@@ -21,3 +21,8 @@
   healthcheck, runbook. Recurring tasks created: PREGAME daily 15:00 UTC (card -> Taco),
   POSTGAME daily 05:30 UTC (grade + dataset + ledger). Both fresh-session, bootstrap via AGENTS.md.
 - Pending tonight: 4 kprop paper plays grade at next postgame fire (~05:35Z).
+
+## 2026-07-22 (manual postgame, user-triggered)
+- 7/21 graded: Rasmussen WIN (5K, proj 5.41 — nailed), Buehler LOSS (3K vs 4.41), Perkins LOSS (4K vs 4.5, near-miss), Mikolas VOID (gs=0, relief — book rules void no-start props). Day 1: 1-2-1V, -0.47u.
+- 13 finals + 2 PPD (PIT@NYY, BAL@BOS -> likely 7/22 DHs) upserted; dataset 1518 finals. Pitcher logs appended (ER/BB placeholders noted).
+- 05:30Z trigger will find work done; should no-op gracefully.

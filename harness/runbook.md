@@ -13,7 +13,9 @@
    direct fetch does NOT work (tested 2026-07-22); don't burn fetches retrying.
 4. Projections: LOCAL — engine k-prop method, START-ONLY accumulation from pitcher_logs
    (bug history: relief outings inflate TBF/start). <5 prior GS -> skip. |proj-line|>=1.5 -> R5 audit.
-5. Card: EV>0 AND edge>=4pp AND |dev|>=0.8 -> paper play (weight 0.5 if GS<10). Write
+5. Card = FULL-TRACKING (Taco standing order 7/22): run `python3 harness/daily_card.py DATE slate.psv`
+   -> ALL games x {lines, V13 H%/projT/RLcov/blow%, K projs, gap-vs-market} displayed as TRACKING.
+   Plays remain kprop-only: EV>0 AND edge>=4pp AND |dev|>=0.8 -> paper play (weight 0.5 if GS<10). Write
    cards/YYYY-MM-DD_kprops.json + html; append plays to state.json ledgers.kprops_paper.plays_pending;
    SendUserFile card to Taco. NO sides plays (R3) — log V13 directional silently if V13 inputs handy.
 6. LINE SNAPSHOT (free, feeds E3): WebFetch ESPN core odds for today's event ids (runbook pattern in

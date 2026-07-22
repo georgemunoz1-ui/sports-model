@@ -10,3 +10,14 @@
 - Caught-bug log: relief-outing TBF inflation in K projections (fixed: start-only). Keep R5 sharp.
 - For next session: run postgame cycle for 7/21, then pregame 7/22. E1 (opponent-K%) is the queued
   experiment when there's capacity.
+
+## 2026-07-22 (early) — DURABILITY INCIDENT + full harness live
+- INCIDENT: container rollback silently erased the 7/19-20 grading turn's writes (results upsert,
+  kprops engine, 7/21 card files). Healthcheck CAUGHT IT on first run. Repaired from conversation
+  record: results.csv back to 1,505 finals (verified in separate process), kprops.py rebuilt and
+  reproduces carded projections exactly (Rasmussen 5.41/Buehler 4.41/Perkins 5.83/Mikolas 3.75).
+  New rule in force: git commit after EVERY write batch. Recommend a remote to Taco for true durability.
+- HARNESS LIVE: AGENTS.md entry point, state.json (verdicts/ledgers/gates/experiment queue),
+  healthcheck, runbook. Recurring tasks created: PREGAME daily 15:00 UTC (card -> Taco),
+  POSTGAME daily 05:30 UTC (grade + dataset + ledger). Both fresh-session, bootstrap via AGENTS.md.
+- Pending tonight: 4 kprop paper plays grade at next postgame fire (~05:35Z).

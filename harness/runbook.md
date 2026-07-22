@@ -4,8 +4,13 @@
 1. healthcheck.py; read state.json.
 2. Slate: WebFetch `https://statsapi.mlb.com/api/v1/schedule?sportId=1&date=YYYY-MM-DD&hydrate=probablePitcher`
    -> gamePk|away|home|time|aSP name+id|hSP name+id. Save data/mlb/schedule/YYYY-MM-DD_slate.json.
-3. K lines: Taco usually posts the board (screenshots/text). If absent, card is projection-only
-   (no EV column) — do NOT guess prices (R1).
+3. K lines — SOURCE OF TRUTH: Taco's RotoWire CSV export (he clicks Export Table Data->CSV on
+   rotowire.com/betting/mlb/player-props.php and drops the file in chat; check /root/.claude/uploads/
+   for today's newest .csv/.xls). Parse flexibly: header row names the books; row = player, team,
+   opp, line, under price, over price per book — use DraftKings column primarily, best-price across
+   books for the EV line if unambiguous. Screenshots/pasted text are the fallback. If neither:
+   projection-only card, do NOT guess prices (R1). RotoWire pages themselves are JS shells —
+   direct fetch does NOT work (tested 2026-07-22); don't burn fetches retrying.
 4. Projections: LOCAL — engine k-prop method, START-ONLY accumulation from pitcher_logs
    (bug history: relief outings inflate TBF/start). <5 prior GS -> skip. |proj-line|>=1.5 -> R5 audit.
 5. Card: EV>0 AND edge>=4pp AND |dev|>=0.8 -> paper play (weight 0.5 if GS<10). Write

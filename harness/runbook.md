@@ -11,7 +11,10 @@
 5. Card: EV>0 AND edge>=4pp AND |dev|>=0.8 -> paper play (weight 0.5 if GS<10). Write
    cards/YYYY-MM-DD_kprops.json + html; append plays to state.json ledgers.kprops_paper.plays_pending;
    SendUserFile card to Taco. NO sides plays (R3) — log V13 directional silently if V13 inputs handy.
-6. Append docs/progress.md (3-6 lines: what ran, plays, anomalies). git add -A && git commit.
+6. LINE SNAPSHOT (free, feeds E3): WebFetch ESPN core odds for today's event ids (runbook pattern in
+   session history / sports/registry.py espn_odds_url) -> save data/mlb/odds/YYYY-MM-DD_pregame.json.
+   ML+totals only; prop prices still come from Taco's boards.
+7. Append docs/progress.md (3-6 lines). git commit; bash harness/push.sh.
 
 ## postgame  (run ~05:30 UTC after last final)
 1. healthcheck.py.
@@ -27,10 +30,19 @@
    if push fails, WARN in the summary but continue; local commit still made).
 7. Message Taco: record, running units, notable grades, tomorrow.
 
+## edge cases (postgame)
+- LATE FINALS: 05:30Z fire can catch West-coast extras still live. Grade what is FINAL; leave the
+  rest in plays_pending with a note — next postgame sweeps them. NEVER grade a non-final.
+- POSTPONED game on a carded play -> play is VOID (remove from pending, 0u, note in ledger).
+- DOUBLEHEADERS: match pitcher's gameLog row by date AND opponent; two same-date rows possible.
+
 ## weekly review (Sundays, after postgame)
 - Recompute K-prop calibration on ALL graded forward plays vs backtest curve (drift check).
 - Check gates in state.json (kprops_go_live progress n/100). Report to Taco.
 - Pick ONE experiment from experiment_queue if capacity; pre-register method BEFORE running (R7).
+- BACKUP: `git bundle create /tmp/sportsmodel_backup_$(date +%F).bundle --all` -> SendUserFile to Taco.
+- LEDGER DASHBOARD: regenerate docs/dashboard.html (running record, units curve, calibration table)
+  -> SendUserFile so Taco tracks visually without asking.
 
 ## fetch discipline (hard-won)
 - WebFetch only; big JSON truncates -> always use `fields=` and <=7-day windows.

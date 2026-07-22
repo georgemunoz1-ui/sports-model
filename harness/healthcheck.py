@@ -46,6 +46,12 @@ try:
     pend=[p for p in lp.get("plays_pending",[]) if p["date"]<str(datetime.date.today())]
     check(f"kprop pending plays from past dates: {len(pend)} (grade them!)", len(pend)==0, warn=True)
 except Exception: pass
+# 5b. git hygiene: no large uncommitted drift
+import subprocess
+try:
+    dirty=subprocess.run(["git","status","--porcelain"],capture_output=True,text=True).stdout.strip()
+    check(f"git working tree clean ({len(dirty.splitlines())} dirty)", len(dirty.splitlines())<=3, warn=True)
+except Exception: pass
 # 6. progress journal fresh
 if os.path.exists("docs/progress.md"):
     mtime=datetime.date.fromtimestamp(os.path.getmtime("docs/progress.md"))

@@ -51,6 +51,16 @@
 - LEDGER DASHBOARD: regenerate docs/dashboard.html (running record, units curve, calibration table)
   -> SendUserFile so Taco tracks visually without asking.
 
+## pricing discipline (adopted from OddsJam patterns, 7/22)
+- LINE-SHOP: Taco's board carries 6+ books — always take the BEST price per play (record book).
+  Never default to DK if another book pays more. Free ROI, no model change.
+- NO-VIG FAIR P: for every play compute market fair prob (proportional devig of the two-sided
+  quote) and display model-vs-fair gap. Also LOG fair p per graded play -> over time this gives a
+  props Brier-vs-market benchmark (same test that killed sides, now for props).
+- LINE SPLITS: when books hang DIFFERENT lines (e.g. Singer 5.5 DK vs 4.5 MGM), flag it — stale/soft
+  line signal + potential middle. Display, don't bet middles (out of scope).
+- SKIP arbitrage/middle betting (needs real-time multi-book execution, not our mission).
+
 ## fetch discipline (hard-won)
 - WebFetch only; big JSON truncates -> always use `fields=` and <=7-day windows.
 - ESPN odds vanish at final -> pregame capture only. statsapi standings = stale; never use.

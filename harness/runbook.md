@@ -23,7 +23,9 @@
 4. Grade pending plays: OVER wins if K>line. P/L at price (weight-adjusted). Move pending->graded in
    state.json; update record/units; append docs/kprop_ledger.md row per play.
 5. Update v13_forward_directional if slate was logged. Update state.json.updated_utc + next_actions.
-6. Append docs/progress.md; git commit; message Taco: record, running units, notable grades, tomorrow.
+6. Append docs/progress.md; git commit; run `bash harness/push.sh` (durability push to origin —
+   if push fails, WARN in the summary but continue; local commit still made).
+7. Message Taco: record, running units, notable grades, tomorrow.
 
 ## weekly review (Sundays, after postgame)
 - Recompute K-prop calibration on ALL graded forward plays vs backtest curve (drift check).

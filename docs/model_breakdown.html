@@ -1,0 +1,111 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Model Breakdown — Full System Documentation · July 22, 2026</title>
+<style>
+:root{--bg:#0d1117;--card:#161b22;--line:#232b36;--ink:#e6edf3;--dim:#8b949e;--grn:#3fb950;--red:#f85149;--amb:#d29922;--blu:#58a6ff;--vio:#bc8cff}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif}
+.wrap{max-width:960px;margin:0 auto;padding:28px 20px 70px}
+h1{font-size:22px;margin:0 0 3px}h2{font-size:15px;margin:30px 0 10px;padding-bottom:6px;border-bottom:1px solid var(--line);text-transform:uppercase;letter-spacing:.04em;color:var(--blu)}
+h3{font-size:13.5px;margin:16px 0 6px;color:var(--ink)}
+.sub{color:var(--dim);font-size:12.5px}
+p{margin:7px 0}
+.card{background:var(--card);border:1px solid var(--line);border-radius:9px;padding:13px 16px;margin:10px 0}
+.formula{background:#0b0f14;border:1px solid var(--line);border-radius:7px;padding:9px 13px;font-family:ui-monospace,Menlo,monospace;font-size:12px;color:var(--vio);margin:7px 0;overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:12.4px;margin:7px 0}
+th,td{padding:6px 9px;text-align:left;border-bottom:1px solid var(--line)}
+th{color:var(--dim);font-weight:600;font-size:10.5px;text-transform:uppercase}
+.pos{color:var(--grn)}.neg{color:var(--red)}.amb{color:var(--amb)}.mut{color:var(--dim)}.b{font-weight:700}
+.tag{display:inline-block;font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px;text-transform:uppercase;letter-spacing:.04em}
+.t-live{background:rgba(63,185,80,.16);color:var(--grn)}.t-dead{background:rgba(248,81,73,.14);color:var(--red)}.t-trk{background:rgba(88,166,255,.16);color:var(--blu)}
+ul{margin:5px 0;padding-left:19px}li{margin:4px 0}
+.foot{color:var(--dim);font-size:11px;margin-top:26px;border-top:1px solid var(--line);padding-top:10px}
+</style></head><body><div class="wrap">
+
+<h1>Full Model Breakdown</h1>
+<div class="sub">System documentation as of July 22, 2026 · everything below is reproducible from the repo (git-tracked, offline bundle in your files)</div>
+
+<h2>0 · Design doctrine (the spine everything hangs on)</h2>
+<div class="card">
+<p><b>The five-step hierarchy</b> (locked after your objective-function correction):</p>
+<ul>
+<li><b>1. Accurate calibrated probabilities</b> — DATA &gt; Implied. Judged vs outcomes (win%, Brier, MAE, calibration), never vs the market's opinion.</li>
+<li><b>2. Correct objective</b> — a bet is judged by <b>EV vs the price's break-even</b>, not win% &gt; 50%. A 45% dog at +150 is a win for the strategy.</li>
+<li><b>3. Decision vs price</b> — act only when model p beats break-even by a <b>≥4pp uncertainty buffer</b>.</li>
+<li><b>4. Risk control</b> — half-weight thin samples (&lt;10 GS), void no-starts, blowout-risk guardrail, R5 rule ("edge &gt; 35% = probably your own bug — audit first").</li>
+<li><b>5. Outcome tracking</b> — pre-registered plays only enter the ledger; retro-casts are labeled and excluded; verdicts move only at gate sample sizes.</li>
+</ul></div>
+
+<h2>1 · Data layer (all free, all as-of, no look-ahead)</h2>
+<div class="card">
+<table><thead><tr><th>Asset</th><th>Size</th><th>Source</th><th>Feeds</th></tr></thead><tbody>
+<tr><td class="b">results.csv</td><td>1,518 finals (full 2026 season)</td><td>MLB StatsAPI</td><td>team RF/RA form, park factors, base rates, backtests</td></tr>
+<tr><td class="b">pitcher_logs/ (310 pitchers)</td><td>every 2026 appearance: IP, ER, SO, BB, TBF, GS</td><td>StatsAPI game logs</td><td>as-of pitcher rates + K projections</td></tr>
+<tr><td class="b">park_factors.json</td><td>30 parks</td><td>derived from our own results (home/road controlled, 30% shrunk)</td><td>run environment per game</td></tr>
+<tr><td class="b">features.csv</td><td>1,461 games × as-of features</td><td>joined locally</td><td>the honest backtest harness</td></tr>
+<tr><td class="b">odds captures</td><td>daily pregame</td><td>ESPN/DK API + your RotoWire boards</td><td>prices, fair-p benchmark, E3 line-move study</td></tr>
+</tbody></table>
+<p class="mut">Key property: every historical feature is frozen at its pre-game value ("as-of"). This is what made the backtests trustworthy — and what exposed the sides mirage.</p></div>
+
+<h2>2 · Engine A — K-prop projector <span class="tag t-live">LIVE PAPER</span></h2>
+<div class="card">
+<p>The track that earns plays. Per starter, using <b>starts only</b> (relief outings excluded — a caught bug):</p>
+<div class="formula">K-rate = (ΣSO + 0.22·80) / (ΣTBF + 80)          ← shrunk toward league 22% with an 80-TBF prior
+E[TBF] = (ΣTBF + 24·3) / (starts + 3)            ← expected workload, shrunk toward 24 batters
+E[K]   = K-rate × E[TBF]
+P(K ≥ line) = Poisson tail at λ = E[K]           ← closed-form (zero simulation noise)</div>
+<p><b>Play rule:</b> best price across the books on your board → EV = p·profit − (1−p) → <b>PLAY iff EV &gt; 0 AND edge ≥ 4pp AND |E[K] − line| ≥ 0.8</b>. Half-weight if &lt; 10 GS. Skip if &lt; 5 GS. Void if pitcher doesn't start.</p>
+<p><b>Validation (n = 1,759 historical starts):</b> MAE <b>1.92 K</b> vs naive last-start 2.41 vs league-avg 1.99; P(over) calibration buckets track (model 60% → overs hit 58%); displaced lines punished at 62-70% vs 52.4% break-even.</p>
+<p><b>Forward ledger:</b> day 1 = 1-2-1V, −0.47u. Day 2 pending tonight (Cole U6.5, Singer U5.5 @FD, Jump O4.5 @+110, Bennett U5.5 ½). Gate: 100 graded plays, CI-positive ROI, your sign-off — then and only then real money.</p>
+<p><b>Known gaps (= experiment queue):</b> no opponent-K% adjustment (E1, next), Poisson may under-fatten tails (E2), no pitch-count/opener intel (mitigated by the starter-confirmation rule).</p></div>
+
+<h2>3 · Engine B — V13.1 game simulator <span class="tag t-trk">TRACKING ONLY</span></h2>
+<div class="card">
+<p>Monte Carlo (30,000 sims/game) producing win%, projected total, run-line cover, and blowout risk. Displayed on every card per your standing order; closed for betting.</p>
+<div class="formula">SP run-suppression = shrunk_ERA − ((K% − BB%) − 13.5)·0.03     where shrunk_ERA = w·ERA + (1−w)·4.20, w = GS/(GS+8)
+Team offense = RF/g ÷ 4.45 (league)     ·  bullpen = 0.55·team RA + 0.45·league (double-count fix)
+Park effect scales with opposing pitcher's ball-in-play rate    ·  HFA = 1.005 (fit from base rates)
+Runs ~ Poisson-Gamma; variance shape driven by opposing K% (contact arms → fat tails)
+Outputs: P(home win) · E[total] · P(cover ±1.5) · P(lose by ≥5) per side</div>
+<p><b>The verdict that closed it (n = 1,461 as-of games):</b> directional accuracy <b>53.0%</b> vs a 52% home base rate; Brier <b>0.2500</b> = exactly coin, vs market ~0.238. A gradient-boosted model on the same features did <i>worse</i> (49.7% / 0.2563) — the ceiling is the <b>inputs</b>, not the algorithm. Season rates + team form simply don't carry what the market prices (lineups, platoons, bullpen state, injuries).</p>
+<p><b>What survived validation:</b> the blowout-risk guardrail (≥18% flagged picks got blown out 33% vs 5% for the rest — 6.6× separation) and the reliability finding that V13's honest range is ~40-65% (its old "80%+ locks" won just 61% — which is why calibration crushes displayed confidence).</p>
+<p><b>Reopen gate:</b> a new feature class (lineup wOBA, bullpen rest) beating market Brier on a ≥500-game holdout. Until then: display, don't bet.</p></div>
+
+<h2>4 · Pricing layer (OddsJam-informed, added 7/22)</h2>
+<div class="card"><ul>
+<li><b>Line-shopping:</b> best price across all books on your board, book recorded per play (already moved Singer to FD −140, Jump to +110).</li>
+<li><b>No-vig fair p:</b> every play logs the market's devigged probability next to ours → accumulating a props Brier-vs-market benchmark (the same referee that killed sides, now watching props). Today's plays carry +14 to +19pp model-vs-fair gaps — large; the graded sample will tell us who's right.</li>
+<li><b>Line-split flags:</b> books hanging different lines (Singer 5.5 DK vs 4.5 MGM) displayed as soft-market signals. Arbitrage/middles deliberately out of scope.</li>
+</ul></div>
+
+<h2>5 · Ledgers & current standing</h2>
+<div class="card">
+<table><thead><tr><th>Track</th><th>Status</th><th>Record</th><th>Note</th></tr></thead><tbody>
+<tr><td class="b">K-props (pre-registered)</td><td><span class="tag t-live">LIVE PAPER</span></td><td>1-2-1V · −0.47u · gate 3/100</td><td>4 pending tonight</td></tr>
+<tr><td class="b">ML tracking picks</td><td><span class="tag t-trk">TRACKING</span></td><td>0-0 (starts tonight: MIL, BOS, SEA, KC)</td><td>could someday evidence a sides reopen</td></tr>
+<tr><td class="b">V13 forward directional</td><td><span class="tag t-trk">TRACKING</span></td><td>18-10 (home-heavy noise)</td><td>reference only</td></tr>
+<tr><td class="b">MLB sides / RL</td><td><span class="tag t-dead">DEAD</span></td><td>n=1,461 verdict</td><td>no plays</td></tr>
+<tr><td class="b">Totals</td><td><span class="tag t-dead">BENCHED</span></td><td>44-48% pooled</td><td>leans displayed, graded nightly</td></tr>
+<tr><td class="b">Real money</td><td colspan="2" class="b">$0 — evidence-based, not just cautious</td><td>unlock = gate + your authorization</td></tr>
+</tbody></table></div>
+
+<h2>6 · The harness (what makes it run without you)</h2>
+<div class="card"><ul>
+<li><b>Two autonomous daily runs:</b> pregame 8:00 AM PT (slate → projections → priced card to you) and postgame 10:30 PM PT (finals → grade everything → ledger → summary to you). Sundays add calibration drift check, dashboard, backup bundle, one experiment.</li>
+<li><b>AGENTS.md + runbook + state.json:</b> every fresh session boots from a stable entry point, machine-readable state, and procedures that encode every hard-won lesson (fetch tricks, DH handling, void rules, R1-R8).</li>
+<li><b>healthcheck.py:</b> integrity gate before any work — caught a real container rollback on its first run.</li>
+<li><b>Durability:</b> git every write, offline bundle in your files, RESTORE.md one-command rebuild. (GitHub remote still open — needs your repo + token.)</li>
+</ul></div>
+
+<h2>7 · Honest limitations (the list we work, not hide)</h2>
+<div class="card"><ul>
+<li>Sides are a coin flip on free season-level data — proven twice; only richer inputs change that.</li>
+<li>K-prop edge is <b>plausible but unproven forward</b> — the backtest is real; whether flagged line-deviations are book <i>error</i> vs book <i>information</i> (opponent K%, pitch plans) is exactly what the 100-play gate answers.</li>
+<li>Prop prices depend on your RotoWire drop (pages unscrapeable); no board → projection-only card.</li>
+<li>No injury/lineup/weather feeds; rookie starters skip; totals module weak; the ecosystem (WNBA/NFL/NBA/CFB) is scaffolded, not populated.</li>
+</ul></div>
+
+<h2>8 · Roadmap (one pre-registered experiment at a time)</h2>
+<div class="card">
+<p><b>E1</b> opponent-K% adjustment (next — closes the biggest known gap) → <b>E2</b> negative-binomial tails → <b>E3</b> line-move/CLV study (collecting) → <b>E4</b> lineup-aware sides reopen attempt → <b>E5</b> WNBA port (gated on K-props n≥50). Each must beat the current version on the full historical replay before it ships — the pitcher-index experiment already died by this rule, which is the rule working.</p></div>
+
+<div class="foot">Repo: AGENTS.md · state.json · harness/ (runbook, healthcheck, daily_card.py, push.sh) · engine/ (kprops.py live; v13/gbm archived-with-verdict) · data/backfill/mlb/2026/ · cards/ · docs/ (progress journal, ledgers, dashboards). All formulas verbatim from running code. $0 risked · gate 3/100 · next grade ~10:30 PM PT.</div>
+</div></body></html>

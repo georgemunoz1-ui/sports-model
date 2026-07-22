@@ -1,0 +1,63 @@
+{
+ "created": "2026-07-19",
+ "sports": {
+  "mlb": {
+   "season_2026": {
+    "target_range": [
+     "2026-03-25",
+     "2026-07-19"
+    ],
+    "windows_done": [
+     "2026-03-25..2026-03-31",
+     "2026-04-01..2026-04-07",
+     "2026-04-08..2026-04-14",
+     "2026-04-15..2026-04-21",
+     "2026-04-22..2026-04-28",
+     "2026-04-29..2026-05-05",
+     "2026-05-06..2026-05-12",
+     "2026-05-13..2026-05-19",
+     "2026-05-20..2026-05-26",
+     "2026-05-27..2026-06-02",
+     "2026-06-03..2026-06-09",
+     "2026-06-10..2026-06-16",
+     "2026-06-17..2026-06-23",
+     "2026-06-24..2026-06-30",
+     "2026-07-01..2026-07-07",
+     "2026-07-08..2026-07-14",
+     "2026-07-15..2026-07-19"
+    ],
+    "rows": 1498,
+    "status": "complete",
+    "finals": 1475
+   },
+   "derived_priors": {
+    "home_win_pct": 0.522,
+    "avg_total": 9.03,
+    "avg_home_margin": 0.01,
+    "blowout_rate": 0.309,
+    "park_factors": "data/backfill/mlb/2026/park_factors.json"
+   },
+   "enrich": {
+    "starters_rows": 1498,
+    "unique_pitchers": 310,
+    "logs_cached": 310,
+    "phase": "B",
+    "notes": "starters via 7-day schedule windows(fields+probablePitcher)+results join; 12 DH conflicts heuristic-resolved (gamePks= refetch 403-blocked); 2 games lack a probable (824273,824985).",
+    "logs_remaining": 0,
+    "phaseB_method": "per pitcher TWO gameLog fetches merged by date: A=fields...,inningsPitched,earnedRuns,strikeOuts,gamesStarted -> date|IP|ER|SO|GS ; B=fields...,baseOnBalls,battersFaced -> date|BB|TBF (each shows ALL games; 6-stat single fetch truncates ~11). team/opp/HA reconstructed from results.csv. Resumable: skip ids with existing pitcher_logs/{id}.txt."
+   }
+  },
+  "wnba": {
+   "status": "ready_in_season"
+  },
+  "nfl": {
+   "status": "stub_offseason"
+  },
+  "nba": {
+   "status": "stub_offseason"
+  },
+  "cfb": {
+   "status": "stub_offseason"
+  }
+ }
+}

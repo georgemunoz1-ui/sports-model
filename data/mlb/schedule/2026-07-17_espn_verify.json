@@ -1,0 +1,176 @@
+{
+  "capture_time_utc": "2026-07-18T04:52:00Z",
+  "espn_fetch_window_utc": "2026-07-18T04:20:12Z to 2026-07-18T04:24:12Z",
+  "method": "WebFetch of sports.core.api.espn.com v2 status + competitors/{teamId}/score endpoints per event; competitor URLs are ESPN team-id based (competitors/1 and /2 pattern 404s unless a team has that id)",
+  "events": [
+    {
+      "espn_id": 401872178,
+      "matchup": "TB@BOS G1",
+      "espn_status": "FETCH_FAILED",
+      "espn_away_score": null,
+      "espn_home_score": null,
+      "matches_statsapi": "pending",
+      "statsapi_capture": "Final 0-10",
+      "note": "WebFetch proxy HTTP 429 rate-limited on all attempts (04:24Z-04:51Z); statsapi final TB 0 - BOS 10 NOT independently verified"
+    },
+    {
+      "espn_id": 401816145,
+      "matchup": "TB@BOS G2",
+      "espn_status": "FETCH_FAILED",
+      "espn_away_score": null,
+      "espn_home_score": null,
+      "matches_statsapi": "pending",
+      "statsapi_capture": "Final 3-5",
+      "note": "not fetched before WebFetch proxy rate limit hit; statsapi final TB 3 - BOS 5 NOT independently verified"
+    },
+    {
+      "espn_id": 401816142,
+      "matchup": "LAD@NYY",
+      "espn_status": "FETCH_FAILED",
+      "espn_away_score": null,
+      "espn_home_score": null,
+      "matches_statsapi": "pending",
+      "statsapi_capture": "Final 2-1",
+      "note": "not fetched before WebFetch proxy rate limit hit; statsapi final LAD 2 - NYY 1 NOT independently verified"
+    },
+    {
+      "espn_id": 401816146,
+      "matchup": "TEX@ATL",
+      "espn_status": "STATUS_FINAL (detail: Final, state: post)",
+      "espn_away_score": 1,
+      "espn_home_score": 15,
+      "matches_statsapi": true,
+      "statsapi_capture": "Final 1-15",
+      "note": "away TEX (team id 13) value 1.0 winner:false; home ATL (15) value 15.0 winner:true"
+    },
+    {
+      "espn_id": 401816141,
+      "matchup": "CWS@TOR",
+      "espn_status": "STATUS_FINAL (detail: Final, state: post)",
+      "espn_away_score": 12,
+      "espn_home_score": 4,
+      "matches_statsapi": true,
+      "statsapi_capture": "Final 12-4",
+      "note": "ESPN shortName CHW @ TOR; away CWS (4) value 12.0 winner:true; home TOR (14) value 4.0 winner:false"
+    },
+    {
+      "espn_id": 401816148,
+      "matchup": "MIA@MIL",
+      "espn_status": "STATUS_FINAL (detail: Final/10, state: post)",
+      "espn_away_score": 1,
+      "espn_home_score": 2,
+      "matches_statsapi": true,
+      "statsapi_capture": "Final 1-2",
+      "note": "10 innings; away MIA (28) value 1.0 winner:false; home MIL (8) value 2.0 winner:true"
+    },
+    {
+      "espn_id": 401816149,
+      "matchup": "MIN@CHC",
+      "espn_status": "STATUS_FINAL (detail: Final, state: post)",
+      "espn_away_score": 5,
+      "espn_home_score": 2,
+      "matches_statsapi": true,
+      "statsapi_capture": "Final 5-2",
+      "note": "away MIN (9) value 5.0 winner:true; home CHC (16) value 2.0 winner:false"
+    },
+    {
+      "espn_id": 401816147,
+      "matchup": "BAL@HOU",
+      "espn_status": "STATUS_FINAL (detail: Final, state: post)",
+      "espn_away_score": 3,
+      "espn_home_score": 2,
+      "matches_statsapi": true,
+      "statsapi_capture": "Final 3-2",
+      "note": "away BAL (1) value 3.0 winner:true; home HOU (18) value 2.0 winner:false"
+    },
+    {
+      "espn_id": 401816150,
+      "matchup": "SD@KC",
+      "espn_status": "STATUS_FINAL (detail: Final/10, state: post)",
+      "espn_away_score": 6,
+      "espn_home_score": 7,
+      "matches_statsapi": true,
+      "statsapi_capture": "Final 6-7",
+      "note": "10 innings; away SD (25) value 6.0 winner:false; home KC (7) value 7.0 winner:true"
+    },
+    {
+      "espn_id": 401816151,
+      "matchup": "CIN@COL",
+      "espn_status": "STATUS_FINAL (detail: Final, state: post)",
+      "espn_away_score": 7,
+      "espn_home_score": 2,
+      "matches_statsapi": true,
+      "statsapi_capture": "Final 7-2",
+      "note": "away CIN (17) value 7.0 winner:true; home COL (27) value 2.0 winner:false"
+    },
+    {
+      "espn_id": 401816144,
+      "matchup": "PIT@CLE",
+      "espn_status": "STATUS_POSTPONED (detail: Postponed, state: post)",
+      "espn_away_score": null,
+      "espn_home_score": null,
+      "matches_statsapi": true,
+      "statsapi_capture": "POSTPONED",
+      "note": "ESPN status endpoint confirms Postponed; score endpoints not fetched (rate limit; not meaningful for postponed game); see pit_cle_reschedule"
+    },
+    {
+      "espn_id": 401816152,
+      "matchup": "DET@LAA",
+      "espn_status": "STATUS_FINAL (detail: Final, state: post)",
+      "espn_away_score": 2,
+      "espn_home_score": 1,
+      "matches_statsapi": "pending",
+      "statsapi_capture": "in progress at 04:09Z capture",
+      "note": "ESPN now Final: away DET (6) value 2.0 winner:true; home LAA (3) value 1.0 winner:false. statsapi capture predated final - re-pull statsapi to cross-check"
+    },
+    {
+      "espn_id": 401816155,
+      "matchup": "WSH@ATH",
+      "espn_status": "STATUS_IN_PROGRESS (detail: Bottom 7th, state: in)",
+      "espn_away_score": 18,
+      "espn_home_score": 2,
+      "matches_statsapi": "pending",
+      "statsapi_capture": "in progress at 04:09Z capture",
+      "note": "STILL LIVE at ~04:23Z snapshot - NOT final. away WSH (20) value 18.0; home ATH (11) value 2.0; no winner flags"
+    },
+    {
+      "espn_id": 401816154,
+      "matchup": "STL@AZ",
+      "espn_status": "STATUS_IN_PROGRESS (detail: Middle 9th, state: in)",
+      "espn_away_score": 5,
+      "espn_home_score": 4,
+      "matches_statsapi": "pending",
+      "statsapi_capture": "in progress at 04:09Z capture",
+      "note": "STILL LIVE at ~04:23Z snapshot - NOT final. ESPN shortName STL @ ARI; away STL (24) value 5.0; home ARI (29) value 4.0; no winner flags"
+    },
+    {
+      "espn_id": 401816153,
+      "matchup": "SF@SEA",
+      "espn_status": "STATUS_IN_PROGRESS (detail: Bottom 8th, state: in)",
+      "espn_away_score": 7,
+      "espn_home_score": 0,
+      "matches_statsapi": "pending",
+      "statsapi_capture": "in progress at 04:09Z capture",
+      "note": "STILL LIVE at ~04:23Z snapshot - NOT final. away SF (26) value 7.0; home SEA (12) value 0.0; no winner flags"
+    }
+  ],
+  "pit_cle_reschedule": {
+    "statsapi_gamePk": 824414,
+    "source": "https://statsapi.mlb.com/api/v1/schedule?sportId=1&gamePk=824414",
+    "original_game": {
+      "status": {"detailedState": "Postponed", "statusCode": "DD", "codedGameState": "D", "reason": "Air Quality"},
+      "officialDate": "2026-07-18",
+      "gameDate": "2026-07-17T23:10:00Z",
+      "rescheduleDate": "2026-07-18T17:10:00Z",
+      "rescheduleGameDate": "2026-07-18"
+    },
+    "rescheduled_game": {
+      "status": {"detailedState": "Scheduled", "statusCode": "S", "codedGameState": "S"},
+      "officialDate": "2026-07-18",
+      "gameDate": "2026-07-18T17:10:00Z",
+      "rescheduledFrom": "2026-07-17T23:10:00Z",
+      "rescheduledFromDate": "2026-07-17"
+    },
+    "espn_status_401816144": "STATUS_POSTPONED"
+  }
+}

@@ -1,0 +1,38 @@
+{
+  "updated_utc": "2026-07-21T20:30:00Z",
+  "verdicts": {
+    "mlb_sides": {"status": "DEAD", "evidence": "n=1461 as-of backtest: V13 MC ~coin (Brier .2500, 53%); GBM worse (.2563, 49.7%). No plays.", "reopen_gate": "pre-registered experiment with new feature class (lineups/bullpen-rest) beating market Brier on >=500-game holdout"},
+    "mlb_kprops": {"status": "LIVE_PAPER", "evidence": "n=1759 backtest: MAE 1.92<naive 2.41; calibrated; displaced lines hit 62-70%. Most live DK lines within 0.5K of projection (engine sane).", "open_question": "are >=0.9K line deviations book-error or book-info? forward ledger answers"},
+    "totals": {"status": "NOT_READY", "evidence": "44-48% directional pooled"},
+    "calibration_T": {"status": "UNRESOLVED", "evidence": "n=26 fit said 0.55, n=1461 fit said 1.50 (both boundary); sides dead so moot for now"}
+  },
+  "ledgers": {
+    "kprops_paper": {"day": 1, "record_w": 0, "record_l": 0, "units": 0.0, "plays_pending": [
+      {"date": "2026-07-21", "pitcher": "Drew Rasmussen", "side": "OVER", "line": 4.5, "price": 103, "weight": 1.0},
+      {"date": "2026-07-21", "pitcher": "Walker Buehler", "side": "OVER", "line": 3.5, "price": -129, "weight": 1.0},
+      {"date": "2026-07-21", "pitcher": "Jack Perkins", "side": "OVER", "line": 4.5, "price": 102, "weight": 0.5},
+      {"date": "2026-07-21", "pitcher": "Miles Mikolas", "side": "OVER", "line": 2.5, "price": -122, "weight": 0.5}]},
+    "v13_forward_directional": {"w": 18, "l": 10, "note": "7/19-20; home-heavy noise; tracking only"},
+    "real_money": {"risked": 0.0, "authorized": false}
+  },
+  "gates": {
+    "kprops_go_live": {"passes": false, "criteria": "n>=100 graded paper plays AND ROI>0 with bootstrap 95% CI excluding 0 AND calibration holds forward AND Taco explicit authorization", "progress": "0/100"},
+    "sides_reopen": {"passes": false, "criteria": "see verdicts.mlb_sides.reopen_gate"},
+    "second_sport": {"passes": false, "criteria": "kprops methodology validated (n>=50 graded) -> port to WNBA totals/props first"}
+  },
+  "experiment_queue": [
+    {"id": "E1", "passes": false, "status": "queued", "title": "Opponent-K% adjustment for K-props", "method": "team K-taken/PA as-of from pitcher_logs opponents; pre-register: must cut backtest MAE and improve displaced-line hit% on 1759-start replay", "why": "closes the 'book info we lack' gap"},
+    {"id": "E2", "passes": false, "status": "queued", "title": "Negative-binomial K tails vs Poisson", "method": "fit dispersion on backtest; must improve P(over) calibration buckets"},
+    {"id": "E3", "passes": false, "status": "queued", "title": "Line-move capture for props", "method": "capture DK K-lines at 2 timestamps/day; measure if OUR flagged deviations get steamed toward projection (CLV-for-props = independent edge evidence)"},
+    {"id": "E4", "passes": false, "status": "queued", "title": "Lineup-aware offense for sides (reopen attempt)", "method": "daily lineups + batter wOBA as-of; only worth building if E1-E3 show the pipeline sustains quality"},
+    {"id": "E5", "passes": false, "status": "queued", "title": "WNBA port", "method": "registry already stubbed; totals first"}
+  ],
+  "known_issues": [
+    "Blanco/rookies absent from FG (use null+cap)",
+    "ESPN odds wipe at final -> capture pregame only",
+    "WebFetch truncates big JSON -> use fields= param + small windows (see runbook)",
+    "statsapi standings endpoint serves stale W-L (use results.csv aggregates instead)",
+    "container is ephemeral: git commit locally each run; ask Taco about a remote for true durability"
+  ],
+  "next_actions": ["grade 7/21 kprops (scheduled 05:30Z)", "run 7/22 pregame cycle", "E1 opponent-K% when a free block exists"]
+}

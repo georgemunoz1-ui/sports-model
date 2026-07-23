@@ -37,3 +37,6 @@
 - ML tracking day 1: 3-1 (MIL✓ BOS✓ KC✓ | SEA✗).
 - Cole 11K vs proj 5.59 = 5.4K miss on a 19-start sample -> E1 (opponent-K%) escalated: PIT strikes out a LOT; opponent adjustment would have raised Cole's proj + possibly flipped the play. Priority experiment.
 - Dataset 1,535 finals. Logs appended.
+
+## 2026-07-23 (midday) — selection-logic fix + Sale registered
+- Taco caught best-EV-first flaw: qualifying U7.5@HR quote masked by non-qualifying max-EV U6.5@FD. Engine gains select_play() (qualify-then-best). Sale U7.5 -145 HR 1.0u registered pre-pitch (E[K] 6.54, disp -0.96, edge +7pp). Official 7/23 engine card = Sale U7.5 + Seymour O4.5. Taco 5-play raw baseline unchanged, grades in parallel.

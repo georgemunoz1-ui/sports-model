@@ -29,3 +29,19 @@ def p_over(ek,line):
     k0=int(np.ceil(line)); return 1-sum(exp(-ek)*ek**i/factorial(i) for i in range(k0))
 def ev(p,ml): 
     prof=100/(-ml) if ml<0 else ml/100; return p*prof-(1-p)
+
+
+def select_play(quotes, ek, gs, min_edge=0.04, min_disp=0.8):
+    """FIXED 7/23 (Taco-caught flaw): evaluate EVERY (book,line,under,over) quote against ALL gates,
+    return max-EV QUALIFYING quote. Old flow picked max-EV first then gated -> masked qualifiers
+    (Sale U7.5 HR hidden behind non-qualifying U6.5 FD)."""
+    def imp(ml): return (-ml)/(-ml+100) if ml<0 else 100/(ml+100)
+    quals=[]
+    for book,line,pu,po in quotes:
+        pov=p_over(ek,line)
+        for side,p,price in (("OVER",pov,po),("UNDER",1-pov,pu)):
+            if price is None: continue
+            e=ev(p,price); edge=p-imp(price); disp=ek-line
+            if e>0 and edge>=min_edge and abs(disp)>=min_disp and ((side=="OVER")==(disp>0)):
+                quals.append((e,book,line,side,price,p,edge,disp))
+    return max(quals) if quals else None

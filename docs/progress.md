@@ -31,3 +31,9 @@
 - Taco posted RotoWire K board + odds. 4 paper plays: Cole U6.5(-105), Singer U5.5(-144), Jump O4.5(+104), Bennett U5.5(-148, half). Pending in state.json.
 - Detmers/Kremer overs correctly declined (prices pre-shaded steep toward our projections — E3 note).
 - Starter changes vs morning probables: Lauer, Dobbins, Fried, Kay, Quantrill, Miles, Perez, Hughes.
+
+## 2026-07-23 (manual postgame for 7/22)
+- K-props day 2: Jump WIN (5K>4.5, +110), Bennett WIN (4K<5.5), Cole LOSS (11K!! vs proj 5.59 — biggest miss yet), Singer LOSS (6K vs 4.46). Day +0.44u; cumulative 3-4-1V, -0.03u; gate 8/100.
+- ML tracking day 1: 3-1 (MIL✓ BOS✓ KC✓ | SEA✗).
+- Cole 11K vs proj 5.59 = 5.4K miss on a 19-start sample -> E1 (opponent-K%) escalated: PIT strikes out a LOT; opponent adjustment would have raised Cole's proj + possibly flipped the play. Priority experiment.
+- Dataset 1,535 finals. Logs appended.

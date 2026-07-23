@@ -1,5 +1,5 @@
 {
- "updated_utc": "2026-07-22T18:30:00Z",
+ "updated_utc": "2026-07-23T05:15:00Z",
  "verdicts": {
   "mlb_sides": {
    "status": "DEAD",
@@ -22,64 +22,11 @@
  },
  "ledgers": {
   "kprops_paper": {
-   "day": 1,
-   "record_w": 1,
-   "record_l": 2,
-   "units": -0.47,
-   "plays_pending": [
-    {
-     "date": "2026-07-22",
-     "pitcher": "Gerrit Cole",
-     "side": "UNDER",
-     "line": 6.5,
-     "price": -105,
-     "weight": 1.0,
-     "ek": 5.59,
-     "p": 0.67,
-     "book": "DK",
-     "mkt_fair_p": 0.483,
-     "model_vs_fair_gap": 0.187
-    },
-    {
-     "date": "2026-07-22",
-     "pitcher": "Jake Bennett",
-     "side": "UNDER",
-     "line": 5.5,
-     "price": -148,
-     "weight": 0.5,
-     "ek": 4.5,
-     "p": 0.7,
-     "book": "DK",
-     "mkt_fair_p": 0.563,
-     "model_vs_fair_gap": 0.137
-    },
-    {
-     "date": "2026-07-22",
-     "pitcher": "Brady Singer",
-     "side": "UNDER",
-     "line": 5.5,
-     "price": -140,
-     "weight": 1.0,
-     "ek": 4.46,
-     "p": 0.71,
-     "book": "FD",
-     "mkt_fair_p": 0.551,
-     "model_vs_fair_gap": 0.159
-    },
-    {
-     "date": "2026-07-22",
-     "pitcher": "Gage Jump",
-     "side": "OVER",
-     "line": 4.5,
-     "price": 110,
-     "weight": 1.0,
-     "ek": 5.51,
-     "p": 0.64,
-     "book": "FD/MGM",
-     "mkt_fair_p": 0.449,
-     "model_vs_fair_gap": 0.191
-    }
-   ],
+   "day": 2,
+   "record_w": 3,
+   "record_l": 4,
+   "units": -1.03,
+   "plays_pending": [],
    "graded": [
     {
      "date": "2026-07-21",
@@ -124,6 +71,70 @@
      "actual": 1,
      "result": "VOID (did not start, gs=0)",
      "pl": 0.0
+    },
+    {
+     "date": "2026-07-22",
+     "pitcher": "Gerrit Cole",
+     "side": "UNDER",
+     "line": 6.5,
+     "price": -105,
+     "weight": 1.0,
+     "ek": 5.59,
+     "p": 0.67,
+     "book": "DK",
+     "mkt_fair_p": 0.483,
+     "model_vs_fair_gap": 0.187,
+     "actual": 11,
+     "result": "LOSS",
+     "pl": -1.0
+    },
+    {
+     "date": "2026-07-22",
+     "pitcher": "Jake Bennett",
+     "side": "UNDER",
+     "line": 5.5,
+     "price": -148,
+     "weight": 0.5,
+     "ek": 4.5,
+     "p": 0.7,
+     "book": "DK",
+     "mkt_fair_p": 0.563,
+     "model_vs_fair_gap": 0.137,
+     "actual": 4,
+     "result": "WIN",
+     "pl": 0.34
+    },
+    {
+     "date": "2026-07-22",
+     "pitcher": "Brady Singer",
+     "side": "UNDER",
+     "line": 5.5,
+     "price": -140,
+     "weight": 1.0,
+     "ek": 4.46,
+     "p": 0.71,
+     "book": "FD",
+     "mkt_fair_p": 0.551,
+     "model_vs_fair_gap": 0.159,
+     "actual": 6,
+     "result": "LOSS",
+     "pl": -1.0
+    },
+    {
+     "date": "2026-07-22",
+     "pitcher": "Gage Jump",
+     "side": "OVER",
+     "line": 4.5,
+     "price": 110,
+     "weight": 1.0,
+     "ek": 5.51,
+     "p": 0.64,
+     "book": "FD/MGM",
+     "mkt_fair_p": 0.449,
+     "model_vs_fair_gap": 0.191,
+     "actual": 5,
+     "result": "WIN",
+     "pl": 1.1
     }
    ]
   },
@@ -137,10 +148,9 @@
    "authorized": false
   },
   "ml_tracking": {
-   "record_w": 0,
-   "record_l": 0,
-   "graded": [],
-   "pending": [
+   "record_w": 3,
+   "record_l": 1,
+   "graded": [
     {
      "date": "2026-07-22",
      "pick": "MIL",
@@ -149,7 +159,8 @@
      "v13_wp": 0.6,
      "mkt_fair": 0.57,
      "blow_risk": 0.07,
-     "note": "highest conviction + lowest blowout risk on slate; Scott/Henderson confirmed"
+     "note": "highest conviction + lowest blowout risk on slate; Scott/Henderson confirmed",
+     "result": "WIN"
     },
     {
      "date": "2026-07-22",
@@ -159,7 +170,8 @@
      "v13_wp": 0.57,
      "mkt_fair": 0.55,
      "blow_risk": 0.13,
-     "note": "Kremer/Bennett confirmed; DH G1"
+     "note": "Kremer/Bennett confirmed; DH G1",
+     "result": "WIN"
     },
     {
      "date": "2026-07-22",
@@ -169,7 +181,8 @@
      "v13_wp": 0.54,
      "mkt_fair": 0.58,
      "blow_risk": 0.1,
-     "note": "dir pick agrees w/ market but LESS confident \u2014 tests V13 vs market fair"
+     "note": "dir pick agrees w/ market but LESS confident \u2014 tests V13 vs market fair",
+     "result": "LOSS"
     },
     {
      "date": "2026-07-22",
@@ -179,16 +192,18 @@
      "v13_wp": 0.51,
      "mkt_fair": 0.47,
      "blow_risk": 0.18,
-     "note": "only true market disagreement (home dog); Roupp/Lugo confirmed"
+     "note": "only true market disagreement (home dog); Roupp/Lugo confirmed",
+     "result": "WIN"
     }
-   ]
+   ],
+   "pending": []
   }
  },
  "gates": {
   "kprops_go_live": {
    "passes": false,
    "criteria": "n>=100 graded paper plays AND ROI>0 with bootstrap 95% CI excluding 0 AND calibration holds forward AND Taco explicit authorization",
-   "progress": "3/100"
+   "progress": "7/100"
   },
   "sides_reopen": {
    "passes": false,
@@ -245,8 +260,8 @@
   "container is ephemeral: git commit locally each run; ask Taco about a remote for true durability"
  ],
  "next_actions": [
-  "pregame 7/22 (PIT@NYY + BAL@BOS doubleheaders from postponements)",
-  "await RotoWire CSV for EV card",
-  "E1 when capacity"
+  "pregame 7/23",
+  "E1 opponent-K% experiment \u2014 NOW PRIORITY (Cole/Singer misses vs weak-K opponents question)",
+  "weekly review Sunday"
  ]
 }

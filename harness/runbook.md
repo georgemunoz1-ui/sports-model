@@ -68,6 +68,23 @@
   line signal + potential middle. Display, don't bet middles (out of scope).
 - SKIP arbitrage/middle betting (needs real-time multi-book execution, not our mission).
 
+## log repair & reconciliation protocol (Taco spec, 7/23 — Sale corruption incident)
+Detection (healthcheck, WARN not FAIL — spacing is a detector, never a verdict):
+- dupe date rows (note: both-ends-of-DH relief CAN be legit — lean format lacks opponent, so verify)
+- traditional starters (IP>3 both) with starts <3 days apart
+Reconciliation (before ANY overwrite):
+1. StatMuse (server-rendered, WebFetch-viable, VERIFIED 7/23):
+   https://www.statmuse.com/mlb/ask/{pitcher-name}-game-log-2026
+   relievers >24 rows: split ...-game-log-from-march-1-2026-to-may-31-2026 / june-1...to-{today}
+2. Cross-check season G/GS/SO/TBF sums vs MLB.com player profile AND statsapi season line.
+3. Rows must match date+opponent where available; NEVER delete a row on spacing alone.
+4. Openers/relievers: adjacent GS=1 days are legit (Holton 5/3+5/4) — confirm via independent log.
+5. Totals irreconcilable -> QUARANTINE the pitcher (skip from cards, note in state.known_issues)
+   until resolved. Caveat: StatMuse/MLB.com/statsapi share MLB's upstream feed — this catches OUR
+   extraction errors (the actual 7/23 failure mode), not hypothetical upstream errors.
+Forward format: NEW log rows should use 8-field date|opp|IP|ER|SO|BB|TBF|GS (opponent enables the
+date+opponent dupe key); parsers already accept mixed formats.
+
 ## fetch discipline (hard-won)
 - WebFetch only; big JSON truncates -> always use `fields=` and <=7-day windows.
 - ESPN odds vanish at final -> pregame capture only. statsapi standings = stale; never use.

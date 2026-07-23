@@ -44,3 +44,8 @@
 ## 2026-07-23 (audit closeout, per Taco)
 - Sale log corruption CONFIRMED (phantom rows) -> 6 logs re-fetched verbatim; Sale now 18GS/123SO/426TBF matching external EXACTLY (+ tonight's start). Other 5 flagged = legit openers, not corruption.
 - Healthcheck gains log-integrity rule (dupe dates / consecutive >3IP starts). price_cli.py is now the mandated board->plays caller (wires select_play mechanically). progress gate-count corrected (7/100, voids excluded).
+
+## 2026-07-23 (late) — reconciliation protocol adopted (Taco spec)
+- StatMuse route VERIFIED fetchable; confirms Sale repair (5/20+5/28 real, 5/22+5/27 phantom; 123 K).
+- Healthcheck: spacing now FLAGS for reconciliation (warn) instead of hard-fail; opener-aware; never auto-delete.
+- Runbook: full repair protocol + quarantine rule + 8-field forward format (adds opponent).

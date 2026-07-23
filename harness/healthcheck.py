@@ -57,11 +57,14 @@ try:
             if len(p)>=10 and p[9]=="1": starts.append((p[0],float(p[4])))
             elif len(p)==7 and p[6]=="1": starts.append((p[0],float(p[1])))
         starts.sort()
-        if len(starts)!=len(set(d for d,_ in starts)): badlogs.append(f); continue
+        # Taco validation spec 7/23: dupes/spacing FLAG for reconciliation, never auto-verdict.
+        if len(starts)!=len(set(d for d,_ in starts)): badlogs.append((f,"dupe-date (check DH vs phantom)")); continue
         for (d1,ip1),(d2,ip2) in zip(starts,starts[1:]):
-            if (_dt.date.fromisoformat(d2)-_dt.date.fromisoformat(d1)).days<=2 and ip1>3 and ip2>3:
-                badlogs.append(f); break
-    check(f"pitcher-log integrity ({len(badlogs)} corrupted)", len(badlogs)==0)
+            if (_dt.date.fromisoformat(d2)-_dt.date.fromisoformat(d1)).days<3 and ip1>3 and ip2>3:
+                badlogs.append((f,"traditional-starter <3d gap")); break
+    check(f"pitcher-log integrity ({len(badlogs)} flagged -> reconcile per runbook, do NOT delete)", len(badlogs)==0, warn=True)
+    if badlogs:
+        for f,why in badlogs[:5]: print(f"   RECONCILE: {f} ({why})")
 except Exception as e: check(f"log-integrity scan ({e})", False)
 # 5a2. engine self-test (Sale regression + sample gates) — mechanical protection
 try:

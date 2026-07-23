@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Session-start integrity gate. Run BEFORE any work. Exit 0 = healthy. Mechanically enforces
 what can be enforced (Anthropic/OpenAI harness pattern: rules as tooling, not vibes)."""
-import csv, json, os, sys, glob, datetime
+import csv, json, os, sys, glob, datetime, subprocess
 BASE=os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 os.chdir(BASE)
 fails=[]; warns=[]
@@ -46,6 +46,11 @@ try:
     pend=[p for p in lp.get("plays_pending",[]) if p["date"]<str(datetime.date.today())]
     check(f"kprop pending plays from past dates: {len(pend)} (grade them!)", len(pend)==0, warn=True)
 except Exception: pass
+# 5a2. engine self-test (Sale regression + sample gates) — mechanical protection
+try:
+    r=subprocess.run([sys.executable,"engine/kprops.py"],capture_output=True,text=True)
+    check(f"kprops self-test ({r.stdout.strip()})", r.returncode==0)
+except Exception as e: check(f"kprops self-test ran ({e})", False)
 # 5b. git hygiene: no large uncommitted drift
 import subprocess
 try:

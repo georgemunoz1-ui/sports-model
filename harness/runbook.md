@@ -11,7 +11,9 @@
    books for the EV line if unambiguous. Screenshots/pasted text are the fallback. If neither:
    projection-only card, do NOT guess prices (R1). RotoWire pages themselves are JS shells —
    direct fetch does NOT work (tested 2026-07-22); don't burn fetches retrying.
-4. Projections: LOCAL — engine k-prop method, START-ONLY accumulation from pitcher_logs
+4. Projections+plays: MUST use engine/kprops.py price_board() (canonical: proj -> select_play with
+   gs gates + qualify-then-best baked in). NO ad-hoc pricing scripts — that's how the Sale flaw and
+   the unwired-fix gap happened. START-ONLY accumulation from pitcher_logs
    (bug history: relief outings inflate TBF/start). <5 prior GS -> skip. |proj-line|>=1.5 -> R5 audit.
 5. Card = FULL-TRACKING (Taco standing order 7/22): run `python3 harness/daily_card.py DATE slate.psv`
    -> ALL games x {lines, V13 H%/projT/RLcov/blow%, K projs, gap-vs-market} displayed as TRACKING.

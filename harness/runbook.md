@@ -30,8 +30,13 @@
    pattern; overwrite same game_id — verify AFTER flush, in a separate process, not mid-write).
 3. Actual K for carded pitchers: WebFetch `.../people/{id}/stats?stats=gameLog&group=pitching&season=2026&fields=stats,splits,date,stat,inningsPitched,earnedRuns,strikeOuts,baseOnBalls,battersFaced,gamesStarted`
    -> last row = tonight. ALSO append that row to pitcher_logs/{id}.txt (keeps projections current).
-4. Grade pending plays: OVER wins if K>line. P/L at price (weight-adjusted). Move pending->graded in
-   state.json; update record/units; append docs/kprop_ledger.md row per play.
+4. Grade pending plays (BOTH ledgers: kprops_paper + kprops_taco_baseline). Per entry fill:
+   result (WIN/LOSS/VOID), pl, roi = pl/weight, outcome y = 1 if the played side hit,
+   brier_raw=(raw_p−y)^2, brier_shrunk=(shrunk_p−y)^2, logloss_raw=−ln(raw_p if y else 1−raw_p),
+   logloss_shrunk likewise. close_line/close_price from Taco's latest board if posted (CLV), else
+   null+note. Move pending->graded; update records/units; append docs/kprop_ledger.md.
+   WEEKLY: cumulative brier_raw vs brier_shrunk answers the shrinkage A/B with proper scoring,
+   not just W-L.
 5. Update v13_forward_directional if slate was logged. Update state.json.updated_utc + next_actions.
 6. Append docs/progress.md; git commit; run `bash harness/push.sh` (durability push to origin —
    if push fails, WARN in the summary but continue; local commit still made).

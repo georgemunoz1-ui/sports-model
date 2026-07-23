@@ -234,6 +234,65 @@
      "note": "highest conviction on slate (Sale vs Canning, SD blow-risk 34%) \u2014 no board price captured, graded directional-only"
     }
    ]
+  },
+  "kprops_taco_baseline": {
+   "desc": "Taco raw-rate binomial baseline (no shrinkage, price-EV only, no displacement req) \u2014 A/B vs engine",
+   "record_w": 0,
+   "record_l": 0,
+   "units": 0.0,
+   "pending": [
+    {
+     "date": "2026-07-23",
+     "pitcher": "Ian Seymour",
+     "side": "OVER",
+     "line": 4.5,
+     "price": -119,
+     "ek_taco": 5.43,
+     "ek_engine": 5.34,
+     "note": "both models agree \u2014 also the engine's official play"
+    },
+    {
+     "date": "2026-07-23",
+     "pitcher": "Gavin Williams",
+     "side": "OVER",
+     "line": 6.5,
+     "price": -107,
+     "ek_taco": 7.25,
+     "ek_engine": 6.97,
+     "note": "gap = K-rate shrinkage (raw 29.9% vs shrunk 28.8%)"
+    },
+    {
+     "date": "2026-07-23",
+     "pitcher": "Taj Bradley",
+     "side": "OVER",
+     "line": 5.5,
+     "price": -153,
+     "ek_taco": 6.53,
+     "ek_engine": 6.34,
+     "note": "engine declined on price (-153 juiced)"
+    },
+    {
+     "date": "2026-07-23",
+     "pitcher": "Michael McGreevy",
+     "side": "OVER",
+     "line": 3.5,
+     "price": 120,
+     "ek_taco": 3.74,
+     "ek_engine": 3.96,
+     "note": "engine declined on displacement (<0.8); interesting: shrinkage RAISES low-K arms"
+    },
+    {
+     "date": "2026-07-23",
+     "pitcher": "Randy Dobnak",
+     "side": "UNDER",
+     "line": 3.5,
+     "price": -140,
+     "ek_taco": 3.0,
+     "ek_engine": null,
+     "note": "engine SKIPS (1-2 starts); Taco flagged spot-starter risk himself"
+    }
+   ],
+   "graded": []
   }
  },
  "gates": {

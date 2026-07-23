@@ -33,10 +33,14 @@
 - Starter changes vs morning probables: Lauer, Dobbins, Fried, Kay, Quantrill, Miles, Perez, Hughes.
 
 ## 2026-07-23 (manual postgame for 7/22)
-- K-props day 2: Jump WIN (5K>4.5, +110), Bennett WIN (4K<5.5), Cole LOSS (11K!! vs proj 5.59 — biggest miss yet), Singer LOSS (6K vs 4.46). Day -0.56u; cumulative 3-4-1V, -1.03u (hand-math error caught+fixed, corrections entry); gate 8/100.
+- K-props day 2: Jump WIN (5K>4.5, +110), Bennett WIN (4K<5.5), Cole LOSS (11K!! vs proj 5.59 — biggest miss yet), Singer LOSS (6K vs 4.46). Day -0.56u; cumulative 3-4-1V, -1.03u (hand-math error caught+fixed, corrections entry); gate 7/100 (Mikolas VOID does not count).
 - ML tracking day 1: 3-1 (MIL✓ BOS✓ KC✓ | SEA✗).
 - Cole 11K vs proj 5.59 = 5.4K miss on a 19-start sample -> E1 (opponent-K%) escalated: PIT strikes out a LOT; opponent adjustment would have raised Cole's proj + possibly flipped the play. Priority experiment.
 - Dataset 1,535 finals. Logs appended.
 
 ## 2026-07-23 (midday) — selection-logic fix + Sale registered
 - Taco caught best-EV-first flaw: qualifying U7.5@HR quote masked by non-qualifying max-EV U6.5@FD. Engine gains select_play() (qualify-then-best). Sale U7.5 -145 HR 1.0u registered pre-pitch (E[K] 6.54, disp -0.96, edge +7pp). Official 7/23 engine card = Sale U7.5 + Seymour O4.5. Taco 5-play raw baseline unchanged, grades in parallel.
+
+## 2026-07-23 (audit closeout, per Taco)
+- Sale log corruption CONFIRMED (phantom rows) -> 6 logs re-fetched verbatim; Sale now 18GS/123SO/426TBF matching external EXACTLY (+ tonight's start). Other 5 flagged = legit openers, not corruption.
+- Healthcheck gains log-integrity rule (dupe dates / consecutive >3IP starts). price_cli.py is now the mandated board->plays caller (wires select_play mechanically). progress gate-count corrected (7/100, voids excluded).

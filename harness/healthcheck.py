@@ -46,6 +46,23 @@ try:
     pend=[p for p in lp.get("plays_pending",[]) if p["date"]<str(datetime.date.today())]
     check(f"kprop pending plays from past dates: {len(pend)} (grade them!)", len(pend)==0, warn=True)
 except Exception: pass
+# 5a1. pitcher-log integrity (Sale-corruption class): dupe dates or consecutive-day REAL starts
+try:
+    import datetime as _dt
+    badlogs=[]
+    for f in glob.glob("data/backfill/mlb/2026/pitcher_logs/*.txt"):
+        starts=[]
+        for ln in open(f):
+            p=ln.strip().split("|")
+            if len(p)>=10 and p[9]=="1": starts.append((p[0],float(p[4])))
+            elif len(p)==7 and p[6]=="1": starts.append((p[0],float(p[1])))
+        starts.sort()
+        if len(starts)!=len(set(d for d,_ in starts)): badlogs.append(f); continue
+        for (d1,ip1),(d2,ip2) in zip(starts,starts[1:]):
+            if (_dt.date.fromisoformat(d2)-_dt.date.fromisoformat(d1)).days<=2 and ip1>3 and ip2>3:
+                badlogs.append(f); break
+    check(f"pitcher-log integrity ({len(badlogs)} corrupted)", len(badlogs)==0)
+except Exception as e: check(f"log-integrity scan ({e})", False)
 # 5a2. engine self-test (Sale regression + sample gates) — mechanical protection
 try:
     r=subprocess.run([sys.executable,"engine/kprops.py"],capture_output=True,text=True)

@@ -5,7 +5,7 @@ hit, decision-change ROI) are DEFERRED per §3 (no historical prop lines). Prope
 log-loss (line-free analog of Brier). Emits report + JSON summary. Run ONCE; no intermediate peeking."""
 import csv, math, json, os
 BASE=os.path.dirname(os.path.dirname(os.path.abspath(__file__))); os.chdir(BASE)
-rows=list(csv.DictReader(open("data/mlb/e1_replay_table.csv")))
+rows=list(csv.DictReader(open("data/mlb/e1_score_pop.csv")))  # PAIRED experiment-of-record (n_prior>=5, <=7/19)
 for r in rows:
     for k in ("actual","ek_base","ek_e1","p_asof","o","L","premium","highk"): r[k]=float(r[k])
 

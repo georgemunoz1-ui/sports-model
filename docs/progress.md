@@ -68,3 +68,9 @@
 - Froze replay table: 2659 starts (as-of pitcher shrunk K-rate x opponent log5, o=SigmaSO/Sigma(AB+BB), N0=200, strict date<D, DH=start-of-day; 24 quarantined, never league-avg-subbed). Fixed a pipe-delimited starters.csv join bug (was resolving only 129/2659 -> 2659/2659).
 - CONFIRMATORY RESULT: **E1 REJECTED**. Overall ΔMAE +0.004K (gate 0.03); interaction cell prem×highK WORSE -0.108K; complement flat +0.005; NLL flat (2.232 vs 2.234), slope 0.998. Opponent-K applied a real 0.295K avg nudge but OVER-projects premium-vs-highK matchups -> Cole/Sale were variance, not a systematic blind spot. Projections UNCHANGED; opponent-K table kept for display/tracking only.
 - Pre-registration vindicated: the sliced view shows a naive "fix the recent misses" would have DEGRADED exactly those matchups. R7 discipline paid off.
+
+## 2026-07-24 (E1 PAIRED correction — Taco red-gate)
+- Taco red-gate: the confirmatory replay must be PAIRED on the experiment-of-record (n=1759, engine-eligible), not a fresh 2659 sample. The 2659 score included n_prior 1-4 pitchers the engine's proj() refuses (<5 GS -> None). VOID.
+- Reconstructed paired population: engine-eligible n_prior>=5, horizon <=7/19, row_id=pid|gamePk. 1757 starts (vs recorded 1759: -2 from Sale phantom-row repair). 1757 unique ids==count; 0 quarantined-in-pop. Baseline projection identical row-for-row; E1 adds only opponent term.
+- Resolver fixes to hit 0 quarantine: full-team-name canon gap in results.csv (backfill used "Pittsburgh Pirates", upserts used codes); same-opponent-DH handling (Yamamoto/Schlittler 7/19 LAD@NYY DH). Chandler/Ashcraft resolved via pitcher-team+results fallback.
+- PAIRED RESULT: E1 still REJECTED. Overall ΔMAE +0.011K (<0.03 gate); interaction cell WORSE -0.037K; complement +0.011; NLL 2.230 vs 2.236, slope 1.009. Verdict identical to the void 2659 run -> robust. Projections UNCHANGED.

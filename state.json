@@ -491,7 +491,7 @@
   {
    "id": "E1",
    "passes": false,
-   "status": "REJECTED (2026-07-24, confirmatory n=2659): overall ΔMAE +0.004K (<0.03 gate); interaction cell WORSE -0.108K; complement flat. Opponent-K does not generalize and does not repair Cole/Sale (variance, not blind spot). Projections UNCHANGED; pipeline retained for tracking. See docs/experiments/E1_result.md.",
+   "status": "REJECTED (2026-07-24, PAIRED confirmatory n=1757 experiment-of-record, engine-eligible n_prior>=5 <=7/19, row_id=pid|gamePk, 0 quarantined-in-pop): overall ΔMAE +0.011K (<0.03 gate); interaction cell WORSE -0.037K; complement +0.011 flat. Opponent-K does not generalize and does not repair Cole/Sale (variance, not blind spot). Verdict robust vs the void 2659 pass. Projections UNCHANGED; pipeline retained for tracking. See docs/experiments/E1_result.md.",
    "title": "Opponent-K% adjustment for K-props",
    "prereg_doc": "docs/experiments/E1_opponent_k_prereg.md",
    "method": "log5/odds-ratio combine of pitcher as-of shrunk K-rate p with as-of opponent team K-rate-taken o [o = (SigmaSO + L*N0)/(Sigma(AB+BB) + N0), N0=200, denominator AB+BB per principal 7/24] vs league L: adj=(p*o/L)/((p*o/L)+((1-p)(1-o)/(1-L))); E[TBF] unchanged; Poisson tails unchanged. Strict as-of (date<D), DH=start-of-day both games.",

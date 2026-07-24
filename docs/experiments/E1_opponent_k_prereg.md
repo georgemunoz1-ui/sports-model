@@ -109,3 +109,35 @@ a ~as-of proxy; the confirmatory replay will use per-game as-of):
 **Consequence:** only 1 of the 2 motivating misses is an opponent-K case. The feature CANNOT be
 justified by these anecdotes — narrative repair would only fix one of them anyway. E1 must stand on
 the broad replay (complement slice, §6.4). This diagnostic strengthens, not weakens, the §2 guard.
+
+---
+## Data construction — FROZEN ADDENDUM (2026-07-24, principal spec; no results observed → still confirmatory)
+Change log: as-of denominator PA → **AB+BB** (enables EXACT reconciliation vs the 7/23 snapshot's AB/BB
+columns; ~immaterial to o, corr ≈ 0.99). Logged per the R7 rule; zero results seen when frozen.
+
+1. **Fetch:** 30 team hitting gameLogs; fields `gamePk, date, atBats(AB), baseOnBalls(BB), strikeOuts(SO)`.
+   Preserve raw responses to `data/mlb/team_gamelogs/{ABBR}.json`. Parse locally — NEVER trust the
+   model-reported COUNT/SUM (the WSH "813 vs 858" was an extraction-summary error; the raw 103-row
+   array reconciled to 858 exactly).
+2. **Uniqueness:** key each team-game by `gamePk`, not date.
+3. **As-of proxy** for start g vs opponent O on date D:
+   `o_asof = (Σ_{O games, date<D} SO + L·N0) / (Σ_{O games, date<D}(AB+BB) + N0)`, N0=200 (frozen).
+   Strict `date < D` = one-game shift excluding the current matchup.
+4. **Doubleheader policy (FROZEN):** start-of-day totals for BOTH games — a same-date sibling does not
+   enter the other's as-of. Achieved by strict `date < D`; we do NOT attempt to prove G1-final-before-G2
+   from the gamelog. Policy recorded here as the frozen choice.
+5. **Abbreviation map:** one explicit table normalizing all variants → canonical (AZ/ARI, WSH/WSN,
+   SD/SDP, SF/SFG, KC/KCR, TB/TBR, ATH/OAK, CWS/CHW). Team-ID → canonical for the fetch.
+6. **Quarantine:** any start whose opponent can't be matched to a reconciled team is EXCLUDED + logged;
+   never silently assigned league average.
+7. **VALIDATION / FREEZE GATE (mechanically separate, BLOCKING):** all 30 teams' terminal G (unique
+   gamePk count), ΣSO, ΣAB, ΣBB must reconcile to the 7/23 snapshot before the replay table is built.
+   Any mismatch → re-fetch that team; do NOT proceed. Once all 30 reconcile → freeze + commit the replay
+   table; the confirmatory replay then runs ONCE without inspecting intermediate performance.
+8. **Prior preserved exactly:** N0 = 200.
+
+## Production integration (task 11, AFTER replay verdict)
+- Parser: add + TEST 7-, 8-, and 10-field support (opponent-aware) before ANY 8-field forward writes.
+- Forward opponent-K: SHADOW MODE first (compute + log, do not alter plays), then promote to
+  `price_board()` + healthcheck ONLY if E1 passes. If E1 fails: retain the data pipeline for tracking,
+  leave projections unchanged.

@@ -49,3 +49,11 @@
 - StatMuse route VERIFIED fetchable; confirms Sale repair (5/20+5/28 real, 5/22+5/27 phantom; 123 K).
 - Healthcheck: spacing now FLAGS for reconciliation (warn) instead of hard-fail; opener-aware; never auto-delete.
 - Runbook: full repair protocol + quarantine rule + 8-field forward format (adds opponent).
+
+## 2026-07-24 (postgame for 7/23)
+- ENGINE K-props 1-1, -0.58u: Seymour O4.5 WIN (7K), Sale U7.5 LOSS (11K vs proj 6.54). Cumulative 4-5, -1.61u; gate 9/100.
+- Sale 11K = SECOND straight day an elite-K arm torched our UNDER (Cole 11K 7/22). Both disp<1.0, both book-info not book-error. E1 (opponent-K%) now TOP priority — SD/PIT are high-K offenses the model is blind to.
+- TACO raw baseline 3-2, +0.48u (BEAT engine tonight): Williams O6.5 WIN (11K) + Dobnak U3.5 WIN were both engine DECLINES (shrinkage dropped Williams disp to 0.47; Dobnak <5GS skip). Discipline cost 2 winners tonight. A/B night-1 Brier: raw 0.244 < shrunk 0.258 (n=4, noise).
+- ML tracking 2-1 (MIN✓ +112 upset, ATL✓, STL✗). Cumulative 5-2. V13 dir 3-2 -> 21-12.
+- Dataset: 1,539 finals (7/23 upserted; ARI@STL already present). Logs: 9 starts appended + Sale 7/23 placeholder corrected (3.2|7K -> 6.0|11K); Sale season now 19GS/134SO/450TBF = external EXACTLY.
+- BUG: runbook 8-field forward log format crashes sp_asof (field[1] parsed as IP). Reverted to 7-field; parser needs opp-aware len==8 branch before adoption. Logged to known_issues.

@@ -1,5 +1,5 @@
 {
- "updated_utc": "2026-07-23T22:30:00Z",
+ "updated_utc": "2026-07-24T06:10:00Z",
  "verdicts": {
   "mlb_sides": {
    "status": "DEAD",
@@ -22,70 +22,11 @@
  },
  "ledgers": {
   "kprops_paper": {
-   "day": 2,
-   "record_w": 3,
-   "record_l": 4,
-   "units": -1.03,
-   "plays_pending": [
-    {
-     "date": "2026-07-23",
-     "pitcher": "Ian Seymour",
-     "side": "OVER",
-     "line": 4.5,
-     "price": -119,
-     "weight": 0.5,
-     "ek": 5.34,
-     "p": 0.62,
-     "book": "DK",
-     "raw_ek": 5.43,
-     "shrunk_ek": 5.34,
-     "raw_p": 0.631,
-     "shrunk_p": 0.617,
-     "p_delta": 0.015,
-     "disp_raw": 0.93,
-     "disp_shrunk": 0.84,
-     "sample_tier": "5-14 GS",
-     "gs": 7,
-     "close_line": null,
-     "close_price": null,
-     "clv_note": "fill from Taco's late board if posted; else null",
-     "result": null,
-     "roi": null,
-     "brier_raw": null,
-     "brier_shrunk": null,
-     "logloss_raw": null,
-     "logloss_shrunk": null
-    },
-    {
-     "date": "2026-07-23",
-     "pitcher": "Chris Sale",
-     "side": "UNDER",
-     "line": 7.5,
-     "price": -145,
-     "weight": 1.0,
-     "ek": 6.54,
-     "p": 0.667,
-     "book": "HR",
-     "raw_ek": null,
-     "shrunk_ek": 6.54,
-     "raw_p": null,
-     "shrunk_p": 0.667,
-     "p_delta": null,
-     "disp_raw": null,
-     "disp_shrunk": -0.96,
-     "sample_tier": "15+ GS",
-     "gs": 20,
-     "close_line": null,
-     "close_price": null,
-     "clv_note": "registered pre-first-pitch after Taco caught best-EV-first selection flaw; Taco's fresh-FG calc 6.59 vs engine-log 6.54 \u2014 both qualify",
-     "result": null,
-     "roi": null,
-     "brier_raw": null,
-     "brier_shrunk": null,
-     "logloss_raw": null,
-     "logloss_shrunk": null
-    }
-   ],
+   "day": 3,
+   "record_w": 4,
+   "record_l": 5,
+   "units": -1.61,
+   "plays_pending": [],
    "graded": [
     {
      "date": "2026-07-21",
@@ -194,21 +135,85 @@
      "actual": 5,
      "result": "WIN",
      "pl": 1.1
+    },
+    {
+     "date": "2026-07-23",
+     "pitcher": "Ian Seymour",
+     "side": "OVER",
+     "line": 4.5,
+     "price": -119,
+     "weight": 0.5,
+     "ek": 5.34,
+     "p": 0.62,
+     "book": "DK",
+     "raw_ek": 5.43,
+     "shrunk_ek": 5.34,
+     "raw_p": 0.631,
+     "shrunk_p": 0.617,
+     "p_delta": 0.015,
+     "disp_raw": 0.93,
+     "disp_shrunk": 0.84,
+     "sample_tier": "5-14 GS",
+     "gs": 7,
+     "close_line": 4.5,
+     "close_price": -119,
+     "clv_note": "no late board posted; close=open",
+     "result": "WIN",
+     "roi": 0.84,
+     "brier_raw": 0.1362,
+     "brier_shrunk": 0.1467,
+     "logloss_raw": 0.4604,
+     "logloss_shrunk": 0.4829,
+     "actual": 7,
+     "y": 1,
+     "pl": 0.42
+    },
+    {
+     "date": "2026-07-23",
+     "pitcher": "Chris Sale",
+     "side": "UNDER",
+     "line": 7.5,
+     "price": -145,
+     "weight": 1.0,
+     "ek": 6.54,
+     "p": 0.667,
+     "book": "HR",
+     "raw_ek": null,
+     "shrunk_ek": 6.54,
+     "raw_p": null,
+     "shrunk_p": 0.667,
+     "p_delta": null,
+     "disp_raw": null,
+     "disp_shrunk": -0.96,
+     "sample_tier": "15+ GS",
+     "gs": 20,
+     "close_line": 7.5,
+     "close_price": -145,
+     "clv_note": "no late board posted; close=open",
+     "result": "LOSS",
+     "roi": -1.0,
+     "brier_raw": null,
+     "brier_shrunk": 0.4449,
+     "logloss_raw": null,
+     "logloss_shrunk": 1.0996,
+     "actual": 11,
+     "y": 0,
+     "pl": -1.0
     }
    ]
   },
   "v13_forward_directional": {
-   "w": 18,
-   "l": 10,
-   "note": "7/19-20; home-heavy noise; tracking only"
+   "w": 21,
+   "l": 12,
+   "note": "7/19-24; +3-2 on 7/23 (MIN,DET,ATL correct; TB,STL wrong); tracking only"
   },
   "real_money": {
    "risked": 0.0,
    "authorized": false
   },
   "ml_tracking": {
-   "record_w": 3,
-   "record_l": 1,
+   "record_w": 5,
+   "record_l": 2,
    "graded": [
     {
      "date": "2026-07-22",
@@ -253,16 +258,15 @@
      "blow_risk": 0.18,
      "note": "only true market disagreement (home dog); Roupp/Lugo confirmed",
      "result": "WIN"
-    }
-   ],
-   "pending": [
+    },
     {
      "date": "2026-07-23",
      "pick": "MIN",
      "game": "MIN@CLE",
      "ml": 112,
      "v13_wp": 0.54,
-     "note": "true market disagreement: V13 makes the +112 dog a 54% favorite; Bradley>Williams matchup read; both blow-risks low"
+     "note": "true market disagreement: V13 makes the +112 dog a 54% favorite; Bradley>Williams matchup read; both blow-risks low",
+     "result": "WIN"
     },
     {
      "date": "2026-07-23",
@@ -270,7 +274,8 @@
      "game": "AZ@STL",
      "ml": -125,
      "v13_wp": 0.55,
-     "note": "conviction WITH market; McGreevy stable, Pfaadt swing-role"
+     "note": "conviction WITH market; McGreevy stable, Pfaadt swing-role",
+     "result": "LOSS"
     },
     {
      "date": "2026-07-23",
@@ -278,16 +283,19 @@
      "game": "SD@ATL",
      "ml": null,
      "v13_wp": 0.71,
-     "note": "highest conviction on slate (Sale vs Canning, SD blow-risk 34%) \u2014 no board price captured, graded directional-only"
+     "note": "highest conviction on slate (Sale vs Canning, SD blow-risk 34%) \u2014 no board price captured, graded directional-only",
+     "result": "WIN"
     }
-   ]
+   ],
+   "pending": []
   },
   "kprops_taco_baseline": {
    "desc": "Taco raw-rate binomial baseline (no shrinkage, price-EV only, no displacement req) \u2014 A/B vs engine",
-   "record_w": 0,
-   "record_l": 0,
-   "units": 0.0,
-   "pending": [
+   "record_w": 3,
+   "record_l": 2,
+   "units": 0.48,
+   "pending": [],
+   "graded": [
     {
      "date": "2026-07-23",
      "pitcher": "Ian Seymour",
@@ -309,12 +317,16 @@
      "close_line": null,
      "close_price": null,
      "clv_note": "fill from Taco's late board if posted; else null",
-     "result": null,
-     "roi": null,
-     "brier_raw": null,
-     "brier_shrunk": null,
-     "logloss_raw": null,
-     "logloss_shrunk": null
+     "result": "WIN",
+     "roi": 0.84,
+     "brier_raw": 0.1362,
+     "brier_shrunk": 0.1467,
+     "logloss_raw": 0.4604,
+     "logloss_shrunk": 0.4829,
+     "actual": 7,
+     "y": 1,
+     "weight": 1.0,
+     "pl": 0.84
     },
     {
      "date": "2026-07-23",
@@ -337,12 +349,16 @@
      "close_line": null,
      "close_price": null,
      "clv_note": "fill from Taco's late board if posted; else null",
-     "result": null,
-     "roi": null,
-     "brier_raw": null,
-     "brier_shrunk": null,
-     "logloss_raw": null,
-     "logloss_shrunk": null
+     "result": "WIN",
+     "roi": 0.93,
+     "brier_raw": 0.1706,
+     "brier_shrunk": 0.2061,
+     "logloss_raw": 0.5327,
+     "logloss_shrunk": 0.6051,
+     "actual": 11,
+     "y": 1,
+     "weight": 1.0,
+     "pl": 0.93
     },
     {
      "date": "2026-07-23",
@@ -365,12 +381,16 @@
      "close_line": null,
      "close_price": null,
      "clv_note": "fill from Taco's late board if posted; else null",
-     "result": null,
-     "roi": null,
-     "brier_raw": null,
-     "brier_shrunk": null,
-     "logloss_raw": null,
-     "logloss_shrunk": null
+     "result": "LOSS",
+     "roi": -1.0,
+     "brier_raw": 0.4032,
+     "brier_shrunk": 0.3684,
+     "logloss_raw": 1.0079,
+     "logloss_shrunk": 0.9339,
+     "actual": 5,
+     "y": 0,
+     "weight": 1.0,
+     "pl": -1.0
     },
     {
      "date": "2026-07-23",
@@ -393,12 +413,16 @@
      "close_line": null,
      "close_price": null,
      "clv_note": "fill from Taco's late board if posted; else null",
-     "result": null,
-     "roi": null,
-     "brier_raw": null,
-     "brier_shrunk": null,
-     "logloss_raw": null,
-     "logloss_shrunk": null
+     "result": "LOSS",
+     "roi": -1.0,
+     "brier_raw": 0.2642,
+     "brier_shrunk": 0.3125,
+     "logloss_raw": 0.7215,
+     "logloss_shrunk": 0.8187,
+     "actual": 3,
+     "y": 0,
+     "weight": 1.0,
+     "pl": -1.0
     },
     {
      "date": "2026-07-23",
@@ -421,22 +445,33 @@
      "close_line": null,
      "close_price": null,
      "clv_note": "fill from Taco's late board if posted; else null",
-     "result": null,
-     "roi": null,
-     "brier_raw": null,
+     "result": "WIN",
+     "roi": 0.71,
+     "brier_raw": 0.1246,
      "brier_shrunk": null,
-     "logloss_raw": null,
-     "logloss_shrunk": null
+     "logloss_raw": 0.4354,
+     "logloss_shrunk": null,
+     "actual": 3,
+     "y": 1,
+     "weight": 1.0,
+     "pl": 0.71
     }
    ],
-   "graded": []
+   "ab_shrinkage": {
+    "n_both": 4,
+    "brier_raw_mean": 0.2435,
+    "brier_shrunk_mean": 0.2584,
+    "logloss_raw_mean": 0.6806,
+    "logloss_shrunk_mean": 0.7102,
+    "note": "A/B night 1: RAW beat SHRUNK on both Brier and logloss. Two high-K arms (Williams 11K) went OVER where shrinkage pulled p toward 0.5. n=4 shared plays \u2014 pure noise, marathon scoring."
+   }
   }
  },
  "gates": {
   "kprops_go_live": {
    "passes": false,
    "criteria": "n>=100 graded paper plays AND ROI>0 with bootstrap 95% CI excluding 0 AND calibration holds forward AND Taco explicit authorization",
-   "progress": "7/100"
+   "progress": "9/100"
   },
   "sides_reopen": {
    "passes": false,
@@ -490,11 +525,13 @@
   "ESPN odds wipe at final -> capture pregame only",
   "WebFetch truncates big JSON -> use fields= param + small windows (see runbook)",
   "statsapi standings endpoint serves stale W-L (use results.csv aggregates instead)",
-  "container is ephemeral: git commit locally each run; ask Taco about a remote for true durability"
+  "container is ephemeral: git commit locally each run; ask Taco about a remote for true durability",
+  "RUNBOOK BUG (found 7/24): the 8-field forward log format 'date|opp|IP|...' CRASHES sp_asof (parses field[1] as IP -> float(opp) error) and is skipped by healthcheck log-integrity (len!=7 and !=10). Logs stay 7-field 'date|IP|ER|SO|BB|TBF|GS' until parsers are made opponent-aware. Fix: add len==8 branch offset-by-1, then update runbook.",
+  "ELITE-ARM UNDER blind spot: Cole 11K (7/22) + Sale 11K (7/23) both smashed our UNDER; TBF-capped projection underrates premium-K arms vs high-K offenses. E1 (opponent-K%) is the fix, escalated to top."
  ],
  "next_actions": [
-  "postgame grade tonight (2 engine + 5 baseline + 3 ML)",
-  "E1 opponent-K% experiment",
-  "Sunday weekly review + dashboard"
+  "PRE-REGISTER + RUN E1 (opponent-K%): Cole 11K (7/22) + Sale 11K (7/23) = 2 straight elite-K arms torched our UNDER; book-info not book-error. Top priority.",
+  "Sunday weekly review: cumulative Brier raw-vs-shrunk A/B (n_both=4 so far), dashboard, backup bundle",
+  "monitor: shrinkage+gates removed 2 winners on 7/23 (Williams O, Dobnak U) \u2014 track if pattern persists (n tiny)"
  ]
 }

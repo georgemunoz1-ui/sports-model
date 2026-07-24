@@ -491,10 +491,14 @@
   {
    "id": "E1",
    "passes": false,
-   "status": "queued",
+   "status": "PRE-REGISTERED (frozen 2026-07-24); awaiting threshold sign-off + data fetch, then run",
    "title": "Opponent-K% adjustment for K-props",
-   "method": "team K-taken/PA as-of from pitcher_logs opponents; pre-register: must cut backtest MAE and improve displaced-line hit% on 1759-start replay",
-   "why": "closes the 'book info we lack' gap"
+   "prereg_doc": "docs/experiments/E1_opponent_k_prereg.md",
+   "method": "log5/odds-ratio combine of pitcher as-of shrunk K-rate p with as-of opponent team K-rate-taken o (shrink N0=200PA) vs league L: adj=(p*o/L)/((p*o/L)+((1-p)(1-o)/(1-L))); E[TBF] unchanged; Poisson tails unchanged. Strict as-of.",
+   "reporting": ["overall MAE","Brier + calibration slope/intercept","displaced-line hit rate (lined subset)","premium-K arms K%>=27 slice","high-opp-K offenses oppK>=24 slice","interaction premium x high-K","count+direction of flipped decisions + their backtest ROI","COMPLEMENT slice (narrative-repair guard)"],
+   "adopt_rule": "GENERAL adopt requires ALL: overall MAE down >=0.03K; Brier not worse + calib slope [0.9,1.1]; displaced-hit >= baseline (or deferred if <150 lined starts); complement slice also improves (not interaction-only); flipped-decision set net non-negative ROI. Interaction-only gain (>=0.10K) with complement degradation -> GATE-TO-MATCHUP experimental only. Else REJECT (retain H0: short-run clustering).",
+   "data_prereq": "fetch 2026 team batting game logs (K,PA/game) from statsapi -> per-team as-of K-rate; opponent via pitcher_logs+results.csv join (no log-schema change).",
+   "why": "closes the 'book info we lack' gap IF it generalizes; pre-registration guards against post-hoc repair of the Cole/Sale anecdotes"
   },
   {
    "id": "E2",

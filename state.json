@@ -504,14 +504,14 @@
   {
    "id": "E2",
    "passes": false,
-   "status": "queued",
+   "status": "queued (AFTER E3, per Taco 7/24 — tail quality is useful but does NOT address the book-info question)",
    "title": "Negative-binomial K tails vs Poisson",
    "method": "fit dispersion on backtest; must improve P(over) calibration buckets"
   },
   {
    "id": "E3",
    "passes": false,
-   "status": "queued",
+   "status": "NEXT (E3 BEFORE E2, per Taco 7/24) — directly tests whether market movement carries information missing from the projection (the unresolved book-info question), with NO engine change. Pre-register before running.",
    "title": "Line-move capture for props",
    "method": "capture DK K-lines at 2 timestamps/day; measure if OUR flagged deviations get steamed toward projection (CLV-for-props = independent edge evidence)"
   },
@@ -542,8 +542,8 @@
  "next_actions": [
   "E1 -> NO-PROMOTE / CONFIRMATORY INDETERMINATE. Original 1759 confirmatory CLOSED unrecoverable. 1757 run is EXPLORATORY (no material value, but not confirmatory). Engine unchanged. Cole/Sale cause UNEXPLAINED (not 'variance').",
   "E1-R (if opponent-K worth a real confirmatory): pre-register a FORWARD holdout (unobserved starts), freeze method/thresholds, score once. The 1757 rows are burned for confirmatory use.",
-  "E-queue also: E3 line-move CLV for props (independent edge evidence, no model change) OR E2 neg-binomial K tails. Pre-register before running (R7).",
-  "8-field log parser fix (opp-aware) is NOT urgent (E1 rejected -> no forward opponent writes); do it before ever adopting 8-field format.",
+  "NEXT EXPERIMENT = E3 (before E2, Taco 7/24): capture prop line movement -> test if market steams toward our flagged deviations (CLV = book-info evidence), NO engine change. Pre-register first (R7). E2 (neg-binomial tails) follows.",
+  "8-field log parser fix (opp-aware) is NOT urgent (E1 not promoted -> no forward opponent writes); do it before ever adopting 8-field format.",
   "Sunday weekly review: cumulative Brier raw-vs-shrunk A/B (n_both=4 so far), dashboard, backup bundle",
   "monitor: on 7/23 the 4 plays engine filters skipped went 2-2 net -0.36u (filters NET-CORRECT). Track cumulatively, not per-night."
  ]

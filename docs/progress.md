@@ -57,3 +57,8 @@
 - ML tracking 2-1 (MIN✓ +112 upset, ATL✓, STL✗). Cumulative 5-2. V13 dir 3-2 -> 21-12.
 - Dataset: 1,539 finals (7/23 upserted; ARI@STL already present). Logs: 9 starts appended + Sale 7/23 placeholder corrected (3.2|7K -> 6.0|11K); Sale season now 19GS/134SO/450TBF = external EXACTLY.
 - BUG: runbook 8-field forward log format crashes sp_asof (field[1] parsed as IP). Reverted to 7-field; parser needs opp-aware len==8 branch before adoption. Logged to known_issues.
+
+## 2026-07-24 (E1 pre-registration + team-K snapshot)
+- E1 PRE-REGISTERED (frozen): log5/odds-ratio opponent-K method + full reporting spec (6 metrics + complement slice) + adopt/gate/reject thresholds. docs/experiments/E1_opponent_k_prereg.md. Awaiting Taco threshold sign-off + per-game data fetch before confirmatory run.
+- Taco uploaded 7/23 season team stats -> parsed to team K-rate-taken table (data/mlb/team_batting_asof/2026-07-23.json). League 22.7%. High-K(>=24%): LAA,CIN,PIT,BAL,NYY,CWS,PHI. Low-K: TB 19.4%, AZ 20.0%, TOR 20.1%.
+- KEY pre-run diagnostic: E1 would REPAIR Cole (PIT high-K, play flips to no-play, avoids loss) but NOT Sale (SD league-avg rank 12, adj +0.09K, play still fires+loses). Only 1 of 2 anecdotes is an opponent-K case -> Sale 11K was pitcher-side variance. Feature must stand on broad replay merit, not these two games. (snapshot=look-ahead if used as historical feature; per-game fetch still required.)

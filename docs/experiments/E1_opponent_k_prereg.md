@@ -96,3 +96,16 @@ short-run clustering; we do NOT claim opponent-blindness as an established defic
 
 Once these are confirmed, the run is confirmatory. Changing any of them afterward makes the run
 exploratory and requires a fresh pre-registration for a confirmatory pass.
+
+---
+## Pre-run diagnostic (2026-07-24, using Taco's 7/23 team-K snapshot)
+Snapshot cross-check on the two motivating anecdotes (illustrative — uses the 7/23 season snapshot as
+a ~as-of proxy; the confirmatory replay will use per-game as-of):
+- **Cole 7/22 vs PIT (24.9% K, rank 3/30, high-K):** log5 raises E[K] 5.59 → 6.12 (+0.53K); UNDER
+  displacement 0.91 → 0.38 → **play FLIPS to no-play**. E1 would have AVOIDED the Cole loss. Fits H1.
+- **Sale 7/23 vs SD (23.0% K, rank 12/30, league-average):** log5 raises E[K] 6.59 → 6.68 (+0.09K);
+  UNDER displacement 0.91 → 0.82 → **play does NOT flip, still fires, still loses.** Sale's 11K was
+  pitcher-side variance vs an average-K offense; opponent-K% does not explain it.
+**Consequence:** only 1 of the 2 motivating misses is an opponent-K case. The feature CANNOT be
+justified by these anecdotes — narrative repair would only fix one of them anyway. E1 must stand on
+the broad replay (complement slice, §6.4). This diagnostic strengthens, not weakens, the §2 guard.

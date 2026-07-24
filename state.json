@@ -14,7 +14,7 @@
   "mlb_kprops": {
    "status": "LIVE_PAPER",
    "evidence": "n=1759 backtest: MAE 1.92<naive 2.41; calibrated; displaced lines hit 62-70%. Most live DK lines within 0.5K of projection (engine sane).",
-   "open_question": "are >=0.9K line deviations book-error or book-info? forward ledger answers"
+   "open_question": "are >=0.9K line deviations book-info? E1 (opponent-K) REJECTED as the explanation (n=2659, no MAE gain, hurts the exact cell). Deviations remain unexplained; forward ledger + future E-queue (park/framing/ump) still open."
   },
   "totals": {
    "status": "NOT_READY",
@@ -491,7 +491,7 @@
   {
    "id": "E1",
    "passes": false,
-   "status": "PRE-REGISTERED (frozen 2026-07-24); awaiting threshold sign-off + data fetch, then run",
+   "status": "REJECTED (2026-07-24, confirmatory n=2659): overall ΔMAE +0.004K (<0.03 gate); interaction cell WORSE -0.108K; complement flat. Opponent-K does not generalize and does not repair Cole/Sale (variance, not blind spot). Projections UNCHANGED; pipeline retained for tracking. See docs/experiments/E1_result.md.",
    "title": "Opponent-K% adjustment for K-props",
    "prereg_doc": "docs/experiments/E1_opponent_k_prereg.md",
    "method": "log5/odds-ratio combine of pitcher as-of shrunk K-rate p with as-of opponent team K-rate-taken o [o = (SigmaSO + L*N0)/(Sigma(AB+BB) + N0), N0=200, denominator AB+BB per principal 7/24] vs league L: adj=(p*o/L)/((p*o/L)+((1-p)(1-o)/(1-L))); E[TBF] unchanged; Poisson tails unchanged. Strict as-of (date<D), DH=start-of-day both games.",
@@ -540,8 +540,10 @@
   "ELITE-ARM UNDER misses (HYPOTHESIS, not confirmed): Cole 11K (7/22) + Sale 11K (7/23) are 2 consecutive premium-arm UNDER misses. PLAUSIBLE cause = TBF-capped projection omitting opponent-K%; equally consistent with short-run clustering at n=2. E1 replay must show improvement before causal status. Escalated to top for TESTING, not treated as established."
  ],
  "next_actions": [
-  "PRE-REGISTER + RUN E1 (opponent-K%): Cole 11K (7/22) + Sale 11K (7/23) = 2 straight premium-arm UNDER misses reveal a PLAUSIBLE opponent-K% omission (hypothesis, NOT yet causal). E1 must improve the 1759-start replay before this explanation earns status; otherwise it's short-run clustering. Top priority.",
+  "E1 DONE -> REJECTED (opponent-K adds +0.004K MAE, hurts interaction cell -0.108K). Cole/Sale = variance. Projections unchanged; opponent-K table kept for display/tracking only.",
+  "E-queue next: E3 line-move CLV for props (independent edge evidence, no model change needed) OR E2 neg-binomial K tails. Pre-register before running (R7).",
+  "8-field log parser fix (opp-aware) is NOT urgent (E1 rejected -> no forward opponent writes); do it before ever adopting 8-field format.",
   "Sunday weekly review: cumulative Brier raw-vs-shrunk A/B (n_both=4 so far), dashboard, backup bundle",
-  "monitor: on 7/23 the 4 plays engine filters skipped went 2-2 net -0.36u (filters NET-CORRECT; avoided Bradley -153 + McGreevy no-disp losses). Only Williams was a shrinkage-cost-a-winner. Track cumulatively, not per-night."
+  "monitor: on 7/23 the 4 plays engine filters skipped went 2-2 net -0.36u (filters NET-CORRECT). Track cumulatively, not per-night."
  ]
 }

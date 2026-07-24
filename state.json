@@ -1,5 +1,5 @@
 {
- "updated_utc": "2026-07-24T07:20:00Z",
+ "updated_utc": "2026-07-24T18:30:00Z",
  "ledger_conventions": {
   "pl_rounding": "Each play settles to a 2-decimal P/L (American-odds payout rounded at settlement). Running units = sum of these rounded per-play values, so the ledger column sums EXACTLY to the total (sportsbook-settlement convention, chosen for auditability). Note: summing unrounded payouts can differ by ~0.01u (e.g. baseline 7/23 is +0.48u rounded, +0.49u unrounded).",
   "brier_ab": "raw-vs-shrunk Brier/logloss compared only on plays where BOTH probabilities exist (engine skips produce no shrunk_p). 7/23 n_both=4 (Dobnak excluded).",
@@ -292,7 +292,35 @@
      "result": "WIN"
     }
    ],
-   "pending": []
+   "pending": [
+    {
+     "date": "2026-07-24",
+     "pick": "NYY",
+     "game": "NYY@PHI",
+     "ml": 112,
+     "v13_wp": 0.61,
+     "mkt_impl": 0.47,
+     "note": "V13 flips +112 road dog to 61% favorite \u2014 day's one real market disagreement; starter low-trust (\u26a0)"
+    },
+    {
+     "date": "2026-07-24",
+     "pick": "ATL",
+     "game": "ATL@BAL",
+     "ml": 100,
+     "v13_wp": 0.54,
+     "mkt_impl": 0.5,
+     "note": "mild V13 +EV lean on road pick'em"
+    },
+    {
+     "date": "2026-07-24",
+     "pick": "SEA",
+     "game": "SEA@TEX",
+     "ml": -120,
+     "v13_wp": 0.58,
+     "mkt_impl": 0.54,
+     "note": "V13 more bullish on SEA than market"
+    }
+   ]
   },
   "kprops_taco_baseline": {
    "desc": "Taco raw-rate binomial baseline (no shrinkage, price-EV only, no displacement req) \u2014 A/B vs engine",
@@ -491,12 +519,21 @@
   {
    "id": "E1",
    "passes": false,
-   "status": "NO-PROMOTE / CONFIRMATORY INDETERMINATE (2026-07-24). Original n=1759 confirmatory CLOSED as UNRECOVERABLE (row IDs never stored: backtest kept anonymous arrays; data vintage mutated since; see docs/experiments/E1_confirmatory_closure.md). The n=1757 run is EXPLORATORY (reconstructed pop, 7/24 vintage, <=7/19 horizon), NOT confirmatory: overall ΔMAE +0.011K (<0.03), interaction -0.037K, calib slope 1.009. Bounded conclusion: E1 as specified showed no material incremental value on the observed sample; does NOT explain the Cole/Sale misses (cause unexplained). The 1757 rows cannot be reused as confirmatory; a real E1-R needs a pre-registered FORWARD holdout. ENGINE UNCHANGED.",
+   "status": "NO-PROMOTE / CONFIRMATORY INDETERMINATE (2026-07-24). Original n=1759 confirmatory CLOSED as UNRECOVERABLE (row IDs never stored: backtest kept anonymous arrays; data vintage mutated since; see docs/experiments/E1_confirmatory_closure.md). The n=1757 run is EXPLORATORY (reconstructed pop, 7/24 vintage, <=7/19 horizon), NOT confirmatory: overall \u0394MAE +0.011K (<0.03), interaction -0.037K, calib slope 1.009. Bounded conclusion: E1 as specified showed no material incremental value on the observed sample; does NOT explain the Cole/Sale misses (cause unexplained). The 1757 rows cannot be reused as confirmatory; a real E1-R needs a pre-registered FORWARD holdout. ENGINE UNCHANGED.",
    "title": "Opponent-K% adjustment for K-props",
    "prereg_doc": "docs/experiments/E1_opponent_k_prereg.md",
    "method": "log5/odds-ratio combine of pitcher as-of shrunk K-rate p with as-of opponent team K-rate-taken o [o = (SigmaSO + L*N0)/(Sigma(AB+BB) + N0), N0=200, denominator AB+BB per principal 7/24] vs league L: adj=(p*o/L)/((p*o/L)+((1-p)(1-o)/(1-L))); E[TBF] unchanged; Poisson tails unchanged. Strict as-of (date<D), DH=start-of-day both games.",
    "data_gate": "BLOCKING (harness/e1_data.py gate_ok): all 30 teams' terminal G(unique gamePk)/SO/AB/BB must reconcile to 7/23 snapshot before replay table is built/frozen. gamePk-keyed; explicit abbrev table; quarantine unmatched opponents (never sub league avg); parse raw locally, never trust model COUNT/SUM.",
-   "reporting": ["overall MAE","Brier + calibration slope/intercept","displaced-line hit rate (lined subset)","premium-K arms K%>=27 slice","high-opp-K offenses oppK>=24 slice","interaction premium x high-K","count+direction of flipped decisions + their backtest ROI","COMPLEMENT slice (narrative-repair guard)"],
+   "reporting": [
+    "overall MAE",
+    "Brier + calibration slope/intercept",
+    "displaced-line hit rate (lined subset)",
+    "premium-K arms K%>=27 slice",
+    "high-opp-K offenses oppK>=24 slice",
+    "interaction premium x high-K",
+    "count+direction of flipped decisions + their backtest ROI",
+    "COMPLEMENT slice (narrative-repair guard)"
+   ],
    "adopt_rule": "GENERAL adopt requires ALL: overall MAE down >=0.03K; Brier not worse + calib slope [0.9,1.1]; displaced-hit >= baseline (or deferred if <150 lined starts); complement slice also improves (not interaction-only); flipped-decision set net non-negative ROI. Interaction-only gain (>=0.10K) with complement degradation -> GATE-TO-MATCHUP experimental only. Else REJECT (retain H0: short-run clustering).",
    "data_prereq": "fetch 2026 team batting game logs (K,PA/game) from statsapi -> per-team as-of K-rate; opponent via pitcher_logs+results.csv join (no log-schema change).",
    "why": "closes the 'book info we lack' gap IF it generalizes; pre-registration guards against post-hoc repair of the Cole/Sale anecdotes"
@@ -504,14 +541,14 @@
   {
    "id": "E2",
    "passes": false,
-   "status": "queued (AFTER E3, per Taco 7/24 — tail quality is useful but does NOT address the book-info question)",
+   "status": "queued (AFTER E3, per Taco 7/24 \u2014 tail quality is useful but does NOT address the book-info question)",
    "title": "Negative-binomial K tails vs Poisson",
    "method": "fit dispersion on backtest; must improve P(over) calibration buckets"
   },
   {
    "id": "E3",
    "passes": false,
-   "status": "NEXT (E3 BEFORE E2, per Taco 7/24) — directly tests whether market movement carries information missing from the projection (the unresolved book-info question), with NO engine change. Pre-register before running.",
+   "status": "NEXT (E3 BEFORE E2, per Taco 7/24) \u2014 directly tests whether market movement carries information missing from the projection (the unresolved book-info question), with NO engine change. Pre-register before running.",
    "title": "Line-move capture for props",
    "method": "capture DK K-lines at 2 timestamps/day; measure if OUR flagged deviations get steamed toward projection (CLV-for-props = independent edge evidence)"
   },
@@ -540,11 +577,10 @@
   "ELITE-ARM UNDER misses (HYPOTHESIS, not confirmed): Cole 11K (7/22) + Sale 11K (7/23) are 2 consecutive premium-arm UNDER misses. PLAUSIBLE cause = TBF-capped projection omitting opponent-K%; equally consistent with short-run clustering at n=2. E1 replay must show improvement before causal status. Escalated to top for TESTING, not treated as established."
  ],
  "next_actions": [
-  "E1 -> NO-PROMOTE / CONFIRMATORY INDETERMINATE. Original 1759 confirmatory CLOSED unrecoverable. 1757 run is EXPLORATORY (no material value, but not confirmatory). Engine unchanged. Cole/Sale cause UNEXPLAINED (not 'variance').",
-  "E1-R (if opponent-K worth a real confirmatory): pre-register a FORWARD holdout (unobserved starts), freeze method/thresholds, score once. The 1757 rows are burned for confirmatory use.",
-  "NEXT EXPERIMENT = E3 (before E2, Taco 7/24): capture prop line movement -> test if market steams toward our flagged deviations (CLV = book-info evidence), NO engine change. Pre-register first (R7). E2 (neg-binomial tails) follows.",
-  "8-field log parser fix (opp-aware) is NOT urgent (E1 not promoted -> no forward opponent writes); do it before ever adopting 8-field format.",
-  "Sunday weekly review: cumulative Brier raw-vs-shrunk A/B (n_both=4 so far), dashboard, backup bundle",
-  "monitor: on 7/23 the 4 plays engine filters skipped went 2-2 net -0.36u (filters NET-CORRECT). Track cumulatively, not per-night."
+  "GRADE tonight (7/24): ML tracking (NYY/ATL/SEA) + V13 directional on all 15 games. No K plays (no prop board). Update ml_tracking + v13_forward_directional.",
+  "NEXT EXPERIMENT = E3 (before E2): pre-register prop line-move CLV capture (book-info test, no engine change), then run.",
+  "E1 CLOSED: NO-PROMOTE / CONFIRMATORY INDETERMINATE; original 1759 unrecoverable; engine unchanged.",
+  "Sunday weekly review: dashboard + backup bundle + cumulative Brier A/B.",
+  "8-field parser fix deferred (no forward opponent writes)."
  ]
 }

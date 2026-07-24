@@ -1,5 +1,10 @@
 {
- "updated_utc": "2026-07-24T06:10:00Z",
+ "updated_utc": "2026-07-24T07:20:00Z",
+ "ledger_conventions": {
+  "pl_rounding": "Each play settles to a 2-decimal P/L (American-odds payout rounded at settlement). Running units = sum of these rounded per-play values, so the ledger column sums EXACTLY to the total (sportsbook-settlement convention, chosen for auditability). Note: summing unrounded payouts can differ by ~0.01u (e.g. baseline 7/23 is +0.48u rounded, +0.49u unrounded).",
+  "brier_ab": "raw-vs-shrunk Brier/logloss compared only on plays where BOTH probabilities exist (engine skips produce no shrunk_p). 7/23 n_both=4 (Dobnak excluded).",
+  "objective": "profitability = EV vs price break-even, NOT win% > 50%."
+ },
  "verdicts": {
   "mlb_sides": {
    "status": "DEAD",
@@ -527,10 +532,10 @@
   "statsapi standings endpoint serves stale W-L (use results.csv aggregates instead)",
   "container is ephemeral: git commit locally each run; ask Taco about a remote for true durability",
   "RUNBOOK BUG (found 7/24): the 8-field forward log format 'date|opp|IP|...' CRASHES sp_asof (parses field[1] as IP -> float(opp) error) and is skipped by healthcheck log-integrity (len!=7 and !=10). Logs stay 7-field 'date|IP|ER|SO|BB|TBF|GS' until parsers are made opponent-aware. Fix: add len==8 branch offset-by-1, then update runbook.",
-  "ELITE-ARM UNDER blind spot: Cole 11K (7/22) + Sale 11K (7/23) both smashed our UNDER; TBF-capped projection underrates premium-K arms vs high-K offenses. E1 (opponent-K%) is the fix, escalated to top."
+  "ELITE-ARM UNDER misses (HYPOTHESIS, not confirmed): Cole 11K (7/22) + Sale 11K (7/23) are 2 consecutive premium-arm UNDER misses. PLAUSIBLE cause = TBF-capped projection omitting opponent-K%; equally consistent with short-run clustering at n=2. E1 replay must show improvement before causal status. Escalated to top for TESTING, not treated as established."
  ],
  "next_actions": [
-  "PRE-REGISTER + RUN E1 (opponent-K%): Cole 11K (7/22) + Sale 11K (7/23) = 2 straight elite-K arms torched our UNDER; book-info not book-error. Top priority.",
+  "PRE-REGISTER + RUN E1 (opponent-K%): Cole 11K (7/22) + Sale 11K (7/23) = 2 straight premium-arm UNDER misses reveal a PLAUSIBLE opponent-K% omission (hypothesis, NOT yet causal). E1 must improve the 1759-start replay before this explanation earns status; otherwise it's short-run clustering. Top priority.",
   "Sunday weekly review: cumulative Brier raw-vs-shrunk A/B (n_both=4 so far), dashboard, backup bundle",
   "monitor: on 7/23 the 4 plays engine filters skipped went 2-2 net -0.36u (filters NET-CORRECT; avoided Bradley -153 + McGreevy no-disp losses). Only Williams was a shrinkage-cost-a-winner. Track cumulatively, not per-night."
  ]

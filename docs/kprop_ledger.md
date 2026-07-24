@@ -14,3 +14,7 @@ Day 2: 2-2, -0.56u | cumulative 3-4-1V, -1.03u
 | 7/23 | Seymour | O4.5 | -119(DK) | 0.5 | 5.34 | 7 | WIN | +0.42 |
 | 7/23 | Sale | U7.5 | -145(HR) | 1.0 | 6.54 | 11 | LOSS | -1.00 |
 Day 3: 1-1, -0.58u | cumulative 4-5, -1.61u | gate 9/100
+
+---
+**P/L convention (declared 7/24):** each play settles to a 2-decimal payout (American-odds payout rounded at settlement); running units = sum of the rounded per-play values, so this column sums EXACTLY to the total. Sportsbook-settlement convention, chosen for auditability. Summing *unrounded* payouts can differ by ~0.01u (baseline 7/23: +0.48u rounded / +0.49u unrounded).
+**Brier A/B:** raw-vs-shrunk compared only where BOTH probabilities exist; engine skips (no shrunk_p) are excluded. 7/23 n_both=4 (Dobnak excluded).

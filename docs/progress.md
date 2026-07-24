@@ -52,7 +52,7 @@
 
 ## 2026-07-24 (postgame for 7/23)
 - ENGINE K-props 1-1, -0.58u: Seymour O4.5 WIN (7K), Sale U7.5 LOSS (11K vs proj 6.54). Cumulative 4-5, -1.61u; gate 9/100.
-- Sale 11K = SECOND straight day an elite-K arm torched our UNDER (Cole 11K 7/22). Both disp<1.0, both book-info not book-error. E1 (opponent-K%) now TOP priority — SD/PIT are high-K offenses the model is blind to.
+- Sale 11K = SECOND straight day a premium-K arm beat our UNDER (Cole 11K 7/22), both disp<1.0. EPISTEMIC NOTE (Taco): this is NOT yet "book-info not book-error" — 2 misses reveal a PLAUSIBLE opponent-K% omission but are equally consistent with short-run clustering at n=2. E1 must improve the 1759-start replay before the opponent-K explanation earns causal status. Escalated to top for TESTING.
 - TACO raw baseline 3-2, +0.48u vs engine -0.58u — but the divergence is subtler than "discipline too tight": the 4 plays the engine declined/skipped went 2-2 (Williams W, Dobnak W, Bradley L, McGreevy L) = -0.36u flat. Filters were NET-CORRECT (declining Bradley -153 juice + McGreevy no-disp AVOIDED 2 losses; only Williams was a true shrinkage-cost-a-winner, elite-K arm pulled 0.75->0.47). Baseline's profit came from the SHARED Seymour play (+0.84 full vs engine +0.42 half). Engine lost the night PURELY on its unique Sale play. A/B night-1 Brier raw 0.244 < shrunk 0.258 (n=4, noise).
 - ML tracking 2-1 (MIN✓ +112 upset, ATL✓, STL✗). Cumulative 5-2. V13 dir 3-2 -> 21-12.
 - Dataset: 1,539 finals (7/23 upserted; ARI@STL already present). Logs: 9 starts appended + Sale 7/23 placeholder corrected (3.2|7K -> 6.0|11K); Sale season now 19GS/134SO/450TBF = external EXACTLY.

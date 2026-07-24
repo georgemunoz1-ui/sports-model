@@ -5,7 +5,8 @@ Computes everything LOCALLY (results.csv + pitcher_logs) then merges data/mlb/od
 and (if present) a RotoWire props CSV. Usage: python3 harness/daily_card.py YYYY-MM-DD slate.psv
   slate.psv lines: gamePk|Away Full Name|Home Full Name|utcTime|AwaySP name|HomeSP name (TBD ok)
 Outputs cards/DATE_card.{json,html}. Paper/tracking only — plays require kprop EV rule + prices."""
-import csv, json, os, sys, glob
+import csv, json, os, sys, glob, unicodedata
+def _norm(s): return unicodedata.normalize("NFKD",(s or "")).encode("ascii","ignore").decode().lower().strip()
 import numpy as np
 from math import exp, factorial
 rng=np.random.default_rng(722)
@@ -31,9 +32,9 @@ for r in csv.DictReader(open("data/backfill/mlb/2026/results.csv")):
 def team_rf(t): return rf.get(t,0)/g[t] if g.get(t) else LG_RPG
 def team_ra(t): return ra.get(t,0)/g[t] if g.get(t) else LG_RPG
 PARK=json.load(open("data/backfill/mlb/2026/park_factors.json"))
-IDS={r["name"].lower():r["id"] for r in csv.DictReader(open("data/backfill/mlb/2026/pitchers.csv"))}
+IDS={_norm(r["name"]):r["id"] for r in csv.DictReader(open("data/backfill/mlb/2026/pitchers.csv"))}
 def sp_asof(name):
-    pid=IDS.get((name or "").lower())
+    pid=IDS.get(_norm(name))
     if not pid or not os.path.exists(f"data/backfill/mlb/2026/pitcher_logs/{pid}.txt"): return None
     ip=er=so=bb=tbf=st=0.0; s_so=s_tbf=0.0
     for ln in open(f"data/backfill/mlb/2026/pitcher_logs/{pid}.txt"):

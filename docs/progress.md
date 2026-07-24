@@ -87,3 +87,9 @@
 - AUDIT record for the EXPLORATORY 1757 dataset (exploratory != unaudited): docs/experiments/E1_1757_audit.md — sha256 e1_score_pop.csv=56092b40..., construction table=0dd2e6a9..., scoring-code commits (e1_replay/e1_data @0a520c7, e1_score @5f12da1, dataset frozen @1a644b4), transcript path, DH evidence (Yamamoto 808967 + Schlittler 693645, both 7/19 = gamePk 823523 via gamelog fetch).
 - E-QUEUE RESEQUENCED: E3 (prop line-move CLV) is NEXT, BEFORE E2 (neg-binomial tails). E3 directly tests the unresolved book-info question (does market movement carry info missing from the projection?) with NO engine change; E2 addresses tail quality but not the Cole/Sale hypothesis.
 - FINAL STATUSES LOCKED: original 1759 replay UNRECOVERABLE; 1757 run EXPLORATORY sensitivity only; production NO PROMOTION; confirmatory E1 INDETERMINATE; Cole/Sale cause UNEXPLAINED; future confirmation = untouched forward holdout.
+
+## 2026-07-24 (pregame card + accent-cap fix)
+- 7/24 full-tracking card (15 games, display-only: sides DEAD, totals NOT_READY, no K board -> no plays). Real gamePks captured.
+- ENGINE FIX: daily_card pitcher-name lookup was accent-SENSITIVE -> "Jesus Luzardo" (slate) missed "Jesús Luzardo" (DB), silently capping an established arm to league-average. Made IDS lookup accent-insensitive (unicodedata strip). Verified: non-accented slate now resolves Luzardo (6.88) + Márquez (3.77).
+- Correction: NYY@PHI ⚠ was Luzardo (accent), not Schlittler; the cap suppressed the TOTAL (projT 8.7->8.1) but NOT the win% -> NYY 61% flip HOLDS at full trust. KC@DET ⚠ is Beck Way (KC rookie, 0 GS), not Skubal (14 GS, resolved). ml_tracking NYY note -> full-trust.
+- 3 ML tracking pending (NYY/ATL/SEA) + 15 V13 directional to grade tonight on finals.

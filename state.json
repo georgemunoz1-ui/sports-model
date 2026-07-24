@@ -14,7 +14,7 @@
   "mlb_kprops": {
    "status": "LIVE_PAPER",
    "evidence": "n=1759 backtest: MAE 1.92<naive 2.41; calibrated; displaced lines hit 62-70%. Most live DK lines within 0.5K of projection (engine sane).",
-   "open_question": "are >=0.9K line deviations book-info? E1 (opponent-K) REJECTED as the explanation (n=2659, no MAE gain, hurts the exact cell). Deviations remain unexplained; forward ledger + future E-queue (park/framing/ump) still open."
+   "open_question": "are >=0.9K line deviations book-info? UNRESOLVED. E1 (opponent-K) exploratory run showed no incremental value, but the confirmatory test is INDETERMINATE (original 1759 pop unrecoverable) so opponent-K is neither confirmed nor refuted as an explanation. Deviations remain unexplained; forward ledger + future pre-registered E-queue (opponent-K forward holdout / park / framing / ump) all still open."
   },
   "totals": {
    "status": "NOT_READY",
@@ -491,7 +491,7 @@
   {
    "id": "E1",
    "passes": false,
-   "status": "REJECTED (2026-07-24, PAIRED confirmatory n=1757 experiment-of-record, engine-eligible n_prior>=5 <=7/19, row_id=pid|gamePk, 0 quarantined-in-pop): overall ΔMAE +0.011K (<0.03 gate); interaction cell WORSE -0.037K; complement +0.011 flat. Opponent-K does not generalize and does not repair Cole/Sale (variance, not blind spot). Verdict robust vs the void 2659 pass. Projections UNCHANGED; pipeline retained for tracking. See docs/experiments/E1_result.md.",
+   "status": "NO-PROMOTE / CONFIRMATORY INDETERMINATE (2026-07-24). Original n=1759 confirmatory CLOSED as UNRECOVERABLE (row IDs never stored: backtest kept anonymous arrays; data vintage mutated since; see docs/experiments/E1_confirmatory_closure.md). The n=1757 run is EXPLORATORY (reconstructed pop, 7/24 vintage, <=7/19 horizon), NOT confirmatory: overall ΔMAE +0.011K (<0.03), interaction -0.037K, calib slope 1.009. Bounded conclusion: E1 as specified showed no material incremental value on the observed sample; does NOT explain the Cole/Sale misses (cause unexplained). The 1757 rows cannot be reused as confirmatory; a real E1-R needs a pre-registered FORWARD holdout. ENGINE UNCHANGED.",
    "title": "Opponent-K% adjustment for K-props",
    "prereg_doc": "docs/experiments/E1_opponent_k_prereg.md",
    "method": "log5/odds-ratio combine of pitcher as-of shrunk K-rate p with as-of opponent team K-rate-taken o [o = (SigmaSO + L*N0)/(Sigma(AB+BB) + N0), N0=200, denominator AB+BB per principal 7/24] vs league L: adj=(p*o/L)/((p*o/L)+((1-p)(1-o)/(1-L))); E[TBF] unchanged; Poisson tails unchanged. Strict as-of (date<D), DH=start-of-day both games.",
@@ -540,8 +540,9 @@
   "ELITE-ARM UNDER misses (HYPOTHESIS, not confirmed): Cole 11K (7/22) + Sale 11K (7/23) are 2 consecutive premium-arm UNDER misses. PLAUSIBLE cause = TBF-capped projection omitting opponent-K%; equally consistent with short-run clustering at n=2. E1 replay must show improvement before causal status. Escalated to top for TESTING, not treated as established."
  ],
  "next_actions": [
-  "E1 DONE -> REJECTED (opponent-K adds +0.004K MAE, hurts interaction cell -0.108K). Cole/Sale = variance. Projections unchanged; opponent-K table kept for display/tracking only.",
-  "E-queue next: E3 line-move CLV for props (independent edge evidence, no model change needed) OR E2 neg-binomial K tails. Pre-register before running (R7).",
+  "E1 -> NO-PROMOTE / CONFIRMATORY INDETERMINATE. Original 1759 confirmatory CLOSED unrecoverable. 1757 run is EXPLORATORY (no material value, but not confirmatory). Engine unchanged. Cole/Sale cause UNEXPLAINED (not 'variance').",
+  "E1-R (if opponent-K worth a real confirmatory): pre-register a FORWARD holdout (unobserved starts), freeze method/thresholds, score once. The 1757 rows are burned for confirmatory use.",
+  "E-queue also: E3 line-move CLV for props (independent edge evidence, no model change) OR E2 neg-binomial K tails. Pre-register before running (R7).",
   "8-field log parser fix (opp-aware) is NOT urgent (E1 rejected -> no forward opponent writes); do it before ever adopting 8-field format.",
   "Sunday weekly review: cumulative Brier raw-vs-shrunk A/B (n_both=4 so far), dashboard, backup bundle",
   "monitor: on 7/23 the 4 plays engine filters skipped went 2-2 net -0.36u (filters NET-CORRECT). Track cumulatively, not per-night."

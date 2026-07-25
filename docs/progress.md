@@ -125,3 +125,40 @@ information via model."
   toward 24 compressing workhorse starts** — distinct from E1's opponent-K term. Generated AFTER seeing
   results, so it cannot be tested on them; any test needs R7 pre-registration against an untouched
   future holdout. **No engine change made.** E3 (prop line-move CLV) remains the next experiment.
+
+### 2026-07-25 (02:15 ET) — 7/25 card built; ML tracking rebuilt as a pre-registered EV ledger
+
+- **Slate + lines.** 15 games pulled from statsapi (`data/mlb/slates/2026-07-25.psv`). Full ML/RL/Totals
+  board from covers.com → `data/mlb/odds/2026-07-25_pregame.json`, explicitly labeled **OPENING/EARLY**
+  (captured 05:50Z, ~11h before the 17:10Z first pitch). ESPN served cached 7/12 data, RotoWire is a JS
+  shell, sportsbookreview showed 7/23, vegasinsider and dimers showed 7/24, oddsshark is
+  `ROBOTS_DISALLOWED` (no bypass attempted). covers was the only full 7/25 board — **single source, no
+  book attribution.**
+- **Card.** `harness/build_card_0725.py` → `cards/2026-07-25_card.html`. Every figure is computed from
+  `cards/2026-07-25_card.json`; nothing hand-typed. Verified programmatically (all 15 games present, all
+  ML strings and V13 percentages match source, no capped game registered, EV recomputed independently):
+  **PASS**.
+- **No 7/25 K board exists yet** at 02:15 ET. Per R1 the card carries **zero prop plays** — projections
+  only. Cease **8.14** is the highest E[K] this engine has produced on any priced slate (36.9 K%, 17 GS).
+- **`ml_tracking` FROZEN at 7-3, superseded.** Its selection rule was "V13 directional lean + my
+  discretion," which is not an EV rule and was never written down in advance; the 7-3 therefore measures
+  an unspecified process and cannot be honestly extended. Rows kept as history, not deleted.
+- **NEW `ml_ev_tracking`, rule pre-registered 06:20Z — before the 17:10Z first pitch (R7).** Mechanical:
+  (1) compute V13 P(win) for BOTH sides of every game; (2) qualify iff `EV>0 AND edge>=0.04` — the same
+  thresholds `select_play` already uses, not tuned for this ledger; (3) exclude capped games (starter TBD
+  or <5 GS), logging the exclusion; (4) register every qualifier, no discretion; (5) freeze the opening
+  price, capture close separately for CLV.
+- **7/25 qualifiers (3 of 30 sides): COL +186 (p .462, edge +11.2%, EV +.321), KC +154 (p .466, edge
+  +7.2%, EV +.184), STL −116 (p .592, edge +5.5%, EV +.102).** Two of the three are sides V13 expects to
+  **lose more often than win** — they qualify purely on price. This is the objective function behaving as
+  specified: **+EV vs break-even, not win% > 50%.** Expect this ledger's W-L to look mediocre while
+  performing well; units and CLV are the readouts.
+- **Excluded by rule 3 and logged, not hidden:** ATH +144 (EV +.139) — MIN starter TBD *and* Mason
+  Barnett has no start log. Recording it makes the cost of the trust rule measurable.
+- **Open data problems carried on the card, not buried:** TOR@BOS run-line side labels look inverted at
+  source (UNVERIFIED); CHC@PIT price conflict between covers' board (+116/−128, 8.0) and covers' own
+  matchup page (+112/−102, 7.5), unreconciled; ATH@MIN total 10.5 is a 1.5-run outlier; **7/24 pitcher
+  logs still unbackfilled** (boxscore extraction was mixing `seasonStats` into game stats — skipped
+  rather than injecting unverified numbers; no effect on 7/25 since no pitcher starts on consecutive days).
+- Sides still DEAD, totals still NOT_READY, K-prop paper ledger unchanged at **4-5 / −1.61u, gate 9/100**,
+  $0 real money, unauthorized.

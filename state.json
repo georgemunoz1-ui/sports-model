@@ -1,5 +1,5 @@
 {
- "updated_utc": "2026-07-24T18:30:00Z",
+ "updated_utc": "2026-07-25T06:25Z",
  "ledger_conventions": {
   "pl_rounding": "Each play settles to a 2-decimal P/L (American-odds payout rounded at settlement). Running units = sum of these rounded per-play values, so the ledger column sums EXACTLY to the total (sportsbook-settlement convention, chosen for auditability). Note: summing unrounded payouts can differ by ~0.01u (e.g. baseline 7/23 is +0.48u rounded, +0.49u unrounded).",
   "brier_ab": "raw-vs-shrunk Brier/logloss compared only on plays where BOTH probabilities exist (engine skips produce no shrunk_p). 7/23 n_both=4 (Dobnak excluded).",
@@ -334,7 +334,10 @@
     }
    ],
    "pending": [],
-   "units_note": "7/24 net +1.12u at posted prices; display-only, $0 staked (sides DEAD per R3)"
+   "units_note": "7/24 net +1.12u at posted prices; display-only, $0 staked (sides DEAD per R3)",
+   "status": "FROZEN 2026-07-25",
+   "superseded_by": "ml_ev_tracking",
+   "why_frozen": "Selection rule was 'V13 directional lean + my discretion', which is not an EV rule and was never written down in advance. Its 7-3 record therefore measures an unspecified process and cannot be extended. Frozen rather than deleted: the 10 graded rows stay as history. All ML tracking from 2026-07-25 forward uses ml_ev_tracking, whose rule was pre-registered before first pitch (R7)."
   },
   "kprops_taco_baseline": {
    "desc": "Taco raw-rate binomial baseline (no shrinkage, price-EV only, no displacement req) \u2014 A/B vs engine",
@@ -540,6 +543,79 @@
      "note": "Board sourced AFTER the slate went final -> retroactive and result-contaminated. Shadow only."
     }
    ]
+  },
+  "ml_ev_tracking": {
+   "purpose": "Does V13's win probability beat the moneyline price? Display-only. Sides remain DEAD (R3): $0 staked, 1u notional per pick. This ledger does NOT advance the 100-play K-prop authorization gate and confers no bet authority.",
+   "preregistered_utc": "2026-07-25T06:20Z",
+   "preregistered_before_first_pitch": true,
+   "first_pitch_utc_earliest": "2026-07-25T17:10Z",
+   "rule": {
+    "1_both_sides": "For every game on the slate, compute V13 P(win) for BOTH sides. No pre-filtering by lean.",
+    "2_gate": "Qualify a side iff EV > 0 AND edge (= p - implied) >= 0.04. Same thresholds engine/kprops.select_play already uses; not tuned for this ledger.",
+    "3_trust": "Exclude any game flagged capped (a starter is TBD or has <5 GS). Log the exclusion explicitly, never silently.",
+    "4_no_discretion": "Register EVERY side that qualifies. No conviction ranking, no trimming, no vetoes.",
+    "5_price": "Freeze the opening-snapshot price as the graded price. Record the closing price separately for CLV (feeds E3)."
+   },
+   "record_w": 0,
+   "record_l": 0,
+   "units": 0.0,
+   "graded": [],
+   "pending": [
+    {
+     "date": "2026-07-25",
+     "pick": "COL",
+     "game": "COL@MIL",
+     "ml": 186,
+     "v13_p": 0.462,
+     "implied": 0.35,
+     "edge": 0.112,
+     "ev_per_unit": 0.321,
+     "v13_directional_lean_agrees": false,
+     "price_snapshot": "opening, covers.com, 2026-07-25T05:50Z \u2014 WILL MOVE; closing price to be captured before lock",
+     "weight": 1.0,
+     "staked": 0.0
+    },
+    {
+     "date": "2026-07-25",
+     "pick": "KC",
+     "game": "KC@DET",
+     "ml": 154,
+     "v13_p": 0.466,
+     "implied": 0.394,
+     "edge": 0.072,
+     "ev_per_unit": 0.184,
+     "v13_directional_lean_agrees": false,
+     "price_snapshot": "opening, covers.com, 2026-07-25T05:50Z \u2014 WILL MOVE; closing price to be captured before lock",
+     "weight": 1.0,
+     "staked": 0.0
+    },
+    {
+     "date": "2026-07-25",
+     "pick": "STL",
+     "game": "CIN@STL",
+     "ml": -116,
+     "v13_p": 0.592,
+     "implied": 0.537,
+     "edge": 0.055,
+     "ev_per_unit": 0.102,
+     "v13_directional_lean_agrees": true,
+     "price_snapshot": "opening, covers.com, 2026-07-25T05:50Z \u2014 WILL MOVE; closing price to be captured before lock",
+     "weight": 1.0,
+     "staked": 0.0
+    }
+   ],
+   "methodology_note": "Two of the three 7/25 picks (COL +186, KC +154) are sides V13 expects to LOSE more often than win (p=0.462, 0.466). They qualify because the price is far enough off V13's number to be +EV. This is the objective function working as specified: profitability is +EV vs break-even, NOT win% > 50%. Expect this ledger's W-L record to look mediocre even when it is performing well; units and CLV are the readouts that matter, not W-L.",
+   "excluded_by_rule_3": [
+    {
+     "date": "2026-07-25",
+     "side": "ATH",
+     "game": "ATH@MIN",
+     "ml": 144,
+     "ev_per_unit": 0.14,
+     "edge": 0.057,
+     "why": "Both starters unmodeled: MIN starter TBD and Mason Barnett has no start log. Would have ranked 3rd by EV on the full board. Recorded so the cost of rule 3 is measurable rather than invisible."
+    }
+   ]
   }
  },
  "gates": {
@@ -623,7 +699,12 @@
   "NEXT EXPERIMENT = E3 (before E2): pre-register prop line-move CLV capture (book-info test, no engine change), then run.",
   "E1 CLOSED: NO-PROMOTE / CONFIRMATORY INDETERMINATE; original 1759 unrecoverable; engine unchanged.",
   "Sunday weekly review: dashboard + backup bundle + cumulative Brier A/B.",
-  "8-field parser fix deferred (no forward opponent writes)."
+  "8-field parser fix deferred (no forward opponent writes).",
+  "Re-pull 2026-07-25 pitcher K props once a board posts (nothing available at 02:15 ET). R1: no prop plays until real prices exist.",
+  "Capture a CLOSING 2026-07-25 odds snapshot before first pitch (17:10Z) \u2014 grades ml_ev_tracking at open, and feeds E3 CLV.",
+  "Reconcile CHC@PIT 7/25 price conflict (board +116/-128 tot 8.0 vs covers matchup page +112/-102 tot 7.5) with a second source.",
+  "Verify TOR@BOS 7/25 run line \u2014 source side labels look inverted vs the moneyline; currently UNVERIFIED.",
+  "Grade 2026-07-25 tonight: v13_forward_directional (15), ml_ev_tracking (3), total leans (display)."
  ],
  "mlb_kprops": {
   "kproj_daily_check_2026_07_24": {

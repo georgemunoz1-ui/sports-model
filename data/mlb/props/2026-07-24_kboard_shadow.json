@@ -1,0 +1,40 @@
+{
+ "meta": {
+  "date": "2026-07-24",
+  "captured_utc": "2026-07-25T05:30Z",
+  "capture_is_post_slate": true,
+  "gate_eligible": false,
+  "why_not_gate_eligible": "Board was sourced AFTER the 2026-07-24 slate went final (capture 2026-07-25 ~01:30 ET). Any play derived from it is retroactive and result-contaminated. SHADOW/NO-STAKE only; does NOT advance the 100-play authorization gate.",
+  "book_attribution": "NONE. Sources are editorial articles quoting a price without naming the sportsbook. Treated as market observations, not book-attributed quotes. Cross-source spreads on identical lines are real and logged (see _conflicts).",
+  "sources": {
+   "OI": "https://oddsindex.com/sports/mlb/player-props-today",
+   "VS": "https://vsin.com/mlb/best-mlb-player-props-today-july-24-2026-picks-predictions/",
+   "DKN": "https://dknetwork.draftkings.com/2026/07/24/mlb-picks-best-strikeout-prop-bets-for-friday-7-24-26/"
+  },
+  "_conflicts": [
+   "Jared Jones O5.5: OI +106 / VS +110 / DKN -103 (13-cent spread on the same bet)",
+   "Shane Drohan O5.5: OI -135 / VS -121",
+   "Patrick Sandoval O4.5: OI +106 / VS +118",
+   "Tarik Skubal: OI has O7.5 -160, DKN has U8.5 -140 (different lines, not a conflict)"
+  ],
+  "alt_line_conversion": "'N+ strikeouts' rendered as Over (N-0.5): Jones 6+ -> O5.5; Drohan 7+ -> O6.5; Arrighetti 7+ -> O6.5; Schlittler 7+ -> O6.5.",
+  "r1_compliance": "Unpriced sides are recorded as null, never inferred. select_play() skips null prices."
+ },
+ "shadow_plays": [
+  {
+   "pitcher": "Tarik Skubal",
+   "ek": 6.66,
+   "gs": 14,
+   "book": "DKN",
+   "line": 8.5,
+   "side": "UNDER",
+   "price": -140,
+   "p": 0.772,
+   "edge": 0.188,
+   "ev": 0.323,
+   "disp": -1.84,
+   "weight": 1.0
+  }
+ ],
+ "n_evaluated": 20
+}

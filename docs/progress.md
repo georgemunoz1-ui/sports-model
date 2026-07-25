@@ -93,3 +93,35 @@
 - ENGINE FIX: daily_card pitcher-name lookup was accent-SENSITIVE -> "Jesus Luzardo" (slate) missed "Jesús Luzardo" (DB), silently capping an established arm to league-average. Made IDS lookup accent-insensitive (unicodedata strip). Verified: non-accented slate now resolves Luzardo (6.88) + Márquez (3.77).
 - Correction: NYY@PHI ⚠ was Luzardo (accent), not Schlittler; the cap suppressed the TOTAL (projT 8.7->8.1) but NOT the win% -> NYY 61% flip HOLDS at full trust. KC@DET ⚠ is Beck Way (KC rookie, 0 GS), not Skubal (14 GS, resolved). ml_tracking NYY note -> full-trust.
 - 3 ML tracking pending (NYY/ATL/SEA) + 15 V13 directional to grade tonight on finals.
+
+## 2026-07-25 — 7/24 board sourced + priced (SHADOW), 7/24 graded
+**Request:** "Get odds for ML, RL and Totals. Search for Pitcher K props as well for 7/24. Then run
+information via model."
+
+- **ML/RL/Totals 7/24:** already captured pre-lock from Taco's board → `data/mlb/odds/2026-07-24_pregame.json`
+  (15 games, ML + total + over/under juice + runline both sides). No gap to fill.
+- **K props 7/24:** sourced 20 arms w/ real stated prices from three editorial sources (oddsindex,
+  VSiN, DK Network) → `data/mlb/props/2026-07-24_kboard.json`. RotoBaller premium is a JS shell
+  (unfetchable, consistent with the RotoWire finding of 7/22). **No sportsbook attribution** available;
+  cross-source spreads are real (Jared Jones O5.5 at +106 / +110 / -103). Unpriced sides recorded as
+  `null`, never inferred (R1).
+- **TIMING / INTEGRITY:** board was captured 2026-07-25 ~01:30 ET — **after** every 7/24 game was final.
+  Retroactive plays are result-contaminated. Added `harness/shadow_price.py`: calls the same canonical
+  `kprops.price_board()` but writes NOTHING to state.json. Result: **1 of 20 arms qualified**
+  (Skubal UNDER 8.5 @-140, disp -1.84 → R5 audit). Actual 12 K → would have LOST (-1.00u hypothetical).
+  Logged under new `ledgers.kprops_shadow`. **Paper ledger unchanged 4-5 / -1.61u; gate stays 9/100.**
+- **ENGINE FIX:** `engine/kprops.py` `_ids()`/`proj()` now accent-normalize (`_norm`) — same defect class
+  as daily_card.py @10596a3. A board saying "Jesus Luzardo" previously returned "skip: no log" for
+  "Jesús Luzardo". Self-test still PASS.
+- **7/24 grading** (`harness/grade_0724.py`, all arithmetic computed):
+  - ML directional tracking **2-1, +1.12u** (NYY +112 W on a 1-0 shutout at full trust, ATL +100 W,
+    SEA -120 L). Record **5-2 → 7-3**.
+  - V13 sides **8-7** → **21-12 → 29-19**. Road leans 4-1, home-chalk leans 4-6 (one slate; no inference).
+  - V13 total leans **5-7**, 3 no-lean. Totals remain NOT_READY.
+  - K projection on the board: **n=18, MAE 2.52 vs naive-4.6 MAE 2.66** — barely beats a constant.
+- **HYPOTHESIS-GENERATING ONLY (not a finding):** the 5 largest under-projections were all deep high-K
+  starts (Skubal 12, Schlittler 12, Sasaki 9, Yesavage 9, Luzardo 9); the largest over-projections were
+  short outings (Arrighetti 1.0 IP/0K, Miller 5.1 IP/0K). Candidate mechanism = **E[TBF] shrinkage
+  toward 24 compressing workhorse starts** — distinct from E1's opponent-K term. Generated AFTER seeing
+  results, so it cannot be tested on them; any test needs R7 pre-registration against an untouched
+  future holdout. **No engine change made.** E3 (prop line-move CLV) remains the next experiment.

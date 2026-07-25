@@ -1,13 +1,17 @@
 """K-prop projection engine (canonical, rebuilt after rollback). START-ONLY accumulation —
 relief outings excluded (bug history). Backtest result of record (n=1759): MAE 1.92 vs naive 2.41,
 calibrated P(over), displaced lines 62-70%. Usage: proj(name) -> (E[K], starts) as-of latest log."""
-import csv, os, numpy as np
+import csv, os, unicodedata, numpy as np
 from math import exp, factorial
 BASE=os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 LOGS=os.path.join(BASE,"data/backfill/mlb/2026/pitcher_logs")
 LG_KRATE=0.22; LG_TBF=24.0
+def _norm(s):
+    """Accent-insensitive key (fixed 2026-07-25, same defect class as daily_card.py 10596a3:
+    a board listing 'Jesus Luzardo' must resolve to DB 'Jesús Luzardo', not silently skip)."""
+    return unicodedata.normalize("NFKD",(s or "")).encode("ascii","ignore").decode().lower().strip()
 def _ids():
-    return {r["name"].lower():r["id"] for r in csv.DictReader(open(os.path.join(BASE,"data/backfill/mlb/2026/pitchers.csv")))}
+    return {_norm(r["name"]):r["id"] for r in csv.DictReader(open(os.path.join(BASE,"data/backfill/mlb/2026/pitchers.csv")))}
 def _parse(path):
     rows=[]
     for ln in open(path):
@@ -16,7 +20,7 @@ def _parse(path):
         elif len(p)>=7: rows.append((p[0],float(p[3]),float(p[5]),p[6]=="1"))
     rows.sort(); return rows
 def proj(name, ids=None):
-    ids=ids or _ids(); pid=ids.get(name.lower())
+    ids=ids or _ids(); pid=ids.get(_norm(name))
     if not pid: return None
     f=os.path.join(LOGS,f"{pid}.txt")
     if not os.path.exists(f): return None

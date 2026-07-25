@@ -208,17 +208,18 @@
    ]
   },
   "v13_forward_directional": {
-   "w": 21,
-   "l": 12,
-   "note": "7/19-24; +3-2 on 7/23 (MIN,DET,ATL correct; TB,STL wrong); tracking only"
+   "w": 29,
+   "l": 19,
+   "note": "7/19-24; 7/24 went 8-7 on the full 15-game slate (tracking only, no stake)",
+   "total_leans_note": "7/24 total leans 5-7 with 3 no-lean (|proj-line|<0.25). Totals remain NOT_READY."
   },
   "real_money": {
    "risked": 0.0,
    "authorized": false
   },
   "ml_tracking": {
-   "record_w": 5,
-   "record_l": 2,
+   "record_w": 7,
+   "record_l": 3,
    "graded": [
     {
      "date": "2026-07-22",
@@ -290,9 +291,7 @@
      "v13_wp": 0.71,
      "note": "highest conviction on slate (Sale vs Canning, SD blow-risk 34%) \u2014 no board price captured, graded directional-only",
      "result": "WIN"
-    }
-   ],
-   "pending": [
+    },
     {
      "date": "2026-07-24",
      "pick": "NYY",
@@ -301,7 +300,11 @@
      "v13_wp": 0.61,
      "mkt_impl": 0.47,
      "note": "V13 flips +112 road dog to 61% favorite \u2014 FULL-TRUST (Luzardo accent-cap fixed; flip holds with both real arms modeled). Day's one real market disagreement.",
-     "v13_trust": "full"
+     "v13_trust": "full",
+     "result": "WIN",
+     "pl": 1.12,
+     "final": "NYY 1-0 PHI",
+     "gamePk": 823434
     },
     {
      "date": "2026-07-24",
@@ -310,7 +313,11 @@
      "ml": 100,
      "v13_wp": 0.54,
      "mkt_impl": 0.5,
-     "note": "mild V13 +EV lean on road pick'em"
+     "note": "mild V13 +EV lean on road pick'em",
+     "result": "WIN",
+     "pl": 1.0,
+     "final": "ATL 7-6 BAL",
+     "gamePk": 824812
     },
     {
      "date": "2026-07-24",
@@ -319,9 +326,15 @@
      "ml": -120,
      "v13_wp": 0.58,
      "mkt_impl": 0.54,
-     "note": "V13 more bullish on SEA than market"
+     "note": "V13 more bullish on SEA than market",
+     "result": "LOSS",
+     "pl": -1.0,
+     "final": "TEX 5-4 SEA",
+     "gamePk": 822872
     }
-   ]
+   ],
+   "pending": [],
+   "units_note": "7/24 net +1.12u at posted prices; display-only, $0 staked (sides DEAD per R3)"
   },
   "kprops_taco_baseline": {
    "desc": "Taco raw-rate binomial baseline (no shrinkage, price-EV only, no displacement req) \u2014 A/B vs engine",
@@ -499,6 +512,34 @@
     "logloss_shrunk_mean": 0.7102,
     "note": "A/B night 1: RAW beat SHRUNK on both Brier and logloss. Two high-K arms (Williams 11K) went OVER where shrinkage pulled p toward 0.5. n=4 shared plays \u2014 pure noise, marathon scoring."
    }
+  },
+  "kprops_shadow": {
+   "purpose": "Post-slate / what-if pricing runs. NEVER staked, NEVER counted toward the 100-play authorization gate.",
+   "runs": [
+    {
+     "date": "2026-07-24",
+     "board": "data/mlb/props/2026-07-24_kboard.json",
+     "captured_utc": "2026-07-25T05:30Z",
+     "n_arms_priced": 20,
+     "n_qualified": 1,
+     "plays": [
+      {
+       "pitcher": "Tarik Skubal",
+       "side": "UNDER",
+       "line": 8.5,
+       "price": -140,
+       "source": "DKN",
+       "ek": 6.66,
+       "disp": -1.84,
+       "r5_audit": true,
+       "actual": 12,
+       "result": "LOSS",
+       "pl_hypothetical": -1.0
+      }
+     ],
+     "note": "Board sourced AFTER the slate went final -> retroactive and result-contaminated. Shadow only."
+    }
+   ]
   }
  },
  "gates": {
@@ -583,5 +624,13 @@
   "E1 CLOSED: NO-PROMOTE / CONFIRMATORY INDETERMINATE; original 1759 unrecoverable; engine unchanged.",
   "Sunday weekly review: dashboard + backup bundle + cumulative Brier A/B.",
   "8-field parser fix deferred (no forward opponent writes)."
- ]
+ ],
+ "mlb_kprops": {
+  "kproj_daily_check_2026_07_24": {
+   "n": 18,
+   "mae": 2.52,
+   "naive_mae": 2.66,
+   "note": "Exploratory single-slate check on the sourced board, NOT a pre-registered test. Direction of the large errors is one-sided at the top end (Skubal -5.34, Schlittler -5.32, Sasaki -3.96, Yesavage -3.79, Luzardo -2.12 all UNDER-projected) with two short-outing over-projections (B.Miller +6.34 on 0K/5.1IP, Arrighetti +5.41 on 0K/1.0IP). Hypothesis-generating only; any test must be pre-registered against an untouched future holdout."
+  }
+ }
 }

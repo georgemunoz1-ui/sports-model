@@ -1,5 +1,5 @@
 {
- "updated_utc": "2026-07-25T06:25Z",
+ "updated_utc": "2026-07-25T06:40Z",
  "ledger_conventions": {
   "pl_rounding": "Each play settles to a 2-decimal P/L (American-odds payout rounded at settlement). Running units = sum of these rounded per-play values, so the ledger column sums EXACTLY to the total (sportsbook-settlement convention, chosen for auditability). Note: summing unrounded payouts can differ by ~0.01u (e.g. baseline 7/23 is +0.48u rounded, +0.49u unrounded).",
   "brier_ab": "raw-vs-shrunk Brier/logloss compared only on plays where BOTH probabilities exist (engine skips produce no shrunk_p). 7/23 n_both=4 (Dobnak excluded).",
@@ -695,12 +695,12 @@
   "ELITE-ARM UNDER misses (HYPOTHESIS, not confirmed): Cole 11K (7/22) + Sale 11K (7/23) are 2 consecutive premium-arm UNDER misses. PLAUSIBLE cause = TBF-capped projection omitting opponent-K%; equally consistent with short-run clustering at n=2. E1 replay must show improvement before causal status. Escalated to top for TESTING, not treated as established."
  ],
  "next_actions": [
+  "Get PRICES for the 2026-07-25 K board \u2014 the source page has Export Table Data -> CSV/Excel. Lines alone cannot be priced (R1). 4 arms are on the displacement watchlist and need only a price to be evaluated.",
   "GRADE tonight (7/24): ML tracking (NYY/ATL/SEA) + V13 directional on all 15 games. No K plays (no prop board). Update ml_tracking + v13_forward_directional.",
   "NEXT EXPERIMENT = E3 (before E2): pre-register prop line-move CLV capture (book-info test, no engine change), then run.",
   "E1 CLOSED: NO-PROMOTE / CONFIRMATORY INDETERMINATE; original 1759 unrecoverable; engine unchanged.",
   "Sunday weekly review: dashboard + backup bundle + cumulative Brier A/B.",
   "8-field parser fix deferred (no forward opponent writes).",
-  "Re-pull 2026-07-25 pitcher K props once a board posts (nothing available at 02:15 ET). R1: no prop plays until real prices exist.",
   "Capture a CLOSING 2026-07-25 odds snapshot before first pitch (17:10Z) \u2014 grades ml_ev_tracking at open, and feeds E3 CLV.",
   "Reconcile CHC@PIT 7/25 price conflict (board +116/-128 tot 8.0 vs covers matchup page +112/-102 tot 7.5) with a second source.",
   "Verify TOR@BOS 7/25 run line \u2014 source side labels look inverted vs the moneyline; currently UNVERIFIED.",
@@ -712,6 +712,68 @@
    "mae": 2.52,
    "naive_mae": 2.66,
    "note": "Exploratory single-slate check on the sourced board, NOT a pre-registered test. Direction of the large errors is one-sided at the top end (Skubal -5.34, Schlittler -5.32, Sasaki -3.96, Yesavage -3.79, Luzardo -2.12 all UNDER-projected) with two short-outing over-projections (B.Miller +6.34 on 0K/5.1IP, Arrighetti +5.41 on 0K/1.0IP). Hypothesis-generating only; any test must be pre-registered against an untouched future holdout."
+  },
+  "kline_board_2026_07_25": {
+   "source": "Taco screenshot, multi-book strikeout table, transcribed by eye 2026-07-25T06:35Z",
+   "file": "data/mlb/props/2026-07-25_klines.json",
+   "n_arms": 27,
+   "prices": "NONE \u2014 lines only; all quotes null (R1)",
+   "engine_run": "harness/shadow_price.py -> 0 of 27 qualified, by construction. state.json unchanged.",
+   "column_diagnostic": {
+    "mean_signed_disp": {
+     "DK": -1.44,
+     "FD": -1.23,
+     "MGM": -0.61,
+     "BR": -0.11,
+     "CZR": -1.27
+    },
+    "MAE": {
+     "DK": 1.44,
+     "FD": 1.33,
+     "MGM": 0.86,
+     "BR": 0.49,
+     "CZR": 1.29
+    },
+    "conclusion": "Only the BetRivers column behaves like a main line. DK/FD/CZR post >=7.5 K lines on 16.9-19.8 K% starters (Pallante, Elder, Bibee), which no book does. Treat those columns as an alt-line ladder pending confirmation."
+   },
+   "engine_validation": "Against the BR column the engine's MAE is 0.49 K across 24 projected arms. The engine was built with no knowledge of this board. This is the first external multi-book line set the K engine has been checked against; it is a validation signal, NOT a profitability signal \u2014 matching the line means agreeing with the market, which by itself produces no edge.",
+   "near_miss_recorded": "Naive ingestion would have produced 11 fake R5-level UNDER edges by comparing projections against alt lines. Did not happen; recorded anyway.",
+   "watchlist_vs_BR": [
+    {
+     "pitcher": "Robbie Ray",
+     "line": 6.5,
+     "ek": 4.73,
+     "disp": -1.77,
+     "side": "UNDER",
+     "gs": 19,
+     "note": "R5 audit if ever played"
+    },
+    {
+     "pitcher": "Paul Skenes",
+     "line": 7.5,
+     "ek": 6.39,
+     "disp": -1.11,
+     "side": "UNDER",
+     "gs": 21
+    },
+    {
+     "pitcher": "Foster Griffin",
+     "line": 4.5,
+     "ek": 5.51,
+     "disp": 1.01,
+     "side": "OVER",
+     "gs": 20
+    },
+    {
+     "pitcher": "Bryan Woo",
+     "line": 6.5,
+     "ek": 5.67,
+     "disp": -0.83,
+     "side": "UNDER",
+     "gs": 19
+    }
+   ],
+   "blocking": "Needs real prices. The source page has an Export Table Data -> CSV button; that export is the unblocking artifact."
   }
  }
 }

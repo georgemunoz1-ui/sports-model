@@ -162,3 +162,30 @@ information via model."
   rather than injecting unverified numbers; no effect on 7/25 since no pitcher starts on consecutive days).
 - Sides still DEAD, totals still NOT_READY, K-prop paper ledger unchanged at **4-5 / −1.61u, gate 9/100**,
   $0 real money, unauthorized.
+
+### 2026-07-25 (02:40 ET) — multi-book K LINE board received (no prices); engine externally validated
+
+- Taco supplied a screenshot of a 5-book strikeout table (DK / FD / MGM / BetRivers / Caesars), 27 arms.
+  Row set cross-checks exactly: 30 slate starters − PHI TBD − MIN TBD − Barnett (no log) = 27.
+- **No prices.** The Under/Over columns rendered as book icons. Transcribed lines only →
+  `data/mlb/props/2026-07-25_klines.json` with **every quote null**. Ran the canonical engine on it via
+  `shadow_price.py`: **0 of 27 qualified, by construction.** R1 held mechanically, not by discipline.
+- **Column-semantics diagnostic (the important finding).** Mean signed displacement (E[K] − line):
+  DK −1.44, FD −1.23, CZR −1.27, MGM −0.61, **BR −0.11**; MAE 1.44 / 1.33 / 1.29 / 0.86 / **0.49**.
+  DK, FD and CZR post ≥7.5 K lines on Andre Pallante (16.9 K%), Bryce Elder (19.8 K%) and Tanner Bibee
+  (19.0 K%). No book prices a 16.9 K% starter at 8.5. **Those columns are an alt-line ladder, not five
+  quotes on one bet.** Only BetRivers behaves like a main line.
+- **NEAR MISS, recorded although it did not happen:** ingesting the board naively would have manufactured
+  **11 fake R5-level UNDER edges** (Pallante −4.36, Burke −3.73, Elder −3.64, Brown −3.16, Skenes −3.11 …)
+  purely by comparing projections against alt lines. The qualify-then-best selector would have taken the
+  fattest of them. Same failure family as the WSH 813-vs-858 extraction error: the number looked like a
+  signal and was an artifact of the source.
+- **ENGINE VALIDATION:** against the BR column the engine sits at **MAE 0.49 K over 24 arms**, built with
+  no knowledge of this board. First external multi-book check the K engine has had. This is a *calibration*
+  signal, not a profitability one — agreeing with the market is how you confirm the model is sane and also
+  exactly how you make no money. Edge lives in the 4 arms where it disagrees.
+- **Watchlist vs BR (|disp| ≥ 0.8, the engine's own gate):** Robbie Ray U6.5 (E[K] 4.73, −1.77, R5),
+  Paul Skenes U7.5 (6.39, −1.11), Foster Griffin O4.5 (5.51, +1.01), Bryan Woo U6.5 (5.67, −0.83).
+  All four are **unplayable until a real price exists.**
+- Greene (3 GS), Bratt (2 GS) and Sears (4 GS) fall under the 5-GS floor — no projection, correctly skipped.
+- Ledger unchanged 4-5 / −1.61u, gate 9/100, $0 real money.

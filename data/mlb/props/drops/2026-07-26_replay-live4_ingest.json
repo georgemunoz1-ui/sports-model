@@ -1,0 +1,120 @@
+{
+ "drop": "data/mlb/props/drops/2026-07-26_replay-live4.json",
+ "date": "2026-07-26",
+ "source_type": "aggregator",
+ "source_note": "REPLAY of the 7/26 live-at-processing board (4 arms x 5 books) through the lenient ingester. Regression fixture: must reproduce the Soriano registration exactly.",
+ "captured_utc": "2026-07-26T19:13:00Z",
+ "processed_utc": "2026-07-26T19:15:00Z",
+ "selector": "engine.kprops.select_play, unmodified",
+ "staked": 0.0,
+ "rows": [
+  {
+   "pitcher": "Cristopher Sanchez",
+   "status": "no play",
+   "game": "NYY@PHI",
+   "first_pitch": "2026-07-26T23:20:00Z",
+   "ek": 6.933180021559468,
+   "gs": 20,
+   "ek_source": "card (frozen pre-slate), full precision from proj which still agrees to 2dp",
+   "quotes_in": 5,
+   "quotes_kept": 5,
+   "gate_eligible": true,
+   "eligibility": "captured 19:13Z, processed 19:15Z, first pitch 23:20Z -> 245 min of runway",
+   "tests": [
+    "T1 DK 7.5 hold 6.14%",
+    "T1 FD 7.5 hold 6.17%",
+    "T1 MGM 6.5 hold 7.11%",
+    "T1 BR 7.5 hold 7.26%",
+    "T1 CZR 7.5 hold 6.95%",
+    "T3 spread 1.0 K over 5 books"
+   ],
+   "warnings": [],
+   "rejections": [],
+   "play": null
+  },
+  {
+   "pitcher": "Will Warren",
+   "status": "no play",
+   "game": "NYY@PHI",
+   "first_pitch": "2026-07-26T23:20:00Z",
+   "ek": 5.082479014109662,
+   "gs": 19,
+   "ek_source": "card (frozen pre-slate), full precision from proj which still agrees to 2dp",
+   "quotes_in": 5,
+   "quotes_kept": 5,
+   "gate_eligible": true,
+   "eligibility": "captured 19:13Z, processed 19:15Z, first pitch 23:20Z -> 245 min of runway",
+   "tests": [
+    "T1 DK 4.5 hold 5.95%",
+    "T1 FD 4.5 hold 6.06%",
+    "T1 MGM 4.5 hold 5.98%",
+    "T1 BR 4.5 hold 6.99%",
+    "T1 CZR 4.5 hold 5.95%",
+    "T3 spread 0.0 K over 5 books"
+   ],
+   "warnings": [],
+   "rejections": [],
+   "play": null
+  },
+  {
+   "pitcher": "Jose Soriano",
+   "status": "REGISTERABLE",
+   "game": "LAA@SF",
+   "first_pitch": "2026-07-26T20:05:00Z",
+   "ek": 5.680745341614907,
+   "gs": 20,
+   "ek_source": "card (frozen pre-slate), full precision from proj which still agrees to 2dp",
+   "quotes_in": 5,
+   "quotes_kept": 5,
+   "gate_eligible": true,
+   "eligibility": "captured 19:13Z, processed 19:15Z, first pitch 20:05Z -> 50 min of runway",
+   "tests": [
+    "T1 DK 5.5 hold 6.03%",
+    "T1 FD 4.5 hold 5.88%",
+    "T1 MGM 5.5 hold 7.96%",
+    "T1 BR 5.5 hold 7.05%",
+    "T1 CZR 5.5 hold 6.99%",
+    "T3 spread 1.0 K over 5 books"
+   ],
+   "warnings": [],
+   "rejections": [],
+   "play": {
+    "book": "FD",
+    "line": 4.5,
+    "side": "OVER",
+    "price": -166,
+    "p": 0.67,
+    "edge": 0.046,
+    "ev": 0.074,
+    "disp": 1.18,
+    "weight": 1.0
+   }
+  },
+  {
+   "pitcher": "Carson Whisenhunt",
+   "status": "no play",
+   "game": null,
+   "first_pitch": null,
+   "ek": null,
+   "gs": null,
+   "ek_source": null,
+   "quotes_in": 5,
+   "quotes_kept": 5,
+   "gate_eligible": false,
+   "eligibility": "first pitch unknown (arm not on the card) -> cannot prove pre-lock",
+   "tests": [
+    "T1 DK 4.5 hold 5.97%",
+    "T1 FD 4.5 hold 6.06%",
+    "T1 MGM 4.5 hold 7.62%",
+    "T1 BR 4.5 hold 7.05%",
+    "T1 CZR 4.5 hold 6.65%",
+    "T3 spread 0.0 K over 5 books"
+   ],
+   "warnings": [],
+   "rejections": [
+    "no E[K]: not on the card (likely a TBD starter when the card was cut), and engine.kprops.proj returns nothing (no log, or <5 GS)"
+   ],
+   "play": null
+  }
+ ]
+}

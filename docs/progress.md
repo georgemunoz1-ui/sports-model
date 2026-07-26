@@ -352,3 +352,48 @@ does not read it. Freeland 1.5, Avila 1.5, Baz 2.5 are the same defect.
 
 Nothing here is gate-eligible. 26 of 30 arms had already started. Gate stays 9/100 +1
 pending.
+
+## 2026-07-27 — the capture requirement was mine, not the market's
+
+Taco flagged that the K board is one of the hardest things on the slate to grab
+consistently, and he is right. The response was not to ask harder. It was to
+notice that I had been treating a full 30-arm 6-book board as the unit of work
+when the actual unit is **one arm, one book, both sides of the price**.
+
+`harness/ingest_kquote.py` accepts a capture of any size and runs only the tests
+that a capture of that shape can support:
+
+* T1 hold on every two-sided quote. One-sided quotes pass through with that
+  stated rather than silently trusted.
+* T2 rung coherence as a warning only — demoted 7/26, an alt ladder passes it
+  by construction.
+* T3 dispersion **only** on aggregator captures with ≥2 books. A single book's
+  own prop page has no alt-ladder ambiguity, so running dispersion there would
+  discard good prices to answer a question that cannot arise. This makes a
+  book-direct screenshot strictly easier to use than an aggregator board, which
+  inverts the effort gradient in the right direction.
+* T4 re-read against any earlier drop the same date.
+
+Gate eligibility is decided by the clock and nothing else: capture time known,
+capture before first pitch, processing before first pitch. Everything else is
+shadow at $0. Arms posted ≤3.5 K are held to shadow regardless, because a short
+posted line *is* the book encoding a short outing and the E[TBF] prior does not
+read it — the Fedde/Freeland/Avila/Baz defect. `--allow-short-lines` overrides.
+
+**Regression test.** `harness/test_ingest_kquote.py` replays the 7/26
+live-at-processing board and requires the ingester to reproduce the hand-made
+Jose Soriano registration field for field — side, line, price, book, E[K], GS,
+p, edge, EV, displacement, weight, game, first pitch. It does, and registers
+exactly one play, not two. Five more checks cover the minimum useful capture,
+the three ways the clock can disqualify a play, line-only cells, alt-ladder
+quarantine, and the short-line hold.
+
+Getting that exact match required a real fix. The card stores E[K] to 2dp, so
+replaying through the card gave EV +0.073 against the ledger's +0.074. Rather
+than paper over it, `resolve_ek` takes `proj`'s full precision **only when proj
+still agrees with the frozen card to within that rounding** — if the log has
+moved since the card was cut, the card wins and the divergence is printed. That
+keeps the reproducibility of a frozen artifact and the precision of the live
+one, without letting a replay quietly price a start using its own result.
+
+Engine untouched. `state.json` untouched. Gate still 9/100.

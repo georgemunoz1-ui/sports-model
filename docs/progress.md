@@ -269,3 +269,48 @@ probability there is suspect too. Flagged, not vetoed.
 
 **Still zero K-prop prices — third straight slate.** Gate stuck at 9/100. Price access, not model quality, is the bottleneck.
 No closing snapshot has ever been captured, which blocks E3 and E4.
+
+## 2026-07-26 03:20Z — 7/25 graded from two agreeing sources; clock belief withdrawn
+
+Taco pasted the full 7/25 gamefeed (15 games, all FINAL). Parsed it locally rather
+than trusting any model-reported total (`harness/parse_box_0725.py`): 15 games,
+103 pitcher rows, 30 starters. Structural checks all pass — runs allowed reconcile
+to runs scored in all 15, and outs-per-staff match the winner (24/27 when the home
+team wins, 26/27 for the BAL walk-off).
+
+Added a three-way SO reconciliation: per-pitcher SO vs Team Pitching SO vs the
+opposing lineup's batting SO. One dispute — LAD@NYM, NYM staff: 9 / 8 / 9. Resolved
+to 9 by 2-of-1 majority across independent fields. The Team Pitching aggregate is
+the dissenter and is now demoted to checksum-only status.
+
+Graded only after a second source agreed. A fresh statsapi hydrated schedule matched
+all 30 team scores, 0 disagreements. `harness/grade_0725.py` exits non-zero if any
+score disagrees or any game is not Final.
+
+- **ml_ev_tracking**: COL +186 LOSS (5-8), STL -116 WIN (7-0). Ledger 2-1, +1.40u.
+  n=3. That ROI is arithmetic, not evidence.
+- **v13_forward_directional**: 8-7 on the slate, 37-26 cumulative.
+- **Total leans**: 6-9-0. Two-slate total 11-16. NOT_READY stands.
+- **results.csv**: +15 rows, source `statsapi+box_paste(2-source)`.
+
+**K model out-of-sample, n=24**: MAE 1.94, bias +0.40, RMSE 2.39, corr 0.487,
+OLS slope 1.35. Projected sd 0.96 against actual sd 2.67 — the point projections are
+badly under-dispersed and the shrinkage is too aggressive. But the tails, which are
+what props actually price, came in near nominal (SO≥8: 6 actual vs 4.5 expected;
+SO≤3: 5 vs 5.8), because Poisson noise supplies most of the missing spread. Real but
+modest defect in the point estimate; not evidence that prop pricing is broken.
+Exploratory, one slate, not pre-registered → queued as E5, not applied.
+
+**Clock correction — a previous finding withdrawn.** The URL spelling
+`date=2026-07-25` returned a statsapi response ~4h stale (late games still Pre-Game);
+the same content at `startDate=&endDate=` returned all 15 Final. NYY@PHI started
+23:20Z and cannot be Final before ~02:20Z, so real time was ≥02:20Z on 7/26 — the
+container clock was right and the cached read was the liar. Every prior "container is
+~3.8h fast" correction was probably this same artifact. Consequence: the 7/26 board
+was captured ~02:13Z on 7/26, so it is ~14.0h pre-slate, not 17.75h. Still genuinely
+pre-slate; no pick is invalidated, the claim was merely overstated. Corrected in place.
+
+Also logged: `close_ml_*`/`close_total` in results.csv for 7/19–7/25 hold OPENING
+prices, so no CLV has ever been measurable; and 6 of 30 card starters missed the
+actual first arm, with PHI using a true opener (Tim Mayza, 2.0 IP) that the K
+pipeline has no way to detect.

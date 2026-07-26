@@ -397,3 +397,31 @@ keeps the reproducibility of a frozen artifact and the precision of the live
 one, without letting a replay quietly price a start using its own result.
 
 Engine untouched. `state.json` untouched. Gate still 9/100.
+
+## 2026-07-27 — full model breakdown, patch-notes form
+
+Rewrote `docs/model_breakdown.html`, superseding the 7/22 version (e74cdcb, 111 lines).
+Structure is dated release blocks (ADDED / CHANGED / FIXED / DEPRECATED / KNOWN) from
+07-18 through today, then a standing reference section: both engine tracks with formulas
+quoted from running code, the selector thresholds, the four-test board suite and T2's
+demotion, all seven ledgers with real figures, every graded K-prop row, the four-part
+authorization gate, R1-R8, AUTH-1..7, the known-issues list, and the experiment queue.
+
+Every number traces to state.json, the ledgers, or engine source (R1). Verdicts are
+stated unsoftened: sides DEAD, totals NOT_READY, "V13 HAS NO DEMONSTRATED EDGE" on
+n=1,461, K-props LIVE_PAPER at 9/100 with 4-5 and -1.61u, real money $0 unauthorized.
+
+NEW DEFECT FOUND WHILE WRITING IT — **HFA-SPLIT**. `engine/v13_1.py:58` multiplies the
+home run mean by 1.03; `harness/daily_card.py:63` multiplies by 1.005. Same model, two
+different home-field advantages, ~2.5% apart in home run environment. The 7/22 breakdown
+documented 1.005, so v13_1.py is the file that drifted. No play is affected (sides are
+frozen and unbet), but no V13 figure is comparable across the two paths until this is
+reconciled. Logged rather than patched (R6); fixing it is a code change and gets its own
+unit of work. Added to known issues and to next actions.
+
+Also carried forward, unresolved: the E4 ID collision (lineup-aware offense vs
+favorite-fade, both E4) and the prose use of "E5" for the shrinkage experiment while the
+queue's E5 is the WNBA port. Under R7 an experiment's identity is part of its
+pre-registration, so this must be reconciled before either E4 reads out.
+
+Engine, state.json, gate string: untouched.

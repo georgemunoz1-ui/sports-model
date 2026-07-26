@@ -189,3 +189,32 @@ information via model."
   All four are **unplayable until a real price exists.**
 - Greene (3 GS), Bratt (2 GS) and Sears (4 GS) fall under the 5-GS floor — no projection, correctly skipped.
 - Ledger unchanged 4-5 / −1.61u, gate 9/100, $0 real money.
+
+### 2026-07-25 (18:10 ET) — CLOCK CORRECTION; KC +154 wins the first pre-registered EV pick; no K prices exist
+
+- **CLOCK ERROR, caught and corrected.** The container clock reads ~4h FAST. I briefly believed it was 02:40 ET
+  and then 22:04 ET; two statsapi endpoints put the true time at ~18:10 ET with KC@DET Final, 4 games In
+  Progress and 10 not yet started. Every timing claim in the preceding entry was wrong and is superseded here.
+- **covers.com served a stale 7/24 page** whose "finals" (COL@MIL 5-2, CIN@STL 4-2, NYY@PHI 1-0 …) were
+  **byte-identical to the 7/24 results already in results.csv.** Recognised and **not** written as 7/25 data.
+  Had those been ingested, 15 duplicate rows would have entered the dataset under the wrong date.
+- **First graded pick on the pre-registered EV ledger: KC +154 WIN (3-2), +1.54u.** Pre-registration stands —
+  the rule was fixed at 06:20Z, 10h50m before the 17:10Z first pitch. Note **V13 leaned DET, not KC**: the pick
+  existed only because the price was wrong. It won. One game proves nothing, but the mechanism is the point.
+  **ml_ev_tracking 1-0, +1.54u.** COL +186 and STL −116 still pending.
+- **CLV:** late snapshot (22:10Z) → `data/mlb/odds/2026-07-25_late.json`. Every line identical to the 05:50Z
+  open except CHC@PIT total 8.0 → 7.5, which resolves the opening source conflict in favour of the matchup page.
+  **COL and STL both 0 cents CLV** — the market never disagreed with my entry price.
+- **NO K PROP PRICES EXIST for 7/25 anywhere reachable.** oddsindex serves a cached 7/24 page; vegasinsider
+  renders prices without unambiguous over/under attribution (refused — mis-assigning a side IS price invention);
+  rotoballer/rotowire are JS shells; oddsshark ROBOTS_DISALLOWED; the 7/25 editorial articles carry **outs**
+  props and batter props, not K props. FTN quotes "Skenes Under 17.5 Outs +130" — a market the engine has never
+  been validated on, so it was not converted. **Zero prop plays, second slate running.**
+- **STRUCTURAL FINDING, now logged in known_issues: price access is the binding constraint, not model quality.**
+  The engine posted MAE 0.49 against a real main-line column today; the gate has sat at 9/100 for two slates
+  purely because prices are unreachable. The unblocking artifact is the **Export Table Data → CSV** button on
+  the source Taco screenshotted. That one file is worth more right now than any further modelling.
+- **Transcription conflict:** vegasinsider shows Skenes 6.5-8.5 / Eovaldi 5.5-6.5; my screenshot transcription
+  has Skenes 7.5-9.5 / Eovaldi 6.5-8.5. They do not reconcile — further support for the alt-line-ladder reading
+  and an independent reason nothing should be staked off an eyeballed image.
+- Ledger unchanged 4-5 / −1.61u, gate 9/100, $0 real money.

@@ -1,5 +1,5 @@
 {
- "updated_utc": "2026-07-25T06:40Z",
+ "updated_utc": "2026-07-25T22:10Z",
  "ledger_conventions": {
   "pl_rounding": "Each play settles to a 2-decimal P/L (American-odds payout rounded at settlement). Running units = sum of these rounded per-play values, so the ledger column sums EXACTLY to the total (sportsbook-settlement convention, chosen for auditability). Note: summing unrounded payouts can differ by ~0.01u (e.g. baseline 7/23 is +0.48u rounded, +0.49u unrounded).",
   "brier_ab": "raw-vs-shrunk Brier/logloss compared only on plays where BOTH probabilities exist (engine skips produce no shrunk_p). 7/23 n_both=4 (Dobnak excluded).",
@@ -556,10 +556,30 @@
     "4_no_discretion": "Register EVERY side that qualifies. No conviction ranking, no trimming, no vetoes.",
     "5_price": "Freeze the opening-snapshot price as the graded price. Record the closing price separately for CLV (feeds E3)."
    },
-   "record_w": 0,
+   "record_w": 1,
    "record_l": 0,
-   "units": 0.0,
-   "graded": [],
+   "units": 1.54,
+   "graded": [
+    {
+     "date": "2026-07-25",
+     "pick": "KC",
+     "game": "KC@DET",
+     "ml": 154,
+     "v13_p": 0.466,
+     "implied": 0.394,
+     "edge": 0.072,
+     "ev_per_unit": 0.184,
+     "v13_directional_lean_agrees": false,
+     "price_snapshot": "opening, covers.com, 2026-07-25T05:50Z \u2014 WILL MOVE; closing price to be captured before lock",
+     "weight": 1.0,
+     "staked": 0.0,
+     "final": "3-2",
+     "gamePk": 824244,
+     "result": "WIN",
+     "pl": 1.54,
+     "closing_price": "not captured \u2014 game was already final when the late snapshot was taken"
+    }
+   ],
    "pending": [
     {
      "date": "2026-07-25",
@@ -573,21 +593,10 @@
      "v13_directional_lean_agrees": false,
      "price_snapshot": "opening, covers.com, 2026-07-25T05:50Z \u2014 WILL MOVE; closing price to be captured before lock",
      "weight": 1.0,
-     "staked": 0.0
-    },
-    {
-     "date": "2026-07-25",
-     "pick": "KC",
-     "game": "KC@DET",
-     "ml": 154,
-     "v13_p": 0.466,
-     "implied": 0.394,
-     "edge": 0.072,
-     "ev_per_unit": 0.184,
-     "v13_directional_lean_agrees": false,
-     "price_snapshot": "opening, covers.com, 2026-07-25T05:50Z \u2014 WILL MOVE; closing price to be captured before lock",
-     "weight": 1.0,
-     "staked": 0.0
+     "staked": 0.0,
+     "late_price_2210Z": 186,
+     "clv_cents": 0,
+     "clv_note": "Line has NOT moved between the 05:50Z open and the 22:10Z late snapshot. CLV so far = 0 cents. A true closing capture at lock is still owed."
     },
     {
      "date": "2026-07-25",
@@ -601,7 +610,10 @@
      "v13_directional_lean_agrees": true,
      "price_snapshot": "opening, covers.com, 2026-07-25T05:50Z \u2014 WILL MOVE; closing price to be captured before lock",
      "weight": 1.0,
-     "staked": 0.0
+     "staked": 0.0,
+     "late_price_2210Z": -116,
+     "clv_cents": 0,
+     "clv_note": "Line has NOT moved between the 05:50Z open and the 22:10Z late snapshot. CLV so far = 0 cents. A true closing capture at lock is still owed."
     }
    ],
    "methodology_note": "Two of the three 7/25 picks (COL +186, KC +154) are sides V13 expects to LOSE more often than win (p=0.462, 0.466). They qualify because the price is far enough off V13's number to be +EV. This is the objective function working as specified: profitability is +EV vs break-even, NOT win% > 50%. Expect this ledger's W-L record to look mediocre even when it is performing well; units and CLV are the readouts that matter, not W-L.",
@@ -692,7 +704,14 @@
   "statsapi standings endpoint serves stale W-L (use results.csv aggregates instead)",
   "container is ephemeral: git commit locally each run; ask Taco about a remote for true durability",
   "RUNBOOK BUG (found 7/24): the 8-field forward log format 'date|opp|IP|...' CRASHES sp_asof (parses field[1] as IP -> float(opp) error) and is skipped by healthcheck log-integrity (len!=7 and !=10). Logs stay 7-field 'date|IP|ER|SO|BB|TBF|GS' until parsers are made opponent-aware. Fix: add len==8 branch offset-by-1, then update runbook.",
-  "ELITE-ARM UNDER misses (HYPOTHESIS, not confirmed): Cole 11K (7/22) + Sale 11K (7/23) are 2 consecutive premium-arm UNDER misses. PLAUSIBLE cause = TBF-capped projection omitting opponent-K%; equally consistent with short-run clustering at n=2. E1 replay must show improvement before causal status. Escalated to top for TESTING, not treated as established."
+  "ELITE-ARM UNDER misses (HYPOTHESIS, not confirmed): Cole 11K (7/22) + Sale 11K (7/23) are 2 consecutive premium-arm UNDER misses. PLAUSIBLE cause = TBF-capped projection omitting opponent-K%; equally consistent with short-run clustering at n=2. E1 replay must show improvement before causal status. Escalated to top for TESTING, not treated as established.",
+  {
+   "issue": "PRICE ACCESS is the binding constraint on this project \u2014 not model quality.",
+   "evidence": "2026-07-24: no board reachable pregame; board only found post-slate -> shadow only. 2026-07-25: multi-book LINE board obtained (27 arms) but NO prices anywhere reachable. oddsindex serves a cached 7/24 page; vegasinsider renders prices without unambiguous over/under attribution (assigning a price to the wrong side would be price invention, so refused); rotoballer/rotowire are JS shells; oddshark ROBOTS_DISALLOWED; editorial articles for 7/25 carried outs props and batter props, no K prices.",
+   "consequence": "K-prop gate has been stuck at 9/100 for two consecutive slates for reasons that have nothing to do with the engine. Meanwhile the engine posted MAE 0.49 vs a real main-line column.",
+   "unblocking_artifact": "The source Taco screenshotted has an 'Export Table Data -> Excel / CSV / PDF' button. One CSV export containing prices converts a dead slate into a priceable board and is worth more than any further modeling work right now.",
+   "logged_utc": "2026-07-25T22:10Z"
+  }
  ],
  "next_actions": [
   "Get PRICES for the 2026-07-25 K board \u2014 the source page has Export Table Data -> CSV/Excel. Lines alone cannot be priced (R1). 4 arms are on the displacement watchlist and need only a price to be evaluated.",
@@ -773,7 +792,9 @@
      "gs": 19
     }
    ],
-   "blocking": "Needs real prices. The source page has an Export Table Data -> CSV button; that export is the unblocking artifact."
+   "blocking": "Needs real prices. The source page has an Export Table Data -> CSV button; that export is the unblocking artifact.",
+   "TIMING_CORRECTION": "Ingested 2026-07-26T02:04Z = 22:04 ET Sat, AFTER the 7/25 slate finished. I had read a stale container clock and believed it was 02:40 ET. Board is SHADOW-ONLY regardless of whether prices ever arrive. The column diagnostic and the MAE-0.49 engine validation are unaffected \u2014 those compare projections to LINES, and lines are set pre-game, so no result information leaks into them.",
+   "gate_eligible": false
   }
  }
 }

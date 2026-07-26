@@ -218,3 +218,54 @@ information via model."
   has Skenes 7.5-9.5 / Eovaldi 6.5-8.5. They do not reconcile — further support for the alt-line-ladder reading
   and an independent reason nothing should be staked off an eyeballed image.
 - Ledger unchanged 4-5 / −1.61u, gate 9/100, $0 real money.
+
+## 2026-07-25 18:30 ET — 7/26 board ingested pre-slate; V13 favorite-fade hypothesis pre-registered as E4
+
+**Clock, again.** Container read `Sun Jul 26 02:13 UTC`; real time was ~22:30Z on 7/25 (container ~3.8h fast),
+established from the statsapi hydrated schedule: 23:10Z games were Pre-Game while 20:10Z games sat in the 6th–7th.
+
+**Caught a bad endpoint.** `/api/v1/game/824244/linescore` returned a stale snapshot ("middle of the 5th, 2-1")
+*and* labelled Kansas City as the home team, which the schedule endpoint contradicts (KC is away). The hydrated
+schedule — coherent across all 15 games — shows KC@DET **Final, KC 3 DET 2**. So the KC +154 WIN grade stands, but
+only because it was cross-checked. Logged to `known_issues`: never grade from a single endpoint.
+
+**7/25 remainder.** COL +186 and STL −116 were still Pre-Game at capture. Ungraded, correctly. Only KC@DET was final,
+so the results.csv backfill is deferred rather than done half-way from a source (covers) already caught serving stale pages.
+
+**7/26 board.** User-supplied screenshot, 15 games with real numeric prices. Verified before use:
+
+- matchups and first-pitch times: **15/15 exact** vs statsapi
+- starters: **26/30 exact** vs `probablePitcher` (accent-normalized)
+- moneyline hold: **2.08%–3.85%, mean 3.03%**, no arbitrage in any game
+
+That hold band is the load-bearing check — a misread price would have broken it. Best-verified board so far.
+
+**Totals are a best-price display, not a market.** The under line is quoted at or above the over line in 15/15 games
+(12 positive, 3 zero, **zero negative**). A sampling error mixes signs; this does not. So the consensus total is only
+*bounded* for 12 games — `total=null`, no lean emitted. Only ATL@BAL 8.5, HOU@CWS 9.5, COL@MIL 7.5 are genuine.
+Same defect class as the 7/25 strikeout alt-line ladder, caught by the same displacement test. Moneylines unaffected,
+so the pre-registered ledger is clean.
+
+**Registered (pre-slate by ~17.75h):** COL +265 (p=.324, edge +.050, EV +.183) and NYY +140 (p=.491, edge +.074,
+EV +.178). Neither is a team V13 expects to win. Excluded by rule 3: KC +162 and WSH +105.
+
+**Cost of conservatism, measured.** statsapi says TBD for BOS/KC/SF starters where the board names one. Treating
+first-party as authority caps those games. A shadow slate using the board's names, identical rule, yields exactly one
+extra pick: KC +162 (EV +.153). Shadow wrote nothing — card diverted, canonical regenerated.
+
+**Rule-text vs code discrepancy found.** Rule 3 reads "TBD or <5 GS"; `daily_card.py` implements "TBD or <2 GS".
+7/25 was graded under the code, so 7/26 was selected the same way. Verified explicitly: **zero picks flip** between the
+two readings on this slate. Text to be amended forward-only, effective 7/27.
+
+**E4 pre-registered.** Across 50 priced, uncapped game-rows on 5 cards, V13 sits −0.086 below the market on home big
+favorites (n=8) and −0.019 in the middle (n=40). Four of five picks this ledger has ever made are underdogs. The ledger
+may be one systematic "fade the favorite" bet. Readout is **CLV, not W-L**; holdout is forward slates from 7/27, since
+these rows generated the hypothesis. Explicitly *not* used to touch today's picks — rule 4 forbids discretion, and
+dropping a play after seeing a diagnostic is the exact contamination pre-registration exists to prevent.
+
+**R5 audit.** COL@MIL: V13 proj 9.7 vs line 7.5, displacement +2.2. Freeland 7.61 ERA vs Misiorowski 1.63 / 39.6% K.
+The engine appears to punish a bad starter without bound. COL is also a registered ML pick in that game, so the win
+probability there is suspect too. Flagged, not vetoed.
+
+**Still zero K-prop prices — third straight slate.** Gate stuck at 9/100. Price access, not model quality, is the bottleneck.
+No closing snapshot has ever been captured, which blocks E3 and E4.

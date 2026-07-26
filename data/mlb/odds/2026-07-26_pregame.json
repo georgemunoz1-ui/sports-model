@@ -1,0 +1,291 @@
+{
+ "date": "2026-07-26",
+ "snapshot": "PRE-SLATE (~18h before first pitch)",
+ "captured_utc": "2026-07-25T22:30Z",
+ "source": "User-uploaded screenshot of a multi-book aggregate board (columns: Team | Date | Win (Moneyline) | Cover (Spread, Line) | Total Runs (O/U, Line) | If You Bet $20 | Starting Pitcher)",
+ "warning": "TRANSCRIPTION_RISK_HIGH. These numbers were read from an image by a model, then carried across a context compaction. They were NOT re-read from the image in the session that wrote this file. Every figure here is a model transcription, not a parsed feed. The unblocking artifact remains the source page's 'Export Table Data -> CSV' button.",
+ "verification": {
+  "matchups_and_times": "15/15 EXACT match vs statsapi hydrated schedule for 2026-07-26 (matchup AND first-pitch UTC).",
+  "starters": "26/30 exact match vs statsapi probablePitcher (accent-normalized). 3 statsapi-TBD where the board has a name (UNCONFIRMED, treated as TBD -> capped). 1 DIRECT CONFLICT: ATH@MIN home, board=Travis Adams vs statsapi=Joe Ryan; statsapi wins per first-party doctrine.",
+  "ml_hold": "All 15 games pass the two-sided vig check: hold 2.08%-3.85%, mean 3.03%, every game sum_imp>1 (no arb). A misread price would almost certainly break this.",
+  "totals": "Displacement test: under_line - over_line >= 0 in 15/15 games (12 positive, 3 zero, ZERO negative). A sampling error would mix signs; it does not. Confirms best-price-across-books display, NOT a two-sided market."
+ },
+ "flags": [
+  "TOTALS: 12/15 games have no identified consensus total (only bounds). total=null for those; NO total lean is emitted for them. Only ATL@BAL 8.5, HOU@CWS 9.5, COL@MIL 7.5 are genuine two-sided numbers.",
+  "SPREAD/run-line column was NOT transcribed (side attribution unverified). R3 makes sides DEAD so nothing downstream needs it. Recording the omission rather than inventing values (R1).",
+  "ATH@MIN starter identity disputed (Travis Adams vs Joe Ryan). Modeled with statsapi's Joe Ryan. The board's ML may have been priced against a different pitcher \u2014 treat any edge in this game as suspect.",
+  "3 games modeled with TBD starters (TOR@BOS, KC@DET, LAA@SF) and are therefore capped/excluded by pre-registered rule 3. A shadow slate using the board's unconfirmed names measures the cost."
+ ],
+ "events": [
+  {
+   "matchup": "CLE@TB",
+   "ml_away": 120,
+   "ml_home": -134,
+   "total": null,
+   "over": null,
+   "under": null,
+   "rl_fav": null,
+   "note": null,
+   "total_bounds": {
+    "lo": 6.5,
+    "hi": 7.5,
+    "over_px": -140,
+    "under_px": -145,
+    "two_sided": false,
+    "why": "best-price display: over quoted at 6.5, under at 7.5. Consensus total is only BOUNDED to [6.5, 7.5], not identified. total=null so no total lean is emitted."
+   }
+  },
+  {
+   "matchup": "ATL@BAL",
+   "ml_away": -105,
+   "ml_home": -110,
+   "total": 8.5,
+   "over": -114,
+   "under": 102,
+   "rl_fav": null,
+   "note": null,
+   "total_bounds": {
+    "lo": 8.5,
+    "hi": 8.5,
+    "over_px": -114,
+    "under_px": 102,
+    "two_sided": true,
+    "why": "single number quoted both sides \u2014 genuine market"
+   }
+  },
+  {
+   "matchup": "AZ@WSH",
+   "ml_away": -118,
+   "ml_home": 105,
+   "total": null,
+   "over": null,
+   "under": null,
+   "rl_fav": null,
+   "note": null,
+   "total_bounds": {
+    "lo": 9.5,
+    "hi": 10.0,
+    "over_px": -125,
+    "under_px": -110,
+    "two_sided": false,
+    "why": "best-price display: over quoted at 9.5, under at 10.0. Consensus total is only BOUNDED to [9.5, 10.0], not identified. total=null so no total lean is emitted."
+   }
+  },
+  {
+   "matchup": "CHC@PIT",
+   "ml_away": 107,
+   "ml_home": -122,
+   "total": null,
+   "over": null,
+   "under": null,
+   "rl_fav": null,
+   "note": null,
+   "total_bounds": {
+    "lo": 8.5,
+    "hi": 9.0,
+    "over_px": -115,
+    "under_px": -115,
+    "two_sided": false,
+    "why": "best-price display: over quoted at 8.5, under at 9.0. Consensus total is only BOUNDED to [8.5, 9.0], not identified. total=null so no total lean is emitted."
+   }
+  },
+  {
+   "matchup": "TOR@BOS",
+   "ml_away": 116,
+   "ml_home": -130,
+   "total": null,
+   "over": null,
+   "under": null,
+   "rl_fav": null,
+   "note": null,
+   "total_bounds": {
+    "lo": 8.0,
+    "hi": 8.5,
+    "over_px": -110,
+    "under_px": -110,
+    "two_sided": false,
+    "why": "best-price display: over quoted at 8.0, under at 8.5. Consensus total is only BOUNDED to [8.0, 8.5], not identified. total=null so no total lean is emitted."
+   }
+  },
+  {
+   "matchup": "KC@DET",
+   "ml_away": 162,
+   "ml_home": -184,
+   "total": null,
+   "over": null,
+   "under": null,
+   "rl_fav": null,
+   "note": null,
+   "total_bounds": {
+    "lo": 9.0,
+    "hi": 9.5,
+    "over_px": -120,
+    "under_px": -120,
+    "two_sided": false,
+    "why": "best-price display: over quoted at 9.0, under at 9.5. Consensus total is only BOUNDED to [9.0, 9.5], not identified. total=null so no total lean is emitted."
+   }
+  },
+  {
+   "matchup": "LAD@NYM",
+   "ml_away": -154,
+   "ml_home": 137,
+   "total": null,
+   "over": null,
+   "under": null,
+   "rl_fav": null,
+   "note": null,
+   "total_bounds": {
+    "lo": 9.0,
+    "hi": 9.5,
+    "over_px": -115,
+    "under_px": -118,
+    "two_sided": false,
+    "why": "best-price display: over quoted at 9.0, under at 9.5. Consensus total is only BOUNDED to [9.0, 9.5], not identified. total=null so no total lean is emitted."
+   }
+  },
+  {
+   "matchup": "SD@MIA",
+   "ml_away": 110,
+   "ml_home": -125,
+   "total": null,
+   "over": null,
+   "under": null,
+   "rl_fav": null,
+   "note": null,
+   "total_bounds": {
+    "lo": 8.5,
+    "hi": 9.0,
+    "over_px": -110,
+    "under_px": -110,
+    "two_sided": false,
+    "why": "best-price display: over quoted at 8.5, under at 9.0. Consensus total is only BOUNDED to [8.5, 9.0], not identified. total=null so no total lean is emitted."
+   }
+  },
+  {
+   "matchup": "ATH@MIN",
+   "ml_away": 125,
+   "ml_home": -140,
+   "total": null,
+   "over": null,
+   "under": null,
+   "rl_fav": null,
+   "note": null,
+   "total_bounds": {
+    "lo": 10.0,
+    "hi": 10.5,
+    "over_px": -115,
+    "under_px": -115,
+    "two_sided": false,
+    "why": "best-price display: over quoted at 10.0, under at 10.5. Consensus total is only BOUNDED to [10.0, 10.5], not identified. total=null so no total lean is emitted."
+   }
+  },
+  {
+   "matchup": "COL@MIL",
+   "ml_away": 265,
+   "ml_home": -295,
+   "total": 7.5,
+   "over": -105,
+   "under": -106,
+   "rl_fav": null,
+   "note": null,
+   "total_bounds": {
+    "lo": 7.5,
+    "hi": 7.5,
+    "over_px": -105,
+    "under_px": -106,
+    "two_sided": true,
+    "why": "single number quoted both sides \u2014 genuine market"
+   }
+  },
+  {
+   "matchup": "HOU@CWS",
+   "ml_away": -105,
+   "ml_home": -108,
+   "total": 9.5,
+   "over": 100,
+   "under": -115,
+   "rl_fav": null,
+   "note": null,
+   "total_bounds": {
+    "lo": 9.5,
+    "hi": 9.5,
+    "over_px": 100,
+    "under_px": -115,
+    "two_sided": true,
+    "why": "single number quoted both sides \u2014 genuine market"
+   }
+  },
+  {
+   "matchup": "CIN@STL",
+   "ml_away": 115,
+   "ml_home": -132,
+   "total": null,
+   "over": null,
+   "under": null,
+   "rl_fav": null,
+   "note": null,
+   "total_bounds": {
+    "lo": 8.5,
+    "hi": 9.0,
+    "over_px": -120,
+    "under_px": -120,
+    "two_sided": false,
+    "why": "best-price display: over quoted at 8.5, under at 9.0. Consensus total is only BOUNDED to [8.5, 9.0], not identified. total=null so no total lean is emitted."
+   }
+  },
+  {
+   "matchup": "SEA@TEX",
+   "ml_away": -108,
+   "ml_home": -108,
+   "total": null,
+   "over": null,
+   "under": null,
+   "rl_fav": null,
+   "note": null,
+   "total_bounds": {
+    "lo": 7.0,
+    "hi": 7.5,
+    "over_px": -120,
+    "under_px": -120,
+    "two_sided": false,
+    "why": "best-price display: over quoted at 7.0, under at 7.5. Consensus total is only BOUNDED to [7.0, 7.5], not identified. total=null so no total lean is emitted."
+   }
+  },
+  {
+   "matchup": "LAA@SF",
+   "ml_away": 100,
+   "ml_home": -115,
+   "total": null,
+   "over": null,
+   "under": null,
+   "rl_fav": null,
+   "note": null,
+   "total_bounds": {
+    "lo": 7.5,
+    "hi": 8.0,
+    "over_px": -120,
+    "under_px": -120,
+    "two_sided": false,
+    "why": "best-price display: over quoted at 7.5, under at 8.0. Consensus total is only BOUNDED to [7.5, 8.0], not identified. total=null so no total lean is emitted."
+   }
+  },
+  {
+   "matchup": "NYY@PHI",
+   "ml_away": 140,
+   "ml_home": -155,
+   "total": null,
+   "over": null,
+   "under": null,
+   "rl_fav": null,
+   "note": null,
+   "total_bounds": {
+    "lo": 7.5,
+    "hi": 8.5,
+    "over_px": -122,
+    "under_px": -125,
+    "two_sided": false,
+    "why": "best-price display: over quoted at 7.5, under at 8.5. Consensus total is only BOUNDED to [7.5, 8.5], not identified. total=null so no total lean is emitted."
+   }
+  }
+ ]
+}

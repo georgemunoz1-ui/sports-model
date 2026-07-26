@@ -1,0 +1,37 @@
+{
+  "date": "2026-07-26",
+  "snapshot": "PRE-SLATE (user screenshot)",
+  "captured_utc": "2026-07-25T22:30Z",
+  "captured_note": "Container clock runs ~3.8h fast. Real time established from statsapi hydrated schedule for 2026-07-25: games with gameDate 23:10Z were Pre-Game while 20:10Z games were in the 6th-7th, placing real time at ~22:20-22:35Z on 2026-07-25. Earliest 7/26 first pitch is 16:15Z, so this board is ~18h pre-slate.",
+  "source": "User-uploaded screenshot of a multi-book aggregate board (columns: Team | Date | Win (Moneyline) | Cover (Spread, Line) | Total Runs (O/U, Line) | If You Bet $20 | Starting Pitcher)",
+
+  "PROVENANCE_WARNING": "TRANSCRIPTION_RISK_HIGH. These numbers were read from an image by a model, then carried across a context compaction. They were NOT re-read from the image in the session that wrote this file. Every figure here is a model transcription, not a parsed feed. The unblocking artifact remains the source page's 'Export Table Data -> CSV' button.",
+
+  "TOTALS_COLUMN_WARNING": {
+    "finding": "The O/U column reports a DIFFERENT line for the over than for the under in 12 of 15 games, and the under line is never lower than the over line (higher by 0.5 or 1.0 in those 12; equal in 3).",
+    "diagnosis": "This is a BEST-PRICE-ACROSS-BOOKS display, not one book's two-sided market. Best over is found at the lowest line on the board; best under at the highest. Pairing them (e.g. o8.0 -110 with u8.5 -110) describes a MIDDLE, not a market.",
+    "consequence": "The consensus total is NOT identified for those 12 games; it is only BOUNDED: true_total in [over_line, under_line]. Only the 3 games where over_line == under_line (ATL@BAL 8.5, HOU@CWS 9.5, COL@MIL 7.5) expose a genuine two-sided number.",
+    "rule": "Do NOT ingest these as a single two-sided total. Totals are advisory only on this board. This is the same class of defect as the 2026-07-25 strikeout alt-line ladder, caught by the same displacement test.",
+    "relation_to_moneyline": "The ML column is UNAFFECTED: one price per team, two teams per game, unambiguous side attribution. ml_ev_tracking operates on ML only, so the totals defect does not contaminate the pre-registered ledger."
+  },
+
+  "SPREAD_NOT_TRANSCRIBED": "The screenshot's 'Cover (Spread, Line)' column was not transcribed. Run-line prices appear split across two rows per game and side attribution is unverified. Under R3 sides are DEAD, so nothing downstream needs it. Recording the omission rather than inventing values (R1).",
+
+  "events": [
+    {"matchup": "CLE@TB",  "away": "CLE", "home": "TB",  "ml_away": 120,  "ml_home": -134, "start_utc": "16:15Z", "over_line": 6.5,  "over": -140, "under_line": 7.5,  "under": -145, "sp_away_img": "Parker Messick",   "sp_home_img": "Drew Rasmussen"},
+    {"matchup": "AZ@WSH",  "away": "AZ",  "home": "WSH", "ml_away": -118, "ml_home": 105,  "start_utc": "17:35Z", "over_line": 9.5,  "over": -125, "under_line": 10.0, "under": -110, "sp_away_img": "Kohl Drake",       "sp_home_img": "Miles Mikolas"},
+    {"matchup": "ATL@BAL", "away": "ATL", "home": "BAL", "ml_away": -105, "ml_home": -110, "start_utc": "17:35Z", "over_line": 8.5,  "over": -114, "under_line": 8.5,  "under": 102,  "sp_away_img": "Reynaldo Lopez",   "sp_home_img": "Shane Baz"},
+    {"matchup": "TOR@BOS", "away": "TOR", "home": "BOS", "ml_away": 116,  "ml_home": -130, "start_utc": "17:35Z", "over_line": 8.0,  "over": -110, "under_line": 8.5,  "under": -110, "sp_away_img": "Kevin Gausman",    "sp_home_img": "Ranger Suarez"},
+    {"matchup": "CHC@PIT", "away": "CHC", "home": "PIT", "ml_away": 107,  "ml_home": -122, "start_utc": "17:35Z", "over_line": 8.5,  "over": -115, "under_line": 9.0,  "under": -115, "sp_away_img": "Jameson Taillon",  "sp_home_img": "Braxton Ashcraft"},
+    {"matchup": "KC@DET",  "away": "KC",  "home": "DET", "ml_away": 162,  "ml_home": -184, "start_utc": "17:40Z", "over_line": 9.0,  "over": -120, "under_line": 9.5,  "under": -120, "sp_away_img": "Luinder Avila",    "sp_home_img": "Framber Valdez"},
+    {"matchup": "SD@MIA",  "away": "SD",  "home": "MIA", "ml_away": 110,  "ml_home": -125, "start_utc": "17:40Z", "over_line": 8.5,  "over": -110, "under_line": 9.0,  "under": -110, "sp_away_img": "Walker Buehler",   "sp_home_img": "Janson Junk"},
+    {"matchup": "LAD@NYM", "away": "LAD", "home": "NYM", "ml_away": -154, "ml_home": 137,  "start_utc": "17:40Z", "over_line": 9.0,  "over": -115, "under_line": 9.5,  "under": -118, "sp_away_img": "Emmet Sheehan",    "sp_home_img": "Freddy Peralta"},
+    {"matchup": "HOU@CWS", "away": "HOU", "home": "CWS", "ml_away": -105, "ml_home": -108, "start_utc": "18:10Z", "over_line": 9.5,  "over": 100,  "under_line": 9.5,  "under": -115, "sp_away_img": "Ronel Blanco",     "sp_home_img": "Erick Fedde"},
+    {"matchup": "ATH@MIN", "away": "ATH", "home": "MIN", "ml_away": 125,  "ml_home": -140, "start_utc": "18:10Z", "over_line": 10.0, "over": -115, "under_line": 10.5, "under": -115, "sp_away_img": "Jeffrey Springs",  "sp_home_img": "Travis Adams"},
+    {"matchup": "COL@MIL", "away": "COL", "home": "MIL", "ml_away": 265,  "ml_home": -295, "start_utc": "18:10Z", "over_line": 7.5,  "over": -105, "under_line": 7.5,  "under": -106, "sp_away_img": "Kyle Freeland",    "sp_home_img": "Jacob Misiorowski"},
+    {"matchup": "CIN@STL", "away": "CIN", "home": "STL", "ml_away": 115,  "ml_home": -132, "start_utc": "18:15Z", "over_line": 8.5,  "over": -120, "under_line": 9.0,  "under": -120, "sp_away_img": "Andrew Abbott",    "sp_home_img": "Kyle Leahy"},
+    {"matchup": "SEA@TEX", "away": "SEA", "home": "TEX", "ml_away": -108, "ml_home": -108, "start_utc": "18:35Z", "over_line": 7.0,  "over": -120, "under_line": 7.5,  "under": -120, "sp_away_img": "Logan Gilbert",    "sp_home_img": "Jacob deGrom"},
+    {"matchup": "LAA@SF",  "away": "LAA", "home": "SF",  "ml_away": 100,  "ml_home": -115, "start_utc": "20:05Z", "over_line": 7.5,  "over": -120, "under_line": 8.0,  "under": -120, "sp_away_img": "Jose Soriano",     "sp_home_img": "Carson Whisenhunt"},
+    {"matchup": "NYY@PHI", "away": "NYY", "home": "PHI", "ml_away": 140,  "ml_home": -155, "start_utc": "23:20Z", "over_line": 7.5,  "over": -122, "under_line": 8.5,  "under": -125, "sp_away_img": "Will Warren",      "sp_home_img": "Cristopher Sanchez"}
+  ]
+}

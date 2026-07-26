@@ -1,5 +1,5 @@
 {
- "updated_utc": "2026-07-25T22:10Z",
+ "updated_utc": "2026-07-25T22:30Z",
  "ledger_conventions": {
   "pl_rounding": "Each play settles to a 2-decimal P/L (American-odds payout rounded at settlement). Running units = sum of these rounded per-play values, so the ledger column sums EXACTLY to the total (sportsbook-settlement convention, chosen for auditability). Note: summing unrounded payouts can differ by ~0.01u (e.g. baseline 7/23 is +0.48u rounded, +0.49u unrounded).",
   "brier_ab": "raw-vs-shrunk Brier/logloss compared only on plays where BOTH probabilities exist (engine skips produce no shrunk_p). 7/23 n_both=4 (Dobnak excluded).",
@@ -614,6 +614,37 @@
      "late_price_2210Z": -116,
      "clv_cents": 0,
      "clv_note": "Line has NOT moved between the 05:50Z open and the 22:10Z late snapshot. CLV so far = 0 cents. A true closing capture at lock is still owed."
+    },
+    {
+     "date": "2026-07-26",
+     "pick": "COL",
+     "game": "COL@MIL",
+     "ml": 265,
+     "v13_p": 0.324,
+     "implied": 0.274,
+     "edge": 0.05,
+     "ev_per_unit": 0.183,
+     "v13_directional_lean_agrees": false,
+     "price_snapshot": "user screenshot board, captured 2026-07-25T22:30Z, ~18h pre-slate (earliest first pitch 2026-07-26T16:15Z) \u2014 WILL MOVE; closing price to be captured before lock",
+     "weight": 1.0,
+     "staked": 0.0,
+     "transcription_risk": "HIGH \u2014 read from an image. Board passed a full integrity audit: 15/15 matchup+time match vs statsapi, 26/30 starter match, ML hold 2.08-3.85% (mean 3.03%) with no arb in any game.",
+     "caveat": "Same game triggers an R5 total audit (V13 proj 9.7 vs line 7.5, disp +2.2). If V13 misprices run scoring here, its win probability in this game is suspect too. Registered anyway \u2014 rule 4 forbids discretionary vetoes."
+    },
+    {
+     "date": "2026-07-26",
+     "pick": "NYY",
+     "game": "NYY@PHI",
+     "ml": 140,
+     "v13_p": 0.491,
+     "implied": 0.417,
+     "edge": 0.074,
+     "ev_per_unit": 0.178,
+     "v13_directional_lean_agrees": false,
+     "price_snapshot": "user screenshot board, captured 2026-07-25T22:30Z, ~18h pre-slate (earliest first pitch 2026-07-26T16:15Z) \u2014 WILL MOVE; closing price to be captured before lock",
+     "weight": 1.0,
+     "staked": 0.0,
+     "transcription_risk": "HIGH \u2014 read from an image. Board passed a full integrity audit: 15/15 matchup+time match vs statsapi, 26/30 starter match, ML hold 2.08-3.85% (mean 3.03%) with no arb in any game."
     }
    ],
    "methodology_note": "Two of the three 7/25 picks (COL +186, KC +154) are sides V13 expects to LOSE more often than win (p=0.462, 0.466). They qualify because the price is far enough off V13's number to be +EV. This is the objective function working as specified: profitability is +EV vs break-even, NOT win% > 50%. Expect this ledger's W-L record to look mediocre even when it is performing well; units and CLV are the readouts that matter, not W-L.",
@@ -626,8 +657,49 @@
      "ev_per_unit": 0.14,
      "edge": 0.057,
      "why": "Both starters unmodeled: MIN starter TBD and Mason Barnett has no start log. Would have ranked 3rd by EV on the full board. Recorded so the cost of rule 3 is measurable rather than invisible."
+    },
+    {
+     "date": "2026-07-26",
+     "side": "KC",
+     "game": "KC@DET",
+     "ml": 162,
+     "ev_per_unit": 0.189,
+     "edge": 0.072,
+     "why": "capped: starters TBD (gs 0) / Framber Valdez (gs 19). Recorded so the cost of rule 3 stays measurable."
+    },
+    {
+     "date": "2026-07-26",
+     "side": "WSH",
+     "game": "AZ@WSH",
+     "ml": 105,
+     "ev_per_unit": 0.111,
+     "edge": 0.054,
+     "why": "capped: starters Kohl Drake (gs 0) / Miles Mikolas (gs 8). Recorded so the cost of rule 3 stays measurable."
     }
-   ]
+   ],
+   "rule_reconciliation_2026_07_26": {
+    "issue": "Rule 3 as WRITTEN says 'a starter is TBD or has <5 GS'. The CODE that actually produced the capped flag (harness/daily_card.py) uses 'gs<2 or TBD'. The two definitions differ.",
+    "what_was_actually_applied": "7/25 was graded with the CODE definition (gs<2). To keep the ledger internally consistent, 7/26 was ALSO selected with the code definition.",
+    "effect_on_2026_07_26": "NONE. Zero registered sides on this slate would flip under the gs<5 reading \u2014 checked explicitly, not assumed.",
+    "forward_fix": "The written text will be amended to match the code (gs<2 or TBD) effective 2026-07-27. Amending forward-only; the 7/25-7/26 rows are NOT re-selected under a rule chosen after seeing their outcomes."
+   },
+   "conservative_tbd_cost_2026_07_26": {
+    "policy": "statsapi (first-party) is the authority on starters. Where statsapi says TBD, the game is capped even if the odds board lists a name.",
+    "affected": [
+     "TOR@BOS (board: Ranger Suarez)",
+     "KC@DET (board: Luinder Avila)",
+     "LAA@SF (board: Carson Whisenhunt)"
+    ],
+    "measured_cost": "A shadow slate built with the board's unconfirmed names was run through the identical rule. It produces ONE extra pick: KC +162 (p=0.440, edge=+0.058, EV=+0.153). That is the price of the conservatism on this slate, recorded so it is visible rather than invisible.",
+    "shadow_wrote_nothing": "The shadow run's card was diverted to /tmp and the canonical card regenerated. No ledger row, no state write."
+   },
+   "starter_conflict_2026_07_26": {
+    "game": "ATH@MIN",
+    "board": "Travis Adams",
+    "statsapi": "Joe Ryan",
+    "resolution": "Modeled with Joe Ryan (first-party wins).",
+    "note": "The board's -140 MIN price may have been made against a different pitcher. No side in this game cleared the rule, so nothing was registered either way \u2014 but the conflict is logged because a future slate may not be so lucky."
+   }
   }
  },
  "gates": {
@@ -695,6 +767,18 @@
    "status": "queued",
    "title": "WNBA port",
    "method": "registry already stubbed; totals first"
+  },
+  {
+   "id": "E4",
+   "status": "PRE-REGISTERED, not yet run",
+   "registered_utc": "2026-07-25T22:30Z",
+   "title": "Is V13's disagreement with the moneyline market an edge or a favorite-fading bias?",
+   "motivation": "Across 50 priced+uncapped game-rows on 5 cards, mean(V13_home_wp - market_home_wp) is -0.086 where the home team is a big favorite (mkt>0.58, n=8), -0.019 in the middle (n=40), +0.005 where home is a big dog (n=2). V13 compresses toward 50/50 relative to the market. Every ml_ev_tracking pick so far (KC +154, COL +186, STL -116, COL +265, NYY +140) is consistent with that shape: 4 of 5 are underdogs. The ledger may be one systematic bet \u2014 'fade favorites' \u2014 wearing five different uniforms.",
+   "hypothesis": "H0: V13's favorite-fade is genuine edge -> ml_ev_tracking picks show positive CLV. H1: it is calibration bias -> CLV is <=0 and units bleed even when W-L looks respectable.",
+   "primary_readout": "Closing-line value in cents, NOT win-loss. Pre-specified because W-L is the wrong readout for a +EV objective function.",
+   "holdout": "Forward slates from 2026-07-27 onward. The 7/25 and 7/26 rows are EXPLORATORY \u2014 they generated this hypothesis, so they cannot confirm it.",
+   "blocking": "Requires a genuine closing snapshot at lock, which has never yet been captured. E4 cannot start until closing capture works. This is the same binding constraint (price access) already logged.",
+   "must_not_do": "This diagnostic MUST NOT be used to veto or trim picks on 7/26 or any registered slate. Rule 4 forbids discretion; the whole point of pre-registration is that a mid-flight hunch does not get to edit the pick list."
   }
  ],
  "known_issues": [
@@ -711,19 +795,30 @@
    "consequence": "K-prop gate has been stuck at 9/100 for two consecutive slates for reasons that have nothing to do with the engine. Meanwhile the engine posted MAE 0.49 vs a real main-line column.",
    "unblocking_artifact": "The source Taco screenshotted has an 'Export Table Data -> Excel / CSV / PDF' button. One CSV export containing prices converts a dead slate into a priceable board and is worth more than any further modeling work right now.",
    "logged_utc": "2026-07-25T22:10Z"
+  },
+  {
+   "logged_utc": "2026-07-25T22:30Z",
+   "issue": "statsapi /api/v1/game/<pk>/linescore served a STALE, home/away-SWAPPED snapshot",
+   "detail": "Fetching game 824244 (KC@DET 7/25) via the per-game linescore endpoint returned 'middle of the 5th, 2-1' and labelled Kansas City as the HOME team. The hydrated schedule endpoint for the same date returned 'Final, KC (away) 3 @ DET (home) 2, bottom 9' and was internally coherent across all 15 games (later starts Pre-Game, mid-window games in the 6th-7th). The schedule reading is authoritative; the linescore call was both stale and wrong on side attribution.",
+   "why_it_matters": "Two independent failure modes in one response: an out-of-date snapshot AND a swapped home/away mapping. Either alone would have produced a wrong grade. Trusting it would have graded KC 2-1 in-progress as a loss when KC in fact won 3-2.",
+   "rule": "Never grade from a single endpoint. Grade from the hydrated schedule, which carries all 15 games and can be checked for internal coherence against the clock. Treat any single-game endpoint as unverified until it agrees with the schedule.",
+   "lineage": "Same doctrine as the WSH 813-vs-858 extraction error: do not trust a model-reported figure from one source."
   }
  ],
  "next_actions": [
-  "Get PRICES for the 2026-07-25 K board \u2014 the source page has Export Table Data -> CSV/Excel. Lines alone cannot be priced (R1). 4 arms are on the displacement watchlist and need only a price to be evaluated.",
   "GRADE tonight (7/24): ML tracking (NYY/ATL/SEA) + V13 directional on all 15 games. No K plays (no prop board). Update ml_tracking + v13_forward_directional.",
   "NEXT EXPERIMENT = E3 (before E2): pre-register prop line-move CLV capture (book-info test, no engine change), then run.",
   "E1 CLOSED: NO-PROMOTE / CONFIRMATORY INDETERMINATE; original 1759 unrecoverable; engine unchanged.",
   "Sunday weekly review: dashboard + backup bundle + cumulative Brier A/B.",
   "8-field parser fix deferred (no forward opponent writes).",
-  "Capture a CLOSING 2026-07-25 odds snapshot before first pitch (17:10Z) \u2014 grades ml_ev_tracking at open, and feeds E3 CLV.",
   "Reconcile CHC@PIT 7/25 price conflict (board +116/-128 tot 8.0 vs covers matchup page +112/-102 tot 7.5) with a second source.",
   "Verify TOR@BOS 7/25 run line \u2014 source side labels look inverted vs the moneyline; currently UNVERIFIED.",
-  "Grade 2026-07-25 tonight: v13_forward_directional (15), ml_ev_tracking (3), total leans (display)."
+  "Grade 7/25 COL +186 and STL -116 once final (both were Pre-Game at 22:30Z; starts 23:10Z/23:15Z).",
+  "Grade v13_forward_directional and the 7/25 total leans once the slate completes.",
+  "Backfill verified 7/25 finals into results.csv from statsapi hydrated schedule ONLY. covers.com was caught serving a stale 7/24 page whose finals were byte-identical to rows already on disk. Only KC@DET 3-2 was final at capture.",
+  "Capture a genuine CLOSING snapshot for 7/26 before 16:15Z. This has never once been done and it blocks E3 and E4.",
+  "Amend rule 3's written text to match the code (TBD or gs<2), effective 2026-07-27, forward only.",
+  "Still need real K-prop PRICES. Unblocking artifact remains the source page's 'Export Table Data -> CSV' button."
  ],
  "mlb_kprops": {
   "kproj_daily_check_2026_07_24": {

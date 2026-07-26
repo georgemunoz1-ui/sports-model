@@ -314,3 +314,41 @@ Also logged: `close_ml_*`/`close_total` in results.csv for 7/19–7/25 hold OPEN
 prices, so no CLV has ever been measurable; and 6 of 30 card starters missed the
 actual first arm, with PHI using a true opener (Tim Mayza, 2.0 IP) that the K
 pipeline has no way to detect.
+
+## 2026-07-26 19:30Z — first real two-sided K board, and the engine's shrinkage caught twice
+
+Transcribed all 30 arms of the 7/26 strikeout board (6 book columns; Hard Rock cut
+off, prices absent, zero quotes taken from it — R1). Four integrity tests ran before
+anything was priced.
+
+T1 hold: 31/31 two-sided quotes inside 2–12%. T4 re-read: the 4 rows transcribed in
+the live pass re-read identically from a fresh crop.
+
+T2 rung coherence passed on **every** row — including Misiorowski's 12.5 @ −135 /
+11.5 @ −330, which is a perfectly coherent ladder and is obviously not a startable
+strikeout market. **T2 is necessary but not sufficient and can no longer be cited
+alone.** T3 cross-book dispersion is the load-bearing test: 10 of 30 rows quarantined
+for a line spread > 1.0 K.
+
+Regressed the engine's pre-slate E[K] on the board's median posted line. Slope 0.703
+on clean rows with GS≥15 (n=12, corr 0.872) — the engine moves 0.70 K when the market
+moves 1.0. Implied stretch 1.42×. On 7/25 the outcome regression gave an actual-on-
+projected slope of 1.35. Outcomes and prices are independent yardsticks and they agree
+on direction and roughly on magnitude.
+
+Measuring on the dirty rows would have said 2.35× — 65% too aggressive. The quarantine
+filter is what makes the number usable.
+
+Consequence: residual (E[K] − line) correlates with the line at −0.87. Direction of
+nearly every K selection is determined by whether the line is high or low. Registered
+E5 as a pre-registered stretch correction against an untouched forward holdout; the
+7/25 n=24 and 7/26 n=12 are burned. **Engine unchanged.**
+
+Shadow run over the 20 permitted rows produced 2 selections. One is Soriano, already
+registered live and pre-lock — the shadow reproducing it is a pipeline consistency
+check, not a second play. The other is Fedde OVER 2.5 @ +106, claimed EV +0.469, and
+that is a bug report: a 2.5 K line *is* the market pricing a short outing, and E[TBF]
+does not read it. Freeland 1.5, Avila 1.5, Baz 2.5 are the same defect.
+
+Nothing here is gate-eligible. 26 of 30 arms had already started. Gate stays 9/100 +1
+pending.

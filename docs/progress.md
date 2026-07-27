@@ -876,3 +876,58 @@ observed 2026-07-27T02:33Z on a Covers player-props board during a 12-source sca
 observation that placed him in Tier 2. It is EVENT_A and cannot be passed to select_play().
 The same scan found zero other K lines across the other 23 pitchers and zero complete two-sided
 quotes slate-wide.
+
+### 2026-07-27 (03:2x UTC) — Phase-2 capture protocol; lineage hash now reproducible
+
+Final Phase-2 clarification. Phase 1 NOT modified - sha256sum -c OK before and after, and the
+frozen artifact does not appear in this diff. Real money still $0, unauthorized.
+
+  docs/experiments/KSIM-2026-07-27_phase2_capture_protocol.md   (new)
+  docs/experiments/KSIM-2026-07-27_lineage_manifest.txt         (new, 23 entries)
+  harness/verify_lineage.py                                     (new, recomputes every hash)
+
+NOTHING IS AN "OPENER" UNTIL PROVEN. EVENT_A/EVENT_B are renamed FIRST_CAPTURED_LINE and
+FIRST_CAPTURED_COMPLETE_QUOTE; a third term VERIFIED_OPENER exists and requires a market-origin
+timestamp or an authenticated odds-history feed. "First we saw it" is a fact about our
+retrieval; "first the book posted it" is a fact about the market, and we have never had
+evidence for the second. Absent that evidence VERIFIED_OPENER is ABSENT, not inferred from the
+earliest capture. A supersession banner was added to the addendum's section 5; no accepted text
+was rewritten.
+
+TWO TIMESTAMPS, NEVER CONFLATED. observed_at_utc (ours, always present) and
+source_quote_time_utc (the book's, null when the source supplies none). Setting the second
+equal to the first is prohibited - it manufactures market provenance from our own retrieval
+clock, and it is exactly what would let a mid-slate screenshot pass as an opener.
+
+MAIN-LINE SELECTION IS MARKET-DESIGNATED ONLY. If a book shows several rungs, use the one the
+BOOK designates default/main; otherwise mark MAIN_LINE_UNRESOLVED, keep every alternate, and
+score nothing from that pitcher's line placement. Choosing the rung nearest E[K] is prohibited:
+it would select the comparison that minimises the error being measured, guaranteeing a
+flattering result however the engine actually performs. Same defect class as the 7/26 alt-rung
+contamination, approached from the other side.
+
+PHASE-2A ELIGIBILITY IS THE CLOCK. A capture counts for executable-decision scoring only if
+observed_at_utc precedes THAT PITCHER's first pitch. Later captures are still recorded and still
+reported, but can never produce a frozen executable decision and can never be relabelled.
+Per-pitcher deadlines are tabulated in the protocol from the frozen artifact.
+
+TWO COMPARISONS, NEVER MERGED. C1 = frozen line vs FIRST_CAPTURED_COMPLETE_QUOTE. C2 = frozen
+line vs VERIFIED_OPENER, only where authenticated opener history exists. If none exists for this
+slate - the present expectation - C2 is reported EMPTY, never approximated from C1.
+
+LINEAGE NOW REPRODUCIBLE, not asserted. harness/verify_lineage.py recomputes all four published
+hashes from disk: phase1, kprops.py, pitchers.csv and composite_v1 all OK under
+python 3.11.15 / CPython / Linux-6.18.5. Command: python3 harness/verify_lineage.py
+
+  A weakness in the published canonicalisation is documented rather than quietly fixed. v1 is
+  ''.join(f'{pid}:{sha256}') over pids sorted as STRINGS with NO delimiter. Concatenating
+  variable-length fields without a separator is not injective in general; it is well defined
+  here only because pid and sha256 happen to be fixed-width. It cannot be changed without
+  invalidating a hash already cited in the addendum and a commit message, so v1 stands, and a
+  delimited v2 (fc6f01fa...) is published alongside for future manifests.
+
+BRADISH RECORD CORRECTION. The addendum said "under side only, no price transcribed"; the
+source did display an under price whose value never reached our record. Both are true of
+different things. Encoded as under_price: null with price_present_but_not_transcribed: true -
+never a reconstructed number. He stays FIRST_CAPTURED_LINE only: not complete (no over price),
+not a verified opener (no market-origin timestamp), not passable to select_play(), Tier 2.

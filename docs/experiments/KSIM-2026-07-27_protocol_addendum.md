@@ -106,6 +106,8 @@ for a pitcher, that pitcher has **no opener**, and the row is reported as
 
 ## 5 — Two opening events, recorded separately
 
+> **TERMINOLOGY SUPERSEDED.** `EVENT_A`/`EVENT_B` are renamed `FIRST_CAPTURED_LINE`/`FIRST_CAPTURED_COMPLETE_QUOTE`, and neither may be called an *opener* without a verified market-origin timestamp. See `KSIM-2026-07-27_phase2_capture_protocol.md`. The rules below are unchanged; only the names are.
+
 | event | definition | may be passed to `select_play()` |
 |---|---|---|
 | **EVENT_A** first publicly observed line | any posted line, **even one-sided**, with source and timestamp | **NO** |

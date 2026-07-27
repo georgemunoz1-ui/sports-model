@@ -425,3 +425,68 @@ queue's E5 is the WNBA port. Under R7 an experiment's identity is part of its
 pre-registration, so this must be reconciled before either E4 reads out.
 
 Engine, state.json, gate string: untouched.
+
+2026-07-27 — core breakdown (lessons form) + four corrections from Taco's review
+--------------------------------------------------------------------------------
+NEW: docs/core_breakdown.html. Companion to model_breakdown.html — same system, but
+organized by what was learned rather than by release date. Thirteen lessons L1-L13, each
+with the incident that produced it, the lesson, and whether it is actually incorporated in
+code or still only doctrine. Plus: the objective that was wrong at the start (AUTH-7,
+"beat the house at a high clip" -> "positive EV vs the price's break-even"), the failure
+class that produced five separate errors ("summaries are not sources"), the shrinkage
+convention table, a gap table of what is doctrine but nothing enforces, and the through-line.
+
+The through-line, stated plainly: everything that survived was validated by something
+outside my own reasoning — outcomes, the market, a second source, a pre-registration.
+Everything validated against my own reasoning was eventually discarded. And the useful
+moves have been subtractive: sides killed, totals held back, boards quarantined, plays
+excluded. Nothing added has yet been shown to make money.
+
+TACO'S REVIEW — four critiques, all four verified correct, all four now recorded.
+
+(1) SHRINKAGE "CONVERGENCE" IS INVALID. Retracted. 1.35 is a calibration slope
+    (r*sd_a/sd_p = 0.487*2.67/0.96 = 1.354). 1.42 is a noiseless inversion
+    (1/slope(E[K]~line) = 1/0.703). Since slope(y~x)*slope(x~y) = corr^2, inverting one
+    cannot produce the other. Identity checked: 0.703*1.0817 = 0.7604 = 0.872^2 exactly.
+    Applying the market estimator to the outcome data gives 1/0.175 = 5.71, not 1.35 —
+    cleanest proof they were never the same quantity, and evidence the estimator is
+    unstable at corr 0.487. Consistent table:
+        calibration slope   outcomes 1.35   market 1.08
+        sd-match, Poisson-stripped (talent sd 1.49)  outcomes 1.56   market 1.24
+        noiseless inversion outcomes 5.71   market 1.42
+    Also: the outcome fit is not significant. SE 0.516, 95% CI [0.28, 2.42], t = 0.68.
+    CONSEQUENCE: next-action #2 rewritten. Pre-registration must name the estimator and
+    the convention, not just the number (R7 amendment). And KPROP-EDGE-ARTIFACT cannot be
+    the readout — a 1.4 stretch zeroes residual-vs-line whether or not the spread is real.
+    Readout is held-out MAE and log-loss on plays the selector would actually make.
+
+(2) PUSH TERM MISSING. Confirmed in code. p_over does k0=int(ceil(line)); 1-sum(...) =
+    P(X >= ceil(line)). On an integer line ceil(5)=5 gives P(X>=5), counting X=5 as a win
+    when it is a push. P(X=5 | lambda=5.00) = 0.1755. P(X=6 | lambda=5.68) = 0.1592.
+    ev(p,ml) has the matching gap. Logged as PUSH-TERM-MISSING. Next unit of work.
+
+(3) GATE COUNTER OUT OF SYNC WITH THE RULESET. Confirmed. 8 of the 9 graded plays would
+    not register under the current <=3.5 K guard. Taco's instruction recorded verbatim and
+    binding: "You should not retro-drop it — that's how a record gets laundered, and R6
+    says so." Resolution is a FORK, not a reset and not a purge: tag every row with
+    selector_version, keep the historical counter at 9 as audit trail, define the gate on
+    the current version's subset starting at 8. Logged as SELECTOR-VERSION-UNTAGGED.
+
+(4) REPO CLAIM. Taco's tree shows 2 commits and no engine/. This container shows 52 and
+    b23c254 present, so we are looking at different trees. The finding underneath is the
+    one that mattered: `git remote -v` is EMPTY and always has been. Four days of work
+    existed in exactly one ephemeral place. Acted rather than asked — created and delivered
+    sportsmodel_2026-07-27.bundle (863K, full history, verified complete, HEAD b9257bb) and
+    a worktree tarball. A bundle is a snapshot, not a remote; a real remote still needs a
+    repo URL and a token from Taco.
+
+CORRECTED IN docs/model_breakdown.html (delivered version contained these):
+  - "40 commits" -> 52. R1-class error; a number stated that did not trace. Original
+    wording preserved in a correction note per R6, not silently overwritten.
+  - Shrinkage "two independent methods agree" section struck through and retracted in place.
+  - Next-action #2 rewritten. Closing summary paragraph rewritten.
+  - Two new known issues added: PUSH-TERM-MISSING, SELECTOR-VERSION-UNTAGGED.
+
+Engine, state.json, ledgers, gate string: untouched. No play created, graded, or removed.
+Stated order for what follows: push guard, then shrinkage pre-registration to spec, then
+selector_version tagging and the gate fork, then the 8-field parser, HFA-SPLIT, E4/E5.

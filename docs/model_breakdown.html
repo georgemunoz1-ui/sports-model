@@ -80,7 +80,8 @@
 <header>
   <h1>sportsmodel — full breakdown</h1>
   <div class="sub">Patch notes for the whole system: what runs, what it believes, what it got wrong, and what is still unproven.</div>
-  <div class="stamp mono">2026-07-27 &nbsp;·&nbsp; HEAD b23c254 &nbsp;·&nbsp; 40 commits &nbsp;·&nbsp; supersedes model_breakdown.html @ e74cdcb (2026-07-22)</div>
+  <div class="stamp mono">2026-07-27 &nbsp;·&nbsp; HEAD b23c254 &nbsp;·&nbsp; 52 commits &nbsp;·&nbsp; supersedes model_breakdown.html @ e74cdcb (2026-07-22)</div>
+  <div class="stamp mono" style="opacity:.75">CORRECTION 2026-07-27: this line originally read "40 commits." The true count at b23c254 is 52 (<code>git rev-list --count HEAD</code>). An R1-class error — a number stated that did not trace. Corrected here, logged in progress.md, original wording preserved in this note per R6.</div>
 </header>
 
 <div class="banner">
@@ -138,7 +139,8 @@
   <div class="title">two independent measurements agree, which is the interesting part</div>
   <ul class="notes">
     <li><span class="lbl ADDED">Added</span><span>Out-of-sample calibration <code>calibration_2026_07_25_oos</code>: n=24, MAE 1.94, bias +0.40, RMSE 2.39, corr 0.487, <b>OLS slope 1.35</b>, sd(projected) 0.96 vs sd(actual) 2.67. Tails near nominal — SO≥8 actual 6 vs expected 4.5; SO≤3 actual 5 vs expected 5.8.</span></li>
-    <li><span class="lbl CHANGED">Finding</span><span><b>The engine is over-shrunk, and two unrelated methods say so by nearly the same amount.</b> Outcome-based regression on 7/25 gives 1.35×. Market-based implied stretch on 7/26's clean rows gives 1.42×. One is fit against results, the other against prices; they share no input. The point estimates are under-dispersed while the Poisson tails behave — the mean is fine, the spread is too narrow.</span></li>
+    <li><span class="lbl CHANGED">Finding</span><span><s><b>The engine is over-shrunk, and two unrelated methods say so by nearly the same amount.</b> Outcome-based regression on 7/25 gives 1.35×. Market-based implied stretch on 7/26's clean rows gives 1.42×. One is fit against results, the other against prices; they share no input.</s> The point estimates are under-dispersed while the Poisson tails behave — the mean is fine, the spread is too narrow.</span></li>
+    <li><span class="lbl FIXED">Retracted 7/27</span><span><b>The "convergence" was an artifact of mixing estimands.</b> 1.35 is a calibration slope (actual regressed on projected: <span class="mono">r·sd_a/sd_p = 0.487×2.67/0.96 = 1.354</span>). 1.42 is a <i>noiseless inversion</i> (<span class="mono">1/slope(E[K]~line) = 1/0.703</span>). Because <span class="mono">slope(y~x)·slope(x~y) = corr²</span>, inverting one never yields the other. Proof: apply the market document's own estimator to the outcome data and you get <span class="mono">1/slope(proj~actual) = 1/0.175 = <b>5.71</b></span>, not 1.35. Computed consistently — calibration slope: outcomes <b>1.35</b>, market <b>1.08</b>; sd-matching with Poisson noise stripped: outcomes <b>1.56</b>, market <b>1.24</b>; noiseless inversion: outcomes <b>5.71</b>, market <b>1.42</b>. The two numbers never agreed. Further, the outcome fit is not significant: SE 0.516, 95% CI [0.28, 2.42], t vs no-stretch 0.68. Credit: Taco caught this.</span></li>
     <li><span class="lbl ADDED">Added</span><span>Per-book column diagnostic (mean signed dispersion / MAE vs engine): DK −1.44 / 1.44, FD −1.23 / 1.33, MGM −0.61 / 0.86, BR −0.11 / <b>0.49</b>, CZR −1.27 / 1.29. <b>Only BetRivers behaves like a main line.</b> Engine MAE against BR is 0.49 K.</span></li>
     <li><span class="lbl ADDED">Added</span><span><code>ml_ev_tracking</code>, pre-registered 2026-07-25T06:20Z before first pitch. Currently 2–1, +1.40u, ROI 46.7%, 3 graded, 2 pending, 3 excluded by rule 3.</span></li>
     <li><span class="lbl DEPRECATED">Deprecated</span><span><code>ml_tracking</code> FROZEN at 7–3 and superseded. Stated reason, verbatim: <em>"Selection rule was 'V13 directional lean + my discretion', which is not an EV rule and was never written down in advance."</em> A 7–3 record produced by an unwritten rule is not a result.</span></li>
@@ -339,7 +341,9 @@ LAA@SF final. Two ML rows also pending: COL +265 and NYY +140.
   <li><span class="lbl KNOWN">Binding</span><span><b>PRICE ACCESS is the binding constraint on this project — not model quality.</b> Everything downstream of a price is in decent shape. Getting a trustworthy price, before first pitch, consistently, is the thing that is not.</span></li>
   <li><span class="lbl KNOWN">Data</span><span><b>No closing price has ever been captured.</b> The <code>close_*</code> columns in <code>results.csv</code> contain <em>opening</em> prices. Fixable forward only — the historical closes are gone. This blocks E3 and the favorite-fade E4.</span></li>
   <li><span class="lbl KNOWN">Model</span><span>Openers and bulk arms are unmodeled in E[TBF]. Six of thirty starters mismatched on 7/25; PHI used a true opener. Current mitigation is the ≤3.5 K hard hold.</span></li>
-  <li><span class="lbl KNOWN">Model</span><span><b>KPROP-EDGE-ARTIFACT</b> — the residual correlates with the posted line at <span class="mono">−0.87</span>. That is not a small artifact. A large part of the apparent edge is a function of where the line sits, which is exactly what the frozen shrinkage experiment is meant to test.</span></li>
+  <li><span class="lbl KNOWN">Model</span><span><b>KPROP-EDGE-ARTIFACT</b> — the residual correlates with the posted line at <span class="mono">−0.87</span>. That is not a small artifact. A large part of the apparent edge is a function of where the line sits. <b>Amended 7/27:</b> this can no longer serve as the shrinkage experiment's readout — the two are mechanically the same quantity, so a stretch near 1.4 drives this to zero whether or not the extra spread is real. Both need separate, out-of-sample readouts.</span></li>
+  <li><span class="lbl KNOWN">Selector</span><span><b>PUSH-TERM-MISSING</b> — <code>p_over</code> computes <span class="mono">P(X ≥ ⌈line⌉)</span>. Correct on a half-point line; on an <b>integer</b> line <span class="mono">⌈5⌉=5</span> scores X=5 as a win when it is a push. At λ=5.00 that is <b>17.55%</b> of outcomes priced wrong; at λ=5.68 on a 6 line, 15.92%. <code>ev(p,ml)</code> has the matching gap — a push returns stake and needs a three-outcome form. Live correctness bug, not yet fixed. Credit: Taco.</span></li>
+  <li><span class="lbl KNOWN">Ledger</span><span><b>SELECTOR-VERSION-UNTAGGED</b> — the gate counter reads 9 of 100, but the ≤3.5 K exclusion added later means only 8 of those 9 are plays the current selector would make (Mikolas O 2.5 is the void and does not count; only Buehler O 3.5 falls inside the guard). Rows are not tagged with the ruleset that produced them, so "9 of 100" mixes selectors. <b>Rows will not be retro-dropped</b> (R6, and a laundered record is worse than an honest bad one). Resolution: fork — tag every row with <code>selector_version</code>, keep 9 as the audit trail, define the gate on the current version's subset starting at 8.</span></li>
   <li><span class="lbl KNOWN">Model</span><span>Elite-arm UNDER misses. Cole and Sale both lost as UNDERs.</span></li>
   <li><span class="lbl KNOWN">Board</span><span>KBOARD-COVERAGE (12 of 30 rows line-only), KBOARD-T2-INSUFFICIENT, KBOARD-LATE, KPROP-OPENER-2.</span></li>
   <li><span class="lbl KNOWN">Source</span><span>Blanco and rookie arms absent from FanGraphs. ESPN wipes odds at final. WebFetch truncates large JSON <em>and</em> can serve responses far older than its documented 15-minute cache. statsapi standings run stale.</span></li>
@@ -370,7 +374,7 @@ LAA@SF final. Two ML rows also pending: COL +265 and NYY +140.
 <h2>What happens next</h2>
 <ul class="notes">
   <li><span class="lbl NOTE">1</span><span>Grade Soriano (LAA@SF) and the two pending ML rows.</span></li>
-  <li><span class="lbl NOTE">2</span><span>Fit and <b>freeze</b> the shrinkage stretch scalar on pre-7/26 data, then open a forward holdout. The engine must not move before it reads out. Two independent estimates (1.35, 1.42) pointing the same way is the strongest signal on the board right now — which is precisely why it gets pre-registered rather than shipped.</span></li>
+  <li><span class="lbl NOTE">2</span><span><b>REWRITTEN 7/27.</b> <s>Fit and freeze the shrinkage scalar on pre-7/26 data. Two independent estimates (1.35, 1.42) pointing the same way is the strongest signal on the board.</s> They were one estimate computed two ways — see the retraction above. The pre-registration must instead <b>name the estimator and the convention</b> (calibration slope vs sd-matching vs inversion), not just the number, and must name a readout metric that the transform cannot trivially satisfy. <b>KPROP-EDGE-ARTIFACT cannot be that readout</b>: a stretch near 1.4 zeroes residual-vs-line whether or not the extra spread is real. Readout must be held-out MAE and log-loss on plays the selector would actually make.</span></li>
   <li><span class="lbl NOTE">3</span><span>Capture one genuine closing price. This has never once been done, and it blocks two experiments.</span></li>
   <li><span class="lbl NOTE">4</span><span>Build an opener detector, or keep hard-excluding every arm posted at ≤3.5 K.</span></li>
   <li><span class="lbl NOTE">5</span><span>Amend rule 3's written text to match the code (TBD or GS&lt;2), effective 7/27, forward only.</span></li>
@@ -393,9 +397,12 @@ conclude anything in either direction.
 The most useful thing learned this week was not a modeling result. It was that the ingestion path had
 been demanding far more than the gate actually required, and that demand kept putting every board in
 mid-slate where it could not count. The fix was to make the intake lenient and the clock strict. The
-second most useful thing was that two independent measurements — one against outcomes, one against
-prices — agree the projections are over-shrunk by roughly 1.35–1.42×. That is the most promising open
-lead, and under R7 it gets pre-registered and frozen before it gets used, not after.
+second most useful thing was <s>that two independent measurements — one against outcomes, one against
+prices — agree the projections are over-shrunk by roughly 1.35–1.42×</s> — retracted 7/27; those were
+the same measurement under two different conventions, and computed consistently they do not agree. The
+honest version of the lead is narrower: the projections are under-dispersed against outcomes by
+somewhere between 1.35× and 1.56× depending on convention, on n=24, with a confidence interval that
+includes 1.0. Under R7 it gets pre-registered with its estimator named, and frozen before it is used.
 </p>
 <p>
 Real money remains at zero and unauthorized. That does not change because a number looks good on a

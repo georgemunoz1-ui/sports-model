@@ -648,3 +648,53 @@ healthcheck line "git working tree clean (N dirty)" was reporting on files that 
 Added .gitignore (__pycache__/, *.py[cod], *.egg-info/) and untracked the five .pyc files. Bytecode
 regenerates on import and is never an input to anything. Verified afterwards: kprops self-test PASS,
 ingest regression PASS, healthcheck HEALTHY, and the tree stays clean across a full suite run.
+
+### 2026-07-27 (02:1x UTC) — three wording corrections; earlier entries left intact per R6
+
+All three came from Taco reading the 7/27 entry above. Earlier log entries are NOT edited —
+the wrong wording stays where it was written and is superseded here. state.json and
+core_breakdown.html ARE edited, because those are current-state documents rather than a log,
+and both carry the superseded wording inline.
+
+1. "THE HONEST RANGE NARROWS TO ~1.1-1.35" — withdrawn as phrasing. It reads as an interval
+   estimate and it is not one. Replacement wording, now used everywhere:
+
+     the four comparable point estimates span 1.08-1.35; this is not a confidence interval
+     or an identified parameter range, and no-stretch remains plausible.
+
+   "Comparable" means the 2x2 of calibration slope and dispersion matching (1.35 / 1.08 /
+   1.31 / 1.24). The noiseless-inversion row is excluded because 5.68 against 1.42 is not
+   comparable across sources — which is precisely the arithmetic that made the original
+   "convergence" claim possible.
+
+2. ROW MISLABELLED. The table row read "sd-matching, Poisson noise stripped". That was true of
+   only half the row. The OUTCOME cell strips Poisson sampling variance out of actual K counts,
+   sqrt(var(actual) - E[lambda]) / sd(proj) = 1.31. The MARKET cell is sd(line)/sd(E[K]) =
+   corr/slope = 1.24, with no Poisson correction of any kind — posted lines are not Poisson
+   draws and there is nothing to strip. Labelling both cells the same way implied a symmetry
+   between the two estimates that does not exist. Row is now "dispersion matching; outcome
+   estimate Poisson-stripped".
+
+3. INTEGER-LINE SCOPE, overstated and now measured. The claim was "0 of the 4 line values in
+   any captured board are integer". Wrong twice.
+
+   First, the population. That scan keyed on a JSON field named "line" and found 4 values. The
+   K boards store quotes POSITIONALLY as [book, line, under, over], so the scan missed almost
+   the entire population. Counted properly, across all 10 board files under data/mlb/props/:
+
+     365 posted K line values, 0 integer.
+     distinct values: 1.5 2.5 3.5 4.5 5.5 6.5 7.5 8.5 9.5 11.5 12.5 — every one a half-point.
+
+   The conclusion survives and is now much better supported: no K prop captured to date could
+   have hit the push bug, so for this market the 7/27 fix is preventive.
+
+   Second, the scope word. "Any captured board" wrongly swept in the game-total boards, which
+   DO contain integer lines — 25 of them (7.0/8.0/9.0/10.0/11.0), as the 91d2d9c entry above
+   already recorded. Those push exactly the way K props do. Totals are safe today only because
+   daily_card.py:102 emits a directional lean and never a price. The correct statement is
+   scoped to K props and says nothing about totals.
+
+   Same failure class as the 1.56: a summary statistic reached for when the raw rows were one
+   file away, and a scope word ("any") doing work the measurement did not support.
+
+No engine, selector, ledger row, gate or verdict touched. Real money still $0, unauthorized.

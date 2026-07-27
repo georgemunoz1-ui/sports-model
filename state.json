@@ -849,7 +849,8 @@
    "id": "PUSH-TERM-MISSING",
    "opened": "2026-07-27",
    "status": "RESOLVED 2026-07-27 (commit 91d2d9c)",
-   "text": "p_over returned P(X>=ceil(line)), scoring an integer-line push as an OVER win. probs() now returns (p_over,p_push,p_under) and ev() settles three outcomes. Proven no-op on the record -- all nine graded rows are half-point lines. Independently re-verified 2026-07-27: back-compat bit-for-bit across 240x12 half-point cases, push mass matches closed-form Poisson, and the -110 EV flip +6.81% -> -9.14% reproduces."
+   "text": "p_over returned P(X>=ceil(line)), scoring an integer-line push as an OVER win. probs() now returns (p_over,p_push,p_under) and ev() settles three outcomes. Proven no-op on the record -- all nine graded rows are half-point lines. Independently re-verified 2026-07-27: back-compat bit-for-bit across 240x12 half-point cases, push mass matches closed-form Poisson, and the -110 EV flip +6.81% -> -9.14% reproduces.",
+   "exposure_scope": "Measured, not asserted. Across the K-PROP population only - all 10 board files under data/mlb/props/ - there are 365 posted line values and ZERO are integer; every distinct value is a half-point (1.5, 2.5, 3.5, 4.5, 5.5, 6.5, 7.5, 8.5, 9.5, 11.5, 12.5). So no K prop captured to date could have hit the bug, and the fix is preventive for this market. This does NOT extend to the board population as a whole: stored GAME-TOTAL boards contain 25 integer lines (7.0/8.0/9.0/10.0/11.0), which push exactly the same way. Totals are safe today only because daily_card.py:102 emits a directional lean rather than a price. An earlier statement of this scope said '0 of the 4 line values in any captured board' - wrong twice: the scan keyed on a \"line\" field and so missed the positional [book, line, under, over] format that holds essentially the whole population, and 'any captured board' wrongly swept in the totals boards. Corrected 2026-07-27."
   },
   {
    "id": "ERBB-PLACEHOLDER-UNFLAGGED",
@@ -1119,7 +1120,7 @@
      "implied_stretch": 1.42,
      "implied_stretch_ESTIMATOR": "1.42 is 1/slope, the noiseless inversion. It is the right answer only if the posted line is treated as error-free truth and the goal is to restore dispersion. For finding edges it is the wrong one: restoring dispersion amplifies the engine's own noise along with any signal, and noise in excess of the market's is precisely what manufactures edges."
     },
-    "finding": "The engine's point projections are under-dispersed relative to both outcomes and the market. DIRECTION is consistent across every cut and both yardsticks. MAGNITUDE is not identified: it lands anywhere in roughly 1.1-1.35 depending on which estimator is used, and the outcome-side evidence is not significant (SE 0.515, 95% CI [0.28, 2.42], t vs no-stretch 0.68). The previously stated \"about 1.42x\" was the noiseless inversion, the most aggressive of the three estimators.",
+    "finding": "The engine's point projections are under-dispersed relative to both outcomes and the market. DIRECTION is consistent across every cut and both yardsticks. MAGNITUDE is not identified. The four comparable point estimates span 1.08-1.35; this is not a confidence interval or an identified parameter range, and no-stretch remains plausible. The outcome-side evidence is not significant on its own (SE 0.515, 95% CI [0.28, 2.42], t vs no-stretch 0.68). The previously stated 'about 1.42x' was the noiseless inversion, the most aggressive of the three estimators.",
     "why_the_filter_matters": "Unfiltered the slope reads 0.426 (stretch 2.35x). The quarantined alt-rung rows alone would have inflated the required correction by roughly 65%. Measuring on dirty rows would have produced a much more aggressive and wrong engine change.",
     "convergence": "This is the SECOND independent measurement pointing the same way. The 7/25 out-of-sample grade gave an OLS slope of actual-on-projected of 1.35 (n=24, outcome-based). This board gives an implied stretch of 1.42 (n=12, market-based). Outcomes and prices are independent yardsticks and they agree on both the direction and roughly the magnitude.",
     "status": "HYPOTHESIS-GENERATING ONLY. Neither measurement was pre-registered, both are n<=24, the two never converged, and no engine change is licensed by either (R7).",
@@ -1130,17 +1131,20 @@
       "from_outcomes": 1.35,
       "from_market_clean_gs15": 1.08
      },
-     "sd_matching_poisson_stripped": {
+     "dispersion_matching_outcome_poisson_stripped": {
       "from_outcomes": 1.31,
       "from_market_clean_gs15": 1.24
      },
+     "dispersion_matching_LABEL_NOTE": "Row renamed 2026-07-27. It previously read 'sd-matching, Poisson noise stripped', which was wrong for half the row: only the OUTCOME estimate is Poisson-stripped. The outcome figure removes Poisson sampling variance from actual K counts, sqrt(var(actual) - E[lambda]) / sd(proj). The MARKET figure is sd(line)/sd(E[K]) = corr/slope with no Poisson correction of any kind - posted lines are not Poisson draws and there is nothing to strip. Labelling both cells the same way implied a symmetry that does not exist. Credit: Taco.",
      "noiseless_inversion_1_over_slope": {
       "from_outcomes": 5.68,
       "from_market_clean_gs15": 1.42
      },
      "the_pair_that_was_quoted": "1.35 from row 1 and 1.42 from row 3 -- one estimator from each row.",
-     "correction_to_the_first_correction": "The 7/27 retraction in docs/core_breakdown.html put the outcome-side sd-matching figure at 1.56. That was computed from an ASSUMED mean of 4.9. The 24 stored rows give mean(actual)=5.750 and sd(actual)=2.723, so the Poisson-stripped talent sd is sqrt(7.413-5.750)=1.290 and the ratio to sd(proj)=0.983 is 1.31, not 1.56. An assumed input inside a correction is the same R1 error the correction was fixing. The honest range narrows from ~1.1-1.6 to ~1.1-1.35.",
-     "caveat": "The Poisson strip assumes K counts are conditionally Poisson. Real counts are mildly over-dispersed (variable IP), which inflates the stripped talent variance, so 1.31 is an upper bound on that estimator. At n=24 it is in any case very noisy."
+     "correction_to_the_first_correction": "The 7/27 retraction in docs/core_breakdown.html put the outcome-side sd-matching figure at 1.56. That was computed from an ASSUMED mean of 4.9. The 24 stored rows give mean(actual)=5.750 and sd(actual)=2.723, so the Poisson-stripped talent sd is sqrt(7.413-5.750)=1.290 and the ratio to sd(proj)=0.983 is 1.31, not 1.56. An assumed input inside a correction is the same R1 error the correction was fixing. SUPERSEDED WORDING (kept per R6): 'The honest range narrows from ~1.1-1.6 to ~1.1-1.35.' That phrasing reads as an interval estimate and it is not one. The four comparable point estimates span 1.08-1.35; this is not a confidence interval or an identified parameter range, and no-stretch remains plausible.",
+     "caveat": "The Poisson strip assumes K counts are conditionally Poisson. Real counts are mildly over-dispersed (variable IP), which inflates the stripped talent variance, so 1.31 is an upper bound on that estimator. At n=24 it is in any case very noisy.",
+     "comparable_estimates_span": "The four comparable point estimates span 1.08-1.35; this is not a confidence interval or an identified parameter range, and no-stretch remains plausible.",
+     "what_comparable_means": "The 2x2 of calibration slope and dispersion matching: 1.35 / 1.08 / 1.31 / 1.24. The noiseless-inversion row is excluded because it is not comparable across sources - 5.68 against 1.42 - which is the arithmetic that made the original 'convergence' claim possible in the first place."
     }
    },
    "shadow_run": {

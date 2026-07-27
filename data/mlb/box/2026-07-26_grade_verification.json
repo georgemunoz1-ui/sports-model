@@ -1,0 +1,56 @@
+{
+ "record_id": "GRADE-0726-VERIFICATION-01",
+ "appends_to": {
+  "commit": "db00e00",
+  "note": "db00e00 is NOT rewritten. Its original one-source limitation stands in the record exactly as written (R6). This record appends verification on top of it."
+ },
+ "verified_at_utc": "2026-07-27T05:06:00Z",
+ "attribution": "Multi-source verification performed by the OPERATOR and reported to this environment. This environment did NOT fetch CBS, Reuters, ESPN or MLB - outbound egress is blocked (see ENVIRONMENT_BLOCKED_DURING_C01, and a further statsapi 403 at 04:34Z). The upgrade below rests on the operator's reported reads, recorded as such, not on anything observed here.",
+ "CORRECTION_to_db00e00_language": {
+  "superseded_wording": "\"Corroborated INTERNALLY: the Angels team-pitching SO row (10) equals the sum of the six individual Angels pitchers (5+1+1+2+0+1), so Soriano's 5 SO is confirmed by a total computed independently of his own line.\"",
+  "correction": "The ten-strikeout team total agreeing with the six individual pitcher entries is an INTERNAL CONSISTENCY CHECK, not independent corroboration. Both values may derive from the same underlying box-score data, so the agreement rules out a transcription or arithmetic slip within that one source and rules out nothing about the source itself. Calling it 'independent' overstated it - the very error class this project keeps catching.",
+  "what_it_does_establish": "Self-consistency of the single 7/26 paste.",
+  "what_it_never_established": "That the paste reflected the true result.",
+  "who_caught_it": "Taco."
+ },
+ "settlements": [
+  {
+   "row": "Jose Soriano OVER 4.5 K @ -166 (FD), weight 1.0",
+   "sources_reported": [
+    "CBS box score",
+    "Reuters"
+   ],
+   "agreed_values": "5.0 IP, 3 H, 3 BB, 5 SO",
+   "additional": "CBS additionally reports 85 pitches",
+   "independent_source_count": 2,
+   "status": "VERIFIED_2_SOURCE",
+   "settlement": "WIN, +0.60u - UNCHANGED"
+  },
+  {
+   "row": "COL +265 (COL@MIL)",
+   "sources_reported": [
+    "CBS",
+    "ESPN"
+   ],
+   "agreed_values": "MIL 11, COL 2",
+   "independent_source_count": 2,
+   "status": "VERIFIED_2_SOURCE",
+   "settlement": "LOSS, -1.00u - UNCHANGED"
+  },
+  {
+   "row": "NYY +140 (NYY@PHI)",
+   "sources_reported": [
+    "CBS",
+    "ESPN",
+    "MLB"
+   ],
+   "agreed_values": "PHI 11, NYY 4",
+   "independent_source_count": 3,
+   "status": "VERIFIED_3_SOURCE",
+   "settlement": "LOSS, -1.00u - UNCHANGED"
+  }
+ ],
+ "ledger_effect": "NONE. All three settlements were already correct; this record upgrades their EVIDENCE STANDING from single-source to multi-source. No record_w, record_l, units, gate or verdict changes. kprops_paper stays 5-5 -1.01u; ml_ev_tracking stays 2-3 -0.60u.",
+ "doctrine": "'Never grade from a single endpoint' is now satisfied for these three rows. It was NOT satisfied at db00e00, which said so plainly at the time.",
+ "real_money": "$0.00, unauthorized"
+}

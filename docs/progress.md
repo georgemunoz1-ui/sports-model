@@ -1319,3 +1319,55 @@ cleared - there are no pending plays left.
 STILL OPEN, unchanged by this: no closing price was captured for any of the three graded rows,
 so CLV remains uncomputable and E3/E4 stay blocked. results.csv is NOT backfilled with 7/26
 finals; only the three ledger rows were graded.
+
+### 2026-07-27T05:06:00Z — 7/26 settlements upgraded to multi-source; a live duplication bug found
+
+db00e00 is NOT rewritten - its one-source limitation stands exactly as written (R6). This appends
+verification on top. Phase 1, C01 and U01 untouched. Real money still $0, unauthorized.
+
+  record  data/mlb/box/2026-07-26_grade_verification.json
+  sha256  8497bd5a6b53cf89e86e62211eddd23ce2485c71105dafe45da6df8c5159f456
+
+MY PHRASING WAS WRONG AND TACO CAUGHT IT. db00e00 said the Angels team SO total agreeing with the
+six individual pitcher entries "confirmed" Soriano's 5 SO "independently". It does not. That is
+an INTERNAL CONSISTENCY CHECK, not independent corroboration: both values may derive from the
+same underlying box-score data, so their agreement rules out a transcription or arithmetic slip
+WITHIN that one source and rules out nothing whatever about the source itself. Calling it
+"independent" overstated the evidence - the exact error class this project keeps catching. What
+it established: self-consistency of the one paste. What it never established: that the paste was
+right.
+
+SETTLEMENTS UPGRADED - values unchanged, evidence standing raised.
+  Soriano OVER 4.5 @ -166   CBS + Reuters agree 5.0 IP, 3 H, 3 BB, 5 SO (CBS also 85 pitches)
+                            VERIFIED_2_SOURCE   WIN  +0.60u  unchanged
+  COL +265 (COL@MIL)        CBS + ESPN agree MIL 11, COL 2
+                            VERIFIED_2_SOURCE   LOSS -1.00u  unchanged
+  NYY +140 (NYY@PHI)        CBS + ESPN + MLB agree PHI 11, NYY 4
+                            VERIFIED_3_SOURCE   LOSS -1.00u  unchanged
+kprops_paper stays 5-5 -1.01u; ml_ev_tracking stays 2-3 -0.60u. No gate, verdict or record moves.
+"Never grade from a single endpoint" is now SATISFIED for these three rows. It was not satisfied
+at db00e00, which said so at the time.
+
+ATTRIBUTION, stated plainly: the multi-source reads were performed by the OPERATOR and reported
+here. This environment did NOT fetch CBS, Reuters, ESPN or MLB - egress is blocked, and a further
+statsapi attempt at 04:34Z returned 403. The upgrade rests on the operator's reported reads,
+recorded as such, not on anything observed here.
+
+A LIVE DUPLICATION BUG, found while checking the assertions Taco asked for.
+harness/ingest_kquote.py:379 built its dedup key set from plays_pending ONLY. A graded row LEAVES
+plays_pending - so from the moment Soriano was graded this morning, re-running --register on the
+7/26 drop would have seen "not already pending" and appended him a SECOND time, duplicating him
+across graded + pending. Confirmed reproducible against the live ledger before fixing. The dedup
+now spans plays_pending + graded. Note there is no row_id in the ledger schema; (date, normalised
+pitcher) is the identity this write path has always used, so it is the identity used here - not
+an invented field.
+
+THREE ASSERTIONS ADDED TO THE REGRESSION, and they can fail.
+  1. Soriano appears EXACTLY ONCE across plays_pending + graded.
+  2. No row identity appears in BOTH collections.
+  3. All 15 registration-field comparisons run and are value-identical - the COUNT is asserted,
+     so a future edit cannot quietly delete a comparison and still report PASS.
+Taco's point was exactly right: searching both collections with next() takes the FIRST match, so
+a duplicated row passed silently. Proved by injection on an in-memory copy, never touching the
+real ledger: duplicating Soriano across graded+pending trips both assertions 1 and 2; duplicating
+him twice inside graded trips assertion 1. Under the old lookup, the first case reported PASS.

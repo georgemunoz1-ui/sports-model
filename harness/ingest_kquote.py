@@ -376,7 +376,13 @@ def main():
     shutil.copy("state.json", "/tmp/state.bak.ingest.json")
     S = json.load(open("state.json"))
     L = S["ledgers"]["kprops_paper"]
-    have = {(p["date"], a_(p["pitcher"])) for p in L["plays_pending"]}
+    # Dedup across BOTH collections. Scanning plays_pending alone was a live defect:
+    # once a row is graded it LEAVES plays_pending, so re-running --register on the same
+    # drop would re-append an already-settled play and duplicate it across graded +
+    # pending. Confirmed reproducible on 2026-07-27 with the graded Soriano row.
+    # There is no row_id in the ledger schema; (date, normalised pitcher) is the identity
+    # this write path has always used, so it is the identity used here.
+    have = {(p["date"], a_(p["pitcher"])) for p in L["plays_pending"] + L["graded"]}
     added = 0
     for r in reg:
         if (date, a_(r["pitcher"])) in have:

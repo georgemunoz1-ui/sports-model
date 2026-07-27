@@ -27,6 +27,11 @@ def run(drop, now="2026-07-26T19:15:00Z", extra=()):
     return json.load(open(os.path.splitext(drop)[0] + "_ingest.json"))
 
 
+def _norm_name(n):
+    import unicodedata
+    return "".join(c for c in unicodedata.normalize("NFKD", n) if not unicodedata.combining(c)).lower().strip()
+
+
 def drop_file(payload, tag):
     p = os.path.join(tempfile.mkdtemp(), "2026-07-26_%s.json" % tag)
     json.dump(payload, open(p, "w"), indent=1)
@@ -42,12 +47,27 @@ if out:
     # is unchanged wherever the row currently lives. Searching only plays_pending made this
     # test fail the moment Soriano was graded on 2026-07-27.
     _L = json.load(open("state.json"))["ledgers"]["kprops_paper"]
-    led = next(p for p in (_L["plays_pending"] + _L["graded"]) if p["pitcher"] == "Jose Soriano")
+
+    # Searching both collections is not enough on its own: next() takes the FIRST match, so a
+    # row duplicated across pending and graded would pass silently. Assert identity explicitly.
+    # NOTE: the ledger schema has no row_id. (date, normalised pitcher) is the identity the
+    # write path dedups on, so it is the identity asserted here.
+    def _key(r): return (r["date"], _norm_name(r["pitcher"]))
+    _pend = [p for p in _L["plays_pending"] if p["pitcher"] == "Jose Soriano"]
+    _grad = [p for p in _L["graded"] if p["pitcher"] == "Jose Soriano"]
+    if len(_pend) + len(_grad) != 1:
+        fails.append("Soriano must appear EXACTLY ONCE across plays_pending+graded, found %d+%d"
+                     % (len(_pend), len(_grad)))
+    _pk = {_key(r) for r in _L["plays_pending"]}
+    _gk = {_key(r) for r in _L["graded"]}
+    if _pk & _gk:
+        fails.append("row identity present in BOTH plays_pending and graded: %s" % sorted(_pk & _gk))
+    led = (_pend + _grad)[0] if (_pend or _grad) else {}
     if not row or not row["play"]:
         fails.append("replay produced no Soriano play at all")
     else:
         p = row["play"]
-        for got, want, name in [(row["status"], "REGISTERABLE", "status"),
+        _cmp = [(row["status"], "REGISTERABLE", "status"),
                                 (row["gate_eligible"], True, "gate_eligible"),
                                 (p["side"], led["side"], "side"),
                                 (p["line"], led["line"], "line"),
@@ -61,7 +81,12 @@ if out:
                                 (p["ev"], led["ev_per_unit"], "ev"),
                                 (p["disp"], led["disp"], "disp"),
                                 (row["game"], led["game"], "game"),
-                                (row["first_pitch"], led["first_pitch_utc"], "first_pitch")]:
+                                (row["first_pitch"], led["first_pitch_utc"], "first_pitch")]
+        # All 15 as-registered fields must be present and value-identical. Asserting the COUNT
+        # stops a future edit from quietly deleting a comparison and still reporting PASS.
+        if len(_cmp) != 15:
+            fails.append("expected 15 registration-field comparisons, found %d" % len(_cmp))
+        for got, want, name in _cmp:
             if got != want:
                 fails.append("Soriano %s: ingester %r vs ledger %r" % (name, got, want))
     # and it must not invent extra registrations

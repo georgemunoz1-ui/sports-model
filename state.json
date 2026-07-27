@@ -1,5 +1,5 @@
 {
- "updated_utc": "2026-07-27T04:52:00Z",
+ "updated_utc": "2026-07-27T05:06:00Z",
  "ledger_conventions": {
   "pl_rounding": "Each play settles to a 2-decimal P/L (American-odds payout rounded at settlement). Running units = sum of these rounded per-play values, so the ledger column sums EXACTLY to the total (sportsbook-settlement convention, chosen for auditability). Note: summing unrounded payouts can differ by ~0.01u (e.g. baseline 7/23 is +0.48u rounded, +0.49u unrounded).",
   "brier_ab": "raw-vs-shrunk Brier/logloss compared only on plays where BOTH probabilities exist (engine skips produce no shrunk_p). 7/23 n_both=4 (Dobnak excluded).",
@@ -254,7 +254,18 @@
      "decision_policy_version": null,
      "policy_note": "Registered before decision_policy_version existed. UNTAGGED by construction; no tag invented (R1). Lands in the HISTORICAL audit, NOT the prospective gate.",
      "grading_source": "user-pasted MLB gamefeed box scores, 15 games, 7/26/2026, received 2026-07-27. SINGLE SOURCE - not 2-of-3. Corroborated INTERNALLY: the Angels team-pitching SO row (10) equals the sum of the six individual Angels pitchers (5+1+1+2+0+1), so Soriano's 5 SO is confirmed by a total computed independently of his own line. Slate identity confirmed: 15 games, and the 30 starters match the stored 2026-07-26 K board exactly.",
-     "clv_note": "no closing price captured - the standing close-capture gap, unchanged"
+     "clv_note": "no closing price captured - the standing close-capture gap, unchanged",
+     "verification": {
+      "status": "VERIFIED_2_SOURCE",
+      "sources_reported": [
+       "CBS",
+       "Reuters"
+      ],
+      "verified_at_utc": "2026-07-27T05:06:00Z",
+      "attribution": "operator-reported; this environment did not fetch them (egress blocked)",
+      "record": "GRADE-0726-VERIFICATION-01",
+      "note": "Upgrades evidence standing only. Settlement value unchanged."
+     }
     }
    ],
    "price_access_note": "2026-07-26: FIRST board ever obtained with real two-sided K PRICES. It arrived mid-slate: 13 of 15 games had already started, so 26 of 30 arms are shadow-only. Only LAA@SF and NYY@PHI were still unlocked."
@@ -693,7 +704,18 @@
      "result": "LOSS",
      "pl": -1.0,
      "grading_source": "user-pasted MLB gamefeed box scores, 15 games, 7/26/2026, received 2026-07-27. SINGLE SOURCE - not 2-of-3. Corroborated INTERNALLY: the Angels team-pitching SO row (10) equals the sum of the six individual Angels pitchers (5+1+1+2+0+1), so Soriano's 5 SO is confirmed by a total computed independently of his own line. Slate identity confirmed: 15 games, and the 30 starters match the stored 2026-07-26 K board exactly.",
-     "closing_price": "not captured - standing close-capture gap"
+     "closing_price": "not captured - standing close-capture gap",
+     "verification": {
+      "status": "VERIFIED_2_SOURCE",
+      "sources_reported": [
+       "CBS",
+       "ESPN"
+      ],
+      "verified_at_utc": "2026-07-27T05:06:00Z",
+      "attribution": "operator-reported; this environment did not fetch them (egress blocked)",
+      "record": "GRADE-0726-VERIFICATION-01",
+      "note": "Upgrades evidence standing only. Settlement value unchanged."
+     }
     },
     {
      "date": "2026-07-26",
@@ -714,7 +736,19 @@
      "result": "LOSS",
      "pl": -1.0,
      "grading_source": "user-pasted MLB gamefeed box scores, 15 games, 7/26/2026, received 2026-07-27. SINGLE SOURCE - not 2-of-3. Corroborated INTERNALLY: the Angels team-pitching SO row (10) equals the sum of the six individual Angels pitchers (5+1+1+2+0+1), so Soriano's 5 SO is confirmed by a total computed independently of his own line. Slate identity confirmed: 15 games, and the 30 starters match the stored 2026-07-26 K board exactly.",
-     "closing_price": "not captured - standing close-capture gap"
+     "closing_price": "not captured - standing close-capture gap",
+     "verification": {
+      "status": "VERIFIED_3_SOURCE",
+      "sources_reported": [
+       "CBS",
+       "ESPN",
+       "MLB"
+      ],
+      "verified_at_utc": "2026-07-27T05:06:00Z",
+      "attribution": "operator-reported; this environment did not fetch them (egress blocked)",
+      "record": "GRADE-0726-VERIFICATION-01",
+      "note": "Upgrades evidence standing only. Settlement value unchanged."
+     }
     }
    ],
    "pending": [],

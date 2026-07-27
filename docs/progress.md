@@ -1262,3 +1262,60 @@ K play, and the healthcheck warning about it stands.
 
 NOTHING ABOUT 7/26 OUTCOMES IS KNOWN HERE. The re-run re-prices a board; it does not observe a
 result. No win, loss or push may be inferred from it.
+
+### 2026-07-27T04:52:00Z — 7/26 GRADED from pasted box scores; Soriano WINS; healthcheck 0 warn
+
+Phase 1, C01 and U01 all untouched and still verifying. Real money still $0, unauthorized.
+
+SOURCE, and its limit stated first. User-pasted MLB gamefeed box scores, 15 games, 7/26/2026.
+This is a SINGLE SOURCE - it is NOT the 2-of-3 resolution the standing doctrine asks for after
+the stale/home-away-swapped statsapi incident. What it does have is INTERNAL corroboration: the
+Angels team-pitching SO row reads 10, and the six individual Angels pitchers sum to
+5+1+1+2+0+1 = 10. Soriano's 5 SO is therefore confirmed by a total computed independently of his
+own line. Slate identity also checks out: 15 games in the paste, and the 30 starters match the
+stored 2026-07-26 K board exactly. Graded on that basis, with the single-source limitation
+recorded on every row rather than glossed.
+
+K-PROP GRADED. Jose Soriano OVER 4.5 K @ -166 (FD), weight 1.0.
+  actual: 5.0 IP, 3 H, 3 BB, 5 SO, 85 NP  ->  5 > 4.5  ->  WIN
+  P/L +0.60 (100/166 = 0.60241, 2-dp settlement convention)
+  kprops_paper: 4-5 -1.61u -> 5-5 -1.01u, pending 0
+
+ML ROWS GRADED, both losses.
+  COL +265 (COL@MIL, final 2-11) LOSS -1.00
+  NYY +140 (NYY@PHI, final 4-11) LOSS -1.00
+  ml_ev_tracking: 2-1 +1.40u -> 2-3 -0.60u, ROI -12.0%, pending 0
+  n=5. Still a number, not evidence.
+
+THE GATE DID NOT MOVE, AND THAT IS CORRECT. Soriano was registered before
+decision_policy_version existed, so it is UNTAGGED by construction and no tag was invented (R1).
+It lands in the HISTORICAL audit, not the prospective gate.
+  prospective : 0/100 under dp-2026-07-27   (unchanged)
+  historical  : 9 -> 10 settled, 4-5 -> 5-5, -1.61u -> -1.01u
+  retrospective short-line statistic: 8 of 9 -> 9 of 10 (Soriano's 4.5 clears the 3.5 guard;
+  Buehler O 3.5 remains the only blocked row)
+
+MY ERROR, CAUGHT BY A TEST. My first grading pass BUILT A FRESH graded row instead of preserving
+the registration row, silently dropping edge, ev_per_unit, disp and first_pitch_utc. The
+ingest regression caught it immediately - it compares 15 as-registered fields against the ledger
+and those fields had vanished. Reverted from backup and re-graded so the graded row IS the
+registration row plus grading fields, with an assertion that no as-registered key is lost.
+Grading must never destroy the record of what was registered.
+
+TWO TESTS UPDATED, NEITHER WEAKENED.
+  policy_gate self-test restructured into STRUCTURAL invariants (true forever: prospective ==
+  count of tagged rows, no invented tags, void accounting, settled == W+L, stored string ==
+  computed, retrospective stays flagged exploratory) and a KNOWN_LEDGER snapshot that pins the
+  current record. Updating KNOWN_LEDGER is now an explicit act a commit must justify; its job is
+  to make an UNANNOUNCED ledger change fail loudly. It did exactly that here, failing on
+  "historical settled changed: 10" before I had written a word about the grade.
+  test_ingest_kquote now searches plays_pending AND graded for the Soriano row. Pure location
+  fix - all 15 field comparisons are untouched, and they only still pass because the re-grade
+  preserves every as-registered field.
+
+healthcheck: 0 fail, 0 WARN. The standing "kprop pending plays from past dates" warning is
+cleared - there are no pending plays left.
+
+STILL OPEN, unchanged by this: no closing price was captured for any of the three graded rows,
+so CLV remains uncomputable and E3/E4 stay blocked. results.csv is NOT backfilled with 7/26
+finals; only the three ledger rows were graded.

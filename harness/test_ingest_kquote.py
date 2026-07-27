@@ -37,8 +37,12 @@ def drop_file(payload, tag):
 out = run("data/mlb/props/drops/2026-07-26_replay-live4.json")
 if out:
     row = next((r for r in out["rows"] if r["pitcher"] == "Jose Soriano"), None)
-    led = next(p for p in json.load(open("state.json"))["ledgers"]["kprops_paper"]["plays_pending"]
-               if p["pitcher"] == "Jose Soriano")
+    # The row starts in plays_pending and moves to graded once the game is settled.
+    # Grading PRESERVES every as-registered field, so the field-for-field comparison below
+    # is unchanged wherever the row currently lives. Searching only plays_pending made this
+    # test fail the moment Soriano was graded on 2026-07-27.
+    _L = json.load(open("state.json"))["ledgers"]["kprops_paper"]
+    led = next(p for p in (_L["plays_pending"] + _L["graded"]) if p["pitcher"] == "Jose Soriano")
     if not row or not row["play"]:
         fails.append("replay produced no Soriano play at all")
     else:

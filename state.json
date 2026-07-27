@@ -1,5 +1,5 @@
 {
- "updated_utc": "2026-07-27T01:52:33Z",
+ "updated_utc": "2026-07-27T04:52:00Z",
  "ledger_conventions": {
   "pl_rounding": "Each play settles to a 2-decimal P/L (American-odds payout rounded at settlement). Running units = sum of these rounded per-play values, so the ledger column sums EXACTLY to the total (sportsbook-settlement convention, chosen for auditability). Note: summing unrounded payouts can differ by ~0.01u (e.g. baseline 7/23 is +0.48u rounded, +0.49u unrounded).",
   "brier_ab": "raw-vs-shrunk Brier/logloss compared only on plays where BOTH probabilities exist (engine skips produce no shrunk_p). 7/23 n_both=4 (Dobnak excluded).",
@@ -41,36 +41,10 @@
  "ledgers": {
   "kprops_paper": {
    "day": 3,
-   "record_w": 4,
+   "record_w": 5,
    "record_l": 5,
-   "units": -1.61,
-   "plays_pending": [
-    {
-     "date": "2026-07-26",
-     "pitcher": "Jose Soriano",
-     "side": "OVER",
-     "line": 4.5,
-     "price": -166,
-     "book": "FD",
-     "ek": 5.68,
-     "gs": 20,
-     "p": 0.67,
-     "weight": 1.0,
-     "edge": 0.046,
-     "ev_per_unit": 0.074,
-     "disp": 1.18,
-     "game": "LAA@SF",
-     "first_pitch_utc": "2026-07-26T20:05:00Z",
-     "registered_utc": "2026-07-26T19:15:00Z",
-     "minutes_before_first_pitch": 50,
-     "preregistered_before_first_pitch": true,
-     "selector": "engine/kprops.price_board -> select_play, UNMODIFIED. Canonical thresholds (EV>0, edge>=0.04, |disp|>=0.8, gs>=5, directional sanity). Nothing tuned for this board.",
-     "price_provenance": "User screenshot of a 6-book K board. Exact capture time UNKNOWN; bounded at <= 2026-07-26T19:13Z. The price may have moved since capture. This is an OBSERVED price, not an invented one (R1 satisfied), but it is not a verified-at-registration price.",
-     "integrity": "All 20 two-sided quotes on the four still-unlocked arms hold 5.88-7.96% with zero out-of-band values, and both multi-rung pitchers price the lower rung's OVER far higher (Sanchez 6.5 at -175 vs 7.5 at ~+101; Soriano 4.5 at -166 vs 5.5 at ~+114). This is a genuine per-book two-sided market, NOT the best-price display that defeated the 7/25 K board and the 7/26 totals column.",
-     "caveat": "FD's 4.5 is the low rung; 4 of 5 books post 5.5. The engine is documented to take displaced lines 62-70% of the time, so this is expected behavior, not a bug. The 7/25 out-of-sample calibration suggests point projections may be UNDER-dispersed (calibration slope 1.35, but 95% CI [0.28, 2.42] -- not significant), which if true would push this projection further ABOVE the line, i.e. the possible defect favors this play. That is NOT a reason to size it up and no adjustment was applied - E5 is untested.",
-     "staked": 0.0
-    }
-   ],
+   "units": -1.01,
+   "plays_pending": [],
    "graded": [
     {
      "date": "2026-07-21",
@@ -243,6 +217,44 @@
      "actual": 11,
      "y": 0,
      "pl": -1.0
+    },
+    {
+     "date": "2026-07-26",
+     "pitcher": "Jose Soriano",
+     "side": "OVER",
+     "line": 4.5,
+     "price": -166,
+     "book": "FD",
+     "ek": 5.68,
+     "gs": 20,
+     "p": 0.67,
+     "weight": 1.0,
+     "edge": 0.046,
+     "ev_per_unit": 0.074,
+     "disp": 1.18,
+     "game": "LAA@SF",
+     "first_pitch_utc": "2026-07-26T20:05:00Z",
+     "registered_utc": "2026-07-26T19:15:00Z",
+     "minutes_before_first_pitch": 50,
+     "preregistered_before_first_pitch": true,
+     "selector": "engine/kprops.price_board -> select_play, UNMODIFIED. Canonical thresholds (EV>0, edge>=0.04, |disp|>=0.8, gs>=5, directional sanity). Nothing tuned for this board.",
+     "price_provenance": "User screenshot of a 6-book K board. Exact capture time UNKNOWN; bounded at <= 2026-07-26T19:13Z. The price may have moved since capture. This is an OBSERVED price, not an invented one (R1 satisfied), but it is not a verified-at-registration price.",
+     "integrity": "All 20 two-sided quotes on the four still-unlocked arms hold 5.88-7.96% with zero out-of-band values, and both multi-rung pitchers price the lower rung's OVER far higher (Sanchez 6.5 at -175 vs 7.5 at ~+101; Soriano 4.5 at -166 vs 5.5 at ~+114). This is a genuine per-book two-sided market, NOT the best-price display that defeated the 7/25 K board and the 7/26 totals column.",
+     "caveat": "FD's 4.5 is the low rung; 4 of 5 books post 5.5. The engine is documented to take displaced lines 62-70% of the time, so this is expected behavior, not a bug. The 7/25 out-of-sample calibration suggests point projections may be UNDER-dispersed (calibration slope 1.35, but 95% CI [0.28, 2.42] -- not significant), which if true would push this projection further ABOVE the line, i.e. the possible defect favors this play. That is NOT a reason to size it up and no adjustment was applied - E5 is untested.",
+     "staked": 0.0,
+     "p_push": 0.0,
+     "result": "WIN",
+     "actual": 5,
+     "y": 1,
+     "pl": 0.6,
+     "ip": "5.0",
+     "h": 3,
+     "bb": 3,
+     "np": 85,
+     "decision_policy_version": null,
+     "policy_note": "Registered before decision_policy_version existed. UNTAGGED by construction; no tag invented (R1). Lands in the HISTORICAL audit, NOT the prospective gate.",
+     "grading_source": "user-pasted MLB gamefeed box scores, 15 games, 7/26/2026, received 2026-07-27. SINGLE SOURCE - not 2-of-3. Corroborated INTERNALLY: the Angels team-pitching SO row (10) equals the sum of the six individual Angels pitchers (5+1+1+2+0+1), so Soriano's 5 SO is confirmed by a total computed independently of his own line. Slate identity confirmed: 15 games, and the 30 starters match the stored 2026-07-26 K board exactly.",
+     "clv_note": "no closing price captured - the standing close-capture gap, unchanged"
     }
    ],
    "price_access_note": "2026-07-26: FIRST board ever obtained with real two-sided K PRICES. It arrived mid-slate: 13 of 15 games had already started, so 26 of 30 arms are shadow-only. Only LAA@SF and NYY@PHI were still unlocked."
@@ -597,8 +609,8 @@
     "5_price": "Freeze the opening-snapshot price as the graded price. Record the closing price separately for CLV (feeds E3)."
    },
    "record_w": 2,
-   "record_l": 1,
-   "units": 1.4,
+   "record_l": 3,
+   "units": -0.6,
    "graded": [
     {
      "date": "2026-07-25",
@@ -660,9 +672,7 @@
      "gamePk": "823027",
      "result": "WIN",
      "pl": 0.86
-    }
-   ],
-   "pending": [
+    },
     {
      "date": "2026-07-26",
      "pick": "COL",
@@ -678,7 +688,12 @@
      "staked": 0.0,
      "transcription_risk": "HIGH \u2014 read from an image. Board passed a full integrity audit: 15/15 matchup+time match vs statsapi, 26/30 starter match, ML hold 2.08-3.85% (mean 3.03%) with no arb in any game.",
      "caveat": "Same game triggers an R5 total audit (V13 proj 9.7 vs line 7.5, disp +2.2). If V13 misprices run scoring here, its win probability in this game is suspect too. Registered anyway \u2014 rule 4 forbids discretionary vetoes.",
-     "provenance_correction": "Timestamp corrected 2026-07-26T03:20Z. The original stamp assumed a 3.8h-fast container clock; that belief has been withdrawn. Still genuinely pre-slate, so the registration stands unaltered."
+     "provenance_correction": "Timestamp corrected 2026-07-26T03:20Z. The original stamp assumed a 3.8h-fast container clock; that belief has been withdrawn. Still genuinely pre-slate, so the registration stands unaltered.",
+     "final": "2-11",
+     "result": "LOSS",
+     "pl": -1.0,
+     "grading_source": "user-pasted MLB gamefeed box scores, 15 games, 7/26/2026, received 2026-07-27. SINGLE SOURCE - not 2-of-3. Corroborated INTERNALLY: the Angels team-pitching SO row (10) equals the sum of the six individual Angels pitchers (5+1+1+2+0+1), so Soriano's 5 SO is confirmed by a total computed independently of his own line. Slate identity confirmed: 15 games, and the 30 starters match the stored 2026-07-26 K board exactly.",
+     "closing_price": "not captured - standing close-capture gap"
     },
     {
      "date": "2026-07-26",
@@ -694,9 +709,15 @@
      "weight": 1.0,
      "staked": 0.0,
      "transcription_risk": "HIGH \u2014 read from an image. Board passed a full integrity audit: 15/15 matchup+time match vs statsapi, 26/30 starter match, ML hold 2.08-3.85% (mean 3.03%) with no arb in any game.",
-     "provenance_correction": "Timestamp corrected 2026-07-26T03:20Z. The original stamp assumed a 3.8h-fast container clock; that belief has been withdrawn. Still genuinely pre-slate, so the registration stands unaltered."
+     "provenance_correction": "Timestamp corrected 2026-07-26T03:20Z. The original stamp assumed a 3.8h-fast container clock; that belief has been withdrawn. Still genuinely pre-slate, so the registration stands unaltered.",
+     "final": "4-11",
+     "result": "LOSS",
+     "pl": -1.0,
+     "grading_source": "user-pasted MLB gamefeed box scores, 15 games, 7/26/2026, received 2026-07-27. SINGLE SOURCE - not 2-of-3. Corroborated INTERNALLY: the Angels team-pitching SO row (10) equals the sum of the six individual Angels pitchers (5+1+1+2+0+1), so Soriano's 5 SO is confirmed by a total computed independently of his own line. Slate identity confirmed: 15 games, and the 30 starters match the stored 2026-07-26 K board exactly.",
+     "closing_price": "not captured - standing close-capture gap"
     }
    ],
+   "pending": [],
    "methodology_note": "Two of the three 7/25 picks (COL +186, KC +154) are sides V13 expects to LOSE more often than win (p=0.462, 0.466). They qualify because the price is far enough off V13's number to be +EV. This is the objective function working as specified: profitability is +EV vs break-even, NOT win% > 50%. Expect this ledger's W-L record to look mediocre even when it is performing well; units and CLV are the readouts that matter, not W-L.",
    "excluded_by_rule_3": [
     {
@@ -750,7 +771,7 @@
     "resolution": "Modeled with Joe Ryan (first-party wins).",
     "note": "The board's -140 MIN price may have been made against a different pitcher. No side in this game cleared the rule, so nothing was registered either way \u2014 but the conflict is logged because a future slate may not be so lucky."
    },
-   "roi_pct": 46.7,
+   "roi_pct": -12.0,
    "n_note": "n=3. Far too few plays to distinguish skill from noise; a 3-play ROI is a number, not evidence. No bootstrap CI is quoted because at n=3 it would span every plausible value."
   }
  },
@@ -758,17 +779,17 @@
   "kprops_go_live": {
    "passes": false,
    "criteria": "n>=100 graded paper plays AND ROI>0 with bootstrap 95% CI excluding 0 AND calibration holds forward AND Taco explicit authorization",
-   "progress": "0/100 graded under dp-2026-07-27 (+1 pending, 0 under current policy) [historical audit: 9 settled, 4-5, -1.61u, untagged]",
+   "progress": "0/100 graded under dp-2026-07-27 [historical audit: 10 settled, 5-5, -1.01u, untagged]",
    "policy_version": "dp-2026-07-27",
    "prospective_progress": "0/100 graded under dp-2026-07-27",
    "historical_audit": {
-    "graded": 9,
-    "record": "4-5",
-    "units": -1.61,
+    "graded": 10,
+    "record": "5-5",
+    "units": -1.01,
     "void": 1,
-    "pending": 1,
+    "pending": 0,
     "note": "Preserved in full and never re-graded or retro-dropped (R6). These rows were produced by at least three untagged selector configurations, and one of them (Buehler OVER 3.5) is rejected outright by the current short-line guard. They are an audit trail, not gate progress.",
-    "settled": 9,
+    "settled": 10,
     "policy_tags": "NONE. These rows predate decision_policy_version and no tag is invented for them (R1: absence recorded as absence). An untagged row is simply not a current-policy row."
    },
    "why_zero_not_eight": "Eight of the nine rows would survive the current guard, but surviving a filter applied after the fact is not the same as having been selected by the current policy. Those eight were chosen under rules that no longer exist, and the choice of which to keep was made with their results already known. A prospective gate has to start prospectively. 0/100.",
@@ -777,13 +798,13 @@
     "status": "EXPLORATORY - never gate progress",
     "checkable_criterion": "short-line intake guard only (posted line > 3.5 K)",
     "not_checked": "EV>0, edge>=0.04, |proj-line|>=0.8 -- all need as-of E[K], and recomputing it now would read a log containing the start being priced (R2).",
-    "n_untagged_settled": 9,
-    "n_pass": 8,
+    "n_untagged_settled": 10,
+    "n_pass": 9,
     "n_blocked": 1,
     "blocked_rows": [
      "Walker Buehler OVER 3.5"
     ],
-    "statistic": "8 of 9",
+    "statistic": "9 of 10",
     "reading": "8 of 9 is NOT '8 plays are still valid'. It is '8 clear the one guard that can be checked without cheating'. The rest of the selector needs as-of E[K], and recomputing that now would read a pitcher log already containing the start being priced (R2). Exploratory only; it moves no gate."
    }
   },

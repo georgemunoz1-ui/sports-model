@@ -12,7 +12,7 @@ The three numbers, kept strictly separate:
 
   prospective   plays graded under the CURRENT policy. This is the gate. Starts at 0.
   historical    every settled play ever, whatever produced it. Audit trail, never
-                re-graded, never retro-dropped (R6). Currently 9.
+                re-graded, never retro-dropped (R6). Current value in KNOWN_LEDGER.
   retrospective how many historical plays the current guards would have admitted.
                 EXPLORATORY ONLY. Never gate progress. See the docstring on
                 retrospective_compatibility for what it can and cannot see.
@@ -76,8 +76,8 @@ def retrospective_compatibility(state: dict) -> dict:
     that already contains the start being priced. That is the R2 look-ahead leak that
     resolve_ek() exists to block, so it is not attempted here.
 
-    So this is a SHORT-LINE-GUARD-ONLY figure. It is not "8 of 9 plays are still valid";
-    it is "8 of 9 clear the one guard that can be checked without cheating". It is never
+    So this is a SHORT-LINE-GUARD-ONLY figure. It is not "N plays are still valid"; it is
+    "N clear the one guard that can be checked without cheating". It is never
     gate progress: those rows were selected under rules that no longer exist, and choosing
     which to keep would be done with their results already known.
     """
@@ -135,39 +135,49 @@ def _load(path: str = "state.json") -> dict:
     return json.load(open(path))
 
 
+#: Deliberately-maintained snapshot of the ledger. UPDATING THESE IS AN EXPLICIT ACT:
+#: they change only when a real grade lands, and the commit that moves them must say why.
+#: Their job is to make an UNANNOUNCED ledger change fail loudly.
+KNOWN_LEDGER = {
+    "historical_settled": 10,     # 9 -> 10 on 2026-07-27: Jose Soriano OVER 4.5 graded WIN
+    "historical_record": "5-5",
+    "historical_units": -1.01,
+    "untagged_settled": 10,
+    "graded_rows": 11,            # 10 settled + 1 VOID (Mikolas)
+    "retrospective_statistic": "9 of 10",
+    "retrospective_blocked": "Buehler",
+}
+
+
 def _selftest() -> None:
-    """Assertions that must hold on the real ledger, not on a fixture."""
+    """Two kinds of check, kept apart.
+
+    STRUCTURAL invariants must hold forever, whatever the ledger says. LEDGER checks pin the
+    current record against KNOWN_LEDGER so an unannounced change fails rather than passing
+    quietly.
+    """
     S = _load()
     c = gate_counts(S)
-    cur = current_policy(S)
 
-    # 1. the gate counts only current-policy rows, and there are none yet
-    assert c["prospective_graded"] == 0, "expected 0 prospective, got %d" % c["prospective_graded"]
-
-    # 2. the historical audit is preserved in full and is NOT the gate
-    assert c["historical_settled"] == 9, "historical settled changed: %d" % c["historical_settled"]
-    assert c["historical_record"] == "4-5", c["historical_record"]
-    assert abs(c["historical_units"] - (-1.61)) < 1e-9, c["historical_units"]
-    assert c["untagged_settled"] == 9, "expected all 9 historical rows untagged"
-    assert c["prospective_graded"] != c["historical_settled"], "gate must not equal the audit trail"
-
-    # 3. VOID is excluded from settled counts
-    graded_rows = S["ledgers"]["kprops_paper"]["graded"]
-    assert len(graded_rows) == 10 and len(settled_rows(S)) == 9, "void must not count as settled"
-
-    # 4. the retrospective statistic is 8 of 9 and is flagged exploratory
-    r = c["retrospective_compatibility"]
-    assert r["statistic"] == "8 of 9", r["statistic"]
-    assert r["n_blocked"] == 1 and "Buehler" in r["blocked_rows"][0], r["blocked_rows"]
-    assert r["status"].startswith("EXPLORATORY")
-
-    # 5. no historical row was given an invented policy tag
-    assert all(r.get("decision_policy_version") is None for r in untagged_rows(S))
-
-    # 6. the string stored in state.json matches the computed one
+    # ---- structural: true regardless of what has been graded ----
+    assert c["prospective_graded"] == len(prospective_rows(S)), "prospective count disagrees with the tagged rows"
+    assert all(r.get("decision_policy_version") is None for r in untagged_rows(S)), "an invented policy tag appeared on a historical row"
+    graded = S["ledgers"]["kprops_paper"]["graded"]
+    assert len(settled_rows(S)) == sum(1 for r in graded if r.get("result") in SETTLED), "settled filter is inconsistent"
+    assert len(settled_rows(S)) < len(graded) or all(r.get("result") in SETTLED for r in graded), "void accounting is wrong"
+    assert c["historical_settled"] == S["ledgers"]["kprops_paper"]["record_w"] + S["ledgers"]["kprops_paper"]["record_l"], "settled count disagrees with W+L"
     stored = S["gates"]["kprops_go_live"]["progress"]
-    assert stored == progress_string(S), "stored gate string has drifted:\n  stored:   %s\n  computed: %s" % (
-        stored, progress_string(S))
+    assert stored == progress_string(S), "stored gate string has drifted:\n  stored:   %s\n  computed: %s" % (stored, progress_string(S))
+    r = c["retrospective_compatibility"]
+    assert r["status"].startswith("EXPLORATORY"), "the retrospective statistic must stay flagged exploratory"
+
+    # ---- ledger: pinned, and only moved deliberately ----
+    for k in ("historical_settled", "historical_record", "untagged_settled"):
+        assert c[k] == KNOWN_LEDGER[k], "%s changed: %r != %r (update KNOWN_LEDGER only for a real grade)" % (k, c[k], KNOWN_LEDGER[k])
+    assert abs(c["historical_units"] - KNOWN_LEDGER["historical_units"]) < 1e-9, "historical_units changed: %r" % c["historical_units"]
+    assert len(graded) == KNOWN_LEDGER["graded_rows"], "graded row count changed: %d" % len(graded)
+    assert r["statistic"] == KNOWN_LEDGER["retrospective_statistic"], r["statistic"]
+    assert KNOWN_LEDGER["retrospective_blocked"] in " ".join(r["blocked_rows"]), r["blocked_rows"]
 
     print("policy_gate self-test: PASS")
 

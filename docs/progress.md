@@ -1130,3 +1130,52 @@ D3 The 2026-07-27 protocol is COMPLETE at sections A, B, C, D. Per B5 the amendm
    logged and deferred to the next untouched slate.
 
 Window state: STILL OPEN - no qualifying capture has been received for 2026-07-27.
+
+### 2026-07-27T04:14:43Z — KSIM-0727-U01: user-supplied capture, STALE PRIOR SLATE, no qualifying quote
+
+First USER_SUPPLIED_OPPORTUNISTIC_CAPTURE for 7/27. Phase 1 unaltered, C01 untouched, both still
+verifying. Real money still $0, unauthorized.
+
+  record   data/mlb/props/simulated/2026-07-27_KSIM_phase2a_user01.json
+  sha256   09a3634406c33b32a8d08fc10e363de280e85bacde098e86f17f96b252640963
+           (that hash covers THE RECORD. The screenshot itself has NO hash - see below.)
+
+CLASSIFICATION ACCEPTED AND INDEPENDENTLY CONFIRMED.
+  SOURCE_RESPONSE SUCCESS | SLATE_MATCH FALSE | STATUS NO_QUALIFYING_MARKET
+  REASON STALE_PRIOR_SLATE_WITH_BLANK_PRICES | qualifying 7/27 quotes 0 | executable decisions 0
+
+MECHANICAL VERIFICATION, not eyeballing. The 30 pitcher names visible in the image were compared
+against the frozen 7/27 board and against data/mlb/props/2026-07-26_kboard_full.json:
+  overlap with frozen 2026-07-27 : 0
+  overlap with stored 2026-07-26 : 30 of 30, with ZERO on the 7/26 board absent from the image
+                                   and ZERO in the image absent from the 7/26 board
+This is not "partially stale." It is a wholesale rendering of the prior slate - the same thirty
+arms, none added, none dropped. Corroborated by arms already on our 7/26 record: Jose Soriano
+(the still-pending 7/26 play) and Fedde, Freeland, Avila and Baz (the four short-line arms named
+in the 7/27 guard note).
+
+TWO INDEPENDENT DISQUALIFICATIONS, either one sufficient:
+  1. WRONG SLATE - none of the 30 arms start on 2026-07-27.
+  2. NO PRICES - Under and Over are blank for every book column. Line-only. Even on the correct
+     slate this fails C7: a line without both prices is not a FIRST_CAPTURED_COMPLETE_QUOTE.
+
+EVIDENCE COULD NOT BE HASHED - retention gap, logged OPEN. The screenshot arrived as inline
+conversation content, not as a file. A filesystem search over /root/.claude, /tmp/claude-0 and
+/tmp for images created after 03:00Z returned nothing, so there is no artifact to hash. NO HASH
+IS RECORDED. A fabricated digest would be far worse than an absent one, and this is exactly the
+shape of the fabricated-bundle metadata caught earlier today (a 63-character "SHA-256" for a file
+that did not exist). A5 and C5 require the original file preserved and hashed; this capture does
+not meet that bar. Retention needs the operator to supply the image AS A FILE - the only current
+copy is the conversation transcript, which is outside our control.
+
+SCOPE, per C3. This is ONE aggregator page rendering five book COLUMNS, not five source
+responses. It establishes only that THIS source had not populated a qualifying 7/27 strikeout
+board at received_at_utc. It does NOT establish that no sportsbook had 7/27 markets. DK, FD,
+MGM, BR and CZR remain CAPTURE_NOT_RUN as individual sources; no per-book NO_QUALIFYING_MARKET
+or ACCESS_BLOCKED status was written from this image.
+
+The displayed numbers are NOT 7/27 lines and are never to be described as such. They were not
+transcribed into the record: they carry no permitted analytic use, and copying 150 cells out of
+an image would add error for no purpose. Preserved as stale-source evidence only.
+
+B5 / D3 AMENDMENT WINDOW REMAINS OPEN - this is not a qualifying capture.

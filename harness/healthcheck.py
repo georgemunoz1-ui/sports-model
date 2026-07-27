@@ -71,6 +71,24 @@ try:
     r=subprocess.run([sys.executable,"engine/kprops.py"],capture_output=True,text=True)
     check(f"kprops self-test ({r.stdout.strip()})", r.returncode==0)
 except Exception as e: check(f"kprops self-test ran ({e})", False)
+# 5a3. gate counter: COMPUTED, not typed. The gate line used to be written as
+# record_w + record_l on every --register run, which counts every settled row whatever
+# policy produced it -- so a prospective 0/100 was silently clobbered back to 9/100.
+# This FAILS rather than warns: a gate that has quietly drifted is worse than no gate.
+try:
+    r=subprocess.run([sys.executable,"harness/policy_gate.py","--selftest"],capture_output=True,text=True)
+    check(f"policy gate self-test ({(r.stdout+r.stderr).strip().splitlines()[-1] if (r.stdout+r.stderr).strip() else 'no output'})", r.returncode==0)
+    sys.path.insert(0,"harness"); import policy_gate
+    st2=json.load(open("state.json")); gc=policy_gate.gate_counts(st2)
+    stored=st2["gates"]["kprops_go_live"]["progress"]
+    check("gate string matches recomputed value", stored==policy_gate.progress_string(st2))
+    check(f"prospective gate counts only current-policy rows ({gc['prospective_graded']}/{gc['prospective_target']} under {gc['policy_version']})",
+          gc["prospective_graded"]==len(policy_gate.prospective_rows(st2)))
+    check(f"historical audit preserved ({gc['historical_settled']} settled, {gc['historical_record']}, {gc['historical_units']:+.2f}u)",
+          gc["historical_settled"]==st2["ledgers"]["kprops_paper"]["record_w"]+st2["ledgers"]["kprops_paper"]["record_l"])
+    check("no invented policy tag on historical rows",
+          all(x.get("decision_policy_version") is None for x in policy_gate.untagged_rows(st2)))
+except Exception as e: check(f"policy gate checks ({e})", False)
 # 5b. git hygiene: no large uncommitted drift
 import subprocess
 try:

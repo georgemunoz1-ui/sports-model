@@ -49,6 +49,7 @@ GATE ELIGIBILITY is decided by the clock, never by the operator:
 Everything is PAPER. $0. select_play is imported unmodified; this file does not
 tune, reweight, or second-guess a single engine threshold.
 """
+import policy_gate
 import argparse, json, os, re, shutil, sys, unicodedata
 from datetime import datetime, timezone
 
@@ -395,16 +396,23 @@ def main():
                                  drop.get("source_note", "user drop"), src,
                                  "; ".join(r["tests"]) or "no test applicable",
                                  drop.get("captured_utc"), now.strftime("%H:%MZ")),
-            integrity_warnings=r["warnings"], staked=0.0))
+            integrity_warnings=r["warnings"], staked=0.0,
+            decision_policy_version=S["decision_policy_version"]["current"]))
         have.add((date, a_(r["pitcher"])))
         added += 1
         print("  registered: %s %s %.1f @ %+d (%s)" % (r["pitcher"], p["side"], p["line"], p["price"], p["book"]))
 
-    graded = L["record_w"] + L["record_l"]
-    names = ", ".join(p["pitcher"] for p in L["plays_pending"])
     L["units"] = L["units"]  # untouched: nothing here grades
-    S["gates"]["kprops_go_live"]["progress"] = "%d/100 graded%s" % (
-        graded, (", +%d pending (%s)" % (len(L["plays_pending"]), names)) if L["plays_pending"] else "")
+    # The gate line is COMPUTED, never typed. It used to be written here as
+    # record_w + record_l, which counts every settled row regardless of the policy that
+    # produced it -- so a prospective 0/100 was silently clobbered back to 9/100 on the
+    # next --register run. policy_gate counts only current-policy rows.
+    S["gates"]["kprops_go_live"]["progress"] = policy_gate.progress_string(S)
+    S["gates"]["kprops_go_live"]["prospective_progress"] = "%d/%d graded under %s" % (
+        policy_gate.gate_counts(S)["prospective_graded"], policy_gate.GATE_N,
+        policy_gate.current_policy(S))
+    S["gates"]["kprops_go_live"]["retrospective_compatibility"].update(
+        policy_gate.retrospective_compatibility(S))
     S["updated_utc"] = now.strftime("%Y-%m-%dT%H:%M:%SZ")
     json.dump(S, open("state.json", "w"), indent=1)
 

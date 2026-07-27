@@ -698,3 +698,61 @@ and both carry the superseded wording inline.
    file away, and a scope word ("any") doing work the measurement did not support.
 
 No engine, selector, ledger row, gate or verdict touched. Real money still $0, unauthorized.
+
+### 2026-07-27 (02:2x UTC) — decision_policy_version WIRED; the gate is now computed, not typed
+
+Scope: this unit only. No ER/BB work, no parser work, no HFA work, no engine change.
+
+WHAT WAS ACTUALLY BROKEN. decision_policy_version and the prospective 0/100 landed in
+state.json earlier today as text. They were declarative and would not have survived:
+harness/ingest_kquote.py rewrites gates.kprops_go_live.progress on EVERY --register run,
+computing it as `record_w + record_l` — which counts every settled row regardless of the
+policy that produced it. The hand-set "0/100 under dp-2026-07-27" would have been silently
+clobbered back to "9/100 graded" the next time a play was registered, and nothing would have
+reported it. healthcheck did not look at the gate at all.
+
+NEW harness/policy_gate.py — one place that owns the counter. Three numbers, kept apart:
+  prospective    graded rows tagged with the CURRENT policy. This is the gate. 0/100.
+  historical     every settled row ever. Audit trail. 9 settled, 4-5, -1.61u. Never
+                 re-graded, never retro-dropped (R6).
+  retrospective  8 of 9 — EXPLORATORY ONLY, and narrower than it looks. See below.
+VOID is excluded from settled counts: Mikolas returned the stake and decided nothing, so
+`graded` holds 10 rows and only 9 of them settled.
+
+THE 8-OF-9 IS A SHORT-LINE-GUARD-ONLY STATISTIC. The only current criterion checkable against
+a stored row is the short-line hold, because the row carries its posted line. EV>0, edge>=0.04
+and |proj-line|>=0.8 all need E[K] as it stood BEFORE that start, and recomputing it now would
+read a pitcher log that already contains the start being priced — the exact R2 leak resolve_ek()
+exists to block. So it is not "8 of 9 plays are still valid". It is "8 of 9 clear the one guard
+that can be checked without cheating". It moves no gate. The one blocked row is Buehler O 3.5.
+
+NO INVENTED HISTORICAL TAGS. The nine rows carry no decision_policy_version and none was
+written onto them. Absence is recorded as absence (R1); an untagged row is simply not a
+current-policy row. healthcheck asserts this and FAILS if a tag ever appears on them.
+
+WIRING.
+  - ingest_kquote.py stamps decision_policy_version on every newly registered row, and now
+    writes the gate line through policy_gate.progress_string() instead of the hardcoded
+    record_w+record_l form.
+  - healthcheck gained four checks, all FAIL-not-warn: the policy_gate self-test; stored gate
+    string == recomputed; prospective counts only current-policy rows; historical audit intact;
+    and no invented tag on a historical row. A gate that has quietly drifted is worse than no
+    gate, so these fail loudly.
+
+BUG FOUND AND FIXED DURING THE UNIT. policy_gate imported SHORT_LINE from ingest_kquote so the
+guard and the statistic reporting on the guard could not drift apart — but ingest_kquote now
+imports policy_gate, and SHORT_LINE is defined BELOW that import, so the cycle failed at load
+time with ImportError. Caught by running the import, not by reading it. Fixed with a lazy
+read inside the function; both directions import cleanly and the constant is still read from
+the module that enforces it rather than duplicated.
+
+TESTS THAT CAN FAIL. Verified by breaking things on a deepcopy, not by assertion:
+  - drift the stored gate string to "9/100 graded" -> detected.
+  - back-date a policy tag onto a historical row -> prospective jumps 0->1, untagged drops
+    9->8, two self-test assertions fail.
+  - append a genuine current-policy WIN -> prospective goes 0->1/100 while the 9 untagged rows
+    stay out of the gate.
+state.json verified byte-identical after the test run.
+
+Verified: policy_gate self-test PASS, kprops self-test PASS, ingest regression PASS,
+healthcheck HEALTHY 0 fail. Real money still $0, unauthorized. Sides still DEAD.

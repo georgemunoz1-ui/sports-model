@@ -758,7 +758,7 @@
   "kprops_go_live": {
    "passes": false,
    "criteria": "n>=100 graded paper plays AND ROI>0 with bootstrap 95% CI excluding 0 AND calibration holds forward AND Taco explicit authorization",
-   "progress": "0/100 under dp-2026-07-27 (historical audit: 9 graded, 4-5, -1.61u -- see historical_audit)",
+   "progress": "0/100 graded under dp-2026-07-27 (+1 pending, 0 under current policy) [historical audit: 9 settled, 4-5, -1.61u, untagged]",
    "policy_version": "dp-2026-07-27",
    "prospective_progress": "0/100 graded under dp-2026-07-27",
    "historical_audit": {
@@ -767,9 +767,25 @@
     "units": -1.61,
     "void": 1,
     "pending": 1,
-    "note": "Preserved in full and never re-graded or retro-dropped (R6). These rows were produced by at least three untagged selector configurations, and one of them (Buehler OVER 3.5) is rejected outright by the current short-line guard. They are an audit trail, not gate progress."
+    "note": "Preserved in full and never re-graded or retro-dropped (R6). These rows were produced by at least three untagged selector configurations, and one of them (Buehler OVER 3.5) is rejected outright by the current short-line guard. They are an audit trail, not gate progress.",
+    "settled": 9,
+    "policy_tags": "NONE. These rows predate decision_policy_version and no tag is invented for them (R1: absence recorded as absence). An untagged row is simply not a current-policy row."
    },
-   "why_zero_not_eight": "Eight of the nine rows would survive the current guard, but surviving a filter applied after the fact is not the same as having been selected by the current policy. Those eight were chosen under rules that no longer exist, and the choice of which to keep was made with their results already known. A prospective gate has to start prospectively. 0/100."
+   "why_zero_not_eight": "Eight of the nine rows would survive the current guard, but surviving a filter applied after the fact is not the same as having been selected by the current policy. Those eight were chosen under rules that no longer exist, and the choice of which to keep was made with their results already known. A prospective gate has to start prospectively. 0/100.",
+   "computed_by": "harness/policy_gate.py -- this string is COMPUTED from the ledger, not typed. harness/ingest_kquote.py writes it through policy_gate.progress_string() and healthcheck FAILS if the stored string and the recomputed one disagree. Before 2026-07-27 the gate line was rewritten on every --register run as 'record_w + record_l', which counts every settled row regardless of the policy that produced it -- so a hand-set 0/100 would have been silently clobbered back to 9/100.",
+   "retrospective_compatibility": {
+    "status": "EXPLORATORY - never gate progress",
+    "checkable_criterion": "short-line intake guard only (posted line > 3.5 K)",
+    "not_checked": "EV>0, edge>=0.04, |proj-line|>=0.8 -- all need as-of E[K], and recomputing it now would read a log containing the start being priced (R2).",
+    "n_untagged_settled": 9,
+    "n_pass": 8,
+    "n_blocked": 1,
+    "blocked_rows": [
+     "Walker Buehler OVER 3.5"
+    ],
+    "statistic": "8 of 9",
+    "reading": "8 of 9 is NOT '8 plays are still valid'. It is '8 clear the one guard that can be checked without cheating'. The rest of the selector needs as-of E[K], and recomputing that now would read a pitcher log already containing the start being priced (R2). Exploratory only; it moves no gate."
+   }
   },
   "sides_reopen": {
    "passes": false,

@@ -756,3 +756,70 @@ state.json verified byte-identical after the test run.
 
 Verified: policy_gate self-test PASS, kprops self-test PASS, ingest regression PASS,
 healthcheck HEALTHY 0 fail. Real money still $0, unauthorized. Sides still DEAD.
+
+### 2026-07-27 (03:01 UTC) — KSIM-2026-07-27 PHASE 1 FROZEN (simulated board, no market exists)
+
+Pre-market forecast for the 7/27 slate, frozen before any pitcher-K line was published.
+Everything in it is labelled SIMULATED - NOT AN ACTUAL MARKET. No engine change, no ledger
+row, no gate movement. Real money still $0, unauthorized.
+
+  artifact  data/mlb/props/simulated/2026-07-27_KSIM_phase1.json
+  sha256    7f827fd0014e5835ec3bf3572bbe1ff36dce452d5e0a55b735d04fe665c12d2f
+  cutoff    2026-07-27T02:33Z      frozen  2026-07-27T03:01:55Z
+  engine    6146baa, FROZEN - no stretch applied, E5 has not read out
+
+WHY THE ID IS NOT AN E-NUMBER. Two experiments are already numbered E4 and "E5" is used in
+prose for the shrinkage work while the queue's E5 is the WNBA port. Adding a numeric ID would
+compound an open R7 defect, so this board is KSIM-2026-07-27.
+
+COHORT RECONCILIATION - 24 probable, 23 eligible, 1 excluded, none silently dropped.
+  EXCLUDED: Zac Thornton (MLBAM 804267, NYM). GS=3 against the pre-registered >=5 GS floor in
+  engine.kprops.proj(). Not missing and not skipped: the name resolves, the log exists, and it
+  holds three starts (5/20, 6/26, 7/12). The engine returns nothing rather than a guess. He is
+  also in data/backfill/mlb/2026/_need_logs.txt as pending backfill. Row preserved in
+  excluded_rows with the reason attached.
+  Name-resolution note: "Zach Thornton" fails at LOOKUP (pid None); "Zac Thornton" resolves and
+  fails at the SAMPLE GATE. Same None, different cause - only the second is the eligibility rule.
+
+TIERS. Never pooled in any Phase 2 readout.
+  Tier 2, K-market-exposed (1): Kyle Bradish. A 5.5 line was visible before freeze. Performance
+    projection is evaluable; simulated-line accuracy MUST NOT be scored as blind.
+  Tier 1, game-market-exposed (22): the generator had seen this slate's moneylines, run lines
+    and totals before freeze. Exploratory, partially exposed line-baseline cohort - NOT a blind
+    confirmatory market test.
+  Tier 0, clean: ZERO. No pitcher on this slate is fully blind. A genuinely blind
+    market-forecast test requires a future untouched slate.
+
+SIMULATED-LINE RULE, pre-registered before any 7/27 K line was seen:
+  line = round(2*E[K])/2, over -115, under -115, no shading, CI +/-0.5 K DECLARED NOT FITTED.
+  It uses only E[K] and is fitted to nothing, so the Tier-1 exposure cannot leak into it.
+  The 7/26 engine-vs-market fit (slope 0.703) was deliberately NOT used: n=12, unlicensed under
+  R7, magnitude unidentified (1.08-1.35), and fitted to the market - which would import the very
+  anchor a blind test exists to detect.
+
+THE SELECTOR COLUMN IS VACUOUS IN PHASE 1, and this is a property of the system rather than of
+this slate. When the simulated line is the engine's own number rounded to the nearest rung, the
+largest achievable |displacement| is 0.25 K against a 0.8 K floor, so select_play rejects all 23
+rows by construction. select_play is a MARKET-DISAGREEMENT detector; it cannot fire against the
+model's own number. The column is retained for schema fidelity with the reason recorded on every
+row, and it carries no information until Phase 2 scores it against a real quote.
+
+R2 CHECK. Newest start in pitcher_logs is 2026-07-23, so no 7/27 start can be present and proj()
+cannot read the outcome it is projecting.
+
+TWO DEFECTS CAUGHT BEFORE THE HASH - which is the point of freezing in two steps.
+  1. frozen_utc was first written as 02:41:00Z, a time that traced to no command. Replaced with
+     the actual wall clock at write (R1).
+  2. pmf enumerated k=0..12 alongside pmf_12plus = P(K>=12), double-counting k=12; distributions
+     summed to as much as 1.0236. Corrected to k=0..11 plus a 12+ tail. Sums are now 1.0 +/- 2e-5.
+  Both are recorded in the artifact under corrections_before_freeze.
+
+SIDE OBSERVATION. 13 of 23 rows land on an INTEGER simulated line, mean push mass 0.182. Under
+the pre-7/27 code every one of those would have scored the push as an OVER win - Martin Perez at
+4.0 would have read P(over) 0.557 instead of 0.362. The push fix was not hypothetical.
+
+STARTER STATUS is single-source and UNCONFIRMED on every row: generator transcription of an
+aggregator screenshot, T4 re-read not done, CBS used as operator baseline. 6 of 30 starters were
+wrong on 2026-07-25 and PHI ran a true opener.
+
+Verified: kprops PASS, ingest regression PASS, policy_gate PASS, healthcheck HEALTHY 0 fail.

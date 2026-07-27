@@ -1002,3 +1002,50 @@ B4 game times verified against an authoritative schedule AT capture time, source
 B5 the amendment window closes at the first qualifying capture. Later methodological
    discoveries are logged and deferred to the next untouched slate, never applied to 7/27 in
    flight.
+
+### 2026-07-27T03:44:20Z — Phase-2A scan cycle KSIM-0727-C01: 6/6 ACCESS_BLOCKED, zero market information
+
+First Phase-2A capture attempted under the protocol frozen at d6229ac. Phase 1 NOT modified.
+Real money still $0, unauthorized.
+
+  artifact  data/mlb/props/simulated/2026-07-27_KSIM_phase2a_cycle01.json
+  sha256    147b2f3f44f4e00a58fb3400fefafe792137bf0e95585e3ef2abebdb2ad46fd0
+  window    2026-07-27T03:43:02Z -> 2026-07-27T03:44:20Z
+  design    OPPORTUNISTIC_CAPTURE
+
+RESULT: DK, FD, BR, MGM, CZR, HR queried once each in A1 order. All six returned HTTP 403.
+  ACCESS_BLOCKED 6 | SOURCE_FAILURE 0 | NO_QUALIFYING_MARKET 0 | CAPTURE_NOT_RUN 0
+  qualifying captures 0, complete quotes 0, lines observed 0.
+
+THIS CYCLE ESTABLISHES NOTHING ABOUT THE MARKET. Under B1 only a successful source response can
+establish NO_QUALIFYING_MARKET, and zero sources responded. Saying "no 7/27 K lines were found"
+off the back of this would convert our own access failure into a market fact - which is exactly
+what B1 was written to prevent, one message after it was written.
+
+TWO STRUCTURAL BLOCKERS, both permanent for the agent-side capture path:
+
+ EGRESS-BLOCKED. statsapi.mlb.com - a plain public JSON API that does not bot-block - also
+ returned 403 when queried for the B4 schedule check. A uniform 403 across seven unrelated hosts
+ indicates the environment's network policy is refusing non-allowlisted outbound requests. That
+ is our perimeter, not seven independent refusals, and retrying later will not change it.
+
+ WEBFETCH-NOT-EVIDENCE. WebFetch converts a page to markdown and answers a prompt over it with a
+ small fast model. It returns summarised prose, never the original HTML/JSON. A5 requires the
+ original response or a timestamped screenshot, hashed. So even WITH egress, an agent-side
+ WebFetch capture could satisfy neither A5 (nothing raw to hash) nor B1's "successful source
+ response" standard - it would be a summariser's report of a source, which is the documented
+ "summaries are not sources" failure class that has produced five separate incidents on this
+ project. This is the long-logged unsolved WebFetch gap becoming operationally binding.
+
+CONSEQUENCE: the agent cannot execute a Phase-2A capture from this environment. The capture path
+runs through the OPERATOR - a screenshot or saved raw response from a book's own prop page,
+which satisfies A5 and B1 in a way no tool available here can.
+
+B4 NOT SATISFIED this cycle: schedule verification was itself ACCESS_BLOCKED, so
+scheduled_first_pitch_utc values stand as frozen in Phase 1, unverified at capture time.
+
+CYCLE DEFECT LOGGED, A4-OBSERVED-AT-NOT-STAMPED: per-source observed_at_utc was not recorded,
+only the cycle window. A4 requires a per-capture timestamp. No quote was at stake since every
+source was blocked, but the next cycle must stamp each call. Status OPEN.
+
+B5 AMENDMENT WINDOW REMAINS OPEN - no qualifying capture has occurred for 2026-07-27.

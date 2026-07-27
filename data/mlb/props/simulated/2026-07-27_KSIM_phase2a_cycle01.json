@@ -1,0 +1,173 @@
+{
+ "scan_cycle_id": "KSIM-0727-C01",
+ "phase": "2A",
+ "phase1_sha256": "7f827fd0014e5835ec3bf3572bbe1ff36dce452d5e0a55b735d04fe665c12d2f",
+ "protocol_frozen_at_commit": "d6229ac",
+ "design": "OPPORTUNISTIC_CAPTURE",
+ "design_note": "Run when convenient, not on a fixed cadence. Per B3 this record may NOT be used to claim any quote was the first AVAILABLE quote, to compare market-release timing across pitchers, or to infer how long any line had been posted.",
+ "cycle_started_at_utc": "2026-07-27T03:43:02Z",
+ "cycle_ended_at_utc": "2026-07-27T03:44:20Z",
+ "scan_order": [
+  "DK",
+  "FD",
+  "BR",
+  "MGM",
+  "CZR",
+  "HR"
+ ],
+ "captures": [
+  {
+   "order": 1,
+   "book": "DK",
+   "source_url_or_feed": "https://sportsbook.draftkings.com/leagues/baseball/mlb",
+   "status": "ACCESS_BLOCKED",
+   "http_status": 403,
+   "observed_at_utc": null,
+   "observed_at_note": "NOT individually stamped - A4 lapse, see cycle_defects. Bounded by the cycle window.",
+   "source_quote_time_utc": null,
+   "line": null,
+   "over_price": null,
+   "under_price": null,
+   "main_line_designation": null,
+   "evidence_path": null,
+   "evidence_sha256": null,
+   "evidence_note": "No A5-grade evidence exists: no response body was returned, and WebFetch would not have supplied one in any case (see structural_blockers).",
+   "verbatim_response": "The server returned HTTP 403 Forbidden.\n\nThe response body was not retrieved. If this URL requires authentication, use an authenticated tool (e.g. `gh` for GitHub, or an MCP-provided fetch tool) instead of WebFetch."
+  },
+  {
+   "order": 2,
+   "book": "FD",
+   "source_url_or_feed": "https://sportsbook.fanduel.com/navigation/mlb",
+   "status": "ACCESS_BLOCKED",
+   "http_status": 403,
+   "observed_at_utc": null,
+   "observed_at_note": "NOT individually stamped - A4 lapse, see cycle_defects. Bounded by the cycle window.",
+   "source_quote_time_utc": null,
+   "line": null,
+   "over_price": null,
+   "under_price": null,
+   "main_line_designation": null,
+   "evidence_path": null,
+   "evidence_sha256": null,
+   "evidence_note": "No A5-grade evidence exists: no response body was returned, and WebFetch would not have supplied one in any case (see structural_blockers).",
+   "verbatim_response": "The server returned HTTP 403 Forbidden.\n\nThe response body was not retrieved. If this URL requires authentication, use an authenticated tool (e.g. `gh` for GitHub, or an MCP-provided fetch tool) instead of WebFetch."
+  },
+  {
+   "order": 3,
+   "book": "BR",
+   "source_url_or_feed": "https://www.betrivers.com/",
+   "status": "ACCESS_BLOCKED",
+   "http_status": 403,
+   "observed_at_utc": null,
+   "observed_at_note": "NOT individually stamped - A4 lapse, see cycle_defects. Bounded by the cycle window.",
+   "source_quote_time_utc": null,
+   "line": null,
+   "over_price": null,
+   "under_price": null,
+   "main_line_designation": null,
+   "evidence_path": null,
+   "evidence_sha256": null,
+   "evidence_note": "No A5-grade evidence exists: no response body was returned, and WebFetch would not have supplied one in any case (see structural_blockers).",
+   "verbatim_response": "The server returned HTTP 403 Forbidden.\n\nThe response body was not retrieved. If this URL requires authentication, use an authenticated tool (e.g. `gh` for GitHub, or an MCP-provided fetch tool) instead of WebFetch."
+  },
+  {
+   "order": 4,
+   "book": "MGM",
+   "source_url_or_feed": "https://sports.betmgm.com/en/sports/baseball-23",
+   "status": "ACCESS_BLOCKED",
+   "http_status": 403,
+   "observed_at_utc": null,
+   "observed_at_note": "NOT individually stamped - A4 lapse, see cycle_defects. Bounded by the cycle window.",
+   "source_quote_time_utc": null,
+   "line": null,
+   "over_price": null,
+   "under_price": null,
+   "main_line_designation": null,
+   "evidence_path": null,
+   "evidence_sha256": null,
+   "evidence_note": "No A5-grade evidence exists: no response body was returned, and WebFetch would not have supplied one in any case (see structural_blockers).",
+   "verbatim_response": "The server returned HTTP 403 Forbidden.\n\nThe response body was not retrieved. If this URL requires authentication, use an authenticated tool (e.g. `gh` for GitHub, or an MCP-provided fetch tool) instead of WebFetch."
+  },
+  {
+   "order": 5,
+   "book": "CZR",
+   "source_url_or_feed": "https://sportsbook.caesars.com/us/nj/bet/baseball",
+   "status": "ACCESS_BLOCKED",
+   "http_status": 403,
+   "observed_at_utc": null,
+   "observed_at_note": "NOT individually stamped - A4 lapse, see cycle_defects. Bounded by the cycle window.",
+   "source_quote_time_utc": null,
+   "line": null,
+   "over_price": null,
+   "under_price": null,
+   "main_line_designation": null,
+   "evidence_path": null,
+   "evidence_sha256": null,
+   "evidence_note": "No A5-grade evidence exists: no response body was returned, and WebFetch would not have supplied one in any case (see structural_blockers).",
+   "verbatim_response": "The server returned HTTP 403 Forbidden.\n\nThe response body was not retrieved. If this URL requires authentication, use an authenticated tool (e.g. `gh` for GitHub, or an MCP-provided fetch tool) instead of WebFetch."
+  },
+  {
+   "order": 6,
+   "book": "HR",
+   "source_url_or_feed": "https://app.hardrock.bet/",
+   "status": "ACCESS_BLOCKED",
+   "http_status": 403,
+   "observed_at_utc": null,
+   "observed_at_note": "NOT individually stamped - A4 lapse, see cycle_defects. Bounded by the cycle window.",
+   "source_quote_time_utc": null,
+   "line": null,
+   "over_price": null,
+   "under_price": null,
+   "main_line_designation": null,
+   "evidence_path": null,
+   "evidence_sha256": null,
+   "evidence_note": "No A5-grade evidence exists: no response body was returned, and WebFetch would not have supplied one in any case (see structural_blockers).",
+   "verbatim_response": "The server returned HTTP 403 Forbidden.\n\nThe response body was not retrieved. If this URL requires authentication, use an authenticated tool (e.g. `gh` for GitHub, or an MCP-provided fetch tool) instead of WebFetch."
+  }
+ ],
+ "schedule_verification": {
+  "required_by": "B4",
+  "attempted": true,
+  "source": "https://statsapi.mlb.com/api/v1/schedule?sportId=1&date=2026-07-27",
+  "status": "ACCESS_BLOCKED",
+  "http_status": 403,
+  "verified": false,
+  "note": "B4 schedule verification could NOT be performed this cycle. scheduled_first_pitch_utc values therefore remain as frozen in Phase 1, unverified at capture time."
+ },
+ "outcome": {
+  "qualifying_captures": 0,
+  "complete_quotes": 0,
+  "lines_observed": 0,
+  "NO_QUALIFYING_MARKET": 0,
+  "SOURCE_FAILURE": 0,
+  "ACCESS_BLOCKED": 6,
+  "CAPTURE_NOT_RUN": 0,
+  "determination": "THIS CYCLE ESTABLISHES NOTHING ABOUT THE MARKET. Under B1 only a successful source response can establish NO_QUALIFYING_MARKET, and zero sources responded. Six ACCESS_BLOCKED results are a statement about our access, not about whether 7/27 pitcher-K markets exist."
+ },
+ "structural_blockers": [
+  {
+   "id": "EGRESS-BLOCKED",
+   "detail": "All 6 book sources AND statsapi.mlb.com returned HTTP 403. statsapi is a plain public JSON API that does not bot-block, so a uniform 403 across seven unrelated hosts indicates the environment's network policy is refusing non-allowlisted outbound requests - our perimeter, not seven independent refusals. Retrying later will not change this.",
+   "consequence": "The agent cannot reach any market source from this environment."
+  },
+  {
+   "id": "WEBFETCH-NOT-EVIDENCE",
+   "detail": "WebFetch 'converts the page to markdown and answers the prompt using a small fast model'. It returns model-summarised prose, never the original HTML/JSON. A5 requires the original response or a timestamped screenshot, hashed.",
+   "consequence": "Even with egress, an agent-side WebFetch capture could satisfy neither A5 (no raw artifact to hash) nor B1's 'successful source response' standard for NO_QUALIFYING_MARKET - it would be a summariser's report of a source, which is the documented 'summaries are not sources' failure class."
+  }
+ ],
+ "cycle_defects": [
+  {
+   "id": "A4-OBSERVED-AT-NOT-STAMPED",
+   "detail": "Individual observed_at_utc was not recorded per source; only the cycle window 03:43:02Z-03:44:20Z was captured. A4 requires a per-capture timestamp.",
+   "impact": "None to any quote - every source was ACCESS_BLOCKED and no quote was at stake. Logged so the next cycle stamps each call.",
+   "status": "OPEN"
+  }
+ ],
+ "amendment_window": {
+  "rule": "B5",
+  "state": "OPEN",
+  "reason": "No qualifying Phase-2A capture has occurred for 2026-07-27, so the window has not closed."
+ },
+ "real_money": "$0.00, unauthorized"
+}

@@ -351,3 +351,101 @@ protocol amendments are permitted**. Methodological problems discovered after th
 
 This document and everything above it are frozen as of commit `5d18dde`. The ordering is
 auditable: this section is committed before any capture is attempted.
+
+
+---
+
+# MANUAL-EVIDENCE PATH (section C) — issued before any qualifying capture
+
+Phase 1 unaltered. The C01 artifact is **not rewritten**; the language correction below
+supersedes it in reporting, and the original text stays hashed at
+`147b2f3f44f4e00a58fb3400fefafe792137bf0e95585e3ef2abebdb2ad46fd0` (R6).
+
+## C1 — `ENVIRONMENT_BLOCKED_DURING_C01`, not "permanent"
+
+**Superseded wording (retained, R6).** The C01 record and its commit message called the two
+blockers *"permanent for the agent-side path"* and stated *"retrying later will not change
+this."*
+
+**That was an overclaim and is withdrawn.** The evidence was seven HTTP 403s inside an 78-second
+window. That establishes **perimeter blocking during C01** and nothing about the future. Network
+policy, allowlists and environment configuration can change; a later cycle may succeed.
+
+The finding is renamed **`ENVIRONMENT_BLOCKED_DURING_C01`** and is scoped to that cycle. Claims
+that access *can never* work are prohibited. Retrying is permitted and may succeed.
+
+The second blocker is likewise rescoped: WebFetch returning model-summarised markdown rather
+than the original response is a property of **the fetch tooling currently available**, which is
+also subject to change if a raw-response fetch path appears. It is not a law of nature either.
+
+## C2 — A single screenshot is not a scan cycle
+
+One user-supplied image is a **`USER_SUPPLIED_OPPORTUNISTIC_CAPTURE`**.
+
+It is **not** a completed A1 scan cycle, and it **cannot supply statuses or timestamps for
+sources the user did not inspect**. If the user screenshots FD, that tells us nothing whatsoever
+about DK, BR, MGM, CZR or HR at that moment.
+
+## C3 — Never manufacture the un-inspected
+
+From a single screenshot it is prohibited to write:
+
+- a per-source `observed_at_utc` for any source not inspected;
+- a `NO_QUALIFYING_MARKET` finding for any source not inspected;
+- an `ACCESS_BLOCKED` status for any source not inspected.
+
+Un-inspected sources are `CAPTURE_NOT_RUN`. That is the only honest status for a source nobody
+looked at.
+
+## C4 — Two capture classes, reported separately
+
+| class | requirement | may freeze a decision? | may be called the primary hierarchy-selected comparison? |
+|---|---|---|---|
+| **A. `PRIMARY_PROTOCOL_CAPTURE`** | the fixed DK→FD→BR→MGM→CZR→HR cycle, with evidence for **every** source through the qualifying winner | yes | **yes** |
+| **B. `USER_SUPPLIED_OPPORTUNISTIC_CAPTURE`** | a complete same-book quote in one image | **yes** | **no** |
+
+Class B can freeze an executable decision. It can never be presented as the hierarchy-selected
+primary, because no hierarchy was exercised — one source was looked at.
+
+## C5 — What a screenshot must visibly establish
+
+All six, visible in the image itself, not supplied alongside it:
+
+1. **sportsbook / source**
+2. **player and market** (that it is pitcher strikeouts)
+3. **the strikeout line**
+4. **both over and under prices, from the same book**
+5. **game or slate date**
+6. **main / default-line status**, where the book shows it
+
+The **original image is preserved and hashed**. A cropped re-render, a retyped transcription, or
+a description of an image is not the evidence — the file is.
+
+## C6 — Timestamps on manual evidence
+
+- **`observed_at_utc`** = the time the evidence was **received or captured**. Always present.
+- **`source_quote_time_utc`** = null **unless the book visibly supplies a quote time in the
+  image**. Never inferred from the file's mtime, the message time, or when we processed it.
+
+## C7 — What is not a complete quote
+
+Neither of these is a `FIRST_CAPTURED_COMPLETE_QUOTE`, and neither may reach `select_play()`:
+
+- a screenshot showing **only one side**;
+- an image **combining the best over and the best under from different books**.
+
+The second is the 7/26 aggregator contamination in screenshot form. A price pair that no single
+book would honour together is not a quote; it is two quotes from two books, and the hold it
+implies is fictional.
+
+## C8 — Scoring an isolated user capture
+
+A class-B capture may support a **prospective executable decision** — it is a real price a real
+book showed, and a decision frozen against it before first pitch is a genuine forward test.
+
+Its **line-placement result is descriptive and source-selected**. The book was chosen by
+whatever made it convenient to screenshot, not by the pre-registered hierarchy, so the
+comparison carries a selection effect of unknown sign and size.
+
+**Class-A and class-B results are never pooled.** Reported separately, always, in any Phase-2
+readout.

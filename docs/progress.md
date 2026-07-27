@@ -1049,3 +1049,45 @@ only the cycle window. A4 requires a per-capture timestamp. No quote was at stak
 source was blocked, but the next cycle must stamp each call. Status OPEN.
 
 B5 AMENDMENT WINDOW REMAINS OPEN - no qualifying capture has occurred for 2026-07-27.
+
+### 2026-07-27T03:52:00Z — manual-evidence path (section C); C01 overclaim withdrawn
+
+Eight rules appended to the capture protocol as section C. Phase 1 unaltered. The C01 artifact
+is NOT rewritten - its hash still verifies and its original wording stays in the record (R6).
+Real money still $0, unauthorized.
+
+C1 OVERCLAIM WITHDRAWN, AND IT WAS MINE. The C01 record and its commit message called the two
+   blockers "permanent for the agent-side path" and asserted "retrying later will not change
+   this." The evidence was seven HTTP 403s inside a 78-second window. That establishes perimeter
+   blocking DURING C01 and nothing about the future - policy, allowlists and environment config
+   can all change. Renamed ENVIRONMENT_BLOCKED_DURING_C01 and scoped to that cycle. Claims that
+   access can never work are prohibited; retrying is permitted and may succeed.
+   The WebFetch limitation is rescoped the same way: summarised-markdown-not-raw-response is a
+   property of the fetch tooling CURRENTLY AVAILABLE, not a law of nature.
+   This is the same error class the project keeps catching - stating a conclusion wider than the
+   observation supports. One 78-second window cannot license the word "permanent."
+C2 one user image is a USER_SUPPLIED_OPPORTUNISTIC_CAPTURE, not a completed A1 cycle, and it
+   cannot supply statuses or timestamps for sources nobody inspected.
+C3 never manufacture per-source timestamps, NO_QUALIFYING_MARKET findings or ACCESS_BLOCKED
+   statuses from a single screenshot. Un-inspected sources are CAPTURE_NOT_RUN - the only honest
+   status for a source nobody looked at.
+C4 two classes. A PRIMARY_PROTOCOL_CAPTURE needs the full DK->FD->BR->MGM->CZR->HR cycle with
+   evidence for every source through the qualifying winner, and may be called the primary
+   hierarchy-selected comparison. B USER_SUPPLIED_OPPORTUNISTIC_CAPTURE may freeze an executable
+   decision but never carries that title - no hierarchy was exercised when one source was seen.
+C5 an acceptable screenshot must VISIBLY establish source, player+market, line, BOTH prices from
+   the SAME book, slate date, and main-line status where shown. The original image is preserved
+   and hashed; a retyped transcription is not the evidence, the file is.
+C6 observed_at_utc = when the evidence was received or captured. source_quote_time_utc stays
+   null unless the book visibly supplies a quote time IN the image - never inferred from file
+   mtime, message time, or processing time.
+C7 a one-sided screenshot, or one combining best-over and best-under from different books, is
+   NOT a FIRST_CAPTURED_COMPLETE_QUOTE and cannot reach select_play(). The second is the 7/26
+   aggregator contamination in screenshot form: a price pair no single book would honour
+   together is not a quote, and the hold it implies is fictional.
+C8 an isolated user capture may support a prospective executable decision - it is a real price a
+   real book showed, frozen before first pitch. But its line-placement result is DESCRIPTIVE and
+   SOURCE-SELECTED: the book was chosen by convenience, not by the hierarchy, so the comparison
+   carries a selection effect of unknown sign and size. Class A and class B are never pooled.
+
+B5 amendment window REMAINS OPEN - still no qualifying capture for 2026-07-27.

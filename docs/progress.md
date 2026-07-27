@@ -931,3 +931,52 @@ source did display an under price whose value never reached our record. Both are
 different things. Encoded as under_price: null with price_present_but_not_transcribed: true -
 never a reconstructed number. He stays FIRST_CAPTURED_LINE only: not complete (no over price),
 not a verified opener (no market-origin timestamp), not passable to select_play(), Tier 2.
+
+### 2026-07-27T03:38:00Z — Phase-2A operational rules; scan cycles, evidence hashing, per-pitcher freeze
+
+Eight operational rules appended to docs/experiments/KSIM-2026-07-27_phase2_capture_protocol.md
+as section PHASE-2A OPERATIONAL RULES, plus a capture-record template at
+data/mlb/props/simulated/_KSIM_phase2a_capture_template.json. Phase 1 NOT modified: sha256sum -c
+OK, and the frozen artifact does not appear in this diff. Real money still $0, unauthorized.
+
+A1 fixed scan order DK -> FD -> BR -> MGM -> CZR -> HR, declared in advance, never reordered.
+A2 a scan cycle is ONE timestamped sweep; every response is retained including
+   market_unavailable. A source that returned nothing is a recorded observation, not an
+   omission - the absence of a line at a known time is precisely the evidence that established
+   the 7/27 K market had not opened.
+A3 primary selection = FIRST cycle containing a qualifying complete main-line quote, then the
+   hierarchy WITHIN that cycle, not sub-second retrieval order.
+A4 required fields incl. scan_cycle_id, cycle_started_at_utc, observed_at_utc,
+   source_quote_time_utc, scheduled_first_pitch_utc, minutes_before_first_pitch (signed;
+   negative = after first pitch = ineligible), book, line, both prices, main-line designation.
+A5 evidence is the ORIGINAL html/json response or a timestamped screenshot visibly containing
+   the complete quote, hashed. A hand-built JSON record is metadata, NOT evidence.
+A6 complete ISO timestamps with dates and seconds, always.
+A7 freeze each pitcher's executable decision IMMEDIATELY on its qualifying capture.
+A8 later quotations preserved for movement/closing analysis, never substituted.
+
+A3 SUPERSEDES THE RULE PRE-REGISTERED IN ADDENDUM SECTION 6 ("first complete quote by capture
+timestamp, ties DK > FD > ..."). The change is legitimate ONLY because zero complete quotes
+exist for this slate: the 12-source scan at 2026-07-27T02:33:00Z found one one-sided line and no
+complete quote. Changing a selection rule after a qualifying capture existed would be
+retrospective selection and is prohibited. Recorded here with its timestamp so the ordering of
+rule-change and first-capture is auditable.
+
+OPERATIONAL RESOLUTION of A3 vs A7: because DK is first in the hierarchy, a qualifying DK quote
+cannot be outranked later in the same cycle and may be frozen at once. If DK does not qualify
+the cycle continues down the order, and the non-qualifying responses above the winner are
+retained as the evidence that it won.
+
+A5 HAS A CONSEQUENCE WORTH STATING. The existing hand-built drop files under
+data/mlb/props/drops/ are METADATA under this rule, not evidence. They remain valid inputs to
+the ingester but cannot by themselves substantiate a Phase-2A capture.
+
+A6 CAUGHT AN ERROR OF MINE FROM ONE MESSAGE EARLIER. I wrote "the three West Coast games give
+until 01:38Z" with no date. Those games fall on 2026-07-28 in UTC while the rest of the slate is
+2026-07-27, so the bare form is ambiguous across exactly the boundary this slate straddles. The
+correct form is 2026-07-28T01:38:00Z.
+  Forward-only: progress.md holds ~20 bare HH:MMZ forms in earlier entries. It is an
+  append-only log and they are NOT rewritten (R6).
+  The frozen artifact stores 2026-07-27T18:35Z - full date, no seconds field. Phase 2A writes
+  the seconds-complete form. Same instant; the mapping is TABULATED in the protocol, not
+  applied to the frozen file.

@@ -160,3 +160,127 @@ One record correction: the addendum recorded "under side only, no price transcri
 source did display an under price; its value was not transmitted into our record. Both
 statements are true of different things — the price existed at source, and we hold no value for
 it. It is `null` with `price_present_but_not_transcribed: true`, never a reconstructed number.
+
+
+---
+
+# PHASE-2A OPERATIONAL RULES
+
+Issued after the capture protocol was accepted. **Phase 1 is not modified.** These govern how a
+Phase-2A capture is performed, evidenced and frozen.
+
+## A1 — Fixed scan order
+
+    DK -> FD -> BR -> MGM -> CZR -> HR
+
+Declared in advance and never reordered mid-slate.
+
+## A2 — A scan cycle is one timestamped sweep
+
+A cycle **begins at one recorded UTC timestamp** (`cycle_started_at_utc`) and queries every
+available source in A1 order. **Every response is retained**, including `market_unavailable`,
+`no_line_posted`, `page_error` and `not_reachable`. A source that returned nothing is a recorded
+observation, not an omission — the absence of a line at a known time is exactly the evidence
+that established the 7/27 market had not opened.
+
+## A3 — Primary selection: first qualifying cycle, then hierarchy
+
+The primary `FIRST_CAPTURED_COMPLETE_QUOTE` is taken from the **first scan cycle containing at
+least one qualifying complete main-line quote**. Within that cycle the **pre-registered
+hierarchy decides**, not sub-second retrieval order.
+
+> **This supersedes the rule pre-registered in the addendum §6** ("first complete quote by
+> capture timestamp, ties broken DK > FD > BR > MGM > CZR > HR"). The change is legitimate
+> *only* because **zero complete quotes exist for this slate at the time of writing** — the
+> 12-source scan at `2026-07-27T02:33:00Z` found one one-sided line and no complete quotes.
+> Changing a selection rule after a qualifying capture existed would be retrospective
+> selection and is prohibited.
+
+**Operational resolution.** Because DK is first in the hierarchy, a qualifying DK quote cannot
+be outranked later in the same cycle, so it may be frozen the moment it qualifies. If DK does
+not qualify, the cycle continues down the order; the first book that qualifies wins, and the
+non-qualifying responses above it are retained as the evidence that it did.
+
+## A4 — Required fields on every capture
+
+    scan_cycle_id                 e.g. KSIM-0727-C03
+    cycle_started_at_utc          full ISO, with date and seconds
+    observed_at_utc               full ISO, per-source retrieval time
+    source_quote_time_utc         book/feed time, or null -- never set equal to observed_at_utc
+    scheduled_first_pitch_utc     full ISO
+    minutes_before_first_pitch    signed; negative means AFTER first pitch -> ineligible (A7 / §5)
+    book                          DK | FD | BR | MGM | CZR | HR
+    line                          posted K line
+    over_price                    or null
+    under_price                   or null
+    main_line_designation         book_designated | not_designated | MAIN_LINE_UNRESOLVED
+    evidence_sha256               hash of the raw evidence artifact (A5)
+    evidence_path                 path to the retained payload/screenshot
+    status                        complete_quote | line_only | market_unavailable | error
+
+## A5 — What counts as evidence
+
+Acceptable, and only these:
+
+- the **original HTML/JSON response** as returned; or
+- a **timestamped screenshot visibly containing the complete quote**.
+
+The evidence artifact is **hashed** and the hash stored on the record.
+
+**A manually constructed JSON record is metadata, not raw evidence.** This has a consequence
+worth stating plainly: the existing hand-built drop files under `data/mlb/props/drops/` are
+metadata under this rule. They remain valid *inputs* to the ingester, but they are not evidence
+and cannot by themselves substantiate a Phase-2A capture.
+
+## A6 — Complete ISO timestamps, always
+
+Write `2026-07-27T18:35:00Z`, never `18:35Z`. A bare time is ambiguous across the UTC date
+boundary, and this slate straddles it: the three West Coast games fall on **2026-07-28** in UTC
+while every other game falls on 2026-07-27.
+
+- **Forward-only.** Historical `progress.md` entries contain bare `HH:MMZ` forms; they are an
+  append-only log and are **not rewritten** (R6). The rule binds all new records.
+- **The frozen artifact is not edited.** It stores `2026-07-27T18:35Z` — full date, no seconds
+  field. Phase 2A writes the seconds-complete form. These denote the same instant; the mapping
+  is recorded below, not applied to the frozen file.
+
+| pitcher | game | frozen artifact form | Phase-2A form | frozen line |
+|---|---|---|---|---|
+| George Kirby | SEA@TEX | `2026-07-27T18:35Z` | `2026-07-27T18:35:00Z` | 5.5 |
+| Kumar Rocker | SEA@TEX | `2026-07-27T18:35Z` | `2026-07-27T18:35:00Z` | 4.0 |
+| Keider Montero | BAL@DET | `2026-07-27T22:40Z` | `2026-07-27T22:40:00Z` | 4.0 |
+| Kyle Bradish | BAL@DET | `2026-07-27T22:40Z` | `2026-07-27T22:40:00Z` | 5.5 |
+| Merrill Kelly | ARI@PIT | `2026-07-27T22:40Z` | `2026-07-27T22:40:00Z` | 4.0 |
+| Mitch Keller | ARI@PIT | `2026-07-27T22:40Z` | `2026-07-27T22:40:00Z` | 4.0 |
+| Tyler Phillips | PHI@MIA | `2026-07-27T22:40Z` | `2026-07-27T22:40:00Z` | 3.5 |
+| Zack Wheeler | PHI@MIA | `2026-07-27T22:40Z` | `2026-07-27T22:40:00Z` | 7.0 |
+| Andrew Alvarez | TOR@WSH | `2026-07-27T22:45Z` | `2026-07-27T22:45:00Z` | 5.0 |
+| Max Scherzer | TOR@WSH | `2026-07-27T22:45Z` | `2026-07-27T22:45:00Z` | 3.5 |
+| Chase Burns | CLE@CIN | `2026-07-27T23:10Z` | `2026-07-27T23:10:00Z` | 6.5 |
+| Martin Perez | ATL@NYM | `2026-07-27T23:10Z` | `2026-07-27T23:10:00Z` | 4.0 |
+| Slade Cecconi | CLE@CIN | `2026-07-27T23:10Z` | `2026-07-27T23:10:00Z` | 4.0 |
+| Max Fried | NYY@CHW | `2026-07-27T23:40Z` | `2026-07-27T23:40:00Z` | 5.0 |
+| Noah Schultz | NYY@CHW | `2026-07-27T23:40Z` | `2026-07-27T23:40:00Z` | 4.5 |
+| David Peterson | CHC@STL | `2026-07-27T23:45Z` | `2026-07-27T23:45:00Z` | 4.5 |
+| Matthew Liberatore | CHC@STL | `2026-07-27T23:45Z` | `2026-07-27T23:45:00Z` | 4.5 |
+| Tatsuya Imai | HOU@LAA | `2026-07-28T01:38Z` | `2026-07-28T01:38:00Z` | 5.0 |
+| Walbert Urena | HOU@LAA | `2026-07-28T01:38Z` | `2026-07-28T01:38:00Z` | 5.0 |
+| Jack Perkins | BOS@ATH | `2026-07-28T01:40Z` | `2026-07-28T01:40:00Z` | 5.5 |
+| Payton Tolle | BOS@ATH | `2026-07-28T01:40Z` | `2026-07-28T01:40:00Z` | 5.5 |
+| Brandon Sproat | MIL@SF | `2026-07-28T01:45Z` | `2026-07-28T01:45:00Z` | 5.0 |
+| Tyler Mahle | MIL@SF | `2026-07-28T01:45Z` | `2026-07-28T01:45:00Z` | 5.0 |
+
+## A7 — Freeze per pitcher, immediately
+
+The moment a pitcher has a qualifying capture, **that pitcher's executable decision is frozen**:
+`select_play()` is run against that quote and the result is written and hashed.
+
+Do **not** wait for the rest of the slate, for a later book, or for a better price. Waiting is
+optionality, and optionality exercised with knowledge of how the market moved is indistinguishable
+from choosing the entry that flatters the record.
+
+## A8 — Later quotations are kept, never substituted
+
+Every subsequent quotation is preserved for line-movement and closing-line analysis. None may
+replace a frozen Phase-2A decision, and a later, better price never restates the decision that
+was actually frozen.

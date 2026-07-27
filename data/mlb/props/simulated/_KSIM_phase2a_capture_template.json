@@ -1,0 +1,36 @@
+{
+ "_schema": "KSIM-2026-07-27 Phase-2A capture record",
+ "_phase1_sha256": "7f827fd0014e5835ec3bf3572bbe1ff36dce452d5e0a55b735d04fe665c12d2f",
+ "_rules": "docs/experiments/KSIM-2026-07-27_phase2_capture_protocol.md, section PHASE-2A OPERATIONAL RULES",
+ "scan_cycle_id": "KSIM-0727-C01",
+ "cycle_started_at_utc": "YYYY-MM-DDTHH:MM:SSZ",
+ "scan_order": [
+  "DK",
+  "FD",
+  "BR",
+  "MGM",
+  "CZR",
+  "HR"
+ ],
+ "captures": [
+  {
+   "book": "DK",
+   "pitcher": "<name>",
+   "pitcher_id": "<mlbam>",
+   "observed_at_utc": "YYYY-MM-DDTHH:MM:SSZ",
+   "source_quote_time_utc": null,
+   "source_url_or_feed": "<url>",
+   "scheduled_first_pitch_utc": "YYYY-MM-DDTHH:MM:SSZ",
+   "minutes_before_first_pitch": 0,
+   "line": null,
+   "over_price": null,
+   "under_price": null,
+   "main_line_designation": "book_designated | not_designated | MAIN_LINE_UNRESOLVED",
+   "alternates_retained": [],
+   "evidence_path": "<path to raw html/json/screenshot>",
+   "evidence_sha256": "<sha256 of that file>",
+   "status": "complete_quote | line_only | market_unavailable | error",
+   "notes": ""
+  }
+ ]
+}

@@ -980,3 +980,25 @@ correct form is 2026-07-28T01:38:00Z.
   The frozen artifact stores 2026-07-27T18:35Z - full date, no seconds field. Phase 2A writes
   the seconds-complete form. Same instant; the mapping is TABULATED in the protocol, not
   applied to the frozen file.
+
+### 2026-07-27T03:44:00Z — Phase-2A outcome/design rules B1-B5, committed BEFORE any capture attempt
+
+Five rules appended to the capture protocol. Phase 1 NOT modified. Committed before a scan is
+attempted so the ordering of rule-freeze and first-capture is auditable, per B5.
+
+B1 four distinct non-capture outcomes: NO_QUALIFYING_MARKET (source responded successfully, no
+   qualifying quote - the only one that is a finding), SOURCE_FAILURE, ACCESS_BLOCKED,
+   CAPTURE_NOT_RUN. The last three are statements about US, not the market. Collapsing them
+   into "no line found" converts our own failure into a market fact.
+B2 predetermined order preserved, one query per source per cycle. No re-running a source
+   because its first result was unfavourable or incomplete - that is selection disguised as
+   retry. Retry permitted only for a failure/block that returned NO content, recorded as a
+   separate attempt, never replacing the original.
+B3 opportunistic cadence must be labelled OPPORTUNISTIC_CAPTURE, and under it three claims are
+   prohibited: that the first captured quote was the first AVAILABLE quote; any cross-pitcher
+   market-release timing comparison; any inference about how long a line was up before capture.
+B4 game times verified against an authoritative schedule AT capture time, source recorded.
+   Deadlines never extended retrospectively after a quote or a result is known.
+B5 the amendment window closes at the first qualifying capture. Later methodological
+   discoveries are logged and deferred to the next untouched slate, never applied to 7/27 in
+   flight.

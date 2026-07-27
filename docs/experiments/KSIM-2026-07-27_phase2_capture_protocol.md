@@ -284,3 +284,70 @@ from choosing the entry that flatters the record.
 Every subsequent quotation is preserved for line-movement and closing-line analysis. None may
 replace a frozen Phase-2A decision, and a later, better price never restates the decision that
 was actually frozen.
+
+
+---
+
+# PHASE-2A OUTCOME AND DESIGN RULES (frozen at commit 5d18dde)
+
+Issued after the operational rules were accepted, **before any qualifying capture existed**.
+Phase 1 is not modified.
+
+## B1 — Four distinct non-capture outcomes. Only one of them is a finding.
+
+| status | meaning | establishes "no market"? |
+|---|---|---|
+| `NO_QUALIFYING_MARKET` | the source **responded successfully** and the response contained no qualifying complete main-line quote | **YES** |
+| `SOURCE_FAILURE` | the source was reached but errored, timed out, returned malformed or truncated content | no |
+| `ACCESS_BLOCKED` | geo-block, auth wall, bot challenge, robots restriction, rate limit | no |
+| `CAPTURE_NOT_RUN` | the source was never queried in this cycle | no |
+
+**Only a successful source response can establish that no qualifying market was present.** The
+other three are statements about *us*, not about the market. Collapsing them into "no line
+found" would convert our own failure into a market fact — which is how "the 7/27 board was
+empty" could quietly become "the 7/27 market had not opened" without evidence for it.
+
+## B2 — Predetermined scan order is preserved
+
+Sources are queried in A1 order and **each source is queried once per cycle**. A source is
+**not** re-run within the same cycle because its first result was unfavourable, incomplete, or
+not the side we wanted. Re-rolling a source until it yields a usable quote is selection
+disguised as retry.
+
+A re-query is permitted only for a `SOURCE_FAILURE` or `ACCESS_BLOCKED` that returned **no
+content at all**, and the retry is recorded as a separate attempt with its own timestamp and
+status. It never replaces the original record.
+
+## B3 — Opportunistic cadence must be labelled
+
+If cycles are run when convenient rather than on a fixed schedule, the design is
+**`OPPORTUNISTIC_CAPTURE`** and must be labelled so wherever results are reported.
+
+Under that label the following claims are **prohibited**:
+
+- that the first captured quote was the **first available** quote;
+- any comparison of **market-release timing across pitchers** (who posted earlier);
+- any inference about **how long** a line was available before capture.
+
+Our capture times reflect operator availability, not market behaviour. Reading release timing
+out of an opportunistic scan measures the observer.
+
+## B4 — Game times verified at capture, never extended afterwards
+
+`scheduled_first_pitch_utc` is verified against an authoritative schedule **at capture time**
+and the verification source and time are recorded. A schedule change (rain delay, doubleheader
+split, time move) is recorded when observed.
+
+**A deadline is never extended retrospectively** — not after a qualifying quote is in hand, and
+not after a result is known. If a game's start moved later and we learn of it afterwards, the
+eligibility already determined by the deadline in force at capture stands. Retroactive deadline
+extension is the purest form of outcome-dependent eligibility.
+
+## B5 — The amendment window closes at the first qualifying capture
+
+Once the first qualifying Phase-2A capture occurs for this slate, **no further 2026-07-27
+protocol amendments are permitted**. Methodological problems discovered after that moment are
+**logged and deferred to the next untouched slate** — never applied to 7/27 in flight.
+
+This document and everything above it are frozen as of commit `5d18dde`. The ordering is
+auditable: this section is committed before any capture is attempted.

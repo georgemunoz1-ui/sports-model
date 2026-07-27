@@ -65,7 +65,7 @@
 <header>
   <h1>core breakdown</h1>
   <div class="sub">Everything learned since the project started, the incident that taught it, and the mechanism that now enforces it — or the admission that nothing does.</div>
-  <div class="stamp mono">2026-07-27 · HEAD b9257bb · 52 commits · companion to model_breakdown.html (patch notes)</div>
+  <div class="stamp mono">2026-07-27 · HEAD 91d2d9c · 54 commits (generated at b9257bb/52; re-stamped 2026-07-27) · companion to model_breakdown.html (patch notes)</div>
 </header>
 
 <div class="lead">
@@ -181,7 +181,7 @@ unaltered.
   <div class="n">L7 · from the 7/25–7/26 shrinkage work · NEW 7/27</div>
   <div class="claim">Name the estimator and the convention, not just the number.</div>
   <div class="row"><span class="t">Incident</span><span>I reported two "convergent" measurements that the engine is over-shrunk: 1.35 from outcomes, 1.42 from the market. They are different estimands. The outcome figure is a calibration slope — actual regressed on projected. The market figure is <code>1/slope</code> of E[K] regressed on line. Since <code>slope(y~x)·slope(x~y) = corr²</code>, inverting one does not produce the other.</span></div>
-  <div class="row"><span class="t">Proof</span><span>Apply the market estimator to the outcome data: <code>1/slope(proj~actual) = 1/0.175 = 5.71</code>. Not 1.35. The convergence was an artifact of using a different estimator on each side.</span></div>
+  <div class="row"><span class="t">Proof</span><span>Apply the market estimator to the outcome data: <code>1/slope(proj~actual) = 1/0.1760 = 5.68</code>. Not 1.35. The convergence was an artifact of using a different estimator on each side.</span></div>
   <div class="row"><span class="t">Lesson</span><span>Beyond the arithmetic: the two conventions optimize different things. Restoring dispersion amplifies my own noise along with any signal, and noise in excess of the market's is precisely what manufactures edges. So the logged KPROP-EDGE-ARTIFACT (residual vs posted line at −0.87) <b>cannot be the readout</b> for this experiment — a 1.42 stretch zeroes that correlation whether or not the extra spread is real.</span></div>
   <div class="row"><span class="t t-pend">Pending</span><span>Next-action #2 is wrong as written. The pre-registration must name estimator, convention and readout metric, and the readout must be held-out MAE and log-loss on plays the selector would actually make.</span></div>
 </div>
@@ -189,9 +189,9 @@ unaltered.
 <table>
   <tr><th>Shrinkage scalar, computed consistently</th><th class="num">from outcomes</th><th class="num">from market</th></tr>
   <tr><td>calibration slope, E[y|x]</td><td class="num">1.35</td><td class="num">1.08</td></tr>
-  <tr><td>sd-matching, Poisson noise stripped</td><td class="num">1.56</td><td class="num">1.24</td></tr>
-  <tr><td>noiseless inversion, 1/slope</td><td class="num">5.71</td><td class="num">1.42</td></tr>
-  <tr><td colspan="3">The document's quoted pair took 1.35 from row 1 and 1.42 from row 3. Direction is consistent across every cut; magnitude is unidentified within roughly 1.1–1.6. At n=24 with corr 0.487 the slope SE is 0.516, the 95% CI is [0.28, 2.42], and t against no-stretch is 0.68 — that evidence alone does not establish a stretch is needed.</td></tr>
+  <tr><td>sd-matching, Poisson noise stripped</td><td class="num">1.31</td><td class="num">1.24</td></tr>
+  <tr><td>noiseless inversion, 1/slope</td><td class="num">5.68</td><td class="num">1.42</td></tr>
+  <tr><td colspan="3">The document's quoted pair took 1.35 from row 1 and 1.42 from row 3. Direction is consistent across every cut; magnitude is unidentified within roughly 1.1–1.35. <b>Corrected 2026-07-27:</b> the outcome-side sd-matching cell first read 1.56, computed from an <i>assumed</i> mean of 4.9. The 24 stored rows give mean(actual) 5.750 and sd(actual) 2.723, so the Poisson-stripped talent sd is √(7.413−5.750)=1.290 and the ratio to sd(proj) 0.983 is <b>1.31</b>. An assumed input inside a correction is the same R1 error the correction was fixing. At n=24 with corr 0.487 the slope SE is 0.516, the 95% CI is [0.28, 2.42], and t against no-stretch is 0.68 — that evidence alone does not establish a stretch is needed.</td></tr>
 </table>
 
 <div class="lesson">
@@ -199,7 +199,7 @@ unaltered.
   <div class="claim">A changing selector silently changes what the counter counts.</div>
   <div class="row"><span class="t">Incident</span><span>The 7/27 short-line guard blocks any arm posted ≤3.5 K. Buehler (O 3.5) is one of the nine graded plays. Eight of nine would register under today's selector; the ninth would not. Nothing in any ledger row records which selector version produced it.</span></div>
   <div class="row"><span class="t">Lesson</span><span>The gate is "n ≥ 100 graded plays," which quietly assumes the hundred plays came from one strategy. This is the third selector change. Without a version tag the sample is a blend, and R6 correctly forbids the tempting fix of retro-dropping the row.</span></div>
-  <div class="row"><span class="t t-pend">Pending</span><span>Proposal: tag every row with <code>selector_version</code>, keep the historical counter at 9 as the audit trail, and define the gate on the current version's subset — which starts at 8, not 9.</span></div>
+  <div class="row"><span class="t t-pend">Pending</span><span>Proposal: tag every row with <code>selector_version</code>, keep the historical counter at 9 as the audit trail, and define the gate on the current version <i>prospectively</i> — which starts at <b>0</b>, not 8 and not 9. Eight of the nine survive today's guard, but a filter applied after the fact, with the results already known, is not a selection rule.</span></div>
 </div>
 
 <div class="lesson">
@@ -207,7 +207,7 @@ unaltered.
   <div class="claim">A push is not a win.</div>
   <div class="row"><span class="t">Incident</span><span><code>p_over</code> computes <code>P(X ≥ ⌈line⌉)</code>. Correct on a half-point line. On an integer line, <code>⌈5⌉ = 5</code> yields P(X≥5), which scores X=5 as a win when it is a push — 17.6% of outcomes at E[K]=5, 15.9% at E[K]=5.68 on a 6. <code>ev()</code> has the matching gap: a push returns stake and needs a three-outcome form.</span></div>
   <div class="row"><span class="t">Lesson</span><span>Rare on main lines, not rare on alt lines — and the ingester now accepts alt captures, so the exposure grew at the moment intake got lenient.</span></div>
-  <div class="row"><span class="t t-pend">Pending</span><span>Cheap guard, not yet written.</span></div>
+  <div class="row"><span class="t t-inc">Incorporated</span><span>Fixed in commit <code>91d2d9c</code>. <code>probs(ek,line)</code> is now the single source of truth and <code>ev(p,ml,p_push)</code> settles three outcomes; the default <code>p_push=0.0</code> reproduces every half-point call bit-for-bit. Self-test 4 → 8 checks. Independently re-verified 2026-07-27.</span></div>
 </div>
 
 <div class="lesson">
@@ -236,7 +236,7 @@ unaltered.
   <div class="claim">A logged risk with no mechanism is not a managed risk.</div>
   <div class="row"><span class="t">Incident</span><span>"The container is ephemeral" has been in known-issues for days. Today: 52 commits, <b>no git remote</b>, and the only backups were bundles in <code>/tmp</code> dated 7/22 and 7/23 — in a directory that dies with the container. Four days of work existed in exactly one place.</span></div>
   <div class="row"><span class="t">Lesson</span><span>I wrote the risk down and then worked past it for four days. Writing it down felt like handling it. It was not.</span></div>
-  <div class="row"><span class="t t-pend">Partial</span><span>A verified full-history bundle has been delivered off-container. A real remote is still pending on your repo URL and token.</span></div>
+  <div class="row"><span class="t t-inc">Resolved 2026-07-27</span><span>All 54 commits are pushed to <code>github.com/georgemunoz1-ui/sports-model</code>, branch <code>sportsmodel/main</code>, tip <code>91d2d9c</code>. The history now exists in a second place that does not die with the container. The standing obligation is to push after every session.</span></div>
 </div>
 
 <h2>4 · What is doctrine but nothing enforces</h2>

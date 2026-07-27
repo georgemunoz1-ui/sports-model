@@ -541,3 +541,97 @@ The moment totals are priced they need probs()-style three-outcome handling. Tot
 NOT_READY and unbet. Recorded so this is not rediscovered as a new bug later.
 
 Gate string, state.json, ledgers: untouched. Real money still $0, unauthorized.
+
+---
+
+### 2026-07-27 (01:52 UTC) — CORRECTION-ONLY RECONCILIATION; the history finally has a remote
+
+No engine, selector, projector or ledger row was touched. Every change here repairs a CLAIM,
+a STAMP, or a GATE DEFINITION. Real money still $0, unauthorized. Sides still DEAD.
+
+DURABILITY — L13 closed. All 54 commits are pushed to
+github.com/georgemunoz1-ui/sports-model, branch `sportsmodel/main`, tip 91d2d9c. Four days of
+work had been living in exactly one place. It now lives in two. The standing obligation is to
+push after every session; the container still holds nothing durable on its own.
+
+Note for anyone reading the delivered archives: the worktree tarball is an OLDER snapshot than
+the bundle — it predates e3dcb52 (core_breakdown.html) and 91d2d9c (the push fix). The bundle
+is authoritative. If you restored from the tarball you would silently lose the push-term fix.
+
+DECISION_POLICY_VERSION — introduced. `dp-2026-07-27` names the whole decision path a play
+passes through: projector, selector thresholds, intake guards, settlement maths. Changing any
+one of them starts a new version, because the plays the new path produces are not exchangeable
+with the plays the old one produced. The prior version history is recorded as NOT
+RECONSTRUCTIBLE rather than invented — no ledger row carries the policy that produced it.
+
+THE GATE FORKS, AND THE PROSPECTIVE SIDE STARTS AT ZERO.
+  historical audit  : 9 graded, 4-5, -1.61u. Preserved in full. Never re-graded, never
+                      retro-dropped (R6). This is the audit trail.
+  prospective gate  : 0/100 under dp-2026-07-27.
+Yesterday's proposal was to start it at 8, on the reasoning that eight of the nine survive
+today's short-line guard. That was wrong and Taco called it. Surviving a filter applied after
+the fact is not the same as having been selected by the current policy: those eight were chosen
+under rules that no longer exist, and the decision about which to keep would be made with their
+results already in hand. That is the L5 error — a selection rule that cannot be written down in
+advance — wearing a tidier costume. A prospective gate starts prospectively. Zero.
+
+RETRACTION REPAIRED IN state.json. The "two independent measurements converge at 1.35-1.42"
+claim was retracted in the docs on 7/27 but state.json still carried it as
+`engine_vs_market_shrinkage.convergence`. Now retracted there too, original text preserved
+verbatim (R6), with the estimators recomputed side by side from the 24 stored rows in
+data/mlb/box/2026-07-25_grades.json:
+
+    convention                        from outcomes    from market (clean, GS>=15)
+    calibration slope  E[y|x]              1.35              1.08
+    sd-matching, Poisson stripped          1.31              1.24
+    noiseless inversion  1/slope           5.68              1.42
+
+The quoted pair took 1.35 from row 1 and 1.42 from row 3.
+
+A CORRECTION INSIDE THE CORRECTION. Yesterday's retraction put the outcome-side sd-matching
+figure at 1.56. That number was computed from an ASSUMED mean of 4.9. The 24 stored rows were
+sitting in the repo the whole time and give mean(actual) = 5.750, sd(actual) = 2.723 — so the
+Poisson-stripped talent sd is sqrt(7.413 - 5.750) = 1.290 and the ratio to sd(proj) = 0.983 is
+1.31, not 1.56. An assumed input inside a correction is precisely the R1 error the correction
+was written to fix, and it is the "summaries are not sources" failure class one more time: I
+reached for a rounded summary statistic when the raw rows were one file away. The honest range
+narrows from ~1.1-1.6 to ~1.1-1.35. Direction still holds across every cut; magnitude is still
+not identified, and the outcome-side evidence is still not significant (SE 0.515, 95% CI
+[0.28, 2.42], t vs no-stretch 0.68).
+
+NEXT-ACTION #2 REWRITTEN. It read "fit and FREEZE the E5 stretch scalar", which presumes a
+converged estimate that does not exist. It now requires the pre-registration to name the
+ESTIMATOR, the CONVENTION and what it optimises, and a READOUT the transform cannot trivially
+satisfy — held-out MAE and log-loss on plays the selector would actually make.
+KPROP-EDGE-ARTIFACT is explicitly disqualified as that readout: a stretch near 1.4 drives
+residual-vs-line to zero whether or not the extra spread is real.
+
+STAMPS. docs/model_breakdown.html was stamped "HEAD b23c254 - 52 commits". b23c254 is 51
+commits; 52 is the count at b9257bb, the commit that ADDED the document. The correction note in
+that file — written specifically to fix a miscount — restated the same wrong number. Both
+wordings preserved per R6. Filed as REVISION-STAMP-DRIFT. Both documents are now stamped to the
+real tip, and model_breakdown.html carries a note saying it is no longer the tip.
+
+PUSH-FIX STATUS PROPAGATED. state.json predated commit 91d2d9c entirely and carried no
+push-term entry; core_breakdown.html L9 still said "cheap guard, not yet written";
+model_breakdown.html still said "live correctness bug, not yet fixed". All three now record it
+as RESOLVED, with the independent re-verification: probs() sums to 1 and matches closed-form
+Poisson at every point tried, back-compat is exact (max deviation 0.00e+00 across 240x12
+half-point cases), and the -110 flip +6.81% -> -9.14% reproduces.
+
+NEW DEFECT LOGGED, NOT PATCHED — ERBB-PLACEHOLDER-UNFLAGGED. Eight pitcher-date rows
+(656876/621111/678022/571945 on 07-21; 543037/663903/695611/687562 on 07-22) carry ER=0, BB=0
+as placeholders that were never fetched. The caveat lives in pitcher_logs/README_NOTE.txt,
+which no code reads and no healthcheck tests, and a genuine 0-ER start is indistinguishable
+from a placeholder by inspection. Season ERA is understated by +0.10 to +0.35 for those arms.
+K-props are UNAFFECTED — E[K] reads only SO and TBF, both verbatim per the note. ERA and BB%
+feed the sides sim only, and sides are frozen and unbet, so no play is affected. This is L13's
+exact shape: a risk written down beside the data instead of encoded in it. R1 wants null plus a
+flag, not a zero. Fix queued, not applied here — this pass is correction-only.
+
+STILL OPEN, CONFIRMED PRESENT IN CODE. HFA-SPLIT (v13_1.py:58 x1.03 vs daily_card.py:63
+x1.005, both still there). The 8-field parser is LATENT not live: 5,139 log rows are 7-field,
+134 are 10-field, zero are 8-field — it blocks forward writes and is corrupting nothing today.
+selector_version tagging on ledger rows is still unimplemented; only the state.json half landed.
+
+VERIFICATION. kprops self-test PASS. ingest_kquote regression PASS. healthcheck HEALTHY.

@@ -823,3 +823,56 @@ aggregator screenshot, T4 re-read not done, CBS used as operator baseline. 6 of 
 wrong on 2026-07-25 and PHI ran a true opener.
 
 Verified: kprops PASS, ingest regression PASS, policy_gate PASS, healthcheck HEALTHY 0 fail.
+
+### 2026-07-27 (03:1x UTC) — KSIM protocol addendum; Phase 1 untouched and re-verified
+
+Eight clarifications issued after Phase-1 acceptance, recorded in
+docs/experiments/KSIM-2026-07-27_protocol_addendum.md. The frozen artifact was NOT modified:
+sha256sum -c re-verified OK before and after writing the addendum. Real money still $0.
+
+  Phase-1 hash (unchanged): 7f827fd0014e5835ec3bf3572bbe1ff36dce452d5e0a55b735d04fe665c12d2f
+
+WHAT CHANGED IN THE PROTOCOL, not in the data:
+ 1. The +/-0.5 K band is renamed DECLARED COMPARISON BAND / TOLERANCE BAND everywhere. It was
+    declared, not estimated; "opened inside the CI" must never be reported as coverage.
+ 2. The -115 prices are a standardized NULL ASSUMPTION, not forecasts. Phase 2 must not score
+    price error, price directional agreement, or shading accuracy against them. Target B is
+    mechanical LINE-PLACEMENT error only.
+ 3. "Tier-1 exposure cannot leak in" is WITHDRAWN as overclaiming. Replaced with the exact
+    wording: the transformation from E[K] to the derived line contains no market input;
+    independence of E[K] itself depends on the frozen engine and its input lineage containing
+    no betting-market variables. Lineage now hashed and audited (below).
+ 4. Phase 2 splits: 2A before first pitch (openers + frozen executable decisions), 2B after
+    games (closes + results). An uncaptured opener is OPENER_NOT_CAPTURED forever - never
+    reconstructed once results are known.
+ 5. Two opening events kept apart. EVENT_A = first publicly observed line, even one-sided,
+    NOT executable. EVENT_B = first complete quote (book, line, over, under, timestamp), the
+    only thing select_play() may see.
+ 6. Opener-source rule PRE-REGISTERED before further lines appear: first complete EVENT_B by
+    capture timestamp; ties broken DK > FD > BR > MGM > CZR > HR.
+ 7. Starter-status changes alter eligibility, never the frozen projection. Scratch -> preserve
+    and mark NOT STARTED. Replacement -> no retroactive projection. Short outing or injury exit
+    -> RETAIN the result and label it; never silently drop it.
+ 8. Phase 2 writes NEW artifacts citing the Phase-1 hash. The frozen file is never appended to.
+
+INPUT LINEAGE, hashed to support the item-3 independence claim. proj() reads exactly three
+things and nothing else enters E[K]:
+  engine/kprops.py                       72a30c2650b6c4dc6b2b6c2f8a57f1848b1e139909cf0ad7b0120441f7411b56
+  data/backfill/mlb/2026/pitchers.csv    a350ff454f247019e56bd39c6a6e2d393f0ffc5999cb079fb88be55a5e98d6a7
+  23 pitcher logs (composite)            806e5cd2f0a7964900b421069b1bfe596ccc71e885dfa6bb30fb0a55bcd53f20
+Schema audit: pitchers.csv is (id, name); logs are date|ip|er|so|bb|tbf|gs or
+date|opp|home|side|ip|er|so|bb|tbf|gs. No line, price, odds, total, moneyline or implied-prob
+column anywhere. The claim holds FOR THESE INPUTS AT THESE HASHES - a property of the audited
+files, not a general guarantee. Per-log hashes are tabulated in the addendum.
+
+WHY THE TIE-BREAK ORDER IS NOT QUALITY-RANKED. The 7/25 per-book diagnostic found only
+BetRivers behaving like a main line (signed dispersion -0.11, MAE 0.49 vs DK's -1.44/1.44).
+Ranking BR first ON THOSE GROUNDS would be circular: the book would be chosen because it agrees
+with the model whose line-placement error is being measured, which mechanically shrinks the
+error under test. The declared order rests on no quality grounds at all and is a tie-break only.
+
+EVENT_A ALREADY ON THE RECORD. Kyle Bradish, line 5.5, UNDER side only, no price transcribed,
+observed 2026-07-27T02:33Z on a Covers player-props board during a 12-source scan. This is the
+observation that placed him in Tier 2. It is EVENT_A and cannot be passed to select_play().
+The same scan found zero other K lines across the other 23 pitchers and zero complete two-sided
+quotes slate-wide.

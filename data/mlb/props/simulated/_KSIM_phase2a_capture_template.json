@@ -31,15 +31,16 @@
    "status": "complete_quote | line_only | market_unavailable | error",
    "notes": "",
    "received_at_utc": "YYYY-MM-DDTHH:MM:SSZ  (exact system time the original image arrived - ALWAYS present)",
-   "user_reported_capture_time": "optional; verbatim, WITH timezone and stated precision. Never converted to an exact timestamp.",
-   "image_metadata_time": "EXIF/file metadata time if present and readable, else null",
-   "eligibility_timestamp_used": "received_at_utc | visible_in_image | image_metadata_time",
-   "eligibility_basis": "why that one was used",
+   "user_reported_capture_time": "optional provenance, verbatim WITH timezone and stated precision. RECORDED but NOT decision-bearing under D1-R.",
+   "image_metadata_time": "EXIF/file metadata if readable. RECORDED but NOT decision-bearing under D1-R.",
+   "eligibility_timestamp_used": "received_at_utc  (D1-R: UNCONDITIONAL - no exception)",
+   "eligibility_basis": "D1-R. received_at_utc is the sole prospective-eligibility timestamp.",
    "observed_at_utc": "= eligibility_timestamp_used, per D1",
    "main_line_status": "book_designated | MAIN_LINE_UNRESOLVED | ALT_LINE",
    "scorable_outcome_and_clv": "true/false  (CLV only against the IDENTICAL book and line)",
    "scorable_line_placement": "true only when main_line_status == book_designated"
   }
  ],
- "_capture_class": "PRIMARY_PROTOCOL_CAPTURE | USER_SUPPLIED_OPPORTUNISTIC_CAPTURE"
+ "_capture_class": "PRIMARY_PROTOCOL_CAPTURE | USER_SUPPLIED_OPPORTUNISTIC_CAPTURE",
+ "_amendment_window": "CLOSED for 2026-07-27 by owner decision. B5 trigger never fired."
 }

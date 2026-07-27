@@ -1,0 +1,36 @@
+{
+ "record_id": "KSIM-0727-U01-EVIDENCE-RECOVERY-ATTEMPT-01",
+ "supersedes": null,
+ "rewrites": null,
+ "references": {
+  "record": "KSIM-0727-U01",
+  "record_sha256": "09a3634406c33b32a8d08fc10e363de280e85bacde098e86f17f96b252640963",
+  "note": "U01 is NOT rewritten. This is a supplemental record of a recovery attempt."
+ },
+ "attempt_at_utc": "2026-07-27T04:23:00Z",
+ "outcome": "FAILED_FILE_NOT_RECEIVED",
+ "detail": "The operator reported recovering the original PNG and instructed that it be downloaded, re-attached, hashed and accepted only on a match. No file reached this environment. Searched: the session uploads directory (still holding only the four items from 2026-07-27T01:42Z), all of /root/.claude, /tmp and /home/user for any image by extension, and the entire filesystem for any file of exactly 200437 bytes. All empty.",
+ "capability_note": "There is no tool in this environment for retrieving a file from an external upload workspace. A file must be attached to this conversation to be reachable.",
+ "operator_supplied_expected": {
+  "sha256": "bccfc52c1818df8e55bf57fbe295da8556bb8d7a3509ebb39f392bafaf943088",
+  "sha256_length": 64,
+  "well_formed": true,
+  "format": "PNG, 908x812 RGBA",
+  "size_bytes": 200437,
+  "status": "UNVERIFIED - RECORDED, NOT CONFIRMED",
+  "why": "Recorded now, before any file exists here, precisely so that a later receipt can be checked against a value committed in advance. It is the operator's figure. This environment has not computed it and does not assert it."
+ },
+ "recomputed": {
+  "sha256": null,
+  "performed": false,
+  "reason": "No file present. NO DIGEST IS RECORDED AS RECOMPUTED. Under the operator's own rule - 'recompute the digest locally, accept it only if it matches' - the absence of a file means there is nothing to accept."
+ },
+ "effect_on_U01": {
+  "observed_at_utc": "UNCHANGED - 2026-07-27T04:14:43Z",
+  "classification": "UNCHANGED - SOURCE_RESPONSE SUCCESS, SLATE_MATCH FALSE, NO_QUALIFYING_MARKET, REASON STALE_PRIOR_SLATE_WITH_BLANK_PRICES, 0 qualifying, 0 executable",
+  "eligibility": "UNCHANGED",
+  "retention_gap": "STILL OPEN - no byte-level evidence is attached"
+ },
+ "substantive_finding_restated": "Exact 2026-07-26 slate (30 of 30 match, zero overlap with the frozen 7/27 board), blank Under/Over across every book column, no executable K-prop capture.",
+ "real_money": "$0.00, unauthorized"
+}

@@ -1179,3 +1179,51 @@ transcribed into the record: they carry no permitted analytic use, and copying 1
 an image would add error for no purpose. Preserved as stale-source evidence only.
 
 B5 / D3 AMENDMENT WINDOW REMAINS OPEN - this is not a qualifying capture.
+
+### 2026-07-27T04:27:25Z — evidence recovery FAILED (no file); D1-R applied; 7/27 window CLOSED
+
+Phase 1 unaltered; C01 and U01 untouched, all three still verifying. Real money $0, unauthorized.
+
+EVIDENCE RECOVERY ATTEMPT FAILED - NO FILE ARRIVED.
+  record  data/mlb/props/simulated/2026-07-27_KSIM_U01_evidence_recovery_attempt01.json
+  sha256  90145e1166834545c91ac526ec9822428a33e45dee357a8aea56172a4edbc155
+The operator reported recovering the original PNG and asked that it be downloaded, re-attached,
+hashed, and accepted only on a match. No file reached this environment. Searched the session
+uploads directory (still only the four items from 01:42Z), all of /root/.claude, /tmp and
+/home/user by image extension, and the whole filesystem for any file of exactly 200437 bytes.
+All empty. There is also no tool here for retrieving a file from an external upload workspace -
+a file must be attached to this conversation to be reachable.
+  NO DIGEST IS RECORDED AS RECOMPUTED. By the operator's own rule - recompute locally, accept
+  only on a match - the absence of a file means there is nothing to accept. I did not send the
+  drafted text asserting the PNG "is attached as a file," because it was not.
+  The operator-supplied expected digest bccfc52c...943088 IS recorded, explicitly UNVERIFIED, and
+  it is well-formed at 64 hex chars (unlike the 63-char bundle digest caught earlier today).
+  Committing it BEFORE any file exists here is deliberate: a later receipt can then be checked
+  against a value fixed in advance.
+  U01 is unchanged - observed_at_utc, classification and eligibility all stand. Retention gap
+  STILL OPEN.
+
+D1-R APPLIED. D1 as committed at 4cb78c0 let an in-image clock or trustworthy metadata override
+the arrival stamp. That exception is REMOVED: received_at_utc is now the UNCONDITIONAL
+prospective-eligibility timestamp. user_reported_capture_time and image_metadata_time are still
+recorded as provenance but decide nothing. This is one-directional - it closes every route by
+which a capture could be argued earlier than its arrival, so it can only make qualification
+harder, never easier, and cannot be used later to rescue a late capture. U01 is unaffected: its
+observed_at_utc already came from received_at_utc under D1's default branch.
+  Note: the unconditional form was NOT already committed. The operator's message allowed for
+  that possibility; it was not the case, so it was applied here rather than merely marked.
+
+WINDOW CLOSED - AND THE BASIS MATTERS. The 2026-07-27 amendment window is CLOSED as of this
+commit, by OWNER DECISION. It is NOT closed because B5 fired. B5/D3 close the window on the
+first QUALIFYING capture, and that trigger never fired - U01 was correctly NO_QUALIFYING_MARKET
+with zero qualifying quotes and zero executable decisions. So the window standing open was the
+rule working as written, not the inconsistency it was described as. Recording "closed per B5"
+would put a false trigger in the record; the honest entry is owner decision with the trigger
+explicitly marked not-fired.
+  Final 7/27 protocol: sections A, B, C, D (incl. D1-R) and E.
+  No further 2026-07-27 methodological amendments are permitted. Later discoveries belong to the
+  next untouched slate. If the PNG arrives it may be attached as supplemental byte-level
+  evidence, but it cannot alter U01 and is not an amendment.
+
+SUBSTANTIVE FINDING UNCHANGED: exact 2026-07-26 slate (30 of 30), blank Under/Over across every
+book column, zero overlap with the frozen 7/27 board, no executable K-prop capture.

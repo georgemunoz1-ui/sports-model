@@ -510,3 +510,51 @@ excluded, because that comparison presumes we know which rung the book called it
 Per B5, the 2026-07-27 amendment window **closes the moment the first qualifying capture is
 received**. Sections A, B, C and D are the complete protocol for this slate. Anything discovered
 after that moment is logged and deferred to the next untouched slate.
+
+
+---
+
+# SECTION E — D1 HARDENED, AND THE 2026-07-27 AMENDMENT WINDOW CLOSED
+
+## E1 — D1-R: `received_at_utc` is unconditional
+
+**D1 as committed at `4cb78c0` carried an exception:** eligibility used `received_at_utc`
+*"unless the screenshot visibly establishes an earlier timestamp or trustworthy metadata supplies
+one."* That exception is **removed**.
+
+> **D1-R.** For prospective eligibility, `received_at_utc` is the **unconditional** timestamp. No
+> in-image clock, no EXIF field, no operator account moves the eligibility boundary.
+
+`user_reported_capture_time` and `image_metadata_time` are still **recorded** — they remain useful
+provenance and may describe when a capture was taken. They no longer **decide** anything.
+
+**This is a tightening, and it is one-directional.** Every path by which a capture could have been
+argued *earlier* than its arrival is now closed. It can only make a capture harder to qualify,
+never easier, so it cannot be used after the fact to rescue a late one.
+
+**Consequence for `KSIM-0727-U01`:** its `observed_at_utc` of `2026-07-27T04:14:43Z` was already
+set by `received_at_utc` under D1's default branch, so D1-R changes nothing about it. The record
+stands exactly as committed. And the still-open retention gap can never now be used to re-time it.
+
+## E2 — Window CLOSED
+
+The **2026-07-27 amendment window is CLOSED** as of this commit.
+
+**Recorded accurately, because the distinction matters.** B5/D3 specify that the window closes on
+the **first qualifying capture**. That trigger **never fired** — no qualifying capture exists for
+this slate. `KSIM-0727-U01` was correctly classified `NO_QUALIFYING_MARKET` with zero qualifying
+quotes and zero executable decisions, so the window remaining open was the rule working as
+written, not an inconsistency in it.
+
+The window is closed by **protocol-owner decision**, which is the owner's to make. It is *not*
+closed because B5 triggered. Writing "closed per B5" would put a false trigger in the record.
+
+    closure_basis      OWNER_DECISION
+    b5_trigger_fired   FALSE - no qualifying capture occurred for 2026-07-27
+    closed_at          this commit
+    final_protocol     sections A, B, C, D (incl. D1-R) and E
+
+**No further 2026-07-27 methodological amendments are permitted.** Anything discovered from here
+is logged and deferred to the next untouched slate. That includes the open U01 retention gap: if
+the PNG arrives later it may be attached as supplemental byte-level evidence, but it cannot
+alter U01's `observed_at_utc`, classification or eligibility, and it is not an amendment.

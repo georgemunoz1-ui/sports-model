@@ -1,0 +1,8 @@
+# Compiled bytecode is regenerated on every import and is never an input to any
+# model. Tracking it meant the working tree went dirty after every healthcheck
+# run, which is what made "commit your changes" fire on a repo nobody had edited.
+__pycache__/
+*.py[cod]
+
+# packaging / editable-install metadata
+*.egg-info/

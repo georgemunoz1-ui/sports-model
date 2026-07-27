@@ -635,3 +635,16 @@ x1.005, both still there). The 8-field parser is LATENT not live: 5,139 log rows
 selector_version tagging on ledger rows is still unimplemented; only the state.json half landed.
 
 VERIFICATION. kprops self-test PASS. ingest_kquote regression PASS. healthcheck HEALTHY.
+
+### 2026-07-27 (02:0x UTC) — housekeeping: stop tracking compiled bytecode
+
+No source, no model, no claim, no ledger row touched. `git diff --stat -- '*.py'` is empty.
+
+Five .pyc files were tracked and there was no .gitignore. engine/__pycache__/kprops.cpython-311.pyc
+is rewritten every time engine/kprops.py is imported — which healthcheck, the kprops self-test and
+the ingest regression all do — so the working tree went dirty after every verification run. The
+healthcheck line "git working tree clean (N dirty)" was reporting on files that nobody had edited.
+
+Added .gitignore (__pycache__/, *.py[cod], *.egg-info/) and untracked the five .pyc files. Bytecode
+regenerates on import and is never an input to anything. Verified afterwards: kprops self-test PASS,
+ingest regression PASS, healthcheck HEALTHY, and the tree stays clean across a full suite run.

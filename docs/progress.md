@@ -490,3 +490,54 @@ CORRECTED IN docs/model_breakdown.html (delivered version contained these):
 Engine, state.json, ledgers, gate string: untouched. No play created, graded, or removed.
 Stated order for what follows: push guard, then shrinkage pre-registration to spec, then
 selector_version tagging and the gate fork, then the 8-field parser, HFA-SPLIT, E4/E5.
+
+2026-07-27b — PUSH-TERM-MISSING fixed in engine/kprops.py
+--------------------------------------------------------------------------------
+Taco's critique (2) is now patched. This is a correctness fix, not a parameter change,
+so R7 does not gate it; it is pre-registered nowhere because there is nothing to test —
+the old code was arithmetically wrong about what a push is.
+
+WHAT WAS WRONG. p_over(ek,line) computed k0=ceil(line); 1 - sum(pmf(0..k0-1)), i.e.
+P(X >= ceil(line)). On a half-point line (4.5 -> ceil 5) that is right and no push exists.
+On an INTEGER line (5.0 -> ceil 5) it returns P(X>=5), which counts X==5 — a push, stake
+returned — as an OVER win. ev(p,ml) had the matching gap: two outcomes where there are
+three.
+
+MAGNITUDE, measured not asserted:
+  ek=5.00, line 5:  P(over) 0.38404  P(push) 0.17547  P(under) 0.44049
+                    old P(over) was 0.55951 — overstated by exactly the push mass.
+                    At -110 that flips the bet from EV +6.81% to EV -9.14%. 16-point swing.
+  ek=5.68, line 6:  P(over) 0.34245  P(push) 0.15921  P(under) 0.49834
+
+WHAT CHANGED.
+  - new probs(ek,line) -> (p_over, p_push, p_under), the single source of truth. Integer
+    lines carve out pmf(L); half-point lines return p_push=0.0 and the identical old split.
+  - p_over() retained but now returns TRUE P(over) — on an integer line it no longer
+    includes the push. Docstring says so.
+  - ev(p, ml, p_push=0.0) is now three-outcome: p*prof - (1 - p - p_push). Default 0.0
+    reproduces the old form bit-for-bit, so no half-point call site moves.
+  - select_play computes edge against the CONDITIONAL-ON-SETTLING probability, p/(1-p_push),
+    which is the correct comparison to a vigged implied price. Identical to the old
+    p - imp(price) whenever p_push is 0.
+  - plays now carry a p_push field.
+
+VERIFICATION — the fix is a proven no-op on the existing record.
+  - All nine graded K-prop rows are on half-point lines (4.5, 3.5, 2.5, 5.5, 6.5, 7.5).
+    Zero historical rows change. No ledger row was edited, and none will be.
+  - Self-test extended 4 -> 8 checks. New ones assert: half-point lines gain no push mass
+    and reproduce the pre-fix P(over) to 1e-12; integer push mass equals pmf(L) and matches
+    0.17547 at ek=5; the three probabilities sum to 1; integer P(over) strictly shrank;
+    ev() is bit-for-bit back-compatible at p_push=0; and a fair push-eligible bet is
+    EV-neutral. PASS.
+  - harness/test_ingest_kquote.py PASS — it replays the 7/26 board and reproduces the hand
+    made Soriano ledger row field-for-field. Unchanged.
+  - healthcheck HEALTHY, 0 fail, 1 warn (the warn is the ungraded Soriano row).
+
+RELATED FINDING, LOGGED NOT PATCHED. Scanning stored boards for integer lines turned up 25
+of them — all game TOTALS (7.0, 8.0, 9.0, 10.0, 11.0), which push exactly like K props do.
+The totals path is safe today only by accident: daily_card.py:102 emits a directional lean
+(s["tot"] > tl), never a probability or a price, so there is nothing yet to get wrong.
+The moment totals are priced they need probs()-style three-outcome handling. Totals remain
+NOT_READY and unbet. Recorded so this is not rediscovered as a new bug later.
+
+Gate string, state.json, ledgers: untouched. Real money still $0, unauthorized.

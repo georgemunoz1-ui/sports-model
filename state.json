@@ -1,5 +1,5 @@
 {
- "updated_utc": "2026-07-27T05:06:00Z",
+ "updated_utc": "2026-07-27T23:11:25Z",
  "ledger_conventions": {
   "pl_rounding": "Each play settles to a 2-decimal P/L (American-odds payout rounded at settlement). Running units = sum of these rounded per-play values, so the ledger column sums EXACTLY to the total (sportsbook-settlement convention, chosen for auditability). Note: summing unrounded payouts can differ by ~0.01u (e.g. baseline 7/23 is +0.48u rounded, +0.49u unrounded).",
   "brier_ab": "raw-vs-shrunk Brier/logloss compared only on plays where BOTH probabilities exist (engine skips produce no shrunk_p). 7/23 n_both=4 (Dobnak excluded).",
@@ -913,6 +913,34 @@
    "holdout": "Forward slates from 2026-07-27 onward. The 7/25 and 7/26 rows are EXPLORATORY \u2014 they generated this hypothesis, so they cannot confirm it.",
    "blocking": "Requires a genuine closing snapshot at lock, which has never yet been captured. E4 cannot start until closing capture works. This is the same binding constraint (price access) already logged.",
    "must_not_do": "This diagnostic MUST NOT be used to veto or trim picks on 7/26 or any registered slate. Rule 4 forbids discretion; the whole point of pre-registration is that a mid-flight hunch does not get to edit the pick list."
+  },
+  {
+   "id": "E6",
+   "passes": false,
+   "status": "PRE-REGISTERED (hypothesis only), NOT implemented, NOT run, DATA-BLOCKED 2026-07-27. Engine unchanged; hr_shrink appears in no source file in this repo. Recorded as a separate hypothesis because formula changes are frozen -- explicitly NOT a V11/v12 implementation.",
+   "title": "HR log-odds shrinkage in a log5 event model",
+   "prereg_doc": "docs/experiments/E6_hr_logodds_shrinkage_prereg.md",
+   "id_note": "Takes E6, not E5: 'E4' is already assigned twice in this queue (lineup-aware offense; V13-vs-moneyline). That pre-existing collision is NOT resolved here, only avoided.",
+   "method": "log5 in odds form odds(b)*odds(p)/odds(L) [exact identity, not an approximation], then HR shrunk toward league by weighted geometric interpolation in odds space: odds(h)=odds(q_HR)^(1-s)*odds(L_HR)^s, equivalently h=logistic((1-s)*logit(q_HR)+s*logit(L_HR)). Normalisation scheme PRE-COMMITTED to A (ANCHOR_HR): P(HR)=h; P(e)=(1-h)*raw[e]/sum_{j!=HR} raw[j].",
+   "corrections_superseding_prior_claims": [
+    "WITHDRAWN: 'log-odds interpolation is less violent at the extremes than probability interpolation.' NOT universal. True when both endpoints sit near the same boundary (0.001->0.030 at s=0.5 gives 0.00553 vs linear 0.01550); FALSE when endpoints are far apart in log-odds space (0.500->0.001 gives 0.03067 vs linear 0.25050, an 8x difference). REPLACED BY the three defensible properties: bounded, preserves endpoints, interpolates geometrically in odds space.",
+    "STRENGTHENED: independent binary log5 over mutually exclusive events generally does NOT sum to one (structural; holds even when b, p and L each sum to 1). Dividing every event by sum(raw) rescales HR too, so the delivered HR rate is NOT the value the shrinkage formula produced. A parameter fitted to a target that is then overwritten is not identified. Illustrative synthetic case: sum(raw)=0.992512, h=0.036381, post-renormalisation 0.036655, drift +0.75% relative. Magnitude is data-dependent; the defect is not."
+   ],
+   "blocking_prereqs_before_hr_shrink_may_be_specified": [
+    "1. Are b and p already regressed? Double shrinkage gives total pull 1-(1-w1)(1-s), not s. Deliverable: the prior weight already embedded in each input.",
+    "2. Is HR modelled per PA or conditional on BBE? BBE is the sample size for HR|BBE; if HR is per PA the sample size is PA and BBE mixes units. If truly conditional, the distribution must be P(BBE)*P(HR|BBE), which the reviewed code does not do.",
+    "3. How are hitter and pitcher sample uncertainty combined? One scalar cannot represent two independent sample sizes. Either shrink b and p separately, or state and justify the combination rule.",
+    "4. Is the target sampling uncertainty or calibration correction? Sampling -> K/(n+K), decays with n, K from a variance decomposition. Calibration -> a fitted slope that does NOT decay with n and belongs in a calibration layer. One parameter fitted to outcomes absorbs both and will not generalise."
+   ],
+   "guards": [
+    "assert 0.0 <= hr_shrink <= 1.0 -- outside [0,1] the geometric interpolation EXTRAPOLATES (s>1 overshoots past L, s<0 pushes away); K/(n+K) is in range only if K>=0 and n>=0, and a NaN or missing n breaks it silently",
+    "clip b[e], p[e], L[e] to [1e-6, 1-1e-6] BEFORE _odds(): _odds(p)=p/(1-p) divides by zero at p=1, and _odds(L[e]) sits in a DENOMINATOR so L[e]=0 (plausible for 3B early in a season) raises. At p=1, orr/(1+orr) is nan and poisons every event via sum(raw), not just its own."
+   ],
+   "data_gate": "BLOCKING -- THE DATA DOES NOT EXIST IN THIS REPO. Verified against the working tree: pitcher_logs are 7-field date|IP|H|SO|BB|TBF|GS (no HR, no batted-ball events); team_gamelogs are [gamePk,date,AB,BB,SO] (team-level only); team_batting_asof is team aggregate. No batter-level per-PA event data, no HR counts, no BBE anywhere. E6 needs a NEW acquisition of per-PA or per-batted-ball outcomes for BOTH batter and pitcher -- a larger prerequisite than E1's team K-rate aggregates.",
+   "test_set_requirement": "UNTOUCHED FORWARD HOLDOUT ONLY. Row IDs (batter_id|pitcher_id|gamePk|PA_index) plus data-vintage hash stored AT GENERATION TIME -- E1's confirmatory run was closed UNRECOVERABLE precisely because row IDs were never stored and the vintage mutated. Strict as-of. The window used to answer the four prereqs is BURNED and can never serve as the test.",
+   "adopt_rule": "Adopt only if ALL hold on the untouched forward holdout: HR calibration slope moves toward 1.0 and lands in [0.9,1.1]; HR Brier/log-loss not worse; every PA's distribution sums to 1.0 within 1e-9 AND P(HR) reproduces h exactly; non-HR calibration does not degrade (the anchored scheme pushes the normalisation residual onto them -- that cost is measured, not assumed); no guard ever fires on real data. Else retain H0.",
+   "r7_note": "ONE parameter: hr_shrink (prior strength HR_K). The normalisation SCHEME is a second free choice and is pre-committed to A (ANCHOR_HR); picking A vs B (multinomial softmax) after seeing which calibrates better would be two parameters disguised as one. Scheme B is a separate experiment with its own pre-registration.",
+   "why": "The reviewed construction's algebra is correct but two analytical claims about it were wrong, and the proposed hr_shrink is unidentified until the four prereqs are answered. Recording it as a pre-registered hypothesis keeps it out of the frozen formula path while preserving the idea."
   }
  ],
  "known_issues": [

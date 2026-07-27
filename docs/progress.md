@@ -1091,3 +1091,42 @@ C8 an isolated user capture may support a prospective executable decision - it i
    carries a selection effect of unknown sign and size. Class A and class B are never pooled.
 
 B5 amendment window REMAINS OPEN - still no qualifying capture for 2026-07-27.
+
+### 2026-07-27T03:58:00Z — section D: manual-evidence timestamps and main-line status; protocol complete
+
+Final pre-capture clarification. Phase 1 unaltered; the C01 artifact untouched and still
+verifying. Real money still $0, unauthorized.
+
+D1 ELIGIBILITY RUNS ON A DEFENSIBLE TIMESTAMP, NOT A RECOLLECTION. My own phrasing is withdrawn:
+   I asked for a screenshot "plus roughly when you took it," which invites exactly the
+   conversion this rule prohibits. Three fields now, never merged:
+     received_at_utc              exact system time the ORIGINAL image arrives. Always present.
+     user_reported_capture_time   optional, verbatim, WITH timezone and stated precision.
+     image_metadata_time          EXIF/file metadata if present and readable.
+   The eligibility test uses received_at_utc against that pitcher's scheduled_first_pitch_utc,
+   UNLESS the image visibly establishes an earlier time or trustworthy metadata supplies one. An
+   approximation is recorded with its precision and NEVER becomes an exact timestamp.
+   Consequence, stated now rather than discovered later: an image arriving after first pitch is
+   INELIGIBLE for executable scoring even if genuinely taken hours earlier, absent visible or
+   metadata proof. Deliberately conservative - received_at_utc is the one time we can evidence,
+   and eligibility resting on memory is eligibility revisable after the result is known.
+
+D2 EXECUTABILITY AND MAIN-LINE IDENTIFICATION ARE SEPARATE QUESTIONS. A complete same-book quote
+   freezes a Class-B executable decision even when main-line status is invisible.
+     book_designated        freeze yes | outcome+CLV yes | line-placement YES
+     MAIN_LINE_UNRESOLVED   freeze yes | outcome+CLV yes | line-placement EXCLUDED
+     ALT_LINE               freeze yes | outcome+CLV yes | line-placement EXCLUDED (not the
+                            book's main market)
+   CLV for the non-designated labels is measured against the IDENTICAL book and line only -
+   never another book's close, never another rung.
+   This REFINES section 4 / A4 rather than contradicting it. A4 said an unresolved main line
+   meant "score nothing from that pitcher's line placement." D2 keeps that exclusion and
+   separates what was conflated with it: the executable decision still freezes and is still
+   scorable for outcome and CLV. Only the placement comparison against the simulated main line
+   is excluded, because that comparison presumes we know which rung the book called main.
+
+D3 The 2026-07-27 protocol is COMPLETE at sections A, B, C, D. Per B5 the amendment window
+   closes the moment the first qualifying capture is received; anything found after that is
+   logged and deferred to the next untouched slate.
+
+Window state: STILL OPEN - no qualifying capture has been received for 2026-07-27.

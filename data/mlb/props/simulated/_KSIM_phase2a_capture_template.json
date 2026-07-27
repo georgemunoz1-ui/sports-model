@@ -17,7 +17,6 @@
    "book": "DK",
    "pitcher": "<name>",
    "pitcher_id": "<mlbam>",
-   "observed_at_utc": "YYYY-MM-DDTHH:MM:SSZ",
    "source_quote_time_utc": null,
    "source_url_or_feed": "<url>",
    "scheduled_first_pitch_utc": "YYYY-MM-DDTHH:MM:SSZ",
@@ -27,10 +26,20 @@
    "under_price": null,
    "main_line_designation": "book_designated | not_designated | MAIN_LINE_UNRESOLVED",
    "alternates_retained": [],
-   "evidence_path": "<path to raw html/json/screenshot>",
+   "evidence_path": "<path to the ORIGINAL image or raw response>",
    "evidence_sha256": "<sha256 of that file>",
    "status": "complete_quote | line_only | market_unavailable | error",
-   "notes": ""
+   "notes": "",
+   "received_at_utc": "YYYY-MM-DDTHH:MM:SSZ  (exact system time the original image arrived - ALWAYS present)",
+   "user_reported_capture_time": "optional; verbatim, WITH timezone and stated precision. Never converted to an exact timestamp.",
+   "image_metadata_time": "EXIF/file metadata time if present and readable, else null",
+   "eligibility_timestamp_used": "received_at_utc | visible_in_image | image_metadata_time",
+   "eligibility_basis": "why that one was used",
+   "observed_at_utc": "= eligibility_timestamp_used, per D1",
+   "main_line_status": "book_designated | MAIN_LINE_UNRESOLVED | ALT_LINE",
+   "scorable_outcome_and_clv": "true/false  (CLV only against the IDENTICAL book and line)",
+   "scorable_line_placement": "true only when main_line_status == book_designated"
   }
- ]
+ ],
+ "_capture_class": "PRIMARY_PROTOCOL_CAPTURE | USER_SUPPLIED_OPPORTUNISTIC_CAPTURE"
 }

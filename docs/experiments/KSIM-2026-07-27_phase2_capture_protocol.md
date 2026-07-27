@@ -449,3 +449,64 @@ comparison carries a selection effect of unknown sign and size.
 
 **Class-A and class-B results are never pooled.** Reported separately, always, in any Phase-2
 readout.
+
+
+---
+
+# MANUAL-EVIDENCE TIMESTAMPS AND MAIN-LINE STATUS (section D) — final pre-capture clarification
+
+Phase 1 unaltered. Issued before any qualifying capture exists.
+
+## D1 — Eligibility runs on a timestamp we can defend, not a recollection
+
+**Withdrawn phrasing, mine.** I asked for a screenshot "plus roughly when you took it." An
+approximation cannot carry an eligibility decision, and asking for one invites exactly the
+conversion D1 prohibits.
+
+Three timestamp fields, recorded separately and never merged:
+
+| field | definition | required |
+|---|---|---|
+| `received_at_utc` | exact system timestamp when the **original image arrives** | **always** |
+| `user_reported_capture_time` | operator's own account — **with timezone and stated precision** ("about 14:30 ET, ±15 min") | optional |
+| `image_metadata_time` | EXIF / file metadata time, if present and readable | if available |
+
+**The eligibility test uses `received_at_utc`** — compared against that pitcher's
+`scheduled_first_pitch_utc` — **unless** the screenshot **visibly establishes an earlier
+timestamp** (a clock or quote time inside the image) **or** trustworthy metadata supplies one.
+
+**An approximate recollection is never converted into an exact timestamp.** It is recorded
+verbatim in `user_reported_capture_time`, with its stated precision, and it does not move the
+eligibility boundary.
+
+**Consequence, stated plainly so it is not a surprise later.** An image that arrives after a
+pitcher's first pitch is **ineligible for executable-decision scoring**, even if it was genuinely
+taken hours earlier, unless the image or its metadata proves the earlier time. This is
+deliberately conservative: `received_at_utc` is the one time we can evidence, and eligibility
+that rests on memory is eligibility that can be revised after the result is known.
+
+## D2 — Executability and main-line identification are separate questions
+
+A **complete same-book quote can freeze a Class-B executable decision even when main-line status
+is not visible.**
+
+| label | when | freezes a decision? | outcome + CLV? | simulated-main-line placement comparison? |
+|---|---|---|---|---|
+| `book_designated` | the book visibly marks it default/main | yes | yes | **yes** |
+| `MAIN_LINE_UNRESOLVED` | complete quote, main-line status not visible | **yes** | **yes**, against the **identical book and line** | **NO — excluded** |
+| `ALT_LINE` | the image visibly shows an alternate rung | **yes** | **yes**, against the identical book and line | **NO — not the book's main market** |
+
+CLV for either non-designated label is measured **against the identical book and line only** —
+never against a different book's close, and never against a different rung.
+
+**Refinement of §4 / A4, not a contradiction.** The earlier rule said an unresolved main line
+meant "score nothing from that pitcher's line placement." D2 keeps that exclusion and separates
+out what was conflated with it: the *executable decision* still freezes and is still scorable
+for outcome and CLV. Only the *line-placement comparison against the simulated main line* is
+excluded, because that comparison presumes we know which rung the book called its main market.
+
+## D3 — Amendment window
+
+Per B5, the 2026-07-27 amendment window **closes the moment the first qualifying capture is
+received**. Sections A, B, C and D are the complete protocol for this slate. Anything discovered
+after that moment is logged and deferred to the next untouched slate.

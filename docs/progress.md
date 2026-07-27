@@ -1227,3 +1227,38 @@ explicitly marked not-fired.
 
 SUBSTANTIVE FINDING UNCHANGED: exact 2026-07-26 slate (30 of 30), blank Under/Over across every
 book column, zero overlap with the frozen 7/27 board, no executable K-prop capture.
+
+### 2026-07-27T04:34:00Z — 7/26 model re-run: reproduces exactly; still ungradable
+
+Ran harness/shadow_kboard_0726.py over the stored 2026-07-26 board. No engine change, no ledger
+change, no gate movement. Real money still $0, unauthorized.
+
+RESULT REPRODUCES THE RECORD EXACTLY. 20 permitted rows priced, 2 plays selected:
+  Jose Soriano  OVER 4.5 @ -166 (FD)  EV +0.073  edge +0.046  p 0.670  weight 1.0
+  Erick Fedde   OVER 2.5 @ +106 (FD)  EV +0.469  edge +0.227  p 0.713  weight 0.5
+Skipped: 10 QUARANTINED by T3 dispersion, 9 line-only (no priced cell), 3 not on the pre-slate
+card, 2 with no pre-slate E[K] (gs=0 against the >=5 floor).
+
+ONLY DIFFERENCE vs the committed output: a p_push field, 0.0 on both rows. That is the 7/27
+push-term fix propagating into a script that predates it. Both plays sit on half-point lines, so
+p_push is exactly 0.0 and every other field - book, side, line, price, p, edge, EV, disp, weight
+- is byte-identical. The fix being a proven no-op on the existing record is now demonstrated on
+this board too, not just asserted.
+
+THE CURRENT POLICY WOULD PRODUCE ONE PLAY, NOT TWO. shadow_kboard_0726.py calls
+engine.kprops.select_play directly, while the <=3.5 K short-line guard lives in
+harness/ingest_kquote.py - so this script predates AND bypasses the guard. Under dp-2026-07-27:
+  Soriano OVER 4.5  -> passes the guard
+  Fedde   OVER 2.5  -> BLOCKED by the short-line guard, and separately trips the R5 audit
+                       threshold at |EV| 0.469 > 0.35
+Fedde is the exact defect the guard was written for. The shadow output is a faithful replay of
+what the OLD selector did on 7/26 and must not be read as what the current one would do.
+
+STILL NOT GRADABLE. results.csv holds 1,569 finals, latest 2026-07-25; zero rows dated
+2026-07-26; no 7/26 box file on disk. A statsapi fetch for the 7/26 schedule+linescore returned
+HTTP 403, consistent with the perimeter blocking observed in C01 - retried per C1, which permits
+it, and it failed again. So Jose Soriano OVER 4.5 (LAA@SF) remains the one pending gate-eligible
+K play, and the healthcheck warning about it stands.
+
+NOTHING ABOUT 7/26 OUTCOMES IS KNOWN HERE. The re-run re-prices a board; it does not observe a
+result. No win, loss or push may be inferred from it.

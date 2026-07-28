@@ -112,8 +112,11 @@ DRIFT                             = +0.000274     (+0.75% relative)
 
 The magnitude is data-dependent — it grows as `b` and `p` diverge from `L` — but the **direction of
 the defect is not**: whatever `hr_shrink` is tuned to deliver, global renormalisation delivers
-something else. A parameter fitted against a target that is then silently overwritten is not
-identified.
+something else. The consequence is interpretive: **the direct binary-logit interpretation of
+`hr_shrink` does not survive downstream normalisation. The parameter could still be estimated
+end-to-end against the final normalised distribution, but it would no longer mean the stated
+interpolation weight.** Normalisation changes interpretation; it does not by itself demonstrate
+statistical non-identifiability.
 
 ### 4.1 Pre-committed fix (scheme A, ANCHOR_HR)
 
@@ -136,11 +139,14 @@ Construct the whole event distribution jointly with multinomial log-odds / softm
 category, so normalisation is built in and no event is privileged. Shrinkage then applies in that
 parameterisation. This is cleaner but is a different model, not a patch.
 
-### 4.3 R7 — the scheme is a second free choice and MUST be pre-committed
+### 4.3 R7 — the scheme is an architecture fork and MUST be pre-committed
 
-Choosing between A and B *after* seeing which calibrates better would be two free parameters
-disguised as one. **E6 pre-commits to scheme A (ANCHOR_HR).** Scheme B, if wanted, is a separate
-experiment with its own pre-registration. Likewise, the normalisation fix is a *correctness* repair
+A and B are a **model-architecture fork and a researcher degree of freedom**, not a second numeric
+free parameter: they are different models, not two settings of one knob. Choosing between them
+*after* seeing which calibrates better is exactly the degree of freedom pre-registration exists to
+remove. **E6 pre-commits to scheme A (ANCHOR_HR)**, and assigning scheme B to a separate experiment
+with its own pre-registration remains the correct control. Likewise, the normalisation fix is a
+*correctness* repair
 rather than a tuning knob — but it still changes outputs, so it cannot be slipped into a frozen
 formula without going through this process.
 
@@ -192,9 +198,13 @@ p_clipped = min(max(p, EPS), 1.0 - EPS)   # applied to b[e], p[e], L[e] BEFORE _
   assume.
 - **Clip before `_odds()`.** `_odds(p) = p/(1−p)` **divides by zero at `p = 1`** and returns `0` at
   `p = 0`. `_odds(L[e])` sits in a **denominator**, so `L[e] = 0` — a plausible value for a rare
-  event with a short as-of window, e.g. `3B` early in a season — raises rather than degrades. At
-  `p = 1` the odds are `inf` and `orr/(1+orr)` evaluates to `nan`, which then propagates through
-  `Σ raw` and poisons **every** event, not just the offending one.
+  event with a short as-of window, e.g. `3B` early in a season — raises rather than degrades.
+  **Exact boundary probabilities can produce division by zero, infinity or NaN depending on scalar
+  versus array arithmetic and subsequent operations.** The required invariant is therefore stated as
+  an invariant rather than as a predicted failure mode: **after clipping, every intermediate and
+  every output must be finite**, and a non-finite value anywhere is a hard failure. Note that a
+  non-finite `raw[e]` also contaminates `Σ raw`, so the blast radius is not confined to the
+  offending event.
 - Rare-event note: clipping at `EPS` is itself a floor on the model's resolution for events rarer
   than `EPS`. It is a guard against undefined arithmetic, not a substitute for a prior.
 

@@ -1,5 +1,5 @@
 {
- "updated_utc": "2026-07-28T05:20:07Z",
+ "updated_utc": "2026-07-28T05:46:37Z",
  "ledger_conventions": {
   "pl_rounding": "Each play settles to a 2-decimal P/L (American-odds payout rounded at settlement). Running units = sum of these rounded per-play values, so the ledger column sums EXACTLY to the total (sportsbook-settlement convention, chosen for auditability). Note: summing unrounded payouts can differ by ~0.01u (e.g. baseline 7/23 is +0.48u rounded, +0.49u unrounded).",
   "brier_ab": "raw-vs-shrunk Brier/logloss compared only on plays where BOTH probabilities exist (engine skips produce no shrunk_p). 7/23 n_both=4 (Dobnak excluded).",
@@ -882,14 +882,16 @@
    "passes": false,
    "status": "queued (AFTER E3, per Taco 7/24 \u2014 tail quality is useful but does NOT address the book-info question)",
    "title": "Negative-binomial K tails vs Poisson",
-   "method": "fit dispersion on backtest; must improve P(over) calibration buckets"
+   "method": "fit dispersion on backtest; must improve P(over) calibration buckets",
+   "queue_hold_2026_07_28": "PARKED_BY_ML_PRIORITY: non-ML (K tails). Pre-registration preserved; no work authorized."
   },
   {
    "id": "E3",
    "passes": false,
    "status": "NEXT (E3 BEFORE E2, per Taco 7/24) \u2014 directly tests whether market movement carries information missing from the projection (the unresolved book-info question), with NO engine change. Pre-register before running.",
    "title": "Line-move capture for props",
-   "method": "capture DK K-lines at 2 timestamps/day; measure if OUR flagged deviations get steamed toward projection (CLV-for-props = independent edge evidence)"
+   "method": "capture DK K-lines at 2 timestamps/day; measure if OUR flagged deviations get steamed toward projection (CLV-for-props = independent edge evidence)",
+   "queue_hold_2026_07_28": "CAPTURE-ONLY: passive line/odds capture allowed and encouraged; no model change."
   },
   {
    "id": "E7",
@@ -897,14 +899,16 @@
    "status": "queued",
    "title": "Lineup-aware offense for sides (reopen attempt)",
    "method": "daily lineups + batter wOBA as-of; only worth building if E1-E3 show the pipeline sustains quality",
-   "id_history": "Was a SECOND E4 alongside the favorite-fade experiment. Renumbered to E7 on 2026-07-28. The favorite-fade experiment KEEPS E4 because it is the one with a pre-registration and with references throughout docs/progress.md; this entry was 'queued' with no doc and no references, so moving it breaks nothing."
+   "id_history": "Was a SECOND E4 alongside the favorite-fade experiment. Renumbered to E7 on 2026-07-28. The favorite-fade experiment KEEPS E4 because it is the one with a pre-registration and with references throughout docs/progress.md; this entry was 'queued' with no doc and no references, so moving it breaks nothing.",
+   "queue_hold_2026_07_28": "PARKED_BY_ML_PRIORITY: ML-feature reopen attempt \u2014 held until Phase 3 ablations; single-active rule. Pre-registration preserved; no work authorized."
   },
   {
    "id": "E5",
    "passes": false,
    "status": "queued",
    "title": "WNBA port",
-   "method": "registry already stubbed; totals first"
+   "method": "registry already stubbed; totals first",
+   "queue_hold_2026_07_28": "PARKED_BY_ML_PRIORITY: non-ML (WNBA). Pre-registration preserved; no work authorized."
   },
   {
    "id": "E4",
@@ -916,7 +920,8 @@
    "primary_readout": "Closing-line value in cents, NOT win-loss. Pre-specified because W-L is the wrong readout for a +EV objective function.",
    "holdout": "Forward slates from 2026-07-27 onward. The 7/25 and 7/26 rows are EXPLORATORY \u2014 they generated this hypothesis, so they cannot confirm it.",
    "blocking": "Requires a genuine closing snapshot at lock, which has never yet been captured. E4 cannot start until closing capture works. This is the same binding constraint (price access) already logged.",
-   "must_not_do": "This diagnostic MUST NOT be used to veto or trim picks on 7/26 or any registered slate. Rule 4 forbids discretion; the whole point of pre-registration is that a mid-flight hunch does not get to edit the pick list."
+   "must_not_do": "This diagnostic MUST NOT be used to veto or trim picks on 7/26 or any registered slate. Rule 4 forbids discretion; the whole point of pre-registration is that a mid-flight hunch does not get to edit the pick list.",
+   "queue_hold_2026_07_28": "ML DIAGNOSTIC, retained; runs only as a Phase 3 pre-registered ablation under the single-active rule."
   },
   {
    "id": "E6",
@@ -944,7 +949,8 @@
    "test_set_requirement": "UNTOUCHED FORWARD HOLDOUT ONLY. Row IDs (batter_id|pitcher_id|gamePk|PA_index) plus data-vintage hash stored AT GENERATION TIME -- E1's confirmatory run was closed UNRECOVERABLE precisely because row IDs were never stored and the vintage mutated. Strict as-of. The window used to answer the four prereqs is BURNED and can never serve as the test.",
    "adopt_rule": "Adopt only if ALL hold on the untouched forward holdout: HR calibration slope moves toward 1.0 and lands in [0.9,1.1]; HR Brier/log-loss not worse; every PA's distribution sums to 1.0 within 1e-9 AND P(HR) reproduces h exactly; non-HR calibration does not degrade (the anchored scheme pushes the normalisation residual onto them -- that cost is measured, not assumed); no guard ever fires on real data. Else retain H0.",
    "r7_note": "ONE numeric parameter: hr_shrink (prior strength HR_K). The normalisation SCHEME is a MODEL-ARCHITECTURE FORK and a researcher degree of freedom -- NOT a second numeric free parameter; A and B are different models, not two settings of one knob. Choosing between them after seeing which calibrates better is exactly the degree of freedom pre-registration removes. Pre-committing to A (ANCHOR_HR) and assigning B (multinomial softmax) to a separate experiment with its own pre-registration remains the correct control.",
-   "why": "The reviewed construction's algebra is correct but two analytical claims about it were wrong, and the proposed hr_shrink is unidentified until the four prereqs are answered. Recording it as a pre-registered hypothesis keeps it out of the frozen formula path while preserving the idea."
+   "why": "The reviewed construction's algebra is correct but two analytical claims about it were wrong, and the proposed hr_shrink is unidentified until the four prereqs are answered. Recording it as a pre-registered hypothesis keeps it out of the frozen formula path while preserving the idea.",
+   "queue_hold_2026_07_28": "PARKED_BY_ML_PRIORITY: non-ML (HR event model; also DATA-BLOCKED). Pre-registration preserved; no work authorized."
   }
  ],
  "known_issues": [
@@ -1353,5 +1359,24 @@
   "E6": "HR log-odds shrinkage in a log5 event model",
   "E7": "Lineup-aware offense for sides (reopen attempt) \u2014 was a duplicate E4 until 2026-07-28",
   "_note": "docs/progress.md also uses 'E5' in PROSE for a shrinkage experiment. That prose usage is SUPERSEDED: the shrinkage work is E6. E5 in this registry is the WNBA port. Historical prose is left as written (R6); this registry is authoritative."
+ },
+ "market_priority": [
+  "ML",
+  "K",
+  "RL",
+  "TOTAL"
+ ],
+ "market_status": {
+  "ML": "NO_PROMOTE",
+  "K": "PAPER_ONLY / MAINTENANCE_ONLY",
+  "RL": "NOT_READY",
+  "TOTAL": "NOT_READY",
+  "_ordering_rule": "Daily reporting always appears in market_priority order.",
+  "_set_by": "OWNER PRIORITY RESET 2026-07-28; frozen until owner changes it"
+ },
+ "experiment_queue_policy": {
+  "rule": "While ML recovery is incomplete, NEW non-ML MODEL-CHANGING experiments are REJECTED at the queue. Passive data capture is always allowed. At most ONE model-changing experiment may be ACTIVE at a time.",
+  "ml_recovery_complete": false,
+  "active_experiment": null
  }
 }

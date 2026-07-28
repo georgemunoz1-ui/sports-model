@@ -131,6 +131,20 @@ try:
     rb=subprocess.run([sys.executable,"harness/test_parse_equivalence.py"],capture_output=True,text=True)
     check(f"SUCCESSOR_EQUIVALENCE (verifier B: {(rb.stdout.strip().splitlines() or ['no output'])[-1][:60]})", rb.returncode==0)
 except Exception as e: check(f"parse equivalence ran ({e})", False)
+# 5a2c. model registry + market priority enforcement (P1A)
+try:
+    r=subprocess.run([sys.executable,"harness/model_registry.py"],capture_output=True,text=True)
+    check(f"model registry ({(r.stdout.strip().splitlines() or ['no output'])[-1][:70]})", r.returncode==0)
+    _st=json.load(open("state.json"))
+    check("market_priority frozen [ML,K,RL,TOTAL]", _st.get("market_priority")==["ML","K","RL","TOTAL"])
+    _ms=_st.get("market_status",{})
+    check("market statuses (ML NO_PROMOTE, K PAPER, RL/TOTAL NOT_READY)",
+          _ms.get("ML")=="NO_PROMOTE" and "PAPER" in str(_ms.get("K")) and _ms.get("RL")=="NOT_READY" and _ms.get("TOTAL")=="NOT_READY")
+    _qp=_st.get("experiment_queue_policy",{})
+    _act=_qp.get("active_experiment")
+    _ok=_act is None or str(_act).upper().startswith("E4") or "ML" in str(_act).upper()
+    check(f"queue policy: no non-ML model-changing experiment active (active={_act})", _ok and not _qp.get("ml_recovery_complete",False) or _ok)
+except Exception as e: check(f"P1A enforcement ({e})", False)
 # 5a3. gate counter: COMPUTED, not typed. The gate line used to be written as
 # record_w + record_l on every --register run, which counts every settled row whatever
 # policy produced it -- so a prospective 0/100 was silently clobbered back to 9/100.

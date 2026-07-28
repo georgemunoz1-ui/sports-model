@@ -100,6 +100,7 @@ for pk,awf,hmf,t,aspn,hspn in slate:
     ml_a,ml_h,tl=o.get("ml_away"),o.get("ml_home"),o.get("total")
     mkt_h=devig(ml_a,ml_h)[1] if (ml_a and ml_h) else None
     rows.append(dict(gamePk=pk,away=aw,home=hm,time=t,asp=aspn,hsp=hspn,
+        model_id="ml.v13_1.hfa1005.card.s722n30000",  # bound identity, harness/model_registry.py
         asp_stats=asp,hsp_stats=hsp,capped=capped,park=round(pf,3),
         v13=dict(home_wp=round(s["hw"],3),proj_total=round(s["tot"],1),rl_home_cover=round(s["rl_h"],3),
                  rl_away_cover=round(s["rl_a"],3),blow_home=round(s["blow_h"],3),blow_away=round(s["blow_a"],3)),

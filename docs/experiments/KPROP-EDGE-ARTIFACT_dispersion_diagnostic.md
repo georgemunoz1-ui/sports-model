@@ -90,12 +90,26 @@ two-sided prices exist. A half-point line on its own is only a coarse market est
 the market between two integers and says nothing about where inside that interval, which the prices
 do carry.
 
-## 6. Data-quality tags — frozen BEFORE outcomes
+## 6. Data-quality tags — **OUTCOME-BLINDED, POST-START SENSITIVITY DEFINITION**
 
 `data/mlb/props/evidence/2026-07-27/KSIM-0727-U02_dq_tags.json`, frozen `2026-07-28T01:40:27Z`,
-sha256 `7c004cf4a75579c18c97426dd096edbe1013714e0f490b0a16b383d5e800f39f`, with
-`outcomes_inspected_at_freeze: false`. Per-row tags: log age, placeholder contamination, pre-game
-starter confirmation, opener/workload risk.
+sha256 `7c004cf4a75579c18c97426dd096edbe1013714e0f490b0a16b383d5e800f39f`. Per-row tags: log age,
+placeholder contamination, pre-game starter confirmation, opener/workload risk.
+
+**This is NOT a pregame pre-registration, and the earlier wording claiming it was is withdrawn.**
+At the freeze instant **11 of the 12 games were already underway** — SEA@TEX by 425 minutes,
+HOU@LAA by 2.5, BOS@ATH by 0.5 (the freeze landed **27 seconds after** its 01:40:00Z first pitch).
+Only MIL@SF had not started. Reclassification recorded append-only in
+`KSIM-0727-U02_dq_tags_CLASSIFICATION.json` (sha256 `65b2c1b1…780112`); the tag file itself is not
+edited, since its hash is already published.
+
+`outcomes_inspected_at_freeze: false` is **retained as a process attestation** — but an attestation
+that we did not look does not restore pregame status. Blindness here is asserted, not structurally
+guaranteed.
+
+**Consequence: subset B is exploratory sensitivity analysis only, and neither A nor B may be used
+confirmatorily for this slate. A future untouched slate — tags frozen before ANY first pitch — is
+required for confirmatory use. `KPROP-INFO-TEST` carries the same label on 2026-07-27.**
 
 **Reporting contract:**
 
@@ -110,10 +124,13 @@ Subset B rule, fixed in advance: `log_age_days ≤ 21` **and** not placeholder-c
 
 Two observations available now, both outcome-independent:
 
-- **Placeholder contamination does not reach `E[K]`.** The `ER=0, BB=0` placeholders occupy fields 2
-  and 4 of the 7-field log; `kprops._parse` reads `p[3]=SO` and `p[5]=TBF` only. Real for ERA,
-  orthogonal to the K projection. The subset-B clause is retained anyway as a conservative,
-  non-binding filter.
+- **Placeholder fields are not read by the current `E[K]` calculation** — the `ER=0, BB=0`
+  placeholders occupy fields 2 and 4 of the 7-field log, and `kprops._parse` reads `p[3]=SO` and
+  `p[5]=TBF` only. **This holds only if SO and TBF on those rows are accurate.** Field-level non-use
+  does not establish that the affected row, or the collection process that produced it, is
+  trustworthy: the same fetch that left ER and BB unpopulated produced SO and TBF, and nothing
+  independently confirms them. The earlier word "orthogonal" overstated this and is withdrawn. The
+  subset-B clause is retained as a conservative filter for exactly that reason.
 - **Three of the four fired rows fall OUTSIDE subset B** — Alvarez, Perkins and Imai are all
   `opener_workload_risk = HIGH`; only Peterson is inside. Determined by a rule fixed before any
   outcome was inspected. It is a flag for where the selector concentrates, not a result.

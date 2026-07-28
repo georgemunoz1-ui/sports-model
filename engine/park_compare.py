@@ -61,7 +61,14 @@ S=[("STL","ARI","McGreevy","Kelly","Chase Field",8.5,5,4),("DET","LAA","Melton",
  ("TEX","ATL","Gore","Murphy","Truist Park",9.0,7,6),("TB","BOS","Seymour","Sandoval","Fenway Park",9.5,6,7),
  ("SF","SEA","Webb","Woo","T-Mobile Park",6.5,3,4),("WSH","ATH","Littell","Ginn","Sutter Health Park",11.0,1,15),
  ("DET","LAA","Skubal","GrayRod","Angel Stadium",8.0,7,0)]
-def run(PK,hfa,label):
+def run(PK,hfa,label,seed=1319):
+    # RESEED per cell (added 2026-07-28). `rng` is a module-level generator consumed sequentially,
+    # so without this every cell draws from wherever the previous cell left the stream: results
+    # depend on HOW MANY cells you run and in WHAT ORDER, and two runs of the same configuration
+    # disagree. That confounds every between-cell comparison this script exists to make. Numbers
+    # quoted before this date came from the unreseeded sequential stream and are not reproducible.
+    global rng
+    rng=np.random.default_rng(seed)
     br=[]; dw=dl=0; tw=tl=0; tabs=[]
     for aw,hm,asp,hsp,pk,line,as_,hs in S:
         hw,tot=sim(aw,hm,asp,hsp,pk,PK,hfa); yb=1 if hs>as_ else 0

@@ -1,5 +1,5 @@
 {
- "updated_utc": "2026-07-28T01:52:53Z",
+ "updated_utc": "2026-07-28T02:02:57Z",
  "ledger_conventions": {
   "pl_rounding": "Each play settles to a 2-decimal P/L (American-odds payout rounded at settlement). Running units = sum of these rounded per-play values, so the ledger column sums EXACTLY to the total (sportsbook-settlement convention, chosen for auditability). Note: summing unrounded payouts can differ by ~0.01u (e.g. baseline 7/23 is +0.48u rounded, +0.49u unrounded).",
   "brier_ab": "raw-vs-shrunk Brier/logloss compared only on plays where BOTH probabilities exist (engine skips produce no shrunk_p). 7/23 n_both=4 (Dobnak excluded).",
@@ -962,7 +962,7 @@
    "text": "8 pitcher-date rows (656876/621111/678022/571945 on 07-21; 543037/663903/695611/687562 on 07-22) carry ER=0,BB=0 as placeholders that were never fetched. The caveat lives in pitcher_logs/README_NOTE.txt, which no code reads and no healthcheck tests, and a genuine 0-ER start is indistinguishable from a placeholder. Season ERA understated by +0.10 to +0.35 for those arms.",
    "scope": "K-props UNAFFECTED: E[K] reads only SO and TBF, both verbatim per the note. ERA/BB% feed the sides sim only, and sides are frozen and unbet. No play affected.",
    "doctrine": "Same shape as L13 -- a risk written down beside the data instead of encoded in it. R1 wants null+flag, not 0.",
-   "resolution": "Machine-readable manifest at data/backfill/mlb/2026/pitcher_logs/_placeholders.json enumerating all 8 pitcher-date rows, verified against the logs. healthcheck now FAILS if a manifest row's ER/BB are no longer 0 (backfilled -> manifest stale) or if SO/TBF drifted. Also established: the placeholders occupy fields 2 and 4 while kprops._parse reads p[3]=SO and p[5]=TBF, so the contamination is real for ERA and ORTHOGONAL to E[K]. daily_card.py sp_asof is the only consumer that reads ER/BB."
+   "resolution": "Machine-readable manifest at data/backfill/mlb/2026/pitcher_logs/_placeholders.json enumerating all 8 pitcher-date rows, verified against the logs. healthcheck now FAILS if a manifest row's ER/BB are no longer 0 (backfilled -> manifest stale) or if SO/TBF drifted. Also established: the placeholder ER/BB fields are NOT READ DIRECTLY by the current E[K] calculation (fields 2 and 4; _parse reads p[3]=SO and p[5]=TBF), ASSUMING SO and TBF on those rows are accurate. Field-level non-use does NOT establish the row or its collection process is trustworthy -- the earlier word 'orthogonal' is withdrawn. daily_card.py sp_asof is the only consumer that reads ER/BB."
   },
   {
    "id": "REVISION-STAMP-DRIFT",
@@ -1072,7 +1072,8 @@
    "opened": "2026-07-28",
    "status": "PRE-REGISTERED, not yet run",
    "text": "Does the projection add information BEYOND the market? (1) compare an outcome model using market line + two-sided prices against one adding E[K]; (2) orthogonalise U = E[K] - fitted_E[K](market information); (3) test whether U predicts actual K minus the market forecast; (4) compare held-out MAE and NLL, NOT residual-vs-line correlation (inadmissible per KPROP-EDGE-ARTIFACT); (5) n~23 is EXPLORATORY, no verdict moves on it. Use a PRICE-ADJUSTED market forecast where complete two-sided prices exist -- a half-point line alone is only a coarse market estimate.",
-   "dq_contract": "Report A = all 23 frozen rows (operational pipeline performance, the headline) and B = the pre-tagged data_valid_subset_B (sensitivity only). Tags frozen pre-outcome at data/mlb/props/evidence/2026-07-27/KSIM-0727-U02_dq_tags.json sha256 7c004cf4a75579c18c97426dd096edbe1013714e0f490b0a16b383d5e800f39f. The valid-data subset may NEVER be defined after results."
+   "dq_contract": "Report A = all 23 frozen rows (operational pipeline performance, the headline) and B = the pre-tagged data_valid_subset_B (sensitivity only). Tags frozen pre-outcome at data/mlb/props/evidence/2026-07-27/KSIM-0727-U02_dq_tags.json sha256 7c004cf4a75579c18c97426dd096edbe1013714e0f490b0a16b383d5e800f39f. The valid-data subset may NEVER be defined after results. CLASSIFICATION: the tags were frozen at 01:40:27Z with 11 of 12 games ALREADY UNDERWAY (BOS@ATH by 27 seconds), so this is NOT a pregame pre-registration. outcomes_inspected_at_freeze=false is retained as a PROCESS ATTESTATION only and cannot restore pregame status. Subset B is exploratory sensitivity analysis; neither A nor B is confirmatory for 2026-07-27. A future UNTOUCHED slate, tagged before any first pitch, is required.",
+   "classification_2026_07_27": "OUTCOME-BLINDED, POST-START SENSITIVITY DEFINITION - exploratory on this slate only"
   },
   {
    "id": "HFA-SPLIT",
@@ -1080,7 +1081,8 @@
    "status": "RESOLVED 2026-07-28 (single-sourced); VALUE ITSELF UNRESOLVED",
    "text": "v13_1.py used 1.03 and daily_card.py used 1.005 with nothing naming the difference, so V13's P(win) was not traceable to a formula. Not a bug -- a VERSION SPLIT: engine/park_compare.py is the experiment and card_2026_07_20.py records the 7/20 adoption of 'data-derived parks + HFA 1.005'.",
    "resolution": "engine/hfa.py is now the single source of truth: CURRENT=1.005 (live path) and V13_1_LEGACY=1.03 (v13_1 lineage), both imported rather than hard-coded. Values UNCHANGED -- this is a refactor, not a formula change (R3). healthcheck scans the live paths for stray HFA literals.",
-   "evidence_caveat": "park_compare.py re-run 2026-07-28, n=27: OLD parks/1.03 Brier 0.2413; NEW parks/1.03 0.2404; NEW parks/1.005 0.2408. The HFA trim is NOT empirically supported -- on Brier 1.005 is 0.0004 WORSE than 1.03 on the same park set. The PARK change carries the improvement (tot MAE 4.07 -> 3.80); the HFA change does not. Totals 44%->48% is 1 game in 25 at n=27. Under R4 none of this moves a verdict. 1.005 is current because it is what the live path has run since 7/20, NOT because it was shown better. Which value is right: UNRESOLVED."
+   "evidence_caveat": "Full 2x2 factorial, park_compare RESEEDED per cell (seed 1319), n=27: OLD/1.03 Brier 0.2413, OLD/1.005 0.2415, NEW/1.03 0.2404, NEW/1.005 0.2402. Monte Carlo noise floor, SAME cell (NEW/1.005) at four seeds: 0.2402/0.2408/0.2396/0.2404, range 0.0012. The HFA main effect is +0.0002 under OLD parks and -0.0002 under NEW -- OPPOSITE SIGNS and ~6x smaller than the single-cell seed noise. THIS EXPERIMENT SUPPORTS NEITHER 1.03 NOR 1.005; the value is UNRESOLVED. The park effect on Brier (~0.0011) is itself comparable to the 0.0012 noise range and is also not established. Only the park effect on TOTAL MAE (4.07/4.06 -> 3.79/3.79 at both HFA levels, ~27x the 0.01 seed range) clears the noise, and that is a totals metric while totals are NOT_READY. NO claim that the park change 'carries the gain' on any sides metric.",
+   "reproducibility_defect": "Until 2026-07-28 park_compare seeded once at module scope and never reseeded, so each cell drew from wherever the previous left the stream and results depended on how many cells ran and in what order. Two runs of NEW/1.03 gave 0.2404 and 0.2412. Any HFA number quoted before that date is NOT reproducible. run() now reseeds per cell; same-config calls agree exactly."
   },
   {
    "id": "LOG-WIDTH-8-MISPARSE",
@@ -1095,6 +1097,13 @@
    "status": "OPEN - environment, not fixable here",
    "text": "WebFetch returns HTTP 403 for EVERY host tried: statsapi.mlb.com, site.api.espn.com, plaintextsports.com, en.wikipedia.org. Blanket perimeter block, not a per-site refusal. Direct curl to statsapi also fails with 'CONNECT tunnel failed, response 403'. WebSearch DOES work but returns model-summarised snippets.",
    "consequence": "results.csv cannot be backfilled with 7/26-7/27 finals to the repo's own 2-source standard: a row needs game_id (gamePk), venue and scores, and WebSearch returned 7 of ~15 games for 7/26 with no gamePks, no venues and no completeness guarantee. Writing that in would assert numbers rather than source them (R1), into the dataset the backtests read. NOT DONE, deliberately. The dataset-freshness warning stands as the honest signal."
+  },
+  {
+   "id": "LINEAGE-VERIFIER-SPLIT",
+   "opened": "2026-07-28",
+   "status": "RESOLVED 2026-07-28",
+   "text": "An earlier fix let verify_lineage ENROL successor engine hashes so a legitimate edit would not fail. That weakened the provenance assertion into 'the engine is either what produced Phase 1, or something we decided is close enough' -- which is not a provenance statement.",
+   "resolution": "Two separate verifiers. A = harness/verify_lineage.py FROZEN_LINEAGE: reads engine/kprops.py and EVERY input from git at commit 6d4a7c0, verifies the published hashes EXACTLY, NEVER accepts a successor. B = harness/test_parse_equivalence.py SUCCESSOR_EQUIVALENCE: loads the frozen engine as a whole module out of the freeze commit and compares UNROUNDED E[K] against the current engine, records the successor hash and the evidence, and CANNOT change what A asserts. B now also carries explicit layout fixtures (widths 7, 8, 10 plus relief rows), malformed-width failure cases (3, 6, 9, 11), README_NOTE exclusion and placeholder-manifest enforcement -- necessary because the 310 logs on disk contain only widths 7 and 10 and never exercise 8."
   }
  ],
  "next_actions": [

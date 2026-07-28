@@ -10,18 +10,35 @@ This was NOT an accident and NOT a bug: it is a VERSION SPLIT. engine/park_compa
 experiment that produced it, and card_2026_07_20.py's docstring records the adoption
 ("New data-derived parks + HFA 1.005"). The two families are the pre- and post-7/20 calibrations.
 
-WHAT THE EVIDENCE ACTUALLY SAYS — re-run 2026-07-28, engine/park_compare.py, pooled 7/17+7/18:
+WHAT THE EVIDENCE ACTUALLY SAYS — full 2x2 factorial, engine/park_compare.py RESEEDED per cell
+(seed 1319), pooled 7/17+7/18, n = 27:
 
-    OLD parks (hand)  hfa 1.03    Brier 0.2413 | dir 17-9  | totals 10-15 (40%) | tot MAE 4.07
-    NEW parks (data)  hfa 1.03    Brier 0.2404 | dir 16-10 | totals 11-14 (44%) | tot MAE 3.80
-    NEW parks trimmed hfa 1.005   Brier 0.2408 | dir 16-10 | totals 12-13 (48%) | tot MAE 3.80
+    parks   hfa      Brier    dir     totals        tot MAE
+    OLD     1.03     0.2413   17-9    10-15 (40%)   4.07
+    OLD     1.005    0.2415   16-10    9-16 (36%)   4.06
+    NEW     1.03     0.2404   16-10   11-14 (44%)   3.79
+    NEW     1.005    0.2402   16-10   12-13 (48%)   3.79
 
-    n = 27.
+MONTE CARLO NOISE FLOOR — the SAME cell (NEW/1.005) at four seeds:
 
-**The HFA trim is not empirically supported.** On Brier, 1.005 is 0.0004 WORSE than 1.03 on the
-same park set. The park change carries the improvement (MAE 4.07 -> 3.80); the HFA change does
-not, and moves the wrong way on the headline metric. Totals hit rate rises 44% -> 48%, but that
-is 1 game out of 25 at n=27. Under R4, none of this moves a verdict in either direction.
+    0.2402, 0.2408, 0.2396, 0.2404   ->  range 0.0012 on Brier, 3.78-3.79 on total MAE
+
+**The HFA value is UNRESOLVED. This experiment supports NEITHER 1.03 nor 1.005.**
+The HFA main effect is +0.0002 under OLD parks and -0.0002 under NEW parks -- opposite signs, and
+roughly SIX TIMES SMALLER than the 0.0012 seed-to-seed range of a single cell. It is noise.
+
+On Brier the park effect (~0.0011) is itself comparable to that 0.0012 noise range and is likewise
+not established. The one effect that clears the noise is the park effect on TOTAL MAE: 4.07/4.06 ->
+3.79/3.79, consistent at both HFA levels and ~27x the 0.01 seed range. But that is a totals metric,
+totals are NOT_READY, and it says nothing about HFA. No claim is made here that the park change
+"carries the gain" on any sides metric.
+
+Under R4, n=27 moves no verdict in any direction.
+
+REPRODUCIBILITY NOTE: until 2026-07-28 park_compare seeded once at module scope and never reseeded,
+so each cell drew from wherever the previous cell left the stream and results depended on how many
+cells were run and in what order. Two runs of the same configuration genuinely disagreed
+(NEW/1.03 gave 0.2404 and 0.2412). Any HFA number quoted before that date is not reproducible.
 
 So CURRENT is 1.005 because that is what the live path has been running since 7/20 and changing
 it now would be an unregistered formula change (R3) -- NOT because it was shown to be better.

@@ -1,23 +1,27 @@
 #!/usr/bin/env python3
-"""Recompute the KSIM-2026-07-27 input-lineage hashes from the files on disk.
+"""VERIFIER A — FROZEN_LINEAGE. What actually generated KSIM-2026-07-27 Phase 1.
 
-Exists so the composite hash published in the protocol addendum is REPRODUCIBLE rather than
-asserted. Run it and compare; it recomputes from the pitcher logs the frozen board actually
-used, in a documented canonical order.
+This verifier answers exactly one question: **do the published lineage hashes still describe the
+freeze commit?** It therefore reads every input out of git at the freeze commit, NOT from the
+working tree, and it compares against the published values EXACTLY.
+
+It will NEVER accept a successor hash. An earlier version enrolled successor hashes here so that a
+legitimate engine edit would not fail; that was wrong. Enrolment inside this check would weaken the
+provenance assertion into "the engine is either what produced Phase 1, or something we have decided
+is close enough" -- which is not a provenance statement at all. Whether the CURRENT implementation
+agrees with the frozen one is a different question, answered by VERIFIER B
+(harness/test_parse_equivalence.py). B can never change what this file asserts.
 
     python3 harness/verify_lineage.py
 
-Two canonical forms are emitted because the published one is imperfect and cannot be changed
-without invalidating a hash already in the record:
+Two canonical composite forms are emitted because the published one is imperfect and cannot be
+changed without invalidating a hash already in the record:
 
-  v1  ''.join(f'{pid}:{sha256}')  over pids sorted as STRINGS, utf-8, NO separator.
-      This is what was published. It is ambiguous in principle -- concatenating
-      variable-length fields with no delimiter is not injective in general -- but pid and
-      sha256 are both fixed-width here, so it is well defined for this manifest. Kept
-      verbatim because the value is already cited in the addendum and a commit message.
-
-  v2  '\\n'.join(f'{pid}  {sha256}') + '\\n'.  Delimited, greppable, diffable. Use this for
-      any future manifest.
+  v1  ''.join(f'{pid}:{sha256}') over pids sorted as STRINGS, utf-8, NO separator. This is what was
+      published. Ambiguous in principle -- concatenating variable-length fields with no delimiter is
+      not injective -- but pid and sha256 are fixed-width here, so it is well defined for this
+      manifest. Kept verbatim because the value is already cited in the addendum and a commit message.
+  v2  '\\n'.join(f'{pid}  {sha256}') + '\\n'. Delimited, greppable. Use this for future manifests.
 """
 
 from __future__ import annotations
@@ -25,15 +29,21 @@ from __future__ import annotations
 import hashlib
 import json
 import os
+import subprocess
 import sys
 
 BASE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-ARTIFACT = os.path.join(BASE, "data/mlb/props/simulated/2026-07-27_KSIM_phase1.json")
-LOGS = os.path.join(BASE, "data/backfill/mlb/2026/pitcher_logs")
-PITCHERS = os.path.join(BASE, "data/backfill/mlb/2026/pitchers.csv")
-ENGINE = os.path.join(BASE, "engine/kprops.py")
+os.chdir(BASE)
 
-#: published in docs/experiments/KSIM-2026-07-27_protocol_addendum.md
+#: The Phase-1 freeze. Every input below is read AT THIS COMMIT.
+FREEZE_COMMIT = "6d4a7c0"
+
+ARTIFACT = "data/mlb/props/simulated/2026-07-27_KSIM_phase1.json"
+LOGS = "data/backfill/mlb/2026/pitcher_logs"
+PITCHERS = "data/backfill/mlb/2026/pitchers.csv"
+ENGINE = "engine/kprops.py"
+
+#: published in docs/experiments/KSIM-2026-07-27_protocol_addendum.md. NEVER REWRITTEN.
 PUBLISHED = {
     "kprops_py": "72a30c2650b6c4dc6b2b6c2f8a57f1848b1e139909cf0ad7b0120441f7411b56",
     "pitchers_csv": "a350ff454f247019e56bd39c6a6e2d393f0ffc5999cb079fb88be55a5e98d6a7",
@@ -42,15 +52,23 @@ PUBLISHED = {
 }
 
 
-def sha256_file(path: str) -> str:
-    return hashlib.sha256(open(path, "rb").read()).hexdigest()
+def blob(path: str) -> bytes:
+    """The file's bytes AT THE FREEZE COMMIT. Never the working tree."""
+    r = subprocess.run(["git", "show", f"{FREEZE_COMMIT}:{path}"], capture_output=True)
+    if r.returncode != 0:
+        raise SystemExit(f"cannot read {path} at {FREEZE_COMMIT}: {r.stderr.decode()[:200]}")
+    return r.stdout
+
+
+def sha256_blob(path: str) -> str:
+    return hashlib.sha256(blob(path)).hexdigest()
 
 
 def log_hashes() -> dict[str, str]:
-    """The 23 pitcher logs the frozen board actually used, keyed by pitcher_id."""
-    art = json.load(open(ARTIFACT))
+    """The 23 pitcher logs the frozen board used, keyed by pitcher_id, read at the freeze commit."""
+    art = json.loads(blob(ARTIFACT))
     pids = sorted({r["pitcher_id"] for r in art["rows"]})  # STRING sort, as published
-    return {pid: sha256_file(os.path.join(LOGS, f"{pid}.txt")) for pid in pids}
+    return {pid: sha256_blob(f"{LOGS}/{pid}.txt") for pid in pids}
 
 
 def composite_v1(logs: dict[str, str]) -> str:
@@ -61,63 +79,34 @@ def composite_v2(logs: dict[str, str]) -> str:
     return hashlib.sha256(("\n".join(f"{k}  {v}" for k, v in sorted(logs.items())) + "\n").encode()).hexdigest()
 
 
-#: The engine may legitimately change after a freeze. When it does, the PUBLISHED hash is NEVER
-#: rewritten -- it records what produced the frozen board. Instead the new hash is enrolled here with
-#: a reason and a re-runnable equivalence proof. An engine change that is NOT enrolled still FAILS,
-#: so evolution stays possible without the audit trail becoming decorative.
-ENGINE_SUCCESSORS = {
-    "9fd8699358e382852bfc64aa5a4286ede6d1d0a8207a775e360e90d8112b4c96": {
-        "date": "2026-07-28",
-        "change": "_parse(): exact-width dispatch, adds the 8-field forward layout "
-                  "date|opp|IP|ER|SO|BB|TBF|GS and raises on unknown widths. Previously `elif len(p)>=7` "
-                  "caught an 8-field row and read ER as SO and BB as TBF -- silently wrong numbers.",
-        "behaviour_change_on_frozen_inputs": "NONE",
-        "proof": "harness/test_parse_equivalence.py -- _parse output byte-identical on all 310 logs, "
-                 "and all 23 frozen E_K/gs reproduce at stored precision.",
-    },
-}
-
-
 def main() -> int:
     logs = log_hashes()
     got = {
-        "phase1": sha256_file(ARTIFACT),
-        "kprops_py": sha256_file(ENGINE),
-        "pitchers_csv": sha256_file(PITCHERS),
+        "phase1": sha256_blob(ARTIFACT),
+        "kprops_py": sha256_blob(ENGINE),
+        "pitchers_csv": sha256_blob(PITCHERS),
         "composite_v1": composite_v1(logs),
     }
+    print("VERIFIER A - FROZEN_LINEAGE")
+    print(f"all inputs read from git at {FREEZE_COMMIT}; successor hashes are NEVER accepted here")
     print(f"python {sys.version.split()[0]}   logs hashed: {len(logs)}")
     print(f"{'item':<16}{'status':<8}{'sha256'}")
     fails = 0
-    evolved = 0
     for k, v in got.items():
         ok = v == PUBLISHED[k]
-        succ = ENGINE_SUCCESSORS.get(v) if k == "kprops_py" else None
-        if ok:
-            status = "OK"
-        elif succ:
-            status = "MOVED"
-            evolved += 1
-        else:
-            status = "FAIL"
-            fails += 1
-        print(f"{k:<16}{status:<8}{v}")
-        if status == "FAIL":
-            print(f"{'':<24}expected {PUBLISHED[k]}")
-        if succ:
-            print(f"{'':<24}freeze-time {PUBLISHED[k]}")
-            print(f"{'':<24}enrolled {succ['date']}: {succ['change']}")
-            print(f"{'':<24}behaviour change on frozen inputs: {succ['behaviour_change_on_frozen_inputs']}")
-            print(f"{'':<24}proof: {succ['proof']}")
+        fails += (not ok)
+        print(f"{k:<16}{'OK' if ok else 'FAIL':<8}{v}")
+        if not ok:
+            print(f"{'':<24}published {PUBLISHED[k]}")
     print(f"{'composite_v2':<16}{'-':<8}{composite_v2(logs)}   (delimited form, for future manifests)")
     print()
     if fails:
-        print(f"MISMATCH - {fails} item(s) differ and are NOT enrolled; the lineage has moved since the freeze")
-    elif evolved:
-        print(f"VERIFIED - frozen inputs reproduce; {evolved} enrolled engine change(s) since the freeze, "
-              "each with a proven-no-op equivalence test")
+        print(f"FAIL - {fails} item(s) differ. The freeze commit no longer matches what was published; "
+              "the provenance record is broken.")
     else:
-        print("VERIFIED - lineage reproduces the published hashes")
+        print("VERIFIED - the published hashes describe the freeze commit exactly.")
+        print("NOTE: this says nothing about the CURRENT engine. For that, run VERIFIER B: "
+              "python3 harness/test_parse_equivalence.py")
     return 1 if fails else 0
 
 

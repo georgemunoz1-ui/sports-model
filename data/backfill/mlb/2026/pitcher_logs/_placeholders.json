@@ -4,7 +4,7 @@
  "supersedes": "pitcher_logs/README_NOTE.txt as the MACHINE-READABLE source; the note stays as prose",
  "meaning": "These 8 pitcher-date rows carry ER=0 and BB=0 as PLACEHOLDERS that were never fetched. A genuine 0-ER start is indistinguishable from a placeholder in the raw file, which is why this manifest exists: membership is enumerated rather than inferred.",
  "impact_on_ERA": "Season ERA understated by roughly +0.10 to +0.35 for these arms.",
- "impact_on_K_projection": "NONE. ER and BB are fields 2 and 4; engine.kprops._parse reads SO (3) and TBF (5) only. Verified 2026-07-28. The contamination is real but orthogonal to E[K].",
+ "impact_on_K_projection": "The placeholder ER and BB fields are NOT READ DIRECTLY by the current E[K] calculation, ASSUMING SO and TBF on those rows are accurate. ER/BB are fields 2 and 4; engine.kprops._parse reads SO (3) and TBF (5). Verified 2026-07-28.",
  "consumers_that_read_ER_or_BB": [
   "harness/daily_card.py sp_asof (era, k, bb)"
  ],
@@ -153,5 +153,6 @@
    "GS": true,
    "raw": "2026-07-22|5.2|0|4|0|26|1"
   }
- ]
+ ],
+ "scope_limit": "Field-level non-use does NOT establish that the affected row, or the collection process that produced it, is trustworthy. The same fetch that left ER and BB unpopulated also produced SO and TBF, and nothing independently confirms those. Earlier wording called this 'orthogonal to E[K]'; that overstated it and is withdrawn."
 }

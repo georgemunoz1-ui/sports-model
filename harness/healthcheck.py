@@ -120,11 +120,16 @@ try:
     r=subprocess.run([sys.executable,"engine/kprops.py"],capture_output=True,text=True)
     check(f"kprops self-test ({r.stdout.strip()})", r.returncode==0)
 except Exception as e: check(f"kprops self-test ran ({e})", False)
-# 5a2b. parse-equivalence: engine/kprops.py is a published KSIM lineage hash. If it changes, the
-# change must be proven a no-op on the frozen inputs rather than silently accepted.
+# 5a2b. TWO SEPARATE lineage verifiers, deliberately not merged. A asserts what generated Phase 1
+# and never accepts a successor hash; B asks whether the current engine still agrees. Merging them
+# would let 'enrolment' quietly weaken the provenance claim.
 try:
-    r=subprocess.run([sys.executable,"harness/test_parse_equivalence.py"],capture_output=True,text=True)
-    check(f"parse equivalence ({(r.stdout.strip().splitlines() or ['no output'])[-1]})", r.returncode==0)
+    # VERIFIER A: provenance. Reads every input from the freeze commit; never accepts a successor.
+    ra=subprocess.run([sys.executable,"harness/verify_lineage.py"],capture_output=True,text=True)
+    check("FROZEN_LINEAGE (verifier A: published hashes describe commit 6d4a7c0)", ra.returncode==0)
+    # VERIFIER B: does the CURRENT engine agree with the frozen one? Cannot alter what A asserts.
+    rb=subprocess.run([sys.executable,"harness/test_parse_equivalence.py"],capture_output=True,text=True)
+    check(f"SUCCESSOR_EQUIVALENCE (verifier B: {(rb.stdout.strip().splitlines() or ['no output'])[-1][:60]})", rb.returncode==0)
 except Exception as e: check(f"parse equivalence ran ({e})", False)
 # 5a3. gate counter: COMPUTED, not typed. The gate line used to be written as
 # record_w + record_l on every --register run, which counts every settled row whatever

@@ -14,7 +14,8 @@ re-verified unchanged.
 | E4 ID collision | two experiments both numbered E4 | favorite-fade keeps E4; lineup-aware → **E7**; `experiment_id_registry` added as authoritative |
 | healthcheck log glob | `README_NOTE.txt` counted as a pitcher log and fed to the integrity scan | filtered via `_logfiles()` |
 | healthcheck git label | printed "git working tree clean (2 dirty)" | relabelled to "git tree: N uncommitted path(s) (≤3 tolerated)" |
-| lineage fragility | any engine edit broke a published KSIM hash with no legitimate path forward | `verify_lineage` now **enrols** successor hashes with a reason + proof, reports `MOVED`, and still **fails** on an unenrolled change |
+| lineage fragility | any engine edit broke a published KSIM hash with no legitimate path forward | **two separate verifiers** — A `verify_lineage.py` (FROZEN_LINEAGE, reads all inputs from commit `6d4a7c0`, exact hashes, **never** accepts a successor) and B `test_parse_equivalence.py` (SUCCESSOR_EQUIVALENCE, unrounded comparison against the frozen module, cannot alter A) |
+| enrolment weakened provenance | the first fix let successor hashes satisfy the frozen check | reverted — enrolment removed from A entirely; see `LINEAGE-VERIFIER-SPLIT` |
 
 ### Two findings that came out of the fixes
 
@@ -74,6 +75,16 @@ plaintextsports.com, and even Wikipedia. This is a blanket perimeter block, not 
 
 ## Verification
 
-All suites green: `kprops` PASS · `ingest_kquote` PASS · `parse_equivalence` PASS · `policy_gate`
-PASS · `verify_lineage` VERIFIED (1 enrolled engine change) · healthcheck **0 fail**, 1 warn
-(dataset freshness, which is the blocked backfill above).
+All suites green: `kprops` PASS · `ingest_kquote` PASS · **verifier A** FROZEN_LINEAGE VERIFIED
+(published hashes describe commit `6d4a7c0` exactly) · **verifier B** SUCCESSOR_EQUIVALENCE PASS
+(unrounded `E[K]` bit-identical on 23/23 rows; layout fixtures for widths 7/8/10; malformed widths
+3/6/9/11 all raise) · `policy_gate` PASS · healthcheck **0 fail**.
+
+## Classification correction — DQ tag freeze
+
+The tags were frozen `2026-07-28T01:40:27Z`, with **11 of 12 games already underway** (SEA@TEX by
+425 min; BOS@ATH by 27 seconds). They are therefore **OUTCOME-BLINDED, POST-START SENSITIVITY
+DEFINITION**, not a pregame pre-registration. `outcomes_inspected_at_freeze: false` is retained as a
+process attestation only. Subset B is exploratory sensitivity analysis; neither A nor B is
+confirmatory for this slate, and `KPROP-INFO-TEST` carries the same label. A future untouched slate
+is required. Recorded append-only in `KSIM-0727-U02_dq_tags_CLASSIFICATION.json`.

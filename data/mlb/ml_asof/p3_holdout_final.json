@@ -1,0 +1,49 @@
+{
+ "record_id": "ML-P3-HOLDOUT-FINAL",
+ "opened_once": true,
+ "window": "2026-06-29..2026-07-19",
+ "n": 234,
+ "home_rate": 0.4957,
+ "candidate_config_sha256_prefix": "132523ac86695b85",
+ "frozen_beta": [
+  0.09724894149789932,
+  0.049056529386263814,
+  0.2106568691062031
+ ],
+ "results": {
+  "candidate_d_logistic": {
+   "n": 234,
+   "brier": 0.2438,
+   "logloss": 0.6808,
+   "acc": 0.5897,
+   "calib_intercept": -0.172,
+   "calib_slope": 1.646
+  },
+  "ref_a_v13": {
+   "n": 234,
+   "brier": 0.2447,
+   "logloss": 0.6827,
+   "acc": 0.6453,
+   "calib_intercept": -0.025,
+   "calib_slope": 1.358
+  },
+  "ref_b_const": {
+   "n": 234,
+   "brier": 0.25,
+   "logloss": 0.6931,
+   "acc": 0.4957,
+   "calib_intercept": null,
+   "calib_slope": null
+  },
+  "ref_c_baserate": {
+   "n": 234,
+   "brier": 0.2507,
+   "logloss": 0.6946,
+   "acc": 0.4957,
+   "calib_intercept": -0.017,
+   "calib_slope": -0.002
+  }
+ },
+ "verdict_rule": "FINAL for candidate d_logistic_2f; references contextual only; nothing promotes",
+ "rng_note": "ref_a_v13 holdout stream default_rng(9_000_000+idx), disclosed in the freeze doc"
+}

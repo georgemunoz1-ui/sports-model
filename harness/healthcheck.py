@@ -153,6 +153,11 @@ try:
     r=subprocess.run([sys.executable,"harness/test_ml_firewall.py"],capture_output=True,text=True)
     check(f"ml firewall fixtures ({(r.stdout.strip().splitlines() or ['no output'])[-1][:70]})", r.returncode==0)
 except Exception as e: check(f"ml firewall ({e})", False)
+# 5a2d2. ML-P4 forward generator: frozen-candidate double-hash refusal + disposition fixtures
+try:
+    r=subprocess.run([sys.executable,"harness/ml_p4_forward.py"],capture_output=True,text=True)
+    check(f"ml p4 forward ({(r.stdout.strip().splitlines() or ['no output'])[-1][:70]})", r.returncode==0)
+except Exception as e: check(f"ml p4 forward ({e})", False)
 # 5a2c. model registry + market priority enforcement (P1A)
 try:
     r=subprocess.run([sys.executable,"harness/model_registry.py"],capture_output=True,text=True)

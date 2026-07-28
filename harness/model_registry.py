@@ -72,6 +72,32 @@ REGISTRY = {
         "note": "V13 verdict-scorer arithmetic on firewall features; per-row RNG so results are "
                 "split-independent. Pre-registered in docs/experiments/ML-P2P3_prereg.md. Never a card.",
     },
+    "ml.d_logistic_2f.p4.cfg132523ac": {
+        "role": "P4_CHALLENGER",
+        "source": "harness/ml_p4_forward.py",
+        "hfa": "n/a (logistic; no simulation)",
+        "seed": "n/a (deterministic)", "sims_per_game": 0, "rng_policy": "deterministic_closed_form",
+        "calibration_artifact": "data/mlb/ml_asof/p3_candidate_config.json",
+        "input_schema": "p4-forward-v1 (as-of team form + shrunk SP ERA diff)",
+        "note": "FROZEN candidate d_logistic_2f, config sha256 132523ac86695b851fd8e4c88815da0416a"
+                "79421e76ba0cce1c9bce24dfe096b (canonical: sha256 of sort_keys json.dumps; the "
+                "artifact's file-byte sha256 eede422d0659e485... is pinned too). The generator "
+                "verifies BOTH before every run and refuses on either mismatch. No refit during "
+                "Phase 4 (owner override 2026-07-28).",
+    },
+    "ml.v13_1.p4fwd.hfa1005.n4000.rng_gamePk": {
+        "role": "P4_INCUMBENT_REFERENCE",
+        "source": "harness/ml_p4_forward.py",
+        "hfa": "parameter fixed 1.005 for P4 (stamped per record)",
+        "seed": "int(gamePk)", "sims_per_game": 4000, "rng_policy": "per_game_seed_gamePk",
+        "calibration_artifact": None,
+        "input_schema": "p4-forward-v1",
+        "note": "V13 verdict-scorer arithmetic, forward RNG keyed to gamePk: deterministic and "
+                "slate-order independent. Distinct identity from every prior V13 stream. "
+                "Delegates the arithmetic to harness/ml_p2_baselines.v13_row (itself pinned) via "
+                "_gidx = gamePk - 7_000_000, so seed = int(gamePk) with zero copied formula lines; "
+                "bit-identity proven in the ml_p4_forward selftest.",
+    },
     "ml.v13_1.hfa103.backtest.s1319n40000": {
         "role": "LEGACY_BACKTEST",
         "source": "engine/v13_1.py",

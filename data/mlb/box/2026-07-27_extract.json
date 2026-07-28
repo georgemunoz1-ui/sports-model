@@ -1,0 +1,117 @@
+{
+ "record_id": "2026-07-27-OUTCOMES-EXTRACT",
+ "created_utc": "2026-07-28T05:19:08Z",
+ "source": {
+  "kind": "SINGLE_SOURCE operator paste (statcast-style gamefeed text)",
+  "raw_file": "data/mlb/box/2026-07-27_paste.txt",
+  "raw_sha256": "858d626284c9970015ddc3a2efaac613e3621fd607f30d4da36496e123233f10",
+  "limitation": "ONE SOURCE. Same standard as db00e00's original grading: settlements from this extract are single-source until independently verified. Upgrade path: a second independent source per game.",
+  "internal_consistency": "Individual-pitcher SO sums cross-checked against opposing-batter SO sums for SEA@TEX, TOR@WSH, CHC@STL, HOU@LAA, BOS@ATH: all agree. SEA@TEX Team Pitching aggregate row reads SO=9 against individuals 10 and TEX batter sum 10 -> aggregate is the dissenter, 10 recorded (2-of-3 across independent fields; same defect class as the 7/25 LAD@NYM row). Internal consistency is NOT a second source."
+ },
+ "games_played": 11,
+ "games_postponed": [
+  {
+   "game": "CLE@CIN",
+   "status": "POSTPONED, rescheduled 2026-07-28",
+   "effect": "Slade Cecconi and Chase Burns rows of the frozen cohort are NO_CONTEST for this slate"
+  }
+ ],
+ "finals": [
+  {
+   "game": "SEA@TEX",
+   "away": 3,
+   "home": 7
+  },
+  {
+   "game": "BAL@DET",
+   "away": 8,
+   "home": 5
+  },
+  {
+   "game": "AZ@PIT",
+   "away": 2,
+   "home": 3,
+   "note": "F/10"
+  },
+  {
+   "game": "PHI@MIA",
+   "away": 7,
+   "home": 8
+  },
+  {
+   "game": "TOR@WSH",
+   "away": 3,
+   "home": 2
+  },
+  {
+   "game": "ATL@NYM",
+   "away": 3,
+   "home": 14
+  },
+  {
+   "game": "NYY@CWS",
+   "away": 9,
+   "home": 5
+  },
+  {
+   "game": "CHC@STL",
+   "away": 7,
+   "home": 3
+  },
+  {
+   "game": "HOU@LAA",
+   "away": 6,
+   "home": 4
+  },
+  {
+   "game": "BOS@ATH",
+   "away": 4,
+   "home": 2
+  },
+  {
+   "game": "MIL@SF",
+   "away": 0,
+   "home": 3
+  }
+ ],
+ "starter_events": [
+  {
+   "game": "TOR@WSH",
+   "event": "OPENER",
+   "detail": "Eddy Yean opened (2.1 IP); Andrew Alvarez pitched bulk relief (4.1 IP, 3 SO). Alvarez was the listed probable and was tagged opener_workload_risk=HIGH in the pre-outcome DQ tags. The flagged risk MATERIALIZED.",
+   "kprop_opener_2": "instance"
+  },
+  {
+   "game": "HOU@LAA",
+   "event": "SHORT_START",
+   "detail": "Tatsuya Imai started but recorded 2 outs (0.2 IP, 4 BB, 1 SO). Tagged opener_workload_risk=HIGH pre-outcome."
+  }
+ ],
+ "cohort_strikeouts": {
+  "George Kirby": 3,
+  "Kumar Rocker": 7,
+  "Kyle Bradish": 4,
+  "Keider Montero": 1,
+  "Zack Wheeler": 6,
+  "Tyler Phillips": 5,
+  "Merrill Kelly": 6,
+  "Mitch Keller": 4,
+  "Max Scherzer": 4,
+  "Andrew Alvarez": 3,
+  "Martin Perez": 4,
+  "Max Fried": 4,
+  "Noah Schultz": 5,
+  "David Peterson": 3,
+  "Matthew Liberatore": 5,
+  "Tatsuya Imai": 1,
+  "Walbert Urena": 5,
+  "Payton Tolle": 7,
+  "Jack Perkins": 4,
+  "Brandon Sproat": 5,
+  "Tyler Mahle": 3,
+  "Slade Cecconi": null,
+  "Chase Burns": null
+ },
+ "excluded_arm_note": "Zac Thornton (excluded pre-freeze, GS=3) started ATL@NYM: 6.1 IP, 5 SO.",
+ "results_csv": "NOT backfilled: rows require game_id (gamePk) and venue, absent from this paste. Same blocker as 7/26. Deliberate (R1)."
+}

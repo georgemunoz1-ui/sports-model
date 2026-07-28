@@ -1,5 +1,5 @@
 {
- "updated_utc": "2026-07-28T02:51:20Z",
+ "updated_utc": "2026-07-28T05:20:07Z",
  "ledger_conventions": {
   "pl_rounding": "Each play settles to a 2-decimal P/L (American-odds payout rounded at settlement). Running units = sum of these rounded per-play values, so the ledger column sums EXACTLY to the total (sportsbook-settlement convention, chosen for auditability). Note: summing unrounded payouts can differ by ~0.01u (e.g. baseline 7/23 is +0.48u rounded, +0.49u unrounded).",
   "brier_ab": "raw-vs-shrunk Brier/logloss compared only on plays where BOTH probabilities exist (engine skips produce no shrunk_p). 7/23 n_both=4 (Dobnak excluded).",
@@ -1034,7 +1034,8 @@
   {
    "id": "KPROP-OPENER-2",
    "opened": "2026-07-26",
-   "text": "The engine's single largest claimed edge on the first real price board (Fedde OVER 2.5 @ +106, EV +0.469) sits on the lowest line on the board. A 2.5 K line IS the market telling us it expects a short outing. The engine's E[TBF] prior does not read that signal, so it projects a full start and manufactures an edge. Freeland (1.5), Avila (1.5) and Baz (2.5 at DK) have the same shape. Treat a posted line at or below 3.5 as evidence about TBF, not as value."
+   "text": "The engine's single largest claimed edge on the first real price board (Fedde OVER 2.5 @ +106, EV +0.469) sits on the lowest line on the board. A 2.5 K line IS the market telling us it expects a short outing. The engine's E[TBF] prior does not read that signal, so it projects a full start and manufactures an edge. Freeland (1.5), Avila (1.5) and Baz (2.5 at DK) have the same shape. Treat a posted line at or below 3.5 as evidence about TBF, not as value.",
+   "instances_2026_07_27": "CONFIRMED TWICE on the 7/27 slate, both pre-tagged HIGH opener_workload_risk in the pre-outcome DQ tags: Alvarez DID NOT START (Eddy Yean opened; Alvarez 4.1 bulk relief, 3 SO vs a 3.5 line) and Imai started but lasted 0.2 IP (4 BB, 1 SO vs a 6.5 line). n=2 instances; direction only, no verdict moves (R4)."
   },
   {
    "id": "KPROP-EDGE-ARTIFACT",

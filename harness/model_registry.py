@@ -62,6 +62,16 @@ REGISTRY = {
                 "stream, so this is a DISTINCT identity (owner correction 2026-07-28). Used by the 7/27 "
                 "post-slate replay and the 7/28 exploratory stale-input diagnostic. Never a production card.",
     },
+    "ml.v13_1.p2eval.hfa_param.n4000.per_row_reset": {
+        "role": "EVALUATION_RUNNER",
+        "source": "harness/ml_p2_baselines.py",
+        "hfa": "parameter (P2: 1.005; P3-A1 compares 1.005 vs 1.03; every result artifact stamps the value used)",
+        "seed": "7_000_000 + global_row_index", "sims_per_game": 4000, "rng_policy": "per_row_reset",
+        "calibration_artifact": None,
+        "input_schema": "ml-asof-v1 (firewall dataset, vintage-pinned)",
+        "note": "V13 verdict-scorer arithmetic on firewall features; per-row RNG so results are "
+                "split-independent. Pre-registered in docs/experiments/ML-P2P3_prereg.md. Never a card.",
+    },
     "ml.v13_1.hfa103.backtest.s1319n40000": {
         "role": "LEGACY_BACKTEST",
         "source": "engine/v13_1.py",

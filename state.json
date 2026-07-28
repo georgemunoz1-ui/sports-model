@@ -1,5 +1,5 @@
 {
- "updated_utc": "2026-07-28T02:02:57Z",
+ "updated_utc": "2026-07-28T02:51:20Z",
  "ledger_conventions": {
   "pl_rounding": "Each play settles to a 2-decimal P/L (American-odds payout rounded at settlement). Running units = sum of these rounded per-play values, so the ledger column sums EXACTLY to the total (sportsbook-settlement convention, chosen for auditability). Note: summing unrounded payouts can differ by ~0.01u (e.g. baseline 7/23 is +0.48u rounded, +0.49u unrounded).",
   "brier_ab": "raw-vs-shrunk Brier/logloss compared only on plays where BOTH probabilities exist (engine skips produce no shrunk_p). 7/23 n_both=4 (Dobnak excluded).",
@@ -1104,6 +1104,13 @@
    "status": "RESOLVED 2026-07-28",
    "text": "An earlier fix let verify_lineage ENROL successor engine hashes so a legitimate edit would not fail. That weakened the provenance assertion into 'the engine is either what produced Phase 1, or something we decided is close enough' -- which is not a provenance statement.",
    "resolution": "Two separate verifiers. A = harness/verify_lineage.py FROZEN_LINEAGE: reads engine/kprops.py and EVERY input from git at commit 6d4a7c0, verifies the published hashes EXACTLY, NEVER accepts a successor. B = harness/test_parse_equivalence.py SUCCESSOR_EQUIVALENCE: loads the frozen engine as a whole module out of the freeze commit and compares UNROUNDED E[K] against the current engine, records the successor hash and the evidence, and CANNOT change what A asserts. B now also carries explicit layout fixtures (widths 7, 8, 10 plus relief rows), malformed-width failure cases (3, 6, 9, 11), README_NOTE exclusion and placeholder-manifest enforcement -- necessary because the 310 logs on disk contain only widths 7 and 10 and never exercise 8."
+  },
+  {
+   "id": "U02-NONQUALIFYING-LABEL-DEFECT",
+   "opened": "2026-07-28",
+   "status": "RESOLVED 2026-07-28 by superseding record (commit message immutable)",
+   "text": "Commit 7efb9b9's subject line calls KSIM-0727-U02 the 'first qualifying Phase-2A capture' and its findings doc framed the C5 item-5 failure (no visible slate date on the K board) as 'referred to the protocol owner for adjudication'. Independent audit: the capture did NOT qualify and there was nothing to adjudicate. C5 requires all six fields visible in the image itself; D2 built a degraded path for item 6 only, none for item 5; and the amendment window closed at af12e52 (04:28:30Z), twelve hours before the capture arrived, so no exception could be created (D3/E2).",
+   "resolution": "EVIDENCE_DEFICIENT_SHADOW classification, owner-authorized 2026-07-28: data/mlb/props/evidence/2026-07-27/KSIM-0727-U02_capture_CLASSIFICATION.json. TIMING_ELIGIBLE 23/23 (D1-R); EVIDENCE_COMPLETE false; CLASS_B_QUALIFIED false. The four decisions (Alvarez, Peterson, Imai, Perkins) are permanently barred from the prospective ledger and gate for this slate; outcome/CLV on them is descriptive shadow analysis only, never pooled (C8). Verified at classification: no 2026-07-27 rows in kprops_paper, gate 0/100 under dp-2026-07-27. Also recorded: pre-first-pitch existence of the decision set is internally evidenced only (single container clock, no pregame remote receipt); T1 validates only broad price coherence (a +124->+134 misread passes) and all transcription reads to date are by one model family. Audit of record: docs/audits/2026-07-28_independent_validation_audit.md, sha256 519d42ac34c8b4c55c18d4b549647d9433e20023bb603522a98dd7631c4fcd61."
   }
  ],
  "next_actions": [

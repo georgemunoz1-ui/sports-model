@@ -1,0 +1,21 @@
+{
+ "record_id": "KSIM-0727-U02-TRANSCRIPTION-AUDIT-ADDENDUM",
+ "created_utc": "2026-07-28T02:49:18Z",
+ "sidecar_not_edit": "The frozen transcription JSON is NEVER edited; its hash is published. This sidecar supersedes specific claims in and about it (R6).",
+ "references": {
+  "transcription_sha256": "af52a28b03e3d900ea7ec5265ccd5088595e1f78ebd49d197a20d3dc556eb396",
+  "decisions_sha256": "60fe448c01937410946d9c1d2c01322f70c47dbb188bdfbf0a92415d1f1279e2",
+  "audit_doc": "docs/audits/2026-07-28_independent_validation_audit.md",
+  "audit_doc_sha256": "519d42ac34c8b4c55c18d4b549647d9433e20023bb603522a98dd7631c4fcd61"
+ },
+ "t1_limits": {
+  "statement": "T1 validates only broad two-sided price coherence. It detects some gross price errors, does not validate line values, and cannot establish digit-perfect transcription.",
+  "demonstration": "Misreading Imai DK over +124 as +134 yields hold 4.1%, inside the 2-12% tolerance -> passes T1. The posted LINE never enters the hold formula, so a wrong line with correct prices passes T1 entirely.",
+  "supersedes": "'Since the pairs were transcribed independently, a misread digit would almost certainly have broken one. This is the strongest available evidence the transcription is accurate.' (findings doc section 4, and the equivalent implication wherever T1 is cited)"
+ },
+ "reader_independence": {
+  "status": "REPRODUCED_BY_CORRELATED_READER",
+  "detail": "The original extraction, the T4 re-read of the firing rows, and the 2026-07-28 audit full-board re-read were all performed by the same model family. The image is primary evidence; repeated extraction by one reader family is not independent verification.",
+  "path_to_strengthen": "A human re-read or genuinely independent extraction can raise transcription confidence. It cannot repair the C5 item-5 (visible date) failure retrospectively."
+ }
+}

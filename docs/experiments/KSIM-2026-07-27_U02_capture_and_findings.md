@@ -1,4 +1,15 @@
-# KSIM-0727-U02 — first qualifying Phase-2A capture, and what it exposed
+# KSIM-0727-U02 — Phase-2A capture, and what it exposed
+
+> **CLASSIFICATION (2026-07-28, owner-authorized): `EVIDENCE_DEFICIENT_SHADOW`.** This capture did
+> **NOT** qualify: C5 item 5 (visible slate date) failed, the frozen protocol contains no exception
+> for independent slate identification (D2 built a degraded path for item 6 only), and the
+> amendment window closed at `af12e52` twelve hours before this capture arrived (D3/E2). The title
+> of commit `7efb9b9` ("first qualifying Phase-2A capture") is superseded by
+> `data/mlb/props/evidence/2026-07-27/KSIM-0727-U02_capture_CLASSIFICATION.json`. Status:
+> TIMING_ELIGIBLE 23/23 · EVIDENCE_COMPLETE no · CLASS_B_QUALIFIED false. The four decisions are
+> permanently barred from the prospective ledger and gate for this slate; any outcome/CLV work on
+> them is descriptive shadow analysis only, never pooled. §2's "referred to the protocol owner"
+> framing is likewise superseded — under the frozen text there was nothing to adjudicate.
 
 **Phase 1 is not modified.** `data/mlb/props/simulated/2026-07-27_KSIM_phase1.json` verified at
 `7f827fd0014e5835ec3bf3572bbe1ff36dce452d5e0a55b735d04fe665c12d2f` before and after this work.
@@ -62,8 +73,11 @@ capture supports is the executable-decision test, not the line-placement test.
 
 - **T1 (hold 2–12%)** — **PASS, 0 failures across 110 price pairs.** Each book shows its own tight
   characteristic band: DK 5.45–6.21%, FD 5.85–6.17%, MGM 5.76–7.74%, BR 6.77–7.31%, CZR 5.88–8.21%.
-  Since the pairs were transcribed independently, a misread digit would almost certainly have
-  broken one. This is the strongest available evidence the transcription is accurate.
+  **Audit correction 2026-07-28:** T1 validates only broad two-sided price coherence. It detects
+  some gross price errors, does not validate line values at all (the line never enters the hold
+  formula), and cannot establish digit-perfect transcription — demonstrated: +124 misread as +134
+  passes at 4.1% hold. Transcription confidence rests on the re-reads, and all reads to date are by
+  the same model family (`REPRODUCED_BY_CORRELATED_READER` — see the transcription audit addendum).
 - **T3 (cross-book line dispersion ≤ 1.0K)** — at tolerance, twice. Wheeler DK/FD/CZR 7.5 vs
   MGM/BR 6.5; Keller DK/FD/MGM/CZR 3.5 vs BR 4.5. Both minority rungs are priced like alt rungs
   (Wheeler MGM +130/−175, Keller BR −165/+123). Neither fired.
@@ -90,10 +104,14 @@ precisely where defects live.
 
 ## 6 — The result that matters more than the plays
 
-Against a real market the model is **essentially unbiased**: over 23 pitchers,
-mean(model − market λ) = **+0.013**, median **−0.026**, mean|diff| **0.416 K**. On 19 of 23 it
-tracks a six-book consensus within half a strikeout. That is the first genuine external
-measurement this engine has ever had, and it is a decent one.
+**Audit correction 2026-07-28 — "essentially unbiased" withdrawn.** Bias is an expectation over
+repeated samples relative to truth; a near-zero cross-sectional difference from a constructed
+market estimate on one slate does not establish it. The supportable statement: **on this single
+slate, the mean difference between model E[K] and the constructed market-implied λ was near zero**
+— +0.013 (proportional de-vig; +0.023 under power de-vig), median −0.026, mean|diff| 0.416 K,
+n=23, cross-sectionally correlated, construction-dependent (Poisson inversion + de-vig choice),
+exploratory (R4). On 19 of 23 the model sits within half a strikeout of the six-book consensus.
+It is the first external comparison this engine has had — a comparison, not a measurement of bias.
 
 The selector also stopped being vacuous. Against the self-consistent simulated line it fired
 **0 of 23** (max |disp| 0.25K against a 0.8 floor). Against a real market it fires **4 of 23**.

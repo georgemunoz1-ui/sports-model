@@ -1,0 +1,35 @@
+{
+ "record_id": "KSIM-0727-U02-CAPTURE-CLASSIFICATION",
+ "created_utc": "2026-07-28T02:49:18Z",
+ "classification": "EVIDENCE_DEFICIENT_SHADOW",
+ "authorized_by": "protocol owner, 2026-07-28 ('Audit corrections: authorized')",
+ "supersedes": [
+  "commit 7efb9b9 subject line 'first qualifying Phase-2A capture' -- the capture did NOT qualify; the commit message is immutable, so this record supersedes rather than rewrites it",
+  "the 'referred to the protocol owner for adjudication' framing in the capture record and findings doc -- under the frozen text there is nothing to adjudicate"
+ ],
+ "three_way_status": {
+  "TIMING_ELIGIBLE": "23/23 -- received_at_utc 2026-07-27T16:38:58Z precedes every first pitch (D1-R)",
+  "EVIDENCE_COMPLETE": "FALSE -- C5 item 5 (game or slate date) is not visible in the K-board image; the date control is cropped and illegible",
+  "CLASS_B_QUALIFIED": "FALSE -- no pre-existing exception for independent slate identification exists in the frozen protocol"
+ },
+ "frozen_rule_basis": {
+  "C5": "'All six, visible in the image itself, not supplied alongside it' -- item 5: game or slate date. Companion images and slate-match corroboration are exactly what 'not supplied alongside it' excludes.",
+  "C4": "Class B requirement = 'a complete same-book quote in one image'. Completeness of screenshot evidence is defined by C5; a capture failing a mandatory C5 item never reaches C8's decision-freezing power.",
+  "D2": "The protocol built exactly ONE degraded path for a failed C5 item -- item 6, MAIN_LINE_UNRESOLVED -- and none for item 5. Expressio unius: the omission is a decision.",
+  "D3_E2": "The 2026-07-27 amendment window CLOSED at af12e52 (04:28:30Z), twelve hours before this capture arrived. Post-closure discoveries are deferred to the next untouched slate; no retroactive waiver is possible.",
+  "D1_R": "Timing eligibility is satisfied and is insufficient alone: timing cannot cure evidence."
+ },
+ "consequences": [
+  "The four decisions (Alvarez OVER BR 3.5 +100; Peterson OVER MGM 3.5 +120; Imai UNDER FD 6.5 -150; Perkins OVER MGM 4.5 -120) are PERMANENTLY BARRED from the prospective ledger and the authorization gate for this slate.",
+  "If outcome or CLV is ever computed for them it is DESCRIPTIVE SHADOW ANALYSIS ONLY, labelled EVIDENCE_DEFICIENT_SHADOW, reported separately, never pooled with class-A or qualified class-B results (C8).",
+  "Verified at classification time: ledgers.kprops_paper contains no 2026-07-27 rows; gate reads 0/100 under dp-2026-07-27; the decision record's gate_effect is NONE."
+ ],
+ "timing_anchor_caveat": "Pre-first-pitch existence of the frozen decision set is INTERNALLY evidenced only: upload mtime, frozen_utc and the 7efb9b9 committer time all derive from the same container clock, and no remote received any commit before first pitch (the only push occurred 2026-07-28, post-slate). A signed commit binds its claimed timestamp; it does not attest it against a trusted clock.",
+ "unchanged": {
+  "phase1_sha256": "7f827fd0014e5835ec3bf3572bbe1ff36dce452d5e0a55b735d04fe665c12d2f",
+  "decisions_sha256": "60fe448c01937410946d9c1d2c01322f70c47dbb188bdfbf0a92415d1f1279e2",
+  "transcription_sha256": "af52a28b03e3d900ea7ec5265ccd5088595e1f78ebd49d197a20d3dc556eb396",
+  "dq_tags_sha256": "7c004cf4a75579c18c97426dd096edbe1013714e0f490b0a16b383d5e800f39f"
+ },
+ "audit_doc_sha256": "519d42ac34c8b4c55c18d4b549647d9433e20023bb603522a98dd7631c4fcd61"
+}

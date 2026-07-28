@@ -48,6 +48,16 @@ def _logfiles():
             if os.path.basename(f)[0] not in "_." and not os.path.basename(f).startswith("README")]
 n=len(_logfiles())
 check(f"pitcher_logs cached: {n} (>=310)", n>=310)
+# 3b. results.csv close_* columns hold OPENING prices. Declared machine-readably so a future CLV
+# consumer cannot silently treat them as closes, and so the contaminated range cannot grow unnoticed.
+try:
+    _cc=json.load(open("data/backfill/mlb/2026/results_close_columns_contamination.json"))
+    _rows=list(csv.DictReader(open("data/backfill/mlb/2026/results.csv")))
+    _pop={r["date"] for r in _rows if r["close_ml_away"] or r["close_ml_home"] or r["close_total"]}
+    _new=sorted(_pop-set(_cc["all_populated_dates"]))
+    check(f"close_* contamination declared and not growing ({len(_pop)} dates populated, {len(_new)} undeclared)", not _new)
+    for d in _new[:5]: print(f"   UNDECLARED close_* DATE: {d} — is it a real close, or another opening?")
+except Exception as e: check(f"close_* contamination manifest ({e})", False)
 # 4a. ER/BB placeholder manifest — the caveat used to live only in README_NOTE.txt, which no code
 # read and no check tested, so a genuine 0-ER start was indistinguishable from a placeholder.
 try:

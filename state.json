@@ -1,5 +1,5 @@
 {
- "updated_utc": "2026-07-28T01:49:37Z",
+ "updated_utc": "2026-07-28T01:52:53Z",
  "ledger_conventions": {
   "pl_rounding": "Each play settles to a 2-decimal P/L (American-odds payout rounded at settlement). Running units = sum of these rounded per-play values, so the ledger column sums EXACTLY to the total (sportsbook-settlement convention, chosen for auditability). Note: summing unrounded payouts can differ by ~0.01u (e.g. baseline 7/23 is +0.48u rounded, +0.49u unrounded).",
   "brier_ab": "raw-vs-shrunk Brier/logloss compared only on plays where BOTH probabilities exist (engine skips produce no shrunk_p). 7/23 n_both=4 (Dobnak excluded).",
@@ -1014,7 +1014,10 @@
    "scope": "All MLB 2026 rows dated 2026-07-19 through 2026-07-25.",
    "cause": "A true closing snapshot has never once been captured. The card's opening snapshot was written into the close_* columns for continuity.",
    "consequence": "Any CLV computation (E3) that reads these columns measures nothing. E3 must capture its own closes prospectively.",
-   "rule": "Do not backfill these retroactively - the closes are gone. Fix forward only."
+   "rule": "Do not backfill these retroactively - the closes are gone. Fix forward only.",
+   "SCOPE_CORRECTION_2026-07-28": "The stated scope 'All MLB 2026 rows dated 2026-07-19 through 2026-07-25' is OVERSTATED. Verified against the file: only 2026-07-24 and 2026-07-25 (30 rows) have populated close_* values. Rows before 7/24 are empty in those columns.",
+   "declared_at": "data/backfill/mlb/2026/results_close_columns_contamination.json",
+   "enforcement": "healthcheck fails if the populated close_* date set grows beyond the declared one"
   },
   {
    "issue": "Probable-starter staleness and openers are unhandled by the K pipeline.",
@@ -1085,6 +1088,13 @@
    "status": "RESOLVED 2026-07-28",
    "text": "The runbook recorded that an 8-field forward log (date|opp|IP|...) CRASHES sp_asof. The worse half was unrecorded: kprops._parse dispatched on `len(p)>=10 ... elif len(p)>=7`, so an 8-field row fell into the 7-field branch and was read as ER->SO and BB->TBF. Silently wrong numbers, no error.",
    "resolution": "Exact-width dispatch in engine/kprops.py, harness/daily_card.py and harness/healthcheck.py, with width 8 = date|opp|IP|ER|SO|BB|TBF|GS handled and unknown widths raising rather than guessing (R1). Proven a no-op by harness/test_parse_equivalence.py: _parse output byte-identical on all 310 logs and all 23 frozen E_K/gs reproduced. engine/kprops.py's hash therefore MOVED from the KSIM lineage manifest; the published hash was NOT rewritten -- verify_lineage.py now enrols successor hashes with a reason and a proof, and still FAILS on an unenrolled change."
+  },
+  {
+   "id": "NETWORK-WEBFETCH-BLANKET-403",
+   "opened": "2026-07-28",
+   "status": "OPEN - environment, not fixable here",
+   "text": "WebFetch returns HTTP 403 for EVERY host tried: statsapi.mlb.com, site.api.espn.com, plaintextsports.com, en.wikipedia.org. Blanket perimeter block, not a per-site refusal. Direct curl to statsapi also fails with 'CONNECT tunnel failed, response 403'. WebSearch DOES work but returns model-summarised snippets.",
+   "consequence": "results.csv cannot be backfilled with 7/26-7/27 finals to the repo's own 2-source standard: a row needs game_id (gamePk), venue and scores, and WebSearch returned 7 of ~15 games for 7/26 with no gamePks, no venues and no completeness guarantee. Writing that in would assert numbers rather than source them (R1), into the dataset the backtests read. NOT DONE, deliberately. The dataset-freshness warning stands as the honest signal."
   }
  ],
  "next_actions": [

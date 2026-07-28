@@ -1,0 +1,23 @@
+{
+ "record_id": "RESULTS-CLOSE-COLUMNS-ARE-OPENINGS",
+ "applies_to": "data/backfill/mlb/2026/results.csv",
+ "columns": [
+  "close_ml_away",
+  "close_ml_home",
+  "close_spread_home",
+  "close_total"
+ ],
+ "truth": "These columns contain OPENING prices, not closing prices. The card's opening snapshot was written into the close_* columns for continuity. A true closing snapshot has NEVER been captured.",
+ "consequence": "Any CLV computation reading these columns measures nothing. E3 and E4 are blocked on this, not on modelling work.",
+ "populated_rows": 30,
+ "date_range": [
+  "2026-07-24",
+  "2026-07-25"
+ ],
+ "all_populated_dates": [
+  "2026-07-24",
+  "2026-07-25"
+ ],
+ "why_not_renamed": "Renaming would break sports/schema.py's fixed FIELDS contract and the dated harness scripts that already wrote these rows. The columns are left as-is and declared here; healthcheck fails if the contaminated range grows.",
+ "required_of_consumers": "Any code computing CLV MUST read this file first and refuse to treat close_* as a close for the dates listed."
+}

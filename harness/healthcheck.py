@@ -160,8 +160,10 @@ try:
     _st=json.load(open("state.json"))
     check("market_priority frozen [ML,K,RL,TOTAL]", _st.get("market_priority")==["ML","K","RL","TOTAL"])
     _ms=_st.get("market_status",{})
-    check("market statuses (ML NO_PROMOTE, K PAPER, RL/TOTAL NOT_READY)",
-          _ms.get("ML")=="NO_PROMOTE" and "PAPER" in str(_ms.get("K")) and _ms.get("RL")=="NOT_READY" and _ms.get("TOTAL")=="NOT_READY")
+    # Owner override 2026-07-28: Phase 4 active states. mlb_sides VERDICT stays NO_PROMOTE separately.
+    check("market statuses (ML FORWARD_VALIDATION_ACTIVE, K MAINTENANCE_ONLY_ACTIVE, RL/TOTAL DATA_CAPTURE_ACTIVE)",
+          _ms.get("ML")=="FORWARD_VALIDATION_ACTIVE" and _ms.get("K")=="MAINTENANCE_ONLY_ACTIVE"
+          and str(_ms.get("RL")).startswith("DATA_CAPTURE_ACTIVE") and str(_ms.get("TOTAL")).startswith("DATA_CAPTURE_ACTIVE"))
     _qp=_st.get("experiment_queue_policy",{})
     _act=_qp.get("active_experiment")
     _ok=_act is None or str(_act).upper().startswith("E4") or "ML" in str(_act).upper()

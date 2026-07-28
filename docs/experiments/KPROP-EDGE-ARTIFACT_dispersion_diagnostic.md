@@ -122,7 +122,8 @@ required for confirmatory use. `KPROP-INFO-TEST` carries the same label on 2026-
 Subset B rule, fixed in advance: `log_age_days ≤ 21` **and** not placeholder-contaminated **and**
 `opener_workload_risk ≠ HIGH` **and** `gs ≥ 10`. **B = 15 of 23.**
 
-Two observations available now, both outcome-independent:
+Two observations, neither of which depends on any outcome (though both were recorded post-start —
+see the classification above):
 
 - **Placeholder fields are not read by the current `E[K]` calculation** — the `ER=0, BB=0`
   placeholders occupy fields 2 and 4 of the 7-field log, and `kprops._parse` reads `p[3]=SO` and
@@ -132,8 +133,9 @@ Two observations available now, both outcome-independent:
   independently confirms them. The earlier word "orthogonal" overstated this and is withdrawn — including the 23 `placeholder_note` fields inside the hashed tag file, which are superseded by the classification record rather than edited. The
   subset-B clause is retained as a conservative filter for exactly that reason.
 - **Three of the four fired rows fall OUTSIDE subset B** — Alvarez, Perkins and Imai are all
-  `opener_workload_risk = HIGH`; only Peterson is inside. Determined by a rule fixed before any
-  outcome was inspected. It is a flag for where the selector concentrates, not a result.
+  `opener_workload_risk = HIGH`; only Peterson is inside. The rule was fixed before results were
+  read, but — per the classification above — **after** most first pitches, so this is a flag for
+  where the selector concentrates, not a confirmatory result.
 
 ## 7. Withdrawn claim
 

@@ -131,6 +131,13 @@ try:
     rb=subprocess.run([sys.executable,"harness/test_parse_equivalence.py"],capture_output=True,text=True)
     check(f"SUCCESSOR_EQUIVALENCE (verifier B: {(rb.stdout.strip().splitlines() or ['no output'])[-1][:60]})", rb.returncode==0)
 except Exception as e: check(f"parse equivalence ran ({e})", False)
+# 5a2c2. forecast/grade registries: hash-chain + rules + falsification battery
+try:
+    r=subprocess.run([sys.executable,"harness/forecast_registry.py"],capture_output=True,text=True)
+    check(f"forecast registry ({(r.stdout.strip().splitlines() or ['no output'])[-1][:70]})", r.returncode==0)
+    r=subprocess.run([sys.executable,"harness/test_forecast_registry.py"],capture_output=True,text=True)
+    check(f"forecast-registry falsifications ({(r.stdout.strip().splitlines() or ['?'])[-1][:60]})", r.returncode==0)
+except Exception as e: check(f"forecast registry ({e})", False)
 # 5a2d. ML as-of firewall (P1B): dataset rebuild determinism + manifest + fixture battery
 try:
     if os.path.exists("data/mlb/ml_asof/manifest.json"):

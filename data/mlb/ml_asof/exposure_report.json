@@ -1,0 +1,37 @@
+{
+ "record_id": "ML-ASOF-EXPOSURE-REPORT",
+ "placeholder_exposure": {
+  "dataset_rows_with_placeholder_in_sp_window": 0,
+  "why_zero_in_dataset": "SP features attach only where starters.csv resolves the game (<=2026-07-19); the 8 placeholder rows are dated 2026-07-21/22, so no resolved dataset row's as-of window reaches them. The exposure is in the LIVE card path, which reads full logs: demonstrated on Jack Perkins (678022), ATH SP in the 7/27 counterfactual replay.",
+  "contaminated_arms": [
+   "656876",
+   "621111",
+   "678022",
+   "571945",
+   "543037",
+   "663903",
+   "695611",
+   "687562"
+  ],
+  "phase1_rule": "ER/BB placeholders are NOT imputed or repaired; rows whose windows include them are flagged and can never be executable"
+ },
+ "starter_status": {
+  "resolved_post_hoc_rows": 1490,
+  "unresolved_rows": 79,
+  "unresolved_by_month": {
+   "2026-07": 79
+  },
+  "note": "UNRESOLVED = no starters.csv record (games after 2026-07-19). Rows retained + flagged; PROVISIONAL forecasts only, never executable. Forward slates: 7/28 capture has 4 preview-TBA vs odds-named conflicts; 7/27 had 2 pre-tagged opener events."
+ },
+ "input_age_distribution_days": {
+  "team_last_final_p50": 1,
+  "team_p90": 2,
+  "team_max": 6,
+  "sp_last_start_p50": 6,
+  "sp_p90": 8,
+  "sp_max": 100,
+  "n_team_obs": 2658,
+  "n_sp_obs": 2599
+ },
+ "staleness_threshold": "NOT SET. Per owner instruction, no threshold is invented after seeing performance; the distribution above is surfaced for a separate approval decision."
+}

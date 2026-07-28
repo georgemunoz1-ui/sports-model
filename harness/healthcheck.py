@@ -131,6 +131,21 @@ try:
     rb=subprocess.run([sys.executable,"harness/test_parse_equivalence.py"],capture_output=True,text=True)
     check(f"SUCCESSOR_EQUIVALENCE (verifier B: {(rb.stdout.strip().splitlines() or ['no output'])[-1][:60]})", rb.returncode==0)
 except Exception as e: check(f"parse equivalence ran ({e})", False)
+# 5a2d. ML as-of firewall (P1B): dataset rebuild determinism + manifest + fixture battery
+try:
+    if os.path.exists("data/mlb/ml_asof/manifest.json"):
+        r=subprocess.run([sys.executable,"harness/build_ml_asof.py","--check"],capture_output=True,text=True)
+        check(f"ml_asof rebuild {((r.stdout.strip().splitlines() or ['?'])[-1])[:60]}", r.returncode==0)
+        import importlib.util as _u
+        _sp=_u.spec_from_file_location("bma","harness/build_ml_asof.py"); _bm=_u.module_from_spec(_sp); _sp.loader.exec_module(_bm)
+        _mf=json.load(open("data/mlb/ml_asof/manifest.json"))
+        _mc=_bm.manifest_check(_mf)
+        check(f"ml_asof manifest complete ({len(_mc)} problems)", not _mc)
+        _n=sum(1 for _ in open("data/mlb/ml_asof/dataset.jsonl"))
+        check(f"ml_asof row count matches manifest ({_n} vs {_mf['row_count']})", _n==_mf["row_count"])
+    r=subprocess.run([sys.executable,"harness/test_ml_firewall.py"],capture_output=True,text=True)
+    check(f"ml firewall fixtures ({(r.stdout.strip().splitlines() or ['no output'])[-1][:70]})", r.returncode==0)
+except Exception as e: check(f"ml firewall ({e})", False)
 # 5a2c. model registry + market priority enforcement (P1A)
 try:
     r=subprocess.run([sys.executable,"harness/model_registry.py"],capture_output=True,text=True)

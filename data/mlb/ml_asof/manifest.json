@@ -1,0 +1,18 @@
+{
+ "schema_version": "ml-asof-v1",
+ "built_utc": "2026-07-28T05:49:12Z",
+ "row_count": 1569,
+ "eligible_for_evaluation": 1345,
+ "flagged_rows": 224,
+ "vintage_sha256": "431e689cf629e3952354f417de4825caee4907f5ca490a376a940a75ae40d203",
+ "source_hashes": {
+  "park_factors": "f99f38b1042b0771ae850dc9aa506498c14e963064b72e110371ea9b48420793",
+  "pitchers": "a350ff454f247019e56bd39c6a6e2d393f0ffc5999cb079fb88be55a5e98d6a7",
+  "placeholder_manifest": "5a646765b588766428d47cd7218b55990fec5b26331e6c118e10c4b377f87ec9",
+  "results": "80e34d90d6a427645152463f27fee61b71780589f248eea08a43ec559dd8f8c8",
+  "starters": "2d61ebfa4dfb5c32fc09e615b7f4ff5913a17566e1646a565c7f5bf85cd5ef5a"
+ },
+ "log_composite_sha256": "a453abca8d9161d7cdbc95abfc9742682379f2952afd614c030f3877bca02872",
+ "time_rule": "strict date < slate_date; same-day admissible only with source timestamps (none exist -> excluded); doubleheaders start-of-day",
+ "determinism": "rows sorted (slate_date, gamePk); no wall-clock in dataset bytes; vintage = sha256(dataset.jsonl)"
+}

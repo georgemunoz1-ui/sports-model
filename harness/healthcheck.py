@@ -20,7 +20,10 @@ try:
     st=json.load(open("state.json"))
     check("state.json parses", True)
     check("real money still 0 / unauthorized", st["ledgers"]["real_money"]["risked"]==0.0 and not st["ledgers"]["real_money"]["authorized"], warn=True)
-    check("sides verdict still DEAD (R3)", st["verdicts"]["mlb_sides"]["status"]=="DEAD", warn=True)
+    # Label changed 2026-07-28: DEAD -> NO_PROMOTE. "DEAD" overstated the finding -- it read as a
+    # property of the problem, when the evidence covers THIS implementation and THIS feature set.
+    # The gate is unchanged: no sides plays without a pre-registered experiment beating the market.
+    check("sides verdict still NO_PROMOTE (R3)", st["verdicts"]["mlb_sides"]["status"]=="NO_PROMOTE", warn=True)
 except Exception as e:
     check(f"state.json parses ({e})", False)
 # 3. results.csv integrity

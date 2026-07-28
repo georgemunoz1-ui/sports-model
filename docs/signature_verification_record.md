@@ -80,6 +80,15 @@ outcomes include **`unknown_key`**, **`no_user`** or **`unverified_email`** rath
 (`verified`, `reason`, `signature`, `payload`) from the GitHub API and record the actual `reason`
 here. Until that is done, status stays **UNKNOWN**.
 
+**2026-07-28 push attempt to read it:** the branch was pushed (`8a0730a..a5794c1`, fast-forward).
+Three routes to the verification object were then tried and all are blocked from this environment:
+the GitHub MCP `get_commit` tool strips the `verification` field at every detail level; the raw
+REST API returns "GitHub access is not enabled for this session" (the session's app auth does not
+cover API reads); and WebFetch is blocked by the perimeter 403. **Status therefore remains
+UNKNOWN.** It can be settled by opening the commit page in a browser:
+https://github.com/georgemunoz1-ui/sports-model/commit/a5794c13dafe98607fcabe15898f4af6c7dc578f —
+the badge next to the commit shows Verified/Unverified, and its tooltip gives GitHub's `reason`.
+
 ---
 
 ## Why the local tooling reports failure

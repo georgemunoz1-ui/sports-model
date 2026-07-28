@@ -1379,6 +1379,12 @@
   "rule": "While ML recovery is incomplete, NEW non-ML MODEL-CHANGING experiments are REJECTED at the queue. Passive data capture is always allowed. At most ONE model-changing experiment may be ACTIVE at a time.",
   "ml_recovery_complete": false,
   "active_experiment": "ML-P4-FORWARD (d_logistic_2f cfg 132523ac vs V13 vs market; first eligible slate 2026-07-29)",
-  "ml_recovery_status": "Phases 2+3 COMPLETE 2026-07-28. P2 pooled dev (n=708): d_logistic 0.2460 Brier beat a_v13 0.2486, c 0.2496, b 0.2500. A1 (HFA) and A2 (IP prior) both CLOSED, no improvement -- HFA remains UNRESOLVED. Candidate d_logistic_2f frozen (config 132523ac86695b85), holdout 6/29-7/19 opened ONCE: candidate 0.2438 Brier / 0.6808 logloss beat every reference including a_v13 (0.2447). ML remains NO_PROMOTE: the market benchmark is still unmeasured (~0.238 reference), the margin over the incumbent is thin, and promotion requires Phase 4 forward paper validation against live de-vigged prices, which is NOT yet authorized."
+  "ml_recovery_status": "Phases 2+3 COMPLETE 2026-07-28. P2 pooled dev (n=708): d_logistic 0.2460 Brier beat a_v13 0.2486, c 0.2496, b 0.2500. A1 (HFA) and A2 (IP prior) both CLOSED, no improvement -- HFA remains UNRESOLVED. Candidate d_logistic_2f frozen (config 132523ac86695b85), holdout 6/29-7/19 opened ONCE: candidate 0.2438 Brier / 0.6808 logloss beat every reference including a_v13 (0.2447). ML remains NO_PROMOTE: the market benchmark is still unmeasured (~0.238 reference), the margin over the incumbent is thin, and promotion requires Phase 4 forward paper validation against live de-vigged prices, which is NOT yet authorized.",
+  "shadow_development": {
+   "rule": "Owner-directed 2026-07-28: parallel SHADOW development track. Changes NO production model, NO frozen artifact, NO Phase-4 path; ML-P4-FORWARD remains the single ACTIVE model-changing experiment. Shadow models register an identity immediately before their FIRST shadow forecast, not earlier.",
+   "ML-E1-PLAYER-EVOLUTION-V1": "SHADOW_ACTIVE (engine + schema + prereg committed; DATA GATE: EVIDENCE_ABSENT \u2014 zero batter-level event histories/ages/multi-year data in repo; no projection producible until owner-supplied or R8-fetched data)",
+   "ml.v14.player_context.shadow.v1": "SPEC_ONLY (prereg committed; identity NOT registered \u2014 cannot run)",
+   "k.xk_stuff.shadow.v1": "SPEC_ONLY (prereg committed; zero pitch-level data; identity NOT registered)"
+  }
  }
 }

@@ -100,7 +100,7 @@ placeholder contamination, pre-game starter confirmation, opener/workload risk.
 At the freeze instant **11 of the 12 games were already underway** — SEA@TEX by 425 minutes,
 HOU@LAA by 2.5, BOS@ATH by 0.5 (the freeze landed **27 seconds after** its 01:40:00Z first pitch).
 Only MIL@SF had not started. Reclassification recorded append-only in
-`KSIM-0727-U02_dq_tags_CLASSIFICATION.json` (sha256 `65b2c1b1…780112`); the tag file itself is not
+`KSIM-0727-U02_dq_tags_CLASSIFICATION.json` (rev 2, sha256 `16479490…f7aa28`); the tag file itself is not
 edited, since its hash is already published.
 
 `outcomes_inspected_at_freeze: false` is **retained as a process attestation** — but an attestation
@@ -129,7 +129,7 @@ Two observations available now, both outcome-independent:
   `p[5]=TBF` only. **This holds only if SO and TBF on those rows are accurate.** Field-level non-use
   does not establish that the affected row, or the collection process that produced it, is
   trustworthy: the same fetch that left ER and BB unpopulated produced SO and TBF, and nothing
-  independently confirms them. The earlier word "orthogonal" overstated this and is withdrawn. The
+  independently confirms them. The earlier word "orthogonal" overstated this and is withdrawn — including the 23 `placeholder_note` fields inside the hashed tag file, which are superseded by the classification record rather than edited. The
   subset-B clause is retained as a conservative filter for exactly that reason.
 - **Three of the four fired rows fall OUTSIDE subset B** — Alvarez, Perkins and Imai are all
   `opener_workload_risk = HIGH`; only Peterson is inside. Determined by a rule fixed before any

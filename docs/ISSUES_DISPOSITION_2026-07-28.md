@@ -17,18 +17,31 @@ re-verified unchanged.
 | lineage fragility | any engine edit broke a published KSIM hash with no legitimate path forward | **two separate verifiers** — A `verify_lineage.py` (FROZEN_LINEAGE, reads all inputs from commit `6d4a7c0`, exact hashes, **never** accepts a successor) and B `test_parse_equivalence.py` (SUCCESSOR_EQUIVALENCE, unrounded comparison against the frozen module, cannot alter A) |
 | enrolment weakened provenance | the first fix let successor hashes satisfy the frozen check | reverted — enrolment removed from A entirely; see `LINEAGE-VERIFIER-SPLIT` |
 
-### Two findings that came out of the fixes
+### Three findings that came out of the fixes
 
-**The HFA trim is not supported by its own experiment.** Re-running `engine/park_compare.py`
-(n=27): OLD parks/1.03 Brier **0.2413**, NEW parks/1.03 **0.2404**, NEW parks/1.005 **0.2408**. On
-Brier, `1.005` is **0.0004 worse** than `1.03` on the same park set. The *park* change carries the
-improvement (total MAE 4.07 → 3.80); the HFA change does not. Totals 44%→48% is one game in 25.
-Under R4 none of this moves a verdict. `1.005` is current because it is what the live path has run
-since 7/20 — **not** because it won. Which value is right is **UNRESOLVED**.
+**The HFA experiment supports neither value.** Full 2×2 factorial, `park_compare` **reseeded per
+cell** (n=27): OLD/1.03 **0.2413**, OLD/1.005 **0.2415**, NEW/1.03 **0.2404**, NEW/1.005 **0.2402**.
+Noise floor, same cell (NEW/1.005) at four seeds: 0.2402 / 0.2408 / 0.2396 / 0.2404 — **range
+0.0012**. The HFA main effect is **+0.0002 under OLD parks and −0.0002 under NEW** — opposite signs,
+about six times smaller than single-cell seed noise. The park effect on Brier (~0.0011) is itself
+comparable to that noise and also not established. Only the park effect on **total MAE**
+(4.07/4.06 → 3.79/3.79 at both HFA levels, ~27× the 0.01 seed range) clears the noise — and that is
+a totals metric while totals are NOT_READY. **No claim is made that the park change "carries the
+gain" on any sides metric** (the earlier wording here said exactly that, and is withdrawn). HFA
+stays **UNRESOLVED**; `1.005` is current only because it is what the live path has run since 7/20.
 
-**Placeholder contamination does not reach `E[K]`.** `ER`/`BB` are log fields 2 and 4;
-`kprops._parse` reads `p[3]=SO` and `p[5]=TBF`. Real for ERA, orthogonal to the K projection. The
-only consumer that reads ER/BB is `daily_card.py::sp_asof`.
+**`park_compare` was not reproducible.** It seeded once at module scope and never reseeded, so each
+cell drew from wherever the previous cell left the stream — results depended on how many cells ran
+and in what order. Two runs of NEW/1.03 genuinely gave **0.2404 and 0.2412**. Any HFA number quoted
+before 2026-07-28 is not reproducible. `run()` now reseeds per cell; repeated same-config calls agree
+exactly.
+
+**Placeholder fields are not read by the current `E[K]` calculation** — `ER`/`BB` are log fields 2
+and 4, `kprops._parse` reads `p[3]=SO` and `p[5]=TBF` — **assuming SO and TBF on those rows are
+accurate.** Field-level non-use does not establish that the row, or the collection process behind it,
+is trustworthy: the same fetch that left ER/BB unpopulated produced SO and TBF, and nothing
+independently confirms them. The earlier word "orthogonal" overstated this and is withdrawn. The only
+consumer reading ER/BB is `daily_card.py::sp_asof`.
 
 ## DECLARED AND ENFORCED (cannot be fixed, but can no longer be misused)
 

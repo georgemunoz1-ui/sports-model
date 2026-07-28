@@ -1,0 +1,378 @@
+{
+ "record_id": "ML-P2-BASELINES",
+ "prereg": "docs/experiments/ML-P2P3_prereg.md",
+ "prereg_sha256": "86579a7d58dfc337342be124e2caae2bd4f21d5416bad1e607f9aa7cd35be0b8",
+ "dataset_vintage": "431e689cf629e3952354f417de4825caee4907f5ca490a376a940a75ae40d203",
+ "model_identity": "ml.v13_1.p2eval.hfa_param.n4000.per_row_reset",
+ "hfa_param": 1.005,
+ "dev_weeks": [
+  "2026-05-04",
+  "2026-05-11",
+  "2026-05-18",
+  "2026-05-25",
+  "2026-06-01",
+  "2026-06-08",
+  "2026-06-15",
+  "2026-06-22"
+ ],
+ "holdout_sealed": "2026-06-29..2026-07-19 (never loaded)",
+ "market_benchmark": "UNAVAILABLE on this population (stored ML openings are 7/24-25 only; SP resolution ends 7/19). Not approximated.",
+ "per_week": [
+  {
+   "week": "2026-05-04",
+   "n": 86,
+   "train_n": 403,
+   "base_rate": 0.5211,
+   "beta": [
+    0.0892,
+    0.037,
+    0.1412
+   ],
+   "a_v13": {
+    "brier": 0.2548,
+    "logloss": 0.7032,
+    "acc": 0.5
+   },
+   "b_const": {
+    "brier": 0.25,
+    "logloss": 0.6931,
+    "acc": 0.5581
+   },
+   "c_baserate": {
+    "brier": 0.248,
+    "logloss": 0.6891,
+    "acc": 0.5581
+   },
+   "d_logistic": {
+    "brier": 0.245,
+    "logloss": 0.6831,
+    "acc": 0.6279
+   }
+  },
+  {
+   "week": "2026-05-11",
+   "n": 87,
+   "train_n": 489,
+   "base_rate": 0.5276,
+   "beta": [
+    0.1174,
+    0.0291,
+    0.1751
+   ],
+   "a_v13": {
+    "brier": 0.2523,
+    "logloss": 0.6982,
+    "acc": 0.5747
+   },
+   "b_const": {
+    "brier": 0.25,
+    "logloss": 0.6931,
+    "acc": 0.5172
+   },
+   "c_baserate": {
+    "brier": 0.2498,
+    "logloss": 0.6928,
+    "acc": 0.5172
+   },
+   "d_logistic": {
+    "brier": 0.2472,
+    "logloss": 0.6875,
+    "acc": 0.5172
+   }
+  },
+  {
+   "week": "2026-05-18",
+   "n": 89,
+   "train_n": 576,
+   "base_rate": 0.526,
+   "beta": [
+    0.1051,
+    0.031,
+    0.182
+   ],
+   "a_v13": {
+    "brier": 0.2408,
+    "logloss": 0.6742,
+    "acc": 0.5506
+   },
+   "b_const": {
+    "brier": 0.25,
+    "logloss": 0.6931,
+    "acc": 0.4831
+   },
+   "c_baserate": {
+    "brier": 0.2516,
+    "logloss": 0.6963,
+    "acc": 0.4831
+   },
+   "d_logistic": {
+    "brier": 0.2444,
+    "logloss": 0.6818,
+    "acc": 0.6067
+   }
+  },
+  {
+   "week": "2026-05-25",
+   "n": 90,
+   "train_n": 665,
+   "base_rate": 0.5203,
+   "beta": [
+    0.0864,
+    0.0348,
+    0.2139
+   ],
+   "a_v13": {
+    "brier": 0.2368,
+    "logloss": 0.6662,
+    "acc": 0.5778
+   },
+   "b_const": {
+    "brier": 0.25,
+    "logloss": 0.6931,
+    "acc": 0.5444
+   },
+   "c_baserate": {
+    "brier": 0.2486,
+    "logloss": 0.6904,
+    "acc": 0.5444
+   },
+   "d_logistic": {
+    "brier": 0.2413,
+    "logloss": 0.6756,
+    "acc": 0.5667
+   }
+  },
+  {
+   "week": "2026-06-01",
+   "n": 90,
+   "train_n": 755,
+   "base_rate": 0.5232,
+   "beta": [
+    0.099,
+    0.0587,
+    0.2142
+   ],
+   "a_v13": {
+    "brier": 0.2582,
+    "logloss": 0.71,
+    "acc": 0.4556
+   },
+   "b_const": {
+    "brier": 0.25,
+    "logloss": 0.6931,
+    "acc": 0.4889
+   },
+   "c_baserate": {
+    "brier": 0.2511,
+    "logloss": 0.6953,
+    "acc": 0.4889
+   },
+   "d_logistic": {
+    "brier": 0.251,
+    "logloss": 0.6952,
+    "acc": 0.5111
+   }
+  },
+  {
+   "week": "2026-06-08",
+   "n": 87,
+   "train_n": 845,
+   "base_rate": 0.5195,
+   "beta": [
+    0.0778,
+    0.0555,
+    0.1999
+   ],
+   "a_v13": {
+    "brier": 0.2445,
+    "logloss": 0.682,
+    "acc": 0.4943
+   },
+   "b_const": {
+    "brier": 0.25,
+    "logloss": 0.6931,
+    "acc": 0.5402
+   },
+   "c_baserate": {
+    "brier": 0.2488,
+    "logloss": 0.6908,
+    "acc": 0.5402
+   },
+   "d_logistic": {
+    "brier": 0.2394,
+    "logloss": 0.6717,
+    "acc": 0.5977
+   }
+  },
+  {
+   "week": "2026-06-15",
+   "n": 87,
+   "train_n": 932,
+   "base_rate": 0.5215,
+   "beta": [
+    0.0918,
+    0.0465,
+    0.2368
+   ],
+   "a_v13": {
+    "brier": 0.2481,
+    "logloss": 0.6893,
+    "acc": 0.4713
+   },
+   "b_const": {
+    "brier": 0.25,
+    "logloss": 0.6931,
+    "acc": 0.5862
+   },
+   "c_baserate": {
+    "brier": 0.2468,
+    "logloss": 0.6867,
+    "acc": 0.5862
+   },
+   "d_logistic": {
+    "brier": 0.2426,
+    "logloss": 0.6781,
+    "acc": 0.5977
+   }
+  },
+  {
+   "week": "2026-06-22",
+   "n": 92,
+   "train_n": 1019,
+   "base_rate": 0.527,
+   "beta": [
+    0.1123,
+    0.0402,
+    0.2446
+   ],
+   "a_v13": {
+    "brier": 0.2531,
+    "logloss": 0.6994,
+    "acc": 0.4783
+   },
+   "b_const": {
+    "brier": 0.25,
+    "logloss": 0.6931,
+    "acc": 0.4783
+   },
+   "c_baserate": {
+    "brier": 0.2519,
+    "logloss": 0.697,
+    "acc": 0.4783
+   },
+   "d_logistic": {
+    "brier": 0.2565,
+    "logloss": 0.7065,
+    "acc": 0.4783
+   }
+  }
+ ],
+ "pooled": {
+  "a_v13": {
+   "n": 708,
+   "brier": 0.2486,
+   "logloss": 0.6903,
+   "acc": 0.5127,
+   "calib_intercept": 0.097,
+   "calib_slope": 0.654,
+   "reliability": [
+    {
+     "bin": "0.2-0.3",
+     "n": 1,
+     "mean_p": 0.233,
+     "obs": 0.0
+    },
+    {
+     "bin": "0.3-0.4",
+     "n": 44,
+     "mean_p": 0.373,
+     "obs": 0.364
+    },
+    {
+     "bin": "0.4-0.5",
+     "n": 321,
+     "mean_p": 0.46,
+     "obs": 0.533
+    },
+    {
+     "bin": "0.5-0.6",
+     "n": 293,
+     "mean_p": 0.542,
+     "obs": 0.532
+    },
+    {
+     "bin": "0.6-0.7",
+     "n": 49,
+     "mean_p": 0.631,
+     "obs": 0.571
+    }
+   ]
+  },
+  "b_const": {
+   "n": 708,
+   "brier": 0.25,
+   "logloss": 0.6931,
+   "acc": 0.524,
+   "calib_intercept": null,
+   "calib_slope": null,
+   "reliability": [
+    {
+     "bin": "0.5-0.6",
+     "n": 708,
+     "mean_p": 0.5,
+     "obs": 0.524
+    }
+   ]
+  },
+  "c_baserate": {
+   "n": 708,
+   "brier": 0.2496,
+   "logloss": 0.6923,
+   "acc": 0.524,
+   "calib_intercept": 0.91,
+   "calib_slope": -8.727,
+   "reliability": [
+    {
+     "bin": "0.5-0.6",
+     "n": 708,
+     "mean_p": 0.523,
+     "obs": 0.524
+    }
+   ]
+  },
+  "d_logistic": {
+   "n": 708,
+   "brier": 0.246,
+   "logloss": 0.6851,
+   "acc": 0.5621,
+   "calib_intercept": -0.004,
+   "calib_slope": 1.069,
+   "reliability": [
+    {
+     "bin": "0.3-0.4",
+     "n": 13,
+     "mean_p": 0.372,
+     "obs": 0.308
+    },
+    {
+     "bin": "0.4-0.5",
+     "n": 212,
+     "mean_p": 0.468,
+     "obs": 0.448
+    },
+    {
+     "bin": "0.5-0.6",
+     "n": 434,
+     "mean_p": 0.543,
+     "obs": 0.558
+    },
+    {
+     "bin": "0.6-0.7",
+     "n": 49,
+     "mean_p": 0.63,
+     "obs": 0.612
+    }
+   ]
+  }
+ }
+}

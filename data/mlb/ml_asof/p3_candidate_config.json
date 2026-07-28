@@ -1,0 +1,8 @@
+{
+ "spec": "d_logistic_2f: logit(p)=b0+b1*((h_rf-h_ra)-(a_rf-a_ra))+b2*(shrunk(a_era,a_gs)-shrunk(h_era,h_gs)); shrunk w=g/(g+8) to 4.20; Newton 60 iters; trained on ALL eligible rows slate_date<2026-06-29 (n=1111), dataset vintage 431e689cf629e3952354f417de4825caee4907f5ca490a376a940a75ae40d203",
+ "beta": [
+  0.09724894149789932,
+  0.049056529386263814,
+  0.2106568691062031
+ ]
+}

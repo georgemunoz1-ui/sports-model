@@ -215,8 +215,80 @@ def run_a1():
     print(f"wrote {OUT}/p3_a1_hfa.json")
 
 
+def _ip_mean_asof(pid, slate_date, _cache={}):
+    """Mean IP per start strictly before slate, shrunk to 5.4 with w=gs/(gs+6). A2 prereg spec."""
+    key = (pid, slate_date)
+    if key in _cache:
+        return _cache[key]
+    import importlib.util as _u
+    if "_bma" not in _cache:
+        sp = _u.spec_from_file_location("bma", "harness/build_ml_asof.py")
+        m = _u.module_from_spec(sp); sp.loader.exec_module(m)
+        _cache["_bma"] = m
+    rows = _cache["_bma"].log_rows(pid) or []
+    ips = [ip for d, ip, *_, gs_ in [(r[0], r[1], r[6]) for r in rows] if False]  # placeholder
+    ips = [r[1] for r in rows if r[0] < slate_date and r[6]]
+    gs = len(ips)
+    mu = (sum(ips) / gs) if gs else 5.4
+    w = gs / (gs + 6)
+    v = max(2.0, min(8.0, w * mu + (1 - w) * 5.4))
+    _cache[key] = v
+    return v
+
+
+def v13_row_a2(r, hfa, n=4000):
+    """(a) with the ONLY change being per-pitcher IP prior means (A2). Same per-row RNG stream."""
+    rng = np.random.default_rng(7_000_000 + r["_gidx"])
+    t = r["team"]; sp = r["sp"]
+    oa = (t["away"]["rf_pg"] or LG_RPG) / LG_RPG; oh = (t["home"]["rf_pg"] or LG_RPG) / LG_RPG
+    pena = 0.55 * (t["away"]["ra_pg"] or LG_RPG) + 0.45 * LG_RPG
+    penh = 0.55 * (t["home"]["ra_pg"] or LG_RPG) + 0.45 * LG_RPG
+    a, h = sp["away"], sp["home"]
+    rah = rs(h["era"], h["gs"], h["k_pct"], h["bb_pct"])
+    raa = rs(a["era"], a["gs"], a["k_pct"], a["bb_pct"])
+    pf = r["park_factor"] or 1.0
+    pfa = 1 + (pf - 1) * (bipf(h["k_pct"], h["bb_pct"]) / LG_BIP)
+    pfh = 1 + (pf - 1) * (bipf(a["k_pct"], a["bb_pct"]) / LG_BIP)
+    mu_a = _ip_mean_asof(a["pid"], r["slate_date"])
+    mu_h = _ip_mean_asof(h["pid"], r["slate_date"])
+    ip = np.clip(rng.normal(mu_a, 1.3, n), 2, 8); ip2 = np.clip(rng.normal(mu_h, 1.3, n), 2, 8)
+    ma = (rah / 9 * ip + penh / 9 * (9 - ip)) * oa * pfa
+    mh = (raa / 9 * ip2 + pena / 9 * (9 - ip2)) * oh * pfh * hfa
+    ka = h["k_pct"] if h["k_pct"] is not None else LG_K
+    kh = a["k_pct"] if a["k_pct"] is not None else LG_K
+    sa = np.clip(1.8 + (ka - LG_K) * 0.16, 1.2, 6); sh = np.clip(1.8 + (kh - LG_K) * 0.16, 1.2, 6)
+    ra_ = rng.poisson(rng.gamma(sa, np.maximum(ma, 0.3) / sa))
+    rh_ = rng.poisson(rng.gamma(sh, np.maximum(mh, 0.3) / sh))
+    tie = ra_ == rh_
+    hx = rng.random(n) < (0.5 + 0.04 * np.sign(pena - penh))
+    return float(np.where(tie, hx, rh_ > ra_).mean())
+
+
+def run_a2():
+    rows = load_rows()
+    te = [r for r in rows if any(w <= r["slate_date"] <= wk_end(w) for w in DEV_WEEKS)]
+    y = [r["label_home_win"] for r in te]
+    p0 = [v13_row(r, 1.005) for r in te]
+    p2_ = [v13_row_a2(r, 1.005) for r in te]
+    b0, l0, a0 = metrics(p0, y); b2, l2, a2v = metrics(p2_, y)
+    d = np.array([(pb - yv) ** 2 - (pa - yv) ** 2 for pa, pb, yv in zip(p0, p2_, y)])
+    se = float(d.std(ddof=1) / np.sqrt(len(d)))
+    art = dict(record_id="ML-P3-A2-IP-PRIOR", prereg=PREREG, dataset_vintage=VINTAGE,
+               model_identity="ml.v13_1.p2eval.hfa_param.n4000.per_row_reset",
+               paired=True, n=len(te),
+               baseline=dict(brier=round(b0, 4), logloss=round(l0, 4), acc=round(a0, 4)),
+               a2_ip_prior=dict(brier=round(b2, 4), logloss=round(l2, 4), acc=round(a2v, 4),
+                                calib=[round(x, 3) for x in calib(p2_, y)]),
+               delta_brier_a2_minus_base=round(float(d.mean()), 6), paired_se=round(se, 6))
+    json.dump(art, open(f"{OUT}/p3_a2_ip_prior.json", "w"), indent=1)
+    print(json.dumps({k: v for k, v in art.items() if k != "prereg"}, indent=1))
+    print(f"wrote {OUT}/p3_a2_ip_prior.json")
+
+
 if __name__ == "__main__":
     if "--a1" in sys.argv:
         run_a1()
+    elif "--a2" in sys.argv:
+        run_a2()
     else:
         run_p2()

@@ -1,0 +1,29 @@
+{
+ "record_id": "ML-P3-A1-HFA",
+ "prereg": "docs/experiments/ML-P2P3_prereg.md",
+ "dataset_vintage": "431e689cf629e3952354f417de4825caee4907f5ca490a376a940a75ae40d203",
+ "model_identity": "ml.v13_1.p2eval.hfa_param.n4000.per_row_reset",
+ "paired": true,
+ "n": 708,
+ "hfa_1005": {
+  "brier": 0.2486,
+  "logloss": 0.6903,
+  "acc": 0.5127,
+  "calib": [
+   0.0968034603215409,
+   0.6542743240133886
+  ]
+ },
+ "hfa_103": {
+  "brier": 0.248,
+  "logloss": 0.6892,
+  "acc": 0.5395,
+  "calib": [
+   0.07669750565911079,
+   0.6809597331394286
+  ]
+ },
+ "delta_brier_103_minus_1005": -0.000546,
+ "paired_se": 0.000355,
+ "note": "negative delta favours 1.03; |delta| < ~2*SE is noise"
+}

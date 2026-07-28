@@ -61,6 +61,23 @@ def composite_v2(logs: dict[str, str]) -> str:
     return hashlib.sha256(("\n".join(f"{k}  {v}" for k, v in sorted(logs.items())) + "\n").encode()).hexdigest()
 
 
+#: The engine may legitimately change after a freeze. When it does, the PUBLISHED hash is NEVER
+#: rewritten -- it records what produced the frozen board. Instead the new hash is enrolled here with
+#: a reason and a re-runnable equivalence proof. An engine change that is NOT enrolled still FAILS,
+#: so evolution stays possible without the audit trail becoming decorative.
+ENGINE_SUCCESSORS = {
+    "9fd8699358e382852bfc64aa5a4286ede6d1d0a8207a775e360e90d8112b4c96": {
+        "date": "2026-07-28",
+        "change": "_parse(): exact-width dispatch, adds the 8-field forward layout "
+                  "date|opp|IP|ER|SO|BB|TBF|GS and raises on unknown widths. Previously `elif len(p)>=7` "
+                  "caught an 8-field row and read ER as SO and BB as TBF -- silently wrong numbers.",
+        "behaviour_change_on_frozen_inputs": "NONE",
+        "proof": "harness/test_parse_equivalence.py -- _parse output byte-identical on all 310 logs, "
+                 "and all 23 frozen E_K/gs reproduce at stored precision.",
+    },
+}
+
+
 def main() -> int:
     logs = log_hashes()
     got = {
@@ -72,16 +89,35 @@ def main() -> int:
     print(f"python {sys.version.split()[0]}   logs hashed: {len(logs)}")
     print(f"{'item':<16}{'status':<8}{'sha256'}")
     fails = 0
+    evolved = 0
     for k, v in got.items():
         ok = v == PUBLISHED[k]
-        fails += (not ok)
-        print(f"{k:<16}{'OK' if ok else 'FAIL':<8}{v}")
-        if not ok:
+        succ = ENGINE_SUCCESSORS.get(v) if k == "kprops_py" else None
+        if ok:
+            status = "OK"
+        elif succ:
+            status = "MOVED"
+            evolved += 1
+        else:
+            status = "FAIL"
+            fails += 1
+        print(f"{k:<16}{status:<8}{v}")
+        if status == "FAIL":
             print(f"{'':<24}expected {PUBLISHED[k]}")
+        if succ:
+            print(f"{'':<24}freeze-time {PUBLISHED[k]}")
+            print(f"{'':<24}enrolled {succ['date']}: {succ['change']}")
+            print(f"{'':<24}behaviour change on frozen inputs: {succ['behaviour_change_on_frozen_inputs']}")
+            print(f"{'':<24}proof: {succ['proof']}")
     print(f"{'composite_v2':<16}{'-':<8}{composite_v2(logs)}   (delimited form, for future manifests)")
     print()
-    print("VERIFIED - lineage reproduces the published hashes" if not fails
-          else f"MISMATCH - {fails} item(s) differ; the lineage has moved since the freeze")
+    if fails:
+        print(f"MISMATCH - {fails} item(s) differ and are NOT enrolled; the lineage has moved since the freeze")
+    elif evolved:
+        print(f"VERIFIED - frozen inputs reproduce; {evolved} enrolled engine change(s) since the freeze, "
+              "each with a proven-no-op equivalence test")
+    else:
+        print("VERIFIED - lineage reproduces the published hashes")
     return 1 if fails else 0
 
 

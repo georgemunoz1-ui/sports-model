@@ -12,6 +12,8 @@ Changes vs V13.0:
 Deferred (needs multi-slate sample, NOT fit on n=1): global temperature calibration.
 """
 import numpy as np
+from hfa import V13_1_LEGACY as HFA
+
 rng = np.random.default_rng(1319)
 LG_RPG=4.45; LG_ERA=4.20; LG_K=22.0; LG_BB=8.5; LG_BIP=1-(LG_K+LG_BB)/100  # ~0.695
 
@@ -55,7 +57,7 @@ def sim(aw,hm,asp,hsp,park,n=40000):
     pf_h = 1+(pf-1)*(bip_rate(SP[asp][2],SP[asp][3])/LG_BIP)
     ip=np.clip(rng.normal(5.4,1.3,n),2.0,8.0); ip2=np.clip(rng.normal(5.4,1.3,n),2.0,8.0)
     mean_a=(ra_h/9*ip + pen_h/9*(9-ip))*off_a*pf_a
-    mean_h=(ra_a/9*ip2+ pen_a/9*(9-ip2))*off_h*pf_h*1.03  # HFA
+    mean_h=(ra_a/9*ip2+ pen_a/9*(9-ip2))*off_h*pf_h*HFA  # HFA-SPLIT: v13_1 lineage value, see engine/hfa.py
     # (1) K-driven variance: gamma shape from OPPOSING SP K% (low K -> low shape -> fat tail)
     sh_a=1.8+ (SP[hsp][2]-LG_K)*0.16   # away runs shape set by home SP's K%
     sh_h=1.8+ (SP[asp][2]-LG_K)*0.16

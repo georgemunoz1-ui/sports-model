@@ -1,0 +1,157 @@
+{
+ "record_id": "ERBB-PLACEHOLDER-MANIFEST",
+ "generated_utc": "2026-07-28",
+ "supersedes": "pitcher_logs/README_NOTE.txt as the MACHINE-READABLE source; the note stays as prose",
+ "meaning": "These 8 pitcher-date rows carry ER=0 and BB=0 as PLACEHOLDERS that were never fetched. A genuine 0-ER start is indistinguishable from a placeholder in the raw file, which is why this manifest exists: membership is enumerated rather than inferred.",
+ "impact_on_ERA": "Season ERA understated by roughly +0.10 to +0.35 for these arms.",
+ "impact_on_K_projection": "NONE. ER and BB are fields 2 and 4; engine.kprops._parse reads SO (3) and TBF (5) only. Verified 2026-07-28. The contamination is real but orthogonal to E[K].",
+ "consumers_that_read_ER_or_BB": [
+  "harness/daily_card.py sp_asof (era, k, bb)"
+ ],
+ "rows": [
+  {
+   "pitcher_id": "656876",
+   "date": "2026-07-21",
+   "fields_placeholder": [
+    "ER",
+    "BB"
+   ],
+   "field_indices": [
+    2,
+    4
+   ],
+   "observed_ER": 0.0,
+   "observed_BB": 0.0,
+   "SO": 5.0,
+   "TBF": 23.0,
+   "GS": true,
+   "raw": "2026-07-21|5.0|0|5|0|23|1"
+  },
+  {
+   "pitcher_id": "621111",
+   "date": "2026-07-21",
+   "fields_placeholder": [
+    "ER",
+    "BB"
+   ],
+   "field_indices": [
+    2,
+    4
+   ],
+   "observed_ER": 0.0,
+   "observed_BB": 0.0,
+   "SO": 3.0,
+   "TBF": 24.0,
+   "GS": true,
+   "raw": "2026-07-21|5.2|0|3|0|24|1"
+  },
+  {
+   "pitcher_id": "678022",
+   "date": "2026-07-21",
+   "fields_placeholder": [
+    "ER",
+    "BB"
+   ],
+   "field_indices": [
+    2,
+    4
+   ],
+   "observed_ER": 0.0,
+   "observed_BB": 0.0,
+   "SO": 4.0,
+   "TBF": 21.0,
+   "GS": true,
+   "raw": "2026-07-21|5.0|0|4|0|21|1"
+  },
+  {
+   "pitcher_id": "571945",
+   "date": "2026-07-21",
+   "fields_placeholder": [
+    "ER",
+    "BB"
+   ],
+   "field_indices": [
+    2,
+    4
+   ],
+   "observed_ER": 0.0,
+   "observed_BB": 0.0,
+   "SO": 1.0,
+   "TBF": 18.0,
+   "GS": false,
+   "raw": "2026-07-21|3.2|0|1|0|18|0"
+  },
+  {
+   "pitcher_id": "543037",
+   "date": "2026-07-22",
+   "fields_placeholder": [
+    "ER",
+    "BB"
+   ],
+   "field_indices": [
+    2,
+    4
+   ],
+   "observed_ER": 0.0,
+   "observed_BB": 0.0,
+   "SO": 11.0,
+   "TBF": 25.0,
+   "GS": true,
+   "raw": "2026-07-22|7.0|0|11|0|25|1"
+  },
+  {
+   "pitcher_id": "663903",
+   "date": "2026-07-22",
+   "fields_placeholder": [
+    "ER",
+    "BB"
+   ],
+   "field_indices": [
+    2,
+    4
+   ],
+   "observed_ER": 0.0,
+   "observed_BB": 0.0,
+   "SO": 6.0,
+   "TBF": 26.0,
+   "GS": true,
+   "raw": "2026-07-22|6.2|0|6|0|26|1"
+  },
+  {
+   "pitcher_id": "695611",
+   "date": "2026-07-22",
+   "fields_placeholder": [
+    "ER",
+    "BB"
+   ],
+   "field_indices": [
+    2,
+    4
+   ],
+   "observed_ER": 0.0,
+   "observed_BB": 0.0,
+   "SO": 5.0,
+   "TBF": 24.0,
+   "GS": true,
+   "raw": "2026-07-22|4.2|0|5|0|24|1"
+  },
+  {
+   "pitcher_id": "687562",
+   "date": "2026-07-22",
+   "fields_placeholder": [
+    "ER",
+    "BB"
+   ],
+   "field_indices": [
+    2,
+    4
+   ],
+   "observed_ER": 0.0,
+   "observed_BB": 0.0,
+   "SO": 4.0,
+   "TBF": 26.0,
+   "GS": true,
+   "raw": "2026-07-22|5.2|0|4|0|26|1"
+  }
+ ]
+}

@@ -6,6 +6,10 @@ and (if present) a RotoWire props CSV. Usage: python3 harness/daily_card.py YYYY
   slate.psv lines: gamePk|Away Full Name|Home Full Name|utcTime|AwaySP name|HomeSP name (TBD ok)
 Outputs cards/DATE_card.{json,html}. Paper/tracking only — plays require kprop EV rule + prices."""
 import csv, json, os, sys, glob, unicodedata
+import sys as _sys, os as _os
+_sys.path.insert(0,_os.path.join(_os.path.dirname(_os.path.dirname(_os.path.abspath(__file__))),'engine'))
+from hfa import CURRENT as HFA  # HFA-SPLIT: single source of truth, see engine/hfa.py
+
 def _norm(s): return unicodedata.normalize("NFKD",(s or "")).encode("ascii","ignore").decode().lower().strip()
 import numpy as np
 from math import exp, factorial
@@ -39,8 +43,12 @@ def sp_asof(name):
     ip=er=so=bb=tbf=st=0.0; s_so=s_tbf=0.0
     for ln in open(f"data/backfill/mlb/2026/pitcher_logs/{pid}.txt"):
         p=ln.strip().split("|")
-        if len(p)>=10: d=dict(ip=float(p[4]),er=float(p[5]),so=float(p[6]),bb=float(p[7]),tbf=float(p[8]),gs=p[9]=="1")
-        elif len(p)>=7: d=dict(ip=float(p[1]),er=float(p[2]),so=float(p[3]),bb=float(p[4]),tbf=float(p[5]),gs=p[6]=="1")
+        # Exact-width dispatch. The old `>=10 / elif >=7` sent an 8-field forward-format row
+        # (date|opp|IP|ER|SO|BB|TBF|GS) into the 7-field branch, where float(p[1]) is the opponent
+        # abbreviation -> the ValueError recorded in the runbook. Width 8 is now handled.
+        if len(p)==10: d=dict(ip=float(p[4]),er=float(p[5]),so=float(p[6]),bb=float(p[7]),tbf=float(p[8]),gs=p[9]=="1")
+        elif len(p)==8: d=dict(ip=float(p[2]),er=float(p[3]),so=float(p[4]),bb=float(p[5]),tbf=float(p[6]),gs=p[7]=="1")
+        elif len(p)==7: d=dict(ip=float(p[1]),er=float(p[2]),so=float(p[3]),bb=float(p[4]),tbf=float(p[5]),gs=p[6]=="1")
         else: continue
         ip+=d["ip"]; er+=d["er"]; so+=d["so"]; bb+=d["bb"]; tbf+=d["tbf"]
         if d["gs"]: st+=1; s_so+=d["so"]; s_tbf+=d["tbf"]
@@ -60,7 +68,7 @@ def sim(asp,hsp,aw,hm,pf,n=30000):
     rah,raa=rs(hsp),rs(asp)
     pfa=1+(pf-1)*(bip(hsp)/LG_BIP); pfh=1+(pf-1)*(bip(asp)/LG_BIP)
     ip=np.clip(rng.normal(5.4,1.3,n),2,8); ip2=np.clip(rng.normal(5.4,1.3,n),2,8)
-    ma=(rah/9*ip+penh/9*(9-ip))*oa*pfa; mh=(raa/9*ip2+pena/9*(9-ip2))*oh*pfh*1.005
+    ma=(rah/9*ip+penh/9*(9-ip))*oa*pfa; mh=(raa/9*ip2+pena/9*(9-ip2))*oh*pfh*HFA
     sa=np.clip(1.8+(hsp["k"]-LG_K)*.16,1.2,6); sh=np.clip(1.8+(asp["k"]-LG_K)*.16,1.2,6)
     raA=rng.poisson(rng.gamma(sa,np.maximum(ma,.3)/sa)); rhH=rng.poisson(rng.gamma(sh,np.maximum(mh,.3)/sh))
     tie=raA==rhH; hx=rng.random(n)<(.5+.04*np.sign(pena-penh)); hw=np.where(tie,hx,rhH>raA); mg=rhH-raA

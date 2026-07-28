@@ -1,5 +1,5 @@
 {
- "updated_utc": "2026-07-28T01:42:40Z",
+ "updated_utc": "2026-07-28T01:49:37Z",
  "ledger_conventions": {
   "pl_rounding": "Each play settles to a 2-decimal P/L (American-odds payout rounded at settlement). Running units = sum of these rounded per-play values, so the ledger column sums EXACTLY to the total (sportsbook-settlement convention, chosen for auditability). Note: summing unrounded payouts can differ by ~0.01u (e.g. baseline 7/23 is +0.48u rounded, +0.49u unrounded).",
   "brier_ab": "raw-vs-shrunk Brier/logloss compared only on plays where BOTH probabilities exist (engine skips produce no shrunk_p). 7/23 n_both=4 (Dobnak excluded).",
@@ -892,11 +892,12 @@
    "method": "capture DK K-lines at 2 timestamps/day; measure if OUR flagged deviations get steamed toward projection (CLV-for-props = independent edge evidence)"
   },
   {
-   "id": "E4",
+   "id": "E7",
    "passes": false,
    "status": "queued",
    "title": "Lineup-aware offense for sides (reopen attempt)",
-   "method": "daily lineups + batter wOBA as-of; only worth building if E1-E3 show the pipeline sustains quality"
+   "method": "daily lineups + batter wOBA as-of; only worth building if E1-E3 show the pipeline sustains quality",
+   "id_history": "Was a SECOND E4 alongside the favorite-fade experiment. Renumbered to E7 on 2026-07-28. The favorite-fade experiment KEEPS E4 because it is the one with a pre-registration and with references throughout docs/progress.md; this entry was 'queued' with no doc and no references, so moving it breaks nothing."
   },
   {
    "id": "E5",
@@ -957,10 +958,11 @@
   {
    "id": "ERBB-PLACEHOLDER-UNFLAGGED",
    "opened": "2026-07-27",
-   "status": "OPEN - fix queued",
+   "status": "RESOLVED 2026-07-28",
    "text": "8 pitcher-date rows (656876/621111/678022/571945 on 07-21; 543037/663903/695611/687562 on 07-22) carry ER=0,BB=0 as placeholders that were never fetched. The caveat lives in pitcher_logs/README_NOTE.txt, which no code reads and no healthcheck tests, and a genuine 0-ER start is indistinguishable from a placeholder. Season ERA understated by +0.10 to +0.35 for those arms.",
    "scope": "K-props UNAFFECTED: E[K] reads only SO and TBF, both verbatim per the note. ERA/BB% feed the sides sim only, and sides are frozen and unbet. No play affected.",
-   "doctrine": "Same shape as L13 -- a risk written down beside the data instead of encoded in it. R1 wants null+flag, not 0."
+   "doctrine": "Same shape as L13 -- a risk written down beside the data instead of encoded in it. R1 wants null+flag, not 0.",
+   "resolution": "Machine-readable manifest at data/backfill/mlb/2026/pitcher_logs/_placeholders.json enumerating all 8 pitcher-date rows, verified against the logs. healthcheck now FAILS if a manifest row's ER/BB are no longer 0 (backfilled -> manifest stale) or if SO/TBF drifted. Also established: the placeholders occupy fields 2 and 4 while kprops._parse reads p[3]=SO and p[5]=TBF, so the contamination is real for ERA and ORTHOGONAL to E[K]. daily_card.py sp_asof is the only consumer that reads ER/BB."
   },
   {
    "id": "REVISION-STAMP-DRIFT",
@@ -1068,6 +1070,21 @@
    "status": "PRE-REGISTERED, not yet run",
    "text": "Does the projection add information BEYOND the market? (1) compare an outcome model using market line + two-sided prices against one adding E[K]; (2) orthogonalise U = E[K] - fitted_E[K](market information); (3) test whether U predicts actual K minus the market forecast; (4) compare held-out MAE and NLL, NOT residual-vs-line correlation (inadmissible per KPROP-EDGE-ARTIFACT); (5) n~23 is EXPLORATORY, no verdict moves on it. Use a PRICE-ADJUSTED market forecast where complete two-sided prices exist -- a half-point line alone is only a coarse market estimate.",
    "dq_contract": "Report A = all 23 frozen rows (operational pipeline performance, the headline) and B = the pre-tagged data_valid_subset_B (sensitivity only). Tags frozen pre-outcome at data/mlb/props/evidence/2026-07-27/KSIM-0727-U02_dq_tags.json sha256 7c004cf4a75579c18c97426dd096edbe1013714e0f490b0a16b383d5e800f39f. The valid-data subset may NEVER be defined after results."
+  },
+  {
+   "id": "HFA-SPLIT",
+   "opened": "2026-07-27",
+   "status": "RESOLVED 2026-07-28 (single-sourced); VALUE ITSELF UNRESOLVED",
+   "text": "v13_1.py used 1.03 and daily_card.py used 1.005 with nothing naming the difference, so V13's P(win) was not traceable to a formula. Not a bug -- a VERSION SPLIT: engine/park_compare.py is the experiment and card_2026_07_20.py records the 7/20 adoption of 'data-derived parks + HFA 1.005'.",
+   "resolution": "engine/hfa.py is now the single source of truth: CURRENT=1.005 (live path) and V13_1_LEGACY=1.03 (v13_1 lineage), both imported rather than hard-coded. Values UNCHANGED -- this is a refactor, not a formula change (R3). healthcheck scans the live paths for stray HFA literals.",
+   "evidence_caveat": "park_compare.py re-run 2026-07-28, n=27: OLD parks/1.03 Brier 0.2413; NEW parks/1.03 0.2404; NEW parks/1.005 0.2408. The HFA trim is NOT empirically supported -- on Brier 1.005 is 0.0004 WORSE than 1.03 on the same park set. The PARK change carries the improvement (tot MAE 4.07 -> 3.80); the HFA change does not. Totals 44%->48% is 1 game in 25 at n=27. Under R4 none of this moves a verdict. 1.005 is current because it is what the live path has run since 7/20, NOT because it was shown better. Which value is right: UNRESOLVED."
+  },
+  {
+   "id": "LOG-WIDTH-8-MISPARSE",
+   "opened": "2026-07-28",
+   "status": "RESOLVED 2026-07-28",
+   "text": "The runbook recorded that an 8-field forward log (date|opp|IP|...) CRASHES sp_asof. The worse half was unrecorded: kprops._parse dispatched on `len(p)>=10 ... elif len(p)>=7`, so an 8-field row fell into the 7-field branch and was read as ER->SO and BB->TBF. Silently wrong numbers, no error.",
+   "resolution": "Exact-width dispatch in engine/kprops.py, harness/daily_card.py and harness/healthcheck.py, with width 8 = date|opp|IP|ER|SO|BB|TBF|GS handled and unknown widths raising rather than guessing (R1). Proven a no-op by harness/test_parse_equivalence.py: _parse output byte-identical on all 310 logs and all 23 frozen E_K/gs reproduced. engine/kprops.py's hash therefore MOVED from the KSIM lineage manifest; the published hash was NOT rewritten -- verify_lineage.py now enrols successor hashes with a reason and a proof, and still FAILS on an unenrolled change."
   }
  ],
  "next_actions": [
@@ -1299,5 +1316,15 @@
     "read": "2 selections out of 30 arms. One is Soriano, which is the play already registered live and pre-lock - the shadow run reproducing it independently is a consistency check on the pipeline, not a second play. The other is Fedde OVER 2.5 at +106 with a claimed EV of +0.469, and that number is a red flag, not a find: see known_issues."
    }
   }
+ },
+ "experiment_id_registry": {
+  "E1": "Opponent-K% adjustment for K-props",
+  "E2": "Negative-binomial K tails vs Poisson",
+  "E3": "Line-move capture for props",
+  "E4": "V13 vs moneyline: edge or favorite-fading bias?",
+  "E5": "WNBA port",
+  "E6": "HR log-odds shrinkage in a log5 event model",
+  "E7": "Lineup-aware offense for sides (reopen attempt) \u2014 was a duplicate E4 until 2026-07-28",
+  "_note": "docs/progress.md also uses 'E5' in PROSE for a shrinkage experiment. That prose usage is SUPERSEDED: the shrinkage work is E6. E5 in this registry is the WNBA port. Historical prose is left as written (R6); this registry is authoritative."
  }
 }

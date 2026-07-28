@@ -12,12 +12,31 @@ def _norm(s):
     return unicodedata.normalize("NFKD",(s or "")).encode("ascii","ignore").decode().lower().strip()
 def _ids():
     return {_norm(r["name"]):r["id"] for r in csv.DictReader(open(os.path.join(BASE,"data/backfill/mlb/2026/pitchers.csv")))}
+#: Log field layouts, keyed by field count. Values are (SO index, TBF index, GS index).
+#: 7  date|IP|ER|SO|BB|TBF|GS                 (canonical backfill format)
+#: 8  date|opp|IP|ER|SO|BB|TBF|GS             (forward format, everything after date shifts +1)
+#: 10 the wide format, SO=6 TBF=8 GS=9
+_LAYOUTS={7:(3,5,6), 8:(4,6,7), 10:(6,8,9)}
+
 def _parse(path):
+    """Parse a pitcher log into (date, SO, TBF, is_start) rows.
+
+    Dispatch is on EXACT field count. It used to be `>=10 ... elif >=7`, which silently routed an
+    8-field forward-format row into the 7-field branch and read ER as SO and BB as TBF -- wrong
+    numbers, no error. That is worse than the documented sp_asof crash, because nothing surfaces it.
+    An unrecognised width now raises rather than guessing (R1).
+    """
     rows=[]
-    for ln in open(path):
-        p=ln.strip().split("|")
-        if len(p)>=10: rows.append((p[0],float(p[6]),float(p[8]),p[9]=="1"))
-        elif len(p)>=7: rows.append((p[0],float(p[3]),float(p[5]),p[6]=="1"))
+    for i,ln in enumerate(open(path),1):
+        ln=ln.strip()
+        if not ln: continue
+        p=ln.split("|")
+        lay=_LAYOUTS.get(len(p))
+        if lay is None:
+            raise ValueError("%s:%d unrecognised log width %d (known: %s): %r"
+                             % (path,i,len(p),sorted(_LAYOUTS),ln[:80]))
+        so,tbf,gs=lay
+        rows.append((p[0],float(p[so]),float(p[tbf]),p[gs]=="1"))
     rows.sort(); return rows
 def proj(name, ids=None):
     ids=ids or _ids(); pid=ids.get(_norm(name))

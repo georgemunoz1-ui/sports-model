@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Session-start integrity gate. Run BEFORE any work. Exit 0 = healthy. Mechanically enforces
 what can be enforced (Anthropic/OpenAI harness pattern: rules as tooling, not vibes)."""
-import csv, json, os, sys, glob, datetime, subprocess
+import csv, json, os, re, sys, glob, datetime, subprocess
 BASE=os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 os.chdir(BASE)
 fails=[]; warns=[]
@@ -41,8 +41,41 @@ try:
 except Exception as e:
     check(f"results.csv readable ({e})", False)
 # 4. pitcher logs cache
-n=len(glob.glob("data/backfill/mlb/2026/pitcher_logs/*.txt"))
+def _logfiles():
+    """Only real pitcher logs. README_NOTE.txt lives in this directory and matched *.txt, so it was
+    being counted as a log (and fed to the integrity scan, where it parses to width 1 and vanishes)."""
+    return [f for f in glob.glob("data/backfill/mlb/2026/pitcher_logs/*.txt")
+            if os.path.basename(f)[0] not in "_." and not os.path.basename(f).startswith("README")]
+n=len(_logfiles())
 check(f"pitcher_logs cached: {n} (>=310)", n>=310)
+# 4a. ER/BB placeholder manifest — the caveat used to live only in README_NOTE.txt, which no code
+# read and no check tested, so a genuine 0-ER start was indistinguishable from a placeholder.
+try:
+    _pm=json.load(open("data/backfill/mlb/2026/pitcher_logs/_placeholders.json"))
+    _bad=[]
+    for r in _pm["rows"]:
+        got=None
+        for ln in open(f"data/backfill/mlb/2026/pitcher_logs/{r['pitcher_id']}.txt"):
+            p=ln.strip().split("|")
+            if p and p[0]==r["date"]: got=p; break
+        if got is None: _bad.append(f"{r['pitcher_id']} {r['date']} row missing")
+        elif not (float(got[2])==0.0 and float(got[4])==0.0):
+            _bad.append(f"{r['pitcher_id']} {r['date']} ER/BB no longer 0 — backfilled? drop it from the manifest")
+        elif float(got[3])!=r["SO"] or float(got[5])!=r["TBF"]:
+            _bad.append(f"{r['pitcher_id']} {r['date']} SO/TBF changed since the manifest was cut")
+    check(f"ER/BB placeholder manifest matches logs ({len(_pm['rows'])} rows, {len(_bad)} drift)", not _bad)
+    for b in _bad[:5]: print(f"   PLACEHOLDER DRIFT: {b}")
+except Exception as e: check(f"ER/BB placeholder manifest ({e})", False)
+# 4b. HFA single-source — HFA-SPLIT was two unexplained literals (1.03 / 1.005) across the tree.
+try:
+    _live={"harness/daily_card.py","engine/v13_1.py"}
+    _stray=[]
+    for f in sorted(_live):
+        for i,ln in enumerate(open(f),1):
+            if re.search(r"pfh\*1\.\d+|pf_h\*1\.\d+", ln.replace(" ","")): _stray.append(f"{f}:{i}")
+    check(f"HFA read from engine/hfa.py in live paths ({len(_stray)} stray literals)", not _stray)
+    for s in _stray[:5]: print(f"   STRAY HFA LITERAL: {s}")
+except Exception as e: check(f"HFA single-source scan ({e})", False)
 # 5. ledger consistency: pending plays graded?
 try:
     lp=st["ledgers"]["kprops_paper"]
@@ -53,11 +86,14 @@ except Exception: pass
 try:
     import datetime as _dt
     badlogs=[]
-    for f in glob.glob("data/backfill/mlb/2026/pitcher_logs/*.txt"):
+    for f in _logfiles():
         starts=[]
         for ln in open(f):
             p=ln.strip().split("|")
-            if len(p)>=10 and p[9]=="1": starts.append((p[0],float(p[4])))
+            # exact-width dispatch; width 8 = date|opp|IP|... (forward format) was previously
+            # skipped entirely by this scan, so an 8-field log could not be integrity-checked
+            if len(p)==10 and p[9]=="1": starts.append((p[0],float(p[4])))
+            elif len(p)==8 and p[7]=="1": starts.append((p[0],float(p[2])))
             elif len(p)==7 and p[6]=="1": starts.append((p[0],float(p[1])))
         starts.sort()
         # Taco validation spec 7/23: dupes/spacing FLAG for reconciliation, never auto-verdict.
@@ -74,6 +110,12 @@ try:
     r=subprocess.run([sys.executable,"engine/kprops.py"],capture_output=True,text=True)
     check(f"kprops self-test ({r.stdout.strip()})", r.returncode==0)
 except Exception as e: check(f"kprops self-test ran ({e})", False)
+# 5a2b. parse-equivalence: engine/kprops.py is a published KSIM lineage hash. If it changes, the
+# change must be proven a no-op on the frozen inputs rather than silently accepted.
+try:
+    r=subprocess.run([sys.executable,"harness/test_parse_equivalence.py"],capture_output=True,text=True)
+    check(f"parse equivalence ({(r.stdout.strip().splitlines() or ['no output'])[-1]})", r.returncode==0)
+except Exception as e: check(f"parse equivalence ran ({e})", False)
 # 5a3. gate counter: COMPUTED, not typed. The gate line used to be written as
 # record_w + record_l on every --register run, which counts every settled row whatever
 # policy produced it -- so a prospective 0/100 was silently clobbered back to 9/100.
@@ -96,7 +138,7 @@ except Exception as e: check(f"policy gate checks ({e})", False)
 import subprocess
 try:
     dirty=subprocess.run(["git","status","--porcelain"],capture_output=True,text=True).stdout.strip()
-    check(f"git working tree clean ({len(dirty.splitlines())} dirty)", len(dirty.splitlines())<=3, warn=True)
+    check(f"git tree: {len(dirty.splitlines())} uncommitted path(s) (<=3 tolerated)", len(dirty.splitlines())<=3, warn=True)
 except Exception: pass
 # 6. progress journal fresh
 if os.path.exists("docs/progress.md"):

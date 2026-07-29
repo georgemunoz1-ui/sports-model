@@ -1,0 +1,35 @@
+{
+ "record_id": "P4-2026-07-29-STARTER-ANNOTATIONS-LATER-CAPTURE",
+ "rule": "APPEND-ONLY sidecar (R6). The 16 frozen P4 forecast rows and both card artifacts are NOT rewritten. These annotations join at grading time as additional dq context.",
+ "source": {
+  "path": "data/mlb/matchups/2026-07-29_sp_vs_roster.json",
+  "captured_at_utc": "~2026-07-29T09:40Z (after the 07:1xZ forecast generation)",
+  "nature": "authoritative-style pregame matchup source with explicit ET times"
+ },
+ "conflicts": [
+  {
+   "game": "TEX@TB",
+   "forecast_id": "P4-20260729-UNRESOLVED:TEX@TB:2026-07-29",
+   "board_named": "Ian Seymour (L) [P badge]",
+   "matchup_source_named": "Casey Legumina (R) #67",
+   "flag": "STARTER_CONFLICT_LATER_CAPTURE",
+   "impact": "frozen candidate/V13-card inputs used Seymour's as-of stats for TB; if Legumina starts, the home-SP feature is the wrong pitcher. Card K row 'Ian Seymour E[K] 5.49' is conditional-void; the K board offered no Seymour line, so no prop-display impact. NOT adjudicated: neither source is a lineup-card confirmation."
+  },
+  {
+   "game": "COL@SD",
+   "forecast_id": "P4-20260729-UNRESOLVED:COL@SD:2026-07-29",
+   "board_named": "Griffin Canning (R)",
+   "matchup_source_named": "To be announced",
+   "flag": "STARTER_TBA_LATER_CAPTURE",
+   "impact": "SD home SP unsettled at 09:40Z; frozen inputs used Canning's stats. Card K row 'Griffin Canning E[K] 4.72' conditional on Canning actually starting."
+  }
+ ],
+ "corroborations": {
+  "starters": "the other 14 pairings match the odds-board names exactly (incl. Brady Singer, who remains PLACEHOLDER-ERBB contaminated)",
+  "timezone": "explicit 'PM ET' on every game \u2014 first explicit-timezone source this slate; validates the slate builder's EDT=UTC-4 conversion for all 16 first_pitch_utc values",
+  "venues": "all 16 venue strings match the results.csv-derived venue mapping (incl. UNIQLO Field at Dodger Stadium, Sutter Health Park)",
+  "doubleheader": "ATL@NYM listed at 1:10 PM ET and 7:10 PM ET with distinct starters \u2014 third independent corroboration of the DH"
+ },
+ "grading_directive": "At grading, attach the two flags above to their rows; if box scores show the matchup-source starter (Legumina) or a third name, record actual_starter and classify the SP-feature defect explicitly. Rows are already DIAGNOSTIC; no cohort change is possible or needed.",
+ "bvp_data_ruling": "Career SP-vs-roster splits (2-127 PA) are CAPTURE ONLY under R4; no model input; potential V14 context feature only via pre-registered validation."
+}

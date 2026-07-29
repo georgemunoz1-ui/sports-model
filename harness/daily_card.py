@@ -97,6 +97,7 @@ for pk,awf,hmf,t,aspn,hspn in slate:
     cands=odds.get(f"{aw}@{hm}") or [{}]
     with_ml=[c for c in cands if c.get("ml_away")]
     o=with_ml[0] if with_ml else cands[0]   # prefer priced entry (DH placeholders have none)
+    if len(cands)>1 and o in cands: cands.remove(o)  # doubleheader: each game consumes its own quote, in listed order
     ml_a,ml_h,tl=o.get("ml_away"),o.get("ml_home"),o.get("total")
     mkt_h=devig(ml_a,ml_h)[1] if (ml_a and ml_h) else None
     rows.append(dict(gamePk=pk,away=aw,home=hm,time=t,asp=aspn,hsp=hspn,

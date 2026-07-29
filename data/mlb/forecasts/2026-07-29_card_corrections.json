@@ -1,0 +1,53 @@
+{
+ "record_id": "CARD-2026-07-29-METADATA-CORRECTIONS",
+ "applies_to": {
+  "card": "cards/2026-07-29_card.json",
+  "card_sha256": "ea00fea554a3175309f475c9645cb3df2dd622b7314ab9c153d7b3977238b6dd",
+  "p4_forecasts": "P4-20260729-* (16 rows, forecasts.jsonl)"
+ },
+ "rule": "APPEND-ONLY sidecar (R6). The frozen card and forecast rows are NOT rewritten. This record must be read alongside them and precedes any outcome join.",
+ "authorized": "Owner acceptance + corrections, 2026-07-29. Card ACCEPTED FOR DIAGNOSTIC TRACKING AND FUTURE GRADING.",
+ "correction_1_ev_discipline": {
+  "withdrawn": "HOU -1.5 as a 'model-vs-price standout'. At +120 break-even is 45.45%; model 0.441 -> unit EV = 0.441*1.20 - 0.559 = -0.0298 (-2.98%). Raw cover probability misread as edge.",
+  "sole_positive_ev_rl_row": "ATL -1.5 (G1) at +153: BE 39.53%, model 0.447 -> unit EV = 0.447*1.53 - 0.553 = +0.131 (+13.1%). DIAGNOSTIC, NON-EXECUTABLE.",
+  "full_rl_ev_recheck": "all 16 RL rows recomputed: every other quoted -1.5 side is EV-negative or ~flat (next closest: PIT -1.5 +158 at ~+0.0004, i.e. flat).",
+  "standing_rule": "The phrase 'model-vs-price' may never again appear without break-even probability or unit EV computed. Raw model probability alone is insufficient."
+ },
+ "correction_2_v13_identity": {
+  "question": "sequential production stream vs gamePk-seeded identity \u2014 which produced the displayed values?",
+  "method": "source inspection + byte-level reproduction, NOT prior documentation",
+  "finding": "harness/daily_card.py line 16: rng=np.random.default_rng(722), module level; sim() consumes this stream with no reset (lines 70-75); games processed in slate.psv order; n=30000; HFA imported from engine/hfa.py CURRENT=1.005. Registry entry ml.v13_1.hfa1005.card.s722n30000 specifies exactly this (seed 722, 30000 sims, rng_policy sequential_slate_order, source harness/daily_card.py, pinned hash matches the file that ran).",
+  "reproduction": "Re-running the card byte-reproduces sha256 ea00fea554a3... exactly -> deterministic sequential stream confirmed; slate order is frozen in data/mlb/slates/2026-07-29_slate.psv.",
+  "verdict": "Displayed 7/29 card values were produced by the REGISTERED production identity ml.v13_1.hfa1005.card.s722n30000 (the id stamped on every row). No new diagnostic identity is needed. The gamePk-seeded identity ml.v13_1.p4fwd.hfa1005.n4000.rng_gamePk did NOT run (no gamePks) and produced nothing displayed; the P4 registry rows carry incumbent p_home=None."
+ },
+ "correction_3_source_reconciliation": {
+  "7_28_capture": "15 FINAL boxes + ATL@NYM POSTPONED (owner-confirmed 2026-07-29; consistent with the double 7/29 listing). With the postponement confirmed, the 7/28 slate IS complete at 15 finals -> ATL/NYM team-results reconciliation restores for 7/30+ slate builds. The two 7/29 ATL/NYM forecast rows keep their TEAM_RESULTS_STALE flag as generated (frozen).",
+  "7_29_statcast_capture": "15 matchup preview pages; ALL 30 team pages read 'Awaiting Starting Lineup' (no lineup was confirmed anywhere in the capture); ATL@NYM G1 has NO separately captured preview \u2014 one ATL@NYM page exists for a doubleheader day, so preview-derived context cannot distinguish G1 from G2."
+ },
+ "correction_4_k_price_order": {
+  "rule": "Every future K-prop table labels price columns explicitly as UNDER / OVER. The frozen kboard artifact's columns_per_book was already [line, under, over]; display tables must say so."
+ },
+ "correction_5_integer_totals": {
+  "rule": "Integer total lines require P(over), P(push), P(under). A projected MEAN above/below an integer line is descriptive only and can never establish a priced totals edge.",
+  "tonight": "Integer lines on this slate: BAL@DET 8.0, COL@SD 8.0, CHC@STL 8.0, CLE@CIN 9.0. The frozen card emits only the projected mean (daily_card outputs no total distribution), so NO totals edge claim exists for any integer-line game tonight; the 'lean' column is descriptive.",
+  "tooling_gap": "daily_card must emit P(over/push/under) per line before any future totals-edge language."
+ },
+ "7_30_clean_cohort_requirements": [
+  "1. gamePk resolved for every scheduled game (statsapi access or owner-supplied schedule)",
+  "2. every price attributed to a NAMED sportsbook (visible operator tab in capture)",
+  "3. both ML prices preserved from the SAME book with the SAME timestamp",
+  "4. probable starters reconciled to an authoritative pregame source (not odds-board-named)",
+  "5. lineup status captured SEPARATELY from probable-starter status",
+  "6. candidate AND V13 forecasts registered under exact model/RNG identities (V13 p4fwd runs once gamePks exist)",
+  "7. per-row staleness, placeholder and starter flags attached",
+  "8. failures route INDIVIDUALLY to DIAGNOSTIC; one bad row never invalidates the slate"
+ ],
+ "grading_plan_when_finals_arrive": {
+  "scope": "every 7/29 row, diagnostic cohort",
+  "ml": "candidate, V13(card identity, from the frozen card), and unattributed-market benchmark scored separately",
+  "k": "projected vs actual per arm; no ledger",
+  "rl": "actual cover + quoted-price EV classification per the correction-1 discipline",
+  "totals": "actual result with integer pushes handled explicitly",
+  "constraints": "no gate movement, $0, no real-money change"
+ }
+}

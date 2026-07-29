@@ -112,6 +112,16 @@ def main(slate_date):
     for r in ph["rows"]:
         ph_by_pid.setdefault(r["pitcher_id"], set()).add(r["date"])
     form = team_form(slate_date)
+    # Team-results completeness is COMPUTED, not typed: complete_through = latest final on disk;
+    # rows are reconciled only when that reaches D-1. Per-date exceptions (teams whose game that
+    # day is unaccounted) come from an optional data/mlb/slates/{date}_recon_exceptions.json.
+    # History: 7/29 ran with a hardcoded ATL/NYM exception before their 7/28 PPD was owner-confirmed.
+    complete_through = max(r["date"] for r in csv.DictReader(open("data/backfill/mlb/2026/results.csv"))
+                           if r["status"] == "final" and r["total"] != "" and r["date"] < slate_date)
+    d1 = (dt.date.fromisoformat(slate_date) - dt.timedelta(days=1)).isoformat()
+    base_reconciled = complete_through >= d1
+    exf = f"data/mlb/slates/{slate_date}_recon_exceptions.json"
+    recon_exceptions = set(json.load(open(exf))) if os.path.exists(exf) else set()
     venue_by_home = {}
     for r in csv.DictReader(open("data/backfill/mlb/2026/results.csv")):
         if r.get("venue"):
@@ -143,7 +153,7 @@ def main(slate_date):
                         "k_pct": feats["k_pct"] if feats else None,
                         "bb_pct": feats["bb_pct"] if feats else None,
                         "asof_flags": flags}
-        recon = not ({a, h} & {"ATL", "NYM"})  # ATL/NYM 7/28 result unaccounted in the capture
+        recon = base_reconciled and not ({a, h} & recon_exceptions)
         pf = park.get(venue_by_home.get(h, ""), None)
         games.append({
             "gamePk": None, "slate_date": slate_date, "away": a, "home": h,
@@ -151,7 +161,7 @@ def main(slate_date):
             "first_pitch_utc": et_to_utc(slate_date, g["time_verbatim"]),
             "first_pitch_verbatim": g["time_verbatim"],
             "team": {"away": form.get(a), "home": form.get(h)},
-            "team_results_complete_through": "2026-07-28",
+            "team_results_complete_through": complete_through,
             "team_results_reconciled": recon,
             "sp": sp, "park_factor": pf,
             "quote": {"book": None,

@@ -1,0 +1,1020 @@
+{
+ "record_id": "P4-SLATE-2026-07-29",
+ "built_utc": "2026-07-29T07:23:08Z",
+ "odds_source": {
+  "path": "data/mlb/odds/2026-07-29_gameboards.json",
+  "sha256": "9fa4e847ab70c8d60c5e6fa9b1eafc8a515e892fe2ea21731616c12841c778e9"
+ },
+ "assumptions": [
+  "first-pitch times: board shows no TZ; ET presumed (EDT=UTC-4), robustly pre-pitch under any US timezone at generation time",
+  "team form: normalized labels, full-season as-of (P2 spec); firewall's raw-label keying diverges post-7/19 label switch \u2014 disclosed, not hidden"
+ ],
+ "unmatched_starters": [
+  "AJ Smith-Shawver",
+  "Hayden Wesneski"
+ ],
+ "games": [
+  {
+   "gamePk": null,
+   "slate_date": "2026-07-29",
+   "away": "PHI",
+   "home": "MIA",
+   "dh_game": null,
+   "first_pitch_utc": "2026-07-29T16:10:00Z",
+   "first_pitch_verbatim": "Jul 29 12:10pm",
+   "team": {
+    "away": {
+     "rf_pg": 4.324,
+     "ra_pg": 4.444,
+     "games_before": 108
+    },
+    "home": {
+     "rf_pg": 4.38,
+     "ra_pg": 4.343,
+     "games_before": 108
+    }
+   },
+   "team_results_complete_through": "2026-07-28",
+   "team_results_reconciled": true,
+   "sp": {
+    "away": {
+     "pid": 666200,
+     "name": "Jesus Luzardo",
+     "confirmed": false,
+     "staleness_tier": "STALE_WARNING",
+     "stale_block_verified": false,
+     "no_log": false,
+     "era": 3.526,
+     "gs": 20,
+     "k_pct": 29.61,
+     "bb_pct": 7.66,
+     "asof_flags": {
+      "placeholder_in_window": false
+     }
+    },
+    "home": {
+     "pid": 687473,
+     "name": "Ryan Gusto",
+     "confirmed": false,
+     "staleness_tier": "STALE_BLOCK",
+     "stale_block_verified": false,
+     "no_log": false,
+     "era": 5.236,
+     "gs": 5,
+     "k_pct": 18.94,
+     "bb_pct": 7.58,
+     "asof_flags": {
+      "placeholder_in_window": false
+     }
+    }
+   },
+   "park_factor": 0.865,
+   "quote": {
+    "book": null,
+    "ml_home": 144,
+    "ml_away": -175,
+    "observed_at_utc": "2026-07-29T07:17:39Z",
+    "board_view": "view_a (single-book board; operator tab not visible -> book UNRESOLVED)"
+   }
+  },
+  {
+   "gamePk": null,
+   "slate_date": "2026-07-29",
+   "away": "AZ",
+   "home": "PIT",
+   "dh_game": null,
+   "first_pitch_utc": "2026-07-29T16:35:00Z",
+   "first_pitch_verbatim": "Jul 29 12:35pm",
+   "team": {
+    "away": {
+     "rf_pg": 4.477,
+     "ra_pg": 4.542,
+     "games_before": 107
+    },
+    "home": {
+     "rf_pg": 5.213,
+     "ra_pg": 4.843,
+     "games_before": 108
+    }
+   },
+   "team_results_complete_through": "2026-07-28",
+   "team_results_reconciled": true,
+   "sp": {
+    "away": {
+     "pid": 593958,
+     "name": "Eduardo Rodriguez",
+     "confirmed": false,
+     "staleness_tier": "STALE_WARNING",
+     "stale_block_verified": false,
+     "no_log": false,
+     "era": 2.682,
+     "gs": 20,
+     "k_pct": 17.15,
+     "bb_pct": 8.58,
+     "asof_flags": {
+      "placeholder_in_window": false
+     }
+    },
+    "home": {
+     "pid": 683003,
+     "name": "Jared Jones",
+     "confirmed": false,
+     "staleness_tier": "STALE_WARNING",
+     "stale_block_verified": false,
+     "no_log": false,
+     "era": 4.122,
+     "gs": 9,
+     "k_pct": 29.45,
+     "bb_pct": 7.36,
+     "asof_flags": {
+      "placeholder_in_window": false
+     }
+    }
+   },
+   "park_factor": 1.092,
+   "quote": {
+    "book": null,
+    "ml_home": -129,
+    "ml_away": 107,
+    "observed_at_utc": "2026-07-29T07:17:39Z",
+    "board_view": "view_a (single-book board; operator tab not visible -> book UNRESOLVED)"
+   }
+  },
+  {
+   "gamePk": null,
+   "slate_date": "2026-07-29",
+   "away": "TOR",
+   "home": "WSH",
+   "dh_game": null,
+   "first_pitch_utc": "2026-07-29T17:05:00Z",
+   "first_pitch_verbatim": "Jul 29 1:05pm",
+   "team": {
+    "away": {
+     "rf_pg": 3.935,
+     "ra_pg": 4.519,
+     "games_before": 108
+    },
+    "home": {
+     "rf_pg": 5.5,
+     "ra_pg": 5.213,
+     "games_before": 108
+    }
+   },
+   "team_results_complete_through": "2026-07-28",
+   "team_results_reconciled": true,
+   "sp": {
+    "away": {
+     "pid": 702056,
+     "name": "Trey Yesavage",
+     "confirmed": false,
+     "staleness_tier": "STALE_WARNING",
+     "stale_block_verified": false,
+     "no_log": false,
+     "era": 3.913,
+     "gs": 15,
+     "k_pct": 23.28,
+     "bb_pct": 12.24,
+     "asof_flags": {
+      "placeholder_in_window": false
+     }
+    },
+    "home": {
+     "pid": 641793,
+     "name": "Zack Littell",
+     "confirmed": false,
+     "staleness_tier": "STALE_WARNING",
+     "stale_block_verified": false,
+     "no_log": false,
+     "era": 5.423,
+     "gs": 13,
+     "k_pct": 14.73,
+     "bb_pct": 7.25,
+     "asof_flags": {
+      "placeholder_in_window": false
+     }
+    }
+   },
+   "park_factor": 1.086,
+   "quote": {
+    "book": null,
+    "ml_home": 102,
+    "ml_away": -123,
+    "observed_at_utc": "2026-07-29T07:17:39Z",
+    "board_view": "view_a (single-book board; operator tab not visible -> book UNRESOLVED)"
+   }
+  },
+  {
+   "gamePk": null,
+   "slate_date": "2026-07-29",
+   "away": "BAL",
+   "home": "DET",
+   "dh_game": null,
+   "first_pitch_utc": "2026-07-29T17:10:00Z",
+   "first_pitch_verbatim": "Jul 29 1:10pm",
+   "team": {
+    "away": {
+     "rf_pg": 4.546,
+     "ra_pg": 4.778,
+     "games_before": 108
+    },
+    "home": {
+     "rf_pg": 4.296,
+     "ra_pg": 3.935,
+     "games_before": 108
+    }
+   },
+   "team_results_complete_through": "2026-07-28",
+   "team_results_reconciled": true,
+   "sp": {
+    "away": {
+     "pid": 669432,
+     "name": "Trevor Rogers",
+     "confirmed": false,
+     "staleness_tier": "STALE_WARNING",
+     "stale_block_verified": false,
+     "no_log": false,
+     "era": 4.433,
+     "gs": 18,
+     "k_pct": 18.83,
+     "bb_pct": 7.82,
+     "asof_flags": {
+      "placeholder_in_window": false
+     }
+    },
+    "home": {
+     "pid": 669373,
+     "name": "Tarik Skubal",
+     "confirmed": false,
+     "staleness_tier": "STALE_WARNING",
+     "stale_block_verified": false,
+     "no_log": false,
+     "era": 2.896,
+     "gs": 14,
+     "k_pct": 30.53,
+     "bb_pct": 3.43,
+     "asof_flags": {
+      "placeholder_in_window": false
+     }
+    }
+   },
+   "park_factor": 0.975,
+   "quote": {
+    "book": null,
+    "ml_home": -180,
+    "ml_away": 148,
+    "observed_at_utc": "2026-07-29T07:17:39Z",
+    "board_view": "view_a (single-book board; operator tab not visible -> book UNRESOLVED)"
+   }
+  },
+  {
+   "gamePk": null,
+   "slate_date": "2026-07-29",
+   "away": "ATL",
+   "home": "NYM",
+   "dh_game": 1,
+   "first_pitch_utc": "2026-07-29T17:10:00Z",
+   "first_pitch_verbatim": "Jul 29 1:10pm",
+   "team": {
+    "away": {
+     "rf_pg": 4.934,
+     "ra_pg": 4.028,
+     "games_before": 106
+    },
+    "home": {
+     "rf_pg": 4.168,
+     "ra_pg": 4.645,
+     "games_before": 107
+    }
+   },
+   "team_results_complete_through": "2026-07-28",
+   "team_results_reconciled": false,
+   "sp": {
+    "away": {
+     "pid": null,
+     "name": "AJ Smith-Shawver",
+     "confirmed": false,
+     "staleness_tier": "PROVISIONAL",
+     "stale_block_verified": false,
+     "no_log": true,
+     "era": null,
+     "gs": null,
+     "k_pct": null,
+     "bb_pct": null
+    },
+    "home": {
+     "pid": 640455,
+     "name": "Sean Manaea",
+     "confirmed": false,
+     "staleness_tier": "STALE_WARNING",
+     "stale_block_verified": false,
+     "no_log": false,
+     "era": 4.948,
+     "gs": 7,
+     "k_pct": 22.95,
+     "bb_pct": 7.37,
+     "asof_flags": {
+      "placeholder_in_window": false
+     }
+    }
+   },
+   "park_factor": 1.085,
+   "quote": {
+    "book": null,
+    "ml_home": -105,
+    "ml_away": -115,
+    "observed_at_utc": "2026-07-29T07:17:39Z",
+    "board_view": "view_a (single-book board; operator tab not visible -> book UNRESOLVED)"
+   }
+  },
+  {
+   "gamePk": null,
+   "slate_date": "2026-07-29",
+   "away": "MIL",
+   "home": "SF",
+   "dh_game": null,
+   "first_pitch_utc": "2026-07-29T19:45:00Z",
+   "first_pitch_verbatim": "Jul 29 3:45pm",
+   "team": {
+    "away": {
+     "rf_pg": 5.075,
+     "ra_pg": 3.72,
+     "games_before": 107
+    },
+    "home": {
+     "rf_pg": 4.121,
+     "ra_pg": 4.682,
+     "games_before": 107
+    }
+   },
+   "team_results_complete_through": "2026-07-28",
+   "team_results_reconciled": true,
+   "sp": {
+    "away": {
+     "pid": 675660,
+     "name": "Shane Drohan",
+     "confirmed": false,
+     "staleness_tier": "STALE_WARNING",
+     "stale_block_verified": false,
+     "no_log": false,
+     "era": 3.32,
+     "gs": 10,
+     "k_pct": 23.97,
+     "bb_pct": 6.62,
+     "asof_flags": {
+      "placeholder_in_window": false
+     }
+    },
+    "home": {
+     "pid": 657277,
+     "name": "Logan Webb",
+     "confirmed": false,
+     "staleness_tier": "STALE_WARNING",
+     "stale_block_verified": false,
+     "no_log": false,
+     "era": 3.895,
+     "gs": 17,
+     "k_pct": 19.41,
+     "bb_pct": 6.16,
+     "asof_flags": {
+      "placeholder_in_window": false
+     }
+    }
+   },
+   "park_factor": 0.923,
+   "quote": {
+    "book": null,
+    "ml_home": 104,
+    "ml_away": -126,
+    "observed_at_utc": "2026-07-29T07:17:39Z",
+    "board_view": "view_a (single-book board; operator tab not visible -> book UNRESOLVED)"
+   }
+  },
+  {
+   "gamePk": null,
+   "slate_date": "2026-07-29",
+   "away": "COL",
+   "home": "SD",
+   "dh_game": null,
+   "first_pitch_utc": "2026-07-29T20:10:00Z",
+   "first_pitch_verbatim": "Jul 29 4:10pm",
+   "team": {
+    "away": {
+     "rf_pg": 4.759,
+     "ra_pg": 5.787,
+     "games_before": 108
+    },
+    "home": {
+     "rf_pg": 4.206,
+     "ra_pg": 4.393,
+     "games_before": 107
+    }
+   },
+   "team_results_complete_through": "2026-07-28",
+   "team_results_reconciled": true,
+   "sp": {
+    "away": {
+     "pid": 687312,
+     "name": "Gabriel Hughes",
+     "confirmed": false,
+     "staleness_tier": "STALE_WARNING",
+     "stale_block_verified": false,
+     "no_log": false,
+     "era": 3.191,
+     "gs": 2,
+     "k_pct": 25.0,
+     "bb_pct": 8.93,
+     "asof_flags": {
+      "placeholder_in_window": false
+     }
+    },
+    "home": {
+     "pid": 656288,
+     "name": "Griffin Canning",
+     "confirmed": false,
+     "staleness_tier": "CURRENT",
+     "stale_block_verified": false,
+     "no_log": false,
+     "era": 7.385,
+     "gs": 12,
+     "k_pct": 22.66,
+     "bb_pct": 11.51,
+     "asof_flags": {
+      "placeholder_in_window": false
+     }
+    }
+   },
+   "park_factor": 0.895,
+   "quote": {
+    "book": null,
+    "ml_home": -143,
+    "ml_away": 119,
+    "observed_at_utc": "2026-07-29T07:17:39Z",
+    "board_view": "view_a (single-book board; operator tab not visible -> book UNRESOLVED)"
+   }
+  },
+  {
+   "gamePk": null,
+   "slate_date": "2026-07-29",
+   "away": "TEX",
+   "home": "TB",
+   "dh_game": null,
+   "first_pitch_utc": "2026-07-29T22:40:00Z",
+   "first_pitch_verbatim": "Jul 29 6:40pm",
+   "team": {
+    "away": {
+     "rf_pg": 4.243,
+     "ra_pg": 4.411,
+     "games_before": 107
+    },
+    "home": {
+     "rf_pg": 4.481,
+     "ra_pg": 4.113,
+     "games_before": 106
+    }
+   },
+   "team_results_complete_through": "2026-07-28",
+   "team_results_reconciled": true,
+   "sp": {
+    "away": {
+     "pid": 669022,
+     "name": "MacKenzie Gore",
+     "confirmed": false,
+     "staleness_tier": "STALE_WARNING",
+     "stale_block_verified": false,
+     "no_log": false,
+     "era": 4.912,
+     "gs": 21,
+     "k_pct": 25.68,
+     "bb_pct": 8.84,
+     "asof_flags": {
+      "placeholder_in_window": false
+     }
+    },
+    "home": {
+     "pid": 693855,
+     "name": "Ian Seymour",
+     "confirmed": false,
+     "staleness_tier": "CURRENT",
+     "stale_block_verified": false,
+     "no_log": false,
+     "era": 5.007,
+     "gs": 8,
+     "k_pct": 28.01,
+     "bb_pct": 8.79,
+     "asof_flags": {
+      "placeholder_in_window": false
+     }
+    }
+   },
+   "park_factor": 1.021,
+   "quote": {
+    "book": null,
+    "ml_home": -143,
+    "ml_away": 119,
+    "observed_at_utc": "2026-07-29T07:17:39Z",
+    "board_view": "view_a (single-book board; operator tab not visible -> book UNRESOLVED)"
+   }
+  },
+  {
+   "gamePk": null,
+   "slate_date": "2026-07-29",
+   "away": "CLE",
+   "home": "CIN",
+   "dh_game": null,
+   "first_pitch_utc": "2026-07-29T23:10:00Z",
+   "first_pitch_verbatim": "Jul 29 7:10pm",
+   "team": {
+    "away": {
+     "rf_pg": 3.908,
+     "ra_pg": 4.083,
+     "games_before": 109
+    },
+    "home": {
+     "rf_pg": 4.142,
+     "ra_pg": 4.755,
+     "games_before": 106
+    }
+   },
+   "team_results_complete_through": "2026-07-28",
+   "team_results_reconciled": true,
+   "sp": {
+    "away": {
+     "pid": 676282,
+     "name": "Joey Cantillo",
+     "confirmed": false,
+     "staleness_tier": "STALE_WARNING",
+     "stale_block_verified": false,
+     "no_log": false,
+     "era": 3.811,
+     "gs": 21,
+     "k_pct": 24.62,
+     "bb_pct": 11.43,
+     "asof_flags": {
+      "placeholder_in_window": false
+     }
+    },
+    "home": {
+     "pid": 663903,
+     "name": "Brady Singer",
+     "confirmed": false,
+     "staleness_tier": "CURRENT",
+     "stale_block_verified": false,
+     "no_log": false,
+     "era": 4.366,
+     "gs": 20,
+     "k_pct": 19.38,
+     "bb_pct": 6.83,
+     "asof_flags": {
+      "placeholder_in_window": true
+     }
+    }
+   },
+   "park_factor": 0.97,
+   "quote": {
+    "book": null,
+    "ml_home": 112,
+    "ml_away": -135,
+    "observed_at_utc": "2026-07-29T07:17:39Z",
+    "board_view": "view_a (single-book board; operator tab not visible -> book UNRESOLVED)"
+   }
+  },
+  {
+   "gamePk": null,
+   "slate_date": "2026-07-29",
+   "away": "ATL",
+   "home": "NYM",
+   "dh_game": 2,
+   "first_pitch_utc": "2026-07-29T23:10:00Z",
+   "first_pitch_verbatim": "Jul 29 7:10pm",
+   "team": {
+    "away": {
+     "rf_pg": 4.934,
+     "ra_pg": 4.028,
+     "games_before": 106
+    },
+    "home": {
+     "rf_pg": 4.168,
+     "ra_pg": 4.645,
+     "games_before": 107
+    }
+   },
+   "team_results_complete_through": "2026-07-28",
+   "team_results_reconciled": false,
+   "sp": {
+    "away": {
+     "pid": 519242,
+     "name": "Chris Sale",
+     "confirmed": false,
+     "staleness_tier": "CURRENT",
+     "stale_block_verified": false,
+     "no_log": false,
+     "era": 2.217,
+     "gs": 19,
+     "k_pct": 29.78,
+     "bb_pct": 5.78,
+     "asof_flags": {
+      "placeholder_in_window": false
+     }
+    },
+    "home": {
+     "pid": 681035,
+     "name": "Christian Scott",
+     "confirmed": false,
+     "staleness_tier": "STALE_WARNING",
+     "stale_block_verified": false,
+     "no_log": false,
+     "era": 3.032,
+     "gs": 13,
+     "k_pct": 28.46,
+     "bb_pct": 10.28,
+     "asof_flags": {
+      "placeholder_in_window": false
+     }
+    }
+   },
+   "park_factor": 1.085,
+   "quote": {
+    "book": null,
+    "ml_home": 128,
+    "ml_away": -155,
+    "observed_at_utc": "2026-07-29T07:17:39Z",
+    "board_view": "view_a (single-book board; operator tab not visible -> book UNRESOLVED)"
+   }
+  },
+  {
+   "gamePk": null,
+   "slate_date": "2026-07-29",
+   "away": "NYY",
+   "home": "CWS",
+   "dh_game": null,
+   "first_pitch_utc": "2026-07-29T23:40:00Z",
+   "first_pitch_verbatim": "Jul 29 7:40pm",
+   "team": {
+    "away": {
+     "rf_pg": 4.673,
+     "ra_pg": 3.841,
+     "games_before": 107
+    },
+    "home": {
+     "rf_pg": 4.792,
+     "ra_pg": 4.406,
+     "games_before": 106
+    }
+   },
+   "team_results_complete_through": "2026-07-28",
+   "team_results_reconciled": true,
+   "sp": {
+    "away": {
+     "pid": 693645,
+     "name": "Cam Schlittler",
+     "confirmed": false,
+     "staleness_tier": "STALE_WARNING",
+     "stale_block_verified": false,
+     "no_log": false,
+     "era": 2.246,
+     "gs": 21,
+     "k_pct": 29.65,
+     "bb_pct": 5.11,
+     "asof_flags": {
+      "placeholder_in_window": false
+     }
+    },
+    "home": {
+     "pid": 663436,
+     "name": "Davis Martin",
+     "confirmed": false,
+     "staleness_tier": "STALE_WARNING",
+     "stale_block_verified": false,
+     "no_log": false,
+     "era": 3.401,
+     "gs": 19,
+     "k_pct": 22.05,
+     "bb_pct": 7.5,
+     "asof_flags": {
+      "placeholder_in_window": false
+     }
+    }
+   },
+   "park_factor": 0.939,
+   "quote": {
+    "book": null,
+    "ml_home": 123,
+    "ml_away": -149,
+    "observed_at_utc": "2026-07-29T07:17:39Z",
+    "board_view": "view_a (single-book board; operator tab not visible -> book UNRESOLVED)"
+   }
+  },
+  {
+   "gamePk": null,
+   "slate_date": "2026-07-29",
+   "away": "KC",
+   "home": "MIN",
+   "dh_game": null,
+   "first_pitch_utc": "2026-07-29T23:40:00Z",
+   "first_pitch_verbatim": "Jul 29 7:40pm",
+   "team": {
+    "away": {
+     "rf_pg": 4.185,
+     "ra_pg": 5.083,
+     "games_before": 108
+    },
+    "home": {
+     "rf_pg": 4.759,
+     "ra_pg": 5.0,
+     "games_before": 108
+    }
+   },
+   "team_results_complete_through": "2026-07-28",
+   "team_results_reconciled": true,
+   "sp": {
+    "away": {
+     "pid": 677976,
+     "name": "Randy Dobnak",
+     "confirmed": false,
+     "staleness_tier": "CURRENT",
+     "stale_block_verified": false,
+     "no_log": false,
+     "era": 1.475,
+     "gs": 2,
+     "k_pct": 12.2,
+     "bb_pct": 10.98,
+     "asof_flags": {
+      "placeholder_in_window": false
+     }
+    },
+    "home": {
+     "pid": 657746,
+     "name": "Joe Ryan",
+     "confirmed": false,
+     "staleness_tier": "STALE_BLOCK",
+     "stale_block_verified": false,
+     "no_log": false,
+     "era": 2.879,
+     "gs": 20,
+     "k_pct": 28.44,
+     "bb_pct": 5.56,
+     "asof_flags": {
+      "placeholder_in_window": false
+     }
+    }
+   },
+   "park_factor": 0.918,
+   "quote": {
+    "book": null,
+    "ml_home": -181,
+    "ml_away": 149,
+    "observed_at_utc": "2026-07-29T07:17:39Z",
+    "board_view": "view_a (single-book board; operator tab not visible -> book UNRESOLVED)"
+   }
+  },
+  {
+   "gamePk": null,
+   "slate_date": "2026-07-29",
+   "away": "CHC",
+   "home": "STL",
+   "dh_game": null,
+   "first_pitch_utc": "2026-07-29T23:45:00Z",
+   "first_pitch_verbatim": "Jul 29 7:45pm",
+   "team": {
+    "away": {
+     "rf_pg": 5.215,
+     "ra_pg": 4.393,
+     "games_before": 107
+    },
+    "home": {
+     "rf_pg": 4.387,
+     "ra_pg": 4.472,
+     "games_before": 106
+    }
+   },
+   "team_results_complete_through": "2026-07-28",
+   "team_results_reconciled": true,
+   "sp": {
+    "away": {
+     "pid": 571510,
+     "name": "Matthew Boyd",
+     "confirmed": false,
+     "staleness_tier": "STALE_WARNING",
+     "stale_block_verified": false,
+     "no_log": false,
+     "era": 4.329,
+     "gs": 10,
+     "k_pct": 23.5,
+     "bb_pct": 6.45,
+     "asof_flags": {
+      "placeholder_in_window": false
+     }
+    },
+    "home": {
+     "pid": 669160,
+     "name": "Dustin May",
+     "confirmed": false,
+     "staleness_tier": "STALE_WARNING",
+     "stale_block_verified": false,
+     "no_log": false,
+     "era": 4.88,
+     "gs": 19,
+     "k_pct": 22.95,
+     "bb_pct": 7.73,
+     "asof_flags": {
+      "placeholder_in_window": false
+     }
+    }
+   },
+   "park_factor": 0.856,
+   "quote": {
+    "book": null,
+    "ml_home": 105,
+    "ml_away": -127,
+    "observed_at_utc": "2026-07-29T07:17:39Z",
+    "board_view": "view_a (single-book board; operator tab not visible -> book UNRESOLVED)"
+   }
+  },
+  {
+   "gamePk": null,
+   "slate_date": "2026-07-29",
+   "away": "HOU",
+   "home": "LAA",
+   "dh_game": null,
+   "first_pitch_utc": "2026-07-30T01:38:00Z",
+   "first_pitch_verbatim": "Jul 29 9:38pm",
+   "team": {
+    "away": {
+     "rf_pg": 4.569,
+     "ra_pg": 4.972,
+     "games_before": 109
+    },
+    "home": {
+     "rf_pg": 4.259,
+     "ra_pg": 4.889,
+     "games_before": 108
+    }
+   },
+   "team_results_complete_through": "2026-07-28",
+   "team_results_reconciled": true,
+   "sp": {
+    "away": {
+     "pid": null,
+     "name": "Hayden Wesneski",
+     "confirmed": false,
+     "staleness_tier": "PROVISIONAL",
+     "stale_block_verified": false,
+     "no_log": true,
+     "era": null,
+     "gs": null,
+     "k_pct": null,
+     "bb_pct": null
+    },
+    "home": {
+     "pid": 680570,
+     "name": "Grayson Rodriguez",
+     "confirmed": false,
+     "staleness_tier": "STALE_WARNING",
+     "stale_block_verified": false,
+     "no_log": false,
+     "era": 8.754,
+     "gs": 8,
+     "k_pct": 16.07,
+     "bb_pct": 10.12,
+     "asof_flags": {
+      "placeholder_in_window": false
+     }
+    }
+   },
+   "park_factor": 0.887,
+   "quote": {
+    "book": null,
+    "ml_home": 109,
+    "ml_away": -131,
+    "observed_at_utc": "2026-07-29T07:17:39Z",
+    "board_view": "view_a (single-book board; operator tab not visible -> book UNRESOLVED)"
+   }
+  },
+  {
+   "gamePk": null,
+   "slate_date": "2026-07-29",
+   "away": "BOS",
+   "home": "ATH",
+   "dh_game": null,
+   "first_pitch_utc": "2026-07-30T01:40:00Z",
+   "first_pitch_verbatim": "Jul 29 9:40pm",
+   "team": {
+    "away": {
+     "rf_pg": 4.198,
+     "ra_pg": 3.755,
+     "games_before": 106
+    },
+    "home": {
+     "rf_pg": 4.43,
+     "ra_pg": 5.607,
+     "games_before": 107
+    }
+   },
+   "team_results_complete_through": "2026-07-28",
+   "team_results_reconciled": true,
+   "sp": {
+    "away": {
+     "pid": 663776,
+     "name": "Patrick Sandoval",
+     "confirmed": false,
+     "staleness_tier": "STALE_WARNING",
+     "stale_block_verified": false,
+     "no_log": false,
+     "era": 4.945,
+     "gs": 2,
+     "k_pct": 23.81,
+     "bb_pct": 4.76,
+     "asof_flags": {
+      "placeholder_in_window": false
+     }
+    },
+    "home": {
+     "pid": 682052,
+     "name": "Jacob Lopez",
+     "confirmed": false,
+     "staleness_tier": "STALE_WARNING",
+     "stale_block_verified": false,
+     "no_log": false,
+     "era": 6.935,
+     "gs": 12,
+     "k_pct": 17.44,
+     "bb_pct": 12.81,
+     "asof_flags": {
+      "placeholder_in_window": false
+     }
+    }
+   },
+   "park_factor": 1.449,
+   "quote": {
+    "book": null,
+    "ml_home": 129,
+    "ml_away": -156,
+    "observed_at_utc": "2026-07-29T07:17:39Z",
+    "board_view": "view_a (single-book board; operator tab not visible -> book UNRESOLVED)"
+   }
+  },
+  {
+   "gamePk": null,
+   "slate_date": "2026-07-29",
+   "away": "SEA",
+   "home": "LAD",
+   "dh_game": null,
+   "first_pitch_utc": "2026-07-30T02:10:00Z",
+   "first_pitch_verbatim": "Jul 29 10:10pm",
+   "team": {
+    "away": {
+     "rf_pg": 4.037,
+     "ra_pg": 3.954,
+     "games_before": 108
+    },
+    "home": {
+     "rf_pg": 5.159,
+     "ra_pg": 3.72,
+     "games_before": 107
+    }
+   },
+   "team_results_complete_through": "2026-07-28",
+   "team_results_reconciled": true,
+   "sp": {
+    "away": {
+     "pid": 676106,
+     "name": "Emerson Hancock",
+     "confirmed": false,
+     "staleness_tier": "STALE_BLOCK",
+     "stale_block_verified": false,
+     "no_log": false,
+     "era": 3.224,
+     "gs": 18,
+     "k_pct": 24.1,
+     "bb_pct": 6.41,
+     "asof_flags": {
+      "placeholder_in_window": false
+     }
+    },
+    "home": {
+     "pid": 641778,
+     "name": "Eric Lauer",
+     "confirmed": false,
+     "staleness_tier": "STALE_BLOCK",
+     "stale_block_verified": false,
+     "no_log": false,
+     "era": 4.933,
+     "gs": 12,
+     "k_pct": 14.46,
+     "bb_pct": 8.31,
+     "asof_flags": {
+      "placeholder_in_window": false
+     }
+    }
+   },
+   "park_factor": 0.93,
+   "quote": {
+    "book": null,
+    "ml_home": -150,
+    "ml_away": 124,
+    "observed_at_utc": "2026-07-29T07:17:39Z",
+    "board_view": "view_a (single-book board; operator tab not visible -> book UNRESOLVED)"
+   }
+  }
+ ]
+}

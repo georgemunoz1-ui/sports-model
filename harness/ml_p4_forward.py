@@ -231,6 +231,8 @@ def make_record(row, beta, generated_at_utc, archived_at_utc, slate_ref=None, ph
     gid = row.get("gamePk")
     game_ref = int(gid) if gid is not None else \
         f"UNRESOLVED:{row.get('away', '?')}@{row.get('home', '?')}:{row.get('slate_date', '?')}"
+    if gid is None and row.get("dh_game"):
+        game_ref += f"#G{row['dh_game']}"  # doubleheader games must not share a forecast_id
     fid = f"P4-{str(row.get('slate_date', '?')).replace('-', '')}-{game_ref}"
     if disp == "QUARANTINE":
         return {"quarantine": True, "forecast_id": fid, "game_ref": game_ref,
@@ -518,14 +520,17 @@ def selftest() -> int:
     qrec = make_record(_fixture_row(quote=None), beta, GEN, GEN, sref, PH)
     ok("quarantine emits refusal dict, no probabilities",
        qrec.get("quarantine") is True and "payload" not in qrec)
+    g1 = make_record(_fixture_row(gamePk=None, dh_game=1), beta, GEN, GEN, sref, PH)
+    g2 = make_record(_fixture_row(gamePk=None, dh_game=2), beta, GEN, GEN, sref, PH)
+    ok("doubleheader games get distinct forecast ids", g1["forecast_id"] != g2["forecast_id"])
 
     if fails:
         print("ml_p4_forward selftest: FAIL")
         for x in fails:
             print("  " + x)
         return 1
-    print("ml_p4_forward selftest: PASS (23 fixtures: hash-freeze refusal, quarantine, "
-          "late/placeholder/stale demotion, devig, incumbent bit-identity, rule engine)")
+    print("ml_p4_forward selftest: PASS (24 fixtures: hash-freeze refusal, quarantine, "
+          "late/placeholder/stale demotion, devig, incumbent bit-identity, rule engine, DH ids)")
     return 0
 
 

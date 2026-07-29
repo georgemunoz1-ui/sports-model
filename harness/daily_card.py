@@ -72,9 +72,10 @@ def sim(asp,hsp,aw,hm,pf,n=30000):
     sa=np.clip(1.8+(hsp["k"]-LG_K)*.16,1.2,6); sh=np.clip(1.8+(asp["k"]-LG_K)*.16,1.2,6)
     raA=rng.poisson(rng.gamma(sa,np.maximum(ma,.3)/sa)); rhH=rng.poisson(rng.gamma(sh,np.maximum(mh,.3)/sh))
     tie=raA==rhH; hx=rng.random(n)<(.5+.04*np.sign(pena-penh)); hw=np.where(tie,hx,rhH>raA); mg=rhH-raA
-    return dict(hw=float(hw.mean()),tot=float((raA+rhH+tie*rng.poisson(1.0,n)).mean()),
+    t_arr=raA+rhH+tie*rng.poisson(1.0,n)  # same single draw as before; array kept for P(over/push/under)
+    return dict(hw=float(hw.mean()),tot=float(t_arr.mean()),
         rl_h=float(np.mean(mg>=2)),rl_a=float(np.mean(mg<=-2)),
-        blow_h=float(np.mean(mg<=-5)),blow_a=float(np.mean(mg>=5)))
+        blow_h=float(np.mean(mg<=-5)),blow_a=float(np.mean(mg>=5)),_tots=t_arr)
 def devig(a,h):
     f=lambda m:(-m)/(-m+100) if m<0 else 100/(m+100); pa,ph=f(a),f(h); s=pa+ph; return pa/s,ph/s
 def p_ge(lam,line): k0=int(np.ceil(line)); return 1-sum(exp(-lam)*lam**i/factorial(i) for i in range(k0))
@@ -104,7 +105,11 @@ for pk,awf,hmf,t,aspn,hspn in slate:
         model_id="ml.v13_1.hfa1005.card.s722n30000",  # bound identity, harness/model_registry.py
         asp_stats=asp,hsp_stats=hsp,capped=capped,park=round(pf,3),
         v13=dict(home_wp=round(s["hw"],3),proj_total=round(s["tot"],1),rl_home_cover=round(s["rl_h"],3),
-                 rl_away_cover=round(s["rl_a"],3),blow_home=round(s["blow_h"],3),blow_away=round(s["blow_a"],3)),
+                 rl_away_cover=round(s["rl_a"],3),blow_home=round(s["blow_h"],3),blow_away=round(s["blow_a"],3),
+                 # correction-5 tooling fix: full settlement split vs the market line (push explicit)
+                 p_over=(round(float((s["_tots"]>tl).mean()),3) if tl else None),
+                 p_push=(round(float((s["_tots"]==tl).mean()),3) if tl else None),
+                 p_under=(round(float((s["_tots"]<tl).mean()),3) if tl else None)),
         lines=dict(ml_away=ml_a,ml_home=ml_h,total=tl,over=o.get("over"),under=o.get("under"),
                    rl=o.get("rl_fav"),rl_note=o.get("note")),
         mkt_home_prob=(round(mkt_h,3) if mkt_h else None),

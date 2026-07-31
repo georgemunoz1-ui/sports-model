@@ -132,9 +132,10 @@ def main(slate_date):
     games = []
     for g in boards["games"]:
         a, h = g["away"], g["home"]
+        st = g.get("starters_displayed") or g.get("starters_board")
+        mlq = g["ml"]["view_a"] if "ml" in g else {"away": g["ml_away"], "home": g["ml_home"]}
         sp = {}
-        for side, disp in (("away", g["starters_displayed"]["away"]),
-                           ("home", g["starters_displayed"]["home"])):
+        for side, disp in (("away", st["away"]), ("home", st["home"])):
             name = disp.rsplit("(", 1)[0].strip()
             pid = pids.get(_fold(name))
             if pid is None:
@@ -165,7 +166,7 @@ def main(slate_date):
             "team_results_reconciled": recon,
             "sp": sp, "park_factor": pf,
             "quote": {"book": None,
-                      "ml_home": g["ml"]["view_a"]["home"], "ml_away": g["ml"]["view_a"]["away"],
+                      "ml_home": mlq["home"], "ml_away": mlq["away"],
                       "observed_at_utc": boards["observed_at_utc"],
                       "board_view": "view_a (single-book board; operator tab not visible -> book UNRESOLVED)"},
         })

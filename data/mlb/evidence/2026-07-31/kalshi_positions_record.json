@@ -1,0 +1,89 @@
+{
+ "record_id": "EXTERNAL-POSITIONS-2026-07-31-KALSHI",
+ "classification": [
+  "OWNER_PERSONAL_REAL_MONEY_POSITIONS",
+  "OUTSIDE_SYSTEM_GATES",
+  "EVIDENCE_CAPTURE_ONLY"
+ ],
+ "observed_at_utc": "2026-07-31T10:35:32Z",
+ "timing": "ALL FOUR PREGAME (earliest first pitch 18:20Z); cash-out quotes below cost reflect venue spread, not game state",
+ "portfolio": {
+  "total_cost_usd": 99.96,
+  "positions": [
+   {
+    "id": "S1",
+    "cost": 25.0,
+    "payout": 235.18,
+    "legs": [
+     "TB ML",
+     "WSH ML",
+     "MIL ML",
+     "DET ML"
+    ],
+    "note": "= advisory 'Option A' hybrid layout",
+    "implied": 0.1063,
+    "ev_pct": {
+     "market": -11.1,
+     "v13": -2.0,
+     "cand": 0.5
+    }
+   },
+   {
+    "id": "S2",
+    "cost": 24.99,
+    "payout": 206.44,
+    "legs": [
+     "PIT@CIN Under 7.5",
+     "SF@SD Under 8.5",
+     "BOS@LAD Under 8.5"
+    ],
+    "implied": 0.1211,
+    "ev_pct": {
+     "market": -6.9,
+     "v13": 58.5
+    },
+    "warning": "V13's +58.5% comes ENTIRELY from the two R5-FLAGGED artifact unders (SF@SD +22.6%, BOS@LAD +37.2% were explicitly flagged as probable model artifacts on the frozen card); the PIT@CIN under leg is AGAINST the model (V13 p_under .450 < market fair .483)"
+   },
+   {
+    "id": "S3",
+    "cost": 25.0,
+    "payout": 688.7,
+    "legs": [
+     "NYY ML",
+     "PIT ML",
+     "STL ML",
+     "MIN ML"
+    ],
+    "implied": 0.0363,
+    "ev_pct": {
+     "market": -23.3,
+     "v13": 103.8,
+     "cand": 17.3
+    },
+    "warning": "worst-priced ticket: Kalshi implied 3.63% vs book-fair 2.78% -> -23% by market; V13 +104% is fantasy-grade stale-input inflation; PIT and MIN legs are V13-only value"
+   },
+   {
+    "id": "S4",
+    "cost": 24.97,
+    "payout": 425.89,
+    "legs": [
+     "MIA ML",
+     "WSH ML",
+     "DET ML",
+     "NYY ML"
+    ],
+    "note": "= advisory 'Option C' value-tilt layout",
+    "implied": 0.0586,
+    "ev_pct": {
+     "market": -11.0,
+     "v13": 42.2,
+     "cand": 25.9
+    }
+   }
+  ],
+  "correlation": "NOT independent tickets: WSH and DET each appear in S1+S4, NYY in S3+S4. A WSH or DET loss kills two tickets; an NYY loss kills two.",
+  "portfolio_ev_market_fair": "expected return ~$86.9 on $99.96 (-13.1%) by de-vigged book consensus; model EVs are positive but carry the 7/29 data-hole inflation, disclosed pre-purchase"
+ },
+ "model_disclosure": "all reads from the FROZEN 7/31 card/forecasts (generated 10:30Z with 7/29 missing for every team); gate 0/100, NO_PROMOTE, system ledger unchanged at $0",
+ "settlement": "pending 7/31 finals; will be graded leg-by-leg with actual starters recorded"
+}

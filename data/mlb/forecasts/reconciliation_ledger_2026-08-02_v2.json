@@ -1,0 +1,38 @@
+{
+ "record_id": "RECONCILIATION-LEDGER-2026-08-02-v2",
+ "supersedes": "RECONCILIATION-LEDGER-2026-08-02",
+ "generated_utc": "2026-08-02T20:38:00Z",
+ "resolution": "GAPS CLOSED via WebSearch (first-party channel; egress proxy still 403 for direct fetch, but WebSearch reaches authoritative outlets). 31 missing finals sourced (16x 7/29, 15x 7/31), cross-checked against frozen slates, ingested with WEBSEARCH_MULTI_SOURCE provenance (user upload supersedes).",
+ "data_state": {
+  "results_max_date": "2026-07-31",
+  "total_finals": 1651,
+  "contiguity_7_18_to_7_31": "SOLID (7/29 hole closed)",
+  "still_missing": [
+   "2026-08-01 (slate never captured; no forecasts exist for it -> not blocking)"
+  ]
+ },
+ "forecasts_grades": {
+  "forecasts": 48,
+  "grades": 44,
+  "newly_graded": "31 P4 (16x 7/29 + 15x 7/31)",
+  "remaining_ungraded": "2 (7/28 CLE_CIN DH-ambiguous, ATL_NYM PPD)"
+ },
+ "scoring_diagnostic_cohort": {
+  "n": 31,
+  "candidate_brier": 0.2555,
+  "market_brier": 0.2478,
+  "candidate_acc": 0.452,
+  "market_acc": 0.581,
+  "paired_dBrier_cand_minus_mkt": "+0.00765 +/- 0.00906 SE (candidate WORSE, within noise)",
+  "home_win_rate": 0.419,
+  "interpretation": "On 31 real games the frozen candidate did NOT beat the market (Brier or accuracy). DESCRIPTIVE ONLY: all rows DIAGNOSTIC (stale team form incl. the 7/29 hole at generation, starters board-named, book unattributed). Clean n toward 300 stays 0. Directionally consistent with the standing NO_PROMOTE verdict \u2014 the morning 'model value' was largely the data hole."
+ },
+ "parlays": {
+  "2026-07-30": "LOST -$99.96",
+  "2026-07-31_four_combos": "ALL 4 LOST -$99.96",
+  "2026-07-31_advisories": "ALL LOST",
+  "aggregate": "every negative-EV parlay lost, matching the market's -9..-13% EV read"
+ },
+ "notable": "DET@ATH 7/31 went 13-1 (14 total) \u2014 the game the card R5-FLAGGED for a too-high 13.0 total projection; the flagged projection was directionally RIGHT vs the 10.5 market line, but the R5 discipline (don't bet a suspected artifact) still stands as correct process.",
+ "governance": "gate 0/100; NO_PROMOTE; real-money ledger $0/unauthorized; Phase-4 clean n=0."
+}

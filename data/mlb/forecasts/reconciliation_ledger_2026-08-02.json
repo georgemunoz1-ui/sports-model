@@ -1,0 +1,65 @@
+{
+ "record_id": "RECONCILIATION-LEDGER-2026-08-02",
+ "supersedes": "RECONCILIATION-LEDGER-THROUGH-2026-08-01",
+ "generated_utc": "2026-08-02T20:28:00Z",
+ "exhaustive_search_performed": {
+  "network": "403 CONNECT-tunnel block confirmed for statsapi.mlb.com, ESPN api, sportsdata.io (all sports hosts denied by policy; not per-tool fixable; proxy healthy/non-selective)",
+  "uploads_dir": "full inventory swept 2026-08-02; newest file 2026-07-31 10:34Z; NO box-score/finals artifact for any missing date; older images verified = 7/27 pregame boards + code snippets",
+  "existing_artifacts": "7/29 slate boards + Savant previews are PREGAME (no results); already fully extracted",
+  "conclusion": "the missing finals are UNOBTAINABLE by any means available; not fabricated (R1)"
+ },
+ "data_state": {
+  "results_max_date": "2026-07-30",
+  "total_finals": 1620,
+  "MISSING_FINALS": [
+   {
+    "date": "2026-07-29",
+    "games": 16,
+    "status": "played, never uploaded",
+    "blocks": "16 P4 forecasts + team-form contiguity"
+   },
+   {
+    "date": "2026-07-31",
+    "games": 15,
+    "status": "played (now past), never uploaded",
+    "blocks": "15 P4 forecasts + 4 Kalshi combos + all 7/31 advisory-parlay scoring"
+   },
+   {
+    "date": "2026-08-01",
+    "games": "unknown",
+    "status": "slate never captured; not simulated",
+    "blocks": "whole day absent"
+   }
+  ],
+  "old_partial": {
+   "2026-07-23": "4 finals (pre-existing thin capture)"
+  }
+ },
+ "parlay_scoring": {
+  "2026-07-30_combo": "SCORED \u2014 LOST -$99.96 (BOS W, LAD W, SD L)",
+  "2026-07-31_placed_combos_S1_S4": "PLAYED but UNSCORED \u2014 blocked on 7/31 finals upload",
+  "2026-07-31_advisory_suggestions": "PLAYED but UNSCORED \u2014 same block (best-4-leg, win-prob, hybrid A/B/C)"
+ },
+ "forecast_grade": {
+  "forecasts": 48,
+  "grades": 13,
+  "ungraded": "16 (7/29 blocked) + 15 (7/31 blocked) + 2 (7/28 DH/PPD unresolvable)"
+ },
+ "gaps_CLOSED_this_sweep": [
+  "ledger re-dated to true 8/2 state (7/31 moved pending-play -> blocked-on-upload)",
+  "exhaustive-search result recorded so the unobtainability is proven, not asserted",
+  "(prior sweep) reconciliation contiguity fix + interior-hole detection remain in force"
+ ],
+ "gaps_UNCLOSEABLE_without_upload": [
+  "7/29 finals",
+  "7/31 finals",
+  "8/1 slate+finals"
+ ],
+ "surgical_upload_list": {
+  "1_HIGHEST": "7/31 box scores -> scores your 4 combos + all advisory parlays + 15 forecasts",
+  "2": "7/29 box scores -> 16 forecasts + closes team-form contiguity hole",
+  "3": "8/1 box scores + (if you want an 8/1 card) the 8/1 board/matchup capture",
+  "format": "any paste with away/home teams + final scores per game, exactly like the 7/30 paste"
+ },
+ "governance": "gate 0/100; NO_PROMOTE; real-money ledger $0/unauthorized; Phase-4 clean n=0."
+}

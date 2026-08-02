@@ -112,14 +112,25 @@ def main(slate_date):
     for r in ph["rows"]:
         ph_by_pid.setdefault(r["pitcher_id"], set()).add(r["date"])
     form = team_form(slate_date)
-    # Team-results completeness is COMPUTED, not typed: complete_through = latest final on disk;
-    # rows are reconciled only when that reaches D-1. Per-date exceptions (teams whose game that
-    # day is unaccounted) come from an optional data/mlb/slates/{date}_recon_exceptions.json.
-    # History: 7/29 ran with a hardcoded ATL/NYM exception before their 7/28 PPD was owner-confirmed.
-    complete_through = max(r["date"] for r in csv.DictReader(open("data/backfill/mlb/2026/results.csv"))
-                           if r["status"] == "final" and r["total"] != "" and r["date"] < slate_date)
+    # Team-results completeness is COMPUTED, not typed. CONTIGUITY, not just max date: an interior
+    # HOLE (a date with zero finals inside the trailing window) silently drops a full day of games
+    # from every team's as-of form, yet a pure max-date check would still pass once a LATER date is
+    # backfilled. So reconciled requires (a) the latest final reaches D-1 AND (b) no interior hole
+    # in [D-14 .. D-1]. History: the 7/29 finals never arrived; without this guard an 8/1+ slate
+    # built after 7/31 finals landed would FALSELY report team results complete.
+    _final_dates = {r["date"] for r in csv.DictReader(open("data/backfill/mlb/2026/results.csv"))
+                    if r["status"] == "final" and r["total"] != "" and r["date"] < slate_date}
+    complete_through = max(_final_dates)
     d1 = (dt.date.fromisoformat(slate_date) - dt.timedelta(days=1)).isoformat()
-    base_reconciled = complete_through >= d1
+    _sd = dt.date.fromisoformat(slate_date)
+    # INTERIOR hole only: a gameless date with a game-day on BOTH sides within the window. This
+    # ignores the All-Star break (a leading gameless stretch, 7/13-7/15 in 2026) while catching a
+    # true mid-season drop like the un-uploaded 7/29 finals (game-days 7/28 and 7/30 flank it).
+    _win = [(_sd - dt.timedelta(days=k)).isoformat() for k in range(1, 15)]
+    _present = [d for d in _win if d in _final_dates]
+    result_holes = [d for d in _win if d not in _final_dates
+                    and any(p < d for p in _present) and any(p > d for p in _present)]
+    base_reconciled = (complete_through >= d1) and not result_holes
     exf = f"data/mlb/slates/{slate_date}_recon_exceptions.json"
     recon_exceptions = set(json.load(open(exf))) if os.path.exists(exf) else set()
     venue_by_home = {}
@@ -180,6 +191,8 @@ def main(slate_date):
                            "team form: normalized labels, full-season as-of (P2 spec); firewall's "
                            "raw-label keying diverges post-7/19 label switch — disclosed, not hidden"],
            "unmatched_starters": unmatched,
+           "team_results_complete_through": complete_through,
+           "team_results_holes_in_trailing_14d": result_holes,
            "games": games}
     path = f"data/mlb/slates/{slate_date}_p4_slate.json"
     json.dump(out, open(path, "w"), indent=1)

@@ -170,8 +170,8 @@ def main(slate_date):
         games.append({
             "gamePk": None, "slate_date": slate_date, "away": a, "home": h,
             "dh_game": g.get("dh_game"),
-            "first_pitch_utc": et_to_utc(slate_date, g["time_verbatim"]),
-            "first_pitch_verbatim": g["time_verbatim"],
+            "first_pitch_utc": g.get("first_pitch_utc") or et_to_utc(slate_date, g["time_verbatim"]),
+            "first_pitch_verbatim": g.get("time_verbatim") or g.get("first_pitch_utc"),
             "team": {"away": form.get(a), "home": form.get(h)},
             "team_results_complete_through": complete_through,
             "team_results_reconciled": recon,

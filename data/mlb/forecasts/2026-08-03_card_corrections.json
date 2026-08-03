@@ -1,0 +1,254 @@
+{
+ "record_id": "CARD-2026-08-03-METADATA-CORRECTIONS",
+ "applies_to": "cards/2026-08-03_card.json + P4-20260803-* (8 frozen forecasts)",
+ "rule": "APPEND-ONLY (R6/R3). Frozen forecast probabilities and card are NOT rewritten. gamePks and corrected benchmarks attach as metadata. Any starter-confirmed rerun is a SEPARATELY HASHED version, never a rewrite of the frozen forecast.",
+ "authorized_by": "owner audit 2026-08-03",
+ "1_gamePks_resolved": "8 official MLB gamePks attached (see games[].gamePk). Grade all 8 tomorrow.",
+ "2_starters_unresolved": "3 official TBD on MLB probables: WSH (away), SF@TEX (home/TEX), LAD@CHC (away/LAD). WSH must NOT be frozen specifically as Trevor Williams -- board=Williams, other=Littell, MLB=TBD, Statcast-preview=Williams (does not resolve). The frozen CAP forecast is preserved as ONE SCENARIO, NOT a confirmed-starter forecast.",
+ "3_market_benchmark_methodology_CORRECTION": {
+  "flaw": "the frozen P4 market benchmark de-vigged the cross-book BEST-ODDS pair (away price from one book, home from another) -- INVALID: opposite sides from different books cannot form one market probability.",
+  "superseded_by": "DraftKings SAME-BOOK two-sided de-vig (per game below)",
+  "grading_rule": "tomorrow's market column uses the DK same-book benchmark, not the frozen cross-book value",
+  "forward_rule": "future P4 slates transcribe and de-vig a SINGLE book's two-sided ML for the market benchmark"
+ },
+ "4_structural_compression": "WSH@PHI and STL@NYY carry STRUCTURAL_COMPRESSION_FLAG, actionable_ev=null: near-.500 model probabilities vs substantial market favorites, compounded by stale/unresolved SP.",
+ "5_kprops": {
+  "seymour": "DK line corrected 3.5->4.5; displacement +0.99 (5.49 vs 4.5), NOT +2.0",
+  "bieber": "3.5 -> BLOCKED_SHORT_LINE (<=3.5 disposition-level block, not annotation)",
+  "all": "diagnostic; pitcher logs ~11 days stale"
+ },
+ "6_runline": "LAD -1.5 model cover .441: best +145 EV +8.0%, DK +135 EV +3.6%; NON-EXECUTABLE (LAD starter TBD)",
+ "7_totals_dk_ev": {
+  "WSH@PHI_O9.5": "best +17.7% / DK +14.8% -- VOID edge (capped WSH starter)",
+  "PIT@MIL_O8.5": "best +12.8% / DK +9.6%",
+  "TB@COL_U11.5": "best +11.9% / DK +9.6%"
+ },
+ "disposition": "PREGAME_DIAGNOSTIC \u00b7 TEAM_CURRENT \u00b7 SP_STALE \u00b7 3_STARTER_UNRESOLVED \u00b7 NON_EXECUTABLE. First slate with reported D-1 team completeness, but NOT the first clean Phase-4 slate.",
+ "games": [
+  {
+   "game": "WSH@PHI",
+   "forecast_id": "P4-20260803-UNRESOLVED:WSH@PHI:2026-08-03",
+   "gamePk": 823431,
+   "starters_official": [
+    "TBD",
+    "Nola"
+   ],
+   "starter_status": "STARTER_CONFLICT: board Williams / other Littell / MLB TBD",
+   "dk_ml": [
+    129,
+    -156
+   ],
+   "dk_market_p_home": 0.5825,
+   "v13_p_home": 0.4,
+   "cand_p_home": 0.461,
+   "v13_best_ev": {
+    "side": "WSH",
+    "ev_pct": 37.4,
+    "actionable_ev": null
+   },
+   "cand_best_ev": {
+    "side": "WSH",
+    "ev_pct": 23.4,
+    "actionable_ev": null
+   },
+   "flag": "STRUCTURAL_COMPRESSION_FLAG"
+  },
+  {
+   "game": "STL@NYY",
+   "forecast_id": "P4-20260803-UNRESOLVED:STL@NYY:2026-08-03",
+   "gamePk": 823520,
+   "starters_official": [
+    "McGreevy",
+    "Schlittler"
+   ],
+   "starter_status": "confirmed",
+   "dk_ml": [
+    168,
+    -205
+   ],
+   "dk_market_p_home": 0.643,
+   "v13_p_home": 0.544,
+   "cand_p_home": 0.569,
+   "v13_best_ev": {
+    "side": "STL",
+    "ev_pct": 22.2,
+    "actionable_ev": null
+   },
+   "cand_best_ev": {
+    "side": "STL",
+    "ev_pct": 15.5,
+    "actionable_ev": null
+   },
+   "flag": "STRUCTURAL_COMPRESSION_FLAG"
+  },
+  {
+   "game": "PIT@MIL",
+   "forecast_id": "P4-20260803-UNRESOLVED:PIT@MIL:2026-08-03",
+   "gamePk": 823757,
+   "starters_official": [
+    "Chandler",
+    "Sproat"
+   ],
+   "starter_status": "confirmed",
+   "dk_ml": [
+    123,
+    -149
+   ],
+   "dk_market_p_home": 0.5716,
+   "v13_p_home": 0.493,
+   "cand_p_home": 0.519,
+   "v13_best_ev": {
+    "side": "PIT",
+    "ev_pct": 13.1,
+    "actionable_ev": 13.1
+   },
+   "cand_best_ev": {
+    "side": "PIT",
+    "ev_pct": 7.3,
+    "actionable_ev": 7.3
+   },
+   "flag": null
+  },
+  {
+   "game": "SF@TEX",
+   "forecast_id": "P4-20260803-UNRESOLVED:SF@TEX:2026-08-03",
+   "gamePk": 822867,
+   "starters_official": [
+    "Webb",
+    "TBD"
+   ],
+   "starter_status": "PROVISIONAL: TEX home starter TBD (board Quantrill)",
+   "dk_ml": [
+    -110,
+    -109
+   ],
+   "dk_market_p_home": 0.4989,
+   "v13_p_home": 0.506,
+   "cand_p_home": 0.518,
+   "v13_best_ev": {
+    "side": "TEX",
+    "ev_pct": -3.0,
+    "actionable_ev": -3.0
+   },
+   "cand_best_ev": {
+    "side": "TEX",
+    "ev_pct": -0.7,
+    "actionable_ev": -0.7
+   },
+   "flag": null
+  },
+  {
+   "game": "LAD@CHC",
+   "forecast_id": "P4-20260803-UNRESOLVED:LAD@CHC:2026-08-03",
+   "gamePk": 824647,
+   "starters_official": [
+    "TBD",
+    "Boyd"
+   ],
+   "starter_status": "PROVISIONAL: LAD away starter TBD (board Wrobleski)",
+   "dk_ml": [
+    -126,
+    104
+   ],
+   "dk_market_p_home": 0.4679,
+   "v13_p_home": 0.42,
+   "cand_p_home": 0.463,
+   "v13_best_ev": {
+    "side": "LAD",
+    "ev_pct": 4.0,
+    "actionable_ev": 4.0
+   },
+   "cand_best_ev": {
+    "side": "LAD",
+    "ev_pct": -3.7,
+    "actionable_ev": -3.7
+   },
+   "flag": null
+  },
+  {
+   "game": "TOR@HOU",
+   "forecast_id": "P4-20260803-UNRESOLVED:TOR@HOU:2026-08-03",
+   "gamePk": 824160,
+   "starters_official": [
+    "Bieber",
+    "Javier"
+   ],
+   "starter_status": "confirmed",
+   "dk_ml": [
+    112,
+    -135
+   ],
+   "dk_market_p_home": 0.5491,
+   "v13_p_home": 0.485,
+   "cand_p_home": 0.443,
+   "v13_best_ev": {
+    "side": "TOR",
+    "ev_pct": 9.2,
+    "actionable_ev": 9.2
+   },
+   "cand_best_ev": {
+    "side": "TOR",
+    "ev_pct": 18.1,
+    "actionable_ev": 18.1
+   },
+   "flag": null
+  },
+  {
+   "game": "TB@COL",
+   "forecast_id": "P4-20260803-UNRESOLVED:TB@COL:2026-08-03",
+   "gamePk": 824324,
+   "starters_official": [
+    "Seymour",
+    "Lorenzen"
+   ],
+   "starter_status": "confirmed",
+   "dk_ml": [
+    -166,
+    137
+   ],
+   "dk_market_p_home": 0.4034,
+   "v13_p_home": 0.489,
+   "cand_p_home": 0.447,
+   "v13_best_ev": {
+    "side": "COL",
+    "ev_pct": 15.9,
+    "actionable_ev": 15.9
+   },
+   "cand_best_ev": {
+    "side": "COL",
+    "ev_pct": 5.9,
+    "actionable_ev": 5.9
+   },
+   "flag": null
+  },
+  {
+   "game": "SD@AZ",
+   "forecast_id": "P4-20260803-UNRESOLVED:SD@AZ:2026-08-03",
+   "gamePk": 825095,
+   "starters_official": [
+    "King",
+    "Pfaadt"
+   ],
+   "starter_status": "confirmed",
+   "dk_ml": [
+    -105,
+    -115
+   ],
+   "dk_market_p_home": 0.5108,
+   "v13_p_home": 0.498,
+   "cand_p_home": 0.484,
+   "v13_best_ev": {
+    "side": "SD",
+    "ev_pct": -2.0,
+    "actionable_ev": -2.0
+   },
+   "cand_best_ev": {
+    "side": "SD",
+    "ev_pct": 0.7,
+    "actionable_ev": 0.7
+   },
+   "flag": null
+  }
+ ],
+ "governance": "gate 0/100; NO_PROMOTE; model ledger $0; not pushing."
+}

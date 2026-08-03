@@ -6,10 +6,6 @@
  "market_acc": "18/31",
  "paired_dBrier_mean": 0.00765,
  "paired_SE": 0.00906,
- "ci95": [
-  -0.01012,
-  0.02541
- ],
  "rows": [
   {
    "fid": "20260729-PHI@MIA:2026-07-29",
@@ -197,5 +193,14 @@
    "cand": 0.5525,
    "market": 0.507
   }
+ ],
+ "ci95_t_30df": [
+  -0.01085,
+  0.02615
+ ],
+ "ci95_note": "95% CI is the 30-df t interval (t=2.042): [-0.01085, +0.02615] -> [-0.011, +0.026]. The earlier [-0.010, +0.025] was the normal-z interval and is superseded.",
+ "ci95_z_superseded": [
+  -0.01012,
+  0.02541
  ]
 }

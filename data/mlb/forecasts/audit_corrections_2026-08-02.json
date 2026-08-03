@@ -14,12 +14,12 @@
  "2_causal_claim_WITHDRAWN": {
   "withdrawn": "'the morning model value was largely the 7/29 data hole talking'",
   "counterfactual_evidence": "no-refit replay (frozen beta, SP features fixed, only team-form completeness changed to include 7/29+7/30): mean |delta p_home| = 0.0006, max 0.0020; 7/31-only Brier 0.2615 -> 0.2616 (unchanged); moved toward outcome 6/15. The data hole had NEGLIGIBLE effect on the frozen probabilities (each team had ~100 games; two more barely move the season aggregate).",
-  "corrected_explanation": "The candidate scored worse than the captured market baseline for reasons OTHER than the hole: it is a low-variance 2-feature logistic sitting near 0.5 that does not beat an efficient market, on a road-heavy slate (home teams 13/31) that penalized its mild home lean. Consistent with NO_PROMOTE \u2014 but NOT because of the missing data."
+  "corrected_explanation": "On this 31-game diagnostic cohort, the candidate scored worse than the captured market baseline, but the estimate is imprecise and does not establish that the candidate generally cannot outperform the market. The counterfactual shows specifically that completing the missing team-form results did not materially explain the observed gap."
  },
  "3_scoring_wording": {
   "replace": "'lost to the market'",
   "with": "'scored worse than the captured market baseline on this 31-game DIAGNOSTIC cohort'",
-  "exact_stats": "candidate Brier 0.2555 acc 14/31 (0.452); market Brier 0.2478 acc 18/31 (0.581); paired dBrier +0.00765, SD 0.05047, SE 0.00906, 95% CI [-0.01012, +0.02541] (crosses 0), t=+0.844 on 30 df -> NOT statistically significant. 31 paired rows: 2026-0729-0731_paired_scoring.json"
+  "exact_stats": "candidate Brier 0.2555 acc 14/31 (0.452); market Brier 0.2478 acc 18/31 (0.581); paired dBrier +0.00765, SD 0.05047, SE 0.00906, t=+0.844 on 30 df (NOT significant); 95% CI (30-df t, t=2.042) [-0.011, +0.026] (crosses 0). The normal-z interval [-0.010, +0.025] was inconsistent with the stated t-test and is superseded. 31 paired rows: 2026-0729-0731_paired_scoring.json"
  },
  "4_parlay_ev_wording": {
   "replace": "'the market -9% to -13% read held exactly'",
@@ -47,5 +47,6 @@
   },
   "current_data_tier": "WEBSEARCH_MULTI_SOURCE (tier 2). A user-supplied official box (tier 1) would resolve any disagreement; a casual paste (tier 3) would be recorded as a flagged discrepancy, not an automatic override."
  },
- "governance": "gate 0/100; NO_PROMOTE; model-authorized ledger $0; nothing pushed pending owner authorization."
+ "governance": "gate 0/100; NO_PROMOTE; model-authorized ledger $0; nothing pushed pending owner authorization.",
+ "precision_edits_2026-08-02b": "CI corrected to 30-df t interval [-0.011,+0.026]; explanation narrowed to the cohort (removed the general 'cannot beat the market' overreach) per owner."
 }

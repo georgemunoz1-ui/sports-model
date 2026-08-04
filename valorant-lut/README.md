@@ -22,40 +22,54 @@ LUT with mathematically uniform sensitivity steps.
 1. In Raw Accel Reimagined, use **Import Profile** and pick `VAL-3200-088-64pt.rawaccelprofile.json`
    (or **Import Settings** for the `.settings.json`).
 2. Make sure your **mouse DPI is 3200** and Valorant in-game sens is **0.088** — the curve is scaled to that DPI.
-3. Press **Save & Apply**.
+3. **Leave device "DPI (normalizes input speed)" at 0 / disabled** (Advanced → device config). If you enter
+   3200 there, Raw Accel rescales input to 1000-DPI equivalents and the accel onset moves from 15 in/s to
+   ~48 in/s — the curve would barely ever activate. Chart-display DPI is cosmetic and safe either way.
+4. Keep Sens Multiplier 1.00, rotation/angle snapping 0, smoothing 0.
+5. Press **Save & Apply**.
 
 Alternatively, open the **Free Curve Editor (LUT)**, select all points, and paste the contents of
 `VAL-3200-088-64pt.paste.txt` (v1.8.4+ supports precise `x,y;x,y` pasting), then **Save & Apply**.
 
 ## What the curve does
 
-The LUT runs in **Gain / Velocity** mode, so it is a velocity curve — the effective sensitivity you feel
-is the **slope** (`dy/dx`) of the curve, not the raw ratio. Input speed is in **counts/ms**.
+The LUT runs in **Gain / Velocity** mode, so it is a velocity curve. Raw Accel distinguishes two things:
 
-| Zone | Input speed | Hand speed @3200 DPI | Effective sens |
-|------|-------------|----------------------|----------------|
+- **Gain** = the *slope* of the curve — the per-count multiplier applied to additional movement at that speed.
+- **Sensitivity** = the *ratio* output/input — the average multiplier over the whole motion, which lags
+  behind the gain because the slow start of a flick was still 1:1.
+
+This is a **gain-cap** curve: gain reaches +10% at 30 in/s, while actual sensitivity climbs gradually and
+only approaches 1.10× at extreme speeds. That lag is intentional — it keeps flick distances predictable.
+Input speed is in **counts/ms**.
+
+| Zone | Input speed | Hand speed @3200 DPI | Gain (slope) |
+|------|-------------|----------------------|--------------|
 | **Raw / precise** | 0 – 48 counts/ms | 0 – 15 in/s | **exactly 1.000×** (untouched) |
 | **Ramp** | 48 – 96 counts/ms | 15 – 30 in/s | smoothly 1.000× → 1.100× |
 | **Cap** | ≥ 96 counts/ms | ≥ 30 in/s | flat **1.100×** (+10%) |
 
-Effective sensitivity at typical in-game hand speeds (3200 DPI):
+Gain vs actual sensitivity at typical hand speeds (3200 DPI):
 
 ```
-  2 in/s : 1.000x      20 in/s : 1.035x
-  5 in/s : 1.000x      25 in/s : 1.089x
- 10 in/s : 1.000x      30 in/s : 1.100x
- 15 in/s : 1.000x      40+ in/s: 1.100x
+ hand speed   gain (slope)   sensitivity (ratio)
+   15 in/s      1.000x           1.000x
+   20 in/s      1.035x           1.003x
+   25 in/s      1.089x           1.015x
+   30 in/s      1.100x           1.029x
+   50 in/s      1.100x           1.057x
+  100 in/s      1.100x           1.079x
 ```
 
-Slow tracking and micro-adjustments (≤15 in/s) stay **perfectly 1:1**, so your base 3200/0.088 aim is
-unchanged and muscle memory is preserved. Only intentional fast flicks (15–30 in/s) get a gentle boost,
-capped at **+10%** so flicks stay predictable.
+Slow tracking and micro-adjustments (≤15 in/s) stay **perfectly 1:1**, so your base 3200/0.088 aim
+(eDPI 281.6) is unchanged and muscle memory is preserved. A fast flick ends at only ~+3% total sensitivity,
+with the extra help ramping in progressively during genuinely fast swipes.
 
 ## Design notes / improvements over the reference
 
 - **64 points, uniform granularity.** Rebuilt from your 116-point `CANONICAL` curve. Instead of subsampling,
-  the knee nodes are placed at **equal gain increments**, giving uniform ~0.0017×/step sensitivity resolution
-  (max step 0.00198×) — the smoothest possible feel for a 64-point budget. Max deviation from your original
+  the knee nodes are placed at **equal gain increments**, giving very uniform ~0.0017×/step gain resolution
+  (max step 0.00198×) within the 64-point budget. Max deviation from your original
   curve: **0.0015 counts/ms** (imperceptible).
 - **Exact base and cap.** Slope is forced to *exactly* 1.000 below 48 counts/ms and *exactly* 1.100 above
   96 counts/ms — no drift, no dips; slope is monotonically non-decreasing throughout.

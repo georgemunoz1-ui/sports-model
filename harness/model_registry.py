@@ -98,6 +98,24 @@ REGISTRY = {
                 "_gidx = gamePk - 7_000_000, so seed = int(gamePk) with zero copied formula lines; "
                 "bit-identity proven in the ml_p4_forward selftest.",
     },
+    "ml.v13_1.hist_replay.hfa1005.n30000.rng_gamePk": {
+        "role": "HISTORICAL_REPLAY_RUNNER",
+        "source": "harness/run_v13_historical.py",
+        "hfa": 1.005, "hfa_provenance": "import: engine/hfa.py CURRENT",
+        "seed": "722 + int(gamePk)", "sims_per_game": 30000, "rng_policy": "per_game_seed_722_plus_gamePk",
+        "calibration_artifact": None,
+        "input_schema": "features.csv-v1 (frozen as-of backfill through 2026-07-19; NO look-ahead)",
+        "note": "Date-safe V13 Monte Carlo replay over the FROZEN as-of features (owner spec "
+                "2026-08-04): reads ONLY features.csv, never loops daily_card.py over historical "
+                "dates (that reads every final on disk -> look-ahead leakage). Per-game seed = "
+                "722 + int(gamePk), so results are row-order and parallelism invariant. sims/game is "
+                "configurable (--sims-per-game, default 30000; also validated at 100000). Emits full "
+                "ML/RL/totals distributions + MC SE + projected score; scores the totals distribution "
+                "at the REALIZED total as a PIT check (no market total line in the frozen features). "
+                "The d_logistic_2f candidate is computed ONCE per row here, deterministic, never "
+                "simulated. Same-book market benchmark is null on this window (only 7/24-7/25 closes "
+                "on file, after the 7/19 feature freeze). Diagnostic runner; never a production card.",
+    },
     "ml.v13_1.hfa103.backtest.s1319n40000": {
         "role": "LEGACY_BACKTEST",
         "source": "engine/v13_1.py",

@@ -1371,3 +1371,46 @@ Taco's point was exactly right: searching both collections with next() takes the
 a duplicated row passed silently. Proved by injection on an in-memory copy, never touching the
 real ledger: duplicating Soriano across graded+pending trips both assertions 1 and 2; duplicating
 him twice inside graded trips assertion 1. Under the old lookup, the first case reported PASS.
+
+## 2026-08-04 — date-safe V13 historical replay runner (owner spec)
+
+Built harness/run_v13_historical.py: the CORRECT "full sims on all data" the owner asked for — a
+date-safe HISTORICAL REPLAY, not a loop of harness/daily_card.py over past dates. daily_card reads
+every final currently on disk with no historical date filter, so looping it backward is look-ahead
+leakage. This runner reads ONLY data/backfill/mlb/2026/features.csv, whose rows are the strict
+as-of inputs frozen for each game (the backfill window ends 2026-07-19).
+
+What it fixes vs engine/score_and_calibrate.py (the prior scorer):
+  - sims/game CONFIGURABLE (--sims-per-game, default 30000; validated at 2k and 30k, 100k capable).
+    score_and_calibrate hardcoded 4000.
+  - PER-GAME seed = 722 + int(gamePk): each game's result is independent of row order and of
+    parallelism. score_and_calibrate uses one sequential RNG stream, so per-row probs shift with
+    order. Selftest proves same-seed determinism + order-invariance.
+  - DATE-ORDERED expanding-weekly OOS calibration (temperature T fit on strictly-prior weeks),
+    never a random split on the scoring rows.
+  - FULL simulated run arrays -> ML win prob, RL cover (±1.5), projected away/home/total, MC SE,
+    and a PIT-style totals check. score_and_calibrate emitted ML only.
+  - The Phase-4 candidate d_logistic_2f is computed ONCE per row, deterministic, never simulated;
+    config double-hash-verified (canonical 132523ac / file-byte eede422d) and refused on drift.
+
+30k run over 1,475 eligible games (13.6s): ALL Brier 0.2527 / logloss 0.6996 / acc 53.0% (home
+base 0.522); both-SP subset n=1322 Brier 0.2496 / acc 54.0%; ROLLING OOS n=1242 raw Brier 0.2467 /
+acc 55.2%, calibrated 0.2471 — temperature scaling did NOT improve OOS Brier here, so the raw sim
+is already ~calibrated on this window. Candidate populated on 1460/1475 (15 honest nulls where team
+form is incomplete). Output: data/mlb/evaluations/v13_full_30k.jsonl, one auditable row per game
+(gamePk, date, inputs_hash, model_hash, features_file_sha256, seed_base+game_seed, sims, hfa,
+sp_mature, full v13 block, candidate, market, outcome).
+
+HONEST NULL, not a broken join. Same-book market benchmark is available on 0/1475 games: the only
+same-book close ML on file is 7/24–7/25 (30 rows), which is AFTER the 7/19 feature freeze, so it
+cannot overlap the replay window. Verified the join key (game_id split vs gamePk) is correct; the
+windows simply don't intersect. No cross-book de-vig was used (that would be an invalid ~1%-hold
+market prob). Totals are scored at the REALIZED total as a distribution/PIT check and LABELED as
+such (p_sim_over/eq/under_realized) — not a market over/under settlement, because the frozen
+features carry no market total line.
+
+GOVERNANCE. Registered the new sim source in harness/model_registry.py as
+ml.v13_1.hist_replay.hfa1005.n30000.rng_gamePk (role HISTORICAL_REPLAY_RUNNER) and pinned its hash
+(12 sources pinned). HFA is imported from engine/hfa.py (CURRENT=1.005), no stray literal. Runner
+is DIAGNOSTIC — never a production card, changes no gate, promotes nothing. Healthcheck HEALTHY
+(0 fail). Gate stays 0/100 NO_PROMOTE; model-authorized ledger $0; paper only. Not pushed.

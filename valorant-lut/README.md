@@ -6,9 +6,10 @@ Valorant's 0.07 yaw; a raw 180° is ≈ 23.2 cm).
 
 Four profiles:
 
-- **`VAL-SCURVE-3200-088-64pt`** — whaamkabaam-style S-curve: slow movements run *below* baseline
-  (gain 0.85× for extra micro precision), crosses baseline at ~8 in/s, rises to 1.30× for flicks.
-  "Low and high sens at the same time." Whole mode (both axes).
+- **`VAL-SCURVE-V2-3200-088-64pt`** (current) — whaamkabaam-style S-curve, retuned from play
+  feedback: tighter hold (gain 0.80× at slow speed) and faster flicks (1.40× cap reached by 40 in/s),
+  crossing baseline at ~7.6 in/s. Whole mode (both axes).
+- **`VAL-SCURVE-3200-088-64pt`** — S-curve v1: floor 0.85×, cap 1.30× at 50 in/s, crossing ~8 in/s.
 - **`VAL-CURVE-3200-088-64pt`** — punchy boost-only curve: raw below 8 in/s, gain 1.00× → 1.30×
   across 8–40 in/s. The assist lands in the realistic flick range (20–50 in/s). Vertical stays raw.
 - **`VAL-MILD-3200-088-64pt`** — conservative: raw below 12 in/s, gain 1.00× → 1.20× across
@@ -22,7 +23,8 @@ Four profiles:
 
 | File | Use |
 |------|-----|
-| `VAL-SCURVE-3200-088-64pt.rawaccelprofile.json` | **Import Profile** — whaamkabaam-style S-curve |
+| `VAL-SCURVE-V2-3200-088-64pt.rawaccelprofile.json` | **Import Profile** — S-curve V2 (current) |
+| `VAL-SCURVE-3200-088-64pt.rawaccelprofile.json` | **Import Profile** — S-curve v1 |
 | `VAL-CURVE-3200-088-64pt.rawaccelprofile.json` | **Import Profile** — punchy boost-only curve |
 | `VAL-MILD-3200-088-64pt.rawaccelprofile.json` | **Import Profile** — conservative boost-only curve |
 | `VAL-*.settings.json` | Import Settings variants of each |
@@ -43,19 +45,21 @@ same time" philosophy: slow movements run **below** your baseline for extra micr
 movements rise above it. Gain is a log-space smootherstep (the same family as Raw Accel's
 synchronous/motivity mode):
 
-- **≤2 in/s:** gain 0.85× — micro-adjust/tracking at effective eDPI **239** (more room for precision)
-- **2–50 in/s:** smooth S rising through **1.00× at ~8 in/s** (your baseline feel sits at normal aim speed)
-- **≥50 in/s:** gain 1.30× — flick assist comparable to VAL-CURVE
+**V2** (current, retuned from play feedback — v1 flicks felt slow, hold felt loose):
 
-| Hand speed | Gain | Sens (ratio) | Effective eDPI |
-|-----------:|-----:|-------------:|---------------:|
-|   3 in/s | 0.85× | 0.85× | 240 |
-|   8 in/s | 1.00× | 0.89× | 252 |
-|  12 in/s | 1.10× | 0.95× | 266 |
-|  20 in/s | 1.22× | 1.03× | 292 |
-|  30 in/s | 1.28× | 1.11× | 313 |
-|  50 in/s | 1.30× | 1.18× | 334 |
-|  80 in/s | 1.30× | 1.23× | 346 |
+- **≤2 in/s:** gain 0.80× — angle-holding jitter damped 20%, micro at effective eDPI **225**
+- **2–40 in/s:** smooth S rising through **1.00× at ~7.6 in/s**; sens *ratio* recrosses 1.0 near 15 in/s,
+  so medium corrections land almost exactly where raw would put them
+- **≥40 in/s:** gain 1.40× — full flick assist arrives at real flick speeds
+
+| Hand speed | v1 gain | V2 gain | v1 sens | V2 sens | V2 eff-eDPI |
+|-----------:|--------:|--------:|--------:|--------:|------------:|
+|   3 in/s | 0.85× | 0.80× | 0.85× | 0.80× | 226 |
+|   8 in/s | 1.00× | 1.02× | 0.89× | 0.87× | 244 |
+|  15 in/s | 1.15× | 1.26× | 0.98× | 1.00× | 281 |
+|  20 in/s | 1.22× | 1.34× | 1.03× | 1.07× | 302 |
+|  30 in/s | 1.28× | 1.40× | 1.11× | 1.17× | 330 |
+|  50 in/s | 1.30× | 1.40× | 1.18× | 1.26× | 356 |
 
 Two things change vs the boost-only curves, both deliberate:
 

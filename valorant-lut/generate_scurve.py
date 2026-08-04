@@ -25,64 +25,66 @@ nodes sit at equal gain increments (uniform 0.0075x/step resolution).
 import json, math
 
 DPI = 3200.0
-G_LO, G_HI = 0.85, 1.30
-V_LO, V_HI = DPI*2.0/1000.0, DPI*50.0/1000.0    # 6.4 .. 160 counts/ms
 XMAX = 640.0
 N_POINTS = 64
-NAME = "VAL-SCURVE-3200-088-64pt"
 
-_lnlo, _lnhi = math.log(V_LO), math.log(V_HI)
-_lgl, _lgh = math.log(G_LO), math.log(G_HI)
+# (name, gain floor, gain cap, floor-end in/s, cap-start in/s)
+PROFILES = [
+    # V1: original — floor 0.85, cap 1.30 at 50 in/s
+    ("VAL-SCURVE-3200-088-64pt", 0.85, 1.30, 2.0, 50.0),
+    # V2: tighter hold + faster flicks — floor 0.80, cap 1.40 by 40 in/s
+    ("VAL-SCURVE-V2-3200-088-64pt", 0.80, 1.40, 2.0, 40.0),
+]
 
 def s(u): return 6*u**5 - 15*u**4 + 10*u**3
 
-def gain(x):
-    if x <= V_LO: return G_LO
-    if x >= V_HI: return G_HI
-    u = (math.log(x) - _lnlo) / (_lnhi - _lnlo)
-    return math.exp(_lgl + (_lgh - _lgl)*s(u))
-
-def inv_gain(level):
-    lo, hi = V_LO, V_HI
-    for _ in range(80):
-        m = 0.5*(lo+hi)
-        if gain(m) < level: lo = m
-        else: hi = m
-    return 0.5*(lo+hi)
-
-def simpson(a, b, n=400):
-    if b <= a: return 0.0
-    n += n % 2
-    h = (b-a)/n
-    acc = gain(a) + gain(b)
-    for i in range(1, n):
-        acc += gain(a+i*h) * (4 if i % 2 else 2)
-    return acc*h/3.0
-
-# nodes: base(2) + knee at equal gain steps(M incl. V_HI) + tail(2) = 64
-M = N_POINTS - 4
-levels = [G_LO + (G_HI-G_LO)*k/M for k in range(1, M+1)]
-knee = [inv_gain(L) for L in levels]
-knee[-1] = V_HI
-xs = sorted(set(round(x, 6) for x in ([0.0625, V_LO] + knee + [400.0, XMAX])))
-
-# cumulative integral at nodes (exact linear pieces outside the knee)
-NX, NY = [], []
-acc = None
-for x in xs:
-    if x <= V_LO:
-        y = G_LO * x
-    elif x >= V_HI:
-        if acc is None:
-            acc = G_LO*V_LO + simpson(V_LO, V_HI, 4000)
-        y = acc + G_HI*(x - V_HI)
-    else:
-        y = G_LO*V_LO + simpson(V_LO, x, 2000)
-    NX.append(round(x, 5)); NY.append(round(y, 5))
-assert len(NX) <= 64
-
-h_data = []
-for x, yv in zip(NX, NY): h_data += [x, yv]
+def build_lut(G_LO, G_HI, vlo_ins, vhi_ins):
+    V_LO, V_HI = DPI*vlo_ins/1000.0, DPI*vhi_ins/1000.0
+    lnlo, lnhi = math.log(V_LO), math.log(V_HI)
+    lgl, lgh = math.log(G_LO), math.log(G_HI)
+    def gain(x):
+        if x <= V_LO: return G_LO
+        if x >= V_HI: return G_HI
+        u = (math.log(x) - lnlo) / (lnhi - lnlo)
+        return math.exp(lgl + (lgh - lgl)*s(u))
+    def inv_gain(level):
+        lo, hi = V_LO, V_HI
+        for _ in range(80):
+            m = 0.5*(lo+hi)
+            if gain(m) < level: lo = m
+            else: hi = m
+        return 0.5*(lo+hi)
+    def simpson(a, b, n=400):
+        if b <= a: return 0.0
+        n += n % 2
+        h = (b-a)/n
+        acc = gain(a) + gain(b)
+        for i in range(1, n):
+            acc += gain(a+i*h) * (4 if i % 2 else 2)
+        return acc*h/3.0
+    # nodes: base(2) + knee at equal gain steps(M incl. V_HI) + tail(2) = 64
+    M = N_POINTS - 4
+    levels = [G_LO + (G_HI-G_LO)*k/M for k in range(1, M+1)]
+    knee = [inv_gain(L) for L in levels]
+    knee[-1] = V_HI
+    tail = [0.5*(V_HI+XMAX), XMAX]
+    xs = sorted(set(round(x, 6) for x in ([0.0625, V_LO] + knee + tail)))
+    NX, NY = [], []
+    acc = None
+    for x in xs:
+        if x <= V_LO:
+            y = G_LO * x
+        elif x >= V_HI:
+            if acc is None:
+                acc = G_LO*V_LO + simpson(V_LO, V_HI, 4000)
+            y = acc + G_HI*(x - V_HI)
+        else:
+            y = G_LO*V_LO + simpson(V_LO, x, 2000)
+        NX.append(round(x, 5)); NY.append(round(y, 5))
+    assert len(NX) <= 64
+    h_data = []
+    for x, yv in zip(NX, NY): h_data += [x, yv]
+    return NX, NY, h_data, inv_gain
 
 def accel(mode, data):
     return {
@@ -93,8 +95,9 @@ def accel(mode, data):
         "Cap mode": "output", "data": data,
     }
 
-profile = {
-    "name": NAME,
+def make_profile(name, h_data):
+    return {
+    "name": name,
     "Stretches domain for horizontal vs vertical inputs": {"x": 1.0, "y": 1.0},
     "Stretches accel range for horizontal vs vertical inputs": {"x": 1.0, "y": 1.0},
     "Whole or horizontal accel parameters": accel("lut", h_data),
@@ -111,15 +114,17 @@ profile = {
     "L/R output DPI ratio (left sens multiplier)": 1.0,
     "U/D output DPI ratio (up sens multiplier)": 1.0,
     "Degrees of rotation": 0.0, "Degrees of angle snapping": 0.0, "Input Speed Cap": 0.0,
-}
+    }
 
-export = {
+def make_export(profile):
+    return {
     "format": "RawAccelReimagined.Profile", "formatVersion": 1,
     "rawAccelVersion": "1.7.0", "exportedAtUtc": "2026-08-04T00:00:00.0000000Z",
     "profile": profile,
 }
 
-settings = {
+def make_settings(profile):
+    return {
     "### Accel modes ###": "classic | jump | natural | synchronous | power | lut | noaccel",
     "### Cap modes ###": "in_out | input | output",
     "version": "1.7.0",
@@ -134,13 +139,16 @@ settings = {
 }
 
 if __name__ == "__main__":
-    with open(NAME + ".rawaccelprofile.json", "w") as f:
-        json.dump(export, f, indent=2); f.write("\n")
-    with open(NAME + ".settings.json", "w") as f:
-        json.dump(settings, f, indent=2); f.write("\n")
-    paste = "; ".join(f"{x:g},{yv:g}" for x, yv in zip(NX, NY))
-    with open(NAME + ".paste.txt", "w") as f:
-        f.write(paste + "\n")
-    print(f"{NAME}: {len(NX)} points")
-    cross = inv_gain(1.0)
-    print(f"gain crosses 1.00 at {cross:.1f} counts/ms = {cross*1000/DPI:.1f} in/s")
+    for name, g_lo, g_hi, vlo, vhi in PROFILES:
+        NX, NY, h_data, inv_gain = build_lut(g_lo, g_hi, vlo, vhi)
+        profile = make_profile(name, h_data)
+        with open(name + ".rawaccelprofile.json", "w") as f:
+            json.dump(make_export(profile), f, indent=2); f.write("\n")
+        with open(name + ".settings.json", "w") as f:
+            json.dump(make_settings(profile), f, indent=2); f.write("\n")
+        paste = "; ".join(f"{x:g},{yv:g}" for x, yv in zip(NX, NY))
+        with open(name + ".paste.txt", "w") as f:
+            f.write(paste + "\n")
+        cross = inv_gain(1.0)
+        print(f"{name}: {len(NX)} pts, floor {g_lo} cap {g_hi}, "
+              f"baseline crossing {cross*1000/DPI:.1f} in/s")

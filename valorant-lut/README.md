@@ -4,12 +4,15 @@ Valorant-tuned mouse-acceleration LUTs for **[Raw Accel Reimagined](https://gith
 built for **3200 DPI** with **0.088** in-game sensitivity (**eDPI 281.6** ≈ **46.4 cm/360** at
 Valorant's 0.07 yaw; a raw 180° is ≈ 23.2 cm).
 
-Three profiles, same architecture (raw base → smootherstep gain ramp → flat cap), different tuning:
+Four profiles:
 
-- **`VAL-CURVE-3200-088-64pt`** — punchy: raw below 8 in/s, gain 1.00× → 1.30× across 8–40 in/s.
-  The assist lands in the realistic flick range (20–50 in/s).
+- **`VAL-SCURVE-3200-088-64pt`** — whaamkabaam-style S-curve: slow movements run *below* baseline
+  (gain 0.85× for extra micro precision), crosses baseline at ~8 in/s, rises to 1.30× for flicks.
+  "Low and high sens at the same time." Whole mode (both axes).
+- **`VAL-CURVE-3200-088-64pt`** — punchy boost-only curve: raw below 8 in/s, gain 1.00× → 1.30×
+  across 8–40 in/s. The assist lands in the realistic flick range (20–50 in/s). Vertical stays raw.
 - **`VAL-MILD-3200-088-64pt`** — conservative: raw below 12 in/s, gain 1.00× → 1.20× across
-  12–90 in/s. Near-raw at ordinary flick speeds; assist arrives mostly at very fast swipes (60+ in/s).
+  12–90 in/s. Near-raw at ordinary flick speeds; assist arrives mostly at very fast swipes. Vertical raw.
 - **`VAL-3200-088-64pt`** — the earlier subtle gain-cap profile (raw <15 in/s, +10% cap by 30 in/s),
   rebuilt from the `CANONICAL` reference.
 
@@ -19,19 +22,55 @@ Three profiles, same architecture (raw base → smootherstep gain ramp → flat 
 
 | File | Use |
 |------|-----|
-| `VAL-CURVE-3200-088-64pt.rawaccelprofile.json` | **Import Profile** — punchy continuous curve |
-| `VAL-MILD-3200-088-64pt.rawaccelprofile.json` | **Import Profile** — conservative continuous curve |
-| `VAL-CURVE-3200-088-64pt.settings.json`, `VAL-MILD-…settings.json` | Import Settings variants |
-| `VAL-CURVE-…paste.txt`, `VAL-MILD-…paste.txt` | Free Curve Editor paste strings |
-| `VAL-CURVE-3200-088-64pt.curve.svg` | Gain chart — all three profiles overlaid |
-| `generate_valorant_curve.py` | Self-contained generator for both continuous curves |
+| `VAL-SCURVE-3200-088-64pt.rawaccelprofile.json` | **Import Profile** — whaamkabaam-style S-curve |
+| `VAL-CURVE-3200-088-64pt.rawaccelprofile.json` | **Import Profile** — punchy boost-only curve |
+| `VAL-MILD-3200-088-64pt.rawaccelprofile.json` | **Import Profile** — conservative boost-only curve |
+| `VAL-*.settings.json` | Import Settings variants of each |
+| `VAL-*.paste.txt` | Free Curve Editor paste strings |
+| `curves-overlay.svg` | Gain chart — all four profiles overlaid |
+| `generate_scurve.py` | Self-contained generator for the S-curve |
+| `generate_valorant_curve.py` | Self-contained generator for the boost-only curves |
 | `VAL-3200-088-64pt.rawaccelprofile.json` | **Import Profile** — subtle gain-cap profile |
 | `VAL-3200-088-64pt.settings.json` | Import Settings variant of the same |
 | `VAL-3200-088-64pt.paste.txt` | Free Curve Editor paste string |
 | `VAL-3200-088-64pt.curve.svg` | Chart for the subtle profile |
 | `generate_curve.py` | Self-contained generator for the subtle profile |
 
-## The continuous curves (`VAL-CURVE` and `VAL-MILD`)
+## The S-curve (`VAL-SCURVE`) — whaamkabaam-style
+
+The other profiles only ever *add* sensitivity. The S-curve implements the "low and high sens at the
+same time" philosophy: slow movements run **below** your baseline for extra micro precision, and fast
+movements rise above it. Gain is a log-space smootherstep (the same family as Raw Accel's
+synchronous/motivity mode):
+
+- **≤2 in/s:** gain 0.85× — micro-adjust/tracking at effective eDPI **239** (more room for precision)
+- **2–50 in/s:** smooth S rising through **1.00× at ~8 in/s** (your baseline feel sits at normal aim speed)
+- **≥50 in/s:** gain 1.30× — flick assist comparable to VAL-CURVE
+
+| Hand speed | Gain | Sens (ratio) | Effective eDPI |
+|-----------:|-----:|-------------:|---------------:|
+|   3 in/s | 0.85× | 0.85× | 240 |
+|   8 in/s | 1.00× | 0.89× | 252 |
+|  12 in/s | 1.10× | 0.95× | 266 |
+|  20 in/s | 1.22× | 1.03× | 292 |
+|  30 in/s | 1.28× | 1.11× | 313 |
+|  50 in/s | 1.30× | 1.18× | 334 |
+|  80 in/s | 1.30× | 1.23× | 346 |
+
+Two things change vs the boost-only curves, both deliberate:
+
+1. **Whole mode** (accel applies to both axes uniformly). With a sub-1.0 slow region, keeping vertical
+   raw would make slow diagonals skew ~15% — unacceptable. Consequence: vertical micro (headshot-line
+   settling, recoil pulls) also runs at 0.85×, i.e. slightly slower and more precise, but different
+   from your raw muscle memory. This is how S-curves are normally shipped.
+2. **Slow aim is not raw anymore.** That's the trade: more precision headroom up close in exchange for
+   re-learning the slow-speed feel. Expect a few sessions of adaptation — the payoff is the "both
+   sensitivities at once" effect.
+
+Tuning knobs at the top of `generate_scurve.py`: `G_LO` (floor), `G_HI` (cap), and the speed window.
+If 0.85 feels too slow on sprays, try `G_LO = 0.90`.
+
+## The boost-only curves (`VAL-CURVE` and `VAL-MILD`)
 
 Both use the same construction: exactly **1.000×** gain below the onset, a quintic smootherstep ease up
 to the max gain at the cap speed, flat beyond. The velocity LUT is the exact analytic integral of the

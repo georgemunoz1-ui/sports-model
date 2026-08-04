@@ -1,10 +1,14 @@
-# Valorant LUT — 3200 DPI · 0.088 sens (Raw Accel Reimagined)
+# Valorant LUTs — 3200 DPI · 0.088 sens (Raw Accel Reimagined)
 
-A subtle, Valorant-tuned mouse-acceleration LUT for **[Raw Accel Reimagined](https://github.com/diskcell/Raw-Accel-Reimagined)**,
+Valorant-tuned mouse-acceleration LUTs for **[Raw Accel Reimagined](https://github.com/diskcell/Raw-Accel-Reimagined)**,
 built for **3200 DPI** with **0.088** in-game sensitivity (**eDPI 281.6**, ≈ 39 cm/360).
 
-It reproduces the feel of your `CANONICAL` reference curve, rebuilt as a clean **64-point**
-LUT with mathematically uniform sensitivity steps.
+Two profiles:
+
+- **`VAL-CURVE-3200-088-64pt`** (recommended) — a continuous curve: raw below 8 in/s, C2-smooth gain
+  rise 1.00× → 1.30× across the whole flick range (8–40 in/s), capped at +30%.
+- **`VAL-3200-088-64pt`** — the earlier subtle gain-cap profile (raw <15 in/s, +10% cap by 30 in/s),
+  rebuilt from the `CANONICAL` reference.
 
 > Independent community project. Not affiliated with Riot Games or the official Raw Accel team.
 
@@ -12,15 +16,44 @@ LUT with mathematically uniform sensitivity steps.
 
 | File | Use |
 |------|-----|
-| `VAL-3200-088-64pt.rawaccelprofile.json` | **Import Profile** (recommended) — single profile |
-| `VAL-3200-088-64pt.settings.json` | **Import Settings** — full settings export, same curve |
-| `VAL-3200-088-64pt.paste.txt` | `x,y;x,y` string to paste into the Free Curve Editor (LUT) |
-| `VAL-3200-088-64pt.curve.svg` | Chart of effective sensitivity vs input speed |
+| `VAL-CURVE-3200-088-64pt.rawaccelprofile.json` | **Import Profile** — the continuous curve (recommended) |
+| `VAL-CURVE-3200-088-64pt.settings.json` | Import Settings variant of the same |
+| `VAL-CURVE-3200-088-64pt.paste.txt` | Free Curve Editor paste string |
+| `VAL-CURVE-3200-088-64pt.curve.svg` | Gain chart (new curve vs old, overlaid) |
+| `generate_valorant_curve.py` | Self-contained generator for the continuous curve |
+| `VAL-3200-088-64pt.rawaccelprofile.json` | **Import Profile** — subtle gain-cap profile |
+| `VAL-3200-088-64pt.settings.json` | Import Settings variant of the same |
+| `VAL-3200-088-64pt.paste.txt` | Free Curve Editor paste string |
+| `VAL-3200-088-64pt.curve.svg` | Chart for the subtle profile |
+| `generate_curve.py` | Self-contained generator for the subtle profile |
+
+## The continuous curve (`VAL-CURVE`)
+
+Gain shape: exactly **1.000×** below **8 in/s** (25.6 counts/ms), then a quintic smootherstep ease to
+**1.300×** at **40 in/s** (128 counts/ms), flat beyond. The velocity LUT is the exact analytic integral
+of that gain function, sampled at equal gain increments (uniform 0.005×/step), so the curve is live and
+smooth through the entire realistic flick range — no dead plateau in the middle of your aim speeds.
+
+| Hand speed | Gain (slope) | Sens (ratio) | Effective eDPI |
+|-----------:|-------------:|-------------:|---------------:|
+|  ≤8 in/s | 1.000× | 1.000× | 281.6 |
+|  15 in/s | 1.022× | 1.003× | 282 |
+|  20 in/s | 1.082× | 1.014× | 286 |
+|  25 in/s | 1.168× | 1.036× | 292 |
+|  30 in/s | 1.248× | 1.065× | 300 |
+|  40 in/s | 1.300× | 1.120× | 315 |
+|  50 in/s | 1.300× | 1.156× | 326 |
+|  80 in/s | 1.300× | 1.210× | 341 |
+
+What that means in play: crosshair placement, tracking, spray control and micro-flicks (all ≤8 in/s)
+are pixel-identical to raw 3200/0.088. Mid-speed flicks get progressively more help, and a fast 180°
+swipe needs ~**17 cm** of pad instead of 19.7 cm. Vertical stays raw 1:1 (by-component mode), so the
+headshot line and recoil pulls are untouched.
 
 ## How to load it
 
-1. In Raw Accel Reimagined, use **Import Profile** and pick `VAL-3200-088-64pt.rawaccelprofile.json`
-   (or **Import Settings** for the `.settings.json`).
+1. In Raw Accel Reimagined, use **Import Profile** and pick `VAL-CURVE-3200-088-64pt.rawaccelprofile.json`
+   (or the subtle `VAL-3200-088-64pt` variant; **Import Settings** works with the `.settings.json` files).
 2. Make sure your **mouse DPI is 3200** and Valorant in-game sens is **0.088** — the curve is scaled to that DPI.
 3. **Leave device "DPI (normalizes input speed)" at 0 / disabled** (Advanced → device config). If you enter
    3200 there, Raw Accel rescales input to 1000-DPI equivalents and the accel onset moves from 15 in/s to
@@ -31,7 +64,7 @@ LUT with mathematically uniform sensitivity steps.
 Alternatively, open the **Free Curve Editor (LUT)**, select all points, and paste the contents of
 `VAL-3200-088-64pt.paste.txt` (v1.8.4+ supports precise `x,y;x,y` pasting), then **Save & Apply**.
 
-## What the curve does
+## The subtle profile (`VAL-3200-088-64pt`)
 
 The LUT runs in **Gain / Velocity** mode, so it is a velocity curve. Raw Accel distinguishes two things:
 

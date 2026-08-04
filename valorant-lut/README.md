@@ -1,0 +1,89 @@
+# Valorant LUT — 3200 DPI · 0.088 sens (Raw Accel Reimagined)
+
+A subtle, Valorant-tuned mouse-acceleration LUT for **[Raw Accel Reimagined](https://github.com/diskcell/Raw-Accel-Reimagined)**,
+built for **3200 DPI** with **0.088** in-game sensitivity (**eDPI 281.6**, ≈ 39 cm/360).
+
+It reproduces the feel of your `CANONICAL` reference curve, rebuilt as a clean **64-point**
+LUT with mathematically uniform sensitivity steps.
+
+> Independent community project. Not affiliated with Riot Games or the official Raw Accel team.
+
+## Files
+
+| File | Use |
+|------|-----|
+| `VAL-3200-088-64pt.rawaccelprofile.json` | **Import Profile** (recommended) — single profile |
+| `VAL-3200-088-64pt.settings.json` | **Import Settings** — full settings export, same curve |
+| `VAL-3200-088-64pt.paste.txt` | `x,y;x,y` string to paste into the Free Curve Editor (LUT) |
+| `VAL-3200-088-64pt.curve.svg` | Chart of effective sensitivity vs input speed |
+
+## How to load it
+
+1. In Raw Accel Reimagined, use **Import Profile** and pick `VAL-3200-088-64pt.rawaccelprofile.json`
+   (or **Import Settings** for the `.settings.json`).
+2. Make sure your **mouse DPI is 3200** and Valorant in-game sens is **0.088** — the curve is scaled to that DPI.
+3. Press **Save & Apply**.
+
+Alternatively, open the **Free Curve Editor (LUT)**, select all points, and paste the contents of
+`VAL-3200-088-64pt.paste.txt` (v1.8.4+ supports precise `x,y;x,y` pasting), then **Save & Apply**.
+
+## What the curve does
+
+The LUT runs in **Gain / Velocity** mode, so it is a velocity curve — the effective sensitivity you feel
+is the **slope** (`dy/dx`) of the curve, not the raw ratio. Input speed is in **counts/ms**.
+
+| Zone | Input speed | Hand speed @3200 DPI | Effective sens |
+|------|-------------|----------------------|----------------|
+| **Raw / precise** | 0 – 48 counts/ms | 0 – 15 in/s | **exactly 1.000×** (untouched) |
+| **Ramp** | 48 – 96 counts/ms | 15 – 30 in/s | smoothly 1.000× → 1.100× |
+| **Cap** | ≥ 96 counts/ms | ≥ 30 in/s | flat **1.100×** (+10%) |
+
+Effective sensitivity at typical in-game hand speeds (3200 DPI):
+
+```
+  2 in/s : 1.000x      20 in/s : 1.035x
+  5 in/s : 1.000x      25 in/s : 1.089x
+ 10 in/s : 1.000x      30 in/s : 1.100x
+ 15 in/s : 1.000x      40+ in/s: 1.100x
+```
+
+Slow tracking and micro-adjustments (≤15 in/s) stay **perfectly 1:1**, so your base 3200/0.088 aim is
+unchanged and muscle memory is preserved. Only intentional fast flicks (15–30 in/s) get a gentle boost,
+capped at **+10%** so flicks stay predictable.
+
+## Design notes / improvements over the reference
+
+- **64 points, uniform granularity.** Rebuilt from your 116-point `CANONICAL` curve. Instead of subsampling,
+  the knee nodes are placed at **equal gain increments**, giving uniform ~0.0017×/step sensitivity resolution
+  (max step 0.00198×) — the smoothest possible feel for a 64-point budget. Max deviation from your original
+  curve: **0.0015 counts/ms** (imperceptible).
+- **Exact base and cap.** Slope is forced to *exactly* 1.000 below 48 counts/ms and *exactly* 1.100 above
+  96 counts/ms — no drift, no dips; slope is monotonically non-decreasing throughout.
+- **Safe tail.** Extended to 640 counts/ms (200 in/s), far beyond any real flick, so behavior is well-defined
+  even on the fastest snaps.
+- **By-component (unchanged from your setup).** `Whole/combined = false`: the accel curve applies to
+  **horizontal** movement while **vertical stays 1:1 raw** — horizontal flick assist, raw vertical for
+  recoil control and the headshot line.
+
+### Variants (easy to make on request)
+- **Tighter** (later onset ~60 counts/ms, +8% cap) — matches your `tight` reference.
+- **Whole/combined** magnitude-based accel (uniform on diagonals, no directional skew).
+- **Raw** (no acceleration) — your `RAW` reference.
+
+## Rebuild
+
+The curve is generated deterministically by the self-contained `generate_curve.py` (embeds the reference
+gain profile — no external files needed):
+
+```
+python3 generate_curve.py     # rewrites the .rawaccelprofile.json, .settings.json and .paste.txt
+```
+
+Parameters: onset 48 counts/ms, cap 96 counts/ms, max gain 1.10, 64 points, equal-gain node spacing.
+
+### Notes on the engine
+LUT runs in gain/velocity space: the points are an output-velocity curve, and the effective sensitivity
+is its **slope** (Raw Accel's official guide calls them "velocity points"). That's why the base region uses
+`y = x` (slope 1.000 → no accel) rather than a flat ratio. Input speed is **counts/ms**, which scales with
+mouse DPI — so this curve is specific to **3200 DPI**. If you change DPI, the onset/cap hand-speeds shift and
+the curve should be rescaled.

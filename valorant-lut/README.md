@@ -1,12 +1,15 @@
 # Valorant LUTs — 3200 DPI · 0.088 sens (Raw Accel Reimagined)
 
 Valorant-tuned mouse-acceleration LUTs for **[Raw Accel Reimagined](https://github.com/diskcell/Raw-Accel-Reimagined)**,
-built for **3200 DPI** with **0.088** in-game sensitivity (**eDPI 281.6**, ≈ 39 cm/360).
+built for **3200 DPI** with **0.088** in-game sensitivity (**eDPI 281.6** ≈ **46.4 cm/360** at
+Valorant's 0.07 yaw; a raw 180° is ≈ 23.2 cm).
 
-Two profiles:
+Three profiles, same architecture (raw base → smootherstep gain ramp → flat cap), different tuning:
 
-- **`VAL-CURVE-3200-088-64pt`** (recommended) — a continuous curve: raw below 8 in/s, C2-smooth gain
-  rise 1.00× → 1.30× across the whole flick range (8–40 in/s), capped at +30%.
+- **`VAL-CURVE-3200-088-64pt`** — punchy: raw below 8 in/s, gain 1.00× → 1.30× across 8–40 in/s.
+  The assist lands in the realistic flick range (20–50 in/s).
+- **`VAL-MILD-3200-088-64pt`** — conservative: raw below 12 in/s, gain 1.00× → 1.20× across
+  12–90 in/s. Near-raw at ordinary flick speeds; assist arrives mostly at very fast swipes (60+ in/s).
 - **`VAL-3200-088-64pt`** — the earlier subtle gain-cap profile (raw <15 in/s, +10% cap by 30 in/s),
   rebuilt from the `CANONICAL` reference.
 
@@ -16,39 +19,55 @@ Two profiles:
 
 | File | Use |
 |------|-----|
-| `VAL-CURVE-3200-088-64pt.rawaccelprofile.json` | **Import Profile** — the continuous curve (recommended) |
-| `VAL-CURVE-3200-088-64pt.settings.json` | Import Settings variant of the same |
-| `VAL-CURVE-3200-088-64pt.paste.txt` | Free Curve Editor paste string |
-| `VAL-CURVE-3200-088-64pt.curve.svg` | Gain chart (new curve vs old, overlaid) |
-| `generate_valorant_curve.py` | Self-contained generator for the continuous curve |
+| `VAL-CURVE-3200-088-64pt.rawaccelprofile.json` | **Import Profile** — punchy continuous curve |
+| `VAL-MILD-3200-088-64pt.rawaccelprofile.json` | **Import Profile** — conservative continuous curve |
+| `VAL-CURVE-3200-088-64pt.settings.json`, `VAL-MILD-…settings.json` | Import Settings variants |
+| `VAL-CURVE-…paste.txt`, `VAL-MILD-…paste.txt` | Free Curve Editor paste strings |
+| `VAL-CURVE-3200-088-64pt.curve.svg` | Gain chart — all three profiles overlaid |
+| `generate_valorant_curve.py` | Self-contained generator for both continuous curves |
 | `VAL-3200-088-64pt.rawaccelprofile.json` | **Import Profile** — subtle gain-cap profile |
 | `VAL-3200-088-64pt.settings.json` | Import Settings variant of the same |
 | `VAL-3200-088-64pt.paste.txt` | Free Curve Editor paste string |
 | `VAL-3200-088-64pt.curve.svg` | Chart for the subtle profile |
 | `generate_curve.py` | Self-contained generator for the subtle profile |
 
-## The continuous curve (`VAL-CURVE`)
+## The continuous curves (`VAL-CURVE` and `VAL-MILD`)
 
-Gain shape: exactly **1.000×** below **8 in/s** (25.6 counts/ms), then a quintic smootherstep ease to
-**1.300×** at **40 in/s** (128 counts/ms), flat beyond. The velocity LUT is the exact analytic integral
-of that gain function, sampled at equal gain increments (uniform 0.005×/step), so the curve is live and
-smooth through the entire realistic flick range — no dead plateau in the middle of your aim speeds.
+Both use the same construction: exactly **1.000×** gain below the onset, a quintic smootherstep ease up
+to the max gain at the cap speed, flat beyond. The velocity LUT is the exact analytic integral of the
+gain function, sampled at equal gain increments, so the LUT slope reproduces the intended gain precisely.
+Note the gain cap is a *slope* cap: actual sensitivity (output/input ratio) keeps rising after the cap
+speed and approaches the cap value only asymptotically at extreme speeds.
 
-| Hand speed | Gain (slope) | Sens (ratio) | Effective eDPI |
-|-----------:|-------------:|-------------:|---------------:|
-|  ≤8 in/s | 1.000× | 1.000× | 281.6 |
-|  15 in/s | 1.022× | 1.003× | 282 |
-|  20 in/s | 1.082× | 1.014× | 286 |
-|  25 in/s | 1.168× | 1.036× | 292 |
-|  30 in/s | 1.248× | 1.065× | 300 |
-|  40 in/s | 1.300× | 1.120× | 315 |
-|  50 in/s | 1.300× | 1.156× | 326 |
-|  80 in/s | 1.300× | 1.210× | 341 |
+Side-by-side (gain / actual-sensitivity ratio):
 
-What that means in play: crosshair placement, tracking, spray control and micro-flicks (all ≤8 in/s)
-are pixel-identical to raw 3200/0.088. Mid-speed flicks get progressively more help, and a fast 180°
-swipe needs ~**17 cm** of pad instead of 19.7 cm. Vertical stays raw 1:1 (by-component mode), so the
-headshot line and recoil pulls are untouched.
+| Hand speed | VAL-CURVE gain | VAL-CURVE sens | VAL-MILD gain | VAL-MILD sens |
+|-----------:|---------------:|---------------:|--------------:|--------------:|
+|  ≤8 in/s  | 1.000× | 1.000× | 1.000× | 1.000× |
+|  15 in/s  | 1.022× | 1.003× | 1.000× | 1.000× |
+|  20 in/s  | 1.083× | 1.014× | 1.002× | 1.000× |
+|  30 in/s  | 1.246× | 1.065× | 1.017× | 1.003× |
+|  40 in/s  | 1.300× | 1.120× | 1.050× | 1.010× |
+|  50 in/s  | 1.300× | 1.156× | 1.095× | 1.022× |
+|  60 in/s  | 1.300× | 1.180× | 1.142× | 1.039× |
+|  80 in/s  | 1.300× | 1.210× | 1.197× | 1.073× |
+| 100 in/s  | 1.300× | 1.228× | 1.200× | 1.098× |
+| 200 in/s  | 1.300× | 1.264× | 1.200× | 1.149× |
+
+Both keep everything below their onset pixel-identical to raw 3200/0.088, and vertical stays raw 1:1
+(by-component mode) so the headshot line and recoil pulls are untouched. The difference is *where the
+help lands*: VAL-CURVE assists ordinary fast flicks (20–50 in/s), while VAL-MILD is nearly inert there
+and only meaningfully assists very fast swipes (60+ in/s).
+
+On 180s: a raw 180° needs ≈23.2 cm of pad. The multiplier varies during a swipe (it depends on the whole
+speed trajectory), but as a constant-speed approximation at 50 in/s, VAL-CURVE brings it to ≈20 cm and
+VAL-MILD to ≈22.7 cm.
+
+**Which to pick:** start with **VAL-CURVE** if you wanted acceleration you can actually feel during
+normal flicking (that was the complaint with the flat profile); start with **VAL-MILD** if you want your
+established flick memory essentially untouched and only long swipes shortened. They bracket the space —
+after a session with each, the right cap/onset for you is usually obvious, and the generator makes any
+in-between (`PROFILES` list at the top of `generate_valorant_curve.py`).
 
 ## How to load it
 

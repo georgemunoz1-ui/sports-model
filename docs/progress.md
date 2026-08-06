@@ -1414,3 +1414,34 @@ ml.v13_1.hist_replay.hfa1005.n30000.rng_gamePk (role HISTORICAL_REPLAY_RUNNER) a
 (12 sources pinned). HFA is imported from engine/hfa.py (CURRENT=1.005), no stray literal. Runner
 is DIAGNOSTIC — never a production card, changes no gate, promotes nothing. Healthcheck HEALTHY
 (0 fail). Gate stays 0/100 NO_PROMOTE; model-authorized ledger $0; paper only. Not pushed.
+
+## 2026-08-06 — workflow validated; 8/4+8/5 finals ingested; 8/4 graded; 8/6 card prepped
+
+WORKFLOW VALIDATION (owner request). All selftests PASS (run_v13_historical, model_registry,
+ml_p4_forward). Independent full re-run of the 30k historical replay reproduced the committed
+v13_full_30k.jsonl BIT-IDENTICALLY (canonical sha ex-built_utc 08033edb3d33...): per-game-seed
+determinism holds end-to-end on all 1,475 games.
+
+FINALS INGESTED (WebSearch multi-source, gamePk-keyed from MLB.com gameday URLs). 8/4: 15/15
+matching the frozen slate matchups. 8/5: 15/15 series continuations. Contiguity SOLID 7/18 -> 8/5.
+ECHO GUARD: three first-pass 8/5 scores were 8/4-echoes surfaced by the search layer and were
+CORRECTED by dedicated recap searches BEFORE recording (NYM@CLE 6-5 in 10, not 6-2; MIN@KC 2-1,
+not 8-6; ATH@CIN 3-2, not 5-4). PIT@MIL 4-2 was verified genuinely identical both nights (Jones
+Tue / Skenes Wed). Evidence files record the guard. ml_asof rebuilt: 1719 rows, vintage
+51c9bf44eacc, rebuild check IDENTICAL.
+
+8/4 GRADED (all 15, single-book benchmark from the frozen board, book UNRESOLVED, ~4.5% hold).
+Home teams won 11/15 (favorite-friendly night — the mirror of 8/3's road sweep). Market beat the
+candidate on BOTH metrics this slate: Brier 0.2266 vs 0.2427, accuracy 10/15 vs 8/15. The
+candidate's compression cost it on a night the favorites delivered. V13 incumbent null on all 15
+(gamePk unresolved at freeze — documented Phase-4 limitation). Registry now 71 forecasts / 67
+grades, chain intact. Cumulative candidate ML: n=54, Brier 0.2530, home 27/54 — DIAGNOSTIC only,
+benchmark heterogeneous across dates, clean promotion n still 0.
+
+8/6 CARD PREPPED (PRE-ODDS). Slate assembled by per-series WebSearch confirmation — no single
+source enumerated the day. 8 games confirmed (NYY confirmed OFF; 12 other idle teams presumed
+travel-day, caveat recorded: a missed Thursday opener is possible and the owner's board is the
+completeness authority). Probables named for 6 games; LAA/ATH/SD/AZ starters TBD -> CAP.
+FULL-TRACKING card built (cards/2026-08-06_card.json, V13 n=30000, no lines — odds board absent).
+P4 forecasts BLOCKED until the owner's frozen odds board arrives (media line BAL -163 seen and
+recorded as context ONLY, never a board quote). Gate 0/100 NO_PROMOTE; model ledger $0; not pushed.

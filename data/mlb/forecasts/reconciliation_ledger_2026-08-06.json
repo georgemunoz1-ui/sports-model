@@ -1,0 +1,26 @@
+{
+ "record_id": "RECON-2026-08-06",
+ "run_utc": "2026-08-06T06:54:33Z",
+ "scope": "ingest 8/4 (15) + 8/5 (15) finals via WebSearch; grade all 15 frozen 8/4 ML forecasts; rebuild ml_asof; prep 8/6 card",
+ "contiguity": "results.csv finals contiguous 2026-07-18 -> 2026-08-05; no interior holes in trailing 14d of 8/6",
+ "echo_corrections": "8/5 first-pass had three 8/4-echo scores, corrected by dedicated recap searches BEFORE recording: NYM@CLE 6-5(10) not 6-2; MIN@KC 2-1 not 8-6; ATH@CIN 3-2 not 5-4; PIT@MIL 4-2 verified genuinely repeated (Jones Tue/Skenes Wed)",
+ "grading": "15/15 graded on the frozen board's single-book two-sided de-vig benchmark (book UNRESOLVED, overround ~4.5%); V13 incumbent null on all (gamePk unresolved at freeze -> Phase-4 documented limitation)",
+ "results_84": {
+  "n": 15,
+  "home_won": 11,
+  "candidate_brier": 0.2427,
+  "market_brier": 0.2266,
+  "candidate_acc": "8/15",
+  "market_acc": "10/15"
+ },
+ "cumulative_candidate": {
+  "n": 54,
+  "brier": 0.253,
+  "home_won": 27
+ },
+ "evidence": [
+  "data/mlb/evidence/websearch/2026-08-04_finals.json",
+  "data/mlb/evidence/websearch/2026-08-05_finals.json"
+ ],
+ "workflow_validation": "selftests PASS (runner/registry/p4_forward); 30k historical replay re-run BIT-IDENTICAL to committed artifact ex built_utc (canonical sha 08033edb3d33)"
+}

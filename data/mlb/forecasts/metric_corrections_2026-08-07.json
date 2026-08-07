@@ -1,0 +1,55 @@
+{
+ "record_id": "METRIC-CORRECTIONS-2026-08-07",
+ "written_utc": "2026-08-07T05:40:12Z",
+ "cause": "two 7/29 outcomes were flipped in the original grading (extra-innings games captured at wrong regulation-era scores); see evidence/websearch/2026-08-07_results_corrections.json",
+ "supersedes": [
+  "2026-0729-0731_paired_scoring.json headline numbers (rows preserved there; corrected here)",
+  "6b7cc58 commit-message metrics for the 31-game cohort",
+  "cumulative candidate figures quoted through 2026-08-06"
+ ],
+ "cohort_0729_0731_n31": {
+  "was": {
+   "candidate_brier": 0.2555,
+   "market_brier": 0.2478,
+   "candidate_acc": "14/31",
+   "market_acc": "18/31",
+   "paired_dBrier_mean": 0.00765,
+   "paired_SE": 0.00906,
+   "t_CI_95": [
+    -0.011,
+    0.026
+   ]
+  },
+  "now": {
+   "candidate_brier": 0.2577,
+   "market_brier": 0.2547,
+   "candidate_acc": "12/31",
+   "market_acc": "16/31",
+   "paired_dBrier_mean": 0.00304,
+   "paired_SE": 0.00921,
+   "t_CI_95": [
+    -0.0158,
+    0.0218
+   ],
+   "t_df30": 2.042
+  },
+  "flipped_rows": [
+   "20260729-CHC@STL:2026-07-29",
+   "20260729-NYY@CWS:2026-07-29"
+  ]
+ },
+ "cumulative_candidate_ML": {
+  "was": {
+   "n": 54,
+   "brier": 0.253,
+   "home_won": 27
+  },
+  "now": {
+   "n": 54,
+   "brier": 0.2543,
+   "home_won": 29
+  }
+ },
+ "unchanged": "the CF no-refit replay (cf_replay_7-31_datahole.json) compared model INPUTS, not outcomes - unaffected; frozen forecasts untouched (R3/R6)",
+ "interpretation": "still DESCRIPTIVE, CI crosses zero, no promotion-relevant change; benchmark heterogeneity note stands"
+}

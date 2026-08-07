@@ -1445,3 +1445,39 @@ completeness authority). Probables named for 6 games; LAA/ATH/SD/AZ starters TBD
 FULL-TRACKING card built (cards/2026-08-06_card.json, V13 n=30000, no lines — odds board absent).
 P4 forecasts BLOCKED until the owner's frozen odds board arrives (media line BAL -163 seen and
 recorded as context ONLY, never a board quote). Gate 0/100 NO_PROMOTE; model ledger $0; not pushed.
+
+## 2026-08-07 — 8/6 board processed; THREE season-data errors found and fixed via records cross-validation
+
+The owner pasted the full 8/6 board POST-FINAL (close quotes + finals + statcast gamefeeds). Frozen
+as data/mlb/odds/2026-08-06_gameboards.json. Because the quotes arrived after outcomes, NO
+prospective P4 forecasts were generated from it — retrospective diagnostics only.
+
+MY 8/6 PREP WAS WRONG IN TWO WAYS (corrections sidecar 2026-08-06_prep_corrections.json; frozen
+artifacts untouched): the slate was 11 games, not 8 (missed WSH@PHI G4of4, DET@SEA G3, TOR@CHC
+one-off — the per-series search enumeration inferred series ends wrongly; the recorded caveat
+'owner board is the completeness authority' fired exactly), and the card's CIN probable was Rhett
+Lowder while the actual starter was Andrew Abbott (graded as-is with SP-MISMATCH flag).
+
+RECORDS CROSS-VALIDATION CAUGHT REAL DATA ERRORS. Recomputing all 22 board teams' pregame records
+from results.csv: 19/22 exact, AZ/CHC/CWS each off by one game. Targeted WebSearch verification
+resolved ALL THREE, every one in the WebSearch data-hole-closure cohort:
+  - 7/29 NYY@CWS: stored NYY 5-4; ACTUAL CWS 6-5 in 12 innings (ESPN 401816316, b-almanac).
+  - 7/29 CHC@STL: stored CHC 4-3; ACTUAL STL 3-2 in 10 innings (MLB gameday 823022).
+  - 7/23 AZ@STL: ABSENT (7/23 was a partial-capture day); ACTUAL AZ 10-6 (ESPN 401881162) — appended.
+Root cause: two extra-innings games captured at wrong regulation-era scores + one dropped game on a
+partial day. Post-fix: 22/22 records match exactly. Residual: partial-capture days 7/16(1)/7/23(5)/
+7/27(11)/7/30(10) and 8 teams not on the board (LAD NYY SF STL TB TEX COL HOU) remain unvalidated.
+
+DOWNSTREAM CORRECTIONS (append-only): two 7/29 grades had flipped outcomes -> superseding grade
+rows G2-* appended (chain intact, 69 grades); metric_corrections_2026-08-07.json recomputes the
+31-game cohort: candidate Brier 0.2555->0.2577 (12/31), market 0.2478->0.2547 (16/31), paired
+dBrier +0.00765->+0.00304, t-CI [-0.0158,+0.0218] — still crosses zero, still DESCRIPTIVE.
+Cumulative candidate ML: n=54 Brier 0.2543 (was 0.2530), home 29/54. CF no-refit replay unaffected
+(it compared inputs, not outcomes). ml_asof rebuilt: 1731 rows, vintage 831669da1356.
+
+8/6 INGESTED (11 finals, owner-board source, ws-style keys + gamePk 823754 for PIT@MIL; CWS@BOS
+12-11 in 13, TOR@CHC 3-2 in 11). Contiguity 7/18 -> 8/6. CARD GRADED retro-diagnostically
+(2026-08-06_card_scoring.json; immutability: signed commit cb44a80 06:59:46Z, first pitch 16:35Z):
+V13 Brier 0.2537, 3/8 sides; board market 0.2305, 5/8; V13 total leans 2/7 on a night with a
+23-run 13-inning Fenway game and 19 runs in Cleveland; market went 7/11 on the full slate.
+Gate 0/100 NO_PROMOTE; model ledger $0; not pushed.

@@ -1,0 +1,11 @@
+{
+ "record_id": "PREP-CORRECTIONS-2026-08-06",
+ "written_utc": "2026-08-07T05:40:12Z",
+ "corrects": "data/mlb/slates/2026-08-06_prep.json + cards/2026-08-06_card.json (both stay frozen; corrections travel here)",
+ "errors": [
+  "SLATE INCOMPLETE: 8 games confirmed, actual slate 11 (missed WSH@PHI G4, DET@SEA G3, TOR@CHC one-off). Root cause: per-series search enumeration inferred series ends from 3-game patterns; WSH@PHI and PIT@MIL were 4-game series, DET@SEA had a G3, and TOR@CHC was a single-game set no search surfaced.",
+  "WRONG PROBABLE: card listed CIN starter Rhett Lowder; actual starter Andrew Abbott (L). V13 CIN row used Lowder's log - graded as-is with SP-MISMATCH flag per the 7/29 starter-annotation precedent.",
+  "UNRESOLVED STARTERS CONFIRMED LATE: LAA=Ryan Johnson(R), SD=Walker Buehler(R), AZ=Bryce Drake(L, 3 career starts) - card used CAP league-average for these rows."
+ ],
+ "prior_note_validated": "the prep record's completeness caveat ('a Thursday opener not surfaced by search would be MISSED; the owner's board is the completeness authority') is exactly what happened"
+}

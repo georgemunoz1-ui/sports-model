@@ -1,0 +1,45 @@
+{
+ "record_id": "RESULTS-CORRECTIONS-2026-08-07",
+ "retrieved_utc": "2026-08-07T05:40:12Z",
+ "trigger": "owner 8/6 board pregame-records cross-validation: 19/22 exact; AZ/CHC/CWS off by one game each",
+ "provenance_class": "WEBSEARCH_MULTI_SOURCE targeted verification (ESPN game pages, MLB.com gameday, baseball-reference/almanac boxes)",
+ "corrections": [
+  {
+   "game_id": "mlb:2026:ws0729-NYYCWS",
+   "was": "NYY 5 @ CWS 4, home_win=0",
+   "now": "NYY 5 @ CWS 6 (12 innings), home_win=1",
+   "sources": [
+    "espn.com/mlb/game/_/gameId/401816316 (White Sox 6-5)",
+    "baseball-almanac.com box 202607290CHA",
+    "b-ref CHA202607290"
+   ]
+  },
+  {
+   "game_id": "mlb:2026:ws0729-CHCSTL",
+   "was": "CHC 4 @ STL 3, home_win=0",
+   "now": "CHC 2 @ STL 3 (10 innings), home_win=1",
+   "sources": [
+    "mlb.com/gameday/823022 (Cubs 2, Cardinals 3)",
+    "espn 401816314",
+    "bleachernation enhanced box 7/29"
+   ]
+  },
+  {
+   "game_id": "mlb:2026:ws0723-AZSTL",
+   "was": "ABSENT (7/23 was a partial-capture day: 4 games on file)",
+   "now": "AZ 10 @ STL 6, home_win=0 (appended)",
+   "sources": [
+    "espn 401881162 (D-backs 10-6)",
+    "b-ref SLN202607230",
+    "baseball-almanac 202607230SLN",
+    "foxsports boxscore 97182"
+   ]
+  }
+ ],
+ "root_cause": "all three sit in the WebSearch data-hole-closure cohort (7/23 partial capture; 7/29 recovered finals) \u2014 two extra-innings games were captured at a WRONG regulation-era score, and one partial day dropped a game entirely",
+ "residual_risk": "partial-capture days still on file: 7/16 (1 game), 7/23 (now 5), 7/27 (11), 7/30 (10); 8 teams (LAD NYY SF STL TB TEX COL HOU) not present on the 8/6 board so not cross-validated \u2014 flagged for the next records checkpoint",
+ "grades_affected": [
+  "G-P4-20260729-UNRESOLVED:NYY@CWS:2026-07-29 (home_win 0->1)",
+  "G-P4-20260729-UNRESOLVED:CHC@STL:2026-07-29 (home_win 0->1)"
+ ]
+}

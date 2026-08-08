@@ -1,0 +1,37 @@
+{
+ "record_id": "SLATE-CORRECTIONS-2026-08-08",
+ "built_utc": "2026-08-08T22:30:22Z",
+ "authority": "owner official-source verification (user positions user-authoritative)",
+ "corrects": [
+  "data/mlb/forecasts/2026-08-08_updated_card.json (CLE@CWS injury note)",
+  "data/feeds/2026-08-08_reconciliation.json (J.Ramirez 'back in lineup')",
+  "my prior chat claim 'Ramirez confirmed back' and the phrase 'road-dog CWS'"
+ ],
+ "corrections": [
+  {
+   "item": "Jose Ramirez NOT in Cleveland's posted 8/8 lineup",
+   "was": "WebSearch snippet said 'Ramirez back' -> I stated 'confirmed back for 8/8'",
+   "now": "He played 8/7; the OFFICIAL 8/8 lineup is Kwan, Adell, DeLauter, Martinez, Hoskins, Rocchio, Bazzana, Hedges, Genao (no Ramirez). The snippet conflated his 8/7 return with today.",
+   "consequence": "CWS is rejected for MODEL-COMPRESSION + PRICE-VALIDATION reasons, NOT because Ramirez returned today. J-Ram's absence is a real factor V13/log5 cannot quantify reliably \u2014 itself a reason we lack a defensible number, not a reason to bet CWS."
+  },
+  {
+   "item": "Terminology: UNDERDOG compression, not 'road-dog'",
+   "now": "CWS and WSH are HOME underdogs; BAL, HOU, TB are ROAD underdogs. The bias is underdog compression regardless of home/road."
+  },
+  {
+   "item": "James Wood absence CONFIRMED",
+   "now": "Washington placed Wood on the IL 2026-08-04 (oblique). Confirmed out for 8/8. WSH reasoning stands."
+  }
+ ],
+ "official_cle_lineup_8_8": [
+  "Kwan",
+  "Adell",
+  "DeLauter",
+  "Martinez",
+  "Hoskins",
+  "Rocchio",
+  "Bazzana",
+  "Hedges",
+  "Genao"
+ ]
+}

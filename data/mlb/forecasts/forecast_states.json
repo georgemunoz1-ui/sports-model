@@ -1,0 +1,35 @@
+{
+ "record_id": "FORECAST-STATES-2026-08-08",
+ "built_utc": "2026-08-08T21:52:47Z",
+ "purpose": "Three independent states per the operating workflow \u2014 eliminates permanent-pending. Grading, benchmarking, and execution advance independently.",
+ "program": {
+  "P4_forward_challenger": {
+   "model": "ml.d_logistic_2f.p4.cfg132523ac (active forward challenger)",
+   "forecast_status": "ACTIVE (forecasts generated each eligible slate)",
+   "benchmark_status": "PER-SLATE (single-book de-vig where a same-book close exists; else UNATTRIBUTED)",
+   "execution_status": "UNAUTHORIZED (betting authorization closed \u2014 does NOT block forecasting or learning)",
+   "gate": "0/100 NO_PROMOTE",
+   "clean_promotion_n": 0,
+   "disposition": "INCONCLUSIVE (forced; not PENDING) \u2014 accumulating diagnostic evidence toward a pre-registered gate"
+  }
+ },
+ "current_ungraded_by_slate": {
+  "2026-07-27": 2,
+  "2026-07-28": 2
+ },
+ "standing_rule": {
+  "missing_prices": "do NOT prevent outcome grading (grade proceeds on the official result)",
+  "missing_lineups": "do NOT block ML (V13 does not consume lineups); only lineup-consuming models block",
+  "unattributed_odds": "block market comparison ONLY, not model learning",
+  "execution": "UNAUTHORIZED is a stable state, not a blocker on forecasting/evaluation"
+ },
+ "note": "Per-game T-120/T-30 versioned states (FORECAST_T120_v1, FINAL_PREGAME|DIAGNOSTIC, benchmark sidecar, first-pitch lock, LATE_CAPTURE) are emitted by the pregame Routine going forward; this file is the program-level rollup.",
+ "example_row_schema": {
+  "forecast_status": "FINAL_PREGAME",
+  "benchmark_status": "COMPLETE_QUOTE",
+  "execution_status": "UNAUTHORIZED",
+  "next_action": "GRADE_AFTER_FINAL",
+  "owner": "grading_agent",
+  "deadline_utc": "<first_pitch+ ~4h>"
+ }
+}

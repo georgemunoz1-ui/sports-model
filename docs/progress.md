@@ -1481,3 +1481,23 @@ Cumulative candidate ML: n=54 Brier 0.2543 (was 0.2530), home 29/54. CF no-refit
 V13 Brier 0.2537, 3/8 sides; board market 0.2305, 5/8; V13 total leans 2/7 on a night with a
 23-run 13-inning Fenway game and 19 runs in Cleveland; market went 7/11 on the full slate.
 Gate 0/100 NO_PROMOTE; model ledger $0; not pushed.
+
+## 2026-08-08 — 8/7 finals ingested; 8/8 card + parlay options (pre-pitch, odds pending)
+
+8/7 FINALS: full 15-game slate enumerated team-by-team (all 30 accounted — the 8/6 miss does not
+repeat), 13/15 gamePk-keyed. Three summary-text-only scores were re-verified via dedicated recap
+searches BEFORE recording (TOR@PHI 5-4 ninth-inning survival; LAD@AZ 4-3 Waldschmidt walk-off-HR
+off Diaz; MIN@MIL 8-6 comeback) — the 7/29 extra-innings lesson is now standard procedure.
+Contiguity 7/18 -> 8/7. ml_asof rebuilt: 1746 rows, vintage a0c149a6f45a.
+
+8/8 CARD (15 games, generated ~18:10Z, earliest pitch 19:05Z — pre-pitch): V13 n=30000 card run.
+Probables from WebSearch; CAP on NYM@PIT (Stock no-id), MIN@MIL (starters unconfirmed), HOU@SD
+(Blanco no-id), DET@SF (Jobe no-id). Notable trades visible: Skubal->LAD, Scherzer TOR, deGrom TEX.
+
+PARLAY CARD (data/mlb/forecasts/2026-08-08_parlay_card.json, PAPER/ADVISORY only): owner rule
+'actual win probability over EV'. Eligible legs = V13 favorite sides, both-SP-mature games only
+(CAP games excluded). Top legs BOS 60.9 / CHC 60.2 / ATL 57.9 / PHI 57.3 / CWS 56.4. Best combos:
+2-leg BOS+CHC 36.7% (BE +173); 3-leg +ATL 21.2% (BE +371); 4-leg +PHI 12.2% (BE +722); alternate
+4-leg 11.3% (BE +788). NO ODDS BOARD captured -> EV and the hybrid probability+value ranking are
+BLOCKED pending the owner's board; break-evens state the minimum parlay price for +EV IF the model
+probabilities are right. No wagers; ledger $0; gate 0/100 NO_PROMOTE. Not pushed.

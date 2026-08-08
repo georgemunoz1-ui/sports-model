@@ -1,0 +1,29 @@
+{
+ "record_id": "WNBA-SECTION-MANIFEST",
+ "sport": "WNBA",
+ "created_utc": "2026-08-08T18:34:16Z",
+ "status": "MARKET_CAPTURE_ONLY  (model layer ABSENT)",
+ "summary": "A firewalled WNBA section that processes observed multi-book market prices only. It has NO model and produces NO forecasts, edges, or EV \u2014 none can exist without WNBA data this system does not have.",
+ "components": {
+  "board": "data/wnba/odds/{date}_board.json  (frozen owner paste; real prices)",
+  "module": "harness/wnba_market.py  (de-vig, no-vig consensus, hold, line-shopping; --selftest)",
+  "analysis": "data/wnba/analysis/{date}_market.json  (market layer output)"
+ },
+ "governance": {
+  "R1_never_invent": "module structurally emits model_prob/model_edge/model_ev = null and the selftest fails if any is non-null; every probability is labeled MARKET-IMPLIED",
+  "firewall": "data/wnba/** and harness/wnba_market.py are isolated from the MLB engine, model_registry, forecast_registry, policy_gate, and healthcheck. No WNBA number reaches the MLB gate (0/100), forecasts, or ledgers.",
+  "ledger": "$0 / paper; no wagers authorized",
+  "supersede_rule": "official box/result tier-1 supersedes; user positions user-authoritative (same as MLB)"
+ },
+ "descriptive_context_omitted": {
+  "attempted": "WNBA team records / standings (Aug 8 2026) via WebSearch, to sanity-check the lines",
+  "result": "source returned implausible/stale figures (e.g. '5-2' records in August, inconsistent across teams)",
+  "decision": "OMITTED rather than recorded \u2014 per R1, unreliable data is not laundered into the section. Records/form can be added later from a verified source (basketball-reference/WNBA.com box history), clearly labeled DESCRIPTIVE_CONTEXT_ONLY, never as a model input."
+ },
+ "to_promote_to_a_real_model": [
+  "ingest WNBA results history (dates, home/away, scores) \u2014 none on disk",
+  "team ratings (four-factor/possession), injuries, rest/back-to-backs, star minutes",
+  "fit + rolling date-ordered OOS calibration, graded through a WNBA forecast registry parallel to the MLB one",
+  "only then may model probabilities/edges/EV be emitted \u2014 and only as DIAGNOSTIC until a clean prospective sample clears a pre-registered gate"
+ ]
+}

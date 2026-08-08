@@ -1,0 +1,15 @@
+{
+ "record_id": "MASSEY-CROSSCHECK-2026-08-08",
+ "built_utc": "2026-08-08T18:42:52Z",
+ "classification": "EXTERNAL_POWER_RATING_CROSSCHECK (descriptive; not a forecast, not graded)",
+ "method": "log5 on Massey/records (scale-free) + a documented home-court bump (MLB +0.16, WNBA +0.35 log-odds). Massey 'Rat' used ordinally, NOT converted from its proprietary scale (R1).",
+ "CRITICAL_CAVEAT_MLB": "Massey ratings + log5 are TEAM-STRENGTH / season-record based and BLIND to today's STARTING PITCHER \u2014 the dominant single-game factor in MLB. Where Massey disagrees with the market it is usually because the market is pricing a starter Massey cannot see (e.g. CIN's ace Burns 2.35 ERA behind CIN -140; LAD's Yamamoto behind LAD -193). So Massey is a team-strength cross-check, NOT a pitching-aware verdict, and its agreement with V13 on an underdog does NOT by itself validate V13.",
+ "value_leg_refinement": {
+  "CLE@CWS": "V13 CWS 56% AND Massey(team+home) CWS 56% both ABOVE market (CWS 44%, market favors CLE on Gavin Williams' arm). The one leg with genuine independent support for V13's lean \u2014 still contested (3 sources split), not a lock.",
+  "CIN@WSH": "V13 WSH 52%, Massey WSH 54%, market WSH 43%. But Massey is BLIND to CIN's ace Burns; the market's CIN -140 likely prices him. Lean MARKET; WSH 'value' probably not real.",
+  "BAL@TEX": "Massey backs the MARKET (TEX better, #16 vs #21). V13's BAL lean unsupported -> compression artifact, as flagged.",
+  "LAD@AZ": "Massey LAD 52.6% < V13 57% < market 65% \u2014 Massey is MORE compressed than V13 here because it can't see Yamamoto. Market (starter-aware) is right to be highest on LAD."
+ },
+ "bottom_line_mlb": "Massey broadly corroborates the MARKET's team-strength view and does NOT rescue V13's underdog compression, EXCEPT CLE@CWS where a starter-aware model (V13) and team+home (Massey) both sit above the market \u2014 the one evening leg worth a second look, and even then contested.",
+ "wnba_headline": "Storm @ Portland Fire (8:30p ET, Portland HOME): Portland rates far higher (Massey #12 vs #15; log5 ~74% neutral, ~80% with home court) yet the market prices it a COIN FLIP (Seattle even/slight-fav). A ~31-point market-vs-ratings gap. Almost certainly a Portland injury/rest or Seattle personnel change the static ratings miss \u2014 CHECK THE INJURY REPORT; do not bet the rating blindly. log5/Massey are injury- and rest-blind, which matters even more in the WNBA (star rest)."
+}

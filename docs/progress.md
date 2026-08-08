@@ -1501,3 +1501,26 @@ PARLAY CARD (data/mlb/forecasts/2026-08-08_parlay_card.json, PAPER/ADVISORY only
 4-leg 11.3% (BE +788). NO ODDS BOARD captured -> EV and the hybrid probability+value ranking are
 BLOCKED pending the owner's board; break-evens state the minimum parlay price for +EV IF the model
 probabilities are right. No wagers; ledger $0; gate 0/100 NO_PROMOTE. Not pushed.
+
+## 2026-08-08 — standing data-acquisition authorization; injury/roster feed layer
+
+Owner granted a STANDING authorization to acquire public sports data (power ratings, advanced/
+team/player metrics, rosters, depth charts, injury/rest/lineup status, statistics) to improve
+model accuracy — "autonomous support moving forward." Recorded verbatim in
+docs/authorizations/2026-08-08_data_acquisition.json.
+
+CONSTRAINTS HELD REGARDLESS OF THE GRANT (this is data autonomy, not a licence to invent or to
+bet): R1 — acquire REAL data from identifiable sources, freeze with provenance (source/URL/
+retrieved_utc/confidence), never fabricate; low-quality returns flagged/omitted, not laundered
+(cf. the rejected '5-2 records' WebSearch). NETWORK — sanctioned channels only (WebSearch/WebFetch);
+the egress-proxy 403s are policy and never routed around. R3/R6 — no silent mutation of frozen
+models/cards; new data enters as versioned inputs + reconciliation sidecars, and any model that
+consumes it is a NEW hashed identity. MONEY/GATE — data only; gate stays 0/100 NO_PROMOTE, ledger
+$0, push still needs separate authorization.
+
+Built the feed layer: data/feeds/{mlb,wnba}/ + data/feeds/MANIFEST.json (schema, provenance
+classes, integration policy — V13 is lineup/bullpen-blind, WNBA log5/Massey are injury/rest-blind;
+acquired data is surfaced as stale-input flags, not silently consumed). Launched the
+acquire-injury-roster-data workflow (wf_50b8a5df-3d1): injuries/rosters/lineups/rest across the
+8/8 MLB+WNBA slate, a deep dive on the Storm@Portland 31pp market-vs-rating divergence, and a scout
+of standing sources. Findings freeze into data/feeds/ on completion. Gate untouched; not pushed.

@@ -1,0 +1,16 @@
+{
+ "record_id": "AUTH-DATA-ACQUISITION-2026-08-08",
+ "granted_utc": "2026-08-08T18:49:00Z",
+ "granted_by": "owner (georgemunoz1@gmail.com)",
+ "verbatim": "You have full autonomy to acquire and procure all power rankings, advanced data, and any other advanced metric and/or data sets, including statistics and season assistance and all available statistics you are able to acquire on the [entire] Internet. You have autonomous support moving forward. Please pull roster status, injury status, depth charts, and any other player metrics or data that improves accuracy.",
+ "scope": "STANDING (durable, 'moving forward'): acquire public sports data \u2014 power ratings, advanced/team/player metrics, rosters, depth charts, injury/rest status, lineups, statistics \u2014 to improve model accuracy.",
+ "constraints_held_regardless": [
+  "R1 \u2014 acquire REAL data from identifiable sources and FREEZE it with provenance (source, URL, retrieved_utc, confidence). Never invent a player, stat, status, or number. Under-report before fabricating; low-quality returns are flagged/omitted, not laundered in (cf. the WebSearch '5-2 records' that were rejected).",
+  "NETWORK \u2014 use only sanctioned channels (WebSearch first-party; WebFetch where permitted). The org egress proxy 403s are policy and are NEVER routed around.",
+  "R3/R6 \u2014 do NOT silently mutate frozen models or already-published cards. New data enters as versioned inputs + reconciliation sidecars; any model that consumes it is a new hashed identity, not a rewrite.",
+  "MONEY/GATE \u2014 this authorization is for DATA ONLY. It does not authorize wagers, does not move the ML gate (0/100 NO_PROMOTE), and does not touch the ledger ($0). Push still requires separate explicit authorization.",
+  "PROVENANCE HIERARCHY \u2014 official box/league > reputable outlet (ESPN/Rotowire/beat) > aggregator; user positions remain user-authoritative; conflicts recorded, not silently resolved."
+ ],
+ "landing_layer": "data/feeds/{mlb,wnba}/ with per-pull artifacts; data/feeds/MANIFEST.json documents schema + sources.",
+ "first_action": "acquire-injury-roster-data workflow (run wf_50b8a5df-3d1): injuries/rosters/lineups/rest for the 8/8 MLB+WNBA slate + reconcile the Storm@Portland divergence + scout standing sources."
+}

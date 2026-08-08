@@ -1,0 +1,27 @@
+{
+ "record_id": "FEEDS-MANIFEST",
+ "created_utc": "2026-08-08T18:49:00Z",
+ "purpose": "External acquired-data layer (injuries, rosters, depth charts, advanced metrics, power ratings). Feeds accuracy; does not itself change any frozen model.",
+ "authorization": "docs/authorizations/2026-08-08_data_acquisition.json (standing)",
+ "schema_per_pull": {
+  "required": [
+   "record_id",
+   "sport",
+   "retrieved_utc",
+   "provenance_class",
+   "sources",
+   "confidence",
+   "data"
+  ],
+  "provenance_class": "one of OFFICIAL_LEAGUE | REPUTABLE_OUTLET | AGGREGATOR | WEBSEARCH_MULTI_SOURCE",
+  "confidence": "HIGH | MEDIUM | LOW \u2014 LOW/unsourced items are flagged, never fed to a model",
+  "as_of": "injury/lineup data is time-sensitive; every pull is timestamped and treated as as-of"
+ },
+ "integration_policy": {
+  "V13_MLB": "currently uses team season RF/RA + starter logs; it is lineup/bullpen-BLIND. Injury data is surfaced as a reconciliation/stale-input flag now; consuming it inside the model would be a NEW hashed V13 identity (R3), proposed to the owner, not a silent edit.",
+  "WNBA_log5": "records/Massey are injury+rest-BLIND. Injury data is used to explain market-vs-rating divergences and flag which games the rating cannot be trusted on.",
+  "grading": "acquired data never auto-enters a forecast or ledger; it improves inputs, not outcomes."
+ },
+ "firewall": "data/feeds/wnba and all WNBA artifacts stay isolated from the MLB engine/registries/gate.",
+ "sources_registry": "populated by the sources-scout agent (which authoritative feeds are reachable via WebSearch/WebFetch) on workflow completion."
+}

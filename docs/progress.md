@@ -1524,3 +1524,31 @@ acquired data is surfaced as stale-input flags, not silently consumed). Launched
 acquire-injury-roster-data workflow (wf_50b8a5df-3d1): injuries/rosters/lineups/rest across the
 8/8 MLB+WNBA slate, a deep dive on the Storm@Portland 31pp market-vs-rating divergence, and a scout
 of standing sources. Findings freeze into data/feeds/ on completion. Gate untouched; not pushed.
+
+## 2026-08-08 — injury/roster acquisition frozen; Storm@Portland framing corrected
+
+The acquire-injury-roster-data sweep (8 agents, 481k tokens, 153 searches) returned well-sourced,
+honestly-caveated data. Frozen with provenance into data/feeds/: mlb + wnba injuries
+(2026-08-08_injuries.json), a reconciliation advisory (2026-08-08_reconciliation.json: 16 material
+games + 13 stale-input flags), and SOURCES_REGISTRY.json. All MEDIUM confidence (snippet-level;
+WebFetch is EGRESS-BLOCKED for FanGraphs/Savant/B-Ref/Rotowire/Massey/official injury PDFs, so
+nothing is table-verified — statuses are 'expected', confirm on the official day-of report).
+
+SELF-CORRECTION (R6, data/wnba/analysis/2026-08-08_massey_overlay_correction.json): my earlier
+'Storm@Portland: market prices the worse team Seattle as a coin flip, 31pp divergence' was WRONG on
+the market direction. It rested on the owner's single-board snapshot (Circa Storm -115). The
+consensus market actually has PORTLAND the home favorite ~-125/-130 (~56%); market and rating AGREE
+Portland is better. The gap is mostly log5/Massey OVERCONFIDENCE (over-mapping a 3-rung gap between
+two weak teams to 74-80% in a high-variance game) plus a secondary stale-HIGH effect from Portland's
+injuries (Barker + Feagin season-ending ACLs, Samuelson out). Correct read: narrow Portland toward
+~56%, don't lay it heavily; NOT Seattle value.
+
+MATERIAL STALE-INPUT FLAGS surfaced (advisory only — no frozen card/model mutated; consuming these
+would be a new hashed identity, owner's call). MLB stars OUT that V13's season aggregates still
+carry: Juan Soto (NYM), Byron Buxton (MIN), James Wood (WSH), Chapman+Schmitt+Bader (SF), Correa
+(HOU, season-ending), Pasquantino+M.Garcia (KC), O'Hearn+Oneil Cruz (PIT); returns Vlad Jr (TOR),
+J-Ram (CLE), Witt Jr (KC); Ohtani DH-only (not pitching) 8/8. High-leverage bullpen arms out
+(invisible to V13): SD Adam, SEA Brash, AZ J.Martinez, CIN Santillan, CHC Shelby Miller. WNBA: Lynx
+rating stale-LOW (Collier back), Sparks/Mercury stale from the Plum trade, Fever-Sky the biggest
+two-way swing (Clark probable/minutes-managed; Reese likely out, unconfirmed). Gate 0/100 NO_PROMOTE;
+ledger $0; not pushed.

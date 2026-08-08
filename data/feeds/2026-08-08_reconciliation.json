@@ -1,0 +1,149 @@
+{
+ "record_id": "FEED-RECONCILIATION-2026-08-08",
+ "built_utc": "2026-08-08T19:10:35Z",
+ "authorization": "docs/authorizations/2026-08-08_data_acquisition.json",
+ "status": "ADVISORY OVERLAY \u2014 surfaces which frozen numbers to distrust and in which direction. Does NOT mutate any frozen card/model (R3/R6). Consuming these inside a model = a new hashed identity, owner's call.",
+ "storm_portland_corrected_verdict": "PARTIALLY EXPLAINED \u2014 and the task's directional premise is half-wrong. The acquired odds do NOT show Seattle favored or the worse team priced as a coin flip: Portland is the HOME FAVORITE ~ -1.5 / -125 to -130 (Seattle +106; Portland ~56% implied; SI, sportsgambler). So the true divergence is model ~74-80% (Massey #12 vs SEA #15) vs market ~56% for Portland \u2014 the model is far more confident in the SAME side the market already favors. Injuries explain PART of the gap, not most of it: (a) Portland's season power rating is inflated by games that featured Sarah Ashlee Barker and Sania Feagin (both now season-ending ACLs) plus Karlie Samuelson (foot, OUT), with Oblak/Carleton/Puoch day-to-day \u2014 a genuine stale-HIGH input the injury-blind Massey/log5 cannot see, and it should pull the model DOWN toward the market. (b) But the dominant driver is structural: a 3-rung rating gap between two weak teams (POR 12-19, SEA 6-27) simply does not map to 74-80% in one high-variance WNBA game, and -125/-130 is normal moneyline compression. There is NO Seattle catalyst (no trade, no returning star; 10-game skid, 2-16 SU road, ~-11 road net, finishing a cross-country trip); situational edges (home, no travel, healthy/hot Carla Leite) favor Portland, and SI calls Portland UNDERVALUED (\"should be favored by more\"). HONEST VERDICT: the divergence is mostly MODEL OVERCONFIDENCE \u2014 log5/Massey over-mapping a small rating edge between two bad teams \u2014 PLUS a real but secondary stale-rating effect from Portland's injuries. It is not an unexplained market signal and not a hidden Seattle value; the correct read narrows Portland toward the market rather than backing Seattle. Caveat: the 56% and 74-80% figures are betting-preview snippets, not a clean odds feed or the model's own output \u2014 verify posted odds and the single-snippet day-to-day statuses against the official 5pm-prior WNBA report.",
+ "material_games": [
+  {
+   "game": "Seattle Storm @ Portland Fire (WNBA, Sat 8/8 8:30 PM ET)",
+   "what_changed": "Portland OUT: Barker + Feagin (both season-ending ACL) and Samuelson (foot); Oblak/Carleton/Puoch day-to-day. Star G Carla Leite healthy and in form. Seattle: Magbegor 8/8 status unresolved; Flau'jae Johnson healthy.",
+   "direction": "Trims Portland's edge \u2014 its season rating is stale-high from games those OUT players featured in. Nudges Portland's win prob DOWN toward the ~56% market; do NOT lay Portland as heavily as an injury-blind rating implies. Small-to-moderate."
+  },
+  {
+   "game": "Las Vegas Aces @ Minnesota Lynx (WNBA, Sat 8/8 1:00 PM ET)",
+   "what_changed": "Both franchise stars IN: A'ja Wilson active (26/13 on 8/6, July ankle resolved); Napheesa Collier healthy and starting (returned late July from double-ankle surgery). Only immaterial reserves out.",
+   "direction": "No injury discount either side. If the model carries a stale Wilson-OUT (July) or Collier-injured input, correct UP for BOTH \u2014 full-strength #1 vs #2 clash. Massey/log5 likely under-rate the Lynx (rating lacks Collier's games)."
+  },
+  {
+   "game": "Indiana Fever @ Chicago Sky (WNBA, Sat 8/8 3:30 PM ET)",
+   "what_changed": "Caitlin Clark PROBABLE (back), minutes-managed (~26-min cap even when active). Angel Reese likely OUT (back) but sourcing contaminated/unconfirmed. Boston probable.",
+   "direction": "Reese absence weakens Chicago materially -> toward Fever. Clark managed-minutes or any downgrade -> toward Sky. Largest two-way swing on the slate; do not lock without the official report."
+  },
+  {
+   "game": "Golden State Valkyries @ Los Angeles Sparks (WNBA, Sun 8/9 7:00 PM ET)",
+   "what_changed": "Cameron Brink status genuinely conflicting (minutes-cap return vs 'out indefinitely'). Kelsey Plum already traded OFF the Sparks (~8/1) \u2014 baked into recent form. Kate Martin (GSV) unconfirmed.",
+   "direction": "If Brink OUT, weakens Sparks interior/rebounding/rim protection -> fade Sparks and lower total. Unresolved; verify day-of."
+  },
+  {
+   "game": "Phoenix Mercury @ Washington Mystics (WNBA, Sun 8/9 ~3:00 PM ET)",
+   "what_changed": "Kelsey Plum newly acquired by Phoenix (debuted 8/3), possibly minutes-capped/off bench. Thomas + Copper healthy. Mystics clean injury report.",
+   "direction": "No injury discount either side; Plum usage affects Phoenix ceiling/total more than side. Massey/log5 use pre-trade Phoenix identity \u2014 modest stale effect. Modest."
+  },
+  {
+   "game": "Cincinnati Reds @ Washington Nationals (MLB)",
+   "what_changed": "James Wood (Nationals' best bat) on 10-day IL (oblique); lineup reshuffled (Abrams leadoff). Reds pen down setup man Santillan.",
+   "direction": "Nationals' season runs-for overstates current offense -> move the number AGAINST Washington."
+  },
+  {
+   "game": "Cleveland Guardians @ Chicago White Sox (MLB)",
+   "what_changed": "Jose Ramirez reported back in CLE lineup (L wrist maintenance), batting 3rd. White Sox catching gutted (Teel IL, Bart broken hand).",
+   "direction": "Toward Cleveland \u2014 J-Ram upgrades the offense; CWS depth thinned. Confirm J-Ram on the official card."
+  },
+  {
+   "game": "Minnesota Twins @ Milwaukee Brewers (MLB)",
+   "what_changed": "Byron Buxton (25-HR All-Star CF) back on 10-day IL (hip re-aggravation). Brewers missing regular OF Frelick; closer Megill available.",
+   "direction": "Twins' season runs-for overstates offense/defense -> move AGAINST Minnesota."
+  },
+  {
+   "game": "New York Mets @ Pittsburgh Pirates (MLB)",
+   "what_changed": "Juan Soto (Mets' best hitter) on 10-day IL since ~7/24 (calf). Pirates missing O'Hearn (quad) + Oneil Cruz (hand).",
+   "direction": "Both offenses overstated by season stats -> lower the total; Soto is the larger single subtraction, tilting AGAINST the Mets."
+  },
+  {
+   "game": "Detroit Tigers @ San Francisco Giants (MLB)",
+   "what_changed": "Giants missing multiple regulars \u2014 Chapman (3B), Schmitt (INF), Bader (OF).",
+   "direction": "SF lineup materially weakened -> move AGAINST the Giants / lower SF run expectancy."
+  },
+  {
+   "game": "Toronto Blue Jays @ Philadelphia Phillies (MLB)",
+   "what_changed": "Vlad Guerrero Jr. returned from hamstring (8/7, batting 2nd at 1B); Santander + Barger still on IL. Phillies full strength, closer Duran available (25 SV, 1.83).",
+   "direction": "Vlad's return nudges TOR offense UP vs a lineup that recently lacked him; modest. Confirm Vlad on card."
+  },
+  {
+   "game": "Chicago Cubs @ Kansas City Royals (MLB)",
+   "what_changed": "Bobby Witt Jr. back (bats 2nd, workload-managed) but Pasquantino (wrist) AND Maikel Garcia (hand) both OUT. Cubs pen down Shelby Miller (season-ending UCL) + Milner.",
+   "direction": "Mixed for KC \u2014 Witt positive, two middle-order bats negative; net small DOWNGRADE to KC offense. Cubs late-inning pen weaker."
+  },
+  {
+   "game": "Baltimore Orioles @ Texas Rangers (MLB)",
+   "what_changed": "deGrom reported as TEX probable (ace); Josh Jung (everyday 3B) on 10-day IL (calf).",
+   "direction": "deGrom start SUPPRESSES the total and boosts TEX run-prevention; Jung out slightly trims TEX offense. If V13 uses season starter aggregates, plug in deGrom specifically."
+  },
+  {
+   "game": "Houston Astros @ San Diego Padres (MLB)",
+   "what_changed": "Correa season-ending (SS, ankle surgery) for HOU. Padres rotation gutted (Pivetta/Giolito/Musgrove) and high-leverage RP Jason Adam OUT; Robbie Ray probable SD.",
+   "direction": "SD bullpen thin -> raises late-game/total risk. Correa loss is standing (largely priced) but still invisible to injury-blind model components."
+  },
+  {
+   "game": "Los Angeles Dodgers @ Arizona Diamondbacks (MLB)",
+   "what_changed": "Yamamoto probable (healthy ace) vs Pfaadt. Ohtani expected as DH ONLY \u2014 NOT pitching (managing knee/biceps). Will Smith (C) out; AZ high-leverage RP Justin Martinez out.",
+   "direction": "Confirm Ohtani DH-not-pitching \u2014 if the model expects an Ohtani start that is a stale pitching input. Yamamoto strengthens LAD run-prevention."
+  },
+  {
+   "game": "Tampa Bay Rays @ Seattle Mariners (MLB)",
+   "what_changed": "Two quality starters probable \u2014 Rasmussen (TB) vs Gilbert (SEA). Luke Raley (SEA regular bat) on IL; SEA high-leverage RP Matt Brash out.",
+   "direction": "Two good arms -> total-suppressing; Raley out trims SEA offense; SEA pen weaker late."
+  }
+ ],
+ "stale_model_inputs": [
+  "Portland Fire power rating (Massey #12 / V13 season aggregate) is stale-HIGH: built partly on games featuring Barker, Feagin, and Samuelson \u2014 all now OUT (two season-ending ACLs + foot). log5/Massey are injury-blind and cannot discount this; it inflates Portland's ~74-80% model prob.",
+  "Minnesota Lynx rating is likely stale-LOW: the season aggregate lacks Napheesa Collier (out until late July after double-ankle surgery), who is now healthy and starting. Injury-blind components won't credit her return.",
+  "Las Vegas Aces rating possibly stale-LOW from A'ja Wilson's ~3-game July ankle absence; she is back (26/13 on 8/6) and injury-blind components won't re-credit her.",
+  "Washington Nationals season runs-for overstates the current offense \u2014 James Wood (best hitter) on 10-day IL (oblique), not reflected in the season aggregate.",
+  "Minnesota Twins season runs-for overstates offense \u2014 Byron Buxton (25 HR) back on the 10-day IL (hip).",
+  "New York Mets season runs-for overstates offense \u2014 Juan Soto on IL since ~7/24. Pittsburgh overstated too \u2014 O'Hearn (quad) + Oneil Cruz (hand) out.",
+  "San Francisco Giants season runs-for overstates offense \u2014 Chapman, Schmitt, and Bader all out.",
+  "Kansas City Royals season runs-for overstates offense \u2014 Pasquantino (wrist) + Maikel Garcia (hand) out (Witt's return partially offsets).",
+  "Houston Astros season aggregate overstates the club \u2014 Correa (SS) season-ending after playing early season; V13's full-season runs-for/against still carries his early contribution.",
+  "Starter inputs must use TODAY's probables, not season-aggregate starter logs: deGrom (TEX), Yamamoto (LAD), Gilbert (SEA), Rasmussen (TB), Robbie Ray (SD), Pfaadt (AZ), etc. Critically, Ohtani is expected DH-ONLY on 8/8 (NOT pitching) \u2014 any model input expecting an Ohtani start is stale.",
+  "Bullpen state is invisible to V13 and to log5/Massey: depleted high-leverage arms not reflected \u2014 SD (Jason Adam), SEA (Matt Brash), AZ (Justin Martinez), CIN (Santillan), CHC (Shelby Miller season-ending + Milner), TOR (Yimi Garcia/Mantiply). These raise late-game/total run expectancy the model cannot see.",
+  "WNBA team ratings for the Sparks and Mercury are stale from the ~8/1 Kelsey Plum trade \u2014 Massey/log5 use pre-trade rosters (Sparks still carrying Plum's production, Phoenix not yet credited).",
+  "Rest/travel is invisible to log5/Massey: Seattle is finishing a cross-country road trip vs a home, no-travel Portland; the Aces come off an OT game into a 1 PM ET tip. These situational edges are unmodeled."
+ ],
+ "data_quality_flags": [
+  "Storm-Portland divergence figures (~56% market, ~74-80% Massey) are betting-preview SNIPPETS (SI, sportsgambler), not a clean odds feed or the model's own output. Verify actual posted/closing odds and the model number. Note the task's premise ('worse-rated home team priced as a coin flip' / Seattle favored) is NOT supported \u2014 Portland is the home favorite ~ -125/-130.",
+  "Portland day-to-day statuses (Carleton, Puoch, Oblak) and Samuelson OUT come from single search snippets; the official WNBA 5pm-prior injury PDF was egress-blocked. Verify the final report before acting.",
+  "Ezi Magbegor (Seattle) 8/8 game status UNRESOLVED \u2014 could not confirm; verify official report.",
+  "Angel Reese 8/8/2026 status is contaminated with Aug-2025 'did not travel' material; best read is likely OUT (back) but NOT confirmed. Verify official report.",
+  "Caitlin Clark: one outlier 'ruled out' vs preponderance 'probable, managed minutes' \u2014 confirm final designation AND minutes cap; single biggest lever on that line.",
+  "Cameron Brink (Sparks): conflicting 'minutes-cap return' vs 'out indefinitely' reports \u2014 genuinely unresolved; verify day-of.",
+  "Kate Martin (Valkyries) status unconfirmed (rotation guard, low materiality).",
+  "All MLB probable pitchers are labeled 'reported/per preview' \u2014 confirm on the official card: deGrom, Yamamoto, Gilbert, Rasmussen, Robbie Ray, Blanco, Pfaadt, Brubaker, Montero, Z. Thornton, Mlodzinski, Bradish.",
+  "Player-return claims need lineup-card confirmation: Vlad Guerrero Jr. (TOR), Jose Ramirez (CLE \u2014 wrist maintenance, elevated risk of a late scratch), Bobby Witt Jr. (KC \u2014 workload-managed, could DH/rest).",
+  "Ohtani DH-not-pitching must be confirmed on the posted LAD lineup.",
+  "Some Rays reliever attributions self-flagged 'verify attribution' (Williamson, Sulser). Closer identities unconfirmed in several spots (e.g., STL committee, TOR/CLE/HOU closer availability).",
+  "COL@STL correctly returned NO material news (only Jordan Walker day-to-day, R knee) \u2014 no model action, but confirm Walker on the official card.",
+  "Whole dataset is search-snippet level (all game blocks MEDIUM confidence). WebFetch is egress-blocked for FanGraphs, Baseball Savant, Baseball-Reference, Rotowire, Massey, and the official WNBA/MLB injury PDFs \u2014 nothing is table/row-verified. Treat every status as 'expected,' not 'confirmed,' until the day-of official report."
+ ],
+ "completeness": {
+  "missing": [
+   "Clean, timestamped posted/closing odds feed for the ENTIRE slate. Storm-Portland market (~56%, POR -125/-130) and the ~74-80% model number are SI/sportsgambler preview snippets, not a real odds feed or the model's own output. No game on the slate has a verified market price, so no model-vs-market divergence is actually measurable.",
+   "Official WNBA 5pm-prior injury report PDF (egress-blocked) for all 5 WNBA games \u2014 nothing is row-verified; every status is 'expected.'",
+   "Official MLB lineup cards / posted probable-pitcher confirmations for every game \u2014 all probables labeled 'reported/per preview' (deGrom, Yamamoto, Gilbert, Rasmussen, Robbie Ray, Pfaadt, etc.).",
+   "MLB weather/wind data \u2014 extreme-weather check appears never performed for any game (no reads gathered).",
+   "The model's own per-game outputs (V13 probs / Massey ratings). Everything is being reasoned against snippets, not the model's numbers.",
+   "Confirmed bullpen/closer availability in many spots: STL committee, TOR/CLE/HOU closer identity+availability, Rays reliever attributions self-flagged (Williamson, Sulser).",
+   "Ezi Magbegor (SEA) 8/8 game status \u2014 unresolved.",
+   "Angel Reese 8/8 status \u2014 contaminated with Aug-2025 material; OUT is a guess, not confirmed.",
+   "Caitlin Clark final designation AND minutes cap \u2014 single biggest lever on Fever-Sky, unconfirmed.",
+   "Cameron Brink (LAS/Sparks) \u2014 'minutes-cap return' vs 'out indefinitely' genuinely unresolved.",
+   "Portland day-to-day trio (Carleton, Puoch, Oblak) and Samuelson-OUT \u2014 single-snippet only.",
+   "Kate Martin (GSV) status \u2014 unconfirmed (low materiality).",
+   "Lineup-card confirmation of key returns: Vlad Jr. (TOR), Jose Ramirez (CLE, wrist-maintenance scratch risk), Bobby Witt Jr. (KC, workload-managed).",
+   "Ohtani DH-only (NOT pitching) \u2014 must be confirmed on posted LAD lineup; stale pitching input if wrong.",
+   "No FanGraphs / Baseball Savant / Baseball-Reference / Rotowire / Massey table verification \u2014 all egress-blocked; zero primary-source cross-checks.",
+   "COL@STL: confirm Jordan Walker (R knee) on the official card."
+  ],
+  "low_confidence": [
+   "Whole dataset is search-snippet level \u2014 every game block is MEDIUM confidence at best; treat all statuses as 'expected,' not 'confirmed.'",
+   "Seattle Storm @ Portland Fire \u2014 anchor game; odds premise (Seattle-favored) is wrong, POR is home favorite; divergence figures unverified; Portland stale-rating inputs single-snippet.",
+   "Indiana Fever @ Chicago Sky \u2014 LOW: Reese OUT unconfirmed + Clark PROBABLE/minutes-cap unconfirmed; largest two-way swing on the slate.",
+   "Golden State Valkyries @ Los Angeles Sparks \u2014 LOW: Brink genuinely conflicting; Martin unconfirmed.",
+   "Las Vegas Aces @ Minnesota Lynx \u2014 Wilson/Collier reported healthy but not report-confirmed; possible stale-LOW ratings both sides.",
+   "Phoenix Mercury @ Washington Mystics \u2014 Plum-trade staleness + usage/minutes cap unconfirmed.",
+   "All 15 MLB games \u2014 probables and return/scratch claims unconfirmed on official cards; bullpen state invisible."
+  ],
+  "next_pull": "Pull the official WNBA 5pm-ET-prior injury report PDF for the 8/8 slate. In one document it resolves the highest-leverage unknowns at once: Reese OUT? and Clark's final designation + minutes cap (the largest two-way swing, Fever-Sky), Magbegor (SEA), Brink (Sparks), and Portland's day-to-day trio (Carleton/Puoch/Oblak/Samuelson) that anchor the Storm-Portland stale-rating verdict \u2014 converting the slate's most material statuses from 'expected' to 'confirmed.' Immediate close-second: a clean timestamped odds feed (DK/Pinnacle) for the full slate, since NO game currently has a verified market price to measure divergence against."
+ }
+}

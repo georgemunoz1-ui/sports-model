@@ -1552,3 +1552,39 @@ J-Ram (CLE), Witt Jr (KC); Ohtani DH-only (not pitching) 8/8. High-leverage bull
 rating stale-LOW (Collier back), Sparks/Mercury stale from the Plum trade, Fever-Sky the biggest
 two-way swing (Clark probable/minutes-managed; Reese likely out, unconfirmed). Gate 0/100 NO_PROMOTE;
 ledger $0; not pushed.
+
+## 2026-08-10 — TIER-1 CORRECTION: 8/8 result ingestion was 27% wrong; 8/9 ingested; parser built
+
+The owner supplied an authoritative Statcast box dump for 8/8 + 8/9. It exposed that the 8/8 results
+INGESTED FROM WEBSEARCH SNIPPETS were wrong on 4 of 15 games, THREE WITH THE WINNER REVERSED:
+  ATH@BOS recorded 3-7 (BOS) -> actually 7-3 (ATH)
+  LAA@MIA recorded 4-3 (LAA) -> actually 0-7 (MIA)
+  DET@SF  recorded 2-5 (SF)  -> actually 8-0 (DET)
+  TB@SEA  recorded 2-1       -> actually 3-2 (winner right, score wrong)
+All three winner-flips are LINESCORE-VERIFIED in the tier-1 source, so the correction is not itself
+in doubt. Those wrong results had already been used to GRADE the model and to write "lessons learned".
+
+ROOT CAUSE: results were ingested by a model READING SEARCH SNIPPETS — a summary written about a page,
+not the record itself — with no structural validation and no source-tier gate. This is the THIRD
+instance of the same failure mode (7/29 extra-innings scores; 7/23 missing game), and the earlier
+fixes were narrative (a note) rather than structural (a gate).
+
+STRUCTURAL FIX: harness/parse_box_dump.py — deterministic parser for owner-supplied box dumps. No model
+in the loop; same bytes always yield the same finals. It cross-checks every score against the game's own
+LINESCORE (innings must sum to the stated final) and guards ties, duplicate matchups, self-matchups and
+game-count. 27 of 30 games independently verified; the 3 without a linescore in the dump are reported
+"no-linescore" rather than falsely claimed verified. Its selftest carries a regression fixture in the real
+dump format: an early build parsed the COLUMN HEADER "1 2 3 ... 9 R H" as a data row and reported every
+game CONTRADICTED — a checker that cries wolf on valid data is worse than no checker, so that case is
+now a permanent test.
+
+CORRECTED 8/8 GRADING (supersedes; originals preserved, R6): V13 8/15 (was 7/15), Brier 0.2614 (was
+0.2558 — accuracy rose but calibration WORSENED, because the bad rows were games the model was confident
+about); market favorites 7/15 (was 6/15); Pass-1 8/12 (was 7/12); attractive plays 3/3 (UNCHANGED —
+MIL/CWS/TB genuinely won). The PASS/$0 decision is unaffected: it was made pre-game on pre-game
+information, and no money was ever at risk.
+
+8/9 INGESTED + GRADED (tier-1): V13 11/15 (73%), Brier 0.2353. MAJOR CAVEAT: 13 of 15 were CAP games
+(starters unconfirmed at card time -> league-average SP), and V13 went 10/13 on those, so the 73% is
+mostly team-form + HFA, NOT the starter-aware simulation. No odds board was captured for 8/9, so there
+is no market benchmark for that slate. Gate 0/100, ledger $0.

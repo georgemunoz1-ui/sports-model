@@ -1,0 +1,35 @@
+{
+ "record_id": "SLATE-GATE-2026-08-10",
+ "built_utc": "2026-08-10T18:15:57Z",
+ "disposition": "DATA_BLOCKED",
+ "summary": "The 8/10 slate could NOT be established from available tier-3 sources. No card was built and no forecast was registered. This is the new gate working as designed, not a tooling failure.",
+ "what_happened": [
+  {
+   "source": "WebSearch #1 (probables aggregation)",
+   "verdict": "REJECTED \u2014 internally incoherent",
+   "detail": "Returned pitcher/team pairings that contradict this season's known rosters: MacKenzie Gore listed for HOU (he started for TEX on the 8/8 board), Casey Mize for SEA (traded to SD ~8/5), Logan Henderson for ATH (he is MIL), Hunter Dobbins for DET (Boston). Also proposed 'Orioles vs Phillies', which no other source shows."
+  },
+  {
+   "source": "WebSearch #2 (scoreboard)",
+   "verdict": "PARTIAL \u2014 6 of ~10 games, times likely Pacific",
+   "detail": "BOS@TOR, NYM@ATL, BAL@MIN, PHI@STL, TEX@LAA, COL@AZ. Directly contradicts source #1 (which had BAL vs PHI as one game; here they are in two different games)."
+  },
+  {
+   "source": "WebSearch #3 (targeted BAL check)",
+   "verdict": "CONFIRMS BAL@MIN",
+   "detail": "BAL @ MIN at Target Field, T. Rogers (BAL) vs D. Kremer (MIN). Kremer-as-Twin is consistent with the 8/5 record in this repo, so this pairing is coherent. It also shows source #1 garbled the same two pitchers onto the wrong teams."
+  }
+ ],
+ "cross_source_agreement": {
+  "BAL@MIN": "2 of 3 sources, coherent with repo history \u2014 the ONLY matchup that clears two-source agreement"
+ },
+ "why_no_card": "Under the controls added today, an outcome label or a forecast input may not rest on a single unverified tier-3 snippet. Two independent pulls disagreed on the fundamental composition of the slate; assembling a card from the overlap would be exactly the reconstruction behaviour that produced the 2026-08-08 LAA@MIA row.",
+ "gates_run": {
+  "healthcheck": "HEALTHY, 0 fail",
+  "result_provenance": "PASS",
+  "result_content_checks": "PASS",
+  "parse_box_dump": "PASS"
+ },
+ "to_unblock": "A tier-1 slate source: the owner's board/screenshot (the proven path), or an MLB.com schedule capture. With that, the card builds and forecasts register PROSPECTIVELY (DIAGNOSTIC_PROSPECTIVE) before first pitch \u2014 which is the evidence class the registry backfill could not create for 8/6-8/9.",
+ "note": "Earliest listed first pitch is ~4:07pm PT / 7:07pm ET, so a tier-1 source received in the next few hours still permits a genuine pre-pitch freeze."
+}

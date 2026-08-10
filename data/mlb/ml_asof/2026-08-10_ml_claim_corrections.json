@@ -1,0 +1,34 @@
+{
+ "record_id": "ML-CLAIM-CORRECTIONS-2026-08-10",
+ "built_utc": "2026-08-10T19:29:27Z",
+ "supersedes": "data/mlb/ml_asof/2026-08-10_regression_eval.json and my chat report of the same date",
+ "trigger": "Owner-specified rigorous diagnostics (LPM range, ROC-AUC, calibration/decomposition, fold audit, IQR effects, block ablations, date-block bootstrap + Holm).",
+ "corrections": [
+  {
+   "claim": "LPM's 'ranking is fine (54.4% acc)'",
+   "status": "WRONG \u2014 retracted",
+   "correct": "By ROC-AUC the LPM ranks WORST of all four models: LPM 0.5535 vs logistic 0.5645, ridge 0.5648, V13 0.5662. Accuracy at a 0.5 threshold was a misleading proxy for ranking; AUC is the right measure and it says the opposite."
+  },
+  {
+   "claim": "LPM Brier 0.2555",
+   "status": "MATERIALLY INCOMPLETE",
+   "correct": "That is the CLIPPED figure. Raw LPM predictions span [-5.375, +5.000] with 32 of 1054 (3.04%) outside [0,1], and the RAW Brier is 0.4445 \u2014 far worse than the 0.2497 uncertainty floor. Nearly all of the LPM's apparent respectability is repaired by clipping, not earned by the fit. Its calibration slope is 0.028 (perfect = 1.0), i.e. its probabilities carry almost no calibrated information."
+  },
+  {
+   "claim": "'logistic vs base rate is SIGNIFICANT (t=-1.98, CI barely excludes 0)'",
+   "status": "REFUTED",
+   "correct": "That used a naive game-level t-test. Under a DATE-BLOCK bootstrap (games within a date are correlated) the CI is [-0.00683,+0.00019], p_raw=0.062 \u2014 already not significant. After Holm correction across the six model comparisons, p_holm=0.375. NOTHING in this comparison set is significant: every p_holm >= 0.375."
+  },
+  {
+   "claim": "'logistic edges V13'",
+   "status": "NOT SUPPORTED, and reversed on discrimination",
+   "correct": "logistic vs V13 dBrier -0.00045, p_holm=1.000. Moreover V13 has the HIGHEST AUC (0.5662) and the HIGHEST resolution (0.00693 vs logistic 0.00578) \u2014 it discriminates BEST of the four. Its weakness is calibration (slope 0.842, reliability 0.00382 vs logistic 0.00233). The fitted regressions are better calibrated; V13 extracts more signal."
+  }
+ ],
+ "what_survives": {
+  "starter_dominance": "CONFIRMED and strengthened. Block ablation: removing the starter block costs +0.00272 Brier and collapses AUC from 0.5645 to 0.5232 \u2014 nearly all discrimination is gone. Park costs +0.00046. Removing run-differential, offense or defense changes nothing (delta 0.00000/-0.00002/-0.00002): the model is effectively starter + park.",
+  "iqr_effect": "An IQR shift in shrunk-ERA edge moves the predicted probability by +0.0626 at p=0.5 (an upper bound), vs park -0.0280 and team run-differential +0.0045 \u2014 a ~14x ratio."
+ },
+ "overall_verdict": "After proper inference NO model \u2014 LPM, logistic, ridge or V13 \u2014 is statistically distinguishable from the league base rate or from each other. The earlier report overstated both the LPM's competence and the logistic's significance. The one robust structural finding is that whatever signal exists is concentrated almost entirely in the starting pitcher.",
+ "preprocessing_audit": "Standardisation, coefficient fitting and ridge-penalty selection are all fitted INSIDE each walk-forward training fold. Imputation is NOT fold-fitted \u2014 missing SP rates fall back to fixed global constants (LG_ERA 4.20, K 22.0, BB 8.5) which are priors carrying no outcome information, so they cannot leak, but a purist build would re-estimate them per fold. Rows missing team form are dropped, not imputed (R1)."
+}

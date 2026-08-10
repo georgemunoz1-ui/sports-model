@@ -1629,3 +1629,52 @@ gates, wired into healthcheck, each with a selftest that healthcheck also runs.
 
 Healthcheck: HEALTHY, 0 fail. Remaining WARN is the one unreconciled echo (PIT@MIL 8/4-8/5, which
 the 8/5 session verified by hand as a genuine repeat but which still rests on tier-3).
+
+## 2026-08-10 (later) — rigorous ML diagnostics overturn the earlier report; V13 frozen; V14 shadow
+
+Owner required seven specific diagnostics before any feature expansion. All were run
+(harness/ml_diagnostics.py + harness/ml_full_report.py). THREE of my earlier claims are now
+retracted (data/mlb/ml_asof/2026-08-10_ml_claim_corrections.json; the prior eval carries a
+SUPERSEDED_BY stamp):
+
+1. LPM RANGE: raw predictions span [-5.375, +5.000], 32/1054 (3.04%) outside [0,1], RAW Brier
+   0.4445 vs clipped 0.2555. Almost all of the LPM's apparent respectability is repaired by
+   clipping, not earned by the fit. Calibration slope 0.028 (perfect = 1.0).
+2. ROC-AUC replaces "ranking is fine" — and reverses it. LPM ranks WORST (0.5535); V13 ranks BEST
+   (0.5662), then ridge 0.5648, logistic 0.5645.
+3. CALIBRATION + MURPHY DECOMPOSITION: logistic slope 0.979 and ridge 1.069 are well calibrated;
+   V13 is 0.842 (overconfident) but has the HIGHEST RESOLUTION (0.00693 vs logistic 0.00578). The
+   regressions calibrate better; V13 extracts more signal. That argues against replacing V13 with a
+   regression and for RECALIBRATING it.
+4. FOLD AUDIT: standardisation, coefficients and ridge-penalty selection are all fitted inside each
+   training fold. Imputation is NOT fold-fitted and is disclosed — missing SP rates fall back to
+   fixed global constants (priors, carrying no outcome information, so no leakage, but a purist
+   build would re-estimate per fold). Rows missing team form are dropped, not imputed.
+5. Coefficients are standardised (per-SD). IQR marginal effects at p=0.5: sp_era_edge +0.0626,
+   park -0.0280, sp_k_edge +0.0124, def_edge +0.0080, team_rd_edge +0.0045 — a ~14x ratio between
+   starter and team run-differential.
+6. BLOCK ABLATIONS: dropping the starter block costs +0.00272 Brier and collapses AUC 0.5645 ->
+   0.5232. Park costs +0.00046. Dropping run-differential/offense/defense changes nothing
+   (0.00000 / -0.00002 / -0.00002). The model is effectively STARTER + PARK.
+7. DATE-BLOCK BOOTSTRAP + HOLM: nothing is significant. logistic vs base p_raw 0.062 -> p_holm
+   0.375; logistic vs V13 p_holm 1.000. My earlier "significant (t=-1.98)" used a naive game-level
+   t-test; blocking by date (games within a date are correlated) already kills it, and multiplicity
+   correction buries it.
+
+NET: after proper inference NO model is distinguishable from the league base rate or from each
+other. The single robust structural finding is that the signal is concentrated in the starter.
+
+CONSEQUENTLY, per the owner's conditional instruction: V13 IS FROZEN
+(data/mlb/ml_asof/V13_FREEZE.json) — no estimator swap, no refit, no feature addition. Starter-detail
+work exists only as a NON-EXECUTABLE V14 SHADOW (docs/experiments/V14_shadow_prereg.json), with the
+success threshold, inference method and disposition set pre-registered BEFORE any fitting, and with
+the blocking data gaps named honestly (no lineup, bullpen-state or rest data exists in the repo).
+
+Also built data/mlb/forecasts/2026-08-10_composite_slate.json: binds the six v1 forecasts and the
+four v2 additions to their respective card versions so all ten grade with NO retroactive rebinding.
+All ten hashes resolve. Grading is explicitly LEDGER MAINTENANCE ONLY — ten games cannot resolve
+estimator or feature quality.
+
+WNBA: froze the 4-book 8/10-8/11 board (data/wnba/odds/2026-08-10_board.json). Unlike the MLB
+"Best Odds" board this one quotes both sides within each book, so same-book de-vig is VALID here.
+Model layer remains ABSENT.

@@ -1,0 +1,434 @@
+{
+ "record_id": "WNBA-MARKET-ANALYSIS-2026-08-10_11",
+ "sport": "WNBA",
+ "built_utc": "2026-08-10T20:10:12Z",
+ "model_status": "ABSENT (MLB-only system; no WNBA model/data \u2014 market layer only, R1)",
+ "board_source": {
+  "path": "data/wnba/odds/2026-08-10_board.json",
+  "record_id": "WNBA-BOARD-2026-08-10_11"
+ },
+ "what_this_is": "MARKET LAYER ONLY: de-vig, no-vig consensus, hold, best-price line-shopping from the observed 4-book prices. Every probability is MARKET-IMPLIED.",
+ "what_this_is_not": "NOT a forecast. No model win probability, edge, or EV \u2014 this system has no WNBA model or data. No +EV claim can be made without an independent estimate, which does not exist here.",
+ "to_build_a_real_model_you_would_need": [
+  "WNBA game results history (scores, dates, home/away) \u2014 none on disk",
+  "team ratings / four-factor or possession data, and injuries/rest",
+  "player availability + minutes (WNBA lines move hard on star rest)",
+  "a fit + a rolling out-of-sample calibration, graded like the MLB forecast registry"
+ ],
+ "games": [
+  {
+   "teams": [
+    "Toronto Tempo",
+    "Atlanta Dream"
+   ],
+   "tip_et": "8:00 PM",
+   "date": "2026-08-10",
+   "favorite": "Atlanta Dream",
+   "home_away": null,
+   "note": null,
+   "per_book": {
+    "Circa": {
+     "ml": {
+      "Toronto Tempo": 675,
+      "Atlanta Dream": -1000
+     },
+     "spread": {
+      "Toronto Tempo": 15,
+      "Atlanta Dream": -15
+     },
+     "total": 187.5,
+     "market_implied_prob": {
+      "Toronto Tempo": 0.1243,
+      "Atlanta Dream": 0.8757
+     },
+     "hold": 0.0381
+    },
+    "Boomers": {
+     "ml": {
+      "Toronto Tempo": 650,
+      "Atlanta Dream": -1000
+     },
+     "spread": {
+      "Toronto Tempo": 15,
+      "Atlanta Dream": -15
+     },
+     "total": 187.5,
+     "market_implied_prob": {
+      "Toronto Tempo": 0.1279,
+      "Atlanta Dream": 0.8721
+     },
+     "hold": 0.0424
+    },
+    "BetMGM": {
+     "ml": {
+      "Toronto Tempo": 625,
+      "Atlanta Dream": -1000
+     },
+     "spread": {
+      "Toronto Tempo": 14.5,
+      "Atlanta Dream": -14.5
+     },
+     "total": 187.5,
+     "market_implied_prob": {
+      "Toronto Tempo": 0.1317,
+      "Atlanta Dream": 0.8683
+     },
+     "hold": 0.047
+    },
+    "Caesars": {
+     "ml": {
+      "Toronto Tempo": 650,
+      "Atlanta Dream": -1000
+     },
+     "spread": {
+      "Toronto Tempo": 15,
+      "Atlanta Dream": -15
+     },
+     "total": 187.5,
+     "market_implied_prob": {
+      "Toronto Tempo": 0.1279,
+      "Atlanta Dream": 0.8721
+     },
+     "hold": 0.0424
+    }
+   },
+   "consensus_market_implied": {
+    "n_books": 4,
+    "no_vig_consensus_prob": {
+     "Toronto Tempo": 0.128,
+     "Atlanta Dream": 0.872
+    },
+    "label": "MARKET-IMPLIED (mean of de-vigged book prices) \u2014 NOT a model forecast"
+   },
+   "best_price": {
+    "Toronto Tempo": 675,
+    "Atlanta Dream": -1000
+   },
+   "spread_range_t1": [
+    14.5,
+    15
+   ],
+   "total_range": [
+    187.5,
+    187.5
+   ],
+   "model_prob": null,
+   "model_edge": null,
+   "model_ev": null,
+   "model_note": "NULL BY DESIGN \u2014 no WNBA model exists in this system (R1)."
+  },
+  {
+   "teams": [
+    "Chicago Sky",
+    "Seattle Storm"
+   ],
+   "tip_et": "10:00 PM",
+   "date": "2026-08-10",
+   "favorite": "Chicago Sky (road favorite)",
+   "home_away": null,
+   "note": null,
+   "per_book": {
+    "Circa": {
+     "ml": {
+      "Chicago Sky": -140,
+      "Seattle Storm": 120
+     },
+     "spread": {
+      "Chicago Sky": -2.5,
+      "Seattle Storm": 2.5
+     },
+     "total": 179,
+     "market_implied_prob": {
+      "Chicago Sky": 0.562,
+      "Seattle Storm": 0.438
+     },
+     "hold": 0.0379
+    },
+    "Boomers": {
+     "ml": {
+      "Chicago Sky": -135,
+      "Seattle Storm": 115
+     },
+     "spread": {
+      "Chicago Sky": -2,
+      "Seattle Storm": 2
+     },
+     "total": 179,
+     "market_implied_prob": {
+      "Chicago Sky": 0.5526,
+      "Seattle Storm": 0.4474
+     },
+     "hold": 0.0396
+    },
+    "BetMGM": {
+     "ml": {
+      "Chicago Sky": -135,
+      "Seattle Storm": 110
+     },
+     "spread": {
+      "Chicago Sky": -2.5,
+      "Seattle Storm": 2.5
+     },
+     "total": 178.5,
+     "market_implied_prob": {
+      "Chicago Sky": 0.5468,
+      "Seattle Storm": 0.4532
+     },
+     "hold": 0.0507
+    },
+    "Caesars": {
+     "ml": {
+      "Chicago Sky": -135,
+      "Seattle Storm": 115
+     },
+     "spread": {
+      "Chicago Sky": -2,
+      "Seattle Storm": 2
+     },
+     "total": 179,
+     "market_implied_prob": {
+      "Chicago Sky": 0.5526,
+      "Seattle Storm": 0.4474
+     },
+     "hold": 0.0396
+    }
+   },
+   "consensus_market_implied": {
+    "n_books": 4,
+    "no_vig_consensus_prob": {
+     "Chicago Sky": 0.5535,
+     "Seattle Storm": 0.4465
+    },
+    "label": "MARKET-IMPLIED (mean of de-vigged book prices) \u2014 NOT a model forecast"
+   },
+   "best_price": {
+    "Chicago Sky": -135,
+    "Seattle Storm": 120
+   },
+   "spread_range_t1": [
+    -2.5,
+    -2
+   ],
+   "total_range": [
+    178.5,
+    179
+   ],
+   "model_prob": null,
+   "model_edge": null,
+   "model_ev": null,
+   "model_note": "NULL BY DESIGN \u2014 no WNBA model exists in this system (R1)."
+  },
+  {
+   "teams": [
+    "New York Liberty",
+    "Indiana Fever"
+   ],
+   "tip_et": "7:30 PM",
+   "date": "2026-08-11",
+   "favorite": "Indiana Fever",
+   "home_away": null,
+   "note": "Circa and Boomers not posted at capture",
+   "per_book": {
+    "BetMGM": {
+     "ml": {
+      "New York Liberty": 145,
+      "Indiana Fever": -175
+     },
+     "spread": {
+      "New York Liberty": 4.5,
+      "Indiana Fever": -4.5
+     },
+     "total": 192.5,
+     "market_implied_prob": {
+      "New York Liberty": 0.3908,
+      "Indiana Fever": 0.6092
+     },
+     "hold": 0.0445
+    },
+    "Caesars": {
+     "ml": {
+      "New York Liberty": 143,
+      "Indiana Fever": -170
+     },
+     "spread": {
+      "New York Liberty": 4.5,
+      "Indiana Fever": -4.5
+     },
+     "total": 191.5,
+     "market_implied_prob": {
+      "New York Liberty": 0.3953,
+      "Indiana Fever": 0.6047
+     },
+     "hold": 0.0412
+    }
+   },
+   "consensus_market_implied": {
+    "n_books": 2,
+    "no_vig_consensus_prob": {
+     "New York Liberty": 0.393,
+     "Indiana Fever": 0.607
+    },
+    "label": "MARKET-IMPLIED (mean of de-vigged book prices) \u2014 NOT a model forecast"
+   },
+   "best_price": {
+    "New York Liberty": 145,
+    "Indiana Fever": -170
+   },
+   "spread_range_t1": [
+    4.5,
+    4.5
+   ],
+   "total_range": [
+    191.5,
+    192.5
+   ],
+   "model_prob": null,
+   "model_edge": null,
+   "model_ev": null,
+   "model_note": "NULL BY DESIGN \u2014 no WNBA model exists in this system (R1)."
+  },
+  {
+   "teams": [
+    "Phoenix Mercury",
+    "Los Angeles Sparks"
+   ],
+   "tip_et": "10:00 PM",
+   "date": "2026-08-11",
+   "favorite": "Phoenix Mercury (road favorite)",
+   "home_away": null,
+   "note": "Caesars only at capture; opening was -1.5 -110 / -120, tot 179.5",
+   "per_book": {
+    "Caesars": {
+     "ml": {
+      "Phoenix Mercury": -120,
+      "Los Angeles Sparks": 100
+     },
+     "spread": {
+      "Phoenix Mercury": -1,
+      "Los Angeles Sparks": 1
+     },
+     "total": 181.5,
+     "market_implied_prob": {
+      "Phoenix Mercury": 0.5217,
+      "Los Angeles Sparks": 0.4783
+     },
+     "hold": 0.0455
+    }
+   },
+   "consensus_market_implied": {
+    "n_books": 1,
+    "no_vig_consensus_prob": {
+     "Phoenix Mercury": 0.5217,
+     "Los Angeles Sparks": 0.4783
+    },
+    "label": "MARKET-IMPLIED (mean of de-vigged book prices) \u2014 NOT a model forecast"
+   },
+   "best_price": {
+    "Phoenix Mercury": -120,
+    "Los Angeles Sparks": 100
+   },
+   "spread_range_t1": [
+    -1,
+    -1
+   ],
+   "total_range": [
+    181.5,
+    181.5
+   ],
+   "model_prob": null,
+   "model_edge": null,
+   "model_ev": null,
+   "model_note": "NULL BY DESIGN \u2014 no WNBA model exists in this system (R1)."
+  },
+  {
+   "teams": [
+    "Washington Mystics",
+    "Las Vegas Aces"
+   ],
+   "tip_et": "10:00 PM",
+   "date": "2026-08-11",
+   "favorite": "Las Vegas Aces",
+   "home_away": null,
+   "note": "Circa not posted; Boomers shows line movement (spread 7.5->8, ML +280->+290 / -350)",
+   "per_book": {
+    "Boomers": {
+     "ml": {
+      "Washington Mystics": 290,
+      "Las Vegas Aces": -350
+     },
+     "spread": {
+      "Washington Mystics": 8,
+      "Las Vegas Aces": -8
+     },
+     "total": 168.5,
+     "market_implied_prob": {
+      "Washington Mystics": 0.2479,
+      "Las Vegas Aces": 0.7521
+     },
+     "hold": 0.0342
+    },
+    "BetMGM": {
+     "ml": {
+      "Washington Mystics": 260,
+      "Las Vegas Aces": -350
+     },
+     "spread": {
+      "Washington Mystics": 7.5,
+      "Las Vegas Aces": -7.5
+     },
+     "total": 167.5,
+     "market_implied_prob": {
+      "Washington Mystics": 0.2632,
+      "Las Vegas Aces": 0.7368
+     },
+     "hold": 0.0556
+    },
+    "Caesars": {
+     "ml": {
+      "Washington Mystics": 275,
+      "Las Vegas Aces": -350
+     },
+     "spread": {
+      "Washington Mystics": 7.5,
+      "Las Vegas Aces": -7.5
+     },
+     "total": 168.5,
+     "market_implied_prob": {
+      "Washington Mystics": 0.2553,
+      "Las Vegas Aces": 0.7447
+     },
+     "hold": 0.0444
+    }
+   },
+   "consensus_market_implied": {
+    "n_books": 3,
+    "no_vig_consensus_prob": {
+     "Washington Mystics": 0.2555,
+     "Las Vegas Aces": 0.7445
+    },
+    "label": "MARKET-IMPLIED (mean of de-vigged book prices) \u2014 NOT a model forecast"
+   },
+   "best_price": {
+    "Washington Mystics": 290,
+    "Las Vegas Aces": -350
+   },
+   "spread_range_t1": [
+    7.5,
+    8
+   ],
+   "total_range": [
+    167.5,
+    168.5
+   ],
+   "model_prob": null,
+   "model_edge": null,
+   "model_ev": null,
+   "model_note": "NULL BY DESIGN \u2014 no WNBA model exists in this system (R1)."
+  }
+ ],
+ "governance": {
+  "firewall": "data/wnba/** isolated from MLB engine/registries/healthcheck",
+  "gate_impact": "NONE",
+  "ledger_impact": "NONE ($0, paper)"
+ }
+}

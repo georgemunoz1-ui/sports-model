@@ -121,8 +121,12 @@ def analyze(board_path=BOARD, out_path=OUT):
     b = json.load(open(board_path))
     now = dt.datetime.now(dt.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
     games = [analyze_game(g) for g in b["games"]]
+    # record_id follows the BOARD, never a hard-coded date — a stale literal here would stamp one
+    # board's analysis with another board's identity, which is exactly the kind of silent
+    # mislabelling the provenance rules exist to prevent.
+    board_tag = b["record_id"].replace("WNBA-BOARD-", "")
     out = {
-        "record_id": "WNBA-MARKET-ANALYSIS-2026-08-08",
+        "record_id": f"WNBA-MARKET-ANALYSIS-{board_tag}",
         "sport": "WNBA",
         "built_utc": now,
         "model_status": MODEL_STATUS,
@@ -222,5 +226,13 @@ def selftest():
 if __name__ == "__main__":
     ap = argparse.ArgumentParser()
     ap.add_argument("--selftest", action="store_true")
+    ap.add_argument("--board", default=BOARD, help="path to a frozen owner board JSON")
+    ap.add_argument("--out", default=None, help="analysis output path (default: derived from --board)")
     args = ap.parse_args()
-    raise SystemExit(selftest() if args.selftest else analyze())
+    if args.selftest:
+        raise SystemExit(selftest())
+    out_path = args.out
+    if out_path is None:
+        out_path = (OUT if args.board == BOARD
+                    else args.board.replace("/odds/", "/analysis/").replace("_board.json", "_market.json"))
+    raise SystemExit(analyze(args.board, out_path))

@@ -1,0 +1,74 @@
+{
+ "record_id": "TIER3-RESOURCING-QUEUE",
+ "built_utc": "2026-08-10T16:25:30Z",
+ "why": "126 outcome labels rest on non-tier-1 sources. The one day ever checked against tier-1 was 27% wrong, so these are PROVISIONAL until re-sourced. Scores (not just winners) feed rf_pg/ra_pg model features.",
+ "how_to_close": "Owner supplies a Statcast/box dump per date -> harness/parse_box_dump.py -> rows become tier-1 FINAL with evidence bound. Same path already proven on 8/8-8/9.",
+ "totals": {
+  "provisional_rows": 126,
+  "dates": 10
+ },
+ "by_date": [
+  {
+   "date": "2026-07-23",
+   "provisional_rows": 1,
+   "tier2": 0,
+   "tier3": 1
+  },
+  {
+   "date": "2026-07-29",
+   "provisional_rows": 16,
+   "tier2": 2,
+   "tier3": 14
+  },
+  {
+   "date": "2026-07-31",
+   "provisional_rows": 15,
+   "tier2": 0,
+   "tier3": 15
+  },
+  {
+   "date": "2026-08-01",
+   "provisional_rows": 15,
+   "tier2": 0,
+   "tier3": 15
+  },
+  {
+   "date": "2026-08-02",
+   "provisional_rows": 15,
+   "tier2": 15,
+   "tier3": 0
+  },
+  {
+   "date": "2026-08-03",
+   "provisional_rows": 8,
+   "tier2": 0,
+   "tier3": 8
+  },
+  {
+   "date": "2026-08-04",
+   "provisional_rows": 15,
+   "tier2": 0,
+   "tier3": 15
+  },
+  {
+   "date": "2026-08-05",
+   "provisional_rows": 15,
+   "tier2": 0,
+   "tier3": 15
+  },
+  {
+   "date": "2026-08-07",
+   "provisional_rows": 15,
+   "tier2": 0,
+   "tier3": 15
+  },
+  {
+   "date": "2026-08-08",
+   "provisional_rows": 11,
+   "tier2": 0,
+   "tier3": 11
+  }
+ ],
+ "cohort_impact": "Every cumulative cohort metric (n=54 Brier 0.2543; the 31-game paired dBrier +0.00304) draws 100% of its outcome labels from this channel. Report those as PROVISIONAL, and report cohort metrics twice \u2014 all-rows and tier-1-only \u2014 until this queue is closed.",
+ "priority": "Highest value: dates feeding the graded registry cohorts (7/29-8/3). The 8/6 records cross-check constrains WINNERS on many rows but is blind to SCORES."
+}

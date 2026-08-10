@@ -157,6 +157,12 @@ def _linescore_check(lines, idx, away_score, home_score):
 def validate(by_date, expect_per_date=None):
     """Structural validation. Returns (ok, problems)."""
     problems = []
+    # A total parse failure must FAIL, not pass vacuously. The first build returned
+    # "VALIDATION: PASS", exit 0 on zero games parsed — a gate that green-lights an empty
+    # result set is worse than none, because it reads as confirmation.
+    if not by_date or not any(games for games in by_date.values()):
+        problems.append("no games parsed — refusing to report PASS on an empty parse")
+        return False, problems
     for date, games in sorted(by_date.items()):
         seen = set()
         for g in games:
@@ -225,6 +231,13 @@ def selftest():
         fails.append("valid linescore did not verify (false positive)")
     if _linescore_check(block, 0, 9, 1) is not False:
         fails.append("wrong score not contradicted by linescore (false negative)")
+    # empty parse must FAIL, never pass vacuously
+    ok, probs = validate({})
+    if ok or not any("no games parsed" in p for p in probs):
+        fails.append("empty parse reported PASS (vacuous green light)")
+    ok, _ = validate({"2026-01-01": []})
+    if ok:
+        fails.append("date with zero games reported PASS")
     if fails:
         print("parse_box_dump selftest: FAIL")
         for f in fails:

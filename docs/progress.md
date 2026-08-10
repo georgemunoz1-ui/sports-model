@@ -1588,3 +1588,44 @@ information, and no money was ever at risk.
 (starters unconfirmed at card time -> league-average SP), and V13 went 10/13 on those, so the 73% is
 mostly team-form + HFA, NOT the starter-aware simulation. No odds board was captured for 8/9, so there
 is no market benchmark for that slate. Gate 0/100, ledger $0.
+
+## 2026-08-10 — fixes 1-3 implemented as CODE GATES (not prose); tier-3 queue opened
+
+The audit's root cause was that every control guarded MODEL IDENTITY and none guarded the OUTCOME
+LABEL, compounded by every August lesson being written as prose rather than as a gate. These are
+gates, wired into healthcheck, each with a selftest that healthcheck also runs.
+
+1. PROVENANCE IS NOW MACHINE-READABLE (harness/result_provenance.py). results.csv gains
+   source_tier / result_status / evidence_path / evidence_sha256. Back-filled from the existing
+   source text: 1650 FINAL (tier-1), 126 PROVISIONAL (17 tier-2, 109 tier-3). Rule: only tier-1 may
+   claim FINAL; a cited evidence file must EXIST and its sha256 must MATCH (the fabricated-hash rule
+   already used for forecasts, lifted to outcomes). PROVISIONAL is a legitimate resting state — and
+   freshness is deliberately satisfied by PROVISIONAL rows, because requiring FINAL there would
+   recreate the exact pressure that caused this incident (statsapi egress-blocked + a gate demanding
+   currency = an agent improvising snippets into finals).
+
+2. THE GATE CAN NOW FAIL ON CONTENT (harness/result_content_checks.py), not just shape:
+   - adjacent-day echo detector (WARN/reconcile, never a verdict — ~19 genuine repeats exist)
+   - winner-NAME reconciliation, the only thing that can catch an orientation flip, since such a row
+     is internally consistent; reports rows as UNCHECKABLE rather than silently passing
+   - frozen-slate completeness (the 7/23 missing-game class)
+   REPLAY PROOF against the real incident: the echo detector fires on BOTH verbatim echoes
+   (DET@SF, TB@SEA), and provenance marks all 15 bad 8/8 rows PROVISIONAL, so under the new rules
+   none could have backed a graded result. ATH@BOS (orientation flip) and LAA@MIA (fabrication) are
+   not echoes — they need the winner-name check and evidence binding, which is why all three exist.
+   Also fixed parse_box_dump's silent-PASS-on-zero-games bug (an empty parse now FAILS).
+
+3. REGISTRATION IS THE ONLY WAY TO GRADE. healthcheck FAILs if a date has a committed card and
+   finals but no registry rows (scoped to >= 2026-07-28, the registry's authorization). Backfilled
+   8/6, 8/8, 8/9 as POST_HOC_REPLAY — 38 forecasts + 38 grades, cohort chosen deliberately because
+   the outcomes were already known; minting PROSPECTIVE rows after the fact would be the very R1
+   violation this closes. Registry now 109 forecasts / 107 grades, chain intact.
+
+4. TIER-3 QUEUE OPENED (data/mlb/evidence/tier3_resourcing_queue.json): 126 provisional rows across
+   10 dates, needing owner box dumps to close via the proven parse_box_dump path. Until then every
+   cumulative cohort metric (n=54 Brier 0.2543; 31-game paired dBrier +0.00304) is PROVISIONAL —
+   100% of those outcome labels come from the channel that measured 27% wrong the one day it was
+   ever checked.
+
+Healthcheck: HEALTHY, 0 fail. Remaining WARN is the one unreconciled echo (PIT@MIL 8/4-8/5, which
+the 8/5 session verified by hand as a genuine repeat but which still rests on tier-3).

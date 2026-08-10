@@ -37,9 +37,48 @@ try:
     check("all finals have home_win+total", len(bad)==0)
     last=max(r["date"] for r in finals)
     days_stale=(datetime.date.today()-datetime.date.fromisoformat(last)).days
+    # Freshness is satisfied by PROVISIONAL rows too. Requiring FINAL here would recreate the exact
+    # pressure that caused the 2026-08-08 incident: statsapi was egress-blocked, the gate demanded a
+    # current dataset, and the agent improvised search snippets into finals to satisfy it.
     check(f"dataset freshness: last final {last} ({days_stale}d old)", days_stale<=2, warn=True)
 except Exception as e:
     check(f"results.csv readable ({e})", False)
+# 3b. OUTCOME-LABEL provenance + content integrity (added 2026-08-10 after the 8/8 ingestion
+# failure: the old block validated SHAPE only and passed HEALTHY on three reversed winners).
+try:
+    import importlib.util as _ilu
+    def _load(mod, path):
+        s=_ilu.spec_from_file_location(mod, path); m=_ilu.module_from_spec(s); s.loader.exec_module(m); return m
+    _rp=_load("result_provenance","harness/result_provenance.py")
+    _rc=_load("result_content_checks","harness/result_content_checks.py")
+    _rows=list(csv.DictReader(open("data/backfill/mlb/2026/results.csv")))
+    # (a) provenance: only tier-1 may claim FINAL; a cited evidence file must exist and its hash match.
+    _probs,_stats=_rp.audit_rows(_rows)
+    check(f"result provenance ({_stats['FINAL']} FINAL/tier-1, {_stats['PROVISIONAL']} PROVISIONAL, "
+          f"{_stats['evidence_bound']} evidence-bound){'' if not _probs else ': '+_probs[0]}", not _probs)
+    # (b) orientation flips: only a verbatim winner NAME from the source can catch these, because a
+    # flipped row is internally consistent. Reported honestly as UNCHECKABLE when evidence lacks it.
+    _mism,_checked=_rc.winner_name_mismatch(_rows)
+    check(f"winner-name reconciliation ({_checked} rows checkable, {len(_mism)} mismatch)", not _mism)
+    # (c) adjacent-day echo: a RECONCILE signal, not a verdict — genuine repeats exist, so this warns.
+    _un=_rc.unreconciled_echoes(_rows)
+    check(f"adjacent-day duplicate scores on non-tier-1 sources: {len(_un)} "
+          f"({', '.join(h['matchup']+' '+h['dates'][1] for h in _un[:3]) or 'none'})", not _un, warn=True)
+    # (d) completeness: a game on a frozen slate that never got a result (the 7/23 class).
+    _miss=_rc.slate_completeness(_rows)
+    check(f"frozen-slate games missing a result: {len(_miss)}", not _miss)
+    # (e) REGISTRATION IS THE ONLY WAY TO GRADE. The 8/6-8/9 gradings were reported to the owner as
+    # "diagnostic evidence toward the promotion gate" while never entering the hash-chained registry
+    # at all (head.json sat at 71/69). Any date with a committed card AND finals must be registered.
+    # Scoped to dates on/after the registry's authorization (2026-07-28); earlier cards predate it.
+    _REG_START="2026-07-28"
+    _cd={os.path.basename(p).split("_")[0] for p in glob.glob("cards/*_card.json")}
+    _fd={r["date"] for r in _rows if r["status"]=="final"}
+    _rd={json.loads(l).get("slate_date") for l in open("data/mlb/forecasts/forecasts.jsonl")}
+    _unreg=sorted(d for d in (_cd & _fd) if d>=_REG_START and d not in _rd)
+    check(f"graded slates registered in the forecast registry (unregistered: {_unreg or 'none'})", not _unreg)
+except Exception as e:
+    check(f"result provenance/content checks ({e})", False)
 # 4. pitcher logs cache
 def _logfiles():
     """Only real pitcher logs. README_NOTE.txt lives in this directory and matched *.txt, so it was
@@ -183,6 +222,12 @@ except Exception as e: check(f"P1A enforcement ({e})", False)
 # record_w + record_l on every --register run, which counts every settled row whatever
 # policy produced it -- so a prospective 0/100 was silently clobbered back to 9/100.
 # This FAILS rather than warns: a gate that has quietly drifted is worse than no gate.
+# Outcome-label tooling selftests. An ungated selftest is a selftest that stops being run: the 8/5
+# "echo guard" existed only as prose and was never executed, so it never prevented anything.
+for _m in ("result_provenance","result_content_checks","parse_box_dump"):
+    _r=subprocess.run([sys.executable,f"harness/{_m}.py","--selftest"],capture_output=True,text=True)
+    _out=(_r.stdout+_r.stderr).strip().splitlines()
+    check(f"{_m} selftest ({_out[-1][:72] if _out else 'no output'})", _r.returncode==0)
 try:
     r=subprocess.run([sys.executable,"harness/policy_gate.py","--selftest"],capture_output=True,text=True)
     check(f"policy gate self-test ({(r.stdout+r.stderr).strip().splitlines()[-1] if (r.stdout+r.stderr).strip() else 'no output'})", r.returncode==0)

@@ -5,8 +5,12 @@
  "status": "MARKET_CAPTURE_ONLY (model layer ABSENT), firewalled from MLB",
  "components": {
   "board": "data/nfl/odds/{range}_preseason_board.json",
-  "risk": "data/nfl/INTEGRATION_RISK.json"
+  "risk": "data/nfl/INTEGRATION_RISK.json",
+  "disposition": "data/nfl/DISPOSITION.json",
+  "regular_season_spec": "docs/experiments/NFL_REGULAR_SEASON_TRACK.json"
  },
+ "preseason_status": "DATA_CAPTURE_ONLY / NO_FORECAST (disposition D2) — preseason outcomes are driven by planned QB rotation and snap intent, which were never captured as-of-kickoff; reconstructing them from box scores injects look-ahead",
+ "regular_season_status": "SPEC_ONLY, DATA_BLOCKED — no NFL play-by-play, injury, depth-chart, schedule or weather data exists in this repository",
  "governance": {
   "R1": "no NFL model probability/edge/EV may be emitted \u2014 none exists",
   "firewall": "data/nfl/** isolated from MLB engine/registries/gate/ledger",

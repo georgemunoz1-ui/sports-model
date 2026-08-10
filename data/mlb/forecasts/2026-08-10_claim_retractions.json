@@ -1,0 +1,60 @@
+{
+ "record_id": "CLAIM-RETRACTIONS-2026-08-10",
+ "built_utc": "2026-08-10T06:49:33Z",
+ "trigger": "49-agent audit (wf_dcdfa3e6-90f) + my own direct re-verification. Several claims were false BEFORE the bad result data, and my 2026-08-10 correction pass RE-BLESSED two of them without recomputing.",
+ "standing_rule_adopted": "Every superseded number is RECOMPUTED from frozen inputs, never derived by arithmetic on the number being corrected.",
+ "retractions": [
+  {
+   "claim": "Pass-2 'attractive plays' MIL/CWS/TB went 3/3 \u2014 the disciplined selections cashed",
+   "status": "VOID (post-hoc, winner-filtered)",
+   "verified_by_me": "MIN@MIL fav_ev = -0.0983 in the model's own post-board EV screen (ev_analysis) \u2014 the model was AGAINST MIL. MIL appears in NO pre-game artifact; the owner-ratified pre-game set is CWS/WSH/BAL/HOU-TB, all classified PASS.",
+   "correct_statement": "The pre-registered candidate set went 3/5 on tier-1 data, and all five were classified PASS, so none was a selection. MIL's apparent attractiveness came entirely from my injury heuristic bumping it +4pts \u2014 an adjustment with zero measured value (below)."
+  },
+  {
+   "claim": "Injury overlay was NET POSITIVE (7/12 vs raw 6/12); corrected to 8/12",
+   "status": "VOID (arithmetically false under BOTH datasets)",
+   "verified_by_me": "The frozen overlay changes the PICK in exactly 2 of 10 games: CIN@WSH (flip HURT) and BAL@TEX (flip HELPED). Raw V13 5/10, injury-adjusted 5/10. NET EFFECT = 0.",
+   "correct_statement": "The injury overlay has NO measured benefit. The cited mechanism ('deGrom->TEX and ->SD helped') is also false: HOU@SD carries inj_delta_home 0.0."
+  },
+  {
+   "claim": "UPSET-HEAVY night (market favorites 6/15, corrected 7/15)",
+   "status": "VOID (not 'weakened' as my correction said)",
+   "correct_statement": "The frozen board's own calibrated expectation is 8.72 favorite wins; observed 7 gives z=-0.90, P(<=7)=0.258 \u2014 an ORDINARY slate. This was the causal premise for 'compression caught winning dogs'; without it the day reads as 'an ordinary slate on which a compressed model went 8/15'."
+  },
+  {
+   "claim": "V13 edged the market (8/15 vs 7/15)",
+   "status": "WEAKENED to DESCRIPTIVE-ONLY",
+   "correct_statement": "Paired dBrier +0.0137, t=0.81, 95% CI [-0.023,+0.050] \u2014 crosses zero. The entire +1 margin is 5 disagreement games going 3-2; the grading named only the 3 winners (WSH/CWS/TB) and omitted BAL and HOU. Pooled across benchmarked slates V13 trails on accuracy. Honest counterweight: the corrected data does WIDEN V13's edge over the price even as absolute Brier worsens \u2014 report both."
+  },
+  {
+   "claim": "WNBA model ratings 3/3",
+   "status": "VOID",
+   "correct_statement": "Four repo artifacts declare the WNBA model layer ABSENT with a selftest enforcing null probabilities. Two of the three legs were calls this program had explicitly refused to price (Fever@Sky, 'DO NOT PRICE') or classified PASS (Portland). The market went 3/3 on the same legs, so the record carries zero information about rating skill. It was also written into data/mlb/forecasts/, breaching the declared MLB/WNBA firewall."
+  },
+  {
+   "claim": "Recorded as diagnostic evidence toward the promotion gate",
+   "status": "VOID",
+   "correct_statement": "Nothing from 8/6, 8/8 or 8/9 entered forecasts.jsonl or grades.jsonl; head.json is unchanged at 71/69. These are unregistered sidecars, not gate evidence. The registry has been BYPASSED for every slate since 8/4."
+  },
+  {
+   "claim": "My correction's explanation that 'the wrong rows were games the model was CONFIDENT about'",
+   "status": "VOID (my own error)",
+   "correct_statement": "False for 3 of the 4 rows \u2014 TB@SEA at |p-0.5|=0.006 was the LEAST confident game on the card. The real shape: V13's top-5-confidence bucket went 1/5 while the middle five went 5/5. The single driver is ATH@BOS (0.614), the slate's only high-conviction call, which LOST."
+  },
+  {
+   "claim": "R3 compliance on 8/8",
+   "status": "VIOLATION RECORDED",
+   "correct_statement": "cards/2026-08-08_card.json was overwritten IN PLACE (373 ins/373 del, commit 34e8a12) when the odds board arrived, injecting prices AND re-running V13 on 12 of 15 rows in one step, with no v2 sidecar. The 'market-blind two-pass' separation is therefore NOT audit-verifiable; three defensible V13 records exist (9/15 pre-board, 8/15 post-board, 7/15 reported). No price-fitting evidence was found (7 of 12 moved AWAY from the market), but the design makes price-fitting undetectable."
+  }
+ ],
+ "audit_self_corrections_not_carried_forward": [
+  "The audit's claim that the bad LAA@MIA row 'manufactured a winning dog' is WRONG: both V13 (0.526) and the market (0.594) had MIA, so the fabricated LAA win COST V13 a hit rather than creating one.",
+  "The audit's 'tier-1 dump missing from repo' finding was true when written and was remediated 33 minutes later; the frozen file re-hashes to the pre-published sha256 exactly, so the correction is authentic and reproducible. The ENFORCEMENT half (no rule requires a cited hash to resolve) remains OPEN."
+ ],
+ "what_still_stands": [
+  "The PASS/$0 decision \u2014 made pre-first-pitch on pre-game information; $0 exposed; no money was ever at risk.",
+  "The compression diagnosis \u2014 mean |p-0.5| 0.0462 vs market 0.0814, a measured property of the frozen card, outcome-independent.",
+  "The same-day Ramirez lineup self-correction \u2014 correct and owner-verified.",
+  "The 8/9 headline 11/15 / Brier 0.2353 \u2014 reproduces on clean inputs with zero pick flips, but rests on 13/15 CAP games; NOT validation of the starter-aware model."
+ ]
+}

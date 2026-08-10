@@ -1,0 +1,35 @@
+{
+ "record_id": "NFL-TRACK-INTEGRATION-RISK-2026-08-10",
+ "built_utc": "2026-08-10T19:46:32Z",
+ "status": "FLAGGED \u2014 not blocking, but must be resolved BEFORE any NFL branch is merged",
+ "what_was_reported": "A narrative supplied with the NFL board states that another session located 'the preserved sports-model repository bundle', found its checkpoint 'dated July 27', created an NFL preseason feature branch on it, and intends to 'keep later MLB work untouched'.",
+ "verified_facts": {
+  "july27_checkpoint_is_stale_by": "57 commits",
+  "current_head": "2b64e68 (= origin/sportsmodel/main)",
+  "controls_absent_from_a_july27_base": [
+   "harness/result_provenance.py (source_tier/result_status/evidence binding) \u2014 added 8/10",
+   "harness/result_content_checks.py (echo detector, winner-name reconciliation, slate completeness) \u2014 added 8/10",
+   "harness/parse_box_dump.py (deterministic tier-1 ingestion) \u2014 added 8/10",
+   "harness/run_v13_historical.py (date-safe replay) \u2014 added 8/4",
+   "harness/wnba_market.py + the WNBA firewall \u2014 added 8/8",
+   "docs/OPERATING_WORKFLOW.md \u2014 added 8/8",
+   "data/mlb/ml_asof/V13_FREEZE.json \u2014 added 8/10",
+   "the 8/8 results corrections (3 reversed winners) and every claim retraction"
+  ]
+ },
+ "the_risk": "A branch cut from 2026-07-27 predates the entire outcome-label control layer AND the 8/8 data corrections. If it is merged naively \u2014 especially anything touching data/backfill/mlb/2026/results.csv, harness/healthcheck.py or the registry \u2014 it can (a) reintroduce results.csv WITHOUT the provenance columns, silently voiding the FINAL/PROVISIONAL gate, (b) restore the three reversed 8/8 winners, and (c) bypass the registration-required-to-grade check. 'Keeping later MLB work untouched' is the right intent, but intent is not a merge strategy.",
+ "required_before_merge": [
+  "Rebase the NFL work onto current HEAD (2b64e68 or later) rather than merging a July-27 base.",
+  "The NFL track must add ONLY files under data/nfl/** and an nfl_* harness namespace \u2014 zero edits to results.csv, healthcheck.py, forecast_registry.py, model_registry.py or any MLB artifact.",
+  "Register any NFL model as a NEW model_id in harness/model_registry.py; it may not reuse or extend a V13/V14 identity (V13 is FROZEN as of 2026-08-10).",
+  "harness/healthcheck.py must pass at 0 fail after integration, including the provenance, content-check and registration gates.",
+  "NFL prices stay quarantined from features, matching the MLB rule: forecast first, price second."
+ ],
+ "agreement_with_the_narrative": [
+  "Storing quotes as a timestamped evaluation board and never as predictive features \u2014 correct, and matches how the WNBA board is handled.",
+  "Preserving the pasted timestamp verbatim while registering the corrected kickoff, with the mismatch flagged rather than silently fixed \u2014 correct, and implemented here.",
+  "Freezing estimator/features/split/deadbands/gates before fitting \u2014 correct, and matches the V14 shadow pre-registration."
+ ],
+ "correction_to_the_narrative": "The timestamp defect is not only a clock-label error. The uniform -4h shift also moves FOUR games to the previous day (LAC@HOU, ARI@LV, TEN@SF from Fri 8/14 to Thu 8/13; DAL@SEA from Sun 8/16 to Sat 8/15). Registering kickoff from the official schedule fixes the time but a slate registered under the board's DATE HEADERS would still group those four games on the wrong day.",
+ "second_defect_the_narrative_did_not_report": "Caesars posts the opposite favourite from the other three books on at least five games (LAC@HOU, TB@NYJ, MIA@WAS, CAR@BUF, JAX@NO). Any cross-book consensus must resolve or exclude these before averaging."
+}

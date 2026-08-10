@@ -1,0 +1,990 @@
+{
+ "record_id": "NFL-PRESEASON-BOARD-2026-08-13_16",
+ "sport": "NFL",
+ "season_phase": "PRESEASON",
+ "transcribed_utc": "2026-08-10T19:45:52Z",
+ "source_tier": 1,
+ "provenance_class": "OWNER_BOARD_SCREENSHOT (4-book: Circa/Boomers/BetMGM/Caesars)",
+ "MODEL_STATUS": "ABSENT \u2014 this system has NO NFL model and NO NFL data. Under R1 no model probability, edge or EV may be produced. This is an EVALUATION BOARD ONLY.",
+ "firewall": "data/nfl/** is isolated from the MLB engine, registries, policy_gate and healthcheck, exactly as data/wnba/** is. No NFL number may reach the MLB gate (0/100), forecasts or ledgers.",
+ "DEFECT_1_TIMESTAMPS": {
+  "finding": "Every kickoff on the board is printed in UTC but LABELLED 'ET'. Verified arithmetically: subtracting 4h (the EDT->UTC delta) puts 16 of 16 games into standard NFL preseason windows (1pm/4pm/7pm/7:30pm/8pm/9pm ET); no other offset does.",
+  "consequence_the_narrative_missed": "The shift also moves FOUR games to the PREVIOUS DAY: LAC@HOU, ARI@LV and TEN@SF are listed under Fri 8/14 but kick off Thu 8/13 (8pm/8pm/9pm ET), and DAL@SEA is listed under Sun 8/16 but kicks off Sat 8/15 8pm ET. Date attribution, not just clock time, is wrong on the source.",
+  "handling": "board_label_verbatim preserves the source exactly; kickoff_et_corrected carries the corrected value. The source is NOT silently rewritten."
+ },
+ "DEFECT_2_CAESARS_SIDE_DISAGREEMENT": {
+  "finding": "Caesars posts the OPPOSITE favourite from the other three books on at least five games: LAC@HOU, TB@NYJ, MIA@WAS, CAR@BUF and JAX@NO (e.g. three books have MIA -3, Caesars has MIA +1.5).",
+  "why_it_matters": "This is not small line shading; it is a sign flip. Either Caesars genuinely disagrees, or that column is mis-scraped/mis-transcribed. Averaging across books without resolving it would produce a meaningless consensus.",
+  "handling": "Recorded per book, NOT averaged. Any consensus computed downstream must exclude or resolve these five games first."
+ },
+ "PRESEASON_MODELLING_CAVEAT": "Regular-season team strength is the WRONG prior here. Preseason outcomes turn on planned QB/starter snap counts, roster-cut churn, and coaching substitution intent \u2014 none of which is recoverable from postgame box scores without look-ahead. A model trained on regular-season EPA and scored on preseason games would be measuring the wrong thing.",
+ "books": [
+  "Circa",
+  "Boomers",
+  "BetMGM",
+  "Caesars"
+ ],
+ "n_games": 16,
+ "games": [
+  {
+   "away": "DET",
+   "home": "CIN",
+   "kickoff_et_corrected": "2026-08-13 7:00 PM",
+   "board_label_verbatim": "Thu 8/13 11:00 PM",
+   "books": {
+    "Circa": {
+     "t1": {
+      "spread": 6.5,
+      "spread_vig": -110,
+      "ml": 235
+     },
+     "t2": {
+      "spread": -6.5,
+      "spread_vig": -110,
+      "ml": -280
+     },
+     "total": 37.0
+    },
+    "Boomers": {
+     "t1": {
+      "spread": 7,
+      "spread_vig": -110,
+      "ml": 250
+     },
+     "t2": {
+      "spread": -7,
+      "spread_vig": -110,
+      "ml": -300
+     },
+     "total": 37.5
+    },
+    "BetMGM": {
+     "t1": {
+      "spread": 7,
+      "spread_vig": -115,
+      "ml": 225
+     },
+     "t2": {
+      "spread": -7,
+      "spread_vig": -105,
+      "ml": -275
+     },
+     "total": 37.5
+    },
+    "Caesars": {
+     "t1": {
+      "spread": 4.5,
+      "spread_vig": -110,
+      "ml": 173
+     },
+     "t2": {
+      "spread": -4.5,
+      "spread_vig": -110,
+      "ml": -213
+     },
+     "total": 38.5
+    }
+   }
+  },
+  {
+   "away": "GB",
+   "home": "PIT",
+   "kickoff_et_corrected": "2026-08-13 7:00 PM",
+   "board_label_verbatim": "Thu 8/13 11:00 PM",
+   "books": {
+    "Circa": {
+     "t1": {
+      "spread": 1.5,
+      "spread_vig": -110,
+      "ml": 105
+     },
+     "t2": {
+      "spread": -1.5,
+      "spread_vig": -110,
+      "ml": -125
+     },
+     "total": 37.0
+    },
+    "Boomers": {
+     "t1": {
+      "spread": 1.5,
+      "spread_vig": -110,
+      "ml": 105
+     },
+     "t2": {
+      "spread": -1.5,
+      "spread_vig": -110,
+      "ml": -125
+     },
+     "total": 37.0
+    },
+    "BetMGM": {
+     "t1": {
+      "spread": 1.5,
+      "spread_vig": -110,
+      "ml": 105
+     },
+     "t2": {
+      "spread": -1.5,
+      "spread_vig": -110,
+      "ml": -125
+     },
+     "total": 36.5
+    },
+    "Caesars": {
+     "t1": {
+      "spread": 1.5,
+      "spread_vig": -108,
+      "ml": 107
+     },
+     "t2": {
+      "spread": -1.5,
+      "spread_vig": -112,
+      "ml": -129
+     },
+     "total": 37.5
+    }
+   }
+  },
+  {
+   "away": "IND",
+   "home": "NE",
+   "kickoff_et_corrected": "2026-08-13 7:30 PM",
+   "board_label_verbatim": "Thu 8/13 11:30 PM",
+   "books": {
+    "Circa": {
+     "t1": {
+      "spread": 1.5,
+      "spread_vig": -110,
+      "ml": 105
+     },
+     "t2": {
+      "spread": -1.5,
+      "spread_vig": -110,
+      "ml": -125
+     },
+     "total": 38.5
+    },
+    "Boomers": {
+     "t1": {
+      "spread": 1.5,
+      "spread_vig": -110,
+      "ml": 105
+     },
+     "t2": {
+      "spread": -1.5,
+      "spread_vig": -110,
+      "ml": -125
+     },
+     "total": 38.0
+    },
+    "BetMGM": {
+     "t1": {
+      "spread": 1.5,
+      "spread_vig": -110,
+      "ml": 105
+     },
+     "t2": {
+      "spread": -1.5,
+      "spread_vig": -110,
+      "ml": -125
+     },
+     "total": 39.0
+    },
+    "Caesars": {
+     "t1": {
+      "spread": 1.5,
+      "spread_vig": -107,
+      "ml": 111
+     },
+     "t2": {
+      "spread": -1.5,
+      "spread_vig": -114,
+      "ml": -132
+     },
+     "total": 38.5
+    }
+   }
+  },
+  {
+   "away": "LAC",
+   "home": "HOU",
+   "kickoff_et_corrected": "2026-08-13 8:00 PM",
+   "board_label_verbatim": "Fri 8/14 12:00 AM",
+   "books": {
+    "Circa": {
+     "t1": {
+      "spread": 1.5,
+      "spread_vig": -110,
+      "ml": 105
+     },
+     "t2": {
+      "spread": -1.5,
+      "spread_vig": -110,
+      "ml": -125
+     },
+     "total": 36.5
+    },
+    "Boomers": {
+     "t1": {
+      "spread": 1.5,
+      "spread_vig": -110,
+      "ml": 105
+     },
+     "t2": {
+      "spread": -1.5,
+      "spread_vig": -110,
+      "ml": -125
+     },
+     "total": 37.0
+    },
+    "BetMGM": {
+     "t1": {
+      "spread": 1.5,
+      "spread_vig": -110,
+      "ml": 105
+     },
+     "t2": {
+      "spread": -1.5,
+      "spread_vig": -110,
+      "ml": -125
+     },
+     "total": 37.5
+    },
+    "Caesars": {
+     "t1": {
+      "spread": -1.5,
+      "spread_vig": -114,
+      "ml": -132
+     },
+     "t2": {
+      "spread": 1.5,
+      "spread_vig": -107,
+      "ml": 110
+     },
+     "total": 38.0
+    }
+   }
+  },
+  {
+   "away": "ARI",
+   "home": "LV",
+   "kickoff_et_corrected": "2026-08-13 8:00 PM",
+   "board_label_verbatim": "Fri 8/14 12:00 AM",
+   "books": {
+    "Circa": {
+     "t1": {
+      "spread": 2.5,
+      "spread_vig": -110,
+      "ml": 120
+     },
+     "t2": {
+      "spread": -2.5,
+      "spread_vig": -110,
+      "ml": -140
+     },
+     "total": 40.0
+    },
+    "Boomers": {
+     "t1": {
+      "spread": 2.5,
+      "spread_vig": -110,
+      "ml": 115
+     },
+     "t2": {
+      "spread": -2.5,
+      "spread_vig": -110,
+      "ml": -135
+     },
+     "total": 40.5
+    },
+    "BetMGM": {
+     "t1": {
+      "spread": 2.5,
+      "spread_vig": -110,
+      "ml": 120
+     },
+     "t2": {
+      "spread": -2.5,
+      "spread_vig": -110,
+      "ml": -145
+     },
+     "total": 40.5
+    },
+    "Caesars": {
+     "t1": {
+      "spread": 2.5,
+      "spread_vig": -110,
+      "ml": 113
+     },
+     "t2": {
+      "spread": -2.5,
+      "spread_vig": -110,
+      "ml": -136
+     },
+     "total": 39.5
+    }
+   }
+  },
+  {
+   "away": "TEN",
+   "home": "SF",
+   "kickoff_et_corrected": "2026-08-13 9:00 PM",
+   "board_label_verbatim": "Fri 8/14 1:00 AM",
+   "books": {
+    "Circa": {
+     "t1": {
+      "spread": -3,
+      "spread_vig": -110,
+      "ml": -155
+     },
+     "t2": {
+      "spread": 3,
+      "spread_vig": -110,
+      "ml": 135
+     },
+     "total": 40.0
+    },
+    "Boomers": {
+     "t1": {
+      "spread": -2.5,
+      "spread_vig": -110,
+      "ml": -145
+     },
+     "t2": {
+      "spread": 2.5,
+      "spread_vig": -110,
+      "ml": 125
+     },
+     "total": 39.5
+    },
+    "BetMGM": {
+     "t1": {
+      "spread": -2.5,
+      "spread_vig": -120,
+      "ml": -150
+     },
+     "t2": {
+      "spread": 2.5,
+      "spread_vig": 100,
+      "ml": 125
+     },
+     "total": 39.5
+    },
+    "Caesars": {
+     "t1": {
+      "spread": -2.5,
+      "spread_vig": -115,
+      "ml": -140
+     },
+     "t2": {
+      "spread": 2.5,
+      "spread_vig": -105,
+      "ml": 117
+     },
+     "total": 37.5
+    }
+   }
+  },
+  {
+   "away": "TB",
+   "home": "NYJ",
+   "kickoff_et_corrected": "2026-08-14 7:00 PM",
+   "board_label_verbatim": "Fri 8/14 11:00 PM",
+   "books": {
+    "Circa": {
+     "t1": {
+      "spread": 2,
+      "spread_vig": -110,
+      "ml": 110
+     },
+     "t2": {
+      "spread": -2,
+      "spread_vig": -110,
+      "ml": -130
+     },
+     "total": 35.5
+    },
+    "Boomers": {
+     "t1": {
+      "spread": 2.5,
+      "spread_vig": -110,
+      "ml": 120
+     },
+     "t2": {
+      "spread": -2.5,
+      "spread_vig": -110,
+      "ml": -140
+     },
+     "total": 36.0
+    },
+    "BetMGM": {
+     "t1": {
+      "spread": 2.5,
+      "spread_vig": -105,
+      "ml": 120
+     },
+     "t2": {
+      "spread": -2.5,
+      "spread_vig": -115,
+      "ml": -145
+     },
+     "total": 36.5
+    },
+    "Caesars": {
+     "t1": {
+      "spread": -1.5,
+      "spread_vig": -108,
+      "ml": null
+     },
+     "t2": {
+      "spread": 1.5,
+      "spread_vig": -112,
+      "ml": null
+     },
+     "total": 35.5
+    }
+   }
+  },
+  {
+   "away": "MIA",
+   "home": "WAS",
+   "kickoff_et_corrected": "2026-08-14 7:00 PM",
+   "board_label_verbatim": "Fri 8/14 11:00 PM",
+   "books": {
+    "Circa": {
+     "t1": {
+      "spread": -3,
+      "spread_vig": -110,
+      "ml": -155
+     },
+     "t2": {
+      "spread": 3,
+      "spread_vig": -110,
+      "ml": 135
+     },
+     "total": 36.5
+    },
+    "Boomers": {
+     "t1": {
+      "spread": -3,
+      "spread_vig": -110,
+      "ml": -150
+     },
+     "t2": {
+      "spread": 3,
+      "spread_vig": -110,
+      "ml": 130
+     },
+     "total": 36.5
+    },
+    "BetMGM": {
+     "t1": {
+      "spread": -3,
+      "spread_vig": -105,
+      "ml": -145
+     },
+     "t2": {
+      "spread": 3,
+      "spread_vig": -115,
+      "ml": 120
+     },
+     "total": 36.5
+    },
+    "Caesars": {
+     "t1": {
+      "spread": 1.5,
+      "spread_vig": -121,
+      "ml": null
+     },
+     "t2": {
+      "spread": -1.5,
+      "spread_vig": 100,
+      "ml": null
+     },
+     "total": 36.5
+    }
+   }
+  },
+  {
+   "away": "DEN",
+   "home": "ATL",
+   "kickoff_et_corrected": "2026-08-14 7:00 PM",
+   "board_label_verbatim": "Fri 8/14 11:00 PM",
+   "books": {
+    "Circa": {
+     "t1": {
+      "spread": -4.5,
+      "spread_vig": -110,
+      "ml": -220
+     },
+     "t2": {
+      "spread": 4.5,
+      "spread_vig": -110,
+      "ml": 190
+     },
+     "total": 38.5
+    },
+    "Boomers": {
+     "t1": {
+      "spread": -5.5,
+      "spread_vig": -110,
+      "ml": -240
+     },
+     "t2": {
+      "spread": 5.5,
+      "spread_vig": -110,
+      "ml": 200
+     },
+     "total": 38.0
+    },
+    "BetMGM": {
+     "t1": {
+      "spread": -5.5,
+      "spread_vig": -110,
+      "ml": -250
+     },
+     "t2": {
+      "spread": 5.5,
+      "spread_vig": -110,
+      "ml": 200
+     },
+     "total": 38.0
+    },
+    "Caesars": {
+     "t1": {
+      "spread": -4.5,
+      "spread_vig": -107,
+      "ml": -213
+     },
+     "t2": {
+      "spread": 4.5,
+      "spread_vig": -113,
+      "ml": 174
+     },
+     "total": 37.5
+    }
+   }
+  },
+  {
+   "away": "CAR",
+   "home": "BUF",
+   "kickoff_et_corrected": "2026-08-15 1:00 PM",
+   "board_label_verbatim": "Sat 8/15 5:00 PM",
+   "books": {
+    "Circa": {
+     "t1": {
+      "spread": -2,
+      "spread_vig": -110,
+      "ml": -130
+     },
+     "t2": {
+      "spread": 2,
+      "spread_vig": -110,
+      "ml": 110
+     },
+     "total": 38.0
+    },
+    "Boomers": {
+     "t1": {
+      "spread": -1.5,
+      "spread_vig": -110,
+      "ml": -125
+     },
+     "t2": {
+      "spread": 1.5,
+      "spread_vig": -110,
+      "ml": 105
+     },
+     "total": 38.0
+    },
+    "BetMGM": {
+     "t1": {
+      "spread": -1.5,
+      "spread_vig": -110,
+      "ml": -125
+     },
+     "t2": {
+      "spread": 1.5,
+      "spread_vig": -110,
+      "ml": 105
+     },
+     "total": 38.5
+    },
+    "Caesars": {
+     "t1": {
+      "spread": 1.5,
+      "spread_vig": -110,
+      "ml": 114
+     },
+     "t2": {
+      "spread": -1.5,
+      "spread_vig": -110,
+      "ml": -137
+     },
+     "total": 37.5
+    }
+   }
+  },
+  {
+   "away": "MIN",
+   "home": "NYG",
+   "kickoff_et_corrected": "2026-08-15 1:00 PM",
+   "board_label_verbatim": "Sat 8/15 5:00 PM",
+   "books": {
+    "Circa": {
+     "t1": {
+      "spread": -3,
+      "spread_vig": -110,
+      "ml": -155
+     },
+     "t2": {
+      "spread": 3,
+      "spread_vig": -110,
+      "ml": 135
+     },
+     "total": 40.5
+    },
+    "Boomers": {
+     "t1": {
+      "spread": -3,
+      "spread_vig": -110,
+      "ml": -155
+     },
+     "t2": {
+      "spread": 3,
+      "spread_vig": -110,
+      "ml": 135
+     },
+     "total": 40.5
+    },
+    "BetMGM": {
+     "t1": {
+      "spread": -3,
+      "spread_vig": -110,
+      "ml": -165
+     },
+     "t2": {
+      "spread": 3,
+      "spread_vig": -110,
+      "ml": 135
+     },
+     "total": 40.5
+    },
+    "Caesars": {
+     "t1": {
+      "spread": -2.5,
+      "spread_vig": -113,
+      "ml": -148
+     },
+     "t2": {
+      "spread": 2.5,
+      "spread_vig": -107,
+      "ml": 123
+     },
+     "total": 38.5
+    }
+   }
+  },
+  {
+   "away": "CLE",
+   "home": "CHI",
+   "kickoff_et_corrected": "2026-08-15 1:00 PM",
+   "board_label_verbatim": "Sat 8/15 5:00 PM",
+   "books": {
+    "Circa": {
+     "t1": {
+      "spread": 0,
+      "spread_vig": -110,
+      "ml": null
+     },
+     "t2": {
+      "spread": 0,
+      "spread_vig": -110,
+      "ml": null
+     },
+     "total": 39.0
+    },
+    "Boomers": {
+     "t1": {
+      "spread": 0,
+      "spread_vig": -110,
+      "ml": -110
+     },
+     "t2": {
+      "spread": 0,
+      "spread_vig": -110,
+      "ml": -110
+     },
+     "total": 39.0
+    },
+    "BetMGM": {
+     "t1": {
+      "spread": 1,
+      "spread_vig": -115,
+      "ml": -105
+     },
+     "t2": {
+      "spread": -1,
+      "spread_vig": -105,
+      "ml": -115
+     },
+     "total": 38.5
+    },
+    "Caesars": {
+     "t1": {
+      "spread": 1.5,
+      "spread_vig": -120,
+      "ml": -104
+     },
+     "t2": {
+      "spread": -1.5,
+      "spread_vig": 100,
+      "ml": -117
+     },
+     "total": 38.5
+    }
+   }
+  },
+  {
+   "away": "LAR",
+   "home": "KC",
+   "kickoff_et_corrected": "2026-08-15 4:00 PM",
+   "board_label_verbatim": "Sat 8/15 8:00 PM",
+   "books": {
+    "Circa": {
+     "t1": {
+      "spread": 2.5,
+      "spread_vig": -110,
+      "ml": 115
+     },
+     "t2": {
+      "spread": -2.5,
+      "spread_vig": -110,
+      "ml": -135
+     },
+     "total": 36.5
+    },
+    "Boomers": {
+     "t1": {
+      "spread": 2.5,
+      "spread_vig": -110,
+      "ml": 115
+     },
+     "t2": {
+      "spread": -2.5,
+      "spread_vig": -110,
+      "ml": -135
+     },
+     "total": 36.5
+    },
+    "BetMGM": {
+     "t1": {
+      "spread": 1.5,
+      "spread_vig": -105,
+      "ml": 115
+     },
+     "t2": {
+      "spread": -1.5,
+      "spread_vig": -115,
+      "ml": -135
+     },
+     "total": 36.5
+    },
+    "Caesars": {
+     "t1": {
+      "spread": 1.5,
+      "spread_vig": -110,
+      "ml": 108
+     },
+     "t2": {
+      "spread": -1.5,
+      "spread_vig": -110,
+      "ml": -129
+     },
+     "total": 36.5
+    }
+   }
+  },
+  {
+   "away": "JAX",
+   "home": "NO",
+   "kickoff_et_corrected": "2026-08-15 4:00 PM",
+   "board_label_verbatim": "Sat 8/15 8:00 PM",
+   "books": {
+    "Circa": {
+     "t1": {
+      "spread": 2.5,
+      "spread_vig": -110,
+      "ml": 115
+     },
+     "t2": {
+      "spread": -2.5,
+      "spread_vig": -110,
+      "ml": -135
+     },
+     "total": 37.5
+    },
+    "Boomers": {
+     "t1": {
+      "spread": 2,
+      "spread_vig": -110,
+      "ml": 110
+     },
+     "t2": {
+      "spread": -2,
+      "spread_vig": -110,
+      "ml": -130
+     },
+     "total": 37.0
+    },
+    "BetMGM": {
+     "t1": {
+      "spread": 2,
+      "spread_vig": -110,
+      "ml": 115
+     },
+     "t2": {
+      "spread": -2,
+      "spread_vig": -110,
+      "ml": -135
+     },
+     "total": 37.5
+    },
+    "Caesars": {
+     "t1": {
+      "spread": -1.5,
+      "spread_vig": -107,
+      "ml": -127
+     },
+     "t2": {
+      "spread": 1.5,
+      "spread_vig": -114,
+      "ml": 106
+     },
+     "total": 38.5
+    }
+   }
+  },
+  {
+   "away": "PHI",
+   "home": "BAL",
+   "kickoff_et_corrected": "2026-08-15 7:00 PM",
+   "board_label_verbatim": "Sat 8/15 11:00 PM",
+   "books": {
+    "Circa": {
+     "t1": {
+      "spread": -1.5,
+      "spread_vig": -110,
+      "ml": -120
+     },
+     "t2": {
+      "spread": 1.5,
+      "spread_vig": -110,
+      "ml": 100
+     },
+     "total": 36.5
+    },
+    "Boomers": {
+     "t1": {
+      "spread": -2,
+      "spread_vig": -110,
+      "ml": -130
+     },
+     "t2": {
+      "spread": 2,
+      "spread_vig": -110,
+      "ml": 110
+     },
+     "total": 36.5
+    },
+    "BetMGM": {
+     "t1": {
+      "spread": -2.5,
+      "spread_vig": -110,
+      "ml": -135
+     },
+     "t2": {
+      "spread": 2.5,
+      "spread_vig": -110,
+      "ml": 115
+     },
+     "total": 36.5
+    },
+    "Caesars": {
+     "t1": {
+      "spread": -2.5,
+      "spread_vig": -107,
+      "ml": -137
+     },
+     "t2": {
+      "spread": 2.5,
+      "spread_vig": -114,
+      "ml": 115
+     },
+     "total": 36.5
+    }
+   }
+  },
+  {
+   "away": "DAL",
+   "home": "SEA",
+   "kickoff_et_corrected": "2026-08-15 8:00 PM",
+   "board_label_verbatim": "Sun 8/16 12:00 AM",
+   "books": {
+    "Circa": {
+     "t1": {
+      "spread": 3.5,
+      "spread_vig": -110,
+      "ml": 160
+     },
+     "t2": {
+      "spread": -3.5,
+      "spread_vig": -110,
+      "ml": -185
+     },
+     "total": 38.5
+    },
+    "Boomers": {
+     "t1": {
+      "spread": 3.5,
+      "spread_vig": -110,
+      "ml": 160
+     },
+     "t2": {
+      "spread": -3.5,
+      "spread_vig": -110,
+      "ml": -180
+     },
+     "total": 39.5
+    },
+    "BetMGM": {
+     "t1": {
+      "spread": 3.5,
+      "spread_vig": -110,
+      "ml": 165
+     },
+     "t2": {
+      "spread": -3.5,
+      "spread_vig": -110,
+      "ml": -200
+     },
+     "total": 39.5
+    },
+    "Caesars": {
+     "t1": {
+      "spread": 2.5,
+      "spread_vig": -107,
+      "ml": 126
+     },
+     "t2": {
+      "spread": -2.5,
+      "spread_vig": -113,
+      "ml": -152
+     },
+     "total": 37.5
+    }
+   }
+  }
+ ]
+}

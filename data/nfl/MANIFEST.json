@@ -1,0 +1,22 @@
+{
+ "record_id": "NFL-SECTION-MANIFEST",
+ "sport": "NFL",
+ "created_utc": "2026-08-10T19:46:32Z",
+ "status": "MARKET_CAPTURE_ONLY (model layer ABSENT), firewalled from MLB",
+ "components": {
+  "board": "data/nfl/odds/{range}_preseason_board.json",
+  "risk": "data/nfl/INTEGRATION_RISK.json"
+ },
+ "governance": {
+  "R1": "no NFL model probability/edge/EV may be emitted \u2014 none exists",
+  "firewall": "data/nfl/** isolated from MLB engine/registries/gate/ledger",
+  "gate_impact": "NONE",
+  "ledger_impact": "NONE ($0, paper)"
+ },
+ "to_build_a_real_preseason_model": [
+  "preseason-specific outcome history (not regular-season EPA)",
+  "planned QB/starter snap-count intent, which is NOT recoverable from postgame box scores without look-ahead \u2014 this is the binding constraint",
+  "roster-cut and depth-chart state as-of kickoff",
+  "walk-forward validation + date-block inference + pre-registered success threshold, as with V14"
+ ]
+}

@@ -1,0 +1,68 @@
+{
+ "record_id": "SLATE-GATE-2026-08-10-RESOLVED",
+ "built_utc": "2026-08-10T18:53:13Z",
+ "supersedes": "data/mlb/slates/2026-08-10_gate_result.json (DATA_BLOCKED)",
+ "disposition": "PARTIAL \u2014 6 games verified and carded; slate incomplete (~10 scheduled)",
+ "how_the_block_was_cleared": "Not by trusting a source, but by CROSS-VALIDATING one. Two structural checks:",
+ "validation": [
+  {
+   "check": "standings reconciliation",
+   "result": "9/9 EXACT \u2014 the source's claimed team records (BOS 64-53, TOR 56-63, NYM 52-67, ATL 71-47, PHI 63-56, STL 59-59, TEX 59-59, LAA 45-73, BAL 57-61) match records computed from results.csv through 8/9 exactly.",
+   "significance": "This also INDEPENDENTLY CONFIRMS the 8/8 tier-1 correction: BOS's record would not reconcile if ATH@BOS were still recorded reversed."
+  },
+  {
+   "check": "starter-team coherence vs this repo's own prior boards",
+   "result": "PASS \u2014 Gore=TEX (8/4 board), Dobbins=STL (8/4 board), Kremer=MIN (8/5 recap), Hughes=COL (8/4 board), Elder=ATL (8/9), Detmers=LAA, Painter=PHI.",
+   "significance": "This is what exposed the first source as garbled: it carried the RIGHT pitcher pairs assigned to the WRONG teams (e.g. 'Blue Jays vs Rays: Taillon vs Gray' is really BOS@TOR: Gray vs Taillon)."
+  }
+ ],
+ "carded": [
+  {
+   "g": "BOS@TOR",
+   "sp": "Sonny Gray v Jameson Taillon",
+   "v13_home": 0.38
+  },
+  {
+   "g": "NYM@ATL",
+   "sp": "Christian Scott v Bryce Elder",
+   "v13_home": 0.55
+  },
+  {
+   "g": "BAL@MIN",
+   "sp": "Trevor Rogers v Dean Kremer",
+   "v13_home": 0.49
+  },
+  {
+   "g": "PHI@STL",
+   "sp": "Andrew Painter v Hunter Dobbins",
+   "v13_home": 0.53
+  },
+  {
+   "g": "TEX@LAA",
+   "sp": "MacKenzie Gore v Reid Detmers",
+   "v13_home": 0.5
+  },
+  {
+   "g": "COL@AZ",
+   "sp": "Gabriel Hughes v Michael Soroka",
+   "v13_home": 0.54
+  }
+ ],
+ "excluded": [
+  {
+   "g": "CIN@WSH 12:15pm ET at Nationals Park",
+   "reason": "SUSPECTED 8/9 ECHO \u2014 identical matchup, venue AND first-pitch time to the 8/9 game already on file. Not carded without independent confirmation. This is the adjacent-day echo pattern the new detector exists for."
+  },
+  {
+   "g": "MIL@SD",
+   "reason": "matchup corroborated but no probables found; not carded"
+  },
+  {
+   "g": "~3 further games",
+   "reason": "one source says 10 games total; the remainder could not be identified"
+  }
+ ],
+ "registry": "6 forecasts registered DIAGNOSTIC_PROSPECTIVE, pre-first-pitch (earliest 23:07Z) \u2014 the first genuinely prospective registry evidence since 8/4, and the class the 8/6-8/9 backfill could not create.",
+ "not_available": "No odds board -> no market benchmark, no EV, no edge claim. Probables are not confirmed lineups.",
+ "gate": "0/100 NO_PROMOTE; ledger $0; execution UNAUTHORIZED"
+}

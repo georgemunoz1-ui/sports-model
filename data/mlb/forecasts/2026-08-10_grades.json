@@ -1,0 +1,73 @@
+{
+ "record_id": "SLATE-GRADES-2026-08-10",
+ "graded_utc": "2026-08-11T02:10:00Z",
+ "evidence_path": "data/mlb/evidence/box_dumps/2026-08-10_statcast_box_extract.txt",
+ "evidence_sha256": "1d3077b5898236d50c6f7e766aeff505561015b4825847d70946ac127ab187f9",
+ "source_tier": 1,
+ "source": "owner paste, Statcast/Gameday board, 10 MLB Games 8/10/2026",
+ "binds_to": "data/mlb/forecasts/2026-08-10_composite_slate.json",
+
+ "EVIDENCE_CLASS": "LEDGER MAINTENANCE ONLY. Per the owner's standing instruction of 2026-08-10, this grading is NOT evidence for changing the model and must not be cited as such. Ten games could not resolve estimator or feature quality; seven resolves less.",
+
+ "integrity_checks": {
+  "linescore_cross_check": "10/10 PASS — for every game the header R equals the sum of that team's inning cells, independently for away and home",
+  "winner_name_orientation": "PASS — the away @ home header orientation agrees with the linescore row order in all 10 games",
+  "adjacent_day_echo": "no score pair in this capture duplicates a 2026-08-09 result",
+  "note": "these checks catch arithmetic and orientation corruption. They cannot detect a source that is internally consistent and wrong; that is what the tier-1 requirement is for."
+ },
+
+ "finality_disposition": {
+  "rule": "only rows carrying a tier-1 FINAL marker are graded FINAL. A complete-looking linescore is NOT a finality marker.",
+  "graded_final": 7,
+  "held_provisional": 3,
+  "held_detail": [
+   {"game": "TEX@LAA", "status_in_capture": "LIVE - MIDDLE 10", "score_at_capture": "4-1", "reason": "game in progress; Texas led in the top of the 10th and the Angels had not batted"},
+   {"game": "TB@ATH", "status_in_capture": "no status label; page offered 'Live At Bat'", "score_at_capture": "10-6", "reason": "linescore is complete through 9, but the capture carries no FINAL marker and shows a live-game control. Under the conservative default this is PROVISIONAL, not FINAL."},
+   {"game": "KC@LAD", "status_in_capture": "no status label; page offered 'Live At Bat'", "score_at_capture": "5-6", "reason": "same as TB@ATH. The home half of the 9th shows X, which is consistent with a completed game, but consistency is not a finality marker."}
+  ],
+  "note": "Grading these three would require assuming finality the capture does not assert. That assumption is exactly what the provenance layer exists to refuse. They can be graded from a later tier-1 capture carrying FINAL."
+ },
+
+ "graded": [
+  {"game": "BAL@MIN", "card_version": "v1", "v13_home_wp": 0.493, "final": "5-9", "home_won": 1, "brier": 0.2570, "side_correct": false},
+  {"game": "BOS@TOR", "card_version": "v1", "v13_home_wp": 0.381, "final": "1-2", "home_won": 1, "brier": 0.3832, "side_correct": false},
+  {"game": "COL@AZ",  "card_version": "v1", "v13_home_wp": 0.538, "final": "0-9", "home_won": 1, "brier": 0.2134, "side_correct": true},
+  {"game": "HOU@SF",  "card_version": "v2", "v13_home_wp": 0.482, "final": "6-3", "home_won": 0, "brier": 0.2323, "side_correct": true},
+  {"game": "MIL@SD",  "card_version": "v2", "v13_home_wp": 0.454, "final": "2-3", "home_won": 1, "brier": 0.2981, "side_correct": false},
+  {"game": "NYM@ATL", "card_version": "v1", "v13_home_wp": 0.553, "final": "8-5", "home_won": 0, "brier": 0.3058, "side_correct": false},
+  {"game": "PHI@STL", "card_version": "v1", "v13_home_wp": 0.526, "final": "6-5", "home_won": 0, "brier": 0.2767, "side_correct": false}
+ ],
+
+ "summary": {
+  "n": 7,
+  "brier": 0.2809,
+  "side_accuracy": "2/7 = 28.6%",
+  "home_teams_won": "4/7",
+  "constant_0.500_brier": 0.2500,
+  "constant_home_base_rate_brier": 0.2449,
+  "verdict_on_the_night": "V13 scored WORSE than a coin flip and worse than the home base rate on these seven games."
+ },
+
+ "what_seven_games_can_and_cannot_establish": {
+  "binomial": "P(<= 2 correct of 7 | fair coin) = 0.227; two-sided 0.453. Going 2-for-7 is an ordinary coin-flip outcome, not an anomaly.",
+  "paired_brier_vs_coin": "mean difference -0.0309, sd 0.0561, se 0.0212, t = -1.46, approximate 95% CI [-0.0829, +0.0210]",
+  "conclusion": "The interval spans zero by a wide margin. Seven games cannot distinguish V13 from a coin in EITHER direction. This result is not evidence the model is broken, exactly as a 5-for-7 night would not have been evidence it works. Nothing here changes the gate, the freeze, or V14's status.",
+  "guard": "This record must not be cited in any promotion, demotion, retune or feature decision. If it is ever quoted, it must be quoted with this section attached."
+ },
+
+ "totals_note": {
+  "observed": "proj_total vs actual on the 7 FINAL games: BAL@MIN 8.4/14 (+5.6), BOS@TOR 8.2/3 (-5.2), COL@AZ 9.0/9 (0.0), HOU@SF 8.0/9 (+1.0), MIL@SD 6.9/5 (-1.9), NYM@ATL 8.3/13 (+4.7), PHI@STL 8.4/11 (+2.6)",
+  "mean_signed_error": 0.97,
+  "mean_absolute_error": 3.00,
+  "interpretation": "n=7, and the two largest errors point in opposite directions. No conclusion is drawn."
+ },
+
+ "note_on_the_flagged_tb_ath_total": "The 14.6 projected total for TB@ATH was flagged pre-game as a park-factor artifact — Sutter Health Park sits at 1.449, the highest of all 30 parks and 30% above Coors, in a table fit from in-season data. The score at capture was 10-6, total 16. That does NOT vindicate the projection. A park factor that is 30% above the next-highest park being directionally right in one game is noise, the game is not graded here because it carries no FINAL marker, and the underlying estimate is still small-sample-inflated. The flag stands.",
+
+ "governance": {
+  "gate": "0/100 NO_PROMOTE — unchanged by this grading",
+  "ledger": "$0, paper, execution UNAUTHORIZED — no wager existed on any of these games",
+  "v13": "remains FROZEN as of 2026-08-10; this grading does not reopen it",
+  "cohort": "all rows are DIAGNOSTIC_PROSPECTIVE; none is promotion_eligible"
+ }
+}

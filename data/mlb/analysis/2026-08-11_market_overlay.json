@@ -1,0 +1,47 @@
+{
+ "record_id": "MARKET-OVERLAY-2026-08-11",
+ "built_utc": "2026-08-11T20:13:24Z",
+ "separation": "Question 1 (who should win) answered market-blind in cards/2026-08-11_card.json, registered pre-board. Question 2 (is any wager attractive) answered here, against the frozen owner board. The card was NOT rebuilt after prices arrived.",
+ "price_caveat": "Board holds are 1.63-1.87 pct \u2014 the 8/10 Best-Odds composite structure. Per the 2026-08-03 ruling there is NO valid market-implied probability benchmark from these pairs; EV below is computed at quoted best prices only.",
+ "screen_result": {
+  "positive_ev_sides_at_quoted_prices": 14,
+  "reading": "14 of 15 games showing a positive-EV side is not opportunity \u2014 it is the compression artifact measuring itself. A model squeezed toward .500 manufactures value on nearly every dog and, against low-hold prices, on many favourites too. The screen's job here is to reject its own output.",
+  "worst_artifact": "KC@LAD: EV +0.72 on KC at +249 rides V13 seeing 49 pct for a lineup facing Snell, of whom V13 has one logged start (CAP). That number is ignorance priced as an edge.",
+  "survivors_of_mechanical_flags": [
+   {
+    "side": "ATL ML -124",
+    "v13": 0.58,
+    "edge_vs_implied_pp": 2.6,
+    "note": "borderline compression (|p-0.5| = 0.08 exactly); edge inside any honest uncertainty buffer"
+   },
+   {
+    "side": "MIL ML -122",
+    "v13": 0.6,
+    "edge_vs_implied_pp": 5.1,
+    "note": "the card's one real lean; still fails tests 1, 2 and 5 below"
+   }
+  ]
+ },
+ "five_part_test": {
+  "1_confirmed_lineup_and_starter": "FAIL \u2014 probables only, no posted lineups in any capture",
+  "2_exact_executable_single_book_price": "FAIL \u2014 composite low-hold board; no single-book two-sided quote",
+  "3_edge_survives_vig_plus_uncertainty": "FAIL \u2014 best surviving edge 5.1pp on MIL; V13 is DIAGNOSTIC with last-10 Brier 0.2554, no calibrated uncertainty for single-game edge use",
+  "4_no_compression_flag": "PASS only for MIL@SD and (exactly at threshold) NYM@ATL",
+  "5_independent_support_or_validated_cohort": "FAIL \u2014 gate 0/100, V13 frozen, no second model"
+ },
+ "verdict": "ZERO WAGERS. Gate 0/100 NO_PROMOTE, ledger $0, execution UNAUTHORIZED \u2014 and nothing tonight comes close on the merits either.",
+ "showcase_per_standing_instruction": {
+  "model_leans_vs_board_favourite": [
+   "MIL@SD: V13 MIL 60 pct vs board MIL -122 \u2014 same side, model stronger",
+   "NYM@ATL: V13 ATL 58 pct vs board ATL -124 \u2014 same side",
+   "TB@ATH: V13 TB 58 pct vs board TB -174 \u2014 same side, model weaker than price",
+   "CIN@CWS: V13 CWS 56 pct vs board CWS -153 \u2014 same side",
+   "SEA@NYY: V13 NYY 55 pct vs board NYY -129 \u2014 same side",
+   "PIT@MIA: V13 PIT 54 pct vs board PIT -110 \u2014 same side",
+   "disagreements (all inside compression zone, none trusted): COL@AZ model 51/49 away vs AZ -170; BOS@TOR model 50/50 vs TOR -136; CHC@WSH model 50/50 (TBD-inflated) vs CHC -163; BAL@MIN model 52 away vs MIN -109"
+  ],
+  "totals_note": "TB@ATH board total 10.5 is the highest on the slate \u2014 the market agrees Sutter Health Park plays extreme, but V13's 12.2 still overshoots the market by 1.7 runs on the inflated 1.449 park factor. CHC@WSH 11.1 vs 9.0 is TBD-inflation (Irvin resolved post-registration). Neither is a totals opinion; RL/TOTAL markets are DATA_CAPTURE only."
+ },
+ "starter_resolution_post_registration": "WSH starter resolved to (R) Jake Irvin after the 15 forecasts were registered. Per R3 the card and forecasts stay as frozen; the CHC@WSH row's league-average home-SP assumption is now a known input error, recorded here rather than patched.",
+ "wnba": "3-game board frozen at data/wnba/odds/2026-08-11_board.json \u2014 spread/total only, no priced pairs, so no market-implied probabilities. PHX@LAS flags a SIGN FLIP vs yesterday's capture (Caesars PHX -1 road fav -> LAS -2.5): the market moved ~3.5 points AWAY from the external v0.4 shadow card's PHX side. No WNBA model exists here; recorded as market observation only."
+}

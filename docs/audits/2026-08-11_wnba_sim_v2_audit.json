@@ -1,0 +1,169 @@
+{
+ "record_id": "AUDIT-WNBA-SIM-V2-2026-08-11",
+ "built_utc": "2026-08-11T00:20:00Z",
+ "auditor_head": "39e8e92a1953cd412a61b3407a4cc0bfb8fc26ec",
+ "supersedes": null,
+ "follows": "docs/audits/2026-08-10_wnba_nfl_simulation_contract_audit.json (the v1 audit whose nine findings v2 answers)",
+ "scope_limit": "CONTRACTS ONLY. Commits 33d7f287, fc42fb7c and f3cf5b1d are not reachable from this repository; harness/wnba_nfl_simulation.py does not exist here. The implementation, the reported healthchecks, the NFL run artifacts, and the bundle digests were NOT inspected. Only the five supplied documents were audited.",
+ "documents_audited": [
+  "SIMULATION_V1_AUDIT_CORRECTION.json",
+  "WNBA_SIMULATION_V2_CONTRACT.json",
+  "WNBA_SIMULATION_V2_GUIDE.md",
+  "WNBA_NFL_SIMULATION_FRAME_V2.json",
+  "WNBA_NFL_MODEL_SIMULATION_FRAME_V2.md"
+ ],
+ "method": "Every finding was reproduced numerically, then handed to an independent adversarial verifier instructed to refute it with its own from-scratch reimplementation of the contract text. 29 agents, 6 probes, 23 verifications. 17 findings survived; 6 did not and are recorded as withdrawn.",
+
+ "v1_findings_correctly_closed": [
+  "F1 NFL: withdrawn outright rather than patched, with re-entry requiring a separate simulation_version and explicit -3/-3.5 and -7/-7.5 falsification. Withdrawing was the strongest available disposition and it was taken.",
+  "F4 negative scores: censor-at-zero replaces rejection, with the censored fraction reported and a 0.5% block. Correct fix. Measured censoring at WNBA scale is 0.0000%, so the rule is inert but harmless.",
+  "F5 uncertainty: MC numerical error and a 5000-rep game-date block-bootstrap interval are now separate fields, with the MC term explicitly barred from being presented as the probability interval. Correct, and the block unit (game date) matches this repository's own practice.",
+  "F6 provenance: WNBA_OFFICIAL now required among the agreeing pair, plus ECHO_REVIEW_REQUIRED exclusion for consecutive-day identical matchup/score pairs. This closes the 8/8 echo mechanism properly.",
+  "F8 reproducibility: residual_pool_sha256 and purpose are bound into every seed. Closed.",
+  "Data horizon: v2's 1000-game floor (500 training + 500 OOF = 3.50 current-format seasons) is arithmetically correct and is genuinely STRONGER than the v1 audit's approximate ~3 seasons, because the 500-game training floor per row is the binding constraint. v2 is right and the v1 audit was loose."
+ ],
+
+ "findings": [
+  {
+   "id": "V2-B1",
+   "severity": "BLOCKING",
+   "title": "The fold-regime gate blocks a perfectly clean bank 83% of the time at the contract's own minimum configuration",
+   "claim": "maximum_residual_sd_ratio_across_folds = 1.35 is not a heterogeneity threshold at 50-game folds. It sits essentially ON the median of the no-drift null distribution, so at the contract's two stated floors (minimum_games 500, minimum_games_per_fold 50, i.e. 10 folds x 50) the gate is worse than a coin flip on data with no heterogeneity at all.",
+   "measured": {
+    "null_median_of_max_over_min_fold_sd_at_10x50": "1.360 (frozen threshold 1.35 sits BELOW it)",
+    "false_block_sd_ratio_arm_only": "78.3% - 78.9%",
+    "false_block_combined_gate": "83.3% - 83.8%",
+    "by_layout": "4 folds x125: 1.1% | 5x100: 5.3% | 6x84: 15.2% | 7x72: 31.7% | 8x63: 50.8% | 10x50: 83.4% | 12x50: 90.4% | 14x50: 94.3%",
+    "mechanism": "sd(log s_hat) at n=50 is 0.102 (theory 1/sqrt(2(n-1)) = 0.101); E[range of 10 std normals] = 3.078 gives an expected null ratio of 1.365 — the threshold is one third of a standard error below the null MEAN",
+    "evidence_carried": "blocking a clean pool 83.4% of the time against 100% on a 1.4x drift alternative is a likelihood ratio of 1.20, about 0.26 bits"
+   },
+   "note_the_auditor_owns": "The v1-audit-style single-series estimate of this was 60.2%. That was UNDERSTATED: the gate applies to BOTH the margin and total series, so four sub-tests must all pass. The correct figure is 83%.",
+   "fix": "Freeze minimum_games_per_fold: 100 and maximum_folds: 5 — 5 x 100 is exactly the existing 500-row floor, and measures 5.3% false-block with 93.5%/98.9% power. Or make the threshold a function of (fold count, fold size) rather than a scalar, or use a Levene/Bartlett statistic at a stated alpha. A scalar cannot be correct across layouts."
+  },
+  {
+   "id": "V2-B2",
+   "severity": "BLOCKING",
+   "title": "No minimum fold count: declaring the pool a single fold passes the fold gate on arbitrarily heterogeneous data",
+   "claim": "residual_adapter.fold_gate freezes minimum_games_per_fold = 50 but specifies no minimum number of folds and no fold-construction rule. floor(500/50) = 10 is the MAXIMUM fold count at the pool floor; the minimum is unspecified. With one fold the sd ratio is max/min of a single number = 1.000, and the fold mean equals the pooled mean, so both arms are satisfied by construction.",
+   "measured": {
+    "deliberately_filthy_population": "first 250 rows N(-5, 9) margin, last 250 N(+5, 18); totals N(-6,12) then N(+6,24)",
+    "P_block_with_1_fold": "0.0000",
+    "P_block_with_2_folds_on_IDENTICAL_data": "1.0000",
+    "verifier_refinement": "at 1 fold only the sd-ratio arm is fully vacuous; the fold-mean arm degenerates into a pooled-bias test and still fires at large pooled bias (0.0010 at |mean|/sd = 0.23, 0.927 at 0.39). The scale arm is unconditionally void."
+   },
+   "consequence": "Read together with V2-B1 this is the decisive defect: at the pool floor the gate blocks 83% of CLEAN banks, and declared as one fold it blocks 0% of FILTHY ones. The verdict is set by an unspecified free parameter the operator chooses after seeing the bank. That is not a pre-registered gate.",
+   "fix": "Add minimum_folds and a frozen fold-construction rule tied to the walk-forward schedule (one fold per season, or per fixed 100-game increment) to residual_adapter.fold_gate."
+  },
+  {
+   "id": "V2-B3",
+   "severity": "BLOCKING",
+   "title": "The v2 tie rule is biased, and the bias is a mechanical compression toward the bank's average game",
+   "claim": "rounded_tie_rule resolves toward the sampled OOF row's observed winner sign. But a rounded tie requires margin_mean + margin_residual_i ~ 0, i.e. margin_residual_i ~ -margin_mean; and the contract's own identity gives actual_home_margin_i = oof_prediction_i + margin_residual_i. Conditioning on a tie therefore forces actual_home_margin_i ~ oof_prediction_i - margin_mean. The tiebreak is not merely correlated with the event that selected it — under a coherent integer box-score bank it is EXACTLY determined by it: sign(actual_margin) == sign(oof_pred - margin_mean) in 100.00% of tie rows.",
+   "measured": {
+    "tie_rate": "2.0% - 3.4%",
+    "v2_home_share_among_ties": "sweeps 98.3% at margin_mean -8 down to 11.9% at +8, against the correct ~50%",
+    "home_win_prob_shift_by_margin_mean": "-8: +1.35pp | -6: +1.35pp | -3: +1.25pp | 0: +0.67pp | +3: -0.15pp | +6: -0.81pp | +8: -1.06pp",
+    "peak": "+1.42pp at margin_mean -5.5 and -1.08pp at +9.0",
+    "zero_crossing": "exactly at the bank's mean OOF prediction (+2.5) — confirming the mechanism analytically",
+    "direction": "always AGAINST the model's own lean, shrinking every game toward the probability of the bank's average game",
+    "does_not_vanish": "the shift is +1.407pp at the N=500 floor and +1.397pp at N=1000 — it survives N -> infinity while the finite-bank interval shrinks",
+    "vs_mc_noise": "4.1x - 9.5x the 100k-draw MC SE (0.14-0.16pp)",
+    "price_terms": "fair home moneyline +219.8 -> +206.0 at margin_mean -6; -291.2 -> -275.8 at +8, about 14-15 cents",
+    "divergence_budget": "consumes up to 47% of the frozen 3.0pp divergence gate on its own"
+   },
+   "scope_limit_the_verifier_established": "This moves home-win probability and spread settlement ONLY at |line| < 1 — measured shift is exactly +0.000pp at -1.5, -3.5, -7.5, because breaking a lattice tie moves the margin only from 0 to +/-1. Totals settlement is unaffected. The claim must not be stated more broadly than that.",
+   "why_this_matters_here": "This is underdog compression, arriving by a new route. The owner already identified compression toward .500 as V13's characteristic pathology and rejected wagers on it. A tie rule that mechanically shrinks every game toward the bank's average game manufactures the same artifact inside the WNBA simulator.",
+   "fix": "Use sign(M_drawn) = sign(margin_mean + margin_residual_i) — the continuous margin already inside the draw. Verified to reproduce P(M > 0) to 0.0e+00 absolute error at every grid point, because rounding is monotone and can only create a tie, never flip a winner. Requires a new simulation_version under the contract's own change_control clause.",
+   "guide_justification_is_wrong": "The guide defends the rule as 'avoiding direct-model probability as the tiebreaker.' sign(M_drawn) is not the direct-model probability — it is the sign of the simulated continuous margin. The stated rationale does not apply to the unbiased alternative it rejects."
+  },
+  {
+   "id": "V2-H1",
+   "severity": "HIGH",
+   "title": "The 3.0pp divergence gate blocks under exact population agreement, and its own bootstrap interval is wider than the gate",
+   "claim": "The gate compares two quantities and blocks on a 3.0pp difference, but the simulated side carries irreducible finite-bank noise that the gate does not account for. Worse, the contract elsewhere mandates reporting a 95% interval for that same quantity which is WIDER than the threshold it gates on.",
+   "measured": {
+    "false_block_under_EXACT_population_agreement": "17.7% at pick'em, 17.4% at margin_mean +3, 14.8% at +6, 7.2% at +12; slate-weighted 14.4% over a 286-game season",
+    "matches_analytic": "binomial tail 2*sf(0.03 / sqrt(p(1-p)/500)) within 0.3pp at every point — pure finite-bank noise",
+    "worsens_with_same_date_correlation": "rho 0.15 -> 19.2%, rho 0.30 -> 20.9%",
+    "contract_internal_contradiction": "the contract's own 5000-rep game-date block-bootstrap 95% half-width is 0.0438 at pick'em versus the 0.03 gate — 1.10x to 1.46x WIDER, for all p in (0.136, 0.865)",
+    "with_estimation_error": "a perfectly well-specified logistic/ridge pair trained at the contract's own 1000-game horizon blocks 38.7% of games; 26.5% at n_train 2000; 20.6% at n_train 5000 — the 500-row bank floor alone caps how low it can go",
+    "decomposition_at_n_train_1000": "logistic estimation 42.3% | ridge estimation 29.8% | bank noise 14.7% | link misspecification 0.000%",
+    "slate_correlation": "one bank serves every game, so failures are not independent — 34% of banks block zero games while 12% block more than half the season and 1.9% block over 90%",
+    "bank_size_for_a_5_percent_bank_only_false_block": "1,067 OOF rows = 3.7 current-format seasons of OOF alone, or 5.5 total seasons including the training floor"
+   },
+   "important_qualification": "The gate's CONCEPT is sound. At the link floor (infinite training, 1e6-row bank) median |divergence| is 0.0009 and P(>0.03) is 0.000%. Pre-registering a threshold before seeing data is correct practice and is not being faulted. What is being quantified is the consequence: at the contract's own frozen data horizon this gate withholds settlement output on a large fraction of games for reasons that have nothing to do with model inconsistency.",
+   "fix": "Gate on a quantity that accounts for its own sampling error — e.g. require the finite-bank bootstrap interval to exclude a 3.0pp divergence, rather than comparing point estimates. Or scale the threshold to bank size. Either requires a new simulation_version."
+  },
+  {
+   "id": "V2-M1",
+   "severity": "MEDIUM",
+   "title": "The Monte Carlo layer estimates a number the contract already has exactly",
+   "claim": "Enumerate the randomness in one game: a draw selects a bank row; censoring, lattice projection and tie resolution are all deterministic given that row. Row selection is the ONLY stochastic element, so every reported quantity is an exact finite sum over the bank rows.",
+   "measured": {
+    "determinism_proof": "the full v2 pipeline over 200,000 sampled rows matched a 500-entry lookup table exactly on both H and A (200,000/200,000); the 200,000 draws produced 403 distinct score pairs, identical to the 403 distinct images of the 500 rows",
+    "exact_vs_100k_MC_at_margin_mean_3": "home-win 0.612000 vs 0.611420 | push@-3.0 0.032000 (= 16/500) vs 0.032080 | over@163 0.526000 vs 0.524630",
+    "mc_error": "unbiased, sd 0.156pp, max |error| 0.609pp over 2000 runs",
+    "cost": "enumeration ~0.11 ms versus ~10.8 ms for 100k draws, about 100x"
+   },
+   "consequence": "default_draws = 100000 and mc_numerical_standard_error are vestigial: the correct value of the MC standard error is identically zero, achievable at lower cost. The contract already specifies an 'exact all-bank-row' computation for its divergence gate, which demonstrates the authors know enumeration is available.",
+   "severity_note": "MEDIUM, not blocking. The MC error is small against the 2.2pp finite-bank interval. This is a gratuitous error, not a mispricing risk.",
+   "fix": "Enumerate. Keep sampling only where it is genuinely needed, and bootstrap the exact enumerated statistic rather than nesting Monte Carlo inside the bootstrap."
+  },
+  {
+   "id": "V2-M2",
+   "severity": "MEDIUM",
+   "title": "The tie rule contradicts the contract's own 'minimum-distance lattice move' language",
+   "claim": "The nearest point of Z^2 under Euclidean distance IS coordinatewise rounding — verified by brute-force neighbourhood search on 651,001 points with 0 disagreements. So 'JOINT_NONNEGATIVE_INTEGER_PAIR' changes nothing versus v1's independent rounding except where a constraint binds. Where one does bind — the tie — the minimum-distance move agrees with sign(continuous M) on 400,000/400,000 draws. v2's tie rule therefore deliberately departs from minimum distance while the contract describes it as a minimum-distance move.",
+   "withdrawn_stronger_claim": "An earlier form of this finding asserted the joint projection was a pure no-op. That was REFUTED: the nonnegativity constraint and the tie rule do change outcomes. The projection ARITHMETIC is unchanged (jitter remains 0.409 margin / 0.408 total, exactly v1's figure); it is the tie handling that differs, and it differs in the wrong direction.",
+   "fix": "Either honour minimum distance — which is sign(M_drawn), the V2-B3 fix — or change the contract language, since the two currently contradict."
+  },
+  {
+   "id": "V2-L1",
+   "severity": "LOW",
+   "title": "The 286-games-per-season constant does not survive a backfill into pre-expansion seasons",
+   "claim": "games_per_current_format_season is a single-point constant, but 'four completed seasons' is asserted against a 1000-game floor that only holds at the current format.",
+   "measured": "A four-season backfill mixing one current-format season with three prior-format seasons (286 + 240 + 240 + 216) totals 982 games — 18 short of the frozen 1000 floor (1.8%), and 482 OOF rows against a 500 floor. Five seasons are required under that mix. Conversely at a 15-team field, four seasons overshoots by half a season.",
+   "severity_correction": "the verifier downgraded this from HIGH to LOW: it fails CLOSED (a pool-size block), it does not misprice any emitted number.",
+   "fix": "Express the horizon in GAMES, which is already the frozen unit, and treat the season count as illustrative rather than operational."
+  }
+ ],
+
+ "findings_withdrawn_after_adversarial_verification": [
+  "That the tie bias can only ADD to divergence — refuted; the sign depends on margin_mean relative to the bank mean and it can offset.",
+  "That the joint lattice projection is a provable no-op — refuted; the algebra is right but nonnegativity and the tie rule do bind.",
+  "That v2 raises the projection RMS it introduces as a diagnostic — refuted.",
+  "That 100,000 draws is simultaneously wasteful and insufficient — refuted; the enumeration point stands (V2-M1) but the 'insufficient' half does not.",
+  "That the published probability differs from the gated probability — refuted.",
+  "That the NFL re-entry criteria carry zero numeric tolerance — refuted on its load-bearing claims. A true narrow kernel survives: requirement 4 read literally and in isolation is satisfied by any integer-lattice model, since push(-3) is nonzero and push(-3.5) is zero for anything on the integer lattice. The requirement needs to compare simulated push mass to HELD-OUT mass, not merely to zero."
+ ],
+
+ "on_the_nfl_v0_2_report": {
+  "reported": "2,895 completed games, 1,865 walk-forward evaluations, Brier 0.2298 vs 0.2497 expanding base rate, NO_PROMOTE",
+  "game_count_reconciles": "2015-2025 scheduled regular-season games = 2,896 (256/season through 2020, 272 after) against 2,895 reported, delta 1. 2019-2025 = 1,872 against 1,865 evaluations, delta 7. The guide's '2019-2025 walk-forward' and the run path's '2015_2025' are the EVALUATION WINDOW and the DATA RANGE respectively — consistent, not contradictory. No discrepancy to report.",
+  "brier_gap_plausibility": "the 0.0199 gap over n=1865 corresponds to t between 2.6 and 6.6 across a plausible range of paired per-game standard deviations (0.10-0.25) after a 1.3x week-block inflation. It very likely survives. But likely-survives is not demonstrated.",
+  "what_the_pre_registered_spec_requires_and_the_report_does_not_show": [
+   "week-block bootstrap 95% CI excluding zero after Holm — not reported",
+   "calibration slope within [0.85, 1.15] and intercept within [-0.15, 0.15] — not reported",
+   "ROC-AUC above baseline on the same folds — not reported",
+   "per-block ablations for every retained feature block — not reported",
+   "a look-ahead audit on a random sample of frozen feature rows — not reported"
+  ],
+  "assessment": "NO_PROMOTE is the correct status and is consistent with what was shown. But 'built and validated' overstates it: one Brier comparison against a base rate is not the pre-registered criterion set in docs/experiments/NFL_REGULAR_SEASON_TRACK.json. Three of the five promotion criteria have no reported number at all. The correct description is BUILT and RETROSPECTIVELY SCORED."
+ },
+
+ "on_the_wnba_acquisition_request": {
+  "request": "an explicit authorization phrase to install/use a GitHub connector and download sportsdataverse/wehoop-wnba-data and sportsdataverse/wehoop-wnba-stats-data (2017-2025 Parquet)",
+  "authority": "OWNER'S TO GIVE. Not given by this record and not assumed here.",
+  "source_pairing_is_well_chosen": "wehoop-wnba-data is ESPN-derived and wehoop-wnba-stats-data is stats.wnba.com-derived, so the pair can satisfy v2's own F6 rule that WNBA_OFFICIAL appear among the agreeing pair. A single-repo import could not.",
+  "residual_independence_caveat": "both arrive through the same sportsdataverse transport. The UPSTREAMS are independent; the TRANSPORT is not. A schema-mapping or team-ID join defect would hit both identically and agreement would not detect it. Bind the upstream digest, or spot-check a sample of finals directly against wnba.com before granting FINAL status.",
+  "sequencing_recommendation": "Acquisition does not unblock anything while V2-B1, V2-B2 and V2-B3 stand. With the fold gate as frozen, a clean 500-row bank is blocked 83% of the time at the pool floor and a filthy one passes at 0% if declared as a single fold; and the tie rule injects up to 1.4pp of compression into every simulated probability. Fix the three, cut a new simulation_version, then acquire. Data cannot resolve a defect in the gate that judges it.",
+  "capability_note": "This workspace could add both public repositories directly. It has not, and will not without the owner's word."
+ },
+
+ "governance_status": {
+  "gate": "0/100 NO_PROMOTE — unchanged",
+  "ledger": "$0, paper, execution UNAUTHORIZED — unchanged",
+  "firewall": "document review only. No code imported, no model identity registered, no forecast emitted, no data acquired.",
+  "integration_position": "Do not merge and do not run. Three BLOCKING findings stand, all confirmed under independent adversarial re-derivation. Each requires a new simulation_version under the contract's own change_control clause."
+ }
+}

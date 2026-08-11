@@ -1,0 +1,440 @@
+{
+ "record_id": "WNBA-SOURCE-STAGING-MANIFEST-2026-08-11",
+ "staged_utc": "2026-08-11T01:30:00Z",
+ "authorization": "owner, explicit, 2026-08-11: 'Yes\u2014pull both repositories now'",
+ "staging_rule": "BYTE-EXACT. No normalization, parsing, rewriting or schema change was applied to any staged file. Files are copies of the upstream bytes.",
+ "years_requested": [
+  "2017",
+  "2018",
+  "2019",
+  "2020",
+  "2021",
+  "2022",
+  "2023",
+  "2024",
+  "2025"
+ ],
+ "families": {
+  "ESPN": {
+   "repository": "sportsdataverse/wehoop-wnba-data",
+   "resolved_commit": "83dab862e7a8d5c9e8569b0d97a9b82728a395b3",
+   "upstream_family": "ESPN (espn.com WNBA endpoints), mirrored by sportsdataverse",
+   "transport": "github.com/sportsdataverse (mirror). UPSTREAM independent of the other family; TRANSPORT shared.",
+   "clone": "git clone --depth 1 (shallow); no Git LFS in use (.gitattributes carries 0 lfs entries)",
+   "files": [
+    {
+     "role": "results_long",
+     "season": "2017",
+     "relative_path": "wnba/schedules/parquet/wnba_schedule_2017.parquet",
+     "staged_path": "data/wnba/source/staging/ESPN/wnba/schedules/parquet/wnba_schedule_2017.parquet",
+     "bytes": 56405,
+     "sha256": "1c713a31c171f697535b36fedc2346facd7e0fa2a41b8c829322e41aaae6ec40"
+    },
+    {
+     "role": "results_long",
+     "season": "2018",
+     "relative_path": "wnba/schedules/parquet/wnba_schedule_2018.parquet",
+     "staged_path": "data/wnba/source/staging/ESPN/wnba/schedules/parquet/wnba_schedule_2018.parquet",
+     "bytes": 56495,
+     "sha256": "5682159a05cd0bd1721733fbc671db5ad21669b9e0590c33bd0b7ab2391fd60c"
+    },
+    {
+     "role": "results_long",
+     "season": "2019",
+     "relative_path": "wnba/schedules/parquet/wnba_schedule_2019.parquet",
+     "staged_path": "data/wnba/source/staging/ESPN/wnba/schedules/parquet/wnba_schedule_2019.parquet",
+     "bytes": 56345,
+     "sha256": "8c7ad494fcb94b590f9ddcb630a1a2f25f7e6b1d83e0579c9f91a4c28ff9b42e"
+    },
+    {
+     "role": "results_long",
+     "season": "2020",
+     "relative_path": "wnba/schedules/parquet/wnba_schedule_2020.parquet",
+     "staged_path": "data/wnba/source/staging/ESPN/wnba/schedules/parquet/wnba_schedule_2020.parquet",
+     "bytes": 48930,
+     "sha256": "b48472b819ffb308b6fd6ad3232ffb5ab7dc69567284ee67c9896d8ee8a34a52"
+    },
+    {
+     "role": "results_long",
+     "season": "2021",
+     "relative_path": "wnba/schedules/parquet/wnba_schedule_2021.parquet",
+     "staged_path": "data/wnba/source/staging/ESPN/wnba/schedules/parquet/wnba_schedule_2021.parquet",
+     "bytes": 55612,
+     "sha256": "e252b0fb9ec09a3636e02d8a2557387ae88192cf4186a9799d45d36dc88c5491"
+    },
+    {
+     "role": "results_long",
+     "season": "2022",
+     "relative_path": "wnba/schedules/parquet/wnba_schedule_2022.parquet",
+     "staged_path": "data/wnba/source/staging/ESPN/wnba/schedules/parquet/wnba_schedule_2022.parquet",
+     "bytes": 58018,
+     "sha256": "75d80f3863249f52d78a6a17cd64db0a41220c95123713f79e2be26ce8a23b5f"
+    },
+    {
+     "role": "results_long",
+     "season": "2023",
+     "relative_path": "wnba/schedules/parquet/wnba_schedule_2023.parquet",
+     "staged_path": "data/wnba/source/staging/ESPN/wnba/schedules/parquet/wnba_schedule_2023.parquet",
+     "bytes": 85069,
+     "sha256": "733e13fd1241d35e804c310b5275178fb9104b2cd1e5aa13ad8443733696b056"
+    },
+    {
+     "role": "results_long",
+     "season": "2024",
+     "relative_path": "wnba/schedules/parquet/wnba_schedule_2024.parquet",
+     "staged_path": "data/wnba/source/staging/ESPN/wnba/schedules/parquet/wnba_schedule_2024.parquet",
+     "bytes": 84577,
+     "sha256": "5d20832586db38d0b5f6ebb18f1a3c7a5b639c83f52bfd049a6838eab01df1ae"
+    },
+    {
+     "role": "results_long",
+     "season": "2025",
+     "relative_path": "wnba/schedules/parquet/wnba_schedule_2025.parquet",
+     "staged_path": "data/wnba/source/staging/ESPN/wnba/schedules/parquet/wnba_schedule_2025.parquet",
+     "bytes": 98609,
+     "sha256": "109d4b7d41cdfd39889e517483e3e847579352ffb3671783f56569d40097f7ce"
+    },
+    {
+     "role": "team_box",
+     "season": "2017",
+     "relative_path": "wnba/team_box/parquet/team_box_2017.parquet",
+     "staged_path": "data/wnba/source/staging/ESPN/wnba/team_box/parquet/team_box_2017.parquet",
+     "bytes": 40862,
+     "sha256": "5790df7751e99b005bf3eba07d6020e8b03bc6219dc01b6f47d3ec4e06c6ee3d"
+    },
+    {
+     "role": "team_box",
+     "season": "2018",
+     "relative_path": "wnba/team_box/parquet/team_box_2018.parquet",
+     "staged_path": "data/wnba/source/staging/ESPN/wnba/team_box/parquet/team_box_2018.parquet",
+     "bytes": 41131,
+     "sha256": "677f5e14dddcaa8e289d03e2b2ee1fbbccee9105777a9d01319087a3d74bf65b"
+    },
+    {
+     "role": "team_box",
+     "season": "2019",
+     "relative_path": "wnba/team_box/parquet/team_box_2019.parquet",
+     "staged_path": "data/wnba/source/staging/ESPN/wnba/team_box/parquet/team_box_2019.parquet",
+     "bytes": 41102,
+     "sha256": "52890ad5e2c5a893f7493d6f23e69c01d62fe26e00b9f1b779d5e7f65fdaf849"
+    },
+    {
+     "role": "team_box",
+     "season": "2020",
+     "relative_path": "wnba/team_box/parquet/team_box_2020.parquet",
+     "staged_path": "data/wnba/source/staging/ESPN/wnba/team_box/parquet/team_box_2020.parquet",
+     "bytes": 35358,
+     "sha256": "e636f54194d2aa51533316bfe58a2b0393e80a486718bc3acc9ee27282dc4b53"
+    },
+    {
+     "role": "team_box",
+     "season": "2021",
+     "relative_path": "wnba/team_box/parquet/team_box_2021.parquet",
+     "staged_path": "data/wnba/source/staging/ESPN/wnba/team_box/parquet/team_box_2021.parquet",
+     "bytes": 40196,
+     "sha256": "02e574a18b06c883247bd67d0e4b29423f0b6a5cba04c8b1579bf12d7af28d8e"
+    },
+    {
+     "role": "team_box",
+     "season": "2022",
+     "relative_path": "wnba/team_box/parquet/team_box_2022.parquet",
+     "staged_path": "data/wnba/source/staging/ESPN/wnba/team_box/parquet/team_box_2022.parquet",
+     "bytes": 42711,
+     "sha256": "7919b2f7de526350476c868d1048162cc9b3bf6f9f059f41298e1d40450f871c"
+    },
+    {
+     "role": "team_box",
+     "season": "2023",
+     "relative_path": "wnba/team_box/parquet/team_box_2023.parquet",
+     "staged_path": "data/wnba/source/staging/ESPN/wnba/team_box/parquet/team_box_2023.parquet",
+     "bytes": 46373,
+     "sha256": "b809463e42effd99a86f8e73af460e42ac2484b1759a3713e2081b6eb90d7d04"
+    },
+    {
+     "role": "team_box",
+     "season": "2024",
+     "relative_path": "wnba/team_box/parquet/team_box_2024.parquet",
+     "staged_path": "data/wnba/source/staging/ESPN/wnba/team_box/parquet/team_box_2024.parquet",
+     "bytes": 50234,
+     "sha256": "dc88ccea42bb293489e62a2fac1d9e56dc353e841b7b4b93620e07a31927cc47"
+    },
+    {
+     "role": "team_box",
+     "season": "2025",
+     "relative_path": "wnba/team_box/parquet/team_box_2025.parquet",
+     "staged_path": "data/wnba/source/staging/ESPN/wnba/team_box/parquet/team_box_2025.parquet",
+     "bytes": 54334,
+     "sha256": "1c19ec04ecc9958f06fae09234961e3f4b61cf8fb8d359d392561dfd74bbd2e1"
+    },
+    {
+     "role": "player_box",
+     "season": "2017",
+     "relative_path": "wnba/player_box/parquet/player_box_2017.parquet",
+     "staged_path": "data/wnba/source/staging/ESPN/wnba/player_box/parquet/player_box_2017.parquet",
+     "bytes": 103444,
+     "sha256": "61b6ed5e77cab59549fe355c3dd1cdc57fc6d39d53b218e740faa71092120a62"
+    },
+    {
+     "role": "player_box",
+     "season": "2018",
+     "relative_path": "wnba/player_box/parquet/player_box_2018.parquet",
+     "staged_path": "data/wnba/source/staging/ESPN/wnba/player_box/parquet/player_box_2018.parquet",
+     "bytes": 104655,
+     "sha256": "5a5d4777d030b10721f559932c73bf21702945cd75b7ec0ce46cd84c6b936e88"
+    },
+    {
+     "role": "player_box",
+     "season": "2019",
+     "relative_path": "wnba/player_box/parquet/player_box_2019.parquet",
+     "staged_path": "data/wnba/source/staging/ESPN/wnba/player_box/parquet/player_box_2019.parquet",
+     "bytes": 104467,
+     "sha256": "eb4ce445ef7c91315e0c085da3ae52e6548aeb685c81760843308808dc4b3dfa"
+    },
+    {
+     "role": "player_box",
+     "season": "2020",
+     "relative_path": "wnba/player_box/parquet/player_box_2020.parquet",
+     "staged_path": "data/wnba/source/staging/ESPN/wnba/player_box/parquet/player_box_2020.parquet",
+     "bytes": 80840,
+     "sha256": "419823f7f596d4657e3e51a3989289cc0b1ed52609ddef7a3b25eb94591ce5f6"
+    },
+    {
+     "role": "player_box",
+     "season": "2021",
+     "relative_path": "wnba/player_box/parquet/player_box_2021.parquet",
+     "staged_path": "data/wnba/source/staging/ESPN/wnba/player_box/parquet/player_box_2021.parquet",
+     "bytes": 100373,
+     "sha256": "198a6f55a7ddeb9f20101ebee912e9185e6861f9bfda733db6585a68c51cb016"
+    },
+    {
+     "role": "player_box",
+     "season": "2022",
+     "relative_path": "wnba/player_box/parquet/player_box_2022.parquet",
+     "staged_path": "data/wnba/source/staging/ESPN/wnba/player_box/parquet/player_box_2022.parquet",
+     "bytes": 110029,
+     "sha256": "957e7a504f06cd0007b744d0369a25f2f1afd8dedf57783c9d3f240bed76d9dd"
+    },
+    {
+     "role": "player_box",
+     "season": "2023",
+     "relative_path": "wnba/player_box/parquet/player_box_2023.parquet",
+     "staged_path": "data/wnba/source/staging/ESPN/wnba/player_box/parquet/player_box_2023.parquet",
+     "bytes": 116693,
+     "sha256": "ce79b78367e0d4aaf046157ad00f4c02973746ab412c8762e48d3fff7ba497bf"
+    },
+    {
+     "role": "player_box",
+     "season": "2024",
+     "relative_path": "wnba/player_box/parquet/player_box_2024.parquet",
+     "staged_path": "data/wnba/source/staging/ESPN/wnba/player_box/parquet/player_box_2024.parquet",
+     "bytes": 145496,
+     "sha256": "f242d762e9695f46a7f789cee34a334d547d0eee3180d8c133bceaa9892e8143"
+    },
+    {
+     "role": "player_box",
+     "season": "2025",
+     "relative_path": "wnba/player_box/parquet/player_box_2025.parquet",
+     "staged_path": "data/wnba/source/staging/ESPN/wnba/player_box/parquet/player_box_2025.parquet",
+     "bytes": 173203,
+     "sha256": "e50e3130a1f60e0063314f899d9d0d96a56868c785e557d96f3ab7c0fd5559ff"
+    }
+   ]
+  },
+  "WNBA_OFFICIAL": {
+   "repository": "sportsdataverse/wehoop-wnba-stats-data",
+   "resolved_commit": "030251653e2be74d80545d6a0cdbdcd7d39152e2",
+   "upstream_family": "stats.wnba.com (league official stats endpoints), mirrored by sportsdataverse",
+   "transport": "github.com/sportsdataverse (mirror). UPSTREAM independent of the other family; TRANSPORT shared.",
+   "clone": "git clone --depth 1 (shallow); no Git LFS in use (.gitattributes carries 0 lfs entries)",
+   "files": [
+    {
+     "role": "results_long",
+     "season": "2017",
+     "relative_path": "wnba_stats/schedules/parquet/wnba_stats_schedule_2017.parquet",
+     "staged_path": "data/wnba/source/staging/WNBA_OFFICIAL/wnba_stats/schedules/parquet/wnba_stats_schedule_2017.parquet",
+     "bytes": 109838,
+     "sha256": "dfd410133e56eacc9914cf684c3500aab3f717f06c94caab89dc78bfe0bf168a"
+    },
+    {
+     "role": "results_long",
+     "season": "2018",
+     "relative_path": "wnba_stats/schedules/parquet/wnba_stats_schedule_2018.parquet",
+     "staged_path": "data/wnba/source/staging/WNBA_OFFICIAL/wnba_stats/schedules/parquet/wnba_stats_schedule_2018.parquet",
+     "bytes": 111111,
+     "sha256": "7042ab700ce00b41cb65371e55b3d89a865636240bbd048ae8bb4ebdce3d6c5b"
+    },
+    {
+     "role": "results_long",
+     "season": "2019",
+     "relative_path": "wnba_stats/schedules/parquet/wnba_stats_schedule_2019.parquet",
+     "staged_path": "data/wnba/source/staging/WNBA_OFFICIAL/wnba_stats/schedules/parquet/wnba_stats_schedule_2019.parquet",
+     "bytes": 108783,
+     "sha256": "ab5467c099421f0bc26a3e0d8680dc508ce32b628a1761b263deb120a724b7cb"
+    },
+    {
+     "role": "results_long",
+     "season": "2020",
+     "relative_path": "wnba_stats/schedules/parquet/wnba_stats_schedule_2020.parquet",
+     "staged_path": "data/wnba/source/staging/WNBA_OFFICIAL/wnba_stats/schedules/parquet/wnba_stats_schedule_2020.parquet",
+     "bytes": 79072,
+     "sha256": "4312e6adf2bcca0292977c07d2b9a158ba602a40a80a60e49a23b2be118d14a9"
+    },
+    {
+     "role": "results_long",
+     "season": "2021",
+     "relative_path": "wnba_stats/schedules/parquet/wnba_stats_schedule_2021.parquet",
+     "staged_path": "data/wnba/source/staging/WNBA_OFFICIAL/wnba_stats/schedules/parquet/wnba_stats_schedule_2021.parquet",
+     "bytes": 101956,
+     "sha256": "48abbd853cdf9f9ee62ab8b02fcf6cf217f76d99b12c6aa5c4dd5079b617ead0"
+    },
+    {
+     "role": "results_long",
+     "season": "2022",
+     "relative_path": "wnba_stats/schedules/parquet/wnba_stats_schedule_2022.parquet",
+     "staged_path": "data/wnba/source/staging/WNBA_OFFICIAL/wnba_stats/schedules/parquet/wnba_stats_schedule_2022.parquet",
+     "bytes": 115729,
+     "sha256": "0413b54939becea837a850579b8f6d2526c566b6227e421d0c94ee449ab80785"
+    },
+    {
+     "role": "results_long",
+     "season": "2023",
+     "relative_path": "wnba_stats/schedules/parquet/wnba_stats_schedule_2023.parquet",
+     "staged_path": "data/wnba/source/staging/WNBA_OFFICIAL/wnba_stats/schedules/parquet/wnba_stats_schedule_2023.parquet",
+     "bytes": 124924,
+     "sha256": "dd514db311ee5b9c918f5952a8582e890ef53eca528663df2200a5158cb2f80f"
+    },
+    {
+     "role": "results_long",
+     "season": "2024",
+     "relative_path": "wnba_stats/schedules/parquet/wnba_stats_schedule_2024.parquet",
+     "staged_path": "data/wnba/source/staging/WNBA_OFFICIAL/wnba_stats/schedules/parquet/wnba_stats_schedule_2024.parquet",
+     "bytes": 125722,
+     "sha256": "d894b2545c4af750adcdbd9862c182c7f6f8d3eaa174555f6535be7982fbb237"
+    },
+    {
+     "role": "results_long",
+     "season": "2025",
+     "relative_path": "wnba_stats/schedules/parquet/wnba_stats_schedule_2025.parquet",
+     "staged_path": "data/wnba/source/staging/WNBA_OFFICIAL/wnba_stats/schedules/parquet/wnba_stats_schedule_2025.parquet",
+     "bytes": 146657,
+     "sha256": "16c3ff01a4ed64b82ece77d9f224f2b4228254e7f3d1929d2afc49d0f7279fb2"
+    }
+   ]
+  }
+ },
+ "absent": [
+  {
+   "family": "WNBA_OFFICIAL",
+   "role": "team_box",
+   "season": "2017",
+   "expected_relative_path": "wnba_stats/team_boxscores/parquet/team_boxscores_2017.parquet"
+  },
+  {
+   "family": "WNBA_OFFICIAL",
+   "role": "team_box",
+   "season": "2018",
+   "expected_relative_path": "wnba_stats/team_boxscores/parquet/team_boxscores_2018.parquet"
+  },
+  {
+   "family": "WNBA_OFFICIAL",
+   "role": "team_box",
+   "season": "2019",
+   "expected_relative_path": "wnba_stats/team_boxscores/parquet/team_boxscores_2019.parquet"
+  },
+  {
+   "family": "WNBA_OFFICIAL",
+   "role": "team_box",
+   "season": "2020",
+   "expected_relative_path": "wnba_stats/team_boxscores/parquet/team_boxscores_2020.parquet"
+  },
+  {
+   "family": "WNBA_OFFICIAL",
+   "role": "team_box",
+   "season": "2021",
+   "expected_relative_path": "wnba_stats/team_boxscores/parquet/team_boxscores_2021.parquet"
+  },
+  {
+   "family": "WNBA_OFFICIAL",
+   "role": "team_box",
+   "season": "2022",
+   "expected_relative_path": "wnba_stats/team_boxscores/parquet/team_boxscores_2022.parquet"
+  },
+  {
+   "family": "WNBA_OFFICIAL",
+   "role": "team_box",
+   "season": "2023",
+   "expected_relative_path": "wnba_stats/team_boxscores/parquet/team_boxscores_2023.parquet"
+  },
+  {
+   "family": "WNBA_OFFICIAL",
+   "role": "team_box",
+   "season": "2024",
+   "expected_relative_path": "wnba_stats/team_boxscores/parquet/team_boxscores_2024.parquet"
+  },
+  {
+   "family": "WNBA_OFFICIAL",
+   "role": "team_box",
+   "season": "2025",
+   "expected_relative_path": "wnba_stats/team_boxscores/parquet/team_boxscores_2025.parquet"
+  },
+  {
+   "family": "WNBA_OFFICIAL",
+   "role": "player_box",
+   "season": "2017",
+   "expected_relative_path": "wnba_stats/player_boxscores/parquet/player_boxscores_2017.parquet"
+  },
+  {
+   "family": "WNBA_OFFICIAL",
+   "role": "player_box",
+   "season": "2018",
+   "expected_relative_path": "wnba_stats/player_boxscores/parquet/player_boxscores_2018.parquet"
+  },
+  {
+   "family": "WNBA_OFFICIAL",
+   "role": "player_box",
+   "season": "2019",
+   "expected_relative_path": "wnba_stats/player_boxscores/parquet/player_boxscores_2019.parquet"
+  },
+  {
+   "family": "WNBA_OFFICIAL",
+   "role": "player_box",
+   "season": "2020",
+   "expected_relative_path": "wnba_stats/player_boxscores/parquet/player_boxscores_2020.parquet"
+  },
+  {
+   "family": "WNBA_OFFICIAL",
+   "role": "player_box",
+   "season": "2021",
+   "expected_relative_path": "wnba_stats/player_boxscores/parquet/player_boxscores_2021.parquet"
+  },
+  {
+   "family": "WNBA_OFFICIAL",
+   "role": "player_box",
+   "season": "2022",
+   "expected_relative_path": "wnba_stats/player_boxscores/parquet/player_boxscores_2022.parquet"
+  },
+  {
+   "family": "WNBA_OFFICIAL",
+   "role": "player_box",
+   "season": "2023",
+   "expected_relative_path": "wnba_stats/player_boxscores/parquet/player_boxscores_2023.parquet"
+  },
+  {
+   "family": "WNBA_OFFICIAL",
+   "role": "player_box",
+   "season": "2024",
+   "expected_relative_path": "wnba_stats/player_boxscores/parquet/player_boxscores_2024.parquet"
+  },
+  {
+   "family": "WNBA_OFFICIAL",
+   "role": "player_box",
+   "season": "2025",
+   "expected_relative_path": "wnba_stats/player_boxscores/parquet/player_boxscores_2025.parquet"
+  }
+ ],
+ "totals": {
+  "files_staged": 36,
+  "bytes_staged": 3055353,
+  "absent_expected_files": 18
+ }
+}

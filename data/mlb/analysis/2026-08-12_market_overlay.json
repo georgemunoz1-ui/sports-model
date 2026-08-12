@@ -1,0 +1,16 @@
+{
+ "record_id": "MARKET-OVERLAY-2026-08-12",
+ "built_utc": "2026-08-12T16:48:34Z",
+ "price_caveat": "holds 1.63-1.87 pct composite; no de-vig benchmark; EV at quoted prices only. BAL@MIN is quoted -101/-101-style BOTH NEGATIVE \u2014 a book-side anomaly worth noting.",
+ "v2_survivors_of_mechanical_flags": [
+  {
+   "game": "TB@ATH",
+   "side": "HOME",
+   "ev": 0.112,
+   "v13_home": 0.372
+  }
+ ],
+ "five_part_test": "FAILS on lineups (probables only), executable single-book price (composite board), and independent support (gate 0/100) \u2014 for every candidate",
+ "verdict": "ZERO WAGERS. Gate 0/100 NO_PROMOTE, ledger $0, execution UNAUTHORIZED.",
+ "coherence_note": "both 8/12 gate conflicts (Soriano LAA->TOR, Ray SF->SD) were confirmed REAL by the tier-1 board \u2014 the conservative TBD drop cost v1 two starter inputs and is the correct price of the rule; v2 registered pre-pitch with confirmed starters fixes it under the all-cohorts grading rule"
+}

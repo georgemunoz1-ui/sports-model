@@ -33,8 +33,16 @@ try:
     finals=[r for r in rows if r["status"]=="final"]
     check(f"results.csv rows={len(rows)} finals={len(finals)} (>=1505)", len(finals)>=1505)
     check("no duplicate game_ids", len(ids)==len(set(ids)))
-    bad=[r for r in finals if r["home_win"] not in ("0","1") or r["total"]=="" ]
-    check("all finals have home_win+total", len(bad)==0)
+    # home_win is mandatory on every final. total may be empty ONLY on an explicit WINNER-ONLY
+    # row: result_status PROVISIONAL with BOTH scores empty (winner proven by tier-1 standings
+    # arithmetic before any box supplies the score, as on 2026-08-11). A FINAL-status row or a
+    # row with any score present must still carry a total — partial scores stay a hard failure.
+    def _winner_only(r):
+        return (r.get("result_status")=="PROVISIONAL" and r.get("away_score","")==""
+                and r.get("home_score","")=="")
+    bad=[r for r in finals if r["home_win"] not in ("0","1")
+         or (r["total"]=="" and not _winner_only(r))]
+    check("all finals have home_win+total (or explicit winner-only PROVISIONAL)", len(bad)==0)
     last=max(r["date"] for r in finals)
     days_stale=(datetime.date.today()-datetime.date.fromisoformat(last)).days
     # Freshness is satisfied by PROVISIONAL rows too. Requiring FINAL here would recreate the exact

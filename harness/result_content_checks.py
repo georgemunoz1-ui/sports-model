@@ -107,10 +107,19 @@ def winner_name_mismatch(rows, evidence_dir="data/mlb/evidence"):
 
 
 def slate_completeness(rows, slate_dir="data/mlb/slates"):
-    """Every game on a frozen slate .psv must have a result row once that date has any results."""
+    """Every game on a frozen slate .psv must have a result row once that date has any results.
+
+    A WINNER-ONLY row (status final, home_win set, scores empty) COUNTS as a result here: the
+    winner-known/score-unknown state is real (tier-1 standings arithmetic can prove a winner a day
+    before any box supplies the score, as on 2026-08-11), and refusing to represent it would force
+    either invented scores (R1 violation) or a permanently red gate. Echo detection and ml_asof
+    label building still require full scores — _finals() is unchanged; only completeness accepts
+    the weaker row, and such a row must still be PROVISIONAL under the provenance audit."""
     have = {}
-    for r in _finals(rows):
-        have.setdefault(r["date"], set()).add((r["away"], r["home"]))
+    for r in rows:
+        if r.get("status") == "final" and (r.get("total") not in ("", None)
+                                           or r.get("home_win") not in ("", None)):
+            have.setdefault(r["date"], set()).add((r["away"], r["home"]))
     missing = []
     for p in sorted(glob.glob(os.path.join(slate_dir, "*_slate.psv"))):
         date = os.path.basename(p).split("_")[0]
@@ -166,6 +175,20 @@ def selftest():
     rows3[1]["date"] = "2026-08-08"; rows3[1]["home_score"] = "9"
     if dup_score_pairs(rows3):
         fails.append("different score wrongly flagged as echo")
+    # COMPLETENESS: a WINNER-ONLY row (home_win set, scores empty) satisfies completeness,
+    # but a game with NO row at all still fires. Uses a temp slate dir with a 2-game slate.
+    import tempfile
+    with tempfile.TemporaryDirectory() as td:
+        with open(os.path.join(td, "2026-08-11_slate.psv"), "w") as f:
+            f.write("X1|MIL|SD|20:10Z|A|B\nX2|KC|LAD|02:10Z|C|D\n")
+        wrows = [{"status": "final", "total": "", "away_score": "", "home_score": "",
+                  "date": "2026-08-11", "away": "MIL", "home": "SD", "home_win": "1",
+                  "source_tier": "1"}]
+        miss = slate_completeness(wrows, slate_dir=td)
+        if len(miss) != 1 or "KC@LAD" not in miss[0]:
+            fails.append(f"winner-only row handling wrong: expected only KC@LAD missing, got {miss}")
+        if _finals(wrows):
+            fails.append("winner-only row leaked into _finals() — echo/label logic must not see it")
     if fails:
         print("result_content_checks selftest: FAIL")
         for f in fails:

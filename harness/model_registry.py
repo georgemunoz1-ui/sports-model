@@ -131,8 +131,18 @@ REGISTRY = {
     "hist.card_2026_07_19":      {"role": "HISTORICAL_ARTIFACT", "source": "engine/card_2026_07_19.py",      "hfa": 1.03},
     "hist.card_2026_07_20":      {"role": "HISTORICAL_ARTIFACT", "source": "engine/card_2026_07_20.py",      "hfa": 1.005},
     "hist.park_compare":         {"role": "HISTORICAL_ARTIFACT", "source": "engine/park_compare.py",         "hfa": "parameter (2x2 factorial tool)"},
+    "wnba.rs.ff7_logit_ridge.v1_0.shadow": {
+        "role": "WNBA_SHADOW_DIAGNOSTIC",
+        "source": "harness/wnba_model_v1.py",
+        "hfa": None, "hfa_provenance": "logistic intercept (fitted, not a constant)",
+        "seed": None, "sims_per_game": None, "rng_policy": "deterministic (no simulation layer)",
+        "calibration_artifact": "data/wnba/model/2026-08-12_v1_walkforward.json",
+        "input_schema": "staged-parquet-v1 (official-plus-one reconciled team rows, 2017-2026)",
+        "note": "Preregistered 2026-08-12 (docs/experiments/2026-08-12_WNBA_V1_PREREG.json). "
+                "All three targets VALIDATED_VS_BASELINE under date-block bootstrap + Holm. "
+                "FIREWALLED: no output reaches the MLB gate, forecasts or ledger.",
+    },
 }
-
 #: Registered source hashes. Regenerate deliberately with --pin after an AUTHORIZED change to a
 #: LIVE source; a hash change without a matching --pin commit fails healthcheck. Stored separately
 #: from REGISTRY so a pin update is a visible one-line diff per file.

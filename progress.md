@@ -11,3 +11,4 @@
 
 ## STANDING DISPLAY RULE (owner, 2026-08-12)
 - Every card response shows the FULL slate table — all games, all sports in scope — never a summary subset. Leans and flags are called out IN ADDITION to, not instead of, the complete table.
+- WNBA MODEL BUILT: wnba.rs.ff7_logit_ridge.v1_0.shadow — preregistered, all 3 targets VALIDATED (Brier .2112 vs .2472 p_holm<1e-3, AUC .722, margin MAE 9.99 vs 11.41, total 14.16 vs 14.47); 3-game card coherence-gated and registered pre-tip

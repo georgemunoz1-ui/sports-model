@@ -1,0 +1,83 @@
+{
+ "n": 1633,
+ "dates": 642,
+ "home_win": {
+  "brier": 0.2112318736147291,
+  "base_brier": 0.2471628938348657,
+  "auc": 0.7222466960352423,
+  "calibration": {
+   "intercept": -0.04515628030269122,
+   "slope": 1.0546488072300644
+  },
+  "accuracy": 0.6668707899571341
+ },
+ "margin": {
+  "mae": 9.994992200020839,
+  "base_mae": 11.407124019958832
+ },
+ "total": {
+  "mae": 14.16358826210898,
+  "base_mae": 14.471270555550193
+ },
+ "comparisons": {
+  "win_vs_base": {
+   "dBrier": -0.03593102022013664,
+   "ci95": [
+    -0.04346935194001012,
+    -0.028404051079320175
+   ],
+   "p": 0.0,
+   "n_dates": 642
+  },
+  "margin_vs_base": {
+   "dMAE": -1.4121318199379957,
+   "ci95": [
+    -1.6774920307524663,
+    -1.157597191935907
+   ],
+   "p": 0.0,
+   "n_dates": 642
+  },
+  "total_vs_base": {
+   "dMAE": -0.30768229344121284,
+   "ci95": [
+    -0.5105766344871556,
+    -0.10250516877713879
+   ],
+   "p": 0.0035,
+   "n_dates": 642
+  }
+ },
+ "holm": {
+  "win_vs_base": {
+   "p_raw": 0.0,
+   "p_holm": 0.0,
+   "reject_0.05": true
+  },
+  "margin_vs_base": {
+   "p_raw": 0.0,
+   "p_holm": 0.0,
+   "reject_0.05": true
+  },
+  "total_vs_base": {
+   "p_raw": 0.0035,
+   "p_holm": 0.0035,
+   "reject_0.05": true
+  }
+ },
+ "gates": {
+  "win_p_holm_improving": true,
+  "cal_slope": true,
+  "cal_intercept": true,
+  "auc_above_half": true
+ },
+ "WIN_TARGET_PASS": true,
+ "target_status": {
+  "home_win": "VALIDATED_VS_BASELINE",
+  "margin": "VALIDATED_VS_BASELINE",
+  "total": "VALIDATED_VS_BASELINE"
+ },
+ "model_id": "wnba.rs.ff7_logit_ridge.v1_0.shadow",
+ "prereg": "docs/experiments/2026-08-12_WNBA_V1_PREREG.json",
+ "feature_state_as_of": "2026-07-22"
+}

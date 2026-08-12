@@ -1,10 +1,9 @@
 {
  "record_id": "WNBA-TEAM-CROSSWALK-2026-08-11",
  "built_utc": "2026-08-11T01:45:00Z",
- "purpose": "Map ESPN team abbreviations to WNBA_OFFICIAL (stats.wnba.com) team abbreviations for 2017-2025. Derived empirically from the staged bytes, then validated by score reconciliation — not assumed.",
+ "purpose": "Map ESPN team abbreviations to WNBA_OFFICIAL (stats.wnba.com) team abbreviations for 2017-2025. Derived empirically from the staged bytes, then validated by score reconciliation \u2014 not assumed.",
  "canonical_side": "WNBA_OFFICIAL",
  "validation": "With this crosswalk, 2085 of 2091 ESPN games (99.71%) match an official game on date + both team codes + both scores, with ZERO score disagreements among matched games. Without it: 0.00%. With the partial first-pass map only: 82.82%.",
-
  "stable_map_espn_to_official": {
   "LA": "LAS",
   "LV": "LVA",
@@ -12,28 +11,46 @@
   "WSH": "WAS",
   "CONN": "CON",
   "SA": "SAN",
-  "GS": "GSV"
+  "GS": "GSV",
+  "POR": "PDX"
  },
- "identity": ["ATL", "CHI", "DAL", "IND", "MIN", "SEA"],
-
+ "identity": [
+  "ATL",
+  "CHI",
+  "DAL",
+  "IND",
+  "MIN",
+  "SEA"
+ ],
  "season_dependent": {
   "PHOENIX": {
    "rule": "seasons <= 2024: ESPN 'PHX' -> official 'PHO'. seasons >= 2025: ESPN 'PHO' -> official 'PHX'.",
    "the_codes_swap": true,
-   "hazard": "A fixed map is correct for 2017-2024 and silently WRONG for 2025. It fails SILENTLY — the join succeeds against the wrong team and stays internally self-consistent. This is the orientation-flip failure mode recorded in this repository on 2026-08-08, where three of eleven ingested winners were reversed and arithmetic checks could not detect it.",
+   "hazard": "A fixed map is correct for 2017-2024 and silently WRONG for 2025. It fails SILENTLY \u2014 the join succeeds against the wrong team and stays internally self-consistent. This is the orientation-flip failure mode recorded in this repository on 2026-08-08, where three of eleven ingested winners were reversed and arithmetic checks could not detect it.",
    "required_guard": "after joining, assert each team's season win-loss record reconciles independently against BOTH feeds. A crosswalk that produces a coherent but wrong join is worse than one that errors."
   }
  },
-
  "exhibition_and_non_franchise_codes": {
-  "exclude": ["USA", "WNBASTARS", "WEST", "EAST", "WIL", "DEL", "STE", "PAR", "ALL", "CLA", "COL"],
+  "exclude": [
+   "USA",
+   "WNBASTARS",
+   "WEST",
+   "EAST",
+   "WIL",
+   "DEL",
+   "STE",
+   "PAR",
+   "ALL",
+   "CLA",
+   "COL"
+  ],
   "reason": "All-Star and exhibition rosters (Team Wilson, Team Delle Donne, Team Stewart, Team Parker, Team Clark, Team Collier, USA national team). Not franchises. They must never enter a ratings model or a residual bank.",
   "handling": "EXCLUDED at join time, not deleted. The staged source bytes still contain every row."
  },
-
  "unresolved_after_crosswalk": {
   "espn_only_games": 6,
   "official_only_games": 2,
   "disposition": "These stay PROVISIONAL under the official-plus-one finality rule. Do NOT force-match them. They are a coverage difference between two feeds, not a defect in either, and resolving them requires a direct wnba.com check."
- }
+ },
+ "2026_expansion_note": "Portland: ESPN POR -> official PDX (found when MIN@PDX came back DATA_BLOCKED; the mapping recovered 27 reconciled games). ESPN 2026 also carries COOP and SPO codes \u2014 special-event squads, excluded by official-plus-one automatically."
 }

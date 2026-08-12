@@ -1,0 +1,36 @@
+{
+ "record_id": "WNBA-SOURCE-STAGING-EXTENSION-2026-08-12",
+ "staged_utc": "2026-08-12T17:05:00Z",
+ "authorization": "owner 2026-08-12: 'BUILD the model ... fulfill all data requirements'",
+ "staging_rule": "BYTE-EXACT, same pinned clones as the 8/11 staging",
+ "files": [
+  {
+   "family": "WNBA_OFFICIAL",
+   "relative_path": "wnba_stats/schedules/parquet/wnba_stats_schedule_2026.parquet",
+   "bytes": 105856,
+   "sha256": "87418a75745738cd3c9dc0afca925aeafe5d74d1518141a31b92efcc7758e0cb",
+   "resolved_commit": "030251653e2be74d80545d6a0cdbdcd7d39152e2"
+  },
+  {
+   "family": "ESPN",
+   "relative_path": "wnba/schedules/parquet/wnba_schedule_2026.parquet",
+   "bytes": 125059,
+   "sha256": "3eb74d5e0ee9515d3dee8af644d58d0dc57e0121372e8caeb7445a2ec618eae5",
+   "resolved_commit": "83dab862e7a8d5c9e8569b0d97a9b82728a395b3"
+  },
+  {
+   "family": "ESPN",
+   "relative_path": "wnba/team_box/parquet/team_box_2026.parquet",
+   "bytes": 45233,
+   "sha256": "74109c959fb86ae9c60ac8be00ae444bed013d7d515775910c649b7a62e29a92",
+   "resolved_commit": "83dab862e7a8d5c9e8569b0d97a9b82728a395b3"
+  },
+  {
+   "family": "ESPN",
+   "relative_path": "wnba/player_box/parquet/player_box_2026.parquet",
+   "bytes": 110195,
+   "sha256": "6ccf3f5366a127d5c348be95540852bae07de7b283f5059045e1a6e240b436a2",
+   "resolved_commit": "83dab862e7a8d5c9e8569b0d97a9b82728a395b3"
+  }
+ ]
+}

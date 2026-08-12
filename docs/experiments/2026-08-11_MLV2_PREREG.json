@@ -1,0 +1,43 @@
+{
+ "record_id": "MLV2-CANDIDATES-PREREG-2026-08-11",
+ "created_utc": "2026-08-11T22:05:00Z",
+ "status": "PREREGISTERED_BEFORE_FITTING — thresholds below are frozen as of this record; changing them requires a successor record, not an edit",
+ "authority": "owner instruction 2026-08-11: 'utilize all newly learned best practices and enhance our current models'",
+ "lane": "ML (in-lane with the active ML-P4-FORWARD experiment; retrospective diagnostic only; does not touch the P4 forward queue, the frozen V13, or any card)",
+
+ "what_is_and_is_not_being_done": {
+  "is": "Three preregistered candidate improvements evaluated retrospectively against frozen V13 on identical games, under the full rigor stack this program has accumulated: expanding date-ordered walk-forward, fold-local standardization, inner-split penalty selection, date-block bootstrap, Holm correction, calibration and AUC gates, and a block ablation.",
+  "is_not": "V13 is NOT modified (frozen 2026-08-10). No card changes. No promotion. Wagers remain 0/100 regardless of outcome — a model that clears every gate below earns a SHADOW dual-run slot, nothing more.",
+  "why_this_is_the_only_honest_route": "The 2026-08-10 diagnostics established that a plausible-looking improvement (logistic vs base, t=-1.98) died under date-block bootstrap + Holm (p_holm 0.375), and that coefficient magnitude is not evidence. 'Enhance accuracy' therefore means: preregister, fit once, test hard, adopt only what survives."
+ },
+
+ "learned_practices_applied": [
+  "L1 (WNBA v0.4 audit M1): a classifier can silently contradict its own companion estimates — V13's measured pathology is compression toward .500. Candidate C1 attacks exactly this: walk-forward Platt recalibration of V13's own output, the analogue of the level/coherence fixes that repaired the WNBA card.",
+  "L2 (WNBA v0.4 audit M2): level terms and slowly-varying state matter. C3 adds the two as-of features computable from bytes on disk: rest-day edge and 10-game form edge.",
+  "L3 (v0.3 incident): no standardization of anything sparse/binary — all features here are continuous; standardization is fold-local only.",
+  "L4 (2026-08-10 corrections): every comparison goes through date-block bootstrap + Holm; nothing is claimed from a t-statistic alone.",
+  "L5 (fold-gate audits): thresholds are stated before data is seen and are arithmetic, not vibes.",
+  "L6 (V14 lesson): features requiring data not on disk (lineups, bullpen identity, travel) are NOT faked with proxies; they stay in V14's data-blocked queue."
+ ],
+
+ "candidates": {
+  "C1_v13_platt": "walk-forward Platt recalibration: at each date D fit logistic(y ~ a + b*logit(p_v13)) on all graded games strictly before D (min 300), apply to D's games. Two parameters; directly targets the measured compression. If V13 is well calibrated, b~1 and this changes nothing — the candidate is falsifiable by construction.",
+  "C2_logit7": "ridge logistic on the frozen 7-feature set (sp_era_edge, team_rd_edge, off_edge, def_edge, sp_k_edge, sp_bb_edge, park), penalty chosen on an inner 80/20 split of the training window only. Re-run of the 8/10 candidate under this harness so C3's ablation is apples-to-apples.",
+  "C3_logit9": "C2 plus rest_edge (capped at 5 days, home minus away) and form10_edge (mean run differential over up to the last 10 completed games, home minus away), both computed strictly as-of from results.csv."
+ },
+
+ "protocol": {
+  "data": "features.csv rows with complete team form, intersected with the frozen V13 replay (v13_full_30k.jsonl) so every comparison is on identical games with identical labels",
+  "split": "expanding window, date-ordered, burn_in 400 games (same as the 8/10 experiment); to predict date D, fit strictly on games before D",
+  "inference": "paired Brier difference candidate-minus-V13, date-block bootstrap 4000 reps seed 11, two-sided",
+  "holm_family": ["C1 vs V13", "C2 vs V13", "C3 vs V13", "C3 vs C2 (rest+form block ablation)"],
+  "adoption_requires_ALL": [
+   "p_holm < 0.05 on the candidate-vs-V13 Brier comparison, with the CI on the correct side",
+   "calibration slope in [0.85, 1.15] and intercept in [-0.15, 0.15]",
+   "ROC-AUC >= V13's AUC - 0.005 on the same games",
+   "for C3 additionally: the block ablation (C3 vs C2) must itself survive Holm — a win that vanishes without the new block is C2's win, not C3's"
+  ],
+  "on_pass": "register a new model identity, dual-run as DIAGNOSTIC shadow beside V13 on future cards; promotion to card-of-record requires a separate prospective gate; wagers stay 0/100 NO_PROMOTE regardless",
+  "on_fail": "record NO_ADOPT with the numbers; V13 remains the sole card model; no retuning, no threshold movement, no second attempt without a successor prereg"
+ }
+}

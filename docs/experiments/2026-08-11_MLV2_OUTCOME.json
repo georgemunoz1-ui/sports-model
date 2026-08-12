@@ -1,0 +1,30 @@
+{
+ "record_id": "MLV2-OUTCOME-2026-08-11",
+ "built_utc": "2026-08-11T22:20:00Z",
+ "prereg": "docs/experiments/2026-08-11_MLV2_PREREG.json",
+ "experiment": "data/mlb/ml_asof/2026-08-11_mlv2_experiment.json",
+ "verdict": "NO_ADOPT \u2014 all three preregistered candidates failed the frozen gates. V13 remains the sole card model. No retuning, no threshold movement, per the prereg's own on_fail clause.",
+ "results_n1054_81_dates": {
+  "V13 (reference)": "Brier 0.24707, AUC 0.5662, slope 0.842, intercept +0.061",
+  "C1 v13_platt": "Brier 0.24950 (WORSE, dBrier +0.0024, p_holm 0.95) \u2014 walk-forward recalibration overcorrected out-of-sample (test-window slope 2.02). 0/4 checks.",
+  "C2 logit7": "Brier 0.24682 (tie: dBrier -0.00025, CI [-0.0039,+0.0036], p_holm 1.0) \u2014 well calibrated (slope 1.069) but not better. 3/4 checks; fails significance. Confirms the 8/10 result under this harness.",
+  "C3 logit9 (+rest,+form10)": "Brier 0.24754; the block ablation vs C2 is dBrier +0.0007, p_raw 0.46 \u2014 rest days and 10-game form carry NO incremental signal here. 2/5 checks."
+ },
+ "the_finding_that_matters": {
+  "claim": "V13's binding constraint is DISCRIMINATION, not calibration.",
+  "evidence": "On the eligible window V13's AUC is 0.566 and its calibration slope is 0.842 \u2014 its small deviations from .500 are already slightly TOO LARGE for the signal they carry. A recalibration layer cannot fix a weak-AUC model (C1 proved it by losing), and refitting the same 7 features cannot either (C2 tied). The 'compression' the owner named is real as a description of the output distribution, but the cure is more signal, not a stretch of the existing signal.",
+  "where_more_signal_lives": "exactly the V14 data-blocked queue: confirmed lineups, bullpen availability/fatigue, starter-recency detail, official pregame confirmations. The 8/10 block ablations already showed starter-block dominance; today shows the cheap residual features (rest, form) add nothing. Accuracy improvement is now a DATA ACQUISITION problem, not a fitting problem.",
+  "practical_next_steps_in_priority_order": [
+   "1. Keep the personnel-layer pattern from the v5 track: prospective, hash-bound pregame lineup/bullpen capture for MLB (the WNBA/NFL personnel contract is directly reusable). This feeds V14's blocked features the only legitimate way \u2014 prospectively.",
+   "2. Continue the active ML-P4-FORWARD experiment untouched \u2014 prospective evidence remains the scarcest asset.",
+   "3. Do not spend further compute refitting the frozen feature set; today's Holm family is the third null result on that surface."
+  ]
+ },
+ "governance": {
+  "v13": "FROZEN, unchanged",
+  "cards": "unchanged",
+  "gate": "0/100 NO_PROMOTE",
+  "ledger": "$0",
+  "note": "The rigor stack did its job: three plausible 'enhancements' were prevented from being adopted on noise. A NO_ADOPT under frozen gates is a successful experiment, not a failed one."
+ }
+}

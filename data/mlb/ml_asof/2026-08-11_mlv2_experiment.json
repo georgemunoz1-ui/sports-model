@@ -1,0 +1,153 @@
+{
+ "n": 1054,
+ "dates": 81,
+ "models": {
+  "v13": {
+   "brier": 0.24707133238562087,
+   "auc": 0.5661782727797001,
+   "calibration": {
+    "intercept": 0.06136479948979072,
+    "slope": 0.8423910511708614
+   },
+   "decomposition": {
+    "brier": 0.24707133238562087,
+    "reliability": 0.003821910835173847,
+    "resolution": 0.0069318972950733705,
+    "uncertainty": 0.2497398543184183
+   }
+  },
+  "platt": {
+   "brier": 0.24949809509148463,
+   "auc": 0.5257352941176471,
+   "calibration": {
+    "intercept": -0.16558190577176438,
+    "slope": 2.0237072487311023
+   },
+   "decomposition": {
+    "brier": 0.24949809509148463,
+    "reliability": 0.002891247734271525,
+    "resolution": 0.0031844823217803404,
+    "uncertainty": 0.2497398543184183
+   }
+  },
+  "logit7": {
+   "brier": 0.2468213896230325,
+   "auc": 0.5647563437139562,
+   "calibration": {
+    "intercept": -0.05517780525941761,
+    "slope": 1.0692000168618703
+   },
+   "decomposition": {
+    "brier": 0.2468213896230325,
+    "reliability": 0.0015268273402675385,
+    "resolution": 0.004765674750060234,
+    "uncertainty": 0.2497398543184183
+   }
+  },
+  "logit9": {
+   "brier": 0.24753740139402292,
+   "auc": 0.5652825836216839,
+   "calibration": {
+    "intercept": -0.0309187929875069,
+    "slope": 0.8157508825868336
+   },
+   "decomposition": {
+    "brier": 0.24753740139402292,
+    "reliability": 0.0007748923113275212,
+    "resolution": 0.004043231177378575,
+    "uncertainty": 0.2497398543184183
+   }
+  }
+ },
+ "comparisons": {
+  "C1_platt_vs_v13": {
+   "dBrier": 0.0024267627058637523,
+   "ci95": [
+    -0.0015459002496502588,
+    0.006446823061065142
+   ],
+   "p": 0.238,
+   "n_dates": 81
+  },
+  "C2_logit7_vs_v13": {
+   "dBrier": -0.00024994276258841804,
+   "ci95": [
+    -0.003853434455314729,
+    0.0035505264378687443
+   ],
+   "p": 0.915,
+   "n_dates": 81
+  },
+  "C3_logit9_vs_v13": {
+   "dBrier": 0.00046606900840200343,
+   "ci95": [
+    -0.0035081252648945316,
+    0.004773845373438926
+   ],
+   "p": 0.8065,
+   "n_dates": 81
+  },
+  "C3_vs_C2_block_ablation": {
+   "dBrier": 0.0007160117709904217,
+   "ci95": [
+    -0.0011473334268516323,
+    0.002766062407673642
+   ],
+   "p": 0.4635,
+   "n_dates": 81
+  }
+ },
+ "holm": {
+  "C1_platt_vs_v13": {
+   "p_raw": 0.238,
+   "p_holm": 0.952,
+   "reject_0.05": false
+  },
+  "C3_vs_C2_block_ablation": {
+   "p_raw": 0.4635,
+   "p_holm": 1.0,
+   "reject_0.05": false
+  },
+  "C3_logit9_vs_v13": {
+   "p_raw": 0.8065,
+   "p_holm": 1.0,
+   "reject_0.05": false
+  },
+  "C2_logit7_vs_v13": {
+   "p_raw": 0.915,
+   "p_holm": 1.0,
+   "reject_0.05": false
+  }
+ },
+ "verdicts": {
+  "C1_platt_vs_v13": {
+   "checks": {
+    "p_holm_lt_0.05_and_improving": false,
+    "cal_slope_in_band": false,
+    "cal_intercept_in_band": false,
+    "auc_not_worse_than_v13_minus_005": false
+   },
+   "ADOPT": false
+  },
+  "C2_logit7_vs_v13": {
+   "checks": {
+    "p_holm_lt_0.05_and_improving": false,
+    "cal_slope_in_band": true,
+    "cal_intercept_in_band": true,
+    "auc_not_worse_than_v13_minus_005": true
+   },
+   "ADOPT": false
+  },
+  "C3_logit9_vs_v13": {
+   "checks": {
+    "p_holm_lt_0.05_and_improving": false,
+    "cal_slope_in_band": false,
+    "cal_intercept_in_band": true,
+    "auc_not_worse_than_v13_minus_005": true,
+    "block_ablation_survives_holm": false
+   },
+   "ADOPT": false
+  }
+ },
+ "prereg": "docs/experiments/2026-08-11_MLV2_PREREG.json"
+}

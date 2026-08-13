@@ -1,0 +1,47 @@
+{
+ "record_id": "CORRECTIONS-AND-DURABILITY-2026-08-13",
+ "built_utc": "2026-08-13T07:31:02Z",
+ "trigger": "second-round audit; every claim re-verified locally before acceptance",
+ "conceded": [
+  {
+   "id": "C1",
+   "claim_retracted": "'the capture Routine has been approval-gated since 8/9'",
+   "truth": "No such artifact exists anywhere. The 8/9 attempt required a trigger rail whose tools needed user approval at invocation; a denied/unmade call leaves nothing pending. Worse, the trigger MCP is currently DISCONNECTED from this session too, so the routine cannot be created from here today. The claim dressed an absence up as a pending object. Retracted."
+  },
+  {
+   "id": "C2",
+   "claim_corrected": "'sim 0/3 lifetime on market disagreements'",
+   "truth": "0/3 was 8/12 only. Full reconstruction across all three graded nights (cards + frozen boards + tier-1 finals): DISAGREEMENTS 3/9, AGREEMENTS 16/31. Per night: 8/10 0/2 (PHI@STL, TEX@LAA), 8/11 3/4 (BAL@MIN, COL@AZ, HOU@SF won; BOS@TOR lost), 8/12 0/3. The auditor's implausibility argument was correct \u2014 earlier nights had disagreements, and on 8/11 they mostly WON. The cumulative signal is far weaker than the 8/12-only framing implied: 33% vs 52% on n=9/31 is suggestive of the compression diagnosis, nowhere near conclusive, and now tracked cumulatively by construction."
+  },
+  {
+   "id": "C3",
+   "claim_amended": "'bullpen features: most of the bytes already exist; one roster dump unlocks it'",
+   "truth": "Sample verified locally (312 log files, 5,275 rows, 2,281 relief rows = 43%, 159 files with relief rows \u2014 matching the auditor's counts within container drift). But the auditor's bias point stands: pitchers.csv (310 names) was built from daily PROBABLES, so its relief rows skew toward swingmen and openers, not leverage relievers. A bullpen aggregate on this sample is computed on a non-random subset. Gated on a roster dump AND acquisition of the missing reliever logs; demoted below park-shrinkage accordingly."
+  }
+ ],
+ "contested": [
+  {
+   "id": "C4",
+   "claim": "'e665c809 and the WNBA build most likely evaporated with their container'",
+   "truth": "Verified live at write time: git ls-remote origin sportsmodel/main returns a7565f48, whose PARENT is e665c809; the WNBA build (f70dfbd) is on the same durable remote. The unauthenticated 404 is what any PRIVATE repo returns and is not evidence the rail is down \u2014 authenticated pushes from this workspace succeed daily. What the cron finding DOES explain: the scheduled containers clone github.com/georgemunoz1-ui/SPORTSMODEL (no hyphen) \u2014 a different name from the live remote SPORTS-MODEL \u2014 so they can never see this line of work and fall back to a 2026-07-29 zip. The evaporation is real for CRON-CONTAINER work; it is not the history of this branch."
+  }
+ ],
+ "durability_actions": {
+  "done_now": [
+   "fresh full-tree backup zip (sportsmodel_backup_2026-08-13.zip, includes .git) sent to uploads so the nightly fallback restores current state instead of 7/29",
+   "this record itself pushed to the durable remote"
+  ],
+  "needs_owner": [
+   "point the two crons' bootstrap at georgemunoz1-ui/sports-model (one-word fix: the hyphen) or disable them \u2014 they cannot be edited from this session (trigger rail disconnected)",
+   "decision on whether the crons should push with credentials; until then each cron run's work dies with its container",
+   "lineup-capture routine creation, whenever a trigger rail is available to any session"
+  ],
+  "priority_accepted": "the auditor's reorder is adopted: (1) durability, (2) park-shrinkage prereg (verified defect, on-disk data, replay-testable, no approvals), (3) bullpen (gated on roster+logs), (4) lineup layer (gated on trigger rail)"
+ },
+ "experiments_pause_note": "The auditor states a standing pause on experiments/feature work. In THIS workspace each experiment ran under explicit owner authorization (MLV2, WNBA build). No new experiment starts until the owner rules on whether that pause binds here; the park-shrinkage PREREG can be written without fitting anything, and that is the only preparatory step taken.",
+ "governance": {
+  "gate": "0/100 NO_PROMOTE",
+  "ledger": "$0",
+  "records_mutated": 0
+ }
+}

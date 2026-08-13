@@ -1,0 +1,33 @@
+{
+ "record_id": "SLATE-GRADES-2026-08-12",
+ "graded_utc": "2026-08-13T06:03:22Z",
+ "source_tier": 1,
+ "evidence": "data/mlb/evidence/2026-08-12_owner_finals_board.txt",
+ "cohorts": {
+  "v1_preboard": {
+   "n": 15,
+   "brier": 0.2485,
+   "sides": "6/15"
+  },
+  "v2_confirmed_starters": {
+   "n": 15,
+   "brier": 0.247,
+   "sides": "6/15"
+  },
+  "designed_experiment": "v2 minus v1 dBrier = -0.0015 on identical games \u2014 starter confirmation moved almost nothing tonight, consistent with the discrimination finding (AUC 0.566): V13's inputs are not its binding constraint on a single night either"
+ },
+ "cumulative_v13_ledger": {
+  "nights": 3,
+  "n": 40,
+  "brier": 0.2492,
+  "sides": "19/40",
+  "read": "indistinguishable from a coin across three fully-graded nights, exactly as the MLV2 diagnosis predicted; nothing here reopens the freeze"
+ },
+ "night_notes": [
+  "Wheeler (10-3, 2.69) lost 1-7 to Leahy \u2014 the night's biggest favorite-side surprise; board favorite PHI -163",
+  "board favorites went 9/15; V13 v2 6/15 \u2014 neither distinguishable from coin at n=15",
+  "TB@ATH: the one model FAVORITE (TB 63%) delivered 8-4; total 12 vs proj 12.7 \u2014 one night the park factor was right-ish; still noise",
+  "tier-3 text summaries were wrong on 3 of 10 games they claimed (MIL@SD again, TB score, HOU@SF reversed) while mlb.com gameday-title URLs went 10/10 \u2014 source-quality lesson recorded"
+ ],
+ "evidence_class": "LEDGER MAINTENANCE ONLY"
+}

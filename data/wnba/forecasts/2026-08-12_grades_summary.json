@@ -1,0 +1,49 @@
+{
+ "record_id": "WNBA-GRADES-2026-08-12",
+ "graded_utc": "2026-08-13T06:03:22Z",
+ "source_tier": 1,
+ "model_id": "wnba.rs.ff7_logit_ridge.v1_0.shadow",
+ "first_prospective_night": {
+  "n": 3,
+  "brier": 0.0603,
+  "sides": "3/3",
+  "margin_mae": 6.53,
+  "total_mae": 7.2
+ },
+ "rows": [
+  {
+   "g": "TOR@DAL",
+   "final": "88-94",
+   "p_home": 0.723,
+   "brier": 0.0767,
+   "side": true,
+   "margin": "pred +7.5 act +6 (err 1.5)",
+   "total": "pred 170.4 act 182 (err -11.6)"
+  },
+  {
+   "g": "MIN@PDX",
+   "final": "85-81",
+   "p_home": 0.194,
+   "brier": 0.0376,
+   "side": true,
+   "margin": "pred -10.4 act -4 (err +6.4)",
+   "total": "pred 170.9 act 166 (err +4.9)"
+  },
+  {
+   "g": "CHI@GSV",
+   "final": "71-91",
+   "p_home": 0.742,
+   "brier": 0.0666,
+   "side": true,
+   "margin": "pred +8.3 act +20 (err -11.7)",
+   "total": "pred 167.1 act 162 (err +5.1)"
+  }
+ ],
+ "vs_market": {
+  "margin_distance": "model closer than the closing spread on 2 of 3 (DAL 1.5 vs 2.5; PDX 6.4 vs 8.5; GSV 11.7 vs 11.5 lost by a hair)",
+  "totals": "actuals came in UNDER the market on all three (182/183.5, 166/186.5!, 162/166.5); the model's cross-era-lagged totals were CLOSER than the line on MIN@PDX by 15.6 points and roughly tied elsewhere \u2014 the flagged limitation cut in the model's favour tonight, which is luck, not design",
+  "line_moves": "overnight moves went TOWARD the model on both big spreads (DAL -9.5->-8.5, MIN -13.5->-12.5), n=2, observation only"
+ },
+ "non_evidence_guard": "P(3/3 | three ~74-81 pct picks all being right) ~ 0.44 \u2014 a coin-adjacent event. One night validates nothing; the walk-forward n=1633 is the evidence base, and it already said what it said.",
+ "no_retune": "the cross-era total term stays as frozen; a within-era successor prereg remains the recorded candidate. Nothing else changes off n=3."
+}

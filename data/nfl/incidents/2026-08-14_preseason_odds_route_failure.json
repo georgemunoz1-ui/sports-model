@@ -1,0 +1,46 @@
+{
+  "incident_id": "NFL-ODDS-ROUTE-2026-08-14-001",
+  "recorded_at_utc": "2026-08-14T22:32:27Z",
+  "status": "OPEN_GENERATOR_DEFECT; RECOVERY_SNAPSHOT_CAPTURED",
+  "severity": "HIGH",
+  "expected_route": "NFL / PRESEASON / 2026-08-14 / three games",
+  "observed_bad_route": "NFL / REGULAR_SEASON / WEEK_1 / 16 games",
+  "failure": "The screenshot rail defaulted to a September regular-season Week 1 board instead of the August 14 preseason slate.",
+  "consequences": [
+    "The initial output could not contain current executable preseason prices.",
+    "A later narrative mixed a stale August 13 board with secondary same-day pages and called the result a current card.",
+    "The missed T-minus-90 capture cannot be backfilled by a later timestamp."
+  ],
+  "rederived_mismatches": [
+    {
+      "game": "DEN@ATL",
+      "claim": "The August 13 board held DEN -3.5/-4.5.",
+      "actual_frozen_board": "Circa DEN -4.5; Boomers and BetMGM DEN -5.5; Caesars DEN -4.5."
+    },
+    {
+      "game": "MIA@WAS",
+      "claim": "The favorite sign remained unresolved on the current card.",
+      "actual_current_evidence": "Same-day FanDuel-attributed, Bleacher Report, and FOX displays all showed MIA -3.5. The old board's Caesars sign flip remains historical evidence, not a current unresolved sign."
+    },
+    {
+      "game": "TB@NYJ",
+      "claim": "TB -1.5 was the clean opener and NYJ -5.5 represented a seven-point move.",
+      "actual_frozen_board": "The August 13 board already showed NYJ -2 to -2.5 at Circa, Boomers, and BetMGM; Caesars alone showed TB -1.5. A single outlier cannot define the cross-book opener."
+    },
+    {
+      "scope": "NFL model identity",
+      "claim": "No NFL model exists in the system.",
+      "actual_state": "A regular-season NFL shadow model exists. No independent NFL preseason model exists. Those statements are not interchangeable."
+    }
+  ],
+  "recovery_artifact": "data/nfl/odds/2026-08-14_preseason_current_20260814T223227Z.json",
+  "recovery_artifact_sha256": "b3aacb7f64f66203f09006553fc6ccb1781b8182f08b0fb6ce3311ea330649e5",
+  "required_generator_fix": [
+    "Resolve the official schedule and season phase before requesting odds.",
+    "Reject any returned game ID, kickoff date, or phase outside the requested slate.",
+    "Capture every book/source quote separately with access time and URL.",
+    "Do not average favorite-sign conflicts and do not carry a stale conflict forward after a current capture resolves it.",
+    "Run at T-minus-48h, T-minus-3h, and T-minus-90m; append every capture and never relabel a recovery capture as a missed window.",
+    "Bind the final line snapshot to the latest eligible pregame personnel snapshot, including explicit QB and participation-plan conflicts."
+  ]
+}

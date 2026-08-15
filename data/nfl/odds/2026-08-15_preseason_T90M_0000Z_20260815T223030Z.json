@@ -1,0 +1,65 @@
+{
+ "schema_version": "nfl.preseason.current_lines.v1",
+ "capture_id": "NFL-PS-LINES-20260815T223030Z-T90M-0000Z",
+ "sport": "NFL",
+ "season_phase": "PRESEASON",
+ "capture_kind": "CURRENT_LINES",
+ "captured_at_utc": "2026-08-15T22:30:30Z",
+ "target_window": "T_MINUS_90M",
+ "window_state": "ON_TIME (kick 2026-08-16T00:00Z)",
+ "grade_scope": "MARKET_BENCHMARK_ONLY",
+ "promotion_eligible": false,
+ "wager_authority": "NO",
+ "stake": "$0",
+ "provenance": {
+  "grade": "WEB_EXTRACTED_NOT_RAW_BYTE_BOUND",
+  "raw_source_bytes_on_disk": false,
+  "rule": "source-specific quotes; no averaging; movement vs held T-3H capture NFL-PS-LINES-20260815T210111Z-T3H-0000Z"
+ },
+ "games": [
+  {
+   "away_team": "DAL",
+   "home_team": "SEA",
+   "game_start_utc": "2026-08-16T00:00:00Z",
+   "model_forecast": null,
+   "forecast_status": "NO_INDEPENDENT_PRESEASON_MODEL",
+   "source_quotes": [
+    {
+     "quote_id": "DAL-SEA-DK-20260815T223030Z",
+     "quote_scope": "SOURCE_SPECIFIC",
+     "display_source": "DraftKings-attributed summary",
+     "underlying_book_attribution": "DraftKings",
+     "attribution_confidence": "MEDIUM",
+     "source_url": "https://www.covers.com/nfl/cowboys-vs-seahawks-predictions-picks-best-bets-saturday-august-15-2026",
+     "accessed_at_utc": "2026-08-15T22:30:30Z",
+     "away_spread": 3.0,
+     "home_spread": -3.0,
+     "away_moneyline": 130,
+     "home_moneyline": -155,
+     "total": 36.5
+    },
+    {
+     "quote_id": "DAL-SEA-FANDUEL-20260815T223030Z",
+     "quote_scope": "SOURCE_SPECIFIC",
+     "display_source": "FanDuel-attributed summary",
+     "underlying_book_attribution": "FanDuel Sportsbook",
+     "attribution_confidence": "MEDIUM",
+     "source_url": "https://www.rotowire.com/betting/nfl/game/seahawks-vs-cowboys-odds-2026-08-15-2978930",
+     "accessed_at_utc": "2026-08-15T22:30:30Z",
+     "away_spread": 2.5,
+     "away_spread_price": -110,
+     "home_spread": -2.5,
+     "home_spread_price": -110
+    }
+   ],
+   "current_favorite": "SEA",
+   "favorite_basis": "sign consistent at every source and both windows \u2014 benchmark SEA stands",
+   "movement_vs_t3h": "DK spread -3.5 -> -3 (0.5 toward DAL); DK total 39.5 -> 36.5 \u2014 a 3-point total drop in 90 minutes on the same attribution is UNUSUAL: real steam or a source discrepancy; both prints recorded verbatim, unadjudicated. FanDuel -2.5 consistent. ML -148/-155 range stable.",
+   "pregame_personnel": {
+    "status": "CARRIED_FROM_T3H \u2014 no late scratches surfaced",
+    "facts": [],
+    "conflicts": []
+   }
+  }
+ ]
+}

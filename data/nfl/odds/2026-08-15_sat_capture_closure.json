@@ -1,0 +1,31 @@
+{
+ "record_id": "NFL-PRE1-SAT-CAPTURE-CLOSURE-2026-08-15",
+ "built_utc": "2026-08-15T22:30:30Z",
+ "closes": "NFL-PRE1-SAT-CAPTURE-PLAN-2026-08-15",
+ "windows": {
+  "T_MINUS_48": "MISSED for all 7 games (window predated authorization) \u2014 recorded, never backfilled",
+  "T_MINUS_3H": "4/4 runs ON TIME (14:02Z, 17:00Z, 20:01Z, 21:01Z)",
+  "T_MINUS_90M": "4/4 runs ON TIME (15:30Z, 18:31Z, 21:31Z, 22:30Z)",
+  "artifacts": 8
+ },
+ "benchmarks_declared_computed_from_artifacts": {
+  "declared_5_of_7": {
+   "CAR@BUF": "BUF",
+   "LAR@KC": "KC",
+   "JAX@NO": "NO",
+   "PHI@BAL": "PHI",
+   "DAL@SEA": "SEA"
+  },
+  "no_benchmark_2_of_7": {
+   "CLE@CHI": "unresolved sign state (CLE -3 vs CHI -2.5, low-confidence attribution)",
+   "MIN@NYG": "unresolved sign state (MIN -1.5 vs NYG -2.5)"
+  },
+  "chat_count_correction": "my 21:31Z chat message said '6 of 7 declared' \u2014 WRONG, it is 5 of 7; this record computes the count from the artifacts per the compute-from-rows rule, and the chat error is owned here"
+ },
+ "open_flags_for_the_sweep": [
+  "JAX@NO cross-source ML/spread incoherence (T-90M)",
+  "DAL@SEA 3-point DK total drop (T-90M) \u2014 unadjudicated",
+  "reported-open context: Yahoo said JAX opened -1.5 (sign would have flipped by T-3H); context only, we hold no openers"
+ ],
+ "grading_contract": "06:00Z 8/16 sweep grades the FIVE declared benchmark sides vs finals (tie rule; MARKET_BENCHMARK_ONLY); CLE@CHI and MIN@NYG grade NO_BENCHMARK; per control OWNER-CONTROLS-2026-08-15 the cumulative n (8 prior + up to 5 tonight) remains too small for ANY signal claim in either direction"
+}

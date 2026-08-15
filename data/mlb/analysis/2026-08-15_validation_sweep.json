@@ -1,0 +1,18 @@
+{
+ "record_id": "VALIDATION-SWEEP-2026-08-15",
+ "built_utc": "2026-08-15T05:08:52Z",
+ "evidence": "data/mlb/evidence/2026-08-15_validation_sweep.txt",
+ "evidence_sha256": "4da981a560f965a0c74335b984af914cf7be869943e5c9f4d4209c89734a480a",
+ "purpose": "owner request: pull all finals, validate uploaded information, correct anything wrong",
+ "verdict_on_uploaded_information": "VALIDATED \u2014 zero corrections required to the owner's 8/14 finals board or the auditor settlement. Every independently re-captured result matched. The one conflicting datum found (a '73-69' snippet for LAS@NYL 8/13) was investigated and REJECTED as an intermediate-score artifact; the recorded 85-81 is confirmed by recap-title, beat coverage, and internally coherent play-by-play.",
+ "resolved_tonight": {
+  "TEX@LAA_0813": "LAA 7-0 (gameday-title class, no-echo verified vs 8/12's 5-2). v1 graded (TEX .512 pick WRONG), v2 graded (LAA .502 pick CORRECT \u2014 the deadline-move starter capture earned its keep)",
+  "MIL@LAD_0813": "MIL 5-4 validated across four sources; auditor attestation confirmed; results row now on disk",
+  "eight_eleven_scores": "all six winner-only rows upgraded with scores \u2014 SIX OF SIX winners confirmed the tier-1 standings arithmetic (TEX@LAA 2-3, COL@AZ 3-2, TB@ATH 12-4, HOU@SF 1-4, MIL@SD 2-11, KC@LAD 4-5). The winner-only representation is now fully vindicated, including on the MIL@SD watch game.",
+  "wnba_0813_converted": "official ledger now 7/8 sides, mean Brier 0.1064 (was 4/5 tier-1-only); the provisional and official ledgers have merged at identical numbers",
+  "mlb_0813_chain": "9 grades appended (v1 2/7 mean .2586; v2 2/3 mean .2591); registry 188 forecasts / 186 grades, chain intact"
+ },
+ "eight_fourteen_status": "no independent direct capture possible \u2014 every scoreboard route (mlb.com, espn.com, baseball-reference.com) is egress-blocked. Stands on two independent attestations (tier-1 owner board + auditor reconciliation vs official scoreboard), zero conflicts among them. Recorded as the validation basis, not upgraded further.",
+ "open_items_remaining": "TWO: (1) 8/14 grades rest on attestation pairs rather than direct capture \u2014 acceptable, documented; (2) opener/bulk play sequences for CWS and TB remain auditor-attested (mlb.com blocked). Everything else on the books is graded and validated.",
+ "trigger": "the 06:00Z sweep's entire scope is complete ahead of schedule; trigger deleted"
+}

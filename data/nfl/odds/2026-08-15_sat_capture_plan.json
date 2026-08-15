@@ -1,0 +1,58 @@
+{
+ "record_id": "NFL-PRE1-SAT-CAPTURE-PLAN-2026-08-15",
+ "built_utc": "2026-08-15T05:40:59Z",
+ "slate_source": "web schedule capture (nfl.com/fbschedules/FOX corroborated): 7 games",
+ "games": {
+  "CAR@BUF": {
+   "kick_utc": "2026-08-15T17:00Z",
+   "T_MINUS_48": "MISSED \u2014 window passed before authorization; recorded T_MINUS_48_MISSED, NOT backfilled",
+   "T_MINUS_3H": "2026-08-15T14:00Z",
+   "T_MINUS_90M": "2026-08-15T15:30Z"
+  },
+  "CLE@CHI": {
+   "kick_utc": "2026-08-15T17:00Z",
+   "T_MINUS_48": "MISSED \u2014 window passed before authorization; recorded T_MINUS_48_MISSED, NOT backfilled",
+   "T_MINUS_3H": "2026-08-15T14:00Z",
+   "T_MINUS_90M": "2026-08-15T15:30Z"
+  },
+  "MIN@NYG": {
+   "kick_utc": "2026-08-15T17:00Z",
+   "T_MINUS_48": "MISSED \u2014 window passed before authorization; recorded T_MINUS_48_MISSED, NOT backfilled",
+   "T_MINUS_3H": "2026-08-15T14:00Z",
+   "T_MINUS_90M": "2026-08-15T15:30Z"
+  },
+  "LAR@KC": {
+   "kick_utc": "2026-08-15T20:00Z",
+   "T_MINUS_48": "MISSED \u2014 window passed before authorization; recorded T_MINUS_48_MISSED, NOT backfilled",
+   "T_MINUS_3H": "2026-08-15T17:00Z",
+   "T_MINUS_90M": "2026-08-15T18:30Z"
+  },
+  "JAX@NO": {
+   "kick_utc": "2026-08-15T20:00Z",
+   "T_MINUS_48": "MISSED \u2014 window passed before authorization; recorded T_MINUS_48_MISSED, NOT backfilled",
+   "T_MINUS_3H": "2026-08-15T17:00Z",
+   "T_MINUS_90M": "2026-08-15T18:30Z"
+  },
+  "PHI@BAL": {
+   "kick_utc": "2026-08-15T23:00Z",
+   "T_MINUS_48": "MISSED \u2014 window passed before authorization; recorded T_MINUS_48_MISSED, NOT backfilled",
+   "T_MINUS_3H": "2026-08-15T20:00Z",
+   "T_MINUS_90M": "2026-08-15T21:30Z"
+  },
+  "DAL@SEA": {
+   "kick_utc": "2026-08-16T00:00Z",
+   "T_MINUS_48": "MISSED \u2014 window passed before authorization; recorded T_MINUS_48_MISSED, NOT backfilled",
+   "T_MINUS_3H": "2026-08-16T21:00Z",
+   "T_MINUS_90M": "2026-08-16T22:30Z"
+  }
+ },
+ "capture_contract_per_snapshot": [
+  "per-book/source-specific quotes with access timestamps and URLs; NO averaging across sign conflicts",
+  "QB rotation, expected starters, inactive/scratch status, snap-plan source per team",
+  "opening-to-current movement, with the provenance of 'opening' stated (this repo holds NO Saturday openers; earliest held capture is the baseline and is labeled as such \u2014 never presented as the market open)",
+  "explicit null model fields; grade_scope MARKET_BENCHMARK_ONLY; promotion_eligible false; wager authority NO, stake $0",
+  "versioned artifacts data/nfl/odds/2026-08-15_preseason_<WINDOW>_<runtime>.json \u2014 a later capture NEVER overwrites an earlier one; late runs keep RECOVERY identity"
+ ],
+ "guard_note": "harness/nfl_preseason_line_guard.py is hardcoded to the 8/14 recovery capture (game ids, 3-game inventory, RECOVERY window); tonight's artifacts follow its schema and rules but need a parameterized guard \u2014 recorded as the guard's first required generalization, not patched tonight.",
+ "triggers": "eight window wake-ups armed (T-3h and T-90m per kick cluster: 14:00, 15:30, 17:00, 18:30, 20:00, 21:00, 21:30, 22:30Z)"
+}

@@ -1,0 +1,22 @@
+{
+ "record_id": "OWNER-CONTROLS-2026-08-15",
+ "built_utc": "2026-08-15T05:40:59Z",
+ "authority": "owner instruction 2026-08-15 (settlement acceptance + interpretation controls)",
+ "control_1_nfl_benchmark_interpretation": {
+  "rule": "NFL preseason benchmark 4/8 is INCONCLUSIVE \u2014 n=8 supports no claim in either direction about exploitable preseason signal. NO_FORECAST stands because no leakage-safe snap-plan/personnel model exists, not because the benchmark split 4-4.",
+  "corrects_my_overstatement": "my 8/15 summary said the ledger is 'demonstrating in both directions that preseason markets carry no exploitable signal' \u2014 RETRACTED as an overreach; the ledger is accumulating, not demonstrating. Same error class as the R4 asymmetry conceded on 8/12: treating a tiny sample as evidence when it points the convenient way."
+ },
+ "control_2_registry_reconciliation_188_186": {
+  "finding": "the two-row difference is NOT two pending forecasts. Full reconciliation: 184 distinct forecasts graded; 2 of them carry a second G2 addendum grade (P4-20260729-UNRESOLVED:NYY@CWS and :CHC@STL, from the 7/29 unresolved-then-resolved flow) = 186 grade rows; 4 forecasts are permanently ungradeable ARCHIVAL records by design:",
+  "ungraded_by_design": [
+   "PTR-KSIM-2026-07-27-PHASE1 (pointer to immutable K-sim board artifact)",
+   "PTR-KSIM-0727-U02-DECISIONS (pointer to K-props decision record)",
+   "RETRO-20260728-CLE_CIN (retrospective archive of contemporaneous chat forecast)",
+   "RETRO-20260728-ATL_NYM (same)"
+  ],
+  "conclusion": "no future/pending game forecasts exist ungraded; slate completeness is genuinely closed. Standing rule adopted: registry counts quoted in summaries must state the archival/addendum breakdown, not just the two totals."
+ },
+ "control_3_method_validation_caveat": {
+  "rule": "the starter-coherence success (1 rebuilt forecast graded correct) and winner-only vindication (6/6) are STRUCTURAL-INTEGRITY demonstrations, not statistical validation of either method. n=1 and n=6 license process confidence, not accuracy claims."
+ }
+}

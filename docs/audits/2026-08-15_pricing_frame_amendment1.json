@@ -1,0 +1,13 @@
+{
+ "record_id": "PRICING-FRAME-2026-08-15-AMENDMENT-1",
+ "built_utc": "2026-08-15T22:13:47Z",
+ "amends": "PRICING-FRAME-2026-08-15 (original untouched, R6)",
+ "authority": "owner precision 2026-08-15",
+ "push_aware_ev": {
+  "rule": "EV = p_model/p_be - 1 applies DIRECTLY only to binary moneylines. For spreads and totals with push probability: EV = p_win*(dec-1) - p_loss (pushes refund, contributing 0), and the edge comparison uses the CONDITIONAL probability p_win/(p_win+p_loss) vs break-even.",
+  "identity_preserved": "EV > 0 iff p_win*dec > p_win + p_loss iff p_win/(p_win+p_loss) > 1/dec = p_be \u2014 the sign consistency of the binary case carries over exactly; only the numerator/denominator change.",
+  "repo_support": "V13 cards already emit the full settlement split for totals (v13.p_over / p_push / p_under \u2014 the correction-5 tooling fix) so the push-aware inputs exist natively; ML rows are binary (extra-innings rules preclude pushes); run-line rows settle at \u00b11.5 and cannot push. The NFL grading frame's tie rule is the same principle applied to grading: a push/tie is excluded from the binary record, never counted as a loss.",
+  "status": "the implemented selector already handles the distinction (owner-stated); this record preserves the precision so no future implementation regresses to the binary formula on pushable markets."
+ },
+ "governance_unchanged": "positive edge remains a SCREENING result on the separate sharp output; five-part test, gate 0/100 NO_PROMOTE, wager authority NO, stake $0"
+}

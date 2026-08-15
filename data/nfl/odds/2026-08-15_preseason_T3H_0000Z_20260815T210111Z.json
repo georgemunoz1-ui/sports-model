@@ -1,0 +1,76 @@
+{
+ "schema_version": "nfl.preseason.current_lines.v1",
+ "capture_id": "NFL-PS-LINES-20260815T210111Z-T3H-0000Z",
+ "sport": "NFL",
+ "season_phase": "PRESEASON",
+ "capture_kind": "CURRENT_LINES",
+ "captured_at_utc": "2026-08-15T21:01:11Z",
+ "target_window": "T_MINUS_3H",
+ "window_state": "ON_TIME (kick 2026-08-16T00:00Z, Lumen Field; 5pm PT confirmed)",
+ "t_minus_48_note": "T_MINUS_48_MISSED per plan record; not backfilled",
+ "grade_scope": "MARKET_BENCHMARK_ONLY",
+ "promotion_eligible": false,
+ "wager_authority": "NO",
+ "stake": "$0",
+ "provenance": {
+  "grade": "WEB_EXTRACTED_NOT_RAW_BYTE_BOUND",
+  "raw_source_bytes_on_disk": false,
+  "rule": "source-specific quotes; no averaging; baseline for the 22:30Z T-90M run \u2014 not an opener"
+ },
+ "games": [
+  {
+   "away_team": "DAL",
+   "home_team": "SEA",
+   "game_start_utc": "2026-08-16T00:00:00Z",
+   "model_forecast": null,
+   "forecast_status": "NO_INDEPENDENT_PRESEASON_MODEL",
+   "source_quotes": [
+    {
+     "quote_id": "DAL-SEA-DK-20260815T210111Z",
+     "quote_scope": "SOURCE_SPECIFIC",
+     "display_source": "DraftKings Network article",
+     "underlying_book_attribution": "DraftKings",
+     "attribution_confidence": "MEDIUM",
+     "source_url": "https://dknetwork.draftkings.com/2026/08/15/dallas-cowboys-vs-seattle-seahawks-prediction-pick-for-nfl-preseason-on-8-15-26/",
+     "accessed_at_utc": "2026-08-15T21:01:11Z",
+     "away_spread": 3.5,
+     "home_spread": -3.5,
+     "total": 39.5
+    },
+    {
+     "quote_id": "DAL-SEA-ML-SOURCE-20260815T210111Z",
+     "quote_scope": "SOURCE_SPECIFIC",
+     "display_source": "SI betting / youwager summary (ML pair)",
+     "underlying_book_attribution": null,
+     "attribution_confidence": "MEDIUM",
+     "source_url": "https://www.si.com/betting/cowboys-vs-seahawks-prediction-odds-spread-trends-for-nfl-preseason-week-1-01kzyb87gmth",
+     "accessed_at_utc": "2026-08-15T21:01:11Z",
+     "away_moneyline": 124,
+     "home_moneyline": -148
+    }
+   ],
+   "current_favorite": "SEA",
+   "favorite_basis": "TWO_SOURCE_SAME_SIGN (DK SEA -3.5; SI-class SEA -148) \u2014 benchmark DECLARED: SEA",
+   "pregame_personnel": {
+    "status": "CAPTURED",
+    "facts": [
+     {
+      "team": "SEA",
+      "source_family": "HC_QUOTED (Field Gulls) + SECONDARY",
+      "source_url": "https://www.fieldgulls.com/seattle-seahawks-news/172410/mike-macdonald-seahawks-established-starters-wont-play-vs-cowboys",
+      "captured_at_utc": "2026-08-15T21:01:11Z",
+      "fact": "HC Macdonald: established starters will not play. Sam Darnold OUT; Drew Lock starts with Jalen Milroe rotating in-and-out (rotation plan, not halves)."
+     },
+     {
+      "team": "DAL",
+      "source_family": "SECONDARY_REPORT",
+      "source_url": "https://www.si.com/nfl/cowboys/onsi/predicting-dallas-cowboys-starters-seahawks-nfl-preseason-week-1",
+      "captured_at_utc": "2026-08-15T21:01:11Z",
+      "fact": "Joe Milton and Sam Howell split the QB work (backup competition); Prescott, J.Williams, Lamb, Pickens, Q.Williams unlikely to play."
+     }
+    ],
+    "conflicts": []
+   }
+  }
+ ]
+}

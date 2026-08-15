@@ -1,0 +1,33 @@
+{
+ "record_id": "NFL-PRE1-BENCHMARK-GRADES-2026-08-14",
+ "built_utc": "2026-08-15T04:55:31Z",
+ "evidence": "data/mlb/evidence/2026-08-14_owner_finals_board.txt",
+ "evidence_sha256": "ec7480dadad2956d88ee79cdafaa0f755d7ee69c95d43fadd576d7192ea5f7fc",
+ "source_tier": 1,
+ "grade_scope": "MARKET_BENCHMARK_ONLY (no model rows exist)",
+ "games": [
+  {
+   "g": "DEN@ATL",
+   "final": "27-7 DEN",
+   "benchmark": "DEN (-3/-3.5)",
+   "binary": "CORRECT",
+   "ats": "covered"
+  },
+  {
+   "g": "MIA@WAS",
+   "final": "7-20 WSH",
+   "benchmark": "MIA (-3.5, sign resolved by 3 same-day sources)",
+   "binary": "WRONG",
+   "ats": "not covered \u2014 WSH won outright by 13 while officially sitting 25 incl. Daniels"
+  },
+  {
+   "g": "TB@NYJ",
+   "final": "24-16 TB",
+   "benchmark": "NYJ (-5.5/-6.5)",
+   "binary": "WRONG",
+   "ats": "not covered \u2014 TB won outright as the dog with Mayfield out and the late Geno Smith scratch"
+  }
+ ],
+ "night": "benchmark 1/3 \u2014 computed from rows",
+ "read": "the market's preseason personnel signal FAILED tonight on both games where it moved: the MIA resolution was correct capture discipline and still lost; the NYJ 3-4pt move lost outright. 8/13's TEN/CIN snap-plan wins now look like variance, not skill \u2014 preseason NO_FORECAST is the only defensible posture and the benchmark ledger is proving it in both directions."
+}

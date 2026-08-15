@@ -1,0 +1,96 @@
+{
+ "record_id": "GRADES-2026-08-14-CORRECTION-1",
+ "built_utc": "2026-08-15T05:02:42Z",
+ "corrects": "GRADES-2026-08-14 (data/mlb/analysis/2026-08-14_grades.json) \u2014 original untouched (R6)",
+ "trigger": "external auditor settlement 2026-08-15; independent reproduction of all 28 MLB Brier values MATCHED this record exactly before these corrections were raised",
+ "correction_1_starter_exhibit": {
+  "wrong_claim_in_original": "starter changes CWS Urquidy->Newcomb, BAL Bassitt->Bradish, TB Scholtens->Matz; 'V13 simulated CWS@DET and BAL@TB with wrong starters; both graded losses'",
+  "corrected_state": {
+   "CWS": "Newcomb OPENED; registered probable Urquidy pitched BULK behind him \u2014 an opener arrangement, not a scratch. V13's Urquidy input was partially right (he threw the bulk innings).",
+   "TB": "Matz OPENED; registered probable Scholtens pitched BULK \u2014 same arrangement. V13's Scholtens input likewise partially right.",
+   "BAL": "Bassitt STARTED as registered. The postgame 'Probables' display showing Bradish was a DISPLAY ARTIFACT, not a change. My evidence file recorded Bradish as the actual starter \u2014 that entry is WRONG and this record supersedes it. NO change occurred.",
+   "verification": "auditor-attested via official play sequences (mlb.com/news/white-sox-hit-4-home-runs-in-win-over-tigers; mlb.com/stories/game/822942); mlb.com is egress-blocked from this container so the URLs are preserved unverified \u2014 attested, not confirmed"
+  },
+  "retracted": "'every actual change occurred on a projection-flagged row' \u2014 retracted; only CWS and TB had plan changes (opener conversions), BAL had none. The flags still marked the two real plan changes.",
+  "root_cause": "postgame 'Probables' blocks are PLAN-DISPLAY data, not realized-starter evidence. Treating them as realized was the same class of error as the tier-3 text-summary trap.",
+  "standing_rule_adopted": "realized pitching is proven only by play sequence or box, never by a probables display \u2014 pre- or post-game."
+ },
+ "correction_2_wnba_totals_claims": {
+  "wrong_claims_in_original": "'DAL@IND total_err +8.5 is the first POSITIVE total error' and '6 of 8 totals now under'",
+  "row_math": [
+   {
+    "game": "WNBA-V1-20260812-TOR@DAL",
+    "pred": 170.4,
+    "actual": 182,
+    "direction": "UNDER-predicted"
+   },
+   {
+    "game": "WNBA-V1-20260812-MIN@PDX",
+    "pred": 170.9,
+    "actual": 166,
+    "direction": "OVER-predicted"
+   },
+   {
+    "game": "WNBA-V1-20260812-CHI@GSV",
+    "pred": 167.1,
+    "actual": 162,
+    "direction": "OVER-predicted"
+   },
+   {
+    "game": "WNBA-V1-20260814-DAL@IND",
+    "pred": 176.5,
+    "actual": 185,
+    "direction": "UNDER-predicted"
+   },
+   {
+    "game": "WNBA-V1-20260814-PDX@SEA",
+    "pred": 170.2,
+    "actual": 166,
+    "direction": "OVER-predicted"
+   },
+   {
+    "game": "ATL@CON-0813",
+    "pred": 171.6,
+    "actual": 173,
+    "direction": "UNDER-predicted"
+   },
+   {
+    "game": "LAS@NYL-0813",
+    "pred": 173.1,
+    "actual": 166,
+    "direction": "OVER-predicted"
+   },
+   {
+    "game": "WAS@LVA-0813",
+    "pred": 167.0,
+    "actual": 159,
+    "direction": "OVER-predicted"
+   }
+  ],
+  "corrected_state": "5 of 8 totals OVER-predicted (actual below model), 3 of 8 UNDER-predicted. Positive errors existed from night one (TOR@DAL +11.6). Neither of the original claims survives the rows.",
+  "auditor_claim_contested": "the auditor's 'tonight breaks the short run of every total being underpredicted' is ALSO wrong by the same rows \u2014 MIN@PDX and CHI@GSV were over-predicted on the first night. Both workspaces typed a totals narrative instead of computing it.",
+  "narrative_correction": "'directionally low' was always a statement about model totals vs MARKET LINES (the cross-era level term prices totals under the board), NOT vs realized totals. Vs realized, the model runs slightly HIGH (5/8 over). The distinction is now explicit; conflating the two produced both workspaces' errors.",
+  "process_note": "this is the second hardcoded-aggregate violation in three days (LAS@NYL was the first). The standing compute-from-rows rule now explicitly covers DIRECTIONAL/narrative claims, not just numeric aggregates."
+ },
+ "correction_3_mil_lad_0813_score": {
+  "update": "auditor supplies MIL 5-4 LAD for 2026-08-13 (self-correcting their own earlier conflation with 8/14's LAD 3-1). Consistent with the series-state winner proof already graded. Score recorded here as AUDITOR-ATTESTED; the results.csv row remains withheld until 8/13's slate can be ingested completely (TEX@LAA still open \u2014 a partial 8/13 ingest would trip slate completeness honestly)."
+ },
+ "confirmations_from_settlement": {
+  "brier_reproduction": "all 28 MLB row Briers, both night means, disagreement-set means (0.2331 vs 0.2746), and CAPPED split (0-2/0.2852 vs 6-6/0.2507) independently reproduced \u2014 first full two-workspace numerical agreement on a graded night",
+  "baseline_context_adopted": "vs constant 0.5: V13 -0.0057, V19 -0.0200 Brier. Both models were worse than a coin on this upset-heavy night; recorded without spin.",
+  "nfl_ten_note": "TEN -6 push confirmed; the registered pre-1 quotes at -2.5/-3 covered \u2014 consistent with our TEN@SF correction record."
+ },
+ "lineup_rail_schema_adopted": {
+  "fields": [
+   "plan_type (STARTER|OPENER_BULK|TBD)",
+   "opener_id",
+   "bulk_id",
+   "confirmed_at_utc",
+   "source",
+   "confidence"
+  ],
+  "versioning": "T-90/T-30 changes create a NEW registered forecast version; originals never overwritten",
+  "grading": "outcome grading proceeds regardless; pitching_plan_match graded as a separate dimension",
+  "status": "adopted into the roadmap's personnel layer spec \u2014 implementation still gated on the roster/lineup data rail"
+ }
+}

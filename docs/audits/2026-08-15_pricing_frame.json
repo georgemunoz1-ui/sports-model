@@ -1,0 +1,20 @@
+{
+ "record_id": "PRICING-FRAME-2026-08-15",
+ "built_utc": "2026-08-15T21:43:15Z",
+ "authority": "owner statement 2026-08-15; formalizes the arithmetic the overlays already use",
+ "definitions": {
+  "fair_line_from_model": "p >= .5: american = -100*p/(1-p); p < .5: american = +100*(1-p)/p. The model's probability is set FIRST, independent of any price (forecast first, price second).",
+  "break_even_from_posted_price": "negative m: p_be = |m|/(|m|+100); positive m: p_be = 100/(m+100). This is the vig-INCLUSIVE threshold of one posted price at one source \u2014 it is NOT a market probability estimate and requires no de-vig.",
+  "edge": "edge = p_model - p_be, per side, per posted price.",
+  "ev_per_unit": "EV = p_model*(dec-1) - (1-p_model), where dec = 1 + (m/100 if m>0 else 100/|m|).",
+  "identity": "EV = p_model/p_be - 1, hence sign(EV) == sign(edge) always \u2014 the two screens can never disagree on direction, only on magnitude."
+ },
+ "verified_against_live_record": "WNBA-OVERLAY-2026-08-14 DAL@IND: p_model(IND)=.6312 -> IND -290: p_be .7436, edge -.1124, EV -.1511; DAL +250: p_be .2857, edge +.0831, EV +.2908 \u2014 matches the pushed overlay to the rounding digit.",
+ "boundaries": [
+  "PERMITTED: edge/EV vs a SINGLE posted price (break-even needs no de-vig and makes no market-probability claim). This is the only sanctioned use of cross-book best-odds prices (8/3 ruling: EV-screen only).",
+  "FORBIDDEN: constructing 'market probability' by de-vigging a cross-book best-odds pair (8/3 ruling). Two-sided SAME-BOOK de-vig for market-implied context remains permitted and must be labeled MARKET-IMPLIED, never a forecast.",
+  "FORBIDDEN: prices as model inputs. p_model must exist before the price is looked at; an edge computed from a price-influenced probability is circular.",
+  "SCOPE: NFL preseason capture artifacts FORBID ev/edge/implied_probability fields entirely (line-guard FORBIDDEN_KEYS) \u2014 no model exists there, so the frame has no left-hand side.",
+  "AUTHORITY: a positive edge/EV is a SCREEN, not a wager instruction. Five-part test still applies (executable single-book price, injury state, prospective sample, gate, authority). Gate 0/100 NO_PROMOTE; wager authority NO; stake $0."
+ ]
+}

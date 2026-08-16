@@ -24,20 +24,25 @@ placed at equal gain increments (uniform gain-step resolution).
 """
 import json
 
-DPI = 3200.0
-XMAX = 640.0                            # 200 in/s tail
 N_POINTS = 64
+TAIL_INS = 200.0                        # tail reaches 200 in/s regardless of DPI
 
-# (name, onset in/s, cap-speed in/s, max gain)
+# (name, onset in/s, cap-speed in/s, max gain, dpi)
 PROFILES = [
-    ("VAL-CURVE-3200-088-64pt", 8.0, 40.0, 1.30),   # punchy: assist through 8-40 in/s
-    ("VAL-MILD-3200-088-64pt", 12.0, 90.0, 1.20),   # conservative: assist mostly 40+ in/s
+    ("VAL-CURVE-3200-088-64pt", 8.0, 40.0, 1.30, 3200.0),   # punchy: assist through 8-40 in/s
+    ("VAL-MILD-3200-088-64pt", 12.0, 90.0, 1.20, 3200.0),   # conservative: assist mostly 40+ in/s
+    # low-gradient rebuild: 1.000 flat through the whole micro-aim/deceleration band so
+    # velocity-estimation noise cannot modulate sensitivity there, then a shallow ramp
+    # into a modest cap at genuine flick speeds.
+    ("VAL-LOWGRAD-3200-088-64pt", 12.0, 40.0, 1.15, 3200.0),
+    ("VAL-LOWGRAD-1600-015-64pt", 12.0, 40.0, 1.15, 1600.0),
 ]
 
 def s(u):  return 6*u**5 - 15*u**4 + 10*u**3          # smootherstep (gain shape)
 def S(u):  return u**6 - 3*u**5 + 2.5*u**4            # its integral, S(1)=0.5
 
-def build_lut(A_INS, B_INS, G):
+def build_lut(A_INS, B_INS, G, DPI=3200.0):
+    XMAX = DPI*TAIL_INS/1000.0
     A, B = DPI*A_INS/1000.0, DPI*B_INS/1000.0
     def gain(x):
         if x <= A: return 1.0
@@ -78,13 +83,13 @@ def accel(mode, data):
         "Cap mode": "output", "data": data,
     }
 
-def make_profile(name, h_data):
+def make_profile(name, h_data, xmax=640.0):
     return {
     "name": name,
     "Stretches domain for horizontal vs vertical inputs": {"x": 1.0, "y": 1.0},
     "Stretches accel range for horizontal vs vertical inputs": {"x": 1.0, "y": 1.0},
     "Whole or horizontal accel parameters": accel("lut", h_data),
-    "Vertical accel parameters": accel("lut", [0.0625, 0.0625, 640.0, 640.0]),
+    "Vertical accel parameters": accel("lut", [0.0625, 0.0625, xmax, xmax]),
     "Input speed calculation parameters": {
         "Whole/combined accel (set false for 'by component' mode)": False,
         "lpNorm": 2.0,
@@ -122,9 +127,9 @@ def make_settings(profile):
 }
 
 if __name__ == "__main__":
-    for name, a_ins, b_ins, g_cap in PROFILES:
-        NX, NY, h_data = build_lut(a_ins, b_ins, g_cap)
-        profile = make_profile(name, h_data)
+    for name, a_ins, b_ins, g_cap, dpi in PROFILES:
+        NX, NY, h_data = build_lut(a_ins, b_ins, g_cap, dpi)
+        profile = make_profile(name, h_data, dpi*TAIL_INS/1000.0)
         with open(name + ".rawaccelprofile.json", "w") as f:
             json.dump(make_export(profile), f, indent=2); f.write("\n")
         with open(name + ".settings.json", "w") as f:
@@ -132,4 +137,4 @@ if __name__ == "__main__":
         paste = "; ".join(f"{x:g},{yv:g}" for x, yv in zip(NX, NY))
         with open(name + ".paste.txt", "w") as f:
             f.write(paste + "\n")
-        print(f"{name}: {len(NX)} points (onset {a_ins} in/s, cap {b_ins} in/s, gain {g_cap})")
+        print(f"{name}: {len(NX)} pts @{dpi:.0f}dpi (onset {a_ins} in/s, cap {b_ins} in/s, gain {g_cap})")

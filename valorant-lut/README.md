@@ -87,6 +87,39 @@ above). That ratio's elasticity — `d ln(mult) / d ln(speed)` — peaks at only
 that is ≤0.054% of stroke displacement: about 0.2 mm on a 40 cm flick, far below hand tremor. The
 two regions that matter most (the hold floor and the flick cap) are flat, hence fully jitter-immune.
 
+## The drift/float problem, and `VAL-LOWGRAD`
+
+Reported symptom: a drifting or floating sensation during **micro-corrections and deceleration**
+while running the S-curve. A buffered-input explanation was proposed; the source evidence above rules
+that out. But the symptom is real, and the S-curve's own numbers explain it far better:
+
+| Curve | gain while braking 30 → 2 in/s | swing |
+|---|---|---|
+| `VAL-SCURVE-V2` | 1.398 → 0.803 | **+74%** |
+| `VAL-LOWGRAD` | 1.114 → 1.000 | **+11%** |
+
+Landing a flick means sweeping the whole speed range from fast to nearly still. On V2 the multiplier
+falls by 43% during exactly that motion, and its steepest region sits right in the micro-correction
+band. The crosshair therefore decelerates on a different curve than your hand — which is what "floating"
+feels like. Worse, V2's sub-1.0 floor means slow aim is not raw, so there is no fixed reference to
+settle onto. None of that requires jitter or Riot's buffer to explain; it is the curve.
+
+`VAL-LOWGRAD` is the corrective design:
+
+- **exactly 1.000× below 12 in/s** — the entire micro-aim and deceleration band has *zero* gain
+  gradient, so neither hand-speed variation nor velocity-estimation noise can modulate sensitivity there
+- smootherstep to a **modest 1.15 cap by 40 in/s** — assist stays in the genuine flick range
+- no sub-1.0 region, so slow aim is raw again and muscle memory has a fixed anchor
+
+Gain: 1.000 (≤12 in/s) · 1.021 (20) · 1.114 (30) · 1.150 (50+).
+
+The honest tradeoff: you cannot have both "no gain variation in the aim band" and "strong assist at
+20 in/s" — 20 in/s *is* near the aim band. `VAL-LOWGRAD` deliberately buys stability with flick punch.
+
+> **DPI is baked into the x-axis.** Breakpoints are counts/ms, so a curve authored for one DPI is wrong
+> at another. `VAL-LOWGRAD` ships for both **3200/0.088** and **1600/0.15**, with breakpoints anchored in
+> physical in/s (12 and 40) in each. Load the file matching your actual DPI — never the other one.
+
 ## The S-curve (`VAL-SCURVE`) — whaamkabaam-style
 
 The other profiles only ever *add* sensitivity. The S-curve implements the "low and high sens at the

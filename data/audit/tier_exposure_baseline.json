@@ -1,0 +1,80 @@
+{
+ "note": "Frozen exposure baseline. A RISE means new non-tier-1 rows became visible to tier-blind consumers \u2014 that is a gate failure, not a warning. A FALL is fine (contamination was removed). Rebaseline only on an owner decision.",
+ "consumers": [
+  [
+   "harness/build_ml_asof.py:126",
+   "ML training/eval dataset labels",
+   "CRITICAL"
+  ],
+  [
+   "harness/build_p4_slate.py:72",
+   "live slate as-of team form (production forecast path)",
+   "CRITICAL"
+  ],
+  [
+   "sports/enrich_mlb.py:81",
+   "features.csv labels",
+   "CRITICAL"
+  ],
+  [
+   "sports/enrich_mlb.py:15",
+   "features.csv as-of rf/ra accumulator",
+   "HIGH"
+  ],
+  [
+   "harness/daily_card.py:30",
+   "daily card team_rf/team_ra \u2014 direct V13 card inputs",
+   "HIGH"
+  ],
+  [
+   "harness/ml_v2_experiment.py:54",
+   "MLV2 rest_edge / form10_edge features",
+   "HIGH"
+  ],
+  [
+   "harness/build_p4_slate.py:121",
+   "slate completeness/contiguity reconciler",
+   "MEDIUM"
+  ],
+  [
+   "harness/healthcheck.py:33",
+   "finals>=1505 threshold counts provisional rows",
+   "MEDIUM"
+  ],
+  [
+   "sports/schema.py:72",
+   "operator-facing 'N finals' confirmation line",
+   "MEDIUM"
+  ],
+  [
+   "harness/result_content_checks.py:41",
+   "_finals() helper (defensible for echo detection)",
+   "LOW"
+  ]
+ ],
+ "exposure": {
+  "rows": 1838,
+  "naive_finals": 1824,
+  "canonical_finals": 1688,
+  "leaked_into_naive_predicate": 136,
+  "leaked_by_class": {
+   "tier1/PROVISIONAL": 10,
+   "tier2/PROVISIONAL": 17,
+   "tier3/PROVISIONAL": 109
+  },
+  "leaked_by_date": {
+   "2026-07-23": 1,
+   "2026-07-29": 16,
+   "2026-07-31": 15,
+   "2026-08-01": 15,
+   "2026-08-02": 15,
+   "2026-08-03": 8,
+   "2026-08-04": 15,
+   "2026-08-05": 15,
+   "2026-08-07": 15,
+   "2026-08-08": 11,
+   "2026-08-10": 1,
+   "2026-08-11": 9
+  }
+ }
+}

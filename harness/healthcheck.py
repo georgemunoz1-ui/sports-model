@@ -233,7 +233,7 @@ except Exception as e: check(f"P1A enforcement ({e})", False)
 # Outcome-label tooling selftests. An ungated selftest is a selftest that stops being run: the 8/5
 # "echo guard" existed only as prose and was never executed, so it never prevented anything.
 for _m in ("result_provenance","result_content_checks","parse_box_dump",
-           "acquisition_ledger","missing_data_audit"):
+           "acquisition_ledger","missing_data_audit","tier_discipline"):
     _r=subprocess.run([sys.executable,f"harness/{_m}.py","--selftest"],capture_output=True,text=True)
     _out=(_r.stdout+_r.stderr).strip().splitlines()
     check(f"{_m} selftest ({_out[-1][:72] if _out else 'no output'})", _r.returncode==0)
@@ -248,6 +248,12 @@ try:
     _r=subprocess.run([sys.executable,"harness/missing_data_audit.py","--gate"],capture_output=True,text=True)
     _out=(_r.stdout+_r.stderr).strip().splitlines()
     check(f"missing-data audit ({_out[-1][:80] if _out else 'no output'})", _r.returncode==0)
+    # Canonical-tier exposure must never GROW. It does not fail on today's 136 legacy rows (removing
+    # those changes a FROZEN model's as-of inputs and is an owner decision) — it fails the moment a
+    # NEW non-tier-1 row becomes visible to the repo's tier-blind label consumers.
+    _r=subprocess.run([sys.executable,"harness/tier_discipline.py","--gate"],capture_output=True,text=True)
+    _out=(_r.stdout+_r.stderr).strip().splitlines()
+    check(f"canonical-tier exposure ({_out[0][:80] if _out else 'no output'})", _r.returncode==0)
 except Exception as e: check(f"acquisition/audit gates ({e})", False)
 try:
     r=subprocess.run([sys.executable,"harness/policy_gate.py","--selftest"],capture_output=True,text=True)

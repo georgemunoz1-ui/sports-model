@@ -1,0 +1,44 @@
+{
+ "record_id": "EVIDENCE-BINDING-CORRECTION-2026-08-16",
+ "built_utc": "2026-08-16T03:43:29Z",
+ "authority": "repository-wide evidence-hash audit, 2026-08-16 (26 distinct (path, sha256) pairs recomputed; 25 clean, 1 mismatch, plus 56 unhashed broken pointers)",
+ "why_append_only": "data/mlb/forecasts/grades.jsonl is an append-only hash-chained ledger (R6). The defective pointers CANNOT be rewritten in place without breaking the chain, so this record supersedes them and any verifier must resolve evidence for the named grade_ids through here.",
+ "correction_1_mispaired_hash": {
+  "affected": "13 grade records G-RETRO-20260728-{BAL_DET,TEX_TB,PHI_MIA,AZ_PIT,TOR_WSH,KC_MIN,NYY_CWS,CHC_STL,HOU_LAA,BOS_ATH,COL_SD,MIL_SF,SEA_LAD}",
+  "defect": "all 13 bind path data/mlb/box/2026-07-26_and_07-28_extract.json to sha256 c18668285900c92a8fc3f167c8b76e589e825cbcb70c0dcee8d28a2755868744, which is NOT that file's hash.",
+  "root_cause": "path/hash MISPAIRING, not corruption or tampering: c18668... is the sha256 of the UPSTREAM artifact data/mlb/box/2026-07-26_and_07-28_savant_paste.txt (confirmed by a full-repo 937-file hash sweep \u2014 exactly one file matches). Both files are present and unmodified; git status clean.",
+  "true_hashes": {
+   "data/mlb/box/2026-07-26_and_07-28_extract.json": "559278a6d0fe101ffb15a2b65880b4c6c9a93a3de87b6dea7b68a358bbf20122",
+   "data/mlb/box/2026-07-26_and_07-28_savant_paste.txt": "c18668285900c92a8fc3f167c8b76e589e825cbcb70c0dcee8d28a2755868744"
+  },
+  "resolution": "both artifacts are genuine and the evidence chain is intact once the pair is read correctly; no data is in doubt."
+ },
+ "correction_2_broken_paths": {
+  "affected": "56 grade records citing evidence/websearch/... under a truncated prefix",
+  "defect": "the cited prefix 'evidence/websearch/' does not resolve \u2014 there is no top-level evidence/ directory and git never tracked one.",
+  "true_paths_and_hashes": {
+   "data/mlb/evidence/websearch/2026-0729-0731_finals.json": "f36d6d825de6f46096ec6edfef90220db8f5f089dec4a7f2271e670e5cf0bafa",
+   "data/mlb/evidence/websearch/2026-08-04_finals.json": "aa74d1dae4b7756c9233d6112953d4c16f7cf789c7c51ce785d734f9343d8120",
+   "data/mlb/evidence/websearch/2026-08-03_finals.json": "d2d73820333111ff933e09c73581e0e75ed0a161f1595c868bafec7c1a614434",
+   "data/mlb/evidence/websearch/2026-08-07_results_corrections.json": "8590564d6c0a3e8e4a9f29f0a062ace118897cdacdb7799241e4e5bcd8d16b65"
+  },
+  "note": "these 56 pointers carry NO expected hash, so they were invisible to hash-based verification. Hashes are computed and bound HERE for the first time."
+ },
+ "correction_3_unhashable_by_nature": {
+  "affected": "15 RETRO-20260728-* forecast records",
+  "state": "artifact_ref absent and original_file_hash explicitly null; pregame_evidence is the string 'conversation_transcript'",
+  "disposition": "NOT repairable from repository artifacts \u2014 the cited evidence lives outside the repo. The null is honest and self-declaring (the records do not claim a binding they lack), so it stays null. These 15 are already cohort RETROSPECTIVE_ARCHIVED / EXCLUDED_FROM_ALL_AGGREGATES and must never be promoted."
+ },
+ "correction_4_wnba_official_ledger_wording": {
+  "corrects": "data/mlb/analysis/2026-08-15_validation_sweep.json phrase 'official ledger now 7/8 sides, mean Brier 0.1064 ... the provisional and official ledgers have merged'",
+  "defect": "that sentence folded THREE TIER-3-basis grades (G-WNBA-V1-20260813-*) into what it called the official ledger alongside five genuine tier-1 grades. Under the 2026-08-16 ruling those are different evidence tiers and must not be pooled.",
+  "corrected_statement": "WNBA tier-1 cohort: n=5, 4-1 sides, mean Brier 0.1305. WNBA tier-3 pre-ruling cohort: n=3, 3-0 sides, mean Brier 0.0663. These are reported separately by harness/cohort_backtest.py and are never summed.",
+  "also_corrects": "data/mlb/analysis/2026-08-13_provisional_results_CORRECTION.json grading_status claimed 'ungraded ... waits for tier-1 capture'; three grades were in fact appended 2026-08-15T05:08:12Z on tier-3 evidence. The stated precondition was never met. The grades stand (append-only) as a documented pre-ruling exception."
+ },
+ "correction_5_orphaned_provisional_record": {
+  "corrects": "PROVISIONAL-VALIDATION-2026-08-11 (data/mlb/analysis/2026-08-11_provisional_validation.json)",
+  "defect": "carries MIL@SD as '6-4' and KC@LAD as 'UNRESOLVED'. Tier-1/verified state: MIL@SD was won by SAN DIEGO (winner-only tier-1 row, home_win=0; tier-3 score 2-11 held in the 8/11 acquisition ledger) and KC@LAD has a tier-1 winner-only row. The 6-4 is both wrong and orientation-reversed relative to the truth.",
+  "why_this_record_exists": "the sweep found this file FULLY ORPHANED \u2014 zero machine-readable references to its record_id anywhere, and the incident file that reverses it (2026-08-11_milsd_reversal_incident.json) carries no `corrects` field. A reader opening the original got superseded numbers with no in-band signal. That is now fixed by this record plus data/audit/supersession_index.json."
+ },
+ "structural_fix_adopted": "all correction records must name the target record_id in a `corrects`/`supersedes` field. data/audit/supersession_index.json is generated from those fields so any record can be checked for a successor in one lookup instead of a full-repo grep."
+}

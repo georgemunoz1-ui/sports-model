@@ -71,7 +71,13 @@ def _stats(rows, name, evidence_tier, notes, exclusions=(), unresolved=()):
 
 def cohorts():
     F = {f["forecast_id"]: f for f in _jsonl("data/mlb/forecasts/forecasts.jsonl")}
-    G = _jsonl("data/mlb/forecasts/grades.jsonl")
+    G_all = _jsonl("data/mlb/forecasts/grades.jsonl")
+    # A grade named by another grade's supersedes_grade_id is HISTORY, not current state. Iterating
+    # the raw list double-counted the two 7/29 R6 supersessions, whose labels are contradictory
+    # (home_win 0 then 1) — a latent double-grade that only stayed harmless because no active cohort
+    # prefix reached them.
+    _superseded = {g["supersedes_grade_id"] for g in G_all if g.get("supersedes_grade_id")}
+    G = [g for g in G_all if g.get("grade_id") not in _superseded]
     res = {(r["date"], r["away"], r["home"]): r for r in _results()}
     out = []
 
@@ -99,7 +105,11 @@ def cohorts():
             r = res.get((f["slate_date"], t["away"], t["home"]))
             row = {"game": f'{t["away"]}@{t["home"]}', "p_home": p_home, "home_win": int(g["home_win"]),
                    "total_pred": p.get("proj_total")}
-            if r and r.get("total") not in ("", None) and r.get("source_tier") == "1":
+            # BOTH predicates: 10 rows are source_tier==1 but result_status==PROVISIONAL (winner
+            # proven by tier-1 standings arithmetic, score not yet officially captured). Enforcing
+            # tier alone would admit them as finals.
+            if (r and r.get("total") not in ("", None) and r.get("source_tier") == "1"
+                    and r.get("result_status") == "FINAL"):
                 row["total_actual"] = float(r["total"])
             rows.append(row)
         return rows
@@ -136,7 +146,7 @@ def cohorts():
             away, home = r["g"].split("@")
             key = ("2026-08-14", "AZ" if away == "ARI" else away, home)
             rr = res.get(key)
-            if not rr or rr.get("source_tier") != "1":
+            if not rr or rr.get("source_tier") != "1" or rr.get("result_status") != "FINAL":
                 continue
             p_home = r["p"] if r["pick"] == home else round(1 - r["p"], 3)
             rows.append({"game": r["g"], "p_home": p_home, "home_win": int(rr["home_win"])})

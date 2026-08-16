@@ -24,6 +24,9 @@ Modes:  (default) full report -> data/audit/missing_data_report.json + stdout su
 from __future__ import annotations
 import csv, glob, json, os, sys, collections
 
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import acquisition_ledger as _al
+
 BASE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 os.chdir(BASE)
 RESULTS = "data/backfill/mlb/2026/results.csv"
@@ -146,7 +149,10 @@ def repo_scans():
     res = _results_rows()
     F = _load_jsonl("data/mlb/forecasts/forecasts.jsonl")
     G = _load_jsonl("data/mlb/forecasts/grades.jsonl")
-    graded = collections.Counter(g["forecast_id"] for g in G)
+    superseded = {g["supersedes_grade_id"] for g in G if g.get("supersedes_grade_id")}
+    G_current = [g for g in G if g.get("grade_id") not in superseded]
+    graded = collections.Counter(g["forecast_id"] for g in G_current)
+    gaps_superseded = sorted(superseded)
 
     # new tier-2/3 canonical ingestion after the ruling (STRUCTURAL)
     gaps["new_tier23_canonical"] = [
@@ -159,6 +165,7 @@ def repo_scans():
     # duplicate grades beyond whitelist (STRUCTURAL)
     gaps["duplicate_grades"] = [f"{k} x{c}" for k, c in graded.items()
                                 if c > 1 and k not in GRADE_DUP_WHITELIST]
+    gaps["superseded_grades_resolved"] = gaps_superseded
     # forecasts without terminal disposition (excluding archival-by-design)
     gaps["ungraded_forecasts"] = [f["forecast_id"] for f in F
                                   if f["forecast_id"] not in graded
@@ -189,7 +196,10 @@ def repo_scans():
     gaps["missing_evidence_files"] = sorted(missing_ev)
     # date-level deferral states in any acquisition ledger (STRUCTURAL)
     bad_states = []
-    for path in glob.glob("data/*/acquisition_ledger_*.jsonl"):
+    # SHARED definition: acquisition_ledger.ledger_paths() also covers data/nfl/results_ledger.jsonl,
+    # which the previous inline glob missed — an NFL row carrying a date-level state would have
+    # slipped the gate-fatal check entirely.
+    for path in _al.ledger_paths():
         for r in _load_jsonl(path):
             if r.get("state") in FORBIDDEN_LEDGER_STATES:
                 bad_states.append(f"{path}: {r.get('date')} {r.get('state')}")
@@ -198,13 +208,13 @@ def repo_scans():
     have = {(r["date"], r["away"], r["home"]) for r in res
             if r.get("away_score") not in ("", None) or r.get("home_win") not in ("", None)}
     led_have = set()
-    for path in glob.glob("data/mlb/acquisition_ledger_*.jsonl"):
+    for path in _al.ledger_paths():
         for r in _load_jsonl(path):
             if r.get("game") and "@" in r["game"]:
                 a, h = r["game"].split("@")
                 led_have.add((r["date"], a, h))
     untracked = []
-    for p in sorted(glob.glob("data/mlb/slates/*_slate.psv")):
+    for p in sorted(glob.glob("data/mlb/slates/*_slate*.psv")):
         date = os.path.basename(p).split("_")[0]
         for line in open(p):
             parts = line.strip().split("|")
@@ -213,6 +223,16 @@ def repo_scans():
                 if k not in have and k not in led_have:
                     untracked.append(f"{date} {parts[1]}@{parts[2]}")
     gaps["slate_games_untracked_anywhere"] = untracked
+    # zero-row slate dates: slate_completeness() returns early when a date has no rows at all, so a
+    # WHOLLY absent slate is invisible to it. Enumerate those dates explicitly.
+    dates_with_rows = {r["date"] for r in res}
+    zero_row_slates = []
+    for p in sorted(glob.glob("data/mlb/slates/*_slate*.psv")):
+        date = os.path.basename(p).split("_")[0]
+        if date not in dates_with_rows:
+            n = sum(1 for line in open(p) if line.strip())
+            zero_row_slates.append(f"{date}: frozen slate {os.path.basename(p)} has {n} games and ZERO canonical rows")
+    gaps["zero_row_slate_dates"] = sorted(set(zero_row_slates))
     # legacy schema drift: tier-1 rows with blank result_status / full team names
     gaps["legacy_blank_status_rows"] = [f'{r["date"]} {r["away"]}@{r["home"]}' for r in res
                                         if r.get("source_tier") == "1" and r.get("result_status") == ""]

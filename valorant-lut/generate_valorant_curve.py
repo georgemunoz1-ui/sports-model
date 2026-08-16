@@ -24,10 +24,12 @@ placed at equal gain increments (uniform gain-step resolution).
 """
 import json
 
-N_POINTS = 64
+N_POINTS = 64           # default; per-profile override is the 7th tuple field
 TAIL_INS = 200.0                        # tail reaches 200 in/s regardless of DPI
 
-# (name, onset in/s, cap-speed in/s, max gain, dpi, whole_mode)
+# (name, onset in/s, cap-speed in/s, max gain, dpi, whole_mode[, n_points])
+# Base Raw Accel's real limit is LUT_POINTS_CAPACITY = 257, not the 64 that
+# Raw Accel Reimagined's editor shows. More nodes = finer gain staircase.
 # whole_mode False = by-component (horizontal accel, vertical raw 1:1)
 # whole_mode True  = magnitude-based accel on both axes (no diagonal skew)
 PROFILES = [
@@ -43,12 +45,15 @@ PROFILES = [
     # same design emitted for lower-DPI setups (eDPI 240 held constant)
     ("VAL-LOWGRAD-800-030-64pt", 12.0, 40.0, 1.15, 800.0, False),
     ("VAL-LOWGRAD-400-060-64pt", 12.0, 40.0, 1.15, 400.0, False),
+    # full-resolution builds for base Raw Accel (257-point cap)
+    ("VAL-LOWGRAD-1600-015-257pt", 12.0, 40.0, 1.15, 1600.0, False, 257),
+    ("VAL-LOWGRAD-1600-015-WHOLE-257pt", 12.0, 40.0, 1.15, 1600.0, True, 257),
 ]
 
 def s(u):  return 6*u**5 - 15*u**4 + 10*u**3          # smootherstep (gain shape)
 def S(u):  return u**6 - 3*u**5 + 2.5*u**4            # its integral, S(1)=0.5
 
-def build_lut(A_INS, B_INS, G, DPI=3200.0):
+def build_lut(A_INS, B_INS, G, DPI=3200.0, NPTS=N_POINTS):
     XMAX = DPI*TAIL_INS/1000.0
     A, B = DPI*A_INS/1000.0, DPI*B_INS/1000.0
     def gain(x):
@@ -68,7 +73,7 @@ def build_lut(A_INS, B_INS, G, DPI=3200.0):
             else: hi = m
         return 0.5*(lo+hi)
     # nodes: base(2) + knee at equal gain steps(M incl. B) + tail(2) = 64
-    M = N_POINTS - 4
+    M = NPTS - 4
     levels = [1.0 + (G-1.0)*k/M for k in range(1, M+1)]
     knee = [inv_gain(L) for L in levels]
     knee[-1] = B
@@ -76,7 +81,7 @@ def build_lut(A_INS, B_INS, G, DPI=3200.0):
     xs = sorted(set(round(x, 6) for x in ([0.0625, A] + knee + tail)))
     NX = [round(x, 5) for x in xs]
     NY = [round(y_of(x), 5) for x in xs]
-    assert len(NX) <= 64
+    assert len(NX) <= 257, f"{len(NX)} exceeds LUT_POINTS_CAPACITY"
     h_data = []
     for x, yv in zip(NX, NY): h_data += [x, yv]
     return NX, NY, h_data
@@ -135,8 +140,10 @@ def make_settings(profile):
 }
 
 if __name__ == "__main__":
-    for name, a_ins, b_ins, g_cap, dpi, whole in PROFILES:
-        NX, NY, h_data = build_lut(a_ins, b_ins, g_cap, dpi)
+    for entry in PROFILES:
+        name, a_ins, b_ins, g_cap, dpi, whole = entry[:6]
+        npts = entry[6] if len(entry) > 6 else N_POINTS
+        NX, NY, h_data = build_lut(a_ins, b_ins, g_cap, dpi, npts)
         profile = make_profile(name, h_data, dpi*TAIL_INS/1000.0, whole)
         with open(name + ".rawaccelprofile.json", "w") as f:
             json.dump(make_export(profile), f, indent=2); f.write("\n")

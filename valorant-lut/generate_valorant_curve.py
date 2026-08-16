@@ -5,7 +5,9 @@ gain/velocity LUTs, 64 points each).
 
 Target: 3200 DPI, 0.088 in-game sens (eDPI 281.6, ~46.4 cm/360 at 0.07 yaw).
 
-Design (gain space — the LUT slope IS the felt per-count multiplier):
+Design (gain space — the LUT slope is the *marginal* gain; note the driver
+applies y(s)/s, the ratio, as the per-packet multiplier, so felt sensitivity
+lags the slope and only approaches the cap asymptotically):
 exactly 1.000x below the onset speed, then a C2-smooth quintic ease
 (smootherstep) up to the max gain at the cap speed, flat beyond, out to
 200 in/s. Zero gain-derivative at both ends of the ramp — no kinks.

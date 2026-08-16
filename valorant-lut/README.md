@@ -38,6 +38,55 @@ Four profiles:
 | `VAL-3200-088-64pt.curve.svg` | Chart for the subtle profile |
 | `generate_curve.py` | Self-contained generator for the subtle profile |
 
+## Valorant's forced Raw Input Buffer — does it affect these LUTs?
+
+**No.** Verified against the Raw Accel driver source, not inferred.
+
+Riot removed the `Raw Input Buffer` toggle in **patch 11.06 (Sept 16, 2025)** and forces it on.
+It selects how the *game* reads already-delivered input: `GetRawInputBuffer()` drains a batch of
+`RAWINPUT` records in one syscall instead of handling one `WM_INPUT` message at a time. It is a
+CPU-overhead optimization for high-polling-rate mice — not an input-path change.
+
+Raw Accel runs far upstream of that. `rawaccel.sys` is a KMDF **upper filter driver** on the mouse
+class stack (registered via `SPCRP_UPPERFILTERS`, `WdfFdoInitSetFilter`). It hooks
+`IOCTL_INTERNAL_MOUSE_CONNECT` and substitutes its own `ClassService` callback, so on every mouse
+report `RawaccelCallback` mutates `LastX`/`LastY` **in place** and only then forwards the buffer to
+mouclass. The source comment is explicit: *"Called when there are mouse packets to report to the RIT."*
+So win32k's Raw Input Thread — and therefore every read path the game could choose — only ever sees
+post-acceleration deltas. The driver contains **zero** references to `WM_INPUT`, `GetRawInputData`,
+`GetRawInputBuffer`, or user32; it cannot observe how the app reads.
+
+The math is also closed: acceleration is applied per packet upstream, so the game receives `Σ f(dᵢ)`.
+Batched vs per-message reads are just re-partitions of that same sum, and Valorant's `0.088` is a
+linear scalar that commutes with summation. Total view-angle change is identical either way. An
+interaction would require accel applied *after* summing (in-game accel, like Source's `m_customaccel`)
+— Valorant has none.
+
+Note also: "raw input bypasses Windows acceleration" is true but irrelevant here. Pointer ballistics /
+Enhanced Pointer Precision lives in win32k; Raw Accel lives below mouclass. Different layers, and
+raw input cannot bypass the lower one. That is precisely why Raw Accel works in Valorant at all.
+
+### Device settings: leave them at defaults
+
+These were tested by simulation against the real 64-point LUT, and the shipped defaults win:
+
+| Device field | Value | Why |
+|---|---|---|
+| `DPI (normalizes input speed)` | **0** | Non-zero rescales input by `1000/DPI`. The LUT x-axis is raw counts/ms locked to 3200 DPI (6.4 and 128 counts/ms *are* 2 and 40 in/s). Setting it breaks the curve. |
+| `Polling rate Hz` | **0** | Counter-intuitive but measured: setting 1000 raises the Δt floor to 1 ms, and that clamp is **one-sided** — it lifts short intervals (under-reading speed) while leaving long ones alone. Net systematic undershoot of −0.3% to −1.3% on flicks vs ~0.0% today. |
+| `Use constant time interval` | **false** | Exact only if polls never merge or drop; at a 5% merged-poll rate it degrades to +1.0–1.7% error. Measured timing self-corrects. |
+| all smoothing half-lives | **0** | Baseline jitter error is already ~0.01–0.05% of stroke displacement. A 2 ms half-life moves error away from zero; 8 ms causes ~−1.3% flick undershoot from speed-estimate lag. |
+
+Why jitter is a non-issue for this curve: the driver measures Δt with `KeQueryPerformanceCounter`,
+divides a multi-packet batch evenly (`ticks * tick_interval / num_packets`), and clamps to
+[0.0625, 100] ms. Note what actually gets applied: in Gain/Velocity mode `accel-lookup.hpp` sets
+`velocity = args.gain` and then computes `y /= x`, so the per-packet multiplier is the **ratio**
+`y(s)/s` — the slope is the *marginal* gain, which is why felt sensitivity lags it (see the tables
+above). That ratio's elasticity — `d ln(mult) / d ln(speed)` — peaks at only
+**0.26**, so a 1% speed error yields at most 0.26% multiplier error. Under realistic 5% timing jitter
+that is ≤0.054% of stroke displacement: about 0.2 mm on a 40 cm flick, far below hand tremor. The
+two regions that matter most (the hold floor and the flick cap) are flat, hence fully jitter-immune.
+
 ## The S-curve (`VAL-SCURVE`) — whaamkabaam-style
 
 The other profiles only ever *add* sensitivity. The S-curve implements the "low and high sens at the

@@ -36,6 +36,7 @@ PROFILES = [
     # V2 design regenerated for the 1600 DPI hardware. This is the control that
     # isolates the DPI variable: identical philosophy to V2, correct breakpoints.
     ("VAL-SCURVE-V2-1600-015-64pt", 0.80, 1.40, 2.0, 40.0, 1600.0),
+    ("VAL-SCURVE-V2-800-030-64pt", 0.80, 1.40, 2.0, 40.0, 800.0),
 ]
 
 def s(u): return 6*u**5 - 15*u**4 + 10*u**3

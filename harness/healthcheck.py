@@ -232,10 +232,23 @@ except Exception as e: check(f"P1A enforcement ({e})", False)
 # This FAILS rather than warns: a gate that has quietly drifted is worse than no gate.
 # Outcome-label tooling selftests. An ungated selftest is a selftest that stops being run: the 8/5
 # "echo guard" existed only as prose and was never executed, so it never prevented anything.
-for _m in ("result_provenance","result_content_checks","parse_box_dump"):
+for _m in ("result_provenance","result_content_checks","parse_box_dump",
+           "acquisition_ledger","missing_data_audit"):
     _r=subprocess.run([sys.executable,f"harness/{_m}.py","--selftest"],capture_output=True,text=True)
     _out=(_r.stdout+_r.stderr).strip().splitlines()
     check(f"{_m} selftest ({_out[-1][:72] if _out else 'no output'})", _r.returncode==0)
+# 5a3b. per-game acquisition coverage + canonical-tier discipline (owner ruling 2026-08-16).
+# These are GATES, not selftests: they read the live ledgers and the live canonical table, so they
+# fail when a date-level deferral, a post-ruling tier-2/3 canonical ingestion, a duplicate grade, or
+# a forecast generated after first pitch actually appears in the repository.
+try:
+    _r=subprocess.run([sys.executable,"harness/acquisition_ledger.py","--gate"],capture_output=True,text=True)
+    _out=(_r.stdout+_r.stderr).strip().splitlines()
+    check(f"acquisition ledgers valid ({_out[0][:72] if _out else 'no output'})", _r.returncode==0)
+    _r=subprocess.run([sys.executable,"harness/missing_data_audit.py","--gate"],capture_output=True,text=True)
+    _out=(_r.stdout+_r.stderr).strip().splitlines()
+    check(f"missing-data audit ({_out[-1][:80] if _out else 'no output'})", _r.returncode==0)
+except Exception as e: check(f"acquisition/audit gates ({e})", False)
 try:
     r=subprocess.run([sys.executable,"harness/policy_gate.py","--selftest"],capture_output=True,text=True)
     check(f"policy gate self-test ({(r.stdout+r.stderr).strip().splitlines()[-1] if (r.stdout+r.stderr).strip() else 'no output'})", r.returncode==0)

@@ -1,0 +1,270 @@
+[
+ {
+  "cohort": "MLB V13 prospective \u2014 2026-08-14",
+  "n": 14,
+  "evidence_tier": "TIER_1",
+  "side_record": "6-8",
+  "accuracy": 0.4286,
+  "mean_brier": 0.2557,
+  "log_loss": 0.7043,
+  "margin_mae": null,
+  "margin_n": 0,
+  "total_mae": 4.6286,
+  "total_n": 14,
+  "spread_diagnostic": {
+   "mean_favourite_prob": 0.5492,
+   "sd_pp": 3.07,
+   "n_ge_58pct": 2
+  },
+  "calibration_buckets": {
+   "0.50-0.55": {
+    "n": 7,
+    "mean_pred": 0.5266,
+    "realised": 0.4286
+   },
+   "0.55-0.60": {
+    "n": 6,
+    "mean_pred": 0.5635,
+    "realised": 0.3333
+   },
+   "0.60-0.70": {
+    "n": 1,
+    "mean_pred": 0.622,
+    "realised": 1.0
+   }
+  },
+  "exclusions": [
+   "none"
+  ],
+  "unresolved": [
+   "none"
+  ],
+  "notes": "ml.v13_1.hfa1005.card.s722n30000, frozen; registered pre-pitch; graded on the tier-1 owner finals board. This is the only fully tier-1 MLB cohort in the repository."
+ },
+ {
+  "cohort": "MLB V13 prospective \u2014 2026-08-13 v1 (PRE-RULING TIER-3 EXCEPTION)",
+  "n": 7,
+  "evidence_tier": "TIER_3_PRE_RULING",
+  "side_record": "2-5",
+  "accuracy": 0.2857,
+  "mean_brier": 0.2587,
+  "log_loss": 0.7106,
+  "margin_mae": null,
+  "margin_n": 0,
+  "total_mae": null,
+  "total_n": 0,
+  "spread_diagnostic": {
+   "mean_favourite_prob": 0.532,
+   "sd_pp": 2.4,
+   "n_ge_58pct": 0
+  },
+  "calibration_buckets": {
+   "0.50-0.55": {
+    "n": 5,
+    "mean_pred": 0.522,
+    "realised": 0.4
+   },
+   "0.55-0.60": {
+    "n": 2,
+    "mean_pred": 0.557,
+    "realised": 0.0
+   }
+  },
+  "exclusions": [
+   "not poolable with tier-1"
+  ],
+  "unresolved": [
+   "none"
+  ],
+  "notes": "Graded 2026-08-15 on multi-source tier-3 finals, BEFORE the owner's tier-1-only ruling. The grade chain is append-only so these stand, but they are a separate cohort and must never be pooled with the tier-1 cohort above."
+ },
+ {
+  "cohort": "MLB V13 v2 evening cohort \u2014 2026-08-13 (PRE-RULING TIER-3 EXCEPTION)",
+  "n": 2,
+  "evidence_tier": "TIER_3_PRE_RULING",
+  "side_record": "1-1",
+  "accuracy": 0.5,
+  "mean_brier": 0.2842,
+  "log_loss": 0.7619,
+  "margin_mae": null,
+  "margin_n": 0,
+  "total_mae": null,
+  "total_n": 0,
+  "spread_diagnostic": {
+   "mean_favourite_prob": 0.534,
+   "sd_pp": 4.53,
+   "n_ge_58pct": 0
+  },
+  "calibration_buckets": {
+   "0.50-0.55": {
+    "n": 1,
+    "mean_pred": 0.502,
+    "realised": 1.0
+   },
+   "0.55-0.60": {
+    "n": 1,
+    "mean_pred": 0.566,
+    "realised": 0.0
+   }
+  },
+  "exclusions": [
+   "P4-20260813v2-MIL@LAD (winner proven tier-1; different evidence tier)"
+  ],
+  "unresolved": [
+   "none"
+  ],
+  "notes": "3 graded rows total; MIL@LAD's grade rests on a TIER-1 series-state winner proof rather than a tier-3 score and is therefore excluded from this tier-3 statistic and named below."
+ },
+ {
+  "cohort": "MLB V19 external shadow \u2014 2026-08-14 (MESSAGE-ATTESTED)",
+  "n": 14,
+  "evidence_tier": "TIER_1_FINAL / ATTESTED_FORECAST",
+  "side_record": "4-10",
+  "accuracy": 0.2857,
+  "mean_brier": 0.27,
+  "log_loss": 0.7339,
+  "margin_mae": null,
+  "margin_n": 0,
+  "total_mae": null,
+  "total_n": 0,
+  "spread_diagnostic": {
+   "mean_favourite_prob": 0.5433,
+   "sd_pp": 3.76,
+   "n_ge_58pct": 2
+  },
+  "calibration_buckets": {
+   "0.50-0.55": {
+    "n": 9,
+    "mean_pred": 0.5198,
+    "realised": 0.2222
+   },
+   "0.55-0.60": {
+    "n": 4,
+    "mean_pred": 0.5737,
+    "realised": 0.5
+   },
+   "0.60-0.70": {
+    "n": 1,
+    "mean_pred": 0.633,
+    "realised": 0.0
+   }
+  },
+  "exclusions": [
+   "none"
+  ],
+  "unresolved": [
+   "none"
+  ],
+  "notes": "V18's frozen artifact run prospectively; NO_PROMOTE (paired CIs crossed zero). The FINALS are tier-1; the FORECAST payload is a message transcription, not canonical bytes \u2014 control C-V19-SUPERSESSION governs if canonical bytes later differ."
+ },
+ {
+  "cohort": "WNBA v1.0 shadow \u2014 TIER-1 graded",
+  "n": 5,
+  "evidence_tier": "TIER_1",
+  "side_record": "4-1",
+  "accuracy": 0.8,
+  "mean_brier": 0.1305,
+  "log_loss": 0.4329,
+  "margin_mae": 6.346,
+  "margin_n": 5,
+  "total_mae": 6.86,
+  "total_n": 5,
+  "spread_diagnostic": {
+   "mean_favourite_prob": 0.6963,
+   "sd_pp": 9.06,
+   "n_ge_58pct": 4
+  },
+  "calibration_buckets": {
+   "0.55-0.60": {
+    "n": 1,
+    "mean_pred": 0.5793,
+    "realised": 0.0
+   },
+   "0.60-0.70": {
+    "n": 1,
+    "mean_pred": 0.6312,
+    "realised": 1.0
+   },
+   "0.70-1.01": {
+    "n": 3,
+    "mean_pred": 0.757,
+    "realised": 1.0
+   }
+  },
+  "exclusions": [
+   "none"
+  ],
+  "unresolved": [
+   "none"
+  ],
+  "notes": "wnba.rs.ff7_logit_ridge.v1_0.shadow; registered pre-tip; graded on tier-1 owner finals boards."
+ },
+ {
+  "cohort": "WNBA v1.0 shadow \u2014 TIER-3 graded (PRE-RULING EXCEPTION)",
+  "n": 3,
+  "evidence_tier": "TIER_3_PRE_RULING",
+  "side_record": "3-0",
+  "accuracy": 1.0,
+  "mean_brier": 0.0663,
+  "log_loss": 0.2957,
+  "margin_mae": 11.7633,
+  "margin_n": 3,
+  "total_mae": 5.5,
+  "total_n": 3,
+  "spread_diagnostic": {
+   "mean_favourite_prob": 0.7448,
+   "sd_pp": 4.15,
+   "n_ge_58pct": 3
+  },
+  "calibration_buckets": {
+   "0.70-1.01": {
+    "n": 3,
+    "mean_pred": 0.7448,
+    "realised": 1.0
+   }
+  },
+  "exclusions": [
+   "none"
+  ],
+  "unresolved": [
+   "none"
+  ],
+  "notes": "2026-08-13 night, converted on corroborated multi-source finals before the tier-1-only ruling; separate cohort."
+ },
+ {
+  "cohort": "NFL market benchmark \u2014 TIER-1 graded",
+  "n": 8,
+  "evidence_tier": "TIER_1",
+  "side_record": "4-4",
+  "accuracy": 0.5,
+  "mean_brier": null,
+  "log_loss": null,
+  "margin_mae": null,
+  "total_mae": null,
+  "calibration_buckets": {},
+  "exclusions": [
+   "2026-08-13 IND@NE TIE_EXCLUDED"
+  ],
+  "unresolved": [
+   "2026-08-15 CLE@CHI (AWAITING_FROZEN_PAYLOAD_AND_TIER1_FINAL)",
+   "2026-08-15 MIN@NYG (AWAITING_FROZEN_PAYLOAD_AND_TIER1_FINAL)",
+   "2026-08-15 DAL@SEA (PENDING_FINAL)"
+  ],
+  "notes": "NO MODEL EXISTS. This is the market's declared favourite graded against finals \u2014 market-benchmark evidence, never NFL model performance. Brier/log-loss are NULL BY DESIGN because no probability was ever emitted (R1). n is far too small for any signal claim in either direction (owner control OWNER-CONTROLS-2026-08-15)."
+ },
+ {
+  "cohort": "NFL market benchmark \u2014 TIER-3 provisional",
+  "n": 4,
+  "evidence_tier": "TIER_3_PROVISIONAL",
+  "side_record": "1-3",
+  "accuracy": 0.25,
+  "mean_brier": null,
+  "log_loss": null,
+  "margin_mae": null,
+  "total_mae": null,
+  "calibration_buckets": {},
+  "exclusions": [],
+  "unresolved": [],
+  "notes": "NO MODEL EXISTS. This is the market's declared favourite graded against finals \u2014 market-benchmark evidence, never NFL model performance. Brier/log-loss are NULL BY DESIGN because no probability was ever emitted (R1). n is far too small for any signal claim in either direction (owner control OWNER-CONTROLS-2026-08-15)."
+ }
+]

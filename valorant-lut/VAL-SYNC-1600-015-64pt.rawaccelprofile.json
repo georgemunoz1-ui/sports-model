@@ -1,0 +1,75 @@
+{
+  "format": "RawAccelReimagined.Profile",
+  "formatVersion": 1,
+  "rawAccelVersion": "1.7.0",
+  "exportedAtUtc": "2026-08-04T00:00:00.0000000Z",
+  "profile": {
+    "name": "VAL-SYNC-1600-015",
+    "Stretches domain for horizontal vs vertical inputs": {
+      "x": 1.0,
+      "y": 1.0
+    },
+    "Stretches accel range for horizontal vs vertical inputs": {
+      "x": 1.0,
+      "y": 1.0
+    },
+    "Whole or horizontal accel parameters": {
+      "mode": "synchronous",
+      "Gain / Velocity": false,
+      "inputOffset": 0.0,
+      "outputOffset": 0.0,
+      "acceleration": 0.005,
+      "decayRate": 0.1,
+      "gamma": 0.12,
+      "motivity": 1.0723805294763609,
+      "exponentClassic": 2.0,
+      "scale": 1.0,
+      "exponentPower": 0.05,
+      "limit": 1.5,
+      "syncSpeed": 40.0,
+      "smooth": 0.5,
+      "Cap / Jump": {
+        "x": 15.0,
+        "y": 1.5
+      },
+      "Cap mode": "output",
+      "data": []
+    },
+    "Vertical accel parameters": {
+      "mode": "noaccel",
+      "Gain / Velocity": false,
+      "inputOffset": 0.0,
+      "outputOffset": 0.0,
+      "acceleration": 0.005,
+      "decayRate": 0.1,
+      "gamma": 0.12,
+      "motivity": 1.0723805294763609,
+      "exponentClassic": 2.0,
+      "scale": 1.0,
+      "exponentPower": 0.05,
+      "limit": 1.5,
+      "syncSpeed": 40.0,
+      "smooth": 0.5,
+      "Cap / Jump": {
+        "x": 15.0,
+        "y": 1.5
+      },
+      "Cap mode": "output",
+      "data": []
+    },
+    "Input speed calculation parameters": {
+      "Whole/combined accel (set false for 'by component' mode)": true,
+      "lpNorm": 2.0,
+      "Time in ms after which an input is weighted at half its original value.": 0.0,
+      "Time in ms after which scale is weighted at half its original value.": 0.0,
+      "Time in ms after which an output is weighted at half its original value.": 0.0
+    },
+    "Output DPI": 1072.3805294763608,
+    "Y/X output DPI ratio (vertical sens multiplier)": 1.0,
+    "L/R output DPI ratio (left sens multiplier)": 1.0,
+    "U/D output DPI ratio (up sens multiplier)": 1.0,
+    "Degrees of rotation": 0.0,
+    "Degrees of angle snapping": 0.0,
+    "Input Speed Cap": 0.0
+  }
+}

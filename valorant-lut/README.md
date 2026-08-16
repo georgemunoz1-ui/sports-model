@@ -1,8 +1,14 @@
-# Valorant LUTs — 3200 DPI · 0.088 sens (Raw Accel Reimagined)
+# Valorant LUTs (Raw Accel Reimagined)
 
-Valorant-tuned mouse-acceleration LUTs for **[Raw Accel Reimagined](https://github.com/diskcell/Raw-Accel-Reimagined)**,
-built for **3200 DPI** with **0.088** in-game sensitivity (**eDPI 281.6** ≈ **46.4 cm/360** at
-Valorant's 0.07 yaw; a raw 180° is ≈ 23.2 cm).
+Valorant-tuned mouse-acceleration LUTs for **[Raw Accel Reimagined](https://github.com/diskcell/Raw-Accel-Reimagined)**.
+
+> ## ⚠ Current hardware: **1600 DPI · 0.15 sens · 8000 Hz**
+> eDPI **240** ≈ **54.4 cm/360** at Valorant's 0.07 yaw (raw 180° ≈ 27.2 cm).
+>
+> **Use `VAL-LOWGRAD-1600-015-64pt`.** Every profile whose name contains `3200-088` was authored for
+> the previous 3200 DPI / 0.088 setup and is **mismatched at 1600 DPI** — the x-axis is counts/ms, so
+> loading one shifts every breakpoint to double the intended hand speed. They are kept for reference
+> only. See the drift section below for what that mismatch actually did.
 
 Four profiles:
 
@@ -89,9 +95,30 @@ two regions that matter most (the hold floor and the flick cap) are flat, hence 
 
 ## The drift/float problem, and `VAL-LOWGRAD`
 
-Reported symptom: a drifting or floating sensation during **micro-corrections and deceleration**
-while running the S-curve. A buffered-input explanation was proposed; the source evidence above rules
-that out. But the symptom is real, and the S-curve's own numbers explain it far better:
+### Root cause found: a DPI change silently rescaled the curve
+
+The drift was reported after switching **3200 DPI → 1600 DPI** while still running
+`VAL-SCURVE-V2`, which was authored for 3200. The LUT x-axis is counts/ms, so halving DPI doubles the
+hand speed every breakpoint corresponds to. The sub-1.0 floor stretched from ≤2 in/s to ≤4 in/s, and
+the baseline crossing moved from 7.6 in/s to **15.2 in/s** — so *all* crosshair placement, tracking
+and micro-correction ran **below 1.0× gain**:
+
+| hand speed | intended @3200 | actual @1600 |
+|---:|---:|---:|
+|  4 in/s | 0.835 | **0.803** |
+|  8 in/s | 1.015 | **0.835** |
+| 12 in/s | 1.165 | **0.925** |
+| 15 in/s | 1.255 | **0.995** |
+
+Compounded by the sens change (281.6 → 240 eDPI), effective sensitivity at 10 in/s fell from
+255 to 196 eDPI — **−23%**. A crosshair moving 23% less than your hand expects, on a steeply varying
+curve, through the entire aiming band, is exactly the reported floating sensation. Riot's buffer is
+not involved; the ROADMAP's own escalation trigger ("any DPI/sens change → regenerate") was the
+safeguard for precisely this.
+
+### Why the replacement is also a better design
+
+Even matched to the right DPI, the S-curve has a second weakness worth fixing:
 
 | Curve | gain while braking 30 → 2 in/s | swing |
 |---|---|---|
@@ -119,6 +146,32 @@ The honest tradeoff: you cannot have both "no gain variation in the aim band" an
 > **DPI is baked into the x-axis.** Breakpoints are counts/ms, so a curve authored for one DPI is wrong
 > at another. `VAL-LOWGRAD` ships for both **3200/0.088** and **1600/0.15**, with breakpoints anchored in
 > physical in/s (12 and 40) in each. Load the file matching your actual DPI — never the other one.
+
+### 8000 Hz polling: why the flat floor matters more, not less
+
+At 1600 DPI and 8 kHz you get only ~0.2 counts per packet at 1 in/s, so the driver's instantaneous
+speed estimate is extremely coarse at low speeds — ±250% at 1 in/s, ±50% at 5 in/s. That is a genuine
+reason a gain-varying curve can feel unstable on this hardware. `VAL-LOWGRAD` is immune where it counts:
+
+| hand speed | speed-estimate error | resulting gain error |
+|---:|---:|---:|
+|  1 in/s | ±250% | **0.00%** |
+|  5 in/s |  ±50% | **0.00%** |
+| 12 in/s |  ±21% | 0.06% |
+| 25 in/s |  ±10% | 2.35% (worst case) |
+
+All the severe quantization lands in the flat 1.000× region, where no speed error can change the
+multiplier. The same test on the mismatched S-curve gives **3× the worst-case error**. Leave the
+Raw Accel polling-rate field at **0** regardless — see the device-settings table above for why
+setting it is a measured regression.
+
+### Directional A/B (`-WHOLE` variant)
+
+`VAL-LOWGRAD-1600-015-WHOLE-64pt` is the identical curve in **whole/combined** mode: acceleration is
+driven by movement magnitude and applied to both axes, so fast diagonals keep their direction. The
+default by-component build accelerates horizontal only and leaves vertical raw — better for recoil
+control and the headshot line, but a fast diagonal skews by a few degrees at the 1.15 cap. Raw Accel's
+own guidance is that whole mode is smoother for most users. Both are shipped; run the A/B.
 
 ## The S-curve (`VAL-SCURVE`) — whaamkabaam-style
 

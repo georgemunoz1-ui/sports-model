@@ -8,7 +8,10 @@ habits hold the rating down (K/D bottom 26%, KAST bottom 32%). Gear is solved an
 **Baseline (Aug 8):** comp 0.90 K/D · 24.9% HS · 69% KAST · ACS 214 · DDΔ +1/rd.
 Swiftplay same act: 1.05 K/D · DDΔ +17/rd · ACS 239 — the comp-translation gap is the project.
 Hours are inverted for climbing: 68h swift vs 21h comp.
-Gear locked: `VAL-SCURVE-V2` (0.80×→1.40×, cross 7.6 in/s) · 3200 DPI · 0.088 · Wooting RT 0.15mm.
+Gear (updated Aug 2026): **1600 DPI · 0.15 · 8000 Hz**, curve `VAL-LOWGRAD-1600-015-64pt`
+(1.000× below 12 in/s, 1.15 cap by 40 in/s) · Wooting RT 0.15mm. The earlier `VAL-SCURVE-V2` was
+authored for 3200 DPI; running it after the DPI switch put all aim speeds below 1.0× gain and caused
+the reported drift. Escalation trigger 3 fired and the curve was regenerated.
 Post-switch form: last-20 swift 75% WR / 1.31 K/D; Aug 7 was a 49% HS day.
 
 ## Phase 0 — Freeze (this week)
@@ -50,5 +53,7 @@ Post-switch form: last-20 swift 75% WR / 1.31 K/D; Aug 7 was a 49% HS day.
 - HS% < 30 averaged over 30 games while flicks feel like overshooting → cap 1.40× → 1.35×.
 - Hold still drifts after the Wooting W/S fix → floor 0.80× → 0.78×.
 - Any DPI/sens change → regenerate the curve to match. Never play a mismatched curve.
+  (FIRED Aug 2026: 3200/0.088 → 1600/0.15. Curve regenerated as VAL-LOWGRAD-1600-015.
+  This trigger exists because a mismatched curve is indistinguishable from a "bad" curve by feel.)
 
 **Weekly check, four numbers only:** KAST · K/D · HS% · untradeable deaths. Weekly, never mid-session.

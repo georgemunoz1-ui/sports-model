@@ -40,6 +40,9 @@ PROFILES = [
     ("VAL-LOWGRAD-1600-015-64pt", 12.0, 40.0, 1.15, 1600.0, False),
     # same curve, whole/combined mode - the A/B for directional uniformity
     ("VAL-LOWGRAD-1600-015-WHOLE-64pt", 12.0, 40.0, 1.15, 1600.0, True),
+    # same design emitted for lower-DPI setups (eDPI 240 held constant)
+    ("VAL-LOWGRAD-800-030-64pt", 12.0, 40.0, 1.15, 800.0, False),
+    ("VAL-LOWGRAD-400-060-64pt", 12.0, 40.0, 1.15, 400.0, False),
 ]
 
 def s(u):  return 6*u**5 - 15*u**4 + 10*u**3          # smootherstep (gain shape)

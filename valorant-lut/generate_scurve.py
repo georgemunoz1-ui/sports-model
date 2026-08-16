@@ -24,21 +24,24 @@ nodes sit at equal gain increments (uniform 0.0075x/step resolution).
 """
 import json, math
 
-DPI = 3200.0
-XMAX = 640.0
 N_POINTS = 64
+TAIL_INS = 200.0
 
-# (name, gain floor, gain cap, floor-end in/s, cap-start in/s)
+# (name, gain floor, gain cap, floor-end in/s, cap-start in/s, dpi)
 PROFILES = [
     # V1: original — floor 0.85, cap 1.30 at 50 in/s
-    ("VAL-SCURVE-3200-088-64pt", 0.85, 1.30, 2.0, 50.0),
+    ("VAL-SCURVE-3200-088-64pt", 0.85, 1.30, 2.0, 50.0, 3200.0),
     # V2: tighter hold + faster flicks — floor 0.80, cap 1.40 by 40 in/s
-    ("VAL-SCURVE-V2-3200-088-64pt", 0.80, 1.40, 2.0, 40.0),
+    ("VAL-SCURVE-V2-3200-088-64pt", 0.80, 1.40, 2.0, 40.0, 3200.0),
+    # V2 design regenerated for the 1600 DPI hardware. This is the control that
+    # isolates the DPI variable: identical philosophy to V2, correct breakpoints.
+    ("VAL-SCURVE-V2-1600-015-64pt", 0.80, 1.40, 2.0, 40.0, 1600.0),
 ]
 
 def s(u): return 6*u**5 - 15*u**4 + 10*u**3
 
-def build_lut(G_LO, G_HI, vlo_ins, vhi_ins):
+def build_lut(G_LO, G_HI, vlo_ins, vhi_ins, DPI=3200.0):
+    XMAX = DPI*TAIL_INS/1000.0
     V_LO, V_HI = DPI*vlo_ins/1000.0, DPI*vhi_ins/1000.0
     lnlo, lnhi = math.log(V_LO), math.log(V_HI)
     lgl, lgh = math.log(G_LO), math.log(G_HI)
@@ -84,7 +87,7 @@ def build_lut(G_LO, G_HI, vlo_ins, vhi_ins):
     assert len(NX) <= 64
     h_data = []
     for x, yv in zip(NX, NY): h_data += [x, yv]
-    return NX, NY, h_data, inv_gain
+    return NX, NY, h_data, inv_gain, XMAX
 
 def accel(mode, data):
     return {
@@ -139,8 +142,8 @@ def make_settings(profile):
 }
 
 if __name__ == "__main__":
-    for name, g_lo, g_hi, vlo, vhi in PROFILES:
-        NX, NY, h_data, inv_gain = build_lut(g_lo, g_hi, vlo, vhi)
+    for name, g_lo, g_hi, vlo, vhi, dpi in PROFILES:
+        NX, NY, h_data, inv_gain, _x = build_lut(g_lo, g_hi, vlo, vhi, dpi)
         profile = make_profile(name, h_data)
         with open(name + ".rawaccelprofile.json", "w") as f:
             json.dump(make_export(profile), f, indent=2); f.write("\n")
@@ -151,4 +154,4 @@ if __name__ == "__main__":
             f.write(paste + "\n")
         cross = inv_gain(1.0)
         print(f"{name}: {len(NX)} pts, floor {g_lo} cap {g_hi}, "
-              f"baseline crossing {cross*1000/DPI:.1f} in/s")
+              f"baseline crossing {cross*1000/dpi:.1f} in/s @{dpi:.0f}dpi")

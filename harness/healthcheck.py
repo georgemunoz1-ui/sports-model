@@ -233,7 +233,7 @@ except Exception as e: check(f"P1A enforcement ({e})", False)
 # Outcome-label tooling selftests. An ungated selftest is a selftest that stops being run: the 8/5
 # "echo guard" existed only as prose and was never executed, so it never prevented anything.
 for _m in ("result_provenance","result_content_checks","parse_box_dump",
-           "acquisition_ledger","missing_data_audit","tier_discipline"):
+           "acquisition_ledger","missing_data_audit","tier_discipline","artifact_immutability"):
     _r=subprocess.run([sys.executable,f"harness/{_m}.py","--selftest"],capture_output=True,text=True)
     _out=(_r.stdout+_r.stderr).strip().splitlines()
     check(f"{_m} selftest ({_out[-1][:72] if _out else 'no output'})", _r.returncode==0)
@@ -254,6 +254,12 @@ try:
     _r=subprocess.run([sys.executable,"harness/tier_discipline.py","--gate"],capture_output=True,text=True)
     _out=(_r.stdout+_r.stderr).strip().splitlines()
     check(f"canonical-tier exposure ({_out[0][:80] if _out else 'no output'})", _r.returncode==0)
+    # Registered cohort artifacts must still hash to what was registered. daily_card.py hardcodes its
+    # output path, so a rebuild for a date CLOBBERS that date's v1 artifact; this makes the resulting
+    # damage impossible to miss instead of relying on the operator having kept a copy.
+    _r=subprocess.run([sys.executable,"harness/artifact_immutability.py","--gate"],capture_output=True,text=True)
+    _out=(_r.stdout+_r.stderr).strip().splitlines()
+    check(f"registered-artifact immutability ({_out[0][:78] if _out else 'no output'})", _r.returncode==0)
 except Exception as e: check(f"acquisition/audit gates ({e})", False)
 try:
     r=subprocess.run([sys.executable,"harness/policy_gate.py","--selftest"],capture_output=True,text=True)

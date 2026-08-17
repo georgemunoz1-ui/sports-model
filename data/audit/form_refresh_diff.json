@@ -1,6 +1,6 @@
 {
  "record_id": "FORM-REFRESH-DIFF-2026-08-17",
- "built_utc": "2026-08-17T08:21:58Z",
+ "built_utc": "2026-08-17T08:51:34Z",
  "role": "MEASUREMENT_NON_FORECASTING",
  "question": "what changed SOLELY because the 2026-08-15/16 tier-1 data became available",
  "model_identity": "ml.v13_1.hfa1005.card.s722n30000 \u2014 FROZEN; no parameter, RNG policy, promotion gate or market input altered by this refresh",
@@ -31,10 +31,15 @@
   "hole_repair_mean_abs_pp_frozen_n": 0.1876,
   "total_mean_abs_pp_frozen_n": 0.4739,
   "hole_repair_mean_abs_pp_reference": 0.1973,
-  "total_mean_abs_pp_reference_SUM_OF_PARTS": 0.4254,
-  "share_of_total_attributable_to_8_15_16_FROZEN_N": 0.8101,
-  "share_of_total_attributable_to_8_15_16_REFERENCE": 0.8125,
-  "share_note": "the frozen-n share is computed from ONE draw of a coupled RNG and is the noisier of the two. The reference share is the one to quote.",
+  "net_mean_abs_pp_reference": 0.4254,
+  "gross_path_movement_pp": 0.5429,
+  "refresh_share_of_GROSS_path_movement": 0.6367,
+  "repair_share_of_GROSS_path_movement": 0.3633,
+  "shapley_refresh_mean_abs_pp": 0.3481,
+  "shapley_repair_mean_abs_pp": 0.1964,
+  "shapley_refresh_share_ORDER_NEUTRAL": 0.6393,
+  "mean_abs_interaction_pp": 0.0093,
+  "share_note": "MEAN ABSOLUTE MOVEMENTS ARE NOT ADDITIVE. gross (0.543-scale) exceeds net because signed per-game contributions partially cancel. A per-path mean |delta| divided by the NET mean |delta| is a share of nothing \u2014 that error produced the retracted '81%'. Quote the GROSS share for path-specific movement, or the SHAPLEY share when an order-neutral split is required.",
   "side_flips_at_frozen_n": 1,
   "side_flips_surviving_reference_estimate": 0,
   "rank_changes": 2,
@@ -501,6 +506,17 @@
     "p_holm": 5.61482992575059e-112,
     "survives_holm_05": true
    },
+   "signed_contributions_pp": {
+    "refresh_given_hole_repaired_B_to_C": -0.7183,
+    "refresh_given_hole_open_A_to_D": -0.7049,
+    "repair_given_refresh_absent_A_to_B": 0.2348,
+    "repair_given_refresh_applied_D_to_C": 0.2215,
+    "shapley_refresh": -0.7116,
+    "shapley_repair": 0.2282,
+    "shapley_sum": -0.4834,
+    "net_A_to_C": -0.39,
+    "interaction_pp": -0.0134
+   },
    "side_at_frozen_n_before": "AWAY",
    "side_at_frozen_n_after": "AWAY",
    "side_flipped_at_frozen_n": false,
@@ -552,6 +568,17 @@
     ],
     "p_holm": 1.1e-299,
     "survives_holm_05": true
+   },
+   "signed_contributions_pp": {
+    "refresh_given_hole_repaired_B_to_C": -0.5782,
+    "refresh_given_hole_open_A_to_D": -0.5782,
+    "repair_given_refresh_absent_A_to_B": 0.0,
+    "repair_given_refresh_applied_D_to_C": 0.0,
+    "shapley_refresh": -0.5782,
+    "shapley_repair": 0.0,
+    "shapley_sum": -0.5782,
+    "net_A_to_C": -1.2233,
+    "interaction_pp": 0.0
    },
    "side_at_frozen_n_before": "HOME",
    "side_at_frozen_n_after": "AWAY",
@@ -605,6 +632,17 @@
     "p_holm": 1.1e-299,
     "survives_holm_05": true
    },
+   "signed_contributions_pp": {
+    "refresh_given_hole_repaired_B_to_C": 0.0478,
+    "refresh_given_hole_open_A_to_D": 0.0536,
+    "repair_given_refresh_absent_A_to_B": 0.4417,
+    "repair_given_refresh_applied_D_to_C": 0.436,
+    "shapley_refresh": 0.0507,
+    "shapley_repair": 0.4388,
+    "shapley_sum": 0.4895,
+    "net_A_to_C": 0.3767,
+    "interaction_pp": -0.0058
+   },
    "side_at_frozen_n_before": "HOME",
    "side_at_frozen_n_after": "HOME",
    "side_flipped_at_frozen_n": false,
@@ -656,6 +694,17 @@
     ],
     "p_holm": 3.777751968712737e-162,
     "survives_holm_05": true
+   },
+   "signed_contributions_pp": {
+    "refresh_given_hole_repaired_B_to_C": -0.8167,
+    "refresh_given_hole_open_A_to_D": -0.8287,
+    "repair_given_refresh_absent_A_to_B": 0.2512,
+    "repair_given_refresh_applied_D_to_C": 0.2631,
+    "shapley_refresh": -0.8227,
+    "shapley_repair": 0.2571,
+    "shapley_sum": -0.5655,
+    "net_A_to_C": -0.4533,
+    "interaction_pp": 0.012
    },
    "side_at_frozen_n_before": "AWAY",
    "side_at_frozen_n_after": "AWAY",
@@ -709,6 +758,17 @@
     "p_holm": 1.1e-299,
     "survives_holm_05": true
    },
+   "signed_contributions_pp": {
+    "refresh_given_hole_repaired_B_to_C": 0.0308,
+    "refresh_given_hole_open_A_to_D": 0.0584,
+    "repair_given_refresh_absent_A_to_B": 0.455,
+    "repair_given_refresh_applied_D_to_C": 0.4274,
+    "shapley_refresh": 0.0446,
+    "shapley_repair": 0.4412,
+    "shapley_sum": 0.4858,
+    "net_A_to_C": 0.4633,
+    "interaction_pp": -0.0276
+   },
    "side_at_frozen_n_before": "AWAY",
    "side_at_frozen_n_after": "AWAY",
    "side_flipped_at_frozen_n": false,
@@ -760,6 +820,17 @@
     ],
     "p_holm": 1.2269134859198434e-100,
     "survives_holm_05": true
+   },
+   "signed_contributions_pp": {
+    "refresh_given_hole_repaired_B_to_C": -0.2835,
+    "refresh_given_hole_open_A_to_D": -0.3019,
+    "repair_given_refresh_absent_A_to_B": 0.1603,
+    "repair_given_refresh_applied_D_to_C": 0.1787,
+    "shapley_refresh": -0.2927,
+    "shapley_repair": 0.1695,
+    "shapley_sum": -0.1232,
+    "net_A_to_C": -0.3267,
+    "interaction_pp": 0.0184
    },
    "side_at_frozen_n_before": "HOME",
    "side_at_frozen_n_after": "HOME",
@@ -813,6 +884,17 @@
     "p_holm": 1.1e-299,
     "survives_holm_05": true
    },
+   "signed_contributions_pp": {
+    "refresh_given_hole_repaired_B_to_C": 0.1733,
+    "refresh_given_hole_open_A_to_D": 0.1733,
+    "repair_given_refresh_absent_A_to_B": 0.0,
+    "repair_given_refresh_applied_D_to_C": 0.0,
+    "shapley_refresh": 0.1733,
+    "shapley_repair": 0.0,
+    "shapley_sum": 0.1733,
+    "net_A_to_C": 0.1633,
+    "interaction_pp": 0.0
+   },
    "side_at_frozen_n_before": "HOME",
    "side_at_frozen_n_after": "HOME",
    "side_flipped_at_frozen_n": false,
@@ -864,6 +946,17 @@
     ],
     "p_holm": 1.1e-299,
     "survives_holm_05": true
+   },
+   "signed_contributions_pp": {
+    "refresh_given_hole_repaired_B_to_C": -0.2086,
+    "refresh_given_hole_open_A_to_D": -0.2086,
+    "repair_given_refresh_absent_A_to_B": 0.0,
+    "repair_given_refresh_applied_D_to_C": 0.0,
+    "shapley_refresh": -0.2086,
+    "shapley_repair": 0.0,
+    "shapley_sum": -0.2086,
+    "net_A_to_C": -0.2267,
+    "interaction_pp": 0.0
    },
    "side_at_frozen_n_before": "HOME",
    "side_at_frozen_n_after": "HOME",
@@ -917,6 +1010,17 @@
     "p_holm": 4.2264829386528106e-123,
     "survives_holm_05": true
    },
+   "signed_contributions_pp": {
+    "refresh_given_hole_repaired_B_to_C": -0.0698,
+    "refresh_given_hole_open_A_to_D": -0.0606,
+    "repair_given_refresh_absent_A_to_B": -0.1733,
+    "repair_given_refresh_applied_D_to_C": -0.1825,
+    "shapley_refresh": -0.0652,
+    "shapley_repair": -0.1779,
+    "shapley_sum": -0.2431,
+    "net_A_to_C": -0.2367,
+    "interaction_pp": -0.0092
+   },
    "side_at_frozen_n_before": "AWAY",
    "side_at_frozen_n_after": "AWAY",
    "side_flipped_at_frozen_n": false,
@@ -969,6 +1073,17 @@
     "p_holm": 1.1e-299,
     "survives_holm_05": true
    },
+   "signed_contributions_pp": {
+    "refresh_given_hole_repaired_B_to_C": -0.3281,
+    "refresh_given_hole_open_A_to_D": -0.3263,
+    "repair_given_refresh_absent_A_to_B": -0.3894,
+    "repair_given_refresh_applied_D_to_C": -0.3912,
+    "shapley_refresh": -0.3272,
+    "shapley_repair": -0.3903,
+    "shapley_sum": -0.7175,
+    "net_A_to_C": -0.6067,
+    "interaction_pp": -0.0018
+   },
    "side_at_frozen_n_before": "HOME",
    "side_at_frozen_n_after": "HOME",
    "side_flipped_at_frozen_n": false,
@@ -1020,6 +1135,17 @@
     ],
     "p_holm": 7.67165664857105e-14,
     "survives_holm_05": true
+   },
+   "signed_contributions_pp": {
+    "refresh_given_hole_repaired_B_to_C": 0.5472,
+    "refresh_given_hole_open_A_to_D": 0.5613,
+    "repair_given_refresh_absent_A_to_B": 0.0641,
+    "repair_given_refresh_applied_D_to_C": 0.05,
+    "shapley_refresh": 0.5543,
+    "shapley_repair": 0.0571,
+    "shapley_sum": 0.6113,
+    "net_A_to_C": 0.7467,
+    "interaction_pp": -0.0141
    },
    "side_at_frozen_n_before": "HOME",
    "side_at_frozen_n_after": "HOME",

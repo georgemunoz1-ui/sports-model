@@ -1,6 +1,6 @@
 {
  "record_id": "TIER1-BOARD-GATE-2026-08-15-2026-08-16",
- "built_utc": "2026-08-17T08:22:14Z",
+ "built_utc": "2026-08-17T08:53:38Z",
  "role": "MEASUREMENT_NON_FORECASTING \u2014 reads results.csv, never writes it",
  "results_file": "data/backfill/mlb/2026/results.csv",
  "results_file_sha256": "05a4a6a9b2a865aa85c8752e48dc1239b1986674490bdd81088086e9a28ef17c",
@@ -51,9 +51,22 @@
    "distinct_franchises": 30,
    "franchises_appearing_more_than_once": [],
    "names_not_a_known_franchise": [],
-   "completeness": "COMPLETE_BY_INVARIANT",
+   "completeness": "COMPLETE_BY_ROSTER_PARTITION",
    "missing_tier1_games": 0,
-   "completeness_basis": "all 30 known franchises appear exactly once across 15 canonical tier-1 games; a 16th game would repeat a franchise and a missing game would leave two absent",
+   "missing_tier1_games_basis": "roster partition only \u2014 PROVISIONAL pending schedule manifest",
+   "completeness_basis": "all 30 known franchises appear exactly once across 15 canonical tier-1 games, so the board is an internally complete roster partition. This does NOT independently prove the official schedule had exactly 15 games: a doubleheader plus a matching off-day pair would also partition the roster. PROVISIONAL until the exact gamePk set matches a separately captured official schedule manifest.",
+   "schedule_manifest": {
+    "path": "data/mlb/schedule/official_manifest_2026-08-15.json",
+    "PRESENT": false,
+    "consequence": "the game COUNT is not independently verified. missing_tier1_games=0 rests on the roster partition alone and is PROVISIONAL.",
+    "required_contents": {
+     "gamePks": "the official gamePk list for this date",
+     "captured_at_utc": "capture timestamp",
+     "source": "official schedule endpoint or owner-supplied board",
+     "note": "must be captured SEPARATELY from the results board so it is genuinely a second source, not a re-read of the same bytes"
+    },
+    "blocked_by": "outbound HTTPS 403 at the org egress proxy; not routed around"
+   },
    "provenance_failures": [],
    "distinct_evidence_files": [
     "data/mlb/evidence/2026-08-15_2026-08-16_mlb_official_form_board.json"
@@ -72,6 +85,7 @@
    ],
    "unresolved_fields": {},
    "internal_incoherence": [],
+   "schedule_manifest_verified": false,
    "PASS": true
   },
   {
@@ -83,9 +97,22 @@
    "distinct_franchises": 30,
    "franchises_appearing_more_than_once": [],
    "names_not_a_known_franchise": [],
-   "completeness": "COMPLETE_BY_INVARIANT",
+   "completeness": "COMPLETE_BY_ROSTER_PARTITION",
    "missing_tier1_games": 0,
-   "completeness_basis": "all 30 known franchises appear exactly once across 15 canonical tier-1 games; a 16th game would repeat a franchise and a missing game would leave two absent",
+   "missing_tier1_games_basis": "roster partition only \u2014 PROVISIONAL pending schedule manifest",
+   "completeness_basis": "all 30 known franchises appear exactly once across 15 canonical tier-1 games, so the board is an internally complete roster partition. This does NOT independently prove the official schedule had exactly 15 games: a doubleheader plus a matching off-day pair would also partition the roster. PROVISIONAL until the exact gamePk set matches a separately captured official schedule manifest.",
+   "schedule_manifest": {
+    "path": "data/mlb/schedule/official_manifest_2026-08-16.json",
+    "PRESENT": false,
+    "consequence": "the game COUNT is not independently verified. missing_tier1_games=0 rests on the roster partition alone and is PROVISIONAL.",
+    "required_contents": {
+     "gamePks": "the official gamePk list for this date",
+     "captured_at_utc": "capture timestamp",
+     "source": "official schedule endpoint or owner-supplied board",
+     "note": "must be captured SEPARATELY from the results board so it is genuinely a second source, not a re-read of the same bytes"
+    },
+    "blocked_by": "outbound HTTPS 403 at the org egress proxy; not routed around"
+   },
    "provenance_failures": [],
    "distinct_evidence_files": [
     "data/mlb/evidence/2026-08-15_2026-08-16_mlb_official_form_board.json"
@@ -104,6 +131,7 @@
    ],
    "unresolved_fields": {},
    "internal_incoherence": [],
+   "schedule_manifest_verified": false,
    "PASS": true
   }
  ],

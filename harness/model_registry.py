@@ -111,6 +111,22 @@ REGISTRY = {
     },
     "ml.v13_1.hfa1005.card.s722n30000": {
         "role": "LIVE_CARD",
+        # OWNER RULING 2026-08-17: do NOT purge the legacy rows from under V13. Preserve it exactly,
+        # tag the exposure, and fork a clean successor lineage instead. Rewriting the inputs beneath
+        # already-registered forecasts would falsify the record of what produced them.
+        "data_lineage_tag": "LEGACY_TIER_EXPOSURE_136",
+        "promotion_status": "NO_PROMOTE",
+        "legacy_tier_exposure": {
+            "rows": 136, "date_range": ["2026-07-23", "2026-08-11"],
+            "composition": {"tier1/PROVISIONAL": 10, "tier2/PROVISIONAL": 17, "tier3/PROVISIONAL": 109},
+            "consequence": ("this identity's season-to-date team form is computed with the tier-blind "
+                            "predicate, so these 136 non-canonical rows are inside every forecast it "
+                            "has produced. That is a permanent property of THIS identity."),
+            "disposition": ("FROZEN AND TAGGED, never repaired. The successor lineage "
+                            "data/backfill/mlb/2026/results_tier1.csv is tier-1-only and is where a "
+                            "clean model is built; V13's inputs are never rewritten."),
+            "baseline_artifact": "data/audit/tier_exposure_baseline.json",
+        },
         "source": "harness/daily_card.py",
         "hfa": 1.005, "hfa_provenance": "import: engine/hfa.py CURRENT",
         "seed": 722, "sims_per_game": 30000, "rng_policy": "sequential_slate_order",
@@ -120,6 +136,8 @@ REGISTRY = {
     },
     "ml.v13_1.hfa1005.card.s722n30000.per_game_reset": {
         "role": "DIAGNOSTIC_VARIANT",
+        "data_lineage_tag": "LEGACY_TIER_EXPOSURE_136",
+        "promotion_status": "NO_PROMOTE",
         "source": "harness/daily_card.py",
         "hfa": 1.005, "hfa_provenance": "import: engine/hfa.py CURRENT",
         "seed": 722, "sims_per_game": 30000, "rng_policy": "per_game_reset_seed722",

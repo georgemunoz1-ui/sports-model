@@ -18,9 +18,24 @@ never mutated, and all three therefore share identical provenance:
     S_B  date <= 2026-08-14                          -> S_A + the 8/13 hole repair
     S_C  all dates (through 2026-08-16)              -> the state v3 was actually built on
 
-    A -> B  = the 8/13 interior-hole repair, alone
-    B -> C  = THE 8/15-8/16 REFRESH, ALONE   <-- what was asked for
-    A -> C  = the total, and must equal the registered v2 -> v3 contrast
+    S_D  all dates EXCEPT 2026-08-13                 -> the refresh WITHOUT the hole repair
+
+    A -> B  = the 8/13 interior-hole repair, with the refresh absent
+    B -> C  = THE 8/15-8/16 REFRESH, given the hole repaired   <-- what was asked for
+    A -> D  = the refresh, with the hole still open
+    D -> C  = the hole repair, given the refresh applied
+    A -> C  = the net total, and must equal the registered v2 -> v3 contrast
+
+ATTRIBUTION IS NOT A RATIO OF MEAN ABSOLUTE MOVEMENTS (owner correction 2026-08-17). An earlier
+version of this module reported the refresh as "81% of the total" by dividing a per-path mean
+|delta| (0.3457pp) by the NET mean |delta| (0.4254pp). Those have different denominators and the
+quotient is a share of nothing: mean absolute movements are NOT additive, because signed
+per-game contributions partially cancel. 0.3457 + 0.1973 = 0.5430pp of GROSS path movement, which
+exceeds the 0.4254pp net precisely by the amount that cancels. This module now reports:
+  - net movement, mean |phi_R + phi_H|
+  - gross path movement, and each path's share OF THE GROSS (order-dependent by construction)
+  - SHAPLEY values over the two factors, which are order-neutral and sum EXACTLY to the net signed
+    change per game: phi_R = 1/2[(D-A) + (C-B)], phi_H = 1/2[(B-A) + (C-D)], phi_R + phi_H = C-A.
 
 THE DECOMPOSITION IS NOT ASSUMED, IT IS VERIFIED. Before any delta is reported, S_A must reproduce
 the REGISTERED v2 card's probabilities exactly and S_C must reproduce the REGISTERED v3 card's
@@ -143,6 +158,7 @@ def run(hi_sims, hi_reps, quick):
     S_A = team_form(filtered_results(lambda d: d <= CUTOFF_A and d != HOLE_DATE))
     S_B = team_form(filtered_results(lambda d: d <= CUTOFF_A))
     S_C = team_form(filtered_results(lambda d: True))
+    S_D = team_form(filtered_results(lambda d: d != HOLE_DATE))   # refresh WITHOUT the hole repair
 
     # ---- GATE: the reconstructed states must reproduce the REGISTERED cards exactly ----
     verify = {}
@@ -159,11 +175,15 @@ def run(hi_sims, hi_reps, quick):
                            "the decomposition would be of the wrong thing"), "verification": verify}
 
     teams = sorted({_ab(r[s]) for r in v3 for s in ("away", "home")})
-    p_A, p_B, p_C = (card_probs(v3, f) for f in (S_A, S_B, S_C))
+    p_A, p_B, p_C, p_D = (card_probs(v3, f) for f in (S_A, S_B, S_C, S_D))
 
-    hi_BC = paired_hi(v3, S_B, S_C, 1 if quick else hi_sims, 2 if quick else hi_reps)
-    hi_AB = paired_hi(v3, S_A, S_B, 1 if quick else hi_sims, 2 if quick else hi_reps)
-    for tbl in (hi_BC, hi_AB):
+    _n = 1 if quick else hi_sims
+    _r = 2 if quick else hi_reps
+    hi_BC = paired_hi(v3, S_B, S_C, _n, _r)   # refresh | hole repaired
+    hi_AB = paired_hi(v3, S_A, S_B, _n, _r)   # repair  | refresh absent
+    hi_AD = paired_hi(v3, S_A, S_D, _n, _r)   # refresh | hole open
+    hi_DC = paired_hi(v3, S_D, S_C, _n, _r)   # repair  | refresh applied
+    for tbl in (hi_BC, hi_AB, hi_AD, hi_DC):
         ph = holm([_p_from_t(x["abs_t"], (2 if quick else hi_reps) - 1) for x in tbl])
         m = len(tbl)
         for x, h in zip(tbl, ph):
@@ -201,6 +221,11 @@ def run(hi_sims, hi_reps, quick):
             g = f'{g}-{r["gamePk"]}'
         hb = next(x for x in hi_BC if x["gamePk"] == r["gamePk"])
         ha = next(x for x in hi_AB if x["gamePk"] == r["gamePk"])
+        hd = next(x for x in hi_AD if x["gamePk"] == r["gamePk"])
+        hc = next(x for x in hi_DC if x["gamePk"] == r["gamePk"])
+        # Shapley over the two factors: order-neutral, and phi_R + phi_H is EXACTLY the net change
+        phi_R = 0.5 * (hd["mean_signed_pp"] + hb["mean_signed_pp"])
+        phi_H = 0.5 * (ha["mean_signed_pp"] + hc["mean_signed_pp"])
         games.append({
             "game": g, "gamePk": r["gamePk"], "away_sp": r["asp"], "home_sp": r["hsp"],
             "starters_changed_by_refresh": False,
@@ -215,6 +240,17 @@ def run(hi_sims, hi_reps, quick):
                  "survives_holm_05", "excl_zero_simultaneous", "n_sims", "reps")},
             "hole_repair_reference_estimate": {k: ha[k] for k in
                 ("mean_signed_pp", "ci95", "p_holm", "survives_holm_05")},
+            "signed_contributions_pp": {
+                "refresh_given_hole_repaired_B_to_C": hb["mean_signed_pp"],
+                "refresh_given_hole_open_A_to_D": hd["mean_signed_pp"],
+                "repair_given_refresh_absent_A_to_B": ha["mean_signed_pp"],
+                "repair_given_refresh_applied_D_to_C": hc["mean_signed_pp"],
+                "shapley_refresh": round(phi_R, 4),
+                "shapley_repair": round(phi_H, 4),
+                "shapley_sum": round(phi_R + phi_H, 4),
+                "net_A_to_C": round((p_C[i] - p_A[i]) * 100, 4),
+                "interaction_pp": round(hb["mean_signed_pp"] - hd["mean_signed_pp"], 4),
+            },
             "side_at_frozen_n_before": "HOME" if p_B[i] >= .5 else "AWAY",
             "side_at_frozen_n_after": "HOME" if p_C[i] >= .5 else "AWAY",
             "side_flipped_at_frozen_n": (p_B[i] >= .5) != (p_C[i] >= .5),
@@ -243,6 +279,9 @@ def run(hi_sims, hi_reps, quick):
     d_card = np.array([g["delta_pp_frozen_n_8_15_16_REFRESH"] for g in games])
     d_hole = np.array([g["delta_pp_frozen_n_8_13_repair"] for g in games])
     d_hole_ref = np.array([g["hole_repair_reference_estimate"]["mean_signed_pp"] for g in games])
+    _phiR = np.array([g["signed_contributions_pp"]["shapley_refresh"] for g in games])
+    _phiH = np.array([g["signed_contributions_pp"]["shapley_repair"] for g in games])
+    _inter = np.array([g["signed_contributions_pp"]["interaction_pp"] for g in games])
 
     rep = {
         "record_id": "FORM-REFRESH-DIFF-2026-08-17",
@@ -271,14 +310,22 @@ def run(hi_sims, hi_reps, quick):
             "total_mean_abs_pp_frozen_n": round(float(np.abs(
                 np.array([g["delta_pp_frozen_n_total"] for g in games])).mean()), 4),
             "hole_repair_mean_abs_pp_reference": round(float(np.abs(d_hole_ref).mean()), 4),
-            "total_mean_abs_pp_reference_SUM_OF_PARTS": round(float(np.abs(d_ref + d_hole_ref).mean()), 4),
-            "share_of_total_attributable_to_8_15_16_FROZEN_N": (
-                round(float(np.abs(d_card).mean() / np.abs(np.array(
-                    [g["delta_pp_frozen_n_total"] for g in games])).mean()), 4)),
-            "share_of_total_attributable_to_8_15_16_REFERENCE": (
-                round(float(np.abs(d_ref).mean() / np.abs(d_ref + d_hole_ref).mean()), 4)),
-            "share_note": ("the frozen-n share is computed from ONE draw of a coupled RNG and is the "
-                           "noisier of the two. The reference share is the one to quote."),
+            "net_mean_abs_pp_reference": round(float(np.abs(_phiR + _phiH).mean()), 4),
+            "gross_path_movement_pp": round(float(np.abs(d_ref).mean() + np.abs(d_hole_ref).mean()), 4),
+            "refresh_share_of_GROSS_path_movement": round(float(
+                np.abs(d_ref).mean() / (np.abs(d_ref).mean() + np.abs(d_hole_ref).mean())), 4),
+            "repair_share_of_GROSS_path_movement": round(float(
+                np.abs(d_hole_ref).mean() / (np.abs(d_ref).mean() + np.abs(d_hole_ref).mean())), 4),
+            "shapley_refresh_mean_abs_pp": round(float(np.abs(_phiR).mean()), 4),
+            "shapley_repair_mean_abs_pp": round(float(np.abs(_phiH).mean()), 4),
+            "shapley_refresh_share_ORDER_NEUTRAL": round(float(
+                np.abs(_phiR).mean() / (np.abs(_phiR).mean() + np.abs(_phiH).mean())), 4),
+            "mean_abs_interaction_pp": round(float(np.abs(_inter).mean()), 4),
+            "share_note": ("MEAN ABSOLUTE MOVEMENTS ARE NOT ADDITIVE. gross (0.543-scale) exceeds net "
+                           "because signed per-game contributions partially cancel. A per-path mean "
+                           "|delta| divided by the NET mean |delta| is a share of nothing — that error "
+                           "produced the retracted '81%'. Quote the GROSS share for path-specific "
+                           "movement, or the SHAPLEY share when an order-neutral split is required."),
             "side_flips_at_frozen_n": sum(g["side_flipped_at_frozen_n"] for g in games),
             "side_flips_surviving_reference_estimate": sum(
                 1 for g in games if g["side_flip_survives_reference_estimate"]),
@@ -378,6 +425,21 @@ def selftest():
     for i in range(len(v3)):
         if abs(((pB[i] - pA[i]) + (pC[i] - pB[i])) - (pC[i] - pA[i])) > 1e-12:
             fails.append(f"decomposition does not sum to the total on game {i}")
+    # 7. Shapley additivity: phi_R + phi_H must equal the net signed change per game, exactly
+    D = team_form(filtered_results(lambda d: d != HOLE_DATE))
+    pD = card_probs(v3, D)
+    for i in range(len(v3)):
+        phiR = 0.5 * ((pD[i] - pA[i]) + (pC[i] - pB[i]))
+        phiH = 0.5 * ((pB[i] - pA[i]) + (pC[i] - pD[i]))
+        if abs((phiR + phiH) - (pC[i] - pA[i])) > 1e-12:
+            fails.append(f"Shapley values do not sum to the net change on game {i}")
+    # 8. the retracted error must stay retracted: a per-path mean |delta| over the NET mean |delta|
+    #    is not a share, and gross must be >= net whenever any cancellation occurs
+    dR = np.array([abs(pC[i] - pB[i]) for i in range(len(v3))])
+    dH = np.array([abs(pB[i] - pA[i]) for i in range(len(v3))])
+    net = np.array([abs(pC[i] - pA[i]) for i in range(len(v3))])
+    if not (dR.mean() + dH.mean() >= net.mean() - 1e-12):
+        fails.append("gross path movement is below net movement — impossible by the triangle inequality")
     if fails:
         print("form_refresh_diff selftest: FAIL")
         for f in fails:
@@ -412,9 +474,16 @@ if __name__ == "__main__":
           f'max {t["refresh_max_abs_pp_reference"]}pp')
     print(f'8/13 hole repair alone : mean |delta| {t["hole_repair_mean_abs_pp_reference"]}pp '
           f'(reference) / {t["hole_repair_mean_abs_pp_frozen_n"]}pp at the frozen n')
-    print(f'total (= v2->v3)       : {t["total_mean_abs_pp_reference_SUM_OF_PARTS"]}pp '
-          f'(reference) / {t["total_mean_abs_pp_frozen_n"]}pp at the frozen n; the refresh is '
-          f'{t["share_of_total_attributable_to_8_15_16_REFERENCE"]:.0%} of it (reference estimates)')
+    print(f'NET combined (= v2->v3): {t["net_mean_abs_pp_reference"]}pp (reference) / '
+          f'{t["total_mean_abs_pp_frozen_n"]}pp at the frozen n')
+    print(f'GROSS path movement    : {t["gross_path_movement_pp"]}pp — refresh '
+          f'{t["refresh_share_of_GROSS_path_movement"]:.1%}, repair '
+          f'{t["repair_share_of_GROSS_path_movement"]:.1%}. Mean absolute movements do NOT add to '
+          f'the net; the difference is directional cancellation.')
+    print(f'SHAPLEY (order-neutral): refresh {t["shapley_refresh_mean_abs_pp"]}pp '
+          f'({t["shapley_refresh_share_ORDER_NEUTRAL"]:.1%}), repair '
+          f'{t["shapley_repair_mean_abs_pp"]}pp; mean |interaction| '
+          f'{t["mean_abs_interaction_pp"]}pp')
     print(f'side flips {t["side_flips_at_frozen_n"]} at the frozen n, '
           f'{t["side_flips_surviving_reference_estimate"]} surviving noise separation   '
           f'rank changes {t["rank_changes"]}   '

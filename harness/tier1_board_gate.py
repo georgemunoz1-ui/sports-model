@@ -15,13 +15,24 @@ games or fields." The stated success criteria:
 15 rows whether or not a 16th game existed. This module therefore does NOT trust the board's own
 expected_game_count. It uses a structural invariant that the board cannot fake:
 
-    MLB has 30 franchises. On a full single-header slate every franchise appears in exactly one game,
-    so 15 games with 30 distinct franchises each appearing exactly once is COMPLETE BY CONSTRUCTION —
-    a 16th game is impossible without some franchise appearing twice, and a missing game would leave
-    two franchises absent. A doubleheader shows up as a franchise appearing twice and is reported
-    explicitly rather than silently absorbed.
+    MLB has 30 franchises. If 15 games cover all 30 exactly once, the board is an internally
+    COMPLETE ROSTER PARTITION: no franchise is missing and none is doubled WITHIN the board.
 
-That invariant is independent of the source, so it survives a source that is wrong or truncated.
+WHAT THAT DOES AND DOES NOT ESTABLISH (owner correction 2026-08-17). It proves the board partitions
+the roster. It does NOT independently prove the OFFICIAL schedule had exactly 15 games. A slate with
+a doubleheader and a corresponding off-day pair would also partition the roster: 15 games covering
+30 franchises once each is consistent with more than one true schedule. The status is therefore
+COMPLETE_BY_ROSTER_PARTITION, not "complete", and it is PROVISIONAL until the exact gamePk SET
+matches a SEPARATELY CAPTURED official schedule manifest. That manifest is the only thing that
+settles the count, and it is not available here (egress 403); the gate reports its absence rather
+than treating the partition as a substitute.
+
+The "+2 games per slate team" check in harness/form_refresh_diff.py is NOT independent corroboration
+either: it is derived from the same ingested rows, so it re-expresses the partition rather than
+testing it against a second source. Recorded as such.
+
+The partition test is still worth running because it is independent of the source's own claimed
+count, so it survives a source that is truncated or self-inconsistent.
 A partial slate (off-days) is NOT assumed complete; it is reported as UNVERIFIABLE_BY_INVARIANT with
 the absent franchises named, because on such a date the invariant genuinely cannot settle the count.
 
@@ -104,11 +115,15 @@ def audit_date(rows, date, parks, hash_cache):
                                      f"invariant cannot place could be a typo standing in for an absent "
                                      f"franchise, so completeness is NOT asserted")
     elif not absent and not twice:
-        rep["completeness"] = "COMPLETE_BY_INVARIANT"
+        rep["completeness"] = "COMPLETE_BY_ROSTER_PARTITION"
         rep["missing_tier1_games"] = 0
-        rep["completeness_basis"] = (f"all {MLB_FRANCHISES} known franchises appear exactly once across "
-                                     f"{len(canon)} canonical tier-1 games; a 16th game would repeat a "
-                                     f"franchise and a missing game would leave two absent")
+        rep["missing_tier1_games_basis"] = "roster partition only — PROVISIONAL pending schedule manifest"
+        rep["completeness_basis"] = (
+            f"all {MLB_FRANCHISES} known franchises appear exactly once across {len(canon)} canonical "
+            f"tier-1 games, so the board is an internally complete roster partition. This does NOT "
+            f"independently prove the official schedule had exactly {len(canon)} games: a doubleheader "
+            f"plus a matching off-day pair would also partition the roster. PROVISIONAL until the exact "
+            f"gamePk set matches a separately captured official schedule manifest.")
     elif twice:
         rep["completeness"] = "DOUBLEHEADER_PRESENT_INVARIANT_INAPPLICABLE"
         rep["missing_tier1_games"] = None
@@ -121,6 +136,39 @@ def audit_date(rows, date, parks, hash_cache):
         rep["completeness_basis"] = (f"{len(absent)} franchise(s) absent ({', '.join(absent)}). On a "
                                      f"partial slate the invariant cannot distinguish an off-day from a "
                                      f"missing game — NOT asserted complete")
+
+    # --- the check that WOULD settle the count: exact gamePk set vs an official schedule manifest ---
+    man = f"data/mlb/schedule/official_manifest_{date}.json"
+    if os.path.exists(man):
+        m = json.load(open(man))
+        want = {str(x) for x in m.get("gamePks", [])}
+        have = {r["game_id"].split(":")[-1] for r in canon}
+        rep["schedule_manifest"] = {
+            "path": man, "sha256": _sha(man), "captured_at_utc": m.get("captured_at_utc"),
+            "source": m.get("source"), "manifest_games": len(want), "board_games": len(have),
+            "in_manifest_not_on_board": sorted(want - have),
+            "on_board_not_in_manifest": sorted(have - want),
+            "EXACT_SET_MATCH": want == have and bool(want),
+        }
+        if rep["schedule_manifest"]["EXACT_SET_MATCH"]:
+            rep["completeness"] = "COMPLETE_VERIFIED_AGAINST_OFFICIAL_SCHEDULE"
+            rep["missing_tier1_games"] = 0
+            rep["missing_tier1_games_basis"] = "exact gamePk set match against an independent manifest"
+        else:
+            rep["missing_tier1_games"] = len(want - have) if want else None
+            rep["completeness"] = "SCHEDULE_MANIFEST_DISAGREES"
+    else:
+        rep["schedule_manifest"] = {
+            "path": man, "PRESENT": False,
+            "consequence": ("the game COUNT is not independently verified. missing_tier1_games=0 rests "
+                            "on the roster partition alone and is PROVISIONAL."),
+            "required_contents": {"gamePks": "the official gamePk list for this date",
+                                  "captured_at_utc": "capture timestamp",
+                                  "source": "official schedule endpoint or owner-supplied board",
+                                  "note": "must be captured SEPARATELY from the results board so it is "
+                                          "genuinely a second source, not a re-read of the same bytes"},
+            "blocked_by": "outbound HTTPS 403 at the org egress proxy; not routed around",
+        }
 
     # --- provenance: evidence must exist and still hash to what was recorded ---
     prov_fail, ts = [], []
@@ -174,6 +222,7 @@ def audit_date(rows, date, parks, hash_cache):
             incoherent.append(f"{g}: tie {a}-{h} — MLB games do not end tied")
     rep["internal_incoherence"] = incoherent
 
+    rep["schedule_manifest_verified"] = bool(rep.get("schedule_manifest", {}).get("EXACT_SET_MATCH"))
     rep["PASS"] = (rep["missing_tier1_games"] == 0 and not prov_fail and not incoherent
                    and not rep["unresolved_fields"] and not rep["tier_2_3_substitutes_in_canonical_input"])
     return rep
@@ -273,7 +322,7 @@ def selftest():
     ab = sorted(MLB_ABBRS)
     real = [dict(base[i], away=ab[2 * i], home=ab[2 * i + 1], game_id=f"r{i}") for i in range(15)]
     rr = audit_date(real, "2026-01-01", parks, {})
-    if rr["completeness"] != "COMPLETE_BY_INVARIANT" or rr["missing_tier1_games"] != 0:
+    if rr["completeness"] != "COMPLETE_BY_ROSTER_PARTITION" or rr["missing_tier1_games"] != 0:
         fails.append(f"a genuine 30-franchise slate did not read complete: {rr['completeness']}")
     # ONE typo standing in for an absent franchise must NOT read complete (the real-world failure)
     typo = [dict(x) for x in real]; typo[0]["away"] = "NY Yankees"
@@ -321,6 +370,9 @@ def selftest():
     e2 = [dict(real[0], date="2026-01-01"), dict(real[0], date="2026-01-02", game_id="g99", home_score="9")]
     if cross_date_echo(e2, ["2026-01-01", "2026-01-02"]):
         fails.append("echo detector fired on a different score")
+    # a roster partition must NEVER be reported as schedule-verified while no manifest exists
+    if rr.get("schedule_manifest_verified") or rr["schedule_manifest"].get("PRESENT") is not False:
+        fails.append("roster partition reported as schedule-verified without a manifest")
     if fails:
         print("tier1_board_gate selftest: FAIL")
         for f in fails:
@@ -328,7 +380,7 @@ def selftest():
         return 1
     print("tier1_board_gate selftest: PASS (unknown/typo'd team name, short slate, doubleheader, "
           "tier-3 substitute, bad+missing evidence hash, linescore incoherence, tie, blank venue and "
-          "adjacent-day echo all caught; a genuine 30-franchise slate reads complete)")
+          "adjacent-day echo all caught; a genuine 30-franchise slate reads COMPLETE_BY_ROSTER_PARTITION, never schedule-verified without a manifest)")
     return 0
 
 
@@ -349,7 +401,8 @@ if __name__ == "__main__":
     print(f'canonical_results_contamination = {c["canonical_results_contamination_IN_WINDOW"]} in window   '
           f'({c["canonical_results_contamination_WHOLE_FILE"]} legacy rows elsewhere in the file)')
     for d in r["per_date"]:
-        print(f'\n[{d["date"]}] {d["canonical_tier1_finals"]} canonical tier-1 finals — {d["completeness"]}')
+        print(f'\n[{d["date"]}] {d["canonical_tier1_finals"]} canonical tier-1 finals — {d["completeness"]}'
+              f'  (schedule-manifest verified: {d["schedule_manifest_verified"]})')
         print(f'   {d["completeness_basis"]}')
         print(f'   sources {d["sources"]}  captured {d["capture_timestamps"]["distinct"]}')
         for p, h in d["evidence_sha256"].items():

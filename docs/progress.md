@@ -1849,3 +1849,96 @@ V13 FROZEN. No forecast altered, none regraded. Gate 0/100 NO_PROMOTE, ledger $0
 STILL OPEN: 8/17 cohorts ungraded pending tier-1 finals; no 8/18 card until a schedule + probables
 board arrives or egress is restored; owner decision on the 136 legacy rows; card generation is still
 manual and request-driven, the root cause of the 8/16 miss.
+
+================================================================================
+2026-08-17 — ROUND-2 CORRECTIONS; V13 TAGGED, SUCCESSOR LINEAGE FORKED
+================================================================================
+
+Two claims withdrawn, one wording tightened, one ruling executed, one operational gate built.
+
+1. COMPLETENESS WAS OVERCLAIMED. "COMPLETE_BY_INVARIANT" is wrong. Covering all 30 franchises once
+proves an internally complete PARTITION, not that the official schedule had 15 games: a doubleheader
+plus a matching off-day pair partitions the roster identically. My "a 16th game is impossible without
+repeating a franchise" was false. Renamed COMPLETE_BY_ROSTER_PARTITION, PROVISIONAL until the exact
+gamePk SET matches a separately captured official schedule manifest; the gate now looks for that
+manifest, names the consequence of its absence, and only promotes to
+COMPLETE_VERIFIED_AGAINST_OFFICIAL_SCHEDULE on an exact set match. Its selftest asserts a partition
+can never read as schedule-verified without one.
+
+The second overclaim was worse and is also withdrawn: I called the "+2 games per slate team" check
+independent corroboration. It reads the SAME ingested rows. Two code paths over one source is not two
+sources, and dressing a single-source claim as a cross-check is the more serious error of the two.
+Retained only as what it is — an internal consistency check.
+
+2. "81% OF TOTAL" WAS INVALID. I divided a per-path mean |delta| (0.3457pp) by the NET mean |delta|
+(0.4254pp) — different denominators, so the quotient is a share of nothing. Mean absolute movements
+are non-additive: signed per-game contributions cancel, and 0.3457 + 0.1973 = 0.5430pp of GROSS
+movement exceeds the net by exactly what cancels.
+
+  net combined       0.4254pp
+  gross path         0.5429pp   refresh 63.7%, repair 36.3%   (order-dependent by construction)
+  Shapley            refresh 0.3481pp (63.9%), repair 0.1964pp, mean |interaction| 0.0093pp
+
+A fourth form state S_D (all dates except 8/13) was added so both factor orderings exist. The Shapley
+share lands on the gross share because the interaction is tiny — which means the retracted 81% was
+not a subtlety about interaction, it was purely a denominator error. Per-game signed contributions
+for all four paths are now emitted. The selftest asserts phi_R + phi_H equals the net signed change
+to 1e-12 per game and that gross >= net.
+
+The conclusion, owner's wording, adopted verbatim including the conditioning clause: "Conditional on
+repairing the 8/13 hole, adding the 8/15-8/16 results changed V13 probabilities by 0.346pp on
+average, caused no robust side flips, and has no demonstrated prospective accuracy benefit."
+
+3. NO DETECTABLE IMPROVEMENT IS NOT EQUIVALENCE — and the interval says so loudly. I had been citing
+"FULL vs STALE -0.0005 Brier, p=0.59" as if it settled the question. Against the only practical
+yardstick this program has (the 8/10 starter-block ablation, +0.00272 Brier):
+
+  freshness CI [-0.00242, +0.00099]  -> does NOT exclude an improvement worth 89% of the starter block
+  50+ stratum CI [-0.00357, +0.00262] -> does NOT exclude one worth 131% of it
+
+So the freshness test is UNDER-POWERED against its own practical threshold. "No detectable
+improvement" is the only supported statement; "no effect" / "equivalent" / "freshness does not
+matter" are withdrawn wherever I implied them. What IS established stands: the 0-9 prior-games
+stratum at +0.0375 Brier, CI [0.0192, 0.0553], lower bound 7x the starter block — unshrunk
+early-season form is materially harmful, not merely detected as harmful.
+
+4. LINEAGE RULING EXECUTED. V13 preserved exactly and tagged LEGACY_TIER_EXPOSURE_136 / NO_PROMOTE in
+the registry (both the card identity and its per_game_reset variant), with row count, date range and
+class composition recorded as a PERMANENT property rather than a defect to repair. Clean lineage
+built at data/backfill/mlb/2026/results_tier1.csv (1727 rows, sha fbf294d1) by
+harness/tier1_lineage.py. "Never rewrite V13's inputs" is ENFORCED: the builder captures results.csv's
+sha256 before and after and RAISES on any difference; verified unchanged at 05a4a6a9b2a865aa.
+
+The retrain is BLOCKED, and the blocker is a finding. The tier-1-only lineage is not merely smaller —
+it removes NINE ENTIRE DAYS with zero surviving canonical finals (7/29, 7/31, 8/01-8/05, 8/07, 8/11)
+plus partials on 7/23, 8/08 (4 of 15) and 8/10. All 30 franchises lose 7-11 games, ~6-9% of the
+season. As-of form on that lineage is form over OBSERVED games, not games PLAYED; after 7/29 the two
+differ and a model trained there learns a rate with the wrong denominator, invisibly in its own
+metrics. The lineage refuses to certify itself: SUCCESSOR_READINESS = DEGRADED_INTERIOR_GAPS with a
+named acquisition requirement per missing date, and a selftest that forbids READY while days are
+missing. Retraining now would buy provenance and pay in coverage.
+
+5. THE CAPTURE RAIL — the owner's point that model gates cannot compensate for absent pregame inputs
+is the correct diagnosis of this repo's actual failure mode. Every gate here checks the QUALITY of
+data that arrived; none fired when data never arrived, which is exactly what cost 8/16. Built
+harness/pregame_preflight.py: for a named date it checks the three pregame inputs (official gamePk
+schedule, starters/lineups, timestamped prices) against per-input deadlines measured from the slate's
+true first pitch. It fails on MISSING_PAST_DEADLINE, not on mere absence — a gate keyed to absence
+fails every morning and is ignored by lunchtime, which is how the rail died. Wired into healthcheck
+for today AND tomorrow, tomorrow being the one that gets forgotten.
+
+Live: 8/17 is FORECAST_ONLY_NO_MARKET_GRADE — slate present (11 games, 4 TBD, 63.6% resolved), first
+pitch 17:40Z, and PRICES ARE STILL RECOVERABLE with 441 minutes of slack. That is actionable now
+rather than a post-mortem. 8/18 is INPUTS_MISSING with no slate at all.
+
+The gate found a bug in itself first: min() over first-pitch STRINGS made the 8/17 slate's 00:05Z
+next-day start sort ahead of the 17:40Z opener, so a live pregame check reported "523 minutes PAST
+first pitch". A preflight that thinks the day is already lost is worse than none. Times now resolve
+to absolute UTC datetimes with a rollover below 10:00Z; the selftest asserts the 8/17 opener is
+17:40Z.
+
+VERIFIABILITY. The owner cannot inspect commits from their side, so nothing here asks to be believed
+on a summary. Every module carries a --selftest whose fixtures must FAIL on the defect they guard,
+and the gates re-derive their claims from the repository rather than from a record.
+
+Gate 0/100 NO_PROMOTE, ledger $0, paper only. No forecast altered, none regraded.

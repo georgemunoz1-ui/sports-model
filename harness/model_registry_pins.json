@@ -242,7 +242,7 @@
    ]
   },
   "harness/form_refresh_diff.py": {
-   "current": "0541cfa257849bb77c03571244c603f06a4713c38a5cd3e4b9508d1a7b329904",
+   "current": "b22ddf561f3eb2482289bf1a11b08e76f8df59abd5ea61c4c9cc4422e6e68ee7",
    "versions": [
     {
      "impl_version": 1,
@@ -259,6 +259,14 @@
      "pin_commit": null,
      "note": "IMPL v2 \u2014 corrected an inverted boolean: pitcher_form.changed_by_this_refresh was emitting 'not _sp_changed', so a field-by-field comparison finding ZERO starter differences was reported as CHANGED. The underlying verification and every probability figure were unaffected; only the summary flag was wrong. Caught by reading the emitted artifact rather than trusting the code path.",
      "record": "docs/audits/2026-08-17_tier1_refresh_cycle.json"
+    },
+    {
+     "impl_version": 3,
+     "sha256": "b22ddf561f3eb2482289bf1a11b08e76f8df59abd5ea61c4c9cc4422e6e68ee7",
+     "authorized_utc": "2026-08-17T08:53:29Z",
+     "pin_commit": null,
+     "note": "IMPL v3 \u2014 owner correction 2026-08-17: the '81% of total' attribution was invalid. It divided a per-path mean |delta| by the NET mean |delta| (different denominators), and mean absolute movements are non-additive because signed per-game contributions cancel. Adds a fourth form state S_D (all dates except the hole date) so both factor orderings exist, then reports GROSS path shares and order-neutral two-factor SHAPLEY values with per-game signed contributions and the interaction term. Selftest now asserts phi_R + phi_H equals the net signed change to 1e-12 per game and that gross >= net.",
+     "record": "docs/experiments/2026-08-17_CORRECTIONS_ROUND2.json"
     }
    ]
   }

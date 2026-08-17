@@ -1,0 +1,119 @@
+{
+ "record_id": "TIER1-LINEAGE-2026-08-17",
+ "built_utc": "2026-08-17T08:46:56Z",
+ "authority": "owner ruling 2026-08-17: build a separate tier-1-only results lineage for the successor; never rewrite inputs underlying registered V13 forecasts",
+ "lineage_path": "data/backfill/mlb/2026/results_tier1.csv",
+ "lineage_sha256": "fbf294d18f86f69cad16c88c54b335e57a56fec64a93bb77d43a9d44f198fae1",
+ "derived_from": "data/backfill/mlb/2026/results.csv",
+ "source_sha256": "05a4a6a9b2a865aa85c8752e48dc1239b1986674490bdd81088086e9a28ef17c",
+ "source_unchanged_by_this_build": true,
+ "predicate": "tier_discipline.is_canonical_final (status=final AND source_tier=1 AND result_status=FINAL AND total non-blank)",
+ "deterministic": "regenerating from the same source yields byte-identical output; this is a VIEW, not an independent record, and it is never hand-edited",
+ "accounting": {
+  "source_rows": 1877,
+  "kept_canonical": 1727,
+  "dropped_non_canonical_finals": 136,
+  "dropped_by_class": {
+   "tier1/PROVISIONAL": 10,
+   "tier2/PROVISIONAL": 17,
+   "tier3/PROVISIONAL": 109
+  },
+  "reconciles": true
+ },
+ "V13_ISOLATION": {
+  "v13_reads": "data/backfill/mlb/2026/results.csv",
+  "successor_reads": "data/backfill/mlb/2026/results_tier1.csv",
+  "v13_inputs_rewritten": false,
+  "enforcement": "the source sha256 is captured before and after every build and asserted equal; a build that touched it raises rather than completing",
+  "v13_tag": "LEGACY_TIER_EXPOSURE_136 / NO_PROMOTE (harness/model_registry.py)"
+ },
+ "SUCCESSOR_READINESS": {
+  "ready": false,
+  "status": "DEGRADED_INTERIOR_GAPS",
+  "why": "as-of team form built on this lineage is form over OBSERVED CANONICAL GAMES, not over games actually played. For any slate after the first missing day the two differ, and a model trained on it learns a rate with the wrong denominator. A missing game is a scoring event that happened and is being averaged out.",
+  "gaps": {
+   "whole_days_lost": [
+    "2026-07-29",
+    "2026-07-31",
+    "2026-08-01",
+    "2026-08-02",
+    "2026-08-03",
+    "2026-08-04",
+    "2026-08-05",
+    "2026-08-07",
+    "2026-08-11"
+   ],
+   "whole_days_lost_count": 9,
+   "partial_days": {
+    "2026-07-23": {
+     "naive": 5,
+     "canonical": 4
+    },
+    "2026-08-08": {
+     "naive": 15,
+     "canonical": 4
+    },
+    "2026-08-10": {
+     "naive": 10,
+     "canonical": 9
+    }
+   },
+   "franchises": 30,
+   "games_lost_per_franchise": {
+    "min": 7,
+    "max": 11
+   },
+   "clean_games_per_franchise": {
+    "min": 113,
+    "max": 117
+   },
+   "worst_hit": [
+    {
+     "team": "STL",
+     "lost": 11,
+     "pct": 8.9
+    },
+    {
+     "team": "PHI",
+     "lost": 10,
+     "pct": 8.0
+    },
+    {
+     "team": "AZ",
+     "lost": 10,
+     "pct": 8.1
+    },
+    {
+     "team": "PIT",
+     "lost": 10,
+     "pct": 7.9
+    },
+    {
+     "team": "TOR",
+     "lost": 10,
+     "pct": 7.9
+    }
+   ]
+  },
+  "BLOCKING_ACQUISITION_REQUIREMENT": [
+   "re-acquire tier-1 finals for 2026-07-29",
+   "re-acquire tier-1 finals for 2026-07-31",
+   "re-acquire tier-1 finals for 2026-08-01",
+   "re-acquire tier-1 finals for 2026-08-02",
+   "re-acquire tier-1 finals for 2026-08-03",
+   "re-acquire tier-1 finals for 2026-08-04",
+   "re-acquire tier-1 finals for 2026-08-05",
+   "re-acquire tier-1 finals for 2026-08-07",
+   "re-acquire tier-1 finals for 2026-08-11",
+   "complete tier-1 finals for 2026-07-23 (4/5 present)",
+   "complete tier-1 finals for 2026-08-08 (4/15 present)",
+   "complete tier-1 finals for 2026-08-10 (9/10 present)"
+  ],
+  "blocked_by": "outbound HTTPS 403 at the org egress proxy; not routed around. These dates need an owner-supplied official board or restored egress."
+ },
+ "what_this_lineage_is_NOT": [
+  "not a replacement for results.csv \u2014 V13 continues to read the canonical file unchanged",
+  "not evidence of anything on its own; it is an input to a successor that does not yet exist",
+  "not certified: while DEGRADED_INTERIOR_GAPS, a successor trained here must carry that tag"
+ ]
+}

@@ -234,7 +234,7 @@ except Exception as e: check(f"P1A enforcement ({e})", False)
 # "echo guard" existed only as prose and was never executed, so it never prevented anything.
 for _m in ("result_provenance","result_content_checks","parse_box_dump",
            "acquisition_ledger","missing_data_audit","tier_discipline","artifact_immutability",
-           "tier1_board_gate","form_refresh_diff"):
+           "tier1_board_gate","form_refresh_diff","tier1_lineage","pregame_preflight"):
     _r=subprocess.run([sys.executable,f"harness/{_m}.py","--selftest"],capture_output=True,text=True)
     _out=(_r.stdout+_r.stderr).strip().splitlines()
     check(f"{_m} selftest ({_out[-1][:72] if _out else 'no output'})", _r.returncode==0)
@@ -268,6 +268,23 @@ try:
     _out=[l for l in (_r.stdout+_r.stderr).strip().splitlines() if "missing_tier1" in l or "LATEST" in l]
     check(f"tier-1 board completeness ({'; '.join(x.strip() for x in _out[:2])[:96] if _out else 'no output'})",
           _r.returncode==0)
+    # PREGAME PREFLIGHT (owner 2026-08-17): "model gates cannot compensate for absent pregame inputs."
+    # Every other gate here checks the QUALITY of data that arrived; this one fires when data never
+    # arrives, which is what actually cost 2026-08-16. It fails only once the acquisition window has
+    # CLOSED -- a gate keyed to mere absence would fail every morning and be ignored by lunchtime.
+    _now=datetime.datetime.now(datetime.timezone.utc)
+    # today (still actionable if pregame) and tomorrow (the one that gets forgotten)
+    for _d in [_now.strftime("%Y-%m-%d"), (_now+datetime.timedelta(days=1)).strftime("%Y-%m-%d")]:
+        _r=subprocess.run([sys.executable,"harness/pregame_preflight.py","--date",_d,"--gate"],
+                          capture_output=True,text=True)
+        _out=(_r.stdout+_r.stderr).strip().splitlines()
+        check(f"pregame inputs for {_d} ({_out[0][:80] if _out else 'no output'})",
+              _r.returncode==0, warn=True)
+    # The successor lineage must never silently certify itself while it has interior gaps.
+    _r=subprocess.run([sys.executable,"harness/tier1_lineage.py","--gate"],capture_output=True,text=True)
+    _out=[l for l in (_r.stdout+_r.stderr).strip().splitlines() if "READINESS" in l or "whole days" in l]
+    check(f"tier-1 successor lineage ({' '.join(x.strip() for x in _out)[:88] if _out else 'no output'})",
+          _r.returncode==0, warn=True)
 except Exception as e: check(f"acquisition/audit gates ({e})", False)
 try:
     r=subprocess.run([sys.executable,"harness/policy_gate.py","--selftest"],capture_output=True,text=True)

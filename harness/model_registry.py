@@ -63,6 +63,30 @@ REGISTRY = {
                  "rng.poisson that shifts downstream RNG, use of the rounded rather than raw park "
                  "factor, and a reduced ABBR map that split franchises with legacy full-name rows."),
     },
+    # MEASUREMENT ONLY — the companion to the noise study, and its corrective. The noise study
+    # measures how far a frozen artifact's output MOVES when an input is swapped; this measures
+    # whether that movement is in the right direction, out of sample. Registered because it runs V13
+    # arithmetic over the whole frozen feature window, but it contains NO copied sim math: v13_sim,
+    # load_rows and _sp are imported from harness/run_v13_historical.py, which is separately pinned.
+    "ml.v13_1.form_ablation.measurement": {
+        "role": "MEASUREMENT_NON_FORECASTING",
+        "source": "harness/form_oof_ablation.py",
+        # not a float: this module applies no HFA of its own. It has zero sim lines; the 1.005 comes
+        # from engine/hfa.py via the imported v13_sim, whose own registered entry asserts it.
+        "hfa": "inherited (no HFA term in this source; imports v13_sim from harness/run_v13_historical.py)",
+        "seed": "722 + int(gamePk) — identical in every arm (common random numbers)",
+        "sims_per_game": "parameter (200000 for the registered run; stamped in the artifact)",
+        "rng_policy": "per_game_seed_722_plus_gamePk, shared across arms",
+        "calibration_artifact": None,
+        "input_schema": "features.csv-v1 (frozen as-of backfill through 2026-07-19; NO look-ahead)",
+        "emits_forecasts": False,
+        "note": ("Three arms over one frozen feature file: FULL (as-of form), STALE (each team's own "
+                 "snapshot lagged >= N days, read off the same file so look-ahead is not representable), "
+                 "NO_FORM (form inputs None -> v13_sim's existing LG_RPG fallback). Out-of-sample by "
+                 "construction: V13 fits nothing, so there is no train/test split to leak across. "
+                 "Inference is a date-block bootstrap over slate dates plus Holm over the primary "
+                 "family. Answers the owner's 2026-08-17 caution: useful, not merely active."),
+    },
     "ml.v13_1.hfa1005.card.s722n30000": {
         "role": "LIVE_CARD",
         "source": "harness/daily_card.py",

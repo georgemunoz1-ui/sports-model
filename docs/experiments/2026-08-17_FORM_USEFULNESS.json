@@ -1,0 +1,91 @@
+{
+ "record_id": "FORM-USEFULNESS-2026-08-17",
+ "built_utc": "2026-08-17T08:12:00Z",
+ "authority": "owner caution 2026-08-17: 'To establish that form is useful — not merely active — run a date-ordered OOF ablation comparing form vs no-form on paired Brier/log-loss.'",
+ "answers": "docs/experiments/2026-08-17_MECHANISM_CLOSEOUT_CORRECTION.json caution_3, which recorded form's predictive value as UNKNOWN pending this test.",
+ "artifact": "data/audit/form_oof_ablation.json",
+ "generator": "harness/form_oof_ablation.py (model_id ml.v13_1.form_ablation.measurement, impl v2 65ee1d2abb68)",
+ "role": "MEASUREMENT_NON_FORECASTING — emits no forecast, changes no model, touches no card, ledger or gate",
+
+ "design": {
+  "arms": {
+   "FULL": "V13 with as-of team form exactly as the frozen features carry it",
+   "STALE": "V13 with each team's own most recent form snapshot dated at least 3 days earlier, read off the same frozen file — the direct analogue of the 8/17 v2->v3 freshness contrast",
+   "NO_FORM": "V13 with all four form inputs None, which routes through v13_sim's existing LG_RPG fallback: offense multiplier 1.0 and league-average bullpen penalty for both sides. SP, park factor and HFA remain, so this measures form's INCREMENTAL value GIVEN the rest of the model."
+  },
+  "window": "2026-03-25 .. 2026-07-19, 1475 labelled games (1460 with form present, 1417 with a qualifying stale snapshot)",
+  "sims_per_game_per_arm": 200000,
+  "common_random_numbers": "seed 722 + int(gamePk), identical in every arm",
+  "why_this_is_out_of_sample": "V13 fits nothing — no training set, no refit, no outcome-tuned parameter. Every input is the strict as-of state (cutoff: date < slate date) and every label was unseen. That is a stronger guarantee than a train/test split and makes the comparison date-ordered by construction.",
+  "inference": "date-block bootstrap over slate dates (10,000 draws) because same-date games share weather, umpires, rest and league scoring conditions; Holm across the primary family; per-date sign test alongside.",
+  "no_transcribed_sim_math": "v13_sim, load_rows and _sp are imported from the pinned harness/run_v13_historical.py. The noise study had already shown how easily a re-transcription introduces a bug."
+ },
+
+ "HEADLINE": "Team form does not improve V13's prospective accuracy anywhere in this window, and where the form estimate rests on few games it makes V13 measurably WORSE. Freshness of form has no detectable accuracy effect at all.",
+
+ "absolute_levels_form_present_rows": {
+  "V13_FULL":    {"brier": 0.252794, "logloss": 0.699736},
+  "V13_STALE":   {"brier": 0.252146, "logloss": 0.698737},
+  "V13_NO_FORM": {"brier": 0.248194, "logloss": 0.689510},
+  "constant_home_base_rate_0.5212": {"brier": 0.249549, "logloss": 0.692245},
+  "reading": "V13 WITH form scores worse than a constant that uses no game information at all (0.2528 vs 0.2495 Brier). V13 WITHOUT form is the only arm that beats that constant (0.2482). Neither arm is good; the ordering is the finding."
+ },
+
+ "contrasts_form_present_rows": {
+  "sign_convention": "arm minus reference on a LOSS: positive = the arm predicts WORSE",
+  "FULL_vs_NO_FORM": {"brier": 0.004601, "ci95": [0.000745, 0.008689], "p": 0.0194, "p_holm": 0.0592,
+                      "logloss": 0.010226, "logloss_p": 0.0148, "logloss_p_holm": 0.0592,
+                      "dates_better_worse": "52-60",
+                      "verdict": "form is directionally HARMFUL and both CIs exclude zero, but NEITHER metric survives Holm at family-wise 0.05. The correct statement is 'no evidence form helps, suggestive evidence it hurts' — NOT 'form is significantly harmful.'"},
+  "FULL_vs_STALE": {"brier": -0.000520, "ci95": [-0.002421, 0.000993], "p": 0.5872,
+                    "logloss": -0.001804, "logloss_p": 0.3614, "dates_better_worse": "54-55",
+                    "verdict": "FRESHNESS HAS NO DETECTABLE EFFECT ON ACCURACY. Lagging every team's form by at least 3 days costs nothing measurable on either metric, and the per-date sign test is 54-55, a coin flip."},
+  "STALE_vs_NO_FORM": {"brier": 0.003996, "p": 0.0418, "logloss": 0.009314, "logloss_p": 0.0270,
+                       "verdict": "stale form is harmful in the same direction and by nearly the same amount as fresh form — consistent with the harm coming from HAVING an unshrunk rate at all, not from its age."}
+ },
+
+ "WHERE_THE_HARM_LIVES": {
+  "prediction_made_before_looking": "V13 applies rf/LG_RPG with NO shrinkage, so a team nine games into the season can carry a large offense multiplier off pure noise. If form hurts, the damage should concentrate where the rate is least supported. A FLAT profile across support buckets would have refuted this.",
+  "result": "a clean monotone gradient — the prediction is confirmed",
+  "strata_FULL_vs_NO_FORM": [
+   {"prior_games_weaker_side": "0-9",   "n": 137, "brier_diff": 0.037495, "ci95": [0.019248, 0.055269], "logloss_diff": 0.083921, "p": 0.0002, "p_holm_over_4_strata": 0.0008, "verdict": "SEVERELY HARMFUL — survives Holm"},
+   {"prior_games_weaker_side": "10-24", "n": 227, "brier_diff": 0.007578, "ci95": [-0.003569, 0.020063], "logloss_diff": 0.016087, "p": 0.1886, "verdict": "harmful in direction, not distinguishable from zero"},
+   {"prior_games_weaker_side": "25-49", "n": 380, "brier_diff": 0.000518, "ci95": [-0.006299, 0.007394], "logloss_diff": 0.001111, "p": 0.8710, "verdict": "no effect"},
+   {"prior_games_weaker_side": "50+",   "n": 716, "brier_diff": -0.000470, "ci95": [-0.003568, 0.002623], "logloss_diff": -0.000894, "p": 0.7704, "verdict": "no effect — form is not USEFUL here either, merely harmless"}
+  ],
+  "monthly_brier_diff_full_minus_noform": {"2026-03": 0.050440, "2026-04": 0.010836, "2026-05": -0.002829, "2026-06": 0.001478, "2026-07": -0.000022},
+  "so_the_pooled_number_is_an_average_of_two_regimes": "the pooled +0.0046 is not a uniform penalty. It is ~137 early-season games being badly mispriced, diluted across 1460. Reporting only the pooled figure would understate the early-season damage by 8x and overstate the mature-season effect, which is zero."
+ },
+
+ "WHAT_THIS_SETTLES_ABOUT_THE_8_17_SENSITIVITY_STUDY": {
+  "the_sensitivity_claim_stands_as_written": "replacing incomplete-through-8/14 form with complete-through-8/16 form moved V13's home-win probabilities by a mean absolute 0.427pp across 11 games. That measurement is unaffected by anything here.",
+  "the_usefulness_question_is_now_ANSWERED_and_the_answer_is_NO": "the owner's caution was that sensitivity is not usefulness. It was correct, and the ablation resolves it against form: at the support level of a mid-August slate (every team well past 50 prior games), the FULL vs NO_FORM contrast is -0.0005 Brier with a CI spanning zero, and the freshness contrast is likewise indistinguishable from zero. The 0.427pp of movement bought no measurable accuracy.",
+  "retained_wording": "'These are local sensitivities of V13 — not evidence that either feature improves prospective accuracy.' That sentence was the cautious reading in the absence of a test. With the test run, the stronger and now-supported statement is that form did not improve prospective accuracy on this window, and that the freshness distinction in particular had no detectable accuracy consequence.",
+  "what_is_still_NOT_claimed": "that form is useless in principle, or that a SHRUNK form feature would not help. Neither was tested. What was tested is V13's specific unshrunk use of it."
+ },
+
+ "GOVERNANCE_no_action_taken": {
+  "V13_unchanged": "ml.v13_1.hfa1005.card.s722n30000 remains FROZEN (R3). A diagnostic finding is not authority to edit a frozen model mid-record.",
+  "no_regrade": "no forecast altered, no grade recomputed, no cohort re-scored.",
+  "gate": "0/100 NO_PROMOTE — unchanged, and this result moves it in no direction because V13 is not a promotion candidate.",
+  "ledger": "model-authorized $0; execution UNAUTHORIZED, paper only.",
+  "the_obvious_next_step_is_NOT_taken_without_a_prereg": "the indicated change is shrinking rf/ra toward league average by games-played (the same treatment engine already applies to SP ERA via shrunk(e,g) with an 8-start prior, and which team form conspicuously lacks). That is a NEW candidate identity requiring its own pre-registration — it is not a patch to V13, and fitting the shrinkage constant on this window would burn the window. Flagged alongside the pending park-shrinkage prereg for an owner decision."
+ },
+
+ "scope_limits": [
+  "Measures form's incremental value GIVEN V13's SP, park and HFA terms. SP ERA itself partly encodes team quality, so this is not form's value in isolation.",
+  "The frozen feature window ends 2026-07-19 and does not include the 2026-08-17 slate the sensitivity study used. The 50+ stratum is the relevant read-across for a mid-August slate.",
+  "The STALE arm lags form by at least 3 days using each team's own earlier snapshot; it is an analogue of the v2->v3 freshness contrast, not a reconstruction of it. 43 rows have no qualifying earlier snapshot and are excluded from that contrast only.",
+  "A null result is evidence of no detectable effect AT THIS SAMPLE SIZE (n=716 in the 50+ stratum), not proof of no effect. The 50+ CI is [-0.0036, +0.0026] Brier, so effects larger than ~0.003 Brier are excluded; smaller ones are not.",
+  "One season, one league, one model. Nothing here generalises to WNBA or NFL, which are separately firewalled."
+ ],
+
+ "falsification_tests_in_the_generator_selftest": [
+  "no STALE snapshot may carry a lag below the requested minimum (checked on all 1475 rows)",
+  "the first game of the season must receive no stale snapshot",
+  "FULL and NO_FORM must actually differ on a form-present row, or the ablation is inert",
+  "the NO_FORM arm must be deterministic under a fixed seed",
+  "the block bootstrap must NOT call pure noise significant, and MUST detect a real 0.5 SD shift",
+  "Holm adjustment checked against hand-worked values"
+ ]
+}

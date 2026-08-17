@@ -219,6 +219,27 @@
      "note": "reconstructed from the git history of this pins file (2026-08-17 append-only migration); superseded"
     }
    ]
+  },
+  "harness/form_oof_ablation.py": {
+   "current": "65ee1d2abb68a09967047d473b02357eedf796e65d83e22aadebe696dc41ee08",
+   "versions": [
+    {
+     "impl_version": 1,
+     "sha256": "3105da03e03b05c9747cc3a850bc166daa002e8fce23c31e508d1b47038c6235",
+     "authorized_utc": "2026-08-17T07:44:19Z",
+     "pin_commit": null,
+     "note": "IMPL v1 \u2014 initial registration. Date-ordered OOF ablation of team form (FULL / STALE / NO_FORM) on paired Brier and log-loss, per owner caution 2026-08-17: 'To establish that form is useful \u2014 not merely active \u2014 run a date-ordered OOF ablation comparing form vs no-form on paired Brier/log-loss.' Imports v13_sim/load_rows/_sp from the pinned harness/run_v13_historical.py; contains no transcribed sim math.",
+     "record": "docs/experiments/2026-08-17_FORM_USEFULNESS.json"
+    },
+    {
+     "impl_version": 2,
+     "sha256": "65ee1d2abb68a09967047d473b02357eedf796e65d83e22aadebe696dc41ee08",
+     "authorized_utc": "2026-08-17T07:50:22Z",
+     "pin_commit": null,
+     "note": "IMPL v2 \u2014 added stratification of the FULL vs NO_FORM contrast by how many prior games the weaker-supported side's form rests on (counted from the same frozen file, strictly before the row, so leak-free). V13 applies rf/LG_RPG with NO shrinkage, so the pre-registered prediction was that damage concentrates where support is thinnest; a flat profile would have refuted it. Analysis addition only: no arm definition, seed, sim call or metric changed, and the pooled figures are byte-identical to impl v1's run.",
+     "record": "docs/experiments/2026-08-17_FORM_USEFULNESS.json"
+    }
+   ]
   }
  }
 }

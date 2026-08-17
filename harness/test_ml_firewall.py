@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""P1B firewall test battery: TEN negative fixtures prove each gate CAN fail; FIVE positive tests
+"""P1B firewall test battery: THIRTEEN negative fixtures prove each gate CAN fail; FIVE positive tests
 prove the build is deterministic, ordered, non-mutating and market-free. All fixtures are synthetic
 or in-memory deepcopies — no repo data is modified.
 """
@@ -10,6 +10,7 @@ import copy
 import hashlib
 import json
 import os
+import subprocess
 import sys
 import tempfile
 
@@ -79,10 +80,16 @@ def main() -> int:
     bad["executable_eligible"] = True
     v = B.validate([bad], 1, [{"gamePk": bad["gamePk"]}])
     t("7 unresolved starter marked executable -> FAIL", any("executable" in x for x in v))
-    # 8. model source-hash mismatch (registry pin drift)
+    # 8. model source-hash mismatch (registry pin drift). Pins are the append-only v2 ledger
+    # (harness/model_registry.py, owner ruling 2026-08-17): drift means the CURRENT authorized
+    # version — versions[-1] — disagrees with disk, so that is the entry the fixture corrupts. The
+    # earlier fixture wrote a top-level key, which v2 ignores, and the gate silently passed.
     with tempfile.TemporaryDirectory() as td:
         pp = os.path.join(td, "pins.json")
-        pins = json.load(open(MR.PINS_PATH)); pins["harness/daily_card.py"] = "0" * 64
+        pins = json.load(open(MR.PINS_PATH))
+        e = pins["sources"]["harness/daily_card.py"]
+        e["versions"][-1] = dict(e["versions"][-1], sha256="0" * 64)
+        e["current"] = "0" * 64
         json.dump(pins, open(pp, "w"))
         old = MR.PINS_PATH
         try:
@@ -108,6 +115,32 @@ def main() -> int:
     # 10. silent exclusion without an exclusion record
     v = B.validate(rows1[:-1], n_finals, exc1)
     t("10 dropped row without reconciliation -> FAIL", any("silent exclusion" in x for x in v))
+    # 10a-c. the append-only pin ledger (owner ruling 2026-08-17). Registered forecasts bind the sha
+    # of the implementation that produced them, so DELETING a historical version breaks those
+    # bindings just as surely as rewriting an artifact would.
+    pins = MR.load_pins()
+    dropped = {p: (vs[:-1] if p == "harness/daily_card.py" else vs) for p, vs in pins.items()}
+    _real_run = subprocess.run
+    _head = json.dumps({"schema": "model_registry_pins-v2",
+                        "sources": {p: {"current": vs[-1]["sha256"], "versions": vs}
+                                    for p, vs in pins.items()}})
+
+    class _Fake:
+        returncode = 0
+        stdout = _head
+    try:  # pretend HEAD already carries the full v2 ledger, then drop a version from the worktree
+        subprocess.run = lambda *a, **k: (_Fake() if a and "show" in a[0] else _real_run(*a, **k))
+        t("10a deleting a historical pin version -> APPEND-ONLY VIOLATION",
+          any("APPEND-ONLY VIOLATION" in x for x in MR._append_only_check(dropped)))
+    finally:
+        subprocess.run = _real_run
+    t("10b a superseded pin still RESOLVES (historical forecast bindings stay valid)",
+      MR.authorized_source_hash("harness/daily_card.py",
+                                "f9cad5d3e2b7227d1c5117185e415882930f33918752b6ce7f975d8cf8dfec9f") is not None
+      and MR.authorized_source_hash("harness/daily_card.py", "0" * 64) is None)
+    t("10c bulk re-pin is refused (the call that erased the daily_card history)",
+      _real_run([sys.executable, "harness/model_registry.py", "--pin"],
+                capture_output=True, text=True).returncode == 1)
 
     print("== POSITIVE TESTS ==")
     b1, b2 = B.dataset_bytes(rows1), B.dataset_bytes(rows2)
@@ -126,7 +159,7 @@ def main() -> int:
     if bad:
         print(f"\nml_firewall tests: FAIL ({len(bad)}): {bad}")
         return 1
-    print(f"\nml_firewall tests: PASS ({len(results)} checks: 10 negative fixtures fired, 5 positives hold)")
+    print(f"\nml_firewall tests: PASS ({len(results)} checks: 13 negative fixtures fired, 5 positives hold)")
     return 0
 
 

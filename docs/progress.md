@@ -1678,3 +1678,80 @@ estimator or feature quality.
 WNBA: froze the 4-book 8/10-8/11 board (data/wnba/odds/2026-08-10_board.json). Unlike the MLB
 "Best Odds" board this one quotes both sides within each book, so same-book de-vig is VALID here.
 Model layer remains ABSENT.
+
+================================================================================
+2026-08-17 — APPEND-ONLY PIN LEDGER; FORM IS ACTIVE BUT NOT USEFUL
+================================================================================
+
+Three owner cautions on the RNG mechanism closeout, all executed.
+
+1. TERMINOLOGY. 2,000,000 draws is a HIGH-PRECISION REFERENCE ESTIMATE, not a "true" or "noiseless"
+   value — it carries an SE and a CI, and calling it exact contradicted the artifact's own intervals.
+   Corrected in harness/rng_noise_study.py (impl v2, documentation only; --verify-math still
+   reproduces all 11 registered v3 card probabilities exactly) and in a superseding record,
+   docs/experiments/2026-08-17_MECHANISM_CLOSEOUT_CORRECTION.json. The original closeout is left
+   byte-intact (R6); no number in it is withdrawn.
+
+2. MULTIPLICITY + SD RECONCILIATION (data/audit/rng_noise_study_holm.json). Study B: 11/11 survive
+   Holm at family-wise 0.05 (max p_holm 5.89e-06), and all 11 Bonferroni-simultaneous CIs exclude
+   zero — the "11/11" claim survives correction and is retained. Study C: 9/9 survive; the tenth
+   common game is the deliberate exact-zero control and carries no test. The two SD figures were
+   never in conflict: 0.2495pp is a PER-REPLICATE SD at n=30,000, 0.013pp a half-width on a MEAN of
+   10 replicates at n=2,000,000. 1/sqrt(n) predicts 0.0306pp; measured 0.0212pp. The 0.69 ratio is
+   paired common-random-numbers variance reduction — both arms share the per-(game,replicate) seed,
+   so part of the MC error cancels in the difference. Independent scaling is an upper bound, and a
+   measured value ABOVE it would have indicated a seeding defect.
+
+3. APPEND-ONLY RE-PIN. The owner's instruction exposed a real defect: model_registry_pins was a flat
+   path->sha map and `--pin` rewrote it wholesale, so authorizing the 8/17 daily_card I/O fix ERASED
+   pin f9cad5d3, which 200+ registered forecasts bind as the implementation that produced them. Git
+   preserved it; the governance ledger did not, and a gate that needs `git log` to recover its own
+   contents is not a gate. Now schema v2: an ordered per-source list of authorized implementation
+   versions, `current` == versions[-1], earlier versions retained forever. History reconstructed
+   from the v1 file's own git log, so nothing was lost — daily_card.py now carries all FIVE of its
+   authorized impls. Bulk `--pin` removed; a pin needs an explicit path and a mandatory --note.
+   authorized_source_hash() resolves a forecast's historical binding, which is what makes retention
+   load-bearing rather than decorative. Three new firewall fixtures (10a/10b/10c) prove the ledger
+   catches a deleted version, resolves a superseded pin, and refuses the exact call that caused the
+   loss. NO forecast altered, NO grade recomputed.
+
+4. THE ABLATION THE OWNER ASKED FOR — and it does not go form's way.
+   harness/form_oof_ablation.py, model_id ml.v13_1.form_ablation.measurement. Three arms over the
+   frozen as-of features (3/25-7/19, 1475 games, 200,000 sims/game/arm, common random numbers, no
+   transcribed sim math — v13_sim is imported from the pinned historical runner). Out-of-sample by
+   construction: V13 fits nothing, so there is no split to leak across.
+
+     V13 FULL     brier 0.25279   logloss 0.69974
+     V13 STALE    brier 0.25215   logloss 0.69874     (form lagged >= 3 days)
+     V13 NO_FORM  brier 0.24819   logloss 0.68951
+     constant home base rate 0.5212 -> brier 0.24955
+
+   V13 WITH form scores worse than a constant that uses no game information. V13 WITHOUT form is the
+   only arm that beats it. FULL vs NO_FORM is +0.0046 Brier / +0.0102 logloss, both CIs excluding
+   zero at p_raw 0.019/0.015 — but NEITHER survives Holm (p_holm 0.0592). The honest statement is
+   "no evidence form helps, suggestive evidence it hurts," not "significantly harmful."
+
+   WHERE THE HARM LIVES, on a prediction made before looking: V13 applies rf/LG_RPG with NO
+   shrinkage, so damage should concentrate where the rate is least supported; a flat profile would
+   have refuted it. Clean monotone gradient by prior games of the weaker-supported side —
+   0-9: +0.0375 (p=0.0002, survives Holm over the 4 strata); 10-24: +0.0076 (p=0.19);
+   25-49: +0.0005; 50+: -0.0005 (p=0.77). The pooled figure is an average of two regimes: ~137
+   early-season games badly mispriced, diluted across 1460.
+
+   FRESHNESS HAS NO DETECTABLE ACCURACY EFFECT. FULL vs STALE is -0.0005 Brier (p=0.59) and -0.0018
+   logloss (p=0.36), per-date sign test 54-55. This directly settles the 8/17 v2->v3 question: the
+   0.427pp of probability movement bought no measurable accuracy. Sensitivity was real; usefulness
+   is not established, and at mid-August support levels (every team past 50 games) the contrast is
+   indistinguishable from zero. This corroborates the 8/10 MLV2 block ablation, which found dropping
+   run-differential/offense/defense changed the logistic model by 0.00000/-0.00002/-0.00002 — two
+   independent methods, same conclusion: the signal is in the STARTER, not in team form.
+
+   NOT CLAIMED: that form is useless in principle, or that a SHRUNK form feature would not help.
+   Neither was tested. What was tested is V13's specific unshrunk use of it.
+
+GOVERNANCE. V13 remains FROZEN (R3) — a diagnostic finding is not authority to edit a frozen model
+mid-record. No regrade. Gate 0/100 NO_PROMOTE, model-authorized ledger $0, execution UNAUTHORIZED,
+paper only. The indicated change — shrinking rf/ra toward league average by games played, the same
+treatment engine already gives SP ERA via shrunk(e,g) and which team form conspicuously lacks — is a
+NEW candidate identity needing its own prereg, and fitting the shrinkage constant on this window
+would burn the window. Flagged for an owner decision alongside the pending park-shrinkage prereg.

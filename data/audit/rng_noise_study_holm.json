@@ -1,0 +1,470 @@
+{
+ "record_id": "HOLM-SIMULTANEOUS-2026-08-17",
+ "why": "external caution: apply Holm / simultaneous coverage before retaining '11/11 exclude zero', and reconcile the two SD figures",
+ "study_B_v2_vs_v3": {
+  "m_tests": 11,
+  "survive_holm_05": 11,
+  "simultaneous_ci_exclude_zero": 11,
+  "max_p_holm": 5.894107486226948e-06,
+  "min_abs_t": 9.415384615384616,
+  "games": [
+   {
+    "game": "BAL@TB",
+    "n_sims": 2000000,
+    "reps": 10,
+    "mean_signed_pp": -0.5799,
+    "mean_abs_pp": 0.5799,
+    "sd_pp": 0.0212,
+    "se_pp": 0.0067,
+    "ci95_low": -0.593,
+    "ci95_high": -0.5668,
+    "distinguishable_from_zero": true,
+    "frac_reps_sign_flip_of_side": null,
+    "t": -86.55223880597015,
+    "p_raw": 1.858800883363174e-14,
+    "p_holm": 2.0446809716994913e-13,
+    "survives_holm_05": true,
+    "ci_simultaneous": [
+     -0.5989,
+     -0.5609
+    ],
+    "excl_zero_simultaneous": true
+   },
+   {
+    "game": "STL@CIN-G2",
+    "n_sims": 2000000,
+    "reps": 10,
+    "mean_signed_pp": -0.5668,
+    "mean_abs_pp": 0.5668,
+    "sd_pp": 0.0212,
+    "se_pp": 0.0067,
+    "ci95_low": -0.58,
+    "ci95_high": -0.5537,
+    "distinguishable_from_zero": true,
+    "frac_reps_sign_flip_of_side": null,
+    "t": -84.59701492537313,
+    "p_raw": 2.2826671598930512e-14,
+    "p_holm": 2.282667159893051e-13,
+    "survives_holm_05": true,
+    "ci_simultaneous": [
+     -0.5858,
+     -0.5478
+    ],
+    "excl_zero_simultaneous": true
+   },
+   {
+    "game": "CWS@CHC",
+    "n_sims": 2000000,
+    "reps": 10,
+    "mean_signed_pp": -0.7011,
+    "mean_abs_pp": 0.7011,
+    "sd_pp": 0.032,
+    "se_pp": 0.0101,
+    "ci95_low": -0.7209,
+    "ci95_high": -0.6813,
+    "distinguishable_from_zero": true,
+    "frac_reps_sign_flip_of_side": null,
+    "t": -69.41584158415841,
+    "p_raw": 1.3502933775182008e-13,
+    "p_holm": 1.2152640397663807e-12,
+    "survives_holm_05": true,
+    "ci_simultaneous": [
+     -0.7298,
+     -0.6724
+    ],
+    "excl_zero_simultaneous": true
+   },
+   {
+    "game": "DET@PIT",
+    "n_sims": 2000000,
+    "reps": 10,
+    "mean_signed_pp": 0.4562,
+    "mean_abs_pp": 0.4562,
+    "sd_pp": 0.0222,
+    "se_pp": 0.007,
+    "ci95_low": 0.4425,
+    "ci95_high": 0.4699,
+    "distinguishable_from_zero": true,
+    "frac_reps_sign_flip_of_side": null,
+    "t": 65.17142857142856,
+    "p_raw": 2.380098194000545e-13,
+    "p_holm": 1.904078555200436e-12,
+    "survives_holm_05": true,
+    "ci_simultaneous": [
+     0.4363,
+     0.4761
+    ],
+    "excl_zero_simultaneous": true
+   },
+   {
+    "game": "LAD@COL",
+    "n_sims": 2000000,
+    "reps": 10,
+    "mean_signed_pp": 0.6304,
+    "mean_abs_pp": 0.6304,
+    "sd_pp": 0.0339,
+    "se_pp": 0.0107,
+    "ci95_low": 0.6094,
+    "ci95_high": 0.6514,
+    "distinguishable_from_zero": true,
+    "frac_reps_sign_flip_of_side": null,
+    "t": 58.915887850467286,
+    "p_raw": 5.89085394146878e-13,
+    "p_holm": 4.123597759028146e-12,
+    "survives_holm_05": true,
+    "ci_simultaneous": [
+     0.6,
+     0.6608
+    ],
+    "excl_zero_simultaneous": true
+   },
+   {
+    "game": "MIA@PHI",
+    "n_sims": 2000000,
+    "reps": 10,
+    "mean_signed_pp": 0.508,
+    "mean_abs_pp": 0.508,
+    "sd_pp": 0.0319,
+    "se_pp": 0.0101,
+    "ci95_low": 0.4882,
+    "ci95_high": 0.5278,
+    "distinguishable_from_zero": true,
+    "frac_reps_sign_flip_of_side": null,
+    "t": 50.2970297029703,
+    "p_raw": 2.436016307530768e-12,
+    "p_holm": 1.4616097845184608e-11,
+    "survives_holm_05": true,
+    "ci_simultaneous": [
+     0.4793,
+     0.5367
+    ],
+    "excl_zero_simultaneous": true
+   },
+   {
+    "game": "STL@CIN-G1",
+    "n_sims": 2000000,
+    "reps": 10,
+    "mean_signed_pp": -0.4954,
+    "mean_abs_pp": 0.4954,
+    "sd_pp": 0.0385,
+    "se_pp": 0.0122,
+    "ci95_low": -0.5193,
+    "ci95_high": -0.4715,
+    "distinguishable_from_zero": true,
+    "frac_reps_sign_flip_of_side": null,
+    "t": -40.60655737704918,
+    "p_raw": 1.658952343943715e-11,
+    "p_holm": 8.294761719718575e-11,
+    "survives_holm_05": true,
+    "ci_simultaneous": [
+     -0.53,
+     -0.4608
+    ],
+    "excl_zero_simultaneous": true
+   },
+   {
+    "game": "ATL@MIN",
+    "n_sims": 2000000,
+    "reps": 10,
+    "mean_signed_pp": -0.2476,
+    "mean_abs_pp": 0.2476,
+    "sd_pp": 0.0335,
+    "se_pp": 0.0106,
+    "ci95_low": -0.2683,
+    "ci95_high": -0.2268,
+    "distinguishable_from_zero": true,
+    "frac_reps_sign_flip_of_side": null,
+    "t": -23.358490566037734,
+    "p_raw": 2.3003692955990854e-09,
+    "p_holm": 9.201477182396342e-09,
+    "survives_holm_05": true,
+    "ci_simultaneous": [
+     -0.2777,
+     -0.2175
+    ],
+    "excl_zero_simultaneous": true
+   },
+   {
+    "game": "SD@NYM",
+    "n_sims": 2000000,
+    "reps": 10,
+    "mean_signed_pp": 0.1764,
+    "mean_abs_pp": 0.1764,
+    "sd_pp": 0.0271,
+    "se_pp": 0.0086,
+    "ci95_low": 0.1596,
+    "ci95_high": 0.1932,
+    "distinguishable_from_zero": true,
+    "frac_reps_sign_flip_of_side": null,
+    "t": 20.511627906976745,
+    "p_raw": 7.265397534371336e-09,
+    "p_holm": 2.1796192603114008e-08,
+    "survives_holm_05": true,
+    "ci_simultaneous": [
+     0.152,
+     0.2008
+    ],
+    "excl_zero_simultaneous": true
+   },
+   {
+    "game": "ATH@KC",
+    "n_sims": 2000000,
+    "reps": 10,
+    "mean_signed_pp": -0.2084,
+    "mean_abs_pp": 0.2084,
+    "sd_pp": 0.0331,
+    "se_pp": 0.0105,
+    "ci95_low": -0.2289,
+    "ci95_high": -0.1879,
+    "distinguishable_from_zero": true,
+    "frac_reps_sign_flip_of_side": null,
+    "t": -19.847619047619048,
+    "p_raw": 9.713024198172199e-09,
+    "p_holm": 2.1796192603114008e-08,
+    "survives_holm_05": true,
+    "ci_simultaneous": [
+     -0.2382,
+     -0.1786
+    ],
+    "excl_zero_simultaneous": true
+   },
+   {
+    "game": "AZ@BOS",
+    "n_sims": 2000000,
+    "reps": 10,
+    "mean_signed_pp": -0.1224,
+    "mean_abs_pp": 0.1224,
+    "sd_pp": 0.0411,
+    "se_pp": 0.013,
+    "ci95_low": -0.1479,
+    "ci95_high": -0.097,
+    "distinguishable_from_zero": true,
+    "frac_reps_sign_flip_of_side": null,
+    "t": -9.415384615384616,
+    "p_raw": 5.894107486226948e-06,
+    "p_holm": 5.894107486226948e-06,
+    "survives_holm_05": true,
+    "ci_simultaneous": [
+     -0.1593,
+     -0.0855
+    ],
+    "excl_zero_simultaneous": true
+   }
+  ]
+ },
+ "study_C_v1_vs_v2": {
+  "m_tests": 9,
+  "note": "the STL@CIN G2 control is excluded from testing because its effect is EXACTLY zero with se=0, so t is undefined \u2014 that is the design working, not a dropped observation",
+  "survive_holm_05": 9,
+  "simultaneous_ci_exclude_zero": 9,
+  "games": [
+   {
+    "game": "SD@NYM",
+    "n_sims": 2000000,
+    "reps": 10,
+    "mean_signed_pp": 4.109,
+    "mean_abs_pp": 4.109,
+    "sd_pp": 0.0211,
+    "se_pp": 0.0067,
+    "ci95_low": 4.0959,
+    "ci95_high": 4.1221,
+    "distinguishable_from_zero": true,
+    "frac_reps_sign_flip_of_side": null,
+    "t": 613.2835820895522,
+    "p_raw": 4.148358410130341e-22,
+    "p_holm": 3.733522569117307e-21,
+    "survives_holm_05": true,
+    "ci_simultaneous": [
+     4.0904,
+     4.1276
+    ],
+    "excl_zero_simultaneous": true
+   },
+   {
+    "game": "LAD@COL",
+    "n_sims": 2000000,
+    "reps": 10,
+    "mean_signed_pp": 4.5091,
+    "mean_abs_pp": 4.5091,
+    "sd_pp": 0.0245,
+    "se_pp": 0.0078,
+    "ci95_low": 4.4939,
+    "ci95_high": 4.5243,
+    "distinguishable_from_zero": true,
+    "frac_reps_sign_flip_of_side": null,
+    "t": 578.0897435897436,
+    "p_raw": 7.060990166533341e-22,
+    "p_holm": 5.648792133226673e-21,
+    "survives_holm_05": true,
+    "ci_simultaneous": [
+     4.4875,
+     4.5307
+    ],
+    "excl_zero_simultaneous": true
+   },
+   {
+    "game": "MIA@PHI",
+    "n_sims": 2000000,
+    "reps": 10,
+    "mean_signed_pp": 3.6702,
+    "mean_abs_pp": 3.6702,
+    "sd_pp": 0.046,
+    "se_pp": 0.0145,
+    "ci95_low": 3.6417,
+    "ci95_high": 3.6987,
+    "distinguishable_from_zero": true,
+    "frac_reps_sign_flip_of_side": null,
+    "t": 253.11724137931031,
+    "p_raw": 1.1932342607564321e-18,
+    "p_holm": 8.352639825295025e-18,
+    "survives_holm_05": true,
+    "ci_simultaneous": [
+     3.63,
+     3.7104
+    ],
+    "excl_zero_simultaneous": true
+   },
+   {
+    "game": "DET@PIT",
+    "n_sims": 2000000,
+    "reps": 10,
+    "mean_signed_pp": -1.9817,
+    "mean_abs_pp": 1.9817,
+    "sd_pp": 0.0299,
+    "se_pp": 0.0095,
+    "ci95_low": -2.0003,
+    "ci95_high": -1.9632,
+    "distinguishable_from_zero": true,
+    "frac_reps_sign_flip_of_side": null,
+    "t": -208.6,
+    "p_raw": 6.802595778204461e-18,
+    "p_holm": 4.081557466922676e-17,
+    "survives_holm_05": true,
+    "ci_simultaneous": [
+     -2.008,
+     -1.9554
+    ],
+    "excl_zero_simultaneous": true
+   },
+   {
+    "game": "ATH@KC",
+    "n_sims": 2000000,
+    "reps": 10,
+    "mean_signed_pp": 2.2075,
+    "mean_abs_pp": 2.2075,
+    "sd_pp": 0.0376,
+    "se_pp": 0.0119,
+    "ci95_low": 2.1842,
+    "ci95_high": 2.2308,
+    "distinguishable_from_zero": true,
+    "frac_reps_sign_flip_of_side": null,
+    "t": 185.50420168067225,
+    "p_raw": 1.9553408316963022e-17,
+    "p_holm": 9.776704158481511e-17,
+    "survives_holm_05": true,
+    "ci_simultaneous": [
+     2.1745,
+     2.2405
+    ],
+    "excl_zero_simultaneous": true
+   },
+   {
+    "game": "CWS@CHC",
+    "n_sims": 2000000,
+    "reps": 10,
+    "mean_signed_pp": 2.1895,
+    "mean_abs_pp": 2.1895,
+    "sd_pp": 0.0398,
+    "se_pp": 0.0126,
+    "ci95_low": 2.1648,
+    "ci95_high": 2.2142,
+    "distinguishable_from_zero": true,
+    "frac_reps_sign_flip_of_side": null,
+    "t": 173.76984126984127,
+    "p_raw": 3.5202355993196346e-17,
+    "p_holm": 1.4080942397278538e-16,
+    "survives_holm_05": true,
+    "ci_simultaneous": [
+     2.1546,
+     2.2244
+    ],
+    "excl_zero_simultaneous": true
+   },
+   {
+    "game": "BAL@TB",
+    "n_sims": 2000000,
+    "reps": 10,
+    "mean_signed_pp": -1.099,
+    "mean_abs_pp": 1.099,
+    "sd_pp": 0.0337,
+    "se_pp": 0.0107,
+    "ci95_low": -1.1199,
+    "ci95_high": -1.0781,
+    "distinguishable_from_zero": true,
+    "frac_reps_sign_flip_of_side": null,
+    "t": -102.71028037383178,
+    "p_raw": 3.988692130853274e-15,
+    "p_holm": 1.1966076392559822e-14,
+    "survives_holm_05": true,
+    "ci_simultaneous": [
+     -1.1287,
+     -1.0693
+    ],
+    "excl_zero_simultaneous": true
+   },
+   {
+    "game": "AZ@BOS",
+    "n_sims": 2000000,
+    "reps": 10,
+    "mean_signed_pp": 0.9654,
+    "mean_abs_pp": 0.9654,
+    "sd_pp": 0.0357,
+    "se_pp": 0.0113,
+    "ci95_low": 0.9433,
+    "ci95_high": 0.9875,
+    "distinguishable_from_zero": true,
+    "frac_reps_sign_flip_of_side": null,
+    "t": 85.43362831858408,
+    "p_raw": 2.0894008763410174e-14,
+    "p_holm": 4.178801752682035e-14,
+    "survives_holm_05": true,
+    "ci_simultaneous": [
+     0.9341,
+     0.9967
+    ],
+    "excl_zero_simultaneous": true
+   },
+   {
+    "game": "ATL@MIN",
+    "n_sims": 2000000,
+    "reps": 10,
+    "mean_signed_pp": -0.6753,
+    "mean_abs_pp": 0.6753,
+    "sd_pp": 0.0313,
+    "se_pp": 0.0099,
+    "ci95_low": -0.6947,
+    "ci95_high": -0.6558,
+    "distinguishable_from_zero": true,
+    "frac_reps_sign_flip_of_side": null,
+    "t": -68.2121212121212,
+    "p_raw": 1.5800962822653242e-13,
+    "p_holm": 1.5800962822653242e-13,
+    "survives_holm_05": true,
+    "ci_simultaneous": [
+     -0.7028,
+     -0.6478
+    ],
+    "excl_zero_simultaneous": true
+   }
+  ]
+ },
+ "sd_reconciliation": {
+  "measured_sd_per_replicate_n30000": 0.2495,
+  "predicted_sd_at_n2m_if_independent": 0.0306,
+  "measured_sd_at_n2m_BAL": 0.0212,
+  "se_BAL_over_10_reps": 0.0067,
+  "nominal_95_halfwidth_BAL": 0.0131,
+  "explanation": "the two figures are the SAME quantity at different n and averaging depth. MC error scales as 1/sqrt(n): 0.2495pp at n=30,000 predicts 0.0306pp at n=2,000,000, and averaging 10 replicates divides by sqrt(10) again -> ~0.0097pp SE, whose 1.96x half-width is ~0.019pp. BAL's measured SD is 0.0212pp, TIGHTER than the 0.0306pp independent-sampling prediction (ratio 0.69), because the design is PAIRED: both arms use the same per-(game,replicate) seed, so part of the MC error is common and cancels in the difference. Variance reduction below the independent prediction is the expected behaviour of common-random-numbers, not an anomaly.",
+  "no_contradiction": "0.2495pp is a per-replicate SD at the FROZEN n; 0.013pp is a half-width on a MEAN of 10 replicates at n=2M. Comparing them directly would be a units error."
+ }
+}

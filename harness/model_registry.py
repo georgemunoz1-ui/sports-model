@@ -164,10 +164,46 @@ REGISTRY = {
                 "FIREWALLED: no output reaches the MLB gate, forecasts or ledger.",
     },
 }
-#: Registered source hashes. Regenerate deliberately with --pin after an AUTHORIZED change to a
-#: LIVE source; a hash change without a matching --pin commit fails healthcheck. Stored separately
-#: from REGISTRY so a pin update is a visible one-line diff per file.
+#: Registered source hashes, as an APPEND-ONLY ledger of authorized generator implementation
+#: versions (schema model_registry_pins-v2). Owner instruction 2026-08-17: "Keep the source re-pin
+#: append-only as a new generator implementation/version; never replace the historical pin."
+#:
+#: WHY the v1 flat map was wrong: it stored one sha per path and --pin REWROTE it, so authorizing an
+#: I/O fix to harness/daily_card.py on 2026-08-17 silently erased the pin f9cad5d3... that 200+
+#: registered forecasts bind as the implementation which produced them. Those bindings were then
+#: unresolvable against the registry — the record still said "produced by f9cad5d3" but nothing on
+#: file agreed that f9cad5d3 had ever been authorized. Git preserved it; the governance artifact did
+#: not, and a gate that depends on `git log` to know its own history is not a gate.
+#:
+#: v2 keeps an ordered `versions` list per source. A re-pin APPENDS. `current` is always
+#: versions[-1].sha256 and is the only version permitted on disk; every earlier version stays
+#: readable forever so historical bindings resolve. The five daily_card versions below were
+#: reconstructed from the v1 file's own git history, so the migration lost nothing.
 PINS_PATH = "harness/model_registry_pins.json"
+
+
+def load_pins() -> dict:
+    """path -> ordered list of authorized implementation versions. Reads v2; tolerates a v1 map."""
+    if not os.path.exists(PINS_PATH):
+        return {}
+    d = json.load(open(PINS_PATH))
+    if d.get("schema") == "model_registry_pins-v2":
+        return {p: e["versions"] for p, e in d["sources"].items()}
+    # legacy flat map: one unlabelled version per path
+    return {p: [{"impl_version": 1, "sha256": s, "authorized_utc": None, "note": "legacy v1 pin"}]
+            for p, s in d.items() if isinstance(s, str)}
+
+
+def authorized_source_hash(path: str, sha256: str):
+    """Which authorized implementation version is this sha? None if it was never authorized.
+
+    This is what makes the ledger append-only in a load-bearing way rather than a decorative one: a
+    forecast record that binds a SUPERSEDED generator sha is still correctly bound, and this resolves
+    it instead of reporting drift."""
+    for v in load_pins().get(path, []):
+        if v["sha256"] == sha256:
+            return v
+    return None
 
 
 def _hfa_in_source(path: str):
@@ -182,7 +218,8 @@ def _hfa_in_source(path: str):
 def selftest() -> int:
     import hfa_values  # local shim below
     fails = []
-    pins = json.load(open(PINS_PATH)) if os.path.exists(PINS_PATH) else {}
+    pins = load_pins()
+    fails += _append_only_check(pins)
     ids = list(REGISTRY)
     if len(ids) != len(set(ids)):
         fails.append("duplicate model_id")
@@ -193,8 +230,18 @@ def selftest() -> int:
             fails.append(f"{mid}: source missing {p}")
             continue
         h = sha(p)
-        if p in pins and pins[p] != h:
-            fails.append(f"{mid}: source hash drifted from pin: {p} {h[:12]} != {pins[p][:12]}")
+        if p in pins:
+            cur = pins[p][-1]
+            if cur["sha256"] != h:
+                prior = authorized_source_hash(p, h)
+                if prior:
+                    fails.append(f"{mid}: {p} on disk is impl v{prior['impl_version']} "
+                                 f"({h[:12]}), a SUPERSEDED implementation — the current authorized "
+                                 f"version is v{cur['impl_version']} ({cur['sha256'][:12]}). A revert is "
+                                 f"an authorized change like any other: append it, do not roll back to it.")
+                else:
+                    fails.append(f"{mid}: source hash drifted from pin: {p} {h[:12]} != "
+                                 f"{cur['sha256'][:12]} (never an authorized version)")
         seen_sources[p] = mid
         lits, imports = _hfa_in_source(p)
         want = m["hfa"]
@@ -228,10 +275,84 @@ def selftest() -> int:
     return 0
 
 
-def pin() -> None:
-    pins = {m["source"]: sha(m["source"]) for m in REGISTRY.values() if os.path.exists(m["source"])}
-    json.dump(pins, open(PINS_PATH, "w"), indent=1)
-    print(f"pinned {len(pins)} sources -> {PINS_PATH}")
+def _append_only_check(pins: dict) -> list:
+    """Internal consistency + a real append-only assertion against the committed ledger.
+
+    Consistency is checked unconditionally. The history-shrink check compares against HEAD via git;
+    if git is unavailable it is SKIPPED, and that is stated rather than silently passing."""
+    fails = []
+    for p, vs in pins.items():
+        shas = [v["sha256"] for v in vs]
+        if len(shas) != len(set(shas)):
+            fails.append(f"pins {p}: a sha appears twice — versions must be distinct and ordered")
+        if [v["impl_version"] for v in vs] != list(range(1, len(vs) + 1)):
+            fails.append(f"pins {p}: impl_version must run 1..N in order")
+    if os.path.exists(PINS_PATH):
+        d = json.load(open(PINS_PATH))
+        if d.get("schema") == "model_registry_pins-v2":
+            for p, e in d["sources"].items():
+                if e["current"] != e["versions"][-1]["sha256"]:
+                    fails.append(f"pins {p}: `current` disagrees with versions[-1] — the ledger is incoherent")
+    try:
+        import subprocess
+        head = subprocess.run(["git", "show", f"HEAD:{PINS_PATH}"], capture_output=True, text=True, timeout=20)
+        if head.returncode == 0:
+            old = json.loads(head.stdout)
+            was = ({p: [v["sha256"] for v in e["versions"]] for p, e in old["sources"].items()}
+                   if old.get("schema") == "model_registry_pins-v2"
+                   else {p: [s] for p, s in old.items() if isinstance(s, str)})
+            for p, shas in was.items():
+                have = {v["sha256"] for v in pins.get(p, [])}
+                lost = [s for s in shas if s not in have]
+                if lost:
+                    fails.append(f"pins {p}: APPEND-ONLY VIOLATION — {len(lost)} committed version(s) "
+                                 f"dropped ({', '.join(s[:12] for s in lost)}). Registered forecasts bind "
+                                 f"these; they may never be removed.")
+    except Exception:
+        pass  # no git / detached tree: the consistency checks above still ran
+    return fails
+
+
+def pin(path: str, note: str, record: str = None) -> int:
+    """APPEND the current on-disk sha of `path` as a new authorized implementation version.
+
+    There is deliberately no bulk re-pin: the destructive v1 behaviour was `--pin` with no argument,
+    which rewrote every source's single pin at once and is how the daily_card history was lost."""
+    if not os.path.exists(path):
+        print(f"REFUSED: {path} does not exist")
+        return 1
+    if path not in {m["source"] for m in REGISTRY.values()}:
+        print(f"REFUSED: {path} is not the source of any registered model_id")
+        return 1
+    h = sha(path)
+    d = (json.load(open(PINS_PATH)) if os.path.exists(PINS_PATH)
+         else {"schema": "model_registry_pins-v2", "policy": "APPEND-ONLY", "sources": {}})
+    if d.get("schema") != "model_registry_pins-v2":
+        print("REFUSED: pins file is not v2; migrate before appending")
+        return 1
+    e = d["sources"].setdefault(path, {"current": None, "versions": []})
+    for v in e["versions"]:
+        if v["sha256"] == h:
+            print(f"REFUSED: {path} already registered as impl v{v['impl_version']} ({h[:12]}). "
+                  f"Nothing to append — the disk contents are unchanged from an authorized version.")
+            return 1
+    if not note:
+        print("REFUSED: --note is mandatory. A pin with no stated authority is indistinguishable "
+              "from drift that someone blessed.")
+        return 1
+    e["versions"].append({"impl_version": len(e["versions"]) + 1, "sha256": h,
+                          "authorized_utc": _utc_now(), "pin_commit": None,
+                          "note": note, **({"record": record} if record else {})})
+    e["current"] = h
+    json.dump(d, open(PINS_PATH, "w"), indent=1)
+    print(f"appended {path} impl v{e['versions'][-1]['impl_version']} = {h[:16]} "
+          f"({len(e['versions'])} authorized versions retained)")
+    return 0
+
+
+def _utc_now() -> str:
+    import datetime
+    return datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
 
 
 class _HfaShim:
@@ -252,6 +373,15 @@ _load_hfa()
 
 if __name__ == "__main__":
     if "--pin" in sys.argv:
-        pin()
-        raise SystemExit(0)
+        i = sys.argv.index("--pin")
+        if i + 1 >= len(sys.argv) or sys.argv[i + 1].startswith("--"):
+            print("REFUSED: bulk re-pin is removed. Usage:\n"
+                  "  --pin <source-path> --note '<what changed and under whose authority>' "
+                  "[--record <path/to/audit.json>]\n"
+                  "Pins are append-only: a new authorized build becomes a NEW implementation version; "
+                  "the historical pin is never replaced.")
+            raise SystemExit(1)
+        _note = sys.argv[sys.argv.index("--note") + 1] if "--note" in sys.argv else None
+        _rec = sys.argv[sys.argv.index("--record") + 1] if "--record" in sys.argv else None
+        raise SystemExit(pin(sys.argv[i + 1], _note, _rec))
     raise SystemExit(selftest())

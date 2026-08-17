@@ -1,0 +1,81 @@
+{
+ "record_id": "MECHANISM-CLOSEOUT-CORRECTION-2026-08-17",
+ "supersedes_wording_of": "docs/experiments/2026-08-17_MECHANISM_CLOSEOUT.json",
+ "rewrites_nothing": "R6. The superseded record is left byte-intact. No number in it is withdrawn; the numbers were correct. What is corrected here is TERMINOLOGY, the multiplicity treatment, and the claim's SCOPE.",
+ "built_utc": "2026-08-17T07:52:00Z",
+ "authority": "owner three cautions + interpretive correction, 2026-08-17",
+
+ "caution_1_TERMINOLOGY": {
+  "ruling": "Call 2,000,000 draws a HIGH-PRECISION REFERENCE ESTIMATE, not 'true' or 'noiseless'.",
+  "why_the_old_wording_was_wrong": "n=2,000,000 gives a per-run Monte-Carlo SE of ~0.035pp on a single probability; averaging 10 paired replicates gives ~0.007pp on the contrast. That is small. It is not zero, and calling it 'true' or 'noiseless' asserts an exactness the estimator does not have — while the artifact was simultaneously reporting an SE and a CI for that same quantity, which only makes sense if it is an estimate.",
+  "applied_to": [
+   "harness/rng_noise_study.py docstring, Study B heading, and the emitted `why` field (impl v2)",
+   "every figure below, which is now labelled reference estimate + interval rather than 'true effect'"
+  ],
+  "field_name_note": "the superseded artifact's JSON KEYS (mean_abs_true_effect_pp, true_effect_pp, v1_vs_v2_true_effect_pp) are left as written — renaming keys in a dated record is a rewrite. Read them as reference estimates; this record is the authority on their interpretation."
+ },
+
+ "caution_2_MULTIPLICITY_AND_SD_RECONCILIATION": {
+  "artifact": "data/audit/rng_noise_study_holm.json",
+  "holm": {
+   "study_B_v2_vs_v3_form_freshness": {
+    "m_tests": 11,
+    "survive_holm_family_wise_05": 11,
+    "bonferroni_simultaneous_CIs_excluding_zero": 11,
+    "max_p_holm": 5.89e-06,
+    "min_abs_t": 9.42,
+    "verdict": "the '11/11 exclude zero' claim SURVIVES the correction and is retained"
+   },
+   "study_C_v1_vs_v2_starter_resolution": {
+    "m_tests": 9,
+    "note": "the 10th common game, STL@CIN-G2, is the deliberate no-starter-change CONTROL: both arms are TBD/TBD, its contrast is exactly 0.0000pp by construction, and it carries no test. It is EXCLUDED from the multiplicity family, not from the study — it remains the study's falsification check and it passed.",
+    "survive_holm_family_wise_05": 9,
+    "verdict": "retained"
+   }
+  },
+  "sd_reconciliation": {
+   "the_apparent_conflict": "the study reports a 0.2495pp replicate SD, and separately a +/-0.013pp interval on BAL@TB. These look contradictory.",
+   "resolution_1_UNITS": "0.2495pp is a PER-REPLICATE SD of the contrast at the FROZEN setting n=30,000. 0.013pp is a HALF-WIDTH on the MEAN of 10 replicates at n=2,000,000. Comparing them directly is a units error: different n, and SD vs SE-of-a-mean.",
+   "resolution_2_SCALING": "1/sqrt(n) scaling from n=30,000 to n=2,000,000 predicts a per-replicate SD of 0.2495 / sqrt(66.67) = 0.0306pp. BAL@TB measured 0.0212pp.",
+   "resolution_3_THE_REMAINING_GAP": "measured/predicted = 0.69. This is expected, not anomalous: both arms share the per-(game,replicate) seed, so the design is paired COMMON RANDOM NUMBERS and part of the Monte-Carlo error is common to the two arms and cancels in the difference. Independent-sampling scaling is therefore an UPPER bound on the paired SD, and the measured value sits below it as it should.",
+   "arithmetic": "SE = 0.0212 / sqrt(10) = 0.0067pp; 1.96 x SE = 0.0131pp = the reported +/-0.013pp. The two figures are consistent.",
+   "what_would_have_falsified_this": "a measured paired SD ABOVE the 0.0306pp independent-sampling prediction. CRN can only reduce the variance of the difference, never inflate it, so that would have indicated a transcription or seeding defect rather than a variance-reduction gain."
+  }
+ },
+
+ "caution_3_SCOPE_THE_INTERPRETIVE_CORRECTION": {
+  "owner_correction_ACCEPTED": "this proves local model sensitivity, not predictive usefulness.",
+  "why_accepted_without_qualification": "the study swaps one input state and measures how far a frozen artifact's output moves. A feature can move the output by any amount and still have zero or negative out-of-sample skill; magnitude of response is not evidence of correctness of response. Nothing in Study A, B or C has an outcome label anywhere in it, so no accuracy claim is even expressible from these data.",
+  "DEFENSIBLE_RECORD_owner_verbatim": "On the 2026-08-17 slate, replacing V13's incomplete-through-8/14 form state with complete-through-8/16 form state changed expected home-win probabilities by a mean absolute 0.427pp across 11 games. No side flip survived Monte Carlo noise separation. Across 10 common games, starter resolution changed probabilities by 2.141pp, approximately 5.02x more. These are local sensitivities of V13-not evidence that either feature improves prospective accuracy.",
+  "this_wording_is_the_record": "adopted verbatim. Any future citation of the 0.427pp / 2.141pp / 5.02x figures carries this sentence with it, including the final clause. Citing the magnitudes without the scope limit is the specific error this record exists to prevent.",
+  "the_test_that_WOULD_establish_usefulness": "a date-ordered out-of-sample ablation, form vs no-form, on paired Brier and log-loss. Implemented in harness/form_oof_ablation.py; result recorded separately. Until that reports, the correct statement about form's predictive value is that it is UNKNOWN, not that it is positive."
+ },
+
+ "caution_4_APPEND_ONLY_RE_PIN": {
+  "instruction": "Keep the source re-pin append-only as a new generator implementation/version; never replace the historical pin. No forecasts need alteration or regrading.",
+  "the_defect_this_exposed": "harness/model_registry_pins.json was a flat path->sha map and `--pin` REWROTE it wholesale. Authorizing the 2026-08-17 I/O fix to harness/daily_card.py therefore ERASED the pin f9cad5d3e2b7227d1c5117185e415882930f33918752b6ce7f975d8cf8dfec9f, which 200+ registered forecasts bind as the implementation that produced them. The bindings were still correct; the registry simply no longer agreed that sha had ever been authorized. Git preserved the history, but a governance ledger that needs `git log` to recover its own contents is not a ledger.",
+  "fix": {
+   "schema": "model_registry_pins-v2: each source carries an ordered `versions` list of authorized generator implementation versions; `current` is always versions[-1].sha256 and is the only version permitted on disk.",
+   "migration_lost_nothing": "the full version history was reconstructed from the v1 file's own git history. harness/daily_card.py now carries all FIVE authorized implementations (a901787198d0, 5765d0ec929b, b58e3f51f9ca, f9cad5d3e2b7, f57980f10728) rather than only the latest.",
+   "bulk_repin_REMOVED": "`--pin` with no argument now refuses. A pin requires an explicit source path and a mandatory --note; a pin with no stated authority is indistinguishable from drift that someone blessed.",
+   "duplicate_append_refused": "re-pinning an unchanged file refuses rather than appending a second identical version.",
+   "revert_is_named_not_silent": "if a source on disk matches a SUPERSEDED authorized version, the gate now says so by version number instead of reporting unknown drift.",
+   "new_resolver": "model_registry.authorized_source_hash(path, sha) resolves a forecast's historical binding to its implementation version. This is what makes retention load-bearing rather than decorative.",
+   "falsification_tests_run": [
+    "dropping a committed version from the ledger -> APPEND-ONLY VIOLATION raised (verified against a v2 HEAD)",
+    "`current` disagreeing with versions[-1] -> incoherence raised",
+    "restoring daily_card.py to impl v4 on disk -> gate names it as superseded impl v4, not unknown drift",
+    "f9cad5d3... resolves to impl v4; an unauthorized sha resolves to None"
+   ]
+  },
+  "forecasts": "UNCHANGED. No forecast altered, no grade recomputed. The 11 P4-20260817v3-* records still bind f9cad5d3 (impl v4), which is the correct historical record of what produced them, and that binding now RESOLVES against the registry instead of dangling.",
+  "second_append_this_cycle": "harness/rng_noise_study.py impl v2 (eb7d157a5b31...), documentation-only terminology fix per caution 1. Transcription re-verified after the edit: --verify-math PASSES, reproducing all 11 registered v3 card probabilities exactly. impl v1 (4fddd2aea7e1...) retained."
+ },
+
+ "standing_status_unchanged": {
+  "gate": "0/100 NO_PROMOTE",
+  "model_authorized_ledger_usd": 0,
+  "execution": "UNAUTHORIZED, paper only",
+  "v13_identity": "ml.v13_1.hfa1005.card.s722n30000 FROZEN — no forecast altered or regraded by anything in this record"
+ }
+}

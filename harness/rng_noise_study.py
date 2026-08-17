@@ -7,7 +7,7 @@ the NUMBER of underlying uniforms consumed depends on the parameters. Change tea
 change -> draw counts change -> every subsequent draw, including in later games on the slate, is
 re-coupled. Therefore the observed v2->v3 card delta of 0.455pp is
 
-    observed = true parameter effect  +  RNG re-coupling noise
+    observed = form-state effect (the estimand)  +  RNG re-coupling noise
 
 and bit-for-bit regeneration proves deterministic REPLAY, not a noise-free estimate. The auditor's
 own probe (0.1% perturbation, 200 paired seeds) gave SD 0.237pp / mean|d| 0.192pp — material beside
@@ -17,9 +17,19 @@ TWO STUDIES, same math either way:
   A) REPLICATION AT THE FROZEN SETTING. n=30000, R independent per-game keyed seeds, both arms run
      under the SAME seed per replicate. This is the distribution the single frozen card is one draw
      from. It answers: could 0.455pp be noise?
-  B) HIGH-n EFFECT ESTIMATE. n=2,000,000 per replicate collapses MC error to ~0.035pp per run
-     (sqrt(.25/n)); averaging R_HI runs tightens it further. The arm difference then estimates the
-     TRUE parameter effect, with a Monte-Carlo CI.
+  B) HIGH-PRECISION REFERENCE ESTIMATE. n=2,000,000 per replicate collapses MC error to ~0.035pp
+     per run (sqrt(.25/n)); averaging R_HI runs tightens it further. The arm difference is then a
+     HIGH-PRECISION REFERENCE ESTIMATE of the form-state effect, reported with a Monte-Carlo CI.
+     It is NOT a "true" or "noiseless" value (owner terminology ruling 2026-08-17): 2,000,000 draws
+     shrink Monte-Carlo error, they do not remove it — which is precisely why every figure here
+     carries an SE and an interval. Both arms share the per-(game,replicate) seed, so this is a
+     paired common-random-numbers contrast and its SE is smaller than independent sampling predicts.
+
+WHAT THIS DOES NOT ESTABLISH. Every number here is a LOCAL SENSITIVITY of a frozen artifact: how
+much V13's output moves when one input state is swapped. That is not evidence that the input
+improves prospective accuracy. Establishing usefulness requires a date-ordered out-of-sample
+ablation on paired Brier/log-loss — see harness/form_oof_ablation.py. Sensitivity and skill are
+different claims and this module measures only the first.
 
 The sim math is transcribed verbatim from harness/daily_card.py (lines 62-78) and verified against
 it by `--verify-math`, which reproduces the registered v3 card probabilities exactly using the same
@@ -216,7 +226,12 @@ def main():
     out = {"record_id": "RNG-NOISE-STUDY-2026-08-17",
            "why": ("daily_card.py uses ONE global sequential RNG; numpy gamma/poisson are rejection "
                    "samplers whose draw counts depend on parameters, so a form change re-couples the "
-                   "whole downstream stream. Observed card delta = true effect + coupling noise."),
+                   "whole downstream stream. Observed card delta = form-state effect + coupling "
+                   "noise. The n=2,000,000 arm is a HIGH-PRECISION REFERENCE ESTIMATE of that "
+                   "effect, not a 'true' or 'noiseless' value (owner terminology ruling 2026-08-17)."),
+           "scope_limit": ("LOCAL SENSITIVITY of a frozen artifact only. Not evidence that the "
+                           "feature improves prospective accuracy; that requires the date-ordered "
+                           "OOF ablation in harness/form_oof_ablation.py."),
            "studies": [A, B, C]}
     os.makedirs("data/audit", exist_ok=True)
     json.dump(out, open("data/audit/rng_noise_study.json", "w"), indent=1)

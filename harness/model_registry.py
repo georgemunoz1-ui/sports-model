@@ -87,6 +87,28 @@ REGISTRY = {
                  "Inference is a date-block bootstrap over slate dates plus Holm over the primary "
                  "family. Answers the owner's 2026-08-17 caution: useful, not merely active."),
     },
+    # MEASUREMENT ONLY — attributes a card-to-card probability change to the specific data that
+    # caused it, by rebuilding intermediate form states from DATE FILTERS over the canonical results
+    # file (never mutating it). Registered because it replays V13 card probabilities; it holds no
+    # copied sim math (sim_p/team_form/raw_pf are imported from the pinned rng_noise_study). Its
+    # correctness condition is a refusal gate: the reconstructed states must reproduce the REGISTERED
+    # v2 and v3 cards exactly or it emits nothing.
+    "ml.v13_1.form_refresh_diff.measurement": {
+        "role": "MEASUREMENT_NON_FORECASTING",
+        "source": "harness/form_refresh_diff.py",
+        "hfa": "inherited (no HFA term in this source; imports sim_p from harness/rng_noise_study.py)",
+        "seed": "722 for the frozen-n card replay; sha256(game|replicate) for the paired high-n arm",
+        "sims_per_game": "30000 (frozen replay) and 2000000 (reference estimate)",
+        "rng_policy": "sequential_slate_order for the card replay (matches the frozen card exactly); "
+                      "per_game_keyed_seeds shared across arms for the paired contrast",
+        "calibration_artifact": None,
+        "input_schema": "registered card artifacts + date-filtered results.csv",
+        "emits_forecasts": False,
+        "note": ("Separates the 2026-08-13 interior-hole repair from the 2026-08-15/16 refresh, which "
+                 "the registered v2->v3 contrast bundles together (one intake applied all 39 rows). "
+                 "Reports each per-game delta twice: at the frozen n, and as a high-precision "
+                 "reference estimate with a Monte-Carlo CI and Holm correction."),
+    },
     "ml.v13_1.hfa1005.card.s722n30000": {
         "role": "LIVE_CARD",
         "source": "harness/daily_card.py",

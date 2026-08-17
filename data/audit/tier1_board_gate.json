@@ -1,0 +1,111 @@
+{
+ "record_id": "TIER1-BOARD-GATE-2026-08-15-2026-08-16",
+ "built_utc": "2026-08-17T08:22:14Z",
+ "role": "MEASUREMENT_NON_FORECASTING \u2014 reads results.csv, never writes it",
+ "results_file": "data/backfill/mlb/2026/results.csv",
+ "results_file_sha256": "05a4a6a9b2a865aa85c8752e48dc1239b1986674490bdd81088086e9a28ef17c",
+ "criteria": {
+  "LATEST_TIER1_FORM_DATE": "2026-08-16",
+  "LATEST_TIER1_FORM_DATE_meets_2026_08_16": true,
+  "missing_tier1_games_8_15": 0,
+  "missing_tier1_games_8_16": 0,
+  "canonical_results_contamination_IN_WINDOW": 0,
+  "canonical_results_contamination_WHOLE_FILE": 136
+ },
+ "contamination_whole_file": {
+  "leaked_rows": 136,
+  "by_class": {
+   "tier1/PROVISIONAL": 10,
+   "tier2/PROVISIONAL": 17,
+   "tier3/PROVISIONAL": 109
+  },
+  "by_date": {
+   "2026-07-23": 1,
+   "2026-07-29": 16,
+   "2026-07-31": 15,
+   "2026-08-01": 15,
+   "2026-08-02": 15,
+   "2026-08-03": 8,
+   "2026-08-04": 15,
+   "2026-08-05": 15,
+   "2026-08-07": 15,
+   "2026-08-08": 11,
+   "2026-08-10": 1,
+   "2026-08-11": 9
+  },
+  "date_range": [
+   "2026-07-23",
+   "2026-08-11"
+  ],
+  "note": "These are LEGACY rows predating the owner's 2026-08-16 tier-1-only ruling. They are outside the acquisition window and are NOT introduced by this refresh. They remain visible to the tier-blind production predicate and therefore still feed V13's season-to-date form. Removing them would change a FROZEN model's inputs mid-record (R3) and is an owner decision, not a repair \u2014 see harness/tier_discipline.py and data/audit/tier_exposure_baseline.json."
+ },
+ "duplicate_game_ids_whole_file": [],
+ "cross_date_echo_flags": [],
+ "per_date": [
+  {
+   "date": "2026-08-15",
+   "rows": 15,
+   "canonical_tier1_finals": 15,
+   "tier_2_3_substitutes_in_canonical_input": [],
+   "rows_not_final": [],
+   "distinct_franchises": 30,
+   "franchises_appearing_more_than_once": [],
+   "names_not_a_known_franchise": [],
+   "completeness": "COMPLETE_BY_INVARIANT",
+   "missing_tier1_games": 0,
+   "completeness_basis": "all 30 known franchises appear exactly once across 15 canonical tier-1 games; a 16th game would repeat a franchise and a missing game would leave two absent",
+   "provenance_failures": [],
+   "distinct_evidence_files": [
+    "data/mlb/evidence/2026-08-15_2026-08-16_mlb_official_form_board.json"
+   ],
+   "evidence_sha256": {
+    "data/mlb/evidence/2026-08-15_2026-08-16_mlb_official_form_board.json": "22cd684068317ab3f7e78691400a15fe78583d0998cbcc27f18801a8ca4cc7d7"
+   },
+   "capture_timestamps": {
+    "distinct": [
+     "2026-08-17T05:20:56Z"
+    ],
+    "n_rows_with_timestamp": 15
+   },
+   "sources": [
+    "mlb.com/scores direct official form board"
+   ],
+   "unresolved_fields": {},
+   "internal_incoherence": [],
+   "PASS": true
+  },
+  {
+   "date": "2026-08-16",
+   "rows": 15,
+   "canonical_tier1_finals": 15,
+   "tier_2_3_substitutes_in_canonical_input": [],
+   "rows_not_final": [],
+   "distinct_franchises": 30,
+   "franchises_appearing_more_than_once": [],
+   "names_not_a_known_franchise": [],
+   "completeness": "COMPLETE_BY_INVARIANT",
+   "missing_tier1_games": 0,
+   "completeness_basis": "all 30 known franchises appear exactly once across 15 canonical tier-1 games; a 16th game would repeat a franchise and a missing game would leave two absent",
+   "provenance_failures": [],
+   "distinct_evidence_files": [
+    "data/mlb/evidence/2026-08-15_2026-08-16_mlb_official_form_board.json"
+   ],
+   "evidence_sha256": {
+    "data/mlb/evidence/2026-08-15_2026-08-16_mlb_official_form_board.json": "22cd684068317ab3f7e78691400a15fe78583d0998cbcc27f18801a8ca4cc7d7"
+   },
+   "capture_timestamps": {
+    "distinct": [
+     "2026-08-17T05:20:56Z"
+    ],
+    "n_rows_with_timestamp": 15
+   },
+   "sources": [
+    "mlb.com/scores direct official form board"
+   ],
+   "unresolved_fields": {},
+   "internal_incoherence": [],
+   "PASS": true
+  }
+ ],
+ "ALL_CRITERIA_MET_IN_WINDOW": true
+}

@@ -240,6 +240,27 @@
      "record": "docs/experiments/2026-08-17_FORM_USEFULNESS.json"
     }
    ]
+  },
+  "harness/form_refresh_diff.py": {
+   "current": "0541cfa257849bb77c03571244c603f06a4713c38a5cd3e4b9508d1a7b329904",
+   "versions": [
+    {
+     "impl_version": 1,
+     "sha256": "84099795a832df0296f3e54d7154761af31a760764c4707852c81667fe7507cc",
+     "authorized_utc": "2026-08-17T08:14:01Z",
+     "pin_commit": null,
+     "note": "IMPL v1 \u2014 initial registration. Three-state decomposition separating the 2026-08-13 interior-hole repair from the 2026-08-15/16 tier-1 refresh, which the registered v2->v3 contrast bundles together because one intake applied all 39 rows. Form states are built by DATE FILTER over the canonical results file in memory; the file is never mutated. Refuses to report unless the reconstructed states reproduce the REGISTERED v2 and v3 card probabilities exactly. Owner instruction 2026-08-17.",
+     "record": "docs/audits/2026-08-17_tier1_refresh_cycle.json"
+    },
+    {
+     "impl_version": 2,
+     "sha256": "0541cfa257849bb77c03571244c603f06a4713c38a5cd3e4b9508d1a7b329904",
+     "authorized_utc": "2026-08-17T08:22:11Z",
+     "pin_commit": null,
+     "note": "IMPL v2 \u2014 corrected an inverted boolean: pitcher_form.changed_by_this_refresh was emitting 'not _sp_changed', so a field-by-field comparison finding ZERO starter differences was reported as CHANGED. The underlying verification and every probability figure were unaffected; only the summary flag was wrong. Caught by reading the emitted artifact rather than trusting the code path.",
+     "record": "docs/audits/2026-08-17_tier1_refresh_cycle.json"
+    }
+   ]
   }
  }
 }

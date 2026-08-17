@@ -1755,3 +1755,97 @@ paper only. The indicated change — shrinking rf/ra toward league average by ga
 treatment engine already gives SP ERA via shrunk(e,g) and which team form conspicuously lacks — is a
 NEW candidate identity needing its own prereg, and fitting the shrinkage constant on this window
 would burn the window. Flagged for an owner decision alongside the pending park-shrinkage prereg.
+
+================================================================================
+2026-08-17 — TIER-1 REFRESH CYCLE: 8/15-8/16 VALIDATED, DIFF ATTRIBUTED
+================================================================================
+
+STOP CONDITIONS, all met in the acquisition window:
+  LATEST_TIER1_FORM_DATE = 2026-08-16   missing_tier1_games_8_15 = 0
+  missing_tier1_games_8_16 = 0          canonical_results_contamination = 0 in window
+
+ACQUISITION. New network acquisition was attempted and is BLOCKED — 403 CONNECT at the org egress
+proxy. Not routed around. It did not block the cycle: the tier-1 evidence was already on disk from
+the owner-supplied MLB_OFFICIAL capture at 05:20:56Z, so acquisition resolved to VALIDATING bytes
+already hashed and bound rather than fetching new ones.
+
+COMPLETENESS IS PROVEN, NOT COUNTED (harness/tier1_board_gate.py). A count cannot prove completeness
+against itself — 15 rows are 15 rows whether or not a 16th game existed — so the board's own
+expected_game_count is not trusted. Instead: MLB has 30 franchises, on a full single-header slate
+each appears in exactly one game, so 15 games with all 30 franchises appearing exactly once is
+complete BY CONSTRUCTION. Both dates: COMPLETE_BY_INVARIANT. A second, unrelated code path agrees —
+the diff module's selftest asserts every slate team gains EXACTLY 2 games across the refresh, which
+is only possible if both dates were full 15-game slates.
+
+That gate caught a hole in itself before it ever ran on live data: the invariant first counted
+DISTINCT NAMES, so a typo ("NY Yankees") would have read as a 30th franchise while a real one was
+absent. Now set membership against the frozen 30 abbreviations, with a typo fixture.
+
+UNRESOLVED: none. 30/30 rows canonical tier-1 FINAL, all 16 required fields non-blank, 30/30 venues
+resolvable and present in park_factors, 30/30 linescore-coherent, 0 provenance failures (every
+evidence file re-hashed from disk), 0 duplicate game_ids, 0 cross-date echo flags. That last one
+matters: the 8/15 capture session was previously quarantined for a six-game publication-date
+masquerade, and the tier-1 board is echo-clean and supersedes it.
+
+CONTAMINATION, honestly. Zero in the window. 136 LEGACY rows dated 7/23-8/11 predate the tier-1-only
+ruling and still feed V13 form through the tier-blind production predicate. NOT purged: that changes
+a FROZEN model's as-of inputs mid-record (R3, 30 of 62 team labels move), and this instruction scoped
+tier-1-only to the ACQUISITION, not to a retroactive rewrite of already-registered forecasts' inputs.
+Exposure stays frozen at the 136 baseline and the healthcheck FAILS if it grows. Owner decision.
+
+INPUTS REBUILT. ml_asof rebuilt: 1863 rows through 8/16, dataset BYTE-IDENTICAL, which proves the
+CRLF->LF normalization was content-neutral at the manifest level rather than merely asserting it; the
+manifest's results binding now matches the live file. features.csv deliberately NOT extended — it is
+the frozen 7/19 evaluation window and daily_card does not read it. pitcher_logs untouched.
+
+NO 8/15 OR 8/16 CARDS EXIST TO RERUN. Zero cards, zero forecasts, both dates. 8/15 was quarantined
+mid-capture; 8/16 was missed and detected after every first pitch. I did not generate them now:
+a pregame-shaped forecast for a completed slate is what the post_start_forecasts gate exists to
+catch. RETROSPECTIVE_REPLAY remains the only legal path and is not taken unasked, because a replay
+artifact sitting in cards/ is what gets mistaken for a forecast six weeks later.
+
+NEXT CARD FROM THE UPDATED AS-OF STATE: cards/2026-08-17_card_v3.json, 11 games, frozen V13, form
+complete through 8/16 — and PROVEN current, because rebuilding it now from the present as-of state
+reproduces sha 1cac3973 BYTE-FOR-BYTE. No 8/18 card: that slate does not exist here and cannot be
+acquired (403); no slate was inferred from series continuation and no starters were guessed.
+
+THE DIFF (harness/form_refresh_diff.py, ml.v13_1.form_refresh_diff.measurement). The registered
+v2->v3 contrast is NOT the requested diff: one intake applied 39 rows — 8/13 x9 (interior hole) plus
+8/15 x15 and 8/16 x15 — so v2->v3 bundles the hole repair with the refresh. Three form states built
+by in-memory DATE FILTER over the canonical file (never mutated), and the module REFUSES to report
+unless the reconstructed states reproduce the REGISTERED v2 and v3 card probabilities exactly. Both
+gates PASS on all 11 games.
+
+  8/15-8/16 refresh ALONE   mean |delta| 0.3457pp   max 0.8167pp   81% of the total
+  8/13 hole repair ALONE    mean |delta| 0.1973pp
+  total                     mean |delta| 0.4254pp
+  11/11 distinguishable from zero after Holm; 2 rank changes; 0 side flips surviving noise separation
+
+All figures are high-precision REFERENCE ESTIMATES from paired common-random-numbers replicates at
+n=2,000,000 with Monte-Carlo CIs — not "true" or "noiseless" values.
+
+Team form: 20/20 slate teams changed, each gaining exactly 2 games; largest movement STL rf/g +0.083,
+CHC ra/g +0.084. Every delta is tiny because two games barely move a ~122-game season rate — which is
+exactly why the probability effect is a third of a point. Pitcher form: UNCHANGED, verified field by
+field across all 11 games (0 mismatches); the intake carried team results, not pitcher logs.
+
+BAL@TB flipped side at the frozen n (.5075 -> .4960) and the flip does NOT survive: the reference
+estimate is -0.578pp, putting it at .5017, still HOME. Same game, same retraction as this morning's
+v2->v3 contrast. No side flip is attributable to the refresh.
+
+EDGES, BREAK-EVENS AND SELECTIONS ARE NULL. No market prices exist on file for 8/17 — every row's
+lines/mkt_home_prob/gap_home is null in BOTH cards and no odds file exists; price acquisition is
+blocked by the same 403. Edge is undefined without a posted price and the selection rule cannot fire
+without one. They did not change, but not because they were stable — because they were absent before
+and after. Any nonzero edge or selection delta reported for this slate would be invented (R1).
+
+Also fixed an inverted boolean in my own artifact: pitcher_form.changed_by_this_refresh emitted
+"not _sp_changed", so a comparison finding ZERO starter differences reported CHANGED. Probability
+figures unaffected. Caught by reading the emitted artifact rather than trusting the code path.
+
+CONSTRAINTS HONOURED: model parameters, RNG policy, promotion gates and market inputs all UNCHANGED.
+V13 FROZEN. No forecast altered, none regraded. Gate 0/100 NO_PROMOTE, ledger $0, paper only.
+
+STILL OPEN: 8/17 cohorts ungraded pending tier-1 finals; no 8/18 card until a schedule + probables
+board arrives or egress is restored; owner decision on the 136 legacy rows; card generation is still
+manual and request-driven, the root cause of the 8/16 miss.

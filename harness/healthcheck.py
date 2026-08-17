@@ -233,7 +233,8 @@ except Exception as e: check(f"P1A enforcement ({e})", False)
 # Outcome-label tooling selftests. An ungated selftest is a selftest that stops being run: the 8/5
 # "echo guard" existed only as prose and was never executed, so it never prevented anything.
 for _m in ("result_provenance","result_content_checks","parse_box_dump",
-           "acquisition_ledger","missing_data_audit","tier_discipline","artifact_immutability"):
+           "acquisition_ledger","missing_data_audit","tier_discipline","artifact_immutability",
+           "tier1_board_gate","form_refresh_diff"):
     _r=subprocess.run([sys.executable,f"harness/{_m}.py","--selftest"],capture_output=True,text=True)
     _out=(_r.stdout+_r.stderr).strip().splitlines()
     check(f"{_m} selftest ({_out[-1][:72] if _out else 'no output'})", _r.returncode==0)
@@ -260,6 +261,13 @@ try:
     _r=subprocess.run([sys.executable,"harness/artifact_immutability.py","--gate"],capture_output=True,text=True)
     _out=(_r.stdout+_r.stderr).strip().splitlines()
     check(f"registered-artifact immutability ({_out[0][:78] if _out else 'no output'})", _r.returncode==0)
+    # Tier-1 board completeness for the 8/15-8/16 refresh window (owner instruction 2026-08-17).
+    # Completeness is proven by the 30-franchise slot invariant, not by trusting the board's own
+    # expected_game_count, and every row's evidence file is re-hashed against what was recorded.
+    _r=subprocess.run([sys.executable,"harness/tier1_board_gate.py","--gate"],capture_output=True,text=True)
+    _out=[l for l in (_r.stdout+_r.stderr).strip().splitlines() if "missing_tier1" in l or "LATEST" in l]
+    check(f"tier-1 board completeness ({'; '.join(x.strip() for x in _out[:2])[:96] if _out else 'no output'})",
+          _r.returncode==0)
 except Exception as e: check(f"acquisition/audit gates ({e})", False)
 try:
     r=subprocess.run([sys.executable,"harness/policy_gate.py","--selftest"],capture_output=True,text=True)

@@ -1,36 +1,30 @@
 {
- "date": "2026-08-17",
- "checked_utc": "2026-08-17T15:58:53Z",
+ "date": "2026-08-18",
+ "checked_utc": "2026-08-17T23:52:36Z",
  "inputs": {
   "starters": {
-   "present": true,
-   "files": [
-    "data/mlb/slates/2026-08-17_slate.psv",
-    "data/mlb/slates/2026-08-17_slate_v2.psv"
-   ],
-   "sha256": {
-    "data/mlb/slates/2026-08-17_slate.psv": "dd4ec7bfba1e46f30db707b2e8864a91c9cf52543be2c9d683716647f772f040",
-    "data/mlb/slates/2026-08-17_slate_v2.psv": "171ef8c59e51a75a999ccbe7cb4fd50cfacc6ff309b797fa08264f1933a634ca"
-   },
-   "games": 11,
-   "games_with_a_TBD_starter": 4,
-   "games_with_BOTH_starters_TBD": 1,
-   "resolution_pct": 63.6,
+   "present": false,
+   "files": [],
+   "sha256": {},
+   "games": 0,
+   "games_with_a_TBD_starter": 0,
+   "games_with_BOTH_starters_TBD": 0,
+   "resolution_pct": null,
    "note": "TBD starters are accepted but counted: starter resolution moved 8/17 probabilities ~5x more than form freshness, so a TBD-heavy slate is a materially weaker card.",
    "consequence_if_absent": "no slate means no card at all, and no first pitch to time the other inputs against. This is the 2026-08-16 failure exactly.",
    "deadline_min_before_first_pitch": 180,
-   "status": "PRESENT"
+   "status": "MISSING_NO_SLATE_TO_TIME_AGAINST"
   },
   "schedule": {
    "present": false,
-   "path": "data/mlb/schedule/official_manifest_2026-08-17.json",
+   "path": "data/mlb/schedule/official_manifest_2026-08-18.json",
    "sha256": null,
    "gamePks": 0,
    "captured_at_utc": null,
    "source": null,
    "consequence_if_absent": "the slate count is unverified \u2014 tier1_board_gate can only report COMPLETE_BY_ROSTER_PARTITION, never a confirmed game count",
    "deadline_min_before_first_pitch": 240,
-   "status": "MISSING_PAST_DEADLINE (101m left, needed 240m out)"
+   "status": "MISSING_NO_SLATE_TO_TIME_AGAINST"
   },
   "prices": {
    "present": false,
@@ -38,22 +32,22 @@
    "sha256": {},
    "consequence_if_absent": "no break-even probability, no edge, no selection, and nothing to grade against a market. Model output is forecast-only.",
    "deadline_min_before_first_pitch": 90,
-   "status": "MISSING_BUT_RECOVERABLE (11m of slack)"
+   "status": "MISSING_NO_SLATE_TO_TIME_AGAINST"
   }
  },
- "first_pitch_utc": "2026-08-17T17:40Z",
- "minutes_to_first_pitch": 101,
+ "first_pitch_utc": null,
+ "minutes_to_first_pitch": null,
  "past_first_pitch": false,
  "missing_past_deadline": [
-  "schedule"
- ],
- "missing_but_recoverable": [
+  "schedule",
+  "starters",
   "prices"
  ],
- "CARD_IS_PRODUCIBLE": true,
+ "missing_but_recoverable": [],
+ "CARD_IS_PRODUCIBLE": false,
  "CARD_WOULD_BE_GRADEABLE_VS_MARKET": false,
  "ALL_INPUTS_PRESENT": false,
  "GATE_FAIL": true,
  "PASS": false,
- "verdict": "FORECAST_ONLY_NO_MARKET_GRADE"
+ "verdict": "INPUTS_MISSING"
 }

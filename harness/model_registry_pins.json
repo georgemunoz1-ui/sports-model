@@ -269,6 +269,19 @@
      "record": "docs/experiments/2026-08-17_CORRECTIONS_ROUND2.json"
     }
    ]
+  },
+  "harness/card_render.py": {
+   "current": "49cc3fb57c61aaa6e52d67363bc6b2eac3a4c672b31f9764648d9b5f62ffd350",
+   "versions": [
+    {
+     "impl_version": 1,
+     "sha256": "49cc3fb57c61aaa6e52d67363bc6b2eac3a4c672b31f9764648d9b5f62ffd350",
+     "authorized_utc": "2026-08-17T23:52:20Z",
+     "pin_commit": null,
+     "note": "IMPL v1 \u2014 initial registration. Renders a registered card as model output in betting units (fair ML, fair run line, per-side projected score, model total, one-run/extra-inning/blowout probabilities, K expectations). Contains a verbatim transcription of daily_card.py sim() to recover per-side score means the stored card does not keep; refuses to render unless the replay reproduces all six stored V13 fields exactly on every game. Owner instruction 2026-08-17: cards must carry model predictions/output.",
+     "record": "data/audit/card_render_2026-08-17.json"
+    }
+   ]
   }
  }
 }

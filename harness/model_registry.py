@@ -109,6 +109,26 @@ REGISTRY = {
                  "Reports each per-game delta twice: at the frozen n, and as a high-precision "
                  "reference estimate with a Monte-Carlo CI and Holm correction."),
     },
+    # RENDERING ONLY — re-expresses an ALREADY-REGISTERED card as model output in betting units.
+    # Owner 2026-08-17: "I need the cards having model predictions/output. We can't be having a blank
+    # card." The fault was rendering, not the model: fair lines are a MODEL output (model p -> fair
+    # line) and need no market, while edge needs a posted price too. Registered because it carries a
+    # verbatim transcription of daily_card.py sim() in order to recover the per-side projected scores
+    # the stored card does not keep; its correctness condition is that the replay reproduce ALL SIX
+    # stored V13 fields exactly on every game, or it refuses to render.
+    "ml.v13_1.card_render.rendering": {
+        "role": "RENDERING_NON_FORECASTING",
+        "source": "harness/card_render.py",
+        "hfa": 1.005, "hfa_provenance": "import: engine/hfa.py CURRENT",
+        "seed": 722, "sims_per_game": 30000, "rng_policy": "sequential_slate_order (the frozen card policy)",
+        "calibration_artifact": None,
+        "input_schema": "registered card artifacts + results.csv team form + park_factors",
+        "emits_forecasts": False,
+        "note": ("Emits fair moneyline, fair run line, projected score per side, model total, one-run "
+                 "and extra-inning probabilities, blowout risk and K expectations. Edge, EV and "
+                 "selection stay NULL WITH A REASON whenever no posted price exists — R1 — so the "
+                 "card can never imply a play it cannot support."),
+    },
     "ml.v13_1.hfa1005.card.s722n30000": {
         "role": "LIVE_CARD",
         # OWNER RULING 2026-08-17: do NOT purge the legacy rows from under V13. Preserve it exactly,

@@ -1942,3 +1942,53 @@ on a summary. Every module carries a --selftest whose fixtures must FAIL on the 
 and the gates re-derive their claims from the repository rather than from a record.
 
 Gate 0/100 NO_PROMOTE, ledger $0, paper only. No forecast altered, none regraded.
+
+================================================================================
+2026-08-17 — CARD RENDERING FIXED: FAIR LINES ARE MODEL OUTPUT
+================================================================================
+
+OWNER: "I need the cards having model predictions/output. We can't be having a blank card. That
+defeats the entire purpose of this process."
+
+Correct, and the fault was MINE in the RENDERING, not in the model. The v3 card carries a full V13
+simulation for all 11 games and I displayed it as probabilities beside a column of dashes, because
+the moneyline and total columns are MARKET fields and no prices exist for this slate. That reads as
+a blank card. It was not.
+
+The distinction the pricing frame already makes, and that I failed to render:
+
+    model probability -> FAIR LINE        needs only the model
+    posted price      -> break-even prob  needs the market
+    edge = model p - break-even           needs BOTH
+
+The left column is a model output and was simply never being drawn. A card with no posted price is
+missing its EDGE, not its content.
+
+harness/card_render.py (ml.v13_1.card_render.rendering, RENDERING_NON_FORECASTING) now emits, per
+game: fair moneyline both sides (American + decimal), fair run line at -1.5 and +1.5 both sides,
+projected score per side, model total, one-run and extra-inning probabilities, blowout risk each way,
+strikeout expectations, and a model-confidence ranking. Same treatment for the WNBA shadow card:
+fair ML, fair spread, model total.
+
+The stored card does not keep per-side projected scores, so the module replays the slate under the
+FROZEN RNG (seed 722, n=30000, slate order) using a verbatim transcription of daily_card.py sim().
+It REFUSES to render unless that replay reproduces ALL SIX stored V13 fields exactly on every game --
+home_wp, proj_total, both run-line covers, both blowout probabilities. Verified 11/11. Its selftest
+also proves a corrupted stored probability is refused rather than rendered over, that fair lines
+round-trip back to their probabilities, and that no edge or selection is ever produced without a
+posted price.
+
+EDGE, EV AND SELECTION REMAIN NULL, with the reason attached rather than the field omitted. Those
+need a posted price; egress is 403 and R1 forbids inventing one. The card now shows everything the
+model knows and stays silent only where the market is genuinely absent.
+
+Two rendering defects of my own were caught and fixed before publishing: a stray %-padding that
+printed "23   %", and 0.00 shown for a null strikeout projection -- which would read as "we project
+zero strikeouts" rather than "we have no projection for a TBD starter". Now an em dash.
+
+8/17 model card, ranked by confidence: STL@CIN G1 -121 away, CWS@CHC -121 home, MIA@PHI -119 home,
+ATL@MIN -115 away, SD@NYM -114 home, down to BAL@TB -102 home. Six of eleven games sit inside 110 on
+the fair line: V13's binding constraint is still discrimination, and the card says so honestly.
+
+Gate 0/100 NO_PROMOTE, ledger $0, paper only. No forecast altered, none regraded, no new identity for
+any probability -- this re-expresses an already-registered artifact.

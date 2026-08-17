@@ -1,0 +1,45 @@
+{
+ "record_id": "FORM-BOARD-INTAKE-2026-08-17-PART2",
+ "built_utc": "2026-08-17T05:59:32Z",
+ "supersedes": "FORM-BOARD-INTAKE-2026-08-17 (application_status DATA_BLOCKED)",
+ "outcome": "APPLIED \u2014 39 tier-1 rows added (8/13 x9, 8/15 x15, 8/16 x15); the 2026-08-13 interior hole is closed",
+ "boards": {
+  "2026-08-13": {
+   "sha256": "9656d657d75cd9b60f30cc6631c246c0dab85e7e9810e370a7f27d3cf9190f9b",
+   "hash_claim_verified": true,
+   "disposition": "RESULT_FORM_REPAIR_ONLY_NO_REGRADE"
+  },
+  "2026-08-15_2026-08-16": {
+   "sha256": "22cd684068317ab3f7e78691400a15fe78583d0998cbcc27f18801a8ca4cc7d7",
+   "hash_claim_verified": true,
+   "disposition": "RESULT_BACKFILL_ONLY_NOT_BACKTESTABLE"
+  }
+ },
+ "delivery_gap": {
+  "claim": "a venue-safe intake module at SHA 48f6bd0a107d829750473d5e08c7cde9bdeecb997becd334db869fff6aed2471",
+  "what_arrived": "TWO .py uploads, byte-identical to EACH OTHER and byte-identical to the module already installed here (SHA d7259f399272beebebd9b9e6cf821b3d258c447294bcd70bed6e1c82b7ddb093). The claimed 48f6bd0a artifact did not arrive.",
+  "proof": "the delivered validator REJECTED the 8/13 board on exactly the two checks the new version was meant to relax: 'form-board capture dates must be labeled as having no registered card' and 'form-board disposition must block retrospective grading'. It also still wrote venue=\"\" at line 281 \u2014 the very defect it claimed to fix.",
+  "resolution": "implemented natively in this workspace rather than waiting: (a) RESULT_FORM_REPAIR_ONLY_NO_REGRADE accepted as a second legal disposition, guarded MORE strictly than the backfill case (requires grading_use_authorized=false AND forecast_card_registered=true); (b) venue resolution that BLOCKS ingestion unless a venue is resolvable. If the real 48f6bd0a module arrives, reconcile and record diffs.",
+  "doctrine": "file-delivery doctrine applied: a claim is unverified until the receiving side can stat the bytes."
+ },
+ "venue_resolution": {
+  "design": "venue must be RESOLVABLE or ingestion blocks. Source order: (1) the board's own venue field; (2) this repository's established home-team -> venue mapping derived from canonical tier-1 rows. Nothing invented.",
+  "outcome": "8/13 board supplied 9 venues directly; the 8/15-8/16 board carries NO venue fields, so all 30 resolved from the canonical map. 39/39 non-blank, 39/39 present in park_factors.json, 19 distinct venues.",
+  "note_on_their_claim": "their message says the 8/15-8/16 ledgers 'now contain venues' while its hash is unchanged at 22cd6840 \u2014 but that board has no venue fields at all. Both cannot hold. The canonical-map fallback made the point moot here."
+ },
+ "cross_verification_8_13": {
+  "result": "8 of 9 games match my independent tier-3 records exactly",
+  "discrepancy": {
+   "game": "PHI@MIN",
+   "mine": "2-1",
+   "official": "7-1",
+   "winner": "PHI either way \u2014 UNCHANGED",
+   "resolution": "tier-1 with a validated linescore supersedes; my score record was wrong, my winner was right",
+   "grade_impact": "NONE. G-P4-20260813v2-PHI@MIN graded on home_win=0 and stays correct; not regraded."
+  }
+ },
+ "grades_untouched": "no forecast was regraded. The 9 8/13 grades remain as appended (pre-ruling tier-3 exception).",
+ "frozen_artifacts_untouched": "harness/daily_card.py byte-identical; 8/17 v1 and v2 cards unchanged and still registered on 8/14 form.",
+ "new_gate": "tier_discipline now FAILS on any canonical final with a blank venue \u2014 the daily_card park-factor collapse is now unreachable by construction.",
+ "dataset": "ml_asof rebuilt, vintage b4b58f16 -> 4cc97344, deterministic rebuild check IDENTICAL"
+}

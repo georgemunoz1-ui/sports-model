@@ -59,6 +59,15 @@ def naive_final(row) -> bool:
     return row.get("status") == "final" and row.get("total") not in ("", None)
 
 
+def blank_venue_finals(rows=None):
+    """Canonical finals with no venue. A blank venue silently collapses the park factor to 1.0 in
+    harness/daily_card.py (venue_of[home] is assigned last-wins), so this is a GATE, not a warning.
+    Fixed at the intake boundary in harness/mlb_form_state.py; this asserts it stayed fixed."""
+    rows = rows if rows is not None else list(csv.DictReader(open(RESULTS)))
+    return [f'{r["date"]} {r["away"]}@{r["home"]}' for r in rows
+            if r.get("status") == "final" and not (r.get("venue") or "").strip()]
+
+
 def exposure(rows=None):
     rows = rows if rows is not None else list(csv.DictReader(open(RESULTS)))
     naive = [r for r in rows if naive_final(r)]
@@ -77,6 +86,7 @@ def exposure(rows=None):
 
 def run(gate=False, rebaseline=False):
     e = exposure()
+    e["blank_venue_finals"] = len(blank_venue_finals())
     os.makedirs("data/audit", exist_ok=True)
     if rebaseline or not os.path.exists(BASELINE):
         json.dump({"note": "Frozen exposure baseline. A RISE means new non-tier-1 rows became visible "
@@ -88,6 +98,12 @@ def run(gate=False, rebaseline=False):
         return 0
     base = json.load(open(BASELINE))["exposure"]
     grew = e["leaked_into_naive_predicate"] > base["leaked_into_naive_predicate"]
+    blanks = blank_venue_finals()
+    if blanks:
+        print(f"  ! {len(blanks)} canonical final(s) have a BLANK VENUE -> park factor silently 1.0")
+        for b in blanks[:5]:
+            print(f"    {b}")
+        grew = True
     print(f"tier exposure: {e['leaked_into_naive_predicate']} rows admitted by the tier-blind predicate "
           f"but not canonical (baseline {base['leaked_into_naive_predicate']}); "
           f"canonical finals {e['canonical_finals']} of {e['naive_finals']} naive")
@@ -116,6 +132,8 @@ def selftest():
         fails.append("tier-1 PROVISIONAL row wrongly accepted (the 10-row winner-proof class)")
     if exposure([t3, t1, t1p])["leaked_into_naive_predicate"] != 2:
         fails.append("exposure count wrong on the synthetic fixture")
+    if blank_venue_finals():
+        fails.append(f"{len(blank_venue_finals())} canonical finals have a blank venue")
     if os.path.exists(BASELINE):
         base = json.load(open(BASELINE))["exposure"]
         if e["leaked_into_naive_predicate"] > base["leaked_into_naive_predicate"]:

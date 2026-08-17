@@ -115,13 +115,62 @@ def validate_official_board(path: Path) -> tuple[dict, list[str]]:
         errors.append("scope.required_base_final_count must be a positive integer")
     if scope.get("model_predictions_present") is not False:
         errors.append("official form board must not contain model predictions")
-    if scope.get("forecast_card_registered_for_capture_dates") is not False:
-        errors.append("form-board capture dates must be labeled as having no registered card")
+    # TWO legal dispositions (extended 2026-08-17, this workspace):
+    #   RESULT_BACKFILL_ONLY_NOT_BACKTESTABLE - no card existed for the capture dates.
+    #   RESULT_FORM_REPAIR_ONLY_NO_REGRADE    - a card DID exist and is already graded; the board
+    #                                           repairs the canonical FORM record only. This is the
+    #                                           stricter case, so it additionally requires an explicit
+    #                                           grading_use_authorized=false.
+    disposition = scope.get("disposition")
+    if disposition == "RESULT_FORM_REPAIR_ONLY_NO_REGRADE":
+        if scope.get("grading_use_authorized") is not False:
+            errors.append("form-repair board must set grading_use_authorized=false")
+        if scope.get("forecast_card_registered_for_capture_dates") is not True:
+            errors.append("form-repair board must declare that a card WAS registered for its dates")
+    elif disposition == "RESULT_BACKFILL_ONLY_NOT_BACKTESTABLE":
+        if scope.get("forecast_card_registered_for_capture_dates") is not False:
+            errors.append("backfill board capture dates must be labeled as having no registered card")
+    else:
+        errors.append("form-board disposition must block retrospective grading")
     if scope.get("backtestable") is not False:
         errors.append("form-board results must be explicitly non-backtestable")
-    if scope.get("disposition") != "RESULT_BACKFILL_ONLY_NOT_BACKTESTABLE":
-        errors.append("form-board disposition must block retrospective grading")
     return doc, errors
+
+
+# ---- venue resolution (added 2026-08-17) -------------------------------------------------
+# WHY: apply_board_to_results originally wrote venue="". harness/daily_card.py:35 assigns
+# venue_of[home] unconditionally on a last-wins basis, so blank-venue rows appended at the end of
+# results.csv would have overridden every real venue and silently collapsed park factors to 1.0 for
+# most of the league on the next card. Fixed at the INTAKE boundary so the frozen card path is not
+# touched: a venue must be RESOLVABLE - from the board itself, or from this repository's own
+# established home-team -> venue mapping - and ingestion BLOCKS when it is not. Nothing is invented:
+# the fallback map is derived from canonical tier-1 rows already on disk.
+def canonical_venue_map(results_path: Path = RESULTS) -> dict:
+    venues = {}
+    with Path(results_path).open() as handle:
+        for row in csv.DictReader(handle):
+            if row.get("status") != "final" or not (row.get("venue") or "").strip():
+                continue
+            if row.get("source_tier") != "1":
+                continue
+            venues.setdefault(normalize_team(row.get("home")), {})
+            key = row["venue"].strip()
+            venues[normalize_team(row["home"])][key] = venues[normalize_team(row["home"])].get(key, 0) + 1
+    return {team: max(counts.items(), key=lambda kv: kv[1])[0] for team, counts in venues.items()}
+
+
+def resolve_venue(game: dict, venue_map: dict) -> str:
+    stated = str(game.get("venue") or "").strip()
+    if stated:
+        return stated
+    home = normalize_team(game.get("home"))
+    mapped = venue_map.get(home)
+    if not mapped:
+        raise FormStateError(
+            f"{game.get('game_id')}: venue is blank on the board and home team {home!r} has no venue "
+            "in the canonical tier-1 record - refusing ingestion rather than writing a blank venue"
+        )
+    return mapped
 
 
 def materialize_board(path: Path, output_root: Path = CAPTURE_ROOT) -> list[Path]:
@@ -250,6 +299,7 @@ def apply_board_to_results(path: Path, results_path: Path = RESULTS) -> dict:
     if base_holes:
         raise FormStateError("canonical base has interior result-date holes: " + ", ".join(base_holes))
 
+    venue_map = canonical_venue_map(results_path)
     by_id = {row["game_id"]: row for row in existing}
     by_matchup = {(row.get("date"), normalize_team(row.get("away")), normalize_team(row.get("home"))): row
                   for row in existing}
@@ -278,7 +328,7 @@ def apply_board_to_results(path: Path, results_path: Path = RESULTS) -> dict:
                 "away_score": str(away_score), "home_score": str(home_score),
                 "home_win": "1" if home_score > away_score else "0",
                 "margin": str(home_score - away_score), "total": str(home_score + away_score),
-                "neutral_site": "0", "venue": "",
+                "neutral_site": "0", "venue": resolve_venue(game, venue_map),
                 "source": "mlb.com/scores direct official form board",
                 "ingested_utc": doc["captured_at_utc"], "source_tier": "1",
                 "result_status": "FINAL", "evidence_path": evidence_rel,
@@ -295,6 +345,10 @@ def apply_board_to_results(path: Path, results_path: Path = RESULTS) -> dict:
         "base_complete_through": base_d1,
         "board_dates": board_dates,
         "added": len(additions),
+        "venues_from_board": sum(1 for day in doc["dates"] for g in day["games"] if str(g.get("venue") or "").strip()),
+        "venues_from_canonical_map": sum(1 for r in additions if r["venue"]) - sum(
+            1 for day in doc["dates"] for g in day["games"] if str(g.get("venue") or "").strip()),
+        "blank_venues_written": sum(1 for r in additions if not r["venue"]),
         "already_present": sum(len(day["games"]) for day in doc["dates"]) - len(additions),
     }
 

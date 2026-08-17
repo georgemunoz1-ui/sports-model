@@ -1,0 +1,131 @@
+{
+ "record_id": "MECHANISM-CLOSEOUT-2026-08-17",
+ "built_utc": "2026-08-17T07:16:55Z",
+ "supersedes_claim_in": "V3-COHORT-PREREG-2026-08-17 + CORRECTION-1 (mechanism claim only; no forecast altered)",
+ "auditor_premise_ACCEPTED": "daily_card.py drives all games from ONE global np.random.default_rng(722); numpy's gamma/poisson are rejection samplers whose draw counts depend on parameters, so a form change re-couples the downstream stream. Bit-for-bit regeneration proves deterministic REPLAY, not a noise-free estimate. The observed 0.4545pp was therefore an unseparated sum of effect + coupling noise. This was correct and my earlier framing did not distinguish the two.",
+ "noise_floor_independently_confirmed": {
+  "auditor": "SD 0.237pp / mean|d| 0.192pp at a 0.1% perturbation, 200 paired seeds",
+  "this_repo": "per-replicate SD 0.2495pp mean (range 0.225-0.274) at the frozen n=30000 over 200 per-game keyed seeds",
+  "verdict": "AGREES. The noise floor is real and material per replicate."
+ },
+ "method": {
+  "transcription_verified": "harness/rng_noise_study.py --verify-math reproduces ALL 11 registered v3 probabilities EXACTLY under the frozen global-sequential RNG. Two transcription bugs were caught by that gate before any result was believed: (1) sim()'s trailing rng.poisson(1.0,n) was omitted \u2014 it does not enter p_home but it CONSUMES RNG and desynchronises every later game; (2) the card's ROUNDED park factor was used instead of the raw one. A third bug \u2014 a reduced ABBR map that split franchises carrying legacy full-name rows in results.csv into two teams \u2014 was also caught this way.",
+  "design": "per-game keyed seeds (sha256 of game|rep), both arms under the SAME seed per replicate. This also REMOVES the slate-order confound that made v1-vs-v2 non-causal at the card level, because each game now gets its own independent stream rather than a position-dependent one.",
+  "study_A": "n=30000 (frozen setting), 200 paired seeds \u2014 the distribution the single card is one draw from",
+  "study_B": "n=2,000,000, 10 paired seeds \u2014 MC error ~0.035pp/run, so this estimates the TRUE parameter effect"
+ },
+ "RESULT_form_effect_is_REAL": {
+  "mean_abs_true_effect_pp": 0.4266,
+  "single_card_observed_pp": 0.4545,
+  "n30k_200rep_mean_pp": 0.4178,
+  "games_distinguishable_from_zero": "11 of 11, at n=2,000,000, with CIs excluding zero",
+  "per_game_signed_pp": {
+   "STL@CIN-G1": {
+    "effect": -0.4954,
+    "ci95": [
+     -0.5193,
+     -0.4715
+    ]
+   },
+   "BAL@TB": {
+    "effect": -0.5799,
+    "ci95": [
+     -0.593,
+     -0.5668
+    ]
+   },
+   "MIA@PHI": {
+    "effect": 0.508,
+    "ci95": [
+     0.4882,
+     0.5278
+    ]
+   },
+   "STL@CIN-G2": {
+    "effect": -0.5668,
+    "ci95": [
+     -0.58,
+     -0.5537
+    ]
+   },
+   "DET@PIT": {
+    "effect": 0.4562,
+    "ci95": [
+     0.4425,
+     0.4699
+    ]
+   },
+   "AZ@BOS": {
+    "effect": -0.1224,
+    "ci95": [
+     -0.1479,
+     -0.097
+    ]
+   },
+   "SD@NYM": {
+    "effect": 0.1764,
+    "ci95": [
+     0.1596,
+     0.1932
+    ]
+   },
+   "ATH@KC": {
+    "effect": -0.2084,
+    "ci95": [
+     -0.2289,
+     -0.1879
+    ]
+   },
+   "ATL@MIN": {
+    "effect": -0.2476,
+    "ci95": [
+     -0.2683,
+     -0.2268
+    ]
+   },
+   "CWS@CHC": {
+    "effect": -0.7011,
+    "ci95": [
+     -0.7209,
+     -0.6813
+    ]
+   },
+   "LAD@COL": {
+    "effect": 0.6304,
+    "ci95": [
+     0.6094,
+     0.6514
+    ]
+   }
+  },
+  "conclusion": "the form effect SURVIVES noise separation. The near-noiseless estimate (0.4266pp) sits within 0.03pp of the single card's 0.4545pp, and per-game signed effects are stable between the two studies (e.g. CWS@CHC -0.682 vs -0.701; LAD@COL +0.621 vs +0.630). So the observed card delta was a good estimate \u2014 but that is now DEMONSTRATED rather than assumed."
+ },
+ "RETRACTION_the_BAL_TB_flip": {
+  "card": "p_home .508 -> .496, a side flip",
+  "true_effect_pp": -0.5799,
+  "ci95": [
+   -0.593,
+   -0.5668
+  ],
+  "expected_p_under_true_effect": 0.5022,
+  "finding": "the flip is NOT caused by form. The true effect moves BAL@TB from .508 to ~.5022 \u2014 still home-favoured. The card crossed .500 only because that single draw realised -1.2pp (true -0.58 plus ~-0.62 of coupling noise). The CI does not span .500 either. The auditor's specific challenge on this flip is UPHELD and my earlier '1 side flip' framing is RETRACTED: at 11 games, zero side flips are attributable to form.",
+  "generalisation": "side flips on near-.500 games are the least robust statistic on any card and should never be reported without a noise separation."
+ },
+ "REVISED_starter_vs_form": {
+  "v1_vs_v2_true_effect_pp": 2.1407,
+  "basis": "10 common games incl. the STL@CIN G2 control, per-game seeds",
+  "control_check": "STL@CIN G2 signed effect EXACTLY +0.0000pp (se 0.0000) \u2014 starters TBD/TBD in both arms, so the harness returns a hard zero where the treatment is absent. This validates the design.",
+  "ratio": 5.02,
+  "was_reported": "5.6x then corrected to 5.08x; now 5.02x on a noise-separated, order-confound-free basis",
+  "note": "the per-game-seed design removes the slate-order/size confound flagged in CORRECTION-1, so this contrast is now cleanly attributable to starter resolution."
+ },
+ "DEFENSIBLE_STATEMENT": "Swapping the complete-through-8/16 results state changed V13's expected home-win probability by a mean of 0.427pp across the 11 games (all 11 distinguishable from zero at n=2M), against a per-replicate noise floor of ~0.25pp at the frozen n=30000. Starter resolution moves it ~5.0x more (2.14pp). Form is a WEAK but REAL input. No side flip on this slate is attributable to form. Eleven games promote nothing.",
+ "closeout_items": {
+  "1_v2_v3_200_seeds": "DONE \u2014 study A (200 seeds, n=30k) and study B (n=2M) in data/audit/rng_noise_study.json; mean signed, mean abs and MC CIs per game",
+  "2_v1_v2_10_games_with_control": "DONE \u2014 study C; control retained and returns exact zero",
+  "3_exclusive_create_output": "DONE \u2014 harness/daily_card.py now takes --out and opens with O_EXCL; rebuilding over a registered artifact REFUSES. Proof the simulation is untouched: rebuilding the v3 card with the patched binary reproduces sha 1cac3973... byte-for-byte. Prevention now backs the existing hash detection.",
+  "4_binding_reconciliation": "DONE \u2014 data/audit/artifact_binding_reconciliation.json: 220 = 205 bound + 15 exempt, all 15 named (RETRO-20260728-*, conversation-transcript evidence, unbindable by nature, excluded from all aggregates)",
+  "5_extended_bindings": "DONE \u2014 data/mlb/forecasts/2026-08-17_v3_input_bindings_extended.json: 16 consumed pitcher-log digests, the ABSENCE of the optional odds file bound as an input, numpy 2.4.6 / python 3.11.15 / PCG64 seed 722 / n=30000, plus the RNG caveat"
+ },
+ "unchanged": "no registered forecast altered, no regrade; v1/v2/v3 hashes stand; grading still once each from tier-1 FINAL"
+}

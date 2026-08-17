@@ -42,6 +42,27 @@ REGISTRY = {
         "input_schema": "features.csv-v1 (gamePk,date,away,home,venue,home_win,total,margin,features)",
         "note": "Produced the n=1461 NO_PROMOTE evidence. Reproduced bit-identically 2026-07-28.",
     },
+    # MEASUREMENT ONLY — emits no forecast, registers nothing, and its output never reaches a card,
+    # a ledger or the gate. It exists to SEPARATE the true parameter effect from RNG-coupling noise in
+    # an ALREADY-FROZEN artifact (see docs/experiments/2026-08-17_MECHANISM_CLOSEOUT.json). It is
+    # registered because it contains a verbatim transcription of the V13 sim math, and an unregistered
+    # copy of that math is exactly how a shadow model gets born. Its correctness condition is stricter
+    # than a model's: `--verify-math` must reproduce the registered v3 card probabilities EXACTLY.
+    "ml.v13_1.hfa1005.noisestudy.measurement": {
+        "role": "MEASUREMENT_NON_FORECASTING",
+        "source": "harness/rng_noise_study.py",
+        "hfa": 1.005, "hfa_provenance": "import: engine/hfa.py CURRENT",
+        "seed": None, "sims_per_game": None,
+        "rng_policy": "per_game_keyed_seeds (sha256 of game|replicate) — deliberately NOT the frozen "
+                      "sequential-slate policy, because removing stream-position coupling is the point",
+        "calibration_artifact": None,
+        "input_schema": "same as the live card; reads registered card artifacts + results.csv states",
+        "emits_forecasts": False,
+        "note": ("Transcription verified against the frozen card by --verify-math, which caught three "
+                 "real transcription bugs before any number was believed: an omitted trailing "
+                 "rng.poisson that shifts downstream RNG, use of the rounded rather than raw park "
+                 "factor, and a reduced ABBR map that split franchises with legacy full-name rows."),
+    },
     "ml.v13_1.hfa1005.card.s722n30000": {
         "role": "LIVE_CARD",
         "source": "harness/daily_card.py",

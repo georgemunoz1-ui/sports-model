@@ -116,9 +116,22 @@ for pk,awf,hmf,t,aspn,hspn in slate:
         gap_home=(round(s["hw"]-mkt_h,3) if mkt_h else None),
         total_lean=("OVER" if (tl and s["tot"]>tl) else ("UNDER" if tl else None)),
         k_away=asp.get("ek"), k_home=hsp.get("ek")))
-json.dump({"date":date,"mode":"FULL-TRACKING (no plays unless kprop EV rule fires)","rows":rows},
-          open(f"cards/{date}_card.json","w"),indent=1)
-print(f"cards/{date}_card.json: {len(rows)} games")
+# OUTPUT PATH (2026-08-17): previously hardcoded to cards/{date}_card.json and opened with "w",
+# so ANY rebuild for a date silently clobbered that date's registered v1 cohort artifact. Immutability
+# depended on the operator remembering to keep a copy. Now: an explicit --out, and O_EXCL so an
+# existing artifact is NEVER overwritten — the process refuses instead. Detection (the hash gate in
+# harness/artifact_immutability.py) is retained, but prevention is what actually protects a cohort.
+# The simulation is untouched: regenerating a registered card with this build reproduces it byte-for-byte.
+_out = sys.argv[sys.argv.index("--out")+1] if "--out" in sys.argv else f"cards/{date}_card.json"
+_payload = json.dumps({"date":date,"mode":"FULL-TRACKING (no plays unless kprop EV rule fires)","rows":rows},indent=1)
+try:
+    _fd = os.open(_out, os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o644)
+except FileExistsError:
+    sys.exit(f"REFUSED: {_out} already exists. A registered cohort artifact is never overwritten.\n"
+             f"         Pass --out cards/{date}_card_vN.json for a new arm.")
+with os.fdopen(_fd, "w") as _f:
+    _f.write(_payload)
+print(f"{_out}: {len(rows)} games")
 for r in rows:
     L=r["lines"]; v=r["v13"]
     ml=f"{L['ml_away']}/{L['ml_home']}" if L['ml_away'] else "—"

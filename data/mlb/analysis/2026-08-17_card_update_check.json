@@ -1,0 +1,65 @@
+{
+ "record_id": "CARD-UPDATE-CHECK-2026-08-17T1558Z",
+ "checked_utc": "2026-08-17T15:58:53Z",
+ "request": "owner: update 8/17 card",
+ "OUTCOME": "NO_UPDATE_POSSIBLE — nothing new has arrived to update it WITH. The registered card is verified still current.",
+
+ "currency_proof": {
+  "test": "rebuild cards/2026-08-17_card_v3.json from the present as-of state at 15:58:53Z",
+  "expected_sha256": "1cac39733f68d6b0d605133791adf15ed3ccb5817ac5c5c240eaf5f87bd27bc8",
+  "observed_sha256": "1cac39733f68d6b0d605133791adf15ed3ccb5817ac5c5c240eaf5f87bd27bc8",
+  "result": "BYTE-IDENTICAL — the registered card is exactly what the current inputs produce",
+  "why_that_is_the_answer": "an 'update' can only come from changed inputs. Form is unchanged because no 2026-08-17 game has been played; starters are unchanged because no new probables board arrived; prices are unchanged because none exist. Regenerating a card from identical inputs and calling it an update would create a second artifact with no new information in it."
+ },
+
+ "what_changed_since_the_last_report": "only the clock, and that is the actionable part.",
+
+ "TIMING_AT_CHECK": {
+  "first_pitch_utc": "2026-08-17T17:40Z (STL@CIN game 1)",
+  "minutes_to_first_pitch": 101,
+  "prices": "MISSING_BUT_RECOVERABLE — 11 minutes of slack against the 90-minute deadline. After ~16:10Z a price captured for this slate can no longer inform a pregame forecast.",
+  "schedule_manifest": "MISSING_PAST_DEADLINE — the 240-minute window closed at ~13:40Z. The 8/15-8/16 boards therefore stay COMPLETE_BY_ROSTER_PARTITION rather than schedule-verified, and the 8/17 slate count is likewise unverified.",
+  "starters": "PRESENT — 11 games, 4 carrying a TBD (63.6% resolved)"
+ },
+
+ "acquisition_attempted_at_check": {
+  "targets": ["api.the-odds-api.com/v4/sports/baseball_mlb/odds", "statsapi.mlb.com/api/v1/schedule"],
+  "result": "HTTP 000 — CONNECT tunnel refused (403) at the org egress proxy, both targets",
+  "not_routed_around": true,
+  "consequence": "prices, the schedule manifest and the 4 outstanding probables are all unobtainable from this session. Only an owner-supplied board can supply them inside the remaining window."
+ },
+
+ "WHAT_WOULD_ACTUALLY_UPDATE_THE_CARD": [
+  {"input": "the 4 outstanding probables (STL@CIN G1 away, STL@CIN G2 both, DET@PIT home, AZ@BOS home)",
+   "effect": "a NEW v4 cohort under the standing rule that a starter change forks a cohort — not an edit to v3. Expected magnitude is material: the 8/17 v1-vs-v2 contrast measured starter resolution moving probabilities ~2.14pp, roughly 5x form freshness.",
+   "deadline": "before 17:40Z for the STL@CIN games; per-game first pitch for the others"},
+  {"input": "timestamped two-sided prices",
+   "effect": "the first non-null edge column this slate has had. Break-even, edge = p_model - p_be, and the EV selection rule all become computable; the card stops being forecast-only.",
+   "deadline": "~16:10Z to stay inside the 90-minute pregame window"},
+  {"input": "an official gamePk schedule manifest",
+   "effect": "promotes slate completeness from roster-partition to schedule-verified",
+   "deadline": "already missed for 8/17; still worth supplying for 8/18"}
+ ],
+
+ "CARD_STATE_UNCHANGED": {
+  "mlb": {"artifact": "cards/2026-08-17_card_v3.json", "games": 11,
+          "model_id": "ml.v13_1.hfa1005.card.s722n30000",
+          "model_tag": "LEGACY_TIER_EXPOSURE_136 / NO_PROMOTE",
+          "form_state": "complete through 2026-08-16 (tier-1, 30/30 on each of 8/15 and 8/16)",
+          "registered_pregame": true, "forecasts": 11, "graded": false},
+  "wnba": {"artifact": "data/wnba/forecasts/2026-08-17_card.json", "games": 1,
+           "model_id": "wnba.rs.ff7_logit_ridge.v1_0.shadow",
+           "feature_state_as_of": "2026-07-22", "staleness_days": 26,
+           "note": "SHADOW DIAGNOSTIC, wager authority NO, stake 0. The 26-day feature staleness is the standing limitation on this card and is not repaired by anything in the MLB refresh."},
+  "nfl": {"games": 0, "basis": "no 2026-08-17 NFL files exist; emptiness recorded, not assumed"}
+ },
+
+ "no_side_effects": {
+  "cards_written": 0, "forecasts_registered": 0, "grades_written": 0,
+  "canonical_results_touched": false,
+  "model_parameters_rng_gates_market_inputs": "UNCHANGED",
+  "scratch_rebuild": "written to the session scratchpad, not to cards/; the O_EXCL guard in daily_card.py would have refused an overwrite of the registered artifact in any case"
+ },
+
+ "standing_status": {"gate": "0/100 NO_PROMOTE", "ledger_usd": 0, "execution": "UNAUTHORIZED, paper only"}
+}

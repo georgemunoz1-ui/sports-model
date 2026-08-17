@@ -1,0 +1,38 @@
+{
+ "record_id": "FORM-BOARD-INTAKE-2026-08-17",
+ "built_utc": "2026-08-17T05:41:29Z",
+ "artifact": "data/mlb/evidence/2026-08-15_2026-08-16_mlb_official_form_board.json",
+ "evidence_sha256": "22cd684068317ab3f7e78691400a15fe78583d0998cbcc27f18801a8ca4cc7d7",
+ "hash_claim_verified": true,
+ "tool": "harness/mlb_form_state.py (installed verbatim; selftest PASS; --validate-evidence PASS)",
+ "cross_verification": {
+  "headline": "24 of 24 independently captured games AGREE with this board, 0 disagreements, gamePks included.",
+  "detail": "13 of my 8/15 finals came from a 14-agent adversarial workflow; 9 of my 8/16 finals came from literal date-stamped titles with distinct gamePk/gameId. All 22 match the official board exactly. In addition BOTH 8/15 low-confidence candidates I refused to promote (TEX@ATH 5-3, KC@LAA 0-1) are CONFIRMED, and the single-agent uncorroborated AZ@ATL 10-3 from 8/15 is CONFIRMED.",
+  "significance": "This is the strongest cross-workspace agreement the program has produced. It also validates the echo discipline: on 8/16 four separate search batches served prior-day finals, and every score I rejected as an echo is confirmed by the official board to have been the wrong game.",
+  "six_previously_unresolved_8_16": {
+   "BOS@PIT": "3-8",
+   "AZ@ATL": "3-5",
+   "WSH@NYM": "3-4",
+   "SD@CLE": "5-0",
+   "TEX@ATH": "2-5",
+   "KC@LAA": "3-0"
+  }
+ },
+ "application_status": "DATA_BLOCKED \u2014 NOT applied to results.csv, and not forced",
+ "blocker": {
+  "message": "canonical base has interior result-date holes: 2026-08-13",
+  "cause": "2026-08-13 has ZERO canonical rows. That hole is a DIRECT CONSEQUENCE of the owner's 2026-08-16 tier-1-only ruling: 9 tier-3 rows for 8/13 were correctly evicted from results.csv into the acquisition ledger, and no tier-1 replacement has ever been captured for that date.",
+  "assessment": "Two correct rules colliding, not a defect in either. The form-state contract refuses to compute team form across an interior hole \u2014 which is right, because a team's games_before and rf/ra would silently understate. The external workspace's assumption that '14 official 8/14 finals' was sufficient did not hold here, because this lineage acquired a NEW hole at 8/13 after the ruling.",
+  "both_paths_blocked": "--apply-evidence (results.csv append) and --target-date (capture-overlay form) BOTH refuse on the same hole. The overlay cannot route around it either."
+ },
+ "what_did_land": [
+  "harness/mlb_form_state.py installed; selftest PASS",
+  "board validated: 30/30 finals, 30 unique gamePks, 30/30 linescore-sum, 0 ties, source-URL date match",
+  "capture ledgers materialized for BOTH dates under data/result_capture/mlb/ (the 8/16 ledger reproduces the supplied one exactly)",
+  "8/16 acquisition-ledger rows can now be upgraded from tier-3 to tier-1-confirmed on the strength of this board"
+ ],
+ "unblock_requirement": "ONE artifact: an 8/13 MLB official form board in the same schema (9 games \u2014 the 7 on 2026-08-13_slate.psv plus PHI@MIN and MIL@LAD from _slate_v2.psv). Its scope.required_base_cutoff_game_date would be 2026-08-12 (15 finals present, verified). With that applied, 8/13 -> 8/16 becomes contiguous and this board applies immediately.",
+ "note_on_8_13_grades": "The 9 forecasts for 8/13 are ALREADY graded on tier-3 evidence as a documented pre-ruling exception. A tier-1 8/13 board would NOT regrade them (append-only, no double-grading) \u2014 it would repair the canonical FORM record only.",
+ "frozen_cards_untouched": "The 8/17 v1 and v2 cohorts remain registered with form as-of 2026-08-14 and are NOT retroactively altered. Nothing in this intake changes a frozen card.",
+ "authority": "paper only; wager authority NO; gate 0/100 NO_PROMOTE"
+}

@@ -1,0 +1,29 @@
+{
+ "record_id": "V14-FORWARD-PROTOCOL-2026-08-18",
+ "built_utc": "2026-08-18T09:10:00Z",
+ "frozen_before_first_forward_forecast": true,
+ "authority": "owner decision 2026-08-18: run V14 forward, explicitly as a FAILED-DEVELOPMENT TRANSPORT TEST — not as a promising successor.",
+ "decision_state": {
+  "development_gate": "NOT MET (data/mlb/ml_asof/2026-08-18_v14_result.json)",
+  "forward_shadow": "APPROVED",
+  "promotion_eligibility": "pending 500 games / 60 dates and every frozen gate in the prereg",
+  "betting_authority": "NO",
+  "refit_recalibration": "FORBIDDEN — the fold-fitting procedure is frozen; no parameter learned after this date may use any forward game's outcome"
+ },
+ "PURPOSE": "confirmed-starter transport test. The one legitimate unresolved question: does clean T-90 confirmed-starter information perform better than the leakage-safe but noisier historical identity state (the HISTORICAL STARTER-IDENTITY MEASUREMENT LIMITATION)? This run answers that and nothing else. It does not rehabilitate the failed development result and may never be narrated as doing so.",
+ "ELIGIBILITY_FROZEN": {
+  "rule": "starter identity CONFIRMED at T-90 minutes before scheduled first pitch, both sides, from a tier-1 capture that says CONFIRMED — a probables/preview board is PROJECTED and does NOT qualify",
+  "excluded_and_counted": "PROJECTED and UNKNOWN starters exclude the game from V14 scoring; every exclusion is recorded with its class. League-average substitution never produces a V14 forecast at all (stricter than the card, which may display CAP rows for tracking).",
+  "example_from_today": "the 2026-08-18 owner probables board and the matchup-preview board are both PROJECTED class. NO 8/18 game is V14-eligible unless a T-90 CONFIRMED capture arrives before its first pitch."
+ },
+ "REGISTRATION_FROZEN": {
+  "one_immutable_probability": "exactly one V14 probability per eligible game, registered pre-pitch through forecast_registry (hash chain), cohort V14_FORWARD, never revised, never superseded by a later capture",
+  "no_selective_registration": "if a slate has eligible games, ALL eligible games register — never a subset chosen by lines, apparent edge, or model confidence. A slate where registration is impossible is recorded as such.",
+  "not_pooled": "V14_FORWARD grades against tier-1 FINAL evidence only, alongside (never pooled with) the V13 cohorts on the same games"
+ },
+ "COMPARISON_FROZEN": "identical-game comparison against all four development comparators: raw V13 (the live card probability for the same game), Platt-calibrated V13 (calibration fit on data strictly before the forward window start, frozen at first use), expanding home-rate, and the no-starter ablation (park-only pipeline, weights refit per slate date on pre-date data exactly as V14's are). Same Holm family as the prereg.",
+ "CHECKPOINTS": "descriptive only, at 100/250/500 games: counts, scores, calibration — no interim significance claims, no tuning, no narrative promotion. The 500-game/60-date evaluation is the only inferential read.",
+ "V19_INDEPENDENCE": "V14 and V19 are evaluated independently. If both ever pass their gates, replacement requires a preregistered prospective HEAD-TO-HEAD; neither inherits the other's evidence.",
+ "TERMINOLOGY_BINDING": "per docs/experiments/2026-08-18_V14_WORDING_CORRECTIONS.json: the historical identity issue is a MEASUREMENT LIMITATION, not leakage; the development fit is ONE analytical result from two deterministic executions.",
+ "operational_note": "no V14 forward forecast exists yet and none can be produced from today's boards (both PROJECTED class). The first forecast requires a T-90 CONFIRMED starter capture — which the capture rail does not yet deliver; that is the same rail gap named in pregame_preflight and is now also the binding constraint on this experiment."
+}

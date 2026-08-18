@@ -2207,3 +2207,46 @@ STATUS: ml.v14_starter.rlog.shadow registered (20 identities), FORWARD_ONLY_PEND
 registration is PERMITTED by the prereg but NOT STARTED: the development result undercuts the
 motivation and whether to spend the forward window is the owner's call. V13 byte-frozen and
 untouched; gate 0/100; ledger $0; paper only.
+
+================================================================================
+2026-08-18 — V14 FORWARD PROTOCOL FROZEN; 8/18 v3 FORKED ON STARTER CORRECTIONS
+================================================================================
+
+V14 FORWARD (owner: run it as a FAILED-DEVELOPMENT TRANSPORT TEST, not a promising successor).
+Protocol frozen BEFORE any forward forecast (docs/experiments/2026-08-18_V14_FORWARD_PROTOCOL.json):
+purpose = confirmed-starter transport test only; eligibility = starter CONFIRMED at T-90 both sides
+(PROJECTED/UNKNOWN excluded AND counted; league-average never produces a V14 forecast); one
+immutable probability per eligible game through the hash chain; all eligible games register or none
+(no selection by lines or apparent edge); identical-game comparison vs all four frozen comparators;
+tier-1 FINAL grading only; descriptive checkpoints at 100/250/500 with no interim inference; V14 and
+V19 independent, with a preregistered head-to-head required if both ever pass. Refit/recalibration
+FORBIDDEN. Betting authority NO.
+
+Operational reality named in the protocol: NO forward forecast can exist yet — both of today's
+boards are PROJECTED class. The T-90 confirmed capture the protocol requires is the same rail gap
+pregame_preflight tracks; it is now also the binding constraint on this experiment.
+
+TWO WORDING CORRECTIONS, both VERIFIED before adoption (2026-08-18_V14_WORDING_CORRECTIONS.json):
+1. "Identity leakage" WITHDRAWN -> "historical starter-identity measurement limitation". The test:
+   leakage requires postgame identity entering a pregame feature. Traced: every sp stat is
+   strict-prior; identity selects WHICH pitcher's pregame stats enter, and the first pitcher of a
+   game is determined before first pitch — a pregame fact measured through a postgame record. The
+   build remained causal; the development run is NOT disqualified.
+2. "Executed twice" -> "ONE analytical result from TWO deterministic executions", the second being
+   recovery after post-fit serialization failure. Preserved: the truncated partial (quarantined),
+   the full traceback (transcribed into the quarantine note), and an in-process reproduction whose
+   ex-timestamp sha256 (e4d2c5e6a6ff1b85) is IDENTICAL to the on-disk result.
+
+8/18 v3 FORK. The owner's matchup-preview board (PROJECTED class, evidence 52bdb086) landed five
+starter-state changes vs v2 — and exposed a REAL v2 DEFECT: the probables board's "MIA Gibson" was
+GS-disambiguated to TREY Gibson, the only registry match, but the preview names CADE Gibson (#58, L),
+absent from the registry. v2's MIA side consumed the WRONG pitcher's log. The resolver failure mode
+is now demonstrated: when the true starter is missing from the registry, unique-lastname matching
+confidently picks the wrong man. v3 corrects to CAP (-3.8pp on MIA@PHI, PHI .603 -> .565). Also:
+AZ@BOS resolved to Ranger Suarez (+2.0pp BOS), CWS@CHC regressed to TBD (+3.4pp toward CHC... note
+the away CWS starter went from a 54-G reliever's log to league average), WSH named Jackson Kent
+(still CAP), ATH@KC home regressed to TBD. 15 v3 forecasts registered ~13h pre-pitch; v1/v2 stand;
+three cohorts grade separately. Career-vs-roster/Statcast preview columns preserved in evidence and
+FIREWALLED — closed feature lists on both V13 and V14.
+
+Chain: 259 forecasts / 218 grades intact. Gate 0/100, ledger $0, paper only.

@@ -62,6 +62,23 @@ REJECTED_PHANTOMS = [f'{p["listing"]} — {p["why_rejected"]}' for p in _IDENT_D
 NFL_FROZEN_EXTERNAL = {"CLE@CHI": "NFL-PS-2026-CLE-CHI-MKT0_1", "MIN@NYG": "NFL-PS-2026-MIN-NYG-MKT0_1"}
 
 
+def _tip_iso(tip, slate_date):
+    """Resolve a tip time to full ISO for comparison. Card rows carry bare HH:MMZ slate times whose
+    DATE is the US slate date, so a post-midnight-UTC start (e.g. 00:40Z on the 8/18 slate) belongs
+    to the FOLLOWING UTC day. Comparing the bare string against a same-day generated_at_utc declared
+    four genuinely pregame 8/18 forecasts post-start — the same rollover bug pregame_preflight had.
+    Full ISO strings pass through untouched; bare times before 10:00Z roll to slate_date + 1."""
+    import re as _re, datetime as _dt
+    if not tip or not _re.fullmatch(r"\d{2}:\d{2}Z", tip):
+        return tip  # already full ISO (v3-style records) or unparseable -> compare as-is
+    if not slate_date:
+        return tip
+    d = _dt.date.fromisoformat(slate_date)
+    if int(tip[:2]) < 10:
+        d += _dt.timedelta(days=1)
+    return f"{d.isoformat()}T{tip}"
+
+
 def _load_jsonl(path):
     if not os.path.exists(path):
         return []
@@ -174,7 +191,7 @@ def repo_scans():
     late = []
     for f in F:
         tip = (f.get("payload") or {}).get("tip_utc")
-        if tip and f["generated_at_utc"] > tip:
+        if tip and f["generated_at_utc"] > _tip_iso(tip, f.get("slate_date")):
             late.append(f["forecast_id"])
     for r in _load_jsonl("data/wnba/forecasts/registrations.jsonl"):
         if r["generated_at_utc"] > r["tip_utc"]:

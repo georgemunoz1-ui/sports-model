@@ -2106,3 +2106,50 @@ recoverable" — false and alarming; now "no slate clock to time against (still 
 WHAT UPGRADES THIS CARD: (1) official 8/18 schedule manifest -> confirms/extends the slate and
 covers the ten unknown franchises; (2) probables board -> v2 cohort with real starters (worth ~5x
 form); (3) pregame prices -> the edge column. Gate 0/100 NO_PROMOTE, ledger $0, paper only.
+
+================================================================================
+2026-08-18 — v2 FORKED ON THE OWNER PROBABLES BOARD; FIRST PREGAME PRICES; WNBA CARD
+================================================================================
+
+Owner delivered the full 8/18 probables board — 15 games, starters, ET times, venues, weather, and
+PREGAME prices (~15h before the earliest first pitch). First pregame price capture of this program.
+Also the WNBA 8/18 lines board (4 games, spreads + totals).
+
+SLATE: 15 games, all 30 franchises exactly once — the roster-partition invariant holds PREGAME for
+the first time. The 9-game derived v1 slate is CONFIRMED 9/9 by this board, and BAL@TB's exclusion
+was right: BAL and TB each open new series (NYY@BAL, TOR@TB). The ten previously-unknowable
+franchises all appear.
+
+STARTERS: 27/30 board names resolved against pitchers.csv with GS-disambiguation where multiple
+candidates share a last name (Suarez: Ranger 17 GS vs José 2 GS — board stats are the all-zero
+display defect confirmed 8/17, so the tie is UNRESOLVABLE and that side runs CAP; Lynch and Kent are
+absent from the registry entirely). Board starter STATS ignored on principle; only names and prices
+consumed.
+
+CARD v2: cards/2026-08-18_card_v2.json (15288870), frozen V13, form through 8/17, 15 forecasts
+registered through forecast_registry at 07:25Z (chain intact, 244/218). v1 stays registered; the two
+arms grade separately against the same finals, never pooled.
+
+FIRST PREGAME EDGE COLUMN. Same-book two-sided de-vig (valid per the 8/3 ruling). Model vs market:
+mean |gap| 5.8pp, 8 of 15 gaps >=5pp, positive-edge sides 5/15. Largest claimed edges are all DOGS
+and CAP-degraded games: WSH +134 (+12.7pp, Kent unresolved), CWS +141 (+12.1pp), DET +123 (+9.2pp).
+STANDING CAUTION APPLIED: yesterday's settlement showed >=5pp claimed edges went 0-2 and the model's
+spread is a third of the market's, so large "edges" are mostly V13's inability to express strong
+opinions, not discoveries. Screening display only; no plays (kprop rule did not fire; execution
+UNAUTHORIZED).
+
+WNBA: owner asked for "v1-3 for WNBA as well" — those arms DO NOT EXIST for WNBA and the card says
+why: the shadow model has no starter input and its feature state froze 2026-07-22, so there is
+exactly ONE input state per slate; three arms would be three identical cards. Generated the single
+card for all four games (LAS@CON at TD Garden, IND@TOR Tempo, NYL@CHI, ATL@LVA), 4 forecasts
+registered pre-tip with the lines bound at registration. Model vs market: agrees on IND, NYL, LVA
+sides but much flatter than the market on IND@TOR (model IND by 5 vs line IND -9.5); likes CON +1.5
+narrowly against the LAS line.
+
+ONE GATE FAILURE, MINE, FIXED: registering v2 payloads with the card's bare HH:MMZ tip times made
+the post-start gate read 00:40Z on the 8/18 slate as ALREADY PAST at 07:25Z — the third appearance
+of the midnight-UTC rollover bug, this time in missing_data_audit. Fixed with the same <10:00Z
+rollover rule; falsification test proves a genuinely post-start forecast is still caught on both
+sides of midnight.
+
+Gate 0/100 NO_PROMOTE, ledger $0, paper only.

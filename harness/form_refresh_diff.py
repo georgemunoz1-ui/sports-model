@@ -72,6 +72,11 @@ RESULTS = "data/backfill/mlb/2026/results.csv"
 OUT = "data/audit/form_refresh_diff.json"
 FROZEN_N, FROZEN_SEED = 30000, 722
 HOLE_DATE, CUTOFF_A, REFRESH = "2026-08-13", "2026-08-14", ["2026-08-15", "2026-08-16"]
+# S_C is the form state the v3 card was BUILT on, which ends 2026-08-16. It was written as "all
+# dates" — true only until 2026-08-17 results were ingested, at which point S_C silently grew a day
+# and stopped reproducing the registered card. An as-of state must be pinned to its date, not to
+# "whatever is on disk".
+CUTOFF_C = "2026-08-16"
 
 
 def filtered_results(keep):
@@ -157,8 +162,8 @@ def run(hi_sims, hi_reps, quick):
 
     S_A = team_form(filtered_results(lambda d: d <= CUTOFF_A and d != HOLE_DATE))
     S_B = team_form(filtered_results(lambda d: d <= CUTOFF_A))
-    S_C = team_form(filtered_results(lambda d: True))
-    S_D = team_form(filtered_results(lambda d: d != HOLE_DATE))   # refresh WITHOUT the hole repair
+    S_C = team_form(filtered_results(lambda d: d <= CUTOFF_C))
+    S_D = team_form(filtered_results(lambda d: d != HOLE_DATE and d <= CUTOFF_C))
 
     # ---- GATE: the reconstructed states must reproduce the REGISTERED cards exactly ----
     verify = {}
@@ -298,7 +303,7 @@ def run(hi_sims, hi_reps, quick):
         "state_definitions": {
             "S_A": f"date <= {CUTOFF_A}, excluding {HOLE_DATE} — reproduces registered v2 exactly",
             "S_B": f"date <= {CUTOFF_A} — S_A plus the {HOLE_DATE} hole repair",
-            "S_C": "all dates through 2026-08-16 — reproduces registered v3 exactly",
+            "S_C": f"date <= {CUTOFF_C} — reproduces registered v3 exactly",
             "canonical_file_mutated": False,
         },
         "slate_totals": {
@@ -406,7 +411,8 @@ def selftest():
         fails.append("S_A still contains the 8/13 hole rows")
     # 3. the three states must be strictly nested in games played
     A, B, C = (team_form(filtered_results(k)) for k in
-               (lambda d: d <= CUTOFF_A and d != HOLE_DATE, lambda d: d <= CUTOFF_A, lambda d: True))
+               (lambda d: d <= CUTOFF_A and d != HOLE_DATE, lambda d: d <= CUTOFF_A,
+                lambda d: d <= CUTOFF_C))
     for t in ("NYY", "TB", "CIN"):
         if not (A[2].get(t, 0) <= B[2].get(t, 0) <= C[2].get(t, 0)):
             fails.append(f"{t}: game counts are not monotone across S_A <= S_B <= S_C")
@@ -426,7 +432,7 @@ def selftest():
         if abs(((pB[i] - pA[i]) + (pC[i] - pB[i])) - (pC[i] - pA[i])) > 1e-12:
             fails.append(f"decomposition does not sum to the total on game {i}")
     # 7. Shapley additivity: phi_R + phi_H must equal the net signed change per game, exactly
-    D = team_form(filtered_results(lambda d: d != HOLE_DATE))
+    D = team_form(filtered_results(lambda d: d != HOLE_DATE and d <= CUTOFF_C))
     pD = card_probs(v3, D)
     for i in range(len(v3)):
         phiR = 0.5 * ((pD[i] - pA[i]) + (pC[i] - pB[i]))

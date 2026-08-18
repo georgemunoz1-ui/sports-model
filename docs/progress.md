@@ -1992,3 +1992,79 @@ the fair line: V13's binding constraint is still discrimination, and the card sa
 
 Gate 0/100 NO_PROMOTE, ledger $0, paper only. No forecast altered, none regraded, no new identity for
 any probability -- this re-expresses an already-registered artifact.
+
+================================================================================
+2026-08-18 — 8/17 SETTLED: THE MARKET WON, AND THE PROFIT WAS THE WRONG PROFIT
+================================================================================
+
+Owner relayed a tier-1 finals board for 8/17 with closing money lines, totals, umpires and actual
+probables. Board hashed to evidence (bbcbdb69), 11 games, no ties, 20 franchises with STL/CIN twice.
+The board's EST Score / EST Line columns are ANOTHER MODEL's predictions and were not transcribed,
+ingested or compared against anything.
+
+GRADES, cohorts separate, never pooled, each forecast graded exactly once:
+  v1  10 games  5-5  Brier 0.24596  logloss 0.68503
+  v2  11 games  8-3  Brier 0.23496  logloss 0.66300
+  v3  11 games  7-4  Brier 0.23789  logloss 0.66886
+  MARKET at close   Brier 0.185-0.190
+
+The market beat every arm by ~0.05 Brier. v2 (stale form) outscored v3 (fresh form) 8-3 to 7-4 --
+NOISE at n=11, not evidence that stale form is better, and the prospective ablation already found
+freshness has no detectable accuracy effect. Reporting v2 as a winner would be the exact error this
+program exists to prevent.
+
+DISCRIMINATION, now measured against real prices rather than inferred:
+  model p_home  mean .5042  SD  3.25pp  range .452-.547
+  market p_home mean .5294  SD 11.48pp  range .273-.704   -> market spread is 3.53x
+V13 prices an 11-game slate inside a 9.5pp band while the market spans 43pp. Every strong market
+opinion therefore registers as a large model "edge" -- not a discovery, an inability to be confident.
+
+EV AT CLOSE (evaluation only; these prices arrived after the finals and were never playable):
+v3 realized +1.058u on 11 flat units, and the composition is the opposite of an edge --
+  positive-edge games (the only ones a value rule fires on): n=6, 3-3, realized -0.283u
+  negative-edge games (-EV by construction, never played):   n=5, 4-1, realized +1.341u
+  large positive edges >=5pp (where you would size up):      n=2, 0-2, realized -2.000u
+ALL of the profit came from bets the strategy would never place. The games the model actually liked
+lost money, and the two it liked most went 0-2. LAD@COL is the clearest case: model 50.8% COL vs
+market 27.3%, a 23.5pp "edge" claiming +0.829 EV/unit; COL lost 5-11. The model had no COL-specific
+information -- it simply cannot express 27%.
+
+TOTALS: mean signed error -1.14 runs (model low), mean absolute 3.70. Not a usable totals signal.
+
+STARTER DEFECTS on 4 of 11: the card put Rhett Lowder in game 1 when he started game 2 (both G1
+sides wrong), G2 ran both sides on league average, and PIT/BOS were TBD (actual Mlodzinski, Gamboa).
+Starter resolution is worth ~2.14pp, ~5x form freshness -- so this card's starter gaps degraded it
+more than the entire 8/15-8/16 form refresh improved it. A naive name compare said SIX changes;
+MIA@PHI (Sánchez) and ATL@MIN (Pérez) were accent artifacts. The grader NFKD-folds names.
+
+DOUBLEHEADER MAPPING by SCHEDULED ORDER, not by starter: card DH1 (17:40Z) -> board Game 1. Mapping
+by starter would have graded the 17:40Z forecast against a game it was never registered for. The
+rejected alternative is recorded so the choice is auditable.
+
+UNRESOLVED: repo holds 17 appearances for Rhett Lowder (ERA 5.98, 13 GS); the board shows 0-0/0 G/
+0 GS/0.00. Leading hypothesis is a board display defect -- the same all-zero block appears for
+Emanuel, while Gamboa (also 0 GS) carries real rates. NOT resolved, nothing edited, no regrade.
+Grades use only the final score.
+
+THREE GATE FAILURES, ALL MINE, ALL CAUGHT BY GATES RATHER THAN BY INSPECTION -- and all the same bug:
+an as-of state pinned to "whatever is on disk" instead of to its date.
+  1. grade_slate appended raw lines to grades.jsonl instead of calling forecast_registry.append_grade,
+     leaving head.json stale -> HASH CHAIN BROKEN. Reverted the uncommitted appends, routed through
+     the registry API, re-graded. 218 grades, chain intact.
+  2. card_render replayed with the CURRENT results file, so ingesting 8/17 finals gave the replay
+     look-ahead into the very day it was forecasting; STL@CIN moved .452 -> .456 and the module's own
+     refuse-on-mismatch gate fired. Now filters to date < the card's slate date.
+  3. form_refresh_diff defined S_C as "all dates" -- true only until 8/17 landed. Pinned to
+     CUTOFF_C = 2026-08-16.
+
+WNBA DAL@GSV NOT GRADED: 0:16 left in the 4th, 70-76, no final exists. Grading a game with time on
+the clock would be inventing an outcome. Model card for reference only: p_home .6209, margin +4.16,
+total 163.8 on 26-day-stale features; market GSV -5.5, total 162.5. No model-vs-outcome comparison
+is drawn, because there is no outcome.
+
+INGESTED: 11 tier-1 rows for 8/17. game_id prefix OWNERBOARD- so it can never be mistaken for an
+official gamePk, which is still unacquired. close_* columns left EMPTY -- prices are never features.
+Slate completeness is DOUBLEHEADER_PRESENT_INVARIANT_INAPPLICABLE; still needs a schedule manifest.
+ml_asof rebuilt, 1874 rows.
+
+Gate 0/100 NO_PROMOTE, ledger $0, paper only. No forecast altered, no card rewritten.

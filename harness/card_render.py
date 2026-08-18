@@ -129,11 +129,29 @@ def sim_full(asp, hsp, form, aw, hm, pf, n, rng):
             "p_extras": float(tie.mean())}
 
 
+def _results_before(date):
+    """results.csv text containing only rows strictly BEFORE `date`. Read-only; never writes."""
+    import csv as _csv, io as _io
+    raw = open(RESULTS, newline="").read()
+    rd = _csv.DictReader(_io.StringIO(raw))
+    buf = _io.StringIO()
+    w = _csv.DictWriter(buf, fieldnames=rd.fieldnames, lineterminator="\n")
+    w.writeheader()
+    for r in rd:
+        if r["date"] < date:
+            w.writerow(r)
+    return buf.getvalue()
+
+
 def render(card_path):
     _ab, team_form = _norm_ab()
     card = json.load(open(card_path))
     rows = card["rows"]
-    form = team_form(open(RESULTS).read())
+    # AS-OF FORM, not current form. daily_card reads every final on disk at build time, so a card
+    # dated D was built on results STRICTLY BEFORE D. Replaying with today's file silently includes
+    # D's own results — look-ahead — and the replay then disagrees with the registered card. Caught
+    # the moment 2026-08-17 finals were ingested: the STL@CIN replay moved 0.452 -> 0.456.
+    form = team_form(_results_before(card["date"]))
     PARK = json.load(open(PARKS))
     rng = np.random.default_rng(FROZEN_SEED)
 

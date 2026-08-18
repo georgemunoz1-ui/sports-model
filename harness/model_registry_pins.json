@@ -242,7 +242,7 @@
    ]
   },
   "harness/form_refresh_diff.py": {
-   "current": "b22ddf561f3eb2482289bf1a11b08e76f8df59abd5ea61c4c9cc4422e6e68ee7",
+   "current": "800c8623be66ef688e55a394e70a6c75d87e8bce3489dcb955f31324be3a2639",
    "versions": [
     {
      "impl_version": 1,
@@ -267,11 +267,19 @@
      "pin_commit": null,
      "note": "IMPL v3 \u2014 owner correction 2026-08-17: the '81% of total' attribution was invalid. It divided a per-path mean |delta| by the NET mean |delta| (different denominators), and mean absolute movements are non-additive because signed per-game contributions cancel. Adds a fourth form state S_D (all dates except the hole date) so both factor orderings exist, then reports GROSS path shares and order-neutral two-factor SHAPLEY values with per-game signed contributions and the interaction term. Selftest now asserts phi_R + phi_H equals the net signed change to 1e-12 per game and that gross >= net.",
      "record": "docs/experiments/2026-08-17_CORRECTIONS_ROUND2.json"
+    },
+    {
+     "impl_version": 4,
+     "sha256": "800c8623be66ef688e55a394e70a6c75d87e8bce3489dcb955f31324be3a2639",
+     "authorized_utc": "2026-08-18T04:20:18Z",
+     "pin_commit": null,
+     "note": "IMPL v4 \u2014 pins S_C (and S_D) to CUTOFF_C = 2026-08-16 instead of 'all dates'. S_C is the form state the v3 card was BUILT on; writing it as 'all dates' was true only until 8/17 results were ingested, after which the state silently grew a day and stopped reproducing the registered card. An as-of state must be pinned to its date, not to whatever is on disk.",
+     "record": "data/mlb/analysis/2026-08-17_grades.json"
     }
    ]
   },
   "harness/card_render.py": {
-   "current": "49cc3fb57c61aaa6e52d67363bc6b2eac3a4c672b31f9764648d9b5f62ffd350",
+   "current": "37df793e1c349ce16f4bdc544bbe8beb15318b474dbe5956f07b2d7d947d395a",
    "versions": [
     {
      "impl_version": 1,
@@ -280,6 +288,14 @@
      "pin_commit": null,
      "note": "IMPL v1 \u2014 initial registration. Renders a registered card as model output in betting units (fair ML, fair run line, per-side projected score, model total, one-run/extra-inning/blowout probabilities, K expectations). Contains a verbatim transcription of daily_card.py sim() to recover per-side score means the stored card does not keep; refuses to render unless the replay reproduces all six stored V13 fields exactly on every game. Owner instruction 2026-08-17: cards must carry model predictions/output.",
      "record": "data/audit/card_render_2026-08-17.json"
+    },
+    {
+     "impl_version": 2,
+     "sha256": "37df793e1c349ce16f4bdc544bbe8beb15318b474dbe5956f07b2d7d947d395a",
+     "authorized_utc": "2026-08-18T04:20:18Z",
+     "pin_commit": null,
+     "note": "IMPL v2 \u2014 AS-OF FORM FIX. The replay used the CURRENT results file, but a card dated D was built by daily_card from results strictly BEFORE D. Once 2026-08-17 finals were ingested the replay silently included that day's own results (look-ahead) and stopped reproducing the registered card: STL@CIN home_wp moved 0.452 -> 0.456. Now filters results.csv to date < the card's slate date. Caught by the module's own refuse-on-mismatch gate the moment the finals landed.",
+     "record": "data/mlb/analysis/2026-08-17_grades.json"
     }
    ]
   }

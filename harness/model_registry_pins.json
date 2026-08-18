@@ -298,6 +298,19 @@
      "record": "data/mlb/analysis/2026-08-17_grades.json"
     }
    ]
+  },
+  "harness/ml_v14_starter.py": {
+   "current": "56ba10f9ef0e5a5ea583ea432028178d29b336737270aef76ffb0de0ea214a69",
+   "versions": [
+    {
+     "impl_version": 1,
+     "sha256": "56ba10f9ef0e5a5ea583ea432028178d29b336737270aef76ffb0de0ea214a69",
+     "authorized_utc": "2026-08-18T08:44:31Z",
+     "pin_commit": null,
+     "note": "IMPL v1 \u2014 the one-shot V14 starter-shadow runner, written AFTER the prereg was frozen at commit 8855503 (sha 9cb65230) and implementing exactly it: closed 6-feature vector, fold-internal standardization + inner-split ridge selection, four comparators on identical games, date-block bootstrap + Holm. Refuses to fit against drifted prereg bytes; refuses a second fit while a valid result exists. Includes the serialization fix (numpy bool casts) applied after the first run crashed writing its output; the partial was quarantined, not deleted, and the deterministic refit reproduced the identical numbers.",
+     "record": "data/mlb/ml_asof/2026-08-18_v14_result.json"
+    }
+   ]
   }
  }
 }

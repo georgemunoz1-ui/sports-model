@@ -2153,3 +2153,57 @@ rollover rule; falsification test proves a genuinely post-start forecast is stil
 sides of midnight.
 
 Gate 0/100 NO_PROMOTE, ledger $0, paper only.
+
+================================================================================
+2026-08-18 — V14 STARTER SHADOW: PREREG FROZEN, FIT ONCE, CRITERIA NOT MET
+================================================================================
+
+Owner approved the starter-focused successor for preregistration and forward-only shadow testing —
+no promotion, no wagering, no V13 replacement.
+
+ORDER OF OPERATIONS, kept strictly: (1) V14 identity verified reserved-but-never-instantiated
+(0 refs in registry/forecasts/grades/cards); (2) the preregistration was written and COMMITTED
+(8855503, sha 9cb65230) BEFORE any fitting code existed; (3) the runner implements exactly that
+document, refuses to fit if the prereg bytes drift, and refuses a second fit while a valid result
+exists; (4) the fit ran ONCE.
+
+Frozen in the prereg: closed 6-feature vector (shrunk-ERA, shrunk-K-BB, rest, 30-day workload,
+expected-IP edges + park; handedness and TTO excluded at 0% coverage under the >=90% rule; unshrunk
+team form excluded, shrunk form ablation-only), ridge logistic with everything fold-internal,
+four comparators on identical games, no-imputation missingness, practical thresholds, date-block
+bootstrap + Holm over 8 tests, promotion criteria (>=500 prospective pregame-confirmed games /
+>=60 dates, zero chronology-provenance-personnel failures, owner sign-off). Disclosed limitation:
+historical starter identity is RESOLVED_POST_HOC; the promotion test is immune (prospective only).
+
+ONE-SHOT RESULT (918 games, 78 scored dates + 30 burn-in; exclusions all counted):
+
+  model                   Brier    logloss   AUC     pSD    slope   rel     resol
+  V14                     0.24765  0.68850  0.5519  5.99%  0.758  0.00314  0.00553
+  no-starter ablation     0.24916  0.69147  0.5090  1.83%  1.102  0.00082  0.00092
+  raw V13                 0.24777  0.68875  0.5608  6.44%  0.754  0.00442  0.00661
+  calibrated V13          0.24866  0.69046  0.5450  1.99%  1.649  0.00453  0.00563
+  expanding home rate     0.24987  0.69288  0.4662  0.49%  (degenerate)
+
+VERDICT AGAINST THE FROZEN CRITERIA — NOT MET. V14 is directionally best on Brier and logloss
+against ALL four comparators, and its mean improvement vs the no-starter ablation (-0.00151)
+exceeds the 0.00068 practical floor — but NOTHING survives Holm (all 8 tests p_holm 1.0, every CI
+spans zero), AUC 0.5519 is BELOW raw V13's 0.5608, and the calibration slope 0.758 sits below the
+frozen [0.80, 1.20] band. The development signal required CI-excluding-zero AND the AUC and
+calibration conditions; none of the three holds. The result stands as-is — no feature shopping,
+no re-runs.
+
+HONEST READING: five starter features recover nearly all of V13's skill (Brier 0.24765 vs 0.24777)
+with better reliability (0.00314 vs 0.00442) — consistent with starter concentration — but do not
+EXCEED it, and the resolution did not widen (5.99% vs 6.44% SD). The V19 lesson was applied in
+reverse: nothing is claimed from spread. Also notable: Platt-calibrating V13 made it WORSE
+(0.24866), the expanding-window recalibration overcorrecting at slope 1.649.
+
+Two operational notes: the first --run crashed serializing a numpy bool AFTER the deterministic fit
+completed; the truncated partial was QUARANTINED (not deleted) and the refit reproduced identical
+numbers (no RNG in the estimator). And the runner's own selftest caught a wrong fixture of mine —
+testing calibration on perfectly separated data, where an unbounded slope is correct behavior.
+
+STATUS: ml.v14_starter.rlog.shadow registered (20 identities), FORWARD_ONLY_PENDING. Forward shadow
+registration is PERMITTED by the prereg but NOT STARTED: the development result undercuts the
+motivation and whether to spend the forward window is the owner's call. V13 byte-frozen and
+untouched; gate 0/100; ledger $0; paper only.

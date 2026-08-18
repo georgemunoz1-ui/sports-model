@@ -129,6 +129,27 @@ REGISTRY = {
                  "selection stay NULL WITH A REASON whenever no posted price exists — R1 — so the "
                  "card can never imply a play it cannot support."),
     },
+    # SHADOW EXPERIMENT — the V14 starter successor, fit ONCE under a preregistration frozen and
+    # committed BEFORE the fitting code existed (docs/experiments/2026-08-18_V14_STARTER_PREREG.json,
+    # sha 9cb65230, commit 8855503). The runner refuses to fit if the prereg bytes drift and refuses
+    # a second fit while a valid result exists. Emits no card, forecast, price or wager.
+    "ml.v14_starter.rlog.shadow": {
+        "role": "SHADOW_EXPERIMENT",
+        "source": "harness/ml_v14_starter.py",
+        "hfa": "n/a (ridge logistic; no simulation, no HFA term)",
+        "seed": "n/a (deterministic IRLS; bootstrap seed 20260818 fixed in the prereg)",
+        "sims_per_game": 0, "rng_policy": "deterministic_closed_form",
+        "calibration_artifact": None,
+        "input_schema": "ml-asof-v1 (firewall dataset) + pitcher_logs for workload/expected-IP; "
+                        "V13 comparator joined from the pinned historical replay",
+        "emits_forecasts": False,
+        "note": ("ONE-SHOT RESULT (data/mlb/ml_asof/2026-08-18_v14_result.json): directionally best "
+                 "Brier/logloss of all five arms on 918 games/78 dates, but NOTHING survives Holm "
+                 "(all p_holm 1.0), AUC 0.5519 < raw V13 0.5608, calibration slope 0.758 below the "
+                 "frozen [0.80,1.20] band. Development signal NOT achieved per the frozen criteria. "
+                 "Status FORWARD_ONLY_PENDING; promotion requires >=500 prospective pregame-confirmed "
+                 "games and owner sign-off."),
+    },
     "ml.v13_1.hfa1005.card.s722n30000": {
         "role": "LIVE_CARD",
         # OWNER RULING 2026-08-17: do NOT purge the legacy rows from under V13. Preserve it exactly,

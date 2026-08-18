@@ -2068,3 +2068,41 @@ Slate completeness is DOUBLEHEADER_PRESENT_INVARIANT_INAPPLICABLE; still needs a
 ml_asof rebuilt, 1874 rows.
 
 Gate 0/100 NO_PROMOTE, ledger $0, paper only. No forecast altered, no card rewritten.
+
+================================================================================
+2026-08-18 — 8/18 CARD PRE-BUILT FROM TIER-1 SERIES CONTINUATION (v1, PARTIAL)
+================================================================================
+
+Owner: "Pre build 8/18 full card." Built the strongest card the evidence permits and labeled exactly
+what it is NOT.
+
+THE SLATE IS DERIVED, NOT CAPTURED. No 8/18 schedule exists on disk and egress is 403 — but the
+tier-1 8/17 board carries per-game series state, and series arithmetic is evidence: "Game 1 of 3"
+played 8/17 means game 2 on 8/18 at the same venue. Nine matchups derive that way (STL@CIN game 3
+of 5, plus MIA@PHI, SD@NYM, LAD@COL, ATH@KC, DET@PIT, AZ@BOS, ATL@MIN, CWS@CHC). BAL@TB is EXCLUDED
+— its series completed (game 4 of 4) — and ten franchises (CLE HOU LAA MIL NYY SEA SF TEX TOR WSH)
+are unknowable from this board, so this is a PARTIAL slate of a day whose true size is unknown.
+This differs in kind from the 8/15 echo-incident schedule scrape (which contained impossible
+matchups): it reads series arithmetic off a hash-bound tier-1 finals board. It is still an
+inference and every record says so.
+
+CARD: cards/2026-08-18_card.json (fab4e613), 9 games, frozen V13, form tier-1-complete through
+8/17 (the 11 owner-board rows are in). ALL 18 starter slots TBD -> every game runs both sides on
+league-average pitching, the weakest configuration this engine has. Registered 9 forecasts through
+forecast_registry (chain intact, 229/218) at 04:40Z, hours before any plausible first pitch.
+
+GRADING RULE, set at registration: a forecast grades ONLY if its matchup is confirmed by tier-1
+evidence for 8/18 at the same venue; a derived game that never happens is VOID with a named reason,
+never a miss. When an official schedule/probables board arrives, a v2 cohort FORKS; v1 is not
+edited.
+
+Fair-line card (model output, no market): LAD@COL away -117 the strongest lean, MIA@PHI dead even
+at -100 — without Sánchez confirmed, PHI's edge is gone, which is the starter effect made visible.
+Renderer replay verified against the registered card 9/9 under the as-of form fix.
+
+Also fixed a preflight mislabel: inputs missing with NO slate clock printed as "no longer
+recoverable" — false and alarming; now "no slate clock to time against (still acquirable)".
+
+WHAT UPGRADES THIS CARD: (1) official 8/18 schedule manifest -> confirms/extends the slate and
+covers the ten unknown franchises; (2) probables board -> v2 cohort with real starters (worth ~5x
+form); (3) pregame prices -> the edge column. Gate 0/100 NO_PROMOTE, ledger $0, paper only.

@@ -262,7 +262,15 @@ if __name__ == "__main__":
           f'gradeable vs market: {r["CARD_WOULD_BE_GRADEABLE_VS_MARKET"]}   '
           f'all inputs present: {r["ALL_INPUTS_PRESENT"]}')
     if r["missing_past_deadline"]:
-        print(f'  ! PAST DEADLINE, no longer recoverable: {", ".join(r["missing_past_deadline"])}')
+        # an input can be in `missing` for two very different reasons; saying "no longer
+        # recoverable" about one that is merely UNTIMED (no slate clock) is false and alarming
+        dead = [k for k in r["missing_past_deadline"]
+                if "UNRECOVERABLE" in r["inputs"][k]["status"] or "PAST_DEADLINE" in r["inputs"][k]["status"]]
+        untimed = [k for k in r["missing_past_deadline"] if k not in dead]
+        if dead:
+            print(f'  ! PAST DEADLINE, no longer recoverable: {", ".join(dead)}')
+        if untimed:
+            print(f'  ! MISSING, no slate clock to time against (still acquirable): {", ".join(untimed)}')
     if r["missing_but_recoverable"]:
         print(f'  -> still acquirable: {", ".join(r["missing_but_recoverable"])}')
     raise SystemExit(1 if (a.gate and not r["PASS"]) else 0)

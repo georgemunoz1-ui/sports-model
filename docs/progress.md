@@ -2298,3 +2298,33 @@ spread strategy — no ATS selection rule was preregistered, no prices/vig were 
 addendum creates no selections. If spread reads are to be graded routinely, that needs its own
 preregistered rule (side = sign of fair-spread-minus-line, all games, no thresholds) BEFORE the next
 slate, not after a good night.
+
+================================================================================
+2026-08-19 — FIRST PROSPECTIVE ATS COHORT OPENS (0-0); 8/19 WNBA CARD REGISTERED
+================================================================================
+
+Sequence kept clean: the ATS prereg + official 8/18 summary correction + settlement-contract gate
+were committed at b6154b9 BEFORE any 8/19 selection existed. The owner's 8/19 lines board (2 games,
+pregame ~18h out, evidence f8cc17f4) then produced the first cohort. Board carries NO juice; bound
+as null, not assumed -110.
+
+CARD (WNBA-CARD-2026-08-19, model unchanged, features 28d stale), estimands SEPARATE per contract:
+
+  WINNER  TOR@WAS  p_home .5953 (WAS)     MIN@GSV  p_home .4329 (MIN)
+  MARGIN  WAS +3.9                        GSV -1.5 (MIN by 1.5)
+  TOTAL   168.5 vs line 170.5             163.8 vs line 165.5   (level term on notice: -20/+16 misses)
+
+  ATS (frozen rule, home_cover_delta = home_margin_pred + home_spread_line):
+    TOR@WAS: +3.87 + (-9.5) = -5.63 -> AWAY  => TOR +9.5
+    MIN@GSV: -1.53 + (+2.5) = +0.97 -> HOME  => GSV +2.5
+
+Two selections registered pre-tip in data/wnba/forecasts/ats_selections.jsonl with rule_id, line,
+juice(null), capture timestamp, home_margin_pred, home_cover_delta, selected team. Settlement
+contract gate PASS. Registration-line grade primary, close diagnostic. Cohort record: 0-0.
+
+Note the structural echo of 8/18 without any claim attached: both selections again take points/the
+flatter side vs strong market spreads (WAS -9.5, MIN -2.5 on a 29-7 team). Whether that keeps
+cashing is exactly what the prospective cohort exists to measure — at n>=2 per night it will take
+weeks to mean anything.
+
+Healthcheck wired with the settlement-contract gate and green end-to-end.

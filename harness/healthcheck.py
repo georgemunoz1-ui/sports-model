@@ -234,7 +234,8 @@ except Exception as e: check(f"P1A enforcement ({e})", False)
 # "echo guard" existed only as prose and was never executed, so it never prevented anything.
 for _m in ("result_provenance","result_content_checks","parse_box_dump",
            "acquisition_ledger","missing_data_audit","tier_discipline","artifact_immutability",
-           "tier1_board_gate","form_refresh_diff","tier1_lineage","pregame_preflight","card_render"):
+           "tier1_board_gate","form_refresh_diff","tier1_lineage","pregame_preflight","card_render",
+           "settlement_contract"):
     _r=subprocess.run([sys.executable,f"harness/{_m}.py","--selftest"],capture_output=True,text=True)
     _out=(_r.stdout+_r.stderr).strip().splitlines()
     check(f"{_m} selftest ({_out[-1][:72] if _out else 'no output'})", _r.returncode==0)
@@ -280,6 +281,11 @@ try:
         _out=(_r.stdout+_r.stderr).strip().splitlines()
         check(f"pregame inputs for {_d} ({_out[0][:80] if _out else 'no output'})",
               _r.returncode==0, warn=True)
+    # Settlement contract (owner 2026-08-19): estimands structured and separate, no generic 'side',
+    # no ATS grade without a pre-tip selection id. Pre-cutoff records grandfathered.
+    _r=subprocess.run([sys.executable,"harness/settlement_contract.py","--gate"],capture_output=True,text=True)
+    _out=(_r.stdout+_r.stderr).strip().splitlines()
+    check(f"settlement contract ({_out[0][:78] if _out else 'no output'})", _r.returncode==0)
     # The successor lineage must never silently certify itself while it has interior gaps.
     _r=subprocess.run([sys.executable,"harness/tier1_lineage.py","--gate"],capture_output=True,text=True)
     _out=[l for l in (_r.stdout+_r.stderr).strip().splitlines() if "READINESS" in l or "whole days" in l]

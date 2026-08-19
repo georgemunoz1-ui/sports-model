@@ -1,0 +1,178 @@
+{
+ "schema": "wnba.multibook_price_capture.v1",
+ "record_id": "WNBA-PRICES-20260819-MULTIBOOK",
+ "ingested_at_utc": "2026-08-19T04:44:21Z",
+ "source_timestamp": "NOT_DISPLAYED \u2014 the screenshots expose no capture clock; this record binds the INGESTION timestamp only and says so explicitly",
+ "received_from": "owner screenshots (3: moneyline, totals, spreads) + summary table",
+ "screenshot_sha256_owner_attested_truncated": {
+  "moneyline": "cc6333f2\u202657a1b9",
+  "totals": "9328b91f\u20262c3fd",
+  "spreads": "bc476507\u2026dcc5b0",
+  "note": "truncated hashes as supplied; full digests not transmitted"
+ },
+ "source_tier": 1,
+ "source_family": "OWNER_BOARD",
+ "GOVERNANCE": {
+  "registration_lines_remain_primary_for_ATS": "TOR +9.5 / WSH -9.5 and MIN -2.5 / GSV +2.5, as bound at 05:30Z. Immutable.",
+  "these_quotes_are": "SECONDARY EXECUTION PRICES \u2014 source-specific, never averaged, never re-selected after the fact based on which best supports the model",
+  "cross_book_best_prices": "valid for INDIVIDUAL break-even/EV screening only; MUST NOT be paired and de-vigged as one market (8/3 ruling)",
+  "min_gsv_spread_split": "most books MIN -2.5; one visible book MIN -1.5. Source-specific, NOT averaged, NOT a re-selection basis."
+ },
+ "slate_date": "2026-08-19",
+ "games": [
+  {
+   "game": "TOR@WAS",
+   "rot": "623/624",
+   "moneyline_by_book": {
+    "open": {
+     "TOR": 310,
+     "WSH": -395
+    },
+    "bet365": {
+     "TOR": 350,
+     "WSH": -450
+    },
+    "mgm": {
+     "TOR": 375,
+     "WSH": -500
+    },
+    "dk": {
+     "TOR": 380,
+     "WSH": -500
+    },
+    "caesars": {
+     "TOR": 360,
+     "WSH": -480
+    }
+   },
+   "spread_by_book": {
+    "open": {
+     "home_line": -8.5,
+     "away_juice": -110,
+     "home_juice": -110
+    },
+    "bet365": {
+     "home_line": -9.5,
+     "away_juice": -115,
+     "home_juice": -105
+    },
+    "mgm": {
+     "home_line": -9.5,
+     "away_juice": -110,
+     "home_juice": -110
+    },
+    "dk": {
+     "home_line": -9.5,
+     "away_juice": -110,
+     "home_juice": -110
+    },
+    "caesars": {
+     "home_line": -9.5,
+     "away_juice": -115,
+     "home_juice": -105
+    }
+   },
+   "total_by_book": {
+    "open": {
+     "line": 171.5,
+     "juice": -110
+    },
+    "bet365": {
+     "line": 169.5,
+     "juice": -110
+    },
+    "mgm": {
+     "line": 169.5,
+     "juice": -110
+    },
+    "dk": {
+     "line": 169.5,
+     "juice": -110
+    },
+    "caesars": {
+     "line": 169.5,
+     "juice": -110
+    }
+   },
+   "movement": "total 171.5 open -> 170.5 (first capture) -> 169.5 consensus; spread -8.5 open -> -9.5 consistent"
+  },
+  {
+   "game": "MIN@GSV",
+   "rot": "625/626",
+   "moneyline_by_book": {
+    "open": {
+     "MIN": -125,
+     "GSV": 105
+    },
+    "bet365": {
+     "MIN": -125,
+     "GSV": 105
+    },
+    "mgm": {
+     "MIN": -130,
+     "GSV": 110
+    },
+    "dk": {
+     "MIN": -130,
+     "GSV": 110
+    },
+    "caesars": {
+     "MIN": -125,
+     "GSV": 105
+    }
+   },
+   "spread_by_book": {
+    "open": {
+     "away_line": -1.5,
+     "away_juice": -115,
+     "home_juice": -105
+    },
+    "bet365": {
+     "away_line": -2.5,
+     "away_juice": -105,
+     "home_juice": -115
+    },
+    "mgm": {
+     "away_line": -2.5,
+     "away_juice": -110,
+     "home_juice": -110
+    },
+    "dk": {
+     "away_line": -2.5,
+     "away_juice": -105,
+     "home_juice": -115
+    },
+    "caesars": {
+     "away_line": -1.5,
+     "away_juice": -110,
+     "home_juice": -110
+    }
+   },
+   "total_by_book": {
+    "open": {
+     "line": 164.5,
+     "juice": -110
+    },
+    "bet365": {
+     "line": 164.5,
+     "juice": -110
+    },
+    "mgm": {
+     "line": 164.5,
+     "juice_over": -105,
+     "juice_under": -115
+    },
+    "dk": {
+     "line": 164.5,
+     "juice_over": -115,
+     "juice_under": -105
+    },
+    "caesars": {
+     "line": 164.0,
+     "juice": -110
+    }
+   },
+   "movement": "total 165.5 (first capture) -> 164.5 consensus, one book 164; spread split -2.5 majority / -1.5 minority"
+  }
+ ]
+}

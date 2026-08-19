@@ -1,0 +1,77 @@
+{
+ "record_id": "WNBA-20260819-MODEL-VS-MARKET-SCREEN",
+ "built_utc": "2026-08-19T04:46:00Z",
+ "prices_evidence": 0.4329,
+ "prices_evidence_sha256": "f455103ac0740636a9fa7c386be47deb5cf64e17e311474565c83179f76e7124",
+ "card": "data/wnba/forecasts/2026-08-19_card.json (registered 05:30Z, UNCHANGED \u2014 no probability here is new)",
+ "SCREENING_ONLY": "cross-book best prices; individual break-even/EV screening per the 8/3 ruling; NOT selections, NOT wagers, wager authority NO",
+ "same_book_devig_verified": {
+  "WSH": "0.7864-0.8000 (owner: 78.6-80.0 MATCH)",
+  "MIN": "0.5325-0.5427 (owner: 53.2-54.3 MATCH)"
+ },
+ "fair_moneylines_from_model": {
+  "TOR@WAS": {
+   "WSH": -147,
+   "TOR": 147
+  },
+  "MIN@GSV": {
+   "MIN": -131,
+   "GSV": 131
+  }
+ },
+ "rows": [
+  {
+   "game": "TOR@WAS",
+   "team": "TOR",
+   "best_price": 380,
+   "book": "dk",
+   "model_p": 0.4047,
+   "break_even": 0.2083,
+   "edge_pp": 19.64,
+   "ev_per_unit": 0.9426,
+   "screening_only": true
+  },
+  {
+   "game": "TOR@WAS",
+   "team": "WSH",
+   "best_price": -450,
+   "book": "bet365",
+   "model_p": 0.5953,
+   "break_even": 0.8182,
+   "edge_pp": -22.29,
+   "ev_per_unit": -0.2724,
+   "screening_only": true
+  },
+  {
+   "game": "MIN@GSV",
+   "team": "MIN",
+   "best_price": -125,
+   "book": "bet365/caesars",
+   "model_p": 0.5671,
+   "break_even": 0.5556,
+   "edge_pp": 1.15,
+   "ev_per_unit": 0.0208,
+   "screening_only": true
+  },
+  {
+   "game": "MIN@GSV",
+   "team": "GSV",
+   "best_price": 110,
+   "book": "mgm/dk",
+   "model_p": 0.4329,
+   "break_even": 0.4762,
+   "edge_pp": -4.33,
+   "ev_per_unit": -0.0909,
+   "screening_only": true
+  }
+ ],
+ "TRUST_WARNING": {
+  "TOR_at_WAS": "the model gives WAS .595 vs same-book market .786-.800 \u2014 a 19-20pp gap producing a nominal TOR +380 'edge' of +19.6pp / +0.94 EV. Every governance precedent says DISTRUST THIS NUMBER: (a) 8/17 MLB showed claimed edges >=5pp went 0-2 and the biggest (23.5pp, LAD@COL) lost; (b) this model is 28 days stale with NO injury/rest features, and a -450 favourite usually encodes personnel news the model cannot see; (c) probability compression toward .500 manufactures exactly this signature. The screen is reported because the frozen frame requires it, and flagged as most likely MODEL INABILITY, not value.",
+  "MIN_at_GSV": "model MIN .567 vs market .532-.543 \u2014 a 2.4-3.5pp gap, +1.2pp edge at -125, EV +0.021/unit. Small, and within the model's demonstrated error."
+ },
+ "totals_direction_vs_moved_lines": {
+  "TOR@WAS": "model 168.5 vs consensus 169.5 (open 171.5): UNDER lean, 1.0 \u2014 the market moved TOWARD the model by 2.0 since open, which removes most of the read",
+  "MIN@GSV": "model 163.8 vs consensus 164.5 (one book 164.0): UNDER lean, 0.7 \u2014 marginal; level term on notice (-20/+16 recent misses)"
+ },
+ "ATS_selections": "UNCHANGED and immutable: TOR +9.5 and GSV +2.5 at the registration lines (still quoted at -110/-115 and -110/-115 across books). The MIN -1.5 minority book is recorded as an execution price only; not a re-selection basis."
+}

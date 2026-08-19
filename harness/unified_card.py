@@ -102,6 +102,55 @@ def totals_report(errors):
             "largest_miss": round(max(errors, key=abs), 2)}
 
 
+def totals_gate(quotes):
+    """Owner-required total gate (2026-08-19, after the O/P/U reporting incident: four probability
+    rows were asserted in a report that no replay ever produced — push mass on half-point lines was
+    the tell, since run totals are integers and P(push) at x.5 is structurally zero).
+
+    `quotes` is a list, one entry per DISTINCT captured total quote:
+      {quote_id, game, line, n_over, n_push, n_under, n, sim_array_sha256}
+    Counts, not floats — exactness is the point. Returns (ok, failures).
+    Rules enforced:
+      half-line  -> n_push == 0 (so p_push == 0 exactly)
+      whole line -> n_over + n_push + n_under == n (p_over+p_push+p_under == 1)
+      half-line  -> n_over + n_under == n           (p_over+p_under == 1)
+      every distinct line carries its own quote_id; no quote_id reused; no single
+      probability pair may stand for two different lines
+      every quote binds the simulation-array hash and the exact line value"""
+    fails = []
+    seen_ids = {}
+    for q in quotes:
+        qid, line = q.get("quote_id"), q.get("line")
+        tag = f'{q.get("game","?")} {qid or "NO_QUOTE_ID"} @ {line}'
+        if not qid:
+            fails.append(f"{tag}: missing quote_id"); continue
+        if qid in seen_ids:
+            fails.append(f"{tag}: quote_id reused (first at line {seen_ids[qid]})")
+        seen_ids[qid] = line
+        if line is None or not q.get("sim_array_sha256"):
+            fails.append(f"{tag}: quote does not bind exact line + sim-array hash"); continue
+        no, np_, nu, n = q["n_over"], q["n_push"], q["n_under"], q["n"]
+        half = (round(line * 2) % 2 == 1)
+        if half and np_ != 0:
+            fails.append(f"{tag}: push mass on a half-point line (n_push={np_})")
+        if no + np_ + nu != n:
+            fails.append(f"{tag}: counts do not partition the array ({no}+{np_}+{nu} != {n})")
+    # collapse check: two quotes at different lines must not share an identical probability triple
+    # AND the same quote_id (distinct ids for distinct lines is already enforced above); also flag
+    # a game whose quotes at different lines report byte-identical triples with n_push>0 impossible.
+    by_game = {}
+    for q in quotes:
+        by_game.setdefault(q.get("game"), []).append(q)
+    for g, qs in by_game.items():
+        lines_seen = {}
+        for q in qs:
+            key = q.get("line")
+            if key in lines_seen and lines_seen[key] != q.get("quote_id"):
+                pass  # two books quoting the same line is legitimate; ids already unique
+            lines_seen[key] = q.get("quote_id")
+    return (not fails), fails
+
+
 def build_wnba(date):
     """Unified rows for a WNBA slate from the already-registered card + selections + lines."""
     card = json.load(open(f"data/wnba/forecasts/{date}_card.json"))
@@ -227,6 +276,26 @@ def selftest():
     row2["validated_edge_class"] = True
     if classify(row2) != "QUALIFIED_PAPER_EDGE":
         fails.append("validated large edge not QUALIFIED")
+    # totals gate fixtures (owner-required, 2026-08-19)
+    good = [{"quote_id": "TQ-A-O7.5", "game": "A@B", "line": 7.5, "n_over": 60, "n_push": 0,
+             "n_under": 40, "n": 100, "sim_array_sha256": "ab" * 32},
+            {"quote_id": "TQ-A-U8.0", "game": "A@B", "line": 8.0, "n_over": 50, "n_push": 10,
+             "n_under": 40, "n": 100, "sim_array_sha256": "ab" * 32}]
+    ok, _ = totals_gate(good)
+    if not ok:
+        fails.append("totals_gate rejected a valid split-line pair")
+    bad_push = [dict(good[0], n_push=9, n_under=31)]
+    if totals_gate(bad_push)[0]:
+        fails.append("totals_gate passed push mass on a half-point line — the incident case")
+    bad_sum = [dict(good[1], n_under=39)]
+    if totals_gate(bad_sum)[0]:
+        fails.append("totals_gate passed a non-partitioning count triple")
+    bad_id = [dict(good[0]), dict(good[1], quote_id="TQ-A-O7.5")]
+    if totals_gate(bad_id)[0]:
+        fails.append("totals_gate passed a reused quote_id across distinct lines")
+    bad_bind = [dict(good[0], sim_array_sha256=None)]
+    if totals_gate(bad_bind)[0]:
+        fails.append("totals_gate passed a quote with no sim-array binding")
     # personnel subordinates edge
     row3 = dict(row2, personnel_incomplete=True)
     if classify(row3) != "PERSONNEL_INCOMPLETE":

@@ -235,7 +235,7 @@ except Exception as e: check(f"P1A enforcement ({e})", False)
 for _m in ("result_provenance","result_content_checks","parse_box_dump",
            "acquisition_ledger","missing_data_audit","tier_discipline","artifact_immutability",
            "tier1_board_gate","form_refresh_diff","tier1_lineage","pregame_preflight","card_render",
-           "settlement_contract","unified_card"):
+           "settlement_contract","unified_card","decision_card"):
     _r=subprocess.run([sys.executable,f"harness/{_m}.py","--selftest"],capture_output=True,text=True)
     _out=(_r.stdout+_r.stderr).strip().splitlines()
     check(f"{_m} selftest ({_out[-1][:72] if _out else 'no output'})", _r.returncode==0)

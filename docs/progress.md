@@ -2250,3 +2250,27 @@ three cohorts grade separately. Career-vs-roster/Statcast preview columns preser
 FIREWALLED — closed feature lists on both V13 and V14.
 
 Chain: 259 forecasts / 218 grades intact. Gate 0/100, ledger $0, paper only.
+
+================================================================================
+2026-08-19 — WNBA 8/18 SETTLED: 1/4 SIDES, THE SHADOW'S WORST NIGHT
+================================================================================
+
+Owner board (score-only, tier-1 FINAL, evidence bf9c21a5). Graded once each, artifact bindings
+re-hashed, chain untouched (WNBA ledger is registrations/grades jsonl).
+
+  LAS@CON  77-85  p_h .494  MISS  brier .2557   margin +0.9 pred / +8 actual
+  IND@TOR 101-95  p_h .322  OK    brier .1035   margin -5.0 pred / -6 actual (clean read on the Tempo)
+  NYL@CHI  86-93  p_h .430  MISS  brier .3248
+  ATL@LVA  97-82  p_h .681  MISS  brier .4639   the night's damage: 68% on a 15-point loser
+
+Night mean Brier .287. Running shadow record: 9/13 sides, mean Brier .1648, totals signed error now
++0.0 net (the two big misses cancelled: DAL@GSV +15.8 high, IND@TOR -20.3 low — a reminder that a
+zero MEAN error can hide large errors; MAE is the honest totals number).
+
+One instructive detail: on LAS@CON the model's MARGIN said CON +0.9 while its PROBABILITY said LAS
+.506 — the two heads disagreed (that is exactly the 3.05pp coherence gap flagged at registration),
+and the margin head was right. At n=13 this is an anecdote, recorded not acted on.
+
+Line movement vs registration also recorded (IND@TOR 192.5->190.5 etc.); grading uses outcome only.
+n=13 remains ledger maintenance, not evidence. Model stays SHADOW, wager authority NO. MLB 8/18
+finals (39 forecasts, three cohorts) still awaited.

@@ -1,0 +1,565 @@
+{
+ "schema": "mlb.owner_matchup_preview_board.v1",
+ "record_id": "OWNER-MATCHUPS-20260819-0957Z",
+ "captured_at_utc": "2026-08-19T09:57:34Z",
+ "received_from": "owner paste 2026-08-19 (daily matchup previews)",
+ "source_tier": 1,
+ "source_family": "OWNER_BOARD",
+ "starter_class": "PROJECTED (preview board; NOT a T-90 confirmation - does not satisfy V14 forward eligibility)",
+ "firewall": "career-vs-current-roster and Statcast columns (PA, K%, BB%, AVG, wOBA, exit velo, launch angle, xBA, xSLG, xwOBA) are NOT V13 inputs and are NOT ingested as features anywhere. The V13 feature list is closed and the V14 vector is frozen; these numbers are preserved in this evidence file only. Prices remain absent from this board: PRICE_DATA_BLOCKED state is unchanged.",
+ "slate_date": "2026-08-19",
+ "timezone_note": "board times are ET (UTC-4 in August); DET@PIT 12:35 PM ET reproduces the 16:35Z already transmitted on the 09:22Z slate board - consistency check PASS",
+ "games": [
+  {
+   "away": "DET",
+   "home": "PIT",
+   "time_et": "12:35 PM",
+   "time_utc": "16:35Z",
+   "venue": "PNC Park",
+   "asp": {
+    "name": "Jackson Jobe",
+    "num": 21,
+    "throws": "R",
+    "career_vs_roster": null,
+    "note": "Never Faced Any Players on this Team."
+   },
+   "hsp": {
+    "name": "Paul Skenes",
+    "num": 30,
+    "throws": "R",
+    "career_vs_roster": {
+     "pa": 32,
+     "k_pct": 31.3,
+     "bb_pct": 6.3,
+     "avg": ".103",
+     "woba": ".160",
+     "ev": 86.1,
+     "la": 9.9,
+     "xba": ".222",
+     "xslg": ".315",
+     "xwoba": ".275"
+    }
+   }
+  },
+  {
+   "away": "SD",
+   "home": "NYM",
+   "time_et": "1:10 PM",
+   "time_utc": "17:10Z",
+   "venue": "Citi Field",
+   "asp": {
+    "name": "Michael King",
+    "num": 34,
+    "throws": "R",
+    "career_vs_roster": {
+     "pa": 82,
+     "k_pct": 24.4,
+     "bb_pct": 7.3,
+     "avg": ".280",
+     "woba": ".383",
+     "ev": 88.0,
+     "la": 13.4,
+     "xba": ".309",
+     "xslg": ".588",
+     "xwoba": ".407"
+    }
+   },
+   "hsp": {
+    "name": "Robert Stock",
+    "num": 89,
+    "throws": "R",
+    "career_vs_roster": {
+     "pa": 2,
+     "k_pct": 0.0,
+     "bb_pct": 0.0,
+     "avg": ".000",
+     "woba": ".000",
+     "ev": 89.8,
+     "la": -3.0,
+     "xba": ".219",
+     "xslg": ".243",
+     "xwoba": ".200"
+    }
+   }
+  },
+  {
+   "away": "ATL",
+   "home": "MIN",
+   "time_et": "1:40 PM",
+   "time_utc": "17:40Z",
+   "venue": "Target Field",
+   "asp": {
+    "name": "AJ Smith-Shawver",
+    "num": 32,
+    "throws": "R",
+    "career_vs_roster": {
+     "pa": 4,
+     "k_pct": 50.0,
+     "bb_pct": 0.0,
+     "avg": ".000",
+     "woba": ".000",
+     "ev": 87.1,
+     "la": 27.0,
+     "xba": ".128",
+     "xslg": ".141",
+     "xwoba": ".118"
+    }
+   },
+   "hsp": {
+    "name": "Taj Bradley",
+    "num": 26,
+    "throws": "R",
+    "career_vs_roster": {
+     "pa": 53,
+     "k_pct": 34.0,
+     "bb_pct": 7.5,
+     "avg": ".245",
+     "woba": ".293",
+     "ev": 92.2,
+     "la": 15.0,
+     "xba": ".213",
+     "xslg": ".328",
+     "xwoba": ".265"
+    }
+   }
+  },
+  {
+   "away": "CWS",
+   "home": "CHC",
+   "time_et": "2:20 PM",
+   "time_utc": "18:20Z",
+   "venue": "Wrigley Field",
+   "asp": {
+    "name": "Sean Newcomb",
+    "num": 15,
+    "throws": "L",
+    "career_vs_roster": {
+     "pa": 34,
+     "k_pct": 20.6,
+     "bb_pct": 11.8,
+     "avg": ".179",
+     "woba": ".219",
+     "ev": 88.2,
+     "la": 11.6,
+     "xba": ".188",
+     "xslg": ".309",
+     "xwoba": ".293"
+    }
+   },
+   "hsp": {
+    "name": "Clay Holmes",
+    "num": 25,
+    "throws": "R",
+    "career_vs_roster": {
+     "pa": 22,
+     "k_pct": 18.2,
+     "bb_pct": 13.6,
+     "avg": ".167",
+     "woba": ".232",
+     "ev": 95.6,
+     "la": 13.7,
+     "xba": ".267",
+     "xslg": ".437",
+     "xwoba": ".386"
+    }
+   }
+  },
+  {
+   "away": "AZ",
+   "home": "BOS",
+   "time_et": "4:10 PM",
+   "time_utc": "20:10Z",
+   "venue": "Fenway Park",
+   "asp": {
+    "name": "Brandon Pfaadt",
+    "num": 32,
+    "throws": "R",
+    "career_vs_roster": {
+     "pa": 32,
+     "k_pct": 25.0,
+     "bb_pct": 9.4,
+     "avg": ".276",
+     "woba": ".331",
+     "ev": 83.8,
+     "la": 22.8,
+     "xba": ".274",
+     "xslg": ".470",
+     "xwoba": ".350"
+    }
+   },
+   "hsp": {
+    "name": "Payton Tolle",
+    "num": 70,
+    "throws": "L",
+    "career_vs_roster": {
+     "pa": 11,
+     "k_pct": 18.2,
+     "bb_pct": 9.1,
+     "avg": ".500",
+     "woba": ".708",
+     "ev": 94.4,
+     "la": 16.6,
+     "xba": ".400",
+     "xslg": ".965",
+     "xwoba": ".579"
+    }
+   }
+  },
+  {
+   "away": "MIA",
+   "home": "PHI",
+   "time_et": "6:05 PM",
+   "time_utc": "22:05Z",
+   "venue": "Citizens Bank Park",
+   "asp": {
+    "name": "Sandy Alcantara",
+    "num": 22,
+    "throws": "R",
+    "career_vs_roster": {
+     "pa": 352,
+     "k_pct": 17.3,
+     "bb_pct": 6.5,
+     "avg": ".302",
+     "woba": ".341",
+     "ev": 88.9,
+     "la": 8.8,
+     "xba": ".298",
+     "xslg": ".465",
+     "xwoba": ".352"
+    }
+   },
+   "hsp": {
+    "name": "Aaron Nola",
+    "num": 27,
+    "throws": "R",
+    "career_vs_roster": {
+     "pa": 48,
+     "k_pct": 20.8,
+     "bb_pct": 4.2,
+     "avg": ".304",
+     "woba": ".335",
+     "ev": 88.2,
+     "la": 8.6,
+     "xba": ".269",
+     "xslg": ".446",
+     "xwoba": ".321"
+    }
+   }
+  },
+  {
+   "away": "NYY",
+   "home": "BAL",
+   "time_et": "6:35 PM",
+   "time_utc": "22:35Z",
+   "venue": "Oriole Park at Camden Yards",
+   "asp": {
+    "name": "Will Warren",
+    "num": 29,
+    "throws": "R",
+    "career_vs_roster": {
+     "pa": 82,
+     "k_pct": 23.2,
+     "bb_pct": 12.2,
+     "avg": ".211",
+     "woba": ".320",
+     "ev": 90.5,
+     "la": 13.6,
+     "xba": ".211",
+     "xslg": ".403",
+     "xwoba": ".318"
+    }
+   },
+   "hsp": {
+    "name": "Chris Bassitt",
+    "num": 40,
+    "throws": "R",
+    "career_vs_roster": {
+     "pa": 116,
+     "k_pct": 23.3,
+     "bb_pct": 9.5,
+     "avg": ".272",
+     "woba": ".337",
+     "ev": 88.6,
+     "la": 9.3,
+     "xba": ".275",
+     "xslg": ".426",
+     "xwoba": ".344"
+    }
+   }
+  },
+  {
+   "away": "SF",
+   "home": "CLE",
+   "time_et": "6:40 PM",
+   "time_utc": "22:40Z",
+   "venue": "Progressive Field",
+   "asp": {
+    "name": "Matt Wilkinson",
+    "num": null,
+    "throws": "L",
+    "career_vs_roster": null,
+    "note": "Never Faced Any Players on this Team."
+   },
+   "hsp": {
+    "name": "Parker Messick",
+    "num": 77,
+    "throws": "L",
+    "career_vs_roster": null,
+    "note": "Never Faced Any Players on this Team."
+   }
+  },
+  {
+   "away": "STL",
+   "home": "CIN",
+   "time_et": "6:40 PM",
+   "time_utc": "22:40Z",
+   "venue": "Great American Ball Park",
+   "asp": {
+    "name": "Matthew Liberatore",
+    "num": 32,
+    "throws": "L",
+    "career_vs_roster": {
+     "pa": 81,
+     "k_pct": 19.8,
+     "bb_pct": 8.6,
+     "avg": ".219",
+     "woba": ".304",
+     "ev": 91.3,
+     "la": 13.1,
+     "xba": ".247",
+     "xslg": ".456",
+     "xwoba": ".337"
+    }
+   },
+   "hsp": {
+    "name": "Chase Burns",
+    "num": 26,
+    "throws": "R",
+    "career_vs_roster": {
+     "pa": 4,
+     "k_pct": 25.0,
+     "bb_pct": 25.0,
+     "avg": ".000",
+     "woba": ".173",
+     "ev": 88.0,
+     "la": 12.0,
+     "xba": ".126",
+     "xslg": ".138",
+     "xwoba": ".258"
+    }
+   }
+  },
+  {
+   "away": "TOR",
+   "home": "TB",
+   "time_et": "6:40 PM",
+   "time_utc": "22:40Z",
+   "venue": "Tropicana Field",
+   "asp": {
+    "name": "Max Scherzer",
+    "num": 31,
+    "throws": "R",
+    "career_vs_roster": {
+     "pa": 10,
+     "k_pct": 30.0,
+     "bb_pct": 0.0,
+     "avg": ".300",
+     "woba": ".265",
+     "ev": 78.2,
+     "la": 1.7,
+     "xba": ".203",
+     "xslg": ".240",
+     "xwoba": ".194"
+    }
+   },
+   "hsp": {
+    "name": "Drew Rasmussen",
+    "num": 57,
+    "throws": "R",
+    "career_vs_roster": {
+     "pa": 102,
+     "k_pct": 20.6,
+     "bb_pct": 7.8,
+     "avg": ".258",
+     "woba": ".307",
+     "ev": 86.9,
+     "la": 4.7,
+     "xba": ".265",
+     "xslg": ".422",
+     "xwoba": ".326"
+    }
+   }
+  },
+  {
+   "away": "ATH",
+   "home": "KC",
+   "time_et": "7:40 PM",
+   "time_utc": "23:40Z",
+   "venue": "Kauffman Stadium",
+   "asp": {
+    "name": "TBD",
+    "note": "To be announced."
+   },
+   "hsp": {
+    "name": "TBD",
+    "note": "To be announced."
+   }
+  },
+  {
+   "away": "SEA",
+   "home": "MIL",
+   "time_et": "7:40 PM",
+   "time_utc": "23:40Z",
+   "venue": "American Family Field",
+   "asp": {
+    "name": "Logan Gilbert",
+    "num": 36,
+    "throws": "R",
+    "career_vs_roster": {
+     "pa": 58,
+     "k_pct": 37.9,
+     "bb_pct": 0.0,
+     "avg": ".175",
+     "woba": ".211",
+     "ev": 92.5,
+     "la": 16.3,
+     "xba": ".177",
+     "xslg": ".319",
+     "xwoba": ".208"
+    }
+   },
+   "hsp": {
+    "name": "Dustin May",
+    "num": 21,
+    "throws": "R",
+    "career_vs_roster": {
+     "pa": 22,
+     "k_pct": 18.2,
+     "bb_pct": 4.5,
+     "avg": ".350",
+     "woba": ".342",
+     "ev": 96.9,
+     "la": -7.7,
+     "xba": ".244",
+     "xslg": ".307",
+     "xwoba": ".263"
+    }
+   }
+  },
+  {
+   "away": "WSH",
+   "home": "TEX",
+   "time_et": "8:05 PM",
+   "time_utc": "00:05Z",
+   "venue": "Globe Life Field",
+   "asp": {
+    "name": "Cade Cavalli",
+    "num": 24,
+    "throws": "R",
+    "career_vs_roster": {
+     "pa": 2,
+     "k_pct": 0.0,
+     "bb_pct": 0.0,
+     "avg": ".000",
+     "woba": ".000",
+     "ev": 78.0,
+     "la": 14.0,
+     "xba": ".157",
+     "xslg": ".158",
+     "xwoba": ".143"
+    }
+   },
+   "hsp": {
+    "name": "Kumar Rocker",
+    "num": 80,
+    "throws": "R",
+    "career_vs_roster": null,
+    "note": "Never Faced Any Players on this Team."
+   }
+  },
+  {
+   "away": "LAA",
+   "home": "HOU",
+   "time_et": "8:10 PM",
+   "time_utc": "00:10Z",
+   "venue": "Daikin Park",
+   "asp": {
+    "name": "Walbert Urena",
+    "num": 57,
+    "throws": "R",
+    "name_as_displayed": "Walbert Ure\u00f1a",
+    "career_vs_roster": {
+     "pa": 51,
+     "k_pct": 23.5,
+     "bb_pct": 17.6,
+     "avg": ".150",
+     "woba": ".278",
+     "ev": 87.5,
+     "la": 12.1,
+     "xba": ".170",
+     "xslg": ".305",
+     "xwoba": ".302"
+    }
+   },
+   "hsp": {
+    "name": "Ethan Pecko",
+    "num": null,
+    "throws": "R",
+    "career_vs_roster": null,
+    "note": "Never Faced Any Players on this Team."
+   }
+  },
+  {
+   "away": "LAD",
+   "home": "COL",
+   "time_et": "8:40 PM",
+   "time_utc": "00:40Z",
+   "venue": "Coors Field",
+   "asp": {
+    "name": "Roki Sasaki",
+    "num": 11,
+    "throws": "R",
+    "career_vs_roster": {
+     "pa": 29,
+     "k_pct": 10.3,
+     "bb_pct": 6.9,
+     "avg": ".192",
+     "woba": ".214",
+     "ev": 88.7,
+     "la": 13.8,
+     "xba": ".207",
+     "xslg": ".268",
+     "xwoba": ".237"
+    }
+   },
+   "hsp": {
+    "name": "Kyle Freeland",
+    "num": 21,
+    "throws": "L",
+    "career_vs_roster": {
+     "pa": 271,
+     "k_pct": 19.6,
+     "bb_pct": 5.2,
+     "avg": ".302",
+     "woba": ".375",
+     "ev": 91.6,
+     "la": 17.5,
+     "xba": ".265",
+     "xslg": ".551",
+     "xwoba": ".363"
+    }
+   }
+  }
+ ],
+ "intake_flags": [
+  "STARTER_CLASS_PROJECTED: preview board, not a T-90 confirmation. V14 forward protocol does NOT fire on this capture.",
+  "RESOLVES_V1_AMBIGUITY: Robert Stock's side is now bound - NYM home starter (his career-vs-roster panel faces the Padres). The v1 intake left his side unbound.",
+  "UNREGISTERED_STARTERS (5, CAP applies): Jackson Jobe (DET), Robert Stock (NYM), AJ Smith-Shawver (ATL), Matt Wilkinson (SF), Ethan Pecko (HOU) - absent from data/backfill/mlb/2026/pitchers.csv. Recorded, not invented: no stats fabricated; league-average CAP pitching in the sim.",
+  "TBA_BOTH_SIDES: ATH@KC - both starters 'To be announced', CAP.",
+  "ROSTER_MOTION_RECORDED_NOT_VERIFIED: this board lists Taj Bradley starting for MIN, Dustin May for MIL, Clay Holmes for CHC, Sean Newcomb for CWS, Max Scherzer for TOR, Chris Bassitt for BAL, Michael King for SD - team assignments are taken from the tier-1 board as delivered; no external verification is possible from this session (egress 403) and none is invented.",
+  "GAME_TIMES_NOW_COMPLETE: all 15 start times transmitted (ET); the three 00:xxZ starts belong to the 2026-08-19 slate under the <10:00Z rollover rule.",
+  "PRICE_DATA_BLOCKED_UNCHANGED: this board carries zero prices. No ML edge, EV, ATS bet, or total bet is emitted."
+ ],
+ "starter_updates_vs_v1": "v1 (09:22Z board) transmitted 2 starter names (Jobe, Smith-Shawver) + 28 TBD. This board names 26 of 30 slots (ATH@KC x2 + 2 already-named remain as were); every named starter forks the v2 cohort; v1 is immutable.",
+ "handedness_now_available": "all named starters carry throws L/R on this board; recorded here, NOT a model feature (V13 has no handedness input; V14's vector is closed)"
+}

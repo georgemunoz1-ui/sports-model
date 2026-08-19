@@ -22,3 +22,4 @@
 - unregistered starters recorded, not invented: Jackson Jobe (DET), AJ Smith-Shawver (ATL) -> CAP; both board classes PROJECTED so V14 forward stays idle (T-90 CONFIRMED only)
 - 15:05Z starter/lineup refresh scheduled (T-90 before DET@PIT); later starter changes fork cohorts, never overwrite
 - 8/19 WNBA dedup ruled: repeated capture = same 2 games, no second card; registered ATS lines grade primary; TOR +380 stays COMPRESSION_CONFLICT
+- 09:57Z preview board: 26/30 starter slots named (ATH@KC TBA x2), all times transmitted -> v2 cohort forked (15 forecasts, chain 289/257 PASS); Stock side ambiguity resolved (NYM home); 5 unregistered starters CAP; Statcast career-vs-roster columns firewalled; class PROJECTED so V14 still idle; prices still absent -> PRICE_DATA_BLOCKED unchanged

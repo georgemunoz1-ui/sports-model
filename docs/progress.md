@@ -2274,3 +2274,27 @@ and the margin head was right. At n=13 this is an anecdote, recorded not acted o
 Line movement vs registration also recorded (IND@TOR 192.5->190.5 etc.); grading uses outcome only.
 n=13 remains ledger maintenance, not evidence. Model stays SHADOW, wager authority NO. MLB 8/18
 finals (39 forecasts, three cohorts) still awaited.
+
+--------------------------------------------------------------------------------
+2026-08-19 addendum — THE 8/18 WNBA READS, GRADED AS STATED (owner question)
+--------------------------------------------------------------------------------
+The owner asked whether the pre-tip reads were actually bad. They were not — the settlement graded a
+DIFFERENT quantity. Three evaluations of the same four games, all from registered pregame data
+(margin_home + lines bound at registration; the reads were also stated verbatim pre-tip in-session):
+
+  outcome sides (p_home >= .5)        1-3   what the settlement graded
+  ATS reads (fair spread vs line)     3-1   identical at registration lines and at closes
+  totals reads (model total vs line)  1-3   incl. the IND@TOR under losing by 20+
+
+All three are true at once. LAS@CON (.494) and NYL@CHI (.430) were coin-flip side classifications
+that landed wrong, while their POINTS reads (CON +1.5, CHI +4.5) both cashed; TOR +9.5 cashed on the
+flatter-than-market read; the one common loser everywhere was ATL@LVA, where model and market agreed
+and the model was MORE wrong (LVA -5.1 fair vs -3.5 line, lost by 15).
+
+Pattern consistent with the registration-time coherence flags: the MARGIN head is carrying the
+useful information; the probability head adds little near .500 and the totals level term remains
+untrustworthy (misses of -20 and +16 in two nights). n=4 ATS wins is NOT evidence of a profitable
+spread strategy — no ATS selection rule was preregistered, no prices/vig were modelled, and this
+addendum creates no selections. If spread reads are to be graded routinely, that needs its own
+preregistered rule (side = sign of fair-spread-minus-line, all games, no thresholds) BEFORE the next
+slate, not after a good night.

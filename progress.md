@@ -15,3 +15,10 @@
 ## 2026-08-13
 - 8/12 fully graded tier-1 both sports: MLB v1 .2485/6-15, v2 .2470/6-15 (starter confirmation ~nil); V13 3-night ledger 40g .2492 ~ coin
 - WNBA v1.0 FIRST PROSPECTIVE NIGHT: 3/3 sides, Brier .0603, margin MAE 6.5, total MAE 7.2; beat closing spread distance 2/3; n=3 non-evidence guard recorded; no retune
+## 2026-08-19 (intake, 09:22Z board)
+- 8/19 MLB owner slate ingested pre-start: 15 games/30 teams (franchise partition holds), only DET@PIT 16:35Z time transmitted; evidence sha c01e4ef0c21653a0
+- ALL prices absent on the board -> slate state PRICE_DATA_BLOCKED: winner/margin/total generated BEFORE prices and registered (15 forecasts, chain 274/257 PASS); NO ML edge, EV, ATS bet, or total bet emitted; VSiN EST columns firewalled (never model input, never price substitute)
+- unified card rows: all 15 trust_status=BLOCKED / blocked_reason=PRICE_DATA_BLOCKED, selection IDs null-with-reason
+- unregistered starters recorded, not invented: Jackson Jobe (DET), AJ Smith-Shawver (ATL) -> CAP; both board classes PROJECTED so V14 forward stays idle (T-90 CONFIRMED only)
+- 15:05Z starter/lineup refresh scheduled (T-90 before DET@PIT); later starter changes fork cohorts, never overwrite
+- 8/19 WNBA dedup ruled: repeated capture = same 2 games, no second card; registered ATS lines grade primary; TOR +380 stays COMPRESSION_CONFLICT

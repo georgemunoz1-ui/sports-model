@@ -1,0 +1,17 @@
+{
+ "schema": "ops.scheduled_refresh.v1",
+ "record_id": "REFRESH-20260819-2210Z",
+ "fired_at_utc": "2026-08-19T22:10:00Z",
+ "executed_at_utc": "2026-08-19T22:14:13Z",
+ "purpose": "ATH@KC T-90 + SF@CLE 21:10Z T-90 outcome + WNBA window prep",
+ "boards_since_last_check": "owner 20:30Z discretionary card (already ingested, commit 5ddc80e) \u2014 carried the SF@CLE starter resolution and lineup-posted attestations; NO new board since",
+ "sf_cle_t90": "MET \u2014 resolved at 20:30Z, 40 minutes BEFORE its 21:10Z T-90, by owner attestation (Wilkinson debut; v2 basis correct). Row already unblocked to COMPRESSION_CONFLICT.",
+ "ath_kc_t90": "MISSED at 22:10Z \u2014 no starter attestation for either side all day (odds board Springs/Lugo vs VSiN Jump, v2 TBD/TBD). Row stays BLOCKED\u2014STARTER_MISMATCH through first pitch 23:40Z; attribution lands at settlement.",
+ "acquisition_attempt": {
+  "result": "HTTP 000 \u2014 CONNECT tunnel refused (403) at org egress proxy",
+  "not_routed_around": true
+ },
+ "v14": "ZERO eligible games today \u2014 exclusion ledger written (data/mlb/ml_asof/2026-08-19_v14_exclusions.json) with per-game classes incl. the AMBIGUOUS_POSTED_LINEUP_ATTESTATION call and one recorded recognition miss (MIA@PHI window, conditional on owner ruling). Ruling requested for future slates.",
+ "wnba_window": "TOR@WAS tips 23:30Z, MIN@GSV 02:00Z. Grading on owner finals only: 2 WINNER + 2 ATS at registration lines (TOR +9.5 / GSV +2.5), ATS cohort opens 0-0. Owner discretion legs (U168.5, GSV +2.5 among the 7) grade separately under owner attribution.",
+ "betting_output": "ZERO \u2014 unchanged"
+}

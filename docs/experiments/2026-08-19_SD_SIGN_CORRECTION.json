@@ -1,0 +1,52 @@
+{
+ "schema": "governance.correction.v1",
+ "record_id": "CORR-20260819-SD-ML-SIGN",
+ "created_utc": "2026-08-19T10:32:56Z",
+ "corrects": "commit bb97de7 \u2014 SD@NYM moneyline treatment in data/mlb/evidence/2026-08-19_owner_odds_1005Z.json and the 10:11Z price_evaluation line for UC-2026-08-19-MLB-SD@NYM",
+ "method": "APPEND_ONLY_SUPERSESSION \u2014 the original evidence file and evaluation line are not edited; this record plus superseding jsonl lines govern (R6)",
+ "error_chain": {
+  "screenshot_pixels": "SD -128 (correct, owner re-inspected source pixels)",
+  "owner_derived_text_1005Z": "SD +128 (WRONG \u2014 owner transcription error)",
+  "assistant_ingestion": "read the screenshot cell as -128, flagged the SIGN_CONFLICT, then let the owner-quoted +128 govern the screen per tier-1 deference",
+  "resolution": "the owner's re-inspection confirms the pixels; the derived text is withdrawn"
+ },
+ "corrected_screen_SD@NYM": {
+  "SD": {
+   "model_p": 0.536,
+   "price": -128,
+   "break_even": 0.5614,
+   "edge_pp": -2.54,
+   "ev_per_unit": -0.0453
+  },
+  "NYM": {
+   "model_p": 0.464,
+   "price": 120,
+   "break_even": 0.4545,
+   "edge_pp": 0.95,
+   "ev_per_unit": 0.0208
+  },
+  "combined_break_even": "~1.016 \u2014 a normal 1.6% overround"
+ },
+ "consequences_owner_verbatim": [
+  "No sign conflict remains.",
+  "No apparent arbitrage exists.",
+  "Combined break-even probability is approximately 101.6%, a normal 1.6% overround\u2014not 89.3%.",
+  "SD must be removed from the positive-edge screen.",
+  "NYM remains only PRICE_SENSITIVE, well below a trustworthy uncertainty buffer."
+ ],
+ "withdrawn": [
+  "AUDIT_REQUIRED\u2014BOTH_SIDES_PLUS disposition on SD@NYM (no both-sides-positive state exists)",
+  "the SD+128/NYM+120 apparent-arbitrage executability audit trigger",
+  "SD +22.2% raw EV row from the positive-edge screen"
+ ],
+ "relabel_per_owner": "WSH and MIA stay AUDIT_REQUIRED as direction-flip conflicts, distinct from the frozen compression geometry (WSH's earlier COMPRESSION_CONFLICT stamp is superseded by this more precise label; the frozen-gate mechanical value \u2014 no fire, -0.75pp \u2014 was and remains disclosed)",
+ "unchanged": [
+  "four totals remain directional diagnostics only",
+  "three MLB starter conflicts remain blocked (CWS three-source, SF, ATH)",
+  "K props remain no-play at gate 0/100",
+  "WNBA registration lines and secondary observations remain properly separated",
+  "betting output remains ZERO"
+ ],
+ "standing_rule_owner_verbatim": "a model-generated or assistant-transcribed quote can never supersede captured source pixels.",
+ "standing_rule_operationalized": "When a screenshot and any derived text disagree \u2014 the owner's text or the assistant's \u2014 the pixel capture governs and the derived quote is the thing flagged. Deference to tier-1 attaches to the SOURCE ARTIFACT, not to prose about it. The original screenshot hash (a6057aa8...ad89f0, owner-attested) already proved the correct sign at capture time."
+}

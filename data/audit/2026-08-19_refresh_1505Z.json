@@ -1,0 +1,26 @@
+{
+ "schema": "ops.scheduled_refresh.v1",
+ "record_id": "REFRESH-20260819-1505Z",
+ "fired_at_utc": "2026-08-19T15:05:00Z",
+ "executed_at_utc": "2026-08-19T15:09:26Z",
+ "purpose": "T-90 starter/lineup/price check before DET@PIT 16:35Z (owner-scheduled)",
+ "preflight": "FORECAST_ONLY_NO_MARKET_GRADE \u2014 schedule manifest MISSING_PAST_DEADLINE (240m window closed ~12:35Z; slate stays COMPLETE_BY_ROSTER_PARTITION); starters PRESENT 15 games / 1 TBD pair (ATH@KC); prices flagged MISSING_PAST_DEADLINE by the odds-intake path check",
+ "price_check_clarification": "preflight reads data/mlb/odds/{date}_pregame.json, which was never populated because the 10:05Z owner capture arrived AFTER both cohorts were registered and prices never feed back into cohorts. The pregame-price requirement for screening was in fact satisfied at 10:05:16Z (T-6.5h) via data/mlb/evidence/2026-08-19_owner_odds_1005Z.json. Tooling gap noted, frozen preflight semantics not edited mid-slate.",
+ "new_boards_since_1005Z": "NONE \u2014 no owner starter/lineup/price board arrived between 10:05Z and this check",
+ "acquisition_attempt": {
+  "targets": [
+   "statsapi.mlb.com/api/v1/schedule",
+   "api.the-odds-api.com/v4/sports/baseball_mlb/odds"
+  ],
+  "result": "HTTP 000 \u2014 CONNECT tunnel refused (403) at the org egress proxy, both targets",
+  "not_routed_around": true
+ },
+ "t90_confirmation_state": "NO CONFIRMED-class capture exists. The latest starter source remains the 09:57Z preview board (PROJECTED). Therefore: (a) V14 forward does NOT fire for DET@PIT \u2014 the game is excluded and counted per protocol; (b) the three starter-conflict rows (CWS@CHC three-source, SF@CLE, ATH@KC) remain BLOCKED \u2014 their own T-90 deadlines are 16:50Z, 21:10Z, 22:10Z; (c) no starter change is attested, so NO v3 fork (a fork requires new tier-1 starter information, not the absence of it)",
+ "cohort_state_unchanged": {
+  "v1": "P4-20260819 (15, immutable)",
+  "v2": "P4-20260819v2 (15, frozen, screening basis)",
+  "v3": "not forked \u2014 no new starter attestation"
+ },
+ "betting_output": "ZERO \u2014 unchanged; gate 0/100 NO_PROMOTE, paper only, execution UNAUTHORIZED",
+ "next_check": "re-armed 16:50Z (CWS@CHC T-90, the three-source-conflict game); subsequent blocked-row deadlines cascade 21:10Z / 22:10Z"
+}

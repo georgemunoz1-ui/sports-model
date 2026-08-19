@@ -1,0 +1,24 @@
+{
+ "record_id": "WNBA-SETTLEMENT-CORRECTION-2026-08-19",
+ "built_utc": "2026-08-19T05:05:00Z",
+ "authority": "owner ruling 2026-08-19",
+ "supersedes_summary_of": ["progress.md addendum committed at 5ce7eb3", "chat settlement of 2026-08-18 WNBA"],
+ "rewrites_nothing": "R6 — the original settlement rows, the grades, and the 5ce7eb3 addendum stay byte-intact. This record replaces their SUMMARY WORDING and interpretive claims.",
+
+ "OFFICIAL_SUMMARY_owner_verbatim": "Official WNBA grading: home-win classifier 1/4, Brier 0.2870; margin MAE 9.2; total MAE 11.0. No ATS selections were registered under the forecast contract, so no official ATS record exists. A retrospective market-overlay comparison is 3/4 and is diagnostic only.",
+ "numbers_verified_before_adoption": {"brier": 0.287, "margin_mae": 9.2, "total_mae": 11.0, "all_match_owner": true},
+
+ "what_was_wrong_with_my_framing": {
+  "defect_1": "the settlement labelled the registered win-probability grade generically as 'sides' while the pregame table displayed spread reads — two estimands under one word. The GRADE was correct; the LABEL invited exactly the confusion that followed.",
+  "defect_2": "the addendum's 'the reads were good' rescued the night with an estimand that was never registered as a gradeable forecast output. Graded as a record, the 3-1 ATS overlay would itself be the ghost grade. WITHDRAWN wording -> 'the spread overlay settled 3-1 (retrospective, diagnostic only, non-ledger, non-promotional)'.",
+  "defect_3": "'the margin head is carrying the useful information' claimed superiority from n=4. WITHDRAWN. n=4 cannot establish that the margin head carries superior information; the observation is logged as a hypothesis for the preregistered ATS diagnostic cohort to test, nothing more.",
+  "defect_4": "the original pregame prose 'IND side, but 4.5 flatter than the line' conflated two estimands in one phrase; it needed to say 'IND winner / TOR ATS'."
+ },
+
+ "OFFICIAL_LEDGER_STATE": {
+  "shadow_winner_classification_record": "9/13, mean Brier 0.1648 — UNCHANGED; the 3/4 overlay cannot be added retroactively",
+  "night_of_2026_08_18": {"winner_head": "1-3", "spread_overlay_retrospective_diagnostic": "3-1", "totals_overlay_retrospective_diagnostic": "1-3"},
+  "only_the_first_was_a_registered_selection": true,
+  "ats_prospective_tracking": "begins with the NEXT slate at 0-0 under docs/experiments/2026-08-19_ATS_PREREG.json"
+ }
+}

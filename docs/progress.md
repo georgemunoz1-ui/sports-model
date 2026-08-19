@@ -2361,3 +2361,45 @@ two: the market beats every arm by ~0.04 Brier, and large claimed edges lose.
 
 Card bundle pushed for the external session's settle-verification (shas in the settlement record).
 Gate 0/100, ledger $0, paper only. Still pending: 8/19 WNBA finals (2 WINNER + 2 ATS at 0-0).
+
+================================================================================
+2026-08-19 — CARD CONTRACT FROZEN AND LIVE: TRUST LADDER REPLACES RAW GAPS
+================================================================================
+
+Owner specification implemented in full (docs/experiments/2026-08-19_CARD_CONTRACT.json +
+harness/unified_card.py, wired into healthcheck).
+
+1. THREE STATEMENTS per row — WINNER / PRICE / ATS — never conflated; a predicted loser can be the
+   value side, which is exactly the WNBA 1-3-winners/3-1-overlay reconciliation.
+2. COMPRESSION-CONFLICT GATE, frozen at market_conf - model_conf >= 5pp: all three owner fixtures
+   (WSH@TEX .464/.591, CWS@CHC .482/.603, TOR-away .405/.208) flag in the selftest; threshold exact
+   at 5.0pp. Flagged rows stay visible but can never become PAPER_EDGE until personnel complete AND
+   the edge class has forward validation. Basis: >=5pp claimed edges are 0-6 lifetime.
+3. UNCERTAINTY-ADJUSTED EDGE: screen is LCB(p) > break-even. MLB LCB uses the MC sigma with the
+   understatement DISCLOSED (sim noise only; model error is larger). WNBA sigma NOT_QUANTIFIED ->
+   positive raw edge caps at PRICE_SENSITIVE. Display: raw edge, sigma+basis, conservative edge, EV
+   at conservative p, trust status.
+4. ATS/TOTAL PROBABILITIES: MLB gets cover/push/fail and O/P/U from the verified replay's
+   distributions when the next slate arrives; WNBA reads are labelled DIRECTIONAL_DIAGNOSTIC even
+   though the frozen cohort grades them. Totals reporting everywhere: MAE + MEDIAN + signed bias +
+   LARGEST miss (the mean is banned from travelling alone — SEA@MIL 22-0 and the WNBA cancellation
+   both hid in a mean).
+5. ONE IMMUTABLE ROW: data/cards_unified/{date}_{sport}.jsonl, stable row_id + winner/ats/total
+   selection ids + registered line/juice/book/timestamp + flags; settlement APPENDS a same-row_id
+   line; a second pregame build REFUSES; no recreated results tables.
+6. PERSONNEL INTEGRITY on every row: starter state, lineup state (NONE_AVAILABLE — honest), feature
+   age, late-change flag, settlement-time actual-starter reconciliation.
+7. SORT BY TRUST LADDER (QUALIFIED > PRICE_SENSITIVE > COMPRESSION_CONFLICT > PERSONNEL_INCOMPLETE >
+   NO_VALUE > BLOCKED), never by raw gap. QUALIFIED_PAPER_EDGE is EMPTY BY CONSTRUCTION until an
+   edge class earns forward validation, and the card prints that emptiness.
+
+FIRST LIVE INSTANCE — tonight's WNBA slate, and the ladder inverts the old ordering exactly as
+intended: MIN@GSV leads as PRICE_SENSITIVE (MIN -125, raw +1.2pp, uncertainty unquantified) while
+TOR@WAS with its +19.6pp raw "edge" is demoted to COMPRESSION_CONFLICT — AUDIT_REQUIRED. Two build
+defects caught in the process: the WSH/WAS alias split cost Washington its price row, and the
+OPENER was being offered as a best executable price.
+
+MODEL LESSONS recorded in the contract: MLB's binding problem remains discrimination (v3 .2402 vs
+market .2044); next feature priority is confirmed lineups / bullpen rest / starter workload /
+scratch risk, NOT more form or another estimator; the WNBA margin-head question requires its own
+prereg (named, not run); market data stays downstream forever.

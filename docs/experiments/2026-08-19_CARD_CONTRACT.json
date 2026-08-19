@@ -1,0 +1,64 @@
+{
+ "record_id": "CARD-CONTRACT-2026-08-19",
+ "built_utc": "2026-08-19T09:30:00Z",
+ "authority": "owner card-improvement specification 2026-08-19, following the 8/18 settlement lesson: 'model closer to 50% than the market' is not automatically sharp — the largest MLB dog gaps were compression artifacts.",
+ "applies_from": "the next card built after this commit; existing registered cards are NOT restated",
+
+ "1_THREE_STATEMENTS_PER_ROW": {
+  "WINNER": "who the model expects to win (probability + predicted winner)",
+  "PRICE": "which moneyline offers value, if any, under the uncertainty-adjusted screen",
+  "ATS": "which team should cover the registered spread",
+  "principle": "a predicted loser can be the moneyline or ATS value side; the WNBA 1-3 winners / 3-1 spread-overlay night is the canonical example and neither table was wrong"
+ },
+
+ "2_COMPRESSION_CONFLICT_GATE_FROZEN": {
+  "definition": "market_confidence - model_confidence >= 0.05, where confidence = |p - 0.5| and market p is same-book de-vigged",
+  "label": "COMPRESSION_CONFLICT — AUDIT_REQUIRED",
+  "consequence": "the row stays visible with all numbers, but can NEVER be classified PAPER_EDGE until (a) personnel are complete AND (b) the edge class has forward validation",
+  "calibration_fixtures": [
+   {"case": "WSH@TEX 8/18", "model_p_home": 0.464, "market_p_home": 0.591, "must_flag": true},
+   {"case": "CWS@CHC 8/18", "model_p_home": 0.482, "market_p_home": 0.603, "must_flag": true},
+   {"case": "TOR@WAS WNBA (away side)", "model_p_away": 0.405, "market_p_away": 0.208, "must_flag": true}],
+  "evidence_basis": "claimed edges >=5pp are 0-6 lifetime across the two settled priced slates"
+ },
+
+ "3_UNCERTAINTY_ADJUSTED_EDGE_FROZEN": {
+  "screen": "lower confidence bound of p_model > p_break_even (never the point estimate alone)",
+  "lcb_mlb": "p - 1.96*sqrt(p(1-p)/30000) — the Monte-Carlo SE of the frozen sim. DISCLOSED UNDERSTATEMENT: this quantifies simulation noise only, not model error, which two settled slates show is far larger (market beats V13 by ~0.04 Brier). Therefore even a passing LCB screen cannot mint QUALIFIED_PAPER_EDGE while the edge class lacks forward validation.",
+  "lcb_wnba": "NOT COMPUTABLE — the shadow logistic carries no frozen per-game uncertainty. Uncertainty status NOT_QUANTIFIED; any positive raw edge caps at PRICE_SENSITIVE.",
+  "display": ["raw_edge_pp", "uncertainty (sigma + basis)", "conservative_edge_pp", "ev_at_conservative_p", "trust_status"]
+ },
+
+ "4_ATS_AND_TOTALS_PROBABILITIES": {
+  "mlb": "cover/push/fail probabilities at the REGISTERED spread and over/push/under at the registered total, computed from the verified byte-identical sim replay's margin and total distributions (card_render discipline: refuse unless the replay reproduces the registered card). With juice these yield break-even and EV.",
+  "wnba": "no distribution exists — margin-minus-spread is a DIRECTIONAL_DIAGNOSTIC and is labelled exactly that, even though the frozen ATS cohort grades it",
+  "totals_reporting_everywhere": "MAE, MEDIAN absolute error, signed bias, and LARGEST MISS — cancellation concealed WNBA errors and SEA@MIL 22-0 dominated MLB MAE; a mean alone is banned"
+ },
+
+ "5_ONE_IMMUTABLE_ROW": {
+  "store": "data/cards_unified/{date}_{sport}.jsonl — one pregame record per game with row_id, forecast_id, winner_selection_id, ats_selection_id, total_selection_id, registered line/juice/book/capture timestamp, model probability/margin/total, all flags",
+  "settlement": "appends a type=settlement line bearing the SAME row_id to the SAME file; the pregame line is never edited and no separate results table is ever recreated"
+ },
+
+ "6_PERSONNEL_INTEGRITY_FIELDS": ["starter_state CONFIRMED|PROBABLE|TBD per side", "lineup_state (NONE_AVAILABLE until a lineup rail exists)", "feature_age_days", "late_change_flag", "actual_starter_reconciliation (settlement-time)"],
+
+ "7_SORT_ORDER_FROZEN": ["QUALIFIED_PAPER_EDGE", "PRICE_SENSITIVE", "COMPRESSION_CONFLICT", "PERSONNEL_INCOMPLETE", "NO_VALUE", "BLOCKED"],
+ "sort_rationale": "ranking by raw model-market gap placed the least trustworthy rows first on 8/18",
+ "trust_ladder_frozen": {
+  "BLOCKED": "no registered price, or slate/eligibility failure",
+  "NO_VALUE": "conservative edge <= 0 on both sides",
+  "PERSONNEL_INCOMPLETE": "a TBD/CAP starter or unresolved personnel on either side (subordinates any positive edge)",
+  "COMPRESSION_CONFLICT": "the frozen gate above (subordinates any positive edge)",
+  "PRICE_SENSITIVE": "0 < conservative edge < 2pp, or uncertainty NOT_QUANTIFIED with positive raw edge",
+  "QUALIFIED_PAPER_EDGE": "conservative edge >= 2pp AND no compression conflict AND personnel complete AND the edge class is forward-validated. CURRENTLY EMPTY BY CONSTRUCTION: no edge class has forward validation (>=5pp class is 0-6). The card prints this emptiness rather than relaxing the bar."
+ },
+
+ "MODEL_LESSONS_RECORDED": {
+  "mlb_binding_problem": "discrimination, still: v3 .2402 vs market .2044 Brier despite better starter information",
+  "starter_vs_form": "starter resolution matters more than form freshness, but starter features alone did not validate V14",
+  "next_mlb_feature_priority": ["confirmed lineups", "bullpen availability/rest", "starter workload", "scratch risk"],
+  "explicitly_deprioritized": "more unshrunk recent form; another estimator swap",
+  "wnba_margin_head": "may be more useful than the winner-probability mapping — requires a PREREGISTERED coherence/margin-to-win investigation before any use; named as a pending prereg, NOT run, NOT promoted from a 3-1 night",
+  "market_position": "essential downstream evaluation evidence; FORBIDDEN in the predictive feature path, unchanged"
+ }
+}

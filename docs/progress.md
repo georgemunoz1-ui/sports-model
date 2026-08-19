@@ -2328,3 +2328,36 @@ cashing is exactly what the prospective cohort exists to measure — at n>=2 per
 weeks to mean anything.
 
 Healthcheck wired with the settlement-contract gate and green end-to-end.
+
+================================================================================
+2026-08-19 — MLB 8/18 SETTLED, ALL THREE COHORTS: MARKET WINS AGAIN, EDGES 0-4
+================================================================================
+
+Owner finals board (15 games, 30 clubs exactly once — COMPLETE_BY_ROSTER_PARTITION, screenshot
+69cf38da… owner-attested). 15 tier-1 rows ingested (c57430d1), all 39 forecasts graded once through
+the chain (259/257 intact), estimand WINNER on every record.
+
+  WINNER   v1  7-2   Brier .2396  logloss .6724   (9 games, derived slate, ALL-CAP starters)
+           v2  9-6   Brier .2424  logloss .6780   <- owner's independent settlement REPRODUCED EXACTLY
+           v3 10-5   Brier .2402  logloss .6735
+           MARKET 12-3, Brier .2044 (registered pregame prices)
+
+  Model-market disagreements: v2 0-3 (DET, WSH, CWS — the three largest claimed dog edges, all LOST);
+  v3 0-2 (its CWS TBD-correction flipped that side to CHC, which won — the one concrete v3 gain).
+  Positive-EV screens at registered prices: 0-4 including TB (-4.00u hypothetical, screens only).
+  Claimed edges >=5pp are now 0-6 LIFETIME across the two settled priced slates.
+
+  TOTAL (from the immutable per-game proj_total, never the '10 overs' summary):
+           v1 MAE 3.07 (+1.51 signed)   v2 MAE 4.33 (+0.45)   v3 MAE 4.47 (+0.35)
+  SEA@MIL 22-0 is the outlier: v2 projected 6.8 vs actual 22 (miss 15.2, ~1/3 of the MAE).
+
+  Starter reconciliation 29/30: ATH actual starter Basso vs registered Perkins -> attribution flag
+  on the three ATH@KC rows; winner grading is starter-independent, no regrade.
+
+COMPRESSION CONFIRMED ON A SECOND PRICED SLATE: v2 spanned .458-.603 while the market spanned
+.370-.686, and every large model-market gap was the model being wrong. v1 7-2 with all-league-
+average starters and v3 edging v2 are NOISE at n=9/15 — the stable cross-slate findings are just
+two: the market beats every arm by ~0.04 Brier, and large claimed edges lose.
+
+Card bundle pushed for the external session's settle-verification (shas in the settlement record).
+Gate 0/100, ledger $0, paper only. Still pending: 8/19 WNBA finals (2 WINNER + 2 ATS at 0-0).

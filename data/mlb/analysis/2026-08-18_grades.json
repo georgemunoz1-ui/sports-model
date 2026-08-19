@@ -1,0 +1,95 @@
+{
+ "summary": {
+  "v1": {
+   "n": 9,
+   "record": "7-2",
+   "brier": 0.2396,
+   "logloss": 0.6724,
+   "total_mae": 3.07,
+   "total_mean_signed": 1.51
+  },
+  "v2": {
+   "n": 15,
+   "record": "9-6",
+   "brier": 0.2424,
+   "logloss": 0.678,
+   "total_mae": 4.33,
+   "total_mean_signed": 0.45,
+   "market_record": "12-3",
+   "market_brier": 0.2044,
+   "disagreements": "0-3 (['DET@PIT', 'WSH@TEX', 'CWS@CHC'])"
+  },
+  "v3": {
+   "n": 15,
+   "record": "10-5",
+   "brier": 0.2402,
+   "logloss": 0.6735,
+   "total_mae": 4.47,
+   "total_mean_signed": 0.35,
+   "market_record": "12-3",
+   "market_brier": 0.2044,
+   "disagreements": "0-2 (['DET@PIT', 'WSH@TEX'])"
+  }
+ },
+ "positive_ev_screen_settlement": [
+  [
+   "TOR@TB",
+   0.018,
+   "LOST",
+   -1
+  ],
+  [
+   "DET@PIT",
+   0.16,
+   "LOST",
+   -1
+  ],
+  [
+   "WSH@TEX",
+   0.254,
+   "LOST",
+   -1
+  ],
+  [
+   "CWS@CHC",
+   0.248,
+   "LOST",
+   -1
+  ]
+ ],
+ "record_id": "SETTLEMENT-2026-08-18",
+ "built_utc": "2026-08-19T09:12:00Z",
+ "evidence": "data/mlb/evidence/2026-08-18_owner_finals.json",
+ "evidence_sha256": "c57430d19e26604bfef64427c39268bed56d2d6048daeb27b4784a86e4d00407",
+ "owner_v2_settlement_cross_check": "owner-computed 9-6 / Brier .2424 / logloss .6780, market 12-3 / .2044, disagreements 0-3, EV screens 0-4 (-4.00u) \u2014 ALL reproduced exactly from the sealed card bytes here",
+ "cohorts_never_pooled": true,
+ "card_bundle_for_external_verification": {
+  "v1": {
+   "path": "cards/2026-08-18_card.json",
+   "sha256": "fab4e61395385f9f3da4a2eccf85ee0bd83a3a32055ca91ed26ca8f515d6084c"
+  },
+  "v2": {
+   "path": "cards/2026-08-18_card_v2.json",
+   "sha256": "15288870ea7a6f6d2723c62a9a1766e5e3cb45d92c89110c70079a851d8d023a"
+  },
+  "v3": {
+   "path": "cards/2026-08-18_card_v3.json",
+   "sha256": "e17ee66456aaf621085c74f0ebc3e70424140d2fbbc804f4e88f8b86db8739c1"
+  },
+  "note": "pushed to origin so the external session can settle-verify against the identical bytes"
+ },
+ "starter_change_attribution_flag": {
+  "game": "ATH@KC",
+  "registered": "Jack Perkins",
+  "actual": "Basso",
+  "applies_to": [
+   "P4-20260818v2-ATH@KC",
+   "P4-20260818v3-ATH@KC",
+   "P4-20260818-ATH@KC"
+  ],
+  "disposition": "graded as registered (winner-only grading is starter-independent); flag recorded, no regrade"
+ },
+ "totals_note": "graded from the IMMUTABLE per-game proj_total in each card, never from the summary '10 overs'. SEA@MIL 22-0 is the outlier: v2 projected 6.8 vs actual 22 (miss 15.2) and single-handedly carries ~1/3 of the v2 totals MAE.",
+ "compression_diagnosis_CONFIRMED_AGAIN": "v2 stayed within .458-.603 while the market spanned .370-.686; the three largest claimed dog edges (WSH +12.7pp, CWS +12.1pp, DET +9.2pp) were exactly the three model-market disagreements and all three LOST. Two consecutive settled slates now show the same signature: claimed edges >=5pp are 0-6 lifetime.",
+ "small_n_warning": "v1 7-2 on nine games with ALL-LEAGUE-AVERAGE starters, and v3 10-5 vs v2 9-6, are NOISE at this n. The only stable readings across both settled slates are: market Brier beats every arm by ~0.04, and large model-market gaps lose."
+}

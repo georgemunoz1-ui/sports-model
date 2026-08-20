@@ -1,0 +1,29 @@
+{
+ "schema": "governance.ratification.v1",
+ "record_id": "ATS-LAYER-SEPARATION-RATIFIED-2026-08-20",
+ "created_utc": "2026-08-20T05:22:00Z",
+ "owner_ratification_verbatim": {
+  "layers": [
+   "Registration layer: preserve every preregistered forecast to maintain an unbiased validation sample.",
+   "Action layer: apply the new 2.0-point deadband, compression block, and wager-authority rules.",
+   "Settlement layer: grade every registered forecast, regardless of whether it was actionable."
+  ],
+  "ledgers": [
+   "Full ATS diagnostic cohort",
+   "Action-eligible subset under the amended rule",
+   "Blocked underdog/compression subset"
+  ],
+  "no_retroactivity": "Do not retroactively apply the gate to the 8/19 grades; the amendment begins with 8/20.",
+  "units": "ATS delta: spread points. Moneyline edge: probability percentage points.",
+  "v14": "data starvation is preferable to quietly treating projected lineups as official confirmation"
+ },
+ "implementation": {
+  "module": "harness/ats_ledgers.py (selftested, healthcheck-wired): FULL / ACTION_ELIGIBLE / BLOCKED_SUBSET, gate classifies never filters, 8/19 rows PRE_AMENDMENT in FULL only",
+  "units": "decision_card.ml_screen_text ('probability percentage points') and ats_read_text ('spread points') \u2014 the two units never share a sentence unnamed",
+  "state_at_ratification": {
+   "FULL": "0-2-0 (both PRE_AMENDMENT)",
+   "ACTION_ELIGIBLE": "0-0-0 opens 8/20",
+   "BLOCKED_SUBSET": "0-0-0 opens 8/20"
+  }
+ }
+}

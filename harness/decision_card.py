@@ -45,6 +45,22 @@ FORBIDDEN_TOKENS = list(TRANSLATE.keys()) + [
 RECOMMENDATION_WORDS = re.compile(r"\b(bet this|play this|recommended|take (?:the )?[A-Z]|hammer|lock)\b")
 
 
+def ml_screen_text(team, price, edge_pp):
+    """Moneyline screen phrasing with its UNIT named (owner rule 2026-08-20: probability
+    percentage points, never bare 'points' — ATS deltas are spread points and the two never
+    share a sentence without units)."""
+    sign = "+" if price > 0 else ""
+    return (f"{team} {sign}{price} screens {edge_pp:+.1f} probability percentage points "
+            f"above break-even (a screen only)")
+
+
+def ats_read_text(team, line, delta_pts):
+    """ATS read phrasing in SPREAD POINTS, always labeled paper."""
+    sign = "+" if line > 0 else ""
+    return (f"{team} {sign}{line} — registered paper spread read, cushion {delta_pts:+.2f} "
+            f"spread points (tracked, never a bet)")
+
+
 def final_action(governing, best_cons_edge_pp, wager_authority_yes=False):
     g = governing or ""
     if "BLOCKED" in g or "PRICE_DATA_BLOCKED" in g or g == "PERSONNEL_INCOMPLETE":

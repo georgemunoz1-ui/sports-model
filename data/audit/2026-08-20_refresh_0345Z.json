@@ -1,0 +1,24 @@
+{
+ "schema": "ops.scheduled_refresh.v1",
+ "record_id": "REFRESH-20260820-0345Z",
+ "fired_at_utc": "2026-08-20T03:45:00Z",
+ "executed_at_utc": "2026-08-20T03:46:07Z",
+ "purpose": "8/19 settlement window check",
+ "finals_boards": "NONE ARRIVED \u2014 no owner finals for MLB (15 games) or WNBA (TOR@WAS, MIN@GSV). Nothing gradeable exists in this checkout: tier-1 finals are owner-supplied only and none are invented (R1).",
+ "acquisition_attempt": {
+  "targets": [
+   "statsapi.mlb.com/api/v1/schedule"
+  ],
+  "result": "HTTP 000 \u2014 CONNECT tunnel refused (403) at org egress proxy",
+  "not_routed_around": true
+ },
+ "pending_on_finals": [
+  "MLB: grade v1 (P4-20260819, 15) and v2 (P4-20260819v2, 15) separately, never pooled, vs market where priced",
+  "WNBA: 2 WINNER grades + first 2 ATS grades at registration lines (TOR +9.5 / GSV +2.5; cohort opens 0-0)",
+  "owner discretion card: 7 legs / 5.25u + revised GSV sizing + Kalshi positions \u2014 OWNER attribution only, model ledger $0",
+  "starter attribution for CWS@CHC (three-source conflict) and ATH@KC from the finals board \u2014 settlement facts, never card edits"
+ ],
+ "v14_state": "8/19 exclusion ledger FINAL at 0 eligible / 15 excluded; prospective 'posted lineups = CONFIRMED-class?' ruling still awaited from owner",
+ "next_check": "re-armed ~12:00Z morning check (finals + 8/20 slate preflight)",
+ "betting_output": "ZERO \u2014 unchanged; gate 0/100 NO_PROMOTE, paper only, execution UNAUTHORIZED"
+}

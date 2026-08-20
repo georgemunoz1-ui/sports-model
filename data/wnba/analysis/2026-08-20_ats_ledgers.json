@@ -5,7 +5,7 @@
   "FULL": {
    "n_graded": 2,
    "W-L-P": "0-2-0",
-   "pending": 0
+   "pending": 3
   },
   "ACTION_ELIGIBLE": {
    "n_graded": 0,
@@ -15,7 +15,7 @@
   "BLOCKED_SUBSET": {
    "n_graded": 0,
    "W-L-P": "0-0-0",
-   "pending": 0
+   "pending": 3
   }
  },
  "ledgers": {
@@ -35,10 +35,59 @@
     "home_cover_delta_spread_points": 0.97,
     "gate_class": "PRE_AMENDMENT",
     "result": "LOSS"
+   },
+   {
+    "ats_selection_id": "ATS-20260820-IND@DAL",
+    "selected_team": "DAL",
+    "line_spread_points": 2.5,
+    "home_cover_delta_spread_points": 2.92,
+    "gate_class": "MARGIN_COMPRESSION_BLOCK",
+    "result": "PENDING"
+   },
+   {
+    "ats_selection_id": "ATS-20260820-ATL@LAS",
+    "selected_team": "LAS",
+    "line_spread_points": 8.5,
+    "home_cover_delta_spread_points": 3.93,
+    "gate_class": "MARGIN_COMPRESSION_BLOCK",
+    "result": "PENDING"
+   },
+   {
+    "ats_selection_id": "ATS-20260820-CON@LVA",
+    "selected_team": "CON",
+    "line_spread_points": 14.5,
+    "home_cover_delta_spread_points": -1.48,
+    "gate_class": "MARGIN_COMPRESSION_BLOCK",
+    "result": "PENDING"
    }
   ],
   "ACTION_ELIGIBLE": [],
-  "BLOCKED_SUBSET": []
+  "BLOCKED_SUBSET": [
+   {
+    "ats_selection_id": "ATS-20260820-IND@DAL",
+    "selected_team": "DAL",
+    "line_spread_points": 2.5,
+    "home_cover_delta_spread_points": 2.92,
+    "gate_class": "MARGIN_COMPRESSION_BLOCK",
+    "result": "PENDING"
+   },
+   {
+    "ats_selection_id": "ATS-20260820-ATL@LAS",
+    "selected_team": "LAS",
+    "line_spread_points": 8.5,
+    "home_cover_delta_spread_points": 3.93,
+    "gate_class": "MARGIN_COMPRESSION_BLOCK",
+    "result": "PENDING"
+   },
+   {
+    "ats_selection_id": "ATS-20260820-CON@LVA",
+    "selected_team": "CON",
+    "line_spread_points": 14.5,
+    "home_cover_delta_spread_points": -1.48,
+    "gate_class": "MARGIN_COMPRESSION_BLOCK",
+    "result": "PENDING"
+   }
+  ]
  },
  "note": "ledger 1 is the experiment; ledgers 2+3 partition its post-amendment rows. Gate classifies, never filters registration or grading."
 }

@@ -102,6 +102,23 @@ def totals_report(errors):
             "largest_miss": round(max(errors, key=abs), 2)}
 
 
+WNBA_ATS_DEADBAND_PTS = 2.0  # frozen 2026-08-20 (owner rule 2): |home_cover_delta| under this = PASS, mechanically, no rounding up
+
+
+def wnba_ats_status(home_cover_delta, selected_is_market_dog):
+    """Owner rules 1/2/5 (2026-08-20 amendment), card-action layer. The diagnostic cohort still
+    REGISTERS every selection per the frozen prereg (no threshold, deliberately); this function
+    decides what the CARD may say about one. Winner accuracy never authorizes the opposite ATS
+    side; sub-deadband deltas PASS; any underdog read from the compressed margin head is blocked."""
+    if home_cover_delta is None:
+        return "ATS_NO_SELECTION"
+    if selected_is_market_dog:
+        return "MARGIN_COMPRESSION_BLOCK"
+    if abs(home_cover_delta) < WNBA_ATS_DEADBAND_PTS:
+        return "ATS_DEADBAND_PASS"
+    return "ATS_DIAGNOSTIC_ONLY"
+
+
 def totals_gate(quotes):
     """Owner-required total gate (2026-08-19, after the O/P/U reporting incident: four probability
     rows were asserted in a report that no replay ever produced — push mass on half-point lines was
@@ -276,6 +293,19 @@ def selftest():
     row2["validated_edge_class"] = True
     if classify(row2) != "QUALIFIED_PAPER_EDGE":
         fails.append("validated large edge not QUALIFIED")
+    # WNBA ATS card-action fixtures (owner amendment 2026-08-20)
+    if wnba_ats_status(0.97, False) != "ATS_DEADBAND_PASS":
+        fails.append("sub-deadband delta (the GSV +2.5 case) not PASSed mechanically")
+    if wnba_ats_status(1.99, False) != "ATS_DEADBAND_PASS":
+        fails.append("1.99 rounded up past the deadband — 'no rounding up' violated")
+    if wnba_ats_status(-5.63, True) != "MARGIN_COMPRESSION_BLOCK":
+        fails.append("underdog read from the compressed margin head (the TOR +9.5 case) not blocked")
+    if wnba_ats_status(0.97, True) != "MARGIN_COMPRESSION_BLOCK":
+        fails.append("dog-side block must dominate the deadband check")
+    if wnba_ats_status(2.0, False) != "ATS_DIAGNOSTIC_ONLY":
+        fails.append("at-deadband favorite read should remain diagnostic-only (paper)")
+    if wnba_ats_status(None, False) != "ATS_NO_SELECTION":
+        fails.append("missing delta must be NO_SELECTION")
     # totals gate fixtures (owner-required, 2026-08-19)
     good = [{"quote_id": "TQ-A-O7.5", "game": "A@B", "line": 7.5, "n_over": 60, "n_push": 0,
              "n_under": 40, "n": 100, "sim_array_sha256": "ab" * 32},

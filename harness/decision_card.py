@@ -30,6 +30,10 @@ TRANSLATE = {
     "PRICE_DATA_BLOCKED": "Blocked — no betting prices existed when the forecast was built",
     "PERSONNEL_INCOMPLETE": "Blocked — starter or lineup information incomplete",
     "NO_VALUE": "No value at the quoted prices",
+    "MARGIN_COMPRESSION_BLOCK": "Blocked — the spread model is known to understate blowouts, so an underdog spread read from it cannot be trusted",
+    "ATS_DEADBAND_PASS": "Pass — the spread cushion is under the 2-point minimum; too small to act on, no rounding up",
+    "ATS_DIAGNOSTIC_ONLY": "Paper tracking only — the spread model has no completed validation sample yet",
+    "ATS_NO_SELECTION": "No spread read exists for this game",
 }
 
 # Tokens that must never appear untranslated in the bettor-facing surface.

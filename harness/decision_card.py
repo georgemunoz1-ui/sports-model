@@ -95,6 +95,12 @@ def render_gate(rows, decision_text, wager_authority_yes=False):
             fails.append(f"{tag}: missing plain-English trust label")
         if any(t in lbl for t in TRANSLATE):
             fails.append(f"{tag}: internal status used as the trust label")
+        # 7. four-field lead (owner rule 2026-08-20): winner | side read | total read | action,
+        # with every non-BET action rendered as an explicit NO BET
+        if decision_text and r.get("final_action") in FINAL_ACTIONS:
+            if f"**Action: {action_display(r)}**" not in decision_text:
+                fails.append(f"{tag}: four-field lead missing or action not rendered as "
+                             f"'{action_display(r)}'")
     # text-level checks on the bettor surface
     if re.search(r"\bhome win\b", decision_text, re.I):
         fails.append("decision text says 'home win' without naming the team")
@@ -107,6 +113,30 @@ def render_gate(rows, decision_text, wager_authority_yes=False):
 def sort_rows(rows):
     return sorted(rows, key=lambda r: (ACTION_ORDER[r["final_action"]],
                                        -(r.get("sort_edge") or -99)))
+
+
+def action_display(r):
+    """Owner rule (2026-08-20): a theoretical screen must never read as a recommendation, so
+    every non-BET action is rendered as an explicit NO BET with its flavor."""
+    fa = r["final_action"]
+    if fa == "BET":
+        return "BET (qualified)"
+    return {"WATCH": "NO BET — watch only", "PASS": "NO BET — pass",
+            "BLOCKED": "NO BET — blocked"}[fa]
+
+
+def side_read_display(r):
+    """Best side/spread read, labeled a screen; if the screened team opposes the model winner,
+    say CONFLICTING READ explicitly (opposite teams are not a contradiction — one answers 'who
+    wins', the other 'which price looks cheap')."""
+    pr = r.get("best_price_read")
+    if not pr:
+        return "none"
+    txt = pr["text"]
+    st = pr.get("team")
+    if st and st != r["predicted_winner"]["team"]:
+        txt = f"CONFLICTING READ — {txt} (opposite the model's pick)"
+    return txt
 
 
 def render_md(date, rows, banner, vintage_note):
@@ -122,16 +152,16 @@ def render_md(date, rows, banner, vintage_note):
         ps = r.get("projected_score")
         score = " – ".join(f"{t} {ps[t]}" for t in r["teams"]) if ps else "n/a"
         tr = r.get("best_total_read")
-        total = f"{tr['side']} {tr['line']} ({tr['prob']:.0%})" if tr else "no total read"
-        pr = r.get("best_price_read")
-        price = pr["text"] if pr else "no screened price"
+        total = f"{tr['side']} {tr['line']} ({tr['prob']:.1%})" if tr else "none"
+        # THE FOUR-FIELD LEAD (owner rule): winner | side read | total read | action — first line, every game.
         L += [f"### {r['game']} — {r['start']}",
-              f"- Model pick: **{w['team']} {w['win_prob']:.1%}** to win ({w['other_team']} {w['other_prob']:.1%})",
+              f"**Predicted winner:** {w['team']} {w['win_prob']:.1%} ({w['other_team']} {w['other_prob']:.1%})"
+              f" | **Best side read:** {side_read_display(r)}"
+              f" | **Best total read:** {total}"
+              f" | **Action: {action_display(r)}**",
               f"- Projected score: {score}",
-              f"- Price screen (not a recommendation): {price}",
-              f"- Total read (diagnostic only): {total}",
               f"- Trust: {r['trust_label']}",
-              f"- **Action: {r['final_action']}** — {r['reason']}", ""]
+              f"- Why: {r['reason']}", ""]
     return "\n".join(L)
 
 
@@ -145,9 +175,12 @@ def selftest():
         "best_total_read": {"side": "Under", "line": 8.5, "prob": .64},
         "trust_label": "Worth watching — modest edge at the quoted price, below the trust bar",
         "final_action": "WATCH", "reason": "test", "sort_edge": 2.9}
-    ok, f = render_gate([ok_row], "clean text", False)
+    CLEAN = "clean text **Action: NO BET — watch only** more text"
+    ok, f = render_gate([ok_row], CLEAN, False)
     if not ok:
         fails.append(f"gate rejected a valid row: {f}")
+    if render_gate([ok_row], "text with no four-field action lead", False)[0]:
+        fails.append("gate passed a decision text missing the NO BET action rendering")
     bad = dict(ok_row); bad["predicted_winner"] = {"team": "home", "win_prob": .55,
                                                   "other_team": "A", "other_prob": .45}
     if render_gate([bad], "clean", False)[0]:

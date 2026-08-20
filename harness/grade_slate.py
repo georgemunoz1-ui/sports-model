@@ -162,12 +162,19 @@ def run(date, board_path, commit=False):
         crow = next(r for r in cards[coh] if _row_tail(r) == tail)
         p = crow["v13"]["home_wp"]
         y = int(g["home_score"] > g["away_score"])
-        pa, ph = devig_two_sided(g["close_ml_away"], g["close_ml_home"])
+        # 2026-08-20: a finals board with no closing prices grades winner/total normally;
+        # every market-relative field is null with the reason carried in the record (R1) —
+        # a missing price is never invented and never blocks the winner grade.
+        priced = g.get("close_ml_away") is not None and g.get("close_ml_home") is not None
         side_home = p >= .5
         p_side = p if side_home else 1 - p
-        be = ph if side_home else pa
-        price = g["close_ml_home"] if side_home else g["close_ml_away"]
-        dec = decimal_from_american(price)
+        if priced:
+            pa, ph = devig_two_sided(g["close_ml_away"], g["close_ml_home"])
+            be = ph if side_home else pa
+            price = g["close_ml_home"] if side_home else g["close_ml_away"]
+            dec = decimal_from_american(price)
+        else:
+            pa = ph = be = price = dec = None
         rows.append({
             "forecast_id": fid, "cohort": coh, "board_game": board_key(g),
             "away": g["away"], "home": g["home"],
@@ -178,14 +185,15 @@ def run(date, board_path, commit=False):
             "actual_total": g["away_score"] + g["home_score"],
             "model_total": crow["v13"]["proj_total"],
             "total_error": round(crow["v13"]["proj_total"] - (g["away_score"] + g["home_score"]), 2),
-            "close_total_line": g["close_total"],
-            "closing_price_devig_p_home": round(ph, 4),
-            "model_minus_market_pp": round((p - ph) * 100, 2),
+            "close_total_line": g.get("close_total"),
+            "closing_price_devig_p_home": (round(ph, 4) if priced else None),
+            "model_minus_market_pp": (round((p - ph) * 100, 2) if priced else None),
             "model_side": g["home"] if side_home else g["away"],
             "model_side_price": price,
-            "break_even_prob_at_close": round(be, 4),
-            "edge_pp_at_close": round((p_side - be) * 100, 2),
-            "ev_per_unit_at_close": round(p_side * (dec - 1) - (1 - p_side), 4),
+            "break_even_prob_at_close": (round(be, 4) if priced else None),
+            "edge_pp_at_close": (round((p_side - be) * 100, 2) if priced else None),
+            "ev_per_unit_at_close": (round(p_side * (dec - 1) - (1 - p_side), 4) if priced else None),
+            "market_fields_null_reason": (None if priced else "board carries no closing prices"),
             "model_side_won": int((side_home and y == 1) or (not side_home and y == 0)),
             "starter_defect": _starter_defect(crow, g),
         })
@@ -210,6 +218,7 @@ def summarize(res):
     out = {}
     for coh in sorted({r["cohort"] for r in res["rows"]}):
         rs = [r for r in res["rows"] if r["cohort"] == coh]
+        pr = [r for r in rs if r.get("closing_price_devig_p_home") is not None]
         n = len(rs)
         out[coh] = {
             "n": n,
@@ -219,13 +228,14 @@ def summarize(res):
             "logloss": round(sum(r["logloss"] for r in rs) / n, 6) if n else None,
             "mean_abs_total_error": round(sum(abs(r["total_error"]) for r in rs) / n, 3) if n else None,
             "mean_signed_total_error": round(sum(r["total_error"] for r in rs) / n, 3) if n else None,
-            "market_brier_at_close": round(sum(brier(r["closing_price_devig_p_home"], r["home_win"])
-                                               for r in rs) / n, 6) if n else None,
-            "ev_at_close_flat_unit_sum": round(sum(
-                (r["ev_per_unit_at_close"]) for r in rs), 4) if n else None,
-            "realized_units_flat_1u_all_model_sides": round(sum(
+            "market_brier_at_close": (round(sum(brier(r["closing_price_devig_p_home"], r["home_win"])
+                                                for r in pr) / len(pr), 6) if pr else None),
+            "ev_at_close_flat_unit_sum": (round(sum(
+                (r["ev_per_unit_at_close"]) for r in pr), 4) if pr else None),
+            "realized_units_flat_1u_all_model_sides": (round(sum(
                 (decimal_from_american(r["model_side_price"]) - 1) if r["model_side_won"] else -1
-                for r in rs), 4) if n else None,
+                for r in pr), 4) if pr else None),
+            "priced_rows": len(pr),
         }
     return out
 

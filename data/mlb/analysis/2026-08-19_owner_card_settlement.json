@@ -1,0 +1,68 @@
+{
+ "schema": "owner_discretion_settlement.v1",
+ "record_id": "OWNER-CARD-SETTLE-20260819",
+ "settled_at_utc": "2026-08-20T05:03:25Z",
+ "attribution": "OWNER DISCRETION ONLY \u2014 never model output, never gate progress; model-authorized ledger remains $0",
+ "evidence": {
+  "mlb": "cbdb88c2b0aa56fe3777e48be1e04440c6858422e15bc6363d52a026f5184ec7",
+  "wnba": "1bb26bb8a6f0b48c61637493abf6c60f873adf1a1fab3c07ea1acced3db7c1a7"
+ },
+ "legs": [
+  {
+   "sel": "CIN ML -128",
+   "stake_u": 1.0,
+   "result": "WIN",
+   "note": "CIN 5-4 over STL"
+  },
+  {
+   "sel": "TB -1.5 +111",
+   "stake_u": 1.0,
+   "result": "LOSS",
+   "note": "TB won 7-6 \u2014 by exactly 1, the run line's worst case"
+  },
+  {
+   "sel": "CLE -1.5 -101",
+   "stake_u": 0.75,
+   "result": "LOSS",
+   "note": "CLE lost 0-1 to Wilkinson's debut shutout start"
+  },
+  {
+   "sel": "MIA ML +120",
+   "stake_u": 0.75,
+   "result": "LOSS",
+   "note": "PHI 4-1"
+  },
+  {
+   "sel": "TOR/WAS UNDER 168.5",
+   "stake_u": 0.75,
+   "result": "LOSS",
+   "note": "total 175"
+  },
+  {
+   "sel": "GSV +2.5 (revised sizing)",
+   "stake_u": 0.25,
+   "result": "LOSS",
+   "note": "GSV lost by 11; owner also attested tailing GS +3.5 (stake not transmitted) \u2014 same result, LOSS"
+  },
+  {
+   "sel": "LAA ML +142",
+   "stake_u": 0.5,
+   "result": "LOSS",
+   "note": "HOU 3-2"
+  }
+ ],
+ "record": "1-6",
+ "risked_u": 5.0,
+ "net_u": -3.2187,
+ "kalshi": {
+  "position": "TOR/WAS Total Points \u2014 NO on Over 175.5 (cost $49.99, max payout $102.57)",
+  "result": "WIN \u2014 final total 175 <= 175.5",
+  "pnl_usd": 52.58,
+  "note": "landed in the exact 169-175 split zone flagged at recording: the Kalshi 175.5 leg won while the U168.5 leg lost"
+ },
+ "model_screen_postmortem": {
+  "agreements_and_results": "model agreed with MIA (+11.6pp screen) \u2014 LOST; mildly agreed TB -1.5 (+4.0pp) \u2014 LOST by the 1-run margin; model's strongest disagreement was CLE -1.5 (-12.4pp) \u2014 CLE lost outright, the fade vindicated; model disagreed CIN at -128 (-3.0pp) \u2014 CIN WON, market right, model's thin edge read wrong",
+  "direction_flips_tonight": "MIA lost, WSH won 6-0 \u2014 the audit class went 1-1 and remains unproven either way",
+  "n_warning": "one night; none of this is evidence at n=7 legs"
+ }
+}

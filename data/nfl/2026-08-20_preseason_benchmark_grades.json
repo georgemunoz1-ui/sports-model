@@ -1,0 +1,71 @@
+{
+ "record_id": "NFL-PRE-BENCHMARK-GRADES-2026-08-20",
+ "built_utc": "2026-08-21T05:45:00Z",
+ "grade_scope": "MARKET_BENCHMARK_ONLY \u2014 no NFL model identity exists in the registry and no immutable pregame probability card was registered. Brier, log loss, edge and EV are NULL BY RULE, not omitted by oversight.",
+ "board_evidence": "data/nfl/evidence_2026-08-20_preseason_board.json",
+ "board_evidence_sha256": "9106bae72d8e8dbbddab473ea0aad30c24694d1a99235907ff573b3204c37517",
+ "finals_evidence_urls": [
+  "https://www.espn.com/nfl/boxscore/_/gameId/401873286",
+  "https://www.wral.com/news/ap/0ca39-fernando-mendoza-throws-a-pick-6-struggles-in-1st-half-of-raiders-22-20-preseason-win-over-texans/",
+  "https://www.reviewjournal.com/sports/raiders/fernando-mendoza-int-aidan-oconnell-led-raiders-comeback-win-stand-out-vs-texans-3867082/",
+  "https://www.nbcbayarea.com/news/sports/nfl/san-francisco-49ers/brock-purdy-live-updates-score-highlights-chargers/4130523/",
+  "https://www.vavel.com/en-us/nfl/2026/08/21/1268365-chargers-vs-49ers-live-score-nfl-preseason.html",
+  "https://www.espn.com/nfl/boxscore/_/gameId/401873285"
+ ],
+ "tie_rule": "a tie grades PUSH on the benchmark side and is counted separately (registered NFL benchmark convention)",
+ "games": [
+  {
+   "g": "LV@HOU",
+   "away": "LV",
+   "home": "HOU",
+   "final": "LV 22, HOU 20",
+   "away_score": 22,
+   "home_score": 20,
+   "registered_benchmark_side": "HOU",
+   "benchmark_basis": "capture-time board (16:41Z evidence): HOU -1.5 (-105), HOU ML -120 -> HOU is the registered market favorite; board OPEN column had LV -1.5, a full line flip, recorded",
+   "binary": "WRONG",
+   "ats": "HOU -1.5 NOT covered (HOU lost outright by 2)",
+   "tie": false,
+   "source_game_id": "401873286",
+   "source_urls": [
+    "https://www.espn.com/nfl/boxscore/_/gameId/401873286",
+    "https://www.wral.com/news/ap/0ca39-fernando-mendoza-throws-a-pick-6-struggles-in-1st-half-of-raiders-22-20-preseason-win-over-texans/",
+    "https://www.reviewjournal.com/sports/raiders/fernando-mendoza-int-aidan-oconnell-led-raiders-comeback-win-stand-out-vs-texans-3867082/"
+   ],
+   "brier": null,
+   "logloss": null,
+   "model_edge": null,
+   "ev": null,
+   "null_reason": "MARKET_BENCHMARK_ONLY"
+  },
+  {
+   "g": "SF@LAC",
+   "away": "SF",
+   "home": "LAC",
+   "final": "SF 41, LAC 17",
+   "away_score": 41,
+   "home_score": 17,
+   "registered_benchmark_side": "SF",
+   "benchmark_basis": "capture-time board: SF -1.5 (-102), SF ML -120 -> SF is the registered market favorite; board OPEN column had LAC -1.5, a full line flip, recorded",
+   "binary": "CORRECT",
+   "ats": "SF -1.5 covered (SF won by 24)",
+   "tie": false,
+   "source_game_id": "401873285",
+   "source_urls": [
+    "https://www.nbcbayarea.com/news/sports/nfl/san-francisco-49ers/brock-purdy-live-updates-score-highlights-chargers/4130523/",
+    "https://www.vavel.com/en-us/nfl/2026/08/21/1268365-chargers-vs-49ers-live-score-nfl-preseason.html",
+    "https://www.espn.com/nfl/boxscore/_/gameId/401873285"
+   ],
+   "brier": null,
+   "logloss": null,
+   "model_edge": null,
+   "ev": null,
+   "null_reason": "MARKET_BENCHMARK_ONLY"
+  }
+ ],
+ "brier": null,
+ "logloss": null,
+ "model_edge": null,
+ "ev": null,
+ "null_reason": "MARKET_BENCHMARK_ONLY"
+}

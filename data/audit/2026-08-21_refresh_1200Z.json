@@ -1,0 +1,41 @@
+{
+ "schema": "ops.scheduled_refresh.v1",
+ "record_id": "REFRESH-20260821-1200Z",
+ "fired_at_utc": "2026-08-21T12:00:48Z",
+ "executed_at_utc": "2026-08-21T12:02:05Z",
+ "queue_state": "The reminder's queue was armed before the work completed. 8/20 settlement DONE (fadf385) and audited (52acd22, f7504a7); 8/21 intake DONE \u2014 MLB v1+v2 (30 forecasts), WNBA 3, NFL 3 benchmark rows, decision card rendered (b5e3204).",
+ "preflight_2026_08_21": "FORECAST_ONLY_NO_MARKET_GRADE \u2014 488 min to first pitch; starters 80% resolved (3 TBD); schedule manifest and prices both still MISSING_BUT_RECOVERABLE (248m / 398m of slack).",
+ "acquisition_attempt": {
+  "target": "api.the-odds-api.com/v4/sports/baseball_mlb/odds",
+  "result": "HTTP 000 \u2014 CONNECT tunnel refused (403) at the org egress proxy",
+  "not_routed_around": true
+ },
+ "price_acquisition_attempted_via_web": {
+  "outcome": "PARTIAL AND NOT USABLE \u2014 recorded as evidence, NOT ingested as prices",
+  "fragments_seen": [
+   {
+    "game": "ATL@MIL",
+    "claim_a": "ATL +123 / MIL -149",
+    "claim_b": "ATL +125 / MIL -148",
+    "note": "two different sources, slightly different numbers; cannot establish which pairing is same-book"
+   },
+   {
+    "game": "TOR@NYY",
+    "claim": "NYY -247, total 7.5",
+    "note": "one side only; no Toronto price captured"
+   }
+  ],
+  "coverage": "2 of 15 games, neither cleanly attributable to a single book, one of them one-sided",
+  "decision": "NOT INGESTED. Screening 15 games from two partial fragments is the single-source-snippet failure mode this system has already been corrected for twice (the 8/21 Hunter Dobbins claim, and the 8/19 SD sign conflict). A price that cannot be attributed to one book cannot be de-vigged (8/3 ruling), and a one-sided quote cannot be de-vigged at all.",
+  "consequence": "All 18 MLB and WNBA rows remain BLOCKED on NO_PRICES_EXIST. Betting output stays zero. The rows unblock only on a complete, attributable two-sided board \u2014 an owner board, or a capture good enough to name its source per side."
+ },
+ "v14": "STARVED \u2014 no explicitly official confirmed-lineup source; 8/21 board class is PROJECTED.",
+ "pending_owner_decision": "make sportsmodel/main the repository default branch. A pull request from sportsmodel/main into main is IMPOSSIBLE, not merely blocked: GitHub rejected it with 'no history in common' (the two branches have disjoint roots, confirmed by git merge-base returning empty). Switching the default in repo settings is the clean fix and touches no history. Not actioned \u2014 repository settings are the owner's call.",
+ "standing": {
+  "gate": "0/100 NO_PROMOTE",
+  "ledger_usd": 0,
+  "wager_authority": "NO",
+  "execution": "UNAUTHORIZED"
+ },
+ "next_check": "re-armed 18:00Z \u2014 inside the price window (T-2h10m to first pitch) and after the 3 remaining starter slots would normally resolve"
+}

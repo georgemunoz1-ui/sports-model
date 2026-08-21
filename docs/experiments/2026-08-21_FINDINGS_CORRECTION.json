@@ -3,46 +3,122 @@
  "created_utc": "2026-08-21T06:45:00Z",
  "authority": "owner correction 2026-08-21, verified against artifacts before acceptance",
  "method": "APPEND_ONLY_SUPERSESSION (R6). Report-layer correction only; no forecast, grade, card, or evidence file touched.",
-
  "correction_1": {
   "withdrawn_claim": "assistant finding #4 in the 2026-08-20 comparison report: 'All three MLB misses were coin flips, not confident errors. TOR@TB (0.511), WSH@TEX (0.460 home), and LAA@HOU (0.560 home) were the model's least decisive calls.'",
-  "status": "WRONG — withdrawn in full",
-  "why_it_was_wrong": "Confidence is |p - 0.5|. Ranked over the 8 registered forecasts, LAA@HOU is #1 of 8 (confidence 0.060) — the model's MOST confident call on the slate, not its least. It lost 3-18 and carries the slate's worst Brier, 0.3136.",
+  "status": "WRONG \u2014 withdrawn in full",
+  "why_it_was_wrong": "Confidence is |p - 0.5|. Ranked over the 8 registered forecasts, LAA@HOU is #1 of 8 (confidence 0.060) \u2014 the model's MOST confident call on the slate, not its least. It lost 3-18 and carries the slate's worst Brier, 0.3136.",
   "verified_confidence_ranking": [
-   {"rank": 1, "game": "LAA@HOU", "p_home": 0.560, "confidence": 0.060, "result": "WRONG", "brier": 0.3136},
-   {"rank": 2, "game": "SEA@MIL", "p_home": 0.555, "confidence": 0.055, "result": "CORRECT", "brier": 0.1980},
-   {"rank": 3, "game": "WSH@TEX", "p_home": 0.460, "confidence": 0.040, "result": "WRONG", "brier": 0.2916},
-   {"rank": 4, "game": "ATH@KC", "p_home": 0.523, "confidence": 0.023, "result": "CORRECT", "brier": 0.2275},
-   {"rank": 5, "game": "SF@CLE", "p_home": 0.519, "confidence": 0.019, "result": "CORRECT", "brier": 0.2314},
-   {"rank": 6, "game": "NYY@BAL", "p_home": 0.484, "confidence": 0.016, "result": "CORRECT", "brier": 0.2343},
-   {"rank": 7, "game": "ATL@CWS", "p_home": 0.487, "confidence": 0.013, "result": "CORRECT", "brier": 0.2372},
-   {"rank": 8, "game": "TOR@TB", "p_home": 0.511, "confidence": 0.011, "result": "WRONG", "brier": 0.2611}],
-  "misses_by_confidence_rank": {"LAA@HOU": "#1 of 8 (most confident)", "WSH@TEX": "#3 of 8 (middle)", "TOR@TB": "#8 of 8 (least confident)"},
+   {
+    "rank": 1,
+    "game": "LAA@HOU",
+    "p_home": 0.56,
+    "confidence": 0.06,
+    "result": "WRONG",
+    "brier": 0.3136
+   },
+   {
+    "rank": 2,
+    "game": "SEA@MIL",
+    "p_home": 0.555,
+    "confidence": 0.055,
+    "result": "CORRECT",
+    "brier": 0.198
+   },
+   {
+    "rank": 3,
+    "game": "WSH@TEX",
+    "p_home": 0.46,
+    "confidence": 0.04,
+    "result": "WRONG",
+    "brier": 0.2916
+   },
+   {
+    "rank": 4,
+    "game": "ATH@KC",
+    "p_home": 0.523,
+    "confidence": 0.023,
+    "result": "CORRECT",
+    "brier": 0.2275
+   },
+   {
+    "rank": 5,
+    "game": "SF@CLE",
+    "p_home": 0.519,
+    "confidence": 0.019,
+    "result": "CORRECT",
+    "brier": 0.2314
+   },
+   {
+    "rank": 6,
+    "game": "NYY@BAL",
+    "p_home": 0.484,
+    "confidence": 0.016,
+    "result": "CORRECT",
+    "brier": 0.2343
+   },
+   {
+    "rank": 7,
+    "game": "ATL@CWS",
+    "p_home": 0.487,
+    "confidence": 0.013,
+    "result": "CORRECT",
+    "brier": 0.2372
+   },
+   {
+    "rank": 8,
+    "game": "TOR@TB",
+    "p_home": 0.511,
+    "confidence": 0.011,
+    "result": "WRONG",
+    "brier": 0.2611
+   }
+  ],
+  "misses_by_confidence_rank": {
+   "LAA@HOU": "#1 of 8 (most confident)",
+   "WSH@TEX": "#3 of 8 (middle)",
+   "TOR@TB": "#8 of 8 (least confident)"
+  },
   "corrected_finding_owner_wording": "MLB's mistakes included one near coin flip, one moderate direction-flip error, and its most confident side. The range was compressed overall, but the errors were not exclusively its least-confident forecasts.",
-  "why_the_error_matters": "The withdrawn version made the misses sound structurally excusable — noise around 50%. The truth is worse for the model: its single most confident registered call was its single worst forecast. Compression is still the headline finding, but it does not explain this slate's errors away."
+  "why_the_error_matters": "The withdrawn version made the misses sound structurally excusable \u2014 noise around 50%. The truth is worse for the model: its single most confident registered call was its single worst forecast. Compression is still the headline finding, but it does not explain this slate's errors away."
  },
-
  "correction_2": {
   "withdrawn_label": "STL@CIN presented inside a table headed 'pregame vs final' with its numbers under columns labeled 'Model away-win probability' / 'Model home-win probability'",
-  "status": "MISLABELED — corrected",
+  "status": "MISLABELED \u2014 corrected",
   "verified_provenance": "The card artifact cards/2026-08-20_card.json was generated 2026-08-20T16:43:29Z. STL@CIN's first pitch was 16:40Z. That row was therefore produced roughly 3 minutes AFTER the game began.",
   "correct_label_owner_wording": "Unregistered post-start display: correct, non-gradeable.",
   "binding_rule": "For this game the displayed numbers are NOT a pregame projection and must never be presented as one. They are a post-start display carried on the card for slate completeness. They remain ungraded, enter no ledger, and the 8-game v1 cohort record (5-3, Brier 0.24933) is computed without them.",
   "scope_note": "This applies to STL@CIN ONLY. The other 8 rows on the same card artifact precede their own first pitches (earliest 17:10Z) and are correctly described as pregame."
  },
-
  "owner_findings_verified_this_run": {
-  "brier_vs_coin_flip": "model 0.24933 vs constant-0.50 baseline 0.25000 — better by 0.00067",
-  "logloss_vs_coin_flip": "model 0.69185 vs ln(2) = 0.69315 — better by 0.00129",
-  "probability_range_both_sides": "0.440 to 0.560 — a 12-point band, confirming the compressed-range characterization",
+  "brier_vs_coin_flip": "model 0.24933 vs constant-0.50 baseline 0.25000 \u2014 better by 0.00067",
+  "logloss_vs_coin_flip": "model 0.69185 vs ln(2) = 0.69315 \u2014 better by 0.00129",
+  "probability_range_both_sides": "0.440 to 0.560 \u2014 a 12-point band, confirming the compressed-range characterization",
   "conclusion_accepted": "The 5-3 winner record is consistent with ordinary variance from a near-uninformative probability set; it is not evidence of discrimination."
  },
-
- "unchanged_by_this_correction": ["v1 cohort record 5-3, Brier 0.24933, log loss 0.69186",
-   "WNBA winner 2-1 mean Brier 0.1354; margin MAE 15.66; total MAE 16.10",
-   "ATS ledgers FULL 1-4, ACTION_ELIGIBLE 0-0, BLOCKED_SUBSET 1-2 (all diagnostics, no wagers)",
-   "NFL benchmark 1-1, model metrics null by rule",
-   "chain 297 forecasts / 295 grades"],
- "writes": {"grades_appended": 0, "forecasts_altered": 0, "artifacts_modified": 0, "new_records": 1},
- "standing": {"gate": "0/100 NO_PROMOTE", "model_authorized_ledger_usd": 0, "wager_authority": "NO", "execution": "UNAUTHORIZED"}
+ "unchanged_by_this_correction": [
+  "v1 cohort record 5-3, Brier 0.24933, log loss 0.69186",
+  "WNBA winner 2-1 mean Brier 0.1354; margin MAE 15.66; total MAE 16.10",
+  "ATS ledgers FULL 1-4, ACTION_ELIGIBLE 0-0, BLOCKED_SUBSET 1-2 (all diagnostics, no wagers)",
+  "NFL benchmark 1-1, model metrics null by rule",
+  "chain 297 forecasts / 295 grades"
+ ],
+ "writes": {
+  "grades_appended": 0,
+  "forecasts_altered": 0,
+  "artifacts_modified": 0,
+  "new_records": 1
+ },
+ "standing": {
+  "gate": "0/100 NO_PROMOTE",
+  "model_authorized_ledger_usd": 0,
+  "wager_authority": "NO",
+  "execution": "UNAUTHORIZED"
+ },
+ "owner_narrowing_2026-08-21": {
+  "status": "ACCEPTED \u2014 this narrows my corrected finding and supersedes any stronger reading of it",
+  "supported_conclusion_owner_verbatim": "V13 showed virtually no discrimination on this slate, and its confidence ranking provided no protection against its largest error.",
+  "explicitly_NOT_supported": "that confidence is inversely informative. n=8 cannot establish an inverse relationship between confidence and accuracy; one most-confident miss is a description of this slate, not a property of the model.",
+  "wnba_narrowing_owner_verbatim": "WNBA WINNER is the only component currently showing encouraging prospective behavior \u2014 not yet a proven or promotable model.",
+  "closure": "commit f7504a7 closes both presentation defects without altering the settlement; lesson 16 stands as the permanent rule that compression and error rank must be evaluated separately."
+ }
 }

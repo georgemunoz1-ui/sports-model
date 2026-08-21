@@ -1,0 +1,164 @@
+{
+ "schema": "mlb.acquired_slate_board.v1",
+ "record_id": "WEB-MLB-SLATE-20260821",
+ "captured_at_utc": "2026-08-21T06:45:00Z",
+ "received_from": "tier-1 web acquisition (MLB.com/ESPN schedule listings via search)",
+ "source_tier": 1,
+ "source_family": "OFFICIAL_WEB",
+ "slate_date": "2026-08-21",
+ "game_count": 15,
+ "count_verification": "TWO independent search confirmations both enumerate the same 15 matchups. An earlier snippet's prose said '14 games' while listing 15; the conflict was resolved against the enumerated lists, which agree exactly.",
+ "franchise_partition": "COMPLETE_BY_ROSTER_PARTITION \u2014 30 distinct franchises, each appearing exactly once. NOTE: a clean partition proves internal consistency, not schedule completeness (lesson 13); no official gamePk manifest was obtained.",
+ "price_state": "NO PRICES ACQUIRED OR CONSULTED. The card below is generated before any market data for this slate exists in the repository \u2014 forecast first, price second.",
+ "starter_state": "ALL TBD. Probables could not be retrieved reliably: the aggregator pages carrying them (fangraphs, mlbschedule.net) are egress-blocked and search snippets did not enumerate them.",
+ "low_confidence_names_seen_NOT_USED": [
+  {
+   "game": "TOR@NYY",
+   "claim": "NYY Cam Schlittler",
+   "status": "SINGLE_SOURCE_LOW_CONFIDENCE \u2014 recorded, NOT used in the card"
+  },
+  {
+   "game": "STL@PHI",
+   "claim": "PHI Jesus Luzardo / STL Hunter Dobbins",
+   "status": "SINGLE_SOURCE_LOW_CONFIDENCE, name plausibility unverified \u2014 recorded, NOT used in the card"
+  }
+ ],
+ "why_not_used": "R1: a single unverified snippet name is not a probable. Using it would silently assert a starter the model then prices. All 15 games run league-average CAP pitching until a verified probables board arrives, at which point a v2 cohort forks and the diff measures the starter information.",
+ "games": [
+  {
+   "away": "ATL",
+   "home": "MIL",
+   "first_pitch_utc": "20:10Z",
+   "venue": "American Family Field",
+   "away_sp": null,
+   "home_sp": null,
+   "starters_null_reason": "NOT_RETRIEVED"
+  },
+  {
+   "away": "STL",
+   "home": "PHI",
+   "first_pitch_utc": "22:40Z",
+   "venue": "Citizens Bank Park",
+   "away_sp": null,
+   "home_sp": null,
+   "starters_null_reason": "NOT_RETRIEVED"
+  },
+  {
+   "away": "TOR",
+   "home": "NYY",
+   "first_pitch_utc": "23:05Z",
+   "venue": "Yankee Stadium",
+   "away_sp": null,
+   "home_sp": null,
+   "starters_null_reason": "NOT_RETRIEVED"
+  },
+  {
+   "away": "SF",
+   "home": "BOS",
+   "first_pitch_utc": "23:10Z",
+   "venue": "Fenway Park",
+   "away_sp": null,
+   "home_sp": null,
+   "starters_null_reason": "NOT_RETRIEVED"
+  },
+  {
+   "away": "WSH",
+   "home": "MIA",
+   "first_pitch_utc": "23:10Z",
+   "venue": "loanDepot park",
+   "away_sp": null,
+   "home_sp": null,
+   "starters_null_reason": "NOT_RETRIEVED"
+  },
+  {
+   "away": "TB",
+   "home": "BAL",
+   "first_pitch_utc": "23:15Z",
+   "venue": "Oriole Park at Camden Yards",
+   "away_sp": null,
+   "home_sp": null,
+   "starters_null_reason": "NOT_RETRIEVED"
+  },
+  {
+   "away": "NYM",
+   "home": "CWS",
+   "first_pitch_utc": "23:40Z",
+   "venue": "Rate Field",
+   "away_sp": null,
+   "home_sp": null,
+   "starters_null_reason": "NOT_RETRIEVED"
+  },
+  {
+   "away": "DET",
+   "home": "KC",
+   "first_pitch_utc": "00:10Z",
+   "venue": "Kauffman Stadium",
+   "away_sp": null,
+   "home_sp": null,
+   "starters_null_reason": "NOT_RETRIEVED"
+  },
+  {
+   "away": "ATH",
+   "home": "HOU",
+   "first_pitch_utc": "00:10Z",
+   "venue": "Daikin Park",
+   "away_sp": null,
+   "home_sp": null,
+   "starters_null_reason": "NOT_RETRIEVED"
+  },
+  {
+   "away": "LAA",
+   "home": "TEX",
+   "first_pitch_utc": "00:15Z",
+   "venue": "Globe Life Field",
+   "away_sp": null,
+   "home_sp": null,
+   "starters_null_reason": "NOT_RETRIEVED"
+  },
+  {
+   "away": "CLE",
+   "home": "COL",
+   "first_pitch_utc": "00:40Z",
+   "venue": "Coors Field",
+   "away_sp": null,
+   "home_sp": null,
+   "starters_null_reason": "NOT_RETRIEVED"
+  },
+  {
+   "away": "CIN",
+   "home": "AZ",
+   "first_pitch_utc": "01:40Z",
+   "venue": "Chase Field",
+   "away_sp": null,
+   "home_sp": null,
+   "starters_null_reason": "NOT_RETRIEVED"
+  },
+  {
+   "away": "MIN",
+   "home": "SD",
+   "first_pitch_utc": "01:40Z",
+   "venue": "Petco Park",
+   "away_sp": null,
+   "home_sp": null,
+   "starters_null_reason": "NOT_RETRIEVED"
+  },
+  {
+   "away": "PIT",
+   "home": "LAD",
+   "first_pitch_utc": "02:10Z",
+   "venue": "Dodger Stadium",
+   "away_sp": null,
+   "home_sp": null,
+   "starters_null_reason": "NOT_RETRIEVED"
+  },
+  {
+   "away": "CHC",
+   "home": "SEA",
+   "first_pitch_utc": "02:10Z",
+   "venue": "T-Mobile Park",
+   "away_sp": null,
+   "home_sp": null,
+   "starters_null_reason": "NOT_RETRIEVED"
+  }
+ ]
+}

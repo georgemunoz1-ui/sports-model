@@ -1,0 +1,592 @@
+{
+ "schema": "mlb.owner_matchup_preview_board.v1",
+ "record_id": "OWNER-MATCHUPS-20260821-0705Z",
+ "captured_at_utc": "2026-08-21T07:05:00Z",
+ "received_from": "owner paste 2026-08-21 (daily matchup previews)",
+ "source_tier": 1,
+ "source_family": "OWNER_BOARD",
+ "slate_date": "2026-08-21",
+ "starter_class": "PROJECTED (preview board; NOT a T-90 confirmation \u2014 does not satisfy V14 forward eligibility)",
+ "firewall": "career-vs-current-roster and Statcast columns (PA, K%, BB%, AVG, wOBA, exit velo, launch angle, xBA, xSLG, xwOBA) are NOT V13 inputs and are NOT ingested as features anywhere. Preserved in this evidence file only. Handedness likewise recorded, not a feature.",
+ "slots_named": "27 of 30. TBD: STL away, TOR away, SD home.",
+ "price_state": "NO PRICES on this board \u2014 the slate remains price-free and the v1/v2 forecasts both precede any market data.",
+ "adjudication_of_declined_names": {
+  "context": "the 8/21 v1 build recorded two single-source probable claims and deliberately did not use them (R1).",
+  "NYY Cam Schlittler": "CONFIRMED by this board \u2014 the declined name was correct",
+  "PHI Jesus Luzardo": "CONFIRMED by this board \u2014 the declined name was correct",
+  "STL Hunter Dobbins": "NOT CONFIRMED \u2014 this board lists the St. Louis starter as 'To be announced'. Had the snippet been trusted, the card would have priced a starter no tier-1 source supports.",
+  "verdict": "Two of three would have been fine and one would have been wrong. That is exactly the distribution the rule exists for: the discipline is not that snippets are usually wrong, it is that you cannot tell which one is."
+ },
+ "unregistered_starter": "Hayden Wesneski (HOU) is absent from data/backfill/mlb/2026/pitchers.csv -> CAP league-average pitching for that slot. Recorded, not invented.",
+ "roster_motion_recorded_not_verified": "this board places Freddy Peralta with TB, Sonny Gray with BOS, Trevor Rogers with BAL, Ryan Gusto with MIA, Matthew Boyd with CHC and Eduardo Rodriguez with AZ; team assignments are taken from the tier-1 board as delivered and no external verification is possible from this session.",
+ "rodriguez_note": "'Eduardo Rodriguez #57' is explicit by first name, so the four-way registry Rodriguez ambiguity that forced a CAP on 2026-08-20 does NOT recur here; resolved to id 593958.",
+ "games": [
+  {
+   "away": "ATL",
+   "home": "MIL",
+   "first_pitch_utc": "20:10Z",
+   "venue": "American Family Field",
+   "asp": {
+    "name": "Chris Sale",
+    "num": 51,
+    "throws": "L",
+    "career_vs_roster": {
+     "pa": 93,
+     "k_pct": 36.6,
+     "bb_pct": 6.5,
+     "avg": ".244",
+     "woba": ".264",
+     "ev": 87.5,
+     "la": 3.4,
+     "xba": ".189",
+     "xslg": ".258",
+     "xwoba": ".224"
+    }
+   },
+   "hsp": {
+    "name": "Jacob Misiorowski",
+    "num": 32,
+    "throws": "R",
+    "career_vs_roster": {
+     "pa": 20,
+     "k_pct": 25.0,
+     "bb_pct": 5.0,
+     "avg": ".211",
+     "woba": ".213",
+     "ev": 84.5,
+     "la": 21.7,
+     "xba": ".202",
+     "xslg": ".253",
+     "xwoba": ".224"
+    }
+   }
+  },
+  {
+   "away": "STL",
+   "home": "PHI",
+   "first_pitch_utc": "22:40Z",
+   "venue": "Citizens Bank Park",
+   "asp": {
+    "name": "TBD",
+    "num": null,
+    "throws": null,
+    "career_vs_roster": null
+   },
+   "hsp": {
+    "name": "Jesus Luzardo",
+    "num": 44,
+    "throws": "L",
+    "career_vs_roster": {
+     "pa": 21,
+     "k_pct": 14.3,
+     "bb_pct": 0.0,
+     "avg": ".250",
+     "woba": ".262",
+     "ev": 95.3,
+     "la": 8.9,
+     "xba": ".263",
+     "xslg": ".382",
+     "xwoba": ".296"
+    }
+   }
+  },
+  {
+   "away": "TOR",
+   "home": "NYY",
+   "first_pitch_utc": "23:05Z",
+   "venue": "Yankee Stadium",
+   "asp": {
+    "name": "TBD",
+    "num": null,
+    "throws": null,
+    "career_vs_roster": null
+   },
+   "hsp": {
+    "name": "Cam Schlittler",
+    "num": 31,
+    "throws": "R",
+    "career_vs_roster": {
+     "pa": 104,
+     "k_pct": 21.2,
+     "bb_pct": 10.6,
+     "avg": ".258",
+     "woba": ".297",
+     "ev": 81.6,
+     "la": 9.9,
+     "xba": ".252",
+     "xslg": ".303",
+     "xwoba": ".303"
+    }
+   }
+  },
+  {
+   "away": "SF",
+   "home": "BOS",
+   "first_pitch_utc": "23:10Z",
+   "venue": "Fenway Park",
+   "asp": {
+    "name": "Logan Webb",
+    "num": 62,
+    "throws": "R",
+    "career_vs_roster": {
+     "pa": 36,
+     "k_pct": 19.4,
+     "bb_pct": 5.6,
+     "avg": ".333",
+     "woba": ".379",
+     "ev": 95.3,
+     "la": 7.8,
+     "xba": ".291",
+     "xslg": ".390",
+     "xwoba": ".331"
+    }
+   },
+   "hsp": {
+    "name": "Sonny Gray",
+    "num": 54,
+    "throws": "R",
+    "career_vs_roster": {
+     "pa": 78,
+     "k_pct": 20.5,
+     "bb_pct": 17.9,
+     "avg": ".238",
+     "woba": ".357",
+     "ev": 90.9,
+     "la": 11.4,
+     "xba": ".214",
+     "xslg": ".433",
+     "xwoba": ".342"
+    }
+   }
+  },
+  {
+   "away": "WSH",
+   "home": "MIA",
+   "first_pitch_utc": "23:10Z",
+   "venue": "loanDepot park",
+   "asp": {
+    "name": "Brad Lord",
+    "num": 41,
+    "throws": "R",
+    "career_vs_roster": {
+     "pa": 14,
+     "k_pct": 21.4,
+     "bb_pct": 14.3,
+     "avg": ".167",
+     "woba": ".226",
+     "ev": 91.3,
+     "la": 8.8,
+     "xba": ".272",
+     "xslg": ".332",
+     "xwoba": ".327"
+    }
+   },
+   "hsp": {
+    "name": "Ryan Gusto",
+    "num": 65,
+    "throws": "R",
+    "career_vs_roster": {
+     "pa": 14,
+     "k_pct": 21.4,
+     "bb_pct": 7.1,
+     "avg": ".333",
+     "woba": ".304",
+     "ev": 82.5,
+     "la": 14.4,
+     "xba": ".262",
+     "xslg": ".358",
+     "xwoba": ".280"
+    }
+   }
+  },
+  {
+   "away": "TB",
+   "home": "BAL",
+   "first_pitch_utc": "23:15Z",
+   "venue": "Oriole Park at Camden Yards",
+   "asp": {
+    "name": "Freddy Peralta",
+    "num": 51,
+    "throws": "R",
+    "career_vs_roster": {
+     "pa": 64,
+     "k_pct": 26.6,
+     "bb_pct": 12.5,
+     "avg": ".170",
+     "woba": ".280",
+     "ev": 89.1,
+     "la": 20.7,
+     "xba": ".212",
+     "xslg": ".333",
+     "xwoba": ".314"
+    }
+   },
+   "hsp": {
+    "name": "Trevor Rogers",
+    "num": 28,
+    "throws": "L",
+    "career_vs_roster": {
+     "pa": 71,
+     "k_pct": 14.1,
+     "bb_pct": 7.0,
+     "avg": ".338",
+     "woba": ".387",
+     "ev": 88.5,
+     "la": 13.7,
+     "xba": ".312",
+     "xslg": ".454",
+     "xwoba": ".355"
+    }
+   }
+  },
+  {
+   "away": "NYM",
+   "home": "CWS",
+   "first_pitch_utc": "23:40Z",
+   "venue": "Rate Field",
+   "asp": {
+    "name": "Sean Manaea",
+    "num": 59,
+    "throws": "L",
+    "career_vs_roster": {
+     "pa": 57,
+     "k_pct": 17.5,
+     "bb_pct": 8.8,
+     "avg": ".216",
+     "woba": ".291",
+     "ev": 85.9,
+     "la": 22.2,
+     "xba": ".173",
+     "xslg": ".293",
+     "xwoba": ".247"
+    }
+   },
+   "hsp": {
+    "name": "Sean Burke",
+    "num": 59,
+    "throws": "R",
+    "career_vs_roster": {
+     "pa": 9,
+     "k_pct": 22.2,
+     "bb_pct": 11.1,
+     "avg": ".375",
+     "woba": ".453",
+     "ev": 82.5,
+     "la": 31.3,
+     "xba": ".260",
+     "xslg": ".547",
+     "xwoba": ".377"
+    }
+   }
+  },
+  {
+   "away": "DET",
+   "home": "KC",
+   "first_pitch_utc": "00:10Z",
+   "venue": "Kauffman Stadium",
+   "asp": {
+    "name": "Troy Melton",
+    "num": 52,
+    "throws": "R",
+    "career_vs_roster": {
+     "pa": 26,
+     "k_pct": 19.2,
+     "bb_pct": 15.4,
+     "avg": ".273",
+     "woba": ".415",
+     "ev": 91.9,
+     "la": 13.8,
+     "xba": ".254",
+     "xslg": ".554",
+     "xwoba": ".394"
+    }
+   },
+   "hsp": {
+    "name": "Noah Cameron",
+    "num": 65,
+    "throws": "L",
+    "career_vs_roster": {
+     "pa": 27,
+     "k_pct": 33.3,
+     "bb_pct": 14.8,
+     "avg": ".174",
+     "woba": ".275",
+     "ev": 90.4,
+     "la": 17.3,
+     "xba": ".248",
+     "xslg": ".388",
+     "xwoba": ".335"
+    }
+   }
+  },
+  {
+   "away": "ATH",
+   "home": "HOU",
+   "first_pitch_utc": "00:10Z",
+   "venue": "Daikin Park",
+   "asp": {
+    "name": "J.T. Ginn",
+    "num": 35,
+    "throws": "R",
+    "career_vs_roster": {
+     "pa": 43,
+     "k_pct": 23.3,
+     "bb_pct": 7.0,
+     "avg": ".289",
+     "woba": ".361",
+     "ev": 85.1,
+     "la": 11.1,
+     "xba": ".249",
+     "xslg": ".327",
+     "xwoba": ".302"
+    }
+   },
+   "hsp": {
+    "name": "Hayden Wesneski",
+    "num": 39,
+    "throws": "R",
+    "career_vs_roster": {
+     "pa": 3,
+     "k_pct": 0.0,
+     "bb_pct": 0.0,
+     "avg": "1.000",
+     "woba": "1.256",
+     "ev": 81.6,
+     "la": 21.7,
+     "xba": ".730",
+     "xslg": "1.002",
+     "xwoba": ".752"
+    }
+   }
+  },
+  {
+   "away": "LAA",
+   "home": "TEX",
+   "first_pitch_utc": "00:15Z",
+   "venue": "Globe Life Field",
+   "asp": {
+    "name": "Reid Detmers",
+    "num": 48,
+    "throws": "L",
+    "career_vs_roster": {
+     "pa": 107,
+     "k_pct": 36.4,
+     "bb_pct": 9.3,
+     "avg": ".191",
+     "woba": ".300",
+     "ev": 89.3,
+     "la": 17.9,
+     "xba": ".197",
+     "xslg": ".348",
+     "xwoba": ".289"
+    }
+   },
+   "hsp": {
+    "name": "MacKenzie Gore",
+    "num": 1,
+    "throws": "L",
+    "career_vs_roster": {
+     "pa": 86,
+     "k_pct": 27.9,
+     "bb_pct": 10.5,
+     "avg": ".234",
+     "woba": ".294",
+     "ev": 84.9,
+     "la": 18.7,
+     "xba": ".195",
+     "xslg": ".285",
+     "xwoba": ".257"
+    }
+   }
+  },
+  {
+   "away": "CLE",
+   "home": "COL",
+   "first_pitch_utc": "00:40Z",
+   "venue": "Coors Field",
+   "asp": {
+    "name": "Joey Cantillo",
+    "num": 54,
+    "throws": "L",
+    "career_vs_roster": {
+     "pa": 5,
+     "k_pct": 20.0,
+     "bb_pct": 20.0,
+     "avg": ".000",
+     "woba": ".138",
+     "ev": 78.5,
+     "la": -5.0,
+     "xba": ".155",
+     "xslg": ".167",
+     "xwoba": ".251"
+    }
+   },
+   "hsp": {
+    "name": "Tanner Gordon",
+    "num": 29,
+    "throws": "R",
+    "career_vs_roster": {
+     "pa": 13,
+     "k_pct": 7.7,
+     "bb_pct": 7.7,
+     "avg": ".500",
+     "woba": ".516",
+     "ev": 88.1,
+     "la": 24.0,
+     "xba": ".306",
+     "xslg": ".411",
+     "xwoba": ".340"
+    }
+   }
+  },
+  {
+   "away": "CIN",
+   "home": "AZ",
+   "first_pitch_utc": "01:40Z",
+   "venue": "Chase Field",
+   "asp": {
+    "name": "Nick Lodolo",
+    "num": 40,
+    "throws": "L",
+    "career_vs_roster": {
+     "pa": 44,
+     "k_pct": 20.5,
+     "bb_pct": 2.3,
+     "avg": ".200",
+     "woba": ".272",
+     "ev": 90.4,
+     "la": 16.1,
+     "xba": ".209",
+     "xslg": ".328",
+     "xwoba": ".259"
+    }
+   },
+   "hsp": {
+    "name": "Eduardo Rodriguez",
+    "num": 57,
+    "throws": "L",
+    "career_vs_roster": {
+     "pa": 60,
+     "k_pct": 21.7,
+     "bb_pct": 11.7,
+     "avg": ".216",
+     "woba": ".284",
+     "ev": 84.6,
+     "la": 15.3,
+     "xba": ".214",
+     "xslg": ".301",
+     "xwoba": ".280"
+    }
+   }
+  },
+  {
+   "away": "MIN",
+   "home": "SD",
+   "first_pitch_utc": "01:40Z",
+   "venue": "Petco Park",
+   "asp": {
+    "name": "Connor Prielipp",
+    "num": 61,
+    "throws": "L",
+    "career_vs_roster": {
+     "pa": 3,
+     "k_pct": 66.7,
+     "bb_pct": 0.0,
+     "avg": ".000",
+     "woba": ".000",
+     "ev": 89.0,
+     "la": -14.0,
+     "xba": ".048",
+     "xslg": ".052",
+     "xwoba": ".043"
+    }
+   },
+   "hsp": {
+    "name": "TBD",
+    "num": null,
+    "throws": null,
+    "career_vs_roster": null
+   }
+  },
+  {
+   "away": "PIT",
+   "home": "LAD",
+   "first_pitch_utc": "02:10Z",
+   "venue": "UNIQLO Field at Dodger Stadium",
+   "asp": {
+    "name": "Bubba Chandler",
+    "num": 36,
+    "throws": "R",
+    "career_vs_roster": {
+     "pa": 12,
+     "k_pct": 8.3,
+     "bb_pct": 0.0,
+     "avg": ".417",
+     "woba": ".560",
+     "ev": 95.7,
+     "la": -3.7,
+     "xba": ".395",
+     "xslg": ".943",
+     "xwoba": ".559"
+    }
+   },
+   "hsp": {
+    "name": "Yoshinobu Yamamoto",
+    "num": 18,
+    "throws": "R",
+    "career_vs_roster": {
+     "pa": 16,
+     "k_pct": 31.3,
+     "bb_pct": 6.3,
+     "avg": ".200",
+     "woba": ".209",
+     "ev": 89.8,
+     "la": -2.6,
+     "xba": ".165",
+     "xslg": ".219",
+     "xwoba": ".199"
+    }
+   }
+  },
+  {
+   "away": "CHC",
+   "home": "SEA",
+   "first_pitch_utc": "02:10Z",
+   "venue": "T-Mobile Park",
+   "asp": {
+    "name": "Matthew Boyd",
+    "num": 16,
+    "throws": "L",
+    "career_vs_roster": {
+     "pa": 35,
+     "k_pct": 25.7,
+     "bb_pct": 8.6,
+     "avg": ".226",
+     "woba": ".277",
+     "ev": 83.6,
+     "la": 10.4,
+     "xba": ".203",
+     "xslg": ".333",
+     "xwoba": ".269"
+    }
+   },
+   "hsp": {
+    "name": "Emerson Hancock",
+    "num": 26,
+    "throws": "R",
+    "career_vs_roster": {
+     "pa": 34,
+     "k_pct": 20.6,
+     "bb_pct": 2.9,
+     "avg": ".250",
+     "woba": ".397",
+     "ev": 91.5,
+     "la": 16.3,
+     "xba": ".252",
+     "xslg": ".598",
+     "xwoba": ".381"
+    }
+   }
+  }
+ ]
+}

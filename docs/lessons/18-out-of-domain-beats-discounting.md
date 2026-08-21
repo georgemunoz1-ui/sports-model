@@ -1,0 +1,4 @@
+# When a model is applied outside its domain, block the row — do not tell the reader to "discount it".
+Rule: "discount by an unknown amount" is not an executable correction. If a known model term is wrong for a game, the row gets a permanent status that forces BLOCKED and survives prices arriving. It stays in the registration and settlement cohorts (so the miss is measured) and is barred only from card action.
+Incident: 2026-08-21 PDX@TOR, played at Rogers Arena Vancouver with Toronto nominally home. The frozen WNBA feature set has no neutral-site term, so a full home-court advantage was applied to a team that did not have one. Status OUT_OF_DOMAIN—NEUTRAL_SITE_HCA_UNMODELED, enforced by PERMANENT_BLOCKS + render_gate check #8.
+Companion rule: never discount one model's forecast because a DIFFERENT model missed. Separate models have separate validation histories; cross-model contamination of reasoning was corrected in the same review.

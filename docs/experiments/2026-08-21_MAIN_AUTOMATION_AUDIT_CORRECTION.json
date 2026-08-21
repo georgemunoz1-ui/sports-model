@@ -1,0 +1,63 @@
+{
+ "record_id": "AUDIT-CORRECTION-MAIN-AUTOMATION-2026-08-21",
+ "created_utc": "2026-08-21T18:35:00Z",
+ "method": "APPEND_ONLY correction of my own 12:25Z audit claim, plus one code fix.",
+ "withdrawn_claim": {
+  "where": "progress.md line 57 and the 12:25Z chat report",
+  "text": "'Default-branch prerequisites audited (read-only): ... no automation targeting main.'",
+  "status": "FALSE \u2014 WITHDRAWN. Every other clause in that sentence reproduces (no Actions, no Pages, no branch protections on any of 4 branches, no non-sample hooks), but 'no automation targeting main' was wrong on two independent counts."
+ },
+ "why_my_grep_missed_it": {
+  "pattern_used": "grep -E '(branches:|refs/heads/main|origin/main|checkout main|--branch main|/blob/main/|/tree/main/)'",
+  "the_actual_string": "git push -q origin main   <- 'origin main' with a SPACE",
+  "diagnosis": "I tested 'origin/main' with a slash and 'checkout main', but never 'origin <branch>' with a space, which is the ordinary git push refspec form. The pattern was shaped by what I expected CI config to look like rather than by how git is actually invoked in shell scripts. A search that only looks where you expect the answer is not an audit.",
+  "second_miss": "out-of-repo automation is invisible to grep entirely \u2014 two enabled cron Routines resolve the default branch implicitly via a bare `git clone`. No repo-local search could have found them; I should have enumerated the triggers, which I had the tool to do."
+ },
+ "finding_1_push_sh": {
+  "file": "harness/push.sh",
+  "line": 6,
+  "severity": "critical",
+  "was": "git push -q origin main 2>&1 | tail -1",
+  "problem": "`main` is a 1-commit, 2-file stub (.gitignore + README.md) with NO common ancestry with the working branch \u2014 `git merge-base main sportsmodel/main` is empty, 1 commit vs 270. Line 5 commits onto the CHECKED-OUT branch; line 6 then pushed a branch that does not contain that commit. The push SUCCEEDED (exit 0) because pushing an unchanged stub is a valid no-op, so harness/runbook.md's WARN-on-push-failure path (lines 26 and 43) never fired. This is a SILENT durability failure: every cycle reported a successful durability push while pushing nothing.",
+  "now": "git push -q origin HEAD  \u2014 branch-agnostic, pushes the checked-out branch",
+  "why_not_hardcode_the_new_name": "substituting 'sportsmodel/main' as a bare refname would be correct today and re-introduce the identical bug class the first time work happens on any other branch. HEAD has no such failure mode.",
+  "scope_note": "push.sh cd's to /home/claude/work/sportsmodel \u2014 the scheduled-run container path, not this session's checkout. The silent failure therefore affected the cron cycles, not this session's pushes, which use explicit `git push origin sportsmodel/main`."
+ },
+ "finding_2_cron_triggers": {
+  "severity": "high",
+  "in_repo": false,
+  "triggers": [
+   {
+    "id": "trig_018RWyPuLS8Kh7XBz6WDfCy3",
+    "name": "Sports model \u2014 daily pregame K-prop card",
+    "cron": "0 15 * * *",
+    "enabled": true,
+    "last_fired": "2026-08-21T15:10:45Z"
+   },
+   {
+    "id": "trig_017JYhFJTSfpPfmBMjsdgEhD",
+    "name": "Sports model \u2014 nightly grade + dataset update",
+    "cron": "30 5 * * *",
+    "enabled": true,
+    "last_fired": "2026-08-21T13:19:29Z"
+   }
+  ],
+  "problem": "Both STEP 0 bootstraps run `git clone https://github.com/georgemunoz1-ui/sports-model.git` with NO -b flag, so they check out the remote default branch. `git ls-remote --symref origin HEAD` returns refs/heads/main, and main is the 2-file stub \u2014 so every scheduled run clones a repo with no AGENTS.md, trips its own 'restore before any work' guard, and falls through to the stale-zip rail.",
+  "important_implication": "This is an INDEPENDENT cause of the recurring BOOTSTRAP_BLOCKED / stale-zip failures, additional to the sports-model hyphen fix recorded on 2026-08-13. The hyphen was fixed and the failures continued, because the clone was still landing on a stub.",
+  "effect_of_the_switch": "The default-branch change REPAIRS both triggers rather than breaking them. That is a behavior change worth expecting rather than discovering.",
+  "recommended_but_NOT_ACTIONED": "pin each clone with `-b sportsmodel/main` so the bootstrap is independent of repo settings. These are the owner's automation prompts; I have the update_trigger capability but did not use it without instruction."
+ },
+ "post_switch_step": "after the default changes, run `git remote set-head origin -a` in any existing clone so origin/HEAD stops pointing at the stub.",
+ "audit_method_note": "Found by a 28-agent read-only audit with an adversarial refutation pass \u2014 the finding survived refutation and was then re-verified by hand here (push.sh bytes, merge-base, rev-list counts, ls-remote symref, and both trigger prompts) before anything was changed.",
+ "writes": {
+  "code_files_fixed": 1,
+  "forecasts_altered": 0,
+  "grades_appended": 0,
+  "triggers_modified": 0
+ },
+ "standing": {
+  "gate": "0/100 NO_PROMOTE",
+  "ledger_usd": 0,
+  "wager_authority": "NO"
+ }
+}

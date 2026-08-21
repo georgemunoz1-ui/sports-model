@@ -119,6 +119,63 @@ def wnba_ats_status(home_cover_delta, selected_is_market_dog):
     return "ATS_DIAGNOSTIC_ONLY"
 
 
+def slot_status(name, stats, cap_era=4.2, low_sample_gs=2):
+    """Mechanical starter-slot resolution (owner rule 2026-08-21). Three DISTINCT predicates that
+    must never be conflated in a report:
+      TBD           - no starter announced
+      REGISTRY_MISS - named but absent from the frozen pitcher registry -> league-average CAP
+      LOW_SAMPLE    - registered with real stats but gs < 2, so shrinkage w = gs/(gs+8) pulls the
+                      projection >= 89% toward league average. NOT a CAP substitution.
+      RESOLVED      - registered with gs >= 2
+    'CAP slot' means TBD or REGISTRY_MISS only. daily_card's `capped` flag is BROADER (gs<2 OR TBD)
+    and therefore counts LOW_SAMPLE too - which is why the two give different game counts."""
+    if name == "TBD" or name is None:
+        return "TBD"
+    if stats.get("gs", 0) == 0 and stats.get("era") == cap_era:
+        return "REGISTRY_MISS"
+    if stats.get("gs", 0) < low_sample_gs:
+        return "LOW_SAMPLE"
+    return "RESOLVED"
+
+
+def starter_completeness(rows):
+    """Derive completeness mechanically from card rows. Returns every count with its predicate
+    named, so no report can print a bare percentage whose denominator is ambiguous."""
+    CAP = ("TBD", "REGISTRY_MISS")
+    slots, games_cap_free, games_fully_resolved, detail = 0, 0, 0, []
+    for r in rows:
+        sa = slot_status(r.get("asp"), r.get("asp_stats", {}))
+        sh = slot_status(r.get("hsp"), r.get("hsp_stats", {}))
+        slots += 2
+        cap_here = [s for s in (sa, sh) if s in CAP]
+        if not cap_here:
+            games_cap_free += 1
+        if sa == "RESOLVED" and sh == "RESOLVED":
+            games_fully_resolved += 1
+        if sa != "RESOLVED" or sh != "RESOLVED":
+            detail.append({"game": f"{r['away']}@{r['home']}", "away": sa, "home": sh})
+    cap_slots = sum(1 for r in rows for n, s in ((r.get("asp"), r.get("asp_stats", {})),
+                                                 (r.get("hsp"), r.get("hsp_stats", {})))
+                    if slot_status(n, s) in CAP)
+    low = sum(1 for r in rows for n, s in ((r.get("asp"), r.get("asp_stats", {})),
+                                           (r.get("hsp"), r.get("hsp_stats", {})))
+              if slot_status(n, s) == "LOW_SAMPLE")
+    n_games = len(rows)
+    return {
+        "denominator_slots": slots,
+        "cap_slots": cap_slots,
+        "model_resolved_slots": slots - cap_slots,
+        "low_sample_slots": low,
+        "games": n_games,
+        "games_with_no_cap_slot": games_cap_free,
+        "games_fully_resolved_both_slots_gs_ge_2": games_fully_resolved,
+        "unresolved_detail": detail,
+        "predicate_note": ("'CAP slot' = TBD or REGISTRY_MISS. 'fully resolved' additionally requires "
+                           "gs >= 2 on both slots, so a LOW_SAMPLE starter reduces the fully-resolved "
+                           "game count without adding a CAP slot. The two counts differ by design."),
+    }
+
+
 def totals_gate(quotes):
     """Owner-required total gate (2026-08-19, after the O/P/U reporting incident: four probability
     rows were asserted in a report that no replay ever produced — push mass on half-point lines was
@@ -293,6 +350,24 @@ def selftest():
     row2["validated_edge_class"] = True
     if classify(row2) != "QUALIFIED_PAPER_EDGE":
         fails.append("validated large edge not QUALIFIED")
+    # starter completeness fixtures (owner rule 2026-08-21): the three predicates must not conflate
+    _rows = [{"away": "A", "home": "B", "asp": "TBD", "hsp": "P1", "asp_stats": {"gs": 0, "era": 4.2},
+              "hsp_stats": {"gs": 20, "era": 3.1}},
+             {"away": "C", "home": "D", "asp": "P2", "hsp": "P3", "asp_stats": {"gs": 1, "era": 3.0},
+              "hsp_stats": {"gs": 15, "era": 3.5}},
+             {"away": "E", "home": "F", "asp": "P4", "hsp": "P5", "asp_stats": {"gs": 19, "era": 3.2},
+              "hsp_stats": {"gs": 0, "era": 4.2}}]
+    _c = starter_completeness(_rows)
+    if _c["cap_slots"] != 2:
+        fails.append(f"CAP slots miscounted: {_c['cap_slots']} (TBD + REGISTRY_MISS only, expected 2)")
+    if _c["low_sample_slots"] != 1:
+        fails.append("LOW_SAMPLE slot not counted separately from CAP")
+    if _c["games_with_no_cap_slot"] != 1:
+        fails.append(f"games-with-no-CAP-slot wrong: {_c['games_with_no_cap_slot']} (expected 1)")
+    if _c["games_fully_resolved_both_slots_gs_ge_2"] != 0:
+        fails.append("fully-resolved game count must exclude the LOW_SAMPLE game")
+    if slot_status("P", {"gs": 0, "era": 4.2}) != "REGISTRY_MISS" or slot_status("P", {"gs": 1, "era": 3.0}) != "LOW_SAMPLE":
+        fails.append("slot_status conflates REGISTRY_MISS with LOW_SAMPLE")
     # WNBA ATS card-action fixtures (owner amendment 2026-08-20)
     if wnba_ats_status(0.97, False) != "ATS_DEADBAND_PASS":
         fails.append("sub-deadband delta (the GSV +2.5 case) not PASSed mechanically")

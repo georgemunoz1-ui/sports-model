@@ -1,0 +1,20 @@
+{
+ "schema": "ops.scheduled_refresh.v1",
+ "record_id": "REFRESH-20260821-0430Z",
+ "fired_at_utc": "2026-08-21T04:30:04Z",
+ "executed_at_utc": "2026-08-21T04:30:58Z",
+ "purpose": "8/20 settlement window check",
+ "finals_boards": "NONE ARRIVED \u2014 no owner finals for the 9 MLB games or 3 WNBA games. Nothing gradeable exists in this checkout; nothing invented (R1).",
+ "acquisition_attempt": {
+  "result": "HTTP 000 \u2014 CONNECT tunnel refused (403) at org egress proxy",
+  "not_routed_around": true
+ },
+ "pending_on_finals": [
+  "MLB v1 (P4-20260820, 8 forecasts) via grade_slate + registry; STL@CIN grades nothing (exclusion stands); market comparison from registration-vintage same-board prices, close prices null-with-reason unless transmitted",
+  "WNBA 3 WINNER + 3 ATS at registration lines (DAL +2.5 / LAS +8.5 / CON +14.5) \u2014 first BLOCKED_SUBSET data; MARGIN/TOTAL as separate estimand records; ats_ledgers refresh",
+  "results.csv append + ml_asof rebuild; settlement rendered four-field"
+ ],
+ "v14_8_20": "zero eligible (PROJECTED only) \u2014 exclusions stand counted",
+ "betting_output": "ZERO \u2014 unchanged",
+ "next_check": "re-armed ~12:00Z"
+}

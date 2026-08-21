@@ -1,0 +1,120 @@
+{
+ "record_id": "SETTLEMENT-CLARIFICATION-2026-08-20",
+ "created_utc": "2026-08-21T06:10:00Z",
+ "method": "APPEND_ONLY_SUPERSESSION (R6). No forecast, grade, card, or evidence file was modified, no forecast was re-graded, and no settlement was re-run. This record supersedes the LABELS and adds the reconciliations requested by the owner audit; data/mlb/analysis/2026-08-20_settlement_report.json remains on disk exactly as written.",
+ "supersedes": "label and accounting sections of data/mlb/analysis/2026-08-20_settlement_report.json",
+
+ "item_1_four_count_reconciliation": {
+  "identity": "scheduled = registered model forecasts + benchmark rows + scheduled exclusions",
+  "arithmetic": "14 = 11 + 2 + 1  (verified)",
+  "scheduled_games": {"total": 14, "MLB": 9, "WNBA": 3, "NFL_preseason": 2,
+    "basis": "independent per-league schedule manifests, built separately from results; no doubleheaders, postponements, or cancellations"},
+  "registered_model_forecasts": {"total": 11, "MLB": 8, "WNBA": 3,
+    "verified_by": "8 records with slate_date=2026-08-20 in data/mlb/forecasts/forecasts.jsonl; 3 WNBA-V1-20260820-* records in data/wnba/forecasts/registrations.jsonl"},
+  "registered_benchmark_rows": {"total": 2, "games": ["LV@HOU", "SF@LAC"],
+    "verified_by": "data/nfl/2026-08-20_preseason_benchmark_grades.json"},
+  "scheduled_exclusions": {"total": 1, "game": "STL@CIN",
+    "reason": "POST_START_AT_INTAKE — board captured 16:41:38Z against a 16:40Z first pitch. No forecast was ever registered; the final is recorded in results.csv for lineage and nothing is graded.",
+    "verified_by": "data/mlb/analysis/2026-08-20_STLCIN_exclusion.json (forecast_registered: false)"},
+  "correction_note": "The prior report counted the two NFL games as EXCLUDED_WITH_REASON, which collapsed two distinct categories (benchmark rows vs scheduled exclusions) into one and made the four counts irreconcilable. They are now separate; see item 2."
+ },
+
+ "item_2_nfl_disposition_relabel": {
+  "old_label": "EXCLUDED_WITH_REASON",
+  "new_label": "BENCHMARK_GRADED / MODEL_GRADE_NOT_APPLICABLE",
+  "rationale": "These rows WERE graded — against the registered capture-time market side — so calling them excluded understated the work done and mis-stated the disposition. What is not applicable is a MODEL grade, because no NFL model identity exists in the registry and no immutable pregame probability card was registered.",
+  "games": [
+   {"g": "LV@HOU", "final": "LV 22, HOU 20", "registered_benchmark_side": "HOU (-1.5, ML -120 at capture)",
+    "benchmark_result": "WRONG (HOU lost outright by 2; -1.5 not covered)", "tie": false,
+    "disposition": "BENCHMARK_GRADED / MODEL_GRADE_NOT_APPLICABLE",
+    "brier": null, "logloss": null, "model_edge": null, "ev": null, "null_reason": "MARKET_BENCHMARK_ONLY"},
+   {"g": "SF@LAC", "final": "SF 41, LAC 17", "registered_benchmark_side": "SF (-1.5, ML -120 at capture)",
+    "benchmark_result": "CORRECT (SF won by 24; -1.5 covered)", "tie": false,
+    "disposition": "BENCHMARK_GRADED / MODEL_GRADE_NOT_APPLICABLE",
+    "brier": null, "logloss": null, "model_edge": null, "ev": null, "null_reason": "MARKET_BENCHMARK_ONLY"}
+  ],
+  "benchmark_record": "1-1-0",
+  "preserved": "Brier, log loss, model edge and EV remain NULL BY RULE on both rows, unchanged."
+ },
+
+ "item_3_grade_ledger_arithmetic": {
+  "verified_against_files": true,
+  "principal_grade_chain": {
+   "file": "data/mlb/forecasts/grades.jsonl",
+   "before": 287, "after": 295, "delta": 8,
+   "delta_source": "exactly 8 new MLB grades, forecast_ids P4-20260820-{TOR@TB, SF@CLE, ATH@KC, ATL@CWS, SEA@MIL, NYY@BAL, WSH@TEX, LAA@HOU}",
+   "file_check": "wc -l = 295; 8 records match P4-20260820-*; 295 - 8 = 287 prior",
+   "head_json_declares": {"n_forecasts": 297, "n_grades": 295}},
+  "wnba_ledger": {
+   "file": "data/wnba/forecasts/grades.jsonl",
+   "name": "WNBA estimand grade ledger (SEPARATE file, NOT part of the 297/295 principal chain)",
+   "total_lines_now": 33, "appended_for_this_slate": 12,
+   "composition": {"WINNER": 3, "MARGIN": 3, "TOTAL": 3, "ATS": 3},
+   "note": "One record per game per estimand, never combined. The ATS records additionally resolve into the three ATS ledger views (harness/ats_ledgers.py), which are a VIEW over these same records and not a fourth store."},
+  "correction_note": "The prior report stated 'chain 297/295' and '12 WNBA grades appended' adjacently, which could be misread as the WNBA records living inside the principal chain. They do not. The 8-record delta fully explains 287 -> 295; the 12 WNBA records are counted nowhere in that chain."
+ },
+
+ "item_4_commit_identification": {
+  "settlement_content_commit": "fadf385 — 18 files, +1145/-40: grades, evidence, results.csv rows, market-context, settlement report, NFL benchmark record, ml_asof rebuild, progress entry",
+  "final_released_remote_head": "5d35b23f89584c733b93eaea458f109df81cd632 — 'Refresh gate artifacts from post-settlement healthcheck', 2 files, +2/-2 (timestamps only)",
+  "verified_by": "git ls-remote origin refs/heads/sportsmodel/main -> 5d35b23f89584c733b93eaea458f109df81cd632",
+  "correction_note": "fadf385 is the settlement-content commit and is NOT the current remote HEAD; 5d35b23 sits on top of it and is the released HEAD. This clarification commit will advance the HEAD again; the settlement content commit remains fadf385."
+ },
+
+ "item_5_signed_error_convention": {
+  "universal_convention": "signed error = PREDICTED minus ACTUAL, in every case below. Positive means the model projected MORE than happened (over-projection); negative means it projected LESS (under-projection).",
+  "mlb_total_error": {"formula": "v13.proj_total - (away_score + home_score)", "code": "harness/grade_slate.py:187",
+    "worked_example": "LAA@HOU: 7.8 - 21 = -13.2 -> the model under-projected by 13.2 runs",
+    "slate_signed_mean": 0.275, "slate_mae": 4.25, "median_ae": 2.8, "largest_miss": -13.2},
+  "wnba_margin_error": {"formula": "margin_home_pred - margin_home_actual", "orientation": "HOME-RELATIVE throughout",
+    "worked_example": "ATL@LAS: -4.57 - (-36) = +31.43 -> the model was 31.4 points more favorable to the HOME side (LAS) than reality",
+    "slate_values": {"IND@DAL": -5.58, "ATL@LAS": 31.43, "CON@LVA": -9.98}},
+  "wnba_total_error": {"formula": "total_pred - (away_score + home_score)",
+    "worked_example": "ATL@LAS: 175.9 - 212 = -36.1 -> the model under-projected by 36.1 points",
+    "slate_values": {"IND@DAL": 0.5, "ATL@LAS": -36.1, "CON@LVA": -11.7}},
+  "note": "MLB totals and WNBA totals share the convention but NOT the scale; they are never averaged together."
+ },
+
+ "item_6_source_independence_audit": {
+  "explicit_caveat": "Agent count is NOT source independence. 25 agents ran, but agents are consumers of sources, not sources. The counts below are over DOMAINS and ORGANIZATIONS reached, and they further collapse wire-syndicated outlets into a single family because a shared AP or Field Level Media recap republished by six papers is ONE source, not six.",
+  "unique_source_domains_across_journal": 57,
+  "distinct_official_numeric_ids_captured": 72,
+  "id_note": "The 72 includes ids of REJECTED prior-day echo games, deliberately retained as evidence of the rejection.",
+  "independence_families": ["OFFICIAL_LEAGUE (mlb.com incl. baseballsavant, wnba.com incl. team sites, nfl.com incl. team sites)", "ESPN (espn.com, espn.co.uk — one organization)", "WIRE_SYNDICATED (AP / Field Level Media republished by local outlets — collapsed to ONE)", "each remaining independent outlet counted individually"],
+  "per_game_independent_families": {"ATH@KC": 7, "ATL@CWS": 9, "ATL@LAS": 7, "CON@LVA": 7, "IND@DAL": 7,
+    "LAA@HOU": 7, "LV@HOU": 6, "NYY@BAL": 8, "SEA@MIL": 6, "SF@CLE": 5, "SF@LAC": 9, "STL@CIN": 6,
+    "TOR@TB": 5, "WSH@TEX": 5},
+  "games_with_two_source_corroboration": "14 of 14 — every game reached at least 5 independent families, minimum observed 5 (SF@CLE, TOR@TB, WSH@TEX)",
+  "games_supported_by_only_one_source": "NONE",
+  "cross_pass_check": "The verification pass and the adversarial refutation pass were run by different agents with different prompts; per game they shared between 1 and 6 domains, meaning each pass also reached domains the other did not.",
+  "residual_weakness_stated_plainly": "Every game's evidence includes an OFFICIAL_LEAGUE title and an ESPN title. If those two organizations were both wrong in the same direction on the same game, the corroborating independent outlets would in most cases not catch it, because many of them derive their scores from the same league feed. This is a real, unremovable limit of score-provider concentration, not a defect of the fan-out."
+ },
+
+ "item_7_healthcheck_timestamp_diagnosis": {
+  "verdict": "WORKING AS WRITTEN, but the artifacts conflate a report with a liveness stamp. Diagnosis only — no implementation change made or authorized.",
+  "mechanism": [
+   "harness/healthcheck.py:268 runs `tier1_board_gate.py --gate` as a subprocess",
+   "harness/healthcheck.py:279 runs `pregame_preflight.py --date <d> --gate` (for today and tomorrow)",
+   "pregame_preflight.py:89 stamps checked_utc = now(), then line 180 json.dump()s the report to the TRACKED path data/audit/pregame_preflight.json",
+   "tier1_board_gate.py:264 stamps built_utc = now(), then line 304 json.dump()s to the TRACKED path data/audit/tier1_board_gate.json"],
+  "observed_delta": "The 5d35b23 diff is exactly two lines: checked_utc 06:00:52Z -> 06:01:45Z and built_utc 06:00:52Z -> 06:01:45Z. No substantive field changed.",
+  "why_it_matters": "Running the read-only verification makes the working tree dirty, so 'uncommitted changes' is not a reliable cleanliness signal immediately after a healthcheck, and the stop-hook fires on every run. It also puts pure-timestamp commits into the release history.",
+  "root_cause": "The gate artifacts serve two purposes in one file: a versioned report (worth tracking) and a run-liveness stamp (changes every execution by construction). Only the second causes the churn.",
+  "options_not_implemented": [
+   "A: move the timestamp to an untracked sidecar (e.g. data/audit/.last_run.json, gitignored), leaving the tracked report byte-stable when nothing substantive changed",
+   "B: write-if-changed — compare the payload excluding the timestamp and skip the write when identical",
+   "C: gitignore the two audit artifacts entirely and treat them as local run state",
+   "D: accept the churn and keep folding it into a timestamp-only commit, as done for 5d35b23"],
+  "recommendation_if_authorized": "Option B is the smallest change that preserves both purposes: the report still refreshes when a gate result actually moves, and a no-change run leaves the tree clean.",
+  "authorization_status": "NOT AUTHORIZED — reported only, per the audit instruction."
+ },
+
+ "non_writing_integrity_checks_run": {
+  "forecast_registry.verify": "PASS (297 forecasts, 295 grades, chain intact)",
+  "settlement_contract --gate": "PASS (cutoff 2026-08-19T05:00:00Z; pre-cutoff records grandfathered)",
+  "artifact_immutability --selftest": "PASS (282/282 bound records match their registered hash, 15 unbound)"
+ },
+ "writes_performed_by_this_audit": {"grades_appended": 0, "forecasts_altered": 0, "settlements_rerun": 0,
+   "artifacts_modified": 0, "new_records": 1},
+ "standing": {"gate": "0/100 NO_PROMOTE", "model_authorized_ledger_usd": 0, "wager_authority": "NO", "execution": "UNAUTHORIZED"}
+}

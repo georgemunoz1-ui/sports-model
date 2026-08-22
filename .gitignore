@@ -6,3 +6,11 @@ __pycache__/
 
 # packaging / editable-install metadata
 *.egg-info/
+
+# Mutation-harness temp copies. `--mutants` writes a patched copy of a module into harness/ (it has
+# to live there for imports to resolve), runs its selftest, and unlinks it. They exist for a second
+# or two each, but a suite running dozens of them leaves the tree looking dirty to any check that
+# samples at the wrong moment — and an independent review running several suites at once makes that
+# routine. Never an input to anything; never committed.
+harness/tmp*_mutant.py
+harness/_dbg_*.py

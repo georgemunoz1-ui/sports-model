@@ -2696,3 +2696,36 @@ closed". Proposed REGISTRATION_WINDOW_CLOSED plus an early-in-day acquisition ru
 Forecast-first-price-second HELD: moneylines surfaced incidentally in previews and were deliberately
 not recorded or used. Betting output zero, ledger $0.
 Records: data/audit/2026-08-22_acquisition_ladder_run.json
+
+## 2026-08-23T00:05Z — LIVE PREGAME REGISTRATION: 3 MLB + 2 WNBA, after correcting a timezone error
+OWNER FLAGGED THE TIME (4:54 PM PT) AND IT EXPOSED MY ERROR. I had read every reported start time as
+Eastern and concluded the whole 8/22 slate was past first pitch. The "4:15 PM" listings were
+PACIFIC. Re-acquired per game: Cubs@Mariners and Pirates@Dodgers were 4:15 PM PT (23:15Z, started),
+but MIN@SD was 5:40 PM PT = 00:40Z, CLE@COL 8:10 PM Denver = 02:10Z and CIN@AZ 8:10 PM Phoenix =
+03:10Z — all three still PREGAME. My "the entire slate has started" claim was wrong.
+
+REGISTERED PRE-START at 23:56Z, chain 330/325 PASS:
+  P4-20260822-MIN@SD   T-44m   p_home .493  total 7.8
+  P4-20260822-CLE@COL  T-134m  p_home .526  total 9.7
+  P4-20260822-CIN@AZ   T-194m  p_home .548  total 8.8
+All starters CAP (no attributable starter source; names in search prose deliberately unused), no
+prices consulted, tier-2 schedule, dq_flags STARTERS_CAP/NO_PRICES/TIER2_SCHEDULE/PARTIAL_SLATE.
+The other 12 MLB games had genuinely started and are NEVER registered.
+
+WNBA: 3 games on 8/22. IND@NYL tipped 23:00Z (not registered). Two still pregame and registered
+pre-tip, orientation corroborated by VENUE rather than by "vs" ordering — Crypto.com Arena means LAS
+is home, Mortgage Matchup Center means PHX is home:
+  CON@LAS  p_home .6279  margin_home +3.40  total 172.3  coherence 3.19pp PASS  T-62m
+  ATL@PHX  p_home .3859  margin_home -3.58  total 170.5  coherence 1.31pp PASS  T-122m
+ZERO ATS selections (no line acquired; frozen prereg: missing line = NO_SELECTION). Total stays
+hard-blocked from recommendation language. An earlier search had claimed Portland hosting both
+Washington and Toronto — that was false and is now superseded by the corroborated 3-game board.
+
+NFL: DAL@ARI kicks 02:00Z at State Farm Stadium, still pregame, recorded as evidence.
+MARKET_BENCHMARK_ONLY with benchmark_side NULL — no attributable line was acquired, and a
+snippet-only price is evidence only. The rest of Week 2 had kicked. The full 10-game enumeration
+could not be transcribed reliably (merged bullets, a missing kickoff, and five non-8/22 games mixed
+into its results paragraph), so only the corroborated game is recorded.
+
+Betting output zero, ledger $0, wager authority NO. The acquisition ladder shipped an hour ago is
+what made this cycle recoverable at all.

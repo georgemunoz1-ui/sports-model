@@ -1,0 +1,33 @@
+{
+ "schema": "ops.scheduled_refresh.v1",
+ "record_id": "REFRESH-20260822-0330Z",
+ "fired_at_utc": "2026-08-22T03:30:44Z",
+ "executed_at_utc": "2026-08-22T03:32:00Z",
+ "purpose": "8/21 settlement window",
+ "outcome": "SLATE NOT COMPLETE \u2014 settlement DEFERRED, nothing graded.",
+ "why": "The 8/21 slate runs from a 20:10Z first pitch to 02:10Z starts. At 03:32Z the late games (CIN@AZ and MIN@SD at 01:40Z, PIT@LAD and CHC@SEA at 02:10Z, and probably CLE@COL at 00:40Z) are still in progress. Only ATL@MIL has surfaced as final.",
+ "verified_final_so_far": [
+  {
+   "game": "ATL@MIL",
+   "final": "ATL 1, MIL 2",
+   "source": "mlb.com Gameday title, gamePk 823746, explicitly dated 08/21/2026",
+   "note": "recorded here as evidence only \u2014 NOT graded, because the cohort settlement runs as one unit"
+  }
+ ],
+ "no_owner_board": "none arrived since the 8/21 intake boards.",
+ "acquisition_attempt": {
+  "result": "HTTP 000 \u2014 CONNECT tunnel refused (403) at the org egress proxy",
+  "not_routed_around": true
+ },
+ "why_not_partial_grade": "Grading the finished ~10 games now and the rest later would split the v1-vs-v2 comparison across two evidence captures with different acquisition timestamps. The graded-once rule would still hold, but the head-to-head is the whole point of this slate and it is cleaner settled as one unit against one evidence file. Deferring costs nothing: the forecasts are immutable and already registered.",
+ "dispositions_now": {
+  "PENDING_NOT_FINAL": 15,
+  "GRADED": 0,
+  "EXCLUDED_WITH_REASON": 0
+ },
+ "wnba": "3 games, tips 23:30Z and 02:00Z \u2014 the 02:00Z pair is mid-game. PENDING_NOT_FINAL.",
+ "nfl": "3 preseason benchmark rows, kickoffs 20:00Z/20:30Z/22:00Z \u2014 all should be final; deferred with the rest for a single settlement pass.",
+ "v14": "8/21 outcome is fixed at ZERO eligible (board class PROJECTED all day, no official confirmed-lineup source ever arrived). The exclusion ledger will be written with the settlement.",
+ "betting_output": "ZERO \u2014 unchanged; nothing was ever unblocked because no prices arrived for this slate at all.",
+ "next_check": "re-armed 06:15Z \u2014 comfortably past the last plausible finish (02:10Z start + ~3.5h)"
+}

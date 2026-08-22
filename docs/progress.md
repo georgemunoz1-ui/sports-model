@@ -2602,3 +2602,25 @@ one. A review that can only say no is as useless as one that can only say yes.
 Suites after repair: starter_attribution 43/43, daily_baselines 74/74, journal_continuity 29/29 —
 the AUTHOR's suites, evidence of work and not a release condition. QUARANTINES HELD; round 2 must be
 independent again. Record: docs/audits/2026-08-22_INDEPENDENT_REVIEW_ROUND1.json
+
+## 2026-08-22 (14:00Z scheduled check) — carry-overs already closed; 8/22 has no slate
+CHECK PREMISE WAS STALE, verified against the files rather than accepted: the two carry-overs it
+named were already resolved. CHC@SEA is graded in BOTH cohorts (P4-20260821-CHC@SEA and
+P4-20260821v2-CHC@SEA, home_win=1, graded 14:05Z) and PDX@TOR carries its three WNBA estimand
+records (WINNER 79-82 Brier .1508, MARGIN err +0.55, TOTAL). pending_results.json shows an EMPTY
+pending list with both entries in resolved_log at 7.7 hours pending, so the 36h expiry the check
+warned about never came into play and nothing was allowed to lapse. PDX@TOR's neutral-site question
+was recorded at settlement and stands: margin error +0.55, the most accurate row on the slate, and
+it stays OUT_OF_DOMAIN — an accurate row from an unearned home-court term is luck, not vindication.
+
+8/22 CYCLE: preflight INPUTS_MISSING with MISSING_NO_SLATE_TO_TIME_AGAINST on all three inputs — no
+owner board has arrived, so there is no first pitch to time anything against and no card is
+producible. No 8/22 evidence, card or WNBA card exists. One tier-1 acquisition attempt: CONNECT
+tunnel failed, 403 at the org egress proxy, not routed around. V14 starved (no official
+confirmed-lineup source; PROJECTED never qualifies). Betting output zero, ledger 0 bets / $0.
+
+Still pending owner: the default-branch switch to sportsmodel/main. Authorization is recorded;
+execution remains BLOCKED ON CAPABILITY (the GitHub MCP server exposes no repository-settings tool,
+and a raw token call is the same class of bypass as routing around the egress proxy). The switch
+would also repair the two enabled cron Routines that bare-clone the default branch onto the 2-file
+stub.

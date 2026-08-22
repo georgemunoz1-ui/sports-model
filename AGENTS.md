@@ -9,7 +9,11 @@ NEVER raw win%. Everything is PAPER until a go-live gate in state.json passes. $
 1. `cd /home/claude/work/sportsmodel && python3 harness/healthcheck.py`  — verifies dataset
    integrity, ledger consistency, last-run recency. FIX health failures before new work.
 2. Read `state.json` — current verdicts, ledgers, gates, experiment queue, next actions.
-3. Read `docs/progress.md` (last ~30 lines) — what the previous run did and left for you.
+3. Read `docs/progress.md` (last ~120 lines) — what the previous run did and left for you.
+   The window is 120, not 30, because entries now run 15-30 lines each and a 30-line read
+   landed mid-paragraph with no dated header in view. `harness/journal_continuity.py`
+   PARSES this line and fails if the newest dated entry falls outside the window stated
+   here, so changing the number changes what is enforced — keep them honest together.
 4. Do ONE unit of work well (a daily cycle, or ONE experiment), not everything at once.
 
 ## The daily cycle (two halves)

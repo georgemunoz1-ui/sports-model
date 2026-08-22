@@ -129,7 +129,12 @@ DEFAULT_N = 200_000
 FROZEN_SEED, FROZEN_N = 722, 30000  # daily_card.py's global-sequential discipline
 
 # daily_card.py: CAP = dict(era=LG_ERA, gs=0, k=LG_K, bb=LG_BB, ek=None)
-LG_ERA, LG_K, LG_BB = 4.20, 22.0, 8.5
+# The league-average CAP is DERIVED from card_render — the module whose sim() this harness actually
+# drives — rather than hand-typed a third time. A third copy means the control arm can silently stop
+# being the control the card used. The historically pinned values are asserted below so a drift is
+# loud rather than silent.
+LG_ERA, LG_K, LG_BB = cr.LG_ERA, cr.LG_K, cr.LG_BB
+PINNED_LG = {"LG_ERA": 4.20, "LG_K": 22.0, "LG_BB": 8.5}
 CAP_STATS = {"era": LG_ERA, "gs": 0, "k": LG_K, "bb": LG_BB, "ek": None}
 # The ONLY stat fields daily_card.sim() reads. "ek" is a display projection and never enters the
 # simulation, so it is deliberately excluded from the CAP predicate below.
@@ -225,6 +230,34 @@ def keyed_delta_label(dpp):
 # pure helpers
 # --------------------------------------------------------------------------------------------
 
+def _assert_cap_constants():
+    """Cross-check the CAP stat vector against daily_card, the module whose sim is being driven.
+
+    Consequence if they drift, demonstrated by the independent review: with different league
+    averages every TBD slot stops matching CAP_STATS, is classed TREATED, and receives a
+    MEASURED_PAIRED_DELTA — while arm (a), the control for every game, is still built from
+    CAP_STATS. The whole contrast silently changes meaning. Returns a list of mismatches."""
+    bad = []
+    for name, ours in (("LG_ERA", LG_ERA), ("LG_K", LG_K), ("LG_BB", LG_BB)):
+        theirs = getattr(cr, name, None)
+        if theirs is None:
+            bad.append(f"CAP_CONSTANTS_UNVERIFIED — card_render has no {name}, so the control arm "
+                       f"cannot be shown to be the league average the sim uses")
+        elif float(theirs) != float(ours):
+            bad.append(f"CAP_CONSTANT_DRIFT — {name} is {ours} here and {theirs} in card_render")
+        if float(PINNED_LG[name]) != float(ours):
+            bad.append(f"CAP_CONSTANT_MOVED — {name} is now {ours}; it was pinned at "
+                       f"{PINNED_LG[name]} when this harness was written. Every TBD slot would stop "
+                       f"matching CAP_STATS, be classed TREATED, and be measured against a control "
+                       f"arm still built from CAP_STATS — the contrast changes meaning silently")
+    # the CAP vector must be exactly the four fields sim() reads, at those values
+    if {k: CAP_STATS[k] for k in SIM_STAT_FIELDS} != {"era": LG_ERA, "gs": 0, "k": LG_K,
+                                                      "bb": LG_BB}:
+        bad.append(f"CAP_VECTOR_MISMATCH — CAP_STATS does not carry the league-average vector: "
+                   f"{CAP_STATS}")
+    return bad
+
+
 def _seed_input(game, date, model_id=MODEL_ID, rep=0):
     """The draw key, stated as a string so it appears verbatim in every record.
 
@@ -250,8 +283,14 @@ def _arm_binding(model_id, game, date, rep, n, seed, arms):
 
     Without this a record's numbers float free of the arrays that produced them: a later change to
     n, to the seed, to the model identity or to an arm's stat vector leaves the delta looking
-    equally authoritative. The binding is a hash over every input that selects the draws, so a
-    record whose binding does not recompute is not the record it claims to be."""
+    equally authoritative.
+
+    WHAT IT COVERS is exactly the `binding_covers` list emitted alongside it: model_id, game, date,
+    replicate, n, seed, seed_input and each arm's scenario and stat vector. It does NOT cover the
+    team form tuple or the park factor, and BOTH of those reach the realized draw stream — an
+    earlier version of this docstring claimed it hashed "every input that selects the draws", which
+    was false. A binding that recomputes proves the arms and the key are what the record says; it
+    does not prove the form vintage or the park factor were."""
     payload = json.dumps({
         "model_id": model_id, "game": game, "date": date, "rep": rep, "n": n, "seed": seed,
         "seed_input": _seed_input(game, date, model_id, rep),
@@ -352,23 +391,46 @@ def _deltas(p_a, p_b, p_c, p_d):
             "non_additivity": joint - (away + home)}
 
 
-def _paired_se(per_rep):
-    """Standard error of each PAIRED delta across independently keyed replicates.
+DELTA_KEYS = ("away_only", "home_only", "joint", "non_additivity")
 
-    The contrast is what is being measured, so the contrast is what gets an interval. One replicate
-    yields None WITH a reason rather than 0.0 — a single observation has no spread, and printing
-    0.0 there would read as a perfectly precise estimate."""
-    keys = ("away_only", "home_only", "joint", "non_additivity")
-    out = {}
-    for k in keys:
+
+def _paired_point_and_se(per_rep):
+    """The point estimate AND its standard error, from the SAME set of replicates.
+
+    THE DEFECT THIS FIXES (independent review, 2026-08-22): the module published replicate 0 as the
+    point estimate while reporting sd/sqrt(reps) — the standard error OF THE MEAN of all replicates
+    — as its uncertainty. Those describe different numbers, and the published interval was too small
+    by sqrt(reps), 2.24x at the default of 5. One observed record put the joint interaction at
+    1.47 +/- 0.253 while its own replicate spread was [1.47, 0.035, 0.40, 0.47, 0.165], sd 0.566:
+    the reported point was an EXTREME of its own sampling distribution, advertised as the most
+    precise of the four quantities.
+
+    Both numbers now come from one estimator — the MEAN across replicates, with sd/sqrt(reps) as its
+    standard error. The mean is also the better estimate: it uses every replicate instead of
+    discarding four fifths of the work. Replicate 0 is still reported as `deltas_pp_replicate0` so a
+    reader can recompute it from the stored arm probabilities.
+
+    One replicate yields a point estimate but NO standard error: a single observation has no spread,
+    and 0.0 there would read as perfect precision."""
+    point, se = {}, {}
+    for k in DELTA_KEYS:
         vals = [r[k] for r in per_rep if r.get(k) is not None]
-        if len(vals) < 2:
-            out[k] = None
+        if not vals:
+            point[k], se[k] = None, None
             continue
         m = sum(vals) / len(vals)
+        point[k] = m
+        if len(vals) < 2:
+            se[k] = None
+            continue
         var = sum((v - m) ** 2 for v in vals) / (len(vals) - 1)
-        out[k] = float(np.sqrt(var / len(vals)))
-    return out
+        se[k] = float(np.sqrt(var / len(vals)))
+    return point, se
+
+
+def _paired_se(per_rep):
+    """The standard error OF THE MEAN, matching the point estimate above."""
+    return _paired_point_and_se(per_rep)[1]
 
 
 def _mc_se_pp(p, n):
@@ -499,11 +561,10 @@ def attribute_rows(v1_rows, v2_rows, date, form, pf_of, n=DEFAULT_N, reps=DEFAUL
             # deltas from the UNROUNDED arm probabilities: rounding first would put a floor of
             # ~1e-4pp under an identity that must be exactly 0.0 for an untreated arm.
             per_rep.append(_deltas(*[p_by_arm[k]["hw"] for k in ARM_KEYS]))
-        d = {k: per_rep[0][k] for k in per_rep[0]}
-        # PAIRED Monte-Carlo uncertainty: the spread of the PAIRED delta across independently keyed
-        # replicates. This is a sampling distribution of the contrast itself, not a closed form
-        # borrowed from one arm's binomial error.
-        se = _paired_se(per_rep)
+        # The published estimate is the MEAN across replicates; replicate 0 is carried separately
+        # so the arm probabilities stored in the record still recompute to something checkable.
+        d, se = _paired_point_and_se(per_rep)
+        d_rep0 = {k: per_rep[0][k] for k in per_rep[0]}
 
         # THREE STATES. An untreated slot means arm b (or c) is identical to the control BY
         # CONSTRUCTION — a structural zero, never a measurement, and never a bare 0.0.
@@ -520,10 +581,25 @@ def attribute_rows(v1_rows, v2_rows, date, form, pf_of, n=DEFAULT_N, reps=DEFAUL
         }
         nulls = {k: v["reason"] for k, v in states.items() if v["reason"]}
         rep = {k: v["value_pp"] for k, v in states.items()}
+        # STATE GATING on EVERY state-dependent field, not only deltas_pp. Previously a
+        # both-slots-TBD game published delta_se_pp 0.0 — perfect precision on a quantity the same
+        # record says was never measured — plus a keyed_label reading "+0.00 points" and a
+        # registered_minus_keyed differenced against a raw structural zero.
+        measured = {k for k, v in states.items() if v["state"] == MEASURED}
+        se = {k: (se.get(k) if k in measured else None) for k in DELTA_KEYS}
+        se_nulls = {k: (f"{states[k]['state']} — a standard error describes a MEASURED quantity; "
+                        f"0.0 here would read as perfect precision on something never measured")
+                    for k in DELTA_KEYS if k not in measured}
 
         v1_basis_is_cap = _is_cap(r1["asp_stats"]) and _is_cap(r1["hsp_stats"])
         seq = (r2["v13"]["home_wp"] - r1["v13"]["home_wp"]) * 100.0
-        if v1_basis_is_cap:
+        if "joint" not in measured:
+            # Differencing the registered delta against a STRUCTURAL ZERO produces a number that
+            # looks like a coupling residual and is really just the registered delta itself.
+            residual, residual_null = None, (
+                f"{states['joint']['state']} — the keyed joint contrast was never measured, so "
+                f"registered-minus-keyed would just restate the registered delta")
+        elif v1_basis_is_cap:
             residual = seq - d["joint"]
             residual_null = None
         else:
@@ -548,10 +624,17 @@ def attribute_rows(v1_rows, v2_rows, date, form, pf_of, n=DEFAULT_N, reps=DEFAUL
                           "treated": home_treated},
             "arms": sims,
             "arm_scenarios": dict(ARM_SCENARIO),
+            "deltas_pp_replicate0": {k: _r(v) for k, v in d_rep0.items()},
+            "replicate_deltas_pp": {k: [_r(r[k]) for r in per_rep] for k in DELTA_KEYS},
+            "estimator": (f"point = MEAN across {max(1, int(reps))} independently keyed replicates; "
+                          f"delta_se_pp = sd/sqrt(reps) of that SAME mean. One estimator for both — "
+                          f"reporting replicate 0 beside the standard error of the mean understated "
+                          f"the interval by sqrt(reps)."),
             "delta_states": states,
             "deltas_pp": {k: _r(v) for k, v in rep.items()},
             "deltas_null_reasons": nulls,
             "delta_se_pp": {k: _r(v) for k, v in se.items()},
+            "delta_se_null_reasons": se_nulls,
             "delta_se_basis": (f"paired standard error across {max(1, int(reps))} independently "
                                f"keyed replicates of the SAME contrast (rep index enters the draw "
                                f"key); n={n} draws per arm per replicate. Not a closed form."),
@@ -559,7 +642,11 @@ def attribute_rows(v1_rows, v2_rows, date, form, pf_of, n=DEFAULT_N, reps=DEFAUL
             "registered_minus_keyed_joint_pp": _r(residual),
             "registered_minus_keyed_null_reason": residual_null,
             "v1_basis_is_both_cap": v1_basis_is_cap,
-            "keyed_label": keyed_delta_label(d["joint"]),
+            "keyed_label": (keyed_delta_label(d["joint"]) if "joint" in measured else None),
+            "keyed_label_null_reason": (None if "joint" in measured else
+                                        f"{states['joint']['state']} — a label naming a starter "
+                                        f"effect must not render '+0.00 points' for a contrast that "
+                                        f"was never measured"),
             "sequential_label": sequential_delta_label(seq),
             "direction_note": ("AWAY-ONLY is the effect of resolving the AWAY slot; in "
                                "daily_card.sim() that pitcher drives the HOME team's run "
@@ -1002,11 +1089,17 @@ def selftest():
     bp = both["arms"]["b_away_real_home_cap"]["p_home"]
     cp = both["arms"]["c_away_cap_home_real"]["p_home"]
     dpp = both["arms"]["d_both_real"]["p_home"]
+    # The stored arms are replicate 0's, so the arm arithmetic is checked against the replicate-0
+    # field. deltas_pp is the MEAN across replicates and is checked separately below.
     for q, want in (("away_only", (bp - ap) * 100), ("home_only", (cp - ap) * 100),
                     ("joint", (dpp - ap) * 100)):
-        if abs(both["deltas_pp"][q] - want) > 2e-3:
-            fails.append(f"(7) {q} is not (arm - control): reported {both['deltas_pp'][q]} vs "
-                         f"{want:.4f} — a reversed sign would report the counterfactual as the base")
+        if abs(both["deltas_pp_replicate0"][q] - want) > 2e-3:
+            fails.append(f"(7) {q} is not (arm - control): replicate0 reported "
+                         f"{both['deltas_pp_replicate0'][q]} vs {want:.4f} — a reversed sign would "
+                         f"report the counterfactual as the base")
+        if (both["deltas_pp"][q] > 0) != (want > 0) and abs(want) > 0.5:
+            fails.append(f"(7) the published {q} has the opposite sign to the arm arithmetic: "
+                         f"{both['deltas_pp'][q]} vs {want:.4f}")
 
     # (8) ACCIDENTALLY CHANGING BOTH STARTERS IN A ONE-STARTER SCENARIO FAILS.
     try:
@@ -1110,6 +1203,205 @@ def selftest():
         if changed == b_ref:
             fails.append(f"(10) changing the {label} did not change the draw binding — the binding "
                          f"does not cover the thing it claims to")
+
+    # =========================================================================================
+    # INDEPENDENT REVIEW 2026-08-22 — the confirmed findings and the surviving mutants, fixtured.
+    # =========================================================================================
+    # BLOCKING FINDING — the SE described a different number than the one published. deltas_pp was
+    # replicate 0; delta_se_pp was sd/sqrt(reps), the error of the MEAN of all replicates. The
+    # interval was too small by sqrt(reps) on every emitted record.
+    import statistics as _stats
+    _cap = []
+    _orig_pse = _paired_point_and_se
+    def _spy(per_rep):
+        _cap.append([dict(r) for r in per_rep])
+        return _orig_pse(per_rep)
+    globals()["_paired_point_and_se"] = _spy
+    try:
+        est = attribute_rows(_v1cap, [_row("AAA", "BBB", "NG01", "Back", _BACK, "Ace", _ACE, 0.474)],
+                             D, _FORM, lambda hm: 1.0, n=_TINY_N, reps=5)[0]
+    finally:
+        globals()["_paired_point_and_se"] = _orig_pse
+    if not _cap:
+        fails.append("the estimator spy never fired — the SE fixture proves nothing")
+    else:
+        per = _cap[0]
+        for q in ("away_only", "home_only", "joint"):
+            vals = [r[q] for r in per]
+            want_point = sum(vals) / len(vals)
+            want_se = _stats.stdev(vals) / (len(vals) ** 0.5)
+            if abs(est["deltas_pp"][q] - round(want_point, 4)) > 1e-3:
+                fails.append(f"the published {q} is not the replicate MEAN: {est['deltas_pp'][q]} "
+                             f"vs {want_point:.4f}. Publishing replicate 0 beside the standard "
+                             f"error of the mean understates the interval by sqrt(reps)")
+            if abs(est["delta_se_pp"][q] - round(want_se, 4)) > 1e-3:
+                fails.append(f"the {q} SE is not sd/sqrt(reps) of the published estimate: "
+                             f"{est['delta_se_pp'][q]} vs {want_se:.4f}")
+            if abs(est["deltas_pp_replicate0"][q] - round(vals[0], 4)) > 1e-6:
+                fails.append(f"deltas_pp_replicate0 is not replicate 0 for {q}")
+            if est["replicate_deltas_pp"][q][0] != round(vals[0], 4):
+                fails.append(f"the replicate vector for {q} does not start at replicate 0")
+    # ARITHMETIC PIN on hand-computed replicates — no call into the module's own estimator.
+    fake = [{"away_only": 1.0, "home_only": 0.0, "joint": 0.0, "non_additivity": 0.0},
+            {"away_only": 3.0, "home_only": 0.0, "joint": 0.0, "non_additivity": 0.0},
+            {"away_only": 5.0, "home_only": 0.0, "joint": 0.0, "non_additivity": 0.0}]
+    pt, sepin = _paired_point_and_se(fake)
+    if abs(pt["away_only"] - 3.0) > 1e-12:
+        fails.append(f"mean of [1,3,5] is not 3.0: {pt['away_only']}")
+    # sd = 2.0 ; sd/sqrt(3) = 1.1547005383792515
+    if abs(sepin["away_only"] - 1.1547005383792515) > 1e-9:
+        fails.append(f"SE of [1,3,5] must be sd/sqrt(3) = 1.15470053838, got {sepin['away_only']} "
+                     f"(sd alone is 2.0; a constant would be neither)")
+    if abs(sepin["home_only"] - 0.0) > 1e-12:
+        fails.append(f"SE of three identical values must be exactly 0.0: {sepin['home_only']}")
+    if _paired_point_and_se([fake[0]])[1]["away_only"] is not None:
+        fails.append("a SE was asserted from ONE replicate")
+
+    # FINDING — state gating on EVERY state-dependent field, not just deltas_pp
+    tbd = attribute_rows(_v1cap, [_row("AAA", "BBB", "NG01", "TBD", _CT, "TBD", _CT, 0.474)],
+                         D, _FORM, lambda hm: 1.0, n=_TINY_N)[0]
+    for q in DELTA_KEYS:
+        if tbd["delta_se_pp"][q] is not None:
+            fails.append(f"a both-TBD game published a standard error of {tbd['delta_se_pp'][q]} "
+                         f"for {q} — perfect precision on a quantity the same record says was "
+                         f"never measured")
+        if not tbd["delta_se_null_reasons"].get(q):
+            fails.append(f"the null SE for {q} carries no reason")
+    if tbd["keyed_label"] is not None:
+        fails.append(f"a structural-zero joint rendered a starter-effect label: {tbd['keyed_label']!r}")
+    if not tbd.get("keyed_label_null_reason"):
+        fails.append("the suppressed label carries no reason")
+    if tbd["registered_minus_keyed_joint_pp"] is not None:
+        fails.append(f"registered-minus-keyed differenced against a STRUCTURAL ZERO: "
+                     f"{tbd['registered_minus_keyed_joint_pp']} — that number is just the "
+                     f"registered delta wearing a residual's name")
+    if not tbd.get("registered_minus_keyed_null_reason"):
+        fails.append("the suppressed residual carries no reason")
+    if both["keyed_label"] is None or both["delta_se_pp"]["joint"] is None:
+        fails.append("state gating suppressed a genuinely MEASURED quantity")
+
+    # SURVIVING MUTANT — the seed FORMULA was pinned but not the draw stream the sim CONSUMES.
+    # `default_rng(int(seed) & 0xFFFF)` reintroduces the 2026-08-17 coupling defect with the suite
+    # green. Bind the realized stream: two distinct games on one slate must not produce identical
+    # draws through run_arm itself.
+    # FULL WIDTH, tested precisely: two seeds differing ONLY above the low 16 bits must give
+    # different draws. Comparing two arbitrary game keys is not enough — under a 16-bit truncation
+    # most pairs still differ and only some collide, so such a fixture passes by luck.
+    _s0 = _seed("AAA@BBB", D)
+    lo = run_arm(dict(_CT), dict(_CT), _FORM, "AAA", "BBB", 1.0, _TINY_N, _s0)
+    hi = run_arm(dict(_CT), dict(_CT), _FORM, "AAA", "BBB", 1.0, _TINY_N, _s0 ^ (1 << 20))
+    if lo["hw"] == hi["hw"]:
+        fails.append("two seeds differing only in a HIGH bit produced identical draws — the seed is "
+                     "being truncated before it reaches the generator, so game keys collide in "
+                     "pairs and the 2026-08-17 coupling defect returns for those pairs")
+    for shift in (16, 17, 24, 31):
+        if run_arm(dict(_CT), dict(_CT), _FORM, "AAA", "BBB", 1.0, _TINY_N,
+                   _s0 ^ (1 << shift))["hw"] == lo["hw"]:
+            fails.append(f"bit {shift} of the seed does not reach the generator")
+    gb = run_arm(dict(_CT), dict(_CT), _FORM, "AAA", "BBB", 1.0, _TINY_N, _seed("CCC@DDD", D))
+    if lo["hw"] == gb["hw"]:
+        fails.append("two DIFFERENT game keys produced identical realized draw streams")
+    two_g = attribute_rows([c1, c2], [g1, g2], D, _FORM, lambda hm: 1.0, n=_TINY_N)
+    if two_g[0]["arms"]["a_both_cap"]["p_home"] == two_g[1]["arms"]["a_both_cap"]["p_home"]:
+        fails.append("two games on one slate drew IDENTICAL control arms — per-game draw isolation "
+                     "is not reaching the simulation")
+    if two_g[0]["seed"] == two_g[1]["seed"]:
+        fails.append("two games on one slate share a seed")
+
+    # SURVIVING MUTANT — attribute()'s two stated preconditions were untested.
+    import tempfile as _tf3
+    with _tf3.TemporaryDirectory() as _td4:
+        def _card(path, date, rows_):
+            json.dump({"date": date, "rows": rows_}, open(os.path.join(_td4, path), "w"))
+            return os.path.join(_td4, path)
+        r_ok = _row("AAA", "BBB", "NG01", "TBD", _CT, "TBD", _CT, 0.520)
+        p1 = _card("v1.json", D, [r_ok])
+        p2 = _card("v2.json", D, [_row("AAA", "BBB", "NG01", "Ace", _ACE, "TBD", _CT, 0.474)])
+        p2_wrongdate = _card("v2_bad.json", "2026-08-22",
+                             [_row("AAA", "BBB", "NG01", "Ace", _ACE, "TBD", _CT, 0.474)])
+        try:
+            attribute(D, p1, p2_wrongdate, n=_TINY_N)
+            fails.append("attribute() accepted a card whose slate date is not the requested date — "
+                         "one of its two stated preconditions, and nothing tested it")
+        except (ValueError, SystemExit, KeyError):
+            pass
+        try:
+            attribute(D, p1, p2, n=_TINY_N)
+            fails.append("attribute() accepted cards whose stored probabilities do NOT reproduce "
+                         "under the frozen replay — its other stated precondition")
+        except (ValueError, SystemExit, KeyError):
+            pass
+
+    # SURVIVING MUTANT — _safe_out never exercised; R6 says a measurement module may not write into
+    # a registered-artifact directory.
+    for blocked in ("cards/x.json", "data/mlb/forecasts/x.json", "data/cards_unified/x.jsonl",
+                    "data/backfill/x.csv", "/etc/passwd", "../outside.json"):
+        try:
+            _safe_out(blocked)
+            fails.append(f"_safe_out accepted {blocked!r} — a measurement module writing into a "
+                         f"registered-artifact path violates R6")
+        except (ValueError, SystemExit):
+            pass
+
+    # SURVIVING MUTANT — the team identities reaching the sim were unbound.
+    # Bound THROUGH attribute_rows, not merely on run_arm: the record's arm probabilities must
+    # equal an independently computed arm with the row's OWN away/home orientation. _FORM is
+    # asymmetric between AAA and BBB, so a transposition inside the loop changes every number.
+    rec_teams = attribute_rows([c1], [g1], D, _FORM, lambda hm: 1.0, n=_TINY_N)[0]
+    if rec_teams["away"] != "AAA" or rec_teams["home"] != "BBB":
+        fails.append(f"the record's teams do not match the row: {rec_teams['away']}@{rec_teams['home']}")
+    want_a = run_arm(dict(_CT), dict(_CT), _FORM, "AAA", "BBB", 1.0, _TINY_N,
+                     _seed("AAA@BBB", D))["hw"]
+    swap_a = run_arm(dict(_CT), dict(_CT), _FORM, "BBB", "AAA", 1.0, _TINY_N,
+                     _seed("AAA@BBB", D))["hw"]
+    if want_a == swap_a:
+        fails.append("the fixture form is symmetric between the two teams, so a transposition is "
+                     "undetectable and this test proves nothing")
+    elif abs(rec_teams["arms"]["a_both_cap"]["p_home"] - want_a) > 1e-9:
+        fails.append(f"the record's control arm is {rec_teams['arms']['a_both_cap']['p_home']} but "
+                     f"the row's own AAA@BBB orientation gives {want_a} (transposed gives {swap_a}) "
+                     f"— the teams reaching the sim are not the row's teams")
+
+    # SURVIVING MUTANT — the CAP constants were a hand-typed third copy.
+    _capbad = _assert_cap_constants()
+    if _capbad:
+        fails.append(f"CAP constants disagree with the sim being driven: {_capbad}")
+    # ... and the cross-check must be able to say NO, or it is not a check
+    _saved = cr.LG_ERA
+    try:
+        cr.LG_ERA = _saved + 0.1
+        drift = _assert_cap_constants()
+        if not drift or not any("CAP_CONSTANT_DRIFT" in x for x in drift):
+            fails.append(f"the CAP cross-check reported no drift when card_render's league ERA "
+                         f"moved — a check that can only return OK is not a check: {drift}")
+    finally:
+        cr.LG_ERA = _saved
+    if _assert_cap_constants():
+        fails.append("the CAP cross-check did not recover after the drift fixture")
+    if (LG_ERA, LG_K, LG_BB) != (cr.LG_ERA, cr.LG_K, cr.LG_BB):
+        fails.append("the CAP constants are not derived from card_render")
+
+    # FINDING — the reason CODE must be asserted, not merely a non-empty string
+    if "STRUCTURAL_ZERO" not in (miss["deltas_null_reasons"].get("home_only") or ""):
+        fails.append("the null reason is not a recognised CODE — 'n/a' would satisfy a "
+                     "non-empty-string check")
+    if "R1_NO_INTERACTION" not in (miss["deltas_null_reasons"].get("non_additivity") or ""):
+        fails.append("the interaction null reason is not the R1 code")
+
+    # FINDING — the _arm_binding docstring claimed more than the binding covers
+    # The docstring must NAME what the binding does not cover. Checked by the presence of the
+    # disclaimer, not by the absence of a phrase — an absence test matches the fixture's own text.
+    _bd = _arm_binding.__doc__ or ""
+    if "does NOT cover" not in _bd or "park factor" not in _bd:
+        fails.append("the _arm_binding docstring does not state what the binding FAILS to cover. "
+                     "Form and the park factor both reach the realized draw stream and neither is "
+                     "hashed; an earlier docstring claimed it hashed every input that selects the "
+                     "draws, which was false while binding_covers two lines away was accurate")
+    _uncovered = {"form", "park"}
+    if _uncovered & {str(x).lower() for x in
+                     (attribute_rows([c1], [g1], D, _FORM, lambda hm: 1.0,
+                                     n=_TINY_N)[0]["binding_covers"])}:
+        fails.append("binding_covers claims to cover form or the park factor; it does not")
 
     # SELFTEST STRUCTURE — proved, not assumed. The ten fixtures above were briefly DEAD CODE:
     # an early `if fails: return 1` sat above them, so their failures were collected and then
@@ -1233,12 +1525,49 @@ MUTANTS = [
      '        "game": game, "date": date, "rep": rep, "n": n, "seed": seed,'),
     # paired uncertainty
     ("SE: single replicate asserted as 0.0 instead of null",
-     "        if len(vals) < 2:\n            out[k] = None", "        if len(vals) < 2:\n            out[k] = 0.0"),
+     "        if len(vals) < 2:\n            se[k] = None\n            continue",
+     "        if len(vals) < 2:\n            se[k] = 0.0\n            continue"),
     ("SE: paired uncertainty not reported at all",
      '            "delta_se_pp": {k: _r(v) for k, v in se.items()},', '            "delta_se_pp": None,'),
     # the causal-language refusal (kept from the original suite)
     ("causal language: 'starter effect' allowed without 'keyed'",
      '    if "starter effect" in flat and "keyed" not in flat:', "    if False:"),
+    # --- INDEPENDENT REVIEW 2026-08-22
+    ("SE: standard error of the MEAN reported beside a replicate-0 point estimate (the blocker)",
+     "        d, se = _paired_point_and_se(per_rep)",
+     "        d, se = {k: per_rep[0][k] for k in DELTA_KEYS}, _paired_point_and_se(per_rep)[1]"),
+    ("SE: sd reported instead of sd/sqrt(reps)",
+     "        se[k] = float(np.sqrt(var / len(vals)))", "        se[k] = float(np.sqrt(var))"),
+    ("SE: constant asserted in place of the estimator",
+     "        se[k] = float(np.sqrt(var / len(vals)))", "        se[k] = 0.0001"),
+    ("SE: population variance instead of sample variance",
+     "        var = sum((v - m) ** 2 for v in vals) / (len(vals) - 1)",
+     "        var = sum((v - m) ** 2 for v in vals) / len(vals)"),
+    ("state gating removed from delta_se_pp (0.0 = perfect precision on an unmeasured quantity)",
+     "        se = {k: (se.get(k) if k in measured else None) for k in DELTA_KEYS}", "        pass"),
+    ("state gating removed from keyed_label",
+     '            "keyed_label": (keyed_delta_label(d["joint"]) if "joint" in measured else None),',
+     '            "keyed_label": keyed_delta_label(d["joint"]),'),
+    ("state gating removed from registered-minus-keyed",
+     '        if "joint" not in measured:', "        if False:"),
+    ("draw stream collapsed (2026-08-17 coupling defect restored)",
+     "    return cr.sim_full(asp, hsp, form, aw, hm, pf, n, np.random.default_rng(seed))",
+     "    return cr.sim_full(asp, hsp, form, aw, hm, pf, n, np.random.default_rng(int(seed) & 0xFFFF))"),
+    ("attribute(): the frozen-replay precondition removed",
+     "    bad = verify_transcription", "    bad = [] and verify_transcription"),
+    ("_safe_out: registered-artifact prefixes emptied (R6 violation)",
+     'REGISTERED_PREFIXES = ("cards/", "data/cards_unified/", "data/mlb/forecasts/",',
+     'REGISTERED_PREFIXES = (' + "'zzz/', " + '"data/cards_unified/", "data/mlb/forecasts/",'),
+    ("team identities transposed on the way into the sim",
+     "                sim = run_arm(asp, hsp, form, aw, hm, pf, n, rseed)",
+     "                sim = run_arm(asp, hsp, form, hm, aw, pf, n, rseed)"),
+    ("CAP constants hand-typed instead of derived from the driven sim",
+     "LG_ERA, LG_K, LG_BB = cr.LG_ERA, cr.LG_K, cr.LG_BB",
+     "LG_ERA, LG_K, LG_BB = 4.30, 22.0, 8.5"),
+    ("CAP cross-check neutered", "    return bad\n\n\ndef _seed_input", "    return []\n\n\ndef _seed_input"),
+    ("binding docstring overclaims what it covers",
+     "    WHAT IT COVERS is exactly the `binding_covers` list emitted alongside it: model_id, game, date,\n    replicate, n, seed, seed_input and each arm's scenario and stat vector. It does NOT cover the\n    team form tuple or the park factor, and BOTH of those reach the realized draw stream",
+     "    It covers every input that selects the draws"),
     ("selftest structure: a second FAIL verdict orphans the fixtures below it",
      "    if fails:\n        print(\"starter_attribution selftest: FAIL\")",
      "    if fails:\n        print(\"starter_attribution selftest: FAIL\")\n        return 1\n    if fails:\n        print(\"starter_attribution selftest: FAIL\")"),

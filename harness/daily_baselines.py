@@ -137,9 +137,30 @@ SCORE_FIELDS = ("n", "side_record", "accuracy", "brier", "logloss")
 
 
 # ----------------------------------------------------------------------------- price arithmetic
+class NotAmericanOdds(ValueError):
+    """Raised when a price is not on the American scale."""
+
+
 def imp(american):
-    """Raw implied probability from an American price. NOT de-vigged."""
-    a = float(american)
+    """Raw implied probability from an American price. NOT de-vigged.
+
+    REFUSES anything that is not American. Decimal odds pasted into an American field are the
+    dangerous case: 2.50/1.60 de-vigs to 0.502 on every game with no error and no reason code,
+    manufacturing a "the market was a coin flip" comparator in the PRINCIPAL market slot. There is
+    no American price strictly between -100 and +100, so the band is a clean discriminator."""
+    if isinstance(american, bool) or american is None:
+        raise NotAmericanOdds(f"price {american!r} is not a number")
+    try:
+        a = float(american)
+    except (TypeError, ValueError):
+        raise NotAmericanOdds(f"price {american!r} is not a number")
+    if a != a or a in (float("inf"), float("-inf")):
+        raise NotAmericanOdds(f"price {american!r} is not finite")
+    if -100 < a < 100:
+        raise NotAmericanOdds(
+            f"price {american!r} lies strictly between -100 and +100, where no American price "
+            f"exists. Decimal odds pasted into an American field land here and de-vig to ~0.50 "
+            f"silently, which fabricates a coin-flip market")
     return (-a) / ((-a) + 100) if a < 0 else 100 / (a + 100)
 
 
@@ -163,6 +184,14 @@ def devig_same_book(a_away, a_home):
     """Two-sided proportional de-vig -> p_home. Valid ONLY when both prices come off ONE book."""
     ia, ih = imp(a_away), imp(a_home)
     return ih / (ia + ih)
+
+
+def _devig_guarded(a_away, a_home):
+    """devig_same_book, turning a non-American price into null-with-reason instead of a traceback."""
+    try:
+        return devig_same_book(a_away, a_home), None
+    except NotAmericanOdds as exc:
+        return None, f"PRICE_NOT_AMERICAN_ODDS — {exc}; " + R1
 
 
 def brier(p, y):
@@ -197,16 +226,35 @@ def devig_entry(entry):
         return None, (f"UNRECOGNISED_PRICE_BASIS — basis {entry.get('basis')!r} is not a recognised "
                       f"same-board basis, so the pair cannot be SHOWN to have come off one board. "
                       f"Refused rather than accepted by default; " + R1)
+    # The 8/3 ruling is about WHERE the two prices came from, so it must be enforced on the BOOK
+    # NAMES too — not only on `basis`. Applying an allowlist to `basis` while leaving
+    # {"book": "best_odds"} to sail through is the same bypass one field over, and this is the third
+    # time this class has appeared (basis spellings, one-sided attribution, now the book name).
+    named_books = [entry.get("book"), entry.get("book_away"), entry.get("book_home")]
+    named_books += list((entry.get("books") or {}).keys()) if isinstance(entry.get("books"), dict) else []
+    aggregator = sorted({_norm_token(b) for b in named_books if b} & set(CROSS_BOOK_BASES))
+    if aggregator:
+        return None, (f"CROSS_BOOK_DEVIG_PROHIBITED — the pair names {aggregator} as its book, which "
+                      f"is an AGGREGATOR, not a board. A best-odds/consensus label in the book field "
+                      f"is the same claim as in the basis field (8/3 ruling)")
     if "books" in entry:
         pairs = []
         any_away = any_home = False
         for bk, b in (entry.get("books") or {}).items():
+            if not isinstance(b, dict):
+                # This repo's own captures carry null book values. An AttributeError here would
+                # abort a whole settlement rather than null one comparator.
+                return None, (f"MALFORMED_BOOK_ENTRY — book {bk!r} carries {type(b).__name__} "
+                              f"rather than a price pair, so it cannot be de-vigged; " + R1)
             a = b.get("away", b.get("ml_away"))
             h = b.get("home", b.get("ml_home"))
             any_away = any_away or a is not None
             any_home = any_home or h is not None
             if a is not None and h is not None:
-                pairs.append(devig_same_book(a, h))
+                pv, pr = _devig_guarded(a, h)
+                if pv is None:
+                    return None, pr
+                pairs.append(pv)
         if pairs:
             return sum(pairs) / len(pairs), None  # mid of the per-book same-book de-vigs
         if any_away and any_home:
@@ -228,7 +276,7 @@ def devig_entry(entry):
     if not named:
         return None, ("PRICE_BOOK_ATTRIBUTION_MISSING — the pair carries no book attribution, so it "
                       "cannot be shown to be same-book; assuming it would reintroduce cross-book de-vig")
-    return devig_same_book(a, h), None
+    return _devig_guarded(a, h)
 
 
 def split_prices(prices):
@@ -400,7 +448,7 @@ def slate_manifest(date, forecasts_path=None, grades_path=None, dispositions=Non
             "source": {"forecasts": fp, "grades": gp, "n_registry_rows": len(fcs)}}
 
 
-def manifest_coverage(rows, manifest, verify_artifact_hashes=True):
+def manifest_coverage(rows, manifest, verify_artifact_hashes=True, scorable_ids=None):
     """FULL identity coverage. Returns (ok, failures, detail). Runs BEFORE any aggregate metric.
 
     Every check below is on IDENTITIES and HASHES. None of them reads a filename, so a correctly
@@ -464,6 +512,16 @@ def manifest_coverage(rows, manifest, verify_artifact_hashes=True):
     if foreign_rows:
         fails.append(f"FOREIGN_COHORT_IDENTITY — {foreign_rows[:6]} are not registered for this "
                      f"slate; scoring them mixes another slate or another experiment into the report")
+    # A row that is PRESENT but UNSCORABLE (no probability, no outcome, no game key) contributes
+    # nothing to any aggregate, so counting it as coverage means the report silently scores fewer
+    # games than the manifest says it did — identical in effect to deleting the row.
+    if scorable_ids is not None:
+        unscorable = sorted((rset & graded) - set(scorable_ids))
+        if unscorable:
+            fails.append(f"UNSCORABLE_ROW_COUNTED_AS_COVERAGE — {unscorable[:6]}"
+                         f"{'...' if len(unscorable) > 6 else ''} are present but carry no usable "
+                         f"probability/outcome/game key, so they enter no aggregate. Presence is "
+                         f"not coverage; " + R1)
     row_missing = sorted(graded - rset)
     if row_missing:
         fails.append(f"ROW_COUNT_SHORT — {len(row_missing)} graded identities are absent from the "
@@ -550,7 +608,8 @@ def _norm_cohort_rows(cohort_rows):
     reason, not dropped on the floor."""
     keep, bad = [], []
     for i, r in enumerate(cohort_rows or []):
-        coh = str(r.get("cohort") or r.get("arm") or "v1").strip().lower()
+        coh_raw = r.get("cohort") or r.get("arm") or r.get("experiment_arm")
+        coh = str(coh_raw).strip().lower() if coh_raw else None
         game = r.get("board_game") or r.get("game")
         if not game and r.get("away") and r.get("home"):
             game = f'{r["away"]}@{r["home"]}'
@@ -562,15 +621,24 @@ def _norm_cohort_rows(cohort_rows):
         y = r.get("home_win")
         if y is None:
             y = r.get("y")
+        if not coh:
+            # Defaulting an unlabelled row into v1 silently attributes another arm's probability to
+            # the all-CAP cohort and shifts its Brier. Unknown is null with a reason (R1).
+            bad.append({"row_index": i, "game": game, "cohort": None,
+                        "forecast_id": r.get("forecast_id"),
+                        "reason": "NO_COHORT_LABEL — the row carries no cohort/arm/experiment_arm, "
+                                  "so the arm it belongs to is unknown; " + R1})
+            continue
         if not game:
-            bad.append({"row_index": i, "cohort": coh, "reason": "NO_GAME_KEY — row names no game"})
+            bad.append({"row_index": i, "cohort": coh, "forecast_id": r.get("forecast_id"),
+                        "reason": "NO_GAME_KEY — row names no game"})
             continue
         if p is None:
-            bad.append({"game": game, "cohort": coh,
+            bad.append({"game": game, "cohort": coh, "forecast_id": r.get("forecast_id"),
                         "reason": "NO_MODEL_PROBABILITY — row carries no p_home; " + R1})
             continue
         if y is None or y == "":
-            bad.append({"game": game, "cohort": coh,
+            bad.append({"game": game, "cohort": coh, "forecast_id": r.get("forecast_id"),
                         "reason": "NOT_GRADED — row carries no home_win outcome; " + R1})
             continue
         keep.append({"cohort": coh, "game": game, "p_home": float(p), "home_win": int(y),
@@ -591,8 +659,12 @@ def baselines(date, cohort_rows, results_rows=None, prices=None, manifest=None):
     null-with-reason and the gate fails. Owner ruling 2026-08-22: full set equality BEFORE
     aggregates, and the check reads identities and hashes only, never a filename."""
     rows, unscorable = _norm_cohort_rows(cohort_rows)
+    # Bind coverage to rows that can ACTUALLY be scored, not merely rows that exist.
+    _scorable = {r.get("forecast_id") for r in (cohort_rows or [])
+                 if r.get("forecast_id")} - {
+        b.get("forecast_id") for b in unscorable if b.get("forecast_id")}
     mf = manifest if manifest is not None else slate_manifest(date)
-    cov_ok, cov_fails, cov_detail = manifest_coverage(cohort_rows, mf)
+    cov_ok, cov_fails, cov_detail = manifest_coverage(cohort_rows, mf, scorable_ids=_scorable)
     coverage = {"ok": cov_ok, "failures": cov_fails, "detail": cov_detail,
                 "expected_ids": (mf or {}).get("expected_ids") if isinstance(mf, dict) else None,
                 "rule": "aggregate metrics require {expected forecast IDs} == {graded} U "
@@ -832,6 +904,25 @@ def _baseline_challenge(blocks, games):
                 vs[bk] = {"comparable": False,
                           "null_reason": b.get("null_reason") or ("BASELINE_UNAVAILABLE; " + R1)}
                 continue
+            # A market priced on 5 of 15 games has a Brier over 5 games; the cohort's is over 15.
+            # Comparing them is the apples-to-oranges error the subset note exists to prevent, and
+            # the module already computes cohort_brier_on_priced_subset for exactly this. Only
+            # Brier has a subset-matched form, so the comparison is INCOMPARABLE, not "close enough".
+            if b.get("same_games_as_cohorts") is False or (
+                    b.get("games") and c.get("games")
+                    and set(b["games"]) != set(c["games"])):
+                sub_b = (b.get("cohort_brier_on_priced_subset") or {}).get(
+                    {v: k for k, v in COHORT_BASELINE.items()}.get(ck, ck))
+                vs[bk] = {"comparable": False,
+                          "null_reason": (
+                              f"INCOMPARABLE_DIFFERENT_GAME_SETS — this baseline was scored on "
+                              f"{len(b.get('games') or [])} game(s) and the cohort on "
+                              f"{len(c.get('games') or [])}. A Brier over a priced subset is not "
+                              f"comparable to one over the full slate; accuracy and log loss have "
+                              f"no subset-matched form here at all; " + R1),
+                          "cohort_brier_on_this_baselines_games": sub_b,
+                          "baseline_brier": b.get("brier")}
+                continue
             per = {}
             for m, lower_is_better in (("accuracy", False), ("brier", True), ("logloss", True)):
                 cv, bv = c.get(m), b.get(m)
@@ -856,6 +947,7 @@ def _baseline_challenge(blocks, games):
                                   "DID_NOT_CLEAR" if any_worse else "LEVEL")}
         comparable = [v for v in vs.values() if v.get("comparable")]
         out["cohorts"][ck] = {
+            "baselines_incomparable": sorted(k for k, v in vs.items() if not v.get("comparable")),
             "versus": vs,
             "cleared_every_baseline": (None if not comparable
                                        else all(v.get("cohort_cleared") for v in comparable)),
@@ -1876,6 +1968,116 @@ def selftest():
     if list(r["baselines"].keys())[0] != "expanding_home_win_prior":
         fails.append("the expanding home prior is not the FIRST comparator in the emitted report")
 
+    # =========================================================================================
+    # INDEPENDENT REVIEW 2026-08-22 — seven confirmed defects, each fixtured on its own.
+    # =========================================================================================
+    # FIX 2 — the 8/3 ruling is about WHERE the prices came from, so an aggregator label in the BOOK
+    # field is the same claim as in the basis field. Third appearance of this bypass class.
+    for shape in ({"book": "best_odds", "ml_away": 147, "ml_home": -158},
+                  {"book": "consensus", "ml_away": 147, "ml_home": -158},
+                  {"book": "best odds", "ml_away": 147, "ml_home": -158},
+                  {"book_away": "best_line", "book_home": "best_line",
+                   "ml_away": 147, "ml_home": -158},
+                  {"books": {"best_odds": {"away": 147, "home": -158}}},
+                  {"book": "aggregate", "ml_away": 147, "ml_home": -158}):
+        pv, rv = devig_entry(shape)
+        if pv is not None or "CROSS_BOOK_DEVIG_PROHIBITED" not in (rv or ""):
+            fails.append(f"an AGGREGATOR named in the BOOK field de-vigged to {pv}: {shape} — the "
+                         f"allowlist was applied to `basis` and not to the book name")
+    if devig_entry({"book": "vsin", "ml_away": 147, "ml_home": -158})[0] is None:
+        fails.append("a real board name was refused by the aggregator check")
+
+    # FIX 4 — decimal odds pasted into an American field fabricate a coin-flip market
+    for dec in (2.5, 1.6, 1.91, -1.5, 99.0, -99.0, 0.0):
+        try:
+            imp(dec)
+            fails.append(f"imp({dec}) accepted a value that is not an American price — decimal odds "
+                         f"land here and de-vig to ~0.50 on every game, manufacturing a coin-flip "
+                         f"market in the PRINCIPAL market slot")
+        except NotAmericanOdds:
+            pass
+    for good in (147, -158, 100, -100, 5000):
+        try:
+            imp(good)
+        except NotAmericanOdds:
+            fails.append(f"imp({good}) refused a legitimate American price")
+    for junk in (None, "abc", True, float("nan"), float("inf")):
+        try:
+            imp(junk)
+            fails.append(f"imp({junk!r}) accepted a non-price")
+        except NotAmericanOdds:
+            pass
+    pv, rv = devig_entry({"book": "dk", "ml_away": 2.5, "ml_home": 1.6})
+    if pv is not None or "PRICE_NOT_AMERICAN_ODDS" not in (rv or ""):
+        fails.append(f"a decimal-odds pair de-vigged to {pv} instead of null+reason")
+    if abs(round(imp(-110), 6) - 0.523810) > 1e-6 or abs(round(imp(100), 6) - 0.5) > 1e-6:
+        fails.append(f"imp() arithmetic drifted: imp(-110)={imp(-110)}, imp(100)={imp(100)}")
+
+    # FIX 6 — a null book value must be null-with-reason, not an AttributeError mid-settlement
+    pv, rv = devig_entry({"books": {"dk": None}})
+    if pv is not None or "MALFORMED_BOOK_ENTRY" not in (rv or ""):
+        fails.append(f"a null book value did not return null+reason: {pv} {rv}")
+
+    # FIX 5 — an unlabelled row must not DEFAULT into v1, silently shifting that cohort's Brier
+    kept, bad = _norm_cohort_rows([{"board_game": "A@B", "p_home_model": .9, "home_win": 1,
+                                    "forecast_id": "X"}])
+    if kept or not any("NO_COHORT_LABEL" in b["reason"] for b in bad):
+        fails.append(f"an unlabelled row defaulted into a cohort: kept={kept} bad={bad}")
+    kept, _ = _norm_cohort_rows([{"experiment_arm": "v2", "board_game": "A@B", "p_home_model": .6,
+                                  "home_win": 1, "forecast_id": "X"}])
+    if not kept or kept[0]["cohort"] != "v2":
+        fails.append("experiment_arm was not accepted as a cohort label — the registry writes it")
+
+    # FIX 1 — a row that is PRESENT but UNSCORABLE is not coverage
+    unscor = [dict(x) for x in rows]
+    unscor[0] = dict(unscor[0]); unscor[0].pop("home_win")           # graded id, unscorable row
+    ok_, f_, _d = manifest_coverage(
+        unscor, _fixture_manifest(rows, DATE, ART),
+        scorable_ids={x["forecast_id"] for x in unscor[1:]})
+    if ok_ or not any("UNSCORABLE_ROW_COUNTED_AS_COVERAGE" in x for x in f_):
+        fails.append(f"a present-but-unscorable row counted as identity coverage: {f_}")
+    ur2 = baselines(DATE, unscor, res_rows, None, _fixture_manifest(rows, DATE, ART))
+    if ur2["baselines"]["v1_all_cap_cohort"]["brier"] is not None:
+        fails.append("aggregates were produced with an unscorable row counted as covered")
+
+    # FIX 3 — a market priced on a SUBSET is not comparable to a full-slate cohort
+    part5 = {"timing": "pregame",
+             "games": {g: {"book": "vsin", "ml_away": 147, "ml_home": -158} for g in games[:5]}}
+    pr = baselines(DATE, rows, res_rows, part5, MF)
+    pv2 = pr["baseline_challenge"]["cohorts"]["v2_resolved_starters_cohort"]
+    mkt = pv2["versus"]["market_no_vig_when_captured"]
+    if mkt.get("comparable"):
+        fails.append("a market scored on 5 games was compared against a cohort scored on 15 — the "
+                     "apples-to-oranges comparison the subset note exists to prevent")
+    if "INCOMPARABLE_DIFFERENT_GAME_SETS" not in (mkt.get("null_reason") or ""):
+        fails.append(f"the subset market was excluded with the wrong reason: {mkt}")
+    if "market_no_vig_when_captured" not in (pv2.get("baselines_incomparable") or []):
+        fails.append("the incomparable baseline was not named")
+    if "market_no_vig_when_captured" in (pv2.get("baselines_not_cleared") or []):
+        fails.append("an INCOMPARABLE baseline was reported as one the cohort failed to clear — "
+                     "that is a verdict the evidence does not support")
+
+    # FIX 7 — rules the suite was blind to
+    nonfinal = [{"date": "2026-08-19", "status": "in progress", "home_win": "1"}] * 40
+    if expanding_home_win_prior(DATE, nonfinal)[0] is not None:
+        fails.append("the prior counted NON-FINAL games — a lead in the 7th is not a result")
+    domain = [{"date": "2026-08-19", "status": "final", "home_win": "2"},
+              {"date": "2026-08-19", "status": "final", "home_win": "1"}]
+    p_, n_, _w = expanding_home_win_prior(DATE, domain)
+    if n_ != 1 or p_ != 1.0:
+        fails.append(f"a home_win outside {{0,1}} entered the prior: p={p_} n={n_}")
+    # ASYMMETRIC on purpose: 1-and-1 cannot detect a transposition.
+    sp2 = score_probs("x", {"a": .6, "b": .7, "c": .55, "d": .4}, {k: 1 for k in "abcd"},
+                      ["a", "b", "c", "d"])
+    if sp2["sides_home"] != 3 or sp2["sides_away"] != 1:
+        fails.append(f"side counts wrong or transposed: home {sp2['sides_home']} / away "
+                     f"{sp2['sides_away']} (3 probabilities are >= .5, one is below)")
+    if sp2["sides_home"] + sp2["sides_away"] != sp2["n"]:
+        fails.append("side counts do not partition n")
+    sp3 = score_probs("x", {"a": .6}, {"a": 1}, ["a", "b"])
+    if sp3["scored_on_common_set"] is not False:
+        fails.append("a block scored on a SUBSET claimed the common game set")
+
     # UPSTREAM — a PARTIAL grade snapshot is refused, not scored. This is the source of the
     # one-game 8/21 run the review found printing a directive off a coin flip.
     import tempfile as _tf
@@ -2080,6 +2282,38 @@ MUTANTS = [
      "CHALLENGE_BASELINES = ()"),
     ("flat 50%: no longer 0.5", '        {g: 0.5 for g in games}, outcomes, games,',
      '        {g: 0.52 for g in games}, outcomes, games,'),
+    # --- INDEPENDENT REVIEW 2026-08-22
+    ("aggregator name in the BOOK field admitted (8/3 bypass, third variant)",
+     "    if aggregator:", "    if False:"),
+    ("aggregator check ignores the per-book keys",
+     '    named_books += list((entry.get("books") or {}).keys()) if isinstance(entry.get("books"), dict) else []',
+     "    named_books += []"),
+    ("decimal odds accepted as American", "    if -100 < a < 100:", "    if False:"),
+    ("non-numeric price accepted", "    except (TypeError, ValueError):\n        raise NotAmericanOdds",
+     "    except (TypeError, ValueError):\n        return 0.5  # noqa\n    if False:\n        raise NotAmericanOdds"),
+    ("non-American price raises instead of nulling",
+     "    except NotAmericanOdds as exc:\n        return None, f\"PRICE_NOT_AMERICAN_ODDS",
+     "    except ZeroDivisionError as exc:\n        return None, f\"PRICE_NOT_AMERICAN_ODDS"),
+    ("malformed book value crashes instead of nulling",
+     "            if not isinstance(b, dict):", "            if False:"),
+    ("unlabelled row defaults into v1", "        if not coh:", "        if False:"),
+    ("experiment_arm no longer accepted as a cohort label",
+     '        coh_raw = r.get("cohort") or r.get("arm") or r.get("experiment_arm")',
+     '        coh_raw = r.get("cohort") or r.get("arm")'),
+    ("unscorable rows counted as identity coverage",
+     "    if scorable_ids is not None:", "    if False:"),
+    ("coverage no longer bound to SCORABLE rows",
+     "    cov_ok, cov_fails, cov_detail = manifest_coverage(cohort_rows, mf, scorable_ids=_scorable)",
+     "    cov_ok, cov_fails, cov_detail = manifest_coverage(cohort_rows, mf)"),
+    ("subset-priced baseline compared against a full-slate cohort",
+     '            if b.get("same_games_as_cohorts") is False or (', "            if False and ("),
+    ("prior counts non-final games",
+     '        if str(r.get("status") or "").lower() != "final":', "        if False:"),
+    ("home_win domain {0,1} not enforced", "        if hw not in (0, 1):", "        if False:"),
+    ("side counts transposed", '"sides_home": sides_home, "sides_away": n - sides_home,',
+     '"sides_home": n - sides_home, "sides_away": sides_home,'),
+    ("scored_on_common_set always true",
+     '"scored_on_common_set": set(gs) == set(games),', '"scored_on_common_set": True,'),
     ("outcome conflicts no longer block the report",
      '    for c in res.get("outcome_conflicts") or []:', "    for c in []:"),
 ]

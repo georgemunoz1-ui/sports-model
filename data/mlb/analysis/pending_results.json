@@ -1,0 +1,12 @@
+{
+ "schema": "ops.pending_results.v1",
+ "purpose": "Games explicitly recorded as PENDING_NOT_FINAL. An entry suppresses the slate-completeness FAIL for at most 36 hours (harness/result_content_checks.PENDING_MAX_AGE_H) and only with a stated reason; after that the gate goes red again and stays red until a real result lands. A game with no entry is never excused.",
+ "pending": [
+  {
+   "date": "2026-08-21",
+   "game": "CHC@SEA",
+   "reason": "02:10Z first pitch; no tier-1 source had published a final at the 06:25Z settlement capture. Both cohorts (v1 and v2) are pending on this game symmetrically, so the 14-game head-to-head is unaffected. Grades when a final is confirmed.",
+   "recorded_utc": "2026-08-22T06:25:00Z"
+  }
+ ]
+}

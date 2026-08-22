@@ -120,6 +120,7 @@ def slate_completeness(rows, slate_dir="data/mlb/slates"):
         if r.get("status") == "final" and (r.get("total") not in ("", None)
                                            or r.get("home_win") not in ("", None)):
             have.setdefault(r["date"], set()).add((r["away"], r["home"]))
+    excused = _fresh_pendings()
     missing = []
     for p in sorted(glob.glob(os.path.join(slate_dir, "*_slate.psv"))):
         date = os.path.basename(p).split("_")[0]
@@ -131,8 +132,43 @@ def slate_completeness(rows, slate_dir="data/mlb/slates"):
             if len(parts) >= 3:
                 want.add((parts[1], parts[2]))
         for g in sorted(want - have[date]):
+            if (date, f"{g[0]}@{g[1]}") in excused:
+                continue  # explicitly recorded PENDING_NOT_FINAL and still fresh — see _fresh_pendings
             missing.append(f"{date}: {g[0]}@{g[1]} is on the frozen slate but has no result row")
     return missing
+
+
+PENDING_REGISTRY = "data/mlb/analysis/pending_results.json"
+PENDING_MAX_AGE_H = 36
+
+
+def _fresh_pendings(path=PENDING_REGISTRY, now=None):
+    """Games explicitly recorded as PENDING_NOT_FINAL, and still fresh.
+
+    WHY THIS EXISTS AND WHY IT EXPIRES (2026-08-21): a late game that genuinely has not finished is
+    a real state, and the only alternatives are inventing a result (R1 violation) or a permanently
+    red gate — the same reasoning already applied to winner-only rows above. But an open-ended
+    excuse would let a missing result hide forever behind a stale note, so an entry only suppresses
+    the failure for PENDING_MAX_AGE_H hours. After that the gate goes red again and STAYS red until
+    a real result lands. A game with no entry at all is never excused.
+
+    Registry entries: {"date": "YYYY-MM-DD", "game": "AWAY@HOME", "reason": str,
+                       "recorded_utc": "YYYY-MM-DDTHH:MM:SSZ"}"""
+    import datetime as _dt
+    if not os.path.exists(path):
+        return set()
+    now = now or _dt.datetime.now(_dt.timezone.utc)
+    out = set()
+    for e in json.load(open(path)).get("pending", []):
+        try:
+            t = _dt.datetime.strptime(e["recorded_utc"], "%Y-%m-%dT%H:%M:%SZ").replace(tzinfo=_dt.timezone.utc)
+        except Exception:
+            continue  # unparseable timestamp never excuses anything
+        if not e.get("reason"):
+            continue  # an entry without a stated reason never excuses anything
+        if (now - t).total_seconds() <= PENDING_MAX_AGE_H * 3600:
+            out.add((e["date"], e["game"]))
+    return out
 
 
 def run(path=RESULTS):
@@ -145,6 +181,31 @@ def run(path=RESULTS):
             "echo_pairs": echoes, "unreconciled_echoes": unrec,
             "winner_mismatches": mism, "winner_checked": checked,
             "slate_missing": missing}
+
+
+def _selftest_pendings():
+    """Fixtures for the pending-result excuse: it must expire, require a reason, and never excuse
+    a game that was simply never recorded."""
+    import datetime as _dt, tempfile, json as _j
+    f=[]
+    now=_dt.datetime(2026,8,22,6,0,0,tzinfo=_dt.timezone.utc)
+    def reg(entries):
+        fh=tempfile.NamedTemporaryFile("w",suffix=".json",delete=False)
+        _j.dump({"pending":entries},fh); fh.close(); return fh.name
+    fresh=reg([{"date":"2026-08-21","game":"CHC@SEA","reason":"late game not final",
+                "recorded_utc":"2026-08-22T06:00:00Z"}])
+    if ("2026-08-21","CHC@SEA") not in _fresh_pendings(fresh, now):
+        f.append("a fresh, reasoned pending entry did not excuse its game")
+    stale=reg([{"date":"2026-08-21","game":"CHC@SEA","reason":"late game not final",
+                "recorded_utc":"2026-08-20T00:00:00Z"}])
+    if _fresh_pendings(stale, now):
+        f.append("a STALE pending entry still excused its game — the excuse must expire")
+    noreason=reg([{"date":"2026-08-21","game":"CHC@SEA","recorded_utc":"2026-08-22T06:00:00Z"}])
+    if _fresh_pendings(noreason, now):
+        f.append("a pending entry with no stated reason excused its game")
+    if _fresh_pendings("/nonexistent/path.json", now):
+        f.append("a missing registry excused something")
+    return f
 
 
 def selftest():
@@ -189,6 +250,7 @@ def selftest():
             fails.append(f"winner-only row handling wrong: expected only KC@LAD missing, got {miss}")
         if _finals(wrows):
             fails.append("winner-only row leaked into _finals() — echo/label logic must not see it")
+    fails += _selftest_pendings()
     if fails:
         print("result_content_checks selftest: FAIL")
         for f in fails:

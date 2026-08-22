@@ -1,5 +1,11 @@
 # AUTHORIZATIONS LOG — standing decisions by Taco
 
+> NOT A HANDOFF JOURNAL. This is a standing-decisions record, not the run journal a new
+> session bootstraps from — that is `docs/progress.md` (see `AGENTS.md` step 3).
+> `harness/journal_continuity.py` discovers journal-SHAPED files by their dated sections so a
+> renamed rival journal cannot hide; this line is the explicit declaration that excludes this
+> file from the one-canonical-journal rule. Removing it makes the healthcheck go red.
+
 ## 2026-07-18T04:14Z (2026-07-17 ~21:14 PT) — four decisions via structured question, this session
 
 **AUTH-1 (Priorities).** All three tracks authorized for this session: (a) MLB pipeline + 7/18 card,

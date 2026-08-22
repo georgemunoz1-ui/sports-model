@@ -35,7 +35,22 @@ BASE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 CANONICAL = "docs/progress.md"
 LOADER_SPEC = "AGENTS.md"
 REDIRECT_MARKERS = ("JOURNAL SPLIT CLOSED", "NOT the canonical run journal", "Do not append here")
-DATE_HEADER = re.compile(r"^#{1,3}\s*(\d{4}-\d{2}-\d{2})", re.M)
+# Header depth is pinned DELIBERATELY at 1-6 (every markdown heading level). An earlier bound of
+# 1-3 meant `#### 2026-08-23` was invisible while `## 2026-08-23` failed on a byte-identical tree —
+# a rule nobody could predict from outside. Fixtures now pin both sides of the bound.
+DATE_HEADER = re.compile(r"^#{1,6}\s*(\d{4}-\d{2}-\d{2})", re.M)
+# Directories searched for journal-SHAPED files (not just files literally named progress.md). Kept
+# shallow on purpose: docs/lessons, docs/experiments and docs/audits hold dated records that are
+# NOT handoff journals, and sweeping them in would make rule 1 fire constantly and get disabled.
+JOURNAL_DIRS = ("", "docs")
+JOURNAL_SHAPE_MIN_ENTRIES = 3
+# Widening discovery from "named progress.md" to "journal-shaped" catches a renamed rival journal,
+# and also catches legitimate dated RECORDS that are not handoff journals at all (AUTHORIZATIONS.md
+# is a standing-decisions log). Rather than guess, a file DECLARES itself. A shape-matched file with
+# no declaration FAILS — so the rule cannot be evaded by renaming, and a real record costs one line
+# once. The declaration is deliberately NOT honoured on the canonical journal: pointing it at the
+# handoff file would disable every rule here in a single edit.
+NOT_A_JOURNAL_MARKERS = ("NOT A HANDOFF JOURNAL",)
 MAX_ENTRY_AGE_DAYS = 2
 DEFAULT_LOADER_LINES = 30
 
@@ -72,28 +87,69 @@ def parse_loader(spec_text):
     A check that hard-codes the path it is meant to verify cannot notice the day AGENTS.md starts
     pointing somewhere else — which is the whole failure mode. Returns (path, n_lines, raw_line)."""
     if not spec_text:
-        return None, DEFAULT_LOADER_LINES, None
+        return None, DEFAULT_LOADER_LINES, None, "NO_SPEC_TEXT"
+    cands = []
     for line in spec_text.splitlines():
         if "progress.md" not in line or "read" not in line.lower():
             continue
         m = re.search(r"`([^`]*progress\.md)`", line) or re.search(r"([\w./-]*progress\.md)", line)
+        if not m:
+            continue
         n = re.search(r"last\s*~?\s*(\d+)\s*lines", line, re.I)
-        if m:
-            return m.group(1), int(n.group(1)) if n else DEFAULT_LOADER_LINES, line.strip()
-    return None, DEFAULT_LOADER_LINES, None
+        numbered = bool(re.match(r"\s*\d+[.)]", line))
+        cands.append((numbered, m.group(1), int(n.group(1)) if n else DEFAULT_LOADER_LINES,
+                      line.strip()))
+    if not cands:
+        return None, DEFAULT_LOADER_LINES, None, "NO_CANDIDATE_LINE"
+    # A NUMBERED bootstrap step beats loose prose. First-line-wins let any earlier mention shadow
+    # the real step — including the "the journal used to live at X" note a migration leaves behind,
+    # i.e. the parse was weakest exactly when it mattered most.
+    steps = [c for c in cands if c[0]]
+    pool = steps or cands
+    paths = {c[1].lstrip("./") for c in pool}
+    if len(paths) > 1:
+        return pool[0][1], pool[0][2], pool[0][3], f"AMBIGUOUS_INSTRUCTION:{sorted(paths)}"
+    return pool[0][1], pool[0][2], pool[0][3], None
 
 
-def find_journals(root=None):
-    """Every journal-shaped file in the tree: a markdown file named progress.md, or one carrying
-    dated section headers under docs/. Redirects are still journals — that is the point."""
+def find_journals(root=None, reader=None):
+    """Every journal-SHAPED file, not merely every file named progress.md.
+
+    The name test alone was both the documented and the implemented behaviour, and it makes rule 1
+    trivially evadable: a live rival journal called docs/handoff.md or docs/journal.md is invisible,
+    and noticing handoff state accumulating where nothing reads it is the whole point of rule 1. So
+    a markdown file in the searched directories ALSO counts as a journal when it carries at least
+    JOURNAL_SHAPE_MIN_ENTRIES dated section headers.
+
+    Content comes from `reader` (committed bytes by default), for the same reason every other rule
+    here uses committed content: a cold clone sees commits, not a working tree."""
     root = root or BASE
-    out = []
-    for dirpath, dirnames, filenames in os.walk(root):
-        dirnames[:] = [d for d in dirnames if d not in (".git", "node_modules", "__pycache__")]
-        for fn in filenames:
-            if fn.lower() != "progress.md":
+    read = reader or committed_text
+    out = set()
+    for d in JOURNAL_DIRS:
+        full = os.path.join(root, d) if d else root
+        if not os.path.isdir(full):
+            continue
+        for fn in sorted(os.listdir(full)):
+            path = os.path.join(full, fn)
+            if not os.path.isfile(path) or not fn.lower().endswith(".md"):
                 continue
-            out.append(os.path.relpath(os.path.join(dirpath, fn), root))
+            rel = os.path.relpath(path, root)
+            if fn.lower() == "progress.md":
+                out.add(rel)
+                continue
+            try:
+                txt = read(rel)
+            except Exception:
+                txt = None
+            if txt and len(DATE_HEADER.findall(txt)) >= JOURNAL_SHAPE_MIN_ENTRIES:
+                out.add(rel)
+    # a file literally named progress.md ANYWHERE still counts, wherever it is hiding
+    for dirpath, dirnames, filenames in os.walk(root):
+        dirnames[:] = [x for x in dirnames if x not in (".git", "node_modules", "__pycache__")]
+        for fn in filenames:
+            if fn.lower() == "progress.md":
+                out.add(os.path.relpath(os.path.join(dirpath, fn), root))
     return sorted(out)
 
 
@@ -101,8 +157,18 @@ def is_redirect(text):
     return bool(text) and any(m in text for m in REDIRECT_MARKERS)
 
 
+def declares_not_a_journal(text):
+    """A dated file that states it is not a handoff journal. One line, committed, auditable."""
+    return bool(text) and any(m in text for m in NOT_A_JOURNAL_MARKERS)
+
+
 def redirect_state_after_marker(text):
-    """Dated entries appearing AFTER the redirect marker — i.e. the closed file is live again."""
+    """Dated entries appearing AFTER the redirect marker — i.e. the closed file is live again.
+
+    POSITION-DEPENDENT BY CONSTRUCTION, and therefore NOT sufficient on its own: put the marker at
+    the BOTTOM of the file and every live entry sits above it, so this returns nothing while the
+    file is being actively written. `check` therefore ALSO compares each redirect's newest entry
+    date against the canonical journal's, which no marker placement can dodge."""
     if not text:
         return []
     lines = text.splitlines()
@@ -126,9 +192,17 @@ def check(canonical=None, loader_spec=None, journals=None, today=None,
     # ---- 1. EXACTLY ONE canonical journal
     js = journals if journals is not None else find_journals()
     texts = {j: read(j) for j in js}
-    live = [j for j, t in texts.items() if t is not None and not is_redirect(t)]
-    detail["journals"] = {j: ("REDIRECT" if is_redirect(t) else
-                              ("LIVE" if t is not None else "UNCOMMITTED")) for j, t in texts.items()}
+    def _class(j, t):
+        if t is None:
+            return "UNCOMMITTED"
+        if is_redirect(t):
+            return "REDIRECT"
+        # the canonical journal can NEVER declare itself out of its own rules
+        if j != canonical and declares_not_a_journal(t):
+            return "DECLARED_NOT_A_JOURNAL"
+        return "LIVE"
+    detail["journals"] = {j: _class(j, t) for j, t in texts.items()}
+    live = [j for j, t in texts.items() if _class(j, t) == "LIVE"]
     if canonical not in js:
         fails.append(f"CANONICAL_JOURNAL_ABSENT — {canonical} is not among the journals found "
                      f"({js}); the file every bootstrap path names must exist")
@@ -148,6 +222,14 @@ def check(canonical=None, loader_spec=None, journals=None, today=None,
     # ---- 2. LATEST COMMITTED ENTRY and its age
     date, idx = latest_entry(ctext)
     detail["latest_committed_entry"] = date
+    if date is not None and idx is not None:
+        body = [l for l in ctext.splitlines()[idx + 1:]
+                if l.strip() and not DATE_HEADER.match(l)]
+        detail["latest_entry_body_lines"] = len(body)
+        if not body:
+            fails.append(f"EMPTY_LATEST_ENTRY — the newest dated section ({date}) has no body. A "
+                         f"bare header satisfies every structural rule here AND holds the staleness "
+                         f"age at 0 forever, silencing the only freshness signal indefinitely")
     if not date:
         fails.append(f"NO_DATED_ENTRY — the committed {canonical} carries no dated section header, "
                      f"so 'the latest entry' is not a well-defined thing to read")
@@ -185,9 +267,13 @@ def check(canonical=None, loader_spec=None, journals=None, today=None,
 
     # ---- 4. COLD BOOTSTRAP: does the loader's own window contain the latest entry?
     spec = read(loader_spec or LOADER_SPEC)
-    lpath, llines, lraw = parse_loader(spec)
+    lpath, llines, lraw, lwhy = parse_loader(spec)
     detail["loader"] = {"spec_file": loader_spec or LOADER_SPEC, "path": lpath,
-                        "lines": llines, "instruction": lraw}
+                        "lines": llines, "instruction": lraw, "parse_note": lwhy}
+    if lwhy and lwhy.startswith("AMBIGUOUS_INSTRUCTION"):
+        fails.append(f"AMBIGUOUS_LOADER_INSTRUCTION — {loader_spec or LOADER_SPEC} names more than "
+                     f"one journal to read ({lwhy.split(':', 1)[1]}); which file a cold session "
+                     f"bootstraps from must not depend on which line a reader notices first")
     if lpath is None:
         fails.append(f"LOADER_INSTRUCTION_NOT_FOUND — {loader_spec or LOADER_SPEC} does not state "
                      f"which journal a new session reads; the bootstrap path is unverifiable")
@@ -212,6 +298,22 @@ def check(canonical=None, loader_spec=None, journals=None, today=None,
         after = redirect_state_after_marker(t)
         if after:
             leaks[j] = after
+    # POSITION-INDEPENDENT: a closed journal whose newest dated entry is NEWER than the canonical
+    # journal's is being written to, wherever its marker sits. This is the rule that actually holds;
+    # the marker scan above is a more specific signal kept for its better message.
+    stale_canon = {}
+    for j, t in texts.items():
+        if j == canonical or not is_redirect(t):
+            continue
+        rdate, _ = latest_entry(t)
+        if rdate and date and rdate > date:
+            stale_canon[j] = rdate
+    detail["redirects_newer_than_canonical"] = stale_canon
+    for j, rdate in stale_canon.items():
+        fails.append(f"REDIRECT_NEWER_THAN_CANONICAL — closed journal {j} carries an entry dated "
+                     f"{rdate}, NEWER than the canonical journal's {date}. Handoff state is being "
+                     f"written to a file nothing reads, which is the 2026-08-22 defect; marker "
+                     f"placement cannot hide this because no marker position is consulted")
     detail["redirect_state_leaks"] = leaks
     for j, after in leaks.items():
         fails.append(f"REDIRECT_CARRIES_INDEPENDENT_STATE — {j} is a closed redirect but has "
@@ -338,13 +440,122 @@ def selftest():
     if ok or not any("NO_COMMIT_BINDS_THE_JOURNAL" in x for x in f):
         fails.append(f"a journal that no commit touches was accepted: {f}")
 
+    # --- INDEPENDENT REVIEW 2026-08-22, blocker 1: a redirect whose MARKER SITS AT THE BOTTOM has
+    #     every live entry above it, so the marker scan returns nothing while the file is being
+    #     actively written. Position-independent rule: a redirect newer than canonical FAILS.
+    rogue_bottom = ("## 2026-08-25\n- live entries written here\n\n"
+                    "## JOURNAL SPLIT CLOSED\nDo not append here again.")
+    if redirect_state_after_marker(rogue_bottom):
+        fails.append("the marker fixture is wrong — this shape must be invisible to the scan, which "
+                     "is the whole point of the position-independent rule below")
+    ok, f, d = run(dict(base, **{"docs/progress.md": "## 2026-08-20\n- old canonical entry",
+                                 "progress.md": rogue_bottom}),
+                   ["docs/progress.md", "progress.md"])
+    if ok or not any("REDIRECT_NEWER_THAN_CANONICAL" in x for x in f):
+        fails.append(f"a closed redirect dated FIVE DAYS NEWER than the canonical journal passed "
+                     f"because its marker sat at the bottom: {f}")
+    if not d.get("redirects_newer_than_canonical"):
+        fails.append("the newer-redirect detail was not recorded")
+    # ... and a redirect OLDER than canonical is fine — a closed journal keeps its past (R6)
+    ok, f, _ = run(base, ["docs/progress.md", "progress.md"])
+    if not ok:
+        fails.append(f"a redirect older than canonical was rejected: {f}")
+
+    # --- blocker 2: find_journals is executed by the suite, against the REAL implementation.
+    import tempfile as _tf2
+    with _tf2.TemporaryDirectory() as _td3:
+        os.makedirs(os.path.join(_td3, "docs"))
+        os.makedirs(os.path.join(_td3, "docs", "lessons"))
+        open(os.path.join(_td3, "docs", "progress.md"), "w").write(good_journal)
+        open(os.path.join(_td3, "progress.md"), "w").write(redirect)
+        # a journal-SHAPED file under another NAME — invisible to a name-only search
+        open(os.path.join(_td3, "docs", "handoff.md"), "w").write(
+            "## 2026-08-20\n- a\n## 2026-08-21\n- b\n## 2026-08-22\n- c\n")
+        # a dated RECORD that is not a handoff journal must NOT be swept in
+        open(os.path.join(_td3, "docs", "lessons", "07-x.md"), "w").write(
+            "## 2026-08-20\n## 2026-08-21\n## 2026-08-22\n")
+        found = find_journals(_td3, reader=lambda rel: open(os.path.join(_td3, rel)).read())
+        if "docs/handoff.md" not in found:
+            fails.append(f"find_journals missed a journal-SHAPED file under another name — rule 1 "
+                         f"is evadable by renaming: {found}")
+        if "progress.md" not in found or "docs/progress.md" not in found:
+            fails.append(f"find_journals missed a file literally named progress.md: {found}")
+        if "docs/lessons/07-x.md" in found:
+            fails.append(f"find_journals swept in a dated RECORD that is not a handoff journal: "
+                         f"{found}")
+        # a nested progress.md is still found wherever it hides
+        os.makedirs(os.path.join(_td3, "notes", "deep"))
+        open(os.path.join(_td3, "notes", "deep", "progress.md"), "w").write(good_journal)
+        if "notes/deep/progress.md" not in find_journals(
+                _td3, reader=lambda rel: open(os.path.join(_td3, rel)).read()):
+            fails.append("a nested progress.md escaped discovery")
+
+    # --- the NOT-A-JOURNAL declaration: explicit, one line, and NOT usable on the canonical file
+    record = "# STANDING RECORD\n\nNOT A HANDOFF JOURNAL.\n## 2026-08-20\n- a\n## 2026-08-21\n- b\n"
+    ok, f, d = run(dict(base, **{"AUTHORIZATIONS.md": record}),
+                   ["docs/progress.md", "progress.md", "AUTHORIZATIONS.md"])
+    if not ok:
+        fails.append(f"a dated RECORD that declares itself not a handoff journal was counted as a "
+                     f"rival journal: {f}")
+    if d["journals"].get("AUTHORIZATIONS.md") != "DECLARED_NOT_A_JOURNAL":
+        fails.append(f"the declaration was not recorded: {d['journals']}")
+    # ... an UNDECLARED dated file IS a rival, so renaming cannot evade rule 1
+    undecl = "# SOMETHING\n## 2026-08-20\n- a\n## 2026-08-21\n- b\n## 2026-08-22\n- c\n"
+    ok, f, _ = run(dict(base, **{"docs/handoff.md": undecl}),
+                   ["docs/progress.md", "progress.md", "docs/handoff.md"])
+    if ok or not any("NOT_EXACTLY_ONE_CANONICAL_JOURNAL" in x for x in f):
+        fails.append(f"an UNDECLARED journal-shaped rival passed — rule 1 evadable by renaming: {f}")
+    # ... and the canonical journal cannot declare ITSELF out of its own rules
+    ok, f, d = run(dict(base, **{"docs/progress.md": "NOT A HANDOFF JOURNAL.\n" + good_journal,
+                                 "progress.md": undecl}),
+                   ["docs/progress.md", "progress.md"])
+    if d["journals"].get("docs/progress.md") == "DECLARED_NOT_A_JOURNAL":
+        fails.append("the CANONICAL journal declared itself out of its own rules — one line would "
+                     "then disable every check in this module")
+    if ok:
+        fails.append("a tree with the canonical journal self-excluded and a live rival passed")
+
+    # --- an EMPTY newest entry silences staleness forever
+    ok, f, d = run(dict(base, **{"docs/progress.md": good_journal.rsplit("- newest entry", 1)[0]}),
+                   ["docs/progress.md", "progress.md"])
+    if ok or not any("EMPTY_LATEST_ENTRY" in x for x in f):
+        fails.append(f"a dated header with NO BODY passed every rule and pinned the age at 0: {f}")
+    if run(base, ["docs/progress.md", "progress.md"])[2].get("latest_entry_body_lines", 0) < 1:
+        fails.append("a real entry was reported as having no body")
+
+    # --- DATE_HEADER depth is PINNED on both sides of its bound
+    if latest_entry("#### 2026-08-23\n- x")[0] != "2026-08-23":
+        fails.append("an H4 dated header was invisible — the depth bound must be pinned, and a "
+                     "rule nobody can predict from outside is worse than either bound")
+    if latest_entry("####### 2026-08-23\n- x")[0] is not None:
+        fails.append("seven hashes is not a markdown heading and must not read as one")
+    if latest_entry("2026-08-23 — not a header\n")[0] is not None:
+        fails.append("a bare date line was read as a section header")
+
     # 6. helper-level pins
     if latest_entry("## 2026-08-01\n## 2026-08-22\n## 2026-08-10")[0] != "2026-08-22":
         fails.append("latest_entry does not return the NEWEST date (order-independent)")
     if latest_entry("")[0] is not None:
         fails.append("latest_entry invented a date from nothing")
-    if parse_loader(AG) != ("docs/progress.md", 30, AG.strip()):
+    if parse_loader(AG) != ("docs/progress.md", 30, AG.strip(), None):
         fails.append(f"parse_loader wrong: {parse_loader(AG)}")
+    # a NUMBERED bootstrap step beats an earlier prose mention (the migration-note shadow)
+    shadowed = ("Historical note: the journal used to live at `notes/progress.md`; read that only "
+                "for archaeology.\n" + AG)
+    if parse_loader(shadowed)[0] != "notes/progress.md" and parse_loader(shadowed)[0] != "docs/progress.md":
+        fails.append(f"parse_loader picked neither candidate: {parse_loader(shadowed)}")
+    if parse_loader(shadowed)[0] != "docs/progress.md":
+        fails.append(f"an earlier PROSE mention shadowed the numbered bootstrap step: "
+                     f"{parse_loader(shadowed)[0]!r} — the parse is weakest exactly when a journal "
+                     f"migration has left a stale note behind")
+    # two NUMBERED steps naming DIFFERENT journals is ambiguous, and ambiguity is a failure
+    amb = "3. Read `docs/progress.md` (last ~30 lines)\n4. Read `docs/other_progress.md` first"
+    if not (parse_loader(amb)[3] or "").startswith("AMBIGUOUS_INSTRUCTION"):
+        fails.append(f"two numbered steps naming different journals were not flagged ambiguous: "
+                     f"{parse_loader(amb)}")
+    ok, f, _ = run(dict(base, **{"AGENTS.md": amb}), ["docs/progress.md", "progress.md"])
+    if ok or not any("AMBIGUOUS_LOADER_INSTRUCTION" in x for x in f):
+        fails.append(f"an ambiguous bootstrap instruction passed: {f}")
     if is_redirect("ordinary journal text"):
         fails.append("an ordinary journal was classed a redirect")
     if not is_redirect(redirect):
@@ -361,7 +572,8 @@ def selftest():
 MUTANTS = [
     ("one-canonical rule removed", "    if len(live) != 1:", "    if False:"),
     ("live journal need not be the canonical one", "    elif live[0] != canonical:", "    elif False:"),
-    ("redirects counted as live", "not is_redirect(t)]", "True]"),
+    ("redirects counted as live", '        if is_redirect(t):\n            return "REDIRECT"',
+     '        if False:\n            return "REDIRECT"'),
     ("uncommitted journal accepted", "    if ctext is None:", "    if False and ctext is None:"),
     ("committed content swapped for the working tree",
      '    return _git("show", f"HEAD:{path}")',
@@ -380,6 +592,33 @@ MUTANTS = [
      "    elif lpath.lstrip(\"./\") != canonical.lstrip(\"./\"):", "    elif False:"),
     ("missing loader instruction tolerated", "    if lpath is None:", "    if False:"),
     ("redirect state leak tolerated", "    for j, after in leaks.items():", "    for j, after in {}.items():"),
+    # --- INDEPENDENT REVIEW 2026-08-22
+    ("position-independent redirect rule removed (marker at the bottom hides live entries)",
+     "        if rdate and date and rdate > date:", "        if False:"),
+    ("redirect-newer comparison inverted", "        if rdate and date and rdate > date:",
+     "        if rdate and date and rdate < date:"),
+    ("find_journals: shape clause removed, name-only search restored",
+     "            if txt and len(DATE_HEADER.findall(txt)) >= JOURNAL_SHAPE_MIN_ENTRIES:",
+     "            if False:"),
+    ("find_journals: shallow scope widened to sweep in dated records",
+     'JOURNAL_DIRS = ("", "docs")', 'JOURNAL_DIRS = ("", "docs", "docs/lessons")'),
+    ("find_journals: nested progress.md no longer discovered",
+     "            if fn.lower() == \"progress.md\":\n                out.add(os.path.relpath(os.path.join(dirpath, fn), root))",
+     "            if False:\n                out.add(os.path.relpath(os.path.join(dirpath, fn), root))"),
+    ("parse_loader: first-line-wins restored (a stale migration note shadows the real step)",
+     "    steps = [c for c in cands if c[0]]\n    pool = steps or cands", "    pool = cands"),
+    ("parse_loader: ambiguity no longer a failure", "    if len(paths) > 1:", "    if False:"),
+    ("empty newest entry tolerated", "        if not body:", "        if False:"),
+    ("DATE_HEADER depth silently narrowed", 'r"^#{1,6}\\s*(\\d{4}-\\d{2}-\\d{2})"',
+     'r"^#{1,3}\\s*(\\d{4}-\\d{2}-\\d{2})"'),
+    ("DATE_HEADER matches a bare date line", 'r"^#{1,6}\\s*(\\d{4}-\\d{2}-\\d{2})"',
+     'r"^#{0,6}\\s*(\\d{4}-\\d{2}-\\d{2})"'),
+    ("not-a-journal declaration honoured on the CANONICAL journal (disables everything)",
+     "        if j != canonical and declares_not_a_journal(t):", "        if declares_not_a_journal(t):"),
+    ("not-a-journal declaration ignored, so real records read as rival journals",
+     "        if j != canonical and declares_not_a_journal(t):", "        if False:"),
+    ("undeclared shape-matched rival treated as declared",
+     "    return bool(text) and any(m in text for m in NOT_A_JOURNAL_MARKERS)", "    return True"),
     ("redirect scan looks BEFORE the marker instead of after",
      "    return [l for l in lines[pos + 1:] if DATE_HEADER.match(l)]",
      "    return [l for l in lines[:pos] if DATE_HEADER.match(l)]"),

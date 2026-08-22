@@ -217,7 +217,43 @@ def side_read_display(r):
     return txt
 
 
+def fair_number_display(row):
+    """The FAIR NUMBER column (owner card spec 2026-08-22): what the model itself says the line
+    should be. For a margin-bearing sport that is the negated predicted home margin; for a
+    moneyline-only row it is the model's fair price expressed as a probability. Never a spread
+    lifted from a book."""
+    if row.get("fair_number") is not None:
+        return row["fair_number"]
+    mh = row.get("margin_home")
+    if mh is not None:
+        h = row["teams"][1]
+        return f"{h} {-mh:+.2f}"
+    w = row.get("predicted_winner") or {}
+    if w.get("win_prob") is not None:
+        return f"{w['team']} {w['win_prob']:.1%} fair"
+    return "none"
+
+
+def market_number_display(row):
+    """The MARKET NUMBER column. Null-with-reason is a first-class value here: a blank market
+    column has always meant 'no price was captured', and that must stay visible rather than being
+    silently rendered as an empty cell."""
+    m = row.get("market_number")
+    if m:
+        return m
+    return f"none — {row.get('market_null_reason', 'no price captured')}"
+
+
+FIVE_FIELD_HEADER = "| Game | Model prediction | Fair number | Market number | Action |"
+
+
 def render_md(date, rows, banner, vintage_note):
+    """FIVE-FIELD CARD (owner spec 2026-08-22): the bettor surface leads with exactly
+    Game | Model prediction | Fair number | Market number | Action.
+    Everything else - Brier components, CAP attribution, evidence hashes, governance tokens -
+    moves to the audit appendix. The controls are NOT weakened: render_gate still runs over the
+    full structured rows, so a row missing a team label, a line-bound total, or a final action
+    still refuses to render even though those fields no longer appear in the lead table."""
     L = [f"# Decision Card — {date}", "", f"**{banner}**", "", vintage_note, ""]
     section = {"BET": "## Qualified bets", "WATCH": "## Watchlist",
                "PASS": "## Passes", "BLOCKED": "## Blocked / data conflicts"}
@@ -225,21 +261,15 @@ def render_md(date, rows, banner, vintage_note):
     for r in rows:
         if r["final_action"] != cur:
             cur = r["final_action"]
-            L += [section[cur], ""]
+            L += [section[cur], "", FIVE_FIELD_HEADER, "|---|---|---|---|---|"]
         w = r["predicted_winner"]
-        ps = r.get("projected_score")
-        score = " – ".join(f"{t} {ps[t]}" for t in r["teams"]) if ps else "n/a"
-        tr = r.get("best_total_read")
-        total = f"{tr['side']} {tr['line']} ({tr['prob']:.1%})" if tr else "none"
-        # THE FOUR-FIELD LEAD (owner rule): winner | side read | total read | action — first line, every game.
-        L += [f"### {r['game']} — {r['start']}",
-              f"**Predicted winner:** {w['team']} {w['win_prob']:.1%} ({w['other_team']} {w['other_prob']:.1%})"
-              f" | **Best side read:** {side_read_display(r)}"
-              f" | **Best total read:** {total}"
-              f" | **Action: {action_display(r)}**",
-              f"- Projected score: {score}",
-              f"- Trust: {r['trust_label']}",
-              f"- Why: {r['reason']}", ""]
+        pred = f"{w['team']} {w['win_prob']:.1%} ({w['other_team']} {w['other_prob']:.1%})"
+        L.append(f"| **{r['game']}** {r['start']} | {pred} | {fair_number_display(r)} "
+                 f"| {market_number_display(r)} | **{action_display(r)}** |")
+    L += ["", "*Reasons, trust labels, projected scores, starter states, deltas and all governance "
+          "detail are in the audit appendix — the controls still run over every row.*", ""]
+    for r in rows:
+        L.append(f"- **{r['game']}** — {r['trust_label']} — {r['reason']}")
     return "\n".join(L)
 
 
@@ -281,6 +311,22 @@ def selftest():
         fails.append("gate rejected a correctly labeled observed delta")
     if completeness_display(26, 30, "starter slots") != "26 of 30 starter slots (86.7% of starter slots)":
         fails.append(f"completeness_display wrong: {completeness_display(26,30,'starter slots')}")
+    # five-field card fixtures (owner spec 2026-08-21/22)
+    if fair_number_display({"teams": ["A", "B"], "margin_home": -7.23}) != "B +7.23":
+        fails.append("fair number must be the NEGATED home margin")
+    if fair_number_display({"teams": ["A", "B"], "margin_home": 3.55}) != "B -3.55":
+        fails.append("fair number sign wrong for a home favorite")
+    mn = market_number_display({"market_number": None, "market_null_reason": "no prices acquired"})
+    if "none" not in mn or "no prices acquired" not in mn:
+        fails.append("a missing market number must render null-WITH-REASON, not blank")
+    md = render_md("2026-01-01", [ok_row], "b", "v")
+    if FIVE_FIELD_HEADER not in md:
+        fails.append("five-field header missing from the rendered card")
+    for leaked in ("Projected score:", "Best side read:"):
+        if leaked in md:
+            fails.append(f"lead table still carries a demoted field: {leaked}")
+    if "test" not in md:
+        fails.append("reason dropped entirely — it must move to the appendix, not vanish")
     bad = dict(ok_row); bad["predicted_winner"] = {"team": "home", "win_prob": .55,
                                                   "other_team": "A", "other_prob": .45}
     if render_gate([bad], "clean", False)[0]:

@@ -1,0 +1,423 @@
+{
+ "record_id": "WNBA-TOTAL-SUPPRESSION-AND-REBUILD-2026-08-22",
+ "created_utc": "2026-08-22T14:30:00Z",
+ "schema": "governance.suppression_and_rebuild_record-v1 (RECORD, NOT CODE \u2014 this file contains no executable content, is never imported by any module, and is read, hashed and verified only)",
+ "status": "PART A is IN FORCE NOW and binds the card surface from this timestamp forward. PART B is a PREREGISTERED CANDIDATE SPEC \u2014 nothing in it is built, fitted, adopted or authorized. Changes require a SUCCESSOR record with a new record_id; this file is never edited in place (R6).",
+ "authority": "owner roadmap item 6 (2026-08-22): suppress the WNBA total head on the card surface now, and rebuild it later only against a preregistered specification with prospective validation.",
+ "supersedes": "nothing. Append-only. No existing card, forecast, grade, ledger or record is modified, regraded or withdrawn by this file.",
+ "sign_convention_stated_once": "every total error in this record is PREDICTED MINUS ACTUAL, the convention stated in the 2026-08-20 settlement audit. POSITIVE = the model projected TOO MANY points; NEGATIVE = too few. The largest miss on record (-36.1) is therefore an UNDER-projection, and the second largest (+24.1) an over-projection: the head fails enormously in both directions.",
+ "RELATIONSHIP_TO_EXISTING_RECORDS": {
+  "escalates": "owner rule 4 of WNBA-ATS-DEADBAND-AMENDMENT-2026-08-20 (verbatim: 'No WNBA total recommendations. The total head is diagnostic only after repeated double-digit misses.'). That rule made the total DIAGNOSTIC by policy. Part A makes it HARD-BLOCKED by mechanism: the surface no longer carries a number that a reader could act on, and the render gate refuses any surface that does.",
+  "inherits_the_three_layer_separation": "owner ratification 2026-08-20: REGISTER everything / GATE actions / GRADE everything. Part A is a gate on the ACTION and DISPLAY layer only. Total registration and total grading continue unchanged, so the prospective record keeps accumulating and Part B has a comparator.",
+  "inherits_the_permanent_block_precedent": "decision_card.PERMANENT_BLOCKS / lesson 18 (out-of-domain beats discounting): a block that can be lifted by prices arriving, by a good night, or by a coherence improvement is not a block. WNBA_TOTAL_ACTION_PROHIBITED is permanent until a SUCCESSOR record signed by the owner lifts it.",
+  "sibling_roadmap_item": "WNBA-COHERENT-DIST-PREREG-2026-08-22 (owner roadmap item 5) replaces the disconnected WINNER/MARGIN heads with one coherent predictive margin distribution. Item 6 is the TOTAL. The two interact and the interaction is an OPEN DECISION recorded below, not resolved here.",
+  "incident_lineage": "INC-20260819-TOTALS-REPORT (O/P/U probabilities asserted in a report that no replay produced) is the reason totals carry a heavier reporting burden than any other estimand in this repo. That incident was about MLB totals and about the report layer; this record is about the WNBA total MODEL and the card layer. They are distinct, and the standing rule from that incident \u2014 every displayed number is read from a tool-produced artifact in the same turn (R1, lesson 02) \u2014 applies to every number in this file.",
+  "lessons_cited": [
+   "06 estimands-not-sides (WINNER / ATS / TOTAL are separate decisions and one cannot authorize another)",
+   "11 null-plus-flag (unknown is null plus a reason code, never an imputed value)",
+   "18 out-of-domain-beats-discounting (a structural defect is a block, not a discount)",
+   "20 check-the-base-rate-before-crediting-the-model (a trivial baseline is the first comparator, not the last)"
+  ]
+ },
+ "PART_A_IMMEDIATE_SUPPRESSION": {
+  "in_force": true,
+  "effective_utc": "2026-08-22T14:30:00Z",
+  "scope": "every bettor-facing surface for WNBA totals: the Decision Card lead (whatever its current column layout), any chat or message rendering of a WNBA card, and any summary derived from them. Sport scope is WNBA ONLY \u2014 MLB totals are governed by the separate totals_gate and are untouched.",
+  "layout_independence": "this record binds CONTENT, not column count. The Decision Card lead has already gone from a single technical card to a four-field lead to a five-field card inside three days; a suppression rule keyed to a particular layout would lapse the next time the layout changes. The string binds whichever field renders a WNBA total, and if the current layout has no total field at all the string is rendered anyway (see R-A8): the owner specified a visible statement, not a silent omission.",
+  "THE_CARD_SURFACE_REDUCES_TO_EXACTLY_THIS_STRING": "Total projection: diagnostic only; action prohibited.",
+  "string_discipline": {
+   "exact_bytes": "Total projection: diagnostic only; action prohibited.",
+   "it_is_the_whole_field": "this string is the ENTIRE total field. Nothing may be appended, prefixed, parenthesised or footnoted onto it on the decision surface.",
+   "what_may_not_appear_beside_it": [
+    "the model's projected total (any number)",
+    "the market total line",
+    "the words Over or Under, or O/U, or any side token",
+    "any over/push/under probability",
+    "any lean, edge, delta, or distance-to-line",
+    "any hedged softener such as 'slight under lean', 'for reference', 'if you must', or 'informational only'",
+    "any confidence, star, tier or strength marker"
+   ],
+   "why_a_number_cannot_survive_on_the_surface": "a projected total displayed beside a market line IS an actionable instruction whatever label sits next to it. The 8/19 report incident and the 8/20 'only defensible side' framing are the same failure twice: the caveat was present and the number was acted on anyway. Removing the number is the only enforcement that does not depend on a reader honouring a label."
+  },
+  "RECOMMENDATION_LANGUAGE_IS_HARD_BLOCKED_NOT_DISCOURAGED": {
+   "statement": "HARD-BLOCKED. This is not a style preference, not guidance, and not a discouragement. A WNBA total recommendation is a RENDER FAILURE: the gate returns not-ok, the surface is refused, and nothing is emitted. There is no severity dial, no warning level, and no override flag.",
+   "no_discretionary_escape": "no 'best available option' phrasing, no 'the only defensible side', no ranking of totals against each other. Owner rule 6 of 2026-08-20 governs: 'best available option' cannot be translated into 'bet'; if nothing qualifies the answer is simply NO BET \u2014 and for WNBA totals nothing can qualify while this record stands.",
+   "assistant_narration_is_in_scope": "the block binds the assistant's prose in the same turn as the card, not just the rendered artifact. The 8/20 defect was the ADVICE layer echoing a diagnostic as a recommendation; a gate that only inspects the artifact would have passed that turn.",
+   "owner_discretion_is_walled_not_licensed": "lesson 14: the owner may do whatever the owner wishes with the owner's own money, recorded under owner attribution. That is not a model recommendation and never enters the model ledger. This block governs what the MODEL SURFACE may say."
+  },
+  "WHAT_CONTINUES_UNCHANGED": {
+   "registration": "the total continues to be computed and registered pre-tip in the immutable card and unified row exactly as before. Suppressing the surface must not bias the prospective sample \u2014 the same argument that kept ATS registration unthresholded on 2026-08-20.",
+   "grading": "every registered total continues to be graded once against tier-1 finals, appended to data/wnba/forecasts/grades.jsonl. Part B has no comparator if grading stops.",
+   "audit_appendix": "the numeric projection, its error, and the four-statistic totals block remain available in the Audit Appendix and in the artifacts. The Audit Appendix is an internal surface and is not a decision surface.",
+   "total_selection_id": "stays null with its existing reason on every unified row: 'no total selection rule is preregistered; TOTAL is DIRECTIONAL_DIAGNOSTIC only'. No total selection has ever been registered and none may be."
+  },
+  "EVIDENCE_ON_RECORD": {
+   "owner_stated_error_list_verbatim": [
+    -20,
+    16,
+    20.8,
+    -36.1,
+    -8.7,
+    24.1,
+    9.1
+   ],
+   "what_that_list_is": "the standing total_limitation chain carried on the WNBA cards themselves (data/wnba/forecasts/2026-08-21_card.json: 'cross-era level term; misses -20/+16/+20.8/-36.1 on record \u2014 DIAGNOSTIC ONLY, never a recommendation (owner rule 4)') extended by the three errors from the 2026-08-21 slate.",
+   "each_value_reconciled_to_a_registered_grade": [
+    {
+     "owner_value": -20,
+     "grade_id": "G-WNBA-V1-20260818-IND@TOR",
+     "date": "2026-08-18",
+     "total_pred": 175.7,
+     "total_actual": 196,
+     "exact_error": -20.3,
+     "note": "the card string rounds -20.3 to -20; the registered grade is the governing value"
+    },
+    {
+     "owner_value": 16,
+     "grade_id": "G-WNBA-V1-20260817-DAL@GSV",
+     "date": "2026-08-17",
+     "total_pred": 163.8,
+     "total_actual": 148,
+     "exact_error": 15.8,
+     "note": "the card string rounds +15.8 to +16; the registered grade is the governing value"
+    },
+    {
+     "owner_value": 20.8,
+     "grade_id": "G-TOTAL-WNBA-V1-20260819-MIN@GSV",
+     "date": "2026-08-19",
+     "total_pred": 163.8,
+     "total_actual": 143,
+     "exact_error": 20.8,
+     "note": "exact match"
+    },
+    {
+     "owner_value": -36.1,
+     "grade_id": "G-TOTAL-WNBA-V1-20260820-ATL@LAS",
+     "date": "2026-08-20",
+     "total_pred": 175.9,
+     "total_actual": 212,
+     "exact_error": -36.1,
+     "note": "exact match; largest miss on record"
+    },
+    {
+     "owner_value": -8.7,
+     "grade_id": "G-TOTAL-WNBA-V1-20260821-MIN@WAS",
+     "date": "2026-08-21",
+     "total_pred": 169.3,
+     "total_actual": 178,
+     "exact_error": -8.7,
+     "note": "exact match"
+    },
+    {
+     "owner_value": 24.1,
+     "grade_id": "G-TOTAL-WNBA-V1-20260821-GSV@CHI",
+     "date": "2026-08-21",
+     "total_pred": 167.1,
+     "total_actual": 143,
+     "exact_error": 24.1,
+     "note": "exact match"
+    },
+    {
+     "owner_value": 9.1,
+     "grade_id": "G-TOTAL-WNBA-V1-20260821-PDX@TOR",
+     "date": "2026-08-21",
+     "total_pred": 170.1,
+     "total_actual": 161,
+     "exact_error": 9.1,
+     "note": "exact match"
+    }
+   ],
+   "THE_ALTERNATION": {
+    "owner_wording": "the head alternates between near-perfect and enormous.",
+    "the_sharpest_instance_is_a_SINGLE_NIGHT": {
+     "slate": "2026-08-20",
+     "near_perfect": {
+      "game": "IND@DAL",
+      "grade_id": "G-TOTAL-WNBA-V1-20260820-IND@DAL",
+      "total_pred": 176.5,
+      "total_actual": 176,
+      "error": 0.5
+     },
+     "enormous": {
+      "game": "ATL@LAS",
+      "grade_id": "G-TOTAL-WNBA-V1-20260820-ATL@LAS",
+      "total_pred": 175.9,
+      "total_actual": 212,
+      "error": -36.1
+     },
+     "third_game_same_night": {
+      "game": "CON@LVA",
+      "total_pred": 167.3,
+      "total_actual": 179,
+      "error": -11.7
+     },
+     "spread_within_one_slate_points": 36.6,
+     "why_this_is_the_decisive_evidence": "same model, same code, same frozen features, same night, three games: 0.5, -11.7 and -36.1. There is no slate-level condition, no data outage and no personnel event that separates the good row from the catastrophic one. A reader shown +0.5 has no way to know they are not about to be shown -36.1, which is precisely why the number cannot be displayed at all."
+    },
+    "the_near_perfect_row_is_not_evidence_of_skill": "0.5 points on one game out of 21 is what a wide error distribution produces near its centre. Reading it as accuracy is the same error the 2026-08-21 PDX@TOR margin row already forced onto the record: an accurate row from an unearned term is luck, not vindication."
+   },
+   "SLATE_2026_08_21": {
+    "mae": 13.97,
+    "n": 3,
+    "errors": [
+     -8.7,
+     24.1,
+     9.1
+    ],
+    "arithmetic": "(8.7 + 24.1 + 9.1) / 3 = 41.9 / 3 = 13.9667 -> 13.97",
+    "source": "data/wnba/forecasts/grades.jsonl, reproduced from the three registered TOTAL grade records",
+    "collision_warning": "13.97 is ALSO harness/wnba_model_v1.py MARGIN_SD, the incumbent's frozen empirical MARGIN standard deviation, and the coherent-distribution prereg already warns that the two must never be swapped. The equality here is a numeric coincidence between a three-game total MAE and a frozen margin sd. They are different quantities on different estimands and must never be cited for one another."
+   },
+   "COMPLETE_REGISTERED_TOTAL_RECORD_BANNED_MEAN_RULE": {
+    "why_all_four_statistics_travel_together": "harness/unified_card.totals_report: the mean never travels alone. Here the rule earns itself \u2014 see signed_bias beside largest_miss.",
+    "artifact": "data/wnba/forecasts/grades.jsonl (tier-1 FINAL evidence only)",
+    "window": "2026-08-12 through 2026-08-21, 8 slate dates",
+    "n": 21,
+    "mae": 10.87,
+    "median_ae": 8.5,
+    "signed_bias": -0.4,
+    "largest_miss": -36.1,
+    "largest_miss_forecast_id": "WNBA-V1-20260820-ATL@LAS",
+    "error_range": [
+     -36.1,
+     24.1
+    ],
+    "dispersion_counts": {
+     "abs_err_le_2": 2,
+     "abs_err_ge_5": 17,
+     "abs_err_ge_10": 8,
+     "abs_err_ge_15": 5,
+     "abs_err_ge_20": 4,
+     "abs_err_ge_30": 1
+    },
+    "the_point_of_the_signed_bias": "-0.40 points of signed bias across 21 games would, quoted alone, read as a nearly unbiased total head. It is the arithmetic of a -36.1 and a +24.1 cancelling. Mean signed error is the single most misleading statistic available for this head, and this is the concrete case the banned-mean rule was written for."
+   },
+   "HONEST_ACCOUNTING_OF_THE_OWNER_SUBSET": {
+    "finding": "the seven values on record are 7 of the 21 registered total grades. Their mean absolute error is 19.26; the complete registered record's is 10.87. The quoted subset therefore overstates the head's typical error by 8.39 points.",
+    "why_this_is_recorded_rather_than_quietly_dropped": "lesson 20 and the 2026-08-21 denominator record: a figure whose denominator is unstated is not usable, and the discipline applies to evidence FOR a decision the assistant agrees with exactly as much as to evidence against it. Suppressing a head on a flattering subset would set the precedent that selected evidence is acceptable when the conclusion is congenial.",
+    "does_it_change_the_decision": "NO. On the complete n=21 record the head still carries MAE 10.87, a median absolute error of 8.5, eight double-digit misses in twenty-one games and a 36.1-point tail on a quantity that lives near 170. Both readings support suppression; the record states both so the next reader does not have to rediscover the denominator."
+   },
+   "THE_HEAD_DID_NOT_DEGRADE_AND_MUST_NOT_BE_NARRATED_AS_IF_IT_HAD": {
+    "development_window_artifact": "data/wnba/model/2026-08-12_v1_walkforward.json",
+    "walk_forward": {
+     "n": 1633,
+     "dates": 642,
+     "total_mae": 14.16358826210898,
+     "base_mae": 14.471270555550193,
+     "dMAE": -0.30768229344121284,
+     "ci95": [
+      -0.5105766344871556,
+      -0.10250516877713879
+     ],
+     "p_holm": 0.0035,
+     "target_status": "VALIDATED_VS_BASELINE"
+    },
+    "reading": "the total head's entire validated claim was a 0.31-point improvement on a 14.5-point baseline error, against a baseline that is the running mean of all prior totals. It was statistically distinguishable at n=1633 and practically negligible. Its live MAE of 10.87 over 21 games is BETTER than its own development number.",
+    "therefore": "nothing regressed. The head is behaving as its own preregistered validation said it would, and that level of accuracy was never actionable. This record exists because the head was SURFACED, not because it broke.",
+    "the_false_narrative_this_paragraph_exists_to_block": "'the total head degraded in August, retune it.' A retune addresses a regression that did not happen and would be fitted on 21 games. VALIDATED_VS_BASELINE is not the same claim as USEFUL, and the gap between those two words is the whole finding."
+   },
+   "WHAT_THIS_EVIDENCE_DOES_NOT_ESTABLISH": [
+    "it does NOT establish that the head is worse than the market. No WNBA total was ever selected, priced or graded against a closing total: no total-selection rule has ever been preregistered, total_selection_id is null on every unified row, and closing totals appear on only some boards (close_total is present on wnba.owner_results_board.v1 for 2026-08-18 and absent from the web finals schemas). MARKET_COMPARISON_UNAVAILABLE for totals, slate-wide.",
+    "it does NOT establish a directional bias. Signed bias is -0.40 over 21 games; the head misses hugely in both directions and no over- or under-projection tendency is claimed.",
+    "it does NOT establish a loss record. There is no total P&L because there was never a total bet. The official ledger stands at 0 bets and $0.",
+    "n=21 over 8 dates is a small sample by this program's own standing rule (R4). The suppression is justified by the ABSENCE of any validated actionable claim plus the demonstrated magnitude of the tail \u2014 not by a measured edge against a price."
+   ]
+  }
+ },
+ "PART_A_MECHANICAL_ENFORCEMENT_SPEC_FOR_THE_IMPLEMENTING_MODULE": {
+  "note": "this record is a specification. It writes no code and edits no module. An implementing module must be written separately and must carry its own selftest wired into healthcheck, in the style of harness/unified_card.py and harness/decision_card.py.",
+  "gate_name": "WNBA_TOTAL_ACTION_PROHIBITED",
+  "gate_shape": "a pure function over (rows, decision_text) returning (ok, failures) \u2014 the same contract as decision_card.render_gate and unified_card.totals_gate. It never mutates a row and never writes to a registered artifact.",
+  "conditions_the_gate_MUST_refuse": [
+   "R-A1: any row with sport == 'wnba' whose best_total_read is not None. The structure carrying side, line and probability must be absent, not merely labeled.",
+   "R-A2: any WNBA total field on the decision surface whose text is not byte-identical to the exact string.",
+   "R-A3: any Over/Under/O-U side token, any total line value, or any over/push/under probability appearing in the WNBA section of the decision text.",
+   "R-A4: any recommendation word in or adjacent to a WNBA total field \u2014 the decision_card.RECOMMENDATION_WORDS pattern applied to the total field, which today is applied only to the price field.",
+   "R-A5: any numeric model total on the decision surface. The number is permitted in the Audit Appendix and in the artifacts, and nowhere else.",
+   "R-A6: any attempt to lift the block from row state \u2014 prices arriving, a coherence pass, a low-error night, or an operator flag. Only a SUCCESSOR record with owner sign-off lifts it, exactly as OUT_OF_DOMAIN is permanent under decision_card.PERMANENT_BLOCKS.",
+   "R-A7: any softener or hedge attached to the exact string (prefix, suffix, parenthetical or footnote).",
+   "R-A8: any WNBA decision surface on which the exact string is ABSENT. Silent omission is not suppression \u2014 a reader who sees no total field cannot tell whether the total was withheld or simply forgotten, and the owner's instruction was that the surface reduces TO this sentence, not to nothing. This rule is what makes the block survive a column-layout change."
+  ],
+  "what_the_gate_must_NOT_do": [
+   "it must not delete, alter or refuse the registered total in the immutable card or unified row",
+   "it must not suppress the total in the Audit Appendix",
+   "it must not block the WINNER or ATS surfaces \u2014 estimands are separate (lesson 06), and a total block is not a winner block",
+   "it must not silently rewrite an offending surface into a compliant one. It REFUSES and returns failures; silent repair hides the defect from the operator."
+  ]
+ },
+ "PART_A_REQUIRED_FALSIFICATION_FIXTURES": {
+  "rule": "house rule: at least one fixture per rule that would PASS if the rule were deleted. A fixture that stays green after its rule is removed is not a fixture. Each entry below names the deletion it is designed to turn red.",
+  "F1_structured_total_read_present": "a WNBA row carrying best_total_read {'side':'Under','line':168.5,'prob':0.61} must be REFUSED. Delete R-A1 and this fixture passes.",
+  "F2_exact_string_altered": "total field 'Total projection: diagnostic only; action prohibited (slight under lean).' must be REFUSED. Delete R-A2/R-A7 and this fixture passes.",
+  "F3_bare_number_on_the_surface": "decision text containing 'Total projection: 167.1 \u2014 diagnostic only' must be REFUSED. Delete R-A5 and this fixture passes.",
+  "F4_side_token_without_a_number": "decision text containing 'lean Under' in the WNBA section must be REFUSED even with no line and no probability attached. Delete R-A3 and this fixture passes.",
+  "F5_recommendation_word": "'take the Under' in a WNBA total field must be REFUSED. Delete R-A4 and this fixture passes. NOTE: decision_card.RECOMMENDATION_WORDS as frozen today matches 'take (?:the )?[A-Z]' and would therefore need the total field passed to it \u2014 the implementing module must apply it, not assume it.",
+  "F6_prices_do_not_lift_the_block": "the same WNBA row before and after a total line and juice are attached must produce the identical refusal. Delete R-A6 and the post-price case passes.",
+  "F7_good_night_does_not_lift_the_block": "a WNBA row whose previous slate error was 0.5 must be refused identically to one whose previous error was -36.1. The IND@DAL row is the fixture. Delete R-A6 and this fixture passes.",
+  "F8_compliant_surface_passes": "a WNBA row with best_total_read None and the exact string as its whole total field must PASS. Without this fixture the gate could refuse everything and still look correct.",
+  "F9_other_estimands_survive": "the same compliant WNBA row must still render its WINNER and ATS fields and must still reach its normal final_action. A gate that blocks the whole row is wrong in the other direction (lesson 06).",
+  "F10_mlb_totals_unaffected": "an MLB row carrying a legitimate gate-certified best_total_read with its exact line must PASS. Delete the sport scoping and this fixture turns red \u2014 it exists so the WNBA block cannot silently swallow the MLB totals surface that INC-20260819-TOTALS-REPORT already certified.",
+  "F11_artifact_untouched": "after a gate run, the registered card and unified row bytes are unchanged. The gate is a reader. Delete the read-only discipline and this fixture turns red.",
+  "F12_R1_null_reason": "a WNBA row with no total computed at all must render the exact string and must NOT render an empty field, a dash, or a zero. Unknown is null plus a reason code.",
+  "F13_silent_omission_is_refused": "a WNBA decision surface carrying no total field at all \u2014 the shape a column-layout change produces \u2014 must be REFUSED. Delete R-A8 and this fixture passes, which is precisely the failure mode where a suppression rule quietly stops applying because the surface was redesigned around it.",
+  "F14_gate_runs_on_the_RENDERED_output": "the fixtures above must be applied to the output of the renderer, not to a hand-written sample string that resembles it. A gate exercised only against a literal fixture cannot detect a renderer that has drifted away from it. See the verified surface-state note below for a live instance of exactly this gap."
+ },
+ "IMPLEMENTATION_SURFACE_STATE_AT_WRITING": {
+  "status": "OBSERVATION, VERIFIED BY EXECUTION. Not a defect this record authorizes anyone to fix.",
+  "observed_utc": "2026-08-22T14:30:00Z",
+  "what_was_observed": "harness/decision_card.py carries an uncommitted working-tree change (git status: M) replacing the four-field lead with a FIVE-FIELD card \u2014 Game | Model prediction | Fair number | Market number | Action. The 'Best total read' field no longer appears in the lead table at all.",
+  "why_it_matters_to_this_record": "under that layout a WNBA total would be silently absent rather than explicitly suppressed. R-A8 and fixture F13 exist because of it, and the exact string must be given a home on whatever surface ships.",
+  "second_observation_reproduced_not_asserted": "with that change in the tree, render_md()'s own output FAILS render_gate() check 7: render_md emits '**NO BET \u2014 watch only**' while check 7 requires the literal '**Action: NO BET \u2014 watch only**'. Reproduced by calling render_md on the selftest's own ok_row and passing the result to render_gate: ok=False, failure 'A@B: four-field lead missing or action not rendered as NO BET \u2014 watch only'. decision_card --selftest still reports PASS because it feeds render_gate a hand-written CLEAN literal instead of render_md's actual output.",
+  "the_general_lesson_this_instance_illustrates": "a gate tested only against a literal it was written beside verifies the literal, not the renderer. This is the same shape as the 2026-08-10 healthcheck finding \u2014 well-formed rows passing a shape check \u2014 and it is why F14 above requires the WNBA total fixtures to run on rendered output.",
+  "no_action_taken": "no file was edited by this record. The observation is recorded so that whoever lands the five-field change and whoever implements Part A see it before wiring them together."
+ },
+ "PART_B_REBUILD_CANDIDATE_SPEC": {
+  "status": "CANDIDATE SPECIFICATION \u2014 NOT BUILT, NOT FITTED, NOT REGISTERED, NOT AUTHORIZED. No code, no parameters and no artifact exist for it. This section preregisters what a rebuild would have to be, so that a later build cannot choose its own requirements after seeing data.",
+  "reserved_candidate_model_id": "wnba.rs.total_v2.candidate_shadow",
+  "adoption_state": "CANDIDATE. A rebuild that is specified is not a rebuild that is validated. Nothing here promotes, replaces, unblocks or authorizes anything, and passing every gate below still requires owner sign-off before the Part A suppression is lifted.",
+  "WHY_THE_INCUMBENT_TOTAL_HEAD_FAILS_STRUCTURALLY": {
+   "architecture_on_record": "harness/wnba_model_v1.py, make_rows() and walk_forward(): the total target is a ridge OLS at fixed l2=1.0 on exactly THREE regressors, fitted on every prior row since burn-in \u2014 xt = [lg_mean_tot, (pace_home + pace_away) - 2*lg_mean_pace, net_home + net_away], where lg_mean_tot and lg_mean_pace are ALL-HISTORY running league means accumulated from the first staged season forward.",
+   "D1_the_level_term_is_cross_era": "lg_mean_tot anchors every projection to a running mean over the whole staged history. WNBA scoring level is not stationary across that history, so the anchor sits below the current era's level and the head must recover the difference from two edge terms that were never designed to carry it. This is the defect the cards have named as 'cross-era level term' since 2026-08-19.",
+   "D2_no_current_season_estimate_exists_anywhere_in_the_head": "all three regressors are all-history running quantities. The head has no representation of how this season's teams are actually scoring.",
+   "D3_it_is_a_point_estimate_with_no_distribution": "the head emits one number. There is no dispersion, no push mass, no interval and therefore no honest way to say how wrong it might be. A total is a quantity people price distributionally; a point estimate cannot be scored against a priced market.",
+   "D4_venue_is_unmodeled": "the frozen feature set contains no venue term. 2026-08-21 PDX@TOR was played at Rogers Arena, Vancouver \u2014 Toronto hosting away from its home market \u2014 and the model applied its standard home-court term anyway; the row was recorded OUT_OF_DOMAIN. 2026-08-18 LAS@CON was at TD Garden. Two neutral-or-displaced venues inside ten days, neither visible to the model.",
+   "D5_no_personnel_grain": "a game total is a minutes-weighted sum of player scoring rates. This head has zero player-grain input: no injuries, no rest designations, no expected minutes. A starter ruled out changes a total materially and is invisible to it.",
+   "D6_no_overtime_structure": "overtime adds a fifth period of scoring to the total and the head has no term for it. Separately, and importantly, the largest miss on record was NOT an overtime game: ATL@LAS finished 124-88, a 36-point final margin, which cannot arise from a game tied at the end of regulation. Overtime is a real structural gap in the total's distribution; it is NOT the explanation for -36.1, and this record refuses to let a convenient explanation attach itself to the worst row.",
+   "D7_the_features_are_stale_by_construction": "feature_state_as_of is 2026-07-22 on every WNBA card ever emitted. As of this record that freeze is 31 days old."
+  },
+  "REQUIRED_FEATURES_ALL_SIX_MANDATORY": {
+   "closure_rule": "this list is the MINIMUM. A rebuild missing any one of these is not the rebuild this record specifies. Additions are permitted only by naming them in the successor preregistration BEFORE any fit; nothing may be added, removed or transformed after seeing results (no feature shopping \u2014 the discipline the 2026-08-12 and 2026-08-22 WNBA preregs already impose).",
+   "R1_applies_to_every_feature": "where a required input cannot be sourced pregame from a tier-1 record, the feature is null plus a reason code and the game does not emit a total. It is never imputed, never league-averaged in silently, and never proxied by a quantity that happens to be available.",
+   "F_1_current_season_pace_and_efficiency": {
+    "requirement": "current-season, as-of-pregame team pace (possessions per 40 minutes) and offensive and defensive efficiency (points per 100 possessions), computed strictly from games completed before the slate date under official-plus-one finality.",
+    "why": "D1 and D2. The level of a total is a current-season quantity and the incumbent has no current-season term at all. This is the single largest structural gap.",
+    "shrinkage_must_be_preregistered": "early-season team rates are noisy; any shrinkage of the current-season estimate toward a prior must be specified with its constant frozen before fitting, in the style of the incumbent's SHRINK_G.",
+    "eligibility_inherited": "both teams >= 5 prior games that season, as the incumbent."
+   },
+   "F_2_expansion_era_weighting": {
+    "requirement": "an explicit, preregistered weighting of historical rows by recency and by league composition, replacing the all-history unweighted running means. The scheme (exponential half-life, hard season window, or explicit era indicator) and its constant are frozen before any fit.",
+    "why": "D1. The league is in an expansion era: roster composition and scoring level are not drawn from the same distribution as the deep history the incumbent averages over. An unweighted all-history mean silently asserts stationarity that the data does not support.",
+    "the_cost_that_must_be_recorded_before_the_fact": "down-weighting history reduces effective sample size. The candidate must report its effective n alongside its raw n, and a weighting that is tuned to whatever half-life scores best is a new preregistration, not a hyperparameter.",
+    "expansion_teams_need_explicit_handling": "a franchise with little or no prior history has no stable current-season rate for several weeks. That case is null plus a reason code until the eligibility minimum is met \u2014 not a league-average fill."
+   },
+   "F_3_overtime_probability": {
+    "requirement": "an explicit P(overtime) and an expected-additional-points term, so that the emitted total is a mixture over regulation and overtime outcomes rather than a single regulation-shaped point.",
+    "why": "D6. Overtime is a discrete jump in the total that the incumbent cannot represent, and it is a tail mechanism \u2014 exactly the part of the distribution this head fails in.",
+    "prerequisite_that_does_not_exist_yet": "the registered tier-1 finals evidence carries no period or overtime indicator on ANY schema in use (wnba.owner_results_board.v1, wnba.owner_finals_board.v1, wnba.web_finals_board.v1 all record final scores only). Overtime incidence therefore cannot currently be measured or graded from registered evidence. Extending the evidence schema to carry period detail is a PREREQUISITE for this feature, and until it exists no overtime rate may be asserted.",
+    "no_rate_is_asserted_in_this_record": "R1. The WNBA overtime base rate must be MEASURED from the staged official rows before it is modeled. This record states no number for it, and a later module may not quote one from memory."
+   },
+   "F_4_venue_and_neutral_site_classification": {
+    "requirement": "a pregame venue classification per game with at least three states \u2014 TRUE_HOME, NEUTRAL_SITE, DISPLACED_HOME (a nominal home team hosting away from its home market) \u2014 bound to the registered forecast, plus altitude or arena-specific handling only if preregistered.",
+    "why": "D4. Both the home-court term and the scoring environment depend on where the game is played, and the model currently assumes TRUE_HOME for every row.",
+    "incidents": [
+     "2026-08-21 PDX@TOR at Rogers Arena, Vancouver: recorded OUT_OF_DOMAIN, and note that this row produced the slate's most accurate margin (+0.55) \u2014 accuracy from an unearned term is luck and did not lift the block (lesson 18)",
+     "2026-08-18 LAS@CON at TD Garden"
+    ],
+    "prerequisite": "venue is not carried by the schedule capture that feeds the card. A pregame venue source must be identified and bound in evidence, or the classification is null plus a reason code and the game does not emit a total."
+   },
+   "F_5_injury_and_expected_minutes": {
+    "requirement": "pregame injury/availability status and expected minutes at player grain for both teams, with a capture timestamp that provably precedes tip, aggregated into an availability-adjusted team scoring rate.",
+    "why": "D5. A total is a minutes-weighted sum of player rates. This is also the estimand where the MLB side of this program has its sharpest measured result \u2014 starter resolution moved probabilities ~3pp per slate and flipped sides \u2014 so personnel information is not a speculative addition here.",
+    "the_v14_discipline_applies_verbatim": "the MLB V14 ruling of 2026-08-20 governs: an EXPECTED or POSTED lineup is never CONFIRMED. A game whose availability is not confirmed is EXCLUDED with its reason class. Starvation is acceptable; contamination is not.",
+    "prerequisite_that_may_not_be_satisfiable": "the staged WNBA source is team-grain official schedule and box data. If no pregame player-availability feed with a before-tip timestamp can be sourced, this feature is NOT AVAILABLE, must be recorded as such, and may NOT be proxied by a post-hoc box score or by a news snippet. A feature that cannot be sourced pregame cannot be in the frozen list \u2014 that would be a look-ahead defect (R2)."
+   },
+   "F_6_STRICT_MAXIMUM_FEATURE_AGE_GATE": {
+    "this_is_a_gate_not_a_feature": "it is listed among the required features because the rebuild is not specified without it. It binds emission, not fitting.",
+    "requirement": "a preregistered integer MAX_FEATURE_AGE_DAYS. If (slate_date - feature_state_as_of) exceeds it, the model EMITS NO TOTAL for that slate: the field is null with reason code STALE_FEATURES and the card renders the null. It does not emit a degraded total with a warning attached.",
+    "why_a_warning_is_not_enough": "the 8/20 advice-layer failure and the 8/19 report incident are both cases where the caveat was present and the number was used anyway. A staleness warning beside a number is the same shape of failure. The gate must remove the number.",
+    "the_current_freeze_is_too_stale_and_this_is_verified_not_asserted": {
+     "feature_state_as_of": "2026-07-22",
+     "age_on_2026_08_22_days": 31,
+     "age_on_every_card_ever_emitted_days": {
+      "2026-08-12": 21,
+      "2026-08-13": 22,
+      "2026-08-14": 23,
+      "2026-08-17": 26,
+      "2026-08-18": 27,
+      "2026-08-19": 28,
+      "2026-08-20": 29,
+      "2026-08-21": 30
+     },
+     "statement": "a 2026-07-22 feature freeze is TOO STALE for late-August action. A month of a compressed WNBA season carries roster movement, injury developments, rotation changes and form shifts, none of which reach a model frozen in July. Every total this head has ever emitted was emitted at 21 to 30 days of feature age.",
+     "the_consequence_stated_plainly": "any MAX_FEATURE_AGE_DAYS at or below 21 would have blocked ALL 21 registered WNBA totals on record. That is the correct outcome, not an argument for a looser gate."
+    },
+    "the_number_must_be_owner_set_BEFORE_any_fit": "choosing MAX_FEATURE_AGE_DAYS after checking which value lets the current freeze through is gate shopping and is forbidden. The number is preregistered in the successor record; this file deliberately does not name one, because naming one here would be the assistant setting a gate it will later be measured against.",
+    "it_binds_the_incumbent_too": "if a max age is adopted, it applies to any WNBA total emission including the incumbent's diagnostic one. A gate that only binds the candidate protects the wrong model."
+   }
+  },
+  "THE_COMPARATORS": {
+   "C1_incumbent_total_head": "wnba.rs.ff7_logit_ridge.v1_0.shadow, FROZEN. Refit, retune and replacement are forbidden. It continues to compute and register a diagnostic total under Part A precisely so this comparison remains possible. Beating it is NECESSARY.",
+   "C2_trivial_baselines": "(a) current-season running mean total, (b) trailing-N-game mean total with N preregistered. Lesson 20: the trivial baseline is checked FIRST, not last. The incumbent's own development edge over a running-mean baseline was 0.31 points, so a candidate that cannot clearly beat a running mean has produced nothing.",
+   "C3_market_closing_total": "the ONLY comparator relevant to action. Currently MARKET_COMPARISON_UNAVAILABLE: no preregistered total-line capture protocol exists, closing totals are present on some boards and absent from others, and vig has never been modeled for totals. Establishing a tier-1 closing-total capture with juice is a PREREQUISITE for any action claim.",
+   "the_ordering_rule": "beating C1 and C2 is NECESSARY and NOT SUFFICIENT. No WNBA total may reach the action layer on the strength of beating the model it replaces. Only C3, on a preregistered prospective sample with vig modeled, can support an action claim."
+  },
+  "OPEN_DECISION_FOR_THE_OWNER_SEPARATE_HEAD_OR_JOINT_OBJECT": {
+   "the_question": "margin = home_score - away_score and total = home_score + away_score are two functions of the SAME pair. Roadmap item 5 (WNBA-COHERENT-DIST-PREREG-2026-08-22) replaces the disconnected winner/margin heads with one coherent predictive margin law. Rebuilding the total as a THIRD independent head would reintroduce exactly the disconnection item 5 exists to delete.",
+   "option_A_separate_head_plus_coherence_gate": "keep the total as its own model and add a mandatory coherence gate binding it to the margin law. Simpler to build; the coherence gate becomes a permanent maintenance obligation and a tolerance-shaped gate is exactly what item 5 rejects.",
+   "option_B_joint_scoring_object": "model the two team scores jointly and DERIVE margin, total, spread, moneyline and every O/U probability from that one object. Coherence becomes structural rather than gated, which is item 5's stated principle applied to the full score. Larger build; supersedes item 5's scope.",
+   "not_decided_here": "this is an owner decision about scope and sequencing and the assistant does not take it unilaterally. It is recorded so the choice is made deliberately and before any fitting, rather than settled by whichever module gets written first.",
+   "what_is_decided_here": "whichever option is chosen, the rebuild is preregistered before any fit, and Part A stays in force throughout."
+  }
+ },
+ "PART_B_PROMOTION_GATES_ALL_REQUIRED": {
+  "G0_out_of_sample_is_the_binding_requirement": "every scored game's outcome must have been UNKNOWN when the candidate's parameters were frozen. Forward only. No refit, no recalibration, no feature change, no weighting change and no threshold change inside the evaluation window. Development-window improvement is not evidence for promotion and may never be narrated as such.",
+  "G1_preregistered_sample_size": {
+   "requirement": ">= 200 prospective WNBA games across >= 60 distinct slate dates, forward only.",
+   "consistency": "identical to roadmap item 5's G1 so the two candidates are held to one standard.",
+   "registration_completeness": "if a slate has eligible games, ALL eligible games register. Never a subset chosen by line, apparent edge, model confidence or feature freshness. A slate where registration was impossible is recorded with its reason code.",
+   "seasons_note": "at roughly 2.6 games per WNBA slate date, 200 games over 60 dates is not reachable in the remainder of the 2026 regular season. The gate spans seasons and the candidate stays SHADOW until it is met. A short season is not a reason to lower the number, and this sentence exists so that reduction cannot later be presented as a technicality.",
+   "checkpoints": "descriptive only at 50 and 100 games: counts, the four-statistic error block, calibration and coverage. No interim significance claims, no tuning, no narrative promotion (V14 forward-protocol precedent)."
+  },
+  "G2_primary_distributional_score": "CRPS of the candidate's full predictive TOTAL law versus each comparator, paired per game on identical games. The incumbent, which emits a point, is given a fair distributional shot by constructing its implied law from its own frozen residual scale \u2014 scoring it against a distribution it never claimed would be rigged and is forbidden. Inference: date-block bootstrap resampling SLATE DATES with replacement, 10000 draws, seed 20260822, on paired per-date mean score differences; 95% CI must exclude zero on the improving side.",
+  "G3_point_error_block_reported_alongside": "MAE, MEDIAN absolute error, SIGNED bias and LARGEST miss, always together (harness/unified_card.totals_report). Reported for context; a point-error improvement CANNOT substitute for G2.",
+  "G4_calibration_of_the_level": "OLS of ACTUAL total on PREDICTED total must give slope in [0.85, 1.15] and the comparator's slope on the same games is reported beside it. This is the gate that measures a cross-era level anchor directly: a projection anchored below the current scoring level produces a slope away from 1.",
+  "G5_TAIL_GATE_THIS_IS_THE_ONE_THAT_MATTERS_HERE": "the defect being fixed is the TAIL, so a candidate may not pass on average performance. Empirical coverage of the central 50%, 80% and 95% intervals of the predictive total law must each fall within 0.10 of nominal (0.05 for the 95% interval), and the count of |error| >= 25 exceedances must not exceed what the candidate's own law predicts at the preregistered tolerance. A candidate that improves MAE while keeping a 36-point tail has not fixed anything. PIT histogram and KS statistic are reported as DESCRIPTIVE diagnostics, not inferential gates.",
+  "G6_multiplicity": "Holm across the family {candidate vs incumbent on CRPS, candidate vs current-season-mean baseline on CRPS, candidate vs trailing-mean baseline on CRPS, candidate vs incumbent on MAE} = 4 tests. The baseline tests are sanity floors that must ALSO pass; the promotion claim rests on the incumbent comparison.",
+  "G7_feature_age_gate_integrity": "ZERO emissions in the evaluation window with feature age above MAX_FEATURE_AGE_DAYS, verified mechanically over the registered rows, not attested. One violation fails the gate outright \u2014 a staleness gate that leaked once is not a gate.",
+  "G8_provenance_and_immutability": "exactly one distribution per eligible game, registered PRE-TIP, never revised and never superseded by a later capture. Every registration binds the feature_state_as_of date, the code hash and the evidence hash. Grading is once and only once (R6).",
+  "G9_market_gate_required_only_for_ACTION": "beating C1 and C2 under G2-G8 may support lifting the DISPLAY suppression with owner sign-off. It may NOT support any action, selection, EV claim or wager. Action additionally requires a preregistered prospective sample against captured closing totals with vig modeled (C3), which does not exist today.",
+  "G10_owner_sign_off": "required and not implied by passing the numbers. Passing every gate produces a RECOMMENDATION to the owner, never an automatic promotion.",
+  "on_failure": "the candidate is recorded FAILED, the Part A suppression stays in force, and the incumbent stays frozen and suppressed. A failure does not authorize a third attempt: that needs a new preregistration with a new identity, and it may not reuse the evaluation window that produced the failure."
+ },
+ "KNOWN_LIMITATIONS_RECORDED_BEFORE_THE_FACT": [
+  "The rebuild may be unbuildable as specified. F_5 (injury and expected minutes) and F_3 (overtime) both depend on data that does not exist in the current staged source or evidence schemas. Recording that now prevents a later build from quietly dropping the hard features and calling the result the rebuild.",
+  "Expansion-era weighting shrinks effective sample size. A candidate weighted hard toward recent rows may be unable to reach G1's sample requirement with stable parameters, which is a real possible outcome and not a reason to loosen the weighting after the fact.",
+  "n=21 is the entire prospective total record. Every number in Part A's evidence block rests on it, and R4 says small samples do not move verdicts. What moves this verdict is not the sample size \u2014 it is that no validated actionable claim ever existed for this head.",
+  "Suppression removes information from the owner's view. That is the intended cost: a number that cannot be acted on responsibly is not information, and the owner retains full access through the Audit Appendix.",
+  "This record does not address the MARGIN head's blowout compression, which is a separate, live and re-confirmed defect governed by MARGIN_COMPRESSION_BLOCK and roadmap item 5.",
+  "If roadmap item 5's coherent margin law is adopted while the total remains a separate head, the WNBA card will again carry two objects that can contradict each other. The open decision above must be settled before, not after, either build."
+ ],
+ "WRITE_DISCIPLINE": {
+  "never_write_to_registered_artifacts": "no module implementing this record may write to data/wnba/forecasts/*_card.json, registrations.jsonl, grades.jsonl, ats_selections.jsonl or data/cards_unified/*. Pregame rows are immutable; settlement appends.",
+  "candidate_output_paths_reserved": {
+   "candidate_forecasts": "data/wnba/candidate_total_v2/forecasts.jsonl",
+   "candidate_grades": "data/wnba/candidate_total_v2/grades.jsonl",
+   "candidate_model_artifacts": "data/wnba/candidate_total_v2/model/"
+  },
+  "these_paths_do_not_exist_yet": "they are reserved by this record so a later build cannot claim a registered path by accident. Nothing is created by writing this file.",
+  "R1_unknown_is_null_plus_a_reason_code": "every null in a candidate emission carries a reason code. No imputation, no league-average fill presented as an estimate, no number recalled from a previous turn.",
+  "R6_append_only": "this record is never edited in place. A correction is a SUCCESSOR record citing this record_id."
+ },
+ "WHAT_THIS_RECORD_DOES_NOT_AUTHORIZE": [
+  "it does not authorize any wager, any selection, any EV claim or any stake on any WNBA estimand",
+  "it does not authorize retuning, refitting or replacing the incumbent WNBA model",
+  "it does not authorize editing, regrading or withdrawing any existing card, forecast, grade or ledger entry",
+  "it does not authorize building the Part B candidate \u2014 that requires a successor preregistration naming MAX_FEATURE_AGE_DAYS, the weighting scheme and the head-versus-joint-object decision",
+  "it does not authorize lifting the Part A suppression on the strength of any future good night, price arrival or coherence improvement",
+  "it does not authorize blocking, softening or altering the WNBA WINNER or ATS surfaces \u2014 estimands are separate",
+  "it does not authorize changing MLB totals handling in any way"
+ ],
+ "STANDING": {
+  "wnba_total_card_surface": "SUPPRESSED \u2014 exact string only, action prohibited, hard-blocked",
+  "wnba_total_registration": "CONTINUES",
+  "wnba_total_grading": "CONTINUES",
+  "incumbent_model": "FROZEN (wnba.rs.ff7_logit_ridge.v1_0.shadow)",
+  "rebuild": "CANDIDATE SPEC ONLY \u2014 not built, not fitted, not authorized",
+  "gate": "0/100 NO_PROMOTE",
+  "wager_authority": "NO",
+  "stake": 0,
+  "bets": 0,
+  "pnl_usd": 0,
+  "ledger_eligible": false
+ }
+}

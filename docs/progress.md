@@ -2468,3 +2468,40 @@ Routines bare-clone the default branch and land on the `main` stub; `harness/pus
 `git push origin main` to `git push origin HEAD` (the old form pushed a disjoint stub and exited 0,
 so the runbook's WARN never fired — a silent durability failure on every cycle). (5) Acquisition
 still 403 on the org egress proxy; never routed around.
+
+## 2026-08-22 (later) — daily_baselines repaired: nine defects closed, 32/32 mutants killed, and the module immediately corrected me
+Roadmap item 2 taken off the quarantine list. The adversarial review's eight defects are closed and
+a ninth was found while repairing: the CLI read `{date}_grades.json`, which a re-settlement
+REWRITES — the 8/21 file lists 28 forecasts under `already_graded_skipped` and carries 2 rows, so
+the real run resolved to ONE common game and printed "the cohort demonstrated nothing" as a
+directive off a coin flip. Partial snapshots are now refused by name.
+
+The critical fixes: Brier and log loss are pinned to hand-computed constants that do not call the
+module (`brier -> abs(p-y)` and a sign-dropped `logloss` both SURVIVED the original fixtures while
+printing PASS and green); the cross-book prohibition became an ALLOWLIST after eight spellings of
+"best odds" were shown to de-vig to a number and pass the gate; book agreement now holds over every
+named board (`{book:dk, book_away:fd}` — a shape `split_prices` builds by itself — used to de-vig
+happily); zero common games BLOCKS the gate; below five games the BEAT verdict is null with a
+reason and rendered neutrally; unmarked price timing is UNKNOWN rather than defaulting to pregame,
+which was the one path by which closing prices could be scored as the pregame comparator.
+
+`--mutants` runs 32 source mutants and requires the selftest to FAIL for each: 32/32 KILLED. The
+harness had the disease it exists to cure — MUTANTS quotes the code it patches, so a naive
+replace() rewrote the LIST ENTRY instead of the function for any target defined below it, silently
+reporting two real mutants as survivors. A no-op mutant proves as little as a decorative fixture.
+
+FIRST HONEST RUN, and it corrected me on its first slate. Read-only over the 8/21 cards joined to
+graded finals, gate PASS, reproducing the settled record exactly (v1 8-7/.24633, v2 10-5/.23062).
+The expanding home-win prior — .524231, from 1006/1919 finals STRICTLY before the slate — scored
+Brier .229587 and log loss .652289, beating v2 on BOTH. So v2 cleared no baseline that night on any
+measure. My 8/22 line that "Brier still beats flat-50% (.23062 vs .25000) so the probabilities held
+some information" is WITHDRAWN: flat-50% is weaker than a base rate anyone can compute without a
+model, and I picked it because it was already in the report. Fragility stated plainly — the edge is
+.00103 on n=15 and reverses under 4 of 15 single-game flips, so this does NOT establish the prior
+forecasts better; the supported claim is the negative one. Verified by hand against results.csv
+independently of the module. Lesson 22 added.
+
+STILL NOT TRUE: the repair has not been independently re-reviewed, the module is not imported by
+healthcheck and not wired into any card, grade or decision, and four siblings remain quarantined
+with open defect lists (starter_attribution, subgroup_monitor, totals_eval, freshness_gates).
+Record: docs/experiments/2026-08-22_DAILY_BASELINES_REPAIR.json

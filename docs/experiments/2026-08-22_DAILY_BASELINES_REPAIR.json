@@ -1,0 +1,56 @@
+{
+ "record_id": "DAILY-BASELINES-REPAIR-2026-08-22",
+ "status": "DEFECTS CLOSED AND MUTATION-PROVEN — NOT WIRED, NOT RATIFIED",
+ "module": "harness/daily_baselines.py",
+ "supersedes_nothing": "append-only; the quarantine record and the review it cites stand unchanged",
+ "review_closed": "docs/audits/2026-08-22_roadmap_module_review.json (daily_baselines.py section)",
+ "why_this_module_first": "The owner's roadmap prioritised it, and the review's own verdict named the reason: the expanding-home baseline is the comparator that would have caught the 2026-08-21 base-rate problem before the settlement report led with a Brier improvement, and its scoring arithmetic was completely unpinned.",
+
+ "defects_closed": [
+  {"n": 1, "severity": "critical", "was": "No Brier or log-loss VALUE was pinned anywhere. `brier -> abs(p-y)` and `logloss` with its sign dropped both SURVIVED, printing selftest PASS and gate green while reporting a NEGATIVE log loss to the operator.", "now": "Both scorers pinned to hand-computed constants that do not call the module: brier(0.6,1)=0.16, brier(0.75,0)=0.5625, logloss(0.6,1)=-ln(0.6)=0.5108256238, logloss(0.5,1)=ln(2), plus monotonicity and a finite-positive clamp check; pinned AGAIN through score_probs (mean Brier 0.36125, mean log loss 0.94856) so a correct scorer wired up wrongly is also caught."},
+  {"n": 2, "severity": "critical", "was": "The cross-book prohibition was a closed 3-item denylist with hyphen-only normalisation. 'best odds', 'cross book', 'best price', 'best_line', 'best_available', 'best', 'shop' and 'consensus' all de-vigged to 0.60201 and passed the gate — the 8/3 ruling bypassable by spelling.", "now": "ALLOWLIST. Spaces and hyphens both normalise; a recognised best-odds label gets the specific 8/3 reason and an UNRECOGNISED basis is refused with UNRECOGNISED_PRICE_BASIS rather than accepted by default. All eight of the reviewer's live bypasses now return null."},
+  {"n": 3, "severity": "critical", "was": "One-sided book attribution CONTRADICTING the top-level book was accepted as same-book, because the check only fired when both per-side books existed and disagreed. Reachable from an ordinary capture file, since split_prices merges the top-level book into every entry. `cross_book` was compared with `is True`, so the string 'true' from any CSV/YAML/env round-trip was ignored.", "now": "Agreement is required over the whole named set of {book, book_away, book_home}; cross_book is coerced. The reviewer's end-to-end shape that produced brier=0.171996 with gate()==True now returns available=False, brier=None."},
+  {"n": 4, "severity": "high", "was": "gate() returned green on a report with ZERO common games — including two cohorts with disjoint game sets, the exact not-a-head-to-head condition the module exists to detect. A one-game slate printed 'The cohort demonstrated nothing here' as an imperative directive off a single coin flip.", "now": "n_games_common == 0 is a BLOCKING gate failure. Below MIN_GAMES_FOR_VERDICT (5) the verdict is null with SAMPLE_TOO_SMALL_FOR_A_VERDICT, the consequence sentence is withheld, and the comparison is rendered neutrally ('higher'/'level'/'lower') rather than as a capitalised BEAT. The raw comparison is still reported — suppressed verdict, not suppressed data."},
+  {"n": 5, "severity": "high", "was": "format_report() raised TypeError on a report gate() certified as valid, and the CLI printed the report BEFORE the gate, so the operator got a traceback instead of the verdict.", "now": "The per-cohort render is guarded like the baseline loop; the CLI computes the gate first and a rendering failure is itself recorded as a gate failure rather than replacing the output."},
+  {"n": 6, "severity": "high", "was": "Unmarked price timing silently defaulted to 'captured', so a CLOSING-price file scored as the pregame market baseline was indistinguishable from a genuine pregame capture — the one direction in this module where later information leaks into an earlier baseline.", "now": "split_prices returns THREE buckets. An entry with no timing evidence lands in `unknown`, is scored by NEITHER market baseline, and the set-aside count is named in PRICE_CAPTURE_TIME_UNKNOWN. Explicitly-marked files still populate their own bucket and only their own."},
+  {"n": 7, "severity": "medium", "was": "An available:False block could carry a non-null n, record or Brier and still pass the gate — an unavailable comparator that prints a score reads as scored.", "now": "_gate_block asserts every SCORE_FIELD is None when available is False."},
+  {"n": 8, "severity": "medium", "was": "The BEAT comparison had no tested boundary; `>` versus `>=` was undetectable.", "now": "Strictly-greater, with an exact-tie fixture asserting a tie renders as 'did not beat'."},
+  {"n": 9, "severity": "found while repairing", "was": "The CLI read {date}_grades.json, which a re-settlement REWRITES: the 2026-08-21 file lists 28 forecasts under already_graded_skipped and carries 2 rows. That is how the real run resolved to ONE common game and printed a directive off a coin flip.", "now": "_cli_rows REFUSES a partial snapshot — either an already_graded_skipped list or a completeness string exceeding the distinct games present — naming the discrepancy instead of scoring a re-graded remainder as if it were the slate."}
+ ],
+
+ "mutation_harness": {
+  "why": "lesson 21 — a passing selftest is not a proven fixture. The original 63-mutant review found 21 survivors behind a green selftest.",
+  "invocation": "python3 harness/daily_baselines.py --mutants",
+  "contract": "each mutant is a source edit expressing a rule this module claims; the mutated copy's selftest MUST fail. A survivor, or a mutant whose pattern does not apply, exits non-zero and is reported as decoration.",
+  "result": "32 mutants, 32 KILLED",
+  "harness_defect_found_and_fixed": "The harness had the disease it exists to cure. MUTANTS quotes the code it patches, so replace(old,new,1) rewrote the LIST ENTRY instead of the function for any target defined below the list — two real mutants were silently no-ops reported as SURVIVED. The list region is now excised before patching. A no-op mutant proves exactly as little as a decorative fixture.",
+  "coverage_note": "The suite covers the nine defects above plus the rules the ORIGINAL fixtures did hold (strictly-before prior, no 0.500 default, no omitted baseline, same-games, no Brier for a deterministic rule, outcome conflicts blocking), so a future repair cannot silently undo them."
+ },
+
+ "first_honest_run": {
+  "scope": "2026-08-21 MLB, 15 common games, cohort rows rebuilt READ-ONLY from cards/2026-08-21_card.json and cards/2026-08-21_card_v2.json joined to graded finals in results.csv. Nothing written.",
+  "gate": "PASS",
+  "reproduces_the_settled_record_exactly": {"v1": "8-7, Brier 0.24633, log loss 0.68583", "v2": "10-5, Brier 0.23062, log loss 0.65404"},
+  "expanding_home_win_prior": {
+   "p_home": 0.524231,
+   "basis": "1006 home wins in 1919 finals STRICTLY BEFORE 2026-08-21",
+   "look_ahead_version_not_used": "including the slate date would give 0.527404 over 1934",
+   "side_record": "14-1",
+   "brier": 0.229587,
+   "logloss": 0.652289,
+   "verified": "hand-computed from results.csv independently of the module; both agree"
+  },
+  "finding": "On this slate the v2 cohort did not beat the no-model home-win base rate on ANY measure: win-loss 10-5 against 14-1, Brier 0.23062 against 0.229587, log loss 0.65404 against 0.652289. v1 lost on all three by more.",
+  "correction_to_an_earlier_statement": "On 2026-08-22 I wrote that v2's 'Brier still beats flat-50% (.23062 vs .25000) so the probabilities held some information.' Flat-50% was the WRONG comparator — it is weaker than a base rate anyone can compute without a model. Against the correct comparator, v2's Brier advantage disappears. The owner's base-rate caveat was sharper than my defence of the number.",
+  "fragility_stated": "The prior's Brier edge over v2 is 0.00103 on n=15 and REVERSES under 4 of 15 single-game outcome flips. This does NOT establish that the prior is the better forecaster. The robust claim is the negative one: v2 cleared no baseline on this slate, and the comparator used to argue otherwise was too weak.",
+  "why_this_matters": "This is the comparison the settlement pipeline could not compute on 8/21, which is why the report led with '+6.1% relative Brier' and the owner had to catch the base-rate problem by hand. The module now computes it automatically, on the same games, whether or not the result is flattering."
+ },
+
+ "what_is_still_not_true": [
+  "This repair has NOT been independently re-reviewed. The defect list came from an adversarial pass; the fix has only my own mutation suite behind it.",
+  "The module is NOT imported by healthcheck, NOT wired into any card, grade or decision, and its numbers stay diagnostic until the owner ratifies it.",
+  "Four sibling modules remain QUARANTINED with their defect lists open: starter_attribution, subgroup_monitor, totals_eval, freshness_gates.",
+  "READS-ONLY is a property of the current code, not an enforced invariant; the module writes nothing but nothing stops a future edit from doing so."
+ ],
+ "recorded_utc": "2026-08-22"
+}

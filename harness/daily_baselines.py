@@ -43,13 +43,31 @@ Usage: python3 harness/daily_baselines.py --selftest
        python3 harness/daily_baselines.py --date 2026-08-21 [--grades PATH] [--prices PATH]
 """
 # =============================================================================================
-# QUARANTINED DRAFT — NOT WIRED, NOT AUTHORITATIVE (2026-08-22)
-# Built for the owner's roadmap and then adversarially reviewed. The review found critical/high
-# defects and, more importantly, that many of this module's own fixtures are DECORATIVE: they stay
-# green when the rule they supposedly guard is deleted. A passing selftest here therefore does not
-# mean the rules hold. Findings: docs/audits/2026-08-22_roadmap_module_review.json
-# This module is NOT imported by healthcheck, NOT used for any card, grade, or decision, and its
-# numbers must not be quoted until the defect list is closed and the fixtures are proven killing.
+# DEFECTS CLOSED 2026-08-22 — STILL NOT WIRED, STILL AWAITING OWNER RATIFICATION
+# This module was quarantined the same day after an adversarial review found 8 critical/high
+# defects and, worse, that its own fixtures were largely DECORATIVE: 21 of 63 mutants SURVIVED,
+# including `brier -> abs(p-y)` and `logloss` with its sign dropped. All 8 are now closed:
+#   1  Brier and log loss are pinned to hand-computed constants that do not call this module
+#   2  the price-basis check is an ALLOWLIST — an unrecognised basis is refused, not accepted
+#   3  book agreement holds over EVERY named board, and `cross_book` is coerced, not identity-checked
+#   4  zero common games BLOCKS the gate; below 5 games the BEAT verdict is null with a reason
+#   5  format_report renders every report the gate certifies, and the CLI prints the verdict first
+#   6  unmarked price timing is UNKNOWN — it no longer defaults into the pregame market baseline
+#   7  an available=False block may not leak a score past the gate
+#   8  the BEAT boundary is strictly-greater and a tie is pinned by fixture
+# plus one found while repairing: a PARTIAL grade snapshot is refused rather than scored as a slate.
+#
+# `--mutants` runs 32 source mutants and requires the selftest to FAIL for each. 32/32 are KILLED.
+# That harness had the same disease it exists to cure — it patched the MUTANTS list literal instead
+# of the function whenever the target was defined below the list, silently reporting two real
+# mutants as survivors. Fixed; the list region is now excised before patching.
+#
+# WHAT IS STILL NOT TRUE: this repair has not been independently re-reviewed, and promotion is an
+# owner act. The module is READS-ONLY and writes nothing, but it is NOT imported by healthcheck and
+# is NOT wired into any card, grade or decision. Numbers from it are diagnostic and must be labeled
+# as such until the owner ratifies it.
+# Review: docs/audits/2026-08-22_roadmap_module_review.json
+# Repair: docs/experiments/2026-08-22_DAILY_BASELINES_REPAIR.json
 # =============================================================================================
 
 from __future__ import annotations
@@ -59,6 +77,7 @@ import csv
 import json
 import math
 import os
+import re
 import sys
 
 BASE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -67,6 +86,21 @@ ANALYSIS = os.path.join(BASE, "data/mlb/analysis")
 EPS = 1e-6
 
 R1 = "R1: unknown is null plus a reason code — never a default, never invented"
+
+# Below this many common games the headline BEAT/did-not-beat verdict is suppressed: a one- or
+# two-game "a blind rule beat the cohort" line reads as a finding and is a coin flip (defect 4).
+MIN_GAMES_FOR_VERDICT = 5
+
+# Price-basis handling is an ALLOWLIST, not a denylist (defect 2). A denylist of best-odds spellings
+# accepts every spelling nobody thought of — 'best price', 'best_line', 'best_available', 'shop',
+# 'consensus' all de-vigged to a number and passed the gate. An unrecognised basis is now REFUSED,
+# which is the R1 posture this module claims everywhere else.
+SAME_BOARD_BASES = ("", "board", "same_book", "same_board", "single_book", "book", "one_book",
+                    "two_sided", "two_sided_same_book")
+# Kept as a denylist too, so a KNOWN best-odds label gets the specific 8/3 ruling as its reason
+# rather than the generic unrecognised-basis message.
+CROSS_BOOK_BASES = ("best_odds", "cross_book", "best_price", "best_line", "best_available",
+                    "best", "shop", "shopped", "consensus", "aggregate", "aggregated")
 
 # The frozen list. Order is the report order. A key missing from a report is a gate failure.
 BASELINE_KEYS = (
@@ -88,6 +122,22 @@ def imp(american):
     """Raw implied probability from an American price. NOT de-vigged."""
     a = float(american)
     return (-a) / ((-a) + 100) if a < 0 else 100 / (a + 100)
+
+
+def _norm_token(v):
+    """Fold a label to a comparison token. Hyphens AND spaces both normalise: 'best odds' and
+    'best-odds' are the same claim as 'best_odds', and the earlier hyphen-only fold let the
+    space-separated spellings straight through (defect 2)."""
+    t = str(v or "").strip().lower().replace("-", "_").replace(" ", "_")
+    while "__" in t:
+        t = t.replace("__", "_")
+    return t.strip("_")
+
+
+def _truthy(v):
+    """`cross_book` arrived as the string 'true' through any CSV/YAML/env round-trip and an
+    `is True` identity check ignored it (defect 3). Coerce instead."""
+    return v is True or _norm_token(v) in ("1", "true", "yes", "y", "t")
 
 
 def devig_same_book(a_away, a_home):
@@ -120,10 +170,14 @@ def devig_entry(entry):
     exactly the cross-book de-vig the 8/3 ruling banned."""
     if not entry:
         return None, "NO_PRICE_CAPTURED — no market prices were captured for this game"
-    basis = str(entry.get("basis") or "").lower().replace("-", "_")
-    if entry.get("cross_book") is True or basis in ("best_odds", "cross_book", "best_price"):
+    basis = _norm_token(entry.get("basis"))
+    if _truthy(entry.get("cross_book")) or basis in CROSS_BOOK_BASES:
         return None, ("CROSS_BOOK_DEVIG_PROHIBITED — best-odds prices come from different boards; "
                       "two-sided de-vig across books normalises against a vig no book quoted (8/3 ruling)")
+    if basis not in SAME_BOARD_BASES:
+        return None, (f"UNRECOGNISED_PRICE_BASIS — basis {entry.get('basis')!r} is not a recognised "
+                      f"same-board basis, so the pair cannot be SHOWN to have come off one board. "
+                      f"Refused rather than accepted by default; " + R1)
     if "books" in entry:
         pairs = []
         any_away = any_home = False
@@ -143,24 +197,35 @@ def devig_entry(entry):
     a, h = entry.get("ml_away"), entry.get("ml_home")
     if a is None or h is None:
         return None, "ONE_SIDED_PRICE_NO_DEVIG — only one side was captured, so no vig can be removed"
-    ba, bh, bk = entry.get("book_away"), entry.get("book_home"), entry.get("book")
-    if ba and bh and ba != bh:
-        return None, (f"CROSS_BOOK_DEVIG_PROHIBITED — away priced at {ba}, home at {bh}; "
-                      f"two-sided de-vig requires one board (8/3 ruling)")
-    if not (bk or (ba and bh)):
+    # Every named board on the pair must be the SAME board. The earlier check only fired when BOTH
+    # per-side books were present and disagreed, so {"book":"dk","book_away":"fd"} — a shape
+    # split_prices produces on its own by merging top-level defaults into every entry — de-vigged
+    # happily and passed the gate (defect 3). Agreement is now over the whole named set.
+    named = {_norm_token(x) for x in (entry.get("book"), entry.get("book_away"),
+                                      entry.get("book_home")) if x}
+    if len(named) > 1:
+        return None, (f"CROSS_BOOK_DEVIG_PROHIBITED — the pair names more than one board "
+                      f"({sorted(named)}); two-sided de-vig requires one board (8/3 ruling)")
+    if not named:
         return None, ("PRICE_BOOK_ATTRIBUTION_MISSING — the pair carries no book attribution, so it "
                       "cannot be shown to be same-book; assuming it would reintroduce cross-book de-vig")
     return devig_same_book(a, h), None
 
 
 def split_prices(prices):
-    """Normalise the `prices` argument into ({game: entry} captured, {game: entry} closing).
+    """Normalise the `prices` argument into (captured, closing, unknown_timing) — THREE buckets.
+
+    An unmarked price file used to fall into `captured` by default, so a closing-price file scored
+    as the pregame market baseline was indistinguishable from a genuine pregame capture (defect 6).
+    That is the one direction in this module where later information can leak into an earlier
+    baseline, so an entry with no timing evidence now lands in `unknown` and is scored by NEITHER
+    market baseline. Timing must be stated, per-entry or top-level.
 
     Accepted: {"games": {...}, "book": ..., "basis": ..., "timing": "close"} with the top-level
     book/basis as per-game defaults, or a bare {game: entry} mapping. A per-game entry may itself
     carry {"captured"/"pregame": ..., "close"/"closing": ...}."""
     if not prices:
-        return {}, {}
+        return {}, {}, {}
     defaults = {k: prices[k] for k in ("book", "basis", "cross_book") if k in prices}
     if "events" in prices:
         # the repo's own odds capture shape: {"events": [{"matchup": "STL@CIN", "ml_away": ...}]}.
@@ -176,23 +241,30 @@ def split_prices(prices):
         games = {k: v for k, v in prices.items()
                  if k not in ("games", "events", "book", "basis", "cross_book", "timing",
                               "source", "evidence_sha256")}
-    top_close = str(prices.get("timing") or "").lower() in ("close", "closing")
-    captured, close = {}, {}
+    CLOSE_T = ("close", "closing", "closer", "final", "post")
+    PRE_T = ("capture", "captured", "pregame", "pre_game", "pre", "open", "opening", "intake")
+    top = _norm_token(prices.get("timing"))
+    captured, close, unknown = {}, {}, {}
     for k, e in games.items():
         if not isinstance(e, dict):
             continue
+        c = cl = unk = None
         if any(t in e for t in ("captured", "pregame", "close", "closing")):
             c = e.get("captured") or e.get("pregame")
             cl = e.get("close") or e.get("closing")
-        elif str(e.get("timing") or "").lower() in ("close", "closing") or top_close:
-            c, cl = None, e
         else:
-            c, cl = e, None
-        if isinstance(c, dict):
-            captured[k] = {**defaults, **c}
-        if isinstance(cl, dict):
-            close[k] = {**defaults, **cl}
-    return captured, close
+            t = _norm_token(e.get("timing")) or top
+            if t in CLOSE_T:
+                cl = e
+            elif t in PRE_T:
+                c = e
+            else:
+                # No timing evidence anywhere. NOT assumed pregame.
+                unk = e
+        for bucket, val in ((captured, c), (close, cl), (unknown, unk)):
+            if isinstance(val, dict):
+                bucket[k] = {**defaults, **val}
+    return captured, close, unknown
 
 
 # ----------------------------------------------------------------------------- expanding prior
@@ -391,14 +463,27 @@ def baselines(date, cohort_rows, results_rows=None, prices=None):
     }
 
     # 5/6. market baselines — same-book de-vig only, captured and closing kept separate.
-    captured, closing = split_prices(prices)
+    captured, closing, unknown_timing = split_prices(prices)
+    if unknown_timing:
+        # R1: prices whose capture time is unstated are scored by neither market baseline, and the
+        # count is NAMED so the operator sees what was set aside rather than silently absorbed.
+        unknown_reason = (
+            f"PRICE_CAPTURE_TIME_UNKNOWN — {len(unknown_timing)} price entr"
+            f"{'y' if len(unknown_timing) == 1 else 'ies'} carry no timing marker "
+            f"(no per-entry captured/pregame/close key, no `timing` field, no top-level `timing`). "
+            f"An unmarked file is NOT assumed pregame: scoring a closing file as the pregame market "
+            f"baseline would leak later information into an earlier comparator; " + R1)
     cohort_probs = {c: {r["game"]: r["p_home"] for r in rs} for c, rs in by_coh.items()}
     blocks["market_no_vig_when_captured"] = _market_block(
         "market no-vig probability (when captured)", captured, outcomes, games, cohort_probs,
-        "NO_PRICE_CAPTURED — no market prices were captured for this slate; " + R1)
+        (unknown_reason if unknown_timing and not captured
+         else "NO_PRICE_CAPTURED — no market prices were captured for this slate; " + R1),
+        unknown_timing_n=len(unknown_timing))
     blocks["closing_market"] = _market_block(
         "closing market no-vig probability", closing, outcomes, games, cohort_probs,
-        "NO_CLOSING_PRICES_CAPTURED — no closing prices exist for this slate; " + R1)
+        (unknown_reason if unknown_timing and not closing
+         else "NO_CLOSING_PRICES_CAPTURED — no closing prices exist for this slate; " + R1),
+        unknown_timing_n=len(unknown_timing))
 
     # ALWAYS_HOME — its own explicit line, because it is the headline sanity check.
     ah_games = [g for g in games if outcomes.get(g) is not None]
@@ -421,7 +506,7 @@ def baselines(date, cohort_rows, results_rows=None, prices=None):
         always_home = _unavailable("ALWAYS_HOME (bet every home team, no model)",
                                    "NO_GRADED_GAMES — no common game carries an outcome; " + R1)
 
-    headline = _headline(always_home, blocks, other)
+    headline = _headline(always_home, blocks, other, len(games))
     return {
         "record_id": f"BASELINES-{date}",
         "date": date,
@@ -444,11 +529,11 @@ def baselines(date, cohort_rows, results_rows=None, prices=None):
     }
 
 
-def _market_block(label, entries, outcomes, games, cohort_probs, empty_reason):
+def _market_block(label, entries, outcomes, games, cohort_probs, empty_reason, unknown_timing_n=0):
     """Score a market comparator, refusing anything that is not a same-book two-sided de-vig."""
     if not entries:
         return _unavailable(label, empty_reason, per_game_null_reasons={},
-                            same_games_as_cohorts=False)
+                            same_games_as_cohorts=False, unknown_timing_n=unknown_timing_n)
     probs, reasons = {}, {}
     for g in games:
         p, why = devig_entry(entries.get(g))
@@ -477,8 +562,13 @@ def _market_block(label, entries, outcomes, games, cohort_probs, empty_reason):
     return blk
 
 
-def _headline(always_home, blocks, other):
-    """The 8/21 question, computed every time: did ALWAYS_HOME beat the best cohort?"""
+def _headline(always_home, blocks, other, n_common=None):
+    """The 8/21 question, computed every time: did ALWAYS_HOME beat the best cohort?
+
+    Below MIN_GAMES_FOR_VERDICT the comparison is still COMPUTED and printed, but the BEAT verdict
+    is null with a reason and the "the cohort demonstrated nothing" consequence sentence is
+    suppressed (defect 4). A one-game slate previously rendered a coin flip in the same imperative
+    voice as the 15-game finding this module was written for."""
     if not always_home.get("available"):
         return {"always_home_accuracy": None, "best_cohort": None, "best_cohort_accuracy": None,
                 "always_home_beat_best_cohort": None,
@@ -491,16 +581,37 @@ def _headline(always_home, blocks, other):
                 "best_cohort_accuracy": None, "always_home_beat_best_cohort": None,
                 "message": "no cohort was scorable, so no comparison exists; " + R1}
     name, acc, rec = max(cands, key=lambda c: c[1])
+    # STRICTLY greater. A tie is NOT a beat: equal accuracy means the blind rule did not outscore
+    # the cohort, and the boundary is pinned by a fixture so `>` can never drift to `>=`.
     beat = always_home["accuracy"] > acc
+    small = n_common is not None and n_common < MIN_GAMES_FOR_VERDICT
     msg = (f"ALWAYS_HOME {always_home['side_record']} ({always_home['accuracy']:.4f}) "
            f"{'BEAT' if beat else 'did not beat'} the best cohort {name} {rec} ({acc:.4f}) "
            f"on this slate.")
+    out = {"always_home_accuracy": always_home["accuracy"], "best_cohort": name,
+           "best_cohort_accuracy": acc, "best_cohort_record": rec,
+           "always_home_beat_best_cohort": beat, "verdict_null_reason": None}
+    if small:
+        # Below the floor the comparison is stated NEUTRALLY. "BEAT", capitalised, reads as a
+        # finding even with a qualifier bolted on after it (defect 4).
+        msg = (f"ALWAYS_HOME {always_home['side_record']} ({always_home['accuracy']:.4f}) versus the "
+               f"best cohort {name} {rec} ({acc:.4f}) — "
+               f"{'higher' if beat else ('level' if always_home['accuracy'] == acc else 'lower')} "
+               f"on this slate.")
+        out["always_home_beat_best_cohort"] = None
+        out["raw_comparison_beat"] = beat
+        out["verdict_null_reason"] = (
+            f"SAMPLE_TOO_SMALL_FOR_A_VERDICT — {n_common} common game"
+            f"{'' if n_common == 1 else 's'} is below the {MIN_GAMES_FOR_VERDICT}-game floor. The "
+            f"raw comparison is reported for the record; it is NOT a finding about either side, and "
+            f"the consequence sentence is withheld deliberately; " + R1)
+        out["message"] = msg + " " + out["verdict_null_reason"]
+        return out
     if beat:
         msg += (" The cohort demonstrated nothing here — a blind home-side rule scored better. "
                 "Report this comparison; do not lead with a cohort-versus-cohort improvement.")
-    return {"always_home_accuracy": always_home["accuracy"], "best_cohort": name,
-            "best_cohort_accuracy": acc, "best_cohort_record": rec,
-            "always_home_beat_best_cohort": beat, "message": msg}
+    out["message"] = msg
+    return out
 
 
 # ----------------------------------------------------------------------------- frozen gate
@@ -515,6 +626,13 @@ def _gate_block(name, blk):
             fails.append(f"{name}: field {fld} OMITTED — R1 requires null WITH a reason, not absence")
         elif blk.get(fld) is None and not blk.get("null_reason"):
             fails.append(f"{name}: {fld} is null with no reason string (R1)")
+    if blk.get("available") is False:
+        # An unavailable comparator that still carries an n, a record or a Brier reads as scored.
+        # The earlier gate only checked the reverse direction (defect 7).
+        for fld in SCORE_FIELDS:
+            if blk.get(fld) is not None:
+                fails.append(f"{name}: available=False but {fld}={blk.get(fld)!r} — an unavailable "
+                             f"comparator must not leak a score")
     return fails
 
 
@@ -527,6 +645,10 @@ def gate(res):
       - every cohort is scored on the common game set, and all common-set blocks share it
       - cohorts that disagree about a graded outcome block the report entirely"""
     fails = []
+    if res.get("n_games_common") == 0:
+        fails.append("n_games_common == 0 — no game is common to EVERY cohort, so no head-to-head "
+                     "comparison exists. Disjoint cohort game sets are precisely the condition this "
+                     "module exists to detect; a report over an empty set is not a comparison")
     b = res.get("baselines") or {}
     for k in BASELINE_KEYS:
         if k not in b:
@@ -547,8 +669,9 @@ def gate(res):
     if ah and ah.get("available") and not hl:
         fails.append("headline ALWAYS_HOME-vs-cohort comparison missing")
     if ah and ah.get("available") and hl and hl.get("always_home_beat_best_cohort") is None \
-            and hl.get("best_cohort") is not None:
-        fails.append("headline present but the ALWAYS_HOME comparison verdict is null")
+            and hl.get("best_cohort") is not None and not hl.get("verdict_null_reason"):
+        fails.append("headline present but the ALWAYS_HOME comparison verdict is null with no "
+                     "reason — a suppressed verdict must say why it was suppressed (R1)")
     # SAME GAMES
     common = set(res.get("games") or [])
     for k, blk in list(b.items()) + list((res.get("other_cohorts") or {}).items()):
@@ -583,8 +706,16 @@ def format_report(res):
             L.append(f'    reason: {blk.get("null_reason")}')
         if k == "raw_v13_registered_card":
             for c, sub in (blk.get("per_cohort") or {}).items():
-                L.append(f'    = {c} (identical by construction): {sub["side_record"]} '
-                         f'acc {sub["accuracy"]:.4f} brier {sub["brier"]:.5f}')
+                # Guarded exactly like the baseline loop above. An unavailable per-cohort block
+                # carries None here, and the unguarded format spec raised TypeError on a report the
+                # gate certified as valid (defect 5).
+                if sub.get("available") and sub.get("accuracy") is not None \
+                        and sub.get("brier") is not None:
+                    L.append(f'    = {c} (identical by construction): {sub["side_record"]} '
+                             f'acc {sub["accuracy"]:.4f} brier {sub["brier"]:.5f}')
+                else:
+                    L.append(f'    = {c} (identical by construction): null — '
+                             f'{sub.get("null_reason")}')
     for c, blk in (res.get("other_cohorts") or {}).items():
         if blk.get("available") and blk.get("n") is not None:
             L.append(f'{"other cohort " + c:<32}{blk["n"]:>4}{blk["side_record"]:>8}'
@@ -666,7 +797,7 @@ def selftest():
         fails.append(f"balanced same-book pair did not de-vig to 0.5: {bal} {balr}")
 
     # ---- full report on the 14-1 slate, with only cross-book prices available
-    xprices = {"games": {g: dict(xb) for g in games}}
+    xprices = {"timing": "pregame", "games": {g: dict(xb) for g in games}}
     r = baselines(DATE, rows, res_rows, xprices)
     ok, gf = gate(r)
     if not ok:
@@ -731,19 +862,20 @@ def selftest():
 
     # the repo's own {"events": [...]} capture shape normalises, and top-level book attribution
     # applies to every event (an events file with NO book stays refused, not assumed same-book)
-    ev = {"book": "owner_board", "source": "prose claim, not machine-checkable",
+    ev = {"book": "owner_board", "timing": "pregame", "source": "prose claim, not machine-checkable",
           "events": [{"matchup": g, "ml_away": 147, "ml_home": -158} for g in games]}
     if not baselines(DATE, rows, res_rows, ev)["baselines"]["market_no_vig_when_captured"]["available"]:
         fails.append("the repo's events-shaped price capture was not normalised")
     ev_nobook = {"events": [{"matchup": g, "ml_away": 147, "ml_home": -158} for g in games],
-                 "source": "same-board two-sided (prose)"}
+                 "timing": "pregame", "source": "same-board two-sided (prose)"}
     mb = baselines(DATE, rows, res_rows, ev_nobook)["baselines"]["market_no_vig_when_captured"]
     if mb["available"] or "PRICE_BOOK_ATTRIBUTION_MISSING" not in (mb["null_reason"] or ""):
         fails.append("an events file whose only same-book claim is prose was de-vigged anyway")
 
     # RULE: a market priced on only part of the slate is never compared against a cohort scored on
     # all of it — the block must carry the cohort Briers recomputed on the SAME priced subset.
-    part = {"games": {g: {"book": "vsin", "ml_away": 147, "ml_home": -158} for g in games[:5]}}
+    part = {"timing": "pregame",
+            "games": {g: {"book": "vsin", "ml_away": 147, "ml_home": -158} for g in games[:5]}}
     pm = baselines(DATE, rows, res_rows, part)["baselines"]["market_no_vig_when_captured"]
     if pm["n"] != 5 or "cohort_brier_on_priced_subset" not in pm:
         fails.append("a partial market was reported without the matching cohort subset Briers")
@@ -853,6 +985,245 @@ def selftest():
             fails.append(f"real-file prior did not change when 2026-08-21 became strictly earlier "
                          f"({a} vs {b}) — look-ahead would be undetectable")
 
+    # =========================================================================================
+    # FIXTURES CLOSING THE 2026-08-22 ADVERSARIAL REVIEW (docs/audits/2026-08-22_roadmap_module_review.json)
+    # Every one below is mutation-proven: `--mutants` re-runs this selftest against a source mutant
+    # of the rule it guards and REQUIRES the selftest to fail. A fixture that cannot fail is
+    # decoration (lesson 21), and the nine defects here all survived the original fixture set.
+    # =========================================================================================
+
+    # DEFECT 1 (critical) — the scoring arithmetic itself was never pinned. `brier` could return
+    # abs(p-y) and `logloss` could drop its minus sign while the selftest printed PASS and the gate
+    # printed green. These constants are hand-computed and do NOT call the module.
+    if brier(0.6, 1) != 0.16000000000000003 and round(brier(0.6, 1), 12) != 0.16:
+        fails.append(f"brier(0.6,1) = {brier(0.6,1)} — must be (0.6-1)^2 = 0.16")
+    if round(brier(0.4, 0), 12) != 0.16:
+        fails.append(f"brier(0.4,0) = {brier(0.4,0)} — must be 0.16")
+    if round(brier(0.75, 0), 12) != 0.5625:
+        fails.append(f"brier(0.75,0) = {brier(0.75,0)} — must be 0.5625")
+    if round(brier(1.0, 1), 12) != 0.0 or round(brier(0.0, 1), 12) != 1.0:
+        fails.append("brier is not the squared error at its endpoints")
+    # -ln(0.6) = 0.5108256237659907 ; -ln(0.25) = 1.3862943611198906
+    if round(logloss(0.6, 1), 10) != 0.5108256238:
+        fails.append(f"logloss(0.6,1) = {logloss(0.6,1)} — must be -ln(0.6) = 0.5108256238")
+    if round(logloss(0.75, 0), 10) != 1.3862943611:
+        fails.append(f"logloss(0.75,0) = {logloss(0.75,0)} — must be -ln(0.25) = 1.3862943611")
+    if round(logloss(0.5, 1), 10) != 0.6931471806:
+        fails.append(f"logloss(0.5,1) = {logloss(0.5,1)} — must be ln(2) = 0.6931471806")
+    if logloss(0.0, 1) <= 0 or not math.isfinite(logloss(0.0, 1)):
+        fails.append("logloss at the clamp must be finite and POSITIVE — a negative log loss "
+                     "printed to an operator is a sign error, not a good score")
+    if logloss(0.9, 1) >= logloss(0.6, 1):
+        fails.append("logloss is not decreasing in a correct confident probability — sign inverted")
+    # ... and pinned again THROUGH score_probs, so a correct scorer wired up wrongly is also caught.
+    sp = score_probs("pin", {"g1": 0.6, "g2": 0.75}, {"g1": 1, "g2": 0}, ["g1", "g2"])
+    if sp["brier"] != round((0.16 + 0.5625) / 2, 6) or sp["brier"] != 0.36125:
+        fails.append(f"score_probs mean Brier = {sp['brier']} — must be (0.16+0.5625)/2 = 0.36125")
+    if sp["logloss"] != 0.94856:
+        fails.append(f"score_probs mean log loss = {sp['logloss']} — must be "
+                     f"(0.5108256238+1.3862943611)/2 = 0.94856")
+    if sp["side_record"] != "1-1" or sp["accuracy"] != 0.5:
+        fails.append(f"score_probs side accounting wrong: {sp['side_record']} {sp['accuracy']}")
+
+    # DEFECT 2 (critical) — the basis denylist was a closed 3-item tuple. Every spelling below
+    # de-vigged to 0.60201 and passed the gate. The check is now an ALLOWLIST.
+    for bad_basis in ("best odds", "cross book", "best price", "best_line", "best available",
+                      "best", "shop", "consensus", "BEST-ODDS", "  best   odds  ", "aggregate",
+                      "screen", "anything nobody thought of"):
+        pv, rv = devig_entry({"basis": bad_basis, "book": "vsin", "ml_away": 147, "ml_home": -158})
+        if pv is not None:
+            fails.append(f"basis {bad_basis!r} produced a market probability {pv} — the basis check "
+                         f"must REFUSE what it does not recognise, not accept it by default")
+        elif not (("CROSS_BOOK_DEVIG_PROHIBITED" in (rv or ""))
+                  or ("UNRECOGNISED_PRICE_BASIS" in (rv or ""))):
+            fails.append(f"basis {bad_basis!r} refused with an unrelated reason: {rv}")
+    for ok_basis in ("", None, "board", "same_book", "same-board", "single book"):
+        pv, rv = devig_entry({"basis": ok_basis, "book": "vsin", "ml_away": 147, "ml_home": -158})
+        if pv is None:
+            fails.append(f"a stated same-board basis {ok_basis!r} was refused: {rv} — the allowlist "
+                         f"must not reject the shape the repo actually captures")
+
+    # DEFECT 3 (critical) — one-sided attribution CONTRADICTING the top-level book was accepted as
+    # same-book. split_prices merges the top-level book into every entry, so this shape is reachable
+    # from an ordinary capture file, not just hand-built input.
+    pv, rv = devig_entry({"book": "dk", "book_away": "fd", "ml_away": 147, "ml_home": -158})
+    if pv is not None or "CROSS_BOOK_DEVIG_PROHIBITED" not in (rv or ""):
+        fails.append(f"a pair naming dk at top level and fd on the away side de-vigged anyway: "
+                     f"{pv} {rv} — agreement must hold over EVERY named board, not just the pair")
+    pv, rv = devig_entry({"book": "dk", "book_home": "fd", "ml_away": 147, "ml_home": -158})
+    if pv is not None or "CROSS_BOOK_DEVIG_PROHIBITED" not in (rv or ""):
+        fails.append(f"top-level/home-side book disagreement de-vigged anyway: {pv} {rv}")
+    pv, rv = devig_entry({"book": "dk", "book_away": "DK", "ml_away": 147, "ml_home": -158})
+    if pv is None:
+        fails.append(f"'dk' and 'DK' were treated as different boards: {rv}")
+    for truthy in (True, "true", "True", "yes", "1", 1):
+        pv, rv = devig_entry({"cross_book": truthy, "book": "vsin",
+                              "ml_away": 147, "ml_home": -158})
+        if pv is not None or "CROSS_BOOK_DEVIG_PROHIBITED" not in (rv or ""):
+            fails.append(f"cross_book={truthy!r} was ignored — an `is True` identity check misses "
+                         f"every string round-trip through CSV/YAML/env")
+    # end-to-end: the whole reachable shape must not produce a scored market baseline
+    e2e = {"book": "consensus_best", "timing": "pregame",
+           "games": {g: {"book_away": "dk", "ml_away": 147, "ml_home": -158} for g in games}}
+    mk_e2e = baselines(DATE, rows, res_rows, e2e)["baselines"]["market_no_vig_when_captured"]
+    if mk_e2e["available"] or mk_e2e["brier"] is not None:
+        fails.append(f"the end-to-end cross-book shape still produced a market Brier "
+                     f"{mk_e2e['brier']} with available={mk_e2e['available']}")
+
+    # DEFECT 4 (high) — zero common games passed the gate, and a ONE-game slate printed
+    # "the cohort demonstrated nothing" in the same voice as the 15-game finding.
+    empty = baselines(DATE, [], res_rows, None)
+    if empty["n_games_common"] != 0:
+        fails.append("the empty-cohort fixture does not actually produce an empty common set")
+    if gate(empty)[0]:
+        fails.append("gate PASSED a report with zero common games — no comparison exists there")
+    disjoint = baselines(DATE, [
+        {"cohort": "v1", "board_game": "A@B", "p_home_model": .6, "home_win": 1},
+        {"cohort": "v2", "board_game": "C@D", "p_home_model": .6, "home_win": 1}], res_rows, None)
+    if disjoint["n_games_common"] != 0 or gate(disjoint)[0]:
+        fails.append("gate PASSED cohorts with DISJOINT game sets — the exact not-a-head-to-head "
+                     "condition this module exists to detect")
+    one = baselines(DATE, [
+        {"cohort": "v1", "board_game": "A@B", "p_home_model": .40, "home_win": 1},
+        {"cohort": "v2", "board_game": "A@B", "p_home_model": .45, "home_win": 1}], res_rows, None)
+    hl1 = one["headline"]
+    if one["n_games_common"] != 1:
+        fails.append("the one-game fixture is not one game")
+    if hl1.get("always_home_beat_best_cohort") is not None:
+        fails.append("a ONE-game slate returned a definitive BEAT verdict — a coin flip rendered "
+                     "as a finding is the failure mode this floor exists to stop")
+    if "SAMPLE_TOO_SMALL_FOR_A_VERDICT" not in (hl1.get("verdict_null_reason") or ""):
+        fails.append("the suppressed verdict carries no reason (R1)")
+    if "demonstrated nothing" in (hl1.get("message") or ""):
+        fails.append("the consequence sentence was printed below the sample floor")
+    if hl1.get("raw_comparison_beat") is None:
+        fails.append("the raw comparison was withheld entirely — it belongs in the record, it just "
+                     "is not a verdict")
+    if not gate(one)[0]:
+        fails.append(f"gate rejected a valid small-sample report: {gate(one)[1]} — the floor "
+                     "suppresses the VERDICT, it does not invalidate the report")
+    # and the floor must not silence the real 15-game finding
+    if r["headline"].get("always_home_beat_best_cohort") is not True:
+        fails.append("the sample floor suppressed the genuine 15-game verdict")
+
+    # DEFECT 8 (medium) — the BEAT boundary. A tie is NOT a beat, and `>` must not drift to `>=`.
+    tie_rows = []
+    tg = [f"T{i}@U{i}" for i in range(10)]
+    for i, g in enumerate(tg):
+        y = 1 if i < 7 else 0                       # ALWAYS_HOME goes 7-3
+        # cohort picks home on the same 7 it wins and away on the 3 it loses -> 7-3 as well? no:
+        # make the cohort exactly 7-3 by picking home everywhere it is right and away where it is
+        # wrong in equal measure. Simplest exact tie: cohort picks home on all 10 -> 7-3.
+        tie_rows.append({"cohort": "v1", "board_game": g, "p_home_model": .6, "home_win": y})
+    tie = baselines(DATE, tie_rows, res_rows, None)
+    ah_acc = tie["always_home"]["accuracy"]
+    v1_acc = tie["baselines"]["v1_all_cap_cohort"]["accuracy"]
+    if ah_acc != v1_acc:
+        fails.append(f"the tie fixture is not a tie ({ah_acc} vs {v1_acc}) — the boundary is untested")
+    elif tie["headline"]["always_home_beat_best_cohort"] is not False:
+        fails.append("a TIE was reported as ALWAYS_HOME beating the cohort — the comparison must be "
+                     "STRICTLY greater")
+    elif "did not beat" not in tie["headline"]["message"]:
+        fails.append("a tie did not render as 'did not beat'")
+
+    # DEFECT 5 (high) — format_report must render every report the gate certifies as valid.
+    for name, rep in (("14-1 slate", r), ("priced", r2), ("one game", one), ("tie", tie),
+                      ("empty", empty), ("disjoint", disjoint)):
+        try:
+            txt = format_report(rep)
+        except Exception as exc:
+            fails.append(f"format_report raised {type(exc).__name__} on the {name} report: {exc}")
+        else:
+            if not txt or "DAILY BASELINES" not in txt:
+                fails.append(f"format_report produced no report for {name}")
+    # the specific crash: a per-cohort block that is unavailable
+    crashy = dict(r)
+    crashy["baselines"] = dict(r["baselines"])
+    crashy["baselines"]["raw_v13_registered_card"] = dict(r["baselines"]["raw_v13_registered_card"])
+    crashy["baselines"]["raw_v13_registered_card"]["per_cohort"] = {
+        "v9": _unavailable("v9 cohort", "NO_ROWS — nothing to score; " + R1, cohort="v9")}
+    try:
+        format_report(crashy)
+    except Exception as exc:
+        fails.append(f"format_report still crashes on an unavailable per-cohort block: "
+                     f"{type(exc).__name__}: {exc}")
+
+    # DEFECT 6 (high) — an UNMARKED price file must not populate the pregame market baseline.
+    unmarked = {"games": {g: {"book": "vsin", "ml_away": 147, "ml_home": -158} for g in games}}
+    ur = baselines(DATE, rows, res_rows, unmarked)
+    umk = ur["baselines"]["market_no_vig_when_captured"]
+    if umk["available"] or umk["brier"] is not None:
+        fails.append("an unmarked price file populated the PREGAME market baseline — a closing file "
+                     "would then be scored as the pregame comparator, which is look-ahead")
+    if "PRICE_CAPTURE_TIME_UNKNOWN" not in (umk["null_reason"] or ""):
+        fails.append(f"unmarked prices refused with the wrong reason: {umk['null_reason']}")
+    if ur["baselines"]["closing_market"]["available"]:
+        fails.append("an unmarked price file populated the CLOSING baseline")
+    if umk.get("unknown_timing_n") != len(games):
+        fails.append(f"the set-aside count was not named: {umk.get('unknown_timing_n')}")
+    # ... while an explicitly-marked file still works in BOTH directions
+    for mark, key, other_key in (("pregame", "market_no_vig_when_captured", "closing_market"),
+                                 ("close", "closing_market", "market_no_vig_when_captured")):
+        mk_p = {"timing": mark,
+                "games": {g: {"book": "vsin", "ml_away": 147, "ml_home": -158} for g in games}}
+        mr = baselines(DATE, rows, res_rows, mk_p)["baselines"]
+        if not mr[key]["available"]:
+            fails.append(f"timing={mark!r} did not populate {key}: {mr[key]['null_reason']}")
+        if mr[other_key]["available"]:
+            fails.append(f"timing={mark!r} ALSO populated {other_key} — the buckets must be disjoint")
+
+    # DEFECT 7 (medium) — an unavailable block must never leak a score past the gate.
+    for fld, val in (("n", 15), ("brier", 0.2), ("accuracy", 0.9333), ("side_record", "14-1"),
+                     ("logloss", 0.65)):
+        leaky = json.loads(json.dumps(r))
+        blk = leaky["baselines"]["closing_market"]
+        if blk["available"]:
+            fails.append("the leak fixture needs an UNAVAILABLE block to mutate")
+            break
+        blk[fld] = val
+        if gate(leaky)[0]:
+            fails.append(f"gate PASSED an available=False block carrying {fld}={val!r} — an "
+                         f"unavailable comparator that still prints a score reads as scored")
+
+    # UPSTREAM — a PARTIAL grade snapshot is refused, not scored. This is the source of the
+    # one-game 8/21 run the review found printing a directive off a coin flip.
+    import tempfile as _tf
+    with _tf.TemporaryDirectory() as td:
+        # The two refusal branches are tested SEPARATELY. Combined in one fixture they cover for
+        # each other: deleting either branch still refuses, so neither is actually proven.
+        _R = [{"cohort": "v1", "board_game": "A@B", "p_home_model": .4, "home_win": 1},
+              {"cohort": "v2", "board_game": "A@B", "p_home_model": .45, "home_win": 1}]
+        cases = [
+            # (filename, doc, what the branch is)
+            ("skipped_only.json",
+             {"already_graded_skipped": ["P4-A", "P4-B"], "rows": _R},
+             "a file listing games graded in an EARLIER run (no completeness string at all)"),
+            ("completeness_only.json",
+             {"completeness": "15 of 15 graded", "rows": _R},
+             "a file CLAIMING 15 graded games while carrying 1 distinct game (no skipped list)"),
+        ]
+        for fn, doc, what in cases:
+            pp = os.path.join(td, fn)
+            json.dump(doc, open(pp, "w"))
+            try:
+                _cli_rows("2026-08-21", pp)
+            except SystemExit as exc:
+                if "PARTIAL_GRADE_SNAPSHOT" not in str(exc):
+                    fails.append(f"{what} refused with the wrong reason: {exc}")
+            else:
+                fails.append(f"{what} was scored as if it were the slate")
+        # a COMPLETE snapshot still loads
+        full = os.path.join(td, "full_grades.json")
+        json.dump({"completeness": "2 of 2 graded", "rows": [
+            {"cohort": "v1", "board_game": "A@B", "p_home_model": .4, "home_win": 1},
+            {"cohort": "v1", "board_game": "C@D", "p_home_model": .6, "home_win": 1}]},
+            open(full, "w"))
+        try:
+            if len(_cli_rows("2026-08-21", full)) != 2:
+                fails.append("a complete grades snapshot did not load")
+        except SystemExit as exc:
+            fails.append(f"a complete grades snapshot was refused: {exc}")
+
     if fails:
         print("daily_baselines selftest: FAIL")
         for f in fails:
@@ -867,28 +1238,201 @@ def selftest():
     return 0
 
 
+# ----------------------------------------------------------------------------- mutation harness
+# LESSON 21: a passing selftest is not a proven fixture. The 2026-08-22 adversarial review ran 63
+# mutants against the ORIGINAL fixture set; 21 SURVIVED, including `brier -> abs(p-y)` and
+# `logloss -> +(...)`. Every mutant below is a rule this module claims to enforce, expressed as a
+# source edit. `--mutants` applies each to a temp copy and REQUIRES that copy's selftest to FAIL.
+# A mutant that survives is printed as SURVIVED and the run exits non-zero: the fixture guarding it
+# is decoration and the claim it backs must not be made.
+MUTANTS = [
+    # --- scoring arithmetic (defect 1: NOT ONE value was pinned before)
+    ("brier: squared error -> absolute error", "    return (p - y) ** 2", "    return abs(p - y)"),
+    ("brier: squared error -> constant", "    return (p - y) ** 2", "    return 0.25"),
+    ("logloss: sign dropped", "    return -(y * math.log(p) + (1 - y) * math.log(1 - p))",
+     "    return (y * math.log(p) + (1 - y) * math.log(1 - p))"),
+    ("logloss: y and 1-y transposed", "    return -(y * math.log(p) + (1 - y) * math.log(1 - p))",
+     "    return -((1 - y) * math.log(p) + y * math.log(1 - p))"),
+    ("logloss: log -> log10", "    return -(y * math.log(p) + (1 - y) * math.log(1 - p))",
+     "    return -(y * math.log10(p) + (1 - y) * math.log10(1 - p))"),
+    ("score_probs: mean -> sum", '"brier": round(sum(brier(probs[g], outcomes[g]) for g in gs) / n, 6)',
+     '"brier": round(sum(brier(probs[g], outcomes[g]) for g in gs), 6)'),
+    # --- de-vig direction and price arithmetic
+    ("devig: home/away transposed", "    return ih / (ia + ih)", "    return ia / (ia + ih)"),
+    ("imp: favourite/dog branches swapped",
+     "    return (-a) / ((-a) + 100) if a < 0 else 100 / (a + 100)",
+     "    return 100 / (a + 100) if a < 0 else (-a) / ((-a) + 100)"),
+    # --- defect 2: the basis allowlist
+    ("basis: allowlist reverted to the 3-item denylist",
+     "    if basis not in SAME_BOARD_BASES:", "    if False:"),
+    ("basis: space normalisation removed",
+     '.replace("-", "_").replace(" ", "_")', '.replace("-", "_")'),
+    ("basis: unrecognised accepted by default",
+     "SAME_BOARD_BASES = (", "SAME_BOARD_BASES = tuple(CROSS_BOOK_BASES) + ("),
+    # --- defect 3: book-set agreement and cross_book coercion
+    ("book agreement: only the two per-side books compared (the old check)",
+     "    if len(named) > 1:",
+     "    if len({_norm_token(x) for x in (entry.get('book_away'), entry.get('book_home')) if x}) > 1:"),
+    ("cross_book: coercion reverted to an `is True` identity check",
+     "    if _truthy(entry.get(\"cross_book\")) or basis in CROSS_BOOK_BASES:",
+     "    if entry.get(\"cross_book\") is True or basis in CROSS_BOOK_BASES:"),
+    ("attribution: unattributed pair assumed same-book",
+     "    if not named:", "    if False:"),
+    # --- defect 4: sample floor and the empty comparison set
+    ("gate: zero common games passes",
+     '    if res.get("n_games_common") == 0:', "    if False:"),
+    ("headline: sample floor removed",
+     "    small = n_common is not None and n_common < MIN_GAMES_FOR_VERDICT",
+     "    small = False"),
+    ("headline: floor lowered to 1 game", "MIN_GAMES_FOR_VERDICT = 5", "MIN_GAMES_FOR_VERDICT = 1"),
+    # (`None or (x)` is x — that first attempt was a no-op mutant, which is itself the lesson-21
+    #  failure mode one level up: a mutant that changes nothing proves nothing either.)
+    ("headline: suppressed verdict loses its reason",
+     '        out["verdict_null_reason"] = (', '        out["verdict_null_reason"] = None and ('),
+    # --- defect 8: the BEAT boundary
+    ("headline: BEAT boundary `>` -> `>=`",
+     '    beat = always_home["accuracy"] > acc', '    beat = always_home["accuracy"] >= acc'),
+    ("headline: consequence sentence deleted",
+     '        msg += (" The cohort demonstrated nothing here', '        msg += ("" or (" '),
+    # --- defect 6: price timing
+    ("timing: unmarked prices default to `captured` again",
+     "                unk = e", "                c = e"),
+    ("timing: close and pregame buckets collapsed",
+     "            if t in CLOSE_T:", "            if False:"),
+    # --- defect 7: unavailable blocks leaking a score
+    ("gate: unavailable block may carry a score",
+     '    if blk.get("available") is False:', "    if False:"),
+    # --- defect 5: rendering
+    ("format_report: per-cohort guard removed",
+     '                if sub.get("available") and sub.get("accuracy") is not None \\\n                        and sub.get("brier") is not None:',
+     "                if True:"),
+    # --- rules the ORIGINAL fixtures did hold (kept so a repair cannot silently undo them)
+    ("prior: strictly-before -> inclusive (look-ahead)", "        if not d or d >= date:",
+     "        if not d or d > date:"),
+    ("prior: empty history defaults to 0.500", "        return None, 0, (f\"NO_RESULTS_STRICTLY_BEFORE",
+     "        return 0.5, 0, (f\"NO_RESULTS_STRICTLY_BEFORE"),
+    ("gate: a missing frozen baseline is tolerated", "        if k not in b:", "        if False:"),
+    ("same-games: cohorts may be scored on different games",
+     "        if blk.get(\"cohort\") and (not blk.get(\"scored_on_common_set\")",
+     "        if False and blk.get(\"cohort\") and (not blk.get(\"scored_on_common_set\")"),
+    ("always_home: reports a Brier for a deterministic rule",
+     '            "brier": None, "logloss": None,\n            "sides_home": len(ah_games)',
+     '            "brier": 0.0667, "logloss": 0.25,\n            "sides_home": len(ah_games)'),
+    ("partial grade snapshot scored as the slate", "    if skipped:", "    if False:"),
+    ("partial snapshot: completeness mismatch ignored", "    if m and rows and int(m.group(1)) >",
+     "    if False and m and rows and int(m.group(1)) >"),
+    ("outcome conflicts no longer block the report",
+     '    for c in res.get("outcome_conflicts") or []:', "    for c in []:"),
+]
+
+
+def mutation_suite(verbose=True):
+    """Run every mutant. Returns the list of SURVIVORS (empty is the only acceptable result)."""
+    import subprocess, tempfile
+    src = open(os.path.abspath(__file__)).read()
+    # The MUTANTS list quotes the very code it patches, so a naive replace(old, new, 1) rewrites the
+    # LIST ENTRY instead of the function whenever the target is defined below the list — which
+    # silently turned two real mutants into no-ops and reported them as SURVIVORS. The list region
+    # is excised before patching, and both halves are searched.
+    _i = src.index("MUTANTS = [")
+    _j = src.index("\ndef mutation_suite", _i)
+    head, block, tail = src[:_i], src[_i:_j], src[_j:]
+    survivors, unapplied = [], []
+    for name, old, new in MUTANTS:
+        where = "head" if old in head else ("tail" if old in tail else None)
+        if where is None:
+            unapplied.append(f"{name}: pattern not found in executable source (it may exist only "
+                             f"inside the MUTANTS list) — the mutant proves nothing")
+            continue
+        if where == "head":
+            mutated = head.replace(old, new, 1) + block + tail
+        else:
+            mutated = head + block + tail.replace(old, new, 1)
+        if mutated == src:
+            unapplied.append(f"{name}: replacement was a no-op")
+            continue
+        with tempfile.NamedTemporaryFile("w", suffix="_mutant.py", delete=False,
+                                         dir=os.path.dirname(os.path.abspath(__file__))) as fh:
+            fh.write(mutated)
+            path = fh.name
+        try:
+            pr = subprocess.run([sys.executable, path, "--selftest"],
+                                capture_output=True, text=True, timeout=180)
+            killed = pr.returncode != 0
+        except subprocess.TimeoutExpired:
+            killed = True
+        finally:
+            os.unlink(path)
+        if verbose:
+            print(f"  {'KILLED  ' if killed else 'SURVIVED'}  {name}")
+        if not killed:
+            survivors.append(name)
+    for u in unapplied:
+        print(f"  UNAPPLIED  {u}")
+    ok = not survivors and not unapplied
+    print(f"mutation suite: {len(MUTANTS) - len(survivors) - len(unapplied)}/{len(MUTANTS)} killed"
+          f"{'' if ok else '  — SURVIVORS/UNAPPLIED MEAN THE FIXTURES ARE DECORATIVE'}")
+    return survivors + unapplied
+
+
 def _cli_rows(date, grades_path=None):
+    """Load cohort rows for a slate, REFUSING a partial snapshot.
+
+    A grades file is rewritten on every settlement run, and a re-run that re-grades one late game
+    lists the other fourteen under `already_graded_skipped` and carries ONE row per cohort. Scoring
+    that silently is how the 2026-08-21 slate produced a one-game 'the cohort demonstrated nothing'
+    directive off a single coin flip. The sample floor now suppresses that verdict, but the honest
+    fix is upstream: a snapshot that says it graded 15 games and hands over 1 is REFUSED here, with
+    the discrepancy named, rather than scored as if it were the slate."""
     p = grades_path or os.path.join(ANALYSIS, f"{date}_grades.json")
     if not os.path.exists(p):
         raise SystemExit(f"no graded cohort rows found at {p}")
-    return json.load(open(p)).get("rows", [])
+    doc = json.load(open(p))
+    rows = doc.get("rows", [])
+    skipped = doc.get("already_graded_skipped") or []
+    if skipped:
+        raise SystemExit(
+            f"PARTIAL_GRADE_SNAPSHOT — {p} carries {len(rows)} row(s) but lists {len(skipped)} "
+            f"game(s) as already graded in an earlier run ({', '.join(sorted(skipped)[:3])}"
+            f"{'...' if len(skipped) > 3 else ''}). Scoring this file would compare the cohorts on "
+            f"a re-graded remainder, not on the slate. Supply the full-slate rows with --grades, or "
+            f"rebuild them from the forecast/grade chain; " + R1)
+    stated = str(doc.get("completeness") or "")
+    m = re.match(r"\s*(\d+)\s+of\s+(\d+)", stated)
+    if m and rows and int(m.group(1)) > len({r.get("board_game") or r.get("game") for r in rows}):
+        raise SystemExit(
+            f"PARTIAL_GRADE_SNAPSHOT — {p} states completeness {stated!r} but carries only "
+            f"{len({r.get('board_game') or r.get('game') for r in rows})} distinct game(s); " + R1)
+    return rows
 
 
 if __name__ == "__main__":
     ap = argparse.ArgumentParser()
     ap.add_argument("--selftest", action="store_true")
+    ap.add_argument("--mutants", action="store_true",
+                    help="run every mutant against the selftest; a SURVIVOR means the fixture "
+                         "guarding that rule is decoration (lesson 21)")
     ap.add_argument("--date")
     ap.add_argument("--grades")
     ap.add_argument("--prices")
     a = ap.parse_args()
+    if a.mutants:
+        raise SystemExit(1 if mutation_suite() else 0)
     if a.selftest:
         raise SystemExit(selftest())
     if not a.date:
         ap.error("--date or --selftest required")
     prices = json.load(open(a.prices)) if a.prices else None
     res = baselines(a.date, _cli_rows(a.date, a.grades), None, prices)
-    print(format_report(res))
+    # The GATE VERDICT is the operator-facing output and must survive a rendering failure: printing
+    # the report first meant a format crash replaced the verdict with a traceback (defect 5).
     ok, gf = gate(res)
+    try:
+        print(format_report(res))
+    except Exception as exc:
+        print(f"REPORT RENDERING FAILED ({type(exc).__name__}: {exc}) — the gate verdict below "
+              f"still stands and a rendering failure is itself a defect, not a pass")
+        ok, gf = False, gf + [f"format_report raised {type(exc).__name__}: {exc}"]
     if not ok:
         print("\nBASELINE GATE: FAIL")
         for f in gf:

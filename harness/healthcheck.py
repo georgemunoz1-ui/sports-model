@@ -235,7 +235,8 @@ except Exception as e: check(f"P1A enforcement ({e})", False)
 for _m in ("result_provenance","result_content_checks","parse_box_dump",
            "acquisition_ledger","missing_data_audit","tier_discipline","artifact_immutability",
            "tier1_board_gate","form_refresh_diff","tier1_lineage","pregame_preflight","card_render",
-           "settlement_contract","unified_card","decision_card","ats_ledgers"):
+           "settlement_contract","unified_card","decision_card","ats_ledgers",
+           "journal_continuity"):
     _r=subprocess.run([sys.executable,f"harness/{_m}.py","--selftest"],capture_output=True,text=True)
     _out=(_r.stdout+_r.stderr).strip().splitlines()
     check(f"{_m} selftest ({_out[-1][:72] if _out else 'no output'})", _r.returncode==0)
@@ -317,6 +318,24 @@ if os.path.exists("docs/progress.md"):
     mtime=datetime.date.fromtimestamp(os.path.getmtime("docs/progress.md"))
     check(f"progress.md last touched {mtime}", (datetime.date.today()-mtime).days<=2, warn=True)
 else: check("docs/progress.md exists", False, warn=True)
+# 6c. SEMANTIC journal continuity (owner ruling 2026-08-22). mtime is an extra signal, NOT the
+#     source of truth: it moves on checkout, restore, copy and touch, and says nothing about whether
+#     the file a COLD SESSION reads contains the latest work. This checks committed content:
+#     exactly one canonical journal, the latest committed entry and its date, the commit it binds
+#     to, a cold-bootstrap simulation through the loader window PARSED OUT OF AGENTS.md, and that
+#     the closed redirect carries no independent state.
+try:
+    import journal_continuity as _jc
+    _ok, _jf, _jd = _jc.check()
+    check(f"journal continuity (latest committed entry {_jd.get('latest_committed_entry')}, "
+          f"cold-bootstrap window {(_jd.get('loader') or {}).get('lines')} lines)", _ok)
+    if not _ok:
+        for _x in _jf:
+            print(f"       ! {_x}")
+    for _w in (_jd.get("warnings") or []):
+        check(f"journal: {_w}", False, warn=True)
+except Exception as e:
+    check(f"journal continuity check ({e})", False)
 # 6b. journal split: AGENTS.md step 3, runbook.md and check 6 above all read docs/progress.md.
 #     A second journal at the repo root existed and silently took the daily entries from 2026-08-20
 #     onward, so the file the next session actually bootstraps from went three days stale while

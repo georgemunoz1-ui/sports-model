@@ -74,6 +74,7 @@ from __future__ import annotations
 
 import argparse
 import csv
+import hashlib
 import json
 import math
 import os
@@ -102,15 +103,33 @@ SAME_BOARD_BASES = ("", "board", "same_book", "same_board", "single_book", "book
 CROSS_BOOK_BASES = ("best_odds", "cross_book", "best_price", "best_line", "best_available",
                     "best", "shop", "shopped", "consensus", "aggregate", "aggregated")
 
-# The frozen list. Order is the report order. A key missing from a report is a gate failure.
-BASELINE_KEYS = (
-    "v1_all_cap_cohort",
-    "v2_resolved_starters_cohort",
-    "expanding_home_win_prior",
-    "raw_v13_registered_card",
-    "market_no_vig_when_captured",
-    "closing_market",
+# OWNER-ORDERED COMPARATOR SEQUENCE (ruling 2026-08-22). Order IS the report order and it is
+# gate-enforced, because reading order decides which comparator a score gets defended against.
+# The expanding home prior leads: it is the strongest baseline obtainable with no model at all, and
+# on 2026-08-21 it beat the resolved-starter cohort on record, Brier AND log loss while flat-50%
+# — which happened to be the number already in the report — did not (lesson 22).
+PRINCIPAL_COMPARATORS = (
+    "expanding_home_win_prior",        # 1. strongest no-model baseline, as-of, no look-ahead
+    "v1_all_cap_cohort",               # 2. all-CAP cohort
+    "v2_resolved_starters_cohort",     # 3. resolved-starter cohort
+    "market_no_vig_when_captured",     # 4. same-book no-vig market
+    "closing_market",                  # 5. closing market
 )
+# Flat 50% STAYS — as a universal sanity floor, never as the principal comparator. It is classed
+# SECONDARY so that a report cannot quote it in the leading position, which is the exact failure
+# lesson 22 records.
+SECONDARY_COMPARATORS = ("flat_50_sanity_check",)
+# Not an independent comparator at all: raw V13 IS the cohort probability.
+NON_INDEPENDENT_COMPARATORS = ("raw_v13_registered_card",)
+BASELINE_KEYS = PRINCIPAL_COMPARATORS + SECONDARY_COMPARATORS + NON_INDEPENDENT_COMPARATORS
+COMPARATOR_CLASS = dict(
+    [(k, "PRINCIPAL") for k in PRINCIPAL_COMPARATORS]
+    + [(k, "SECONDARY_SANITY_CHECK") for k in SECONDARY_COMPARATORS]
+    + [(k, "NON_INDEPENDENT") for k in NON_INDEPENDENT_COMPARATORS])
+COMPARATOR_RANK = {k: i + 1 for i, k in enumerate(BASELINE_KEYS)}
+# The cohorts are the things under test; every other PRINCIPAL row is a baseline they must clear.
+COHORT_KEYS = ("v1_all_cap_cohort", "v2_resolved_starters_cohort")
+CHALLENGE_BASELINES = tuple(k for k in PRINCIPAL_COMPARATORS if k not in COHORT_KEYS)
 COHORT_BASELINE = {"v1": "v1_all_cap_cohort", "v2": "v2_resolved_starters_cohort"}
 
 # Scoring fields every block carries, present even when null (see R1 above).
@@ -313,6 +332,184 @@ def load_results(src=None):
         return list(csv.DictReader(fh))
 
 
+# ------------------------------------------------------------------- manifest identity coverage
+# OWNER RULING 2026-08-22. "Partial snapshots refused by name" was NOT strong enough: recognising a
+# filename is not identity coverage. Aggregate metrics may be produced only after FULL SET EQUALITY
+# between the slate's expected forecast identities and the identities actually accounted for.
+#
+#     {expected forecast IDs}  ==  {graded forecast IDs}  U  {dispositions accounted with a reason}
+#
+# and, additionally: correct cohort/card hash, no duplicate grade IDs, no foreign cohort IDs,
+# expected row count, every terminal disposition accounted for. A CORRECTLY NAMED two-row file
+# must still fail — the check never looks at a path, only at identities.
+FORECASTS_JSONL = os.path.join(BASE, "data/mlb/forecasts/forecasts.jsonl")
+GRADES_JSONL = os.path.join(BASE, "data/mlb/forecasts/grades.jsonl")
+TERMINAL_DISPOSITIONS = ("GRADED", "EXCLUDED_WITH_REASON")
+NON_TERMINAL_DISPOSITIONS = ("PENDING_WITH_REASON",)
+
+
+def _sha256_file(path):
+    h = hashlib.sha256()
+    with open(path, "rb") as fh:
+        for chunk in iter(lambda: fh.read(1 << 20), b""):
+            h.update(chunk)
+    return h.hexdigest()
+
+
+def slate_manifest(date, forecasts_path=None, grades_path=None, dispositions=None):
+    """Build the authoritative identity manifest for a slate from the APPEND-ONLY registry.
+
+    The registry — not a grades snapshot, not a filename — is the authority on which forecasts
+    exist for a date. A grades file is rewritten on every settlement run; forecasts.jsonl is not.
+
+    `dispositions` maps forecast_id -> {"disposition": ..., "reason": ...} for identities that are
+    accounted for WITHOUT a grade (a post-start exclusion, a game that never finished). Anything
+    that is neither graded nor dispositioned leaves the manifest INCOMPLETE, and an incomplete
+    manifest blocks aggregate metrics."""
+    fp = forecasts_path or FORECASTS_JSONL
+    gp = grades_path or GRADES_JSONL
+    if not os.path.exists(fp):
+        return {"date": date, "available": False,
+                "null_reason": f"FORECAST_REGISTRY_UNREADABLE — {fp} does not exist; " + R1}
+    fcs = [json.loads(l) for l in open(fp) if l.strip()]
+    grs = [json.loads(l) for l in open(gp) if l.strip()] if os.path.exists(gp) else []
+    slate = [f for f in fcs if f.get("slate_date") == date]
+    expected, cohort_of, artifact_of, arm_of = set(), {}, {}, {}
+    for f in slate:
+        fid = f.get("forecast_id")
+        if not fid:
+            continue
+        expected.add(fid)
+        arm_of[fid] = f.get("experiment_arm")
+        art = (f.get("artifact_ref") or {}).get("path")
+        if art:
+            artifact_of[fid] = (art, f.get("original_file_hash"))
+    grade_ids, graded = [], set()
+    for g in grs:
+        fid = g.get("forecast_id")
+        if fid in expected:
+            graded.add(fid)
+            grade_ids.append(g.get("grade_id"))
+    return {"date": date, "available": bool(expected),
+            "null_reason": (None if expected else
+                            f"NO_REGISTERED_FORECASTS_FOR_SLATE — the append-only registry holds no "
+                            f"forecast with slate_date {date}; an unverifiable slate is not scored; " + R1),
+            "expected_ids": sorted(expected), "graded_ids": sorted(graded),
+            "grade_ids": grade_ids, "artifact_of": artifact_of, "arm_of": arm_of,
+            "dispositions": dict(dispositions or {}),
+            "source": {"forecasts": fp, "grades": gp, "n_registry_rows": len(fcs)}}
+
+
+def manifest_coverage(rows, manifest, verify_artifact_hashes=True):
+    """FULL identity coverage. Returns (ok, failures, detail). Runs BEFORE any aggregate metric.
+
+    Every check below is on IDENTITIES and HASHES. None of them reads a filename, so a correctly
+    named file carrying the wrong rows fails exactly as a wrongly named one does."""
+    fails, detail = [], {}
+    if not isinstance(manifest, dict) or not manifest.get("available"):
+        return False, [(manifest or {}).get("null_reason")
+                       or "MANIFEST_UNAVAILABLE — no identity manifest was supplied, so coverage "
+                          "cannot be established and aggregate metrics are refused; " + R1], detail
+    expected = set(manifest.get("expected_ids") or [])
+    graded = set(manifest.get("graded_ids") or [])
+    disp = manifest.get("dispositions") or {}
+
+    # 1. every expected identity carries a TERMINAL disposition
+    accounted, non_terminal, unreasoned = set(graded), {}, []
+    for fid, d in disp.items():
+        state = str((d or {}).get("disposition") or "").upper()
+        if not (d or {}).get("reason"):
+            unreasoned.append(fid)
+            continue
+        if state in TERMINAL_DISPOSITIONS:
+            accounted.add(fid)
+        elif state in NON_TERMINAL_DISPOSITIONS:
+            non_terminal[fid] = state
+    if unreasoned:
+        fails.append(f"DISPOSITION_WITHOUT_REASON — {sorted(unreasoned)} carry a disposition with no "
+                     f"reason string; an unexplained exclusion is not an accounting; " + R1)
+    if non_terminal:
+        fails.append(f"NON_TERMINAL_DISPOSITION — {sorted(non_terminal)} are {sorted(set(non_terminal.values()))}, "
+                     f"which is not a terminal state; aggregates over a slate still in flight would "
+                     f"be revised by the missing rows")
+
+    # 2. FULL SET EQUALITY  {expected} == {graded} U {accounted dispositions}
+    missing = sorted(expected - accounted)
+    foreign_acct = sorted(accounted - expected)
+    if missing:
+        fails.append(f"IDENTITY_COVERAGE_INCOMPLETE — {len(missing)} of {len(expected)} registered "
+                     f"forecast identities are neither graded nor dispositioned: {missing[:6]}"
+                     f"{'...' if len(missing) > 6 else ''}. Aggregate metrics are refused until "
+                     f"{{expected}} == {{graded}} U {{accounted}}")
+    if foreign_acct:
+        fails.append(f"FOREIGN_ACCOUNTED_IDENTITY — {foreign_acct[:6]} are accounted for but are not "
+                     f"registered for this slate")
+
+    # 3. supplied rows: identity present, no foreign ids, no duplicates, expected row count
+    row_ids, dupes = [], []
+    for i, r in enumerate(rows or []):
+        fid = r.get("forecast_id")
+        if not fid:            # ROW IDENTITY GATE
+            fails.append(f"ROW_WITHOUT_IDENTITY — supplied row {i} carries no forecast_id, so it "
+                         f"cannot be bound to the manifest; " + R1)
+            continue
+        if fid in row_ids:
+            dupes.append(fid)
+        row_ids.append(fid)
+    if dupes:
+        fails.append(f"DUPLICATE_ROW_IDENTITY — {sorted(set(dupes))} appear more than once; a "
+                     f"duplicated row silently reweights every aggregate")
+    rset = set(row_ids)
+    foreign_rows = sorted(rset - expected)
+    if foreign_rows:
+        fails.append(f"FOREIGN_COHORT_IDENTITY — {foreign_rows[:6]} are not registered for this "
+                     f"slate; scoring them mixes another slate or another experiment into the report")
+    row_missing = sorted(graded - rset)
+    if row_missing:
+        fails.append(f"ROW_COUNT_SHORT — {len(row_missing)} graded identities are absent from the "
+                     f"supplied rows ({row_missing[:6]}{'...' if len(row_missing) > 6 else ''}); "
+                     f"expected {len(graded)} scored rows, received {len(rset)}")
+
+    # 4. no duplicate grade IDs
+    gids = [g for g in (manifest.get("grade_ids") or []) if g]
+    gdupes = sorted({g for g in gids if gids.count(g) > 1})
+    if gdupes:
+        fails.append(f"DUPLICATE_GRADE_ID — {gdupes[:6]} appear more than once in the grade chain")
+
+    # 5. cohort / card artifact hash still matches what was REGISTERED
+    hash_detail = {}
+    if verify_artifact_hashes:
+        for fid in sorted(rset & expected):
+            art = (manifest.get("artifact_of") or {}).get(fid)
+            if not art:
+                fails.append(f"NO_ARTIFACT_BINDING — {fid} names no registered card artifact, so its "
+                             f"probabilities cannot be shown to come from the registered card; " + R1)
+                continue
+            path, want = art
+            if path in hash_detail:
+                continue
+            full = path if os.path.isabs(path) else os.path.join(BASE, path)
+            if not os.path.exists(full):
+                hash_detail[path] = {"registered": want, "live": None,
+                                     "match": False, "reason": "ARTIFACT_MISSING"}
+                fails.append(f"ARTIFACT_MISSING — registered card {path} does not exist; the rows "
+                             f"cannot be shown to be the registered probabilities")
+                continue
+            live = _sha256_file(full)
+            hash_detail[path] = {"registered": want, "live": live, "match": live == want}
+            if want and live != want:
+                fails.append(f"ARTIFACT_HASH_MISMATCH — {path} is sha {live[:12]} but was registered "
+                             f"as {str(want)[:12]}; the card changed after registration (R3: frozen "
+                             f"stays frozen), so these rows are not the registered forecast")
+    detail = {"n_expected": len(expected), "n_graded": len(graded),
+              "n_dispositioned": len(accounted - graded), "n_rows": len(rset),
+              "missing_identities": missing, "foreign_row_identities": foreign_rows,
+              "duplicate_row_identities": sorted(set(dupes)), "duplicate_grade_ids": gdupes,
+              "non_terminal_dispositions": non_terminal, "artifact_hashes": hash_detail,
+              "set_equality": not missing and not foreign_acct}
+    return (not fails), fails, detail
+
+
 # ----------------------------------------------------------------------------- scoring blocks
 def _unavailable(label, reason, **extra):
     blk = {"label": label, "available": False, "null_reason": reason,
@@ -382,12 +579,44 @@ def _norm_cohort_rows(cohort_rows):
 
 
 # ----------------------------------------------------------------------------- the report
-def baselines(date, cohort_rows, results_rows=None, prices=None):
+def baselines(date, cohort_rows, results_rows=None, prices=None, manifest=None):
     """Score every frozen baseline for one slate. Reads only; returns the report dict.
 
     `results_rows` may be a loaded list, a path, or None (defaults to the season results file).
-    `prices` shape is documented on `split_prices`/`devig_entry`."""
+    `prices` shape is documented on `split_prices`/`devig_entry`.
+
+    `manifest` is the slate's IDENTITY manifest (see slate_manifest). It is NOT optional in effect:
+    passing None auto-loads it from the append-only forecast registry, and if coverage does not
+    reach full set equality then NO aggregate metric is produced — every block is returned
+    null-with-reason and the gate fails. Owner ruling 2026-08-22: full set equality BEFORE
+    aggregates, and the check reads identities and hashes only, never a filename."""
     rows, unscorable = _norm_cohort_rows(cohort_rows)
+    mf = manifest if manifest is not None else slate_manifest(date)
+    cov_ok, cov_fails, cov_detail = manifest_coverage(cohort_rows, mf)
+    coverage = {"ok": cov_ok, "failures": cov_fails, "detail": cov_detail,
+                "expected_ids": (mf or {}).get("expected_ids") if isinstance(mf, dict) else None,
+                "rule": "aggregate metrics require {expected forecast IDs} == {graded} U "
+                        "{dispositioned with a reason}, plus registered-artifact hash match, no "
+                        "duplicate grade IDs, no foreign identities, expected row count, and every "
+                        "terminal disposition accounted for. Identity-bound, never filename-bound."}
+    if not cov_ok:
+        # REFUSE to compute anything. A partial slate scored as a slate is the failure this stops.
+        why = ("MANIFEST_COVERAGE_INCOMPLETE — aggregate metrics are refused until identity coverage "
+               "is complete: " + " | ".join(cov_fails)[:600] + "; " + R1)
+        blk = {k: _unavailable(k, why) for k in BASELINE_KEYS}
+        return {"record_id": f"BASELINES-{date}", "date": date, "n_games_common": 0, "games": [],
+                "excluded_games": [], "unscorable_rows": unscorable, "outcome_conflicts": [],
+                "always_home": _unavailable("ALWAYS_HOME (bet every home team, no model)", why),
+                "headline": {"always_home_accuracy": None, "best_cohort": None,
+                             "best_cohort_accuracy": None, "always_home_beat_best_cohort": None,
+                             "verdict_null_reason": why, "message": why},
+                "baselines": {k: dict(blk[k], comparator_class=COMPARATOR_CLASS[k],
+                                      comparator_rank=COMPARATOR_RANK[k]) for k in BASELINE_KEYS},
+                "comparator_order": list(BASELINE_KEYS),
+                "principal_comparators": list(PRINCIPAL_COMPARATORS),
+                "baseline_challenge": {"metrics": [], "cohorts": {}, "note": why},
+                "other_cohorts": {}, "manifest_coverage": coverage, "reads_only": True,
+                "notes": ["NO AGGREGATE WAS COMPUTED — identity coverage failed"]}
     by_coh = {}
     for r in rows:
         by_coh.setdefault(r["cohort"], []).append(r)
@@ -442,6 +671,14 @@ def baselines(date, cohort_rows, results_rows=None, prices=None):
             prior_p_home=round(p_prior, 6), prior_sample_n=prior_n,
             window="strictly-before, expanding (no look-ahead: the slate's own games are excluded)",
             side_selection_equals_always_home=(p_prior >= .5))
+
+    # FLAT 50% — retained as a universal sanity FLOOR, classed SECONDARY so it can never occupy the
+    # principal position. Brier is 0.25 and log loss ln(2) by construction on any outcome vector.
+    blocks["flat_50_sanity_check"] = score_probs(
+        "flat 50% (universal sanity floor — NOT the principal comparator)",
+        {g: 0.5 for g in games}, outcomes, games,
+        floor_note="a score that beats only this has cleared nothing a base rate could not; the "
+                   "principal comparator is the expanding home prior (lesson 22)")
 
     # 4. raw V13 — the registered card probability. Identical to the cohorts BY CONSTRUCTION.
     reg = sorted({r["cohort"] for r in rows if r["registered_card"]}) or sorted(by_coh)
@@ -513,11 +750,16 @@ def baselines(date, cohort_rows, results_rows=None, prices=None):
         "n_games_common": len(games),
         "games": games,
         "excluded_games": excluded,
+        "manifest_coverage": coverage,
         "unscorable_rows": unscorable,
         "outcome_conflicts": conflicts,
         "always_home": always_home,
         "headline": headline,
-        "baselines": {k: blocks[k] for k in BASELINE_KEYS},
+        "baselines": {k: dict(blocks[k], comparator_class=COMPARATOR_CLASS[k],
+                              comparator_rank=COMPARATOR_RANK[k]) for k in BASELINE_KEYS},
+        "comparator_order": list(BASELINE_KEYS),
+        "principal_comparators": list(PRINCIPAL_COMPARATORS),
+        "baseline_challenge": _baseline_challenge(blocks, games),
         "other_cohorts": other,
         "reads_only": True,
         "notes": [
@@ -560,6 +802,69 @@ def _market_block(label, entries, outcomes, games, cohort_probs, empty_reason, u
                      / max(1, len([g for g in sub if g in pp and outcomes.get(g) is not None])), 6)
             for c, pp in (cohort_probs or {}).items()}
     return blk
+
+
+def _baseline_challenge(blocks, games):
+    """THE LESSON-22 TEST, computed every slate: did each cohort clear the strongest PRINCIPAL
+    baseline available to it, on EVERY recorded metric?
+
+    A cohort that beats flat-50% but loses to the as-of home rate has cleared nothing. The 8/21
+    slate is the case: v2 10-5/.23062/.65404 against an expanding prior of 14-1/.22959/.65229.
+    Direction is stated per metric so a mixed result cannot be summarised as a win."""
+    out = {"metrics": ["side_record (accuracy)", "brier (lower is better)",
+                       "logloss (lower is better)"],
+           "cohorts": {}, "note": (
+               "A cohort 'clears' a baseline only by being no worse on EVERY metric and better on "
+               "at least one. Ties and mixed results are reported as such, never as a win. This "
+               "compares SCORES on one slate; it establishes nothing about which forecaster is "
+               "better in general — see sample_caution on each row.")}
+    for ck in COHORT_KEYS:
+        c = blocks.get(ck) or {}
+        if not c.get("available") or c.get("brier") is None:
+            out["cohorts"][ck] = {"cleared_every_baseline": None,
+                                  "null_reason": (c.get("null_reason")
+                                                  or "COHORT_UNAVAILABLE — nothing to challenge; " + R1)}
+            continue
+        vs = {}
+        for bk in CHALLENGE_BASELINES:
+            b = blocks.get(bk) or {}
+            if not b.get("available") or b.get("brier") is None:
+                vs[bk] = {"comparable": False,
+                          "null_reason": b.get("null_reason") or ("BASELINE_UNAVAILABLE; " + R1)}
+                continue
+            per = {}
+            for m, lower_is_better in (("accuracy", False), ("brier", True), ("logloss", True)):
+                cv, bv = c.get(m), b.get(m)
+                if cv is None or bv is None:
+                    per[m] = {"cohort": cv, "baseline": bv, "cohort_better": None,
+                              "null_reason": f"{m.upper()}_NOT_SCORED on one side; " + R1}
+                    continue
+                better = (cv < bv) if lower_is_better else (cv > bv)
+                worse = (cv > bv) if lower_is_better else (cv < bv)
+                per[m] = {"cohort": cv, "baseline": bv, "delta": round(cv - bv, 6),
+                          "cohort_better": (None if cv == bv else better),
+                          "cohort_worse": (None if cv == bv else worse)}
+            scored = [v for v in per.values() if v.get("cohort_better") is not None
+                      or v.get("cohort_worse") is not None or "null_reason" not in v]
+            any_worse = any(v.get("cohort_worse") for v in per.values())
+            any_better = any(v.get("cohort_better") for v in per.values())
+            incomplete = any("null_reason" in v for v in per.values())
+            vs[bk] = {"comparable": True, "per_metric": per,
+                      "cohort_cleared": (None if incomplete else (any_better and not any_worse)),
+                      "verdict": ("INCOMPLETE" if incomplete else
+                                  "CLEARED" if (any_better and not any_worse) else
+                                  "DID_NOT_CLEAR" if any_worse else "LEVEL")}
+        comparable = [v for v in vs.values() if v.get("comparable")]
+        out["cohorts"][ck] = {
+            "versus": vs,
+            "cleared_every_baseline": (None if not comparable
+                                       else all(v.get("cohort_cleared") for v in comparable)),
+            "baselines_not_cleared": sorted(k for k, v in vs.items()
+                                            if v.get("comparable") and not v.get("cohort_cleared")),
+            "sample_caution": (f"scored on {len(games)} game(s) of one slate; a score comparison on "
+                               f"one slate is not evidence about either forecaster in general"),
+        }
+    return out
 
 
 def _headline(always_home, blocks, other, n_common=None):
@@ -645,6 +950,39 @@ def gate(res):
       - every cohort is scored on the common game set, and all common-set blocks share it
       - cohorts that disagree about a graded outcome block the report entirely"""
     fails = []
+    cov = res.get("manifest_coverage")
+    if not isinstance(cov, dict):
+        fails.append("manifest_coverage block MISSING — a report that does not state its identity "
+                     "coverage cannot be trusted to have scored the slate it names")
+    elif not cov.get("ok"):
+        for f in (cov.get("failures") or ["coverage failed with no reason recorded"]):
+            fails.append(f"identity coverage: {f}")
+    elif not (cov.get("detail") or {}).get("set_equality"):
+        fails.append("identity coverage reports ok but not set equality — the two must agree")
+    order = res.get("comparator_order")
+    if list(order or []) != list(BASELINE_KEYS):
+        fails.append(f"comparator order {order} != the frozen owner-ratified order "
+                     f"{list(BASELINE_KEYS)} — reading order decides which comparator a score is "
+                     f"defended against (lesson 22)")
+    if list((res.get("baselines") or {}).keys()) != list(BASELINE_KEYS):
+        fails.append("the emitted baselines are not in the frozen comparator order")
+    for k, blk in (res.get("baselines") or {}).items():
+        if not isinstance(blk, dict):
+            continue
+        if blk.get("comparator_class") != COMPARATOR_CLASS.get(k):
+            fails.append(f"{k}: comparator_class {blk.get('comparator_class')!r} != "
+                         f"{COMPARATOR_CLASS.get(k)!r} — flat 50% must stay classed a SECONDARY "
+                         f"sanity check and can never be presented as the principal comparator")
+        if blk.get("comparator_rank") != COMPARATOR_RANK.get(k):
+            fails.append(f"{k}: comparator_rank {blk.get('comparator_rank')!r} != "
+                         f"{COMPARATOR_RANK.get(k)!r}")
+    if COMPARATOR_CLASS.get("flat_50_sanity_check") != "SECONDARY_SANITY_CHECK":
+        fails.append("flat 50% is not classed SECONDARY — it is a floor, not the baseline")
+    if PRINCIPAL_COMPARATORS[0] != "expanding_home_win_prior":
+        fails.append("the expanding home prior is not the leading principal comparator")
+    if "baseline_challenge" not in res:
+        fails.append("baseline_challenge missing — whether each cohort CLEARED the strongest "
+                     "no-model baseline is the finding, not an optional extra (lesson 22)")
     if res.get("n_games_common") == 0:
         fails.append("n_games_common == 0 — no game is common to EVERY cohort, so no head-to-head "
                      "comparison exists. Disjoint cohort game sets are precisely the condition this "
@@ -690,19 +1028,33 @@ def gate(res):
 
 def format_report(res):
     L = [f'DAILY BASELINES — {res["date"]}  ({res["n_games_common"]} common games)']
+    cov = res.get("manifest_coverage") or {}
+    d = cov.get("detail") or {}
+    L.append(f'IDENTITY COVERAGE      {"PASS" if cov.get("ok") else "FAIL"}  '
+             f'expected {d.get("n_expected")} = graded {d.get("n_graded")} + dispositioned '
+             f'{d.get("n_dispositioned")} | rows {d.get("n_rows")} | set equality '
+             f'{d.get("set_equality")}')
+    for f in (cov.get("failures") or [])[:6]:
+        L.append(f'    ! {f}')
+    if not cov.get("ok"):
+        L.append('    NO AGGREGATE WAS COMPUTED — identity coverage must be complete first')
+        return "\n".join(L)
     ah = res["always_home"]
     L.append(f'ALWAYS_HOME            {ah["side_record"] or "-":>8}  acc '
              f'{("%.4f" % ah["accuracy"]) if ah["accuracy"] is not None else "null":>7}  '
              f'brier {"null":>8}  logloss {"null":>8}   <- headline sanity check')
     L.append(f'  {res["headline"].get("message","")}')
-    L.append(f'{"baseline":<32}{"n":>4}{"W-L":>8}{"acc":>8}{"brier":>10}{"logloss":>10}')
+    L.append(f'{"#  comparator":<34}{"n":>4}{"W-L":>8}{"acc":>8}{"brier":>10}{"logloss":>10}   class')
     for k in BASELINE_KEYS:
         blk = res["baselines"][k]
+        lbl = f'{COMPARATOR_RANK[k]}. {k}'
+        cls = {"PRINCIPAL": "", "SECONDARY_SANITY_CHECK": "   <- sanity FLOOR, not the comparator",
+               "NON_INDEPENDENT": "   <- not independent"}.get(COMPARATOR_CLASS[k], "")
         if blk.get("available") and blk.get("n") is not None:
-            L.append(f'{k:<32}{blk["n"]:>4}{blk["side_record"]:>8}{blk["accuracy"]:>8.4f}'
-                     f'{blk["brier"]:>10.5f}{blk["logloss"]:>10.5f}')
+            L.append(f'{lbl:<34}{blk["n"]:>4}{blk["side_record"]:>8}{blk["accuracy"]:>8.4f}'
+                     f'{blk["brier"]:>10.5f}{blk["logloss"]:>10.5f}{cls}')
         else:
-            L.append(f'{k:<32}{"null":>4}{"null":>8}{"null":>8}{"null":>10}{"null":>10}')
+            L.append(f'{lbl:<34}{"null":>4}{"null":>8}{"null":>8}{"null":>10}{"null":>10}{cls}')
             L.append(f'    reason: {blk.get("null_reason")}')
         if k == "raw_v13_registered_card":
             for c, sub in (blk.get("per_cohort") or {}).items():
@@ -724,6 +1076,23 @@ def format_report(res):
             L.append(f'{"other cohort " + c:<32}{"null":>4}{"null":>8}{"null":>8}'
                      f'{"null":>10}{"null":>10}')
             L.append(f'    reason: {blk.get("null_reason")}')
+    bc = res.get("baseline_challenge") or {}
+    if bc.get("cohorts"):
+        L.append("DID EACH COHORT CLEAR THE STRONGEST NO-MODEL BASELINE? (better on at least one "
+                 "metric, worse on none)")
+        for ck, cv in bc["cohorts"].items():
+            got = cv.get("cleared_every_baseline")
+            L.append(f'  {ck:<32}{"YES" if got else ("null" if got is None else "NO")}'
+                     f'{("  did not clear: " + ", ".join(cv.get("baselines_not_cleared") or [])) if got is False else ""}')
+            for bk, v in (cv.get("versus") or {}).items():
+                if not v.get("comparable"):
+                    continue
+                pm = v.get("per_metric") or {}
+                bits = " ".join(
+                    f'{m}{pm[m]["delta"]:+.5f}' for m in ("accuracy", "brier", "logloss")
+                    if pm.get(m, {}).get("delta") is not None)
+                L.append(f'      vs {bk:<30}{v["verdict"]:<15}{bits}')
+        L.append(f'  {bc.get("note","")}')
     for e in res.get("excluded_games") or []:
         L.append(f'  EXCLUDED {e["game"]}: {e["reason"]}')
     for u in res.get("unscorable_rows") or []:
@@ -743,15 +1112,44 @@ def _fixture_slate():
         p2 = .60 if i <= 8 else .40
         # v1: right on games 0-6 and on game 14 -> 8-7
         p1 = .60 if i <= 6 else .40
-        rows.append({"cohort": "v1", "board_game": g, "p_home_model": p1, "home_win": outcomes[g]})
-        rows.append({"cohort": "v2", "board_game": g, "p_home_model": p2, "home_win": outcomes[g]})
+        rows.append({"cohort": "v1", "board_game": g, "p_home_model": p1, "home_win": outcomes[g],
+                     "forecast_id": f"FIX-v1-{g}"})
+        rows.append({"cohort": "v2", "board_game": g, "p_home_model": p2, "home_win": outcomes[g],
+                     "forecast_id": f"FIX-v2-{g}"})
     return games, outcomes, rows
+
+
+def _fixture_manifest(rows, date="2026-08-21", artifact=None, expected=None, graded=None,
+                      dispositions=None, grade_ids=None):
+    """A SYNTHETIC identity manifest for fixtures. It binds to a REAL file on disk so the artifact
+    hash path is exercised for real rather than skipped — a fixture that stubs out the check it is
+    supposed to prove is the decorative kind (lesson 21)."""
+    ids = [r.get("forecast_id") for r in (rows or []) if r.get("forecast_id")]
+    exp = sorted(set(ids if expected is None else expected))
+    gr = sorted(set(exp if graded is None else graded))
+    art = {}
+    if artifact:
+        path, sha = artifact
+        art = {i: (path, sha) for i in exp}
+    return {"date": date, "available": True, "null_reason": None,
+            "expected_ids": exp, "graded_ids": gr,
+            "grade_ids": (grade_ids if grade_ids is not None else [f"G-{i}" for i in gr]),
+            "artifact_of": art, "arm_of": {},
+            "dispositions": dict(dispositions or {}), "source": {"synthetic_fixture": True}}
 
 
 def selftest():
     fails = []
     games, outcomes, rows = _fixture_slate()
     DATE = "2026-08-21"
+    # A REAL artifact on disk, so the registered-card hash path in manifest_coverage is exercised
+    # for real by every fixture rather than stubbed out. Removed at the end of the run.
+    import tempfile as _tempfile
+    _fd, _artpath = _tempfile.mkstemp(suffix="_fixture_card.json", prefix="db_")
+    os.write(_fd, json.dumps({"fixture_card": True, "rows": []}).encode())
+    os.close(_fd)
+    ART = (_artpath, _sha256_file(_artpath))
+    MF = _fixture_manifest(rows, DATE, ART)
     # results fixture: 1 of 2 prior games went home. The slate's own 14-1 and a LATER 5-0 day are
     # both present and must be invisible to the prior.
     res_rows = ([{"date": "2026-08-19", "status": "final", "home_win": "1"},
@@ -798,7 +1196,7 @@ def selftest():
 
     # ---- full report on the 14-1 slate, with only cross-book prices available
     xprices = {"timing": "pregame", "games": {g: dict(xb) for g in games}}
-    r = baselines(DATE, rows, res_rows, xprices)
+    r = baselines(DATE, rows, res_rows, xprices, MF)
     ok, gf = gate(r)
     if not ok:
         fails.append(f"gate rejected a well-formed report: {gf}")
@@ -849,7 +1247,7 @@ def selftest():
     # ---- same-book prices, half of them closing
     good = {"games": {g: {"captured": {"book": "vsin", "ml_away": 147, "ml_home": -158},
                           "close": {"book": "vsin", "ml_away": 120, "ml_home": -129}} for g in games}}
-    r2 = baselines(DATE, rows, res_rows, good)
+    r2 = baselines(DATE, rows, res_rows, good, MF)
     if not r2["baselines"]["market_no_vig_when_captured"]["available"]:
         fails.append("same-book captured prices did not produce a market baseline")
     if not r2["baselines"]["closing_market"]["available"]:
@@ -864,11 +1262,11 @@ def selftest():
     # applies to every event (an events file with NO book stays refused, not assumed same-book)
     ev = {"book": "owner_board", "timing": "pregame", "source": "prose claim, not machine-checkable",
           "events": [{"matchup": g, "ml_away": 147, "ml_home": -158} for g in games]}
-    if not baselines(DATE, rows, res_rows, ev)["baselines"]["market_no_vig_when_captured"]["available"]:
+    if not baselines(DATE, rows, res_rows, ev, MF)["baselines"]["market_no_vig_when_captured"]["available"]:
         fails.append("the repo's events-shaped price capture was not normalised")
     ev_nobook = {"events": [{"matchup": g, "ml_away": 147, "ml_home": -158} for g in games],
                  "timing": "pregame", "source": "same-board two-sided (prose)"}
-    mb = baselines(DATE, rows, res_rows, ev_nobook)["baselines"]["market_no_vig_when_captured"]
+    mb = baselines(DATE, rows, res_rows, ev_nobook, MF)["baselines"]["market_no_vig_when_captured"]
     if mb["available"] or "PRICE_BOOK_ATTRIBUTION_MISSING" not in (mb["null_reason"] or ""):
         fails.append("an events file whose only same-book claim is prose was de-vigged anyway")
 
@@ -876,7 +1274,7 @@ def selftest():
     # all of it — the block must carry the cohort Briers recomputed on the SAME priced subset.
     part = {"timing": "pregame",
             "games": {g: {"book": "vsin", "ml_away": 147, "ml_home": -158} for g in games[:5]}}
-    pm = baselines(DATE, rows, res_rows, part)["baselines"]["market_no_vig_when_captured"]
+    pm = baselines(DATE, rows, res_rows, part, MF)["baselines"]["market_no_vig_when_captured"]
     if pm["n"] != 5 or "cohort_brier_on_priced_subset" not in pm:
         fails.append("a partial market was reported without the matching cohort subset Briers")
     else:
@@ -888,9 +1286,9 @@ def selftest():
             fails.append("a partial market claimed it covered the full common game set")
 
     # the printed surface must not crash on an extra cohort or on a fully-null report
-    for _r in (r, r2, baselines(DATE, rows + [{"cohort": "v3", "board_game": games[0],
-                                               "p_home_model": .5, "home_win": outcomes[games[0]]}],
-                                res_rows, None)):
+    _x3 = rows + [{"cohort": "v3", "board_game": games[0], "p_home_model": .5,
+                   "home_win": outcomes[games[0]], "forecast_id": "FIX-v3-0"}]
+    for _r in (r, r2, baselines(DATE, _x3, res_rows, None, _fixture_manifest(_x3, DATE, ART))):
         txt = format_report(_r)
         if "ALWAYS_HOME" not in txt:
             fails.append("the rendered report dropped the ALWAYS_HOME line")
@@ -900,8 +1298,9 @@ def selftest():
 
     # RULE: cohorts are scored on the SAME games — an extra game in one cohort is excluded, not
     # silently included, and the excluded game is reported with a reason.
-    extra = rows + [{"cohort": "v1", "board_game": "ZZ@ZZ", "p_home_model": .9, "home_win": 1}]
-    r3 = baselines(DATE, extra, res_rows, None)
+    extra = rows + [{"cohort": "v1", "board_game": "ZZ@ZZ", "p_home_model": .9, "home_win": 1,
+                     "forecast_id": "FIX-v1-ZZ"}]
+    r3 = baselines(DATE, extra, res_rows, None, _fixture_manifest(extra, DATE, ART))
     if r3["n_games_common"] != 15 or r3["baselines"]["v1_all_cap_cohort"]["n"] != 15:
         fails.append(f'v1 scored {r3["baselines"]["v1_all_cap_cohort"]["n"]} games against v2\'s 15 '
                      f'— the head-to-head is no longer on identical games')
@@ -910,7 +1309,7 @@ def selftest():
 
     # RULE: a cohort with no rows is reported null-with-reason, not omitted.
     only_v2 = [x for x in rows if x["cohort"] == "v2"]
-    r4 = baselines(DATE, only_v2, res_rows, None)
+    r4 = baselines(DATE, only_v2, res_rows, None, _fixture_manifest(only_v2, DATE, ART))
     v1b = r4["baselines"]["v1_all_cap_cohort"]
     if v1b["available"] or "NO_V1_COHORT_ROWS" not in (v1b["null_reason"] or ""):
         fails.append("a missing cohort was not reported as null-with-reason")
@@ -918,8 +1317,9 @@ def selftest():
         fails.append(f"gate rejected a report whose missing cohort was properly declared: {gate(r4)[1]}")
 
     # RULE: ungraded / probability-less rows are surfaced, never silently dropped.
-    r5 = baselines(DATE, rows + [{"cohort": "v2", "board_game": "QQ@QQ", "p_home_model": .5}],
-                   res_rows, None)
+    _x5 = rows + [{"cohort": "v2", "board_game": "QQ@QQ", "p_home_model": .5,
+                   "forecast_id": "FIX-v2-QQ"}]
+    r5 = baselines(DATE, _x5, res_rows, None, _fixture_manifest(_x5, DATE, ART))
     if not any(u.get("game") == "QQ@QQ" and "NOT_GRADED" in u["reason"] for u in r5["unscorable_rows"]):
         fails.append("an ungraded row vanished without a reason")
 
@@ -929,6 +1329,28 @@ def selftest():
     g1["baselines"].pop("closing_market")
     if gate(g1)[0]:
         fails.append("gate passed a report with a baseline OMITTED — the 8/21 failure mode")
+    # ORDER, tested independently of omission: every frozen key is PRESENT, only the sequence is
+    # wrong. The omission check cannot see this, so the two rules are proven separately rather than
+    # one silently covering for the other.
+    g1b = copy.deepcopy(r)
+    g1b["baselines"] = {k: g1b["baselines"][k] for k in reversed(BASELINE_KEYS)}
+    if set(g1b["baselines"]) != set(BASELINE_KEYS):
+        fails.append("the order fixture accidentally dropped a key — it must ONLY reorder")
+    if gate(g1b)[0]:
+        fails.append("gate passed a report whose comparators are all present but in the WRONG "
+                     "ORDER — reading order decides which comparator a score is defended against, "
+                     "so the expanding home prior leading is a rule, not a formatting preference")
+    g1c = copy.deepcopy(r)
+    g1c["comparator_order"] = list(reversed(BASELINE_KEYS))
+    if gate(g1c)[0]:
+        fails.append("gate passed a report whose declared comparator_order contradicts the frozen "
+                     "order")
+    # CLASS: flat 50% must never be presented as a principal comparator.
+    g1d = copy.deepcopy(r)
+    g1d["baselines"]["flat_50_sanity_check"]["comparator_class"] = "PRINCIPAL"
+    if gate(g1d)[0]:
+        fails.append("gate passed a report presenting flat 50% as a PRINCIPAL comparator — that is "
+                     "precisely the lesson-22 failure, mechanised")
     g2 = copy.deepcopy(r)
     g2["baselines"]["market_no_vig_when_captured"]["null_reason"] = None
     if gate(g2)[0]:
@@ -962,15 +1384,16 @@ def selftest():
     del g7b["baselines"]["v2_resolved_starters_cohort"]["logloss"]
     if gate(g7b)[0]:
         fails.append("gate passed a scored cohort missing its log loss")
-    conflict = rows + [{"cohort": "v3", "board_game": games[0], "p_home_model": .5, "home_win": 0}]
-    r6 = baselines(DATE, conflict, res_rows, None)
+    conflict = rows + [{"cohort": "v3", "board_game": games[0], "p_home_model": .5, "home_win": 0,
+                        "forecast_id": "FIX-v3-conflict"}]
+    r6 = baselines(DATE, conflict, res_rows, None, _fixture_manifest(conflict, DATE, ART))
     if not r6["outcome_conflicts"] or gate(r6)[0]:
         fails.append("cohorts disagreeing about a graded outcome did not block the report")
 
     # a cohort that BEATS always-home must not be flagged as beaten
     strong = [dict(x, p_home_model=(.6 if outcomes[x["board_game"]] == 1 else .4))
               for x in rows if x["cohort"] == "v2"]
-    r7 = baselines(DATE, strong, res_rows, None)
+    r7 = baselines(DATE, strong, res_rows, None, _fixture_manifest(strong, DATE, ART))
     if r7["headline"]["always_home_beat_best_cohort"] is not False:
         fails.append("a perfect cohort was still reported as beaten by ALWAYS_HOME")
 
@@ -1065,27 +1488,31 @@ def selftest():
     # end-to-end: the whole reachable shape must not produce a scored market baseline
     e2e = {"book": "consensus_best", "timing": "pregame",
            "games": {g: {"book_away": "dk", "ml_away": 147, "ml_home": -158} for g in games}}
-    mk_e2e = baselines(DATE, rows, res_rows, e2e)["baselines"]["market_no_vig_when_captured"]
+    mk_e2e = baselines(DATE, rows, res_rows, e2e, MF)["baselines"]["market_no_vig_when_captured"]
     if mk_e2e["available"] or mk_e2e["brier"] is not None:
         fails.append(f"the end-to-end cross-book shape still produced a market Brier "
                      f"{mk_e2e['brier']} with available={mk_e2e['available']}")
 
     # DEFECT 4 (high) — zero common games passed the gate, and a ONE-game slate printed
     # "the cohort demonstrated nothing" in the same voice as the 15-game finding.
-    empty = baselines(DATE, [], res_rows, None)
+    empty = baselines(DATE, [], res_rows, None, _fixture_manifest([], DATE, ART))
     if empty["n_games_common"] != 0:
         fails.append("the empty-cohort fixture does not actually produce an empty common set")
     if gate(empty)[0]:
         fails.append("gate PASSED a report with zero common games — no comparison exists there")
-    disjoint = baselines(DATE, [
-        {"cohort": "v1", "board_game": "A@B", "p_home_model": .6, "home_win": 1},
-        {"cohort": "v2", "board_game": "C@D", "p_home_model": .6, "home_win": 1}], res_rows, None)
+    _dj = [{"cohort": "v1", "board_game": "A@B", "p_home_model": .6, "home_win": 1,
+            "forecast_id": "FIX-dj-1"},
+           {"cohort": "v2", "board_game": "C@D", "p_home_model": .6, "home_win": 1,
+            "forecast_id": "FIX-dj-2"}]
+    disjoint = baselines(DATE, _dj, res_rows, None, _fixture_manifest(_dj, DATE, ART))
     if disjoint["n_games_common"] != 0 or gate(disjoint)[0]:
         fails.append("gate PASSED cohorts with DISJOINT game sets — the exact not-a-head-to-head "
                      "condition this module exists to detect")
-    one = baselines(DATE, [
-        {"cohort": "v1", "board_game": "A@B", "p_home_model": .40, "home_win": 1},
-        {"cohort": "v2", "board_game": "A@B", "p_home_model": .45, "home_win": 1}], res_rows, None)
+    _one = [{"cohort": "v1", "board_game": "A@B", "p_home_model": .40, "home_win": 1,
+             "forecast_id": "FIX-one-1"},
+            {"cohort": "v2", "board_game": "A@B", "p_home_model": .45, "home_win": 1,
+             "forecast_id": "FIX-one-2"}]
+    one = baselines(DATE, _one, res_rows, None, _fixture_manifest(_one, DATE, ART))
     hl1 = one["headline"]
     if one["n_games_common"] != 1:
         fails.append("the one-game fixture is not one game")
@@ -1114,8 +1541,9 @@ def selftest():
         # cohort picks home on the same 7 it wins and away on the 3 it loses -> 7-3 as well? no:
         # make the cohort exactly 7-3 by picking home everywhere it is right and away where it is
         # wrong in equal measure. Simplest exact tie: cohort picks home on all 10 -> 7-3.
-        tie_rows.append({"cohort": "v1", "board_game": g, "p_home_model": .6, "home_win": y})
-    tie = baselines(DATE, tie_rows, res_rows, None)
+        tie_rows.append({"cohort": "v1", "board_game": g, "p_home_model": .6, "home_win": y,
+                         "forecast_id": f"FIX-tie-{i}"})
+    tie = baselines(DATE, tie_rows, res_rows, None, _fixture_manifest(tie_rows, DATE, ART))
     ah_acc = tie["always_home"]["accuracy"]
     v1_acc = tie["baselines"]["v1_all_cap_cohort"]["accuracy"]
     if ah_acc != v1_acc:
@@ -1150,7 +1578,7 @@ def selftest():
 
     # DEFECT 6 (high) — an UNMARKED price file must not populate the pregame market baseline.
     unmarked = {"games": {g: {"book": "vsin", "ml_away": 147, "ml_home": -158} for g in games}}
-    ur = baselines(DATE, rows, res_rows, unmarked)
+    ur = baselines(DATE, rows, res_rows, unmarked, MF)
     umk = ur["baselines"]["market_no_vig_when_captured"]
     if umk["available"] or umk["brier"] is not None:
         fails.append("an unmarked price file populated the PREGAME market baseline — a closing file "
@@ -1166,7 +1594,7 @@ def selftest():
                                  ("close", "closing_market", "market_no_vig_when_captured")):
         mk_p = {"timing": mark,
                 "games": {g: {"book": "vsin", "ml_away": 147, "ml_home": -158} for g in games}}
-        mr = baselines(DATE, rows, res_rows, mk_p)["baselines"]
+        mr = baselines(DATE, rows, res_rows, mk_p, MF)["baselines"]
         if not mr[key]["available"]:
             fails.append(f"timing={mark!r} did not populate {key}: {mr[key]['null_reason']}")
         if mr[other_key]["available"]:
@@ -1184,6 +1612,269 @@ def selftest():
         if gate(leaky)[0]:
             fails.append(f"gate PASSED an available=False block carrying {fld}={val!r} — an "
                          f"unavailable comparator that still prints a score reads as scored")
+
+    # =========================================================================================
+    # OWNER RULING 2026-08-22 — MANIFEST-BOUND IDENTITY COVERAGE.
+    # "Refused by name" is not protection: recognising a filename proves nothing about contents.
+    # Aggregate metrics require FULL SET EQUALITY on identities before anything is computed.
+    # THE ACCEPTANCE TEST: a CORRECTLY NAMED two-row file must still fail.
+    # =========================================================================================
+    thirty = _fixture_manifest(rows, DATE, ART)          # 30 registered identities, all graded
+    if len(thirty["expected_ids"]) != 30:
+        fails.append("the coverage fixture manifest is not the 30-identity slate")
+    two_rows = [r_ for r_ in rows if r_["board_game"] == games[0]]
+    if len(two_rows) != 2:
+        fails.append("the two-row fixture is not two rows")
+    short = baselines(DATE, two_rows, res_rows, None, thirty)
+    if short["baselines"]["v2_resolved_starters_cohort"]["brier"] is not None:
+        fails.append("A TWO-ROW SET WAS SCORED AGAINST A THIRTY-IDENTITY MANIFEST — this is the "
+                     "acceptance test the owner named; no filename is involved anywhere in it")
+    if short["always_home"]["accuracy"] is not None or short["n_games_common"] != 0:
+        fails.append("aggregates were produced despite incomplete identity coverage")
+    if gate(short)[0]:
+        fails.append("gate PASSED a report whose identity coverage is incomplete")
+    if not any("ROW_COUNT_SHORT" in f for f in (short["manifest_coverage"]["failures"] or [])):
+        fails.append(f"the two-row file was refused with the wrong reason: "
+                     f"{short['manifest_coverage']['failures']}")
+    # ... and the OTHER half of set equality: registered identities that are neither graded nor
+    # dispositioned. This is the failure the two-row case cannot exercise, because there every
+    # identity IS graded — the rows are simply missing.
+    halfgraded = _fixture_manifest(rows, DATE, ART,
+                                   graded=[x["forecast_id"] for x in rows[:20]])
+    ok_, f_, _d = manifest_coverage(rows, halfgraded)
+    if ok_ or not any("IDENTITY_COVERAGE_INCOMPLETE" in x for x in f_):
+        fails.append(f"registered identities that were never graded or dispositioned did not "
+                     f"block aggregates: {f_}")
+    if _d.get("set_equality"):
+        fails.append("set_equality reported true while identities were unaccounted for")
+    # ... and the SAME rows pass when the manifest genuinely covers only them
+    okrep = baselines(DATE, two_rows, res_rows, None, _fixture_manifest(two_rows, DATE, ART))
+    if not okrep["manifest_coverage"]["ok"]:
+        fails.append(f"complete coverage was refused: {okrep['manifest_coverage']['failures']}")
+
+    # every sub-rule the owner enumerated, each tested on its own
+    def _cov(rows_, **kw):
+        return manifest_coverage(rows_, _fixture_manifest(rows, DATE, ART, **kw))
+    # (a) foreign cohort identity
+    ok_, f_, _d = _cov(rows + [{"cohort": "v2", "board_game": "X@Y", "p_home_model": .5,
+                                "home_win": 1, "forecast_id": "OTHER-SLATE-1"}])
+    if ok_ or not any("FOREIGN_COHORT_IDENTITY" in x for x in f_):
+        fails.append(f"an identity from another slate was accepted into the cohort: {f_}")
+    # (b) duplicate row identity
+    ok_, f_, _d = _cov(rows + [dict(rows[0])])
+    if ok_ or not any("DUPLICATE_ROW_IDENTITY" in x for x in f_):
+        fails.append(f"a duplicated row identity was accepted — it silently reweights aggregates: {f_}")
+    # (c) duplicate grade id
+    ok_, f_, _d = _cov(rows, grade_ids=["G-DUP"] * 30)
+    if ok_ or not any("DUPLICATE_GRADE_ID" in x for x in f_):
+        fails.append(f"duplicate grade IDs were accepted: {f_}")
+    # (d) row without identity
+    ok_, f_, _d = _cov(rows + [{"cohort": "v2", "board_game": "N@N", "p_home_model": .5, "home_win": 1}])
+    if ok_ or not any("ROW_WITHOUT_IDENTITY" in x for x in f_):
+        fails.append(f"an unidentified row was accepted: {f_}")
+    # (e) expected row count short
+    ok_, f_, _d = _cov(rows[:-1])
+    if ok_ or not any("ROW_COUNT_SHORT" in x for x in f_):
+        fails.append(f"a short row set was accepted against a full manifest: {f_}")
+    # (f) terminal dispositions: a reasoned exclusion COUNTS, a reasonless one does not,
+    #     and a non-terminal PENDING blocks aggregates
+    part_rows = [x for x in rows if x["forecast_id"] != "FIX-v1-A01@H01"]
+    mf_ok = _fixture_manifest(rows, DATE, ART, graded=[x["forecast_id"] for x in part_rows],
+                              dispositions={"FIX-v1-A01@H01": {"disposition": "EXCLUDED_WITH_REASON",
+                                                               "reason": "post-start intake"}})
+    ok_, f_, _d = manifest_coverage(part_rows, mf_ok)
+    if not ok_:
+        fails.append(f"a REASONED terminal exclusion did not close the identity set: {f_}")
+    mf_bad = _fixture_manifest(rows, DATE, ART, graded=[x["forecast_id"] for x in part_rows],
+                               dispositions={"FIX-v1-A01@H01": {"disposition": "EXCLUDED_WITH_REASON"}})
+    ok_, f_, _d = manifest_coverage(part_rows, mf_bad)
+    if ok_ or not any("DISPOSITION_WITHOUT_REASON" in x for x in f_):
+        fails.append(f"an exclusion with NO REASON closed the identity set: {f_}")
+    mf_pend = _fixture_manifest(rows, DATE, ART, graded=[x["forecast_id"] for x in part_rows],
+                                dispositions={"FIX-v1-A01@H01": {"disposition": "PENDING_WITH_REASON",
+                                                                 "reason": "game not final"}})
+    ok_, f_, _d = manifest_coverage(part_rows, mf_pend)
+    if ok_ or not any("NON_TERMINAL_DISPOSITION" in x for x in f_):
+        fails.append(f"a NON-TERMINAL pending disposition closed the identity set — aggregates over "
+                     f"a slate still in flight would be revised by the missing rows: {f_}")
+    # (g) registered artifact hash — the card changed after registration (R3)
+    ok_, f_, _d = manifest_coverage(rows, _fixture_manifest(rows, DATE, (ART[0], "0" * 64)))
+    if ok_ or not any("ARTIFACT_HASH_MISMATCH" in x for x in f_):
+        fails.append(f"a card whose bytes changed after registration was still scored: {f_}")
+    ok_, f_, _d = manifest_coverage(rows, _fixture_manifest(
+        rows, DATE, (os.path.join(BASE, "no/such/card.json"), "0" * 64)))
+    if ok_ or not any("ARTIFACT_MISSING" in x for x in f_):
+        fails.append(f"rows bound to a MISSING registered card were still scored: {f_}")
+    ok_, f_, _d = manifest_coverage(rows, _fixture_manifest(rows, DATE, None))
+    if ok_ or not any("NO_ARTIFACT_BINDING" in x for x in f_):
+        fails.append(f"rows with NO registered card binding were still scored: {f_}")
+    # (h) no manifest at all is a refusal, never a pass
+    ok_, f_, _d = manifest_coverage(rows, None)
+    if ok_ or not any("MANIFEST_UNAVAILABLE" in x for x in f_):
+        fails.append(f"a missing manifest was treated as coverage: {f_}")
+    ok_, f_, _d = manifest_coverage(rows, {"available": False, "null_reason": "NO_REGISTRY"})
+    if ok_:
+        fails.append("an unavailable manifest was treated as coverage")
+    # (i) coverage must be REPORTED, not merely computed
+    if not isinstance(r.get("manifest_coverage"), dict) or not r["manifest_coverage"].get("ok"):
+        fails.append("the 14-1 report does not carry a passing manifest_coverage block")
+
+    # (j) the gate must act on the coverage verdict ITSELF, not merely on the empty report that a
+    #     refusal happens to produce. Hand-built so no other rule can cover for it.
+    import copy as _copy
+    cov_off = _copy.deepcopy(r)
+    cov_off["manifest_coverage"] = {"ok": False, "failures": ["IDENTITY_COVERAGE_INCOMPLETE — 3 of "
+                                    "30 identities unaccounted"], "detail": {"set_equality": False}}
+    if gate(cov_off)[0]:
+        fails.append("gate PASSED a fully-populated report whose manifest_coverage says the identity "
+                     "set is incomplete — the verdict must be acted on, not just carried")
+    # A coverage failure that is NOT a set-equality failure — a changed card hash, a duplicated
+    # grade ID. Only the ok-verdict check can see this one, so the two rules are proven apart.
+    cov_hash = _copy.deepcopy(r)
+    cov_hash["manifest_coverage"] = {
+        "ok": False,
+        "failures": ["ARTIFACT_HASH_MISMATCH — the registered card changed after registration"],
+        "detail": {"set_equality": True}}
+    if gate(cov_hash)[0]:
+        fails.append("gate PASSED a report whose identities all reconcile but whose REGISTERED CARD "
+                     "HASH no longer matches — set equality is not the whole of coverage")
+    cov_lie = _copy.deepcopy(r)
+    cov_lie["manifest_coverage"] = {"ok": True, "failures": [], "detail": {"set_equality": False}}
+    if gate(cov_lie)[0]:
+        fails.append("gate PASSED a report claiming coverage ok while its own detail says set "
+                     "equality does not hold — the two must agree")
+    cov_gone = _copy.deepcopy(r)
+    cov_gone.pop("manifest_coverage")
+    if gate(cov_gone)[0]:
+        fails.append("gate PASSED a report carrying NO manifest_coverage block at all")
+
+    # ---- slate_manifest reads the APPEND-ONLY registry, not a grades snapshot
+    if os.path.exists(FORECASTS_JSONL):
+        real_mf = slate_manifest("2026-08-21")
+        if not real_mf.get("available") or len(real_mf["expected_ids"]) != 30:
+            fails.append(f"the real 8/21 manifest is not the 30 registered identities: "
+                         f"{len(real_mf.get('expected_ids') or [])}")
+        if set(real_mf["expected_ids"]) != set(real_mf["graded_ids"]):
+            fails.append("the real 8/21 slate is not fully graded in the registry, so the fixture "
+                         "below cannot distinguish a coverage failure from a data gap")
+        if slate_manifest("1999-01-01").get("available"):
+            fails.append("a slate with no registered forecasts reported an available manifest")
+    # The expected set comes from the FORECAST registry, never from the grades file. Proven on a
+    # synthetic registry where one registered forecast is deliberately UNGRADED: if the expected set
+    # were derived from grades, that identity would silently vanish and coverage would pass on a
+    # slate with a hole in it.
+    with _tempfile.TemporaryDirectory() as _td2:
+        fpath = os.path.join(_td2, "f.jsonl")
+        gpath = os.path.join(_td2, "g.jsonl")
+        with open(fpath, "w") as fh:
+            for i in range(3):
+                fh.write(json.dumps({"forecast_id": f"SYN-{i}", "slate_date": "2026-08-21",
+                                     "experiment_arm": "SYN",
+                                     "artifact_ref": {"path": ART[0]},
+                                     "original_file_hash": ART[1]}) + "\n")
+            fh.write(json.dumps({"forecast_id": "OTHER-DATE", "slate_date": "2026-08-20"}) + "\n")
+        with open(gpath, "w") as fh:                       # SYN-2 deliberately NOT graded
+            for i in range(2):
+                fh.write(json.dumps({"grade_id": f"G-SYN-{i}", "forecast_id": f"SYN-{i}"}) + "\n")
+        syn = slate_manifest("2026-08-21", fpath, gpath)
+        if sorted(syn["expected_ids"]) != ["SYN-0", "SYN-1", "SYN-2"]:
+            fails.append(f"the expected set is not the REGISTERED forecasts for the slate: "
+                         f"{syn['expected_ids']} — an ungraded registration must not vanish, and a "
+                         f"different slate's forecast must not appear")
+        if sorted(syn["graded_ids"]) != ["SYN-0", "SYN-1"]:
+            fails.append(f"the graded set is wrong: {syn['graded_ids']}")
+        syn_rows = [{"cohort": "v1", "board_game": f"G{i}", "p_home_model": .5, "home_win": 1,
+                     "forecast_id": f"SYN-{i}"} for i in range(3)]
+        ok_, f_, _d = manifest_coverage(syn_rows, syn)
+        if ok_ or not any("IDENTITY_COVERAGE_INCOMPLETE" in x for x in f_):
+            fails.append(f"a slate with one ungraded registration passed coverage: {f_}")
+
+    # ---- LESSON 22: the cohort-versus-strongest-baseline challenge.
+    # The fixture REPRODUCES the 2026-08-21 shape that this rule exists for: a cohort that BEATS
+    # flat 50% and LOSES to the as-of home rate on every metric. Numbers are chosen so the gap is
+    # real, not knife-edge on rounding.
+    L22_GAMES = [f"L{i:02d}@M{i:02d}" for i in range(15)]
+    l22_out = {g: 1 for g in L22_GAMES}
+    l22_out[L22_GAMES[14]] = 0                       # 14-1 home, like the real slate
+    l22_rows = []
+    for i, g in enumerate(L22_GAMES):
+        p_ = .545 if i < 10 else .455                # 10 home picks right, 4 away picks wrong, 1 right
+        l22_rows.append({"cohort": "v2", "board_game": g, "p_home_model": p_,
+                         "home_win": l22_out[g], "forecast_id": f"L22-{g}"})
+    # 1006 home wins in 1919 prior finals -> p = .524231, the real 8/21 as-of rate
+    l22_res = ([{"date": "2026-08-01", "status": "final", "home_win": "1"} for _ in range(1006)]
+               + [{"date": "2026-08-01", "status": "final", "home_win": "0"} for _ in range(913)])
+    l22 = baselines(DATE, l22_rows, l22_res, None, _fixture_manifest(l22_rows, DATE, ART))
+    lp = l22["baselines"]["expanding_home_win_prior"]
+    lc = l22["baselines"]["v2_resolved_starters_cohort"]
+    lf = l22["baselines"]["flat_50_sanity_check"]
+    if round(lp["prior_p_home"], 6) != 0.524231:
+        fails.append(f"the lesson-22 prior is not the 8/21 as-of rate: {lp['prior_p_home']}")
+    if not (lc["brier"] < lf["brier"]):
+        fails.append(f"the lesson-22 cohort does not beat flat 50% ({lc['brier']} vs {lf['brier']}), "
+                     f"so the 'beats the floor, loses the baseline' case is not exercised")
+    if not (lc["brier"] > lp["brier"] and lc["logloss"] > lp["logloss"]
+            and lc["accuracy"] < lp["accuracy"]):
+        fails.append(f"the lesson-22 fixture does not reproduce the real shape: cohort "
+                     f"{lc['brier']}/{lc['logloss']}/{lc['accuracy']} vs prior "
+                     f"{lp['brier']}/{lp['logloss']}/{lp['accuracy']}")
+    lv = l22["baseline_challenge"]["cohorts"]["v2_resolved_starters_cohort"]
+    if lv["cleared_every_baseline"] is not False:
+        fails.append(f"a cohort beaten by the prior on ALL THREE metrics was reported as clearing "
+                     f"its baselines: {lv['cleared_every_baseline']}")
+    if "expanding_home_win_prior" not in lv["baselines_not_cleared"]:
+        fails.append("the prior was not named among the baselines the cohort failed to clear")
+    lper = lv["versus"]["expanding_home_win_prior"]["per_metric"]
+    for m in ("brier", "logloss", "accuracy"):
+        if lper[m]["cohort_better"] is not False or lper[m]["cohort_worse"] is not True:
+            fails.append(f"per-metric direction wrong on {m}: {lper[m]}")
+    if lv["versus"]["expanding_home_win_prior"]["verdict"] != "DID_NOT_CLEAR":
+        fails.append(f"verdict wrong: {lv['versus']['expanding_home_win_prior']['verdict']}")
+    # a cohort that DOES clear the prior must be reported as clearing it — the rule must be able to
+    # say yes, or a permanent NO is not evidence of anything.
+    win_rows = [dict(x, p_home_model=(.85 if l22_out[x["board_game"]] == 1 else .15))
+                for x in l22_rows]
+    lw = baselines(DATE, win_rows, l22_res, None,
+                   _fixture_manifest(win_rows, DATE, ART))["baseline_challenge"]["cohorts"]
+    if lw["v2_resolved_starters_cohort"]["cleared_every_baseline"] is not True:
+        fails.append("a cohort that beats the prior on every metric was NOT reported as clearing it "
+                     "— a test that can only return NO proves nothing")
+
+    # MIXED result — better on one metric, WORSE on another. "Cleared" must require no metric
+    # worse; a rule that only asks "better on something" calls this a win, and that is exactly how
+    # a cohort gets credited for a Brier gain while losing the side record.
+    MX = [f"X{i:02d}@Y{i:02d}" for i in range(10)]
+    mx_out = {g: (1 if i < 6 else 0) for i, g in enumerate(MX)}     # 6-4 home
+    mx_rows = []
+    for i, g in enumerate(MX):
+        p_ = .95 if i == 0 else .49        # one confident right home call, everything else near-coin
+        mx_rows.append({"cohort": "v2", "board_game": g, "p_home_model": p_,
+                        "home_win": mx_out[g], "forecast_id": f"MX-{g}"})
+    mx = baselines(DATE, mx_rows, l22_res, None, _fixture_manifest(mx_rows, DATE, ART))
+    mp, mc = mx["baselines"]["expanding_home_win_prior"], mx["baselines"]["v2_resolved_starters_cohort"]
+    if not (mc["brier"] < mp["brier"] and mc["accuracy"] < mp["accuracy"]):
+        fails.append(f"the MIXED fixture is not mixed: cohort {mc['brier']}/{mc['accuracy']} vs "
+                     f"prior {mp['brier']}/{mp['accuracy']} — it must be better on one metric and "
+                     f"worse on another, or it cannot separate the two rules")
+    mv = mx["baseline_challenge"]["cohorts"]["v2_resolved_starters_cohort"]["versus"]["expanding_home_win_prior"]
+    if mv["cohort_cleared"] is not False or mv["verdict"] != "DID_NOT_CLEAR":
+        fails.append(f"a cohort WORSE on accuracy but better on Brier was reported as clearing the "
+                     f"baseline: {mv['verdict']} / {mv['cohort_cleared']} — clearing requires no "
+                     f"metric worse, not merely something better")
+    if mx["baseline_challenge"]["cohorts"]["v2_resolved_starters_cohort"]["cleared_every_baseline"] is not False:
+        fails.append("a mixed result was rolled up as clearing every baseline")
+
+    f50 = r["baselines"]["flat_50_sanity_check"]
+    if f50["brier"] != 0.25 or round(f50["logloss"], 6) != round(math.log(2), 6):
+        fails.append(f"flat 50% is not 0.25 Brier / ln(2) log loss: {f50['brier']} {f50['logloss']}")
+    if f50["comparator_class"] != "SECONDARY_SANITY_CHECK":
+        fails.append("flat 50% is not classed a secondary sanity check")
+    # a cohort that beats flat-50 but loses the prior must be reported as NOT clearing
+    if r["baselines"]["v2_resolved_starters_cohort"]["brier"] >= f50["brier"]:
+        fails.append("the fixture cohort does not even beat flat 50%, so the lesson-22 case "
+                     "(beats the floor, loses the baseline) is not exercised")
+    if list(r["baselines"].keys())[0] != "expanding_home_win_prior":
+        fails.append("the expanding home prior is not the FIRST comparator in the emitted report")
 
     # UPSTREAM — a PARTIAL grade snapshot is refused, not scored. This is the source of the
     # one-game 8/21 run the review found printing a directive off a coin flip.
@@ -1223,6 +1914,11 @@ def selftest():
                 fails.append("a complete grades snapshot did not load")
         except SystemExit as exc:
             fails.append(f"a complete grades snapshot was refused: {exc}")
+
+    try:
+        os.unlink(_artpath)
+    except OSError:
+        pass
 
     if fails:
         print("daily_baselines selftest: FAIL")
@@ -1311,7 +2007,25 @@ MUTANTS = [
      "        if not d or d > date:"),
     ("prior: empty history defaults to 0.500", "        return None, 0, (f\"NO_RESULTS_STRICTLY_BEFORE",
      "        return 0.5, 0, (f\"NO_RESULTS_STRICTLY_BEFORE"),
-    ("gate: a missing frozen baseline is tolerated", "        if k not in b:", "        if False:"),
+    # Omission and order OVERLAP by construction (equal key sequences imply presence), so deleting
+    # one alone leaves the other catching the pop. Each is therefore proven against the case only it
+    # can see: omission against a pop with BOTH checks removed, order against a pure reorder.
+    ("gate: order check removed, so ONLY the omission rule can catch a popped baseline",
+     "    if list((res.get(\"baselines\") or {}).keys()) != list(BASELINE_KEYS):\n        fails.append(\"the emitted baselines are not in the frozen comparator order\")\n    for k, blk in (res.get(\"baselines\") or {}).items():",
+     "    for k, blk in (res.get(\"baselines\") or {}).items():"),
+    ("gate: comparator order check removed",
+     '    if list((res.get(\"baselines\") or {}).keys()) != list(BASELINE_KEYS):',
+     "    if False:"),
+    ("gate: declared comparator_order not checked",
+     "    if list(order or []) != list(BASELINE_KEYS):", "    if False:"),
+    ("gate: comparator class not enforced (flat 50% may lead)",
+     "        if blk.get(\"comparator_class\") != COMPARATOR_CLASS.get(k):", "        if False:"),
+    ("comparator order: prior demoted below the cohorts",
+     'PRINCIPAL_COMPARATORS = (\n    "expanding_home_win_prior",',
+     'PRINCIPAL_COMPARATORS = (\n    "v1_all_cap_cohort",'),
+    ("flat 50% promoted to a principal comparator",
+     'SECONDARY_COMPARATORS = ("flat_50_sanity_check",)',
+     'SECONDARY_COMPARATORS = ()\nPRINCIPAL_COMPARATORS = PRINCIPAL_COMPARATORS + ("flat_50_sanity_check",)'),
     ("same-games: cohorts may be scored on different games",
      "        if blk.get(\"cohort\") and (not blk.get(\"scored_on_common_set\")",
      "        if False and blk.get(\"cohort\") and (not blk.get(\"scored_on_common_set\")"),
@@ -1321,6 +2035,51 @@ MUTANTS = [
     ("partial grade snapshot scored as the slate", "    if skipped:", "    if False:"),
     ("partial snapshot: completeness mismatch ignored", "    if m and rows and int(m.group(1)) >",
      "    if False and m and rows and int(m.group(1)) >"),
+    # --- OWNER RULING 2026-08-22: manifest-bound identity coverage
+    ("coverage: aggregates computed despite failed coverage",
+     "    if not cov_ok:", "    if False:"),
+    ("coverage: gate ignores the coverage verdict",
+     "    elif not cov.get(\"ok\"):", "    elif False:"),
+    ("coverage: set-equality cross-check dropped",
+     "    elif not (cov.get(\"detail\") or {}).get(\"set_equality\"):", "    elif False:"),
+    ("coverage: unaccounted identities tolerated", "    if missing:", "    if False:"),
+    ("coverage: foreign identities admitted", "    if foreign_rows:", "    if False:"),
+    ("coverage: duplicate row identities admitted", "    if dupes:", "    if False:"),
+    ("coverage: duplicate grade IDs admitted", "    if gdupes:", "    if False:"),
+    ("coverage: short row set admitted", "    if row_missing:", "    if False:"),
+    ("coverage: reasonless disposition closes the set", "    if unreasoned:", "    if False:"),
+    ("coverage: non-terminal PENDING closes the set", "    if non_terminal:", "    if False:"),
+    ("coverage: PENDING promoted to a terminal state",
+     'TERMINAL_DISPOSITIONS = ("GRADED", "EXCLUDED_WITH_REASON")',
+     'TERMINAL_DISPOSITIONS = ("GRADED", "EXCLUDED_WITH_REASON", "PENDING_WITH_REASON")'),
+    ("coverage: registered artifact hash not verified",
+     "            if want and live != want:", "            if False:"),
+    ("coverage: missing registered artifact tolerated",
+     "            if not os.path.exists(full):", "            if False and not os.path.exists(full):"),
+    ("coverage: rows with no artifact binding admitted",
+     "            if not art:", "            if False:"),
+    ("coverage: an absent manifest is treated as coverage",
+     "    if not isinstance(manifest, dict) or not manifest.get(\"available\"):", "    if False:"),
+    ("coverage: rows without an identity admitted",
+     "        if not fid:            # ROW IDENTITY GATE", "        if False:"),
+    ("manifest: expected set read from grades instead of the forecast registry",
+     "    slate = [f for f in fcs if f.get(\"slate_date\") == date]",
+     "    slate = [f for f in fcs if f.get(\"slate_date\") == date and f.get(\"forecast_id\") in {g.get('forecast_id') for g in grs}]"),
+    # --- LESSON 22: comparator order and the baseline challenge
+    ("challenge: a cohort worse on a metric still 'clears' the baseline",
+     "                      \"cohort_cleared\": (None if incomplete else (any_better and not any_worse)),",
+     "                      \"cohort_cleared\": (None if incomplete else any_better),"),
+    ("challenge: only Brier compared, accuracy and log loss dropped",
+     '            for m, lower_is_better in (("accuracy", False), ("brier", True), ("logloss", True)):',
+     '            for m, lower_is_better in (("brier", True),):'),
+    ("challenge: better/worse direction inverted for lower-is-better metrics",
+     "                better = (cv < bv) if lower_is_better else (cv > bv)",
+     "                better = (cv > bv) if lower_is_better else (cv < bv)"),
+    ("challenge: the cohorts are compared only against each other",
+     "CHALLENGE_BASELINES = tuple(k for k in PRINCIPAL_COMPARATORS if k not in COHORT_KEYS)",
+     "CHALLENGE_BASELINES = ()"),
+    ("flat 50%: no longer 0.5", '        {g: 0.5 for g in games}, outcomes, games,',
+     '        {g: 0.52 for g in games}, outcomes, games,'),
     ("outcome conflicts no longer block the report",
      '    for c in res.get("outcome_conflicts") or []:', "    for c in []:"),
 ]

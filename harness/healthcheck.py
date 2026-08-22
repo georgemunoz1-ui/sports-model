@@ -317,6 +317,15 @@ if os.path.exists("docs/progress.md"):
     mtime=datetime.date.fromtimestamp(os.path.getmtime("docs/progress.md"))
     check(f"progress.md last touched {mtime}", (datetime.date.today()-mtime).days<=2, warn=True)
 else: check("docs/progress.md exists", False, warn=True)
+# 6b. journal split: AGENTS.md step 3, runbook.md and check 6 above all read docs/progress.md.
+#     A second journal at the repo root existed and silently took the daily entries from 2026-08-20
+#     onward, so the file the next session actually bootstraps from went three days stale while
+#     looking maintained. Freshness of the canonical file is not enough — a stray journal that is
+#     NEWER than it means handoff state is being written where nobody reads it.
+if os.path.exists("progress.md") and os.path.exists("docs/progress.md"):
+    stray=os.path.getmtime("progress.md"); canon=os.path.getmtime("docs/progress.md")
+    check("journal split: root progress.md is not newer than canonical docs/progress.md",
+          stray<=canon, warn=True)
 print(f"\n{'HEALTHY' if not fails else 'UNHEALTHY'} — {len(fails)} fail, {len(warns)} warn")
 if fails: print("Fix FAILs before new work:", fails)
 sys.exit(1 if fails else 0)

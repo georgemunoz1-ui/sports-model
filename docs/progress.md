@@ -2403,3 +2403,68 @@ MODEL LESSONS recorded in the contract: MLB's binding problem remains discrimina
 market .2044); next feature priority is confirmed lineups / bullpen rest / starter workload /
 scratch risk, NOT more form or another estimator; the WNBA margin-head question requires its own
 prereg (named, not run); market data stays downstream forever.
+
+## 2026-08-20 → 2026-08-22 — BRIDGE: entries recovered from a stray root journal
+A second journal at the repo root (`progress.md`) took the daily entries from 2026-08-20 onward
+while this file — the one `AGENTS.md` step 3, `harness/runbook.md` and `healthcheck.py` check 6 all
+read — sat unwritten since 8/19. Neither file is rewritten. The root file is closed with a redirect;
+this section carries the state a bootstrapping session needs. A new healthcheck check (6b) warns
+whenever the root journal is newer than this one, and it FIRED on the live defect before this fix,
+so it is not decoration.
+
+**8/20 SETTLED.** MLB v1 5-3, Brier .24933, logloss .69186, totals MAE 4.25 / median 2.8 / signed
++0.28 / largest -13.2. STL@CIN EXCLUDED_WITH_REASON — the board arrived 90s after first pitch, no
+forecast was ever registered, and a result plus a late closing price cannot manufacture a pregame
+forecast; the ghost grade was explicitly refused. WNBA WINNER 2/3 (mean Brier .1354), MARGIN errors
+-5.6/+31.4/-10.0, TOTAL diagnostic only. ATS FULL 1-4, ACTION_ELIGIBLE 0-0, BLOCKED_SUBSET 1-2.
+NFL 2 games MARKET_BENCHMARK_ONLY 1-1, Brier/EV null by rule. Settlement audit issued seven
+append-only corrections (four-count reconciliation, NFL disposition relabel, chain arithmetic,
+commit identity, signed-error convention, source-independence, healthcheck timestamp churn).
+
+**8/21 SETTLED — the first clean starter-information head-to-head**, identical games, same seed,
+same form, same code. v1 (all league-average) 8-7, Brier .24633, logloss .68583, totals MAE 2.46 /
+median 2.0 / signed +1.05 / largest 6.1. v2 (26/30 slots resolved) 10-5, Brier .23062, logloss
+.65404, totals MAE 2.39 / median 2.7 / signed +0.72 / largest 4.7. Owner's numbers reproduced
+exactly. **THE HEADLINE IS DISQUALIFIED BY ITS OWN BASE RATE:** home teams went 14-1; v2 was 10-1
+on home picks and 0-4 on away; v1 was 8-1 and 0-6. Both cohorts went 0-for on every away pick, and
+an always-pick-home heuristic would have gone 14-1 — beating v2 by four games. Brier still beats
+flat-50%, so the probabilities carried some information, but the win-loss headline is worse than
+the crudest base-rate strategy and must never be quoted alone. Three of v2's four gains were flips
+toward home on a 14-1 home night, so the starter effect remains UNESTABLISHED. Lesson 20.
+WNBA winners 2-1, mean Brier .20606, margin MAE 3.47, total MAE 13.97. NFL benchmark 2-1 / 2-1.
+Chain 327 forecasts / 325 grades. OFFICIAL LEDGER: 0 bets, $0 P&L.
+
+**Governance shipped 8/20-8/22.** WNBA ATS deadband amendment (winner skill never authorizes an
+ATS side; |delta| < 2.0 spread points = PASS mechanically; shadow ATS stays paper; no WNBA total
+recommendations; MARGIN_COMPRESSION_BLOCK on dog reads; "best available option" is not a bet).
+V14 ruling: "expected lineup" does not equal CONFIRMED — PROJECTED boards never qualify, exclusions
+counted. Three-layer separation ratified: registration preserves everything, the gate classifies
+actions, settlement grades everything; three ATS ledgers partition without filtering; 8/19 rows are
+PRE_AMENDMENT and were never retro-gated. Units are never shared: ATS delta is SPREAD POINTS,
+moneyline edge is PROBABILITY PERCENTAGE POINTS. OUT_OF_DOMAIN—NEUTRAL_SITE_HCA_UNMODELED is a
+PERMANENT block (PDX@TOR graded accurately anyway — an accurate row from an unearned home-court
+term is luck, not vindication).
+
+**Card presentation is now mechanical, not conventional.** Five-field lead: Game | Model prediction
+| Fair number | Market number | Action. `fair_number_display()` emits the NEGATED home margin so
+margin-is-not-a-spread cannot be forgotten; `market_number_display()` renders null WITH REASON, never
+a blank; `margin_display()` names team and direction in words; `delta_display()` refuses "starter
+effect" without a keyed seed; `completeness_display()` refuses a bare "NN% resolved". Render-gate
+checks #8-#11 enforce all four. `slot_status()` keeps TBD / REGISTRY_MISS / LOW_SAMPLE / RESOLVED
+unconflated — the 11/15-vs-10/15 denominator dispute resolved to a NAMED fifth blocker (WSH@MIA,
+Brad Lord, gs=1, LOW_SAMPLE). Totals gate requires n_push == 0 on half-lines, an exact count
+partition, per-quote ids and sim-array binding.
+
+**Open items for the next session.** (1) Five roadmap measurement modules are QUARANTINED — built,
+selftests green, but an adversarial mutation pass found critical/high defects in all five plus
+dozens of decorative fixtures; none is wired, no number from them may be quoted; close the defect
+list module by module, starting with `daily_baselines`, proving each fixture KILLS its mutant before
+wiring anything (docs/audits/2026-08-22_roadmap_module_review.json, lesson 21). (2) Three prereg/rule
+records are DRAFTED, NOT RATIFIED — nothing may be fit against them. (3) Default-branch switch to
+`sportsmodel/main` is owner-AUTHORIZED but BLOCKED ON CAPABILITY: GitHub MCP exposes no
+repository-settings tool, and a raw token call is the same class of bypass as routing around the
+egress proxy, so it was not routed around. Pre-change state recorded for verification. (4) Two cron
+Routines bare-clone the default branch and land on the `main` stub; `harness/push.sh` was fixed from
+`git push origin main` to `git push origin HEAD` (the old form pushed a disjoint stub and exited 0,
+so the runbook's WARN never fired — a silent durability failure on every cycle). (5) Acquisition
+still 403 on the org egress proxy; never routed around.

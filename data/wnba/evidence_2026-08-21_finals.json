@@ -5,7 +5,7 @@
  "source_tier": 1,
  "source_family": "OFFICIAL_WEB",
  "slate_date": "2026-08-21",
- "completeness": "2 of 3 FINAL. PDX@TOR (02:00Z tip, Rogers Arena Vancouver) had not surfaced as final -> PENDING_NOT_FINAL.",
+ "completeness": "3 of 3 FINAL after the owner relayed PDX@TOR at 14:05Z.",
  "echo_rejected": "'Fire 97-83 Tempo' is the 2026-08-06 meeting; REJECTED.",
  "games": [
   {
@@ -23,13 +23,18 @@
    "home_score": 73,
    "status": "FINAL",
    "source": "Sky 73-70, multiple wire"
+  },
+  {
+   "away": "PDX",
+   "home": "TOR",
+   "away_score": 79,
+   "home_score": 82,
+   "status": "FINAL",
+   "source": "owner relay of official result (wnba.com 1022600274, Rogers Arena Vancouver)"
   }
  ],
- "pending": [
-  {
-   "game": "PDX@TOR",
-   "status": "PENDING_NOT_FINAL",
-   "note": "this is the OUT_OF_DOMAIN neutral-site row; it still grades in the WINNER cohort when final"
-  }
- ]
+ "pending": [],
+ "pending_resolved": {
+  "PDX@TOR": "79-82"
+ }
 }

@@ -1,0 +1,28 @@
+{
+ "schema": "mlb.web_finals_addendum.v1",
+ "record_id": "WEB-MLB-FINALS-20260821-ADDENDUM",
+ "captured_at_utc": "2026-08-22T14:05:00Z",
+ "source_tier": 1,
+ "source_family": "OWNER_RELAY",
+ "slate_date": "2026-08-21",
+ "why_a_separate_file": "The base evidence file data/mlb/evidence/2026-08-21_web_finals.json is cited by hash (sha256 41e4be37f6aaf3b0f47dc49d72ca045c4bcaa9386c52a3a765aa584e12ffeb9c) on 14 already-appended results.csv rows. Appending the late final to it would change that hash and invalidate every one of those bindings \u2014 the provenance gate caught exactly that when it was attempted. Evidence files are immutable once cited; late arrivals get their own record.",
+ "base_evidence": "data/mlb/evidence/2026-08-21_web_finals.json",
+ "base_evidence_sha256": "41e4be37f6aaf3b0f47dc49d72ca045c4bcaa9386c52a3a765aa584e12ffeb9c",
+ "resolves": "the CHC@SEA PENDING_NOT_FINAL entry recorded at 2026-08-22T06:25:00Z",
+ "games": [
+  {
+   "seq": 15,
+   "away": "CHC",
+   "home": "SEA",
+   "away_score": 5,
+   "home_score": 6,
+   "close_ml_away": null,
+   "close_ml_home": null,
+   "close_total": null,
+   "away_sp": "Matthew Boyd",
+   "home_sp": "Emerson Hancock",
+   "venue": "T-Mobile Park",
+   "source_game_id": "mlb gamePk 823101 (owner relay of the official scoreboard)"
+  }
+ ]
+}

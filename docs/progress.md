@@ -2505,3 +2505,59 @@ STILL NOT TRUE: the repair has not been independently re-reviewed, the module is
 healthcheck and not wired into any card, grade or decision, and four siblings remain quarantined
 with open defect lists (starter_attribution, subgroup_monitor, totals_eval, freshness_gates).
 Record: docs/experiments/2026-08-22_DAILY_BASELINES_REPAIR.json
+
+## 2026-08-22 (owner rulings) — comparator order, manifest-bound coverage, semantic continuity, starter contract
+ROADMAP COUNT CORRECTED to 1 of 8 delivered. I had counted daily_baselines as delivered because its
+own mutation suite was green — conflating "wired and load-bearing" with "its own suite kills its own
+mutants", which is the standing lesson 21 denies. Fourth instance of the unnamed-predicate family,
+so the predicate is now named on every line of the accounting record. Worse than I reported: the two
+WNBA prereg records were not "awaiting owner review" — they had already been independently reviewed
+and REJECTED (verdicts REJECT and BREAKS, 18 defects each, 8 critical/high) with no successor
+record. Those are the two unaccounted items. Item 8 (do not just recalibrate) is
+SATISFIED_BY_PROHIBITION, verified: V13 still frozen at seed 722 / n=30000 / HFA 1.005, WNBA feature
+state still frozen 2026-07-22.
+
+COMPARATOR ORDER frozen and gate-enforced: expanding home prior, v1, v2, same-book no-vig market,
+closing market. Flat 50% stays as a SECONDARY sanity floor and can never occupy the principal
+position — a gate rule, because the 8/21 failure was defending a Brier against the weakest
+comparator already in the report. New baseline_challenge asks, every slate, whether each cohort
+CLEARED the strongest no-model baseline on EVERY metric; clearing requires better on one and worse
+on none. On the real 8/21 slate both cohorts read DID_NOT_CLEAR (v2: accuracy -0.2666, Brier
++0.00103, log loss +0.00175 against the prior).
+
+MANIFEST-BOUND IDENTITY COVERAGE replaces "refused by name", which was never protection. Aggregates
+now require, before anything is computed: {expected forecast IDs} == {graded} U {dispositioned with
+a reason}, registered-card hash match, no duplicate grade IDs, no foreign identities, expected row
+count, every disposition terminal. Expected set comes from the append-only FORECAST registry, never
+a grades snapshot — proven on a synthetic registry with one deliberately ungraded registration,
+since the real slate is fully graded and could not distinguish the two sources. ACCEPTANCE TEST on
+real data: a correctly named two-row file against the 30-identity 8/21 manifest is refused with
+ROW_COUNT_SHORT and produces no aggregate. No filename appears in the check.
+
+SEMANTIC JOURNAL CONTINUITY (harness/journal_continuity.py, WIRED). mtime demoted to a secondary
+signal. Checks COMMITTED content: exactly one canonical journal with all others closed redirects,
+the latest committed entry and its age, the commit it binds to, a cold-bootstrap simulation through
+the loader window PARSED OUT OF AGENTS.md, and that the redirect carries no dated entry after its
+marker. Found a live defect on its first run: the newest entry sat 36 lines from EOF while AGENTS.md
+told a new session to read the last 30. AGENTS.md widened to 120 — and because the check parses that
+line, the stated number is the enforced number.
+
+STARTER_ATTRIBUTION rebuilt to the owner acceptance contract (recorded first as the standard, not as
+a claim of meeting it): three states MEASURED_PAIRED_DELTA / STRUCTURAL_ZERO / NOT_MEASURABLE, with
+a structural zero's 0.0 attached to the STATE and never to a numeric field; draws keyed by model ID
++ game + date + replicate index, with scenario keying the RECORD not the draws (putting it in the
+seed would destroy the common random numbers the same contract requires); paired Monte-Carlo
+uncertainty across independently keyed replicates, replacing a refusal, with one replicate still
+null-with-reason; draw_binding_sha256 over model, game, date, rep, n, seed and every arm's stat
+vector; an arm may move only the slot its scenario names. Ten falsification fixtures as the owner
+numbered them, 29/29 own mutants killed. QUARANTINE HELD — the release condition is INDEPENDENT
+review, which is running.
+
+THREE DEFECTS FOUND IN MY OWN FIXTURES, which matter more than the counts: the ten fixtures were
+DEAD CODE below an early return (failures collected then discarded, every guarded mutant survived);
+two binding mutants left the covered field reachable by another route so proved nothing; one order
+mutant could not break a property that holds structurally. Also four "survivors" across the suites
+were overlapping gate rules covering for each other, each now given a fixture only it can satisfy.
+Lesson 23 added: the test harness is not exempt from the discipline it enforces.
+Mutation suites: daily_baselines 59/59, journal_continuity 16/16, starter_attribution 29/29.
+Records: 2026-08-22_ROADMAP_ACCOUNTING_CORRECTION.json, _STARTER_ATTRIBUTION_ACCEPTANCE_CONTRACT.json

@@ -1,0 +1,42 @@
+{
+ "record_id": "ACQUISITION-LADDER-RUN-2026-08-22",
+ "schema": "ops.acquisition_ladder_run.v1",
+ "run_utc": "2026-08-22T23:45:00Z",
+ "supersedes_by_appending": "data/audit/2026-08-22_acquisition_attempt.json — that record's REFUSAL was overturned by running the ladder properly. It is not edited (R6); this record states what changed and why.",
+
+ "what_i_got_wrong_earlier_today": "I tried one HTTP rail, hit a 403, sampled six WebFetch domains, and declared acquisition blocked — then asked the owner to post screenshots. That violated standing acquisition autonomy AND was factually wrong: the search rail remained available and, when actually used, produced a corroborated 15-game schedule. A failed CONNECT on one rail does not establish that no public board exists.",
+
+ "MLB": {
+  "state": "ONLINE_ACQUIRED (schedule) / PARTIAL — starters and prices absent by design at this step",
+  "games": 15,
+  "completeness": "COMPLETE_BY_ROSTER_PARTITION — 30 franchises exactly once. NOT schedule-verified against an official game-ID manifest; none was reachable.",
+  "slate": ["TOR@NYY","ATL@MIL","WSH@MIA","STL@PHI","TB@BAL","LAA@TEX","ATH@HOU","NYM@CWS","DET@KC","PIT@LAD","CHC@SEA","SF@BOS","CIN@AZ","CLE@COL","MIN@SD"],
+  "method": "WebSearch result TITLES, URL SLUGS and venue strings across independent publishers. Titles and slugs are publisher-authored strings returned verbatim, not a summariser's paraphrase — a materially stronger class than the prose I refused earlier.",
+  "orientation_conflict_RESOLVED": "An early whole-slate summary claimed AZ@CIN. Nine independent publisher titles/slugs (Yahoo, SI, Fubo, Athlon, BetMGM, Redleg Nation, ESPN, FanDuel) place the game at Chase Field as CIN@AZ, consistent with the continuing series. The summary was wrong; the per-game query settled it. This is why whole-slate summaries are weak and per-game title corroboration is not.",
+  "source_tier": 2,
+  "tier_note": "NOT tier-1. Every official and reference host is denied by org egress policy, so no page could be opened, captured or hashed."
+ },
+ "WNBA": {"state": "ACQUISITION_EXHAUSTED", "games": null,
+          "failure": "Search returned an internally contradictory result — Portland shown hosting both Washington and Toronto on one date, which cannot be true, and the registry has PDX@TOR on 8/21 at a neutral site. No game count was produced by any query. wnba.com, stats.wnba.com and espn.com are all egress-denied."},
+ "NFL": {"state": "PARTIAL_ONLINE_ACQUISITION", "games_claimed": 10,
+         "failure": "Ten preseason matchups with kickoff times were reported, but the enumeration is malformed (two games merged into single bullets, one with no time) and the accompanying results paragraph mixes in five games that are not from 2026-08-22. nfl.com and espn.com are egress-denied, so nothing could be opened to disambiguate. Registering a benchmark board from this would put unverifiable matchups into the evidence chain."},
+
+ "rails": [
+  {"rail": "shell HTTPS (curl)", "hosts": ["statsapi.mlb.com","stats.wnba.com","site.api.espn.com"], "result": "403 CONNECT — org gateway denial, logged proxy-side as connect_rejected. NOT routed around."},
+  {"rail": "WebFetch", "hosts_denied": ["statsapi.mlb.com","www.mlb.com","www.baseball-reference.com","www.rotowire.com","www.fantasypros.com","en.wikipedia.org","plaintextsports.com","www.covers.com","www.espn.com","www.foxsports.com"], "result": "EGRESS_BLOCKED on every sports/reference host"},
+  {"rail": "WebFetch control", "hosts": ["github.com","raw.githubusercontent.com"], "result": "REACHABLE — github.com 404 (private repo), raw.githubusercontent.com served content. Proves the denial is domain-specific policy, not a dead network. Characterised rather than assumed."},
+  {"rail": "code-hosted datasets", "hosts": ["github.com/sportsdataverse/baseballr-data"], "result": "NO 2026 COVERAGE — MLB schedules absent entirely; NCAA schedules stop at 2024."},
+  {"rail": "WebSearch", "result": "WORKS — the rail that carried the acquisition. Whole-slate summaries proved unreliable; per-game queries corroborated by titles/slugs proved reliable."}
+ ],
+
+ "TIMING_FINDING_THAT_BLOCKS_REGISTRATION": {
+  "issue": "The ladder SUCCEEDED and the card still could not be registered. Build completed 23:45Z; the earliest first pitch was 17:35Z and the latest ~23:40Z, so every game had already started.",
+  "consequence": "ZERO forecasts registered for 2026-08-22. cards/2026-08-22_card.json exists as an UNREGISTERED POST-START DISPLAY (mode V1_ONLINE_SCHEDULE_NO_STARTERS_NO_PRICES__POST_START_UNREGISTERED): correct for its inputs, non-gradeable, in no cohort, ledger or chain. Same disposition as the 2026-08-20 STL@CIN row.",
+  "gap_in_the_ruling": "The owner's state machine covers acquisition outcomes but has no state for 'acquired successfully, registration window already closed'. That is a distinct condition and it is the one that actually bit today. Proposed: REGISTRATION_WINDOW_CLOSED, and a scheduled acquisition run EARLY in the slate day rather than at the evening check.",
+  "root_cause": "The cycle ran at the 14:00Z check and I spent it refusing rather than acquiring. Had the ladder run then, every game was still pregame."
+ },
+
+ "forecast_first_price_second_HELD": "Odds were encountered incidentally in search results during schedule acquisition (moneylines for STL@PHI, TB@BAL, LAA@TEX, ATH@HOU appeared in a preview snippet). They were deliberately NOT recorded and NOT used. No price is in the card, and no edge or selection exists.",
+ "state_changes": "cards/2026-08-22_card.json written as an unregistered post-start artifact. NO forecast registered, NO grade, NO ledger entry, betting output zero.",
+ "permanent_fix": "harness/acquisition_ladder.py (state machine + gate + 15 mutation-proven fixtures, wired into healthcheck) and the pregame_preflight wording correction."
+}

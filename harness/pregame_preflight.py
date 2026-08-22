@@ -140,7 +140,17 @@ def check(date, now=None):
         if e["present"]:
             e["status"] = "PRESENT"
         elif mins_left is None:
-            e["status"] = "MISSING_NO_SLATE_TO_TIME_AGAINST"
+            # OWNER CORRECTION 2026-08-22. The old label was MISSING_NO_SLATE_TO_TIME_AGAINST, which
+            # ASSERTS the system established that no slate exists. When schedule acquisition merely
+            # failed — or was never attempted — that is false, and it is what turned a recoverable
+            # gap into a dead end that got pushed back onto the owner. The correct statement is that
+            # the schedule has not been obtained YET.
+            e["status"] = "ACQUISITION_BLOCKED—SCHEDULE_NOT_YET_OBTAINED"
+            e["note"] = ("no first pitch to time against because the schedule is not in hand. This "
+                         "is NOT a finding that the slate is empty: an empty slate requires an "
+                         "official schedule that affirmatively reports zero games "
+                         "(acquisition_ladder.NO_GAMES_SCHEDULED). Run the acquisition ladder "
+                         "before treating this as anything the owner needs to resolve.")
             missing.append(k)
         elif mins_left < 0:
             e["status"] = "MISSING_AND_UNRECOVERABLE (past first pitch)"

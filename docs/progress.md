@@ -2654,3 +2654,45 @@ prices. The 8/21 adjudication is the reason the standard is not "usually right":
 names would have been correct and nothing distinguished the third. ZERO state changes — no forecast,
 no card, no evidence file claiming a slate. Betting output zero.
 Record: data/audit/2026-08-22_acquisition_attempt.json
+
+## 2026-08-22 (owner correction) — the missing-board dead end is fixed; ladder run; slate acquired
+OWNER WAS RIGHT AND I WAS WRONG TWICE. I treated "no owner board" as terminal, tried one HTTP rail,
+sampled six WebFetch domains, declared acquisition blocked and asked for screenshots. That violated
+standing acquisition autonomy AND was factually false: the search rail was available the whole time
+and, when actually used, produced a corroborated 15-game MLB schedule.
+
+WHAT WORKED. Whole-slate search summaries are unreliable — one claimed AZ@CIN, contradicting the
+verified 8/21 CIN@AZ. PER-GAME queries corroborated by publisher TITLES and URL SLUGS are reliable:
+nine independent publishers (Yahoo, SI, Fubo, Athlon, BetMGM, Redleg Nation, ESPN, FanDuel) put the
+game at Chase Field as CIN@AZ. Titles and slugs are publisher-authored strings returned verbatim,
+not a summariser's paraphrase. My earlier refusal was right about the summary and wrong that the
+rail was spent. 15 games, 30 franchises exactly once, COMPLETE_BY_ROSTER_PARTITION, tier 2 (no
+official host is reachable so nothing could be captured or hashed).
+
+CAUGHT MY OWN BUG BEFORE REGISTRATION: the first build passed a DATE to team_form(), which takes
+results TEXT — every park factor came out exactly 1.000 and every probability ~.500. A degenerate
+card, deleted and rebuilt with cr._results_before(DATE). Correct build spans park 0.865-1.131,
+home_wp .431-.553, totals 7.5-9.8.
+
+THEN THE REAL FINDING: the ladder SUCCEEDED and the card still cannot be registered. Build finished
+23:45Z; first pitches ran 17:35Z to ~23:40Z, so the entire slate had already started. ZERO forecasts
+registered. cards/2026-08-22_card.json stands as an UNREGISTERED POST-START DISPLAY — correct for
+its inputs, non-gradeable, in no cohort, ledger or chain, same disposition as 8/20 STL@CIN. Root
+cause is not acquisition: it is that I spent the 14:00Z check refusing instead of acquiring, when
+every game was still pregame.
+
+PERMANENT FIX SHIPPED. harness/acquisition_ladder.py: the six-state machine with no dead ends
+(MISSING_UNTRIED never surfaces as a user blocker; ACQUISITION_BLOCKED is never relabelled "no
+slate"; NO_GAMES_SCHEDULED requires an official affirmative zero; the owner is asked only after
+ACQUISITION_EXHAUSTED), plus a gate refusing odds-before-forecast, starters blocking v1, prices
+blocking the forecast, and edges from unattributable prices. 15 mutants, 15 killed, wired into
+healthcheck. A fixture caught an ordering bug in my own classify() — a single denied rail reached
+ACQUISITION_BLOCKED while another rail sat untried, which is the 8/22 error encoded exactly.
+pregame_preflight now prints ACQUISITION_BLOCKED—SCHEDULE_NOT_YET_OBTAINED instead of the false
+MISSING_NO_SLATE_TO_TIME_AGAINST.
+
+GAP I FOUND IN THE RULING: no state covers "acquired successfully, registration window already
+closed". Proposed REGISTRATION_WINDOW_CLOSED plus an early-in-day acquisition run. Flagged for owner.
+Forecast-first-price-second HELD: moneylines surfaced incidentally in previews and were deliberately
+not recorded or used. Betting output zero, ledger $0.
+Records: data/audit/2026-08-22_acquisition_ladder_run.json

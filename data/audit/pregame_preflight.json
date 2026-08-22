@@ -1,6 +1,6 @@
 {
  "date": "2026-08-23",
- "checked_utc": "2026-08-22T23:39:25Z",
+ "checked_utc": "2026-08-22T23:49:52Z",
  "inputs": {
   "starters": {
    "present": false,
@@ -10,10 +10,10 @@
    "games_with_a_TBD_starter": 0,
    "games_with_BOTH_starters_TBD": 0,
    "resolution_pct": null,
-   "note": "TBD starters are accepted but counted: starter resolution moved 8/17 probabilities ~5x more than form freshness, so a TBD-heavy slate is a materially weaker card.",
+   "note": "no first pitch to time against because the schedule is not in hand. This is NOT a finding that the slate is empty: an empty slate requires an official schedule that affirmatively reports zero games (acquisition_ladder.NO_GAMES_SCHEDULED). Run the acquisition ladder before treating this as anything the owner needs to resolve.",
    "consequence_if_absent": "no slate means no card at all, and no first pitch to time the other inputs against. This is the 2026-08-16 failure exactly.",
    "deadline_min_before_first_pitch": 180,
-   "status": "MISSING_NO_SLATE_TO_TIME_AGAINST"
+   "status": "ACQUISITION_BLOCKED\u2014SCHEDULE_NOT_YET_OBTAINED"
   },
   "schedule": {
    "present": false,
@@ -24,7 +24,8 @@
    "source": null,
    "consequence_if_absent": "the slate count is unverified \u2014 tier1_board_gate can only report COMPLETE_BY_ROSTER_PARTITION, never a confirmed game count",
    "deadline_min_before_first_pitch": 240,
-   "status": "MISSING_NO_SLATE_TO_TIME_AGAINST"
+   "status": "ACQUISITION_BLOCKED\u2014SCHEDULE_NOT_YET_OBTAINED",
+   "note": "no first pitch to time against because the schedule is not in hand. This is NOT a finding that the slate is empty: an empty slate requires an official schedule that affirmatively reports zero games (acquisition_ladder.NO_GAMES_SCHEDULED). Run the acquisition ladder before treating this as anything the owner needs to resolve."
   },
   "prices": {
    "present": false,
@@ -32,7 +33,8 @@
    "sha256": {},
    "consequence_if_absent": "no break-even probability, no edge, no selection, and nothing to grade against a market. Model output is forecast-only.",
    "deadline_min_before_first_pitch": 90,
-   "status": "MISSING_NO_SLATE_TO_TIME_AGAINST"
+   "status": "ACQUISITION_BLOCKED\u2014SCHEDULE_NOT_YET_OBTAINED",
+   "note": "no first pitch to time against because the schedule is not in hand. This is NOT a finding that the slate is empty: an empty slate requires an official schedule that affirmatively reports zero games (acquisition_ladder.NO_GAMES_SCHEDULED). Run the acquisition ladder before treating this as anything the owner needs to resolve."
   }
  },
  "first_pitch_utc": null,

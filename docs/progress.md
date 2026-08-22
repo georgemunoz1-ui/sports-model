@@ -2624,3 +2624,33 @@ execution remains BLOCKED ON CAPABILITY (the GitHub MCP server exposes no reposi
 and a raw token call is the same class of bypass as routing around the egress proxy). The switch
 would also repair the two enabled cron Routines that bare-clone the default branch onto the 2-file
 stub.
+
+## 2026-08-22 (acquisition attempt on owner instruction) — boards NOT INGESTED, all three sports
+Owner asked me to pull boards and fill gaps from online sources; standing acquisition autonomy
+applies. Three rails tried. Direct curl: 403 CONNECT denials at the org gateway on statsapi.mlb.com,
+stats.wnba.com and site.api.espn.com, logged proxy-side as connect_rejected, not routed around.
+WebFetch: EGRESS_BLOCKED on statsapi, baseball-reference, rotowire, fantasypros, wikipedia and
+mlb.com — characterized rather than assumed, because github.com returned a plain 404 (private repo)
+rather than EGRESS_BLOCKED, so the denial is domain-specific policy and not a dead network.
+WebSearch: WORKS, and returns a model-written summary ABOUT pages that cannot be opened — the
+weakest evidence class there is, and here there are no pixels for it to supersede.
+
+REFUSED ON ALL THREE, each for a concrete reason rather than on principle alone.
+MLB: the claimed 15-game slate is 14/15 IDENTICAL to the verified 8/21 slate in the forecast
+registry, and the fifteenth is the same pairing with home and away REVERSED — registry CIN@AZ on
+8/21, prose AZ@CIN on 8/22. A continuing series is plausible; a mid-series park swap is not. A
+home/away flip inverts the HFA term and flips the sign of the projected margin, which is the most
+consequential transcription error available. Second signal: the only score quoted (TOR@NYY "1-0
+after a runner to third with 1 out") reads as in-progress, not final — the STL@CIN failure mode.
+WNBA: internally contradictory. Portland cannot host both Washington and Toronto on one date, and
+the registry has PDX@TOR on 8/21 at a neutral site, so the summary most likely conflated the two.
+No game count produced at all.
+NFL: more coherent (10 games with times) but still unattributable prose, its own list malformed, and
+its results paragraph mixes five games that are not from 8/22. Registering a benchmark board from it
+would put unverifiable matchups into the evidence chain even though NFL carries no model.
+
+Third instance of this class this week after the Dobbins probable and the two half-surfaced 12:00Z
+prices. The 8/21 adjudication is the reason the standard is not "usually right": 2 of 3 single-source
+names would have been correct and nothing distinguished the third. ZERO state changes — no forecast,
+no card, no evidence file claiming a slate. Betting output zero.
+Record: data/audit/2026-08-22_acquisition_attempt.json

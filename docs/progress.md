@@ -2561,3 +2561,44 @@ were overlapping gate rules covering for each other, each now given a fixture on
 Lesson 23 added: the test harness is not exempt from the discipline it enforces.
 Mutation suites: daily_baselines 59/59, journal_continuity 16/16, starter_attribution 29/29.
 Records: 2026-08-22_ROADMAP_ACCOUNTING_CORRECTION.json, _STARTER_ATTRIBUTION_ACCEPTANCE_CONTRACT.json
+
+## 2026-08-22 (independent review round 1) — real defects in all three, including the wired one
+The owner's release condition ran: 23 agents, independent attack then adversarial refutation of
+every claim, then a release verdict that spot-checked the top findings by running them. Verdicts:
+starter_attribution HOLD_QUARANTINE, daily_baselines and journal_continuity HOLD_WITH_NAMED_FIXES.
+I reproduced every finding before acting on it.
+
+THE BLOCKER: starter_attribution published a standard error for a different number than the estimate
+beside it — deltas_pp was replicate 0, delta_se_pp was sd/sqrt(reps), the error of the MEAN of all
+five. Every interval was too small by 2.24x. Worst case seen: joint interaction 1.47 +/- 0.253 with
+a replicate spread of [1.47, 0.035, 0.40, 0.47, 0.165], sd 0.566 — the published point was an
+extreme of its own sampling distribution, sold as the most precise of the four. Fixed to one
+estimator (replicate mean, sd/sqrt(reps)), with rep 0 kept as deltas_pp_replicate0 and the
+arithmetic pinned on a hand-computed vector that never calls the module's estimator.
+
+STATE GATING was enforced in exactly one field. A both-TBD game published delta_se_pp 0.0 — perfect
+precision on something never measured — a keyed_label of "+0.00 points", and a residual differenced
+against a raw structural zero. All gated now, each with a reason.
+
+CROSS-BOOK BYPASS, THIRD OCCURRENCE, one field over each time: basis spellings (fixed this morning),
+one-sided book attribution (fixed this morning), and now the BOOK NAME itself — {"book":"best_odds"}
+de-vigged happily because I applied the allowlist to `basis` and nothing else. The 8/3 ruling is
+about WHERE the prices came from; enforcing it one field at a time will keep failing, so it now
+covers every field naming a board including the per-book map keys. Also found: decimal odds pasted
+into an American field de-vigged to 0.502 silently, fabricating a coin-flip market in the PRINCIPAL
+market slot; a null book value crashed a settlement; an unlabelled row DEFAULTED into v1; a
+present-but-unscorable row counted as coverage; a market priced on 5 of 15 games was compared to a
+cohort scored on 15.
+
+LIVE DEFECT IN THE WIRED MODULE: journal_continuity's redirect rule was position-dependent — a closed
+journal dated FIVE DAYS NEWER than canonical passed with zero failures because its marker sat at the
+bottom. find_journals had no fixture at all and was name-only, so a rival called docs/handoff.md was
+invisible to the rule that exists to catch exactly that. Both fixed; shape-based discovery needed an
+explicit one-line self-declaration for genuine dated records (AUTHORIZATIONS.md), which the canonical
+journal is not allowed to use on itself.
+
+Three of six claims against starter_attribution were correctly REFUTED, including the most dramatic
+one. A review that can only say no is as useless as one that can only say yes.
+Suites after repair: starter_attribution 43/43, daily_baselines 74/74, journal_continuity 29/29 —
+the AUTHOR's suites, evidence of work and not a release condition. QUARANTINES HELD; round 2 must be
+independent again. Record: docs/audits/2026-08-22_INDEPENDENT_REVIEW_ROUND1.json

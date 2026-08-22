@@ -77,13 +77,34 @@ Usage: python3 harness/starter_attribution.py --selftest
        python3 harness/starter_attribution.py --date 2026-08-21 [--n 200000] [--json] [--out PATH]
 """
 # =============================================================================================
-# QUARANTINED DRAFT — NOT WIRED, NOT AUTHORITATIVE (2026-08-22)
-# Built for the owner's roadmap and then adversarially reviewed. The review found critical/high
-# defects and, more importantly, that many of this module's own fixtures are DECORATIVE: they stay
-# green when the rule they supposedly guard is deleted. A passing selftest here therefore does not
-# mean the rules hold. Findings: docs/audits/2026-08-22_roadmap_module_review.json
-# This module is NOT imported by healthcheck, NOT used for any card, grade, or decision, and its
-# numbers must not be quoted until the defect list is closed and the fixtures are proven killing.
+# QUARANTINED — BUILT TO THE OWNER ACCEPTANCE CONTRACT, AWAITING INDEPENDENT REVIEW (2026-08-22)
+# Contract: docs/experiments/2026-08-22_STARTER_ATTRIBUTION_ACCEPTANCE_CONTRACT.json
+#
+# THE THREE STATES. Every reported quantity carries exactly one:
+#   MEASURED_PAIRED_DELTA  both arms genuinely differ, drawn under identical random numbers
+#   STRUCTURAL_ZERO        the arms are identical BY CONSTRUCTION; the 0.0 is attached to the state,
+#                          never placed in a numeric field a reader would take for a measurement
+#   NOT_MEASURABLE         the counterfactual could not be formed; value null, reason REQUIRED
+#
+# DESIGN, as specified: draws keyed by model ID + game ID + date + replicate index; common random
+# numbers across arms; away-only, home-only and both scenarios; the interaction reported SEPARATELY
+# because joint movement need not equal the sum; missing/CAP/unregistered slots null-with-reason;
+# PAIRED Monte-Carlo uncertainty across independently keyed replicates; results described as model
+# counterfactual deltas, never real-world causal effects; scenario order cannot change results.
+# Scenario keys the RECORD, not the draws — putting it in the seed would destroy the common random
+# numbers the same contract requires.
+#
+# `--mutants` runs 29 source mutants, one per rule, and requires the selftest to FAIL for each.
+# 29/29 are KILLED. That number is NOT the release condition. The owner's condition is an
+# INDEPENDENT review killing these mutants, and this module's own suite passing is exactly the
+# standing lesson 21 exists to deny. Three defects were found in the fixtures while building them:
+# the ten falsification fixtures were briefly DEAD CODE below an early return (their failures were
+# collected and discarded, and every mutant they guard survived); two "binding" mutants left the
+# covered field reachable by another route and so proved nothing; and one order mutant could not
+# break a property that holds structurally. All three were repairs to the TEST, not the code.
+#
+# UNTIL INDEPENDENT REVIEW: not imported by healthcheck, not used for any card, grade or decision,
+# numbers not quoted.
 # =============================================================================================
 
 from __future__ import annotations
@@ -115,6 +136,25 @@ CAP_STATS = {"era": LG_ERA, "gs": 0, "k": LG_K, "bb": LG_BB, "ek": None}
 SIM_STAT_FIELDS = ("era", "gs", "k", "bb")
 
 ARM_KEYS = ("a_both_cap", "b_away_real_home_cap", "c_away_cap_home_real", "d_both_real")
+# The scenario each arm expresses, and which slot it is ALLOWED to move relative to the control.
+ARM_SCENARIO = {"a_both_cap": "CONTROL_BOTH_LEAGUE_AVERAGE",
+                "b_away_real_home_cap": "AWAY_STARTER_ONLY",
+                "c_away_cap_home_real": "HOME_STARTER_ONLY",
+                "d_both_real": "BOTH_STARTERS"}
+ARM_MAY_MOVE = {"a_both_cap": (), "b_away_real_home_cap": ("away",),
+                "c_away_cap_home_real": ("home",), "d_both_real": ("away", "home")}
+# The model whose response is being probed. It is part of the DRAW KEY: two model identities must
+# never share a draw sequence, or a delta measured under one could be read as the other's.
+MODEL_ID = "ml.v13_1.hfa1005.card"
+# Replicates for the PAIRED Monte-Carlo uncertainty the owner requires. Each replicate re-keys the
+# draws (rep index enters the seed) and re-runs all four arms, so the spread of the PAIRED delta
+# across replicates is a real sampling distribution rather than a closed form assumed to apply.
+DEFAULT_REPS = 5
+
+# The three states every reported quantity carries (owner acceptance contract 2026-08-22).
+MEASURED = "MEASURED_PAIRED_DELTA"
+STRUCTURAL_ZERO = "STRUCTURAL_ZERO"
+NOT_MEASURABLE = "NOT_MEASURABLE"
 DH_SUFFIX = {"DH1": "-G1", "DH2": "-G2"}  # rng_noise_study's doubleheader disambiguation
 
 # Directories holding registered artifacts. --out may never land in one of these (R6: registered
@@ -185,12 +225,82 @@ def keyed_delta_label(dpp):
 # pure helpers
 # --------------------------------------------------------------------------------------------
 
-def _seed(game, date):
-    """Per-(game, date) keyed seed. NOT a function of slate position, so resolving a starter in the
-    first game cannot move the draws of the ninth — the exact coupling this module exists to break.
+def _seed_input(game, date, model_id=MODEL_ID, rep=0):
+    """The draw key, stated as a string so it appears verbatim in every record.
 
-    32 bits (8 hex chars) as specified; np.random.default_rng accepts it directly."""
-    return int(hashlib.sha256(f"KEYED|{game}|{date}".encode()).hexdigest()[:8], 16)
+    KEYED BY: model identity, game identity, slate date, replicate index.
+    NOT KEYED BY: slate position (that is the 2026-08-17 coupling defect) and NOT by SCENARIO.
+
+    Scenario is deliberately absent from the DRAW key. The acceptance contract requires both
+    "key simulations by model ID, game ID, scenario and simulation index" AND "use identical random
+    draws for baseline and counterfactual"; those two can only both hold if scenario keys the
+    RECORD and not the draws. Putting scenario in the seed would give every arm its own random
+    sequence, which is exactly what destroys common random numbers and turns a paired contrast back
+    into the difference of two independently noisy estimates."""
+    return f"KEYED|{model_id}|{game}|{date}|rep{rep}"
+
+
+def _seed(game, date, model_id=MODEL_ID, rep=0):
+    """32 bits (8 hex chars) of the draw key; np.random.default_rng accepts it directly."""
+    return int(hashlib.sha256(_seed_input(game, date, model_id, rep).encode()).hexdigest()[:8], 16)
+
+
+def _arm_binding(model_id, game, date, rep, n, seed, arms):
+    """Bind the reported deltas to the ACTUAL draw configuration they came from.
+
+    Without this a record's numbers float free of the arrays that produced them: a later change to
+    n, to the seed, to the model identity or to an arm's stat vector leaves the delta looking
+    equally authoritative. The binding is a hash over every input that selects the draws, so a
+    record whose binding does not recompute is not the record it claims to be."""
+    payload = json.dumps({
+        "model_id": model_id, "game": game, "date": date, "rep": rep, "n": n, "seed": seed,
+        "seed_input": _seed_input(game, date, model_id, rep),
+        "arms": [{"scenario": ARM_SCENARIO[k],
+                  "away": {f: a.get(f) for f in SIM_STAT_FIELDS},
+                  "home": {f: h.get(f) for f in SIM_STAT_FIELDS}}
+                 for k, (a, h) in zip(ARM_KEYS, arms)],
+    }, sort_keys=True)
+    return hashlib.sha256(payload.encode()).hexdigest()
+
+
+def _assert_one_slot_changed(arms):
+    """Every single-starter arm must move EXACTLY the slot its scenario names.
+
+    An arm that quietly changes both slots still produces a plausible number, and that number would
+    be reported as the effect of one starter. The check is over the four stat fields sim() reads."""
+    control_away, control_home = arms[0]
+    bad = []
+    for key, (asp, hsp) in zip(ARM_KEYS, arms):
+        may = ARM_MAY_MOVE[key]
+        away_moved = any(asp.get(f) != control_away.get(f) for f in SIM_STAT_FIELDS)
+        home_moved = any(hsp.get(f) != control_home.get(f) for f in SIM_STAT_FIELDS)
+        if away_moved and "away" not in may:
+            bad.append(f"{key} ({ARM_SCENARIO[key]}) moved the AWAY slot, which its scenario "
+                       f"forbids — a two-slot change reported as a one-starter effect")
+        if home_moved and "home" not in may:
+            bad.append(f"{key} ({ARM_SCENARIO[key]}) moved the HOME slot, which its scenario "
+                       f"forbids — a two-slot change reported as a one-starter effect")
+    if bad:
+        raise ValueError("REFUSED: " + "; ".join(bad))
+    return True
+
+
+def classify(value, arms_identical, measurable=True, reason=None):
+    """THE THREE STATES (owner acceptance contract 2026-08-22).
+
+    A structural zero must never render as an observed measurement, so it is returned as its own
+    state with the zero attached to the state — never as a bare numeric field a reader would take
+    for a measurement."""
+    if not measurable:
+        return {"state": NOT_MEASURABLE, "value_pp": None,
+                "reason": reason or ("NOT_MEASURABLE — the counterfactual could not be formed; " +
+                                     "no reason was supplied, which is itself an R1 violation")}
+    if arms_identical:
+        return {"state": STRUCTURAL_ZERO, "value_pp": None, "structural_value_pp": 0.0,
+                "reason": ("STRUCTURAL_ZERO — the two arms are IDENTICAL by construction, so the "
+                           "difference is 0.0 as an arithmetic fact about the setup. It is not an "
+                           "observation that the starter did not matter.")}
+    return {"state": MEASURED, "value_pp": _r(value), "reason": None}
 
 
 def _game_key(row):
@@ -240,6 +350,25 @@ def _deltas(p_a, p_b, p_c, p_d):
     joint = (p_d - p_a) * 100.0
     return {"away_only": away, "home_only": home, "joint": joint,
             "non_additivity": joint - (away + home)}
+
+
+def _paired_se(per_rep):
+    """Standard error of each PAIRED delta across independently keyed replicates.
+
+    The contrast is what is being measured, so the contrast is what gets an interval. One replicate
+    yields None WITH a reason rather than 0.0 — a single observation has no spread, and printing
+    0.0 there would read as a perfectly precise estimate."""
+    keys = ("away_only", "home_only", "joint", "non_additivity")
+    out = {}
+    for k in keys:
+        vals = [r[k] for r in per_rep if r.get(k) is not None]
+        if len(vals) < 2:
+            out[k] = None
+            continue
+        m = sum(vals) / len(vals)
+        var = sum((v - m) ** 2 for v in vals) / (len(vals) - 1)
+        out[k] = float(np.sqrt(var / len(vals)))
+    return out
 
 
 def _mc_se_pp(p, n):
@@ -302,7 +431,8 @@ def verify_transcription(rows, form, seed=FROZEN_SEED, n=FROZEN_N):
 # attribution
 # --------------------------------------------------------------------------------------------
 
-def attribute_rows(v1_rows, v2_rows, date, form, pf_of, n=DEFAULT_N):
+def attribute_rows(v1_rows, v2_rows, date, form, pf_of, n=DEFAULT_N, reps=DEFAULT_REPS,
+                   model_id=MODEL_ID, arm_order=None, arms_builder=None):
     """Per-game keyed counterfactual over two aligned card row lists. Pure with respect to disk:
     `form` is a (rf, ra, g, venue) tuple and `pf_of(home_abbr) -> float` supplies the park factor,
     so the whole estimator is exercisable on synthetic input without touching a registered card."""
@@ -331,35 +461,65 @@ def attribute_rows(v1_rows, v2_rows, date, form, pf_of, n=DEFAULT_N):
 
         aw, hm = _ab(r2["away"]), _ab(r2["home"])
         pf = pf_of(hm)
-        seed = _seed(key, date)
         away_real, home_real = r2["asp_stats"], r2["hsp_stats"]
         away_treated, home_treated = not _is_cap(away_real), not _is_cap(home_real)
 
-        arms, sims, p_raw = _arms(away_real, home_real), {}, []
-        for arm_key, (asp, hsp) in zip(ARM_KEYS, arms):
-            s = run_arm(asp, hsp, form, aw, hm, pf, n, seed)
-            p_raw.append(s["hw"])
-            sims[arm_key] = {"p_home": _r(s["hw"], 6), "proj_total": _r(s["tot"], 3),
-                             "proj_away_runs": _r(s["proj_away"], 3),
-                             "proj_home_runs": _r(s["proj_home"], 3),
-                             "mc_se_pp_unpaired": _r(_mc_se_pp(s["hw"], n)),
-                             "away_stats": asp, "home_stats": hsp}
-        # deltas come from the UNROUNDED arm probabilities: rounding first would put a floor of
-        # ~1e-4pp under an identity that is supposed to be exactly 0.0 for an untreated arm.
-        d = _deltas(*p_raw)
+        # arms_builder is injected ONLY by the fixture that proves the assertion below is
+        # actually called. Defaulting to _arms keeps the production path identical.
+        arms = (arms_builder or _arms)(away_real, home_real)
+        # An arm may move ONLY the slot its scenario names. Checked before any draw is taken.
+        _assert_one_slot_changed(arms)
+        # SCENARIO ORDER INVARIANCE: arms are addressed by NAME, never by position, so evaluating
+        # them in any order yields the same record. `arm_order` exists purely so a fixture can prove
+        # that — the draws are keyed by identity, so a permutation cannot reach the numbers.
+        order = list(arm_order or ARM_KEYS)
+        if sorted(order) != sorted(ARM_KEYS):
+            raise ValueError(f"REFUSED: arm_order {order} is not a permutation of {list(ARM_KEYS)}")
+        arm_of = dict(zip(ARM_KEYS, arms))   # CANONICAL names, never the caller's order
 
-        nulls = {}
-        rep = {"away_only": d["away_only"], "home_only": d["home_only"],
-               "joint": d["joint"], "non_additivity": d["non_additivity"]}
-        if not away_treated:
-            rep["away_only"] = None
-            nulls["away_only"] = R1_NO_TREATMENT
-        if not home_treated:
-            rep["home_only"] = None
-            nulls["home_only"] = R1_NO_TREATMENT
-        if not (away_treated and home_treated):
-            rep["non_additivity"] = None
-            nulls["non_additivity"] = R1_NO_INTERACTION
+        seed = _seed(key, date, model_id, 0)
+        binding = _arm_binding(model_id, key, date, 0, n, seed, arms)
+        sims, per_rep = {}, []
+        for rep_i in range(max(1, int(reps))):
+            rseed = _seed(key, date, model_id, rep_i)
+            p_by_arm = {}
+            for arm_key in order:                      # ORDER-INDEPENDENT: addressed by name
+                asp, hsp = arm_of[arm_key]
+                sim = run_arm(asp, hsp, form, aw, hm, pf, n, rseed)
+                p_by_arm[arm_key] = sim
+                if rep_i == 0:
+                    sims[arm_key] = {"scenario": ARM_SCENARIO[arm_key],
+                                     "p_home": _r(sim["hw"], 6), "proj_total": _r(sim["tot"], 3),
+                                     "proj_away_runs": _r(sim["proj_away"], 3),
+                                     "proj_home_runs": _r(sim["proj_home"], 3),
+                                     "mc_se_pp_unpaired": _r(_mc_se_pp(sim["hw"], n)),
+                                     "draw_key": _seed_input(key, date, model_id, rep_i),
+                                     "seed": rseed, "n_draws": n,
+                                     "away_stats": asp, "home_stats": hsp}
+            # deltas from the UNROUNDED arm probabilities: rounding first would put a floor of
+            # ~1e-4pp under an identity that must be exactly 0.0 for an untreated arm.
+            per_rep.append(_deltas(*[p_by_arm[k]["hw"] for k in ARM_KEYS]))
+        d = {k: per_rep[0][k] for k in per_rep[0]}
+        # PAIRED Monte-Carlo uncertainty: the spread of the PAIRED delta across independently keyed
+        # replicates. This is a sampling distribution of the contrast itself, not a closed form
+        # borrowed from one arm's binomial error.
+        se = _paired_se(per_rep)
+
+        # THREE STATES. An untreated slot means arm b (or c) is identical to the control BY
+        # CONSTRUCTION — a structural zero, never a measurement, and never a bare 0.0.
+        states = {
+            "away_only": classify(d["away_only"], arms_identical=not away_treated),
+            "home_only": classify(d["home_only"], arms_identical=not home_treated),
+            "joint": classify(d["joint"],
+                              arms_identical=not (away_treated or home_treated)),
+            "non_additivity": classify(
+                d["non_additivity"],
+                arms_identical=False,
+                measurable=(away_treated and home_treated),
+                reason=R1_NO_INTERACTION),
+        }
+        nulls = {k: v["reason"] for k, v in states.items() if v["reason"]}
+        rep = {k: v["value_pp"] for k, v in states.items()}
 
         v1_basis_is_cap = _is_cap(r1["asp_stats"]) and _is_cap(r1["hsp_stats"])
         seq = (r2["v13"]["home_wp"] - r1["v13"]["home_wp"]) * 100.0
@@ -372,8 +532,12 @@ def attribute_rows(v1_rows, v2_rows, date, form, pf_of, n=DEFAULT_N):
         out.append({
             "game": key, "date": date, "gamePk": r2.get("gamePk"),
             "away": r2["away"], "home": r2["home"],
-            "seed_input": f"KEYED|{key}|{date}", "seed": seed,
-            "n_per_arm": n, "park_factor_raw": _r(pf, 6),
+            "model_id": model_id,
+            "seed_input": _seed_input(key, date, model_id, 0), "seed": seed,
+            "draw_binding_sha256": binding,
+            "binding_covers": ["model_id", "game", "date", "rep", "n", "seed", "seed_input",
+                               "per-arm scenario", "per-arm stat vectors"],
+            "n_per_arm": n, "replicates": max(1, int(reps)), "park_factor_raw": _r(pf, 6),
             "away_slot": {"name_v1": r1.get("asp"), "name_v2": r2.get("asp"),
                           "class_v1": _slot_class(r1.get("asp"), r1["asp_stats"]),
                           "class_v2": _slot_class(r2.get("asp"), away_real),
@@ -383,9 +547,14 @@ def attribute_rows(v1_rows, v2_rows, date, form, pf_of, n=DEFAULT_N):
                           "class_v2": _slot_class(r2.get("hsp"), home_real),
                           "treated": home_treated},
             "arms": sims,
+            "arm_scenarios": dict(ARM_SCENARIO),
+            "delta_states": states,
             "deltas_pp": {k: _r(v) for k, v in rep.items()},
             "deltas_null_reasons": nulls,
-            "delta_se_pp": None, "delta_se_null_reason": R1_SINGLE_REPLICATE,
+            "delta_se_pp": {k: _r(v) for k, v in se.items()},
+            "delta_se_basis": (f"paired standard error across {max(1, int(reps))} independently "
+                               f"keyed replicates of the SAME contrast (rep index enters the draw "
+                               f"key); n={n} draws per arm per replicate. Not a closed form."),
             "registered_sequential_delta_pp": _r(seq),
             "registered_minus_keyed_joint_pp": _r(residual),
             "registered_minus_keyed_null_reason": residual_null,
@@ -467,6 +636,8 @@ _ACE = {"era": 2.22, "gs": 19, "k": 29.8, "bb": 5.8, "ek": 6.79}
 _BACK = {"era": 5.10, "gs": 14, "k": 17.2, "bb": 10.1, "ek": 3.90}
 _LOW = {"era": 3.00, "gs": 1, "k": 20.0, "bb": 9.0, "ek": None}
 _TINY_N = 4000
+# Direction fixtures need enough draws that an ace-vs-league-average gap is not simulation noise.
+_BIG_N = 60000
 
 
 def _row(away, home, pk, aname, astats, hname, hstats, hwp, park=1.0):
@@ -482,8 +653,23 @@ def selftest():
     # ---- 1. KEYED SEED ----------------------------------------------------------------------
     # exact value fixture: pins the formula itself, so any change to the hash input, the digest
     # slice or the base is caught rather than absorbed as "still deterministic"
-    if _seed("A@B", D) != 3337157104:
-        fails.append(f"keyed seed formula changed: _seed('A@B',{D}) = {_seed('A@B', D)}, expected 3337157104")
+    # The draw key now carries MODEL ID and REPLICATE INDEX as well as game and date (acceptance
+    # contract 2026-08-22). Pinned exactly, so a change to the hash input, digest slice, base, model
+    # identity or separator is caught rather than absorbed as "still deterministic".
+    if _seed_input("A@B", D) != "KEYED|ml.v13_1.hfa1005.card|A@B|2026-08-21|rep0":
+        fails.append(f"draw key string changed: {_seed_input('A@B', D)!r}")
+    if _seed("A@B", D) != 2384510613:
+        fails.append(f"keyed seed formula changed: _seed('A@B',{D}) = {_seed('A@B', D)}, expected 2384510613")
+    if _seed("A@B", D, "OTHER_MODEL") == _seed("A@B", D):
+        fails.append("two MODEL IDENTITIES received the same draw sequence — a delta measured under "
+                     "one model could be read as the other's")
+    if _seed("A@B", D, MODEL_ID, 1) == _seed("A@B", D, MODEL_ID, 0):
+        fails.append("two REPLICATES received the same seed — the paired SE would then be 0 by "
+                     "construction rather than measured")
+    if "SCENARIO" in _seed_input("A@B", D).upper() or any(
+            sc in _seed_input("A@B", D) for sc in ARM_SCENARIO.values()):
+        fails.append("SCENARIO entered the DRAW key — that destroys common random numbers, which "
+                     "the contract requires for the baseline and the counterfactual")
     if _seed("A@B", D) != _seed("A@B", D):
         fails.append("keyed seed is not deterministic for the same game+date")
     if _seed("A@B", D) == _seed("B@A", D):
@@ -602,8 +788,13 @@ def selftest():
     if got["deltas_pp"]["away_only"] is not None:
         fails.append("an UNTREATED away slot reported a numeric delta (structural 0.0 presented as "
                      "a measurement) instead of null + reason")
-    if "R1_NO_TREATMENT" not in (got["deltas_null_reasons"].get("away_only") or ""):
-        fails.append("an untreated away slot carried no R1 reason code")
+    if got["delta_states"]["away_only"]["state"] != STRUCTURAL_ZERO:
+        fails.append(f"an untreated away slot was not classed STRUCTURAL_ZERO: "
+                     f"{got['delta_states']['away_only']}")
+    if "STRUCTURAL_ZERO" not in (got["deltas_null_reasons"].get("away_only") or ""):
+        fails.append("an untreated away slot carried no reason code")
+    if got["delta_states"]["away_only"].get("structural_value_pp") != 0.0:
+        fails.append("the structural zero is not carried as a state-attached value")
     if got["deltas_pp"]["non_additivity"] is not None:
         fails.append("an interaction term was reported with only one slot treated")
     if got["deltas_pp"]["home_only"] is None or got["deltas_pp"]["joint"] is None:
@@ -622,8 +813,17 @@ def selftest():
     else:
         if abs(dp["non_additivity"] - (dp["joint"] - (dp["away_only"] + dp["home_only"]))) > 2e-4:
             fails.append(f"reported interaction does not satisfy its own identity: {dp}")
-    if both["delta_se_pp"] is not None or "R1_SINGLE_REPLICATE" not in both["delta_se_null_reason"]:
-        fails.append("a per-delta SE was asserted from a single replicate")
+    if not isinstance(both["delta_se_pp"], dict):
+        fails.append("no paired Monte-Carlo uncertainty was reported — the contract requires it")
+    elif any(both["delta_se_pp"].get(k) is None for k in ("away_only", "home_only", "joint")):
+        fails.append(f"a paired SE is missing: {both['delta_se_pp']}")
+    elif any(both["delta_se_pp"][k] <= 0 for k in ("away_only", "home_only", "joint")):
+        fails.append(f"a paired SE is non-positive — replicates that never differ would give 0 by "
+                     f"construction: {both['delta_se_pp']}")
+    single = attribute_rows(v1, v2_both, D, _FORM, lambda hm: 1.0, n=_TINY_N, reps=1)[0]
+    if single["delta_se_pp"].get("joint") is not None:
+        fails.append("a SE was asserted from ONE replicate — a single observation has no spread, "
+                     "and 0.0 there would read as a perfectly precise estimate")
     if both["registered_sequential_delta_pp"] is None:
         fails.append("the registered sequential delta was not carried alongside the keyed one")
     if abs(both["registered_sequential_delta_pp"] - (0.474 - 0.520) * 100) > 1e-6:
@@ -683,6 +883,249 @@ def selftest():
     if _dist_report([])["mean_abs"] is not None or "R1_EMPTY" not in _dist_report([])["reason_null"]:
         fails.append("an empty statistic was not reported as null + reason")
 
+    # =========================================================================================
+    # THE TEN MINIMUM FALSIFICATION FIXTURES (owner acceptance contract 2026-08-22).
+    # Numbered exactly as the owner stated them. Each is paired with a mutant in MUTANTS below,
+    # and `--mutants` requires this selftest to FAIL for every one.
+    # =========================================================================================
+    _CT = dict(CAP_STATS)
+    _v1cap = [_row("AAA", "BBB", "NG01", "TBD", _CT, "TBD", _CT, 0.520)]
+
+    # (1) IDENTICAL INPUTS PRODUCE STRUCTURAL_ZERO — never a measurement.
+    ident = attribute_rows(_v1cap, [_row("AAA", "BBB", "NG01", "TBD", _CT, "TBD", _CT, 0.520)],
+                           D, _FORM, lambda hm: 1.0, n=_TINY_N)[0]
+    for q in ("away_only", "home_only", "joint"):
+        st = ident["delta_states"][q]
+        if st["state"] != STRUCTURAL_ZERO:
+            fails.append(f"(1) identical inputs did not produce STRUCTURAL_ZERO on {q}: {st}")
+        if st["value_pp"] is not None:
+            fails.append(f"(1) a structural zero was reported as a measured value on {q}: {st}")
+        if st.get("structural_value_pp") != 0.0:
+            fails.append(f"(1) the structural zero lost its attached 0.0 on {q}: {st}")
+    if ident["arms"]["a_both_cap"]["p_home"] != ident["arms"]["d_both_real"]["p_home"]:
+        fails.append("(1) identical arms did not reproduce each other — CRN is broken")
+
+    # (2) MISSING STARTER PRODUCES NOT_MEASURABLE, NEVER 0.0.
+    miss = attribute_rows(_v1cap, [_row("AAA", "BBB", "NG01", "Back", _BACK, "TBD", _CT, 0.474)],
+                          D, _FORM, lambda hm: 1.0, n=_TINY_N)[0]
+    na = miss["delta_states"]["non_additivity"]
+    if na["state"] != NOT_MEASURABLE:
+        fails.append(f"(2) an interaction with one slot missing was not NOT_MEASURABLE: {na}")
+    if na["value_pp"] is not None or not na["reason"]:
+        fails.append(f"(2) NOT_MEASURABLE carried a value or no reason: {na}")
+    if miss["delta_states"]["home_only"]["state"] != STRUCTURAL_ZERO:
+        fails.append("(2) the missing HOME slot was not classed a structural zero")
+    if miss["deltas_pp"]["home_only"] == 0.0:
+        fails.append("(2) a missing starter produced a NUMERIC 0.0 — the exact defect the three "
+                     "states exist to prevent")
+
+    # (3) IMPROVING THE HOME STARTER MOVES HOME PROBABILITY IN THE EXPECTED DIRECTION.
+    good = attribute_rows(_v1cap, [_row("AAA", "BBB", "NG01", "TBD", _CT, "Ace", _ACE, 0.474)],
+                          D, _FORM, lambda hm: 1.0, n=_BIG_N)[0]
+    bad_ = attribute_rows(_v1cap, [_row("AAA", "BBB", "NG01", "TBD", _CT, "Back", _BACK, 0.474)],
+                          D, _FORM, lambda hm: 1.0, n=_BIG_N)[0]
+    gh, bh = good["deltas_pp"]["home_only"], bad_["deltas_pp"]["home_only"]
+    if gh is None or bh is None:
+        fails.append("(3) a treated home slot produced no measured delta")
+    elif not (gh > 0 and gh > bh):
+        fails.append(f"(3) an ACE home starter did not raise the home win probability relative to "
+                     f"league average, or did not beat a BACK-END starter: ace {gh:+.4f}pp vs "
+                     f"back {bh:+.4f}pp")
+
+    # (4) IMPROVING THE AWAY STARTER MOVES IT OPPOSITELY.
+    gaway = attribute_rows(_v1cap, [_row("AAA", "BBB", "NG01", "Ace", _ACE, "TBD", _CT, 0.474)],
+                           D, _FORM, lambda hm: 1.0, n=_BIG_N)[0]
+    baway = attribute_rows(_v1cap, [_row("AAA", "BBB", "NG01", "Back", _BACK, "TBD", _CT, 0.474)],
+                           D, _FORM, lambda hm: 1.0, n=_BIG_N)[0]
+    ga, ba = gaway["deltas_pp"]["away_only"], baway["deltas_pp"]["away_only"]
+    if ga is None or ba is None:
+        fails.append("(4) a treated away slot produced no measured delta")
+    elif not (ga < 0 and ga < ba):
+        fails.append(f"(4) an ACE AWAY starter did not LOWER the home win probability: "
+                     f"ace {ga:+.4f}pp vs back {ba:+.4f}pp")
+    elif not (ga < 0 < gh):
+        fails.append(f"(4) the away and home effects of the same ace are not OPPOSITE in sign: "
+                     f"away {ga:+.4f}pp, home {gh:+.4f}pp")
+
+    # (5) REORDERING GAMES AND SCENARIOS CHANGES NOTHING.
+    g1 = _row("AAA", "BBB", "NG01", "Back", _BACK, "Ace", _ACE, 0.474)
+    g2 = _row("CCC", "DDD", "NG02", "Ace", _ACE, "Back", _BACK, 0.512)
+    c1 = _row("AAA", "BBB", "NG01", "TBD", _CT, "TBD", _CT, 0.520)
+    c2 = _row("CCC", "DDD", "NG02", "TBD", _CT, "TBD", _CT, 0.500)
+    fwd = attribute_rows([c1, c2], [g1, g2], D, _FORM, lambda hm: 1.0, n=_TINY_N)
+    rev = attribute_rows([c2, c1], [g2, g1], D, _FORM, lambda hm: 1.0, n=_TINY_N)
+    fwd_by = {r["game"]: r["deltas_pp"] for r in fwd}
+    rev_by = {r["game"]: r["deltas_pp"] for r in rev}
+    if fwd_by != rev_by:
+        fails.append(f"(5) reordering the SLATE changed the deltas — position leaked into the "
+                     f"draws: {fwd_by} vs {rev_by}")
+    perm = attribute_rows([c1, c2], [g1, g2], D, _FORM, lambda hm: 1.0, n=_TINY_N,
+                          arm_order=("d_both_real", "a_both_cap", "c_away_cap_home_real",
+                                     "b_away_real_home_cap"))
+    if {r["game"]: r["deltas_pp"] for r in perm} != fwd_by:
+        fails.append("(5) reordering the SCENARIOS changed the deltas — arms are being addressed "
+                     "by position, so the draws depend on evaluation order")
+    if [r["draw_binding_sha256"] for r in perm] != [r["draw_binding_sha256"] for r in fwd]:
+        fails.append("(5) scenario order changed the draw binding")
+    # arms must be addressed by CANONICAL name: a permuted order that re-labels the arms would
+    # report the home-only contrast under the away-only field.
+    if perm[0]["arms"]["b_away_real_home_cap"]["away_stats"] != fwd[0]["arms"]["b_away_real_home_cap"]["away_stats"]:
+        fails.append("(5) a permuted arm_order re-assigned stat vectors to the wrong scenarios")
+    for bad_order in (("a_both_cap", "a_both_cap", "c_away_cap_home_real", "d_both_real"),
+                      ("a_both_cap", "b_away_real_home_cap"),
+                      ("a_both_cap", "b_away_real_home_cap", "c_away_cap_home_real", "nonsense")):
+        try:
+            attribute_rows([c1], [g1], D, _FORM, lambda hm: 1.0, n=_TINY_N, arm_order=bad_order)
+            fails.append(f"(5) an arm_order that is not a permutation was accepted: {bad_order}")
+        except ValueError:
+            pass
+
+    # (6) REMOVING COMMON RANDOM NUMBERS FAILS. Two identical arms under ONE key must be bit-equal;
+    #     the shared-sequential mechanism this module replaces must NOT reproduce itself, or the
+    #     equality above would prove nothing.
+    _s = _seed("A@B", D)
+    q1 = run_arm(dict(_CT), dict(_CT), _FORM, "AAA", "BBB", 1.0, _TINY_N, _s)
+    q2 = run_arm(dict(_CT), dict(_CT), _FORM, "AAA", "BBB", 1.0, _TINY_N, _s)
+    if q1["hw"] != q2["hw"]:
+        fails.append("(6) two identical arms under one keyed seed did not agree exactly — common "
+                     "random numbers are not in force")
+    shared = np.random.default_rng(_s)
+    z1 = cr.sim_full(dict(_CT), dict(_CT), _FORM, "AAA", "BBB", 1.0, _TINY_N, shared)
+    z2 = cr.sim_full(dict(_CT), dict(_CT), _FORM, "AAA", "BBB", 1.0, _TINY_N, shared)
+    if z1["hw"] == z2["hw"]:
+        fails.append("(6) the SHARED-generator mechanism reproduced itself, so the CRN fixture "
+                     "above cannot distinguish paired draws from unpaired ones and proves nothing")
+
+    # (7) REVERSING THE DELTA SIGN FAILS. Pinned as an arithmetic identity on the arms themselves,
+    #     independently of fixtures 3 and 4, so a sign flip cannot hide behind a direction test.
+    ap = both["arms"]["a_both_cap"]["p_home"]
+    bp = both["arms"]["b_away_real_home_cap"]["p_home"]
+    cp = both["arms"]["c_away_cap_home_real"]["p_home"]
+    dpp = both["arms"]["d_both_real"]["p_home"]
+    for q, want in (("away_only", (bp - ap) * 100), ("home_only", (cp - ap) * 100),
+                    ("joint", (dpp - ap) * 100)):
+        if abs(both["deltas_pp"][q] - want) > 2e-3:
+            fails.append(f"(7) {q} is not (arm - control): reported {both['deltas_pp'][q]} vs "
+                         f"{want:.4f} — a reversed sign would report the counterfactual as the base")
+
+    # (8) ACCIDENTALLY CHANGING BOTH STARTERS IN A ONE-STARTER SCENARIO FAILS.
+    try:
+        _assert_one_slot_changed(((dict(_CT), dict(_CT)), (dict(_ACE), dict(_ACE)),
+                                  (dict(_CT), dict(_ACE)), (dict(_ACE), dict(_ACE))))
+        fails.append("(8) a one-starter arm that moved BOTH slots was accepted — its number would "
+                     "be reported as the effect of a single starter")
+    except ValueError as exc:
+        if "AWAY" not in str(exc) and "HOME" not in str(exc):
+            fails.append(f"(8) the two-slot refusal names no slot: {exc}")
+    try:
+        _assert_one_slot_changed(((dict(_CT), dict(_CT)), (dict(_ACE), dict(_CT)),
+                                  (dict(_ACE), dict(_ACE)), (dict(_ACE), dict(_ACE))))
+        fails.append("(8) a HOME-only arm that also moved the away slot was accepted")
+    except ValueError:
+        pass
+    if _assert_one_slot_changed(_arms(dict(_ACE), dict(_BACK))) is not True:
+        fails.append("(8) the correctly-built arms were refused")
+    # ... and attribute_rows must actually CALL it. Proven by injecting a builder that produces a
+    # one-starter arm which moves both slots; without the call the run would return a number.
+    def _bad_builder(a, h):
+        return ((dict(_CT), dict(_CT)), (dict(a), dict(h)),   # arm b illegally moves BOTH slots
+                (dict(_CT), dict(h)), (dict(a), dict(h)))
+    try:
+        attribute_rows(_v1cap, [_row("AAA", "BBB", "NG01", "Back", _BACK, "Ace", _ACE, 0.474)],
+                       D, _FORM, lambda hm: 1.0, n=_TINY_N, arms_builder=_bad_builder)
+        fails.append("(8) attribute_rows produced a delta from arms where the AWAY-ONLY scenario "
+                     "moved both slots — the assertion exists but is never called")
+    except ValueError as exc:
+        if "REFUSED" not in str(exc):
+            fails.append(f"(8) the in-loop refusal is not the one-slot assertion: {exc}")
+
+    # (9) DROPPING THE INTERACTION FIELD FAILS.
+    for q in ("away_only", "home_only", "joint", "non_additivity"):
+        if q not in both["delta_states"] or q not in both["deltas_pp"]:
+            fails.append(f"(9) {q} is absent from the record — the interaction must be reported "
+                         f"SEPARATELY because joint movement need not equal the sum")
+    if both["delta_states"]["non_additivity"]["state"] != MEASURED:
+        fails.append("(9) a fully treated game did not MEASURE the interaction")
+    if both["deltas_pp"]["non_additivity"] is None:
+        fails.append("(9) the interaction field is null on a fully treated game")
+    add = both["deltas_pp"]["away_only"] + both["deltas_pp"]["home_only"]
+    if abs(both["deltas_pp"]["joint"] - add) < 1e-12 and both["deltas_pp"]["non_additivity"] != 0.0:
+        fails.append("(9) the interaction contradicts its own components")
+
+    # (10) REMOVING THE ARRAY/SEED BINDING FAILS.
+    if not both.get("draw_binding_sha256"):
+        fails.append("(10) the record carries no draw binding — its numbers float free of the "
+                     "arrays that produced them")
+    b_ref = _arm_binding(MODEL_ID, "AAA@BBB", D, 0, _TINY_N, _seed("AAA@BBB", D),
+                         _arms(_BACK, _ACE))
+    if both["draw_binding_sha256"] != b_ref:
+        fails.append("(10) the stored binding does not recompute from its stated inputs")
+    # The binding must be SENSITIVE to each input it claims to cover — proven against LITERAL
+    # digests, because comparing the module's output to the module's own recomputation moves with
+    # any mutation and can never detect one.
+    _pin = _arm_binding("M", "A@B", "2026-08-21", 0, 1000, 12345,
+                        ((dict(_CT), dict(_CT)), (dict(_ACE), dict(_CT)),
+                         (dict(_CT), dict(_ACE)), (dict(_ACE), dict(_ACE))))
+    _variants = {
+        "model id": _arm_binding("OTHER", "A@B", "2026-08-21", 0, 1000, 12345,
+                                 ((dict(_CT), dict(_CT)), (dict(_ACE), dict(_CT)),
+                                  (dict(_CT), dict(_ACE)), (dict(_ACE), dict(_ACE)))),
+        "game": _arm_binding("M", "X@Y", "2026-08-21", 0, 1000, 12345,
+                             ((dict(_CT), dict(_CT)), (dict(_ACE), dict(_CT)),
+                              (dict(_CT), dict(_ACE)), (dict(_ACE), dict(_ACE)))),
+        "date": _arm_binding("M", "A@B", "2026-08-22", 0, 1000, 12345,
+                             ((dict(_CT), dict(_CT)), (dict(_ACE), dict(_CT)),
+                              (dict(_CT), dict(_ACE)), (dict(_ACE), dict(_ACE)))),
+        "rep": _arm_binding("M", "A@B", "2026-08-21", 1, 1000, 12345,
+                            ((dict(_CT), dict(_CT)), (dict(_ACE), dict(_CT)),
+                             (dict(_CT), dict(_ACE)), (dict(_ACE), dict(_ACE)))),
+        "n": _arm_binding("M", "A@B", "2026-08-21", 0, 1001, 12345,
+                          ((dict(_CT), dict(_CT)), (dict(_ACE), dict(_CT)),
+                           (dict(_CT), dict(_ACE)), (dict(_ACE), dict(_ACE)))),
+        "seed": _arm_binding("M", "A@B", "2026-08-21", 0, 1000, 12346,
+                             ((dict(_CT), dict(_CT)), (dict(_ACE), dict(_CT)),
+                              (dict(_CT), dict(_ACE)), (dict(_ACE), dict(_ACE)))),
+        "arm stat vectors": _arm_binding("M", "A@B", "2026-08-21", 0, 1000, 12345,
+                                         ((dict(_CT), dict(_CT)), (dict(_BACK), dict(_CT)),
+                                          (dict(_CT), dict(_ACE)), (dict(_BACK), dict(_ACE)))),
+    }
+    for label, v in _variants.items():
+        if v == _pin:
+            fails.append(f"(10) changing the {label} did not change the draw binding — the binding "
+                         f"does not cover the thing it claims to")
+    if len(set(_variants.values()) | {_pin}) != len(_variants) + 1:
+        fails.append("(10) two different draw configurations collided to the same binding")
+    for label, changed in (
+            ("n", _arm_binding(MODEL_ID, "AAA@BBB", D, 0, _TINY_N + 1, _seed("AAA@BBB", D),
+                               _arms(_BACK, _ACE))),
+            ("model id", _arm_binding("OTHER", "AAA@BBB", D, 0, _TINY_N, _seed("AAA@BBB", D),
+                                      _arms(_BACK, _ACE))),
+            ("seed", _arm_binding(MODEL_ID, "AAA@BBB", D, 0, _TINY_N, 999, _arms(_BACK, _ACE))),
+            ("game", _arm_binding(MODEL_ID, "XXX@YYY", D, 0, _TINY_N, _seed("AAA@BBB", D),
+                                  _arms(_BACK, _ACE))),
+            ("date", _arm_binding(MODEL_ID, "AAA@BBB", "2026-08-22", 0, _TINY_N,
+                                  _seed("AAA@BBB", D), _arms(_BACK, _ACE))),
+            ("arm stats", _arm_binding(MODEL_ID, "AAA@BBB", D, 0, _TINY_N, _seed("AAA@BBB", D),
+                                       _arms(_ACE, _ACE)))):
+        if changed == b_ref:
+            fails.append(f"(10) changing the {label} did not change the draw binding — the binding "
+                         f"does not cover the thing it claims to")
+
+    # SELFTEST STRUCTURE — proved, not assumed. The ten fixtures above were briefly DEAD CODE:
+    # an early `if fails: return 1` sat above them, so their failures were collected and then
+    # discarded and every mutant they guard survived. A selftest that cannot report its own last
+    # fixture is decoration in the purest form (lesson 21), so the structure is now asserted.
+    # Markers are CONCATENATED at runtime so this check does not match its own source text.
+    _src = open(os.path.abspath(__file__)).read()
+    _vm = 'print("starter_attribution selftest: ' + 'FAIL")'
+    _fm = 'fails.append(f"(10) changing ' + 'the'
+    if _src.count(_vm) != 1:
+        fails.append(f"{_src.count(_vm)} FAIL verdicts in the selftest — an early return silently "
+                     f"orphans every fixture below it, which is exactly what happened on 2026-08-22")
+    elif _src.rindex(_fm) > _src.rindex(_vm):
+        fails.append("SELFTEST STRUCTURE BROKEN — the last fixture appends failures BELOW the "
+                     "verdict, so its result can never be reported")
+
     if fails:
         print("starter_attribution selftest: FAIL")
         for f in fails:
@@ -703,6 +1146,145 @@ def selftest():
 # CLI
 # --------------------------------------------------------------------------------------------
 
+# ----------------------------------------------------------------------- mutation harness
+# LESSON 21 + owner acceptance contract: the ten falsification fixtures are only worth their name
+# if each KILLS the mutant it exists to catch. `--mutants` applies each source edit to a temp copy
+# and REQUIRES that copy's selftest to fail. A survivor means the fixture is decoration and the
+# quarantine stays regardless.
+MUTANTS = [
+    # (1) identical inputs must be STRUCTURAL_ZERO, never a measurement
+    ("(1) structural zero rendered as a measured value",
+     "    if arms_identical:", "    if False:"),
+    ("(1) structural zero carries a numeric value_pp",
+     '        return {"state": STRUCTURAL_ZERO, "value_pp": None, "structural_value_pp": 0.0,',
+     '        return {"state": STRUCTURAL_ZERO, "value_pp": 0.0, "structural_value_pp": 0.0,'),
+    ("(1) the attached structural 0.0 dropped",
+     '"structural_value_pp": 0.0,', '"structural_value_pp": None,'),
+    # (2) missing starter -> NOT_MEASURABLE, never 0.0
+    ("(2) NOT_MEASURABLE state removed", "    if not measurable:", "    if False:"),
+    ("(2) NOT_MEASURABLE returns 0.0 instead of null",
+     '        return {"state": NOT_MEASURABLE, "value_pp": None,',
+     '        return {"state": NOT_MEASURABLE, "value_pp": 0.0,'),
+    ("(2) interaction measurable with only one slot treated",
+     "                measurable=(away_treated and home_treated),", "                measurable=True,"),
+    # (3)/(4) direction
+    ("(3/4) home-only and away-only arms transposed",
+     "            (dict(away_real), dict(CAP_STATS)),\n            (dict(CAP_STATS), dict(home_real)),",
+     "            (dict(CAP_STATS), dict(home_real)),\n            (dict(away_real), dict(CAP_STATS)),"),
+    ("(3/4) away and home deltas transposed",
+     '    away = (p_b - p_a) * 100.0\n    home = (p_c - p_a) * 100.0',
+     '    away = (p_c - p_a) * 100.0\n    home = (p_b - p_a) * 100.0'),
+    # (5) order invariance
+    ("(5) arms re-labelled by the caller's order instead of canonical names",
+     "        arm_of = dict(zip(ARM_KEYS, arms))   # CANONICAL names, never the caller's order",
+     "        arm_of = dict(zip(order, arms))"),
+    ("(5) slate position enters the draw key",
+     '    return f"KEYED|{model_id}|{game}|{date}|rep{rep}"',
+     '    return f"KEYED|{model_id}|{game}|{date}|rep{rep}|{len(game)}"'),
+    ("(5) arm_order permutation not validated",
+     "        if sorted(order) != sorted(ARM_KEYS):", "        if False:"),
+    # (6) common random numbers
+    ("(6) CRN removed — each arm gets its own generator",
+     "    return cr.sim_full(asp, hsp, form, aw, hm, pf, n, np.random.default_rng(seed))",
+     "    return cr.sim_full(asp, hsp, form, aw, hm, pf, n, np.random.default_rng())"),
+    ("(6) scenario enters the draw key, destroying pairing",
+     "                sim = run_arm(asp, hsp, form, aw, hm, pf, n, rseed)",
+     "                sim = run_arm(asp, hsp, form, aw, hm, pf, n, rseed + hash(arm_key) % 97)"),
+    ("(6) replicate index dropped from the seed, so every replicate is identical",
+     "def _seed(game, date, model_id=MODEL_ID, rep=0):\n    \"\"\"32 bits",
+     "def _seed(game, date, model_id=MODEL_ID, rep=0):\n    rep = 0\n    \"\"\"32 bits"),
+    ("(6) model identity dropped from the draw key",
+     '    return f"KEYED|{model_id}|{game}|{date}|rep{rep}"',
+     '    return f"KEYED|{game}|{date}|rep{rep}"'),
+    # (7) sign
+    ("(7) delta sign reversed (control minus arm)",
+     '    away = (p_b - p_a) * 100.0\n    home = (p_c - p_a) * 100.0\n    joint = (p_d - p_a) * 100.0',
+     '    away = (p_a - p_b) * 100.0\n    home = (p_a - p_c) * 100.0\n    joint = (p_a - p_d) * 100.0'),
+    # (8) one-slot scenarios
+    ("(8) the one-slot-changed assertion never called",
+     "        _assert_one_slot_changed(arms)", "        pass  # assertion removed"),
+    ("(8) the assertion never raises", '        raise ValueError("REFUSED: " + "; ".join(bad))',
+     '        pass'),
+    ("(8) only the away slot is checked for illegal movement",
+     '        if home_moved and "home" not in may:', "        if False:"),
+    # (9) interaction
+    ("(9) interaction dropped from the reported quantities",
+     '            "non_additivity": classify(', '            "_dropped_non_additivity": classify('),
+    ("(9) interaction reported as the sum instead of the residual",
+     '    return {"away_only": away, "home_only": home, "joint": joint,\n            "non_additivity": joint - (away + home)}',
+     '    return {"away_only": away, "home_only": home, "joint": joint,\n            "non_additivity": away + home}'),
+    # (10) binding
+    ("(10) draw binding removed from the record",
+     '            "draw_binding_sha256": binding,', '            "draw_binding_sha256": None,'),
+    ("(10) binding ignores n", '        "model_id": model_id, "game": game, "date": date, "rep": rep, "n": n, "seed": seed,',
+     '        "model_id": model_id, "game": game, "date": date, "rep": rep, "seed": seed,'),
+    # These two mutants must REMOVE coverage, not merely perturb the payload. An earlier pair
+    # "survived" because they left the covered field reachable by another route — `_x: 0` still
+    # carried the stat vectors, and dropping `model_id` left model identity inside `seed_input`.
+    # A mutant that does not actually delete the rule proves as little as a decorative fixture.
+    ("(10) binding ignores the per-arm stat vectors",
+     '''        "arms": [{"scenario": ARM_SCENARIO[k],
+                  "away": {f: a.get(f) for f in SIM_STAT_FIELDS},
+                  "home": {f: h.get(f) for f in SIM_STAT_FIELDS}}
+                 for k, (a, h) in zip(ARM_KEYS, arms)],''',
+     '        "arms": [ARM_SCENARIO[k] for k in ARM_KEYS],'),
+    ("(10) binding ignores the model identity",
+     '        "model_id": model_id, "game": game, "date": date, "rep": rep, "n": n, "seed": seed,\n        "seed_input": _seed_input(game, date, model_id, rep),',
+     '        "game": game, "date": date, "rep": rep, "n": n, "seed": seed,'),
+    # paired uncertainty
+    ("SE: single replicate asserted as 0.0 instead of null",
+     "        if len(vals) < 2:\n            out[k] = None", "        if len(vals) < 2:\n            out[k] = 0.0"),
+    ("SE: paired uncertainty not reported at all",
+     '            "delta_se_pp": {k: _r(v) for k, v in se.items()},', '            "delta_se_pp": None,'),
+    # the causal-language refusal (kept from the original suite)
+    ("causal language: 'starter effect' allowed without 'keyed'",
+     '    if "starter effect" in flat and "keyed" not in flat:', "    if False:"),
+    ("selftest structure: a second FAIL verdict orphans the fixtures below it",
+     "    if fails:\n        print(\"starter_attribution selftest: FAIL\")",
+     "    if fails:\n        print(\"starter_attribution selftest: FAIL\")\n        return 1\n    if fails:\n        print(\"starter_attribution selftest: FAIL\")"),
+]
+
+
+def mutation_suite(verbose=True):
+    import subprocess as _sp, tempfile as _tf
+    src = open(os.path.abspath(__file__)).read()
+    i = src.index("MUTANTS = [")
+    j = src.index("\ndef mutation_suite", i)
+    head, block, tail = src[:i], src[i:j], src[j:]
+    survivors, unapplied = [], []
+    for name, old, new in MUTANTS:
+        where = "head" if old in head else ("tail" if old in tail else None)
+        if where is None:
+            unapplied.append(f"{name}: pattern not found in executable source")
+            continue
+        mutated = (head.replace(old, new, 1) + block + tail) if where == "head" \
+            else (head + block + tail.replace(old, new, 1))
+        if mutated == src:
+            unapplied.append(f"{name}: no-op replacement")
+            continue
+        with _tf.NamedTemporaryFile("w", suffix="_mutant.py", delete=False,
+                                    dir=os.path.dirname(os.path.abspath(__file__))) as fh:
+            fh.write(mutated)
+            path = fh.name
+        try:
+            pr = _sp.run([sys.executable, path, "--selftest"], capture_output=True, text=True,
+                         timeout=1800)
+            killed = pr.returncode != 0
+        except _sp.TimeoutExpired:
+            killed = True
+        finally:
+            os.unlink(path)
+        if verbose:
+            print(f"  {'KILLED  ' if killed else 'SURVIVED'}  {name}", flush=True)
+        if not killed:
+            survivors.append(name)
+    for u in unapplied:
+        print(f"  UNAPPLIED  {u}")
+    print(f"mutation suite: {len(MUTANTS) - len(survivors) - len(unapplied)}/{len(MUTANTS)} killed"
+          f"{'' if not (survivors or unapplied) else '  — SURVIVORS MEAN DECORATIVE FIXTURES'}")
+    return survivors + unapplied
+
+
 def _safe_out(path):
     rel = os.path.relpath(os.path.abspath(path), BASE)
     if rel.startswith(".."):
@@ -718,6 +1300,9 @@ def _safe_out(path):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--selftest", action="store_true")
+    ap.add_argument("--mutants", action="store_true",
+                    help="apply every mutant to a temp copy and require the selftest to FAIL for "
+                         "each; a SURVIVOR means the fixture guarding that rule is decoration")
     ap.add_argument("--date", default="2026-08-21")
     ap.add_argument("--v1", default=None, help="v1 (all-league-average) card path")
     ap.add_argument("--v2", default=None, help="v2 (starters resolved) card path")
@@ -725,6 +1310,8 @@ def main():
     ap.add_argument("--json", action="store_true")
     ap.add_argument("--out", default=None, help="optional JSON output path (never overwrites)")
     a = ap.parse_args()
+    if a.mutants:
+        return 1 if mutation_suite() else 0
     if a.selftest:
         return selftest()
 

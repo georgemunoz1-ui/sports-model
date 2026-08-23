@@ -2806,3 +2806,33 @@ stays empty by construction.
 
 ZERO slip. Wager authority NO, execution UNAUTHORIZED, ledger $0. The owner's discretion card remains
 their own and stays walled from model output.
+
+## 2026-08-23T01:05Z — DK NFL capture: FIRST valid same-book de-vig of the night, still zero bets
+Owner posted a DraftKings NFL preseason board for DAL@ARI (kickoff 7:00 PM PT = 02:00Z, countdown
+00:56:49 on screen). SOURCE PIXELS GOVERN.
+
+PRICE BASIS IS SAME_BOOK_TWO_SIDED AND DE-VIG IS VALID — and the arithmetic proves it independently
+of the DraftKings logo. Overrounds: moneyline +4.75%, spread +4.62%, main total +4.75%, both SGP
+alternates +6.52%. That is a genuine single-book vig. The WNBA aggregator board two hours earlier
+carried +0.58% and +0.41%, the signature of best-odds shopping across books, which is why de-vig was
+refused there. THE OVERROUND IS THE TEST; this board passes it and that one failed it. Same evening,
+same screening code, opposite rulings, both mechanical.
+
+DE-VIGGED MARKET: DAL .4957 / ARI .5043 on the moneyline — DK's own implied chart shows 50/50, so
+the de-vig reproduces the book's own view. Spread cover DAL .5174 / ARI .4826 at 1.5. Total 38.5,
+over .5043.
+
+AND IT STILL PRODUCES NO BET, for a reason no amount of price quality can fix: NO NFL MODEL EXISTS.
+A valid de-vig yields a MARKET probability, not an edge — there is nothing to compare it against.
+Brier/logloss/edge/EV stay NULL BY RULE. Registered ARI -1.5 (-102) / ML -112 as the capture-time
+benchmark side at T-55m, MARKET_BENCHMARK_ONLY, superseding the earlier null-benchmark record
+append-only.
+
+SGP CORRELATION, recorded because it bears on the earlier parlay screen: the alternates are tagged
+SGP and legs INSIDE one game are correlated — DAL +2.5 and Over 37.5 are not independent. The
+independence multiplication used in the parlay screen is defensible ACROSS games and is NOT valid
+within one. Any same-game combination needs the book's own combined price. Also noted: the SGP
+alternates carry ~40% more vig than the main lines (+6.52% vs +4.62-4.75%) for moving the number one
+point.
+
+Betting output zero, ledger $0. Evidence: data/nfl/evidence_2026-08-22_DK_DALARI_prices.json

@@ -11,7 +11,18 @@
    "market_brier_at_close": null,
    "ev_at_close_flat_unit_sum": null,
    "realized_units_flat_1u_all_model_sides": null,
-   "priced_rows": 0
+   "priced_rows": 0,
+   "bound_grade_ids": [
+    "G-P4-20260820-ATH@KC",
+    "G-P4-20260820-ATL@CWS",
+    "G-P4-20260820-LAA@HOU",
+    "G-P4-20260820-NYY@BAL",
+    "G-P4-20260820-SEA@MIL",
+    "G-P4-20260820-SF@CLE",
+    "G-P4-20260820-TOR@TB",
+    "G-P4-20260820-WSH@TEX"
+   ],
+   "cohort_input_sha256": "c3607ab9d1d82a3f3e1ab5f6f8fc35fb1feaed59de9b028127929db26f37be4e"
   }
  },
  "date": "2026-08-20",
@@ -242,6 +253,24 @@
  "record_id": "GRADES-2026-08-20",
  "built_utc": "2026-08-21T05:45:00Z",
  "cohorts_never_pooled": true,
- "market_comparison": "MARKET_COMPARISON_UNAVAILABLE \u2014 no closing prices acquired. Registration-vintage same-board moneylines are reported separately as MARKET_IMPLIED_CONTEXT and are NOT closing-line evidence.",
- "stl_cin": "no forecast registered (POST_START_AT_INTAKE exclusion, data/mlb/analysis/2026-08-20_STLCIN_exclusion.json) \u2014 result recorded, nothing graded"
+ "market_comparison": "MARKET_COMPARISON_UNAVAILABLE — no closing prices acquired. Registration-vintage same-board moneylines are reported separately as MARKET_IMPLIED_CONTEXT and are NOT closing-line evidence.",
+ "stl_cin": "no forecast registered (POST_START_AT_INTAKE exclusion, data/mlb/analysis/2026-08-20_STLCIN_exclusion.json) — result recorded, nothing graded",
+ "summary_pre_contract_2026-08-23": {
+  "v1": {
+   "n": 8,
+   "correct": 5,
+   "accuracy": 0.625,
+   "brier": 0.249333,
+   "logloss": 0.691855,
+   "mean_abs_total_error": 4.25,
+   "mean_signed_total_error": 0.275,
+   "market_brier_at_close": null,
+   "ev_at_close_flat_unit_sum": null,
+   "realized_units_flat_1u_all_model_sides": null,
+   "priced_rows": 0
+  }
+ },
+ "contract": "grade_summary_contract_v1",
+ "summary_rebuild_note": "Rebuilt 2026-08-23 from every active non-superseded record in data/mlb/forecasts/grades.jsonl under grade_summary_contract_v1. The pre-contract block is preserved above; it agreed with the ledger and differs only in decimal precision where it had been rounded to 4 places.",
+ "summary_rebuilt_from": "data/mlb/forecasts/grades.jsonl (active, non-superseded)"
 }

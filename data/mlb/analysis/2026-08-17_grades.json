@@ -10,38 +10,79 @@
    "mean_signed_total_error": -1.88,
    "market_brier_at_close": 0.184778,
    "ev_at_close_flat_unit_sum": -0.2006,
-   "realized_units_flat_1u_all_model_sides": -2.0892
+   "realized_units_flat_1u_all_model_sides": -2.0892,
+   "bound_grade_ids": [
+    "G-P4-20260817-ATH@KC",
+    "G-P4-20260817-ATL@MIN",
+    "G-P4-20260817-AZ@BOS",
+    "G-P4-20260817-BAL@TB",
+    "G-P4-20260817-CWS@CHC",
+    "G-P4-20260817-DET@PIT",
+    "G-P4-20260817-LAD@COL",
+    "G-P4-20260817-MIA@PHI",
+    "G-P4-20260817-SD@NYM",
+    "G-P4-20260817-STL@CIN"
+   ],
+   "cohort_input_sha256": "1d46db6bcd50bb12b3e109226280b771ac03dcda40f7954d9ad76088c5702ed7"
   },
   "v2": {
    "n": 11,
    "correct": 8,
-   "accuracy": 0.7273,
+   "accuracy": 0.727273,
    "brier": 0.234959,
    "logloss": 0.662997,
    "mean_abs_total_error": 3.709,
    "mean_signed_total_error": -1.164,
    "market_brier_at_close": 0.189648,
    "ev_at_close_flat_unit_sum": -0.0211,
-   "realized_units_flat_1u_all_model_sides": 2.6715
+   "realized_units_flat_1u_all_model_sides": 2.6715,
+   "bound_grade_ids": [
+    "G-P4-20260817v2-ATH@KC",
+    "G-P4-20260817v2-ATL@MIN",
+    "G-P4-20260817v2-AZ@BOS",
+    "G-P4-20260817v2-BAL@TB",
+    "G-P4-20260817v2-CWS@CHC",
+    "G-P4-20260817v2-DET@PIT",
+    "G-P4-20260817v2-LAD@COL",
+    "G-P4-20260817v2-MIA@PHI",
+    "G-P4-20260817v2-SD@NYM",
+    "G-P4-20260817v2-STL@CIN-G1",
+    "G-P4-20260817v2-STL@CIN-G2"
+   ],
+   "cohort_input_sha256": "d93b3eaacda00e62721fcc7a75357502dba1ff9aef9d0bc9c4b111bbe60ba5b0"
   },
   "v3": {
    "n": 11,
    "correct": 7,
-   "accuracy": 0.6364,
+   "accuracy": 0.636364,
    "brier": 0.237887,
    "logloss": 0.668859,
    "mean_abs_total_error": 3.7,
    "mean_signed_total_error": -1.136,
    "market_brier_at_close": 0.189648,
    "ev_at_close_flat_unit_sum": 0.4528,
-   "realized_units_flat_1u_all_model_sides": 1.058
+   "realized_units_flat_1u_all_model_sides": 1.058,
+   "bound_grade_ids": [
+    "G-P4-20260817v3-ATH@KC",
+    "G-P4-20260817v3-ATL@MIN",
+    "G-P4-20260817v3-AZ@BOS",
+    "G-P4-20260817v3-BAL@TB",
+    "G-P4-20260817v3-CWS@CHC",
+    "G-P4-20260817v3-DET@PIT",
+    "G-P4-20260817v3-LAD@COL",
+    "G-P4-20260817v3-MIA@PHI",
+    "G-P4-20260817v3-SD@NYM",
+    "G-P4-20260817v3-STL@CIN-G1",
+    "G-P4-20260817v3-STL@CIN-G2"
+   ],
+   "cohort_input_sha256": "7ac92bc9285a6280e59c1b4c2103b7e3f23d4b805d1b7589da829d03d5fdfe20"
   }
  },
  "date": "2026-08-17",
  "board": "data/mlb/evidence/2026-08-17_owner_board.json",
  "board_sha256": "bbcbdb69946fb45bee90be84878170b9d862a97a3053ce4d17d9f6cde4bf39ec",
  "board_captured_utc": "2026-08-18T04:15:00Z",
- "price_timing": "POST_FINAL \u2014 the board was received after every game ended, so its money lines are CLOSING prices captured retrospectively. They may be used for EV-at-close evaluation and MUST NOT be presented as pregame selections.",
+ "price_timing": "POST_FINAL — the board was received after every game ended, so its money lines are CLOSING prices captured retrospectively. They may be used for EV-at-close evaluation and MUST NOT be presented as pregame selections.",
  "rows": [
   {
    "forecast_id": "P4-20260817-ATH@KC",
@@ -927,5 +968,46 @@
   }
  ],
  "errors": [],
- "already_graded_skipped": []
+ "already_graded_skipped": [],
+ "summary_pre_contract_2026-08-23": {
+  "v1": {
+   "n": 10,
+   "correct": 5,
+   "accuracy": 0.5,
+   "brier": 0.245958,
+   "logloss": 0.685031,
+   "mean_abs_total_error": 3.56,
+   "mean_signed_total_error": -1.88,
+   "market_brier_at_close": 0.184778,
+   "ev_at_close_flat_unit_sum": -0.2006,
+   "realized_units_flat_1u_all_model_sides": -2.0892
+  },
+  "v2": {
+   "n": 11,
+   "correct": 8,
+   "accuracy": 0.7273,
+   "brier": 0.234959,
+   "logloss": 0.662997,
+   "mean_abs_total_error": 3.709,
+   "mean_signed_total_error": -1.164,
+   "market_brier_at_close": 0.189648,
+   "ev_at_close_flat_unit_sum": -0.0211,
+   "realized_units_flat_1u_all_model_sides": 2.6715
+  },
+  "v3": {
+   "n": 11,
+   "correct": 7,
+   "accuracy": 0.6364,
+   "brier": 0.237887,
+   "logloss": 0.668859,
+   "mean_abs_total_error": 3.7,
+   "mean_signed_total_error": -1.136,
+   "market_brier_at_close": 0.189648,
+   "ev_at_close_flat_unit_sum": 0.4528,
+   "realized_units_flat_1u_all_model_sides": 1.058
+  }
+ },
+ "contract": "grade_summary_contract_v1",
+ "summary_rebuild_note": "Rebuilt 2026-08-23 from every active non-superseded record in data/mlb/forecasts/grades.jsonl under grade_summary_contract_v1. The pre-contract block is preserved above; it agreed with the ledger and differs only in decimal precision where it had been rounded to 4 places.",
+ "summary_rebuilt_from": "data/mlb/forecasts/grades.jsonl (active, non-superseded)"
 }

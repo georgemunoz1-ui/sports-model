@@ -1,30 +1,66 @@
 {
  "summary": {
   "v1": {
-   "n": 1,
-   "correct": 0,
-   "accuracy": 0.0,
-   "brier": 0.323761,
-   "logloss": 0.841647,
+   "n": 15,
+   "correct": 8,
+   "accuracy": 0.533333,
+   "brier": 0.246333,
+   "logloss": 0.685827,
    "mean_abs_total_error": 3.0,
    "mean_signed_total_error": -3.0,
    "market_brier_at_close": null,
    "ev_at_close_flat_unit_sum": null,
    "realized_units_flat_1u_all_model_sides": null,
-   "priced_rows": 0
+   "priced_rows": 0,
+   "bound_grade_ids": [
+    "G-P4-20260821-ATH@HOU",
+    "G-P4-20260821-ATL@MIL",
+    "G-P4-20260821-CHC@SEA",
+    "G-P4-20260821-CIN@AZ",
+    "G-P4-20260821-CLE@COL",
+    "G-P4-20260821-DET@KC",
+    "G-P4-20260821-LAA@TEX",
+    "G-P4-20260821-MIN@SD",
+    "G-P4-20260821-NYM@CWS",
+    "G-P4-20260821-PIT@LAD",
+    "G-P4-20260821-SF@BOS",
+    "G-P4-20260821-STL@PHI",
+    "G-P4-20260821-TB@BAL",
+    "G-P4-20260821-TOR@NYY",
+    "G-P4-20260821-WSH@MIA"
+   ],
+   "cohort_input_sha256": "12401da40aff593c7ad3d77d9c0b1572dbb3478a726cb31943d54fbb77a314e1"
   },
   "v2": {
-   "n": 1,
-   "correct": 0,
-   "accuracy": 0.0,
-   "brier": 0.292681,
-   "logloss": 0.778705,
+   "n": 15,
+   "correct": 10,
+   "accuracy": 0.666667,
+   "brier": 0.230621,
+   "logloss": 0.654043,
    "mean_abs_total_error": 3.5,
    "mean_signed_total_error": -3.5,
    "market_brier_at_close": null,
    "ev_at_close_flat_unit_sum": null,
    "realized_units_flat_1u_all_model_sides": null,
-   "priced_rows": 0
+   "priced_rows": 0,
+   "bound_grade_ids": [
+    "G-P4-20260821v2-ATH@HOU",
+    "G-P4-20260821v2-ATL@MIL",
+    "G-P4-20260821v2-CHC@SEA",
+    "G-P4-20260821v2-CIN@AZ",
+    "G-P4-20260821v2-CLE@COL",
+    "G-P4-20260821v2-DET@KC",
+    "G-P4-20260821v2-LAA@TEX",
+    "G-P4-20260821v2-MIN@SD",
+    "G-P4-20260821v2-NYM@CWS",
+    "G-P4-20260821v2-PIT@LAD",
+    "G-P4-20260821v2-SF@BOS",
+    "G-P4-20260821v2-STL@PHI",
+    "G-P4-20260821v2-TB@BAL",
+    "G-P4-20260821v2-TOR@NYY",
+    "G-P4-20260821v2-WSH@MIA"
+   ],
+   "cohort_input_sha256": "d0608fb5783d050d7a8799dacddce60cc512fbfe1b55e634d715e7e67ffab0ac"
   }
  },
  "date": "2026-08-21",
@@ -126,5 +162,36 @@
  "built_utc": "2026-08-22T14:05:00Z",
  "cohorts_never_pooled": true,
  "completeness": "15 of 15 graded",
- "market_comparison": "MARKET_COMPARISON_UNAVAILABLE \u2014 no prices were ever acquired."
+ "market_comparison": "MARKET_COMPARISON_UNAVAILABLE — no prices were ever acquired.",
+ "summary_pre_contract_2026-08-23": {
+  "v1": {
+   "n": 1,
+   "correct": 0,
+   "accuracy": 0.0,
+   "brier": 0.323761,
+   "logloss": 0.841647,
+   "mean_abs_total_error": 3.0,
+   "mean_signed_total_error": -3.0,
+   "market_brier_at_close": null,
+   "ev_at_close_flat_unit_sum": null,
+   "realized_units_flat_1u_all_model_sides": null,
+   "priced_rows": 0
+  },
+  "v2": {
+   "n": 1,
+   "correct": 0,
+   "accuracy": 0.0,
+   "brier": 0.292681,
+   "logloss": 0.778705,
+   "mean_abs_total_error": 3.5,
+   "mean_signed_total_error": -3.5,
+   "market_brier_at_close": null,
+   "ev_at_close_flat_unit_sum": null,
+   "realized_units_flat_1u_all_model_sides": null,
+   "priced_rows": 0
+  }
+ },
+ "contract": "grade_summary_contract_v1",
+ "summary_rebuild_note": "CORRECTED 2026-08-23. The block preserved above was written by a re-settlement run that graded only the late CHC@SEA game and summarised THAT RUN'S ROWS, moving the other 28 forecasts into already_graded_skipped. It reported n=1 for a cohort of 15 and replaced the .230621 v2 headline with .292681. Nothing about any forecast, grade or result changed; only the derived summary was wrong. It is now rebuilt from every active non-superseded ledger record and reproduces .230621 exactly.",
+ "summary_rebuilt_from": "data/mlb/forecasts/grades.jsonl (active, non-superseded)"
 }

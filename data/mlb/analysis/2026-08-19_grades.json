@@ -3,7 +3,7 @@
   "v1": {
    "n": 15,
    "correct": 8,
-   "accuracy": 0.5333,
+   "accuracy": 0.533333,
    "brier": 0.25251,
    "logloss": 0.698293,
    "mean_abs_total_error": 3.62,
@@ -11,12 +11,30 @@
    "market_brier_at_close": null,
    "ev_at_close_flat_unit_sum": null,
    "realized_units_flat_1u_all_model_sides": null,
-   "priced_rows": 0
+   "priced_rows": 0,
+   "bound_grade_ids": [
+    "G-P4-20260819-ATH@KC",
+    "G-P4-20260819-ATL@MIN",
+    "G-P4-20260819-AZ@BOS",
+    "G-P4-20260819-CWS@CHC",
+    "G-P4-20260819-DET@PIT",
+    "G-P4-20260819-LAA@HOU",
+    "G-P4-20260819-LAD@COL",
+    "G-P4-20260819-MIA@PHI",
+    "G-P4-20260819-NYY@BAL",
+    "G-P4-20260819-SD@NYM",
+    "G-P4-20260819-SEA@MIL",
+    "G-P4-20260819-SF@CLE",
+    "G-P4-20260819-STL@CIN",
+    "G-P4-20260819-TOR@TB",
+    "G-P4-20260819-WSH@TEX"
+   ],
+   "cohort_input_sha256": "b4d8c02d2791a54d6b60cef6764bf3d6751719b884fdfd5f95a6e583a51c193d"
   },
   "v2": {
    "n": 15,
    "correct": 8,
-   "accuracy": 0.5333,
+   "accuracy": 0.533333,
    "brier": 0.249535,
    "logloss": 0.69184,
    "mean_abs_total_error": 3.667,
@@ -24,7 +42,25 @@
    "market_brier_at_close": null,
    "ev_at_close_flat_unit_sum": null,
    "realized_units_flat_1u_all_model_sides": null,
-   "priced_rows": 0
+   "priced_rows": 0,
+   "bound_grade_ids": [
+    "G-P4-20260819v2-ATH@KC",
+    "G-P4-20260819v2-ATL@MIN",
+    "G-P4-20260819v2-AZ@BOS",
+    "G-P4-20260819v2-CWS@CHC",
+    "G-P4-20260819v2-DET@PIT",
+    "G-P4-20260819v2-LAA@HOU",
+    "G-P4-20260819v2-LAD@COL",
+    "G-P4-20260819v2-MIA@PHI",
+    "G-P4-20260819v2-NYY@BAL",
+    "G-P4-20260819v2-SD@NYM",
+    "G-P4-20260819v2-SEA@MIL",
+    "G-P4-20260819v2-SF@CLE",
+    "G-P4-20260819v2-STL@CIN",
+    "G-P4-20260819v2-TOR@TB",
+    "G-P4-20260819v2-WSH@TEX"
+   ],
+   "cohort_input_sha256": "da95a521391ce39736ba17aab8d829244b5ae727c262433ca87b544e8ad42cd0"
   }
  },
  "date": "2026-08-19",
@@ -894,6 +930,37 @@
  "already_graded_skipped": [],
  "record_id": "GRADES-2026-08-19",
  "built_utc": "2026-08-20T05:03:25Z",
- "market_comparison": "NOT COMPUTABLE \u2014 the finals board carries no closing prices and the only 8/19 prices on file are cross-book best odds (de-vig INVALID per 8/3 ruling). Favorite-accuracy from the 10:05Z board is reported descriptively in the settlement summary only.",
- "cohorts_never_pooled": true
+ "market_comparison": "NOT COMPUTABLE — the finals board carries no closing prices and the only 8/19 prices on file are cross-book best odds (de-vig INVALID per 8/3 ruling). Favorite-accuracy from the 10:05Z board is reported descriptively in the settlement summary only.",
+ "cohorts_never_pooled": true,
+ "summary_pre_contract_2026-08-23": {
+  "v1": {
+   "n": 15,
+   "correct": 8,
+   "accuracy": 0.5333,
+   "brier": 0.25251,
+   "logloss": 0.698293,
+   "mean_abs_total_error": 3.62,
+   "mean_signed_total_error": 0.633,
+   "market_brier_at_close": null,
+   "ev_at_close_flat_unit_sum": null,
+   "realized_units_flat_1u_all_model_sides": null,
+   "priced_rows": 0
+  },
+  "v2": {
+   "n": 15,
+   "correct": 8,
+   "accuracy": 0.5333,
+   "brier": 0.249535,
+   "logloss": 0.69184,
+   "mean_abs_total_error": 3.667,
+   "mean_signed_total_error": 0.693,
+   "market_brier_at_close": null,
+   "ev_at_close_flat_unit_sum": null,
+   "realized_units_flat_1u_all_model_sides": null,
+   "priced_rows": 0
+  }
+ },
+ "contract": "grade_summary_contract_v1",
+ "summary_rebuild_note": "Rebuilt 2026-08-23 from every active non-superseded record in data/mlb/forecasts/grades.jsonl under grade_summary_contract_v1. The pre-contract block is preserved above; it agreed with the ledger and differs only in decimal precision where it had been rounded to 4 places.",
+ "summary_rebuilt_from": "data/mlb/forecasts/grades.jsonl (active, non-superseded)"
 }

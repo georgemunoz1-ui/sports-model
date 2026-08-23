@@ -214,22 +214,66 @@ def _starter_defect(crow, g):
     return bad or None
 
 
-def summarize(res):
+def _ledger_forecasts_for(date):
+    """forecast_ids the ledger already holds an ACTIVE grade for on this date."""
+    import grade_ledger as GL
+    fdates = {}
+    for f in GL._read_jsonl(GL.FORECASTS):
+        fdates.setdefault(f.get("forecast_id"), f.get("slate_date"))
+    return [fid for fid in GL.resolve(GL._read_jsonl(GL.GRADES))["active"]
+            if fdates.get(fid) == date]
+
+
+def summarize(res, date=None):
+    """Cohort statistics REBUILT FROM THE LEDGER, never from this run's rows.
+
+    OWNER RULING 2026-08-23. summarize() used to average `res["rows"]` — the rows graded in THIS
+    RUN — so a re-settlement that graded one late game reported n=1 for a cohort of 15 and pushed
+    the rest into already_graded_skipped. The 2026-08-21 v2 headline .230621 was overwritten with
+    .292681 that way. The core statistics now come from every active non-superseded ledger record
+    for the date and cohort, and the artifact binds the grade ids and an input hash so the rebuild
+    is checkable rather than merely asserted.
+
+    Market and totals fields cannot come from the ledger (it carries no prices or scores), so they
+    are computed from this run's rows and are emitted ONLY when this run covered the whole active
+    cohort. A partial market statistic is exactly the defect this ruling removes, so when the run is
+    partial every market/totals field is null with the reason carried (R1)."""
+    import grade_ledger as GL
+    date = date or res.get("date")
+    cohorts = sorted({r["cohort"] for r in res["rows"]} |
+                     {GL.cohort_of(f) for f in _ledger_forecasts_for(date)})
     out = {}
-    for coh in sorted({r["cohort"] for r in res["rows"]}):
+    for coh in cohorts:
+        t = GL.rebuild(date, coh)
+        if t["n"] == 0:
+            continue
         rs = [r for r in res["rows"] if r["cohort"] == coh]
-        pr = [r for r in rs if r.get("closing_price_devig_p_home") is not None]
-        n = len(rs)
+        active_ids = {b["grade_id"] for b in t["bound_grades"]}
+        run_ids = {f'G-{r["forecast_id"]}' for r in rs}
+        covered = active_ids <= run_ids
+        pr = [r for r in rs if r.get("closing_price_devig_p_home") is not None] if covered else []
+        n = t["n"]
+        partial_reason = (None if covered else
+                          f"this run graded {len(rs)} of {n} active rows in the cohort; market and "
+                          f"totals fields need per-game prices and scores that the ledger does not "
+                          f"carry, and a partial market statistic is not reported (R1)")
         out[coh] = {
             "n": n,
-            "correct": sum(r["correct"] for r in rs),
-            "accuracy": round(sum(r["correct"] for r in rs) / n, 4) if n else None,
-            "brier": round(sum(r["brier"] for r in rs) / n, 6) if n else None,
-            "logloss": round(sum(r["logloss"] for r in rs) / n, 6) if n else None,
-            "mean_abs_total_error": round(sum(abs(r["total_error"]) for r in rs) / n, 3) if n else None,
-            "mean_signed_total_error": round(sum(r["total_error"] for r in rs) / n, 3) if n else None,
+            "correct": t["correct"],
+            "accuracy": t["accuracy"],
+            "brier": t["brier"],
+            "logloss": t["logloss"],
+            "bound_grade_ids": sorted(active_ids),
+            "cohort_input_sha256": t["cohort_input_sha256"],
+            "rebuilt_from_ledger": True,
+            "run_covered_full_cohort": covered,
+            "market_and_totals_null_reason": partial_reason,
+            "mean_abs_total_error": round(sum(abs(r["total_error"]) for r in rs) / len(rs), 3) if covered and rs else None,
+            "mean_signed_total_error": round(sum(r["total_error"] for r in rs) / len(rs), 3) if covered and rs else None,
             "market_brier_at_close": (round(sum(brier(r["closing_price_devig_p_home"], r["home_win"])
                                                 for r in pr) / len(pr), 6) if pr else None),
+            # every field below this line is scoped to THIS RUN's rows and is null unless the run
+            # covered the whole active cohort
             "ev_at_close_flat_unit_sum": (round(sum(
                 (r["ev_per_unit_at_close"]) for r in pr), 4) if pr else None),
             "realized_units_flat_1u_all_model_sides": (round(sum(
@@ -270,6 +314,36 @@ def selftest():
     d = 1 / p
     if abs(p * (d - 1) - (1 - p)) > 1e-9:
         fails.append("EV at a fair price is not zero — the EV formula is wrong")
+    # THE 2026-08-21 REGRESSION. summarize() must report the WHOLE cohort from the ledger even when
+    # this run graded nothing at all. Run with res["rows"] EMPTY — the shape of a re-settlement that
+    # skipped every already-graded forecast — and the cohort must still come back complete.
+    sys.path.insert(0, os.path.join(BASE, "harness"))
+    empty_run = {"date": "2026-08-21", "rows": [], "errors": [], "already_graded_skipped": []}
+    try:
+        s21 = summarize(empty_run, "2026-08-21")
+    except Exception as e:
+        s21 = {}
+        fails.append(f"summarize raised on a run that graded nothing: {type(e).__name__}: {e}")
+    for coh, want_n, want_brier in (("v1", 15, 0.246333), ("v2", 15, 0.230621)):
+        blk = s21.get(coh)
+        if blk is None:
+            fails.append(f"summarize dropped cohort {coh} when this run graded no rows — this is "
+                         f"the defect that rewrote 2026-08-21 to n=1")
+            continue
+        if blk["n"] != want_n:
+            fails.append(f"{coh} summarised n={blk['n']} from an empty run; the ledger holds "
+                         f"{want_n} active grades")
+        if abs(blk["brier"] - want_brier) > 5e-6:
+            fails.append(f"{coh} brier {blk['brier']} != the ledger's {want_brier}")
+        if not blk.get("bound_grade_ids") or not blk.get("cohort_input_sha256"):
+            fails.append(f"{coh} statistics are not bound to grade ids and an input hash")
+        # a run that covered nothing must not report market or totals statistics
+        if blk.get("run_covered_full_cohort") is not False:
+            fails.append(f"{coh} claimed the run covered the full cohort when it graded no rows")
+        if blk.get("mean_abs_total_error") is not None:
+            fails.append(f"{coh} reported a totals statistic from a run with no rows")
+        if not blk.get("market_and_totals_null_reason"):
+            fails.append(f"{coh} nulled its market fields without carrying the reason (R1)")
     if fails:
         print("grade_slate selftest: FAIL")
         for f in fails:
@@ -296,7 +370,23 @@ if __name__ == "__main__":
         for e in res["errors"]:
             print("  " + e)
         raise SystemExit(1)
-    s = summarize(res)
+    sys.path.insert(0, os.path.join(BASE, "harness"))
+    if a.commit:
+        now = dt.datetime.now(dt.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+        src = (f'tier1 owner board {res["board"]} sha256:{res["board_sha256"]} status=FINAL')
+        # APPEND THROUGH THE REGISTRY, never around it. forecast_registry maintains a hash chain over
+        # both jsonl files plus head.json; a raw file append leaves head stale and the chain reads as
+        # BROKEN. An earlier version of this module wrote directly and did exactly that.
+        import forecast_registry as FR
+        for r in res["rows"]:
+            FR.append_grade({"grade_id": f'G-{r["forecast_id"]}',
+                             "forecast_id": r["forecast_id"], "graded_at_utc": now,
+                             "home_win": r["home_win"], "source": src})
+        print(f'appended {len(res["rows"])} grades through forecast_registry (chain + head updated)')
+    else:
+        print("DRY RUN — pass --commit to append grades (each forecast graded exactly once)")
+    # THE SUMMARY IS REBUILT FROM THE LEDGER, and therefore only after the ledger is current.
+    s = summarize(res, a.date)
     print(f'{a.date} — board {res["board_sha256"][:16]} captured {res["board_captured_utc"]}')
     if res["already_graded_skipped"]:
         print(f'  {len(res["already_graded_skipped"])} forecast(s) already graded and SKIPPED (graded once)')
@@ -319,20 +409,11 @@ if __name__ == "__main__":
               f'{"; ".join(r["starter_defect"]) if r["starter_defect"] else "-"}')
     os.makedirs("data/mlb/analysis", exist_ok=True)
     op = f"data/mlb/analysis/{a.date}_grades.json"
-    json.dump({"summary": s, **res}, open(op, "w"), indent=1)
+    json.dump({"summary": s, "contract": "grade_summary_contract_v1",
+               "already_graded_skipped_is_audit_only": (
+                   "This list records which forecasts this RUN skipped because they were already "
+                   "graded. It never reduces a cohort statistic: every number in `summary` is "
+                   "rebuilt from the full set of active non-superseded ledger records."),
+               **res}, open(op, "w"), indent=1)
     print(f"\nwrote {op}")
-    if a.commit:
-        now = dt.datetime.now(dt.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
-        src = (f'tier1 owner board {res["board"]} sha256:{res["board_sha256"]} status=FINAL')
-        # APPEND THROUGH THE REGISTRY, never around it. forecast_registry maintains a hash chain over
-        # both jsonl files plus head.json; a raw file append leaves head stale and the chain reads as
-        # BROKEN. An earlier version of this module wrote directly and did exactly that.
-        sys.path.insert(0, os.path.join(BASE, "harness"))
-        import forecast_registry as FR
-        for r in res["rows"]:
-            FR.append_grade({"grade_id": f'G-{r["forecast_id"]}',
-                             "forecast_id": r["forecast_id"], "graded_at_utc": now,
-                             "home_win": r["home_win"], "source": src})
-        print(f'appended {len(res["rows"])} grades through forecast_registry (chain + head updated)')
-    else:
-        print("DRY RUN — pass --commit to append grades (each forecast graded exactly once)")
+

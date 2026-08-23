@@ -237,7 +237,7 @@ for _m in ("result_provenance","result_content_checks","parse_box_dump",
            "tier1_board_gate","form_refresh_diff","tier1_lineage","pregame_preflight","card_render",
            "settlement_contract","unified_card","decision_card","ats_ledgers",
            "journal_continuity","acquisition_ladder","echo_gate","sports_acquisition","retry_ladder",
-           "information_class"):
+           "information_class","grade_ledger"):
     _r=subprocess.run([sys.executable,f"harness/{_m}.py","--selftest"],capture_output=True,text=True)
     _out=(_r.stdout+_r.stderr).strip().splitlines()
     check(f"{_m} selftest ({_out[-1][:72] if _out else 'no output'})", _r.returncode==0)
@@ -271,6 +271,14 @@ try:
     _r=subprocess.run([sys.executable,"harness/information_class.py","--gate"],capture_output=True,text=True)
     _out=(_r.stdout+_r.stderr).strip().splitlines()
     check(f"information-class ledger ({_out[0][:78] if _out else 'no output'})", _r.returncode==0)
+    # 5a3d. GRADE SUMMARIES ARE DERIVED (owner ruling 2026-08-23, ordered before item 2). The
+    # per-game ledger is canonical; every cohort statistic must rebuild from all active
+    # non-superseded records, bind its grade ids and an input hash, and reproduce exactly. This
+    # fails on a partial summary, a stale binding, statistic drift, and on the specific 2026-08-21
+    # shape where already_graded_skipped was substituted for previously graded rows.
+    _r=subprocess.run([sys.executable,"harness/grade_ledger.py","--gate"],capture_output=True,text=True)
+    _out=(_r.stdout+_r.stderr).strip().splitlines()
+    check(f"grade-summary reproducibility ({_out[0][:78] if _out else 'no output'})", _r.returncode==0)
     # Tier-1 board completeness for the 8/15-8/16 refresh window (owner instruction 2026-08-17).
     # Completeness is proven by the 30-franchise slot invariant, not by trusting the board's own
     # expected_game_count, and every row's evidence file is re-hashed against what was recorded.

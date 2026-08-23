@@ -61,7 +61,8 @@ OVERLAY_FIELDS = ("action_status", "action_reason", "market_number", "raw_edge_p
 def build_row(game, arm, p_home, projections, slate_date, model_id, simulation_version,
               information_class, information_fraction, named_cap_slots, verified_profile_slots,
               training_cutoff_utc, feature_cutoff_utc, evaluation_arm_id, sport,
-              ats=None, fallback_applied=None, uncertainty=None):
+              ats=None, fallback_applied=None, uncertainty=None,
+              projected_score_null_reason=None):
     """One arm's forecast for one game, in the shape forecast_contract demands.
 
     Carries NO price field of any kind. The overlay adds those later, after sealing."""
@@ -94,6 +95,7 @@ def build_row(game, arm, p_home, projections, slate_date, model_id, simulation_v
         "forecast_status": FC.FORECAST_REGISTERED,
         "action_status": FC.PASS_REFERENCE_ONLY,
         "fallback_applied": fallback_applied,
+        "projected_score_null_reason": projected_score_null_reason,
     }
     if ats is not None:
         row["ats_selection"] = ats.get("selection")
@@ -186,7 +188,8 @@ def build_card(slate, arm_specs, slate_date, information_cutoff_utc, evidence_sh
                 spec.get("training_cutoff_utc", information_cutoff_utc), information_cutoff_utc,
                 spec["evaluation_arm_id"], sport,
                 ats=extra.get("ats"), fallback_applied=extra.get("fallback_applied"),
-                uncertainty=extra.get("uncertainty"))
+                uncertainty=extra.get("uncertainty"),
+                projected_score_null_reason=extra.get("projected_score_null_reason"))
             row["evidence_sha256"] = evidence_sha256
             rows.append(row); by_arm[arm].append(row)
     # SAME SCHEDULE FOR EVERY ARM

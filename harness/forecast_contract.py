@@ -108,10 +108,25 @@ def validate_row(row, sport=None):
     if p is None or not isinstance(p, (int, float)) or isinstance(p, bool) or not (0.0 < float(p) < 1.0):
         f.append(f"{row.get('game', '?')}: winner_probability {p!r} is not a probability in (0,1) — "
                  f"a blocked row is still a forecast row")
-    for k in ("projected_away_score", "projected_home_score", "projected_total"):
+    # A NULL WITH A STATED REASON IS A FIRST-CLASS VALUE; A BARE NULL IS NOT.
+    # V13 forecasts a winner and a total and does not forecast per-team scores. Forcing it to emit
+    # one would be fabricating a number to satisfy a schema, which is worse than the gap. So a
+    # projected score may be null ONLY when the row states why — the same R1 convention the market
+    # fields already follow. The projected TOTAL has no such exemption: every arm here forecasts a
+    # total, and a null there would be a missing forecast rather than an absent estimand.
+    for k in ("projected_away_score", "projected_home_score"):
         v = row.get(k)
-        if v is None or isinstance(v, bool) or not isinstance(v, (int, float)):
+        if v is None:
+            if not row.get("projected_score_null_reason"):
+                f.append(f"{row.get('game', '?')}: {k} is null with no projected_score_null_reason; "
+                         f"a bare null is a missing forecast, a null with a stated reason is an "
+                         f"absent estimand")
+        elif isinstance(v, bool) or not isinstance(v, (int, float)):
             f.append(f"{row.get('game', '?')}: {k} is {v!r}; a gate blocks an action, not a projection")
+    tv = row.get("projected_total")
+    if tv is None or isinstance(tv, bool) or not isinstance(tv, (int, float)):
+        f.append(f"{row.get('game', '?')}: projected_total is {tv!r}; every arm on this card "
+                 f"forecasts a total, so a null here is a missing forecast")
     probs = [row.get("p_over"), row.get("p_push"), row.get("p_under")]
     if any(x is None or isinstance(x, bool) or not isinstance(x, (int, float)) for x in probs):
         f.append(f"{row.get('game', '?')}: over/push/under probabilities incomplete {probs}")
@@ -290,9 +305,29 @@ def selftest():
         g, why = gradeable(r)
         if not g:
             f.append(f"a row with action_status {status} was not gradeable: {why}")
+    # NULL PROJECTED SCORES: permitted with a reason, refused bare
+    bare = _row(projected_away_score=None, projected_home_score=None)
+    if validate_row(bare)[0]:
+        f.append("a row with bare null projected scores was accepted")
+    reasoned = _row(projected_away_score=None, projected_home_score=None,
+                    projected_score_null_reason="this model forecasts a winner and a total and "
+                                                "does not forecast per-team scores")
+    okn, ffn = validate_row(reasoned)
+    if not okn:
+        f.append(f"a null projected score WITH a stated reason was refused: {ffn}")
+    if not gradeable(reasoned)[0]:
+        f.append("a row with reasoned null projected scores was not gradeable")
+    # the projected TOTAL has no such exemption
+    if validate_row(_row(projected_total=None,
+                         projected_score_null_reason="stated"))[0]:
+        f.append("a null projected_total was excused by the projected-score reason")
+    # a NON-NUMERIC projected score is not a null and is not excused by any reason
+    for bad in ("4.1", True, [], {}):
+        if validate_row(_row(projected_away_score=bad,
+                             projected_score_null_reason="stated"))[0]:
+            f.append(f"projected_away_score={bad!r} was accepted as a projection")
     # a BLOCKED row that lost its numbers is exactly the 2026-08-22 defect
-    for k in ("winner_probability", "projected_away_score", "projected_home_score",
-              "projected_total"):
+    for k in ("winner_probability", "projected_total"):
         r = _row(action_status="BLOCKED_DOG_COMPRESSION", **{k: None})
         if validate_row(r)[0]:
             f.append(f"a BLOCKED row with {k}=None was accepted — that is the 2026-08-22 defect: a "
@@ -449,9 +484,13 @@ MUTANTS = [
     ("a BLOCKED row may carry an empty winner probability — the 2026-08-22 defect",
      "    if p is None or not isinstance(p, (int, float)) or isinstance(p, bool) or not (0.0 < float(p) < 1.0):",
      "    if False:"),
-    ("a BLOCKED row may carry empty projections",
-     '        if v is None or isinstance(v, bool) or not isinstance(v, (int, float)):',
-     "        if False:"),
+    ("a bare null projected score is accepted",
+     '            if not row.get("projected_score_null_reason"):', "            if False:"),
+    ("a null projected TOTAL is excused like a projected score",
+     "    if tv is None or isinstance(tv, bool) or not isinstance(tv, (int, float)):",
+     "    if False:"),
+    ("a non-numeric projected score is accepted",
+     "        elif isinstance(v, bool) or not isinstance(v, (int, float)):", "        elif False:"),
     ("over/push/under need not sum to one",
      "    elif abs(sum(float(x) for x in probs) - 1.0) > 1e-6:", "    elif False:"),
     ("push mass is assumed zero, so a whole-number total is rejected",

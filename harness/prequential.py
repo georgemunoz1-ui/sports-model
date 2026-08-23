@@ -64,16 +64,18 @@ def audit_pool(pool, target_slate_date, target_game_id=None):
 
 def provenance(prior_record, pool, target_slate_date, target_game_id=None,
                generated_at_utc=None, game_start_utc=None,
-               prior_last_game_finalized_at_utc=None):
+               prior_last_game_finalized_at_utc=None, finalized_upper_bound_utc=None):
     """The required fields plus BOTH audits, for attachment to an evaluation row."""
     status, f = audit_pool(pool, target_slate_date, target_game_id)
     cut = prior_record.get("prior_cutoff_utc", f"{target_slate_date}T00:00:00Z")
     cstatus, cf = audit_chronology(prior_last_game_finalized_at_utc, cut,
-                                   generated_at_utc, game_start_utc)
+                                   generated_at_utc, game_start_utc,
+                                   finalized_upper_bound_utc=finalized_upper_bound_utc)
     return {
         "chronology_status": cstatus,
         "chronology_failures": cf,
         "prior_last_game_finalized_at_utc": prior_last_game_finalized_at_utc,
+        "prior_last_game_finalized_upper_bound_utc": finalized_upper_bound_utc,
         "generated_at_utc": generated_at_utc,
         "game_start_utc": game_start_utc,
         "prior_n": prior_record.get("prior_games_n"),
@@ -103,18 +105,64 @@ def provenance(prior_record, pool, target_slate_date, target_game_id=None,
 # generated at or after first pitch is not a forecast.
 # ---------------------------------------------------------------------------------------------
 CHRONOLOGY_OK = "CHRONOLOGY_OK"
+CHRONOLOGY_OK_BY_BOUND = "CHRONOLOGY_OK_BY_UPPER_BOUND"
+
+# A CONSERVATIVE UPPER BOUND IS A PROOF, AND IT IS NOT THE SAME AS A MEASUREMENT.
+#
+# The repository stores no result-finalization timestamps, which left every cohort blocked on
+# NO_FINALIZATION_TIMESTAMP_AVAILABLE. But the ordering the rule needs is an INEQUALITY, and an
+# inequality can be established by a bound: if the LATEST INSTANT a game could possibly have
+# finished is still before the cutoff, the ordering holds regardless of when it actually finished.
+#
+# The bound must be derived from the game's own START time and a maximum duration, never from its
+# calendar date — a calendar date is exactly what the owner ruled insufficient. And the resulting
+# status is reported DISTINCTLY from a measured one, because a bound that happens to clear by
+# nineteen hours and a bound that clears by ninety seconds are not the same evidence, and a future
+# reader must be able to tell a bound from a timestamp.
+MAX_GAME_DURATION_HOURS = {"mlb": 7.0, "wnba": 4.0, "nfl": 5.0}
+
 FINALIZATION_AFTER_CUTOFF = "PRIOR_GAME_FINALIZED_AT_OR_AFTER_CUTOFF"
 CUTOFF_AFTER_GENERATION = "CUTOFF_AFTER_GENERATION"
 GENERATED_AFTER_START = "GENERATED_AT_OR_AFTER_FIRST_PITCH"
 NO_FINALIZATION_TIMESTAMP = "NO_FINALIZATION_TIMESTAMP_AVAILABLE"
 
 
+def finalization_upper_bound(last_game_start_utc, sport):
+    """The latest instant a game starting at last_game_start_utc could possibly have finished.
+
+    Derived from the START INSTANT plus a sport maximum, never from a calendar date."""
+    import datetime as _dt
+    if not last_game_start_utc:
+        return None, "no start instant for the prior's last game, so no bound can be derived"
+    hours = MAX_GAME_DURATION_HOURS.get(str(sport).lower())
+    if hours is None:
+        return None, f"no maximum duration is registered for sport {sport!r}"
+    if "T" not in str(last_game_start_utc):
+        return None, (f"{last_game_start_utc!r} is a calendar date, not a start instant. "
+                      f"datetime.fromisoformat would silently read it as midnight, which is the "
+                      f"calendar-date substitution this rule exists to forbid.")
+    try:
+        t = _dt.datetime.fromisoformat(last_game_start_utc.replace("Z", "+00:00"))
+    except (ValueError, AttributeError):
+        return None, f"unparseable start instant {last_game_start_utc!r}"
+    b = (t + _dt.timedelta(hours=hours)).strftime("%Y-%m-%dT%H:%M:%SZ")
+    return b, (f"start {last_game_start_utc} plus the registered {hours}h {sport} maximum; this is "
+               f"an UPPER BOUND, not a measurement")
+
+
 def audit_chronology(prior_last_game_finalized_at_utc, prior_cutoff_utc, generated_at_utc,
-                     game_start_utc):
-    """(status, failures). All four instants are required; a missing one is refused, not assumed."""
+                     game_start_utc, finalized_upper_bound_utc=None):
+    """(status, failures). All four instants are required; a missing one is refused, not assumed.
+
+    When no exact finalization timestamp exists, a conservative UPPER BOUND may stand in — and the
+    resulting status says so, because a bound is weaker evidence than a measurement even when it
+    clears comfortably."""
     f = []
     fin, cut, gen, start = (prior_last_game_finalized_at_utc, prior_cutoff_utc,
                             generated_at_utc, game_start_utc)
+    by_bound = False
+    if fin is None and finalized_upper_bound_utc is not None:
+        fin, by_bound = finalized_upper_bound_utc, True
     if fin is None:
         return NO_FINALIZATION_TIMESTAMP, [
             f"{NO_FINALIZATION_TIMESTAMP}: the prior's last pooled game carries no finalization "
@@ -127,15 +175,18 @@ def audit_chronology(prior_last_game_finalized_at_utc, prior_cutoff_utc, generat
     if f:
         return "CHRONOLOGY_UNESTABLISHED", f
     if not (fin < cut):
-        f.append(f"{FINALIZATION_AFTER_CUTOFF}: the last pooled result finalized at {fin}, at or "
-                 f"after the prior cutoff {cut}")
+        f.append(f"{FINALIZATION_AFTER_CUTOFF}: the last pooled result "
+                 f"{'could not be shown to finalize before' if by_bound else 'finalized at'} {fin}, "
+                 f"at or after the prior cutoff {cut}")
     if not (cut <= gen):
         f.append(f"{CUTOFF_AFTER_GENERATION}: the prior cutoff {cut} is AFTER the forecast was "
                  f"generated at {gen}, so the prior absorbed results the forecast could not use")
     if not (gen < start):
         f.append(f"{GENERATED_AFTER_START}: the forecast was generated at {gen}, at or after first "
                  f"pitch {start}")
-    return (CHRONOLOGY_OK if not f else f[0].split(":")[0]), f
+    if f:
+        return f[0].split(":")[0], f
+    return (CHRONOLOGY_OK_BY_BOUND if by_bound else CHRONOLOGY_OK), f
 
 
 REQUIRED_ROW_FIELDS = ("prior_n", "prior_p", "prior_cutoff_utc", "prequential_status",
@@ -158,7 +209,7 @@ def audit_rows(rows):
         if st is not None and st != CLEAN:
             f.append(f"{gid}: prequential status {st}")
         cs = r.get("chronology_status")
-        if cs is not None and cs != CHRONOLOGY_OK:
+        if cs is not None and cs not in (CHRONOLOGY_OK, CHRONOLOGY_OK_BY_BOUND):
             f.append(f"{gid}: chronology status {cs}")
         cut = r.get("prior_cutoff_utc")
         sd = r.get("slate_date")
@@ -238,6 +289,47 @@ def selftest():
     for g in (START, "2026-08-19T23:30:00Z"):
         if audit_chronology(FIN, CUT, g, START)[0] != GENERATED_AFTER_START:
             f.append(f"a forecast generated at {g} against a {START} first pitch was accepted")
+    # --- A CONSERVATIVE UPPER BOUND IS A PROOF, AND IS REPORTED AS WEAKER EVIDENCE -----------------
+    b, why = finalization_upper_bound("2026-08-22T02:10:00Z", "mlb")
+    if b != "2026-08-22T09:10:00Z":
+        f.append(f"the mlb 7h bound is wrong: {b}")
+    if "UPPER BOUND, not a measurement" not in why:
+        f.append("the bound does not declare itself a bound")
+    G23, S23 = "2026-08-23T10:04:00Z", "2026-08-23T17:35:00Z"
+    st, ff = audit_chronology(None, "2026-08-23T00:00:00Z", G23, S23, finalized_upper_bound_utc=b)
+    if st != CHRONOLOGY_OK_BY_BOUND:
+        f.append(f"a bound clearing the cutoff by 15 hours did not establish chronology: {st} {ff}")
+    if st == CHRONOLOGY_OK:
+        f.append("a BOUNDED chronology was reported as a MEASURED one; a reader must be able to "
+                 "tell them apart")
+    # a bound that does NOT clear the cutoff fails, exactly like a measurement would
+    late, _ = finalization_upper_bound("2026-08-22T23:00:00Z", "mlb")   # -> 2026-08-23T06:00Z
+    if audit_chronology(None, "2026-08-23T00:00:00Z", G23, S23,
+                        finalized_upper_bound_utc=late)[0] != FINALIZATION_AFTER_CUTOFF:
+        f.append("a bound extending past the cutoff was accepted")
+    # a MEASURED timestamp is preferred over a bound when both are present
+    if audit_chronology(FIN, CUT, GEN, START, finalized_upper_bound_utc=late)[0] != CHRONOLOGY_OK:
+        f.append("a measured timestamp was overridden by a bound")
+    # the bound must come from the START INSTANT, never from a calendar date
+    if finalization_upper_bound("2026-08-22", "mlb")[0] is not None:
+        f.append("a bare calendar date produced a bound; the bound must derive from a start instant")
+    if finalization_upper_bound(None, "mlb")[0] is not None:
+        f.append("a bound was derived with no start instant")
+    if finalization_upper_bound("2026-08-22T02:10:00Z", "curling")[0] is not None:
+        f.append("a bound was derived for a sport with no registered maximum")
+    for sport, hrs in MAX_GAME_DURATION_HOURS.items():
+        bb, _ = finalization_upper_bound("2026-08-22T00:00:00Z", sport)
+        if bb != f"2026-08-22T{int(hrs):02d}:00:00Z":
+            f.append(f"the {sport} bound is wrong: {bb}")
+    # a bounded row passes the cohort audit
+    _br = {"game_id": "b1", "slate_date": "2026-08-21", "prior_n": 10, "prior_p": 0.5,
+           "prior_cutoff_utc": "2026-08-21T00:00:00Z", "prequential_status": CLEAN,
+           "chronology_status": CHRONOLOGY_OK_BY_BOUND}
+    if not audit_rows([_br])[0]:
+        f.append("a bounded-chronology row failed the cohort audit")
+    if audit_rows([dict(_br, chronology_status=FINALIZATION_AFTER_CUTOFF)])[0]:
+        f.append("a failed-chronology row passed the cohort audit")
+
     # A CALENDAR DATE ALONE IS REFUSED
     st, ff = audit_chronology(None, CUT, GEN, START)
     if st != NO_FINALIZATION_TIMESTAMP:
@@ -318,6 +410,23 @@ MUTANTS = [
      "        if cut and sd and not (str(cut)[:10] <= sd):", "        if cut and sd and not (str(cut)[:10] < sd):"),
     ("a negative prior_n is accepted",
      "        if n is not None and not (isinstance(n, int) and n >= 0):", "        if False:"),
+    ("a bound that does not clear the cutoff is accepted",
+     "    if not (fin < cut):", "    if by_bound and False or not (fin < cut) and False:"),
+    ("a BOUNDED chronology is reported as a MEASURED one",
+     "    return (CHRONOLOGY_OK_BY_BOUND if by_bound else CHRONOLOGY_OK), f",
+     "    return CHRONOLOGY_OK, f"),
+    ("a bound silently overrides a measured timestamp",
+     "    if fin is None and finalized_upper_bound_utc is not None:",
+     "    if finalized_upper_bound_utc is not None:"),
+    ("the bound is derived from a calendar date instead of a start instant",
+     '    if "T" not in str(last_game_start_utc):',
+     "    if False:"),
+    ("the sport maximum is ignored and a zero-length game assumed",
+     "    b = (t + _dt.timedelta(hours=hours)).strftime", "    b = (t + _dt.timedelta(hours=0)).strftime"),
+    ("an unregistered sport gets a default maximum",
+     "    if hours is None:", "    if False:"),
+    ("the bound stops declaring itself a bound",
+     'f"an UPPER BOUND, not a measurement")', 'f"a value.")'),
     ("a calendar date is accepted in place of a finalization timestamp",
      "    if fin is None:", "    if False:"),
     ("finalization at or after the cutoff is accepted",
@@ -334,7 +443,7 @@ MUTANTS = [
      "        if v is None:\n            f.append(f\"{name} is absent; chronology cannot be established\")",
      "        if False:\n            f.append(f\"{name} is absent; chronology cannot be established\")"),
     ("a bad chronology status no longer fails the cohort",
-     "        if cs is not None and cs != CHRONOLOGY_OK:", "        if False:"),
+     "        if cs is not None and cs not in (CHRONOLOGY_OK, CHRONOLOGY_OK_BY_BOUND):", "        if False:"),
     ("the calendar-date refusal stops explaining itself",
      'f"timestamp. A CALENDAR DATE IS NOT SUFFICIENT — a game dated the day before a midnight "',
      'f"timestamp. "'),

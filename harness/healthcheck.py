@@ -243,7 +243,11 @@ for _m in ("result_provenance","result_content_checks","parse_box_dump",
            # 2026-08-23: the never-adapt audit found that the SAME-BOOK DE-VIG requirement was
            # on the do-not-adapt list with no enforcing module running here. freshness_gates
            # carries the cross-book guard and a full selftest, and was simply never wired.
-           "freshness_gates","never_adapt_audit","forecast_contract","evaluation_standard","prequential","promotion_gate","evaluation_arm","keyed_seed","cohort_fork","three_arm_card"):
+           "freshness_gates","never_adapt_audit","forecast_contract","evaluation_standard","prequential","promotion_gate","evaluation_arm","keyed_seed","cohort_fork","three_arm_card",
+           # 2026-08-23 owner amendments 1-10. Wired the same day they were written: a rule
+           # that is not executed by this gate is a rule that stops running (lesson 26).
+           "arm_coverage","totals_estimand","simulation_standard","render_contract",
+           "franchise_identity","finalization_evidence"):
     _r=subprocess.run([sys.executable,f"harness/{_m}.py","--selftest"],capture_output=True,text=True)
     _out=(_r.stdout+_r.stderr).strip().splitlines()
     check(f"{_m} selftest ({_out[-1][:72] if _out else 'no output'})", _r.returncode==0)

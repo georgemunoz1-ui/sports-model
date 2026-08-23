@@ -104,6 +104,8 @@ def provenance(prior_record, pool, target_slate_date, target_game_id=None,
 # generated would mean the prior absorbed results the forecast could not have used, and a forecast
 # generated at or after first pitch is not a forecast.
 # ---------------------------------------------------------------------------------------------
+import finalization_evidence
+
 CHRONOLOGY_OK = "CHRONOLOGY_OK"
 CHRONOLOGY_OK_BY_BOUND = "CHRONOLOGY_OK_BY_UPPER_BOUND"
 
@@ -151,17 +153,32 @@ def finalization_upper_bound(last_game_start_utc, sport):
 
 
 def audit_chronology(prior_last_game_finalized_at_utc, prior_cutoff_utc, generated_at_utc,
-                     game_start_utc, finalized_upper_bound_utc=None):
+                     game_start_utc, finalized_upper_bound_utc=None,
+                     policy=finalization_evidence.PREFER_OBSERVED):
     """(status, failures). All four instants are required; a missing one is refused, not assumed.
 
     When no exact finalization timestamp exists, a conservative UPPER BOUND may stand in — and the
     resulting status says so, because a bound is weaker evidence than a measurement even when it
-    clears comfortably."""
+    clears comfortably.
+
+    OWNER AMENDMENT 9 (2026-08-23): the bound is an INFERENCE conditional on a maximum-duration
+    assumption that extra innings, delays and suspended games are all known to break. Under
+    finalization_evidence.STRICT_OBSERVED_ONLY no bound is admissible at all and the row is excluded
+    rather than passed on a conditional proof. The policy is the caller's choice and is refused if
+    it is not one of the two registered ones."""
+    if policy not in finalization_evidence.POLICIES:
+        raise ValueError(f"unregistered chronology policy {policy!r}")
     f = []
     fin, cut, gen, start = (prior_last_game_finalized_at_utc, prior_cutoff_utc,
                             generated_at_utc, game_start_utc)
     by_bound = False
     if fin is None and finalized_upper_bound_utc is not None:
+        if policy == finalization_evidence.STRICT_OBSERVED:
+            return finalization_evidence.UNPROVEN, [
+                f"{finalization_evidence.UNPROVEN}: only a derived upper bound "
+                f"({finalized_upper_bound_utc}) is available and the registered policy is "
+                f"{policy}, which admits no bound. start + a maximum duration is an inference, "
+                f"not an observed finalization instant."]
         fin, by_bound = finalized_upper_bound_utc, True
     if fin is None:
         return NO_FINALIZATION_TIMESTAMP, [
@@ -383,6 +400,25 @@ def selftest():
     if audit_rows([dict(rows[0], prior_n=-1)])[0]:
         f.append("a negative prior_n was accepted")
 
+    # OWNER AMENDMENT 9: the bound is an inference, and the strict policy refuses it outright.
+    BOUND = "2026-08-18T23:00:00Z"   # a 16:00Z start plus the registered 7h MLB maximum
+    st_b, _ = audit_chronology(None, CUT, GEN, START, finalized_upper_bound_utc=BOUND)
+    if st_b != CHRONOLOGY_OK_BY_BOUND:
+        f.append(f"a clearing bound should pass under the default policy, got {st_b}")
+    st_s, ff_s = audit_chronology(None, CUT, GEN, START, finalized_upper_bound_utc=BOUND,
+                                  policy=finalization_evidence.STRICT_OBSERVED)
+    if st_s != finalization_evidence.UNPROVEN or not ff_s:
+        f.append(f"STRICT_OBSERVED_ONLY must refuse a derived bound, got {st_s}")
+    st_o, _ = audit_chronology(FIN, CUT, GEN, START,
+                               policy=finalization_evidence.STRICT_OBSERVED)
+    if st_o != CHRONOLOGY_OK:
+        f.append("STRICT_OBSERVED_ONLY still admits an observed finalization instant")
+    try:
+        audit_chronology(FIN, CUT, GEN, START, policy="ANYTHING_I_LIKE")
+        f.append("an unregistered chronology policy must raise")
+    except ValueError:
+        pass
+
     print("prequential selftest:", "PASS" if not f else "FAIL")
     for x in f:
         print("  " + x)
@@ -390,6 +426,11 @@ def selftest():
 
 
 MUTANTS = [
+    ("the strict policy stops refusing a derived bound",
+     "        if policy == finalization_evidence.STRICT_OBSERVED:", "        if False:"),
+    ("an unregistered chronology policy is accepted",
+     "    if policy not in finalization_evidence.POLICIES:", "    if False:"),
+
     ("same-slate results are allowed into the prior",
      '        if d == target_slate_date:\n            same.append(gid)', "        if False:\n            same.append(gid)"),
     ("future-dated results are allowed into the prior",

@@ -1,0 +1,515 @@
+{
+ "record_id": "BOARD-AMENDMENTS-2026-08-23",
+ "created_utc": "2026-08-23T12:20:00Z",
+ "authority": "owner amendments 1-10, 2026-08-23",
+ "layer": "REPORT_LAYER_AMENDMENT",
+ "immutability": "cards/2026-08-23_three_arm_card.json is UNCHANGED and remains the registered artifact. Every correction below is stated here and applied to future cards. R6: the card is appended to, never edited.",
+ "owner_standing_accepted": {
+  "mlb": "15/15 games, three arms, registered pregame — valid prospective evidence",
+  "wnba": "three rows per game, challenger BASELINE_EQUIVALENT_NULL — a negative control",
+  "nfl": "baseline only",
+  "betting_output": "zero without a price overlay"
+ },
+ "modules_added": {
+  "arm_coverage.py": "amendment 1 — 14/14 mutants",
+  "totals_estimand.py": "amendments 2 and 3 — 21/21 mutants",
+  "simulation_standard.py": "amendments 4 and 5 — 16/16 mutants",
+  "render_contract.py": "amendments 6, 7 and 10 — 22/22 mutants",
+  "franchise_identity.py": "amendment 8 — 15/15 mutants",
+  "finalization_evidence.py": "amendment 9 — 16/16 mutants; wired into prequential.audit_chronology, which is now 29/29",
+  "healthcheck.py": "all six gated the same day they were written"
+ },
+ "findings": {
+  "amendment_1_arm_coverage": {
+   "claim": {
+    "claim": "PARTIAL_THREE_ARM_BOARD",
+    "reasons": [
+     "mlb:total: CHALLENGER BASELINE_EQUIVALENT_NULL",
+     "nfl:total: BASELINE PRESENT_BUT_NO_FORECASTS",
+     "nfl:total: CHALLENGER ABSENT",
+     "nfl:total: CHAMPION ABSENT",
+     "nfl:winner: CHALLENGER ABSENT",
+     "nfl:winner: CHAMPION ABSENT",
+     "wnba:total: BASELINE PRESENT_BUT_NO_FORECASTS",
+     "wnba:total: CHALLENGER PRESENT_BUT_NO_FORECASTS",
+     "wnba:total: CHAMPION PRESENT_BUT_NO_FORECASTS",
+     "wnba:winner: CHALLENGER BASELINE_EQUIVALENT_NULL"
+    ],
+    "note": "A negative control is not challenger coverage; a missing arm is not a short arm."
+   },
+   "lines": [
+    "mlb:total: 2/3  CHALLENGER=BASELINE_EQUIVALENT_NULL",
+    "mlb:winner: 3/3",
+    "nfl:total: 0/3  BASELINE=PRESENT_BUT_NO_FORECASTS  CHAMPION=ABSENT  CHALLENGER=ABSENT",
+    "nfl:winner: 1/3  CHAMPION=ABSENT  CHALLENGER=ABSENT",
+    "wnba:total: 0/3  BASELINE=PRESENT_BUT_NO_FORECASTS  CHAMPION=PRESENT_BUT_NO_FORECASTS  CHALLENGER=PRESENT_BUT_NO_FORECASTS",
+    "wnba:winner: 2/3  CHALLENGER=BASELINE_EQUIVALENT_NULL"
+   ],
+   "per_sport": {
+    "mlb": {
+     "total": {
+      "coverage": "2/3",
+      "null_arms": [
+       "CHALLENGER"
+      ],
+      "absent_arms": [],
+      "max_abs_diff_challenger_vs_baseline": 0.0
+     },
+     "winner": {
+      "coverage": "3/3",
+      "null_arms": [],
+      "absent_arms": [],
+      "max_abs_diff_challenger_vs_baseline": 0.0645773851696907
+     }
+    },
+    "wnba": {
+     "total": {
+      "coverage": "0/3",
+      "null_arms": [],
+      "absent_arms": [],
+      "max_abs_diff_challenger_vs_baseline": null
+     },
+     "winner": {
+      "coverage": "2/3",
+      "null_arms": [
+       "CHALLENGER"
+      ],
+      "absent_arms": [],
+      "max_abs_diff_challenger_vs_baseline": 0.0
+     }
+    },
+    "nfl": {
+     "total": {
+      "coverage": "0/3",
+      "null_arms": [],
+      "absent_arms": [
+       "CHAMPION",
+       "CHALLENGER"
+      ],
+      "max_abs_diff_challenger_vs_baseline": null
+     },
+     "winner": {
+      "coverage": "1/3",
+      "null_arms": [],
+      "absent_arms": [
+       "CHAMPION",
+       "CHALLENGER"
+      ],
+      "max_abs_diff_challenger_vs_baseline": null
+     }
+    }
+   }
+  },
+  "amendment_2_totals_estimand": {
+   "card_said": "MODEL_FAIR_LINE_NOT_MARKET — no MLB price board was captured for this slate, so each arm's total is graded against its own fair line (floor(mu)+0.5). This is a weaker estimand than a market-line total and is labelled so it is never quoted as one.",
+   "verdict": "REFUSED — an arm's own floor(mu)+0.5 is not an estimand, labelled or not",
+   "n_rows_refused_as_self_referential": 15,
+   "replacement_estimands": [
+    "TOTAL_POINT_ERROR_VS_ACTUAL",
+    "TOTAL_DISTRIBUTION_VS_ACTUAL",
+    "TOTAL_MARKET_OVER_UNDER"
+   ],
+   "distribution_scores_available": false,
+   "distribution_note": "no arm on this card retained a simulated total distribution — the champion reports a point projection at 30,000 trials and both other arms are closed-form (simulation_trials 0). Log score and CRPS are therefore NOT_COMPUTABLE for the 8/23 cohort and must be wired before the next card, not back-filled from a point projection.",
+   "market_ou_status": "MARKET_OU_UNAVAILABLE_NO_INDEPENDENT_LINE",
+   "market_ou_reason": "no MLB price board was captured for this slate under the same-book rule; the owner-supplied Reference v2 board is bimodal in overround and only its eight wide rows clear the same-book bar (2026-08-23 correction record)"
+  },
+  "amendment_3_baseline_total": {
+   "defect": "the card's BASELINE row did not merely lack a total — it carried the CHALLENGER's total, identical to the third decimal in all 15 games",
+   "n_games_identical": 15,
+   "n_games": 15,
+   "real_baseline": {
+    "model_id": "mlb.expanding_total_prior.league_mean",
+    "n": 1802,
+    "cutoff_date": "2026-08-23",
+    "league_mean_total": 8.984461709211987,
+    "park_factor": null,
+    "park_adjustment_applied": false,
+    "projected_total": 8.984461709211987,
+    "prior_sd_runs": 4.537313064286119,
+    "uncertainty_kind": "PRIOR_POOL_SD_RUNS",
+    "inputs_used": [
+     "tier1_final_totals_before_cutoff"
+    ]
+   },
+   "worked_example_park_adjusted": {
+    "CLE@COL": 10.332,
+    "SF@BOS": 9.164,
+    "MIN@SD": 8.266
+   },
+   "park_note": "the three park factors above are ILLUSTRATIVE placeholders to show the mechanism; the registered park table is a separate SLOW-layer artifact and is not asserted here",
+   "second_defect_found": {
+    "what": "the baseline's own winner probability contradicts its own score projection",
+    "detail": "p_home is 0.5252 in all 15 games (home favoured) while the projected AWAY score exceeds the projected HOME score in 6 of them",
+    "games": [
+     "TB@BAL",
+     "WSH@MIA",
+     "DET@KC",
+     "ATH@HOU",
+     "CLE@COL",
+     "MIN@SD"
+    ],
+    "reading": "the baseline arm is two unrelated numbers wearing one arm's name: a league-mean home probability and a score projection borrowed from the challenger"
+   }
+  },
+  "amendment_4_trial_standard": {
+   "champion": {
+    "model_id": "ml.v13_1.hfa1005.card.s722n30000",
+    "trials": 30000,
+    "standard": 100000,
+    "status": "LEGACY_TRIAL_COUNT",
+    "may_claim_standard": false,
+    "mc_sd_pp_at_p50": 0.2886751345948129,
+    "required_action": "remains registered and gradeable; fork a separate 100000-trial identity for any arm that is to be described as meeting the current standard"
+   },
+   "fork": {
+    "legacy_model_id": "ml.v13_1.hfa1005.card.s722n30000",
+    "forked_model_id": "ml.v13_1.hfa1005.card.s722n100000",
+    "trials": 100000,
+    "distinct_identity": true,
+    "note": "a separate arm, not a re-tagging: the legacy arm keeps its own grades"
+   },
+   "other_arms": {
+    "baseline": "simulation_trials 0 — closed form, no trial standard applies",
+    "challenger": "simulation_trials 0 — closed form, no trial standard applies"
+   }
+  },
+  "amendment_5_common_random_numbers": {
+   "owner_figure": "0.41pp on a difference near 50% at 30k trials, from INDEPENDENT seeds",
+   "correction": "that figure assumes BOTH arms are simulated. On this card only the champion is: the baseline and the challenger both carry simulation_trials 0 and are closed form. The delta therefore inherits the champion's noise alone, 0.2887pp at p=.5, not 0.4082pp.",
+   "consequence_for_crn": "common random numbers cannot be applied to a champion-versus-challenger delta that has only one stream in it. CRN is registered here and becomes load-bearing the moment a second simulated arm exists — the 100k champion fork above is exactly that case, and it must share the champion's stream.",
+   "conclusion_unchanged": "small deltas are still not model differences",
+   "per_game": [
+    {
+     "game": "TB@BAL",
+     "delta_pp": -5.27,
+     "champion_mc_sd_pp": 0.2859,
+     "z_on_champion_noise_alone": 18.43,
+     "resolvable": true
+    },
+    {
+     "game": "STL@PHI",
+     "delta_pp": -2.3,
+     "champion_mc_sd_pp": 0.2883,
+     "z_on_champion_noise_alone": 7.97,
+     "resolvable": true
+    },
+    {
+     "game": "TOR@NYY",
+     "delta_pp": 0.69,
+     "champion_mc_sd_pp": 0.2867,
+     "z_on_champion_noise_alone": 2.42,
+     "resolvable": true
+    },
+    {
+     "game": "WSH@MIA",
+     "delta_pp": -3.39,
+     "champion_mc_sd_pp": 0.2885,
+     "z_on_champion_noise_alone": 11.77,
+     "resolvable": true
+    },
+    {
+     "game": "DET@KC",
+     "delta_pp": -5.82,
+     "champion_mc_sd_pp": 0.2867,
+     "z_on_champion_noise_alone": 20.29,
+     "resolvable": true
+    },
+    {
+     "game": "ATH@HOU",
+     "delta_pp": 1.33,
+     "champion_mc_sd_pp": 0.288,
+     "z_on_champion_noise_alone": 4.62,
+     "resolvable": true
+    },
+    {
+     "game": "NYM@CWS",
+     "delta_pp": 1.2,
+     "champion_mc_sd_pp": 0.2878,
+     "z_on_champion_noise_alone": 4.16,
+     "resolvable": true
+    },
+    {
+     "game": "LAA@TEX",
+     "delta_pp": 0.63,
+     "champion_mc_sd_pp": 0.2867,
+     "z_on_champion_noise_alone": 2.18,
+     "resolvable": true
+    },
+    {
+     "game": "CLE@COL",
+     "delta_pp": 2.44,
+     "champion_mc_sd_pp": 0.2885,
+     "z_on_champion_noise_alone": 8.46,
+     "resolvable": true
+    },
+    {
+     "game": "SF@BOS",
+     "delta_pp": 3.61,
+     "champion_mc_sd_pp": 0.2808,
+     "z_on_champion_noise_alone": 12.87,
+     "resolvable": true
+    },
+    {
+     "game": "PIT@LAD",
+     "delta_pp": -5.78,
+     "champion_mc_sd_pp": 0.2881,
+     "z_on_champion_noise_alone": 20.06,
+     "resolvable": true
+    },
+    {
+     "game": "CHC@SEA",
+     "delta_pp": -6.66,
+     "champion_mc_sd_pp": 0.2878,
+     "z_on_champion_noise_alone": 23.15,
+     "resolvable": true
+    },
+    {
+     "game": "MIN@SD",
+     "delta_pp": -6.09,
+     "champion_mc_sd_pp": 0.2873,
+     "z_on_champion_noise_alone": 21.2,
+     "resolvable": true
+    },
+    {
+     "game": "CIN@AZ",
+     "delta_pp": -1.69,
+     "champion_mc_sd_pp": 0.2885,
+     "z_on_champion_noise_alone": 5.86,
+     "resolvable": true
+    },
+    {
+     "game": "ATL@MIL",
+     "delta_pp": 0.5,
+     "champion_mc_sd_pp": 0.285,
+     "z_on_champion_noise_alone": 1.76,
+     "resolvable": false
+    }
+   ],
+   "n_not_resolvable": 1,
+   "not_resolvable_games": [
+    "ATL@MIL"
+   ],
+   "crn_manifest_for_next_card": "CRN_OK"
+  },
+  "amendments_6_7_10_render_contract": {
+   "status": "RENDER_CONTRACT_REFUSED",
+   "n_problems": 17,
+   "problems": [
+    {
+     "code": "BANNED_ALIAS",
+     "alias": "champion spread",
+     "canonical": "CROSS_GAME_P_SD",
+     "definition": "standard deviation of one arm's p_home ACROSS the games of one slate — how much the arm separates games, not how unsure it is about any one of them"
+    },
+    {
+     "code": "BANNED_ALIAS",
+     "alias": "challenger spread",
+     "canonical": "CROSS_GAME_P_SD",
+     "definition": "standard deviation of one arm's p_home ACROSS the games of one slate — how much the arm separates games, not how unsure it is about any one of them"
+    },
+    {
+     "code": "BANNED_ALIAS",
+     "alias": "spread",
+     "canonical": "CROSS_GAME_P_SD",
+     "definition": "standard deviation of one arm's p_home ACROSS the games of one slate — how much the arm separates games, not how unsure it is about any one of them"
+    },
+    {
+     "code": "BANNED_ALIAS",
+     "alias": "sd",
+     "canonical": "EMPIRICAL_FORECAST_EDGE_SD",
+     "definition": "empirical standard deviation of the realised forecast edge, used to build conservative_edge = raw_edge - 1.645 x this"
+    },
+    {
+     "code": "BANNED_ALIAS",
+     "alias": "emp. sd",
+     "canonical": "EMPIRICAL_FORECAST_EDGE_SD",
+     "definition": "empirical standard deviation of the realised forecast edge, used to build conservative_edge = raw_edge - 1.645 x this"
+    },
+    {
+     "code": "BANNED_ALIAS",
+     "alias": "uncertainty",
+     "canonical": "EMPIRICAL_FORECAST_EDGE_SD",
+     "definition": "empirical standard deviation of the realised forecast edge, used to build conservative_edge = raw_edge - 1.645 x this"
+    },
+    {
+     "code": "BANNED_ALIAS",
+     "alias": "sd",
+     "canonical": "MONTE_CARLO_SD",
+     "definition": "simulation noise in one arm's probability estimate at its trial count"
+    },
+    {
+     "code": "BANNED_ALIAS",
+     "alias": "uncertainty",
+     "canonical": "MONTE_CARLO_SD",
+     "definition": "simulation noise in one arm's probability estimate at its trial count"
+    },
+    {
+     "code": "BANNED_ALIAS",
+     "alias": "sd",
+     "canonical": "PRIOR_PARAMETER_SD",
+     "definition": "posterior standard deviation of the expanding Beta prior's probability parameter — shrinks as sqrt(1/n) with the number of finals in the pool"
+    },
+    {
+     "code": "BANNED_ALIAS",
+     "alias": "uncertainty",
+     "canonical": "PRIOR_PARAMETER_SD",
+     "definition": "posterior standard deviation of the expanding Beta prior's probability parameter — shrinks as sqrt(1/n) with the number of finals in the pool"
+    },
+    {
+     "code": "BANNED_ALIAS",
+     "alias": "sd",
+     "canonical": "PRIOR_POOL_SD_RUNS",
+     "definition": "standard deviation of the tier-1 final totals in the expanding scoring prior"
+    },
+    {
+     "code": "LABEL_DOES_NOT_NAME_ITS_KIND",
+     "label": "Champion spread",
+     "kind": "CROSS_GAME_P_SD",
+     "required": "CROSS_GAME_P_SD"
+    },
+    {
+     "code": "LABEL_DOES_NOT_NAME_ITS_KIND",
+     "label": "Challenger spread",
+     "kind": "CROSS_GAME_P_SD",
+     "required": "CROSS_GAME_P_SD"
+    },
+    {
+     "code": "GENERIC_LABEL_IDENTIFIES_NOTHING",
+     "label": "SD",
+     "kind": "PRIOR_PARAMETER_SD",
+     "required": "PRIOR_PARAMETER_SD"
+    },
+    {
+     "code": "LABEL_DOES_NOT_NAME_ITS_KIND",
+     "label": "Emp. SD",
+     "kind": "EMPIRICAL_FORECAST_EDGE_SD",
+     "required": "EMPIRICAL_FORECAST_EDGE_SD"
+    },
+    {
+     "code": "TRUNCATED_STATUS_TOKEN",
+     "token": "feature state 32 days stale vs 21 day ceiling",
+     "rendered_as": "feature state 32 days stale vs 21 day ceilin",
+     "lost": "g",
+     "note": "a blocked action's reason is the binding part of the record"
+    },
+    {
+     "code": "TRUNCATED_STATUS_TOKEN",
+     "token": "feature state stale and out of domain neutral site",
+     "rendered_as": "feature state stale and out of domain neutra",
+     "lost": "l site",
+     "note": "a blocked action's reason is the binding part of the record"
+    }
+   ],
+   "renames": {
+    "Champion spread": "CROSS_GAME_P_SD",
+    "Challenger spread": "CROSS_GAME_P_SD",
+    "SD (WNBA prior, 8.9pp)": "PRIOR_PARAMETER_SD",
+    "Emp. SD (8.11pp)": "EMPIRICAL_FORECAST_EDGE_SD"
+   },
+   "family_note": "CROSS_GAME_P_SD is DISPERSION, not uncertainty — it says how much an arm separates the games of a slate, not how unsure it is about any one of them. It may not share a column heading with either uncertainty."
+  },
+  "amendment_8_franchise_identity": {
+   "wnba": {
+    "sport": "wnba",
+    "n_reference": 4,
+    "n_card": 4,
+    "paired_on_raw_keys": 3,
+    "paired_on_canonical_keys": 4,
+    "silently_lost_without_binding": 1,
+    "rescued_pairs": [
+     {
+      "as_written_reference": "WAS@POR",
+      "as_written_card": "WAS@PDX"
+     }
+    ],
+    "unresolvable": [],
+    "status": "BINDING_REQUIRED"
+   },
+   "mlb": {
+    "sport": "mlb",
+    "n_reference": 15,
+    "n_card": 15,
+    "paired_on_raw_keys": 14,
+    "paired_on_canonical_keys": 15,
+    "silently_lost_without_binding": 1,
+    "rescued_pairs": [
+     {
+      "as_written_reference": "CIN@ARI",
+      "as_written_card": "CIN@AZ"
+     }
+    ],
+    "unresolvable": [],
+    "status": "BINDING_REQUIRED"
+   },
+   "fragmentation_counts_in_repo": {
+    "PDX/POR": "24/5",
+    "PHX/PHO": "32/5",
+    "LVA/LV": "31/2",
+    "NYL/NY": "19/2",
+    "LAS/LA": "46/2"
+   },
+   "coverage": {
+    "mlb": {
+     "n_canonical": 30,
+     "n_alias_keys": 64,
+     "source": "derived at import from adaptive_state.TEAM_ABBR (30 franchises, 34 keys)",
+     "completeness": "COMPLETE_30_FRANCHISES"
+    },
+    "nfl": {
+     "n_canonical": 32,
+     "n_alias_keys": 38,
+     "source": "the 32 codes present in data/nfl; NOT a recalled league list",
+     "completeness": "COMPLETE_32_FRANCHISES_AS_OBSERVED"
+    },
+    "wnba": {
+     "n_canonical": 15,
+     "n_alias_keys": 25,
+     "source": "the 15 codes spelled in data/wnba; aliases cross-checked against wnba_model_v1.XW",
+     "completeness": "COMPLETE_15_FRANCHISES_2026"
+    }
+   },
+   "consistency_with_champion_model": "CONSISTENT"
+  },
+  "amendment_9_chronology": {
+   "card_status": "CHRONOLOGY_OK_BY_UPPER_BOUND",
+   "evidence_grade": "DERIVED_UPPER_BOUND",
+   "under_default_policy": {
+    "policy": "PREFER_OBSERVED_EXCLUDE_UNPROVEN",
+    "n_included": 15,
+    "n_excluded": 0,
+    "n_on_a_bound": 15,
+    "smallest_bound_margin_hours": 14.833333333333334
+   },
+   "under_strict_policy": {
+    "policy": "STRICT_OBSERVED_ONLY",
+    "n_included": 0,
+    "n_excluded": 15
+   },
+   "bound_assumption": {
+    "assumption": "a game finishes within MAX_GAME_DURATION_HOURS of its scheduled start",
+    "known_failure_modes": [
+     "extra innings — a 15+ inning MLB game can exceed 7 hours of elapsed time",
+     "rain or weather delay — suspends the clock without suspending the calendar",
+     "suspended and resumed on a later date — finalization can post more than a day after start",
+     "a start that was itself pushed back, so the recorded start instant is not the real one"
+    ],
+    "consequence": "a bound can be WRONG in a direction a timestamp cannot; it is never reported under the same status as an observation",
+    "tier1_sources": [
+     "MLB_STATSAPI_GAME_FINAL",
+     "SAVANT_BOX_FINAL",
+     "WNBA_OFFICIAL_BOX_FINAL",
+     "NFL_OFFICIAL_BOX_FINAL"
+    ],
+    "policies": [
+     "PREFER_OBSERVED_EXCLUDE_UNPROVEN",
+     "STRICT_OBSERVED_ONLY"
+    ],
+    "default_policy": "PREFER_OBSERVED_EXCLUDE_UNPROVEN"
+   },
+   "owner_is_right": "start + 7h is an inference. Its margin here is 14.833333333333334 hours, which is comfortable, but a suspended-and-resumed game breaks the assumption by more than any margin.",
+   "what_is_needed": "official_finalized_utc on tier-1 results. The repository stores none today, so under STRICT_OBSERVED_ONLY every 8/23 row is excluded and the cohort has no admissible prior at all. That is the honest state, and it is why the default policy is PREFER_OBSERVED rather than STRICT."
+  }
+ },
+ "status": "FORWARD_ONLY_PENDING — unchanged. Improvement over the expanding prior is not established; the 8/23 MLB cohort is valid prospective evidence and is not yet settled."
+}

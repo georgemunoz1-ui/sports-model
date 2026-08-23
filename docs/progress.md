@@ -2924,3 +2924,31 @@ me; the mechanised ruling did, in four minutes.
 
 STILL PENDING (6): CIN@AZ, CON@LAS, ATL@PHX, DAL@ARI not yet indexed anywhere; MIN@SD and CLE@COL
 awaiting tier-1 confirmation. Record: docs/experiments/2026-08-22_TIER2_INGESTION_INCIDENT.json
+
+## 2026-08-23T05:25Z — full-slate sweep: 6 of 15 MLB finals as EVIDENCE ONLY; advanced metrics NOT obtainable
+Owner asked for all scores plus advanced metrics. After the 05:12Z tier incident everything acquired
+here is EVIDENCE ONLY and enters no canonical table and grades nothing.
+
+METHOD THAT WORKED: querying the MLB.com Gameday TITLE pattern — "MLB Gameday: <away> N, <home> M
+Final Score (08/22/2026)" — which embeds score and date in the title itself. Six finals: TOR 4-NYY 3,
+STL 3-PHI 12, TB 2-BAL 3, CHC 4-SEA 5, MIN 5-SD 7, CLE 4-COL 3. Nine games are not indexed with a
+final; several Gameday titles still read "Probable Pitchers, Lineups" or "Live Score". The CIN@AZ
+"9-0" echo (Aug 21, already in the registry) was rejected again.
+
+ADVANCED METRICS: NOT OBTAINABLE, and this is structural rather than effort-limited. Titles can carry
+a final score; they cannot carry a box score. Every host serving Statcast/wOBA/pitch-level data is
+egress-denied — baseballsavant, baseball-reference, fangraphs, espn, foxsports, rotowire, covers,
+plaintextsports all return EGRESS_BLOCKED on WebFetch. raw.githubusercontent.com IS reachable but the
+community mirrors carry no MLB schedule and nothing past 2024. I will not reconstruct metrics from
+summariser prose: that is exactly the class that produced tonight's echo error.
+
+DIAGNOSTIC READ on the six (NOT a grade — 4 were never registered, 2 are registered but awaiting
+tier-1): model 1-5 on winners, mean Brier .27784, WORSE than flat-50%. Registered pair specifically
+0-2 / .26686. Totals MAE 3.15, median 3.9, signed -0.32, largest -5.2 (STL@PHI, a 12-run blowout the
+all-CAP card had at 9.8). BASE RATE: home went 4-2 on these six, so always-home would have gone 4-2
+against the model's 1-5 — the same base-rate lesson as 8/21, now on a starter-blind card where it is
+even less surprising. Every starter slot was league-average CAP, so this is close to a park-and-HFA
+model and it performed like one.
+
+Still pending: 9 MLB finals, both WNBA finals, DAL@ARI (which carries both owner-discretion legs), and
+tier-1 confirmation for MIN@SD and CLE@COL.

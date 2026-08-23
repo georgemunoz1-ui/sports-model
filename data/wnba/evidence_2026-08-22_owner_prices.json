@@ -1,0 +1,45 @@
+{
+ "record_id": "WNBA-OWNER-PRICE-CAPTURE-20260822",
+ "schema": "wnba.owner_price_board.v1",
+ "captured_at_utc": "2026-08-23T00:30:00Z",
+ "device_clock_shown": "5:30 (PT)",
+ "received_from": "owner screenshots, two games, aggregator 'Games' board with a multi-book selector (+12 books shown in the header)",
+ "source_tier": 1,
+ "source_family": "OWNER_SOURCE_PIXELS",
+ "governing_rule": "Source pixels govern. A model-generated or assistant-transcribed quote can never supersede them (standing rule 2026-08-19).",
+
+ "CRITICAL_PRICE_BASIS": "BEST_ODDS_CROSS_BOOK. Each side of each market carries its OWN book badge and the two sides differ. This is a best-price aggregator display, not a single board. Under the 8/3 ruling cross-book de-vig is INVALID for market probability: it normalises against a vig no book ever quoted. Single-price EV screening IS permitted. The tell is in the numbers themselves — the two-sided implied probabilities sum to 1.0058 and 1.0041, i.e. essentially zero overround, which no single book offers.",
+
+ "games": [
+  {"away": "CON", "home": "LAS", "tip_local": "6:00 PM", "records": {"CON": "9-26", "LAS": "12-24"},
+   "pct_of_bets_spread": {"CON": 44, "LAS": 56},
+   "moneyline": {"CON": {"price": 190, "book_badge": "blue-N"},
+                 "LAS": {"price": -195, "book_badge": "BetRivers"},
+                 "same_book": false},
+   "spread": {"CON": {"line": 4.5, "price": 117, "book_badge": "blue-N", "tag": "EV+"},
+              "LAS": {"line": -4.5, "price": -115, "book_badge": "Hard Rock"},
+              "same_book": false},
+   "total": {"line": 170.5, "over": {"price": -105, "book_badge": "Hard Rock", "tag": "EV+"},
+             "under": {"price": 105, "book_badge": "green-X"}, "same_book": false},
+   "l10_context": {"CON_ml": "20%", "LAS_ml": "20%", "h2h_ml": "40/60",
+                   "CON_spread": "20%", "LAS_spread": "20%", "h2h_spread": "60/40",
+                   "CON_ou": "O 50% / U 50%", "LAS_ou": "O 60% / U 40%"}},
+
+  {"away": "ATL", "home": "PHX", "tip_local": "7:00 PM", "records": {"ATL": "23-13", "PHX": "13-23"},
+   "pct_of_bets_spread": {"ATL": 64, "PHX": 36},
+   "moneyline": {"ATL": {"price": -317, "book_badge": "blue-N"},
+                 "PHX": {"price": 310, "book_badge": "green-X", "tag": "EV+"},
+                 "same_book": false},
+   "spread": {"ATL": {"line": -8.5, "price": 108, "book_badge": "blue-N"},
+              "PHX": {"line": 8.5, "price": -106, "book_badge": "BetRivers"},
+              "same_book": false},
+   "total": {"line": 176.5, "over": {"price": -106, "book_badge": "blue-N"},
+             "under": {"price": 102, "book_badge": "green-X"}, "same_book": false},
+   "l10_context": {"ATL_ml": "70%", "PHX_ml": "50%", "h2h_ml": "100/0",
+                   "ATL_spread": "60%", "PHX_spread": "80%", "h2h_spread": "60/40",
+                   "ATL_ou": "O 70% / U 30%", "PHX_ou": "O 50% / U 50%"}}
+ ],
+
+ "forecast_precedence_CONFIRMED": "Both forecasts were registered at 2026-08-22T23:56Z, BEFORE this 00:30Z price capture. Forecast-first holds by timestamp, not by assertion.",
+ "third_game_note": "IND@NYL tipped 23:00Z and is not on this board's pregame section; it was never registered and no price is recorded for it."
+}

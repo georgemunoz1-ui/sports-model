@@ -2729,3 +2729,36 @@ into its results paragraph), so only the corroborated game is recorded.
 
 Betting output zero, ledger $0, wager authority NO. The acquisition ladder shipped an hour ago is
 what made this cycle recoverable at all.
+
+## 2026-08-23T00:30Z — OWNER PRICE CAPTURE, WNBA: screened, zero qualified bets
+Owner posted two price screenshots (5:30 PT device clock). SOURCE PIXELS GOVERN. Both forecasts were
+registered at 23:56Z, BEFORE this capture, so forecast-first holds by timestamp rather than by
+assertion.
+
+PRICE BASIS IS BEST_ODDS_CROSS_BOOK and the arithmetic proves it, not just the badges: each side of
+each market carries its own book badge (blue-N / BetRivers / Hard Rock / green-X) and the two-sided
+implied probabilities sum to 1.0058 and 1.0041 — overrounds of +0.58% and +0.41% where a single book
+quotes +4 to +6%. Cross-book de-vig REFUSED (8/3 ruling); single-price EV screening permitted.
+
+CON@LAS (tip 01:00Z). Model LAS .6279. CON +190 implied .3448, raw edge +2.73pp, EV +7.91%/unit —
+the only PRICE_SENSITIVE row on the board; compression gap 2.73pp, below the 5pp gate. LAS -195 is
+-5.01%. ATS: home_cover_delta = +3.40 + (-4.5) = -1.10 spread points -> CON, a market dog read, and
+|1.10| < 2.0 deadband -> MARGIN_COMPRESSION_BLOCK on both counts.
+
+ATL@PHX (tip 02:00Z). Model PHX .3859 against an implied .2439 — raw edge +14.20pp and a nominal EV
+of +58.2%/unit on PHX +310. That is NOT an edge: market_conf .2561 - model_conf .1141 = 14.20pp, so
+the COMPRESSION GATE FIRES and the row is COMPRESSION_CONFLICT / AUDIT_REQUIRED. Lifetime record of
+edges >=5pp is 0-6. ATL -317 screens -19.2%. ATS: delta = -3.58 + 8.5 = +4.92, clears the 2.0
+deadband, but PHX is the market dog -> MARGIN_COMPRESSION_BLOCK.
+
+Two ATS selections registered pre-tip (T-27m, T-87m), both classed MARGIN_COMPRESSION_BLOCK. Ledgers
+now FULL 1-4-0 with 2 pending, ACTION_ELIGIBLE 0-0-0, BLOCKED_SUBSET 1-2-0 with 2 pending — the
+action gate has still surfaced ZERO eligible selections since it was amended, which is the intended
+behaviour on dog reads.
+
+TOTALS: model 172.3 vs line 170.5, and 170.5 vs line 176.5. DIAGNOSTIC ONLY, hard-blocked from
+recommendation language. The 6-point ATL@PHX disagreement is exactly where the total head has been
+worst (8/21 error +24.10).
+
+ZERO QUALIFIED BETS. Wager authority NO, execution UNAUTHORIZED, ledger $0.
+Evidence: data/wnba/evidence_2026-08-22_owner_prices.json sha b258d436415696de

@@ -1,0 +1,126 @@
+{
+ "record_id": "INFORMATION-CLASS-2026-08-23",
+ "created_utc": "2026-08-23T00:20:00Z",
+ "authority": "owner development program 2026-08-23, item 1 (verbatim)",
+ "owner_instruction": "Turn all-CAP cards into an explicit baseline cohort. Do not present an all-CAP slate as a normal card. Use: INFORMATION_CLASS = ALL_CAP_BASELINE, ACTION_AUTHORITY = NONE, continue registering it for comparison, fork the actionable challenger only after verified starters arrive.",
+ "status": "IMPLEMENTED AND WIRED. Independent review not yet run.",
+ "delivered": {
+  "module": "harness/information_class.py",
+  "mutation_suite": "27/27 killed",
+  "wired": [
+   "healthcheck selftest loop",
+   "healthcheck live gate (--gate)"
+  ],
+  "ledger": "data/audit/information_class_ledger.json (40 entries, append-only)",
+  "design_rules": [
+   "The class is COMPUTED FROM THE SLOT STATS. The row-level capped flag is never read: it is per-ROW over TWO slots and cannot distinguish all-CAP from partial, and a card asserting capped=false while carrying CAP stats is classified all-CAP anyway.",
+   "A printed starter NAME is not information. A slot showing a real pitcher with league-average CAP stats is CAP_NAMED_REGISTRY_MISS, counted separately because it is the most misleading state a card can display.",
+   "This module can only REMOVE authority. Every non-baseline class returns GATE_GOVERNED, which grants nothing and defers to the promotion gate (0/100 NO_PROMOTE), paper-only and the trust ladder. There is no code path that returns an affirmative permission.",
+   "REGISTRATION IS NOT ACTION: ALL_CAP_BASELINE stays registration_eligible, per the owner instruction to continue registering it for comparison. A fixture and a mutant both enforce this so that cannot-be-acted-on can never collapse into not-recorded.",
+   "Cards are NOT retro-stamped. Rewriting a registered artifact breaks its hash and violates R3, so the classification lives in a derived ledger and the gate re-derives it and fails on drift.",
+   "The fork rule refuses three specific failures: forking with zero verified slots (a relabelling), forking by reusing the baseline model_id or artifact path (R3/R6), and forking on starter names that are not attributable to a source (R1)."
+  ]
+ },
+ "findings_from_the_first_full_scan": {
+  "1_five_all_cap_cards_were_presented_as_normal_cards": {
+   "cards": [
+    "cards/2026-08-17_card.json (0/20 resolved)",
+    "cards/2026-08-18_card.json (0/18)",
+    "cards/2026-08-19_card.json (0/30)",
+    "cards/2026-08-21_card.json (0/30)",
+    "cards/2026-08-22_card.json (0/30)"
+   ],
+   "why_it_matters": "Nothing in the repo measured starter-slot resolution before today, so an all-CAP slate and a fully-resolved slate were written, read and graded through the same path under the same name."
+  },
+  "2_forty_two_slots_printed_a_name_while_feeding_league_average_stats": {
+   "count": 42,
+   "clearest_case": "cards/2026-08-19_card.json displays Jackson Jobe (DET@PIT) and AJ Smith-Shawver (ATL@MIN) and is nonetheless 0/30 resolved. A reader seeing names reasonably concludes the card knows who is pitching. It does not.",
+   "worst_density": "cards/2026-08-19_card_v2.json — 5 named-but-CAP slots",
+   "rule_now_enforced": "the name is cosmetic; the stats are the input"
+  },
+  "3_the_cohort_label_v1_does_not_denote_an_information_class": {
+   "evidence": {
+    "2026-08-18 v1": "ALL_CAP_BASELINE (0/18 resolved)",
+    "2026-08-19 v1": "ALL_CAP_BASELINE (0/30)",
+    "2026-08-21 v1": "ALL_CAP_BASELINE (0/30)",
+    "2026-08-20 v1": "PARTIAL_STARTER_INFORMATION (17 of 18 slots RESOLVED)"
+   },
+   "conclusion": "v1 is a slot in the day's build sequence, not an information class. On three of four days it names the all-CAP baseline; on 2026-08-20 it names a nearly fully-resolved card. Any pooling keyed on the label mixes classes."
+  },
+  "4_audit_of_the_owner_pooled_score": {
+   "owner_figure": "32-21, weighted Brier approximately .2421, quoted with the caveat that it should not become canonical until identity, eligibility and cohort definitions are verified identical",
+   "reproduces_exactly": true,
+   "recomputed": {
+    "n": 53,
+    "record": "32-21 (.604)",
+    "weighted_brier": 0.24213,
+    "advantage_over_flat_50": 0.00787
+   },
+   "the_caveat_tested": "The four pooled cohorts are 2026-08-18 v2, 2026-08-19 v2, 2026-08-20 v1 and 2026-08-21 v2. By CLASS all four are PARTIAL_STARTER_INFORMATION. The pool is therefore class-HOMOGENEOUS: the label inconsistency in finding 3 did not, on this particular pool, mix an all-CAP cohort into a starter-informed one. The caution was correct about the labels and did not this time cost the number its meaning.",
+   "residual_defect_1_dose_gradient": "Resolution RATE varies across the pool — 90%, 73%, 94%, 83%. That is a dose gradient inside one class, not a class break, but the pooled figure averages over four different amounts of starter information and cannot be read as the performance of any one configuration.",
+   "residual_defect_2_artifact_no_longer_carries_its_own_inputs": "data/mlb/analysis/2026-08-21_grades.json no longer reproduces its own .23062: the late CHC@SEA re-settlement rewrote it to n=1 with 28 rows in already_graded_skipped. The figure survives only in docs/experiments/2026-08-21_BASE_RATE_CAVEAT.json and in git history at commit 21514f2. A canonical pooled score cannot be built on an artifact that no longer carries its own inputs."
+  },
+  "5_baseline_versus_challenger": {
+   "unpaired_pooled": {
+    "ALL_CAP_BASELINE": {
+     "n": 39,
+     "record": "23-16 (.590)",
+     "weighted_brier": 0.24716,
+     "advantage_over_flat_50": 0.00284,
+     "days": [
+      "2026-08-18 v1 n=9",
+      "2026-08-19 v1 n=15",
+      "2026-08-21 v1 n=15"
+     ]
+    },
+    "PARTIAL_challenger": {
+     "n": 53,
+     "record": "32-21 (.604)",
+     "weighted_brier": 0.24213,
+     "advantage_over_flat_50": 0.00787
+    },
+    "warning": "these two pools cover different slates and different game counts and are NOT a head-to-head"
+   },
+   "paired_same_slate_head_to_head": {
+    "eligible_days": [
+     "2026-08-19 (both cohorts n=15)",
+     "2026-08-21 (both cohorts n=14, pre-CHC@SEA, recovered from commit 21514f2)"
+    ],
+    "n": 29,
+    "baseline": {
+     "record": "16-13",
+     "brier": 0.24686
+    },
+    "challenger": {
+     "record": "18-11",
+     "brier": 0.23826
+    },
+    "delta_brier": -0.00859,
+    "2026-08-18_excluded_and_why": "the 8/18 grades artifact stores summaries only — it has no rows array — so the v1 (n=9) and v2 (n=15) cohorts cannot be restricted to their common games. An unpaired 9-vs-15 comparison would be a slate difference reported as a model difference.",
+    "2026-08-20_excluded_and_why": "no baseline cohort was built that day; only one card exists",
+    "reading": "TWO DAYS and 29 paired games, both favouring the starter-informed challenger. That is the whole of the direct evidence that starter information helps. It is consistent with the 8/21 finding that three of the four v2 flips went TOWARD the home side on a night home teams went 14-1, and it is not an established effect."
+   }
+  }
+ },
+ "what_this_does_not_do": [
+  "It does not change any registered forecast, grade or ledger row.",
+  "It does not grant action authority to anything. The gate remains 0/100 NO_PROMOTE, the model-authorized ledger remains $0, execution remains UNAUTHORIZED and wager authority NO.",
+  "It does not retro-stamp historical cards, and no card artifact changed by a single byte.",
+  "It does not fork a challenger for 2026-08-22: no verified starter has arrived for that slate, so fork_authorization refuses it by rule."
+ ],
+ "the_2026_08_22_card_under_this_rule": {
+  "path": "cards/2026-08-22_card.json",
+  "information_class": "ALL_CAP_BASELINE",
+  "action_authority": "NONE",
+  "registration_eligible": true,
+  "registration_status_unchanged": "NOT_REGISTERED — POST_START_AT_BUILD; the settlement-contract cutoff still applies and is independent of this class",
+  "fork_status": "REFUSED — no verified starter slot has arrived"
+ },
+ "defects_found_while_building_this": [
+  "FALSY-ZERO READ: the first scan coalesced missing values with `x or default`, and because the CAP signature contains gs=0 it reported ZERO CAP slots across all 35 cards. Zero is a value, not a missing marker. Now a named mutant.",
+  "EM-DASH ESCAPING: the banner check compared the banner against json.dumps output, which escapes the em-dash to \\u2014, so a correctly bannered card failed the render guard. Now a named mutant.",
+  "TWO SOURCES OF TRUTH FOR AUTHORITY: the NOT_A_CARD and legacy early-returns hardcoded NONE while the gate read ACTION_AUTHORITY_BY_CLASS. Two mutants survived until the table became the single source. This is lesson 23's ordering resolving to a real defect on the third hypothesis.",
+  "A DRIFT FIXTURE THAT COULD NOT FAIL: the gate's class-drift rule was masked by the authority rule, because the drift case also changed the authority. Isolated with a drift between two classes that BOTH map to NONE."
+ ],
+ "next": "independent review of harness/information_class.py; then owner item 2 — rebuild MLB around a baseline offset using the expanding home prior as intercept"
+}

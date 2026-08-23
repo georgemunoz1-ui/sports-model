@@ -1,0 +1,568 @@
+{
+ "record_id": "INFORMATION-CLASS-LEDGER",
+ "authority": "owner development program 2026-08-23, item 1: make all-CAP a baseline-only class",
+ "created_utc": "2026-08-23T00:00:00Z",
+ "append_only": true,
+ "how_to_read": "One entry per file under cards/. The class is COMPUTED FROM THE SLOT STATS by harness/information_class.py and re-derived by its --gate on every healthcheck; drift between a recorded class and the live card FAILS. Cards are NOT retro-stamped: rewriting a registered artifact would break its hash and violate R3, so the classification lives here instead.",
+ "classes": {
+  "ALL_CAP_BASELINE": "every starter slot is the league-average CAP. ACTION_AUTHORITY = NONE. Still registered, for comparison only.",
+  "PARTIAL_STARTER_INFORMATION": "some slots resolved, some CAP. Authority deferred to the promotion gate.",
+  "VERIFIED_STARTER_COHORT": "every slot resolved from real starter stats. Authority deferred to the promotion gate.",
+  "NOT_CLASSIFIABLE": "modern card with unreadable or absent slots, or no slots at all. Fails closed to NONE.",
+  "NOT_A_CARD": "a prop sheet or EV screen filed under cards/. Not a slate.",
+  "LEGACY_SCHEMA_NO_SLOT_STATS": "pre-2026-07-22 schema carried no per-slot stats; the class cannot be recovered from the artifact."
+ },
+ "counts": {
+  "NOT_A_CARD": 5,
+  "LEGACY_SCHEMA_NO_SLOT_STATS": 2,
+  "PARTIAL_STARTER_INFORMATION": 26,
+  "VERIFIED_STARTER_COHORT": 2,
+  "ALL_CAP_BASELINE": 5
+ },
+ "entries": {
+  "cards/2026-07-18_card.json": {
+   "information_class": "NOT_A_CARD",
+   "action_authority": "NONE",
+   "registration_eligible": true,
+   "slots_total": 0,
+   "slots_resolved": 0,
+   "slots_cap": 0,
+   "named_but_cap": [],
+   "reason": "no slate rows — this file is not a card",
+   "card_sha256": "841c028eeebf9a6795cddc9c8dbae586e63e2a5855c150ed1264d92b7ce49845",
+   "classified_utc": "2026-08-23T00:00:00Z"
+  },
+  "cards/2026-07-19_card.json": {
+   "information_class": "LEGACY_SCHEMA_NO_SLOT_STATS",
+   "action_authority": "NONE",
+   "registration_eligible": true,
+   "slots_total": 0,
+   "slots_resolved": 0,
+   "slots_cap": 0,
+   "named_but_cap": [],
+   "reason": "pre-2026-07-22 schema: no per-slot starter stats were recorded, so the information class of this card cannot be recovered from the artifact",
+   "card_sha256": "9f2eb644f7ef24c40e63ff8f25ede4f0a536af3af61d8a1d57b00c3b570ed2d2",
+   "classified_utc": "2026-08-23T00:00:00Z"
+  },
+  "cards/2026-07-20_card.json": {
+   "information_class": "LEGACY_SCHEMA_NO_SLOT_STATS",
+   "action_authority": "NONE",
+   "registration_eligible": true,
+   "slots_total": 0,
+   "slots_resolved": 0,
+   "slots_cap": 0,
+   "named_but_cap": [],
+   "reason": "pre-2026-07-22 schema: no per-slot starter stats were recorded, so the information class of this card cannot be recovered from the artifact",
+   "card_sha256": "65d5395795f693f0d22ac583700a8c91efa8b752f38ac982409f44acbd0197f3",
+   "classified_utc": "2026-08-23T00:00:00Z"
+  },
+  "cards/2026-07-21_kprops.json": {
+   "information_class": "NOT_A_CARD",
+   "action_authority": "NONE",
+   "registration_eligible": true,
+   "slots_total": 0,
+   "slots_resolved": 0,
+   "slots_cap": 0,
+   "named_but_cap": [],
+   "reason": "no slate rows — this file is not a card",
+   "card_sha256": "bce3fc5ee31dd2f383c2549f929866fb489d1da26e8f3d038653dd393d484bde",
+   "classified_utc": "2026-08-23T00:00:00Z"
+  },
+  "cards/2026-07-22_card.json": {
+   "information_class": "PARTIAL_STARTER_INFORMATION",
+   "action_authority": "GATE_GOVERNED",
+   "registration_eligible": true,
+   "slots_total": 30,
+   "slots_resolved": 25,
+   "slots_cap": 5,
+   "named_but_cap": [],
+   "reason": null,
+   "card_sha256": "96ada1b9bdffaa4db9922b6b862cd999db4c89adebb34483f45bec8dd31da589",
+   "classified_utc": "2026-08-23T00:00:00Z"
+  },
+  "cards/2026-07-23_card.json": {
+   "information_class": "PARTIAL_STARTER_INFORMATION",
+   "action_authority": "GATE_GOVERNED",
+   "registration_eligible": true,
+   "slots_total": 10,
+   "slots_resolved": 9,
+   "slots_cap": 0,
+   "named_but_cap": [],
+   "reason": null,
+   "card_sha256": "89ccaeb5680b6ffc6679e8957524ad9b58d0f6d4dcc922c7e0db4b1123acdc9a",
+   "classified_utc": "2026-08-23T00:00:00Z"
+  },
+  "cards/2026-07-24_card.json": {
+   "information_class": "PARTIAL_STARTER_INFORMATION",
+   "action_authority": "GATE_GOVERNED",
+   "registration_eligible": true,
+   "slots_total": 30,
+   "slots_resolved": 28,
+   "slots_cap": 2,
+   "named_but_cap": [
+    "KC@DET:away"
+   ],
+   "reason": null,
+   "card_sha256": "d67ccd48097699b1ee4368f4ac7143ba96ea18b3467fa9598a685579dd803652",
+   "classified_utc": "2026-08-23T00:00:00Z"
+  },
+  "cards/2026-07-25_card.json": {
+   "information_class": "PARTIAL_STARTER_INFORMATION",
+   "action_authority": "GATE_GOVERNED",
+   "registration_eligible": true,
+   "slots_total": 30,
+   "slots_resolved": 27,
+   "slots_cap": 3,
+   "named_but_cap": [
+    "ATH@MIN:away"
+   ],
+   "reason": null,
+   "card_sha256": "bac0d3616f74f27d37f0d93bcd825186adc396fe3e5f5c4a838a446f9738884b",
+   "classified_utc": "2026-08-23T00:00:00Z"
+  },
+  "cards/2026-07-25_ml_ev_picks.json": {
+   "information_class": "NOT_A_CARD",
+   "action_authority": "NONE",
+   "registration_eligible": true,
+   "slots_total": 0,
+   "slots_resolved": 0,
+   "slots_cap": 0,
+   "named_but_cap": [],
+   "reason": "no slate rows — this file is not a card",
+   "card_sha256": "91899aed9bde5a78ef670b0600d29282fa542d4ed28328dbbe3820db73a0db1a",
+   "classified_utc": "2026-08-23T00:00:00Z"
+  },
+  "cards/2026-07-26_card.json": {
+   "information_class": "PARTIAL_STARTER_INFORMATION",
+   "action_authority": "GATE_GOVERNED",
+   "registration_eligible": true,
+   "slots_total": 30,
+   "slots_resolved": 25,
+   "slots_cap": 5,
+   "named_but_cap": [
+    "AZ@WSH:away",
+    "HOU@CWS:away"
+   ],
+   "reason": null,
+   "card_sha256": "cbfedf711cd84d53312115c66340445af58bb2a573a36c0a56f110bb8ce5a8ab",
+   "classified_utc": "2026-08-23T00:00:00Z"
+  },
+  "cards/2026-07-26_ml_ev_picks.json": {
+   "information_class": "NOT_A_CARD",
+   "action_authority": "NONE",
+   "registration_eligible": true,
+   "slots_total": 0,
+   "slots_resolved": 0,
+   "slots_cap": 0,
+   "named_but_cap": [],
+   "reason": "no slate rows — this file is not a card",
+   "card_sha256": "6670403a8022d73c0b468d2f6ee7fd1dd1be2142ac468246dff3828f12df4d40",
+   "classified_utc": "2026-08-23T00:00:00Z"
+  },
+  "cards/2026-07-26_ml_ev_picks_raw.json": {
+   "information_class": "NOT_A_CARD",
+   "action_authority": "NONE",
+   "registration_eligible": true,
+   "slots_total": 0,
+   "slots_resolved": 0,
+   "slots_cap": 0,
+   "named_but_cap": [],
+   "reason": "no slate rows — this file is not a card",
+   "card_sha256": "03a9687de45895d71055ba31e08eaf97ff22afd3396c5b457ca87117151116b9",
+   "classified_utc": "2026-08-23T00:00:00Z"
+  },
+  "cards/2026-07-29_card.json": {
+   "information_class": "PARTIAL_STARTER_INFORMATION",
+   "action_authority": "GATE_GOVERNED",
+   "registration_eligible": true,
+   "slots_total": 32,
+   "slots_resolved": 30,
+   "slots_cap": 2,
+   "named_but_cap": [
+    "ATL@NYM:away",
+    "HOU@LAA:away"
+   ],
+   "reason": null,
+   "card_sha256": "ea00fea554a3175309f475c9645cb3df2dd622b7314ab9c153d7b3977238b6dd",
+   "classified_utc": "2026-08-23T00:00:00Z"
+  },
+  "cards/2026-07-29_card_v2.json": {
+   "information_class": "PARTIAL_STARTER_INFORMATION",
+   "action_authority": "GATE_GOVERNED",
+   "registration_eligible": true,
+   "slots_total": 32,
+   "slots_resolved": 30,
+   "slots_cap": 2,
+   "named_but_cap": [
+    "ATL@NYM:away",
+    "HOU@LAA:away"
+   ],
+   "reason": null,
+   "card_sha256": "5e808f21237f5630be205795950cd050856e62a8baf670bf1d31ef6ec886a3f8",
+   "classified_utc": "2026-08-23T00:00:00Z"
+  },
+  "cards/2026-07-31_card.json": {
+   "information_class": "PARTIAL_STARTER_INFORMATION",
+   "action_authority": "GATE_GOVERNED",
+   "registration_eligible": true,
+   "slots_total": 30,
+   "slots_resolved": 29,
+   "slots_cap": 1,
+   "named_but_cap": [
+    "PHI@BAL:away"
+   ],
+   "reason": null,
+   "card_sha256": "cafc2bf2820c5ba1c9483f92972224c114830c12c7dbfc386ef5d484b28264e1",
+   "classified_utc": "2026-08-23T00:00:00Z"
+  },
+  "cards/2026-08-03_card.json": {
+   "information_class": "PARTIAL_STARTER_INFORMATION",
+   "action_authority": "GATE_GOVERNED",
+   "registration_eligible": true,
+   "slots_total": 16,
+   "slots_resolved": 15,
+   "slots_cap": 1,
+   "named_but_cap": [
+    "WSH@PHI:away"
+   ],
+   "reason": null,
+   "card_sha256": "b207df4bb0678bfe0be65f95d98100494e625742d55389cb145acbcd5b07dd4e",
+   "classified_utc": "2026-08-23T00:00:00Z"
+  },
+  "cards/2026-08-04_card.json": {
+   "information_class": "PARTIAL_STARTER_INFORMATION",
+   "action_authority": "GATE_GOVERNED",
+   "registration_eligible": true,
+   "slots_total": 30,
+   "slots_resolved": 28,
+   "slots_cap": 2,
+   "named_but_cap": [
+    "TOR@HOU:home",
+    "SF@TEX:away"
+   ],
+   "reason": null,
+   "card_sha256": "1f5868fdada0146e48f2c0be509e14d2ae375447afb176c1a5647eb4d286fb2f",
+   "classified_utc": "2026-08-23T00:00:00Z"
+  },
+  "cards/2026-08-06_card.json": {
+   "information_class": "PARTIAL_STARTER_INFORMATION",
+   "action_authority": "GATE_GOVERNED",
+   "registration_eligible": true,
+   "slots_total": 16,
+   "slots_resolved": 12,
+   "slots_cap": 4,
+   "named_but_cap": [],
+   "reason": null,
+   "card_sha256": "4ea711998c21e38faaf4824900d9f50ac92d5d2bcfaa37790710480a0bbb4fb0",
+   "classified_utc": "2026-08-23T00:00:00Z"
+  },
+  "cards/2026-08-08_card.json": {
+   "information_class": "PARTIAL_STARTER_INFORMATION",
+   "action_authority": "GATE_GOVERNED",
+   "registration_eligible": true,
+   "slots_total": 30,
+   "slots_resolved": 28,
+   "slots_cap": 2,
+   "named_but_cap": [
+    "NYM@PIT:away",
+    "DET@SF:away"
+   ],
+   "reason": null,
+   "card_sha256": "00ed7055ee5e1a5bc5dd84fd6ab88dab7ba14ba27a044de5f04e8f963f3818a9",
+   "classified_utc": "2026-08-23T00:00:00Z"
+  },
+  "cards/2026-08-09_card.json": {
+   "information_class": "PARTIAL_STARTER_INFORMATION",
+   "action_authority": "GATE_GOVERNED",
+   "registration_eligible": true,
+   "slots_total": 30,
+   "slots_resolved": 7,
+   "slots_cap": 22,
+   "named_but_cap": [],
+   "reason": null,
+   "card_sha256": "cc3a9cbb0299de14ed9d7eb2ffccdcc4040f8237220ef05867710c84d1f34de7",
+   "classified_utc": "2026-08-23T00:00:00Z"
+  },
+  "cards/2026-08-10_card.json": {
+   "information_class": "VERIFIED_STARTER_COHORT",
+   "action_authority": "GATE_GOVERNED",
+   "registration_eligible": true,
+   "slots_total": 12,
+   "slots_resolved": 12,
+   "slots_cap": 0,
+   "named_but_cap": [],
+   "reason": null,
+   "card_sha256": "6dc4057214cf090ee5fc527f5e07989f5f17461d5660af620a4fb900f90d1f97",
+   "classified_utc": "2026-08-23T00:00:00Z"
+  },
+  "cards/2026-08-10_card_v2_full10.json": {
+   "information_class": "PARTIAL_STARTER_INFORMATION",
+   "action_authority": "GATE_GOVERNED",
+   "registration_eligible": true,
+   "slots_total": 20,
+   "slots_resolved": 18,
+   "slots_cap": 2,
+   "named_but_cap": [
+    "HOU@SF:away",
+    "HOU@SF:home"
+   ],
+   "reason": null,
+   "card_sha256": "2040c2db22a5499c7d0ca60a74df344dcbfb256aaa28a660542fa3287313b4aa",
+   "classified_utc": "2026-08-23T00:00:00Z"
+  },
+  "cards/2026-08-11_card.json": {
+   "information_class": "PARTIAL_STARTER_INFORMATION",
+   "action_authority": "GATE_GOVERNED",
+   "registration_eligible": true,
+   "slots_total": 30,
+   "slots_resolved": 26,
+   "slots_cap": 3,
+   "named_but_cap": [
+    "TEX@LAA:away",
+    "TB@ATH:home"
+   ],
+   "reason": null,
+   "card_sha256": "bba2bfe1eec0f4d3d87814d2775959694037a837ec73f331576b778f8050239b",
+   "classified_utc": "2026-08-23T00:00:00Z"
+  },
+  "cards/2026-08-12_card.json": {
+   "information_class": "PARTIAL_STARTER_INFORMATION",
+   "action_authority": "GATE_GOVERNED",
+   "registration_eligible": true,
+   "slots_total": 30,
+   "slots_resolved": 17,
+   "slots_cap": 13,
+   "named_but_cap": [
+    "NYM@ATL:away"
+   ],
+   "reason": null,
+   "card_sha256": "3baf335a092d371fa56adbae414d91959a4eb6f0c1b477e2097430ef3c3cf3a9",
+   "classified_utc": "2026-08-23T00:00:00Z"
+  },
+  "cards/2026-08-12_card_v2_confirmed.json": {
+   "information_class": "PARTIAL_STARTER_INFORMATION",
+   "action_authority": "GATE_GOVERNED",
+   "registration_eligible": true,
+   "slots_total": 30,
+   "slots_resolved": 25,
+   "slots_cap": 5,
+   "named_but_cap": [
+    "HOU@SF:away",
+    "CHC@WSH:home",
+    "NYM@ATL:away",
+    "TEX@LAA:home"
+   ],
+   "reason": null,
+   "card_sha256": "69798fa4a0d0fe02bbe0b9f704b2716c143b5526da94620f845b6ceaf03f6063",
+   "classified_utc": "2026-08-23T00:00:00Z"
+  },
+  "cards/2026-08-13_card.json": {
+   "information_class": "PARTIAL_STARTER_INFORMATION",
+   "action_authority": "GATE_GOVERNED",
+   "registration_eligible": true,
+   "slots_total": 14,
+   "slots_resolved": 2,
+   "slots_cap": 12,
+   "named_but_cap": [],
+   "reason": null,
+   "card_sha256": "c6fbf4302c286c42223cd69a2c57e7e657a6b8f2ea693055138559bd1ba2648e",
+   "classified_utc": "2026-08-23T00:00:00Z"
+  },
+  "cards/2026-08-13_card_v2_evening.json": {
+   "information_class": "VERIFIED_STARTER_COHORT",
+   "action_authority": "GATE_GOVERNED",
+   "registration_eligible": true,
+   "slots_total": 6,
+   "slots_resolved": 6,
+   "slots_cap": 0,
+   "named_but_cap": [],
+   "reason": null,
+   "card_sha256": "7e18225eb3b61a1ae5932094d1fb8648fc622384bf6f76b52f506dce87efcccc",
+   "classified_utc": "2026-08-23T00:00:00Z"
+  },
+  "cards/2026-08-14_card.json": {
+   "information_class": "PARTIAL_STARTER_INFORMATION",
+   "action_authority": "GATE_GOVERNED",
+   "registration_eligible": true,
+   "slots_total": 28,
+   "slots_resolved": 25,
+   "slots_cap": 3,
+   "named_but_cap": [
+    "CWS@DET:away",
+    "CWS@DET:home",
+    "WSH@NYM:home"
+   ],
+   "reason": null,
+   "card_sha256": "72976b894789b79fd453639f7f0eceafc3496f79deae3c0efd4bf8a461a5c99f",
+   "classified_utc": "2026-08-23T00:00:00Z"
+  },
+  "cards/2026-08-17_card.json": {
+   "information_class": "ALL_CAP_BASELINE",
+   "action_authority": "NONE",
+   "registration_eligible": true,
+   "slots_total": 20,
+   "slots_resolved": 0,
+   "slots_cap": 20,
+   "named_but_cap": [],
+   "reason": null,
+   "card_sha256": "9d802f1f892f26f5cf903b76fdc53a12775150e560081fa328a6e2384e539ecb",
+   "classified_utc": "2026-08-23T00:00:00Z"
+  },
+  "cards/2026-08-17_card_v2.json": {
+   "information_class": "PARTIAL_STARTER_INFORMATION",
+   "action_authority": "GATE_GOVERNED",
+   "registration_eligible": true,
+   "slots_total": 22,
+   "slots_resolved": 15,
+   "slots_cap": 6,
+   "named_but_cap": [
+    "ATH@KC:away"
+   ],
+   "reason": null,
+   "card_sha256": "da1b65d2afc4c94cc7f401aedb16cbefc931ab3ca9624b0a0459302c38e9d57e",
+   "classified_utc": "2026-08-23T00:00:00Z"
+  },
+  "cards/2026-08-17_card_v3.json": {
+   "information_class": "PARTIAL_STARTER_INFORMATION",
+   "action_authority": "GATE_GOVERNED",
+   "registration_eligible": true,
+   "slots_total": 22,
+   "slots_resolved": 15,
+   "slots_cap": 6,
+   "named_but_cap": [
+    "ATH@KC:away"
+   ],
+   "reason": null,
+   "card_sha256": "1cac39733f68d6b0d605133791adf15ed3ccb5817ac5c5c240eaf5f87bd27bc8",
+   "classified_utc": "2026-08-23T00:00:00Z"
+  },
+  "cards/2026-08-18_card.json": {
+   "information_class": "ALL_CAP_BASELINE",
+   "action_authority": "NONE",
+   "registration_eligible": true,
+   "slots_total": 18,
+   "slots_resolved": 0,
+   "slots_cap": 18,
+   "named_but_cap": [],
+   "reason": null,
+   "card_sha256": "fab4e61395385f9f3da4a2eccf85ee0bd83a3a32055ca91ed26ca8f515d6084c",
+   "classified_utc": "2026-08-23T00:00:00Z"
+  },
+  "cards/2026-08-18_card_v2.json": {
+   "information_class": "PARTIAL_STARTER_INFORMATION",
+   "action_authority": "GATE_GOVERNED",
+   "registration_eligible": true,
+   "slots_total": 30,
+   "slots_resolved": 27,
+   "slots_cap": 3,
+   "named_but_cap": [
+    "ATH@KC:home",
+    "AZ@BOS:home",
+    "WSH@TEX:away"
+   ],
+   "reason": null,
+   "card_sha256": "15288870ea7a6f6d2723c62a9a1766e5e3cb45d92c89110c70079a851d8d023a",
+   "classified_utc": "2026-08-23T00:00:00Z"
+  },
+  "cards/2026-08-18_card_v3.json": {
+   "information_class": "PARTIAL_STARTER_INFORMATION",
+   "action_authority": "GATE_GOVERNED",
+   "registration_eligible": true,
+   "slots_total": 30,
+   "slots_resolved": 26,
+   "slots_cap": 4,
+   "named_but_cap": [
+    "MIA@PHI:away",
+    "WSH@TEX:away"
+   ],
+   "reason": null,
+   "card_sha256": "e17ee66456aaf621085c74f0ebc3e70424140d2fbbc804f4e88f8b86db8739c1",
+   "classified_utc": "2026-08-23T00:00:00Z"
+  },
+  "cards/2026-08-19_card.json": {
+   "information_class": "ALL_CAP_BASELINE",
+   "action_authority": "NONE",
+   "registration_eligible": true,
+   "slots_total": 30,
+   "slots_resolved": 0,
+   "slots_cap": 30,
+   "named_but_cap": [
+    "DET@PIT:away",
+    "ATL@MIN:away"
+   ],
+   "reason": null,
+   "card_sha256": "11cb5aca1c7e0aae5bdf1e229de8d92199c765af605b366b6232e0f588cdc6e8",
+   "classified_utc": "2026-08-23T00:00:00Z"
+  },
+  "cards/2026-08-19_card_v2.json": {
+   "information_class": "PARTIAL_STARTER_INFORMATION",
+   "action_authority": "GATE_GOVERNED",
+   "registration_eligible": true,
+   "slots_total": 30,
+   "slots_resolved": 22,
+   "slots_cap": 7,
+   "named_but_cap": [
+    "DET@PIT:away",
+    "SD@NYM:home",
+    "LAA@HOU:home",
+    "SF@CLE:away",
+    "ATL@MIN:away"
+   ],
+   "reason": null,
+   "card_sha256": "22147b7d0fdf1d3e578fe2c2c92e38ea47ce2eee9acb8504574d3a998f22f43d",
+   "classified_utc": "2026-08-23T00:00:00Z"
+  },
+  "cards/2026-08-20_card.json": {
+   "information_class": "PARTIAL_STARTER_INFORMATION",
+   "action_authority": "GATE_GOVERNED",
+   "registration_eligible": true,
+   "slots_total": 18,
+   "slots_resolved": 17,
+   "slots_cap": 1,
+   "named_but_cap": [
+    "LAA@HOU:away"
+   ],
+   "reason": null,
+   "card_sha256": "090795a77ecae8854c993126319767268ddc5090f19d553262b4d17d4b3e4a3c",
+   "classified_utc": "2026-08-23T00:00:00Z"
+  },
+  "cards/2026-08-21_card.json": {
+   "information_class": "ALL_CAP_BASELINE",
+   "action_authority": "NONE",
+   "registration_eligible": true,
+   "slots_total": 30,
+   "slots_resolved": 0,
+   "slots_cap": 30,
+   "named_but_cap": [],
+   "reason": null,
+   "card_sha256": "3e4e640c1bf446e69767898a05377a4d20fc611942545948a9eae7c5e92b7da8",
+   "classified_utc": "2026-08-23T00:00:00Z"
+  },
+  "cards/2026-08-21_card_v2.json": {
+   "information_class": "PARTIAL_STARTER_INFORMATION",
+   "action_authority": "GATE_GOVERNED",
+   "registration_eligible": true,
+   "slots_total": 30,
+   "slots_resolved": 25,
+   "slots_cap": 4,
+   "named_but_cap": [
+    "ATH@HOU:home"
+   ],
+   "reason": null,
+   "card_sha256": "f57851ace8e3bc5d6eaaed9046a3ba6804bcf88177c342afd0bfdb11aa4395a5",
+   "classified_utc": "2026-08-23T00:00:00Z"
+  },
+  "cards/2026-08-22_card.json": {
+   "information_class": "ALL_CAP_BASELINE",
+   "action_authority": "NONE",
+   "registration_eligible": true,
+   "slots_total": 30,
+   "slots_resolved": 0,
+   "slots_cap": 30,
+   "named_but_cap": [],
+   "reason": null,
+   "card_sha256": "44c625dc9ff4eaf4f7df45b65962c39c5242eb0b798e7bac3d28a39c6218de3e",
+   "classified_utc": "2026-08-23T00:00:00Z"
+  }
+ }
+}

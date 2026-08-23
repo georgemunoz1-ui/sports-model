@@ -236,7 +236,8 @@ for _m in ("result_provenance","result_content_checks","parse_box_dump",
            "acquisition_ledger","missing_data_audit","tier_discipline","artifact_immutability",
            "tier1_board_gate","form_refresh_diff","tier1_lineage","pregame_preflight","card_render",
            "settlement_contract","unified_card","decision_card","ats_ledgers",
-           "journal_continuity","acquisition_ladder","echo_gate","sports_acquisition","retry_ladder"):
+           "journal_continuity","acquisition_ladder","echo_gate","sports_acquisition","retry_ladder",
+           "information_class"):
     _r=subprocess.run([sys.executable,f"harness/{_m}.py","--selftest"],capture_output=True,text=True)
     _out=(_r.stdout+_r.stderr).strip().splitlines()
     check(f"{_m} selftest ({_out[-1][:72] if _out else 'no output'})", _r.returncode==0)
@@ -263,6 +264,13 @@ try:
     _r=subprocess.run([sys.executable,"harness/artifact_immutability.py","--gate"],capture_output=True,text=True)
     _out=(_r.stdout+_r.stderr).strip().splitlines()
     check(f"registered-artifact immutability ({_out[0][:78] if _out else 'no output'})", _r.returncode==0)
+    # 5a3c. INFORMATION CLASS (owner ruling 2026-08-23). Every card carries a class DERIVED FROM ITS
+    # SLOT STATS, and an all-CAP slate is a baseline cohort with ACTION_AUTHORITY = NONE. This gate
+    # re-derives the class of every card and fails on drift, on a card that was never classified,
+    # and on a ledgered authority that contradicts the class. Five committed cards are all-CAP.
+    _r=subprocess.run([sys.executable,"harness/information_class.py","--gate"],capture_output=True,text=True)
+    _out=(_r.stdout+_r.stderr).strip().splitlines()
+    check(f"information-class ledger ({_out[0][:78] if _out else 'no output'})", _r.returncode==0)
     # Tier-1 board completeness for the 8/15-8/16 refresh window (owner instruction 2026-08-17).
     # Completeness is proven by the 30-franchise slot invariant, not by trusting the board's own
     # expected_game_count, and every row's evidence file is re-hashed against what was recorded.

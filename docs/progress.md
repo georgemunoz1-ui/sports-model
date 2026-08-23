@@ -3055,3 +3055,51 @@ resolving it (>=5pp edges are 0-6 lifetime). Best row all night, CON +190, had a
 SHIPPED: acquisition_ladder 15/15, echo_gate 7/7, sports_acquisition 24/24, retry_ladder 15/15,
 journal_continuity repaired 29/29, preflight wording corrected, daily_baselines repaired 74/74 and
 still quarantined. Record: docs/experiments/2026-08-22_CYCLE_REVIEW.json
+
+## 2026-08-23 — INFORMATION CLASS: an all-CAP slate is a baseline cohort, not a card (owner item 1)
+
+VERIFIED THE OWNER'S THESIS TABLE FIRST. Every figure reproduces exactly: pooled 32-21 = .604,
+weighted Brier .24213, advantage over flat-50 +.00787, 8/20 advantage over a coin flip +.00067.
+The owner's own caveat — "should not become a canonical pooled score until model identity,
+eligibility and cohort definitions are verified identical" — was then TESTED rather than repeated,
+and it survives with two named residuals (below).
+
+SHIPPED harness/information_class.py — 27/27 mutants, wired into healthcheck as BOTH a selftest and
+a live gate. Class is COMPUTED FROM THE SLOT STATS; the row-level `capped` flag is never read.
+Ledger: data/audit/information_class_ledger.json, 40 entries, append-only. No card artifact changed
+by a byte — retro-stamping would break registered hashes (R3), so the class lives in a derived
+ledger and the gate re-derives it and FAILS ON DRIFT.
+
+FIRST FULL SCAN, three findings:
+(1) FIVE committed cards have ZERO resolved starter slots — 08-17, 08-18, 08-19, 08-21, 08-22 — and
+    all were written, read and graded as ordinary cards. Nothing measured this before today.
+(2) 42 SLOTS PRINTED A PITCHER'S NAME while feeding league-average CAP stats. 8/19 shows
+    "Jackson Jobe" and "AJ Smith-Shawver" and is 0/30 resolved. The name is cosmetic; the stats are
+    the input.
+(3) THE LABEL "v1" IS NOT A CLASS. On 08-18/19/21 it names the all-CAP baseline; on 08-20 it names a
+    card with 17 of 18 slots RESOLVED. Anything pooled on the label pools whatever it meant that day.
+
+AUDIT OF THE POOLED SCORE: the four cohorts behind 32-21 are 8/18 v2, 8/19 v2, 8/20 v1, 8/21 v2 —
+by CLASS all four are PARTIAL_STARTER_INFORMATION, so the pool is class-HOMOGENEOUS and the label
+inconsistency did not this time cost the number its meaning. Two residuals do bite: a DOSE GRADIENT
+(resolution 90/73/94/83%, four different amounts of starter information averaged into one figure),
+and 2026-08-21_grades.json NO LONGER REPRODUCES ITS OWN .23062 — the late CHC@SEA re-settlement
+rewrote it to n=1 with 28 skipped; the figure survives only in the caveat record and at commit 21514f2.
+
+BASELINE vs CHALLENGER, the comparison the class exists to enable. Unpaired pools are not a
+head-to-head (different slates, different n). The PAIRED same-slate evidence is TWO DAYS, n=29:
+baseline 16-13 / .24686, challenger 18-11 / .23826, delta -.00859. 8/18 is excluded because its
+grades artifact has no rows array and its 9-vs-15 cohorts cannot be restricted to common games;
+8/20 is excluded because no baseline was built. Twenty-nine paired games is the WHOLE of the direct
+evidence that starter information helps, and it sits alongside the 8/21 finding that three of four
+v2 flips went toward the home side on a 14-1 home night. Not an established effect.
+
+8/22 CARD: ALL_CAP_BASELINE, ACTION_AUTHORITY = NONE, registration_eligible (owner: keep registering
+it for comparison), fork REFUSED — no verified starter has arrived. Gate unchanged at 0/100
+NO_PROMOTE, ledger $0, execution UNAUTHORIZED.
+
+FOUR DEFECTS FOUND WHILE BUILDING IT, all mine: falsy-zero read of gs=0 made the first scan report
+ZERO CAP slots across 35 cards; em-dash escaping made a correctly-bannered card fail the render
+guard; two sources of truth for action authority (two mutants survived until the table became the
+only one); and a drift fixture that could not fail because it also tripped the authority rule.
+Lesson 24 written. Record: docs/experiments/2026-08-23_INFORMATION_CLASS.json

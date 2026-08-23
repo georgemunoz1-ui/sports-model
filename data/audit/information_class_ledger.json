@@ -809,12 +809,13 @@
    "unreadable_slots": 0,
    "named_but_cap": [],
    "reason": "This is a THREE-ARM FORECAST card, not a slate card: its rows carry per-arm probabilities rather than starter slot stats, so the slot-based classifier correctly reports that it cannot recover a class from this file. The dose is NOT self-declared — it is bound to the source slate card below, whose slot stats ARE classified, and which the gate checks independently. Letting a card declare its own information class would undo lesson 24.",
-   "card_sha256": "bde862b8d50478e5e8eb71df2267b6e30ca085ea560c68223c70df4de799bd35",
+   "card_sha256": "2aecdc446260a01ee8a9292fb8fa478941beaa902b062aa071d4d7886eba991e",
    "classified_utc": "2026-08-23T10:30:00Z",
    "dose_bound_to_source_card": "cards/2026-08-23_card.json",
    "source_card_sha256": "c34a30ed1428564d9fbfe8e95c48cb78f17ed8c47604b0457de62cfbc88d9432",
    "source_card_information_class": "PARTIAL_STARTER_INFORMATION",
-   "source_card_information_fraction": 0.8
+   "source_card_information_fraction": 0.8,
+   "rebuild_note": "rebuilt 2026-08-23T10:45Z after adaptive_state.team_ratings was corrected to normalise team identity; the previous build's challenger ratings were computed from the abbreviation-era rows only"
   }
  },
  "dose": "starter_information_fraction = starter_slots_resolved / starter_slots_total. THIN (LOW_SAMPLE) slots are excluded from the numerator and counted in thin_profile_slots: they carry real but sparse statistics and are not a settled profile.",

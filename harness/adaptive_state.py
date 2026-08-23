@@ -138,6 +138,56 @@ def home_prior_beta(cutoff_date, rows=None, alpha=HOME_PRIOR_ALPHA, beta=HOME_PR
 # TEAM RATINGS — shrunk scoring rates, updated after every settlement.
 # ---------------------------------------------------------------------------------------------
 
+# TEAM IDENTITY IS FRAGMENTED IN results.csv AND MUST BE NORMALISED BEFORE ANY RATING IS BUILT.
+# Rows dated before 2026-07-19 carry FULL NAMES ("Atlanta Braves"); rows from 2026-07-19 carry
+# ABBREVIATIONS ("ATL"). An unnormalised group-by therefore returns 62 keys for a 30-team league and
+# splits every team's season in two. It does this SILENTLY: the ratings still look plausible, they
+# are just built from a quarter of the games and shrunk far harder toward the league mean than they
+# should be. ATL had 23 games under its abbreviation and 97 more under its full name.
+# daily_card.py has always normalised (its ABBR map); this module did not, so the CHALLENGER arm
+# was affected and the CHAMPION was not.
+TEAM_ABBR = {
+    "Arizona Diamondbacks": "AZ", "Atlanta Braves": "ATL", "Baltimore Orioles": "BAL",
+    "Boston Red Sox": "BOS", "Chicago Cubs": "CHC", "Chicago White Sox": "CWS",
+    "Cincinnati Reds": "CIN", "Cleveland Guardians": "CLE", "Colorado Rockies": "COL",
+    "Detroit Tigers": "DET", "Houston Astros": "HOU", "Kansas City Royals": "KC",
+    "Los Angeles Angels": "LAA", "Los Angeles Dodgers": "LAD", "Miami Marlins": "MIA",
+    "Milwaukee Brewers": "MIL", "Minnesota Twins": "MIN", "New York Mets": "NYM",
+    "New York Yankees": "NYY", "Athletics": "ATH", "Oakland Athletics": "ATH",
+    "Philadelphia Phillies": "PHI", "Pittsburgh Pirates": "PIT", "San Diego Padres": "SD",
+    "San Francisco Giants": "SF", "Seattle Mariners": "SEA", "St. Louis Cardinals": "STL",
+    "Tampa Bay Rays": "TB", "Texas Rangers": "TEX", "Toronto Blue Jays": "TOR",
+    "Washington Nationals": "WSH", "OAK": "ATH", "CHW": "CWS", "ARI": "AZ",
+}
+EXPECTED_TEAMS = 30
+
+
+def normalize_team(t):
+    """One canonical abbreviation per franchise. An unmapped long name is returned unchanged so it
+    shows up as an anomaly rather than being silently folded into some other team."""
+    if t is None:
+        return None
+    return TEAM_ABBR.get(t, t)
+
+
+def team_identity_audit(rows=None, cutoff_date=None, tier_filter=("1",)):
+    """Positive evidence that the pool resolves to one key per franchise."""
+    rows = load_results() if rows is None else rows
+    pool = asof(rows, cutoff_date, tier_filter) if cutoff_date else rows
+    raw, norm = set(), set()
+    for r in pool:
+        for k in ("away", "home"):
+            if r.get(k):
+                raw.add(r[k]); norm.add(normalize_team(r[k]))
+    unmapped = sorted(t for t in norm if len(t) > 4)
+    return {"raw_keys": len(raw), "normalised_keys": len(norm),
+            "expected": EXPECTED_TEAMS,
+            "ok": len(norm) == EXPECTED_TEAMS and not unmapped,
+            "unmapped_long_names": unmapped,
+            "note": ("raw_keys above expected means the source mixes naming conventions; "
+                     "normalised_keys is what any rating must be grouped by")}
+
+
 def team_ratings(cutoff_date, rows=None, tier_filter=("1",),
                  prior_strength=None, league_mean=LEAGUE_MEAN_RUNS):
     """Offensive and defensive runs-per-game per team, shrunk toward the league mean.
@@ -153,7 +203,8 @@ def team_ratings(cutoff_date, rows=None, tier_filter=("1",),
             a, h = int(r["away_score"]), int(r["home_score"])
         except (KeyError, TypeError, ValueError):
             continue
-        for team, scored, allowed in ((r.get("away"), a, h), (r.get("home"), h, a)):
+        for team, scored, allowed in ((normalize_team(r.get("away")), a, h),
+                                      (normalize_team(r.get("home")), h, a)):
             if not team:
                 continue
             d = acc.setdefault(team, {"n": 0, "scored": 0, "allowed": 0})
@@ -169,6 +220,7 @@ def team_ratings(cutoff_date, rows=None, tier_filter=("1",),
                      "raw_off_rpg": (d["scored"] / n) if n else None,
                      "raw_def_rpg": (d["allowed"] / n) if n else None}
     return {"cutoff_date": cutoff_date, "prior_strength_games": k, "league_mean": league_mean,
+            "identity_audit": team_identity_audit(rows, cutoff_date, tier_filter),
             "teams": out}
 
 
@@ -333,6 +385,51 @@ def selftest():
     if tr2["teams"]["DDD"]["shrink_weight"] >= tr2["teams"]["BBB"]["shrink_weight"]:
         f.append("the shrink weight does not increase with sample size")
 
+    # --- TEAM IDENTITY MUST NORMALISE BEFORE ANY RATING IS BUILT --------------------------------
+    # The real defect: results.csv carries FULL NAMES before 2026-07-19 and ABBREVIATIONS after, so
+    # an unnormalised group-by returned 62 keys for a 30-team league and split every season in two.
+    MIXED = ([{"status": "final", "date": "2026-05-0%d" % (i + 1), "game_id": f"m{i}",
+               "away": "New York Mets", "home": "Atlanta Braves", "away_score": "3",
+               "home_score": "5", "home_win": "1", "source_tier": "1"} for i in range(9)] +
+             [{"status": "final", "date": "2026-08-0%d" % (i + 1), "game_id": f"a{i}",
+               "away": "NYM", "home": "ATL", "away_score": "3", "home_score": "5",
+               "home_win": "1", "source_tier": "1"} for i in range(3)])
+    tr_mixed = team_ratings("2026-08-23", MIXED)
+    if set(tr_mixed["teams"]) != {"ATL", "NYM"}:
+        f.append(f"a mixed-naming pool produced {sorted(tr_mixed['teams'])} instead of two "
+                 f"canonical keys — every franchise's season is being split in two")
+    if tr_mixed["teams"]["ATL"]["games"] != 12:
+        f.append(f"ATL was built from {tr_mixed['teams']['ATL']['games']} games, not the 12 in the "
+                 f"pool; the full-name rows were dropped")
+    aud = tr_mixed["identity_audit"]
+    if aud["raw_keys"] != 4 or aud["normalised_keys"] != 2:
+        f.append(f"the identity audit miscounted: {aud}")
+    for full, ab in (("Atlanta Braves", "ATL"), ("Oakland Athletics", "ATH"), ("CHW", "CWS"),
+                     ("ARI", "AZ"), ("Athletics", "ATH")):
+        if normalize_team(full) != ab:
+            f.append(f"normalize_team({full!r}) = {normalize_team(full)!r}, expected {ab!r}")
+    if normalize_team("ATL") != "ATL":
+        f.append("an already-canonical abbreviation was rewritten")
+    if normalize_team(None) is not None:
+        f.append("a missing team was coerced")
+    # an UNMAPPED long name must SHOW UP, never be folded into another team
+    unk = [{"status": "final", "date": "2026-05-01", "game_id": "u", "away": "Portland Pilots",
+            "home": "ATL", "away_score": "1", "home_score": "2", "home_win": "1",
+            "source_tier": "1"}]
+    au = team_identity_audit(unk)
+    if au["ok"] or "Portland Pilots" not in au["unmapped_long_names"]:
+        f.append("an unmapped long team name was silently accepted")
+    # the LIVE repository must resolve to exactly 30 franchises
+    try:
+        live = team_ratings("2026-08-23")
+        if not live["identity_audit"]["ok"]:
+            f.append(f"the live results table does not resolve to 30 franchises: "
+                     f"{live['identity_audit']}")
+        if len(live["teams"]) != EXPECTED_TEAMS:
+            f.append(f"the live ratings hold {len(live['teams'])} teams, expected {EXPECTED_TEAMS}")
+    except (OSError, KeyError):
+        pass
+
     # --- HIERARCHICAL PITCHER PROFILES: the owner's central requirement --------------------------
     # ONE BAD START moves an established pitcher very little and a debut a great deal.
     est = pitcher_profile("Ace", career_starts=120, career_mean=3.20, season_observations=[9.0])
@@ -407,6 +504,15 @@ MUTANTS = [
      "    a, b = w + alpha, (n - w) + beta", "    a, b = w, (n - w)"),
     ("the prior interval no longer narrows with evidence",
      "    var = (a * b) / (((a + b) ** 2) * (a + b + 1))", "    var = 0.25"),
+    ("team identity is not normalised, splitting every franchise in two",
+     '        for team, scored, allowed in ((normalize_team(r.get("away")), a, h),\n                                      (normalize_team(r.get("home")), h, a)):',
+     '        for team, scored, allowed in ((r.get("away"), a, h), (r.get("home"), h, a)):'),
+    ("the abbreviation map is emptied, so full names never fold",
+     "    return TEAM_ABBR.get(t, t)", "    return t"),
+    ("an unmapped long name is hidden instead of surfaced",
+     '    unmapped = sorted(t for t in norm if len(t) > 4)', "    unmapped = []"),
+    ("the identity audit passes whatever the key count",
+     '            "ok": len(norm) == EXPECTED_TEAMS and not unmapped,', '            "ok": True,'),
     ("team ratings are unshrunk raw rates",
      "        w = n / (n + k) if (n + k) else 0.0", "        w = 1.0"),
     ("team shrinkage is constant, so a 3-game team is treated like a 40-game team",

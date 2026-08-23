@@ -223,6 +223,45 @@ def slot_states(card):
     return out
 
 
+def classify_game(row):
+    """The information class and dose of ONE GAME, from its two starter slots.
+
+    A CARD-LEVEL dose is not a per-game dose, and stamping one onto every row is a real defect: it
+    tells a reader that a game with two resolved starters and a game with two CAP slots carry the
+    same information, when the whole point of the dose is that they do not. The 2026-08-23 three-arm
+    card stamped 0.80 onto all fifteen rows; the true per-game doses run from 0.0 to 1.0."""
+    states = []
+    for nk, sk in (("asp", "asp_stats"), ("hsp", "hsp_stats")):
+        states.append(slot_state(row.get(nk), row.get(sk)))
+    n = len(states)
+    counts = {s: states.count(s) for s in set(states)}
+    n_res = counts.get(RESOLVED, 0)
+    n_cap = counts.get(CAP_TBD, 0) + counts.get(CAP_NAMED_REGISTRY_MISS, 0)
+    frac = n_res / n if n else None
+    # A GAME HAS EXACTLY TWO STARTER SLOTS, so its dose can only be 0.0, 0.5 or 1.0. There is no
+    # reachable LOW_STARTER_INFORMATION band at the game level — that class exists for CARDS, where
+    # the fraction is continuous. Writing an unreachable branch here would be dead code that looks
+    # like a rule, and the card-level boundary mutants would target it instead of the live one.
+    if counts.get(MALFORMED):
+        cls = NOT_CLASSIFIABLE
+    elif n_res == 0:
+        cls = ALL_CAP_BASELINE
+    elif n_res == n:
+        cls = FULL_STARTER_INFORMATION
+    else:
+        cls = PARTIAL_STARTER_INFORMATION
+    return {"game": f"{row.get('away')}@{row.get('home')}",
+            "information_class": cls,
+            "action_authority": ACTION_AUTHORITY_BY_CLASS[cls],
+            "starter_information_fraction": (round(frac, 6) if frac is not None else None),
+            "starter_slots_total": n, "starter_slots_resolved": n_res,
+            "named_cap_slots": counts.get(CAP_NAMED_REGISTRY_MISS, 0),
+            "tbd_cap_slots": counts.get(CAP_TBD, 0),
+            "thin_profile_slots": counts.get(LOW_SAMPLE, 0),
+            "verified_profile_slots": n_res,
+            "slot_states": states}
+
+
 def classify(card):
     """Compute the information class of a card FROM ITS STATS. Returns a full record."""
     if not has_rows_list(card):
@@ -570,6 +609,42 @@ def selftest():
         f.append(f"a thin slot was counted as verified information: fraction "
                  f"{d['starter_information_fraction']}, expected 0.25")
 
+    # 17b2. PER-GAME DOSE. A card-level dose stamped onto every row says a two-resolved game and a
+    #       two-CAP game carry the same information, which is the opposite of what a dose is for.
+    per = classify_game(row("A", "B", "McGreevy", REAL, "Singer", REAL))
+    if per["starter_information_fraction"] != 1.0 or per["information_class"] != FULL_STARTER_INFORMATION:
+        f.append(f"a fully resolved GAME did not score dose 1.0: {per}")
+    per = classify_game(row("A", "B", "TBD", CAP, "TBD", CAP))
+    if per["starter_information_fraction"] != 0.0 or per["information_class"] != ALL_CAP_BASELINE:
+        f.append("an all-CAP GAME did not score dose 0.0")
+    per = classify_game(row("A", "B", "McGreevy", REAL, "TBD", CAP))
+    if per["starter_information_fraction"] != 0.5:
+        f.append(f"a half-resolved GAME scored {per['starter_information_fraction']}, expected 0.5")
+    if per["information_class"] != PARTIAL_STARTER_INFORMATION:
+        f.append(f"a half-resolved GAME classified as {per['information_class']}; with two slots the "
+                 f"only reachable classes are ALL_CAP, PARTIAL and FULL")
+    # every per-game dose must be one of exactly three values
+    for a_st, h_st in ((REAL, REAL), (REAL, CAP), (CAP, REAL), (CAP, CAP), (REAL, THIN)):
+        d = classify_game(row("A", "B", "x", a_st, "y", h_st))["starter_information_fraction"]
+        if d not in (0.0, 0.5, 1.0):
+            f.append(f"a two-slot game produced dose {d}, which is not 0, 0.5 or 1")
+    # a THIN (one-start) slot is not resolved information, whatever name it carries
+    per = classify_game(row("A", "B", "McGreevy", REAL, "Rookie", THIN))
+    if per["starter_information_fraction"] != 0.5:
+        f.append(f"a one-start pitcher was counted as full information: dose "
+                 f"{per['starter_information_fraction']}")
+    if per["thin_profile_slots"] != 1:
+        f.append("a thin slot was not counted separately in the per-game record")
+    # the per-game doses across a card must NOT all be equal when the slots differ
+    mixed_card = {"rows": [row("A", "B", "M", REAL, "S", REAL),
+                           row("C", "D", "TBD", CAP, "TBD", CAP),
+                           row("E", "F", "M", REAL, "TBD", CAP)]}
+    doses = [classify_game(r)["starter_information_fraction"] for r in mixed_card["rows"]]
+    if len(set(doses)) != 3 or sorted(doses) != [0.0, 0.5, 1.0]:
+        f.append(f"per-game doses collapsed to {doses}; a card-level dose is not a per-game dose")
+    if classify(mixed_card)["starter_information_fraction"] in doses[:1]:
+        pass
+
     # 17c. DISPLAYED vs ENTERED. The owner's example verbatim.
     disp, ident, prof = slot_identity("Jackson Jobe", CAP)
     if (disp, ident, prof) != ("Jackson Jobe", IDENTITY_NAMED_UNVERIFIED, PROFILE_LEAGUE_AVERAGE_CAP):
@@ -686,6 +761,12 @@ MUTANTS = [
      "        if x is None or abs(x - v) > CAP_TOL:", "        if x is not None and abs(x - v) > CAP_TOL:"),
     ("all-CAP threshold rounded down — a mostly-CAP card called baseline",
      "    elif n_resolved == 0:", "    elif n_resolved <= 1:"),
+    ("the per-game dose is replaced by a single card-level number",
+     '    return {"game": f"{row.get(\'away\')}@{row.get(\'home\')}",\n            "information_class": cls,\n            "action_authority": ACTION_AUTHORITY_BY_CLASS[cls],\n            "starter_information_fraction": (round(frac, 6) if frac is not None else None),',
+     '    return {"game": f"{row.get(\'away\')}@{row.get(\'home\')}",\n            "information_class": cls,\n            "action_authority": ACTION_AUTHORITY_BY_CLASS[cls],\n            "starter_information_fraction": 0.8,'),
+    ("a per-game thin slot is counted as resolved information",
+     "    n_res = counts.get(RESOLVED, 0)\n    n_cap",
+     "    n_res = counts.get(RESOLVED, 0) + counts.get(LOW_SAMPLE, 0)\n    n_cap"),
     ("the LOW/PARTIAL dose boundary removed — 4% and 94% share a class",
      "    elif frac < 0.50:", "    elif False:"),
     ("the dose boundary moved so a half-resolved card reads as LOW",

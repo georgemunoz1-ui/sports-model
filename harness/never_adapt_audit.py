@@ -27,6 +27,10 @@ import adaptive_layers as AL
 ENFORCERS = {
     "evidence_tier_definitions": ["tier_discipline.py", "tier1_board_gate.py"],
     "temporal_leakage_rules": ["settlement_contract.py", "pregame_preflight.py"],
+    # added to the never-adapt list with the owner's 2026-08-23 reassignment. This audit FAILED on
+    # both the moment they were added, which is the audit doing exactly its job.
+    "timing_gates": ["settlement_contract.py", "pregame_preflight.py", "adaptive_layers.py"],
+    "immutable_identities": ["artifact_immutability.py", "forecast_registry.py"],
     "source_provenance_requirements": ["result_provenance.py", "acquisition_ledger.py"],
     "same_book_devig_requirement": ["freshness_gates.py"],
     "ats_deadbands": ["ats_ledgers.py"],

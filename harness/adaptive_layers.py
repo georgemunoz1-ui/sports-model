@@ -46,39 +46,50 @@ NEVER = "NEVER_ADAPTS_AUTOMATICALLY"
 # is an unaudited one, so the default is refusal, not permission.
 # ---------------------------------------------------------------------------------------------
 LAYERS = {
+    # OWNER REASSIGNMENT 2026-08-23 (second specification). The first cut put team ratings and
+    # pitcher posteriors in FAST and calibration in MEDIUM. The owner moved both a notch slower:
+    # ratings and posteriors are MEDIUM, calibration and park effects are SLOW. The direction is
+    # deliberate — the quantities that move a forecast the furthest now move the least often, and
+    # only availability-type facts, which genuinely change day to day, update nightly.
     FAST: {
-        "trigger": "every tier-1 settlement",
+        "trigger": "every tier-1 settlement — availability-type facts only",
         "quantities": (
-            "expanding_home_prior", "team_offensive_strength", "team_defensive_strength",
-            "bullpen_workload", "bullpen_availability", "starter_profile",
+            "player_availability", "confirmed_inactives", "bullpen_workload",
+            "bullpen_availability", "recent_lineup", "recent_minutes",
             "expected_innings_distribution", "expected_pitch_count_distribution",
-            "recent_form_decayed", "empirical_uncertainty_by_information_class",
-            "park_residual_distribution", "weather_residual_distribution",
-            "wnba_team_strength", "wnba_pace", "wnba_player_availability",
-            "wnba_projected_minutes", "wnba_lineup_continuity", "wnba_rest_travel_state",
-            "wnba_home_court_state",
+            "empirical_uncertainty_by_information_class",
+            "wnba_player_availability", "wnba_projected_minutes", "wnba_lineup_continuity",
+            "wnba_rest_travel_state", "rest_travel_state", "roster_cuts",
+            "expected_quarterback_rotation", "snap_shares",
         )},
     MEDIUM: {
-        "trigger": "every 50-100 eligible games",
+        "trigger": "every 50-100 eligible games — ratings and posteriors",
         "quantities": (
-            "calibration_intercept", "calibration_slope", "recency_decay_weights",
-            "residual_variance", "wnba_winner_head_calibration",
-            "wnba_margin_residual_variance", "wnba_total_residual_variance",
+            "expanding_home_prior", "team_offensive_strength", "team_defensive_strength",
+            "recent_form_decayed", "recency_decay_weights", "starter_profile",
+            "pitcher_posterior", "player_posterior", "residual_variance",
+            "wnba_team_strength", "wnba_pace", "wnba_offensive_efficiency",
+            "wnba_defensive_efficiency", "wnba_margin_residual_variance",
+            "wnba_total_residual_variance", "depth_chart_quality",
         )},
     SLOW: {
-        "trigger": "formal model release only",
+        "trigger": "formal model release only — global coefficients, park effects, calibration",
         "quantities": (
+            "global_coefficients", "park_effects", "park_residual_distribution",
+            "weather_residual_distribution", "calibration_intercept", "calibration_slope",
+            "wnba_winner_head_calibration", "wnba_home_court_state",
             "feature_set", "model_architecture", "action_thresholds", "action_rules",
             "trust_ladder_definition", "compression_gate_threshold",
+            "coach_preseason_tendencies",
         )},
     NEVER: {
         "trigger": "owner decision only — no evidence, promotion or alarm substitutes for one",
         "quantities": (
-            "evidence_tier_definitions", "temporal_leakage_rules",
+            "evidence_tier_definitions", "temporal_leakage_rules", "timing_gates",
             "source_provenance_requirements", "same_book_devig_requirement",
             "ats_deadbands", "market_prices_as_predictive_features",
-            "registered_forecast_bytes", "grading_definitions", "wager_authority",
-            "promotion_standards",
+            "registered_forecast_bytes", "immutable_identities", "grading_definitions",
+            "wager_authority", "promotion_standards",
         )},
 }
 
@@ -205,11 +216,20 @@ def cycle_gate(completed_steps, proposed_step):
 def selftest():
     f = []
     # --- the register --------------------------------------------------------------------------
-    for q, want in (("team_offensive_strength", FAST), ("starter_profile", FAST),
+    # The owner's 2026-08-23 assignment, quantity by quantity. These are the ONLY speeds these
+    # quantities may run at, and the reassignment moved ratings/posteriors slower and calibration
+    # slower still.
+    for q, want in (("player_availability", FAST), ("bullpen_workload", FAST),
+                    ("recent_minutes", FAST), ("recent_lineup", FAST),
                     ("empirical_uncertainty_by_information_class", FAST),
-                    ("calibration_slope", MEDIUM), ("residual_variance", MEDIUM),
+                    ("team_offensive_strength", MEDIUM), ("team_defensive_strength", MEDIUM),
+                    ("starter_profile", MEDIUM), ("pitcher_posterior", MEDIUM),
+                    ("expanding_home_prior", MEDIUM), ("residual_variance", MEDIUM),
                     ("recency_decay_weights", MEDIUM),
+                    ("calibration_slope", SLOW), ("calibration_intercept", SLOW),
+                    ("park_effects", SLOW), ("global_coefficients", SLOW),
                     ("feature_set", SLOW), ("action_thresholds", SLOW),
+                    ("timing_gates", NEVER), ("immutable_identities", NEVER),
                     ("ats_deadbands", NEVER), ("wager_authority", NEVER),
                     ("market_prices_as_predictive_features", NEVER),
                     ("evidence_tier_definitions", NEVER), ("promotion_standards", NEVER),
@@ -254,17 +274,31 @@ def selftest():
                  "registration check can catch this")
 
     # --- speed enforcement ------------------------------------------------------------------------
-    if not may_update("team_offensive_strength", FAST)[0]:
+    if not may_update("player_availability", FAST)[0]:
         f.append("a FAST quantity was refused at FAST")
-    if may_update("team_offensive_strength", MEDIUM, 100)[0]:
+    if may_update("player_availability", MEDIUM, 100)[0]:
         f.append("a FAST quantity was accepted at MEDIUM — the wrong speed is the wrong quantity")
-    if may_update("calibration_slope", FAST)[0]:
-        f.append("CALIBRATION was accepted at FAST — that is recalibrating on last night")
-    if may_update("calibration_slope", MEDIUM, 49)[0]:
-        f.append("calibration updated after 49 eligible games; the floor is 50")
-    if not may_update("calibration_slope", MEDIUM, 50)[0]:
-        f.append("calibration was refused at exactly the 50-game floor")
-    if may_update("calibration_slope", MEDIUM)[0]:
+    # RATINGS ARE NO LONGER NIGHTLY. This is the substance of the owner's reassignment: a team
+    # rating that moves after every settlement is a rating that chases the last result.
+    if may_update("team_offensive_strength", FAST)[0]:
+        f.append("TEAM RATINGS were accepted at FAST — they move at MEDIUM now, so one night "
+                 "cannot move them")
+    if may_update("pitcher_posterior", FAST)[0]:
+        f.append("a PITCHER POSTERIOR was accepted at FAST")
+    if not may_update("team_offensive_strength", MEDIUM, 50)[0]:
+        f.append("team ratings were refused at MEDIUM with a full cadence")
+    if may_update("team_offensive_strength", MEDIUM, 49)[0]:
+        f.append("team ratings updated after 49 eligible games; the floor is 50")
+    # CALIBRATION IS NOW SLOW — it moves at a formal release, not on a cadence at all.
+    for layer, n in ((FAST, None), (MEDIUM, 500), (MEDIUM, 50)):
+        if may_update("calibration_slope", layer, n)[0]:
+            f.append(f"CALIBRATION was accepted at {layer} with n={n} — it is a SLOW quantity now "
+                     f"and changes only at a formal model release")
+    if not release_update("calibration_slope")[0]:
+        f.append("calibration was refused at a formal release, where it now belongs")
+    if may_update("park_effects", MEDIUM, 500)[0]:
+        f.append("PARK EFFECTS were accepted at MEDIUM; they are SLOW")
+    if may_update("residual_variance", MEDIUM)[0]:
         f.append("a MEDIUM update was accepted with NO game count supplied")
     if may_update("feature_set", SLOW)[0]:
         f.append("a SLOW quantity was accepted inside the automatic path")

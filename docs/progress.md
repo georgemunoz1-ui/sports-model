@@ -3239,3 +3239,46 @@ and information_class.py already computes starter_information_fraction.
 TEN ML -170 0.5u is classified trained_model_output=false on announced rotation information —
 owner discretion under the 7/25 precedent, walled from model output, never touching the model ledger.
 Record: docs/experiments/2026-08-23_FORECAST_CONTRACT.json
+
+## 2026-08-23 (5) — Evaluation standard, and the reference change that reverses the result
+
+PRESENTATION WORK FROZEN per owner mandate. evaluation_standard.py 35/35, adaptive_layers
+reassigned 17/17, both wired. Report is never pooled across sport / arm / estimand / information
+class.
+
+LAYERS REASSIGNED: ratings and pitcher posteriors FAST -> MEDIUM; calibration and park effects
+MEDIUM -> SLOW; timing_gates and immutable_identities added to NEVER. The quantities that move a
+forecast furthest now move least often. THE NEVER-ADAPT AUDIT CAUGHT MY OWN OMISSION IMMEDIATELY:
+adding those two items with no bound enforcer FAILED the healthcheck on the next run — one day
+after the audit was built to catch that exact shape.
+
+THE HEADLINE, AND IT REVERSES YESTERDAY'S. Every prior comparison measured the challenger against
+the ALL-CAP BASELINE. The owner's standard measures against the EXPANDING PRIOR. Same 30 games,
+different reference, opposite conclusion.
+
+  arm                    record   Brier    skill      interval             verdict
+  EXPANDING_PRIOR        22-8    .24030   +.00000    [-0, -0]             (the reference)
+  ALL_CAP_BASELINE       16-14   .24942   -.03794    [-.06134, -.01454]   NEGATIVE SKILL
+  CHALLENGER (starter)   18-12   .24008   +.00094    [-.00216, +.00404]   NO PREDICTIVE PROGRESS
+
+The all-CAP baseline has a WINNING RECORD and an entire skill interval below zero — its
+probabilities SUBTRACTED information relative to the base rate. That is exactly the combination the
+standard exists to surface and it appeared on the first real run. And ALMOST THE ENTIRE -0.00934
+challenger advantage was the BASELINE BEING BAD, not the challenger being good: against the correct
+reference the challenger's skill is +0.00094 with an interval spanning zero. Nine days of MLB work
+has not produced a model that beats a constant .527 by a measurable amount.
+
+PAIRED POSTGAME, n=30, no unpaired games. Gained on 21 (+0.6078 Brier), lost on 9 (+0.3275).
+TOWARD_HOME n=19 gained 16, net +0.4030. TOWARD_AWAY n=11 gained 5, net -0.1227. Four of the five
+largest gains are moves toward home on nights home went 22-8; three of the five largest losses are
+moves toward away. Looking game by game does not soften the directional confound — it IS the shape
+of the result.
+
+TWO DEFECTS FOUND BY RUNNING ON REAL DATA, both mine. (1) NO MATERIALITY GUARD: +0.00094 was graded
+PREDICTIVE_PROGRESS because the sign was positive. A slate-clustered skill interval now governs, and
+it is consulted BEFORE the point sign — so a negative point estimate whose interval spans zero is
+NO_PREDICTIVE_PROGRESS, not NEGATIVE_SKILL. Overclaiming negatively is the same error as
+overclaiming positively. (2) CALIBRATION FITTED TO A NEAR-CONSTANT FORECAST gave slope -2139 on the
+prior arm; an exact-equality guard missed it because the prior drifts a hair between dates. Floor is
+now 0.1pp of spread and the answer is UNDEFINED, not miscalibrated.
+Records: docs/experiments/2026-08-23_EVALUATION_STANDARD.json, _PAIRED_POSTGAME.json

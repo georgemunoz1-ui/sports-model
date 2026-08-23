@@ -1,0 +1,194 @@
+{
+ "record_id": "ACQUISITION-RETRY-3-2026-08-22",
+ "schema": "ops.acquisition_retry.v1",
+ "run_utc": "2026-08-23T17:52:00Z",
+ "attempt": 3,
+ "of": 3,
+ "due_utc": "2026-08-23T17:45:00Z",
+ "final_retry": true,
+ "expiry_utc": "2026-08-24T17:45:00Z",
+ "appends_to": [
+  "data/audit/2026-08-22_retry_ladder.json",
+  "data/audit/2026-08-22_acquisition_report.json"
+ ],
+ "r6": "append-only. Neither prior record is edited; this one states what the third attempt found.",
+ "TWO_AXIS_CLASSIFICATION": {
+  "why_two_axes": "A failed request has two independent causes — the RAIL may be down, or the DOMAIN may be refusing us. Attributing a rail failure to a domain is an unproven verdict about a third party, which the standing rule forbids.",
+  "axis_A_rail": [
+   {
+    "rail": "curl / shell HTTP",
+    "status": "NOT_ATTEMPTED",
+    "why": "standing rule: never route around an org egress-proxy 403 with shell HTTP against sports sites. The prior HTTP_403_ORG_PROXY observations stand as recorded and were not re-provoked."
+   },
+   {
+    "rail": "WebFetch (approved tool)",
+    "status": "BLOCKED_FOR_EVERY_DOMAIN_ATTEMPTED",
+    "observed": "EGRESS_BLOCKED on statsapi.mlb.com, www.mlb.com, baseballsavant.mlb.com, www.nfl.com, www.wnba.com, www.espn.com — and on en.wikipedia.org, the neutral CONTROL. The control is the whole point: a rail that cannot reach Wikipedia is not telling us anything about mlb.com."
+   },
+   {
+    "rail": "WebSearch (approved tool)",
+    "status": "AVAILABLE",
+    "observed": "returns publisher-authored titles and URLs; produced corroborating titles for TOR@NYY today"
+   },
+   {
+    "rail": "authenticated MCP",
+    "status": "NONE_APPLICABLE",
+    "observed": "the servers connected to this session are GitHub and a financial-markets server. Neither carries sports results."
+   }
+  ],
+  "axis_B_domain": {
+   "verdict": "UNDETERMINABLE",
+   "why": "every fetch rail available to this session is blocked for every domain tested, including a neutral control. Nothing observed today distinguishes 'mlb.com refuses this client' from 'this environment has no outbound fetch at all'. The second is consistent with all the evidence and is the weaker claim, so no domain-level verdict is recorded.",
+   "explicitly_not_claimed": "MLB, the NFL and the WNBA are NOT recorded as blocking this client. That would be an unproven verdict about a third party."
+  }
+ },
+ "CAPABILITY_OBSERVATIONS_APPENDED": [
+  {
+   "utc": "2026-08-23T17:52:00Z",
+   "rail": "WebFetch",
+   "target": "statsapi.mlb.com/api/v1/schedule?sportId=1&date=2026-08-22",
+   "result": "EGRESS_BLOCKED"
+  },
+  {
+   "utc": "2026-08-23T17:52:00Z",
+   "rail": "WebFetch",
+   "target": "www.mlb.com/scores/2026-08-22",
+   "result": "EGRESS_BLOCKED"
+  },
+  {
+   "utc": "2026-08-23T17:52:00Z",
+   "rail": "WebFetch",
+   "target": "baseballsavant.mlb.com/gamefeed?date=8/22/2026",
+   "result": "EGRESS_BLOCKED"
+  },
+  {
+   "utc": "2026-08-23T17:52:00Z",
+   "rail": "WebFetch",
+   "target": "www.nfl.com/scores/2026/PRE2",
+   "result": "EGRESS_BLOCKED"
+  },
+  {
+   "utc": "2026-08-23T17:52:00Z",
+   "rail": "WebFetch",
+   "target": "www.wnba.com/schedule?season=2026&month=8",
+   "result": "EGRESS_BLOCKED"
+  },
+  {
+   "utc": "2026-08-23T17:52:00Z",
+   "rail": "WebFetch",
+   "target": "www.espn.com (tier-2 publisher)",
+   "result": "EGRESS_BLOCKED"
+  },
+  {
+   "utc": "2026-08-23T17:52:00Z",
+   "rail": "WebFetch",
+   "target": "en.wikipedia.org  [NEUTRAL CONTROL]",
+   "result": "EGRESS_BLOCKED",
+   "significance": "the control that turns a per-domain story into a per-rail one"
+  },
+  {
+   "utc": "2026-08-23T17:52:00Z",
+   "rail": "WebSearch",
+   "target": "MLB 2026-08-22 finals",
+   "result": "AVAILABLE"
+  }
+ ],
+ "TIER1_CONFIRMED": [],
+ "n_tier1_confirmed": 0,
+ "settled_this_run": [],
+ "model_ledger_effect": "NONE. Zero games settled. The model-authorized ledger remains $0 at 0 bets.",
+ "PENDING_TIER1_CONFIRMATION": {
+  "n": 18,
+  "expires_utc": "2026-08-24T17:45:00Z",
+  "expiry_disposition": "UNRESOLVED_SOURCE_GAP unless official evidence lands first",
+  "games": [
+   "TOR@NYY",
+   "STL@PHI",
+   "TB@BAL",
+   "CHC@SEA",
+   "MIN@SD",
+   "CLE@COL",
+   "ATL@MIL",
+   "WSH@MIA",
+   "LAA@TEX",
+   "ATH@HOU",
+   "NYM@CWS",
+   "DET@KC",
+   "PIT@LAD",
+   "SF@BOS",
+   "CIN@AZ",
+   "CON@LAS (WNBA)",
+   "ATL@PHX (WNBA)",
+   "DAL@ARI (NFL)"
+  ]
+ },
+ "THE_SIX_PROVISIONAL_FINALS": {
+  "question": "were any of the six ever confirmed at tier 1?",
+  "answer": "NONE. Not one of the six has ever been confirmed at tier 1, on any of the three attempts. All six remain PENDING_TIER1_CONFIRMATION and none has entered the canonical results table — data/mlb results carry ZERO rows dated 2026-08-22.",
+  "rows": [
+   {
+    "game": "TOR@NYY",
+    "provisional": "4-3",
+    "tier": 3,
+    "tier1": false,
+    "new_today": "corroborated a second time at tier 3: an ESPN title and an MLB.com Gameday title both name 4-3. An official publisher's TITLE in a search index is still a search snippet, and search snippets are never canonical evidence whatever domain they quote. It does not clear echo_gate, because the artifact itself was never retrieved."
+   },
+   {
+    "game": "STL@PHI",
+    "provisional": "3-12",
+    "tier": 3,
+    "tier1": false,
+    "new_today": "a search result names the winning and losing pitchers, consistent with a PHI win. That is direction, not a score."
+   },
+   {
+    "game": "TB@BAL",
+    "provisional": "2-3",
+    "tier": 3,
+    "tier1": false,
+    "new_today": null
+   },
+   {
+    "game": "CHC@SEA",
+    "provisional": "4-5",
+    "tier": 3,
+    "tier1": false,
+    "new_today": null
+   },
+   {
+    "game": "MIN@SD",
+    "provisional": "5-7",
+    "tier": 3,
+    "tier1": false,
+    "new_today": null
+   },
+   {
+    "game": "CLE@COL",
+    "provisional": "4-3",
+    "tier": 3,
+    "tier1": false,
+    "new_today": null
+   }
+  ]
+ },
+ "OWNER_DISCRETION_LANE": {
+  "legs": [
+   "DAL (DAL@ARI, NFL)",
+   "PHX (ATL@PHX, WNBA)"
+  ],
+  "settled": false,
+  "why": "neither DAL@ARI nor ATL@PHX is tier-1 confirmed, so neither leg settles.",
+  "wall": "these are the owner's own units on the owner's own reasoning. They are not model output, not model-authorized, not gate progress, and they never touch the model ledger — which stays $0 at 0 bets whatever these do. Price, market and stake were never transmitted and remain null rather than assumed, so even a confirmed result would settle a direction and not an amount.",
+  "structure": "NOT_TRANSMITTED — two singles or a parlay was never stated, which changes the settlement arithmetic and is why it is left null."
+ },
+ "LADDER_STATE": {
+  "all_retries_spent": true,
+  "retry_4_exists": false,
+  "what_resolves_a_game_now": "tier-1 confirmation arriving on its own before 2026-08-24T17:45Z",
+  "what_would_unblock_acquisition": [
+   "an outbound fetch rail that reaches any domain from this environment",
+   "an authenticated MCP server carrying official sports results",
+   "owner-relayed official evidence — a scoreboard capture or an official box, which is how the 2026-08-21 finals entered the canonical table at tier 1"
+  ]
+ },
+ "status": "RETRY_LADDER_EXHAUSTED — 0 of 18 games confirmed at tier 1 across all three attempts."
+}

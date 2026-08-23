@@ -18,8 +18,8 @@
    "due_utc": "2026-08-23T17:45:00Z"
   }
  ],
- "next_due_utc": "2026-08-23T06:15:00Z",
- "all_retries_spent": false,
+ "next_due_utc": null,
+ "all_retries_spent": true,
  "expiry_utc": "2026-08-24T17:45:00Z",
  "expired": false,
  "scope": {
@@ -378,5 +378,24 @@
    ],
    "next_retry": "3 of 3 at 2026-08-23T17:45Z; expiry 2026-08-24T17:45Z -> UNRESOLVED_SOURCE_GAP"
   }
- ]
+ ],
+ "retries_run": [
+  {
+   "attempt": 1,
+   "run_utc": "2026-08-23T06:15:00Z",
+   "tier1_confirmed": 0
+  },
+  {
+   "attempt": 2,
+   "run_utc": "2026-08-23T07:45:00Z",
+   "tier1_confirmed": 0
+  },
+  {
+   "attempt": 3,
+   "run_utc": "2026-08-23T17:52:00Z",
+   "tier1_confirmed": 0,
+   "record": "data/audit/2026-08-23_acquisition_retry_3.json"
+  }
+ ],
+ "terminal_state": "RETRY_LADDER_EXHAUSTED at 2026-08-23T17:52:00Z. 0 of 18 games confirmed at tier 1. Expires 2026-08-24T17:45Z as UNRESOLVED_SOURCE_GAP unless official evidence lands first."
 }

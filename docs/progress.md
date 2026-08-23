@@ -3420,3 +3420,37 @@ Contract extended: a projected per-team score may be null ONLY with a stated rea
 winner and a total and does not forecast per-team scores; fabricating a split to satisfy a schema is
 worse than the gap. The projected TOTAL has no such exemption.
 Board: https://claude.ai/code/artifact/b30873fc-6d6a-456f-9d01-acf05f72dcce
+
+## 2026-08-23 (later) — ten owner amendments, and the retry ladder runs out
+
+The owner accepted the MLB challenger cohort as valid prospective evidence and refused the wider
+claim: WNBA carried three rows per game with a challenger equal to the baseline, and NFL had one arm.
+Ten amendments followed. Six new modules, all gated in healthcheck the day they were written:
+arm_coverage (14/14), totals_estimand (21/21), simulation_standard (16/16), render_contract (24/24),
+franchise_identity (15/15), finalization_evidence (16/16, wired into prequential, now 29/29).
+
+The card is unchanged. Every correction is a report-layer amendment in
+docs/experiments/2026-08-23_BOARD_AMENDMENTS.json.
+
+THREE THINGS THE AMENDMENTS TURNED UP THAT NOBODY HAD ASKED ABOUT.
+(1) The baseline total was not missing — it was the CHALLENGER'S total, in all 15 games, identical to
+the third decimal. So MLB is a null challenger on the total estimand too, which is why coverage is
+now computed per estimand and not per sport.
+(2) That same baseline reports p(home) .5252 everywhere while projecting the away team to outscore
+the home team in six of those games. Nothing in the pipeline had ever compared an arm's winner
+probability against its own score projection.
+(3) The owner's 0.41pp Monte Carlo figure assumes both arms are simulated. Only the champion is —
+the other two carry simulation_trials 0 and are closed form — so the delta inherits 0.289pp, and
+common random numbers cannot apply to a difference with one stream in it. The conclusion survives for
+one game rather than five: only ATL@MIL fails the two-sigma bar.
+
+RETRY 3 OF 3, AND THE CONTROL THAT MATTERED. Every tier-1 route came back EGRESS_BLOCKED on the
+approved rail — and so did en.wikipedia.org, the neutral control. That control is the finding: a rail
+that cannot reach Wikipedia says nothing about mlb.com. The prior per-domain 403s therefore CANNOT be
+upgraded to a domain-level verdict, and none is recorded. 0 of 18 games confirmed at tier 1 across
+all three attempts; none of the six provisional finals has ever been confirmed, and the canonical
+table still carries zero rows dated 2026-08-22. Expires 2026-08-24T17:45Z as UNRESOLVED_SOURCE_GAP.
+
+Model-authorized ledger $0 at 0 bets. The two owner-discretion legs stay unsettled in their walled
+lane. Status FORWARD_ONLY_PENDING.
+Board: https://claude.ai/code/artifact/f82e58a3-02a4-4201-ba55-9916a762563c

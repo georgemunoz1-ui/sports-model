@@ -2952,3 +2952,38 @@ model and it performed like one.
 
 Still pending: 9 MLB finals, both WNBA finals, DAL@ARI (which carries both owner-discretion legs), and
 tier-1 confirmation for MIN@SD and CLE@COL.
+
+## 2026-08-23T05:40Z — owner pushed further: rail exhaustively mapped, 5 echoes caught, echo_gate shipped
+Owner: "still stopping too early — official league scoreboards can resolve the slate." Correct on the
+principle, and pushing harder produced two results, one of them uncomfortable.
+
+RAIL NOW EXHAUSTIVELY MAPPED, not inferred from a sample. Tested 15 hosts spanning official league
+APIs, alternate ESPN endpoints and aggregators: statsapi.mlb.com, gd2.mlb.com,
+lookup-service-prod.mlb.com, mlbstatic.com, site.web.api.espn.com, cdn.espn.com,
+sports.core.api.espn.com, africa.espn.com, thescore.com, sports.yahoo.com, cbssports.com,
+nbcsports.com, api.sportradar.com, retrosheet.org, en.wikipedia.org — ALL BLOCKED. Only
+raw.githubusercontent.com (301) and api.github.com (200) respond. The direct-fetch rail is genuinely
+dead for sports data; that is now demonstrated across 15 hosts rather than assumed from 6. My earlier
+generalisation from a handful of domains was exactly the error the acquisition ladder was written to
+prevent, and I made it anyway.
+
+THEN THE SEARCH RAIL PRODUCED FIVE ECHOES IN ONE SWEEP. A single query returned "the final scores for
+August 22" — White Sox 6 Mets 4, Royals 5 Tigers 2, Red Sox 6 Giants 4, Dodgers 5 Pirates 4 — and ALL
+FOUR are the AUGUST 21 results already graded in this registry, exactly. The MLB.com Gameday title
+settled it: "Mets 4, White Sox 6 Final Score (08/21/2026)", gameId 824559, while the 8/22 game is
+824560 and still has no final. Adding the CIN@AZ 9-0 echo caught twice earlier, that is FIVE in one
+night. The tell that made me look: player details stitched from other games — "Jake Rogers hit a
+walk-off" for the White Sox when Rogers is a Tiger. PUSHING HARDER PRODUCED MORE CLAIMS AND ZERO NEW
+VERIFIED DATA, and would have corrupted four games had I trusted the prose.
+
+SHIPPED harness/echo_gate.py, wired into healthcheck, 7/7 mutants killed. It refuses any claimed
+final that exactly reproduces the same matchup's most recent graded result inside a 3-day window —
+REFUSED PENDING CONFIRMATION, not a verdict of falsehood, since a repeated scoreline is possible. Run
+against tonight's eight actual claims it refuses all five echoes and accepts the three title-verified
+finals. One mutant was NOT written because no fixture can isolate it: prior_results' date filter and
+_within's window both exclude future dates, so neither is independently necessary. Recorded as
+redundancy rather than faked with a mutant that appears to kill (lesson 23 corollary).
+
+VERIFIED FINALS remain 6 of 15, all EVIDENCE ONLY: TOR 4-NYY 3, STL 3-PHI 12, TB 2-BAL 3, CHC 4-SEA 5,
+MIN 5-SD 7, CLE 4-COL 3. The nine others, both WNBA games and DAL@ARI are genuinely not published
+with finals in any reachable source.

@@ -164,6 +164,35 @@ def render_gate(rows, decision_text, wager_authority_yes=False):
                 fails.append(f"{tag}: margin shown without naming the team and direction in words")
             if "fair spread" not in md:
                 fails.append(f"{tag}: margin shown without its explicitly labeled fair spread")
+        # 12. STARTER DISPLAY (owner rule 2026-08-23). "The Decision Card should render
+        #     'Jobe — CAP profile', not merely 'Jobe'." A slot whose FEATURE PROFILE is the
+        #     league-average CAP must say so wherever its name appears: 42 slots across the card
+        #     history printed a pitcher's name while feeding CAP stats, and every reader took the
+        #     name as information.
+        for side in ("away_starter", "home_starter"):
+            sl = r.get(side)
+            if not isinstance(sl, dict):
+                continue
+            disp, prof, txt = sl.get("displayed_starter"), sl.get("feature_profile"), sl.get("text")
+            if prof is None or txt is None:
+                fails.append(f"{tag}: {side} carries no feature_profile/text — displayed identity "
+                             f"and the profile that entered the model must both be stated")
+                continue
+            if prof == "LEAGUE_AVERAGE_CAP" and "CAP profile" not in txt:
+                fails.append(f"{tag}: {side} renders {txt!r} for a LEAGUE_AVERAGE_CAP slot — a "
+                             f"name without its profile reads as starter information it is not")
+            if prof == "PITCHER_SPECIFIC_THIN" and "thin profile" not in txt:
+                fails.append(f"{tag}: {side} renders a thin profile as a settled one")
+            if disp and txt == disp and prof != "PITCHER_SPECIFIC":
+                fails.append(f"{tag}: {side} renders the bare name {disp!r} for a {prof} slot")
+            if decision_text and txt not in decision_text:
+                fails.append(f"{tag}: {side} rendered text {txt!r} does not appear on the card")
+        # 13. an ALL_CAP_BASELINE row is a baseline cohort and can never be an action
+        if r.get("information_class") == "ALL_CAP_BASELINE":
+            if r.get("final_action") == "BET":
+                fails.append(f"{tag}: BET emitted on an ALL_CAP_BASELINE row (ACTION_AUTHORITY=NONE)")
+            if decision_text and "ALL_CAP_BASELINE — ACTION_AUTHORITY = NONE" not in decision_text:
+                fails.append(f"{tag}: an ALL_CAP_BASELINE row rendered without the baseline banner")
         # 10. a v1->v2 delta may only be called a starter effect if keyed-seed sourced
         dt = r.get("delta_text")
         if dt is not None and "starter effect" in dt and "keyed-seed" not in dt:
@@ -186,6 +215,15 @@ def render_gate(rows, decision_text, wager_authority_yes=False):
         fails.append(f"completeness percentage '{m.group(0)}' printed without a named denominator "
                      f"- use completeness_display(numerator, denominator, unit)")
     return (not fails), fails
+
+
+def starter_fragment(name, stats):
+    """The three facts a Decision Card row must carry for one starter slot: what is DISPLAYED,
+    whether that identity is verified, and what PROFILE actually entered the model."""
+    import information_class as IC
+    disp, ident, prof = IC.slot_identity(name, stats)
+    return {"displayed_starter": disp, "identity_status": ident, "feature_profile": prof,
+            "text": IC.render_slot(name, stats)}
 
 
 def sort_rows(rows):
@@ -303,6 +341,59 @@ def selftest():
         fails.append("gate rejected a correctly worded margin display")
     if "lose by 7.23" not in margin_display("B", "A", -7.23) or "fair spread B +7.23" not in margin_display("B", "A", -7.23):
         fails.append(f"margin_display wrong: {margin_display('B','A',-7.23)}")
+    # OWNER RULE 2026-08-23: displayed identity vs the profile that entered the model.
+    CAP = {"era": 4.20, "gs": 0, "k": 22.0, "bb": 8.5}
+    REAL = {"era": 3.11, "gs": 20, "k": 16.2, "bb": 5.9}
+    THIN = {"era": 2.00, "gs": 1, "k": 18.0, "bb": 4.0}
+    jobe = starter_fragment("Jackson Jobe", CAP)
+    if jobe["text"] != "Jackson Jobe — CAP profile":
+        fails.append(f"starter_fragment rendered {jobe['text']!r} for a named CAP slot")
+    if jobe["identity_status"] != "NAMED_UNVERIFIED" or jobe["feature_profile"] != "LEAGUE_AVERAGE_CAP":
+        fails.append(f"starter_fragment mislabeled the Jobe case: {jobe}")
+    capped_row = dict(ok_row, away_starter=jobe, home_starter=starter_fragment("McGreevy", REAL))
+    TXT = CLEAN + " Jackson Jobe — CAP profile / McGreevy"
+    if not render_gate([capped_row], TXT, False)[0]:
+        fails.append(f"gate rejected a correctly rendered CAP slot: {render_gate([capped_row], TXT, False)[1]}")
+    # THE DEFECT: the bare name
+    bare = dict(capped_row, away_starter=dict(jobe, text="Jackson Jobe"))
+    if render_gate([bare], CLEAN + " Jackson Jobe / McGreevy", False)[0]:
+        fails.append("gate passed a bare pitcher name for a LEAGUE_AVERAGE_CAP slot")
+    # ISOLATION. The bare-name rule and the CAP-profile rule overlap on the fixture above, so each
+    # needs a case only IT can catch (lesson 24: a fixture exercising two rules proves the stricter
+    # one and decorates the other).
+    dressed = dict(capped_row, away_starter=dict(jobe, text="Jackson Jobe (probable)"))
+    if render_gate([dressed], CLEAN + " Jackson Jobe (probable) / McGreevy", False)[0]:
+        fails.append("gate passed a decorated name that still never states the CAP profile — only "
+                     "the CAP-profile rule can catch this")
+    unread = dict(capped_row, away_starter={"displayed_starter": "Ghost",
+                                            "identity_status": "NAMED_UNVERIFIED",
+                                            "feature_profile": "UNREADABLE", "text": "Ghost"})
+    if render_gate([unread], CLEAN + " Ghost / McGreevy", False)[0]:
+        fails.append("gate passed a bare name on an UNREADABLE-profile slot — only the bare-name "
+                     "rule can catch this")
+    # a slot that states no profile at all
+    noprof = dict(capped_row, away_starter={"displayed_starter": "Jackson Jobe"})
+    if render_gate([noprof], TXT, False)[0]:
+        fails.append("gate passed a starter slot carrying no feature_profile")
+    # a thin profile dressed as a settled one
+    thin_bad = dict(capped_row,
+                    away_starter=dict(starter_fragment("Rookie", THIN), text="Rookie (spot start)"))
+    if render_gate([thin_bad], CLEAN + " Rookie (spot start) / McGreevy", False)[0]:
+        fails.append("gate passed a thin profile rendered as a settled one")
+    # the rendered text must actually reach the card
+    if render_gate([capped_row], CLEAN + " McGreevy", False)[0]:
+        fails.append("gate passed a row whose starter text never appears on the card")
+    # an ALL_CAP_BASELINE row can never be an action and must carry the banner
+    BAN = "ALL_CAP_BASELINE — ACTION_AUTHORITY = NONE"
+    base_row = dict(capped_row, information_class="ALL_CAP_BASELINE")
+    if render_gate([base_row], TXT, False)[0]:
+        fails.append("gate passed an ALL_CAP_BASELINE row with no baseline banner on the card")
+    if not render_gate([base_row], TXT + " " + BAN, False)[0]:
+        fails.append(f"gate rejected a correctly bannered baseline row: "
+                     f"{render_gate([base_row], TXT + ' ' + BAN, False)[1]}")
+    bet_base = dict(base_row, final_action="BET")
+    if render_gate([bet_base], TXT + " " + BAN + " **Action: BET (qualified)**", True)[0]:
+        fails.append("gate passed a BET on an ALL_CAP_BASELINE row")
     bad_delta = dict(ok_row, delta_text="starter effect +8.10 points")
     if render_gate([bad_delta], CLEAN, False)[0]:
         fails.append("gate passed an observed delta labeled a causal starter effect")
@@ -357,5 +448,65 @@ def selftest():
     return fails
 
 
+MUTANTS = [
+    ("a LEAGUE_AVERAGE_CAP slot may render without stating its profile",
+     '            if prof == "LEAGUE_AVERAGE_CAP" and "CAP profile" not in txt:', "            if False:"),
+    ("a bare pitcher name is accepted for any profile",
+     '            if disp and txt == disp and prof != "PITCHER_SPECIFIC":', "            if False:"),
+    ("a thin profile may render as a settled one",
+     '            if prof == "PITCHER_SPECIFIC_THIN" and "thin profile" not in txt:', "            if False:"),
+    ("a starter slot may omit its feature_profile entirely",
+     "            if prof is None or txt is None:", "            if prof is None and False:"),
+    ("the rendered starter text need not appear on the card",
+     "            if decision_text and txt not in decision_text:", "            if False:"),
+    ("BET permitted on an ALL_CAP_BASELINE row",
+     '            if r.get("final_action") == "BET":', "            if False:"),
+    ("an ALL_CAP_BASELINE row may render without the baseline banner",
+     '            if decision_text and "ALL_CAP_BASELINE — ACTION_AUTHORITY = NONE" not in decision_text:',
+     "            if False:"),
+    ("starter_fragment reports the displayed name as a verified profile",
+     "    disp, ident, prof = IC.slot_identity(name, stats)",
+     "    disp, ident, prof = IC.slot_identity(name, stats); prof = 'PITCHER_SPECIFIC'"),
+]
+
+
+def mutation_suite(verbose=True):
+    import subprocess as _sp, tempfile as _tf
+    src = open(os.path.abspath(__file__)).read()
+    i = src.index("MUTANTS = [")
+    j = src.index("\ndef mutation_suite", i)
+    head, block, tail = src[:i], src[i:j], src[j:]
+    surv, unapp = [], []
+    for name, old, new in MUTANTS:
+        where = "head" if old in head else ("tail" if old in tail else None)
+        if where is None:
+            unapp.append(f"{name}: pattern not found"); continue
+        mut = (head.replace(old, new, 1) + block + tail) if where == "head" \
+            else (head + block + tail.replace(old, new, 1))
+        if mut == src:
+            unapp.append(f"{name}: no-op"); continue
+        with _tf.NamedTemporaryFile("w", suffix="_mutant.py", delete=False,
+                                    dir=os.path.dirname(os.path.abspath(__file__))) as fh:
+            fh.write(mut); path = fh.name
+        try:
+            pr = _sp.run([sys.executable, path, "--selftest"], capture_output=True, text=True, timeout=120)
+            killed = pr.returncode != 0
+        except _sp.TimeoutExpired:
+            killed = True
+        finally:
+            os.unlink(path)
+        if verbose:
+            print(f"  {'KILLED  ' if killed else 'SURVIVED'}  {name}")
+        if not killed:
+            surv.append(name)
+    for u in unapp:
+        print(f"  UNAPPLIED  {u}")
+    print(f"mutation suite: {len(MUTANTS)-len(surv)-len(unapp)}/{len(MUTANTS)} killed"
+          f"{'' if not (surv or unapp) else '  — SURVIVORS MEAN DECORATIVE FIXTURES'}")
+    return surv + unapp
+
+
 if __name__ == "__main__":
+    if "--mutants" in sys.argv:
+        sys.exit(1 if mutation_suite() else 0)
     sys.exit(1 if selftest() else 0)

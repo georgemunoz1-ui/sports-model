@@ -63,9 +63,14 @@ LOW_SAMPLE = "LOW_SAMPLE"
 MALFORMED = "MALFORMED"
 CAP_STATES = (CAP_TBD, CAP_NAMED_REGISTRY_MISS)
 
-ALL_CAP_BASELINE = "ALL_CAP_BASELINE"
-PARTIAL_STARTER_INFORMATION = "PARTIAL_STARTER_INFORMATION"
-VERIFIED_STARTER_COHORT = "VERIFIED_STARTER_COHORT"
+# OWNER REFINEMENT 2026-08-23: keep the categorical class, add continuous dose. "A 73% card and a
+# 94% card should not silently share the same analytical treatment." The boundaries are on
+# starter_information_fraction = resolved slots / total slots.
+ALL_CAP_BASELINE = "ALL_CAP_BASELINE"                       # exactly 0
+LOW_STARTER_INFORMATION = "LOW_STARTER_INFORMATION"          # (0, 0.50)
+PARTIAL_STARTER_INFORMATION = "PARTIAL_STARTER_INFORMATION"  # [0.50, 1.00)
+FULL_STARTER_INFORMATION = "FULL_STARTER_INFORMATION"        # exactly 1
+VERIFIED_STARTER_COHORT = FULL_STARTER_INFORMATION           # prior name, kept so old records read
 NOT_CLASSIFIABLE = "NOT_CLASSIFIABLE"
 # Two things under cards/ that are NOT unclassifiable slates and must not be reported as if they
 # were broken. Both still carry ACTION_AUTHORITY = NONE, because neither can evidence starter
@@ -80,6 +85,8 @@ GATE_GOVERNED = "GATE_GOVERNED"
 
 ACTION_AUTHORITY_BY_CLASS = {
     ALL_CAP_BASELINE: NONE,
+    LOW_STARTER_INFORMATION: GATE_GOVERNED,
+    FULL_STARTER_INFORMATION: GATE_GOVERNED,
     NOT_CLASSIFIABLE: NONE,
     NOT_A_CARD: NONE,
     LEGACY_SCHEMA_NO_SLOT_STATS: NONE,
@@ -116,6 +123,49 @@ def is_cap_slot(stats):
         if x is None or abs(x - v) > CAP_TOL:
             return False
     return True
+
+
+# WHAT IS DISPLAYED vs WHAT ENTERED THE MODEL. These are different facts and were being conflated:
+# a card printed "Jackson Jobe" while feeding league-average stats, and every reader — including me
+# — read the name as information. The Decision Card must render "Jobe — CAP profile", never "Jobe".
+IDENTITY_UNKNOWN = "UNKNOWN"                 # no name at all
+IDENTITY_NAMED_UNVERIFIED = "NAMED_UNVERIFIED"   # a name, but nothing behind it
+IDENTITY_VERIFIED = "VERIFIED"               # a name with its own statistical profile
+PROFILE_LEAGUE_AVERAGE_CAP = "LEAGUE_AVERAGE_CAP"
+PROFILE_PITCHER_SPECIFIC = "PITCHER_SPECIFIC"
+PROFILE_PITCHER_SPECIFIC_THIN = "PITCHER_SPECIFIC_THIN"
+PROFILE_UNREADABLE = "UNREADABLE"
+
+
+def slot_identity(name, stats):
+    """(displayed_starter, identity_status, feature_profile) for one slot.
+
+    identity_status answers "do we know who is pitching"; feature_profile answers "what actually
+    entered the model". They can disagree, and when they do, that disagreement IS the finding."""
+    st = slot_state(name, stats)
+    displayed = (name or "").strip() or None
+    if st == MALFORMED:
+        return displayed, (IDENTITY_NAMED_UNVERIFIED if displayed else IDENTITY_UNKNOWN), \
+            PROFILE_UNREADABLE
+    if st == CAP_TBD:
+        return displayed, IDENTITY_UNKNOWN, PROFILE_LEAGUE_AVERAGE_CAP
+    if st == CAP_NAMED_REGISTRY_MISS:
+        return displayed, IDENTITY_NAMED_UNVERIFIED, PROFILE_LEAGUE_AVERAGE_CAP
+    if st == LOW_SAMPLE:
+        return displayed, IDENTITY_VERIFIED, PROFILE_PITCHER_SPECIFIC_THIN
+    return displayed, IDENTITY_VERIFIED, PROFILE_PITCHER_SPECIFIC
+
+
+def render_slot(name, stats):
+    """How a Decision Card must render this slot. A name alone is never sufficient."""
+    disp, ident, prof = slot_identity(name, stats)
+    if prof == PROFILE_LEAGUE_AVERAGE_CAP:
+        return f"{disp} — CAP profile" if disp else "TBD — CAP profile"
+    if prof == PROFILE_PITCHER_SPECIFIC_THIN:
+        return f"{disp} — thin profile"
+    if prof == PROFILE_UNREADABLE:
+        return f"{disp or 'TBD'} — UNREADABLE profile"
+    return disp
 
 
 def slot_state(name, stats):
@@ -178,14 +228,22 @@ def classify(card):
     if not has_rows_list(card):
         return {"information_class": NOT_A_CARD,
                 "action_authority": ACTION_AUTHORITY_BY_CLASS[NOT_A_CARD],
-                "registration_eligible": True, "slots_total": 0, "slots_resolved": 0,
+                "registration_eligible": True,
+                "starter_slots_total": 0, "starter_slots_resolved": 0,
+                "starter_information_fraction": None, "named_cap_slots": 0, "tbd_cap_slots": 0,
+                "verified_profile_slots": 0, "thin_profile_slots": 0, "unreadable_slots": 0,
+                "slots_total": 0, "slots_resolved": 0,
                 "slots_cap": 0, "counts": {}, "named_but_cap": [],
                 "reason": "no slate rows — this file is not a card"}
     rows = card_rows(card)
     if rows and not has_slot_stats(rows):
         return {"information_class": LEGACY_SCHEMA_NO_SLOT_STATS,
                 "action_authority": ACTION_AUTHORITY_BY_CLASS[LEGACY_SCHEMA_NO_SLOT_STATS],
-                "registration_eligible": True, "slots_total": 0, "slots_resolved": 0,
+                "registration_eligible": True,
+                "starter_slots_total": 0, "starter_slots_resolved": 0,
+                "starter_information_fraction": None, "named_cap_slots": 0, "tbd_cap_slots": 0,
+                "verified_profile_slots": 0, "thin_profile_slots": 0, "unreadable_slots": 0,
+                "slots_total": 0, "slots_resolved": 0,
                 "slots_cap": 0, "counts": {}, "named_but_cap": [],
                 "reason": "pre-2026-07-22 schema: no per-slot starter stats were recorded, so the "
                           "information class of this card cannot be recovered from the artifact"}
@@ -196,20 +254,35 @@ def classify(card):
         counts[s] = counts.get(s, 0) + 1
     n_cap = counts[CAP_TBD] + counts[CAP_NAMED_REGISTRY_MISS]
     n_resolved = counts[RESOLVED]
+    # DOSE. The fraction counts only FULLY resolved slots: a LOW_SAMPLE slot carries a name and real
+    # but thin statistics, which is information the model can use and evidence a reader should not
+    # mistake for a settled profile. It is excluded from the numerator and named separately.
+    frac = (n_resolved / n) if n else None
     if n == 0:
         cls = NOT_CLASSIFIABLE          # fail closed: no slots is not "fully verified"
     elif counts[MALFORMED]:
         cls = NOT_CLASSIFIABLE          # fail closed: unreadable inputs are not information
-    elif n_cap == n:
+    elif n_resolved == 0:
         cls = ALL_CAP_BASELINE
     elif n_resolved == n:
-        cls = VERIFIED_STARTER_COHORT
+        cls = FULL_STARTER_INFORMATION
+    elif frac < 0.50:
+        cls = LOW_STARTER_INFORMATION
     else:
         cls = PARTIAL_STARTER_INFORMATION
     return {
         "information_class": cls,
         "action_authority": ACTION_AUTHORITY_BY_CLASS[cls],
         "registration_eligible": True,   # every class is recorded; see REGISTRATION IS NOT ACTION
+        "starter_slots_total": n,
+        "starter_slots_resolved": n_resolved,
+        "starter_information_fraction": (round(frac, 6) if frac is not None else None),
+        "named_cap_slots": counts[CAP_NAMED_REGISTRY_MISS],
+        "tbd_cap_slots": counts[CAP_TBD],
+        "verified_profile_slots": n_resolved,
+        "thin_profile_slots": counts[LOW_SAMPLE],
+        "unreadable_slots": counts[MALFORMED],
+        # prior field names, kept so existing ledger entries and readers do not silently break
         "slots_total": n,
         "slots_resolved": n_resolved,
         "slots_cap": n_cap,
@@ -451,6 +524,75 @@ def selftest():
         f.append("an EMPTY card classified as something other than NOT_CLASSIFIABLE")
     if classify({"rows": []})["action_authority"] != NONE:
         f.append("an empty card retained action authority")
+    # 17b. DOSE. The four classes and their exact boundaries. A 73% card and a 94% card must not
+    #      share a class label, and the boundaries must be tested ON the boundary, not near it.
+    def deck(nres, ntot):
+        """A card with EXACTLY nres resolved slots out of ntot. Every row carries BOTH slots — an
+        earlier version of this helper set only asp_stats, which left every home slot MALFORMED and
+        made the whole dose block pass against NOT_CLASSIFIABLE while proving nothing."""
+        assert ntot % 2 == 0, "a card has two starter slots per game"
+        rows = []
+        for i in range(ntot // 2):
+            a = REAL if 2 * i < nres else CAP
+            h = REAL if 2 * i + 1 < nres else CAP
+            rows.append({"away": f"A{i}", "home": f"B{i}",
+                         "asp": "X", "asp_stats": a, "hsp": "Y", "hsp_stats": h})
+        return {"rows": rows}
+    for nres, ntot, want in ((0, 10, ALL_CAP_BASELINE),
+                             (1, 10, LOW_STARTER_INFORMATION),
+                             (4, 10, LOW_STARTER_INFORMATION),
+                             (5, 10, PARTIAL_STARTER_INFORMATION),   # 0.50 is PARTIAL, not LOW
+                             (9, 10, PARTIAL_STARTER_INFORMATION),
+                             (10, 10, FULL_STARTER_INFORMATION)):
+        got = classify(deck(nres, ntot))
+        if got["information_class"] != want:
+            f.append(f"{nres}/{ntot} resolved classified as {got['information_class']}, expected {want}")
+        if abs(got["starter_information_fraction"] - nres / ntot) > 1e-9:
+            f.append(f"{nres}/{ntot}: starter_information_fraction {got['starter_information_fraction']}")
+    # the owner's own example: 73% and 94% must NOT share a class treatment with each other's
+    # neighbours by accident — both are PARTIAL, and the FRACTION is what separates them
+    a, b = classify(deck(22, 30)), classify(deck(17, 18))
+    if a["starter_information_fraction"] == b["starter_information_fraction"]:
+        f.append("a 73% card and a 94% card report the same information fraction")
+    # required field names, exactly as specified
+    for k in ("starter_slots_total", "starter_slots_resolved", "starter_information_fraction",
+              "named_cap_slots", "tbd_cap_slots", "verified_profile_slots"):
+        if k not in classify(deck(5, 10)):
+            f.append(f"required field {k} is missing from the classification record")
+    d = classify({"rows": [row("DET", "PIT", "Jackson Jobe", CAP, "TBD", CAP),
+                           row("A", "B", "McGreevy", REAL, "Rookie", THIN)]})
+    if (d["named_cap_slots"], d["tbd_cap_slots"], d["verified_profile_slots"]) != (1, 1, 1):
+        f.append(f"slot tallies wrong: named_cap={d['named_cap_slots']} "
+                 f"tbd_cap={d['tbd_cap_slots']} verified={d['verified_profile_slots']}")
+    if d["thin_profile_slots"] != 1:
+        f.append("a thin (LOW_SAMPLE) slot was not counted separately")
+    if d["starter_information_fraction"] != 0.25:
+        f.append(f"a thin slot was counted as verified information: fraction "
+                 f"{d['starter_information_fraction']}, expected 0.25")
+
+    # 17c. DISPLAYED vs ENTERED. The owner's example verbatim.
+    disp, ident, prof = slot_identity("Jackson Jobe", CAP)
+    if (disp, ident, prof) != ("Jackson Jobe", IDENTITY_NAMED_UNVERIFIED, PROFILE_LEAGUE_AVERAGE_CAP):
+        f.append(f"the Jobe case resolved to {(disp, ident, prof)}, expected "
+                 f"(Jackson Jobe, NAMED_UNVERIFIED, LEAGUE_AVERAGE_CAP)")
+    if render_slot("Jackson Jobe", CAP) != "Jackson Jobe — CAP profile":
+        f.append(f"a NAMED_UNVERIFIED slot renders as {render_slot('Jackson Jobe', CAP)!r}; the "
+                 f"Decision Card must never render the bare name")
+    if render_slot("McGreevy", REAL) != "McGreevy":
+        f.append("a verified slot was decorated with a profile caveat it does not need")
+    if "thin" not in render_slot("Rookie", THIN):
+        f.append("a thin profile renders as if it were a settled one")
+    if slot_identity("TBD", CAP)[1] != IDENTITY_UNKNOWN:
+        f.append("a TBD slot claimed a known identity")
+    if slot_identity("McGreevy", REAL)[2] != PROFILE_PITCHER_SPECIFIC:
+        f.append("a resolved slot did not report a pitcher-specific profile")
+    # identity and profile must be able to DISAGREE — that disagreement is the whole point
+    ids = {slot_identity(n, st)[1:] for n, st in (("Jackson Jobe", CAP), ("TBD", CAP),
+                                                  ("McGreevy", REAL), ("Rookie", THIN))}
+    if len(ids) != 4:
+        f.append(f"identity/profile pairs collapse: only {len(ids)} distinct pairs across four "
+                 f"materially different slots")
+
     # 18b. NOT_A_CARD vs LEGACY vs MALFORMED are three different things and must stay distinct.
     for notcard in ({"date": "2026-07-21", "market": "k", "plays": []},
                     {"rule": "ev", "picks": []}, [], "nope", None):
@@ -543,7 +685,26 @@ MUTANTS = [
     ("a missing CAP field is treated as matching",
      "        if x is None or abs(x - v) > CAP_TOL:", "        if x is not None and abs(x - v) > CAP_TOL:"),
     ("all-CAP threshold rounded down — a mostly-CAP card called baseline",
-     "    elif n_cap == n:", "    elif n_cap >= n - 1:"),
+     "    elif n_resolved == 0:", "    elif n_resolved <= 1:"),
+    ("the LOW/PARTIAL dose boundary removed — 4% and 94% share a class",
+     "    elif frac < 0.50:", "    elif False:"),
+    ("the dose boundary moved so a half-resolved card reads as LOW",
+     "    elif frac < 0.50:", "    elif frac <= 0.50:"),
+    ("the information fraction counts THIN slots as verified",
+     "    frac = (n_resolved / n) if n else None",
+     "    frac = ((n_resolved + counts[LOW_SAMPLE]) / n) if n else None"),
+    ("FULL collapses into PARTIAL", "    elif n_resolved == n:", "    elif False:"),
+    ("a named CAP slot reports a verified identity",
+     "        return displayed, IDENTITY_NAMED_UNVERIFIED, PROFILE_LEAGUE_AVERAGE_CAP",
+     "        return displayed, IDENTITY_VERIFIED, PROFILE_PITCHER_SPECIFIC"),
+    ("the Decision Card renders the bare name of an unverified starter",
+     '        return f"{disp} — CAP profile" if disp else "TBD — CAP profile"',
+     "        return disp"),
+    ("a thin profile renders as a settled one",
+     '        return f"{disp} — thin profile"', "        return disp"),
+    ("named and TBD cap slots are pooled into one count",
+     '        "named_cap_slots": counts[CAP_NAMED_REGISTRY_MISS],',
+     '        "named_cap_slots": counts[CAP_NAMED_REGISTRY_MISS] + counts[CAP_TBD],'),
     ("baseline granted action authority", "    ALL_CAP_BASELINE: NONE,",
      "    ALL_CAP_BASELINE: GATE_GOVERNED,"),
     ("baseline made registration-INELIGIBLE — 'cannot bet' collapsed into 'not recorded'",

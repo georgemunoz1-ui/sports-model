@@ -1,0 +1,117 @@
+{
+ "record_id": "BASELINE-OFFSET-2026-08-23",
+ "created_utc": "2026-08-23T02:30:00Z",
+ "authority": "owner development program 2026-08-23, item 2",
+ "status": "ARCHITECTURE AND INVARIANTS IMPLEMENTED AND WIRED. No residual model is fitted yet; f(X) is not populated, so nothing has been forecast through this path.",
+ "specification": {
+  "form": "logit(p_home) = logit(p_home_prior_asof) + f(X)",
+  "prior": "expanding home-win rate over games completed strictly before the slate date",
+  "residual": "team strength, starters, bullpen, park, rest and other frozen features",
+  "market": "prices and implied probabilities remain downstream-only",
+  "regularization": "strong, pulling f(X) toward zero when features add no validated information"
+ },
+ "delivered": {
+  "harness/baseline_offset.py": "27/27 mutants; prior, log-odds composition, registered-field contract, and all ten structural invariants",
+  "harness/paired_eval.py": "22/22 mutants; per-game preservation and every required report",
+  "wired": "healthcheck selftest loop"
+ },
+ "design_decisions_and_why": {
+  "tier1_only_prior_pool": "126 of the 1934 canonical 2026 finals are legacy tier-2/3 rows under a standing frozen exposure. A prior is a MODEL INPUT, so the pool is tier-1 by default. The filter is an explicit bound parameter and prior_source_hash covers the exact rows, so the intercept reconstructs rather than being asserted.",
+  "smoothing": "The rate is smoothed toward .5 with a pseudo-count of 20. Two reasons: an early-season raw ratio over a handful of games is not a prior, and at n=0 the prior is EXACTLY .5, hence a log-odds of exactly 0 — which is what makes invariant 3 checkable as an exact identity rather than an approximate one.",
+  "clamping": "expit saturates to exactly 1.0 in float arithmetic past a composed log-odds of about 37, and invariant 5 requires a probability strictly inside (0,1). The selftest caught this: a residual of +50 on a .999 prior produced exactly 1.0, a claim of certainty with infinite log-loss. combine() now clamps. Under the intended regularization such a residual should never occur, so the clamp is a guard, not a working range.",
+  "slate_clustered_bootstrap": "Games on one night share weather, umpiring, schedule spot and the night's home/away balance. 2026-08-21 went 14-1 home. Resampling GAMES treats those fifteen as independent draws and reports an interval far too narrow. The unit of independence is the night."
+ },
+ "prior_as_of_2026_08_22": {
+  "p_home_prior": 0.5251641137855579,
+  "prior_games_n": 1808,
+  "prior_home_wins": 950,
+  "prior_raw_rate": 0.5254424778761062,
+  "prior_cutoff_utc": "2026-08-22T00:00:00Z",
+  "prior_source_hash": "0fae26c78efc032377896794663ab8c6240637075940919a8f2cc352c6e7c9f6",
+  "prior_pool_tier_filter": [
+   "1"
+  ],
+  "prior_pseudo_count": 20.0,
+  "prior_pseudo_center": 0.5,
+  "prior_last_game_date": "2026-08-21"
+ },
+ "the_paired_evaluation_run_on_the_only_evidence_that_exists": {
+  "what_it_is": "v1 (ALL_CAP_BASELINE card) versus v2 (starter-informed card) on the two dates where BOTH were registered on the same slate: 2026-08-19 and 2026-08-21.",
+  "sample_correction": "This is 30 paired games, not the 29 reported earlier today. The earlier figure came from the BROKEN 2026-08-21 summary, which had lost fourteen of its fifteen rows; rebuilding both cohorts from the ledger recovers the full slate on both dates. The grade-ledger repair paid for itself immediately.",
+  "headline": {
+   "baseline": {
+    "record": "16-14",
+    "brier": 0.249422,
+    "logloss": 0.69206
+   },
+   "challenger": {
+    "record": "18-12",
+    "brier": 0.240078,
+    "logloss": 0.672942
+   },
+   "mean_paired_delta_brier": -0.009343,
+   "mean_paired_delta_logloss": -0.019118,
+   "pct_games_improved": 0.7,
+   "slate_clustered_95pct_CI_delta_brier": [
+    -0.015712,
+    -0.002975
+   ],
+   "n_slates": 2
+  },
+  "THE_DIRECTIONAL_AUDIT_IS_THE_FINDING": {
+   "toward_home": {
+    "n": 19,
+    "challenger": "13-6",
+    "baseline": "9-10",
+    "mean_delta_brier": -0.021209,
+    "pct_improved": 0.842
+   },
+   "toward_away": {
+    "n": 11,
+    "challenger": "5-6",
+    "baseline": "7-4",
+    "mean_delta_brier": 0.011152,
+    "pct_improved": 0.455
+   },
+   "reading": "EVERY unit of the challenger's advantage comes from games where it moved TOWARD THE HOME SIDE. Where it moved toward the away side it was WORSE than the baseline, on both Brier and log-loss, and its record went 5-6 against the baseline's 7-4. Across these two nights home teams went 22-8. This is exactly the confound the owner named — 'fortunate directional exposure' rather than starter information — and it is now measured rather than suspected. The aggregate -0.0093 must never be quoted without this split.",
+   "what_would_settle_it": "Away-moving games on slates where the away side wins at or above its base rate. That cannot be manufactured; it requires more slates."
+  },
+  "calibration": {
+   "challenger": {
+    "intercept": 0.954,
+    "slope": 1.1095
+   },
+   "baseline": {
+    "intercept": 1.0285,
+    "slope": -0.5736
+   },
+   "reading": "The all-CAP baseline's slope is NEGATIVE: over these 30 games its probabilities ran slightly against the outcomes. With AUC 0.509 the honest reading is that it carries essentially no discrimination and the sign is noise, not that it is anti-predictive. It does mean the 'no material calibration regression' criterion passes trivially — almost anything beats a slope of -0.57 — so that criterion is not evidence of anything on this sample.",
+   "discrimination": {
+    "challenger_auc": 0.5511,
+    "baseline_auc": 0.5085
+   }
+  },
+  "promotion_criteria_evaluated": {
+   "negative_paired_brier_difference": true,
+   "negative_paired_logloss_difference": true,
+   "confidence_interval_supports_improvement": true,
+   "no_material_calibration_regression": true,
+   "improvement_not_confined_to_one_subgroup": false,
+   "all_conditions_met": false,
+   "blocking_condition": "the improvement IS confined: it disappears and reverses on away-moving games",
+   "stage": "DESCRIPTIVE_SHADOW_EVIDENCE_ONLY (30 of the 100 games that stage requires)"
+  },
+  "what_this_does_not_do": [
+   "No forecast has been produced through the baseline-offset path; f(X) is not fitted.",
+   "Nothing is promoted. The gate remains 0/100 NO_PROMOTE, the model-authorized ledger $0, execution UNAUTHORIZED, wager authority NO.",
+   "The 30-game result is descriptive shadow evidence and is not a measured starter effect."
+  ],
+  "defects_found_while_building_this": [
+   "SATURATION: combine() returned exactly 1.0 for a large residual, violating invariant 5. Caught by the invariant's own fixture, not by inspection.",
+   "DEGENERATE BOOTSTRAP: the first slate bootstrap drew with `state % n` from a linear congruential generator. The low bits of an LCG are not random — with two slates it resampled the SAME night every draw and reported a ZERO-WIDTH interval as if it were precision. The draw now comes from the high bits, and a fixture requires a two-slate interval to span both slates' values.",
+   "TWO OVERLAPPING MUTANTS: the postponed-game rule and the blank-outcome guard both excluded the same fixture row, so the status rule was never independently proven; and the finiteness check on a probability is genuinely subsumed by the open-interval predicate, so that mutant was RETIRED with a comment rather than dressed up.",
+   "THREE PAIRED_EVAL RULES were decorative on first pass — determinism-from-the-recorded-seed, the calibration gradient, and the promotion note — and each now has an isolating fixture."
+  ]
+ },
+ "next": "fit f(X) under strong regularization out-of-sample and register baseline and challenger simultaneously on identical games; then independent review"
+}

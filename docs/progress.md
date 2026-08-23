@@ -3103,3 +3103,51 @@ ZERO CAP slots across 35 cards; em-dash escaping made a correctly-bannered card 
 guard; two sources of truth for action authority (two mutants survived until the table became the
 only one); and a drift fixture that could not fail because it also tripped the authority rule.
 Lesson 24 written. Record: docs/experiments/2026-08-23_INFORMATION_CLASS.json
+
+## 2026-08-23 (2) — Grade ledger repaired, dose added, baseline-offset architecture built
+
+ORDER FOLLOWED AS GIVEN: fix the grade-summary overwrite first, then the information-class
+refinement, then item 2.
+
+GRADE SUMMARIES ARE NOW DERIVED. harness/grade_ledger.py, 18/18 mutants, wired as selftest + gate.
+The per-game ledger stays canonical and untouched; every cohort statistic rebuilds from all ACTIVE
+non-superseded records, binds its grade ids plus an input hash, and must reproduce exactly. Partial
+summaries, stale bindings and statistic drift all FAIL, and already_graded_skipped is demoted to an
+audit field with a named check for the exact 2026-08-21 shape. Model probabilities are read back
+from the card the forecast was REGISTERED against, verified by hash (R3). 2026-08-21 v2 now rebuilds
+to .230621 and v1 to .246333; every other date reproduced with zero errors. grade_slate.py appends
+grades BEFORE summarising and nulls market/totals fields with a reason when a run is partial.
+
+INFORMATION CLASS SPLIT FOUR WAYS on starter_information_fraction: ALL_CAP 0 / LOW 1-49% /
+PARTIAL 50-99% / FULL 100%, boundaries tested ON the boundary. Reclassifying moved four cards —
+8/09 (23%) and 8/13 (14%) drop out of PARTIAL, where they had been sharing a label with 94% cards.
+DISPLAYED vs ENTERED are now separate: the Decision Card renders "Jackson Jobe — CAP profile",
+never the bare name, and render_gate refuses five distinct ways of hiding a CAP profile.
+decision_card had NO mutation suite at all; it has one now, 8/8.
+
+ITEM 2 ARCHITECTURE: logit(p_home) = logit(prior) + f(X). baseline_offset.py 27/27, paired_eval.py
+22/22. Prior is tier-1 only (a prior is a model input; 126 canonical finals are legacy tier-2/3),
+smoothed toward .5 so an empty pool gives EXACTLY .5 and invariant 3 is an exact identity. All ten
+structural invariants enforced; an invariant that cannot run is REPORTED, never counted as a pass.
+As of 8/22 the prior is .52516 over 1808 tier-1 games. f(X) is NOT fitted yet — nothing has been
+forecast through this path.
+
+THE PAIRED RUN, AND THE FINDING. 30 paired games (not 29 — the earlier figure came from the broken
+8/21 summary; the ledger repair recovered a full slate). Aggregate: baseline 16-14 / .249422,
+challenger 18-12 / .240078, mean ΔBrier -0.0093, 70% improved, slate-clustered CI
+[-0.0157, -0.0030] excluding zero. EVERY HEADLINE POINTS THE SAME WAY — and the required directional
+split destroys it: moving TOWARD HOME (n=19) the challenger is 13-6 with ΔBrier -0.0212; moving
+TOWARD AWAY (n=11) it is 5-6 with ΔBrier +0.0112, WORSE than the baseline. Home teams went 22-8
+across the two nights. The owner predicted this from four flips before any of these numbers existed.
+promotion_criteria correctly blocks on improvement_not_confined_to_one_subgroup = false.
+
+Baseline calibration slope came back NEGATIVE (-0.57) with AUC .509 — no discrimination, sign is
+noise — which also means "no material calibration regression" passes trivially and is evidence of
+nothing on this sample.
+
+DEFECTS FOUND WHILE BUILDING: combine() saturated to exactly 1.0 on a large residual (caught by
+invariant 5's own fixture); the slate bootstrap drew from the DEGENERATE LOW BITS of an LCG and
+returned a ZERO-WIDTH interval as if it were precision; four rules across three modules were
+decorative on first pass and each now has an isolating fixture; one mutant was RETIRED as
+unkillable-by-construction with a comment rather than dressed up. Lesson 25 written.
+Records: docs/experiments/2026-08-23_BASELINE_OFFSET.json, _PAIRED_EVAL_v1_vs_v2.json

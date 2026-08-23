@@ -1,0 +1,45 @@
+{
+ "record_id": "EVALUATION-ARMS-2026-08-23",
+ "created_utc": "2026-08-23T12:00:00Z",
+ "authority": "owner amendment 2026-08-23: bind separate arm identities",
+ "cohort_first_game_start_utc": "2026-08-19T17:05:00Z",
+ "arms": [
+  {
+   "evaluation_arm_id": "arm_4cbf9a687530e728de08d7c4",
+   "arm_name": "V13_ALL_CAP_INPUTS",
+   "registered_utc": "2026-08-23T12:00:00Z",
+   "model_id": "ml.v13_1.hfa1005.card.s722n30000",
+   "input_policy_id": "ALL_CAP_NO_STARTER_RESOLUTION",
+   "feature_manifest_sha256": "af65d928e6262912c35bcc27202ef3dd4ce9a99aca11a046096a416fff89bf50",
+   "cap_substitution_policy_id": "CAP_LEAGUE_AVERAGE_era4.20_gs0_k22.0_bb8.5",
+   "simulation_config_id": "seed722_n30000_global_sequential_rng",
+   "training_cutoff_policy_id": "ASOF_STRICTLY_PRIOR_SLATE_DATE_V1"
+  },
+  {
+   "evaluation_arm_id": "arm_ccd72d1f32d10991ba0aa9fd",
+   "arm_name": "V13_STARTER_INFORMED",
+   "registered_utc": "2026-08-23T12:00:00Z",
+   "model_id": "ml.v13_1.hfa1005.card.s722n30000",
+   "input_policy_id": "PREVIEW_BOARD_STARTER_RESOLUTION",
+   "feature_manifest_sha256": "af65d928e6262912c35bcc27202ef3dd4ce9a99aca11a046096a416fff89bf50",
+   "cap_substitution_policy_id": "CAP_LEAGUE_AVERAGE_ON_UNRESOLVED_SLOTS_ONLY",
+   "simulation_config_id": "seed722_n30000_global_sequential_rng",
+   "training_cutoff_policy_id": "ASOF_STRICTLY_PRIOR_SLATE_DATE_V1"
+  }
+ ],
+ "comparison_label": "RETROSPECTIVE_INPUT_POLICY_ABLATION",
+ "per_arm": {
+  "V13_ALL_CAP_INPUTS": {
+   "status": "RETROSPECTIVE_INPUT_POLICY_ABLATION",
+   "reason": "arm registered 2026-08-23T12:00:00Z, at or after the cohort's first game started 2026-08-19T17:05:00Z: the policy was fixed with results visible, so this is an input-policy ablation and not prospective challenger evidence"
+  },
+  "V13_STARTER_INFORMED": {
+   "status": "RETROSPECTIVE_INPUT_POLICY_ABLATION",
+   "reason": "arm registered 2026-08-23T12:00:00Z, at or after the cohort's first game started 2026-08-19T17:05:00Z: the policy was fixed with results visible, so this is an input-policy ablation and not prospective challenger evidence"
+  }
+ },
+ "identities_distinct": true,
+ "THE_HONEST_FINDING": "No evaluation_arm_id, input_policy_id or CAP-substitution policy id existed anywhere in the repository before today. The registry carried only free-text experiment_arm labels, and those labels DIFFER between the two dates for the same conceptual arm: 2026-08-19 recorded V1_SERIES_SLATE_PRICE_BLOCKED and V2_PREVIEW_BOARD_STARTERS_PRICE_BLOCKED, while 2026-08-21 recorded V1_WEB_SCHEDULE_NO_STARTERS_NO_PRICES and V2_PREVIEW_BOARD_STARTERS_NO_PRICES. Those strings describe how each day's data happened to be acquired, not a frozen input policy. The two arms on 2026-08-19 were generated 26 minutes apart the same morning (09:35Z and 10:01Z) with no prior registration of either policy.",
+ "the_only_candidate_prereg": "docs/experiments/2026-08-18_V14_STARTER_PREREG.json predates the cohort but registers a different thing: a V14 estimator with its own frozen feature set. It does not define the V13 input-policy arms compared here.",
+ "CONSEQUENCE": "The arms are registered TODAY, so prospectivity derives to RETROSPECTIVE_INPUT_POLICY_ABLATION. The 30-game comparison is relabelled accordingly. It is not prospective challenger evidence and must not be cited as such. These identities are prospective from 2026-08-23 forward."
+}

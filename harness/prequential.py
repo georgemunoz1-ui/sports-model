@@ -62,10 +62,20 @@ def audit_pool(pool, target_slate_date, target_game_id=None):
     return (CLEAN if not f else f[0].split(":")[0]), f
 
 
-def provenance(prior_record, pool, target_slate_date, target_game_id=None):
-    """The three required fields plus the audit result, for attachment to an evaluation row."""
+def provenance(prior_record, pool, target_slate_date, target_game_id=None,
+               generated_at_utc=None, game_start_utc=None,
+               prior_last_game_finalized_at_utc=None):
+    """The required fields plus BOTH audits, for attachment to an evaluation row."""
     status, f = audit_pool(pool, target_slate_date, target_game_id)
+    cut = prior_record.get("prior_cutoff_utc", f"{target_slate_date}T00:00:00Z")
+    cstatus, cf = audit_chronology(prior_last_game_finalized_at_utc, cut,
+                                   generated_at_utc, game_start_utc)
     return {
+        "chronology_status": cstatus,
+        "chronology_failures": cf,
+        "prior_last_game_finalized_at_utc": prior_last_game_finalized_at_utc,
+        "generated_at_utc": generated_at_utc,
+        "game_start_utc": game_start_utc,
         "prior_n": prior_record.get("prior_games_n"),
         "prior_p": prior_record.get("p_home_prior"),
         "prior_cutoff_utc": prior_record.get("prior_cutoff_utc",
@@ -77,7 +87,59 @@ def provenance(prior_record, pool, target_slate_date, target_game_id=None):
     }
 
 
-REQUIRED_ROW_FIELDS = ("prior_n", "prior_p", "prior_cutoff_utc", "prequential_status")
+# ---------------------------------------------------------------------------------------------
+# CHRONOLOGY — TIMESTAMPS, NOT CALENDAR DATES.
+#
+# OWNER RULING 2026-08-23: prior_last_game_date=2026-08-18 does NOT prove safety against a cutoff of
+# 2026-08-19T00:00:00Z. That cutoff is 17:00 Pacific on August 18, and MLB games dated August 18 on
+# the West Coast were still in progress. A calendar date says which SLATE a game belongs to; it says
+# nothing about when the result became knowable. The required orderings are:
+#
+#     prior_last_game_finalized_at_utc  <  prior_cutoff_utc
+#     prior_cutoff_utc                 <=  generated_at_utc  <  game_start_utc
+#
+# The middle ordering matters as much as the first: a cutoff LATER than the moment the forecast was
+# generated would mean the prior absorbed results the forecast could not have used, and a forecast
+# generated at or after first pitch is not a forecast.
+# ---------------------------------------------------------------------------------------------
+CHRONOLOGY_OK = "CHRONOLOGY_OK"
+FINALIZATION_AFTER_CUTOFF = "PRIOR_GAME_FINALIZED_AT_OR_AFTER_CUTOFF"
+CUTOFF_AFTER_GENERATION = "CUTOFF_AFTER_GENERATION"
+GENERATED_AFTER_START = "GENERATED_AT_OR_AFTER_FIRST_PITCH"
+NO_FINALIZATION_TIMESTAMP = "NO_FINALIZATION_TIMESTAMP_AVAILABLE"
+
+
+def audit_chronology(prior_last_game_finalized_at_utc, prior_cutoff_utc, generated_at_utc,
+                     game_start_utc):
+    """(status, failures). All four instants are required; a missing one is refused, not assumed."""
+    f = []
+    fin, cut, gen, start = (prior_last_game_finalized_at_utc, prior_cutoff_utc,
+                            generated_at_utc, game_start_utc)
+    if fin is None:
+        return NO_FINALIZATION_TIMESTAMP, [
+            f"{NO_FINALIZATION_TIMESTAMP}: the prior's last pooled game carries no finalization "
+            f"timestamp. A CALENDAR DATE IS NOT SUFFICIENT — a game dated the day before a midnight "
+            f"UTC cutoff may still have been in progress at that cutoff."]
+    for name, v in (("prior_cutoff_utc", cut), ("generated_at_utc", gen),
+                    ("game_start_utc", start)):
+        if v is None:
+            f.append(f"{name} is absent; chronology cannot be established")
+    if f:
+        return "CHRONOLOGY_UNESTABLISHED", f
+    if not (fin < cut):
+        f.append(f"{FINALIZATION_AFTER_CUTOFF}: the last pooled result finalized at {fin}, at or "
+                 f"after the prior cutoff {cut}")
+    if not (cut <= gen):
+        f.append(f"{CUTOFF_AFTER_GENERATION}: the prior cutoff {cut} is AFTER the forecast was "
+                 f"generated at {gen}, so the prior absorbed results the forecast could not use")
+    if not (gen < start):
+        f.append(f"{GENERATED_AFTER_START}: the forecast was generated at {gen}, at or after first "
+                 f"pitch {start}")
+    return (CHRONOLOGY_OK if not f else f[0].split(":")[0]), f
+
+
+REQUIRED_ROW_FIELDS = ("prior_n", "prior_p", "prior_cutoff_utc", "prequential_status",
+                       "chronology_status")
 
 
 def audit_rows(rows):
@@ -95,6 +157,9 @@ def audit_rows(rows):
         counts[st] = counts.get(st, 0) + 1
         if st is not None and st != CLEAN:
             f.append(f"{gid}: prequential status {st}")
+        cs = r.get("chronology_status")
+        if cs is not None and cs != CHRONOLOGY_OK:
+            f.append(f"{gid}: chronology status {cs}")
         cut = r.get("prior_cutoff_utc")
         sd = r.get("slate_date")
         if cut and sd and not (str(cut)[:10] <= sd):
@@ -149,9 +214,48 @@ def selftest():
     if p["prequential_status"] != CLEAN:
         f.append("a clean provenance record was flagged")
 
+    # --- CHRONOLOGY: timestamps, not calendar dates ------------------------------------------
+    FIN, CUT, GEN, START = ("2026-08-18T23:12:00Z", "2026-08-19T00:00:00Z",
+                            "2026-08-19T09:35:00Z", "2026-08-19T23:05:00Z")
+    st, ff = audit_chronology(FIN, CUT, GEN, START)
+    if st != CHRONOLOGY_OK or ff:
+        f.append(f"a clean chronology was flagged: {st} {ff}")
+    # THE OWNER'S EXACT CASE: a West Coast game dated 08-18 that finished AFTER a midnight-UTC
+    # cutoff. A calendar date of 2026-08-18 looks safe; the timestamp is not.
+    st, ff = audit_chronology("2026-08-19T02:40:00Z", CUT, GEN, START)
+    if st != FINALIZATION_AFTER_CUTOFF:
+        f.append(f"a game finalized at 02:40Z on the 19th passed a midnight-19th cutoff: {st}")
+    # boundary: finalization EXACTLY at the cutoff is not before it
+    if audit_chronology(CUT, CUT, GEN, START)[0] != FINALIZATION_AFTER_CUTOFF:
+        f.append("a result finalized exactly at the cutoff was accepted")
+    # cutoff AFTER generation
+    if audit_chronology(FIN, "2026-08-19T10:00:00Z", GEN, START)[0] != CUTOFF_AFTER_GENERATION:
+        f.append("a prior cutoff later than the forecast's own generation time was accepted")
+    # cutoff EXACTLY at generation is permitted
+    if audit_chronology(FIN, GEN, GEN, START)[0] != CHRONOLOGY_OK:
+        f.append("a cutoff exactly at generation was refused; the rule is cutoff <= generated")
+    # generated at or after first pitch
+    for g in (START, "2026-08-19T23:30:00Z"):
+        if audit_chronology(FIN, CUT, g, START)[0] != GENERATED_AFTER_START:
+            f.append(f"a forecast generated at {g} against a {START} first pitch was accepted")
+    # A CALENDAR DATE ALONE IS REFUSED
+    st, ff = audit_chronology(None, CUT, GEN, START)
+    if st != NO_FINALIZATION_TIMESTAMP:
+        f.append("a missing finalization timestamp was not refused")
+    if "CALENDAR DATE IS NOT SUFFICIENT" not in " ".join(ff):
+        f.append("the refusal does not say a calendar date is insufficient")
+    for missing in ("cut", "gen", "start"):
+        args = {"prior_last_game_finalized_at_utc": FIN, "prior_cutoff_utc": CUT,
+                "generated_at_utc": GEN, "game_start_utc": START}
+        args[{"cut": "prior_cutoff_utc", "gen": "generated_at_utc",
+              "start": "game_start_utc"}[missing]] = None
+        if audit_chronology(**args)[0] == CHRONOLOGY_OK:
+            f.append(f"chronology passed with {missing} absent")
+
     # --- row audit -------------------------------------------------------------------------------
     rows = [{"game_id": "g1", "slate_date": "2026-08-21", "prior_n": 100, "prior_p": 0.527,
-             "prior_cutoff_utc": "2026-08-21T00:00:00Z", "prequential_status": CLEAN}]
+             "prior_cutoff_utc": "2026-08-21T00:00:00Z", "prequential_status": CLEAN,
+             "chronology_status": CHRONOLOGY_OK}]
     ok, ff, s = audit_rows(rows)
     if not ok:
         f.append(f"a clean row cohort failed: {ff}")
@@ -165,6 +269,19 @@ def selftest():
     # a leaked row fails the cohort
     if audit_rows([dict(rows[0], prequential_status=SAME_SLATE_LEAK)])[0]:
         f.append("a leaked row passed the cohort audit")
+    for bad in (FINALIZATION_AFTER_CUTOFF, CUTOFF_AFTER_GENERATION, GENERATED_AFTER_START,
+                NO_FINALIZATION_TIMESTAMP):
+        if audit_rows([dict(rows[0], chronology_status=bad)])[0]:
+            f.append(f"a row with chronology status {bad} passed the cohort audit")
+    # provenance carries the chronology verdict through
+    pr19 = dict(pr, prior_cutoff_utc=CUT)     # a prior record whose cutoff matches this chronology
+    pv = provenance(pr19, POOL, "2026-08-21", generated_at_utc=GEN, game_start_utc=START,
+                    prior_last_game_finalized_at_utc=FIN)
+    if pv["chronology_status"] != CHRONOLOGY_OK:
+        f.append(f"provenance mis-graded a clean chronology: {pv['chronology_status']}")
+    pv2 = provenance(pr19, POOL, "2026-08-21")
+    if pv2["chronology_status"] != NO_FINALIZATION_TIMESTAMP:
+        f.append("provenance with no finalization timestamp was not refused")
     # a cutoff AFTER its own slate date fails
     if audit_rows([dict(rows[0], prior_cutoff_utc="2026-08-22T00:00:00Z")])[0]:
         f.append("a prior cutoff dated after its own slate was accepted")
@@ -201,6 +318,26 @@ MUTANTS = [
      "        if cut and sd and not (str(cut)[:10] <= sd):", "        if cut and sd and not (str(cut)[:10] < sd):"),
     ("a negative prior_n is accepted",
      "        if n is not None and not (isinstance(n, int) and n >= 0):", "        if False:"),
+    ("a calendar date is accepted in place of a finalization timestamp",
+     "    if fin is None:", "    if False:"),
+    ("finalization at or after the cutoff is accepted",
+     "    if not (fin < cut):", "    if not (fin <= cut):"),
+    ("the finalization ordering is dropped entirely",
+     "    if not (fin < cut):", "    if False:"),
+    ("a prior cutoff later than the forecast generation is accepted",
+     "    if not (cut <= gen):", "    if False:"),
+    ("the cutoff/generation boundary becomes strict, refusing a legitimate equality",
+     "    if not (cut <= gen):", "    if not (cut < gen):"),
+    ("a forecast generated at or after first pitch is accepted",
+     "    if not (gen < start):", "    if False:"),
+    ("a missing chronology instant is assumed safe",
+     "        if v is None:\n            f.append(f\"{name} is absent; chronology cannot be established\")",
+     "        if False:\n            f.append(f\"{name} is absent; chronology cannot be established\")"),
+    ("a bad chronology status no longer fails the cohort",
+     "        if cs is not None and cs != CHRONOLOGY_OK:", "        if False:"),
+    ("the calendar-date refusal stops explaining itself",
+     'f"timestamp. A CALENDAR DATE IS NOT SUFFICIENT — a game dated the day before a midnight "',
+     'f"timestamp. "'),
     ("provenance stops carrying the prior's own values",
      '        "prior_n": prior_record.get("prior_games_n"),', '        "prior_n": None,'),
 ]

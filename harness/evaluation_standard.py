@@ -117,8 +117,44 @@ def reliability(rows, p_key="p_model", y_key="home_win", buckets=BUCKETS, min_n=
     return out
 
 
+# OWNER RULING 2026-08-23: "The Hessian rule is acceptable as a numerical estimability guard, but
+# passing it must not mean calibration is acceptable. It only means fitting the calibration line is
+# numerically possible."
+#
+# These are two different questions and were being conflated by proximity: the estimability guard
+# sits immediately above the calibration fields, so a reader — and the promotion gate — could take
+# "we printed a slope" as "the slope is fine". ESTIMABLE means the arithmetic is solvable. ACCEPTABLE
+# means the slope and intercept sit inside the promotion bands. A model can be perfectly estimable
+# and catastrophically miscalibrated; that is the normal case, not an edge case.
+ESTIMABLE = "NUMERICALLY_ESTIMABLE"
+NOT_ESTIMABLE = "NOT_NUMERICALLY_ESTIMABLE"
+
+
+def calibration_acceptable(slope, intercept, slope_band=(0.80, 1.25), intercept_abs_max=0.50):
+    """(acceptable, reason). SEPARATE from estimability, and never implied by it.
+
+    An UNDEFINED calibration is NOT acceptable: a line that could not be fitted has not been shown
+    to be fine, and defaulting it to acceptable would let the least measurable arm clear the
+    strictest condition."""
+    if slope is None or intercept is None:
+        return False, ("calibration is UNDEFINED (the line was not estimable), which is not the "
+                       "same as acceptable and must never be read as it")
+    bad = []
+    if not (slope_band[0] <= slope <= slope_band[1]):
+        bad.append(f"slope {slope:.3f} outside {slope_band}")
+    if abs(intercept) > intercept_abs_max:
+        bad.append(f"|intercept| {abs(intercept):.3f} above {intercept_abs_max}")
+    if bad:
+        return False, "; ".join(bad)
+    return True, f"slope {slope:.3f} in {slope_band}, |intercept| {abs(intercept):.3f} within band"
+
+
 def calibration_estimable(ps):
     """(estimable, reason) under the PREREGISTERED conditioning rule. No tunable threshold.
+
+    THIS IS A NUMERICAL GUARD ONLY. Passing it means the 2x2 solve is well conditioned. It says
+    NOTHING about whether the resulting slope and intercept are acceptable — see
+    calibration_acceptable, which is a separate question with separate bands.
 
     Builds the same Hessian the recalibration fit would use, at the null point (a=0, b=1) where the
     weights are the forecast's own p(1-p), and asks whether that 2x2 system is solvable in float64.
@@ -189,6 +225,12 @@ def winner_metrics(rows, p_key="p_model", prior_key="p_prior", y_key="home_win")
         "calibration_intercept": cal.get("intercept"),
         "calibration_slope": cal.get("slope"),
         "calibration_undefined_reason": cal.get("reason"),
+        # TWO SEPARATE VERDICTS, never collapsed into one.
+        "calibration_estimability": ESTIMABLE if est else NOT_ESTIMABLE,
+        "calibration_estimability_reason": why,
+        "calibration_acceptable": calibration_acceptable(cal.get("slope"), cal.get("intercept"))[0],
+        "calibration_acceptability_reason": calibration_acceptable(cal.get("slope"),
+                                                                   cal.get("intercept"))[1],
         "probability_spread_pp": (_sd(ps) * 100.0) if _sd(ps) is not None else None,
         "discrimination_auc": PE.auc([{"p_home_challenger": p, "home_result": y}
                                       for p, y in zip(ps, ys)]).get("auc"),
@@ -589,6 +631,58 @@ def selftest():
     # fewer than three games is refused whatever the spread
     if calibration_estimable([0.3, 0.7])[0]:
         f.append("a two-game cohort was given a calibration line")
+
+    # --- ESTIMABLE IS NOT ACCEPTABLE ---------------------------------------------------------------
+    # A forecast can be perfectly estimable and catastrophically miscalibrated. That is the normal
+    # case, and conflating the two would let the arithmetic vouch for the statistics.
+    wide = [0.35, 0.45, 0.55, 0.65] * 8
+    if not calibration_estimable(wide)[0]:
+        f.append("the estimability fixture is not actually estimable")
+    if calibration_acceptable(-0.574, 1.028)[0]:
+        f.append("the real all-CAP arm (slope -0.574, intercept 1.028) was called acceptable "
+                 "despite being perfectly estimable")
+    if calibration_acceptable(1.109, 0.954)[0]:
+        f.append("the real challenger arm (slope 1.109, intercept 0.954) was called acceptable; "
+                 "its intercept is far outside the band")
+    if not calibration_acceptable(1.05, 0.10)[0]:
+        f.append("a genuinely well-calibrated arm was refused")
+    # UNDEFINED IS NOT ACCEPTABLE
+    ok_a, why_a = calibration_acceptable(None, None)
+    if ok_a:
+        f.append("an UNDEFINED calibration was called acceptable — the least measurable arm would "
+                 "clear the strictest condition")
+    if "not the same as acceptable" not in why_a:
+        f.append("the undefined-calibration refusal does not distinguish undefined from acceptable")
+    # the boundaries
+    for sl, ic, want in ((0.80, 0.0, True), (0.79, 0.0, False), (1.25, 0.0, True),
+                         (1.26, 0.0, False), (1.0, 0.50, True), (1.0, 0.51, False),
+                         (1.0, -0.51, False)):
+        if calibration_acceptable(sl, ic)[0] != want:
+            f.append(f"calibration_acceptable({sl}, {ic}) = {calibration_acceptable(sl, ic)[0]}, "
+                     f"expected {want}")
+    # the two verdicts are carried SEPARATELY on every metrics block
+    m2 = winner_metrics([{"p_model": p, "p_prior": 0.527, "home_win": i % 2}
+                         for i, p in enumerate(wide)])
+    for k in ("calibration_estimability", "calibration_acceptable",
+              "calibration_estimability_reason", "calibration_acceptability_reason"):
+        if k not in m2:
+            f.append(f"the metrics block does not carry {k}")
+    if m2["calibration_estimability"] != ESTIMABLE:
+        f.append("a well-conditioned arm was not marked estimable")
+    # ISOLATION: an arm that is ESTIMABLE and NOT ACCEPTABLE. Only a case where the two verdicts
+    # DISAGREE can prove they are computed separately; where they happen to agree, substituting one
+    # for the other is invisible.
+    badcal = ([{"p_model": 0.95, "p_prior": 0.527, "home_win": 1} for _ in range(14)] +
+              [{"p_model": 0.95, "p_prior": 0.527, "home_win": 0} for _ in range(6)] +
+              [{"p_model": 0.05, "p_prior": 0.527, "home_win": 0} for _ in range(14)] +
+              [{"p_model": 0.05, "p_prior": 0.527, "home_win": 1} for _ in range(6)])
+    mb = winner_metrics(badcal)
+    if mb["calibration_estimability"] != ESTIMABLE:
+        f.append("a widely-spread overconfident arm was not numerically estimable")
+    if mb["calibration_acceptable"] is not False:
+        f.append(f"an arm with slope {mb['calibration_slope']:.3f} was called calibration-ACCEPTABLE "
+                 f"merely because its fit was numerically estimable — the two verdicts are being "
+                 f"conflated")
     # a VARYING forecast still gets its calibration line
     if winner_metrics(good)["calibration_slope"] is None:
         f.append("a varying forecast lost its calibration line")
@@ -713,6 +807,19 @@ MUTANTS = [
     ("the skill interval keeps the sign of the Brier difference instead of flipping it",
      '    return {"lo": -bs["hi"] / pb, "hi": -bs["lo"] / pb,',
      '    return {"lo": bs["lo"] / pb, "hi": bs["hi"] / pb,'),
+    ("an UNDEFINED calibration is treated as acceptable",
+     "    if slope is None or intercept is None:", "    if False:"),
+    ("estimability is allowed to stand in for acceptability",
+     '        "calibration_acceptable": calibration_acceptable(cal.get("slope"), cal.get("intercept"))[0],',
+     '        "calibration_acceptable": est,'),
+    ("the calibration slope band is removed",
+     "def calibration_acceptable(slope, intercept, slope_band=(0.80, 1.25), intercept_abs_max=0.50):",
+     "def calibration_acceptable(slope, intercept, slope_band=(-99, 99), intercept_abs_max=99):"),
+    ("the intercept band is removed",
+     "    if abs(intercept) > intercept_abs_max:", "    if False:"),
+    ("the undefined refusal stops distinguishing undefined from acceptable",
+     '"same as acceptable and must never be read as it")',
+     '"and that is fine.")'),
     ("a near-constant forecast is given a calibration line anyway",
      "    if rcond <= RCOND_FLOOR:", "    if False:"),
     ("the conditioning floor is tightened below the float64 rule, missing a near-constant arm",

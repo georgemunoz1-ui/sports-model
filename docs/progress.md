@@ -3333,3 +3333,48 @@ beats_every_reference, holm_intervals_below_zero, calibration_acceptable. Real-m
 separate and has no code path that authorises without explicit human approval.
 prequential 11/11, promotion_gate 26/26, evaluation_standard 38/38, baseline_offset 31/31.
 Record: docs/experiments/2026-08-23_AMENDMENT.json
+
+## 2026-08-23 (7) — Inference defect: two clusters cannot produce p=.0081
+
+487c3ad PRESERVED as an intermediate audit commit. Its inferential numbers are WITHDRAWN; its
+descriptive means and structural findings stand.
+
+THE DEFECT, VERIFIED BEFORE FIXING. An exact cluster sign-flip test with k clusters has 2^k
+assignments, so the smallest attainable two-sided p is 2/2^k. With k=2 that is 0.5000. The reported
+Holm p of .0081 is 62x smaller than the test can produce. ROOT CAUSE: _p_from_interval applied a
+normal approximation to a bootstrap whose resample space holds three distinct means; the z-statistic
+carried the degrees of freedom of 30 GAMES, not 2 CLUSTERS. The independence assumption was
+correctly avoided in the interval and then smuggled back into the p-value.
+
+SUPPRESSION RULE, DERIVED NOT CHOSEN: k >= log2(2/alpha) -> SIX clusters at alpha .05. Below it:
+interval NON_DECISION_GRADE, holm_p UNAVAILABLE_INSUFFICIENT_CLUSTERS, beats NOT_EVALUABLE. Raw
+paired means survive as descriptive: -0.00934 vs V13_ALL_CAP_INPUTS, -0.00023 vs the prior. No new
+post-result threshold; the 500-game/60-slate gate stays binding. A TRAP THIS EXPOSED:
+NOT_EVALUABLE is a truthy string, so bool() would have read a suppressed verdict as a PASS. The gate
+now compares to True explicitly and a fixture drives a suppressed comparison at it.
+
+CHRONOLOGY. Accepted: prior_last_game_date=2026-08-18 does not prove safety against a
+2026-08-19T00:00:00Z cutoff — that is 17:00 Pacific on the 18th. Now required:
+finalized_at < cutoff <= generated_at < first_pitch. RESULT ON THE REAL COHORT: pool-leak audit
+PREQUENTIAL_CLEAN 30/30, but chronology NO_FINALIZATION_TIMESTAMP_AVAILABLE 30/30 — the repository
+stores no result-finalization timestamps at all. The prior's chronological safety is UNPROVEN, and
+zero_integrity_failures now joins the blocking list where a calendar-date check had read clean.
+
+ARM IDENTITY. Registered V13_ALL_CAP_INPUTS (arm_4cbf9a68...) and V13_STARTER_INFORMED
+(arm_ccd72d1f...), each binding six policies. THE FINDING: no evaluation_arm_id, input_policy_id or
+CAP-substitution policy existed anywhere before today, and the free-text experiment_arm labels
+DIFFER across the two dates for the same conceptual arm (08-19 V1_SERIES_SLATE_PRICE_BLOCKED vs
+08-21 V1_WEB_SCHEDULE_NO_STARTERS_NO_PRICES) — they describe each day's acquisition circumstances,
+not a policy. The two 08-19 arms were generated 26 minutes apart the same morning. The only
+candidate prereg, 2026-08-18_V14_STARTER_PREREG, registers a V14 estimator, not these input
+policies. DERIVED LABEL: RETROSPECTIVE_INPUT_POLICY_ABLATION. The 30-game comparison is NOT
+prospective challenger evidence. The identities are prospective from today forward.
+
+ESTIMABILITY IS NOT ACCEPTANCE. The Hessian rule is now explicitly a numerical guard only;
+calibration_estimability and calibration_acceptable are separate fields, and UNDEFINED is
+explicitly NOT acceptable. Both real arms are estimable and NEITHER is acceptable.
+
+BINDING GATE: FORWARD_ONLY_PENDING on six conditions. SUBSTANTIVE CONCLUSION UNCHANGED: improvement
+over the expanding prior is NOT ESTABLISHED, and neither comparison is inference-grade.
+promotion_gate 35/35, prequential 20/20, evaluation_arm 13/13, evaluation_standard 43/43.
+Record: docs/experiments/2026-08-23_INFERENCE_AMENDMENT.json

@@ -52,6 +52,60 @@ CALIBRATION_SLOPE_BAND = (0.80, 1.25)
 CALIBRATION_INTERCEPT_ABS_MAX = 0.50
 FAMILY_ALPHA = 0.05
 
+# ---------------------------------------------------------------------------------------------
+# CLUSTER SUFFICIENCY — DERIVED FROM THE TEST, NOT CHOSEN.
+#
+# The unit of independence is the slate date, so the reference test is an exact cluster-level
+# sign-flip: with k clusters there are 2^k sign assignments, and the smallest attainable two-sided
+# p-value is 2 / 2^k. Inference at level alpha is therefore IMPOSSIBLE unless
+#
+#     2 / 2^k <= alpha    <=>    k >= log2(2 / alpha)
+#
+# At alpha = .05 that is k >= 5.32, i.e. SIX clusters. With two clusters the smallest attainable
+# two-sided p is 0.5.
+#
+# THIS IS WHY THE 2026-08-23 REPORT WAS WRONG. It printed a Holm-adjusted p of .0081 on a two-slate
+# cohort — a value 62 times smaller than the test can produce. The cause was _p_from_interval
+# applying a normal approximation to a bootstrap whose resample space holds three distinct means;
+# the z-statistic it produced carried the degrees of freedom of 30 GAMES, not of 2 CLUSTERS. That is
+# exactly the independence assumption the clustering standard exists to forbid, reintroduced in the
+# p-value after being correctly avoided in the interval.
+#
+# No new post-result threshold is introduced. The 500-game / 60-slate-date gate remains the binding
+# one; this rule only decides whether an inferential verdict may be PRINTED at all.
+# ---------------------------------------------------------------------------------------------
+NON_DECISION_GRADE = "NON_DECISION_GRADE"
+UNAVAILABLE_INSUFFICIENT_CLUSTERS = "UNAVAILABLE_INSUFFICIENT_CLUSTERS"
+NOT_EVALUABLE = "NOT_EVALUABLE"
+
+
+def min_clusters_for_alpha(alpha=FAMILY_ALPHA):
+    """Smallest k for which an exact cluster sign-flip test can reach alpha. Derived, not tuned."""
+    if not (0 < alpha < 1):
+        raise ValueError(f"alpha must lie in (0,1), got {alpha}")
+    return int(math.ceil(math.log2(2.0 / alpha)))
+
+
+def smallest_attainable_p(k):
+    """The floor on a two-sided exact sign-flip p-value with k clusters."""
+    if k is None or k < 1:
+        return 1.0
+    return min(1.0, 2.0 / (2 ** k))
+
+
+def inference_grade(n_clusters, alpha=FAMILY_ALPHA):
+    """(ok, reason). May an inferential verdict be reported on this many clusters at all?"""
+    need = min_clusters_for_alpha(alpha)
+    if n_clusters is None:
+        return False, "the number of independent clusters was not established"
+    if n_clusters < need:
+        return False, (f"{n_clusters} independent cluster(s): an exact cluster sign-flip test has "
+                       f"{2 ** n_clusters} assignments, so its smallest attainable two-sided p is "
+                       f"{smallest_attainable_p(n_clusters):.4f}, above alpha={alpha}. Inference "
+                       f"needs at least {need} clusters and Holm adjustment can only increase a "
+                       f"p-value, never rescue one.")
+    return True, f"{n_clusters} clusters, at or above the derived minimum of {need}"
+
 # Real-money gate — entirely separate.
 RM_MIN_GAMES = 100
 RM_REQUIRES_EXPLICIT_APPROVAL = True
@@ -77,6 +131,10 @@ def date_block_interval(rows, key="delta_brier", reps=4000, seed=20260823, alpha
     night's home/away balance, so resampling games would treat a 15-game night as 15 independent
     draws."""
     return PE.slate_bootstrap(rows, key, reps=reps, seed=seed, alpha=alpha)
+
+
+def _raw_mean(xs):
+    return (sum(xs) / len(xs)) if xs else None
 
 
 def _p_from_interval(bs, key="point"):
@@ -113,17 +171,36 @@ def compare_against_references(challenger, references, reps=4000, seed=20260823)
             rows.append({"game_id": g, "slate_date": c.get("slate_date"),
                          "delta_brier": (float(c["p"]) - y) ** 2 - (float(rr["p"]) - y) ** 2})
         bs = date_block_interval(rows, reps=reps, seed=seed)
-        p = _p_from_interval(bs)
-        blocks[name] = {
+        k = len({r.get("slate_date") for r in rows if r.get("slate_date") is not None})
+        grade_ok, grade_why = inference_grade(k)
+        block = {
             "comparator": f"CHALLENGER minus {name}",
             "sign_convention": "negative favours the CHALLENGER",
             "n_paired": len(rows),
-            "n_slate_dates": bs.get("n_slates"),
-            "mean_delta_brier": bs.get("point"),
-            "date_block_interval": [bs.get("lo"), bs.get("hi")],
-            "raw_p": p,
+            "n_slate_dates": k,
+            # THE RAW PAIRED MEAN IS ALWAYS REPORTED. It is descriptive and needs no inference.
+            "mean_delta_brier": _raw_mean([r["delta_brier"] for r in rows]),
             "unpaired": {"challenger_only": only_c, f"{name}_only": only_r},
+            "inference_grade": grade_ok,
+            "inference_note": grade_why,
         }
+        if not grade_ok:
+            # SUPPRESSED. Not softened, not caveated — withheld. A number that the test cannot
+            # produce should not appear at all, because a printed p-value is quoted long after the
+            # caveat beside it is forgotten.
+            block.update({
+                "date_block_interval": NON_DECISION_GRADE,
+                "raw_p": UNAVAILABLE_INSUFFICIENT_CLUSTERS,
+                "holm_adjusted_p": UNAVAILABLE_INSUFFICIENT_CLUSTERS,
+                "interval_entirely_below_zero": NOT_EVALUABLE,
+                "beats_this_reference": NOT_EVALUABLE,
+                "smallest_attainable_two_sided_p": smallest_attainable_p(k),
+            })
+            blocks[name] = block
+            continue
+        p = _p_from_interval(bs)
+        block.update({"date_block_interval": [bs.get("lo"), bs.get("hi")], "raw_p": p})
+        blocks[name] = block
         names.append(name); pvals.append(p if p is not None else 1.0)
     adj = holm(pvals)
     for name, a in zip(names, adj):
@@ -133,6 +210,9 @@ def compare_against_references(challenger, references, reps=4000, seed=20260823)
         blocks[name]["beats_this_reference"] = bool(
             hi is not None and hi < 0 and a is not None and a < FAMILY_ALPHA)
     return {"family_size": len(names), "family_alpha": FAMILY_ALPHA,
+            "suppressed_for_insufficient_clusters": [n for n, b in blocks.items()
+                                                     if not b.get("inference_grade")],
+            "min_clusters_required": min_clusters_for_alpha(FAMILY_ALPHA),
             "adjustment": "Holm step-down, applied across every reference simultaneously",
             "why_adjusted": ("two references means two simultaneous comparisons; taking the better "
                              "of two 95% intervals is a 90% claim wearing a 95% label"),
@@ -153,11 +233,14 @@ def evaluate(cohort, comparison, integrity, calibration, auc):
     c["sample_500_games"] = {"ok": n >= MIN_GAMES, "have": n, "need": MIN_GAMES}
     c["sample_60_slate_dates"] = {"ok": nd >= MIN_SLATE_DATES, "have": nd, "need": MIN_SLATE_DATES}
     refs = comparison.get("references", {})
-    beats = {k: bool(v.get("beats_this_reference")) for k, v in refs.items()}
+    # NOT_EVALUABLE is a string, and bool("NOT_EVALUABLE") is True. Comparing to True explicitly
+    # keeps a suppressed verdict from being read as a passing one.
+    beats = {k: (v.get("beats_this_reference") is True) for k, v in refs.items()}
     c["beats_every_reference"] = {"ok": bool(refs) and all(beats.values()), "detail": beats,
                                   "rule": "a conjunction over every reference, never an average"}
     c["holm_intervals_below_zero"] = {
-        "ok": bool(refs) and all(v.get("interval_entirely_below_zero") for v in refs.values()),
+        "ok": bool(refs) and all(v.get("interval_entirely_below_zero") is True
+                                 for v in refs.values()),
         "detail": {k: v.get("date_block_interval") for k, v in refs.items()}}
     ac = auc.get("challenger")
     arefs = auc.get("references") or {}
@@ -249,6 +332,8 @@ def selftest():
             r1.append({"game_id": g, "p": 0.52})                      # a weak reference
             r2.append({"game_id": g, "p": 0.80 if y else 0.20})       # a strong reference
     cmp1 = compare_against_references(ch, {"EXPANDING_PRIOR": r1, "V13": r2})
+    # FOUR slate dates is BELOW the derived minimum of six, so every inferential field must be
+    # SUPPRESSED while the raw paired mean is still reported.
     for name in ("EXPANDING_PRIOR", "V13"):
         b = cmp1["references"][name]
         if b["comparator"] != f"CHALLENGER minus {name}":
@@ -257,14 +342,68 @@ def selftest():
             f.append(f"the {name} block does not state its sign convention")
         if b["n_paired"] != 60 or b["n_slate_dates"] != 4:
             f.append(f"{name}: n_paired {b['n_paired']} / slates {b['n_slate_dates']}")
-        if b.get("holm_adjusted_p") is None:
-            f.append(f"{name} carries no Holm-adjusted p")
-        if b["holm_adjusted_p"] < b["raw_p"]:
-            f.append(f"{name}: the adjusted p is SMALLER than the raw p")
-    if not cmp1["references"]["EXPANDING_PRIOR"]["interval_entirely_below_zero"]:
-        f.append("a challenger far better than a weak reference did not clear that reference")
+        if b.get("inference_grade") is not False:
+            f.append(f"{name}: four clusters were graded inference-capable")
+        if b["date_block_interval"] != NON_DECISION_GRADE:
+            f.append(f"{name}: an interval was printed on four clusters: {b['date_block_interval']}")
+        if b["raw_p"] != UNAVAILABLE_INSUFFICIENT_CLUSTERS or \
+                b["holm_adjusted_p"] != UNAVAILABLE_INSUFFICIENT_CLUSTERS:
+            f.append(f"{name}: a p-value was printed on four clusters: {b['raw_p']}")
+        if b["beats_this_reference"] != NOT_EVALUABLE or \
+                b["interval_entirely_below_zero"] != NOT_EVALUABLE:
+            f.append(f"{name}: a beats verdict was printed on four clusters")
+        if b["mean_delta_brier"] is None:
+            f.append(f"{name}: the raw paired mean was suppressed along with the inference; it is "
+                     f"descriptive and must survive")
+        if abs(b["smallest_attainable_two_sided_p"] - 0.125) > 1e-12:
+            f.append(f"{name}: the attainable-p floor for four clusters is wrong: "
+                     f"{b['smallest_attainable_two_sided_p']}")
+    if set(cmp1["suppressed_for_insufficient_clusters"]) != {"EXPANDING_PRIOR", "V13"}:
+        f.append("the suppression list does not name both references")
+    if cmp1["min_clusters_required"] != 6:
+        f.append(f"the reported cluster minimum is {cmp1['min_clusters_required']}, expected 6")
     if "90% claim wearing a 95% label" not in cmp1["why_adjusted"]:
         f.append("the comparison does not state why the family is adjusted")
+    # A SUPPRESSED verdict must never be read as a PASS by the gate. NOT_EVALUABLE is a truthy
+    # string, and that is exactly how a suppressed comparison could sneak through.
+    gsup = evaluate(dict(n_games=600, n_slate_dates=70), cmp1, clean, cal_ok,
+                    {"challenger": 0.70, "references": {"EXPANDING_PRIOR": 0.52, "V13": 0.58}})
+    if gsup["status"] != FORWARD_ONLY_PENDING:
+        f.append("the gate PASSED on suppressed, non-evaluable comparisons")
+    for cond in ("beats_every_reference", "holm_intervals_below_zero"):
+        if cond not in gsup["blocking"]:
+            f.append(f"a NOT_EVALUABLE verdict was not blocking on {cond} — a truthy string was "
+                     f"read as a passing result")
+    # SIX clusters is the boundary and must be inference-capable
+    ch6, r6 = [], []
+    for d in ("d1", "d2", "d3", "d4", "d5", "d6"):
+        for i in range(10):
+            y = 1 if i % 3 else 0
+            g = f"{d}-{i}"
+            ch6.append({"game_id": g, "slate_date": d, "p": 0.85 if y else 0.15, "y": y})
+            r6.append({"game_id": g, "p": 0.52})
+    c6 = compare_against_references(ch6, {"WEAK": r6}, reps=1500)["references"]["WEAK"]
+    if c6.get("inference_grade") is not True:
+        f.append("six clusters, the derived minimum, were refused inference")
+    if c6["date_block_interval"] == NON_DECISION_GRADE:
+        f.append("six clusters produced no interval")
+    if c6["beats_this_reference"] is not True:
+        f.append("a challenger far better than a weak reference over six clusters did not clear it")
+    # the derived minimum itself
+    if min_clusters_for_alpha(0.05) != 6 or min_clusters_for_alpha(0.01) != 8:
+        f.append(f"the derived cluster minimum is wrong: .05 -> {min_clusters_for_alpha(0.05)}, "
+                 f".01 -> {min_clusters_for_alpha(0.01)}")
+    for k, want in ((1, 1.0), (2, 0.5), (3, 0.25), (6, 0.03125)):
+        if abs(smallest_attainable_p(k) - want) > 1e-12:
+            f.append(f"smallest_attainable_p({k}) = {smallest_attainable_p(k)}, expected {want}")
+    ok2c, why2c = inference_grade(2)
+    if ok2c:
+        f.append("TWO clusters were graded inference-capable — the 2026-08-23 defect")
+    if "0.5000" not in why2c or "Holm adjustment can only increase" not in why2c:
+        f.append(f"the two-cluster refusal does not state the attainable floor or that Holm cannot "
+                 f"rescue it: {why2c}")
+    if inference_grade(None)[0]:
+        f.append("an unestablished cluster count was graded inference-capable")
     # ISOLATION for the adjusted-p conjunct. Holm multiplies the SMALLEST p in the family by m, so
     # two comparisons that would each pass alone can BOTH fail together. Only the adjusted-p
     # condition can catch that; the raw intervals are unchanged.
@@ -402,6 +541,29 @@ def selftest():
 
 
 MUTANTS = [
+    ("inferential verdicts are printed on too few clusters — the 2026-08-23 defect",
+     "        if not grade_ok:", "        if False:"),
+    ("the cluster minimum is lowered so two clusters become inference-grade",
+     "    return int(math.ceil(math.log2(2.0 / alpha)))", "    return 1"),
+    ("the attainable-p floor is computed as if games were the clusters",
+     "    return min(1.0, 2.0 / (2 ** k))", "    return 0.0"),
+    ("an unestablished cluster count is treated as sufficient",
+     "    if n_clusters is None:", "    if False:"),
+    ("clusters are counted as games",
+     '        k = len({r.get("slate_date") for r in rows if r.get("slate_date") is not None})',
+     "        k = len(rows)"),
+    ("the raw paired mean is suppressed along with the inference",
+     '            "mean_delta_brier": _raw_mean([r["delta_brier"] for r in rows]),',
+     '            "mean_delta_brier": None,'),
+    ("a NOT_EVALUABLE verdict is read as a passing result",
+     '    beats = {k: (v.get("beats_this_reference") is True) for k, v in refs.items()}',
+     '    beats = {k: bool(v.get("beats_this_reference")) for k, v in refs.items()}'),
+    ("a NOT_EVALUABLE interval is read as below zero",
+     '        "ok": bool(refs) and all(v.get("interval_entirely_below_zero") is True',
+     '        "ok": bool(refs) and all(v.get("interval_entirely_below_zero") or True'),
+    ("the two-cluster refusal stops naming the attainable floor",
+     'f"{smallest_attainable_p(n_clusters):.4f}, above alpha={alpha}. Inference "',
+     'f"a value, above alpha={alpha}. Inference "'),
     ("Holm applies no adjustment at all",
      "        adj = min(1.0, (m - rank) * pvalues[i])", "        adj = pvalues[i]"),
     ("Holm loses its monotonicity, so a later comparison can undercut an earlier one",
@@ -436,8 +598,7 @@ MUTANTS = [
      '    c["beats_every_reference"] = {"ok": bool(refs) and all(beats.values()),',
      '    c["beats_every_reference"] = {"ok": all(beats.values()),'),
     ("the Holm interval condition is dropped",
-     '        "ok": bool(refs) and all(v.get("interval_entirely_below_zero") for v in refs.values()),',
-     '        "ok": True,'),
+     '    c["holm_intervals_below_zero"] = {', '    c["holm_intervals_below_zero"] = {"ok": True, "_": {'),
     ("the AUC improvement requirement is removed",
      "REQUIRED_AUC_IMPROVEMENT = 0.010", "REQUIRED_AUC_IMPROVEMENT = -1.0"),
     ("AUC is compared against the WEAKEST reference instead of the best",

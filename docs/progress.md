@@ -3019,3 +3019,39 @@ rather than the fixtures weak — the retry-bound mutant hit the sleep guard ins
 and the sweep-fault mutant used a fault probe() catches internally. Repairing the second exposed a
 real defect: build_manifest's recovery path derived a host from the very input that had just broken,
 so the error handler could kill the sweep it existed to protect. Fixed and fixtured.
+
+## 2026-08-23T06:05Z — 8/22 CYCLE REVIEW
+Verdict: a cycle that produced NO settled results and SIX governance findings. The forecasting was
+the easy part; acquisition and evidence discipline is where the whole night happened.
+
+REGISTERED: MLB 3 of 15 (the other 12 had started), WNBA 2 of 3, NFL 1 benchmark-only. Chain 330/329.
+SETTLED: nothing. Two grades written then WITHDRAWN append-only. Six games pending, expiry 8/24 17:45Z.
+BETTING OUTPUT: zero, all night, across three price captures.
+
+SIX FINDINGS, four of them mine, three caught only because the owner supplied what I had got wrong:
+(1) treated "no owner board" as terminal and asked for screenshots — violating standing autonomy;
+(2) TIMEZONE ERROR, read PT as ET and nearly missed all three registrable MLB games;
+(3) FIRST-PITCH METADATA wrong by ~2-3h because I took start times from prose one turn after
+establishing prose is unreliable — registrations still valid but the recorded safety margin was
+overstated ten-fold; (4) STRUCTURAL: ingested tier-2 into the CANONICAL table and graded against it,
+caught by healthcheck in four minutes and fully reverted; (5) FIVE prior-day echoes, once four at
+once presented as "the final scores for August 22", all matching my own 8/21 rows exactly;
+(6) degenerate card build (date passed where results text was expected) — caught by me pre-registration
+because 15 identical park factors is not a plausible slate.
+
+MODEL, DIAGNOSTIC ONLY (4 of 6 never registered, 2 withdrawn pending tier-1): 1-5, mean Brier .27784,
+WORSE than flat-50%. Totals MAE 3.15, largest -5.2. Home went 4-2, so always-pick-home beats it 4-2
+to 1-5. Unsurprising: every starter slot was league-average CAP, so this was a park-and-HFA model
+performing like one.
+
+PRICE DISCIPLINE, and the contrast is the finding: WNBA aggregator +0.58%/+0.41% overround -> de-vig
+REFUSED; DraftKings NFL +4.75% and WNBA +4.23% -> de-vig VALID. Same evening, same code, opposite
+rulings, both mechanical. Substantively: ATL@PHX PHX +285 showed +14.20pp on the cross-book board
+where it could be dismissed as a shopping artifact, and +13.67pp on the clean single-book de-vig
+where it CANNOT. The edge survives clean data, which CONFIRMS the compression conflict rather than
+resolving it (>=5pp edges are 0-6 lifetime). Best row all night, CON +190, had an edge of 2.73pp —
+0.84 SD of the model's own noise, i.e. smaller than one standard deviation of the estimator producing it.
+
+SHIPPED: acquisition_ladder 15/15, echo_gate 7/7, sports_acquisition 24/24, retry_ladder 15/15,
+journal_continuity repaired 29/29, preflight wording corrected, daily_baselines repaired 74/74 and
+still quarantined. Record: docs/experiments/2026-08-22_CYCLE_REVIEW.json

@@ -2870,3 +2870,27 @@ Noted as a fragility in single-capture benchmark design.
 
 MLB: all three registered games were LIVE on this board, so the pregame price window has closed for
 them and the live prices shown are not used. CON@LAS also live. Betting output zero, ledger $0.
+
+## 2026-08-23T01:15Z — OWNER DISCRETION CARD: DAL + PHX, recorded WALLED
+Owner declared "DAL + PHX got it." Recorded prospectively in the owner discretion lane under OWNER
+attribution. NOT model output, NOT gate progress, NEVER settled against the model-authorized ledger,
+which stays 0 bets / $0 (7/25 precedent: discretion picks and EV rules never mix).
+
+BOTH LEGS PRE-START AT CAPTURE, verified against the owner's own 6:08 PM PT board which showed both
+games unstarted: DAL@ARI kicks 02:00Z (T-45m), ATL@PHX tips 02:10Z (T-55m).
+
+NULLS WITH REASONS rather than assumptions: price, market (ML vs spread), stake and structure (two
+singles vs a two-leg parlay) were all NOT_TRANSMITTED. Structure matters most because it changes the
+settlement arithmetic entirely, so it is left null rather than guessed. DK showed PHX +285 ML and PHX
++8.5 (-112); DAL moved -108 -> -118 between the two captures.
+
+MODEL POSITION STATED ONCE, so the lanes stay separable at settlement. PHX: the model LIKES the side
+and the GATE BLOCKS it — model .3859 vs a valid single-book de-vig .2492, +13.67pp, EV +48.6%, which
+is precisely what trips the compression gate, and >=5pp edges are 0-6 lifetime. The model's opinion
+and the model's own track record point opposite ways on this one. DAL: the model has NO VIEW at all —
+no NFL model exists, and the only NFL artifact is a capture-time market benchmark that took ARI
+before the line flipped to DAL.
+
+Settlement: both legs grade in the discretion lane on final scores. If structure, prices and stake
+arrive the record is amended append-only and settled in units; otherwise WIN/LOSS with P&L null and
+reason named. Record: data/owner_discretion/2026-08-22_owner_discretion_card.json

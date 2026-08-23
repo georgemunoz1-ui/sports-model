@@ -1,0 +1,38 @@
+{
+ "schema": "owner_discretion_card.v1",
+ "record_id": "OWNER-CARD-20260822-0115Z",
+ "captured_at_utc": "2026-08-23T01:15:00Z",
+ "received_from": "owner message: \"DAL + PHX got it.\"",
+ "source_tier": 1,
+ "source_family": "OWNER_DECLARATION",
+
+ "authority_wall": "OWNER PERSONAL DISCRETION. These are the owner's own units, selected by the owner's own reasoning. They are NOT model output, NOT model-authorized, NOT gate progress, and are NEVER settled against the model-authorized ledger, which remains $0 at 0 bets. Recorded prospectively for honest owner-attributed tracking only. 7/25 precedent: discretion picks and EV rules never mix, and mixing them poisons both records.",
+
+ "legs": [
+  {"leg": 1, "sport": "NFL", "sel": "DAL", "game": "DAL@ARI",
+   "kickoff_utc": "2026-08-23T02:00:00Z",
+   "price": null, "price_null_reason": "NOT_TRANSMITTED — the owner did not state a price, and the board moved between the two captures (DAL -108 at 01:04Z, DAL -118 at 01:08Z). Recording a price the owner did not give would be inventing one (R1).",
+   "market_null_reason": "NOT_TRANSMITTED — moneyline or spread not specified",
+   "stake_u": null, "stake_null_reason": "NOT_TRANSMITTED",
+   "prospective_at_capture": true, "minutes_before_start_at_capture": 45},
+  {"leg": 2, "sport": "WNBA", "sel": "PHX", "game": "ATL@PHX",
+   "tip_utc": "2026-08-23T02:10:00Z",
+   "price": null, "price_null_reason": "NOT_TRANSMITTED — DK showed PHX +285 moneyline and PHX +8.5 (-112) at 01:08Z; which one the owner took was not stated.",
+   "market_null_reason": "NOT_TRANSMITTED — moneyline or spread not specified",
+   "stake_u": null, "stake_null_reason": "NOT_TRANSMITTED",
+   "prospective_at_capture": true, "minutes_before_start_at_capture": 55}
+ ],
+ "structure": null,
+ "structure_null_reason": "NOT_TRANSMITTED — two singles or a two-leg parlay was not stated. This changes settlement arithmetic, so it is left null rather than assumed.",
+
+ "prospective_check": "BOTH LEGS PRE-START AT CAPTURE. DAL@ARI kicks 02:00Z (T-45m), ATL@PHX tips 02:10Z (T-55m). Verified against the owner's own 6:08 PM PT board, which showed both games unstarted.",
+
+ "MODEL_POSITION_ON_THESE_LEGS_stated_once_for_the_record": {
+  "purpose": "Recorded so the two lanes stay honestly separable at settlement. This is not a re-argument of the owner's decision, which is the owner's to make.",
+  "PHX": "The model LIKES this side and the GATE BLOCKS it. Model p(PHX) .3859 vs a valid single-book de-vig of .2492 — a +13.67pp edge, EV +48.6% at +285. That edge is exactly what trips the compression gate (market_conf .2508 - model_conf .1141 = 13.67pp), and the lifetime record of edges >=5pp is 0-6. The model's opinion and the model's own track record point in opposite directions here.",
+  "DAL": "The model has NO VIEW. No NFL model identity exists in the registry; Brier, log loss, edge and EV are null by rule. The only NFL artifact tonight is a MARKET_BENCHMARK_ONLY record that took ARI as the capture-time favourite at 01:04Z, before the line flipped to DAL at 01:08Z. That benchmark measures the market, not this pick, and it is not evidence for or against it."
+ },
+
+ "settlement_plan": "Both legs grade in the OWNER DISCRETION lane only, on final scores, recorded with owner attribution. Nothing enters data/mlb/forecasts/, data/wnba/forecasts/, the model grade chain, or the model-authorized ledger. If the owner supplies structure, prices and stake, the record is amended append-only and settled in units; without them the legs settle as WIN/LOSS outcomes with the P&L null and its reason named.",
+ "model_ledger_unchanged": "0 bets, $0. Wager authority NO, execution UNAUTHORIZED, gate 0/100 NO_PROMOTE."
+}

@@ -1,0 +1,301 @@
+{
+ "exhausted_at_utc": "2026-08-23T05:45:00Z",
+ "now_utc": "2026-08-23T05:57:02Z",
+ "retry_schedule": [
+  {
+   "attempt": 1,
+   "offset_minutes": 30,
+   "due_utc": "2026-08-23T06:15:00Z"
+  },
+  {
+   "attempt": 2,
+   "offset_minutes": 120,
+   "due_utc": "2026-08-23T07:45:00Z"
+  },
+  {
+   "attempt": 3,
+   "offset_minutes": 720,
+   "due_utc": "2026-08-23T17:45:00Z"
+  }
+ ],
+ "next_due_utc": "2026-08-23T06:15:00Z",
+ "all_retries_spent": false,
+ "expiry_utc": "2026-08-24T17:45:00Z",
+ "expired": false,
+ "scope": {
+  "routes": [
+   {
+    "host": "www.mlb.com",
+    "route": "/scores/2026-08-22",
+    "tool": "curl",
+    "prior_status": "HTTP_403_ORG_PROXY",
+    "prior_checked_utc": "2026-08-23T05:40:20Z"
+   },
+   {
+    "host": "www.mlb.com",
+    "route": "/gameday/823509",
+    "tool": "curl",
+    "prior_status": "HTTP_403_ORG_PROXY",
+    "prior_checked_utc": "2026-08-23T05:40:20Z"
+   },
+   {
+    "host": "www.mlb.com",
+    "route": "/gameday/mets-vs-white-sox/2026/08/22/824560/final/box",
+    "tool": "curl",
+    "prior_status": "HTTP_403_ORG_PROXY",
+    "prior_checked_utc": "2026-08-23T05:40:21Z"
+   },
+   {
+    "host": "statsapi.mlb.com",
+    "route": "/api/v1/schedule?sportId=1&date=2026-08-22",
+    "tool": "curl",
+    "prior_status": "HTTP_403_ORG_PROXY",
+    "prior_checked_utc": "2026-08-23T05:40:21Z"
+   },
+   {
+    "host": "statsapi.mlb.com",
+    "route": "/api/v1.1/game/824560/feed/live",
+    "tool": "curl",
+    "prior_status": "HTTP_403_ORG_PROXY",
+    "prior_checked_utc": "2026-08-23T05:40:21Z"
+   },
+   {
+    "host": "baseballsavant.mlb.com",
+    "route": "/gamefeed?date=8/22/2026",
+    "tool": "curl",
+    "prior_status": "HTTP_403_ORG_PROXY",
+    "prior_checked_utc": "2026-08-23T05:40:21Z"
+   },
+   {
+    "host": "www.nfl.com",
+    "route": "/scores/2026/PRE2",
+    "tool": "curl",
+    "prior_status": "HTTP_403_ORG_PROXY",
+    "prior_checked_utc": "2026-08-23T05:40:21Z"
+   },
+   {
+    "host": "www.nfl.com",
+    "route": "/games/cowboys-at-cardinals-2026-pre-2",
+    "tool": "curl",
+    "prior_status": "HTTP_403_ORG_PROXY",
+    "prior_checked_utc": "2026-08-23T05:40:22Z"
+   },
+   {
+    "host": "www.wnba.com",
+    "route": "/schedule",
+    "tool": "curl",
+    "prior_status": "HTTP_403_ORG_PROXY",
+    "prior_checked_utc": "2026-08-23T05:40:22Z"
+   },
+   {
+    "host": "www.wnba.com",
+    "route": "/game/atl-vs-pho-1022600300",
+    "tool": "curl",
+    "prior_status": "HTTP_403_ORG_PROXY",
+    "prior_checked_utc": "2026-08-23T05:40:22Z"
+   },
+   {
+    "host": "www.wnba.com",
+    "route": "/game/atl-vs-pho-1022600300/box-score",
+    "tool": "curl",
+    "prior_status": "HTTP_403_ORG_PROXY",
+    "prior_checked_utc": "2026-08-23T05:40:22Z"
+   },
+   {
+    "host": "lookup-service-prod.mlb.com",
+    "route": "/json/named.wsfb_news_browse.bam",
+    "tool": "curl",
+    "prior_status": "HTTP_403_ORG_PROXY",
+    "prior_checked_utc": "2026-08-23T05:43:28Z"
+   },
+   {
+    "host": "docs.statsapi.mlb.com",
+    "route": "/login",
+    "tool": "curl",
+    "prior_status": "HTTP_403_ORG_PROXY",
+    "prior_checked_utc": "2026-08-23T05:43:28Z"
+   }
+  ],
+  "games": [
+   "ATL@MIL",
+   "WSH@MIA",
+   "LAA@TEX",
+   "ATH@HOU",
+   "NYM@CWS",
+   "DET@KC",
+   "PIT@LAD",
+   "SF@BOS",
+   "CIN@AZ",
+   "CON@LAS (WNBA)",
+   "ATL@PHX (WNBA)",
+   "DAL@ARI (NFL)",
+   "TOR@NYY",
+   "STL@PHI",
+   "TB@BAL",
+   "CHC@SEA",
+   "MIN@SD",
+   "CLE@COL"
+  ],
+  "excluded_reachable_routes": 2,
+  "excluded_non_tier1_routes": 6
+ },
+ "dispositions": [
+  {
+   "game": "ATL@MIL",
+   "state": "PENDING_TIER1_CONFIRMATION",
+   "may_grade": false,
+   "reason": "retry ladder still open",
+   "expires_utc": "2026-08-24T17:45:00Z"
+  },
+  {
+   "game": "WSH@MIA",
+   "state": "PENDING_TIER1_CONFIRMATION",
+   "may_grade": false,
+   "reason": "retry ladder still open",
+   "expires_utc": "2026-08-24T17:45:00Z"
+  },
+  {
+   "game": "LAA@TEX",
+   "state": "PENDING_TIER1_CONFIRMATION",
+   "may_grade": false,
+   "reason": "retry ladder still open",
+   "expires_utc": "2026-08-24T17:45:00Z"
+  },
+  {
+   "game": "ATH@HOU",
+   "state": "PENDING_TIER1_CONFIRMATION",
+   "may_grade": false,
+   "reason": "retry ladder still open",
+   "expires_utc": "2026-08-24T17:45:00Z"
+  },
+  {
+   "game": "NYM@CWS",
+   "state": "PENDING_TIER1_CONFIRMATION",
+   "may_grade": false,
+   "reason": "retry ladder still open",
+   "expires_utc": "2026-08-24T17:45:00Z"
+  },
+  {
+   "game": "DET@KC",
+   "state": "PENDING_TIER1_CONFIRMATION",
+   "may_grade": false,
+   "reason": "retry ladder still open",
+   "expires_utc": "2026-08-24T17:45:00Z"
+  },
+  {
+   "game": "PIT@LAD",
+   "state": "PENDING_TIER1_CONFIRMATION",
+   "may_grade": false,
+   "reason": "retry ladder still open",
+   "expires_utc": "2026-08-24T17:45:00Z"
+  },
+  {
+   "game": "SF@BOS",
+   "state": "PENDING_TIER1_CONFIRMATION",
+   "may_grade": false,
+   "reason": "retry ladder still open",
+   "expires_utc": "2026-08-24T17:45:00Z"
+  },
+  {
+   "game": "CIN@AZ",
+   "state": "PENDING_TIER1_CONFIRMATION",
+   "may_grade": false,
+   "reason": "retry ladder still open",
+   "expires_utc": "2026-08-24T17:45:00Z"
+  },
+  {
+   "game": "CON@LAS (WNBA)",
+   "state": "PENDING_TIER1_CONFIRMATION",
+   "may_grade": false,
+   "reason": "retry ladder still open",
+   "expires_utc": "2026-08-24T17:45:00Z"
+  },
+  {
+   "game": "ATL@PHX (WNBA)",
+   "state": "PENDING_TIER1_CONFIRMATION",
+   "may_grade": false,
+   "reason": "retry ladder still open",
+   "expires_utc": "2026-08-24T17:45:00Z"
+  },
+  {
+   "game": "DAL@ARI (NFL)",
+   "state": "PENDING_TIER1_CONFIRMATION",
+   "may_grade": false,
+   "reason": "retry ladder still open",
+   "expires_utc": "2026-08-24T17:45:00Z"
+  },
+  {
+   "game": "TOR@NYY",
+   "state": "PENDING_TIER1_CONFIRMATION",
+   "may_grade": false,
+   "reason": "retry ladder still open",
+   "expires_utc": "2026-08-24T17:45:00Z"
+  },
+  {
+   "game": "STL@PHI",
+   "state": "PENDING_TIER1_CONFIRMATION",
+   "may_grade": false,
+   "reason": "retry ladder still open",
+   "expires_utc": "2026-08-24T17:45:00Z"
+  },
+  {
+   "game": "TB@BAL",
+   "state": "PENDING_TIER1_CONFIRMATION",
+   "may_grade": false,
+   "reason": "retry ladder still open",
+   "expires_utc": "2026-08-24T17:45:00Z"
+  },
+  {
+   "game": "CHC@SEA",
+   "state": "PENDING_TIER1_CONFIRMATION",
+   "may_grade": false,
+   "reason": "retry ladder still open",
+   "expires_utc": "2026-08-24T17:45:00Z"
+  },
+  {
+   "game": "MIN@SD",
+   "state": "PENDING_TIER1_CONFIRMATION",
+   "may_grade": false,
+   "reason": "retry ladder still open",
+   "expires_utc": "2026-08-24T17:45:00Z"
+  },
+  {
+   "game": "CLE@COL",
+   "state": "PENDING_TIER1_CONFIRMATION",
+   "may_grade": false,
+   "reason": "retry ladder still open",
+   "expires_utc": "2026-08-24T17:45:00Z"
+  }
+ ],
+ "evidence_preserved": true,
+ "grading_permitted": false,
+ "grading_rule": "settle and grade ONLY after tier-1 confirmation",
+ "record_id": "RETRY-LADDER-2026-08-22",
+ "preserved_evidence": {
+  "capability_manifest": "data/audit/2026-08-22_capability_manifest.json",
+  "acquisition_report": "data/audit/2026-08-22_acquisition_report.json",
+  "online_finals_evidence": "data/mlb/evidence/2026-08-22_online_finals_evidence.json",
+  "note": "Untouched by exhaustion. Six title-corroborated finals remain held as tier-3 evidence."
+ },
+ "scheduled_triggers": [
+  {
+   "attempt": 1,
+   "due_utc": "2026-08-23T06:15:00Z",
+   "fire_at": "2026-08-23T06:16:00Z",
+   "trigger_id": "trig_017hCTRnfLLkLhRHVEWPqCAh"
+  },
+  {
+   "attempt": 2,
+   "due_utc": "2026-08-23T07:45:00Z",
+   "fire_at": "2026-08-23T07:46:00Z",
+   "trigger_id": "trig_01DfcEMWXGnB1Nv7hHEGS2kc"
+  },
+  {
+   "attempt": 3,
+   "due_utc": "2026-08-23T17:45:00Z",
+   "fire_at": "2026-08-23T17:46:00Z",
+   "trigger_id": "trig_01FKqbqBZA4nbeFLnDuAUw6F"
+  }
+ ],
+ "scheduling_note": "Three triggers armed, one per rung. There is no fourth: the ladder is bounded by RETRY_OFFSETS_MIN and a mutant asserting a fourth rung is killed by fixture."
+}

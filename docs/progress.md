@@ -2987,3 +2987,35 @@ redundancy rather than faked with a mutant that appears to kill (lesson 23 corol
 VERIFIED FINALS remain 6 of 15, all EVIDENCE ONLY: TOR 4-NYY 3, STL 3-PHI 12, TB 2-BAL 3, CHC 4-SEA 5,
 MIN 5-SD 7, CLE 4-COL 3. The nine others, both WNBA games and DAL@ARI are genuinely not published
 with finals in any reachable source.
+
+## 2026-08-23T05:58Z — ACQUISITION_EXHAUSTED handled: evidence preserved, 3 retries armed, 36h clock running
+Owner ruling on exhaustion implemented as harness/retry_ladder.py (15/15 mutants killed) and armed
+with three real triggers.
+
+PRESERVE: nothing was discarded. The capability manifest, the 7-section acquisition report and the
+six title-corroborated finals all survive exhaustion untouched, held as tier-3 evidence.
+
+SCHEDULE: +30m 06:15Z (trig_017hCTRnfLLk), +2h 07:45Z (trig_01DfcEMWXGnB), +12h 17:45Z
+(trig_01FKqbqBZA4n). Exactly three rungs; a mutant adding a fourth is killed by fixture.
+
+NARROW: each retry probes 13 previously-failed TIER-1 routes only. Excluded by rule: the 2
+already-reachable routes (nothing to gain) and the 6 non-tier-1 routes (they can never produce a
+canonical settlement, so retrying them cannot change the outcome that matters). 18 unresolved games
+carried forward; any resolved between rungs drops out of scope.
+
+APPEND: capability observations are append-only. A later probe adds a record and records how many
+priors it follows; it never edits the earlier one. Overwriting would erase the outage itself, which
+is the very thing a retry ladder exists to document. Fixtured both ways.
+
+GRADE LATE: grading_permitted is False and stays False until tier-1 confirmation. A tier-1 result
+arriving AFTER expiry still settles — expiry bounds guessing, not the acceptance of real official
+evidence. That asymmetry is fixtured.
+
+EXPIRE: 2026-08-24T17:45Z. Anything unconfirmed then becomes UNRESOLVED_SOURCE_GAP — a named
+permanent disposition, explicitly "not graded, not guessed, and not silently dropped".
+
+Also completed: sports_acquisition mutation suite finished 24/24 killed. Two mutants had been BROKEN
+rather than the fixtures weak — the retry-bound mutant hit the sleep guard instead of the range(),
+and the sweep-fault mutant used a fault probe() catches internally. Repairing the second exposed a
+real defect: build_manifest's recovery path derived a host from the very input that had just broken,
+so the error handler could kill the sweep it existed to protect. Fixed and fixtured.

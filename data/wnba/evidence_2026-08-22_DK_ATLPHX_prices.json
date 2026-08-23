@@ -1,0 +1,29 @@
+{
+ "record_id": "WNBA-DK-PRICE-CAPTURE-20260822-ATL@PHX",
+ "schema": "wnba.owner_price_board.v1",
+ "captured_at_utc": "2026-08-23T01:08:00Z",
+ "device_clock_shown": "6:08 PM PT",
+ "book": "DraftKings",
+ "source_tier": 1, "source_family": "OWNER_SOURCE_PIXELS",
+ "PRICE_BASIS": "SAME_BOOK_TWO_SIDED — DE-VIG VALID. Overround +4.23% on the moneyline, a genuine single-book vig. The 00:30Z aggregator capture of the same game carried +0.41% and was refused for de-vig.",
+ "game_state_at_capture": "ATL@PHX NOT YET TIPPED, board shows Today 7:10 PM (= 2026-08-23T02:10Z). Registered forecast predates this capture by 72 minutes.",
+ "tip_correction": "The registered card recorded tip 02:00Z; the DK board shows 7:10 PM PT = 02:10Z. Ten-minute correction, recorded append-only; the registration remains comfortably pre-tip either way.",
+ "markets": {
+  "moneyline": {"ATL": -360, "PHX": 285, "overround_pct": 4.23, "devig": {"ATL": 0.7508, "PHX": 0.2492}},
+  "spread": {"ATL": {"line": -8.5, "price": -108}, "PHX": {"line": 8.5, "price": -112}},
+  "total": {"line": 176.5, "over": -108, "under": -112}
+ },
+ "SCREEN_RESULT": {
+  "model_p_phx": 0.3859, "devig_market_p_phx": 0.2492, "raw_edge_pp": 13.67,
+  "ev_per_unit_phx_285": 0.4857,
+  "compression": "market_conf 0.2508 - model_conf 0.1141 = 13.67pp -> GATE FIRES",
+  "status": "COMPRESSION_CONFLICT — AUDIT_REQUIRED",
+  "WHY_THIS_MATTERS": "The earlier +14.20pp reading sat on a CROSS-BOOK aggregator board and could legitimately be dismissed as a best-odds shopping artifact. On a clean single-book de-vig the edge is +13.67pp — it SURVIVES. The model genuinely disagrees with DraftKings by that margin. That does not make it a bet: edges >= 5pp are 0-6 lifetime, so the conflict is CONFIRMED on clean data rather than resolved by it. The correct reading is that the model is probably wrong about this game and the clean price removes the excuse that the signal was an artifact.",
+  "ats": "home_cover_delta = -3.58 + 8.5 = +4.92 spread points -> PHX, the market DOG -> MARGIN_COMPRESSION_BLOCK",
+  "total": "line 176.5 vs model 170.5, model 6.0 under. DIAGNOSTIC ONLY, hard-blocked from recommendation language."
+ },
+ "other_wnba_games_on_board": {
+  "IND@NYL": "LIVE, 4th quarter 0:20, 100-105. Never registered (tipped 23:00Z).",
+  "CON@LAS": "LIVE, 1st quarter 8:16, CON 2 LAS 5. Registered pre-tip at T-27m; pregame screen window closed, live prices not used."
+ }
+}

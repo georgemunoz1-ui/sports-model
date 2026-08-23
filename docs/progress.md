@@ -2836,3 +2836,37 @@ alternates carry ~40% more vig than the main lines (+6.52% vs +4.62-4.75%) for m
 point.
 
 Betting output zero, ledger $0. Evidence: data/nfl/evidence_2026-08-22_DK_DALARI_prices.json
+
+## 2026-08-23T01:10Z — DK multi-sport board: a metadata defect caught by the owner, and a confirmed compression conflict
+FIRST-PITCH METADATA DEFECT, self-reported. The board showed CIN@AZ live in the 4th and CLE@COL live
+in the 4th at 01:07Z. I had registered them with first_pitch_utc 03:10Z and 02:10Z — refuted
+outright, since a game cannot be in the 4th two hours before it starts. Back-projecting from the
+live state: CIN@AZ actually started 00:19-00:28Z, CLE@COL 00:08-00:19Z, MIN@SD 00:45-00:49Z.
+REGISTRATIONS REMAIN VALID — all three were appended at 23:56:22Z, earlier than the earliest
+reconstructed first pitch, so no post-start registration occurred. That was checked first. What is
+wrong is the PROVENANCE: recorded margins of T-134m and T-194m against true margins of roughly T-12m
+and T-23m, a ten-fold overstatement of the safety margin. ROOT CAUSE: I took the start times from
+search PROSE one turn after establishing that prose is unreliable and per-game title/venue
+corroboration is the method — and applied prose to the most timing-critical field in the pipeline.
+No gate caught it because the defect is in the evidence, not the arithmetic; only an external
+observation did. Record: docs/experiments/2026-08-22_FIRST_PITCH_METADATA_CORRECTION.json
+
+ATL@PHX SCREENED ON A VALID DE-VIG, and this is the substantive finding. DK single book, both sides,
+still pre-tip (7:10 PM PT = 02:10Z, a 10-minute correction to the registered 02:00Z). Overround
++4.23% — a real single-book vig, so DE-VIG IS VALID here where the 00:30Z aggregator board (+0.41%)
+was refused. De-vigged ATL .7508 / PHX .2492 against model PHX .3859 = +13.67pp edge, EV +48.6% on
+PHX +285. THE EARLIER READING SURVIVES CLEAN DATA: the +14.20pp cross-book figure could be dismissed
+as a best-odds shopping artifact; +13.67pp on a single-book de-vig cannot. The model genuinely
+disagrees with DraftKings by that margin. That CONFIRMS the compression conflict rather than
+resolving it — edges >=5pp are 0-6 lifetime, so the honest reading is that the model is probably
+wrong about this game and the clean price has removed the artifact excuse. Status unchanged:
+COMPRESSION_CONFLICT, AUDIT_REQUIRED, no bet. ATS PHX +8.5 still MARGIN_COMPRESSION_BLOCK (dog read).
+Total 176.5 vs model 170.5, diagnostic only.
+
+NFL LINE FLIP: DAL@ARI moved from ARI -1.5 / DAL -108 at 01:04Z to DAL -1.5 / DAL -118 at 01:08Z —
+a full favourite flip in five minutes, 55 minutes before kickoff. The registered benchmark took ARI
+as the CAPTURE-TIME favourite and is not revised to chase the move; the move is recorded separately.
+Noted as a fragility in single-capture benchmark design.
+
+MLB: all three registered games were LIVE on this board, so the pregame price window has closed for
+them and the live prices shown are not used. CON@LAS also live. Betting output zero, ledger $0.

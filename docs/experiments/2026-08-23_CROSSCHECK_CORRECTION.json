@@ -1,0 +1,72 @@
+{
+ "record_id": "REFV2-CROSSCHECK-CORRECTION-2026-08-23",
+ "created_utc": "2026-08-23T11:40:00Z",
+ "authority": "adversarial verification of my own cross-check, four independent agents",
+ "why_this_exists": "I reported four conclusions about the owner's Reference v2 card. Three were wrong. They are corrected here rather than in the earlier commit message, which stands as written (R6).",
+ "WITHDRAWN_1_registry_depth": {
+  "what_I_said": "Nine of fifteen doses disagree and the mechanism is registry depth.",
+  "verdict": "REFUTED",
+  "why": "The owner's dose is reproduced EXACTLY, 15 of 15, by a binary weight rule on their own hardcoded table: dose = (slots with starter_weight > 0) / 2, read straight out of data/reference/2026-08-23_reference_sim_output.json. reference_sim.py lines 41-57 carry the literal 'None, 0' for BOTH slots of STL@PHI, WSH@MIA, TB@BAL, DET@KC, CLE@COL and MIN@SD — precisely their six 0.0 games.",
+  "the_decisive_argument": "A thinner registry can only LOWER a dose. The owner's dose EXCEEDS mine on PIT@LAD (1.0 vs 0.0) and NYM@CWS (1.0 vs 0.5). Disagreement in both directions cannot be produced by monotone thinness. Brute-forcing every games-started threshold T in 0..39 for dose=(slots with gs>=T)/2 reproduces the owner's vector at NO value of T: ATH@HOU (gs 7 and 4) scores 1.0 while MIN@SD (gs 14 and 20) scores 0.0, so no single cutoff can order them. Pearson r between the two dose vectors is -0.07.",
+  "what_it_actually_is": "A differently-populated table, not a shallower one. Recovering implied gs from weight = gs/(gs+10): the reference carries gs=26 for Abbott (repo 20), 25 for Soriano (20), 25 for Imanaga (20), 25 for McLean (20), 21 for Mahle (15), 8 for Bratt (2) — while carrying NOTHING at all for Valdez, Buehler, Sanchez, Baz, Sugano and Martinez. A registry cannot be missing Valdez and Buehler while inflating Bratt fourfold."
+ },
+ "WITHDRAWN_2_not_a_classifier_difference": {
+  "what_I_said": "...not by a classifier difference.",
+  "verdict": "REFUTED",
+  "why": "There IS one, and it drives exactly the two games my claim leaned on. information_class.LOW_SAMPLE_GS = 2 excludes a one-start pitcher from the resolved numerator; the reference's rule is binary weight>0, so a one-start line counts as full information. That is the whole of the PIT@LAD (Snell gs=1) and NYM@CWS (Newcomb gs=1) divergence.",
+  "what_survives": "The substantive point stands on its own evidence: a one-start line is not full information. It is simply a classifier disagreement, which is what I denied."
+ },
+ "WITHDRAWN_3_no_mlb_board_on_disk": {
+  "what_I_said": "The MLB market column has no counterpart on disk.",
+  "verdict": "FALSE",
+  "where_it_is": "data/reference/2026-08-23_reference_README.md, section '## MLB board audit', a committed tracked file I had already read. PHI -210, LAD -301 and BOS -231 — the three prices I singled out as unverifiable — all match verbatim, as do the other twelve and every total.",
+  "how_I_missed_it": "I looked in data/mlb/odds/ and in the uploaded novig_market_board.json, concluded from those two that no board existed, and did not re-read the README section I had already opened."
+ },
+ "WITHDRAWN_4_wnba_different_models": {
+  "what_I_said": "Different models, so the disagreeing WNBA probabilities are not a contradiction.",
+  "verdict": "REFUTED",
+  "why": "The reference's four WNBA probabilities are HARDCODED LITERALS at reference_sim.py lines 60-65: p_home 0.682646 / 0.302283 / 0.225150 / 0.475263, reprinted verbatim in the README. The RNG in that loop touches only margin and total; the winner probability is never simulated. And the model id the README attributes them to, wnba.rs.fourfactor_logit_ridge.v0_5.shadow, has exactly ONE occurrence in the entire repository — that README line itself. It resolves to no source, no pin, no artifact.",
+  "correct_framing": "One registered WNBA model (wnba.rs.ff7_logit_ridge.v1_0.shadow, which produces DAL .7491 when run today) versus four typed-in constants. 'Different model' cannot exculpate a gap when the second side is not a model output at all."
+ },
+ "UPHELD_sha_unverifiable": {
+  "claim": "Card SHA 6fd05e87021e92092744f2bd3aa87c984bd9f359fee6bb3424d3ddf85a6430cf matches nothing in this repository.",
+  "verdict": "CONFIRMED, exhaustively",
+  "method": "all 1310 non-.git files hashed; each re-hashed in 5 byte variants (raw, strip, rstrip-newline, plus-newline, CRLF); every parseable json/jsonl re-serialised 10 ways (sort_keys x indent 1/2/compact x ensure_ascii); all 2181 git blobs including unreachable and dangling objects. Zero matches. The literal string and four 8-char fragments of it appear nowhere in the tree, including .git."
+ },
+ "NEW_FINDING_board_overround_is_bimodal": {
+  "test": "the standing same-book test: one book runs about +4-6%, cross-book best-odds +0.4-0.6%",
+  "result": {
+   "mean": "3.29%",
+   "min": "1.64%",
+   "max": "4.75%",
+   "n": 15
+  },
+  "the_split": {
+   "same_book_plausible_4.5_to_4.8pct": [
+    "PIT@LAD 4.56",
+    "CIN@ARI 4.62",
+    "ATL@MIL 4.60",
+    "LAA@TEX 4.53",
+    "SF@BOS 4.51",
+    "CLE@COL 4.62",
+    "MIN@SD 4.68",
+    "CHC@SEA 4.75"
+   ],
+   "too_tight_for_one_book_1.6_to_2.0pct": [
+    "STL@PHI 1.64",
+    "WSH@MIA 1.74",
+    "TB@BAL 1.67",
+    "TOR@NYY 1.71",
+    "DET@KC 1.95",
+    "ATH@HOU 1.79",
+    "NYM@CWS 1.92"
+   ]
+  },
+  "reading": "A genuine single-book board is homogeneous in overround. This one is BIMODAL: eight rows sit in the single-book band and seven sit near 1.7%, which is too tight for one book and too wide for pure best-odds. Under the 2026-08-03 ruling the seven tight rows do not clear the same-book bar and their de-vig is INVALID for market probability — single-price EV screening only. The eight wide rows pass.",
+  "note": "This is the check I should have run instead of asserting the board did not exist."
+ },
+ "MY_DEFECTS_CONFIRMED": [
+  "The committed three-arm card stamped a card-level dose of 0.80 on all 15 rows AND a flat information_class of PARTIAL_STARTER_INFORMATION. The class was the more consequential half: grading_keys keys on it, and it granted PIT@LAD — a true ALL_CAP game — GATE_GOVERNED authority where ALL_CAP_BASELINE maps to NONE. Both are fixed in the current card.",
+  "ATL@MIL was given Milwaukee's park factor at a neutral site. Fixed; all three arms blocked."
+ ]
+}

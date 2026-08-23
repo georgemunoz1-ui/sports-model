@@ -1,0 +1,52 @@
+{
+ "record_id": "FORECAST-CONTRACT-2026-08-23",
+ "created_utc": "2026-08-23T08:10:00Z",
+ "authority": "owner binding standard 2026-08-23",
+ "the_standard": "Generate forecast -> Register and seal -> Apply gates -> Render action status -> Grade the sealed forecast regardless of action status. None becomes a blank row.",
+ "status": "IMPLEMENTED AND WIRED (harness/forecast_contract.py, 25/25 mutants). Independent review not yet run. Our own model has not yet been re-run through it.",
+ "why_this_is_a_real_defect_not_a_presentation_preference": "On 2026-08-22 this system produced ZERO gradeable rows for six games because their gates fired, and the gates ran BEFORE registration. The consequence is not a sparse card — it is that the model was never scored on those games. A model whose hardest rows silently vanish from its own record accumulates a scorebook made only of the games it felt confident about, and every summary statistic computed from it is conditioned on the model's own confidence. That is unfalsifiable by construction.",
+ "design": {
+  "two_statuses": "forecast_status answers 'was a forecast produced'; action_status answers 'may anything be done about it'. FORECAST_STATUSES has exactly one member, so there is no value that means 'suppressed'.",
+  "sealing": "gates run against a SEALED forecast whose hash deliberately EXCLUDES action_status. A gate may render an action status and nothing else; assert_only_action_changed names any sealed field a gate touched.",
+  "no_blank_rows": "validate_card fails when a SCHEDULED game emits no row at all, when a row appears for an unscheduled game, and when one game appears twice.",
+  "the_three_fallbacks": {
+   "MISSING_STARTER": "REGISTERED_CAP_FORECAST",
+   "STALE_STATE": "FROZEN_STATE_FORECAST",
+   "NEUTRAL_SITE_UNCERTAINTY": "OUT_OF_DOMAIN_FORECAST"
+  }
+ },
+ "independent_verification_of_the_owner_artifacts": {
+  "deterministic_sha256": {
+   "claimed": "8d8cee922a4e930367ddd801b871be564f41edca6199f0d089a6084cc6af72d4",
+   "reproduced": "8d8cee922a4e930367ddd801b871be564f41edca6199f0d089a6084cc6af72d4",
+   "match": true,
+   "environment": "independent checkout, numpy 2.4.6",
+   "note": "byte-identical stdout including the trailing newline"
+  },
+  "self_test_claim": {
+   "claimed": "PASS - 20/20 games forecasted",
+   "verified": "PASS - 20/20 games forecasted",
+   "detail": "MLB 15 + WNBA 4 + NFL 1; every row carries a winner probability, a total forecast, and (WNBA/NFL) an ATS forecast; seed 20260823; 100,000 trials"
+  },
+  "forecast_status_uniformity": "all 20 rows FORECAST_REGISTERED; action_status takes six distinct values including five blocked ones. The separation holds.",
+  "market_not_a_predictive_input": {
+   "claimed": false,
+   "verified": true,
+   "how": "grepped the source: market lines appear only as total_line and market_home_spread, i.e. the line an estimand is SCORED AGAINST, never inside a winner probability. The declaration market_data_used_as_predictive_input=false is mechanically true."
+  },
+  "against_the_contract_it_defines": "PASS - 20/20 gradeable, 5 action-blocked, 0 contract failures"
+ },
+ "one_gap_worth_naming": "The binding standard requires 'information class and resolved-information dose' on every row. The reference card carries a model_class but no NUMERIC dose. That is fair for a reference baseline, and it is a field our model must emit — information_class.py already computes starter_information_fraction, so the value exists and only needs threading through.",
+ "the_nfl_selection": "TEN ML -170 at 0.5u is classified INFORMATION_ADJUSTED_PRESEASON_BASELINE with trained_model_output=false, and its stated basis is announced rotation information, not the price. Under the 2026-07-25 precedent this is OWNER DISCRETION: it is walled from model output, does not touch the model ledger, and is not counted in any model evaluation. Recorded as such.",
+ "what_this_does_not_do": [
+  "It does not re-run our own model. The 8/23 card has not been produced through this contract yet.",
+  "It changes no registered forecast, grade or ledger row.",
+  "Nothing is promoted. Gate 0/100 NO_PROMOTE, ledger $0, execution UNAUTHORIZED, wager NO."
+ ],
+ "artifacts_preserved": [
+  "data/reference/2026-08-23_reference_sim.py",
+  "data/reference/2026-08-23_reference_README.md",
+  "data/reference/2026-08-23_novig_market_board.json",
+  "data/reference/2026-08-23_reference_sim_output.json"
+ ]
+}

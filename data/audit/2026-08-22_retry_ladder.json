@@ -297,5 +297,86 @@
    "trigger_id": "trig_01FKqbqBZA4nbeFLnDuAUw6F"
   }
  ],
- "scheduling_note": "Three triggers armed, one per rung. There is no fourth: the ladder is bounded by RETRY_OFFSETS_MIN and a mutant asserting a fourth rung is killed by fixture."
+ "scheduling_note": "Three triggers armed, one per rung. There is no fourth: the ladder is bounded by RETRY_OFFSETS_MIN and a mutant asserting a fourth rung is killed by fixture.",
+ "retry_observations": [
+  {
+   "retry": 2,
+   "of": 3,
+   "ran_utc": "2026-08-23T07:50:00Z",
+   "trigger": "scheduled routine 'Acquisition retry +2h (8/22 slate)'",
+   "scope": "unchanged from retry 1: 13 failed tier-1 routes, 18 unresolved games",
+   "NEW_CAPABILITY_OBSERVATIONS": [
+    {
+     "host": "www.mlb.com",
+     "route": "/gameday/{slug}/2026/08/22/{pk}",
+     "tool": "WebFetch",
+     "network_status": "HTTP_403_ORG_PROXY",
+     "content_status": "NOT_APPLICABLE",
+     "verbatim_proof": "Access to www.mlb.com is blocked by the network egress proxy.",
+     "checked_utc": "2026-08-23T07:49:00Z",
+     "note": "FIRST TIME WebFetch was tested against this host. Previously only curl had been probed there. The two tools are separate capabilities and this is recorded as a new observation, not inferred from the curl result."
+    },
+    {
+     "host": "www.mlb.com",
+     "route": "search index over /gameday/* titles",
+     "tool": "WebSearch",
+     "network_status": "HTTP_2XX",
+     "content_status": "DATA_EXTRACTED",
+     "checked_utc": "2026-08-23T07:48:00Z",
+     "note": "WebSearch REACHES what WebFetch cannot. Six 2026-08-22 finals now carry an official MLB.com Gameday title binding the score and the date in one string. The index had not caught up at retry 1."
+    }
+   ],
+   "titles_recovered": [
+    {
+     "game": "STL@PHI",
+     "title": "MLB Gameday: Cardinals 3, Phillies 12 Final Score (08/22/2026)",
+     "url": "https://www.mlb.com/gameday/cardinals-vs-phillies/2026/08/22/823422"
+    },
+    {
+     "game": "TOR@NYY",
+     "title": "MLB Gameday: Blue Jays 4, Yankees 3 Final Score (08/22/2026)",
+     "url": "https://www.mlb.com/gameday/blue-jays-vs-yankees/2026/08/22/823509/final"
+    },
+    {
+     "game": "TB@BAL",
+     "title": "MLB Gameday: Rays 2, Orioles 3 Final Score (08/22/2026)",
+     "url": "https://www.mlb.com/gameday/rays-vs-orioles/2026/08/22/824798"
+    },
+    {
+     "game": "CHC@SEA",
+     "title": "MLB Gameday: Cubs 4, Mariners 5 Final Score (08/22/2026)",
+     "url": "https://www.mlb.com/gameday/823100/final/video"
+    },
+    {
+     "game": "PIT@LAD",
+     "title": "MLB Gameday: Pirates 3, Dodgers 4 Final Score (08/22/2026)",
+     "url": "https://www.mlb.com/gameday/pirates-vs-dodgers/2026/08/22/823910"
+    },
+    {
+     "game": "CLE@COL",
+     "title": "MLB Gameday: Guardians 4, Rockies 3 Final Score (08/22/2026)",
+     "url": "https://www.mlb.com/gameday/guardians-vs-rockies/2026/08/22/824316/final/wrap"
+    }
+   ],
+   "echo_gate": "6 of 6 screened, 0 refused, all NO_ECHO against the graded 8/21 registry",
+   "SETTLED_THIS_RETRY": 0,
+   "why_not_settled": "The standing rule is that SEARCH SNIPPETS ARE NEVER CANONICAL EVIDENCE, and a title in a search listing is a snippet. The CONTENT originates from a tier-1 host, but the DELIVERY is a tier-3 index, and delivery governs. The one tool that could make these canonical — WebFetch against the Gameday page itself — is blocked by the org egress proxy with verbatim proof. So this is materially better evidence than retry 1 produced and it still does not clear the bar. Six games move from NO_EVIDENCE to TIER1_TITLE_EVIDENCE_PENDING_CANONICAL_DELIVERY; none is graded.",
+   "still_unresolved_after_retry_2": 12,
+   "remaining": [
+    "ATL@MIL",
+    "WSH@MIA",
+    "LAA@TEX",
+    "ATH@HOU",
+    "NYM@CWS",
+    "DET@KC",
+    "SF@BOS",
+    "CIN@AZ",
+    "MIN@SD",
+    "CON@LAS (WNBA)",
+    "ATL@PHX (WNBA)",
+    "DAL@ARI (NFL)"
+   ],
+   "next_retry": "3 of 3 at 2026-08-23T17:45Z; expiry 2026-08-24T17:45Z -> UNRESOLVED_SOURCE_GAP"
+  }
+ ]
 }

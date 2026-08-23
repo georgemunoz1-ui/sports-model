@@ -3200,3 +3200,42 @@ drift monitor's "healthy window" fixture was not healthy — probabilities assig
 it a bad calibration slope and a confounded directional gap, and it fired alarms on its own tail.
 Seven decorative rules across five modules now have isolating fixtures.
 Record: docs/experiments/2026-08-23_ADAPTIVE_LEARNING.json
+
+## 2026-08-23 (4) — Retry 2, and the owner's binding forecast contract
+
+RETRY 2 of 3 (07:50Z). THE SEARCH INDEX CAUGHT UP: six 8/22 finals now carry an official MLB.com
+Gameday title binding score AND date in one string — STL@PHI 3-12, TOR@NYY 4-3, TB@BAL 2-3,
+CHC@SEA 4-5, PIT@LAD 3-4, CLE@COL 4-3. All six pass echo_gate against the graded 8/21 registry.
+NONE SETTLED: a title in a search listing is a snippet, and snippets are never canonical. The
+content is tier-1; the DELIVERY is a tier-3 index, and delivery governs. The one tool that could
+make them canonical — WebFetch on the Gameday page — returned EGRESS_BLOCKED with verbatim proxy
+proof. Six games move NO_EVIDENCE -> TIER1_TITLE_EVIDENCE_PENDING_CANONICAL_DELIVERY. 12 still
+unresolved. Retry 3 at 17:45Z; expiry 8/24 17:45Z.
+NEW CAPABILITY OBSERVATION, and it is the interesting one: WebSearch REACHES mlb.com titles while
+WebFetch on the same host is proxy-blocked. First time WebFetch was tested there — recorded as a
+new observation, never inferred from the curl result. Two tools, one host, opposite capability.
+
+OWNER BINDING STANDARD IMPLEMENTED: harness/forecast_contract.py, 25/25 mutants, wired.
+Generate -> Register and SEAL -> Apply gates -> Render action status -> Grade regardless.
+forecast_status has exactly ONE legal value, so there is no value meaning "suppressed". Gates run
+against a sealed hash that deliberately EXCLUDES action_status, so a gate can render an action
+status and nothing else; assert_only_action_changed names any sealed field a gate touched. A
+SCHEDULED game emitting no row is a card-level FAILURE. The three named cases produce
+REGISTERED_CAP_FORECAST / FROZEN_STATE_FORECAST / OUT_OF_DOMAIN_FORECAST, never a blank.
+This is a real defect of mine, not a presentation preference: on 8/22 six games produced zero
+gradeable rows because gates ran BEFORE registration. A model whose hardest rows vanish from its own
+record keeps a scorebook made only of games it felt confident about, and every statistic from it is
+conditioned on the model's own confidence — unfalsifiable by construction.
+
+OWNER ARTIFACTS INDEPENDENTLY VERIFIED. Deterministic SHA-256 reproduces EXACTLY
+(8d8cee92...72d4) on this checkout under numpy 2.4.6. Self-test verified: 20/20 games, seed
+20260823, 100k trials, all 20 FORECAST_REGISTERED with six distinct action_status values.
+Market-not-a-predictive-input verified mechanically: lines appear only as total_line and
+market_home_spread — the line an estimand is scored AGAINST — never inside a winner probability.
+Against the contract it defines: PASS, 20/20 gradeable, 5 action-blocked, 0 failures.
+ONE GAP: the standard requires a resolved-information DOSE on every row and the reference card
+carries a model_class but no numeric dose. Fair for a reference baseline; our model must emit it,
+and information_class.py already computes starter_information_fraction.
+TEN ML -170 0.5u is classified trained_model_output=false on announced rotation information —
+owner discretion under the 7/25 precedent, walled from model output, never touching the model ledger.
+Record: docs/experiments/2026-08-23_FORECAST_CONTRACT.json

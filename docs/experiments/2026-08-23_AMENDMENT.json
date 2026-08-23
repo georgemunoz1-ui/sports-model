@@ -1,0 +1,164 @@
+{
+ "record_id": "AMENDED-PAIRED-REPORT-2026-08-23",
+ "created_utc": "2026-08-23T11:00:00Z",
+ "authority": "owner amendment 2026-08-23",
+ "amends": "commit a4a0b99, which is PRESERVED. This record corrects its language and adds the comparisons it was missing; it does not retract its verdict.",
+ "LANGUAGE_CORRECTION": {
+  "was": "no improvement produced",
+  "now": "IMPROVEMENT NOT ESTABLISHED",
+  "why_it_matters": "Absence of evidence is not evidence of absence. On 30 forward games across two slate dates the challenger's advantage over the expanding prior is indistinguishable from zero. That is a statement about what this sample can resolve, not a finding that the challenger adds nothing."
+ },
+ "status": "FORWARD_ONLY_PENDING",
+ "STRUCTURAL_FINDING_ABOUT_THE_V13_ARM": {
+  "what_was_asked": "Add V13 to the same paired table.",
+  "what_the_registry_shows": "Both arms on this cohort ALREADY ARE V13. Every one of the 60 forecasts on 2026-08-19 and 2026-08-21 carries model_id ml.v13_1.hfa1005.card.s722n30000. v1 and v2 are not two models — they are two INPUT CONFIGURATIONS of the same frozen model: all-CAP starter inputs versus starter-informed inputs.",
+  "so_the_table_is_relabelled": {
+   "V13_ALL_CAP_INPUTS": "the V13 reference for promotion purposes on this cohort",
+   "CHALLENGER": "V13 with starter-informed inputs",
+   "EXPANDING_HOME_PRIOR": "the base-rate reference"
+  },
+  "the_other_registered_model": "ml.d_logistic_2f.p4.cfg132523ac exists but covers 2026-07-29 through 2026-08-04 only. It has NO overlap with this 30-game cohort and cannot be added to it without changing the game population, which is the error this whole standard exists to prevent.",
+  "consequence": "On this cohort 'beat both V13 and the expanding prior' reduces to 'beat V13-with-CAP-inputs and beat the prior'. A genuinely distinct V13 arm requires registering one prospectively; it cannot be recovered retroactively."
+ },
+ "PREQUENTIAL_PROOF": {
+  "status": "CLEAN — 30 of 30 rows",
+  "method": "the pool ITSELF is re-derived and audited per row, not the code that built it: every pooled game must be strictly earlier than the target slate date, and the target game must not appear in its own prior",
+  "exposed_per_row": [
+   "prior_n",
+   "prior_p",
+   "prior_cutoff_utc",
+   "prior_source_hash",
+   "prior_last_game_date",
+   "prequential_status"
+  ],
+  "worked_row": {
+   "game_id": "2026-08-19-ATH@KC",
+   "prior_n": 1769,
+   "prior_p": 0.5220793739519285,
+   "prior_cutoff_utc": "2026-08-19T00:00:00Z",
+   "prior_last_game_date": "2026-08-18",
+   "prequential_status": "PREQUENTIAL_CLEAN"
+  },
+  "a_gap_this_exposed": "prior_last_game_date came back NULL on the first run because home_prior_beta never populated it. An unexposed provenance field is an unchecked one; it is populated now."
+ },
+ "PAIRED_DATE_BLOCK_COMPARISONS": {
+  "clustering": "slate date; Holm step-down across the family of two references, alpha 0.05",
+  "sign_convention": "negative favours the challenger",
+  "vs_V13_ALL_CAP_INPUTS": {
+   "n": 30,
+   "slate_dates": 2,
+   "mean_delta_brier": -0.00934,
+   "interval": [
+    -0.01571,
+    -0.00298
+   ],
+   "raw_p": 0.004,
+   "holm_p": 0.0081,
+   "beats": true
+  },
+  "vs_EXPANDING_HOME_PRIOR": {
+   "n": 30,
+   "slate_dates": 2,
+   "mean_delta_brier": -0.00023,
+   "interval": [
+    -0.00097,
+    0.00052
+   ],
+   "raw_p": 0.5528,
+   "holm_p": 0.5528,
+   "beats": false
+  },
+  "reading": "The challenger clears V13-with-CAP-inputs and does not clear the base rate. Both must fall, so the conjunction fails."
+ },
+ "POSTGAME_COMPARATOR_LABELLING": {
+  "the_correction": "The 21 gains / 9 losses and the direction decomposition reported earlier were CHALLENGER vs V13_ALL_CAP_INPUTS. They were not labelled as such. Both comparisons are now produced and every decomposition carries its comparator.",
+  "vs_V13_ALL_CAP_INPUTS": {
+   "gained": 21,
+   "lost": 9,
+   "mean_delta_brier": -0.00934,
+   "TOWARD_HOME": {
+    "n": 19,
+    "gained": 16,
+    "mean_delta_brier": -0.02121
+   },
+   "TOWARD_AWAY": {
+    "n": 11,
+    "gained": 5,
+    "mean_delta_brier": 0.01115
+   }
+  },
+  "vs_EXPANDING_HOME_PRIOR": {
+   "gained": 13,
+   "lost": 17,
+   "mean_delta_brier": -0.00023,
+   "TOWARD_HOME": {
+    "n": 13,
+    "gained": 9,
+    "mean_delta_brier": -0.02583
+   },
+   "TOWARD_AWAY": {
+    "n": 17,
+    "gained": 4,
+    "mean_delta_brier": 0.01936
+   },
+   "on_flips": {
+    "n": 10,
+    "gained": 3,
+    "mean_delta_brier": 0.02903
+   }
+  },
+  "what_the_relabelling_changes": "Against the correct reference the gain/loss split INVERTS: 13 gained and 17 lost, not 21 and 9. The headline that looked like a broad win over 30 games is a losing majority once the comparator is the base rate."
+ },
+ "HOME_DIRECTION_FINDING_FROZEN": {
+  "ruling": "The 22-8 home slate is an EX-POST CONFOUND, not evidence for increasing home weight. Every directional decomposition here is AUDIT-ONLY and NON-ADAPTIVE.",
+  "enforced_how": "no directional quantity appears in the adaptive register at any layer, so adaptive_layers.may_update refuses it at every speed as an unregistered quantity — the default is refusal, not permission",
+  "note": "It is recorded so a future sample can test it prospectively. It is not an input."
+ },
+ "SAMPLE_REALITY_AGAINST_THE_BINDING_GATE": {
+  "this_paired_cohort": {
+   "games": 30,
+   "slate_dates": 2
+  },
+  "the_whole_graded_repository": {
+   "graded_rows": 329,
+   "graded_slate_dates": 19
+  },
+  "the_gate": {
+   "games": 500,
+   "slate_dates": 60
+  },
+  "note": "The owner's message refers to nine slate clusters; the paired cohort holds TWO and the repository holds nineteen graded slate dates in total. Either way the binding gate is far out of reach and the 30-game interval is EXPLORATORY."
+ },
+ "BINDING_GATE_RESULT": {
+  "status": "FORWARD_ONLY_PENDING",
+  "blocking": [
+   "sample_500_games",
+   "sample_60_slate_dates",
+   "beats_every_reference",
+   "holm_intervals_below_zero",
+   "calibration_acceptable"
+  ]
+ },
+ "PREREGISTERED_CONSTANT_FORECAST_GUARD": {
+  "the_criticism_accepted": "The previous guard was a spread threshold set to 1e-6, observed to miss the expanding-prior arm, then widened to 1e-3. That is a threshold adjusted after seeing results.",
+  "the_replacement": "A CONDITIONING rule with no free parameter. The recalibration solves a 2x2 Newton system; it is reported only when the Hessian's reciprocal condition number exceeds sqrt(float64 epsilon) = 1.4901161193847656e-08, the standard point at which a linear solve retains half its significant digits. Both the floor and the two-distinct-values rule come from the arithmetic, not from any dataset.",
+  "verified": "catches the real near-constant prior arm at rcond 1.572e-09 and accepts a 3pp-spread forecast at rcond 9.406e-03",
+  "registered_utc": "2026-08-23T00:00:00Z",
+  "layer": "SLOW (formal model release only)"
+ },
+ "OFFSET_ENFORCED": {
+  "requirement": "logit(prior_p_t) as an offset; no unrestricted intercept relearning the base rate",
+  "implemented": "baseline_offset.inv6b_residual_has_no_free_intercept refuses any coefficient named like an intercept — and refuses one PINNED TO ZERO as well, because the term must be ABSENT rather than zeroed, so a later fit cannot un-pin it"
+ },
+ "modules": {
+  "harness/prequential.py": "11/11",
+  "harness/promotion_gate.py": "26/26",
+  "harness/evaluation_standard.py": "38/38",
+  "harness/baseline_offset.py": "31/31"
+ },
+ "what_this_does_not_do": [
+  "It does not retract commit a4a0b99, which stands.",
+  "It does not promote anything. Status FORWARD_ONLY_PENDING; gate 0/100 NO_PROMOTE, ledger $0, execution UNAUTHORIZED, wager authority NO.",
+  "It does not feed any directional finding back into the model."
+ ]
+}

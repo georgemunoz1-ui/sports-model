@@ -3282,3 +3282,54 @@ overclaiming positively. (2) CALIBRATION FITTED TO A NEAR-CONSTANT FORECAST gave
 prior arm; an exact-equality guard missed it because the prior drifts a hair between dates. Floor is
 now 0.1pp of spread and the answer is UNDEFINED, not miscalibrated.
 Records: docs/experiments/2026-08-23_EVALUATION_STANDARD.json, _PAIRED_POSTGAME.json
+
+## 2026-08-23 (6) — Amendment: both comparators, prequential proof, Holm, FORWARD_ONLY_PENDING
+
+LANGUAGE CORRECTED: "IMPROVEMENT NOT ESTABLISHED", not "no improvement produced". Absence of
+evidence is not evidence of absence. Commit a4a0b99 stands; this amends its wording and adds what
+it was missing.
+
+STRUCTURAL FINDING ON "ADD V13". Both arms on this cohort ALREADY ARE V13 — all 60 forecasts carry
+model_id ml.v13_1.hfa1005.card.s722n30000. v1 and v2 are not two models; they are two INPUT
+CONFIGURATIONS of one frozen model. The table is relabelled V13_ALL_CAP_INPUTS / CHALLENGER (V13 +
+starter inputs) / EXPANDING_HOME_PRIOR. The only other registered model,
+ml.d_logistic_2f.p4.cfg132523ac, covers 7/29-8/04 and has ZERO overlap with this cohort — adding it
+would change the game population, which is the error the standard exists to prevent. A distinct V13
+arm must be registered prospectively; it cannot be recovered retroactively.
+
+PREQUENTIAL PROOF: CLEAN, 30/30. The POOL is re-derived and audited per row, not the builder.
+Sample row: 2026-08-19-ATH@KC, prior_n 1769, prior_p .52208, cutoff 2026-08-19T00:00:00Z, last
+pooled game 2026-08-18. It immediately exposed a gap of mine — prior_last_game_date came back NULL
+because home_prior_beta never populated it. An unexposed provenance field is an unchecked one.
+
+PAIRED DATE-BLOCK, HOLM-ADJUSTED, TWO REFERENCES:
+  vs V13_ALL_CAP_INPUTS      dBrier -0.00934  [-0.01571, -0.00298]  Holm p .0081  BEATS
+  vs EXPANDING_HOME_PRIOR    dBrier -0.00023  [-0.00097, +0.00052]  Holm p .5528  does NOT beat
+Both must fall. The conjunction fails.
+
+COMPARATOR LABELLING, AND IT INVERTS THE HEADLINE. The 21 gains / 9 losses was CHALLENGER vs
+V13_ALL_CAP_INPUTS and was not labelled as such. Against the EXPANDING PRIOR the split is 13 GAINED
+/ 17 LOST. What read as a broad win over 30 games is a losing majority once the comparator is the
+base rate. Every decomposition now carries its comparator.
+
+HOME-DIRECTION FINDING FROZEN as an ex-post confound. Audit-only and non-adaptive, enforced
+structurally: no directional quantity is in the adaptive register, so may_update refuses it at every
+speed as unregistered — the default is refusal.
+
+PREREGISTERED CONSTANT-FORECAST GUARD. Criticism accepted: the old guard was 1e-6, seen to miss the
+prior arm, then widened to 1e-3 — a threshold tuned after seeing results. Replaced with a
+CONDITIONING rule with no free parameter: report the calibration line only when the recalibration
+Hessian's reciprocal condition number exceeds sqrt(float64 eps) = 1.4901161193847656e-08. Catches
+the real near-constant arm at rcond 1.572e-09; accepts a 3pp-spread forecast at 9.406e-03.
+
+OFFSET ENFORCED: inv6b refuses any intercept term in f(X) — including one PINNED TO ZERO, because
+the term must be ABSENT rather than zeroed so a later fit cannot un-pin it.
+
+SAMPLE REALITY: this cohort is 30 games over 2 slate dates; the whole graded repository is 329 rows
+over 19 slate dates; the gate needs 500 over 60. The interval is EXPLORATORY.
+
+BINDING GATE: FORWARD_ONLY_PENDING, blocking on sample_500_games, sample_60_slate_dates,
+beats_every_reference, holm_intervals_below_zero, calibration_acceptable. Real-money gate is
+separate and has no code path that authorises without explicit human approval.
+prequential 11/11, promotion_gate 26/26, evaluation_standard 38/38, baseline_offset 31/31.
+Record: docs/experiments/2026-08-23_AMENDMENT.json

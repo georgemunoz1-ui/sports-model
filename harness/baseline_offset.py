@@ -244,6 +244,35 @@ def inv6_no_market_fields_in_features(feature_names):
     return f"INV6: market-derived feature(s) in the matrix: {bad}" if bad else None
 
 
+def inv6b_residual_has_no_free_intercept(coefficients, intercept_names=("intercept", "const",
+                                                                          "bias", "_intercept",
+                                                                          "b0", "alpha")):
+    """The residual model f(X) must carry NO unrestricted intercept.
+
+    OWNER RULING 2026-08-23: "Use the expanding prior as an offset: logit(prior_p_t) with feature
+    effects modeling residual information. Do not allow an unrestricted intercept to relearn the
+    base rate."
+
+    A free intercept in f(X) is not a harmless extra parameter — it lets the residual model
+    re-estimate the very quantity the offset already supplies, and under regularization it will,
+    because an intercept is the cheapest way to fit an average. The offset then stops being the
+    default forecast and becomes a starting guess the model is free to overwrite. Any coefficient
+    named like an intercept, or any nonzero constant term, is refused."""
+    if coefficients is None:
+        return "INV6b: no coefficient set supplied; an unchecked residual model is not a checked one"
+    bad = []
+    for name, value in dict(coefficients).items():
+        n = str(name).strip().lower()
+        if n in intercept_names or n.endswith("intercept"):
+            if value not in (0, 0.0, None):
+                bad.append(f"{name}={value}")
+            else:
+                bad.append(f"{name} is present (pinned to {value}) — the term must be ABSENT, not "
+                           f"zeroed, so it cannot be un-pinned by a later fit")
+    return (f"INV6b: the residual model carries an intercept term {bad} — an unrestricted intercept "
+            f"relearns the base rate the offset already supplies") if bad else None
+
+
 def inv7_baseline_and_challenger_registered_together(baseline_ids, challenger_ids):
     b, c = set(baseline_ids or []), set(challenger_ids or [])
     if b != c:
@@ -283,7 +312,7 @@ def inv10_all_cap_rows_have_no_action_authority(rec):
     return None
 
 
-def check_invariants(rec, rows=None, slate_date=None, feature_names=None,
+def check_invariants(rec, rows=None, slate_date=None, feature_names=None, coefficients=None,
                      baseline_ids=None, challenger_ids=None, pairs=None,
                      card_path=None, recorded_sha=None, recorded_class=None,
                      tier_filter=DEFAULT_TIER_FILTER):
@@ -315,6 +344,12 @@ def check_invariants(rec, rows=None, slate_date=None, feature_names=None,
             fails.append(r)
     else:
         notchecked.append("INV6 (no feature list supplied)")
+    if coefficients is not None:
+        r = inv6b_residual_has_no_free_intercept(coefficients)
+        if r:
+            fails.append(r)
+    else:
+        notchecked.append("INV6b (no residual coefficient set supplied)")
     if baseline_ids is not None or challenger_ids is not None:
         r = inv7_baseline_and_challenger_registered_together(baseline_ids, challenger_ids)
         if r:
@@ -459,6 +494,26 @@ def selftest():
             f.append(f"INV5 passed p_home_challenger={bad!r}")
     if inv5_probabilities_finite_and_open(dict(rec, delta_logit_from_prior=float("inf"))) is None:
         f.append("INV5 passed an infinite delta_logit")
+    # INV6b: NO FREE INTERCEPT in the residual model
+    if inv6b_residual_has_no_free_intercept({"home_form": 0.3, "rest_days": -0.1}) is not None:
+        f.append("a clean coefficient set was refused by the no-intercept rule")
+    for bad in ({"intercept": 0.12, "home_form": 0.3}, {"const": -0.4}, {"bias": 0.01},
+                {"b0": 0.9}, {"alpha": 0.2}, {"model_intercept": 0.05}):
+        if inv6b_residual_has_no_free_intercept(bad) is None:
+            f.append(f"the residual model was allowed an intercept {bad}")
+    # a ZEROED intercept is still refused: the term must be ABSENT so a later fit cannot un-pin it
+    if inv6b_residual_has_no_free_intercept({"intercept": 0.0, "home_form": 0.3}) is None:
+        f.append("an intercept pinned to zero was accepted; the term must be absent, not zeroed")
+    if "ABSENT, not" not in inv6b_residual_has_no_free_intercept({"intercept": 0.0}):
+        f.append("the zeroed-intercept refusal does not explain why absence is required")
+    if inv6b_residual_has_no_free_intercept(None) is None:
+        f.append("a missing coefficient set was treated as clean")
+    ok6, ff6, nc6 = check_invariants(rec)
+    if not any("INV6b" in x for x in nc6):
+        f.append("an unsupplied coefficient set was silently skipped instead of reported")
+    ok6, ff6, _ = check_invariants(rec, coefficients={"intercept": 0.2})
+    if ok6 or not any("INV6b" in x for x in ff6):
+        f.append("check_invariants did not run the no-intercept rule")
     for bad in ("close_ml_home", "market_implied_p", "no_vig_prob", "closing-total",
                 "book_price", "spread_home"):
         if inv6_no_market_fields_in_features(["home_form", bad]) is None:
@@ -555,6 +610,15 @@ MUTANTS = [
     ("INV6 matches only whole names, so close_ml_home slips through",
      '        toks = str(name).lower().replace("-", "_").split("_")',
      "        toks = [str(name).lower()]"),
+    ("the residual model may carry a free intercept, relearning the base rate",
+     "        if n in intercept_names or n.endswith(\"intercept\"):", "        if False:"),
+    ("a zeroed intercept is accepted, leaving a term a later fit can un-pin",
+     "            if value not in (0, 0.0, None):", "            if True:"),
+    ("a missing coefficient set is treated as clean",
+     "    if coefficients is None:\n        return \"INV6b: no coefficient set supplied;",
+     "    if False:\n        return \"INV6b: no coefficient set supplied;"),
+    ("INV6b is silently skipped when no coefficients are supplied",
+     '        notchecked.append("INV6b (no residual coefficient set supplied)")', "        pass"),
     ("INV7 accepts a challenger registered on a different game set",
      "    if b != c:", "    if b < c:"),
     ("INV7 accepts an empty registration as paired", "    if not b:", "    if False:"),

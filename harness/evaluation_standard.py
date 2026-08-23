@@ -48,7 +48,30 @@ NO_PREDICTIVE_PROGRESS = "NO_PREDICTIVE_PROGRESS"
 NEGATIVE_SKILL = "NEGATIVE_SKILL_WORSE_THAN_THE_PRIOR"
 INSUFFICIENT = "INSUFFICIENT_SAMPLE"
 SKILL_MIN_N = 30
-CONSTANT_FORECAST_SD = 1e-3     # 0.1 percentage points
+
+# ---------------------------------------------------------------------------------------------
+# CONSTANT-FORECAST GUARD — PREREGISTERED 2026-08-23, DERIVED, NOT TUNED.
+#
+# The first version of this guard was a spread threshold that I set to 1e-6, watched miss the
+# expanding-prior arm on real data, and then widened to 1e-3. That is a threshold adjusted after
+# seeing results, which is the thing this repository exists to refuse. The owner named it.
+#
+# The replacement is a CONDITIONING rule with no free parameter to tune. The logistic recalibration
+# solves a 2x2 Newton system with Hessian H = [[S_w, S_wx], [S_wx, S_wxx]]. That solve is estimable
+# only when H is well conditioned. The standard numerical-analysis rule is that a linear solve
+# retains about half the available significant digits when the reciprocal condition number falls to
+# sqrt(machine epsilon); below that the solution is dominated by rounding. For float64,
+#
+#     sqrt(eps) = sqrt(2.220446049250313e-16) = 1.4901161193847656e-08
+#
+# so the rule is: report the calibration line only when rcond(H) > sqrt(eps), and when the regressor
+# takes at least two distinct values at all. Both conditions come from the arithmetic, not from any
+# dataset. Changing either is a SLOW-layer act at a formal model release.
+# ---------------------------------------------------------------------------------------------
+CONDITIONING_RULE_REGISTERED_UTC = "2026-08-23T00:00:00Z"
+FLOAT64_EPS = sys.float_info.epsilon
+RCOND_FLOOR = math.sqrt(FLOAT64_EPS)
+MIN_DISTINCT_FORECASTS = 2
 
 
 def _mean(xs):
@@ -94,6 +117,43 @@ def reliability(rows, p_key="p_model", y_key="home_win", buckets=BUCKETS, min_n=
     return out
 
 
+def calibration_estimable(ps):
+    """(estimable, reason) under the PREREGISTERED conditioning rule. No tunable threshold.
+
+    Builds the same Hessian the recalibration fit would use, at the null point (a=0, b=1) where the
+    weights are the forecast's own p(1-p), and asks whether that 2x2 system is solvable in float64.
+    A near-constant forecast makes the regressor column nearly collinear with the intercept column,
+    the determinant collapses, and the fit returns whatever rounding produces — which on real data
+    was an intercept of +189 and a slope of -2139."""
+    if len(ps) < 3:
+        return False, (f"n={len(ps)}: a calibration line through fewer than three games is not a "
+                       f"calibration")
+    if len({round(float(p), 12) for p in ps}) < MIN_DISTINCT_FORECASTS:
+        return False, ("the forecast takes a single value across every game, so the regressor has "
+                       "no variation; this is undefined, not miscalibrated")
+    xs = []
+    for p in ps:
+        q = min(max(float(p), 1e-9), 1 - 1e-9)
+        xs.append(math.log(q / (1 - q)))
+    h00 = h01 = h11 = 0.0
+    for p, x in zip(ps, xs):
+        q = min(max(float(p), 1e-9), 1 - 1e-9)
+        w = q * (1 - q)
+        h00 += w; h01 += w * x; h11 += w * x * x
+    det = h00 * h11 - h01 * h01
+    # rcond of a symmetric 2x2 via its eigenvalues
+    tr = h00 + h11
+    disc = max(tr * tr - 4.0 * det, 0.0)
+    lam_max = 0.5 * (tr + math.sqrt(disc))
+    lam_min = 0.5 * (tr - math.sqrt(disc))
+    rcond = (lam_min / lam_max) if lam_max > 0 else 0.0
+    if rcond <= RCOND_FLOOR:
+        return False, (f"the recalibration Hessian has reciprocal condition number {rcond:.3e}, at "
+                       f"or below the preregistered float64 floor sqrt(eps)={RCOND_FLOOR:.3e}: the "
+                       f"solve is dominated by rounding, so this is undefined, not miscalibrated")
+    return True, f"rcond {rcond:.3e} above the preregistered floor {RCOND_FLOOR:.3e}"
+
+
 def winner_metrics(rows, p_key="p_model", prior_key="p_prior", y_key="home_win"):
     """Everything the standard requires for a winner estimand, on ONE cut."""
     n = len(rows)
@@ -110,16 +170,10 @@ def winner_metrics(rows, p_key="p_model", prior_key="p_prior", y_key="home_win")
     # A CONSTANT forecast has no variation to calibrate. Fitting a logistic recalibration to it
     # produced an intercept of +189 and a slope of -2139 on the expanding-prior arm — numbers that
     # look like catastrophic miscalibration and are actually a degenerate fit. Report UNDEFINED.
-    # THE THRESHOLD IS 0.1pp OF SPREAD, NOT EXACT EQUALITY. The expanding-prior arm is not exactly
-    # constant — the prior moves a hair between slate dates as the pool grows — so an exact-equality
-    # guard missed it and it was handed a calibration slope of -2139 on real data. Below 0.1pp of
-    # spread there is nothing to calibrate, whether or not the values are bit-identical.
     spread = _sd(ps)
-    if spread is None or spread < CONSTANT_FORECAST_SD:
-        cal = {"intercept": None, "slope": None,
-               "reason": f"the forecast varies by {(spread or 0) * 100:.4f}pp across every game, "
-                         f"below the {CONSTANT_FORECAST_SD * 100:.2f}pp floor, so a calibration "
-                         f"line has no slope to estimate; this is undefined, not miscalibrated"}
+    est, why = calibration_estimable(ps)
+    if not est:
+        cal = {"intercept": None, "slope": None, "reason": why}
     else:
         cal = PE.calibration([{"p_home_challenger": p, "home_result": y} for p, y in zip(ps, ys)])
     return {
@@ -509,13 +563,32 @@ def selftest():
         f.append("a constant forecast reported no reason for its undefined calibration")
     if "undefined, not miscalibrated" not in (cm.get("calibration_undefined_reason") or ""):
         f.append("the undefined-calibration reason does not distinguish it from miscalibration")
-    if cm["probability_spread_pp"] is None or cm["probability_spread_pp"] > CONSTANT_FORECAST_SD * 100:
-        f.append("a near-constant forecast did not report a spread below the floor")
-    # and a forecast with REAL but small variation keeps its calibration line
-    small = [{"p_model": 0.50 + 0.03 * (i % 3), "p_prior": 0.527, "home_win": y}
-             for i, y in enumerate([1] * 22 + [0] * 8)]
-    if winner_metrics(small)["calibration_slope"] is None:
-        f.append("a forecast with 2-3pp of real spread lost its calibration line; the floor is 0.1pp")
+    # THE RULE IS DERIVED, NOT TUNED. It must have NO free parameter: the floor is sqrt(float64 eps)
+    # and is reconstructable from the arithmetic alone.
+    if abs(RCOND_FLOOR - math.sqrt(sys.float_info.epsilon)) > 0:
+        f.append("the conditioning floor is not exactly sqrt(float64 epsilon)")
+    if CONDITIONING_RULE_REGISTERED_UTC != "2026-08-23T00:00:00Z":
+        f.append("the conditioning rule carries no frozen registration date")
+    # a truly CONSTANT forecast is refused on the distinct-value rule
+    est, why = calibration_estimable([0.527] * 30)
+    if est or "single value" not in why:
+        f.append(f"a constant forecast was called estimable: {why}")
+    # the REAL near-constant prior arm is refused on the CONDITIONING rule, not on a spread threshold
+    near = [0.527 + (0.00002 if i % 2 else 0.0) for i in range(30)]
+    est, why = calibration_estimable(near)
+    if est:
+        f.append("the near-constant expanding-prior arm was called estimable — this is the case the "
+                 "tuned threshold had to be widened for, and the derived rule must catch it")
+    if "condition number" not in why or "sqrt(eps)" not in why:
+        f.append(f"the refusal does not cite the conditioning rule: {why}")
+    # a forecast with REAL spread keeps its calibration line
+    for ps in ([0.50 + 0.03 * (i % 3) for i in range(30)], [0.35, 0.45, 0.55, 0.65] * 8):
+        if not calibration_estimable(ps)[0]:
+            f.append(f"a forecast with real spread was refused a calibration line: "
+                     f"{calibration_estimable(ps)[1]}")
+    # fewer than three games is refused whatever the spread
+    if calibration_estimable([0.3, 0.7])[0]:
+        f.append("a two-game cohort was given a calibration line")
     # a VARYING forecast still gets its calibration line
     if winner_metrics(good)["calibration_slope"] is None:
         f.append("a varying forecast lost its calibration line")
@@ -640,15 +713,22 @@ MUTANTS = [
     ("the skill interval keeps the sign of the Brier difference instead of flipping it",
      '    return {"lo": -bs["hi"] / pb, "hi": -bs["lo"] / pb,',
      '    return {"lo": bs["lo"] / pb, "hi": bs["hi"] / pb,'),
-    ("a constant forecast is given a calibration line anyway",
-     "    if spread is None or spread < CONSTANT_FORECAST_SD:", "    if False:"),
-    ("the constant-forecast floor tightens to exact equality, missing a near-constant arm",
-     "CONSTANT_FORECAST_SD = 1e-3", "CONSTANT_FORECAST_SD = 1e-12"),
-    ("the constant-forecast floor widens until real forecasts lose their calibration",
-     "CONSTANT_FORECAST_SD = 1e-3", "CONSTANT_FORECAST_SD = 0.5"),
+    ("a near-constant forecast is given a calibration line anyway",
+     "    if rcond <= RCOND_FLOOR:", "    if False:"),
+    ("the conditioning floor is tightened below the float64 rule, missing a near-constant arm",
+     "RCOND_FLOOR = math.sqrt(FLOAT64_EPS)", "RCOND_FLOOR = FLOAT64_EPS * 1e-6"),
+    ("the conditioning floor is widened until real forecasts lose their calibration",
+     "RCOND_FLOOR = math.sqrt(FLOAT64_EPS)", "RCOND_FLOOR = 0.5"),
+    ("the distinct-value rule is dropped, so an exactly constant forecast is fitted",
+     "    if len({round(float(p), 12) for p in ps}) < MIN_DISTINCT_FORECASTS:", "    if False:"),
+    ("the three-game floor on a calibration line is dropped",
+     "    if len(ps) < 3:", "    if False:"),
+    ("the conditioning refusal stops citing the rule",
+     'f"or below the preregistered float64 floor sqrt(eps)={RCOND_FLOOR:.3e}: the "',
+     'f"or below a floor: the "'),
     ("an undefined calibration stops being distinguished from miscalibration",
-     'f"line has no slope to estimate; this is undefined, not miscalibrated"}',
-     'f"line has no slope to estimate."}'),
+     'f"solve is dominated by rounding, so this is undefined, not miscalibrated")',
+     'f"solve is dominated by rounding.")'),
     ("a cohort with no prior reference gets a progress verdict by default",
      "    if bss is None:", "    if False:"),
     ("the negative-skill verdict stops saying the model subtracted information",

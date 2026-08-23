@@ -127,6 +127,8 @@ def home_prior_beta(cutoff_date, rows=None, alpha=HOME_PRIOR_ALPHA, beta=HOME_PR
             "posterior_alpha": a, "posterior_beta": b,
             "prior_sd": math.sqrt(var),
             "prior_cutoff_date": cutoff_date,
+            "prior_cutoff_utc": f"{cutoff_date}T00:00:00Z",
+            "prior_last_game_date": (pool[-1].get("date") if pool else None),
             "prior_source_hash": hashlib.sha256(json.dumps(
                 [[r.get("game_id"), r.get("date"), int(r["home_win"])] for r in pool],
                 separators=(",", ":")).encode()).hexdigest()}

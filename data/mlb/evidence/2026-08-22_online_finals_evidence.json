@@ -4,24 +4,100 @@
  "captured_at_utc": "2026-08-23T05:25:00Z",
  "CANONICAL_STATUS": "EVIDENCE ONLY. These rows are NOT written to data/backfill/mlb/2026/results.csv and grade nothing. A standing ruling bars tier-2/3 ingestion into the canonical table; an attempt to do exactly that was reverted at 05:12Z tonight (docs/experiments/2026-08-22_TIER2_INGESTION_INCIDENT.json). Tier-1 confirmation is required before any of this settles.",
  "source_tier": 2,
- "source_note": "Scores are read from publisher TITLE STRINGS that embed both the score and the date — chiefly MLB.com Gameday titles of the form 'MLB Gameday: <away> N, <home> M Final Score (08/22/2026)'. MLB.com is the official source, but the PAGE could not be opened, captured or hashed (egress-denied), so this is title evidence from an official domain, not a captured tier-1 board.",
- "completeness": "6 of 15 MLB games. The remaining 9 are not indexed with a final at acquisition time — several Gameday titles still read 'Probable Pitchers, Lineups' or 'Live Score'.",
+ "source_note": "Scores are read from publisher TITLE STRINGS that embed both the score and the date \u2014 chiefly MLB.com Gameday titles of the form 'MLB Gameday: <away> N, <home> M Final Score (08/22/2026)'. MLB.com is the official source, but the PAGE could not be opened, captured or hashed (egress-denied), so this is title evidence from an official domain, not a captured tier-1 board.",
+ "completeness": "6 of 15 MLB games. The remaining 9 are not indexed with a final at acquisition time \u2014 several Gameday titles still read 'Probable Pitchers, Lineups' or 'Live Score'.",
  "games_with_finals": [
-  {"away":"TOR","home":"NYY","away_score":4,"home_score":3,"title":"MLB Gameday: Blue Jays 4, Yankees 3 Final Score (08/22/2026)","registered":false},
-  {"away":"STL","home":"PHI","away_score":3,"home_score":12,"title":"MLB Gameday: Cardinals 3, Phillies 12 Final Score (08/22/2026)","registered":false},
-  {"away":"TB","home":"BAL","away_score":2,"home_score":3,"title":"MLB Gameday: Rays 2, Orioles 3 Final Score (08/22/2026)","registered":false},
-  {"away":"CHC","home":"SEA","away_score":4,"home_score":5,"title":"MLB Gameday: Cubs 4, Mariners 5 Final Score (08/22/2026)","registered":false},
-  {"away":"MIN","home":"SD","away_score":5,"home_score":7,"title":"Padres 7-5 Twins (Aug 22, 2026) Box Score - ESPN","registered":true,"forecast_id":"P4-20260822-MIN@SD"},
-  {"away":"CLE","home":"COL","away_score":4,"home_score":3,"title":"Guardians 4-3 Rockies (Aug 22, 2026) Box Score - ESPN","registered":true,"forecast_id":"P4-20260822-CLE@COL"}
+  {
+   "away": "TOR",
+   "home": "NYY",
+   "away_score": 4,
+   "home_score": 3,
+   "title": "MLB Gameday: Blue Jays 4, Yankees 3 Final Score (08/22/2026)",
+   "registered": false
+  },
+  {
+   "away": "STL",
+   "home": "PHI",
+   "away_score": 3,
+   "home_score": 12,
+   "title": "MLB Gameday: Cardinals 3, Phillies 12 Final Score (08/22/2026)",
+   "registered": false
+  },
+  {
+   "away": "TB",
+   "home": "BAL",
+   "away_score": 2,
+   "home_score": 3,
+   "title": "MLB Gameday: Rays 2, Orioles 3 Final Score (08/22/2026)",
+   "registered": false
+  },
+  {
+   "away": "CHC",
+   "home": "SEA",
+   "away_score": 4,
+   "home_score": 5,
+   "title": "MLB Gameday: Cubs 4, Mariners 5 Final Score (08/22/2026)",
+   "registered": false
+  },
+  {
+   "away": "MIN",
+   "home": "SD",
+   "away_score": 5,
+   "home_score": 7,
+   "title": "Padres 7-5 Twins (Aug 22, 2026) Box Score - ESPN",
+   "registered": true,
+   "forecast_id": "P4-20260822-MIN@SD"
+  },
+  {
+   "away": "CLE",
+   "home": "COL",
+   "away_score": 4,
+   "home_score": 3,
+   "title": "Guardians 4-3 Rockies (Aug 22, 2026) Box Score - ESPN",
+   "registered": true,
+   "forecast_id": "P4-20260822-CLE@COL"
+  }
  ],
- "games_without_finals": ["ATL@MIL","WSH@MIA","LAA@TEX","ATH@HOU","NYM@CWS","DET@KC","PIT@LAD","SF@BOS","CIN@AZ"],
- "echo_rejected": "'Diamondbacks 9-0 Reds' was returned repeatedly for CIN@AZ and is the AUGUST 21 game — ESPN's title dates it Aug 21, recaps say 'Friday night', and it is already graded in this registry as 2026-08-21 CIN 0 @ AZ 9. Not adopted.",
-
+ "games_without_finals": [
+  "ATL@MIL",
+  "WSH@MIA",
+  "LAA@TEX",
+  "ATH@HOU",
+  "NYM@CWS",
+  "DET@KC",
+  "PIT@LAD",
+  "SF@BOS",
+  "CIN@AZ"
+ ],
+ "echo_rejected": "'Diamondbacks 9-0 Reds' was returned repeatedly for CIN@AZ and is the AUGUST 21 game \u2014 ESPN's title dates it Aug 21, recaps say 'Friday night', and it is already graded in this registry as 2026-08-21 CIN 0 @ AZ 9. Not adopted.",
  "ADVANCED_METRICS_NOT_ACQUIRED": {
   "requested": "advanced game metrics and statistics (Statcast, wOBA/xwOBA, exit velocity, pitch-level data, win probability added, etc.)",
   "outcome": "NOT OBTAINABLE through any rail available to this session.",
   "why": "Advanced metrics live inside pages, not in titles. Titles can carry a final score; they cannot carry a box score. Every host that serves this data is denied by the organisation's egress policy: baseballsavant/mlb.com, baseball-reference.com, fangraphs, espn.com, foxsports.com, rotowire.com, covers.com, plaintextsports.com. WebFetch returns EGRESS_BLOCKED on all of them. raw.githubusercontent.com IS reachable, but the community datasets that mirror this data (sportsdataverse/baseballr-data) carry no MLB schedule and nothing past 2024.",
   "what_i_will_not_do": "Reconstruct advanced metrics from search-summary prose. A summariser's account of a box score is exactly the unattributable evidence class that produced tonight's echo error and this repo's standing R1 rule. Inventing plausible Statcast figures would be worse than reporting none.",
-  "what_would_unblock_it": ["an egress-policy grant for baseballsavant.mlb.com or baseball-reference.com", "owner-posted box score screenshots, which have outrun the search index all evening"]
- }
+  "what_would_unblock_it": [
+   "an egress-policy grant for baseballsavant.mlb.com or baseball-reference.com",
+   "owner-posted box score screenshots, which have outrun the search index all evening"
+  ]
+ },
+ "retry_log": [
+  {
+   "attempt": 1,
+   "offset": "+30m",
+   "run_utc": "2026-08-23T06:18:31Z",
+   "tier1_routes_probed": 13,
+   "newly_reachable": 0,
+   "status_changes": [
+    {
+     "route": "www.mlb.com/gameday/mets-vs-white-sox/2026/08/22/824560/final/box",
+     "from": "HTTP_403_ORG_PROXY",
+     "to": "HTTP_403_ORIGIN",
+     "meaning": "the CONNECT tunnel succeeded this time and mlb.com's ORIGIN refused us. A different fact from the proxy refusing to connect; both observations are retained."
+    }
+   ],
+   "search_rail": "CLE@COL upgraded to an official MLB.com Gameday title (was ESPN). No NEW 8/22 finals surfaced. 'Braves 1, Brewers 2' was returned but its own title reads 08/21/2026 and matches the registry's 8/21 ATL@MIL 1-2 \u2014 read from the title, not assumed, and not adopted as an 8/22 result.",
+   "echo_gate": "6 claims screened, 0 echoes, 0 new finals",
+   "net_change": "NONE. Still 6 provisional finals, 0 canonical, 12 unresolved."
+  }
+ ]
 }

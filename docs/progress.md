@@ -2786,3 +2786,23 @@ near-zero overround (+0.41%/+0.58%), a cross-book best-odds artifact rather than
 offer. A parlay 88% dependent on a compression-blocked leg is the compression conflict squared.
 
 Zero recommendations. Ledger $0. Record: docs/experiments/2026-08-22_PARLAY_SCREEN.json
+
+## 2026-08-23T00:55Z — "best slip options": ZERO. The best row's edge is smaller than the model's own noise.
+Owner asked for best slip options. This is verbatim the case the owner's own 2026-08-20 amendment
+covers: "best available option" is not a bet. Answered as a RANKING of screened rows, not a slip.
+
+NEW QUANTITATIVE FINDING on the single best row. CON +190 is the only leg on any board tonight that
+screens positive AND clears the compression gate: model p .3721 vs break-even .3448, edge +2.73pp,
+EV +7.91%/unit. But measured against the estimator that produced it — model probability SD ~3.25pp
+across prior slates — that edge is 0.84 SD. THE EDGE IS SMALLER THAN ONE STANDARD DEVIATION OF THE
+MODEL'S OWN NOISE. A 2.73pp overstatement flips it negative, and that is well inside normal error,
+before even accounting for the +0.58% cross-book overround artifact on that game.
+
+So the board decomposes cleanly: one leg whose edge is indistinguishable from noise (CON +190), one
+leg whose edge is large enough to trip the compression gate and is 0-6 lifetime in that class
+(PHX +310), two legs the model prices worse than the market (LAS -195, ATL -317), three MLB rows
+with no prices at all, and an NFL game with no model. Nothing occupies QUALIFIED_PAPER_EDGE, which
+stays empty by construction.
+
+ZERO slip. Wager authority NO, execution UNAUTHORIZED, ledger $0. The owner's discretion card remains
+their own and stays walled from model output.

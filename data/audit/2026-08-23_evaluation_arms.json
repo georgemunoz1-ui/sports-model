@@ -1,0 +1,99 @@
+{
+ "record_id": "EVALUATION-ARMS-2026-08-23",
+ "registered_utc": "2026-08-23T10:04:27Z",
+ "slate_date": "2026-08-23",
+ "authority": "owner three-arm specification 2026-08-23",
+ "registered_BEFORE_first_pitch": true,
+ "first_pitch_note": "MLB first pitch on this slate is approximately 17:05Z. These identities are registered at 2026-08-23T10:04:27Z, hours earlier. Prospectivity will be DERIVED from these two instants once the slate's first game start is confirmed from a tier-1 source — it is not asserted here.",
+ "identities_distinct": true,
+ "identity_failures": [],
+ "n_arms": 7,
+ "arms": [
+  {
+   "evaluation_arm_id": "arm_01b0a7227976d5ac0822fd68",
+   "arm_name": "mlb:BASELINE_EXPANDING_PRIOR",
+   "registered_utc": "2026-08-23T10:04:27Z",
+   "model_id": "mlb.expanding_home_prior.beta_10_10",
+   "input_policy_id": "NO_TEAM_NO_STARTER_INPUTS",
+   "feature_manifest_sha256": "f7877d90eb535c15873c0319f0f9b23bd8e760ecf9f65fad92e281aeb2cfb4db",
+   "cap_substitution_policy_id": "NOT_APPLICABLE_NO_STARTER_INPUT",
+   "simulation_config_id": "closed_form_no_simulation",
+   "training_cutoff_policy_id": "ASOF_STRICTLY_PRIOR_SLATE_DATE_TIER1_ONLY_V1",
+   "sport": "mlb"
+  },
+  {
+   "evaluation_arm_id": "arm_19ef210b9c0b6f28125e2193",
+   "arm_name": "mlb:CHAMPION_V13",
+   "registered_utc": "2026-08-23T10:04:27Z",
+   "model_id": "ml.v13_1.hfa1005.card.s722n30000",
+   "input_policy_id": "PREVIEW_BOARD_STARTER_RESOLUTION_WITH_CAP_FALLBACK",
+   "feature_manifest_sha256": "3f273d84626efa08394d3de086047a069f023b68ed4127e704a2a50fa3356f98",
+   "cap_substitution_policy_id": "CAP_LEAGUE_AVERAGE_era4.20_gs0_k22.0_bb8.5",
+   "simulation_config_id": "seed722_n30000_global_sequential_rng",
+   "training_cutoff_policy_id": "ASOF_LATEST_TIER1_FORM_STATE_V1",
+   "sport": "mlb"
+  },
+  {
+   "evaluation_arm_id": "arm_cd46c429af56406cba0debe4",
+   "arm_name": "mlb:CHALLENGER_ADAPTIVE",
+   "registered_utc": "2026-08-23T10:04:27Z",
+   "model_id": "mlb.baseline_offset.adaptive.v0_1",
+   "input_policy_id": "PREVIEW_BOARD_STARTER_RESOLUTION_WITH_HIERARCHICAL_FALLBACK",
+   "feature_manifest_sha256": "8bbbde71f2b3eacc89ea353f47030856c6dd51bb2d155dacac8959a1f6d11999",
+   "cap_substitution_policy_id": "HIERARCHICAL_POSTERIOR_WIDER_INTERVAL_ON_UNRESOLVED",
+   "simulation_config_id": "keyed_per_game_sha256_model_slate_game_simversion",
+   "training_cutoff_policy_id": "ASOF_STRICTLY_PRIOR_SLATE_DATE_TIER1_ONLY_V1",
+   "sport": "mlb"
+  },
+  {
+   "evaluation_arm_id": "arm_bdbce50ab003dfff1d8ba2d2",
+   "arm_name": "wnba:BASELINE_EXPANDING_PRIOR",
+   "registered_utc": "2026-08-23T10:04:27Z",
+   "model_id": "wnba.expanding_home_prior.beta_10_10",
+   "input_policy_id": "NO_TEAM_NO_PLAYER_INPUTS",
+   "feature_manifest_sha256": "f7877d90eb535c15873c0319f0f9b23bd8e760ecf9f65fad92e281aeb2cfb4db",
+   "cap_substitution_policy_id": "NOT_APPLICABLE_NO_PLAYER_INPUT",
+   "simulation_config_id": "closed_form_no_simulation",
+   "training_cutoff_policy_id": "ASOF_STRICTLY_PRIOR_SLATE_DATE_TIER1_ONLY_V1",
+   "sport": "wnba"
+  },
+  {
+   "evaluation_arm_id": "arm_8c6b206df1eb3e9a6d579af1",
+   "arm_name": "wnba:CHAMPION_WNBA_SHADOW",
+   "registered_utc": "2026-08-23T10:04:27Z",
+   "model_id": "wnba.rs.ff7_logit_ridge.v1_0.shadow",
+   "input_policy_id": "FROZEN_FEATURE_STATE_2026_07_22",
+   "feature_manifest_sha256": "d7877b8f261a00723825d88f4d855ae04ef91b37f236ef42f5665119286a3e71",
+   "cap_substitution_policy_id": "NOT_APPLICABLE_NO_PLAYER_INPUT",
+   "simulation_config_id": "deterministic_logit_no_simulation",
+   "training_cutoff_policy_id": "FROZEN_2026_07_22_NO_UPDATE",
+   "sport": "wnba"
+  },
+  {
+   "evaluation_arm_id": "arm_e513bb485f6602b6ea0fa136",
+   "arm_name": "wnba:CHALLENGER_ADAPTIVE",
+   "registered_utc": "2026-08-23T10:04:27Z",
+   "model_id": "wnba.baseline_offset.adaptive.v0_1",
+   "input_policy_id": "CONFIRMED_AVAILABILITY_WHEN_SOURCED_ELSE_WIDENED",
+   "feature_manifest_sha256": "8bbbde71f2b3eacc89ea353f47030856c6dd51bb2d155dacac8959a1f6d11999",
+   "cap_substitution_policy_id": "WIDER_INTERVAL_ON_UNCONFIRMED_AVAILABILITY",
+   "simulation_config_id": "keyed_per_game_sha256_model_slate_game_simversion",
+   "training_cutoff_policy_id": "ASOF_STRICTLY_PRIOR_SLATE_DATE_TIER1_ONLY_V1",
+   "sport": "wnba"
+  },
+  {
+   "evaluation_arm_id": "arm_cb7dcb1ca77070f1128c7ec7",
+   "arm_name": "nfl:BASELINE_EXPANDING_PRIOR",
+   "registered_utc": "2026-08-23T10:04:27Z",
+   "model_id": "nfl.expanding_home_prior.beta_10_10",
+   "input_policy_id": "NO_TEAM_NO_PLAYER_INPUTS",
+   "feature_manifest_sha256": "f7877d90eb535c15873c0319f0f9b23bd8e760ecf9f65fad92e281aeb2cfb4db",
+   "cap_substitution_policy_id": "NOT_APPLICABLE_NO_PLAYER_INPUT",
+   "simulation_config_id": "closed_form_no_simulation",
+   "training_cutoff_policy_id": "ASOF_STRICTLY_PRIOR_SLATE_DATE_TIER1_ONLY_V1",
+   "sport": "nfl"
+  }
+ ],
+ "registration_failures": [],
+ "note": "The 2026-08-19/21 cohort could never be prospective because no input policy existed before its games. This is the first cohort where the arms are bound in advance."
+}

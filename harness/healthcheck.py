@@ -237,7 +237,13 @@ for _m in ("result_provenance","result_content_checks","parse_box_dump",
            "tier1_board_gate","form_refresh_diff","tier1_lineage","pregame_preflight","card_render",
            "settlement_contract","unified_card","decision_card","ats_ledgers",
            "journal_continuity","acquisition_ladder","echo_gate","sports_acquisition","retry_ladder",
-           "information_class","grade_ledger","baseline_offset","paired_eval"):
+           "information_class","grade_ledger","baseline_offset","paired_eval",
+           "adaptive_layers","adaptive_state","empirical_uncertainty","drift_monitor",
+           "champion_challenger",
+           # 2026-08-23: the never-adapt audit found that the SAME-BOOK DE-VIG requirement was
+           # on the do-not-adapt list with no enforcing module running here. freshness_gates
+           # carries the cross-book guard and a full selftest, and was simply never wired.
+           "freshness_gates","never_adapt_audit"):
     _r=subprocess.run([sys.executable,f"harness/{_m}.py","--selftest"],capture_output=True,text=True)
     _out=(_r.stdout+_r.stderr).strip().splitlines()
     check(f"{_m} selftest ({_out[-1][:72] if _out else 'no output'})", _r.returncode==0)
@@ -279,6 +285,13 @@ try:
     _r=subprocess.run([sys.executable,"harness/grade_ledger.py","--gate"],capture_output=True,text=True)
     _out=(_r.stdout+_r.stderr).strip().splitlines()
     check(f"grade-summary reproducibility ({_out[0][:78] if _out else 'no output'})", _r.returncode==0)
+    # 5a3e. NEVER-ADAPT AUDIT (owner ruling 2026-08-23). Ten things must never adapt automatically.
+    # This fails when any of them is bound to a module that does not actually RUN here — a rule that
+    # is documented, implemented and never executed reads exactly like a rule that works. On its
+    # first run it found the same-book de-vig requirement in precisely that state.
+    _r=subprocess.run([sys.executable,"harness/never_adapt_audit.py"],capture_output=True,text=True)
+    _out=(_r.stdout+_r.stderr).strip().splitlines()
+    check(f"never-adapt enforcement ({_out[0][:70] if _out else 'no output'})", _r.returncode==0)
     # Tier-1 board completeness for the 8/15-8/16 refresh window (owner instruction 2026-08-17).
     # Completeness is proven by the 30-franchise slot invariant, not by trusting the board's own
     # expected_game_count, and every row's evidence file is re-hashed against what was recorded.

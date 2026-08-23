@@ -3151,3 +3151,52 @@ returned a ZERO-WIDTH interval as if it were precision; four rules across three 
 decorative on first pass and each now has an isolating fixture; one mutant was RETIRED as
 unkillable-by-construction with a comment rather than dressed up. Lesson 25 written.
 Records: docs/experiments/2026-08-23_BASELINE_OFFSET.json, _PAIRED_EVAL_v1_vs_v2.json
+
+## 2026-08-23 (3) — Controlled adaptive learning: three speeds, and a list that is now checked
+
+SIX MODULES, ALL WIRED, 85 mutants killed across them: adaptive_layers 17/17, adaptive_state 18/18,
+empirical_uncertainty 16/16, drift_monitor 20/20, champion_challenger 14/14, never_adapt_audit
+(selftest + live gate). Nothing is promoted; no adaptive forecast has been registered yet.
+
+THE AUDIT FOUND A LIVE GAP ON ITS FIRST RUN. same_book_devig_requirement — the 8/3 ruling that
+cross-book best-odds de-vig is INVALID for market probability — was on the never-adapt list with NO
+enforcing module running in the healthcheck. The guard EXISTED: freshness_gates.py carries the
+cross-book bases and a full passing selftest, and had simply never been wired. Documented,
+implemented, tested, never executed. Corroborating evidence I had already written down and not
+connected: THREE cross-book bypasses caught by hand this month, none of them by the guard built to
+catch them. Now wired, and the audit itself is a gate that fails on any never-adapt item without a
+running enforcer. All ten now pass. Lesson 26.
+
+LAYERS: FAST (every tier-1 settlement) / MEDIUM (50-100 eligible games) / SLOW (formal release) /
+NEVER. Refusal is the default — an unregistered quantity cannot update at any speed. The never-adapt
+list sits OUTSIDE the mechanism: a formal release cannot touch it either. The temporal rule refuses
+an update to any game already started, refuses a game informing itself (including a rescheduled game
+keeping its game_id), and refuses when a timestamp is missing rather than assuming.
+
+SHRINKAGE, one 9.00-run start: established (120 starts) moves +0.276 with sd 0.567; developing +0.527
+sd 0.784; debut +0.967 sd 1.061; no history +1.600 sd 1.848 with LEAGUE_AVERAGE_CAP declared. The
+mean moves less AND the interval stays wider — both halves of the owner's requirement.
+
+WINDOWS FROZEN at 2026-08-23 with candidate sets declared. window_change_is_a_challenger has NO code
+path returning permission for an in-place swap, and it names when a proposed window is not even in
+the preregistered candidate set (i.e. was chosen after seeing results).
+
+EMPIRICAL SCREEN re-run on the 8/22 rows: CON +190 raw 2.73pp -> 0.53 sigma against a 5.20pp
+all-CAP spread -> conservative -5.82pp, FAILS. Against the 0.30pp Monte Carlo SE it would have read
+9 sigma. BUT IT DOES NOT RESCUE US: PHX +285 survives at 2.63 sigma (+5.12pp conservative), and the
+>=5pp band is 0-6 lifetime. The empirical screen and the compression gate are DIFFERENT controls;
+PHX is blocked by the second, not the first. Saying otherwise would be the overclaim the screen
+exists to prevent.
+
+DRIFT: rolling 50/100/250 against thresholds frozen and dated, including a direct
+probability-range-contraction check — the failure this system actually has (3.25pp spread vs market
+11.5pp) never trips a Brier alarm, because a coin flip is hard to beat. Response ladder reverts
+action output to the BASELINE, keeps registering both arms, and diagnoses before retraining;
+RETRAIN/RETUNE/REVERSE_PICKS are forbidden responses with a fixture.
+
+TWO REAL DEFECTS: the first pitcher posterior WIDENED its interval for the first several starts (a
+two-term variance mixture); replaced with the conjugate form, monotone by construction. And the
+drift monitor's "healthy window" fixture was not healthy — probabilities assigned FROM outcomes gave
+it a bad calibration slope and a confounded directional gap, and it fired alarms on its own tail.
+Seven decorative rules across five modules now have isolating fixtures.
+Record: docs/experiments/2026-08-23_ADAPTIVE_LEARNING.json

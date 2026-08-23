@@ -15,8 +15,8 @@
  },
  "counts": {
   "NOT_A_CARD": 5,
-  "LEGACY_SCHEMA_NO_SLOT_STATS": 2,
-  "PARTIAL_STARTER_INFORMATION": 24,
+  "LEGACY_SCHEMA_NO_SLOT_STATS": 3,
+  "PARTIAL_STARTER_INFORMATION": 25,
   "LOW_STARTER_INFORMATION": 2,
   "FULL_STARTER_INFORMATION": 2,
   "ALL_CAP_BASELINE": 5
@@ -773,6 +773,48 @@
    "reason": null,
    "card_sha256": "44c625dc9ff4eaf4f7df45b65962c39c5242eb0b798e7bac3d28a39c6218de3e",
    "classified_utc": "2026-08-23T00:00:00Z"
+  },
+  "cards/2026-08-23_card.json": {
+   "information_class": "PARTIAL_STARTER_INFORMATION",
+   "action_authority": "GATE_GOVERNED",
+   "registration_eligible": true,
+   "starter_slots_total": 30,
+   "starter_slots_resolved": 24,
+   "starter_information_fraction": 0.8,
+   "named_cap_slots": 3,
+   "tbd_cap_slots": 1,
+   "verified_profile_slots": 24,
+   "thin_profile_slots": 2,
+   "unreadable_slots": 0,
+   "named_but_cap": [
+    "WSH@MIA:away",
+    "DET@KC:home",
+    "SF@BOS:away"
+   ],
+   "reason": null,
+   "card_sha256": "c34a30ed1428564d9fbfe8e95c48cb78f17ed8c47604b0457de62cfbc88d9432",
+   "classified_utc": "2026-08-23T10:30:00Z"
+  },
+  "cards/2026-08-23_three_arm_card.json": {
+   "information_class": "LEGACY_SCHEMA_NO_SLOT_STATS",
+   "action_authority": "NONE",
+   "registration_eligible": true,
+   "starter_slots_total": 0,
+   "starter_slots_resolved": 0,
+   "starter_information_fraction": null,
+   "named_cap_slots": 0,
+   "tbd_cap_slots": 0,
+   "verified_profile_slots": 0,
+   "thin_profile_slots": 0,
+   "unreadable_slots": 0,
+   "named_but_cap": [],
+   "reason": "This is a THREE-ARM FORECAST card, not a slate card: its rows carry per-arm probabilities rather than starter slot stats, so the slot-based classifier correctly reports that it cannot recover a class from this file. The dose is NOT self-declared — it is bound to the source slate card below, whose slot stats ARE classified, and which the gate checks independently. Letting a card declare its own information class would undo lesson 24.",
+   "card_sha256": "bde862b8d50478e5e8eb71df2267b6e30ca085ea560c68223c70df4de799bd35",
+   "classified_utc": "2026-08-23T10:30:00Z",
+   "dose_bound_to_source_card": "cards/2026-08-23_card.json",
+   "source_card_sha256": "c34a30ed1428564d9fbfe8e95c48cb78f17ed8c47604b0457de62cfbc88d9432",
+   "source_card_information_class": "PARTIAL_STARTER_INFORMATION",
+   "source_card_information_fraction": 0.8
   }
  },
  "dose": "starter_information_fraction = starter_slots_resolved / starter_slots_total. THIN (LOW_SAMPLE) slots are excluded from the numerator and counted in thin_profile_slots: they carry real but sparse statistics and are not a settled profile.",

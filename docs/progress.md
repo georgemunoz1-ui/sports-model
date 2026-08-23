@@ -2762,3 +2762,27 @@ worst (8/21 error +24.10).
 
 ZERO QUALIFIED BETS. Wager authority NO, execution UNAUTHORIZED, ledger $0.
 Evidence: data/wnba/evidence_2026-08-22_owner_prices.json sha b258d436415696de
+
+## 2026-08-23T00:45Z — PARLAY SCREEN (owner request, MLB + NFL + WNBA): zero recommendations
+Standing rule stated and applied: a parlay inherits the WORST trust status among its legs, because it
+is multiplicative and compounds each leg's error rather than diversifying it.
+
+LEG AVAILABILITY. WNBA: 4 legs priced from the 00:30Z capture. MLB: 3 registered forecasts but ZERO
+prices, so nothing is screenable — and they sit at .507-.548 on starter-blind CAP inputs, near coin
+flips (fair prices AZ -121, COL -111, MIN -103). NFL: no model exists at all; DAL@ARI is benchmark-only
+with a null side. So the owner's MLB and NFL legs cannot enter a parlay tonight for two different
+reasons, neither of which is a judgement call.
+
+Only 4 priced legs exist and two pairs are mutually exclusive opposites, so NO valid 3-leg parlay can
+be formed. All four 2-leg combinations REJECTED.
+
+THE HEADLINE NUMBER AND WHY IT IS FALSE. CON +190 + PHX +310 screens +70.7% EV at +1089. Under MARKET
+probabilities the identical parlay is EV -0.0% — the entire edge is model disagreement, none of it is
+price generosity. PHX alone carries 88% of the combined single-leg edge, and PHX is exactly the leg
+the compression gate rejects (14.20pp gap; >=5pp edges are 0-6 lifetime). Break-even is 8.41%; model
+says 14.36% (1.71x), market says 8.41% (1.00x). Blending model toward market: +70.7 / +53.1 / +35.4 /
++17.7 / -0.0%. It stays nominally positive across the whole blend ONLY because the quoted price has
+near-zero overround (+0.41%/+0.58%), a cross-book best-odds artifact rather than a real single-book
+offer. A parlay 88% dependent on a compression-blocked leg is the compression conflict squared.
+
+Zero recommendations. Ledger $0. Record: docs/experiments/2026-08-22_PARLAY_SCREEN.json

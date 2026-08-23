@@ -3378,3 +3378,45 @@ BINDING GATE: FORWARD_ONLY_PENDING on six conditions. SUBSTANTIVE CONCLUSION UNC
 over the expanding prior is NOT ESTABLISHED, and neither comparison is inference-grade.
 promotion_gate 35/35, prequential 20/20, evaluation_arm 13/13, evaluation_standard 43/43.
 Record: docs/experiments/2026-08-23_INFERENCE_AMENDMENT.json
+
+## 2026-08-23 (8) — Three-arm board, registered pregame: the first PROSPECTIVE cohort
+
+BASELINE / CHAMPION / CHALLENGER on every scheduled game, one schedule, one cutoff, one evidence
+hash, keyed seeds. Arms registered 10:04:27Z against a 17:35Z first pitch, so prospectivity DERIVES
+to PROSPECTIVE_CHALLENGER_EVIDENCE — the 8/19-8/21 cohort could never be that.
+
+MLB 15 games x 3 arms = 45 rows, zero contract failures. Baseline .52516 constant (n=1808).
+Champion V13 spread 5.32pp, range .431-.616. Challenger spread 3.39pp, range .459-.591.
+WNBA 4 games: champion ran but its feature state is 32 days stale against a 21-day ceiling, so every
+champion row is action-BLOCKED and still registered and gradeable. The WNBA challenger has no
+validated residual features and no availability data, so regularization pulls f(X) to EXACTLY zero
+and the uncertainty widens to 8.11pp instead — which is the correct behaviour, not a failure.
+NFL: BASELINE ONLY. No trained NFL model exists, so the champion arm is left UNREGISTERED rather
+than filled with a stand-in that would make the board look complete.
+
+SHIPPED: keyed_seed 10/10, cohort_fork 18/18, three_arm_card 12/12, all wired. Fork rule: a pregame
+starter/lineup/injury change forks a new cohort and the parent stays gradeable; a post-start change
+is a COUNTERFACTUAL, permanently ineligible. Price barrier is STRUCTURAL: a forecast row carrying any
+price-shaped field is refused, and the overlay reads a sealed forecast and may write only action
+fields.
+
+CHRONOLOGY UNBLOCKED HONESTLY. The repo stores no finalization timestamps, which had blocked every
+cohort. A conservative UPPER BOUND is a proof of an inequality: last pooled game started
+2026-08-22T02:10Z, plus the registered 7h MLB maximum bounds finalization at 09:10Z, before the
+00:00Z cutoff. Reported as CHRONOLOGY_OK_BY_UPPER_BOUND — distinct from a measurement, because a
+bound is weaker evidence even when it clears by fifteen hours. A bare calendar date is refused.
+
+TWO REAL DEFECTS, both caught by looking at output rather than by a test.
+(1) A ONE-START ERA IS EVIDENCE, NOT A PRIOR. My challenger passed each pitcher's observed ERA in as
+the PRIOR MEAN with no observations, so the hierarchical shrinkage never engaged: Blake Snell's 12.00
+over ONE start entered at 12.00 and drove PIT@LAD to .311. Now .526.
+(2) SIXTY-TWO KEYS FOR A THIRTY-TEAM LEAGUE. results.csv carries full names before 2026-07-19 and
+abbreviations after; team_ratings grouped on the raw string and split every franchise in two,
+silently — ATL had 23 games under its abbreviation and 97 under its full name. The champion was
+unaffected (daily_card always normalised); only my challenger was wrong. Normalised at source with
+an audit that fails unless the pool resolves to exactly 30 franchises.
+
+Contract extended: a projected per-team score may be null ONLY with a stated reason. V13 forecasts a
+winner and a total and does not forecast per-team scores; fabricating a split to satisfy a schema is
+worse than the gap. The projected TOTAL has no such exemption.
+Board: https://claude.ai/code/artifact/b30873fc-6d6a-456f-9d01-acf05f72dcce

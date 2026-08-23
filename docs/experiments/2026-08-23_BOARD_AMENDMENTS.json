@@ -14,7 +14,7 @@
   "arm_coverage.py": "amendment 1 — 14/14 mutants",
   "totals_estimand.py": "amendments 2 and 3 — 21/21 mutants",
   "simulation_standard.py": "amendments 4 and 5 — 16/16 mutants",
-  "render_contract.py": "amendments 6, 7 and 10 — 22/22 mutants",
+  "render_contract.py": "amendments 6, 7 and 10 — 24/24 mutants. The alias check is scoped to the labels a number is NAMED by, not to the prose: the ban is on the column heading, not on the English word inside a sentence explaining it.",
   "franchise_identity.py": "amendment 8 — 15/15 mutants",
   "finalization_evidence.py": "amendment 9 — 16/16 mutants; wired into prequential.audit_chronology, which is now 29/29",
   "healthcheck.py": "all six gated the same day they were written"
@@ -294,7 +294,28 @@
   },
   "amendments_6_7_10_render_contract": {
    "status": "RENDER_CONTRACT_REFUSED",
-   "n_problems": 17,
+   "n_problems": 14,
+   "labels_audited": [
+    "Baseline",
+    "Baseline spread",
+    "Ch margin",
+    "Ch total",
+    "Ch&minus;Ba",
+    "Challenger",
+    "Challenger spread",
+    "Champion",
+    "Champion &minus; challenger",
+    "Champion action",
+    "Champion spread",
+    "Cl&minus;Ba",
+    "Cl&minus;Ch",
+    "Emp. SD",
+    "Game",
+    "Slots",
+    "Start",
+    "Total C",
+    "Total X"
+   ],
    "problems": [
     {
      "code": "BANNED_ALIAS",
@@ -328,31 +349,13 @@
     },
     {
      "code": "BANNED_ALIAS",
-     "alias": "uncertainty",
-     "canonical": "EMPIRICAL_FORECAST_EDGE_SD",
-     "definition": "empirical standard deviation of the realised forecast edge, used to build conservative_edge = raw_edge - 1.645 x this"
-    },
-    {
-     "code": "BANNED_ALIAS",
      "alias": "sd",
      "canonical": "MONTE_CARLO_SD",
      "definition": "simulation noise in one arm's probability estimate at its trial count"
     },
     {
      "code": "BANNED_ALIAS",
-     "alias": "uncertainty",
-     "canonical": "MONTE_CARLO_SD",
-     "definition": "simulation noise in one arm's probability estimate at its trial count"
-    },
-    {
-     "code": "BANNED_ALIAS",
      "alias": "sd",
-     "canonical": "PRIOR_PARAMETER_SD",
-     "definition": "posterior standard deviation of the expanding Beta prior's probability parameter — shrinks as sqrt(1/n) with the number of finals in the pool"
-    },
-    {
-     "code": "BANNED_ALIAS",
-     "alias": "uncertainty",
      "canonical": "PRIOR_PARAMETER_SD",
      "definition": "posterior standard deviation of the expanding Beta prior's probability parameter — shrinks as sqrt(1/n) with the number of finals in the pool"
     },

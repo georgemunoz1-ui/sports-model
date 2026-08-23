@@ -117,9 +117,18 @@ def _norm(s):
 
 
 # =================================================================================================
-def label_audit(text):
-    """Banned aliases appearing in rendered output."""
-    hay = _norm(_strip_markup(text))
+def label_audit(text_or_labels):
+    """Banned aliases appearing where a number is NAMED.
+
+    Pass a list of label strings (column headings, stat captions) to scope the check correctly. A
+    bare string is accepted for auditing a finished render whose labels are not marked up, but it
+    scans the prose too and will fire on an explanatory sentence — the ban is on what a number is
+    CALLED, not on the English word appearing in a paragraph that explains it.
+    """
+    if isinstance(text_or_labels, (list, tuple, set)):
+        hay = _norm(" \n ".join(str(x) for x in text_or_labels))
+    else:
+        hay = _norm(_strip_markup(text_or_labels))
     hits = []
     for canon, spec in sorted(QUANTITIES.items()):
         for alias in spec["banned_aliases"]:
@@ -191,8 +200,10 @@ def truncation_audit(text, tokens):
     return out
 
 
-def render_gate(text, quantities=(), tokens=()):
-    problems = label_audit(text) + quantity_gate(list(quantities)) + truncation_audit(text, list(tokens))
+def render_gate(text, quantities=(), tokens=(), labels=None):
+    """`labels`, when supplied, scopes the alias check to the places a number is actually named."""
+    problems = (label_audit(text if labels is None else list(labels))
+                + quantity_gate(list(quantities)) + truncation_audit(text, list(tokens)))
     return {"status": OK if not problems else REFUSED,
             "n_problems": len(problems),
             "problems": problems,
@@ -292,6 +303,20 @@ def selftest():
     if clean["status"] != OK:
         f.append(f"a corrected render must pass, got {clean['problems']}")
 
+    # --- scoping: the ban is on what a number is CALLED, not on the word inside an explanation ----
+    prose = "<p>the arm widens its uncertainty instead of narrowing the spread of its picks</p>"
+    if not label_audit(prose):
+        f.append("fixture is wrong: unscoped, that prose does trip the aliases")
+    if label_audit(["CROSS_GAME_P_SD", "EMPIRICAL_FORECAST_EDGE_SD"]):
+        f.append("canonical labels must pass when the check is scoped to labels")
+    scoped = render_gate(prose + whole, fixed, tokens,
+                         labels=["CROSS_GAME_P_SD", "EMPIRICAL_FORECAST_EDGE_SD"])
+    if scoped["status"] != OK:
+        f.append(f"scoped to its labels, a page whose PROSE says 'uncertainty' must pass, "
+                 f"got {scoped['problems']}")
+    if label_audit(["Champion spread"]) == []:
+        f.append("a banned alias in a LABEL must still be caught when scoped")
+
     for x in f:
         print("FAIL:", x)
     if not f:
@@ -300,6 +325,11 @@ def selftest():
 
 
 MUTANTS = [
+    ("the alias check ignores the labels it was scoped to",
+     "        hay = _norm(\" \\n \".join(str(x) for x in text_or_labels))", '        hay = ""'),
+    ("the gate ignores the labels argument and scans the prose again",
+     "    problems = (label_audit(text if labels is None else list(labels))",
+     "    problems = (label_audit(text)"),
     ("banned aliases stop being checked",
      "            if re.search(r\"(?<![a-z0-9_])\" + re.escape(a) + r\"(?![a-z0-9_])\", hay):",
      "            if False:"),
@@ -349,11 +379,11 @@ MUTANTS = [
     ("the gate reports OK regardless of problems",
      '    return {"status": OK if not problems else REFUSED,', '    return {"status": OK,'),
     ("the gate stops running the quantity check",
-     "    problems = label_audit(text) + quantity_gate(list(quantities)) + truncation_audit(text, list(tokens))",
-     "    problems = label_audit(text) + truncation_audit(text, list(tokens))"),
+     "                + quantity_gate(list(quantities)) + truncation_audit(text, list(tokens)))",
+     "                + truncation_audit(text, list(tokens)))"),
     ("the gate stops running the truncation check",
-     "    problems = label_audit(text) + quantity_gate(list(quantities)) + truncation_audit(text, list(tokens))",
-     "    problems = label_audit(text) + quantity_gate(list(quantities))"),
+     "                + quantity_gate(list(quantities)) + truncation_audit(text, list(tokens)))",
+     "                + quantity_gate(list(quantities)))"),
     ("markup is not stripped, so a token split by a tag reads as truncated",
      "    hay = _norm(_strip_markup(text))\n    out = []", "    hay = _norm(text)\n    out = []"),
 ]

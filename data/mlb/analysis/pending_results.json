@@ -1,7 +1,56 @@
 {
  "schema": "ops.pending_results.v1",
  "purpose": "Games explicitly recorded as PENDING_NOT_FINAL. An entry suppresses the slate-completeness FAIL for at most 36 hours and only with a stated reason; a game with no entry is never excused.",
- "pending": [],
+ "pending": [
+  {
+   "date": "2026-08-22",
+   "game": "CIN@AZ",
+   "sport": "mlb",
+   "recorded_utc": "2026-08-23T05:02:51Z",
+   "reason": "FINAL_NOT_YET_INDEXED \u2014 ESPN gameId 401816637 still titled 'Live Score'/'Pregame' at acquisition. A 'Diamondbacks 9-0 Reds' result circulating in search is the AUGUST 21 game (already graded in this registry) and was rejected as an echo, not adopted.",
+   "registered_forecast": "P4-20260822-CIN@AZ"
+  },
+  {
+   "date": "2026-08-22",
+   "game": "CON@LAS",
+   "sport": "wnba",
+   "recorded_utc": "2026-08-23T05:02:51Z",
+   "reason": "FINAL_NOT_YET_INDEXED \u2014 no publisher title carrying a final score was returned.",
+   "registered_forecast": "WNBA-V1-20260822-CON@LAS"
+  },
+  {
+   "date": "2026-08-22",
+   "game": "ATL@PHX",
+   "sport": "wnba",
+   "recorded_utc": "2026-08-23T05:02:51Z",
+   "reason": "FINAL_NOT_YET_INDEXED \u2014 FOX Sports title still reads 'Live Score' at acquisition.",
+   "registered_forecast": "WNBA-V1-20260822-ATL@PHX"
+  },
+  {
+   "date": "2026-08-22",
+   "game": "DAL@ARI",
+   "sport": "nfl",
+   "recorded_utc": "2026-08-23T05:02:51Z",
+   "reason": "FINAL_NOT_YET_INDEXED \u2014 FOX Sports title still reads 'Live Score'. Benchmark-only record; also carries both owner-discretion legs.",
+   "registered_forecast": "NFL-PRE-BENCHMARK-REGISTRATION-2026-08-22-DAL@ARI"
+  },
+  {
+   "date": "2026-08-22",
+   "game": "MIN@SD",
+   "sport": "mlb",
+   "recorded_utc": "2026-08-23T05:05:42Z",
+   "reason": "TIER1_CONFIRMATION_REQUIRED \u2014 a title-corroborated tier-2 score exists (MIN@SD 5-7, CLE@COL 4-3) and is held as evidence only. Tier-2 may not enter the canonical table, so the game stays PENDING until a tier-1 source confirms it.",
+   "registered_forecast": "P4-20260822-MIN@SD"
+  },
+  {
+   "date": "2026-08-22",
+   "game": "CLE@COL",
+   "sport": "mlb",
+   "recorded_utc": "2026-08-23T05:05:42Z",
+   "reason": "TIER1_CONFIRMATION_REQUIRED \u2014 a title-corroborated tier-2 score exists (MIN@SD 5-7, CLE@COL 4-3) and is held as evidence only. Tier-2 may not enter the canonical table, so the game stays PENDING until a tier-1 source confirms it.",
+   "registered_forecast": "P4-20260822-CLE@COL"
+  }
+ ],
  "resolved_log": [
   {
    "date": "2026-08-21",

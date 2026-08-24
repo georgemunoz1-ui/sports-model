@@ -3551,3 +3551,33 @@ action.
 
 Model ledger $0 at 0 bets. Model promotion 15/500 games, 1/60 dates. Real-money authorization 0/100,
 separately blocked. Status FORWARD_ONLY_PENDING.
+
+## 2026-08-24 — the first timestamp in this repository that I did not write
+
+Owner authorized a read-only CI-on-push clock. Three runs: the first died on an indented quoted
+heredoc (the terminator must sit at column 0), the second on KeyError 'created_at' because reading a
+run's created_at needs actions: read and the authorized block is contents: read only. I did not
+widen the permission block; I read GitHub's clock from the Date header of an api.github.com
+response, which needs no token and is still an instant after the artifacts were hashed. Run 3
+succeeded. The 8/24 arm registry and board are anchored at 2026-08-24T10:48:32Z, 11h51m before first
+pitch, by a clock that is not mine. It proves an upper bound and says nothing about the commit's own
+author date, which stays unverifiable forever.
+
+The real lesson from run 1 is not the indentation: I had put executable logic in a YAML string,
+where it could not be run locally and so shipped untested. It lives in harness/anchor_verify.py now
+with 10/10 mutants, and a new healthcheck gate runs bash -n over every workflow run-block.
+
+BOARD: 12 games, 10 MLB and 2 WNBA, SEPARATE cohorts, separate hashes, separate cluster counts,
+separate promotion denominators. 8 full starter matchups and 2 partial (TEX@CWS, CIN@SF) whose
+official TBDs stayed TBD. Total distributions retained, so log score and CRPS are computable.
+WNBA champion outputs all ACTION_BLOCKED, DIAGNOSTIC_ONLY, NOT_PROMOTION_ELIGIBLE at 33 days stale.
+
+WIDENING solved numerically as directed: k=2.6089 attains 4.3019pp exactly; the SD ratio would have
+given 2.5685 attaining 4.2379pp and missed. Refusals predefined before the card.
+
+PRIOR RECONCILED: 1700 was my error, from a predicate that ignored result_status. The 16 rows are
+winner-only rows from 8/10-8/11, provisional since ingestion. 1807 - 123 = 1684.
+
+A parser defect caught BEFORE registration by a check that failed: three pitcher-log field widths, I
+assumed one, and I used per-nine units where the repo uses per-batter-faced percentages. Six starters
+had been silently CAPped. The independent dose check found it.

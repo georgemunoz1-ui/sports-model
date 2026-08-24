@@ -3454,3 +3454,34 @@ table still carries zero rows dated 2026-08-22. Expires 2026-08-24T17:45Z as UNR
 Model-authorized ledger $0 at 0 bets. The two owner-discretion legs stay unsettled in their walled
 lane. Status FORWARD_ONLY_PENDING.
 Board: https://claude.ai/code/artifact/f82e58a3-02a4-4201-ba55-9916a762563c
+
+## 2026-08-23 (settlement) — the league mean won
+
+Owner relayed the official scoreboard; all 15 MLB games, 4 WNBA, 1 NFL ingested at tier 1 under
+OWNER_RELAY. The owner's own summary statistics reproduce exactly from their table (home 10-5, mean
+total 9.40), so orientation was not transcribed wrong.
+
+INFERENCE SUPPRESSED. One slate date is one cluster; smallest attainable two-sided p is 1.0.
+NON_DECISION_GRADE / UNAVAILABLE_INSUFFICIENT_CLUSTERS / NOT_EVALUABLE. Everything below is
+descriptive. Not pooled with 8/19-8/21 — different registration, different input policy.
+
+THE EXPANDING TOTAL PRIOR BEAT EVERY MODEL ARM ON TOTALS. MAE 3.334 for one league-mean number
+(8.984 runs) against 3.473 champion and 3.536 challenger. The card as shipped could not have shown
+it, because its baseline total WAS the challenger's total. The amendment-3 comparator earned its
+place on the first slate it touched.
+
+THE OWNER'S QUESTION INVERTED. The fear was calibration bought with discrimination. Discrimination
+went UP — AUC .660 challenger, .580 champion, .500 baseline — and calibration is what failed: slope
+5.86, so outcomes moved about six times as much as the forecasts. The challenger has ordering skill
+its probabilities do not express. The champion's Brier skill over the prior is +0.00076, which is
+nothing.
+
+FOUR GATES FIRED ON INGEST AND ALL FOUR WERE RIGHT: blank venues (park factor would silently be
+1.0), frozen-slate completeness reporting a fully ingested slate as 100% missing because it joined
+unbound identities (lesson 28 — the 62-keys defect one layer over, the same day I shipped the module
+that fixes it), an unregistered slate in the forecast registry, and ml_asof drift. My own first 15
+grade records carried a truncated sha256 with a fabricated seventeenth character; superseded, not
+edited.
+
+Model ledger $0 at 0 bets. Gate 0/100. Owner's TEN ML -170 0.5u won, +0.294u, walled lane only.
+Settlement: https://claude.ai/code/artifact/98e2a9e5-0862-4660-b57d-52891c84dbed

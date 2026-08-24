@@ -32,9 +32,20 @@ import sys
 
 SELECT = "SELECT"
 LEAN_HOLD = "LEAN_HOLD"
-PASS = "PASS"
-BLOCK = "BLOCK"
 UNCERTAINTY_DEFECT = "UNCERTAINTY_PIPELINE_DEFECT"
+
+# STATUS TAXONOMY, corrected 2026-08-24. I reported "16 PASS / 4 BLOCK", which hid the actual
+# blocker: eight of those sixteen carried POSITIVE expected value and were stopped by the missing
+# uncertainty, not by their own economics. A row that fails on its merits and a row that fails
+# because the screen cannot size its error are different outcomes with different remedies — the
+# first needs a better price, the second needs a working pipeline — and pooling them under PASS
+# made the pipeline defect invisible in the summary that most readers would stop at.
+PASS_NEGATIVE_EV = "PASS_NEGATIVE_EV"
+BLOCK_UNCERTAINTY = "BLOCK_UNCERTAINTY"
+BLOCK_STARTER_CHANGE = "BLOCK_STARTER_CHANGE"
+BLOCK_OTHER = "BLOCK_OTHER"
+PASS = PASS_NEGATIVE_EV        # retained so older readers of this module do not silently break
+BLOCK = BLOCK_OTHER
 
 #: Preregistered. Necessary conditions for a selection, never sufficient ones.
 MIN_EDGE_PP_FOR_SELECT = 2.0
@@ -116,11 +127,15 @@ def screen(row):
         out["ev_per_100"] = 100.0 * out["ev_per_dollar"]
 
     if out["blocks"]:
-        out["status"] = BLOCK
-        out["status_reason"] = "; ".join(out["blocks"])
+        joined = "; ".join(out["blocks"])
+        out["status"] = (BLOCK_STARTER_CHANGE if "STARTER_STATE_CHANGED" in joined else BLOCK_OTHER)
+        out["status_reason"] = joined
         return out
     if out["model_uncertainty_pp"] is None:
-        out["status"] = PASS
+        # a POSITIVE-EV row stopped by the pipeline is BLOCKED, not passed. Only a row that fails on
+        # its own economics may be called a pass.
+        ev = out["ev_per_dollar"]
+        out["status"] = BLOCK_UNCERTAINTY if (ev is not None and ev > 0) else PASS_NEGATIVE_EV
         out["uncertainty_status"] = UNCERTAINTY_DEFECT
         out["status_reason"] = (
             f"{UNCERTAINTY_DEFECT} — the price and the raw EV above are computed and correct; what "
@@ -129,14 +144,15 @@ def screen(row):
             f"substituted here.")
         return out
     if out["model_uncertainty_pp"] == out["monte_carlo_error_pp"]:
-        out["status"] = PASS
+        ev = out["ev_per_dollar"]
+        out["status"] = BLOCK_UNCERTAINTY if (ev is not None and ev > 0) else PASS_NEGATIVE_EV
         out["uncertainty_status"] = UNCERTAINTY_DEFECT
         out["status_reason"] = (f"{UNCERTAINTY_DEFECT} — model uncertainty equals Monte Carlo error, "
                                 f"which means one was substituted for the other")
         return out
     e = out["edge_vs_breakeven_pp"]
     if e is None:
-        out["status"] = PASS
+        out["status"] = PASS_NEGATIVE_EV
         out["status_reason"] = "no computable edge"
         return out
     sigma = e / out["model_uncertainty_pp"] if out["model_uncertainty_pp"] > 0 else None
@@ -150,7 +166,7 @@ def screen(row):
                                 f"{MIN_EDGE_PP_FOR_SELECT}pp floor or under "
                                 f"{MIN_SIGMA_FOR_SELECT} sigma")
     else:
-        out["status"] = PASS
+        out["status"] = PASS_NEGATIVE_EV
         out["status_reason"] = f"edge {e:+.2f}pp does not clear the {MIN_EDGE_PP_FOR_LEAN}pp floor"
     return out
 
@@ -203,8 +219,19 @@ def selftest():
         f.append("the no-vig edge is always the larger; only the break-even edge drives EV")
     if abs(s["ev_per_100"] - 100*s["ev_per_dollar"]) > 1e-12:
         f.append("EV per 100 must be 100x EV per dollar")
-    if s["status"] != PASS or s.get("uncertainty_status") != UNCERTAINTY_DEFECT:
-        f.append(f"no model uncertainty must PASS with the defect, got {s['status']}")
+    # THE TAXONOMY CORRECTION: this row has POSITIVE EV, so it is BLOCKED by the pipeline, not passed
+    if s["ev_per_dollar"] <= 0:
+        f.append("fixture is wrong: this row must carry positive EV for the taxonomy test to bite")
+    if s["status"] != BLOCK_UNCERTAINTY or s.get("uncertainty_status") != UNCERTAINTY_DEFECT:
+        f.append(f"a POSITIVE-EV row with no uncertainty must BLOCK_UNCERTAINTY, got {s['status']}")
+    # a NEGATIVE-EV row with the same missing uncertainty is a pass on its own economics
+    negu = screen(dict(base, model_probability=0.30))
+    if negu["ev_per_dollar"] >= 0:
+        f.append("fixture is wrong: this row must carry negative EV")
+    if negu["status"] != PASS_NEGATIVE_EV:
+        f.append(f"a negative-EV row must PASS_NEGATIVE_EV even with no uncertainty, got {negu['status']}")
+    if BLOCK_UNCERTAINTY == PASS_NEGATIVE_EV:
+        f.append("the two outcomes must be distinct statuses")
     if s["ev_per_dollar"] is None or s["ev_per_100"] is None:
         f.append("the raw EV must still be computed and shown under the defect")
     if "no prices" in s["status_reason"].lower() or "missing price" in s["status_reason"].lower():
@@ -213,7 +240,7 @@ def selftest():
         f.append("the defect reason must name what may NOT be substituted")
 
     sub = screen(dict(base, model_uncertainty_pp=0.157, monte_carlo_error_pp=0.157))
-    if sub["status"] != PASS or sub.get("uncertainty_status") != UNCERTAINTY_DEFECT:
+    if sub["status"] != BLOCK_UNCERTAINTY or sub.get("uncertainty_status") != UNCERTAINTY_DEFECT:
         f.append("identical uncertainty and MC error must be refused as a substitution")
 
     big = screen(dict(base, model_probability=0.60, model_uncertainty_pp=3.0, monte_carlo_error_pp=0.16))
@@ -231,13 +258,17 @@ def selftest():
         f.append("fixture is wrong: this row must clear the sigma test so the POINT floor is what binds")
 
     neg = screen(dict(base, model_probability=0.40, model_uncertainty_pp=3.0, monte_carlo_error_pp=0.16))
-    if neg["status"] != PASS: f.append("a negative edge must PASS")
+    if neg["status"] != PASS_NEGATIVE_EV: f.append("a negative edge must PASS_NEGATIVE_EV")
     noisy = screen(dict(base, model_probability=0.60, model_uncertainty_pp=25.0, monte_carlo_error_pp=0.16))
     if noisy["status"] == SELECT: f.append("a sub-1-sigma edge must not select however large the point edge")
     blocked = screen(dict(base, model_probability=0.60, model_uncertainty_pp=3.0, monte_carlo_error_pp=0.16,
                           blocks=["MATERIAL_STARTER_STATE_CHANGED_AFTER_LOCK"]))
-    if blocked["status"] != BLOCK or "STARTER" not in blocked["status_reason"]:
-        f.append("a block must override a selectable edge and name itself")
+    if blocked["status"] != BLOCK_STARTER_CHANGE or "STARTER" not in blocked["status_reason"]:
+        f.append(f"a starter block must be its own status, got {blocked['status']}")
+    other = screen(dict(base, model_probability=0.60, model_uncertainty_pp=3.0,
+                        monte_carlo_error_pp=0.16, blocks=["SOME_OTHER_REASON"]))
+    if other["status"] != BLOCK_OTHER:
+        f.append("a non-starter block must be BLOCK_OTHER, not silently a starter block")
 
     for x in f:
         print("FAIL:", x)
@@ -247,6 +278,18 @@ def selftest():
 
 
 MUTANTS = [
+    ("a positive-EV row blocked by the pipeline is reported as a pass",
+     '        out["status"] = BLOCK_UNCERTAINTY if (ev is not None and ev > 0) else PASS_NEGATIVE_EV\n        out["uncertainty_status"] = UNCERTAINTY_DEFECT\n        out["status_reason"] = (',
+     '        out["status"] = PASS_NEGATIVE_EV\n        out["uncertainty_status"] = UNCERTAINTY_DEFECT\n        out["status_reason"] = ('),
+    ("every uncertainty-gated row is blocked, hiding the ones that fail on their own economics",
+     '        ev = out["ev_per_dollar"]\n        out["status"] = BLOCK_UNCERTAINTY if (ev is not None and ev > 0) else PASS_NEGATIVE_EV\n        out["uncertainty_status"] = UNCERTAINTY_DEFECT\n        out["status_reason"] = (',
+     '        ev = out["ev_per_dollar"]\n        out["status"] = BLOCK_UNCERTAINTY\n        out["uncertainty_status"] = UNCERTAINTY_DEFECT\n        out["status_reason"] = ('),
+    ("the two block kinds collapse into one",
+     '        out["status"] = (BLOCK_STARTER_CHANGE if "STARTER_STATE_CHANGED" in joined else BLOCK_OTHER)',
+     '        out["status"] = BLOCK_OTHER'),
+    ("the pass and block statuses become the same token",
+     'PASS_NEGATIVE_EV = "PASS_NEGATIVE_EV"', 'PASS_NEGATIVE_EV = "BLOCK_UNCERTAINTY"'),
+
     ("break-even ignores the price entirely",
      "    return (-a) / ((-a) + 100.0) if a < 0 else 100.0 / (a + 100.0)", "    return 0.5"),
     ("the favourite and underdog break-even branches are swapped",

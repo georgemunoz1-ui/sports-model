@@ -3581,3 +3581,58 @@ winner-only rows from 8/10-8/11, provisional since ingestion. 1807 - 123 = 1684.
 A parser defect caught BEFORE registration by a check that failed: three pitcher-log field widths, I
 assumed one, and I used per-nine units where the repo uses per-batter-faced percentages. Six starters
 had been silently CAPped. The independent dose check found it.
+
+## 2026-08-24 (cycle 2) — the ladder worked, and then the next defect showed up
+
+Owner rejected the sentence "no prices exist for this slate" and was right to. A blocked egress
+rail is not an absent market. The acquisition ladder DIRECT_BOOK -> NAMED_BOOK_AGGREGATOR ->
+OWNER_RELAY now advances on a rail failure instead of terminating, and the correct terminal wording
+is NO_ELIGIBLE_CAPTURED_PRICE_BOARD. A same-book DraftKings board arrived by OWNER_RELAY and
+validated 12/12. My first eligibility band would have rejected it: I had written an absolute 3.5-7.5%
+overround gate, and the real MLB moneyline holds on that board are 1.637-1.869%.
+
+Then the owner corrected the replacement too. Homogeneity within a market type is necessary and not
+sufficient, because a board with a uniform 20% hold is perfectly homogeneous. Hold policy v2 has two
+dimensions - homogeneity AND a plausible level band - plus verified book identity, quote links, and
+current/opening separation. Versioned as v2-2026-08-24, a pregame policy amendment, not backdated
+over yesterday's decisions.
+
+STATUS TAXONOMY. I reported "16 PASS / 4 BLOCK" and it hid the actual blocker. PASS did double duty
+for two unrelated things. Corrected and now enforced by the type:
+  8 PASS_NEGATIVE_EV      - screened and declined on price
+  8 BLOCK_UNCERTAINTY     - UNCERTAINTY_PIPELINE_DEFECT, no valid interval exists
+  4 BLOCK_STARTER_CHANGE  - material starter state changed after lock
+Nothing on this board is SELECT. Eight of those rows are blocked by a defect in my own pipeline, and
+a summary that let them read as PASS was the worst kind of wrong: quiet and directionally useful.
+
+P = 0.000827 WAS WRONG. See lesson 31. The base rate was fitted over a window containing the 8/21
+slate it was scoring. With the prior strictly before 8/21, p_home = 0.517160, the value is
+P(X >= 14 | Bin(15, 0.517160)) = 0.000760. The cluster is EXTREME_INFLUENTIAL_CLUSTER and
+NOT_CONTAMINATED_BY_OUTCOME_ALONE - rarity alone never disqualifies data.
+
+"PURE NOISE" WITHDRAWN. A 2.18-sigma gap is startling until you remember it was the largest of ten
+comparisons: P(at least one of 10 >= 2.18 sigma) = 0.2569. Correct label is
+CONSISTENT_WITH_MONTE_CARLO_VARIATION, which asserts compatibility and not identity. The two runs
+did use independent RNG streams - 3921802600477923109 and 5397282511765314976 - so the comparison
+was at least a real one.
+
+PMF TAIL. The empirical total distribution was supported on 0-40 and therefore assigned probability
+zero to a 41-run game, which is a log score of -inf waiting to happen. Added an
+OVERFLOW_ABOVE_SUPPORT bin, and pmf_mean now refuses to return a bare mean while overflow mass is
+present. Two quantities kept distinct because they are not the same number:
+  EXPANDING_TOTAL_POINT_MEAN = 8.9911
+  EXPANDING_TOTAL_PMF_MEAN  ~= 8.9976
+
+REFETCH ATTEMPTED, STILL BLOCKED. statsapi.mlb.com EGRESS_BLOCKED. I ran a tier-3 score-reproduction
+check on 2026-08-18 instead: 14/14 agree, 0 disagreements, 1 stored game (mlb:LAD@COL) absent from
+the returned list. That is evidence the stored scores are not wrong. It is not provenance, and I am
+not allowed to let it become provenance by repetition. 1,684 canonical rows remain provisional;
+1,620 carry no evidence path at all.
+
+CLUSTER FLOOR. min_clusters_for_alpha(0.05) = ceil(log2(2/0.05)) = 6. Admissible now: 2. After a
+full restore: 7. Seven is not treated as adequate. The owner said refetching is necessary and not
+sufficient and that is now written into the overlay rather than left as a hope.
+
+EXECUTION REMAINS BLOCKED. Explicit human approval and a fresh price check are both necessary and
+neither is sufficient. Neither can waive UNCERTAINTY_PIPELINE_DEFECT, provisional prior inputs, the
+four starter-change blocks, or 33-day WNBA staleness.

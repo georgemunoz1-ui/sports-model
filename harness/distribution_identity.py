@@ -71,7 +71,29 @@ CONVENTIONS = {
 
 # The support the MLB total prior is defined over. Stated, not inferred from the scored slate.
 MLB_TOTAL_SUPPORT = tuple(range(0, 41))
-LAPLACE_ALPHA = 1.0
+
+#: SMOOTHING. Laplace alpha=1 over 41 bins adds 41 pseudo-counts to 1,684 real ones and drags the
+#: prior mean from 8.9911 to 9.2528 — a +0.262 run distortion of the very quantity the pmf
+#: represents. Unit total pseudo-mass (alpha = 1/|support|) shifts it +0.0065 and still leaves no
+#: integer at exactly zero.
+LAPLACE_ALPHA = None            # explicit: there is no single default; callers pass a policy
+UNIT_PSEUDO_MASS = "UNIT_TOTAL_PSEUDO_MASS"
+
+#: TAIL. A pmf bounded at 40 assigns ZERO probability to a legitimate 41-run game, and under the
+#: exact-mass log-score convention that is an infinite penalty for an outcome the support simply
+#: refused to imagine. Baseball totals have no upper bound: the modern record is in the 40s and
+#: nothing forbids more. So the distribution carries an explicit OVERFLOW bin holding the mass above
+#: the support, and the scorer must be told how to spend it.
+OVERFLOW_KEY = "OVERFLOW_ABOVE_SUPPORT"
+TAIL_CONVENTIONS = {
+    "OVERFLOW_BIN": "mass above max(support) is held in one bin. An outcome above the support scores "
+                    "against that bin's mass, so the log score is finite and honest — it is a large "
+                    "penalty, not an infinite one, which is the correct treatment for a rare but "
+                    "possible event.",
+    "GEOMETRIC_TAIL": "the overflow mass is spread over k > max(support) with a stated decay, giving "
+                      "every integer positive mass at the cost of one more assumed parameter.",
+}
+DEFAULT_TAIL = "OVERFLOW_BIN"
 
 
 def _num(x):
@@ -81,13 +103,29 @@ def _num(x):
 
 
 def pmf_sha256(pmf):
-    """Hash of a pmf, keyed by integer support so two orderings of one pmf hash identically."""
-    payload = json.dumps({str(int(k)): round(float(v), 12) for k, v in sorted(pmf.items())},
+    """Hash of a pmf. The overflow bin is a named key and hashes alongside the integer support."""
+    payload = json.dumps({(k if isinstance(k, str) else str(int(k))): round(float(v), 12)
+                          for k, v in sorted(pmf.items(), key=lambda kv: str(kv[0]))},
                          sort_keys=True, separators=(",", ":"))
     return hashlib.sha256(payload.encode()).hexdigest()
 
 
-def empirical_total_pmf(totals, support=MLB_TOTAL_SUPPORT, alpha=LAPLACE_ALPHA):
+def pmf_mean(pmf, overflow_representative=None):
+    """(mean, note). The overflow bin has no single value, so its treatment is stated, not assumed."""
+    body = {k: v for k, v in pmf.items() if not isinstance(k, str)}
+    m = sum(k * v for k, v in body.items())
+    ov = pmf.get(OVERFLOW_KEY, 0.0)
+    if ov <= 0:
+        return m, "no overflow mass"
+    if overflow_representative is None:
+        return None, (f"{100*ov:.4f}% of the mass sits in {OVERFLOW_KEY}, which has no single value. "
+                      f"A mean over the body alone would understate; supply a representative value "
+                      f"or report the body mean explicitly as a body mean.")
+    return m + float(overflow_representative) * ov, f"overflow priced at {overflow_representative}"
+
+
+def empirical_total_pmf(totals, support=MLB_TOTAL_SUPPORT, alpha=None, tail=DEFAULT_TAIL,
+                        overflow_mass=None):
     """The prior's predictive pmf: the pool's own empirical distribution, Laplace-smoothed.
 
     Smoothing is what stops a never-observed integer inside the support from carrying exactly zero
@@ -100,12 +138,23 @@ def empirical_total_pmf(totals, support=MLB_TOTAL_SUPPORT, alpha=LAPLACE_ALPHA):
     sup = sorted(set(int(k) for k in support))
     if not sup:
         return None, "EMPTY_SUPPORT"
-    outside = [t for t in obs if t not in sup]
-    if outside:
-        return None, f"POOL_TOTALS_OUTSIDE_STATED_SUPPORT: {sorted(set(outside))[:5]}"
+    if tail not in TAIL_CONVENTIONS:
+        return None, f"UNKNOWN_TAIL_CONVENTION: {tail!r}"
+    hi = max(sup)
+    above = [t for t in obs if t > hi]
+    below = [t for t in obs if t < min(sup)]
+    if below:
+        return None, f"POOL_TOTALS_BELOW_STATED_SUPPORT: {sorted(set(below))[:5]}"
+    if alpha is None:
+        alpha = 1.0 / len(sup)          # unit TOTAL pseudo-mass, not one per bin
     counts = {k: alpha for k in sup}
     for t in obs:
-        counts[t] += 1.0
+        if t <= hi:
+            counts[t] += 1.0
+    # the overflow bin: observed exceedances plus a stated floor so a never-yet-seen 41+ game is
+    # improbable rather than impossible
+    floor = alpha if overflow_mass is None else float(overflow_mass)
+    counts[OVERFLOW_KEY] = floor + float(len(above))
     z = sum(counts.values())
     return {k: v / z for k, v in counts.items()}, None
 
@@ -162,10 +211,35 @@ def selftest():
         # an unobserved integer inside the support carries alpha/Z, not zero
         if pmf[3] <= 0 or pmf[3] >= pmf[9]:
             f.append("an unobserved integer must carry small positive mass, below the mode")
-    # a pool total outside the stated support is a refusal, not a silent clip
-    bad, err2 = empirical_total_pmf([7, 8, 99], support=range(0, 21))
-    if bad is not None or "OUTSIDE_STATED_SUPPORT" not in (err2 or ""):
-        f.append("a total outside the support must refuse rather than clip")
+    # --- the tail: a total ABOVE the support goes to the overflow bin, never to zero mass --------
+    if OVERFLOW_KEY not in pmf:
+        f.append("every pmf must carry an overflow bin; a bounded pmf calls 41+ impossible")
+    if pmf[OVERFLOW_KEY] <= 0:
+        f.append("the overflow bin must hold positive mass even with no observed exceedance")
+    # two pools differing ONLY by one exceedance: normalisation is otherwise identical, so the
+    # comparison isolates whether the exceedance actually reached the bin
+    noex, _ = empirical_total_pmf([7, 8, 9], support=range(0, 21))
+    withex, err2 = empirical_total_pmf([7, 8, 9, 99], support=range(0, 21))
+    if withex is None:
+        f.append(f"a total above the support belongs in the overflow bin, not a refusal: {err2}")
+    elif withex[OVERFLOW_KEY] <= noex[OVERFLOW_KEY]:
+        f.append(f"an observed exceedance must increase the overflow mass: "
+                 f"{withex[OVERFLOW_KEY]:.6f} vs {noex[OVERFLOW_KEY]:.6f}")
+    # BELOW the support is still a refusal — a negative total is not a tail event
+    low, err3 = empirical_total_pmf([7, 8, -3], support=range(0, 21))
+    if low is not None or "BELOW_STATED_SUPPORT" not in (err3 or ""):
+        f.append("a total below the support must refuse")
+    if empirical_total_pmf(pool, support=range(0, 21), tail="VIBES")[0] is not None:
+        f.append("an unknown tail convention must refuse")
+    # --- the two means are different quantities and must not be conflated -------------------------
+    m_body, note = pmf_mean(pmf)
+    if m_body is not None:
+        f.append("with overflow mass present, a bare mean must refuse and say why")
+    if OVERFLOW_KEY not in (note or ""):
+        f.append("the refusal must name the overflow bin")
+    m_priced, note2 = pmf_mean(pmf, overflow_representative=25)
+    if m_priced is None:
+        f.append("with a stated representative value the mean is computable")
     if empirical_total_pmf([], support=range(0, 21))[0] is not None:
         f.append("an empty pool has no pmf")
     # the pool here must fall INSIDE any fallback support a defective build might invent, or the
@@ -173,9 +247,17 @@ def selftest():
     if empirical_total_pmf([9, 9], support=[])[0] is not None:
         f.append("an empty support has no pmf, even when every total would fit a fallback")
     # alpha=0 removes smoothing and reintroduces exact zeros — allowed, but it must actually change it
-    raw, _ = empirical_total_pmf(pool, support=range(0, 21), alpha=0.0)
+    raw, _ = empirical_total_pmf(pool, support=range(0, 21), alpha=0.0, overflow_mass=0.0)
     if raw is None or raw[3] != 0.0:
         f.append("alpha=0 must produce the unsmoothed pmf with real zeros")
+    # unit total pseudo-mass is the default and must distort far less than Laplace alpha=1
+    unit, _ = empirical_total_pmf(pool, support=range(0, 21))
+    lap, _ = empirical_total_pmf(pool, support=range(0, 21), alpha=1.0)
+    emp = sum(pool) / len(pool)
+    du = abs(sum(k*v for k, v in unit.items() if not isinstance(k, str))/(1-unit[OVERFLOW_KEY]) - emp)
+    dl = abs(sum(k*v for k, v in lap.items() if not isinstance(k, str))/(1-lap[OVERFLOW_KEY]) - emp)
+    if not (du < dl):
+        f.append(f"unit pseudo-mass must distort the mean less than Laplace: {du:.4f} vs {dl:.4f}")
 
     # --- the hash is over the pmf, and is order-insensitive --------------------------------------
     if pmf_sha256({8: 0.5, 9: 0.5}) != pmf_sha256({9: 0.5, 8: 0.5}):
@@ -228,8 +310,21 @@ MUTANTS = [
      "    counts = {k: alpha for k in sup}", "    counts = {k: 0.0 for k in sup}"),
     ("smoothing is so heavy it overturns the pool's mode",
      "    counts = {k: alpha for k in sup}", "    counts = {k: 1e6 for k in sup}"),
-    ("a pool total outside the support is silently clipped",
-     "    if outside:", "    if False:"),
+    ("a total below the support is silently accepted",
+     "    if below:", "    if False:"),
+    ("the overflow bin is dropped, so an unbounded outcome gets zero mass",
+     "    counts[OVERFLOW_KEY] = floor + float(len(above))", "    pass"),
+    ("the overflow bin starts empty, so a never-seen 41+ game is impossible",
+     "    floor = alpha if overflow_mass is None else float(overflow_mass)", "    floor = 0.0"),
+    ("observed exceedances stop reaching the overflow bin",
+     "    counts[OVERFLOW_KEY] = floor + float(len(above))", "    counts[OVERFLOW_KEY] = floor"),
+    ("an unknown tail convention is accepted",
+     "    if tail not in TAIL_CONVENTIONS:", "    if False:"),
+    ("the default smoothing reverts to Laplace alpha=1",
+     "        alpha = 1.0 / len(sup)          # unit TOTAL pseudo-mass, not one per bin", "        alpha = 1.0"),
+    ("a mean is reported over the body while overflow mass is unpriced",
+     '    if overflow_representative is None:\n        return None, (f"{100*ov:.4f}% of the mass sits in {OVERFLOW_KEY}, which has no single value. "',
+     '    if False:\n        return None, (f"{100*ov:.4f}% of the mass sits in {OVERFLOW_KEY}, which has no single value. "'),
     ("an empty pool yields a pmf anyway",
      '    if not obs:\n        return None, "NO_TOTALS_IN_POOL"', '    if not obs:\n        obs = [9]'),
     ("an empty support yields a pmf anyway",
@@ -237,11 +332,8 @@ MUTANTS = [
     ("the pmf is not normalised",
      "    return {k: v / z for k, v in counts.items()}, None", "    return dict(counts), None"),
     ("the pmf hash ignores the masses",
-     '    payload = json.dumps({str(int(k)): round(float(v), 12) for k, v in sorted(pmf.items())},',
-     '    payload = json.dumps({str(int(k)): 0 for k, v in sorted(pmf.items())},'),
-    ("the pmf hash ignores the support",
-     '    payload = json.dumps({str(int(k)): round(float(v), 12) for k, v in sorted(pmf.items())},',
-     '    payload = json.dumps({"x": sorted(round(float(v), 12) for v in pmf.values())},'),
+     '    payload = json.dumps({(k if isinstance(k, str) else str(int(k))): round(float(v), 12)',
+     '    payload = json.dumps({(k if isinstance(k, str) else str(int(k))): 0.0'),
     ("a missing part stops making the identity incomplete",
      '    missing = [k for k in REQUIRED_PARTS\n               if i.get(k) is None or (isinstance(i.get(k), str) and not i[k].strip())\n               or (isinstance(i.get(k), (list, tuple)) and not i[k])]',
      "    missing = []"),

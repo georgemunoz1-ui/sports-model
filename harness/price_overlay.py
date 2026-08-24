@@ -71,8 +71,30 @@ FROZEN_BOARD_FIELDS = ("p_home", "winner_probability", "projected_total", "proje
 #: Two conditions, both absolute and neither fitted to a board:
 #:   the spread within a market type stays under one percentage point of overround; and
 #:   the level sits above the best-odds regime, which the 2026-08-03 ruling put at 0.4%-0.6%.
+#: PREGAME POLICY AMENDMENT v2, 2026-08-24. NOT the originally registered rule — v1 was the absolute
+#: 3.5%-7.5% band, and this supersedes it in a dated amendment rather than pretending to have always
+#: been the contract.
+#:
+#: v1 was too narrow and would have rejected a valid board. Homogeneity alone, which was my first
+#: fix, is too permissive in the other direction: a uniformly absurd 20% hold board is perfectly
+#: homogeneous and would sail through. The gate needs BOTH dimensions — a plausible LEVEL for the
+#: market and a tight SPREAD within it — plus the identity checks that make "one book" checkable
+#: rather than asserted.
+HOLD_POLICY_VERSION = "v2-2026-08-24"
+HOLD_POLICY_SUPERSEDES = ("supersedes v1: the absolute SAME_BOOK_OVERROUND band [0.035, 0.075] registered 2026-08-03, which would have rejected a valid single-book board")
+
 SAME_BOOK_MAX_OVERROUND_SPREAD_PP = 0.010
 BEST_ODDS_CEILING = 0.010
+
+#: Plausible two-way hold by market. Wide enough to admit a sharp book and a soft one; narrow enough
+#: that an absurd level is refused however homogeneous it is.
+PLAUSIBLE_HOLD_BAND = {
+    "mlb_moneyline": (0.010, 0.080),
+    "wnba_moneyline": (0.015, 0.090),
+    "default": (0.010, 0.100),
+}
+IMPLAUSIBLE_LEVEL = "OVERROUND_LEVEL_OUTSIDE_PLAUSIBLE_BAND_FOR_THIS_MARKET"
+UNVERIFIED_BOOK = "SPORTSBOOK_IDENTITY_OR_QUOTE_LINKS_UNVERIFIED"
 
 # --- selection requirements ------------------------------------------------------------------------
 SELECTION_REQUIREMENTS = ("model_probability", "price", "expected_value",
@@ -88,8 +110,8 @@ def _num(x):
     return float(x)
 
 
-def market_homogeneity(overrounds):
-    """(ok, detail) for one market type. A single book is homogeneous; a mixed board is not."""
+def market_homogeneity(overrounds, market="default"):
+    """(ok, detail) for one market type: plausible LEVEL and tight SPREAD, both required."""
     vals = [v for v in (_num(x) for x in (overrounds or [])) if v is not None]
     if len(vals) < 2:
         return None, {"n": len(vals), "reason": "fewer than two priced markets; homogeneity is "
@@ -102,6 +124,12 @@ def market_homogeneity(overrounds):
         detail["reason"] = (f"mean overround {mean:.4f} is at or below the best-odds regime "
                             f"({BEST_ODDS_CEILING}); a cross-book best-of board cannot support a "
                             f"de-vigged market probability")
+        return False, detail
+    lo, hi = PLAUSIBLE_HOLD_BAND.get(market, PLAUSIBLE_HOLD_BAND["default"])
+    if not (lo <= mean <= hi):
+        detail["reason"] = (f"{IMPLAUSIBLE_LEVEL}: mean overround {mean:.4f} outside [{lo}, {hi}] "
+                            f"for {market}. A uniformly absurd board is perfectly homogeneous, so "
+                            f"the spread test alone would admit it.")
         return False, detail
     if spread > SAME_BOOK_MAX_OVERROUND_SPREAD_PP:
         detail["reason"] = (f"overround spread {spread:.4f} exceeds "
@@ -121,14 +149,19 @@ def price_eligibility(boards):
         ovs = b.get("overrounds")
         if ovs is None and _num(b.get("overround")) is not None:
             ovs = [b["overround"]]
-        hom, detail = market_homogeneity(ovs)
+        hom, detail = market_homogeneity(ovs, b.get("market", "default"))
+        if hom is not False and not (b.get("book") and b.get("source_urls")):
+            hom, detail = False, dict(detail or {}, reason=(
+                f"{UNVERIFIED_BOOK}: a board must name its book AND its quote links, or 'one book' "
+                f"is an assertion rather than a check"))
         if hom is None:
             why = f"homogeneity undefined: {detail.get('reason')}"
         elif hom is False:
             why = detail.get("reason")
         elif not cap or not start or str(cap) >= str(start):
             why = "not captured before the first start"
-        graded.append(dict(b, eligible=why is None, reason=why, homogeneity=detail))
+        graded.append(dict(b, eligible=why is None, reason=why, homogeneity=detail,
+                           hold_policy_version=HOLD_POLICY_VERSION))
     ok = [g for g in graded if g["eligible"]]
     return {
         "n_boards": len(graded),
@@ -207,7 +240,9 @@ def selftest():
 
     # THE CORRECTION: a genuine single-book MLB board holds under 2% and MUST be eligible. An
     # absolute 3.5% floor would have rejected the owner's real DraftKings board.
-    real = price_eligibility([{"overrounds": DK_MLB, "captured_at_utc": "2026-08-24T16:41:27Z",
+    DKID = {"book": "DRAFTKINGS", "source_urls": ["https://www.espn.com/mlb/odds"]}
+    real = price_eligibility([{**DKID, "market": "mlb_moneyline", "overrounds": DK_MLB,
+                               "captured_at_utc": "2026-08-24T16:41:27Z",
                                "first_start_utc": "2026-08-24T22:40:00Z"}])
     if real["status"] != ELIGIBLE:
         f.append(f"the real single-book MLB board must be eligible, got {real['graded'][0]['reason']}")
@@ -217,7 +252,7 @@ def selftest():
         f.append("even an ELIGIBLE board confers no action authority by itself")
 
     # the 8/23 bimodal board must still fail — that is the case the homogeneity test exists for
-    bim = price_eligibility([{"overrounds": BIMODAL_0823, "captured_at_utc": "2026-08-23T15:00:00Z",
+    bim = price_eligibility([{**DKID, "market": "mlb_moneyline", "overrounds": BIMODAL_0823, "captured_at_utc": "2026-08-23T15:00:00Z",
                               "first_start_utc": "2026-08-23T17:35:00Z"}])
     if bim["status"] != NO_ELIGIBLE_BOARD:
         f.append("the bimodal 8/23 board must remain ineligible")
@@ -227,7 +262,7 @@ def selftest():
         f.append("an inadmissible board must still be COUNTED as captured, not reported as absent")
 
     # a cross-book best-of board is tight AND homogeneous, so only the LEVEL test catches it
-    bo = price_eligibility([{"overrounds": BEST_ODDS, "captured_at_utc": "2026-08-24T16:00:00Z",
+    bo = price_eligibility([{**DKID, "market": "mlb_moneyline", "overrounds": BEST_ODDS, "captured_at_utc": "2026-08-24T16:00:00Z",
                              "first_start_utc": "2026-08-24T22:40:00Z"}])
     if bo["status"] != NO_ELIGIBLE_BOARD:
         f.append("a best-odds board must be ineligible")
@@ -235,27 +270,56 @@ def selftest():
         f.append("the best-odds refusal must name the regime, not the spread")
 
     # a single market cannot be tested for homogeneity, and that is reported rather than assumed
-    one = price_eligibility([{"overrounds": [0.0177], "captured_at_utc": "2026-08-24T16:00:00Z",
+    one = price_eligibility([{**DKID, "market": "mlb_moneyline", "overrounds": [0.0177], "captured_at_utc": "2026-08-24T16:00:00Z",
                               "first_start_utc": "2026-08-24T22:40:00Z"}])
     if one["status"] != NO_ELIGIBLE_BOARD or "undefined" not in (one["graded"][0]["reason"] or ""):
         f.append("one priced market cannot establish homogeneity and must not be assumed eligible")
 
-    late = price_eligibility([{"overrounds": DK_MLB, "captured_at_utc": "2026-08-24T23:00:00Z",
+    late = price_eligibility([{**DKID, "market": "mlb_moneyline", "overrounds": DK_MLB, "captured_at_utc": "2026-08-24T23:00:00Z",
                                "first_start_utc": "2026-08-24T22:40:00Z"}])
     if late["status"] != NO_ELIGIBLE_BOARD:
         f.append("a board captured after the first start is not eligible")
 
     # and the WNBA half of the same capture is a DIFFERENT market type with a legitimately wider
     # hold; grouping them together would manufacture a bimodal board out of two honest ones
-    wn = price_eligibility([{"overrounds": [0.04268, 0.04762], "captured_at_utc": "2026-08-24T16:41:27Z",
+    wn = price_eligibility([{**DKID, "market": "wnba_moneyline", "overrounds": [0.04268, 0.04762], "captured_at_utc": "2026-08-24T16:41:27Z",
                              "first_start_utc": "2026-08-25T00:00:00Z"}])
     if wn["status"] != ELIGIBLE:
         f.append(f"the WNBA board must be eligible in its own market type, got {wn['graded'][0]['reason']}")
-    pooled = price_eligibility([{"overrounds": DK_MLB + [0.04268, 0.04762],
+    pooled = price_eligibility([{**DKID, "market": "mlb_moneyline", "overrounds": DK_MLB + [0.04268, 0.04762],
                                  "captured_at_utc": "2026-08-24T16:41:27Z",
                                  "first_start_utc": "2026-08-24T22:40:00Z"}])
     if pooled["status"] != NO_ELIGIBLE_BOARD:
         f.append("pooling two market types must fail homogeneity — they must be graded separately")
+
+    # a uniformly absurd board is perfectly homogeneous — the LEVEL test is what catches it
+    absurd = price_eligibility([{**DKID, "market": "mlb_moneyline",
+                                 "overrounds": [0.20, 0.203, 0.198, 0.201],
+                                 "captured_at_utc": "2026-08-24T16:00:00Z",
+                                 "first_start_utc": "2026-08-24T22:40:00Z"}])
+    if absurd["status"] != NO_ELIGIBLE_BOARD:
+        f.append("a uniformly absurd 20% hold board must be refused on LEVEL despite being homogeneous")
+    if IMPLAUSIBLE_LEVEL not in (absurd["graded"][0]["reason"] or ""):
+        f.append("the absurd board must be refused on level, not on spread")
+    # a board that does not name its book and links cannot claim to be one book
+    anon = price_eligibility([{"market": "mlb_moneyline", "overrounds": DK_MLB,
+                               "captured_at_utc": "2026-08-24T16:41:27Z",
+                               "first_start_utc": "2026-08-24T22:40:00Z"}])
+    if anon["status"] != NO_ELIGIBLE_BOARD or UNVERIFIED_BOOK not in (anon["graded"][0]["reason"] or ""):
+        f.append("a board with no book identity or quote links must be refused")
+    # naming the book is NOT enough on its own: without quote links "one book" is still an assertion
+    named_only = price_eligibility([{"book": "DRAFTKINGS", "market": "mlb_moneyline",
+                                     "overrounds": DK_MLB,
+                                     "captured_at_utc": "2026-08-24T16:41:27Z",
+                                     "first_start_utc": "2026-08-24T22:40:00Z"}])
+    if named_only["status"] != NO_ELIGIBLE_BOARD \
+            or UNVERIFIED_BOOK not in (named_only["graded"][0]["reason"] or ""):
+        f.append("naming a book without quote links must still be refused")
+    # the amendment is versioned, not backdated
+    if HOLD_POLICY_VERSION == "v1" or "supersedes" not in HOLD_POLICY_SUPERSEDES.lower():
+        f.append("the hold policy must be versioned and name what it supersedes")
+    if real["graded"][0].get("hold_policy_version") != HOLD_POLICY_VERSION:
+        f.append("every graded board must record which policy version judged it")
 
     # --- 2: the overlay may not rewrite the board -------------------------------------------------
     ok_overlay = {"board_sha256": B, "captured_at_utc": "2026-08-24T20:00:00Z",
@@ -323,8 +387,22 @@ def selftest():
 
 
 MUTANTS = [
+    ("the plausible-level test stops running, so an absurd board passes on homogeneity alone",
+     "    if not (lo <= mean <= hi):", "    if False:"),
+    ("the plausible band is widened until 20% is normal",
+     '    "mlb_moneyline": (0.010, 0.080),', '    "mlb_moneyline": (0.0, 1.0),'),
+    ("book identity and quote links stop being required",
+     '        if hom is not False and not (b.get("book") and b.get("source_urls")):', "        if False:"),
+    ("quote links alone are dropped from the identity check",
+     '        if hom is not False and not (b.get("book") and b.get("source_urls")):',
+     '        if hom is not False and not b.get("book"):'),
+    ("the policy version is backdated to the original rule",
+     'HOLD_POLICY_VERSION = "v2-2026-08-24"', 'HOLD_POLICY_VERSION = "v1"'),
+    ("the graded board stops recording which policy judged it",
+     '                           hold_policy_version=HOLD_POLICY_VERSION))', "                           ))"),
+
     ("an inadmissible board is reported as no board at all",
-     "        graded.append(dict(b, eligible=why is None, reason=why, homogeneity=detail))",
+     "        graded.append(dict(b, eligible=why is None, reason=why, homogeneity=detail,\n                           hold_policy_version=HOLD_POLICY_VERSION))",
      "        pass"),
     ("the homogeneity test stops running",
      "    if spread > SAME_BOOK_MAX_OVERROUND_SPREAD_PP:", "    if False:"),

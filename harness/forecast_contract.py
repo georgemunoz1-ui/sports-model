@@ -72,6 +72,30 @@ REQUIRED_FIELDS = (
     "fallback_applied",
 )
 # ATS is required only where the sport has a spread estimand.
+#: TARGETS AND THEIR DECISION AUTHORITY (owner directive 2026-08-24).
+#: "Keep total forecasts mandatory and gradable while blocking them from decision authority."
+#:
+#: The total is the steadiest thing this system produces and that is exactly why it is dangerous: a
+#: steady number invites action. It has never had an estimand that could support one. On 2026-08-23
+#: every arm was graded against ITS OWN fair line, which scores ~50/50 by construction; the market
+#: over/under is unavailable because no captured board clears the same-book bar; and the honest
+#: comparator, the expanding league mean, beat every model arm. A target that cannot yet beat a
+#: single league-average number, and has no independent line to be scored against, may be forecast
+#: and graded and may not decide anything.
+#:
+#: Mandatory, gradable, and NEVER decision-bearing are three separate properties, and this table
+#: keeps them separate rather than letting "we grade it" drift into "we can bet it".
+TARGET_AUTHORITY = {
+    "winner": "GATE_GOVERNED",
+    "total": "NEVER_DECISION_BEARING",
+    "ats": "GATE_GOVERNED",
+}
+TOTAL_DECISION_ATTEMPT = "TOTAL_MAY_NOT_CARRY_DECISION_AUTHORITY"
+
+#: Row fields that would give a total decision authority. Presence of any is a structural refusal.
+TOTAL_DECISION_FIELDS = ("total_action_status", "total_selection", "total_stake_u",
+                         "total_bet", "total_authorized", "ou_selection", "ou_stake_u")
+
 ATS_FIELDS = ("ats_selection", "ats_cover_probability")
 ATS_SPORTS = ("wnba", "nfl", "nba", "ncaab", "ncaaf")
 
@@ -127,6 +151,17 @@ def validate_row(row, sport=None):
     if tv is None or isinstance(tv, bool) or not isinstance(tv, (int, float)):
         f.append(f"{row.get('game', '?')}: projected_total is {tv!r}; every arm on this card "
                  f"forecasts a total, so a null here is a missing forecast")
+    # MANDATORY AND GRADABLE, NEVER DECISION-BEARING. The total must be present (above) and must be
+    # gradeable (it flows through gradeable() like any other field) and must not acquire an action.
+    for k in TOTAL_DECISION_FIELDS:
+        if row.get(k) not in (None, "", "NONE"):
+            f.append(f"{row.get('game', '?')}: {TOTAL_DECISION_ATTEMPT} — field {k}={row.get(k)!r}. "
+                     f"The total is forecast and graded; it decides nothing. "
+                     f"TARGET_AUTHORITY['total'] is {TARGET_AUTHORITY['total']} and there is no "
+                     f"path in this module that changes it.")
+    if row.get("total_side") is not None and str(row.get("action_status", "")).startswith(BET_PREFIX):
+        f.append(f"{row.get('game', '?')}: {TOTAL_DECISION_ATTEMPT} — a row carrying a total side "
+                 f"may not also carry a BET action status")
     probs = [row.get("p_over"), row.get("p_push"), row.get("p_under")]
     if any(x is None or isinstance(x, bool) or not isinstance(x, (int, float)) for x in probs):
         f.append(f"{row.get('game', '?')}: over/push/under probabilities incomplete {probs}")
@@ -221,8 +256,9 @@ def gradeable(row):
     ok, f = validate_row(row, row.get("sport"))
     if not ok:
         return False, f"the row is incomplete: {f[0]}"
-    return True, ("gradeable; action_status "
-                  f"{row.get('action_status')!r} governs action only")
+    return True, ("gradeable on every target it carries, the total included; action_status "
+                  f"{row.get('action_status')!r} governs action only, and the total target is "
+                  f"{TARGET_AUTHORITY['total']} regardless of it")
 
 
 def validate_card(rows, scheduled_games, sport=None):
@@ -468,6 +504,41 @@ def selftest():
     if validate_card(rows + [_row("A@B")], sched)[0]:
         f.append("a game appearing twice on one card was accepted")
 
+    # --- totals: mandatory, gradable, never decision-bearing (owner directive 2026-08-24) --------
+    if TARGET_AUTHORITY["total"] != "NEVER_DECISION_BEARING":
+        f.append("the total target must be NEVER_DECISION_BEARING")
+    if TARGET_AUTHORITY["winner"] == TARGET_AUTHORITY["total"]:
+        f.append("winner and total must not share a decision authority")
+    _r = _row()
+    ok0, _ = validate_row(_r, _r.get("sport"))
+    if not ok0:
+        f.append("fixture is wrong: the base row must validate before the total rules are tested")
+    # still MANDATORY
+    ok1, f1 = validate_row(dict(_r, projected_total=None), _r.get("sport"))
+    if ok1 or not any("missing forecast" in x for x in f1):
+        f.append("a null projected_total must still be a missing forecast")
+    # still GRADABLE
+    g_ok, g_why = gradeable(_r)
+    if not g_ok or "total" not in g_why:
+        f.append(f"a complete row must be gradeable on the total too, got {g_why}")
+    # but NEVER DECISION-BEARING
+    # NAMED explicitly, not iterated over TOTAL_DECISION_FIELDS: a loop over the list under test
+    # cannot fail when the list is emptied, which is a fixture that guards nothing (lesson 24).
+    for bad_field in ("total_action_status", "total_selection", "total_stake_u", "total_bet",
+                      "total_authorized", "ou_selection", "ou_stake_u"):
+        if bad_field not in TOTAL_DECISION_FIELDS:
+            f.append(f"{bad_field} must be on the refused-decision list")
+        ok2, f2 = validate_row(dict(_r, **{bad_field: "OVER 8.5"}), _r.get("sport"))
+        if ok2 or not any(TOTAL_DECISION_ATTEMPT in x for x in f2):
+            f.append(f"{bad_field} must be refused as a decision on the total")
+    # a total side alongside a BET action is refused even though each alone is fine
+    ok3, f3 = validate_row(dict(_r, total_side="OVER", action_status="BET_ML_HOME"), _r.get("sport"))
+    if ok3 or not any(TOTAL_DECISION_ATTEMPT in x for x in f3):
+        f.append("a total side on a BET row must be refused")
+    ok4, _ = validate_row(dict(_r, total_side="OVER"), _r.get("sport"))
+    if not ok4:
+        f.append("a total side on a reference-only row is fine and must still validate")
+
     print("forecast_contract selftest:", "PASS" if not f else "FAIL")
     for x in f:
         print("  " + x)
@@ -475,6 +546,19 @@ def selftest():
 
 
 MUTANTS = [
+    ("the total acquires decision authority",
+     'TARGET_AUTHORITY = {\n    "winner": "GATE_GOVERNED",\n    "total": "NEVER_DECISION_BEARING",',
+     'TARGET_AUTHORITY = {\n    "winner": "GATE_GOVERNED",\n    "total": "GATE_GOVERNED",'),
+    ("decision fields on the total stop being refused",
+     "        if row.get(k) not in (None, \"\", \"NONE\"):", "        if False:"),
+    ("the decision-field list is emptied",
+     'TOTAL_DECISION_FIELDS = ("total_action_status", "total_selection", "total_stake_u",\n                         "total_bet", "total_authorized", "ou_selection", "ou_stake_u")',
+     "TOTAL_DECISION_FIELDS = ()"),
+    ("a total side may ride along with a BET action",
+     '    if row.get("total_side") is not None and str(row.get("action_status", "")).startswith(BET_PREFIX):',
+     "    if False:"),
+    ("the total stops being mandatory",
+     "    if tv is None or isinstance(tv, bool) or not isinstance(tv, (int, float)):", "    if False:"),
     ("a required field stops being required",
      "    for k in REQUIRED_FIELDS:\n        if k not in row:", "    for k in ():\n        if k not in row:"),
     ("ATS is no longer required for a spread sport",

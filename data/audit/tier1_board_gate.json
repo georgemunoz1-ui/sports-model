@@ -1,21 +1,21 @@
 {
  "record_id": "TIER1-BOARD-GATE-2026-08-15-2026-08-16",
- "built_utc": "2026-08-24T09:10:01Z",
+ "built_utc": "2026-08-24T09:28:06Z",
  "role": "MEASUREMENT_NON_FORECASTING \u2014 reads results.csv, never writes it",
  "results_file": "data/backfill/mlb/2026/results.csv",
- "results_file_sha256": "de04fd24e25a6902917054ed6b87f642785d21b80a8183061f8575ad28d36354",
+ "results_file_sha256": "2e8483027359655773d2c9f5f87f2209605738d136df79dc2ff18680795f1df2",
  "criteria": {
-  "LATEST_TIER1_FORM_DATE": "2026-08-23",
+  "LATEST_TIER1_FORM_DATE": "2026-08-21",
   "LATEST_TIER1_FORM_DATE_meets_2026_08_16": true,
   "missing_tier1_games_8_15": 0,
   "missing_tier1_games_8_16": 0,
   "canonical_results_contamination_IN_WINDOW": 0,
-  "canonical_results_contamination_WHOLE_FILE": 136
+  "canonical_results_contamination_WHOLE_FILE": 259
  },
  "contamination_whole_file": {
-  "leaked_rows": 136,
+  "leaked_rows": 259,
   "by_class": {
-   "tier1/PROVISIONAL": 10,
+   "tier1/PROVISIONAL": 133,
    "tier2/PROVISIONAL": 17,
    "tier3/PROVISIONAL": 109
   },
@@ -28,14 +28,23 @@
    "2026-08-03": 8,
    "2026-08-04": 15,
    "2026-08-05": 15,
+   "2026-08-06": 11,
    "2026-08-07": 15,
-   "2026-08-08": 11,
-   "2026-08-10": 1,
-   "2026-08-11": 9
+   "2026-08-08": 15,
+   "2026-08-09": 15,
+   "2026-08-10": 8,
+   "2026-08-11": 9,
+   "2026-08-12": 15,
+   "2026-08-14": 14,
+   "2026-08-17": 11,
+   "2026-08-18": 15,
+   "2026-08-19": 15,
+   "2026-08-21": 1,
+   "2026-08-23": 15
   },
   "date_range": [
    "2026-07-23",
-   "2026-08-11"
+   "2026-08-23"
   ],
   "note": "These are LEGACY rows predating the owner's 2026-08-16 tier-1-only ruling. They are outside the acquisition window and are NOT introduced by this refresh. They remain visible to the tier-blind production predicate and therefore still feed V13's season-to-date form. Removing them would change a FROZEN model's inputs mid-record (R3) and is an owner decision, not a repair \u2014 see harness/tier_discipline.py and data/audit/tier_exposure_baseline.json."
  },

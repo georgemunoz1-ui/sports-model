@@ -97,10 +97,21 @@ def load_results(path=None):
     return list(csv.DictReader(open(p)))
 
 
-def asof(rows, cutoff_date, tier_filter=("1",)):
+#: A result that is not authoritative may not feed an authoritative output.
+AUTHORITATIVE_RESULT_STATUS = ("FINAL",)
+
+
+def asof(rows, cutoff_date, tier_filter=("1",), require_authoritative=True):
     """Completed games STRICTLY BEFORE the cutoff date, from the permitted evidence tiers.
 
-    Strictly before, always: a rating that can see the day it is forecasting is not a rating."""
+    Strictly before, always: a rating that can see the day it is forecasting is not a rating.
+
+    OWNER DIRECTIVE 2026-08-24. result_status is now enforced, not merely recorded. PROVISIONAL has
+    always meant "usable for continuity and freshness, never authoritative" — but nothing read the
+    column, so 123 rows resting at PROVISIONAL still fed the expanding prior, the team ratings and
+    the scoring prior, which are the most authoritative numbers this system emits. A status that
+    nothing enforces is a label. Pass require_authoritative=False only to measure what the filter
+    removes, never to compute a forecast."""
     out = []
     for r in rows:
         if str(r.get("status", "")).lower() != "final":
@@ -108,6 +119,8 @@ def asof(rows, cutoff_date, tier_filter=("1",)):
         if (r.get("date") or "") >= cutoff_date:
             continue
         if tier_filter is not None and str(r.get("source_tier", "")) not in tier_filter:
+            continue
+        if require_authoritative and str(r.get("result_status", "")) not in AUTHORITATIVE_RESULT_STATUS:
             continue
         out.append(r)
     return sorted(out, key=lambda r: (r.get("date", ""), r.get("game_id", "")))
@@ -304,13 +317,13 @@ def selftest():
     f = []
     ROWS = []
     for i in range(40):
-        ROWS.append({"status": "final", "date": f"2026-06-{i%28+1:02d}", "game_id": f"g{i}",
+        ROWS.append({"status": "final", "result_status": "FINAL", "date": f"2026-06-{i%28+1:02d}", "game_id": f"g{i}",
                      "away": "AAA", "home": "BBB", "away_score": "3", "home_score": "5",
                      "home_win": "1", "source_tier": "1"})
-    ROWS.append({"status": "final", "date": "2026-07-01", "game_id": "same", "away": "AAA",
+    ROWS.append({"status": "final", "result_status": "FINAL", "date": "2026-07-01", "game_id": "same", "away": "AAA",
                  "home": "BBB", "away_score": "9", "home_score": "0", "home_win": "0",
                  "source_tier": "1"})
-    ROWS.append({"status": "final", "date": "2026-06-05", "game_id": "t3", "away": "AAA",
+    ROWS.append({"status": "final", "result_status": "FINAL", "date": "2026-06-05", "game_id": "t3", "away": "AAA",
                  "home": "BBB", "away_score": "1", "home_score": "2", "home_win": "1",
                  "source_tier": "3"})
 
@@ -388,10 +401,10 @@ def selftest():
     # --- TEAM IDENTITY MUST NORMALISE BEFORE ANY RATING IS BUILT --------------------------------
     # The real defect: results.csv carries FULL NAMES before 2026-07-19 and ABBREVIATIONS after, so
     # an unnormalised group-by returned 62 keys for a 30-team league and split every season in two.
-    MIXED = ([{"status": "final", "date": "2026-05-0%d" % (i + 1), "game_id": f"m{i}",
+    MIXED = ([{"status": "final", "result_status": "FINAL", "date": "2026-05-0%d" % (i + 1), "game_id": f"m{i}",
                "away": "New York Mets", "home": "Atlanta Braves", "away_score": "3",
                "home_score": "5", "home_win": "1", "source_tier": "1"} for i in range(9)] +
-             [{"status": "final", "date": "2026-08-0%d" % (i + 1), "game_id": f"a{i}",
+             [{"status": "final", "result_status": "FINAL", "date": "2026-08-0%d" % (i + 1), "game_id": f"a{i}",
                "away": "NYM", "home": "ATL", "away_score": "3", "home_score": "5",
                "home_win": "1", "source_tier": "1"} for i in range(3)])
     tr_mixed = team_ratings("2026-08-23", MIXED)
@@ -413,7 +426,7 @@ def selftest():
     if normalize_team(None) is not None:
         f.append("a missing team was coerced")
     # an UNMAPPED long name must SHOW UP, never be folded into another team
-    unk = [{"status": "final", "date": "2026-05-01", "game_id": "u", "away": "Portland Pilots",
+    unk = [{"status": "final", "result_status": "FINAL", "date": "2026-05-01", "game_id": "u", "away": "Portland Pilots",
             "home": "ATL", "away_score": "1", "home_score": "2", "home_win": "1",
             "source_tier": "1"}]
     au = team_identity_audit(unk)
@@ -481,6 +494,22 @@ def selftest():
     if not (a > b):
         f.append(f"an established pitcher's prior strength {a} is not greater than a debut's {b}")
 
+    # --- PROVISIONAL results may not feed an authoritative output (owner directive 2026-08-24) ---
+    mixed = [{"status": "final", "date": "2026-08-01", "source_tier": "1",
+              "result_status": "FINAL", "home_win": "1", "total": "9"},
+             {"status": "final", "date": "2026-08-02", "source_tier": "1",
+              "result_status": "PROVISIONAL", "home_win": "1", "total": "9"},
+             {"status": "final", "date": "2026-08-03", "source_tier": "1",
+              "result_status": "", "home_win": "0", "total": "7"}]
+    keep = asof(mixed, "2026-08-10")
+    if len(keep) != 1 or keep[0]["date"] != "2026-08-01":
+        f.append(f"only the FINAL row may feed an authoritative output, got {[r['date'] for r in keep]}")
+    if len(asof(mixed, "2026-08-10", require_authoritative=False)) != 3:
+        f.append("the measurement escape hatch must still return every row")
+    # a blank result_status is not authoritative either — absence is not a claim
+    if any(r["result_status"] == "" for r in asof(mixed, "2026-08-10")):
+        f.append("a blank result_status must not pass as authoritative")
+
     print("adaptive_state selftest:", "PASS" if not f else "FAIL")
     for x in f:
         print("  " + x)
@@ -488,6 +517,16 @@ def selftest():
 
 
 MUTANTS = [
+    ("PROVISIONAL results feed the authoritative priors again",
+     '        if require_authoritative and str(r.get("result_status", "")) not in AUTHORITATIVE_RESULT_STATUS:',
+     "        if False:"),
+    ("a blank result_status counts as authoritative",
+     'AUTHORITATIVE_RESULT_STATUS = ("FINAL",)', 'AUTHORITATIVE_RESULT_STATUS = ("FINAL", "")'),
+    ("PROVISIONAL is added to the authoritative set",
+     'AUTHORITATIVE_RESULT_STATUS = ("FINAL",)', 'AUTHORITATIVE_RESULT_STATUS = ("FINAL", "PROVISIONAL")'),
+    ("the filter defaults to off",
+     "def asof(rows, cutoff_date, tier_filter=(\"1\",), require_authoritative=True):",
+     "def asof(rows, cutoff_date, tier_filter=(\"1\",), require_authoritative=False):"),
     ("an unregistered window is served instead of refused",
      '        raise KeyError(f"{name!r} is not a preregistered window;', '        return 30  # (f"{name!r}'),
     ("a window change becomes an in-place substitution",

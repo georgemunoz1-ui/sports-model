@@ -247,7 +247,9 @@ for _m in ("result_provenance","result_content_checks","parse_box_dump",
            # 2026-08-23 owner amendments 1-10. Wired the same day they were written: a rule
            # that is not executed by this gate is a rule that stops running (lesson 26).
            "arm_coverage","totals_estimand","simulation_standard","render_contract",
-           "franchise_identity","finalization_evidence"):
+           "franchise_identity","finalization_evidence",
+           # 2026-08-24 owner directives: source attribution, and who stamped the clock.
+           "source_artifact_gate","prospectivity_evidence"):
     _r=subprocess.run([sys.executable,f"harness/{_m}.py","--selftest"],capture_output=True,text=True)
     _out=(_r.stdout+_r.stderr).strip().splitlines()
     check(f"{_m} selftest ({_out[-1][:72] if _out else 'no output'})", _r.returncode==0)

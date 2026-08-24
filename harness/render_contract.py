@@ -95,39 +95,69 @@ QUANTITIES = {
 # two tables was tracking two unrelated arms, and the third was invisible. One label, three arms, is
 # the same defect as one label, two uncertainties — so it gets the same rule rather than a footnote.
 ARM_IDENTITIES = {
-    # NOTE: no banned_aliases here on purpose. An alias list on an arm would be
-    # decoration: the misnaming rule below already refuses ANY label that does not contain its
-    # identity, "Baseline" included, and the collision rule catches the actual defect. A field
-    # nothing reads is worse than no field (lesson 21).
-    "EXPANDING_HOME_PRIOR": {
-        "estimand": "winner",
+    # NAMESPACED BY SPORT AND TARGET (owner directive 2026-08-24). An arm name alone is ambiguous
+    # across two axes at once: "CHALLENGER_ADAPTIVE" is a different object in MLB than in the WNBA,
+    # and a different object on the winner target than on the total. Both collisions were live on
+    # the 8/23 page — the WNBA challenger and the MLB challenger shared a name while being different
+    # models, and CHALLENGER_TOTAL and CHALLENGER_ADAPTIVE were one model under two names. The
+    # namespace makes the identity carry its own scope, so a label cannot silently travel between
+    # sports or between targets.
+    #
+    # No banned_aliases here on purpose: the misnaming rule below refuses ANY label that does not
+    # contain its identity, "Baseline" included, and the collision rules catch the real defect. A
+    # field nothing reads is worse than no field (lesson 21).
+    "mlb.winner.EXPANDING_HOME_PRIOR": {
+        "sport": "mlb", "target": "winner",
         "definition": "the expanding Beta(10,10) home-win prior as of the cutoff; one probability "
                       "for every game on the slate",
     },
-    "CHALLENGER_TOTAL": {
-        "estimand": "total",
-        "definition": "the adaptive challenger's projected total. On the 2026-08-23 card this value "
-                      "ALSO occupied the baseline total column, identical in all 15 games, which is "
-                      "why it needs its own name rather than a shared one",
-    },
-    "EXPANDING_TOTAL_PRIOR": {
-        "estimand": "total",
-        "definition": "the expanding league scoring prior, optionally park-adjusted and adjusted by "
-                      "nothing else; the independent comparator on the total estimand",
-    },
-    "CHAMPION_V13": {
-        "estimand": "winner|total",
+    "mlb.winner.CHAMPION_V13": {
+        "sport": "mlb", "target": "winner",
         "definition": "the frozen V13 Monte Carlo card model at its registered trial count",
     },
-    "CHALLENGER_ADAPTIVE": {
-        "estimand": "winner",
-        "definition": "the baseline-offset adaptive challenger on the winner estimand",
+    "mlb.winner.CHALLENGER_ADAPTIVE": {
+        "sport": "mlb", "target": "winner",
+        "definition": "the baseline-offset adaptive challenger on the winner target",
+    },
+    "mlb.total.EXPANDING_TOTAL_PRIOR": {
+        "sport": "mlb", "target": "total",
+        "definition": "the expanding league scoring prior, optionally park-adjusted and adjusted by "
+                      "nothing else; the independent comparator on the total target",
+    },
+    "mlb.total.CHAMPION_V13": {
+        "sport": "mlb", "target": "total",
+        "definition": "V13's projected run total",
+    },
+    "mlb.total.CHALLENGER_ADAPTIVE": {
+        "sport": "mlb", "target": "total",
+        "definition": "the challenger's projected run total. On the 2026-08-23 card this same value "
+                      "ALSO filled the baseline total column in all 15 games — ONE arm, which is "
+                      "why it gets one identity and, under the row rule below, one row",
+    },
+    "wnba.winner.EXPANDING_HOME_PRIOR": {
+        "sport": "wnba", "target": "winner",
+        "definition": "the expanding WNBA home-win prior; a different pool and a different value "
+                      "from the MLB arm that shares its suffix",
+    },
+    "wnba.winner.CHAMPION_WNBA_SHADOW": {
+        "sport": "wnba", "target": "winner",
+        "definition": "the frozen four-factor logit-ridge shadow model, feature state 2026-07-22",
+    },
+    "wnba.winner.CHALLENGER_ADAPTIVE": {
+        "sport": "wnba", "target": "winner",
+        "definition": "the WNBA adaptive challenger, which on 2026-08-23 returned the baseline's "
+                      "values exactly and is a negative control there",
+    },
+    "nfl.winner.EXPANDING_HOME_PRIOR": {
+        "sport": "nfl", "target": "winner",
+        "definition": "the expanding preseason home prior",
     },
 }
 
 ARM_LABEL_COLLISION = "ONE_LABEL_TWO_ARM_IDENTITIES"
 ARM_LABEL_MISNAMES = "ARM_LABEL_DOES_NOT_NAME_ITS_IDENTITY"
 UNKNOWN_ARM = "UNKNOWN_ARM_IDENTITY"
+DUPLICATE_ARM_ROW = "TWO_ROWS_ONE_ARM_IDENTITY"
 
 # Labels so generic that they identify nothing, whatever they are attached to.
 GENERIC_LABELS = {"sd", "s.d.", "σ", "sigma", "uncertainty", "spread", "range", "error", "variance"}
@@ -217,28 +247,52 @@ def quantity_gate(quantities):
 
 
 def arm_identity_gate(bindings):
-    """`bindings`: [{"display_label": str, "identity": str, "estimand": str}, ...]
+    """`bindings`: [{"display_label": str, "identity": str, "row_key": str|None}, ...]
 
-    Refuses an unknown identity, a label that does not name the arm it carries, and — the defect this
-    exists for — one label covering two different arms.
+    Three rules, all page-wide rather than per-table:
+
+      ONE PAGE-WIDE IDENTITY PER LABEL. A label may not name two arms anywhere on the page. Scoping
+      this per table is what let "Baseline" mean the home prior in one table and the challenger's
+      total in the next: each table was internally consistent and the page was not.
+
+      ONE ROW PER IDENTITY. A table may not carry two rows bound to the same arm. The 8/23 totals
+      table listed CHALLENGER_TOTAL and CHALLENGER as separate rows with identical numbers, which
+      reads as two arms agreeing — the most persuasive thing a table can show, and here it was one
+      arm counted twice. Pass row_key to identify the row; rows sharing an identity collide.
+
+      NAMESPACED IDENTITIES ONLY. Enforced by the vocabulary itself rather than by a per-binding
+      shape test: every key in ARM_IDENTITIES carries <sport>.<target>.<ARM>, the selftest asserts
+      that over the whole table, and a binding outside the table is already refused above. A second
+      runtime check would be unreachable, and unreachable code that cannot fail is decoration.
     """
-    problems, by_label = [], {}
+    problems, by_label, by_identity = [], {}, {}
     for b in bindings:
         label, ident = b.get("display_label"), b.get("identity")
         if ident not in ARM_IDENTITIES:
             problems.append({"code": UNKNOWN_ARM, "label": label, "identity": ident})
             continue
-        if label is None or _norm(ident).replace("_", " ") not in _norm(label).replace("_", " "):
+        bare = str(ident).split(".")[-1]
+        if label is None or _norm(bare).replace("_", " ") not in _norm(label).replace("_", " "):
             problems.append({"code": ARM_LABEL_MISNAMES, "label": label, "identity": ident,
                              "required": ident,
                              "definition": ARM_IDENTITIES[ident]["definition"]})
         by_label.setdefault(_norm(label), set()).add(ident)
+        if b.get("row_key") is not None:
+            by_identity.setdefault(ident, []).append(b["row_key"])
     for label, idents in sorted(by_label.items()):
         if len(idents) > 1:
-            ests = sorted({ARM_IDENTITIES[i]["estimand"] for i in idents})
+            spec = [ARM_IDENTITIES[i] for i in idents]
             problems.append({"code": ARM_LABEL_COLLISION, "label": label,
-                             "identities": sorted(idents), "estimands": ests,
-                             "note": "across estimands" if len(ests) > 1 else "within one estimand"})
+                             "identities": sorted(idents),
+                             "sports": sorted({x["sport"] for x in spec}),
+                             "targets": sorted({x["target"] for x in spec}),
+                             "note": "across sports" if len({x["sport"] for x in spec}) > 1
+                                     else ("across targets" if len({x["target"] for x in spec}) > 1
+                                           else "within one sport and target")})
+    for ident, keys in sorted(by_identity.items()):
+        if len(keys) > 1:
+            problems.append({"code": DUPLICATE_ARM_ROW, "identity": ident, "rows": sorted(keys),
+                             "note": "one arm rendered as two rows reads as two arms agreeing"})
     return problems
 
 
@@ -358,36 +412,71 @@ def selftest():
     if not truncation_audit("action blocked: neutral sit", ["action blocked: neutral site"]):
         f.append("losing the final character is still a truncation")
 
-    # --- 6b: one label, three arms (owner correction 6, 2026-08-23) ------------------------------
-    # the 8/23 settlement as first written: "Baseline" named the expanding home prior on the winner
-    # table and the challenger's own total on the total table, while the real total comparator had
-    # no name of its own at all.
-    collided = [{"display_label": "Baseline", "identity": "EXPANDING_HOME_PRIOR", "estimand": "winner"},
-                {"display_label": "Baseline", "identity": "CHALLENGER_TOTAL", "estimand": "total"}]
+    # --- 6b: one label, several arms; one arm, several rows (owner directives) --------------------
+    # the 8/23 settlement as first written: "Baseline" named the MLB home prior on the winner table
+    # and the challenger's own total on the totals table.
+    collided = [{"display_label": "Baseline", "identity": "mlb.winner.EXPANDING_HOME_PRIOR"},
+                {"display_label": "Baseline", "identity": "mlb.total.CHALLENGER_ADAPTIVE"}]
     ap = arm_identity_gate(collided)
     if not any(x["code"] == ARM_LABEL_COLLISION for x in ap):
         f.append("one label covering two arms must collide")
     coll = [x for x in ap if x["code"] == ARM_LABEL_COLLISION][0]
-    if sorted(coll["identities"]) != ["CHALLENGER_TOTAL", "EXPANDING_HOME_PRIOR"]:
+    if sorted(coll["identities"]) != ["mlb.total.CHALLENGER_ADAPTIVE", "mlb.winner.EXPANDING_HOME_PRIOR"]:
         f.append("the arm collision must name both identities")
-    if coll["note"] != "across estimands":
-        f.append("a collision spanning two estimands must say so")
+    if coll["note"] != "across targets":
+        f.append(f"a collision spanning two targets must say so, got {coll['note']}")
     if not any(x["code"] == ARM_LABEL_MISNAMES for x in ap):
         f.append("'Baseline' does not name EXPANDING_HOME_PRIOR and must be refused")
-    named = [{"display_label": "EXPANDING_HOME_PRIOR", "identity": "EXPANDING_HOME_PRIOR",
-              "estimand": "winner"},
-             {"display_label": "CHALLENGER_TOTAL", "identity": "CHALLENGER_TOTAL", "estimand": "total"},
-             {"display_label": "EXPANDING_TOTAL_PRIOR", "identity": "EXPANDING_TOTAL_PRIOR",
-              "estimand": "total"}]
+    # a collision spanning SPORTS is reported as such — the WNBA and MLB challengers are not one arm
+    cross = arm_identity_gate([
+        {"display_label": "CHALLENGER_ADAPTIVE", "identity": "mlb.winner.CHALLENGER_ADAPTIVE"},
+        {"display_label": "CHALLENGER_ADAPTIVE", "identity": "wnba.winner.CHALLENGER_ADAPTIVE"}])
+    xc = [x for x in cross if x["code"] == ARM_LABEL_COLLISION]
+    if not xc or xc[0]["note"] != "across sports":
+        f.append(f"two sports sharing an arm label must collide across sports, got {cross}")
+
+    # ONE ROW PER IDENTITY: the totals table listed the same arm twice with identical numbers
+    dupe = [{"display_label": "CHALLENGER_ADAPTIVE", "identity": "mlb.total.CHALLENGER_ADAPTIVE",
+             "row_key": "row:BASELINE"},
+            {"display_label": "CHALLENGER_ADAPTIVE", "identity": "mlb.total.CHALLENGER_ADAPTIVE",
+             "row_key": "row:CHALLENGER"}]
+    dp = [x for x in arm_identity_gate(dupe) if x["code"] == DUPLICATE_ARM_ROW]
+    if not dp:
+        f.append("one arm rendered as two rows must be refused")
+    elif sorted(dp[0]["rows"]) != ["row:BASELINE", "row:CHALLENGER"]:
+        f.append("the duplicate-row problem must name both rows")
+    # one row per identity is satisfied when the duplicate is collapsed
+    if any(x["code"] == DUPLICATE_ARM_ROW for x in arm_identity_gate([dupe[0]])):
+        f.append("a single row for an identity must pass")
+    # rows with no row_key are not row-checked, and that must not silently pass a real duplicate
+    if any(x["code"] == DUPLICATE_ARM_ROW for x in
+           arm_identity_gate([{k: v for k, v in d.items() if k != "row_key"} for d in dupe])):
+        f.append("fixture is wrong: without row_key there is nothing to collide")
+
+    # NAMESPACING: a bare arm name is refused even when it is otherwise well behaved
+    bare = arm_identity_gate([{"display_label": "EXPANDING_HOME_PRIOR",
+                               "identity": "EXPANDING_HOME_PRIOR"}])
+    if not any(x["code"] == UNKNOWN_ARM for x in bare):
+        f.append("an un-namespaced identity is not in the vocabulary and must be refused")
+
+    named = [{"display_label": "mlb.winner.EXPANDING_HOME_PRIOR",
+              "identity": "mlb.winner.EXPANDING_HOME_PRIOR", "row_key": "r1"},
+             {"display_label": "mlb.total.EXPANDING_TOTAL_PRIOR",
+              "identity": "mlb.total.EXPANDING_TOTAL_PRIOR", "row_key": "r2"},
+             {"display_label": "mlb.total.CHALLENGER_ADAPTIVE",
+              "identity": "mlb.total.CHALLENGER_ADAPTIVE", "row_key": "r3"}]
     if arm_identity_gate(named):
-        f.append(f"distinctly named arms must pass, got {arm_identity_gate(named)}")
-    # two DIFFERENT labels for one identity is fine; two identities under one label is not
+        f.append(f"distinctly named, namespaced, one-row arms must pass, got {arm_identity_gate(named)}")
+    # a label may name the arm by its BARE suffix as long as it does not collide
     if arm_identity_gate([{"display_label": "EXPANDING_TOTAL_PRIOR (runs)",
-                           "identity": "EXPANDING_TOTAL_PRIOR", "estimand": "total"}]):
-        f.append("a label that names its identity with a unit appended must pass")
+                           "identity": "mlb.total.EXPANDING_TOTAL_PRIOR", "row_key": "r"}]):
+        f.append("a label naming the bare arm with a unit appended must pass")
     if not any(x["code"] == UNKNOWN_ARM for x in
-               arm_identity_gate([{"display_label": "X", "identity": "VIBES_ARM", "estimand": "winner"}])):
+               arm_identity_gate([{"display_label": "X", "identity": "mlb.winner.VIBES_ARM"}])):
         f.append("an identity outside the vocabulary must be refused")
+    for k in ARM_IDENTITIES:
+        if len(k.split(".")) != 3:
+            f.append(f"every registered identity must be namespaced: {k}")
 
     # --- the gate as a whole ----------------------------------------------------------------------
     g = render_gate(bad_html + render, wnba, tokens, arms=collided)
@@ -427,23 +516,29 @@ MUTANTS = [
     ("one label may cover two arm identities",
      "        if len(idents) > 1:", "        if False:"),
     ("the arm collision stops naming the identities",
-     '            problems.append({"code": ARM_LABEL_COLLISION, "label": label,\n                             "identities": sorted(idents), "estimands": ests,',
-     '            problems.append({"code": ARM_LABEL_COLLISION, "label": label,\n                             "identities": [], "estimands": ests,'),
-    ("the arm collision stops distinguishing estimands",
-     '            ests = sorted({ARM_IDENTITIES[i]["estimand"] for i in idents})', "            ests = []"),
+     '            problems.append({"code": ARM_LABEL_COLLISION, "label": label,\n                             "identities": sorted(idents),',
+     '            problems.append({"code": ARM_LABEL_COLLISION, "label": label,\n                             "identities": [],'),
+    ("the arm collision stops distinguishing sports from targets",
+     '                             "note": "across sports" if len({x["sport"] for x in spec}) > 1',
+     '                             "note": "across targets" if len({x["sport"] for x in spec}) > 1'),
     ("an arm label need not name the arm it carries",
-     '        if label is None or _norm(ident).replace("_", " ") not in _norm(label).replace("_", " "):',
+     '        if label is None or _norm(bare).replace("_", " ") not in _norm(label).replace("_", " "):',
      "        if False:"),
     ("an unknown arm identity is accepted",
      "        if ident not in ARM_IDENTITIES:", "        if False:"),
+    ("one arm may be rendered as two rows",
+     "        if len(keys) > 1:", "        if False:"),
+    ("the duplicate-row problem stops naming the rows",
+     '            problems.append({"code": DUPLICATE_ARM_ROW, "identity": ident, "rows": sorted(keys),',
+     '            problems.append({"code": DUPLICATE_ARM_ROW, "identity": ident, "rows": [],'),
+    ("row keys stop being collected, so no duplicate can ever collide",
+     '        if b.get("row_key") is not None:\n            by_identity.setdefault(ident, []).append(b["row_key"])',
+     "        if False:\n            by_identity.setdefault(ident, []).append(b[\"row_key\"])"),
+    ("an un-namespaced identity is registered in the vocabulary",
+     '    "mlb.winner.EXPANDING_HOME_PRIOR": {', '    "EXPANDING_HOME_PRIOR": {'),
     ("the gate stops running the arm-identity check",
      "                + quantity_gate(list(quantities)) + arm_identity_gate(list(arms))",
      "                + quantity_gate(list(quantities))"),
-    ("the alias check ignores the labels it was scoped to",
-     "        hay = _norm(\" \\n \".join(str(x) for x in text_or_labels))", '        hay = ""'),
-    ("the gate ignores the labels argument and scans the prose again",
-     "    problems = (label_audit(text if labels is None else list(labels))",
-     "    problems = (label_audit(text)"),
     ("banned aliases stop being checked",
      "            if re.search(r\"(?<![a-z0-9_])\" + re.escape(a) + r\"(?![a-z0-9_])\", hay):",
      "            if False:"),

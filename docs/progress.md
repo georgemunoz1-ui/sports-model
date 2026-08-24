@@ -3517,3 +3517,37 @@ attribution recorded as UNDERSPECIFIED rather than resolved to a host I did not 
 Binding conclusion: EXPANDING_TOTAL_PRIOR had the lowest observed MAE and RMSE; CHALLENGER_ADAPTIVE
 had the lowest observed winner Brier and highest observed AUC; all descriptive, non-decision-grade
 at one cluster; the slope motivates a prospectively registered experiment and authorizes nothing.
+
+## 2026-08-24 — two directives, one lesson: internal consistency is not external corroboration
+
+Six directives. The two that mattered turned out to be the same error twice.
+
+EVIDENCE DOWNGRADED. I bound 15 canonical rows and 15 grades to sha256 of my own transcription of
+the owner's relay and treated it as tier-1 provenance. The hash proves I did not alter my own
+record. It does not identify the source: "MLB scoreboard" names a class, and a tier-1 binding needs
+the artifact. source_artifact_gate (13/13) audits for it, and the answer was not 15 rows but 123
+across 11 dates — every owner-relay row in the table. All now PROVISIONAL. Nine slate dates lose
+every canonical row, the expanding home prior moves -48 bp (.526316 -> .521512, n 1823 -> 1700), and
+8/23 is among the emptied dates, so last night's cohort now rests on provisional results. To stop
+that being cosmetic, adaptive_state.asof enforces result_status — 123 rows had been sitting at a
+status nothing read while feeding the most authoritative numbers this system emits. Tier exposure
+rebaselined 136 -> 259 with the reason recorded; nine tier-blind consumers remain and the baseline
+now records that rather than hiding it.
+
+PROSPECTIVITY IS SELF-ASSERTED. The 7h12m39s lead came from a git commit date — written by my
+machine, settable with one environment variable. Reading it back from the GitHub API returns the
+same author-written field echoed, which wears the costume of corroboration. Zero workflow runs, no
+releases: no clock but mine ever stamped anything referencing that commit. prospectivity_evidence
+(12/12) grades SELF_ASSERTED / REMOTE_ECHOED / REMOTE_OBSERVED and refuses to print "proven" without
+the third. Lesson 30.
+
+Also: arms namespaced <sport>.<target>.<ARM>, because CHALLENGER_ADAPTIVE was a different model in
+the WNBA than in MLB and a different object on total than on winner. Duplicate arm rows collapsed —
+the totals table listed one arm twice with identical numbers, which reads as two arms agreeing.
+render_contract (32/32) now enforces one page-wide identity per label and one row per identity.
+Totals are mandatory and gradable and NEVER decision-bearing: TARGET_AUTHORITY['total'] is
+NEVER_DECISION_BEARING and forecast_contract (32/32) refuses any field that would give a total an
+action.
+
+Model ledger $0 at 0 bets. Model promotion 15/500 games, 1/60 dates. Real-money authorization 0/100,
+separately blocked. Status FORWARD_ONLY_PENDING.

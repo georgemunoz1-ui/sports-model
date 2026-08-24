@@ -1,0 +1,70 @@
+{
+ "record_id": "WORKING-STATE-RECONCILIATION-2026-08-24",
+ "created_utc": "2026-08-24T11:05:00Z",
+ "authority": "owner's reconciled authoritative working state, 2026-08-24; later corrections override earlier reports",
+ "purpose": "reconcile that state against what is actually in this repository, and name every place they differ rather than adopting either silently",
+ "MATCHES_EXACTLY": [
+  "priors: home 0.520540 and total 8.9911 over 1,684 games, latest canonical result 2026-08-21",
+  "8/23 winner arms: prior 10-5 .24225 AUC .500; champion 9-6 .24206 .580; challenger 11-4 .23331 .660",
+  "8/23 totals: prior MAE 3.334 RMSE 4.790 bias -0.416; champion 3.473/5.091/-0.713; challenger 3.536/4.928/-0.490",
+  "the binding interpretation, verbatim in substance: lowest MAE and RMSE to the expanding total prior, lowest winner Brier and highest AUC to the adaptive challenger, all descriptive, provisional and non-decision-grade",
+  "slope 5.86 supports HYPOTHESIS only, and CALIBRATION_POINT_ESTIMATE_OUT_OF_RANGE_NON_DECISION_GRADE",
+  "WNBA 8/23: champion 4-0 .12436 AUC 1.0, control 1-3 .28799 AUC .5; exact nulls 25% and 6.25%",
+  "123 rows across 11 dates downgraded; nine dates lost every canonical row, the nine listed",
+  "all four gate states, and FORWARD_ONLY_PENDING",
+  "the 8/24 slates, both sports, including TEX@CWS and CIN@SF as partial-information rows"
+ ],
+ "BLOCKERS_THE_OWNER_LISTS_THAT_ARE_NOW_CLOSED": {
+  "3_sixteen_row_exclusion_ledger": {
+   "state": "CLOSED",
+   "artifact": "data/audit/2026-08-24_prior_pool_exclusion_ledger.json",
+   "finding": "the 1,700 figure was MY error, not an unexplained transition. I estimated the downgrade's blast radius with a predicate that filtered status and source_tier but NOT result_status — the column that directive had just told me to enforce. The 16 rows are WINNER-ONLY rows (1 on 8/10, 15 on 8/11) that have been PROVISIONAL since ingestion and were never in the canonical pool. 1807 - 123 = 1684 exactly.",
+   "consequence": "the priors are reconciled and the blocker on accepting them is discharged"
+  },
+  "4_remote_clock": {
+   "state": "CLOSED",
+   "artifact": "data/audit/2026-08-24_remote_clock_anchor.json",
+   "run": "3 of 3, success, https://github.com/georgemunoz1-ui/sports-model/actions/runs/32718640880",
+   "anchor_utc": "2026-08-24T10:48:32Z",
+   "lead_to_earliest_mlb_first_pitch": "11h51m28s",
+   "design_deviation_worth_naming": "run 2 failed on KeyError 'created_at' because reading a run's created_at needs `actions: read` and the authorized block is `contents: read`. I did NOT widen the permission block. GitHub's clock is read from the Date header of an api.github.com response: no token, no extra permission, and still an instant AFTER the artifacts were hashed, so it remains a valid upper bound.",
+   "grade": "REMOTE_OBSERVED"
+  },
+  "5_total_distributions_retained": {
+   "state": "CLOSED",
+   "evidence": "20 MLB total rows on cards/2026-08-24_board.json carry a full simulated total_distribution (both champion arms, all 10 games). Log score and CRPS are computable for this cohort.",
+   "note": "the expanding total prior carries a stated null reason instead — a league-mean point prior has no distribution, and inventing one would be worse than the gap"
+  },
+  "8_totals_non_decision_bearing": {
+   "state": "CLOSED AND ENFORCED",
+   "evidence": "forecast_contract.TARGET_AUTHORITY['total'] and ['margin'] are NEVER_DECISION_BEARING; seven decision-shaped fields are structural refusals and a total side on a BET row is refused. Every total and margin row on the 8/24 board carries that authority. 32/32 mutants."
+  }
+ },
+ "BLOCKERS_STILL_OPEN": {
+  "1_capture_and_hash_official_artifacts": "OPEN. Every fetch rail is EGRESS_BLOCKED including a neutral control, so no payload can be captured from here. The 8/24 schedule is an owner-relayed citation and results graded against it will be GRADE_PROVISIONAL.",
+  "2_restore_tier1_provenance_for_123_rows": "OPEN. Requires a Tier-1 addendum binding the exact official artifact, its retrieval timestamp and its content hash, per the standing rule.",
+  "6_august_22_source_gap": "OPEN. 0 of 18 games Tier-1 confirmed across all three retry attempts. The 36h window expires 2026-08-24T17:45Z as UNRESOLVED_SOURCE_GAP; a check-in is scheduled.",
+  "7_refresh_wnba_features": "OPEN and blocked by the same rail failure. The staged official pool ends 2026-07-22, which is both the frozen feature state and the reason every champion output is ACTION_BLOCKED, DIAGNOSTIC_ONLY and NOT_PROMOTION_ELIGIBLE at 33 days."
+ },
+ "DIVERGENCES_REQUIRING_AN_OWNER_DECISION": {
+  "A_the_100k_fork_is_on_the_board_and_not_in_your_arm_set": {
+   "your_state": "five arms: EXPANDING_HOME_PRIOR, CHAMPION_V13, CHALLENGER_ADAPTIVE, CHALLENGER_WIDENED, EXPANDING_TOTAL_PRIOR",
+   "the_board": "also carries mlb.winner.CHAMPION_V13_100K and mlb.total.CHAMPION_V13_100K",
+   "why_I_added_them": "standing amendment 4 of 2026-08-23 — 'future cards should fork a separately identified 100k champion/reference arm'. I treated that as standing and acted on it without re-asking.",
+   "the_cost_I_should_have_flagged": "two more arms is a larger comparison family and therefore a heavier Holm burden on every future inference. That is a real price and it was my call to make unilaterally, which is the part worth questioning.",
+   "options": [
+    "ACCEPT — the fork stays and the family is 7 arms",
+    "REJECT — I drop both rows and reissue the board before first pitch; the cohort hash changes and the anchor must be re-established, which is cheap and still pregame"
+   ],
+   "default_if_you_say_nothing": "they stay, because they are registered, anchored and pregame, and removing a registered arm silently would be worse than keeping one you did not ask for"
+  },
+  "B_the_v19_identity_string_is_not_in_this_repository": {
+   "your_state": "mlb.v19.roster_defense_forward.v1_0.shadow remains registered, forward-only, unpromoted",
+   "what_is_actually_here": "that exact string appears NOWHERE in the repository, including .git. The only V19 lineage present is model identity 'v19_2026_08_14', in docs/audits/2026-08-14_v19_audit_intake.json and the 2026-08-14 grades and gate artifacts: 14 sealed forecasts, wager authority NO, gate 0/100.",
+   "what_I_have_NOT_done": "I have not created the identity you named, and I have not deleted or renamed the one that exists. Adopting a model identity I cannot verify would be exactly the class of fabrication the evidence rules forbid.",
+   "question": "is mlb.v19.roster_defense_forward.v1_0.shadow a rename of v19_2026_08_14, or an identity from a lineage that is not in this repository? If the former, say so and I will bind them with an append-only supersession record."
+  }
+ },
+ "ONE_THING_I_AM_CONFIRMING_RATHER_THAN_CORRECTING": "your supersession of 15/500 and 1/60 is already reflected: cards/2026-08-24_board.json records MLB promotion 0/500 and 0/60 and WNBA promotion 0/500 and 0/60, on separate denominators, with no combined figure anywhere in the record.",
+ "status": "FORWARD_ONLY_PENDING"
+}

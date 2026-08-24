@@ -126,6 +126,16 @@ ARM_IDENTITIES = {
                       "champion's on the same slate. The scale comes from two PREGAME dispersions, "
                       "never from the observed calibration slope",
     },
+    "mlb.winner.CHAMPION_V13_100K": {
+        "sport": "mlb", "target": "winner",
+        "definition": "the 100,000-trial fork of V13 — a SEPARATE identity from the 30k legacy arm, "
+                      "never a re-tag, so the two can never be pooled or substituted",
+    },
+    "mlb.total.CHAMPION_V13_100K": {
+        "sport": "mlb", "target": "total",
+        "definition": "the 100,000-trial fork's projected total, with its simulated distribution "
+                      "retained so log score and CRPS are computable",
+    },
     "mlb.total.EXPANDING_TOTAL_PRIOR": {
         "sport": "mlb", "target": "total",
         "definition": "the expanding league scoring prior, optionally park-adjusted and adjusted by "
@@ -149,6 +159,22 @@ ARM_IDENTITIES = {
     "wnba.winner.CHAMPION_WNBA_SHADOW": {
         "sport": "wnba", "target": "winner",
         "definition": "the frozen four-factor logit-ridge shadow model, feature state 2026-07-22",
+    },
+    "wnba.winner.NEGATIVE_CONTROL": {
+        "sport": "wnba", "target": "winner",
+        "definition": "the arm that reproduces wnba.winner.EXPANDING_HOME_PRIOR exactly, registered "
+                      "under its own name so a tied comparison reads as the control it is rather "
+                      "than as a challenger that happened to agree",
+    },
+    "wnba.margin.CHAMPION_WNBA_SHADOW": {
+        "sport": "wnba", "target": "margin",
+        "definition": "the shadow model's projected home margin. Mandatory and gradable; "
+                      "ACTION_BLOCKED and DIAGNOSTIC_ONLY on feature staleness",
+    },
+    "wnba.total.CHAMPION_WNBA_SHADOW": {
+        "sport": "wnba", "target": "total",
+        "definition": "the shadow model's projected combined total. Mandatory and gradable; "
+                      "ACTION_BLOCKED and DIAGNOSTIC_ONLY on feature staleness",
     },
     "wnba.winner.CHALLENGER_ADAPTIVE": {
         "sport": "wnba", "target": "winner",

@@ -1,0 +1,198 @@
+{
+ "record_id": "PRIOR-POOL-EXCLUSION-LEDGER-2026-08-24",
+ "created_utc": "2026-08-24T10:45:00Z",
+ "why": "owner directive: reconcile the unexplained home-prior transition 1700 -> 1684 with a dated exclusion ledger identifying those 16 rows, before the new priors are accepted.",
+ "THE_DISCREPANCY_IS_MINE_AND_1700_WAS_THE_WRONG_NUMBER": "1684 is correct and 1700 never was. I produced 1700 while estimating the downgrade's blast radius, using a predicate that filtered on status and source_tier but NOT on result_status — the very column the directive had just told me to start enforcing. So my estimate counted 16 rows that were ALREADY excluded from the canonical pool and had never been in it. The 123-row downgrade did not remove these 16; they were out before it ran.",
+ "corrected_transition": {
+  "canonical_pool_before_downgrade": 1807,
+  "canonical_pool_after_downgrade": 1684,
+  "removed_by_the_downgrade": 123,
+  "my_reported_figure": 1700,
+  "error": "+16, from omitting result_status in the estimate"
+ },
+ "THE_16_ROWS": {
+  "n": 16,
+  "what_they_are": "WINNER-ONLY rows. A tier-1 source proved WHO WON — standings arithmetic and series records on the following day's board — while no box score supplied the SCORE. The row records a proven winner and null scores, which is a real state and the honest alternative to inventing a score (R1).",
+  "why_excluded": "they carry result_status PROVISIONAL, which they have carried since ingestion. A winner-only row is admissible for slate completeness — refusing it would force either invented scores or a permanently red gate — and inadmissible for the priors, which need the outcome AND the total.",
+  "status_at_ingestion": "PROVISIONAL",
+  "status_now": "PROVISIONAL — unchanged by the 2026-08-24 downgrade",
+  "by_date": {
+   "2026-08-10": 1,
+   "2026-08-11": 15
+  },
+  "rows": [
+   {
+    "game_id": "mlb:2026:box0810-TEXLAA",
+    "date": "2026-08-10",
+    "away": "TEX",
+    "home": "LAA",
+    "home_win": "0",
+    "total": "5",
+    "result_status": "PROVISIONAL",
+    "source": "winner FINAL per 8/11 board records+series data/mlb/odds/2026-08-11_gameboards.json sha256:5a21aac31ef1e5754e3abf442a737d6d29203ef5979f99dd389b4322883c45de; score was mid-10th at capture in data/mlb/evidence/box_dumps/2026-08-10_statcast_box_extract.txt — runs/total provisional"
+   },
+   {
+    "game_id": "mlb:2026:prov0811-BALMIN",
+    "date": "2026-08-11",
+    "away": "BAL",
+    "home": "MIN",
+    "home_win": "0",
+    "total": "7",
+    "result_status": "PROVISIONAL",
+    "source": "winner tier1 (8/12 board records 2aa3a25e944b); score tier-3 news (55b9f0f8eb4a) PROVISIONAL"
+   },
+   {
+    "game_id": "mlb:2026:prov0811-BOSTOR",
+    "date": "2026-08-11",
+    "away": "BOS",
+    "home": "TOR",
+    "home_win": "1",
+    "total": "8",
+    "result_status": "PROVISIONAL",
+    "source": "winner tier1 (8/12 board records 2aa3a25e944b); score tier-3 news (55b9f0f8eb4a) PROVISIONAL"
+   },
+   {
+    "game_id": "mlb:2026:prov0811-CHCWSH",
+    "date": "2026-08-11",
+    "away": "CHC",
+    "home": "WSH",
+    "home_win": "0",
+    "total": "14",
+    "result_status": "PROVISIONAL",
+    "source": "winner tier1 (8/12 board records 2aa3a25e944b); score tier-3 news (55b9f0f8eb4a) PROVISIONAL"
+   },
+   {
+    "game_id": "mlb:2026:prov0811-CINCWS",
+    "date": "2026-08-11",
+    "away": "CIN",
+    "home": "CWS",
+    "home_win": "0",
+    "total": "9",
+    "result_status": "PROVISIONAL",
+    "source": "winner tier1 (8/12 board records 2aa3a25e944b); score tier-3 news (55b9f0f8eb4a) PROVISIONAL"
+   },
+   {
+    "game_id": "mlb:2026:prov0811-CLEDET",
+    "date": "2026-08-11",
+    "away": "CLE",
+    "home": "DET",
+    "home_win": "1",
+    "total": "10",
+    "result_status": "PROVISIONAL",
+    "source": "winner tier1 (8/12 board records 2aa3a25e944b); score tier-3 news (55b9f0f8eb4a) PROVISIONAL"
+   },
+   {
+    "game_id": "mlb:2026:prov0811-COLAZ",
+    "date": "2026-08-11",
+    "away": "COL",
+    "home": "AZ",
+    "home_win": "0",
+    "total": null,
+    "result_status": "PROVISIONAL",
+    "source": "WINNER-ONLY tier1 (8/12 board records+series 2aa3a25e944b); score unknown pending box"
+   },
+   {
+    "game_id": "mlb:2026:prov0811-HOUSF",
+    "date": "2026-08-11",
+    "away": "HOU",
+    "home": "SF",
+    "home_win": "1",
+    "total": null,
+    "result_status": "PROVISIONAL",
+    "source": "WINNER-ONLY tier1 (8/12 board records+series 2aa3a25e944b); score unknown pending box"
+   },
+   {
+    "game_id": "mlb:2026:prov0811-KCLAD",
+    "date": "2026-08-11",
+    "away": "KC",
+    "home": "LAD",
+    "home_win": "1",
+    "total": null,
+    "result_status": "PROVISIONAL",
+    "source": "WINNER-ONLY tier1 (8/12 board records+series 2aa3a25e944b); score unknown pending box"
+   },
+   {
+    "game_id": "mlb:2026:prov0811-MILSD",
+    "date": "2026-08-11",
+    "away": "MIL",
+    "home": "SD",
+    "home_win": "1",
+    "total": null,
+    "result_status": "PROVISIONAL",
+    "source": "WINNER-ONLY tier1 (8/12 board records+series 2aa3a25e944b); score unknown pending box"
+   },
+   {
+    "game_id": "mlb:2026:prov0811-NYMATL",
+    "date": "2026-08-11",
+    "away": "NYM",
+    "home": "ATL",
+    "home_win": "1",
+    "total": "4",
+    "result_status": "PROVISIONAL",
+    "source": "winner tier1 (8/12 board records 2aa3a25e944b); score tier-3 news (55b9f0f8eb4a) PROVISIONAL"
+   },
+   {
+    "game_id": "mlb:2026:prov0811-PHISTL",
+    "date": "2026-08-11",
+    "away": "PHI",
+    "home": "STL",
+    "home_win": "1",
+    "total": "2",
+    "result_status": "PROVISIONAL",
+    "source": "winner tier1 (8/12 board records 2aa3a25e944b); score tier-3 news (55b9f0f8eb4a) PROVISIONAL"
+   },
+   {
+    "game_id": "mlb:2026:prov0811-PITMIA",
+    "date": "2026-08-11",
+    "away": "PIT",
+    "home": "MIA",
+    "home_win": "1",
+    "total": "2",
+    "result_status": "PROVISIONAL",
+    "source": "winner tier1 (8/12 board records 2aa3a25e944b); score tier-3 news (55b9f0f8eb4a) PROVISIONAL"
+   },
+   {
+    "game_id": "mlb:2026:prov0811-SEANYY",
+    "date": "2026-08-11",
+    "away": "SEA",
+    "home": "NYY",
+    "home_win": "1",
+    "total": "5",
+    "result_status": "PROVISIONAL",
+    "source": "winner tier1 (8/12 board records 2aa3a25e944b); score tier-3 news (55b9f0f8eb4a) PROVISIONAL"
+   },
+   {
+    "game_id": "mlb:2026:prov0811-TBATH",
+    "date": "2026-08-11",
+    "away": "TB",
+    "home": "ATH",
+    "home_win": "0",
+    "total": null,
+    "result_status": "PROVISIONAL",
+    "source": "WINNER-ONLY tier1 (8/12 board records+series 2aa3a25e944b); score unknown pending box"
+   },
+   {
+    "game_id": "mlb:2026:prov0811-TEXLAA",
+    "date": "2026-08-11",
+    "away": "TEX",
+    "home": "LAA",
+    "home_win": "1",
+    "total": null,
+    "result_status": "PROVISIONAL",
+    "source": "WINNER-ONLY tier1 (8/12 board records+series 2aa3a25e944b); score unknown pending box"
+   }
+  ]
+ },
+ "PRIORS_NOW_RECONCILED_AND_ACCEPTABLE": {
+  "expanding_home_prior": {
+   "p": 0.52054,
+   "n": 1684
+  },
+  "expanding_total_prior": {
+   "runs": 8.9911,
+   "n": 1684
+  },
+  "arithmetic": "1807 tier-1 FINAL rows before the downgrade, minus 123 downgraded to PROVISIONAL, = 1684. The 16 winner-only rows are not in either figure because they were never FINAL.",
+  "note": "the 16 rows become eligible the moment a box supplies their scores; nothing about them is disputed, only incomplete."
+ }
+}

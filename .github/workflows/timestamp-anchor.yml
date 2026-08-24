@@ -1,0 +1,149 @@
+# REMOTE CLOCK ANCHOR — the only purpose of this workflow is to make GitHub stamp an instant.
+#
+# Authorized by the owner 2026-08-24 as the permanent fix for prospectivity evidence. Every
+# timestamp this repository could previously offer was one I wrote: a git author or committer date
+# is a field inside the commit, and reading it back from the GitHub API returns that same
+# author-written field echoed. A workflow run's created_at is different in kind — GitHub generates
+# it, for its own reasons, and nothing in the pushed content can influence it.
+#
+# WHAT IT PROVES AND WHAT IT CANNOT. A successful run establishes that the referenced artifacts
+# existed, with exactly these hashes, NO LATER THAN the run's server-generated timestamp. That is an
+# UPPER BOUND and it is the whole claim. It says nothing about the earlier self-authored commit
+# timestamp, which remains unverifiable forever — a later observation cannot retroactively
+# corroborate an earlier assertion.
+#
+# CONSTRAINTS, all six as specified, and none of them incidental:
+#   permissions: contents: read   — the token cannot write anything, anywhere
+#   no secrets                    — nothing is passed in; the job has nothing to leak
+#   never writes back             — no commit, no push, no tag, no comment, no artifact upload
+#   records SHA + card + registry — the three hashes that identify what was anchored
+#   run timestamp as upper bound  — read from the API, which is GitHub's own value, not the runner's
+#                                   wall clock (a runner clock is just another machine's assertion)
+#   fails on absent/differing     — a green run with a missing artifact would be worse than no run,
+#                                   because it would anchor nothing while looking like it had
+name: timestamp-anchor
+
+on:
+  push:
+    branches: ['**']
+
+permissions:
+  contents: read
+
+jobs:
+  anchor:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the pushed commit
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Anchor the pushed SHA, the card and the arm registry
+        env:
+          # GITHUB_TOKEN is deliberately NOT passed. This step reads public run metadata only.
+          SHA: ${{ github.sha }}
+          RUN_ID: ${{ github.run_id }}
+          REPO: ${{ github.repository }}
+        run: |
+          set -euo pipefail
+
+          # --- the artifacts being anchored ---------------------------------------------------
+          # A card is anchored if one exists for today or was named by the commit; the arm registry
+          # is anchored whenever a preregistration file is present. Absent files FAIL the run rather
+          # than being skipped, because a run that anchors nothing must not report success.
+          shopt -s nullglob
+          CARDS=(cards/*_card.json cards/*_three_arm_card.json)
+          REGS=(data/audit/*_evaluation_arms*.json)
+
+          if [ ${#REGS[@]} -eq 0 ]; then
+            echo "::error::no arm registry found under data/audit/*_evaluation_arms*.json — nothing to anchor"
+            exit 1
+          fi
+          if [ ${#CARDS[@]} -eq 0 ]; then
+            echo "::error::no card found under cards/ — nothing to anchor"
+            exit 1
+          fi
+
+          # --- hashes ---------------------------------------------------------------------------
+          # Every referenced artifact must be present AND readable. sha256sum fails the run on a
+          # missing file under `set -e`, which is the required behavior.
+          echo "pushed_sha=$SHA"
+          echo "--- card hashes ---"
+          sha256sum "${CARDS[@]}"
+          echo "--- arm registry hashes ---"
+          sha256sum "${REGS[@]}"
+
+          CARD_DIGEST=$(sha256sum "${CARDS[@]}" | sha256sum | cut -d' ' -f1)
+          REG_DIGEST=$(sha256sum "${REGS[@]}"  | sha256sum | cut -d' ' -f1)
+          echo "card_set_digest=$CARD_DIGEST"
+          echo "arm_registry_digest=$REG_DIGEST"
+
+          # --- hash agreement -------------------------------------------------------------------
+          # The card is immutable once written, so its per-cohort hashes must never change. Those
+          # are what anchor_expectations.json pins — not the card-set or registry digests, which
+          # legitimately change every time a card is added and would make every future push fail.
+          # A recorded cohort hash that no longer matches the card means the card was edited after
+          # registration, which is the "hashes differ" condition and fails the run.
+          EXPECT=data/audit/anchor_expectations.json
+          if [ -f "$EXPECT" ]; then
+            python3 - "$EXPECT" <<'PY'
+          import hashlib, json, sys
+          exp = json.load(open(sys.argv[1]))
+          card_path = exp.get("card")
+          pinned = exp.get("cohort_hashes") or {}
+          if not card_path or not pinned:
+              print("::notice::anchor_expectations pins no cohort hashes; nothing to verify")
+              sys.exit(0)
+          try:
+              card = json.load(open(card_path))
+          except FileNotFoundError:
+              print(f"::error::anchor_expectations references {card_path}, which is absent")
+              sys.exit(1)
+          def sha(o):
+              return hashlib.sha256(json.dumps(o, sort_keys=True,
+                                               separators=(",", ":")).encode()).hexdigest()
+          bad = []
+          for sport, want in sorted(pinned.items()):
+              cohort = card.get(sport)
+              if cohort is None:
+                  bad.append(f"{sport}: cohort absent from {card_path}")
+                  continue
+              got = sha(cohort)
+              if got != want:
+                  bad.append(f"{sport}: pinned {want} but the card hashes to {got}")
+          for b in bad:
+              print(f"::error::{b}")
+          if not bad:
+              print(f"::notice::cohort hashes verified for {sorted(pinned)}")
+          sys.exit(1 if bad else 0)
+          PY
+          fi
+
+          # --- the remotely observed instant ----------------------------------------------------
+          # GitHub's own created_at for this run, read from the API. NOT `date -u`: the runner's
+          # clock is another machine's assertion and would reproduce the exact defect this exists
+          # to fix.
+          RUN_JSON=$(curl -sS -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/$REPO/actions/runs/$RUN_ID")
+          CREATED=$(printf '%s' "$RUN_JSON" | python3 -c 'import json,sys; print(json.load(sys.stdin)["created_at"])')
+          if [ -z "$CREATED" ]; then
+            echo "::error::could not read the server-generated run timestamp; no anchor established"
+            exit 1
+          fi
+
+          echo "::notice::ANCHOR pushed_sha=$SHA card_set_digest=$CARD_DIGEST arm_registry_digest=$REG_DIGEST remote_observed_upper_bound=$CREATED"
+          {
+            echo "## Remote clock anchor"
+            echo ""
+            echo "| field | value |"
+            echo "|---|---|"
+            echo "| pushed SHA | \`$SHA\` |"
+            echo "| card set digest | \`$CARD_DIGEST\` |"
+            echo "| arm registry digest | \`$REG_DIGEST\` |"
+            echo "| remotely observed upper bound | \`$CREATED\` |"
+            echo ""
+            echo "These artifacts existed with these hashes **no later than** the timestamp above,"
+            echo "which GitHub generated. This does not validate the commit's own author date, which"
+            echo "was written locally and stays unverifiable."
+          } >> "$GITHUB_STEP_SUMMARY"

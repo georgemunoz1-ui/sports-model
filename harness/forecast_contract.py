@@ -88,6 +88,10 @@ REQUIRED_FIELDS = (
 TARGET_AUTHORITY = {
     "winner": "GATE_GOVERNED",
     "total": "NEVER_DECISION_BEARING",
+    # margin joins the total under the same reasoning (owner directive 2026-08-24): it is a
+    # mandatory gradable shadow output with no independent line to be scored against, so it is
+    # forecast and graded and decides nothing.
+    "margin": "NEVER_DECISION_BEARING",
     "ats": "GATE_GOVERNED",
 }
 TOTAL_DECISION_ATTEMPT = "TOTAL_MAY_NOT_CARRY_DECISION_AUTHORITY"

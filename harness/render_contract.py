@@ -119,6 +119,13 @@ ARM_IDENTITIES = {
         "sport": "mlb", "target": "winner",
         "definition": "the baseline-offset adaptive challenger on the winner target",
     },
+    "mlb.winner.CHALLENGER_WIDENED": {
+        "sport": "mlb", "target": "winner",
+        "definition": "the dispersion-matched widening challenger preregistered 2026-08-24: the "
+                      "v0_1 offset scaled so the challenger's cross-game p_home SD matches the "
+                      "champion's on the same slate. The scale comes from two PREGAME dispersions, "
+                      "never from the observed calibration slope",
+    },
     "mlb.total.EXPANDING_TOTAL_PRIOR": {
         "sport": "mlb", "target": "total",
         "definition": "the expanding league scoring prior, optionally park-adjusted and adjusted by "

@@ -3636,3 +3636,33 @@ sufficient and that is now written into the overlay rather than left as a hope.
 EXECUTION REMAINS BLOCKED. Explicit human approval and a fresh price check are both necessary and
 neither is sufficient. Neither can waive UNCERTAINTY_PIPELINE_DEFECT, provisional prior inputs, the
 four starter-change blocks, or 33-day WNBA staleness.
+
+### 2026-08-24 (cycle 2, addendum) — the same conflation, one level down
+
+While rebuilding the report I found the row-level version of the defect the owner caught in the
+summary line. Every uncertainty-gated screen printed the UNCERTAINTY_PIPELINE_DEFECT text as its
+status_reason, including the eight rows whose status is PASS_NEGATIVE_EV. Those eight were declined
+on their own economics and would have been declined with a perfect uncertainty estimate. The reason
+was derived from uncertainty_status instead of from status, so a row could be explained by something
+that did not stop it. ev_screen.screen now derives the reason from the status; the still-open defect
+stays recorded in uncertainty_status on every affected row, passed or blocked. Two new mutants and a
+substituted-uncertainty fixture pair straddling zero EV: 25/25. No probability and no status changed.
+
+One of those two new mutants first SURVIVED, and for a reason worth keeping: my edit had inserted a
+comment between two lines of the branch, so the mutant's pattern no longer matched branch 1 and
+silently applied to branch 2 - the substituted-uncertainty branch - which no fixture exercised with
+negative EV. A mutation that lands somewhere other than where it was aimed still reports, and the
+report is about the wrong site. Re-anchored the pattern on the comment and added the missing fixture.
+
+PMF REBUILT for real rather than promised. 1,684 FINAL totals through 8/21, support 0-40, unit total
+pseudo-mass alpha = 1/41, OVERFLOW_ABOVE_SUPPORT holding 0.0014% of the mass:
+  EXPANDING_TOTAL_POINT_MEAN = 8.9911   (arithmetic mean of observed totals)
+  EXPANDING_TOTAL_PMF_MEAN   = 8.9976   (smoothed predictive pmf over its support)
+  difference                 = +0.0065
+pmf_mean refuses to return a bare mean while overflow mass is present. Distribution sha256
+c451bc72b077281c, bound with all nine identity parts. The two means agree to two decimals, which is
+exactly why reporting one under the other's name would have survived review.
+
+Overlay v3 d0ac7ee4 supersedes v2 a17ec8fa, which supersedes v1 e3f69fc9. v2 is not edited: it still
+carries the withdrawn field and_one_of_the_two_is_contaminated, and v3 names it in superseded_fields
+and says what was wrong with it. Report republished.

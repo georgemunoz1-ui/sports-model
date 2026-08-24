@@ -137,18 +137,32 @@ def screen(row):
         ev = out["ev_per_dollar"]
         out["status"] = BLOCK_UNCERTAINTY if (ev is not None and ev > 0) else PASS_NEGATIVE_EV
         out["uncertainty_status"] = UNCERTAINTY_DEFECT
+        # the reason must state why THIS row got THIS status. The pipeline defect is what stops a
+        # positive-EV row; a negative-EV row was declined on its own economics and would have been
+        # declined with a perfect uncertainty estimate. Printing the defect as the reason for both
+        # is the same conflation, one level down, that made "16 PASS / 4 BLOCK" misleading.
         out["status_reason"] = (
             f"{UNCERTAINTY_DEFECT} — the price and the raw EV above are computed and correct; what "
             f"is missing is a defensible per-game model uncertainty. Cross-game dispersion, the "
             f"prior parameter SD and Monte Carlo error are none of them that quantity and are not "
-            f"substituted here.")
+            f"substituted here."
+        ) if out["status"] == BLOCK_UNCERTAINTY else (
+            f"negative expected value at this price ({100.0 * ev:+.2f} per $100); declined on its "
+            f"own economics. {UNCERTAINTY_DEFECT} is also open and is recorded in "
+            f"uncertainty_status, but it is not why this row was passed.")
         return out
     if out["model_uncertainty_pp"] == out["monte_carlo_error_pp"]:
         ev = out["ev_per_dollar"]
         out["status"] = BLOCK_UNCERTAINTY if (ev is not None and ev > 0) else PASS_NEGATIVE_EV
         out["uncertainty_status"] = UNCERTAINTY_DEFECT
-        out["status_reason"] = (f"{UNCERTAINTY_DEFECT} — model uncertainty equals Monte Carlo error, "
-                                f"which means one was substituted for the other")
+        out["status_reason"] = (
+            f"{UNCERTAINTY_DEFECT} — model uncertainty equals Monte Carlo error, "
+            f"which means one was substituted for the other"
+        ) if out["status"] == BLOCK_UNCERTAINTY else (
+            f"negative expected value at this price ({100.0 * ev:+.2f} per $100); declined on its "
+            f"own economics. {UNCERTAINTY_DEFECT} is also open (model uncertainty equals Monte "
+            f"Carlo error) and is recorded in uncertainty_status, but it is not why this row "
+            f"was passed.")
         return out
     e = out["edge_vs_breakeven_pp"]
     if e is None:
@@ -230,6 +244,32 @@ def selftest():
         f.append("fixture is wrong: this row must carry negative EV")
     if negu["status"] != PASS_NEGATIVE_EV:
         f.append(f"a negative-EV row must PASS_NEGATIVE_EV even with no uncertainty, got {negu['status']}")
+    # ...and its REASON must say why it was passed. The defect stays recorded in uncertainty_status,
+    # but a reason that describes the defect on a row the defect did not stop is a mismatch.
+    if "negative expected value" not in negu["status_reason"]:
+        f.append("a PASS_NEGATIVE_EV reason must state the negative EV, not the pipeline defect")
+    if negu["status_reason"].startswith(UNCERTAINTY_DEFECT):
+        f.append("a PASS_NEGATIVE_EV row must not be explained by the uncertainty defect")
+    if negu.get("uncertainty_status") != UNCERTAINTY_DEFECT:
+        f.append("the open defect must still be recorded on a passed row")
+    if not s["status_reason"].startswith(UNCERTAINTY_DEFECT):
+        f.append("a BLOCK_UNCERTAINTY reason must name the defect that stopped it")
+    # the SUBSTITUTED-uncertainty branch (model uncertainty == MC error) needs the same coverage on
+    # both sides of the EV sign, or a mutant that blocks everything there survives untouched.
+    subpos = screen(dict(base, model_uncertainty_pp=0.2886729765797405,
+                         monte_carlo_error_pp=0.2886729765797405))
+    subneg = screen(dict(base, model_probability=0.30, model_uncertainty_pp=0.2886729765797405,
+                         monte_carlo_error_pp=0.2886729765797405))
+    if subpos["ev_per_dollar"] <= 0 or subneg["ev_per_dollar"] >= 0:
+        f.append("fixture is wrong: the substitution pair must straddle zero EV")
+    if subpos["status"] != BLOCK_UNCERTAINTY:
+        f.append(f"a positive-EV substituted row must BLOCK_UNCERTAINTY, got {subpos['status']}")
+    if subneg["status"] != PASS_NEGATIVE_EV:
+        f.append(f"a negative-EV substituted row must PASS_NEGATIVE_EV, got {subneg['status']}")
+    if "Monte Carlo error" not in subpos["status_reason"]:
+        f.append("the substituted block must name the substitution")
+    if "negative expected value" not in subneg["status_reason"]:
+        f.append("a substituted PASS_NEGATIVE_EV reason must state the negative EV")
     if BLOCK_UNCERTAINTY == PASS_NEGATIVE_EV:
         f.append("the two outcomes must be distinct statuses")
     if s["ev_per_dollar"] is None or s["ev_per_100"] is None:
@@ -282,8 +322,11 @@ MUTANTS = [
      '        out["status"] = BLOCK_UNCERTAINTY if (ev is not None and ev > 0) else PASS_NEGATIVE_EV\n        out["uncertainty_status"] = UNCERTAINTY_DEFECT\n        out["status_reason"] = (',
      '        out["status"] = PASS_NEGATIVE_EV\n        out["uncertainty_status"] = UNCERTAINTY_DEFECT\n        out["status_reason"] = ('),
     ("every uncertainty-gated row is blocked, hiding the ones that fail on their own economics",
-     '        ev = out["ev_per_dollar"]\n        out["status"] = BLOCK_UNCERTAINTY if (ev is not None and ev > 0) else PASS_NEGATIVE_EV\n        out["uncertainty_status"] = UNCERTAINTY_DEFECT\n        out["status_reason"] = (',
-     '        ev = out["ev_per_dollar"]\n        out["status"] = BLOCK_UNCERTAINTY\n        out["uncertainty_status"] = UNCERTAINTY_DEFECT\n        out["status_reason"] = ('),
+     '        out["status"] = BLOCK_UNCERTAINTY if (ev is not None and ev > 0) else PASS_NEGATIVE_EV\n        out["uncertainty_status"] = UNCERTAINTY_DEFECT\n        # the reason must state why THIS row got THIS status.',
+     '        out["status"] = BLOCK_UNCERTAINTY\n        out["uncertainty_status"] = UNCERTAINTY_DEFECT\n        # the reason must state why THIS row got THIS status.'),
+    ("the SUBSTITUTED-uncertainty branch blocks every row, hiding the economic passes",
+     '        out["status"] = BLOCK_UNCERTAINTY if (ev is not None and ev > 0) else PASS_NEGATIVE_EV\n        out["uncertainty_status"] = UNCERTAINTY_DEFECT\n        out["status_reason"] = (\n            f"{UNCERTAINTY_DEFECT} — model uncertainty equals Monte Carlo error, "',
+     '        out["status"] = BLOCK_UNCERTAINTY\n        out["uncertainty_status"] = UNCERTAINTY_DEFECT\n        out["status_reason"] = (\n            f"{UNCERTAINTY_DEFECT} — model uncertainty equals Monte Carlo error, "'),
     ("the two block kinds collapse into one",
      '        out["status"] = (BLOCK_STARTER_CHANGE if "STARTER_STATE_CHANGED" in joined else BLOCK_OTHER)',
      '        out["status"] = BLOCK_OTHER'),
@@ -322,8 +365,8 @@ MUTANTS = [
      '            f"{UNCERTAINTY_DEFECT} — the price and the raw EV above are computed and correct; what "',
      '            f"{UNCERTAINTY_DEFECT} — no prices exist for this slate; what "'),
     ("the defect stops naming what may not be substituted",
-     '            f"prior parameter SD and Monte Carlo error are none of them that quantity and are not "\n            f"substituted here.")',
-     '            f"something is missing.")'),
+     '            f"prior parameter SD and Monte Carlo error are none of them that quantity and are not "\n            f"substituted here."',
+     '            f"something is missing."'),
     ("a block no longer overrides a selectable edge",
      '    if out["blocks"]:', "    if False:"),
     ("the sigma floor is removed, so a noisy edge selects",
@@ -333,6 +376,12 @@ MUTANTS = [
      "MIN_EDGE_PP_FOR_SELECT = 2.0", "MIN_EDGE_PP_FOR_SELECT = 0.0"),
     ("a negative edge is treated as a lean",
      "MIN_EDGE_PP_FOR_LEAN = 0.5", "MIN_EDGE_PP_FOR_LEAN = -99.0"),
+    ("the reason stops depending on the status, so a passed row is explained by the defect",
+     '        ) if out["status"] == BLOCK_UNCERTAINTY else (\n            f"negative expected value at this price ({100.0 * ev:+.2f} per $100); declined on its "\n            f"own economics. {UNCERTAINTY_DEFECT} is also open and is recorded in "\n            f"uncertainty_status, but it is not why this row was passed.")',
+     '        )'),
+    ("a passed row stops recording the still-open defect",
+     '        out["uncertainty_status"] = UNCERTAINTY_DEFECT\n        # the reason must state why THIS row got THIS status.',
+     '        out["uncertainty_status"] = None\n        # the reason must state why THIS row got THIS status.'),
 ]
 
 

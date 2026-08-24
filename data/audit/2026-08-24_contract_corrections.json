@@ -1,0 +1,107 @@
+{
+ "record_id": "CONTRACT-CORRECTIONS-AND-PRICE-RECOVERY-2026-08-24",
+ "created_utc": "2026-08-24T17:20:00Z",
+ "forecasts": "FROZEN AND UNCHANGED. No probability was recalculated. cohort hashes 479cdb13 (mlb) and 122787ab (wnba) verified after every change below.",
+ "C1_wording": {
+  "was": "no prices exist for this slate",
+  "now": "NO_ELIGIBLE_CAPTURED_PRICE_BOARD / EV_NOT_COMPUTABLE / ACTION_AUTHORITY_NONE",
+  "and": "it does not apply today — prices were recovered. A blocked rail is a fact about access, not about the market."
+ },
+ "C2_overlay_never_mutates": {
+  "module": "price_overlay.py 19/19",
+  "rule": "an overlay carries its own capture instant and hash, references the frozen board hash, and is refused if it carries ANY field belonging to the board or claims execution"
+ },
+ "C3_100k_resolved": {
+  "contract": "NUMERICAL_DIAGNOSTIC_OF_THE_SAME_MODEL",
+  "primary_arm": "mlb.winner.CHAMPION_V13",
+  "why": "the registered arm set names it and the owner's EV cross-check reproduces to within 0.01pp against it on all seven candidates. The 30k/100k gap is pure simulation noise: max 0.7127pp against an expected difference sd of 0.3276pp (2.18 sigma on the largest of ten).",
+  "excluded_from": [
+   "arm counts",
+   "promotion comparisons",
+   "multiplicity"
+  ],
+  "retained": [
+   "seed",
+   "draw count",
+   "Monte Carlo error",
+   "per-game delta"
+  ],
+  "note": "the 30k arm remains LEGACY_TRIAL_COUNT and may not be described as meeting the 100k standard; the diagnostic is the evidence about how much that matters"
+ },
+ "C4_distribution_identity": {
+  "module": "distribution_identity.py 15/15",
+  "nine_parts": "arm, target, seed, draw count, distribution hash, support, scoring convention, CRPS implementation, exact-total log-score mass convention, zero-probability handling",
+  "total_prior_pmf": "empirical pmf over the canonical pool, support 0..40",
+  "smoothing_choice": "alpha = 1/|support| (unit total pseudo-mass), NOT Laplace alpha=1. Laplace adds 41 pseudo-counts to 1684 real ones and shifts the prior mean from 8.9911 to 9.2528 — a +0.26 run distortion of the very quantity the pmf represents. Unit pseudo-mass shifts it +0.0065 and still leaves no integer at exactly zero."
+ },
+ "C5_selection_requirements": {
+  "module": "price_overlay.selection_ready",
+  "five": [
+   "model probability",
+   "price",
+   "EV",
+   "per-game model uncertainty",
+   "stated risk"
+  ],
+  "and": "Monte Carlo error is refused as a substitute, including when both fields hold the same number"
+ },
+ "C6_prior_pool": {
+  "exclusion_ledger": "data/audit/2026-08-24_prior_pool_exclusion_ledger.json, committed 5b3eb37 — 16 winner-only rows, 1 on 8/10 and 15 on 8/11, provisional since ingestion. 1807 - 123 = 1684. The 1700 figure was my error, from a predicate that ignored result_status.",
+  "but_the_deeper_defect_stands": "auditing the SURVIVING 1,684 rows found 1,684 of 1,684 fail source-artifact identification, and 1,620 (96.2%) carry no evidence path at all. 1,554 name statsapi — an official endpoint — with no retained payload. That is a DIFFERENT defect from the owner-relay one and now has its own grade, SOURCE_NAMED_ARTIFACT_NOT_RETAINED, because it has a different remedy: re-fetching the endpoint restores it without the owner.",
+  "status": "PRIOR_INPUT_POOL_PROVISIONAL / PROSPECTIVE_FORECAST_VALID / PROMOTION_EVIDENCE_INELIGIBLE — the owner's wording, and it is correct"
+ },
+ "reproducibility": {
+  "cross_game_dispersion": "population SD, ddof=0",
+  "widening_solver": {
+   "bracket": "[0.0, 50.0]",
+   "tolerance": 1e-09,
+   "max_iterations": 200,
+   "acceptable_k_band": "[0.25, 12.0]",
+   "method": "bisection on the monotone map k -> SD_p(sigmoid(logit(p_prior)+k*f))"
+  },
+  "anchor": {
+   "run_id": 32718640880,
+   "run_number": 3,
+   "event": "push",
+   "conclusion": "success",
+   "url": "https://github.com/georgemunoz1-ui/sports-model/actions/runs/32718640880",
+   "server_timestamp": "2026-08-24T10:48:32Z",
+   "pushed_sha": "190441a98b54450ca7ef66a723e1419339592756",
+   "cohort_hashes": {
+    "mlb": "479cdb131004b0bf0740ab90...",
+    "wnba": "122787abb30631fa1ea20e20..."
+   }
+  }
+ },
+ "PRICE_RECOVERY": {
+  "ladder": "DIRECT_BOOK -> NAMED_BOOK_AGGREGATOR -> OWNER_RELAY, supplied at rung 3",
+  "board": "data/mlb/odds/2026-08-24_draftkings_board.json, normalized hash 21c575fd",
+  "validation": "12/12 paired, one book, current quotes only, both sides, canonical ids, pregame, no alternate rungs, 0.39h fresh",
+  "eligibility_rule_corrected": "my absolute 3.5-7.5% single-book overround band was wrong and would have REJECTED this valid board: these ten MLB moneylines hold 1.637-1.869%. Replaced with homogeneity within a market type (spread under 1.0pp) plus a best-odds level floor — the test that actually caught the bimodal 8/23 board.",
+  "overlay": "data/audit/2026-08-24_action_overlay.json, hash e3f69fc9, references the board and mutates nothing",
+  "cross_check": "all seven of the owner's candidate EV ranges reproduce to within 0.01pp"
+ },
+ "UNCERTAINTY_PIPELINE_DEFECT": {
+  "attempted": "date-blocked OOF calibration SD from 168 graded pre-8/24 V13 forecasts",
+  "failed_because": "5 of 7 graded dates now carry PROVISIONAL results, leaving k=2 admissible blocks (8/20, 8/21) and 38 rows",
+  "contamination": "8/21 records home 14-1; P(>=14 of 15 | p=0.520540) = 0.00083, about 1 in 1209",
+  "not_substituted": [
+   "cross-game dispersion",
+   "prior parameter SD",
+   "Monte Carlo error",
+   "the asserted BASE_EDGE_SD_PP=3.25 constant, which carries no computation"
+  ],
+  "consequence": "raw EV computed and shown for all 20 sides; 0 SELECT, 0 LEAN_HOLD, 16 PASS, 4 BLOCK"
+ },
+ "BLOCKS": {
+  "mlb:TEX@CWS": "MATERIAL_STARTER_STATE_CHANGED_AFTER_LOCK — José Urquidy now shown",
+  "mlb:CIN@SF": "MATERIAL_STARTER_STATE_CHANGED_AFTER_LOCK — Carson Whisenhunt now shown",
+  "handling": "locked probabilities stand unrewritten; both games blocked"
+ },
+ "MODEL_MARKET_DISPERSION_REVIEW": {
+  "positive_ev_sides": "10/20",
+  "underdogs": "9/10",
+  "status": "REVIEW — neither automatic rejection nor automatic selection"
+ },
+ "EXECUTION": "BLOCKED. Real-money authorization 0/100 requires explicit human approval and a fresh pre-wager quote check."
+}

@@ -80,6 +80,19 @@ QUANTITIES = {
         "definition": "simulation noise in one arm's probability estimate at its trial count",
         "banned_aliases": ["sd", "sim sd", "uncertainty"],
     },
+    "MARKET_HANDICAP": {
+        "family": DISPERSION,
+        "unit": "points",
+        "definition": "a sportsbook's posted handicap — the ORIGINAL and correct meaning of the "
+                      "word 'spread'. It is registered here so a price board can name it without "
+                      "tripping the ban that exists because a cross-game standard deviation was "
+                      "once called a spread. Banning the word outright would have been the wrong "
+                      "fix: the defect was using it for a dispersion statistic, not using it for a "
+                      "handicap. No alias list: banning 'line' would fire on 'Total line', which "
+                      "is the correct name for a totals line. An alias ban that hits correct usage "
+                      "is worse than none — the misnaming and collision rules do the real work.",
+        "banned_aliases": [],
+    },
     "PRIOR_POOL_SD_RUNS": {
         "family": UNCERTAINTY,
         "unit": "runs",

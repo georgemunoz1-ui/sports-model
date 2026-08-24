@@ -52,6 +52,7 @@ BASE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 ARTIFACT_IDENTIFIED = "SOURCE_ARTIFACT_IDENTIFIED"
 CLASS_ONLY = "SOURCE_NAMED_BY_CLASS_NOT_ARTIFACT"
+NOT_RETAINED = "SOURCE_NAMED_ARTIFACT_NOT_RETAINED"
 NO_RECORD = "NO_EVIDENCE_RECORD"
 UNREADABLE = "EVIDENCE_RECORD_UNREADABLE"
 
@@ -63,6 +64,14 @@ ARTIFACT_FIELDS = ("source_artifact", "source_url", "source_endpoint", "official
 CLASS_WORDS = ("scoreboard", "official scoreboard", "results", "board", "relay", "owner board",
                "owner relay", "paste", "screenshot", "summary")
 
+# An OFFICIAL ENDPOINT named in a row's source string. These rows are not owner relays: the source
+# is authoritative and specific. What is missing is the retained payload — the fetch happened while a
+# rail existed and nothing was kept, so the claim cannot be re-verified from this repository. That is
+# a DIFFERENT defect from "the source is a class, not an artifact", and it has a different remedy:
+# re-fetching the same endpoint restores it, whereas only the owner can resupply a relay.
+OFFICIAL_ENDPOINT_MARKERS = ("statsapi", "savant", "mlb.com", "baseballsavant", "wnba_stats",
+                             "wnba.com", "nfl.com")
+
 # Marks that a value is retrievable rather than descriptive.
 _RETRIEVABLE = re.compile(r"(https?://|/api/|\.mlb\.com|statsapi|gamePk\s*=?\s*\d|/gameday/|"
                           r"/boxscore|game_id\s*=?\s*\d)", re.I)
@@ -70,6 +79,21 @@ _RETRIEVABLE = re.compile(r"(https?://|/api/|\.mlb\.com|statsapi|gamePk\s*=?\s*\
 
 def _looks_retrievable(v):
     return isinstance(v, str) and bool(_RETRIEVABLE.search(v))
+
+
+def source_named_not_retained(row):
+    """Does this ROW name an official endpoint while retaining no payload?
+
+    Separated from identifies_source_artifact, which judges the evidence RECORD. This judges the
+    row's own source string, because for 92% of the canonical pool there is no evidence record at
+    all — the source names statsapi and nothing was kept.
+    """
+    src = (row or {}).get("source") or ""
+    ep = (row or {}).get("evidence_path") or ""
+    sh = (row or {}).get("evidence_sha256") or ""
+    named = any(m in src.lower() for m in OFFICIAL_ENDPOINT_MARKERS)
+    retained = bool(ep and sh)
+    return bool(named and not retained)
 
 
 def identifies_source_artifact(record):
@@ -125,16 +149,25 @@ def audit_rows(rows, loader=_load, owner_only=True):
         if ep not in cache:
             cache[ep] = loader(ep)
         ok, why = identifies_source_artifact(cache[ep])
+        if not ok and source_named_not_retained(r):
+            why = NOT_RETAINED
         per.append({"game_id": r.get("game_id"), "date": r.get("date"), "source": src,
                     "evidence_path": ep, "identifies_artifact": ok, "reason": why,
                     "claims_final": r.get("result_status") == "FINAL",
                     "tier": r.get("source_tier")})
     failing = [p for p in per if not p["identifies_artifact"]]
+    not_retained = [p for p in failing if p["reason"] == NOT_RETAINED]
     would_downgrade = [p for p in failing if p["claims_final"]]
     dates = sorted({p["date"] for p in would_downgrade})
     return {
         "n_owner_rows": len(per),
         "n_failing_artifact_identification": len(failing),
+        "n_source_named_artifact_not_retained": len(not_retained),
+        "remedy_split": {
+            NOT_RETAINED: "re-fetch the named endpoint and retain the payload; possible without the "
+                          "owner once any rail exists",
+            CLASS_ONLY: "only the party who read the source can identify it",
+        },
         "n_currently_claiming_FINAL": len(would_downgrade),
         "affected_dates": dates,
         "n_affected_dates": len(dates),
@@ -203,6 +236,24 @@ def selftest():
     if internal_consistency({"no": "check"}) is not None:
         f.append("no arithmetic_check means no consistency claim, not a passing one")
 
+    # --- an official endpoint named with nothing retained is its OWN grade -----------------------
+    if not source_named_not_retained({"source": "statsapi", "evidence_path": "", "evidence_sha256": ""}):
+        f.append("a statsapi row with no retained payload must grade as NOT_RETAINED")
+    if source_named_not_retained({"source": "statsapi", "evidence_path": "e.json",
+                                  "evidence_sha256": "abc"}):
+        f.append("a named endpoint WITH a retained hashed payload is not NOT_RETAINED")
+    if source_named_not_retained({"source": "owner relay official scoreboard",
+                                  "evidence_path": "", "evidence_sha256": ""}):
+        f.append("an owner relay names no endpoint and must not grade as NOT_RETAINED")
+    # a path with no hash is NOT a retained artifact: nothing pins its content, so the row grades
+    # NOT_RETAINED exactly as one with no path at all
+    if not source_named_not_retained({"source": "statsapi", "evidence_path": "e.json",
+                                      "evidence_sha256": ""}):
+        f.append("a path without a hash is not a retained artifact and must grade NOT_RETAINED")
+    for bad in (None, {}, {"source": None}):
+        if source_named_not_retained(bad):
+            f.append(f"{bad!r} must not grade as NOT_RETAINED")
+
     # --- the audit reports blast radius, not just a boolean --------------------------------------
     rows = [{"game_id": "a", "date": "2026-08-23", "source": "owner relay official scoreboard",
              "evidence_path": "relay.json", "result_status": "FINAL", "source_tier": "1"},
@@ -222,6 +273,28 @@ def selftest():
         f.append(f"only the failing date is affected, got {a['affected_dates']}")
     if a["by_date"].get("2026-08-23") != 2:
         f.append("the per-date count must be reported")
+    # the two failing classes are counted separately, because they have different remedies
+    mixed = rows + [{"game_id": "s1", "date": "2026-04-01", "source": "statsapi",
+                     "evidence_path": "", "evidence_sha256": "", "result_status": "FINAL",
+                     "source_tier": "1"}]
+    # the loader must return None for a row with NO evidence path — that is the real shape of 96%
+    # of the canonical pool, and a loader that invents a record for it would hide the whole finding
+    strict = lambda p: None if not p else loader(p)
+    ma = audit_rows(mixed, strict, owner_only=False)
+    if ma["n_source_named_artifact_not_retained"] != 1:
+        f.append(f"a named-but-unretained row must be counted separately, got "
+                 f"{ma['n_source_named_artifact_not_retained']}")
+    if NOT_RETAINED not in ma["remedy_split"] or CLASS_ONLY not in ma["remedy_split"]:
+        f.append("the audit must state the different remedy for each failing class")
+    if ma["remedy_split"][NOT_RETAINED] == ma["remedy_split"][CLASS_ONLY]:
+        f.append("the two remedies must not be the same string")
+    # and each must say the thing that distinguishes it: one is re-fetchable without the owner,
+    # the other is only resupplyable by whoever read the source
+    if "re-fetch" not in ma["remedy_split"][NOT_RETAINED]:
+        f.append("the NOT_RETAINED remedy must say the endpoint can be re-fetched")
+    if "only the party who read the source" not in ma["remedy_split"][CLASS_ONLY]:
+        f.append("the CLASS_ONLY remedy must say only the reader can identify it")
+
     everything = audit_rows(rows, loader, owner_only=False)
     if everything["n_owner_rows"] != 4:
         f.append("owner_only=False must audit every row")
@@ -245,6 +318,17 @@ def selftest():
 
 
 MUTANTS = [
+    ("a named endpoint with no retained payload is graded as a class-only failure",
+     '        if not ok and source_named_not_retained(r):\n            why = NOT_RETAINED', "        if False:\n            why = NOT_RETAINED"),
+    ("an unretained payload counts as retained",
+     "    retained = bool(ep and sh)", "    retained = bool(ep or sh)"),
+    ("every source counts as an official endpoint",
+     "    named = any(m in src.lower() for m in OFFICIAL_ENDPOINT_MARKERS)", "    named = True"),
+    ("the two failing classes are pooled into one count",
+     '        "n_source_named_artifact_not_retained": len(not_retained),', '        "n_source_named_artifact_not_retained": 0,'),
+    ("the differing remedies stop being stated",
+     '            CLASS_ONLY: "only the party who read the source can identify it",',
+     '            CLASS_ONLY: "re-fetch the named endpoint and retain the payload; possible without the ",'),
     ("a class name passes as a source artifact",
      "    return False, CLASS_ONLY", "    return True, ARTIFACT_IDENTIFIED"),
     ("any non-empty value passes as an artifact",

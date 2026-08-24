@@ -190,6 +190,55 @@ def calibration_estimable(ps):
     return True, f"rcond {rcond:.3e} above the preregistered floor {RCOND_FLOOR:.3e}"
 
 
+# =================================================================================================
+# EXACT NULLS FOR SMALL SAMPLES (2026-08-23, owner correction 1)
+#
+# I reported that the WNBA champion's perfect AUC on four games "happens about 4% of the time under
+# a coin flip". That number was 1/24 — the probability of ONE SPECIFIC ORDERING of four items — and
+# it is not the test. With ONE positive among four observations, a perfect AUC needs only that the
+# single positive outrank all three negatives, which under exchangeable random scores happens with
+# probability 1/C(4,1) = 25%. The claim was six times too impressive.
+#
+# The lesson is not "check the arithmetic". It is that a null quoted from memory is a fabricated
+# number under R1, exactly like a fabricated result. So the null is computed here, exactly, from the
+# subgroup's own shape, and a small-sample claim cites it rather than asserting it.
+# =================================================================================================
+def auc_null_probability(n_pos, n_neg):
+    """P(AUC = 1) under exchangeable random scores: the positives must occupy the top n_pos ranks.
+
+    Exactly 1 / C(n_pos+n_neg, n_pos). Returns None when the statistic is undefined (a subgroup with
+    no positives or no negatives has no AUC at all) rather than a number that looks like evidence.
+    """
+    if not isinstance(n_pos, int) or not isinstance(n_neg, int) or n_pos < 1 or n_neg < 1:
+        return None
+    return 1.0 / math.comb(n_pos + n_neg, n_pos)
+
+
+def directional_null_probability(n_correct, n):
+    """P(at least n_correct of n correct) under a fair coin — the record-based null, not the AUC one.
+
+    These are DIFFERENT tests and answer different questions; quoting one for the other is how the
+    4% error happened. A 4-0 record is 1/16 = 6.25%; a perfect AUC with one positive among four is
+    25%. Both can be true of the same four games.
+    """
+    if not isinstance(n, int) or not isinstance(n_correct, int) or n < 1 or not (0 <= n_correct <= n):
+        return None
+    return sum(math.comb(n, k) for k in range(n_correct, n + 1)) / (2.0 ** n)
+
+
+def small_sample_null(n_pos, n_neg, n_correct=None):
+    """Both nulls plus the honest reading, so a perfect subgroup cannot be reported bare."""
+    n = (n_pos or 0) + (n_neg or 0)
+    return {
+        "n": n, "n_positive": n_pos, "n_negative": n_neg,
+        "p_perfect_auc_under_random_scores": auc_null_probability(n_pos, n_neg),
+        "p_record_under_fair_coin": (directional_null_probability(n_correct, n)
+                                     if n_correct is not None else None),
+        "reading": "these are different tests of different statistics on the same games; neither is "
+                   "a p-value for a model and neither becomes one by being small",
+    }
+
+
 def winner_metrics(rows, p_key="p_model", prior_key="p_prior", y_key="home_win"):
     """Everything the standard requires for a winner estimand, on ONE cut."""
     n = len(rows)
@@ -771,6 +820,34 @@ def selftest():
     if "never dropped silently" not in pg2["unpaired"]["note"]:
         f.append("the unpaired block does not state that games are never dropped silently")
 
+    # --- exact small-sample nulls (owner correction 1, 2026-08-23) -------------------------------
+    # the WNBA subgroup that produced the error: one home win, three away wins, perfect AUC
+    if auc_null_probability(1, 3) != 0.25:
+        f.append(f"P(perfect AUC | 1 pos, 3 neg) must be 1/4, got {auc_null_probability(1, 3)}")
+    if abs(directional_null_probability(4, 4) - 0.0625) > 1e-12:
+        f.append("P(4 of 4 under a fair coin) must be 1/16")
+    # the two nulls are DIFFERENT numbers on the same four games — quoting one for the other is the bug
+    if auc_null_probability(1, 3) == directional_null_probability(4, 4):
+        f.append("the AUC null and the record null must not coincide on this shape")
+    # 1/24 is the probability of one specific ordering of four items and is NOT either test
+    if abs(auc_null_probability(1, 3) - 1.0 / 24) < 1e-9:
+        f.append("the AUC null must not equal 1/24, the wrong figure that motivated this function")
+    if auc_null_probability(2, 2) != 1.0 / 6:
+        f.append("P(perfect AUC | 2 pos, 2 neg) must be 1/6")
+    if auc_null_probability(1, 99) >= auc_null_probability(1, 3):
+        f.append("a perfect AUC must get rarer as the negatives grow")
+    # undefined shapes return null, never a number that reads as evidence
+    for bad in ((0, 4), (4, 0), (-1, 3), (1.5, 3), (None, 3)):
+        if auc_null_probability(*bad) is not None:
+            f.append(f"auc_null_probability{bad} must be undefined, got a number")
+    if directional_null_probability(5, 4) is not None:
+        f.append("more correct than played must be undefined")
+    if abs(directional_null_probability(0, 4) - 1.0) > 1e-12:
+        f.append("at least 0 of 4 is certain")
+    blk = small_sample_null(1, 3, n_correct=4)
+    if blk["p_perfect_auc_under_random_scores"] != 0.25 or abs(blk["p_record_under_fair_coin"] - 0.0625) > 1e-12:
+        f.append("small_sample_null must carry BOTH nulls")
+
     print("evaluation_standard selftest:", "PASS" if not f else "FAIL")
     for x in f:
         print("  " + x)
@@ -778,6 +855,22 @@ def selftest():
 
 
 MUTANTS = [
+    ("the AUC null uses the wrong combinatorial base, reproducing the 1/24 error",
+     "    return 1.0 / math.comb(n_pos + n_neg, n_pos)",
+     "    return 1.0 / math.factorial(n_pos + n_neg)"),
+    ("the AUC null stops shrinking as the negatives grow",
+     "    return 1.0 / math.comb(n_pos + n_neg, n_pos)", "    return 0.25"),
+    ("the record null is returned for the AUC question",
+     "    return 1.0 / math.comb(n_pos + n_neg, n_pos)", "    return 0.5 ** (n_pos + n_neg)"),
+    ("a degenerate subgroup with no positives gets a null anyway",
+     "    if not isinstance(n_pos, int) or not isinstance(n_neg, int) or n_pos < 1 or n_neg < 1:",
+     "    if False:"),
+    ("the record null drops its upper tail, so it stops being 'at least'",
+     "    return sum(math.comb(n, k) for k in range(n_correct, n + 1)) / (2.0 ** n)",
+     "    return math.comb(n, n_correct) / (2.0 ** n)"),
+    ("more correct than played is accepted",
+     "    if not isinstance(n, int) or not isinstance(n_correct, int) or n < 1 or not (0 <= n_correct <= n):",
+     "    if False:"),
     ("Brier skill inverted, so a worse model reads as skilled",
      "    return 1.0 - (model_brier / prior_brier)", "    return (model_brier / prior_brier) - 1.0"),
     ("skill compares against a fixed .25 instead of the expanding prior",

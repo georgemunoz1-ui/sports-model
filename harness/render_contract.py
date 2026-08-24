@@ -88,6 +88,47 @@ QUANTITIES = {
     },
 }
 
+# --- ARM IDENTITIES (2026-08-23, owner correction 6) ----------------------------------------------
+# "Baseline" meant three different things on one page: the expanding home prior on the winner
+# estimand, the challenger's own total wearing the baseline column on the total estimand, and the
+# independent league-mean total added as the real comparator. A reader tracking "the baseline" across
+# two tables was tracking two unrelated arms, and the third was invisible. One label, three arms, is
+# the same defect as one label, two uncertainties — so it gets the same rule rather than a footnote.
+ARM_IDENTITIES = {
+    # NOTE: no banned_aliases here on purpose. An alias list on an arm would be
+    # decoration: the misnaming rule below already refuses ANY label that does not contain its
+    # identity, "Baseline" included, and the collision rule catches the actual defect. A field
+    # nothing reads is worse than no field (lesson 21).
+    "EXPANDING_HOME_PRIOR": {
+        "estimand": "winner",
+        "definition": "the expanding Beta(10,10) home-win prior as of the cutoff; one probability "
+                      "for every game on the slate",
+    },
+    "CHALLENGER_TOTAL": {
+        "estimand": "total",
+        "definition": "the adaptive challenger's projected total. On the 2026-08-23 card this value "
+                      "ALSO occupied the baseline total column, identical in all 15 games, which is "
+                      "why it needs its own name rather than a shared one",
+    },
+    "EXPANDING_TOTAL_PRIOR": {
+        "estimand": "total",
+        "definition": "the expanding league scoring prior, optionally park-adjusted and adjusted by "
+                      "nothing else; the independent comparator on the total estimand",
+    },
+    "CHAMPION_V13": {
+        "estimand": "winner|total",
+        "definition": "the frozen V13 Monte Carlo card model at its registered trial count",
+    },
+    "CHALLENGER_ADAPTIVE": {
+        "estimand": "winner",
+        "definition": "the baseline-offset adaptive challenger on the winner estimand",
+    },
+}
+
+ARM_LABEL_COLLISION = "ONE_LABEL_TWO_ARM_IDENTITIES"
+ARM_LABEL_MISNAMES = "ARM_LABEL_DOES_NOT_NAME_ITS_IDENTITY"
+UNKNOWN_ARM = "UNKNOWN_ARM_IDENTITY"
+
 # Labels so generic that they identify nothing, whatever they are attached to.
 GENERIC_LABELS = {"sd", "s.d.", "σ", "sigma", "uncertainty", "spread", "range", "error", "variance"}
 
@@ -175,6 +216,32 @@ def quantity_gate(quantities):
     return problems
 
 
+def arm_identity_gate(bindings):
+    """`bindings`: [{"display_label": str, "identity": str, "estimand": str}, ...]
+
+    Refuses an unknown identity, a label that does not name the arm it carries, and — the defect this
+    exists for — one label covering two different arms.
+    """
+    problems, by_label = [], {}
+    for b in bindings:
+        label, ident = b.get("display_label"), b.get("identity")
+        if ident not in ARM_IDENTITIES:
+            problems.append({"code": UNKNOWN_ARM, "label": label, "identity": ident})
+            continue
+        if label is None or _norm(ident).replace("_", " ") not in _norm(label).replace("_", " "):
+            problems.append({"code": ARM_LABEL_MISNAMES, "label": label, "identity": ident,
+                             "required": ident,
+                             "definition": ARM_IDENTITIES[ident]["definition"]})
+        by_label.setdefault(_norm(label), set()).add(ident)
+    for label, idents in sorted(by_label.items()):
+        if len(idents) > 1:
+            ests = sorted({ARM_IDENTITIES[i]["estimand"] for i in idents})
+            problems.append({"code": ARM_LABEL_COLLISION, "label": label,
+                             "identities": sorted(idents), "estimands": ests,
+                             "note": "across estimands" if len(ests) > 1 else "within one estimand"})
+    return problems
+
+
 def truncation_audit(text, tokens):
     """A canonical token must appear VERBATIM. Present only as a prefix means truncated."""
     hay = _norm(_strip_markup(text))
@@ -200,10 +267,11 @@ def truncation_audit(text, tokens):
     return out
 
 
-def render_gate(text, quantities=(), tokens=(), labels=None):
+def render_gate(text, quantities=(), tokens=(), labels=None, arms=()):
     """`labels`, when supplied, scopes the alias check to the places a number is actually named."""
     problems = (label_audit(text if labels is None else list(labels))
-                + quantity_gate(list(quantities)) + truncation_audit(text, list(tokens)))
+                + quantity_gate(list(quantities)) + arm_identity_gate(list(arms))
+                + truncation_audit(text, list(tokens)))
     return {"status": OK if not problems else REFUSED,
             "n_problems": len(problems),
             "problems": problems,
@@ -290,13 +358,44 @@ def selftest():
     if not truncation_audit("action blocked: neutral sit", ["action blocked: neutral site"]):
         f.append("losing the final character is still a truncation")
 
+    # --- 6b: one label, three arms (owner correction 6, 2026-08-23) ------------------------------
+    # the 8/23 settlement as first written: "Baseline" named the expanding home prior on the winner
+    # table and the challenger's own total on the total table, while the real total comparator had
+    # no name of its own at all.
+    collided = [{"display_label": "Baseline", "identity": "EXPANDING_HOME_PRIOR", "estimand": "winner"},
+                {"display_label": "Baseline", "identity": "CHALLENGER_TOTAL", "estimand": "total"}]
+    ap = arm_identity_gate(collided)
+    if not any(x["code"] == ARM_LABEL_COLLISION for x in ap):
+        f.append("one label covering two arms must collide")
+    coll = [x for x in ap if x["code"] == ARM_LABEL_COLLISION][0]
+    if sorted(coll["identities"]) != ["CHALLENGER_TOTAL", "EXPANDING_HOME_PRIOR"]:
+        f.append("the arm collision must name both identities")
+    if coll["note"] != "across estimands":
+        f.append("a collision spanning two estimands must say so")
+    if not any(x["code"] == ARM_LABEL_MISNAMES for x in ap):
+        f.append("'Baseline' does not name EXPANDING_HOME_PRIOR and must be refused")
+    named = [{"display_label": "EXPANDING_HOME_PRIOR", "identity": "EXPANDING_HOME_PRIOR",
+              "estimand": "winner"},
+             {"display_label": "CHALLENGER_TOTAL", "identity": "CHALLENGER_TOTAL", "estimand": "total"},
+             {"display_label": "EXPANDING_TOTAL_PRIOR", "identity": "EXPANDING_TOTAL_PRIOR",
+              "estimand": "total"}]
+    if arm_identity_gate(named):
+        f.append(f"distinctly named arms must pass, got {arm_identity_gate(named)}")
+    # two DIFFERENT labels for one identity is fine; two identities under one label is not
+    if arm_identity_gate([{"display_label": "EXPANDING_TOTAL_PRIOR (runs)",
+                           "identity": "EXPANDING_TOTAL_PRIOR", "estimand": "total"}]):
+        f.append("a label that names its identity with a unit appended must pass")
+    if not any(x["code"] == UNKNOWN_ARM for x in
+               arm_identity_gate([{"display_label": "X", "identity": "VIBES_ARM", "estimand": "winner"}])):
+        f.append("an identity outside the vocabulary must be refused")
+
     # --- the gate as a whole ----------------------------------------------------------------------
-    g = render_gate(bad_html + render, wnba, tokens)
+    g = render_gate(bad_html + render, wnba, tokens, arms=collided)
     if g["status"] != REFUSED:
         f.append("the 8/23 render must be refused by the contract")
     codes = {x["code"] for x in g["problems"]}
     # each of the three amendments must be represented, not just enough problems to trip the verdict
-    for need in (BANNED_ALIAS, LABEL_COLLISION, GENERIC_LABEL, TRUNCATED):
+    for need in (BANNED_ALIAS, LABEL_COLLISION, GENERIC_LABEL, TRUNCATED, ARM_LABEL_COLLISION):
         if need not in codes:
             f.append(f"the gate must surface {need}, got {sorted(codes)}")
     clean = render_gate(good_html + whole, fixed, tokens)
@@ -325,6 +424,21 @@ def selftest():
 
 
 MUTANTS = [
+    ("one label may cover two arm identities",
+     "        if len(idents) > 1:", "        if False:"),
+    ("the arm collision stops naming the identities",
+     '            problems.append({"code": ARM_LABEL_COLLISION, "label": label,\n                             "identities": sorted(idents), "estimands": ests,',
+     '            problems.append({"code": ARM_LABEL_COLLISION, "label": label,\n                             "identities": [], "estimands": ests,'),
+    ("the arm collision stops distinguishing estimands",
+     '            ests = sorted({ARM_IDENTITIES[i]["estimand"] for i in idents})', "            ests = []"),
+    ("an arm label need not name the arm it carries",
+     '        if label is None or _norm(ident).replace("_", " ") not in _norm(label).replace("_", " "):',
+     "        if False:"),
+    ("an unknown arm identity is accepted",
+     "        if ident not in ARM_IDENTITIES:", "        if False:"),
+    ("the gate stops running the arm-identity check",
+     "                + quantity_gate(list(quantities)) + arm_identity_gate(list(arms))",
+     "                + quantity_gate(list(quantities))"),
     ("the alias check ignores the labels it was scoped to",
      "        hay = _norm(\" \\n \".join(str(x) for x in text_or_labels))", '        hay = ""'),
     ("the gate ignores the labels argument and scans the prose again",
@@ -379,11 +493,11 @@ MUTANTS = [
     ("the gate reports OK regardless of problems",
      '    return {"status": OK if not problems else REFUSED,', '    return {"status": OK,'),
     ("the gate stops running the quantity check",
-     "                + quantity_gate(list(quantities)) + truncation_audit(text, list(tokens)))",
-     "                + truncation_audit(text, list(tokens)))"),
+     "                + quantity_gate(list(quantities)) + arm_identity_gate(list(arms))",
+     "                + arm_identity_gate(list(arms))"),
     ("the gate stops running the truncation check",
-     "                + quantity_gate(list(quantities)) + truncation_audit(text, list(tokens)))",
-     "                + quantity_gate(list(quantities)))"),
+     "                + truncation_audit(text, list(tokens)))",
+     "                )"),
     ("markup is not stripped, so a token split by a tag reads as truncated",
      "    hay = _norm(_strip_markup(text))\n    out = []", "    hay = _norm(text)\n    out = []"),
 ]

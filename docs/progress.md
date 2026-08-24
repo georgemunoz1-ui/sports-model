@@ -3485,3 +3485,35 @@ edited.
 
 Model ledger $0 at 0 bets. Gate 0/100. Owner's TEN ML -170 0.5u won, +0.294u, walled lane only.
 Settlement: https://claude.ai/code/artifact/98e2a9e5-0862-4660-b57d-52891c84dbed
+
+## 2026-08-23 (interpretation corrections) — the values stand, several readings did not
+
+Owner accepted every settlement VALUE as descriptive and rejected the interpretation around them.
+Eight corrections, all right, all applied.
+
+The one that matters most for discipline: I said a perfect AUC on four games happens "about 4% of
+the time under a coin flip". It is 25%. My 4% was 1/24, the chance of one specific ordering of four
+items — not the test, and never the test. With one positive among four, a perfect AUC needs only
+that the positive outrank the three negatives: 1/C(4,1). The separate fair-coin 4-0 record is 1/16.
+I had been applying R1 to results and features and not to test statistics, as though a null were
+general knowledge rather than a quantity computed from this subgroup's own shape. Now computed
+exactly in evaluation_standard, with a mutant that reproduces the 1/24 error. Lesson 29.
+
+Also corrected: a calibration slope from 15 games in one cluster cannot authorize widening the
+offset — that is post-outcome adaptation on a SLOW-layer object, and the right move is a separately
+registered widening challenger tested forward, so the claim is now HYPOTHESIS only. "Calibration
+failed" became CALIBRATION_POINT_ESTIMATE_OUT_OF_RANGE_NON_DECISION_GRADE, because numerical
+estimability only ever meant the fit could be computed. "+0.00076 is indistinguishable from zero at
+any sample size" is false as stated and became "negligible on this slate and not inferentially
+evaluable". The three gates were being quoted as one: model promotion is 15/500 games and 1/60
+dates, real-money authorization is 0/100 and separately blocked, the wager ledger is $0 at 0
+model-authorized bets. "Baseline" named three different arms across two tables and now has three
+identifiers — EXPANDING_HOME_PRIOR, CHALLENGER_TOTAL, EXPANDING_TOTAL_PRIOR — with
+render_contract.arm_identity_gate refusing one label over two arms. Registration lead time is one
+derived number, 7h12m39s, from the latest pregame instant. TB beat BAL 3-1, which is not a blowout.
+WNBA is DIAGNOSTIC_ONLY at 32 days stale and OWNER_RELAY names the route, not the authority — source
+attribution recorded as UNDERSPECIFIED rather than resolved to a host I did not see.
+
+Binding conclusion: EXPANDING_TOTAL_PRIOR had the lowest observed MAE and RMSE; CHALLENGER_ADAPTIVE
+had the lowest observed winner Brier and highest observed AUC; all descriptive, non-decision-grade
+at one cluster; the slope motivates a prospectively registered experiment and authorizes nothing.

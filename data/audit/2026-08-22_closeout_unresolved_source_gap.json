@@ -1,0 +1,290 @@
+{
+ "appends_to": [
+  "data/audit/2026-08-22_acquisition_attempt.json",
+  "data/audit/2026-08-22_retry_ladder.json",
+  "data/audit/2026-08-23_acquisition_retry_3.json"
+ ],
+ "expiry_is_not_a_failure_of_the_model": "the acquisition ladder ran to exhaustion and reported accurately at each rung. What expired is the window, because the environment's egress policy blocked every fetch rail for every domain including a neutral control. The correct terminal wording is UNRESOLVED_SOURCE_GAP \u2014 a statement about the evidence package, not a claim that the games did not happen or that their scores are unknowable.",
+ "r6": "append-only. No prior record is edited. This one states the terminal disposition.",
+ "record_id": "ACQUISITION-CLOSEOUT-2026-08-22",
+ "record_sha256": "8d76eecf46aac313dd6448c524daf9b19519cad4faf88ab3a00690cc070c6daa",
+ "run_utc": "2026-08-24T17:45:29Z",
+ "schema": "ops.acquisition_closeout.v1",
+ "step_1_recheck": {
+  "answer": "NO.",
+  "attempts": [
+   {
+    "rail": "WebFetch",
+    "result": "EGRESS_BLOCKED",
+    "target": "en.wikipedia.org/wiki/Baseball (neutral control)"
+   },
+   {
+    "rail": "WebFetch",
+    "result": "EGRESS_BLOCKED",
+    "target": "statsapi.mlb.com/api/v1/schedule?sportId=1&date=2026-08-22"
+   },
+   {
+    "rail": "WebFetch",
+    "result": "EGRESS_BLOCKED",
+    "target": "www.mlb.com/scores/2026-08-22"
+   },
+   {
+    "rail": "WebFetch",
+    "result": "EGRESS_BLOCKED",
+    "target": "www.baseball-reference.com/boxes/?month=8&day=22&year=2026"
+   },
+   {
+    "rail": "curl / shell HTTP",
+    "result": "NOT_ATTEMPTED",
+    "target": "n/a",
+    "why": "standing rule: never route around an org egress-proxy 403 with shell HTTP against sports sites. The block is the environment's answer, not an obstacle to defeat."
+   },
+   {
+    "rail": "WebSearch",
+    "result": "AVAILABLE_BUT_NOT_CANONICAL",
+    "target": "MLB 2026-08-22 finals",
+    "why": "search snippets are never canonical evidence, whatever domain they quote. A publisher's TITLE in a search index is still a snippet: the artifact was never retrieved, so there is no retrieval timestamp and no content hash. It cannot clear echo_gate and cannot confirm a game at tier 1. Running it again would change nothing about the disposition."
+   }
+  ],
+  "axis_B_domain_verdict": "UNDETERMINABLE \u2014 unchanged. MLB, the NFL and the WNBA are NOT recorded as blocking this client. Every rail is blocked for every domain including the control, so no per-domain conclusion is available.",
+  "control_first": {
+   "conclusion": "RAIL_FAILURE, not a per-domain refusal.",
+   "result": "EGRESS_BLOCKED",
+   "target": "en.wikipedia.org/wiki/Baseball",
+   "utc": "2026-08-24T17:45:29Z",
+   "why": "a per-domain verdict may not be drawn from a rail that is down for everything. The neutral control is re-run BEFORE any sports domain, every time."
+  },
+  "question": "did tier-1 evidence arrive on its own since 2026-08-23T17:52Z?"
+ },
+ "step_2_terminal_disposition": {
+  "consequences": [
+   "no 2026-08-22 row enters the canonical results table (it currently holds ZERO rows for that date)",
+   "no 2026-08-22 game enters the expanding prior pool",
+   "no 2026-08-22 game contributes to any interval, cluster count or promotion denominator",
+   "the date is not an admissible OOF date block and does not move the cluster floor",
+   "the six provisional scores are retained ONLY as a record of what was seen and where"
+  ],
+  "disposition": "UNRESOLVED_SOURCE_GAP",
+  "games": [
+   {
+    "disposition": "UNRESOLVED_SOURCE_GAP",
+    "entered_canonical_results": false,
+    "ever_tier1_confirmed": false,
+    "game": "TOR@NYY",
+    "note": "a provisional score was held from a tier-3 corroboration and was NEVER confirmed at tier 1 on any of the three attempts. It is not a result. It does not enter the canonical table, the prior pool, any interval, or any promotion denominator.",
+    "provisional_score_held": "4-3",
+    "provisional_tier": 3,
+    "sport": "MLB"
+   },
+   {
+    "disposition": "UNRESOLVED_SOURCE_GAP",
+    "entered_canonical_results": false,
+    "ever_tier1_confirmed": false,
+    "game": "STL@PHI",
+    "note": "a provisional score was held from a tier-3 corroboration and was NEVER confirmed at tier 1 on any of the three attempts. It is not a result. It does not enter the canonical table, the prior pool, any interval, or any promotion denominator.",
+    "provisional_score_held": "3-12",
+    "provisional_tier": 3,
+    "sport": "MLB"
+   },
+   {
+    "disposition": "UNRESOLVED_SOURCE_GAP",
+    "entered_canonical_results": false,
+    "ever_tier1_confirmed": false,
+    "game": "TB@BAL",
+    "note": "a provisional score was held from a tier-3 corroboration and was NEVER confirmed at tier 1 on any of the three attempts. It is not a result. It does not enter the canonical table, the prior pool, any interval, or any promotion denominator.",
+    "provisional_score_held": "2-3",
+    "provisional_tier": 3,
+    "sport": "MLB"
+   },
+   {
+    "disposition": "UNRESOLVED_SOURCE_GAP",
+    "entered_canonical_results": false,
+    "ever_tier1_confirmed": false,
+    "game": "CHC@SEA",
+    "note": "a provisional score was held from a tier-3 corroboration and was NEVER confirmed at tier 1 on any of the three attempts. It is not a result. It does not enter the canonical table, the prior pool, any interval, or any promotion denominator.",
+    "provisional_score_held": "4-5",
+    "provisional_tier": 3,
+    "sport": "MLB"
+   },
+   {
+    "disposition": "UNRESOLVED_SOURCE_GAP",
+    "entered_canonical_results": false,
+    "ever_tier1_confirmed": false,
+    "game": "MIN@SD",
+    "note": "a provisional score was held from a tier-3 corroboration and was NEVER confirmed at tier 1 on any of the three attempts. It is not a result. It does not enter the canonical table, the prior pool, any interval, or any promotion denominator.",
+    "provisional_score_held": "5-7",
+    "provisional_tier": 3,
+    "sport": "MLB"
+   },
+   {
+    "disposition": "UNRESOLVED_SOURCE_GAP",
+    "entered_canonical_results": false,
+    "ever_tier1_confirmed": false,
+    "game": "CLE@COL",
+    "note": "a provisional score was held from a tier-3 corroboration and was NEVER confirmed at tier 1 on any of the three attempts. It is not a result. It does not enter the canonical table, the prior pool, any interval, or any promotion denominator.",
+    "provisional_score_held": "4-3",
+    "provisional_tier": 3,
+    "sport": "MLB"
+   },
+   {
+    "disposition": "UNRESOLVED_SOURCE_GAP",
+    "entered_canonical_results": false,
+    "ever_tier1_confirmed": false,
+    "game": "ATL@MIL",
+    "note": "no score of any tier was ever obtained for this game.",
+    "provisional_score_held": null,
+    "provisional_tier": null,
+    "sport": "MLB"
+   },
+   {
+    "disposition": "UNRESOLVED_SOURCE_GAP",
+    "entered_canonical_results": false,
+    "ever_tier1_confirmed": false,
+    "game": "WSH@MIA",
+    "note": "no score of any tier was ever obtained for this game.",
+    "provisional_score_held": null,
+    "provisional_tier": null,
+    "sport": "MLB"
+   },
+   {
+    "disposition": "UNRESOLVED_SOURCE_GAP",
+    "entered_canonical_results": false,
+    "ever_tier1_confirmed": false,
+    "game": "LAA@TEX",
+    "note": "no score of any tier was ever obtained for this game.",
+    "provisional_score_held": null,
+    "provisional_tier": null,
+    "sport": "MLB"
+   },
+   {
+    "disposition": "UNRESOLVED_SOURCE_GAP",
+    "entered_canonical_results": false,
+    "ever_tier1_confirmed": false,
+    "game": "ATH@HOU",
+    "note": "no score of any tier was ever obtained for this game.",
+    "provisional_score_held": null,
+    "provisional_tier": null,
+    "sport": "MLB"
+   },
+   {
+    "disposition": "UNRESOLVED_SOURCE_GAP",
+    "entered_canonical_results": false,
+    "ever_tier1_confirmed": false,
+    "game": "NYM@CWS",
+    "note": "no score of any tier was ever obtained for this game.",
+    "provisional_score_held": null,
+    "provisional_tier": null,
+    "sport": "MLB"
+   },
+   {
+    "disposition": "UNRESOLVED_SOURCE_GAP",
+    "entered_canonical_results": false,
+    "ever_tier1_confirmed": false,
+    "game": "DET@KC",
+    "note": "no score of any tier was ever obtained for this game.",
+    "provisional_score_held": null,
+    "provisional_tier": null,
+    "sport": "MLB"
+   },
+   {
+    "disposition": "UNRESOLVED_SOURCE_GAP",
+    "entered_canonical_results": false,
+    "ever_tier1_confirmed": false,
+    "game": "PIT@LAD",
+    "note": "no score of any tier was ever obtained for this game.",
+    "provisional_score_held": null,
+    "provisional_tier": null,
+    "sport": "MLB"
+   },
+   {
+    "disposition": "UNRESOLVED_SOURCE_GAP",
+    "entered_canonical_results": false,
+    "ever_tier1_confirmed": false,
+    "game": "SF@BOS",
+    "note": "no score of any tier was ever obtained for this game.",
+    "provisional_score_held": null,
+    "provisional_tier": null,
+    "sport": "MLB"
+   },
+   {
+    "disposition": "UNRESOLVED_SOURCE_GAP",
+    "entered_canonical_results": false,
+    "ever_tier1_confirmed": false,
+    "game": "CIN@AZ",
+    "note": "no score of any tier was ever obtained for this game.",
+    "provisional_score_held": null,
+    "provisional_tier": null,
+    "sport": "MLB"
+   },
+   {
+    "disposition": "UNRESOLVED_SOURCE_GAP",
+    "entered_canonical_results": false,
+    "ever_tier1_confirmed": false,
+    "game": "CON@LAS",
+    "note": "no score of any tier was ever obtained for this game.",
+    "provisional_score_held": null,
+    "provisional_tier": null,
+    "sport": "WNBA"
+   },
+   {
+    "disposition": "UNRESOLVED_SOURCE_GAP",
+    "entered_canonical_results": false,
+    "ever_tier1_confirmed": false,
+    "game": "ATL@PHX",
+    "note": "no score of any tier was ever obtained for this game.",
+    "provisional_score_held": null,
+    "provisional_tier": null,
+    "sport": "WNBA"
+   },
+   {
+    "disposition": "UNRESOLVED_SOURCE_GAP",
+    "entered_canonical_results": false,
+    "ever_tier1_confirmed": false,
+    "game": "DAL@ARI",
+    "note": "no score of any tier was ever obtained for this game.",
+    "provisional_score_held": null,
+    "provisional_tier": null,
+    "sport": "NFL"
+   }
+  ],
+  "n_games": 18,
+  "n_tier1_confirmed": 0,
+  "plainly": "NONE of the eighteen games was ever confirmed at tier 1, on any of the three attempts or at expiry. That includes all six games carrying a provisional score. A provisional score is a held number, not a result: the six are named here so the gap is legible, and naming them is not settling them.",
+  "reopening": "if an official artifact for 2026-08-22 is ever retrieved with a game id, a retrieval timestamp and a content hash, this disposition is superseded by a new record. It is not edited, and the window is not reopened retroactively for anything already graded."
+ },
+ "step_3_ledgers": {
+  "model_authorized_wagers": {
+   "effect_of_this_closeout": "NONE. Zero games settled, so nothing to settle against.",
+   "n_bets": 0,
+   "staked_usd": 0.0
+  },
+  "owner_discretion_lane": {
+   "legs": [
+    "DAL",
+    "PHX"
+   ],
+   "status": "UNSETTLED",
+   "wall": "owner discretion picks are walled from model output and never touch the model ledger. They remain unsettled because their games are among the eighteen with no tier-1 confirmation. Their status is a fact about the evidence gap, not a model result."
+  }
+ },
+ "step_4_eight_twenty_three_cohort": {
+  "already_graded_separately_by": [
+   "sport",
+   "arm",
+   "estimand",
+   "per-game information dose"
+  ],
+  "cohorts": "MLB and WNBA remain separate cohorts with separate hashes, cluster counts and promotion denominators. They are not pooled for intervals or inference.",
+  "condition_met": false,
+  "instruction": "settle the 8/23 three-arm cohort IF tier-1 finals for 8/23 are available",
+  "skill_metric": "Brier skill against the expanding prior, never a win-loss record \u2014 a record has no baseline and cannot separate a good forecast from a lucky slate.",
+  "what_therefore_stands": "the three-arm settlement recorded at data/audit/2026-08-23_three_arm_settlement.json remains DESCRIPTIVE and NOT_PROMOTION_ELIGIBLE. It is not re-graded here: re-running the same arithmetic over the same provisional numbers would produce the same figures with a fresher timestamp, which would look like corroboration and would be nothing of the kind.",
+  "why": "the 8/23 finals reached this repository by OWNER_RELAY and were downgraded to PROVISIONAL pending an immutable addendum identifying the exact Tier-1 source artifact. That addendum has not landed, and today's rail check failed on the control, so no 8/23 artifact could be retrieved either."
+ },
+ "window": {
+  "duration_hours": 36,
+  "expired_utc": "2026-08-24T17:45:00Z",
+  "opened_utc": "2026-08-22T05:45:00Z",
+  "status": "EXPIRED"
+ }
+}

@@ -3666,3 +3666,32 @@ exactly why reporting one under the other's name would have survived review.
 Overlay v3 d0ac7ee4 supersedes v2 a17ec8fa, which supersedes v1 e3f69fc9. v2 is not edited: it still
 carries the withdrawn field and_one_of_the_two_is_contaminated, and v3 names it in superseded_fields
 and says what was wrong with it. Report republished.
+
+### 2026-08-24T17:45Z — the 8/22 window expired UNRESOLVED_SOURCE_GAP
+
+Re-checked before closing, control first: en.wikipedia.org EGRESS_BLOCKED, so the rail is down for
+everything and no per-domain verdict is available. statsapi.mlb.com, www.mlb.com and
+baseball-reference all EGRESS_BLOCKED. Shell HTTP NOT_ATTEMPTED - the proxy's answer is the answer.
+WebSearch is up and cannot help: a publisher's title in a search index is still a snippet, with no
+retrieved artifact, no retrieval timestamp and no content hash, so it clears no gate.
+
+All EIGHTEEN games close UNRESOLVED_SOURCE_GAP. Not one was ever tier-1 confirmed on any of the
+three attempts. Six carry a provisional tier-3 score - TOR@NYY 4-3, STL@PHI 3-12, TB@BAL 2-3,
+CHC@SEA 4-5, MIN@SD 5-7, CLE@COL 4-3 - and I am naming them precisely so the gap is legible. Naming
+them is not settling them. A provisional score is a held number, not a result: none enters the
+canonical table (still zero rows for 8/22), the prior pool, any interval, or any denominator, and
+8/22 is not an admissible OOF date block.
+
+Model ledger unchanged at $0 across 0 bets. The DAL and PHX discretion legs stay unsettled in their
+walled lane, for the same evidence reason and with no contact with the model ledger.
+
+The 8/23 cohort was NOT re-settled. Its finals arrived by OWNER_RELAY and are provisional pending an
+addendum naming the exact Tier-1 artifact, which has not landed. Re-running the same arithmetic over
+the same provisional numbers would have produced identical figures under a fresher timestamp - which
+would read as corroboration and would be nothing of the kind. The existing settlement stands as
+DESCRIPTIVE and NOT_PROMOTION_ELIGIBLE, graded separately by sport, arm, estimand and dose, scored
+as Brier skill against the expanding prior rather than as a record.
+
+What expired is the window, not the ladder. The ladder ran to exhaustion and reported accurately at
+every rung. UNRESOLVED_SOURCE_GAP is a statement about the evidence package - not a claim that the
+games did not happen.

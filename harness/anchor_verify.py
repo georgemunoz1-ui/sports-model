@@ -1,0 +1,193 @@
+#!/usr/bin/env python3
+"""ANCHOR VERIFY — the check the CI clock runs, kept in the repository instead of inside YAML.
+
+The first run of .github/workflows/timestamp-anchor.yml FAILED, and it failed for a reason worth
+recording: I had embedded this logic as a `python3 - <<'PY'` heredoc inside an indented `if` block.
+A quoted heredoc terminator must sit at column 0; mine was indented, so the shell never closed the
+heredoc and the step died of a syntax error in under a second. Logic that lives in a YAML string is
+logic that cannot be run locally, and therefore logic that ships untested. It lives here now, it has
+a selftest, and the workflow calls it.
+
+WHAT IT VERIFIES. anchor_expectations.json pins the per-cohort hashes of a card. A card is immutable
+once registered, so those hashes must never change; a mismatch means the card was edited after
+registration. It deliberately does NOT pin a card-set or registry digest, because those legitimately
+change every time a card is added and pinning them would fail every future push for no reason.
+
+Absent card, unreadable card, missing cohort, changed hash: all fail. Nothing pinned: passes, and
+says so rather than pretending to have checked something.
+"""
+from __future__ import annotations
+
+import hashlib
+import json
+import os
+import sys
+
+OK = "ANCHOR_COHORT_HASHES_VERIFIED"
+NOTHING_PINNED = "ANCHOR_NOTHING_PINNED"
+CARD_ABSENT = "ANCHOR_CARD_ABSENT"
+CARD_UNREADABLE = "ANCHOR_CARD_UNREADABLE"
+COHORT_ABSENT = "ANCHOR_COHORT_ABSENT"
+HASH_DIFFERS = "ANCHOR_COHORT_HASH_DIFFERS"
+
+
+def cohort_hash(obj):
+    return hashlib.sha256(json.dumps(obj, sort_keys=True,
+                                     separators=(",", ":")).encode()).hexdigest()
+
+
+def verify(expectations, card_loader=None):
+    """(ok, status, problems). Pure over a caller-supplied loader so the failure paths are testable."""
+    load = card_loader or (lambda p: json.load(open(p)))
+    card_path = (expectations or {}).get("card")
+    pinned = (expectations or {}).get("cohort_hashes") or {}
+    if not card_path or not pinned:
+        return True, NOTHING_PINNED, []
+    try:
+        card = load(card_path)
+    except FileNotFoundError:
+        return False, CARD_ABSENT, [f"{CARD_ABSENT}: {card_path}"]
+    except (ValueError, TypeError) as e:
+        return False, CARD_UNREADABLE, [f"{CARD_UNREADABLE}: {card_path}: {e}"]
+    problems = []
+    for sport, want in sorted(pinned.items()):
+        cohort = card.get(sport)
+        if cohort is None:
+            problems.append(f"{COHORT_ABSENT}: {sport} is not in {card_path}")
+            continue
+        got = cohort_hash(cohort)
+        if got != want:
+            problems.append(f"{HASH_DIFFERS}: {sport} pinned {want} but the card hashes to {got}")
+    if problems:
+        return False, (COHORT_ABSENT if any(p.startswith(COHORT_ABSENT) for p in problems)
+                       else HASH_DIFFERS), problems
+    return True, OK, []
+
+
+def selftest():
+    f = []
+    card = {"mlb": {"rows": [1, 2]}, "wnba": {"rows": [3]}}
+    good = {"card": "c.json", "cohort_hashes": {"mlb": cohort_hash(card["mlb"]),
+                                                "wnba": cohort_hash(card["wnba"])}}
+    load = lambda p: card
+
+    ok, st, pr = verify(good, load)
+    if not ok or st != OK or pr:
+        f.append(f"matching hashes must verify, got {st} {pr}")
+
+    # an edited card fails
+    edited = {"mlb": {"rows": [1, 2, 3]}, "wnba": card["wnba"]}
+    ok, st, pr = verify(good, lambda p: edited)
+    if ok or st != HASH_DIFFERS or not any("mlb" in x for x in pr):
+        f.append(f"an edited cohort must fail and name the sport, got {st} {pr}")
+
+    # a missing cohort fails
+    ok, st, pr = verify(good, lambda p: {"mlb": card["mlb"]})
+    if ok or st != COHORT_ABSENT:
+        f.append(f"a missing cohort must fail, got {st}")
+
+    # an absent card fails
+    def _missing(p): raise FileNotFoundError(p)
+    ok, st, _ = verify(good, _missing)
+    if ok or st != CARD_ABSENT:
+        f.append(f"an absent card must fail, got {st}")
+
+    # an unreadable card fails
+    def _bad(p): raise ValueError("not json")
+    ok, st, _ = verify(good, _bad)
+    if ok or st != CARD_UNREADABLE:
+        f.append(f"an unreadable card must fail, got {st}")
+
+    # nothing pinned passes AND says so — it must not report a verification it did not do
+    for empty in ({}, {"card": "c.json"}, {"cohort_hashes": {}}, None):
+        ok, st, _ = verify(empty, load)
+        if not ok or st != NOTHING_PINNED:
+            f.append(f"{empty!r} must pass as NOTHING_PINNED, got {st}")
+
+    # the hash is order-insensitive on keys but sensitive on values
+    if cohort_hash({"a": 1, "b": 2}) != cohort_hash({"b": 2, "a": 1}):
+        f.append("cohort_hash must not depend on key order")
+    if cohort_hash({"a": 1}) == cohort_hash({"a": 2}):
+        f.append("cohort_hash must depend on values")
+
+    for x in f:
+        print("FAIL:", x)
+    if not f:
+        print("anchor_verify selftest: OK")
+    return f
+
+
+MUTANTS = [
+    ("an edited cohort passes", "        if got != want:", "        if False:"),
+    ("a missing cohort passes",
+     "        if cohort is None:\n            problems.append(f\"{COHORT_ABSENT}: {sport} is not in {card_path}\")\n            continue",
+     "        if cohort is None:\n            continue"),
+    ("an absent card passes",
+     '        return False, CARD_ABSENT, [f"{CARD_ABSENT}: {card_path}"]',
+     '        return True, CARD_ABSENT, []'),
+    ("an unreadable card passes",
+     '        return False, CARD_UNREADABLE, [f"{CARD_UNREADABLE}: {card_path}: {e}"]',
+     '        return True, CARD_UNREADABLE, []'),
+    ("nothing pinned reports a verification it never did",
+     "        return True, NOTHING_PINNED, []", "        return True, OK, []"),
+    ("the hash ignores values",
+     '    return hashlib.sha256(json.dumps(obj, sort_keys=True,\n                                     separators=(",", ":")).encode()).hexdigest()',
+     '    return hashlib.sha256(str(sorted((obj or {}).keys())).encode()).hexdigest()'),
+    ("the hash becomes key-order sensitive",
+     "    return hashlib.sha256(json.dumps(obj, sort_keys=True,",
+     "    return hashlib.sha256(json.dumps(obj, sort_keys=False,"),
+    ("problems are collected but never reported as failure",
+     "    if problems:", "    if False:"),
+]
+
+
+def mutation_suite(verbose=True):
+    import subprocess as _sp, tempfile as _tf
+    src = open(os.path.abspath(__file__)).read()
+    i = src.index("MUTANTS = [")
+    j = src.index("\ndef mutation_suite", i)
+    head, block, tail = src[:i], src[i:j], src[j:]
+    surv, unapp = [], []
+    for name, old, new in MUTANTS:
+        where = "head" if old in head else ("tail" if old in tail else None)
+        if where is None:
+            unapp.append(f"{name}: pattern not found"); continue
+        mut = (head.replace(old, new, 1) + block + tail) if where == "head" \
+            else (head + block + tail.replace(old, new, 1))
+        if mut == src:
+            unapp.append(f"{name}: no-op"); continue
+        with _tf.NamedTemporaryFile("w", suffix="_mutant.py", delete=False,
+                                    dir=os.path.dirname(os.path.abspath(__file__))) as fh:
+            fh.write(mut); path = fh.name
+        try:
+            pr = _sp.run([sys.executable, path, "--selftest"], capture_output=True, text=True, timeout=120)
+            killed = pr.returncode != 0
+        except _sp.TimeoutExpired:
+            killed = True
+        finally:
+            os.unlink(path)
+        if verbose:
+            print(f"  {'KILLED  ' if killed else 'SURVIVED'}  {name}")
+        if not killed:
+            surv.append(name)
+    for u in unapp:
+        print(f"  UNAPPLIED  {u}")
+    print(f"mutation suite: {len(MUTANTS)-len(surv)-len(unapp)}/{len(MUTANTS)} killed"
+          f"{'' if not (surv or unapp) else '  — SURVIVORS MEAN DECORATIVE FIXTURES'}")
+    return surv + unapp
+
+
+if __name__ == "__main__":
+    if "--selftest" in sys.argv:
+        sys.exit(1 if selftest() else 0)
+    if "--mutants" in sys.argv:
+        sys.exit(1 if mutation_suite() else 0)
+    path = sys.argv[1] if len(sys.argv) > 1 else "data/audit/anchor_expectations.json"
+    if not os.path.exists(path):
+        print(f"::notice::{path} absent; nothing pinned to verify")
+        sys.exit(0)
+    ok, status, problems = verify(json.load(open(path)))
+    for p in problems:
+        print(f"::error::{p}")
+    print(f"::notice::{status}")
+    sys.exit(0 if ok else 1)

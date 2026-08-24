@@ -80,45 +80,12 @@ jobs:
           echo "arm_registry_digest=$REG_DIGEST"
 
           # --- hash agreement -------------------------------------------------------------------
-          # The card is immutable once written, so its per-cohort hashes must never change. Those
-          # are what anchor_expectations.json pins — not the card-set or registry digests, which
-          # legitimately change every time a card is added and would make every future push fail.
-          # A recorded cohort hash that no longer matches the card means the card was edited after
-          # registration, which is the "hashes differ" condition and fails the run.
-          EXPECT=data/audit/anchor_expectations.json
-          if [ -f "$EXPECT" ]; then
-            python3 - "$EXPECT" <<'PY'
-          import hashlib, json, sys
-          exp = json.load(open(sys.argv[1]))
-          card_path = exp.get("card")
-          pinned = exp.get("cohort_hashes") or {}
-          if not card_path or not pinned:
-              print("::notice::anchor_expectations pins no cohort hashes; nothing to verify")
-              sys.exit(0)
-          try:
-              card = json.load(open(card_path))
-          except FileNotFoundError:
-              print(f"::error::anchor_expectations references {card_path}, which is absent")
-              sys.exit(1)
-          def sha(o):
-              return hashlib.sha256(json.dumps(o, sort_keys=True,
-                                               separators=(",", ":")).encode()).hexdigest()
-          bad = []
-          for sport, want in sorted(pinned.items()):
-              cohort = card.get(sport)
-              if cohort is None:
-                  bad.append(f"{sport}: cohort absent from {card_path}")
-                  continue
-              got = sha(cohort)
-              if got != want:
-                  bad.append(f"{sport}: pinned {want} but the card hashes to {got}")
-          for b in bad:
-              print(f"::error::{b}")
-          if not bad:
-              print(f"::notice::cohort hashes verified for {sorted(pinned)}")
-          sys.exit(1 if bad else 0)
-          PY
-          fi
+          # The verifier lives in the repository, not in this YAML string. The first run of this
+          # workflow died in under a second because the check was an INDENTED quoted heredoc, whose
+          # terminator must sit at column 0 — logic embedded in YAML cannot be run locally and so
+          # ships untested. harness/anchor_verify.py has its own selftest and 8/8 mutants, and the
+          # healthcheck runs it.
+          python3 harness/anchor_verify.py data/audit/anchor_expectations.json
 
           # --- the remotely observed instant ----------------------------------------------------
           # GitHub's own created_at for this run, read from the API. NOT `date -u`: the runner's

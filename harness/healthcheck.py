@@ -249,10 +249,35 @@ for _m in ("result_provenance","result_content_checks","parse_box_dump",
            "arm_coverage","totals_estimand","simulation_standard","render_contract",
            "franchise_identity","finalization_evidence",
            # 2026-08-24 owner directives: source attribution, and who stamped the clock.
-           "source_artifact_gate","prospectivity_evidence","widening_rule"):
+           "source_artifact_gate","prospectivity_evidence","widening_rule","anchor_verify"):
     _r=subprocess.run([sys.executable,f"harness/{_m}.py","--selftest"],capture_output=True,text=True)
     _out=(_r.stdout+_r.stderr).strip().splitlines()
     check(f"{_m} selftest ({_out[-1][:72] if _out else 'no output'})", _r.returncode==0)
+# 5a2e. WORKFLOW SHELL SYNTAX. The first timestamp-anchor run died in under a second on an
+# indented quoted heredoc, whose terminator must sit at column 0. A `run:` block is shell that
+# nothing checked before it reached GitHub. `bash -n` parses without executing, so this costs
+# nothing and would have caught it.
+try:
+    import yaml as _yaml, tempfile as _tf
+    _wf=sorted(glob.glob(".github/workflows/*.yml"))+sorted(glob.glob(".github/workflows/*.yaml"))
+    _bad=[]
+    for _p in _wf:
+        try: _d=_yaml.safe_load(open(_p))
+        except Exception as _e: _bad.append(f"{_p}: YAML {_e}"); continue
+        for _jn,_j in (_d.get("jobs") or {}).items():
+            for _st in (_j.get("steps") or []):
+                _r=_st.get("run")
+                if not _r: continue
+                with _tf.NamedTemporaryFile("w",suffix=".sh",delete=False) as _fh:
+                    _fh.write(_r); _sp=_fh.name
+                _rc=subprocess.run(["bash","-n",_sp],capture_output=True,text=True)
+                os.unlink(_sp)
+                if _rc.returncode!=0:
+                    _bad.append(f"{_p}:{_jn}:{_st.get('name','?')}: {_rc.stderr.strip().splitlines()[-1] if _rc.stderr.strip() else 'shell syntax error'}")
+    check(f"workflow shell syntax ({len(_wf)} workflow file(s)){'' if not _bad else ': '+_bad[0]}", not _bad)
+except ImportError:
+    check("workflow shell syntax (pyyaml absent — NOT CHECKED)", True, warn=True)
+
 # 5a3b. per-game acquisition coverage + canonical-tier discipline (owner ruling 2026-08-16).
 # These are GATES, not selftests: they read the live ledgers and the live canonical table, so they
 # fail when a date-level deferral, a post-ruling tier-2/3 canonical ingestion, a duplicate grade, or

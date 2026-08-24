@@ -3770,3 +3770,45 @@ price, market, stake and structure were never transmitted. Settling from the res
 inference the instruction forbids, and it is arithmetically impossible besides. Direction is
 determinable (DAL won, PHX lost) and direction is not a settlement. Four values settle the lane
 immediately: side, price taken, stake, and singles or parlay.
+
+### 2026-08-24 (cycle 4) — the decision goes first
+
+Owner's diagnosis: the technical work is fine, the information hierarchy is not. The page opened
+with what I got wrong, then forecasts, then prices, then a twenty-row two-sided EV table, and a
+reader who wanted today's answer had to derive it. The answer was "bet nothing" and it was buried
+under my working. Every correctness gate passed; none of them asks whether the page communicates its
+own conclusion. See lesson 33.
+
+New harness/decision_view.py, gated in healthcheck, 15/15 mutants. It enforces the binding directive:
+one row per game, BET only when all five gates pass (PRICE_FRESHNESS, MODEL_UNCERTAINTY,
+INPUT_INTEGRITY, REALMONEY_AUTHORIZATION, STATED_RISK), a blocked row may never be rendered in the
+selections section, exposure sums BET rows only, and the list is WATCHLIST - never HOLD, which
+already names the bookmaker's overround everywhere else here.
+
+FOUR QUESTIONS SEPARATED. Projected winner, best value side, actual action, shadow total. COL@WSH is
+the case that proves they differ: WSH is the projected winner at 56.66% and COL +169 is the better
+side. Merge those columns and the board is either a tip sheet or nonsense.
+
+PASS AND BLOCKED ARE DIFFERENT OUTPUTS. No positive-value side is a PASS - model and market agree,
+nothing here. Positive value that cannot be acted on is BLOCKED - something here and we cannot reach
+it. Today: 1 pass, 11 blocked. Collapsing them makes the book look clean while hiding every blocker.
+
+Every value in the owner's table reproduced exactly before I rendered anything: all ten best-value
+sides and prices, all ten EVs, all ten arm-agreement counts, all ten projected winners and
+probabilities, and the watchlist ordering. Two conventions I had to fix: the shadow handicap is
+quoted from the HOME side so the column reads the same way down (quoting the favourite flips the
+sign between rows), and a negative-EV best-available side is suppressed rather than dressed up as a
+"best value side" - GSV@MIN shows "No positive ML value", which is why 11 + 1 and not 12 + 0.
+
+LAS +425 lives in its own WNBA diagnostic box and is NOT on the watchlist. In a ranked list beside
+viable MLB candidates, proximity alone would imply comparability, and a 33-day-stale arm with
+unverified personnel is not comparable to anything.
+
+Two stale statements replaced at the top and preserved in the changelog: "two numbers are not a
+standard deviation" -> the two-block SD exists and is too unstable for decision use; "WNBA is a
+different market type" -> the SAME market type in a different sport/price stratum.
+
+Report order now: today's action, decision board, actionable selections (empty, and that is the
+correct output rather than a missing section), watchlist, WNBA diagnostic box, technical appendix
+unchanged and complete, audit/changelog appendix last. decision_view gate DECISION_VIEW_OK,
+render_contract RENDER_CONTRACT_OK.

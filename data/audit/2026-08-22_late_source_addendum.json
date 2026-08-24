@@ -1,0 +1,369 @@
+{
+ "appends_to": [
+  "data/audit/2026-08-22_acquisition_attempt.json",
+  "data/audit/2026-08-22_retry_ladder.json",
+  "data/audit/2026-08-23_acquisition_retry_3.json",
+  "data/audit/2026-08-22_closeout_unresolved_source_gap.json"
+ ],
+ "attempt": 4,
+ "cross_check_against_the_six_provisionals": {
+  "disagreements": [],
+  "n_agreeing": 6,
+  "n_checked": 6,
+  "new_information": "nine MLB finals that had NO score of any tier are now recorded at tier 3, along with both WNBA finals with their official game ids and the NFL final.",
+  "reading": "all six earlier tier-3 provisional scores agree exactly with the owner's relay. That is reassuring and it is not confirmation: two tier-3 observations of the same underlying reporting are not independent, and agreement between them cannot manufacture the provenance neither of them has."
+ },
+ "finals_recorded": {
+  "grade": "SOURCE_NAMED_BY_CLASS_NOT_ARTIFACT",
+  "mlb": [
+   {
+    "agrees_with_prior_provisional": true,
+    "away": "TOR",
+    "away_score": 4,
+    "game": "mlb:TOR@NYY",
+    "home": "NYY",
+    "home_score": 3,
+    "independent_corroboration": null,
+    "official_game_id": null,
+    "official_game_id_null_reason": "the official scoreboard was not retrievable from this environment, so no gamePk could be bound to this row",
+    "prior_provisional_score": "4-3",
+    "source_family": "OWNER_RELAY_OFFICIAL_MLB_SCOREBOARD",
+    "tier": 3,
+    "tier1_confirmed": false
+   },
+   {
+    "agrees_with_prior_provisional": null,
+    "away": "ATL",
+    "away_score": 1,
+    "game": "mlb:ATL@MIL",
+    "home": "MIL",
+    "home_score": 4,
+    "independent_corroboration": null,
+    "official_game_id": null,
+    "official_game_id_null_reason": "the official scoreboard was not retrievable from this environment, so no gamePk could be bound to this row",
+    "prior_provisional_score": null,
+    "source_family": "OWNER_RELAY_OFFICIAL_MLB_SCOREBOARD",
+    "tier": 3,
+    "tier1_confirmed": false
+   },
+   {
+    "agrees_with_prior_provisional": null,
+    "away": "WSH",
+    "away_score": 2,
+    "game": "mlb:WSH@MIA",
+    "home": "MIA",
+    "home_score": 4,
+    "independent_corroboration": null,
+    "official_game_id": null,
+    "official_game_id_null_reason": "the official scoreboard was not retrievable from this environment, so no gamePk could be bound to this row",
+    "prior_provisional_score": null,
+    "source_family": "OWNER_RELAY_OFFICIAL_MLB_SCOREBOARD",
+    "tier": 3,
+    "tier1_confirmed": false
+   },
+   {
+    "agrees_with_prior_provisional": true,
+    "away": "STL",
+    "away_score": 3,
+    "game": "mlb:STL@PHI",
+    "home": "PHI",
+    "home_score": 12,
+    "independent_corroboration": null,
+    "official_game_id": null,
+    "official_game_id_null_reason": "the official scoreboard was not retrievable from this environment, so no gamePk could be bound to this row",
+    "prior_provisional_score": "3-12",
+    "source_family": "OWNER_RELAY_OFFICIAL_MLB_SCOREBOARD",
+    "tier": 3,
+    "tier1_confirmed": false
+   },
+   {
+    "agrees_with_prior_provisional": true,
+    "away": "TB",
+    "away_score": 2,
+    "game": "mlb:TB@BAL",
+    "home": "BAL",
+    "home_score": 3,
+    "independent_corroboration": null,
+    "official_game_id": null,
+    "official_game_id_null_reason": "the official scoreboard was not retrievable from this environment, so no gamePk could be bound to this row",
+    "prior_provisional_score": "2-3",
+    "source_family": "OWNER_RELAY_OFFICIAL_MLB_SCOREBOARD",
+    "tier": 3,
+    "tier1_confirmed": false
+   },
+   {
+    "agrees_with_prior_provisional": null,
+    "away": "LAA",
+    "away_score": 3,
+    "game": "mlb:LAA@TEX",
+    "home": "TEX",
+    "home_score": 0,
+    "independent_corroboration": null,
+    "official_game_id": null,
+    "official_game_id_null_reason": "the official scoreboard was not retrievable from this environment, so no gamePk could be bound to this row",
+    "prior_provisional_score": null,
+    "source_family": "OWNER_RELAY_OFFICIAL_MLB_SCOREBOARD",
+    "tier": 3,
+    "tier1_confirmed": false
+   },
+   {
+    "agrees_with_prior_provisional": null,
+    "away": "ATH",
+    "away_score": 4,
+    "game": "mlb:ATH@HOU",
+    "home": "HOU",
+    "home_score": 3,
+    "independent_corroboration": "MLB.com gameday title in the retained search response",
+    "official_game_id": null,
+    "official_game_id_null_reason": "the official scoreboard was not retrievable from this environment, so no gamePk could be bound to this row",
+    "prior_provisional_score": null,
+    "source_family": "OWNER_RELAY_OFFICIAL_MLB_SCOREBOARD",
+    "tier": 3,
+    "tier1_confirmed": false
+   },
+   {
+    "agrees_with_prior_provisional": null,
+    "away": "NYM",
+    "away_score": 10,
+    "game": "mlb:NYM@CWS",
+    "home": "CWS",
+    "home_score": 5,
+    "independent_corroboration": null,
+    "official_game_id": null,
+    "official_game_id_null_reason": "the official scoreboard was not retrievable from this environment, so no gamePk could be bound to this row",
+    "prior_provisional_score": null,
+    "source_family": "OWNER_RELAY_OFFICIAL_MLB_SCOREBOARD",
+    "tier": 3,
+    "tier1_confirmed": false
+   },
+   {
+    "agrees_with_prior_provisional": null,
+    "away": "DET",
+    "away_score": 1,
+    "game": "mlb:DET@KC",
+    "home": "KC",
+    "home_score": 3,
+    "independent_corroboration": null,
+    "official_game_id": null,
+    "official_game_id_null_reason": "the official scoreboard was not retrievable from this environment, so no gamePk could be bound to this row",
+    "prior_provisional_score": null,
+    "source_family": "OWNER_RELAY_OFFICIAL_MLB_SCOREBOARD",
+    "tier": 3,
+    "tier1_confirmed": false
+   },
+   {
+    "agrees_with_prior_provisional": null,
+    "away": "PIT",
+    "away_score": 3,
+    "game": "mlb:PIT@LAD",
+    "home": "LAD",
+    "home_score": 4,
+    "independent_corroboration": null,
+    "official_game_id": null,
+    "official_game_id_null_reason": "the official scoreboard was not retrievable from this environment, so no gamePk could be bound to this row",
+    "prior_provisional_score": null,
+    "source_family": "OWNER_RELAY_OFFICIAL_MLB_SCOREBOARD",
+    "tier": 3,
+    "tier1_confirmed": false
+   },
+   {
+    "agrees_with_prior_provisional": true,
+    "away": "CHC",
+    "away_score": 4,
+    "game": "mlb:CHC@SEA",
+    "home": "SEA",
+    "home_score": 5,
+    "independent_corroboration": "MLB.com gameday title in the retained search response",
+    "official_game_id": null,
+    "official_game_id_null_reason": "the official scoreboard was not retrievable from this environment, so no gamePk could be bound to this row",
+    "prior_provisional_score": "4-5",
+    "source_family": "OWNER_RELAY_OFFICIAL_MLB_SCOREBOARD",
+    "tier": 3,
+    "tier1_confirmed": false
+   },
+   {
+    "agrees_with_prior_provisional": null,
+    "away": "SF",
+    "away_score": 2,
+    "game": "mlb:SF@BOS",
+    "home": "BOS",
+    "home_score": 3,
+    "independent_corroboration": null,
+    "official_game_id": null,
+    "official_game_id_null_reason": "the official scoreboard was not retrievable from this environment, so no gamePk could be bound to this row",
+    "prior_provisional_score": null,
+    "source_family": "OWNER_RELAY_OFFICIAL_MLB_SCOREBOARD",
+    "tier": 3,
+    "tier1_confirmed": false
+   },
+   {
+    "agrees_with_prior_provisional": null,
+    "away": "CIN",
+    "away_score": 11,
+    "game": "mlb:CIN@AZ",
+    "home": "AZ",
+    "home_score": 5,
+    "independent_corroboration": null,
+    "official_game_id": null,
+    "official_game_id_null_reason": "the official scoreboard was not retrievable from this environment, so no gamePk could be bound to this row",
+    "prior_provisional_score": null,
+    "source_family": "OWNER_RELAY_OFFICIAL_MLB_SCOREBOARD",
+    "tier": 3,
+    "tier1_confirmed": false
+   },
+   {
+    "agrees_with_prior_provisional": true,
+    "away": "CLE",
+    "away_score": 4,
+    "game": "mlb:CLE@COL",
+    "home": "COL",
+    "home_score": 3,
+    "independent_corroboration": null,
+    "official_game_id": null,
+    "official_game_id_null_reason": "the official scoreboard was not retrievable from this environment, so no gamePk could be bound to this row",
+    "prior_provisional_score": "4-3",
+    "source_family": "OWNER_RELAY_OFFICIAL_MLB_SCOREBOARD",
+    "tier": 3,
+    "tier1_confirmed": false
+   },
+   {
+    "agrees_with_prior_provisional": true,
+    "away": "MIN",
+    "away_score": 5,
+    "game": "mlb:MIN@SD",
+    "home": "SD",
+    "home_score": 7,
+    "independent_corroboration": null,
+    "official_game_id": null,
+    "official_game_id_null_reason": "the official scoreboard was not retrievable from this environment, so no gamePk could be bound to this row",
+    "prior_provisional_score": "5-7",
+    "source_family": "OWNER_RELAY_OFFICIAL_MLB_SCOREBOARD",
+    "tier": 3,
+    "tier1_confirmed": false
+   }
+  ],
+  "n_total": 18,
+  "nfl": [
+   {
+    "away": "DAL",
+    "away_score": 34,
+    "game": "nfl:DAL@ARI",
+    "home": "ARI",
+    "home_score": 13,
+    "independent_corroboration": null,
+    "official_game_id": null,
+    "source_family": "OWNER_RELAY_OFFICIAL_NFL_RECAP",
+    "tier": 3,
+    "tier1_confirmed": false
+   }
+  ],
+  "source_family": "OWNER_RELAY",
+  "why_not_tier_1": "the owner names the official MLB scoreboard, the official WNBA game ids and the official NFL recap, and those are the right sources. But naming a source is not retaining one. Tier 1 needs the artifact itself: a payload, a retrieval timestamp and a content hash. None exists for any row here.",
+  "wnba": [
+   {
+    "away": "CON",
+    "away_score": 68,
+    "game": "wnba:CON@LAS",
+    "home": "LAS",
+    "home_score": 77,
+    "independent_corroboration": "ESPN title 'Sparks 77-68 Sun' (espn gameId 401857165) in the retained search response",
+    "official_game_id": "1022600276",
+    "official_game_id_source": "OWNER_RELAY",
+    "tier": 3,
+    "tier1_confirmed": false
+   },
+   {
+    "away": "ATL",
+    "away_score": 99,
+    "game": "wnba:ATL@PHX",
+    "home": "PHX",
+    "home_score": 89,
+    "independent_corroboration": "ESPN title 'Dream 99-89 Mercury' (espn gameId 401857166), Yahoo title 'Atlanta Dream 99, Phoenix Mercury 89', and the official id 1022600277 appearing in the wnba.com URL path \u2014 all in the retained search response",
+    "official_game_id": "1022600277",
+    "official_game_id_source": "OWNER_RELAY",
+    "tier": 3,
+    "tier1_confirmed": false
+   }
+  ]
+ },
+ "gate": {
+  "consequences": [
+   "2026-08-22 does NOT enter the canonical results table",
+   "2026-08-22 does NOT enter the expanding prior pool and does not move the 1,684-row count",
+   "2026-08-22 is NOT an admissible OOF date block and does not move the cluster floor from 2",
+   "no promotion denominator changes; MLB and WNBA remain separate cohorts"
+  ],
+  "requirement": "TIER_1_ARTIFACT_BOUND: game id, retrieval timestamp, content hash",
+  "satisfied": false,
+  "what_would_satisfy_it": "one retrieved payload per game \u2014 statsapi gamePk feed, the WNBA game endpoint for 1022600276 and 1022600277, or the NFL gamecenter feed \u2014 stored with its retrieval timestamp and sha256.",
+  "why": "no artifact was retrievable. Every row above is OWNER_RELAY at tier 3."
+ },
+ "model_ledger_effect": "NONE. $0 at 0 bets. Zero games settled in the model lane.",
+ "owner_discretion_lane": {
+  "blocker_1_gate": "the acquisition gate above is not satisfied.",
+  "blocker_2_registration": "THE DECISIVE ONE. There are no registered prices. The lane record of 2026-08-23 states that price, market, stake and structure \u2014 two singles or a parlay \u2014 were NEVER TRANSMITTED and are held null rather than assumed. Settling from the results alone is exactly the inference the instruction forbids, and it is also arithmetically impossible: without a price and a stake there is no amount to settle.",
+  "instruction": "settle DAL and PHX using their REGISTERED sides and prices; do not infer the wagers from the game results",
+  "settled": false,
+  "to_settle": "transmit, for each leg: the side, the price taken, the stake, and whether the two legs were singles or a parlay. With those four the lane settles immediately.",
+  "wall": "unchanged. This lane is the owner's own units on the owner's own reasoning. It is not model output, not model-authorized, not gate progress, and it never touches the model ledger, which stays $0 at 0 bets whatever these legs do.",
+  "what_IS_determinable_from_the_relayed_finals": {
+   "ATL@PHX": "ATL 99-89 PHX \u2014 a PHX side loses on DIRECTION",
+   "DAL@ARI": "DAL 34-13 ARI \u2014 a DAL side wins on DIRECTION",
+   "note": "direction is not a settlement. It cannot produce a return, a unit count or a P&L, and recording it as one would invent the price it needs.",
+   "status": "DIRECTION_ONLY_NOT_A_SETTLEMENT"
+  }
+ },
+ "r6": "APPEND-ONLY. The expiry record is NOT edited and NOT withdrawn. It correctly describes what was available at 2026-08-24T17:45Z, and a record of what was known at a moment does not become wrong because more was learned later.",
+ "rail_verdict": "EVERY FETCH RAIL REMAINS BLOCKED, including a domain never previously attempted. No page bytes were retrieved, so no row below carries a retrieval timestamp or a content hash of its own source.",
+ "record_id": "ACQUISITION-LATE-SOURCE-2026-08-22",
+ "record_sha256": "61a7e057a93c3dd7205b6d457ef6e43cda2f496d33078aebf4fcfd983548b298",
+ "retrieval_attempts": [
+  {
+   "rail": "WebFetch",
+   "result": "EGRESS_BLOCKED",
+   "target": "www.mlb.com/scores/2026-08-22",
+   "utc": "2026-08-24T19:00:00Z"
+  },
+  {
+   "rail": "WebFetch",
+   "result": "EGRESS_BLOCKED",
+   "target": "www.wnba.com/game/1022600276",
+   "utc": "2026-08-24T19:01:00Z"
+  },
+  {
+   "note": "a domain not previously attempted; the ladder advances while a route is untried",
+   "rail": "WebFetch",
+   "result": "EGRESS_BLOCKED",
+   "target": "plaintextsports.com/mlb/2026-08-22/",
+   "utc": "2026-08-24T19:03:00Z"
+  },
+  {
+   "rail": "WebFetch",
+   "result": "EGRESS_BLOCKED",
+   "target": "www.espn.com/wnba/game/_/gameId/401857166/dream-mercury",
+   "utc": "2026-08-24T19:04:30Z"
+  },
+  {
+   "artifact": "data/evidence/tier3/2026-08-24/websearch_mlb_2026-08-22.txt",
+   "bytes": 1446,
+   "rail": "WebSearch",
+   "result": "RETURNED_TITLES_ONLY",
+   "sha256": "cd942ad0d195b1b68f6920eb0fb839b0fc740e075c83aecddc58e34a150fefe5",
+   "target": "MLB 2026-08-22 finals",
+   "utc": "2026-08-24T19:02:00Z"
+  },
+  {
+   "artifact": "data/evidence/tier3/2026-08-24/websearch_wnba_2026-08-22.txt",
+   "bytes": 1981,
+   "rail": "WebSearch",
+   "result": "RETURNED_TITLES_ONLY",
+   "sha256": "e909b13457742047bafac2936b4c5b9859a78c1b71ea1e697355866dc71adefa",
+   "target": "WNBA 2026-08-22 finals",
+   "utc": "2026-08-24T19:04:00Z"
+  }
+ ],
+ "retroactivity": "NONE. No prior decision, grade, interval, promotion denominator or ledger entry is changed by this record. 2026-08-22 does not retroactively become an admissible OOF date block for anything already computed.",
+ "run_utc": "2026-08-24T19:15:00Z",
+ "schema": "ops.acquisition_attempt.v2",
+ "trigger": "owner supplied official-source leads AFTER the 36h window expired"
+}

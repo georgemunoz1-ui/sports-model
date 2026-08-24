@@ -3695,3 +3695,78 @@ as Brier skill against the expanding prior rather than as a record.
 What expired is the window, not the ladder. The ladder ran to exhaustion and reported accurately at
 every rung. UNRESOLVED_SOURCE_GAP is a statement about the evidence package - not a claim that the
 games did not happen.
+
+### 2026-08-24 (cycle 3) — the twelve-game board finally has twelve games on it
+
+WNBA OVERLAY ADDED. The board called itself a 12-game overlay and screened 10. The two WNBA games
+carried prices and nothing else: no frozen probabilities, no margin or total comparison, no EV. A
+blocked row still has to be rendered, or "blocked" and "absent" look identical on the page. All four
+owner EV figures reproduce to the cent: MIN -218 -$0.27, GSV +180 -$11.44, LAS +425 +$88.32,
+ATL -600 -$25.18; margins MIN +5.80 vs -4.5 and LAS -4.57 vs +10.5; totals 163.8 vs 160.5 and
+175.9 vs 181.5. Every row carries ACTION_BLOCKED_STALE_FEATURES, DIAGNOSTIC_ONLY,
+NOT_PROMOTION_ELIGIBLE, PERSONNEL_UNVERIFIED. The +$88.32 is a diagnostic that a 33-day-stale arm
+disagrees with a -600 market. It is not an opportunity and treating it as one is the failure this
+whole apparatus exists to prevent.
+
+TEN MLB TOTALS rendered against the market as mandatory non-decision-bearing diagnostics - and the
+table immediately showed something that had been sitting unremarked in the record: 9 of 10 project
+OVER, mean gap 0.968 runs. That mirrors the moneyline finding (9 of 10 positive-EV sides were
+underdogs) and suggests a systematic offset rather than ten independent edges.
+MODEL_MARKET_DISPERSION_REVIEW_TOTALS. Totals stay NEVER_DECISION_BEARING.
+
+THREE MONTE CARLO SDs, not one. The row table printed ~0.29pp as MONTE_CARLO_SD; that is the 30k
+run's OWN sd, and the sigma claim is about a DIFFERENCE:
+  MC_SD_PRIMARY_30K      0.2873pp
+  MC_SD_DIAGNOSTIC_100K  0.1574pp
+  MC_SD_DIFFERENCE       0.3276pp   <- what the sigma test needs
+Exact sigma on TEX@CWS is 2.1708, not the 2.18 I rounded to, and max-of-ten is 0.2622 rather than
+0.2569. Both about one in four; the label was the defect, not the conclusion. And the max-of-ten is
+now stated as a NORMAL_AND_INDEPENDENCE_APPROXIMATION: the ten gaps share a model, a prior and a
+slate, so the joint law is not known to be a product, and if they are positively dependent the true
+figure is LOWER. render_contract now carries three distinct kinds and bans the bare ambiguous alias.
+
+THE TERMINAL BIN IS AN EVENT, NOT A VALUE. An overflow bin holding P(Y>=41) is not an exact-integer
+pmf - it assigns nothing to 41, or 42, or any single integer, and EXACT_INTEGER_MASS asks for
+P(Y=y). The OUTCOME SPACE changes, not just the distribution. COARSENED_TERMINAL_BIN chosen over
+UNBOUNDED_INTEGER_TAIL because the second adds a decay parameter nothing here has ever fitted.
+coarsen_outcome() must run on y before scoring or a coarsened forecast is graded against a raw
+integer it never claimed to resolve.
+  EXPANDING_TOTAL_POINT_MEAN             8.9911
+  EXPANDING_TOTAL_BODY_CONDITIONAL_MEAN  8.9976   (E[Y | Y <= 40])
+  EXPANDING_TOTAL_FULL_PMF_MEAN          UNDEFINED
+v3's value was right and its NAME asserted exactly what the bin refuses to supply.
+
+HOLD THRESHOLDS ARE NOW NUMBERS. Stratified sport x market x price band, because an MLB and a WNBA
+moneyline are the same market type and behave nothing alike. 3 of 7 strata calibrate; the rest
+REFUSE. No WNBA stratum calibrates at all - its two moneylines sit in different price bands, so each
+band holds one quote. Under my earlier hand-set band that board PASSED, and it passed because the
+band was invented. Losing that pass is the policy working.
+
+And my first draft of that section was a tautology - see lesson 32. It derived each stratum from the
+board being judged, which admits that board by construction. A gate that cannot fail.
+
+"TWO NUMBERS ARE NOT A STANDARD DEVIATION" WITHDRAWN. Mathematically false: at k=2 the sample SD is
+|r1-r2|/sqrt(2), perfectly defined. It is too UNSTABLE, which is a different claim - the 95%
+interval for sigma given s spans about [0.446s, 31.9s], a factor of 71. New module
+uncertainty_estimand.py states the estimand exactly (SD of the block-mean SIGNED calibration
+residual, blocks are DATES, ddof=1) and names every impostor, above all sqrt(p(1-p)): outcome noise,
+does not shrink with data, LARGEST where the model is best calibrated, computable from the forecast
+alone with no evidence at all.
+
+THE TIER-3 CHECK GOT ITS ARTIFACT, AND IT DOES NOT REPRODUCE. Retaining the query and response
+surfaced something worse than a missing hash: re-running the same query today returns link titles
+only, with not one 8/18 score in the response. The 14/14 claim is withdrawn as evidence and may not
+be cited again. The stored scores are unchanged and nothing here licenses changing them.
+
+8/22 LATE SOURCES APPENDED, NOT MERGED. Every fetch rail still blocked, including plaintextsports,
+a domain never tried before. All 18 finals recorded at tier 3 by OWNER_RELAY with the two search
+responses retained and hashed. All six earlier provisionals agree exactly - reassuring, and not
+confirmation, because two tier-3 observations of the same reporting are not independent. Nine MLB
+games that had no score of any tier now have one. The expiry record is NOT edited: it correctly
+describes what was available at 17:45Z.
+
+DAL/PHX STILL NOT SETTLED, and the decisive blocker is not the gate. There are NO REGISTERED PRICES:
+price, market, stake and structure were never transmitted. Settling from the results is exactly the
+inference the instruction forbids, and it is arithmetically impossible besides. Direction is
+determinable (DAL won, PHX lost) and direction is not a settlement. Four values settle the lane
+immediately: side, price taken, stake, and singles or parlay.

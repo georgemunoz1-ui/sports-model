@@ -1,0 +1,33 @@
+{
+ "created_utc": "2026-08-24T19:10:00Z",
+ "record_id": "TIER3-REPRODUCTION-ARTIFACT-2026-08-18",
+ "record_sha256": "0173aa862c3f23a342a125849613135aa87cd52ab049c4eaba2998cfc5ec42a8",
+ "schema": "ops.tier3_artifact.v1",
+ "standing_rule_adopted": "any check whose RESULT is reported \u2014 a reproduction check, a corroboration, a count of agreements \u2014 retains its query and its response verbatim, hashed and timestamped, at the moment it runs. A result reported without its artifact is a number quoted from memory, which lesson 29 already forbade for nulls and which applies identically here.",
+ "the_original_check": {
+  "also_claimed": "1 stored game (mlb:LAD@COL) absent from the returned list",
+  "artifact_retained_at_the_time": null,
+  "claimed_result": "14 of 14 search-returned scores match the stored rows exactly, 0 disagreements",
+  "consequence": "the original claim cannot be verified by anyone, including me.",
+  "date_checked": "2026-08-18",
+  "retention_status": "NO_ARTIFACT_RETAINED"
+ },
+ "the_reproduction_attempt": {
+  "artifact_bytes": 1280,
+  "artifact_path": "data/evidence/tier3/2026-08-24/websearch_mlb_2026-08-18.txt",
+  "artifact_sha256": "36b03ce07b5d4c88fa8dccbd55e4befbefd65605ba436ab1f0f956992d13cb76",
+  "outcome": "TIER3_REPRODUCTION_NOT_REPRODUCIBLE",
+  "query": "MLB August 18 2026 final scores all games",
+  "rail": "WebSearch (approved tool)",
+  "scores_returned": 0,
+  "utc": "2026-08-24T19:05:00Z",
+  "what_happened": "the same class of query run today returns link titles only. Not one game score for 2026-08-18 appears anywhere in the response. So the check does not merely lack a hash \u2014 it does not reproduce. Search responses are not stable objects; the earlier response existed, and it is gone."
+ },
+ "what_this_does_and_does_not_change": {
+  "provenance": "unaffected. It was never provenance and is not now. Tier-1 provenance still requires a retrieved artifact with a game id, a retrieval timestamp and a content hash.",
+  "the_14_of_14_claim": "WITHDRAWN AS EVIDENCE. It stays in the record as something I said, labelled unreproducible. It may not be cited again in support of the canonical pool.",
+  "the_prior_pool": "still PROVISIONAL at 1,684 rows, of which 1,620 carry no evidence path.",
+  "the_stored_scores": "unchanged. Nothing here suggests the 2026-08-18 rows are wrong, and nothing here is licence to change them."
+ },
+ "why_this_record_exists": "I reported '2026-08-18: 14 of 14 stored scores match, 0 disagreements' and retained nothing. The owner is right that a claim of that shape needs its own artifact: without the exact query, the exact response, a timestamp and a hash, '14/14 matched' is not independently reproducible even as non-provenance evidence. It is a number I asked the reader to take on trust."
+}

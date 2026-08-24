@@ -252,7 +252,8 @@ for _m in ("result_provenance","result_content_checks","parse_box_dump",
            "source_artifact_gate","prospectivity_evidence","widening_rule","anchor_verify",
            # 2026-08-24 price recovery: the ladder, the overlay contract, the EV screen and
            # the distributional identity that "distribution retained" was standing in for.
-           "price_acquisition","price_overlay","ev_screen","distribution_identity"):
+           "price_acquisition","price_overlay","ev_screen","distribution_identity",
+           "uncertainty_estimand"):
     _r=subprocess.run([sys.executable,f"harness/{_m}.py","--selftest"],capture_output=True,text=True)
     _out=(_r.stdout+_r.stderr).strip().splitlines()
     check(f"{_m} selftest ({_out[-1][:72] if _out else 'no output'})", _r.returncode==0)

@@ -86,15 +86,143 @@ HOLD_POLICY_SUPERSEDES = ("supersedes v1: the absolute SAME_BOOK_OVERROUND band 
 SAME_BOOK_MAX_OVERROUND_SPREAD_PP = 0.010
 BEST_ODDS_CEILING = 0.010
 
-#: Plausible two-way hold by market. Wide enough to admit a sharp book and a soft one; narrow enough
-#: that an absurd level is refused however homogeneous it is.
-PLAUSIBLE_HOLD_BAND = {
-    "mlb_moneyline": (0.010, 0.080),
-    "wnba_moneyline": (0.015, 0.090),
-    "default": (0.010, 0.100),
-}
+# --- EXECUTABLE THRESHOLDS, BY SPORT x MARKET x PRICE BAND ----------------------------------------
+#: The owner's next correction: "a plausible level band" is not a policy until the numbers are on the
+#: page. Two market types are not enough of a partition either — an MLB moneyline and a WNBA
+#: moneyline are the SAME market type and behave nothing alike (1.6-1.9% against 4.3-4.8%), and
+#: within one sport the hold climbs with the favourite's price. So the stratum is
+#: (sport, market, price band), and the band is DERIVED, not asserted.
+#:
+#: PRICE BANDS, cut on the FAVOURITE's American price. The cuts are round numbers and are a policy
+#: choice; what is not a choice is that a stratum must be cut somewhere, because hold and price move
+#: together.
+PRICE_BANDS = (("NEAR_PICKEM", -135), ("MODERATE_FAVORITE", -250), ("HEAVY_FAVORITE", -600),
+               ("EXTREME_FAVORITE", None))
+
+
+def price_band(favorite_american):
+    """The band a two-way market sits in, keyed on the FAVOURITE side's price."""
+    f = _num(favorite_american)
+    if f is None:
+        return None
+    for name, floor in PRICE_BANDS:
+        if floor is None or f >= floor:
+            return name
+    return PRICE_BANDS[-1][0]
+
+
+def equal_price_equivalent(hold):
+    """The American price a book would have to quote on BOTH sides to produce this overround.
+
+    This is what makes a ceiling legible instead of arbitrary. A 20% overround is not an abstraction:
+    it is a book quoting -150 on both sides of a coin flip. Anyone can see that is off-market.
+    """
+    h = _num(hold)
+    if h is None or h >= 1.0:
+        return None
+    return -100.0 * (1.0 + h) / (1.0 - h)
+
+
+#: STRUCTURAL LIMITS — true of any two-way market, independent of sport, book or board.
+#: A non-positive overround is not a tight book, it is an arbitrage or a transcription error, and
+#: either way the board is not a market. The ceiling is stated as an equal-price equivalent so it can
+#: be argued with: -150 on both sides of a two-way market.
+STRUCTURAL_HOLD_FLOOR = 0.0                       # strictly greater than
+STRUCTURAL_CEILING_EQUAL_PRICE = -150.0
+STRUCTURAL_HOLD_CEILING = 0.20                    # = (150-100)/(150+100)
+NON_POSITIVE_HOLD = "REFUSED_NON_POSITIVE_OVERROUND_ARBITRAGE_OR_TRANSCRIPTION_ERROR"
+
+#: CALIBRATION POLICY. A band fitted to a handful of quotes is a description of those quotes, so:
+#:   - fewer than MIN_OBS_TO_CALIBRATE quotes in a stratum yields NO band. The stratum is
+#:     UNCALIBRATED and the gate REFUSES rather than passes — the failure mode to avoid is a stratum
+#:     with one observation silently becoming a zero-width band that admits only itself.
+#:   - the allowance factor widens the observed range so one board is not mistaken for the
+#:     population. It is a POLICY CHOICE and is recorded as one; it is not fitted to anything.
+MIN_OBS_TO_CALIBRATE = 3
+ALLOWANCE_FACTOR = 1.75
+#: A dispersion ceiling cannot be tighter than the book's own price grid, or a perfectly ordinary
+#: one-tick difference between two games would read as two books. TICK_ALLOWANCE_PP is derived
+#: below from what a single 1-point American move actually does to a two-way overround.
+TICK_PROBE = (-110, -110)
+DISPERSION_FLOOR_TICKS = 2
+
+UNCALIBRATED = "UNCALIBRATED_INSUFFICIENT_OBSERVATIONS_IN_STRATUM"
 IMPLAUSIBLE_LEVEL = "OVERROUND_LEVEL_OUTSIDE_PLAUSIBLE_BAND_FOR_THIS_MARKET"
 UNVERIFIED_BOOK = "SPORTSBOOK_IDENTITY_OR_QUOTE_LINKS_UNVERIFIED"
+
+
+def _two_way_overround(a, b):
+    """Overround of a two-way American market. Local, so this module does not import a screener."""
+    def imp(o):
+        o = float(o)
+        return (-o) / ((-o) + 100.0) if o < 0 else 100.0 / (o + 100.0)
+    return imp(a) + imp(b) - 1.0
+
+
+def tick_pp(probe=TICK_PROBE):
+    """How much one point of American price moves a two-way overround, in percentage points.
+
+    This is what stops a dispersion ceiling from being tighter than the book's own price grid: two
+    games one tick apart are one book, not two, and a ceiling below this would say otherwise.
+    """
+    a, b = probe
+    return abs(100.0 * _two_way_overround(a - 1, b) - 100.0 * _two_way_overround(a, b))
+
+
+def calibrate_stratum(overrounds, factor=ALLOWANCE_FACTOR, min_obs=MIN_OBS_TO_CALIBRATE):
+    """Derive one stratum's level band and dispersion ceiling from observed quotes.
+
+    Returns a dict that always states n, the observed range, and whether it is usable. An
+    UNCALIBRATED stratum is not a permissive stratum: nothing passes there.
+    """
+    vals = sorted(v for v in (_num(x) for x in (overrounds or [])) if v is not None)
+    out = {"n": len(vals), "min_obs_to_calibrate": min_obs, "allowance_factor": factor}
+    if vals:
+        out.update(observed_min=vals[0], observed_max=vals[-1],
+                   observed_spread_pp=100.0 * (vals[-1] - vals[0]))
+    if len(vals) < min_obs:
+        out.update(status=UNCALIBRATED, level_band=None, dispersion_ceiling_pp=None,
+                   why=(f"{len(vals)} quote(s) in this stratum, below {min_obs}. A band fitted to "
+                        f"this many quotes describes the quotes, not the market. The stratum "
+                        f"REFUSES; it does not wave things through."))
+        return out
+    lo = max(vals[0] / factor, STRUCTURAL_HOLD_FLOOR)
+    hi = min(vals[-1] * factor, STRUCTURAL_HOLD_CEILING)
+    disp = max(100.0 * (vals[-1] - vals[0]) * factor, DISPERSION_FLOOR_TICKS * tick_pp())
+    out.update(status="CALIBRATED", level_band=(lo, hi), dispersion_ceiling_pp=disp,
+               level_band_equal_price=(equal_price_equivalent(lo), equal_price_equivalent(hi)),
+               why=(f"observed [{vals[0]:.6f}, {vals[-1]:.6f}] over {len(vals)} quotes, widened by "
+                    f"x{factor} and clipped to the structural ceiling {STRUCTURAL_HOLD_CEILING} "
+                    f"(equal price {STRUCTURAL_CEILING_EQUAL_PRICE:+.0f})"))
+    return out
+
+
+def stratum_key(sport, market, favorite_american):
+    return (str(sport).lower(), str(market).upper(), price_band(favorite_american))
+
+
+def level_gate(hold_value, stratum):
+    """(ok, why) for ONE quote against its stratum. Structural limits first, then the derived band."""
+    h = _num(hold_value)
+    if h is None:
+        return False, "no overround supplied"
+    if h <= STRUCTURAL_HOLD_FLOOR:
+        return False, (f"{NON_POSITIVE_HOLD}: overround {h:.6f}. A two-way market at or below zero "
+                       f"is arbitrageable, which means it is not one book's market.")
+    if h > STRUCTURAL_HOLD_CEILING:
+        return False, (f"{IMPLAUSIBLE_LEVEL}: overround {h:.6f} exceeds the structural ceiling "
+                       f"{STRUCTURAL_HOLD_CEILING} — a book quoting "
+                       f"{equal_price_equivalent(h):+.0f} on both sides of a two-way market.")
+    if not stratum or stratum.get("status") != "CALIBRATED":
+        return False, (f"{UNCALIBRATED}: this stratum has "
+                       f"{(stratum or {}).get('n', 0)} observation(s) and no derived band, so no "
+                       f"quote in it can be validated. Not calibrated is not permissive.")
+    lo, hi = stratum["level_band"]
+    if not (lo <= h <= hi):
+        return False, (f"{IMPLAUSIBLE_LEVEL}: overround {h:.6f} outside the derived band "
+                       f"[{lo:.6f}, {hi:.6f}] (equal prices "
+                       f"{equal_price_equivalent(lo):+.0f} to {equal_price_equivalent(hi):+.0f})")
+    return True, None
 
 # --- selection requirements ------------------------------------------------------------------------
 SELECTION_REQUIREMENTS = ("model_probability", "price", "expected_value",
@@ -110,7 +238,7 @@ def _num(x):
     return float(x)
 
 
-def market_homogeneity(overrounds, market="default"):
+def market_homogeneity(overrounds, market="default", stratum=None):
     """(ok, detail) for one market type: plausible LEVEL and tight SPREAD, both required."""
     vals = [v for v in (_num(x) for x in (overrounds or [])) if v is not None]
     if len(vals) < 2:
@@ -125,18 +253,106 @@ def market_homogeneity(overrounds, market="default"):
                             f"({BEST_ODDS_CEILING}); a cross-book best-of board cannot support a "
                             f"de-vigged market probability")
         return False, detail
-    lo, hi = PLAUSIBLE_HOLD_BAND.get(market, PLAUSIBLE_HOLD_BAND["default"])
-    if not (lo <= mean <= hi):
-        detail["reason"] = (f"{IMPLAUSIBLE_LEVEL}: mean overround {mean:.4f} outside [{lo}, {hi}] "
-                            f"for {market}. A uniformly absurd board is perfectly homogeneous, so "
-                            f"the spread test alone would admit it.")
+    # LEVEL — against the stratum's DERIVED band when one exists, and against the structural limits
+    # always. `stratum` is passed in by the caller because only the caller knows the price band.
+    # NEVER calibrate from the board under test: a stratum fitted to these very quotes admits them
+    # by construction and the gate becomes a tautology.
+    st = stratum if stratum is not None else lookup_stratum(market_label=market)
+    detail["stratum"] = {k: st.get(k) for k in ("n", "status", "level_band",
+                                                "dispersion_ceiling_pp", "why")}
+    ok_level, why_level = level_gate(mean, st)
+    if not ok_level:
+        detail["reason"] = why_level
         return False, detail
-    if spread > SAME_BOOK_MAX_OVERROUND_SPREAD_PP:
-        detail["reason"] = (f"overround spread {spread:.4f} exceeds "
-                            f"{SAME_BOOK_MAX_OVERROUND_SPREAD_PP}; a single book varies only by its "
-                            f"price grid, so this board holds more than one population")
+    # SPREAD — against the stratum's derived dispersion ceiling, floored at the book's price grid
+    ceiling = st.get("dispersion_ceiling_pp")
+    if ceiling is None:
+        detail["reason"] = f"{UNCALIBRATED}: no dispersion ceiling derived for this stratum"
+        return False, detail
+    if 100.0 * spread > ceiling:
+        detail["reason"] = (f"overround spread {100.0 * spread:.4f}pp exceeds this stratum's "
+                            f"dispersion ceiling {ceiling:.4f}pp; a single book varies only by its "
+                            f"price grid ({tick_pp():.4f}pp per point), so this board holds more "
+                            f"than one population")
         return False, detail
     return True, detail
+
+
+#: THE REGISTERED STRATUM TABLE. Derived ONCE, from the 2026-08-24 DraftKings capture, and frozen
+#: as part of hold policy v2. It is NOT recomputed from the board being judged — a stratum calibrated
+#: from its own board admits that board by construction, and the level test would then be a
+#: tautology dressed as a gate. That was a live defect in my first draft of this section and it is
+#: exactly the masked-fixture failure mode: the check could not fail.
+#:
+#: Because the calibration source IS the 8/24 board, judging the 8/24 board against this table is
+#: still circular at the policy level. That circularity is not hidden — it is labelled
+#: CALIBRATION_SOURCE_SELF_REFERENTIAL, and a board so labelled may not cite the level test as
+#: independent evidence of anything. The table becomes real evidence only once a second, independent
+#: single-book capture has passed through it.
+HOLD_STRATA_CALIBRATION_SOURCE = "PRICE-BOARD-2026-08-24-DRAFTKINGS"
+HOLD_STRATA_STATUS = "PROVISIONAL_SINGLE_BOARD_CALIBRATION"
+SELF_REFERENTIAL = "CALIBRATION_SOURCE_SELF_REFERENTIAL"
+
+#: (sport, MARKET, PRICE_BAND) -> the observed overrounds the band was derived from. Storing the
+#: OBSERVATIONS rather than the derived numbers means the derivation is re-runnable and a reader can
+#: check the arithmetic instead of trusting a literal.
+HOLD_STRATA_OBSERVATIONS = {
+    ("mlb", "MONEYLINE", "NEAR_PICKEM"):
+        [0.018688, 0.018688, 0.017864, 0.016743, 0.016743],
+    ("mlb", "MONEYLINE", "MODERATE_FAVORITE"):
+        [0.017137, 0.017261, 0.016373, 0.017966, 0.017822],
+    ("mlb", "TOTAL_OU", "NEAR_PICKEM"):
+        [0.045867, 0.047079, 0.045210, 0.047079, 0.047273,
+         0.047533, 0.047619, 0.044599, 0.047079, 0.046235],
+    ("wnba", "MONEYLINE", "MODERATE_FAVORITE"): [0.042677],
+    ("wnba", "MONEYLINE", "HEAVY_FAVORITE"): [0.047619],
+    ("wnba", "TOTAL_OU", "NEAR_PICKEM"): [0.047079, 0.047619],
+    ("wnba", "SPREAD", "NEAR_PICKEM"): [0.047079, 0.047533],
+}
+
+#: legacy market labels, so a caller passing "mlb_moneyline" still resolves to a real stratum
+MARKET_ALIASES = {
+    "mlb_moneyline": ("mlb", "MONEYLINE"),
+    "wnba_moneyline": ("wnba", "MONEYLINE"),
+    "mlb_total": ("mlb", "TOTAL_OU"),
+    "wnba_total": ("wnba", "TOTAL_OU"),
+}
+
+
+def hold_strata():
+    """The registered table, derived from the recorded observations. Re-runnable, not a literal."""
+    return {k: calibrate_stratum(v) for k, v in HOLD_STRATA_OBSERVATIONS.items()}
+
+
+def lookup_stratum(sport=None, market=None, favorite_american=None, market_label=None):
+    """Find the REGISTERED stratum for a quote. Returns None when none is registered — and None
+    means refuse, never 'derive one from whatever is in front of you'."""
+    if sport is None and market_label:
+        sport, market = MARKET_ALIASES.get(str(market_label).lower(), (None, None))
+    if sport is None or market is None:
+        return None
+    band = price_band(favorite_american) if favorite_american is not None else None
+    table = hold_strata()
+    if band is not None:
+        return table.get((str(sport).lower(), str(market).upper(), band))
+    # no price band supplied: only answer if EVERY registered band for this sport+market agrees on
+    # calibration status, so an unbanded caller cannot accidentally pick the permissive one
+    cands = [v for k, v in table.items()
+             if k[0] == str(sport).lower() and k[1] == str(market).upper()]
+    if not cands:
+        return None
+    cal = [c for c in cands if c["status"] == "CALIBRATED"]
+    if len(cal) != len(cands):
+        return dict(cands[0], status=UNCALIBRATED, level_band=None, dispersion_ceiling_pp=None,
+                    why=f"{len(cands) - len(cal)} of {len(cands)} price bands in this sport+market "
+                        f"are uncalibrated and no price band was supplied to disambiguate")
+    lo = min(c["level_band"][0] for c in cal)
+    hi = max(c["level_band"][1] for c in cal)
+    return {"n": sum(c["n"] for c in cal), "status": "CALIBRATED", "level_band": (lo, hi),
+            "level_band_equal_price": (equal_price_equivalent(lo), equal_price_equivalent(hi)),
+            "dispersion_ceiling_pp": min(c["dispersion_ceiling_pp"] for c in cal),
+            "why": "union of every calibrated price band in this sport+market; the tightest "
+                   "dispersion ceiling is kept so the union is not more permissive than its parts"}
 
 
 def price_eligibility(boards):
@@ -149,7 +365,12 @@ def price_eligibility(boards):
         ovs = b.get("overrounds")
         if ovs is None and _num(b.get("overround")) is not None:
             ovs = [b["overround"]]
-        hom, detail = market_homogeneity(ovs, b.get("market", "default"))
+        st = b.get("stratum")
+        if st is None:
+            st = lookup_stratum(sport=b.get("sport"), market=b.get("market_type"),
+                                favorite_american=b.get("favorite_american"),
+                                market_label=b.get("market"))
+        hom, detail = market_homogeneity(ovs, b.get("market", "default"), stratum=st)
         if hom is not False and not (b.get("book") and b.get("source_urls")):
             hom, detail = False, dict(detail or {}, reason=(
                 f"{UNVERIFIED_BOOK}: a board must name its book AND its quote links, or 'one book' "
@@ -256,8 +477,71 @@ def selftest():
                               "first_start_utc": "2026-08-23T17:35:00Z"}])
     if bim["status"] != NO_ELIGIBLE_BOARD:
         f.append("the bimodal 8/23 board must remain ineligible")
-    if "more than one population" not in (bim["graded"][0]["reason"] or ""):
-        f.append("the bimodal refusal must say the board holds more than one population")
+    # ...and the SPREAD test must catch a bimodal board ON ITS OWN. The real 8/23 board happens to
+    # also breach the level band, by 0.016pp — near enough to luck that resting the case on it would
+    # be a fixture that passes for the wrong reason. So: a bimodal board whose MEAN sits comfortably
+    # inside the band, which only the dispersion ceiling can reject.
+    hidden = [0.017] * 10 + [0.045] * 4                      # mean 2.50%, spread 2.80pp
+    union = lookup_stratum(market_label="mlb_moneyline")
+    lo, hi = union["level_band"]
+    hmean = sum(hidden) / len(hidden)
+    if not (lo <= hmean <= hi):
+        f.append("fixture is wrong: this bimodal mean must sit INSIDE the band so only spread bites")
+    okh, deth = market_homogeneity(hidden, "mlb_moneyline")
+    if okh is not False:
+        f.append("a bimodal board hiding inside the level band must still fail on dispersion")
+    if "more than one population" not in (deth.get("reason") or ""):
+        f.append(f"the dispersion refusal must name the population problem, got {deth.get('reason')}")
+    if "dispersion ceiling" not in (deth.get("reason") or ""):
+        f.append("the dispersion refusal must cite the stratum's derived ceiling, not a constant")
+
+    # --- the structural limits, tested where ONLY they can bite ---------------------------------
+    # a deliberately permissive synthetic stratum, so a refusal here can only come from the
+    # structural limits and not from the derived band doing the work
+    wide = {"n": 99, "status": "CALIBRATED", "level_band": (0.0001, 0.99),
+            "dispersion_ceiling_pp": 99.0}
+    okc, whyc = level_gate(0.25, wide)
+    if okc:
+        f.append("a 25% two-way hold must be refused by the structural ceiling however wide the band")
+    if "structural ceiling" not in (whyc or ""):
+        f.append(f"the 25% refusal must cite the structural ceiling, got {whyc}")
+    if f"{equal_price_equivalent(0.25):+.0f}" not in (whyc or ""):
+        f.append("the structural refusal must show the equal-price equivalent, so it can be argued with")
+    if not level_gate(0.05, wide)[0]:
+        f.append("fixture is wrong: a 5% hold must pass the same permissive stratum")
+    for bad in (0.0, -0.01, -0.5):
+        okn, whyn = level_gate(bad, wide)
+        if okn:
+            f.append(f"a non-positive overround {bad} must be refused")
+        elif NON_POSITIVE_HOLD not in (whyn or ""):
+            f.append(f"a non-positive overround must be refused BY NAME, got {whyn}")
+    if equal_price_equivalent(STRUCTURAL_HOLD_CEILING) is None or \
+            abs(equal_price_equivalent(STRUCTURAL_HOLD_CEILING) - STRUCTURAL_CEILING_EQUAL_PRICE) > 0.5:
+        f.append("the structural ceiling and its stated equal price must agree")
+
+    # --- the dispersion floor: one tick of the book's own grid is not two books -------------------
+    flat = [0.0470] * 5                                  # zero observed spread
+    fst = calibrate_stratum(flat)
+    if fst["status"] != "CALIBRATED":
+        f.append("fixture is wrong: five quotes must calibrate")
+    if fst["dispersion_ceiling_pp"] <= 0:
+        f.append("a zero-spread stratum must still get a ceiling from the price grid, not zero")
+    onetick = [0.0470, 0.0470 + tick_pp() / 100.0]        # exactly one price tick apart
+    okt, dett = market_homogeneity(onetick, "ignored", stratum=fst)
+    if okt is not True:
+        f.append(f"two quotes one price tick apart are one book, got {dett.get('reason')}")
+    fourticks = [0.0470, 0.0470 + 4 * tick_pp() / 100.0]
+    if market_homogeneity(fourticks, "ignored", stratum=fst)[0] is not False:
+        f.append("four ticks of spread on a flat stratum must still fail")
+
+    # a stratum may NEVER be calibrated from the board under test: that admits it by construction
+    self_cal = calibrate_stratum(hidden)
+    if self_cal["status"] == "CALIBRATED":
+        selfok, _ = market_homogeneity(hidden, "mlb_moneyline", stratum=self_cal)
+        if selfok is not False:
+            pass          # documents the tautology; the guard below is what enforces it
+    if market_homogeneity(hidden, "mlb_moneyline")[1].get("stratum", {}).get("n") == len(hidden):
+        f.append("the stratum used to judge a board must not have been derived from that board")
     if bim["n_boards"] != 1:
         f.append("an inadmissible board must still be COUNTED as captured, not reported as absent")
 
@@ -282,10 +566,25 @@ def selftest():
 
     # and the WNBA half of the same capture is a DIFFERENT market type with a legitimately wider
     # hold; grouping them together would manufacture a bimodal board out of two honest ones
+    # THE WNBA HALF NOW REFUSES, and that is the correct answer under a derived policy rather than a
+    # hand-set band. Its two moneylines sit in two DIFFERENT price bands (-218 moderate, -600 heavy),
+    # so each band holds exactly one quote and neither can be calibrated. Under the old hand-set
+    # band this board passed; it passed because the band was invented, not because the board was
+    # validated. UNCALIBRATED is a refusal, never a wave-through.
     wn = price_eligibility([{**DKID, "market": "wnba_moneyline", "overrounds": [0.04268, 0.04762], "captured_at_utc": "2026-08-24T16:41:27Z",
                              "first_start_utc": "2026-08-25T00:00:00Z"}])
-    if wn["status"] != ELIGIBLE:
-        f.append(f"the WNBA board must be eligible in its own market type, got {wn['graded'][0]['reason']}")
+    if wn["status"] != NO_ELIGIBLE_BOARD:
+        f.append("a WNBA moneyline stratum with one quote per price band cannot be validated")
+    if UNCALIBRATED not in (wn["graded"][0]["reason"] or ""):
+        f.append(f"the WNBA refusal must be UNCALIBRATED, got {wn['graded'][0]['reason']}")
+    if price_band(-218) == price_band(-600):
+        f.append("fixture is wrong: -218 and -600 must fall in different price bands")
+    # and an uncalibrated stratum must not be more permissive than a calibrated one
+    for h in (0.001, 0.043, 0.19):
+        okg, _ = level_gate(h, lookup_stratum(sport="wnba", market="MONEYLINE",
+                                              favorite_american=-600))
+        if okg:
+            f.append(f"an uncalibrated stratum admitted overround {h}; it must admit nothing")
     pooled = price_eligibility([{**DKID, "market": "mlb_moneyline", "overrounds": DK_MLB + [0.04268, 0.04762],
                                  "captured_at_utc": "2026-08-24T16:41:27Z",
                                  "first_start_utc": "2026-08-24T22:40:00Z"}])
@@ -387,10 +686,6 @@ def selftest():
 
 
 MUTANTS = [
-    ("the plausible-level test stops running, so an absurd board passes on homogeneity alone",
-     "    if not (lo <= mean <= hi):", "    if False:"),
-    ("the plausible band is widened until 20% is normal",
-     '    "mlb_moneyline": (0.010, 0.080),', '    "mlb_moneyline": (0.0, 1.0),'),
     ("book identity and quote links stop being required",
      '        if hom is not False and not (b.get("book") and b.get("source_urls")):', "        if False:"),
     ("quote links alone are dropped from the identity check",
@@ -404,18 +699,34 @@ MUTANTS = [
     ("an inadmissible board is reported as no board at all",
      "        graded.append(dict(b, eligible=why is None, reason=why, homogeneity=detail,\n                           hold_policy_version=HOLD_POLICY_VERSION))",
      "        pass"),
-    ("the homogeneity test stops running",
-     "    if spread > SAME_BOOK_MAX_OVERROUND_SPREAD_PP:", "    if False:"),
-    ("the spread ceiling is widened until the bimodal board passes",
-     "SAME_BOOK_MAX_OVERROUND_SPREAD_PP = 0.010", "SAME_BOOK_MAX_OVERROUND_SPREAD_PP = 0.100"),
+    ("the dispersion test stops running, so a bimodal board passes",
+     "    if 100.0 * spread > ceiling:", "    if False:"),
+    ("the level test stops running, so an absurd hold passes",
+     "    ok_level, why_level = level_gate(mean, st)", "    ok_level, why_level = True, None"),
+    ("the stratum is calibrated from the board under test, making the gate a tautology",
+     "    st = stratum if stratum is not None else lookup_stratum(market_label=market)",
+     "    st = stratum if stratum is not None else calibrate_stratum(vals)"),
+    ("an uncalibrated stratum waves quotes through instead of refusing them",
+     '    if not stratum or stratum.get("status") != "CALIBRATED":', "    if False:"),
+    ("a single-observation stratum is treated as calibrated",
+     "MIN_OBS_TO_CALIBRATE = 3", "MIN_OBS_TO_CALIBRATE = 1"),
+    ("the structural ceiling is lifted, so a 20%+ hold board is plausible",
+     "STRUCTURAL_HOLD_CEILING = 0.20", "STRUCTURAL_HOLD_CEILING = 0.95"),
+    ("a non-positive overround stops being refused",
+     "    if h <= STRUCTURAL_HOLD_FLOOR:", "    if False:"),
+    ("the dispersion floor drops below the book's own price grid",
+     "DISPERSION_FLOOR_TICKS = 2", "DISPERSION_FLOOR_TICKS = 0"),
+    ("the price band collapses, pooling a pick-em with a heavy favourite",
+     '        if floor is None or f >= floor:', "        if True:"),
+    ("the dispersion refusal stops naming the population problem",
+     '"than one population")', '"than one book\'s grid.")'),
+    ("the unbanded lookup returns the permissive band instead of refusing",
+     "    if len(cal) != len(cands):", "    if False:"),
     ("the best-odds level test stops running",
      "    if mean < BEST_ODDS_CEILING:", "    if False:"),
     ("a single market is assumed homogeneous",
      '        return None, {"n": len(vals), "reason": "fewer than two priced markets; homogeneity is "\n                                                "undefined and is not assumed"}',
      '        return True, {"n": len(vals), "reason": "assumed"}'),
-    ("the bimodal refusal stops naming the population problem",
-     '                            f"price grid, so this board holds more than one population")',
-     '                            f"price grid.")'),
     ("a board captured after the start is eligible",
      '        elif not cap or not start or str(cap) >= str(start):', "        elif False:"),
     ("an eligible board is reported as conferring action authority",

@@ -84,7 +84,39 @@ UNIT_PSEUDO_MASS = "UNIT_TOTAL_PSEUDO_MASS"
 #: refused to imagine. Baseball totals have no upper bound: the modern record is in the 40s and
 #: nothing forbids more. So the distribution carries an explicit OVERFLOW bin holding the mass above
 #: the support, and the scorer must be told how to spend it.
+#: AND THE OVERFLOW BIN IS NOT AN EXACT-INTEGER PMF. This is the owner's correction and it is
+#: structural, not cosmetic. A bin holding P(Y >= 41) does not assign a probability to 41, or to 42,
+#: or to any single integer above the support. Under EXACT_INTEGER_MASS the scorer asks for
+#: P(Y = y); above the support there is no such number to give. So the OUTCOME SPACE itself changes:
+#: the distribution is a pmf over the COARSENED space {0, 1, ..., 40, "41+"}, and every arm and every
+#: realised outcome must be coarsened the same way before any of them are compared. Scoring a
+#: coarsened forecast against an uncoarsened outcome, or one arm against another under different
+#: coarsenings, silently compares different estimands.
+#:
+#: Two admissible resolutions, both stated rather than assumed:
+#:   COARSENED_TERMINAL_BIN  — collapse every arm and every outcome to {0..40, 41+}. Exact, cheap,
+#:                             and it costs resolution: the model can no longer be graded on
+#:                             distinguishing a 41-run game from a 47-run one.
+#:   UNBOUNDED_INTEGER_TAIL  — spread the overflow mass over 41, 42, ... with a stated decay, which
+#:                             restores an exact-integer pmf at the cost of one assumed parameter
+#:                             that no data in this repository has ever fitted or tested.
+#: Until one is chosen and applied to every arm, the FULL pmf mean is UNDEFINED. The body mean is a
+#: real quantity but it is CONDITIONAL on Y <= 40, and it must be named that way — calling it the
+#: full pmf mean asserts exactly the value the overflow bin correctly refuses to supply.
 OVERFLOW_KEY = "OVERFLOW_ABOVE_SUPPORT"
+COARSE_KEY = "41+"
+OUTCOME_SPACE = {
+    "EXACT_INTEGER": "every integer in the support carries its own mass; nothing above it exists. "
+                     "Assigns zero to a possible outcome and is therefore not admissible for an "
+                     "unbounded quantity like a baseball total.",
+    "COARSENED_TERMINAL_BIN": "the outcome space is {0..max(support), '<max+1>+'}. The terminal bin "
+                              "is an EVENT, not a value. Means over it are undefined; conditional "
+                              "means over the body are defined and must be labelled conditional.",
+    "UNBOUNDED_INTEGER_TAIL": "the outcome space is every non-negative integer, with a stated decay "
+                              "above the support. Exact-integer scoring is restored; the decay "
+                              "parameter is an assumption and is recorded as one.",
+}
+DEFAULT_OUTCOME_SPACE = "COARSENED_TERMINAL_BIN"
 TAIL_CONVENTIONS = {
     "OVERFLOW_BIN": "mass above max(support) is held in one bin. An outcome above the support scores "
                     "against that bin's mass, so the log score is finite and honest — it is a large "
@@ -111,17 +143,65 @@ def pmf_sha256(pmf):
 
 
 def pmf_mean(pmf, overflow_representative=None):
-    """(mean, note). The overflow bin has no single value, so its treatment is stated, not assumed."""
+    """(mean, note). The overflow bin has no single value, so its treatment is stated, not assumed.
+
+    Under COARSENED_TERMINAL_BIN this returns None by design: the terminal bin is an EVENT, and the
+    mean of a distribution one of whose atoms is an event is not a number. Use
+    body_conditional_mean() for the quantity that IS defined, and say "conditional" when you print it.
+    """
     body = {k: v for k, v in pmf.items() if not isinstance(k, str)}
     m = sum(k * v for k, v in body.items())
     ov = pmf.get(OVERFLOW_KEY, 0.0)
     if ov <= 0:
         return m, "no overflow mass"
     if overflow_representative is None:
-        return None, (f"{100*ov:.4f}% of the mass sits in {OVERFLOW_KEY}, which has no single value. "
-                      f"A mean over the body alone would understate; supply a representative value "
-                      f"or report the body mean explicitly as a body mean.")
+        return None, (f"{100*ov:.4f}% of the mass sits in {OVERFLOW_KEY}, which is an EVENT "
+                      f"(Y >= max(support)+1), not a value. The FULL pmf mean is UNDEFINED. A mean "
+                      f"over the body alone is a different quantity — a mean CONDITIONAL on Y being "
+                      f"inside the support — and must be labelled conditional, not reported as the "
+                      f"pmf mean. Supply a representative value only if the outcome space has been "
+                      f"declared UNBOUNDED_INTEGER_TAIL with a stated decay.")
     return m + float(overflow_representative) * ov, f"overflow priced at {overflow_representative}"
+
+
+def body_conditional_mean(pmf):
+    """(mean, conditioning_event). E[Y | Y <= max(support)] — defined, and named for what it is."""
+    body = {k: v for k, v in pmf.items() if not isinstance(k, str)}
+    z = sum(body.values())
+    if z <= 0:
+        return None, "NO_BODY_MASS"
+    hi = max(body)
+    return sum(k * v for k, v in body.items()) / z, f"CONDITIONAL_ON_Y_LE_{hi}"
+
+
+def coarsen_pmf(pmf):
+    """Collapse a pmf to the COARSENED_TERMINAL_BIN outcome space {0..hi, '<hi+1>+'}.
+
+    Idempotent, and it renames the overflow key to the terminal EVENT label so a reader cannot
+    mistake the bin for an integer.
+    """
+    body = {int(k): float(v) for k, v in pmf.items() if not isinstance(k, str)}
+    if not body:
+        return None, "NO_BODY_MASS"
+    hi = max(body)
+    tail = sum(float(v) for k, v in pmf.items() if isinstance(k, str))
+    out = dict(body)
+    out[f"{hi + 1}+"] = tail
+    return out, f"COARSENED_TERMINAL_BIN at {hi + 1}+"
+
+
+def coarsen_outcome(y, hi):
+    """Coarsen a realised outcome the SAME way the forecast was coarsened.
+
+    An arm scored on {0..hi, 'hi+1+'} must be scored against an outcome on that same space. Scoring
+    a coarsened forecast against a raw integer is a category error that produces a number anyway,
+    which is why it has to be a function and not a convention nobody applies.
+    """
+    yi = _num(y)
+    if yi is None:
+        return None
+    yi = int(round(yi))
+    return yi if yi <= int(hi) else f"{int(hi) + 1}+"
 
 
 def empirical_total_pmf(totals, support=MLB_TOTAL_SUPPORT, alpha=None, tail=DEFAULT_TAIL,
@@ -194,6 +274,61 @@ def audit(identity):
 # =================================================================================================
 def selftest():
     f = []
+
+    # --- the coarsened outcome space: an overflow bin is NOT an exact-integer pmf -----------------
+    cpool = [7, 8, 8, 9, 9, 10, 25]          # a genuine exceedance, so the terminal bin has real mass
+    cpmf, cerr = empirical_total_pmf(cpool, support=range(0, 21))
+    if cerr or cpmf is None:
+        f.append(f"coarsening fixture pool failed to build: {cerr}")
+    else:
+        if cpmf.get(OVERFLOW_KEY, 0) <= 0:
+            f.append("fixture is wrong: the coarsening pool must put real mass above the support")
+        m, note = pmf_mean(cpmf)
+        if m is not None:
+            f.append("the full pmf mean must be UNDEFINED while terminal-bin mass is present")
+        if "UNDEFINED" not in (note or ""):
+            f.append("the refusal must say the full mean is UNDEFINED, not merely decline")
+        if "EVENT" not in (note or ""):
+            f.append("the refusal must say the terminal bin is an event, not a value")
+        bm, cond = body_conditional_mean(cpmf)
+        if bm is None:
+            f.append("the body-conditional mean must be computable")
+        elif not (cond or "").startswith("CONDITIONAL_ON_Y_LE_"):
+            f.append("the conditional mean must name its conditioning event")
+        else:
+            naive = sum(k * v for k, v in cpmf.items() if not isinstance(k, str))
+            if abs(bm - naive) < 1e-12:
+                f.append("the conditional mean must renormalize over the body, not just drop the tail")
+        co, cnote = coarsen_pmf(cpmf)
+        if co is None:
+            f.append("coarsen_pmf must return a pmf")
+        else:
+            if "21+" not in co:
+                f.append(f"coarsen_pmf must emit the 21+ terminal event key, got "
+                         f"{[k for k in co if isinstance(k, str)]}")
+            elif abs(co["21+"] - cpmf[OVERFLOW_KEY]) > 1e-12:
+                f.append("the terminal bin must carry exactly the overflow mass")
+            if abs(sum(co.values()) - 1.0) > 1e-9:
+                f.append("coarsening must preserve total mass")
+            if OVERFLOW_KEY in co:
+                f.append("the coarsened pmf must not still carry the raw overflow key")
+            if coarsen_pmf(co)[0] != co:
+                f.append("coarsening must be idempotent")
+        if coarsen_outcome(9, 20) != 9:
+            f.append("an in-support outcome must survive coarsening unchanged")
+        if coarsen_outcome(25, 20) != "21+":
+            f.append(f"an above-support outcome must coarsen to the terminal bin, got "
+                     f"{coarsen_outcome(25, 20)!r}")
+        if coarsen_outcome(20, 20) != 20:
+            f.append("the boundary outcome belongs to the body, not the terminal bin")
+        if coarsen_outcome(21, 20) != "21+":
+            f.append("the first outcome above the support must fall in the terminal bin")
+        if coarsen_outcome(None, 20) is not None:
+            f.append("a missing outcome must not be coarsened into a real bin")
+        if DEFAULT_OUTCOME_SPACE not in OUTCOME_SPACE:
+            f.append("the declared default outcome space must be one of the named ones")
+        if "EXACT_INTEGER" not in OUTCOME_SPACE:
+            f.append("the inadmissible exact-integer space must still be named, so it can be refused")
 
     # --- the empirical prior pmf -----------------------------------------------------------------
     pool = [7, 8, 8, 9, 9, 9, 10, 11, 12]
@@ -322,9 +457,25 @@ MUTANTS = [
      "    if tail not in TAIL_CONVENTIONS:", "    if False:"),
     ("the default smoothing reverts to Laplace alpha=1",
      "        alpha = 1.0 / len(sup)          # unit TOTAL pseudo-mass, not one per bin", "        alpha = 1.0"),
+    ("the terminal bin is treated as an integer, so a coarsened outcome lands in the body",
+     '    return yi if yi <= int(hi) else f"{int(hi) + 1}+"', "    return yi"),
+    ("the coarsening boundary shifts, sweeping the last body integer into the terminal bin",
+     "    return yi if yi <= int(hi) else", "    return yi if yi < int(hi) else"),
+    ("the conditional mean stops renormalizing, so it silently understates",
+     '    return sum(k * v for k, v in body.items()) / z, f"CONDITIONAL_ON_Y_LE_{hi}"',
+     '    return sum(k * v for k, v in body.items()), f"CONDITIONAL_ON_Y_LE_{hi}"'),
+    ("the conditional mean stops naming its conditioning event",
+     'f"CONDITIONAL_ON_Y_LE_{hi}"', '"mean"'),
+    ("coarsening drops the tail mass instead of collapsing it",
+     '    out[f"{hi + 1}+"] = tail', "    pass"),
+    ("coarsening keeps the raw overflow key alongside the terminal bin",
+     "    out = dict(body)", "    out = dict(pmf)"),
+    ("the refusal stops calling the full mean UNDEFINED",
+     "f\"(Y >= max(support)+1), not a value. The FULL pmf mean is UNDEFINED. A mean \"",
+     "f\"(Y >= max(support)+1). A mean \""),
     ("a mean is reported over the body while overflow mass is unpriced",
-     '    if overflow_representative is None:\n        return None, (f"{100*ov:.4f}% of the mass sits in {OVERFLOW_KEY}, which has no single value. "',
-     '    if False:\n        return None, (f"{100*ov:.4f}% of the mass sits in {OVERFLOW_KEY}, which has no single value. "'),
+     '    if overflow_representative is None:\n        return None, (f"{100*ov:.4f}% of the mass sits in {OVERFLOW_KEY}, which is an EVENT "',
+     '    if False:\n        return None, (f"{100*ov:.4f}% of the mass sits in {OVERFLOW_KEY}, which is an EVENT "'),
     ("an empty pool yields a pmf anyway",
      '    if not obs:\n        return None, "NO_TOTALS_IN_POOL"', '    if not obs:\n        obs = [9]'),
     ("an empty support yields a pmf anyway",

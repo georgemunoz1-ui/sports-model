@@ -74,6 +74,32 @@ QUANTITIES = {
                       "conservative_edge = raw_edge - 1.645 x this",
         "banned_aliases": ["sd", "emp. sd", "emp sd", "uncertainty"],
     },
+    #: THE 30k/100k DEFECT. One label, "MONTE_CARLO_SD", covered three different quantities: the
+    #: primary run's own SD, the diagnostic run's own SD, and the SD of the DIFFERENCE between them.
+    #: The sigma test needs the third and the row table showed the first, so the same name silently
+    #: supplied the wrong number. Three quantities get three names.
+    "MC_SD_PRIMARY_30K": {
+        "family": DISPERSION,
+        "unit": "pp",
+        "definition": "sqrt(p(1-p)/30000) — simulation noise in the DEPLOYED champion's own "
+                      "probability at its trial count. This is what belongs beside a screened row.",
+        "banned_aliases": ["monte carlo sd", "mc sd", "sim sd"],
+    },
+    "MC_SD_DIAGNOSTIC_100K": {
+        "family": DISPERSION,
+        "unit": "pp",
+        "definition": "sqrt(p(1-p)/100000) — simulation noise in the 100k DIAGNOSTIC run. Never a "
+                      "row's uncertainty: no row is screened against the diagnostic arm.",
+        "banned_aliases": ["monte carlo sd", "mc sd", "sim sd"],
+    },
+    "MC_SD_DIFFERENCE": {
+        "family": DISPERSION,
+        "unit": "pp",
+        "definition": "sqrt(MC_SD_PRIMARY_30K^2 + MC_SD_DIAGNOSTIC_100K^2) — the SD of the GAP "
+                      "between the two runs, valid only because they used independent streams. Any "
+                      "sigma statement comparing the runs needs THIS one and no other.",
+        "banned_aliases": ["monte carlo sd", "mc sd", "sim sd"],
+    },
     "MONTE_CARLO_SD": {
         "family": UNCERTAINTY,
         "unit": "pp",
@@ -551,6 +577,39 @@ def selftest():
     if label_audit(["Champion spread"]) == []:
         f.append("a banned alias in a LABEL must still be caught when scoped")
 
+    # --- the 30k/100k defect: one label may not cover three quantities ---------------------------
+    trio = ("MC_SD_PRIMARY_30K", "MC_SD_DIAGNOSTIC_100K", "MC_SD_DIFFERENCE")
+    for k in trio:
+        if k not in QUANTITIES:
+            f.append(f"{k} must be its own named quantity")
+    if len({QUANTITIES[k]["definition"] for k in trio if k in QUANTITIES}) != 3:
+        f.append("the three Monte Carlo quantities must have three distinct definitions")
+    # distinctness is not enough — the DIFFERENCE must be defined AS the combination of the other
+    # two, or it is just a third name for the same thing and the sigma test picks up the wrong one
+    dd = QUANTITIES.get("MC_SD_DIFFERENCE", {}).get("definition", "")
+    if not ("MC_SD_PRIMARY_30K" in dd and "MC_SD_DIAGNOSTIC_100K" in dd):
+        f.append("MC_SD_DIFFERENCE must be defined in terms of the two SDs it combines")
+    for k in ("MC_SD_PRIMARY_30K", "MC_SD_DIAGNOSTIC_100K"):
+        if "MC_SD_DIFFERENCE" in QUANTITIES.get(k, {}).get("definition", ""):
+            f.append(f"{k} must not be defined in terms of the difference; the dependency is one-way")
+    if "30000" not in QUANTITIES.get("MC_SD_PRIMARY_30K", {}).get("definition", ""):
+        f.append("the primary SD must name its own trial count")
+    if "100000" not in QUANTITIES.get("MC_SD_DIAGNOSTIC_100K", {}).get("definition", ""):
+        f.append("the diagnostic SD must name its own trial count")
+    # a page labelling all three "MONTE_CARLO_SD" must COLLIDE — that is the actual defect: the
+    # sigma test needed the difference and the row table showed the primary, under one name
+    collide = [{"display_label": "MONTE_CARLO_SD", "kind": k} for k in trio]
+    if not any(pr["code"] == LABEL_COLLISION for pr in quantity_gate(collide)):
+        f.append("one label covering all three Monte Carlo quantities must collide")
+    named = [{"display_label": k, "kind": k} for k in trio]
+    if quantity_gate(named):
+        f.append(f"correctly named MC quantities must pass, got {quantity_gate(named)}")
+    for k in trio:
+        if "monte carlo sd" not in QUANTITIES.get(k, {}).get("banned_aliases", []):
+            f.append(f"{k} must ban the bare ambiguous alias")
+    if not label_audit(["Monte Carlo SD"]):
+        f.append("a bare 'Monte Carlo SD' label must be flagged as an ambiguous alias")
+
     for x in f:
         print("FAIL:", x)
     if not f:
@@ -559,6 +618,12 @@ def selftest():
 
 
 MUTANTS = [
+    ("the three Monte Carlo quantities collapse back into one definition",
+     '"sqrt(MC_SD_PRIMARY_30K^2 + MC_SD_DIAGNOSTIC_100K^2) — the SD of the GAP "',
+     '"sqrt(p(1-p)/30000) — simulation noise, take two "'),
+    ("the ambiguous bare alias stops being banned",
+     '"banned_aliases": ["monte carlo sd", "mc sd", "sim sd"],',
+     '"banned_aliases": ["mc sd", "sim sd"],'),
     ("one label may cover two arm identities",
      "        if len(idents) > 1:", "        if False:"),
     ("the arm collision stops naming the identities",

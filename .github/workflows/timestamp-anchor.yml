@@ -88,14 +88,16 @@ jobs:
           python3 harness/anchor_verify.py data/audit/anchor_expectations.json
 
           # --- the remotely observed instant ----------------------------------------------------
-          # GitHub's own created_at for this run, read from the API. NOT `date -u`: the runner's
-          # clock is another machine's assertion and would reproduce the exact defect this exists
-          # to fix.
-          RUN_JSON=$(curl -sS -H "Accept: application/vnd.github+json" \
-            "https://api.github.com/repos/$REPO/actions/runs/$RUN_ID")
-          CREATED=$(printf '%s' "$RUN_JSON" | python3 -c 'import json,sys; print(json.load(sys.stdin)["created_at"])')
+          # GitHub's own clock, from the `Date` header of a response from api.github.com. NOT
+          # `date -u`: the runner's wall clock is another machine's assertion and would reproduce the
+          # exact defect this exists to fix. And NOT the run's created_at, which needs `actions: read`
+          # — run 2 died on precisely that, a KeyError against an unauthenticated response. The Date
+          # header needs no token and no extra permission, and it answers the same question: an
+          # instant AFTER the artifacts above were hashed, which is a valid upper bound.
+          DATE_HDR=$(curl -sSI https://api.github.com | tr -d '\r' | awk -F': ' 'tolower($1)=="date"{print $2; exit}')
+          CREATED=$(python3 -c 'import sys;sys.path.insert(0,"harness");import anchor_verify as a;print(a.http_date_to_iso(sys.argv[1]) or "")' "$DATE_HDR")
           if [ -z "$CREATED" ]; then
-            echo "::error::could not read the server-generated run timestamp; no anchor established"
+            echo "::error::no server-generated instant could be read; NOTHING IS ANCHORED"
             exit 1
           fi
 

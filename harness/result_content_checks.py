@@ -33,6 +33,10 @@ import datetime as dt
 import glob
 import json
 import os
+import sys
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import franchise_identity as _fi
 
 RESULTS = "data/backfill/mlb/2026/results.csv"
 
@@ -115,11 +119,24 @@ def slate_completeness(rows, slate_dir="data/mlb/slates"):
     either invented scores (R1 violation) or a permanently red gate. Echo detection and ml_asof
     label building still require full scores — _finals() is unchanged; only completeness accepts
     the weaker row, and such a row must still be PROVISIONAL under the provenance audit."""
+    # IDENTITY BINDING (2026-08-23). The frozen slate .psv writes FULL TEAM NAMES and results.csv
+    # writes abbreviations, so comparing raw strings reported all 15 games of a FULLY INGESTED slate
+    # as missing. That is the 62-keys defect wearing a completeness gate: a join on unbound identities
+    # does not fail loudly, it finds no partner. Both sides bind to one canonical id before the
+    # comparison. Binding can only MERGE two spellings of one franchise, so it cannot hide a
+    # genuinely absent game; an unresolvable token falls through as its own raw string, which keeps
+    # the comparison honest rather than silently dropping the row.
+    def _bind(t):
+        try:
+            return _fi.canonical("mlb", t)
+        except Exception:
+            return t
+
     have = {}
     for r in rows:
         if r.get("status") == "final" and (r.get("total") not in ("", None)
                                            or r.get("home_win") not in ("", None)):
-            have.setdefault(r["date"], set()).add((r["away"], r["home"]))
+            have.setdefault(r["date"], set()).add((_bind(r["away"]), _bind(r["home"])))
     excused = _fresh_pendings()
     missing = []
     for p in sorted(glob.glob(os.path.join(slate_dir, "*_slate.psv"))):
@@ -130,7 +147,7 @@ def slate_completeness(rows, slate_dir="data/mlb/slates"):
         for line in open(p):
             parts = line.strip().split("|")
             if len(parts) >= 3:
-                want.add((parts[1], parts[2]))
+                want.add((_bind(parts[1]), _bind(parts[2])))
         for g in sorted(want - have[date]):
             if (date, f"{g[0]}@{g[1]}") in excused:
                 continue  # explicitly recorded PENDING_NOT_FINAL and still fresh — see _fresh_pendings

@@ -25,10 +25,16 @@
      "status": "BLOCKED_EXTERNAL",
      "units_done": 0,
      "utc": "2026-08-25T18:02:00Z"
+    },
+    {
+     "note": "7th attempt (22:00Z slot run early at T-45): statsapi.mlb.com and baseball-reference.com both EGRESS_BLOCKED via the approved fetch tool. 0/123. Next run 2026-08-26T04:00:00Z.",
+     "status": "BLOCKED_EXTERNAL",
+     "units_done": 0,
+     "utc": "2026-08-25T21:56:00Z"
     }
    ],
    "job_id": "RJ-001-PROVENANCE",
-   "next_run_utc": "2026-08-25T22:00:00Z",
+   "next_run_utc": "2026-08-26T04:00:00Z",
    "notes": "a unit is one canonical row bound to a retrieved artifact with a game id, a retrieval timestamp and a content hash. Currently blocked on egress; the job records BLOCKED_EXTERNAL rather than silently not running.",
    "owner_subsystem": "acquisition",
    "status": "BLOCKED_EXTERNAL",
@@ -111,10 +117,16 @@
      "status": "BLOCKED_EXTERNAL",
      "units_done": 0,
      "utc": "2026-08-25T21:16:00Z"
+    },
+    {
+     "note": "6th attempt at the T-45 checkpoint: www.wnba.com EGRESS_BLOCKED, unchanged across 6 attempts/3h55m. 0/6. Deadline is the 23:00Z tip; if still blocked then, the deadline outcome is recorded as missed \u2014 not closed, not laundered. OWNER_RELAY open.",
+     "status": "BLOCKED_EXTERNAL",
+     "units_done": 0,
+     "utc": "2026-08-25T21:56:00Z"
     }
    ],
    "job_id": "RJ-004-WNBA-INJURY",
-   "next_run_utc": "2026-08-25T21:55:00Z",
+   "next_run_utc": "2026-08-25T23:00:00Z",
    "notes": "the official route exists and updates continually, so 34-day staleness is a refresh failure, not a board state. Fallback rung: OWNER_RELAY of the report text. Never route around the egress proxy.",
    "owner_subsystem": "wnba_features",
    "status": "BLOCKED_EXTERNAL",

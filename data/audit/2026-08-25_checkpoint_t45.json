@@ -1,0 +1,30 @@
+{
+ "attempts": [
+  {
+   "result": "EGRESS_BLOCKED (org proxy)",
+   "url": "https://statsapi.mlb.com/api/v1/schedule?sportId=1&date=2026-08-25&hydrate=probablePitcher,lineups"
+  },
+  {
+   "result": "EGRESS_BLOCKED (org proxy)",
+   "url": "https://www.wnba.com/injury-report"
+  },
+  {
+   "result": "EGRESS_BLOCKED (org proxy)",
+   "url": "https://www.baseball-reference.com/previews/"
+  }
+ ],
+ "checkpoint": "T_MINUS_45M (MANDATORY_ALWAYS)",
+ "consequence": "the standing rule 'verify starters, lineups, injuries before any recommendation' cannot be satisfied; with SYSTEM_NOT_DECISION_READY and no fresh pre-execution quote possible on the rail, execution remains BLOCKED for all 18 games \u2014 the checkpoint changes nothing because nothing was pending execution",
+ "duty": "official/team injury reports, active rosters, lineup announcements",
+ "injury_reports": "UNVERIFIED \u2014 no rail; RJ-004 0/6 after 6 attempts",
+ "lineups": "UNVERIFIED \u2014 no rail; no owner relay received this window",
+ "market_phase_note": "quotes observed <= 16:48Z; from 22:40Z any MLB quote is POST_START and not an offer",
+ "next": "23:00Z tick \u2014 RJ-004 deadline disposition; market phase flips at 22:40Z",
+ "record_id": "CHECKPOINT-2026-08-25-T_MINUS_45M",
+ "record_sha256": "e6c7a5b1d2bd42a92b11245ca132b23cfb6dc61546e47e67dfde4d5bf2973665",
+ "rosters": "UNVERIFIED \u2014 no rail",
+ "run_utc": "2026-08-25T21:56:00Z",
+ "schema": "ops.checkpoint.v1",
+ "slate_first_pitch_utc": "2026-08-25T22:40:00Z",
+ "system_state": "SYSTEM_NOT_DECISION_READY; execution BLOCKED; 0 bets / $0"
+}

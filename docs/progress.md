@@ -4015,3 +4015,35 @@ honest current state. The earlier NO_SLATE_ACQUIRED record stands as what the fe
 this is rung 7 landing afterwards. Local egress remains an acquisition-system incident (RJ-001).
 
 SYSTEM_NOT_DECISION_READY unchanged - binding a slate does not repair the estimator.
+
+### 2026-08-25 (board frozen) — 18 games, a committed builder, and a challenger reborn as v0_2
+
+The 8/25 forecast board is FROZEN: 15 MLB games x 6 arms + 3 WNBA games x 5 arms. MLB cohort
+e1346b3b, WNBA d0c59870. No market board exists (FORECAST_ONLY_NO_MARKET_GRADE) and the system
+remains SYSTEM_NOT_DECISION_READY, so it is a forecast board and says so: 0 bets, 18 passes, $0.
+
+THE BUILDER IS COMMITTED THIS TIME. harness/build_board_0825.py, manifest-registered - the 8/24
+builder died in a scratchpad and took adaptive_v0_1's constants with it. Which forced the honest
+choice of the day: I tried to reverse v0_1's residuals from the registered windows and could not
+(no form-difference formula reproduces all ten), and stamping a guess v0_1 would fabricate a model
+identity. So v0_1 is CLOSED (its frozen 8/24 rows stay gradable) and harness/adaptive_challenger.py
+registers adaptive_v0_2 pregame: residual_f = 1.0*(shrunken 30d win-rate diff, prior strength 25) +
+0.05*(rs_away_sp - rs_home_sp), constants declared as policy before any output existed, 9/9 mutants.
+No continuity claimed between the identities.
+
+Board facts: widening k=3.7415 solved numerically to the champion's 4.6775pp cross-game SD on this
+slate. Priors UNCHANGED (0.520540 / 8.9911 over 1,684 - nothing after 8/21 is canonical). Five CAP
+slots, names never substituted: three official TBDs at dose 0.5, and Jackson Jobe + Ethan Pecko
+named with no pitcher log on file at dose 0.75 - inventing MLB ids for them was not an option. WNBA
+shadow ran on the frozen pool (now 34 days stale): CON 41.7% home vs CHI, DAL 76.2% home vs PDX,
+PHX 51.7% home vs WAS(relayed 'WSH', folded per XW) - all ACTION_BLOCKED / DIAGNOSTIC_ONLY.
+
+The ledger discipline held on the way through: the info-class gate refused the unclassified board,
+the independent dose check from the pitcher logs agreed 15/15 with the board's own doses before the
+entry was written, the classifier's own verdict (NOT_A_CARD, authority NONE) is what got recorded,
+and the module manifest refused my unregistered builder until it was registered properly. Decision
+view DECISION_VIEW_OK, coverage 18/18, render RENDER_CONTRACT_OK, healthcheck 0 fail.
+
+Open before first pitch (22:40Z): T-90/T-45 starter follow-up on the five CAP slots; market board
+acquisition; the estimator stays with RJ-001/002/003. Prospectivity of this freeze is
+SELF_ASSERTED_LOCAL until the CI anchor on this push lands.

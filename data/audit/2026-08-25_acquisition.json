@@ -1,0 +1,228 @@
+{
+ "attempts": [
+  {
+   "artifact_sha256": null,
+   "artifact_status": "SOURCE_ARTIFACT_NOT_RETAINED",
+   "note": "enabled:true, recentRelayFailures: []. The proxy itself reports healthy; the block is the environment's network policy for outbound fetches, not a misconfigured relay. Checked because a rail failure must be diagnosed before it is described.",
+   "rail": "shell",
+   "result": "PROXY_ENABLED",
+   "rung": "PREFLIGHT",
+   "source_artifact": null,
+   "target": "$HTTPS_PROXY/__agentproxy/status",
+   "utc": "2026-08-25T00:12:00Z"
+  },
+  {
+   "artifact_sha256": null,
+   "artifact_status": "SOURCE_ARTIFACT_NOT_RETAINED",
+   "rail": "WebFetch",
+   "result": "EGRESS_BLOCKED",
+   "rung": "DIRECT_OFFICIAL_SOURCE",
+   "source_artifact": null,
+   "target": "statsapi.mlb.com/api/v1/schedule?sportId=1&date=2026-08-25&hydrate=probablePitcher,venue,team",
+   "utc": "2026-08-25T00:14:00Z"
+  },
+  {
+   "artifact_sha256": null,
+   "artifact_status": "SOURCE_ARTIFACT_NOT_RETAINED",
+   "rail": "WebFetch",
+   "result": "EGRESS_BLOCKED",
+   "rung": "DIRECT_OFFICIAL_SOURCE",
+   "source_artifact": null,
+   "target": "stats.wnba.com/scoreboard/",
+   "utc": "2026-08-25T00:15:00Z"
+  },
+  {
+   "artifact_sha256": null,
+   "artifact_status": "SOURCE_ARTIFACT_NOT_RETAINED",
+   "rail": "WebFetch",
+   "result": "EGRESS_BLOCKED",
+   "rung": "DIRECT_OFFICIAL_SOURCE",
+   "source_artifact": null,
+   "target": "www.mlb.com/schedule/2026-08-25",
+   "utc": "2026-08-25T00:17:00Z"
+  },
+  {
+   "artifact_sha256": null,
+   "artifact_status": "SOURCE_ARTIFACT_NOT_RETAINED",
+   "note": "the named book itself \u2014 rung 2's strongest route",
+   "rail": "WebFetch",
+   "result": "EGRESS_BLOCKED",
+   "rung": "NAMED_BOOK_OR_AGGREGATOR",
+   "source_artifact": null,
+   "target": "sportsbook.draftkings.com/leagues/baseball/mlb",
+   "utc": "2026-08-25T00:16:00Z"
+  },
+  {
+   "artifact_sha256": null,
+   "artifact_status": "SOURCE_ARTIFACT_NOT_RETAINED",
+   "rail": "WebFetch",
+   "result": "EGRESS_BLOCKED",
+   "rung": "NAMED_BOOK_OR_AGGREGATOR",
+   "source_artifact": null,
+   "target": "api.the-odds-api.com/v4/sports/baseball_mlb/odds/?regions=us&markets=h2h,spreads,totals",
+   "utc": "2026-08-25T00:18:00Z"
+  },
+  {
+   "artifact_sha256": null,
+   "artifact_status": "SOURCE_ARTIFACT_NOT_RETAINED",
+   "note": "the same aggregator family the 8/24 owner relay came from",
+   "rail": "WebFetch",
+   "result": "EGRESS_BLOCKED",
+   "rung": "NAMED_BOOK_OR_AGGREGATOR",
+   "source_artifact": null,
+   "target": "site.api.espn.com/apis/site/v2/sports/baseball/mlb/scoreboard?dates=20260825",
+   "utc": "2026-08-25T00:18:30Z"
+  },
+  {
+   "artifact_sha256": null,
+   "artifact_status": "SOURCE_ARTIFACT_NOT_RETAINED",
+   "rail": "WebFetch",
+   "result": "EGRESS_BLOCKED",
+   "rung": "NAMED_BOOK_OR_AGGREGATOR",
+   "source_artifact": null,
+   "target": "www.covers.com/sport/baseball/mlb/odds",
+   "utc": "2026-08-25T00:19:30Z"
+  },
+  {
+   "artifact_sha256": null,
+   "artifact_status": "SOURCE_ARTIFACT_NOT_RETAINED",
+   "rail": "WebFetch",
+   "result": "EGRESS_BLOCKED",
+   "rung": "DIRECT_OFFICIAL_SOURCE",
+   "source_artifact": null,
+   "target": "www.fangraphs.com/roster-resource/probables-grid",
+   "utc": "2026-08-25T00:17:30Z"
+  },
+  {
+   "artifact_sha256": null,
+   "artifact_status": "SOURCE_ARTIFACT_NOT_RETAINED",
+   "note": "NEUTRAL CONTROL, run before any per-domain conclusion is drawn. Blocked, so this is a RAIL failure and no statement may be made about any sports domain's willingness to serve this client.",
+   "rail": "WebFetch",
+   "result": "EGRESS_BLOCKED",
+   "rung": "CONTROL",
+   "source_artifact": null,
+   "target": "en.wikipedia.org/wiki/Main_Page",
+   "utc": "2026-08-25T00:19:00Z"
+  },
+  {
+   "artifact_bytes": 1457,
+   "artifact_sha256": "aaae33da2c36e0e4ca8e3216a8418a0a6ee88077757f7d6d43fdcca9bb6f8f0a",
+   "artifact_status": "RETAINED_TIER3_SEARCH_RESPONSE",
+   "rail": "WebSearch",
+   "result": "RETURNED_TITLES_ONLY",
+   "rung": "DIRECT_OFFICIAL_SOURCE",
+   "source_artifact": "data/evidence/tier3/2026-08-25/websearch_mlb_probables_2026-08-25.txt",
+   "target": "MLB probable pitchers 2026-08-25",
+   "usable_content": "none \u2014 no matchup, pitcher, start time or venue appears in the response",
+   "utc": "2026-08-25T00:20:00Z"
+  },
+  {
+   "artifact_bytes": 1294,
+   "artifact_sha256": "1abc3f5fd9316e528ec251b4c006a1f281582064f4b4424da662a34ee8db9186",
+   "artifact_status": "RETAINED_TIER3_SEARCH_RESPONSE",
+   "rail": "WebSearch",
+   "result": "RETURNED_TITLES_ONLY",
+   "rung": "DIRECT_OFFICIAL_SOURCE",
+   "source_artifact": "data/evidence/tier3/2026-08-25/websearch_wnba_2026-08-25.txt",
+   "target": "WNBA schedule/injuries 2026-08-25",
+   "usable_content": "none \u2014 no game, official id, start time or injury designation appears",
+   "utc": "2026-08-25T00:24:00Z"
+  },
+  {
+   "artifact_sha256": null,
+   "artifact_status": "SOURCE_ARTIFACT_NOT_RETAINED",
+   "note": "standing rule: never route around an org egress-proxy block with shell HTTP against sports sites. The block is the environment's answer. The proxy status endpoint above is a diagnostic of the rail, not a route around it.",
+   "rail": "curl / shell HTTP",
+   "result": "NOT_ATTEMPTED",
+   "rung": "ANY",
+   "source_artifact": null,
+   "target": "sports domains",
+   "utc": "2026-08-25T00:00:00Z"
+  },
+  {
+   "artifact_sha256": null,
+   "artifact_status": "SOURCE_ARTIFACT_NOT_RETAINED",
+   "note": "the instruction to acquire is not itself acquired data. No 2026-08-25 slate, starter, lineup, injury or price was supplied in this or any prior message.",
+   "rail": "owner message",
+   "result": "NOTHING_RELAYED",
+   "rung": "OWNER_RELAY",
+   "source_artifact": null,
+   "target": "2026-08-25 slate, starters, prices",
+   "utc": "2026-08-25T00:26:00Z"
+  }
+ ],
+ "defect_separation": {
+  "instruction": "fresh acquisition may repair input staleness, price staleness and unverified personnel; it does not repair the uncertainty pipeline, cluster adequacy or provisional training evidence",
+  "not_repairable_by_acquisition": {
+   "INSUFFICIENT_ADMISSIBLE_CLUSTERS": "UNCHANGED. required 6, admissible 2, 7 after a full provenance restore \u2014 and 7 is not treated as adequate.",
+   "PRIOR_INPUT_POOL_PROVISIONAL": "UNCHANGED. 1,684 rows, 1,620 with no evidence path.",
+   "UNCERTAINTY_PIPELINE_DEFECT": "UNCHANGED. k=2 admissible date blocks against a floor of 6. No amount of price or slate data touches this."
+  },
+  "repairable_by_acquisition": {
+   "INPUT_STALENESS": "NOT REPAIRED \u2014 no slate acquired",
+   "PERSONNEL_UNVERIFIED": "NOT REPAIRED \u2014 no injury or availability artifact acquired",
+   "PRICE_STALENESS": "NOT REPAIRED \u2014 no price acquired, and for the 8/24 board the markets are now closed rather than merely stale"
+  },
+  "why_this_separation_is_the_point": "a successful refresh would have repaired three defects and left three standing. Today it repaired none. Either way the uncertainty defect alone keeps every positive-EV row BLOCK_UNCERTAINTY, so no acquisition outcome could have produced a bet today."
+ },
+ "ladder": [
+  "DIRECT_OFFICIAL_SOURCE",
+  "NAMED_BOOK_OR_AGGREGATOR",
+  "OWNER_RELAY"
+ ],
+ "ladder_exhausted": true,
+ "model_ledger": {
+  "n_bets": 0,
+  "staked_usd": 0.0
+ },
+ "model_probabilities": "UNTOUCHED. No price entered any model input. No forecast was regenerated, rewritten or re-anchored by this pass.",
+ "n_attempts": 14,
+ "n_domains_attempted": 9,
+ "outcome": {
+  "games_identified": 0,
+  "per_game_fields_obtained": [],
+  "per_game_fields_required": [
+   "official_game_id",
+   "matchup",
+   "start_time",
+   "venue",
+   "confirmed_or_probable_starters",
+   "starting_lineups",
+   "injuries_and_availability",
+   "moneyline_both_sides",
+   "spread_both_sides",
+   "total_both_sides",
+   "quote_timestamp",
+   "price_age"
+  ],
+  "status": "NO_SLATE_ACQUIRED_FOR_2026-08-25",
+  "statuses": {
+   "injuries_and_availability": "PERSONNEL_UNVERIFIED",
+   "lineups": "LINEUP_UNAVAILABLE",
+   "official_game_id": "SOURCE_ARTIFACT_NOT_RETAINED",
+   "prices": "SOURCE_ARTIFACT_NOT_RETAINED",
+   "slate": "SLATE_UNAVAILABLE",
+   "starters": "STARTER_UNCONFIRMED"
+  },
+  "what_was_not_done": "no slate was inferred from the 8/24 schedule, no starter was carried forward, no price was rolled over, and no field was filled from a search snippet. Missing is recorded as missing.",
+  "why": "every rung-1 and rung-2 route returned EGRESS_BLOCKED, INCLUDING a neutral control, so this is a rail failure and not a per-domain refusal. WebSearch is available and returned titles and URLs only: no matchup, no game id, no start time, no venue, no starter, no lineup, no injury designation and no price. Rung 3 had nothing to relay."
+ },
+ "record_id": "ACQUISITION-2026-08-25",
+ "record_sha256": "31fac7cd259fab5dc46b209776e8c3775b88f46493e0a8644bcda53f8d60b27a",
+ "routes_untried": [],
+ "run_utc_grade": "SELF_ASSERTED_LOCAL \u2014 superseded below by the CI anchor for this push",
+ "run_utc_self_asserted": "2026-08-25T00:30:00Z",
+ "schema": "ops.acquisition_attempt.v2",
+ "target_slate": "2026-08-25 (MLB and WNBA)",
+ "the_finding_that_matters_more": {
+  "board": "cards/2026-08-24_board.json",
+  "consequence": "PRICE_FRESHNESS on the 8/24 board does not fail by degree, it fails categorically. Those markets are closed. A captured 16:41:27Z quote is not a stale offer, it is not an offer. Recomputing an action overlay on it and presenting it as today's decision board would produce a page that looks actionable and is uninvestable \u2014 the most dangerous output this system can make.",
+  "earliest_first_pitch_utc": "2026-08-24T22:40:00Z",
+  "headline": "THE FROZEN BOARD IS FOR 2026-08-24 AND ITS GAMES HAVE STARTED.",
+  "latest_first_pitch_utc": "2026-08-25T02:00:00Z",
+  "remote_observed_grade": "REMOTE_OBSERVED",
+  "remote_observed_lower_bound_on_now": "2026-08-24T23:06:23Z",
+  "remote_observed_source": "GitHub Actions run 32787815870 (timestamp-anchor, run 12), server-generated created_at for the push of 2d3ca4d",
+  "what_was_therefore_refused": "re-badging the 2026-08-24 board as today's. The overlay is not recomputed for action."
+ }
+}

@@ -402,11 +402,24 @@ def truncation_audit(text, tokens):
     return out
 
 
+PLACEHOLDER_TIMESTAMP = "PLACEHOLDER_TIMESTAMP"
+# a clock reading with template characters left in it: "07:0xZ" shipped on 2026-08-25 because no
+# gate looked. Timestamps come from the immutable record field or they do not render.
+_PLACEHOLDER_TS = re.compile(r"\b\d{1,2}:[0-9xX]*[xX][0-9xX]*Z?|\bhh:mm\b|\bHH:MM\b|\bTT:TT\b")
+
+
+def placeholder_timestamp_audit(text):
+    hay = _strip_markup(text)
+    return [{"code": PLACEHOLDER_TIMESTAMP, "rendered": m.group(0),
+             "note": "publish fails until the value comes from the record"}
+            for m in _PLACEHOLDER_TS.finditer(hay)]
+
+
 def render_gate(text, quantities=(), tokens=(), labels=None, arms=()):
     """`labels`, when supplied, scopes the alias check to the places a number is actually named."""
     problems = (label_audit(text if labels is None else list(labels))
                 + quantity_gate(list(quantities)) + arm_identity_gate(list(arms))
-                + truncation_audit(text, list(tokens)))
+                + truncation_audit(text, list(tokens)) + placeholder_timestamp_audit(text))
     return {"status": OK if not problems else REFUSED,
             "n_problems": len(problems),
             "problems": problems,
@@ -633,6 +646,19 @@ def selftest():
     if not label_audit(["prior sd"]):
         f.append("'prior sd' must still be banned after the namespacing change")
 
+    # placeholder timestamps are a publish failure, real clock readings are not
+    pts = placeholder_timestamp_audit("board <b>FROZEN AT 07:0xZ, PRICED AT 16:48Z</b>")
+    if len(pts) != 1 or pts[0]["rendered"] != "07:0xZ":
+        f.append(f"the shipped placeholder '07:0xZ' must be caught exactly once, got {pts}")
+    if placeholder_timestamp_audit("frozen 12:59:19Z, priced 16:48Z, first pitch 22:40Z"):
+        f.append("real clock readings must pass the placeholder audit")
+    if not placeholder_timestamp_audit("frozen at hh:mm today"):
+        f.append("a literal hh:mm template must be caught")
+    g = render_gate("FROZEN AT 07:0xZ")
+    if g["status"] != REFUSED or not any(p["code"] == PLACEHOLDER_TIMESTAMP
+                                         for p in g["problems"]):
+        f.append("render_gate must refuse a page carrying a placeholder timestamp")
+
     for x in f:
         print("FAIL:", x)
     if not f:
@@ -641,6 +667,15 @@ def selftest():
 
 
 MUTANTS = [
+    ("placeholder timestamps stop failing the publish",
+     "                + truncation_audit(text, list(tokens)) + placeholder_timestamp_audit(text))",
+     "                + truncation_audit(text, list(tokens)))"),
+    ("the placeholder pattern narrows until 07:0xZ passes",
+     r'_PLACEHOLDER_TS = re.compile(r"\b\d{1,2}:[0-9xX]*[xX][0-9xX]*Z?|\bhh:mm\b|\bHH:MM\b|\bTT:TT\b")',
+     r'_PLACEHOLDER_TS = re.compile(r"\bhh:mm\b")'),
+    ("real clock readings start failing too",
+     r'_PLACEHOLDER_TS = re.compile(r"\b\d{1,2}:[0-9xX]*[xX][0-9xX]*Z?|\bhh:mm\b|\bHH:MM\b|\bTT:TT\b")',
+     r'_PLACEHOLDER_TS = re.compile(r"\b\d{1,2}:\d{2}")'),
     ("the game-identity exemption swallows bare aliases everywhere",
      r'_GAME_ID = re.compile(r"(?:[a-z]+:)?[a-z]{2,4}@[a-z]{2,4}(?![a-z0-9_])")',
      r'_GAME_ID = re.compile(r"[a-z]{1,4}")'),
@@ -730,8 +765,8 @@ MUTANTS = [
      "                + quantity_gate(list(quantities)) + arm_identity_gate(list(arms))",
      "                + arm_identity_gate(list(arms))"),
     ("the gate stops running the truncation check",
-     "                + truncation_audit(text, list(tokens)))",
-     "                )"),
+     "                + truncation_audit(text, list(tokens)) + placeholder_timestamp_audit(text))",
+     "                + placeholder_timestamp_audit(text))"),
     ("markup is not stripped, so a token split by a tag reads as truncated",
      "    hay = _norm(_strip_markup(text))\n    out = []", "    hay = _norm(text)\n    out = []"),
 ]

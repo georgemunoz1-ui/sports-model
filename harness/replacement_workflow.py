@@ -121,6 +121,58 @@ def newest_valid_pregame(identities):
 
 
 # =================================================================================================
+# COUPLED RESELECTION. Discovered 2026-08-25: three replacement forecasts were generated, anchored
+# and re-screened — but the overlay kept screening the PRE-replacement priced side. When the
+# replacement probability crossed 50%, "the model's side" changed, and screening the abandoned
+# side's price reported PASS_NEGATIVE_EV for a game whose active side had positive raw EV
+# (BOS@MIA: BOS −14.96 shown while MIA +130 was +16.25). Probability, chosen side, that side's
+# price, the EV and the disposition are ONE update, never five.
+SIDE_RETAINED = "SIDE_RETENTION_AFTER_CROSSOVER"
+SIDE_NOT_ARGMAX = "SIDE_NOT_ARGMAX"
+PRICE_SIDE_MISMATCH = "PRICE_SIDE_MISMATCH"
+EV_NOT_RECOMPUTED = "EV_NOT_RECOMPUTED_FULL_PRECISION"
+DISPOSITION_STALE = "DISPOSITION_STALE"
+EV_TOLERANCE = 0.005   # half a cent per $100: an EV recomputed from a ROUNDED probability fails
+
+
+def _raw_ev(p, american):
+    b = float(american) if float(american) > 0 else 100.0 * 100.0 / -float(american)
+    return p * b - (1.0 - p) * 100.0
+
+
+def side_reselection_gate(original_p_home, replacement_p_home, home, away, row):
+    """row: {"side","price_side","price","ev","disposition"[, "conservative_ev"]}. Returns
+    (ok, problems). The active side is the argmax of the NEWEST valid pregame probability;
+    the price, EV and disposition must all belong to that side, at full precision."""
+    problems = []
+    model_side = home if replacement_p_home > 0.5 else away
+    crossed = (float(original_p_home) > 0.5) != (float(replacement_p_home) > 0.5)
+    if row.get("side") != model_side:
+        problems.append({"code": SIDE_RETAINED if crossed else SIDE_NOT_ARGMAX,
+                         "expected_side": model_side, "row_side": row.get("side")})
+        return False, problems
+    if row.get("price_side") != row.get("side"):
+        problems.append({"code": PRICE_SIDE_MISMATCH,
+                         "side": row.get("side"), "price_side": row.get("price_side")})
+        return False, problems
+    p_side = replacement_p_home if row.get("side") == home else 1.0 - replacement_p_home
+    want = _raw_ev(p_side, row.get("price"))
+    if abs(want - float(row.get("ev"))) > EV_TOLERANCE:
+        problems.append({"code": EV_NOT_RECOMPUTED, "expected_ev": round(want, 4),
+                         "row_ev": row.get("ev")})
+        return False, problems
+    cons = row.get("conservative_ev")
+    if cons is None:
+        want_disp = "PENDING_UNCERTAINTY" if want > 0 else "PASS_NEGATIVE_EV"
+    else:
+        want_disp = ("BET" if float(cons) > 0 else "PASS_NEGATIVE_EV") if want > 0 else "PASS_NEGATIVE_EV"
+    if row.get("disposition") != want_disp:
+        problems.append({"code": DISPOSITION_STALE, "expected": want_disp,
+                         "row_disposition": row.get("disposition")})
+    return (not problems), problems
+
+
+# =================================================================================================
 def selftest():
     f = []
     ORIG = {"identity": "mlb.winner.CHAMPION_V13", "game": "mlb:TEX@CWS", "p_home": 0.5340}
@@ -211,6 +263,50 @@ def selftest():
     if newest_valid_pregame([]) is not None:
         f.append("no identities means none is valid")
 
+    # coupled reselection — fixtures are the real 2026-08-25 cases
+    P0_MIA, P1_MIA = 0.4753, 0.5054333333333333
+    good = {"side": "MIA", "price_side": "MIA", "price": 130, "ev": 16.2497,
+            "disposition": "PENDING_UNCERTAINTY"}
+    ok, pr = side_reselection_gate(P0_MIA, P1_MIA, "MIA", "BOS", good)
+    if not ok:
+        f.append(f"the corrected BOS@MIA row must pass, got {pr}")
+    retained = {"side": "BOS", "price_side": "BOS", "price": -139, "ev": -14.96,
+                "disposition": "PASS_NEGATIVE_EV"}
+    ok, pr = side_reselection_gate(P0_MIA, P1_MIA, "MIA", "BOS", retained)
+    if ok or pr[0]["code"] != SIDE_RETAINED:
+        f.append(f"retaining the abandoned side after a 50% crossing must refuse with "
+                 f"{SIDE_RETAINED}, got {pr}")
+    ok, pr = side_reselection_gate(0.5477, 0.5453333333333333, "WSH", "COL",
+                                   {"side": "COL", "price_side": "COL", "price": 120,
+                                    "ev": 0.0, "disposition": "PASS_NEGATIVE_EV"})
+    if ok or pr[0]["code"] != SIDE_NOT_ARGMAX:
+        f.append(f"a wrong side with no crossing is {SIDE_NOT_ARGMAX}, got {pr}")
+    ok, pr = side_reselection_gate(P0_MIA, P1_MIA, "MIA", "BOS",
+                                   dict(good, price_side="BOS"))
+    if ok or pr[0]["code"] != PRICE_SIDE_MISMATCH:
+        f.append(f"a price belonging to the other side must refuse, got {pr}")
+    ok, pr = side_reselection_gate(P0_MIA, P1_MIA, "MIA", "BOS", dict(good, ev=16.2420))
+    if ok or pr[0]["code"] != EV_NOT_RECOMPUTED:
+        f.append(f"an EV from the ROUNDED probability (16.2420 vs 16.2497) must refuse, got {pr}")
+    ok, pr = side_reselection_gate(P0_MIA, P1_MIA, "MIA", "BOS",
+                                   dict(good, disposition="PASS_NEGATIVE_EV"))
+    if ok or pr[0]["code"] != DISPOSITION_STALE:
+        f.append(f"positive raw EV with a PASS disposition must refuse, got {pr}")
+    ok, pr = side_reselection_gate(0.5090666666666667, 0.4861333333333333, "STL", "BAL",
+                                   {"side": "BAL", "price_side": "BAL", "price": 116,
+                                    "ev": 10.9952, "disposition": "PENDING_UNCERTAINTY"})
+    if not ok:
+        f.append(f"the corrected BAL@STL row must pass, got {pr}")
+    ok, pr = side_reselection_gate(0.5477, 0.5453333333333333, "WSH", "COL",
+                                   {"side": "WSH", "price_side": "WSH", "price": -147,
+                                    "ev": -8.3692, "disposition": "PASS_NEGATIVE_EV"})
+    if not ok:
+        f.append(f"the unchanged COL@WSH row must pass, got {pr}")
+    ok, pr = side_reselection_gate(P0_MIA, P1_MIA, "MIA", "BOS",
+                                   dict(good, conservative_ev=1.0))
+    if ok or pr[0]["code"] != DISPOSITION_STALE:
+        f.append("once conservative EV exists and is positive, PENDING_UNCERTAINTY is stale")
+
     print("replacement_workflow selftest:", "OK" if not f else "FAIL")
     for x in f:
         print("   -", x)
@@ -247,6 +343,24 @@ MUTANTS = [
     ("original and replacement stop being graded separately",
      '        "graded_separately_from_original": True,',
      '        "graded_separately_from_original": False,'),
+    ("the active side is chosen from the ORIGINAL probability",
+     "    model_side = home if replacement_p_home > 0.5 else away",
+     "    model_side = home if float(original_p_home) > 0.5 else away"),
+    ("the crossing test inverts",
+     '    crossed = (float(original_p_home) > 0.5) != (float(replacement_p_home) > 0.5)',
+     '    crossed = (float(original_p_home) > 0.5) == (float(replacement_p_home) > 0.5)'),
+    ("a price belonging to the other side is accepted",
+     '    if row.get("price_side") != row.get("side"):',
+     "    if False:"),
+    ("the EV tolerance widens until rounded-probability EVs pass",
+     "EV_TOLERANCE = 0.005",
+     "EV_TOLERANCE = 0.05"),
+    ("EV is recomputed from the abandoned side's probability",
+     '    p_side = replacement_p_home if row.get("side") == home else 1.0 - replacement_p_home',
+     '    p_side = float(original_p_home) if row.get("side") == home else 1.0 - float(original_p_home)'),
+    ("a stale disposition is accepted",
+     '    if row.get("disposition") != want_disp:',
+     "    if False:"),
 ]
 
 

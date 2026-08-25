@@ -1,0 +1,44 @@
+{
+ "amends": "data/mlb/odds/2026-08-25_draftkings_board.json (80e8210a) \u2014 retained, never edited",
+ "authority": "NAMED_BOOK_AGGREGATOR",
+ "book": "DRAFTKINGS (ESPN-displayed)",
+ "capture_scope": "MONEYLINE_ONLY_PARTIAL_CAPTURE",
+ "capture_scope_note": "'full board' withdrawn: totals and spreads were never ingested; the capture is moneylines only until those markets are explicitly stored",
+ "created_utc": "2026-08-25T18:00:46Z",
+ "downgraded_to_NON_AUTHORITATIVE_RECONSTRUCTION": [
+  "mlb:BOS (side price -139 from EV -9.78)",
+  "mlb:NYY",
+  "mlb:MIL",
+  "mlb:LAD",
+  "mlb:STL (side price from EV -8.03)",
+  "mlb:MIN",
+  "mlb:CIN",
+  "wnba:CHI",
+  "wnba:DAL",
+  "wnba:PHX"
+ ],
+ "explicit_relayed_count": 10,
+ "newly_relayed_explicit": [
+  {
+   "price": 130,
+   "side": "mlb:MIA"
+  },
+  {
+   "note": "previously reconstructed at -147 from EV; now explicitly relayed \u2014 value unchanged, class upgraded",
+   "price": -147,
+   "side": "mlb:WSH"
+  },
+  {
+   "price": 116,
+   "side": "mlb:BAL"
+  }
+ ],
+ "price_authoritative": false,
+ "price_authoritative_rule": "DIRECT_SPORTSBOOK only; a fresh pre-execution quote remains mandatory for any action",
+ "price_class_rule": "a price is an input to EV, never an output derived from it; a price reconstructed backwards from a relayed EV is not a captured market observation",
+ "reconstruction_count": 10,
+ "record_id": "DK-BOARD-2026-08-25-ADDENDUM-1",
+ "record_sha256": "21932a926acc94bcede2e32beb6189b65ea34a10f018b496fffb27efd2feeb68",
+ "route": "OWNER_RELAY",
+ "schema": "ops.odds_addendum.v1"
+}

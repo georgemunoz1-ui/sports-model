@@ -1,0 +1,31 @@
+{
+ "amends": "data/audit/2026-08-25_starter_state_addendum.json (a9a408e5) \u2014 retained",
+ "correction": "the three late starters were identified by a NAMED AGGREGATOR AFTER FREEZE (ESPN/DraftKings-attributed board via OWNER_RELAY). MLB's official probable-pitchers page still showed the MIA home, COL away and STL home slots as TBD (owner-relayed observation, 2026-08-25). 'Official TBDs resolved' was wrong: the official source has not resolved them.",
+ "created_utc": "2026-08-25T18:00:46Z",
+ "direct_verification_attempt": {
+  "result": "EGRESS_BLOCKED (org proxy)",
+  "url": "https://www.mlb.com/probable-pitchers",
+  "utc": "2026-08-25T18:00:46Z"
+ },
+ "identification_class": "NAMED_AGGREGATOR_AFTER_FREEZE",
+ "record_id": "STARTER-IDENTIFICATION-CORRECTION-2026-08-25",
+ "record_sha256": "4a628c863ff37e3ce9032373afeeb14fce887df2b18154a02758e91a7dd1748f",
+ "schema": "ops.starter_note.v2",
+ "starters": [
+  {
+   "game": "mlb:BOS@MIA",
+   "name": "Tyler Phillips",
+   "slot": "home"
+  },
+  {
+   "game": "mlb:COL@WSH",
+   "name": "Mason Adams",
+   "slot": "away"
+  },
+  {
+   "game": "mlb:BAL@STL",
+   "name": "Matthew Liberatore",
+   "slot": "home"
+  }
+ ]
+}

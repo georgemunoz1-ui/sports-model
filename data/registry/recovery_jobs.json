@@ -19,10 +19,16 @@
      "status": "BLOCKED_EXTERNAL",
      "units_done": 0,
      "utc": "2026-08-25T04:35:00Z"
+    },
+    {
+     "note": "6th consecutive attempt: statsapi.mlb.com EGRESS_BLOCKED via the approved fetch tool; www.mlb.com and www.wnba.com identically blocked at the same clock. 0/123. Next run 22:00Z.",
+     "status": "BLOCKED_EXTERNAL",
+     "units_done": 0,
+     "utc": "2026-08-25T18:02:00Z"
     }
    ],
    "job_id": "RJ-001-PROVENANCE",
-   "next_run_utc": "2026-08-25T10:00:00Z",
+   "next_run_utc": "2026-08-25T22:00:00Z",
    "notes": "a unit is one canonical row bound to a retrieved artifact with a game id, a retrieval timestamp and a content hash. Currently blocked on egress; the job records BLOCKED_EXTERNAL rather than silently not running.",
    "owner_subsystem": "acquisition",
    "status": "BLOCKED_EXTERNAL",
@@ -67,6 +73,31 @@
    "title": "Register a conservative fallback arm on reconstructible-as-of inputs, with its own validated uncertainty",
    "units_done": 0,
    "units_total": 4
+  },
+  "RJ-004-WNBA-INJURY": {
+   "blocks": [
+    "WNBA_FEATURE_STALENESS_34D",
+    "WNBA_PENDING_FEATURE_REFRESH"
+   ],
+   "deadline_utc": "2026-08-25T23:00:00Z",
+   "depends_on": [],
+   "history": [
+    {
+     "note": "WebFetch https://www.wnba.com/injury-report -> EGRESS_BLOCKED (org proxy). www.mlb.com identically blocked at the same clock. Retry 18:30Z; OWNER_RELAY is the open rung before 23:00Z tip.",
+     "status": "BLOCKED_EXTERNAL",
+     "units_done": 0,
+     "utc": "2026-08-25T18:00:46Z"
+    }
+   ],
+   "job_id": "RJ-004-WNBA-INJURY",
+   "next_run_utc": "2026-08-25T18:30:00Z",
+   "notes": "the official route exists and updates continually, so 34-day staleness is a refresh failure, not a board state. Fallback rung: OWNER_RELAY of the report text. Never route around the egress proxy.",
+   "owner_subsystem": "wnba_features",
+   "status": "BLOCKED_EXTERNAL",
+   "terminal_disposition": null,
+   "title": "Bind the official WNBA injury report for the six teams on tonight's slate (CHI, CON, PDX, DAL, WAS, PHX); a unit is one team's current section bound with retrieval timestamp and content hash",
+   "units_done": 0,
+   "units_total": 6
   }
  },
  "schema": "ops.recovery_jobs.v1"

@@ -13,10 +13,16 @@
      "status": "BLOCKED_EXTERNAL",
      "units_done": 0,
      "utc": "2026-08-25T02:45:00Z"
+    },
+    {
+     "note": "run at 04:35Z ahead of the 06:00Z slot. statsapi.mlb.com and baseball-reference.com both EGRESS_BLOCKED. 0 of 123 rows bound. Rail unchanged since 2026-08-22; this is the 5th consecutive attempt. Next run backed off to 10:00Z.",
+     "status": "BLOCKED_EXTERNAL",
+     "units_done": 0,
+     "utc": "2026-08-25T04:35:00Z"
     }
    ],
    "job_id": "RJ-001-PROVENANCE",
-   "next_run_utc": "2026-08-25T06:00:00Z",
+   "next_run_utc": "2026-08-25T10:00:00Z",
    "notes": "a unit is one canonical row bound to a retrieved artifact with a game id, a retrieval timestamp and a content hash. Currently blocked on egress; the job records BLOCKED_EXTERNAL rather than silently not running.",
    "owner_subsystem": "acquisition",
    "status": "BLOCKED_EXTERNAL",

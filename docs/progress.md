@@ -4067,3 +4067,24 @@ Per-game decision lines rendered in the required shape MODEL SIDE -> MARKET PRIC
 EV -> BET/PASS -> REASON for all 18 games: model sides frozen, prices PENDING_OWNER_RELAY,
 conservative EV UNAVAILABLE (estimator not decision-grade), decisions PASS pre-freeze with open
 work items named. Record 9dd09c02.
+
+### 2026-08-25 (UI repair) — the page had been publishing UNSTYLED for six versions
+
+"Fix UI on board" turned out to be literal: the readiness-statement rebuild at 01c2153 sliced the
+body from '<div class="wrap">' and dropped everything before it - the <title> tag and the ENTIRE
+<style> block. Six published versions rendered as bare unstyled HTML. None of my gates noticed,
+because render_gate audits labels, tokens and quantities in the CONTENT; nothing checks that the
+document still has a head. The render contract now has the same blind spot the module sweep had
+before the identity check: it verifies properties of what is present and says nothing about what
+was amputated.
+
+Restored the head from 2d3ca4d (title now "August 25 Decision Board"), rebuilt the header for the
+current state (stale h1 "System Not Decision Ready" replaced; 8/24 close-out badges moved out of
+the global header - they live in the results card), added jump navigation, put the per-game
+decision lines FIRST per the v1.0 order, fixed the acceptance heading still reading "12 of 12"
+(combined is 16/16), and renumbered the August 24 appendix A1-A12 - the old 1,2,3,3b,3c,5...
+sequence with a missing 4 read as broken. Structure checks: one style block, one footer, balanced
+divs, dark-theme tokens intact, RENDER_CONTRACT_OK, healthcheck 0 fail.
+
+TODO carried: add a head-integrity check (title present in first 8KB, exactly one style block,
+theme tokens present) to the report gate so an amputated head can never ship silently again.

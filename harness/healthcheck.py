@@ -258,7 +258,9 @@ for _m in ("result_provenance","result_content_checks","parse_box_dump",
            "uncertainty_estimand","decision_view",
            # Pregame Decision Readiness v1.0, registered 2026-08-25
            "route_ladder_v1","checkpoint_schedule","readiness_gate","replacement_workflow",
-           "module_manifest","pipeline_e2e","recovery_jobs","result_display","adaptive_challenger","state_coherence"):
+           "module_manifest","pipeline_e2e","recovery_jobs","result_display","adaptive_challenger","state_coherence",
+           # 2026-08-25 owner correction: staleness launches a job; exhaustion publishes a failure
+           "wnba_feature_pipeline"):
     _r=subprocess.run([sys.executable,f"harness/{_m}.py","--selftest"],capture_output=True,text=True)
     _out=(_r.stdout+_r.stderr).strip().splitlines()
     check(f"{_m} selftest ({_out[-1][:72] if _out else 'no output'})", _r.returncode==0)
@@ -463,6 +465,22 @@ try:
             print(f"       ! OVERDUE {_r2['job_id']} {_r2['progress']} due {_r2['deadline_utc']}")
 except Exception as e:
     check(f"recovery jobs ({e})", False)
+
+# 6f. WNBA FEATURE STALENESS LAUNCHES A JOB (owner correction 2026-08-25). Features past the
+#     threshold with no ACTIVE five-component refresh job fail the build — staleness may not sit
+#     on a board as explanatory prose.
+try:
+    import json as _json, wnba_feature_pipeline as _WF
+    _fs=_json.load(open("data/registry/wnba_feature_state.json"))
+    _jobs2=_RJ.load()
+    _age=(_dt.date.today()-_dt.date.fromisoformat(_fs["as_of"])).days
+    _g=_WF.staleness_gate(_age, list(_jobs2.values()))
+    check(f"wnba feature staleness (age {_age}d) is held by an active five-component job",
+          _g["status"]==_WF.OK, warn=False)
+    for _p in _g["problems"]:
+        print(f"       ! {_p}")
+except Exception as e:
+    check(f"wnba feature staleness gate ({e})", False)
 
 # 7. PREGAME DECISION READINESS v1.0, section 12. The standard is implemented only when its
 #    acceptance proofs pass. Each proof asserts BOTH directions — the compliant case passes and the

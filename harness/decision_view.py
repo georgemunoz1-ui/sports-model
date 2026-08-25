@@ -29,6 +29,7 @@ appear in the selections section, and its EV may not be summed into exposure.
 
 MODULE_ID = "decision_view"
 
+import re
 import sys
 
 BET = "BET"
@@ -101,7 +102,43 @@ WORK_QUEUE_ENDINGS = (
     "STARTER_UNCONFIRMED", "UNCERTAINTY_PIPELINE_DEFECT", "LINEUP_UNAVAILABLE",
     "SLATE_UNAVAILABLE", "SOURCE_ARTIFACT_NOT_RETAINED", "PRICE_STALE",
     "MODEL_UNCERTAINTY", "PRICE_FRESHNESS", "INPUT_INTEGRITY",
+    "PENDING_FEATURE_REFRESH", "FEATURE_STALENESS",
 )
+
+# =================================================================================================
+# SYSTEM WORK STATUS (owner render rule, 2026-08-25). The page section that lists open work must
+# classify every item; "what someone should eventually do" is not a state. No unresolved condition
+# may roll into another slate as unchanged prose — it is an ACTIVE_INCIDENT with a job behind it,
+# or it is RESOLVED / EXPIRED / NOT_APPLICABLE.
+WORK_STATUS_CLASSES = ("RESOLVED", "ACTIVE_INCIDENT", "EXPIRED", "NOT_APPLICABLE")
+ACTIVE_INCIDENT_FIELDS = ("job_id", "owner", "last_attempt_utc", "next_attempt_utc",
+                          "deadline_utc", "progress")
+UNKNOWN_WORK_CLASS = "WORK_ITEM_WITH_UNKNOWN_CLASS"
+INCIDENT_FIELD_MISSING = "ACTIVE_INCIDENT_MISSING_REQUIRED_FIELD"
+PROGRESS_NOT_MEASURABLE = "ACTIVE_INCIDENT_PROGRESS_NOT_MEASURABLE"
+
+_PROGRESS = re.compile(r"^\d+/\d+")
+
+
+def work_status_gate(items):
+    """items: [{"item","class",...}]. Every ACTIVE_INCIDENT carries a job id, an owner, last and
+    next attempts, a deadline and measurable progress ("done/total ...")."""
+    problems = []
+    for it in items or []:
+        cls = it.get("class")
+        if cls not in WORK_STATUS_CLASSES:
+            problems.append({"code": UNKNOWN_WORK_CLASS, "item": it.get("item"), "class": cls})
+            continue
+        if cls == "ACTIVE_INCIDENT":
+            missing = [k for k in ACTIVE_INCIDENT_FIELDS if not it.get(k)]
+            if missing:
+                problems.append({"code": INCIDENT_FIELD_MISSING, "item": it.get("item"),
+                                 "missing": missing})
+            elif not _PROGRESS.match(str(it.get("progress"))):
+                problems.append({"code": PROGRESS_NOT_MEASURABLE, "item": it.get("item"),
+                                 "progress": it.get("progress")})
+    return {"status": "WORK_STATUS_OK" if not problems else "WORK_STATUS_REFUSED",
+            "n_problems": len(problems), "problems": problems}
 
 WORK_QUEUE_AS_DECISION = "WORK_QUEUE_CONDITION_PUBLISHED_AS_A_FINAL_DECISION"
 UNKNOWN_EXCEPTION = "EXCEPTION_STATE_NOT_ON_THE_SECTION_11_LIST"
@@ -585,6 +622,40 @@ def selftest():
     if UNIT_SIZE_USD != 100.0:
         f.append("unit size is $100")
 
+    # a stale-feature condition is work, not an ending
+    if "PENDING_FEATURE_REFRESH" not in WORK_QUEUE_ENDINGS:
+        f.append("PENDING_FEATURE_REFRESH must be a work-queue condition, never a game ending")
+
+    # system work status: four classes, incidents fully specified
+    good_items = [
+        {"item": "price board", "class": "RESOLVED"},
+        {"item": "8/24 starter changes", "class": "EXPIRED"},
+        {"item": "tier-1 provenance", "class": "ACTIVE_INCIDENT", "job_id": "RJ-001-PROVENANCE",
+         "owner": "acquisition", "last_attempt_utc": "2026-08-25T21:56:00Z",
+         "next_attempt_utc": "2026-08-26T04:00:00Z", "deadline_utc": "2026-09-01T00:00:00Z",
+         "progress": "0/123 rows"},
+    ]
+    ws = work_status_gate(good_items)
+    if ws["status"] != "WORK_STATUS_OK":
+        f.append(f"a fully classified work list must pass, got {ws}")
+    ws = work_status_gate([{"item": "someday fix the estimator", "class": "SOMEDAY"}])
+    if ws["status"] != "WORK_STATUS_REFUSED" or ws["problems"][0]["code"] != UNKNOWN_WORK_CLASS:
+        f.append("'someday' is not a work-status class")
+    ws = work_status_gate([{"item": "x", "class": None}])
+    if ws["status"] != "WORK_STATUS_REFUSED":
+        f.append("unclassified prose must be refused")
+    bare = {"item": "wnba features", "class": "ACTIVE_INCIDENT", "job_id": "RJ-005",
+            "owner": "wnba_features", "last_attempt_utc": "t", "next_attempt_utc": "t",
+            "deadline_utc": "t", "progress": "0/17 units"}
+    for k in ACTIVE_INCIDENT_FIELDS:
+        broken = dict(bare); broken.pop(k)
+        ws = work_status_gate([broken])
+        if ws["status"] != "WORK_STATUS_REFUSED" or ws["problems"][0]["code"] != INCIDENT_FIELD_MISSING:
+            f.append(f"an ACTIVE_INCIDENT without {k} must be refused")
+    ws = work_status_gate([dict(bare, progress="ongoing")])
+    if ws["status"] != "WORK_STATUS_REFUSED" or ws["problems"][0]["code"] != PROGRESS_NOT_MEASURABLE:
+        f.append("'ongoing' is not measurable progress")
+
     print("decision_view selftest:", "OK" if not f else "FAIL")
     for x in f:
         print("   -", x)
@@ -592,6 +663,18 @@ def selftest():
 
 
 MUTANTS = [
+    ("a stale-feature condition ends a game again",
+     '    "PENDING_FEATURE_REFRESH", "FEATURE_STALENESS",\n)',
+     ")"),
+    ("unknown work classes are accepted",
+     "        if cls not in WORK_STATUS_CLASSES:",
+     "        if False:"),
+    ("an incident may omit its required fields",
+     "            missing = [k for k in ACTIVE_INCIDENT_FIELDS if not it.get(k)]",
+     "            missing = []"),
+    ("unmeasurable progress is accepted",
+     '            elif not _PROGRESS.match(str(it.get("progress"))):',
+     "            elif False:"),
     ("a scheduled game may be dropped from the board without notice",
      '    problems = [{"code": MISSING_GAME, "game": g} for g in sched if g not in have]',
      "    problems = []"),

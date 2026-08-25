@@ -123,17 +123,56 @@
      "status": "BLOCKED_EXTERNAL",
      "units_done": 0,
      "utc": "2026-08-25T21:56:00Z"
+    },
+    {
+     "note": "owner correction: an injuries-only job is one component of five. Folded into RJ-005-WNBA-FEATURE-PIPELINE; 7 attempts, 0/6, every rung EGRESS_BLOCKED except search identification (non-binding).",
+     "status": "FAILED_TERMINAL",
+     "units_done": 0,
+     "utc": "2026-08-25T22:20:00Z"
     }
    ],
    "job_id": "RJ-004-WNBA-INJURY",
    "next_run_utc": "2026-08-25T23:00:00Z",
    "notes": "the official route exists and updates continually, so 34-day staleness is a refresh failure, not a board state. Fallback rung: OWNER_RELAY of the report text. Never route around the egress proxy.",
    "owner_subsystem": "wnba_features",
-   "status": "BLOCKED_EXTERNAL",
-   "terminal_disposition": null,
+   "status": "FAILED_TERMINAL",
+   "terminal_disposition": "SUPERSEDED_BY_WIDER_JOB",
    "title": "Bind the official WNBA injury report for the six teams on tonight's slate (CHI, CON, PDX, DAL, WAS, PHX); a unit is one team's current section bound with retrieval timestamp and content hash",
    "units_done": 0,
    "units_total": 6
+  },
+  "RJ-005-WNBA-FEATURE-PIPELINE": {
+   "blocks": [
+    "WNBA_FEATURE_STALENESS",
+    "WNBA_ACTION_BLOCKED",
+    "SYSTEM_FAILURE_WNBA_FEATURE_PIPELINE"
+   ],
+   "components": [
+    "SCHEDULE_AND_CANONICAL_GAME_IDS",
+    "ROSTERS_AND_TRANSACTIONS",
+    "OFFICIAL_INJURY_AVAILABILITY",
+    "RESULTS_AND_STATS_THROUGH_ASOF",
+    "MARKET_PRICES_VIA_SEPARATE_OVERLAY"
+   ],
+   "deadline_utc": "2026-08-26T17:00:00Z",
+   "depends_on": [],
+   "history": [
+    {
+     "note": "route sweep 21:58-22:10Z: wnba.com/wnba-injury-report (owner's exact URL), stats.wnba.com, espn.com, covers.com, rotowire.com all EGRESS_BLOCKED via the approved fetch tool. WebSearch now returns substantive snippets (rail change from titles-only) \u2014 personnel states identified for all three games, IDENTIFYING_ONLY, nothing binds. Owner relay attempted by request in the published report. 0/17 bound; SYSTEM_FAILURE published for tonight's slate.",
+     "status": "BLOCKED_EXTERNAL",
+     "units_done": 0,
+     "utc": "2026-08-25T22:20:00Z"
+    }
+   ],
+   "job_id": "RJ-005-WNBA-FEATURE-PIPELINE",
+   "next_run_utc": "2026-08-26T04:00:00Z",
+   "notes": "After binding: recompute feature state (as_of, source hashes, age); generate separately identified replacement forecasts (wnba.replacement.FEATURE_REFRESH) since the board is frozen; rerun side, margin, total, EV and disposition through side_reselection_gate after anchor. Exhaustion of all authorized routes without binding publishes SYSTEM_FAILURE_WNBA_FEATURE_PIPELINE \u2014 never a normal-looking board.",
+   "owner_subsystem": "wnba_features",
+   "status": "BLOCKED_EXTERNAL",
+   "terminal_disposition": null,
+   "title": "Full WNBA feature refresh: schedule+canonical game ids (3), roster+transaction sections (6 teams), official injury/availability sections (6 teams), results and team/player stats through the as-of cutoff (1 bound snapshot), market prices via the separate overlay (1 binding). A unit binds only from a retrieved artifact with source, timestamp and content hash.",
+   "units_done": 0,
+   "units_total": 17
   }
  },
  "schema": "ops.recovery_jobs.v1"

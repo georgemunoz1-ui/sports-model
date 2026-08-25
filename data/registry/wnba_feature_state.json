@@ -1,0 +1,14 @@
+{
+ "as_of": "2026-07-22",
+ "record_id": "WNBA-FEATURE-STATE",
+ "record_sha256": "0517470ebd1e2340ec39e33b9d9ecae075d071384fb7f0a83aafb5458c3c3a5b",
+ "refresh_job": "RJ-005-WNBA-FEATURE-PIPELINE",
+ "schema": "ops.feature_state.v1",
+ "source_hashes": {
+  "staged_pool": "see data/wnba/MANIFEST.json \u2014 retained artifacts through 2026-07-22; nothing newer is bound"
+ },
+ "sport": "wnba",
+ "staleness_policy": "wnba_feature_pipeline.STALENESS_THRESHOLD_DAYS = 2 for job launch; model ceiling 21 days for action",
+ "statement": "the staged official pool ends 2026-07-22; every champion output since is ACTION_BLOCKED / DIAGNOSTIC_ONLY / NOT_PROMOTION_ELIGIBLE past the 21-day ceiling (34 days on 2026-08-25)",
+ "updated_utc": "2026-08-25T22:20:00Z"
+}

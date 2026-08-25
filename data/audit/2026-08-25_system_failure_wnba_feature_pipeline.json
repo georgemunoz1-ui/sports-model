@@ -1,0 +1,51 @@
+{
+ "board_effect": "the three WNBA rows on the 2026-08-25 board end SYSTEM_FAILURE_WNBA_FEATURE_PIPELINE, not PENDING_FEATURE_REFRESH; frozen shadow leans remain visible under the RESULT_DISPLAY principle and are display, not decisions",
+ "declared_utc": "2026-08-25T22:20:00Z",
+ "games": [
+  "wnba:CHI@CON 1022600284 tip 23:00Z",
+  "wnba:PDX@DAL 1022600285 tip 2026-08-26T00:00Z",
+  "wnba:WAS@PHX 1022600286 tip 2026-08-26T02:00Z"
+ ],
+ "incident": {
+  "errors": [
+   "OFFICIAL_API: EGRESS_BLOCKED (stats.wnba.com)",
+   "OFFICIAL_SITE: EGRESS_BLOCKED (www.wnba.com/wnba-injury-report and /injury-report; 7 attempts 18:00-22:10Z)",
+   "NAMED_AGGREGATOR_FETCH: EGRESS_BLOCKED (espn.com, covers.com, rotowire.com)",
+   "SEARCH_IDENTIFICATION: IDENTIFIED_ONLY (substantive snippets, non-binding)",
+   "OWNER_RELAY: REQUESTED_NOTHING_RELAYED (request published in the report; no injury-report text relayed this window)"
+  ],
+  "kind": "SYSTEM_FAILURE",
+  "last_successful_artifact": "staged official pool through 2026-07-22 (data/wnba/MANIFEST.json)",
+  "missing_field": "WNBA current features: rosters/transactions, official injury and availability, results and stats through 2026-08-25 (feature as_of 2026-07-22, 34 days old against a 21-day action ceiling)",
+  "not_an_acceptable_normal_result": true,
+  "remediation_required_before_next_slate": "RJ-005-WNBA-FEATURE-PIPELINE binds all five components (17 units) before the next WNBA board (deadline 2026-08-26T17:00:00Z); then recompute feature state, generate wnba.replacement.FEATURE_REFRESH forecasts, and rerun side, margin, total, EV and disposition through side_reselection_gate. If the next board builds with this incident open, it publishes SYSTEM_FAILURE_WNBA_FEATURE_PIPELINE again \u2014 it does not publish normal-looking rows.",
+  "responsible_subsystem": "wnba_features",
+  "routes_attempted": [
+   "OFFICIAL_API",
+   "OFFICIAL_SITE",
+   "NAMED_AGGREGATOR_FETCH",
+   "SEARCH_IDENTIFICATION",
+   "OWNER_RELAY"
+  ]
+ },
+ "published": "SYSTEM_FAILURE_WNBA_FEATURE_PIPELINE",
+ "record_id": "SYSTEM-FAILURE-WNBA-FEATURE-PIPELINE-2026-08-25",
+ "record_sha256": "19a644a854b5b9d48f316bfe81eace52385b3e836e7c6336ec9b0315f34f8b78",
+ "recovery_job": "RJ-005-WNBA-FEATURE-PIPELINE 0/17",
+ "schema": "ops.system_failure.v1",
+ "search_identified_personnel_NON_CANONICAL": {
+  "CHI@CON": [
+   "CHI: Skylar Diggins out (right knee, since Jul 7); Jackson out for season (torn ACL); DiJonai Carrington off report",
+   "CON: Olivia Nelson-Ododa questionable (right knee); Brittney Griner has missed 4 straight (left knee); Aaliyah Edwards returns; Leila Lacan out (FIBA World Cup, Team France)"
+  ],
+  "PDX@DAL": [
+   "PDX: Barker out for season (torn left ACL); Feagin out for season (torn left ACL); Geiselsoder out for season (personal)",
+   "DAL: Aziaha James out (left leg, since Aug 14); Azzi Fudd out for season (right knee surgery); Alanna Smith status unresolved in snippets"
+  ],
+  "WAS@PHX": [
+   "WAS: no players listed; Shakira Austin off report",
+   "PHX: Kelsey Plum returns (left calf); Sami Whitcomb probable (left knee injury management); Marta Su\u00e1rez out (concussion protocol)"
+  ],
+  "rule": "search snippets identify and never bind; nothing below is verified evidence and none of it entered any forecast or decision"
+ }
+}

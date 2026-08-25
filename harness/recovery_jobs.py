@@ -35,7 +35,7 @@ STATUSES = (PENDING, RUNNING, BLOCKED_EXTERNAL, COMPLETE, FAILED_TERMINAL)
 
 #: a terminal disposition is required to close a job, and "we stopped looking" is not one
 TERMINAL_DISPOSITIONS = ("RESTORED", "RECONSTRUCTED", "FALLBACK_ARM_REGISTERED",
-                         "UNRESOLVABLE_WITH_STATED_REASON")
+                         "UNRESOLVABLE_WITH_STATED_REASON", "SUPERSEDED_BY_WIDER_JOB")
 
 REQUIRED_FIELDS = ("job_id", "title", "owner_subsystem", "next_run_utc", "deadline_utc",
                    "units_total", "units_done", "status", "blocks")

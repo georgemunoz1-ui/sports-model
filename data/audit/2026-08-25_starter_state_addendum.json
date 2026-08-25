@@ -1,0 +1,26 @@
+{
+ "corrections": {
+  "Ethan Pecko": {
+   "now": "SMALL_SAMPLE_FALLBACK",
+   "official_mlb_id_relayed": "814490",
+   "relayed_log": "1 GS, 3.2 IP, 3 H, 2 ER, 3 BB, 4 K",
+   "was": "NO_LOG_CAP",
+   "why": "same as Jobe; additionally below any maturity floor (tbf>=10 needs ~2 starts)."
+  },
+  "Jackson Jobe": {
+   "now": "SMALL_SAMPLE_FALLBACK",
+   "relayed_log": "3 GS, 14 IP, 14 H, 7 ER, 5 BB, 11 K (ESPN game log, owner relay)",
+   "was": "NO_LOG_CAP",
+   "why": "the log EXISTS publicly; what is true is that it is not RETAINED in this repository (no pid, no batters-faced column, so the per-BF parser cannot run). CAP remains the preregistered treatment; the claim 'no log' was false and is withdrawn."
+  },
+  "Mason Adams": {
+   "state": "NAMED_NO_LOG_RETAINED_CAP",
+   "why": "identity known from the official board; no pid or log retained and no stats relayed. Distinct from SMALL_SAMPLE_FALLBACK, where the log content is known."
+  }
+ },
+ "created_utc": "2026-08-25T17:10:00Z",
+ "model_effect": "NONE \u2014 CAP inputs were used either way; the correction is to the STATED state, which lesson 24 makes load-bearing.",
+ "r6": "append-only; the frozen board's sp_status strings stand as frozen. This record supersedes their INTERPRETATION.",
+ "record_id": "STARTER-STATE-ADDENDUM-2026-08-25",
+ "record_sha256": "a9a408e5eedc4f3161d2851b33c04657453e8526fb7c439755f4e148e9776702"
+}

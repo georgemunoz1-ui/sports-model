@@ -4047,3 +4047,23 @@ view DECISION_VIEW_OK, coverage 18/18, render RENDER_CONTRACT_OK, healthcheck 0 
 Open before first pitch (22:40Z): T-90/T-45 starter follow-up on the five CAP slots; market board
 acquisition; the estimator stays with RJ-001/002/003. Prospectivity of this freeze is
 SELF_ASSERTED_LOCAL until the CI anchor on this push lands.
+
+### 2026-08-25 (market pass) — markets confirmed live, rung 7 is the route, WNBA leans shown
+
+Price ladder run for the 18-game slate: DIRECT_SPORTSBOOK, NAMED_AGGREGATOR (espn, covers) all
+EGRESS_BLOCKED; WEB_SEARCH_OPEN returned titles plus two one-sided fragments (Tigers +113, Blue
+Jays -120, book unidentified) - retained and hashed, IDENTIFYING_ONLY, provably-live markets and
+nothing more. The ladder's own verdict: LADDER_INCOMPLETE_AUTHORIZED_ROUTE_UNTRIED with OWNER_RELAY
+the remaining rung. "No market information available" is NOT the status and the page says so; the
+status is a rail failure with the market confirmed live, and the relay request names only the
+missing fields (per MLB game: book, both MLs, total+both prices, timestamp; per WNBA game: same
+plus spread+both prices).
+
+WNBA feature refresh attempted and rail-blocked (stats.wnba.com EGRESS_BLOCKED). Per directive:
+shadow leans SHOWN, WNBA action stays blocked specifically (34d stale). Cohorts fully separate -
+boards, EV, uncertainty, decisions, settlement, calibration, promotion counts.
+
+Per-game decision lines rendered in the required shape MODEL SIDE -> MARKET PRICE -> CONSERVATIVE
+EV -> BET/PASS -> REASON for all 18 games: model sides frozen, prices PENDING_OWNER_RELAY,
+conservative EV UNAVAILABLE (estimator not decision-grade), decisions PASS pre-freeze with open
+work items named. Record 9dd09c02.

@@ -1,0 +1,108 @@
+{
+ "cohort_separation": "MLB and WNBA cohorts remain fully separate: separate frozen boards (e1346b3b / d0c59870), separate future EV, uncertainty, decision and settlement records, calibration histories and promotion counts never pooled.",
+ "market_board": {
+  "attempts": [
+   {
+    "rail": "WebFetch",
+    "result": "EGRESS_BLOCKED",
+    "rung": "DIRECT_SPORTSBOOK",
+    "target": "sportsbook.draftkings.com/leagues/baseball/mlb",
+    "utc": "2026-08-25T07:45:00Z"
+   },
+   {
+    "rail": "WebFetch",
+    "result": "EGRESS_BLOCKED",
+    "rung": "NAMED_AGGREGATOR",
+    "target": "www.espn.com/mlb/odds",
+    "utc": "2026-08-25T07:45:30Z"
+   },
+   {
+    "rail": "WebFetch",
+    "result": "EGRESS_BLOCKED",
+    "rung": "NAMED_AGGREGATOR",
+    "target": "www.covers.com/sport/baseball/mlb/matchup/370008/odds",
+    "utc": "2026-08-25T07:52:00Z"
+   },
+   {
+    "artifact": "data/evidence/tier3/2026-08-25/websearch_mlb_odds_2026-08-25.txt",
+    "artifact_sha256": "ec5e9a8959eec7eeb7c8253e0e3ed61f68db8b4bf92cfda9b5f8129e3baeb6e6",
+    "fragments": "Tigers +113 and Blue Jays -120, book unidentified, one side each \u2014 IDENTIFYING_ONLY, confirms live markets on this slate",
+    "rail": "WebSearch",
+    "result": "RETURNED_TITLES_ONLY",
+    "rung": "WEB_SEARCH_OPEN",
+    "utc": "2026-08-25T07:50:00Z"
+   }
+  ],
+  "ladder_result": {
+   "field": "2026-08-25 market board (18 games, both sides, one book)",
+   "note": "a rail failure ADVANCES the ladder. Acquisition may not terminate while an authorized route is untried, and a blocked rail is never a finding about the world.",
+   "routes_untried": [
+    "OWNER_RELAY"
+   ],
+   "status": "LADDER_INCOMPLETE_AUTHORIZED_ROUTE_UNTRIED",
+   "tried": [
+    "OFFICIAL_API",
+    "OFFICIAL_LEAGUE_PAGE",
+    "OFFICIAL_TEAM_PAGE_OR_STATUS",
+    "DIRECT_SPORTSBOOK",
+    "NAMED_AGGREGATOR",
+    "WEB_SEARCH_OPEN"
+   ]
+  },
+  "not_the_status": "'No market information available' \u2014 the fragments prove books are quoting this slate. The failure is this environment's egress, an acquisition-system incident (RJ-001 family), not a property of the market.",
+  "owner_relay_request": {
+   "asked_only_for_the_missing_fields": true,
+   "fields_needed_per_MLB_game": [
+    "book identity",
+    "moneyline both sides",
+    "total line",
+    "over price",
+    "under price",
+    "quote timestamp"
+   ],
+   "fields_needed_per_WNBA_game": [
+    "book identity",
+    "moneyline both sides",
+    "spread line and both prices",
+    "total line and both prices",
+    "quote timestamp"
+   ],
+   "games": 18,
+   "rung": "OWNER_RELAY (rung 7 \u2014 the only authorized route remaining)"
+  },
+  "status": "RAIL_FAILURE_MARKETS_CONFIRMED_LIVE"
+ },
+ "record_id": "ACQUISITION-2026-08-25-MARKET-AND-WNBA",
+ "record_sha256": "9dd09c0262c45c974dc862279e54ed155dedcc85b33d505575c6300d35646f8a",
+ "run_utc_self_asserted": "2026-08-25T07:55:00Z",
+ "schema": "ops.acquisition_attempt.v2",
+ "wnba_feature_refresh": {
+  "attempts": [
+   {
+    "rail": "WebFetch",
+    "result": "EGRESS_BLOCKED",
+    "rung": "OFFICIAL_API",
+    "target": "stats.wnba.com",
+    "utc": "2026-08-25T07:53:00Z"
+   }
+  ],
+  "consequence": "per the directive: model leans are shown, WNBA action stays blocked (ACTION_BLOCKED_STALE_FEATURES, 34 days against a 21-day ceiling). A refreshed pool would lift only the staleness flag \u2014 PERSONNEL_UNVERIFIED and the estimator gates are separate.",
+  "ladder_result": {
+   "field": "WNBA feature refresh (stats through 2026-08-24)",
+   "note": "a rail failure ADVANCES the ladder. Acquisition may not terminate while an authorized route is untried, and a blocked rail is never a finding about the world.",
+   "routes_untried": [
+    "OWNER_RELAY"
+   ],
+   "status": "LADDER_INCOMPLETE_AUTHORIZED_ROUTE_UNTRIED",
+   "tried": [
+    "OFFICIAL_API",
+    "OFFICIAL_LEAGUE_PAGE",
+    "OFFICIAL_TEAM_PAGE_OR_STATUS",
+    "DIRECT_SPORTSBOOK",
+    "NAMED_AGGREGATOR",
+    "WEB_SEARCH_OPEN"
+   ]
+  },
+  "status": "NOT_REFRESHED_RAIL_FAILURE"
+ }
+}

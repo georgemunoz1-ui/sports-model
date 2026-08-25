@@ -3978,3 +3978,40 @@ DESCRIPTIVE HEADLINES, none of them settlement:
 Nothing settled: no canonical row, no prior-pool entry, no promotion count, no estimator input,
 ledger 0 bets / $0. Canonical admission still arrives only via RJ-001; this display record is then
 superseded, not edited. Record b3c05237, display gate RESULT_DISPLAY_OK.
+
+### 2026-08-25 (close-out v2 + slate 25) — a render regression, an alias false positive, and 18 games bound
+
+PIT 3-2 SD in 12 closes the 8/24 slate. Superseding record v2 (e9483f9a, append-only; v1 retained
+with its correct-for-then nine-final figures). Every owner figure reproduced exactly: V13 7-3 /
+.2362 best of four; totals MAE 3.44, RMSE 3.57, signed bias -0.11; prior MAE 3.90; blocked-EV split
+uncertainty 1-7 (PIT +101 the win), starter-change 2-0 (TEX, SF), all candidates 3-7, counterfactual
+-$336. Ledger 0 bets / $0.
+
+RENDER REGRESSION CORRECTED. The results card had shown PRICE_FRESHNESS on every MLB row - the
+market state at render time overwriting the FROZEN pregame disposition the overlay preserved, and
+game-level besides, hiding that PIT +101 was BLOCK_UNCERTAINTY while SD -108 was PASS_NEGATIVE_EV.
+The card now renders the frozen disposition PER SIDE from overlay v4. Market state is a fact about
+the present; the disposition is a fact about the frozen decision; only the second belongs in a
+results card.
+
+BIAS CLAIM DOWNGRADED. "Both leans look like model bias" withdrawn as to totals: with the PIT final,
+signed bias is -0.11 - nearly zero. The nine-final -0.52 was substantially one missing extra-inning
+game; a bias estimate over nine of ten games has a hole in it, and the hole was the longest game.
+The directional concentrations remain a MODEL_MARKET_DISPERSION_REVIEW trigger, not established
+bias. And the starter-change blocks going 2-0 is the uncertainty lesson from the other side: those
+blocks exist for input integrity, and two wins do not indict them any more than seven losses
+vindicated the uncertainty block.
+
+ALIAS RULE NAMESPACED. "SD" is a franchise inside a game identity and an ambiguous alias only where
+a quantity is named. label_audit now strips whole game-identity tokens (TEAM@TEAM, mlb:PIT@SD)
+before scanning - and only whole tokens: "PIT@SD sd" still fires on the second sd. My earlier fix
+(renaming the label to "Pittsburgh at San Diego") treated the symptom. 36/36 mutants.
+
+8/25 SLATE BOUND: 15 MLB + 3 WNBA (official ids 1022600284/85/86) via OWNER_RELAY, record ad85a990,
+plus the .psv the preflight reads. Three official TBDs (BOS@MIA home, COL@WSH away, BAL@STL home)
+are partial-information fields at dose 0.5 for checkpoint follow-up - never grounds for calling the
+slate unacquired. Preflight moved INPUTS_MISSING -> FORECAST_ONLY_NO_MARKET_GRADE, which is the
+honest current state. The earlier NO_SLATE_ACQUIRED record stands as what the fetch rungs could see;
+this is rung 7 landing afterwards. Local egress remains an acquisition-system incident (RJ-001).
+
+SYSTEM_NOT_DECISION_READY unchanged - binding a slate does not repair the estimator.

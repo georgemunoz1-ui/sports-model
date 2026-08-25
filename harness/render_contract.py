@@ -270,10 +270,17 @@ def label_audit(text_or_labels):
     scans the prose too and will fire on an explanatory sentence — the ban is on what a number is
     CALLED, not on the English word appearing in a paragraph that explains it.
     """
+    # NAMESPACING, owner correction 2026-08-25: "SD" is a valid team code inside a GAME IDENTITY
+    # (PIT@SD) and an ambiguous alias only where a QUANTITY is being named. The gate refused a
+    # results-card label for containing a franchise. The alias ban applies to field/estimator
+    # labels; a game-identity token — TEAM@TEAM, or a namespaced id like mlb:PIT@SD — is exempt as
+    # a WHOLE TOKEN, not as a licence for its fragments elsewhere in the same label.
+    _GAME_ID = re.compile(r"(?:[a-z]+:)?[a-z]{2,4}@[a-z]{2,4}(?![a-z0-9_])")
     if isinstance(text_or_labels, (list, tuple, set)):
         hay = _norm(" \n ".join(str(x) for x in text_or_labels))
     else:
         hay = _norm(_strip_markup(text_or_labels))
+    hay = _GAME_ID.sub(" ", hay)
     hits = []
     for canon, spec in sorted(QUANTITIES.items()):
         for alias in spec["banned_aliases"]:
@@ -612,6 +619,20 @@ def selftest():
     if not label_audit(["Monte Carlo SD"]):
         f.append("a bare 'Monte Carlo SD' label must be flagged as an ambiguous alias")
 
+    # --- alias namespacing: a team code inside a game identity is not a quantity alias -----------
+    for ok_label in ("PIT@SD", "mlb:PIT@SD", "PIT@SD status", "Result: PIT@SD"):
+        if label_audit([ok_label]):
+            f.append(f"a game identity must not trip the alias ban: {ok_label!r} -> "
+                     f"{label_audit([ok_label])}")
+    # ...but the exemption is the TOKEN, not the letters: a bare "sd" outside a game identity in
+    # the SAME label must still fire, and so must a bare "sd" label on its own
+    if not label_audit(["sd"]):
+        f.append("a bare 'sd' field label must still be banned")
+    if not label_audit(["PIT@SD sd"]):
+        f.append("a game identity must not launder a separate bare alias in the same label")
+    if not label_audit(["prior sd"]):
+        f.append("'prior sd' must still be banned after the namespacing change")
+
     for x in f:
         print("FAIL:", x)
     if not f:
@@ -620,6 +641,11 @@ def selftest():
 
 
 MUTANTS = [
+    ("the game-identity exemption swallows bare aliases everywhere",
+     r'_GAME_ID = re.compile(r"(?:[a-z]+:)?[a-z]{2,4}@[a-z]{2,4}(?![a-z0-9_])")',
+     r'_GAME_ID = re.compile(r"[a-z]{1,4}")'),
+    ("game identities stop being exempt, so PIT@SD trips the ban again",
+     '    hay = _GAME_ID.sub(" ", hay)', "    pass"),
     ("the three Monte Carlo quantities collapse back into one definition",
      '"sqrt(MC_SD_PRIMARY_30K^2 + MC_SD_DIAGNOSTIC_100K^2) — the SD of the GAP "',
      '"sqrt(p(1-p)/30000) — simulation noise, take two "'),

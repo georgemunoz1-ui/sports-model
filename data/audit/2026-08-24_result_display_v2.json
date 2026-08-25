@@ -1,0 +1,69 @@
+{
+ "bias_claim_downgraded": {
+  "lesson": "a bias estimate over nine of ten games is an estimate with a hole in it, and the hole was not random: the missing game was the longest one.",
+  "now": "WITHDRAWN as to totals: with the PIT final included, signed bias is -0.11 runs \u2014 nearly zero. The nine-final -0.52 was substantially one missing extra-inning game. The directional concentrations (9-of-10 value sides underdogs; 9-of-10 totals over market) remain a MODEL_MARKET_DISPERSION_REVIEW trigger \u2014 a review condition, not established bias.",
+  "was": "'both leans now look like model bias on this slate'"
+ },
+ "created_utc": "2026-08-25T06:30:00Z",
+ "display_gate": {
+  "n_problems": 0,
+  "problems": [],
+  "status": "RESULT_DISPLAY_OK"
+ },
+ "final_performance_all_twelve": {
+  "basis": "ten MLB finals + two WNBA finals; DESCRIPTIVE ONLY, settles nothing",
+  "blocked_ev_splits": {
+   "all_raw_positive_ev": "3-7",
+   "counterfactual_pnl_usd_at_100_per_side": -336.0,
+   "note": "the starter-change blocks going 2-0 is the same lesson from the other side: those blocks exist for input integrity, not EV protection, and two wins do not indict them any more than seven losses vindicated the uncertainty block.",
+   "starter_change_blocked": "2-0 (TEX +120, SF +143 both won)",
+   "uncertainty_blocked": "1-7 (PIT +101 the win)"
+  },
+  "champion_totals": {
+   "mae": 3.44,
+   "prior_mae": 3.9,
+   "rmse": 3.57,
+   "signed_bias": -0.11
+  },
+  "winner_arms": {
+   "CHALLENGER_ADAPTIVE": {
+    "brier": 0.2522,
+    "record": "4-6"
+   },
+   "CHALLENGER_WIDENED": {
+    "brier": 0.2434,
+    "record": "3-7"
+   },
+   "CHAMPION_V13": {
+    "brier": 0.2362,
+    "record": "7-3"
+   },
+   "EXPANDING_HOME_PRIOR": {
+    "brier": 0.2586,
+    "record": "3-7"
+   }
+  }
+ },
+ "layer": "RESULT_DISPLAY",
+ "pit_sd_final": {
+  "away": 3,
+  "champion_p_away": 0.5409,
+  "game": "mlb:PIT@SD",
+  "home": 2,
+  "innings": 12,
+  "side_result": "WIN \u2014 the frozen champion projected PIT at 54.09%",
+  "source": "OWNER_RELAY (CBS box score named)",
+  "source_grade": "OWNER_RELAY",
+  "total_error": 3.56
+ },
+ "r6": "append-only. v1 is retained unedited, including its nine-final figures and its 0-7 headline, both correct for the ten-of-twelve state they described.",
+ "record_id": "RESULT-DISPLAY-2026-08-24-v2",
+ "record_sha256": "e9483f9a872f7eb46174865c12eb960d6759619b5d64af54fda7f2ba1e8228c4",
+ "render_defect_corrected": {
+  "defect": "every MLB result row rendered PRICE_FRESHNESS as its blocker \u2014 the CURRENT market state at render time, overwriting the FROZEN pregame disposition the overlay had carefully preserved. Game-level too: it hid the side-level split (PIT +101 BLOCK_UNCERTAINTY vs SD -108 PASS_NEGATIVE_EV).",
+  "fix": "the results card renders the frozen pregame disposition per SIDE, from overlay v4, and market state lives in its own column where it belongs."
+ },
+ "schema": "ops.result_display.v1",
+ "supersedes": "RESULT-DISPLAY-2026-08-24",
+ "wager_ledger": "0 bets / $0, unchanged"
+}

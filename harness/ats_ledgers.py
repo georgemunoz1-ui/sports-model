@@ -14,6 +14,8 @@ the owner barred retroactive gating of the 8/19 grades.
 UNITS: home_cover_delta is SPREAD POINTS. Moneyline edges elsewhere are PROBABILITY PERCENTAGE
 POINTS. The two never share a threshold or a sentence without their unit named.
 """
+
+MODULE_ID = "ats_ledgers"
 import json, os, sys
 
 BASE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))

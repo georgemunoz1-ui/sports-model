@@ -5,6 +5,8 @@ each proven to FAIL. All fixtures are synthetic and in-memory/tempdir; real regi
 
 from __future__ import annotations
 
+MODULE_ID = "test_forecast_registry"
+
 import copy
 import json
 import os

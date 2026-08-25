@@ -18,6 +18,8 @@ says so rather than pretending to have checked something.
 """
 from __future__ import annotations
 
+MODULE_ID = "anchor_verify"
+
 import datetime as _dt
 import hashlib
 import json

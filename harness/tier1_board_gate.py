@@ -45,6 +45,8 @@ MEASUREMENT ONLY: reads, never writes to results.csv. Emits a report artifact.
 Usage: python3 harness/tier1_board_gate.py [--dates 2026-08-15,2026-08-16] [--gate] [--selftest]
 """
 from __future__ import annotations
+
+MODULE_ID = "tier1_board_gate"
 import argparse, collections, csv, datetime as dt, hashlib, json, os, sys
 
 BASE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))

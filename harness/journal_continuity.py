@@ -25,6 +25,8 @@ READS ONLY. Never writes, never edits a journal.
 """
 from __future__ import annotations
 
+MODULE_ID = "journal_continuity"
+
 import datetime
 import os
 import re

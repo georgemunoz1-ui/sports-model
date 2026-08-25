@@ -31,6 +31,8 @@ arm, so the arms are independent of each other and of slate composition.
 """
 from __future__ import annotations
 
+MODULE_ID = "three_arm_card"
+
 import hashlib
 import json
 import math

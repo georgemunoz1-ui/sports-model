@@ -16,6 +16,8 @@ an older results.csv has already been rewritten.  It does not grade forecasts or
 
 from __future__ import annotations
 
+MODULE_ID = "mlb_form_state"
+
 import argparse
 import csv
 import datetime as dt

@@ -16,6 +16,8 @@ Parsing contract (refuse rather than guess):
 
 from __future__ import annotations
 
+MODULE_ID = "extract_savant_box"
+
 import hashlib
 import json
 import os

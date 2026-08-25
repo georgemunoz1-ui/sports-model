@@ -8,6 +8,8 @@ This module READS registered artifacts and unified-card lines; it never writes t
 A render gate refuses any decision surface that leaks internal jargon, drops a team label,
 detaches a probability from its exact line, or dresses a screen up as a recommendation.
 """
+
+MODULE_ID = "decision_card"
 import json, os, re, sys
 
 BASE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))

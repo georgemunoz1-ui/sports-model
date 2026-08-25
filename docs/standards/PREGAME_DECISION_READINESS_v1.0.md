@@ -167,6 +167,43 @@ cannot authorize execution; missing uncertainty prevents the board from claiming
 no blocked opportunity is labelled a selection; every authorized wager carries a fresh quote, risk,
 stake and playable-price boundary.
 
+## Amendment 1 — conditional acceptance, 2026-08-25
+
+Implementation was CONDITIONALLY_ACCEPTED subject to four requirements. All four are implemented and
+proven by the acceptance suite, now sixteen tests.
+
+**A1.1 Computable is not decision-grade.** The six-cluster floor is renamed
+`MIN_COMPUTABLE_CLUSTERS`: it is the point below which an exact cluster sign-flip test cannot reach
+p ≤ 0.05 at any effect size, which is a fact about arithmetic and says nothing about quality.
+Decision grade additionally requires **20 effective clusters** (Kish-style, so imbalance reduces the
+count), **leave-one-date-out stability** with no date shifting the estimate by more than 25%,
+**influential-cluster diagnostics** naming which date dominates, and **validated interval coverage**
+measured against outcomes rather than assumed from the formula. Basis: Roodman, MacKinnon, Nielsen
+and Webb (Stata Journal, 2019) and the MacKinnon–Webb few-clusters literature. Seven clusters after a
+full restore is `COMPUTABLE_NOT_DECISION_GRADE`.
+
+**A1.2 End-to-end pipeline instrumentation.** `harness/pipeline_e2e.py` runs the real board entry
+point — schedule → acquisition → verification → replacement → price overlay → uncertainty →
+BET/PASS → rendering → anchor — with all nine registered gates wrapped. A registered gate that is
+never invoked is a `REGISTERED_GATE_NEVER_INVOKED` bypass and fails the healthcheck. Module
+self-tests prove a gate works; they say nothing about whether anything called it.
+
+**A1.3 Recovery jobs, executable.** `harness/recovery_jobs.py` holds `RJ-001-PROVENANCE`,
+`RJ-002-OOF-REPLAY` and `RJ-003-FALLBACK-ARM`, each with a job id, next-run time, progress against a
+unit total, a deadline and a terminal disposition. Progress cannot go backwards, a job cannot close
+with units outstanding, and a terminal status requires a recognised disposition — "we stopped
+looking" is not one. Every open defect is attributed to a named job; a blocker with no job is a
+blocker nobody owns. RJ-003 registers a conservative fallback arm on reconstructible-as-of inputs
+with its own validated uncertainty, for the case where rich historical features cannot be rebuilt
+without leakage.
+
+**A1.4 Clobber protection.** `harness/module_manifest.py` maintains a unique (path, module_id)
+registry. A path holds one module_id forever; an id lives at one path; creating over an occupied
+path is refused, and an explicit `REPLACE` must name both what it displaces and why. An undeclared
+module is `MODULE_NOT_IN_MANIFEST`, not exempt — silence is not an exemption. Pinned model sources
+are listed in an explicit exemption file with their reason, because `model_registry` hashes their
+bytes and a `MODULE_ID` line would change the very bytes the pin protects.
+
 ## Binding conclusion
 
 Information unavailability is an acquisition and infrastructure failure to be resolved autonomously.

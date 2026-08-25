@@ -44,6 +44,8 @@ than an arm that is absent.
 """
 from __future__ import annotations
 
+MODULE_ID = "widening_rule"
+
 import json
 import math
 import os

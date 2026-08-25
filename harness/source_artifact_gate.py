@@ -43,6 +43,8 @@ API
 """
 from __future__ import annotations
 
+MODULE_ID = "source_artifact_gate"
+
 import json
 import os
 import re

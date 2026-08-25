@@ -3,6 +3,8 @@
 
 from __future__ import annotations
 
+MODULE_ID = "nfl_preseason_line_guard"
+
 import argparse
 import datetime as dt
 import json

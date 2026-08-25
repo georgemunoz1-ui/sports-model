@@ -21,6 +21,8 @@ Skips are counted, not silent.
 
 from __future__ import annotations
 
+MODULE_ID = "extract_savant_previews"
+
 import hashlib
 import json
 import os

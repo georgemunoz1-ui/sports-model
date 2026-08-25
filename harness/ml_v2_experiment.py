@@ -11,6 +11,8 @@ ml_regression.py / ml_diagnostics.py; the only new code is the two as-of feature
 """
 from __future__ import annotations
 
+MODULE_ID = "ml_v2_experiment"
+
 import csv
 import datetime as dt
 import json

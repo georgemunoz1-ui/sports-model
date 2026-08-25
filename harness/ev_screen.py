@@ -25,6 +25,8 @@ and do not relabel dispersion, prior-parameter SD or MC error to fill the field.
 """
 from __future__ import annotations
 
+MODULE_ID = "ev_screen"
+
 import json
 import math
 import os

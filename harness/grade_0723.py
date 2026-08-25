@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 """Grade 7/23 across all three ledgers from verified box-score K totals. Computes pl/Brier/logloss
 exactly (no hand-math). Idempotent-ish: run once; it moves pending->graded."""
+
+MODULE_ID = "grade_0723"
 import json, math
 S=json.load(open("state.json"))
 

@@ -24,6 +24,8 @@ A per-game quarantine is legal and REQUIRED to keep queue OPEN — quarantine ne
 Modes: (default) summary | --gate exit 1 on violations | --selftest fixture battery
 """
 from __future__ import annotations
+
+MODULE_ID = "acquisition_ledger"
 import glob, json, os, sys, collections
 
 BASE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))

@@ -10,6 +10,8 @@ Also checks the parts of the leniency that are easy to get subtly wrong:
 one arm / one book / both sides is registerable; a locked clock is not; an
 unknown capture time is not; a line-only cell is not a market.
 """
+
+MODULE_ID = "test_ingest_kquote"
 import json, os, subprocess, sys, tempfile
 
 BASE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))

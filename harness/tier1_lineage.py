@@ -31,6 +31,8 @@ scaffold, not a foundation to certify a successor on.
 Usage: python3 harness/tier1_lineage.py [--build] [--gate] [--selftest]
 """
 from __future__ import annotations
+
+MODULE_ID = "tier1_lineage"
 import argparse, collections, csv, datetime as dt, hashlib, io, json, os, sys
 
 BASE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))

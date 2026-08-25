@@ -28,6 +28,8 @@ Also: per-date completeness against the frozen slate, so a silently dropped game
 
 from __future__ import annotations
 
+MODULE_ID = "result_content_checks"
+
 import csv
 import datetime as dt
 import glob

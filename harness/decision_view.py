@@ -27,6 +27,8 @@ risk. A row that fails any of them is BLOCKED, and a BLOCKED row is never a sele
 appear in the selections section, and its EV may not be summed into exposure.
 """
 
+MODULE_ID = "decision_view"
+
 import sys
 
 BET = "BET"
@@ -674,10 +676,28 @@ MUTANTS = [
 
 def mutation_suite():
     src = open(__file__).read()
+    # BASELINE FIRST. A failing selftest makes every mutant look killed, so a broken fixture reports
+    # a perfect score. Caught 2026-08-25 when module_manifest printed 11/11 while its own selftest
+    # was failing.
+    import io as _io, contextlib as _cl
+    _b = _io.StringIO()
+    with _cl.redirect_stdout(_b):
+        _base = selftest()
+    if not _base:
+        print("  BASELINE_FAILING  the unmutated selftest does not pass; every 'kill' below is "
+              "meaningless until it does")
+        print(_b.getvalue().strip())
+        return False
+    # a mutant whose pattern occurs only inside the MUTANTS literal edits its OWN definition,
+    # applies cleanly, changes no behaviour and reports SURVIVED. Caught 2026-08-25 after a rename.
+    body = src[:src.index("MUTANTS = [")]
     killed = 0
     for name, old, new in MUTANTS:
         if old not in src:
             print("  UNAPPLIED ", name + ": pattern not found")
+            continue
+        if old not in body:
+            print("  SELF_TARGETED ", name + ": pattern occurs only inside the MUTANTS list")
             continue
         ns = {"__file__": __file__, "__name__": "mutant"}
         try:

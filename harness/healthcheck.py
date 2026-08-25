@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 """Session-start integrity gate. Run BEFORE any work. Exit 0 = healthy. Mechanically enforces
 what can be enforced (Anthropic/OpenAI harness pattern: rules as tooling, not vibes)."""
+
+MODULE_ID = "healthcheck"
 import csv, json, os, re, sys, glob, datetime, subprocess
 BASE=os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 os.chdir(BASE)
@@ -255,7 +257,8 @@ for _m in ("result_provenance","result_content_checks","parse_box_dump",
            "price_acquisition","price_overlay","ev_screen","distribution_identity",
            "uncertainty_estimand","decision_view",
            # Pregame Decision Readiness v1.0, registered 2026-08-25
-           "route_ladder_v1","checkpoint_schedule","readiness_gate","replacement_workflow"):
+           "route_ladder_v1","checkpoint_schedule","readiness_gate","replacement_workflow",
+           "module_manifest","pipeline_e2e","recovery_jobs"):
     _r=subprocess.run([sys.executable,f"harness/{_m}.py","--selftest"],capture_output=True,text=True)
     _out=(_r.stdout+_r.stderr).strip().splitlines()
     check(f"{_m} selftest ({_out[-1][:72] if _out else 'no output'})", _r.returncode==0)
@@ -417,6 +420,50 @@ if os.path.exists("progress.md") and os.path.exists("docs/progress.md"):
     stray=os.path.getmtime("progress.md"); canon=os.path.getmtime("docs/progress.md")
     check("journal split: root progress.md is not newer than canonical docs/progress.md",
           stray<=canon, warn=True)
+# 6c. MODULE MANIFEST. A unique (path, module_id) registry. "The selftest at that path exits zero"
+#     is true of ANY module living there, which is how I overwrote harness/acquisition_ladder.py on
+#     2026-08-25 with every gate green. The manifest checks IDENTITY: a path holds one module_id
+#     forever, an id lives at one path, and an undeclared module is unregistered rather than exempt.
+try:
+    _r=subprocess.run([sys.executable,"harness/module_manifest.py","--audit"],
+                      capture_output=True,text=True)
+    _mm=json.loads(_r.stdout) if _r.stdout.strip().startswith("{") else {}
+    check(f"module manifest ({_mm.get('status','no output')}; "
+          f"{_mm.get('n_modules','?')} registered, {_mm.get('n_problems','?')} problems)",
+          _r.returncode==0)
+    for _p in (_mm.get("problems") or [])[:10]:
+        print(f"       ! {_p.get('code')} {_p.get('path','')}")
+except Exception as e:
+    check(f"module manifest audit ({e})", False)
+
+# 6d. END-TO-END PIPELINE. Module self-tests prove a gate WORKS; they say nothing about whether
+#     anything CALLED it. This runs the real board entry point with every registered gate wrapped,
+#     and fails when a registered gate is never invoked.
+try:
+    _r=subprocess.run([sys.executable,"harness/pipeline_e2e.py","--run"],capture_output=True,text=True)
+    _pe=json.loads(_r.stdout) if _r.stdout.strip().startswith("{") else {}
+    check(f"pipeline end-to-end ({_pe.get('status','no output')}; "
+          f"{_pe.get('n_invoked','?')}/{_pe.get('n_required','?')} registered gates invoked)",
+          _r.returncode==0)
+    for _b in (_pe.get("bypassed") or []):
+        print(f"       ! BYPASSED {_b.get('stage')} -> {_b.get('module')}.{_b.get('gate')}")
+except Exception as e:
+    check(f"pipeline end-to-end ({e})", False)
+
+# 6e. RECOVERY JOBS. Every open defect must be held by a NAMED job with a deadline. A blocker with
+#     no job is a blocker nobody owns, and "scheduled maintenance" in a journal is not a job.
+try:
+    sys.path.insert(0,"harness"); import recovery_jobs as _RJ
+    _jobs=_RJ.load() or _RJ.default_jobs()
+    _rep=_RJ.status_report(_jobs, _dt.datetime.now(_dt.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"))
+    check(f"recovery jobs ({_rep['n_jobs']} registered, {_rep['n_overdue']} overdue, "
+          f"{len(_rep['open_blockers'])} defect(s) still owned)", _rep["n_overdue"]==0, warn=False)
+    for _r2 in _rep["jobs"]:
+        if _r2["overdue"]:
+            print(f"       ! OVERDUE {_r2['job_id']} {_r2['progress']} due {_r2['deadline_utc']}")
+except Exception as e:
+    check(f"recovery jobs ({e})", False)
+
 # 7. PREGAME DECISION READINESS v1.0, section 12. The standard is implemented only when its
 #    acceptance proofs pass. Each proof asserts BOTH directions — the compliant case passes and the
 #    violating case is refused — so a one-directional test cannot make the standard decoration.

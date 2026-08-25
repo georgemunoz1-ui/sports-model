@@ -3,6 +3,8 @@
 and the mechanically-separate VALIDATION/FREEZE GATE. The gate reconciles every team's terminal
 G/SO/AB/BB (parsed locally from raw gamelogs) against Taco's 7/23 snapshot. build_replay_table()
 and scoring MUST refuse to run unless gate_ok() is True."""
+
+MODULE_ID = "e1_data"
 import json, os, glob
 BASE=os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 GL=os.path.join(BASE,"data/mlb/team_gamelogs")

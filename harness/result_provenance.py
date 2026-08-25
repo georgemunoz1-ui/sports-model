@@ -22,6 +22,8 @@ sanctioned statsapi path was egress-blocked, so the agent improvised and wrote s
 
 from __future__ import annotations
 
+MODULE_ID = "result_provenance"
+
 import csv
 import hashlib
 import os

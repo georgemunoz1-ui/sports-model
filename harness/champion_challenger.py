@@ -24,6 +24,8 @@ and only after the paired-evaluation criteria pass at the required sample size.
 """
 from __future__ import annotations
 
+MODULE_ID = "champion_challenger"
+
 import hashlib
 import json
 import os

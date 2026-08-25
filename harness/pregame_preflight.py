@@ -39,6 +39,8 @@ honest division — a gate that pretended to acquire would be the same silent fa
 Usage: python3 harness/pregame_preflight.py [--date YYYY-MM-DD] [--gate] [--selftest]
 """
 from __future__ import annotations
+
+MODULE_ID = "pregame_preflight"
 import argparse, datetime as dt, glob, hashlib, json, os, re, sys
 
 BASE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))

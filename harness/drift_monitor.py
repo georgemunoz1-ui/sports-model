@@ -29,6 +29,8 @@ Only a direct check on the spread catches it.
 """
 from __future__ import annotations
 
+MODULE_ID = "drift_monitor"
+
 import json
 import math
 import os

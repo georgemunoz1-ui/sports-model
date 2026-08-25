@@ -16,6 +16,8 @@ never run — which reads exactly like a rule that works.
 """
 from __future__ import annotations
 
+MODULE_ID = "never_adapt_audit"
+
 import os
 import sys
 

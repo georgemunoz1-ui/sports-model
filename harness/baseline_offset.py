@@ -29,6 +29,8 @@ produced the intercept is reconstructable rather than asserted.
 """
 from __future__ import annotations
 
+MODULE_ID = "baseline_offset"
+
 import csv
 import hashlib
 import json

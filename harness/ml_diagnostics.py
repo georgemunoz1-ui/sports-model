@@ -18,6 +18,8 @@ effects, so resampling individual games would understate the standard error.
 
 from __future__ import annotations
 
+MODULE_ID = "ml_diagnostics"
+
 import json
 import os
 

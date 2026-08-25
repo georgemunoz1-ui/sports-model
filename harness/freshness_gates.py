@@ -59,6 +59,8 @@ Usage: python3 harness/freshness_gates.py --selftest | --row-json PATH
 
 from __future__ import annotations
 
+MODULE_ID = "freshness_gates"
+
 import argparse
 import datetime as dt
 import json

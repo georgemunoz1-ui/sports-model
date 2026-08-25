@@ -30,6 +30,8 @@ requirement, and it is enforced as a conjunction, not as an average.
 """
 from __future__ import annotations
 
+MODULE_ID = "promotion_gate"
+
 import json
 import math
 import os

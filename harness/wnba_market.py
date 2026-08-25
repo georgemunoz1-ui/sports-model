@@ -27,6 +27,8 @@ Usage:
 
 from __future__ import annotations
 
+MODULE_ID = "wnba_market"
+
 import argparse
 import datetime as dt
 import json

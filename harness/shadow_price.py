@@ -3,6 +3,8 @@
 but writes NOTHING to state.json. Use whenever a board is sourced AFTER the slate is final, or for
 any what-if: retroactive plays must never enter the paper ledger or advance the 100-play gate.
 Usage: python3 harness/shadow_price.py board.json"""
+
+MODULE_ID = "shadow_price"
 import sys, os, json
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "engine"))
 os.chdir(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))

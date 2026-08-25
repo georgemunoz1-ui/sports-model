@@ -24,6 +24,8 @@ is what makes a rebuild reproducible.
 """
 from __future__ import annotations
 
+MODULE_ID = "keyed_seed"
+
 import hashlib
 import os
 import sys

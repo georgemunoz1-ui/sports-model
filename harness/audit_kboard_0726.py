@@ -20,6 +20,8 @@ display cannot survive:
 
 Nothing here prices a play. This only decides which rows are ALLOWED to be priced.
 """
+
+MODULE_ID = "audit_kboard_0726"
 import json, sys
 
 BOARD = "data/mlb/props/2026-07-26_kboard_full.json"

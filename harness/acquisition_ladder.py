@@ -32,6 +32,8 @@ approved browsing/search/fetch tools are the rail.
 """
 from __future__ import annotations
 
+MODULE_ID = "acquisition_ladder"
+
 import json
 import os
 import sys

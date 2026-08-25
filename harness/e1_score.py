@@ -3,6 +3,8 @@
 + complement slice, applies the frozen §6 adopt/gate/reject rule. Line-dependent metrics (displaced-
 hit, decision-change ROI) are DEFERRED per §3 (no historical prop lines). Proper score = mean Poisson
 log-loss (line-free analog of Brier). Emits report + JSON summary. Run ONCE; no intermediate peeking."""
+
+MODULE_ID = "e1_score"
 import csv, math, json, os
 BASE=os.path.dirname(os.path.dirname(os.path.abspath(__file__))); os.chdir(BASE)
 rows=list(csv.DictReader(open("data/mlb/e1_score_pop.csv")))  # PAIRED experiment-of-record (n_prior>=5, <=7/19)

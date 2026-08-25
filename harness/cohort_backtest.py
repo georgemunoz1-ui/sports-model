@@ -13,6 +13,8 @@ are never pooled with tier-1 grades.
 Usage: python3 harness/cohort_backtest.py [--json]
 """
 from __future__ import annotations
+
+MODULE_ID = "cohort_backtest"
 import csv, json, math, os, sys, collections
 
 BASE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))

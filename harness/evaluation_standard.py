@@ -30,6 +30,8 @@ below a floor are marked INSUFFICIENT rather than being quietly averaged into a 
 """
 from __future__ import annotations
 
+MODULE_ID = "evaluation_standard"
+
 import json
 import math
 import os

@@ -26,6 +26,8 @@ Usage:
 
 from __future__ import annotations
 
+MODULE_ID = "parse_box_dump"
+
 import argparse
 import hashlib
 import json

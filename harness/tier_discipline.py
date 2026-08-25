@@ -23,6 +23,8 @@ Why this module gates rather than patches:
 Usage: python3 harness/tier_discipline.py [--gate] [--rebaseline] [--selftest]
 """
 from __future__ import annotations
+
+MODULE_ID = "tier_discipline"
 import csv, json, os, sys
 
 BASE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))

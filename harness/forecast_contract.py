@@ -27,6 +27,8 @@ to become a blank row, and no code path here lets an action_status value suppres
 """
 from __future__ import annotations
 
+MODULE_ID = "forecast_contract"
+
 import hashlib
 import json
 import os

@@ -22,6 +22,8 @@ NEGATIVE IS BETTER throughout: delta = challenger - baseline, on Brier and on lo
 """
 from __future__ import annotations
 
+MODULE_ID = "paired_eval"
+
 import json
 import math
 import os

@@ -26,6 +26,8 @@ changed without invalidating a hash already in the record:
 
 from __future__ import annotations
 
+MODULE_ID = "verify_lineage"
+
 import hashlib
 import json
 import os

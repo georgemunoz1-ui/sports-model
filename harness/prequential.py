@@ -20,6 +20,8 @@ being true the first time someone calls the builder differently.
 """
 from __future__ import annotations
 
+MODULE_ID = "prequential"
+
 import hashlib
 import json
 import os

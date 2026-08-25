@@ -13,6 +13,8 @@ column. Unparsed rows are counted, never guessed.
 
 from __future__ import annotations
 
+MODULE_ID = "extract_external_board"
+
 import hashlib
 import html
 import json

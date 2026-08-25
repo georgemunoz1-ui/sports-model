@@ -23,6 +23,8 @@ Six checks:
 
 from __future__ import annotations
 
+MODULE_ID = "test_parse_equivalence"
+
 import hashlib
 import importlib.util
 import json

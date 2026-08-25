@@ -11,6 +11,8 @@ Grades: ml_ev_tracking pending 7/25 rows, v13_forward_directional (15 games),
 7/25 total leans. Emits a results.csv backfill block and a K-model calibration
 table. Writes nothing to state.json - that is a separate, reviewed step.
 """
+
+MODULE_ID = "grade_0725"
 import json, sys, csv, unicodedata
 
 def ascii_(s):

@@ -1,0 +1,67 @@
+{
+ "jobs": {
+  "RJ-001-PROVENANCE": {
+   "blocks": [
+    "PRIOR_INPUT_POOL_PROVISIONAL",
+    "UNCERTAINTY_PIPELINE_DEFECT"
+   ],
+   "deadline_utc": "2026-09-01T00:00:00Z",
+   "depends_on": [],
+   "history": [
+    {
+     "note": "egress blocked on every rung including a neutral control; 9 domains attempted",
+     "status": "BLOCKED_EXTERNAL",
+     "units_done": 0,
+     "utc": "2026-08-25T02:45:00Z"
+    }
+   ],
+   "job_id": "RJ-001-PROVENANCE",
+   "next_run_utc": "2026-08-25T06:00:00Z",
+   "notes": "a unit is one canonical row bound to a retrieved artifact with a game id, a retrieval timestamp and a content hash. Currently blocked on egress; the job records BLOCKED_EXTERNAL rather than silently not running.",
+   "owner_subsystem": "acquisition",
+   "status": "BLOCKED_EXTERNAL",
+   "terminal_disposition": null,
+   "title": "Restore Tier-1 provenance for the 123 provisional rows and the 1,620 with no evidence path",
+   "units_done": 0,
+   "units_total": 123
+  },
+  "RJ-002-OOF-REPLAY": {
+   "blocks": [
+    "UNCERTAINTY_PIPELINE_DEFECT",
+    "INSUFFICIENT_EFFECTIVE_CLUSTERS"
+   ],
+   "deadline_utc": "2026-09-08T00:00:00Z",
+   "depends_on": [
+    "RJ-001-PROVENANCE"
+   ],
+   "history": [],
+   "job_id": "RJ-002-OOF-REPLAY",
+   "next_run_utc": "2026-08-25T06:30:00Z",
+   "notes": "a unit is one admissible date block: features reconstructed strictly as-of, graded out of fold. Target is 20 EFFECTIVE clusters, not 20 nominal dates, and not the computable floor of 6.",
+   "owner_subsystem": "modelling",
+   "status": "PENDING",
+   "terminal_disposition": null,
+   "title": "Build a leakage-free date-blocked historical replay for uncertainty estimation",
+   "units_done": 0,
+   "units_total": 20
+  },
+  "RJ-003-FALLBACK-ARM": {
+   "blocks": [
+    "UNCERTAINTY_PIPELINE_DEFECT"
+   ],
+   "deadline_utc": "2026-09-08T00:00:00Z",
+   "depends_on": [],
+   "history": [],
+   "job_id": "RJ-003-FALLBACK-ARM",
+   "next_run_utc": "2026-08-25T07:00:00Z",
+   "notes": "fires if RJ-002 finds that rich historical features cannot be reconstructed as-of without leakage. Units: define the reconstructible input set; fit the arm; validate its interval coverage; register the identity. A worse honest arm beats an indefinite outage \u2014 but it must be a REGISTERED identity with its own coverage validation, never the primary arm with wider error bars.",
+   "owner_subsystem": "modelling",
+   "status": "PENDING",
+   "terminal_disposition": null,
+   "title": "Register a conservative fallback arm on reconstructible-as-of inputs, with its own validated uncertainty",
+   "units_done": 0,
+   "units_total": 4
+  }
+ },
+ "schema": "ops.recovery_jobs.v1"
+}

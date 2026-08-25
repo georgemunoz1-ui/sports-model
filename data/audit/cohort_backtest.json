@@ -9,8 +9,8 @@
   "log_loss": 0.7043,
   "margin_mae": null,
   "margin_n": 0,
-  "total_mae": 4.6286,
-  "total_n": 14,
+  "total_mae": null,
+  "total_n": 0,
   "spread_diagnostic": {
    "mean_favourite_prob": 0.5492,
    "sd_pp": 3.07,
@@ -51,8 +51,8 @@
   "log_loss": 0.7106,
   "margin_mae": null,
   "margin_n": 0,
-  "total_mae": null,
-  "total_n": 0,
+  "total_mae": 4.8714,
+  "total_n": 7,
   "spread_diagnostic": {
    "mean_favourite_prob": 0.532,
    "sd_pp": 2.4,
@@ -88,8 +88,8 @@
   "log_loss": 0.7619,
   "margin_mae": null,
   "margin_n": 0,
-  "total_mae": null,
-  "total_n": 0,
+  "total_mae": 0.55,
+  "total_n": 2,
   "spread_diagnostic": {
    "mean_favourite_prob": 0.534,
    "sd_pp": 4.53,
@@ -117,45 +117,15 @@
  },
  {
   "cohort": "MLB V19 external shadow \u2014 2026-08-14 (MESSAGE-ATTESTED)",
-  "n": 14,
+  "n": 0,
   "evidence_tier": "TIER_1_FINAL / ATTESTED_FORECAST",
-  "side_record": "4-10",
-  "accuracy": 0.2857,
-  "mean_brier": 0.27,
-  "log_loss": 0.7339,
-  "margin_mae": null,
-  "margin_n": 0,
-  "total_mae": null,
-  "total_n": 0,
-  "spread_diagnostic": {
-   "mean_favourite_prob": 0.5433,
-   "sd_pp": 3.76,
-   "n_ge_58pct": 2
-  },
-  "calibration_buckets": {
-   "0.50-0.55": {
-    "n": 9,
-    "mean_pred": 0.5198,
-    "realised": 0.2222
-   },
-   "0.55-0.60": {
-    "n": 4,
-    "mean_pred": 0.5737,
-    "realised": 0.5
-   },
-   "0.60-0.70": {
-    "n": 1,
-    "mean_pred": 0.633,
-    "realised": 0.0
-   }
-  },
+  "notes": "V18's frozen artifact run prospectively; NO_PROMOTE (paired CIs crossed zero). The FINALS are tier-1; the FORECAST payload is a message transcription, not canonical bytes \u2014 control C-V19-SUPERSESSION governs if canonical bytes later differ.",
   "exclusions": [
    "none"
   ],
   "unresolved": [
    "none"
-  ],
-  "notes": "V18's frozen artifact run prospectively; NO_PROMOTE (paired CIs crossed zero). The FINALS are tier-1; the FORECAST payload is a message transcription, not canonical bytes \u2014 control C-V19-SUPERSESSION governs if canonical bytes later differ."
+  ]
  },
  {
   "cohort": "WNBA v1.0 shadow \u2014 TIER-1 graded",

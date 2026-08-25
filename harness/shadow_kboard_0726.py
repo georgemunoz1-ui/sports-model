@@ -14,6 +14,8 @@ T3 dispersion, T4 re-read) are priced. Quarantined rows are listed and skipped.
 E[K] and GS come from cards/2026-07-26_card.json, which was built PRE-SLATE from
 statsapi - not from anything in the screenshot.
 """
+
+MODULE_ID = "shadow_kboard_0726"
 import json, sys, unicodedata
 sys.path.insert(0, ".")
 from engine.kprops import select_play, p_over, ev

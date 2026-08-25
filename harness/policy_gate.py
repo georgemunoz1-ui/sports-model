@@ -23,6 +23,8 @@ recorded as absence). An untagged row is simply not a current-policy row.
 
 from __future__ import annotations
 
+MODULE_ID = "policy_gate"
+
 import json
 import os
 

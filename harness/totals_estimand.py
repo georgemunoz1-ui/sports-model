@@ -43,6 +43,8 @@ API
 """
 from __future__ import annotations
 
+MODULE_ID = "totals_estimand"
+
 import json
 import math
 import os

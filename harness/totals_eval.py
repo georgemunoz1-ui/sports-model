@@ -63,6 +63,8 @@ Usage: python3 harness/totals_eval.py --selftest | --rows path/to/rows.json
 
 from __future__ import annotations
 
+MODULE_ID = "totals_eval"
+
 import argparse
 import hashlib
 import json

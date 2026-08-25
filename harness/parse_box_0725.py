@@ -12,6 +12,8 @@ this script, and the per-pitcher SO column is checked against the Team Pitching
 SO total, which is an INDEPENDENT field in the same paste. A game whose pitcher
 SO do not sum to its team total is reported, not silently repaired.
 """
+
+MODULE_ID = "parse_box_0725"
 import json, re, sys, unicodedata
 
 SRC = "data/mlb/box/2026-07-25_paste.txt"

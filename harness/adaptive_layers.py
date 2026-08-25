@@ -29,6 +29,8 @@ This is the same leakage rule that governs forecasts, applied to learning. A rat
 """
 from __future__ import annotations
 
+MODULE_ID = "adaptive_layers"
+
 import json
 import os
 import sys

@@ -23,6 +23,8 @@ it was registered for.
 Usage: python3 harness/grade_slate.py --date 2026-08-17 --board <evidence.json> [--commit] [--selftest]
 """
 from __future__ import annotations
+
+MODULE_ID = "grade_slate"
 import argparse, datetime as dt, hashlib, json, math, os, sys, unicodedata
 
 BASE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))

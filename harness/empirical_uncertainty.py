@@ -30,6 +30,8 @@ no evidence about a condition gets the penalised value, not the clean one.
 """
 from __future__ import annotations
 
+MODULE_ID = "empirical_uncertainty"
+
 import json
 import math
 import os

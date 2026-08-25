@@ -13,6 +13,8 @@ APPENDS a type=settlement line with the same row_id. No separate results table i
 Usage: python3 harness/unified_card.py --selftest | --wnba-date YYYY-MM-DD
 """
 from __future__ import annotations
+
+MODULE_ID = "unified_card"
 import argparse, datetime as dt, hashlib, json, os, sys
 
 BASE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))

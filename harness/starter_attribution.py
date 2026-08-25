@@ -109,6 +109,8 @@ Usage: python3 harness/starter_attribution.py --selftest
 
 from __future__ import annotations
 
+MODULE_ID = "starter_attribution"
+
 import argparse
 import hashlib
 import json

@@ -45,6 +45,8 @@ have. So the refusal is REFUSED_TOO_UNSTABLE_FOR_DECISION_USE, with the computed
 never "undefined".
 """
 
+MODULE_ID = "uncertainty_estimand"
+
 import math
 import sys
 
@@ -71,9 +73,117 @@ REFUSED_SINGLE = "REFUSED_SINGLE_BLOCK_SD_UNDEFINED"
 REFUSED_UNSTABLE = "REFUSED_TOO_UNSTABLE_FOR_DECISION_USE"
 OK = "SIGMA_EPISTEMIC_ESTIMATED"
 
-#: below this many blocks the estimate exists but is not admissible for decisions. Same basis as the
-#: exact sign-flip floor: ceil(log2(2/alpha)) at alpha=0.05.
-MIN_BLOCKS_FOR_DECISION = 6
+#: TWO DIFFERENT THRESHOLDS, AND CONFLATING THEM WAS THE DEFECT.
+#:
+#: MIN_COMPUTABLE_CLUSTERS is the point below which the statistic cannot be FORMED at a useful
+#: resolution: ceil(log2(2/alpha)) = 6 at alpha=0.05, because an exact cluster sign-flip test over k
+#: clusters has minimum two-sided p = 2/2^k and cannot reach 0.05 below k=6 at ANY effect size. That
+#: is a statement about arithmetic. It says nothing about whether the estimate is any good.
+#:
+#: I previously called this MIN_BLOCKS_FOR_DECISION, which asserted the opposite of what it measures.
+#: Clearing it means the number exists. It does not mean the number can size a bet.
+MIN_COMPUTABLE_CLUSTERS = 6
+MIN_BLOCKS_FOR_DECISION = MIN_COMPUTABLE_CLUSTERS      # retained alias; do not use for decisions
+
+#: DECISION GRADE is a different and much higher bar. Cluster-robust inference is unreliable with
+#: few clusters, and the literature on wild-bootstrap cluster inference (Roodman, MacKinnon, Nielsen
+#: and Webb, "Fast and wild: bootstrap inference in Stata using boottest", Stata Journal 2019, and
+#: the MacKinnon-Webb work it builds on) puts the danger zone well above a handful — roughly 20
+#: EFFECTIVE clusters before asymptotic behaviour can be relied on, and worse when cluster sizes are
+#: unbalanced or one cluster is influential.
+#:
+#: EFFECTIVE, not nominal. Unbalanced clusters behave like fewer clusters. The Kish-style effective
+#: count, (sum n_b)^2 / sum n_b^2, equals k exactly when every block is the same size and falls
+#: below k as they diverge — so a pool of 7 dates with one huge slate is worth less than 7.
+DECISION_GRADE_EFFECTIVE_CLUSTERS = 20.0
+DECISION_GRADE_BASIS = ("Roodman, MacKinnon, Nielsen and Webb (Stata Journal, 2019) and the "
+                        "MacKinnon-Webb few-clusters literature: cluster inference is unreliable "
+                        "below roughly 20 effective clusters, and worse under imbalance or a single "
+                        "influential cluster")
+
+#: A single cluster must not be able to move the estimate materially. Leave-one-date-out: refit
+#: without each date and measure how far s moves, relative to s itself.
+MAX_LOO_RELATIVE_SHIFT = 0.25
+#: and interval coverage must have been VALIDATED against outcomes, not assumed from a formula
+COVERAGE_TOLERANCE_PP = 5.0
+
+GRADE_COMPUTABLE = "COMPUTABLE_NOT_DECISION_GRADE"
+GRADE_DECISION = "DECISION_GRADE"
+GRADE_NOT_COMPUTABLE = "NOT_COMPUTABLE"
+REFUSED_EFFECTIVE = "REFUSED_TOO_FEW_EFFECTIVE_CLUSTERS"
+REFUSED_INFLUENTIAL = "REFUSED_INFLUENTIAL_CLUSTER_DOMINATES_THE_ESTIMATE"
+REFUSED_COVERAGE = "REFUSED_INTERVAL_COVERAGE_NOT_VALIDATED"
+
+
+def effective_clusters(sizes):
+    """Kish-style effective cluster count: (sum n)^2 / sum n^2. Equals k only under balance."""
+    ns = [float(n) for n in (sizes or []) if n and float(n) > 0]
+    if not ns:
+        return 0.0
+    return (sum(ns) ** 2) / sum(n * n for n in ns)
+
+
+def leave_one_date_out(block_residuals):
+    """Refit s without each date. Returns (max_relative_shift, per_date), the influence diagnostic.
+
+    An estimate that moves 40% when one date is dropped is not an estimate of a population
+    parameter; it is a description of that date.
+    """
+    items = sorted((block_residuals or {}).items())
+    k = len(items)
+    if k < 3:
+        return None, {}
+    def _sd(vals):
+        m = sum(vals) / len(vals)
+        return math.sqrt(sum((v - m) ** 2 for v in vals) / (len(vals) - 1))
+    full = _sd([v for _, v in items])
+    per = {}
+    for d, _ in items:
+        rest = [v for dd, v in items if dd != d]
+        per[d] = _sd(rest)
+    if full <= 0:
+        return None, per
+    shifts = {d: abs(per[d] - full) / full for d in per}
+    worst = max(shifts.values()) if shifts else 0.0
+    return worst, {"full_sd": full, "loo_sd": per, "relative_shifts": shifts,
+                   "most_influential": max(shifts, key=shifts.get) if shifts else None}
+
+
+def grade(k_clusters, cluster_sizes=None, block_residuals=None, coverage=None,
+          nominal_coverage=95.0):
+    """The tier this estimator has actually reached. Four independent requirements, all needed."""
+    eff = effective_clusters(cluster_sizes) if cluster_sizes else float(k_clusters or 0)
+    out = {"k_nominal": k_clusters, "k_effective": eff,
+           "min_computable": MIN_COMPUTABLE_CLUSTERS,
+           "decision_grade_effective_required": DECISION_GRADE_EFFECTIVE_CLUSTERS,
+           "basis": DECISION_GRADE_BASIS, "blockers": []}
+    if (k_clusters or 0) < MIN_COMPUTABLE_CLUSTERS:
+        out.update(grade=GRADE_NOT_COMPUTABLE)
+        out["blockers"].append({"code": "BELOW_MIN_COMPUTABLE_CLUSTERS", "k": k_clusters,
+                                "required": MIN_COMPUTABLE_CLUSTERS})
+        return out
+    if eff < DECISION_GRADE_EFFECTIVE_CLUSTERS:
+        out["blockers"].append({"code": REFUSED_EFFECTIVE, "effective": eff,
+                                "required": DECISION_GRADE_EFFECTIVE_CLUSTERS,
+                                "note": "clearing the computable floor means the number exists, "
+                                        "not that it can size a bet"})
+    loo, detail = leave_one_date_out(block_residuals)
+    out["leave_one_date_out"] = detail or None
+    if loo is None:
+        out["blockers"].append({"code": "LEAVE_ONE_DATE_OUT_NOT_RUN"})
+    elif loo > MAX_LOO_RELATIVE_SHIFT:
+        out["blockers"].append({"code": REFUSED_INFLUENTIAL, "max_relative_shift": loo,
+                                "ceiling": MAX_LOO_RELATIVE_SHIFT,
+                                "most_influential": detail.get("most_influential")})
+    if coverage is None:
+        out["blockers"].append({"code": REFUSED_COVERAGE,
+                                "note": "coverage must be measured against realised outcomes, not "
+                                        "assumed from the formula that produced the interval"})
+    elif abs(float(coverage) - float(nominal_coverage)) > COVERAGE_TOLERANCE_PP:
+        out["blockers"].append({"code": REFUSED_COVERAGE, "observed": coverage,
+                                "nominal": nominal_coverage, "tolerance_pp": COVERAGE_TOLERANCE_PP})
+    out["grade"] = GRADE_DECISION if not out["blockers"] else GRADE_COMPUTABLE
+    return out
 
 #: chi-square quantiles with 1..8 df, for the interval that shows HOW unstable a small-k s is.
 _CHI2 = {1: (0.000982, 5.023886), 2: (0.050636, 7.377759), 3: (0.215795, 9.348404),
@@ -101,7 +211,7 @@ def sigma_interval(s, k):
     return s * math.sqrt(df / hi_q), s * math.sqrt(df / lo_q)
 
 
-def estimate(blocks, min_blocks=MIN_BLOCKS_FOR_DECISION):
+def estimate(blocks, min_blocks=MIN_COMPUTABLE_CLUSTERS):
     """blocks: {date: [(p, y), ...]}. Returns the estimate AND whether it may be used to decide."""
     res, skipped = {}, {}
     for date in sorted(blocks or {}):
@@ -245,6 +355,79 @@ def selftest():
     if per_block >= per_game:
         f.append("the block estimand must be far smaller than raw Bernoulli SD on balanced blocks")
 
+    # --- COMPUTABLE IS NOT DECISION GRADE --------------------------------------------------------
+    if MIN_COMPUTABLE_CLUSTERS != 6 or DECISION_GRADE_EFFECTIVE_CLUSTERS != 20.0:
+        f.append("the two thresholds are 6 computable and 20 effective")
+    if DECISION_GRADE_EFFECTIVE_CLUSTERS <= MIN_COMPUTABLE_CLUSTERS:
+        f.append("the decision-grade bar must be strictly higher than the computable floor")
+    if "Roodman" not in DECISION_GRADE_BASIS:
+        f.append("the decision-grade bar must cite its basis")
+
+    # effective clusters: equals k under balance, falls below it under imbalance
+    if abs(effective_clusters([10] * 7) - 7.0) > 1e-9:
+        f.append("seven equal blocks are seven effective clusters")
+    lop = effective_clusters([100, 5, 5, 5, 5, 5, 5])
+    if not (1.0 < lop < 3.0):
+        f.append(f"one dominant block must collapse the effective count, got {lop}")
+    if lop >= 7.0:
+        f.append("imbalance must REDUCE the effective count, never leave it at k")
+    if effective_clusters([]) != 0.0 or effective_clusters([0, 0]) != 0.0:
+        f.append("no blocks means no effective clusters")
+
+    # the repository's ACTUAL position, both now and after a full restore
+    now = grade(2, cluster_sizes=[15, 15])
+    if now["grade"] != GRADE_NOT_COMPUTABLE:
+        f.append(f"k=2 is not even computable, got {now['grade']}")
+    after = grade(7, cluster_sizes=[15] * 7,
+                  block_residuals={f"d{i}": 0.01 * i for i in range(7)}, coverage=95.0)
+    if after["grade"] != GRADE_COMPUTABLE:
+        f.append(f"k=7 balanced is computable and NOT decision grade, got {after['grade']}")
+    if not any(b["code"] == REFUSED_EFFECTIVE for b in after["blockers"]):
+        f.append("7 effective clusters must be refused against the 20 bar")
+    if after["grade"] == GRADE_DECISION:
+        f.append("restoring provenance does not by itself produce a decision-grade estimator")
+
+    # a genuinely adequate estimator passes all four requirements
+    good_res = {f"d{i}": (0.005 if i % 2 else -0.005) for i in range(24)}
+    good = grade(24, cluster_sizes=[15] * 24, block_residuals=good_res, coverage=95.0)
+    if good["grade"] != GRADE_DECISION:
+        f.append(f"24 balanced clusters with stable LOO and validated coverage must pass: "
+                 f"{good['blockers']}")
+
+    # ...and each of the four requirements alone must be able to stop it
+    if grade(24, cluster_sizes=[500] + [5] * 23, block_residuals=good_res,
+             coverage=95.0)["grade"] == GRADE_DECISION:
+        f.append("imbalance alone must block decision grade")
+    infl = dict(good_res); infl["d0"] = 0.9
+    g_infl = grade(24, cluster_sizes=[15] * 24, block_residuals=infl, coverage=95.0)
+    if g_infl["grade"] == GRADE_DECISION:
+        f.append("one influential date alone must block decision grade")
+    if not any(b["code"] == REFUSED_INFLUENTIAL for b in g_infl["blockers"]):
+        f.append("the influential-cluster diagnostic must name itself")
+    if g_infl["leave_one_date_out"].get("most_influential") != "d0":
+        f.append("the influence diagnostic must name WHICH date dominates")
+    if grade(24, cluster_sizes=[15] * 24, block_residuals=good_res,
+             coverage=None)["grade"] == GRADE_DECISION:
+        f.append("unvalidated coverage alone must block decision grade")
+    if grade(24, cluster_sizes=[15] * 24, block_residuals=good_res,
+             coverage=70.0)["grade"] == GRADE_DECISION:
+        f.append("coverage far from nominal must block decision grade")
+    if grade(24, cluster_sizes=[15] * 24, block_residuals=None,
+             coverage=95.0)["grade"] == GRADE_DECISION:
+        f.append("a leave-one-out check that never ran must block decision grade")
+
+    # leave-one-date-out itself
+    w, det = leave_one_date_out({f"d{i}": (0.005 if i % 2 else -0.005) for i in range(10)})
+    if w is None or w > MAX_LOO_RELATIVE_SHIFT:
+        f.append(f"a stable pool must have a small LOO shift, got {w}")
+    w2, det2 = leave_one_date_out(dict({f"d{i}": 0.001 for i in range(9)}, d9=0.5))
+    if w2 is None or w2 <= MAX_LOO_RELATIVE_SHIFT:
+        f.append(f"one wild date must produce a large LOO shift, got {w2}")
+    if det2.get("most_influential") != "d9":
+        f.append("the LOO diagnostic must identify the influential date")
+    if leave_one_date_out({"a": 0.1, "b": 0.2})[0] is not None:
+        f.append("LOO needs at least three dates to mean anything")
+
     print("uncertainty_estimand selftest:", "OK" if not f else "FAIL")
     for x in f:
         print("   -", x)
@@ -252,13 +435,35 @@ def selftest():
 
 
 MUTANTS = [
+    ("the decision-grade bar drops to the computable floor",
+     "DECISION_GRADE_EFFECTIVE_CLUSTERS = 20.0", "DECISION_GRADE_EFFECTIVE_CLUSTERS = 6.0"),
+    ("effective clusters stops accounting for imbalance",
+     "    return (sum(ns) ** 2) / sum(n * n for n in ns)", "    return float(len(ns))"),
+    ("the influential-cluster diagnostic stops blocking",
+     "    elif loo > MAX_LOO_RELATIVE_SHIFT:", "    elif False:"),
+    ("a leave-one-out check that never ran is treated as passing",
+     '    if loo is None:\n        out["blockers"].append({"code": "LEAVE_ONE_DATE_OUT_NOT_RUN"})',
+     "    if False:\n        pass"),
+    ("unvalidated interval coverage is treated as validated",
+     "    if coverage is None:", "    if False:"),
+    ("coverage far from nominal is accepted",
+     "    elif abs(float(coverage) - float(nominal_coverage)) > COVERAGE_TOLERANCE_PP:",
+     "    elif False:"),
+    ("the influence ceiling is loosened until any date may dominate",
+     "MAX_LOO_RELATIVE_SHIFT = 0.25", "MAX_LOO_RELATIVE_SHIFT = 99.0"),
+    ("the LOO diagnostic stops naming the influential date",
+     '"most_influential": max(shifts, key=shifts.get) if shifts else None}',
+     '"most_influential": None}'),
+    ("computable and decision grade collapse into one tier",
+     '    out["grade"] = GRADE_DECISION if not out["blockers"] else GRADE_COMPUTABLE',
+     '    out["grade"] = GRADE_DECISION'),
     ("k=2 is reported as undefined rather than unstable",
      "    if k == 1:", "    if k <= 2:"),
     ("the instability refusal claims the value does not exist",
      'f"s = {s_pp:.4f}pp IS defined at k={k} — this is computed, not undefined. "',
      'f"s is undefined at k={k}. "'),
-    ("the decision floor collapses, so k=2 sizes a bet",
-     "MIN_BLOCKS_FOR_DECISION = 6", "MIN_BLOCKS_FOR_DECISION = 2"),
+    ("the computable floor collapses, so k=2 sizes a bet",
+     "MIN_COMPUTABLE_CLUSTERS = 6", "MIN_COMPUTABLE_CLUSTERS = 2"),
     ("the residual loses its sign, so over- and under-confidence look identical",
      "    return sum(y - p for p, y in rows) / len(rows), None",
      "    return sum(abs(y - p) for p, y in rows) / len(rows), None"),
@@ -287,10 +492,31 @@ MUTANTS = [
 
 def mutation_suite():
     src = open(__file__).read()
+    # BASELINE FIRST. A failing selftest makes every mutant look killed, so a broken fixture reports
+    # a perfect score. Caught 2026-08-25 when module_manifest printed 11/11 while its own selftest
+    # was failing.
+    import io as _io, contextlib as _cl
+    _b = _io.StringIO()
+    with _cl.redirect_stdout(_b):
+        _base = selftest()
+    if not _base:
+        print("  BASELINE_FAILING  the unmutated selftest does not pass; every 'kill' below is "
+              "meaningless until it does")
+        print(_b.getvalue().strip())
+        return False
+    # WHERE THE CODE ENDS AND THE MUTANT LIST BEGINS. A mutant whose pattern occurs only inside the
+    # MUTANTS literal edits its OWN definition, applies cleanly, changes no behaviour and reports
+    # SURVIVED — indistinguishable from a decorative fixture. That happened here when a constant was
+    # renamed and the mutant kept the old name, which by then existed nowhere but in the mutant.
+    body = src[:src.index("MUTANTS = [")]
     killed = 0
     for name, old, new in MUTANTS:
         if old not in src:
             print("  UNAPPLIED ", name + ": pattern not found")
+            continue
+        if old not in body:
+            print("  SELF_TARGETED ", name + ": pattern occurs only inside the MUTANTS list, so "
+                                             "this mutant edits itself and tests nothing")
             continue
         ns = {"__file__": __file__, "__name__": "mutant"}
         try:

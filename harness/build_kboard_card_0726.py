@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 """Render the 7/26 K price-board card. Every figure is read from JSON on disk."""
+
+MODULE_ID = "build_kboard_card_0726"
 import json, html
 
 B = json.load(open("data/mlb/props/2026-07-26_kboard_full.json"))

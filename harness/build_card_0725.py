@@ -2,6 +2,8 @@
 """Render cards/2026-07-25_card.html from the card JSON. EVERY number in the HTML is computed
 here from cards/2026-07-25_card.json — nothing is hand-typed. Also emits the pre-registered
 ml_ev_tracking pick list (R7: rule fixed before any 7/25 game starts)."""
+
+MODULE_ID = "build_card_0725"
 import json, os, sys
 os.chdir(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 

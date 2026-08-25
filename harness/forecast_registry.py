@@ -26,6 +26,8 @@ separate, manual, owner-authorized act — no forecast auto-enters a ledger, eve
 
 from __future__ import annotations
 
+MODULE_ID = "forecast_registry"
+
 import hashlib
 import json
 import os

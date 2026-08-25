@@ -3899,3 +3899,52 @@ overwrote the existing 2026-08-22 acquisition state machine. The healthcheck swe
 the name twice in one list. Restored from HEAD, renamed mine to route_ladder_v1, and added a gate:
 every selftest banner must name its own module, so a clobbering replacement announces itself. See
 lesson 34.
+
+### 2026-08-25 (amendment 1) — four conditions closed, and two defects in the test harness itself
+
+A1.1 COMPUTABLE IS NOT DECISION GRADE. MIN_BLOCKS_FOR_DECISION renamed MIN_COMPUTABLE_CLUSTERS,
+because clearing 6 means the statistic can be FORMED, not that it can size a bet. Decision grade
+now additionally requires 20 EFFECTIVE clusters (Kish-style, so imbalance reduces the count - a pool
+with one huge slate is worth less than its nominal k), leave-one-date-out stability under a 25%
+ceiling, an influential-cluster diagnostic that names WHICH date dominates, and interval coverage
+validated against outcomes rather than assumed from the formula that produced the interval. Basis
+recorded: Roodman/MacKinnon/Nielsen/Webb 2019 and the MacKinnon-Webb few-clusters literature. Seven
+clusters after a full restore is COMPUTABLE_NOT_DECISION_GRADE, and each of the four requirements
+alone blocks decision grade.
+
+A1.2 END-TO-END PIPELINE. harness/pipeline_e2e.py runs the real entry point with all nine registered
+gates wrapped and reports any that never fired. Demonstrated: compliant run 9/9; stubbing the price
+overlay gate produces REFUSED with PRICE_OVERLAY named. Module self-tests prove a gate WORKS and say
+nothing about whether anything CALLED it - and that is exactly how a board shipped on 8/24 with rows
+no gate had refused.
+
+A1.3 RECOVERY JOBS. Three executable jobs replace the prose. RJ-001-PROVENANCE (123 units,
+BLOCKED_EXTERNAL, due 9/1), RJ-002-OOF-REPLAY (20 units, depends on 001, due 9/8),
+RJ-003-FALLBACK-ARM (4 units, fires if as-of features cannot be rebuilt without leakage). Progress
+cannot go backwards, a job cannot close with units outstanding, and "we stopped looking" is not a
+terminal disposition. Every open defect is attributed to a named job; a blocker with no job is a
+blocker nobody owns.
+
+A1.4 CLOBBER PROTECTION. harness/module_manifest.py: unique (path, module_id), CREATE over an
+occupied path refused, REPLACE must name what it displaces AND why, duplicate identities refused,
+and an UNDECLARED module is MODULE_NOT_IN_MANIFEST rather than exempt - silence is not an exemption.
+113 modules registered. Ten pinned model sources are exempt IN AN EXPLICIT FILE with the reason: the
+model registry hashes their bytes, and a MODULE_ID line would change the very bytes the pin
+protects. It bit twice while being built: it flagged the two modules I had just created, and my
+bulk MODULE_ID insertion tripped the model registry's source pins on ten frozen files, which I
+reverted with git checkout rather than re-pinning.
+
+AND TWO DEFECTS IN THE MUTATION HARNESS ITSELF. See lesson 35.
+  - A mutant whose pattern survived a rename existed nowhere but inside its own definition. The
+    runner replaced it in the MUTANTS list, changed no behaviour, and printed SURVIVED - which reads
+    as "decorative fixture" and actually meant "this mutant tested nothing". Runners now split the
+    source at MUTANTS = [ and print SELF_TARGETED for a pattern absent from the body. It caught one
+    of my own new mutants on its first run.
+  - module_manifest printed 11/11 killed while its own selftest was FAILING. Every mutant "kills"
+    when the baseline already fails. Runners now run the unmutated selftest first and refuse to
+    report a score at all if it does not pass.
+Both defects were in the machinery that reports on the code, and both emitted numbers that read as
+reassurance. Lesson 23 one level further in.
+
+Acceptance suite now 16/16. healthcheck 0 fail. Standard sha256 301ff7c2 after amendment 1.
+Status unchanged: SYSTEM_NOT_DECISION_READY, EXECUTION BLOCKED, 0 wagers, $0.

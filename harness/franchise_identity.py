@@ -40,6 +40,8 @@ API
 """
 from __future__ import annotations
 
+MODULE_ID = "franchise_identity"
+
 import ast
 import json
 import os

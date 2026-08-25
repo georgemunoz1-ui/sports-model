@@ -21,6 +21,8 @@ Rules:
 
 from __future__ import annotations
 
+MODULE_ID = "backfill_results_savant"
+
 import csv
 import datetime as dt
 import json

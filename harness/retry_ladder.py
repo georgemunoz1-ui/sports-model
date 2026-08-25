@@ -17,6 +17,8 @@ Exhaustion is not the end of a cycle; it is the start of a bounded, narrowing re
 """
 from __future__ import annotations
 
+MODULE_ID = "retry_ladder"
+
 import datetime
 import json
 import os

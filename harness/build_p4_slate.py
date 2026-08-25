@@ -29,6 +29,8 @@ disposition engine, not here):
 
 from __future__ import annotations
 
+MODULE_ID = "build_p4_slate"
+
 import csv
 import datetime as dt
 import hashlib

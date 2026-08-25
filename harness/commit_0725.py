@@ -5,6 +5,8 @@ Reads data/mlb/box/2026-07-25_grades.json, produced by harness/grade_0725.py,
 which refuses to run unless the user paste and statsapi agree on all 30 team
 scores. Idempotent: re-running does not double-append or double-count.
 """
+
+MODULE_ID = "commit_0725"
 import json, csv, os
 
 G = json.load(open("data/mlb/box/2026-07-25_grades.json"))

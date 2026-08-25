@@ -37,6 +37,8 @@ Usage:
 
 from __future__ import annotations
 
+MODULE_ID = "ml_regression"
+
 import argparse
 import csv
 import json

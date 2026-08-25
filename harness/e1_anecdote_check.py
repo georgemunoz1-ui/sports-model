@@ -3,6 +3,8 @@
 pitcher's as-of shrunk K-rate + E[TBF] from his log, apply the frozen log5 formula with his actual
 opponent's K-rate, and check whether the DECISION (side vs line) would have flipped. If the two
 anecdotes don't even flip, the feature cannot be justified by them — only by broad replay merit."""
+
+MODULE_ID = "e1_anecdote_check"
 import json, os
 LG_KRATE=.22; LG_TBF=24.0
 team=json.load(open("data/mlb/team_batting_asof/2026-07-23.json")); L=team["league_k_rate"]

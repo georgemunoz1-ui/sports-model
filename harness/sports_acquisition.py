@@ -27,6 +27,8 @@ EVIDENCE TIERS (owner governance):
 """
 from __future__ import annotations
 
+MODULE_ID = "sports_acquisition"
+
 import datetime
 import json
 import os

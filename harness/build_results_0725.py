@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 """Render the 7/25 results card. Every figure is read from JSON on disk."""
+
+MODULE_ID = "build_results_0725"
 import json, html
 
 G = json.load(open("data/mlb/box/2026-07-25_grades.json"))

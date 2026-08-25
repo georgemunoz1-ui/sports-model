@@ -5,6 +5,8 @@ AND date <= 2026-07-19 (the horizon at which the n=1759 record was set). Post-ho
 starts go to the CONSTRUCTION table only, never the score. Opponent+gamePk resolved via starters.csv,
 then 10-field log opp, then pitcher-team+results.csv fallback, so NO eligible row is quarantined.
 row_id = pitcher_id|gamePk (Taco join key). Baseline formula UNCHANGED; E1 adds only opponent-K."""
+
+MODULE_ID = "e1_replay"
 import csv, glob, os, sys, json
 import e1_data as E
 BASE=E.BASE; os.chdir(BASE)

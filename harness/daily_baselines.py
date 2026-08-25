@@ -72,6 +72,8 @@ Usage: python3 harness/daily_baselines.py --selftest
 
 from __future__ import annotations
 
+MODULE_ID = "daily_baselines"
+
 import argparse
 import csv
 import hashlib

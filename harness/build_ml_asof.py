@@ -27,6 +27,8 @@ odds files, never into predictive features. `assert_no_market_fields` enforces i
 
 from __future__ import annotations
 
+MODULE_ID = "build_ml_asof"
+
 import csv
 import hashlib
 import json

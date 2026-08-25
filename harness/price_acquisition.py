@@ -42,6 +42,8 @@ API
 """
 from __future__ import annotations
 
+MODULE_ID = "price_acquisition"
+
 import json
 import os
 import sys

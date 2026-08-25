@@ -26,6 +26,8 @@ PRICES is neither: prices never touch a winner probability, so a price move fork
 """
 from __future__ import annotations
 
+MODULE_ID = "cohort_fork"
+
 import hashlib
 import json
 import os

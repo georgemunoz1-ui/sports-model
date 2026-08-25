@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 """Render cards/2026-07-26_card.html. Every figure is computed from JSON on disk.
 Nothing in the output is hand-typed. Usage: python3 harness/build_card_0726.py"""
+
+MODULE_ID = "build_card_0726"
 import json, os
 BASE=os.path.dirname(os.path.dirname(os.path.abspath(__file__))); os.chdir(BASE)
 D="2026-07-26"

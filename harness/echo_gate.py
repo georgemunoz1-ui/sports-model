@@ -26,6 +26,8 @@ grades a forecast against a game that never happened, while wrongly deferring co
 """
 from __future__ import annotations
 
+MODULE_ID = "echo_gate"
+
 import csv
 import os
 import sys

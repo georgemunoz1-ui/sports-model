@@ -2,6 +2,8 @@
 """Exact grading for 2026-07-24. All arithmetic computed, never hand-done.
 Grades: (A) ML directional tracking, (B) V13 side directional, (C) V13 total leans (display),
 (D) K-projection accuracy on the sourced board, (E) the SHADOW play (no stake, not gate-eligible)."""
+
+MODULE_ID = "grade_0724"
 import json, math, os, sys
 os.chdir(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 sys.path.insert(0, "engine")

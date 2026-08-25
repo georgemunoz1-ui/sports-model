@@ -22,6 +22,8 @@ Modes:  (default) full report -> data/audit/missing_data_report.json + stdout su
         --selftest fixture battery
 """
 from __future__ import annotations
+
+MODULE_ID = "missing_data_audit"
 import csv, glob, json, os, sys, collections
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))

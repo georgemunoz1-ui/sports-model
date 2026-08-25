@@ -6,6 +6,8 @@ shrinkage fit, and the E5 pre-registration that the fit motivates.
 
 Does NOT touch gates.kprops_go_live. Does NOT change the engine. Idempotent.
 """
+
+MODULE_ID = "commit_kboard_0726"
 import json, unicodedata, statistics as st
 
 def a_(s):

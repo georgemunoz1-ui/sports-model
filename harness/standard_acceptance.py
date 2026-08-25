@@ -11,6 +11,8 @@ compliant case passes AND the violating case is refused. A one-directional accep
 standard becomes decoration.
 """
 
+MODULE_ID = "standard_acceptance"
+
 import sys
 
 sys.path.insert(0, __file__.rsplit("/", 1)[0])
@@ -21,6 +23,10 @@ import decision_view as DV
 import price_overlay as PO
 import readiness_gate as RG
 import replacement_workflow as RW
+import module_manifest as MM
+import pipeline_e2e as PE
+import recovery_jobs as RJ
+import uncertainty_estimand as UE
 
 RESULTS = []
 
@@ -198,12 +204,103 @@ def t12_work_queue_is_not_a_decision():
                   "a genuine economic PASS publishes; a work-queue reason does not")
 
 
+# --- v1.0 conditional-acceptance requirements ------------------------------------------------------
+def t13_computable_is_not_decision_grade():
+    if UE.MIN_COMPUTABLE_CLUSTERS != 6 or UE.DECISION_GRADE_EFFECTIVE_CLUSTERS != 20.0:
+        return _check("computable and decision-grade cluster thresholds are separate", False)
+    after_restore = UE.grade(7, cluster_sizes=[15] * 7,
+                             block_residuals={f"d{i}": 0.01 * i for i in range(7)}, coverage=95.0)
+    good = UE.grade(24, cluster_sizes=[15] * 24,
+                    block_residuals={f"d{i}": (0.005 if i % 2 else -0.005) for i in range(24)},
+                    coverage=95.0)
+    # each of the four requirements alone must be able to stop decision grade
+    stops = [
+        UE.grade(24, cluster_sizes=[500] + [5] * 23,
+                 block_residuals={f"d{i}": (0.005 if i % 2 else -0.005) for i in range(24)},
+                 coverage=95.0)["grade"],
+        UE.grade(24, cluster_sizes=[15] * 24,
+                 block_residuals=dict({f"d{i}": 0.001 for i in range(23)}, d23=0.9),
+                 coverage=95.0)["grade"],
+        UE.grade(24, cluster_sizes=[15] * 24,
+                 block_residuals={f"d{i}": (0.005 if i % 2 else -0.005) for i in range(24)},
+                 coverage=None)["grade"],
+        UE.grade(24, cluster_sizes=[15] * 24, block_residuals=None, coverage=95.0)["grade"],
+    ]
+    return _check("six or seven clusters is computable, not decision-grade",
+                  after_restore["grade"] == UE.GRADE_COMPUTABLE
+                  and good["grade"] == UE.GRADE_DECISION
+                  and all(g != UE.GRADE_DECISION for g in stops),
+                  "k=7 computable; 24 effective + stable LOO + validated coverage passes; "
+                  "imbalance, influence, missing coverage and no-LOO each block alone")
+
+
+def t14_pipeline_bypass_is_detected():
+    ok = PE.run_instrumented(**PE.DEFAULT_RUN)
+    bypassed = []
+    for gate in PE.REQUIRED_GATES:
+        with PE._Trace(tuple(g for g in PE.REQUIRED_GATES if g != gate)) as tr:
+            try:
+                PE.run_board(**PE.DEFAULT_RUN)
+            except Exception:
+                pass
+        bypassed.append(gate not in set(tr.called))
+    return _check("healthcheck fails when a registered gate is bypassed",
+                  ok["status"] == PE.OK and ok["n_invoked"] == ok["n_required"]
+                  and all(bypassed),
+                  f"{ok['n_invoked']}/{ok['n_required']} invoked on a compliant run; each of the "
+                  f"{len(PE.REQUIRED_GATES)} gates is individually detectable when skipped")
+
+
+def t15_open_defects_are_owned_by_jobs():
+    jobs = RJ.load() or RJ.default_jobs()
+    rep = RJ.status_report(jobs, "2026-08-25T03:00:00Z")
+    owned = all(b in rep["open_blockers"] for b in
+                ("PRIOR_INPUT_POOL_PROVISIONAL", "UNCERTAINTY_PIPELINE_DEFECT"))
+    fields = all(all(k in j for k in RJ.REQUIRED_FIELDS) for j in jobs.values())
+    # a job cannot lie about its own progress
+    j = list(jobs.values())[0]
+    refuses = all(RJ.advance(j, "2026-08-25T03:00:00Z", **kw)[0] is None for kw in (
+        {"units_done": -1}, {"status": RJ.COMPLETE, "disposition": "RESTORED"},
+        {"units_done": j["units_total"], "status": RJ.COMPLETE},
+        {"units_done": j["units_total"], "status": RJ.COMPLETE,
+         "disposition": "WE_STOPPED_LOOKING"}))
+    late = RJ.status_report(jobs, "2027-01-01T00:00:00Z")["n_overdue"] > 0
+    return _check("open defects are executable jobs with id, next run, progress, deadline and "
+                  "terminal disposition", owned and fields and refuses and late,
+                  "every open blocker names its job; backwards progress, premature closure and an "
+                  "unrecognised disposition all refuse; a passed deadline reports OVERDUE")
+
+
+def t16_clobber_protection():
+    M = {"harness/a.py": "alpha"}
+    occupied = MM.check_write("harness/a.py", "beta", MM.CREATE, M)
+    replace_ok = MM.check_write("harness/a.py", "beta", MM.REPLACE, M, replaces="alpha",
+                                reason="superseded")
+    replace_bad = [MM.check_write("harness/a.py", "beta", MM.REPLACE, M, **kw)[0]
+                   for kw in ({"replaces": None, "reason": "x"},
+                              {"replaces": "wrong", "reason": "x"},
+                              {"replaces": "alpha", "reason": None})]
+    dup = MM.check_write("harness/z.py", "alpha", MM.CREATE, M)
+    live = MM.audit()
+    return _check("a unique (path, module_id) manifest refuses creation over an occupied path and "
+                  "duplicate identities",
+                  (not occupied[0]) and occupied[1]["code"] == MM.OCCUPIED
+                  and replace_ok[0] and not any(replace_bad)
+                  and (not dup[0]) and dup[1]["code"] == MM.DUPLICATE
+                  and live["status"] == MM.OK,
+                  f"CREATE over an occupied path refused; explicit REPLACE naming what it displaces "
+                  f"and why accepted; duplicate id refused; live manifest {live['n_modules']} "
+                  f"modules, {live['n_problems']} problems")
+
+
 TESTS = (t1_every_game_gets_a_row, t2_routes_attempted_in_order, t3_blocked_rail_advances,
          t4_material_change_generates_replacement, t5_originals_immutable,
          t6_live_price_cannot_enter_pregame, t7_cross_book_cannot_pass_same_book_hold,
          t8_stale_quote_cannot_authorize, t9_missing_uncertainty_blocks_readiness,
          t10_no_blocked_row_labelled_a_selection, t11_wager_carries_quote_risk_stake_boundary,
-         t12_work_queue_is_not_a_decision)
+         t12_work_queue_is_not_a_decision, t13_computable_is_not_decision_grade,
+         t14_pipeline_bypass_is_detected, t15_open_defects_are_owned_by_jobs,
+         t16_clobber_protection)
 
 
 def run():

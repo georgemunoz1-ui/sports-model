@@ -23,6 +23,8 @@ two rather than claimed. There is no field an author can set to assert it.
 """
 from __future__ import annotations
 
+MODULE_ID = "evaluation_arm"
+
 import hashlib
 import json
 import os

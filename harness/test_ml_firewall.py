@@ -6,6 +6,8 @@ or in-memory deepcopies — no repo data is modified.
 
 from __future__ import annotations
 
+MODULE_ID = "test_ml_firewall"
+
 import copy
 import hashlib
 import json

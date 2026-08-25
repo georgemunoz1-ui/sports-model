@@ -39,6 +39,8 @@ API
 """
 from __future__ import annotations
 
+MODULE_ID = "distribution_identity"
+
 import hashlib
 import json
 import math

@@ -2,6 +2,8 @@
 """Append 7/23 actual start rows (7-field: date|IP|ER|SO|BB|TBF|GS — the format both parsers accept;
 the runbook's 8-field opp-first spec BREAKS sp_asof, tracked as a known issue). Correct Sale's
 pre-filled placeholder row to actuals. TBF = 3*outs + H + BB (HBP/ROE negligible for accumulation)."""
+
+MODULE_ID = "append_logs_0723"
 import os
 D="data/backfill/mlb/2026/pitcher_logs"
 # id : (date, IP, ER, SO, BB, TBF, GS)  — verified from Savant box scores 7/23

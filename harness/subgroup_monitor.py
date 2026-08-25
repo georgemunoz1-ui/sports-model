@@ -76,6 +76,8 @@ Usage: python3 harness/subgroup_monitor.py --selftest
 
 from __future__ import annotations
 
+MODULE_ID = "subgroup_monitor"
+
 import argparse
 import datetime as dt
 import hashlib

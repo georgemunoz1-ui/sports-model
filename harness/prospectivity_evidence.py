@@ -44,6 +44,8 @@ API
 """
 from __future__ import annotations
 
+MODULE_ID = "prospectivity_evidence"
+
 import datetime as dt
 import json
 import os

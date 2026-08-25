@@ -10,6 +10,8 @@ Then runs items 1-7 of the owner's spec and writes a single JSON record.
 
 from __future__ import annotations
 
+MODULE_ID = "ml_full_report"
+
 import argparse
 import importlib.util
 import json

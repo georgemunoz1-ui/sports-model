@@ -29,6 +29,8 @@ at or after it. A rating is a function of a date, not of "now".
 """
 from __future__ import annotations
 
+MODULE_ID = "adaptive_state"
+
 import csv
 import hashlib
 import json

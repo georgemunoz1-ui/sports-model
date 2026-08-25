@@ -20,6 +20,8 @@ fact, and the winner ledger 9/13 / Brier .1648 stands). The contract binds every
 Usage: python3 harness/settlement_contract.py [--gate] [--selftest]
 """
 from __future__ import annotations
+
+MODULE_ID = "settlement_contract"
 import datetime as dt, json, os, sys
 
 BASE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))

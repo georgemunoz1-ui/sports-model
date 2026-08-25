@@ -4,6 +4,8 @@ Batting SO = strikeouts TAKEN by that offense (the opponent-K signal E1 needs). 
 SO/(AB+BB) [PA approximated as AB+BB; ~3% understated vs true PA, uniform across teams; the per-game
 statsapi fetch will use exact plateAppearances]. SNAPSHOT ONLY — using this as an as-of historical
 feature would be look-ahead; it seeds FORWARD adjustment and validates the fetch endpoint."""
+
+MODULE_ID = "parse_team_stats"
 import json, os, re
 SRC="/root/.claude/uploads/89dc228f-5581-5f9d-87f5-493d59afc3d1/b67bcc0f-Team_stats_723_date.txt"
 ABBR={"Washington Nationals":"WSH","New York Yankees":"NYY","Houston Astros":"HOU","Atlanta Braves":"ATL",

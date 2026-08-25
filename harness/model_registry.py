@@ -15,6 +15,8 @@ and FAILS on drift, on duplicate ids, and on any ML-sim file on disk that is not
 
 from __future__ import annotations
 
+MODULE_ID = "model_registry"
+
 import hashlib
 import json
 import os

@@ -49,6 +49,8 @@ GATE ELIGIBILITY is decided by the clock, never by the operator:
 Everything is PAPER. $0. select_play is imported unmodified; this file does not
 tune, reweight, or second-guess a single engine threshold.
 """
+
+MODULE_ID = "ingest_kquote"
 import policy_gate
 import argparse, json, os, re, shutil, sys, unicodedata
 from datetime import datetime, timezone

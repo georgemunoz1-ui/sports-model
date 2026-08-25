@@ -37,6 +37,8 @@ than one active grade is a CONFLICT and is refused — never silently resolved b
 """
 from __future__ import annotations
 
+MODULE_ID = "grade_ledger"
+
 import glob
 import hashlib
 import json

@@ -47,6 +47,8 @@ API
 """
 from __future__ import annotations
 
+MODULE_ID = "simulation_standard"
+
 import hashlib
 import json
 import math

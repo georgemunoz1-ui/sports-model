@@ -23,6 +23,8 @@ carry original_file_hash: null and are skipped as unbound rather than counted as
 Usage: python3 harness/artifact_immutability.py [--gate] [--selftest]
 """
 from __future__ import annotations
+
+MODULE_ID = "artifact_immutability"
 import hashlib, json, os, sys
 
 BASE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))

@@ -40,6 +40,8 @@ gate re-derives each class from the card and fails on drift.
 """
 from __future__ import annotations
 
+MODULE_ID = "information_class"
+
 import glob
 import json
 import os

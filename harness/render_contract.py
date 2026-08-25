@@ -42,6 +42,8 @@ API
 """
 from __future__ import annotations
 
+MODULE_ID = "render_contract"
+
 import json
 import os
 import re

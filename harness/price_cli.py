@@ -2,6 +2,8 @@
 """CANONICAL board pricing — the ONLY sanctioned path from a props board to plays.
 Usage: python3 harness/price_cli.py board.json   where board.json = {pitcher: [[book,line,under,over],...]}
 Prints evaluations; appends qualifying plays to state.json pending (enriched schema fields stubbed)."""
+
+MODULE_ID = "price_cli"
 import sys, os, json
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))),"engine"))
 os.chdir(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))

@@ -33,6 +33,8 @@ API
 """
 from __future__ import annotations
 
+MODULE_ID = "arm_coverage"
+
 import json
 import os
 import sys

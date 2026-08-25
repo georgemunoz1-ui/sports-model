@@ -52,12 +52,19 @@
    "depends_on": [
     "RJ-001-PROVENANCE"
    ],
-   "history": [],
+   "history": [
+    {
+     "note": "the 06:30Z slot passed unlogged \u2014 a silent miss is a reporting failure, recorded here. No replay is possible before RJ-001 binds provenance (depends_on). Next slot 2026-08-26T06:30Z, conditional on RJ-001's 04:00Z run.",
+     "status": "BLOCKED_EXTERNAL",
+     "units_done": 0,
+     "utc": "2026-08-25T23:06:00Z"
+    }
+   ],
    "job_id": "RJ-002-OOF-REPLAY",
-   "next_run_utc": "2026-08-25T06:30:00Z",
+   "next_run_utc": "2026-08-26T06:30:00Z",
    "notes": "a unit is one admissible date block: features reconstructed strictly as-of, graded out of fold. Target is 20 EFFECTIVE clusters, not 20 nominal dates, and not the computable floor of 6.",
    "owner_subsystem": "modelling",
-   "status": "PENDING",
+   "status": "BLOCKED_EXTERNAL",
    "terminal_disposition": null,
    "title": "Build a leakage-free date-blocked historical replay for uncertainty estimation",
    "units_done": 0,
@@ -69,12 +76,19 @@
    ],
    "deadline_utc": "2026-09-08T00:00:00Z",
    "depends_on": [],
-   "history": [],
+   "history": [
+    {
+     "note": "the 07:00Z slot passed unlogged \u2014 recorded as a miss. This job is INTERNAL (register the conservative fallback arm spec) and does not need egress; it is schedulable now and set RUNNING for the 2026-08-26T07:00Z slot.",
+     "status": "RUNNING",
+     "units_done": 0,
+     "utc": "2026-08-25T23:06:00Z"
+    }
+   ],
    "job_id": "RJ-003-FALLBACK-ARM",
-   "next_run_utc": "2026-08-25T07:00:00Z",
+   "next_run_utc": "2026-08-26T07:00:00Z",
    "notes": "fires if RJ-002 finds that rich historical features cannot be reconstructed as-of without leakage. Units: define the reconstructible input set; fit the arm; validate its interval coverage; register the identity. A worse honest arm beats an indefinite outage \u2014 but it must be a REGISTERED identity with its own coverage validation, never the primary arm with wider error bars.",
    "owner_subsystem": "modelling",
-   "status": "PENDING",
+   "status": "RUNNING",
    "terminal_disposition": null,
    "title": "Register a conservative fallback arm on reconstructible-as-of inputs, with its own validated uncertainty",
    "units_done": 0,

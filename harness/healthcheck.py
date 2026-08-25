@@ -258,7 +258,7 @@ for _m in ("result_provenance","result_content_checks","parse_box_dump",
            "uncertainty_estimand","decision_view",
            # Pregame Decision Readiness v1.0, registered 2026-08-25
            "route_ladder_v1","checkpoint_schedule","readiness_gate","replacement_workflow",
-           "module_manifest","pipeline_e2e","recovery_jobs"):
+           "module_manifest","pipeline_e2e","recovery_jobs","result_display"):
     _r=subprocess.run([sys.executable,f"harness/{_m}.py","--selftest"],capture_output=True,text=True)
     _out=(_r.stdout+_r.stderr).strip().splitlines()
     check(f"{_m} selftest ({_out[-1][:72] if _out else 'no output'})", _r.returncode==0)

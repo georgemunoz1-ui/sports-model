@@ -3948,3 +3948,33 @@ reassurance. Lesson 23 one level further in.
 
 Acceptance suite now 16/16. healthcheck 0 fail. Standard sha256 301ff7c2 after amendment 1.
 Status unchanged: SYSTEM_NOT_DECISION_READY, EXECUTION BLOCKED, 0 wagers, $0.
+
+### 2026-08-25 (results card) — eleven finals were visible and my card hid them
+
+Owner supplied the 8/24 results from the official scoreboard and ruled: RESULT_DISPLAY and
+CANONICAL_EVIDENCE_ADMISSION are separate layers. Missing provenance may block settlement,
+promotion and estimator input; it may NEVER hide an available score from the visible results card.
+My "12 games registered, nothing gradable" was true canonically and a lie of omission on the page.
+Lesson 36. New harness/result_display.py (7/7 mutants) refuses both breaches of the wall: HIDDEN
+(a score withheld on provenance grounds) and LAUNDERED (a relayed score claiming canonical effect).
+
+EVERY owner figure reproduced exactly from the frozen board before rendering: all four arm records
+and Briers (two differ by 0.0001 rounding; recomputed values binding), champion total MAE 3.43 /
+RMSE 3.57 / bias -0.52 under, prior MAE 3.89, WNBA 1-1 with shadow Brier .2981 vs prior .2879,
+margin MAE 11.12, total MAE 22.35, and the blocked-value record 0-7.
+
+DESCRIPTIVE HEADLINES, none of them settlement:
+  CHAMPION_V13 6-3, best Brier .2391, beating both challengers and the prior on nine finals.
+  The seven blocked positive-EV sides went 0-7. One slate validates nothing - seven correlated
+  underdog-leaning sides going 0-7 is a plausible single-slate outcome - but the asymmetry is vivid:
+  raw EV without an error estimate would have authorized seven losing $100 wagers.
+  Both pregame dispersion leans now look like model bias on this slate: the 9-of-10 underdog value
+  lean went 0-7, and the champion averaged 0.52 runs UNDER realised totals. First data point for
+  MODEL_MARKET_DISPERSION_REVIEW.
+  The stale WNBA shadow earned every flag it carried: lost to the prior on Brier, missed both totals
+  by 17 and 27.
+  PIT@SD displayed as LIVE, excluded from every figure, never shown as final.
+
+Nothing settled: no canonical row, no prior-pool entry, no promotion count, no estimator input,
+ledger 0 bets / $0. Canonical admission still arrives only via RJ-001; this display record is then
+superseded, not edited. Record b3c05237, display gate RESULT_DISPLAY_OK.

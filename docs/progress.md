@@ -3812,3 +3812,43 @@ Report order now: today's action, decision board, actionable selections (empty, 
 correct output rather than a missing section), watchlist, WNBA diagnostic box, technical appendix
 unchanged and complete, audit/changelog appendix last. decision_view gate DECISION_VIEW_OK,
 render_contract RENDER_CONTRACT_OK.
+
+### 2026-08-25T01:58Z — a full acquisition pass that acquired nothing, on a board the clock had passed
+
+Ran the ladder to exhaustion for today's slate: DIRECT_OFFICIAL_SOURCE -> NAMED_BOOK_OR_AGGREGATOR
+-> OWNER_RELAY, 14 attempts across 9 domains, no authorized route left untried. Queried the proxy
+status endpoint first as a diagnostic OF the rail (enabled, no recent relay failures) rather than a
+route around it. Control run BEFORE any per-domain conclusion: en.wikipedia.org EGRESS_BLOCKED, so
+rail failure, so nothing here says anything about whether MLB, the WNBA or DraftKings would serve
+this client. statsapi, stats.wnba.com, mlb.com, fangraphs, sportsbook.draftkings.com, the-odds-api,
+site.api.espn.com and covers.com all EGRESS_BLOCKED. Shell HTTP NOT_ATTEMPTED. Both WebSearch
+responses retained verbatim and hashed; neither contains a matchup, game id, start time, venue,
+starter, lineup, injury designation or price. Zero games acquired for 2026-08-25.
+
+AND THE MORE IMPORTANT FINDING. The frozen board is 2026-08-24 and its games have started. GitHub's
+server clock on this push (run 32799583204) puts now at 2026-08-25T01:58:16Z. Eleven of twelve games
+were past first pitch at that instant; ATL@LAS was 1m44s away. Price age 9h16m49s - but the age is
+not the point. PRICE_FRESHNESS fails CATEGORICALLY, not by degree: those markets are closed. A
+16:41:27Z capture is not a stale offer, it is not an offer.
+
+So I did not re-badge yesterday's board as today's. That would have produced a page that looks
+actionable and is uninvestable, which is the worst thing this system can emit. The decision board is
+published with its true current status: every primary blocker is now PRICE_FRESHNESS, because a
+closed market outranks everything - there is nothing left to repair a bet INTO. The blockers that
+were primary this morning are preserved in the next column, and MODEL_UNCERTAINTY_PIPELINE_DEFECT
+sits on all ten watchlist rows.
+
+Max playable price is blank on every row and that is a RESULT, not an omission. It derives from an
+uncertainty-adjusted break-even; with no admissible uncertainty there is no such price, and printing
+the raw break-even in its place would imply precision the model does not have.
+
+THE DEFECT SEPARATION IS THE POINT AND IT HELD. Acquisition can repair INPUT_STALENESS,
+PRICE_STALENESS and PERSONNEL_UNVERIFIED - today it repaired none of the three. It cannot touch
+UNCERTAINTY_PIPELINE_DEFECT (k=2 against a floor of 6), cluster adequacy (7 after a full restore,
+still not adequate) or the provisional 1,684-row pool. Even a perfect refresh would have left the
+right-hand column standing, and that column alone holds every positive-EV row at BLOCK_UNCERTAINTY.
+No acquisition outcome could have produced a bet today. The two failures matter separately: one is
+fixed by a working network, the other by months of clean walk-forward evidence.
+
+No price entered any model input. No forecast regenerated, rewritten or re-anchored. Ledger $0 at
+0 bets. Bets authorized 0, units 0.00, dollars $0, passed 1, blocked 11.

@@ -253,10 +253,18 @@ for _m in ("result_provenance","result_content_checks","parse_box_dump",
            # 2026-08-24 price recovery: the ladder, the overlay contract, the EV screen and
            # the distributional identity that "distribution retained" was standing in for.
            "price_acquisition","price_overlay","ev_screen","distribution_identity",
-           "uncertainty_estimand","decision_view"):
+           "uncertainty_estimand","decision_view",
+           # Pregame Decision Readiness v1.0, registered 2026-08-25
+           "route_ladder_v1","checkpoint_schedule","readiness_gate","replacement_workflow"):
     _r=subprocess.run([sys.executable,f"harness/{_m}.py","--selftest"],capture_output=True,text=True)
     _out=(_r.stdout+_r.stderr).strip().splitlines()
     check(f"{_m} selftest ({_out[-1][:72] if _out else 'no output'})", _r.returncode==0)
+    # IDENTITY. I overwrote harness/acquisition_ladder.py with a different module on 2026-08-25 and
+    # every gate stayed green, because "the selftest passes" is true of ANY module sitting at that
+    # path. A selftest banner that does not name its own file is the cheapest possible tell.
+    _banner=[l for l in _out if "selftest:" in l]
+    check(f"{_m} selftest names its own module",
+          bool(_banner) and _m in _banner[-1], warn=False)
 # 5a2e. WORKFLOW SHELL SYNTAX. The first timestamp-anchor run died in under a second on an
 # indented quoted heredoc, whose terminator must sit at column 0. A `run:` block is shell that
 # nothing checked before it reached GitHub. `bash -n` parses without executing, so this costs
@@ -409,6 +417,21 @@ if os.path.exists("progress.md") and os.path.exists("docs/progress.md"):
     stray=os.path.getmtime("progress.md"); canon=os.path.getmtime("docs/progress.md")
     check("journal split: root progress.md is not newer than canonical docs/progress.md",
           stray<=canon, warn=True)
+# 7. PREGAME DECISION READINESS v1.0, section 12. The standard is implemented only when its
+#    acceptance proofs pass. Each proof asserts BOTH directions — the compliant case passes and the
+#    violating case is refused — so a one-directional test cannot make the standard decoration.
+try:
+    _r=subprocess.run([sys.executable,"harness/standard_acceptance.py"],capture_output=True,text=True)
+    _lines=(_r.stdout+_r.stderr).strip().splitlines()
+    _summary=[l for l in _lines if l.startswith("standard acceptance:")]
+    check(f"PregameDecisionReadiness v1.0 acceptance ({_summary[-1] if _summary else 'no output'})",
+          _r.returncode==0)
+    for _l in _lines:
+        if _l.strip().startswith("FAIL "):
+            print(f"       ! {_l.strip()}")
+except Exception as e:
+    check(f"standard acceptance suite ({e})", False)
+
 print(f"\n{'HEALTHY' if not fails else 'UNHEALTHY'} — {len(fails)} fail, {len(warns)} warn")
 if fails: print("Fix FAILs before new work:", fails)
 sys.exit(1 if fails else 0)

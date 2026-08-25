@@ -3852,3 +3852,50 @@ fixed by a working network, the other by months of clean walk-forward evidence.
 
 No price entered any model input. No forecast regenerated, rewritten or re-anchored. Ledger $0 at
 0 bets. Bets authorized 0, units 0.00, dollars $0, passed 1, blocked 11.
+
+### 2026-08-25 — Pregame Decision Readiness v1.0 registered and implemented
+
+Standard registered at docs/standards/PREGAME_DECISION_READINESS_v1.0.md,
+sha256 3595b0e3351864ac3d4a318bf8492ea695834a31367d02f69d10d77239f07e1f. Section 12 defines
+implementation as "the automated tests prove it", so the deliverable is the acceptance suite:
+harness/standard_acceptance.py, 12/12, each proof asserting BOTH directions - the compliant case
+passes and the violating case is refused. A one-directional acceptance test is how a standard
+becomes decoration.
+
+FIVE NEW MODULES, all gated in healthcheck:
+  route_ladder_v1        11/11  seven rungs with authority tiers. A blocked rail ADVANCES;
+                                termination is legal only when every authorized route is tried, and
+                                exhaustion is an ACQUISITION INCIDENT, never a property of the game.
+                                A snippet may identify an artifact; it may not supply an
+                                authoritative field while a stronger route is untried.
+  checkpoint_schedule    10/10  eight checkpoints T-24h to pre-execution, escalation starting at
+                                T-90 rather than at the freeze. An overdue checkpoint AT the freeze
+                                is SYSTEM_FAILURE with a named subsystem - never a PASS.
+  readiness_gate         11/11  eleven required estimator parts; SYSTEM_NOT_DECISION_READY;
+                                forbidden substitutes refused by name.
+  replacement_workflow   12/12  material change -> replacement under a preregistered identity,
+                                original immutable, anchored before first pitch or refused. Seven
+                                frozen fallback modes; improvisation refused by name.
+  standard_acceptance    12/12  the section 12 proofs.
+
+EXTENDED: decision_view 32/32 (BET/PASS normal vocabulary, twelve work-queue conditions that may not
+end a game after the freeze, seven section-11 exception states, SYSTEM_FAILURE needing an incident
+record, the 22-field section 9 row contract, slate coverage against the SCHEDULE not the rows, and
+no forced wager on non-positive CONSERVATIVE EV); price_overlay 39/39 (five market phases, live
+price refused from a pregame overlay by the clock AND by a declared phase, cross-book refused for
+same-book hold, opening and current separated).
+
+THE STANDARD IMMEDIATELY REFUSED THIS SYSTEM. Section 7 run against actual state:
+SYSTEM_NOT_DECISION_READY. Seven of eleven estimator parts absent, 2 admissible clusters against a
+declared floor of 6, prior pool provisional. So the report is republished as a READINESS STATEMENT,
+not a decision board. Every previous version had the shape of a product and the content of an
+outage: a header, twelve games, EV numbers, and every row blocked on the same missing estimator.
+v1.0 says that is the wrong output entirely, and it is right.
+
+I ALSO DESTROYED A MODULE AND EVERY GATE STAYED GREEN. `cat > harness/acquisition_ladder.py`
+overwrote the existing 2026-08-22 acquisition state machine. The healthcheck sweep asserts that
+`<name>.py --selftest` exits zero, which is true of ANY module at that path - my replacement had
+11/11 mutants on a file that had just deleted someone else's work. Caught only because grep showed
+the name twice in one list. Restored from HEAD, renamed mine to route_ladder_v1, and added a gate:
+every selftest banner must name its own module, so a clobbering replacement announces itself. See
+lesson 34.

@@ -71,6 +71,152 @@ OK = "DECISION_VIEW_OK"
 REFUSED = "DECISION_VIEW_REFUSED"
 
 
+# --- v1.0 FINAL DECISION VOCABULARY -----------------------------------------------------------
+#: Section 1. The NORMAL vocabulary is BET or PASS. BLOCKED survives below as an INTERNAL status
+#: that drives the watchlist, but it may never be a game's FINAL published decision when its cause
+#: is one of the internal work-queue conditions. That is the whole change: "we could not find out"
+#: is a task with a deadline, not an answer.
+NORMAL_FINAL = (BET, PASS)
+EXCEPTION = "EXCEPTION"
+SYSTEM_FAILURE = "SYSTEM_FAILURE"
+FINAL_DECISIONS = (BET, PASS, EXCEPTION, SYSTEM_FAILURE)
+
+#: Section 11. The closed set of states that can legitimately prevent a normal decision. These are
+#: INCIDENTS — not ordinary passes, and not evidence that searching was optional.
+EXCEPTIONAL_STATES = (
+    "GAME_ALREADY_LIVE",
+    "GAME_POSTPONED_OR_CANCELLED",
+    "MARKET_SUSPENDED",
+    "CONFLICTING_AUTHORITATIVE_IDENTITIES",
+    "MATERIAL_CHANGE_TOO_LATE_TO_ANCHOR",
+    "INTEGRITY_OR_CHRONOLOGY_FAILURE",
+    "NO_VALIDATED_MODEL_OR_FALLBACK_FOR_STATE",
+)
+
+#: Section 1's forbidden endings. Each is an internal work queue.
+WORK_QUEUE_ENDINGS = (
+    "BLOCKED_INFORMATION_UNAVAILABLE", "PERSONNEL_UNVERIFIED", "PRICE_MISSING",
+    "STARTER_UNCONFIRMED", "UNCERTAINTY_PIPELINE_DEFECT", "LINEUP_UNAVAILABLE",
+    "SLATE_UNAVAILABLE", "SOURCE_ARTIFACT_NOT_RETAINED", "PRICE_STALE",
+    "MODEL_UNCERTAINTY", "PRICE_FRESHNESS", "INPUT_INTEGRITY",
+)
+
+WORK_QUEUE_AS_DECISION = "WORK_QUEUE_CONDITION_PUBLISHED_AS_A_FINAL_DECISION"
+UNKNOWN_EXCEPTION = "EXCEPTION_STATE_NOT_ON_THE_SECTION_11_LIST"
+EXCEPTION_WITHOUT_STATE = "EXCEPTION_WITHOUT_A_NAMED_STATE"
+FAILURE_WITHOUT_INCIDENT = "SYSTEM_FAILURE_WITHOUT_AN_INCIDENT_RECORD"
+FORCED_WAGER = "WAGER_FORCED_ON_NON_POSITIVE_CONSERVATIVE_EV"
+
+#: Section 9. Every field the published row must carry.
+ROW_CONTRACT_V1 = (
+    "game", "final_decision", "recommended_side", "recommended_market", "current_price",
+    "playable_price_boundary", "model_probability", "breakeven_probability", "novig_probability",
+    "raw_ev_per_100", "conservative_ev_per_100", "projected_winner", "projected_margin",
+    "projected_total", "arm_agreement", "personnel_verification", "lineup_verification",
+    "quote_timestamp_utc", "quote_age_seconds", "recommended_units", "recommended_dollars",
+    "primary_reason",
+)
+UNIT_SIZE_USD = 100.0
+
+
+MISSING_GAME = "SCHEDULED_GAME_HAS_NO_DECISION_ROW"
+EXTRA_GAME = "DECISION_ROW_FOR_AN_UNSCHEDULED_GAME"
+
+
+def slate_coverage_gate(scheduled_games, rows):
+    """Section 1: EVERY scheduled game receives a decision. Silence is not a decision.
+
+    The failure this catches is quieter than a wrong number: a game that simply is not on the page.
+    Nothing else notices, because every row that IS present can be perfectly correct. Coverage has
+    to be checked against the SCHEDULE, not against the rows, or the rows define their own universe.
+    """
+    sched = list(scheduled_games or [])
+    have = [r.get("game") for r in rows or []]
+    problems = [{"code": MISSING_GAME, "game": g} for g in sched if g not in have]
+    problems += [{"code": EXTRA_GAME, "game": g} for g in have if g not in sched]
+    return {"status": OK if not problems else REFUSED, "n_problems": len(problems),
+            "n_scheduled": len(sched), "n_rows": len(have), "problems": problems}
+
+
+def is_work_queue_ending(reason):
+    """True when a reason is an internal work item that may not end a game."""
+    r = str(reason or "")
+    return any(w in r for w in WORK_QUEUE_ENDINGS)
+
+
+def final_decision(action, exception_state=None, incident=None):
+    """Map an internal action to a v1.0 FINAL decision, or refuse."""
+    if action == BET:
+        return BET, None
+    if action == PASS:
+        return PASS, None
+    if action == EXCEPTION:
+        if not exception_state:
+            return None, EXCEPTION_WITHOUT_STATE
+        if exception_state not in EXCEPTIONAL_STATES:
+            return None, f"{UNKNOWN_EXCEPTION}: {exception_state}"
+        return EXCEPTION, None
+    if action == SYSTEM_FAILURE:
+        if not incident:
+            return None, FAILURE_WITHOUT_INCIDENT
+        return SYSTEM_FAILURE, None
+    return None, f"NOT_A_FINAL_DECISION: {action}"
+
+
+def final_decision_gate(rows, past_freeze=True):
+    """Section 1 + 10 + 11, enforced over a published board."""
+    problems = []
+    for r in rows or []:
+        fd = r.get("final_decision", r.get("actual_action"))
+        reason = r.get("primary_reason", r.get("primary_blocker"))
+        if fd not in FINAL_DECISIONS:
+            problems.append({"code": WORK_QUEUE_AS_DECISION, "game": r.get("game"),
+                             "published": fd,
+                             "note": "the normal final vocabulary is BET or PASS; anything else "
+                                     "must be a named section 11 exception or a SYSTEM_FAILURE "
+                                     "carrying an incident record"})
+            continue
+        if fd in NORMAL_FINAL and past_freeze and is_work_queue_ending(reason):
+            problems.append({"code": WORK_QUEUE_AS_DECISION, "game": r.get("game"),
+                             "published": fd, "reason": reason,
+                             "note": "an internal work queue may not be the stated reason for a "
+                                     "normal decision after the freeze. Resolve it, raise a "
+                                     "section 11 exception, or declare SYSTEM_FAILURE."})
+        _, err = final_decision(fd, r.get("exception_state"), r.get("incident"))
+        if err:
+            problems.append({"code": err, "game": r.get("game")})
+        if fd == BET:
+            cev = _num(r.get("conservative_ev_per_100"))
+            if cev is None or cev <= 0:
+                problems.append({"code": FORCED_WAGER, "game": r.get("game"),
+                                 "conservative_ev_per_100": cev,
+                                 "note": "a wager may not be forced where uncertainty-adjusted EV "
+                                         "is non-positive or unavailable"})
+    return {"status": OK if not problems else REFUSED, "n_problems": len(problems),
+            "problems": problems}
+
+
+def row_contract_gate(rows):
+    """Section 9: every published row carries every field, and a BET shows units AND dollars."""
+    problems = []
+    for r in rows or []:
+        for fld in ROW_CONTRACT_V1:
+            if fld not in r:
+                problems.append({"code": MISSING_FIELD, "game": r.get("game"), "field": fld})
+        if r.get("final_decision") == BET:
+            u, d = _num(r.get("recommended_units")), _num(r.get("recommended_dollars"))
+            if not u or not d:
+                problems.append({"code": "WAGER_WITHOUT_UNITS_AND_DOLLARS", "game": r.get("game")})
+            elif abs(d - u * UNIT_SIZE_USD) > 1e-9:
+                problems.append({"code": "UNITS_AND_DOLLARS_DISAGREE", "game": r.get("game"),
+                                 "units": u, "dollars": d, "unit_size": UNIT_SIZE_USD})
+            if r.get("playable_price_boundary") in (None, ""):
+                problems.append({"code": "WAGER_WITHOUT_A_PLAYABLE_PRICE_BOUNDARY",
+                                 "game": r.get("game")})
+    return {"status": OK if not problems else REFUSED, "n_problems": len(problems),
+            "problems": problems}
+
+
 def _num(x):
     if x is None or isinstance(x, bool) or not isinstance(x, (int, float)):
         return None
@@ -320,6 +466,123 @@ def selftest():
                ["problems"]):
         f.append("a missing required field must be refused")
 
+    # --- v1.0: slate coverage. Every scheduled game gets a row. -----------------------------------
+    SCHED = ["mlb:A@B", "mlb:C@D", "wnba:E@F"]
+    full_rows = [{"game": g} for g in SCHED]
+    if slate_coverage_gate(SCHED, full_rows)["status"] != OK:
+        f.append("a board covering every scheduled game must pass")
+    for drop in SCHED:
+        part = [r for r in full_rows if r["game"] != drop]
+        cov = slate_coverage_gate(SCHED, part)
+        if cov["status"] != REFUSED:
+            f.append(f"a board missing {drop} must be refused")
+        elif not any(p["code"] == MISSING_GAME and p["game"] == drop for p in cov["problems"]):
+            f.append(f"the missing game {drop} must be named")
+    extra = slate_coverage_gate(SCHED, full_rows + [{"game": "mlb:PHANTOM@GAME"}])
+    if extra["status"] != REFUSED or not any(p["code"] == EXTRA_GAME for p in extra["problems"]):
+        f.append("a row for an unscheduled game must be refused — the 8/13 phantom-game defect")
+    if slate_coverage_gate(SCHED, [])["n_problems"] != 3:
+        f.append("an empty board must report every scheduled game as missing")
+    if slate_coverage_gate([], [{"game": "x"}])["status"] != REFUSED:
+        f.append("rows without a schedule cannot define their own universe")
+
+    # --- v1.0: the final decision vocabulary -----------------------------------------------------
+    if set(NORMAL_FINAL) != {BET, PASS}:
+        f.append("the normal final vocabulary is BET and PASS")
+    if len(EXCEPTIONAL_STATES) != 7:
+        f.append("section 11 names seven exceptional states")
+
+    def frow(**kw):
+        base = {"game": "mlb:A@B", "final_decision": PASS, "primary_reason": "negative EV",
+                "conservative_ev_per_100": None}
+        base.update(kw); return base
+
+    # THE HEADLINE RULE: a work-queue condition may not be a game's stated reason after the freeze
+    for wq in ("UNCERTAINTY_PIPELINE_DEFECT", "PERSONNEL_UNVERIFIED", "STARTER_UNCONFIRMED",
+               "PRICE_MISSING", "BLOCKED_INFORMATION_UNAVAILABLE", "LINEUP_UNAVAILABLE"):
+        g = final_decision_gate([frow(primary_reason=wq)])
+        if not any(p["code"] == WORK_QUEUE_AS_DECISION for p in g["problems"]):
+            f.append(f"{wq} must not be publishable as a final reason after the freeze")
+        # ...and BEFORE the freeze it is a legitimate open work item, not a violation
+        if final_decision_gate([frow(primary_reason=wq)], past_freeze=False)["problems"]:
+            f.append(f"{wq} before the freeze is an open work item, not a violation")
+    if not is_work_queue_ending("UNCERTAINTY_PIPELINE_DEFECT"):
+        f.append("the uncertainty defect is an internal work queue")
+    if is_work_queue_ending("negative expected value at this price"):
+        f.append("a genuine economic reason is not a work queue")
+
+    # BLOCKED is no longer a FINAL decision at all — and it must be refused BY THE VOCABULARY,
+    # not incidentally by some later check. Asserting only "refused" would let BLOCKED back into
+    # FINAL_DECISIONS without any fixture noticing.
+    bl = final_decision_gate([frow(final_decision=BLOCKED)])
+    if bl["status"] != REFUSED:
+        f.append("BLOCKED may not be published as a final decision")
+    elif not any(p["code"] == WORK_QUEUE_AS_DECISION and p.get("published") == BLOCKED
+                 for p in bl["problems"]):
+        f.append(f"BLOCKED must be refused by the final-decision vocabulary, got {bl['problems']}")
+    if BLOCKED in FINAL_DECISIONS:
+        f.append("BLOCKED must not be in the final decision vocabulary")
+
+    # exceptions must be named from the closed list
+    ex = final_decision_gate([frow(final_decision=EXCEPTION,
+                                   exception_state="GAME_ALREADY_LIVE")])
+    if ex["status"] != OK:
+        f.append(f"a named section 11 exception is publishable, got {ex['problems']}")
+    # each refusal must come from ITS OWN guard: a missing state and an unlisted state are
+    # different defects and a single catch-all would hide the loss of either
+    for bad, want in ((None, EXCEPTION_WITHOUT_STATE), ("", EXCEPTION_WITHOUT_STATE),
+                      ("I_DID_NOT_LOOK", UNKNOWN_EXCEPTION),
+                      ("UNCERTAINTY_PIPELINE_DEFECT", UNKNOWN_EXCEPTION)):
+        b = final_decision_gate([frow(final_decision=EXCEPTION, exception_state=bad)])
+        if b["status"] != REFUSED:
+            f.append(f"exception state {bad!r} must be refused")
+        elif not any(want in str(p.get("code", "")) for p in b["problems"]):
+            f.append(f"exception state {bad!r} must be refused by {want}, got {b['problems']}")
+    for st in EXCEPTIONAL_STATES:
+        if final_decision_gate([frow(final_decision=EXCEPTION, exception_state=st)])["status"] != OK:
+            f.append(f"{st} is a legitimate section 11 exception")
+
+    # SYSTEM_FAILURE needs an incident record
+    if final_decision_gate([frow(final_decision=SYSTEM_FAILURE)])["status"] != REFUSED:
+        f.append("SYSTEM_FAILURE without an incident record must be refused")
+    if final_decision_gate([frow(final_decision=SYSTEM_FAILURE,
+                                 incident={"missing_field": "starter"})])["status"] != OK:
+        f.append("SYSTEM_FAILURE with an incident record is publishable")
+
+    # NO FORCED WAGERS: a BET needs positive CONSERVATIVE EV, not positive raw EV
+    for cev in (None, 0.0, -1.0):
+        b = final_decision_gate([frow(final_decision=BET, primary_reason="edge",
+                                      conservative_ev_per_100=cev)])
+        if not any(p["code"] == FORCED_WAGER for p in b["problems"]):
+            f.append(f"a BET at conservative EV {cev} must be refused as a forced wager")
+    if final_decision_gate([frow(final_decision=BET, primary_reason="edge",
+                                 conservative_ev_per_100=3.0)])["status"] != OK:
+        f.append("a BET with positive conservative EV is publishable")
+
+    # --- section 9 row contract ------------------------------------------------------------------
+    full = {k: "x" for k in ROW_CONTRACT_V1}
+    full.update(game="mlb:A@B", final_decision=PASS)
+    if row_contract_gate([full])["status"] != OK:
+        f.append(f"a complete row must pass, got {row_contract_gate([full])['problems']}")
+    for fld in ROW_CONTRACT_V1:
+        part = {k: v for k, v in full.items() if k != fld}
+        if not any(p["code"] == MISSING_FIELD and p["field"] == fld
+                   for p in row_contract_gate([part])["problems"]):
+            f.append(f"a row missing {fld} must be refused")
+    # a wager shows BOTH units and dollars, and they must agree at the $100 unit
+    bet = dict(full, final_decision=BET, recommended_units=1.0, recommended_dollars=100.0,
+               playable_price_boundary="-115")
+    if row_contract_gate([bet])["status"] != OK:
+        f.append(f"a complete wager row must pass, got {row_contract_gate([bet])['problems']}")
+    if row_contract_gate([dict(bet, recommended_dollars=50.0)])["status"] != REFUSED:
+        f.append("units and dollars must agree at the $100 unit size")
+    if row_contract_gate([dict(bet, recommended_units=None)])["status"] != REFUSED:
+        f.append("a wager must show units")
+    if row_contract_gate([dict(bet, playable_price_boundary=None)])["status"] != REFUSED:
+        f.append("a wager must carry a playable price boundary")
+    if UNIT_SIZE_USD != 100.0:
+        f.append("unit size is $100")
+
     print("decision_view selftest:", "OK" if not f else "FAIL")
     for x in f:
         print("   -", x)
@@ -327,6 +590,48 @@ def selftest():
 
 
 MUTANTS = [
+    ("a scheduled game may be dropped from the board without notice",
+     '    problems = [{"code": MISSING_GAME, "game": g} for g in sched if g not in have]',
+     "    problems = []"),
+    ("a phantom game may be carded",
+     '    problems += [{"code": EXTRA_GAME, "game": g} for g in have if g not in sched]', "    pass"),
+    ("coverage is checked against the rows instead of the schedule",
+     "    problems = [{\"code\": MISSING_GAME, \"game\": g} for g in sched if g not in have]",
+     "    problems = [{\"code\": MISSING_GAME, \"game\": g} for g in have if g not in have]"),
+    ("a work-queue condition may end a game as a normal decision",
+     "        if fd in NORMAL_FINAL and past_freeze and is_work_queue_ending(reason):",
+     "        if False:"),
+    ("the uncertainty defect drops off the work-queue list",
+     '    "STARTER_UNCONFIRMED", "UNCERTAINTY_PIPELINE_DEFECT", "LINEUP_UNAVAILABLE",',
+     '    "STARTER_UNCONFIRMED", "LINEUP_UNAVAILABLE",'),
+    ("a work-queue reason is a violation even before the freeze",
+     "        if fd in NORMAL_FINAL and past_freeze and", "        if fd in NORMAL_FINAL and"),
+    ("BLOCKED becomes publishable as a final decision",
+     "FINAL_DECISIONS = (BET, PASS, EXCEPTION, SYSTEM_FAILURE)",
+     "FINAL_DECISIONS = (BET, PASS, EXCEPTION, SYSTEM_FAILURE, BLOCKED)"),
+    ("an unlisted exception state is accepted",
+     "        if exception_state not in EXCEPTIONAL_STATES:", "        if False:"),
+    ("an exception needs no state at all",
+     "        if not exception_state:\n            return None, EXCEPTION_WITHOUT_STATE",
+     "        if False:\n            return None, EXCEPTION_WITHOUT_STATE"),
+    ("SYSTEM_FAILURE stops needing an incident record",
+     "        if not incident:\n            return None, FAILURE_WITHOUT_INCIDENT",
+     "        if False:\n            return None, FAILURE_WITHOUT_INCIDENT"),
+    ("a wager is forced on non-positive conservative EV",
+     "            if cev is None or cev <= 0:", "            if False:"),
+    ("a wager is authorized on RAW EV instead of conservative EV",
+     '            cev = _num(r.get("conservative_ev_per_100"))',
+     '            cev = _num(r.get("raw_ev_per_100"))'),
+    ("a required section 9 field may go missing",
+     "        for fld in ROW_CONTRACT_V1:\n            if fld not in r:", "        for fld in []:\n            if fld not in r:"),
+    ("a wager may show units without dollars",
+     "            if not u or not d:", "            if False:"),
+    ("units and dollars stop being reconciled at the unit size",
+     "            elif abs(d - u * UNIT_SIZE_USD) > 1e-9:", "            elif False:"),
+    ("a wager may go out without a playable price boundary",
+     '            if r.get("playable_price_boundary") in (None, ""):', "            if False:"),
+    ("an exceptional state is dropped from the section 11 list",
+     '    "MARKET_SUSPENDED",\n', ""),
     ("BET stops requiring every gate",
      "    failed = [g for g in GATE_NAMES if not (gates or {}).get(g)]",
      "    failed = [g for g in GATE_NAMES[:1] if not (gates or {}).get(g)]"),

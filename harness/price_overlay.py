@@ -355,6 +355,64 @@ def lookup_stratum(sport=None, market=None, favorite_american=None, market_label
                    "dispersion ceiling is kept so the union is not more permissive than its parts"}
 
 
+# --- SECTION 8: MARKET PHASE ---------------------------------------------------------------------
+#: The 2026-08-25 lesson, made executable. A quote captured after actual start is not a stale offer,
+#: it is not an offer, and combining a live price with a frozen pregame probability compares a
+#: number that knows the first three innings against one that does not.
+MARKET_PHASES = ("PRE_GAME", "LIVE", "HALFTIME", "FINAL", "UNVERIFIED")
+PREGAME_ONLY = "PRE_GAME"
+LIVE_IN_PREGAME = "LIVE_PRICE_IN_A_PREGAME_OVERLAY"
+UNVERIFIED_PHASE = "MARKET_PHASE_UNVERIFIED_MAY_NOT_AUTHORIZE"
+POST_START_QUOTE = "QUOTE_CAPTURED_AFTER_ACTUAL_START"
+CROSS_BOOK_HOLD = "CROSS_BOOK_PRICES_USED_FOR_SAME_BOOK_HOLD"
+OPENING_CURRENT_MIXED = "OPENING_AND_CURRENT_PRICES_NOT_SEPARATED"
+
+
+def market_phase(captured_at_utc, actual_start_utc, declared_phase=None):
+    """(phase, ok_for_pregame, why). The clock decides; a declared phase may only be stricter."""
+    if not captured_at_utc or not actual_start_utc:
+        return "UNVERIFIED", False, (f"{UNVERIFIED_PHASE}: a capture time and an actual start time "
+                                     f"are both required to establish the phase")
+    if declared_phase is not None and declared_phase not in MARKET_PHASES:
+        return "UNVERIFIED", False, f"UNKNOWN_MARKET_PHASE: {declared_phase!r}"
+    after = str(captured_at_utc) >= str(actual_start_utc)
+    if after:
+        return ("LIVE" if declared_phase in (None, "PRE_GAME") else declared_phase), False, (
+            f"{POST_START_QUOTE}: captured {captured_at_utc}, actual start {actual_start_utc}. A "
+            f"quote taken at or after first pitch is not a pregame offer, and pairing it with a "
+            f"frozen pregame probability compares a price that knows the game has begun against a "
+            f"forecast that does not.")
+    if declared_phase in ("LIVE", "HALFTIME", "FINAL"):
+        return declared_phase, False, (f"{LIVE_IN_PREGAME}: the source declares {declared_phase} "
+                                       f"even though the capture precedes the recorded start; the "
+                                       f"stricter of clock and declaration wins")
+    if declared_phase == "UNVERIFIED":
+        return "UNVERIFIED", False, UNVERIFIED_PHASE
+    return PREGAME_ONLY, True, None
+
+
+def pregame_overlay_gate(quotes):
+    """Refuse any quote that may not enter a pregame overlay, and say which rule stopped it."""
+    problems = []
+    for q in quotes or []:
+        phase, ok, why = market_phase(q.get("captured_at_utc"), q.get("actual_start_utc"),
+                                      q.get("declared_phase"))
+        if not ok:
+            problems.append({"code": POST_START_QUOTE if phase in ("LIVE", "HALFTIME", "FINAL")
+                             else UNVERIFIED_PHASE, "game": q.get("game"), "phase": phase,
+                             "why": why})
+        if q.get("books") and len(set(q["books"])) > 1:
+            problems.append({"code": CROSS_BOOK_HOLD, "game": q.get("game"),
+                             "books": sorted(set(q["books"])),
+                             "note": "cross-book best prices are for line shopping. A hold computed "
+                                     "across two books is not any book's hold - the 8/3 ruling."})
+        if q.get("opening") is not None and q.get("current") is not None \
+                and q.get("opening_current_separated") is not True:
+            problems.append({"code": OPENING_CURRENT_MIXED, "game": q.get("game")})
+    return {"status": ELIGIBLE if not problems else NO_ELIGIBLE_BOARD,
+            "n_problems": len(problems), "problems": problems}
+
+
 def price_eligibility(boards):
     """Which captured boards may inform a market probability, and the honest status when none can."""
     graded = []
@@ -678,6 +736,52 @@ def selftest():
     if selection_ready(dict(full, stated_risk="  "))[0]:
         f.append("a blank stated risk is not a stated risk")
 
+    # --- section 8: market phase -----------------------------------------------------------------
+    if len(MARKET_PHASES) != 5:
+        f.append("section 4 names five market phases")
+    START = "2026-08-24T23:40:00Z"
+    ph, okp, _ = market_phase("2026-08-24T16:41:27Z", START)
+    if ph != PREGAME_ONLY or not okp:
+        f.append("a capture before first pitch is PRE_GAME and admissible")
+    for cap in (START, "2026-08-25T01:58:16Z"):
+        ph2, ok2, why2 = market_phase(cap, START)
+        if ok2:
+            f.append(f"a quote captured at/after start must be inadmissible ({cap})")
+        if POST_START_QUOTE not in (why2 or ""):
+            f.append("the refusal must name the post-start rule")
+        if "does not" not in (why2 or ""):
+            f.append("the refusal must explain the pregame-probability mismatch")
+    for dp in ("LIVE", "HALFTIME", "FINAL"):
+        _, ok3, why3 = market_phase("2026-08-24T16:41:27Z", START, declared_phase=dp)
+        if ok3:
+            f.append(f"a declared {dp} market may not enter a pregame overlay")
+        if LIVE_IN_PREGAME not in (why3 or ""):
+            f.append(f"a declared {dp} must be refused by the live-in-pregame rule")
+    for args in (("2026-08-24T16:41:27Z", None), (None, START),
+                 ("2026-08-24T16:41:27Z", START, "UNVERIFIED")):
+        if market_phase(*args)[1]:
+            f.append(f"an unverified phase must not authorize: {args}")
+    if market_phase("2026-08-24T16:41:27Z", START, "NOT_A_PHASE")[1]:
+        f.append("an unknown declared phase must be refused")
+    good_q = {"game": "mlb:TEX@CWS", "captured_at_utc": "2026-08-24T16:41:27Z",
+              "actual_start_utc": START, "declared_phase": "PRE_GAME", "books": ["DRAFTKINGS"]}
+    if pregame_overlay_gate([good_q])["status"] != ELIGIBLE:
+        f.append("a clean pregame single-book quote must be eligible")
+    lg = pregame_overlay_gate([dict(good_q, captured_at_utc="2026-08-25T01:58:16Z")])
+    if lg["status"] == ELIGIBLE or not any(p["code"] == POST_START_QUOTE for p in lg["problems"]):
+        f.append("a post-start quote must be refused from the pregame overlay")
+    xb = pregame_overlay_gate([dict(good_q, books=["DRAFTKINGS", "FANDUEL"])])
+    if not any(p["code"] == CROSS_BOOK_HOLD for p in xb["problems"]):
+        f.append("a two-book quote must be refused for same-book hold")
+    if "8/3 ruling" not in str(xb["problems"]):
+        f.append("the cross-book refusal must cite the standing ruling")
+    mixed = pregame_overlay_gate([dict(good_q, opening=-130, current=-124)])
+    if not any(p["code"] == OPENING_CURRENT_MIXED for p in mixed["problems"]):
+        f.append("opening and current must be separated")
+    if pregame_overlay_gate([dict(good_q, opening=-130, current=-124,
+                                  opening_current_separated=True)])["status"] != ELIGIBLE:
+        f.append("separately recorded opening and current prices are fine")
+
     for x in f:
         print("FAIL:", x)
     if not f:
@@ -686,6 +790,25 @@ def selftest():
 
 
 MUTANTS = [
+    ("a post-start quote may enter a pregame overlay",
+     "    if after:", "    if False:"),
+    ("the phase boundary shifts, so a quote AT first pitch counts as pregame",
+     "    after = str(captured_at_utc) >= str(actual_start_utc)",
+     "    after = str(captured_at_utc) > str(actual_start_utc)"),
+    ("a declared LIVE market is allowed into a pregame overlay",
+     '    if declared_phase in ("LIVE", "HALFTIME", "FINAL"):', "    if False:"),
+    ("an unverified market phase authorizes anyway",
+     "    if not captured_at_utc or not actual_start_utc:", "    if False:"),
+    ("cross-book prices pass same-book hold validation",
+     '        if q.get("books") and len(set(q["books"])) > 1:', "        if False:"),
+    ("opening and current prices may be mixed",
+     '            problems.append({"code": OPENING_CURRENT_MIXED, "game": q.get("game")})',
+     "            pass"),
+    ("a market phase is dropped from the vocabulary",
+     '"PRE_GAME", "LIVE", "HALFTIME", "FINAL", "UNVERIFIED")',
+     '"PRE_GAME", "LIVE", "FINAL", "UNVERIFIED")'),
+    ("the post-start refusal stops explaining the mismatch",
+     '"forecast that does not.")', '"quote is late.")'),
     ("book identity and quote links stop being required",
      '        if hom is not False and not (b.get("book") and b.get("source_urls")):', "        if False:"),
     ("quote links alone are dropped from the identity check",

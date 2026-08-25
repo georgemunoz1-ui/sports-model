@@ -99,10 +99,16 @@
      "status": "BLOCKED_EXTERNAL",
      "units_done": 0,
      "utc": "2026-08-25T19:04:00Z"
+    },
+    {
+     "note": "4th attempt: WebFetch https://www.wnba.com/injury-report -> EGRESS_BLOCKED (org proxy), unchanged across 4 attempts/107 min. 0/6. Next run folds into the 21:10Z T-90 checkpoint. OWNER_RELAY remains the open rung before the 23:00Z tip.",
+     "status": "BLOCKED_EXTERNAL",
+     "units_done": 0,
+     "utc": "2026-08-25T19:48:00Z"
     }
    ],
    "job_id": "RJ-004-WNBA-INJURY",
-   "next_run_utc": "2026-08-25T19:45:00Z",
+   "next_run_utc": "2026-08-25T21:10:00Z",
    "notes": "the official route exists and updates continually, so 34-day staleness is a refresh failure, not a board state. Fallback rung: OWNER_RELAY of the report text. Never route around the egress proxy.",
    "owner_subsystem": "wnba_features",
    "status": "BLOCKED_EXTERNAL",

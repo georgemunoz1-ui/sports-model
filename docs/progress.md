@@ -4088,3 +4088,28 @@ divs, dark-theme tokens intact, RENDER_CONTRACT_OK, healthcheck 0 fail.
 
 TODO carried: add a head-integrity check (title present in first 8KB, exactly one style block,
 theme tokens present) to the report gate so an amputated head can never ship silently again.
+
+### 2026-08-25 (market state) — MARKET_CAPTURED_CURRENT, candidates split from passes, replacements anchored
+
+Owner relayed the full DraftKings-attributed state at 16:48Z. All figures verified before use: 7
+candidate EVs reproduce to the cent from the frozen probabilities and explicit prices; 11 more
+prices derived EXACTLY from relayed EV at frozen p and marked DERIVED. Price board 80e8210a with
+the six required state fields. Overlay: 7 PENDING_UNCERTAINTY / 8 PASS_NEGATIVE_EV / 3
+PENDING_FEATURE_REFRESH - negatives now declined on their own economics, not on missing prices;
+PHX +3.32 is NOT a selection (stale features).
+
+Three official TBDs resolved after freeze -> replacement forecasts under
+mlb.replacement.CONFIRMED_LINEUP, originals byte-identical, anchored REMOTE_OBSERVED at
+2026-08-25T17:10:54Z (run 25), 5h29m before first pitch. BOS@MIA +3.01pp (Tyler Phillips), COL@WSH
+-0.24pp (Mason Adams named, no retained log), BAL@STL -2.29pp (Liberatore - model side flips to
+BAL). Re-screened under replacements all three priced sides worsen and stay PASS_NEGATIVE_EV;
+overlay v2 5d505c9c.
+
+"NO_LOG" was FALSE for Jobe and Pecko - their logs exist publicly (3 GS / 1 GS, relayed; Pecko
+official id 814490) and are merely not retained here. Relabeled SMALL_SAMPLE_FALLBACK by append-only
+addendum; CAP inputs unchanged. Mason Adams: NAMED_NO_LOG_RETAINED_CAP.
+
+New harness/state_coherence.py (8/8): refuses the six registered incoherence pairs. First real
+finding within minutes of existing: the replacement rows' status tag didn't say REPLACEMENT near a
+resolved TBD. Page retitled "August 25 Forecast & Market Review" - a page may not call itself a
+Decision Board while SYSTEM_NOT_DECISION_READY. Badge carries COMBINED 16/16.

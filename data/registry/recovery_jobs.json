@@ -31,10 +31,16 @@
      "status": "BLOCKED_EXTERNAL",
      "units_done": 0,
      "utc": "2026-08-25T21:56:00Z"
+    },
+    {
+     "note": "8th attempt: statsapi.mlb.com and baseball-reference.com both EGRESS_BLOCKED via the approved fetch tool. 0/123. Next 10:00Z.",
+     "status": "BLOCKED_EXTERNAL",
+     "units_done": 0,
+     "utc": "2026-08-26T04:02:00Z"
     }
    ],
    "job_id": "RJ-001-PROVENANCE",
-   "next_run_utc": "2026-08-26T04:00:00Z",
+   "next_run_utc": "2026-08-26T10:00:00Z",
    "notes": "a unit is one canonical row bound to a retrieved artifact with a game id, a retrieval timestamp and a content hash. Currently blocked on egress; the job records BLOCKED_EXTERNAL rather than silently not running.",
    "owner_subsystem": "acquisition",
    "status": "BLOCKED_EXTERNAL",
@@ -82,6 +88,12 @@
      "status": "RUNNING",
      "units_done": 0,
      "utc": "2026-08-25T23:06:00Z"
+    },
+    {
+     "note": "honest status at the overnight slot: RJ-003's registered fire condition is an RJ-002 finding (rich features not reconstructible as-of without leakage), and RJ-002 has made no finding \u2014 it is blocked on RJ-001. Advancing units before the condition fires would build an arm nobody has established is needed. 0/4 stands; the 07:00Z slot logs again unless RJ-002 moves.",
+     "status": "RUNNING",
+     "units_done": 0,
+     "utc": "2026-08-26T04:02:00Z"
     }
    ],
    "job_id": "RJ-003-FALLBACK-ARM",
@@ -182,10 +194,16 @@
      "status": "BLOCKED_EXTERNAL",
      "units_done": 0,
      "utc": "2026-08-25T23:20:00Z"
+    },
+    {
+     "note": "component sweep: www.wnba.com/wnba-injury-report and stats.wnba.com both EGRESS_BLOCKED; no rail change since 22:10Z. 0/17. Deadline 17:00Z for the next WNBA board \u2014 if routes stay exhausted at board-build time the board publishes the failure again. Next 10:00Z alongside RJ-001; OWNER_RELAY remains the open rung.",
+     "status": "BLOCKED_EXTERNAL",
+     "units_done": 0,
+     "utc": "2026-08-26T04:02:00Z"
     }
    ],
    "job_id": "RJ-005-WNBA-FEATURE-PIPELINE",
-   "next_run_utc": "2026-08-26T04:00:00Z",
+   "next_run_utc": "2026-08-26T10:00:00Z",
    "notes": "After binding: recompute feature state (as_of, source hashes, age); generate separately identified replacement forecasts (wnba.replacement.FEATURE_REFRESH) since the board is frozen; rerun side, margin, total, EV and disposition through side_reselection_gate after anchor. Exhaustion of all authorized routes without binding publishes SYSTEM_FAILURE_WNBA_FEATURE_PIPELINE \u2014 never a normal-looking board.",
    "owner_subsystem": "wnba_features",
    "status": "BLOCKED_EXTERNAL",

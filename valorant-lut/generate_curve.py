@@ -1,6 +1,10 @@
 #!/usr/bin/env python3
 """
-Self-contained generator for the Valorant LUT (Raw Accel Reimagined).
+LEGACY generator — the original subtle gain-cap profile.
+
+Authored for the previous 3200 DPI / 0.088 setup and NOT valid on the current
+1600 DPI hardware (x-axis is counts/ms, so breakpoints land at double the
+intended hand speed). Kept for history. Use generate_valorant_curve.py instead.
 
 Target: 3200 DPI, 0.088 in-game sens (eDPI 281.6).
 Produces a 64-point "Gain / Velocity" LUT that:

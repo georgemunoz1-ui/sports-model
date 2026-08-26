@@ -1,26 +1,29 @@
 #!/usr/bin/env python3
 """
-Generator for the continuous Valorant accel curves (Raw Accel Reimagined,
-gain/velocity LUTs, 64 points each).
+Generator for the LOWGRAD family - continuous Valorant accel curves as
+gain/velocity LUTs for base Raw Accel.
 
-Target: 3200 DPI, 0.088 in-game sens (eDPI 281.6, ~46.4 cm/360 at 0.07 yaw).
+Design (gain space): exactly 1.000x below the onset speed, then a C2-smooth
+quintic ease (smootherstep) up to the max gain at the cap speed, flat beyond,
+out to 200 in/s. Zero gain-derivative at both ends of the ramp, so no kinks.
+The velocity curve is the exact analytic integral of the gain function, and
+knee nodes sit at equal gain increments for uniform staircase resolution.
 
-Design (gain space — the LUT slope is the *marginal* gain; note the driver
-applies y(s)/s, the ratio, as the per-packet multiplier, so felt sensitivity
-lags the slope and only approaches the cap asymptotically):
-exactly 1.000x below the onset speed, then a C2-smooth quintic ease
-(smootherstep) up to the max gain at the cap speed, flat beyond, out to
-200 in/s. Zero gain-derivative at both ends of the ramp — no kinks.
+Note the driver applies y(s)/s (the ratio) as the per-packet multiplier, so
+felt sensitivity lags the LUT slope and only approaches the cap asymptotically.
 
-Two parameterizations (see PROFILES):
-  VAL-CURVE: onset 8 in/s, cap 40 in/s, gain 1.30 — assist lands in the
-             realistic flick range (20-50 in/s)
-  VAL-MILD:  onset 12 in/s, cap 90 in/s, gain 1.20 — near-raw until very
-             fast swipes; assist mostly at 60+ in/s
+Point budget: base Raw Accel's limit is LUT_POINTS_CAPACITY = 257. The 64 that
+Raw Accel Reimagined's editor advertises is a UI cap and does not apply here;
+the -64pt profiles predate that discovery.
 
-The velocity curve is the exact analytic integral of the gain function, so
-the LUT's slope reproduces the intended gain precisely. Knee nodes are
-placed at equal gain increments (uniform gain-step resolution).
+DPI is baked into the x-axis (counts/ms), so every profile carries its own DPI
+and breakpoints are anchored in physical in/s. Never load a curve whose DPI
+does not match the mouse.
+
+Current active build:
+  VAL-LOWGRAD-1600-015-WHOLE-257pt  (1600 DPI / 0.15, onset 12 in/s,
+  cap 1.15 at 40 in/s, whole mode)
+See PROFILES below for the full list.
 """
 import json
 

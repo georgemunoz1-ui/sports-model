@@ -1,26 +1,25 @@
 #!/usr/bin/env python3
 """
-Generator for VAL-SCURVE-3200-088-64pt — a whaamkabaam-style S-curve for
-Raw Accel Reimagined (gain/velocity LUT, 64 points).
-
-Target: 3200 DPI, 0.088 in-game sens (eDPI 281.6, ~46.4 cm/360 at 0.07 yaw).
+Generator for the S-CURVE family (whaamkabaam-style) for base Raw Accel.
 
 Philosophy ("low and high sens at the same time"): slow movements run BELOW
-baseline for extra micro precision, the curve crosses baseline at normal
-aim speed, fast movements rise above it for flicks.
+baseline for extra micro precision, the curve crosses baseline at normal aim
+speed, fast movements rise above it for flicks.
 
-Gain shape (log-space smootherstep, matching how motivity/synchronous-style
-S-curves are constructed — symmetric on a log speed axis):
-  gain = 0.85            below 2 in/s   (micro: effective eDPI ~239)
-  gain = 0.85 -> 1.30    across 2-50 in/s, crossing 1.00 at ~8 in/s
-  gain = 1.30            above 50 in/s  (flicks), out to 200 in/s
+Gain shape is a log-space smootherstep, matching how motivity/synchronous-style
+S-curves are constructed (symmetric on a log speed axis). Each profile sets its
+own floor, cap and speed window; see PROFILES.
 
-Applied in WHOLE mode (both axes uniformly): with a sub-1.0 slow region,
-by-component vertical-raw would skew slow diagonals by up to 15%.
+Applied in WHOLE mode: with a sub-1.0 slow region, by-component vertical-raw
+would skew slow diagonals noticeably.
 
-The velocity LUT is the numeric integral of the gain function (Simpson,
-sub-1e-6 accuracy), so the LUT slope reproduces the intended gain. Knee
-nodes sit at equal gain increments (uniform 0.0075x/step resolution).
+The velocity LUT is the numeric integral of the gain function (Simpson), so the
+LUT slope reproduces the intended gain. Knee nodes sit at equal gain increments.
+
+STATUS: superseded for daily use by the LOWGRAD family. The 1600 DPI entry is an
+experimental control - it isolates whether the S-curve *design* was ever the
+problem, versus the 3200-DPI-curve-on-1600-DPI-hardware mismatch that actually
+caused the reported drift. Not a recommended daily driver.
 """
 import json, math
 

@@ -1,6 +1,10 @@
 #!/usr/bin/env python3
 """
-VAL-SYNC — a different approach: no LUT at all.
+VAL-SYNC - a different approach: no LUT at all. For base Raw Accel.
+
+STATUS: experimental alternative, not the active build. Its gain is
+non-monotonic (peaks ~1.2147 near 31 in/s, then decays to 1.15) because
+specifying the multiplier means gain = mult + v*mult'.
 
 Everything before this was a 64-point lookup table approximating a smooth
 gain function. This uses Raw Accel's native *synchronous* curve instead,

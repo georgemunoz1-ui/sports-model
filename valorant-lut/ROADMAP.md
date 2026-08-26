@@ -8,11 +8,15 @@ habits hold the rating down (K/D bottom 26%, KAST bottom 32%). Gear is solved an
 **Baseline (Aug 8):** comp 0.90 K/D · 24.9% HS · 69% KAST · ACS 214 · DDΔ +1/rd.
 Swiftplay same act: 1.05 K/D · DDΔ +17/rd · ACS 239 — the comp-translation gap is the project.
 Hours are inverted for climbing: 68h swift vs 21h comp.
-Gear (updated Aug 2026): **1600 DPI · 0.15 · 8000 Hz**, curve `VAL-LOWGRAD-1600-015-64pt`
-(1.000× below 12 in/s, 1.15 cap by 40 in/s) · Wooting RT 0.15mm. The earlier `VAL-SCURVE-V2` was
-authored for 3200 DPI; running it after the DPI switch put all aim speeds below 1.0× gain and caused
-the reported drift. Escalation trigger 3 fired and the curve was regenerated.
-Post-switch form: last-20 swift 75% WR / 1.31 K/D; Aug 7 was a 49% HS day.
+Gear (current): **1600 DPI · 0.15 · 8000 Hz · base Raw Accel**, curve
+`VAL-LOWGRAD-1600-015-WHOLE-257pt` (gain 1.000× below 12 in/s, 1.15 cap by 40 in/s, whole mode)
+· Wooting RT 0.15mm. The earlier `VAL-SCURVE-V2` was authored for 3200 DPI; running it after the DPI
+switch put all aim speeds below 1.0× gain and caused the reported drift. Escalation trigger 3 fired
+and the curve was regenerated.
+
+The 75% WR / 1.31 K/D / 49% HS run was recorded on the **previous 3200 DPI setup** and does not
+describe current form. No games have been logged on the 1600 DPI hardware yet — that is the open
+item, not the curve.
 
 ## Phase 0 — Freeze (this week)
 - No settings changes for 30 comp games. Curve, DPI, sens, crosshair: all frozen.
@@ -50,8 +54,11 @@ Post-switch form: last-20 swift 75% WR / 1.31 K/D; Aug 7 was a 49% HS day.
 4. No 10+ game marathons (the 11-game block contains the 0/6 game exactly where fatigue predicts).
 
 ## Escalation triggers (gear reopens only if one fires)
-- HS% < 30 averaged over 30 games while flicks feel like overshooting → cap 1.40× → 1.35×.
-- Hold still drifts after the Wooting W/S fix → floor 0.80× → 0.78×.
+- HS% < 30 averaged over 30 games while flicks feel like overshooting → LOWGRAD cap 1.15× → 1.12×.
+- Flicks feel dead after 30 games → raise cap 1.15× → 1.20×, or pull the cap speed in from 40 to 35 in/s.
+  (The older triggers referenced the S-curve's 1.40 cap and 0.80 floor; LOWGRAD has neither.)
+- Movement still feels wrong after the Whole-mode A/B → do the Wooting W/S fix next, alone, then
+  raw 1:1 as a baseline. Do not change the curve for a movement complaint.
 - Any DPI/sens change → regenerate the curve to match. Never play a mismatched curve.
   (FIRED Aug 2026: 3200/0.088 → 1600/0.15. Curve regenerated as VAL-LOWGRAD-1600-015.
   This trigger exists because a mismatched curve is indistinguishable from a "bad" curve by feel.)

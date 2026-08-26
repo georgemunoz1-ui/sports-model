@@ -254,16 +254,22 @@
      "status": "BLOCKED_EXTERNAL",
      "units_done": 0,
      "utc": "2026-08-26T18:25:00Z"
+    },
+    {
+     "note": "ROUTE BOUND: the git proxy serves public GitHub reads \u2014 sportsdataverse/wehoop-wnba-raw (commit b843138d, updated this morning) holds the full ESPN schedule parquet and 2026 game JSONs in-tree. Extracted 87 post-cutoff games with per-file sha256 (ext artifact c48f66fa); components SCHEDULE_AND_CANONICAL_GAME_IDS and RESULTS_AND_STATS_THROUGH_ASOF bound -> 4/17 units. The registered model ran current under wnba.replacement.FEATURE_REFRESH. Open: official injury/availability (not in the archive), rosters (partial game_rosters unexplored), market prices. The exhaustion publication is superseded for tonight's games.",
+     "status": "RUNNING",
+     "units_done": 4,
+     "utc": "2026-08-26T18:50:00Z"
     }
    ],
    "job_id": "RJ-005-WNBA-FEATURE-PIPELINE",
    "next_run_utc": "2026-08-27T04:00:00Z",
    "notes": "After binding: recompute feature state (as_of, source hashes, age); generate separately identified replacement forecasts (wnba.replacement.FEATURE_REFRESH) since the board is frozen; rerun side, margin, total, EV and disposition through side_reselection_gate after anchor. Exhaustion of all authorized routes without binding publishes SYSTEM_FAILURE_WNBA_FEATURE_PIPELINE \u2014 never a normal-looking board.",
    "owner_subsystem": "wnba_features",
-   "status": "BLOCKED_EXTERNAL",
+   "status": "RUNNING",
    "terminal_disposition": null,
    "title": "Full WNBA feature refresh: schedule+canonical game ids (3), roster+transaction sections (6 teams), official injury/availability sections (6 teams), results and team/player stats through the as-of cutoff (1 bound snapshot), market prices via the separate overlay (1 binding). A unit binds only from a retrieved artifact with source, timestamp and content hash.",
-   "units_done": 0,
+   "units_done": 4,
    "units_total": 17
   }
  },

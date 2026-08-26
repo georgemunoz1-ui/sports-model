@@ -236,6 +236,12 @@
      "status": "BLOCKED_EXTERNAL",
      "units_done": 0,
      "utc": "2026-08-26T16:32:00Z"
+    },
+    {
+     "note": "'Fix it' execution attempt: three PREVIOUSLY UNTRIED hostnames \u2014 cdn.wnba.com (official schedule/results JSON), cdn.nba.com, en.wikipedia.org (team season game logs) \u2014 all EGRESS_BLOCKED. Proxy status confirms the block is the ENVIRONMENT'S NETWORK POLICY: only package registries and Anthropic endpoints bypass; every content domain is denied. Root remediation is owner-side: change this Claude Code environment's network access policy (claude.ai/code environment settings) \u2014 that unblocks RJ-001, RJ-005, live prices and canonical settlement in one stroke. Until then OWNER_RELAY is the only binding route; the minimal relay payload is registered in data/audit/2026-08-26_wnba_relay_request.json.",
+     "status": "BLOCKED_EXTERNAL",
+     "units_done": 0,
+     "utc": "2026-08-26T17:20:00Z"
     }
    ],
    "job_id": "RJ-005-WNBA-FEATURE-PIPELINE",

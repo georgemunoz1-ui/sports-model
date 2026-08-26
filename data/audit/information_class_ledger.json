@@ -892,6 +892,36 @@
    "unreadable_slots": 0,
    "verified_profile_slots": 0,
    "wnba_note": "the three WNBA games carry no starter-slot concept; PERSONNEL_UNVERIFIED on the rows."
+  },
+  "cards/2026-08-26_board.json": {
+   "action_authority": "NONE",
+   "card_sha256": "629bb91e09325cbc8e820a31efbb4cc8751e76beffff2f7a1afa76a8c08083e9",
+   "classified_utc": "2026-08-26T17:00:00Z",
+   "dose_bound_to_source_card": "data/mlb/slates/2026-08-26_slate.psv",
+   "information_class": "NOT_A_CARD",
+   "named_but_cap": [
+    "Bubba Chandler/Randy Vasquez (PIT@SD, one slot CAP)",
+    "Jesus Luzardo/Bryan Woo (PHI@SEA, one slot CAP)"
+   ],
+   "note": "twelve TBD slots preregistered CAP dose 0.5; start times timezone-inferred and flagged; wnba cohort SYSTEM_FAILURE_WNBA_FEATURE_PIPELINE, no doses",
+   "per_game_dose": {
+    "mlb:BAL@STL": 0.5,
+    "mlb:BOS@MIA": 0.5,
+    "mlb:CHC@AZ": 0.5,
+    "mlb:CIN@SF": 0.5,
+    "mlb:CLE@LAA": 0.5,
+    "mlb:COL@WSH": 0.5,
+    "mlb:HOU@NYY": 0.5,
+    "mlb:KC@TOR": 0.5,
+    "mlb:LAD@ATL": 0.5,
+    "mlb:MIL@NYM": 0.5,
+    "mlb:MIN@ATH": 1.0,
+    "mlb:PHI@SEA": 0.75,
+    "mlb:PIT@SD": 0.75,
+    "mlb:TB@DET": 0.5,
+    "mlb:TEX@CWS": 0.5
+   },
+   "slate_grade": "SEARCH_IDENTIFIED_UNCONFIRMED"
   }
  },
  "how_to_read": "One entry per file under cards/. The class is COMPUTED FROM THE SLOT STATS by harness/information_class.py and re-derived by its --gate on every healthcheck; drift between a recorded class and the live card FAILS. Cards are NOT retro-stamped: rewriting a registered artifact would break its hash and violate R3, so the classification lives here instead.",

@@ -37,10 +37,16 @@
      "status": "BLOCKED_EXTERNAL",
      "units_done": 0,
      "utc": "2026-08-26T04:02:00Z"
+    },
+    {
+     "note": "9th attempt: statsapi.mlb.com and baseball-reference.com EGRESS_BLOCKED. 0/123. Next 16:30Z pre-board check.",
+     "status": "BLOCKED_EXTERNAL",
+     "units_done": 0,
+     "utc": "2026-08-26T10:05:00Z"
     }
    ],
    "job_id": "RJ-001-PROVENANCE",
-   "next_run_utc": "2026-08-26T10:00:00Z",
+   "next_run_utc": "2026-08-26T16:30:00Z",
    "notes": "a unit is one canonical row bound to a retrieved artifact with a game id, a retrieval timestamp and a content hash. Currently blocked on egress; the job records BLOCKED_EXTERNAL rather than silently not running.",
    "owner_subsystem": "acquisition",
    "status": "BLOCKED_EXTERNAL",
@@ -64,10 +70,16 @@
      "status": "BLOCKED_EXTERNAL",
      "units_done": 0,
      "utc": "2026-08-25T23:06:00Z"
+    },
+    {
+     "note": "06:30Z slot passed: no replay possible, RJ-001 still 0/123. Logged, not silent. Next 2026-08-27T06:30Z conditional on RJ-001.",
+     "status": "BLOCKED_EXTERNAL",
+     "units_done": 0,
+     "utc": "2026-08-26T10:05:00Z"
     }
    ],
    "job_id": "RJ-002-OOF-REPLAY",
-   "next_run_utc": "2026-08-26T06:30:00Z",
+   "next_run_utc": "2026-08-27T06:30:00Z",
    "notes": "a unit is one admissible date block: features reconstructed strictly as-of, graded out of fold. Target is 20 EFFECTIVE clusters, not 20 nominal dates, and not the computable floor of 6.",
    "owner_subsystem": "modelling",
    "status": "BLOCKED_EXTERNAL",
@@ -94,10 +106,16 @@
      "status": "RUNNING",
      "units_done": 0,
      "utc": "2026-08-26T04:02:00Z"
+    },
+    {
+     "note": "07:00Z slot passed: fire condition (an RJ-002 finding) still absent; 0/4 stands honestly. Next 2026-08-27T07:00Z.",
+     "status": "RUNNING",
+     "units_done": 0,
+     "utc": "2026-08-26T10:05:00Z"
     }
    ],
    "job_id": "RJ-003-FALLBACK-ARM",
-   "next_run_utc": "2026-08-26T07:00:00Z",
+   "next_run_utc": "2026-08-27T07:00:00Z",
    "notes": "fires if RJ-002 finds that rich historical features cannot be reconstructed as-of without leakage. Units: define the reconstructible input set; fit the arm; validate its interval coverage; register the identity. A worse honest arm beats an indefinite outage \u2014 but it must be a REGISTERED identity with its own coverage validation, never the primary arm with wider error bars.",
    "owner_subsystem": "modelling",
    "status": "RUNNING",
@@ -200,10 +218,16 @@
      "status": "BLOCKED_EXTERNAL",
      "units_done": 0,
      "utc": "2026-08-26T04:02:00Z"
+    },
+    {
+     "note": "sweep: www.wnba.com/wnba-injury-report EGRESS_BLOCKED. 0/17. Deadline 17:00Z: if a WNBA board builds today with routes exhausted it publishes the failure again. Next 16:30Z.",
+     "status": "BLOCKED_EXTERNAL",
+     "units_done": 0,
+     "utc": "2026-08-26T10:05:00Z"
     }
    ],
    "job_id": "RJ-005-WNBA-FEATURE-PIPELINE",
-   "next_run_utc": "2026-08-26T10:00:00Z",
+   "next_run_utc": "2026-08-26T16:30:00Z",
    "notes": "After binding: recompute feature state (as_of, source hashes, age); generate separately identified replacement forecasts (wnba.replacement.FEATURE_REFRESH) since the board is frozen; rerun side, margin, total, EV and disposition through side_reselection_gate after anchor. Exhaustion of all authorized routes without binding publishes SYSTEM_FAILURE_WNBA_FEATURE_PIPELINE \u2014 never a normal-looking board.",
    "owner_subsystem": "wnba_features",
    "status": "BLOCKED_EXTERNAL",

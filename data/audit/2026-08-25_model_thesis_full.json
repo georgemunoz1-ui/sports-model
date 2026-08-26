@@ -1,0 +1,68 @@
+{
+ "arms_15_games": [
+  {
+   "arm": "mlb.winner.EXPANDING_HOME_PRIOR",
+   "brier": 0.2491,
+   "record": "8-7"
+  },
+  {
+   "arm": "mlb.winner.CHALLENGER_ADAPTIVE",
+   "brier": 0.2498,
+   "record": "9-6"
+  },
+  {
+   "arm": "mlb.winner.CHALLENGER_WIDENED",
+   "brier": 0.254,
+   "record": "6-9"
+  },
+  {
+   "arm": "mlb.winner.CHAMPION_V13 (frozen)",
+   "brier": 0.2565,
+   "record": "6-9"
+  },
+  {
+   "arm": "active primary (champion + replacements)",
+   "brier": 0.2568,
+   "record": "6-9"
+  }
+ ],
+ "arms_note": "the 9-game ordering did not hold: WIDENED led at 0.2473 through nine games and finished 0.2540; ADAPTIVE (9-6, 0.2498) and the prior (0.2491) lead the full slate. Ordering instability across six games is itself the finding.",
+ "as_of_utc": "2026-08-26T04:30:00Z",
+ "buckets": [
+  {
+   "brier": 0.2568,
+   "bucket": "PRIMARY_MODEL_ALL_15",
+   "prior_brier": 0.2491,
+   "record": "6-9"
+  },
+  {
+   "bucket": "POSITIVE_RAW_EV_CANDIDATES",
+   "counterfactual_usd_at_100": 353.25,
+   "detail": "early: KC, DET, CWS, BAL won, MIA lost; late: PIT +111 and SEA -105 won, LAA +131 and CHC -108 lost",
+   "record": "6-3"
+  },
+  {
+   "bucket": "NEGATIVE_EV_MODEL_SIDES",
+   "detail": "WSH (captured -147), NYY, MIL, LAD, MIN, CIN (all reconstructed) \u2014 every passed model side lost; pass-price evidence 0-1 captured, 0-5 reconstructed",
+   "record": "0-6"
+  },
+  {
+   "bucket": "ACTUAL_AUTHORIZED_WAGERS",
+   "counterfactual_usd_at_100": 0.0,
+   "record": "0"
+  }
+ ],
+ "descriptive_only": "no settlement, no promotion progress, no estimator input",
+ "late_outcome_derivation": "the owner relayed slate aggregates (primary 6-9, candidates 6-3, passes 0-6, P&L +$353.25, Brier 0.2568 vs 0.2491). The six late winner outcomes are the UNIQUE solution consistent with those aggregates given the frozen probabilities and registered prices (late candidates +$6.24 net is satisfiable only by PIT and SEA winning with LAA and CHC losing); every recomputed statistic then reproduces the relayed figures exactly. Per-game late SCORES are not relayed and are not displayed.",
+ "record_id": "MODEL-THESIS-2026-08-25-FULL",
+ "record_sha256": "5a0a2e4205a59482db22c404e707a73a84b1105df7cf1d78817d96d93ccbc1ba",
+ "schema": "ops.model_thesis.v1",
+ "scope": "all 15 MLB games final (owner-relayed aggregates); WNBA 2 final, WAS@PHX unrelayed",
+ "supersedes": "MODEL-THESIS-2026-08-25-EARLY (c5e7548f) \u2014 retained",
+ "thesis": "The active winner model and total model both lost to their expanding priors (winner Brier 0.2568 vs 0.2491; total MAE 4.77 vs 4.20). The strongest observed separation came from the price overlay: candidates finished 6-3 while every passed model side lost. However, five of six pass prices were reconstructed, so only the candidate performance and the WSH pass are supported by captured prices. One slate identifies a promising screening hypothesis \u2014 it does not establish a betting edge.",
+ "totals": {
+  "champion_mae_15": 4.77,
+  "prior_mae_15": 4.2,
+  "source": "OWNER_RELAY aggregate; per-game late totals not relayed, so these two figures are relayed, not recomputed; the recomputed 9-game view was champion 4.84/5.47/-0.78 vs prior 4.22/4.92/-0.68"
+ }
+}

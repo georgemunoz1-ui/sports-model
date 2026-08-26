@@ -59,6 +59,39 @@ RESULTS_CARD_SECTIONS = (
     "MODEL_THESIS_ONE_SENTENCE",
     "ACQUISITION_STATUS_APPENDIX",
 )
+# Standing report order (owner, 2026-08-26): mandatory at the top of EVERY partial and final
+# results card — the decision-relevant answer first, detail after, nothing removed.
+REPORT_ORDER = (
+    "RESULTS_SNAPSHOT",
+    "PLAIN_LANGUAGE_THESIS",
+    "MODEL_VERSUS_RESULT_TABLE",
+    "ARM_AND_TOTAL_METRICS",
+    "EVIDENCE_AND_TECHNICAL_APPENDIX",
+)
+REPORT_ORDER_OK = "REPORT_ORDER_OK"
+REPORT_ORDER_REFUSED = "REPORT_ORDER_REFUSED"
+SNAPSHOT_NOT_FIRST = "RESULTS_SNAPSHOT_NOT_FIRST"
+REPORT_PART_MISSING = "REQUIRED_REPORT_PART_MISSING"
+REPORT_PART_OUT_OF_ORDER = "REPORT_PART_OUT_OF_ORDER"
+
+
+def report_order_gate(parts):
+    """parts: the report's part keys in page order. All five must appear, in the standing
+    order, with the snapshot first — on partial slates as well as final ones."""
+    problems = []
+    seen = [p for p in (parts or []) if p in REPORT_ORDER]
+    for p in REPORT_ORDER:
+        if p not in seen:
+            problems.append({"code": REPORT_PART_MISSING, "part": p})
+    if seen and seen[0] != "RESULTS_SNAPSHOT":
+        problems.append({"code": SNAPSHOT_NOT_FIRST, "first": seen[0]})
+    want = [p for p in REPORT_ORDER if p in seen]
+    if seen != want:
+        problems.append({"code": REPORT_PART_OUT_OF_ORDER, "got": seen, "want": want})
+    return {"status": REPORT_ORDER_OK if not problems else REPORT_ORDER_REFUSED,
+            "n_problems": len(problems), "problems": problems}
+
+
 CARD_ORDER_OK = "CARD_ORDER_OK"
 CARD_ORDER_REFUSED = "CARD_ORDER_REFUSED"
 SECTION_MISSING = "REQUIRED_CARD_SECTION_MISSING"
@@ -174,6 +207,23 @@ def selftest():
     if g["status"] != DISPLAY_REFUSED or g["problems"][0]["code"] != LAUNDERED:
         f.append("a search-identified score claiming settlement must be LAUNDERED")
 
+    # standing report order: snapshot first on every card, partial or final
+    if report_order_gate(list(REPORT_ORDER))["status"] != REPORT_ORDER_OK:
+        f.append("the standing five-part order must pass")
+    g = report_order_gate(list(REPORT_ORDER[1:]) + ["RESULTS_SNAPSHOT"])
+    if g["status"] != REPORT_ORDER_REFUSED or not any(p["code"] == SNAPSHOT_NOT_FIRST
+                                                     for p in g["problems"]):
+        f.append("a report whose snapshot is not first must be refused")
+    g = report_order_gate([p for p in REPORT_ORDER if p != "PLAIN_LANGUAGE_THESIS"])
+    if g["status"] != REPORT_ORDER_REFUSED or g["problems"][0]["code"] != REPORT_PART_MISSING:
+        f.append("a report without its thesis must be refused")
+    g = report_order_gate(["RESULTS_SNAPSHOT", "PLAIN_LANGUAGE_THESIS",
+                           "ARM_AND_TOTAL_METRICS", "MODEL_VERSUS_RESULT_TABLE",
+                           "EVIDENCE_AND_TECHNICAL_APPENDIX"])
+    if g["status"] != REPORT_ORDER_REFUSED or not any(p["code"] == REPORT_PART_OUT_OF_ORDER
+                                                      for p in g["problems"]):
+        f.append("metrics before the game table is out of order")
+
     # card order: analysis leads, acquisition is the appendix
     full = list(RESULTS_CARD_SECTIONS)
     if card_order_gate(full)["status"] != CARD_ORDER_OK:
@@ -199,6 +249,15 @@ def selftest():
 MUTANTS = [
     ("an available score may be hidden from the card again",
      "        if g not in shown:", "        if False:"),
+    ("the snapshot no longer has to lead the report",
+     '    if seen and seen[0] != "RESULTS_SNAPSHOT":',
+     "    if False:"),
+    ("report parts may go missing",
+     "    for p in REPORT_ORDER:\n        if p not in seen:",
+     "    for p in ():\n        if p not in seen:"),
+    ("report parts may render in any order",
+     "    if seen != want:",
+     "    if False:"),
     ("a card may drop required sections",
      "    for s in RESULTS_CARD_SECTIONS:\n        if s not in seen:",
      "    for s in ():\n        if s not in seen:"),

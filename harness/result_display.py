@@ -45,6 +45,47 @@ CANONICAL_GRADES = ("CANONICAL_TIER1",)
 CANONICAL_EFFECTS = ("settles_ledger", "enters_prior_pool", "counts_toward_promotion",
                      "enters_estimator", "grades_officially")
 
+# =================================================================================================
+# CARD ORDER (owner directive, 2026-08-26). A results card that leads with acquisition statuses is
+# an acquisition log, not model analysis: it says what scores were found, never whether the model
+# worked, what separated useful sides, or what should change. Analysis leads; acquisition is the
+# appendix.
+RESULTS_CARD_SECTIONS = (
+    "CANDIDATE_RECORD_AND_COUNTERFACTUAL",
+    "PASS_BLOCK_RECORD_AND_LOSSES_AVOIDED",
+    "BRIER_VS_EXPANDING_PRIOR",
+    "REPLACEMENT_WORKFLOW_PERFORMANCE",
+    "OBSERVED_FAILURE_PATTERN",
+    "MODEL_THESIS_ONE_SENTENCE",
+    "ACQUISITION_STATUS_APPENDIX",
+)
+CARD_ORDER_OK = "CARD_ORDER_OK"
+CARD_ORDER_REFUSED = "CARD_ORDER_REFUSED"
+SECTION_MISSING = "REQUIRED_CARD_SECTION_MISSING"
+ACQUISITION_LEADS = "ACQUISITION_STATUS_BEFORE_ANALYSIS"
+UNKNOWN_SECTION = "UNKNOWN_CARD_SECTION"
+
+
+def card_order_gate(sections):
+    """sections: the card's section keys in render order. All seven must appear, and the
+    acquisition appendix must come after every analysis section."""
+    problems = []
+    seen = list(sections or [])
+    for s in seen:
+        if s not in RESULTS_CARD_SECTIONS:
+            problems.append({"code": UNKNOWN_SECTION, "section": s})
+    for s in RESULTS_CARD_SECTIONS:
+        if s not in seen:
+            problems.append({"code": SECTION_MISSING, "section": s})
+    if "ACQUISITION_STATUS_APPENDIX" in seen:
+        idx = seen.index("ACQUISITION_STATUS_APPENDIX")
+        after = [s for s in seen[idx + 1:] if s != "ACQUISITION_STATUS_APPENDIX"]
+        if after:
+            problems.append({"code": ACQUISITION_LEADS, "analysis_after_acquisition": after})
+    return {"status": CARD_ORDER_OK if not problems else CARD_ORDER_REFUSED,
+            "n_problems": len(problems), "problems": problems}
+
+
 HIDDEN = "AVAILABLE_SCORE_HIDDEN_FROM_DISPLAY"
 LAUNDERED = "NON_CANONICAL_SCORE_CLAIMS_CANONICAL_EFFECT"
 UNGRADED = "DISPLAY_ROW_WITHOUT_A_SOURCE_GRADE"
@@ -133,6 +174,22 @@ def selftest():
     if g["status"] != DISPLAY_REFUSED or g["problems"][0]["code"] != LAUNDERED:
         f.append("a search-identified score claiming settlement must be LAUNDERED")
 
+    # card order: analysis leads, acquisition is the appendix
+    full = list(RESULTS_CARD_SECTIONS)
+    if card_order_gate(full)["status"] != CARD_ORDER_OK:
+        f.append("the canonical seven-section order must pass")
+    g = card_order_gate(full[:-1])
+    if g["status"] != CARD_ORDER_REFUSED or g["problems"][0]["code"] != SECTION_MISSING:
+        f.append("a card missing its acquisition appendix must be refused")
+    g = card_order_gate([full[-1]] + full[:-1])
+    if g["status"] != CARD_ORDER_REFUSED or not any(p["code"] == ACQUISITION_LEADS
+                                                   for p in g["problems"]):
+        f.append("acquisition statuses leading the card must be refused")
+    g = card_order_gate(full + ["VIBES"])
+    if g["status"] != CARD_ORDER_REFUSED or not any(p["code"] == UNKNOWN_SECTION
+                                                   for p in g["problems"]):
+        f.append("an unknown section must be refused")
+
     print("result_display selftest:", "OK" if not f else "FAIL")
     for x in f:
         print("   -", x)
@@ -142,6 +199,15 @@ def selftest():
 MUTANTS = [
     ("an available score may be hidden from the card again",
      "        if g not in shown:", "        if False:"),
+    ("a card may drop required sections",
+     "    for s in RESULTS_CARD_SECTIONS:\n        if s not in seen:",
+     "    for s in ():\n        if s not in seen:"),
+    ("acquisition statuses may lead the card again",
+     '    if "ACQUISITION_STATUS_APPENDIX" in seen:',
+     "    if False:"),
+    ("unknown card sections are accepted",
+     "        if s not in RESULTS_CARD_SECTIONS:",
+     "        if False:"),
     ("a relayed score may settle the ledger",
      "            claimed = [e for e in CANONICAL_EFFECTS if r.get(e)]",
      "            claimed = []"),

@@ -43,10 +43,16 @@
      "status": "BLOCKED_EXTERNAL",
      "units_done": 0,
      "utc": "2026-08-26T10:05:00Z"
+    },
+    {
+     "note": "10th attempt: statsapi.mlb.com EGRESS_BLOCKED. 0/123. Next overnight slot 2026-08-27T04:00Z.",
+     "status": "BLOCKED_EXTERNAL",
+     "units_done": 0,
+     "utc": "2026-08-26T16:32:00Z"
     }
    ],
    "job_id": "RJ-001-PROVENANCE",
-   "next_run_utc": "2026-08-26T16:30:00Z",
+   "next_run_utc": "2026-08-27T04:00:00Z",
    "notes": "a unit is one canonical row bound to a retrieved artifact with a game id, a retrieval timestamp and a content hash. Currently blocked on egress; the job records BLOCKED_EXTERNAL rather than silently not running.",
    "owner_subsystem": "acquisition",
    "status": "BLOCKED_EXTERNAL",
@@ -224,10 +230,16 @@
      "status": "BLOCKED_EXTERNAL",
      "units_done": 0,
      "utc": "2026-08-26T10:05:00Z"
+    },
+    {
+     "note": "DEADLINE DISPOSITION at 17:00Z: MISSED at 0/17 \u2014 every rung still EGRESS_BLOCKED and nothing relayed. No 8/26 board was requested or built; if one is requested while this stands, it publishes SYSTEM_FAILURE_WNBA_FEATURE_PIPELINE per wnba_feature_pipeline.exhaustion. Job stays open (not closed, not laundered); deadline rolls to the next requested WNBA board. Next sweep 2026-08-27T04:00Z.",
+     "status": "BLOCKED_EXTERNAL",
+     "units_done": 0,
+     "utc": "2026-08-26T16:32:00Z"
     }
    ],
    "job_id": "RJ-005-WNBA-FEATURE-PIPELINE",
-   "next_run_utc": "2026-08-26T16:30:00Z",
+   "next_run_utc": "2026-08-27T04:00:00Z",
    "notes": "After binding: recompute feature state (as_of, source hashes, age); generate separately identified replacement forecasts (wnba.replacement.FEATURE_REFRESH) since the board is frozen; rerun side, margin, total, EV and disposition through side_reselection_gate after anchor. Exhaustion of all authorized routes without binding publishes SYSTEM_FAILURE_WNBA_FEATURE_PIPELINE \u2014 never a normal-looking board.",
    "owner_subsystem": "wnba_features",
    "status": "BLOCKED_EXTERNAL",

@@ -34,7 +34,10 @@ DISPLAY_OK = "RESULT_DISPLAY_OK"
 DISPLAY_REFUSED = "RESULT_DISPLAY_REFUSED"
 
 #: grades a display row may carry. Every row must say how good its score is.
-DISPLAY_GRADES = ("CANONICAL_TIER1", "PROVISIONAL_TIER3", "OWNER_RELAY", "LIVE_UNOFFICIAL")
+#: SEARCH_IDENTIFIED_UNCONFIRMED (2026-08-26): the search rail returns substantive snippets; a
+#: snippet-identified score is displayable under the RESULT_DISPLAY principle and binds nothing.
+DISPLAY_GRADES = ("CANONICAL_TIER1", "PROVISIONAL_TIER3", "OWNER_RELAY", "LIVE_UNOFFICIAL",
+                  "SEARCH_IDENTIFIED_UNCONFIRMED")
 #: grades that may ALSO enter the canonical layer
 CANONICAL_GRADES = ("CANONICAL_TIER1",)
 
@@ -118,6 +121,17 @@ def selftest():
                display_gate({}, [{"game": "z", "source_grade": "LIVE_UNOFFICIAL",
                                   "status": "LIVE", "displayed_as_final": True}])["problems"]):
         f.append("a live game displayed as final must be refused")
+
+    # a search-identified score displays and binds nothing
+    g = display_gate({"mlb:BAL@STL": {"grade": "SEARCH_IDENTIFIED_UNCONFIRMED"}},
+                     [{"game": "mlb:BAL@STL", "source_grade": "SEARCH_IDENTIFIED_UNCONFIRMED"}])
+    if g["status"] != DISPLAY_OK:
+        f.append(f"a search-identified score must be displayable, got {g}")
+    g = display_gate({}, [{"game": "mlb:BAL@STL",
+                           "source_grade": "SEARCH_IDENTIFIED_UNCONFIRMED",
+                           "settles_ledger": True}])
+    if g["status"] != DISPLAY_REFUSED or g["problems"][0]["code"] != LAUNDERED:
+        f.append("a search-identified score claiming settlement must be LAUNDERED")
 
     print("result_display selftest:", "OK" if not f else "FAIL")
     for x in f:

@@ -49,16 +49,22 @@
      "status": "BLOCKED_EXTERNAL",
      "units_done": 0,
      "utc": "2026-08-26T16:32:00Z"
+    },
+    {
+     "note": "ROUTE BOUND (GitHub git-proxy): lancebroz/mlb-pitcher-data stores DAILY statsapi-derived pitch parquets in-tree (game_pk, teams, full play record), commit c6b65466 landed 40 min before retrieval. Committed binder mlb_provenance_bind wrote per-day local evidence extracts (548K, each naming the upstream repo/commit/path/sha256) and bound 1,944/1,957 canonical rows \u2014 including 124/126 of the tier-2/3 provisional set (units capped at 123/123). Honest refusals: 2 ATL@NYM 7/29 doubleheader rows (per-game disambiguation needed), 4 TEAM_MISMATCH rows flagged for review (possible misingested identities: 824978, 825056-58), 5 pks absent from artifacts. Scores remain relayed-grade (a pitch archive proves identity and play record, not final score) \u2014 tier upgrades wait on score derivation or official artifacts. Provenance gate: OK, 1,940 evidence-bound.",
+     "status": "RUNNING",
+     "units_done": 123,
+     "utc": "2026-08-26T19:15:00Z"
     }
    ],
    "job_id": "RJ-001-PROVENANCE",
    "next_run_utc": "2026-08-27T04:00:00Z",
    "notes": "a unit is one canonical row bound to a retrieved artifact with a game id, a retrieval timestamp and a content hash. Currently blocked on egress; the job records BLOCKED_EXTERNAL rather than silently not running.",
    "owner_subsystem": "acquisition",
-   "status": "BLOCKED_EXTERNAL",
+   "status": "RUNNING",
    "terminal_disposition": null,
    "title": "Restore Tier-1 provenance for the 123 provisional rows and the 1,620 with no evidence path",
-   "units_done": 0,
+   "units_done": 123,
    "units_total": 123
   },
   "RJ-002-OOF-REPLAY": {

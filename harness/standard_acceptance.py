@@ -257,8 +257,10 @@ def t15_open_defects_are_owned_by_jobs():
     owned = all(b in rep["open_blockers"] for b in
                 ("PRIOR_INPUT_POOL_PROVISIONAL", "UNCERTAINTY_PIPELINE_DEFECT"))
     fields = all(all(k in j for k in RJ.REQUIRED_FIELDS) for j in jobs.values())
-    # a job cannot lie about its own progress
-    j = list(jobs.values())[0]
+    # a job cannot lie about its own progress. Use an explicitly INCOMPLETE copy: borrowing the
+    # live first job broke this proof the day RJ-001 legitimately reached 123/123 — closing a
+    # complete job with a valid disposition is allowed, and the proof was testing live state.
+    j = dict(list(jobs.values())[0], units_done=0)
     refuses = all(RJ.advance(j, "2026-08-25T03:00:00Z", **kw)[0] is None for kw in (
         {"units_done": -1}, {"status": RJ.COMPLETE, "disposition": "RESTORED"},
         {"units_done": j["units_total"], "status": RJ.COMPLETE},

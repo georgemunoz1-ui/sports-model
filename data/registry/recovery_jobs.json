@@ -204,7 +204,7 @@
     "RESULTS_AND_STATS_THROUGH_ASOF",
     "MARKET_PRICES_VIA_SEPARATE_OVERLAY"
    ],
-   "deadline_utc": "2026-08-26T17:00:00Z",
+   "deadline_utc": "2026-08-27T17:00:00Z",
    "depends_on": [],
    "history": [
     {
@@ -242,6 +242,12 @@
      "status": "BLOCKED_EXTERNAL",
      "units_done": 0,
      "utc": "2026-08-26T17:20:00Z"
+    },
+    {
+     "note": "the 17:00Z deadline was recorded MISSED (not laundered); per that disposition the deadline rolls to the next board window, 2026-08-27T17:00Z. Fallback arm STANDINGS_LOG5_v1 ran tonight (4d7fd06a) \u2014 DIAGNOSTIC_ONLY, binds no unit; 0/17 stands.",
+     "status": "BLOCKED_EXTERNAL",
+     "units_done": 0,
+     "utc": "2026-08-26T17:40:00Z"
     }
    ],
    "job_id": "RJ-005-WNBA-FEATURE-PIPELINE",

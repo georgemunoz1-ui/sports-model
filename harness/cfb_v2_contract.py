@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import argparse
+import copy
 import json
 from datetime import datetime
 from pathlib import Path
@@ -12,6 +13,25 @@ from pathlib import Path
 BASE = Path(__file__).resolve().parents[1]
 PREREG = BASE / "data/cfb/model/CFB_V2_PREREG.json"
 MODEL_ID = "cfb.fbs.epa_talent_hgb.v2_0.challenger"
+
+ALLOWED_LIFECYCLE_STATES = {
+    "PREREGISTERED_DATA_ACQUISITION_PENDING",
+    "DATA_ACQUISITION_RUNNING",
+    "DATA_ACQUIRED_FEATURE_BUILD_PENDING",
+    "FEATURE_BUILD_RUNNING",
+    "OOF_EVALUATION_PENDING",
+    "OOF_EVALUATION_RUNNING",
+    "HISTORICALLY_VALIDATED_SHADOW_PENDING_PROSPECTIVE",
+    "REJECTED",
+}
+
+ALLOWED_PREDICTIVE_PROVENANCE = {
+    "RAW_GAME_ARTIFACT",
+    "CAUSAL_TEAM_STATE",
+    "PREGAME_PERSONNEL_ARTIFACT",
+    "PREGAME_CONTEXT_ARTIFACT",
+    "MISSINGNESS_INDICATOR",
+}
 
 FORBIDDEN_TOKENS = {
     "away_points",
@@ -44,13 +64,19 @@ def _utc(value: object) -> datetime:
     return parsed
 
 
-def load_prereg() -> dict:
-    if not PREREG.is_file():
-        raise ContractError("CFB v2 preregistration is missing")
-    record = json.loads(PREREG.read_text(encoding="utf-8"))
+def load_prereg(record: dict | None = None) -> dict:
+    """Load and validate the preregistration, allowing mutation injection in tests."""
+    if record is None:
+        if not PREREG.is_file():
+            raise ContractError("CFB v2 preregistration is missing")
+        record = json.loads(PREREG.read_text(encoding="utf-8"))
+    elif not isinstance(record, dict):
+        raise ContractError("CFB v2 preregistration must be an object")
+    else:
+        record = copy.deepcopy(record)
     if record.get("model_id") != MODEL_ID:
         raise ContractError("CFB v2 model identity drifted")
-    if record.get("status") != "PREREGISTERED_DATA_ACQUISITION_PENDING":
+    if record.get("status") not in ALLOWED_LIFECYCLE_STATES:
         raise ContractError("unexpected CFB v2 lifecycle state")
     if record.get("output", {}).get("wager_authority") != "NO":
         raise ContractError("CFB v2 wager firewall opened")
@@ -83,6 +109,34 @@ def validate_feature_names(features: list[str]) -> None:
             )
 
 
+def validate_column_provenance(record: dict, columns: list[dict]) -> None:
+    """Reject renamed market inputs by validating lineage, not only column names."""
+    features = ordered_features(record)
+    by_feature: dict[str, dict] = {}
+    for index, column in enumerate(columns):
+        if not isinstance(column, dict):
+            raise ContractError(f"column provenance row {index} is not an object")
+        feature = str(column.get("feature", ""))
+        if feature in by_feature:
+            raise ContractError(f"duplicate column provenance for {feature!r}")
+        if feature not in features:
+            raise ContractError(f"unregistered predictive column {feature!r}")
+        provenance = column.get("provenance_class")
+        if provenance not in ALLOWED_PREDICTIVE_PROVENANCE:
+            raise ContractError(
+                f"predictive feature {feature!r} has forbidden provenance {provenance!r}"
+            )
+        if column.get("market_derived") is not False:
+            raise ContractError(f"predictive feature {feature!r} is market-derived")
+        bindings = column.get("source_bindings")
+        if not isinstance(bindings, list) or not bindings:
+            raise ContractError(f"predictive feature {feature!r} lacks source bindings")
+        by_feature[feature] = column
+    missing = sorted(set(features) - set(by_feature))
+    if missing:
+        raise ContractError(f"predictive column provenance incomplete: {missing}")
+
+
 def validate_asof_rows(rows: list[dict]) -> None:
     for index, row in enumerate(rows):
         kickoff = _utc(row.get("game_start_utc"))
@@ -112,22 +166,44 @@ def selftest() -> int:
     )
 
     failures = 0
-    mutations = [
+    prereg_mutations = [
         ({**record, "model_id": "cfb.changed"}, "identity"),
         ({**record, "output": {**record["output"], "stake": 1}}, "stake"),
+        ({**record, "status": "UNREGISTERED_LIVE_MODEL"}, "lifecycle"),
     ]
-    for mutated, _ in mutations:
+    for mutated, _ in prereg_mutations:
         try:
-            if mutated.get("model_id") != MODEL_ID:
-                raise ContractError("identity")
-            if mutated.get("output", {}).get("stake") != 0:
-                raise ContractError("stake")
+            load_prereg(mutated)
         except ContractError:
             continue
         failures += 1
 
     try:
         validate_feature_names(features + ["closing_line_home"])
+    except ContractError:
+        pass
+    else:
+        failures += 1
+
+    provenance = [
+        {
+            "feature": feature,
+            "provenance_class": (
+                "MISSINGNESS_INDICATOR"
+                if feature.endswith("_available")
+                else "CAUSAL_TEAM_STATE"
+            ),
+            "market_derived": False,
+            "source_bindings": ["fixture:pregame-source"],
+        }
+        for feature in features
+    ]
+    validate_column_provenance(record, provenance)
+    market_alias = copy.deepcopy(provenance)
+    market_alias[0]["provenance_class"] = "MARKET_DERIVED"
+    market_alias[0]["market_derived"] = True
+    try:
+        validate_column_provenance(record, market_alias)
     except ContractError:
         pass
     else:
@@ -154,7 +230,8 @@ def selftest() -> int:
         return 1
     print(
         "CFB v2 contract selftest: PASS "
-        f"({len(features)} frozen features; market, result, chronology and stake gates enforced)"
+        f"({len(features)} frozen features; identity, lifecycle, provenance, "
+        "market, result, chronology and stake gates enforced)"
     )
     return 0
 

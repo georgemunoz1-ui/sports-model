@@ -488,8 +488,16 @@ except Exception as e:
 #     baseline makes the comparison ungradable, exactly what happened to the 8/26 page display.
 try:
     import json as _json2, glob as _glob
-    _bp = sorted(_glob.glob("cards/2026-*_board.json"))[-1]
-    _bd = _json2.load(open(_bp))
+    # per-sport board files exist from 8/27 on; the MLB gate audits the latest MLB-bearing board
+    _cands = sorted(_glob.glob("cards/2026-*_board.json"))
+    _bp = _bd = None
+    for _c in reversed(_cands):
+        _d = _json2.load(open(_c))
+        if "mlb" in _d and isinstance(_d["mlb"], dict) and _d["mlb"].get("rows"):
+            _bp, _bd = _c, _d
+            break
+    if _bd is None:
+        raise ValueError("no MLB-bearing board found")
     _need_w = {"mlb.winner.EXPANDING_HOME_PRIOR", "mlb.winner.CHAMPION_V13",
                "mlb.winner.CHALLENGER_ADAPTIVE", "mlb.winner.CHALLENGER_WIDENED"}
     _need_t = {"mlb.total.EXPANDING_TOTAL_PRIOR", "mlb.total.CHAMPION_V13"}

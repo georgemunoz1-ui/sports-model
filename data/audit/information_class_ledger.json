@@ -922,6 +922,32 @@
     "mlb:TEX@CWS": 0.5
    },
    "slate_grade": "SEARCH_IDENTIFIED_UNCONFIRMED"
+  },
+  "cards/2026-08-27_mlb_board.json": {
+   "action_authority": "NONE",
+   "card_sha256": "e31b623c57254e2b66b0b487e4e861a0b4de84dd579176723e2ba87642cfa078",
+   "classified_utc": "2026-08-27T07:01:13Z",
+   "dose_bound_to_source_card": "data/mlb/slates/2026-08-27_slate.psv",
+   "information_class": "NOT_A_CARD",
+   "per_game_dose": {
+    "mlb:AZ@SF": 0.5,
+    "mlb:BAL@STL": 0.5,
+    "mlb:COL@WSH": 1.0,
+    "mlb:HOU@NYY": 0.75,
+    "mlb:KC@TOR": 0.5,
+    "mlb:LAD@ATL": 0.75,
+    "mlb:MIL@NYM": 1.0
+   },
+   "reason": "Per-sport MLB forecast board (per-sport files begin 8/27). Classifier recomputes NOT_A_CARD and that is recorded. Dose verified against the slate psv: 2 fully-resolved games (1.0), HOU@NYY and LAD@ATL each carry one named probable with no retained log (0.75, NAMED_NO_LOG_RETAINED_CAP), BAL@STL one TBD (0.5), KC@TOR two CONFLICT_CAP slots (0.5), AZ@SF two TBDs (0.5).",
+   "registration_eligible": true
+  },
+  "cards/2026-08-27_nfl_board.json": {
+   "action_authority": "NONE",
+   "card_sha256": "e8ff5608a3719019158510aa4a5fc8c694fcd44619e7b3b83774962c4e2ae0d3",
+   "classified_utc": "2026-08-27T07:01:13Z",
+   "information_class": "LEGACY_SCHEMA_NO_SLOT_STATS",
+   "reason": "NFL no-forecast board: SYSTEM_FAILURE_NFL_MODEL_NOT_REGISTERED_OR_CURRENT + DATA_PREPARATION_COMPLETE. No probability rows exist; classifier recomputes NOT_A_CARD; action authority NONE by construction.",
+   "registration_eligible": true
   }
  },
  "how_to_read": "One entry per file under cards/. The class is COMPUTED FROM THE SLOT STATS by harness/information_class.py and re-derived by its --gate on every healthcheck; drift between a recorded class and the live card FAILS. Cards are NOT retro-stamped: rewriting a registered artifact would break its hash and violate R3, so the classification lives here instead.",

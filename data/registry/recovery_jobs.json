@@ -119,16 +119,22 @@
      "status": "BLOCKED_EXTERNAL",
      "units_done": 0,
      "utc": "2026-08-27T04:15:00Z"
+    },
+    {
+     "note": "EXECUTED (record 2026-08-27_rj002_oof_replay.json): 1,607 canonical FINAL evidence-bound rows / 123 date blocks, Kish effective 115.8, LOO within ceiling, OOF coverage 95.1% vs nominal 95 \u2014 DECISION_GRADE on the registered gates. FINDING for owner review: SD(r_b)=14.79pp sits BELOW the 15.36pp shrunk-Bernoulli floor, so the date-level epistemic excess is ~0 at these block sizes; the registered estimand is dominated by outcome noise, and the block-sigma -> per-game conservative-edge mapping is UNREGISTERED. Conservative EV therefore remains unavailable pending owner registration of a consumption spec. Refusals enumerated: 259 non-canonical, 74 synthetic-pk (seed policy), 3 unbound.",
+     "status": "COMPLETE",
+     "units_done": 20,
+     "utc": "2026-08-27T06:50:00Z"
     }
    ],
    "job_id": "RJ-002-OOF-REPLAY",
-   "next_run_utc": "2026-08-27T11:00:00Z",
+   "next_run_utc": null,
    "notes": "a unit is one admissible date block: features reconstructed strictly as-of, graded out of fold. Target is 20 EFFECTIVE clusters, not 20 nominal dates, and not the computable floor of 6.",
    "owner_subsystem": "modelling",
-   "status": "BLOCKED_EXTERNAL",
+   "status": "COMPLETE",
    "terminal_disposition": null,
    "title": "Build a leakage-free date-blocked historical replay for uncertainty estimation",
-   "units_done": 0,
+   "units_done": 20,
    "units_total": 20
   },
   "RJ-003-FALLBACK-ARM": {
@@ -161,14 +167,20 @@
      "status": "RUNNING",
      "units_done": 0,
      "utc": "2026-08-27T04:15:00Z"
+    },
+    {
+     "note": "RJ-002's finding is in: rich features WERE reconstructible as-of without leakage (1,607 rows replayed; leakage rule enforced by build_ml_asof). The registered fire condition \u2014 reconstruction infeasible \u2014 did NOT fire. The job closes honestly without building an arm nobody established is needed. The separate NEW question RJ-002 surfaced (estimand noise-floor dominance) is an owner-review item, not this job's condition.",
+     "status": "CLOSED_CONDITION_NOT_FIRED",
+     "units_done": 0,
+     "utc": "2026-08-27T06:53:30Z"
     }
    ],
    "job_id": "RJ-003-FALLBACK-ARM",
-   "next_run_utc": "2026-08-27T11:00:00Z",
+   "next_run_utc": null,
    "notes": "fires if RJ-002 finds that rich historical features cannot be reconstructed as-of without leakage. Units: define the reconstructible input set; fit the arm; validate its interval coverage; register the identity. A worse honest arm beats an indefinite outage \u2014 but it must be a REGISTERED identity with its own coverage validation, never the primary arm with wider error bars.",
    "owner_subsystem": "modelling",
-   "status": "RUNNING",
-   "terminal_disposition": null,
+   "status": "CLOSED_CONDITION_NOT_FIRED",
+   "terminal_disposition": "CONDITION_NOT_FIRED",
    "title": "Register a conservative fallback arm on reconstructible-as-of inputs, with its own validated uncertainty",
    "units_done": 0,
    "units_total": 4
@@ -315,6 +327,12 @@
      "status": "RUNNING",
      "units_done": 4,
      "utc": "2026-08-27T04:15:00Z"
+    },
+    {
+     "note": "8/27 slate prep: schedule for tonight's two games (GSV@NYL, WSH@PHX) read from the canonical schedule parquet (already-bound component). NEW: game_rosters/json explored \u2014 full ESPN gamepackages in-git, each with boxscore rosters and an injuries section. Bound roster+availability snapshots for all four slate teams (record 2026-08-27_wnba_personnel_bind.json): NYL Sabally Out (concussion), GSV Rupert Out, PHX 4 Out, WSH none listed. Units 4->8 (four roster artifacts; unit teams roll with the slate). OFFICIAL injury report still EGRESS_BLOCKED (fresh 07:36Z receipt) \u2014 official-grade units stay open; personnel remains PERSONNEL_UNVERIFIED at official grade. 8/26 box scores land in the ~10:30Z upstream commit; feature rebuild through 8/26 executes at the 11:00Z wake before the WNBA board freezes.",
+     "status": "RUNNING",
+     "units_done": 8,
+     "utc": "2026-08-27T06:54:00Z"
     }
    ],
    "job_id": "RJ-005-WNBA-FEATURE-PIPELINE",
@@ -324,7 +342,7 @@
    "status": "RUNNING",
    "terminal_disposition": null,
    "title": "Full WNBA feature refresh: schedule+canonical game ids (3), roster+transaction sections (6 teams), official injury/availability sections (6 teams), results and team/player stats through the as-of cutoff (1 bound snapshot), market prices via the separate overlay (1 binding). A unit binds only from a retrieved artifact with source, timestamp and content hash.",
-   "units_done": 4,
+   "units_done": 8,
    "units_total": 17
   }
  },

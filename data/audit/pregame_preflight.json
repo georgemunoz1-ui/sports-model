@@ -1,11 +1,11 @@
 {
  "2026-08-27": {
   "ALL_INPUTS_PRESENT": false,
-  "CARD_IS_PRODUCIBLE": false,
+  "CARD_IS_PRODUCIBLE": true,
   "CARD_WOULD_BE_GRADEABLE_VS_MARKET": false,
   "GATE_FAIL": true,
   "PASS": false,
-  "checked_utc": "2026-08-27T06:39:41Z",
+  "checked_utc": "2026-08-27T06:59:46Z",
   "date": "2026-08-27",
   "first_pitch_utc": null,
   "inputs": {
@@ -33,26 +33,29 @@
    "starters": {
     "consequence_if_absent": "no slate means no card at all, and no first pitch to time the other inputs against. This is the 2026-08-16 failure exactly.",
     "deadline_min_before_first_pitch": 180,
-    "files": [],
-    "games": 0,
-    "games_with_BOTH_starters_TBD": 0,
-    "games_with_a_TBD_starter": 0,
-    "note": "no first pitch to time against because the schedule is not in hand. This is NOT a finding that the slate is empty: an empty slate requires an official schedule that affirmatively reports zero games (acquisition_ladder.NO_GAMES_SCHEDULED). Run the acquisition ladder before treating this as anything the owner needs to resolve.",
-    "present": false,
-    "resolution_pct": null,
-    "sha256": {},
-    "status": "ACQUISITION_BLOCKED\u2014SCHEDULE_NOT_YET_OBTAINED"
+    "files": [
+     "data/mlb/slates/2026-08-27_slate.psv"
+    ],
+    "games": 7,
+    "games_with_BOTH_starters_TBD": 2,
+    "games_with_a_TBD_starter": 3,
+    "note": "TBD starters are accepted but counted: starter resolution moved 8/17 probabilities ~5x more than form freshness, so a TBD-heavy slate is a materially weaker card.",
+    "present": true,
+    "resolution_pct": 57.1,
+    "sha256": {
+     "data/mlb/slates/2026-08-27_slate.psv": "8a5cc8a9844f002bde53e72a9f6d9b74433116ba87224eceac42c688da7c3123"
+    },
+    "status": "PRESENT"
    }
   },
   "minutes_to_first_pitch": null,
   "missing_but_recoverable": [],
   "missing_past_deadline": [
    "schedule",
-   "starters",
    "prices"
   ],
   "past_first_pitch": false,
-  "verdict": "INPUTS_MISSING"
+  "verdict": "FORECAST_ONLY_NO_MARKET_GRADE"
  },
  "2026-08-28": {
   "ALL_INPUTS_PRESENT": false,

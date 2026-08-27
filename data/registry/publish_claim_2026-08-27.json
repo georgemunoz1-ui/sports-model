@@ -1,0 +1,17 @@
+{
+ "claims": [
+  "cards/2026-08-27_mlb_board.json",
+  "cards/2026-08-27_wnba_board.json",
+  "cards/2026-08-27_nfl_board.json",
+  "reports/2026-08-27_mlb_forecast_and_market_review.html",
+  "reports/2026-08-27_wnba_forecast_and_market_review.html",
+  "reports/2026-08-27_nfl_forecast_and_market_review.html"
+ ],
+ "created_utc": "2026-08-27T07:02:05Z",
+ "prior_artifact_protection": "reports/2026-08-24_board_and_overlay.html is NOT reused for 8/27 and is not modified by this cycle",
+ "record_id": "PUBLISH-CLAIM-2026-08-27",
+ "record_sha256": "517ef9c73b42f010fd056630b8927485876ce98d6bdacddb99154783f8b09b96",
+ "rule": "any other session must not publish or mutate these paths while this claim stands; a competing publish is a conflict to reconcile against git history, never a silent overwrite. Frozen boards are immutable once committed regardless of claimant.",
+ "schema": "ops.publish_claim.v1",
+ "session": "claude.ai/code session 01FCDPkF3XpS97TokTQnhM6Z"
+}

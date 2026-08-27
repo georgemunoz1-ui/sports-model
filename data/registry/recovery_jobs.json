@@ -61,12 +61,31 @@
      "status": "RUNNING",
      "units_done": 123,
      "utc": "2026-08-27T04:15:00Z"
+    },
+    {
+     "note": "phase split per owner correction: acquisition COMPLETE 123/123; score verification RUNNING 0/126; incident OPEN. '123/123 RUNNING' was conflating a finished work package with an open one. Also: the four TEAM_MISMATCH refusals were abbreviation variants (OAK=ATH, ARI=AZ), not wrong games \u2014 folded and bound; whole-file coverage 1,948/1,957.",
+     "status": "RUNNING",
+     "units_done": 123,
+     "utc": "2026-08-27T04:40:00Z"
     }
    ],
    "job_id": "RJ-001-PROVENANCE",
    "next_run_utc": "2026-08-27T11:00:00Z",
    "notes": "a unit is one canonical row bound to a retrieved artifact with a game id, a retrieval timestamp and a content hash. Currently blocked on egress; the job records BLOCKED_EXTERNAL rather than silently not running.",
    "owner_subsystem": "acquisition",
+   "phases": {
+    "RJ-001A_PROVENANCE_ACQUISITION": {
+     "note": "all provisional-set units bound; whole-file 1,948/1,957 after the OAK/ARI variant fold; 9 refusals in two named categories, reconciliation gate sums (88570751 superseded by the regenerated accounting)",
+     "progress": "123/123",
+     "status": "COMPLETE"
+    },
+    "RJ-001B_SCORE_VERIFICATION": {
+     "note": "tier upgrades for the 126 provisional rows need a score-bearing artifact; pitch events carry no runs column (derivation judged infeasible)",
+     "progress": "0/126",
+     "status": "RUNNING"
+    },
+    "RJ-001_INCIDENT": "OPEN"
+   },
    "status": "RUNNING",
    "terminal_disposition": null,
    "title": "Restore Tier-1 provenance for the 123 provisional rows and the 1,620 with no evidence path",

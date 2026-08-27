@@ -1,0 +1,40 @@
+{
+ "created_utc": "2026-08-27T04:40:00Z",
+ "cutoff_rule": "every extension game must be FINAL before the forecast generation time",
+ "dedup": {
+  "base_2026_gids": 202,
+  "extension_gids": 87,
+  "overlap": [],
+  "overlap_count": 0
+ },
+ "forecast_record": "data/audit/2026-08-26_wnba_refresh_forecasts.json (7d8776f6), generated 2026-08-26T18:50Z; extension retrieved 18:29:06Z",
+ "included_0826_games": [
+  {
+   "away": "PDX",
+   "gid": "401857174",
+   "home": "DAL"
+  },
+  {
+   "away": "WAS",
+   "gid": "401857175",
+   "home": "PHX"
+  }
+ ],
+ "leak_check": "the only 2026-08-26-dated extension game is WAS@PHX (tipped 02:00Z, final hours before the 10:32Z upstream commit and the 18:29Z retrieval). Tonight's forecast targets GSV@CON (23:00Z) and TOR@SEA (8/27 02:00Z) are ABSENT from the extension \u2014 no outcome leaked into its own forecast",
+ "max_included_game_date_utc": "2026-08-26",
+ "pool": {
+  "base_games": 2287,
+  "combined": 2374,
+  "combined_pool_sha256": "40f4d37e11c498dc52d257e05012c5dc9f462a16d4d56989dc7923161f14150b",
+  "extension_games": 87
+ },
+ "record_id": "WNBA-REFRESH-PREQUENTIAL-2026-08-26",
+ "record_sha256": "4892bac4646472c4fbbc6036ee3696d62afedfbcbe43488aa9d7d96097efe193",
+ "schema": "ops.prequential_integrity.v1",
+ "upstream": {
+  "commit": "b843138d82af8713dc564e6921b20947dc5c0081",
+  "repo": "github.com/sportsdataverse/wehoop-wnba-raw",
+  "retrieved_utc": "2026-08-26T18:29:06Z",
+  "schedule_sha256": "769591a74263f93627299b9df3c7f40be995e6696f04bd758a388a27c2d28b9a"
+ }
+}

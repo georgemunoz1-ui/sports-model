@@ -31,9 +31,17 @@ RESULTS = "data/backfill/mlb/2026/results.csv"
 BACKUP = "data/backfill/mlb/2026/results_pre_rj001_bind.csv"
 
 
+# variant team codes seen in older canonical rows; folded AFTER the full-name map
+VARIANT = {"OAK": "ATH", "ARI": "AZ"}
+
+
 def bind():
     import pyarrow.parquet as pq
-    from adaptive_challenger import _abbr
+    from adaptive_challenger import _abbr as _abbr0
+
+    def _abbr(t):
+        a = _abbr0(t)
+        return VARIANT.get(a, a)
     head = subprocess.run(["git", "-C", RAW, "rev-parse", "HEAD"],
                           capture_output=True, text=True).stdout.strip()
     rows = list(csv.DictReader(open(RESULTS)))

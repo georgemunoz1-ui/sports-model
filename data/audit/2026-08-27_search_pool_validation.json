@@ -1,0 +1,27 @@
+{
+ "created_utc": "2026-08-27T04:30:00Z",
+ "record_id": "SEARCH-POOL-VALIDATION-TABLE-2026-08-27",
+ "record_sha256": "05a1c1a6cfdec69c90c8e558360f9ff8dcb30f165301b5a4af739c23acbeade2",
+ "schema": "ops.validation_table.v1",
+ "table": {
+  "exact_match": 47,
+  "incorrect": 0,
+  "missing_unmatched": 1,
+  "outside_comparison_set": {
+   "note": "the two refusals (IND@CHI 8/23 direction; TOR@ATL date) were never in the 48-row comparison set \u2014 they were excluded pregame and the archive later supplied their true values (IND won 113-90 at CHI on 8/23 UTC 8/24; TOR@ATL was 8/11, ATL 107-95)",
+   "refused_ambiguities_later_resolved_by_archive": 2
+  },
+  "total_comparison_set": 48,
+  "unmatched_detail": [
+   {
+    "date": "2026-08-09",
+    "l_pts": 78,
+    "loser": "LVA",
+    "n_sources": 1,
+    "w_pts": 84,
+    "winner": "GSV",
+    "winner_venue": null
+   }
+  ]
+ }
+}

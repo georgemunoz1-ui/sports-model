@@ -1,0 +1,67 @@
+{
+ "created_utc": "2026-08-27T08:49:35Z",
+ "frozen_board": "cards/2026-08-27_mlb_board.json (byte-identical; this record is separate)",
+ "games": {
+  "mlb:AZ@SF": {
+   "frozen_p_home": 0.4682,
+   "p_home_adaptive": 0.5142330342626203,
+   "p_home_champ": 0.4840333333333333,
+   "p_home_widened": 0.4903281664049868,
+   "proj_total": 8.246,
+   "residual_f": -0.025258365224360743,
+   "sp_status": {
+    "away": "RESOLVED",
+    "home": "RESOLVED"
+   }
+  },
+  "mlb:HOU@NYY": {
+   "frozen_p_home": 0.5995666666666667,
+   "p_home_adaptive": 0.528593158065828,
+   "p_home_champ": 0.5446,
+   "p_home_widened": 0.5589171493138256,
+   "proj_total": 9.398,
+   "residual_f": 0.03229166666666666,
+   "sp_status": {
+    "away": "NO_PID_CAP(Hayden Wesneski)",
+    "home": "RESOLVED"
+   }
+  },
+  "mlb:KC@TOR": {
+   "frozen_p_home": 0.4886,
+   "p_home_adaptive": 0.5242372966200266,
+   "p_home_champ": 0.5063666666666666,
+   "p_home_widened": 0.5382098609678689,
+   "proj_total": 8.817,
+   "residual_f": 0.014819342891278342,
+   "sp_status": {
+    "away": "RESOLVED",
+    "home": "RESOLVED"
+   }
+  },
+  "mlb:LAD@ATL": {
+   "frozen_p_home": 0.5071666666666667,
+   "p_home_adaptive": 0.5357213863142771,
+   "p_home_champ": 0.49916666666666665,
+   "p_home_widened": 0.5923801433407341,
+   "proj_total": 7.528,
+   "residual_f": 0.060923504273504306,
+   "sp_status": {
+    "away": "RESOLVED",
+    "home": "RESOLVED"
+   }
+  }
+ },
+ "identity": "mlb.replacement.CONFIRMED_LINEUP",
+ "input_grade": "SEARCH_IDENTIFIED_UNCONFIRMED \u2014 starter names from the owner-relayed visible board (named-aggregator identification after freeze, not official confirmation)",
+ "method": "frozen V13 arithmetic, the frozen board's per-game seed, park factor and canonical team form; only the starter features changed; widened uses the frozen k (never re-solved)",
+ "notes": {
+  "mlb:AZ@SF": "Cabrera@Roupp resolves TBD/TBD. AZ 53.18% -> 51.60%, side retained.",
+  "mlb:BAL@STL": "NO replacement possible \u2014 STL starter still undecided; frozen CAP stands.",
+  "mlb:HOU@NYY": "Cole replaces Schlittler at NYY; Wesneski still NO_PID cap. NYY 59.96% -> 54.46%, side retained.",
+  "mlb:KC@TOR": "Cameron@Arrighetti resolves the two-source conflict. p_home 48.86% -> 50.64% \u2014 SIDE CROSSES to TOR.",
+  "mlb:LAD@ATL": "Yamamoto@Sale replaces Sasaki@Smith-Shawver (both slots). p_home 50.72% -> 49.92% \u2014 SIDE CROSSES to LAD (margin-thin: 0.9pp from the coin flip)."
+ },
+ "record_id": "MLB-REPLACEMENTS-2026-08-27",
+ "record_sha256": "747b0d4f4a83b3eb658c16763dce28349564f06d52ded455b2bfd4b805a1f9ee",
+ "schema": "ops.replacement_forecasts.v1"
+}

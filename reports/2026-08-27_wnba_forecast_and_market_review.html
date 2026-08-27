@@ -53,22 +53,22 @@ p{max-width:70ch}
 <span class="chip">2 GAMES — CANONICAL SCHEDULE</span>
 <span class="chip">FORECAST FREEZE SCHEDULED 11:00Z</span>
 <span class="chip">PERSONNEL_UNVERIFIED (official grade)</span>
-<span class="chip">NO RETAINED MARKET</span>
+<span class="chip">MARKET_RETAINED: GSV@NYL (DK) · WSH@PHX DISPLAY-ONLY</span>
 <span class="chip">0 BETS · $0</span>
 </div>
 
 <div class="panel answers">
 <div class="a"><div class="q">Model predicts</div><div class="v">Not yet frozen — forecasts generate after the through-8/26 feature rebuild at the 11:00Z wake</div></div>
 <div class="a"><div class="q">How strong</div><div class="v">Refresh arm enters 2–0 descriptively, Brier 0.103; archive confirmation pending and no promotion evidence accrued</div></div>
-<div class="a"><div class="q">Market offers</div><div class="v">Unknown — NO_RETAINED_MARKET_ARTIFACT (routes blocked, receipts kept)</div></div>
+<div class="a"><div class="q">Market offers</div><div class="v">NYL −2.5 / 162.5 (DK, relayed); WSH −3.5 / 166.5 (display-only, unattributed)</div></div>
 <div class="a"><div class="q">Candidate / pass / blocked</div><div class="v">ACTION_BLOCKED until forecasts freeze and a price binds</div></div>
 <div class="a"><div class="q">What prevents action</div><div class="v">Upstream 8/26 box scores land ~10:30Z; freeze follows, hours before the 00:00Z tip</div></div>
 </div>
 
 <div class="pending"><b>Current state (before the 11:00Z rebuild):</b>
 <code>FEATURE_REBUILD_PENDING</code> · <code>FORECAST_NOT_FROZEN</code> ·
-<code>PERSONNEL_UNVERIFIED</code> · <code>NO_RETAINED_MARKET_ARTIFACT</code> ·
-<code>ACTION_BLOCKED</code>.
+<code>PERSONNEL_UNVERIFIED</code> · <code>MARKET_RETAINED</code> (GSV@NYL, DK-attributed;
+WSH@PHX display-only) · <code>ACTION_BLOCKED</code>.
 <p style="margin:10px 0 0"><b>Why the board is deliberately not frozen yet.</b> The registered
 rule is: rebuild the four-factors feature state through yesterday's completed games <i>before</i>
 any forecast freezes. Yesterday's two box scores publish in the data archive's morning commit
@@ -122,14 +122,20 @@ game payloads from each team's most recent archived game (1–3 days old, hashed
 <p class="sub">Sabally's status is the headline availability question for the Liberty game — re-checked at the 22:30Z and 23:15Z checkpoints. Record <code>2026-08-27_wnba_personnel_bind.json</code>.</p>
 
 <h2>Market and dispositions</h2>
-<div class="warn"><b>NO_RETAINED_MARKET_ARTIFACT.</b> Same blocked routes and receipts as the
-MLB card; capture is re-attempted at 22:30Z / 23:15Z and a fresh quote is required before any
-possible execution. Current state: <code>FEATURE_REBUILD_PENDING</code> ·
+<div class="panel"><p><b>Lines are now retained (owner relay):</b> GSV +2.5 / NYL −2.5, total
+162.5 — explicitly DraftKings-attributed; WSH −3.5, total 166.5 — displayed on ESPN's schedule
+with <i>no book attribution chain</i>, retained as display-only. Notable versus the personnel
+evidence: the market makes the Liberty modest favorites with Sabally listed out.</p></div>
+<div class="warn"><b>Disposition unchanged: FORECAST_NOT_FROZEN · NO EV · ACTION_BLOCKED.</b>
+No EV may be computed before the through-8/26 rebuild freezes forecasts — prices never touch
+model inputs, and a price without a frozen probability is just a number. The overlay attaches
+after the 11:00Z freeze; capture is re-attempted at 22:30Z / 23:15Z and a fresh quote is
+required before any possible execution. Current state: <code>FEATURE_REBUILD_PENDING</code> ·
 <code>FORECAST_NOT_FROZEN</code> · <code>PERSONNEL_UNVERIFIED</code> ·
-<code>NO_RETAINED_MARKET_ARTIFACT</code> · <code>ACTION_BLOCKED</code>. Anticipated after the
-rebuild and freeze exist: <code>FEATURE_STATE_CURRENT</code> · <code>FORECASTS_GENERATED</code>
-(the other three states persist until personnel and market bind). No wager is authorized;
-ledger 0 bets · 0.00u · $0.</div>
+<code>MARKET_RETAINED</code> (partial, per above) · <code>ACTION_BLOCKED</code>. Anticipated
+after the rebuild and freeze exist: <code>FEATURE_STATE_CURRENT</code> ·
+<code>FORECASTS_GENERATED</code> (personnel and action states persist until they bind). No
+wager is authorized; ledger 0 bets · 0.00u · $0.</div>
 
 <h2>Technical & acquisition appendix</h2>
 <details><summary>Feature pipeline state and evidence chain</summary>

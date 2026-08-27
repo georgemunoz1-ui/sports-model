@@ -55,7 +55,8 @@ p{max-width:70ch}
 <div class="chips">
 <span class="chip">7 GAMES FROZEN</span>
 <span class="chip"><b>4</b> WINNER ARMS + <b>2</b> TOTAL OUTPUTS / GAME</span>
-<span class="chip">NO RETAINED MARKET</span>
+<span class="chip">DK MONEYLINES RETAINED (OWNER RELAY, ONE-SIDED)</span>
+<span class="chip"><b>5</b> PASS_NEGATIVE_EV · <b>2</b> RESELECTED, NO PRICE</span>
 <span class="chip"><b>0</b> CANDIDATES · <b>0</b> BETS · <b>$0</b></span>
 <span class="chip">ANCHOR PRECEDES EVERY START</span>
 </div>
@@ -63,9 +64,9 @@ p{max-width:70ch}
 <div class="panel answers">
 <div class="a"><div class="q">Model predicts</div><div class="v">Milwaukee is the slate's one strong directional signal (67.8% at NYM); NYY 60.0% is a moderate lean; the rest are near coin-flips</div></div>
 <div class="a"><div class="q">How strong</div><div class="v">One strong signal, one moderate lean, five near coin-flips; five games carry a capped starter input</div></div>
-<div class="a"><div class="q">Market offers</div><div class="v">Unknown — no price was retainable (acquisition blocked, receipts kept)</div></div>
-<div class="a"><div class="q">Candidate / pass / blocked</div><div class="v">Every row: NO_RETAINED_MARKET_ARTIFACT</div></div>
-<div class="a"><div class="q">What prevents action</div><div class="v">No retained price → no EV; conservative EV also awaits the RJ-002 review</div></div>
+<div class="a"><div class="q">Market offers</div><div class="v">DraftKings moneylines (owner-relayed, model side only): every frozen side is priced as a favorite</div></div>
+<div class="a"><div class="q">Candidate / pass / blocked</div><div class="v">Five priced rows: PASS_NEGATIVE_EV. Two rows reselected sides with no retained price. Zero candidates</div></div>
+<div class="a"><div class="q">What prevents action</div><div class="v">Every priced side screens negative at full precision; nothing to authorize</div></div>
 </div>
 
 <h2>Plain-language thesis</h2>
@@ -105,14 +106,36 @@ that no market exists. The uncertainty estimator reached its registered gates th
 <p class="sub">Percentages are the arm's pick with its probability. *Widened shows the away side at 55.9% (home 44.1%). Totals are never decision-bearing.</p>
 
 <h2>Market, EV and dispositions</h2>
-<div class="block"><b>NO_RETAINED_MARKET_ARTIFACT — all 7 games.</b> Both DraftKings routes
-returned EGRESS_BLOCKED at 06:53Z (receipts retained). Two snippet prices were sighted
-(WSH −120, BAL −120) and recorded as identified-never-bound: a snippet price has no book
-attribution chain and is not a retained artifact. With no valid price, no row can be a
-candidate or an EV pass; the honest per-row state is <code>NO_RETAINED_MARKET_ARTIFACT</code>.
-Fresh capture is re-attempted at every registered checkpoint (15:35Z / 16:20Z / 21:35Z /
-22:20Z / 00:15Z / 01:00Z), and a fresh quote would be required before any possible execution
-regardless. No wager is authorized; ledger stands 0 bets · 0.00u · $0.</div>
+<div class="panel">
+<p><b>DraftKings moneylines were owner-relayed after the freeze</b> — model side only, so this
+is <code>MONEYLINE_ONLY_PARTIAL_CAPTURE</code>: no opposite-side prices, no hold computation,
+single-price EV screening only. Direct fetch routes stayed EGRESS_BLOCKED (receipts retained).
+EVs below use <b>full-precision</b> frozen or replacement probabilities per $100:</p>
+<div class="scroll"><table>
+<thead><tr><th class="l">Game</th><th class="l">Active side</th><th>DK price</th><th>p (full)</th><th>Raw EV/$100</th><th class="l">Basis</th><th class="l">Disposition</th></tr></thead>
+<tbody>
+<tr><td class="l">COL@WSH</td><td class="l">WSH</td><td class="n">−119</td><td class="n">.5172</td><td class="n">−$4.81</td><td class="l">frozen</td><td class="l">PASS_NEGATIVE_EV</td></tr>
+<tr><td class="l">BAL@STL</td><td class="l">BAL</td><td class="n">−114</td><td class="n">.5068</td><td class="n">−$4.87</td><td class="l">frozen (STL still TBD)</td><td class="l">PASS_NEGATIVE_EV*</td></tr>
+<tr><td class="l">HOU@NYY</td><td class="l">NYY</td><td class="n">−163</td><td class="n">.5446</td><td class="n">−$12.13</td><td class="l">replacement (Cole)</td><td class="l">PASS_NEGATIVE_EV</td></tr>
+<tr><td class="l">KC@TOR</td><td class="l"><span class="flag">→ TOR</span></td><td class="n">—</td><td class="n">.5064</td><td class="n">—</td><td class="l">replacement (side flipped)</td><td class="l"><span class="flag">RESELECTED — NO RETAINED PRICE</span></td></tr>
+<tr><td class="l">MIL@NYM</td><td class="l">MIL</td><td class="n">−230</td><td class="n">.6779</td><td class="n">−$2.73</td><td class="l">frozen</td><td class="l">PASS_NEGATIVE_EV</td></tr>
+<tr><td class="l">LAD@ATL</td><td class="l"><span class="flag">→ LAD</span></td><td class="n">—</td><td class="n">.5008</td><td class="n">—</td><td class="l">replacement (side flipped)</td><td class="l"><span class="flag">RESELECTED — NO RETAINED PRICE</span></td></tr>
+<tr><td class="l">AZ@SF</td><td class="l">AZ</td><td class="n">−114</td><td class="n">.5160</td><td class="n">−$3.14</td><td class="l">replacement (Cabrera@Roupp)</td><td class="l">PASS_NEGATIVE_EV</td></tr>
+</tbody></table></div>
+<p class="sub">*provisional pending the STL starter; revisit at T−90 15:35Z. Conservative EV
+remains unavailable (RJ-002 consumption spec pending), but it cannot rescue a negative raw EV:
+every priced side screens out. Zero candidates. Ledger 0 bets · 0.00u · $0.</p>
+</div>
+<div class="warn"><b>Starter resolution changed four games after the freeze — the frozen board
+is untouched; anchored replacements carry the updates</b>
+(<code>mlb.replacement.CONFIRMED_LINEUP</code>, input grade search-identified). Cole replaces
+Schlittler and NYY drops 60.0% → 54.5%. Cameron@Arrighetti resolves the KC@TOR conflict and the
+side <i>crosses</i> to Toronto (50.6%). Yamamoto@Sale replaces both LAD@ATL slots and the side
+crosses to the Dodgers (50.1% — under one point from the flip line). Cabrera@Roupp resolves
+AZ@SF, Arizona retained at 51.6%. The reselection gate refused both attempts to keep the old
+side after a crossover (<code>SIDE_RETENTION_AFTER_CROSSOVER</code>); the reselected sides have
+no relayed price, so no EV exists for them until one binds — probability, side, price, EV and
+disposition move together or not at all.</div>
 
 <h2>Where the arms disagree</h2>
 <div class="panel">

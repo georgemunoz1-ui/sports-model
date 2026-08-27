@@ -1,0 +1,92 @@
+{
+ "created_utc": "2026-08-27T08:49:35Z",
+ "gate": "side_reselection_gate run on all four replacement games: HOU@NYY OK, AZ@SF OK; KC@TOR and LAD@ATL REFUSED SIDE_RETENTION_AFTER_CROSSOVER when the frozen side was offered \u2014 sides reselected accordingly",
+ "ledger": {
+  "exposure_usd": 0,
+  "n_bets": 0,
+  "units": 0.0
+ },
+ "market_artifact": "data/mlb/odds/2026-08-27_dk_ml_owner_relay.json",
+ "owner_diagnostic_check": "owner's rounded EVs reproduced within $0.11 of full precision on every clean row",
+ "record_id": "ACTION-OVERLAY-2026-08-27",
+ "record_sha256": "1ca0a94c33e91bbd4aadbc81c6f5a7effe46c91d4e6d20f4c8a74bd66c4f3333",
+ "replacements": "data/audit/2026-08-27_replacement_forecasts.json",
+ "rows": [
+  {
+   "active_side": "WSH",
+   "basis": "frozen (no starter change)",
+   "conservative_ev": "UNAVAILABLE \u2014 RJ-002 consumption spec pending owner review",
+   "disposition": "PASS_NEGATIVE_EV",
+   "game": "mlb:COL@WSH",
+   "p_side_full_precision": 0.517233,
+   "price": -119,
+   "price_side": "WSH",
+   "raw_ev_per_100": -4.8117
+  },
+  {
+   "active_side": "BAL",
+   "basis": "frozen (STL starter unresolved \u2014 CAP stands)",
+   "caveat": "provisional pending STL starter; revisit at T-90 15:35Z",
+   "conservative_ev": "UNAVAILABLE \u2014 RJ-002 consumption spec pending owner review",
+   "disposition": "PASS_NEGATIVE_EV",
+   "game": "mlb:BAL@STL",
+   "p_side_full_precision": 0.506767,
+   "price": -114,
+   "price_side": "BAL",
+   "raw_ev_per_100": -4.8701
+  },
+  {
+   "active_side": "NYY",
+   "basis": "replacement (Cole for Schlittler), side retained",
+   "conservative_ev": "UNAVAILABLE \u2014 RJ-002 consumption spec pending owner review",
+   "disposition": "PASS_NEGATIVE_EV",
+   "game": "mlb:HOU@NYY",
+   "p_side_full_precision": 0.5446,
+   "price": -163,
+   "price_side": "NYY",
+   "raw_ev_per_100": -12.129
+  },
+  {
+   "active_side": "MIL",
+   "basis": "frozen (no starter change)",
+   "conservative_ev": "UNAVAILABLE \u2014 RJ-002 consumption spec pending owner review",
+   "disposition": "PASS_NEGATIVE_EV",
+   "game": "mlb:MIL@NYM",
+   "p_side_full_precision": 0.677933,
+   "price": -230,
+   "price_side": "MIL",
+   "raw_ev_per_100": -2.7314
+  },
+  {
+   "active_side": "AZ",
+   "basis": "replacement (Cabrera@Roupp), side retained",
+   "conservative_ev": "UNAVAILABLE \u2014 RJ-002 consumption spec pending owner review",
+   "disposition": "PASS_NEGATIVE_EV",
+   "game": "mlb:AZ@SF",
+   "p_side_full_precision": 0.515967,
+   "price": -114,
+   "price_side": "AZ",
+   "raw_ev_per_100": -3.143
+  },
+  {
+   "action": "BLOCKED_PENDING_PRICE",
+   "active_side": "TOR",
+   "disposition": "RESELECTED_SIDE_NO_RETAINED_PRICE",
+   "game": "mlb:KC@TOR",
+   "raw_ev_per_100": null,
+   "reason": "side reselected to TOR (replacement p_home 50.64%); only KC -113 was relayed \u2014 no TOR price is retained, so no EV exists; the KC row is refused as the active side (SIDE_RETENTION_AFTER_CROSSOVER)",
+   "replacement_p_side": 0.5064
+  },
+  {
+   "action": "BLOCKED_PENDING_PRICE",
+   "active_side": "LAD",
+   "disposition": "RESELECTED_SIDE_NO_RETAINED_PRICE",
+   "game": "mlb:LAD@ATL",
+   "raw_ev_per_100": null,
+   "reason": "side reselected to LAD (replacement p_home 49.92%, 0.9pp from the flip point); only ATL -115 was relayed \u2014 no LAD price retained, no EV; ATL refused as active side",
+   "replacement_p_side": 0.500833
+  }
+ ],
+ "schema": "ops.action_overlay.v1",
+ "summary": "5 priced rows all PASS_NEGATIVE_EV at full precision (WSH -4.81, BAL -4.87 provisional, NYY -12.13, MIL -2.73, AZ -3.14); 2 rows reselected with no retained price for the new side; 0 candidates, 0 bets, $0."
+}

@@ -2,6 +2,20 @@
   "record_id": "CFB-V2-PREREG-2026-08-27",
   "model_id": "cfb.fbs.epa_talent_hgb.v2_0.challenger",
   "status": "PREREGISTERED_DATA_ACQUISITION_PENDING",
+  "lifecycle": {
+    "allowed_states": [
+      "PREREGISTERED_DATA_ACQUISITION_PENDING",
+      "DATA_ACQUISITION_RUNNING",
+      "DATA_ACQUIRED_FEATURE_BUILD_PENDING",
+      "FEATURE_BUILD_RUNNING",
+      "OOF_EVALUATION_PENDING",
+      "OOF_EVALUATION_RUNNING",
+      "HISTORICALLY_VALIDATED_SHADOW_PENDING_PROSPECTIVE",
+      "REJECTED"
+    ],
+    "transition_rule": "Every transition is append-only, names its predecessor record and evidence hash, and updates this contract and the lifecycle record in the same commit.",
+    "forecast_permission": "Only HISTORICALLY_VALIDATED_SHADOW_PENDING_PROSPECTIVE may generate v2 prospective forecasts; all earlier states are action- and forecast-blocked."
+  },
   "frozen_utc": "2026-08-27T06:45:33Z",
   "purpose": "A market-free college-football challenger that adds causal efficiency, opponent adjustment, roster continuity, talent, quarterback and travel context to the validated CFB v1 state model.",
   "incumbent": {
@@ -67,7 +81,23 @@
     ],
     "raw_first": true,
     "same_family_warning": "Raw and parsed SportsDataverse repositories are correlated evidence and do not constitute independent result confirmation.",
-    "market_columns": "FORBIDDEN_PREDICTIVE"
+    "market_columns": "FORBIDDEN_PREDICTIVE",
+    "predictive_column_provenance": {
+      "required_at_materialization_and_fit": true,
+      "rule": "Every materialized predictive column must bind its registered feature name, provenance class and retained source artifact ids. Clean renaming does not legalize market-derived information.",
+      "allowed_classes": [
+        "RAW_GAME_ARTIFACT",
+        "CAUSAL_TEAM_STATE",
+        "PREGAME_PERSONNEL_ARTIFACT",
+        "PREGAME_CONTEXT_ARTIFACT",
+        "MISSINGNESS_INDICATOR"
+      ],
+      "forbidden_classes": [
+        "MARKET_DERIVED",
+        "POSTGAME_RESULT",
+        "UNBOUND"
+      ]
+    }
   },
   "ordered_feature_blocks": {
     "v1_state": [
@@ -201,7 +231,7 @@
       "quarterback",
       "coach_continuity"
     ],
-    "missing_behavior": "Publish v1 baseline forecasts and V2_INPUT_BLOCKED; do not pretend prior-season team form is a complete Week 1 state.",
+    "missing_behavior": "If the clean v1 port is present and passes its own healthcheck, publish v1 baseline forecasts with V2_INPUT_BLOCKED. If v1 is absent or unhealthy, publish SYSTEM_FAILURE_CFB_BASELINE_UNAVAILABLE with no forecast. Never pretend prior-season team form is a complete Week 1 state.",
     "fbs_fcs_extreme_spread_review": "Any model-market spread disagreement greater than 14 points is AUDIT_REQUIRED and cannot become a candidate without source and roster review."
   },
   "output": {

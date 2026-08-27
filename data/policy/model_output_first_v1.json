@@ -1,0 +1,27 @@
+{
+  "schema": "governance.model_output_first.v1",
+  "effective_utc": "2026-08-27T09:14:21Z",
+  "scope": ["MLB", "WNBA", "NFL", "CFB", "NBA", "all future registered sports"],
+  "owner_direction": "Always show the best available registered model output before market, EV, disposition, acquisition, or technical state.",
+  "lanes": {
+    "forecast": ["model_id", "side", "probability", "margin_if_registered", "total_if_registered", "as_of", "status"],
+    "market": ["source", "captured_at", "price_or_line", "raw_ev_if_computable"],
+    "action": ["candidate_or_pass_or_blocked", "conservative_ev", "authorization", "stake"]
+  },
+  "rules": [
+    "Market, personnel, refresh, uncertainty, or action blockers may not erase an available forecast.",
+    "A missing price yields EV_UNAVAILABLE, never MODEL_OUTPUT_UNAVAILABLE.",
+    "A pending refresh must display the latest eligible registered output as PRELIMINARY_ASOF when one exists, with exact cutoff and an append-only supersession rule.",
+    "A replacement crossing 50 percent must update side, probability, matching price, EV, and disposition together.",
+    "NO_FORECAST is legal only when no competition-eligible model exists for that phase, target, and cohort; historical model lineage and exclusion reason remain visible.",
+    "Reader View order is active model output, strength, market comparison, action disposition, then collapsed evidence.",
+    "Totals and spreads remain distinct targets and may not be translated into EV without a registered distribution."
+  ],
+  "reader_vocabulary": {
+    "FROZEN": "Current frozen model output",
+    "REPLACEMENT_ANCHORED": "Updated model output",
+    "PRELIMINARY_ASOF": "Early model output; scheduled refresh may supersede",
+    "NO_COMPETITION_ELIGIBLE_MODEL": "No model covers this competition phase",
+    "EV_UNAVAILABLE": "Model output exists; a required market or uncertainty input does not"
+  }
+}

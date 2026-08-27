@@ -51,37 +51,34 @@ p{max-width:70ch}
 
 <div class="chips">
 <span class="chip">2 GAMES — CANONICAL SCHEDULE</span>
-<span class="chip">FORECAST FREEZE SCHEDULED 11:00Z</span>
+<span class="chip">PRELIMINARY MODEL OUTPUT GENERATED · ANCHORED REFRESH STILL SCHEDULED</span>
 <span class="chip">PERSONNEL_UNVERIFIED (official grade)</span>
 <span class="chip">MARKET_RETAINED: GSV@NYL (DK) · WSH@PHX DISPLAY-ONLY</span>
 <span class="chip">0 BETS · $0</span>
 </div>
 
 <div class="panel answers">
-<div class="a"><div class="q">Model predicts</div><div class="v">Not yet frozen — forecasts generate after the through-8/26 feature rebuild at the 11:00Z wake</div></div>
-<div class="a"><div class="q">How strong</div><div class="v">Refresh arm enters 2–0 descriptively, Brier 0.103; archive confirmation pending and no promotion evidence accrued</div></div>
-<div class="a"><div class="q">Market offers</div><div class="v">NYL −2.5 / 162.5 (DK, relayed); WSH −3.5 / 166.5 (display-only, unattributed)</div></div>
-<div class="a"><div class="q">Candidate / pass / blocked</div><div class="v">ACTION_BLOCKED until forecasts freeze and a price binds</div></div>
-<div class="a"><div class="q">What prevents action</div><div class="v">Upstream 8/26 box scores land ~10:30Z; freeze follows, hours before the 00:00Z tip</div></div>
+<div class="a"><div class="q">Model predicts</div><div class="v">NYL 55.7% over GSV · WAS 57.8% over PHX</div></div>
+<div class="a"><div class="q">How strong</div><div class="v">Two modest winner leans; neither is a conviction signal</div></div>
+<div class="a"><div class="q">Market offers</div><div class="v">NYL −2.5 / 162.5 (DK); WSH −3.5 / 166.5 (display-only)</div></div>
+<div class="a"><div class="q">Candidate / pass / blocked</div><div class="v">Model sides exist; EV unavailable; action blocked pending anchored refresh and decision-grade prices</div></div>
+<div class="a"><div class="q">What prevents action</div><div class="v">No moneyline prices or registered cover distribution; personnel remains unverified</div></div>
 </div>
 
-<div class="pending"><b>Current state (before the 11:00Z rebuild):</b>
-<code>FEATURE_REBUILD_PENDING</code> · <code>FORECAST_NOT_FROZEN</code> ·
-<code>PERSONNEL_UNVERIFIED</code> · <code>MARKET_RETAINED</code> (GSV@NYL, DK-attributed;
-WSH@PHX display-only) · <code>ACTION_BLOCKED</code>.
-<p style="margin:10px 0 0"><b>Why the board is deliberately not frozen yet.</b> The registered
-rule is: rebuild the four-factors feature state through yesterday's completed games <i>before</i>
-any forecast freezes. Yesterday's two box scores publish in the data archive's morning commit
-(~10:30Z); the 11:00Z wake rebuilds the pool through 8/26 with a zero-overlap leakage check,
-verifies both tonight's games are absent from the pool, then freezes the board — roughly 13
-hours before first tip. Only after the rebuilt artifact and the freeze exist may this page show
-<code>FEATURE_STATE_CURRENT</code> and <code>FORECASTS_GENERATED</code>. Freezing now on a
-through-8/25 pool would violate the rebuild-first rule for no timing benefit.</p>
-<p style="margin:10px 0 0"><b>If the ~10:30Z upstream commit is late:</b> the 11:00Z wake starts
-an active retry sequence (short-interval re-fetches of the archive, each logged with a receipt)
-rather than waiting silently for the 22:30Z checkpoint; the checkpoint is the backstop, not the
-retry plan. If no route binds by T−90, the board freezes with an explicit staleness disposition
-— never silently.</p></div>
+<h2>Model output — current four-factors run</h2>
+<div class="scroll"><table>
+<thead><tr><th class="l">Game</th><th class="l">Winner side</th><th>Win probability</th><th>Projected margin</th><th>Projected total</th><th class="l">Market read</th></tr></thead>
+<tbody>
+<tr><td class="l"><b>GSV@NYL</b></td><td class="l"><b>NYL</b></td><td class="n">55.65%</td><td class="n">NYL +0.88</td><td class="n">166.9</td><td class="l">Winner: NYL · spread lean: GSV +2.5 · total lean: over 162.5</td></tr>
+<tr><td class="l"><b>WAS@PHX</b></td><td class="l"><b>WAS</b></td><td class="n">57.84%</td><td class="n">WAS +2.44</td><td class="n">169.4</td><td class="l">Winner: WAS · spread lean: PHX +3.5 · total lean: over 166.5</td></tr>
+</tbody></table></div>
+<p class="sub"><code>wnba.replacement.FEATURE_REFRESH</code> · <code>PRELIMINARY_ASOF</code> at 09:14:21Z. The latest retained extension plus the two owner-relayed August 26 finals and ESPN team box statistics were consumed; target game IDs were excluded. The scheduled archive-bound rebuild supersedes these values append-only and must display the change.</p>
+
+<div class="pending"><b>Action state is separate from forecast state.</b>
+The model output exists and is shown above. <code>PERSONNEL_UNVERIFIED</code>,
+partial/display-only markets, and the pending anchored refresh keep <code>ACTION_BLOCKED</code>;
+they do not make the model side disappear. No moneyline EV is computable from spread-only prices,
+and no spread/total EV is legal without a registered cover/total distribution.</div>
 
 <h2>Tonight's slate — canonical schedule artifact</h2>
 <div class="scroll"><table>
@@ -92,20 +89,12 @@ retry plan. If no route binds by T−90, the board freezes with an explicit stal
 </tbody></table></div>
 <p class="sub">Source: in-git ESPN schedule parquet, commit <code>b843138</code>, file sha <code>769591a7…</code>. Reconciliation: 2 discovered = 2 canonical + 0 refusals.</p>
 
-<h2>What will freeze at 11:00Z</h2>
-<div class="panel">
-<p>Three separately-identified arms run on each game — never merged:</p>
-<ul>
-<li><code>wnba.replacement.FEATURE_REFRESH</code> — the frozen four-factors model on the rebuilt through-8/26 pool (margin and total forecasts included, as registered);</li>
-<li><code>wnba.fallback.STANDINGS_LOG5_v1</code> — the standings fallback;</li>
-<li><code>wnba.winner.EXPANDING_HOME_PRIOR</code> — the baseline prior.</li>
-</ul>
-<p>Any complete side disagreement between the refresh arm and the fallback is flagged as the
-slate's diagnostic game, as it was on 8/26 (the refresh arm took Seattle against the fallback's
-Toronto and won by 12 — a 2–0 night at Brier 0.103 vs the fallback's 0.203 and the prior's
-0.251; owner-relayed finals, descriptive only until the archive artifact binds, and no
-promotion evidence accrued).</p>
-</div>
+<h2>Refresh and supersession</h2>
+<div class="panel"><p>The scheduled archive-bound run remains required. It will rerun
+<code>wnba.replacement.FEATURE_REFRESH</code>, <code>wnba.fallback.STANDINGS_LOG5_v1</code>,
+and <code>wnba.winner.EXPANDING_HOME_PRIOR</code> separately. It does not delay Reader View:
+the current registered output stays visible with its exact cutoff, and the anchored run records
+old value → new value for each target.</p></div>
 
 <h2>Personnel — strongest retained evidence, honestly graded</h2>
 <div class="warn"><b>Official grade: PERSONNEL_UNVERIFIED.</b> The official injury-report route
@@ -126,16 +115,10 @@ game payloads from each team's most recent archived game (1–3 days old, hashed
 162.5 — explicitly DraftKings-attributed; WSH −3.5, total 166.5 — displayed on ESPN's schedule
 with <i>no book attribution chain</i>, retained as display-only. Notable versus the personnel
 evidence: the market makes the Liberty modest favorites with Sabally listed out.</p></div>
-<div class="warn"><b>Disposition unchanged: FORECAST_NOT_FROZEN · NO EV · ACTION_BLOCKED.</b>
-No EV may be computed before the through-8/26 rebuild freezes forecasts — prices never touch
-model inputs, and a price without a frozen probability is just a number. The overlay attaches
-after the 11:00Z freeze; capture is re-attempted at 22:30Z / 23:15Z and a fresh quote is
-required before any possible execution. Current state: <code>FEATURE_REBUILD_PENDING</code> ·
-<code>FORECAST_NOT_FROZEN</code> · <code>PERSONNEL_UNVERIFIED</code> ·
-<code>MARKET_RETAINED</code> (partial, per above) · <code>ACTION_BLOCKED</code>. Anticipated
-after the rebuild and freeze exist: <code>FEATURE_STATE_CURRENT</code> ·
-<code>FORECASTS_GENERATED</code> (personnel and action states persist until they bind). No
-wager is authorized; ledger 0 bets · 0.00u · $0.</div>
+<div class="warn"><b>Disposition: MODEL_OUTPUT_AVAILABLE · EV_UNAVAILABLE · ACTION_BLOCKED.</b>
+NYL and WAS are the model's winner sides. Missing moneylines remove moneyline EV; a missing
+cover distribution removes spread/total EV. Those are action constraints, not forecast
+constraints. Ledger: 0 bets · 0.00u · $0.</div>
 
 <h2>Technical & acquisition appendix</h2>
 <details><summary>Feature pipeline state and evidence chain</summary>

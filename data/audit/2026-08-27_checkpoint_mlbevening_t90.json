@@ -1,0 +1,31 @@
+{
+ "block": "MLB evening (HOU@NYY 23:05Z, KC@TOR 23:07Z, MIL@NYM 23:10Z, LAD@ATL 23:15Z)",
+ "created_utc": "2026-08-27T21:36:10Z",
+ "frozen_board": "cards/2026-08-27_mlb_board.json byte-identical (faf45f6d prefix verified)",
+ "kc_tor_conflict": "RESOLUTION CONFIRMED by fresh identification: Noah Cameron (KC, 8-8/4.02 snippet) vs Spencer Arrighetti (TOR, 7-6/4.73) \u2014 matches the anchored replacement; real gamePk 822771 captured from the mlb.com gameday slug and recorded. TOR 50.64% stands; disposition CANDIDATE_NOT_AUTHORIZED_PENDING_UNCERTAINTY at -101 unchanged.",
+ "ledger": {
+  "exposure_usd": 0,
+  "n_bets": 0,
+  "units": 0.0
+ },
+ "market_attempt": {
+  "error": "EGRESS_BLOCKED",
+  "observed_utc": "2026-08-27T21:36:10Z",
+  "outcome": "REFUSED",
+  "route": "sportsbook.draftkings.com (WebFetch)",
+  "standing": "v2 owner relay (54486905) remains current retained capture; no fresher prices"
+ },
+ "next": "NFL T-45 22:15Z, MLB-evening T-45 22:20Z, WNBA T-90 22:30Z",
+ "other_games": "no scratch or change identified for Cole (NYY), Misiorowski/Manaea (MIL@NYM) or Yamamoto/Sale (LAD@ATL); a 'Cole scratched' fragment surfaced and is a stale 2024 story \u2014 recorded as identification noise, not a current event",
+ "real_gamepks_now_recorded": {
+  "mlb:COL@WSH_espn": 401816695,
+  "mlb:HOU@NYY": 823503,
+  "mlb:KC@TOR": 822771,
+  "mlb:LAD@ATL": 824879
+ },
+ "record_id": "CHECKPOINT-2026-08-27-MLB-EVENING-T90",
+ "record_sha256": "4645b5a3ef68a53a543d9557fee9ecf75246bbcab66081e731eb7354a2abec80",
+ "reselection": "no replacement crossed 50% this window; anchored sides stand (NYY, TOR, MIL, LAD)",
+ "schema": "ops.checkpoint.v1",
+ "trigger": "trig_016XUoWfXk2Hw5mM4DbdQhnR (fired 21:35:32Z)"
+}

@@ -67,6 +67,12 @@
      "status": "RUNNING",
      "units_done": 123,
      "utc": "2026-08-27T04:40:00Z"
+    },
+    {
+     "note": "11:00Z wake: lancebroz advanced 448e2ff->3aa218a (10:17Z). Schema unchanged \u2014 still no runs/score columns; RJ-001B stays 0/126 honestly. 8/26 evidence extract already built from 448e2ff; no rebind needed.",
+     "status": "RUNNING",
+     "units_done": 123,
+     "utc": "2026-08-27T11:06:52Z"
     }
    ],
    "job_id": "RJ-001-PROVENANCE",
@@ -333,16 +339,22 @@
      "status": "RUNNING",
      "units_done": 8,
      "utc": "2026-08-27T06:54:00Z"
+    },
+    {
+     "note": "11:00Z wake: wehoop advanced b843138->3316fa3 ON TIME (no retry sequence needed). Extension rebuilt through 8/26: 89 games, 0 missing, per-file sha256, zero dup gids, targets absent. 8/26 finals ARCHIVE-CONFIRMED (upgrade record above); anchored 8/27 WNBA board FROZEN 11:06:18Z with all three arms. Units 8->10 (RESULTS_AND_STATS_THROUGH_ASOF re-bound current + archive confirmation). Open: official injuries (route still blocked), full market attribution. SUPERSESSION FINDING: the preliminary GSV@NYL (NYL 55.65%) is UNREPRODUCED by the registered machinery on either pool \u2014 anchored value is GSV 52.28%; side changed; WAS@PHX reproduced to 4 decimals.",
+     "status": "RUNNING",
+     "units_done": 10,
+     "utc": "2026-08-27T11:06:52Z"
     }
    ],
    "job_id": "RJ-005-WNBA-FEATURE-PIPELINE",
-   "next_run_utc": "2026-08-27T11:00:00Z",
+   "next_run_utc": "2026-08-27T22:30:00Z",
    "notes": "After binding: recompute feature state (as_of, source hashes, age); generate separately identified replacement forecasts (wnba.replacement.FEATURE_REFRESH) since the board is frozen; rerun side, margin, total, EV and disposition through side_reselection_gate after anchor. Exhaustion of all authorized routes without binding publishes SYSTEM_FAILURE_WNBA_FEATURE_PIPELINE \u2014 never a normal-looking board.",
    "owner_subsystem": "wnba_features",
    "status": "RUNNING",
    "terminal_disposition": null,
    "title": "Full WNBA feature refresh: schedule+canonical game ids (3), roster+transaction sections (6 teams), official injury/availability sections (6 teams), results and team/player stats through the as-of cutoff (1 bound snapshot), market prices via the separate overlay (1 binding). A unit binds only from a retrieved artifact with source, timestamp and content hash.",
-   "units_done": 8,
+   "units_done": 10,
    "units_total": 17
   },
   "RJ-006-NFL-MODEL-RESTORATION": {

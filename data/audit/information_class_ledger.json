@@ -948,6 +948,14 @@
    "information_class": "LEGACY_SCHEMA_NO_SLOT_STATS",
    "reason": "NFL no-forecast board: SYSTEM_FAILURE_NFL_MODEL_NOT_REGISTERED_OR_CURRENT + DATA_PREPARATION_COMPLETE. No probability rows exist; classifier recomputes NOT_A_CARD; action authority NONE by construction.",
    "registration_eligible": true
+  },
+  "cards/2026-08-27_wnba_board.json": {
+   "action_authority": "NONE",
+   "card_sha256": "475190e02fcc5560857844d2709ccd8c80bbb416e185e727ea0ae7b0463f418d",
+   "classified_utc": "2026-08-27T11:06:52Z",
+   "information_class": "NOT_A_CARD",
+   "reason": "Anchored 8/27 WNBA board: three arms on two games, archive-bound pool through 8/26, personnel unverified, action blocked. Classifier recomputes and its class is recorded.",
+   "registration_eligible": true
   }
  },
  "how_to_read": "One entry per file under cards/. The class is COMPUTED FROM THE SLOT STATS by harness/information_class.py and re-derived by its --gate on every healthcheck; drift between a recorded class and the live card FAILS. Cards are NOT retro-stamped: rewriting a registered artifact would break its hash and violate R3, so the classification lives here instead.",

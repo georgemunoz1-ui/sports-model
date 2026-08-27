@@ -51,28 +51,58 @@ p{max-width:70ch}
 
 <div class="chips">
 <span class="chip">2 GAMES — CANONICAL SCHEDULE</span>
-<span class="chip">PRELIMINARY MODEL OUTPUT GENERATED · ANCHORED REFRESH STILL SCHEDULED</span>
+<span class="chip">ANCHORED BOARD FROZEN 11:06Z · FEATURE_STATE_CURRENT · FORECASTS_GENERATED</span>
 <span class="chip">PERSONNEL_UNVERIFIED (official grade)</span>
 <span class="chip">MARKET_RETAINED: GSV@NYL (DK) · WSH@PHX DISPLAY-ONLY</span>
 <span class="chip">0 BETS · $0</span>
 </div>
 
 <div class="panel answers">
-<div class="a"><div class="q">Model predicts</div><div class="v">NYL 55.7% over GSV · WAS 57.8% over PHX</div></div>
-<div class="a"><div class="q">How strong</div><div class="v">Two modest winner leans; neither is a conviction signal</div></div>
+<div class="a"><div class="q">Model predicts</div><div class="v">GSV 52.3% at NYL (anchored — the preliminary had NYL) · WAS 57.8% at PHX</div></div>
+<div class="a"><div class="q">How strong</div><div class="v">Two modest winner leans; the fallback arm agrees with both, the prior opposes both</div></div>
 <div class="a"><div class="q">Market offers</div><div class="v">NYL −2.5 / 162.5 (DK); WSH −3.5 / 166.5 (display-only)</div></div>
 <div class="a"><div class="q">Candidate / pass / blocked</div><div class="v">Model sides exist; EV unavailable; action blocked pending anchored refresh and decision-grade prices</div></div>
 <div class="a"><div class="q">What prevents action</div><div class="v">No moneyline prices or registered cover distribution; personnel remains unverified</div></div>
 </div>
 
-<h2>Model output — current four-factors run</h2>
+<h2>Model output — anchored four-factors run (frozen 11:06Z)</h2>
 <div class="scroll"><table>
-<thead><tr><th class="l">Game</th><th class="l">Winner side</th><th>Win probability</th><th>Projected margin</th><th>Projected total</th><th class="l">Market read</th></tr></thead>
+<thead><tr><th class="l">Game</th><th class="l">Winner side</th><th>Win probability</th><th>Projected margin</th><th>Projected total</th><th class="l">Market read (comparison, not selection)</th></tr></thead>
 <tbody>
-<tr><td class="l"><b>GSV@NYL</b></td><td class="l"><b>NYL</b></td><td class="n">55.65%</td><td class="n">NYL +0.88</td><td class="n">166.9</td><td class="l">Winner: NYL · spread lean: GSV +2.5 · total lean: over 162.5</td></tr>
-<tr><td class="l"><b>WAS@PHX</b></td><td class="l"><b>WAS</b></td><td class="n">57.84%</td><td class="n">WAS +2.44</td><td class="n">169.4</td><td class="l">Winner: WAS · spread lean: PHX +3.5 · total lean: over 166.5</td></tr>
+<tr><td class="l"><b>GSV@NYL</b></td><td class="l"><b>GSV</b></td><td class="n">52.28%</td><td class="n">GSV +1.18</td><td class="n">167.0</td><td class="l">Winner: GSV outright · spread lean: GSV +2.5 · total lean: over 162.5</td></tr>
+<tr><td class="l"><b>WAS@PHX</b></td><td class="l"><b>WAS</b></td><td class="n">57.84%</td><td class="n">WAS +2.44</td><td class="n">169.4</td><td class="l">Winner: WAS by less than the line · spread lean: PHX +3.5 · total lean: over 166.5</td></tr>
 </tbody></table></div>
-<p class="sub"><code>wnba.replacement.FEATURE_REFRESH</code> · <code>PRELIMINARY_ASOF</code> at 09:14:21Z. The latest retained extension plus the two owner-relayed August 26 finals and ESPN team box statistics were consumed; target game IDs were excluded. The scheduled archive-bound rebuild supersedes these values append-only and must display the change.</p>
+<p class="sub"><code>wnba.replacement.FEATURE_REFRESH</code> on the archive-bound pool: 2,287
+base + 89 extension games through 8/26 (commit <code>3316fa3</code>, per-file sha256, zero
+overlap, targets verified absent; max included event time 8/27 02:00Z, strictly pregame).</p>
+
+<h2>Supersession — preliminary → anchored, shown as required</h2>
+<div class="scroll"><table>
+<thead><tr><th class="l">Game</th><th class="l">Preliminary (09:14Z)</th><th class="l">Anchored (11:06Z)</th><th class="l">Change</th></tr></thead>
+<tbody>
+<tr><td class="l"><b>GSV@NYL</b></td><td class="l">NYL 55.65% · NYL +0.88 · 166.9</td><td class="l"><b>GSV 52.28% · GSV +1.18 · 167.0</b></td><td class="l"><span class="flag">SIDE CHANGED NYL → GSV</span></td></tr>
+<tr><td class="l"><b>WAS@PHX</b></td><td class="l">WAS 57.84% · WAS +2.44 · 169.4</td><td class="l">WAS 57.84% · WAS +2.44 · 169.4</td><td class="l">none</td></tr>
+</tbody></table></div>
+<div class="warn"><b>Reproduction finding.</b> The preliminary GSV@NYL value could not be
+reproduced by the registered machinery on either pool — the superseded 87-game pool yields GSV
+50.11% and the anchored 89-game pool GSV 52.28%, never NYL 55.65% — while WAS@PHX reproduces to
+four decimals. The discrepancy isolates to the preliminary run's handling of Golden State's
+appended 8/26 blowout (89–64 at CON, which materially raises GSV's four-factors state). The
+anchored archive-bound run is authoritative; the finding is flagged for the PR #3 correction
+record and its coverage registry.</div>
+
+<h2>All three arms — kept separate</h2>
+<div class="scroll"><table>
+<thead><tr><th class="l">Game</th><th class="l">FEATURE_REFRESH</th><th class="l">STANDINGS_LOG5 (diagnostic)</th><th class="l">EXPANDING_PRIOR</th><th class="l">Diagnostic read</th></tr></thead>
+<tbody>
+<tr><td class="l"><b>GSV@NYL</b></td><td class="l"><b>GSV 52.3%</b></td><td class="l">GSV 57.0% (27–11 vs 24–15)</td><td class="l">NYL 53.7%</td><td class="l">Refresh and fallback take the road team; the prior opposes — grades the home prior</td></tr>
+<tr><td class="l"><b>WAS@PHX</b></td><td class="l"><b>WAS 57.8%</b></td><td class="l">WAS 71.8% (23–15 vs 13–25)</td><td class="l">PHX 53.7%</td><td class="l">Same shape; the fallback is far more confident than the refresh arm</td></tr>
+</tbody></table></div>
+
+<div class="warn"><b>Archive confirmation of last night:</b> the morning commit binds GSV 89–64
+and SEA 90–78 exactly as relayed — the 8/26 refresh-arm grading (2–0, Brier 0.1027) now rests
+on an archive-bound artifact (upgrade record <code>04e917ab</code>), no longer on relay
+alone.</div>
 
 <div class="pending"><b>Action state is separate from forecast state.</b>
 The model output exists and is shown above. <code>PERSONNEL_UNVERIFIED</code>,
@@ -89,12 +119,6 @@ and no spread/total EV is legal without a registered cover/total distribution.</
 </tbody></table></div>
 <p class="sub">Source: in-git ESPN schedule parquet, commit <code>b843138</code>, file sha <code>769591a7…</code>. Reconciliation: 2 discovered = 2 canonical + 0 refusals.</p>
 
-<h2>Refresh and supersession</h2>
-<div class="panel"><p>The scheduled archive-bound run remains required. It will rerun
-<code>wnba.replacement.FEATURE_REFRESH</code>, <code>wnba.fallback.STANDINGS_LOG5_v1</code>,
-and <code>wnba.winner.EXPANDING_HOME_PRIOR</code> separately. It does not delay Reader View:
-the current registered output stays visible with its exact cutoff, and the anchored run records
-old value → new value for each target.</p></div>
 
 <h2>Personnel — strongest retained evidence, honestly graded</h2>
 <div class="warn"><b>Official grade: PERSONNEL_UNVERIFIED.</b> The official injury-report route

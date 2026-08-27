@@ -1,0 +1,18 @@
+{
+ "confirmation": {
+  "artifact": "wnba/schedules/parquet/wnba_schedule_2026.parquet",
+  "commit": "3316fa3c116a3d6ce2549699bd65a47d0e6773d5",
+  "finals": {
+   "401857176": "CON 64 - GSV 89 (STATUS_FINAL)",
+   "401857177": "SEA 90 - TOR 78 (STATUS_FINAL)"
+  },
+  "repo": "github.com/sportsdataverse/wehoop-wnba-raw",
+  "verdict": "both owner-relayed finals match the canonical archive EXACTLY; the 2-0/Brier 0.1027 refresh-arm grading now rests on an archive-bound artifact"
+ },
+ "created_utc": "2026-08-27T11:06:52Z",
+ "record_id": "WNBA-ARM-GRADING-2026-08-26-ARCHIVE-CONFIRMATION",
+ "record_sha256": "04e917ab59798e77280ec39a39a6472167f7d4e5beadb41902d452cc6dd9e98d",
+ "schema": "ops.grading_upgrade.v1",
+ "still_descriptive_for_promotion": "single-family ESPN evidence; promotion/settlement accrual still follows the registered evidence-tier rules \u2014 this upgrade removes the relay dependency, it does not mint canonical settlement",
+ "upgrades": "data/audit/2026-08-26_wnba_arm_grading.json (79a8b450) \u2014 source grade OWNER_RELAY -> ESPN_SINGLE_FAMILY_GIT_ARTIFACT; original retained unchanged"
+}

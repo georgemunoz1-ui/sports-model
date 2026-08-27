@@ -1,0 +1,37 @@
+{
+ "coherence_disclosure": "GSV@NYL: p 55.65% sits 3.15pp above the margin-implied probability (margin +0.88); disclosed per the PR's coherence check, both games pass its rule",
+ "created_utc": "2026-08-27T09:26:45Z",
+ "generated_utc": "2026-08-27T09:14:21Z",
+ "lanes": "forecast lane only \u2014 EV unavailable; ACTION_BLOCKED stands; 0 bets, 0.00u, $0",
+ "lineage_verification": "base_extension_blob_sha 08e6fe0e42971ad34e7c2fd89b429456c9d8a791 MATCHES git hash-object of the retained data/wnba/source/staging/EXTENSION_ESPN/ext_2026.json \u2014 the rerun is bound to the same retained through-8/25 pool; the two appended 8/26 team boxes (401857176, 401857177, ESPN box source) are asserted retained on the PR branch and are NOT yet retained in this tree",
+ "model_id": "wnba.replacement.FEATURE_REFRESH",
+ "origin": "owner-relayed rerun on PR #3 head 1a8c8e96 (draft, unmerged); NOT computed in this tree",
+ "predictions": [
+  {
+   "espn_id": 401857178,
+   "ev": "UNAVAILABLE \u2014 no moneyline, no registered cover distribution",
+   "game": "wnba:GSV@NYL",
+   "margin_home": 0.88,
+   "market_read": "winner NYL; spread lean GSV +2.5; total lean over 162.5 (DK relay)",
+   "model_side": "NYL",
+   "p_home": 0.5565,
+   "projected_total": 166.9
+  },
+  {
+   "espn_id": 401857179,
+   "ev": "UNAVAILABLE \u2014 unattributed market, no cover distribution",
+   "game": "wnba:WSH@PHX",
+   "margin_home": -2.44,
+   "market_read": "winner WAS; spread lean PHX +3.5; total lean over 166.5 (display-only line)",
+   "model_side": "WAS",
+   "p_home": 0.4216,
+   "projected_total": 169.4
+  }
+ ],
+ "record_id": "WNBA-PRELIMINARY-FORECASTS-2026-08-27",
+ "record_sha256": "1bb92e60fed5c22949aeab9f907df12fc99e15b5d65d10449cfce59f887f6ca3",
+ "schema": "ops.preliminary_forecasts.v1",
+ "status": "PRELIMINARY_ASOF",
+ "supersession_rule": "the scheduled archive-bound rebuild and anchored freeze supersede these values append-only; Reader View must display old value -> new value per target (executes at the 11:00Z wake or its active-retry sequence)",
+ "systemic_defect_acknowledged": "action blockers were suppressing valid model output on the WNBA card and demoting active MLB sides below market state; the three-lane display (PR #3) is adopted for the live cards; gate/policy integration deferred to merge review"
+}

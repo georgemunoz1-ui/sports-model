@@ -1,0 +1,62 @@
+{
+  "record_id": "NFL-RS-EPA-0.2-STATUS",
+  "model_id": "nfl.rs.epa_logit_ridge.v0_2.shadow",
+  "as_of_utc": "2026-08-10T22:43:43Z",
+  "lineage": {
+    "superseded_model_id": "nfl.rs.epa_logit_ridge.v0_1.shadow",
+    "superseded_run": "data/nfl/model/runs/2026-08-10_nflverse_2015_2025_oof_v1",
+    "superseded_disposition": "REJECTED_DO_NOT_USE",
+    "reason": "V0.1 admitted completed 2011-2014 schedule rows without matching PBP; its append-only INVALIDATION.json preserves the correction record."
+  },
+  "regular_season": {
+    "specification": "FROZEN",
+    "implementation": "BUILT",
+    "historical_fit": "VALIDATED_SHADOW_ARTIFACT",
+    "accepted_run": "data/nfl/model/runs/2026-08-10_nflverse_2015_2025_oof_v2",
+    "walk_forward_results": "COMPLETE_2019_2025",
+    "forecast_authority": "NONE",
+    "promotion": "NO_PROMOTE",
+    "stake": "$0"
+  },
+  "data_inventory": {
+    "source": "nflverse immutable captured schedule and seasonal PBP",
+    "schedule_seasons_retained": [2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025, 2026],
+    "pbp_seasons": [2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025],
+    "completed_regular_games_with_pbp": 2895,
+    "completed_regular_games_without_pbp": 0,
+    "pbp_rows": 508914,
+    "qualifying_early_down_plays": 193818,
+    "completed_binary_training_rows": 2885
+  },
+  "validation": {
+    "walk_forward_games": 1865,
+    "evaluation_seasons": [2019, 2020, 2021, 2022, 2023, 2024, 2025],
+    "home_win_model_brier": 0.22979921243103538,
+    "home_win_expanding_base_brier": 0.24974273656170026,
+    "paired_brier_difference_model_minus_base": -0.019943524130664855,
+    "paired_brier_difference_ci95": [-0.026116682736164663, -0.013656705309261864],
+    "primary_retrospective_gate": "PASS",
+    "home_margin_mae": 10.407998836136626,
+    "home_margin_base_mae": 11.135279491669847,
+    "total_points_mae": 11.009992832771484,
+    "total_points_base_mae": 10.977711788799787,
+    "total_model_improvement": "NOT_DEMONSTRATED; paired CI crosses zero"
+  },
+  "live_block": [
+    "verified starting-QB status and planned availability as of forecast time",
+    "offensive-line availability snapshot as of forecast time",
+    "material injury/inactive snapshot as of forecast time",
+    "100 prospective paper selections under one frozen policy",
+    "coherent closing-line capture and positive lower 95% ROI bound",
+    "explicit owner authorization"
+  ],
+  "preseason": {
+    "status": "DATA_CAPTURE_ONLY / NO_FORECAST",
+    "reason": "planned QB/starter snap share and substitution intent are unavailable historically as pregame, timestamped features"
+  },
+  "score_simulation": {
+    "status": "WITHDRAWN",
+    "reason": "No accepted key-number-preserving NFL score model; spread/push/total simulation remains prohibited."
+  },
+  "market_board": "UNCHANGED and quarantined under data/nfl/odds; it is not a model input"
+}

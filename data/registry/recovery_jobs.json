@@ -344,6 +344,38 @@
    "title": "Full WNBA feature refresh: schedule+canonical game ids (3), roster+transaction sections (6 teams), official injury/availability sections (6 teams), results and team/player stats through the as-of cutoff (1 bound snapshot), market prices via the separate overlay (1 binding). A unit binds only from a retrieved artifact with source, timestamp and content hash.",
    "units_done": 8,
    "units_total": 17
+  },
+  "RJ-006-NFL-MODEL-RESTORATION": {
+   "blocks": [
+    "NFL_MODEL_LINEAGE_NOT_RESTORED_TO_ACTIVE_BRANCH"
+   ],
+   "components": [
+    "RECOVERED_EVIDENCE_RETAINED_AND_HASHED",
+    "IMMUTABLE_RUN_DIRECTORY_RESTORED",
+    "V0_1_INVALIDATION_RECORD_RESTORED",
+    "NFLVERSE_SOURCE_PINS_REACQUIRED",
+    "ACTIVE_REGISTRY_ENTRIES_CREATED",
+    "PROSPECTIVE_PAPER_WORKFLOW_ARMED"
+   ],
+   "deadline_utc": "2026-09-09T00:00:00Z",
+   "depends_on": [],
+   "history": [
+    {
+     "note": "OPENED on owner correction (record 2026-08-27_nfl_history_correction.json). Recovered STATUS, reporting disposition and walk-forward metrics retained with sha256 (unit 1/6). Lost commits 1d089d45*/f3cf5b1d* confirmed unresolvable in full local history. Restoration source: owner's recovered historical checkout; the immutable run dir data/nfl/model/runs/2026-08-10_nflverse_2015_2025_oof_v2 is the next unit.",
+     "status": "RUNNING",
+     "units_done": 1,
+     "utc": "2026-08-27T08:43:15Z"
+    }
+   ],
+   "job_id": "RJ-006-NFL-MODEL-RESTORATION",
+   "next_run_utc": "2026-08-27T15:35:00Z",
+   "notes": "A unit binds only from a retained artifact with source, timestamp and content hash. The live_block gates from the recovered STATUS remain binding for any future authority: verified QB/OL/injury snapshots as of forecast time, 100 prospective paper selections under one frozen policy, coherent closing-line capture with positive lower 95% ROI bound, explicit owner authorization. Preseason stays DATA_CAPTURE_ONLY by registered scope.",
+   "owner_subsystem": "model_registry",
+   "status": "RUNNING",
+   "terminal_disposition": null,
+   "title": "Restore the governed nfl.rs.epa_logit_ridge.v0_2.shadow lineage into the active branch: recovered evidence verified (3/3 partial), immutable run directory, invalidation record for v0_1, source pins, and registry entries; then the current-input + prospective-paper workflow for the regular season (opens 2026-09-09)",
+   "units_done": 1,
+   "units_total": 6
   }
  },
  "schema": "ops.recovery_jobs.v1"

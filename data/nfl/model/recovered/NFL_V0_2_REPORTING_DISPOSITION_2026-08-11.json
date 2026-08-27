@@ -1,0 +1,28 @@
+{
+  "record_id": "NFL-V0.2-REPORTING-DISPOSITION-2026-08-11",
+  "created_utc": "2026-08-11T00:55:08Z",
+  "model_id": "nfl.rs.epa_logit_ridge.v0_2.shadow",
+  "accepted_run": "data/nfl/model/runs/2026-08-10_nflverse_2015_2025_oof_v2",
+  "terminology_correction": {
+    "avoid": "built and validated",
+    "use": "built and retrospectively scored; the preregistered primary retrospective gate passed",
+    "reason": "No prospective, input-completeness, closing-line, ROI, or owner-authorization gate has passed."
+  },
+  "reported_and_verified_in_immutable_run": {
+    "season_week_block_bootstrap_primary_brier_ci95": [-0.026116682736164663, -0.013656705309261864],
+    "bootstrap_blocks": 124,
+    "bootstrap_reps": 20000,
+    "calibration_intercept": -0.0753890181267914,
+    "calibration_slope": 0.9066352353420483,
+    "roc_auc": 0.6637521708605846,
+    "walk_forward_games": 1865
+  },
+  "holm_scope": "NOT_APPLICABLE_TO_PRIMARY. The preregistration requires Holm adjustment across declared secondary superiority tests; the accepted report declares no secondary superiority p-values and makes no secondary superiority claim.",
+  "not_reported": {
+    "feature_block_ablations": "NOT_PREREGISTERED_AND_NOT_RUN; no causal importance claim is authorized",
+    "standalone_row_level_lookahead_audit": "NOT_REPORTED. The pinned implementation and source audit record season-expanding training and batch-before-update weekly construction, but no separate row-level cutoff artifact was emitted.",
+    "prospective_forward_calibration": "NOT_AVAILABLE; prospective count is zero",
+    "closing_line_and_roi": "NOT_AVAILABLE"
+  },
+  "disposition": "NO_PROMOTE / NO LIVE FORECAST AUTHORITY / $0; immutable run bytes unchanged"
+}

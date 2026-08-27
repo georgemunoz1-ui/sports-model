@@ -46,35 +46,45 @@ p{max-width:70ch}
 </style>
 <main>
 <h1>NFL Readiness Board — Thursday, August 27</h1>
-<p class="sub">Preseason final week · 4 games · kickoff 23:00Z · no registered model — no forecasts</p>
+<p class="sub">Preseason final week · 4 games · kickoff 23:00Z · preseason excluded by registered model scope — no forecast</p>
 
 <div class="chips">
-<span class="chip">SYSTEM_FAILURE_NFL_MODEL_NOT_REGISTERED</span>
+<span class="chip">NFL_REGULAR_SEASON_MODEL_BUILT_RETROSPECTIVE_GATE_PASSED</span>
+<span class="chip">NFL_MODEL_LINEAGE_NOT_RESTORED_TO_ACTIVE_BRANCH</span>
+<span class="chip">PRESEASON_EXCLUDED_BY_REGISTERED_SCOPE</span>
+<span class="chip">NO_COMPETITION_ELIGIBLE_PRESEASON_FORECAST</span>
 <span class="chip">BENCHMARK_INPUTS_RETAINED</span>
 <span class="chip">CANONICAL_PRESEASON_SCHEDULE_UNAVAILABLE</span>
-<span class="chip">NO_FORECAST · NO_SELECTION</span>
 <span class="chip">0 BETS · $0</span>
 </div>
 
 <div class="panel answers">
-<div class="a"><div class="q">Model predicts</div><div class="v">Nothing — no NFL model has ever been registered in this system</div></div>
-<div class="a"><div class="q">How strong</div><div class="v">Not applicable; no probability is emitted, none is invented</div></div>
+<div class="a"><div class="q">Model predicts</div><div class="v">Nothing tonight — the built regular-season model excludes preseason by registered scope</div></div>
+<div class="a"><div class="q">How strong</div><div class="v">Not applicable; no probability is emitted for preseason, none is invented</div></div>
 <div class="a"><div class="q">Market offers</div><div class="v">Unknown — NO_RETAINED_MARKET_ARTIFACT (routes blocked)</div></div>
-<div class="a"><div class="q">Candidate / pass / blocked</div><div class="v">Every row: SYSTEM_FAILURE_NO_FORECAST</div></div>
-<div class="a"><div class="q">What prevents action</div><div class="v">A registered, competition-eligible NFL model does not exist</div></div>
+<div class="a"><div class="q">Candidate / pass / blocked</div><div class="v">Every row: NO_COMPETITION_ELIGIBLE_PRESEASON_FORECAST</div></div>
+<div class="a"><div class="q">What prevents action</div><div class="v">Preseason is out of registered scope; the model lineage also awaits restoration to the active branch; shadow authority is $0 regardless</div></div>
 </div>
 
-<div class="fail"><b>Registry verdict, stated plainly.</b> The registry and every historical
-NFL record in this system agree: no NFL model was ever registered. All prior NFL rows were
-market-benchmark-only, with model metrics null by design ("NO MODEL EXISTS" —
-<code>cohort_backtest.json</code>). There is no withdrawn model to revive, MLB/WNBA logic is
-not reusable across sports, and this board will not manufacture probabilities to look full.
-The registry audit is definitive, so the state is <code>SYSTEM_FAILURE_NFL_MODEL_NOT_REGISTERED</code>
-— "or current" would imply an uncertainty the audit already resolved. Benchmark inputs were
-retained anyway — schedule, phase, and personnel readiness below — under
-<code>BENCHMARK_INPUTS_RETAINED</code> with
+<div class="fail"><b>Historical-state correction — this card previously carried a material
+error, now withdrawn.</b> Earlier versions said "no NFL model has ever been registered." That
+is false. The system built and preregistered <code>nfl.rs.epa_logit_ridge.v0_1.shadow</code>
+(rejected with an append-only invalidation record) and <code>v0_2.shadow</code>, which was
+retrospectively scored on 2,895 completed regular-season games: 1,865 walk-forward predictions
+2019–2025, winner Brier <b>0.2298 vs 0.2497</b> baseline, paired CI95
+<b>[−0.0261, −0.0137]</b> over 124 season-week blocks, margin MAE <b>10.41 vs 11.14</b>; the
+total model did not validate. The primary retrospective gate <b>passed</b>; its disposition was
+and remains <code>VALIDATED_SHADOW_ARTIFACT / NO_PROMOTE / NO LIVE FORECAST AUTHORITY / $0</code>.
+What actually failed is preservation: the model's recorded commits resolve nowhere in the
+current history (verified), so the lineage was never restored to the active branch — the same
+failure pattern as the WNBA drought, where completed work was presented as absent. This is now
+a <b>model-restoration incident</b> (RJ-006, opened, recovered evidence retained and hashed),
+not a from-scratch build problem. Tonight's no-forecast outcome stands, but for the correct
+reason: <b>preseason is excluded by the model's registered scope</b> — planned QB snaps,
+starter availability and substitution intent cannot be reconstructed historically without
+leakage. Benchmark inputs were retained under <code>BENCHMARK_INPUTS_RETAINED</code> with
 <code>CANONICAL_PRESEASON_SCHEDULE_UNAVAILABLE</code> stated plainly: 4 games discovered =
-0 canonical + 4 explicit refusals, so "preparation complete" would overclaim.</div>
+0 canonical + 4 explicit refusals.</div>
 
 <h2>Competition phase — determined, not assumed</h2>
 <div class="panel"><p>The authoritative nflverse schedule file (fetched fresh this morning,
@@ -98,17 +108,23 @@ discrepancy is recorded; the phase itself is unambiguous: <b>PRESEASON</b>.</p><
 <h2>Market and dispositions</h2>
 <div class="warn"><b>NO_RETAINED_MARKET_ARTIFACT</b> — same egress-blocked receipts as the MLB
 card; re-attempted at the 21:30Z / 22:15Z checkpoints. Even with a price, no EV could exist:
-EV requires a model probability, and none is emitted. Every row's terminal state is
-<code>SYSTEM_FAILURE_NO_FORECAST</code> — "PENDING" is not used. Ledger 0 bets · 0.00u · $0.</div>
+no preseason probability is emitted. Every row's terminal state is
+<code>NO_COMPETITION_ELIGIBLE_PRESEASON_FORECAST</code> — "PENDING" is not used.
+Ledger 0 bets · 0.00u · $0.</div>
 
-<h2>What it would take to change this</h2>
-<div class="panel"><p>A registered NFL identity with: a preregistered spec, a feature vintage
-appropriate to the competition phase (preseason dynamics are not regular-season dynamics — a
-finale where starters rest is close to structureless), its own validation, and explicit
-promotion/action authority. Until an owner-approved registration exists, NFL stays a
-benchmark lane. Tonight's search-identified schedule, personnel expectations and eventual
-results are display/benchmark evidence only — nothing accrues to future model training until
-canonical game IDs, retained as-of artifacts and results actually bind.</p></div>
+<h2>The path forward — restoration, then prospective paper</h2>
+<div class="panel"><p><b>RJ-006 (model restoration, opened today):</b> verify the recovered
+evidence (done — three artifacts retained and hashed), restore the immutable run directory and
+the v0.1 invalidation record, re-acquire the nflverse source pins, and register the identities
+in the active branch before the regular season opens 2026-09-09.</p>
+<p><b>Then the recovered model's own live-block gates govern any future authority</b> (they are
+binding and unchanged): verified starting-QB status and planned availability as of forecast
+time, offensive-line and injury/inactive snapshots, 100 prospective paper selections under one
+frozen policy, coherent closing-line capture with a positive lower 95% ROI bound, and explicit
+owner authorization. Until all of that, the model is a $0 shadow. Preseason stays
+DATA_CAPTURE_ONLY by registered scope regardless. Tonight's search-identified schedule,
+personnel expectations and eventual results remain display/benchmark evidence only — nothing
+accrues to model training until canonical game IDs and retained as-of artifacts bind.</p></div>
 
 <h2>Technical & acquisition appendix</h2>
 <details><summary>Sources, hashes, refusals</summary>
@@ -118,5 +134,11 @@ game-type domain {CON, DIV, REG, SB, WC} — refusal <code>CANONICAL_SOURCE_LACK
 recorded. nfl.com/espn.com fetch: known egress-denied (8/22 ladder receipts). Slate + personnel:
 two-pass search consensus, grade SEARCH_IDENTIFIED_UNCONFIRMED. Board record
 <code>BOARD-2026-08-27-NFL</code>, anchor 06:59:25Z, cohort hash <code>c86ed8cb…</code>.
-Checkpoints 21:30Z/22:15Z verified server-side (inventory <code>263fe16b</code>).</p></details>
+Checkpoints 21:30Z/22:15Z verified server-side (inventory <code>263fe16b</code>).
+Recovered model evidence (owner-uploaded, grade OWNER_UPLOADED_RECOVERED_ARTIFACT):
+<code>data/nfl/model/recovered/</code> — STATUS <code>6935de06…</code>, reporting disposition
+<code>b4fbc2d6…</code>, walk-forward metrics <code>9ae70459…</code>; lost commits
+<code>1d089d45…</code>/<code>f3cf5b1d…</code> confirmed unresolvable; history-correction record
+<code>53f7c9a9</code>; restoration incident RJ-006 1/6. The frozen 8/27 NFL board's
+registry-verdict text is superseded by that record; its bytes stay unchanged.</p></details>
 </main>

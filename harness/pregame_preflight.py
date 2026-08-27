@@ -185,11 +185,31 @@ def check(date, now=None):
     return rep
 
 
+
+def _write_if_changed(path, rep, ts_keys):
+    """Store reports per slate date and rewrite only when something other than the run
+    timestamp changed for that date. The file is a {date: report} map so the today/tomorrow
+    pair the healthcheck probes stop ping-ponging one shared slot (owner directive
+    2026-08-27: no timestamp-only rewrites, no timestamp-only commits)."""
+    try:
+        old = json.load(open(path))
+    except (OSError, ValueError):
+        old = {}
+    if "date" in old:  # legacy single-report layout
+        old = {old["date"]: old}
+    strip = lambda d: {k: v for k, v in d.items() if k not in ts_keys}
+    prev = old.get(rep["date"])
+    if prev is not None and strip(prev) == strip(rep):
+        return False
+    old[rep["date"]] = rep
+    os.makedirs(os.path.dirname(path), exist_ok=True)
+    json.dump(old, open(path, "w"), indent=1, sort_keys=True)
+    return True
+
 def run(date, gate=False, write=True):
     rep = check(date)
     if write:
-        os.makedirs("data/audit", exist_ok=True)
-        json.dump(rep, open(OUT, "w"), indent=1)
+        _write_if_changed(OUT, rep, ("checked_utc",))
     return rep
 
 

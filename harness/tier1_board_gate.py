@@ -247,6 +247,22 @@ def cross_date_echo(rows, dates):
     return out
 
 
+
+def _write_if_changed(path, rep, ts_keys):
+    """Rewrite the audit record only when something other than the run timestamp changed.
+    A healthcheck pass over an unchanged system must leave tracked files byte-identical
+    (owner directive 2026-08-27: no timestamp-only rewrites, no timestamp-only commits)."""
+    try:
+        old = json.load(open(path))
+    except (OSError, ValueError):
+        old = None
+    strip = lambda d: {k: v for k, v in d.items() if k not in ts_keys}
+    if old is not None and strip(old) == strip(rep):
+        return False
+    os.makedirs(os.path.dirname(path), exist_ok=True)
+    json.dump(rep, open(path, "w"), indent=1)
+    return True
+
 def run(dates, write=True):
     rows = list(csv.DictReader(open(RESULTS)))
     parks = json.load(open(PARKS)) if os.path.exists(PARKS) else None
@@ -302,8 +318,7 @@ def run(dates, write=True):
         and rep["criteria"]["canonical_results_contamination_IN_WINDOW"] == 0
         and not dupes and all(d["PASS"] for d in per_date))
     if write:
-        os.makedirs("data/audit", exist_ok=True)
-        json.dump(rep, open(OUT, "w"), indent=1)
+        _write_if_changed(OUT, rep, ("built_utc",))
     return rep
 
 

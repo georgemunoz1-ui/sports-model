@@ -247,7 +247,7 @@ def main() -> int:
         features = ordered_features(record)
         validate_feature_names(features)
         print(
-            f"CFB v2 contract: READY_FOR_ACQUISITION "
+            f"CFB v2 contract: {record['status']} "
             f"({record['model_id']}; {len(features)} frozen features)"
         )
         return 0

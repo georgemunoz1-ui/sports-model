@@ -1,0 +1,27 @@
+{
+ "block": "MLB day (COL@WSH 17:05Z, BAL@STL 18:15Z)",
+ "created_utc": "2026-08-27T15:37:19Z",
+ "frozen_board": "cards/2026-08-27_mlb_board.json byte-identical (verified below)",
+ "ledger": {
+  "exposure_usd": 0,
+  "n_bets": 0,
+  "units": 0.0
+ },
+ "market_attempt": {
+  "error": "EGRESS_BLOCKED",
+  "note": "owner-relayed one-sided board (a61038c3) remains the retained artifact; TOR and LAD side prices still missing",
+  "observed_utc": "2026-08-27T15:37:19Z",
+  "outcome": "REFUSED",
+  "route": "sportsbook.draftkings.com (WebFetch)"
+ },
+ "next": "T-45 16:20Z",
+ "record_id": "CHECKPOINT-2026-08-27-MLB-DAY-T90",
+ "record_sha256": "e64075c98697928be42cb654968f10741170d663a0b69fea30cbd3bd063177e8",
+ "rj006_note": "restoration pass: no new unit bindable from this environment \u2014 the immutable run directory exists only in the owner's recovered checkout; the standing request is upload or PR of data/nfl/model/runs/2026-08-10_nflverse_2015_2025_oof_v2 plus the v0.1 INVALIDATION.json; 1/6 stands honestly",
+ "schema": "ops.checkpoint.v1",
+ "starters": {
+  "mlb:BAL@STL": "STL TBD RESOLVED by identification: Gordon Graceffo (snippet stats 7-1/3.13; no retained log -> NAMED_NO_LOG_RETAINED_CAP). Replacement rerun with the frozen seed is numerically identical to the frozen forecast (cap unchanged): p_home 0.4932, BAL 50.68% retained, side_reselection_gate PASS. Disposition firms from provisional to PASS_NEGATIVE_EV at BAL -114 (EV -4.87/$100); no further movement possible from this slot without a retained log.",
+  "mlb:COL@WSH": "no change identified: Hughes/Irvin stand; PASS_NEGATIVE_EV at WSH -119 unchanged"
+ },
+ "trigger": "trig_01XuzJEDyc3FnF3QtN5BhKAK (fired 15:35:36Z)"
+}

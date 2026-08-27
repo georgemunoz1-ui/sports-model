@@ -1,0 +1,214 @@
+{
+  "record_id": "CFB-V2-PREREG-2026-08-27",
+  "model_id": "cfb.fbs.epa_talent_hgb.v2_0.challenger",
+  "status": "PREREGISTERED_DATA_ACQUISITION_PENDING",
+  "frozen_utc": "2026-08-27T06:45:33Z",
+  "purpose": "A market-free college-football challenger that adds causal efficiency, opponent adjustment, roster continuity, talent, quarterback and travel context to the validated CFB v1 state model.",
+  "incumbent": {
+    "model_id": "cfb.fbs.elo_form_logit_ridge.v1_0.shadow",
+    "role": "HISTORICALLY_VALIDATED_BASELINE_PENDING_CLEAN_PORT",
+    "availability_in_target_branch": "ABSENT_AT_PREREGISTRATION",
+    "immutable": true,
+    "known_strength": "Validated home-win probability and margin in the recovered historical CFB implementation.",
+    "known_limitations": [
+      "Most aggregate home-win gain over causal Elo comes from FBS-versus-FCS games.",
+      "On FBS-versus-FBS games v1 is approximately tied with evaluation-only ESPN pregame Elo.",
+      "The v1 total target is NOT_VALIDATED_VS_BASELINE.",
+      "Historical causal injuries and depth charts are unavailable, so v1 personnel is context-only."
+    ]
+  },
+  "competition_scope": {
+    "primary": "FBS_VS_FBS",
+    "secondary": "FBS_VS_FCS",
+    "rule": "The cohorts are fit, calibrated, reported and promoted separately. Aggregate improvement may not conceal a failed FBS-versus-FBS cohort."
+  },
+  "targets": {
+    "home_win": "home_points > away_points",
+    "home_margin": "home_points - away_points",
+    "total_points": "home_points + away_points"
+  },
+  "source_plan": [
+    {
+      "repository": "sportsdataverse/cfbfastR-raw",
+      "role": "Authoritative cache of raw ESPN CFB schedules and per-game payloads",
+      "required": true
+    },
+    {
+      "repository": "sportsdataverse/cfbfastR-cfb-raw",
+      "role": "Offline-reprocessable per-game JSON enriched with EPA, WPA and advanced box-score fields",
+      "required": true
+    },
+    {
+      "repository": "sportsdataverse/cfbfastR-cfb-data",
+      "role": "Analysis-ready seasonal tables reshaped from the enriched per-game JSON",
+      "required": true
+    },
+    {
+      "repository": "sportsdataverse/sportsdataverse-data",
+      "role": "GitHub release host for the versioned espn_cfb_* seasonal tables",
+      "required": true
+    },
+    {
+      "repository": "CFBD/cfbd-python",
+      "role": "Versioned client for optional talent, recruiting, returning-production and transfer inputs",
+      "required": false,
+      "missing_behavior": "Disable the entire optional feature block; never synthesize or silently median-impute a structurally missing season."
+    }
+  ],
+  "source_binding": {
+    "requirements": [
+      "repository",
+      "commit",
+      "path",
+      "bytes",
+      "sha256",
+      "retrieved_utc",
+      "upstream_event_time_or_season"
+    ],
+    "raw_first": true,
+    "same_family_warning": "Raw and parsed SportsDataverse repositories are correlated evidence and do not constitute independent result confirmation.",
+    "market_columns": "FORBIDDEN_PREDICTIVE"
+  },
+  "ordered_feature_blocks": {
+    "v1_state": [
+      "elo_diff_with_home_advantage",
+      "home_ewma_points_for",
+      "home_ewma_points_against",
+      "away_ewma_points_for",
+      "away_ewma_points_against",
+      "home_ewma_margin",
+      "away_ewma_margin",
+      "rest_days_diff",
+      "neutral_site",
+      "conference_game"
+    ],
+    "opponent_adjusted_efficiency": [
+      "off_epa_per_play_diff",
+      "def_epa_per_play_diff",
+      "early_down_epa_diff",
+      "success_rate_diff",
+      "explosive_play_rate_diff",
+      "havoc_rate_diff",
+      "finishing_drives_diff",
+      "pace_seconds_per_play_diff"
+    ],
+    "personnel_and_program": [
+      "qb_returning_attempt_share_diff",
+      "offensive_returning_production_diff",
+      "defensive_returning_production_diff",
+      "talent_composite_diff",
+      "transfer_net_value_diff",
+      "head_coach_continuity_diff"
+    ],
+    "context": [
+      "travel_miles_away",
+      "timezone_shift_away",
+      "altitude_delta_away",
+      "short_week_home",
+      "short_week_away",
+      "season_progress",
+      "fbs_vs_fcs"
+    ],
+    "missingness": [
+      "efficiency_block_available",
+      "returning_production_available",
+      "talent_block_available",
+      "qb_block_available",
+      "travel_block_available"
+    ]
+  },
+  "causal_rules": {
+    "game_features": "Only games with final event time strictly before the target kickoff may update team state.",
+    "weekly_block": "All games in one official season-week share the same training and feature cutoff.",
+    "season_openers": "Prior-season efficiency is regressed toward the subdivision mean; current-season information cannot be backfilled after kickoff.",
+    "personnel": "A personnel value is predictive only when an historically retained pregame artifact exists. Current-only roster knowledge is context or a registered replacement input, never retrofitted into training.",
+    "market": "Prices, spreads, totals, consensus, rankings derived from betting markets and public betting percentages are excluded from all model features and tuning."
+  },
+  "estimators": {
+    "home_win": {
+      "family": "HistGradientBoostingClassifier",
+      "calibration": "Nested expanding-window isotonic calibration fitted only on prior out-of-fold predictions; sigmoid fallback when the calibration block is insufficient.",
+      "selection_metric": "Brier score",
+      "secondary_metrics": [
+        "log loss",
+        "calibration intercept",
+        "calibration slope",
+        "ECE",
+        "ROC-AUC"
+      ]
+    },
+    "home_margin": {
+      "family": "HistGradientBoostingRegressor",
+      "loss": "absolute_error",
+      "selection_metric": "MAE"
+    },
+    "total_points": {
+      "family": "HistGradientBoostingRegressor",
+      "loss": "absolute_error",
+      "selection_metric": "MAE",
+      "action_status": "DISABLED_UNTIL_INDEPENDENTLY_VALIDATED"
+    }
+  },
+  "walk_forward": {
+    "minimum_history_seasons": 5,
+    "outer_evaluation": "season x official week",
+    "training_cutoff": "strictly before the earliest kickoff in the evaluation week",
+    "hyperparameter_selection": "Tune on seasons through evaluation_season-2 and validate on evaluation_season-1; selected values are fixed through the evaluation season.",
+    "prediction_role": "OUT_OF_FOLD",
+    "bootstrap_unit": "season-week",
+    "bootstrap_replicates": 20000,
+    "multiplicity": "Holm correction across registered primary target comparisons"
+  },
+  "baselines": {
+    "home_win": [
+      "expanding_home_rate",
+      "causal_v1_elo",
+      "frozen_cfb_v1_direct_probability"
+    ],
+    "home_margin": [
+      "training_only_elo_margin",
+      "frozen_cfb_v1_margin"
+    ],
+    "total_points": [
+      "causal_rolling_total",
+      "frozen_cfb_v1_total"
+    ],
+    "external_diagnostic_only": "ESPN pregame Elo or predictor when retained before kickoff; never treated as an internally controlled baseline."
+  },
+  "promotion_gates": {
+    "minimum_games": 1000,
+    "minimum_season_week_blocks": 60,
+    "home_win": [
+      "Lower Brier than every registered internal baseline on FBS_VS_FBS.",
+      "Holm-adjusted 95% paired season-week interval versus the strongest baseline excludes zero in the improving direction.",
+      "Calibration slope between 0.85 and 1.15 and absolute calibration intercept no greater than 0.10.",
+      "No single season contributes more than 35% of the total paired improvement."
+    ],
+    "home_margin": [
+      "Lower MAE than both registered margin baselines on FBS_VS_FBS.",
+      "Holm-adjusted 95% paired season-week interval excludes zero in the improving direction."
+    ],
+    "total_points": [
+      "Remains disabled unless it independently clears both total baselines and its paired interval gate."
+    ],
+    "prospective": "Historical OOF validation may authorize a prospective shadow challenger, never real-money action. Promotion also requires the registered live horizon."
+  },
+  "week_one_policy": {
+    "reason": "Roster turnover, transfers, quarterback changes and coaching changes make Week 1 materially different from ordinary in-season forecasting.",
+    "required_blocks": [
+      "talent",
+      "returning_production",
+      "quarterback",
+      "coach_continuity"
+    ],
+    "missing_behavior": "Publish v1 baseline forecasts and V2_INPUT_BLOCKED; do not pretend prior-season team form is a complete Week 1 state.",
+    "fbs_fcs_extreme_spread_review": "Any model-market spread disagreement greater than 14 points is AUDIT_REQUIRED and cannot become a candidate without source and roster review."
+  },
+  "output": {
+    "prediction_policy": "gradeable_prediction_output.v2",
+    "prediction_cohort": "PROSPECTIVE_CHALLENGER",
+    "market_overlay": "SEPARATE",
+    "wager_authority": "NO",
+    "stake": 0
+  }
+}

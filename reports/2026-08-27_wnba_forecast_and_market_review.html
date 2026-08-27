@@ -59,20 +59,29 @@ p{max-width:70ch}
 
 <div class="panel answers">
 <div class="a"><div class="q">Model predicts</div><div class="v">Not yet frozen — forecasts generate after the through-8/26 feature rebuild at the 11:00Z wake</div></div>
-<div class="a"><div class="q">How strong</div><div class="v">The refresh arm enters 2–0 (Brier 0.103) from last night's prospective validation</div></div>
+<div class="a"><div class="q">How strong</div><div class="v">Refresh arm enters 2–0 descriptively, Brier 0.103; archive confirmation pending and no promotion evidence accrued</div></div>
 <div class="a"><div class="q">Market offers</div><div class="v">Unknown — NO_RETAINED_MARKET_ARTIFACT (routes blocked, receipts kept)</div></div>
 <div class="a"><div class="q">Candidate / pass / blocked</div><div class="v">ACTION_BLOCKED until forecasts freeze and a price binds</div></div>
 <div class="a"><div class="q">What prevents action</div><div class="v">Upstream 8/26 box scores land ~10:30Z; freeze follows, hours before the 00:00Z tip</div></div>
 </div>
 
-<div class="pending"><b>Why the board is deliberately not frozen yet.</b> The registered rule
-is: rebuild the four-factors feature state through yesterday's completed games <i>before</i>
+<div class="pending"><b>Current state (before the 11:00Z rebuild):</b>
+<code>FEATURE_REBUILD_PENDING</code> · <code>FORECAST_NOT_FROZEN</code> ·
+<code>PERSONNEL_UNVERIFIED</code> · <code>NO_RETAINED_MARKET_ARTIFACT</code> ·
+<code>ACTION_BLOCKED</code>.
+<p style="margin:10px 0 0"><b>Why the board is deliberately not frozen yet.</b> The registered
+rule is: rebuild the four-factors feature state through yesterday's completed games <i>before</i>
 any forecast freezes. Yesterday's two box scores publish in the data archive's morning commit
 (~10:30Z); the 11:00Z wake rebuilds the pool through 8/26 with a zero-overlap leakage check,
 verifies both tonight's games are absent from the pool, then freezes the board — roughly 13
-hours before first tip. Freezing now on a through-8/25 pool would violate the rebuild-first
-rule for no timing benefit. If the upstream commit is late, the fallback is an explicit
-staleness disposition at the 22:30Z T−90 checkpoint — never a silent freeze.</div>
+hours before first tip. Only after the rebuilt artifact and the freeze exist may this page show
+<code>FEATURE_STATE_CURRENT</code> and <code>FORECASTS_GENERATED</code>. Freezing now on a
+through-8/25 pool would violate the rebuild-first rule for no timing benefit.</p>
+<p style="margin:10px 0 0"><b>If the ~10:30Z upstream commit is late:</b> the 11:00Z wake starts
+an active retry sequence (short-interval re-fetches of the archive, each logged with a receipt)
+rather than waiting silently for the 22:30Z checkpoint; the checkpoint is the backstop, not the
+retry plan. If no route binds by T−90, the board freezes with an explicit staleness disposition
+— never silently.</p></div>
 
 <h2>Tonight's slate — canonical schedule artifact</h2>
 <div class="scroll"><table>
@@ -94,7 +103,8 @@ staleness disposition at the 22:30Z T−90 checkpoint — never a silent freeze.
 <p>Any complete side disagreement between the refresh arm and the fallback is flagged as the
 slate's diagnostic game, as it was on 8/26 (the refresh arm took Seattle against the fallback's
 Toronto and won by 12 — a 2–0 night at Brier 0.103 vs the fallback's 0.203 and the prior's
-0.251; owner-relayed finals, descriptive only until the archive artifact binds this morning).</p>
+0.251; owner-relayed finals, descriptive only until the archive artifact binds, and no
+promotion evidence accrued).</p>
 </div>
 
 <h2>Personnel — strongest retained evidence, honestly graded</h2>
@@ -114,10 +124,12 @@ game payloads from each team's most recent archived game (1–3 days old, hashed
 <h2>Market and dispositions</h2>
 <div class="warn"><b>NO_RETAINED_MARKET_ARTIFACT.</b> Same blocked routes and receipts as the
 MLB card; capture is re-attempted at 22:30Z / 23:15Z and a fresh quote is required before any
-possible execution. State vocabulary for tonight: <code>FEATURE_STATE_CURRENT</code> (after the
-11:00Z rebuild) · <code>PERSONNEL_UNVERIFIED</code> · <code>FORECASTS_GENERATED</code> (at
-freeze) · <code>NO_RETAINED_MARKET_ARTIFACT</code> · <code>ACTION_BLOCKED</code>. No wager is
-authorized; ledger 0 bets · 0.00u · $0.</div>
+possible execution. Current state: <code>FEATURE_REBUILD_PENDING</code> ·
+<code>FORECAST_NOT_FROZEN</code> · <code>PERSONNEL_UNVERIFIED</code> ·
+<code>NO_RETAINED_MARKET_ARTIFACT</code> · <code>ACTION_BLOCKED</code>. Anticipated after the
+rebuild and freeze exist: <code>FEATURE_STATE_CURRENT</code> · <code>FORECASTS_GENERATED</code>
+(the other three states persist until personnel and market bind). No wager is authorized;
+ledger 0 bets · 0.00u · $0.</div>
 
 <h2>Technical & acquisition appendix</h2>
 <details><summary>Feature pipeline state and evidence chain</summary>

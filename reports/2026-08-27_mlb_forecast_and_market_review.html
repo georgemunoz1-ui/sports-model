@@ -54,15 +54,15 @@ p{max-width:70ch}
 
 <div class="chips">
 <span class="chip">7 GAMES FROZEN</span>
-<span class="chip">ALL <b>6</b> REGISTERED ARMS / GAME</span>
+<span class="chip"><b>4</b> WINNER ARMS + <b>2</b> TOTAL OUTPUTS / GAME</span>
 <span class="chip">NO RETAINED MARKET</span>
 <span class="chip"><b>0</b> CANDIDATES · <b>0</b> BETS · <b>$0</b></span>
 <span class="chip">ANCHOR PRECEDES EVERY START</span>
 </div>
 
 <div class="panel answers">
-<div class="a"><div class="q">Model predicts</div><div class="v">Milwaukee is the slate's one conviction call (67.8% at NYM); the rest sit 47–60%</div></div>
-<div class="a"><div class="q">How strong</div><div class="v">One strong signal, six near coin-flips; three games carry starter caps</div></div>
+<div class="a"><div class="q">Model predicts</div><div class="v">Milwaukee is the slate's one strong directional signal (67.8% at NYM); NYY 60.0% is a moderate lean; the rest are near coin-flips</div></div>
+<div class="a"><div class="q">How strong</div><div class="v">One strong signal, one moderate lean, five near coin-flips; five games carry a capped starter input</div></div>
 <div class="a"><div class="q">Market offers</div><div class="v">Unknown — no price was retainable (acquisition blocked, receipts kept)</div></div>
 <div class="a"><div class="q">Candidate / pass / blocked</div><div class="v">Every row: NO_RETAINED_MARKET_ARTIFACT</div></div>
 <div class="a"><div class="q">What prevents action</div><div class="v">No retained price → no EV; conservative EV also awaits the RJ-002 review</div></div>
@@ -70,15 +70,19 @@ p{max-width:70ch}
 
 <h2>Plain-language thesis</h2>
 <div class="panel">
-<p><b>The champion sees one real edge and a quiet board.</b> Jacob Misiorowski (1.68 ERA)
-against Sean Manaea makes Milwaukee at New York the only game where the frozen champion leaves
-the coin-flip band: it gives the Mets just 32.2% at home, and both challengers agree with the
-direction. Houston at New York (Yankees) is the next-clearest read at 60.0% home. Everything
-else is 47–52%, which this system reads as "no signal", not "small signal".</p>
-<p><b>Three games are capped, honestly.</b> Kansas City–Toronto has a two-source starter
-conflict on <i>both</i> slots (capped until resolved; the 21:35Z checkpoint retries).
-Arizona–San Francisco is TBD/TBD, and St. Louis has not named a starter. Capped slots ride the
-frozen league-average treatment — never a guess.</p>
+<p><b>One strong directional signal, one moderate lean, five near coin-flips; five games
+contain at least one capped starter input.</b> Jacob Misiorowski (1.68 ERA) against Sean Manaea
+makes Milwaukee at New York the slate's one strong directional signal — not an edge, because no
+price is retained: the frozen champion gives the Mets just 32.2% at home, and both challengers
+agree with the direction. Houston at New York (Yankees) is the one moderate lean at 60.0% home.
+The other five picks sit 50.7%–53.2%, which this system reads as near coin-flips, not small
+signals.</p>
+<p><b>Five games carry at least one capped starter input.</b> Kansas City–Toronto has a
+two-source starter conflict on <i>both</i> slots (capped until resolved; the 21:35Z checkpoint
+retries). Arizona–San Francisco is TBD/TBD, and St. Louis has not named a starter. Houston's
+Wesneski and Atlanta's Smith-Shawver are named but their logs were never retained, so those two
+slots are capped too (<code>NAMED_NO_LOG_RETAINED_CAP</code>). Capped slots ride the frozen
+league-average treatment — never a guess.</p>
 <p><b>No betting claim exists today.</b> No price could be retained from the named book
 (every fetch route is egress-blocked; receipts in the appendix), so no raw EV, no conservative
 EV, and no candidate/pass split can be computed. That is an acquisition failure, not a claim
@@ -112,11 +116,12 @@ regardless. No wager is authorized; ledger stands 0 bets · 0.00u · $0.</div>
 
 <h2>Where the arms disagree</h2>
 <div class="panel">
-<p>Four of seven games split the arms — all four are low-conviction and three are capped:</p>
+<p>Five of seven games split the winner arms — COL@WSH, BAL@STL, KC@TOR, MIL@NYM and AZ@SF —
+all at low conviction except the Milwaukee game, and three of them starter-capped:</p>
 <ul>
 <li><b>COL@WSH</b> — champion takes Washington, the widened challenger takes Colorado. Fully-resolved starters; a genuine model disagreement at low conviction.</li>
 <li><b>BAL@STL</b> and <b>KC@TOR</b> — the champion leans away-side against every other arm; both games are starter-capped, so the disagreement is mostly cap arithmetic.</li>
-<li><b>MIL@NYM</b> — the baseline prior (home 52.1%) opposes all three model arms; this is the slate's diagnostic game: a Milwaukee win credits real signal over the prior.</li>
+<li><b>MIL@NYM</b> — the baseline prior (home 52.1%) opposes all three model arms; this is the slate's primary diagnostic game. Its result will be graded descriptively against the prior using probability metrics; one game cannot validate the signal.</li>
 <li><b>AZ@SF</b> — champion and widened take Arizona, adaptive and prior take San Francisco; TBD/TBD, so treat as noise until starters resolve.</li>
 </ul>
 </div>

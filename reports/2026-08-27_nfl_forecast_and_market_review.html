@@ -49,8 +49,9 @@ p{max-width:70ch}
 <p class="sub">Preseason final week · 4 games · kickoff 23:00Z · no registered model — no forecasts</p>
 
 <div class="chips">
-<span class="chip">SYSTEM_FAILURE_NFL_MODEL_NOT_REGISTERED_OR_CURRENT</span>
-<span class="chip">DATA_PREPARATION_COMPLETE</span>
+<span class="chip">SYSTEM_FAILURE_NFL_MODEL_NOT_REGISTERED</span>
+<span class="chip">BENCHMARK_INPUTS_RETAINED</span>
+<span class="chip">CANONICAL_PRESEASON_SCHEDULE_UNAVAILABLE</span>
 <span class="chip">NO_FORECAST · NO_SELECTION</span>
 <span class="chip">0 BETS · $0</span>
 </div>
@@ -68,7 +69,12 @@ NFL record in this system agree: no NFL model was ever registered. All prior NFL
 market-benchmark-only, with model metrics null by design ("NO MODEL EXISTS" —
 <code>cohort_backtest.json</code>). There is no withdrawn model to revive, MLB/WNBA logic is
 not reusable across sports, and this board will not manufacture probabilities to look full.
-Dataset preparation continued anyway — schedule, phase, and personnel readiness below.</div>
+The registry audit is definitive, so the state is <code>SYSTEM_FAILURE_NFL_MODEL_NOT_REGISTERED</code>
+— "or current" would imply an uncertainty the audit already resolved. Benchmark inputs were
+retained anyway — schedule, phase, and personnel readiness below — under
+<code>BENCHMARK_INPUTS_RETAINED</code> with
+<code>CANONICAL_PRESEASON_SCHEDULE_UNAVAILABLE</code> stated plainly: 4 games discovered =
+0 canonical + 4 explicit refusals, so "preparation complete" would overclaim.</div>
 
 <h2>Competition phase — determined, not assumed</h2>
 <div class="panel"><p>The authoritative nflverse schedule file (fetched fresh this morning,
@@ -100,8 +106,9 @@ EV requires a model probability, and none is emitted. Every row's terminal state
 appropriate to the competition phase (preseason dynamics are not regular-season dynamics — a
 finale where starters rest is close to structureless), its own validation, and explicit
 promotion/action authority. Until an owner-approved registration exists, NFL stays a
-data-preparation and benchmark lane. The readiness dataset from tonight (schedule, phase,
-personnel expectations, results when they bind) accrues to that future registration.</p></div>
+benchmark lane. Tonight's search-identified schedule, personnel expectations and eventual
+results are display/benchmark evidence only — nothing accrues to future model training until
+canonical game IDs, retained as-of artifacts and results actually bind.</p></div>
 
 <h2>Technical & acquisition appendix</h2>
 <details><summary>Sources, hashes, refusals</summary>

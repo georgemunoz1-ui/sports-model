@@ -1,0 +1,63 @@
+{
+ "affirmed": "tri-sport hierarchy stands: model output first, strength second, market state third, disposition fourth, technical evidence collapsed last",
+ "authority": "owner state-coherence review, 2026-08-27",
+ "created_utc": "2026-08-27T07:59:50Z",
+ "mlb": [
+  {
+   "defect": "'edge' without a retained price",
+   "fix": "'one strong directional signal' \u2014 edge requires a price"
+  },
+  {
+   "defect": "capped-game count said three",
+   "fix": "five games carry at least one capped starter input: BAL@STL (STL TBD), KC@TOR (both conflicted), AZ@SF (TBD/TBD), HOU@NYY (Wesneski log not retained), LAD@ATL (Smith-Shawver log not retained)"
+  },
+  {
+   "defect": "arm-split count said four while listing five games",
+   "fix": "five games split the winner arms: COL@WSH, BAL@STL, KC@TOR, MIL@NYM, AZ@SF"
+  },
+  {
+   "defect": "strength classification lumped six games as coin-flips",
+   "fix": "one strong signal (MIL 67.8%), one moderate lean (NYY 60.0%), five near coin-flips (50.7%-53.2%)"
+  },
+  {
+   "defect": "'a Milwaukee win credits real signal' overclaimed one outcome",
+   "fix": "MIL@NYM is the primary diagnostic game; graded descriptively against the prior with probability metrics; one game cannot validate the signal"
+  },
+  {
+   "defect": "'six registered arms' conflated targets",
+   "fix": "4 winner arms + 2 total outputs per game"
+  }
+ ],
+ "nfl": [
+  {
+   "defect": "DATA_PREPARATION_COMPLETE contradicted 4 = 0 canonical + 4 refusals",
+   "fix": "BENCHMARK_INPUTS_RETAINED + CANONICAL_PRESEASON_SCHEDULE_UNAVAILABLE"
+  },
+  {
+   "defect": "'_OR_CURRENT' implied unresolved uncertainty",
+   "fix": "SYSTEM_FAILURE_NFL_MODEL_NOT_REGISTERED \u2014 the registry audit is definitive"
+  },
+  {
+   "defect": "'accrues to that future registration' overclaimed",
+   "fix": "search-identified personnel/results are display/benchmark evidence only until canonical game IDs, retained as-of artifacts and results bind"
+  }
+ ],
+ "record_id": "CARD-STATE-CORRECTIONS-2026-08-27",
+ "record_sha256": "b5d9bbec8d03027d0f232f2cbaf6ee4cb00fe575b6143515fcd4a220be5bf6b6",
+ "schema": "ops.corrections.v1",
+ "scope": "display cards corrected; the frozen boards cards/2026-08-27_{mlb,nfl}_board.json stay byte-identical (append-only) \u2014 this record supersedes their state vocabulary where named below; future boards emit the corrected tokens directly",
+ "wnba": [
+  {
+   "defect": "'prospective validation' premature for owner-relayed finals",
+   "fix": "2-0 descriptively, Brier 0.103; archive confirmation pending; no promotion evidence accrued"
+  },
+  {
+   "defect": "present and future states mixed",
+   "fix": "current: FEATURE_REBUILD_PENDING, FORECAST_NOT_FROZEN, PERSONNEL_UNVERIFIED, NO_RETAINED_MARKET_ARTIFACT, ACTION_BLOCKED; FEATURE_STATE_CURRENT and FORECASTS_GENERATED may appear only after the rebuilt artifact and freeze exist"
+  },
+  {
+   "defect": "late-archive contingency waited for the 22:30Z checkpoint",
+   "fix": "BINDING: if the ~10:30Z upstream commit is absent at the 11:00Z wake, an active short-interval retry sequence starts immediately (each attempt logged with a receipt); the T-90 checkpoint is the backstop, not the retry plan"
+  }
+ ]
+}

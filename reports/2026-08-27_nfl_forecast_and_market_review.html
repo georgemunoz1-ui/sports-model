@@ -1,0 +1,115 @@
+<title>NFL Readiness Board — August 27</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=Public+Sans:wght@400;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  --bg:#f4f5f7; --panel:#ffffff; --ink:#252a33; --muted:#5f6773; --line:#d6dae1;
+  --accent:#44546e; --fail-bg:#f8e9e4; --fail-ink:#8a3b2a; --fail-line:#e0b3a4;
+  --warn-bg:#fdf3e3; --warn-ink:#7a5218; --warn-line:#e5c894; --chip:#eceef2;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#171a1f; --panel:#1f242c; --ink:#e3e7ec; --muted:#98a1ad; --line:#37404c;
+    --accent:#8ba3c7; --fail-bg:#2e1f1b; --fail-ink:#e2a08c; --fail-line:#5c3a2f;
+    --warn-bg:#2d2415; --warn-ink:#e3c07f; --warn-line:#59492a; --chip:#293039;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#171a1f; --panel:#1f242c; --ink:#e3e7ec; --muted:#98a1ad; --line:#37404c;
+  --accent:#8ba3c7; --fail-bg:#2e1f1b; --fail-ink:#e2a08c; --fail-line:#5c3a2f;
+  --warn-bg:#2d2415; --warn-ink:#e3c07f; --warn-line:#59492a; --chip:#293039;
+}
+body{background:var(--bg);color:var(--ink);font:16px/1.55 "Public Sans",system-ui,sans-serif;margin:0;padding:0 16px 64px}
+main{max-width:960px;margin:0 auto}
+h1,h2{font-family:"Archivo",system-ui,sans-serif;text-wrap:balance;line-height:1.15}
+h1{font-size:1.9rem;margin:28px 0 4px}
+h2{font-size:1.25rem;margin:34px 0 10px}
+.sub{color:var(--muted);margin:0 0 18px}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0}
+.chip{background:var(--chip);border:1px solid var(--line);border-radius:999px;padding:3px 12px;font-size:.82rem}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:18px 20px;margin:16px 0}
+.answers{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px}
+.answers .a{border-left:3px solid var(--accent);padding:2px 0 2px 10px}
+.answers .q{font-size:.72rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted)}
+.answers .v{font-weight:600}
+.fail{background:var(--fail-bg);color:var(--fail-ink);border:1px solid var(--fail-line);border-radius:10px;padding:14px 18px;margin:14px 0}
+.warn{background:var(--warn-bg);color:var(--warn-ink);border:1px solid var(--warn-line);border-radius:10px;padding:12px 16px;margin:14px 0}
+.scroll{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:.9rem}
+th,td{padding:7px 10px;border-bottom:1px solid var(--line);text-align:right;font-variant-numeric:tabular-nums}
+th{font-family:"Archivo";font-size:.75rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
+th.l,td.l{text-align:left}
+td.n{font-family:"IBM Plex Mono",monospace;font-size:.85rem}
+details{border:1px solid var(--line);border-radius:10px;padding:12px 18px;margin:12px 0;background:var(--panel)}
+summary{cursor:pointer;font-family:"Archivo";font-weight:600}
+code{font-family:"IBM Plex Mono",monospace;font-size:.85em;background:var(--chip);padding:1px 5px;border-radius:4px}
+p{max-width:70ch}
+</style>
+<main>
+<h1>NFL Readiness Board — Thursday, August 27</h1>
+<p class="sub">Preseason final week · 4 games · kickoff 23:00Z · no registered model — no forecasts</p>
+
+<div class="chips">
+<span class="chip">SYSTEM_FAILURE_NFL_MODEL_NOT_REGISTERED_OR_CURRENT</span>
+<span class="chip">DATA_PREPARATION_COMPLETE</span>
+<span class="chip">NO_FORECAST · NO_SELECTION</span>
+<span class="chip">0 BETS · $0</span>
+</div>
+
+<div class="panel answers">
+<div class="a"><div class="q">Model predicts</div><div class="v">Nothing — no NFL model has ever been registered in this system</div></div>
+<div class="a"><div class="q">How strong</div><div class="v">Not applicable; no probability is emitted, none is invented</div></div>
+<div class="a"><div class="q">Market offers</div><div class="v">Unknown — NO_RETAINED_MARKET_ARTIFACT (routes blocked)</div></div>
+<div class="a"><div class="q">Candidate / pass / blocked</div><div class="v">Every row: SYSTEM_FAILURE_NO_FORECAST</div></div>
+<div class="a"><div class="q">What prevents action</div><div class="v">A registered, competition-eligible NFL model does not exist</div></div>
+</div>
+
+<div class="fail"><b>Registry verdict, stated plainly.</b> The registry and every historical
+NFL record in this system agree: no NFL model was ever registered. All prior NFL rows were
+market-benchmark-only, with model metrics null by design ("NO MODEL EXISTS" —
+<code>cohort_backtest.json</code>). There is no withdrawn model to revive, MLB/WNBA logic is
+not reusable across sports, and this board will not manufacture probabilities to look full.
+Dataset preparation continued anyway — schedule, phase, and personnel readiness below.</div>
+
+<h2>Competition phase — determined, not assumed</h2>
+<div class="panel"><p>The authoritative nflverse schedule file (fetched fresh this morning,
+commit <code>68d754b</code> at 06:35Z) shows the 2026 <b>regular season opens September 9</b>
+and contains no August games — preseason is structurally absent from that source. Multi-pass
+search identification places tonight's four games in the <b>final preseason week (Aug 27–29)</b>.
+ESPN numbers this week "4" (Hall-of-Fame-game inclusive), NFL.com numbers it "3" — the label
+discrepancy is recorded; the phase itself is unambiguous: <b>PRESEASON</b>.</p></div>
+
+<h2>Tonight's slate — benchmark schedule (search-identified)</h2>
+<div class="scroll"><table>
+<thead><tr><th class="l">Game</th><th>Kick (UTC)</th><th class="l">TV</th><th class="l">Personnel expectation (coach statements, identification grade)</th></tr></thead>
+<tbody>
+<tr><td class="l"><b>PIT @ BUF</b></td><td class="n">23:00</td><td class="l">NFLN</td><td class="l">Both starting QBs sit (Allen held; Rodgers has not played this preseason). Allar and Howard get the PIT reps.</td></tr>
+<tr><td class="l"><b>NE @ CLE</b></td><td class="n">00:00</td><td class="l">Prime</td><td class="l">CLE starters out incl. Watson; Gabriel + rookie Green play. NE starters have not appeared this preseason.</td></tr>
+<tr><td class="l"><b>SF @ LV</b></td><td class="n">00:00</td><td class="l">local</td><td class="l">Shanahan: few-to-no SF starters (week-1 Australia travel).</td></tr>
+<tr><td class="l"><b>LAR @ LAC</b></td><td class="n">02:00</td><td class="l">NFLN</td><td class="l">LAR rookie Simpson gets significant snaps; LAC starters one-two series incl. Herbert.</td></tr>
+</tbody></table></div>
+<p class="sub">Reconciliation: 4 discovered = 0 canonical + 4 explicit refusals (no canonical preseason source exists on the working rails; rows are benchmark-schedule only). No matchup silently disappeared.</p>
+
+<h2>Market and dispositions</h2>
+<div class="warn"><b>NO_RETAINED_MARKET_ARTIFACT</b> — same egress-blocked receipts as the MLB
+card; re-attempted at the 21:30Z / 22:15Z checkpoints. Even with a price, no EV could exist:
+EV requires a model probability, and none is emitted. Every row's terminal state is
+<code>SYSTEM_FAILURE_NO_FORECAST</code> — "PENDING" is not used. Ledger 0 bets · 0.00u · $0.</div>
+
+<h2>What it would take to change this</h2>
+<div class="panel"><p>A registered NFL identity with: a preregistered spec, a feature vintage
+appropriate to the competition phase (preseason dynamics are not regular-season dynamics — a
+finale where starters rest is close to structureless), its own validation, and explicit
+promotion/action authority. Until an owner-approved registration exists, NFL stays a
+data-preparation and benchmark lane. The readiness dataset from tonight (schedule, phase,
+personnel expectations, results when they bind) accrues to that future registration.</p></div>
+
+<h2>Technical & acquisition appendix</h2>
+<details><summary>Sources, hashes, refusals</summary>
+<p>nflverse/nfldata <code>games.csv</code> sha <code>e980b1d5…</code>, commit
+<code>68d754b</code> (2026-08-27T06:35:12Z): 272 REG games for 2026, first gameday 2026-09-09,
+game-type domain {CON, DIV, REG, SB, WC} — refusal <code>CANONICAL_SOURCE_LACKS_PRESEASON</code>
+recorded. nfl.com/espn.com fetch: known egress-denied (8/22 ladder receipts). Slate + personnel:
+two-pass search consensus, grade SEARCH_IDENTIFIED_UNCONFIRMED. Board record
+<code>BOARD-2026-08-27-NFL</code>, anchor 06:59:25Z, cohort hash <code>c86ed8cb…</code>.
+Checkpoints 21:30Z/22:15Z verified server-side (inventory <code>263fe16b</code>).</p></details>
+</main>

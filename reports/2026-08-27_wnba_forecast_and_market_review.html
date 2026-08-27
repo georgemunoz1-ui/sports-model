@@ -1,0 +1,137 @@
+<title>WNBA Forecast Board — August 27</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=Public+Sans:wght@400;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  --bg:#f7f4f1; --panel:#ffffff; --ink:#2d2723; --muted:#6b6058; --line:#ddd5cd;
+  --accent:#b35a1f; --warn-bg:#fdf3e3; --warn-ink:#7a5218; --warn-line:#e5c894;
+  --pend-bg:#eef0f6; --pend-ink:#3d4b73; --chip:#f0ebe5; --good:#2e6e4e; --flag:#a04b2f;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#1b1714; --panel:#241f1b; --ink:#e9e3dd; --muted:#a2968b; --line:#3f3730;
+    --accent:#e08a4a; --warn-bg:#2d2415; --warn-ink:#e3c07f; --warn-line:#59492a;
+    --pend-bg:#232837; --pend-ink:#aebbdf; --chip:#2e2823; --good:#4da97c; --flag:#d98a68;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#1b1714; --panel:#241f1b; --ink:#e9e3dd; --muted:#a2968b; --line:#3f3730;
+  --accent:#e08a4a; --warn-bg:#2d2415; --warn-ink:#e3c07f; --warn-line:#59492a;
+  --pend-bg:#232837; --pend-ink:#aebbdf; --chip:#2e2823; --good:#4da97c; --flag:#d98a68;
+}
+body{background:var(--bg);color:var(--ink);font:16px/1.55 "Public Sans",system-ui,sans-serif;margin:0;padding:0 16px 64px}
+main{max-width:960px;margin:0 auto}
+h1,h2{font-family:"Archivo",system-ui,sans-serif;text-wrap:balance;line-height:1.15}
+h1{font-size:1.9rem;margin:28px 0 4px}
+h2{font-size:1.25rem;margin:34px 0 10px}
+.sub{color:var(--muted);margin:0 0 18px}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0}
+.chip{background:var(--chip);border:1px solid var(--line);border-radius:999px;padding:3px 12px;font-size:.82rem}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:18px 20px;margin:16px 0}
+.answers{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px}
+.answers .a{border-left:3px solid var(--accent);padding:2px 0 2px 10px}
+.answers .q{font-size:.72rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted)}
+.answers .v{font-weight:600}
+.pending{background:var(--pend-bg);color:var(--pend-ink);border-radius:10px;padding:14px 18px;margin:14px 0}
+.warn{background:var(--warn-bg);color:var(--warn-ink);border:1px solid var(--warn-line);border-radius:10px;padding:12px 16px;margin:14px 0}
+.scroll{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:.9rem}
+th,td{padding:7px 10px;border-bottom:1px solid var(--line);text-align:right;font-variant-numeric:tabular-nums}
+th{font-family:"Archivo";font-size:.75rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
+th.l,td.l{text-align:left}
+td.n{font-family:"IBM Plex Mono",monospace;font-size:.85rem}
+details{border:1px solid var(--line);border-radius:10px;padding:12px 18px;margin:12px 0;background:var(--panel)}
+summary{cursor:pointer;font-family:"Archivo";font-weight:600}
+code{font-family:"IBM Plex Mono",monospace;font-size:.85em;background:var(--chip);padding:1px 5px;border-radius:4px}
+p{max-width:70ch}
+.flag{color:var(--flag);font-weight:600}
+</style>
+<main>
+<h1>WNBA Forecast Board — Thursday, August 27</h1>
+<p class="sub">2 games · GSV@NYL 8:00p ET (Barclays) · WSH@PHX 10:00p ET · paper research only</p>
+
+<div class="chips">
+<span class="chip">2 GAMES — CANONICAL SCHEDULE</span>
+<span class="chip">FORECAST FREEZE SCHEDULED 11:00Z</span>
+<span class="chip">PERSONNEL_UNVERIFIED (official grade)</span>
+<span class="chip">NO RETAINED MARKET</span>
+<span class="chip">0 BETS · $0</span>
+</div>
+
+<div class="panel answers">
+<div class="a"><div class="q">Model predicts</div><div class="v">Not yet frozen — forecasts generate after the through-8/26 feature rebuild at the 11:00Z wake</div></div>
+<div class="a"><div class="q">How strong</div><div class="v">The refresh arm enters 2–0 (Brier 0.103) from last night's prospective validation</div></div>
+<div class="a"><div class="q">Market offers</div><div class="v">Unknown — NO_RETAINED_MARKET_ARTIFACT (routes blocked, receipts kept)</div></div>
+<div class="a"><div class="q">Candidate / pass / blocked</div><div class="v">ACTION_BLOCKED until forecasts freeze and a price binds</div></div>
+<div class="a"><div class="q">What prevents action</div><div class="v">Upstream 8/26 box scores land ~10:30Z; freeze follows, hours before the 00:00Z tip</div></div>
+</div>
+
+<div class="pending"><b>Why the board is deliberately not frozen yet.</b> The registered rule
+is: rebuild the four-factors feature state through yesterday's completed games <i>before</i>
+any forecast freezes. Yesterday's two box scores publish in the data archive's morning commit
+(~10:30Z); the 11:00Z wake rebuilds the pool through 8/26 with a zero-overlap leakage check,
+verifies both tonight's games are absent from the pool, then freezes the board — roughly 13
+hours before first tip. Freezing now on a through-8/25 pool would violate the rebuild-first
+rule for no timing benefit. If the upstream commit is late, the fallback is an explicit
+staleness disposition at the 22:30Z T−90 checkpoint — never a silent freeze.</div>
+
+<h2>Tonight's slate — canonical schedule artifact</h2>
+<div class="scroll"><table>
+<thead><tr><th class="l">Game</th><th class="l">Venue</th><th>Tip (UTC)</th><th class="l">ESPN id</th><th class="l">Status</th></tr></thead>
+<tbody>
+<tr><td class="l"><b>Golden State @ New York Liberty</b></td><td class="l">Barclays Center</td><td class="n">08-28 00:00</td><td class="l n">401857178</td><td class="l">Scheduled</td></tr>
+<tr><td class="l"><b>Washington @ Phoenix</b></td><td class="l">Mortgage Matchup Center</td><td class="n">08-28 02:00</td><td class="l n">401857179</td><td class="l">Scheduled</td></tr>
+</tbody></table></div>
+<p class="sub">Source: in-git ESPN schedule parquet, commit <code>b843138</code>, file sha <code>769591a7…</code>. Reconciliation: 2 discovered = 2 canonical + 0 refusals.</p>
+
+<h2>What will freeze at 11:00Z</h2>
+<div class="panel">
+<p>Three separately-identified arms run on each game — never merged:</p>
+<ul>
+<li><code>wnba.replacement.FEATURE_REFRESH</code> — the frozen four-factors model on the rebuilt through-8/26 pool (margin and total forecasts included, as registered);</li>
+<li><code>wnba.fallback.STANDINGS_LOG5_v1</code> — the standings fallback;</li>
+<li><code>wnba.winner.EXPANDING_HOME_PRIOR</code> — the baseline prior.</li>
+</ul>
+<p>Any complete side disagreement between the refresh arm and the fallback is flagged as the
+slate's diagnostic game, as it was on 8/26 (the refresh arm took Seattle against the fallback's
+Toronto and won by 12 — a 2–0 night at Brier 0.103 vs the fallback's 0.203 and the prior's
+0.251; owner-relayed finals, descriptive only until the archive artifact binds this morning).</p>
+</div>
+
+<h2>Personnel — strongest retained evidence, honestly graded</h2>
+<div class="warn"><b>Official grade: PERSONNEL_UNVERIFIED.</b> The official injury-report route
+is still egress-blocked (fresh 06:52Z receipt). The strongest retained evidence is in-git ESPN
+game payloads from each team's most recent archived game (1–3 days old, hashed, commit-pinned):</div>
+<div class="scroll"><table>
+<thead><tr><th class="l">Team</th><th class="l">Listed out (as of last archived game)</th><th class="l">Snapshot age</th></tr></thead>
+<tbody>
+<tr><td class="l"><b>New York Liberty</b></td><td class="l"><span class="flag">Satou Sabally — concussion</span>; Maley, Balogun (coach's decision)</td><td class="l">vs LVA (most recent)</td></tr>
+<tr><td class="l"><b>Golden State</b></td><td class="l">Iliana Rupert (not injury related)</td><td class="l">at MIN (most recent)</td></tr>
+<tr><td class="l"><b>Phoenix</b></td><td class="l">Ciezki, Dunn (coach's decision); Suarez (head); Nogic</td><td class="l">Tue vs WSH</td></tr>
+<tr><td class="l"><b>Washington</b></td><td class="l">none listed in the payload (recorded as listed, not asserted healthy)</td><td class="l">Tue at PHX</td></tr>
+</tbody></table></div>
+<p class="sub">Sabally's status is the headline availability question for the Liberty game — re-checked at the 22:30Z and 23:15Z checkpoints. Record <code>2026-08-27_wnba_personnel_bind.json</code>.</p>
+
+<h2>Market and dispositions</h2>
+<div class="warn"><b>NO_RETAINED_MARKET_ARTIFACT.</b> Same blocked routes and receipts as the
+MLB card; capture is re-attempted at 22:30Z / 23:15Z and a fresh quote is required before any
+possible execution. State vocabulary for tonight: <code>FEATURE_STATE_CURRENT</code> (after the
+11:00Z rebuild) · <code>PERSONNEL_UNVERIFIED</code> · <code>FORECASTS_GENERATED</code> (at
+freeze) · <code>NO_RETAINED_MARKET_ARTIFACT</code> · <code>ACTION_BLOCKED</code>. No wager is
+authorized; ledger 0 bets · 0.00u · $0.</div>
+
+<h2>Technical & acquisition appendix</h2>
+<details><summary>Feature pipeline state and evidence chain</summary>
+<p>Canonical pool as-of 7/22 (frozen prereg) + ESPN extension through 8/25 (87 games, per-file
+sha256, zero dedup overlap, pool hash bound at the 8/26 freeze). The 11:00Z rebuild appends
+8/26's two games from the archive's morning commit, records max included event time, combined
+pool hash and an explicit leakage check, and verifies 401857178/401857179 are absent from the
+pool. Recovery job RJ-005 stands at 8/17 units (schedule, results, four roster artifacts bound;
+official injuries and market open). Yesterday's refresh-arm validation is prequentially clean:
+forecasts frozen 18:50Z pre-tip, integrity record <code>4892bac4</code>.</p></details>
+<details><summary>Checkpoints</summary>
+<p>T−90 22:30Z and T−45 23:15Z (trigger ids in the server-verified inventory
+<code>263fe16b</code>, each confirmed by routine-list read-back); the 00:15Z
+MLB-late checkpoint folds in the WSH@PHX pre-tip availability check. Each refreshes
+availability and market with receipts, runs side reselection through the registered gate on any
+replacement crossover, and leaves the frozen board byte-identical.</p></details>
+</main>

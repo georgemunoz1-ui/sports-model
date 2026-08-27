@@ -1,0 +1,163 @@
+<title>MLB Forecast Board — August 27</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=Public+Sans:wght@400;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  --bg:#f6f5f2; --panel:#ffffff; --ink:#22302b; --muted:#5c6b64; --line:#d8ddd8;
+  --accent:#2e6e4e; --accent-ink:#ffffff; --warn-bg:#fdf3e3; --warn-ink:#7a5218; --warn-line:#e5c894;
+  --block-bg:#f8e9e4; --block-ink:#8a3b2a; --chip:#eef1ee; --good:#2e6e4e; --flag:#a04b2f;
+}
+:root:not([data-theme="light"]){}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#161b18; --panel:#1e2521; --ink:#e4e9e5; --muted:#93a29a; --line:#33403a;
+    --accent:#4da97c; --accent-ink:#10251b; --warn-bg:#2d2415; --warn-ink:#e3c07f; --warn-line:#59492a;
+    --block-bg:#2e1f1b; --block-ink:#e2a08c; --chip:#28312c; --good:#4da97c; --flag:#d98a68;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#161b18; --panel:#1e2521; --ink:#e4e9e5; --muted:#93a29a; --line:#33403a;
+  --accent:#4da97c; --accent-ink:#10251b; --warn-bg:#2d2415; --warn-ink:#e3c07f; --warn-line:#59492a;
+  --block-bg:#2e1f1b; --block-ink:#e2a08c; --chip:#28312c; --good:#4da97c; --flag:#d98a68;
+}
+body{background:var(--bg);color:var(--ink);font:16px/1.55 "Public Sans",system-ui,sans-serif;margin:0;padding:0 16px 64px}
+main{max-width:960px;margin:0 auto}
+h1,h2,h3{font-family:"Archivo",system-ui,sans-serif;text-wrap:balance;line-height:1.15}
+h1{font-size:1.9rem;margin:28px 0 4px}
+h2{font-size:1.25rem;margin:34px 0 10px}
+.sub{color:var(--muted);margin:0 0 18px}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0}
+.chip{background:var(--chip);border:1px solid var(--line);border-radius:999px;padding:3px 12px;font-size:.82rem;letter-spacing:.02em}
+.chip b{font-family:"IBM Plex Mono",monospace}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:18px 20px;margin:16px 0}
+.answers{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px}
+.answers .a{border-left:3px solid var(--accent);padding:2px 0 2px 10px}
+.answers .q{font-size:.72rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted)}
+.answers .v{font-weight:600}
+.warn{background:var(--warn-bg);color:var(--warn-ink);border:1px solid var(--warn-line);border-radius:10px;padding:12px 16px;margin:14px 0}
+.block{background:var(--block-bg);color:var(--block-ink);border-radius:10px;padding:12px 16px;margin:14px 0}
+.scroll{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:.9rem}
+th,td{padding:7px 10px;border-bottom:1px solid var(--line);text-align:right;font-variant-numeric:tabular-nums}
+th{font-family:"Archivo";font-size:.75rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
+th.l,td.l{text-align:left}
+td.n{font-family:"IBM Plex Mono",monospace;font-size:.85rem}
+.pick{color:var(--good);font-weight:600}
+.flag{color:var(--flag);font-weight:600}
+details{border:1px solid var(--line);border-radius:10px;padding:12px 18px;margin:12px 0;background:var(--panel)}
+summary{cursor:pointer;font-family:"Archivo";font-weight:600}
+code{font-family:"IBM Plex Mono",monospace;font-size:.85em;background:var(--chip);padding:1px 5px;border-radius:4px}
+p{max-width:70ch}
+</style>
+<main>
+<h1>MLB Forecast Board — Thursday, August 27</h1>
+<p class="sub">Frozen 2026-08-27T06:58:28Z · 7 games · first pitch 17:05Z · paper research only</p>
+
+<div class="chips">
+<span class="chip">7 GAMES FROZEN</span>
+<span class="chip">ALL <b>6</b> REGISTERED ARMS / GAME</span>
+<span class="chip">NO RETAINED MARKET</span>
+<span class="chip"><b>0</b> CANDIDATES · <b>0</b> BETS · <b>$0</b></span>
+<span class="chip">ANCHOR PRECEDES EVERY START</span>
+</div>
+
+<div class="panel answers">
+<div class="a"><div class="q">Model predicts</div><div class="v">Milwaukee is the slate's one conviction call (67.8% at NYM); the rest sit 47–60%</div></div>
+<div class="a"><div class="q">How strong</div><div class="v">One strong signal, six near coin-flips; three games carry starter caps</div></div>
+<div class="a"><div class="q">Market offers</div><div class="v">Unknown — no price was retainable (acquisition blocked, receipts kept)</div></div>
+<div class="a"><div class="q">Candidate / pass / blocked</div><div class="v">Every row: NO_RETAINED_MARKET_ARTIFACT</div></div>
+<div class="a"><div class="q">What prevents action</div><div class="v">No retained price → no EV; conservative EV also awaits the RJ-002 review</div></div>
+</div>
+
+<h2>Plain-language thesis</h2>
+<div class="panel">
+<p><b>The champion sees one real edge and a quiet board.</b> Jacob Misiorowski (1.68 ERA)
+against Sean Manaea makes Milwaukee at New York the only game where the frozen champion leaves
+the coin-flip band: it gives the Mets just 32.2% at home, and both challengers agree with the
+direction. Houston at New York (Yankees) is the next-clearest read at 60.0% home. Everything
+else is 47–52%, which this system reads as "no signal", not "small signal".</p>
+<p><b>Three games are capped, honestly.</b> Kansas City–Toronto has a two-source starter
+conflict on <i>both</i> slots (capped until resolved; the 21:35Z checkpoint retries).
+Arizona–San Francisco is TBD/TBD, and St. Louis has not named a starter. Capped slots ride the
+frozen league-average treatment — never a guess.</p>
+<p><b>No betting claim exists today.</b> No price could be retained from the named book
+(every fetch route is egress-blocked; receipts in the appendix), so no raw EV, no conservative
+EV, and no candidate/pass split can be computed. That is an acquisition failure, not a claim
+that no market exists. The uncertainty estimator reached its registered gates this morning
+(see appendix) but its consumption into per-game conservative EV is pending owner review.</p>
+</div>
+
+<h2>Model output by game — every registered arm</h2>
+<div class="scroll"><table>
+<thead><tr><th class="l">Game (ET start)</th><th>Champion V13</th><th>Widened</th><th>Adaptive</th><th>Prior</th><th>V13 total</th><th>Total prior</th><th class="l">Starters (class)</th></tr></thead>
+<tbody>
+<tr><td class="l"><b>COL@WSH</b> 1:05p</td><td class="n">WSH 51.7%</td><td class="n flag">COL 54.4%</td><td class="n">WSH 50.7%</td><td class="n">WSH 52.1%</td><td class="n">11.41</td><td class="n">8.99</td><td class="l">Hughes / Irvin (probable)</td></tr>
+<tr><td class="l"><b>BAL@STL</b> 2:15p</td><td class="n flag">BAL 50.7%</td><td class="n">STL 50.1%</td><td class="n">STL 51.6%</td><td class="n">STL 52.1%</td><td class="n">7.76</td><td class="n">8.99</td><td class="l">Rogers / <span class="flag">TBD</span></td></tr>
+<tr><td class="l"><b>HOU@NYY</b> 7:05p</td><td class="n pick">NYY 60.0%</td><td class="n">NYY 55.9%</td><td class="n">NYY 52.9%</td><td class="n">NYY 52.1%</td><td class="n">8.60</td><td class="n">8.99</td><td class="l">Wesneski (no log retained) / Schlittler</td></tr>
+<tr><td class="l"><b>KC@TOR</b> 7:07p</td><td class="n flag">KC 51.1%</td><td class="n">TOR 50.1%</td><td class="n">TOR 51.6%</td><td class="n">TOR 52.1%</td><td class="n">8.25</td><td class="n">8.99</td><td class="l"><span class="flag">CONFLICT both slots</span></td></tr>
+<tr><td class="l"><b>MIL@NYM</b> 7:10p</td><td class="n pick">MIL 67.8%</td><td class="n pick">MIL 68.2%</td><td class="n">MIL 52.4%</td><td class="n flag">NYM 52.1%</td><td class="n">8.60</td><td class="n">8.99</td><td class="l">Misiorowski / Manaea (probable)</td></tr>
+<tr><td class="l"><b>LAD@ATL</b> 7:15p</td><td class="n">ATL 50.7%</td><td class="n">ATL 55.9%</td><td class="n">ATL 52.9%</td><td class="n">ATL 52.1%</td><td class="n">9.84</td><td class="n">8.99</td><td class="l">Sasaki / Smith-Shawver (no log retained)</td></tr>
+<tr><td class="l"><b>AZ@SF</b> 9:45p</td><td class="n flag">AZ 53.2%</td><td class="n">AZ 55.9%*</td><td class="n">SF 50.4%</td><td class="n">SF 52.1%</td><td class="n">7.88</td><td class="n">8.99</td><td class="l"><span class="flag">TBD / TBD</span></td></tr>
+</tbody></table></div>
+<p class="sub">Percentages are the arm's pick with its probability. *Widened shows the away side at 55.9% (home 44.1%). Totals are never decision-bearing.</p>
+
+<h2>Market, EV and dispositions</h2>
+<div class="block"><b>NO_RETAINED_MARKET_ARTIFACT — all 7 games.</b> Both DraftKings routes
+returned EGRESS_BLOCKED at 06:53Z (receipts retained). Two snippet prices were sighted
+(WSH −120, BAL −120) and recorded as identified-never-bound: a snippet price has no book
+attribution chain and is not a retained artifact. With no valid price, no row can be a
+candidate or an EV pass; the honest per-row state is <code>NO_RETAINED_MARKET_ARTIFACT</code>.
+Fresh capture is re-attempted at every registered checkpoint (15:35Z / 16:20Z / 21:35Z /
+22:20Z / 00:15Z / 01:00Z), and a fresh quote would be required before any possible execution
+regardless. No wager is authorized; ledger stands 0 bets · 0.00u · $0.</div>
+
+<h2>Where the arms disagree</h2>
+<div class="panel">
+<p>Four of seven games split the arms — all four are low-conviction and three are capped:</p>
+<ul>
+<li><b>COL@WSH</b> — champion takes Washington, the widened challenger takes Colorado. Fully-resolved starters; a genuine model disagreement at low conviction.</li>
+<li><b>BAL@STL</b> and <b>KC@TOR</b> — the champion leans away-side against every other arm; both games are starter-capped, so the disagreement is mostly cap arithmetic.</li>
+<li><b>MIL@NYM</b> — the baseline prior (home 52.1%) opposes all three model arms; this is the slate's diagnostic game: a Milwaukee win credits real signal over the prior.</li>
+<li><b>AZ@SF</b> — champion and widened take Arizona, adaptive and prior take San Francisco; TBD/TBD, so treat as noise until starters resolve.</li>
+</ul>
+</div>
+
+<h2>Data-quality and personnel warnings</h2>
+<div class="warn">
+<b>Slate and starters are search-identified, not officially confirmed.</b> The schedule API is
+egress-blocked; the 7-game slate was cross-checked across four search passes and two real
+gamePks were captured from MLB.com URL slugs. Starter names are aggregator identifications
+(class PROBABLE at best) — verified starters, lineups and injuries could not be bound at freeze
+and are re-checked at T−90/T−45. Pitcher rate features (ERA/K%/BB%) are as-of the retained-log
+cutoff 7/23; per-outing K/BB/TBF evidence is current through 8/26 but carries no runs, so ERA
+cannot be refreshed from it. Wesneski and Smith-Shawver have public logs that were never
+retained — their slots are capped for that reason (<code>NAMED_NO_LOG_RETAINED_CAP</code>),
+which is a retention gap on our side, not a missing log in the world.
+</div>
+
+<h2>Technical & acquisition appendix</h2>
+<details><summary>Freeze record, hashes and identities</summary>
+<p><code>BOARD-2026-08-27-MLB</code> · anchor <code>2026-08-27T06:58:28Z</code> · earliest start
+<code>17:05Z</code> · chronology <code>ANCHOR_PRECEDES_EARLIEST_START</code> · cohort hash
+<code>5980bda2…</code> · slate psv <code>8a5cc8a9…</code> · builder
+<code>harness/build_board_0827.py</code> (committed) · seeds keyed per game, 30,000 trials ·
+priors frozen at n=1,684 (p_home 0.520540, total 8.991) because no canonical result exists
+after 8/21. Winner arms: EXPANDING_HOME_PRIOR, CHAMPION_V13 (frozen 8/10), CHALLENGER_ADAPTIVE,
+CHALLENGER_WIDENED. Total arms: EXPANDING_TOTAL_PRIOR, CHAMPION_V13.</p></details>
+<details><summary>Uncertainty estimator (RJ-002) status</summary>
+<p>The date-blocked out-of-fold replay ran this morning over the evidence-bound canonical pool:
+1,607 rows / 123 date blocks, effective clusters 115.8, leave-one-date-out within ceiling,
+out-of-fold coverage 95.1% vs nominal 95 — the registered gates all pass. Finding for owner
+review: the registered estimand SD(r_b)=14.79pp sits <i>below</i> its 15.36pp shrunk-Bernoulli
+floor, i.e. date-level epistemic drift is indistinguishable from zero at these block sizes, and
+the mapping from block-level sigma to per-game conservative edge is unregistered. Conservative
+EV therefore remains unavailable. Record <code>2026-08-27_rj002_oof_replay.json</code>.</p></details>
+<details><summary>Acquisition routes and refusals</summary>
+<p>statsapi.mlb.com — EGRESS_BLOCKED (fetch receipt 06:44Z). DraftKings site and API —
+EGRESS_BLOCKED (06:53Z). Schedule: 4 search passes, membership consensus, reconciliation
+7 discovered = 7 canonical + 0 refusals. Starter conflict KC@TOR: Cameron|Dobnak (away),
+Arrighetti|Miles (home) — capped, retried at 21:35Z. Evidence extract for 8/26:
+15/15 games bound from <code>lancebroz/mlb-pitcher-data@448e2ff</code>. Timestamp corrections
+record <code>90540ae5</code> covers self-asserted stamps that ran ahead of the clock this
+morning. Checkpoint triggers verified server-side by routine-list read-back (inventory
+<code>263fe16b</code>).</p></details>
+</main>

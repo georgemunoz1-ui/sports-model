@@ -55,10 +55,16 @@
      "status": "RUNNING",
      "units_done": 123,
      "utc": "2026-08-26T19:15:00Z"
+    },
+    {
+     "note": "overnight slot: direct rails still EGRESS_BLOCKED (statsapi 11th attempt). The git route stays productive: archive advanced to commit 448e2ff (04:01Z) with the 8/26 daily parquet; 8/26 evidence extract built (15 games, slate identity for the frozen board now archive-confirmed); pitcher outing logs 8/22-8/26 registered (1bca205e, 604 outings, K+BB<=TBF asserted; two buggy builds caught by sanity checks pre-commit). Score derivation from pitch events judged INFEASIBLE (no runs column) \u2014 tier upgrades for the 126 provisional rows still need a score-bearing artifact or official source. Units stay 123/123.",
+     "status": "RUNNING",
+     "units_done": 123,
+     "utc": "2026-08-27T04:15:00Z"
     }
    ],
    "job_id": "RJ-001-PROVENANCE",
-   "next_run_utc": "2026-08-27T04:00:00Z",
+   "next_run_utc": "2026-08-27T11:00:00Z",
    "notes": "a unit is one canonical row bound to a retrieved artifact with a game id, a retrieval timestamp and a content hash. Currently blocked on egress; the job records BLOCKED_EXTERNAL rather than silently not running.",
    "owner_subsystem": "acquisition",
    "status": "RUNNING",
@@ -88,10 +94,16 @@
      "status": "BLOCKED_EXTERNAL",
      "units_done": 0,
      "utc": "2026-08-26T10:05:00Z"
+    },
+    {
+     "note": "prep for the 06:30Z slot: the dependency is satisfied \u2014 1,944 canonical rows now carry evidence (RJ-001 123/123). The replay plan: date-blocked OOF residuals over the evidence-bound pool per uncertainty_estimand (block = slate date, ddof=1), targeting admissible clusters 2 -> 7+ computable and progress toward 20 effective. Execution needs a focused run; scheduled into the 11:00Z wake rather than silently missing the 06:30Z slot.",
+     "status": "BLOCKED_EXTERNAL",
+     "units_done": 0,
+     "utc": "2026-08-27T04:15:00Z"
     }
    ],
    "job_id": "RJ-002-OOF-REPLAY",
-   "next_run_utc": "2026-08-27T06:30:00Z",
+   "next_run_utc": "2026-08-27T11:00:00Z",
    "notes": "a unit is one admissible date block: features reconstructed strictly as-of, graded out of fold. Target is 20 EFFECTIVE clusters, not 20 nominal dates, and not the computable floor of 6.",
    "owner_subsystem": "modelling",
    "status": "BLOCKED_EXTERNAL",
@@ -124,10 +136,16 @@
      "status": "RUNNING",
      "units_done": 0,
      "utc": "2026-08-26T10:05:00Z"
+    },
+    {
+     "note": "07:00Z slot pre-logged: fire condition (an RJ-002 finding) still absent; RJ-002 replay now actually possible, so the finding may arrive soon. 0/4 stands.",
+     "status": "RUNNING",
+     "units_done": 0,
+     "utc": "2026-08-27T04:15:00Z"
     }
    ],
    "job_id": "RJ-003-FALLBACK-ARM",
-   "next_run_utc": "2026-08-27T07:00:00Z",
+   "next_run_utc": "2026-08-27T11:00:00Z",
    "notes": "fires if RJ-002 finds that rich historical features cannot be reconstructed as-of without leakage. Units: define the reconstructible input set; fit the arm; validate its interval coverage; register the identity. A worse honest arm beats an indefinite outage \u2014 but it must be a REGISTERED identity with its own coverage validation, never the primary arm with wider error bars.",
    "owner_subsystem": "modelling",
    "status": "RUNNING",
@@ -272,10 +290,16 @@
      "status": "RUNNING",
      "units_done": 4,
      "utc": "2026-08-26T21:15:00Z"
+    },
+    {
+     "note": "overnight sweep: wnba.com injury report still EGRESS_BLOCKED; injuries/rosters/market components stay open at 4/17. The wehoop morning commit (~10:30Z) should carry the 8/26 finals (GSV@CON, TOR@SEA) \u2014 fetch and grade the three WNBA arms at the 11:00Z wake.",
+     "status": "RUNNING",
+     "units_done": 4,
+     "utc": "2026-08-27T04:15:00Z"
     }
    ],
    "job_id": "RJ-005-WNBA-FEATURE-PIPELINE",
-   "next_run_utc": "2026-08-27T04:00:00Z",
+   "next_run_utc": "2026-08-27T11:00:00Z",
    "notes": "After binding: recompute feature state (as_of, source hashes, age); generate separately identified replacement forecasts (wnba.replacement.FEATURE_REFRESH) since the board is frozen; rerun side, margin, total, EV and disposition through side_reselection_gate after anchor. Exhaustion of all authorized routes without binding publishes SYSTEM_FAILURE_WNBA_FEATURE_PIPELINE \u2014 never a normal-looking board.",
    "owner_subsystem": "wnba_features",
    "status": "RUNNING",

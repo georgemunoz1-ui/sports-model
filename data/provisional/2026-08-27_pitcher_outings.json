@@ -1,0 +1,5471 @@
+{
+ "created_utc": "2026-08-27T04:11:00Z",
+ "grade": "STATSAPI_GIT_ARTIFACT \u2014 provisional for features; canonical pitchers.csv untouched; a future board build may consume this via a registered extension loader",
+ "method_note": "the events field repeats the PA-ending event on every pitch of the plate appearance; counts are per distinct (game, pitcher, at_bat). Two buggy builds preceded this one (capitalized event names -> all zero; per-pitch counting -> K exceeding TBF) \u2014 both caught by sanity checks before committing, and the K+BB<=TBF invariant is asserted over all outings",
+ "n_outings": 604,
+ "notable": [
+  {
+   "bb": 4,
+   "date": "2026-08-25",
+   "game_pk": 823505,
+   "k": 1,
+   "pitcher": "Ethan Pecko",
+   "pitcher_id": 814490,
+   "tbf": 22
+  },
+  {
+   "bb": 3,
+   "date": "2026-08-25",
+   "game_pk": 824233,
+   "k": 4,
+   "pitcher": "Jackson Jobe",
+   "pitcher_id": 695549,
+   "tbf": 19
+  }
+ ],
+ "outings": [
+  {
+   "bb": 1,
+   "date": "2026-08-22",
+   "game_pk": 822858,
+   "k": 0,
+   "pitcher": "Michael Fulmer",
+   "pitcher_id": 605242,
+   "tbf": 4
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-22",
+   "game_pk": 822858,
+   "k": 3,
+   "pitcher": "Cole Winn",
+   "pitcher_id": 668390,
+   "tbf": 5
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-22",
+   "game_pk": 822858,
+   "k": 1,
+   "pitcher": "Ryan Watson",
+   "pitcher_id": 670245,
+   "tbf": 3
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-22",
+   "game_pk": 822858,
+   "k": 3,
+   "pitcher": "Cody Bradford",
+   "pitcher_id": 674003,
+   "tbf": 22
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-22",
+   "game_pk": 822858,
+   "k": 1,
+   "pitcher": "Peyton Gray",
+   "pitcher_id": 682608,
+   "tbf": 4
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-22",
+   "game_pk": 822858,
+   "k": 1,
+   "pitcher": "Robby Ahlstrom",
+   "pitcher_id": 695239,
+   "tbf": 5
+  },
+  {
+   "bb": 2,
+   "date": "2026-08-22",
+   "game_pk": 822858,
+   "k": 3,
+   "pitcher": "Ryan Johnson",
+   "pitcher_id": 696270,
+   "tbf": 24
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-22",
+   "game_pk": 823100,
+   "k": 1,
+   "pitcher": "Michael Rucker",
+   "pitcher_id": 621074,
+   "tbf": 3
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-22",
+   "game_pk": 823100,
+   "k": 3,
+   "pitcher": "Seranthony Dom\u00ednguez",
+   "pitcher_id": 622554,
+   "tbf": 4
+  },
+  {
+   "bb": 2,
+   "date": "2026-08-22",
+   "game_pk": 823100,
+   "k": 8,
+   "pitcher": "David Peterson",
+   "pitcher_id": 656849,
+   "tbf": 25
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-22",
+   "game_pk": 823100,
+   "k": 0,
+   "pitcher": "Jacob Webb",
+   "pitcher_id": 657097,
+   "tbf": 5
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-22",
+   "game_pk": 823100,
+   "k": 1,
+   "pitcher": "Trent Thornton",
+   "pitcher_id": 663423,
+   "tbf": 5
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-22",
+   "game_pk": 823100,
+   "k": 1,
+   "pitcher": "Ryan Rolison",
+   "pitcher_id": 669020,
+   "tbf": 2
+  },
+  {
+   "bb": 1,
+   "date": "2026-08-22",
+   "game_pk": 823100,
+   "k": 2,
+   "pitcher": "Carlos Vargas",
+   "pitcher_id": 672841,
+   "tbf": 7
+  },
+  {
+   "bb": 2,
+   "date": "2026-08-22",
+   "game_pk": 823100,
+   "k": 5,
+   "pitcher": "Kade Anderson",
+   "pitcher_id": 807739,
+   "tbf": 22
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-22",
+   "game_pk": 823261,
+   "k": 0,
+   "pitcher": "Kyle Hart",
+   "pitcher_id": 606996,
+   "tbf": 6
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-22",
+   "game_pk": 823261,
+   "k": 1,
+   "pitcher": "A.J. Minter",
+   "pitcher_id": 621345,
+   "tbf": 3
+  },
+  {
+   "bb": 1,
+   "date": "2026-08-22",
+   "game_pk": 823261,
+   "k": 1,
+   "pitcher": "Griffin Canning",
+   "pitcher_id": 656288,
+   "tbf": 15
+  },
+  {
+   "bb": 1,
+   "date": "2026-08-22",
+   "game_pk": 823261,
+   "k": 0,
+   "pitcher": "Casey Mize",
+   "pitcher_id": 663554,
+   "tbf": 13
+  },
+  {
+   "bb": 3,
+   "date": "2026-08-22",
+   "game_pk": 823261,
+   "k": 5,
+   "pitcher": "Dean Kremer",
+   "pitcher_id": 665152,
+   "tbf": 22
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-22",
+   "game_pk": 823261,
+   "k": 3,
+   "pitcher": "Tommy Nance",
+   "pitcher_id": 667297,
+   "tbf": 6
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-22",
+   "game_pk": 823261,
+   "k": 1,
+   "pitcher": "Adrian Morejon",
+   "pitcher_id": 670970,
+   "tbf": 3
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-22",
+   "game_pk": 823261,
+   "k": 1,
+   "pitcher": "Mason Miller",
+   "pitcher_id": 695243,
+   "tbf": 3
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-22",
+   "game_pk": 823261,
+   "k": 0,
+   "pitcher": "Andrew Morris",
+   "pitcher_id": 702193,
+   "tbf": 8
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-22",
+   "game_pk": 823422,
+   "k": 1,
+   "pitcher": "Jos\u00e9 Alvarado",
+   "pitcher_id": 621237,
+   "tbf": 4
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-22",
+   "game_pk": 823422,
+   "k": 0,
+   "pitcher": "Chase Shugart",
+   "pitcher_id": 663767,
+   "tbf": 4
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-22",
+   "game_pk": 823422,
+   "k": 1,
+   "pitcher": "Ryan Fernandez",
+   "pitcher_id": 681676,
+   "tbf": 10
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-22",
+   "game_pk": 823422,
+   "k": 0,
+   "pitcher": "Pedro Pag\u00e9s",
+   "pitcher_id": 686780,
+   "tbf": 4
+  },
+  {
+   "bb": 1,
+   "date": "2026-08-22",
+   "game_pk": 823422,
+   "k": 3,
+   "pitcher": "Quinn Mathews",
+   "pitcher_id": 687273,
+   "tbf": 25
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-22",
+   "game_pk": 823422,
+   "k": 8,
+   "pitcher": "Andrew Painter",
+   "pitcher_id": 691725,
+   "tbf": 27
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-22",
+   "game_pk": 823509,
+   "k": 2,
+   "pitcher": "Fernando Cruz",
+   "pitcher_id": 518585,
+   "tbf": 5
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-22",
+   "game_pk": 823509,
+   "k": 2,
+   "pitcher": "Tyler Rogers",
+   "pitcher_id": 643511,
+   "tbf": 5
+  },
+  {
+   "bb": 5,
+   "date": "2026-08-22",
+   "game_pk": 823509,
+   "k": 8,
+   "pitcher": "Dylan Cease",
+   "pitcher_id": 656302,
+   "tbf": 26
+  },
+  {
+   "bb": 2,
+   "date": "2026-08-22",
+   "game_pk": 823509,
+   "k": 0,
+   "pitcher": "Yerry De los Santos",
+   "pitcher_id": 660787,
+   "tbf": 13
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-22",
+   "game_pk": 823509,
+   "k": 3,
+   "pitcher": "Ryan Weathers",
+   "pitcher_id": 677960,
+   "tbf": 17
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-22",
+   "game_pk": 823509,
+   "k": 2,
+   "pitcher": "Louis Varland",
+   "pitcher_id": 686973,
+   "tbf": 4
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-22",
+   "game_pk": 823509,
+   "k": 1,
+   "pitcher": "Bradley Hanner",
+   "pitcher_id": 690440,
+   "tbf": 8
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-22",
+   "game_pk": 823509,
+   "k": 0,
+   "pitcher": "Spencer Miles",
+   "pitcher_id": 693686,
+   "tbf": 2
+  },
+  {
+   "bb": 3,
+   "date": "2026-08-22",
+   "game_pk": 823743,
+   "k": 2,
+   "pitcher": "Mart\u00edn P\u00e9rez",
+   "pitcher_id": 527048,
+   "tbf": 20
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-22",
+   "game_pk": 823743,
+   "k": 1,
+   "pitcher": "Brent Suter",
+   "pitcher_id": 608718,
+   "tbf": 11
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-22",
+   "game_pk": 823743,
+   "k": 2,
+   "pitcher": "DL Hall",
+   "pitcher_id": 669084,
+   "tbf": 3
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-22",
+   "game_pk": 823743,
+   "k": 0,
+   "pitcher": "Aaron Ashby",
+   "pitcher_id": 676879,
+   "tbf": 4
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-22",
+   "game_pk": 823743,
+   "k": 2,
+   "pitcher": "Victor Mederos",
+   "pitcher_id": 682989,
+   "tbf": 5
+  },
+  {
+   "bb": 1,
+   "date": "2026-08-22",
+   "game_pk": 823743,
+   "k": 0,
+   "pitcher": "Chad Patrick",
+   "pitcher_id": 694477,
+   "tbf": 4
+  },
+  {
+   "bb": 2,
+   "date": "2026-08-22",
+   "game_pk": 823743,
+   "k": 4,
+   "pitcher": "Logan Henderson",
+   "pitcher_id": 701656,
+   "tbf": 24
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-22",
+   "game_pk": 823831,
+   "k": 1,
+   "pitcher": "Jake Bird",
+   "pitcher_id": 656234,
+   "tbf": 3
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-22",
+   "game_pk": 823831,
+   "k": 1,
+   "pitcher": "Michael Petersen",
+   "pitcher_id": 656848,
+   "tbf": 3
+  },
+  {
+   "bb": 2,
+   "date": "2026-08-22",
+   "game_pk": 823831,
+   "k": 4,
+   "pitcher": "Jake Irvin",
+   "pitcher_id": 663623,
+   "tbf": 26
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-22",
+   "game_pk": 823831,
+   "k": 0,
+   "pitcher": "Calvin Faucher",
+   "pitcher_id": 676534,
+   "tbf": 3
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-22",
+   "game_pk": 823831,
+   "k": 0,
+   "pitcher": "Tyler Zuber",
+   "pitcher_id": 676604,
+   "tbf": 2
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-22",
+   "game_pk": 823831,
+   "k": 1,
+   "pitcher": "Erik Tolman",
+   "pitcher_id": 680899,
+   "tbf": 4
+  },
+  {
+   "bb": 3,
+   "date": "2026-08-22",
+   "game_pk": 823831,
+   "k": 4,
+   "pitcher": "Eury P\u00e9rez",
+   "pitcher_id": 691587,
+   "tbf": 21
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-22",
+   "game_pk": 823831,
+   "k": 1,
+   "pitcher": "Josh Ekness",
+   "pitcher_id": 694795,
+   "tbf": 4
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-22",
+   "game_pk": 823910,
+   "k": 0,
+   "pitcher": "Kirby Yates",
+   "pitcher_id": 489446,
+   "tbf": 3
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-22",
+   "game_pk": 823910,
+   "k": 2,
+   "pitcher": "Evan Phillips",
+   "pitcher_id": 623465,
+   "tbf": 3
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-22",
+   "game_pk": 823910,
+   "k": 1,
+   "pitcher": "Tanner Scott",
+   "pitcher_id": 656945,
+   "tbf": 3
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-22",
+   "game_pk": 823910,
+   "k": 2,
+   "pitcher": "Camilo Doval",
+   "pitcher_id": 666808,
+   "tbf": 4
+  },
+  {
+   "bb": 1,
+   "date": "2026-08-22",
+   "game_pk": 823910,
+   "k": 11,
+   "pitcher": "Tarik Skubal",
+   "pitcher_id": 669373,
+   "tbf": 27
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-22",
+   "game_pk": 823910,
+   "k": 2,
+   "pitcher": "Yohan Ram\u00edrez",
+   "pitcher_id": 670990,
+   "tbf": 6
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-22",
+   "game_pk": 823910,
+   "k": 1,
+   "pitcher": "Jack Dreyer",
+   "pitcher_id": 676263,
+   "tbf": 1
+  },
+  {
+   "bb": 5,
+   "date": "2026-08-22",
+   "game_pk": 823910,
+   "k": 5,
+   "pitcher": "Jared Jones",
+   "pitcher_id": 683003,
+   "tbf": 20
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-22",
+   "game_pk": 823910,
+   "k": 1,
+   "pitcher": "Antwone Kelly",
+   "pitcher_id": 699008,
+   "tbf": 4
+  },
+  {
+   "bb": 1,
+   "date": "2026-08-22",
+   "game_pk": 824073,
+   "k": 2,
+   "pitcher": "Craig Kimbrel",
+   "pitcher_id": 518886,
+   "tbf": 4
+  },
+  {
+   "bb": 1,
+   "date": "2026-08-22",
+   "game_pk": 824073,
+   "k": 6,
+   "pitcher": "Michael Wacha",
+   "pitcher_id": 608379,
+   "tbf": 26
+  },
+  {
+   "bb": 1,
+   "date": "2026-08-22",
+   "game_pk": 824073,
+   "k": 4,
+   "pitcher": "Drew Anderson",
+   "pitcher_id": 623454,
+   "tbf": 21
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-22",
+   "game_pk": 824073,
+   "k": 0,
+   "pitcher": "Alex Lange",
+   "pitcher_id": 656638,
+   "tbf": 3
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-22",
+   "game_pk": 824073,
+   "k": 0,
+   "pitcher": "Tanner Rainey",
+   "pitcher_id": 663432,
+   "tbf": 3
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-22",
+   "game_pk": 824073,
+   "k": 4,
+   "pitcher": "Drew Sommers",
+   "pitcher_id": 805427,
+   "tbf": 6
+  },
+  {
+   "bb": 1,
+   "date": "2026-08-22",
+   "game_pk": 824151,
+   "k": 2,
+   "pitcher": "Bryan Abreu",
+   "pitcher_id": 650556,
+   "tbf": 6
+  },
+  {
+   "bb": 1,
+   "date": "2026-08-22",
+   "game_pk": 824151,
+   "k": 0,
+   "pitcher": "Bennett Sousa",
+   "pitcher_id": 656986,
+   "tbf": 4
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-22",
+   "game_pk": 824151,
+   "k": 1,
+   "pitcher": "Hogan Harris",
+   "pitcher_id": 663687,
+   "tbf": 3
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-22",
+   "game_pk": 824151,
+   "k": 2,
+   "pitcher": "Luis Medina",
+   "pitcher_id": 665622,
+   "tbf": 6
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-22",
+   "game_pk": 824151,
+   "k": 2,
+   "pitcher": "Elvis Alvarado",
+   "pitcher_id": 665660,
+   "tbf": 3
+  },
+  {
+   "bb": 1,
+   "date": "2026-08-22",
+   "game_pk": 824151,
+   "k": 9,
+   "pitcher": "Jacob Lopez",
+   "pitcher_id": 682052,
+   "tbf": 23
+  },
+  {
+   "bb": 3,
+   "date": "2026-08-22",
+   "game_pk": 824151,
+   "k": 4,
+   "pitcher": "Hunter Brown",
+   "pitcher_id": 686613,
+   "tbf": 24
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-22",
+   "game_pk": 824151,
+   "k": 2,
+   "pitcher": "AJ Blubaugh",
+   "pitcher_id": 805123,
+   "tbf": 4
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-22",
+   "game_pk": 824316,
+   "k": 1,
+   "pitcher": "Brennan Bernardino",
+   "pitcher_id": 657514,
+   "tbf": 3
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-22",
+   "game_pk": 824316,
+   "k": 1,
+   "pitcher": "Cade Smith",
+   "pitcher_id": 671922,
+   "tbf": 4
+  },
+  {
+   "bb": 1,
+   "date": "2026-08-22",
+   "game_pk": 824316,
+   "k": 1,
+   "pitcher": "Juan Mejia",
+   "pitcher_id": 675848,
+   "tbf": 7
+  },
+  {
+   "bb": 1,
+   "date": "2026-08-22",
+   "game_pk": 824316,
+   "k": 6,
+   "pitcher": "Tanner Bibee",
+   "pitcher_id": 676440,
+   "tbf": 24
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-22",
+   "game_pk": 824316,
+   "k": 1,
+   "pitcher": "Erik Sabrowski",
+   "pitcher_id": 681870,
+   "tbf": 3
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-22",
+   "game_pk": 824316,
+   "k": 1,
+   "pitcher": "Hunter Gaddis",
+   "pitcher_id": 683769,
+   "tbf": 4
+  },
+  {
+   "bb": 2,
+   "date": "2026-08-22",
+   "game_pk": 824316,
+   "k": 2,
+   "pitcher": "Gabriel Hughes",
+   "pitcher_id": 687312,
+   "tbf": 21
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-22",
+   "game_pk": 824316,
+   "k": 0,
+   "pitcher": "Nick Frasso",
+   "pitcher_id": 693308,
+   "tbf": 6
+  },
+  {
+   "bb": 1,
+   "date": "2026-08-22",
+   "game_pk": 824560,
+   "k": 3,
+   "pitcher": "Luis Castillo",
+   "pitcher_id": 622491,
+   "tbf": 17
+  },
+  {
+   "bb": 1,
+   "date": "2026-08-22",
+   "game_pk": 824560,
+   "k": 1,
+   "pitcher": "Huascar Brazob\u00e1n",
+   "pitcher_id": 623211,
+   "tbf": 6
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-22",
+   "game_pk": 824560,
+   "k": 1,
+   "pitcher": "Trevor Richards",
+   "pitcher_id": 670950,
+   "tbf": 8
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-22",
+   "game_pk": 824560,
+   "k": 1,
+   "pitcher": "Dedniel N\u00fa\u00f1ez",
+   "pitcher_id": 673380,
+   "tbf": 3
+  },
+  {
+   "bb": 1,
+   "date": "2026-08-22",
+   "game_pk": 824560,
+   "k": 2,
+   "pitcher": "Kodai Senga",
+   "pitcher_id": 673540,
+   "tbf": 5
+  },
+  {
+   "bb": 4,
+   "date": "2026-08-22",
+   "game_pk": 824560,
+   "k": 6,
+   "pitcher": "Christian Scott",
+   "pitcher_id": 681035,
+   "tbf": 23
+  },
+  {
+   "bb": 1,
+   "date": "2026-08-22",
+   "game_pk": 824560,
+   "k": 3,
+   "pitcher": "Austin Warren",
+   "pitcher_id": 681810,
+   "tbf": 7
+  },
+  {
+   "bb": 1,
+   "date": "2026-08-22",
+   "game_pk": 824560,
+   "k": 1,
+   "pitcher": "Jonathan Pintaro",
+   "pitcher_id": 702752,
+   "tbf": 5
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-22",
+   "game_pk": 824560,
+   "k": 1,
+   "pitcher": "Tyler Schweitzer",
+   "pitcher_id": 805326,
+   "tbf": 15
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-22",
+   "game_pk": 824718,
+   "k": 0,
+   "pitcher": "Sam Hentges",
+   "pitcher_id": 656529,
+   "tbf": 5
+  },
+  {
+   "bb": 1,
+   "date": "2026-08-22",
+   "game_pk": 824718,
+   "k": 1,
+   "pitcher": "Jovani Mor\u00e1n",
+   "pitcher_id": 663558,
+   "tbf": 5
+  },
+  {
+   "bb": 2,
+   "date": "2026-08-22",
+   "game_pk": 824718,
+   "k": 6,
+   "pitcher": "Patrick Sandoval",
+   "pitcher_id": 663776,
+   "tbf": 24
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-22",
+   "game_pk": 824718,
+   "k": 2,
+   "pitcher": "Greg Weissert",
+   "pitcher_id": 669711,
+   "tbf": 4
+  },
+  {
+   "bb": 2,
+   "date": "2026-08-22",
+   "game_pk": 824718,
+   "k": 1,
+   "pitcher": "Wyatt Olds",
+   "pitcher_id": 681544,
+   "tbf": 7
+  },
+  {
+   "bb": 1,
+   "date": "2026-08-22",
+   "game_pk": 824718,
+   "k": 2,
+   "pitcher": "Dylan Smith",
+   "pitcher_id": 681916,
+   "tbf": 5
+  },
+  {
+   "bb": 1,
+   "date": "2026-08-22",
+   "game_pk": 824718,
+   "k": 0,
+   "pitcher": "Carson Seymour",
+   "pitcher_id": 693313,
+   "tbf": 7
+  },
+  {
+   "bb": 2,
+   "date": "2026-08-22",
+   "game_pk": 824718,
+   "k": 7,
+   "pitcher": "Blade Tidwell",
+   "pitcher_id": 694918,
+   "tbf": 21
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-22",
+   "game_pk": 824798,
+   "k": 0,
+   "pitcher": "Andrew Kittredge",
+   "pitcher_id": 552640,
+   "tbf": 4
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-22",
+   "game_pk": 824798,
+   "k": 0,
+   "pitcher": "Bryan Baker",
+   "pitcher_id": 641329,
+   "tbf": 1
+  },
+  {
+   "bb": 1,
+   "date": "2026-08-22",
+   "game_pk": 824798,
+   "k": 5,
+   "pitcher": "Shane McClanahan",
+   "pitcher_id": 663556,
+   "tbf": 20
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-22",
+   "game_pk": 824798,
+   "k": 2,
+   "pitcher": "Garrett Cleavinger",
+   "pitcher_id": 664076,
+   "tbf": 4
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-22",
+   "game_pk": 824798,
+   "k": 1,
+   "pitcher": "Tyler Wells",
+   "pitcher_id": 669330,
+   "tbf": 7
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-22",
+   "game_pk": 824798,
+   "k": 0,
+   "pitcher": "Rico Garcia",
+   "pitcher_id": 670329,
+   "tbf": 3
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-22",
+   "game_pk": 824798,
+   "k": 1,
+   "pitcher": "Josh Walker",
+   "pitcher_id": 677020,
+   "tbf": 4
+  },
+  {
+   "bb": 3,
+   "date": "2026-08-22",
+   "game_pk": 824798,
+   "k": 3,
+   "pitcher": "Brandon Young",
+   "pitcher_id": 687064,
+   "tbf": 23
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-22",
+   "game_pk": 824798,
+   "k": 1,
+   "pitcher": "Kevin Kelly",
+   "pitcher_id": 687330,
+   "tbf": 4
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-22",
+   "game_pk": 824798,
+   "k": 0,
+   "pitcher": "Alex Hoppe",
+   "pitcher_id": 695380,
+   "tbf": 4
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-22",
+   "game_pk": 825044,
+   "k": 1,
+   "pitcher": "Tejay Antone",
+   "pitcher_id": 622088,
+   "tbf": 4
+  },
+  {
+   "bb": 2,
+   "date": "2026-08-22",
+   "game_pk": 825044,
+   "k": 1,
+   "pitcher": "Zack Littell",
+   "pitcher_id": 641793,
+   "tbf": 21
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-22",
+   "game_pk": 825044,
+   "k": 1,
+   "pitcher": "Dennis Santana",
+   "pitcher_id": 642701,
+   "tbf": 5
+  },
+  {
+   "bb": 3,
+   "date": "2026-08-22",
+   "game_pk": 825044,
+   "k": 3,
+   "pitcher": "Michael Soroka",
+   "pitcher_id": 647336,
+   "tbf": 20
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-22",
+   "game_pk": 825044,
+   "k": 3,
+   "pitcher": "Kevin Ginkel",
+   "pitcher_id": 656464,
+   "tbf": 3
+  },
+  {
+   "bb": 2,
+   "date": "2026-08-22",
+   "game_pk": 825044,
+   "k": 0,
+   "pitcher": "Tony Santillan",
+   "pitcher_id": 663574,
+   "tbf": 6
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-22",
+   "game_pk": 825044,
+   "k": 2,
+   "pitcher": "Luis Mey",
+   "pitcher_id": 682825,
+   "tbf": 5
+  },
+  {
+   "bb": 1,
+   "date": "2026-08-22",
+   "game_pk": 825044,
+   "k": 1,
+   "pitcher": "Rhett Lowder",
+   "pitcher_id": 695076,
+   "tbf": 26
+  },
+  {
+   "bb": 1,
+   "date": "2026-08-23",
+   "game_pk": 822856,
+   "k": 4,
+   "pitcher": "Yusei Kikuchi",
+   "pitcher_id": 579328,
+   "tbf": 23
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-23",
+   "game_pk": 822856,
+   "k": 6,
+   "pitcher": "Cal Quantrill",
+   "pitcher_id": 615698,
+   "tbf": 24
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-23",
+   "game_pk": 822856,
+   "k": 0,
+   "pitcher": "Tyler Alexander",
+   "pitcher_id": 641302,
+   "tbf": 4
+  },
+  {
+   "bb": 1,
+   "date": "2026-08-23",
+   "game_pk": 822856,
+   "k": 2,
+   "pitcher": "Jacob Latz",
+   "pitcher_id": 656641,
+   "tbf": 5
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-23",
+   "game_pk": 822856,
+   "k": 1,
+   "pitcher": "Sammy Peralta",
+   "pitcher_id": 671111,
+   "tbf": 5
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-23",
+   "game_pk": 822856,
+   "k": 0,
+   "pitcher": "Chase Silseth",
+   "pitcher_id": 681217,
+   "tbf": 1
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-23",
+   "game_pk": 822856,
+   "k": 2,
+   "pitcher": "Peyton Gray",
+   "pitcher_id": 682608,
+   "tbf": 5
+  },
+  {
+   "bb": 1,
+   "date": "2026-08-23",
+   "game_pk": 822856,
+   "k": 1,
+   "pitcher": "Luke Murphy",
+   "pitcher_id": 684665,
+   "tbf": 3
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-23",
+   "game_pk": 822856,
+   "k": 2,
+   "pitcher": "Jos\u00e9 Fermin",
+   "pitcher_id": 820862,
+   "tbf": 3
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-23",
+   "game_pk": 823099,
+   "k": 1,
+   "pitcher": "Caleb Thielbar",
+   "pitcher_id": 573204,
+   "tbf": 3
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-23",
+   "game_pk": 823099,
+   "k": 0,
+   "pitcher": "Carson Kelly",
+   "pitcher_id": 608348,
+   "tbf": 4
+  },
+  {
+   "bb": 2,
+   "date": "2026-08-23",
+   "game_pk": 823099,
+   "k": 1,
+   "pitcher": "Michael Rucker",
+   "pitcher_id": 621074,
+   "tbf": 9
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-23",
+   "game_pk": 823099,
+   "k": 0,
+   "pitcher": "Jhonny Pereda",
+   "pitcher_id": 640902,
+   "tbf": 4
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-23",
+   "game_pk": 823099,
+   "k": 0,
+   "pitcher": "Weston Wilson",
+   "pitcher_id": 642215,
+   "tbf": 8
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-23",
+   "game_pk": 823099,
+   "k": 2,
+   "pitcher": "Aaron Civale",
+   "pitcher_id": 650644,
+   "tbf": 13
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-23",
+   "game_pk": 823099,
+   "k": 1,
+   "pitcher": "Eduard Bazardo",
+   "pitcher_id": 660825,
+   "tbf": 3
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-23",
+   "game_pk": 823099,
+   "k": 1,
+   "pitcher": "Trent Thornton",
+   "pitcher_id": 663423,
+   "tbf": 3
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-23",
+   "game_pk": 823099,
+   "k": 0,
+   "pitcher": "Jos\u00e9 A. Ferrer",
+   "pitcher_id": 678606,
+   "tbf": 7
+  },
+  {
+   "bb": 7,
+   "date": "2026-08-23",
+   "game_pk": 823099,
+   "k": 5,
+   "pitcher": "Bryce Miller",
+   "pitcher_id": 682243,
+   "tbf": 22
+  },
+  {
+   "bb": 2,
+   "date": "2026-08-23",
+   "game_pk": 823099,
+   "k": 4,
+   "pitcher": "Shota Imanaga",
+   "pitcher_id": 684007,
+   "tbf": 14
+  },
+  {
+   "bb": 1,
+   "date": "2026-08-23",
+   "game_pk": 823258,
+   "k": 0,
+   "pitcher": "Taylor Rogers",
+   "pitcher_id": 573124,
+   "tbf": 5
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-23",
+   "game_pk": 823258,
+   "k": 1,
+   "pitcher": "Wandy Peralta",
+   "pitcher_id": 593974,
+   "tbf": 6
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-23",
+   "game_pk": 823258,
+   "k": 4,
+   "pitcher": "Walker Buehler",
+   "pitcher_id": 621111,
+   "tbf": 20
+  },
+  {
+   "bb": 3,
+   "date": "2026-08-23",
+   "game_pk": 823258,
+   "k": 3,
+   "pitcher": "Bailey Ober",
+   "pitcher_id": 641927,
+   "tbf": 22
+  },
+  {
+   "bb": 1,
+   "date": "2026-08-23",
+   "game_pk": 823258,
+   "k": 0,
+   "pitcher": "Jeff Hoffman",
+   "pitcher_id": 656546,
+   "tbf": 5
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-23",
+   "game_pk": 823258,
+   "k": 1,
+   "pitcher": "Yuki Matsui",
+   "pitcher_id": 673513,
+   "tbf": 4
+  },
+  {
+   "bb": 2,
+   "date": "2026-08-23",
+   "game_pk": 823258,
+   "k": 0,
+   "pitcher": "Kody Funderburk",
+   "pitcher_id": 681892,
+   "tbf": 3
+  },
+  {
+   "bb": 1,
+   "date": "2026-08-23",
+   "game_pk": 823258,
+   "k": 2,
+   "pitcher": "Travis Adams",
+   "pitcher_id": 701519,
+   "tbf": 6
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-23",
+   "game_pk": 823421,
+   "k": 0,
+   "pitcher": "Ryne Stanek",
+   "pitcher_id": 592773,
+   "tbf": 3
+  },
+  {
+   "bb": 1,
+   "date": "2026-08-23",
+   "game_pk": 823421,
+   "k": 1,
+   "pitcher": "Tim Mayza",
+   "pitcher_id": 641835,
+   "tbf": 6
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-23",
+   "game_pk": 823421,
+   "k": 7,
+   "pitcher": "Cristopher S\u00e1nchez",
+   "pitcher_id": 650911,
+   "tbf": 28
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-23",
+   "game_pk": 823421,
+   "k": 0,
+   "pitcher": "George Soriano",
+   "pitcher_id": 666277,
+   "tbf": 3
+  },
+  {
+   "bb": 1,
+   "date": "2026-08-23",
+   "game_pk": 823421,
+   "k": 0,
+   "pitcher": "Riley O'Brien",
+   "pitcher_id": 676617,
+   "tbf": 8
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-23",
+   "game_pk": 823421,
+   "k": 0,
+   "pitcher": "Justin Bruihl",
+   "pitcher_id": 677865,
+   "tbf": 4
+  },
+  {
+   "bb": 2,
+   "date": "2026-08-23",
+   "game_pk": 823421,
+   "k": 4,
+   "pitcher": "Kyle Leahy",
+   "pitcher_id": 681517,
+   "tbf": 15
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-23",
+   "game_pk": 823421,
+   "k": 1,
+   "pitcher": "Alex McFarlane",
+   "pitcher_id": 686934,
+   "tbf": 3
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-23",
+   "game_pk": 823421,
+   "k": 1,
+   "pitcher": "Luis Gastelum",
+   "pitcher_id": 703725,
+   "tbf": 4
+  },
+  {
+   "bb": 2,
+   "date": "2026-08-23",
+   "game_pk": 823507,
+   "k": 2,
+   "pitcher": "Carlos Rod\u00f3n",
+   "pitcher_id": 607074,
+   "tbf": 17
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-23",
+   "game_pk": 823507,
+   "k": 0,
+   "pitcher": "Paul Blackburn",
+   "pitcher_id": 621112,
+   "tbf": 6
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-23",
+   "game_pk": 823507,
+   "k": 1,
+   "pitcher": "Ryan Yarbrough",
+   "pitcher_id": 642232,
+   "tbf": 7
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-23",
+   "game_pk": 823507,
+   "k": 2,
+   "pitcher": "Brendon Little",
+   "pitcher_id": 663893,
+   "tbf": 5
+  },
+  {
+   "bb": 3,
+   "date": "2026-08-23",
+   "game_pk": 823507,
+   "k": 6,
+   "pitcher": "Jos\u00e9 Soriano",
+   "pitcher_id": 667755,
+   "tbf": 25
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-23",
+   "game_pk": 823507,
+   "k": 1,
+   "pitcher": "Simeon Woods Richardson",
+   "pitcher_id": 680573,
+   "tbf": 4
+  },
+  {
+   "bb": 1,
+   "date": "2026-08-23",
+   "game_pk": 823507,
+   "k": 1,
+   "pitcher": "Braydon Fisher",
+   "pitcher_id": 680755,
+   "tbf": 3
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-23",
+   "game_pk": 823507,
+   "k": 2,
+   "pitcher": "Brent Headrick",
+   "pitcher_id": 687396,
+   "tbf": 5
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-23",
+   "game_pk": 823507,
+   "k": 0,
+   "pitcher": "Mason Fluharty",
+   "pitcher_id": 689254,
+   "tbf": 2
+  },
+  {
+   "bb": 1,
+   "date": "2026-08-23",
+   "game_pk": 823745,
+   "k": 0,
+   "pitcher": "Raisel Iglesias",
+   "pitcher_id": 628452,
+   "tbf": 5
+  },
+  {
+   "bb": 2,
+   "date": "2026-08-23",
+   "game_pk": 823745,
+   "k": 4,
+   "pitcher": "Tyler Mahle",
+   "pitcher_id": 641816,
+   "tbf": 24
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-23",
+   "game_pk": 823745,
+   "k": 1,
+   "pitcher": "Bryse Wilson",
+   "pitcher_id": 669060,
+   "tbf": 4
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-23",
+   "game_pk": 823745,
+   "k": 2,
+   "pitcher": "DL Hall",
+   "pitcher_id": 669084,
+   "tbf": 5
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-23",
+   "game_pk": 823745,
+   "k": 1,
+   "pitcher": "Dylan Lee",
+   "pitcher_id": 669276,
+   "tbf": 4
+  },
+  {
+   "bb": 3,
+   "date": "2026-08-23",
+   "game_pk": 823745,
+   "k": 5,
+   "pitcher": "Shane Drohan",
+   "pitcher_id": 675660,
+   "tbf": 23
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-23",
+   "game_pk": 823745,
+   "k": 1,
+   "pitcher": "Aaron Ashby",
+   "pitcher_id": 676879,
+   "tbf": 4
+  },
+  {
+   "bb": 1,
+   "date": "2026-08-23",
+   "game_pk": 823745,
+   "k": 1,
+   "pitcher": "Grant Anderson",
+   "pitcher_id": 681982,
+   "tbf": 4
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-23",
+   "game_pk": 823745,
+   "k": 1,
+   "pitcher": "Didier Fuentes",
+   "pitcher_id": 800311,
+   "tbf": 7
+  },
+  {
+   "bb": 3,
+   "date": "2026-08-23",
+   "game_pk": 823827,
+   "k": 3,
+   "pitcher": "Trevor Williams",
+   "pitcher_id": 592866,
+   "tbf": 12
+  },
+  {
+   "bb": 1,
+   "date": "2026-08-23",
+   "game_pk": 823827,
+   "k": 1,
+   "pitcher": "Michael Petersen",
+   "pitcher_id": 656848,
+   "tbf": 2
+  },
+  {
+   "bb": 1,
+   "date": "2026-08-23",
+   "game_pk": 823827,
+   "k": 1,
+   "pitcher": "Pete Fairbanks",
+   "pitcher_id": 664126,
+   "tbf": 5
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-23",
+   "game_pk": 823827,
+   "k": 2,
+   "pitcher": "Jack Ralston",
+   "pitcher_id": 667652,
+   "tbf": 8
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-23",
+   "game_pk": 823827,
+   "k": 0,
+   "pitcher": "Max Kranick",
+   "pitcher_id": 668820,
+   "tbf": 5
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-23",
+   "game_pk": 823827,
+   "k": 2,
+   "pitcher": "Janson Junk",
+   "pitcher_id": 676083,
+   "tbf": 18
+  },
+  {
+   "bb": 1,
+   "date": "2026-08-23",
+   "game_pk": 823827,
+   "k": 1,
+   "pitcher": "Calvin Faucher",
+   "pitcher_id": 676534,
+   "tbf": 5
+  },
+  {
+   "bb": 3,
+   "date": "2026-08-23",
+   "game_pk": 823827,
+   "k": 5,
+   "pitcher": "Jackson Kent",
+   "pitcher_id": 800600,
+   "tbf": 20
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-23",
+   "game_pk": 823909,
+   "k": 1,
+   "pitcher": "Brock Stewart",
+   "pitcher_id": 592779,
+   "tbf": 3
+  },
+  {
+   "bb": 3,
+   "date": "2026-08-23",
+   "game_pk": 823909,
+   "k": 6,
+   "pitcher": "Blake Snell",
+   "pitcher_id": 605483,
+   "tbf": 24
+  },
+  {
+   "bb": 3,
+   "date": "2026-08-23",
+   "game_pk": 823909,
+   "k": 1,
+   "pitcher": "Lake Bachar",
+   "pitcher_id": 669199,
+   "tbf": 9
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-23",
+   "game_pk": 823909,
+   "k": 4,
+   "pitcher": "Carmen Mlodzinski",
+   "pitcher_id": 669387,
+   "tbf": 15
+  },
+  {
+   "bb": 1,
+   "date": "2026-08-23",
+   "game_pk": 823909,
+   "k": 1,
+   "pitcher": "Alex Vesia",
+   "pitcher_id": 681911,
+   "tbf": 4
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-23",
+   "game_pk": 823909,
+   "k": 2,
+   "pitcher": "Edgardo Henriquez",
+   "pitcher_id": 683618,
+   "tbf": 3
+  },
+  {
+   "bb": 1,
+   "date": "2026-08-23",
+   "game_pk": 823909,
+   "k": 1,
+   "pitcher": "Khristian Curtis",
+   "pitcher_id": 694753,
+   "tbf": 10
+  },
+  {
+   "bb": 2,
+   "date": "2026-08-23",
+   "game_pk": 824071,
+   "k": 1,
+   "pitcher": "Jose Cuas",
+   "pitcher_id": 621016,
+   "tbf": 7
+  },
+  {
+   "bb": 1,
+   "date": "2026-08-23",
+   "game_pk": 824071,
+   "k": 1,
+   "pitcher": "Jacob Waguespack",
+   "pitcher_id": 621097,
+   "tbf": 6
+  },
+  {
+   "bb": 1,
+   "date": "2026-08-23",
+   "game_pk": 824071,
+   "k": 1,
+   "pitcher": "Kyle Finnegan",
+   "pitcher_id": 640448,
+   "tbf": 6
+  },
+  {
+   "bb": 1,
+   "date": "2026-08-23",
+   "game_pk": 824071,
+   "k": 2,
+   "pitcher": "Daniel Lynch IV",
+   "pitcher_id": 663738,
+   "tbf": 17
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-23",
+   "game_pk": 824071,
+   "k": 1,
+   "pitcher": "Nate Pearson",
+   "pitcher_id": 663878,
+   "tbf": 4
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-23",
+   "game_pk": 824071,
+   "k": 1,
+   "pitcher": "John Schreiber",
+   "pitcher_id": 670167,
+   "tbf": 2
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-23",
+   "game_pk": 824071,
+   "k": 0,
+   "pitcher": "Connor Thomas",
+   "pitcher_id": 671162,
+   "tbf": 3
+  },
+  {
+   "bb": 1,
+   "date": "2026-08-23",
+   "game_pk": 824071,
+   "k": 2,
+   "pitcher": "Steven Cruz",
+   "pitcher_id": 674444,
+   "tbf": 4
+  },
+  {
+   "bb": 1,
+   "date": "2026-08-23",
+   "game_pk": 824071,
+   "k": 3,
+   "pitcher": "Ty Madden",
+   "pitcher_id": 680744,
+   "tbf": 10
+  },
+  {
+   "bb": 1,
+   "date": "2026-08-23",
+   "game_pk": 824071,
+   "k": 0,
+   "pitcher": "Mason Black",
+   "pitcher_id": 696131,
+   "tbf": 6
+  },
+  {
+   "bb": 1,
+   "date": "2026-08-23",
+   "game_pk": 824071,
+   "k": 3,
+   "pitcher": "Andrew Sears",
+   "pitcher_id": 808825,
+   "tbf": 18
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-23",
+   "game_pk": 824150,
+   "k": 1,
+   "pitcher": "Steven Okert",
+   "pitcher_id": 595345,
+   "tbf": 4
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-23",
+   "game_pk": 824150,
+   "k": 2,
+   "pitcher": "Josh Hader",
+   "pitcher_id": 623352,
+   "tbf": 3
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-23",
+   "game_pk": 824150,
+   "k": 0,
+   "pitcher": "Scott Blewett",
+   "pitcher_id": 656240,
+   "tbf": 3
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-23",
+   "game_pk": 824150,
+   "k": 1,
+   "pitcher": "Enyel De Los Santos",
+   "pitcher_id": 660853,
+   "tbf": 5
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-23",
+   "game_pk": 824150,
+   "k": 2,
+   "pitcher": "Hogan Harris",
+   "pitcher_id": 663687,
+   "tbf": 3
+  },
+  {
+   "bb": 2,
+   "date": "2026-08-23",
+   "game_pk": 824150,
+   "k": 8,
+   "pitcher": "Cristian Javier",
+   "pitcher_id": 664299,
+   "tbf": 18
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-23",
+   "game_pk": 824150,
+   "k": 2,
+   "pitcher": "Luis Medina",
+   "pitcher_id": 665622,
+   "tbf": 4
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-23",
+   "game_pk": 824150,
+   "k": 0,
+   "pitcher": "Brady Basso",
+   "pitcher_id": 669620,
+   "tbf": 7
+  },
+  {
+   "bb": 3,
+   "date": "2026-08-23",
+   "game_pk": 824150,
+   "k": 6,
+   "pitcher": "Jack Perkins",
+   "pitcher_id": 678022,
+   "tbf": 22
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-23",
+   "game_pk": 824150,
+   "k": 4,
+   "pitcher": "Kai-Wei Teng",
+   "pitcher_id": 678906,
+   "tbf": 7
+  },
+  {
+   "bb": 1,
+   "date": "2026-08-23",
+   "game_pk": 824150,
+   "k": 0,
+   "pitcher": "AJ Blubaugh",
+   "pitcher_id": 805123,
+   "tbf": 4
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-23",
+   "game_pk": 824315,
+   "k": 0,
+   "pitcher": "Jordan Romano",
+   "pitcher_id": 605447,
+   "tbf": 3
+  },
+  {
+   "bb": 1,
+   "date": "2026-08-23",
+   "game_pk": 824315,
+   "k": 2,
+   "pitcher": "Tomoyuki Sugano",
+   "pitcher_id": 608372,
+   "tbf": 18
+  },
+  {
+   "bb": 2,
+   "date": "2026-08-23",
+   "game_pk": 824315,
+   "k": 0,
+   "pitcher": "Jimmy Herget",
+   "pitcher_id": 623474,
+   "tbf": 7
+  },
+  {
+   "bb": 3,
+   "date": "2026-08-23",
+   "game_pk": 824315,
+   "k": 4,
+   "pitcher": "Foster Griffin",
+   "pitcher_id": 656492,
+   "tbf": 22
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-23",
+   "game_pk": 824315,
+   "k": 2,
+   "pitcher": "Matt Festa",
+   "pitcher_id": 670036,
+   "tbf": 2
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-23",
+   "game_pk": 824315,
+   "k": 1,
+   "pitcher": "Logan Allen",
+   "pitcher_id": 671106,
+   "tbf": 3
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-23",
+   "game_pk": 824315,
+   "k": 0,
+   "pitcher": "Jaden Hill",
+   "pitcher_id": 677955,
+   "tbf": 3
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-23",
+   "game_pk": 824315,
+   "k": 1,
+   "pitcher": "Tim Herrin",
+   "pitcher_id": 682120,
+   "tbf": 3
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-23",
+   "game_pk": 824315,
+   "k": 1,
+   "pitcher": "Craig Yoho",
+   "pitcher_id": 684974,
+   "tbf": 6
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-23",
+   "game_pk": 824315,
+   "k": 1,
+   "pitcher": "Nick Frasso",
+   "pitcher_id": 693308,
+   "tbf": 5
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-23",
+   "game_pk": 824315,
+   "k": 2,
+   "pitcher": "Mark Manfredi",
+   "pitcher_id": 815081,
+   "tbf": 5
+  },
+  {
+   "bb": 1,
+   "date": "2026-08-23",
+   "game_pk": 824558,
+   "k": 2,
+   "pitcher": "Erick Fedde",
+   "pitcher_id": 607200,
+   "tbf": 15
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-23",
+   "game_pk": 824558,
+   "k": 3,
+   "pitcher": "Daniel Duarte",
+   "pitcher_id": 650960,
+   "tbf": 5
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-23",
+   "game_pk": 824558,
+   "k": 3,
+   "pitcher": "Sean Newcomb",
+   "pitcher_id": 656794,
+   "tbf": 8
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-23",
+   "game_pk": 824558,
+   "k": 1,
+   "pitcher": "Dedniel N\u00fa\u00f1ez",
+   "pitcher_id": 673380,
+   "tbf": 4
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-23",
+   "game_pk": 824558,
+   "k": 0,
+   "pitcher": "Kodai Senga",
+   "pitcher_id": 673540,
+   "tbf": 2
+  },
+  {
+   "bb": 4,
+   "date": "2026-08-23",
+   "game_pk": 824558,
+   "k": 6,
+   "pitcher": "Nolan McLean",
+   "pitcher_id": 690997,
+   "tbf": 24
+  },
+  {
+   "bb": 2,
+   "date": "2026-08-23",
+   "game_pk": 824558,
+   "k": 2,
+   "pitcher": "Grant Taylor",
+   "pitcher_id": 691799,
+   "tbf": 7
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-23",
+   "game_pk": 824558,
+   "k": 3,
+   "pitcher": "Hagen Smith",
+   "pitcher_id": 696146,
+   "tbf": 6
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-23",
+   "game_pk": 824720,
+   "k": 1,
+   "pitcher": "Aroldis Chapman",
+   "pitcher_id": 547973,
+   "tbf": 3
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-23",
+   "game_pk": 824720,
+   "k": 0,
+   "pitcher": "Tyron Guerrero",
+   "pitcher_id": 594027,
+   "tbf": 3
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-23",
+   "game_pk": 824720,
+   "k": 2,
+   "pitcher": "Sam Hentges",
+   "pitcher_id": 656529,
+   "tbf": 5
+  },
+  {
+   "bb": 1,
+   "date": "2026-08-23",
+   "game_pk": 824720,
+   "k": 0,
+   "pitcher": "JT Brubaker",
+   "pitcher_id": 664141,
+   "tbf": 9
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-23",
+   "game_pk": 824720,
+   "k": 2,
+   "pitcher": "Matt Wilkinson",
+   "pitcher_id": 683363,
+   "tbf": 18
+  },
+  {
+   "bb": 1,
+   "date": "2026-08-23",
+   "game_pk": 824720,
+   "k": 6,
+   "pitcher": "Jake Bennett",
+   "pitcher_id": 687562,
+   "tbf": 29
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-23",
+   "game_pk": 824720,
+   "k": 1,
+   "pitcher": "Trent Harris",
+   "pitcher_id": 805345,
+   "tbf": 4
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-23",
+   "game_pk": 824799,
+   "k": 0,
+   "pitcher": "Cam Booser",
+   "pitcher_id": 592155,
+   "tbf": 3
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-23",
+   "game_pk": 824799,
+   "k": 4,
+   "pitcher": "Nick Martinez",
+   "pitcher_id": 607259,
+   "tbf": 19
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-23",
+   "game_pk": 824799,
+   "k": 0,
+   "pitcher": "Bryan Baker",
+   "pitcher_id": 641329,
+   "tbf": 5
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-23",
+   "game_pk": 824799,
+   "k": 0,
+   "pitcher": "Grant Wolfram",
+   "pitcher_id": 664991,
+   "tbf": 5
+  },
+  {
+   "bb": 3,
+   "date": "2026-08-23",
+   "game_pk": 824799,
+   "k": 2,
+   "pitcher": "Shane Baz",
+   "pitcher_id": 669358,
+   "tbf": 23
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-23",
+   "game_pk": 824799,
+   "k": 0,
+   "pitcher": "Cam Sanders",
+   "pitcher_id": 676742,
+   "tbf": 3
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-23",
+   "game_pk": 824799,
+   "k": 1,
+   "pitcher": "Kevin Kelly",
+   "pitcher_id": 687330,
+   "tbf": 3
+  },
+  {
+   "bb": 2,
+   "date": "2026-08-23",
+   "game_pk": 824799,
+   "k": 0,
+   "pitcher": "Anthony Nunez",
+   "pitcher_id": 689296,
+   "tbf": 6
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-23",
+   "game_pk": 825043,
+   "k": 0,
+   "pitcher": "Pierce Johnson",
+   "pitcher_id": 572955,
+   "tbf": 3
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-23",
+   "game_pk": 825043,
+   "k": 1,
+   "pitcher": "Jonathan Lo\u00e1isiga",
+   "pitcher_id": 642528,
+   "tbf": 4
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-23",
+   "game_pk": 825043,
+   "k": 1,
+   "pitcher": "Kevin Ginkel",
+   "pitcher_id": 656464,
+   "tbf": 2
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-23",
+   "game_pk": 825043,
+   "k": 1,
+   "pitcher": "Taylor Clarke",
+   "pitcher_id": 664199,
+   "tbf": 4
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-23",
+   "game_pk": 825043,
+   "k": 1,
+   "pitcher": "Juan Morillo",
+   "pitcher_id": 666661,
+   "tbf": 4
+  },
+  {
+   "bb": 2,
+   "date": "2026-08-23",
+   "game_pk": 825043,
+   "k": 6,
+   "pitcher": "Andrew Abbott",
+   "pitcher_id": 671096,
+   "tbf": 26
+  },
+  {
+   "bb": 2,
+   "date": "2026-08-23",
+   "game_pk": 825043,
+   "k": 3,
+   "pitcher": "Gerardo Carrillo",
+   "pitcher_id": 672629,
+   "tbf": 7
+  },
+  {
+   "bb": 2,
+   "date": "2026-08-23",
+   "game_pk": 825043,
+   "k": 1,
+   "pitcher": "Luis Mey",
+   "pitcher_id": 682825,
+   "tbf": 6
+  },
+  {
+   "bb": 3,
+   "date": "2026-08-23",
+   "game_pk": 825043,
+   "k": 3,
+   "pitcher": "Mitch Bratt",
+   "pitcher_id": 683352,
+   "tbf": 17
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-23",
+   "game_pk": 825043,
+   "k": 1,
+   "pitcher": "Brandyn Garcia",
+   "pitcher_id": 805299,
+   "tbf": 3
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-24",
+   "game_pk": 822695,
+   "k": 1,
+   "pitcher": "Jake Bird",
+   "pitcher_id": 656234,
+   "tbf": 3
+  },
+  {
+   "bb": 4,
+   "date": "2026-08-24",
+   "game_pk": 822695,
+   "k": 6,
+   "pitcher": "Ryan Feltner",
+   "pitcher_id": 663372,
+   "tbf": 28
+  },
+  {
+   "bb": 2,
+   "date": "2026-08-24",
+   "game_pk": 822695,
+   "k": 0,
+   "pitcher": "Juan Mejia",
+   "pitcher_id": 675848,
+   "tbf": 4
+  },
+  {
+   "bb": 1,
+   "date": "2026-08-24",
+   "game_pk": 822695,
+   "k": 7,
+   "pitcher": "Cade Cavalli",
+   "pitcher_id": 676917,
+   "tbf": 24
+  },
+  {
+   "bb": 1,
+   "date": "2026-08-24",
+   "game_pk": 822695,
+   "k": 0,
+   "pitcher": "Erik Tolman",
+   "pitcher_id": 680899,
+   "tbf": 3
+  },
+  {
+   "bb": 2,
+   "date": "2026-08-24",
+   "game_pk": 822695,
+   "k": 0,
+   "pitcher": "Blake Adams",
+   "pitcher_id": 687060,
+   "tbf": 9
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-24",
+   "game_pk": 822695,
+   "k": 0,
+   "pitcher": "Troy Johnston",
+   "pitcher_id": 687859,
+   "tbf": 4
+  },
+  {
+   "bb": 1,
+   "date": "2026-08-24",
+   "game_pk": 822695,
+   "k": 2,
+   "pitcher": "Clayton Beeter",
+   "pitcher_id": 690925,
+   "tbf": 7
+  },
+  {
+   "bb": 5,
+   "date": "2026-08-24",
+   "game_pk": 823097,
+   "k": 4,
+   "pitcher": "Zack Wheeler",
+   "pitcher_id": 554430,
+   "tbf": 25
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-24",
+   "game_pk": 823097,
+   "k": 2,
+   "pitcher": "Jos\u00e9 Alvarado",
+   "pitcher_id": 621237,
+   "tbf": 3
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-24",
+   "game_pk": 823097,
+   "k": 2,
+   "pitcher": "Seranthony Dom\u00ednguez",
+   "pitcher_id": 622554,
+   "tbf": 6
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-24",
+   "game_pk": 823097,
+   "k": 0,
+   "pitcher": "Gabe Speier",
+   "pitcher_id": 642100,
+   "tbf": 3
+  },
+  {
+   "bb": 1,
+   "date": "2026-08-24",
+   "game_pk": 823097,
+   "k": 4,
+   "pitcher": "Chase Shugart",
+   "pitcher_id": 663767,
+   "tbf": 8
+  },
+  {
+   "bb": 2,
+   "date": "2026-08-24",
+   "game_pk": 823097,
+   "k": 5,
+   "pitcher": "Logan Gilbert",
+   "pitcher_id": 669302,
+   "tbf": 22
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-24",
+   "game_pk": 823097,
+   "k": 1,
+   "pitcher": "Carlos Vargas",
+   "pitcher_id": 672841,
+   "tbf": 3
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-24",
+   "game_pk": 823097,
+   "k": 2,
+   "pitcher": "Alex McFarlane",
+   "pitcher_id": 686934,
+   "tbf": 3
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-24",
+   "game_pk": 823183,
+   "k": 1,
+   "pitcher": "Sam Moll",
+   "pitcher_id": 594580,
+   "tbf": 4
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-24",
+   "game_pk": 823183,
+   "k": 0,
+   "pitcher": "Emilio Pag\u00e1n",
+   "pitcher_id": 641941,
+   "tbf": 4
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-24",
+   "game_pk": 823183,
+   "k": 0,
+   "pitcher": "Reiver Sanmartin",
+   "pitcher_id": 665665,
+   "tbf": 3
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-24",
+   "game_pk": 823183,
+   "k": 1,
+   "pitcher": "Julian Garcia",
+   "pitcher_id": 670062,
+   "tbf": 6
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-24",
+   "game_pk": 823183,
+   "k": 3,
+   "pitcher": "Jason Foley",
+   "pitcher_id": 671345,
+   "tbf": 4
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-24",
+   "game_pk": 823183,
+   "k": 2,
+   "pitcher": "Ryan Walker",
+   "pitcher_id": 676254,
+   "tbf": 8
+  },
+  {
+   "bb": 1,
+   "date": "2026-08-24",
+   "game_pk": 823183,
+   "k": 1,
+   "pitcher": "Dylan Smith",
+   "pitcher_id": 681916,
+   "tbf": 5
+  },
+  {
+   "bb": 1,
+   "date": "2026-08-24",
+   "game_pk": 823183,
+   "k": 3,
+   "pitcher": "Carson Whisenhunt",
+   "pitcher_id": 687931,
+   "tbf": 11
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-24",
+   "game_pk": 823183,
+   "k": 2,
+   "pitcher": "Carson Seymour",
+   "pitcher_id": 693313,
+   "tbf": 3
+  },
+  {
+   "bb": 1,
+   "date": "2026-08-24",
+   "game_pk": 823183,
+   "k": 5,
+   "pitcher": "Chase Burns",
+   "pitcher_id": 695505,
+   "tbf": 19
+  },
+  {
+   "bb": 2,
+   "date": "2026-08-24",
+   "game_pk": 823260,
+   "k": 1,
+   "pitcher": "Kirby Yates",
+   "pitcher_id": 489446,
+   "tbf": 5
+  },
+  {
+   "bb": 2,
+   "date": "2026-08-24",
+   "game_pk": 823260,
+   "k": 5,
+   "pitcher": "Robbie Ray",
+   "pitcher_id": 592662,
+   "tbf": 22
+  },
+  {
+   "bb": 2,
+   "date": "2026-08-24",
+   "game_pk": 823260,
+   "k": 1,
+   "pitcher": "Luke Weaver",
+   "pitcher_id": 596133,
+   "tbf": 6
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-24",
+   "game_pk": 823260,
+   "k": 1,
+   "pitcher": "Kyle Hart",
+   "pitcher_id": 606996,
+   "tbf": 4
+  },
+  {
+   "bb": 1,
+   "date": "2026-08-24",
+   "game_pk": 823260,
+   "k": 1,
+   "pitcher": "Gregory Soto",
+   "pitcher_id": 642397,
+   "tbf": 4
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-24",
+   "game_pk": 823260,
+   "k": 1,
+   "pitcher": "Camilo Doval",
+   "pitcher_id": 666808,
+   "tbf": 2
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-24",
+   "game_pk": 823260,
+   "k": 1,
+   "pitcher": "Jeremiah Estrada",
+   "pitcher_id": 669093,
+   "tbf": 4
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-24",
+   "game_pk": 823260,
+   "k": 2,
+   "pitcher": "Adrian Morejon",
+   "pitcher_id": 670970,
+   "tbf": 6
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-24",
+   "game_pk": 823260,
+   "k": 3,
+   "pitcher": "Yohan Ram\u00edrez",
+   "pitcher_id": 670990,
+   "tbf": 3
+  },
+  {
+   "bb": 1,
+   "date": "2026-08-24",
+   "game_pk": 823260,
+   "k": 2,
+   "pitcher": "Yuki Matsui",
+   "pitcher_id": 673513,
+   "tbf": 4
+  },
+  {
+   "bb": 1,
+   "date": "2026-08-24",
+   "game_pk": 823260,
+   "k": 2,
+   "pitcher": "Braxton Ashcraft",
+   "pitcher_id": 677952,
+   "tbf": 21
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-24",
+   "game_pk": 823260,
+   "k": 1,
+   "pitcher": "Mason Montgomery",
+   "pitcher_id": 682254,
+   "tbf": 4
+  },
+  {
+   "bb": 1,
+   "date": "2026-08-24",
+   "game_pk": 823260,
+   "k": 2,
+   "pitcher": "Mason Miller",
+   "pitcher_id": 695243,
+   "tbf": 5
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-24",
+   "game_pk": 823260,
+   "k": 2,
+   "pitcher": "Bradgley Rodriguez",
+   "pitcher_id": 699134,
+   "tbf": 3
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-24",
+   "game_pk": 823828,
+   "k": 1,
+   "pitcher": "Aroldis Chapman",
+   "pitcher_id": 547973,
+   "tbf": 4
+  },
+  {
+   "bb": 4,
+   "date": "2026-08-24",
+   "game_pk": 823828,
+   "k": 4,
+   "pitcher": "Ranger Suarez",
+   "pitcher_id": 624133,
+   "tbf": 24
+  },
+  {
+   "bb": 2,
+   "date": "2026-08-24",
+   "game_pk": 823828,
+   "k": 6,
+   "pitcher": "Sandy Alcantara",
+   "pitcher_id": 645261,
+   "tbf": 29
+  },
+  {
+   "bb": 1,
+   "date": "2026-08-24",
+   "game_pk": 823828,
+   "k": 0,
+   "pitcher": "Pete Fairbanks",
+   "pitcher_id": 664126,
+   "tbf": 1
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-24",
+   "game_pk": 823828,
+   "k": 1,
+   "pitcher": "Erik Miller",
+   "pitcher_id": 669062,
+   "tbf": 5
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-24",
+   "game_pk": 823828,
+   "k": 0,
+   "pitcher": "Tyler Zuber",
+   "pitcher_id": 676604,
+   "tbf": 3
+  },
+  {
+   "bb": 2,
+   "date": "2026-08-24",
+   "game_pk": 823828,
+   "k": 1,
+   "pitcher": "Brayan Bello",
+   "pitcher_id": 678394,
+   "tbf": 10
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-24",
+   "game_pk": 823828,
+   "k": 1,
+   "pitcher": "Josh Ekness",
+   "pitcher_id": 694795,
+   "tbf": 5
+  },
+  {
+   "bb": 1,
+   "date": "2026-08-24",
+   "game_pk": 823828,
+   "k": 0,
+   "pitcher": "Cade Gibson",
+   "pitcher_id": 806188,
+   "tbf": 3
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-24",
+   "game_pk": 823992,
+   "k": 3,
+   "pitcher": "Colin Holderman",
+   "pitcher_id": 670059,
+   "tbf": 4
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-24",
+   "game_pk": 823992,
+   "k": 1,
+   "pitcher": "Sammy Peralta",
+   "pitcher_id": 671111,
+   "tbf": 7
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-24",
+   "game_pk": 823992,
+   "k": 1,
+   "pitcher": "Cade Smith",
+   "pitcher_id": 671922,
+   "tbf": 5
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-24",
+   "game_pk": 823992,
+   "k": 0,
+   "pitcher": "Blake Weiman",
+   "pitcher_id": 676620,
+   "tbf": 4
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-24",
+   "game_pk": 823992,
+   "k": 0,
+   "pitcher": "Hunter Gaddis",
+   "pitcher_id": 683769,
+   "tbf": 4
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-24",
+   "game_pk": 823992,
+   "k": 1,
+   "pitcher": "Luke Murphy",
+   "pitcher_id": 684665,
+   "tbf": 2
+  },
+  {
+   "bb": 3,
+   "date": "2026-08-24",
+   "game_pk": 823992,
+   "k": 3,
+   "pitcher": "George Klassen",
+   "pitcher_id": 691946,
+   "tbf": 25
+  },
+  {
+   "bb": 1,
+   "date": "2026-08-24",
+   "game_pk": 823992,
+   "k": 4,
+   "pitcher": "Parker Messick",
+   "pitcher_id": 800048,
+   "tbf": 21
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-24",
+   "game_pk": 824235,
+   "k": 2,
+   "pitcher": "Bryan Baker",
+   "pitcher_id": 641329,
+   "tbf": 5
+  },
+  {
+   "bb": 1,
+   "date": "2026-08-24",
+   "game_pk": 824235,
+   "k": 3,
+   "pitcher": "Manuel Rodr\u00edguez",
+   "pitcher_id": 655889,
+   "tbf": 5
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-24",
+   "game_pk": 824235,
+   "k": 5,
+   "pitcher": "Drew Rasmussen",
+   "pitcher_id": 656876,
+   "tbf": 21
+  },
+  {
+   "bb": 2,
+   "date": "2026-08-24",
+   "game_pk": 824235,
+   "k": 2,
+   "pitcher": "Tanner Rainey",
+   "pitcher_id": 663432,
+   "tbf": 8
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-24",
+   "game_pk": 824235,
+   "k": 1,
+   "pitcher": "Tyler Holton",
+   "pitcher_id": 663947,
+   "tbf": 4
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-24",
+   "game_pk": 824235,
+   "k": 2,
+   "pitcher": "Garrett Cleavinger",
+   "pitcher_id": 664076,
+   "tbf": 3
+  },
+  {
+   "bb": 2,
+   "date": "2026-08-24",
+   "game_pk": 824235,
+   "k": 0,
+   "pitcher": "Framber Valdez",
+   "pitcher_id": 664285,
+   "tbf": 26
+  },
+  {
+   "bb": 2,
+   "date": "2026-08-24",
+   "game_pk": 824557,
+   "k": 0,
+   "pitcher": "Huascar Brazob\u00e1n",
+   "pitcher_id": 623211,
+   "tbf": 4
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-24",
+   "game_pk": 824557,
+   "k": 2,
+   "pitcher": "Jordan Montgomery",
+   "pitcher_id": 656756,
+   "tbf": 6
+  },
+  {
+   "bb": 4,
+   "date": "2026-08-24",
+   "game_pk": 824557,
+   "k": 2,
+   "pitcher": "Jos\u00e9 Urquidy",
+   "pitcher_id": 664353,
+   "tbf": 21
+  },
+  {
+   "bb": 1,
+   "date": "2026-08-24",
+   "game_pk": 824557,
+   "k": 2,
+   "pitcher": "Trevor Richards",
+   "pitcher_id": 670950,
+   "tbf": 13
+  },
+  {
+   "bb": 3,
+   "date": "2026-08-24",
+   "game_pk": 824557,
+   "k": 8,
+   "pitcher": "Kumar Rocker",
+   "pitcher_id": 677958,
+   "tbf": 25
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-24",
+   "game_pk": 824557,
+   "k": 0,
+   "pitcher": "Luisangel Acu\u00f1a",
+   "pitcher_id": 682668,
+   "tbf": 1
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-24",
+   "game_pk": 824557,
+   "k": 1,
+   "pitcher": "Robby Ahlstrom",
+   "pitcher_id": 695239,
+   "tbf": 4
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-24",
+   "game_pk": 824557,
+   "k": 2,
+   "pitcher": "Tyler Schweitzer",
+   "pitcher_id": 805326,
+   "tbf": 9
+  },
+  {
+   "bb": 2,
+   "date": "2026-08-24",
+   "game_pk": 824964,
+   "k": 3,
+   "pitcher": "Jeffrey Springs",
+   "pitcher_id": 605488,
+   "tbf": 23
+  },
+  {
+   "bb": 1,
+   "date": "2026-08-24",
+   "game_pk": 824964,
+   "k": 0,
+   "pitcher": "Tommy Nance",
+   "pitcher_id": 667297,
+   "tbf": 6
+  },
+  {
+   "bb": 1,
+   "date": "2026-08-24",
+   "game_pk": 824964,
+   "k": 0,
+   "pitcher": "Yoendrys G\u00f3mez",
+   "pitcher_id": 672782,
+   "tbf": 7
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-24",
+   "game_pk": 824964,
+   "k": 0,
+   "pitcher": "Drew Rom",
+   "pitcher_id": 680723,
+   "tbf": 4
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-24",
+   "game_pk": 824964,
+   "k": 2,
+   "pitcher": "Kade Morris",
+   "pitcher_id": 695034,
+   "tbf": 14
+  },
+  {
+   "bb": 1,
+   "date": "2026-08-24",
+   "game_pk": 824964,
+   "k": 0,
+   "pitcher": "Hayden Juenger",
+   "pitcher_id": 696522,
+   "tbf": 7
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-24",
+   "game_pk": 824964,
+   "k": 0,
+   "pitcher": "Andrew Morris",
+   "pitcher_id": 702193,
+   "tbf": 1
+  },
+  {
+   "bb": 1,
+   "date": "2026-08-24",
+   "game_pk": 824964,
+   "k": 7,
+   "pitcher": "Zebby Matthews",
+   "pitcher_id": 805673,
+   "tbf": 27
+  },
+  {
+   "bb": 3,
+   "date": "2026-08-24",
+   "game_pk": 825041,
+   "k": 4,
+   "pitcher": "Merrill Kelly",
+   "pitcher_id": 518876,
+   "tbf": 25
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-24",
+   "game_pk": 825041,
+   "k": 0,
+   "pitcher": "Caleb Thielbar",
+   "pitcher_id": 573204,
+   "tbf": 5
+  },
+  {
+   "bb": 1,
+   "date": "2026-08-24",
+   "game_pk": 825041,
+   "k": 6,
+   "pitcher": "Kevin Gausman",
+   "pitcher_id": 592332,
+   "tbf": 24
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-24",
+   "game_pk": 825041,
+   "k": 0,
+   "pitcher": "Taylor Clarke",
+   "pitcher_id": 664199,
+   "tbf": 3
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-24",
+   "game_pk": 825041,
+   "k": 0,
+   "pitcher": "Ryan Zeferjahn",
+   "pitcher_id": 666171,
+   "tbf": 3
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-24",
+   "game_pk": 825041,
+   "k": 0,
+   "pitcher": "Juan Burgos",
+   "pitcher_id": 686228,
+   "tbf": 3
+  },
+  {
+   "bb": 1,
+   "date": "2026-08-24",
+   "game_pk": 825041,
+   "k": 0,
+   "pitcher": "Drey Jameson",
+   "pitcher_id": 686753,
+   "tbf": 10
+  },
+  {
+   "bb": 1,
+   "date": "2026-08-25",
+   "game_pk": 822693,
+   "k": 0,
+   "pitcher": "Jordan Romano",
+   "pitcher_id": 605447,
+   "tbf": 4
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-25",
+   "game_pk": 822693,
+   "k": 0,
+   "pitcher": "Jimmy Herget",
+   "pitcher_id": 623474,
+   "tbf": 3
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-25",
+   "game_pk": 822693,
+   "k": 1,
+   "pitcher": "Jake Bird",
+   "pitcher_id": 656234,
+   "tbf": 4
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-25",
+   "game_pk": 822693,
+   "k": 2,
+   "pitcher": "Brennan Bernardino",
+   "pitcher_id": 657514,
+   "tbf": 4
+  },
+  {
+   "bb": 1,
+   "date": "2026-08-25",
+   "game_pk": 822693,
+   "k": 2,
+   "pitcher": "Max Kranick",
+   "pitcher_id": 668820,
+   "tbf": 5
+  },
+  {
+   "bb": 2,
+   "date": "2026-08-25",
+   "game_pk": 822693,
+   "k": 6,
+   "pitcher": "Andrew Alvarez",
+   "pitcher_id": 674841,
+   "tbf": 20
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-25",
+   "game_pk": 822693,
+   "k": 1,
+   "pitcher": "Jaden Hill",
+   "pitcher_id": 677955,
+   "tbf": 3
+  },
+  {
+   "bb": 3,
+   "date": "2026-08-25",
+   "game_pk": 822693,
+   "k": 5,
+   "pitcher": "Mason Adams",
+   "pitcher_id": 690279,
+   "tbf": 18
+  },
+  {
+   "bb": 1,
+   "date": "2026-08-25",
+   "game_pk": 822693,
+   "k": 2,
+   "pitcher": "Brad Lord",
+   "pitcher_id": 695418,
+   "tbf": 8
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-25",
+   "game_pk": 822693,
+   "k": 2,
+   "pitcher": "Mark Manfredi",
+   "pitcher_id": 815081,
+   "tbf": 4
+  },
+  {
+   "bb": 5,
+   "date": "2026-08-25",
+   "game_pk": 822773,
+   "k": 4,
+   "pitcher": "Max Scherzer",
+   "pitcher_id": 453286,
+   "tbf": 23
+  },
+  {
+   "bb": 1,
+   "date": "2026-08-25",
+   "game_pk": 822773,
+   "k": 5,
+   "pitcher": "Seth Lugo",
+   "pitcher_id": 607625,
+   "tbf": 21
+  },
+  {
+   "bb": 2,
+   "date": "2026-08-25",
+   "game_pk": 822773,
+   "k": 1,
+   "pitcher": "Paul Sewald",
+   "pitcher_id": 623149,
+   "tbf": 6
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-25",
+   "game_pk": 822773,
+   "k": 1,
+   "pitcher": "Tyler Rogers",
+   "pitcher_id": 643511,
+   "tbf": 6
+  },
+  {
+   "bb": 1,
+   "date": "2026-08-25",
+   "game_pk": 822773,
+   "k": 1,
+   "pitcher": "Nate Pearson",
+   "pitcher_id": 663878,
+   "tbf": 6
+  },
+  {
+   "bb": 1,
+   "date": "2026-08-25",
+   "game_pk": 822773,
+   "k": 3,
+   "pitcher": "Brendon Little",
+   "pitcher_id": 663893,
+   "tbf": 4
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-25",
+   "game_pk": 822773,
+   "k": 1,
+   "pitcher": "John Schreiber",
+   "pitcher_id": 670167,
+   "tbf": 3
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-25",
+   "game_pk": 822773,
+   "k": 0,
+   "pitcher": "Connor Thomas",
+   "pitcher_id": 671162,
+   "tbf": 3
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-25",
+   "game_pk": 822773,
+   "k": 0,
+   "pitcher": "Steven Cruz",
+   "pitcher_id": 674444,
+   "tbf": 5
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-25",
+   "game_pk": 822773,
+   "k": 0,
+   "pitcher": "Braydon Fisher",
+   "pitcher_id": 680755,
+   "tbf": 3
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-25",
+   "game_pk": 822773,
+   "k": 0,
+   "pitcher": "Mason Fluharty",
+   "pitcher_id": 689254,
+   "tbf": 3
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-25",
+   "game_pk": 823016,
+   "k": 5,
+   "pitcher": "Chris Bassitt",
+   "pitcher_id": 605135,
+   "tbf": 26
+  },
+  {
+   "bb": 1,
+   "date": "2026-08-25",
+   "game_pk": 823016,
+   "k": 1,
+   "pitcher": "Peter Strzelecki",
+   "pitcher_id": 657265,
+   "tbf": 7
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-25",
+   "game_pk": 823016,
+   "k": 3,
+   "pitcher": "Caleb Ferguson",
+   "pitcher_id": 657571,
+   "tbf": 7
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-25",
+   "game_pk": 823016,
+   "k": 0,
+   "pitcher": "Yennier Cano",
+   "pitcher_id": 666974,
+   "tbf": 1
+  },
+  {
+   "bb": 1,
+   "date": "2026-08-25",
+   "game_pk": 823016,
+   "k": 7,
+   "pitcher": "Matthew Liberatore",
+   "pitcher_id": 669461,
+   "tbf": 22
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-25",
+   "game_pk": 823016,
+   "k": 2,
+   "pitcher": "Ryan Fernandez",
+   "pitcher_id": 681676,
+   "tbf": 7
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-25",
+   "game_pk": 823016,
+   "k": 0,
+   "pitcher": "Pedro Pag\u00e9s",
+   "pitcher_id": 686780,
+   "tbf": 3
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-25",
+   "game_pk": 823016,
+   "k": 5,
+   "pitcher": "Anthony Nunez",
+   "pitcher_id": 689296,
+   "tbf": 7
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-25",
+   "game_pk": 823098,
+   "k": 0,
+   "pitcher": "Brooks Raley",
+   "pitcher_id": 548384,
+   "tbf": 2
+  },
+  {
+   "bb": 3,
+   "date": "2026-08-25",
+   "game_pk": 823098,
+   "k": 7,
+   "pitcher": "Aaron Nola",
+   "pitcher_id": 605400,
+   "tbf": 23
+  },
+  {
+   "bb": 2,
+   "date": "2026-08-25",
+   "game_pk": 823098,
+   "k": 2,
+   "pitcher": "Andr\u00e9s Mu\u00f1oz",
+   "pitcher_id": 662253,
+   "tbf": 5
+  },
+  {
+   "bb": 1,
+   "date": "2026-08-25",
+   "game_pk": 823098,
+   "k": 9,
+   "pitcher": "George Kirby",
+   "pitcher_id": 669923,
+   "tbf": 30
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-25",
+   "game_pk": 823098,
+   "k": 0,
+   "pitcher": "Jos\u00e9 A. Ferrer",
+   "pitcher_id": 678606,
+   "tbf": 1
+  },
+  {
+   "bb": 1,
+   "date": "2026-08-25",
+   "game_pk": 823098,
+   "k": 0,
+   "pitcher": "Jonathan Bowlan",
+   "pitcher_id": 680742,
+   "tbf": 4
+  },
+  {
+   "bb": 1,
+   "date": "2026-08-25",
+   "game_pk": 823098,
+   "k": 0,
+   "pitcher": "Orion Kerkering",
+   "pitcher_id": 689147,
+   "tbf": 5
+  },
+  {
+   "bb": 1,
+   "date": "2026-08-25",
+   "game_pk": 823181,
+   "k": 0,
+   "pitcher": "Sam Moll",
+   "pitcher_id": 594580,
+   "tbf": 4
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-25",
+   "game_pk": 823181,
+   "k": 2,
+   "pitcher": "Adrian Houser",
+   "pitcher_id": 605288,
+   "tbf": 6
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-25",
+   "game_pk": 823181,
+   "k": 1,
+   "pitcher": "Tejay Antone",
+   "pitcher_id": 622088,
+   "tbf": 5
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-25",
+   "game_pk": 823181,
+   "k": 0,
+   "pitcher": "Sam Hentges",
+   "pitcher_id": 656529,
+   "tbf": 4
+  },
+  {
+   "bb": 2,
+   "date": "2026-08-25",
+   "game_pk": 823181,
+   "k": 5,
+   "pitcher": "Brady Singer",
+   "pitcher_id": 663903,
+   "tbf": 28
+  },
+  {
+   "bb": 1,
+   "date": "2026-08-25",
+   "game_pk": 823181,
+   "k": 1,
+   "pitcher": "Anthony Molina",
+   "pitcher_id": 683627,
+   "tbf": 14
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-25",
+   "game_pk": 823181,
+   "k": 1,
+   "pitcher": "Carson Seymour",
+   "pitcher_id": 693313,
+   "tbf": 4
+  },
+  {
+   "bb": 1,
+   "date": "2026-08-25",
+   "game_pk": 823181,
+   "k": 2,
+   "pitcher": "Trent Harris",
+   "pitcher_id": 805345,
+   "tbf": 4
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-25",
+   "game_pk": 823259,
+   "k": 0,
+   "pitcher": "Gregory Soto",
+   "pitcher_id": 642397,
+   "tbf": 3
+  },
+  {
+   "bb": 2,
+   "date": "2026-08-25",
+   "game_pk": 823259,
+   "k": 7,
+   "pitcher": "Michael King",
+   "pitcher_id": 650633,
+   "tbf": 26
+  },
+  {
+   "bb": 1,
+   "date": "2026-08-25",
+   "game_pk": 823259,
+   "k": 2,
+   "pitcher": "Camilo Doval",
+   "pitcher_id": 666808,
+   "tbf": 4
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-25",
+   "game_pk": 823259,
+   "k": 1,
+   "pitcher": "Adrian Morejon",
+   "pitcher_id": 670970,
+   "tbf": 3
+  },
+  {
+   "bb": 1,
+   "date": "2026-08-25",
+   "game_pk": 823259,
+   "k": 2,
+   "pitcher": "Mason Montgomery",
+   "pitcher_id": 682254,
+   "tbf": 4
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-25",
+   "game_pk": 823259,
+   "k": 4,
+   "pitcher": "Paul Skenes",
+   "pitcher_id": 694973,
+   "tbf": 21
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-25",
+   "game_pk": 823259,
+   "k": 1,
+   "pitcher": "Mason Miller",
+   "pitcher_id": 695243,
+   "tbf": 4
+  },
+  {
+   "bb": 1,
+   "date": "2026-08-25",
+   "game_pk": 823505,
+   "k": 0,
+   "pitcher": "Fernando Cruz",
+   "pitcher_id": 518585,
+   "tbf": 5
+  },
+  {
+   "bb": 1,
+   "date": "2026-08-25",
+   "game_pk": 823505,
+   "k": 1,
+   "pitcher": "Steven Okert",
+   "pitcher_id": 595345,
+   "tbf": 5
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-25",
+   "game_pk": 823505,
+   "k": 1,
+   "pitcher": "Josh Hader",
+   "pitcher_id": 623352,
+   "tbf": 4
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-25",
+   "game_pk": 823505,
+   "k": 0,
+   "pitcher": "Bryan Abreu",
+   "pitcher_id": 650556,
+   "tbf": 5
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-25",
+   "game_pk": 823505,
+   "k": 0,
+   "pitcher": "Bennett Sousa",
+   "pitcher_id": 656986,
+   "tbf": 5
+  },
+  {
+   "bb": 1,
+   "date": "2026-08-25",
+   "game_pk": 823505,
+   "k": 1,
+   "pitcher": "Yerry De los Santos",
+   "pitcher_id": 660787,
+   "tbf": 4
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-25",
+   "game_pk": 823505,
+   "k": 1,
+   "pitcher": "Brent Headrick",
+   "pitcher_id": 687396,
+   "tbf": 6
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-25",
+   "game_pk": 823505,
+   "k": 3,
+   "pitcher": "Bradley Hanner",
+   "pitcher_id": 690440,
+   "tbf": 6
+  },
+  {
+   "bb": 2,
+   "date": "2026-08-25",
+   "game_pk": 823505,
+   "k": 4,
+   "pitcher": "Will Warren",
+   "pitcher_id": 701542,
+   "tbf": 24
+  },
+  {
+   "bb": 4,
+   "date": "2026-08-25",
+   "game_pk": 823505,
+   "k": 1,
+   "pitcher": "Ethan Pecko",
+   "pitcher_id": 814490,
+   "tbf": 22
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-25",
+   "game_pk": 823585,
+   "k": 1,
+   "pitcher": "Antonio Senzatela",
+   "pitcher_id": 622608,
+   "tbf": 5
+  },
+  {
+   "bb": 1,
+   "date": "2026-08-25",
+   "game_pk": 823585,
+   "k": 1,
+   "pitcher": "Jefry Yan",
+   "pitcher_id": 642376,
+   "tbf": 3
+  },
+  {
+   "bb": 1,
+   "date": "2026-08-25",
+   "game_pk": 823585,
+   "k": 1,
+   "pitcher": "Trevor Megill",
+   "pitcher_id": 656730,
+   "tbf": 7
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-25",
+   "game_pk": 823585,
+   "k": 0,
+   "pitcher": "Aaron Ashby",
+   "pitcher_id": 676879,
+   "tbf": 3
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-25",
+   "game_pk": 823585,
+   "k": 1,
+   "pitcher": "Nate Lavender",
+   "pitcher_id": 681320,
+   "tbf": 6
+  },
+  {
+   "bb": 1,
+   "date": "2026-08-25",
+   "game_pk": 823585,
+   "k": 1,
+   "pitcher": "Austin Warren",
+   "pitcher_id": 681810,
+   "tbf": 4
+  },
+  {
+   "bb": 1,
+   "date": "2026-08-25",
+   "game_pk": 823585,
+   "k": 5,
+   "pitcher": "Kyle Harrison",
+   "pitcher_id": 690986,
+   "tbf": 21
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-25",
+   "game_pk": 823585,
+   "k": 0,
+   "pitcher": "Chad Patrick",
+   "pitcher_id": 694477,
+   "tbf": 5
+  },
+  {
+   "bb": 1,
+   "date": "2026-08-25",
+   "game_pk": 823585,
+   "k": 2,
+   "pitcher": "Jonathan Pintaro",
+   "pitcher_id": 702752,
+   "tbf": 4
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-25",
+   "game_pk": 823585,
+   "k": 4,
+   "pitcher": "Zac Thornton",
+   "pitcher_id": 804267,
+   "tbf": 23
+  },
+  {
+   "bb": 1,
+   "date": "2026-08-25",
+   "game_pk": 823826,
+   "k": 0,
+   "pitcher": "Tyron Guerrero",
+   "pitcher_id": 594027,
+   "tbf": 7
+  },
+  {
+   "bb": 1,
+   "date": "2026-08-25",
+   "game_pk": 823826,
+   "k": 0,
+   "pitcher": "Michael Petersen",
+   "pitcher_id": 656848,
+   "tbf": 5
+  },
+  {
+   "bb": 3,
+   "date": "2026-08-25",
+   "game_pk": 823826,
+   "k": 7,
+   "pitcher": "Tyler Phillips",
+   "pitcher_id": 663969,
+   "tbf": 20
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-25",
+   "game_pk": 823826,
+   "k": 0,
+   "pitcher": "Jack Ralston",
+   "pitcher_id": 667652,
+   "tbf": 3
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-25",
+   "game_pk": 823826,
+   "k": 3,
+   "pitcher": "Erik Miller",
+   "pitcher_id": 669062,
+   "tbf": 3
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-25",
+   "game_pk": 823826,
+   "k": 1,
+   "pitcher": "Greg Weissert",
+   "pitcher_id": 669711,
+   "tbf": 4
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-25",
+   "game_pk": 823826,
+   "k": 1,
+   "pitcher": "Calvin Faucher",
+   "pitcher_id": 676534,
+   "tbf": 3
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-25",
+   "game_pk": 823826,
+   "k": 0,
+   "pitcher": "Tyler Zuber",
+   "pitcher_id": 676604,
+   "tbf": 4
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-25",
+   "game_pk": 823826,
+   "k": 1,
+   "pitcher": "Victor Vodnik",
+   "pitcher_id": 680767,
+   "tbf": 1
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-25",
+   "game_pk": 823826,
+   "k": 1,
+   "pitcher": "Wyatt Olds",
+   "pitcher_id": 681544,
+   "tbf": 4
+  },
+  {
+   "bb": 1,
+   "date": "2026-08-25",
+   "game_pk": 823826,
+   "k": 0,
+   "pitcher": "Alec Gamboa",
+   "pitcher_id": 687941,
+   "tbf": 5
+  },
+  {
+   "bb": 1,
+   "date": "2026-08-25",
+   "game_pk": 823826,
+   "k": 0,
+   "pitcher": "Josh Ekness",
+   "pitcher_id": 694795,
+   "tbf": 3
+  },
+  {
+   "bb": 2,
+   "date": "2026-08-25",
+   "game_pk": 823826,
+   "k": 7,
+   "pitcher": "Payton Tolle",
+   "pitcher_id": 801139,
+   "tbf": 22
+  },
+  {
+   "bb": 1,
+   "date": "2026-08-25",
+   "game_pk": 823826,
+   "k": 0,
+   "pitcher": "Cade Gibson",
+   "pitcher_id": 806188,
+   "tbf": 6
+  },
+  {
+   "bb": 1,
+   "date": "2026-08-25",
+   "game_pk": 823989,
+   "k": 4,
+   "pitcher": "Tayler Saucedo",
+   "pitcher_id": 642048,
+   "tbf": 7
+  },
+  {
+   "bb": 1,
+   "date": "2026-08-25",
+   "game_pk": 823989,
+   "k": 3,
+   "pitcher": "Gavin Williams",
+   "pitcher_id": 668909,
+   "tbf": 11
+  },
+  {
+   "bb": 1,
+   "date": "2026-08-25",
+   "game_pk": 823989,
+   "k": 2,
+   "pitcher": "Matt Festa",
+   "pitcher_id": 670036,
+   "tbf": 6
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-25",
+   "game_pk": 823989,
+   "k": 1,
+   "pitcher": "Colin Holderman",
+   "pitcher_id": 670059,
+   "tbf": 4
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-25",
+   "game_pk": 823989,
+   "k": 1,
+   "pitcher": "Ryan Watson",
+   "pitcher_id": 670245,
+   "tbf": 5
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-25",
+   "game_pk": 823989,
+   "k": 2,
+   "pitcher": "Logan Allen",
+   "pitcher_id": 671106,
+   "tbf": 13
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-25",
+   "game_pk": 823989,
+   "k": 2,
+   "pitcher": "Cade Smith",
+   "pitcher_id": 671922,
+   "tbf": 4
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-25",
+   "game_pk": 823989,
+   "k": 0,
+   "pitcher": "Blake Weiman",
+   "pitcher_id": 676620,
+   "tbf": 5
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-25",
+   "game_pk": 823989,
+   "k": 3,
+   "pitcher": "Erik Sabrowski",
+   "pitcher_id": 681870,
+   "tbf": 3
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-25",
+   "game_pk": 823989,
+   "k": 2,
+   "pitcher": "Craig Yoho",
+   "pitcher_id": 684974,
+   "tbf": 4
+  },
+  {
+   "bb": 1,
+   "date": "2026-08-25",
+   "game_pk": 823989,
+   "k": 3,
+   "pitcher": "Ben Joyce",
+   "pitcher_id": 690829,
+   "tbf": 4
+  },
+  {
+   "bb": 5,
+   "date": "2026-08-25",
+   "game_pk": 823989,
+   "k": 3,
+   "pitcher": "Walbert Ure\u00f1a",
+   "pitcher_id": 700712,
+   "tbf": 21
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-25",
+   "game_pk": 823989,
+   "k": 2,
+   "pitcher": "Jos\u00e9 Fermin",
+   "pitcher_id": 820862,
+   "tbf": 8
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-25",
+   "game_pk": 824233,
+   "k": 1,
+   "pitcher": "Kenley Jansen",
+   "pitcher_id": 445276,
+   "tbf": 3
+  },
+  {
+   "bb": 1,
+   "date": "2026-08-25",
+   "game_pk": 824233,
+   "k": 1,
+   "pitcher": "Jacob Waguespack",
+   "pitcher_id": 621097,
+   "tbf": 4
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-25",
+   "game_pk": 824233,
+   "k": 0,
+   "pitcher": "Tyler Holton",
+   "pitcher_id": 663947,
+   "tbf": 4
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-25",
+   "game_pk": 824233,
+   "k": 2,
+   "pitcher": "Casey Legumina",
+   "pitcher_id": 668984,
+   "tbf": 8
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-25",
+   "game_pk": 824233,
+   "k": 5,
+   "pitcher": "Ian Seymour",
+   "pitcher_id": 693855,
+   "tbf": 25
+  },
+  {
+   "bb": 3,
+   "date": "2026-08-25",
+   "game_pk": 824233,
+   "k": 4,
+   "pitcher": "Jackson Jobe",
+   "pitcher_id": 695549,
+   "tbf": 19
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-25",
+   "game_pk": 824233,
+   "k": 1,
+   "pitcher": "Drew Sommers",
+   "pitcher_id": 805427,
+   "tbf": 5
+  },
+  {
+   "bb": 5,
+   "date": "2026-08-25",
+   "game_pk": 824556,
+   "k": 2,
+   "pitcher": "Jacob deGrom",
+   "pitcher_id": 594798,
+   "tbf": 22
+  },
+  {
+   "bb": 1,
+   "date": "2026-08-25",
+   "game_pk": 824556,
+   "k": 2,
+   "pitcher": "Tyler Alexander",
+   "pitcher_id": 641302,
+   "tbf": 5
+  },
+  {
+   "bb": 2,
+   "date": "2026-08-25",
+   "game_pk": 824556,
+   "k": 4,
+   "pitcher": "Anthony Kay",
+   "pitcher_id": 641743,
+   "tbf": 23
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-25",
+   "game_pk": 824556,
+   "k": 1,
+   "pitcher": "Jordan Montgomery",
+   "pitcher_id": 656756,
+   "tbf": 3
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-25",
+   "game_pk": 824556,
+   "k": 0,
+   "pitcher": "Bryan Hudson",
+   "pitcher_id": 663542,
+   "tbf": 4
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-25",
+   "game_pk": 824556,
+   "k": 2,
+   "pitcher": "Jordan Hicks",
+   "pitcher_id": 663855,
+   "tbf": 7
+  },
+  {
+   "bb": 1,
+   "date": "2026-08-25",
+   "game_pk": 824556,
+   "k": 2,
+   "pitcher": "Cole Winn",
+   "pitcher_id": 668390,
+   "tbf": 10
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-25",
+   "game_pk": 824556,
+   "k": 3,
+   "pitcher": "Peyton Gray",
+   "pitcher_id": 682608,
+   "tbf": 5
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-25",
+   "game_pk": 824556,
+   "k": 0,
+   "pitcher": "Grant Taylor",
+   "pitcher_id": 691799,
+   "tbf": 1
+  },
+  {
+   "bb": 3,
+   "date": "2026-08-25",
+   "game_pk": 824556,
+   "k": 1,
+   "pitcher": "Hagen Smith",
+   "pitcher_id": 696146,
+   "tbf": 9
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-25",
+   "game_pk": 824881,
+   "k": 7,
+   "pitcher": "Tyler Glasnow",
+   "pitcher_id": 607192,
+   "tbf": 21
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-25",
+   "game_pk": 824881,
+   "k": 0,
+   "pitcher": "Evan Phillips",
+   "pitcher_id": 623465,
+   "tbf": 1
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-25",
+   "game_pk": 824881,
+   "k": 1,
+   "pitcher": "Raisel Iglesias",
+   "pitcher_id": 628452,
+   "tbf": 4
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-25",
+   "game_pk": 824881,
+   "k": 0,
+   "pitcher": "Tanner Scott",
+   "pitcher_id": 656945,
+   "tbf": 5
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-25",
+   "game_pk": 824881,
+   "k": 0,
+   "pitcher": "Dylan Lee",
+   "pitcher_id": 669276,
+   "tbf": 4
+  },
+  {
+   "bb": 1,
+   "date": "2026-08-25",
+   "game_pk": 824881,
+   "k": 1,
+   "pitcher": "Jack Dreyer",
+   "pitcher_id": 676263,
+   "tbf": 4
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-25",
+   "game_pk": 824881,
+   "k": 0,
+   "pitcher": "Alex Vesia",
+   "pitcher_id": 681911,
+   "tbf": 3
+  },
+  {
+   "bb": 2,
+   "date": "2026-08-25",
+   "game_pk": 824881,
+   "k": 1,
+   "pitcher": "Victor Mederos",
+   "pitcher_id": 682989,
+   "tbf": 4
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-25",
+   "game_pk": 824881,
+   "k": 0,
+   "pitcher": "Dylan Dodd",
+   "pitcher_id": 689266,
+   "tbf": 1
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-25",
+   "game_pk": 824881,
+   "k": 5,
+   "pitcher": "Bryce Elder",
+   "pitcher_id": 693821,
+   "tbf": 27
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-25",
+   "game_pk": 824962,
+   "k": 2,
+   "pitcher": "A.J. Minter",
+   "pitcher_id": 621345,
+   "tbf": 4
+  },
+  {
+   "bb": 1,
+   "date": "2026-08-25",
+   "game_pk": 824962,
+   "k": 1,
+   "pitcher": "Hogan Harris",
+   "pitcher_id": 663687,
+   "tbf": 4
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-25",
+   "game_pk": 824962,
+   "k": 1,
+   "pitcher": "Luis Medina",
+   "pitcher_id": 665622,
+   "tbf": 3
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-25",
+   "game_pk": 824962,
+   "k": 1,
+   "pitcher": "Elvis Alvarado",
+   "pitcher_id": 665660,
+   "tbf": 3
+  },
+  {
+   "bb": 1,
+   "date": "2026-08-25",
+   "game_pk": 824962,
+   "k": 11,
+   "pitcher": "Taj Bradley",
+   "pitcher_id": 671737,
+   "tbf": 28
+  },
+  {
+   "bb": 2,
+   "date": "2026-08-25",
+   "game_pk": 824962,
+   "k": 9,
+   "pitcher": "Gage Jump",
+   "pitcher_id": 695611,
+   "tbf": 24
+  },
+  {
+   "bb": 2,
+   "date": "2026-08-25",
+   "game_pk": 825042,
+   "k": 5,
+   "pitcher": "Clay Holmes",
+   "pitcher_id": 605280,
+   "tbf": 25
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-25",
+   "game_pk": 825042,
+   "k": 1,
+   "pitcher": "Dennis Santana",
+   "pitcher_id": 642701,
+   "tbf": 4
+  },
+  {
+   "bb": 1,
+   "date": "2026-08-25",
+   "game_pk": 825042,
+   "k": 0,
+   "pitcher": "Jacob Webb",
+   "pitcher_id": 657097,
+   "tbf": 5
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-25",
+   "game_pk": 825042,
+   "k": 1,
+   "pitcher": "Justin Martinez",
+   "pitcher_id": 679885,
+   "tbf": 3
+  },
+  {
+   "bb": 1,
+   "date": "2026-08-25",
+   "game_pk": 825042,
+   "k": 1,
+   "pitcher": "Daniel Palencia",
+   "pitcher_id": 694037,
+   "tbf": 6
+  },
+  {
+   "bb": 2,
+   "date": "2026-08-25",
+   "game_pk": 825042,
+   "k": 3,
+   "pitcher": "Brandon Pfaadt",
+   "pitcher_id": 694297,
+   "tbf": 28
+  },
+  {
+   "bb": 1,
+   "date": "2026-08-26",
+   "game_pk": 822692,
+   "k": 1,
+   "pitcher": "Matt Waldron",
+   "pitcher_id": 663362,
+   "tbf": 9
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-26",
+   "game_pk": 822692,
+   "k": 0,
+   "pitcher": "Jorbit Vivas",
+   "pitcher_id": 678391,
+   "tbf": 9
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-26",
+   "game_pk": 822692,
+   "k": 5,
+   "pitcher": "Tanner Gordon",
+   "pitcher_id": 685299,
+   "tbf": 27
+  },
+  {
+   "bb": 2,
+   "date": "2026-08-26",
+   "game_pk": 822692,
+   "k": 0,
+   "pitcher": "Orlando Ribalta",
+   "pitcher_id": 687377,
+   "tbf": 6
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-26",
+   "game_pk": 822692,
+   "k": 2,
+   "pitcher": "Zach Agnos",
+   "pitcher_id": 688642,
+   "tbf": 7
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-26",
+   "game_pk": 822692,
+   "k": 0,
+   "pitcher": "Clayton Beeter",
+   "pitcher_id": 690925,
+   "tbf": 1
+  },
+  {
+   "bb": 3,
+   "date": "2026-08-26",
+   "game_pk": 822692,
+   "k": 3,
+   "pitcher": "Luis Perales",
+   "pitcher_id": 691384,
+   "tbf": 13
+  },
+  {
+   "bb": 2,
+   "date": "2026-08-26",
+   "game_pk": 822692,
+   "k": 3,
+   "pitcher": "Will Dion",
+   "pitcher_id": 702021,
+   "tbf": 14
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-26",
+   "game_pk": 822772,
+   "k": 0,
+   "pitcher": "Paul Sewald",
+   "pitcher_id": 623149,
+   "tbf": 2
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-26",
+   "game_pk": 822772,
+   "k": 1,
+   "pitcher": "Tyler Rogers",
+   "pitcher_id": 643511,
+   "tbf": 4
+  },
+  {
+   "bb": 2,
+   "date": "2026-08-26",
+   "game_pk": 822772,
+   "k": 1,
+   "pitcher": "Brendon Little",
+   "pitcher_id": 663893,
+   "tbf": 4
+  },
+  {
+   "bb": 1,
+   "date": "2026-08-26",
+   "game_pk": 822772,
+   "k": 5,
+   "pitcher": "Randy Dobnak",
+   "pitcher_id": 677976,
+   "tbf": 25
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-26",
+   "game_pk": 822772,
+   "k": 1,
+   "pitcher": "Louis Varland",
+   "pitcher_id": 686973,
+   "tbf": 6
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-26",
+   "game_pk": 822772,
+   "k": 4,
+   "pitcher": "Chad Dallas",
+   "pitcher_id": 689149,
+   "tbf": 8
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-26",
+   "game_pk": 822772,
+   "k": 1,
+   "pitcher": "Mason Fluharty",
+   "pitcher_id": 689254,
+   "tbf": 3
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-26",
+   "game_pk": 822772,
+   "k": 1,
+   "pitcher": "Spencer Miles",
+   "pitcher_id": 693686,
+   "tbf": 8
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-26",
+   "game_pk": 822772,
+   "k": 0,
+   "pitcher": "Mason Black",
+   "pitcher_id": 696131,
+   "tbf": 6
+  },
+  {
+   "bb": 1,
+   "date": "2026-08-26",
+   "game_pk": 823015,
+   "k": 0,
+   "pitcher": "Andrew Kittredge",
+   "pitcher_id": 552640,
+   "tbf": 5
+  },
+  {
+   "bb": 1,
+   "date": "2026-08-26",
+   "game_pk": 823015,
+   "k": 1,
+   "pitcher": "Ryne Stanek",
+   "pitcher_id": 592773,
+   "tbf": 3
+  },
+  {
+   "bb": 1,
+   "date": "2026-08-26",
+   "game_pk": 823015,
+   "k": 0,
+   "pitcher": "Grant Wolfram",
+   "pitcher_id": 664991,
+   "tbf": 4
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-26",
+   "game_pk": 823015,
+   "k": 0,
+   "pitcher": "George Soriano",
+   "pitcher_id": 666277,
+   "tbf": 4
+  },
+  {
+   "bb": 1,
+   "date": "2026-08-26",
+   "game_pk": 823015,
+   "k": 2,
+   "pitcher": "Rico Garcia",
+   "pitcher_id": 670329,
+   "tbf": 5
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-26",
+   "game_pk": 823015,
+   "k": 0,
+   "pitcher": "Riley O'Brien",
+   "pitcher_id": 676617,
+   "tbf": 5
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-26",
+   "game_pk": 823015,
+   "k": 1,
+   "pitcher": "Josh Walker",
+   "pitcher_id": 677020,
+   "tbf": 3
+  },
+  {
+   "bb": 2,
+   "date": "2026-08-26",
+   "game_pk": 823015,
+   "k": 4,
+   "pitcher": "Kyle Bradish",
+   "pitcher_id": 680694,
+   "tbf": 23
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-26",
+   "game_pk": 823015,
+   "k": 0,
+   "pitcher": "Alex Hoppe",
+   "pitcher_id": 695380,
+   "tbf": 2
+  },
+  {
+   "bb": 2,
+   "date": "2026-08-26",
+   "game_pk": 823015,
+   "k": 3,
+   "pitcher": "Michael McGreevy",
+   "pitcher_id": 700241,
+   "tbf": 28
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-26",
+   "game_pk": 823015,
+   "k": 3,
+   "pitcher": "Luis Gastelum",
+   "pitcher_id": 703725,
+   "tbf": 3
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-26",
+   "game_pk": 823096,
+   "k": 1,
+   "pitcher": "Tim Mayza",
+   "pitcher_id": 641835,
+   "tbf": 3
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-26",
+   "game_pk": 823096,
+   "k": 1,
+   "pitcher": "Gabe Speier",
+   "pitcher_id": 642100,
+   "tbf": 3
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-26",
+   "game_pk": 823096,
+   "k": 1,
+   "pitcher": "Eduard Bazardo",
+   "pitcher_id": 660825,
+   "tbf": 5
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-26",
+   "game_pk": 823096,
+   "k": 2,
+   "pitcher": "Jhoan Duran",
+   "pitcher_id": 661395,
+   "tbf": 4
+  },
+  {
+   "bb": 3,
+   "date": "2026-08-26",
+   "game_pk": 823096,
+   "k": 9,
+   "pitcher": "Jes\u00fas Luzardo",
+   "pitcher_id": 666200,
+   "tbf": 25
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-26",
+   "game_pk": 823096,
+   "k": 3,
+   "pitcher": "Carlos Vargas",
+   "pitcher_id": 672841,
+   "tbf": 8
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-26",
+   "game_pk": 823096,
+   "k": 0,
+   "pitcher": "Jos\u00e9 A. Ferrer",
+   "pitcher_id": 678606,
+   "tbf": 4
+  },
+  {
+   "bb": 1,
+   "date": "2026-08-26",
+   "game_pk": 823096,
+   "k": 5,
+   "pitcher": "Bryan Woo",
+   "pitcher_id": 693433,
+   "tbf": 18
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-26",
+   "game_pk": 823180,
+   "k": 2,
+   "pitcher": "Emilio Pag\u00e1n",
+   "pitcher_id": 641941,
+   "tbf": 4
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-26",
+   "game_pk": 823180,
+   "k": 1,
+   "pitcher": "Brock Burke",
+   "pitcher_id": 656271,
+   "tbf": 3
+  },
+  {
+   "bb": 1,
+   "date": "2026-08-26",
+   "game_pk": 823180,
+   "k": 6,
+   "pitcher": "Logan Webb",
+   "pitcher_id": 657277,
+   "tbf": 25
+  },
+  {
+   "bb": 1,
+   "date": "2026-08-26",
+   "game_pk": 823180,
+   "k": 2,
+   "pitcher": "Tony Santillan",
+   "pitcher_id": 663574,
+   "tbf": 7
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-26",
+   "game_pk": 823180,
+   "k": 0,
+   "pitcher": "Reiver Sanmartin",
+   "pitcher_id": 665665,
+   "tbf": 2
+  },
+  {
+   "bb": 2,
+   "date": "2026-08-26",
+   "game_pk": 823180,
+   "k": 5,
+   "pitcher": "Nick Lodolo",
+   "pitcher_id": 666157,
+   "tbf": 21
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-26",
+   "game_pk": 823180,
+   "k": 2,
+   "pitcher": "Julian Garcia",
+   "pitcher_id": 670062,
+   "tbf": 7
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-26",
+   "game_pk": 823180,
+   "k": 0,
+   "pitcher": "Jason Foley",
+   "pitcher_id": 671345,
+   "tbf": 4
+  },
+  {
+   "bb": 1,
+   "date": "2026-08-26",
+   "game_pk": 823180,
+   "k": 0,
+   "pitcher": "Ryan Walker",
+   "pitcher_id": 676254,
+   "tbf": 3
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-26",
+   "game_pk": 823180,
+   "k": 0,
+   "pitcher": "Dylan Smith",
+   "pitcher_id": 681916,
+   "tbf": 5
+  },
+  {
+   "bb": 2,
+   "date": "2026-08-26",
+   "game_pk": 823180,
+   "k": 2,
+   "pitcher": "Spencer Bivens",
+   "pitcher_id": 702352,
+   "tbf": 8
+  },
+  {
+   "bb": 2,
+   "date": "2026-08-26",
+   "game_pk": 823255,
+   "k": 1,
+   "pitcher": "Kirby Yates",
+   "pitcher_id": 489446,
+   "tbf": 6
+  },
+  {
+   "bb": 1,
+   "date": "2026-08-26",
+   "game_pk": 823255,
+   "k": 0,
+   "pitcher": "Kyle Hart",
+   "pitcher_id": 606996,
+   "tbf": 5
+  },
+  {
+   "bb": 1,
+   "date": "2026-08-26",
+   "game_pk": 823255,
+   "k": 1,
+   "pitcher": "Griffin Canning",
+   "pitcher_id": 656288,
+   "tbf": 3
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-26",
+   "game_pk": 823255,
+   "k": 0,
+   "pitcher": "Noah Murdock",
+   "pitcher_id": 668716,
+   "tbf": 1
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-26",
+   "game_pk": 823255,
+   "k": 1,
+   "pitcher": "Lake Bachar",
+   "pitcher_id": 669199,
+   "tbf": 4
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-26",
+   "game_pk": 823255,
+   "k": 2,
+   "pitcher": "Yuki Matsui",
+   "pitcher_id": 673513,
+   "tbf": 3
+  },
+  {
+   "bb": 2,
+   "date": "2026-08-26",
+   "game_pk": 823255,
+   "k": 2,
+   "pitcher": "Randy V\u00e1squez",
+   "pitcher_id": 681190,
+   "tbf": 18
+  },
+  {
+   "bb": 2,
+   "date": "2026-08-26",
+   "game_pk": 823255,
+   "k": 3,
+   "pitcher": "Bubba Chandler",
+   "pitcher_id": 696149,
+   "tbf": 22
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-26",
+   "game_pk": 823255,
+   "k": 2,
+   "pitcher": "Bradgley Rodriguez",
+   "pitcher_id": 699134,
+   "tbf": 8
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-26",
+   "game_pk": 823506,
+   "k": 1,
+   "pitcher": "Michael Fulmer",
+   "pitcher_id": 605242,
+   "tbf": 3
+  },
+  {
+   "bb": 1,
+   "date": "2026-08-26",
+   "game_pk": 823506,
+   "k": 2,
+   "pitcher": "Paul Blackburn",
+   "pitcher_id": 621112,
+   "tbf": 6
+  },
+  {
+   "bb": 1,
+   "date": "2026-08-26",
+   "game_pk": 823506,
+   "k": 1,
+   "pitcher": "Bennett Sousa",
+   "pitcher_id": 656986,
+   "tbf": 7
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-26",
+   "game_pk": 823506,
+   "k": 1,
+   "pitcher": "Tim Hill",
+   "pitcher_id": 657612,
+   "tbf": 3
+  },
+  {
+   "bb": 1,
+   "date": "2026-08-26",
+   "game_pk": 823506,
+   "k": 3,
+   "pitcher": "Enyel De Los Santos",
+   "pitcher_id": 660853,
+   "tbf": 7
+  },
+  {
+   "bb": 3,
+   "date": "2026-08-26",
+   "game_pk": 823506,
+   "k": 5,
+   "pitcher": "Peter Lambert",
+   "pitcher_id": 663567,
+   "tbf": 26
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-26",
+   "game_pk": 823506,
+   "k": 0,
+   "pitcher": "Kai-Wei Teng",
+   "pitcher_id": 678906,
+   "tbf": 1
+  },
+  {
+   "bb": 2,
+   "date": "2026-08-26",
+   "game_pk": 823506,
+   "k": 6,
+   "pitcher": "Elmer Rodr\u00edguez",
+   "pitcher_id": 695684,
+   "tbf": 22
+  },
+  {
+   "bb": 2,
+   "date": "2026-08-26",
+   "game_pk": 823584,
+   "k": 2,
+   "pitcher": "Robert Stock",
+   "pitcher_id": 476594,
+   "tbf": 23
+  },
+  {
+   "bb": 1,
+   "date": "2026-08-26",
+   "game_pk": 823584,
+   "k": 2,
+   "pitcher": "Jefry Yan",
+   "pitcher_id": 642376,
+   "tbf": 7
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-26",
+   "game_pk": 823584,
+   "k": 2,
+   "pitcher": "Bryse Wilson",
+   "pitcher_id": 669060,
+   "tbf": 7
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-26",
+   "game_pk": 823584,
+   "k": 0,
+   "pitcher": "Dustin May",
+   "pitcher_id": 669160,
+   "tbf": 1
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-26",
+   "game_pk": 823584,
+   "k": 0,
+   "pitcher": "Dedniel N\u00fa\u00f1ez",
+   "pitcher_id": 673380,
+   "tbf": 3
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-26",
+   "game_pk": 823584,
+   "k": 0,
+   "pitcher": "Grant Anderson",
+   "pitcher_id": 681982,
+   "tbf": 5
+  },
+  {
+   "bb": 2,
+   "date": "2026-08-26",
+   "game_pk": 823584,
+   "k": 6,
+   "pitcher": "Robert Gasser",
+   "pitcher_id": 688107,
+   "tbf": 24
+  },
+  {
+   "bb": 2,
+   "date": "2026-08-26",
+   "game_pk": 823584,
+   "k": 2,
+   "pitcher": "Chayce McDermott",
+   "pitcher_id": 694646,
+   "tbf": 11
+  },
+  {
+   "bb": 1,
+   "date": "2026-08-26",
+   "game_pk": 823825,
+   "k": 5,
+   "pitcher": "Sonny Gray",
+   "pitcher_id": 543243,
+   "tbf": 23
+  },
+  {
+   "bb": 1,
+   "date": "2026-08-26",
+   "game_pk": 823825,
+   "k": 2,
+   "pitcher": "Jovani Mor\u00e1n",
+   "pitcher_id": 663558,
+   "tbf": 8
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-26",
+   "game_pk": 823825,
+   "k": 0,
+   "pitcher": "Janson Junk",
+   "pitcher_id": 676083,
+   "tbf": 3
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-26",
+   "game_pk": 823825,
+   "k": 1,
+   "pitcher": "Victor Vodnik",
+   "pitcher_id": 680767,
+   "tbf": 4
+  },
+  {
+   "bb": 1,
+   "date": "2026-08-26",
+   "game_pk": 823825,
+   "k": 1,
+   "pitcher": "Wyatt Olds",
+   "pitcher_id": 681544,
+   "tbf": 7
+  },
+  {
+   "bb": 3,
+   "date": "2026-08-26",
+   "game_pk": 823825,
+   "k": 2,
+   "pitcher": "Ryan Gusto",
+   "pitcher_id": 687473,
+   "tbf": 25
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-26",
+   "game_pk": 823825,
+   "k": 1,
+   "pitcher": "Dax Fulton",
+   "pitcher_id": 690978,
+   "tbf": 4
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-26",
+   "game_pk": 823988,
+   "k": 0,
+   "pitcher": "Ryan Watson",
+   "pitcher_id": 670245,
+   "tbf": 6
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-26",
+   "game_pk": 823988,
+   "k": 3,
+   "pitcher": "Sammy Peralta",
+   "pitcher_id": 671111,
+   "tbf": 5
+  },
+  {
+   "bb": 7,
+   "date": "2026-08-26",
+   "game_pk": 823988,
+   "k": 1,
+   "pitcher": "Joey Cantillo",
+   "pitcher_id": 676282,
+   "tbf": 25
+  },
+  {
+   "bb": 1,
+   "date": "2026-08-26",
+   "game_pk": 823988,
+   "k": 4,
+   "pitcher": "Grayson Rodriguez",
+   "pitcher_id": 680570,
+   "tbf": 24
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-26",
+   "game_pk": 823988,
+   "k": 1,
+   "pitcher": "Erik Sabrowski",
+   "pitcher_id": 681870,
+   "tbf": 4
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-26",
+   "game_pk": 823988,
+   "k": 1,
+   "pitcher": "Tim Herrin",
+   "pitcher_id": 682120,
+   "tbf": 4
+  },
+  {
+   "bb": 1,
+   "date": "2026-08-26",
+   "game_pk": 823988,
+   "k": 1,
+   "pitcher": "Hunter Gaddis",
+   "pitcher_id": 683769,
+   "tbf": 3
+  },
+  {
+   "bb": 1,
+   "date": "2026-08-26",
+   "game_pk": 823988,
+   "k": 1,
+   "pitcher": "Luke Murphy",
+   "pitcher_id": 684665,
+   "tbf": 4
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-26",
+   "game_pk": 824234,
+   "k": 0,
+   "pitcher": "Kyle Finnegan",
+   "pitcher_id": 640448,
+   "tbf": 4
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-26",
+   "game_pk": 824234,
+   "k": 0,
+   "pitcher": "Tyler Kinley",
+   "pitcher_id": 641755,
+   "tbf": 3
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-26",
+   "game_pk": 824234,
+   "k": 4,
+   "pitcher": "Freddy Peralta",
+   "pitcher_id": 642547,
+   "tbf": 20
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-26",
+   "game_pk": 824234,
+   "k": 1,
+   "pitcher": "Tyler Wells",
+   "pitcher_id": 669330,
+   "tbf": 3
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-26",
+   "game_pk": 824234,
+   "k": 4,
+   "pitcher": "Troy Melton",
+   "pitcher_id": 675512,
+   "tbf": 27
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-26",
+   "game_pk": 824234,
+   "k": 1,
+   "pitcher": "Kevin Kelly",
+   "pitcher_id": 687330,
+   "tbf": 6
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-26",
+   "game_pk": 824555,
+   "k": 1,
+   "pitcher": "Jakob Junis",
+   "pitcher_id": 596001,
+   "tbf": 4
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-26",
+   "game_pk": 824555,
+   "k": 1,
+   "pitcher": "Sean Newcomb",
+   "pitcher_id": 656794,
+   "tbf": 11
+  },
+  {
+   "bb": 4,
+   "date": "2026-08-26",
+   "game_pk": 824555,
+   "k": 4,
+   "pitcher": "MacKenzie Gore",
+   "pitcher_id": 669022,
+   "tbf": 20
+  },
+  {
+   "bb": 8,
+   "date": "2026-08-26",
+   "game_pk": 824555,
+   "k": 3,
+   "pitcher": "Sean Burke",
+   "pitcher_id": 680732,
+   "tbf": 18
+  },
+  {
+   "bb": 1,
+   "date": "2026-08-26",
+   "game_pk": 824555,
+   "k": 0,
+   "pitcher": "Chase Silseth",
+   "pitcher_id": 681217,
+   "tbf": 5
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-26",
+   "game_pk": 824555,
+   "k": 1,
+   "pitcher": "Peyton Gray",
+   "pitcher_id": 682608,
+   "tbf": 4
+  },
+  {
+   "bb": 2,
+   "date": "2026-08-26",
+   "game_pk": 824555,
+   "k": 4,
+   "pitcher": "Jonathan Cannon",
+   "pitcher_id": 686563,
+   "tbf": 15
+  },
+  {
+   "bb": 1,
+   "date": "2026-08-26",
+   "game_pk": 824555,
+   "k": 0,
+   "pitcher": "Robby Ahlstrom",
+   "pitcher_id": 695239,
+   "tbf": 8
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-26",
+   "game_pk": 824878,
+   "k": 0,
+   "pitcher": "Brock Stewart",
+   "pitcher_id": 592779,
+   "tbf": 4
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-26",
+   "game_pk": 824878,
+   "k": 1,
+   "pitcher": "Evan Phillips",
+   "pitcher_id": 623465,
+   "tbf": 4
+  },
+  {
+   "bb": 2,
+   "date": "2026-08-26",
+   "game_pk": 824878,
+   "k": 1,
+   "pitcher": "Eric Lauer",
+   "pitcher_id": 641778,
+   "tbf": 10
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-26",
+   "game_pk": 824878,
+   "k": 1,
+   "pitcher": "Tanner Scott",
+   "pitcher_id": 656945,
+   "tbf": 4
+  },
+  {
+   "bb": 1,
+   "date": "2026-08-26",
+   "game_pk": 824878,
+   "k": 0,
+   "pitcher": "Dylan Lee",
+   "pitcher_id": 669276,
+   "tbf": 4
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-26",
+   "game_pk": 824878,
+   "k": 2,
+   "pitcher": "Victor Mederos",
+   "pitcher_id": 682989,
+   "tbf": 3
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-26",
+   "game_pk": 824878,
+   "k": 1,
+   "pitcher": "Edgardo Henriquez",
+   "pitcher_id": 683618,
+   "tbf": 3
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-26",
+   "game_pk": 824878,
+   "k": 0,
+   "pitcher": "Dylan Dodd",
+   "pitcher_id": 689266,
+   "tbf": 4
+  },
+  {
+   "bb": 3,
+   "date": "2026-08-26",
+   "game_pk": 824878,
+   "k": 3,
+   "pitcher": "AJ Smith-Shawver",
+   "pitcher_id": 700363,
+   "tbf": 23
+  },
+  {
+   "bb": 2,
+   "date": "2026-08-26",
+   "game_pk": 824878,
+   "k": 1,
+   "pitcher": "Didier Fuentes",
+   "pitcher_id": 800311,
+   "tbf": 8
+  },
+  {
+   "bb": 2,
+   "date": "2026-08-26",
+   "game_pk": 824878,
+   "k": 3,
+   "pitcher": "Roki Sasaki",
+   "pitcher_id": 808963,
+   "tbf": 18
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-26",
+   "game_pk": 824963,
+   "k": 1,
+   "pitcher": "Jeff Hoffman",
+   "pitcher_id": 656546,
+   "tbf": 1
+  },
+  {
+   "bb": 1,
+   "date": "2026-08-26",
+   "game_pk": 824963,
+   "k": 1,
+   "pitcher": "Elvis Alvarado",
+   "pitcher_id": 665660,
+   "tbf": 5
+  },
+  {
+   "bb": 2,
+   "date": "2026-08-26",
+   "game_pk": 824963,
+   "k": 3,
+   "pitcher": "J.T. Ginn",
+   "pitcher_id": 669372,
+   "tbf": 25
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-26",
+   "game_pk": 824963,
+   "k": 0,
+   "pitcher": "Brady Basso",
+   "pitcher_id": 669620,
+   "tbf": 7
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-26",
+   "game_pk": 824963,
+   "k": 1,
+   "pitcher": "Kody Funderburk",
+   "pitcher_id": 681892,
+   "tbf": 6
+  },
+  {
+   "bb": 1,
+   "date": "2026-08-26",
+   "game_pk": 824963,
+   "k": 5,
+   "pitcher": "Connor Prielipp",
+   "pitcher_id": 687570,
+   "tbf": 22
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-26",
+   "game_pk": 824963,
+   "k": 1,
+   "pitcher": "Andrew Morris",
+   "pitcher_id": 702193,
+   "tbf": 7
+  },
+  {
+   "bb": 2,
+   "date": "2026-08-26",
+   "game_pk": 825039,
+   "k": 5,
+   "pitcher": "Matthew Boyd",
+   "pitcher_id": 571510,
+   "tbf": 20
+  },
+  {
+   "bb": 3,
+   "date": "2026-08-26",
+   "game_pk": 825039,
+   "k": 9,
+   "pitcher": "Eduardo Rodriguez",
+   "pitcher_id": 593958,
+   "tbf": 26
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-26",
+   "game_pk": 825039,
+   "k": 1,
+   "pitcher": "Trent Thornton",
+   "pitcher_id": 663423,
+   "tbf": 4
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-26",
+   "game_pk": 825039,
+   "k": 0,
+   "pitcher": "Ryan Zeferjahn",
+   "pitcher_id": 666171,
+   "tbf": 4
+  },
+  {
+   "bb": 0,
+   "date": "2026-08-26",
+   "game_pk": 825039,
+   "k": 0,
+   "pitcher": "Juan Morillo",
+   "pitcher_id": 666661,
+   "tbf": 3
+  },
+  {
+   "bb": 1,
+   "date": "2026-08-26",
+   "game_pk": 825039,
+   "k": 1,
+   "pitcher": "Brandyn Garcia",
+   "pitcher_id": 805299,
+   "tbf": 4
+  }
+ ],
+ "provenance": {
+  "commit": "448e2ff0fde02d5a60f87090db1d2a312a2187ab",
+  "repo": "github.com/lancebroz/mlb-pitcher-data"
+ },
+ "record_id": "PITCHER-OUTINGS-2026-08-22-0826",
+ "record_sha256": "1bca205ebf4137e43424379065105d1e92f39747a0c7b49be812415c3fd0adff",
+ "schema": "ops.pitcher_outings.v1"
+}

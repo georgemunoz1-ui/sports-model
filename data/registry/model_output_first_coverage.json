@@ -1,0 +1,37 @@
+{
+  "schema": "registry.model_output_first.coverage.v1",
+  "effective_utc": "2026-08-27T09:14:21Z",
+  "cards": [
+    {
+      "sport": "MLB",
+      "reader_sections": ["model_output", "strength", "market", "action", "audit"],
+      "rows": [
+        {"game":"COL@WSH","away":"COL","home":"WSH","model_id":"mlb.winner.CHAMPION_V13","forecast_status":"FROZEN","forecast_as_of":"2026-08-27T06:58:28Z","p_home":0.5172,"model_side":"WSH","blockers":[]},
+        {"game":"BAL@STL","away":"BAL","home":"STL","model_id":"mlb.winner.CHAMPION_V13","forecast_status":"FROZEN","forecast_as_of":"2026-08-27T06:58:28Z","p_home":0.4932,"model_side":"BAL","blockers":["PERSONNEL_UNVERIFIED"]},
+        {"game":"HOU@NYY","away":"HOU","home":"NYY","model_id":"mlb.replacement.CONFIRMED_LINEUP","forecast_status":"REPLACEMENT_ANCHORED","forecast_as_of":"2026-08-27T08:51:59Z","p_home":0.5446,"model_side":"NYY","blockers":[]},
+        {"game":"KC@TOR","away":"KC","home":"TOR","model_id":"mlb.replacement.CONFIRMED_LINEUP","forecast_status":"REPLACEMENT_ANCHORED","forecast_as_of":"2026-08-27T08:51:59Z","p_home":0.5064,"model_side":"TOR","blockers":["NO_RETAINED_MARKET_ARTIFACT"]},
+        {"game":"MIL@NYM","away":"MIL","home":"NYM","model_id":"mlb.winner.CHAMPION_V13","forecast_status":"FROZEN","forecast_as_of":"2026-08-27T06:58:28Z","p_home":0.3221,"model_side":"MIL","blockers":[]},
+        {"game":"LAD@ATL","away":"LAD","home":"ATL","model_id":"mlb.replacement.CONFIRMED_LINEUP","forecast_status":"REPLACEMENT_ANCHORED","forecast_as_of":"2026-08-27T08:51:59Z","p_home":0.4992,"model_side":"LAD","blockers":["NO_RETAINED_MARKET_ARTIFACT"]},
+        {"game":"AZ@SF","away":"AZ","home":"SF","model_id":"mlb.replacement.CONFIRMED_LINEUP","forecast_status":"REPLACEMENT_ANCHORED","forecast_as_of":"2026-08-27T08:51:59Z","p_home":0.4840,"model_side":"AZ","blockers":[]}
+      ]
+    },
+    {
+      "sport": "WNBA",
+      "reader_sections": ["model_output", "strength", "market", "action", "audit"],
+      "rows": [
+        {"game":"GSV@NYL","away":"GSV","home":"NYL","model_id":"wnba.replacement.FEATURE_REFRESH","forecast_status":"PRELIMINARY_ASOF","forecast_as_of":"2026-08-27T09:14:21Z","p_home":0.5565,"model_side":"NYL","supersession_rule":"archive-bound anchored refresh replaces append-only","blockers":["FEATURE_REFRESH_PENDING","PERSONNEL_UNVERIFIED"]},
+        {"game":"WAS@PHX","away":"WAS","home":"PHX","model_id":"wnba.replacement.FEATURE_REFRESH","forecast_status":"PRELIMINARY_ASOF","forecast_as_of":"2026-08-27T09:14:21Z","p_home":0.4216,"model_side":"WAS","supersession_rule":"archive-bound anchored refresh replaces append-only","blockers":["FEATURE_REFRESH_PENDING","PERSONNEL_UNVERIFIED","MARKET_PARTIAL"]}
+      ]
+    },
+    {
+      "sport": "NFL",
+      "reader_sections": ["model_output", "strength", "market", "action", "audit"],
+      "rows": [
+        {"game":"PIT@BUF","away":"PIT","home":"BUF","forecast_status":"NO_COMPETITION_ELIGIBLE_MODEL","p_home":null,"model_side":null,"scope_reason":"PRESEASON_EXCLUDED_BY_REGISTERED_SCOPE","blockers":[]},
+        {"game":"NE@CLE","away":"NE","home":"CLE","forecast_status":"NO_COMPETITION_ELIGIBLE_MODEL","p_home":null,"model_side":null,"scope_reason":"PRESEASON_EXCLUDED_BY_REGISTERED_SCOPE","blockers":[]},
+        {"game":"SF@LV","away":"SF","home":"LV","forecast_status":"NO_COMPETITION_ELIGIBLE_MODEL","p_home":null,"model_side":null,"scope_reason":"PRESEASON_EXCLUDED_BY_REGISTERED_SCOPE","blockers":[]},
+        {"game":"LAR@LAC","away":"LAR","home":"LAC","forecast_status":"NO_COMPETITION_ELIGIBLE_MODEL","p_home":null,"model_side":null,"scope_reason":"PRESEASON_EXCLUDED_BY_REGISTERED_SCOPE","blockers":[]}
+      ]
+    }
+  ]
+}

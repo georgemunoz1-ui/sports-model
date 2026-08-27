@@ -1,0 +1,54 @@
+{
+  "record_id": "2026-08-27-MODEL-OUTPUT-FIRST-CORRECTION",
+  "schema": "audit.cross_sport_reader_correction.v1",
+  "created_utc": "2026-08-27T09:14:21Z",
+  "supersedes_display_state_only": [
+    "reports/2026-08-27_wnba_forecast_and_market_review.html@d13c1e5",
+    "reports/2026-08-27_mlb_forecast_and_market_review.html@d13c1e5"
+  ],
+  "immutable_forecasts_mutated": false,
+  "finding": "Market and action blockers were allowed to dominate Reader View and, on WNBA, suppress a computable registered forecast. Forecast, market, and action are now independent lanes.",
+  "wnba_preliminary_rebuild": {
+    "model_id": "wnba.replacement.FEATURE_REFRESH",
+    "status": "PRELIMINARY_ASOF",
+    "generated_utc": "2026-08-27T09:14:21Z",
+    "base_extension_blob_sha": "08e6fe0e42971ad34e7c2fd89b429456c9d8a791",
+    "owner_relayed_finals_appended": [
+      {"game_id": "401857176", "game": "GSV@CON", "final": "GSV 89-64", "team_box_source": "ESPN box score", "four_factor_inputs_retained": true},
+      {"game_id": "401857177", "game": "TOR@SEA", "final": "SEA 90-78", "team_box_source": "ESPN box score", "four_factor_inputs_retained": true}
+    ],
+    "feature_max_event_date_utc": "2026-08-27",
+    "target_game_ids_absent_from_training_pool": ["401857178", "401857179"],
+    "predictions": [
+      {
+        "game_id": "401857178", "game": "GSV@NYL", "model_side": "NYL",
+        "p_home": 0.5565, "margin_home": 0.88, "projected_total": 166.9,
+        "coherence_gap_pp": 3.15, "coherence_pass": true,
+        "market_display": "NYL -2.5 / 162.5 DraftKings owner relay",
+        "market_read": "Model winner side NYL; model spread lean GSV +2.5; model total lean OVER 162.5",
+        "ev_status": "EV_UNAVAILABLE_NO_MONEYLINE_AND_NO_COVER_DISTRIBUTION"
+      },
+      {
+        "game_id": "401857179", "game": "WAS@PHX", "model_side": "WAS",
+        "p_home": 0.4216, "p_away": 0.5784, "margin_home": -2.44, "projected_total": 169.4,
+        "coherence_gap_pp": 0.90, "coherence_pass": true,
+        "market_display": "WSH -3.5 / 166.5 display-only unattributed",
+        "market_read": "Model winner side WAS; model spread lean PHX +3.5; model total lean OVER 166.5",
+        "ev_status": "EV_UNAVAILABLE_UNATTRIBUTED_MARKET_AND_NO_COVER_DISTRIBUTION"
+      }
+    ],
+    "supersession_rule": "The scheduled archive-bound rebuild and anchored freeze supersede these preliminary outputs append-only. Reader View must show both the prior value and the change."
+  },
+  "mlb_reader_correction": {
+    "rule": "The active replacement path, not the stale frozen champion row, is the first model-output table.",
+    "active_sides": ["WSH", "BAL", "NYY", "TOR", "MIL", "LAD", "AZ"],
+    "market_or_uncertainty_blockers_do_not_remove_sides": true
+  },
+  "nfl_reader_correction": {
+    "regular_season_model_history_visible": true,
+    "tonight_no_forecast_reason": "PRESEASON_EXCLUDED_BY_REGISTERED_SCOPE",
+    "forbidden_claim": "NO NFL MODEL EXISTS"
+  },
+  "action_authority": "NONE",
+  "ledger": {"bets": 0, "units": 0.0, "usd": 0}
+}

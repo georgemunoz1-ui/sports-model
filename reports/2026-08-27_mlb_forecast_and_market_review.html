@@ -62,8 +62,8 @@ p{max-width:70ch}
 </div>
 
 <div class="panel answers">
-<div class="a"><div class="q">Model predicts</div><div class="v">Milwaukee is the slate's one strong directional signal (67.8% at NYM); NYY 60.0% is a moderate lean; the rest are near coin-flips</div></div>
-<div class="a"><div class="q">How strong</div><div class="v">One strong signal, one moderate lean, five near coin-flips; five games carry a capped starter input</div></div>
+<div class="a"><div class="q">Model predicts</div><div class="v">MIL 67.8% is the one strong side; active calls: WSH, BAL, NYY, TOR, MIL, LAD and AZ</div></div>
+<div class="a"><div class="q">How strong</div><div class="v">One strong signal; six active calls at 50.1%–54.5%, including two replacement flips</div></div>
 <div class="a"><div class="q">Market offers</div><div class="v">DraftKings moneylines (owner-relayed, model side only): every frozen side is priced as a favorite</div></div>
 <div class="a"><div class="q">Candidate / pass / blocked</div><div class="v">Five priced rows: PASS_NEGATIVE_EV. Two rows reselected sides with no retained price. Zero candidates</div></div>
 <div class="a"><div class="q">What prevents action</div><div class="v">Every priced side screens negative at full precision; nothing to authorize</div></div>
@@ -91,7 +91,21 @@ that no market exists. The uncertainty estimator reached its registered gates th
 (see appendix) but its consumption into per-game conservative EV is pending owner review.</p>
 </div>
 
-<h2>Model output by game — every registered arm</h2>
+<h2>Active model output — replacements included</h2>
+<div class="scroll"><table>
+<thead><tr><th class="l">Game</th><th class="l">Active side</th><th>Probability</th><th class="l">Output basis</th><th class="l">Market screen</th></tr></thead>
+<tbody>
+<tr><td class="l"><b>COL@WSH</b></td><td class="l">WSH</td><td class="n">51.72%</td><td class="l">frozen</td><td class="l">Pass at −119</td></tr>
+<tr><td class="l"><b>BAL@STL</b></td><td class="l">BAL</td><td class="n">50.68%</td><td class="l">frozen; STL starter pending</td><td class="l">Provisional pass at −114</td></tr>
+<tr><td class="l"><b>HOU@NYY</b></td><td class="l">NYY</td><td class="n">54.46%</td><td class="l">replacement: Cole</td><td class="l">Pass at −163</td></tr>
+<tr><td class="l"><b>KC@TOR</b></td><td class="l"><b>TOR</b></td><td class="n">50.64%</td><td class="l">replacement; side flipped</td><td class="l">EV unavailable in retained overlay</td></tr>
+<tr><td class="l"><b>MIL@NYM</b></td><td class="l"><b>MIL</b></td><td class="n">67.79%</td><td class="l">frozen</td><td class="l">Pass at −230</td></tr>
+<tr><td class="l"><b>LAD@ATL</b></td><td class="l"><b>LAD</b></td><td class="n">50.08%</td><td class="l">replacement; side flipped</td><td class="l">EV unavailable in retained overlay</td></tr>
+<tr><td class="l"><b>AZ@SF</b></td><td class="l">AZ</td><td class="n">51.60%</td><td class="l">replacement: Cabrera@Roupp</td><td class="l">Pass at −114</td></tr>
+</tbody></table></div>
+<p class="sub">This is the decision-time forecast lane. Missing prices affect only EV; they do not remove TOR or LAD as model outputs.</p>
+
+<h2>Frozen arm comparison — immutable board</h2>
 <div class="scroll"><table>
 <thead><tr><th class="l">Game (ET start)</th><th>Champion V13</th><th>Widened</th><th>Adaptive</th><th>Prior</th><th>V13 total</th><th>Total prior</th><th class="l">Starters (class)</th></tr></thead>
 <tbody>

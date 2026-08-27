@@ -482,6 +482,29 @@ try:
 except Exception as e:
     check(f"wnba feature staleness gate ({e})", False)
 
+
+# 6g. BOARD ARM COMPLETENESS (owner gate, 2026-08-27). Every registered arm — including the
+#     baseline prior — must appear in the immutable forecast artifact for every game; a missing
+#     baseline makes the comparison ungradable, exactly what happened to the 8/26 page display.
+try:
+    import json as _json2, glob as _glob
+    _bp = sorted(_glob.glob("cards/2026-*_board.json"))[-1]
+    _bd = _json2.load(open(_bp))
+    _need_w = {"mlb.winner.EXPANDING_HOME_PRIOR", "mlb.winner.CHAMPION_V13",
+               "mlb.winner.CHALLENGER_ADAPTIVE", "mlb.winner.CHALLENGER_WIDENED"}
+    _need_t = {"mlb.total.EXPANDING_TOTAL_PRIOR", "mlb.total.CHAMPION_V13"}
+    _bygame = {}
+    for _r in _bd["mlb"]["rows"]:
+        _bygame.setdefault(_r["game"], set()).add(_r["arm"])
+    _missing = {g: sorted((_need_w | _need_t) - a) for g, a in _bygame.items()
+                if (_need_w | _need_t) - a}
+    check(f"board arm completeness ({_bp}: {len(_bygame)} games x "
+          f"{len(_need_w | _need_t)} arms)", not _missing, warn=False)
+    for _g, _m in list(_missing.items())[:5]:
+        print(f"       ! {_g} missing {_m}")
+except Exception as e:
+    check(f"board arm completeness ({e})", False)
+
 # 7. PREGAME DECISION READINESS v1.0, section 12. The standard is implemented only when its
 #    acceptance proofs pass. Each proof asserts BOTH directions — the compliant case passes and the
 #    violating case is refused — so a one-directional test cannot make the standard decoration.

@@ -71,7 +71,7 @@ def selftest():
     card = {"reader_sections": ["model_output", "market", "action", "audit"], "rows": [base]}
     fails = validate_card(card)
     mutations = [
-        ({**base, "model_side": None}, "AVAILABLE_OUTPUT_MISSING"),
+        ({**base, "model_side": None}, "MODEL_SIDE_NOT_DERIVED"),
         ({**base, "model_side": "A"}, "MODEL_SIDE_NOT_DERIVED"),
         ({**base, "forecast_status": "PRELIMINARY_ASOF"}, "SUPERSESSION"),
         ({**base, "forecast_status": "NO_COMPETITION_ELIGIBLE_MODEL",

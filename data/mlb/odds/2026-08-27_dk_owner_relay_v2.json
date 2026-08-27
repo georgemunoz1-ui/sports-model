@@ -1,0 +1,64 @@
+{
+ "book": "DraftKings (ESPN/DK board, owner relay)",
+ "capture_class": "CURRENT prices at relay; still model-side-only for MLB (one-sided; hold not computable); WNBA GSV@NYL now carries ML +120, spread +2.5 and total 161.5 (moved from 162.5); WAS@PHX model-side ML NOT retained",
+ "created_utc": "2026-08-27T19:15:29Z",
+ "execution_rule": "fresh execution-time capture remains mandatory; these prices authorize nothing",
+ "personnel_note": "Sabally listed out for NYL (re-confirmed at relay)",
+ "record_id": "MARKET-2026-08-27-DK-OWNER-RELAY-V2",
+ "record_sha256": "544869056f8d4e55e67cff4f9db0cc761ad01adde83b275f5fcc3047fd1f6891",
+ "rows": [
+  {
+   "game": "mlb:COL@WSH",
+   "note": "earlier capture; game POST_START at relay",
+   "price": -119,
+   "side": "WSH"
+  },
+  {
+   "game": "mlb:BAL@STL",
+   "price": -124,
+   "side": "BAL"
+  },
+  {
+   "game": "mlb:HOU@NYY",
+   "price": -154,
+   "side": "NYY"
+  },
+  {
+   "game": "mlb:KC@TOR",
+   "note": "reselected side now priced",
+   "price": -101,
+   "side": "TOR"
+  },
+  {
+   "game": "mlb:MIL@NYM",
+   "price": -192,
+   "side": "MIL"
+  },
+  {
+   "game": "mlb:LAD@ATL",
+   "note": "reselected side now priced",
+   "price": 111,
+   "side": "LAD"
+  },
+  {
+   "game": "mlb:AZ@SF",
+   "price": -105,
+   "side": "AZ"
+  },
+  {
+   "game": "wnba:GSV@NYL",
+   "price": 120,
+   "side": "GSV",
+   "spread": "GSV +2.5",
+   "total": 161.5
+  },
+  {
+   "game": "wnba:WSH@PHX",
+   "note": "model-side ML not retained -> PRICE_BLOCKED",
+   "price": null,
+   "side": "WAS"
+  }
+ ],
+ "schema": "ops.market_overlay.v1",
+ "supersedes_for_current_prices": "MLB-MARKET-2026-08-27-DK-OWNER-RELAY (a61038c3) \u2014 retained as the earlier capture; both kept append-only"
+}

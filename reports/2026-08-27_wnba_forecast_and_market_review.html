@@ -60,9 +60,9 @@ p{max-width:70ch}
 <div class="panel answers">
 <div class="a"><div class="q">Model predicts</div><div class="v">GSV 52.3% at NYL (anchored — the preliminary had NYL) · WAS 57.8% at PHX</div></div>
 <div class="a"><div class="q">How strong</div><div class="v">Two modest winner leans; the fallback arm agrees with both, the prior opposes both</div></div>
-<div class="a"><div class="q">Market offers</div><div class="v">NYL −2.5 / 162.5 (DK); WSH −3.5 / 166.5 (display-only)</div></div>
-<div class="a"><div class="q">Candidate / pass / blocked</div><div class="v">Model sides exist; EV unavailable; action blocked pending anchored refresh and decision-grade prices</div></div>
-<div class="a"><div class="q">What prevents action</div><div class="v">No moneyline prices or registered cover distribution; personnel remains unverified</div></div>
+<div class="a"><div class="q">Market offers</div><div class="v">GSV +120 / +2.5 / total 161.5 (DK, current relay); WAS-side ML not retained</div></div>
+<div class="a"><div class="q">Candidate / pass / blocked</div><div class="v">GSV +120: raw candidate +$15.02 — NOT authorized; WAS@PHX price-blocked</div></div>
+<div class="a"><div class="q">What prevents action</div><div class="v">Conservative EV awaits the RJ-002 consumption rule; a 52.3% side is not a conviction call; fresh quote mandatory</div></div>
 </div>
 
 <h2>Model output — anchored four-factors run (frozen 11:06Z)</h2>
@@ -135,14 +135,17 @@ game payloads from each team's most recent archived game (1–3 days old, hashed
 <p class="sub">Sabally's status is the headline availability question for the Liberty game — re-checked at the 22:30Z and 23:15Z checkpoints. Record <code>2026-08-27_wnba_personnel_bind.json</code>.</p>
 
 <h2>Market and dispositions</h2>
-<div class="panel"><p><b>Lines are now retained (owner relay):</b> GSV +2.5 / NYL −2.5, total
-162.5 — explicitly DraftKings-attributed; WSH −3.5, total 166.5 — displayed on ESPN's schedule
-with <i>no book attribution chain</i>, retained as display-only. Notable versus the personnel
-evidence: the market makes the Liberty modest favorites with Sabally listed out.</p></div>
-<div class="warn"><b>Disposition: MODEL_OUTPUT_AVAILABLE · EV_UNAVAILABLE · ACTION_BLOCKED.</b>
-NYL and WAS are the model's winner sides. Missing moneylines remove moneyline EV; a missing
-cover distribution removes spread/total EV. Those are action constraints, not forecast
-constraints. Ledger: 0 bets · 0.00u · $0.</div>
+<div class="panel"><p><b>Current DK relay (v2 capture <code>54486905</code>):</b> GSV +120
+moneyline, GSV +2.5, total 161.5 (moved from 162.5). At the anchored GSV 52.28%, the +120
+moneyline screens <b>+$15.02 per $100 at full precision</b> — the day's strongest raw
+market-relative screen, and still only a 52.3% model side. The model total of 167.0 now sits
+5.5 over the moved 161.5. Sabally remains listed out for New York. The WAS-side moneyline for
+WSH@PHX was not retained — that row is PRICE_BLOCKED.</p></div>
+<div class="warn"><b>Disposition: GSV +120 = CANDIDATE_NOT_AUTHORIZED_PENDING_UNCERTAINTY ·
+WAS@PHX = PRICE_BLOCKED.</b> Positive raw EV authorizes nothing: conservative EV is unavailable
+until the RJ-002 per-action consumption rule is approved, spread/total EV would additionally
+need a registered cover distribution, and a fresh execution-time quote is mandatory regardless.
+Ledger: 0 bets · 0.00u · $0.</div>
 
 <h2>Technical & acquisition appendix</h2>
 <details><summary>Feature pipeline state and evidence chain</summary>

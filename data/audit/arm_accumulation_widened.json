@@ -1,0 +1,39 @@
+{
+ "anti_patterns_on_record": [
+  "8/25's nine-game leader (WIDENED 0.2473) finished the same slate at 0.2540 - intra-day ordering flipped once already",
+  "the 6-9 -> 12-3 day-to-day reversal is the registered warning against promoting from one exceptional slate"
+ ],
+ "arm": "mlb.winner.CHALLENGER_WIDENED",
+ "created_utc": "2026-08-27T05:30:00Z",
+ "descriptive_ledger": {
+  "grade": "OWNER_RELAY finals, descriptive only",
+  "pooled": {
+   "brier": 0.2436,
+   "n_games": 30,
+   "record": "18-12"
+  },
+  "slates": [
+   {
+    "brier": 0.254,
+    "date": "2026-08-25",
+    "record": "6-9"
+   },
+   {
+    "brier": 0.2332,
+    "date": "2026-08-26",
+    "record": "12-3"
+   }
+  ],
+  "vs_baseline": "prior pooled 0.2491 over the same 30 - the first arm with a multi-day edge over the do-nothing baseline; champion last in every comparison both days"
+ },
+ "promotion_ledger": {
+  "accrual_rule": "descriptive grading accrues NOTHING toward promotion; only canonically settled games on tier-1 artifacts count, which waits on RJ-001B score verification and the uncertainty estimator (RJ-002/003)",
+  "canonical_games": 0,
+  "registered_denominators": "0/500 and 0/60 (separate, per the registered promotion gate)",
+  "uncertainty_gates": "20 effective clusters (Kish), leave-one-date-out stability <=25%, validated coverage +/-5pp, all eleven section-7 estimator parts"
+ },
+ "record_id": "ARM-ACCUMULATION-CHALLENGER_WIDENED",
+ "record_sha256": "7073fb19d7d44ae85bab6fd54d0addfc89e43c5714615d1ca96610b1aff8b7e7",
+ "schema": "ops.arm_accumulation.v1",
+ "standing_conclusion": "The widened challenger now has meaningful prospective evidence worth accumulating. The champion continues to underperform, while the widened arm has produced the strongest two-day probability record. Promotion still requires the registered sample horizon and uncertainty gates - not the 12-3 headline alone."
+}

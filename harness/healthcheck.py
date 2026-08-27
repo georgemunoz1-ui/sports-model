@@ -513,6 +513,23 @@ try:
 except Exception as e:
     check(f"board arm completeness ({e})", False)
 
+# 6h. MODEL OUTPUT FIRST. Forecast, market and action are independent lanes. A missing price,
+#     personnel check, refresh, or uncertainty estimate may block action but may not erase an
+#     available model side from Reader View.
+try:
+    import model_output_first as _MOF
+    _cov=json.load(open("data/registry/model_output_first_coverage.json"))
+    _mof_fails=[]
+    for _card in _cov.get("cards", []):
+        _mof_fails += [f"{_card.get('sport','?')}: {_x}" for _x in _MOF.validate_card(_card)]
+    check(f"model-output-first coverage ({len(_cov.get('cards', []))} sports; "
+          f"{sum(len(x.get('rows', [])) for x in _cov.get('cards', []))} rows)",
+          not _mof_fails, warn=False)
+    for _x in _mof_fails[:10]:
+        print(f"       ! {_x}")
+except Exception as e:
+    check(f"model-output-first coverage ({e})", False)
+
 # 7. PREGAME DECISION READINESS v1.0, section 12. The standard is implemented only when its
 #    acceptance proofs pass. Each proof asserts BOTH directions — the compliant case passes and the
 #    violating case is refused — so a one-directional test cannot make the standard decoration.

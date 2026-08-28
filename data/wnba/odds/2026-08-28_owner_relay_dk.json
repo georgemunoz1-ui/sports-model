@@ -14,6 +14,12 @@
   "why_it_matters": "the board's schedule grade is ESPN_SINGLE_FAMILY_GIT_ARTIFACT \u2014 wehoop mirrors ESPN, so the ESPN URLs that corroborated it were the same family and added no independent source. A sportsbook is NOT in that family. This is the first genuinely independent corroboration of the 8/28 WNBA slate COMPOSITION."
  },
  "START_TIME_DISCREPANCY": {
+  "corroboration_appended_2026-08-28T10:55Z": {
+   "effect": "the TIMEZONE half of this discrepancy is now corroborated on independent grounds. The +10 minute gap between the book and the wehoop parquet is UNCHANGED and still unresolved.",
+   "finding": "the College Football relay independently supports the PACIFIC reading. Under Eastern its Thursday slots would be 3:00, 4:00, 5:00 and 6:00 PM ET, which are not real Thursday-night college football windows; under Pacific they are 6:00, 7:00, 8:00 and 9:00 PM ET, exactly the canonical ones, and Memphis at UNLV becomes a 10:00 PM ET Vegas late game.",
+   "source": "data/cfb/odds/2026-08-28_owner_relay_dk_forward.json (same phone, 3:38-3:39)",
+   "still_not_confirmed": "no screenshot states its timezone; this is slot-plausibility corroboration, not a confirmation. The original finding above is left exactly as written."
+  },
   "observed": "DraftKings displays the two early games at 4:40 and the two late games at 7:10 in the phone's local time; the wehoop parquet says 7:30 PM and 10:00 PM EDT.",
   "operational_impact": "at most 10 minutes on tip time, well inside the checkpoint spacing; the 22:00Z and 22:45Z checkpoints are unaffected. Flagged there for confirmation.",
   "reading": "the game-to-slot pairing matches the board exactly (two early, two late). Read as Pacific, DraftKings is a consistent +10 minutes against the parquet on all four games. The screenshot does not state its timezone, so the Pacific reading is INFERRED and not confirmed; the 'Sat 10:10 AM' row for tomorrow's CHI@NYL is what makes Eastern implausible.",

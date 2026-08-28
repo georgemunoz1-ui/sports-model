@@ -95,6 +95,7 @@ def build():
     market = json.load(open(f"data/audit/{DATE}_market_acquisition.json"))
     mlb_bind = json.load(open(f"data/mlb/slates/{DATE}_slate_binding.json"))
     overlay = json.load(open(f"data/wnba/odds/{DATE}_owner_relay_dk.json"))
+    cfb_relay = json.load(open(f"data/cfb/odds/{DATE}_owner_relay_dk_forward.json"))
 
     # ---------- assemble every discovered row, all four sports ----------
     allrows = []
@@ -258,6 +259,13 @@ def build():
     gi = mlb["GAME_IDENTITY"]
     total_captured = gi["captured"] + wnba["GAME_IDENTITY"]["captured"] + \
         nfl["GAME_IDENTITY"]["captured"] + len(acq["cfb"]["rows"])
+
+    n_cfb_relay = cfb_relay["DATE_SCOPE"]["n_games"]
+    _cd = sorted(cfb_relay["DATE_SCOPE"]["by_game_date"])
+    cfb_dates = ", ".join(_cd[:-1]) + " or " + _cd[-1]
+    if cfb_relay["DATE_SCOPE"]["rows_on_2026_08_28"] != 0:
+        raise ValueError("the CFB relay now contains 8/28 rows — the card text below "
+                         "asserts it contains none and must be rewritten, not reprinted")
 
     tv = overlay["TRANSCRIPTION_VERIFICATION"]["observed_hold_range_pct"]
     hold_lo, hold_hi = tv[0], tv[1]
@@ -476,6 +484,22 @@ filled from a neighbouring cohort.</p>
 <tbody>
 {cfb_detail}
 </tbody></table></div>
+<div class="panel">
+<p><b>A college football market relay arrived and priced none of it.</b> An owner relay of the
+DraftKings board came in at 10:55Z carrying {n_cfb_relay} games &mdash; and every single row is
+dated {cfb_dates}. <b>Zero are on tonight's slate.</b> The dates were read off the book's own
+section headers rather than assigned: the screenshots scroll down a chronological board, and the
+Saturday block sits above the &ldquo;Thu 3 Sep&rdquo; header, which places it on August 29.</p>
+<p>It is retained as a forward snapshot rather than discarded, because the v2 challenger has an
+<i>empty</i> cohort tonight and these dates plainly are not empty &mdash; it is the first market
+record covering dates on which that model could have a cohort at all. Two things it does not do.
+It does not price this card, so nothing above changes. And because the top of the book's board was
+not captured, it is <b>not</b> evidence that the book carries no August 28 college football; the
+zero-FBS-games finding rests on the schedule acquisition, not on this relay. Cohort membership for
+the relayed games is recorded as <code>REFUSED_UNCLASSIFIED</code>: the challenger is FBS-only, no
+registered FBS team list exists here, and several of these programs changed subdivision during the
+2024&ndash;2026 realignment, so classifying them from memory would be an invented input.</p>
+</div>
 
 <h2>Identity risks &mdash; disclosed, not priced in</h2>
 <div class="warn">

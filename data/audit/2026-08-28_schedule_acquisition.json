@@ -1,0 +1,326 @@
+{
+ "artifacts_written": {
+  "mlb_slate_binding": "data/mlb/slates/2026-08-28_slate_binding.json",
+  "mlb_slate_psv": "data/mlb/slates/2026-08-28_slate.psv",
+  "nfl_schedule_acquisition": "data/audit/2026-08-28_nfl_schedule_acquisition.json",
+  "wnba_slate_binding": "data/wnba/slates/2026-08-28_slate_binding.json"
+ },
+ "cfb": {
+  "fbs_games_discovered": 0,
+  "grade": "SEARCH_IDENTIFIED_UNCONFIRMED",
+  "n": 7,
+  "routes_attempted": [
+   "LOCAL /home/user/nflverse/nfldata \u2014 inspected, NFL-only (DATASETS.md, fake_schedule_20XX.csv, nflfastR docs). Per instruction NOT used for CFB. No CFB content present. RESULT: not applicable.",
+   "LOCAL /home/user/sports-model \u2014 ls of data/{schedule,reference,registry,audit} and recursive grep for 'cfb|college football' across *.json/*.md. Hits are governance/prereg text only (AGENTS.md, AUTHORIZATIONS.md, README.md, sports/README.md 'CFB entries are already stubbed... populate when in season', data/backfill/manifest.json, cards/2026-08-23_three_arm_card.json, data/audit/2026-08-23_evaluation_arms.json). RESULT: NO retained CFB schedule artifact exists in repo or git \u2014 this is why n_canonical=0.",
+   "LOCAL /home/user/sports-model/data/audit/2026-08-28_fixture_pk_provenance.json \u2014 read for the standing adjacent-id-inference remediation (MLB pks 823014/825038 labelled SYNTHETIC_UNVERIFIED). Applied its rule here: every id below was captured from its own URL, none derived from a neighbor.",
+   "WebSearch 'college football Week 1 2026 schedule Friday August 28 games' \u2014 OK.",
+   "WebSearch '2026 college football Week 1 Friday August 28 FBS game kickoff' \u2014 OK.",
+   "WebSearch '\"Week 0\" 2026 college football August 29 2026 schedule FBS games' \u2014 OK.",
+   "WebSearch 'Friday August 28 2026 college football games FCS openers schedule TV times' \u2014 OK.",
+   "WebSearch '2026 Week 0 college football full schedule eight FBS games August 29 Hawaii exemption Friday game' \u2014 OK.",
+   "WebSearch '\"August 28\" 2026 college football no FBS games Friday only FCS Week 0' \u2014 OK.",
+   "WebSearch '2026 Week 0 FBS eight games list ... August 29' \u2014 OK; returned the full 8-game Saturday slate.",
+   "WebSearch per-game ESPN gameId capture queries (Idaho/Cal Poly, Colgate/Fordham, William & Mary/Villanova, Rhode Island/Merrimack, Weber State/Northern Colorado, Marist/New Haven, New Hampshire/UAlbany) \u2014 OK; 7/7 ESPN ids captured from literal result URLs.",
+   "WebFetch https://fbschedules.com/college-football-schedule/ \u2014 EGRESS_BLOCKED (fbschedules.com).",
+   "WebFetch https://www.ncaa.com/news/football/article/college-football-tv-schedule-game-times-preview \u2014 EGRESS_BLOCKED (www.ncaa.com).",
+   "WebFetch https://en.wikipedia.org/wiki/2026_NCAA_Division_I_FBS_football_season \u2014 EGRESS_BLOCKED (en.wikipedia.org).",
+   "WebFetch https://www.si.com/college/fcs/uac/2026-week-0-fcs-football-schedule-kickoff-times-and-how-to-watch \u2014 EGRESS_BLOCKED (www.si.com).",
+   "WebFetch https://www.collegefootballschedule.net/2026-college-football-schedule \u2014 EGRESS_BLOCKED (www.collegefootballschedule.net).",
+   "NOT ATTEMPTED (declared EGRESS_BLOCKED by governance): espn.com direct fetch, statsapi.mlb.com, sportsbook.draftkings.com, www.wnba.com, nfl.com. Consequence: the 7 captured ESPN ids could not be verified against the ESPN scoreboard endpoint itself.",
+   "NOT AVAILABLE: no CollegeFootballData (api.collegefootballdata.com) key or client in this repo; no NCAA stats API client. No route to a retainable canonical CFB schedule artifact exists in this environment."
+  ],
+  "rows": [
+   {
+    "away": "Marist Red Foxes",
+    "canonical_id": "ESPN_GAMEID:401868261",
+    "cohort": "FCS_vs_FCS",
+    "disposition": "REFUSED_OUT_OF_COHORT",
+    "game": "cfb:Marist Red Foxes @ New Haven Chargers",
+    "home": "New Haven Chargers",
+    "id_grade": "CAPTURED",
+    "id_provenance": "CAPTURED \u2014 ESPN game URL literal in WebSearch result: https://www.espn.com/college-football/game/_/gameId/401868261/marist-new-haven . Secondary id also captured: NCAA.com game 6604384 (https://www.ncaa.com/game/6604384). Neither id was inferred, incremented, or derived from any other game's id. espn.com and ncaa.com direct fetch both EGRESS_BLOCKED, so the id is search-identified and NOT independently confirmed.",
+    "start_utc": "2026-08-28T22:00:00Z"
+   },
+   {
+    "away": "Colgate Raiders",
+    "canonical_id": "ESPN_GAMEID:401868007",
+    "cohort": "FCS_vs_FCS",
+    "disposition": "REFUSED_OUT_OF_COHORT",
+    "game": "cfb:Colgate Raiders @ Fordham Rams",
+    "home": "Fordham Rams",
+    "id_grade": "CAPTURED",
+    "id_provenance": "CAPTURED \u2014 ESPN game URL literal in WebSearch result: https://www.espn.com/college-football/game/_/gameId/401868007/colgate-fordham . Secondary id also captured: NCAA.com game 6604549 (https://www.ncaa.com/game/6604549). Not inferred from any adjacent id. espn.com/ncaa.com direct fetch EGRESS_BLOCKED \u2014 search-identified, unconfirmed.",
+    "start_utc": "2026-08-28T22:00:00Z"
+   },
+   {
+    "away": "William & Mary Tribe",
+    "canonical_id": "ESPN_GAMEID:401868040",
+    "cohort": "FCS_vs_FCS",
+    "disposition": "REFUSED_OUT_OF_COHORT",
+    "game": "cfb:William & Mary Tribe @ Villanova Wildcats",
+    "home": "Villanova Wildcats",
+    "id_grade": "CAPTURED",
+    "id_provenance": "CAPTURED \u2014 ESPN game URL literal in WebSearch result: https://www.espn.com/college-football/game/_/gameId/401868040/william-mary-villanova . Not inferred. espn.com direct fetch EGRESS_BLOCKED \u2014 search-identified, unconfirmed.",
+    "start_utc": "2026-08-28T22:00:00Z"
+   },
+   {
+    "away": "New Hampshire Wildcats",
+    "canonical_id": "ESPN_GAMEID:401866616",
+    "cohort": "FCS_vs_FCS",
+    "disposition": "REFUSED_OUT_OF_COHORT",
+    "game": "cfb:New Hampshire Wildcats @ UAlbany Great Danes",
+    "home": "UAlbany Great Danes",
+    "id_grade": "CAPTURED",
+    "id_provenance": "CAPTURED \u2014 ESPN game URL literal in WebSearch result: https://www.espn.com/college-football/game/_/gameId/401866616/new-hampshire-ualbany . Note this id is NOT adjacent-derived despite sharing a prefix with the Rhode Island/Merrimack id; both were captured independently from their own ESPN URLs. espn.com direct fetch EGRESS_BLOCKED \u2014 search-identified, unconfirmed.",
+    "start_utc": "2026-08-28T23:00:00Z"
+   },
+   {
+    "away": "Rhode Island Rams",
+    "canonical_id": "ESPN_GAMEID:401866617",
+    "cohort": "FCS_vs_FCS",
+    "disposition": "REFUSED_OUT_OF_COHORT",
+    "game": "cfb:Rhode Island Rams @ Merrimack Warriors",
+    "home": "Merrimack Warriors",
+    "id_grade": "CAPTURED",
+    "id_provenance": "CAPTURED \u2014 ESPN game URL literal in WebSearch result: https://www.espn.com/college-football/game/_/gameId/401866617/rhode-island-merrimack . Captured independently from its own ESPN URL; NOT obtained by incrementing 401866616. espn.com direct fetch EGRESS_BLOCKED \u2014 search-identified, unconfirmed.",
+    "start_utc": "2026-08-28T23:00:00Z"
+   },
+   {
+    "away": "Weber State Wildcats",
+    "canonical_id": "ESPN_GAMEID:401868129",
+    "cohort": "FCS_vs_FCS",
+    "disposition": "REFUSED_OUT_OF_COHORT",
+    "game": "cfb:Weber State Wildcats @ Northern Colorado Bears",
+    "home": "Northern Colorado Bears",
+    "id_grade": "CAPTURED",
+    "id_provenance": "CAPTURED \u2014 ESPN game URL literal in WebSearch result: https://www.espn.com/college-football/game/_/gameId/401868129/weber-st-n-colorado . Not inferred. espn.com direct fetch EGRESS_BLOCKED \u2014 search-identified, unconfirmed.",
+    "start_utc": "2026-08-29T01:00:00Z"
+   },
+   {
+    "away": "Idaho Vandals",
+    "canonical_id": "ESPN_GAMEID:401868073",
+    "cohort": "FCS_vs_FCS",
+    "disposition": "REFUSED_OUT_OF_COHORT",
+    "game": "cfb:Idaho Vandals @ Cal Poly Mustangs",
+    "home": "Cal Poly Mustangs",
+    "id_grade": "CAPTURED",
+    "id_provenance": "CAPTURED \u2014 ESPN game URL literal in WebSearch result: https://www.espn.com/college-football/game/_/gameId/401868073/idaho-cal-poly . Not inferred. espn.com direct fetch EGRESS_BLOCKED \u2014 search-identified, unconfirmed.",
+    "start_utc": "2026-08-29T02:00:00Z"
+   }
+  ]
+ },
+ "created_utc": "2026-08-28T08:20:00Z",
+ "cross_sport_checks": {
+  "franchise_double_booking": "NONE. City-name overlaps (Atlanta x3, Washington x3, New York x4, and others) are distinct franchises in distinct leagues; no venue is double-booked.",
+  "id_collisions_across_sports": "NONE. All 36 ids are pairwise unique."
+ },
+ "dispositions": {
+  "cfb": "7 rows, ALL REFUSED_OUT_OF_COHORT (FCS-vs-FCS). cfb.fbs.epa_talent_hgb.v2_0.challenger is FBS-only and remains PREREGISTERED_DATA_ACQUISITION_PENDING. Zero FBS games exist on 8/28.",
+  "mlb": "15 canonical rows, SEARCH_IDENTIFIED_UNCONFIRMED. Registered arms may forecast; nothing binds a result.",
+  "nfl": "10 rows, ALL REFUSED_NOT_CANONICAL. Preseason. The registered shadow model nfl.rs.epa_logit_ridge.v0_2.shadow is REGULAR-SEASON scope, so preseason is PRESEASON_EXCLUDED_BY_REGISTERED_SCOPE. Benchmark only: no probability, side, edge or EV. Brier/logloss/EV NULL BY RULE. Wager authority NO, stake $0.",
+  "wnba": "4 canonical rows on a retained artifact. BOARD FREEZE BLOCKED until the wehoop commit carrying 8/27 boxes lands \u2014 feature rebuild through the cutoff precedes any forecast."
+ },
+ "earliest_start": {
+  "earliest_artifact_bound_game": "wnba:401857180 / wnba:401857181",
+  "earliest_artifact_bound_utc": "2026-08-28T23:30:00Z",
+  "note": "the strictest defensible prospectivity bound is the 18:20Z MLB start; the earliest ARTIFACT-BOUND start is the 23:30Z WNBA pair",
+  "overall_game": "mlb:CIN@CHC",
+  "overall_grade": "SEARCH_IDENTIFIED_UNCONFIRMED",
+  "overall_utc": "2026-08-28T18:20:00Z"
+ },
+ "id_capture": {
+  "captured": 36,
+  "inferred": 0,
+  "pairwise_unique": true,
+  "rule": "every id read from its own source record; none derived from an adjacent id",
+  "uncaptured": 0
+ },
+ "known_hazards_for_machine_consumers": [
+  "DO NOT machine-check the reconciliation identity off len(refusals). The per-sport 'refusals' arrays are not row counts: MLB has 11 entries against n_refused=0 (all field-level, inside otherwise-canonical rows) and NFL has 12 against n_refused=10 (10 row-level + 1 slate-level + 1 starter-level). A length check reports false failures. The identity is checked against the enumerated row counts above.",
+  "n_canonical IS NOT A UNIFORM QUALITY SIGNAL ACROSS SPORTS. Three different bars were applied: WNBA's 4 canonical rows rest on a retained git artifact; MLB's 15 rest on search identification only, while its own refusal states the slate 'must not be used to bind results'; NFL and CFB scored 0 canonical on that same class of evidence. Compare within a sport, never across.",
+  "CFB is keyed college_football_fbs but discovered ZERO FBS games \u2014 all 7 rows are FCS-vs-FCS. An empty FBS cohort is the finding, not a gap to fill."
+ ],
+ "nfl": {
+  "competition_phase": "PRESEASON (final preseason week)",
+  "detail_record": "data/audit/2026-08-28_nfl_schedule_acquisition.json",
+  "grade": "SEARCH_IDENTIFIED_UNCONFIRMED",
+  "n": 10,
+  "routes_attempted": [
+   "/home/user/nflverse/nfldata/data/games.csv (local read, python3 csv.DictReader) \u2014 AUTHORITATIVE FOR PHASE, REFUSED FOR FIXTURES. 7548 total rows; 272 rows for season 2026 all game_type=REG; first 2026 gameday 2026-09-09 (NE@SEA 20:20, espn 401872656); game_type domain across the entire file is {REG,WC,DIV,CON,SB} with 0 rows outside it; 0 rows with an August gameday in ANY season. Preseason is structurally absent \u2014 that ABSENCE is the finding, and it confirms phase = PRESEASON (finale week Aug 27-29) while saying nothing about 8/28 fixtures.",
+   "www.nfl.com/schedules/2026/by-week/preseason-week-3 (WebFetch) \u2014 REFUSED, EGRESS_BLOCKED receipt observed 2026-08-28.",
+   "www.espn.com/nfl/schedule/_/week/3/year/2026/seasontype/1 (WebFetch) \u2014 REFUSED, EGRESS_BLOCKED receipt observed 2026-08-28.",
+   "media.nfl.com official 2026 preseason TV schedule PDF (WebFetch) \u2014 REFUSED, EGRESS_BLOCKED receipt observed 2026-08-28.",
+   "fbschedules.com 2026 preseason schedule page (WebFetch) \u2014 REFUSED, EGRESS_BLOCKED receipt observed 2026-08-28. Notable: a non-official aggregator was also denied, so the block is broader than the named official hosts.",
+   "statsapi.mlb.com / sportsbook.draftkings.com / www.wnba.com \u2014 NOT_ATTEMPTED. Known EGRESS_BLOCKED; the MLB and WNBA hosts are wrong-sport, and no market artifact is required for a board carrying zero wager authority.",
+   "WebSearch slate enumeration, 3 independent passes \u2014 IDENTIFIED. Pass1 returned all 10 Friday games; pass2 returned only 6 and carried a stale trailing sentence ('10 games on Saturday with a final pair on Sunday') that contradicted its own day-labeled lists; pass3 returned all 10 matching pass1 exactly, including the NYG@NYJ direction. The 10-game count stands 2-of-3 and is confirmed structurally: 4 games Thu 8/27 + 10 Fri 8/28 + 2 Sat 8/29 (DET@IND, CHI@TEN) = 16 games / 32 teams, each team exactly once.",
+   "WebSearch per-game ESPN gameId capture, 10 dedicated queries (one per game) \u2014 IDENTIFIED. 10/10 real ESPN gameIds captured, each from that game's OWN ESPN URL. ZERO ids inferred, incremented or decremented. Anti-inference evidence: the ids are not ordered by kickoff (within the 4018733xx block, 301=CIN@PHI 8:00pm, 302=WSH@BAL 6:00pm, 303=NYG@NYJ 7:30pm, 304=ATL@MIA 7:00pm, 305=SEA@KC 8:00pm, 306=TB@JAX 7:30pm, 307=HOU@CAR 7:00pm \u2014 sequential assignment by kickoff would have mis-assigned EVERY row), and three games sit entirely outside that block (401873614, 401874048, 401874102). The 2026 REG week-1 ids from games.csv (401872656/657/661, 401872925) interleave below them.",
+   "Artifact retention \u2014 WROTE /home/user/sports-model/data/audit/2026-08-28_nfl_schedule_acquisition.json (sha256 7d98cdd1ff6ca300ed7d4d9138aad334c28063209dab534777e95cadc86b209e), following the 8/27 convention of retaining real ids for future binding. Reconciliation identity verified programmatically (10 = 0 + 10) and all 10 ids verified unique."
+  ],
+  "rows": [
+   {
+    "away": "Washington Commanders",
+    "canonical_id": "ESPN_GAMEID:401873302",
+    "disposition": "REFUSED_NOT_CANONICAL",
+    "game": "nfl:Washington Commanders @ Baltimore Ravens",
+    "home": "Baltimore Ravens",
+    "id_grade": "CAPTURED",
+    "id_provenance": "CAPTURED espn.com/nfl/game/_/gameId/401873302/commanders-ravens \u2014 ESPN URL surfaced by a dedicated per-game WebSearch; not inferred from any other id",
+    "start_utc": "2026-08-28T22:00:00Z"
+   },
+   {
+    "away": "Houston Texans",
+    "canonical_id": "ESPN_GAMEID:401873307",
+    "disposition": "REFUSED_NOT_CANONICAL",
+    "game": "nfl:Houston Texans @ Carolina Panthers",
+    "home": "Carolina Panthers",
+    "id_grade": "CAPTURED",
+    "id_provenance": "CAPTURED espn.com/nfl/game/_/gameId/401873307/texans-panthers \u2014 dedicated per-game WebSearch; not inferred",
+    "start_utc": "2026-08-28T23:00:00Z"
+   },
+   {
+    "away": "Atlanta Falcons",
+    "canonical_id": "ESPN_GAMEID:401873304",
+    "disposition": "REFUSED_NOT_CANONICAL",
+    "game": "nfl:Atlanta Falcons @ Miami Dolphins",
+    "home": "Miami Dolphins",
+    "id_grade": "CAPTURED",
+    "id_provenance": "CAPTURED espn.com/nfl/game/_/gameId/401873304/falcons-dolphins \u2014 dedicated per-game WebSearch; same gameId independently corroborated on the africa.espn.com mirror",
+    "start_utc": "2026-08-28T23:00:00Z"
+   },
+   {
+    "away": "New York Giants",
+    "canonical_id": "ESPN_GAMEID:401873303",
+    "disposition": "REFUSED_NOT_CANONICAL",
+    "game": "nfl:New York Giants @ New York Jets",
+    "home": "New York Jets",
+    "id_grade": "CAPTURED",
+    "id_provenance": "CAPTURED espn.com/nfl/game/_/gameId/401873303/giants-jets \u2014 dedicated per-game WebSearch; not inferred",
+    "start_utc": "2026-08-28T23:30:00Z"
+   },
+   {
+    "away": "Tampa Bay Buccaneers",
+    "canonical_id": "ESPN_GAMEID:401873306",
+    "disposition": "REFUSED_NOT_CANONICAL",
+    "game": "nfl:Tampa Bay Buccaneers @ Jacksonville Jaguars",
+    "home": "Jacksonville Jaguars",
+    "id_grade": "CAPTURED",
+    "id_provenance": "CAPTURED espn.com/nfl/game/_/gameId/401873306/buccaneers-jaguars \u2014 dedicated per-game WebSearch; not inferred",
+    "start_utc": "2026-08-28T23:30:00Z"
+   },
+   {
+    "away": "New Orleans Saints",
+    "canonical_id": "ESPN_GAMEID:401874048",
+    "disposition": "REFUSED_NOT_CANONICAL",
+    "game": "nfl:New Orleans Saints @ Dallas Cowboys",
+    "home": "Dallas Cowboys",
+    "id_grade": "CAPTURED",
+    "id_provenance": "CAPTURED espn.com/nfl/game/_/gameId/401874048/saints-cowboys \u2014 dedicated per-game WebSearch; not inferred",
+    "start_utc": "2026-08-29T00:00:00Z"
+   },
+   {
+    "away": "Seattle Seahawks",
+    "canonical_id": "ESPN_GAMEID:401873305",
+    "disposition": "REFUSED_NOT_CANONICAL",
+    "game": "nfl:Seattle Seahawks @ Kansas City Chiefs",
+    "home": "Kansas City Chiefs",
+    "id_grade": "CAPTURED",
+    "id_provenance": "CAPTURED espn.com/nfl/game/_/gameId/401873305/seahawks-chiefs \u2014 dedicated per-game WebSearch; not inferred",
+    "start_utc": "2026-08-29T00:00:00Z"
+   },
+   {
+    "away": "Arizona Cardinals",
+    "canonical_id": "ESPN_GAMEID:401874102",
+    "disposition": "REFUSED_NOT_CANONICAL",
+    "game": "nfl:Arizona Cardinals @ Green Bay Packers",
+    "home": "Green Bay Packers",
+    "id_grade": "CAPTURED",
+    "id_provenance": "CAPTURED espn.com/nfl/preview/_/gameId/401874102 \u2014 ESPN pregame URL from a dedicated per-game WebSearch; not inferred",
+    "start_utc": "2026-08-29T00:00:00Z"
+   },
+   {
+    "away": "Cincinnati Bengals",
+    "canonical_id": "ESPN_GAMEID:401873301",
+    "disposition": "REFUSED_NOT_CANONICAL",
+    "game": "nfl:Cincinnati Bengals @ Philadelphia Eagles",
+    "home": "Philadelphia Eagles",
+    "id_grade": "CAPTURED",
+    "id_provenance": "CAPTURED espn.com/nfl/game/_/gameId/401873301/bengals-eagles \u2014 dedicated per-game WebSearch; not inferred",
+    "start_utc": "2026-08-29T00:00:00Z"
+   },
+   {
+    "away": "Minnesota Vikings",
+    "canonical_id": "ESPN_GAMEID:401873614",
+    "disposition": "REFUSED_NOT_CANONICAL",
+    "game": "nfl:Minnesota Vikings @ Denver Broncos",
+    "home": "Denver Broncos",
+    "id_grade": "CAPTURED",
+    "id_provenance": "CAPTURED espn.com/nfl/game/_/gameId/401873614/vikings-broncos \u2014 dedicated per-game WebSearch; not inferred",
+    "start_utc": "2026-08-29T01:00:00Z"
+   }
+  ]
+ },
+ "normalization_applied": {
+  "residual_hazard": "MLB legitimately mixes MLB_GAMEPK (5 rows) and ESPN_GAMEID (10 rows) in one column. The namespace is load-bearing, not cosmetic \u2014 downstream must branch on it.",
+  "rule": "all ids normalized to '<ID_SPACE>:<integer>' with ID_SPACE in ['MLB_GAMEPK', 'ESPN_GAMEID']; a bare integer is a hard error at write time",
+  "why": "The four per-sport reports emitted the same ESPN id space in four encodings \u2014 'ESPN_GAMEID:401816711' (MLB), bare '401857180' (WNBA), 'espn:401873302' (NFL), 'ESPN:401868261' (CFB). The bare WNBA integer is the highest-risk form: it is indistinguishable from an MLB gamePk column value."
+ },
+ "reconciliation": {
+  "no_silent_disappearance": "every matchup any route surfaced appears above as canonical or explicitly refused",
+  "per_sport": {
+   "cfb": {
+    "canonical": 0,
+    "discovered": 7,
+    "explicit_refusals": 7,
+    "holds": true,
+    "identity": "7 = 0 + 7"
+   },
+   "mlb": {
+    "canonical": 15,
+    "discovered": 15,
+    "explicit_refusals": 0,
+    "holds": true,
+    "identity": "15 = 15 + 0"
+   },
+   "nfl": {
+    "canonical": 0,
+    "discovered": 10,
+    "explicit_refusals": 10,
+    "holds": true,
+    "identity": "10 = 0 + 10"
+   },
+   "wnba": {
+    "canonical": 4,
+    "discovered": 4,
+    "explicit_refusals": 0,
+    "holds": true,
+    "identity": "4 = 4 + 0"
+   }
+  },
+  "total": {
+   "canonical": 19,
+   "discovered": 36,
+   "explicit_refusals": 17,
+   "holds": true,
+   "identity": "36 = 19 + 17"
+  }
+ },
+ "record_id": "SCHEDULE-ACQUISITION-2026-08-28",
+ "schema": "ops.schedule_acquisition.v2",
+ "slate_date": "2026-08-28",
+ "sports": [
+  "mlb",
+  "wnba",
+  "nfl",
+  "cfb"
+ ],
+ "unresolved_open_items": [
+  "MLB MIA@WSH: Eury Perez asserted as the WSH starter \u2014 third side-swap candidate.",
+  "MLB CWS@MIN: Kremer/Castillo side-swap suspected, single-source.",
+  "MLB COL@ATL: Sugano/Holmes resolved on majority, not confirmed.",
+  "MLB SEA@TOR: start time 23:15Z +/- 8 min.",
+  "MLB MIA and SEA starters: TBD, refused.",
+  "WNBA: Aneesah Morrow listed on two teams.",
+  "WNBA WSH@LAS: no 8/28-dated availability for either club.",
+  "CFB Idaho@Cal Poly: kickoff 02:00Z vs the school's 02:05Z, unresolved."
+ ]
+}

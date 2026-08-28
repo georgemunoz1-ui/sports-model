@@ -13,11 +13,34 @@
  "counts": {
   "ALL_CAP_BASELINE": 5,
   "FULL_STARTER_INFORMATION": 2,
-  "LEGACY_SCHEMA_NO_SLOT_STATS": 3,
+  "LEGACY_SCHEMA_NO_SLOT_STATS": 4,
   "LOW_STARTER_INFORMATION": 2,
-  "NOT_A_CARD": 5,
+  "NOT_A_CARD": 11,
   "PARTIAL_STARTER_INFORMATION": 25
  },
+ "counts_corrections": [
+  {
+   "corrected_utc": "2026-08-28T08:14:56Z",
+   "note": "the stored tally had drifted from the entries it summarises \u2014 boards were appended without it being updated. Recomputed from the entries. No entry was altered; only the derived tally.",
+   "recomputed_from_entries": {
+    "ALL_CAP_BASELINE": 5,
+    "FULL_STARTER_INFORMATION": 2,
+    "LEGACY_SCHEMA_NO_SLOT_STATS": 4,
+    "LOW_STARTER_INFORMATION": 2,
+    "NOT_A_CARD": 11,
+    "PARTIAL_STARTER_INFORMATION": 25
+   },
+   "stale_counts_as_found": {
+    "ALL_CAP_BASELINE": 5,
+    "FULL_STARTER_INFORMATION": 2,
+    "LEGACY_SCHEMA_NO_SLOT_STATS": 3,
+    "LOW_STARTER_INFORMATION": 2,
+    "NOT_A_CARD": 5,
+    "PARTIAL_STARTER_INFORMATION": 25
+   },
+   "trigger": "appending cards/2026-08-28_mlb_board.json"
+  }
+ ],
  "created_utc": "2026-08-23T00:00:00Z",
  "dose": "starter_information_fraction = starter_slots_resolved / starter_slots_total. THIN (LOW_SAMPLE) slots are excluded from the numerator and counted in thin_profile_slots: they carry real but sparse statistics and are not a settled profile.",
  "entries": {
@@ -955,6 +978,32 @@
    "classified_utc": "2026-08-27T11:06:52Z",
    "information_class": "NOT_A_CARD",
    "reason": "Anchored 8/27 WNBA board: three arms on two games, archive-bound pool through 8/26, personnel unverified, action blocked. Classifier recomputes and its class is recorded.",
+   "registration_eligible": true
+  },
+  "cards/2026-08-28_mlb_board.json": {
+   "action_authority": "NONE",
+   "card_sha256": "5a558cfc17dc571ca33632c727e4e44415718e77b670e8e3db19e6124db548b8",
+   "classified_utc": "2026-08-28T08:14:56Z",
+   "dose_bound_to_source_card": "data/mlb/slates/2026-08-28_slate.psv",
+   "information_class": "NOT_A_CARD",
+   "per_game_dose": {
+    "mlb:AZ@SF": 0.5,
+    "mlb:BAL@ATH": 1.0,
+    "mlb:BOS@NYY": 1.0,
+    "mlb:CIN@CHC": 1.0,
+    "mlb:COL@ATL": 1.0,
+    "mlb:CWS@MIN": 1.0,
+    "mlb:HOU@NYM": 1.0,
+    "mlb:KC@CLE": 1.0,
+    "mlb:LAD@DET": 1.0,
+    "mlb:MIA@WSH": 0.5,
+    "mlb:PHI@LAA": 1.0,
+    "mlb:PIT@STL": 0.75,
+    "mlb:SD@TB": 1.0,
+    "mlb:SEA@TOR": 0.5,
+    "mlb:TEX@MIL": 0.75
+   },
+   "reason": "Per-sport MLB forecast board, 15 games x 6 registered arms. Classifier recomputes NOT_A_CARD and that is recorded. Dose independently recomputed from the slate psv and matched row-for-row against the board before this entry was written. TBD_CAP games (2): mlb:MIA@WSH, mlb:SEA@TOR. NAMED_NO_LOG_RETAINED_CAP games (4): mlb:AZ@SF, mlb:MIA@WSH, mlb:PIT@STL, mlb:TEX@MIL. IDENTITY NOTE: this is the first board on which every row carries a CAPTURED, namespaced canonical_id (5 MLB_GAMEPK, 10 ESPN_GAMEID) instead of a synthetic 827000-series pseudo-pk; zero ids were inferred. Separately disclosed and NOT folded into the dose: 2 suspected starter side-swap(s) (mlb:CWS@MIN, mlb:MIA@WSH) \u2014 a wrong side is an identity hazard, not a missing name, and silently discounting it through the dose would move a probability without saying so.",
    "registration_eligible": true
   }
  },

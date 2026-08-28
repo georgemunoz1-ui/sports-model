@@ -65,24 +65,58 @@ NEXT_DAY_BEFORE_HOUR_UTC = 10
 
 
 def _parse_slate(path, date):
-    """gamePk|Away|Home|utcTime|AwaySP|HomeSP — returns (rows, earliest_first_pitch_datetime_or_None).
+    """key|Away|Home|utcTime|AwaySP|HomeSP — returns (rows, earliest_first_pitch_datetime_or_None).
 
-    Times are resolved to absolute UTC datetimes before comparison, with a day rollover for
-    post-midnight starts, so the earliest game is the earliest in TIME rather than in string order."""
-    rows, stamps = [], []
+    Column 0 was historically a gamePk (often a SYNTHETIC 827000-series pseudo-pk). From
+    2026-08-28 it is a namespaced canonical_id, "<ID_SPACE>:<integer>". It is read as an opaque
+    key here and reported under both names so neither an old nor a new consumer is silently wrong.
+
+    Column 3 accepts two forms:
+      * "HH:MMZ"                 — time only, so the slate DATE supplies the day. A late West-coast
+                                   start rolls past midnight UTC and appears as e.g. 00:05Z; sorting
+                                   those as strings makes 00:05Z the "earliest" game, wrong by
+                                   nearly a full day (on the 8/17 slate it moved first pitch from
+                                   17:40Z to 00:05Z and turned a live pregame check into "523
+                                   minutes past first pitch"). Hence NEXT_DAY_BEFORE_HOUR_UTC.
+      * "YYYY-MM-DDTHH:MM:SSZ"   — a full absolute timestamp, which is what the 8/27 and 8/28 slates
+                                   actually carry. This form was previously UNPARSED: the fullmatch
+                                   below rejected it, every stamp was dropped, and the preflight
+                                   reported "first pitch UNKNOWN (no slate)" on a slate it had just
+                                   successfully read 15 starter rows out of. With no first-pitch
+                                   clock there is no machine-checkable T-90/T-45 anchor, so the
+                                   checkpoint deadlines silently had nothing to measure against.
+                                   No rollover heuristic is applied here — the timestamp already
+                                   states its own day, and guessing on top of that would be the
+                                   date-coherence defect the 8/27 P0 was about.
+
+    A full timestamp whose UTC date is neither the slate date nor the following day is REFUSED
+    rather than allowed to set the clock: that is a foreign-date row, and letting one establish
+    first pitch is exactly how a prior-date value gets treated as today's.
+    """
+    rows, stamps, rejected = [], [], []
     d0 = dt.datetime.fromisoformat(date).replace(tzinfo=dt.timezone.utc)
     for ln in open(path):
         p = ln.strip().split("|")
         if len(p) < 6:
             continue
-        rows.append({"gamePk": p[0], "away": p[1], "home": p[2], "utc": p[3],
+        rows.append({"key": p[0], "gamePk": p[0], "away": p[1], "home": p[2], "utc": p[3],
                      "away_sp": p[4], "home_sp": p[5]})
-        if re.fullmatch(r"\d{2}:\d{2}Z", p[3] or ""):
-            h, m = int(p[3][:2]), int(p[3][3:5])
+        t = (p[3] or "").strip()
+        if re.fullmatch(r"\d{2}:\d{2}Z", t):
+            h, m = int(t[:2]), int(t[3:5])
             when = d0.replace(hour=h, minute=m)
             if h < NEXT_DAY_BEFORE_HOUR_UTC:
                 when += dt.timedelta(days=1)
             stamps.append(when)
+        elif re.fullmatch(r"\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z", t):
+            when = dt.datetime.fromisoformat(t[:-1]).replace(tzinfo=dt.timezone.utc)
+            if when.date() in (d0.date(), (d0 + dt.timedelta(days=1)).date()):
+                stamps.append(when)
+            else:
+                rejected.append(f"{p[1]}@{p[2]} {t} is not on {date} or the following UTC day")
+    if rejected:
+        for r in rejected:
+            print(f"   SLATE ROW REFUSED FOR CLOCK (foreign date): {r}")
     return rows, (min(stamps) if stamps else None)
 
 
@@ -255,6 +289,44 @@ def selftest():
     # TBD accounting must be real, not assumed
     if r17["inputs"]["starters"]["resolution_pct"] is None:
         fails.append("starter resolution not computed for a present slate")
+    # FULL-ISO column 3. The 8/27 and 8/28 slates carry absolute timestamps; before this was
+    # handled, every stamp was dropped and the preflight reported "first pitch UNKNOWN (no slate)"
+    # on a slate it had just read 15 starter rows out of — no clock, so no T-90/T-45 anchor.
+    with tempfile.TemporaryDirectory() as td:
+        iso = os.path.join(td, "iso_slate.psv")
+        with open(iso, "w") as fh:
+            # deliberately out of chronological order, and the last row crosses into the next UTC
+            # day, so this also re-checks that a late start does not become "earliest"
+            fh.write("ESPN_GAMEID:401816703|Colorado Rockies|Atlanta Braves|"
+                     "2026-08-28T23:15:00Z|Tomoyuki Sugano|Grant Holmes\n")
+            fh.write("ESPN_GAMEID:401816711|Cincinnati Reds|Chicago Cubs|"
+                     "2026-08-28T18:20:00Z|Rhett Lowder|David Peterson\n")
+            fh.write("ESPN_GAMEID:401816714|Arizona Diamondbacks|San Francisco Giants|"
+                     "2026-08-29T02:15:00Z|Blade Tidwell|Kohl Drake\n")
+        rows, fp = _parse_slate(iso, "2026-08-28")
+        if len(rows) != 3:
+            fails.append(f"full-ISO slate parsed {len(rows)} rows, expected 3")
+        if fp is None:
+            fails.append("full-ISO timestamps produced no first pitch — the clock is dead and "
+                         "there is nothing for a T-90/T-45 checkpoint to measure against")
+        elif fp != dt.datetime(2026, 8, 28, 18, 20, tzinfo=dt.timezone.utc):
+            fails.append(f"full-ISO first pitch resolved to {fp}, expected 2026-08-28T18:20Z")
+        if rows and rows[0]["key"] != "ESPN_GAMEID:401816703":
+            fails.append("namespaced canonical_id did not survive column-0 parsing intact")
+        # a foreign-date row must not be allowed to set the clock
+        stale = os.path.join(td, "stale_slate.psv")
+        with open(stale, "w") as fh:
+            fh.write("MLB_GAMEPK:822694|Colorado Rockies|Washington Nationals|"
+                     "2026-08-27T17:05:00Z|Gabriel Hughes|Jake Irvin\n")   # PRIOR DATE
+            fh.write("ESPN_GAMEID:401816711|Cincinnati Reds|Chicago Cubs|"
+                     "2026-08-28T18:20:00Z|Rhett Lowder|David Peterson\n")
+        rows2, fp2 = _parse_slate(stale, "2026-08-28")
+        if fp2 != dt.datetime(2026, 8, 28, 18, 20, tzinfo=dt.timezone.utc):
+            fails.append(f"a PRIOR-DATE slate row set first pitch to {fp2} — this is the 8/27 "
+                         "result-date contamination shape reappearing on the clock")
+        if len(rows2) != 2:
+            fails.append("the foreign-date row was dropped from rows entirely; it must still be "
+                         "visible as a row, only refused for the clock")
     if fails:
         print("pregame_preflight selftest: FAIL")
         for f in fails:
@@ -263,7 +335,10 @@ def selftest():
     print("pregame_preflight selftest: PASS (day-rollover fixed so a 00:05Z game no longer sorts "
           "ahead of the 17:40Z opener; empty date never READY; 8/17 correctly "
           "FORECAST_ONLY_NO_MARKET_GRADE with prices absent; past-first-pitch marked unrecoverable; "
-          "deadline slack distinguishes recoverable from past-deadline)")
+          "deadline slack distinguishes recoverable from past-deadline; full-ISO column-3 "
+          "timestamps now yield a first-pitch clock instead of silently dropping every stamp; a "
+          "prior-date slate row is refused for the clock but stays visible as a row; namespaced "
+          "canonical_ids survive column-0 parsing)")
     return 0
 
 

@@ -277,7 +277,7 @@
     "RESULTS_AND_STATS_THROUGH_ASOF",
     "MARKET_PRICES_VIA_SEPARATE_OVERLAY"
    ],
-   "deadline_utc": "2026-08-28T22:00:00Z",
+   "deadline_utc": "2026-08-28T22:45:00Z",
    "depends_on": [],
    "history": [
     {
@@ -375,10 +375,16 @@
      "status": "RUNNING",
      "units_done": 11,
      "utc": "2026-08-28T18:10:00Z"
+    },
+    {
+     "note": "22:00Z DEADLINE DISPOSITION: NO UNIT BOUND, units stay 11/17. The 22:00Z checkpoint did resolve a real open item \u2014 Aneesah Morrow is Toronto's and is out for the season, settling a conflict where she appeared on two teams' lists \u2014 but that came from AGGREGATOR reporting, which identifies and does not bind. OFFICIAL_INJURY_AVAILABILITY stays at 0 of 6. Crediting search identification against a component whose unit definition requires an official section with a retrieval timestamp and content hash would inflate the job, and this job has been honest about that since 8/25. Washington and Los Angeles still have NO 8/28-dated report at all; the only one on file is 8/15 and stays refused as stale. Every official route remains EGRESS_BLOCKED. Rolled to 22:45Z, the last pregame checkpoint before the 23:30Z tips. If nothing binds by then the pregame window for tonight's WNBA slate is MISSED \u2014 the same outcome as 8/25, and it should be recorded as missed rather than quietly rolled past. The job stays open because binding then serves future slates, not tonight's dispositions.",
+     "status": "RUNNING",
+     "units_done": 11,
+     "utc": "2026-08-28T22:15:00Z"
     }
    ],
    "job_id": "RJ-005-WNBA-FEATURE-PIPELINE",
-   "next_run_utc": "2026-08-28T22:00:00Z",
+   "next_run_utc": "2026-08-28T22:45:00Z",
    "notes": "After binding: recompute feature state (as_of, source hashes, age); generate separately identified replacement forecasts (wnba.replacement.FEATURE_REFRESH) since the board is frozen; rerun side, margin, total, EV and disposition through side_reselection_gate after anchor. Exhaustion of all authorized routes without binding publishes SYSTEM_FAILURE_WNBA_FEATURE_PIPELINE \u2014 never a normal-looking board.",
    "owner_subsystem": "wnba_features",
    "status": "RUNNING",

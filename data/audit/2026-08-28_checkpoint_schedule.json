@@ -1,0 +1,72 @@
+{
+ "archive_wake": {
+  "purpose": "wehoop fetch, 8/27 WNBA grading, then the 8/28 WNBA board freeze",
+  "trigger": "trig_014GC9SPNbo5E16sV9NPYWhb",
+  "utc": "2026-08-28T11:00:00Z"
+ },
+ "blocks": [
+  {
+   "anchor_game": "mlb:CIN@CHC",
+   "anchor_id": "ESPN_GAMEID:401816711",
+   "anchor_start_utc": "2026-08-28T18:20:00Z",
+   "label": "MLB day",
+   "t45_trigger": "trig_018sqpJXGmQPn8vMZLfeNnFY",
+   "t45_utc": "2026-08-28T17:35:00Z",
+   "t90_trigger": "trig_01PUh3pU8ukKnFPHfZuKxGNn",
+   "t90_utc": "2026-08-28T16:50:00Z"
+  },
+  {
+   "anchor_game": "mlb:LAD@DET",
+   "anchor_id": "MLB_GAMEPK:824231",
+   "anchor_start_utc": "2026-08-28T22:40:00Z",
+   "label": "MLB evening + NFL",
+   "purpose": "the three starter side-swap rows (MIA@WSH, CWS@MIN, PIT@STL) and COL@ATL all start in or after this block, so this is the real window to settle them",
+   "secondary_anchor": "nfl:WSH@BAL ESPN_GAMEID:401873302 at 2026-08-28T22:00:00Z (T-50 at this slot)",
+   "t40_trigger": "trig_014KjifJeswhH4N4JTJ2Qpu6",
+   "t40_utc": "2026-08-28T22:00:00Z",
+   "t90_trigger": "trig_011vhvdsmRZTvroEDb95QNAC",
+   "t90_utc": "2026-08-28T21:10:00Z"
+  },
+  {
+   "anchor_game": "wnba:POR@ATL and wnba:CON@IND",
+   "anchor_id": "ESPN_GAMEID:401857180 / ESPN_GAMEID:401857181",
+   "anchor_start_utc": "2026-08-28T23:30:00Z",
+   "board_state": "CLOSED at schedule time \u2014 the wehoop rebuild through the 8/27 cutoff has not unblocked; a checkpoint on a closed board records that state and does not backfill a forecast",
+   "label": "WNBA",
+   "t45_trigger": "trig_016Gw7jBea6yhFQ2MWaaWUSZ",
+   "t45_utc": "2026-08-28T22:45:00Z",
+   "t90_trigger": "trig_014KjifJeswhH4N4JTJ2Qpu6",
+   "t90_utc": "2026-08-28T22:00:00Z"
+  },
+  {
+   "anchor_game": "mlb:CWS@MIN",
+   "anchor_id": "ESPN_GAMEID:401816710",
+   "anchor_start_utc": "2026-08-29T00:10:00Z",
+   "label": "MLB late",
+   "note": "five games cross into 8/29 UTC and are all 8/28 Eastern rows. AZ@SF (02:15Z) continues a series that also played 8/27 \u2014 the exact shape that produced the P0 prior-date join",
+   "t85_trigger": "trig_016Gw7jBea6yhFQ2MWaaWUSZ",
+   "t85_utc": "2026-08-28T22:45:00Z"
+  }
+ ],
+ "clock_source": {
+  "first_pitch_utc": "2026-08-28T18:20:00Z",
+  "note": "This schedule has a machine-verified anchor for the first time. Until today the preflight parsed only 'HH:MMZ' in slate column 3, so the full ISO timestamps the 8/27 and 8/28 slates carry were silently dropped and first pitch read UNKNOWN \u2014 the T-90 and T-45 offsets had nothing to measure against. Fixed and covered by selftest.",
+  "tool": "harness/pregame_preflight.py"
+ },
+ "created_utc": "2026-08-28T08:30:30Z",
+ "every_checkpoint_must": [
+  "prove the frozen board is byte-identical, with the hash \u2014 a checkpoint that does not prove the board is unchanged proves nothing",
+  "record the market attempt and its receipt whether or not it succeeds",
+  "leave model output untouched when an action blocker fires; a blocker suppresses the ACTION layer only",
+  "never substitute a starter name for a cap"
+ ],
+ "ledger": {
+  "exposure_usd": 0,
+  "n_bets": 0,
+  "units": 0.0,
+  "wager_authority": "NO"
+ },
+ "record_id": "CHECKPOINT-SCHEDULE-2026-08-28",
+ "schema": "ops.checkpoint_schedule.v1",
+ "slate_date": "2026-08-28"
+}

@@ -1,0 +1,200 @@
+<title>MLB Forecast Board &mdash; August 28</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=Public+Sans:wght@400;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  --bg:#f6f5f2; --panel:#ffffff; --ink:#22302b; --muted:#5c6b64; --line:#d8ddd8;
+  --accent:#2e6e4e; --accent-ink:#ffffff; --warn-bg:#fdf3e3; --warn-ink:#7a5218; --warn-line:#e5c894;
+  --block-bg:#f8e9e4; --block-ink:#8a3b2a; --chip:#eef1ee; --good:#2e6e4e; --flag:#a04b2f;
+}
+:root:not([data-theme="light"]){}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#161b18; --panel:#1e2521; --ink:#e4e9e5; --muted:#93a29a; --line:#33403a;
+    --accent:#4da97c; --accent-ink:#10251b; --warn-bg:#2d2415; --warn-ink:#e3c07f; --warn-line:#59492a;
+    --block-bg:#2e1f1b; --block-ink:#e2a08c; --chip:#28312c; --good:#4da97c; --flag:#d98a68;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#161b18; --panel:#1e2521; --ink:#e4e9e5; --muted:#93a29a; --line:#33403a;
+  --accent:#4da97c; --accent-ink:#10251b; --warn-bg:#2d2415; --warn-ink:#e3c07f; --warn-line:#59492a;
+  --block-bg:#2e1f1b; --block-ink:#e2a08c; --chip:#28312c; --good:#4da97c; --flag:#d98a68;
+}
+body{background:var(--bg);color:var(--ink);font:16px/1.55 "Public Sans",system-ui,sans-serif;margin:0;padding:0 16px 64px}
+main{max-width:960px;margin:0 auto}
+h1,h2,h3{font-family:"Archivo",system-ui,sans-serif;text-wrap:balance;line-height:1.15}
+h1{font-size:1.9rem;margin:28px 0 4px}
+h2{font-size:1.25rem;margin:34px 0 10px}
+.sub{color:var(--muted);margin:0 0 18px}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0}
+.chip{background:var(--chip);border:1px solid var(--line);border-radius:999px;padding:3px 12px;font-size:.82rem;letter-spacing:.02em}
+.chip b{font-family:"IBM Plex Mono",monospace}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:18px 20px;margin:16px 0}
+.answers{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px}
+.answers .a{border-left:3px solid var(--accent);padding:2px 0 2px 10px}
+.answers .q{font-size:.72rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted)}
+.answers .v{font-weight:600}
+.warn{background:var(--warn-bg);color:var(--warn-ink);border:1px solid var(--warn-line);border-radius:10px;padding:12px 16px;margin:14px 0}
+.block{background:var(--block-bg);color:var(--block-ink);border-radius:10px;padding:12px 16px;margin:14px 0}
+.scroll{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:.9rem}
+th,td{padding:7px 10px;border-bottom:1px solid var(--line);text-align:right;font-variant-numeric:tabular-nums}
+th{font-family:"Archivo";font-size:.75rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
+th.l,td.l{text-align:left}
+td.n{font-family:"IBM Plex Mono",monospace;font-size:.85rem}
+.pick{color:var(--good);font-weight:600}
+.flag{color:var(--flag);font-weight:600}
+details{border:1px solid var(--line);border-radius:10px;padding:12px 18px;margin:12px 0;background:var(--panel)}
+summary{cursor:pointer;font-family:"Archivo";font-weight:600}
+code{font-family:"IBM Plex Mono",monospace;font-size:.85em;background:var(--chip);padding:1px 5px;border-radius:4px}
+p{max-width:70ch}
+.proof{background:var(--chip);border:1px solid var(--line);border-radius:10px;padding:12px 16px;margin:14px 0;font-family:"IBM Plex Mono",monospace;font-size:.82rem;line-height:1.7;overflow-x:auto}
+.proof b{font-family:"Archivo",sans-serif}
+</style>
+<main>
+<h1>MLB Forecast Board &mdash; Friday, August 28</h1>
+<p class="sub">Prospective &middot; 15 games &middot; frozen 2026-08-28T08:14:56Z
+&middot; forecast-only, no market on file &middot; paper research only</p>
+
+<div class="chips">
+<span class="chip">GAMES <b>15</b> &middot; ARMS <b>6</b></span>
+<span class="chip">GAME IDS <b>15/15 CAPTURED</b> &middot; INFERRED <b>0</b></span>
+<span class="chip">SYNTHETIC PSEUDO-PKS <b>0</b></span>
+<span class="chip">BETS <b>0</b> &middot; <b>$0</b></span>
+<span class="chip">WAGER AUTHORITY <b>NO</b></span>
+</div>
+
+<div class="proof"><b>RESULT BINDING PROOF</b> &mdash; mlb:2026-08-28 &middot; <code>8cd5e165</code><br>
+RESULT_BINDING_PASS = 0/0<br>
+DATE_COHERENCE_PASS = 0/0<br>
+CANONICAL_ID_MATCH = 0/0<br>
+REFUSED_ROWS = 0<br>
+<span style="font-family:Public Sans,sans-serif">This slate has not started. The counters read <b>0/0</b> because <b>nothing is claimed</b> &mdash; not because nothing was checked. All 15 board games were loaded and every canonical id was read; the cohort is reported <b>not gradable</b> with <code>COHORT_COVERAGE_INCOMPLETE</code>, which is the correct state for a slate whose earliest game is still ahead. When finals arrive they must bind on sport + canonical id + scheduled date + result date + away + home, and one refused row blocks every record, Brier, MAE and P&amp;L on the follow-up card.</span></div>
+
+<div class="panel answers">
+<div class="a"><div class="q">What changed today</div><div class="v">Every row carries a real,
+captured game id. The invented 827000-series key is gone.</div></div>
+<div class="a"><div class="q">What the model says</div><div class="v">7 of 15 home sides
+above the prior; 8 games inside &plusmn;3 points of a coin flip. Strongest call
+Milwaukee at 60.09%.</div></div>
+<div class="a"><div class="q">Market</div><div class="v">No retained price artifact. Five routes
+attempted, all blocked. Forecast-only.</div></div>
+<div class="a"><div class="q">Biggest caveat</div><div class="v">Inputs are canonical only through
+2026-08-21 &mdash; seven days stale.</div></div>
+<div class="a"><div class="q">Wagers</div><div class="v">0 bets &middot; 0.00u &middot; $0 &mdash;
+nothing authorized, execution unauthorized</div></div>
+</div>
+
+<h2>The identity fix, and why it was overdue</h2>
+<div class="panel">
+<p><b>Until today every MLB slate opened each row with a number that was made up.</b> The keys ran
+827000, 827001, 827002 &mdash; invented at build time, shaped exactly like a real MLB gamePk, and
+bound to nothing in the world. A key like that cannot identify a game, so results had to be joined
+on something else, and what they were joined on was the team matchup. That is the enabling
+condition behind the August 27 grading failure, in which five August 26 finals were attached to
+August 27 games in a continuing series.</p>
+<p><b>Yesterday's archive verification settled the argument with evidence rather than reasoning.</b>
+Of the two 8/27 ids that had been <i>inferred</i> rather than captured, one was right and one was a
+fabrication: AZ@SF had been carried as 825038, a value obtained by decrementing a <i>different</i>
+matchup's id, and no game 825038 exists. The real id is 823179. One inference in two was wrong.</p>
+<p><b>So this board carries captured ids only, and carries them namespaced.</b> Five games have a
+real MLB gamePk (5 of 15), surfaced from a dated mlb.com slug. The other 10 do not
+&mdash; searching found an ESPN gameId and no gamePk &mdash; so they carry the ESPN id under its own
+namespace. Both spaces are plain integers, which is exactly why the prefix matters: an
+<code>ESPN_GAMEID</code> silently read as a gamePk would be the same defect wearing new clothes. The
+builder refuses an unnamespaced key outright, and the binding gate now refuses a board that mixes
+the two forms, because a bare integer sitting beside a namespaced one is a pseudo-pk that survived
+the migration.</p>
+<p><b>Ten gamePks were missing and none was reconstructed.</b> The 8/28 ESPN ids run contiguously
+from 401816702 to 401816716 and the 8/29 siblings sit at exactly +15, so adjacency would have
+produced fifteen plausible-looking numbers in a few seconds. That is precisely the arithmetic that
+manufactured 825038.</p>
+</div>
+
+<h2>Model output &mdash; all fifteen games</h2>
+<p>Champion probability is shown for the side it favours; the two challengers are shown as home-win
+probability throughout, so a value below 50% means that arm leans away. Dose is the registered
+information weight: 1.0 with both starters resolved, 0.75 with one capped, 0.5 with a TBD.</p>
+<div class="scroll"><table>
+<thead><tr><th class="l">Game</th><th class="l">Canonical id</th><th class="l">Probables</th>
+<th class="l">Champion side</th><th>Champion</th><th>Adaptive (home)</th><th>Widened (home)</th>
+<th>Proj. total</th><th>Dose</th></tr></thead>
+<tbody>
+<tr><td class="l"><b>Cincinnati @ Cubs</b></td><td class="n">ESPN_GAMEID:401816711</td><td class="l">Rhett Lowder / David Peterson</td><td class="l pick">CHC</td><td class="n">55.29%</td><td class="n">51.60%</td><td class="n">51.09%</td><td class="n">11.19</td><td class="n">1.0</td></tr><tr><td class="l"><b>Dodgers @ Detroit</b></td><td class="n">MLB_GAMEPK:824231</td><td class="l">Drew Anderson / Tarik Skubal</td><td class="l pick">LAD</td><td class="n">50.89%</td><td class="n">52.65%</td><td class="n">53.34%</td><td class="n">7.84</td><td class="n">1.0</td></tr><tr><td class="l"><b>Miami @ Washington</b> <span class="flag">side unverified</span></td><td class="n">ESPN_GAMEID:401816707</td><td class="l">TBD / Eury Perez</td><td class="l flag">WSH</td><td class="n">54.71%</td><td class="n">50.03%</td><td class="n">47.70%</td><td class="n">10.41</td><td class="n">0.5</td></tr><tr><td class="l"><b>Kansas City @ Cleveland</b></td><td class="n">ESPN_GAMEID:401816705</td><td class="l">Michael Wacha / Tanner Bibee</td><td class="l pick">CLE</td><td class="n">50.31%</td><td class="n">52.30%</td><td class="n">52.57%</td><td class="n">7.72</td><td class="n">1.0</td></tr><tr><td class="l"><b>Houston @ Mets</b></td><td class="n">ESPN_GAMEID:401816704</td><td class="l">Hunter Brown / Christian Scott</td><td class="l pick">NYM</td><td class="n">52.13%</td><td class="n">55.03%</td><td class="n">58.39%</td><td class="n">8.85</td><td class="n">1.0</td></tr><tr><td class="l"><b>San Diego @ Tampa Bay</b></td><td class="n">ESPN_GAMEID:401816708</td><td class="l">Casey Mize / Shane McClanahan</td><td class="l pick">TB</td><td class="n">52.49%</td><td class="n">50.85%</td><td class="n">49.46%</td><td class="n">7.55</td><td class="n">1.0</td></tr><tr><td class="l"><b>Seattle @ Toronto</b></td><td class="n">ESPN_GAMEID:401816709</td><td class="l">TBD / Dylan Cease</td><td class="l pick">TOR</td><td class="n">51.83%</td><td class="n">51.22%</td><td class="n">50.27%</td><td class="n">7.11</td><td class="n">0.5</td></tr><tr><td class="l"><b>Colorado @ Atlanta</b> <span class="flag">starter on majority</span></td><td class="n">ESPN_GAMEID:401816703</td><td class="l">Tomoyuki Sugano / Grant Holmes</td><td class="l pick">ATL</td><td class="n">54.99%</td><td class="n">53.93%</td><td class="n">56.06%</td><td class="n">9.88</td><td class="n">1.0</td></tr><tr><td class="l"><b>Boston @ Yankees</b></td><td class="n">MLB_GAMEPK:823504</td><td class="l">Patrick Sandoval / Gerrit Cole</td><td class="l pick">NYY</td><td class="n">54.67%</td><td class="n">51.56%</td><td class="n">50.99%</td><td class="n">8.70</td><td class="n">1.0</td></tr><tr><td class="l"><b>Texas @ Milwaukee</b></td><td class="n">MLB_GAMEPK:823744</td><td class="l">Cody Bradford / Logan Henderson</td><td class="l pick">MIL</td><td class="n">60.09%</td><td class="n">54.13%</td><td class="n">56.49%</td><td class="n">8.09</td><td class="n">0.75</td></tr><tr><td class="l"><b>White Sox @ Minnesota</b> <span class="flag">side unverified</span></td><td class="n">ESPN_GAMEID:401816710</td><td class="l">Dean Kremer / Luis Castillo</td><td class="l flag">CWS</td><td class="n">52.75%</td><td class="n">48.97%</td><td class="n">45.45%</td><td class="n">8.82</td><td class="n">1.0</td></tr><tr><td class="l"><b>Pittsburgh @ St. Louis</b> <span class="pick">sides corrected</span></td><td class="n">ESPN_GAMEID:401816712</td><td class="l">Jared Jones / Quinn Mathews</td><td class="l pick">PIT</td><td class="n">52.65%</td><td class="n">52.89%</td><td class="n">53.84%</td><td class="n">8.17</td><td class="n">0.75</td></tr><tr><td class="l"><b>Philadelphia @ Angels</b></td><td class="n">MLB_GAMEPK:823985</td><td class="l">Andrew Painter / Reid Detmers</td><td class="l pick">LAA</td><td class="n">51.54%</td><td class="n">53.38%</td><td class="n">54.89%</td><td class="n">8.62</td><td class="n">1.0</td></tr><tr><td class="l"><b>Baltimore @ Athletics</b></td><td class="n">MLB_GAMEPK:824960</td><td class="l">Brandon Young / Jacob Lopez</td><td class="l pick">BAL</td><td class="n">59.01%</td><td class="n">46.59%</td><td class="n">40.43%</td><td class="n">14.56</td><td class="n">1.0</td></tr><tr><td class="l"><b>Arizona @ Giants</b></td><td class="n">ESPN_GAMEID:401816714</td><td class="l">Blade Tidwell / Kohl Drake</td><td class="l pick">AZ</td><td class="n">53.10%</td><td class="n">51.19%</td><td class="n">50.20%</td><td class="n">7.94</td><td class="n">0.5</td></tr>
+</tbody></table></div>
+
+<h2>What the board actually says</h2>
+<div class="panel">
+<p><b>This is a flat slate.</b> The champion's fifteen probabilities span
+40.99%&ndash;60.09% around a 52.05% home prior, and 8 of 15 sit within
+three points of even. The one genuine outlier is TEX@MIL, where the champion
+takes Milwaukee at 60.09%. A slate this compressed is where
+side selection is worth least and where a wrong starter costs most &mdash; a two-point shift
+reverses a side.</p>
+<p><b>The projected totals carry one number worth naming.</b> BAL@ATH projects
+14.56 runs against a 8.99 prior, and it is not a
+read on the pitchers: the park factor is 1.449, the highest on the board, because the Athletics
+are playing at Sutter Health Park in West Sacramento rather than in Oakland. The total target is
+registered <code>NEVER_DECISION_BEARING</code> and nothing is selected from it.</p>
+<p><b>Inputs are stale and that bounds every number above.</b> The evidence cutoff is canonical rows
+strictly before 2026-08-28, and the latest canonical result in the system is 2026-08-21. The board
+is therefore running on team form that is seven days old. Finals after 8/21 exist only as relayed
+or derived rows, which display but never admit &mdash; so the priors are unchanged at
+0.5205399061 and 8.9911, and that staleness is a property of
+tonight's forecast, not a footnote to it.</p>
+</div>
+
+<h2>Identity risks, disclosed and not priced in</h2>
+<div class="warn">
+<p>Three rows carry a hazard that is <b>not</b> a missing name, and folding it into a starter class
+or discounting it through the dose would move a probability without saying so. It is listed instead.
+The registered dose formula is untouched.</p>
+</div>
+<div class="scroll"><table>
+<thead><tr><th class="l">Game</th><th class="l">Risk</th><th class="l">What makes it a risk</th></tr></thead>
+<tbody>
+<tr><td class="l"><b>COL@ATL</b></td><td class="l">Resolved On Majority</td><td class="l">an early snippet put Sugano on ATL and another reported ATL as TBD; two later independent snippets gave Sugano (COL) vs Holmes (ATL) with consistent stat lines. Majority carried, not confirmed.</td></tr><tr><td class="l"><b>CWS@MIN</b></td><td class="l">Side Swap Suspected</td><td class="l">Kremer (CWS) / Castillo (MIN) is single-source and puts both pitchers on clubs differing from their pre-2026 teams. It comes from the same source whose PIT@STL line was verified side-swapped. Re-confirm BOTH sides at T-90.</td></tr><tr><td class="l"><b>MIA@WSH</b></td><td class="l">Side Swap Suspected</td><td class="l">Eury Perez — a Marlins-associated arm — is asserted as the WASHINGTON starter while MIAMI is TBD. Same shape as the confirmed PIT@STL swap. If the side is wrong, the home slot holds the away team's pitcher and the away slot is empty. Re-confirm at T-90.</td></tr><tr><td class="l"><b>PIT@STL</b></td><td class="l">Side Swap Corrected</td><td class="l">the source reported 'Cardinals: Jared Jones / Pirates: Quinn Mathews'; a dedicated verification pass established Jones starts for PIT and Mathews for STL. The board carries the corrected sides. The uncorrected version would have mis-attributed both.</td></tr>
+</tbody></table></div>
+
+<h2>Starters refused rather than guessed</h2>
+<div class="panel">
+<ul>
+<li>SEA (at TOR): explicitly TBD on two independent snippets. None guessed.</li><li>MIA (at WSH): one snippet named 'Jackson Kent' while the same snippet reported the Marlins probable list as TBD. Unresolved contradiction -&gt; TBD. 'Jackson Kent' is retained as an unconfirmed fragment and must not be promoted without confirmation.</li>
+<li>CONFLICT: 7:15 PM ET on three snippets vs 7:07 PM ET (Rogers Centre's customary time) on two. 23:15:00Z carried on the majority; any T-90/T-45 timer keyed to this game must carry an 8-minute tolerance.</li>
+<li>One snippet reported CWS@MIN 2:10 PM, PIT@STL 3:10 PM, BAL@ATH 4:07 PM and PHI@LAA 7:20 PM ET. Each contradicts 3+ sources and they do not form a coherent slate. Discarded, never averaged.</li>
+</ul>
+</div>
+
+<h2>Market: nothing on file</h2>
+<div class="block">
+<p><b>NO_RETAINED_MARKET_ARTIFACT.</b> Five routes were attempted and every one was refused by the
+egress proxy. No break-even probability, no edge, no selection and no EV exists for this slate.
+That is an <b>action</b> blocker and it does not touch model output &mdash; all fifteen games carry
+their full six-arm forecast above.</p>
+<ul><li><code>curl https://sportsbook.draftkings.com/leagues/baseball/mlb</code> &rarr; REFUSED: EGRESS_BLOCKED — curl exit 56, CONNECT tunnel failed, response 403</li><li><code>curl https://sportsbook-nash.draftkings.com/sites/US-SB/api/v5/eventgroups/84240</code> &rarr; REFUSED: EGRESS_BLOCKED — curl exit 56, CONNECT tunnel failed, response 403</li><li><code>curl https://site.api.espn.com/apis/site/v2/sports/baseball/mlb/scoreboard?dates=20260828</code> &rarr; REFUSED: EGRESS_BLOCKED — curl exit 56, CONNECT tunnel failed, response 403</li><li><code>curl https://api.the-odds-api.com/v4/sports/baseball_mlb/odds</code> &rarr; REFUSED: EGRESS_BLOCKED — curl exit 56, CONNECT tunnel failed, response 403</li><li><code>WebFetch https://sportsbook.draftkings.com/leagues/baseball/mlb (approved tool)</code> &rarr; REFUSED: EGRESS_BLOCKED — domain blocked by the network egress proxy</li></ul>
+<p>Org egress 403s are never routed around. TLS verification was not disabled, HTTPS_PROXY was not unset, and no alternate host, mirror or scraper was used to reach a blocked sports domain. The block is the receipt.</p>
+<p>If prices are relayed, cross-book 'Best Odds' de-vig remains INVALID for recovering market probability (8/3 ruling). A relayed single-book price supports SINGLE-PRICE EV SCREENING only.</p>
+</div>
+
+<h2>Slate reconciliation, four sports</h2>
+<div class="panel">
+<p>36 games discovered across MLB, WNBA, NFL and college football &mdash; 19 canonical, 17
+explicitly refused, identity holds. Nothing any route surfaced was dropped silently. NFL's 10
+preseason games are benchmark-only and sit on their own board. College football surfaced 7 games,
+<b>all FCS versus FCS</b>: the registered FBS challenger has no cohort tonight, and zero FBS games
+existing on this date is the finding rather than a gap. WNBA's 4 games are the only rows bound to a
+retained artifact, and its board is deliberately still closed &mdash; the feature rebuild through
+the 8/27 cutoff has to run first, and the upstream archive has not published it yet.</p>
+</div>
+<details><summary>Hazards recorded for anything that reads these files by machine</summary>
+<ul><li>DO NOT machine-check the reconciliation identity off len(refusals). The per-sport 'refusals' arrays are not row counts: MLB has 11 entries against n_refused=0 (all field-level, inside otherwise-canonical rows) and NFL has 12 against n_refused=10 (10 row-level + 1 slate-level + 1 starter-level). A length check reports false failures. The identity is checked against the enumerated row counts above.</li><li>n_canonical IS NOT A UNIFORM QUALITY SIGNAL ACROSS SPORTS. Three different bars were applied: WNBA's 4 canonical rows rest on a retained git artifact; MLB's 15 rest on search identification only, while its own refusal states the slate 'must not be used to bind results'; NFL and CFB scored 0 canonical on that same class of evidence. Compare within a sport, never across.</li><li>CFB is keyed college_football_fbs but discovered ZERO FBS games — all 7 rows are FCS-vs-FCS. An empty FBS cohort is the finding, not a gap to fill.</li></ul>
+</details>
+
+<h2>Standing position</h2>
+<div class="panel">
+<p><b>0 bets &middot; 0.00 units &middot; $0.</b> Paper research only; execution is unauthorized and
+wager authority is NO. Nothing on this card is a guarantee or a lock. Starters, lineups and injuries
+must be verified before any recommendation, and three rows above are explicitly unverified. Prices,
+if relayed, are never predictive features and enter only the action layer. MLB and WNBA cohorts are
+never pooled.</p>
+</div>
+</main>

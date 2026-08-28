@@ -4113,3 +4113,70 @@ New harness/state_coherence.py (8/8): refuses the six registered incoherence pai
 finding within minutes of existing: the replacement rows' status tag didn't say REPLACEMENT near a
 resolved TBD. Page retitled "August 25 Forecast & Market Review" - a page may not call itself a
 Decision Board while SYSTEM_NOT_DECISION_READY. Badge carries COMBINED 16/16.
+
+### 2026-08-26 to 2026-08-28 (P0 result-date contamination, and the identity fix that closes it)
+
+**The defect.** The 8/27 end-of-night review published five wrong finals. Owner's diagnosis was
+exact: a repeated-series join keyed by teams without requiring the scheduled date or game id, so
+five August 26 finals were attached to August 27 games. Record caf9a897 is INVALID-QUARANTINED with
+every wrong claim enumerated.
+
+**Why it was possible.** Every MLB slate psv opened each row with a synthetic 827000-series key
+invented at build time. A key bound to nothing cannot identify a game, so the join fell back to the
+team matchup — and in a continuing series the matchup is not unique across dates. RJ-007 had already
+found four dateless joins resting on that contract.
+
+**New harness/result_binding_gate.py.** Contract: sport + game_pk + scheduled_date + result_date +
+away + home, all required. Full-cohort refusal — one bad row blocks every aggregate. 17 refusal
+codes. Adversarial audit found six bypasses in my own gate (result_date optional, unbounded final
+lag, duplicate binding, partial cohort, doubleheader siblings, placeholder board pk), all fixed with
+regression fixtures. The gate was decorative until wired into grade_slate.py, which is where the
+audit found the defect live on the write path; legacy grading is now suspended for boards that
+cannot prove binding (0/15 today).
+
+**Two fixture pks were INFERRED, self-disclosed, then archive-verified on 8/28.** 823014 was right.
+825038 was a FABRICATION — decremented from CHC@AZ, a different matchup, and no such game exists.
+The real AZ@SF id is 823179. One inference in two was wrong; that is the evidence base for refusing
+adjacency inference outright.
+
+**8/24-8/27 history audit:** 56 rows, 0 new contamination, 13 disclosed unverifiable. The decisive
+method was recomputing arms from the frozen boards against both hypotheses — live records match the
+correct-finals column to 4 decimals, the quarantined record matches the 8/26-join column exactly.
+Verdict: realized defect ISOLATED, enabling condition SYSTEMIC. The earlier dates are clean by
+write-time ordering and the luck of the calendar, not by any check they passed.
+
+**8/28 is the first board with no invented identifiers.** 15 games, all ids CAPTURED, zero inferred,
+zero synthetic — namespaced as `<ID_SPACE>:<integer>` because 5 rows carry a real MLB gamePk and 10
+carry an ESPN gameId, and both spaces are plain integers. The builder refuses an unnamespaced key.
+Acquisition covered four sports: 36 discovered = 19 canonical + 17 refused. NFL preseason is
+benchmark-only (registered scope is regular season); college football surfaced 7 games, all FCS, so
+the FBS challenger has no cohort. WNBA is bound to a retained artifact but its board stays CLOSED
+until the wehoop rebuild through the 8/27 cutoff lands.
+
+**Gate hardened again on 8/28.** The placeholder guard caught identifiers that announce themselves
+empty but could not catch a fabricated integer. Now that boards are namespaced, a bare integer beside
+a namespaced one is a surviving pseudo-pk and is refused at cohort level. The check targets the
+MIXTURE, not the namespace: a fully namespaced board must still grade and the frozen 8/27 board must
+still bind, both pinned by selftest. Mutation suite 8/8.
+
+**Silent clock failure fixed.** pregame_preflight parsed only "HH:MMZ" in slate column 3, so the full
+ISO timestamps the 8/27 and 8/28 slates carry were dropped and first pitch read UNKNOWN on a slate it
+had just read 15 starter rows out of — the T-90/T-45 offsets had no anchor. Absolute timestamps are
+now parsed without the day-rollover heuristic, and a foreign-date row is refused for the clock while
+staying visible as a row.
+
+**NFL history correction carried forward.** The 8/27 board's claim that no NFL model was ever
+registered is FALSE and withdrawn; v0_2.shadow passed its retrospective gate and is a
+VALIDATED_SHADOW_ARTIFACT. The 8/27 board stays byte-unchanged under R3 and the correction record
+supersedes it. No forecast tonight anyway — preseason is outside the registered scope.
+
+**Three starter side-swaps disclosed, not priced in.** PIT@STL was verified swapped in the source and
+is corrected; CWS@MIN is suspected from the same source; MIA@WSH asserts a Marlins arm as the
+Nationals starter. A wrong side is an identity hazard, not a missing name — recorded in its own
+register rather than folded into a starter class or discounted through the dose.
+
+Ledger unchanged: 0 bets, 0.00 units, $0. Wager authority NO.
+
+Open: owner relay of the official 8/25 MLB scoreboard (closes 3 UNCHECKED 8/26 rows); RJ-006 needs
+the immutable NFL run directory; RJ-007's four dateless joins; `main` is still the default branch
+with unrelated history and 2 files, so a fresh clone gets no harness.

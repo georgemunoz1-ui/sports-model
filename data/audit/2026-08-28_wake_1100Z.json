@@ -1,0 +1,54 @@
+{
+ "agenda": {
+  "1_wnba": {
+   "archive": "wehoop advanced 3316fa3 -> 7a1c7eb (8/28 06:32 ET), carrying both 8/27 finals",
+   "binding": "2/2 on all four counters; scores verified against retained evidence",
+   "board": "cards/2026-08-28_wnba_board_v2.json supersedes v1; v1 untouched under R3",
+   "defects_found": [
+    "COMMIT_PIN/artifact drift with the module selftest failing unnoticed",
+    "my own full-display-name slate keys returned DATA_BLOCKED on all four games"
+   ],
+   "grading": "data/wnba/analysis/2026-08-27_grading.json \u2014 all three arms 2-0 on sides, which is one shared coin landing twice, not three independent successes; n=2 accrues nothing",
+   "pool": "extension rebuilt 89 -> 91 games, four target ids confirmed absent",
+   "status": "COMPLETE"
+  },
+  "2_mlb_0827": {
+   "detail": "no new bindable artifact appeared. The lancebroz parquet still has no runs column, so no score-bearing route exists and the corrected 8/27 record stands as relayed. Descriptive grading on relayed finals accrues nothing; nothing was re-graded.",
+   "status": "NO CHANGE \u2014 still owner-relay-gated"
+  },
+  "3_recovery_jobs": {
+   "RJ-001B": "0/126 \u2014 unchanged and honest; the archive has never carried a runs column",
+   "RJ-005": "RUNNING; injury-route receipt unchanged this cycle",
+   "RJ-006": "1/6 \u2014 the immutable NFL run directory still awaits an owner upload or PR; no unit is bindable from this environment",
+   "RJ-007": "the synthetic-pk defect is fixed forward on 8/28 boards; the four historical dateless joins remain open",
+   "status": "SWEPT \u2014 0 overdue (healthcheck)"
+  },
+  "4_release": {
+   "healthcheck": "HEALTHY 0 fail",
+   "pushed": "sportsmodel/main 700feea",
+   "status": "COMPLETE"
+  }
+ },
+ "completed_utc": "2026-08-28T11:35:00Z",
+ "fired_utc": "2026-08-28T11:01:19Z",
+ "ledger": {
+  "exposure_usd": 0,
+  "n_bets": 0,
+  "units": 0.0,
+  "wager_authority": "NO"
+ },
+ "next_checkins": {
+  "already_armed": [
+   "2026-08-28T16:50:00Z MLB day T-90",
+   "2026-08-28T17:35:00Z MLB day T-45",
+   "2026-08-28T21:10:00Z MLB evening T-90 + NFL T-50",
+   "2026-08-28T22:00:00Z WNBA T-90 + MLB evening T-40",
+   "2026-08-28T22:45:00Z WNBA T-45 + MLB late T-85"
+  ],
+  "re_arm_needed": false,
+  "reason": "the five checkpoints registered at 08:30Z cover the rest of the day; adding another wake would duplicate them"
+ },
+ "record_id": "WAKE-2026-08-28-1100Z",
+ "schema": "ops.wake.v1",
+ "trigger": "trig_014GC9SPNbo5E16sV9NPYWhb"
+}

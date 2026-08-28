@@ -179,6 +179,27 @@ def aggregate_guard(binding, statistic_name):
 
 # =================================================================================================
 # FIXTURES — the real 8/27 board and the real 8/26 finals that contaminated it.
+#
+# PK PROVENANCE, DECLARED. Five of the seven 8/27 gamePks below were CAPTURED from mlb.com gameday
+# URL slugs during the day's checkpoints and are recorded in the audit trail. Two were NOT: BAL@STL
+# and AZ@SF were first written into this fixture by DECREMENTING the 8/26 pk (823015 -> 823014,
+# 825039 -> 825038) — which is the exact adjacent-pk inference this module exists to forbid,
+# committed inside the module's own fixture. They are labelled SYNTHETIC_UNVERIFIED here rather
+# than quietly left to read as ground truth, and the archive check at the next wake must either
+# confirm them or replace them. The refusal logic does not depend on their real-world truth (the
+# CONTAMINATED rows carry real 8/26 pks from the evidence extract, which is what the primary
+# fixture tests) — but an unverified number sitting in a gate fixture is exactly how the next
+# contamination starts.
+PK_PROVENANCE = {
+    822694: "CAPTURED mlb.com slug (COL@WSH), T-45 record 3f3fef17",
+    823503: "CAPTURED mlb.com slug (HOU@NYY), schedule record b9717911",
+    822771: "CAPTURED mlb.com slug (KC@TOR), T-90 record 4645b5a3",
+    823581: "CAPTURED mlb.com slug (MIL@NYM), night review",
+    824879: "CAPTURED mlb.com slug (LAD@ATL), schedule record b9717911",
+    823014: "SYNTHETIC_UNVERIFIED — inferred from 8/26 pk 823015; MUST be archive-verified",
+    825038: "SYNTHETIC_UNVERIFIED — inferred from 8/26 pk 825039; MUST be archive-verified",
+}
+
 BOARD_0827 = {
     "sport": "mlb", "slate_date": "2026-08-27",
     "games": {
@@ -249,6 +270,18 @@ def consecutive_series_fixture():
 
 def selftest():
     f = []
+
+    # 0. every fixture pk declares its provenance, and unverified ones are labelled as such.
+    #    A gate fixture that carries an undeclared number is a contamination vector itself.
+    for _k, g in BOARD_0827["games"].items():
+        p = PK_PROVENANCE.get(g["game_pk"])
+        if not p:
+            f.append(f"fixture pk {g['game_pk']} ({_k}) has no declared provenance")
+        elif not (p.startswith("CAPTURED") or p.startswith("SYNTHETIC_UNVERIFIED")):
+            f.append(f"fixture pk {g['game_pk']} provenance is neither captured nor labelled")
+    for r in CONTAMINATED_0826_ROWS:
+        if r["game_pk"] not in (823015, 823506, 822772, 823584, 824878):
+            f.append(f"contaminated fixture pk {r['game_pk']} is not one of the real 8/26 pks")
 
     # 1. THE consecutive-series test
     passed, b, agg = consecutive_series_fixture()

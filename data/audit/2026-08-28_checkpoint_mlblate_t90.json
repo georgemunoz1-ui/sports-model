@@ -1,0 +1,30 @@
+{
+ "block": "MLB late (AZ@SF 01:45Z) + WSH@PHX (WNBA 02:00Z) fold",
+ "created_utc": "2026-08-28T00:17:39Z",
+ "frozen_board": "cards/2026-08-27_mlb_board.json and cards/2026-08-27_wnba_board.json byte-identical (verified below)",
+ "ledger": {
+  "exposure_usd": 0,
+  "n_bets": 0,
+  "units": 0.0
+ },
+ "market_attempt": {
+  "route": "sportsbook.draftkings.com (WebFetch receipts 22:31Z/22:16Z same host; no fresh two-sided board available)",
+  "standing": "v2 relay retained; AZ -105 basis for the corrected EV"
+ },
+ "next": "MLB-late T-45 01:00Z",
+ "record_id": "CHECKPOINT-2026-08-27-MLB-LATE-T90",
+ "record_sha256": "4d219b1968ac0e5a636e79b862b73fbd0281085b3987b875159b7cf64d4e8ee3",
+ "schema": "ops.checkpoint.v1",
+ "starter_identity_correction": {
+  "correction": "replacement rerun with Jose Cabrera (RESOLVED \u2014 retained log) vs Roupp, frozen seed: p_home 0.4685 (vs frozen 0.4682, vs Edward-basis 0.4840). Side AZ RETAINED at 53.15%; side_reselection_gate PASS; raw EV at the retained -105 is +3.7690/$100 (the Edward-basis +0.74 was understated). Disposition stays CANDIDATE_NOT_AUTHORIZED_PENDING_UNCERTAINTY. A -107 price was sighted in a snippet \u2014 identified, never bound; -105 remains the retained capture.",
+  "defect": "the morning replacement resolved the relayed name 'Cabrera' to EDWARD Cabrera (pid 665795); fresh identification confirms tonight's AZ starter is JOSE Cabrera (pid 703615), a June call-up \u2014 a wrong-pitcher feature basis",
+  "lesson": "a relayed surname is not an identity; replacement records must bind pid, and same-surname ambiguity gets a disambiguation check"
+ },
+ "trigger": "trig_01YS5DEPm7xUAp7HSbHGSVog (fired 00:16:16Z)",
+ "wsh_phx_availability": {
+  "PHX": "Suarez OUT (concussion, 3rd straight); Linskens OUT (contract suspended, World Cup prep); Plum QUESTIONABLE (left lower leg)",
+  "WAS": "no players listed (one 'Tuesday' boilerplate fragment recorded as noise)",
+  "grade": "SEARCH_IDENTIFIED (official route blocked per standing receipts)",
+  "net": "Plum questionable is the swing item for the anchored WAS 57.84% side; display-lane only; WAS-side ML still unretained -> row stays PRICE_BLOCKED"
+ }
+}

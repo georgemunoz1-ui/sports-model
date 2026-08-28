@@ -409,7 +409,17 @@ invent constants. <code>FEATURE_REFRESH</code> is the registered replacement arm
 <code>ACTION_BLOCKED</code> while the pipeline is <code>SYSTEM_NOT_DECISION_READY</code>. Unblocking
 an arm on the forecast side does not open the action layer, so selections remain <b>0</b>.</p>
 </div>
-<details><summary>WNBA availability &mdash; open items, none resolved by guess</summary>
+<details><summary>WNBA availability &mdash; what resolved, and what did not</summary>
+<p><b>Resolved since the freeze.</b> Aneesah Morrow appeared on both Connecticut's and Toronto's
+lists, and that could not both be true. She is <b>Toronto's</b>, and is shut down for the rest of
+the season alongside Brittney Sykes &mdash; the Connecticut listing was the stale one. It changes no
+forecast, because the board carries no personnel input at all; it does mean Toronto arrives at
+Las Vegas heavily depleted, which if anything supports the model rather than challenging it.</p>
+<p><b>Still open.</b> A'ja Wilson's questionable tag persists rather than clearing. And there is
+<i>still</i> no August 28 availability for Washington or Los Angeles &mdash; the only report on file
+remains the one from August 15, which stays refused as stale. Nothing is carried forward by guess.</p>
+<p>All of it is aggregator reporting, which identifies and does not bind, so no recovery-job unit is
+credited for any of it.</p>
 <ul>{wnba_open}</ul></details>
 
 <h2>WNBA market &mdash; priced, screened, and nothing selected</h2>

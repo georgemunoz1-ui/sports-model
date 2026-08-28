@@ -1,0 +1,72 @@
+{
+ "AVAILABILITY_ITEMS": {
+  "aja_wilson": {
+   "caution": "one surfaced headline has Wilson OUT with a WRIST injury against the Mystics on a Thursday \u2014 a different injury and a different game. Not conflated with tonight's back tag.",
+   "not_resolved": "the tag persists rather than clearing; recorded as still open",
+   "status": "STILL QUESTIONABLE (back), in danger of a first miss since Aug 8"
+  },
+  "aneesah_morrow": {
+   "forecast_effect": "NONE. The board carries no personnel input; FEATURE_REFRESH runs on team four-factors from game results, and starters were REFUSED throughout.",
+   "grade": "SEARCH_IDENTIFIED_UNCONFIRMED \u2014 identifies, does not bind",
+   "interpretive_effect": "Toronto is heavily depleted for TOR@LV \u2014 Sykes and Morrow both out for the season, Mabrey re-evaluated in weeks. The model's LV 85.23% is if anything supported by this, not challenged.",
+   "now": "RESOLVED \u2014 she is TORONTO's, and is shut down for the rest of the 2026 season (knee), alongside Brittney Sykes (foot). The Connecticut listing was the stale one.",
+   "was": "listed on BOTH Connecticut's and Toronto's injury lists; reported, not resolved, because no retained artifact settled it"
+  },
+  "las_vegas_other": "NaLyssa Smith out for the season (left leg); Dana Evans questionable (leg)",
+  "washington_los_angeles": {
+   "detail": "no 8/28-dated availability report for either club was found again at this checkpoint. The only report on file remains 8/15, refused as stale. The refusal stands; nothing is carried forward by guess.",
+   "status": "STILL NOTHING"
+  }
+ },
+ "CHECKPOINT_PROMPT_WAS_STALE": {
+  "actual": "that prompt was written at 10:43Z, before the unblock. FEATURE_REFRESH was unblocked at 11:25Z and the board it names is now SUPERSEDED. 1c8b7653 is the v1 cohort.",
+  "expected": "cohort 1c8b7653, FEATURE_REFRESH possibly still blocked",
+  "resolution": "verified BOTH records instead of one: v1 unchanged at 1c8b7653 with its file hash still matching the pointer v2 stores, and v2 current at 2fdb5c9a. The cohort hash differs because v1 carried four FEATURE_REFRESH rows with p_home null and v2 carries the same four with real values. Finding 1c8b7653 as the LIVE cohort here would have meant the unblock never happened."
+ },
+ "anchors": "POR@ATL and CON@IND tip 23:30Z; TOR@LV and WSH@LAS at 8/29 02:00Z",
+ "created_utc": "2026-08-28T22:10:00Z",
+ "frozen_boards": {
+  "supersession_pointer_valid": true,
+  "v1": {
+   "byte_identical_to_committed": true,
+   "cohort": "1c8b7653f4c7afaa3fbcdddc4888beb730dca19dc28f14784ce4b1770defd865",
+   "path": "cards/2026-08-28_wnba_board.json",
+   "status": "SUPERSEDED, untouched under R3"
+  },
+  "v2": {
+   "arms_blocked": 0,
+   "arms_emitted": 3,
+   "byte_identical_to_committed": true,
+   "cohort": "2fdb5c9ae59afee676c61908c4ce03df314d2add6e87e4a75e675f476330f6cc",
+   "path": "cards/2026-08-28_wnba_board_v2.json",
+   "status": "CURRENT"
+  }
+ },
+ "ledger": {
+  "exposure_usd": 0,
+  "n_bets": 0,
+  "units": 0.0,
+  "wager_authority": "NO"
+ },
+ "next": "22:45Z WNBA T-45 + MLB late block T-85",
+ "prices": {
+  "fresh_relay_this_checkpoint": false,
+  "market_attempt": {
+   "outcome": "REFUSED \u2014 EGRESS_BLOCKED, curl exit 56, CONNECT tunnel 403",
+   "route": "curl sportsbook.draftkings.com/leagues/basketball/wnba"
+  },
+  "on_file": "data/wnba/odds/2026-08-28_owner_relay_dk.json (all four games two-sided)",
+  "selections": 0,
+  "why_zero": "registration, not judgement: STANDINGS_LOG5_v1 is DIAGNOSTIC_ONLY_ACTION_BLOCKED, EXPANDING_HOME_PRIOR is a constant, and FEATURE_REFRESH \u2014 though now unblocked on the forecast side \u2014 is ACTION_BLOCKED while the pipeline is SYSTEM_NOT_DECISION_READY. Unblocking an arm's forecast does not open the action layer."
+ },
+ "record_id": "CHECKPOINT-2026-08-28-WNBA-T90",
+ "rj005_note": "these are AGGREGATOR reports, not the official WNBA injury report, so they IDENTIFY and do not bind. RJ-005's OFFICIAL_INJURY_AVAILABILITY component stays at 0 of 6 and no unit is credited. Crediting search identification would inflate the job.",
+ "schema": "ops.checkpoint.v1",
+ "start_time_item": {
+  "conclusion": "the timezone question is settled \u2014 Pacific \u2014 and the residual is a WNBA-SPECIFIC +10 minute gap between the book and the wehoop parquet, not a clock error and not a global book offset.",
+  "how": "the owner's placed-ticket screenshot carried MLB slots that match the frozen board EXACTLY under Pacific (4:10 PM PT = 23:10Z) while POR@ATL read 4:40 PM against the parquet's 23:30Z.",
+  "remaining": "the +10 minutes itself is still unexplained; bounded and immaterial to any checkpoint spacing",
+  "status": "SUBSTANTIALLY RESOLVED since this prompt was written"
+ },
+ "trigger": "trig_014KjifJeswhH4N4JTJ2Qpu6 (fired 22:00:47Z)"
+}

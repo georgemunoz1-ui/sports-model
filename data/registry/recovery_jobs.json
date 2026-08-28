@@ -415,7 +415,9 @@
     "build_board_0825 identity+seed (doubleheader collision)",
     "promotion_gate.compare_against_references",
     "evaluation_standard.paired_postgame",
-    "grade_0725 finals keys"
+    "grade_0725 finals keys",
+    "board gamePk fields carry synthetic slate ids, not real pks (8/26: 826000-826014; 8/27: 827000-827006) \u2014 the gate cannot corroborate ids from production boards",
+    "backfill the six identity fields onto the 8/24-8/26 result records and re-run bind_cohort"
    ],
    "deadline_utc": "2026-09-03T00:00:00Z",
    "depends_on": [],
@@ -425,6 +427,12 @@
      "status": "RUNNING",
      "units_done": 0,
      "utc": "2026-08-28T07:17:53Z"
+    },
+    {
+     "note": "8/24-8/27 audit: no NEW contamination, but every 8/24-8/26 result row would be REFUSED today as MISSING_IDENTITY_FIELD \u2014 those dates are clean by calendar luck and write-time ordering, not by any check. Two further components added: production boards carry synthetic pks so the gate's id corroboration is unsatisfiable from them, and the historical result records need identity backfill. Three 8/26 rows (CHC@AZ, CLE@LAA, MIN@ATH) remain UNCHECKED pending an owner relay of the official 8/25 scoreboard.",
+     "status": "RUNNING",
+     "units_done": 0,
+     "utc": "2026-08-28T07:50:02Z"
     }
    ],
    "job_id": "RJ-007-DATELESS-JOIN-REMEDIATION",
@@ -435,7 +443,7 @@
    "terminal_disposition": null,
    "title": "Remove the dateless (away,home) join from the four remaining evaluation-side code paths and fold date+gamePk into the canonical game identity",
    "units_done": 0,
-   "units_total": 4
+   "units_total": 6
   }
  },
  "schema": "ops.recovery_jobs.v1"

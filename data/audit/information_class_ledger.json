@@ -15,7 +15,7 @@
   "FULL_STARTER_INFORMATION": 2,
   "LEGACY_SCHEMA_NO_SLOT_STATS": 4,
   "LOW_STARTER_INFORMATION": 2,
-  "NOT_A_CARD": 11,
+  "NOT_A_CARD": 12,
   "PARTIAL_STARTER_INFORMATION": 25
  },
  "counts_corrections": [
@@ -1004,6 +1004,16 @@
     "mlb:TEX@MIL": 0.75
    },
    "reason": "Per-sport MLB forecast board, 15 games x 6 registered arms. Classifier recomputes NOT_A_CARD and that is recorded. Dose independently recomputed from the slate psv and matched row-for-row against the board before this entry was written. TBD_CAP games (2): mlb:MIA@WSH, mlb:SEA@TOR. NAMED_NO_LOG_RETAINED_CAP games (4): mlb:AZ@SF, mlb:MIA@WSH, mlb:PIT@STL, mlb:TEX@MIL. IDENTITY NOTE: this is the first board on which every row carries a CAPTURED, namespaced canonical_id (5 MLB_GAMEPK, 10 ESPN_GAMEID) instead of a synthetic 827000-series pseudo-pk; zero ids were inferred. Separately disclosed and NOT folded into the dose: 2 suspected starter side-swap(s) (mlb:CWS@MIN, mlb:MIA@WSH) \u2014 a wrong side is an identity hazard, not a missing name, and silently discounting it through the dose would move a probability without saying so.",
+   "registration_eligible": true
+  },
+  "cards/2026-08-28_nfl_board.json": {
+   "action_authority": "NONE",
+   "card_sha256": "36146eb38757f22d910453306d081d2f7483e61fc936849fbc185a85578c16fe",
+   "classified_utc": "2026-08-28T08:20:55Z",
+   "dose_bound_to_source_card": "data/audit/2026-08-28_schedule_acquisition.json",
+   "information_class": "NOT_A_CARD",
+   "per_game_dose": {},
+   "reason": "NFL no-forecast benchmark board, 10 preseason rows, all REFUSED_NOT_CANONICAL. CLASSIFICATION CORRECTED BEFORE COMMIT: this entry was first written asserting LEGACY_SCHEMA_NO_SLOT_STATS on my reading of the schema; the classifier recomputed NOT_A_CARD and the gate refused the mismatch. The classifier is authoritative and the recorded class now matches it. Recording the disagreement rather than quietly overwriting it, because a ledger that hides a corrected classification is worth less than one that shows it. Per-game dose is empty because there is no forecast for a dose to weight, and starters are NOT_CAPTURED for all 20 slots \u2014 preseason finales resting starters is a league-wide tendency, not a per-game attestation. p_home, side, edge, ev, brier and logloss are NULL BY RULE with null_reason PRESEASON_EXCLUDED_BY_REGISTERED_SCOPE. This board does NOT repeat the withdrawn claim that no NFL model was ever registered: nfl.rs.epa_logit_ridge.v0_2.shadow passed its retrospective gate and is a VALIDATED_SHADOW_ARTIFACT whose registered scope is regular season only (data/audit/2026-08-27_nfl_history_correction.json). Wager authority NO, stake $0.",
    "registration_eligible": true
   }
  },

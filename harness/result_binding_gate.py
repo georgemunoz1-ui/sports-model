@@ -247,10 +247,45 @@ def bind_cohort(rows, board, require_full_coverage=True):
                                     "detail": "an aggregate over a partial cohort reports a "
                                               "denominator it did not earn; exclude explicitly "
                                               "with require_full_coverage=False and say why"})
+
+    cohort_problems.extend(_id_space_problems(board))
+
     return {"bound": bound, "refused": refused,
             "cohort_problems": cohort_problems,
             "gradable": not refused and not cohort_problems,
             "n_rows": len(rows), "n_bound": len(bound), "n_refused": len(refused)}
+
+
+def _id_space_problems(board):
+    """Catch a board that MIXES namespaced canonical_ids with bare integers.
+
+    The placeholder guard in bind_row rejects "", "TBD", "NULL", "0" and "PENDING" — values that
+    announce themselves as empty. It does NOT reject a FABRICATED integer, and that is the shape
+    that actually caused damage: every MLB slate through 2026-08-27 opened each row with an
+    invented 827000-series key that looks exactly like a real gamePk. Nothing about "827003"
+    tells the gate it was made up, so a row echoing it "matched" and the pk check was circular in
+    a way no placeholder list could see.
+
+    From 2026-08-28 boards carry "<ID_SPACE>:<integer>". That form is self-describing, and it makes
+    the migration hazard checkable: once ANY game on a board is namespaced, a bare integer on the
+    SAME board means a pseudo-pk survived the migration. Mixing is refused at cohort level, so it
+    blocks every aggregate rather than quietly degrading one row.
+
+    A board that is entirely un-namespaced is left alone — legacy boards are frozen under R3 and
+    must stay bindable — but a fully namespaced board is held to the stronger contract.
+    """
+    pks = {k: str(g.get("game_pk", "")) for k, g in board["games"].items()}
+    namespaced = {k for k, v in pks.items() if ":" in v}
+    if not namespaced or len(namespaced) == len(pks):
+        return []
+    bare = sorted(k for k in pks if k not in namespaced)
+    return [{"code": BOARD_PK_NOT_A_REAL_IDENTIFIER,
+             "detail": "this board mixes namespaced canonical_ids with bare integers. Once a "
+                       "board declares the namespaced form, a bare integer on it is a surviving "
+                       "synthetic pseudo-pk (the 827000-series contract) — an identifier that "
+                       "cannot bind a result but will happily 'match' a row that echoes it.",
+             "namespaced_games": sorted(namespaced), "bare_games": bare,
+             "bare_values": {k: pks[k] for k in bare}}]
 
 
 def aggregate_guard(binding, statistic_name):
@@ -550,10 +585,52 @@ def selftest():
     if ok or not any(p["code"] in (RESULT_DATE_MISMATCH, SCHEDULED_DATE_MISMATCH) for p in det):
         f.append(f"B8: a next-day result bound to this board: {det}")
 
+    # B9: a SURVIVING SYNTHETIC PSEUDO-PK. B5 only catches identifiers that announce themselves
+    #     empty ("TBD", "0", ""). It cannot catch a fabricated INTEGER, and that is the form that
+    #     actually shipped: every MLB slate through 8/27 keyed its rows on invented 827000-series
+    #     values. From 8/28 boards are namespaced, which makes the mixture detectable — a bare
+    #     integer sitting beside a namespaced id is a pseudo-pk that survived the migration.
+    mixed_board = {"sport": "mlb", "slate_date": "2026-08-28", "games": {
+        "mlb:BOS@NYY": {"game_pk": "MLB_GAMEPK:823504", "away": "BOS", "home": "NYY",
+                        "start_utc": "2026-08-28T23:15:00Z"},
+        "mlb:CIN@CHC": {"game_pk": "827001", "away": "CIN", "home": "CHC",     # <- pseudo-pk
+                        "start_utc": "2026-08-28T18:20:00Z"}}}
+    mixed_rows = [
+        {"sport": "mlb", "game_pk": "MLB_GAMEPK:823504", "scheduled_date": "2026-08-28",
+         "result_date": "2026-08-28", "away": "BOS", "home": "NYY"},
+        {"sport": "mlb", "game_pk": "827001", "scheduled_date": "2026-08-28",
+         "result_date": "2026-08-28", "away": "CIN", "home": "CHC"},
+    ]
+    mixed = bind_cohort(mixed_rows, mixed_board)
+    if mixed["gradable"]:
+        f.append("B9: a board mixing a namespaced id with a synthetic 827000-series pseudo-pk "
+                 "was gradable — every row bound, because a fabricated integer 'matches' the row "
+                 "that echoes it")
+    if not any(c["code"] == BOARD_PK_NOT_A_REAL_IDENTIFIER for c in mixed["cohort_problems"]):
+        f.append(f"B9: the surviving pseudo-pk was not named: {mixed['cohort_problems']}")
+    ok, _ = aggregate_guard(mixed, "winner_record")
+    if ok:
+        f.append("B9: an aggregate over a board carrying a surviving pseudo-pk was permitted")
+    # a fully namespaced board of the same shape must still grade — the check targets the MIXTURE,
+    # not the namespace, so it cannot become a blanket refusal of the new form
+    clean_ns = {"sport": "mlb", "slate_date": "2026-08-28", "games": {
+        "mlb:BOS@NYY": {"game_pk": "MLB_GAMEPK:823504", "away": "BOS", "home": "NYY",
+                        "start_utc": "2026-08-28T23:15:00Z"},
+        "mlb:CIN@CHC": {"game_pk": "ESPN_GAMEID:401816711", "away": "CIN", "home": "CHC",
+                        "start_utc": "2026-08-28T18:20:00Z"}}}
+    clean_rows = [mixed_rows[0], dict(mixed_rows[1], game_pk="ESPN_GAMEID:401816711")]
+    if not bind_cohort(clean_rows, clean_ns)["gradable"]:
+        f.append("B9: a fully namespaced board was refused — the check must target the mixture, "
+                 "not the namespaced form itself")
+    # and a fully LEGACY board must still bind: frozen boards are immutable under R3 and cannot
+    # be migrated, so making the new form mandatory would strand every historical cohort
+    if not bind_cohort(CLEAN_0827_ROWS, BOARD_0827)["gradable"]:
+        f.append("B9: the legacy un-namespaced 8/27 board stopped binding")
+
     print("result_binding_gate selftest:", "FAIL" if f else
           "PASS (consecutive-series join refused 5/5 by name; adjacent-pk slip, date drift both "
-          "directions, pre-start final, ambiguity, missing identity fields and poisoned "
-          "aggregates all refused; the true 8/27 cohort binds 7/7)")
+          "directions, pre-start final, ambiguity, missing identity fields, surviving synthetic "
+          "pseudo-pks and poisoned aggregates all refused; the true 8/27 cohort binds 7/7)")
     for x in f:
         print("   -", x)
     return 1 if f else 0
@@ -613,6 +690,11 @@ def mutation_suite(verbose=True):
                 "gradable": not refused, "n_rows": len(rows), "n_bound": len(bound),
                 "n_refused": len(refused)}
     run("bind_cohort without injectivity or coverage", {"bind_cohort": _no_cohort})
+
+    # M8: the surviving-pseudo-pk check neutered (the B9 bypass, restored). A mutant that returns
+    #     no problems is what "we added the check but it never fires" looks like from the outside.
+    run("_id_space_problems never reports a mixed board",
+        {"_id_space_problems": lambda board: []})
 
     # M7: evidence-score verification removed (the B7 bypass, restored)
     _real_bind = bind_row

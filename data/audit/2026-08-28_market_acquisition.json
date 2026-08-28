@@ -1,0 +1,57 @@
+{
+ "consequence": {
+  "break_even_probability": null,
+  "edge": null,
+  "ev": null,
+  "grading": "forecast-only. Nothing on 8/28 is gradeable against a market unless prices are relayed.",
+  "model_output": "UNAFFECTED. The MLB board carries all six registered arms on 15 games and the NFL board carries its no-forecast rows. An action blocker suppresses the ACTION layer only; it must never suppress valid model output (PR #3).",
+  "reason": "NO_RETAINED_MARKET_ARTIFACT \u2014 nothing to compute a break-even against",
+  "selection": null
+ },
+ "created_utc": "2026-08-28T08:36:00Z",
+ "de_vig_position": "If prices are relayed, cross-book 'Best Odds' de-vig remains INVALID for recovering market probability (8/3 ruling). A relayed single-book price supports SINGLE-PRICE EV SCREENING only.",
+ "no_workaround_attempted": "Org egress 403s are never routed around. TLS verification was not disabled, HTTPS_PROXY was not unset, and no alternate host, mirror or scraper was used to reach a blocked sports domain. The block is the receipt.",
+ "owner_relay_channel": "OPEN. A relayed DraftKings price set would move 8/28 from NO_RETAINED_MARKET_ARTIFACT to a separately hashed price overlay, attached to the frozen board rather than folded into it, and would be graded at full precision. Unit size $100. Paper only; execution UNAUTHORIZED; wager authority NO.",
+ "record_id": "MARKET-ACQUISITION-2026-08-28",
+ "routes_attempted": [
+  {
+   "error": "EGRESS_BLOCKED \u2014 curl exit 56, CONNECT tunnel failed, response 403",
+   "observed_utc": "2026-08-28T08:35:00Z",
+   "outcome": "REFUSED",
+   "route": "curl https://sportsbook.draftkings.com/leagues/baseball/mlb"
+  },
+  {
+   "error": "EGRESS_BLOCKED \u2014 curl exit 56, CONNECT tunnel failed, response 403",
+   "observed_utc": "2026-08-28T08:35:00Z",
+   "outcome": "REFUSED",
+   "route": "curl https://sportsbook-nash.draftkings.com/sites/US-SB/api/v5/eventgroups/84240"
+  },
+  {
+   "error": "EGRESS_BLOCKED \u2014 curl exit 56, CONNECT tunnel failed, response 403",
+   "observed_utc": "2026-08-28T08:35:00Z",
+   "outcome": "REFUSED",
+   "route": "curl https://site.api.espn.com/apis/site/v2/sports/baseball/mlb/scoreboard?dates=20260828"
+  },
+  {
+   "error": "EGRESS_BLOCKED \u2014 curl exit 56, CONNECT tunnel failed, response 403",
+   "observed_utc": "2026-08-28T08:35:00Z",
+   "outcome": "REFUSED",
+   "route": "curl https://api.the-odds-api.com/v4/sports/baseball_mlb/odds"
+  },
+  {
+   "error": "EGRESS_BLOCKED \u2014 domain blocked by the network egress proxy",
+   "observed_utc": "2026-08-28T08:36:00Z",
+   "outcome": "REFUSED",
+   "route": "WebFetch https://sportsbook.draftkings.com/leagues/baseball/mlb (approved tool)"
+  }
+ ],
+ "schema": "ops.market_acquisition.v1",
+ "slate_date": "2026-08-28",
+ "sports_covered": [
+  "mlb",
+  "wnba",
+  "nfl"
+ ],
+ "verdict": "NO_RETAINED_MARKET_ARTIFACT",
+ "why_this_record_exists": "Market capture is run SEPARATELY from, and AFTER, the board freeze. The boards for 8/28 were frozen before this file was written, so no price could have reached a forecast even in principle. Prices are never predictive features; they enter only the action/EV overlay."
+}

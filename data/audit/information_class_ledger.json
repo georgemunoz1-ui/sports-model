@@ -15,7 +15,7 @@
   "FULL_STARTER_INFORMATION": 2,
   "LEGACY_SCHEMA_NO_SLOT_STATS": 4,
   "LOW_STARTER_INFORMATION": 2,
-  "NOT_A_CARD": 12,
+  "NOT_A_CARD": 13,
   "PARTIAL_STARTER_INFORMATION": 25
  },
  "counts_corrections": [
@@ -1014,6 +1014,16 @@
    "information_class": "NOT_A_CARD",
    "per_game_dose": {},
    "reason": "NFL no-forecast benchmark board, 10 preseason rows, all REFUSED_NOT_CANONICAL. CLASSIFICATION CORRECTED BEFORE COMMIT: this entry was first written asserting LEGACY_SCHEMA_NO_SLOT_STATS on my reading of the schema; the classifier recomputed NOT_A_CARD and the gate refused the mismatch. The classifier is authoritative and the recorded class now matches it. Recording the disagreement rather than quietly overwriting it, because a ledger that hides a corrected classification is worth less than one that shows it. Per-game dose is empty because there is no forecast for a dose to weight, and starters are NOT_CAPTURED for all 20 slots \u2014 preseason finales resting starters is a league-wide tendency, not a per-game attestation. p_home, side, edge, ev, brier and logloss are NULL BY RULE with null_reason PRESEASON_EXCLUDED_BY_REGISTERED_SCOPE. This board does NOT repeat the withdrawn claim that no NFL model was ever registered: nfl.rs.epa_logit_ridge.v0_2.shadow passed its retrospective gate and is a VALIDATED_SHADOW_ARTIFACT whose registered scope is regular season only (data/audit/2026-08-27_nfl_history_correction.json). Wager authority NO, stake $0.",
+   "registration_eligible": true
+  },
+  "cards/2026-08-28_wnba_board.json": {
+   "action_authority": "NONE",
+   "card_sha256": "0e328ff1bde5428dcd0a2e272171cd9afcf7919278b0978d99f298c627773159",
+   "classified_utc": "2026-08-28T10:32:20Z",
+   "dose_bound_to_source_card": "data/wnba/slates/2026-08-28_slate_binding.json",
+   "information_class": "NOT_A_CARD",
+   "per_game_dose": {},
+   "reason": "Per-sport WNBA forecast board, 4 games. PARTIAL BY DESIGN and the partition is recorded: 8 arm-rows emitted (wnba.winner.EXPANDING_HOME_PRIOR, a registered constant with no inputs; wnba.fallback.STANDINGS_LOG5_v1, season records only) and 4 blocked (wnba.replacement.FEATURE_REFRESH, which consumes an extension pool that must be rebuilt through the 2026-08-27 cutoff; the wehoop archive is still at 3316fa3 with zero completed 8/27 rows). The blocked rows are PRESENT with p_home null and a stated null_reason -- a null with a reason is a different object from a missing row. Emitting only the arms the blocker does not reach is deliberate: suppressing all three would repeat the 2026-08-27 defect of an action blocker suppressing valid model output. Per-game dose is empty because WNBA has no starting-pitcher analog and no confirmed starting five was retrieved; starters are REFUSED, not guessed. One of the eight teams playing tonight (Washington) played on 8/27 and its result is not bound anywhere, so its record is stale by exactly one game; that game is computed under both outcomes and carries a 2.18pp interval rather than rolling a record forward on an unbound result. The other three games are exact. Fallback output is DIAGNOSTIC_ONLY_ACTION_BLOCKED by its own registration: it never settles, never promotes, never enters the estimator. 0 bets, $0, wager authority NO.",
    "registration_eligible": true
   }
  },

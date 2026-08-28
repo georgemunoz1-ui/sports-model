@@ -1,0 +1,117 @@
+{
+ "MODEL_VIEW": {
+  "break_even": 0.132275,
+  "ev_usd": 8.08,
+  "ev_usd_on_the_screened_dk_slip": 13.81,
+  "parlay_p": 0.153669,
+  "reading": "still nominally +EV, but $5.73 lower than the version screened, entirely because of the worse prices"
+ },
+ "PARLAY_PRICING": {
+  "haircut_pct": 1.22,
+  "note": "this book DOES take a parlay tax. The DraftKings slip screened earlier did not \u2014 its payout was marginally better than the exact product of the legs.",
+  "paid_decimal": 7.56,
+  "true_product_decimal": 7.65372
+ },
+ "PRICE_COMPARISON_VS_SCREENED_SLIP": {
+  "KC": {
+   "screened": 121,
+   "taken": 110,
+   "verdict": "WORSE \u2014 EV falls from +9.82 to +4.36 per $100"
+  },
+  "NYM": {
+   "screened": 101,
+   "taken": -110,
+   "verdict": "MUCH WORSE \u2014 the single best candidate on the board at +101 becomes NEGATIVE EV at -110 (model 52.13% vs 52.38% break-even)"
+  },
+  "POR": {
+   "screened": "+12.5 at -110",
+   "taken": "+13 at -110",
+   "verdict": "BETTER \u2014 half a point more"
+  },
+  "net": "two of three legs were taken at worse numbers than the ones screened"
+ },
+ "STATE": "PLACED \u2014 this is real money at risk, not a slip under consideration",
+ "WHERE_THE_EDGE_SITS": {
+  "conclusion": "the ticket's positive EV rests PRIMARILY on the single leg that has no registered cover distribution. The two registered MLB legs together are +$4.36 and -$0.47 per $100 \u2014 nearly cancelling. Strip the unregistered POR edge back to its own posted price and the whole ticket is +$1.30, essentially flat.",
+  "constructed_cover": 0.593124,
+  "headroom_on_screened_slip": 12.53,
+  "headroom_points": 8.25,
+  "if_por_priced_fairly_at_its_own_break_even": {
+   "ev_usd": 1.3,
+   "parlay_p": 0.135691
+  },
+  "por_cover_needed_for_positive_ev": 0.510662
+ },
+ "authority_wall": "OWNER PERSONAL DISCRETION. Selected and placed by the owner. This is NOT model output, NOT model-authorized, NOT gate progress, and is NEVER settled against the model-authorized ledger, which remains $0 at 0 bets. The model authorized nothing today and its selections stand at 0. 7/25 precedent: discretion picks and EV rules never mix, and mixing them poisons both records.",
+ "captured_at_utc": "2026-08-28T20:20:00Z",
+ "correlated_direction_note": "KC and POR are both underdog sides where the model's known compression biases it upward; NYM is the model's own favourite and is priced against it. The leg errors are not independent.",
+ "grading": {
+  "rule": "graded to the OWNER-DISCRETION record only; it never accrues to model promotion, settlement or the estimator",
+  "when": "after all three legs settle tonight"
+ },
+ "ledger_effect": {
+  "model_authorized_wagers_usd": 0,
+  "model_n_bets": 0,
+  "model_units": 0.0,
+  "owner_discretion_risk_usd": 50.0,
+  "separation": "the model ledger is untouched and stays 0 bets / $0"
+ },
+ "legs": [
+  {
+   "arm": "mlb.winner.CHAMPION_V13",
+   "break_even": 0.47619,
+   "ev_per_100": 4.36,
+   "game": "mlb:KC@CLE",
+   "listed_pitcher": "Michael Wacha (R)",
+   "model_p": 0.496933,
+   "price": 110,
+   "rotation": 965,
+   "sel": "KC Royals",
+   "start": "Aug 28 7:10 PM ET",
+   "status": "REGISTERED"
+  },
+  {
+   "arm": "mlb.winner.CHAMPION_V13",
+   "break_even": 0.52381,
+   "ev_per_100": -0.47,
+   "flag": "NEGATIVE EV AT THE TAKEN PRICE",
+   "game": "mlb:HOU@NYM",
+   "listed_pitcher": "Christian Scott (R)",
+   "model_p": 0.521333,
+   "price": -110,
+   "rotation": 974,
+   "sel": "NY Mets",
+   "start": "Aug 28 7:10 PM ET",
+   "status": "REGISTERED"
+  },
+  {
+   "book_sport_label": "NBA (the book mislabels this WNBA game)",
+   "break_even": 0.52381,
+   "constructed_cover_p": 0.593124,
+   "construction": "Phi((13.0 - 9.71)/13.97) on the frozen MARGIN_SD",
+   "ev_per_100": 13.23,
+   "game": "wnba:POR@ATL",
+   "model_margin_home": 9.71,
+   "price": -110,
+   "rotation": 611,
+   "sel": "POR Fire +13",
+   "start": "Aug 28 7:30 PM ET",
+   "status": "NOT REGISTERED",
+   "why_not_registered": "13.97 is registered as a coherence TOLERANCE between the winner and margin heads, not as an ATS cover law. The 8/22 audit flagged this exact swap for totals and required any such construction be named and preregistered. It is not."
+  }
+ ],
+ "received_from": "owner screenshot of a PLACED ticket",
+ "record_id": "OWNER-TICKET-217916739",
+ "schema": "owner_discretion_card.v1",
+ "source_family": "OWNER_DECLARATION",
+ "source_tier": 1,
+ "ticket": {
+  "book": "NOT DRAFTKINGS \u2014 rotation-number format, distinct from the relayed DK board",
+  "decimal_paid": 7.56,
+  "number": "217916739",
+  "risk_usd": 50.0,
+  "to_win_usd": 328.0,
+  "total_return_usd": 378.0,
+  "type": "PARLAY_3_TEAM"
+ }
+}

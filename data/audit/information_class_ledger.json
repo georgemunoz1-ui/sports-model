@@ -13,7 +13,7 @@
  "counts": {
   "ALL_CAP_BASELINE": 5,
   "FULL_STARTER_INFORMATION": 2,
-  "LEGACY_SCHEMA_NO_SLOT_STATS": 4,
+  "LEGACY_SCHEMA_NO_SLOT_STATS": 5,
   "LOW_STARTER_INFORMATION": 2,
   "NOT_A_CARD": 13,
   "PARTIAL_STARTER_INFORMATION": 25
@@ -1024,6 +1024,16 @@
    "information_class": "NOT_A_CARD",
    "per_game_dose": {},
    "reason": "Per-sport WNBA forecast board, 4 games. PARTIAL BY DESIGN and the partition is recorded: 8 arm-rows emitted (wnba.winner.EXPANDING_HOME_PRIOR, a registered constant with no inputs; wnba.fallback.STANDINGS_LOG5_v1, season records only) and 4 blocked (wnba.replacement.FEATURE_REFRESH, which consumes an extension pool that must be rebuilt through the 2026-08-27 cutoff; the wehoop archive is still at 3316fa3 with zero completed 8/27 rows). The blocked rows are PRESENT with p_home null and a stated null_reason -- a null with a reason is a different object from a missing row. Emitting only the arms the blocker does not reach is deliberate: suppressing all three would repeat the 2026-08-27 defect of an action blocker suppressing valid model output. Per-game dose is empty because WNBA has no starting-pitcher analog and no confirmed starting five was retrieved; starters are REFUSED, not guessed. One of the eight teams playing tonight (Washington) played on 8/27 and its result is not bound anywhere, so its record is stale by exactly one game; that game is computed under both outcomes and carries a 2.18pp interval rather than rolling a record forward on an unbound result. The other three games are exact. Fallback output is DIAGNOSTIC_ONLY_ACTION_BLOCKED by its own registration: it never settles, never promotes, never enters the estimator. 0 bets, $0, wager authority NO.",
+   "registration_eligible": true
+  },
+  "cards/2026-08-29_cfb_board.json": {
+   "action_authority": "NONE",
+   "card_sha256": "689e01d7d8f203dc62bea07742e521f3080866039bc02ca39b9137d88244dd4e",
+   "classified_utc": "2026-08-28T11:45:00Z",
+   "dose_bound_to_source_card": "data/cfb/model/CFB_V2_ACQUISITION_MANIFEST.json",
+   "information_class": "LEGACY_SCHEMA_NO_SLOT_STATS",
+   "per_game_dose": {},
+   "reason": "First CFB forecast board this system has produced. 8 games, all FBS vs FBS, decision arm cfb.fbs.elo_context_logit.v1_0.week1_shadow. The classifier recomputes LEGACY_SCHEMA_NO_SLOT_STATS because college football has no starter-slot analog to count; that is correct here rather than a schema gap. The board is a WEEK 1 board and the arm choice turns on that: the full v1 form arm wins pooled over weeks 2-15 (Brier 0.18223 vs 0.18427 causal Elo, paired CI95 [-0.00508,-0.00065]) but LOSES on openers (0.18828 vs 0.18642) and fails the registered Week-1 calibration gates (slope 0.846 floor 0.85; intercept +0.136 limit 0.10). The lean arm passes both (slope 0.932, intercept +0.089) at the lowest Week-1 Brier tried, 0.18327 over 758 games and 15 seasons. NOT CLAIMED: the lean arm does not significantly beat plain causal Elo on openers \u2014 paired by season the CI95 [-0.00503,+0.00099] includes zero. Three rows are AUDIT_REQUIRED under the preregistered 14-point model-market spread rule. Two involve teams in their first FBS season; that concern was MEASURED (165 historical games, Brier 0.17441 vs 0.18235 elsewhere) rather than assumed, and is recorded as a low-power caveat rather than a blocker because the data does not support blocking. Fixtures are OWNER_RELAYED and the slate is explicitly PARTIAL \u2014 Week 1 Saturday carries far more FBS games than the eight relayed. Selections 0, wager authority NO, stake $0: the v2 lifecycle is DATA_ACQUISITION_RUNNING and the preregistration itself sets stake 0.",
    "registration_eligible": true
   }
  },

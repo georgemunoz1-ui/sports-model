@@ -1,0 +1,126 @@
+{
+ "baseline_causal_elo": {
+  "auc": 0.787109,
+  "brier": 0.184269,
+  "calibration_intercept": -0.0219,
+  "calibration_slope": 0.9461,
+  "ece": 0.013827,
+  "logloss": 0.544141
+ },
+ "baseline_expanding_home_rate": {
+  "auc": 0.490696,
+  "brier": 0.243463,
+  "calibration_intercept": 0.2904,
+  "calibration_slope": 0.1056,
+  "ece": 0.008713,
+  "logloss": 0.680021
+ },
+ "external_diagnostic_espn_elo": {
+  "brier": 0.185532,
+  "n": 10818,
+  "role": "EVALUATION-ONLY. The preregistration forbids treating this as an internally controlled baseline; it is not used in any promotion decision."
+ },
+ "margin": {
+  "mae_model": 13.279,
+  "mae_naive_zero": 16.974
+ },
+ "max_single_season_share_of_gain": 0.1671,
+ "model": {
+  "auc": 0.792199,
+  "brier": 0.182233,
+  "calibration_intercept": -0.0335,
+  "calibration_slope": 0.9559,
+  "ece": 0.014195,
+  "logloss": 0.539141
+ },
+ "paired_vs_strongest_baseline": {
+  "baseline": "baseline_causal_elo",
+  "bootstrap_reps": 20000,
+  "ci95": [
+   -0.005077,
+   -0.000651
+  ],
+  "improves": true,
+  "mean_brier_diff": -0.002559,
+  "n_blocks": 230,
+  "reading": "negative is better (model Brier below baseline Brier)",
+  "seed": 20260828
+ },
+ "per_season": {
+  "2011": {
+   "brier_base": 0.179612,
+   "brier_model": 0.181139,
+   "n": 680
+  },
+  "2012": {
+   "brier_base": 0.172575,
+   "brier_model": 0.171149,
+   "n": 697
+  },
+  "2013": {
+   "brier_base": 0.15962,
+   "brier_model": 0.154185,
+   "n": 702
+  },
+  "2014": {
+   "brier_base": 0.18602,
+   "brier_model": 0.18488,
+   "n": 721
+  },
+  "2015": {
+   "brier_base": 0.173406,
+   "brier_model": 0.171396,
+   "n": 724
+  },
+  "2016": {
+   "brier_base": 0.194161,
+   "brier_model": 0.190046,
+   "n": 719
+  },
+  "2017": {
+   "brier_base": 0.188607,
+   "brier_model": 0.184907,
+   "n": 736
+  },
+  "2018": {
+   "brier_base": 0.175783,
+   "brier_model": 0.175516,
+   "n": 733
+  },
+  "2019": {
+   "brier_base": 0.175779,
+   "brier_model": 0.173744,
+   "n": 734
+  },
+  "2020": {
+   "brier_base": 0.192167,
+   "brier_model": 0.188452,
+   "n": 508
+  },
+  "2021": {
+   "brier_base": 0.186735,
+   "brier_model": 0.185343,
+   "n": 732
+  },
+  "2022": {
+   "brier_base": 0.203268,
+   "brier_model": 0.201055,
+   "n": 734
+  },
+  "2023": {
+   "brier_base": 0.187329,
+   "brier_model": 0.186688,
+   "n": 792
+  },
+  "2024": {
+   "brier_base": 0.201637,
+   "brier_model": 0.199448,
+   "n": 798
+  },
+  "2025": {
+   "brier_base": 0.185907,
+   "brier_model": 0.183654,
+   "n": 808
+  }
+ }
+}

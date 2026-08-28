@@ -1,0 +1,405 @@
+{
+ "DECISION_ARM": {
+  "NOT_CLAIMED": "the lean arm is NOT a demonstrated improvement over plain causal Elo on openers. Paired by season the mean Brier difference is -0.00224 with a 95% interval of [-0.00503, +0.00099], which INCLUDES ZERO. It is the best-calibrated Week 1 arm available, not a proven edge over Elo.",
+  "also_tried_and_rejected": "a Week-1-only training set was worse on every arm (fewer games, more noise)",
+  "arm": "cfb.fbs.elo_context_logit.v1_0.week1_shadow",
+  "features": [
+   "elo_diff_with_home_advantage",
+   "neutral_site",
+   "conference_game"
+  ],
+  "week1_evidence": {
+   "brier": 0.18327,
+   "calibration_intercept": 0.089,
+   "calibration_slope": 0.932,
+   "gates_abs_intercept_max": 0.1,
+   "gates_slope_range": [
+    0.85,
+    1.15
+   ],
+   "n_games": 758,
+   "n_seasons": 15,
+   "passes_week1_calibration": true
+  },
+  "why_not_the_full_v1_arm": "the full form arm wins pooled across weeks 2-15 but LOSES on Week 1 (Brier 0.18828 vs causal Elo 0.18642) and its Week-1 calibration falls outside the registered gates: slope 0.846 against a 0.85 floor and intercept +0.136 against a 0.10 limit. Every 8/29 game is an opener. EWMA form carries last season's scoring into a game played by a substantially different team."
+ },
+ "LEDGERS": {
+  "model_authorized_wagers_usd": 0,
+  "n_bets": 0,
+  "units": 0.0
+ },
+ "MARKET_POSITION": {
+  "de_vig": "NOT PERFORMED \u2014 break-even from each side's own posted price",
+  "overlay_only": "prices enter the action/EV layer only, after the forecast",
+  "prices_are_never_features": true,
+  "selections": 0,
+  "why_zero": "this arm is a week-1 shadow of a model whose own v2 lifecycle is still PREREGISTERED_DATA_ACQUISITION_PENDING. Wager authority is NO and stake is 0 in the preregistration itself; no EV figure can override that."
+ },
+ "SLATE_PROVENANCE": {
+  "PARTIAL_SLATE": "Week 1 Saturday carries far more FBS games than the relayed rows. This board covers only what the relay captured and is NOT the complete 8/29 slate. No aggregate over it may be described as a slate-wide record.",
+  "fixtures_from": "owner-relayed DraftKings board (data/cfb/odds/2026-08-28_owner_relay_dk_forward.json)",
+  "grade": "OWNER_RELAYED_SINGLE_BOOK \u2014 identification only; binds no result",
+  "why_not_acquired": "the cfbfastR archive ends at the 2025 season; no 2026 schedule exists in it"
+ },
+ "builder": "harness/cfb_forecast_0829.py (COMMITTED)",
+ "forecast_anchor_utc": "2026-08-28T11:45:00Z",
+ "hyperparameters_frozen_on": {
+  "alpha": 0.4,
+  "brier": 0.179073,
+  "hfa": 55.0,
+  "k": 28.0,
+  "n": 3414,
+  "regress": 0.75,
+  "window": [
+   2001,
+   2010
+  ]
+ },
+ "lifecycle": {
+  "policy_applied": "week_one_policy: publish v1 baseline forecasts with V2_INPUT_BLOCKED when the Week 1 blocks are missing",
+  "v2_input_blocked": true,
+  "v2_status": "PREREGISTERED_DATA_ACQUISITION_PENDING \u2014 schedules acquired, but the EPA, talent, returning-production, quarterback and coach-continuity blocks are NOT, so v2 cannot be fit"
+ },
+ "n_forecast": 8,
+ "n_refused": 0,
+ "reconciliation": {
+  "forecast": 8,
+  "holds": true,
+  "identity": "8 = 8 + 0",
+  "refused": 0,
+  "relayed_on_date": 8
+ },
+ "record_id": "BOARD-2026-08-29-CFB",
+ "refused": [],
+ "rows": [
+  {
+   "action_status": "NO_SELECTION",
+   "alternates": {
+    "cfb.fbs.causal_elo.v1_0.baseline": 0.859691,
+    "cfb.fbs.elo_form_logit_ridge.v1_0.shadow": 0.854183,
+    "cfb.fbs.expanding_home_rate.v1_0.baseline": 0.587225
+   },
+   "away": "North Carolina",
+   "away_conference": "ACC",
+   "cohort": "FBS_VS_FBS",
+   "conference_game": false,
+   "decision_arm": "cfb.fbs.elo_context_logit.v1_0.week1_shadow",
+   "elo_away_carried": 1475.2,
+   "elo_home_carried": 1693.6,
+   "fbs_fcs_extreme_spread_review": null,
+   "forecast_status": "FORECAST_REGISTERED",
+   "game": "cfb:North Carolina @ TCU",
+   "home": "TCU",
+   "home_conference": "Big 12",
+   "market_overlay": {
+    "away_price": 270,
+    "break_even_away": 0.27027,
+    "break_even_home": 0.772727,
+    "edge_away_pp": -14.9362,
+    "edge_home_pp": 10.6365,
+    "ev_away_per_100": -55.2641,
+    "ev_home_per_100": 13.7649,
+    "home_price": -340
+   },
+   "model_side": "TCU",
+   "p_home": 0.879092,
+   "p_side": 0.879092,
+   "projected_margin_home": 19.448,
+   "start_slot_as_relayed": "Sat 9:00 AM",
+   "subdivision_transition": null
+  },
+  {
+   "action_status": "NO_SELECTION",
+   "alternates": {
+    "cfb.fbs.causal_elo.v1_0.baseline": 0.92015,
+    "cfb.fbs.elo_form_logit_ridge.v1_0.shadow": 0.907592,
+    "cfb.fbs.expanding_home_rate.v1_0.baseline": 0.587225
+   },
+   "away": "San Jos\u00e9 State",
+   "away_conference": "Mountain West",
+   "cohort": "FBS_VS_FBS",
+   "conference_game": false,
+   "decision_arm": "cfb.fbs.elo_context_logit.v1_0.week1_shadow",
+   "elo_away_carried": 1391.47,
+   "elo_home_carried": 1706.21,
+   "fbs_fcs_extreme_spread_review": null,
+   "forecast_status": "FORECAST_REGISTERED",
+   "game": "cfb:San Jos\u00e9 State @ USC",
+   "home": "USC",
+   "home_conference": "Big Ten",
+   "market_overlay": {
+    "away_price": null,
+    "home_price": null,
+    "null_reason": "MONEYLINE_NOT_OFFERED \u2014 padlocked on the book"
+   },
+   "model_side": "USC",
+   "p_home": 0.931594,
+   "p_side": 0.931594,
+   "projected_margin_home": 25.409,
+   "start_slot_as_relayed": "Sat 12:00 PM",
+   "subdivision_transition": null
+  },
+  {
+   "action_status": "NO_SELECTION",
+   "alternates": {
+    "cfb.fbs.causal_elo.v1_0.baseline": 0.626687,
+    "cfb.fbs.elo_form_logit_ridge.v1_0.shadow": 0.607237,
+    "cfb.fbs.expanding_home_rate.v1_0.baseline": 0.587225
+   },
+   "away": "NC State",
+   "away_conference": "ACC",
+   "cohort": "FBS_VS_FBS",
+   "conference_game": true,
+   "decision_arm": "cfb.fbs.elo_context_logit.v1_0.week1_shadow",
+   "elo_away_carried": 1633.84,
+   "elo_home_carried": 1654.76,
+   "fbs_fcs_extreme_spread_review": null,
+   "forecast_status": "FORECAST_REGISTERED",
+   "game": "cfb:NC State @ Virginia",
+   "home": "Virginia",
+   "home_conference": "ACC",
+   "market_overlay": {
+    "away_price": 160,
+    "break_even_away": 0.384615,
+    "break_even_home": 0.657534,
+    "edge_away_pp": 0.612,
+    "edge_home_pp": -4.827,
+    "ev_away_per_100": 1.5913,
+    "ev_home_per_100": -7.341,
+    "home_price": -192
+   },
+   "model_side": "Virginia",
+   "p_home": 0.609264,
+   "p_side": 0.609264,
+   "projected_margin_home": 4.129,
+   "start_slot_as_relayed": "Sat 12:30 PM",
+   "subdivision_transition": null
+  },
+  {
+   "action_status": "NO_SELECTION",
+   "alternates": {
+    "cfb.fbs.causal_elo.v1_0.baseline": 0.896255,
+    "cfb.fbs.elo_form_logit_ridge.v1_0.shadow": 0.885834,
+    "cfb.fbs.expanding_home_rate.v1_0.baseline": 0.587225
+   },
+   "away": "Jacksonville State",
+   "away_conference": "Conference USA",
+   "cohort": "FBS_VS_FBS",
+   "conference_game": false,
+   "decision_arm": "cfb.fbs.elo_context_logit.v1_0.week1_shadow",
+   "elo_away_carried": 1584.46,
+   "elo_home_carried": 1855.25,
+   "fbs_fcs_extreme_spread_review": {
+    "book_home_spread": -7.0,
+    "disagreement_points": 15.69,
+    "model_margin": 22.69,
+    "rule": "week_one_policy: a model-market spread disagreement greater than 14 points cannot become a candidate without source and roster review",
+    "status": "AUDIT_REQUIRED"
+   },
+   "forecast_status": "FORECAST_REGISTERED",
+   "game": "cfb:Jacksonville State @ North Dakota State",
+   "home": "North Dakota State",
+   "home_conference": "Mountain West",
+   "market_overlay": {
+    "away_price": 225,
+    "break_even_away": 0.307692,
+    "break_even_home": 0.73545,
+    "edge_away_pp": -21.8635,
+    "edge_home_pp": 17.5493,
+    "ev_away_per_100": -71.0564,
+    "ev_home_per_100": 23.862,
+    "home_price": -278
+   },
+   "model_side": "North Dakota State",
+   "p_home": 0.910943,
+   "p_side": 0.910943,
+   "projected_margin_home": 22.69,
+   "start_slot_as_relayed": "Sat 2:30 PM",
+   "subdivision_transition": {
+    "concern": "Elo carried into this game was earned in another subdivision",
+    "measured_not_assumed": "I expected this to be a weak spot and measured it instead: across 165 out-of-fold games involving a team in its first FBS season the model is NOT worse (Brier 0.17441 against 0.18235 elsewhere) and the calibration slope is 0.968. The calibration INTERCEPT does run high at +0.159 against a 0.10 gate, on n=165 \u2014 weak evidence, low power. Recorded as a caveat, not a blocker, because the data does not support blocking.",
+    "status": "DISCLOSED_LOW_POWER_CAVEAT",
+    "teams": {
+     "North Dakota State": "last acquired season was fcs, 2026 table says fbs"
+    }
+   }
+  },
+  {
+   "action_status": "NO_SELECTION",
+   "alternates": {
+    "cfb.fbs.causal_elo.v1_0.baseline": 0.393221,
+    "cfb.fbs.elo_form_logit_ridge.v1_0.shadow": 0.415077,
+    "cfb.fbs.expanding_home_rate.v1_0.baseline": 0.587225
+   },
+   "away": "Sacramento State",
+   "away_conference": "Mid-American",
+   "cohort": "FBS_VS_FBS",
+   "conference_game": true,
+   "decision_arm": "cfb.fbs.elo_context_logit.v1_0.week1_shadow",
+   "elo_away_carried": 1547.65,
+   "elo_home_carried": 1423.38,
+   "fbs_fcs_extreme_spread_review": {
+    "book_home_spread": -9.5,
+    "disagreement_points": 14.35,
+    "model_margin": -4.85,
+    "rule": "week_one_policy: a model-market spread disagreement greater than 14 points cannot become a candidate without source and roster review",
+    "status": "AUDIT_REQUIRED"
+   },
+   "forecast_status": "FORECAST_REGISTERED",
+   "game": "cfb:Sacramento State @ Eastern Michigan",
+   "home": "Eastern Michigan",
+   "home_conference": "Mid-American",
+   "market_overlay": {
+    "away_price": 295,
+    "break_even_away": 0.253165,
+    "break_even_home": 0.789474,
+    "edge_away_pp": 36.9636,
+    "edge_home_pp": -41.2274,
+    "ev_away_per_100": 146.0063,
+    "ev_home_per_100": -52.2214,
+    "home_price": -375
+   },
+   "model_side": "Sacramento State",
+   "p_home": 0.377199,
+   "p_side": 0.622801,
+   "projected_margin_home": -4.855,
+   "start_slot_as_relayed": "Sat 3:30 PM",
+   "subdivision_transition": {
+    "concern": "Elo carried into this game was earned in another subdivision",
+    "measured_not_assumed": "I expected this to be a weak spot and measured it instead: across 165 out-of-fold games involving a team in its first FBS season the model is NOT worse (Brier 0.17441 against 0.18235 elsewhere) and the calibration slope is 0.968. The calibration INTERCEPT does run high at +0.159 against a 0.10 gate, on n=165 \u2014 weak evidence, low power. Recorded as a caveat, not a blocker, because the data does not support blocking.",
+    "status": "DISCLOSED_LOW_POWER_CAVEAT",
+    "teams": {
+     "Sacramento State": "last acquired season was fcs, 2026 table says fbs"
+    }
+   }
+  },
+  {
+   "action_status": "NO_SELECTION",
+   "alternates": {
+    "cfb.fbs.causal_elo.v1_0.baseline": 0.395359,
+    "cfb.fbs.elo_form_logit_ridge.v1_0.shadow": 0.484293,
+    "cfb.fbs.expanding_home_rate.v1_0.baseline": 0.587225
+   },
+   "away": "Hawai'i",
+   "away_conference": "Mountain West",
+   "cohort": "FBS_VS_FBS",
+   "conference_game": false,
+   "decision_arm": "cfb.fbs.elo_context_logit.v1_0.week1_shadow",
+   "elo_away_carried": 1583.12,
+   "elo_home_carried": 1460.22,
+   "fbs_fcs_extreme_spread_review": null,
+   "forecast_status": "FORECAST_REGISTERED",
+   "game": "cfb:Hawai'i @ Stanford",
+   "home": "Stanford",
+   "home_conference": "ACC",
+   "market_overlay": {
+    "away_price": 164,
+    "break_even_away": 0.378788,
+    "break_even_home": 0.66443,
+    "edge_away_pp": 18.0741,
+    "edge_home_pp": -22.3958,
+    "ev_away_per_100": 47.7156,
+    "ev_home_per_100": -33.7068,
+    "home_price": -198
+   },
+   "model_side": "Hawai'i",
+   "p_home": 0.440471,
+   "p_side": 0.559529,
+   "projected_margin_home": -1.671,
+   "start_slot_as_relayed": "Sat 4:00 PM",
+   "subdivision_transition": null
+  },
+  {
+   "action_status": "NO_SELECTION",
+   "alternates": {
+    "cfb.fbs.causal_elo.v1_0.baseline": 0.764602,
+    "cfb.fbs.elo_form_logit_ridge.v1_0.shadow": 0.777052,
+    "cfb.fbs.expanding_home_rate.v1_0.baseline": 0.587225
+   },
+   "away": "New Mexico State",
+   "away_conference": "Conference USA",
+   "cohort": "FBS_VS_FBS",
+   "conference_game": false,
+   "decision_arm": "cfb.fbs.elo_context_logit.v1_0.week1_shadow",
+   "elo_away_carried": 1376.31,
+   "elo_home_carried": 1497.91,
+   "fbs_fcs_extreme_spread_review": {
+    "book_home_spread": -31.5,
+    "disagreement_points": 18.04,
+    "model_margin": 13.46,
+    "rule": "week_one_policy: a model-market spread disagreement greater than 14 points cannot become a candidate without source and roster review",
+    "status": "AUDIT_REQUIRED"
+   },
+   "forecast_status": "FORECAST_REGISTERED",
+   "game": "cfb:New Mexico State @ Florida State",
+   "home": "Florida State",
+   "home_conference": "ACC",
+   "market_overlay": {
+    "away_price": 3000,
+    "break_even_away": 0.032258,
+    "break_even_home": 0.990099,
+    "edge_away_pp": 17.3071,
+    "edge_home_pp": -19.5428,
+    "ev_away_per_100": 536.5195,
+    "ev_home_per_100": -19.7382,
+    "home_price": -10000
+   },
+   "model_side": "Florida State",
+   "p_home": 0.794671,
+   "p_side": 0.794671,
+   "projected_margin_home": 13.458,
+   "start_slot_as_relayed": "Sat (slot row not captured)",
+   "subdivision_transition": null
+  },
+  {
+   "action_status": "NO_SELECTION",
+   "alternates": {
+    "cfb.fbs.causal_elo.v1_0.baseline": 0.657012,
+    "cfb.fbs.elo_form_logit_ridge.v1_0.shadow": 0.693499,
+    "cfb.fbs.expanding_home_rate.v1_0.baseline": 0.587225
+   },
+   "away": "Memphis",
+   "away_conference": "American Athletic",
+   "cohort": "FBS_VS_FBS",
+   "conference_game": false,
+   "decision_arm": "cfb.fbs.elo_context_logit.v1_0.week1_shadow",
+   "elo_away_carried": 1587.78,
+   "elo_home_carried": 1628.82,
+   "fbs_fcs_extreme_spread_review": null,
+   "forecast_status": "FORECAST_REGISTERED",
+   "game": "cfb:Memphis @ UNLV",
+   "home": "UNLV",
+   "home_conference": "Mountain West",
+   "market_overlay": {
+    "away_price": 160,
+    "break_even_away": 0.384615,
+    "break_even_home": 0.657534,
+    "edge_away_pp": -8.0686,
+    "edge_home_pp": 3.8536,
+    "ev_away_per_100": -20.9784,
+    "ev_home_per_100": 5.8608,
+    "home_price": -192
+   },
+   "model_side": "UNLV",
+   "p_home": 0.696071,
+   "p_side": 0.696071,
+   "projected_margin_home": 8.474,
+   "start_slot_as_relayed": "Sat 7:00 PM",
+   "subdivision_transition": null
+  }
+ ],
+ "slate_date": "2026-08-29",
+ "source": {
+  "acquisition_manifest": "data/cfb/model/CFB_V2_ACQUISITION_MANIFEST.json",
+  "commit": "c1af1a0ab26d63dea1be4d3ea730ea48a16d8b43",
+  "repository": "github.com/sportsdataverse/cfbfastR-data",
+  "team_table_2026": "/home/user/sportsdataverse/cfbfastR-data/team_info/parquet/cfb_team_info_2026.parquet"
+ },
+ "sport": "cfb",
+ "training": {
+  "cohort": "FBS_VS_FBS",
+  "rows": 17472,
+  "seasons": "2001-2025"
+ },
+ "wager_authority": "NO"
+}

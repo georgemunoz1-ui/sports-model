@@ -3,6 +3,8 @@
 
 from __future__ import annotations
 
+MODULE_ID = "cfb_v2_contract"
+
 import argparse
 import copy
 import json

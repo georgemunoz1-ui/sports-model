@@ -1,20 +1,29 @@
 """Record the owner-relayed DraftKings College Football board, captured 2026-08-28.
 
-THE FIRST FINDING IS THE DATE, NOT THE PRICES. The five screenshots scroll monotonically down the
-book's chronological board. The section headers visible in them are "Thu 3 Sep" and "Fri 4 Sep",
-and the Saturday block sits ABOVE the "Thu 3 Sep" header, so that Saturday is the one BEFORE
-September 3 — 2026-08-29. Every row in the relay is therefore Aug 29, Sep 3 or Sep 4.
+THE FIRST FINDING IS THE DATE, NOT THE PRICES. A second capture reached the TOP of the board and
+its first section header reads "Tomorrow". From Friday 2026-08-28 that is Saturday 2026-08-29,
+so the Saturday block is now dated by the book itself rather than by my reading of the scroll
+order. The later headers "Thu 3 Sep" and "Fri 4 Sep" follow in sequence.
 
-    ZERO of the 19 relayed games are on tonight's 2026-08-28 slate.
+    ZERO of the 22 relayed games are on tonight's 2026-08-28 slate.
 
 So this file is NOT an overlay on the 8/28 card and must never be attached to one. The 8/28 board
 and card are unchanged by it. What it is instead is a FORWARD market snapshot with real value for
 the CFB v2 challenger, which is FBS-only and still PREREGISTERED_DATA_ACQUISITION_PENDING with an
 empty cohort: 8/28 had zero FBS games, and these dates plainly do not.
 
-WHAT THIS RELAY DOES NOT SETTLE. It does not show the top of the board, so it CANNOT be read as
-evidence that the book has no 2026-08-28 college football at all. The relayed PORTION contains
-none; that is the whole claim.
+THE BOOK HAS NO COLLEGE FOOTBALL TODAY AT ALL. The first capture could not support that — its
+top was not shown, so all it established was that the relayed PORTION held no 8/28 rows. The
+second capture shows the board opening on "Tomorrow", which settles it.
+
+WHAT THAT DOES AND DOES NOT SETTLE ABOUT TONIGHT. The schedule acquisition found seven games on
+8/28, every one FCS against FCS. A book showing nothing today is consistent with that IF the
+book omits FCS-vs-FCS matchups, and inconsistent with it if the book prices all college
+football. I cannot distinguish those without knowing DraftKings' inclusion rule, and I decline
+to infer that rule from this sample because doing so would rest on exactly the FBS/FCS
+classification refused below. So the relay neither corroborates nor refutes the seven-game
+slate, and it does NOT independently establish the zero-FBS finding, which continues to rest on
+the schedule acquisition alone.
 
 COHORT MEMBERSHIP IS REFUSED, NOT GUESSED. The v2 challenger is FBS-only and no registered FBS
 team list exists in this repository. Several teams here changed subdivision in the 2024-2026
@@ -43,6 +52,9 @@ OUT = f"data/cfb/odds/{CAPTURE_DATE}_owner_relay_dk_forward.json"
 # date, away, home, away_ml, home_ml, away_spread, away_px, home_spread, home_px,
 # total, over_px, under_px, slot_as_displayed
 ROWS = [
+ ("2026-08-29", "North Carolina", "TCU", +270, -340, +8.5, -105, -8.5, -115, 46.5, -112, -108, "Sat 9:00 AM"),
+ ("2026-08-29", "San Jose State", "USC", None, None, +38.5, -102, -38.5, -118, 61.5, -108, -112, "Sat 12:00 PM"),
+ ("2026-08-29", "NC State", "Virginia", +160, -192, +4.0, -115, -4.0, -105, 51.5, -108, -112, "Sat 12:30 PM"),
  ("2026-08-29", "Jacksonville State", "North Dakota State", +225, -278, +7.0, -115, -7.0, -105, 46.5, -112, -108, "Sat 2:30 PM"),
  ("2026-08-29", "Sacramento State", "Eastern Michigan", +295, -375, +9.5, -108, -9.5, -112, 53.5, -112, -108, "Sat 3:30 PM"),
  ("2026-08-29", "Hawaii", "Stanford", +164, -198, +4.0, -108, -4.0, -112, 48.5, -112, -108, "Sat 4:00 PM"),
@@ -66,7 +78,7 @@ ROWS = [
 
 #: AP ranks shown on the book's board. Recorded because they are evidence of the book's own
 #: cohort view, not used as a model input.
-RANK_SHOWN = {"Missouri": 25, "Utah": 21}
+RANK_SHOWN = {"Missouri": 25, "Utah": 21, "USC": 15}
 
 SPREAD_TOTAL_BAND = (2.0, 8.0)
 #: Moneyline hold runs lower on heavy favourites than on a balanced game, so a wider band is
@@ -116,6 +128,11 @@ def build():
         })
 
     by_date = dict(Counter(g["game_date"] for g in games))
+    if len(games) != 22:
+        raise ValueError(f"expected 22 relayed games across both captures, got {len(games)}")
+    if "2026-08-28" in by_date:
+        raise ValueError("a 2026-08-28 row appeared in the relay — every claim in this record "
+                         "about it pricing none of tonight must be rewritten, not reprinted")
     on_slate = [g for g in games if g["game_date"] == "2026-08-28"]
 
     doc = {
@@ -124,8 +141,13 @@ def build():
         "sport": "cfb",
         "captured_utc_asserted": "2026-08-28T10:55:00Z",
         "relay": {"source": "DraftKings sportsbook, College Football Game Lines, filter 'All'",
-                  "channel": "owner relay, five screenshots",
-                  "screenshot_clock": ["3:38", "3:38", "3:38", "3:39", "3:39"],
+                  "channel": "owner relay, two captures, eight screenshots total",
+                  "capture_1": {"n_screenshots": 5, "clock": ["3:38", "3:38", "3:38",
+                                                              "3:39", "3:39"],
+                                "reach": "mid-board through Fri 4 Sep; top NOT shown"},
+                  "capture_2": {"n_screenshots": 3, "clock": ["3:38", "3:38", "3:38"],
+                                "reach": "TOP of board (first header 'Tomorrow') plus a "
+                                         "re-render of eight already-captured games"},
                   "grade": "OWNER_RELAYED_SINGLE_BOOK"},
         "DATE_SCOPE": {
             "n_games": len(games),
@@ -134,17 +156,26 @@ def build():
             "finding": ("ZERO of the 19 relayed games are on the 2026-08-28 slate. This relay "
                         "prices none of tonight's card."),
             "how_the_dates_were_established": (
-                "The screenshots scroll monotonically down the book's chronological board. Two "
-                "section headers are visible — 'Thu 3 Sep' and 'Fri 4 Sep'. The Saturday block "
-                "sits ABOVE the 'Thu 3 Sep' header, so it is the Saturday before September 3, "
-                "i.e. 2026-08-29. Dates are read from the board's own structure, not assigned."),
+                "CONFIRMED by the board's own first section header, which reads 'Tomorrow'. "
+                "From Friday 2026-08-28 that is Saturday 2026-08-29, and the later headers "
+                "'Thu 3 Sep' and 'Fri 4 Sep' follow in sequence. The first capture had to infer "
+                "the Saturday date from scroll position; the second reached the top of the board, "
+                "so the inference is no longer load-bearing — and it was correct."),
             "applied_to_the_8_28_card": "NOTHING. The 8/28 boards and card are unchanged. This "
                                         "file is never attached as an 8/28 overlay.",
+            "book_has_no_games_today": (
+                "ESTABLISHED by the second capture. The board opens on 'Tomorrow', so DraftKings "
+                "is carrying no college football for 2026-08-28. The first capture could not "
+                "support this and explicitly declined to claim it."),
             "what_this_does_NOT_establish": (
-                "The top of the board is not shown, so this relay CANNOT be read as evidence that "
-                "the book carries no 2026-08-28 college football at all. The claim is only that "
-                "the relayed portion contains none. The separate finding that zero FBS games "
-                "exist on 8/28 rests on the schedule acquisition, not on this file."),
+                "That the 8/28 schedule acquisition is wrong, or that its zero-FBS finding is "
+                "corroborated. The acquisition found seven 8/28 games, all FCS against FCS. A book "
+                "with nothing today is consistent with that IF it omits FCS-vs-FCS matchups and "
+                "inconsistent with it if it prices all college football. Distinguishing those "
+                "requires DraftKings' inclusion rule, which is not known and is NOT inferred from "
+                "this sample — inferring it would rest on the same FBS/FCS classification refused "
+                "elsewhere in this record. The zero-FBS finding continues to rest on the schedule "
+                "acquisition alone."),
         },
         "TRANSCRIPTION_VERIFICATION": {
             "method": ("every two-sided pair must imply a hold in band. Spread and total use "
@@ -162,6 +193,13 @@ def build():
                 round(max(g["moneyline"]["two_sided_hold_pct"] for g in games
                           if g["moneyline"]["two_sided_hold_pct"] is not None), 4)],
             "moneylines_padlocked": sum(1 for g in games if g["moneyline"]["away"] is None),
+            "repeat_capture_check": {
+                "method": "eight games were re-rendered in the second capture, re-transcribed "
+                          "independently, and compared price by price. A repeat rendering is a "
+                          "stronger check than the hold band: the band only says a row is "
+                          "internally plausible, this says it is the same row twice.",
+                "games_repeated": 8, "individual_prices_compared": 70,
+                "disagreements": 0, "verdict": "PASS"},
             "cross_screenshot_check": ("West Georgia @ Kennesaw State appears at the bottom of one "
                                        "screenshot and the top of the next; both renderings agree "
                                        "on every one of its six prices."),
@@ -199,7 +237,9 @@ def build():
                         "6:00 PM ET, which are not real Thursday-night college football windows. "
                         "Under Pacific they are 6:00, 7:00, 8:00 and 9:00 PM ET, which are exactly "
                         "the canonical windows, and Memphis at UNLV becomes a 10:00 PM ET Vegas "
-                        "late game."),
+                        "late game. The second capture adds North Carolina at TCU in a 'Sat 9:00 "
+                        "AM' slot, which is not a college kickoff time in Eastern and is a "
+                        "routine noon ET window in Pacific."),
             "effect": ("the timezone half of the WNBA discrepancy is now corroborated on "
                        "independent grounds. The remaining +10 minute gap between the book and "
                        "the wehoop parquet is UNCHANGED and still unresolved."),

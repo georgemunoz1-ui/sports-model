@@ -6,16 +6,17 @@
  },
  "DATE_SCOPE": {
   "applied_to_the_8_28_card": "NOTHING. The 8/28 boards and card are unchanged. This file is never attached as an 8/28 overlay.",
+  "book_has_no_games_today": "ESTABLISHED by the second capture. The board opens on 'Tomorrow', so DraftKings is carrying no college football for 2026-08-28. The first capture could not support this and explicitly declined to claim it.",
   "by_game_date": {
-   "2026-08-29": 5,
+   "2026-08-29": 8,
    "2026-09-03": 11,
    "2026-09-04": 3
   },
   "finding": "ZERO of the 19 relayed games are on the 2026-08-28 slate. This relay prices none of tonight's card.",
-  "how_the_dates_were_established": "The screenshots scroll monotonically down the book's chronological board. Two section headers are visible \u2014 'Thu 3 Sep' and 'Fri 4 Sep'. The Saturday block sits ABOVE the 'Thu 3 Sep' header, so it is the Saturday before September 3, i.e. 2026-08-29. Dates are read from the board's own structure, not assigned.",
-  "n_games": 19,
+  "how_the_dates_were_established": "CONFIRMED by the board's own first section header, which reads 'Tomorrow'. From Friday 2026-08-28 that is Saturday 2026-08-29, and the later headers 'Thu 3 Sep' and 'Fri 4 Sep' follow in sequence. The first capture had to infer the Saturday date from scroll position; the second reached the top of the board, so the inference is no longer load-bearing \u2014 and it was correct.",
+  "n_games": 22,
   "rows_on_2026_08_28": 0,
-  "what_this_does_NOT_establish": "The top of the board is not shown, so this relay CANNOT be read as evidence that the book carries no 2026-08-28 college football at all. The claim is only that the relayed portion contains none. The separate finding that zero FBS games exist on 8/28 rests on the schedule acquisition, not on this file."
+  "what_this_does_NOT_establish": "That the 8/28 schedule acquisition is wrong, or that its zero-FBS finding is corroborated. The acquisition found seven 8/28 games, all FCS against FCS. A book with nothing today is consistent with that IF it omits FCS-vs-FCS matchups and inconsistent with it if it prices all college football. Distinguishing those requires DraftKings' inclusion rule, which is not known and is NOT inferred from this sample \u2014 inferring it would rest on the same FBS/FCS classification refused elsewhere in this record. The zero-FBS finding continues to rest on the schedule acquisition alone."
  },
  "DISPOSITION": {
   "exposure_usd": 0,
@@ -28,7 +29,7 @@
  "TIMEZONE_COROBORATION": {
   "bears_on": "the open WNBA start-time discrepancy recorded in data/wnba/odds/2026-08-28_owner_relay_dk.json",
   "effect": "the timezone half of the WNBA discrepancy is now corroborated on independent grounds. The remaining +10 minute gap between the book and the wehoop parquet is UNCHANGED and still unresolved.",
-  "finding": "This relay independently supports the PACIFIC reading of the phone clock. Under Eastern the Thursday college slots would be 3:00, 4:00, 5:00 and 6:00 PM ET, which are not real Thursday-night college football windows. Under Pacific they are 6:00, 7:00, 8:00 and 9:00 PM ET, which are exactly the canonical windows, and Memphis at UNLV becomes a 10:00 PM ET Vegas late game.",
+  "finding": "This relay independently supports the PACIFIC reading of the phone clock. Under Eastern the Thursday college slots would be 3:00, 4:00, 5:00 and 6:00 PM ET, which are not real Thursday-night college football windows. Under Pacific they are 6:00, 7:00, 8:00 and 9:00 PM ET, which are exactly the canonical windows, and Memphis at UNLV becomes a 10:00 PM ET Vegas late game. The second capture adds North Carolina at TCU in a 'Sat 9:00 AM' slot, which is not a college kickoff time in Eastern and is a routine noon ET window in Pacific.",
   "still_inferred": "no screenshot states its timezone. This is strong corroboration from slot plausibility, not a confirmation."
  },
  "TRANSCRIPTION_VERIFICATION": {
@@ -38,11 +39,18 @@
    2.1868,
    4.1458
   ],
-  "moneylines_padlocked": 4,
-  "pairs_checked": 53,
+  "moneylines_padlocked": 5,
+  "pairs_checked": 61,
   "problems": [],
+  "repeat_capture_check": {
+   "disagreements": 0,
+   "games_repeated": 8,
+   "individual_prices_compared": 70,
+   "method": "eight games were re-rendered in the second capture, re-transcribed independently, and compared price by price. A repeat rendering is a stronger check than the hold band: the band only says a row is internally plausible, this says it is the same row twice.",
+   "verdict": "PASS"
+  },
   "spread_hold_range_pct": [
-   4.4962,
+   4.4192,
    4.5455
   ],
   "total_hold_range_pct": [
@@ -58,6 +66,98 @@
  },
  "captured_utc_asserted": "2026-08-28T10:55:00Z",
  "games": [
+  {
+   "away": "North Carolina",
+   "cohort": null,
+   "cohort_status": "REFUSED_UNCLASSIFIED",
+   "game_date": "2026-08-29",
+   "home": "TCU",
+   "moneyline": {
+    "away": 270,
+    "break_even_away": 0.27027,
+    "break_even_home": 0.772727,
+    "home": -340,
+    "null_reason": null,
+    "two_sided_hold_pct": 4.1225
+   },
+   "rank_shown_on_book": null,
+   "slot_as_displayed": "Sat 9:00 AM",
+   "spread": {
+    "away": 8.5,
+    "away_px": -105,
+    "home": -8.5,
+    "home_px": -115,
+    "two_sided_hold_pct": 4.4962
+   },
+   "total": {
+    "line": 46.5,
+    "over_px": -112,
+    "two_sided_hold_pct": 4.5376,
+    "under_px": -108
+   }
+  },
+  {
+   "away": "San Jose State",
+   "cohort": null,
+   "cohort_status": "REFUSED_UNCLASSIFIED",
+   "game_date": "2026-08-29",
+   "home": "USC",
+   "moneyline": {
+    "away": null,
+    "break_even_away": null,
+    "break_even_home": null,
+    "home": null,
+    "null_reason": "MONEYLINE_NOT_OFFERED \u2014 padlocked on the book; a price the book declines to offer is not a price to estimate",
+    "two_sided_hold_pct": null
+   },
+   "rank_shown_on_book": {
+    "USC": 15
+   },
+   "slot_as_displayed": "Sat 12:00 PM",
+   "spread": {
+    "away": 38.5,
+    "away_px": -102,
+    "home": -38.5,
+    "home_px": -118,
+    "two_sided_hold_pct": 4.4192
+   },
+   "total": {
+    "line": 61.5,
+    "over_px": -108,
+    "two_sided_hold_pct": 4.5376,
+    "under_px": -112
+   }
+  },
+  {
+   "away": "NC State",
+   "cohort": null,
+   "cohort_status": "REFUSED_UNCLASSIFIED",
+   "game_date": "2026-08-29",
+   "home": "Virginia",
+   "moneyline": {
+    "away": 160,
+    "break_even_away": 0.384615,
+    "break_even_home": 0.657534,
+    "home": -192,
+    "null_reason": null,
+    "two_sided_hold_pct": 4.0445
+   },
+   "rank_shown_on_book": null,
+   "slot_as_displayed": "Sat 12:30 PM",
+   "spread": {
+    "away": 4.0,
+    "away_px": -115,
+    "home": -4.0,
+    "home_px": -105,
+    "two_sided_hold_pct": 4.4962
+   },
+   "total": {
+    "line": 51.5,
+    "over_px": -108,
+    "two_sided_hold_pct": 4.5376,
+    "under_px": -112
+   }
+  },
   {
    "away": "Jacksonville State",
    "cohort": null,
@@ -635,15 +735,28 @@
  ],
  "record_id": "CFB-MARKET-RELAY-2026-08-28-DK-FORWARD",
  "relay": {
-  "channel": "owner relay, five screenshots",
+  "capture_1": {
+   "clock": [
+    "3:38",
+    "3:38",
+    "3:38",
+    "3:39",
+    "3:39"
+   ],
+   "n_screenshots": 5,
+   "reach": "mid-board through Fri 4 Sep; top NOT shown"
+  },
+  "capture_2": {
+   "clock": [
+    "3:38",
+    "3:38",
+    "3:38"
+   ],
+   "n_screenshots": 3,
+   "reach": "TOP of board (first header 'Tomorrow') plus a re-render of eight already-captured games"
+  },
+  "channel": "owner relay, two captures, eight screenshots total",
   "grade": "OWNER_RELAYED_SINGLE_BOOK",
-  "screenshot_clock": [
-   "3:38",
-   "3:38",
-   "3:38",
-   "3:39",
-   "3:39"
-  ],
   "source": "DraftKings sportsbook, College Football Game Lines, filter 'All'"
  },
  "schema": "ops.market_relay_forward.v1",

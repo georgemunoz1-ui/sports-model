@@ -1,0 +1,110 @@
+{
+ "DISPOSITION": {
+  "authorized": false,
+  "conservative_ev": "UNAVAILABLE \u2014 pending the RJ-002 consumption-spec review",
+  "execution": "UNAUTHORIZED",
+  "exposure_usd": 0,
+  "n_bets": 0,
+  "paper_only": true,
+  "selections": 0,
+  "statement": "this is a descriptive screen of a slip the owner constructed. It is not a recommendation, not an authorization, and nothing here was placed.",
+  "units": 0.0,
+  "wager_authority": "NO"
+ },
+ "PARLAY_TAX_CHECK": {
+  "parlay_break_even": 0.117561,
+  "product_of_leg_break_evens": 0.117917,
+  "verdict": "NO incremental parlay hold \u2014 the payout is marginally better than the exact product of the three legs' own vig. A point in the slip's favour."
+ },
+ "SENSITIVITY": {
+  "compression_reexpansion": {
+   "kc": 0.4683,
+   "note": "NYM sits above 50% so re-expansion HELPS it; KC sits below so it hurts. They partly cancel, which is why the parlay is more robust to compression than the raw candidate ranking was.",
+   "nym": 0.5375,
+   "parlay_ev_usd": 11.99
+  },
+  "correlated_direction_bias": {
+   "observation": "all three legs are the plus/underdog side \u2014 NYM +101, KC +121, POR +12.5",
+   "uniform_overstatement_usd": {
+    "0pp": 13.81,
+    "2pp": 6.86,
+    "3pp": 3.58,
+    "5pp": -2.6
+   },
+   "why_it_matters": "a compressed model is biased the SAME WAY on every dog, so these three leg errors are correlated in direction rather than independent, and a parlay multiplies them"
+  },
+  "headroom_points": 12.53,
+  "por_cover_break_even": 0.4538,
+  "reading": "the slip stays +EV while POR's true cover probability exceeds 45.38%"
+ },
+ "STRUCTURE": {
+  "parlay_ev_usd": 13.81,
+  "parlay_hit_rate": 0.15004,
+  "reading": "the parlay is higher EV and far higher variance. Its EV depends multiplicatively on the least-verified number in the whole calculation.",
+  "same_50_as_singles_ev_usd": 3.65,
+  "singles_pay_something_rate": 0.759
+ },
+ "TIMEZONE_ITEM_ADVANCED": {
+  "board_times_utc": {
+   "HOU@NYM": "23:10Z",
+   "KC@CLE": "23:10Z",
+   "POR@ATL": "23:30Z"
+  },
+  "finding": "under Pacific the two MLB slots match the frozen board EXACTLY (4:10 PM PT = 7:10 PM ET = 23:10Z) while POR@ATL is +10 minutes. So the open discrepancy is NOT a timezone error and NOT a global book offset \u2014 it is specific to the WNBA parquet.",
+  "slip_times": {
+   "HOU@NYM": "4:10 PM",
+   "KC@CLE": "4:10 PM",
+   "POR@ATL": "4:40 PM"
+  },
+  "status": "NARROWED \u2014 still unresolved, now scoped to the wehoop WNBA times only"
+ },
+ "created_utc": "2026-08-28T18:35:00Z",
+ "legs": [
+  {
+   "arm": "mlb.winner.CHAMPION_V13",
+   "board": "frozen cohort 3723e680",
+   "game": "mlb:HOU@NYM",
+   "leg": "NYM moneyline",
+   "model_p": 0.521333,
+   "price": 101,
+   "status": "REGISTERED"
+  },
+  {
+   "arm": "mlb.winner.CHAMPION_V13",
+   "board": "frozen cohort 3723e680",
+   "game": "mlb:KC@CLE",
+   "leg": "KC moneyline",
+   "model_p": 0.496933,
+   "price": 121,
+   "status": "REGISTERED"
+  },
+  {
+   "constructed_cover_p": 0.5791,
+   "construction": "Phi((12.5 - 9.71) / 13.97) using the frozen MARGIN_SD",
+   "game": "wnba:POR@ATL",
+   "leg": "POR +12.5 spread",
+   "model_margin_home": 9.71,
+   "price": "NOT SHOWN ON SLIP",
+   "price_inferred": -109.3,
+   "price_relayed_earlier": -110,
+   "status": "NOT REGISTERED",
+   "why_not_registered": "13.97 is frozen in wnba_model_v1 as a COHERENCE-TOLERANCE constant holding the winner and margin heads together, not as an ATS cover law. The 2026-08-22 audit flagged exactly this swap for totals and required any such construction be named and preregistered. It is not. The number is illustrative."
+  }
+ ],
+ "record_id": "PARLAY-SCREEN-2026-08-28-3LEG",
+ "result": {
+  "break_even": 0.117561,
+  "ev_usd_on_50": 13.81,
+  "model_parlay_p": 0.15004
+ },
+ "schema": "ops.parlay_screen.v1",
+ "slip": {
+  "displayed_payout_usd": 425.31,
+  "displayed_price": "+750",
+  "legs": 3,
+  "note": "the +750 on screen is rounded; the payout implies +750.6",
+  "stake_usd": 50.0,
+  "true_decimal": 8.5062
+ },
+ "source": "owner bet-slip screenshot, not placed (unauthenticated)"
+}

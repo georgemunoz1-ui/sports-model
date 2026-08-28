@@ -50,68 +50,62 @@ p{max-width:70ch}
 </style>
 <main>
 <h1>MLB Forecast Board — Thursday, August 27</h1>
-<p class="sub">Frozen 2026-08-27T06:58:28Z · 7 games · first pitch 17:05Z · paper research only</p>
+<p class="sub">Final · 7 games · frozen 06:58:28Z · graded against the official scoreboard · paper research only</p>
 
 <div class="chips">
-<span class="chip">7 GAMES FROZEN</span>
-<span class="chip"><b>4</b> WINNER ARMS + <b>2</b> TOTAL OUTPUTS / GAME</span>
-<span class="chip">DK MONEYLINES RETAINED (OWNER RELAY, ONE-SIDED)</span>
-<span class="chip"><b>5</b> PASS_NEGATIVE_EV · <b>2</b> RESELECTED, NO PRICE</span>
-<span class="chip"><b>0</b> CANDIDATES · <b>0</b> BETS · <b>$0</b></span>
-<span class="chip">ANCHOR PRECEDES EVERY START</span>
+<span class="chip">ACTIVE PATH <b>2–5</b> · BRIER <b>0.2400</b></span>
+<span class="chip">ADAPTIVE <b>5–2</b> BEST DIRECTION</span>
+<span class="chip">SIDE RESELECTION <b>0–2</b></span>
+<span class="chip">TOTALS: PRIOR BEAT THE CHAMPION AGAIN</span>
+<span class="chip"><b>0</b> BETS · <b>0.00u</b> · <b>$0</b></span>
 </div>
 
 <div class="panel answers">
-<div class="a"><div class="q">Model predicts</div><div class="v">MIL 67.8% is the one strong side; active calls: WSH, BAL, NYY, TOR, MIL, LAD and AZ</div></div>
-<div class="a"><div class="q">How strong</div><div class="v">One strong signal; six active calls at 50.1%–54.5%, including two replacement flips</div></div>
-<div class="a"><div class="q">Market offers</div><div class="v">DraftKings moneylines (owner-relayed, model side only): every frozen side is priced as a favorite</div></div>
-<div class="a"><div class="q">Candidate / pass / blocked</div><div class="v">Four raw candidates (TOR, MIL, LAD, AZ) — none authorized; three passes (one post-start)</div></div>
-<div class="a"><div class="q">What prevents action</div><div class="v">Conservative EV awaits the RJ-002 consumption rule; fresh execution-time quotes mandatory; unit $100 unused</div></div>
+<div class="a"><div class="q">What the model said</div><div class="v">Active sides WSH, BAL, NYY, TOR, MIL, LAD, AZ — one strong signal (MIL 67.8%), six near coin-flips</div></div>
+<div class="a"><div class="q">What happened</div><div class="v">2–5. Only WSH and MIL came in; both replacement side-flips lost</div></div>
+<div class="a"><div class="q">Probability quality</div><div class="v">Brier 0.2400 — the best of any path, and it came from compressing confidence on misses, not from picking winners</div></div>
+<div class="a"><div class="q">Market outcome</div><div class="v">Priced passes 2–3; the diagnostic candidate screen 2–3 (−$127.92 at forced $100)</div></div>
+<div class="a"><div class="q">Wagers</div><div class="v">0 bets · 0.00u · $0 — nothing was ever authorized</div></div>
 </div>
 
 <h2>Plain-language thesis</h2>
 <div class="panel">
-<p><b>One strong directional signal, one moderate lean, five near coin-flips; five games
-contain at least one capped starter input.</b> Jacob Misiorowski (1.68 ERA) against Sean Manaea
-makes Milwaukee at New York the slate's one strong directional signal — not an edge, because no
-price is retained: the frozen champion gives the Mets just 32.2% at home, and both challengers
-agree with the direction. Houston at New York (Yankees) is the one moderate lean at 60.0% home.
-The other five picks sit 50.7%–53.2%, which this system reads as near coin-flips, not small
-signals.</p>
-<p><b>Five games carry at least one capped starter input.</b> Kansas City–Toronto has a
-two-source starter conflict on <i>both</i> slots (capped until resolved; the 21:35Z checkpoint
-retries). Arizona–San Francisco is TBD/TBD, and St. Louis has not named a starter. Houston's
-Wesneski and Atlanta's Smith-Shawver are named but their logs were never retained, so those two
-slots are capped too (<code>NAMED_NO_LOG_RETAINED_CAP</code>). Capped slots ride the frozen
-league-average treatment — never a guess.</p>
-<p><b>No candidate exists today.</b> DraftKings moneylines were owner-relayed (model side
-only; direct fetch routes stay egress-blocked, receipts in the appendix). Every priced side
-screens negative at full precision — five economic passes — and the two reselected sides carry
-no retained price, so no EV exists for them. The uncertainty estimator reached its registered
-gates this morning (see appendix) but its consumption into per-game conservative EV is pending
-owner review; a negative raw EV cannot be rescued by it either way.</p>
+<p><b>Direction and calibration moved in opposite directions, and direction is what a side selection is.</b> The active replacement path finished <b>2–5</b> — only Washington and Milwaukee delivered — while posting the best Brier on the board (0.2400). That is not a contradiction: the replacements lowered confidence on games the model got wrong, which flatters the probability score without producing a single extra winner. The frozen champion, untouched by any replacement, went 4–3; the adaptive challenger went <b>5–2</b>, the best direction of the night.</p>
+<p><b>Side reselection went 0–2 and both crossovers were sub-51% calls.</b> Toronto (50.64%) lost 13–2 and the Dodgers (50.08%) lost 1–0. The coupled gate behaved exactly as registered — probability, side, price, EV and disposition moved together on the newest valid pregame information — but the information it moved on carried no conviction. A crossover at 50.1% is a coin flip changing sides, and tonight it cost the board two games it would otherwise have won.</p>
+<p><b>No stable market edge appeared.</b> The five priced passes finished 2–3; forcing $100 on each would have returned −$172.49, so passing protected a losing basket — but the three current-capture passes (WSH −119, BAL −124, NYY −154) went 1–2, not 3–0, and any claim that every passed side won is false. The separately captured morning screen’s four raw candidates finished 1–3 (−$247.92); adding the WNBA GSV +120 winner makes all five candidates 2–3 at −$127.92. Both captures are retained artifacts and are graded separately, never merged. Nothing was authorized and nothing was wagered.</p>
 </div>
 
-<h2>Active model output — replacements included</h2>
+<h2>Model output versus result — all seven games</h2>
 <div class="scroll"><table>
-<thead><tr><th class="l">Game</th><th class="l">Active side</th><th>Probability</th><th class="l">Output basis</th><th class="l">Market screen</th></tr></thead>
+<thead><tr><th class="l">Game</th><th class="l">Active side</th><th>Prob.</th><th class="l">Pregame disposition</th><th class="l">Final</th><th class="l">Takeaway</th></tr></thead>
 <tbody>
-<tr><td class="l"><b>COL@WSH</b></td><td class="l">WSH</td><td class="n">51.72%</td><td class="l">frozen</td><td class="l">−$4.81 at −119 · pass, post-start</td></tr>
-<tr><td class="l"><b>BAL@STL</b></td><td class="l">BAL</td><td class="n">50.68%</td><td class="l">frozen; Graceffo capped</td><td class="l">−$8.46 at −124 · pass</td></tr>
-<tr><td class="l"><b>HOU@NYY</b></td><td class="l">NYY</td><td class="n">54.46%</td><td class="l">replacement: Cole</td><td class="l">−$10.18 at −154 · pass</td></tr>
-<tr><td class="l"><b>KC@TOR</b></td><td class="l"><b>TOR</b></td><td class="n">50.64%</td><td class="l">replacement; side flipped</td><td class="l"><b>+$0.78 at −101 · raw candidate, not authorized</b></td></tr>
-<tr><td class="l"><b>MIL@NYM</b></td><td class="l"><b>MIL</b></td><td class="n">67.79%</td><td class="l">frozen</td><td class="l"><b>+$3.10 at −192 · raw candidate, not authorized</b></td></tr>
-<tr><td class="l"><b>LAD@ATL</b></td><td class="l"><b>LAD</b></td><td class="n">50.08%</td><td class="l">replacement; side flipped</td><td class="l"><b>+$5.68 at +111 · raw candidate, not authorized</b></td></tr>
-<tr><td class="l"><b>AZ@SF</b></td><td class="l">AZ</td><td class="n">53.15%</td><td class="l">replacement corrected: <b>J.</b> Cabrera@Roupp</td><td class="l"><b>+$3.77 at −105 · raw candidate, not authorized</b></td></tr>
+<tr><td class="l"><b>COL@WSH</b></td><td class="l pick">WSH</td><td class="n">51.72%</td><td class="l">pass at −119</td><td class="l"><b>WSH 7–1</b> ✓</td><td class="l">Model right; expensive side still passed</td></tr>
+<tr><td class="l"><b>BAL@STL</b></td><td class="l flag">BAL</td><td class="n">50.68%</td><td class="l">pass at −124</td><td class="l"><b>STL 7–5</b> ✗</td><td class="l">Pass avoided a loss</td></tr>
+<tr><td class="l"><b>HOU@NYY</b></td><td class="l flag">NYY</td><td class="n">54.46%</td><td class="l">pass at −154</td><td class="l"><b>HOU 5–1</b> ✗</td><td class="l">Cole replacement cut NYY confidence; side still wrong</td></tr>
+<tr><td class="l"><b>KC@TOR</b></td><td class="l flag"><b>TOR</b></td><td class="n">50.64%</td><td class="l">raw candidate −101, unauthorized</td><td class="l"><b>KC 13–2</b> ✗</td><td class="l"><b>Replacement crossover lost — badly</b></td></tr>
+<tr><td class="l"><b>MIL@NYM</b></td><td class="l pick"><b>MIL</b></td><td class="n">67.79%</td><td class="l">raw candidate −192, unauthorized</td><td class="l"><b>MIL 8–2</b> ✓</td><td class="l">The slate’s one strong signal won</td></tr>
+<tr><td class="l"><b>LAD@ATL</b></td><td class="l flag"><b>LAD</b></td><td class="n">50.08%</td><td class="l">raw candidate +111, unauthorized</td><td class="l"><b>ATL 1–0</b> ✗</td><td class="l"><b>Replacement crossover lost by one run</b></td></tr>
+<tr><td class="l"><b>AZ@SF</b></td><td class="l flag">AZ</td><td class="n">53.15%</td><td class="l">raw candidate −105, unauthorized</td><td class="l"><b>SF 6–1</b> ✗</td><td class="l">Pass-equivalent; nothing was authorized</td></tr>
 </tbody></table></div>
-<p class="sub">Current owner-relayed DK prices (v2 capture, <code>54486905</code>); EVs full-precision per $100.
-The reselected TOR and LAD sides now carry prices and re-passed the coupled gate. Four raw
-candidates exist and none is authorized: conservative EV awaits the RJ-002 consumption rule,
-and a fresh execution-time quote is mandatory regardless. Fragility: TOR +$0.78 vanishes on one
-tick; LAD's +$5.68 is price-manufactured around a 50.1% model side. Late correction (00:16Z):
-the AZ starter is <b>Jose</b> Cabrera, not Edward — the corrected replacement (retained log,
-53.15%) lifts the AZ screen to +$3.77 at −105; the wrong-pitcher basis is retained in the audit
-trail (amendment <code>188c3795</code>).</p>
+<p class="sub">Finals from the official scoreboard by owner relay. Every row is bound to its scheduled game id and date under the new result-binding gate — the grading that reversed this table’s first version had joined five of these matchups to the previous day’s games.</p>
+
+<h2>Arm metrics — direction versus calibration</h2>
+<div class="scroll"><table>
+<thead><tr><th class="l">Winner path</th><th>Record</th><th>Brier</th><th class="l">Interpretation</th></tr></thead>
+<tbody>
+<tr><td class="l"><b>Active replacements</b></td><td class="n"><b>2–5</b></td><td class="n"><b>0.2400</b></td><td class="l">Best probability score, worst direction — compression on misses, not extra winners</td></tr>
+<tr><td class="l"><code>CHALLENGER_ADAPTIVE</code></td><td class="n"><b>5–2</b></td><td class="n">0.2455</td><td class="l">Best direction of the night</td></tr>
+<tr><td class="l"><code>CHAMPION_V13</code> (frozen)</td><td class="n">4–3</td><td class="n">0.2454</td><td class="l">Beat the active path on direction by leaving the crossovers alone</td></tr>
+<tr><td class="l"><code>CHALLENGER_WIDENED</code></td><td class="n">3–4</td><td class="n">0.2452</td><td class="l">The 12–3 day did not extend; three-day pooled 21–16 / 0.2439</td></tr>
+<tr><td class="l">Expanding home prior</td><td class="n">4–3</td><td class="n">0.2475</td><td class="l">Beat three of four model arms on direction</td></tr>
+</tbody></table></div>
+<div class="scroll"><table>
+<thead><tr><th class="l">Total output</th><th>MAE</th><th>RMSE</th><th>Bias</th><th class="l">Reading</th></tr></thead>
+<tbody>
+<tr><td class="l">Champion total</td><td class="n">4.02</td><td class="n">4.82</td><td class="n">+0.48</td><td class="l">Beaten by a flat constant again</td></tr>
+<tr><td class="l">Expanding-total prior</td><td class="n"><b>3.43</b></td><td class="n"><b>4.21</b></td><td class="n">+0.56</td><td class="l">Wins on MAE and RMSE</td></tr>
+</tbody></table></div>
+<p class="sub">The two largest misses ran in <i>opposite</i> directions — LAD@ATL projected 9.84 against an actual 1 (8.84 high) and KC@TOR projected 8.25 against an actual 15 (6.75 low). That is weak game-level discrimination, not a correctable one-sided bias.</p>
 
 <h2>Frozen arm comparison — immutable board</h2>
 <div class="scroll"><table>
@@ -127,48 +121,29 @@ trail (amendment <code>188c3795</code>).</p>
 </tbody></table></div>
 <p class="sub">Percentages are the arm's pick with its probability. *Widened shows the away side at 55.9% (home 44.1%). Totals are never decision-bearing.</p>
 
-<h2>Market, EV and dispositions</h2>
+<h2>Market accounting — both captures, graded separately</h2>
 <div class="panel">
-<p><b>DraftKings moneylines were owner-relayed after the freeze</b> — model side only, so this
-is <code>MONEYLINE_ONLY_PARTIAL_CAPTURE</code>: no opposite-side prices, no hold computation,
-single-price EV screening only. Direct fetch routes stayed EGRESS_BLOCKED (receipts retained).
-EVs below use <b>full-precision</b> frozen or replacement probabilities per $100:</p>
-<div class="scroll"><table>
-<thead><tr><th class="l">Game</th><th class="l">Active side</th><th>DK price</th><th>p (full)</th><th>Raw EV/$100</th><th class="l">Basis</th><th class="l">Disposition</th></tr></thead>
-<tbody>
-<tr><td class="l">COL@WSH</td><td class="l">WSH</td><td class="n">−119</td><td class="n">.5172</td><td class="n">−$4.81</td><td class="l">frozen</td><td class="l">PASS_NEGATIVE_EV</td></tr>
-<tr><td class="l">BAL@STL</td><td class="l">BAL</td><td class="n">−114</td><td class="n">.5068</td><td class="n">−$4.87</td><td class="l">frozen (STL still TBD)</td><td class="l">PASS_NEGATIVE_EV*</td></tr>
-<tr><td class="l">HOU@NYY</td><td class="l">NYY</td><td class="n">−163</td><td class="n">.5446</td><td class="n">−$12.13</td><td class="l">replacement (Cole)</td><td class="l">PASS_NEGATIVE_EV</td></tr>
-<tr><td class="l">KC@TOR</td><td class="l"><span class="flag">→ TOR</span></td><td class="n">—</td><td class="n">.5064</td><td class="n">—</td><td class="l">replacement (side flipped)</td><td class="l"><span class="flag">RESELECTED — NO RETAINED PRICE</span></td></tr>
-<tr><td class="l">MIL@NYM</td><td class="l">MIL</td><td class="n">−230</td><td class="n">.6779</td><td class="n">−$2.73</td><td class="l">frozen</td><td class="l">PASS_NEGATIVE_EV</td></tr>
-<tr><td class="l">LAD@ATL</td><td class="l"><span class="flag">→ LAD</span></td><td class="n">—</td><td class="n">.5008</td><td class="n">—</td><td class="l">replacement (side flipped)</td><td class="l"><span class="flag">RESELECTED — NO RETAINED PRICE</span></td></tr>
-<tr><td class="l">AZ@SF</td><td class="l">AZ</td><td class="n">−114</td><td class="n">.5160</td><td class="n">−$3.14</td><td class="l">replacement (Cabrera@Roupp)</td><td class="l">PASS_NEGATIVE_EV</td></tr>
-</tbody></table></div>
-<p class="sub">*provisional pending the STL starter; revisit at T−90 15:35Z. Conservative EV
-remains unavailable (RJ-002 consumption spec pending), but it cannot rescue a negative raw EV:
-every priced side screens out. Zero candidates. Ledger 0 bets · 0.00u · $0.</p>
+<p><b>Retained overlay (five priced rows, all passes at capture time):</b> those model sides finished <b>2–3</b>. Forcing $100 of risk on each would have returned <b>−$172.49</b> — the pass discipline protected a losing basket. The three current-capture passes specifically (WSH −119, BAL −124, NYY −154) went <b>1–2</b>.</p>
+<p><b>Separately captured morning screen (diagnostic, not merged):</b> its four MLB raw candidates — TOR −101, MIL −192, LAD +111, AZ −105 — finished <b>1–3</b> at <b>−$247.92</b>. Adding the WNBA GSV +120 winner, all five candidates finished <b>2–3</b> at <b>−$127.92</b>. A positive raw-EV screen that goes 1–3 on its baseball rows is the exact reason conservative EV exists as a separate gate.</p>
+<div class="block"><b>Ledger: 0 bets · 0.00u · $0 exposure.</b> No wager was ever authorized. Every P&amp;L figure above is a counterfactual computed at a forced $100 risk for diagnosis only; none of it accrues to any ledger, promotion denominator or estimator.</div>
 </div>
-<div class="warn"><b>Starter resolution changed four games after the freeze — the frozen board
-is untouched; anchored replacements carry the updates</b>
-(<code>mlb.replacement.CONFIRMED_LINEUP</code>, input grade search-identified). Cole replaces
-Schlittler and NYY drops 60.0% → 54.5%. Cameron@Arrighetti resolves the KC@TOR conflict and the
-side <i>crosses</i> to Toronto (50.6%). Yamamoto@Sale replaces both LAD@ATL slots and the side
-crosses to the Dodgers (50.1% — under one point from the flip line). Cabrera@Roupp resolves
-AZ@SF, Arizona retained at 51.6%. The reselection gate refused both attempts to keep the old
-side after a crossover (<code>SIDE_RETENTION_AFTER_CROSSOVER</code>); the reselected sides have
-no relayed price, so no EV exists for them until one binds — probability, side, price, EV and
-disposition move together or not at all.</div>
 
-<h2>Where the arms disagree</h2>
+<h2>How the disagreements resolved</h2>
 <div class="panel">
-<p>Five of seven games split the winner arms — COL@WSH, BAL@STL, KC@TOR, MIL@NYM and AZ@SF —
-all at low conviction except the Milwaukee game, and three of them starter-capped:</p>
 <ul>
-<li><b>COL@WSH</b> — champion takes Washington, the widened challenger takes Colorado. Fully-resolved starters; a genuine model disagreement at low conviction.</li>
-<li><b>BAL@STL</b> and <b>KC@TOR</b> — the champion leans away-side against every other arm; both games are starter-capped, so the disagreement is mostly cap arithmetic.</li>
-<li><b>MIL@NYM</b> — the baseline prior (home 52.1%) opposes all three model arms; this is the slate's primary diagnostic game. Its result will be graded descriptively against the prior using probability metrics; one game cannot validate the signal.</li>
-<li><b>AZ@SF</b> — champion and widened take Arizona, adaptive and prior take San Francisco; TBD/TBD, so treat as noise until starters resolve.</li>
+<li><b>COL@WSH</b> — champion took Washington, widened took Colorado. <b>Washington won 7–1</b>: the champion was right on the one game where the two challengers split from it cleanly.</li>
+<li><b>MIL@NYM</b> — the prior opposed all three model arms. <b>Milwaukee won 8–2</b>: the slate’s primary diagnostic went to the models, and it was the only strong signal on the board.</li>
+<li><b>KC@TOR</b> and <b>LAD@ATL</b> — the two reselection crossovers. <b>Both lost</b> (13–2 and 1–0), and in both cases the frozen champion’s original side would have won. This is the night’s central finding: reselection at 50.1–50.6% moved off winners.</li>
+<li><b>AZ@SF</b> — champion and widened took Arizona, adaptive and prior took San Francisco. <b>San Francisco won 6–1</b>: the two arms that deferred to the baseline were right.</li>
 </ul>
+<p>Pattern worth watching, not concluding from: on four of the five split games, the lower-conviction arm closer to the baseline was correct. One slate cannot establish that; it is registered as a question for the accumulation ledger.</p>
+</div>
+
+<h2>Grading incident — this card’s first results version was wrong</h2>
+<div class="block">
+<p><b>What happened.</b> The first end-of-night grading of this slate joined five of these games to the <i>previous day’s</i> finals of the same matchups — BAL@STL, HOU@NYY, KC@TOR, MIL@NYM and LAD@ATL are all continuing series, and the join was keyed on team names with no date or game-id requirement. It reported the active path at 5–1 when it was 2–5, the crossovers as a 1–1 split when they were 0–2, and a positive counterfactual P&amp;L that was actually negative.</p>
+<p><b>Why the id alone would not have saved it.</b> Consecutive-series game ids are adjacent integers — KC@TOR is 822772 on 8/26 and 822771 on 8/27; HOU@NYY 823506 and 823503; LAD@ATL 824878 and 824879. A single-digit slip lands on the neighbouring day’s game with every team name still agreeing.</p>
+<p><b>What now prevents it.</b> A registered result-binding gate (<code>harness/result_binding_gate.py</code>) requires sport + game id + scheduled date + away + home on every result row, and refuses date mismatches, prior-date series joins, unmatched or ambiguous ids, finals timestamped before first pitch, and <i>any aggregate touching a refused row</i> — no partial credit, because the damage was never the five rows, it was the records, Brier scores and P&amp;L computed over them. Its primary fixture feeds these exact five prior-day finals into this exact board and requires all five to be refused by name. Three mutation tests confirm the fixture cannot pass with the protections removed. The superseded record is retained unedited and accrues nothing.</p>
 </div>
 
 <h2>Data-quality and personnel warnings</h2>

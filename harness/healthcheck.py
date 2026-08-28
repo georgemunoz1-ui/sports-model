@@ -513,6 +513,22 @@ try:
 except Exception as e:
     check(f"board arm completeness ({e})", False)
 
+# 6i. RESULT BINDING (owner gate, 2026-08-28, after RESULT_DATE_COHORT_CONTAMINATION). A final is
+#     gradable only bound to the SCHEDULED GAME: sport + game_pk + scheduled_date + away + home.
+#     The consecutive-series fixture (prior day's five same-matchup finals fed into the 8/27
+#     cohort) must refuse all five, and any aggregate touching a refused row is refused whole.
+try:
+    _r=subprocess.run([sys.executable,"harness/result_binding_gate.py","--gate"],
+                      capture_output=True,text=True)
+    _out=(_r.stdout+_r.stderr).strip().splitlines()
+    check(f"result binding ({_out[0][:78] if _out else 'no output'})", _r.returncode==0)
+    _m=subprocess.run([sys.executable,"harness/result_binding_gate.py","--mutants"],
+                      capture_output=True,text=True)
+    _mo=(_m.stdout+_m.stderr).strip().splitlines()
+    check(f"result-binding mutants ({_mo[-1][:70] if _mo else 'no output'})", _m.returncode==0)
+except Exception as e:
+    check(f"result binding ({e})", False)
+
 # 7. PREGAME DECISION READINESS v1.0, section 12. The standard is implemented only when its
 #    acceptance proofs pass. Each proof asserts BOTH directions — the compliant case passes and the
 #    violating case is refused — so a one-directional test cannot make the standard decoration.

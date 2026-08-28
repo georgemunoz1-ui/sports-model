@@ -1,0 +1,48 @@
+{
+ "created_utc": "2026-08-28T06:44:09Z",
+ "finals": {
+  "mlb:AZ@SF": "SF 6-1",
+  "mlb:BAL@STL": "STL 7-5",
+  "mlb:COL@WSH": "WSH 7-1",
+  "mlb:HOU@NYY": "HOU 5-1",
+  "mlb:KC@TOR": "KC 13-2",
+  "mlb:LAD@ATL": "ATL 1-0",
+  "mlb:MIL@NYM": "MIL 8-2",
+  "nfl": "BUF 28-27, CLE 37-13, SF 18-12, LAC-LAR 18-20 (LAR won) \u2014 benchmark only",
+  "wnba:GSV@NYL": "GSV 79-60",
+  "wnba:WSH@PHX": "WSH 80-73"
+ },
+ "grade": "OWNER_RELAY_OFFICIAL_SCOREBOARD \u2014 descriptive; archive binding at the 11:00Z wake; nothing accrues to settlement/promotion/estimator",
+ "ledger": {
+  "exposure_usd": 0,
+  "n_bets": 0,
+  "units": 0.0
+ },
+ "mlb": {
+  "active_path": "2-5, Brier 0.2400 (pid-corrected AZ basis; 0.2377 on the displayed Edward basis) \u2014 best Brier, WORST direction",
+  "arms": {
+   "ADAPTIVE": "5-2 / 0.2455 (best record)",
+   "CHAMPION_V13": "4-3 / 0.2454",
+   "PRIOR": "4-3 / 0.2475",
+   "WIDENED": "3-4 / 0.2452"
+  },
+  "key_finding": "directional accuracy and calibration DIVERGED: side reselection went 0-2 (TOR and LAD crossovers both lost; the frozen champion's KC and ATL picks were right), while replacement probabilities scored better by Brier through confidence compression on misses. Both crossovers were sub-51% sides \u2014 the reselection gate moved sides on information that carried no conviction.",
+  "market": "v1 five priced passes 2-3, forced-$100 -172.49; v2-capture three passes (WSH -119, BAL -124, NYY -154) 1-2, forced ~-115.97 \u2014 passing protected a net losing basket; v2 candidates TOR/MIL/LAD/AZ 1-3 -247.92, all five candidates incl. GSV +120: 2-3, -127.92. Both captures are retained artifacts (a61038c3, 54486905), graded separately, never merged.",
+  "totals": "champion MAE 4.02/RMSE 4.82/bias +0.48 vs prior 3.43/4.21/+0.56 \u2014 the prior won again; largest misses OPPOSITE directions (LAD@ATL 9.84->1, KC@TOR 8.25->15): weak game-level discrimination, not one-sided bias",
+  "widened_accumulation": "8/27 widened 3-4/0.2452 \u2014 the two-day edge did NOT extend; three-day pooled 21-16/0.2439 vs prior ~0.2488"
+ },
+ "record_id": "END-OF-NIGHT-REVIEW-2026-08-27-CORRECTED",
+ "record_sha256": "7471527279002a4b7d9e717d8d147e4c8c73c35b95373a15c7329115949ee50e",
+ "schema": "ops.night_review.v1",
+ "standing_conclusion_owner": "WNBA winner modeling produced the best signal; MLB replacement side selection failed despite better calibration; both sports' score/total models remain weak. No wager occurred.",
+ "supersedes_with_defect_class": "caf9a897 via RESULT_DATE_COHORT_CONTAMINATION (correction record above); affected commit a287dbb",
+ "wnba": {
+  "fallback": "2-0 / 0.1323 \u2014 MORE accurate probabilistically tonight than the refresh arm",
+  "personnel_correction": "Ionescu PLAYED (29 min, 4 ast) \u2014 the pregame 'ruled out' identification was false; Sabally out was correct",
+  "prior": "0-2 / 0.2879",
+  "refresh": "2-0 tonight, Brier 0.2027 \u2014 now 4-0/0.1527 pooled across its first two current-feature slates (descriptive, zero promotion accrual)",
+  "score_models_failed": "margin MAE 11.19 (GSV error 17.82); total MAE 22.20, total leans 0-2 \u2014 winners strong, scores badly overstated; the GSV +120 candidate won (+120 hypothetical)",
+  "supersession_vindicated": "the rebuild-first workflow corrected the GSV side and the refreshed winner arm went 2-0. That vindicates the reproduction PROCESS descriptively, not the model statistically. Winner direction remains promising; margin compression and persistent total overprojection remain serious defects.",
+  "totals_direction": "persistent OVERPROJECTION: all four refreshed-arm totals on 8/26-8/27 exceeded the final; no sign flip"
+ }
+}

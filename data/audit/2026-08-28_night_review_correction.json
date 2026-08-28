@@ -1,0 +1,28 @@
+{
+ "additional_false_claims_corrected": [
+  "'every passed side won' \u2014 FALSE: the three v2-capture passes (WSH -119, BAL -124, NYY -154) went 1-2; forcing $100 each ~= -115.97. Passing protected a net losing basket; that is the correct statement.",
+  "'totals error flipped sign vs 8/26' \u2014 FALSE: 167.0 vs 139 is another OVERprojection; all four refreshed-arm totals across 8/26-8/27 exceeded the final",
+  "'NYL played without Ionescu' \u2014 FALSE: Sabrina Ionescu played 29 minutes with four assists; the T-45 checkpoint's 'ruled out (foot)' search identification was wrong (record d82ef006 stands, superseded on this point). Sabally out remains correct."
+ ],
+ "affected_commit": "a287dbb \u2014 marked RESULT_DATE_COHORT_CONTAMINATION (history is append-only; the mark lives here and in the corrected review)",
+ "authority": "owner correction with official 8/26 and 8/27 scoreboard citations, 2026-08-28",
+ "contaminated_rows": {
+  "mlb:BAL@STL": "said BAL 8-7 (8/26) \u2014 actual STL 7-5",
+  "mlb:HOU@NYY": "said NYY 9-3 (8/26) \u2014 actual HOU 5-1",
+  "mlb:KC@TOR": "said TOR 3-0 (8/26) \u2014 actual KC 13-2",
+  "mlb:LAD@ATL": "said ATL 6-5 (8/26) \u2014 actual ATL 1-0",
+  "mlb:MIL@NYM": "said MIL 8-1 (8/26) \u2014 actual MIL 8-2"
+ },
+ "created_utc": "2026-08-28T06:44:09Z",
+ "defect_class": "RESULT_DATE_COHORT_CONTAMINATION",
+ "mechanism": "a repeated-series PRIOR-DATE JOIN keyed by teams without requiring scheduled date/game id: five August 26 finals were assigned to the August 27 games of the same matchups. VERIFIED: every wrong score (BAL 8-7, NYY 9-3, TOR 3-0, MIL 8-1, ATL 6-5) is exactly the 8/26 final for that matchup per the official 8/26 scoreboard and the 8/26 evidence extract. Multi-game search synthesis performed the join; the single-game slug-anchored result (COL@WSH) was correct.",
+ "record_id": "NIGHT-REVIEW-CORRECTION-2026-08-28",
+ "record_sha256": "8dc653846802c66c5bca8dca9408bfe5fc476b33c543156279f1baff358ea6f0",
+ "rules_forward": [
+  "BINDING result-binding gate (harness/result_binding_gate.py): a gradable result requires sport + canonical_game_id/game_pk + scheduled_date + away_team + home_team; refuses result_date != board_slate_date, same-matchup previous-date finals, unmatched/ambiguous game_pk, final timestamps preceding scheduled start, and any aggregate touching a refused row",
+  "a multi-game synthesized finals answer is never gradable; per-game anchors or IDENTIFIED_UNSCORED",
+  "owner relay of the official scoreboard supersedes search identification always"
+ ],
+ "schema": "ops.corrections.v1",
+ "supersedes": "END-OF-NIGHT-REVIEW-2026-08-27 (caf9a897) \u2014 SUPERSEDED, NEVER EDITED; accrues NOTHING to grading, promotion, estimator or arm ledgers"
+}

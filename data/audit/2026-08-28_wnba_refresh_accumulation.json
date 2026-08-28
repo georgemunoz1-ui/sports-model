@@ -1,0 +1,27 @@
+{
+ "accrual": "descriptive only; four games are four games; no promotion, settlement or estimator evidence",
+ "arm": "wnba.replacement.FEATURE_REFRESH",
+ "comparators": {
+  "wnba.fallback.STANDINGS_LOG5_v1": "3-1 / 0.1676 pooled \u2014 and it BEAT the refresh arm outright on 8/27 (0.1323 vs 0.2027)",
+  "wnba.winner.EXPANDING_HOME_PRIOR": "1-3 / 0.2696 pooled"
+ },
+ "created_utc": "2026-08-28T06:49:14Z",
+ "grade": "8/26 archive-confirmed (commit 3316fa3); 8/27 OWNER_RELAY \u2014 both descriptive",
+ "ledger": [
+  {
+   "brier": 0.1027,
+   "date": "2026-08-26",
+   "record": "2-0"
+  },
+  {
+   "brier": 0.2027,
+   "date": "2026-08-27",
+   "record": "2-0"
+  }
+ ],
+ "pooled": "4-0 / 0.1527 across the first four current-feature forecasts",
+ "record_id": "ARM-ACCUMULATION-WNBA-FEATURE-REFRESH",
+ "record_sha256": "1f83c6177028b46969916aef84b0f625d3ac44516d955799a719c3228ed1d10a",
+ "schema": "ops.arm_accumulation.v1",
+ "score_model_caveat": "WINNER ARM ONLY. Margins compress (MAE 11.80 then 11.19) and totals are systematically OVER: every one of the four projected totals exceeded the final (8/26 MAE 8.95, 8/27 MAE 22.20; total leans 0-2 on 8/27). No sign flip has ever occurred \u2014 the earlier claim of one was false."
+}

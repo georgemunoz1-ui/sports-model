@@ -220,20 +220,56 @@ def check(date, now=None):
 
 
 
+#: "(497m of slack)", "(3 minutes past first pitch)" — magnitudes that move every run.
+_SLACK_PAREN = re.compile(r"\s*\([^()]*\)\s*$")
+
+
+def _semantic(rep, ts_keys):
+    """The part of a report that is a STATE, with everything clock-derived removed.
+
+    Stripping `checked_utc` alone was not enough, and the shortfall was visible in the git tree:
+    `minutes_to_first_pitch` counts down every run, and each input's status carries its slack in
+    the string — "MISSING_BUT_RECOVERABLE (497m of slack)" becomes "(496m of slack)" a minute
+    later. So every healthcheck rewrote the file, the working tree was permanently dirty, and a
+    real change was hidden among four drifting integers. That is exactly the timestamp-only
+    rewrite the owner's 2026-08-27 directive prohibits, arriving through a side door.
+
+    The status CATEGORY is kept and only the parenthesised magnitude is dropped, so a genuine
+    transition — MISSING_BUT_RECOVERABLE to PAST_DEADLINE, or to MISSING_AND_UNRECOVERABLE —
+    still counts as a change and still gets written.
+    """
+    out = {}
+    for k, v in rep.items():
+        if k in ts_keys or k == "minutes_to_first_pitch":
+            continue
+        if k == "inputs" and isinstance(v, dict):
+            v = {ik: ({sk: (_SLACK_PAREN.sub("", sv) if sk == "status" and isinstance(sv, str)
+                            else sv)
+                       for sk, sv in iv.items()} if isinstance(iv, dict) else iv)
+                 for ik, iv in v.items()}
+        out[k] = v
+    return out
+
+
 def _write_if_changed(path, rep, ts_keys):
-    """Store reports per slate date and rewrite only when something other than the run
-    timestamp changed for that date. The file is a {date: report} map so the today/tomorrow
-    pair the healthcheck probes stop ping-ponging one shared slot (owner directive
-    2026-08-27: no timestamp-only rewrites, no timestamp-only commits)."""
+    """Store reports per slate date and rewrite only when the STATE changed for that date.
+
+    The file is a {date: report} map so the today/tomorrow pair the healthcheck probes stop
+    ping-ponging one shared slot (owner directive 2026-08-27: no timestamp-only rewrites, no
+    timestamp-only commits).
+
+    When the state is unchanged the record is left exactly as it was, countdown and timestamp
+    together. A retained record whose `checked_utc` and `minutes_to_first_pitch` agree with each
+    other is honest about when it was written; refreshing one without the other would not be.
+    """
     try:
         old = json.load(open(path))
     except (OSError, ValueError):
         old = {}
     if "date" in old:  # legacy single-report layout
         old = {old["date"]: old}
-    strip = lambda d: {k: v for k, v in d.items() if k not in ts_keys}
     prev = old.get(rep["date"])
-    if prev is not None and strip(prev) == strip(rep):
+    if prev is not None and _semantic(prev, ts_keys) == _semantic(rep, ts_keys):
         return False
     old[rep["date"]] = rep
     os.makedirs(os.path.dirname(path), exist_ok=True)
@@ -327,6 +363,39 @@ def selftest():
         if len(rows2) != 2:
             fails.append("the foreign-date row was dropped from rows entirely; it must still be "
                          "visible as a row, only refused for the clock")
+    # NO CLOCK-ONLY REWRITES. Two runs a minute apart differ in checked_utc, in
+    # minutes_to_first_pitch and in every "(Nm of slack)" string, and every one of those is
+    # derived from the clock rather than from the slate. The file must not be rewritten for them.
+    with tempfile.TemporaryDirectory() as td:
+        store = os.path.join(td, "preflight.json")
+        r1 = check("2026-08-17", now=dt.datetime(2026, 8, 17, 8, 0, tzinfo=dt.timezone.utc))
+        if not _write_if_changed(store, r1, ("checked_utc",)):
+            fails.append("the first write of a report was skipped")
+        r2 = check("2026-08-17", now=dt.datetime(2026, 8, 17, 8, 1, tzinfo=dt.timezone.utc))
+        if r2["minutes_to_first_pitch"] == r1["minutes_to_first_pitch"]:
+            fails.append("the fixture did not actually advance the clock, so this proves nothing")
+        if _write_if_changed(store, r2, ("checked_utc",)):
+            fails.append("a clock-only difference rewrote the file — the countdown and the "
+                         "'(Nm of slack)' strings are drifting past the checked_utc strip")
+        # ...but a real STATE change must still be written
+        r3 = dict(r2, verdict="READY")
+        if not _write_if_changed(store, r3, ("checked_utc",)):
+            fails.append("a genuine verdict change was suppressed as clock drift")
+        # ...and so must a status CATEGORY change, even though the magnitude is stripped
+        r4 = json.loads(json.dumps(r3))
+        r4["inputs"]["prices"]["status"] = "MISSING_AND_UNRECOVERABLE (past first pitch)"
+        if not _write_if_changed(store, r4, ("checked_utc",)):
+            fails.append("a RECOVERABLE-to-UNRECOVERABLE transition was suppressed as clock drift")
+        # a pure magnitude change within the same category must NOT be written
+        r5 = json.loads(json.dumps(r4))
+        r5["inputs"]["schedule"]["status"] = _SLACK_PAREN.sub(
+            " (1m of slack)", r5["inputs"]["schedule"]["status"])
+        if _SLACK_PAREN.sub("", r5["inputs"]["schedule"]["status"]) != \
+                _SLACK_PAREN.sub("", r4["inputs"]["schedule"]["status"]):
+            fails.append("the magnitude fixture changed the category too, so it proves nothing")
+        elif _write_if_changed(store, r5, ("checked_utc",)):
+            fails.append("a slack magnitude change inside one category rewrote the file")
+
     if fails:
         print("pregame_preflight selftest: FAIL")
         for f in fails:
@@ -338,7 +407,8 @@ def selftest():
           "deadline slack distinguishes recoverable from past-deadline; full-ISO column-3 "
           "timestamps now yield a first-pitch clock instead of silently dropping every stamp; a "
           "prior-date slate row is refused for the clock but stays visible as a row; namespaced "
-          "canonical_ids survive column-0 parsing)")
+          "canonical_ids survive column-0 parsing; clock-only drift no longer rewrites the store "
+          "while verdict and status-category changes still do)")
     return 0
 
 

@@ -1,0 +1,294 @@
+{
+ "COMPRESSION_FINDING": {
+  "consequence_for_COL": "the extreme-edge audit does NOT find a bad input. COL's form (-1.07 run differential) against ATL's (+0.84), Sugano's 4.90 ERA against Holmes's 3.80, park factor 0.996 and dose 1.0 all check out and all point the same way. The +39.52 is not a data error; it is the compression showing through at the largest price on the board.",
+  "diagnostic": {
+   "corr_price_vs_ev": 0.887,
+   "n_plus_sides": 5,
+   "plus_sides_above_market": 5,
+   "reading": "the model is above the market on every plus-money side and the gap widens with the price \u2014 that is the shape of a compressed probability scale, not of independent value findings",
+   "verdict": "COMPRESSION_SUSPECTED"
+  },
+  "independently_registered": "this is not a new hypothesis. The MLV2 preregistered experiment concluded the binding constraint on this family is DISCRIMINATION, not calibration, and the 8/11 overlay recorded 14 of 15 'positive EV' rows as a compression artefact.",
+  "logit_fit": {
+   "intercept": 0.0325,
+   "reading": "the model spans about 54% of the market's probability range",
+   "slope": 0.3522
+  },
+  "what_it_means": "a compressed model sits above the market on every longshot and below it on every favourite. That is exactly the observed pattern: all five plus-money sides are above market and the correlation between price and EV is +0.887. Ranking these by raw EV is therefore close to ranking them by how big a dog each one is."
+ },
+ "COMPRESSION_SENSITIVITY": {
+  "CIRCULARITY_WARNING": "the fit is estimated on these same five games and applied back to them. It is in-sample and cannot be used to select anything. It is shown because it measures how STABLE the ranking is to a correction the model is independently known to need.",
+  "method": "invert the model-on-market logit fit to re-expand the model onto the market's scale, then re-price each plus-money side",
+  "reading": "NYM is the only candidate that IMPROVES under the correction (+4.79 -> +8.03), because it sits near a coin flip where compression barely bites, so its disagreement with the market is genuine rather than manufactured. COL survives but collapses by 86%. SD and TEX do not survive at all \u2014 TEX flips to -34.74.",
+  "results": {
+   "COL@ATL COL": {
+    "ev_as_frozen": 39.5207,
+    "ev_re_expanded": 5.5425,
+    "price": 210,
+    "survives": true
+   },
+   "HOU@NYM NYM": {
+    "ev_as_frozen": 4.788,
+    "ev_re_expanded": 8.0316,
+    "price": 101,
+    "survives": true
+   },
+   "KC@CLE KC": {
+    "ev_as_frozen": 9.8223,
+    "ev_re_expanded": 3.4875,
+    "price": 121,
+    "survives": true
+   },
+   "SD@TB SD": {
+    "ev_as_frozen": 4.522,
+    "ev_re_expanded": -10.4018,
+    "price": 120,
+    "survives": false
+   },
+   "TEX@MIL TEX": {
+    "ev_as_frozen": 17.3354,
+    "ev_re_expanded": -34.736,
+    "price": 194,
+    "survives": false
+   }
+  }
+ },
+ "DISPOSITION": {
+  "conservative_ev": "UNAVAILABLE \u2014 pending the RJ-002 consumption-spec review",
+  "exposure_usd": 0,
+  "n_bets": 0,
+  "note": "the two rankings agree that NYM is first. They disagree about TEX, which the raw-EV ordering places third and the sensitivity places last.",
+  "ranking_after_compression_sensitivity": [
+   "NYM +101 (only one that strengthens)",
+   "KC +121 (survives, weakened)",
+   "COL +210 (survives but collapses 86%; stays quarantined for extreme edge)",
+   "SD +120 (does not survive)",
+   "TEX +194 (does not survive; flips hard negative)"
+  ],
+  "ranking_as_relayed": [
+   "NYM +101",
+   "KC +121",
+   "TEX +194",
+   "SD +120",
+   "COL +210 (quarantined)"
+  ],
+  "selections": 0,
+  "status": "CANDIDATES, NOT AUTHORIZED WAGERS",
+  "units": 0.0,
+  "wager_authority": "NO"
+ },
+ "PAIR_HOLD_ANOMALY": {
+  "finding": "three of the five pairs imply a hold at or below 0.25%, and TEX/MIL implies EXACTLY 0.000%. A real two-sided book market does not price at zero margin.",
+  "observed": {
+   "COL@ATL": 0.206,
+   "HOU@NYM": 0.246,
+   "KC@CLE": 1.74,
+   "SD@TB": 1.755,
+   "TEX@MIL": 0.0
+  },
+  "reading": "these pairs are very unlikely to be two simultaneously-available prices at ONE book. They look like fair-odds, no-vig or best-available renderings.",
+  "status": "FLAGGED_UNRESOLVED",
+  "why_it_does_not_invalidate_the_EV": "the screen uses each side's OWN posted price, which is the authorized single-price operation. No de-vig is performed and no pair is converted into a market probability, so the 8/3 ruling is untouched.",
+  "why_it_still_matters": "if the two sides are not available together at one book, the candidate list is built on prices that cannot all be taken as shown. Worth confirming the book and whether each price was seen on its own screen."
+ },
+ "SCREEN_CORRECTION": {
+  "defect": "the prior screen selected the side with model probability above 50% and evaluated only that one. A team can be LESS likely to win and still carry value at a large enough price; the old rule could never see it because it never looked.",
+  "fixed_in_code": "harness/two_sided_screen.py, with a selftest that reconstructs the old rule and asserts it loses a positive-EV dog. The fix is a module, not a one-off recalculation.",
+  "owner_correction_utc": "2026-08-28",
+  "registered_order": "model probability for BOTH teams -> each team's ACTUAL price -> raw EV for BOTH sides -> conservative EV -> disposition",
+  "second_defect_fixed": "sides are bound to the RELAYED TEAM LABEL, never inferred from home/away. On HOU@NYM the plus-money side is the HOME team; I made exactly that mislabelling error while auditing this correction and the module now refuses a price that does not name a team in the game.",
+  "what_it_hid_on_this_slate": [
+   "KC +121",
+   "SD +120",
+   "COL +210",
+   "TEX +194"
+  ],
+  "why_NYM_alone_showed": "NYM was the one game where the plus-money side was ALSO the model's pick, so the broken rule happened to surface it"
+ },
+ "TOTALS": {
+  "binding_constraint": "stronger and prior to any deadband: the MLB total target is registered NEVER_DECISION_BEARING, so no difference of any size could produce a selection. The deadband reasoning reaches the right answer; the registration reaches it without needing to measure.",
+  "conclusion": "NO TOTALS OR RUN-LINE SELECTION",
+  "lines": {
+   "COL@ATL": {
+    "line": 8.5,
+    "model": 9.875,
+    "over_diff": 1.38
+   },
+   "HOU@NYM": {
+    "line": 7.5,
+    "model": 8.851,
+    "over_diff": 1.35
+   },
+   "TEX@MIL": {
+    "line": 7.5,
+    "model": 8.094,
+    "over_diff": 0.59
+   }
+  }
+ },
+ "VERIFICATION_BEFORE_USE": {
+  "ev_arithmetic": "reproduces to the cent; largest discrepancy $0.0058, consistent with rounding",
+  "model_probabilities": "all 10 sides reproduce from the frozen board to 4 decimals",
+  "verdict": "the relayed screen is arithmetically correct"
+ },
+ "attaches_to": {
+  "board": "cards/2026-08-28_mlb_board.json",
+  "board_cohort_hash": "3723e6801e2f65f7c60c97581d65252c025909e01ad2372c9105899d3478361a",
+  "board_sha256": "5a558cfc17dc571ca33632c727e4e44415718e77b670e8e3db19e6124db548b8",
+  "rule": "prices are never predictive features; the board is unchanged by this overlay"
+ },
+ "created_utc": "2026-08-28T18:05:00Z",
+ "record_id": "MLB-TWO-SIDED-SCREEN-2026-08-28",
+ "relay": {
+  "grade": "OWNER_RELAYED",
+  "n_games_priced": 5,
+  "of_slate": 15,
+  "source": "owner relay",
+  "unit_usd": 100.0
+ },
+ "schema": "ops.price_overlay.v2",
+ "screen": [
+  {
+   "break_even": 0.322581,
+   "conservative_ev": null,
+   "conservative_ev_reason": "UNAVAILABLE \u2014 pending the RJ-002 consumption-spec review; raw EV is not a substitute and is not authorisation",
+   "disposition": "EXTREME_EDGE_AUDIT_REQUIRED",
+   "edge_pp": 12.7486,
+   "game": "mlb:COL@ATL",
+   "is_home": false,
+   "model_p": 0.450067,
+   "pair_hold_pct": 0.2064,
+   "price": 210,
+   "raw_ev_per_100": 39.5207,
+   "team": "COL"
+  },
+  {
+   "break_even": 0.340136,
+   "conservative_ev": null,
+   "conservative_ev_reason": "UNAVAILABLE \u2014 pending the RJ-002 consumption-spec review; raw EV is not a substitute and is not authorisation",
+   "disposition": "CANDIDATE_UNAUTHORIZED",
+   "edge_pp": 5.8964,
+   "game": "mlb:TEX@MIL",
+   "is_home": false,
+   "model_p": 0.3991,
+   "pair_hold_pct": 0.0,
+   "price": 194,
+   "raw_ev_per_100": 17.3354,
+   "team": "TEX"
+  },
+  {
+   "break_even": 0.452489,
+   "conservative_ev": null,
+   "conservative_ev_reason": "UNAVAILABLE \u2014 pending the RJ-002 consumption-spec review; raw EV is not a substitute and is not authorisation",
+   "disposition": "CANDIDATE_UNAUTHORIZED",
+   "edge_pp": 4.4445,
+   "game": "mlb:KC@CLE",
+   "is_home": false,
+   "model_p": 0.496933,
+   "pair_hold_pct": 1.7398,
+   "price": 121,
+   "raw_ev_per_100": 9.8223,
+   "team": "KC"
+  },
+  {
+   "break_even": 0.497512,
+   "conservative_ev": null,
+   "conservative_ev_reason": "UNAVAILABLE \u2014 pending the RJ-002 consumption-spec review; raw EV is not a substitute and is not authorisation",
+   "disposition": "CANDIDATE_UNAUTHORIZED",
+   "edge_pp": 2.3821,
+   "game": "mlb:HOU@NYM",
+   "is_home": true,
+   "model_p": 0.521333,
+   "pair_hold_pct": 0.2457,
+   "price": 101,
+   "raw_ev_per_100": 4.788,
+   "team": "NYM"
+  },
+  {
+   "break_even": 0.454545,
+   "conservative_ev": null,
+   "conservative_ev_reason": "UNAVAILABLE \u2014 pending the RJ-002 consumption-spec review; raw EV is not a substitute and is not authorisation",
+   "disposition": "CANDIDATE_UNAUTHORIZED",
+   "edge_pp": 2.0555,
+   "game": "mlb:SD@TB",
+   "is_home": false,
+   "model_p": 0.4751,
+   "pair_hold_pct": 1.7551,
+   "price": 120,
+   "raw_ev_per_100": 4.522,
+   "team": "SD"
+  },
+  {
+   "break_even": 0.50495,
+   "conservative_ev": null,
+   "conservative_ev_reason": "UNAVAILABLE \u2014 pending the RJ-002 consumption-spec review; raw EV is not a substitute and is not authorisation",
+   "disposition": "PASS_NEGATIVE_EV",
+   "edge_pp": -2.6284,
+   "game": "mlb:HOU@NYM",
+   "is_home": false,
+   "model_p": 0.478667,
+   "pair_hold_pct": 0.2457,
+   "price": -102,
+   "raw_ev_per_100": -5.2052,
+   "team": "HOU"
+  },
+  {
+   "break_even": 0.563319,
+   "conservative_ev": null,
+   "conservative_ev_reason": "UNAVAILABLE \u2014 pending the RJ-002 consumption-spec review; raw EV is not a substitute and is not authorisation",
+   "disposition": "PASS_NEGATIVE_EV",
+   "edge_pp": -3.8419,
+   "game": "mlb:SD@TB",
+   "is_home": true,
+   "model_p": 0.5249,
+   "pair_hold_pct": 1.7551,
+   "price": -129,
+   "raw_ev_per_100": -6.8201,
+   "team": "TB"
+  },
+  {
+   "break_even": 0.659864,
+   "conservative_ev": null,
+   "conservative_ev_reason": "UNAVAILABLE \u2014 pending the RJ-002 consumption-spec review; raw EV is not a substitute and is not authorisation",
+   "disposition": "PASS_NEGATIVE_EV",
+   "edge_pp": -5.8964,
+   "game": "mlb:TEX@MIL",
+   "is_home": true,
+   "model_p": 0.6009,
+   "pair_hold_pct": 0.0,
+   "price": -194,
+   "raw_ev_per_100": -8.9358,
+   "team": "MIL"
+  },
+  {
+   "break_even": 0.565217,
+   "conservative_ev": null,
+   "conservative_ev_reason": "UNAVAILABLE \u2014 pending the RJ-002 consumption-spec review; raw EV is not a substitute and is not authorisation",
+   "disposition": "PASS_NEGATIVE_EV",
+   "edge_pp": -6.2151,
+   "game": "mlb:KC@CLE",
+   "is_home": true,
+   "model_p": 0.503067,
+   "pair_hold_pct": 1.7398,
+   "price": -130,
+   "raw_ev_per_100": -10.9959,
+   "team": "CLE"
+  },
+  {
+   "break_even": 0.679487,
+   "conservative_ev": null,
+   "conservative_ev_reason": "UNAVAILABLE \u2014 pending the RJ-002 consumption-spec review; raw EV is not a substitute and is not authorisation",
+   "disposition": "PASS_NEGATIVE_EV",
+   "edge_pp": -12.9554,
+   "game": "mlb:COL@ATL",
+   "is_home": true,
+   "model_p": 0.549933,
+   "pair_hold_pct": 0.2064,
+   "price": -212,
+   "raw_ev_per_100": -19.0664,
+   "team": "ATL"
+  }
+ ],
+ "slate_date": "2026-08-28",
+ "sport": "mlb"
+}

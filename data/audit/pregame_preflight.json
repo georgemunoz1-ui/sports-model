@@ -239,21 +239,25 @@
  },
  "2026-08-28": {
   "ALL_INPUTS_PRESENT": false,
-  "CARD_IS_PRODUCIBLE": true,
-  "CARD_WOULD_BE_GRADEABLE_VS_MARKET": false,
-  "GATE_FAIL": false,
-  "PASS": true,
-  "checked_utc": "2026-08-28T08:32:36Z",
+  "CARD_IS_PRODUCIBLE": false,
+  "CARD_WOULD_BE_GRADEABLE_VS_MARKET": true,
+  "GATE_FAIL": true,
+  "PASS": false,
+  "checked_utc": "2026-08-28T19:37:47Z",
   "date": "2026-08-28",
   "first_pitch_utc": "2026-08-28T18:20Z",
   "inputs": {
    "prices": {
     "consequence_if_absent": "no break-even probability, no edge, no selection, and nothing to grade against a market. Model output is forecast-only.",
     "deadline_min_before_first_pitch": 90,
-    "files": [],
-    "present": false,
-    "sha256": {},
-    "status": "MISSING_BUT_RECOVERABLE (497m of slack)"
+    "files": [
+     "data/mlb/odds/2026-08-28_owner_relay_two_sided.json"
+    ],
+    "present": true,
+    "sha256": {
+     "data/mlb/odds/2026-08-28_owner_relay_two_sided.json": "fdf0b27dc3c09b6b3647269da3eff7eca65219fc0da5a8aaff438ad2b0d273cb"
+    },
+    "status": "PRESENT"
    },
    "schedule": {
     "captured_at_utc": null,
@@ -264,7 +268,7 @@
     "present": false,
     "sha256": null,
     "source": null,
-    "status": "MISSING_BUT_RECOVERABLE (347m of slack)"
+    "status": "MISSING_AND_UNRECOVERABLE (past first pitch)"
    },
    "starters": {
     "consequence_if_absent": "no slate means no card at all, and no first pitch to time the other inputs against. This is the 2026-08-16 failure exactly.",
@@ -284,14 +288,13 @@
     "status": "PRESENT"
    }
   },
-  "minutes_to_first_pitch": 587,
-  "missing_but_recoverable": [
-   "schedule",
-   "prices"
+  "minutes_to_first_pitch": -78,
+  "missing_but_recoverable": [],
+  "missing_past_deadline": [
+   "schedule"
   ],
-  "missing_past_deadline": [],
-  "past_first_pitch": false,
-  "verdict": "FORECAST_ONLY_NO_MARKET_GRADE"
+  "past_first_pitch": true,
+  "verdict": "INPUTS_MISSING"
  },
  "2026-08-29": {
   "ALL_INPUTS_PRESENT": false,

@@ -277,7 +277,7 @@
     "RESULTS_AND_STATS_THROUGH_ASOF",
     "MARKET_PRICES_VIA_SEPARATE_OVERLAY"
    ],
-   "deadline_utc": "2026-08-28T17:00:00Z",
+   "deadline_utc": "2026-08-28T22:00:00Z",
    "depends_on": [],
    "history": [
     {
@@ -369,16 +369,22 @@
      "status": "RUNNING",
      "units_done": 10,
      "utc": "2026-08-28T07:54:53Z"
+    },
+    {
+     "note": "17:00Z DEADLINE DISPOSITION. Real progress today, credited precisely rather than generously. MARKET_PRICES_VIA_SEPARATE_OVERLAY BINDS for the first time: the owner relayed the full DraftKings board for all four 8/28 games, transcription-verified against itself (12 two-sided pairs, implied holds 3.65-4.55%), written as a separately hashed overlay attached to the frozen board and never folded into it. That component had never been credited in this job's history, so units 10 -> 11. RESULTS_AND_STATS_THROUGH_ASOF was refreshed but NOT re-credited: wehoop advanced 3316fa3 -> 7a1c7eb at 11:01Z, both 8/27 finals bound 2/2 through the result-binding gate, extension pool rebuilt 89 -> 91 with the four target ids confirmed absent, and FEATURE_REFRESH unblocked on a superseding v2 board. That is the SAME unit already credited on 8/27 at a later cutoff, not a new one, and double-counting it would inflate the job. Two defects fixed en route: the module's COMMIT_PIN had drifted from the artifact it built (selftest failing unnoticed because nothing invoked it), and my own slate keys used display names where the pool keys on abbreviations, which returned DATA_BLOCKED and reads exactly like an outage. STILL BLOCKED, and this is why the job stays open at 11/17: OFFICIAL_INJURY_AVAILABILITY (6 units) remains 0. No 8/28-dated availability exists for Washington or Los Angeles \u2014 the only report found is 8/15 and was refused as stale \u2014 and Aneesah Morrow still appears on both Connecticut's and Toronto's lists. Neither will be settled by guess. Deadline rolled to 22:00Z, the WNBA T-90 checkpoint, which is the next window where these units would actually change a published disposition before tonight's 23:30Z tips.",
+     "status": "RUNNING",
+     "units_done": 11,
+     "utc": "2026-08-28T18:10:00Z"
     }
    ],
    "job_id": "RJ-005-WNBA-FEATURE-PIPELINE",
-   "next_run_utc": "2026-08-28T11:00:00Z",
+   "next_run_utc": "2026-08-28T22:00:00Z",
    "notes": "After binding: recompute feature state (as_of, source hashes, age); generate separately identified replacement forecasts (wnba.replacement.FEATURE_REFRESH) since the board is frozen; rerun side, margin, total, EV and disposition through side_reselection_gate after anchor. Exhaustion of all authorized routes without binding publishes SYSTEM_FAILURE_WNBA_FEATURE_PIPELINE \u2014 never a normal-looking board.",
    "owner_subsystem": "wnba_features",
    "status": "RUNNING",
    "terminal_disposition": null,
    "title": "Full WNBA feature refresh: schedule+canonical game ids (3), roster+transaction sections (6 teams), official injury/availability sections (6 teams), results and team/player stats through the as-of cutoff (1 bound snapshot), market prices via the separate overlay (1 binding). A unit binds only from a retrieved artifact with source, timestamp and content hash.",
-   "units_done": 10,
+   "units_done": 11,
    "units_total": 17
   },
   "RJ-006-NFL-MODEL-RESTORATION": {

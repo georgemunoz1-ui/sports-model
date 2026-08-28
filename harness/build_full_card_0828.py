@@ -89,7 +89,9 @@ def counters(sport, cohort, prose):
 
 def build():
     mlb = json.load(open(f"cards/{DATE}_mlb_board.json"))
-    wnba = json.load(open(f"cards/{DATE}_wnba_board.json"))
+    # the superseding board once FEATURE_REFRESH unblocked; v1 stays frozen on disk
+    _wv2 = f"cards/{DATE}_wnba_board_v2.json"
+    wnba = json.load(open(_wv2 if os.path.exists(_wv2) else f"cards/{DATE}_wnba_board.json"))
     nfl = json.load(open(f"cards/{DATE}_nfl_board.json"))
     acq = json.load(open(f"data/audit/{DATE}_schedule_acquisition.json"))
     market = json.load(open(f"data/audit/{DATE}_market_acquisition.json"))
@@ -194,17 +196,16 @@ def build():
     for g in worder:
         a = wby[g]
         fb = a["wnba.fallback.STANDINGS_LOG5_v1"]
-        st = fb.get("record_staleness")
-        rng = (f'{pct(st["p_home_if_that_game_was_a_win"])}&ndash;'
-               f'{pct(st["p_home_if_that_game_was_a_loss"])}') if st else "&mdash;"
+        fr = a["wnba.replacement.FEATURE_REFRESH"]
         recs = " / ".join(f"{k} {v}" for k, v in sorted(fb["records"].items()))
         wnba_detail += (
             f'<tr><td class="l"><b>{esc(g.split(":")[1])}</b></td>'
             f'<td class="l">{esc(recs)}</td>'
             f'<td class="n">{pct(a["wnba.winner.EXPANDING_HOME_PRIOR"]["p_home"])}</td>'
             f'<td class="n">{pct(fb["p_home"])}</td>'
-            f'<td class="n">{rng}</td>'
-            f'<td class="l flag">blocked</td></tr>')
+            f'<td class="n pick">{pct(fr["p_home"])}</td>'
+            f'<td class="n">{fr["margin_home"]:+.2f}</td>'
+            f'<td class="n">{fr["projected_total"]:.1f}</td></tr>')
 
     # ---------- NFL / CFB detail ----------
     nfl_detail = "".join(
@@ -275,9 +276,10 @@ def build():
                      "was checked &mdash; all 15 games were loaded and every canonical id read. "
                      "Cohort reported <b>not gradable</b> with <code>COHORT_COVERAGE_INCOMPLETE</code>.")
     p_wnba = counters("wnba", f"wnba:{DATE} · 4 games",
-                      "Same reading. Note for the grading pass: this board emits 2 of 3 arms and "
-                      "the blocked arm's rows are <b>present</b> with a null and a reason. "
-                      "Grading a declared null as a miss would be as wrong as omitting it.")
+                      "Same reading. All three registered arms now emit &mdash; the replacement "
+                      "arm was unblocked at 11:25Z once the archive published 8/27 &mdash; so the "
+                      "grading pass will find four games and three live arms, not a null to "
+                      "interpret.")
     p_nfl = counters("nfl", f"nfl:{DATE} · 10 games",
                      "No result will ever be claimed here &mdash; these are benchmark rows with "
                      "no forecast to grade. Brier, logloss and EV are <b>null by rule</b>, and a "
@@ -374,34 +376,38 @@ admit, so the priors stand unchanged at {prior:.10f} and
 footnote to it.</p>
 </div>
 
-<h2>WNBA &mdash; 4 games, and an honest partial board</h2>
+<h2>WNBA &mdash; 4 games, all three arms now live</h2>
 {p_wnba}
-<div class="warn">
-<p><b>One of three registered arms is blocked, so one is blocked &mdash; not all three.</b>
-<code>wnba.replacement.FEATURE_REFRESH</code> consumes an extension pool that must be rebuilt
-through the 8/27 cutoff, and the wehoop archive is still at <code>3316fa3</code> with zero completed
-August 27 rows. Rebuild-first is not waived because a slate happens to be available. But
-<code>EXPANDING_HOME_PRIOR</code> is a registered constant with no inputs and
-<code>STANDINGS_LOG5_v1</code> runs on season records alone; neither touches the blocked pool.
-Suppressing them too would repeat the defect corrected on 8/27 &mdash; an action blocker
-suppressing valid model output. The blocked rows are <b>present</b> on the board with a null and a
-stated reason.</p>
+<div class="panel">
+<p><b>The blocked arm is unblocked.</b> This board shipped at 10:35Z with
+<code>wnba.replacement.FEATURE_REFRESH</code> carried as an explicit null: its extension pool could
+not be rebuilt through the 8/27 cutoff because the archive had not published that day. At 11:01Z it
+did, the rebuild ran (89 &rarr; 91 extension games, all four target ids confirmed absent from the
+pool), and the arm forecasts. The frozen v1 board is untouched; a superseding record carries it.</p>
+<p><b>Shipping the two unblocked arms rather than none was the right call, and the third arm is
+why.</b> Had the whole board been suppressed there would have been nothing to check against when
+the rebuild landed. Instead the crude fallback's largest apparent edge can be tested &mdash; and it
+evaporates. On WSH@LAS the records-only arm had Washington at 71.80% against a 67.21% break-even;
+the feature model says <b>52.69%</b>, fourteen and a half points <i>below</i> break-even, flipping
+the EV to the other side of the game. This card said those edges were &ldquo;describing its own
+blindness&rdquo;. That was a judgement then. It is a measurement now.</p>
+<p><b>And the staleness interval came back correct.</b> One team &mdash; Washington &mdash; had a
+record stale by one game, and rather than roll it forward on an unbound result this board published
+a band: 27.34% if a win, 29.52% if a loss. Washington beat Phoenix 80&ndash;73. The recomputed value
+is <b>27.34%</b>, the win end of that band. Refusing to guess cost nothing.</p>
 </div>
 <div class="scroll"><table>
-<thead><tr><th class="l">Game</th><th class="l">Records (as of 8/26)</th><th>Prior</th>
-<th>Log5 fallback</th><th>Staleness range</th><th class="l">Feature refresh</th></tr></thead>
+<thead><tr><th class="l">Game</th><th class="l">Records (through 8/27)</th><th>Prior</th>
+<th>Log5 fallback</th><th>Feature refresh</th><th>Margin</th><th>Total</th></tr></thead>
 <tbody>
 {wnba_detail}
 </tbody></table></div>
 <div class="panel">
-<p><b>Exactly one record is stale, and by exactly one game.</b> Of tonight's eight teams only
-Washington played on August 27, and that result is not bound anywhere. Rather than roll a record
-forward on a result we do not have, WSH@LAS is computed under both outcomes and carries the
-interval &mdash; a {stale_pp:.2f}-point band. The other three games are exact.</p>
-<p><b>The fallback arm is <code>DIAGNOSTIC_ONLY</code> by its own registration.</b> It runs on
-season win-loss records with no shrinkage, no schedule adjustment and no recency weighting, because
-v1 declined to invent constants. It never settles, never promotes and never enters the estimator.
-Its numbers are the model family's best honest current output, not a recommendation.</p>
+<p><b>The fallback arm stays <code>DIAGNOSTIC_ONLY</code> by its own registration</b> &mdash; season
+win-loss records, no shrinkage, no schedule adjustment, no recency weighting, because v1 declined to
+invent constants. <code>FEATURE_REFRESH</code> is the registered replacement arm and is
+<code>ACTION_BLOCKED</code> while the pipeline is <code>SYSTEM_NOT_DECISION_READY</code>. Unblocking
+an arm on the forecast side does not open the action layer, so selections remain <b>0</b>.</p>
 </div>
 <details><summary>WNBA availability &mdash; open items, none resolved by guess</summary>
 <ul>{wnba_open}</ul></details>

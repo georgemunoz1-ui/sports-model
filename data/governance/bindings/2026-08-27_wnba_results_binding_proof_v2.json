@@ -1,0 +1,57 @@
+{
+ "archive_confirmation": {
+  "commit": "7a1c7eb",
+  "note": "the 8/27 finals are ARCHIVE-BOUND, not relayed. Scores were verified against retained evidence for the same game id, so this is canonical rather than descriptive.",
+  "repo": "github.com/sportsdataverse/wehoop-wnba-raw"
+ },
+ "board_slate_date": "2026-08-27",
+ "cohort": "wnba:2026-08-27",
+ "cohort_problems": [],
+ "counters": {
+  "CANONICAL_ID_MATCH": "2/2",
+  "DATE_COHERENCE_PASS": "2/2",
+  "REFUSED_ROWS": 0,
+  "RESULT_BINDING_PASS": "2/2"
+ },
+ "generated_by": "harness/result_binding_gate.binding_proof \u2014 counters computed, never typed",
+ "gradable": true,
+ "rows": [
+  {
+   "bound_to": "wnba:GSV@NYL",
+   "codes": [
+    "BOUND"
+   ],
+   "index": 0,
+   "row": {
+    "away": "GSV",
+    "away_score": 79,
+    "game_pk": "ESPN_GAMEID:401857178",
+    "home": "NYL",
+    "home_score": 60,
+    "result_date": "2026-08-27",
+    "scheduled_date": "2026-08-27",
+    "sport": "wnba"
+   }
+  },
+  {
+   "bound_to": "wnba:WSH@PHX",
+   "codes": [
+    "BOUND"
+   ],
+   "index": 1,
+   "row": {
+    "away": "WSH",
+    "away_score": 80,
+    "game_pk": "ESPN_GAMEID:401857179",
+    "home": "PHX",
+    "home_score": 73,
+    "result_date": "2026-08-27",
+    "scheduled_date": "2026-08-27",
+    "sport": "wnba"
+   }
+  }
+ ],
+ "rule": "a single failed row blocks every aggregate over this cohort; no partial metric may silently exclude or substitute it",
+ "schema": "ops.binding_proof.v1",
+ "sport": "wnba"
+}

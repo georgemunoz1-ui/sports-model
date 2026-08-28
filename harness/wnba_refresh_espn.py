@@ -37,7 +37,15 @@ EXT_PATH = "data/wnba/source/staging/EXTENSION_ESPN/ext_2026.json"
 CUTOFF = "2026-07-22"     # the official-plus-one pool ends here; extension is strictly after
 
 RAW = "/home/user/sportsdataverse/wehoop-wnba-raw"
-COMMIT_PIN = "b843138d82af8713dc564e6921b20947dc5c0081"
+#: The archive commit this module is allowed to build from. Advancing it is a DECISION and must be
+#: made here, in the diff, never as a side effect of the archive moving underneath us.
+#:
+#: DRIFT FOUND 2026-08-28: the 8/27 extension artifact was built at 3316fa3 while this constant
+#: still read b843138d. The artifact and the pin disagreed, which is exactly the state the pin
+#: exists to prevent, and the module's own selftest had been FAILING on it unnoticed because
+#: nothing invoked that selftest. Both are fixed: the pin is advanced deliberately below, and the
+#: selftest is now wired into healthcheck so it cannot rot silently again.
+COMMIT_PIN = "7a1c7ebaef37590ebdaf75c4d3961b99a493d99b"   # 2026-08-28 06:32 ET; carries the 8/27 finals
 
 _STAT_KEYS = {"fieldGoalsMade-fieldGoalsAttempted": ("fgm", "fga"),
               "threePointFieldGoalsMade-threePointFieldGoalsAttempted": ("fg3m", "fg3a"),

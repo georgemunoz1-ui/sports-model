@@ -8,6 +8,12 @@
   "wager_authority": "NO",
   "why_no_selection_is_a_fact_not_a_judgement": "Both arms that survive this morning's block are non-selecting by construction. STANDINGS_LOG5_v1 is DIAGNOSTIC_ONLY_ACTION_BLOCKED in its own registration. EXPANDING_HOME_PRIOR is a registered constant with no game-specific information. The one arm that could have carried a real view, FEATURE_REFRESH, is blocked on the feature rebuild. There is therefore no arm on this board that is permitted to select, whatever the EV column says."
  },
+ "FEATURE_REFRESH_ADDED": {
+  "headline": "the fallback's largest apparent edge disappears. On WSH@LAS it had Washington at 71.80% against a 67.21% break-even; the feature model says 52.69%, which is 14.5 points BELOW break-even. The v1 card called those edges 'describing its own blindness' \u2014 that was a judgement then and is a measurement now.",
+  "selections_still": 0,
+  "when": "2026-08-28T11:25:00Z",
+  "why": "the arm was blocked at first publication and is now unblocked; leaving the overlay on the crude fallback alone would have left the most misleading numbers standing as the only ones"
+ },
  "INDEPENDENT_SLATE_CORROBORATION": {
   "finding": "DraftKings lists exactly four WNBA games today, and they are the same four matchups with the same home/away orientation as the frozen board.",
   "what_it_does_not_do": "it does not corroborate the ESPN game IDS, which DraftKings does not publish. Id provenance is unchanged.",
@@ -36,10 +42,11 @@
   "verdict": "PASS"
  },
  "attaches_to": {
-  "board": "cards/2026-08-28_wnba_board.json",
-  "board_cohort_hash": "1c8b7653f4c7afaa3fbcdddc4888beb730dca19dc28f14784ce4b1770defd865",
-  "board_sha256": "0e328ff1bde5428dcd0a2e272171cd9afcf7919278b0978d99f298c627773159",
-  "rule": "prices are never predictive features; this overlay is hashed separately and the frozen board is unchanged by it"
+  "board": "cards/2026-08-28_wnba_board_v2.json",
+  "board_cohort_hash": "2fdb5c9ae59afee676c61908c4ce03df314d2add6e87e4a75e675f476330f6cc",
+  "board_sha256": "f5e5f429b1a00a6b11342ac8a29a35e974ecece6b793e94a50c5147053deede6",
+  "rule": "prices are never predictive features; the overlay is hashed separately and the board is unchanged by it",
+  "supersedes_attachment_to": "cards/2026-08-28_wnba_board.json"
  },
  "games": {
   "wnba:CON@IND": {
@@ -51,9 +58,22 @@
      "ev_home_per_100": -10.6682,
      "may_select": false,
      "output_grade": "DIAGNOSTIC_ONLY_ACTION_BLOCKED",
-     "p_away": 0.14728700649008042,
+     "p_away": 0.147287,
      "p_home": 0.8527129935099196,
+     "recomputed_on": "BOARD-2026-08-28-WNBA-V2 (records current through 8/27)",
      "why_not": "DIAGNOSTIC_ONLY_ACTION_BLOCKED by registration"
+    },
+    "wnba.replacement.FEATURE_REFRESH": {
+     "edge_away_pp": 1.3767,
+     "edge_home_pp": -5.1645,
+     "ev_away_per_100": 16.52,
+     "ev_home_per_100": -5.4105,
+     "may_select": false,
+     "output_grade": "ACTION_BLOCKED_SYSTEM_NOT_DECISION_READY",
+     "p_away": 0.0971,
+     "p_home": 0.9029,
+     "unblocked_at": "2026-08-28T11:25:00Z",
+     "why_not": "the registered replacement arm is action-blocked while the pipeline is SYSTEM_NOT_DECISION_READY; unblocking it forecast-side does not open the action layer"
     },
     "wnba.winner.EXPANDING_HOME_PRIOR": {
      "edge_away_pp": 38.0082,
@@ -104,9 +124,22 @@
      "ev_home_per_100": -12.3408,
      "may_select": false,
      "output_grade": "DIAGNOSTIC_ONLY_ACTION_BLOCKED",
-     "p_away": 0.2265364852496462,
+     "p_away": 0.226536,
      "p_home": 0.7734635147503538,
+     "recomputed_on": "BOARD-2026-08-28-WNBA-V2 (records current through 8/27)",
      "why_not": "DIAGNOSTIC_ONLY_ACTION_BLOCKED by registration"
+    },
+    "wnba.replacement.FEATURE_REFRESH": {
+     "edge_away_pp": 5.57,
+     "edge_home_pp": -9.8053,
+     "ev_away_per_100": 34.8125,
+     "ev_home_per_100": -11.1127,
+     "may_select": false,
+     "output_grade": "ACTION_BLOCKED_SYSTEM_NOT_DECISION_READY",
+     "p_away": 0.2157,
+     "p_home": 0.7843,
+     "unblocked_at": "2026-08-28T11:25:00Z",
+     "why_not": "the registered replacement arm is action-blocked while the pipeline is SYSTEM_NOT_DECISION_READY; unblocking it forecast-side does not open the action layer"
     },
     "wnba.winner.EXPANDING_HOME_PRIOR": {
      "edge_away_pp": 30.3415,
@@ -157,9 +190,22 @@
      "ev_home_per_100": -7.2298,
      "may_select": false,
      "output_grade": "DIAGNOSTIC_ONLY_ACTION_BLOCKED",
-     "p_away": 0.14960648639669571,
+     "p_away": 0.149606,
      "p_home": 0.8503935136033043,
+     "recomputed_on": "BOARD-2026-08-28-WNBA-V2 (records current through 8/27)",
      "why_not": "DIAGNOSTIC_ONLY_ACTION_BLOCKED by registration"
+    },
+    "wnba.replacement.FEATURE_REFRESH": {
+     "edge_away_pp": 2.27,
+     "edge_home_pp": -6.4367,
+     "ev_away_per_100": 18.16,
+     "ev_home_per_100": -7.0218,
+     "may_select": false,
+     "output_grade": "ACTION_BLOCKED_SYSTEM_NOT_DECISION_READY",
+     "p_away": 0.1477,
+     "p_home": 0.8523,
+     "unblocked_at": "2026-08-28T11:25:00Z",
+     "why_not": "the registered replacement arm is action-blocked while the pipeline is SYSTEM_NOT_DECISION_READY; unblocking it forecast-side does not open the action layer"
     },
     "wnba.winner.EXPANDING_HOME_PRIOR": {
      "edge_away_pp": 33.8415,
@@ -204,15 +250,28 @@
   "wnba:WSH@LAS": {
    "arms": {
     "wnba.fallback.STANDINGS_LOG5_v1": {
-     "edge_away_pp": 4.5911,
-     "edge_home_pp": -8.8412,
-     "ev_away_per_100": 6.8306,
-     "ev_home_per_100": -23.8713,
+     "edge_away_pp": 5.4447,
+     "edge_home_pp": -9.6948,
+     "ev_away_per_100": 8.1006,
+     "ev_home_per_100": -26.176,
      "may_select": false,
      "output_grade": "DIAGNOSTIC_ONLY_ACTION_BLOCKED",
-     "p_away": 0.718041704381353,
-     "p_home": 0.28195829561864705,
+     "p_away": 0.726578,
+     "p_home": 0.27342226985084195,
+     "recomputed_on": "BOARD-2026-08-28-WNBA-V2 (records current through 8/27)",
      "why_not": "DIAGNOSTIC_ONLY_ACTION_BLOCKED by registration"
+    },
+    "wnba.replacement.FEATURE_REFRESH": {
+     "edge_away_pp": -14.5231,
+     "edge_home_pp": 10.273,
+     "ev_away_per_100": -21.6076,
+     "ev_home_per_100": 27.737,
+     "may_select": false,
+     "output_grade": "ACTION_BLOCKED_SYSTEM_NOT_DECISION_READY",
+     "p_away": 0.5269,
+     "p_home": 0.4731,
+     "unblocked_at": "2026-08-28T11:25:00Z",
+     "why_not": "the registered replacement arm is action-blocked while the pipeline is SYSTEM_NOT_DECISION_READY; unblocking it forecast-side does not open the action layer"
     },
     "wnba.winner.EXPANDING_HOME_PRIOR": {
      "edge_away_pp": -20.8716,

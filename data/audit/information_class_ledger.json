@@ -15,7 +15,7 @@
   "FULL_STARTER_INFORMATION": 2,
   "LEGACY_SCHEMA_NO_SLOT_STATS": 5,
   "LOW_STARTER_INFORMATION": 2,
-  "NOT_A_CARD": 13,
+  "NOT_A_CARD": 14,
   "PARTIAL_STARTER_INFORMATION": 25
  },
  "counts_corrections": [
@@ -1024,6 +1024,16 @@
    "information_class": "NOT_A_CARD",
    "per_game_dose": {},
    "reason": "Per-sport WNBA forecast board, 4 games. PARTIAL BY DESIGN and the partition is recorded: 8 arm-rows emitted (wnba.winner.EXPANDING_HOME_PRIOR, a registered constant with no inputs; wnba.fallback.STANDINGS_LOG5_v1, season records only) and 4 blocked (wnba.replacement.FEATURE_REFRESH, which consumes an extension pool that must be rebuilt through the 2026-08-27 cutoff; the wehoop archive is still at 3316fa3 with zero completed 8/27 rows). The blocked rows are PRESENT with p_home null and a stated null_reason -- a null with a reason is a different object from a missing row. Emitting only the arms the blocker does not reach is deliberate: suppressing all three would repeat the 2026-08-27 defect of an action blocker suppressing valid model output. Per-game dose is empty because WNBA has no starting-pitcher analog and no confirmed starting five was retrieved; starters are REFUSED, not guessed. One of the eight teams playing tonight (Washington) played on 8/27 and its result is not bound anywhere, so its record is stale by exactly one game; that game is computed under both outcomes and carries a 2.18pp interval rather than rolling a record forward on an unbound result. The other three games are exact. Fallback output is DIAGNOSTIC_ONLY_ACTION_BLOCKED by its own registration: it never settles, never promotes, never enters the estimator. 0 bets, $0, wager authority NO.",
+   "registration_eligible": true
+  },
+  "cards/2026-08-28_wnba_board_v2.json": {
+   "action_authority": "NONE",
+   "card_sha256": "f5e5f429b1a00a6b11342ac8a29a35e974ecece6b793e94a50c5147053deede6",
+   "classified_utc": "2026-08-28T11:25:00Z",
+   "dose_bound_to_source_card": "data/wnba/source/staging/EXTENSION_ESPN/ext_2026.json",
+   "information_class": "NOT_A_CARD",
+   "per_game_dose": {},
+   "reason": "Superseding WNBA board for 8/28: all three registered arms now emit. The v1 board carried wnba.replacement.FEATURE_REFRESH as an explicit null because the extension pool could not be rebuilt through the 8/27 cutoff; the archive published that day at 11:01Z (7a1c7eb) and the rebuild ran, taking the pool from 89 to 91 extension games with the four target ids confirmed absent. R3 honoured: the v1 file is untouched and this record supersedes it. One recomputation: the WSH@LAS fallback moved 0.2820 -> 0.2734 because the 8/27 result it explicitly refused to assume is now bound (Washington beat Phoenix 80-73, record 23-15 -> 24-15). The value lands inside the interval v1 published, on its win end \u2014 the refusal to guess cost nothing and the disclosure was accurate. Substantive finding: the records-only fallback's largest apparent edge evaporated. It had Washington at 71.80% against a 67.21% break-even; the feature model says 52.69%, which is 14.5 points BELOW break-even, and the EV sign flips to the other side of the game. The v1 card called those edges 'describing its own blindness' \u2014 a judgement then, a measurement now. Selections remain 0: the fallback is DIAGNOSTIC_ONLY by registration and FEATURE_REFRESH is action-blocked while the pipeline is SYSTEM_NOT_DECISION_READY.",
    "registration_eligible": true
   },
   "cards/2026-08-29_cfb_board.json": {

@@ -1,0 +1,146 @@
+{
+ "WHAT_THIS_DOES_NOT_SUPPORT": "n=2. Two games cannot separate three arms, cannot move a prior, cannot promote anything and cannot demonstrate calibration. All three arms went 2-0 on sides because both away teams won and all three leaned away in both games \u2014 that is one shared coin landing twice, not three independent successes. The Brier ordering below is noise at this n and is recorded for the ledger, not read as evidence.",
+ "accrual": {
+  "estimator": "NONE",
+  "promotion": "NONE",
+  "reason": "descriptive grading; n=2 and no registered gate has a 2-game threshold",
+  "settlement": "NONE"
+ },
+ "arms": {
+  "wnba.fallback.STANDINGS_LOG5_v1": {
+   "brier": 0.132255,
+   "games": [
+    {
+     "brier_contrib": 0.185009,
+     "canonical_id": "ESPN_GAMEID:401857178",
+     "correct": true,
+     "final": "GSV 79 @ NYL 60",
+     "game": "wnba:GSV@NYL",
+     "margin_actual": -19,
+     "margin_pred": null,
+     "p_home": 0.43012627788513086,
+     "side_taken": "away",
+     "total_actual": 139,
+     "total_pred": null,
+     "y_home": 0
+    },
+    {
+     "brier_contrib": 0.0795,
+     "canonical_id": "ESPN_GAMEID:401857179",
+     "correct": true,
+     "final": "WSH 80 @ PHX 73",
+     "game": "wnba:WSH@PHX",
+     "margin_actual": -7,
+     "margin_pred": null,
+     "p_home": 0.28195829561864705,
+     "side_taken": "away",
+     "total_actual": 153,
+     "total_pred": null,
+     "y_home": 0
+    }
+   ],
+   "margin_mae": null,
+   "n": 2,
+   "record": "2-0",
+   "total_mae": null
+  },
+  "wnba.replacement.FEATURE_REFRESH": {
+   "brier": 0.202733,
+   "games": [
+    {
+     "brier_contrib": 0.22772,
+     "canonical_id": "ESPN_GAMEID:401857178",
+     "correct": true,
+     "final": "GSV 79 @ NYL 60",
+     "game": "wnba:GSV@NYL",
+     "margin_actual": -19,
+     "margin_pred": -1.18,
+     "p_home": 0.4772,
+     "side_taken": "away",
+     "total_actual": 139,
+     "total_pred": 167.0,
+     "y_home": 0
+    },
+    {
+     "brier_contrib": 0.177747,
+     "canonical_id": "ESPN_GAMEID:401857179",
+     "correct": true,
+     "final": "WSH 80 @ PHX 73",
+     "game": "wnba:WSH@PHX",
+     "margin_actual": -7,
+     "margin_pred": -2.44,
+     "p_home": 0.4216,
+     "side_taken": "away",
+     "total_actual": 153,
+     "total_pred": 169.4,
+     "y_home": 0
+    }
+   ],
+   "margin_mae": 11.19,
+   "n": 2,
+   "record": "2-0",
+   "total_mae": 22.2
+  },
+  "wnba.winner.EXPANDING_HOME_PRIOR": {
+   "brier": 0.287923,
+   "games": [
+    {
+     "brier_contrib": 0.287923,
+     "canonical_id": "ESPN_GAMEID:401857178",
+     "correct": false,
+     "final": "GSV 79 @ NYL 60",
+     "game": "wnba:GSV@NYL",
+     "margin_actual": -19,
+     "margin_pred": null,
+     "p_home": 0.536585,
+     "side_taken": "home",
+     "total_actual": 139,
+     "total_pred": null,
+     "y_home": 0
+    },
+    {
+     "brier_contrib": 0.287923,
+     "canonical_id": "ESPN_GAMEID:401857179",
+     "correct": false,
+     "final": "WSH 80 @ PHX 73",
+     "game": "wnba:WSH@PHX",
+     "margin_actual": -7,
+     "margin_pred": null,
+     "p_home": 0.536585,
+     "side_taken": "home",
+     "total_actual": 153,
+     "total_pred": null,
+     "y_home": 0
+    }
+   ],
+   "margin_mae": null,
+   "n": 2,
+   "record": "0-2",
+   "total_mae": null
+  }
+ },
+ "binding_proof": "data/governance/bindings/2026-08-27_wnba_results_binding_proof_v2.json",
+ "board": "cards/2026-08-27_wnba_board.json",
+ "board_cohort_hash": "3edfbc75df487577976960df300c0ea2d33b7d8a9097aaad51a2b93b1c737ef4",
+ "counters": {
+  "CANONICAL_ID_MATCH": "2/2",
+  "DATE_COHERENCE_PASS": "2/2",
+  "REFUSED_ROWS": 0,
+  "RESULT_BINDING_PASS": "2/2"
+ },
+ "gradable": true,
+ "graded_utc": "2026-08-28T11:10:00Z",
+ "n_bets": 0,
+ "record_id": "WNBA-GRADING-2026-08-27",
+ "schema": "ops.grading.v1",
+ "slate_date": "2026-08-27",
+ "source": {
+  "advanced_from": "3316fa3",
+  "commit": "7a1c7eb",
+  "note": "the 8/27 boxes landed in the 8/28 06:32 ET commit",
+  "repo": "github.com/sportsdataverse/wehoop-wnba-raw"
+ },
+ "sport": "wnba",
+ "units": 0.0,
+ "wager_authority": "NO"
+}

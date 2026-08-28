@@ -1,0 +1,149 @@
+{
+ "board_slate_date": "2026-08-27",
+ "caveat": "two board pks (BAL@STL 823014, AZ@SF 825038) are SYNTHETIC_UNVERIFIED per record c373946f \u2014 inferred, not captured. The proof is therefore ID-COMPLETE but not yet ID-VERIFIED for those two rows; archive verification is queued in RJ-001.",
+ "cohort": "mlb:2026-08-27",
+ "cohort_problems": [],
+ "counters": {
+  "CANONICAL_ID_MATCH": "7/7",
+  "DATE_COHERENCE_PASS": "7/7",
+  "REFUSED_ROWS": 0,
+  "RESULT_BINDING_PASS": "7/7"
+ },
+ "created_utc": "2026-08-28T07:28:54Z",
+ "gradable": true,
+ "pk_provenance": {
+  "822694": "CAPTURED mlb.com slug (COL@WSH), T-45 record 3f3fef17",
+  "822771": "CAPTURED mlb.com slug (KC@TOR), T-90 record 4645b5a3",
+  "823014": "SYNTHETIC_UNVERIFIED \u2014 inferred from 8/26 pk 823015; MUST be archive-verified",
+  "823503": "CAPTURED mlb.com slug (HOU@NYY), schedule record b9717911",
+  "823581": "CAPTURED mlb.com slug (MIL@NYM), night review",
+  "824879": "CAPTURED mlb.com slug (LAD@ATL), schedule record b9717911",
+  "825038": "SYNTHETIC_UNVERIFIED \u2014 inferred from 8/26 pk 825039; MUST be archive-verified"
+ },
+ "record_sha256": "49996e05f9781d2835d6c8ec49ae58134c7aec22613ae936b281f153af6ef660",
+ "rows": [
+  {
+   "bound_to": "mlb:COL@WSH",
+   "codes": [
+    "BOUND"
+   ],
+   "index": 0,
+   "row": {
+    "away": "COL",
+    "away_score": 1,
+    "game_pk": 822694,
+    "home": "WSH",
+    "home_score": 7,
+    "result_date": "2026-08-27",
+    "scheduled_date": "2026-08-27",
+    "sport": "mlb"
+   }
+  },
+  {
+   "bound_to": "mlb:BAL@STL",
+   "codes": [
+    "BOUND"
+   ],
+   "index": 1,
+   "row": {
+    "away": "BAL",
+    "away_score": 5,
+    "game_pk": 823014,
+    "home": "STL",
+    "home_score": 7,
+    "result_date": "2026-08-27",
+    "scheduled_date": "2026-08-27",
+    "sport": "mlb"
+   }
+  },
+  {
+   "bound_to": "mlb:HOU@NYY",
+   "codes": [
+    "BOUND"
+   ],
+   "index": 2,
+   "row": {
+    "away": "HOU",
+    "away_score": 5,
+    "game_pk": 823503,
+    "home": "NYY",
+    "home_score": 1,
+    "result_date": "2026-08-27",
+    "scheduled_date": "2026-08-27",
+    "sport": "mlb"
+   }
+  },
+  {
+   "bound_to": "mlb:KC@TOR",
+   "codes": [
+    "BOUND"
+   ],
+   "index": 3,
+   "row": {
+    "away": "KC",
+    "away_score": 13,
+    "game_pk": 822771,
+    "home": "TOR",
+    "home_score": 2,
+    "result_date": "2026-08-27",
+    "scheduled_date": "2026-08-27",
+    "sport": "mlb"
+   }
+  },
+  {
+   "bound_to": "mlb:MIL@NYM",
+   "codes": [
+    "BOUND"
+   ],
+   "index": 4,
+   "row": {
+    "away": "MIL",
+    "away_score": 8,
+    "game_pk": 823581,
+    "home": "NYM",
+    "home_score": 2,
+    "result_date": "2026-08-27",
+    "scheduled_date": "2026-08-27",
+    "sport": "mlb"
+   }
+  },
+  {
+   "bound_to": "mlb:LAD@ATL",
+   "codes": [
+    "BOUND"
+   ],
+   "index": 5,
+   "row": {
+    "away": "LAD",
+    "away_score": 0,
+    "game_pk": 824879,
+    "home": "ATL",
+    "home_score": 1,
+    "result_date": "2026-08-27",
+    "scheduled_date": "2026-08-27",
+    "sport": "mlb"
+   }
+  },
+  {
+   "bound_to": "mlb:AZ@SF",
+   "codes": [
+    "BOUND"
+   ],
+   "index": 6,
+   "row": {
+    "away": "AZ",
+    "away_score": 1,
+    "game_pk": 825038,
+    "home": "SF",
+    "home_score": 6,
+    "result_date": "2026-08-27",
+    "scheduled_date": "2026-08-27",
+    "sport": "mlb"
+   }
+  }
+ ],
+ "rule": "a single failed row blocks every aggregate over this cohort; no partial metric may silently exclude or substitute it",
+ "schema": "ops.binding_proof.v1",
+ "source_grade": "OWNER_RELAY_OFFICIAL_SCOREBOARD (mlb.com/scores/2026-08-27)",
+ "sport": "mlb"
+}

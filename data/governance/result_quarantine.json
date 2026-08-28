@@ -1,0 +1,48 @@
+{
+ "consumption_rule": "Any pipeline, card, ledger, estimator or thesis that reads a quarantined record must refuse rather than degrade. A quarantined record is not a low-confidence input; it is not an input.",
+ "created_utc": "2026-08-28T07:40:54Z",
+ "ledger_unaffected": "0 bets / 0.00u / $0 \u2014 no wager was ever authorized, so no quarantined claim ever touched money",
+ "quarantined": [
+  {
+   "class": "RESULT_DATE_COHORT_CONTAMINATION",
+   "commit": "a287dbb",
+   "disposition": "INVALID \u2014 QUARANTINED. Retained unedited. Accrues NOTHING to grading, promotion, estimator, arm ledgers, P&L or publication.",
+   "invalid_claims": [
+    "MLB active path 5-1 (correct: 2-5)",
+    "replacement flips 1-1 (correct: 0-2)",
+    "Brier 0.2136 and every arm figure derived with it",
+    "champion 5-1/0.2075 (correct: 4-3/0.2454)",
+    "total MAE 3.48 (correct: 4.02 vs prior 3.43)",
+    "hypothetical +171.09 (correct: candidates 2-3, -127.92)",
+    "'every passed side won' (correct: the three current-capture passes went 1-2)",
+    "'the totals error flipped sign' (correct: all four WNBA totals over-projected)"
+   ],
+   "record": "data/audit/2026-08-28_end_of_night_review.json",
+   "sha_prefix": "caf9a897"
+  },
+  {
+   "class": "FALSE_PREGAME_AVAILABILITY_CLAIM",
+   "commit": "4986b1f",
+   "disposition": "SUPERSEDED ON ONE POINT ONLY. Retained unedited. The Ionescu 'ruled out (foot)' claim is withdrawn \u2014 she played 29 minutes with four assists. Sabally out was correct. The rest of that checkpoint (market receipt, board byte-identity, GSV side standing) is unaffected and remains valid.",
+   "invalid_claims": [
+    "Sabrina Ionescu ruled out (foot), described as multi-source"
+   ],
+   "record": "data/audit/2026-08-27_checkpoint_wnba_t45.json",
+   "sha_prefix": "d82ef006"
+  }
+ ],
+ "record_id": "RESULT-QUARANTINE",
+ "record_sha256": "94b1f8ed7c683b3a8a00878e932390131c3bfc35f14e415984a9dc6fea785149",
+ "schema": "ops.quarantine.v1",
+ "status": "ACTIVE",
+ "superseding_records": {
+  "audit": "data/audit/2026-08-28_contamination_audit.json",
+  "binding_proofs": [
+   "data/governance/bindings/2026-08-27_mlb_results_binding_proof.json",
+   "data/governance/bindings/2026-08-27_wnba_results_binding_proof.json",
+   "data/governance/bindings/2026-08-27_nfl_results_binding_proof.json"
+  ],
+  "corrected_grading": "data/audit/2026-08-28_end_of_night_review_corrected.json",
+  "correction_and_mechanism": "data/audit/2026-08-28_night_review_correction.json"
+ }
+}

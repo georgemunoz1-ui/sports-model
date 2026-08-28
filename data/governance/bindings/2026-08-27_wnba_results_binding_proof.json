@@ -1,0 +1,54 @@
+{
+ "board_slate_date": "2026-08-27",
+ "cohort": "wnba:2026-08-27",
+ "cohort_problems": [],
+ "counters": {
+  "CANONICAL_ID_MATCH": "2/2",
+  "DATE_COHERENCE_PASS": "2/2",
+  "REFUSED_ROWS": 0,
+  "RESULT_BINDING_PASS": "2/2"
+ },
+ "created_utc": "2026-08-28T07:28:54Z",
+ "gradable": true,
+ "record_sha256": "f63c6066555d5c22b0d96332481ea4b14520a3cee002787dbf0623172b4cf5e7",
+ "rows": [
+  {
+   "bound_to": "wnba:GSV@NYL",
+   "codes": [
+    "BOUND"
+   ],
+   "index": 0,
+   "row": {
+    "away": "GSV",
+    "away_score": 79,
+    "game_pk": 401857178,
+    "home": "NYL",
+    "home_score": 60,
+    "result_date": "2026-08-27",
+    "scheduled_date": "2026-08-27",
+    "sport": "wnba"
+   }
+  },
+  {
+   "bound_to": "wnba:WSH@PHX",
+   "codes": [
+    "BOUND"
+   ],
+   "index": 1,
+   "row": {
+    "away": "WAS",
+    "away_score": 80,
+    "game_pk": 401857179,
+    "home": "PHX",
+    "home_score": 73,
+    "result_date": "2026-08-27",
+    "scheduled_date": "2026-08-27",
+    "sport": "wnba"
+   }
+  }
+ ],
+ "rule": "a single failed row blocks every aggregate over this cohort; no partial metric may silently exclude or substitute it",
+ "schema": "ops.binding_proof.v1",
+ "source_grade": "OWNER_RELAY + canonical wehoop schedule ids (401857178/401857179 match the parquet)",
+ "sport": "wnba"
+}

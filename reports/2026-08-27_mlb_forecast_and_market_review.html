@@ -47,6 +47,8 @@ details{border:1px solid var(--line);border-radius:10px;padding:12px 18px;margin
 summary{cursor:pointer;font-family:"Archivo";font-weight:600}
 code{font-family:"IBM Plex Mono",monospace;font-size:.85em;background:var(--chip);padding:1px 5px;border-radius:4px}
 p{max-width:70ch}
+.proof{background:var(--chip);border:1px solid var(--line);border-radius:10px;padding:12px 16px;margin:14px 0;font-family:"IBM Plex Mono",monospace;font-size:.82rem;line-height:1.7;overflow-x:auto}
+.proof b{font-family:"Archivo",sans-serif}
 </style>
 <main>
 <h1>MLB Forecast Board — Thursday, August 27</h1>
@@ -59,6 +61,13 @@ p{max-width:70ch}
 <span class="chip">TOTALS: PRIOR BEAT THE CHAMPION AGAIN</span>
 <span class="chip"><b>0</b> BETS · <b>0.00u</b> · <b>$0</b></span>
 </div>
+
+<div class="proof"><b>RESULT BINDING PROOF</b> &mdash; mlb:2026-08-27 &middot; <code>49996e05</code><br>
+RESULT_BINDING_PASS = 7/7<br>
+DATE_COHERENCE_PASS = 7/7<br>
+CANONICAL_ID_MATCH = 7/7<br>
+REFUSED_ROWS = 0<br>
+<span style="font-family:Public Sans,sans-serif">Every row bound to its scheduled game id and date, with scores verified against the retained evidence for that same game &mdash; not merely a file hash. A single failed row would have blocked every record, Brier, MAE and P&amp;L on this card. Caveat on record: two board ids (BAL@STL, AZ@SF) are inferred rather than captured (<code>c373946f</code>), so this cohort is id-complete but not yet id-verified for those two; archive verification is queued.</span></div>
 
 <div class="panel answers">
 <div class="a"><div class="q">What the model said</div><div class="v">Active sides WSH, BAL, NYY, TOR, MIL, LAD, AZ — one strong signal (MIL 67.8%), six near coin-flips</div></div>

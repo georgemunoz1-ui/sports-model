@@ -166,9 +166,41 @@ def assert_board_is_for_date(board_doc, date, board_path):
     return str(bd)
 
 
+LEGACY_WRITE_SUSPENDED = "LEGACY_GRADING_PATH_WRITE_SUSPENDED"
+
+
+def assert_board_can_prove_binding(board_doc, board_path):
+    """P0 requirement (owner, 2026-08-28): no record, Brier, P&L, thesis, promotion evidence or
+    estimator input may compute until EVERY row passes reconciliation on
+    sport + canonical_game_id + scheduled_date + both teams.
+
+    This path cannot meet that bar today: every finals board under data/mlb/evidence carries a
+    doc-level date and NO per-game canonical id, so a row here is reconciled on teams + a
+    board-level date only. The date check above closes the cross-date hole that caused the
+    incident, but it cannot prove WHICH game within a date — a doubleheader is still ambiguous,
+    and an id typo is undetectable.
+
+    So the WRITE is suspended rather than the read: dry-run analysis stays available, and nothing
+    reaches the append-only grade ledger (where grade_ledger.rebuild would treat it as canonical)
+    until the board schema carries per-game ids. Unblock condition is stated, not implied.
+    """
+    games = board_doc.get("games") or []
+    with_id = [g for g in games if g.get("gamePk") or g.get("game_pk") or g.get("game_id")]
+    if len(with_id) != len(games) or not games:
+        raise BoardDateMismatch(
+            f"{LEGACY_WRITE_SUSPENDED}: {board_path} carries per-game canonical ids for "
+            f"{len(with_id)}/{len(games)} games. Committing grades from a board that cannot "
+            f"identify its own games would write unreconcilable rows into the append-only ledger. "
+            f"Dry run is unaffected. UNBLOCK: add gamePk to each board game, then bind through "
+            f"harness/result_binding_gate.bind_cohort and attach the binding proof.")
+    return True
+
+
 def run(date, board_path, commit=False):
     board_doc, board = load_board(board_path)
     assert_board_is_for_date(board_doc, date, board_path)
+    if commit:
+        assert_board_can_prove_binding(board_doc, board_path)
     fc = [json.loads(l) for l in open(FORECASTS) if l.strip()]
     fc = [r for r in fc if r.get("slate_date") == date]
     already = {json.loads(l)["forecast_id"] for l in open(GRADES) if l.strip()} if os.path.exists(GRADES) else set()
@@ -344,6 +376,23 @@ def selftest():
         k19 = {board_key(g) for g in _j.load(open(b19))["games"]}
         if len(k18 & k19) < 10:
             fails.append("expected a large matchup overlap between consecutive slates")
+    # the WRITE path is suspended while boards cannot identify their own games; the READ is not
+    if os.path.exists(b18):
+        d18b = _j.load(open(b18))
+        try:
+            assert_board_can_prove_binding(d18b, b18)
+            fails.append("a board with no per-game canonical ids was cleared to commit")
+        except BoardDateMismatch as e:
+            if LEGACY_WRITE_SUSPENDED not in str(e):
+                fails.append("the write suspension did not name itself")
+        # and a board that DOES carry ids passes, so the suspension has a real unblock
+        ok_board = {"slate_date": "2026-08-18",
+                    "games": [{"away": "A", "home": "H", "gamePk": 1}]}
+        try:
+            assert_board_can_prove_binding(ok_board, "<synthetic>")
+        except BoardDateMismatch:
+            fails.append("a board WITH per-game ids was still refused — the unblock is unreachable")
+
     # a board with no date of its own cannot be verified at all
     try:
         assert_board_is_for_date({"games": []}, "2026-08-19", "<undeclared>")

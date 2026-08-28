@@ -78,6 +78,8 @@ BOARD_PK_NOT_A_REAL_IDENTIFIER = "BOARD_PK_NOT_A_REAL_IDENTIFIER"
 DOUBLEHEADER_NEEDS_GAME_NUMBER = "DOUBLEHEADER_NEEDS_GAME_NUMBER"
 DUPLICATE_BINDING = "DUPLICATE_BINDING_TWO_ROWS_ONE_GAME"
 COHORT_COVERAGE_INCOMPLETE = "COHORT_COVERAGE_INCOMPLETE"
+EVIDENCE_SCORE_DISAGREEMENT = "EVIDENCE_SCORE_DISAGREEMENT"
+TEAMS_REVERSED = "TEAMS_REVERSED"
 AGGREGATE_REFUSED = "AGGREGATE_TOUCHES_REFUSED_ROW"
 OK = "BOUND"
 
@@ -158,7 +160,12 @@ def bind_row(row, board):
             return False, problems
 
     if g["away"] != row["away"] or g["home"] != row["home"]:
-        problems.append({"code": MATCHUP_MISMATCH, "game_pk": pk,
+        # Reversed teams get their own name: it is a transcription/relay error that flips home
+        # advantage, the score assignment AND the winner, and "matchup mismatch" reads like a
+        # different game rather than the same game backwards.
+        reversed_ = (g["away"] == row["home"] and g["home"] == row["away"])
+        problems.append({"code": TEAMS_REVERSED if reversed_ else MATCHUP_MISMATCH,
+                         "game_pk": pk,
                          "board": f'{g["away"]}@{g["home"]}',
                          "row": f'{row["away"]}@{row["home"]}'})
 
@@ -187,6 +194,18 @@ def bind_row(row, board):
                              "detail": "a final this long after first pitch is either the next "
                                        "game of the series or a suspended game; a genuine "
                                        "resumption must set suspended_resumed with a reason"})
+
+    # Identity binding proves WHICH game. It does not prove the scores are that game's scores.
+    # A relay can carry the right identity and the wrong numbers — which is one keystroke from the
+    # original defect. When retained evidence is supplied, the scores must agree with it.
+    ev = (board.get("evidence") or {}).get(str(pk)) or (board.get("evidence") or {}).get(pk)
+    if ev:
+        for side in ("home_score", "away_score"):
+            if side in ev and side in row and str(ev[side]) != str(row[side]):
+                problems.append({"code": EVIDENCE_SCORE_DISAGREEMENT, "game_pk": pk,
+                                 "field": side, "row": row.get(side), "evidence": ev[side],
+                                 "detail": "the row binds to this game but its score disagrees "
+                                           "with the retained evidence for it"})
 
     return (not problems), (problems or [{"code": OK, "game_key": key}])
 
@@ -507,6 +526,26 @@ def selftest():
     if ok:
         f.append("B5: a placeholder board pk was treated as an identifier")
 
+    # B6: reversed teams — same game, backwards. Flips home advantage, score assignment AND winner.
+    ok, det = bind_row(dict(CLEAN_0827_ROWS[0], away="WSH", home="COL"), BOARD_0827)
+    if ok or not any(p["code"] == TEAMS_REVERSED for p in det):
+        f.append(f"B6: a reversed-team row was not refused by name: {det}")
+
+    # B7: identity right, SCORES wrong. Binding proves which game, not which numbers.
+    ev_board = {**BOARD_0827,
+                "evidence": {"822771": {"away_score": 13, "home_score": 2}}}   # true KC@TOR 8/27
+    ok, det = bind_row(dict(CLEAN_0827_ROWS[3], away_score=0, home_score=3), ev_board)
+    if ok or not any(p["code"] == EVIDENCE_SCORE_DISAGREEMENT for p in det):
+        f.append(f"B7: a row whose scores contradict retained evidence was accepted: {det}")
+    if not bind_row(CLEAN_0827_ROWS[3], ev_board)[0]:
+        f.append("B7: the true row was refused against its own evidence")
+
+    # B8: a FUTURE-day result is refused as firmly as a prior-day one (both directions of drift).
+    fut = dict(CLEAN_0827_ROWS[3], scheduled_date="2026-08-28", result_date="2026-08-28")
+    ok, det = bind_row(fut, BOARD_0827)
+    if ok or not any(p["code"] in (RESULT_DATE_MISMATCH, SCHEDULED_DATE_MISMATCH) for p in det):
+        f.append(f"B8: a next-day result bound to this board: {det}")
+
     print("result_binding_gate selftest:", "FAIL" if f else
           "PASS (consecutive-series join refused 5/5 by name; adjacent-pk slip, date drift both "
           "directions, pre-start final, ambiguity, missing identity fields and poisoned "
@@ -571,10 +610,61 @@ def mutation_suite(verbose=True):
                 "n_refused": len(refused)}
     run("bind_cohort without injectivity or coverage", {"bind_cohort": _no_cohort})
 
+    # M7: evidence-score verification removed (the B7 bypass, restored)
+    _real_bind = bind_row
+    def _no_evidence(row, board):
+        return _real_bind(row, {k: v for k, v in board.items() if k != "evidence"})
+    run("bind_row ignores retained evidence scores", {"bind_row": _no_evidence})
+
     escaped = [n for n, c in mutants if not c]
     print(f"result_binding_gate mutation suite: {len(mutants) - len(escaped)}/{len(mutants)} "
           f"caught" + (f"; ESCAPED: {escaped}" if escaped else ""))
     return not escaped
+
+
+def binding_proof(rows, board, cohort_label):
+    """The artifact a results card must be able to show, and the counters it must print.
+
+    A card that says "2-5" is asserting a denominator. This makes the denominator auditable:
+    every row is listed with the game it bound to and why, refusals are enumerated rather than
+    dropped, and the four counters the owner requires are computed here rather than typed by hand.
+    """
+    b = bind_cohort(rows, board)
+    per = []
+    for item in b["bound"] + b["refused"]:
+        d = item["detail"][0]
+        per.append({"index": item["index"],
+                    "row": {k: item["row"].get(k) for k in
+                            ("sport", "game_pk", "scheduled_date", "result_date", "away", "home",
+                             "away_score", "home_score")},
+                    "bound_to": d.get("game_key"),
+                    "codes": [p["code"] for p in item["detail"]]})
+    per.sort(key=lambda x: x["index"])
+    n = len(rows)
+    n_bound = b["n_bound"]
+    date_ok = sum(1 for i in b["bound"]
+                  if str(i["row"].get("result_date")) == str(board["slate_date"])
+                  and str(i["row"].get("scheduled_date")) == str(board["slate_date"]))
+    id_ok = sum(1 for i in b["bound"] if i["detail"][0].get("game_key"))
+    return {
+        "schema": "ops.binding_proof.v1",
+        "cohort": cohort_label,
+        "board_slate_date": board["slate_date"],
+        "sport": board.get("sport"),
+        "counters": {
+            "RESULT_BINDING_PASS": f"{n_bound}/{n}",
+            "DATE_COHERENCE_PASS": f"{date_ok}/{n}",
+            "CANONICAL_ID_MATCH": f"{id_ok}/{n}",
+            "REFUSED_ROWS": (0 if not b["refused"] else
+                             [{"index": r["index"], "codes": [p["code"] for p in r["detail"]]}
+                              for r in b["refused"]]),
+        },
+        "gradable": b["gradable"],
+        "cohort_problems": b["cohort_problems"],
+        "rows": per,
+        "rule": "a single failed row blocks every aggregate over this cohort; no partial metric "
+                "may silently exclude or substitute it",
+    }
 
 
 def gate():

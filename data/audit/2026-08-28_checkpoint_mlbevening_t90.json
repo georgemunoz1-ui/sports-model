@@ -1,0 +1,113 @@
+{
+ "FLAGGED_ROWS_SETTLED": {
+  "mlb:COL@ATL": {
+   "confirmed": {
+    "away": "Tomoyuki Sugano (Rockies, 12-7, 4.96, 71 SO)",
+    "home": "Grant Holmes (Braves, 8-5, 3.64, 100 SO)"
+   },
+   "note": "stat lines match those carried at freeze, a stronger match than the names alone. 7:15 PM ET start also confirms the frozen 23:15Z.",
+   "verdict": "CONFIRMED \u2014 upgrades from RESOLVED_ON_MAJORITY"
+  },
+  "mlb:CWS@MIN": {
+   "confirmed": {
+    "away": "Dean Kremer (White Sox, 2-4, 5.22)",
+    "home": "Luis Castillo (Twins, 4-10, 5.19)"
+   },
+   "note": "the suspicion was reasonable \u2014 same single source as the verified PIT@STL swap \u2014 and it was wrong. Recorded as a checked negative.",
+   "verdict": "SUSPICION CLEARED \u2014 the board is correct"
+  },
+  "mlb:MIA@WSH": {
+   "board_carried": {
+    "away": "TBD",
+    "home": "Eury Perez"
+   },
+   "note": "'Jackson Kent' was the exact name the morning acquisition surfaced and REFUSED as an unconfirmed fragment because the snippet was ambiguous about which club he pitched for. He is the NATIONALS starter. The refusal was correct and is now resolved.",
+   "replacement_rerun": {
+    "dose_corrected": 0.5,
+    "dose_frozen": 0.5,
+    "finding": "THE NUMBER DOES NOT MOVE. Neither Perez nor Kent has a retained pitcher log, so both slots cap either way and the simulation uses the same inputs. The identity defect is REAL and its numerical impact is EXACTLY ZERO.",
+    "move_pp": 0.0,
+    "p_home_corrected": 0.5471333333333334,
+    "p_home_frozen": 0.5471333333333334,
+    "seed_unchanged": 3994680937819446120,
+    "total_move": 0.0,
+    "why_that_matters": "this is why the side-swap risk was kept in its own register rather than folded into the dose or into a probability. A disclosed identity hazard turned out to be immaterial to the forecast; had it been silently discounted through the dose, the board would have moved a number for a reason that does not exist."
+   },
+   "status_of_the_frozen_row": "the NUMBER is correct and gradeable; the STARTER ATTRIBUTION is wrong. Those are separable and only the second is defective.",
+   "truth": {
+    "away": "Eury Perez (Marlins, 7-9, 3.17)",
+    "home": "Jackson Kent (Nationals)"
+   },
+   "verdict": "SIDE SWAP CONFIRMED \u2014 the frozen row has both starter slots wrong"
+  }
+ },
+ "OTHER_OPEN_ITEMS_CLOSED": {
+  "id_upgrade": {
+   "board_id": "ESPN_GAMEID:401816709",
+   "game": "mlb:SEA@TOR",
+   "gamepk_now_captured": 822769,
+   "note": "a REAL gamePk for a row the morning acquisition could only give an ESPN id. Captured, not inferred. Recorded here; the frozen board is not edited.",
+   "source": "mlb.com and MiLB.com gameday slugs mariners-vs-blue-jays/2026/08/28/822769/preview"
+  },
+  "mia_starter_tbd": {
+   "now": "RESOLVED \u2014 Eury Perez (see the swap above)",
+   "was": "OFFICIAL_TBD_CAP"
+  },
+  "sea_starter_tbd": {
+   "now": "RESOLVED \u2014 Emerson Hancock",
+   "replacement_rerun": {
+    "SIDE_FLIPS": "TOR -> SEA",
+    "caution": "this is a sub-51% crossover \u2014 TOR 49.05% / SEA 50.95%. On 8/27 side reselection went 0-2 and BOTH crossovers were sub-51% calls. A coin flip changing sides is not a conviction signal, and the precedent says so explicitly.",
+    "dose": "0.5 -> 1.0",
+    "move_pp": -2.77,
+    "p_home_frozen": 0.5182666666666667,
+    "p_home_replacement": 0.4905333333333333,
+    "seed_unchanged": 7311858548007531695,
+    "total_frozen": 7.107,
+    "total_replacement": 6.671
+   },
+   "was": "OFFICIAL_TBD_CAP"
+  },
+  "sea_tor_start_time": {
+   "now": "CONFIRMED 7:15 PM ET = 23:15Z. The majority was right; the tolerance closes.",
+   "was": "23:15Z on a 3-2 majority against 23:07Z, \u00b18 min tolerance"
+  }
+ },
+ "block": "MLB evening (LAD@DET 22:40Z earliest) \u2014 the checkpoint that settles the flagged rows",
+ "created_utc": "2026-08-28T21:30:00Z",
+ "frozen_board": {
+  "byte_identical_to_committed_freeze": true,
+  "cohort_hash": "3723e6801e2f65f7c60c97581d65252c025909e01ad2372c9105899d3478361a",
+  "path": "cards/2026-08-28_mlb_board.json",
+  "sha256": "5a558cfc17dc571ca33632c727e4e44415718e77b670e8e3db19e6124db548b8",
+  "verified_by": "sha256 of the working file against `git show HEAD:<path>`"
+ },
+ "ledger": {
+  "exposure_usd": 0,
+  "n_bets": 0,
+  "note": "model ledger only; the owner-discretion ticket is tracked separately and never mixes",
+  "units": 0.0,
+  "wager_authority": "NO"
+ },
+ "market_attempt": {
+  "note": "MLB prices on file today came ONLY by owner relay, never by a route that opened here",
+  "observed_utc": "2026-08-28T21:30:00Z",
+  "outcome": "REFUSED",
+  "routes": [
+   {
+    "error": "EGRESS_BLOCKED \u2014 curl exit 56, CONNECT tunnel 403",
+    "route": "curl sportsbook.draftkings.com/leagues/baseball/mlb"
+   }
+  ]
+ },
+ "next": "22:00Z WNBA T-90 + MLB evening T-40 (trig_014KjifJeswhH4N4JTJ2Qpu6)",
+ "owner_ticket_touchpoint": {
+  "detail": "the ticket's MLB legs are KC@CLE (Michael Wacha) and HOU@NYM (Christian Scott). Neither game was flagged and both starters match the frozen board. The WNBA leg POR@ATL is unaffected by MLB starter findings. No leg changed.",
+  "legs_affected_by_tonight_findings": "NONE",
+  "ticket": "217916739 (owner discretion, placed)"
+ },
+ "record_id": "CHECKPOINT-2026-08-28-MLB-EVENING-T90",
+ "record_sha256": "a55c301bd42f4641ec309c6e0cb75737e94772e5141150d70bcb88c19a5daf7b",
+ "schema": "ops.checkpoint.v1",
+ "trigger": "trig_011vhvdsmRZTvroEDb95QNAC (fired 21:12:52Z)"
+}

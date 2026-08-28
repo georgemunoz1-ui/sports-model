@@ -56,7 +56,13 @@ import json
 import os
 import sys
 
-REQUIRED_FIELDS = ("sport", "game_pk", "scheduled_date", "away", "home")
+REQUIRED_FIELDS = ("sport", "game_pk", "scheduled_date", "result_date", "away", "home")
+
+#: A final may legitimately land hours after first pitch (extras, rain delay). It may NOT land
+#: after the NEXT game of the same series has started — that is the contamination in temporal
+#: form. 18h is comfortably past any single game and short of a next-day first pitch. A genuinely
+#: suspended-and-resumed game must say so explicitly rather than ride the lag allowance.
+MAX_FINAL_LAG_HOURS = 18.0
 
 MISSING_FIELD = "MISSING_IDENTITY_FIELD"
 RESULT_DATE_MISMATCH = "RESULT_DATE_MISMATCH"
@@ -67,6 +73,11 @@ GAME_PK_AMBIGUOUS = "GAME_PK_AMBIGUOUS"
 GAME_PK_MISMATCH_FOR_MATCHUP = "GAME_PK_MISMATCH_FOR_MATCHUP"
 MATCHUP_MISMATCH = "MATCHUP_MISMATCH"
 FINAL_PRECEDES_START = "FINAL_PRECEDES_START"
+FINAL_TOO_LATE_AFTER_START = "FINAL_TOO_LATE_AFTER_START"
+BOARD_PK_NOT_A_REAL_IDENTIFIER = "BOARD_PK_NOT_A_REAL_IDENTIFIER"
+DOUBLEHEADER_NEEDS_GAME_NUMBER = "DOUBLEHEADER_NEEDS_GAME_NUMBER"
+DUPLICATE_BINDING = "DUPLICATE_BINDING_TWO_ROWS_ONE_GAME"
+COHORT_COVERAGE_INCOMPLETE = "COHORT_COVERAGE_INCOMPLETE"
 AGGREGATE_REFUSED = "AGGREGATE_TOUCHES_REFUSED_ROW"
 OK = "BOUND"
 
@@ -126,6 +137,26 @@ def bind_row(row, board):
     key = matches[0]
     g = board["games"][key]
 
+    # A board pk that is itself a placeholder makes the pk check circular: any row echoing the
+    # placeholder "matches". The board's identifier must be a real one.
+    if str(g["game_pk"]).strip().upper() in ("", "NONE", "TBD", "NULL", "0", "PENDING"):
+        problems.append({"code": BOARD_PK_NOT_A_REAL_IDENTIFIER, "board_game_pk": g["game_pk"],
+                         "game_key": key})
+        return False, problems
+
+    # Doubleheader siblings share sport, teams and BOTH dates, so every check except the pk
+    # collapses. When the board holds more than one game for this matchup and date, the row must
+    # state which one it is rather than relying on the pk alone.
+    siblings = [k for k, x in board["games"].items()
+                if x["away"] == row["away"] and x["home"] == row["home"]]
+    if len(siblings) > 1:
+        rn, bn = row.get("game_number"), g.get("game_number")
+        if rn in (None, "") or bn in (None, "") or str(rn) != str(bn):
+            problems.append({"code": DOUBLEHEADER_NEEDS_GAME_NUMBER, "game_key": key,
+                             "siblings": sorted(siblings), "row_game_number": rn,
+                             "board_game_number": bn})
+            return False, problems
+
     if g["away"] != row["away"] or g["home"] != row["home"]:
         problems.append({"code": MATCHUP_MISMATCH, "game_pk": pk,
                          "board": f'{g["away"]}@{g["home"]}',
@@ -143,21 +174,63 @@ def bind_row(row, board):
                          "board_slate_date": str(board["slate_date"])})
 
     final_utc, start_utc = _utc(row.get("final_utc")), _utc(g.get("start_utc"))
-    if final_utc and start_utc and final_utc < start_utc:
-        problems.append({"code": FINAL_PRECEDES_START,
-                         "final_utc": str(row.get("final_utc")),
-                         "scheduled_start_utc": str(g.get("start_utc"))})
+    if final_utc and start_utc:
+        lag_h = (final_utc - start_utc).total_seconds() / 3600.0
+        if lag_h < 0:
+            problems.append({"code": FINAL_PRECEDES_START,
+                             "final_utc": str(row.get("final_utc")),
+                             "scheduled_start_utc": str(g.get("start_utc"))})
+        elif lag_h > MAX_FINAL_LAG_HOURS and not row.get("suspended_resumed"):
+            # B2: unbounded lag let the NEXT day's game of the same series bind cleanly.
+            problems.append({"code": FINAL_TOO_LATE_AFTER_START, "lag_hours": round(lag_h, 2),
+                             "ceiling_hours": MAX_FINAL_LAG_HOURS,
+                             "detail": "a final this long after first pitch is either the next "
+                                       "game of the series or a suspended game; a genuine "
+                                       "resumption must set suspended_resumed with a reason"})
 
     return (not problems), (problems or [{"code": OK, "game_key": key}])
 
 
-def bind_cohort(rows, board):
-    """Bind a whole cohort. Returns {"bound": [...], "refused": [...], "gradable": bool}."""
+def bind_cohort(rows, board, require_full_coverage=True):
+    """Bind a whole cohort.
+
+    Row-level binding is not enough. Two failure shapes live only at cohort level and both
+    produced published numbers on 2026-08-27:
+
+      WRONG SCORE       a row binds to the wrong game            -> caught by bind_row
+      WRONG DENOMINATOR two rows bind the SAME game, or the      -> caught only here
+                        cohort covers only part of the board
+
+    A record, a Brier score and a P&L are all denominators. "5-1" was wrong partly because the
+    seventh game had not finished; a cohort that silently grades six of seven is the same class of
+    error as a cohort that grades the wrong six.
+    """
     bound, refused = [], []
     for i, row in enumerate(rows):
         ok, detail = bind_row(row, board)
         (bound if ok else refused).append({"index": i, "row": row, "detail": detail})
-    return {"bound": bound, "refused": refused, "gradable": not refused,
+
+    cohort_problems = []
+    seen = {}
+    for b in bound:
+        gk = b["detail"][0].get("game_key")
+        seen.setdefault(gk, []).append(b["index"])
+    for gk, idxs in sorted(seen.items()):
+        if len(idxs) > 1:
+            cohort_problems.append({"code": DUPLICATE_BINDING, "game_key": gk, "rows": idxs,
+                                    "detail": "two result rows bound to one scheduled game; a "
+                                              "makeup, a doubleheader half or a duplicated relay"})
+    if require_full_coverage:
+        missing = sorted(set(board["games"]) - set(seen))
+        if missing:
+            cohort_problems.append({"code": COHORT_COVERAGE_INCOMPLETE, "missing": missing,
+                                    "n_board_games": len(board["games"]), "n_bound": len(seen),
+                                    "detail": "an aggregate over a partial cohort reports a "
+                                              "denominator it did not earn; exclude explicitly "
+                                              "with require_full_coverage=False and say why"})
+    return {"bound": bound, "refused": refused,
+            "cohort_problems": cohort_problems,
+            "gradable": not refused and not cohort_problems,
             "n_rows": len(rows), "n_bound": len(bound), "n_refused": len(refused)}
 
 
@@ -167,13 +240,17 @@ def aggregate_guard(binding, statistic_name):
     This is the check that would have stopped the 8/27 damage: five bad rows became a record, a
     Brier score and a P&L, and those derived numbers are what reached the reader.
     """
-    if binding["refused"]:
+    cohort = binding.get("cohort_problems") or []
+    if binding["refused"] or cohort:
         return False, {"code": AGGREGATE_REFUSED, "statistic": statistic_name,
                        "n_refused": binding["n_refused"],
                        "refused_codes": sorted({p["code"] for r in binding["refused"]
-                                                for p in r["detail"]}),
+                                                for p in r["detail"]}
+                                               | {c["code"] for c in cohort}),
+                       "cohort_problems": cohort,
                        "detail": "no partial credit: the aggregate is refused whole until every "
-                                 "row binds or is explicitly excluded with a recorded reason"}
+                                 "row binds, no two rows claim one game, and the cohort covers "
+                                 "the board or is explicitly narrowed with a recorded reason"}
     return True, {"code": OK, "statistic": statistic_name, "n_rows": binding["n_bound"]}
 
 
@@ -360,6 +437,76 @@ def selftest():
     if ok:
         f.append("an aggregate over six clean rows plus one contaminated row was permitted")
 
+    # ---- BYPASS REGRESSION FIXTURES (adversarial audit, 2026-08-28) ----------------------
+    # Every one of these returned BOUND against the first version of this gate. They are the
+    # reason cohort-level checks exist at all: four of the six were invisible row-by-row.
+
+    # B1: omitting result_date was MORE permissive than stating it honestly. This exact row —
+    #     the published wrong KC@TOR final, carrying the correct 8/27 pk — bound cleanly.
+    b1 = {"sport": "mlb", "game_pk": 822771, "scheduled_date": "2026-08-27",
+          "away": "KC", "home": "TOR", "away_score": 0, "home_score": 3}
+    ok, det = bind_row(b1, BOARD_0827)
+    if ok or not any(p["code"] == MISSING_FIELD and p.get("field") == "result_date"
+                     for p in det):
+        f.append(f"B1: a row omitting result_date was accepted: {det}")
+
+    # B2: a final 27h after first pitch is the NEXT game of the series, not this one.
+    b2 = dict(CLEAN_0827_ROWS[3], final_utc="2026-08-29T02:41:00Z")
+    ok, det = bind_row(b2, BOARD_0827)
+    if ok or not any(p["code"] == FINAL_TOO_LATE_AFTER_START for p in det):
+        f.append(f"B2: a final 27h after first pitch was accepted: {det}")
+    # ... but an explicitly declared suspended-and-resumed game is allowed through
+    ok, det = bind_row(dict(b2, suspended_resumed="rain, resumed next day"), BOARD_0827)
+    if not ok:
+        f.append("B2: an explicitly declared suspended resumption was refused")
+
+    # B3a: two rows binding ONE board game — a makeup game, a doubleheader half, or a duplicated
+    #      relay. Every row is individually clean; only the cohort sees it.
+    dup = bind_cohort(CLEAN_0827_ROWS + [dict(CLEAN_0827_ROWS[1], home_score=8, away_score=7)],
+                      BOARD_0827)
+    if dup["gradable"] or not any(c["code"] == DUPLICATE_BINDING
+                                  for c in dup["cohort_problems"]):
+        f.append("B3a: two rows binding one game were not detected")
+    ok, _ = aggregate_guard(dup, "winner_record")
+    if ok:
+        f.append("B3a: an aggregate over a double-bound cohort was permitted")
+
+    # B3b: a partial cohort is a wrong DENOMINATOR — the "5-1" shape, as opposed to the wrong
+    #      score shape. Grading 3 of 7 games must not silently produce a record.
+    part = bind_cohort(CLEAN_0827_ROWS[:3], BOARD_0827)
+    if part["gradable"] or not any(c["code"] == COHORT_COVERAGE_INCOMPLETE
+                                   for c in part["cohort_problems"]):
+        f.append("B3b: a 3-of-7 cohort was gradable")
+    ok, _ = aggregate_guard(part, "brier")
+    if ok:
+        f.append("B3b: an aggregate over a partial cohort was permitted")
+    # an explicitly narrowed cohort is allowed — the caller must say so
+    if not bind_cohort(CLEAN_0827_ROWS[:3], BOARD_0827,
+                       require_full_coverage=False)["gradable"]:
+        f.append("B3b: an explicitly narrowed cohort was refused anyway")
+
+    # B4: doubleheader siblings share every identity field except the pk, so the pk stops being
+    #     corroborated. The row must declare its game number.
+    dh_board = {"sport": "mlb", "slate_date": "2026-08-27", "games": {
+        "mlb:KC@TOR:G1": {"game_pk": 822771, "away": "KC", "home": "TOR",
+                          "game_number": 1, "start_utc": "2026-08-27T23:07:00Z"},
+        "mlb:KC@TOR:G2": {"game_pk": 822773, "away": "KC", "home": "TOR",
+                          "game_number": 2, "start_utc": "2026-08-28T02:37:00Z"}}}
+    ok, det = bind_row(CLEAN_0827_ROWS[3], dh_board)          # no game_number on the row
+    if ok or not any(p["code"] == DOUBLEHEADER_NEEDS_GAME_NUMBER for p in det):
+        f.append(f"B4: a doubleheader row without a game number was accepted: {det}")
+    ok, _ = bind_row(dict(CLEAN_0827_ROWS[3], game_number=1), dh_board)
+    if not ok:
+        f.append("B4: a correctly numbered doubleheader row was refused")
+
+    # B5: a placeholder pk on the BOARD makes the pk check circular — anything echoing it binds.
+    ph_board = {"sport": "mlb", "slate_date": "2026-08-27", "games": {
+        "mlb:AAA@BBB": {"game_pk": "TBD", "away": "AAA", "home": "BBB", "start_utc": None}}}
+    ok, det = bind_row({"sport": "mlb", "game_pk": "TBD", "scheduled_date": "2026-08-27",
+                        "result_date": "2026-08-27", "away": "AAA", "home": "BBB"}, ph_board)
+    if ok:
+        f.append("B5: a placeholder board pk was treated as an identifier")
+
     print("result_binding_gate selftest:", "FAIL" if f else
           "PASS (consecutive-series join refused 5/5 by name; adjacent-pk slip, date drift both "
           "directions, pre-start final, ambiguity, missing identity fields and poisoned "
@@ -405,6 +552,24 @@ def mutation_suite(verbose=True):
     # M3: aggregates take partial credit
     run("aggregate_guard allows partial credit",
         {"aggregate_guard": lambda binding, s: (True, {"code": OK, "statistic": s})})
+
+    # M4: result_date optional again (the B1 bypass, restored)
+    run("REQUIRED_FIELDS without result_date",
+        {"REQUIRED_FIELDS": ("sport", "game_pk", "scheduled_date", "away", "home")})
+
+    # M5: unbounded final lag (the B2 bypass, restored)
+    run("MAX_FINAL_LAG_HOURS unbounded", {"MAX_FINAL_LAG_HOURS": 1e9})
+
+    # M6: cohort-level checks removed (the B3 bypasses, restored)
+    def _no_cohort(rows, board, require_full_coverage=True):
+        bound, refused = [], []
+        for i, row in enumerate(rows):
+            ok, detail = bind_row(row, board)
+            (bound if ok else refused).append({"index": i, "row": row, "detail": detail})
+        return {"bound": bound, "refused": refused, "cohort_problems": [],
+                "gradable": not refused, "n_rows": len(rows), "n_bound": len(bound),
+                "n_refused": len(refused)}
+    run("bind_cohort without injectivity or coverage", {"bind_cohort": _no_cohort})
 
     escaped = [n for n, c in mutants if not c]
     print(f"result_binding_gate mutation suite: {len(mutants) - len(escaped)}/{len(mutants)} "

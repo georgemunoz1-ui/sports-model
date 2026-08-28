@@ -1,127 +1,138 @@
 {
- "record_id": "SUPERSESSION-INDEX",
- "built_utc": "2026-08-16T03:43:29Z",
- "files_scanned": 260,
- "note": "record_id (or record path) -> the records that correct/supersede/amend it. Generated from `corrects`/`supersedes`/`amends` fields.",
+ "built_utc": "2026-08-28T07:16:43Z",
+ "files_scanned": 644,
  "index": {
-  "data/mlb/ml_asof/2026-08-10_regression_eval.json and my chat report of the same date": [
-   {
-    "by": "ML-CLAIM-CORRECTIONS-2026-08-10",
-    "path": "data/mlb/ml_asof/2026-08-10_ml_claim_corrections.json",
-    "field": "supersedes"
-   }
-  ],
-  "data/mlb/slates/2026-08-10_gate_result.json": [
-   {
-    "by": "SLATE-GATE-2026-08-10-RESOLVED",
-    "path": "data/mlb/slates/2026-08-10_gate_result_RESOLVED.json",
-    "field": "supersedes"
-   }
-  ],
-  "RECONCILIATION-LEDGER-2026-08-02-v3": [
-   {
-    "by": "RECONCILIATION-LEDGER-2026-08-04",
-    "path": "data/mlb/forecasts/reconciliation_ledger_2026-08-04.json",
-    "field": "supersedes"
-   }
-  ],
-  "RECONCILIATION-LEDGER-THROUGH-2026-08-01": [
-   {
-    "by": "RECONCILIATION-LEDGER-2026-08-02",
-    "path": "data/mlb/forecasts/reconciliation_ledger_2026-08-02.json",
-    "field": "supersedes"
-   }
-  ],
-  "RECONCILIATION-LEDGER-2026-08-02": [
-   {
-    "by": "RECONCILIATION-LEDGER-2026-08-02-v2",
-    "path": "data/mlb/forecasts/reconciliation_ledger_2026-08-02_v2.json",
-    "field": "supersedes"
-   }
-  ],
-  "RECONCILIATION-LEDGER-2026-08-02-v2": [
-   {
-    "by": "RECONCILIATION-LEDGER-2026-08-02-v3",
-    "path": "data/mlb/forecasts/reconciliation_ledger_2026-08-02_v3.json",
-    "field": "supersedes"
-   }
-  ],
-  "data/mlb/slates/2026-08-06_prep.json + cards/2026-08-06_card.json": [
-   {
-    "by": "PREP-CORRECTIONS-2026-08-06",
-    "path": "data/mlb/forecasts/2026-08-06_prep_corrections.json",
-    "field": "corrects"
-   }
-  ],
-  "data/mlb/forecasts/2026-08-08_grading.json": [
-   {
-    "by": "SLATE-GRADING-2026-08-08-CORRECTED",
-    "path": "data/mlb/forecasts/2026-08-08_grading_CORRECTED.json",
-    "field": "supersedes"
-   }
-  ],
-  "data/mlb/forecasts/2026-08-08_parlay_card.json": [
-   {
-    "by": "PARLAY-CARD-2026-08-08-EVENING-BOARD",
-    "path": "data/mlb/forecasts/2026-08-08_parlay_card.json",
-    "field": "supersedes"
-   }
-  ],
-  "GRADES-2026-08-14": [
-   {
-    "by": "GRADES-2026-08-14-CORRECTION-1",
-    "path": "data/mlb/analysis/2026-08-14_grades_correction.json",
-    "field": "corrects"
-   }
-  ],
-  "PROVISIONAL-RESULTS-2026-08-13": [
-   {
-    "by": "PROVISIONAL-RESULTS-2026-08-13-CORRECTION-1",
-    "path": "data/mlb/analysis/2026-08-13_provisional_results_CORRECTION.json",
-    "field": "corrects"
-   }
-  ],
-  "WebSearch-snippet ingestion of 2026-08-08": [
-   {
-    "by": "RESULTS-CORRECTION-2026-08-10",
-    "path": "data/mlb/evidence/2026-08-10_results_correction.json",
-    "field": "supersedes"
-   }
-  ],
-  "pitcher_logs/README_NOTE.txt as the MACHINE-READABLE source; the note stays as prose": [
-   {
-    "by": "ERBB-PLACEHOLDER-MANIFEST",
-    "path": "data/backfill/mlb/2026/pitcher_logs/_placeholders.json",
-    "field": "supersedes"
-   }
-  ],
-  "PROVISIONAL-RESULTS-2026-08-13 nfl_capture_D2 entry 'TEN@SF 19-10'": [
-   {
-    "by": "NFL-2026-08-13-TENSF-SCORE-CORRECTION",
-    "path": "data/nfl/incidents/2026-08-13_tensf_score_correction.json",
-    "field": "corrects"
-   }
-  ],
-  "NFL-PRE1-FRI-BOARD-2026-08-14": [
-   {
-    "by": "NFL-PRE1-FRI-BOARD-2026-08-14-CORRECTION-1",
-    "path": "data/nfl/odds/2026-08-14_pre1_fri_board_CORRECTION.json",
-    "field": "corrects"
-   }
-  ],
-  "data/wnba/analysis/2026-08-08_massey_overlay.json and my prior chat framing of Storm @ Portland": [
-   {
-    "by": "MASSEY-OVERLAY-CORRECTION-2026-08-08",
-    "path": "data/wnba/analysis/2026-08-08_massey_overlay_correction.json",
-    "field": "corrects"
-   }
-  ],
-  "PRICING-FRAME-2026-08-15": [
-   {
-    "by": "PRICING-FRAME-2026-08-15-AMENDMENT-1",
-    "path": "docs/audits/2026-08-15_pricing_frame_amendment1.json",
-    "field": "amends"
-   }
-  ]
- }
+  "data/audit/2026-08-24_action_overlay_v2.json": {
+   "supersedes": "ACTION-OVERLAY-2026-08-24"
+  },
+  "data/audit/2026-08-24_action_overlay_v3.json": {
+   "supersedes": "ACTION-OVERLAY-2026-08-24-v2"
+  },
+  "data/audit/2026-08-24_action_overlay_v4.json": {
+   "supersedes": "ACTION-OVERLAY-2026-08-24-v3"
+  },
+  "data/audit/2026-08-24_result_display_v2.json": {
+   "supersedes": "RESULT-DISPLAY-2026-08-24"
+  },
+  "data/audit/2026-08-25_action_overlay_v2.json": {
+   "supersedes": "ACTION-OVERLAY-2026-08-25"
+  },
+  "data/audit/2026-08-25_action_overlay_v3.json": {
+   "supersedes": "ACTION-OVERLAY-2026-08-25-v2 (5d505c9c) \u2014 retained, never edited"
+  },
+  "data/audit/2026-08-25_decision_view.json": {
+   "supersedes": "DECISION-VIEW-2026-08-24"
+  },
+  "data/audit/2026-08-25_model_thesis_full.json": {
+   "supersedes": "MODEL-THESIS-2026-08-25-EARLY (c5e7548f) \u2014 retained"
+  },
+  "data/audit/2026-08-25_result_display_v2.json": {
+   "supersedes": "RESULT-DISPLAY-2026-08-25 (d41f471d) \u2014 retained, never edited"
+  },
+  "data/audit/2026-08-25_result_display_v3.json": {
+   "supersedes": "v2 (84f93525) \u2014 retained"
+  },
+  "data/audit/2026-08-25_result_display_v4.json": {
+   "supersedes": "v3 (b7b03a1d) \u2014 retained"
+  },
+  "data/audit/2026-08-25_starter_identification_correction.json": {
+   "amends": "data/audit/2026-08-25_starter_state_addendum.json (a9a408e5) \u2014 retained"
+  },
+  "data/audit/2026-08-27_checkpoint_corrections.json": {
+   "amends": [
+    "data/audit/2026-08-26_checkpoint_t90.json (d946446a)",
+    "data/audit/2026-08-26_checkpoint_t45.json (4c978da3)"
+   ]
+  },
+  "data/audit/2026-08-28_end_of_night_review_corrected.json": {
+   "supersedes_with_defect_class": "caf9a897 via RESULT_DATE_COHORT_CONTAMINATION (correction record above); affected commit a287dbb"
+  },
+  "data/audit/2026-08-28_night_review_correction.json": {
+   "affected_commits": {
+    "4986b1f": "FALSE_PREGAME_AVAILABILITY_CLAIM \u2014 published data/audit/2026-08-27_checkpoint_wnba_t45.json asserting Sabrina Ionescu was 'RULED OUT (foot)' as a 'multi-source' fact; she played 29 minutes with four assists. The commit subject line states the falsehood. Sabally out was correct. No forecast consumed it (personnel is display-lane and no personnel-replacement identity is registered), so no number changes \u2014 but a false availability claim was published as confirmed.",
+    "a287dbb": "RESULT_DATE_COHORT_CONTAMINATION \u2014 published the five prior-date finals and every number derived from them (record caf9a897)"
+   },
+   "superseded_records": {
+    "caf9a897": "data/audit/2026-08-28_end_of_night_review.json \u2014 retained unedited",
+    "d82ef006": "data/audit/2026-08-27_checkpoint_wnba_t45.json \u2014 retained unedited; superseded ONLY on the Ionescu claim, the rest of that checkpoint (market receipt, board byte-identity, GSV side standing) is unaffected"
+   },
+   "supersedes": "END-OF-NIGHT-REVIEW-2026-08-27 (caf9a897) \u2014 SUPERSEDED, NEVER EDITED; accrues NOTHING to grading, promotion, estimator or arm ledgers"
+  },
+  "data/audit/2026-08-28_replacement_amendment1.json": {
+   "amends": "747b0d4f4a83b3eb658c16763dce28349564f06d52ded455b2bfd4b805a1f9ee"
+  },
+  "data/audit/2026-08-28_widened_accumulation_append.json": {
+   "appends": "7073fb19d7d44ae85bab6fd54d0addfc89e43c5714615d1ca96610b1aff8b7e7"
+  },
+  "data/backfill/mlb/2026/pitcher_logs/_placeholders.json": {
+   "supersedes": "pitcher_logs/README_NOTE.txt as the MACHINE-READABLE source; the note stays as prose"
+  },
+  "data/cards_decision/2026-08-19_r2.json": {
+   "supersedes": "data/cards_decision/2026-08-19.json (presentation only; forecasts and actions identical)"
+  },
+  "data/cards_decision/2026-08-21.json": {
+   "supersedes": "data/cards_decision/2026-08-21.md rendered 07:10Z (four presentation defects)"
+  },
+  "data/mlb/analysis/2026-08-20_settlement_clarification.json": {
+   "supersedes": "label and accounting sections of data/mlb/analysis/2026-08-20_settlement_report.json"
+  },
+  "data/mlb/evidence/2026-08-10_results_correction.json": {
+   "supersedes": "WebSearch-snippet ingestion of 2026-08-08 (tier-3)"
+  },
+  "data/mlb/forecasts/2026-08-08_grading_CORRECTED.json": {
+   "supersedes": "data/mlb/forecasts/2026-08-08_grading.json (built on tier-3 WebSearch results, 4 of 15 wrong)"
+  },
+  "data/mlb/forecasts/2026-08-08_parlay_card.json": {
+   "supersedes": "data/mlb/forecasts/2026-08-08_parlay_card.json (pre-board, prob-only) \u2014 this version uses the owner board (real ML) and board-authoritative probables"
+  },
+  "data/mlb/forecasts/metric_corrections_2026-08-07.json": {
+   "supersedes": [
+    "2026-0729-0731_paired_scoring.json headline numbers (rows preserved there; corrected here)",
+    "6b7cc58 commit-message metrics for the 31-game cohort",
+    "cumulative candidate figures quoted through 2026-08-06"
+   ]
+  },
+  "data/mlb/forecasts/reconciliation_ledger_2026-08-02.json": {
+   "supersedes": "RECONCILIATION-LEDGER-THROUGH-2026-08-01"
+  },
+  "data/mlb/forecasts/reconciliation_ledger_2026-08-02_v2.json": {
+   "supersedes": "RECONCILIATION-LEDGER-2026-08-02"
+  },
+  "data/mlb/forecasts/reconciliation_ledger_2026-08-02_v3.json": {
+   "supersedes": "RECONCILIATION-LEDGER-2026-08-02-v2"
+  },
+  "data/mlb/forecasts/reconciliation_ledger_2026-08-04.json": {
+   "supersedes": "RECONCILIATION-LEDGER-2026-08-02-v3"
+  },
+  "data/mlb/ml_asof/2026-08-10_ml_claim_corrections.json": {
+   "supersedes": "data/mlb/ml_asof/2026-08-10_regression_eval.json and my chat report of the same date"
+  },
+  "data/mlb/odds/2026-08-25_draftkings_board_addendum1.json": {
+   "amends": "data/mlb/odds/2026-08-25_draftkings_board.json (80e8210a) \u2014 retained, never edited"
+  },
+  "data/mlb/odds/2026-08-25_draftkings_board_addendum2.json": {
+   "amends": "addendum 1 (21932a92); original board 80e8210a \u2014 both retained"
+  },
+  "data/mlb/props/evidence/2026-07-27/KSIM-0727-U02_capture_CLASSIFICATION.json": {
+   "supersedes": [
+    "commit 7efb9b9 subject line 'first qualifying Phase-2A capture' -- the capture did NOT qualify; the commit message is immutable, so this record supersedes rather than rewrites it",
+    "the 'referred to the protocol owner for adjudication' framing in the capture record and findings doc -- under the frozen text there is nothing to adjudicate"
+   ]
+  },
+  "data/mlb/props/simulated/2026-07-27_KSIM_U01_evidence_recovery_attempt01.json": {
+   "supersedes": null
+  },
+  "data/mlb/slates/2026-08-10_gate_result_RESOLVED.json": {
+   "supersedes": "data/mlb/slates/2026-08-10_gate_result.json (DATA_BLOCKED)"
+  },
+  "data/nfl/DISPOSITION.json": {
+   "supersedes": null
+  },
+  "data/provisional/2026-08-27_results_pool_addendum.json": {
+   "amends": "PROVISIONAL-RESULTS-POOL-2026-08-26 (2624ce85) \u2014 retained"
+  }
+ },
+ "n_entries": 37,
+ "note": "generated from the declared supersession fields on every retained record; regenerated after the 2026-08-28 audit found the previous build (2026-08-16) predated both 8/28 supersessions, leaving the retained contaminated records undiscoverable through the mechanism built to find them",
+ "record_id": "SUPERSESSION-INDEX"
 }

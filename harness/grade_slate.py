@@ -134,8 +134,41 @@ def _dh_by_time(row, board, key):
     return order[-1] if t >= "20:00Z" else order[0]
 
 
+class BoardDateMismatch(ValueError):
+    """The finals board is not the board for the date being graded."""
+
+
+def assert_board_is_for_date(board_doc, date, board_path):
+    """RESULT_DATE_COHORT_CONTAMINATION guard (2026-08-28, owner-caught).
+
+    board_key() is (away,home) — deliberately, because a finals board holds one slate. But a
+    continuing series repeats the matchup on consecutive days, so that key silently joins a
+    forecast to the WRONG DAY's final if the board handed in is the wrong board. Measured on this
+    repo: all 15 matchups repeat between 2026-08-18 and 2026-08-19 and 12 of the 15 have opposite
+    winners, so grading 8/19 against the 8/18 board produced 15 confidently wrong labels and zero
+    errors — and with --commit those labels are appended to the append-only grade ledger, where
+    grade_ledger.rebuild treats them as canonical.
+
+    The board declares its own date. Requiring it to match is the whole fix; every finals board in
+    data/mlb/evidence carries slate_date at doc level.
+    """
+    bd = board_doc.get("slate_date") or board_doc.get("date")
+    if bd is None:
+        raise BoardDateMismatch(
+            f"BOARD_DATE_UNDECLARED: {board_path} carries no slate_date; a finals board without "
+            f"its own date cannot be verified against --date {date} and a repeated series would "
+            f"join silently")
+    if str(bd) != str(date):
+        raise BoardDateMismatch(
+            f"BOARD_DATE_MISMATCH: --date {date} but {board_path} declares slate_date {bd}. "
+            f"Refusing: a repeated series makes (away,home) non-unique across dates, so this "
+            f"would grade the forecasts against another day's finals.")
+    return str(bd)
+
+
 def run(date, board_path, commit=False):
     board_doc, board = load_board(board_path)
+    assert_board_is_for_date(board_doc, date, board_path)
     fc = [json.loads(l) for l in open(FORECASTS) if l.strip()]
     fc = [r for r in fc if r.get("slate_date") == date]
     already = {json.loads(l)["forecast_id"] for l in open(GRADES) if l.strip()} if os.path.exists(GRADES) else set()
@@ -288,6 +321,36 @@ def summarize(res, date=None):
 
 def selftest():
     fails = []
+
+    # RESULT_DATE_COHORT_CONTAMINATION guard, exercised on the real repeated series in this repo.
+    # 2026-08-18 and 2026-08-19 share all 15 matchups and 12 have opposite winners, so grading one
+    # against the other's board is 15 confident wrong labels appended to the grade ledger.
+    import json as _j
+    b18, b19 = ("data/mlb/evidence/2026-08-18_owner_finals.json",
+                "data/mlb/evidence/2026-08-19_owner_finals.json")
+    if os.path.exists(b18) and os.path.exists(b19):
+        d18 = _j.load(open(b18))
+        try:
+            assert_board_is_for_date(d18, "2026-08-19", b18)
+            fails.append("the 8/18 board was accepted for grading 2026-08-19")
+        except BoardDateMismatch:
+            pass
+        try:
+            assert_board_is_for_date(d18, "2026-08-18", b18)
+        except BoardDateMismatch:
+            fails.append("the 8/18 board was refused for its own date")
+        # the overlap that makes the join dangerous is real, not hypothetical
+        k18 = {board_key(g) for g in d18["games"]}
+        k19 = {board_key(g) for g in _j.load(open(b19))["games"]}
+        if len(k18 & k19) < 10:
+            fails.append("expected a large matchup overlap between consecutive slates")
+    # a board with no date of its own cannot be verified at all
+    try:
+        assert_board_is_for_date({"games": []}, "2026-08-19", "<undeclared>")
+        fails.append("a board with no declared date was accepted")
+    except BoardDateMismatch:
+        pass
+
     if abs(implied(-110) - 0.5238) > 1e-3 or abs(implied(+150) - 0.4) > 1e-3:
         fails.append("implied probability wrong at known prices")
     pa, ph = devig_two_sided(+232, -252)

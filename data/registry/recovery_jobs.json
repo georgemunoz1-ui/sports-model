@@ -406,6 +406,36 @@
    "title": "Restore the governed nfl.rs.epa_logit_ridge.v0_2.shadow lineage into the active branch: recovered evidence verified (3/3 partial), immutable run directory, invalidation record for v0_1, source pins, and registry entries; then the current-input + prospective-paper workflow for the regular season (opens 2026-09-09)",
    "units_done": 1,
    "units_total": 6
+  },
+  "RJ-007-DATELESS-JOIN-REMEDIATION": {
+   "blocks": [
+    "RESULT_DATE_COHORT_CONTAMINATION"
+   ],
+   "components": [
+    "build_board_0825 identity+seed (doubleheader collision)",
+    "promotion_gate.compare_against_references",
+    "evaluation_standard.paired_postgame",
+    "grade_0725 finals keys"
+   ],
+   "deadline_utc": "2026-09-03T00:00:00Z",
+   "depends_on": [],
+   "history": [
+    {
+     "note": "opened from the adversarial audit; four defects enumerated with file, line and measured failure scenario",
+     "status": "RUNNING",
+     "units_done": 0,
+     "utc": "2026-08-28T07:17:53Z"
+    }
+   ],
+   "job_id": "RJ-007-DATELESS-JOIN-REMEDIATION",
+   "next_run_utc": "2026-08-28T11:00:00Z",
+   "notes": "Found by the 2026-08-28 adversarial audit (record above), each verified by running code against real repo data. None is on the write path (grade_slate was, and is fixed), but promotion_gate and evaluation_standard both feed promotion inference, where a silently narrowed population reports a slate difference as a model difference. build_board_0825's fix touches the frozen-board identity schema, so it needs a migration plan rather than an edit.",
+   "owner_subsystem": "harness",
+   "status": "RUNNING",
+   "terminal_disposition": null,
+   "title": "Remove the dateless (away,home) join from the four remaining evaluation-side code paths and fold date+gamePk into the canonical game identity",
+   "units_done": 0,
+   "units_total": 4
   }
  },
  "schema": "ops.recovery_jobs.v1"

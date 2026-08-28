@@ -73,6 +73,12 @@
      "status": "RUNNING",
      "units_done": 123,
      "utc": "2026-08-27T11:06:52Z"
+    },
+    {
+     "note": "NEW OPEN ACTION for the next archive wake (durable here so a container recycle cannot lose it): verify the two SYNTHETIC_UNVERIFIED 8/27 gamePks in harness/result_binding_gate.py's fixture \u2014 BAL@STL 823014 and AZ@SF 825038 \u2014 against the lancebroz 8/27 daily parquet, then flip their PK_PROVENANCE strings from SYNTHETIC_UNVERIFIED to CAPTURED or replace the values. Disclosure record c373946f. Five other 8/27 pks are captured and recorded (822694, 822771, 823503, 823581, 824879). Also: the 8/27 MLB grading now rests on an OWNER_RELAY of the official scoreboard after RESULT_DATE_COHORT_CONTAMINATION; every archive-bound result row must pass harness/result_binding_gate.py before it regrades anything, and any disagreement with the relay must be reported loudly rather than silently preferred.",
+     "status": "RUNNING",
+     "units_done": 123,
+     "utc": "2026-08-28T07:12:55Z"
     }
    ],
    "job_id": "RJ-001-PROVENANCE",

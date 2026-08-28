@@ -1,4 +1,50 @@
 {
+ "CORRECTION_2026-08-28T20:40Z": {
+  "branch_decomposition": {
+   "POR_pushes_and_both_MLB_win": {
+    "p": 0.0072,
+    "payout_usd": "~148 (reduces to a 2-leg parlay)"
+   },
+   "POR_wins_and_both_MLB_win": {
+    "p": 0.15,
+    "payout_usd": 328.0
+   },
+   "everything_else": {
+    "p": 0.8428,
+    "payout_usd": -50.0
+   }
+  },
+  "effect_on_the_numbers": {
+   "note": "a push is worth roughly half a win here, so the continuous approximation landed within a dime by luck. The figure survived; the reasoning behind it did not.",
+   "por_leg_ev_per_100_after": 13.34,
+   "por_leg_ev_per_100_before": 13.23,
+   "ticket_ev_after": 8.14,
+   "ticket_ev_before": 8.08
+  },
+  "effective_price_confirmed": {
+   "american": "+656",
+   "decimal": 7.56,
+   "derivation": "328/50 x 100 = 656",
+   "verdict": "owner's +656 is correct; the model advantage here is narrower than on the DraftKings slip, entirely on price",
+   "versus_screened_dk_slip": "+750.6"
+  },
+  "outcome_table": {
+   "ATL_by_12_or_fewer": {
+    "p": 0.5791,
+    "result": "POR leg WINS"
+   },
+   "ATL_by_14_or_more": {
+    "p": 0.3931,
+    "result": "POR leg LOSES"
+   },
+   "ATL_by_exactly_13": {
+    "p": 0.0278,
+    "result": "POR leg PUSHES \u2014 parlay should reduce to the two MLB legs, subject to house rules"
+   }
+  },
+  "what_is_right": "+12.5 and +13 have the IDENTICAL win probability \u2014 both need ATL to win by 12 or fewer, 57.91%. The half point does not raise the win chance at all. It converts the single outcome 'ATL by exactly 13' (2.78%) from a LOSS into a REFUND on that leg. The owner's push framing is the correct one and mine was not.",
+  "what_was_wrong": "the POR leg was scored with a CONTINUOUS normal CDF, which credited +13 with a higher WIN probability than +12.5 (59.31% vs 57.91%). Margins are integers, so that is wrong."
+ },
  "MODEL_VIEW": {
   "break_even": 0.132275,
   "ev_usd": 8.08,
@@ -87,12 +133,14 @@
   {
    "book_sport_label": "NBA (the book mislabels this WNBA game)",
    "break_even": 0.52381,
-   "constructed_cover_p": 0.593124,
+   "constructed_cover_p": 0.5791,
    "construction": "Phi((13.0 - 9.71)/13.97) on the frozen MARGIN_SD",
-   "ev_per_100": 13.23,
+   "ev_per_100": 13.34,
    "game": "wnba:POR@ATL",
    "model_margin_home": 9.71,
+   "note": "win probability is identical to +12.5; the half point buys a push branch",
    "price": -110,
+   "push_p": 0.0278,
    "rotation": 611,
    "sel": "POR Fire +13",
    "start": "Aug 28 7:30 PM ET",
@@ -108,6 +156,7 @@
  "ticket": {
   "book": "NOT DRAFTKINGS \u2014 rotation-number format, distinct from the relayed DK board",
   "decimal_paid": 7.56,
+  "effective_american_price": "+656",
   "number": "217916739",
   "risk_usd": 50.0,
   "to_win_usd": 328.0,

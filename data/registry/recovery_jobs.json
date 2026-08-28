@@ -277,7 +277,7 @@
     "RESULTS_AND_STATS_THROUGH_ASOF",
     "MARKET_PRICES_VIA_SEPARATE_OVERLAY"
    ],
-   "deadline_utc": "2026-08-28T22:45:00Z",
+   "deadline_utc": "2026-08-29T17:00:00Z",
    "depends_on": [],
    "history": [
     {
@@ -381,10 +381,16 @@
      "status": "RUNNING",
      "units_done": 11,
      "utc": "2026-08-28T22:15:00Z"
+    },
+    {
+     "note": "22:45Z DEADLINE: PREGAME WINDOW FOR TONIGHT'S WNBA SLATE IS MISSED, and recorded as missed rather than rolled past. Tips are at 23:30Z; no official injury section bound at any point today. OFFICIAL_INJURY_AVAILABILITY finishes the day at 0 of 6, units 11/17, every official route EGRESS_BLOCKED. What the day DID achieve on this job: the market-overlay component bound for the first time (unit 11), the extension pool was rebuilt through the 8/27 cutoff and FEATURE_REFRESH unblocked, and the Morrow two-team conflict was resolved \u2014 though by aggregator reporting, which identifies and does not bind, so it credits nothing. This is the same outcome as 8/25 and it is the second slate whose pregame window this component has missed. The job stays open because binding serves future slates; the honest record is that it did not serve tonight's.",
+     "status": "RUNNING",
+     "units_done": 11,
+     "utc": "2026-08-28T22:52:00Z"
     }
    ],
    "job_id": "RJ-005-WNBA-FEATURE-PIPELINE",
-   "next_run_utc": "2026-08-28T22:45:00Z",
+   "next_run_utc": "2026-08-29T11:00:00Z",
    "notes": "After binding: recompute feature state (as_of, source hashes, age); generate separately identified replacement forecasts (wnba.replacement.FEATURE_REFRESH) since the board is frozen; rerun side, margin, total, EV and disposition through side_reselection_gate after anchor. Exhaustion of all authorized routes without binding publishes SYSTEM_FAILURE_WNBA_FEATURE_PIPELINE \u2014 never a normal-looking board.",
    "owner_subsystem": "wnba_features",
    "status": "RUNNING",

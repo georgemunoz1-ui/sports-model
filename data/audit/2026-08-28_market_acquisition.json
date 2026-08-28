@@ -9,9 +9,31 @@
   "selection": null
  },
  "created_utc": "2026-08-28T08:36:00Z",
- "de_vig_position": "If prices are relayed, cross-book 'Best Odds' de-vig remains INVALID for recovering market probability (8/3 ruling). A relayed single-book price supports SINGLE-PRICE EV SCREENING only.",
+ "de_vig_position": "UNCHANGED. Cross-book 'Best Odds' de-vig remains INVALID for recovering market probability (8/3 ruling). The WNBA relay is a SINGLE book, so nothing here combines books; break-even is taken from each side's own posted price and no de-vigged figure is treated as the market probability for any purpose. The two-sided hold is used only to verify the transcription.",
  "no_workaround_attempted": "Org egress 403s are never routed around. TLS verification was not disabled, HTTPS_PROXY was not unset, and no alternate host, mirror or scraper was used to reach a blocked sports domain. The block is the receipt.",
  "owner_relay_channel": "OPEN. A relayed DraftKings price set would move 8/28 from NO_RETAINED_MARKET_ARTIFACT to a separately hashed price overlay, attached to the frozen board rather than folded into it, and would be graded at full precision. Unit size $100. Paper only; execution UNAUTHORIZED; wager authority NO.",
+ "per_sport": {
+  "mlb": {
+   "consequence": "forecast-only; no break-even, edge, selection or EV for any of the 15 games",
+   "n_games_priced": 0,
+   "state": "NO_RETAINED_MARKET_ARTIFACT"
+  },
+  "nfl": {
+   "consequence": "moot \u2014 no forecast exists for a price to be compared against",
+   "n_games_priced": 0,
+   "state": "NO_RETAINED_MARKET_ARTIFACT"
+  },
+  "wnba": {
+   "book": "DraftKings",
+   "n_games_priced": 4,
+   "overlay": "data/wnba/odds/2026-08-28_owner_relay_dk.json",
+   "overlay_sha256": "60085099b7f5033a7af978b8aa3f27ac191cdc0096d9125402b6bf1898e99455",
+   "selections": 0,
+   "state": "RETAINED_OWNER_RELAY_SINGLE_BOOK",
+   "transcription_verification": "PASS \u2014 12 two-sided pairs, implied holds 3.65-4.55%",
+   "why_zero_selections": "both surviving arms are non-selecting by registration; the one arm that could carry a real view is blocked on the feature rebuild"
+  }
+ },
  "record_id": "MARKET-ACQUISITION-2026-08-28",
  "routes_attempted": [
   {
@@ -52,6 +74,11 @@
   "wnba",
   "nfl"
  ],
- "verdict": "NO_RETAINED_MARKET_ARTIFACT",
+ "superseded_verdict": {
+  "superseded_utc": "2026-08-28T10:45:00Z",
+  "was": "NO_RETAINED_MARKET_ARTIFACT",
+  "why": "an owner relay of the DraftKings WNBA board arrived after the boards were frozen. It changes the WNBA action layer only; MLB and NFL remain unpriced and forecast-only."
+ },
+ "verdict": "PARTIAL \u2014 WNBA RETAINED (owner relay); MLB and NFL NO_RETAINED_MARKET_ARTIFACT",
  "why_this_record_exists": "Market capture is run SEPARATELY from, and AFTER, the board freeze. The boards for 8/28 were frozen before this file was written, so no price could have reached a forecast even in principle. Prices are never predictive features; they enter only the action/EV overlay."
 }

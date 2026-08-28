@@ -94,6 +94,7 @@ def build():
     acq = json.load(open(f"data/audit/{DATE}_schedule_acquisition.json"))
     market = json.load(open(f"data/audit/{DATE}_market_acquisition.json"))
     mlb_bind = json.load(open(f"data/mlb/slates/{DATE}_slate_binding.json"))
+    overlay = json.load(open(f"data/wnba/odds/{DATE}_owner_relay_dk.json"))
 
     # ---------- assemble every discovered row, all four sports ----------
     allrows = []
@@ -117,10 +118,12 @@ def build():
         aw, hm = g.split(":")[1].split("@")
         side = hm if fb["p_home"] >= 0.5 else aw
         p = fb["p_home"] if fb["p_home"] >= 0.5 else 1 - fb["p_home"]
+        ov = overlay["games"][g]["moneyline"]
+        ml = ov["home"] if side == hm else ov["away"]
         allrows.append({"sport": "WNBA", "start": fb["game_start_utc"],
                         "label": f"{aw} @ {hm}", "cid": fb["canonical_id"],
                         "lean": f"{side} {pct(p)} (diagnostic)",
-                        "disp": "2 of 3 arms; refresh blocked",
+                        "disp": f"DK {ml:+d} \u00b7 no selection",
                         "risk": "RECORD_STALE" if fb.get("record_staleness") else None})
     for r in nfl["nfl"]["rows"]:
         allrows.append({"sport": "NFL", "start": r["start_utc"],
@@ -214,6 +217,28 @@ def build():
         f'<td class="n">{esc(r["canonical_id"])}</td>'
         f'<td class="l">{esc(r["cohort"])}</td></tr>' for r in acq["cfb"]["rows"])
 
+    mkt_rows = ""
+    for g in worder:
+        v = overlay["games"][g]
+        fb = v["arms"]["wnba.fallback.STANDINGS_LOG5_v1"]
+        m = v["moneyline"]
+        aw, hm = g.split(":")[1].split("@")
+        for side, team, ml, be, pm, edge, e in (
+                ("away", aw, m["away"], m["break_even_away"], fb["p_away"],
+                 fb["edge_away_pp"], fb["ev_away_per_100"]),
+                ("home", hm, m["home"], m["break_even_home"], fb["p_home"],
+                 fb["edge_home_pp"], fb["ev_home_per_100"])):
+            cls = "pick" if e > 0 else "flag"
+            mkt_rows += (
+                f'<tr><td class="l">{esc(g.split(":")[1]) if side == "away" else ""}</td>'
+                f'<td class="l"><b>{esc(team)}</b></td>'
+                f'<td class="n">{ml:+d}</td>'
+                f'<td class="n">{pct(be)}</td>'
+                f'<td class="n">{pct(pm)}</td>'
+                f'<td class="n {cls}">{edge:+.2f}</td>'
+                f'<td class="n {cls}">{e:+.2f}</td>'
+                f'<td class="l">no selection</td></tr>')
+
     stale_pp = (wby["wnba:WSH@LAS"]["wnba.fallback.STANDINGS_LOG5_v1"]
                     ["record_staleness"]["interval_width_pp"])
 
@@ -233,6 +258,9 @@ def build():
     gi = mlb["GAME_IDENTITY"]
     total_captured = gi["captured"] + wnba["GAME_IDENTITY"]["captured"] + \
         nfl["GAME_IDENTITY"]["captured"] + len(acq["cfb"]["rows"])
+
+    tv = overlay["TRANSCRIPTION_VERIFICATION"]["observed_hold_range_pct"]
+    hold_lo, hold_hi = tv[0], tv[1]
 
     p_mlb = counters("mlb", f"mlb:{DATE} · 15 games",
                      "Nothing has started. <b>0/0 means nothing is claimed</b>, not that nothing "
@@ -259,7 +287,7 @@ def build():
 <span class="chip">CFB <b>7</b></span>
 <span class="chip">GAME IDS <b>{total_captured}/36 CAPTURED</b> &middot; INFERRED <b>0</b></span>
 <span class="chip">SYNTHETIC PSEUDO-PKS <b>0</b></span>
-<span class="chip">BETS <b>0</b> &middot; <b>$0</b></span>
+<span class="chip">WNBA PRICED <b>4/4</b> &middot; SELECTIONS <b>0</b></span>\n<span class="chip">BETS <b>0</b> &middot; <b>$0</b></span>
 <span class="chip">WAGER AUTHORITY <b>NO</b></span>
 </div>
 
@@ -273,8 +301,8 @@ captured game id. The invented 827000-series key is retired.</div></div>
 refresh is blocked; the other two do not touch the blocked input.</div></div>
 <div class="a"><div class="q">NFL &amp; CFB</div><div class="v">17 rows, all refused. Preseason is
 outside registered scope; every college game is FCS.</div></div>
-<div class="a"><div class="q">Market</div><div class="v">Nothing on file. Five routes attempted,
-all blocked. No edge, no selection, no EV.</div></div>
+<div class="a"><div class="q">Market</div><div class="v">WNBA priced by owner relay (DraftKings,
+all 4 games). MLB and NFL still unpriced &mdash; five routes, all blocked.</div></div>
 <div class="a"><div class="q">Wagers</div><div class="v">0 bets &middot; 0.00u &middot; $0 &mdash;
 execution unauthorized</div></div>
 </div>
@@ -369,6 +397,52 @@ Its numbers are the model family's best honest current output, not a recommendat
 </div>
 <details><summary>WNBA availability &mdash; open items, none resolved by guess</summary>
 <ul>{wnba_open}</ul></details>
+
+<h2>WNBA market &mdash; priced, screened, and nothing selected</h2>
+<div class="panel">
+<p><b>All four games are priced</b> from an owner relay of the DraftKings board, transcribed and
+verified: twelve two-sided pairs imply holds of {hold_lo:.2f}&ndash;{hold_hi:.2f}%, a band a
+dropped digit or a misaligned row would have broken. The overlay is hashed separately and attached
+to the frozen board &mdash; prices are never predictive features and the board is unchanged by
+them. Break-even comes from each side&rsquo;s own posted price; no de-vigged number is treated as
+the market probability, and nothing combines books, so the 8/3 ruling stands untouched.</p>
+<p><b>One thing this relay does that the archive could not.</b> The board&rsquo;s schedule grade is
+<code>ESPN_SINGLE_FAMILY_GIT_ARTIFACT</code> &mdash; wehoop mirrors ESPN, so the ESPN pages that
+&ldquo;corroborated&rdquo; it were the same family and added no independent source. A sportsbook is
+not in that family, and DraftKings lists exactly these four matchups with the same home/away
+orientation. That is the <b>first genuinely independent corroboration of the slate composition</b>.
+It does not corroborate the game ids, which DraftKings does not publish.</p>
+</div>
+<div class="scroll"><table>
+<thead><tr><th class="l">Game</th><th class="l">Side</th><th>DK price</th><th>Break-even</th>
+<th>Log5 p</th><th>Edge (pp)</th><th>EV / $100</th><th class="l">Disposition</th></tr></thead>
+<tbody>
+{mkt_rows}
+</tbody></table></div>
+<div class="block">
+<p><b>Zero selections, and that is a registration fact rather than a judgement call.</b> Both arms
+that survived this morning&rsquo;s block are non-selecting by construction:
+<code>STANDINGS_LOG5_v1</code> is <code>DIAGNOSTIC_ONLY_ACTION_BLOCKED</code> in its own
+registration, and <code>EXPANDING_HOME_PRIOR</code> is a constant carrying no game-specific
+information. The one arm that could have held a real view is blocked on the feature rebuild. No arm
+on this board is permitted to select, whatever the EV column says.</p>
+<p><b>And the EV column should be read as a diagnostic, not an opportunity.</b> Every large positive
+number sits on a heavy underdog &mdash; +76.74 on Connecticut at +1100, +41.59 on Portland at +525.
+That is precisely where this arm is weakest. <code>STANDINGS_LOG5_v1</code> sees season win-loss
+records and nothing else: no injuries, no rest, no lineup. Tonight A&rsquo;ja Wilson is questionable,
+Brionna Jones is out, Toronto has five players listed, and no 8/28-dated report exists for
+Washington or Los Angeles at all. A model blind to all of that, disagreeing with a market that
+prices it, is describing its own blindness. The honest reading is a calibration signal on the
+fallback arm &mdash; it is systematically too flat on lopsided games.</p>
+</div>
+<div class="warn">
+<p><b>Start times disagree and are not being settled here.</b> DraftKings shows the two early games
+at 4:40 and the two late games at 7:10 in the phone&rsquo;s local time; the wehoop parquet says 7:30
+and 10:00 PM Eastern. The game-to-slot pairing matches exactly, and read as Pacific the book is a
+consistent +10 minutes on all four. The screenshot does not state its timezone, so that reading is
+inferred, not confirmed. Impact is at most ten minutes on tip, well inside the checkpoint spacing;
+it is flagged for the 22:00Z checkpoint rather than resolved by assumption.</p>
+</div>
 
 <h2>NFL &mdash; 10 preseason games, no forecast</h2>
 {p_nfl}

@@ -62,12 +62,12 @@ p{max-width:70ch}
 <span class="chip"><b>0</b> BETS · <b>0.00u</b> · <b>$0</b></span>
 </div>
 
-<div class="proof"><b>RESULT BINDING PROOF</b> &mdash; mlb:2026-08-27 &middot; <code>49996e05</code><br>
+<div class="proof"><b>RESULT BINDING PROOF</b> &mdash; mlb:2026-08-27 &middot; <code>19fdee64</code><br>
 RESULT_BINDING_PASS = 7/7<br>
 DATE_COHERENCE_PASS = 7/7<br>
 CANONICAL_ID_MATCH = 7/7<br>
 REFUSED_ROWS = 0<br>
-<span style="font-family:Public Sans,sans-serif">Every row bound to its scheduled game id and date, with scores verified against the retained evidence for that same game &mdash; not merely a file hash. A single failed row would have blocked every record, Brier, MAE and P&amp;L on this card. Caveat on record: two board ids (BAL@STL, AZ@SF) are inferred rather than captured (<code>c373946f</code>), so this cohort is id-complete but not yet id-verified for those two; archive verification is queued.</span></div>
+<span style="font-family:Public Sans,sans-serif">Every row bound to its scheduled game id and date, with scores verified against the retained evidence for that same game &mdash; not merely a file hash. A single failed row would have blocked every record, Brier, MAE and P&amp;L on this card. All seven game ids are now <b>archive-verified</b> against the upstream 8/27 daily artifact. That check falsified one of them: AZ@SF had been carried as 825038, an id inferred by decrementing a <i>different</i> matchup’s 8/26 id, and no such game exists — the real id is 823179. Scores and grading are unaffected (SF 6–1 is correct and that matchup has no adjacent-date repeat); the false claim was the identifier, and the earlier proof’s 7/7 was self-referential for that row. Record <code>989536ad</code>.</span></div>
 
 <div class="panel answers">
 <div class="a"><div class="q">What the model said</div><div class="v">Active sides WSH, BAL, NYY, TOR, MIL, LAD, AZ — one strong signal (MIL 67.8%), six near coin-flips</div></div>

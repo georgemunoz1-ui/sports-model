@@ -280,9 +280,9 @@ def aggregate_guard(binding, statistic_name):
 # URL slugs during the day's checkpoints and are recorded in the audit trail. Two were NOT: BAL@STL
 # and AZ@SF were first written into this fixture by DECREMENTING the 8/26 pk (823015 -> 823014,
 # 825039 -> 825038) — which is the exact adjacent-pk inference this module exists to forbid,
-# committed inside the module's own fixture. They are labelled SYNTHETIC_UNVERIFIED here rather
-# than quietly left to read as ground truth, and the archive check at the next wake must either
-# confirm them or replace them. The refusal logic does not depend on their real-world truth (the
+# committed inside the module's own fixture. They were labelled SYNTHETIC_UNVERIFIED rather than
+# quietly left to read as ground truth, and the 2026-08-28 archive check RESOLVED both: 823014
+# was right, 825038 was WRONG and is replaced by the real 823179. One of two inferences failed. The refusal logic does not depend on their real-world truth (the
 # CONTAMINATED rows carry real 8/26 pks from the evidence extract, which is what the primary
 # fixture tests) — but an unverified number sitting in a gate fixture is exactly how the next
 # contamination starts.
@@ -292,8 +292,12 @@ PK_PROVENANCE = {
     822771: "CAPTURED mlb.com slug (KC@TOR), T-90 record 4645b5a3",
     823581: "CAPTURED mlb.com slug (MIL@NYM), night review",
     824879: "CAPTURED mlb.com slug (LAD@ATL), schedule record b9717911",
-    823014: "SYNTHETIC_UNVERIFIED — inferred from 8/26 pk 823015; MUST be archive-verified",
-    825038: "SYNTHETIC_UNVERIFIED — inferred from 8/26 pk 825039; MUST be archive-verified",
+    823014: "ARCHIVE_VERIFIED 2026-08-28 (lancebroz f9bca28, 8/27 daily parquet) — the earlier "
+            "inference from 8/26 pk 823015 was CORRECT, now confirmed rather than assumed",
+    823179: "ARCHIVE_VERIFIED 2026-08-28 (lancebroz f9bca28, 8/27 daily parquet). REPLACES the "
+            "inferred 825038, which was WRONG: decremented from 825039 = CHC@AZ, a DIFFERENT "
+            "matchup, and no game 825038 exists on 8/27 at all. One of the two inferences was "
+            "wrong — which is exactly why an inferred id is a fabrication even when plausible.",
 }
 
 BOARD_0827 = {
@@ -311,7 +315,7 @@ BOARD_0827 = {
                         "start_utc": "2026-08-27T23:10:00Z"},
         "mlb:LAD@ATL": {"game_pk": 824879, "away": "LAD", "home": "ATL",
                         "start_utc": "2026-08-27T23:15:00Z"},
-        "mlb:AZ@SF": {"game_pk": 825038, "away": "AZ", "home": "SF",
+        "mlb:AZ@SF": {"game_pk": 823179, "away": "AZ", "home": "SF",
                       "start_utc": "2026-08-28T01:45:00Z"},
     },
 }
@@ -344,7 +348,7 @@ CLEAN_0827_ROWS = [
      "2026-08-27", "away": "MIL", "home": "NYM", "away_score": 8, "home_score": 2},
     {"sport": "mlb", "game_pk": 824879, "scheduled_date": "2026-08-27", "result_date":
      "2026-08-27", "away": "LAD", "home": "ATL", "away_score": 0, "home_score": 1},
-    {"sport": "mlb", "game_pk": 825038, "scheduled_date": "2026-08-27", "result_date":
+    {"sport": "mlb", "game_pk": 823179, "scheduled_date": "2026-08-27", "result_date":
      "2026-08-27", "away": "AZ", "home": "SF", "away_score": 1, "home_score": 6},
 ]
 
@@ -373,7 +377,7 @@ def selftest():
         p = PK_PROVENANCE.get(g["game_pk"])
         if not p:
             f.append(f"fixture pk {g['game_pk']} ({_k}) has no declared provenance")
-        elif not (p.startswith("CAPTURED") or p.startswith("SYNTHETIC_UNVERIFIED")):
+        elif not p.startswith(("CAPTURED", "ARCHIVE_VERIFIED", "SYNTHETIC_UNVERIFIED")):
             f.append(f"fixture pk {g['game_pk']} provenance is neither captured nor labelled")
     for r in CONTAMINATED_0826_ROWS:
         if r["game_pk"] not in (823015, 823506, 822772, 823584, 824878):

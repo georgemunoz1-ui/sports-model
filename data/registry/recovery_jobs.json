@@ -79,6 +79,12 @@
      "status": "RUNNING",
      "units_done": 123,
      "utc": "2026-08-28T07:12:55Z"
+    },
+    {
+     "note": "OPEN ACTION CLOSED (record 989536ad): the two SYNTHETIC_UNVERIFIED 8/27 pks were archive-verified against lancebroz f9bca28. 823014 (BAL@STL) correct; 825038 (AZ@SF) WRONG \u2014 no such game exists, real id 823179. Fixture, binding proof (19fdee64) and card corrected. RJ-001B score verification unchanged at 0/126: the 8/27 parquet still carries no runs column.",
+     "status": "RUNNING",
+     "units_done": 123,
+     "utc": "2026-08-28T07:54:53Z"
     }
    ],
    "job_id": "RJ-001-PROVENANCE",
@@ -357,10 +363,16 @@
      "status": "RUNNING",
      "units_done": 10,
      "utc": "2026-08-27T19:18:20Z"
+    },
+    {
+     "note": "overdue slot rolled during 8/28 prep; wehoop has NOT advanced past 3316fa3 so the 8/27 WNBA boxes are not yet available (morning commit lands ~10:30Z)",
+     "status": "RUNNING",
+     "units_done": 10,
+     "utc": "2026-08-28T07:54:53Z"
     }
    ],
    "job_id": "RJ-005-WNBA-FEATURE-PIPELINE",
-   "next_run_utc": "2026-08-27T22:30:00Z",
+   "next_run_utc": "2026-08-28T11:00:00Z",
    "notes": "After binding: recompute feature state (as_of, source hashes, age); generate separately identified replacement forecasts (wnba.replacement.FEATURE_REFRESH) since the board is frozen; rerun side, margin, total, EV and disposition through side_reselection_gate after anchor. Exhaustion of all authorized routes without binding publishes SYSTEM_FAILURE_WNBA_FEATURE_PIPELINE \u2014 never a normal-looking board.",
    "owner_subsystem": "wnba_features",
    "status": "RUNNING",
@@ -395,10 +407,16 @@
      "status": "RUNNING",
      "units_done": 1,
      "utc": "2026-08-27T19:17:10Z"
+    },
+    {
+     "note": "overdue slot rolled during 8/28 prep; immutable NFL run directory still awaits owner upload/PR; no unit bindable from this environment",
+     "status": "RUNNING",
+     "units_done": 1,
+     "utc": "2026-08-28T07:54:53Z"
     }
    ],
    "job_id": "RJ-006-NFL-MODEL-RESTORATION",
-   "next_run_utc": "2026-08-27T22:30:00Z",
+   "next_run_utc": "2026-08-28T11:00:00Z",
    "notes": "A unit binds only from a retained artifact with source, timestamp and content hash. The live_block gates from the recovered STATUS remain binding for any future authority: verified QB/OL/injury snapshots as of forecast time, 100 prospective paper selections under one frozen policy, coherent closing-line capture with positive lower 95% ROI bound, explicit owner authorization. Preseason stays DATA_CAPTURE_ONLY by registered scope.",
    "owner_subsystem": "model_registry",
    "status": "RUNNING",

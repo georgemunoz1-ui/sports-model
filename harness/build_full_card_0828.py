@@ -87,6 +87,121 @@ def counters(sport, cohort, prose):
             f'<span style="font-family:Public Sans,sans-serif">{prose}</span></div>')
 
 
+def postslate_block():
+    """The RESULTS layer, added after the slate finished.
+
+    It is a separate block from the freeze-time binding proof on purpose. The proof above was
+    written before first pitch and its 0/0 meant "the slate has not started"; this one is written
+    after the last out and its 0/0 means "the slate is over and no admissible source carries it".
+    Same counters, different claim. Collapsing them into one line would let a reader believe the
+    page had been checked once when it was checked twice, for different things.
+
+    Returns "" when the post-slate proofs do not exist yet, so the pre-slate page still builds.
+    """
+    mlb_p = f"data/governance/bindings/{DATE}_mlb_results_binding_proof_postslate.json"
+    wnba_p = f"data/governance/bindings/{DATE}_wnba_v2_results_binding_proof_postslate.json"
+    review_p = "data/audit/2026-08-29_end_of_night_review.json"
+    if not all(os.path.exists(x) for x in (mlb_p, wnba_p, review_p)):
+        return ""
+    mp, wp = json.load(open(mlb_p)), json.load(open(wnba_p))
+    rev = json.load(open(review_p))
+    arch = mp["why_no_results"]
+    lb = arch["lancebroz_mlb_pitcher_data"]
+    we = arch["wehoop_wnba_raw"]
+    lbf = lb["daily_file_probe"]
+    nm = rev["CONTAMINATION_NEAR_MISS"]
+    ld = rev["ARCHIVE_BOUND_IDENTITY_FINDINGS"]["mlb:LAD@DET"]
+    fi = ld["forecast_impact"]
+
+    def cblock(p, cohort):
+        c = p["counters"]
+        sha = hashlib.sha256(json.dumps(p, sort_keys=True).encode()).hexdigest()[:8]
+        return (f'<div class="proof"><b>POST-SLATE BINDING PROOF</b> &mdash; {esc(cohort)} '
+                f'&middot; <code>{sha}</code><br>\n'
+                f'RESULT_BINDING_PASS = {esc(c["RESULT_BINDING_PASS"])}<br>\n'
+                f'DATE_COHERENCE_PASS = {esc(c["DATE_COHERENCE_PASS"])}<br>\n'
+                f'CANONICAL_ID_MATCH = {esc(c["CANONICAL_ID_MATCH"])}<br>\n'
+                f'REFUSED_ROWS = {esc(c["REFUSED_ROWS"])}<br>\n'
+                f'<span style="font-family:Public Sans,sans-serif">{esc(p["WHAT_0_OF_0_MEANS_HERE"])}'
+                f'</span></div>')
+
+    return f"""
+<h2>Results &mdash; nothing was graded, because nothing could be bound</h2>
+<p><b>This is the results layer, and it is empty on purpose.</b> The slate is over. Both
+score-bearing archives were read and neither carries August 28. No final was published here,
+because publishing one would have meant inventing it &mdash; and this is the exact juncture at
+which the August 27 cycle put five fabricated finals on a page.</p>
+
+<table>
+<tr><th>Source</th><th>State when read</th><th>Why it cannot settle August 28</th></tr>
+<tr><td>lancebroz/mlb-pitcher-data</td>
+    <td><code>{esc(lb["head"][:8])}</code> &middot; committed {esc(lb["head_committed_utc"])}</td>
+    <td>Advanced, and it <i>does</i> carry an 8/28 daily file &mdash; {esc(lbf["n_rows"])} rows,
+        {esc(lbf["n_columns"])} columns, and <b>not one of them score-bearing</b>. It never has
+        carried runs, which is why RJ-001B stands at 0/126 and stays there.</td></tr>
+<tr><td>sportsdataverse/wehoop-wnba-raw</td>
+    <td><code>{esc(we["head"][:8])}</code> &middot; committed {esc(we["head_committed_utc"])}</td>
+    <td>Has not advanced. All four WNBA board games are still
+        <code>STATUS_SCHEDULED</code> at 0&ndash;0.</td></tr>
+<tr><td>Search</td><td>Available, and not used</td>
+    <td>Snippets <b>identify</b> and never <b>bind</b>. A result read off a snippet is not evidence
+        that a game finished that way.</td></tr>
+</table>
+
+{cblock(mp, "mlb:" + DATE)}
+{cblock(wp, "wnba:" + DATE + " (v2 board)")}
+
+<h2>A contamination near-miss, caught before it reached this page</h2>
+<p class="flag"><b>{esc(nm["severity"])}.</b> The first post-slate WNBA probe asked the archive a
+reasonable-sounding question &mdash; <i>are there completed rows where the date is 2026-08-28?</i>
+&mdash; and got back <b>two</b>. Neither belongs to this slate.</p>
+<p>{esc(nm["why_that_was_wrong"])}</p>
+<table>
+<tr><th>Row the UTC filter returned</th><th>What it actually is</th></tr>
+<tr><td><code>ESPN_GAMEID:401857178</code> &middot; GSV 79&ndash;60 NYL &middot;
+        2026-08-28T00:00Z</td>
+    <td>An <b>August 27</b> evening ET game. Already graded in the August 27 review.</td></tr>
+<tr><td><code>ESPN_GAMEID:401857179</code> &middot; WSH 80&ndash;73 PHX &middot;
+        2026-08-28T02:00Z</td>
+    <td>An <b>August 27</b> evening ET game. Already graded in the August 27 review.</td></tr>
+</table>
+<p><b>{esc(nm["this_is_the_named_P0"])}</b> {esc(nm["fix"])}</p>
+<p>{esc(nm["what_actually_saved_it"])}</p>
+
+<h2>LAD@DET was wrong on this page by 11.75 points, and was never flagged</h2>
+<p>The 8/28 pitch archive covers 3 of the 15 MLB games. It is enough to settle who actually
+pitched, and it overturns a row this card published. The half-inning convention
+(<code>top</code> &rarr; the <b>home</b> team pitches) was validated against CIN@CHC, whose
+lineups were independently confirmed at the T-45 checkpoint, <i>before</i> any claim rested on
+it.</p>
+<table>
+<tr><th>Game</th><th>What this card carried</th><th>What the archive shows</th><th>Effect</th></tr>
+<tr><td><b>LAD@DET</b> &middot; <code>{esc(ld["gamepk_confirmed"])}</code></td>
+    <td>{esc(ld["board_carried"])}</td>
+    <td>{esc(ld["archive"])}</td>
+    <td><b>p_home {fi["p_home_frozen"]:.4f} &rarr; {fi["p_home_truth"]:.4f}</b>
+        ({fi["move_pp"]:+.2f} pp) &mdash; the largest identity error of the week.
+        Side does not flip.</td></tr>
+</table>
+<p>It bit here precisely because <i>both</i> pitchers have retained logs and are far apart
+(Skubal rs 2.96 vs Anderson rs 4.13). MIA@WSH's swap, confirmed the same way and the one that
+<i>was</i> flagged, moved the number by <b>zero</b> &mdash; neither of its pitchers has a retained
+log, so both slots were capped either way.</p>
+<p class="flag"><b>The flag was tracking the wrong thing.</b> Every row flagged and chased on 8/28
+resolved as immaterial, cleared, or already-correct. The row carrying the largest error was never
+flagged at all, because the acquisition recorded &ldquo;starters consistent across 2 snippets&rdquo;
+and treated agreement as clearance. Two sources agreeing can be wrong the same way, especially
+sharing an upstream. <b>Agreement is not independence.</b></p>
+
+<h2>Owner ticket 217916739 &mdash; ungraded</h2>
+<p>Its legs need finals and none could be bound, so it is not graded here. It settles against
+nothing in the model ledger either way: owner-discretion picks and model EV rules do not mix, and
+the model ledger stands at <b>0 bets, $0</b>. The POR&nbsp;+13 leg's game
+(<code>ESPN_GAMEID:401857180</code>) is one of the four still reading
+<code>STATUS_SCHEDULED</code> in the archive above.</p>
+"""
+
+
 def build():
     mlb = json.load(open(f"cards/{DATE}_mlb_board.json"))
     # the superseding board once FEATURE_REFRESH unblocked; v1 stays frozen on disk
@@ -316,6 +431,8 @@ all 4 games). MLB and NFL still unpriced &mdash; five routes, all blocked.</div>
 <div class="a"><div class="q">Wagers</div><div class="v">0 bets &middot; 0.00u &middot; $0 &mdash;
 execution unauthorized</div></div>
 </div>
+
+{postslate_block()}
 
 <h2>Full slate &mdash; all 36 rows, every sport, in start order</h2>
 <p>Refused rows are shown alongside forecast rows. A refusal that is not displayed is

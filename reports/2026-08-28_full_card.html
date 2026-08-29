@@ -83,6 +83,92 @@ all 4 games). MLB and NFL still unpriced &mdash; five routes, all blocked.</div>
 execution unauthorized</div></div>
 </div>
 
+
+<h2>Results &mdash; nothing was graded, because nothing could be bound</h2>
+<p><b>This is the results layer, and it is empty on purpose.</b> The slate is over. Both
+score-bearing archives were read and neither carries August 28. No final was published here,
+because publishing one would have meant inventing it &mdash; and this is the exact juncture at
+which the August 27 cycle put five fabricated finals on a page.</p>
+
+<table>
+<tr><th>Source</th><th>State when read</th><th>Why it cannot settle August 28</th></tr>
+<tr><td>lancebroz/mlb-pitcher-data</td>
+    <td><code>41f26c83</code> &middot; committed 2026-08-29T01:32:03+00:00</td>
+    <td>Advanced, and it <i>does</i> carry an 8/28 daily file &mdash; 930 rows,
+        61 columns, and <b>not one of them score-bearing</b>. It never has
+        carried runs, which is why RJ-001B stands at 0/126 and stays there.</td></tr>
+<tr><td>sportsdataverse/wehoop-wnba-raw</td>
+    <td><code>7a1c7eba</code> &middot; committed 2026-08-28T06:32:20-04:00</td>
+    <td>Has not advanced. All four WNBA board games are still
+        <code>STATUS_SCHEDULED</code> at 0&ndash;0.</td></tr>
+<tr><td>Search</td><td>Available, and not used</td>
+    <td>Snippets <b>identify</b> and never <b>bind</b>. A result read off a snippet is not evidence
+        that a game finished that way.</td></tr>
+</table>
+
+<div class="proof"><b>POST-SLATE BINDING PROOF</b> &mdash; mlb:2026-08-28 &middot; <code>090193a0</code><br>
+RESULT_BINDING_PASS = 0/0<br>
+DATE_COHERENCE_PASS = 0/0<br>
+CANONICAL_ID_MATCH = 0/0<br>
+REFUSED_ROWS = 0<br>
+<span style="font-family:Public Sans,sans-serif">NOTHING IS CLAIMED, and the reason is specific and worse than the prospective proof's: the slate is OVER and no admissible source carries it. All 90 board rows were loaded and every canonical_id was read. This is NOT 'nothing was checked'.</span></div>
+<div class="proof"><b>POST-SLATE BINDING PROOF</b> &mdash; wnba:2026-08-28 (v2 board) &middot; <code>867b142b</code><br>
+RESULT_BINDING_PASS = 0/0<br>
+DATE_COHERENCE_PASS = 0/0<br>
+CANONICAL_ID_MATCH = 0/0<br>
+REFUSED_ROWS = 0<br>
+<span style="font-family:Public Sans,sans-serif">NOTHING IS CLAIMED, and the reason is specific and worse than the prospective proof's: the slate is OVER and no admissible source carries it. All 12 board rows were loaded and every canonical_id was read. This is NOT 'nothing was checked'.</span></div>
+
+<h2>A contamination near-miss, caught before it reached this page</h2>
+<p class="flag"><b>CAUGHT BEFORE PUBLICATION — no bad number reached a record.</b> The first post-slate WNBA probe asked the archive a
+reasonable-sounding question &mdash; <i>are there completed rows where the date is 2026-08-28?</i>
+&mdash; and got back <b>two</b>. Neither belongs to this slate.</p>
+<p>wehoop's `date` column is UTC. The two rows were ESPN 401857178 (GSV 79-60 NYL, 2026-08-28T00:00Z) and 401857179 (WSH 80-73 PHX, 2026-08-28T02:00Z) — both 8/27 EVENING ET games. Neither is on the 8/28 board. Both were already graded in the 8/27 review, where GSV 79-60 appears in finals_identified. A UTC date filter manufactures a two-game '8/28 result set' out of the previous slate.</p>
+<table>
+<tr><th>Row the UTC filter returned</th><th>What it actually is</th></tr>
+<tr><td><code>ESPN_GAMEID:401857178</code> &middot; GSV 79&ndash;60 NYL &middot;
+        2026-08-28T00:00Z</td>
+    <td>An <b>August 27</b> evening ET game. Already graded in the August 27 review.</td></tr>
+<tr><td><code>ESPN_GAMEID:401857179</code> &middot; WSH 80&ndash;73 PHX &middot;
+        2026-08-28T02:00Z</td>
+    <td>An <b>August 27</b> evening ET game. Already graded in the August 27 review.</td></tr>
+</table>
+<p><b>RESULT_DATE_COHORT_CONTAMINATION — the same defect class as the 8/27 incident, arriving through a different door: not a matchup join without a date, but a date filter in the wrong timezone.</b> the probe now binds on the BOARD'S OWN canonical ids (ESPN_GAMEID 401857180-83) and asks whether those specific games are completed. They are all STATUS_SCHEDULED at 0-0. Identity-based, which is what the binding contract required in the first place.</p>
+<p>the guard was written to abort rather than to proceed on a surprising reading, so a wrong premise produced a halt instead of a grade. The lesson is not that the check was clever — it was wrong — but that a check which fails loudly gives you a chance to notice it is wrong. A silent version of the same query would have graded two 8/27 games as 8/28.</p>
+
+<h2>LAD@DET was wrong on this page by 11.75 points, and was never flagged</h2>
+<p>The 8/28 pitch archive covers 3 of the 15 MLB games. It is enough to settle who actually
+pitched, and it overturns a row this card published. The half-inning convention
+(<code>top</code> &rarr; the <b>home</b> team pitches) was validated against CIN@CHC, whose
+lineups were independently confirmed at the T-45 checkpoint, <i>before</i> any claim rested on
+it.</p>
+<table>
+<tr><th>Game</th><th>What this card carried</th><th>What the archive shows</th><th>Effect</th></tr>
+<tr><td><b>LAD@DET</b> &middot; <code>824231</code></td>
+    <td>away LAD = Drew Anderson, home DET = Tarik Skubal — REVERSED</td>
+    <td>Drew Anderson pitched for DETROIT (89 pitches, home); Tarik Skubal for the DODGERS (83 pitches, away)</td>
+    <td><b>p_home 0.4911 &rarr; 0.3736</b>
+        (-11.75 pp) &mdash; the largest identity error of the week.
+        Side does not flip.</td></tr>
+</table>
+<p>It bit here precisely because <i>both</i> pitchers have retained logs and are far apart
+(Skubal rs 2.96 vs Anderson rs 4.13). MIA@WSH's swap, confirmed the same way and the one that
+<i>was</i> flagged, moved the number by <b>zero</b> &mdash; neither of its pitchers has a retained
+log, so both slots were capped either way.</p>
+<p class="flag"><b>The flag was tracking the wrong thing.</b> Every row flagged and chased on 8/28
+resolved as immaterial, cleared, or already-correct. The row carrying the largest error was never
+flagged at all, because the acquisition recorded &ldquo;starters consistent across 2 snippets&rdquo;
+and treated agreement as clearance. Two sources agreeing can be wrong the same way, especially
+sharing an upstream. <b>Agreement is not independence.</b></p>
+
+<h2>Owner ticket 217916739 &mdash; ungraded</h2>
+<p>Its legs need finals and none could be bound, so it is not graded here. It settles against
+nothing in the model ledger either way: owner-discretion picks and model EV rules do not mix, and
+the model ledger stands at <b>0 bets, $0</b>. The POR&nbsp;+13 leg's game
+(<code>ESPN_GAMEID:401857180</code>) is one of the four still reading
+<code>STATUS_SCHEDULED</code> in the archive above.</p>
+
+
 <h2>Full slate &mdash; all 36 rows, every sport, in start order</h2>
 <p>Refused rows are shown alongside forecast rows. A refusal that is not displayed is
 indistinguishable from a row that was quietly dropped, which is the whole reason the reconciliation

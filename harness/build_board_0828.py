@@ -121,6 +121,10 @@ def owner_class(raw_status):
         return "PROBABLE"
     if raw_status == "OFFICIAL_TBD_CAP":
         return "TBD_CAP"
+    if raw_status.startswith("STALE_DATA_CAP"):
+        # 2026-08-29: the slot HAS data and it is too old to speak of as current. Distinct from
+        # NO_LOG — the failure is age, not absence, and conflating them would hide which is which.
+        return f"STALE_DATA_CAP[{raw_status}]"
     if raw_status.startswith(("NO_PID_CAP", "NO_LOG_CAP")):
         return f"NAMED_NO_LOG_RETAINED_CAP[{raw_status}]"
     return raw_status

@@ -245,6 +245,14 @@ for _m in ("result_provenance","result_content_checks","parse_box_dump",
            # 2026-08-23: the never-adapt audit found that the SAME-BOOK DE-VIG requirement was
            # on the do-not-adapt list with no enforcing module running here. freshness_gates
            # carries the cross-book guard and a full selftest, and was simply never wired.
+           # 2026-08-29 STALE-STARTER P0. sp_asof_strict computed last_start_date and
+           # build_board_0825 discarded it one line before stamping RESOLVED, so 23 of 23 resolved
+           # slots on the 8/28 board carried data 37-74 days old at full dose. freshness_contract
+           # is the shared MLB/WNBA/CFB/NFL gate; the regression test replays the real HOU@NYM
+           # rows. wnba_refresh_espn is here because its own comment claimed it "is now wired into
+           # healthcheck so it cannot rot silently again" while nothing invoked it — the claim is
+           # now true.
+           "freshness_contract","test_starter_freshness_regression","wnba_refresh_espn",
            "freshness_gates","never_adapt_audit","forecast_contract","evaluation_standard","prequential","promotion_gate","evaluation_arm","keyed_seed","cohort_fork","three_arm_card",
            # 2026-08-23 owner amendments 1-10. Wired the same day they were written: a rule
            # that is not executed by this gate is a rule that stops running (lesson 26).

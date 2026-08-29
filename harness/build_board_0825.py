@@ -38,6 +38,7 @@ sys.path.insert(0, os.path.join(BASE, "harness"))
 
 import adaptive_challenger as AC
 import build_ml_asof as ASOF
+import freshness_contract as FC
 import keyed_seed as KS
 import run_v13_historical as V13
 import widening_rule as WR
@@ -90,7 +91,27 @@ def load_slate():
 
 
 def starter(pid_map, name):
-    """(sp_dict_for_v13, status, rs_or_None). CAP on TBD or missing/immature log — never a guess."""
+    """(sp_dict_for_v13, status, rs_or_None). CAP on TBD, missing log, OR STALE DATA.
+
+    THE 2026-08-29 FRESHNESS FIX. This function used to end:
+
+        sp = {"era": feats["era"], "gs": feats["gs"], "k": feats["k_pct"], "bb": feats["bb_pct"]}
+        return sp, "RESOLVED", V13.rs(...)
+
+    `feats` also carries `last_start_date`, computed by sp_asof_strict — and that line dropped it.
+    sp_asof_strict's only rejection is tbf < 10, a VOLUME floor with no RECENCY floor, so a pitcher
+    whose last start was 74 days ago returned features and this function stamped them RESOLVED.
+    Measured on the frozen 2026-08-28 board: 23 of 23 resolved slots had a last start more than 30
+    days before the slate, range 37-74d, median 41d, every one at resolved_information_dose 1.0.
+    HOU@NYM specifically was 40d (Hunter Brown) and 43d (Christian Scott).
+
+    The freshness signal was never missing. It was computed, returned, and discarded by its only
+    consumer, one line before the word RESOLVED. Now it travels: the age becomes a Stamp, the
+    Stamp goes through the shared contract, and a stale slot returns a status that is NOT
+    "RESOLVED" — which means owner_class will not map it to PROBABLE and the dose formula caps it.
+
+    Terminal behaviour is DEGRADE, not block: the game stays bettable at a widened dose.
+    """
     if name == "TBD":
         return V13._sp({}), "OFFICIAL_TBD_CAP", None
     pid = pid_map.get(name)
@@ -99,8 +120,38 @@ def starter(pid_map, name):
     feats, flags = ASOF.sp_asof_strict(pid, SLATE_DATE, set())
     if feats is None:
         return V13._sp({}), f"NO_LOG_CAP({flags['reason']})", None
+
+    disp = starter_freshness(name, feats)
+    if disp.disposition == FC.DEGRADED:
+        # the features exist and are real; they are simply too old to be spoken of as current
+        age = "unknown" if disp.age_days is None else f"{disp.age_days:.0f}d"
+        return (V13._sp({}), f"STALE_DATA_CAP(last_start={feats.get('last_start_date')},"
+                             f"age={age},limit={disp.limit_days}d)", None)
+
     sp = {"era": feats["era"], "gs": feats["gs"], "k": feats["k_pct"], "bb": feats["bb_pct"]}
     return sp, "RESOLVED", V13.rs(sp["era"], sp["gs"], sp["k"], sp["bb"])
+
+
+def starter_freshness(name, feats, slate_date=None, acquire=None):
+    """Turn sp_asof_strict's last_start_date into a Disposition under the shared contract.
+
+    observed_at is the pitcher's LAST START — the newest moment the data actually describes. That
+    is the honest observation time for a cumulative season line: the line is only as current as the
+    most recent game folded into it.
+    """
+    sd = slate_date or SLATE_DATE
+    last = feats.get("last_start_date")
+    if not last:
+        stamp = FC.Stamp.absent(name, "sp_asof_strict returned no last_start_date")
+    else:
+        stamp = FC.Stamp(
+            observed_at=last, effective_at=last,
+            source=f"sp_asof_strict(pid, {sd}) over per-pitcher game logs",
+            source_sha256=None, grade=FC.CONFIRMED, subject=name)
+        stamp.source_sha256 = "n/a-derived-from-logs"
+    return FC.resolve_input(name, "mlb", "starter", stamp,
+                            now=dt.datetime.fromisoformat(sd).replace(tzinfo=dt.timezone.utc),
+                            acquire=acquire)
 
 
 def build():

@@ -292,15 +292,34 @@ def resolve_input(subject, sport, kind, stamp, now=None, acquire=None, max_age_d
                            age_days=age, limit_days=limit, acquisition=acq)
 
     age = stamp.derived_age_days(now)
+    c_age = stamp.content_age_days(now)
     if age is None:
         return Disposition(subject, DEGRADED, stamp.grade, DOSE[(DEGRADED, stamp.grade)],
                            "stamp carries no usable timestamp — age is unknowable, so it is "
                            "treated as stale rather than as fresh",
                            stamp=stamp, age_days=None, limit_days=limit)
 
-    if age <= limit:
+    # BOTH ages must clear the limit. 2026-08-29: this used to test derived_age ALONE, and
+    # derived_age is now - max(observed, effective, fetched) — the most generous reading. So a
+    # stamp whose OBSERVATION was 59 days old but whose fetched_at was now read derived_age 0.00
+    # and returned FRESH at dose 1.0, with no acquisition involved. content_age was computed, this
+    # module's own docstring said it existed to stop exactly that, and nothing ever gated on it.
+    # Computed, returned, thrown away — the same shape as sp_asof_strict's discarded
+    # last_start_date, inside the module written to close it. Fetching is not learning, and a
+    # gate that only reads the generous clock is not a gate.
+    if age <= limit and (c_age is None or c_age <= limit):
         return Disposition(subject, FRESH, stamp.grade, DOSE[(FRESH, stamp.grade)],
-                           f"derived_age {age:.2f}d within the {limit}d limit for {sport}/{kind}",
+                           f"derived_age {age:.2f}d and content_age "
+                           f"{'n/a' if c_age is None else format(c_age, '.2f') + 'd'} both within "
+                           f"the {limit}d limit for {sport}/{kind}",
+                           stamp=stamp, age_days=age, limit_days=limit)
+    if age <= limit and c_age is not None and c_age > limit:
+        # the fetch clock is fresh, the observation is not. Name it precisely.
+        return Disposition(subject, DEGRADED, stamp.grade, DOSE[(DEGRADED, stamp.grade)],
+                           f"REFETCHED_BUT_STALE — derived_age {age:.2f}d is within the {limit}d "
+                           f"limit only because fetched_at moved; the OBSERVATION is {c_age:.2f}d "
+                           "old. A re-fetch that returns the same aged observation refreshes the "
+                           "clock, not the knowledge.",
                            stamp=stamp, age_days=age, limit_days=limit)
 
     got = _try_acquire(subject, sport, kind, acquire, stamp)
@@ -319,8 +338,19 @@ def resolve_input(subject, sport, kind, stamp, now=None, acquire=None, max_age_d
                            f"but did not refresh the content — {why}",
                            stamp=stamp, age_days=age, limit_days=limit, acquisition=acq)
     new_age = fresh.derived_age_days(now)
+    new_c = fresh.content_age_days(now)
+    # THE ACQUIRED STAMP IS RE-GATED. It used to be trusted purely because it was new: the age was
+    # computed and never compared to the limit, so an acquisition that returned a genuinely
+    # different but still-ancient observation minted ACQUIRING at dose 1.0. New is not the same as
+    # fresh, and an adapter that can only reach old data must not be able to launder it.
+    if new_age is None or new_age > limit or (new_c is not None and new_c > limit):
+        shown = "unknown" if new_c is None else f"{new_c:.2f}d"
+        return Disposition(subject, DEGRADED, fresh.grade, DOSE[(DEGRADED, fresh.grade)],
+                           f"acquisition returned NEW content ({why}) but it is still stale: "
+                           f"observation {shown} against a {limit}d limit. New is not fresh.",
+                           stamp=fresh, age_days=new_age, limit_days=limit, acquisition=acq)
     return Disposition(subject, ACQUIRING, fresh.grade, DOSE[(ACQUIRING, fresh.grade)],
-                       f"was {age:.2f}d stale; acquisition refreshed it ({why})",
+                       f"was {age:.2f}d stale; acquisition refreshed it to {new_age:.2f}d ({why})",
                        stamp=fresh, age_days=new_age, limit_days=limit, acquisition=acq)
 
 
@@ -345,6 +375,35 @@ def _try_acquire(subject, sport, kind, acquire, before):
         return None
     fresh.validate()
     return fresh, {"attempted": True, "succeeded": True, "grade": fresh.grade}
+
+
+
+def shrink_to_prior(p, dose, prior):
+    """Consume the dose: pull a probability toward the REGISTERED PRIOR by the missing information.
+
+        p' = prior + dose * (p - prior)
+
+    dose 1.0 leaves p untouched; dose 0.25 keeps a quarter of the model's departure from the
+    prior; dose 0 would return the prior itself. This is what "widen toward the prior" has to mean
+    in code, and until 2026-08-29 nothing performed it: resolved_information_dose was written to
+    the row, validated as a fraction, printed and rendered in HTML, and never multiplied into any
+    probability. A DEGRADED starter and a FRESH one produced identical numbers. Computed,
+    returned, thrown away — the third instance of that shape in this system.
+
+    THE TARGET IS THE REGISTERED PRIOR, NOT 0.5, and the difference is not cosmetic. Shrinking
+    toward 0.5 would strip home-field advantage out of every degraded row: with the MLB expanding
+    home prior at 0.5205, a coin-flip shrink pushes every degraded home side BELOW its own
+    baseline, which is a systematic bias introduced by the safety mechanism. Widening uncertainty
+    must not move the central estimate. Passing prior=0.5 is legitimate only where the registered
+    prior genuinely is 0.5.
+    """
+    if not (0.0 <= dose <= 1.0):
+        raise ValueError(f"dose {dose!r} is not a fraction")
+    if not (0.0 < prior < 1.0):
+        raise ValueError(f"prior {prior!r} is not a probability strictly inside (0,1)")
+    if p is None:
+        return None
+    return prior + dose * (p - prior)
 
 
 def cohort_dose(dispositions):
@@ -441,6 +500,16 @@ def selftest():
     d8 = resolve_input("rotting", "mlb", "starter", stale, now=now, acquire=refetch_same)
     if d8.disposition != DEGRADED:
         f.append(f"A8: a refetch of identical bytes cleared staleness -> {d8.disposition}")
+    # The DISPOSITION is now guarded twice — the content_age gate (A14) catches this case too, so
+    # asserting DEGRADED alone no longer proves clear_requires_new_content still runs. The two
+    # situations are diagnostically different and an operator has to tell them apart: "the source
+    # served me the same bytes again" is a SOURCE problem, while "the source gave me something new
+    # and it is still old" is a DATA problem. So the REASON is asserted, which is what only
+    # clear_requires_new_content can produce.
+    if "did not refresh the content" not in (d8.reason or ""):
+        f.append(f"A8b: the refetch-of-identical-bytes case no longer names itself; reason was "
+                 f"{d8.reason!r}. Two guards cover this hole, and the suite must still be able to "
+                 "tell which one fired.")
 
     # A9 — a real refresh DOES clear it.
     def refetch_new(subject, sport, kind):
@@ -472,6 +541,63 @@ def selftest():
         f.append(f"A13: two degraded slots combined to {both}, which is not worse than the better "
                  f"slot ({min(d.dose_multiplier, d2.dose_multiplier)}) — the combiner is not "
                  "compounding")
+
+    # A17 — THE DOSE MUST BE CONSUMED. A degraded row and a fresh row must not produce the same
+    #       probability, and the shrink must target the REGISTERED PRIOR rather than 0.5.
+    PRIOR = 0.5205399061032864          # mlb.winner.EXPANDING_HOME_PRIOR
+    if shrink_to_prior(0.62, 1.0, PRIOR) != 0.62:
+        f.append("A17: a full dose altered the probability; dose 1.0 must be identity")
+    half = shrink_to_prior(0.62, 0.5, PRIOR)
+    if not (PRIOR < half < 0.62):
+        f.append(f"A17: a half dose put p at {half}, not strictly between the prior and p")
+    if abs(shrink_to_prior(0.62, 0.0, PRIOR) - PRIOR) > 1e-12:
+        f.append("A17: a zero dose did not return the prior exactly")
+    # the direction matters on BOTH sides of the prior — an away-leaning row must move UP
+    low = shrink_to_prior(0.40, 0.25, PRIOR)
+    if not (0.40 < low < PRIOR):
+        f.append(f"A17: a degraded away-leaning row moved to {low}; it must rise toward the prior")
+    # and shrinking toward 0.5 instead of the prior would BIAS a degraded home side downward
+    if shrink_to_prior(PRIOR, 0.25, PRIOR) != PRIOR:
+        f.append("A17: a row sitting exactly at the prior moved under a partial dose")
+    if abs((0.5 + 0.25 * (PRIOR - 0.5)) - PRIOR) < 1e-9:
+        f.append("A17: the 0.5-target and prior-target shrinks are indistinguishable in this "
+                 "fixture, so the test cannot detect the bias it exists to detect")
+
+    # A14 — THE REFETCH-BUT-STALE HOLE. A fresh fetched_at over an ancient observation must NOT
+    #       read FRESH. derived_age uses max(), so this stamp's generous clock reads 0.00d while
+    #       its observation is 59 days old. Before 2026-08-29 this returned FRESH at dose 1.0.
+    refetched = Stamp(observed_at="2026-07-01T00:00:00Z", effective_at="2026-07-01T00:00:00Z",
+                      fetched_at=now, source="s", source_sha256="h", grade=CONFIRMED, subject="r")
+    d14 = resolve_input("r", "mlb", "starter", refetched, now=now)
+    if d14.disposition != DEGRADED:
+        f.append(f"A14: a 59-day-old observation with a fresh fetched_at resolved "
+                 f"{d14.disposition} — the generous clock is being read alone")
+    if d14.dose_multiplier >= 1.0:
+        f.append("A14: refetched-but-stale kept a full dose")
+
+    # A15 — an acquisition that returns genuinely NEW content which is STILL older than the limit
+    #       must degrade. New is not fresh; an adapter that can only reach old data must not be
+    #       able to launder it into ACQUIRING at full dose.
+    ancient = Stamp(observed_at="2026-06-01T00:00:00Z", effective_at="2026-06-01T00:00:00Z",
+                    source="s", source_sha256="old", grade=CONFIRMED, subject="a")
+    def _new_but_old(subject, sport, kind):
+        return Stamp(observed_at="2026-07-01T00:00:00Z", effective_at="2026-07-01T00:00:00Z",
+                     fetched_at=now, source="s2", source_sha256="new", grade=CONFIRMED,
+                     subject=subject)
+    d15 = resolve_input("a", "mlb", "starter", ancient, now=now, acquire=_new_but_old)
+    if d15.disposition != DEGRADED:
+        f.append(f"A15: acquisition of new-but-ancient content resolved {d15.disposition}")
+
+    # A16 — and a GENUINELY fresh acquisition must still restore full dose, or the gate is a
+    #       blanket cap and acquisition buys nothing.
+    def _really_fresh(subject, sport, kind):
+        return Stamp(observed_at="2026-08-27T00:00:00Z", effective_at="2026-08-27T00:00:00Z",
+                     fetched_at=now, source="s2", source_sha256="new", grade=CONFIRMED,
+                     subject=subject)
+    d16 = resolve_input("a", "mlb", "starter", ancient, now=now, acquire=_really_fresh)
+    if d16.disposition != ACQUIRING or d16.dose_multiplier != 1.0:
+        f.append(f"A16: a genuinely fresh acquisition got {d16.disposition}/"
+                 f"{d16.dose_multiplier}; acquisition must still be able to restore confidence")
 
     # A12 — the dose table is total; no lookup can KeyError mid-slate.
     for disp in (FRESH, ACQUIRING, DEGRADED):
@@ -533,6 +659,11 @@ def mutation_suite():
     run("M7 refetch-without-new-content allowed to clear staleness",
         lambda: g.__setitem__("clear_requires_new_content", lambda b, a: (True, "mutant")),
         lambda: g.__setitem__("clear_requires_new_content", orig_clear))
+
+    orig_content = g["Stamp"].content_age_days
+    run("M9 content_age ignored — gate reads only the generous derived_age",
+        lambda: setattr(g["Stamp"], "content_age_days", lambda self, now: None),
+        lambda: setattr(g["Stamp"], "content_age_days", orig_content))
 
     orig_cohort = g["cohort_dose"]
     run("M8 cohort dose takes the max instead of the product",

@@ -67,6 +67,7 @@ import sys
 
 sys.path.insert(0, os.path.dirname(__file__))
 import build_board_0825 as B
+import freshness_contract as FC
 
 SLATE_DATE = "2026-08-28"
 B.SLATE_DATE = SLATE_DATE
@@ -144,6 +145,48 @@ def split_id(canonical_id):
     return space, val
 
 
+
+def apply_information_dose(rows, prior_p):
+    """CONSUME the dose. Until 2026-08-29 nothing did, and that was the whole defect again.
+
+    resolved_information_dose was written onto every row, validated as a fraction by
+    forecast_contract, printed to stdout and rendered into the published HTML — and never
+    multiplied into any probability. A DEGRADED starter and a FRESH one produced identical
+    numbers, so the contract's promise of a "widened prior" was performed by no code. That is the
+    same computed-returned-discarded shape as sp_asof_strict's last_start_date and
+    aggregate_guard's uncalled verdict: the third instance in this system, and the second inside
+    the machinery built to stop it.
+
+    Applied to WINNER arms only. Totals are NEVER_DECISION_BEARING and shrinking a projected run
+    total toward a prior total is a different operation with a different meaning; it is left alone
+    rather than done badly by analogy.
+
+    The pre-dose value is retained on every row. Widening confidence must never destroy the
+    evidence of what the model actually said.
+    """
+    out = []
+    for r in rows:
+        if r.get("target") != "winner" or r.get("p_home") is None:
+            out.append(r)
+            continue
+        dose = r.get("resolved_information_dose")
+        if dose is None or dose == 1.0:
+            r = dict(r, p_home_pre_dose=r["p_home"], dose_applied=1.0,
+                     dose_shrink_target=prior_p)
+            out.append(r)
+            continue
+        raw = r["p_home"]
+        shrunk = FC.shrink_to_prior(raw, dose, prior_p)
+        out.append(dict(r, p_home=shrunk, p_home_pre_dose=raw, dose_applied=dose,
+                        dose_shrink_target=prior_p,
+                        dose_consumption="p' = prior + dose*(p - prior); target is the REGISTERED "
+                                         "prior, NOT 0.5 — shrinking to 0.5 would strip home-field "
+                                         "advantage out of every degraded row and bias it below "
+                                         "its own baseline. Widening uncertainty must not move the "
+                                         "central estimate."))
+    return out
+
+
 def freeze(out_path=f"cards/{SLATE_DATE}_mlb_board.json"):
     import math
     games, wide, target, ev = B.build()
@@ -212,6 +255,8 @@ def freeze(out_path=f"cards/{SLATE_DATE}_mlb_board.json"):
                  projected_total=sim["proj_total"], target_authority="NEVER_DECISION_BEARING",
                  simulation_trials=B.TRIALS, simulation_seed=g["seed"]),
         ]
+
+    mlb_rows = apply_information_dose(mlb_rows, B.PRIOR_P)
 
     ids = [r["canonical_id"] for r in mlb_rows if r["arm"] == "mlb.winner.CHAMPION_V13"]
     if len(set(ids)) != len(games):

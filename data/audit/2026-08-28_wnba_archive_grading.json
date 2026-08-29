@@ -1,0 +1,284 @@
+{
+ "AGGREGATE_GUARD": {
+  "basis": "cohort bound clean",
+  "permitted": true,
+  "statistic": "wnba arm statistics"
+ },
+ "ARMS": {
+  "wnba.fallback.STANDINGS_LOG5_v1": {
+   "brier": 0.292559,
+   "logloss": 0.775744,
+   "n": 4,
+   "per_game": [
+    {
+     "brier": 0.598246,
+     "correct": false,
+     "final": "101-83",
+     "game": "wnba:POR@ATL",
+     "home_won": false,
+     "p_home": 0.773464
+    },
+    {
+     "brier": 0.021693,
+     "correct": true,
+     "final": "91-111",
+     "game": "wnba:CON@IND",
+     "home_won": true,
+     "p_home": 0.852713
+    },
+    {
+     "brier": 0.022382,
+     "correct": true,
+     "final": "73-93",
+     "game": "wnba:TOR@LV",
+     "home_won": true,
+     "p_home": 0.850394
+    },
+    {
+     "brier": 0.527915,
+     "correct": false,
+     "final": "82-88",
+     "game": "wnba:WSH@LAS",
+     "home_won": true,
+     "p_home": 0.273422
+    }
+   ],
+   "record": "2-2"
+  },
+  "wnba.replacement.FEATURE_REFRESH": {
+   "brier": 0.230998,
+   "logloss": 0.636069,
+   "n": 4,
+   "per_game": [
+    {
+     "brier": 0.615126,
+     "correct": false,
+     "final": "101-83",
+     "game": "wnba:POR@ATL",
+     "home_won": false,
+     "p_home": 0.7843
+    },
+    {
+     "brier": 0.009428,
+     "correct": true,
+     "final": "91-111",
+     "game": "wnba:CON@IND",
+     "home_won": true,
+     "p_home": 0.9029
+    },
+    {
+     "brier": 0.021815,
+     "correct": true,
+     "final": "73-93",
+     "game": "wnba:TOR@LV",
+     "home_won": true,
+     "p_home": 0.8523
+    },
+    {
+     "brier": 0.277624,
+     "correct": false,
+     "final": "82-88",
+     "game": "wnba:WSH@LAS",
+     "home_won": true,
+     "p_home": 0.4731
+    }
+   ],
+   "record": "2-2"
+  },
+  "wnba.winner.EXPANDING_HOME_PRIOR": {
+   "brier": 0.233046,
+   "logloss": 0.659181,
+   "n": 4,
+   "per_game": [
+    {
+     "brier": 0.287923,
+     "correct": false,
+     "final": "101-83",
+     "game": "wnba:POR@ATL",
+     "home_won": false,
+     "p_home": 0.536585
+    },
+    {
+     "brier": 0.214753,
+     "correct": true,
+     "final": "91-111",
+     "game": "wnba:CON@IND",
+     "home_won": true,
+     "p_home": 0.536585
+    },
+    {
+     "brier": 0.214753,
+     "correct": true,
+     "final": "73-93",
+     "game": "wnba:TOR@LV",
+     "home_won": true,
+     "p_home": 0.536585
+    },
+    {
+     "brier": 0.214753,
+     "correct": true,
+     "final": "82-88",
+     "game": "wnba:WSH@LAS",
+     "home_won": true,
+     "p_home": 0.536585
+    }
+   ],
+   "record": "3-1"
+  }
+ },
+ "BINDING": {
+  "aggregate_verdict": {
+   "aggregates_permitted": true,
+   "detail": {
+    "code": "BOUND",
+    "n_rows": 4,
+    "statistic": "any aggregate over wnba:2026-08-28"
+   }
+  },
+  "board_slate_date": "2026-08-28",
+  "cohort": "wnba:2026-08-28",
+  "cohort_problems": [],
+  "counters": {
+   "CANONICAL_ID_MATCH": "4/4",
+   "DATE_COHERENCE_PASS": "4/4",
+   "REFUSED_ROWS": 0,
+   "RESULT_BINDING_PASS": "4/4"
+  },
+  "gradable": true,
+  "result_source": {
+   "date_derivation": "ET via zoneinfo from the UTC instant; the UTC date slice would place TOR@LV and WSH@LAS on 8/29 and split this cohort",
+   "feature_commit_pin": "7a1c7eb (governs EXTRACTION, not results \u2014 different question)",
+   "repo": "github.com/sportsdataverse/wehoop-wnba-raw",
+   "result_commit": "8ffb87b",
+   "schedule_sha256": "494f548b3d2ef34506aca376169d90666d09d6f728eb36944b86da38d6c4e101"
+  },
+  "rows": [
+   {
+    "bound_to": "wnba:POR@ATL",
+    "codes": [
+     "BOUND"
+    ],
+    "index": 0,
+    "row": {
+     "away": "Portland Fire",
+     "away_score": 101,
+     "game_pk": "ESPN_GAMEID:401857180",
+     "home": "Atlanta Dream",
+     "home_score": 83,
+     "result_date": "2026-08-28",
+     "scheduled_date": "2026-08-28",
+     "sport": "wnba"
+    }
+   },
+   {
+    "bound_to": "wnba:CON@IND",
+    "codes": [
+     "BOUND"
+    ],
+    "index": 1,
+    "row": {
+     "away": "Connecticut Sun",
+     "away_score": 91,
+     "game_pk": "ESPN_GAMEID:401857181",
+     "home": "Indiana Fever",
+     "home_score": 111,
+     "result_date": "2026-08-28",
+     "scheduled_date": "2026-08-28",
+     "sport": "wnba"
+    }
+   },
+   {
+    "bound_to": "wnba:TOR@LV",
+    "codes": [
+     "BOUND"
+    ],
+    "index": 2,
+    "row": {
+     "away": "Toronto Tempo",
+     "away_score": 73,
+     "game_pk": "ESPN_GAMEID:401857182",
+     "home": "Las Vegas Aces",
+     "home_score": 93,
+     "result_date": "2026-08-28",
+     "scheduled_date": "2026-08-28",
+     "sport": "wnba"
+    }
+   },
+   {
+    "bound_to": "wnba:WSH@LAS",
+    "codes": [
+     "BOUND"
+    ],
+    "index": 3,
+    "row": {
+     "away": "Washington Mystics",
+     "away_score": 82,
+     "game_pk": "ESPN_GAMEID:401857183",
+     "home": "Los Angeles Sparks",
+     "home_score": 88,
+     "result_date": "2026-08-28",
+     "scheduled_date": "2026-08-28",
+     "sport": "wnba"
+    }
+   }
+  ],
+  "rule": "a single failed row blocks every aggregate over this cohort; no partial metric may silently exclude or substitute it",
+  "schema": "ops.binding_proof.v1",
+  "sport": "wnba",
+  "supersedes": {
+   "reading": "the relay was ACCURATE, not sufficient. A claim that later proves true was still unverifiable when made; the 8/27 cycle's five fabricated finals were plausible too.",
+   "record": "data/audit/2026-08-28_relay_grading.json",
+   "relay_scores_agreed": true,
+   "why": "that record graded an owner relay of bare scores which carried no result_date and therefore could not bind: 0/4 refused, IDENTITY_MATCH 4/4 reported beside it. The archive now supplies the missing field."
+  },
+  "unmatched_board_games": []
+ },
+ "EVIDENCE_LAYER": {
+  "accrual": "this cohort IS admissible; it bound on all six fields",
+  "is_archive_bound": true,
+  "layer": "CANONICAL_EVIDENCE_ADMISSION"
+ },
+ "LEDGER": {
+  "n_bets": 0,
+  "units": 0.0,
+  "wager_authority": "NO"
+ },
+ "MARGIN": {
+  "bias": 1.9575,
+  "mae": 11.8975,
+  "n": 4,
+  "per_game": [
+   {
+    "actual": -18,
+    "err": 27.71,
+    "game": "wnba:POR@ATL",
+    "proj": 9.71
+   },
+   {
+    "actual": 20,
+    "err": -4.96,
+    "game": "wnba:CON@IND",
+    "proj": 15.04
+   },
+   {
+    "actual": 20,
+    "err": -7.66,
+    "game": "wnba:TOR@LV",
+    "proj": 12.34
+   },
+   {
+    "actual": 6,
+    "err": -7.26,
+    "game": "wnba:WSH@LAS",
+    "proj": -1.26
+   }
+  ],
+  "rmse": 15.0319
+ },
+ "board": "cards/2026-08-28_wnba_board_v2.json",
+ "cohort": "wnba:2026-08-28",
+ "created_utc": "2026-08-29T11:03:11Z",
+ "record_id": "ARCHIVE-GRADING-WNBA-2026-08-28",
+ "record_sha256": "c433dbce11cb6e7dc5595ab3e197bd4f8488978018b6dead7a29c81f1d7aa81a",
+ "schema": "ops.archive_grading.v1"
+}

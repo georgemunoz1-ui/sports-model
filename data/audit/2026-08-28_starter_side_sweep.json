@@ -1,0 +1,80 @@
+{
+ "LEDGER": {
+  "n_bets": 0,
+  "units": 0.0,
+  "wager_authority": "NO"
+ },
+ "LESSON": {
+  "headline": "the sweep found THREE swaps; only ONE was previously known, and one row had been explicitly recorded as CLEARED.",
+  "on_extrapolation": "the run-support differential does NOT predict the probability move. CWS@MIN carried a differential 70% as large as LAD@DET's (0.8221 vs 1.1704) and moved 1.14pp against 11.75pp \u2014 an order of magnitude less. Team form and park dominate and the differential partly cancels. Estimating the impact from the differential would have overstated CWS@MIN roughly sevenfold. Compute it.",
+  "on_flagging": "every row flagged during the 8/28 cycle resolved immaterial or already-correct. All three swaps found here came from rows nobody was watching. The flag was tracking SOURCE CONFLICT; the defect is SILENT AGREEMENT on a reversed pair, which by construction produces no conflict to notice.",
+  "on_the_control": "the convention was re-validated against a known-correct row BEFORE any swap was claimed. Three simultaneous swap claims from a mis-applied half-inning rule would have been worse than the defect."
+ },
+ "MLB_GRADING": "STILL IMPOSSIBLE. The archive advanced to 0338f57 and now carries all 15 game_pks with pitch-level detail, but still no score-bearing column. RJ-001B stays 0/126.",
+ "RESULT": {
+  "correct": 9,
+  "games_checked": 15,
+  "not_matchable": 3,
+  "not_matchable_detail": "BOS@NYY, MIA@WSH, SEA@TOR \u2014 no archive starter pair matches the board pair; MIA@WSH and SEA@TOR carried TBD/known-swapped slots",
+  "side_swapped": 3
+ },
+ "SWAPS": [
+  {
+   "archive": "away Kohl Drake / home Blade Tidwell",
+   "board": "away Blade Tidwell / home Kohl Drake",
+   "forecast_impact": "ZERO \u2014 both slots NO_PID_CAP, neither pitcher has a retained log",
+   "game": "mlb:AZ@SF",
+   "game_pk": 823178,
+   "note": "this is the row the trigger named HIGHEST RISK for date-binding. The binding risk did not materialise; a starter-side defect did, which is a different failure in the same row.",
+   "previously_flagged": false
+  },
+  {
+   "archive": "away Luis Castillo / home Dean Kremer",
+   "board": "away Dean Kremer / home Luis Castillo",
+   "forecast_impact": "MATERIAL BUT SMALL \u2014 +1.14pp",
+   "game": "mlb:CWS@MIN",
+   "game_pk": 823666,
+   "previously_flagged": false,
+   "previously_recorded_as": "CLEARED earlier in the week \u2014 that clearance was WRONG",
+   "recompute": {
+    "corrected_p_home": 0.4839,
+    "frozen_p_home": 0.4725,
+    "move_pp": 1.14,
+    "side": "holds"
+   },
+   "rs_differential": 0.8221
+  },
+  {
+   "archive": "away Tarik Skubal / home Drew Anderson",
+   "board": "away Drew Anderson / home Tarik Skubal",
+   "forecast_impact": "MATERIAL \u2014 the largest identity error of the week",
+   "game": "mlb:LAD@DET",
+   "game_pk": 824231,
+   "previously_flagged": false,
+   "recompute": {
+    "corrected_p_home": 0.3736,
+    "frozen_p_home": 0.4911333333333333,
+    "move_pp": -11.75,
+    "side": "holds"
+   },
+   "rs_differential": 1.1704
+  }
+ ],
+ "convention": {
+  "control": "CIN@CHC pk 824638 reproduces the board exactly (Peterson->CHC home, Lowder->CIN away), so the convention is validated before any swap is claimed",
+  "rule": "half_inning 'top' -> HOME pitches; 'bottom' -> AWAY pitches"
+ },
+ "created_utc": "2026-08-29T11:06:04Z",
+ "record_id": "STARTER-SIDE-SWEEP-2026-08-28",
+ "record_sha256": "0cf546baa2f2bc694f781a0b3c5f3f1e975dfb69b80e4b6cacb37375d9518596",
+ "schema": "ops.starter_side_sweep.v1",
+ "source": {
+  "commit": "0338f57",
+  "file": "data/raw/2026/daily/2026-08-28.parquet",
+  "game_pks": 15,
+  "repo": "github.com/lancebroz/mlb-pitcher-data",
+  "rows": 4407,
+  "score_bearing_columns": "NONE \u2014 RJ-001B stays 0/126; MLB still cannot be graded"
+ },
+ "trigger": "the required new check from the 8/28 night review: verify starter SIDES against the archive for EVERY game, not only rows that looked contentious"
+}

@@ -627,6 +627,31 @@ def selftest():
     if not bind_cohort(CLEAN_0827_ROWS, BOARD_0827)["gradable"]:
         f.append("B9: the legacy un-namespaced 8/27 board stopped binding")
 
+    # B10 — THE GUARD MUST BE WIRED, not merely defined. aggregate_guard had zero production
+    #       callers for its whole life; binding_proof returned its rule as a STRING and every
+    #       consumer computed statistics anyway. These checks fail if that regresses.
+    poisoned = binding_proof(CONTAMINATED_0826_ROWS, BOARD_0827, "mlb:2026-08-27")
+    if "aggregate_verdict" not in poisoned:
+        f.append("B10a: binding_proof no longer runs aggregate_guard — the rule is prose again")
+    elif poisoned["aggregate_verdict"]["aggregates_permitted"]:
+        f.append("B10b: a cohort of prior-day contaminated rows permits aggregates")
+    try:
+        guarded_aggregate(poisoned, "brier")
+        f.append("B10c: guarded_aggregate allowed a statistic over a refused cohort with no "
+                 "override — the 8/27 defect, reopened")
+    except AggregateRefused:
+        pass
+    try:
+        ok = guarded_aggregate(poisoned, "brier", descriptive_override="identity match only")
+        if not ok.get("cohort_did_not_bind"):
+            f.append("B10d: an overridden aggregate did not record that the cohort failed to bind")
+    except AggregateRefused:
+        f.append("B10d: an explicit descriptive override was refused; overrides must be possible "
+                 "and recorded, not impossible")
+    clean = binding_proof(CLEAN_0827_ROWS, BOARD_0827, "mlb:2026-08-27")
+    if not clean["aggregate_verdict"]["aggregates_permitted"]:
+        f.append("B10e: a clean 7/7 cohort was refused aggregates")
+
     print("result_binding_gate selftest:", "FAIL" if f else
           "PASS (consecutive-series join refused 5/5 by name; adjacent-pk slip, date drift both "
           "directions, pre-start final, ambiguity, missing identity fields, surviving synthetic "
@@ -634,6 +659,14 @@ def selftest():
     for x in f:
         print("   -", x)
     return 1 if f else 0
+
+
+def _mutant_unwire_guard():
+    """The exact regression this module lived with: aggregate_guard defined but never consulted."""
+    g = globals()
+    orig = g["aggregate_guard"]
+    g["aggregate_guard"] = lambda binding, name: (True, {"code": OK, "statistic": name})
+    return lambda: g.__setitem__("aggregate_guard", orig)
 
 
 def mutation_suite(verbose=True):
@@ -750,7 +783,59 @@ def binding_proof(rows, board, cohort_label):
         "rows": per,
         "rule": "a single failed row blocks every aggregate over this cohort; no partial metric "
                 "may silently exclude or substitute it",
+        # 2026-08-29: the line above used to be the ONLY expression of that rule, and it is a
+        # STRING. aggregate_guard — the function named in its own docstring as the check that
+        # would have stopped the 8/27 damage — had ZERO production callers; every hit was inside
+        # this module's own fixtures. So a cohort could refuse every row and still have a Brier
+        # score computed over it and published, which is exactly what happened to the 2026-08-28
+        # relay grading. The guard now RUNS here, on the production entry point, and its verdict
+        # travels with the proof instead of being something a caller must remember to ask for.
+        "aggregate_verdict": (lambda ok, det: {"aggregates_permitted": ok, "detail": det})(
+            *aggregate_guard(b, f"any aggregate over {cohort_label}")),
     }
+
+
+
+class AggregateRefused(Exception):
+    """Raised when a statistic is requested over a cohort that did not bind.
+
+    Carries the refusal detail so a caller cannot catch-and-ignore it without seeing why.
+    """
+
+
+def guarded_aggregate(proof, statistic_name, descriptive_override=None):
+    """THE call every statistic must pass through. Refuses by default.
+
+    proof                 a binding_proof() result
+    descriptive_override  None, or a NON-EMPTY string naming the weaker claim the statistic rests
+                          on. An override does not make the cohort bound; it records, in the
+                          artifact, that a number was published anyway and on what warrant.
+
+    The 8/27 damage was five refused rows becoming a record, a Brier score and a P&L. The guard
+    that would have stopped it existed and was never called. Making the refusal an EXCEPTION means
+    a future caller has to actively decide, in code, to publish over a refused cohort — and say
+    why, in a string that lands in the record.
+    """
+    v = proof.get("aggregate_verdict")
+    if v is None:
+        raise AggregateRefused(
+            f"{statistic_name}: this proof carries no aggregate_verdict, so it was produced by a "
+            "binding_proof that did not run the guard. Refusing rather than assuming it passed.")
+    if v["aggregates_permitted"]:
+        return {"permitted": True, "basis": "cohort bound clean", "statistic": statistic_name}
+    if not descriptive_override or not str(descriptive_override).strip():
+        raise AggregateRefused(
+            f"{statistic_name}: REFUSED over cohort {proof.get('cohort')!r} — "
+            f"{v['detail'].get('n_refused')} refused row(s), codes "
+            f"{v['detail'].get('refused_codes')}. To publish anyway, pass descriptive_override "
+            "naming the weaker claim the number rests on; it will be recorded in the artifact.")
+    return {"permitted": True, "basis": "DESCRIPTIVE_OVERRIDE", "statistic": statistic_name,
+            "override_reason": str(descriptive_override),
+            "cohort_did_not_bind": True,
+            "refused_codes": v["detail"].get("refused_codes"),
+            "warning": ("this statistic was published over a cohort that DID NOT BIND. It is "
+                        "descriptive only and accrues nothing to settlement, promotion or the "
+                        "estimator.")}
 
 
 def gate():

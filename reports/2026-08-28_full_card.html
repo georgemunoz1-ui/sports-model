@@ -108,6 +108,9 @@ a relay of bare scores carries NO result_date. The gate refuses a row that omits
 <b>What is true instead:</b> IDENTITY matches for every game: each relayed score attaches to a canonical id that is on the board with the same matchup. That is a real and useful claim. It is strictly weaker than binding: it does not establish that the score is that game's score, and it establishes nothing about the date.<br><br>
 <b>Effect on the numbers below:</b> NONE of the recomputed metrics change. They were always computed by joining the frozen board to the relayed finals on the game key, which is the identity match. What changes is the WARRANT published beside them: from 'bound, gradable' to 'identity-matched, date unestablished, descriptive only'.</span></div>
 
+<div class="proof"><b>AGGREGATE GUARD</b> &mdash; EVERY statistic in this record was published over a cohort that DID NOT BIND, under an explicit descriptive override.<br>
+<span style="font-family:Public Sans,sans-serif">until 2026-08-29 aggregate_guard — the function whose own docstring calls it 'the check that would have stopped the 8/27 damage' — had ZERO production callers. binding_proof returned its rule as a STRING and every consumer, this module included, computed and published statistics without consulting it. The refusal recorded in BINDING above blocked nothing. It does now: guarded_aggregate raises unless a caller states, in code, why it is publishing anyway.</span></div>
+
 <h3>MLB &mdash; 15 of 15 final</h3>
 <table>
 <tr><th>Winner arm</th><th>Record</th><th>Brier</th><th>Log loss</th></tr>

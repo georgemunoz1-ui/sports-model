@@ -1,4 +1,34 @@
 {
+ "AGGREGATE_GUARD": {
+  "per_sport": {
+   "mlb": {
+    "basis": "DESCRIPTIVE_OVERRIDE",
+    "cohort_did_not_bind": true,
+    "override_reason": "IDENTITY_MATCH ONLY. Every relayed score attaches to a canonical id that is on the board with the same matchup, and that is the whole warrant. The cohort does not bind under the registered contract because the relay carries no result_date. These statistics are DESCRIPTIVE and accrue nothing to settlement, promotion or the estimator.",
+    "permitted": true,
+    "refused_codes": [
+     "COHORT_COVERAGE_INCOMPLETE",
+     "MISSING_IDENTITY_FIELD"
+    ],
+    "statistic": "mlb arm statistics",
+    "warning": "this statistic was published over a cohort that DID NOT BIND. It is descriptive only and accrues nothing to settlement, promotion or the estimator."
+   },
+   "wnba": {
+    "basis": "DESCRIPTIVE_OVERRIDE",
+    "cohort_did_not_bind": true,
+    "override_reason": "IDENTITY_MATCH ONLY. Every relayed score attaches to a canonical id that is on the board with the same matchup, and that is the whole warrant. The cohort does not bind under the registered contract because the relay carries no result_date. These statistics are DESCRIPTIVE and accrue nothing to settlement, promotion or the estimator.",
+    "permitted": true,
+    "refused_codes": [
+     "COHORT_COVERAGE_INCOMPLETE",
+     "MISSING_IDENTITY_FIELD"
+    ],
+    "statistic": "wnba arm statistics",
+    "warning": "this statistic was published over a cohort that DID NOT BIND. It is descriptive only and accrues nothing to settlement, promotion or the estimator."
+   }
+  },
+  "status": "EVERY statistic in this record was published over a cohort that DID NOT BIND, under an explicit descriptive override.",
+  "why_this_block_exists": "until 2026-08-29 aggregate_guard \u2014 the function whose own docstring calls it 'the check that would have stopped the 8/27 damage' \u2014 had ZERO production callers. binding_proof returned its rule as a STRING and every consumer, this module included, computed and published statistics without consulting it. The refusal recorded in BINDING above blocked nothing. It does now: guarded_aggregate raises unless a caller states, in code, why it is publishing anyway."
+ },
  "BINDING": {
   "BOARD_SCHEMA_FINDING": {
    "disposition": "derivation disclosed per board via TEAMS_DERIVED_FROM_GAME_KEY rather than performed silently. Carrying away/home as MLB fields is the real fix and is NOT applied here \u2014 the board is frozen under R3.",
@@ -1245,8 +1275,8 @@
    }
   }
  },
- "created_utc": "2026-08-29T06:19:48Z",
+ "created_utc": "2026-08-29T07:33:18Z",
  "record_id": "RELAY-GRADING-2026-08-28",
- "record_sha256": "0d858261544274dc21aeadb299938578d984ea3f0428b7fcc4a5829a66cadd75",
+ "record_sha256": "560045e0038712db309ec60c1a8a673485a11fe9deacc12c23518e09e4e0382b",
  "schema": "ops.relay_grading.v1"
 }

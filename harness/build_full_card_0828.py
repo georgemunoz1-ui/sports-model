@@ -270,6 +270,9 @@ DATE_COHERENCE_PASS to match, and called both cohorts gradable. That was wrong a
 <b>What is true instead:</b> {esc(B['CORRECTION']['what_is_true_instead'])}<br><br>
 <b>Effect on the numbers below:</b> {esc(B['CORRECTION']['effect_on_the_grades'])}</span></div>
 
+<div class="proof"><b>AGGREGATE GUARD</b> &mdash; {esc(R['AGGREGATE_GUARD']['status'])}<br>
+<span style="font-family:Public Sans,sans-serif">{esc(R['AGGREGATE_GUARD']['why_this_block_exists'])}</span></div>
+
 <h3>MLB &mdash; 15 of 15 final</h3>
 <table>
 <tr><th>Winner arm</th><th>Record</th><th>Brier</th><th>Log loss</th></tr>

@@ -39,7 +39,7 @@ BASE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 os.chdir(BASE)
 sys.path.insert(0, os.path.join(BASE, "harness"))
 
-from result_binding_gate import binding_proof  # noqa: E402
+from result_binding_gate import binding_proof, guarded_aggregate, AggregateRefused  # noqa: E402
 from postslate_binding_0828 import gate_board  # noqa: E402
 
 SLATE_DATE = "2026-08-28"
@@ -207,6 +207,25 @@ def build():
         proofs[sport] = binding_proof(rows, gb, f"{sport}:{SLATE_DATE}")
         idents[sport] = identity_match(gb, finals)
 
+    # THE GUARD, on the path that needed it. binding_proof was called above and then every
+    # statistic below was computed with nothing consulting its verdict — the 2026-08-29 audit
+    # found aggregate_guard had zero production callers anywhere in the repo. These cohorts DO
+    # NOT BIND (a relay of bare scores has no result_date), so publishing a Brier over them
+    # requires an explicit, recorded override naming the weaker warrant. It is no longer possible
+    # to compute these numbers without that decision appearing in the artifact.
+    OVERRIDE = ("IDENTITY_MATCH ONLY. Every relayed score attaches to a canonical id that is on "
+                "the board with the same matchup, and that is the whole warrant. The cohort does "
+                "not bind under the registered contract because the relay carries no result_date. "
+                "These statistics are DESCRIPTIVE and accrue nothing to settlement, promotion or "
+                "the estimator.")
+    guards = {}
+    for sport in ("mlb", "wnba"):
+        try:
+            guards[sport] = guarded_aggregate(proofs[sport], f"{sport} arm statistics",
+                                              descriptive_override=OVERRIDE)
+        except AggregateRefused as e:
+            raise SystemExit(f"AGGREGATE_REFUSED and no override supplied: {e}")
+
     mlb_w = grade_winner(mby, MLB_FINALS, MLB_WINNER_ARMS)
     mlb_t = grade_total(mby, MLB_FINALS, MLB_TOTAL_ARMS)
     wnba_w = grade_winner(wby, WNBA_FINALS, WNBA_ARMS)
@@ -345,6 +364,18 @@ def build():
                                 "is the real fix and is NOT applied here — the board is frozen "
                                 "under R3."),
             },
+        },
+        "AGGREGATE_GUARD": {
+            "status": ("EVERY statistic in this record was published over a cohort that DID NOT "
+                       "BIND, under an explicit descriptive override."),
+            "per_sport": guards,
+            "why_this_block_exists": (
+                "until 2026-08-29 aggregate_guard — the function whose own docstring calls it 'the "
+                "check that would have stopped the 8/27 damage' — had ZERO production callers. "
+                "binding_proof returned its rule as a STRING and every consumer, this module "
+                "included, computed and published statistics without consulting it. The refusal "
+                "recorded in BINDING above blocked nothing. It does now: guarded_aggregate raises "
+                "unless a caller states, in code, why it is publishing anyway."),
         },
         "MLB": {"winner_arms": mlb_w, "total_arms": mlb_t,
                 "extra_innings": EXTRA_INNINGS,

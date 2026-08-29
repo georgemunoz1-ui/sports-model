@@ -209,7 +209,7 @@
    ]
   },
   "harness/wnba_model_v1.py": {
-   "current": "f444d2a42baa29c9ce86bdb8bd7c1b4a720b4b14d7b39f0845a19528225ffd56",
+   "current": "7f128ba323ee939b8f40bf55eb2e1f6e9a24611e29ca4eb743962af2608af4e0",
    "versions": [
     {
      "impl_version": 1,
@@ -217,6 +217,14 @@
      "authorized_utc": "2026-08-12T17:44:44Z",
      "pin_commit": "f70dfbd9",
      "note": "reconstructed from the git history of this pins file (2026-08-17 append-only migration); superseded"
+    },
+    {
+     "impl_version": 2,
+     "sha256": "7f128ba323ee939b8f40bf55eb2e1f6e9a24611e29ca4eb743962af2608af4e0",
+     "authorized_utc": "2026-08-29T08:39:56Z",
+     "pin_commit": null,
+     "note": "ET-date fix in predict_slate: rest/b2b derived via zoneinfo America/New_York instead of a tip[:10] UTC slice. Affects 170 of 333 (51.1%) 2026 tips. Authorized by owner 2026-08-29. impl_version 1 stays authorized so prior forecasts resolve. Not a promotion; calibration revalidation owed.",
+     "record": "data/audit/2026-08-29_wnba_model_repin_authorization.json"
     }
    ]
   },

@@ -12,9 +12,25 @@ import json
 import math
 import os
 import sys
+from zoneinfo import ZoneInfo
 
 import numpy as np
 import pyarrow.parquet as pq
+
+ET = ZoneInfo("America/New_York")   # pool/feature dates are ET calendar dates
+
+
+def et_date(utc_instant):
+    """ET (America/New_York) calendar date of a UTC tip instant, YYYY-MM-DD.
+
+    predict_slate previously sliced `tip[:10]` — the UTC date — so a 2026-07-23T00:00Z tip was
+    treated as 07-23 for rest/b2b when it is the ET evening of 07-22. Same defect class as the
+    wnba_refresh_espn extraction bug; derive, never slice."""
+    s = str(utc_instant).strip().replace("Z", "+00:00")
+    d = dt.datetime.fromisoformat(s)
+    if d.tzinfo is None:
+        d = d.replace(tzinfo=dt.timezone.utc)
+    return d.astimezone(ET).date().isoformat()
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 BASE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -296,10 +312,12 @@ def predict_slate(model, ts, lg, slate, season=2026):
     lg_tot_sum, lg_tot_n, lg_pace_sum = lg
     out = []
     for away, home, tip in slate:
-        fh = ts.feats(season, home, tip[:10])
-        fa = ts.feats(season, away, tip[:10])
+        tip_et = et_date(tip)                # ET date of the tip instant (was tip[:10] UTC slice)
+        fh = ts.feats(season, home, tip_et)
+        fa = ts.feats(season, away, tip_et)
         if not fh or not fa:
-            out.append({"away": away, "home": home, "status": "DATA_BLOCKED (insufficient season history)"})
+            out.append({"away": away, "home": home, "tip_utc": tip, "et_date": tip_et,
+                        "status": "DATA_BLOCKED (insufficient season history)"})
             continue
         x = np.array([fh["net"] - fa["net"], fh["efg"] - fa["efg"], fa["tov"] - fh["tov"],
                       fh["orb"] - fa["orb"], fh["ftr"] - fa["ftr"], fh["rest"] - fa["rest"],
@@ -312,7 +330,8 @@ def predict_slate(model, ts, lg, slate, season=2026):
                        fh["net"] + fa["net"]], float)
         t = float(_ols_raw(model["btot"], ((xt - model["tmu"]) / model["tsd"])[None, :])[0])
         coher = abs(p - 0.5 * (1 + math.erf((m / MARGIN_SD) / math.sqrt(2))))
-        out.append({"away": away, "home": home, "tip_utc": tip, "p_home": round(p, 4),
+        out.append({"away": away, "home": home, "tip_utc": tip, "et_date": tip_et,
+                    "date_timezone": "America/New_York", "p_home": round(p, 4),
                     "margin_home": round(m, 2), "total": round(t, 1),
                     "coherence_gap_pp": round(coher * 100, 2), "coherence_pass": bool(coher <= 0.05),
                     "games_used": {"home": fh["g"], "away": fa["g"]}})
@@ -348,6 +367,22 @@ def selftest():
     f2 = ts.feats(2026, "AAA", "2026-06-09")  # two days off -> not a b2b
     if not f2 or f2["b2b"] != 0.0 or f2["rest"] != 3.0:
         fails.append("rest/b2b wrongly fires on a non-b2b gap")
+    # UTC-tip defect class: a 2026-07-23T00:00Z tip is the ET EVENING of 2026-07-22, so against a
+    # last game on ET 2026-07-21 it is a back-to-back (rest=1/b2b=1), NOT rest=2 as tip[:10] gave.
+    if et_date("2026-07-23T00:00Z") != "2026-07-22" or et_date("2026-07-23T02:00Z") != "2026-07-22":
+        fails.append("et_date does not map a 00:00Z/02:00Z tip to the ET evening before")
+    ts2 = TeamState()
+    g7 = dict(g); g7["date"] = "2026-07-15"
+    ts2.update(g7)
+    for i in range(5):
+        g8 = dict(g); g8["date"] = f"2026-07-{16+i:02d}"
+        ts2.update(g8)                      # last game ET 2026-07-20... then one more:
+    g9 = dict(g); g9["date"] = "2026-07-21"
+    ts2.update(g9)                          # last game ET 2026-07-21
+    f3 = ts2.feats(2026, "AAA", et_date("2026-07-23T00:00Z"))
+    if not f3 or f3["rest"] != 1.0 or f3["b2b"] != 1.0:
+        fails.append("a 2026-07-23T00:00Z tip vs a 2026-07-21 ET last game must be rest=1/b2b=1 "
+                     "(the tip is the ET evening of 07-22)")
     yy = np.array([150.0, 160.0, 170.0, 155.0, 165.0] * 40)
     XX = rng.normal(size=(200, 2))
     if not (120 < _ols_raw(fit_ols(XX, yy, l2=1.0), XX).mean() < 200):

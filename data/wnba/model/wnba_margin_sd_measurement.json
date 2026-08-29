@@ -1,0 +1,22 @@
+{
+ "CAVEAT": "this characterises dispersion around the central estimate. The registered MARGIN_SD 13.97 remains a COHERENCE TOLERANCE and is not a cover law; using it as a distributional constant is a category error regardless of this measurement.",
+ "COMPARISON_WITH_CFB": "CFB retains 10,818 out-of-fold residuals, so its SD is measured (16.716) and a per-week schedule is fittable. WNBA retained none until now. The asymmetry was never a property of the sport; it was a property of what each pipeline chose to keep.",
+ "WHY_THIS_RECORD_EXISTS": "wnba_model_v1.walk_forward() materialises per-game m_pred and m_act; evaluate() collapses them to a single MAE and discards the rest. So the SD was always computable and was never retained. An external verifier re-ran this same walk-forward, obtained n=1721 and MAE 9.881 identical to this record, and still reported sigma as MAE*sqrt(pi/2)=12.384 \u2014 the residuals were in memory at that moment. That is the third instance in this system of a value computed, returned and thrown away, after sp_asof_strict's last_start_date and the inert information dose, and it happened inside an audit whose stated purpose was finding exactly that class.",
+ "created_utc": "2026-08-29T21:12:41Z",
+ "inference_error": -0.1684,
+ "mae": 9.881,
+ "mean_residual_home_bias": 0.2523,
+ "method": "walk_forward() over the ET-corrected pool; per-game m_pred - m_act RETAINED",
+ "n": 1721,
+ "pool": {
+  "extension_games": 89,
+  "games": 2376,
+  "model_rows": 2023
+ },
+ "record_id": "WNBA-MARGIN-SD-2026-08-29",
+ "record_sha256": "94a69c61d602b7b1b98d53327a1fb8a4a3112170735196c2f3319324cd783a8d",
+ "residuals_file": "data/wnba/model/wnba_margin_residuals_2026-08-29.npy",
+ "schema": "wnba.margin_sd_measurement.v1",
+ "sd_inferred_from_mae": 12.384,
+ "sd_measured": 12.5523
+}

@@ -27,17 +27,27 @@ SLATE GRADE. SEARCH_IDENTIFIED_UNCONFIRMED: statsapi, ESPN's API, mlb.com and ev
 EGRESS_BLOCKED (fresh receipts in the schedule record). Snippets identify and never bind. Nothing
 here settles, promotes, or feeds the estimator.
 
-STARTER CLASSES (owner vocabulary, 2026-08-27): PROBABLE for a named-and-resolved slot (aggregator
-naming, not official confirmation); NAMED_NO_LOG_RETAINED_CAP where the pitcher is named but no
-public log was retained here — the log exists in the world, the CAP is OUR retention gap;
-TBD_CAP where the slot is unresolvable.
+STARTER CLASSES (freshness-contract vocabulary, 2026-08-29 — owner_class() is DELETED): the
+status strings now come straight from build_board_0825.starter() via
+board_freshness.resolve_starter_slot, so a bare PROBABLE exists only for a FRESH+CONFIRMED slot
+(MAX_AGE_DAYS[("mlb","starter")] == 2). STALE_DATA_CAP marks a retained-but-aged log;
+NAMED_NO_LOG_RETAINED_CAP[...] marks a named pitcher with no usable retained log (the log exists
+in the world, the CAP is OUR retention gap — old NO_PID/NO_LOG/TBD detail preserved in brackets);
+PROBABLE_ACQUIRED[<grade>] where acquisition refreshed the slot; UNCONFIRMED_STALE_CAP and
+POST_HOC_NOT_PREGAME_CAP cover the remaining rungs. Every rung stays bettable; degraded inputs
+widen the dose (the contract's multiplicative cohort dose, floored at 0.20), never remove a game.
+
+R3 (frozen stays frozen): boards already frozen — including the defective 2026-08-28 publication
+this vocabulary exists to repair — keep their published rows byte-for-byte. These patches change
+builder behaviour going forward only; nothing here rewrites a frozen board.
 
 IDENTITY RISK IS TRACKED SEPARATELY FROM STARTER CLASS. Three rows carry a side-swap hazard: the
 source that produced PIT@STL was verified to have both pitchers on the wrong teams and is corrected
 here, which makes its CWS@MIN line suspect, and MIA@WSH asserts Eury Perez — a Marlins-associated
 arm — as the NATIONALS starter while Miami is TBD. A wrong side is not a missing name, so it is
 recorded in its own register rather than folded into a starter class or silently discounted through
-the dose. The registered dose formula is left exactly as registered.
+the dose. The dose is now the freshness contract's cohort dose; identity risk is still disclosed
+separately and never feeds it.
 
 WNBA AND NFL freeze on their own boards. WNBA is BLOCKED until the wehoop commit carrying 8/27
 boxes lands (feature rebuild through the cutoff precedes any forecast; wehoop has not advanced past
@@ -115,21 +125,6 @@ START_TIME_RISK = {
 }
 
 
-def owner_class(raw_status):
-    """Registered starter status -> the owner's starter vocabulary."""
-    if raw_status == "RESOLVED":
-        return "PROBABLE"
-    if raw_status == "OFFICIAL_TBD_CAP":
-        return "TBD_CAP"
-    if raw_status.startswith("STALE_DATA_CAP"):
-        # 2026-08-29: the slot HAS data and it is too old to speak of as current. Distinct from
-        # NO_LOG — the failure is age, not absence, and conflating them would hide which is which.
-        return f"STALE_DATA_CAP[{raw_status}]"
-    if raw_status.startswith(("NO_PID_CAP", "NO_LOG_CAP")):
-        return f"NAMED_NO_LOG_RETAINED_CAP[{raw_status}]"
-    return raw_status
-
-
 def split_id(canonical_id):
     """'MLB_GAMEPK:824231' -> ('MLB_GAMEPK', '824231'). Refuses anything else, loudly.
 
@@ -170,7 +165,9 @@ def freeze(out_path=f"cards/{SLATE_DATE}_mlb_board.json"):
         id_spaces_seen[space] = id_spaces_seen.get(space, 0) + 1
         prospect = ("PROSPECTIVITY_NOT_ESTABLISHED" if g["start_utc"] <= now
                     else "SELF_ASSERTED_PREGAME")
-        sp_class = {s: owner_class(g["sp_status"][s]) for s in ("away", "home")}
+        # owner_class() is deleted: g["sp_status"] already carries the freshness-contract
+        # vocabulary from build_board_0825.starter() — it is read through, never re-mapped.
+        sp_class = {s: g["sp_status"][s] for s in ("away", "home")}
         risk, why = IDENTITY_RISK.get(g["game"], (None, None))
         base = {"game": g["game"], "sport": "mlb",
                 "canonical_id": g["gamePk"], "id_space": space, "id_value": val,
@@ -180,12 +177,16 @@ def freeze(out_path=f"cards/{SLATE_DATE}_mlb_board.json"):
                 "start_time_risk": START_TIME_RISK.get(g["game"]),
                 "away_starter": g["away_sp"], "home_starter": g["home_sp"],
                 "sp_status": g["sp_status"], "starter_class": sp_class,
+                "starter_dispositions": g["starter_dispositions"],
                 "starter_identification_grade": "SEARCH_IDENTIFIED_UNCONFIRMED",
                 "starter_slots_capped": g["starter_slots_capped"],
                 "identity_risk": risk, "identity_risk_detail": why,
                 "resolved_information_dose": g["information_dose"],
-                "dose_note": ("registered formula, unmodified; identity_risk is disclosed "
-                              "separately and never silently discounts a probability"),
+                "dose_note": ("freshness-contract cohort dose: multiplicative over both starter "
+                              "slots' disposition dose_multipliers, floored at 0.20; every rung "
+                              "(FRESH/ACQUIRING/DEGRADED) stays bettable and a degraded slot "
+                              "widens the dose rather than removing the game. identity_risk is "
+                              "disclosed separately and never silently discounts a probability"),
                 "park_factor": g["park_factor"], "forecast_status": "FORECAST_REGISTERED",
                 "prospectivity": prospect,
                 "action_status": "NO_RETAINED_MARKET_ARTIFACT",

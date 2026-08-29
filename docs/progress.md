@@ -4291,3 +4291,50 @@ the single leg that FOLLOWED the model lost. The Portland leg beat the model's m
 by 31 points against the spread. That is n=2 and evidence of nothing, but it is the honest direction
 of the observation. The +13 push branch never engaged — Portland won outright by 18, so +13 and
 +12.5 settle identically here.
+
+## 2026-08-29 (later still) — the freshness contract now covers all four sports
+
+**The stale-starter P0 is closed at the source.** sp_asof_strict computed last_start_date and
+build_board_0825 dropped it one line before stamping RESOLVED; its only rejection was a tbf<10
+VOLUME floor with no recency floor. 23 of 23 resolved slots on the 8/28 board carried data 37-74
+days old at full dose. HOU@NYM was 40d (Brown) and 43d (Scott). The regression test replays those
+real rows: cohort dose 1.0 -> 0.25.
+
+**aggregate_guard had ZERO production callers.** The function whose own docstring calls it "the
+check that would have stopped the 8/27 damage" was never invoked outside its fixtures;
+binding_proof returned its rule as a STRING. So the 8/28 relay grading published four arm Brier
+scores over a cohort where every row was refused. It now runs inside binding_proof, and
+guarded_aggregate raises unless a caller states in code why it is publishing anyway.
+
+**The live WNBA date corruption is fixed and the pool rebuilt.** et_date() derives ET via zoneinfo
+instead of slicing a UTC instant. Independently recomputed: exactly two games leave the extension,
+401857090 CON@IND and 401857091 DAL@POR, both ET 7/22 evening with a 7/23 UTC date. Extension
+91 -> 89. The artifact was re-extracted; the selftest correctly refused the pre-patch one.
+
+**wnba_model_v1 re-pinned as impl v2 under owner authorization.** predict_slate used a tip[:10] UTC
+slice for rest/b2b. 170 of 333 2026 tips (51.1%) have a UTC date differing from their ET date, so
+this changes features for the majority of games. Append-only per the 8/17 instruction: v1 stays
+authorized and verified resolving, so prior forecasts stay bound. Not a promotion; the 8/12
+calibration was fit under v1 and its verdict is not inherited.
+
+**A leakage hole found while verifying the WNBA wiring, and closed.** feature_state_as_of was
+max() over the whole pool with no slate bound. Once the extension was rebuilt the pool ran past
+older slates, so a retrospective build produced an observed_at AFTER the slate it forecasts — a
+negative age, which resolve_input reads as within limit and reports FRESH. A staleness gate
+returning FRESH on future data is the mirror image of the defect the contract exists to close.
+Measured before the fix: an 8/25 slate read -2d. sp_asof_strict already applied this bound on the
+MLB side; the WNBA pool now does too.
+
+**Two assertions in the regression test were deliberately relaxed, and both are disclosed in the
+file.** The demand that a stale slot return rs=None encoded an implementation choice of mine —
+blanking the sp dict — rather than a correctness requirement; the integrated builder keeps the real
+aged features feeding the engine and widens the dose, which is truer to R1. What is asserted
+instead is the safety property that cannot regress: a stale slot never reaches bare PROBABLE and
+never keeps a full dose.
+
+Also landed: board_shape.py, one shape gate for all four sports, which is what would have caught
+both the CFB board no gate could read and the NFL 8/27->8/28 drift. And acquisition_adapters.py,
+with direct HTTP disabled by default — as delivered it called urlopen against statsapi.mlb.com,
+which this environment does not permit.
+
+Ledger unchanged: 0 bets, 0.00 units, $0. Wager authority NO.

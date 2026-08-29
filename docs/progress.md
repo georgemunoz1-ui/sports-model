@@ -4230,3 +4230,64 @@ check: verify starter SIDES against the archive for every game, not only content
 
 Ledger unchanged: 0 bets, 0.00 units, $0. Wager authority NO. The owner's ticket 217916739 is
 ungraded — its legs need finals — and settles against nothing in the model ledger either way.
+
+## 2026-08-29 (later) — 8/28 graded against an owner relay; every number reproduced
+
+**Owner relayed finals for all 15 MLB, 4 WNBA and 10 NFL games and supplied a corrected results
+snapshot.** Two corrections came from the owner and both are accepted. The earlier seven CFB scores
+were joined from the 8/28 FCS acquisition/refusal record rather than the published Saturday 8/29
+board; they are withdrawn and excluded from every metric, and the 8/29 CFB board stays pregame and
+ungraded at eight games. The relay's own summary was then checked rather than echoed: only the
+FINALS were taken from it, and every record, Brier, log loss, MAE, RMSE and bias was recomputed off
+the frozen boards. **All of it reproduced exactly** — champion 10-5 / 0.2304 / 0.6537, totals prior
+MAE 3.93 beating the champion total's 3.98, Feature Refresh 2-2 / 0.2310 against the prior's 3-1 /
+0.2330, WNBA margin MAE 11.90.
+
+**The layer matters more than the numbers.** These finals are a RELAY, not an archive read — the
+archives still do not carry 8/28. So this is RESULT_DISPLAY, not CANONICAL_EVIDENCE_ADMISSION:
+nothing accrues to settlement, promotion or the estimator, and the ledger stays 0 bets / $0. When
+the archives publish, the numbers must be re-derived from them and any disagreement recorded rather
+than reconciled away.
+
+**The relay's join was short two contract fields, so the rows were rebuilt.** The stated join was
+`slate_date + canonical_id + away + home`; the contract also requires `sport` and `result_date`, and
+result_date is the field whose absence caused the 8/27 P0 — live here, because 14 of the 19 games
+carry an 8/29 UTC timestamp. Rebuilt under the full contract and re-bound through the gate: MLB
+15/15, WNBA 4/4, zero refused, both gradable.
+
+**That re-bind surfaced a board schema defect.** The first pass refused all 15 MLB rows with
+MISSING_IDENTITY_FIELD while all 4 WNBA rows bound cleanly. The MLB board stores away and home ONLY
+inside the composite game key (`mlb:CIN@CHC`); the WNBA board stores them as fields. Two of the six
+contract fields are therefore not independently held on an MLB board. The exposure is bounded — an
+archive row brings its own away/home, so TEAMS_REVERSED can still fire against it — but if a game
+key were ever BUILT backwards at freeze time, nothing on the board could contradict it. Same shape
+as the LAD@DET starter reversal: one source, nothing to disagree with it. The derivation is now
+disclosed per board rather than performed silently; carrying away/home as MLB fields is the real
+fix and is not applied to the frozen 8/28 board under R3.
+
+**The LAD@DET correction moves the champion's Brier the other way from what you'd guess.** Correcting
+the starter sides takes the row from LAD 0.5089 to LAD 0.6264, and LAD won 2-1, so the row Brier
+falls 0.2412 -> 0.1396 and the slate Brier 0.2304 -> 0.2236. The recorded number stays **0.2304**:
+the prospective registered forecast was the malformed one, and an arm does not get to keep the score
+it would have earned on input it never had. The owner's reading is confirmed — the side stays LAD
+either way, so the win does not validate the malformed input — with the addition that the defect
+COST the champion 0.0068 rather than flattering it.
+
+**The champion had a genuinely strong winner slate; the total model did not move.** 10-5 at 0.2304,
+beating the expanding prior by 0.0214 of Brier, and beating every comparison arm on both scores.
+CHALLENGER_ADAPTIVE went 9-6 yet scored worse than the champion — record and probability quality
+come apart on a slate this flat. Totals lost to the flat prior on MAE, RMSE and bias alike.
+
+**WNBA's margin model is the standing problem.** Feature Refresh beat the prior on Brier while going
+2-2 to the prior's 3-1, which on n=4 is not a result either way. POR@ATL is the failure worth
+naming: the most confident WNBA call of the night, ATL 78.4% and ATL by 9.7, against Portland
+winning by 18 — a 27.71-point margin error. A margin model this loose cannot support spread
+probabilities.
+
+**Ticket 217916739 settled: 2 of 3 legs won, parlay lost, cash P&L -$50.** Owner-discretion, and it
+does not settle against the model ledger (7/25 precedent), which stays $0 at 0 bets. Stated because
+it cuts against the model rather than for it: both winning legs ran AGAINST the model's side, and
+the single leg that FOLLOWED the model lost. The Portland leg beat the model's most confident call
+by 31 points against the spread. That is n=2 and evidence of nothing, but it is the honest direction
+of the observation. The +13 push branch never engaged — Portland won outright by 18, so +13 and
++12.5 settle identically here.

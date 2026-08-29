@@ -177,16 +177,33 @@ def gate_board(card, rows_key):
     _id_space_problems evaluates the real contract instead of a stripped copy of it.
     """
     games = {}
+    derived = []
     for r in card[rows_key]["rows"]:
         g = r["game"]
-        ident = {"game_pk": r.get("canonical_id"), "away": r.get("away"), "home": r.get("home"),
-                 "start_utc": r.get("start_utc")}
+        away, home = r.get("away"), r.get("home")
+        if away is None or home is None:
+            # The MLB board stores away/home ONLY inside the composite game key ("mlb:CIN@CHC");
+            # the WNBA board stores them as fields. Two of the six fields in the binding contract
+            # are therefore not independently held on an MLB board and must be parsed back out of
+            # the identifier. That is weaker than reading a field and is recorded as such: if a
+            # game key were ever BUILT backwards at freeze time, nothing on the board could
+            # contradict it, because the board has no second copy to disagree with. It does not
+            # make binding circular against an ARCHIVE row, which brings its own away/home.
+            try:
+                away, home = g.split(":", 1)[1].split("@")
+            except (IndexError, ValueError):
+                raise ValueError(f"CANNOT_DERIVE_TEAMS from game key {g!r} and the row carries no "
+                                 "away/home fields")
+            derived.append(g)
+        ident = {"game_pk": r.get("canonical_id"), "away": away, "home": home,
+                 "start_utc": r.get("start_utc") or r.get("game_start_utc")}
         if g in games and games[g] != ident:
             diff = {k: (games[g][k], ident[k]) for k in ident if games[g][k] != ident[k]}
             raise ValueError(f"ARM_IDENTITY_DISAGREEMENT on {g}: {diff} — two arms describe the "
                              "same game differently; that is an identity defect, not a tie to break")
         games[g] = ident
-    return {"sport": card.get("sport"), "slate_date": card["slate_date"], "games": games}
+    return {"sport": card.get("sport"), "slate_date": card["slate_date"], "games": games,
+            "TEAMS_DERIVED_FROM_GAME_KEY": sorted(set(derived))}
 
 
 def board_identity(board, rows_key):

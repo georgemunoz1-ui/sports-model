@@ -202,6 +202,143 @@ the model ledger stands at <b>0 bets, $0</b>. The POR&nbsp;+13 leg's game
 """
 
 
+def relay_results_block():
+    """The RESULTS layer once the owner relayed finals.
+
+    It REPLACES the "nothing could be bound" section rather than sitting beside it, because that
+    section's claim is no longer the current state — but the reason it existed still is, and the
+    evidence-layer banner carries it: these finals are a RELAY, not an archive read, and the
+    archives still do not carry 8/28. Descriptive only. Nothing accrues.
+    """
+    path = f"data/audit/{DATE}_relay_grading.json"
+    if not os.path.exists(path):
+        return ""
+    R = json.load(open(path))
+    B, cf, tk = R["BINDING"], R["LADDET_COUNTERFACTUAL"], R["OWNER_TICKET"]
+
+    def arms_table(d, cols, extra=""):
+        rows = "".join(
+            f"<tr><td><code>{esc(a)}</code></td>" + "".join(f"<td>{c(v)}</td>" for c in cols) +
+            "</tr>" for a, v in sorted(d.items(), key=lambda kv: kv[1].get("brier", kv[1].get("mae", 0))))
+        return f"<table>{extra}{rows}</table>"
+
+    mw = R["MLB"]["winner_arms"]; mt = R["MLB"]["total_arms"]
+    ww = R["WNBA"]["winner_arms"]; wm = R["WNBA"]["margin"]["wnba.replacement.FEATURE_REFRESH"]
+
+    mlb_rows = "".join(
+        f"<tr><td><code>{esc(a)}</code></td><td>{esc(v['record'])}</td>"
+        f"<td>{v['brier']:.4f}</td><td>{v['logloss']:.4f}</td></tr>"
+        for a, v in sorted(mw.items(), key=lambda kv: kv[1]["brier"]))
+    tot_rows = "".join(
+        f"<tr><td><code>{esc(a)}</code></td><td>{v['mae']:.2f}</td><td>{v['rmse']:.2f}</td>"
+        f"<td>{v['bias']:+.2f}</td></tr>" for a, v in sorted(mt.items(), key=lambda kv: kv[1]["mae"]))
+    w_rows = "".join(
+        f"<tr><td><code>{esc(a)}</code></td><td>{esc(v['record'])}</td>"
+        f"<td>{v['brier']:.4f}</td></tr>"
+        for a, v in sorted(ww.items(), key=lambda kv: kv[1]["brier"]))
+    leg_rows = "".join(
+        f"<tr><td><b>{esc(l['leg'])}</b></td><td>{esc(l['final'])}</td>"
+        f"<td>{'&#10003; ' if 'WON' in l['settlement'] else '&#10007; '}{esc(l['settlement'])}</td>"
+        f"<td>{esc(l['model_position'])}</td></tr>" for l in tk["legs"])
+    marg_rows = "".join(
+        f"<tr><td>{esc(x['game'])}</td><td>{x['proj_home_margin']:+.2f}</td>"
+        f"<td>{x['actual_home_margin']:+d}</td><td><b>{x['err']:+.2f}</b></td></tr>"
+        for x in wm["per_game"])
+
+    return f"""
+<h2>Results &mdash; graded descriptively against relayed finals</h2>
+<div class="proof"><b>EVIDENCE LAYER &mdash; RESULT_DISPLAY, NOT CANONICAL ADMISSION</b><br>
+<span style="font-family:Public Sans,sans-serif">These finals were <b>relayed by the owner</b>, not
+read from a score-bearing archive. The archives still do not carry August 28: lancebroz has an 8/28
+file with no score column, and wehoop has not advanced. So every number here is
+<b>descriptive</b> &mdash; nothing accrues to settlement, to promotion, or to the estimator, and the
+model ledger stays <b>0 bets / $0</b>. Only the <i>finals</i> came from the relay; every record,
+Brier, log loss, MAE and bias below was <b>recomputed from the frozen boards</b> so the relayed
+summary is checked rather than echoed. When the archives publish, these must be re-derived and any
+disagreement recorded rather than reconciled away.</span></div>
+
+<div class="proof"><b>BINDING</b> &mdash; rebuilt under the full contract<br>
+mlb: RESULT_BINDING_PASS = {esc(B['counters']['mlb']['RESULT_BINDING_PASS'])} &middot;
+DATE_COHERENCE_PASS = {esc(B['counters']['mlb']['DATE_COHERENCE_PASS'])} &middot;
+CANONICAL_ID_MATCH = {esc(B['counters']['mlb']['CANONICAL_ID_MATCH'])} &middot;
+REFUSED_ROWS = {esc(B['counters']['mlb']['REFUSED_ROWS'])}<br>
+wnba: RESULT_BINDING_PASS = {esc(B['counters']['wnba']['RESULT_BINDING_PASS'])} &middot;
+DATE_COHERENCE_PASS = {esc(B['counters']['wnba']['DATE_COHERENCE_PASS'])} &middot;
+CANONICAL_ID_MATCH = {esc(B['counters']['wnba']['CANONICAL_ID_MATCH'])} &middot;
+REFUSED_ROWS = {esc(B['counters']['wnba']['REFUSED_ROWS'])}<br>
+<span style="font-family:Public Sans,sans-serif">The relay's stated join was
+<code>slate_date + canonical_id + away + home</code>. The registered contract also requires
+<code>sport</code> and <code>result_date</code> &mdash; and <code>result_date</code> is the field
+whose absence caused the August 27 P0, live here because 14 of these 19 games carry an August 29
+<i>UTC</i> timestamp. The rows were rebuilt under the full contract and re-bound rather than
+accepted as joined. Both cohorts bind clean.</span></div>
+
+<h3>MLB &mdash; 15 of 15 final</h3>
+<table>
+<tr><th>Winner arm</th><th>Record</th><th>Brier</th><th>Log loss</th></tr>
+{mlb_rows}
+</table>
+<p>The champion beat every comparison arm on both probability scores, and beat the expanding home
+prior by <b>{mw['mlb.winner.EXPANDING_HOME_PRIOR']['brier'] - mw['mlb.winner.CHAMPION_V13']['brier']:.4f}</b>
+of Brier. Note that <code>CHALLENGER_ADAPTIVE</code> went 9&ndash;6 but scored <i>worse</i> than the
+champion's 10&ndash;5 on Brier and worse than <code>CHALLENGER_WIDENED</code>'s 7&ndash;8 would
+suggest &mdash; record and probability quality are different questions, and on a slate this flat
+they come apart.</p>
+<table>
+<tr><th>Total arm</th><th>MAE</th><th>RMSE</th><th>Bias</th></tr>
+{tot_rows}
+</table>
+<p>The total model <b>still failed to beat the flat prior</b>, on all three of MAE, RMSE and bias.
+That is the same finding as prior dates and it did not move. {esc(R['MLB']['note'])}</p>
+
+<h3>LAD@DET &mdash; what the correction actually does to the score</h3>
+<p>The frozen board had the two starters on the wrong clubs. Correcting them moves the row from
+<b>LAD {cf['frozen_p_LAD']:.4f}</b> to <b>LAD {cf['corrected_p_LAD']:.4f}</b>, and LAD won 2&ndash;1.</p>
+<table>
+<tr><th></th><th>Row Brier</th><th>Champion slate Brier</th></tr>
+<tr><td>As frozen (malformed input)</td><td>{cf['row_brier_frozen']:.4f}</td>
+    <td><b>{cf['slate_brier_frozen']:.4f}</b> &mdash; the recorded number</td></tr>
+<tr><td>On corrected starters</td><td>{cf['row_brier_corrected']:.4f}</td>
+    <td>{cf['slate_brier_corrected']:.4f} ({cf['delta']:+.4f}) &mdash; diagnostic only</td></tr>
+</table>
+<p class="flag">{esc(cf['reading'])}</p>
+
+<h3>WNBA &mdash; 4 of 4 final</h3>
+<table>
+<tr><th>Winner arm</th><th>Record</th><th>Brier</th></tr>
+{w_rows}
+</table>
+<p>The refreshed arm went 2&ndash;2 while the expanding home prior went 3&ndash;1, and the refreshed
+arm still scored <i>better</i> on Brier &mdash; by {ww['wnba.winner.EXPANDING_HOME_PRIOR']['brier'] - ww['wnba.replacement.FEATURE_REFRESH']['brier']:.4f},
+which on n=4 is not a result. The margin model is the real problem:</p>
+<table>
+<tr><th>Game</th><th>Projected home margin</th><th>Actual</th><th>Error</th></tr>
+{marg_rows}
+</table>
+<p>Margin MAE <b>{wm['mae']:.2f}</b>. POR@ATL is the failure: the model made Atlanta its most
+confident WNBA call of the night at 78.4% and projected them by 9.7; Portland won by 18, a
+<b>27.71-point</b> margin error. A margin model this loose cannot support spread probabilities, and
+that is the finding regardless of how the winner column landed.</p>
+
+<h3>Owner ticket 217916739 &mdash; settled, and separate</h3>
+<table>
+<tr><th>Leg</th><th>Final</th><th>Settlement</th><th>Where the model stood</th></tr>
+{leg_rows}
+</table>
+<p><b>2 of 3 legs won; the parlay lost. Cash P&amp;L &minus;$50.</b>
+{esc(tk['separation'])}</p>
+<p>Worth stating plainly because it cuts against the model rather than for it: the two legs that
+<b>won</b> both ran <i>against</i> the model's side, and the one leg that <b>followed</b> the model
+lost. On the Portland leg the ticket beat the model's most confident call of the night by 31 points
+against the spread. That is n=2 and evidence of nothing &mdash; but it is the honest direction of
+the observation, and rounding it off would be the same error in the other direction.</p>
+
+<h3>NFL and college football</h3>
+<p>{esc(R['NFL']['note'])} All ten preseason games are final and receive no model record.</p>
+<p><b>College football is excluded from every metric above.</b> {esc(R['CFB']['owner_correction_accepted'])}</p>
+"""
+
+
 def build():
     mlb = json.load(open(f"cards/{DATE}_mlb_board.json"))
     # the superseding board once FEATURE_REFRESH unblocked; v1 stays frozen on disk
@@ -432,7 +569,7 @@ all 4 games). MLB and NFL still unpriced &mdash; five routes, all blocked.</div>
 execution unauthorized</div></div>
 </div>
 
-{postslate_block()}
+{relay_results_block() or postslate_block()}
 
 <h2>Full slate &mdash; all 36 rows, every sport, in start order</h2>
 <p>Refused rows are shown alongside forecast rows. A refusal that is not displayed is

@@ -84,89 +84,96 @@ execution unauthorized</div></div>
 </div>
 
 
-<h2>Results &mdash; nothing was graded, because nothing could be bound</h2>
-<p><b>This is the results layer, and it is empty on purpose.</b> The slate is over. Both
-score-bearing archives were read and neither carries August 28. No final was published here,
-because publishing one would have meant inventing it &mdash; and this is the exact juncture at
-which the August 27 cycle put five fabricated finals on a page.</p>
+<h2>Results &mdash; graded descriptively against relayed finals</h2>
+<div class="proof"><b>EVIDENCE LAYER &mdash; RESULT_DISPLAY, NOT CANONICAL ADMISSION</b><br>
+<span style="font-family:Public Sans,sans-serif">These finals were <b>relayed by the owner</b>, not
+read from a score-bearing archive. The archives still do not carry August 28: lancebroz has an 8/28
+file with no score column, and wehoop has not advanced. So every number here is
+<b>descriptive</b> &mdash; nothing accrues to settlement, to promotion, or to the estimator, and the
+model ledger stays <b>0 bets / $0</b>. Only the <i>finals</i> came from the relay; every record,
+Brier, log loss, MAE and bias below was <b>recomputed from the frozen boards</b> so the relayed
+summary is checked rather than echoed. When the archives publish, these must be re-derived and any
+disagreement recorded rather than reconciled away.</span></div>
 
-<table>
-<tr><th>Source</th><th>State when read</th><th>Why it cannot settle August 28</th></tr>
-<tr><td>lancebroz/mlb-pitcher-data</td>
-    <td><code>41f26c83</code> &middot; committed 2026-08-29T01:32:03+00:00</td>
-    <td>Advanced, and it <i>does</i> carry an 8/28 daily file &mdash; 930 rows,
-        61 columns, and <b>not one of them score-bearing</b>. It never has
-        carried runs, which is why RJ-001B stands at 0/126 and stays there.</td></tr>
-<tr><td>sportsdataverse/wehoop-wnba-raw</td>
-    <td><code>7a1c7eba</code> &middot; committed 2026-08-28T06:32:20-04:00</td>
-    <td>Has not advanced. All four WNBA board games are still
-        <code>STATUS_SCHEDULED</code> at 0&ndash;0.</td></tr>
-<tr><td>Search</td><td>Available, and not used</td>
-    <td>Snippets <b>identify</b> and never <b>bind</b>. A result read off a snippet is not evidence
-        that a game finished that way.</td></tr>
-</table>
-
-<div class="proof"><b>POST-SLATE BINDING PROOF</b> &mdash; mlb:2026-08-28 &middot; <code>090193a0</code><br>
-RESULT_BINDING_PASS = 0/0<br>
-DATE_COHERENCE_PASS = 0/0<br>
-CANONICAL_ID_MATCH = 0/0<br>
+<div class="proof"><b>BINDING</b> &mdash; rebuilt under the full contract<br>
+mlb: RESULT_BINDING_PASS = 15/15 &middot;
+DATE_COHERENCE_PASS = 15/15 &middot;
+CANONICAL_ID_MATCH = 15/15 &middot;
 REFUSED_ROWS = 0<br>
-<span style="font-family:Public Sans,sans-serif">NOTHING IS CLAIMED, and the reason is specific and worse than the prospective proof's: the slate is OVER and no admissible source carries it. All 90 board rows were loaded and every canonical_id was read. This is NOT 'nothing was checked'.</span></div>
-<div class="proof"><b>POST-SLATE BINDING PROOF</b> &mdash; wnba:2026-08-28 (v2 board) &middot; <code>867b142b</code><br>
-RESULT_BINDING_PASS = 0/0<br>
-DATE_COHERENCE_PASS = 0/0<br>
-CANONICAL_ID_MATCH = 0/0<br>
+wnba: RESULT_BINDING_PASS = 4/4 &middot;
+DATE_COHERENCE_PASS = 4/4 &middot;
+CANONICAL_ID_MATCH = 4/4 &middot;
 REFUSED_ROWS = 0<br>
-<span style="font-family:Public Sans,sans-serif">NOTHING IS CLAIMED, and the reason is specific and worse than the prospective proof's: the slate is OVER and no admissible source carries it. All 12 board rows were loaded and every canonical_id was read. This is NOT 'nothing was checked'.</span></div>
+<span style="font-family:Public Sans,sans-serif">The relay's stated join was
+<code>slate_date + canonical_id + away + home</code>. The registered contract also requires
+<code>sport</code> and <code>result_date</code> &mdash; and <code>result_date</code> is the field
+whose absence caused the August 27 P0, live here because 14 of these 19 games carry an August 29
+<i>UTC</i> timestamp. The rows were rebuilt under the full contract and re-bound rather than
+accepted as joined. Both cohorts bind clean.</span></div>
 
-<h2>A contamination near-miss, caught before it reached this page</h2>
-<p class="flag"><b>CAUGHT BEFORE PUBLICATION — no bad number reached a record.</b> The first post-slate WNBA probe asked the archive a
-reasonable-sounding question &mdash; <i>are there completed rows where the date is 2026-08-28?</i>
-&mdash; and got back <b>two</b>. Neither belongs to this slate.</p>
-<p>wehoop's `date` column is UTC. The two rows were ESPN 401857178 (GSV 79-60 NYL, 2026-08-28T00:00Z) and 401857179 (WSH 80-73 PHX, 2026-08-28T02:00Z) — both 8/27 EVENING ET games. Neither is on the 8/28 board. Both were already graded in the 8/27 review, where GSV 79-60 appears in finals_identified. A UTC date filter manufactures a two-game '8/28 result set' out of the previous slate.</p>
+<h3>MLB &mdash; 15 of 15 final</h3>
 <table>
-<tr><th>Row the UTC filter returned</th><th>What it actually is</th></tr>
-<tr><td><code>ESPN_GAMEID:401857178</code> &middot; GSV 79&ndash;60 NYL &middot;
-        2026-08-28T00:00Z</td>
-    <td>An <b>August 27</b> evening ET game. Already graded in the August 27 review.</td></tr>
-<tr><td><code>ESPN_GAMEID:401857179</code> &middot; WSH 80&ndash;73 PHX &middot;
-        2026-08-28T02:00Z</td>
-    <td>An <b>August 27</b> evening ET game. Already graded in the August 27 review.</td></tr>
+<tr><th>Winner arm</th><th>Record</th><th>Brier</th><th>Log loss</th></tr>
+<tr><td><code>mlb.winner.CHAMPION_V13</code></td><td>10-5</td><td>0.2304</td><td>0.6537</td></tr><tr><td><code>mlb.winner.CHALLENGER_WIDENED</code></td><td>7-8</td><td>0.2465</td><td>0.6862</td></tr><tr><td><code>mlb.winner.CHALLENGER_ADAPTIVE</code></td><td>9-6</td><td>0.2488</td><td>0.6908</td></tr><tr><td><code>mlb.winner.EXPANDING_HOME_PRIOR</code></td><td>7-8</td><td>0.2518</td><td>0.6967</td></tr>
 </table>
-<p><b>RESULT_DATE_COHORT_CONTAMINATION — the same defect class as the 8/27 incident, arriving through a different door: not a matchup join without a date, but a date filter in the wrong timezone.</b> the probe now binds on the BOARD'S OWN canonical ids (ESPN_GAMEID 401857180-83) and asks whether those specific games are completed. They are all STATUS_SCHEDULED at 0-0. Identity-based, which is what the binding contract required in the first place.</p>
-<p>the guard was written to abort rather than to proceed on a surprising reading, so a wrong premise produced a halt instead of a grade. The lesson is not that the check was clever — it was wrong — but that a check which fails loudly gives you a chance to notice it is wrong. A silent version of the same query would have graded two 8/27 games as 8/28.</p>
-
-<h2>LAD@DET was wrong on this page by 11.75 points, and was never flagged</h2>
-<p>The 8/28 pitch archive covers 3 of the 15 MLB games. It is enough to settle who actually
-pitched, and it overturns a row this card published. The half-inning convention
-(<code>top</code> &rarr; the <b>home</b> team pitches) was validated against CIN@CHC, whose
-lineups were independently confirmed at the T-45 checkpoint, <i>before</i> any claim rested on
-it.</p>
+<p>The champion beat every comparison arm on both probability scores, and beat the expanding home
+prior by <b>0.0214</b>
+of Brier. Note that <code>CHALLENGER_ADAPTIVE</code> went 9&ndash;6 but scored <i>worse</i> than the
+champion's 10&ndash;5 on Brier and worse than <code>CHALLENGER_WIDENED</code>'s 7&ndash;8 would
+suggest &mdash; record and probability quality are different questions, and on a slate this flat
+they come apart.</p>
 <table>
-<tr><th>Game</th><th>What this card carried</th><th>What the archive shows</th><th>Effect</th></tr>
-<tr><td><b>LAD@DET</b> &middot; <code>824231</code></td>
-    <td>away LAD = Drew Anderson, home DET = Tarik Skubal — REVERSED</td>
-    <td>Drew Anderson pitched for DETROIT (89 pitches, home); Tarik Skubal for the DODGERS (83 pitches, away)</td>
-    <td><b>p_home 0.4911 &rarr; 0.3736</b>
-        (-11.75 pp) &mdash; the largest identity error of the week.
-        Side does not flip.</td></tr>
+<tr><th>Total arm</th><th>MAE</th><th>RMSE</th><th>Bias</th></tr>
+<tr><td><code>mlb.total.EXPANDING_TOTAL_PRIOR</code></td><td>3.93</td><td>4.77</td><td>+0.59</td></tr><tr><td><code>mlb.total.CHAMPION_V13</code></td><td>3.98</td><td>4.81</td><td>+0.63</td></tr>
 </table>
-<p>It bit here precisely because <i>both</i> pitchers have retained logs and are far apart
-(Skubal rs 2.96 vs Anderson rs 4.13). MIA@WSH's swap, confirmed the same way and the one that
-<i>was</i> flagged, moved the number by <b>zero</b> &mdash; neither of its pitchers has a retained
-log, so both slots were capped either way.</p>
-<p class="flag"><b>The flag was tracking the wrong thing.</b> Every row flagged and chased on 8/28
-resolved as immaterial, cleared, or already-correct. The row carrying the largest error was never
-flagged at all, because the acquisition recorded &ldquo;starters consistent across 2 snippets&rdquo;
-and treated agreement as clearance. Two sources agreeing can be wrong the same way, especially
-sharing an upstream. <b>Agreement is not independence.</b></p>
+<p>The total model <b>still failed to beat the flat prior</b>, on all three of MAE, RMSE and bias.
+That is the same finding as prior dates and it did not move. BAL@ATH went 10 innings. It is flagged rather than silently averaged into the totals error — a 10-inning game is not the same object as a 9-inning one, and the totals arms were fit on 9.</p>
 
-<h2>Owner ticket 217916739 &mdash; ungraded</h2>
-<p>Its legs need finals and none could be bound, so it is not graded here. It settles against
-nothing in the model ledger either way: owner-discretion picks and model EV rules do not mix, and
-the model ledger stands at <b>0 bets, $0</b>. The POR&nbsp;+13 leg's game
-(<code>ESPN_GAMEID:401857180</code>) is one of the four still reading
-<code>STATUS_SCHEDULED</code> in the archive above.</p>
+<h3>LAD@DET &mdash; what the correction actually does to the score</h3>
+<p>The frozen board had the two starters on the wrong clubs. Correcting them moves the row from
+<b>LAD 0.5089</b> to <b>LAD 0.6264</b>, and LAD won 2&ndash;1.</p>
+<table>
+<tr><th></th><th>Row Brier</th><th>Champion slate Brier</th></tr>
+<tr><td>As frozen (malformed input)</td><td>0.2412</td>
+    <td><b>0.2304</b> &mdash; the recorded number</td></tr>
+<tr><td>On corrected starters</td><td>0.1396</td>
+    <td>0.2236 (-0.0068) &mdash; diagnostic only</td></tr>
+</table>
+<p class="flag">the correction moves the champion's slate Brier from 0.2304 to 0.2236 — IN THE CHAMPION'S FAVOUR, because the corrected probability is more confident on the side that actually won. Two things follow and they point opposite ways. The recorded 0.2304 is CONSERVATIVE: the arm was penalised for an input defect, not for its own judgment. And 0.2236 is NOT claimable: the prospective registered forecast was the malformed one, and an arm does not get to keep the score it would have earned on input it never had. The recorded number stays 0.2304.</p>
+
+<h3>WNBA &mdash; 4 of 4 final</h3>
+<table>
+<tr><th>Winner arm</th><th>Record</th><th>Brier</th></tr>
+<tr><td><code>wnba.replacement.FEATURE_REFRESH</code></td><td>2-2</td><td>0.2310</td></tr><tr><td><code>wnba.winner.EXPANDING_HOME_PRIOR</code></td><td>3-1</td><td>0.2330</td></tr><tr><td><code>wnba.fallback.STANDINGS_LOG5_v1</code></td><td>2-2</td><td>0.2926</td></tr>
+</table>
+<p>The refreshed arm went 2&ndash;2 while the expanding home prior went 3&ndash;1, and the refreshed
+arm still scored <i>better</i> on Brier &mdash; by 0.0020,
+which on n=4 is not a result. The margin model is the real problem:</p>
+<table>
+<tr><th>Game</th><th>Projected home margin</th><th>Actual</th><th>Error</th></tr>
+<tr><td>wnba:CON@IND</td><td>+15.04</td><td>+20</td><td><b>-4.96</b></td></tr><tr><td>wnba:POR@ATL</td><td>+9.71</td><td>-18</td><td><b>+27.71</b></td></tr><tr><td>wnba:TOR@LV</td><td>+12.34</td><td>+20</td><td><b>-7.66</b></td></tr><tr><td>wnba:WSH@LAS</td><td>-1.26</td><td>+6</td><td><b>-7.26</b></td></tr>
+</table>
+<p>Margin MAE <b>11.90</b>. POR@ATL is the failure: the model made Atlanta its most
+confident WNBA call of the night at 78.4% and projected them by 9.7; Portland won by 18, a
+<b>27.71-point</b> margin error. A margin model this loose cannot support spread probabilities, and
+that is the finding regardless of how the winner column landed.</p>
+
+<h3>Owner ticket 217916739 &mdash; settled, and separate</h3>
+<table>
+<tr><th>Leg</th><th>Final</th><th>Settlement</th><th>Where the model stood</th></tr>
+<tr><td><b>KC +110</b></td><td>KC 3-0 CLE</td><td>&#10003; WON</td><td>the model's side was CLE at 50.3% — this leg won AGAINST the model</td></tr><tr><td><b>NYM -110</b></td><td>HOU 3-1 NYM</td><td>&#10007; LOST</td><td>the model's side was NYM at 52.1% — this leg followed the model and lost</td></tr><tr><td><b>POR +13 -110</b></td><td>POR 101-83 ATL</td><td>&#10003; WON OUTRIGHT</td><td>the model's side was ATL at 78.4% with ATL -9.7 — this leg won against the model's most confident WNBA call of the night</td></tr>
+</table>
+<p><b>2 of 3 legs won; the parlay lost. Cash P&amp;L &minus;$50.</b>
+7/25 precedent — owner-discretion picks and model EV rules never mix. This -$50 does not settle against the model ledger, which stays $0 at 0 bets. Two of the three legs won against the model's own side, which is n=2 and evidence of nothing.</p>
+<p>Worth stating plainly because it cuts against the model rather than for it: the two legs that
+<b>won</b> both ran <i>against</i> the model's side, and the one leg that <b>followed</b> the model
+lost. On the Portland leg the ticket beat the model's most confident call of the night by 31 points
+against the spread. That is n=2 and evidence of nothing &mdash; but it is the honest direction of
+the observation, and rounding it off would be the same error in the other direction.</p>
+
+<h3>NFL and college football</h3>
+<p>no model record, Brier, EV or P&amp;L. The registered NFL shadow is regular-season only; SEA 9-9 KC is a tie and would score no winner even if an arm had been eligible. All ten preseason games are final and receive no model record.</p>
+<p><b>College football is excluded from every metric above.</b> the earlier seven FCS scores came from the 8/28 acquisition/refusal record, not from the published Saturday 8/29 CFB board, and are withdrawn from every metric. The 8/29 board is an 8-game partial and remains pregame.</p>
 
 
 <h2>Full slate &mdash; all 36 rows, every sport, in start order</h2>

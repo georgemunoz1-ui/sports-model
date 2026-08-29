@@ -253,7 +253,7 @@ for _m in ("result_provenance","result_content_checks","parse_box_dump",
            # healthcheck so it cannot rot silently again" while nothing invoked it — the claim is
            # now true.
            "freshness_contract","test_starter_freshness_regression","wnba_refresh_espn",
-           "acquisition_adapters","board_shape","market_independence",
+           "acquisition_adapters","board_shape","market_independence","claim_discipline",
            "freshness_gates","never_adapt_audit","forecast_contract","evaluation_standard","prequential","promotion_gate","evaluation_arm","keyed_seed","cohort_fork","three_arm_card",
            # 2026-08-23 owner amendments 1-10. Wired the same day they were written: a rule
            # that is not executed by this gate is a rule that stops running (lesson 26).

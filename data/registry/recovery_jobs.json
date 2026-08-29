@@ -277,7 +277,7 @@
     "RESULTS_AND_STATS_THROUGH_ASOF",
     "MARKET_PRICES_VIA_SEPARATE_OVERLAY"
    ],
-   "deadline_utc": "2026-08-29T17:00:00Z",
+   "deadline_utc": "2026-08-30T17:00:00Z",
    "depends_on": [],
    "history": [
     {
@@ -387,12 +387,24 @@
      "status": "RUNNING",
      "units_done": 11,
      "utc": "2026-08-28T22:52:00Z"
+    },
+    {
+     "components_still_open": [
+      "OFFICIAL_INJURY_AVAILABILITY",
+      "ROSTERS_AND_TRANSACTIONS"
+     ],
+     "deadline_disposition": "MISSED. Not extended in place \u2014 the miss stands in the record. A new deadline is set for the next WNBA board so the job keeps a live clock, and the original is preserved above.",
+     "note": "17:00Z deadline MISSED and recorded as missed rather than extended silently. OFFICIAL_INJURY_AVAILABILITY remains 0 \u2014 every official route has been EGRESS_BLOCKED since 2026-08-25 and nothing changed today. What DID advance on other components: the extraction path was rewritten to derive ET via zoneinfo instead of slicing a UTC instant, which removed two double-counted games (CON@IND 401857090, DAL@POR 401857091) and took the extension pool 91 -> 89; wehoop advanced to 8ffb87b and the 2026-08-28 cohort BOUND 4/4 on all six contract fields, the first genuinely bound cohort in this system; wnba_model_v1 was re-pinned to impl v2 under owner authorization for the same ET defect at predict_slate; and per-game margin AND totals residuals are now retained and measured (margin sigma 12.5523, totals sigma 18.0156, n=1721 each). THE OPEN COMPONENT IS LOAD-BEARING TONIGHT, not merely overdue. ff7 carries no injury, rest or availability inputs, and that is precisely why the TOR +365 moneyline was refused this afternoon despite an apparent +82 EV per $100: two eliminated teams (PHX 13-26, TOR 11-28) run late-August rotations the 39-game form window cannot see, and the model's own 6-point margin disagreement with the market is unfalsifiable without this component. The spread was taken and the moneyline refused on exactly this reasoning. The job's open item and the day's largest refused edge are the same gap.",
+     "status": "DEADLINE_MISSED_EXTERNAL_BLOCK",
+     "units_done": 11,
+     "utc": "2026-08-29T21:56:31Z"
     }
    ],
    "job_id": "RJ-005-WNBA-FEATURE-PIPELINE",
    "next_run_utc": "2026-08-29T11:00:00Z",
    "notes": "After binding: recompute feature state (as_of, source hashes, age); generate separately identified replacement forecasts (wnba.replacement.FEATURE_REFRESH) since the board is frozen; rerun side, margin, total, EV and disposition through side_reselection_gate after anchor. Exhaustion of all authorized routes without binding publishes SYSTEM_FAILURE_WNBA_FEATURE_PIPELINE \u2014 never a normal-looking board.",
    "owner_subsystem": "wnba_features",
+   "previous_deadline_utc_missed": "2026-08-29T17:00:00Z",
    "status": "RUNNING",
    "terminal_disposition": null,
    "title": "Full WNBA feature refresh: schedule+canonical game ids (3), roster+transaction sections (6 teams), official injury/availability sections (6 teams), results and team/player stats through the as-of cutoff (1 bound snapshot), market prices via the separate overlay (1 binding). A unit binds only from a retrieved artifact with source, timestamp and content hash.",

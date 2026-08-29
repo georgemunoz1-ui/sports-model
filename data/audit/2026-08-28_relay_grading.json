@@ -1,41 +1,324 @@
 {
  "BINDING": {
   "BOARD_SCHEMA_FINDING": {
-   "disposition": "the derivation is disclosed per board via TEAMS_DERIVED_FROM_GAME_KEY rather than performed silently. Carrying away/home as fields on the MLB board is the real fix and is NOT applied here \u2014 the 8/28 board is frozen under R3.",
-   "how_it_surfaced": "the first pass through the gate refused all 15 MLB rows with MISSING_IDENTITY_FIELD twice per row, while all 4 WNBA rows bound cleanly. The asymmetry is the board schema, not the relay.",
-   "severity": "BOUNDED. It does NOT make binding circular against an archive row, which carries its own away/home \u2014 TEAMS_REVERSED can still fire there. The narrow exposure is that if a game key were ever BUILT backwards at freeze time, nothing on the board could contradict it, because the board holds no second copy to disagree with. That is the same shape as the LAD@DET starter reversal: one source, nothing to disagree with it.",
-   "teams_derived_from_game_key": {
-    "mlb": 15,
-    "wnba": 0
-   },
-   "what": "the MLB board stores away and home ONLY inside the composite game key (\"mlb:CIN@CHC\"). The WNBA board stores them as explicit fields. Two of the six fields in the binding contract are therefore not independently held on an MLB board and must be parsed back out of the identifier."
+   "disposition": "derivation disclosed per board via TEAMS_DERIVED_FROM_GAME_KEY rather than performed silently. Carrying away/home as MLB fields is the real fix and is NOT applied here \u2014 the board is frozen under R3.",
+   "how_it_surfaced": "the first pass refused all 15 MLB rows with MISSING_IDENTITY_FIELD while all 4 WNBA rows bound cleanly. The asymmetry is the board schema, not the relay.",
+   "severity": "BOUNDED. An archive row brings its own away/home, so TEAMS_REVERSED can still fire there. The narrow exposure is that a game key BUILT backwards at freeze time would have nothing on the board to contradict it \u2014 the same shape as the LAD@DET starter reversal: one source, nothing to disagree with it.",
+   "what": "the MLB board stores away and home ONLY inside the composite game key (\"mlb:CIN@CHC\"). The WNBA board stores them as explicit fields. Two of the six binding-contract fields are therefore not independently held on an MLB board."
   },
-  "cohort_problems": {
-   "mlb": [],
-   "wnba": []
+  "CORRECTION": {
+   "effect_on_the_grades": "NONE of the recomputed metrics change. They were always computed by joining the frozen board to the relayed finals on the game key, which is the identity match. What changes is the WARRANT published beside them: from 'bound, gradable' to 'identity-matched, date unestablished, descriptive only'.",
+   "how_it_was_found": "an adversarial audit of this repo's retrieval surface, not by re-reading the output. The record and the card both looked correct.",
+   "what_is_true_instead": "IDENTITY matches for every game: each relayed score attaches to a canonical id that is on the board with the same matchup. That is a real and useful claim. It is strictly weaker than binding: it does not establish that the score is that game's score, and it establishes nothing about the date.",
+   "what_was_published": "the 2026-08-28 full card and the first version of this record published RESULT_BINDING_PASS = 15/15 (mlb) and 4/4 (wnba), DATE_COHERENCE_PASS identical, and gradable = true for both cohorts.",
+   "why_that_was_wrong": "this module stamped result_date from its own SLATE_DATE constant. That is the missing field being MANUFACTURED so the row would bind \u2014 the same evasion selftest B1 exists to refuse, performed one level up where B1 could not see it. The counter compared a constant against the board's own date and was structurally incapable of failing. Had the wrong night's finals been relayed \u2014 the exact 2026-08-27 P0 \u2014 it would still have read 15/15."
   },
-  "counters": {
+  "VERDICT": "NOT BOUND \u2014 and it never was. See CORRECTION below.",
+  "counters_full_contract": {
    "mlb": {
-    "CANONICAL_ID_MATCH": "15/15",
-    "DATE_COHERENCE_PASS": "15/15",
-    "REFUSED_ROWS": 0,
-    "RESULT_BINDING_PASS": "15/15"
+    "CANONICAL_ID_MATCH": "0/15",
+    "DATE_COHERENCE_PASS": "0/15",
+    "REFUSED_ROWS": [
+     {
+      "codes": [
+       "MISSING_IDENTITY_FIELD"
+      ],
+      "index": 0
+     },
+     {
+      "codes": [
+       "MISSING_IDENTITY_FIELD"
+      ],
+      "index": 1
+     },
+     {
+      "codes": [
+       "MISSING_IDENTITY_FIELD"
+      ],
+      "index": 2
+     },
+     {
+      "codes": [
+       "MISSING_IDENTITY_FIELD"
+      ],
+      "index": 3
+     },
+     {
+      "codes": [
+       "MISSING_IDENTITY_FIELD"
+      ],
+      "index": 4
+     },
+     {
+      "codes": [
+       "MISSING_IDENTITY_FIELD"
+      ],
+      "index": 5
+     },
+     {
+      "codes": [
+       "MISSING_IDENTITY_FIELD"
+      ],
+      "index": 6
+     },
+     {
+      "codes": [
+       "MISSING_IDENTITY_FIELD"
+      ],
+      "index": 7
+     },
+     {
+      "codes": [
+       "MISSING_IDENTITY_FIELD"
+      ],
+      "index": 8
+     },
+     {
+      "codes": [
+       "MISSING_IDENTITY_FIELD"
+      ],
+      "index": 9
+     },
+     {
+      "codes": [
+       "MISSING_IDENTITY_FIELD"
+      ],
+      "index": 10
+     },
+     {
+      "codes": [
+       "MISSING_IDENTITY_FIELD"
+      ],
+      "index": 11
+     },
+     {
+      "codes": [
+       "MISSING_IDENTITY_FIELD"
+      ],
+      "index": 12
+     },
+     {
+      "codes": [
+       "MISSING_IDENTITY_FIELD"
+      ],
+      "index": 13
+     },
+     {
+      "codes": [
+       "MISSING_IDENTITY_FIELD"
+      ],
+      "index": 14
+     }
+    ],
+    "RESULT_BINDING_PASS": "0/15"
    },
    "wnba": {
-    "CANONICAL_ID_MATCH": "4/4",
-    "DATE_COHERENCE_PASS": "4/4",
-    "REFUSED_ROWS": 0,
-    "RESULT_BINDING_PASS": "4/4"
+    "CANONICAL_ID_MATCH": "0/4",
+    "DATE_COHERENCE_PASS": "0/4",
+    "REFUSED_ROWS": [
+     {
+      "codes": [
+       "MISSING_IDENTITY_FIELD"
+      ],
+      "index": 0
+     },
+     {
+      "codes": [
+       "MISSING_IDENTITY_FIELD"
+      ],
+      "index": 1
+     },
+     {
+      "codes": [
+       "MISSING_IDENTITY_FIELD"
+      ],
+      "index": 2
+     },
+     {
+      "codes": [
+       "MISSING_IDENTITY_FIELD"
+      ],
+      "index": 3
+     }
+    ],
+    "RESULT_BINDING_PASS": "0/4"
    }
   },
-  "gap": "the stated join omits sport and result_date. result_date is the field whose absence caused the 8/27 P0, and it is live here: 14 of these 19 games carry an August 29 UTC timestamp. The rows were therefore rebuilt under the full contract and re-bound rather than accepted as joined.",
-  "gradable": {
-   "mlb": true,
-   "wnba": true
+  "gradable_full_contract": {
+   "mlb": false,
+   "wnba": false
   },
-  "outcome": "rebuilt and re-bound; counters below are generated by the gate",
+  "identity_only": {
+   "mlb": {
+    "IDENTITY_MATCH": "15/15",
+    "per_game": [
+     {
+      "away_score": 10,
+      "board_matchup": "AZ@SF",
+      "canonical_id": "ESPN_GAMEID:401816714",
+      "game": "mlb:AZ@SF",
+      "home_score": 6,
+      "present_on_board": true
+     },
+     {
+      "away_score": 4,
+      "board_matchup": "BAL@ATH",
+      "canonical_id": "MLB_GAMEPK:824960",
+      "game": "mlb:BAL@ATH",
+      "home_score": 3,
+      "present_on_board": true
+     },
+     {
+      "away_score": 0,
+      "board_matchup": "BOS@NYY",
+      "canonical_id": "MLB_GAMEPK:823504",
+      "game": "mlb:BOS@NYY",
+      "home_score": 1,
+      "present_on_board": true
+     },
+     {
+      "away_score": 10,
+      "board_matchup": "CIN@CHC",
+      "canonical_id": "ESPN_GAMEID:401816711",
+      "game": "mlb:CIN@CHC",
+      "home_score": 8,
+      "present_on_board": true
+     },
+     {
+      "away_score": 4,
+      "board_matchup": "COL@ATL",
+      "canonical_id": "ESPN_GAMEID:401816703",
+      "game": "mlb:COL@ATL",
+      "home_score": 6,
+      "present_on_board": true
+     },
+     {
+      "away_score": 7,
+      "board_matchup": "CWS@MIN",
+      "canonical_id": "ESPN_GAMEID:401816710",
+      "game": "mlb:CWS@MIN",
+      "home_score": 4,
+      "present_on_board": true
+     },
+     {
+      "away_score": 3,
+      "board_matchup": "HOU@NYM",
+      "canonical_id": "ESPN_GAMEID:401816704",
+      "game": "mlb:HOU@NYM",
+      "home_score": 1,
+      "present_on_board": true
+     },
+     {
+      "away_score": 3,
+      "board_matchup": "KC@CLE",
+      "canonical_id": "ESPN_GAMEID:401816705",
+      "game": "mlb:KC@CLE",
+      "home_score": 0,
+      "present_on_board": true
+     },
+     {
+      "away_score": 2,
+      "board_matchup": "LAD@DET",
+      "canonical_id": "MLB_GAMEPK:824231",
+      "game": "mlb:LAD@DET",
+      "home_score": 1,
+      "present_on_board": true
+     },
+     {
+      "away_score": 2,
+      "board_matchup": "MIA@WSH",
+      "canonical_id": "ESPN_GAMEID:401816707",
+      "game": "mlb:MIA@WSH",
+      "home_score": 9,
+      "present_on_board": true
+     },
+     {
+      "away_score": 5,
+      "board_matchup": "PHI@LAA",
+      "canonical_id": "MLB_GAMEPK:823985",
+      "game": "mlb:PHI@LAA",
+      "home_score": 3,
+      "present_on_board": true
+     },
+     {
+      "away_score": 1,
+      "board_matchup": "PIT@STL",
+      "canonical_id": "ESPN_GAMEID:401816712",
+      "game": "mlb:PIT@STL",
+      "home_score": 4,
+      "present_on_board": true
+     },
+     {
+      "away_score": 4,
+      "board_matchup": "SD@TB",
+      "canonical_id": "ESPN_GAMEID:401816708",
+      "game": "mlb:SD@TB",
+      "home_score": 9,
+      "present_on_board": true
+     },
+     {
+      "away_score": 1,
+      "board_matchup": "SEA@TOR",
+      "canonical_id": "ESPN_GAMEID:401816709",
+      "game": "mlb:SEA@TOR",
+      "home_score": 8,
+      "present_on_board": true
+     },
+     {
+      "away_score": 1,
+      "board_matchup": "TEX@MIL",
+      "canonical_id": "MLB_GAMEPK:823744",
+      "game": "mlb:TEX@MIL",
+      "home_score": 6,
+      "present_on_board": true
+     }
+    ],
+    "what_this_is": "canonical id present on the board and matchup agrees. It proves WHICH game each score is attached to. It does NOT prove the score is that game's score, and it does NOT establish the date.",
+    "what_this_is_not": "binding under the registered contract"
+   },
+   "wnba": {
+    "IDENTITY_MATCH": "4/4",
+    "per_game": [
+     {
+      "away_score": 91,
+      "board_matchup": "Connecticut Sun@Indiana Fever",
+      "canonical_id": "ESPN_GAMEID:401857181",
+      "game": "wnba:CON@IND",
+      "home_score": 111,
+      "present_on_board": true
+     },
+     {
+      "away_score": 101,
+      "board_matchup": "Portland Fire@Atlanta Dream",
+      "canonical_id": "ESPN_GAMEID:401857180",
+      "game": "wnba:POR@ATL",
+      "home_score": 83,
+      "present_on_board": true
+     },
+     {
+      "away_score": 73,
+      "board_matchup": "Toronto Tempo@Las Vegas Aces",
+      "canonical_id": "ESPN_GAMEID:401857182",
+      "game": "wnba:TOR@LV",
+      "home_score": 93,
+      "present_on_board": true
+     },
+     {
+      "away_score": 82,
+      "board_matchup": "Washington Mystics@Los Angeles Sparks",
+      "canonical_id": "ESPN_GAMEID:401857183",
+      "game": "wnba:WSH@LAS",
+      "home_score": 88,
+      "present_on_board": true
+     }
+    ],
+    "what_this_is": "canonical id present on the board and matchup agrees. It proves WHICH game each score is attached to. It does NOT prove the score is that game's score, and it does NOT establish the date.",
+    "what_this_is_not": "binding under the registered contract"
+   }
+  },
   "owner_stated_join": "slate_date + canonical_id + away + home",
-  "registered_contract": "sport + canonical_game_id + scheduled_date + result_date + away + home"
+  "registered_contract": "sport + canonical_game_id + scheduled_date + result_date + away + home",
+  "why_it_cannot_bind": "a relay of bare scores carries NO result_date. The gate refuses a row that omits it \u2014 selftest B1 pins that behaviour, because omitting result_date was MORE permissive than stating it honestly, and the published wrong KC@TOR final on 2026-08-27 bound cleanly precisely by omission. So these rows are correctly REFUSED under the full contract."
  },
  "CFB": {
   "n_games": 8,
@@ -962,8 +1245,8 @@
    }
   }
  },
- "created_utc": "2026-08-29T05:45:14Z",
+ "created_utc": "2026-08-29T06:19:48Z",
  "record_id": "RELAY-GRADING-2026-08-28",
- "record_sha256": "7cac37385237880986483fecc7f8f00afe4966f55f00117a271812ce1a8691de",
+ "record_sha256": "0d858261544274dc21aeadb299938578d984ea3f0428b7fcc4a5829a66cadd75",
  "schema": "ops.relay_grading.v1"
 }

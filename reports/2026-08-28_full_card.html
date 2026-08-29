@@ -95,21 +95,18 @@ Brier, log loss, MAE and bias below was <b>recomputed from the frozen boards</b>
 summary is checked rather than echoed. When the archives publish, these must be re-derived and any
 disagreement recorded rather than reconciled away.</span></div>
 
-<div class="proof"><b>BINDING</b> &mdash; rebuilt under the full contract<br>
-mlb: RESULT_BINDING_PASS = 15/15 &middot;
-DATE_COHERENCE_PASS = 15/15 &middot;
-CANONICAL_ID_MATCH = 15/15 &middot;
-REFUSED_ROWS = 0<br>
-wnba: RESULT_BINDING_PASS = 4/4 &middot;
-DATE_COHERENCE_PASS = 4/4 &middot;
-CANONICAL_ID_MATCH = 4/4 &middot;
-REFUSED_ROWS = 0<br>
-<span style="font-family:Public Sans,sans-serif">The relay's stated join was
-<code>slate_date + canonical_id + away + home</code>. The registered contract also requires
-<code>sport</code> and <code>result_date</code> &mdash; and <code>result_date</code> is the field
-whose absence caused the August 27 P0, live here because 14 of these 19 games carry an August 29
-<i>UTC</i> timestamp. The rows were rebuilt under the full contract and re-bound rather than
-accepted as joined. Both cohorts bind clean.</span></div>
+<div class="proof"><b>BINDING &mdash; NOT BOUND, AND IT NEVER WAS</b><br>
+mlb: full-contract RESULT_BINDING_PASS = 0/15
+&middot; identity-only 15/15<br>
+wnba: full-contract RESULT_BINDING_PASS = 0/4
+&middot; identity-only 4/4<br>
+<span style="font-family:Public Sans,sans-serif">
+<b>An earlier version of this page published RESULT_BINDING_PASS = 15/15 and 4/4 with
+DATE_COHERENCE_PASS to match, and called both cohorts gradable. That was wrong and is withdrawn.</b>
+this module stamped result_date from its own SLATE_DATE constant. That is the missing field being MANUFACTURED so the row would bind — the same evasion selftest B1 exists to refuse, performed one level up where B1 could not see it. The counter compared a constant against the board's own date and was structurally incapable of failing. Had the wrong night's finals been relayed — the exact 2026-08-27 P0 — it would still have read 15/15.<br><br>
+a relay of bare scores carries NO result_date. The gate refuses a row that omits it — selftest B1 pins that behaviour, because omitting result_date was MORE permissive than stating it honestly, and the published wrong KC@TOR final on 2026-08-27 bound cleanly precisely by omission. So these rows are correctly REFUSED under the full contract.<br><br>
+<b>What is true instead:</b> IDENTITY matches for every game: each relayed score attaches to a canonical id that is on the board with the same matchup. That is a real and useful claim. It is strictly weaker than binding: it does not establish that the score is that game's score, and it establishes nothing about the date.<br><br>
+<b>Effect on the numbers below:</b> NONE of the recomputed metrics change. They were always computed by joining the frozen board to the relayed finals on the game key, which is the identity match. What changes is the WARRANT published beside them: from 'bound, gradable' to 'identity-matched, date unestablished, descriptive only'.</span></div>
 
 <h3>MLB &mdash; 15 of 15 final</h3>
 <table>

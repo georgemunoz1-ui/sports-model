@@ -257,21 +257,18 @@ Brier, log loss, MAE and bias below was <b>recomputed from the frozen boards</b>
 summary is checked rather than echoed. When the archives publish, these must be re-derived and any
 disagreement recorded rather than reconciled away.</span></div>
 
-<div class="proof"><b>BINDING</b> &mdash; rebuilt under the full contract<br>
-mlb: RESULT_BINDING_PASS = {esc(B['counters']['mlb']['RESULT_BINDING_PASS'])} &middot;
-DATE_COHERENCE_PASS = {esc(B['counters']['mlb']['DATE_COHERENCE_PASS'])} &middot;
-CANONICAL_ID_MATCH = {esc(B['counters']['mlb']['CANONICAL_ID_MATCH'])} &middot;
-REFUSED_ROWS = {esc(B['counters']['mlb']['REFUSED_ROWS'])}<br>
-wnba: RESULT_BINDING_PASS = {esc(B['counters']['wnba']['RESULT_BINDING_PASS'])} &middot;
-DATE_COHERENCE_PASS = {esc(B['counters']['wnba']['DATE_COHERENCE_PASS'])} &middot;
-CANONICAL_ID_MATCH = {esc(B['counters']['wnba']['CANONICAL_ID_MATCH'])} &middot;
-REFUSED_ROWS = {esc(B['counters']['wnba']['REFUSED_ROWS'])}<br>
-<span style="font-family:Public Sans,sans-serif">The relay's stated join was
-<code>slate_date + canonical_id + away + home</code>. The registered contract also requires
-<code>sport</code> and <code>result_date</code> &mdash; and <code>result_date</code> is the field
-whose absence caused the August 27 P0, live here because 14 of these 19 games carry an August 29
-<i>UTC</i> timestamp. The rows were rebuilt under the full contract and re-bound rather than
-accepted as joined. Both cohorts bind clean.</span></div>
+<div class="proof"><b>BINDING &mdash; NOT BOUND, AND IT NEVER WAS</b><br>
+mlb: full-contract RESULT_BINDING_PASS = {esc(B['counters_full_contract']['mlb']['RESULT_BINDING_PASS'])}
+&middot; identity-only {esc(B['identity_only']['mlb']['IDENTITY_MATCH'])}<br>
+wnba: full-contract RESULT_BINDING_PASS = {esc(B['counters_full_contract']['wnba']['RESULT_BINDING_PASS'])}
+&middot; identity-only {esc(B['identity_only']['wnba']['IDENTITY_MATCH'])}<br>
+<span style="font-family:Public Sans,sans-serif">
+<b>An earlier version of this page published RESULT_BINDING_PASS = 15/15 and 4/4 with
+DATE_COHERENCE_PASS to match, and called both cohorts gradable. That was wrong and is withdrawn.</b>
+{esc(B['CORRECTION']['why_that_was_wrong'])}<br><br>
+{esc(B['why_it_cannot_bind'])}<br><br>
+<b>What is true instead:</b> {esc(B['CORRECTION']['what_is_true_instead'])}<br><br>
+<b>Effect on the numbers below:</b> {esc(B['CORRECTION']['effect_on_the_grades'])}</span></div>
 
 <h3>MLB &mdash; 15 of 15 final</h3>
 <table>

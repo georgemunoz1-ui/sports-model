@@ -222,8 +222,14 @@ def selftest():
     f = []
     art = json.load(open(EXT_PATH)) if os.path.exists(EXT_PATH) else None
     if art is None:
-        print("wnba_refresh_espn selftest: SKIP (no extension artifact)")
-        return True
+        # 2026-08-29: this returned True. A selftest that reports PASS when its subject is ABSENT
+        # is the "0/0 means nothing claimed, not nothing checked" confusion in executable form —
+        # the artifact could be deleted and every gate in the repo would stay green. Absence is
+        # now a FAILURE with the remedy stated, not a silent pass.
+        print("wnba_refresh_espn selftest: FAIL (no extension artifact at "
+              f"{EXT_PATH} — nothing was checked). Run: "
+              "python3 harness/wnba_refresh_espn.py --extract")
+        return False
     if art["cutoff_exclusive"] != "2026-07-22":
         f.append("the extension must start strictly after the official-plus-one cutoff")
     if any(g["date"] <= art["cutoff_exclusive"] for g in art["games"]):

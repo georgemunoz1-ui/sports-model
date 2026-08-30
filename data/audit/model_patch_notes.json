@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "generated_utc": "2026-08-30T03:25:06Z",
+  "generated_utc": "2026-08-30T10:54:38Z",
   "source_of_truth": "append-only patch records; newest first",
   "patches": [
     {
@@ -15,12 +15,16 @@
         "require exact normalized full-name identity instead of trusting people[0]",
         "grade an MLB game log POST_HOC_NOT_PREGAME for starter identity",
         "replace stale MLB starter rates with the registered V13 CAP treatment while retaining the old observation for audit",
-        "keep content-age and post-acquisition age re-gates fail-closed"
+        "keep content-age and post-acquisition age re-gates fail-closed",
+        "apply the same dual-clock re-gate when acquisition fills an ABSENT store slot; an ancient returned observation remains DEGRADED",
+        "derive the starter-slots-capped count from actionable/current-value authority so ACQUIRING fallback rows cannot be counted as uncapped"
       ],
       "verification": {
         "freshness_contract_gate": "PASS",
         "freshness_mutants": "9/9 caught",
         "acquisition_adapter_selftest": "PASS",
+        "absent_acquisition_pair": "PASS — ancient content degrades; genuinely current content recovers",
+        "acquiring_cap_coherence": "PASS — fallback values, capped count, and action state agree",
         "starter_regression": "PASS",
         "targeted_multisport_tests": "23/23 PASS",
         "full_handoff_suite": "171/174 in this review environment; 3 WNBA failures because real pyarrow is unavailable"

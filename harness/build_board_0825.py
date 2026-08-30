@@ -174,6 +174,16 @@ def starter(pid_map, name, acquire=None, now=None):
     return sp, status, V13.rs(sp["era"], sp["gs"], sp["k"], sp["bb"]), disp
 
 
+def starter_slot_capped(disposition):
+    """Return whether the registered CAP, rather than current observed values, was used.
+
+    ACQUIRING+CONFIRMED remains non-actionable until a new board freeze. The resolver therefore
+    withholds the acquired raw values; counting that slot as uncapped would make the board's
+    evidence summary contradict the inputs actually simulated.
+    """
+    return not bool(disposition.get("actionable", False))
+
+
 def build():
     pid_map = name_to_pid()
     rf, ra, ng = team_form_rf_ra()
@@ -192,12 +202,9 @@ def build():
         gid = f"mlb:{aab}@{hab}"
         spa, sa_status, rs_a, disp_a = starter(pid_map, g["away_sp"], acquire=ACQUIRE)
         sph, sh_status, rs_h, disp_h = starter(pid_map, g["home_sp"], acquire=ACQUIRE)
-        # a slot is uncapped only when the contract holds it FRESH, or ACQUIRING with a
-        # CONFIRMED grade; everything else (stale, absent, unconfirmed, post-hoc) counts.
-        def _capped(d):
-            return not (d["disposition"] == "FRESH"
-                        or (d["disposition"] == "ACQUIRING" and d["grade"] == "CONFIRMED"))
-        capped = int(_capped(disp_a)) + int(_capped(disp_h))
+        # A slot is uncapped only when the contract authorizes its CURRENT_OBSERVED_VALUE.
+        # ACQUIRING is deliberately fallback-only until refreeze, even with a CONFIRMED grade.
+        capped = int(starter_slot_capped(disp_a)) + int(starter_slot_capped(disp_h))
         dose = BF.game_dose([disp_a, disp_h])
         pf = parks.get(VENUE.get(g["home"], ""), 1.0)
         seed = KS.seed_for(f"mlb.winner.CHAMPION_V13.{TRIALS}", SLATE_DATE, gid, "v13_1")

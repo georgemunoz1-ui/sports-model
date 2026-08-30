@@ -404,6 +404,28 @@ if os.path.exists("docs/progress.md"):
     mtime=datetime.date.fromtimestamp(os.path.getmtime("docs/progress.md"))
     check(f"progress.md last touched {mtime}", (datetime.date.today()-mtime).days<=2, warn=True)
 else: check("docs/progress.md exists", False, warn=True)
+
+# 6a. HEALTH PAGE PATCH NOTES (owner ruling 2026-08-30). A repair that changes model behaviour
+#     must be visible on the reader-facing health page and in a machine-readable record. This gate
+#     binds the newest patch id to both artifacts, refuses duplicate ids, and refuses an empty
+#     verification block. The dashboard can summarize; the JSON is the audit source of truth.
+try:
+    _pn=json.load(open("data/audit/model_patch_notes.json"))
+    _patches=_pn.get("patches") or []
+    _ids=[p.get("patch_id") for p in _patches]
+    check(f"model patch-note registry ({len(_patches)} entries, newest {_ids[0] if _ids else 'none'})",
+          bool(_patches) and all(_ids) and len(_ids)==len(set(_ids)))
+    _latest=_patches[0] if _patches else {}
+    check("latest patch note carries status, scope, changes, and verification",
+          all(_latest.get(k) for k in ("patch_id","status","scope","changes","verification")))
+    _dash=open("docs/dashboard.html", encoding="utf-8").read()
+    check(f"health dashboard publishes latest patch {_latest.get('patch_id','none')}",
+          bool(_latest.get("patch_id")) and _latest["patch_id"] in _dash)
+    check("health dashboard discloses action block and open-source status",
+          "ACTION_BLOCKED" in _dash and "not open source" in _dash.lower())
+except Exception as e:
+    check(f"health page patch-note binding ({e})", False)
+
 # 6c. SEMANTIC journal continuity (owner ruling 2026-08-22). mtime is an extra signal, NOT the
 #     source of truth: it moves on checkout, restore, copy and touch, and says nothing about whether
 #     the file a COLD SESSION reads contains the latest work. This checks committed content:

@@ -147,8 +147,9 @@ def starter(pid_map, name, acquire=None, now=None):
     last_start_date is NO LONGER dropped: the full feats OrderedDict goes to
     board_freshness.resolve_starter_slot, which applies the freshness contract. The v13 engine's
     sp dict stays exactly {era, gs, k, bb}; freshness travels only in the 4th return value.
-    CAP on TBD or missing/immature log — never a guess. A stale-but-retained log still feeds the
-    engine; the contract widens the DOSE, it does not fabricate or remove data.
+    CAP on TBD, missing, immature, stale, or non-pregame evidence — never a guess. The stale
+    observation stays in the disposition for audit but does not feed V13. The registered league
+    treatment is used until a current canonical observation binds.
     """
     if name == "TBD":
         _, status, disp = BF.resolve_starter_slot(name, None, "OFFICIAL_TBD_CAP", SLATE_DATE,
@@ -167,6 +168,8 @@ def starter(pid_map, name, acquire=None, now=None):
         return V13._sp({}), status, None, disp
     feats, status, disp = BF.resolve_starter_slot(name, feats, "RESOLVED", SLATE_DATE, source,
                                                   acquire=acquire, now=now)
+    if feats is None:
+        return V13._sp({}), status, None, disp
     sp = {"era": feats["era"], "gs": feats["gs"], "k": feats["k_pct"], "bb": feats["bb_pct"]}
     return sp, status, V13.rs(sp["era"], sp["gs"], sp["k"], sp["bb"]), disp
 

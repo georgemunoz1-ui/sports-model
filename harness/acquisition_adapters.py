@@ -23,6 +23,7 @@ import hashlib
 import json
 import os
 import re
+import unicodedata
 MODULE_ID = "acquisition_adapters"
 
 import urllib.parse
@@ -86,8 +87,14 @@ class MLBStatsAPIAdapter(AcquisitionAdapter):
     """statsapi.mlb.com (no key). For kind='starter':
        - find player id via /api/v1/people/search?names=<subject>
        - last game log via /api/v1/people/<id>/stats?stats=gameLog&group=pitching&season=<year>
+       - exact normalized full-name identity match (never ``people[0]``)
        - Stamp(observed_at=last game date, fetched_at=now, source=URL,
-              source_sha256=sha256(response bytes), grade=CONFIRMED)
+              source_sha256=sha256(response bytes), grade=POST_HOC_NOT_PREGAME)
+
+       A game log proves that the identified player pitched on a historical date. It does NOT
+       attest that the player is tonight's starter, and this adapter's signature has no canonical
+       game id or scheduled date on which such an attestation could be bound. It therefore cannot
+       mint CONFIRMED starter identity.
        Timeout 5s, one retry; any failure -> None (contract degrades)."""
 
     name = "mlb_stats_api"
@@ -113,7 +120,7 @@ class MLBStatsAPIAdapter(AcquisitionAdapter):
             return None
 
     def _fetch(self, subject, sport, kind):
-        if sport != "mlb":
+        if sport != "mlb" or kind != "starter":
             return None
         now = self.now_fn()
         q = urllib.parse.urlencode({"names": subject})
@@ -122,9 +129,14 @@ class MLBStatsAPIAdapter(AcquisitionAdapter):
         if not data:
             return None
         people = data.get("people") or []
-        if not people or "id" not in people[0]:
+        target = self._normalise_name(subject)
+        matches = [p for p in people
+                   if p.get("id") is not None
+                   and self._normalise_name(p.get("fullName")) == target]
+        if len(matches) != 1:
             return None
-        pid = people[0]["id"]
+        person = matches[0]
+        pid = person["id"]
 
         log_url = (f"{BASE}/api/v1/people/{pid}/stats"
                    f"?stats=gameLog&group=pitching&season={now.year}")
@@ -138,13 +150,20 @@ class MLBStatsAPIAdapter(AcquisitionAdapter):
             observed_at=last_date,
             effective_at=now,
             fetched_at=now,
-            source=log_url,
+            source=f"{log_url} | identity={person.get('fullName')}",
             source_sha256=hashlib.sha256(body).hexdigest(),
-            grade=fc.CONFIRMED,
+            grade=fc.POST_HOC_NOT_PREGAME,
             subject=subject,
         )
         stamp.validate()
         return stamp
+
+    @staticmethod
+    def _normalise_name(value):
+        """Case/spacing/diacritic-insensitive FULL-name comparison; empty never matches."""
+        s = unicodedata.normalize("NFKD", str(value or ""))
+        s = "".join(ch for ch in s if not unicodedata.combining(ch))
+        return " ".join(re.sub(r"[^a-z0-9]+", " ", s.lower()).split())
 
     @staticmethod
     def _last_game_date(data):
@@ -344,21 +363,24 @@ def selftest():
     except AcquisitionDisabled:
         pass
 
-    # S2 — with an injected fetcher the MLB adapter yields a CONFIRMED stamp whose observed_at is
-    #      the NEWEST game-log date, and whose sha256 is over the real response bytes.
+    # S2 — with an injected fetcher the MLB adapter yields a POST_HOC_NOT_PREGAME stamp whose
+    #      observed_at is the NEWEST game-log date and whose identity is an exact full-name match.
     calls = []
     def fake_get(url, timeout=None):
         calls.append(url)
         if "people/search" in url:
-            return b'{"people":[{"id":680574}]}'
+            return (b'{"people":[{"id":999,"fullName":"Hunter Greene"},'
+                    b'{"id":680574,"fullName":"Hunter Brown"}]}')
         return b'{"stats":[{"splits":[{"date":"2026-07-19"},{"date":"2026-08-27"}]}]}'
     a = MLBStatsAPIAdapter(http_get=fake_get, now_fn=lambda: NOW)
     st = a.fetch("Hunter Brown", "mlb", "starter")
     if st is None:
         f.append("S2: injected fetcher produced no stamp")
     else:
-        if st.grade != fc.CONFIRMED:
-            f.append(f"S2: expected CONFIRMED, got {st.grade}")
+        if st.grade != fc.POST_HOC_NOT_PREGAME:
+            f.append(f"S2: expected POST_HOC_NOT_PREGAME, got {st.grade}")
+        if "/people/680574/stats" not in st.source:
+            f.append(f"S2: exact identity did not select Hunter Brown: {st.source}")
         if st.observed_at.date().isoformat() != "2026-08-27":
             f.append(f"S2: observed_at should be the NEWEST split, got {st.observed_at}")
         if not st.source_sha256:
@@ -366,10 +388,20 @@ def selftest():
 
     # S3 — no game-log dates -> None, never an invented date (R1).
     a2 = MLBStatsAPIAdapter(http_get=lambda u, timeout=None:
-                            b'{"people":[{"id":1}]}' if "search" in u else b'{"stats":[]}',
+                            b'{"people":[{"id":1,"fullName":"Ghost"}]}'
+                            if "search" in u else b'{"stats":[]}',
                             now_fn=lambda: NOW)
     if a2.fetch("Ghost", "mlb", "starter") is not None:
         f.append("S3: an empty game log produced a stamp instead of None")
+
+    # S3b — no exact full-name identity -> refusal. The first search result is never trusted.
+    a2b = MLBStatsAPIAdapter(http_get=lambda u, timeout=None:
+                             b'{"people":[{"id":2,"fullName":"Christian Brown"}]}'
+                             if "search" in u else
+                             b'{"stats":[{"splits":[{"date":"2026-08-27"}]}]}',
+                             now_fn=lambda: NOW)
+    if a2b.fetch("Hunter Brown", "mlb", "starter") is not None:
+        f.append("S3b: a non-matching people[0] identity was accepted")
 
     # S4 — a search-derived stamp is ALWAYS IDENTIFIED_UNCONFIRMED. Snippets identify, never bind.
     s4 = SearchIdentifyAdapter(search_fn=lambda q: "Hunter Brown last started 2026-08-27",
@@ -388,7 +420,7 @@ def selftest():
         if st is not None:
             store.write(st)
             back = store.read("Hunter Brown")
-            if back is None or back.grade != fc.CONFIRMED:
+            if back is None or back.grade != fc.POST_HOC_NOT_PREGAME:
                 f.append("S6: LiveStore did not round-trip a stamp")
             store.write(st)
             if sum(1 for _ in open(path)) < 2:

@@ -1,108 +1,65 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Sports Model — Full Status · July 22, 2026</title>
-<style>
-:root{--bg:#0d1117;--card:#161b22;--line:#232b36;--ink:#e6edf3;--dim:#8b949e;--grn:#3fb950;--red:#f85149;--amb:#d29922;--blu:#58a6ff;--vio:#bc8cff}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif}
-.wrap{max-width:1060px;margin:0 auto;padding:26px 20px 60px}
-h1{font-size:21px;margin:0 0 3px}h2{font-size:14px;margin:26px 0 10px;padding-bottom:6px;border-bottom:1px solid var(--line);text-transform:uppercase;letter-spacing:.04em;color:var(--dim)}
-.sub{color:var(--dim);font-size:12.5px}
-.tiles{display:grid;gap:10px;grid-template-columns:repeat(4,1fr);margin-top:14px}
-@media(max-width:760px){.tiles{grid-template-columns:1fr 1fr}}
-.tile{background:var(--card);border:1px solid var(--line);border-radius:9px;padding:11px 13px}
-.khead{color:var(--dim);font-size:10.5px;text-transform:uppercase;letter-spacing:.04em;margin-bottom:2px}
-.big{font-size:20px;font-weight:700}
-table{width:100%;border-collapse:collapse;font-size:12.2px;margin-top:5px}
-th,td{padding:6px 8px;text-align:right;border-bottom:1px solid var(--line);white-space:nowrap}
-th{color:var(--dim);font-weight:600;font-size:10.5px;text-transform:uppercase}
-td:first-child,th:first-child{text-align:left}
-.pos{color:var(--grn)}.neg{color:var(--red)}.mut{color:var(--dim)}.b{font-weight:700}.amb{color:var(--amb)}
-.tag{display:inline-block;font-size:10px;font-weight:700;letter-spacing:.05em;padding:2px 8px;border-radius:20px;text-transform:uppercase}
-.t-live{background:rgba(63,185,80,.16);color:var(--grn)}.t-dead{background:rgba(248,81,73,.14);color:var(--red)}
-.t-hold{background:rgba(210,153,34,.16);color:var(--amb)}.t-trk{background:rgba(88,166,255,.16);color:var(--blu)}
-.bar{height:7px;background:#0b0f14;border:1px solid var(--line);border-radius:5px;overflow:hidden;margin-top:5px}
-.fill{height:100%;background:var(--blu)}
-.card{background:var(--card);border:1px solid var(--line);border-radius:9px;padding:12px 15px}
-.grid2{display:grid;gap:11px;grid-template-columns:1fr 1fr}@media(max-width:700px){.grid2{grid-template-columns:1fr}}
-.foot{color:var(--dim);font-size:11px;margin-top:24px;border-top:1px solid var(--line);padding-top:10px}
-ul{margin:4px 0 0;padding-left:17px}li{margin:3px 0;font-size:12.5px}
-</style></head><body><div class="wrap">
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Sports Model Health & Patch Notes — August 30, 2026</title>
+  <style>
+    :root{--bg:#0b0f14;--panel:#121923;--line:#263242;--text:#e6edf3;--muted:#9ba7b4;--green:#4ac26b;--amber:#e3b341;--red:#ff6b6b;--blue:#66a3ff;--purple:#c099ff}
+    *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:14px/1.55 system-ui,-apple-system,Segoe UI,sans-serif}.wrap{max-width:1160px;margin:auto;padding:28px 20px 64px}
+    h1{font-size:26px;margin:0}h2{font-size:15px;margin:28px 0 10px;padding-bottom:7px;border-bottom:1px solid var(--line);text-transform:uppercase;letter-spacing:.05em;color:var(--muted)}h3{font-size:15px;margin:0 0 5px}.sub,.muted{color:var(--muted)}
+    .banner{margin:18px 0;padding:14px 16px;border:1px solid #6f2f34;background:#231317;border-radius:10px}.banner b{color:#ff8e8e}.tiles{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}@media(max-width:820px){.tiles{grid-template-columns:1fr 1fr}}@media(max-width:520px){.tiles{grid-template-columns:1fr}}
+    .tile,.card{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:13px 15px}.label{font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted)}.value{font-size:20px;font-weight:750;margin-top:2px}.ok{color:var(--green)}.warn{color:var(--amber)}.bad{color:var(--red)}.info{color:var(--blue)}
+    table{width:100%;border-collapse:collapse;background:var(--panel);border:1px solid var(--line);font-size:12.5px}th,td{padding:8px 10px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}th{font-size:10px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}code{color:#c9d9ff;background:#0a111b;padding:1px 4px;border-radius:4px}
+    .patches{display:grid;gap:10px}.patch{background:var(--panel);border:1px solid var(--line);border-left:4px solid var(--blue);border-radius:9px;padding:13px 15px}.patch.p0{border-left-color:var(--red)}.patch.p1{border-left-color:var(--amber)}.meta{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:7px}.tag{font-size:10px;font-weight:750;letter-spacing:.05em;padding:2px 8px;border-radius:99px;background:#1c2735;color:#cbd5e1}.tag.p0{background:#3a171b;color:#ff9999}.tag.pass{background:#12301c;color:#7ee29a}.tag.block{background:#3b2d12;color:#f0cb73}ul{margin:5px 0 0;padding-left:19px}li{margin:3px 0}.foot{margin-top:28px;padding-top:12px;border-top:1px solid var(--line);color:var(--muted);font-size:11px}
+  </style>
+</head>
+<body><main class="wrap">
+  <h1>Sports Model Health & Patch Notes</h1>
+  <div class="sub">Forward-looking system status · generated 2026-08-30 03:25Z · frozen historical cards remain immutable</div>
 
-<h1>Sports Model — Full Status Report</h1>
-<div class="sub">Wednesday, July 22 2026 · everything paper · $0 real risk · harness autonomous (pregame 8AM PT / grade 10:30PM PT)</div>
+  <div class="banner"><b>Action remains blocked.</b> The P0 freshness patch preserves labelled model output by using registered fallbacks, but stale, absent, post-hoc, or search-identified evidence is no longer action eligible. No current page state authorizes a wager.</div>
 
-<div class="tiles">
-<div class="tile"><div class="khead">K-prop ledger (LIVE track)</div><div class="big">1-2-1V · <span class="neg">-0.47u</span></div><div class="sub">day 1 of forward test · gate 3/100</div></div>
-<div class="tile"><div class="khead">Dataset</div><div class="big">1,518 finals</div><div class="sub">+ 310 pitcher logs · leak-free as-of features</div></div>
-<div class="tile"><div class="khead">Sides (ML) verdict</div><div class="big neg">DEAD</div><div class="sub">n=1,461: MC=coin, ML worse · no plays</div></div>
-<div class="tile"><div class="khead">Real money</div><div class="big">$0</div><div class="sub">correct by evidence, not just caution</div></div>
-</div>
+  <section class="tiles">
+    <div class="tile"><div class="label">P0 freshness gate</div><div class="value ok">PASS</div><div class="muted">9/9 mutants caught</div></div>
+    <div class="tile"><div class="label">Full handoff suite</div><div class="value warn">171 / 174</div><div class="muted">3 WNBA dependency failures</div></div>
+    <div class="tile"><div class="label">Decision readiness</div><div class="value bad">ACTION_BLOCKED</div><div class="muted">freshness ≠ wager authority</div></div>
+    <div class="tile"><div class="label">Open source</div><div class="value info">PRIVATE</div><div class="muted">no license; not open source</div></div>
+  </section>
 
-<h2>① Market status board — every line type we track</h2>
-<table><thead><tr><th>Market</th><th>Status</th><th>Evidence / record</th><th>What changes it</th></tr></thead><tbody>
-<tr><td class="b">MLB Strikeout props</td><td><span class="tag t-live">LIVE PAPER</span></td><td>Backtest n=1,759: MAE 1.92 beats naive 2.41, calibrated; forward 1-2-1V (-0.47u)</td><td>Gate: 100 graded plays, CI-positive ROI → your go-live call</td></tr>
-<tr><td class="b">MLB Moneyline</td><td><span class="tag t-dead">DEAD</span></td><td>n=1,461 as-of: V13 Brier .2500 (coin), GBM .2563 (worse); mkt .238</td><td>New feature class (lineups/pen-rest) beating mkt on 500-game holdout</td></tr>
-<tr><td class="b">MLB Run line</td><td><span class="tag t-dead">DEAD</span></td><td>Derived from same margin dist as ML — dies with it</td><td>Same as ML</td></tr>
-<tr><td class="b">MLB Totals</td><td><span class="tag t-hold">NOT READY</span></td><td>44-48% directional pooled — below coin, benched</td><td>Dixon-Coles correlation exp. (queued behind E1-E3)</td></tr>
-<tr><td class="b">Other props (ER, TB, hits)</td><td><span class="tag t-hold">QUEUED</span></td><td>Same log data supports ER props; not yet built</td><td>K-prop methodology validating first (n≥50)</td></tr>
-<tr><td class="b">V13 directional (no-bet)</td><td><span class="tag t-trk">TRACKING</span></td><td>Forward 18-10 (7/19-20) — home-heavy noise, no conclusion</td><td>Accumulates; sanity reference only</td></tr>
-<tr><td class="b">EST home-lean fade (H1)</td><td><span class="tag t-trk">TRACKING</span></td><td>3-0 on 7/17 road-fav/home-dog splits; n too small</td><td>~30 qualifying spots</td></tr>
-<tr><td class="b">Prop-line CLV (E3)</td><td><span class="tag t-trk">STARTING</span></td><td>Pregame ML/total snapshots now auto-captured daily</td><td>Do our flagged deviations get steamed toward us?</td></tr>
-<tr><td class="b">WNBA / NFL / CFB / NBA</td><td><span class="tag t-hold">STUBBED</span></td><td>Registry + endpoints verified; no ledgers yet</td><td>K-prop validation at n≥50 → WNBA ports first</td></tr>
-</tbody></table>
+  <h2>Model status</h2>
+  <table><thead><tr><th>Sport</th><th>Model output</th><th>Current health</th><th>Action status</th></tr></thead><tbody>
+    <tr><td><b>MLB</b></td><td>Champion V13 plus separately identified challengers and prior</td><td>P0 forward path now substitutes the registered CAP for stale starter values; exact starter confirmation still requires game-bound evidence</td><td class="bad">BLOCKED unless every decision gate passes</td></tr>
+    <tr><td><b>WNBA</b></td><td>Four-factors refresh arm, standings fallback, prior</td><td>89-game extension and ET-date guard are present; real <code>pyarrow</code> was unavailable in this clean review environment, so end-to-end reproduction is not yet green</td><td class="bad">BLOCKED</td></tr>
+    <tr><td><b>CFB</b></td><td>Registered historical/house arm and separately developed shadow margin distribution; never merge their probabilities</td><td>August 29 relay identities were structurally unbindable for canonical grading; future boards require canonical result-binding identities before publication</td><td class="bad">BLOCKED</td></tr>
+    <tr><td><b>NFL</b></td><td>Implementation exists, but no admitted current competition-eligible forecast path</td><td>Benchmark/data-preparation lane only until a current registered model binds</td><td class="bad">NO FORECAST AUTHORITY</td></tr>
+  </tbody></table>
 
-<h2>② K-prop ledger — every play, graded</h2>
-<table><thead><tr><th>Date</th><th>Pitcher</th><th>Play</th><th>Price</th><th>Wt</th><th>Proj</th><th>Actual</th><th>Result</th><th>P/L</th><th>Running</th></tr></thead><tbody>
-<tr><td>7/21</td><td class="b">Drew Rasmussen</td><td>O 4.5 K</td><td>+103</td><td>1.0</td><td>5.41</td><td class="b">5</td><td class="pos b">WIN</td><td class="pos">+1.03</td><td>+1.03</td></tr>
-<tr><td>7/21</td><td class="b">Walker Buehler</td><td>O 3.5 K</td><td>-129</td><td>1.0</td><td>4.41</td><td class="b">3</td><td class="neg b">LOSS</td><td class="neg">-1.00</td><td>+0.03</td></tr>
-<tr><td>7/21</td><td>Jack Perkins</td><td>O 4.5 K</td><td>+102</td><td>0.5</td><td>5.83</td><td class="b">4</td><td class="neg b">LOSS</td><td class="neg">-0.50</td><td>-0.47</td></tr>
-<tr><td>7/21</td><td class="mut">Miles Mikolas</td><td class="mut">O 2.5 K</td><td class="mut">-122</td><td class="mut">0.5</td><td class="mut">3.75</td><td class="mut">1</td><td class="amb b">VOID</td><td class="mut">0.00</td><td>-0.47</td></tr>
-</tbody></table>
-<div class="sub" style="margin-top:6px">Reads: Rasmussen landed ON the projection (5.41→5). Perkins missed by ONE K on a pre-flagged thin sample. Buehler = the true miss (3 vs 4.41). Mikolas VOID — Washington used an opener (gs=0); books void no-start props. New pregame rule adopted: confirm starter status, discount opener-risk teams.</div>
-<div class="bar" style="max-width:420px"><div class="fill" style="width:3%"></div></div>
-<div class="sub">Go-live gate progress: 3/100 graded · needs CI-positive ROI at n=100 + your authorization. Nothing goes live before that.</div>
+  <h2>Freshness state machine</h2>
+  <table><thead><tr><th>Input state</th><th>Forecast value policy</th><th>May publish research output?</th><th>May reach action layer?</th></tr></thead><tbody>
+    <tr><td><code>FRESH + CONFIRMED</code></td><td><code>CURRENT_OBSERVED_VALUE</code></td><td class="ok">Yes</td><td>Only if every other gate passes</td></tr>
+    <tr><td><code>ACQUIRING</code></td><td><code>REGISTERED_FALLBACK_ONLY</code> until the board refreezes</td><td class="ok">Yes, labelled</td><td class="bad">No</td></tr>
+    <tr><td><code>DEGRADED / ABSENT</code></td><td><code>REGISTERED_FALLBACK_ONLY</code>; stale raw value retained for audit only</td><td class="ok">Yes, labelled</td><td class="bad">No</td></tr>
+    <tr><td><code>IDENTIFIED_UNCONFIRMED</code> or <code>POST_HOC_NOT_PREGAME</code></td><td><code>REGISTERED_FALLBACK_ONLY</code></td><td class="ok">Yes, labelled</td><td class="bad">No</td></tr>
+  </tbody></table>
 
-<h2>③ Full 7/21 tracked K board — projection vs line (accountability view)</h2>
-<table><thead><tr><th>Pitcher</th><th>Proj</th><th>Line</th><th>Dev</th><th>Call</th><th>Game result context</th></tr></thead><tbody>
-<tr><td>Chase Burns</td><td>6.35</td><td>6.5</td><td class="mut">-0.15</td><td class="mut">pass (on number)</td><td>CIN won 4-2 @SEA</td></tr>
-<tr><td>Zack Wheeler</td><td>6.85</td><td>6.5</td><td class="mut">+0.35</td><td class="mut">pass</td><td>PHI lost 1-2 to LAD</td></tr>
-<tr><td>Luis Castillo</td><td>4.77</td><td>5.5</td><td class="mut">-0.73</td><td class="mut">excluded (price misread)</td><td>SEA lost 2-4</td></tr>
-<tr><td>Kevin Gausman</td><td>5.72</td><td>5.5</td><td class="mut">+0.22</td><td class="mut">pass</td><td>TOR shelled 2-12</td></tr>
-<tr><td>Tatsuya Imai</td><td>4.91</td><td>5.5</td><td class="mut">-0.59</td><td class="mut">under lean (sub-bar)</td><td>HOU won 5-3</td></tr>
-<tr><td>Will Warren</td><td>5.08</td><td>5.5</td><td class="mut">-0.42</td><td class="mut">under lean (sub-bar)</td><td>PPD → 7/22 DH</td></tr>
-<tr><td>M. Liberatore</td><td>4.72</td><td>4.5</td><td class="mut">+0.22</td><td class="mut">pass</td><td>STL lost 1-5</td></tr>
-<tr><td>Kumar Rocker</td><td>4.21</td><td>4.5</td><td class="mut">-0.29</td><td class="mut">pass</td><td>TEX won 10-0</td></tr>
-<tr><td>Bubba Chandler</td><td>4.48</td><td>4.5</td><td class="mut">-0.02</td><td class="mut">pass (dead on)</td><td>PPD → 7/22 DH</td></tr>
-<tr><td>Tyler Mahle</td><td>4.94</td><td>4.5</td><td class="mut">+0.44</td><td class="mut">over lean (sub-bar)</td><td>SF lost 2-3</td></tr>
-<tr><td class="b">Rasmussen / Buehler / Perkins / Mikolas</td><td colspan="5" class="mut" style="text-align:left">→ the 4 carded plays above</td></tr>
-<tr><td>Peterson · Sproat · Valdez · Avila · Phillips · Lorenzen</td><td colspan="5" class="mut" style="text-align:left">passes / sub-bar leans — full-board actual-K sweep runs in Sunday calibration review</td></tr>
-</tbody></table>
+  <h2>Patch notes</h2>
+  <section class="patches">
+    <article class="patch p0"><div class="meta"><span class="tag p0">P0</span><span class="tag">P0-FRESHNESS-2026-08-30</span><span class="tag pass">isolated verification passed</span></div><h3>Stale values removed from the live feature path</h3><ul><li>Split <code>forecastable</code> from <code>actionable</code>; only <code>FRESH + CONFIRMED</code> can proceed toward action.</li><li>MLB people search now requires one exact normalized full-name match; <code>people[0]</code> is never trusted.</li><li>A historical MLB game log is <code>POST_HOC_NOT_PREGAME</code> for starter identity.</li><li>Stale starter rates no longer enter V13. The registered CAP runs; the old observation remains audit evidence.</li><li>Verified: freshness gate PASS, 9/9 mutants, acquisition self-test PASS, starter regression PASS, targeted multi-sport tests 23/23.</li></ul></article>
+    <article class="patch p0"><div class="meta"><span class="tag p0">P0</span><span class="tag">P0-CONTENT-AGE-2026-08-29</span><span class="tag pass">operational branch</span></div><h3>Fetching is no longer mistaken for learning</h3><p>A fresh <code>fetched_at</code> cannot launder an old observation. Both content age and derived age must pass, newly acquired content is re-gated, and identical stale bytes do not clear staleness.</p></article>
+    <article class="patch p0"><div class="meta"><span class="tag p0">P0</span><span class="tag">P0-RESULT-BINDING-2026-08-28</span><span class="tag pass">operational branch</span></div><h3>Prior-date series contamination refused</h3><p>Grades require sport, canonical game ID, scheduled date, away team, and home team. Any refused row refuses the aggregate; descriptive display never silently becomes promotion evidence.</p></article>
+    <article class="patch p1"><div class="meta"><span class="tag block">P1</span><span class="tag">DATA-WNBA-DATE-AND-EXTENSION-2026-08-29</span><span class="tag block">repro blocker open</span></div><h3>WNBA date and extension repair</h3><p>UTC instants now derive ET game dates, duplicate content across ID spaces is refused, and the extension is 89 games. The clean review still cannot run the real WNBA path without <code>pyarrow</code>; this is an explicit health failure, not a hidden skip.</p></article>
+    <article class="patch"><div class="meta"><span class="tag">POLICY</span><span class="tag">POLICY-MARKET-INDEPENDENCE-2026-08-29</span></div><h3>Market remains valuation-only</h3><p>Odds, betting splits, line movement, and implied probabilities are forbidden predictive features. Model outputs freeze first; prices attach afterward for EV screening.</p></article>
+  </section>
 
-<h2>④ Historical arc — how we got here (all graded honestly)</h2>
-<div class="grid2">
-<div class="card"><div class="khead">Sides journey (now closed)</div>
-<ul>
-<li><b>7/17-18:</b> V11 paper 4-4 · V13 first card, value picks 5-10 but win-predictor 10-5 → found under-dispersion</li>
-<li><b>Parlay (7/18):</b> recommended, LOST (SF, WSH legs) — owned in ledger</li>
-<li><b>7/19-20:</b> forward 18-10 (home-heavy noise) · leans 1-1 · zero live plays post-verdict</li>
-<li><b>Verdict (n=1,461):</b> free-data sides = coin. Both engines. Closed until new feature class.</li>
-</ul></div>
-<div class="card"><div class="khead">System health</div>
-<ul>
-<li>Harness live: healthcheck (caught a real container rollback day 1), runbook, state.json, git + your offline bundle backup</li>
-<li>Two daily autonomous runs · trigger audit clean (2 active)</li>
-<li>RotoWire CSV pipe documented — drop the export any morning for full-EV cards</li>
-<li>Pending: GitHub remote (your repo+token) · 7/22 has TWO doubleheaders (PIT@NYY, BAL@BOS)</li>
-</ul></div>
-</div>
+  <h2>Open blockers</h2>
+  <table><thead><tr><th>Priority</th><th>Blocker</th><th>Closure proof</th></tr></thead><tbody>
+    <tr><td>P0 merge</td><td>Freshness patch must pass the operational branch healthcheck without changing frozen artifacts</td><td>clean branch run + hashes unchanged + review</td></tr>
+    <tr><td>P1</td><td>WNBA <code>pyarrow</code> dependency/reproducible bootstrap</td><td>174/174 in a clean documented environment; no stub-only pass</td></tr>
+    <tr><td>P1</td><td>Current roster, injury, probable-starter and lineup evidence must bind to canonical game identities</td><td>same-game/date evidence receipts before freeze</td></tr>
+    <tr><td>P1</td><td>CFB relay identities cannot settle canonical grades</td><td>canonical IDs and result-binding pass before board registration</td></tr>
+    <tr><td>Release</td><td>Repository is private and has no license</td><td>license, dependency lock, data-rights audit, anonymous clean-clone reproduction</td></tr>
+  </tbody></table>
 
-<h2>⑤ Experiment queue (one at a time, pre-registered)</h2>
-<table><thead><tr><th>ID</th><th>Experiment</th><th>Status</th><th>Must beat</th></tr></thead><tbody>
-<tr><td>E1</td><td class="b">Opponent-K% adjustment for K-props</td><td><span class="tag t-trk">NEXT</span></td><td>Backtest MAE 1.92 + displaced-line hit% on full 1,759-start replay</td></tr>
-<tr><td>E2</td><td>Negative-binomial K tails</td><td class="mut">queued</td><td>P(over) calibration buckets</td></tr>
-<tr><td>E3</td><td>Prop-line CLV capture</td><td class="mut">collecting</td><td>independent edge evidence (steam toward our numbers)</td></tr>
-<tr><td>E4</td><td>Lineup-aware sides reopen</td><td class="mut">queued</td><td>market Brier .238 on 500-game holdout</td></tr>
-<tr><td>E5</td><td>WNBA port</td><td class="mut">gated</td><td>K-prop n≥50 validation first</td></tr>
-</tbody></table>
-
-<div class="foot">Machine state: <code>state.json</code> · ledger: <code>docs/kprop_ledger.md</code> · journal: <code>docs/progress.md</code> · all committed to git (offline bundle in your files, 7/22). Next autonomous run: pregame 8:00 AM PT — drop the RotoWire CSV before then for a full-EV 7/22 card (two DHs today: openers likely, starter-confirmation rule in force).</div>
-</div></body></html>
+  <div class="foot">Machine-readable source: <code>data/audit/model_patch_notes.json</code> · operational code branch: <code>sportsmodel/main</code> · this page reports research-system health, not betting advice.</div>
+</main></body></html>

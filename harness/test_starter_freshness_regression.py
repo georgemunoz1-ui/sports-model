@@ -49,7 +49,9 @@ class _D:
         self.grade = d["grade"]
         self.dose_multiplier = d["dose_multiplier"]
         self.age_days = d.get("age_days")
-        self.bettable = True
+        self.forecastable = d.get("forecastable")
+        self.actionable = d.get("actionable")
+        self.bettable = self.actionable
 
 
 def _feats(last):
@@ -79,8 +81,10 @@ def run():
     dose = BF.game_dose([brown.raw, scott.raw])
     if dose >= 1.0:
         f.append(f"R2: HOU@NYM still produces dose {dose}; the published board said 1.0")
-    if not (brown.bettable and scott.bettable):
-        f.append("R2: the fix made HOU@NYM unbettable; terminal behaviour must be degrade, not block")
+    if not (brown.forecastable and scott.forecastable):
+        f.append("R2: the fix removed the labelled fallback forecast instead of degrading it")
+    if brown.actionable or scott.actionable:
+        f.append("R2: stale starter evidence remained action eligible")
 
     # R3 — the status string the builder emits must NOT be RESOLVED, because owner_class maps
     #      RESOLVED -> PROBABLE and PROBABLE is what the dose formula reads as full information.
@@ -94,12 +98,13 @@ def run():
             f.append(f"R3: a 40-day-old slot still emits {status!r} from starter()")
         if not status.startswith("STALE_DATA_CAP"):
             f.append(f"R3: expected STALE_DATA_CAP, got {status!r}")
-        # DELIBERATELY RELAXED, 2026-08-29. The earlier assertion here demanded rs is None — it
-        # encoded an implementation choice of mine (blank the sp dict on a stale slot), not a
-        # correctness requirement. The integrated builder keeps the REAL aged features feeding the
-        # engine and widens the dose instead, which is both more informative and truer to R1: do
-        # not discard real data, discount confidence in it. What must never regress is the SAFETY
-        # property, asserted below.
+        # P0-FRESHNESS-2026-08-30: the old rates remain audit evidence, but they may not enter V13
+        # as current. The builder must use its registered CAP treatment and expose no run-support
+        # value derived from stale rates.
+        if rs is not None:
+            f.append("R3: stale starter rates still produced a run-support value")
+        if sp != B.V13._sp({}):
+            f.append("R3: stale starter rates still entered V13 instead of the registered CAP")
         if _d["dose_multiplier"] == 1.0:
             f.append("R3: a stale slot kept a full information dose")
         if status == "PROBABLE":

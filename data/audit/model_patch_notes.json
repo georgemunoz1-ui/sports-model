@@ -1,0 +1,81 @@
+{
+  "schema_version": "1.0",
+  "generated_utc": "2026-08-30T03:25:06Z",
+  "source_of_truth": "append-only patch records; newest first",
+  "patches": [
+    {
+      "patch_id": "P0-FRESHNESS-2026-08-30",
+      "severity": "P0",
+      "status": "PROPOSED_VERIFIED_ON_ISOLATED_BRANCH",
+      "scope": ["mlb", "wnba", "cfb", "nfl", "shared freshness contract"],
+      "problem": "Stale or absent observations could remain described as bettable; MLB historical game logs could be stamped as confirmation of tonight's starter; stale pitcher rates still entered V13 before probability shrinkage.",
+      "changes": [
+        "separate forecastable from actionable; only FRESH + CONFIRMED is action eligible",
+        "emit REGISTERED_FALLBACK_ONLY as the value policy for every non-actionable input",
+        "require exact normalized full-name identity instead of trusting people[0]",
+        "grade an MLB game log POST_HOC_NOT_PREGAME for starter identity",
+        "replace stale MLB starter rates with the registered V13 CAP treatment while retaining the old observation for audit",
+        "keep content-age and post-acquisition age re-gates fail-closed"
+      ],
+      "verification": {
+        "freshness_contract_gate": "PASS",
+        "freshness_mutants": "9/9 caught",
+        "acquisition_adapter_selftest": "PASS",
+        "starter_regression": "PASS",
+        "targeted_multisport_tests": "23/23 PASS",
+        "full_handoff_suite": "171/174 in this review environment; 3 WNBA failures because real pyarrow is unavailable"
+      },
+      "action_authority": "NO",
+      "notes": "Frozen historical boards remain byte-identical. The patch is forward-only."
+    },
+    {
+      "patch_id": "P0-CONTENT-AGE-2026-08-29",
+      "severity": "P0",
+      "status": "ON_OPERATIONAL_BRANCH",
+      "scope": ["shared freshness contract"],
+      "problem": "A newly fetched but old observation could appear fresh because fetched_at reset the generous clock.",
+      "changes": [
+        "gate on content_age as well as derived_age",
+        "re-gate newly acquired content against the sport/kind age limit",
+        "refuse refetch-without-new-content"
+      ],
+      "verification": {"freshness_mutants": "9/9 caught"}
+    },
+    {
+      "patch_id": "P0-RESULT-BINDING-2026-08-28",
+      "severity": "P0",
+      "status": "ON_OPERATIONAL_BRANCH",
+      "scope": ["all grading", "mlb incident fixture"],
+      "problem": "Repeated-series matchups allowed prior-date finals to contaminate the next date's grades.",
+      "changes": [
+        "bind sport + canonical game id + scheduled date + away + home",
+        "refuse partial-cohort aggregation and ambiguous identities",
+        "run consecutive-series and adversarial bypass fixtures"
+      ]
+    },
+    {
+      "patch_id": "DATA-WNBA-DATE-AND-EXTENSION-2026-08-29",
+      "severity": "P1",
+      "status": "REVIEWED_WITH_REPRODUCIBILITY_BLOCKER",
+      "scope": ["wnba"],
+      "problem": "UTC-date slicing and duplicate cross-ID content could contaminate the feature pool; the daily extension needed rebuilding.",
+      "changes": [
+        "store utc_instant and derive ET game date",
+        "guard duplicate content across ID spaces",
+        "rebuild the ESPN extension to 89 games"
+      ],
+      "open_blocker": "The review environment has no real pyarrow, so the WNBA end-to-end path did not reproduce."
+    },
+    {
+      "patch_id": "POLICY-MARKET-INDEPENDENCE-2026-08-29",
+      "severity": "POLICY",
+      "status": "ON_OPERATIONAL_BRANCH",
+      "scope": ["all sports"],
+      "changes": [
+        "market, betting splits, line movement, and implied probability are forbidden predictive features",
+        "model outputs freeze before the valuation overlay",
+        "large market disagreement triggers an input audit, not market shrinkage"
+      ]
+    }
+  ]
+}

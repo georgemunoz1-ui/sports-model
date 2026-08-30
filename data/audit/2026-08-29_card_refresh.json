@@ -1,0 +1,99 @@
+{
+ "A_GAP_OF_MY_OWN": {
+  "consequence": "there is no prospective cohort for tomorrow's grading pass to bind against. Freezing a board NOW would not be a forecast \u2014 the games are over.",
+  "evidence_they_were_pregame": {
+   "chi_nyl_tip_utc": "2026-08-29T17:00:00Z",
+   "extension_sha256": "2373022df440b34acc12e408c5cc0916ce0b9ec0d682e4c7181d016f6b856656",
+   "run_retrieved_utc": "2026-08-29T08:23:35Z",
+   "tor_phx_tip_utc": "2026-08-30T02:00:00Z",
+   "verdict": "the run predates both tips by 8.6h and 17.6h respectively"
+  },
+  "forecasts_as_stated": {
+   "wnba:CHI@NYL": {
+    "canonical_id": "ESPN_GAMEID:401857184",
+    "margin_home": 6.21,
+    "p_home": 0.6968,
+    "total": 176.6
+   },
+   "wnba:TOR@PHX": {
+    "canonical_id": "ESPN_GAMEID:401857185",
+    "margin_home": 3.43,
+    "p_home": 0.6115,
+    "total": 170.4
+   }
+  },
+  "grade": "SELF_ASSERTED_PREGAME \u2014 the same grade the MLB boards carry. Weaker than a frozen board and recorded as such rather than dressed up as one.",
+  "lesson": "a forecast that never became an artifact is a forecast that cannot be scored. The board-freeze step is not ceremony; it is what makes a claim checkable later.",
+  "what": "I produced WNBA forecasts for CHI@NYL and TOR@PHX and never froze them into a registered board. They exist in conversation, not as an artifact."
+ },
+ "LEDGER": {
+  "exposure_usd": 0,
+  "n_bets": 0,
+  "units": 0.0,
+  "wager_authority": "NO"
+ },
+ "NEXT": "wehoop ~06:32 ET 2026-08-30 publishes the 8/29 finals; TOR@PHX and CHI@NYL bind then",
+ "PLAYS_AWAITING_RESULT": [
+  {
+   "cover": 0.765,
+   "play": "NDSU -6.5 (-106)",
+   "status": "played, unbindable (DK_RELAY)"
+  },
+  {
+   "cover": 0.748,
+   "play": "SJSU +39.5 (-125)",
+   "status": "played, unbindable"
+  },
+  {
+   "cover": 0.736,
+   "play": "Sac State +9.5",
+   "status": "played, unbindable"
+  },
+  {
+   "cover": 0.567,
+   "play": "Hawai'i +4.5 (-102)",
+   "status": "played, unbindable"
+  },
+  {
+   "cover": 0.686,
+   "play": "Toronto +9.5 (-108)",
+   "status": "played, BINDABLE once wehoop publishes"
+  },
+  {
+   "cover": 0.676,
+   "play": "TCU -8.5",
+   "status": "LOST (relayed, descriptive)"
+  }
+ ],
+ "REFUSED_AND_WHY": {
+  "NC State": "relayed row internally contradicted the prior capture by 15.5 pts; treated as contaminated",
+  "TOR +365 ML": "refused despite +82 EV/100. Same 6-point margin disagreement as the spread but with no cushion, and RJ-005's OFFICIAL_INJURY_AVAILABILITY is still 0/17 EGRESS_BLOCKED \u2014 ff7 cannot see rotations for two eliminated teams.",
+  "all totals": "claim_discipline.assert_totals_playable refuses cfb/mlb/nfl for want of a measured error term. WNBA is permitted and its under-173.5 lean is 0.17 sigma against the measured 18.0156 \u2014 not a play."
+ },
+ "RELAYED_ONLY": {
+  "cfb:UNC@TCU": {
+   "final": "UNC 15 - TCU 10",
+   "grade": "DESCRIPTIVE_ONLY \u2014 accrues nothing",
+   "play": "TCU -8.5 LOST (rated 67.6% to cover at the measured Week-1 sigma 18.385)",
+   "reading": "the misses ordered themselves by distance from the price. 1.19 sigma for the ensemble is routine; under the retired 13.5 constant it would have read 1.62 and masqueraded as a surprise.",
+   "residuals_vs_actual_TCU_minus_5": {
+    "ensemble": 21.9,
+    "house_arm": 24.4,
+    "market": 13.5,
+    "vss_sim": 16.5
+   },
+   "source": "owner screenshot relay"
+  }
+ },
+ "STATE": "ALL TEN PLAYS HAVE PLAYED. ZERO ARE GRADEABLE.",
+ "WHY_NOTHING_BINDS": {
+  "cfb": "no admissible source at all. cfbfastR-data is pinned at the end of the 2025 season, and the board's DK_RELAY:<slug> ids are structurally unbindable regardless of what any source later says. These games can never be formally graded.",
+  "search": "snippets IDENTIFY and never BIND; not used to manufacture a result",
+  "wnba": "wehoop's newest published commit is 8ffb87b, committed 2026-08-29T06:32-04:00 \u2014 before either game tipped. Both 8/29 rows read STATUS_SCHEDULED at 0-0. The archive publishes on a ~06:32 ET daily cadence, so these finals land tomorrow morning."
+ },
+ "created_utc": "2026-08-30T03:06:19Z",
+ "local_time_owner_tz": "2026-08-29 20:04 PDT (America/Los_Angeles)",
+ "record_id": "CARD-REFRESH-2026-08-29T2304ET",
+ "record_sha256": "41dca7b1e8744b89edf63e75f21bff3c8eeeff86138c42c6d03aca11fd4397a1",
+ "schema": "ops.card_refresh.v1"
+}

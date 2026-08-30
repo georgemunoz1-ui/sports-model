@@ -212,6 +212,10 @@ def resolve_starter_slot(name, feats_or_none, raw_status, slate_date, source,
     - else stamp_from_features + resolve_slot(name, 'mlb', 'starter', stamp, acquire=acquire)
     - status_str vocabulary replaces owner_class (see _status_str)
     - NEVER returns bare 'PROBABLE' for anything older than MAX_AGE_DAYS.
+    - returns the supplied feature values only when the disposition is actionably
+      FRESH+CONFIRMED. Every other state returns ``None`` for the values, forcing the caller onto
+      its registered CAP/fallback treatment. Stale evidence remains in ``disp['stamp']`` for audit;
+      it never enters the forecast as though it were current.
     """
     if feats_or_none is None:
         stamp = None
@@ -221,6 +225,8 @@ def resolve_starter_slot(name, feats_or_none, raw_status, slate_date, source,
         feats_out = feats_or_none
     status, disp = resolve_slot(name, "mlb", "starter", stamp, raw_status,
                                 acquire=acquire, now=now)
+    if not disp.get("actionable", False):
+        feats_out = None
     return feats_out, status, disp
 
 

@@ -4,6 +4,30 @@
   "source_of_truth": "append-only patch records; newest first",
   "patches": [
     {
+      "patch_id": "P0-MC-CONVERGENCE-2026-08-30",
+      "severity": "P0",
+      "status": "PROPOSED_VERIFIED_ON_ISOLATED_BRANCH",
+      "scope": ["shared MC convergence gate", "forecastable/actionable gate", "all MC-simulated sports"],
+      "problem": "The mc_engine lineage's convergence gate (3-sigma batch-block check on simulated probabilities) raised ConvergenceError and killed the slate builder with exit 1 (observed: 2.968pp on HOU@NYM, 2.715pp on COL@ATL); the sportsmodel/main lineage had no convergence gate at all, so a simulator measuring its own RNG could emit an actionable probability.",
+      "changes": [
+        "port the batch-block convergence check from lineage/mc_engine_20260830/harness/mc_engine.py (CONVERGENCE_SIGMAS=3.0 on the pooled-Bernoulli se of a block proportion, TRIALS=30000, BLOCKS=10) as harness/mc_convergence.py",
+        "register the named tolerance MC_CONVERGENCE_TOL_PP=2.7386pp, derived not tuned: the worst-case (p_pool=0.5) value of the ported per-game threshold 3*sqrt(0.25/3000)*100",
+        "bind the gate INTO the forecastable/actionable gate: a CONVERGENCE_FAIL demotes the game to forecast-only (actionable=False, input_value_policy=REGISTERED_FALLBACK_ONLY, verdict and pre-demotion state recorded for audit); the rest of the board still builds — fail-closed, not fail-loud-process-kill",
+        "convergence never promotes: a clean verdict leaves a degraded freshness disposition non-actionable",
+        "regression tests: synthetic gap above tolerance demotes with audit recorded and the board builds around it; gap below tolerance keeps the normal actionable path"
+      ],
+      "verification": {
+        "mc_convergence_selftest": "PASS",
+        "mc_convergence_mutants": "4/4 caught",
+        "mc_convergence_regression_pytest": "7/7 PASS",
+        "freshness_contract_gate": "PASS (blob 49fb7ef0 verified byte-identical to sportsmodel/main)",
+        "freshness_mutants": "9/9 caught",
+        "frozen_artifacts": "untouched; cards/ and historical boards/grades not modified (append-only)"
+      },
+      "action_authority": "NO",
+      "notes": "Frozen historical boards remain byte-identical. The port is forward-only. Wiring the per-block evidence into a live forward builder (e.g. a v13 sim run in keyed blocks) is flagged as follow-up; build_board_0825 is a frozen-date builder and was deliberately not edited."
+    },
+    {
       "patch_id": "P0-FRESHNESS-2026-08-30",
       "severity": "P0",
       "status": "PROPOSED_VERIFIED_ON_ISOLATED_BRANCH",

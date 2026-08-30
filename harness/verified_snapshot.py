@@ -46,6 +46,45 @@ THE INCIDENTS THIS FILE ANSWERS, each mapped to the rule it produced.
    CHANGES NOTHING — it does not repair the drift either, because repairing is a rewrite and a
    rewrite erases the evidence that a mutation happened.
 
+5. 2026-08-30, the adversarial review of this layer (data/audit/2026-08-30_isolation_layer_-
+   review.json). Thirty-five HIGH findings; five of them landed here, and every one of them was
+   in the READ path — the half that had fixtures for what the store REFUSES and almost none for
+   what it SERVES.
+
+   C (five independent lenses, the strongest signal in the run). _resolve ordered observations by
+     written_at_utc — the STORE ACTION — while its own docstring said observation. A stale
+     IN_PROGRESS written after a validated CLOSED superseded the final, so get_verified_score
+     returned a non-final for a settled game. Ordering is now _observation_order(), keyed on
+     source_fetched_at_utc; and, because a final does not change, a TERMINAL observation is never
+     superseded by a non-terminal one no matter which instant it carries.
+   D. verify_snapshot() had ZERO read-path callers: its only production call site was inside the
+     WRITE path. records.json edited in place on disk was therefore served as truth by all three
+     analysis tools — this module's founding hazard, unguarded, in the module written against it.
+     This is the third guard in this repo that existed and was never called (after aggregate_guard
+     and ALLOW_DIRECT_HTTP). The getters now re-derive BEFORE serving: the entry files are
+     re-hashed on every read (they are being read anyway, so the hash is nearly free) and the
+     content id is recomputed from the bytes on disk; only the payload-bytes re-hash is cached,
+     keyed on each file's size and mtime_ns. The cache is a speed shortcut over a signal the
+     filesystem supplies, so it is named as a residual and not as a proof.
+   E. A stored verdict was never bound to the record it judged. A genuine CANONICAL verdict copied
+     onto a different record admitted that record — source "web_search" and all — as FINAL. No
+     forgery was required. Now: every field the verdict RECORDED about what it judged (event_id,
+     status, terminal_verified, scheduled_start_utc) must match the record beside it, what the
+     admissible_as IMPLIES about that record must hold, and each entry carries record_sha256, a
+     binding generated here and re-checked on every read.
+   F. Two records both claiming a TERMINAL status for one event id with DIFFERENT scores were
+     silently resolved by picking the writer-supplied later one; content_hash_conflict only
+     catches same-key/same-sha shapes and is evaded by moving source_fetched_at_utc one second.
+     A final does not change: two disagreeing terminals are a CONTRADICTION and the store serves
+     NEITHER, loudly, rather than picking.
+   A-DOWNSTREAM. score_admission.admit(canonical_schedule=None) leaves owner rules 1, 2 and 6
+     unenforced and stamps REASON_SCHEDULE_NOT_SUPPLIED on the verdict. That ceiling is one edit
+     away from being lowered again, so this store refuses such a verdict on the verified side at
+     BOTH ends — write and read. NOTE FOR THE SIBLING MODULES: this makes a schedule-less
+     admission unstorable as a result. harness/test_score_admission.py's FIXTURE 7 currently
+     admits with canonical_schedule=None and then reads the record back; that fixture must supply
+     a schedule. score_collector's own handoff already passes one.
+
 WHY THE ID EXCLUDES now_utc AND INCLUDES fetched_at_utc. The id is content-addressed. A payload's
 fetched_at is a property of the OBSERVATION (the same bytes seen at two instants are two
 observations, and both are kept). now_utc is a property of the STORE ACTION (a retry of the same
@@ -66,8 +105,17 @@ THE SURFACE.
     get_verified_scores(date, league)  > the analysis layer's three tools, and its only three.
     get_source_manifest(snapshot_id)  /   Each calls score_admission.assert_tool_allowed.
     verify_snapshot(snapshot_id)      re-hash what is on disk; report drift, repair nothing.
+                                      Called by the getters now, not only by the writer (D).
     get_quarantine(date, league)      deliberately NOT an analysis tool. Reading the refused
                                       side is an audit act and has to look like one.
+
+Two exceptions a reader may see from the READ path, both added by the 8/30 review:
+    SnapshotImmutabilityViolation     the bytes under out_root are not what they were (D).
+    SnapshotAdmissibilityViolation    what is stored on the verified side does not satisfy the
+                                      ceiling the getters enforce: an unbound verdict, a verdict
+                                      that judged some other record, or a record whose stored
+                                      binding no longer covers it (E, A-DOWNSTREAM).
+    SnapshotContentConflict           two stored observations of one event contradict (F).
 
 Usage: python3 harness/verified_snapshot.py [--selftest] [--mutants] [--gate]
 """
@@ -158,6 +206,8 @@ REFUSE_PAYLOAD_ID = "RAW_PAYLOAD_ID_UNSAFE"
 REFUSE_PAYLOAD_FETCHED_AT = "RAW_PAYLOAD_FETCHED_AT_MISSING"
 REFUSE_PAYLOAD_SHA_MISMATCH = "RAW_PAYLOAD_SHA256_MISMATCH"
 REFUSE_DUPLICATE_PAYLOAD_ID = "DUPLICATE_RAW_PAYLOAD_ID"
+REFUSE_VERDICT_NOT_BOUND = "VERDICT_DID_NOT_JUDGE_THIS_RECORD"
+REFUSE_UNBOUND_NO_SCHEDULE = "ADMITTED_WITHOUT_A_CANONICAL_SCHEDULE"
 REFUSE_BAD_DATE_ET = "SNAPSHOT_DATE_ET_MALFORMED"
 REFUSE_BAD_SOURCE = "SNAPSHOT_SOURCE_MISSING"
 REFUSE_BAD_SNAPSHOT_ID = "SNAPSHOT_ID_MALFORMED"
@@ -200,6 +250,17 @@ REFUSAL_MEANING = {
     REFUSE_PAYLOAD_SHA_MISMATCH: "the caller supplied a sha256 that is not the sha256 of the "
                                  "bytes supplied with it — a typed hash, not a generated one",
     REFUSE_DUPLICATE_PAYLOAD_ID: "two payloads share one id; the second would overwrite the first",
+    REFUSE_VERDICT_NOT_BOUND: "the verdict beside this record judged something else: a field it "
+                              "RECORDED about what it judged disagrees with the record, or the "
+                              "record does not satisfy what its admissible_as implies. Copying a "
+                              "genuine CANONICAL verdict onto a fabricated record needed no "
+                              "forgery at all before this check (2026-08-30 review, cluster E)",
+    REFUSE_UNBOUND_NO_SCHEDULE: "a verdict carrying CANONICAL_SCHEDULE_NOT_SUPPLIED on the "
+                                "verified side. Owner rules 1, 2 and 6 live inside admit()'s "
+                                "`if idx is not None`, so a schedule-less admission checked the "
+                                "record only against ITSELF; the store will not keep that as a "
+                                "result. Defence in depth: the ceiling in admit() is one edit "
+                                "away from being lowered again (2026-08-30 review, cluster A)",
     REFUSE_BAD_DATE_ET: "date_et is not a real YYYY-MM-DD ET calendar date",
     REFUSE_BAD_SOURCE: "source is empty; a snapshot with no named source cannot be lane-checked",
     REFUSE_BAD_SNAPSHOT_ID: "not a '" + SNAPSHOT_ID_PREFIX + "<64 hex>' id generated by this store",
@@ -230,6 +291,38 @@ DRIFT_MEANING = {
                                  "as they now stand on disk",
 }
 
+#: READ-TIME contradictions and unservable stores. Separate from REFUSE_ (a write that was
+#: stopped) and from DRIFT_ (bytes that changed under out_root): these are things the store HOLDS
+#: that cannot be turned into one answer. Every one of them exists because of the 8/30 review.
+CONFLICT_TERMINAL_DISAGREEMENT = "TERMINAL_RECORDS_DISAGREE_FOR_ONE_EVENT"
+CONFLICT_VERDICT_NOT_BOUND = "STORED_VERDICT_DID_NOT_JUDGE_THE_RECORD_BESIDE_IT"
+CONFLICT_RECORD_BINDING = "STORED_RECORD_DOES_NOT_MATCH_ITS_RECORDED_BINDING"
+CONFLICT_UNBOUND_ADMISSION = "STORED_ADMISSION_HAD_NO_CANONICAL_SCHEDULE"
+CONFLICT_VERDICT_UNREADABLE = "STORED_VERDICT_IS_NOT_SCORE_ADMISSION_VOCABULARY"
+
+CONFLICT_MEANING = {
+    CONFLICT_TERMINAL_DISAGREEMENT: "two stored records both claim a TERMINAL status for one "
+                                    "event id and their scores differ. A final does not change, "
+                                    "so this is a contradiction and not a race: the store serves "
+                                    "NEITHER and says why. Picking a winner by a "
+                                    "writer-supplied timestamp is what it used to do, and moving "
+                                    "source_fetched_at_utc by one second evaded "
+                                    "content_hash_conflict entirely (cluster F)",
+    CONFLICT_VERDICT_NOT_BOUND: "a stored verdict does not describe the record it sits beside. "
+                                "Checked at write AND at read, because the write check only "
+                                "covers records this build wrote (cluster E)",
+    CONFLICT_RECORD_BINDING: "the record's bytes no longer hash to the record_sha256 stored in "
+                             "its own entry. The entry-file hash catches this too; this catches "
+                             "it when the manifest and the id were rebuilt to cover the edit",
+    CONFLICT_UNBOUND_ADMISSION: "a stored verdict on the verified side carries "
+                                "CANONICAL_SCHEDULE_NOT_SUPPLIED: it was never checked against a "
+                                "canonical schedule, so it is an unbound claim and not a result "
+                                "(cluster A, defence in depth downstream of admit())",
+    CONFLICT_VERDICT_UNREADABLE: "a stored verdict is not score_admission's vocabulary. It was "
+                                 "checked at write time, so on read it means the entry was "
+                                 "edited after the fact",
+}
+
 
 class SnapshotRefused(ValueError):
     """A read or write was refused BEFORE anything was written. Carries .problems."""
@@ -257,6 +350,22 @@ class SnapshotContentConflict(RuntimeError):
         self.problem = dict(problem)
         RuntimeError.__init__(self, "verified_snapshot content conflict: %s"
                               % json.dumps(self.problem, default=str, sort_keys=True))
+
+
+class SnapshotAdmissibilityViolation(RuntimeError):
+    """READ-TIME. What is stored on the verified side does not satisfy the ceiling the getters
+    enforce, so there is nothing here that may be served as a result.
+
+    Loud rather than skipped, on the store's standing precedent: a record dropped quietly makes a
+    slate read like a quiet night, and that ambiguity is what invited the 8/30 search backfill.
+    Carries .problems, the same shape SnapshotRefused carries at the other end.
+    """
+
+    def __init__(self, problems):
+        self.problems = list(problems)
+        codes = [p.get("code") for p in self.problems]
+        RuntimeError.__init__(self, "verified_snapshot will not serve this: %s :: %s"
+                              % (codes, json.dumps(self.problems, default=str, sort_keys=True)))
 
 
 class SnapshotNotFound(KeyError):
@@ -512,10 +621,17 @@ def _normalize_entries(records, league, date_et, payload_shas):
         if sink in VERIFIED_SINKS:
             bad = _verified_record_problems(record, i, league, date_et, payload_shas,
                                             seen_event_ids)
+            bad.extend(_verdict_binding_problems(record, verdict, i))
             if bad:
                 problems.extend(bad)
                 continue
-        entry = {"record": record, "verdict": verdict.to_dict(), "sink": sink}
+        try:
+            binding = _record_binding(record)
+        except (TypeError, ValueError) as e:
+            problems.append({"code": REFUSE_NOT_SERIALIZABLE, "index": i, "detail": str(e)})
+            continue
+        entry = {"record": record, "verdict": verdict.to_dict(), "sink": sink,
+                 "record_sha256": binding}
         try:
             _canonical(entry)
         except (TypeError, ValueError) as e:
@@ -523,6 +639,87 @@ def _normalize_entries(records, league, date_et, payload_shas):
             continue
         entries.append(entry)
     return entries, problems
+
+
+def _record_binding(record):
+    """The content hash of one record, as this store binds it. Generated, never supplied.
+
+    Written into the entry beside the verdict and re-derived on every read, so the pair
+    (record, verdict) cannot be shuffled, edited or re-paired after the fact. Raises TypeError or
+    ValueError for anything JSON cannot carry, which the caller reports as ENTRY_NOT_JSON_-
+    SERIALIZABLE — quarantine may hold prose, but it may not hold bytes we could not read back.
+    """
+    return _sha256_text(_canonical(record))
+
+
+#: What an admissible_as CLAIMS about the record it was attached to. score_admission decides these
+#: (admit(): VALIDATED_STATES -> FINAL, TERMINAL_STATES -> FINAL_UNVALIDATED, IN_PROGRESS ->
+#: IN_PROGRESS_SNAPSHOT); the store only checks that the record beside the verdict still satisfies
+#: them, which is why the sets are score_admission's own and are not retyped here.
+_ADMISSIBLE_IMPLIES = {
+    sa.ADMISSIBLE_FINAL: (sa.VALIDATED_STATES, True),
+    sa.ADMISSIBLE_FINAL_UNVALIDATED: (sa.TERMINAL_STATES, True),
+    sa.ADMISSIBLE_IN_PROGRESS: (frozenset({sa.IN_PROGRESS}), False),
+}
+
+#: Fields admit() RECORDS in the verdict's own detail about the record it judged. A verdict lifted
+#: onto some other record disagrees with it here. Each pair is (detail key, how to read the record).
+_VERDICT_DETAIL_BINDINGS = (
+    ("event_id", lambda r: r.get("event_id")),
+    ("status", lambda r: r.get("status")),
+    ("terminal_verified", lambda r: bool(r.get("terminal_verified"))),
+    ("scheduled_start_utc", lambda r: _iso(r.get("scheduled_start_utc"))),
+)
+
+
+def _verdict_binding_problems(record, verdict, index):
+    """Every way the verdict beside a record can fail to BE A JUDGEMENT OF THAT RECORD.
+
+    Cluster E, 2026-08-30 review: a stored Verdict was never checked against the record it sat
+    next to, so a genuine CANONICAL verdict copied onto a fabricated record — source "web_search",
+    scores invented — put a FINAL through get_verified_score with no forgery of any kind. Selftest
+    S2 asserted that was impossible; it was not.
+
+    The check is not a re-judgement (this store never re-judges: two judges is how a vocabulary
+    forks). It compares the verdict against ITS OWN RECORD of what it judged, plus what its
+    admissible_as necessarily implies about the record beside it.
+
+    RESIDUAL, stated because a half-check that reads as a whole one is worse than none: admit()
+    does not put the scores it saw into the verdict's detail, so a record re-fabricated to match
+    the verdict on event id, status, terminal_verified and start — and re-bound with a recomputed
+    record_sha256 — still passes. Closing that needs a record digest inside the Verdict, which is
+    score_admission's to add. What this closes is the copy: transferring a verdict now requires
+    rebuilding the record around it rather than just moving one dict.
+    """
+    if not isinstance(record, dict):
+        return [{"code": REFUSE_VERDICT_NOT_BOUND, "index": index,
+                 "detail": "a record on the verified side is not a mapping"}]
+    problems = []
+    for field, read in _VERDICT_DETAIL_BINDINGS:
+        if field not in verdict.detail:
+            continue
+        judged, stored = verdict.detail.get(field), read(record)
+        if judged != stored:
+            problems.append({"code": REFUSE_VERDICT_NOT_BOUND, "index": index, "field": field,
+                             "verdict_judged": judged, "record_says": stored})
+    implied = _ADMISSIBLE_IMPLIES.get(verdict.admissible_as)
+    if implied is not None:
+        states, needs_scores = implied
+        if record.get("status") not in states:
+            problems.append({"code": REFUSE_VERDICT_NOT_BOUND, "index": index,
+                             "field": "admissible_as", "admissible_as": verdict.admissible_as,
+                             "implies_status_in": sorted(states),
+                             "record_says": record.get("status")})
+        if needs_scores and (record.get("away_score") is None
+                             or record.get("home_score") is None):
+            problems.append({"code": REFUSE_VERDICT_NOT_BOUND, "index": index,
+                             "field": "admissible_as", "admissible_as": verdict.admissible_as,
+                             "detail": "a final with no scores beside it"})
+    if sa.REASON_SCHEDULE_NOT_SUPPLIED in verdict.reason_codes:
+        problems.append({"code": REFUSE_UNBOUND_NO_SCHEDULE, "index": index,
+                         "event_id": record.get("event_id"),
+                         "reason_codes": list(verdict.reason_codes)})
+    return problems
 
 
 def _verified_record_problems(record, index, league, date_et, payload_shas, seen_event_ids):
@@ -854,6 +1051,151 @@ def verify_snapshot(snapshot_id, *, root=DEFAULT_ROOT):
 
 
 # ---------------------------------------------------------------------------------------------
+# 8b. THE READ PATH RE-DERIVES.  Cluster D of the 2026-08-30 review: verify_snapshot() had zero
+#     read-path callers, so every hash in section 8 was decoration from the analysis layer's side
+#     and records.json edited in place was served as truth. Nothing below trusts the manifest.
+# ---------------------------------------------------------------------------------------------
+
+#: Payload bytes are the expensive half of a verification, so they are re-hashed only when the
+#: filesystem says a file changed. The key is (path -> size, mtime_ns) for every file in the
+#: snapshot. RESIDUAL, named rather than implied: an edit that preserves both size and mtime is
+#: not seen by this cache. The entry files are re-hashed on EVERY read regardless (below), because
+#: they are being read to be served anyway, so the record bytes never depend on this shortcut.
+_PAYLOAD_INTEGRITY_CACHE = {}
+
+
+def _fs_signature(directory):
+    """Every file under a snapshot, with its size and mtime_ns. Not a clock read: this is what the
+    filesystem already recorded about bytes that are already there."""
+    signature = []
+    for dirpath, dirnames, filenames in os.walk(directory):
+        dirnames.sort()
+        for name in sorted(filenames):
+            path = os.path.join(dirpath, name)
+            try:
+                st = os.stat(path)
+            except OSError:
+                signature.append((os.path.relpath(path, directory), None, None))
+                continue
+            signature.append((os.path.relpath(path, directory), st.st_size, st.st_mtime_ns))
+    return tuple(signature)
+
+
+def _payload_drift(manifest, directory):
+    """Re-hash every stored raw payload against the sha256 the manifest recorded for it."""
+    drift = []
+    for declared in manifest.get("payloads") or []:
+        payload_id = declared.get("payload_id")
+        path = os.path.join(directory, RAW_DIR, str(payload_id))
+        if not os.path.isfile(path):
+            drift.append({"code": DRIFT_FILE_MISSING, "payload_id": payload_id, "path": path})
+            continue
+        # Deliberately not spelled the way verify_snapshot spells the same comparison: the
+        # mutation suite edits ONE occurrence of a pattern, so two identically worded checks
+        # would leave whichever one it did not reach untested and looking tested.
+        rehashed = _sha256_bytes(_read_bytes(path))
+        if rehashed != declared.get("sha256"):
+            drift.append({"code": DRIFT_PAYLOAD_BYTES, "payload_id": payload_id,
+                          "declared": declared.get("sha256"), "actual": rehashed,
+                          "detail": "the bytes changed under an unchanged filename"})
+    return drift
+
+
+def _cached_payload_drift(manifest, directory):
+    key = os.path.realpath(directory)
+    signature = _fs_signature(directory)
+    hit = _PAYLOAD_INTEGRITY_CACHE.get(key)
+    if hit is not None and hit[0] == signature:
+        return list(hit[1])
+    drift = _payload_drift(manifest, directory)
+    _PAYLOAD_INTEGRITY_CACHE[key] = (signature, list(drift))
+    return drift
+
+
+def _read_integrity(manifest, root):
+    """The drift list a getter must clear BEFORE it serves anything out of this snapshot.
+
+    The entry files are re-hashed here on every call, uncached, and the content id is recomputed
+    from the bytes that were just read — so a manifest rewritten to cover an edited records.json
+    still fails, because the id is the hash of the content and the directory name stops being
+    true. Only the payload half consults the size/mtime cache.
+    """
+    snapshot_id = manifest.get("snapshot_id")
+    directory = _snapshot_dir(os.path.abspath(root), snapshot_id)
+    drift, entries = [], []
+    for name in (VERIFIED_NAME, QUARANTINE_NAME):
+        path = os.path.join(directory, name)
+        if not os.path.isfile(path):
+            drift.append({"code": DRIFT_FILE_MISSING, "file": name, "path": path})
+            continue
+        body = _read_bytes(path)
+        declared = (manifest.get("files") or {}).get(name) or {}
+        seen = _sha256_bytes(body)                       # named apart from verify_snapshot's
+        if declared.get("sha256") != seen:               # `actual`, for the same reason as above
+            drift.append({"code": DRIFT_ENTRY_FILE_BYTES, "file": name,
+                          "declared": declared.get("sha256"), "actual": seen,
+                          "detail": "a stored record was edited after the fact"})
+        try:
+            entries.extend((json.loads(body.decode("utf-8")) or {}).get("entries") or [])
+        except Exception as e:                                  # noqa: BLE001 — reported, not hidden
+            drift.append({"code": DRIFT_ENTRY_FILE_BYTES, "file": name, "detail": str(e)})
+    descriptors = [{k: d.get(k) for k in ("payload_id", "sha256", "n_bytes", "fetched_at_utc",
+                                          "source", "url")}
+                   for d in manifest.get("payloads") or []]
+    recomputed = _content_digest(_content_object(manifest.get("league"), manifest.get("date_et"),
+                                                 manifest.get("source"), entries, descriptors))
+    if SNAPSHOT_ID_PREFIX + recomputed != snapshot_id:
+        drift.append({"code": DRIFT_ID_NOT_CONTENT, "snapshot_id": snapshot_id,
+                      "recomputed": SNAPSHOT_ID_PREFIX + recomputed,
+                      "detail": "the id is the hash of the content, so the directory name has "
+                                "stopped being true"})
+    drift.extend(_cached_payload_drift(manifest, directory))
+    return drift
+
+
+def _assert_readable(manifest, root):
+    """Nothing is served out of a snapshot whose bytes are not what they were (cluster D)."""
+    drift = _read_integrity(manifest, root)
+    if drift:
+        raise SnapshotImmutabilityViolation(
+            "this snapshot's bytes are not what they were, so nothing in it may be served as a "
+            "result. verify_snapshot() reports the same drift and repairs none of it",
+            {"snapshot_id": manifest.get("snapshot_id"), "drift": drift})
+
+
+def _assert_servable(entry, snapshot_id):
+    """The ceiling the getters enforce on one stored VERIFIED entry, re-checked on every read.
+
+    Clusters E and A of the 8/30 review. The write path checks the same two things, and that is
+    not redundancy: the write check only ever covers records this build wrote, and the whole
+    premise of this module is that what is on disk is an observation at a moment rather than a
+    permanent fact.
+    """
+    problems = []
+    record = entry.get("record")
+    verdict, why = _verdict_of(entry.get("verdict"))
+    if verdict is None:
+        problems.append({"code": CONFLICT_VERDICT_UNREADABLE, "snapshot_id": snapshot_id,
+                         "detail": why})
+    else:
+        for p in _verdict_binding_problems(record, verdict, None):
+            code = (CONFLICT_UNBOUND_ADMISSION if p["code"] == REFUSE_UNBOUND_NO_SCHEDULE
+                    else CONFLICT_VERDICT_NOT_BOUND)
+            problems.append(dict(p, code=code, snapshot_id=snapshot_id))
+    try:
+        binding = _record_binding(record)
+    except (TypeError, ValueError) as e:
+        binding, problems = None, problems + [{"code": CONFLICT_RECORD_BINDING,
+                                               "snapshot_id": snapshot_id, "detail": str(e)}]
+    if binding is not None and entry.get("record_sha256") != binding:
+        problems.append({"code": CONFLICT_RECORD_BINDING, "snapshot_id": snapshot_id,
+                         "event_id": record.get("event_id") if isinstance(record, dict) else None,
+                         "stored": entry.get("record_sha256"), "recomputed": binding})
+    if problems:
+        raise SnapshotAdmissibilityViolation(problems)
+
+
+# ---------------------------------------------------------------------------------------------
 # 9. READ.  The store's directories are the truth; nothing here consults an index.
 # ---------------------------------------------------------------------------------------------
 
@@ -888,16 +1230,26 @@ def get_source_manifest(snapshot_id, *, root=DEFAULT_ROOT):
     """The snapshot's manifest: per-payload sha256, byte count and fetched instant (owner rule 7),
     the files' hashes, and the content hash the id is made of.
 
-    ANALYSIS TOOL SURFACE. Read-only, like the other two."""
+    ANALYSIS TOOL SURFACE. Read-only, like the other two. The manifest is re-derived against the
+    bytes on disk before it is handed over: a manifest is a claim about a snapshot, and cluster D
+    is precisely the case of a claim nobody ever recomputed.
+    """
     sa.assert_tool_allowed("get_source_manifest")
     directory = _snapshot_dir(os.path.abspath(root), snapshot_id)
     path = os.path.join(directory, MANIFEST_NAME)
     if not os.path.isfile(path):
         raise SnapshotNotFound(snapshot_id)
-    return _read_json(path)
+    manifest = _read_json(path)
+    _assert_readable(manifest, root)
+    return manifest
 
 
 def _entries_of(manifest, kind, root):
+    """One snapshot's entries, AFTER the snapshot has been re-derived from its own bytes.
+
+    This is the single choke point every getter reads through, which is why the read-path
+    verification hangs here: cluster D was not a missing check but a check with no caller.
+    """
     directory = _snapshot_dir(os.path.abspath(root), manifest["snapshot_id"])
     name = VERIFIED_NAME if kind == "verified" else QUARANTINE_NAME
     path = os.path.join(directory, name)
@@ -905,11 +1257,39 @@ def _entries_of(manifest, kind, root):
         raise SnapshotImmutabilityViolation(
             "a snapshot is missing an entry file the manifest names",
             {"snapshot_id": manifest["snapshot_id"], "file": name, "code": DRIFT_FILE_MISSING})
+    _assert_readable(manifest, root)
     return (_read_json(path) or {}).get("entries") or []
 
 
+#: Sorts strictly before any real instant, for a candidate whose observation instant will not
+#: parse. validate_record makes that unreachable on the verified side; it is here so the sort
+#: cannot raise instead of ordering.
+_UNDATED = dt.datetime(1, 1, 1, tzinfo=UTC)
+
+
+def _observation_order(candidate):
+    """The instant the OBSERVATION was made, then the write instant, then the id.
+
+    Cluster C, and the finding five separate review lenses reached independently: this used to be
+    written_at_utc — the STORE ACTION — while the docstring beside it said observation. A stale
+    IN_PROGRESS re-written after a validated CLOSED then superseded the final, and
+    get_verified_score returned a non-final for a settled game. source_fetched_at_utc is when the
+    provider was actually seen; written_at_utc is only when someone got round to storing it.
+
+    Compared as datetimes, never as ISO strings: '…:00.5Z' is a LATER instant than '…:00Z' and a
+    SMALLER string. The write instant and the id are tiebreakers only, so the order is total.
+    """
+    return (_utc(candidate["record"].get("source_fetched_at_utc")) or _UNDATED,
+            str(candidate.get("written_at_utc")), str(candidate.get("snapshot_id")))
+
+
 def _verified_candidates(root, event_id=None, date_et=None, league=None):
-    """Every stored VERIFIED entry matching the filter, newest write last."""
+    """Every stored VERIFIED entry matching the filter, latest OBSERVATION last.
+
+    Each entry clears _assert_servable first: a stored verdict that did not judge the record
+    beside it, or one that was never checked against a canonical schedule, is not a result no
+    matter which file it is filed in.
+    """
     normalized = sa.normalize_league(league) if league is not None else None
     out = []
     for manifest in list_snapshots(root):
@@ -923,21 +1303,37 @@ def _verified_candidates(root, event_id=None, date_et=None, league=None):
                 continue
             if event_id is not None and record.get("event_id") != event_id:
                 continue
+            _assert_servable(entry, manifest["snapshot_id"])
             out.append({"record": record, "verdict": entry.get("verdict"),
                         "snapshot_id": manifest["snapshot_id"],
+                        "observed_at_utc": _iso(record.get("source_fetched_at_utc")),
                         "written_at_utc": manifest.get("written_at_utc")})
-    out.sort(key=lambda c: (str(c["written_at_utc"]), c["snapshot_id"]))
+    out.sort(key=_observation_order)
     return out
 
 
 def _resolve(candidates):
     """The record a caller should read, from several observations of one event.
 
-    A later observation supersedes an earlier one — IN_PROGRESS at 18:45 then CLOSED at 20:30 is
-    two honest observations and both are kept on disk. But two records claiming the SAME source
-    and the SAME fetched instant with DIFFERENT content hashes are not two observations; that is
-    an archive that changed under one key, and it RAISES rather than picking a winner.
+    A later OBSERVATION supersedes an earlier one — IN_PROGRESS fetched at 18:45 then CLOSED
+    fetched at 20:30 is two honest observations and both are kept on disk. Three rules, each one
+    an incident:
+
+    1. Two records claiming the SAME source and the SAME fetched instant with DIFFERENT content
+       hashes are not two observations; that is an archive that changed under one key, and it
+       RAISES rather than picking a winner (owner rule 7, 2026-08-30).
+    2. A FINAL DOES NOT CHANGE. Two records both claiming a terminal status for one event with
+       different scores are a CONTRADICTION, and the store serves NEITHER — picking between them
+       by any timestamp is how a fabricated final would win. content_hash_conflict does not catch
+       this shape: move source_fetched_at_utc by one second and the keys stop matching
+       (cluster F).
+    3. A terminal observation is never superseded by a non-terminal one. A canonical feed that
+       regresses a CLOSED game to IN_PROGRESS is a provider bug, and the contract is explicit
+       that elapsed time never converts one status into another (cluster C, and owner rule 8 read
+       in the direction nobody had tested).
     """
+    if not candidates:
+        return None
     for i in range(len(candidates)):
         for j in range(i + 1, len(candidates)):
             conflict, problem = sa.content_hash_conflict(candidates[i]["record"],
@@ -947,7 +1343,22 @@ def _resolve(candidates):
                     problem, snapshot_ids=[candidates[i]["snapshot_id"],
                                            candidates[j]["snapshot_id"]],
                     event_id=candidates[i]["record"].get("event_id")))
-    return candidates[-1]["record"] if candidates else None
+    terminals = [c for c in candidates if c["record"].get("status") in sa.TERMINAL_STATES]
+    scores = sorted({(c["record"].get("away_score"), c["record"].get("home_score"))
+                     for c in terminals})
+    if len(scores) > 1:
+        raise SnapshotContentConflict({
+            "code": CONFLICT_TERMINAL_DISAGREEMENT,
+            "event_id": candidates[0]["record"].get("event_id"),
+            "scores": [list(s) for s in scores],
+            "snapshot_ids": [c["snapshot_id"] for c in terminals],
+            "observed_at_utc": [c.get("observed_at_utc") for c in terminals],
+            "detail": "a final does not change. Two terminal records for one event disagree, so "
+                      "this store serves neither and names both",
+        })
+    if terminals:
+        candidates = terminals
+    return sorted(candidates, key=_observation_order)[-1]["record"]
 
 
 def get_verified_score(event_id, *, root=DEFAULT_ROOT):
@@ -1039,6 +1450,50 @@ _LATE = "2026-08-31T00:30:00Z"            # 20:30 ET on 08-30. THE ET-crossing i
 _FIXTURE_EVENT_IDS = (sa.EID_MIAWSH, sa.EID_BOSNYY, sa.EID_COLATL, sa.EID_WNBA)
 
 
+class _FixtureAborted(Exception):
+    """A fixture the selftest cannot continue past. The NAMED failure is already recorded, so the
+    outer handler must not re-report it as an unclassified explosion — the mutation suite counts
+    "died on a named assertion" and "blew up somewhere" as different outcomes (cluster O)."""
+
+
+def _rebuild_snapshot_on_disk(root, snapshot_id, mutate):
+    """FIXTURE MACHINERY. Rewrite a stored snapshot's verified entries and then rebuild the
+    manifest and the directory name AROUND the edit, so the store is self-consistent on disk.
+
+    This is the adversary the read-path checks exist for: anyone who can edit records.json can
+    edit the manifest beside it, and the 2026-08-30 mutable archive did exactly that under
+    unchanged filenames. A fixture that only edits the bytes proves the file hash and nothing
+    else. Returns the snapshot's new id.
+    """
+    directory = os.path.join(root, SNAPSHOTS_DIR, snapshot_id)
+    manifest = _read_json(os.path.join(directory, MANIFEST_NAME))
+    documents = {name: _read_json(os.path.join(directory, name))
+                 for name in (VERIFIED_NAME, QUARANTINE_NAME)}
+    documents[VERIFIED_NAME]["entries"] = [mutate(dict(e)) for e in
+                                           documents[VERIFIED_NAME].get("entries") or []]
+    entries = []
+    for name in (VERIFIED_NAME, QUARANTINE_NAME):
+        entries.extend(documents[name].get("entries") or [])
+    descriptors = [{k: d.get(k) for k in ("payload_id", "sha256", "n_bytes", "fetched_at_utc",
+                                          "source", "url")}
+                   for d in manifest.get("payloads") or []]
+    digest = _content_digest(_content_object(manifest.get("league"), manifest.get("date_et"),
+                                             manifest.get("source"), entries, descriptors))
+    new_id = SNAPSHOT_ID_PREFIX + digest
+    files = {}
+    for name in (VERIFIED_NAME, QUARANTINE_NAME):
+        documents[name]["snapshot_id"] = new_id
+        body = _canonical(documents[name]).encode("utf-8")
+        with open(os.path.join(directory, name), "wb") as fh:
+            fh.write(body)
+        files[name] = {"sha256": _sha256_bytes(body), "n_bytes": len(body)}
+    manifest.update({"snapshot_id": new_id, "content_sha256": digest, "files": files})
+    with open(os.path.join(directory, MANIFEST_NAME), "wb") as fh:
+        fh.write(_canonical(manifest).encode("utf-8"))
+    os.rename(directory, os.path.join(root, SNAPSHOTS_DIR, new_id))
+    return new_id
+
+
 def _payload(payload_id, text, fetched_at_utc, source=sa.PROVIDER_MLB_STATSAPI):
     return {"payload_id": payload_id, "raw_text": text, "fetched_at_utc": fetched_at_utc,
             "source": source, "url": "statsapi:/api/v1/schedule?sportId=1&date=2026-08-30"}
@@ -1071,6 +1526,7 @@ def selftest():
     f = []
     seen_refusals = set()
     seen_drift = set()
+    seen_conflicts = set()
     roots = []
 
     def new_root(label):
@@ -1090,6 +1546,32 @@ def selftest():
         except Exception as e:
             f.append("%s: expected SnapshotRefused(%s), got %s: %s"
                      % (label, code, type(e).__name__, e))
+
+    def expect_conflict(label, fn, code, exc=SnapshotContentConflict):
+        """A READ that must refuse to answer. The counterpart of expect_refusal at the other end
+        of the store, and the half the 8/30 review found had almost no fixtures."""
+        try:
+            served = fn()
+            f.append("%s: expected %s, the store SERVED %r" % (label, code, served))
+        except exc as e:
+            got = [p.get("code") for p in getattr(e, "problems", [getattr(e, "problem", {})])]
+            seen_conflicts.update(c for c in got if c)
+            if code not in got:
+                f.append("%s: expected %s, got %s" % (label, code, got))
+        except Exception as e:
+            f.append("%s: expected %s(%s), got %s: %s"
+                     % (label, exc.__name__, code, type(e).__name__, e))
+
+    def must_write(label, *args, **kwargs):
+        """A fixture write that is supposed to succeed. A mutant that makes the store refuse its
+        own happy path must die on a NAMED assertion, not on a bare traceback the mutation suite
+        can only report as an unclassified error (cluster O)."""
+        try:
+            return write_snapshot(*args, **kwargs)
+        except (SnapshotRefused, sa.LaneViolation) as e:
+            f.append("%s: the store REFUSED or MIS-ROUTED a write it must accept: %s: %s"
+                     % (label, type(e).__name__, str(e)[:400]))
+            raise _FixtureAborted(label)
 
     try:
         # ---- S0. POSTURE AND VOCABULARY ---------------------------------------------------
@@ -1135,6 +1617,11 @@ def selftest():
                          and v not in DRIFT_MEANING)
         if missing:
             f.append("S0: drift codes with no entry in DRIFT_MEANING: %s" % missing)
+        missing = sorted(v for k, v in sorted(globals().items())
+                         if k.startswith("CONFLICT_") and isinstance(v, str)
+                         and v not in CONFLICT_MEANING)
+        if missing:
+            f.append("S0: conflict codes with no entry in CONFLICT_MEANING: %s" % missing)
         undeclared = [e for e in _FIXTURE_EVENT_IDS if e not in sa.FIXTURE_PROVENANCE]
         if undeclared:
             f.append("S0: fixture event ids with no declared provenance: %s" % undeclared)
@@ -1176,9 +1663,9 @@ def selftest():
             f.append("S1: the MIA@WSH search claim did not refuse as a schedule conflict (%s)"
                      % search_env["verdict"].disposition)
 
-        sid = write_snapshot(envelopes + [snippet, search_env], league="MLB",
-                             date_et="2026-08-30", source=sa.PROVIDER_MLB_STATSAPI,
-                             raw_payloads=payloads, now_utc=_EVENING, out_root=root)
+        sid = must_write("S1", envelopes + [snippet, search_env], league="MLB",
+                         date_et="2026-08-30", source=sa.PROVIDER_MLB_STATSAPI,
+                         raw_payloads=payloads, now_utc=_EVENING, out_root=root)
         if not _SNAPSHOT_ID_RE.match(sid):
             f.append("S1: the snapshot id is not content-addressed in this store's shape: %r" % sid)
 
@@ -1247,9 +1734,28 @@ def selftest():
         write_snapshot([env], league="WNBA", date_et="2026-08-30", source="web_search",
                        raw_payloads=[_payload("search_snippet.txt", raw, _LATE, "web_search")],
                        now_utc="2026-08-31T02:00:00Z", out_root=wnba_root)
-        if get_verified_score(sa.EID_WNBA, root=wnba_root) is not None:
+
+        leaked = object()
+
+        def leak_check(label, fn):
+            """A read of the verified surface where only quarantine exists. If the boundary is
+            broken this can EXPLODE rather than return — a quarantined record does not have to
+            satisfy the verified side's rules, so reaching one raises. An explosion with no name
+            attached is not evidence of anything, so it is named here (cluster O)."""
+            try:
+                return fn()
+            except Exception as e:                              # noqa: BLE001 — named, not hidden
+                f.append("S2: %s raised %s, so a quarantined record reached the verified read "
+                         "path at all: %s" % (label, type(e).__name__, str(e)[:200]))
+                return leaked
+
+        got = leak_check("get_verified_score on a quarantine-only slate",
+                         lambda: get_verified_score(sa.EID_WNBA, root=wnba_root))
+        if got is not leaked and got is not None:
             f.append("S2: an event stored only in quarantine was returned as a verified score")
-        if get_verified_scores("2026-08-30", "WNBA", root=wnba_root) != []:
+        got = leak_check("get_verified_scores on a quarantine-only slate",
+                         lambda: get_verified_scores("2026-08-30", "WNBA", root=wnba_root))
+        if got is not leaked and got != []:
             f.append("S2: a quarantine-only slate did not read as empty")
         if len(get_quarantine("2026-08-30", "WNBA", root=wnba_root)) != 1:
             f.append("S2: the quarantine-only record is not readable through get_quarantine")
@@ -1462,14 +1968,43 @@ def selftest():
                        w([{"record": dict(closed, raw_response_sha256=_sha256_text("elsewhere")),
                            "verdict": envelopes[0]["verdict"].to_dict()}]),
                        REFUSE_HASH_NOT_IN_SNAPSHOT)
+        # CLUSTER E, at the write end. No forgery: a GENUINE canonical verdict, moved sideways
+        # onto a record it never judged — source "web_search", scores invented, admitted FINAL.
+        fabricated = _record(sa.EID_COLATL, "SYNTH_COL", "SYNTH_ATL", _START_1335ET, sa.CLOSED,
+                             9, 2, sha=sha, source="web_search", fetched=_EVENING)
+        expect_refusal("R: a genuine CANONICAL verdict copied onto a record it never judged",
+                       w([{"record": fabricated,
+                           "verdict": envelopes[0]["verdict"].to_dict()}]),
+                       REFUSE_VERDICT_NOT_BOUND)
+        # CLUSTER A, downstream. admit(canonical_schedule=None) leaves owner rules 1, 2 and 6
+        # unenforced and says so in the verdict. This gate is DEFENCE IN DEPTH and the fixture is
+        # built to stay honest about that: score_admission now caps a schedule-less record at
+        # UNVERIFIED, so asking admit() for the dangerous verdict no longer yields one — and a
+        # gate whose fixture depends on another module's ceiling stops testing itself the moment
+        # that ceiling moves. So the verdict admit() RETURNED UNTIL 2026-08-30 is built by hand.
+        unbound_verdict = {"disposition": sa.ADMIT_FINAL,
+                           "reason_codes": [sa.REASON_SCHEDULE_NOT_SUPPLIED,
+                                            sa.REASON_STATUS_VALIDATED],
+                           "admissible_as": sa.ADMISSIBLE_FINAL,
+                           "detail": {"lane": sa.LANE_CANONICAL, "event_id": closed["event_id"],
+                                      "status": closed["status"], "terminal_verified": True,
+                                      "scheduled_start_utc": closed["scheduled_start_utc"]}}
+        expect_refusal("R: an admission never checked against a canonical schedule",
+                       w([{"record": closed, "verdict": unbound_verdict}]),
+                       REFUSE_UNBOUND_NO_SCHEDULE)
         expect_refusal("R: a record from another league",
                        w(**{"league": "WNBA"}), REFUSE_LEAGUE_MISMATCH)
         # THE UTC-SLICE BUG, in its exact shape: a 2026-08-31T00:30Z start is the ET EVENING of
         # 08-30, so filing it under 08-31 must refuse.
         late = _record(sa.EID_WNBA, "SYNTH_MIN", "SYNTH_ATL", _LATE, sa.CLOSED, 81, 78,
-                       sha=sha, league="WNBA")
+                       sha=sha, league="WNBA", fetched="2026-08-31T03:30:00Z")
+        # Bound against a schedule of its own: an unbound admission is refused before the date is
+        # ever compared (the gate two blocks up), which would make this fixture pass for the
+        # wrong reason and stop watching the UTC slice.
         late_env = _admit(late, now_utc="2026-08-31T04:00:00Z", lane=sa.LANE_CANONICAL,
-                          schedule=None)
+                          schedule={"event_id": sa.EID_WNBA, "league": "WNBA",
+                                    "away_team_id": "SYNTH_MIN", "home_team_id": "SYNTH_ATL",
+                                    "scheduled_start_utc": _LATE})
         expect_refusal("R: an ET date sliced from the UTC string",
                        w([late_env], league="WNBA", date_et="2026-08-31"), REFUSE_DATE_MISMATCH)
         expect_refusal("R: two admitted records for one event id",
@@ -1531,6 +2066,197 @@ def selftest():
                 os.listdir(os.path.join(refuse_root, INCOMING_DIR)):
             f.append("R: a refused write left staged files behind")
 
+        # ---- S10. ORDERED BY THE OBSERVATION, NOT BY THE WRITE (cluster C) ------------------
+        # Five separate review lenses reached this one independently. _resolve ordered by
+        # written_at_utc — when somebody got round to STORING the record — while the docstring
+        # beside it said observation, so a stale IN_PROGRESS written after a validated CLOSED
+        # answered a settled game with a live score.
+        order_root = new_root("observation_order")
+        settled_raw, regressed_raw = raw + "|final2230", raw + "|live2330"
+        settled = _record(sa.EID_MIAWSH, "SYNTH_MIA", "SYNTH_WSH", _START_1215ET, sa.CLOSED,
+                          2, 9, sha=_sha256_text(settled_raw), fetched="2026-08-30T22:30:00Z")
+        # ...and the provider REGRESSING a settled game, observed an hour LATER than the final.
+        # Ordering alone does not save this one: a final does not change.
+        regressed = _record(sa.EID_MIAWSH, "SYNTH_MIA", "SYNTH_WSH", _START_1215ET,
+                            sa.IN_PROGRESS, 1, 3, sha=_sha256_text(regressed_raw),
+                            fetched="2026-08-30T23:30:00Z")
+        for rec, pid, text, seen in ((settled, "schedule_2230.json", settled_raw,
+                                      "2026-08-30T22:30:00Z"),
+                                     (regressed, "schedule_2330.json", regressed_raw,
+                                      "2026-08-30T23:30:00Z")):
+            must_write("S10", [_admit(rec, now_utc="2026-08-31T02:00:00Z",
+                                      lane=sa.LANE_CANONICAL, schedule=schedule)],
+                       league="MLB", date_et="2026-08-30", source=sa.PROVIDER_MLB_STATSAPI,
+                       raw_payloads=[_payload(pid, text, seen)],
+                       now_utc="2026-08-31T02:00:00Z", out_root=order_root)
+        served = get_verified_score(sa.EID_MIAWSH, root=order_root)
+        if (served or {}).get("status") != sa.CLOSED:
+            f.append("S10: a non-terminal observation superseded a VALIDATED FINAL on a settled "
+                     "game. A final does not change, and elapsed time never converts a status: "
+                     "%r" % (served,))
+
+        # ...and with no terminal record in play at all, the order is still the order the
+        # OBSERVATIONS were made in, not the order someone stored them.
+        order2_root = new_root("observation_order_live")
+        early_raw, late_raw = raw + "|colatl1845", raw + "|colatl1930"
+        early = _record(sa.EID_COLATL, "SYNTH_COL", "SYNTH_ATL", _START_1335ET, sa.IN_PROGRESS,
+                        1, 0, sha=_sha256_text(early_raw), fetched="2026-08-30T18:45:00Z")
+        later = _record(sa.EID_COLATL, "SYNTH_COL", "SYNTH_ATL", _START_1335ET, sa.IN_PROGRESS,
+                        4, 6, sha=_sha256_text(late_raw), fetched="2026-08-30T19:30:00Z")
+        # The 19:30 observation is written FIRST and the 18:45 one is written a day later.
+        for rec, pid, text, seen, wrote in (
+                (later, "colatl_1930.json", late_raw, "2026-08-30T19:30:00Z",
+                 "2026-08-30T19:31:00Z"),
+                (early, "colatl_1845.json", early_raw, "2026-08-30T18:45:00Z",
+                 "2026-08-31T05:00:00Z")):
+            must_write("S10", [_admit(rec, now_utc=wrote, lane=sa.LANE_CANONICAL,
+                                      schedule=schedule)],
+                       league="MLB", date_et="2026-08-30", source=sa.PROVIDER_MLB_STATSAPI,
+                       raw_payloads=[_payload(pid, text, seen)], now_utc=wrote,
+                       out_root=order2_root)
+        served = get_verified_score(sa.EID_COLATL, root=order2_root)
+        if (served or {}).get("away_score") != 4 or (served or {}).get("home_score") != 6:
+            f.append("S10: the LAST-WRITTEN observation won instead of the LAST-OBSERVED one. "
+                     "written_at_utc is the store action; source_fetched_at_utc is the "
+                     "observation: %r" % (served,))
+        if len(get_verified_scores("2026-08-30", "MLB", root=order2_root)) != 1:
+            f.append("S10: two observations of one game read back as two results")
+
+        # ---- S11. TWO TERMINALS THAT DISAGREE ARE A CONTRADICTION (cluster F) ---------------
+        # content_hash_conflict catches same-key/same-sha shapes. Move source_fetched_at_utc by
+        # ONE SECOND and the keys stop matching, and the store used to settle the disagreement
+        # by picking whichever of the two a writer stamped later.
+        contradiction_root = new_root("two_finals")
+        a_raw, b_raw = raw + "|final_a", raw + "|final_b"
+        final_a = _record(sa.EID_MIAWSH, "SYNTH_MIA", "SYNTH_WSH", _START_1215ET, sa.CLOSED,
+                          2, 9, sha=_sha256_text(a_raw), fetched=_EVENING)
+        final_b = _record(sa.EID_MIAWSH, "SYNTH_MIA", "SYNTH_WSH", _START_1215ET, sa.CLOSED,
+                          2, 8, sha=_sha256_text(b_raw), fetched="2026-08-30T23:00:01Z")
+        for rec, pid, text, seen in ((final_a, "final_a.json", a_raw, _EVENING),
+                                     (final_b, "final_b.json", b_raw,
+                                      "2026-08-30T23:00:01Z")):
+            must_write("S11", [_admit(rec, now_utc="2026-08-31T02:00:00Z",
+                                      lane=sa.LANE_CANONICAL, schedule=schedule)],
+                       league="MLB", date_et="2026-08-30", source=sa.PROVIDER_MLB_STATSAPI,
+                       raw_payloads=[_payload(pid, text, seen)],
+                       now_utc="2026-08-31T02:00:00Z", out_root=contradiction_root)
+        expect_conflict("S11: two disagreeing finals for one event id",
+                        lambda: get_verified_score(sa.EID_MIAWSH, root=contradiction_root),
+                        CONFLICT_TERMINAL_DISAGREEMENT)
+        expect_conflict("S11: the same contradiction through the slate getter",
+                        lambda: get_verified_scores("2026-08-30", "MLB",
+                                                    root=contradiction_root),
+                        CONFLICT_TERMINAL_DISAGREEMENT)
+
+        # ---- S12/S13. WHAT IS STORED IS RE-CHECKED ON READ (clusters E, A) -----------------
+        # Every fixture below rebuilds the manifest AND the directory name around its edit, so
+        # the snapshot is self-consistent on disk and the file hashes cannot catch it. That is
+        # the honest adversary: whoever can edit records.json can edit the manifest beside it.
+        def stored(label, record):
+            r = new_root(label)
+            return r, must_write(label, [_admit(record, now_utc=_EVENING,
+                                                lane=sa.LANE_CANONICAL, schedule=schedule)],
+                                 league="MLB", date_et="2026-08-30",
+                                 source=sa.PROVIDER_MLB_STATSAPI, raw_payloads=payloads,
+                                 now_utc=_EVENING, out_root=r)
+
+        def promote(entry):
+            """The 8/27 shape in one edit: a live record turned into a final underneath the
+            verdict that judged it live."""
+            entry["record"] = dict(entry["record"], status=sa.CLOSED, terminal_verified=True)
+            entry["record_sha256"] = _record_binding(entry["record"])
+            return entry
+
+        bind_root, bind_sid = stored("verdict_binding", live)
+        _rebuild_snapshot_on_disk(bind_root, bind_sid, promote)
+        expect_conflict("S12: an IN_PROGRESS record promoted to CLOSED beneath its own verdict",
+                        lambda: get_verified_score(sa.EID_COLATL, root=bind_root),
+                        CONFLICT_VERDICT_NOT_BOUND, SnapshotAdmissibilityViolation)
+
+        def edit_score(entry):
+            """A score edited on disk, with the entry's OWN binding left as it was."""
+            entry["record"] = dict(entry["record"], home_score=99)
+            return entry
+
+        stale_root, stale_sid = stored("record_binding", live)
+        _rebuild_snapshot_on_disk(stale_root, stale_sid, edit_score)
+        expect_conflict("S12: a score edited on disk with the manifest rebuilt around it",
+                        lambda: get_verified_score(sa.EID_COLATL, root=stale_root),
+                        CONFLICT_RECORD_BINDING, SnapshotAdmissibilityViolation)
+
+        def unbind(entry):
+            entry["verdict"] = dict(entry["verdict"], reason_codes=list(
+                entry["verdict"]["reason_codes"]) + [sa.REASON_SCHEDULE_NOT_SUPPLIED])
+            return entry
+
+        unbound_root, unbound_sid = stored("unbound_admission", live)
+        _rebuild_snapshot_on_disk(unbound_root, unbound_sid, unbind)
+        expect_conflict("S13: a stored admission that was never checked against a schedule",
+                        lambda: get_verified_score(sa.EID_COLATL, root=unbound_root),
+                        CONFLICT_UNBOUND_ADMISSION, SnapshotAdmissibilityViolation)
+
+        def forge(entry):
+            entry["verdict"] = dict(entry["verdict"], disposition="PROBABLY_FINE")
+            return entry
+
+        forged_root, forged_sid = stored("forged_verdict", live)
+        _rebuild_snapshot_on_disk(forged_root, forged_sid, forge)
+        expect_conflict("S13: a stored verdict edited out of score_admission's vocabulary",
+                        lambda: get_verified_score(sa.EID_COLATL, root=forged_root),
+                        CONFLICT_VERDICT_UNREADABLE, SnapshotAdmissibilityViolation)
+
+        # ---- S14. THE READ PATH RE-DERIVES BEFORE IT SERVES (cluster D) ---------------------
+        # verify_snapshot() existed, was correct, and had ZERO read-path callers: its only
+        # production call site was inside the WRITE path. So records.json edited in place was
+        # served as truth by all three analysis tools — the mutable-archive hazard this module
+        # was written against, inside the module written against it. No manifest rebuild here:
+        # just the bytes, the way an archive rewrites a file under an unchanged name.
+        tamper_root, tamper_sid = stored("read_rehash", closed)
+        tampered_path = os.path.join(tamper_root, SNAPSHOTS_DIR, tamper_sid, VERIFIED_NAME)
+        original = _read_bytes(tampered_path)
+        edited = original.replace(b'"home_score":9', b'"home_score":8')
+        if edited == original:
+            f.append("S14: the tampering fixture changed nothing; it proves nothing")
+        with open(tampered_path, "wb") as fh:
+            fh.write(edited)
+        for tool, call in (("get_verified_score",
+                            lambda: get_verified_score(sa.EID_MIAWSH, root=tamper_root)),
+                           ("get_verified_scores",
+                            lambda: get_verified_scores("2026-08-30", "MLB", root=tamper_root)),
+                           ("get_source_manifest",
+                            lambda: get_source_manifest(tamper_sid, root=tamper_root))):
+            try:
+                out = call()
+                f.append("S14: %s served a snapshot whose records.json was edited on disk (%r). "
+                         "The guard exists; nothing on the read path called it" % (tool, out))
+            except SnapshotImmutabilityViolation:
+                pass
+            except Exception as e:
+                f.append("S14: %s raised %s instead of refusing to serve tampered bytes: %s"
+                         % (tool, type(e).__name__, e))
+        if _read_bytes(tampered_path) != edited:
+            f.append("S14: a refused read REPAIRED the tampered bytes. Repair is a rewrite, and "
+                     "it erases the evidence that the store mutated")
+
+        # ...and the same for the RAW payload the record was derived from. This is the half the
+        # read path caches on size and mtime, so the fixture also proves the cache is not a hole
+        # the getters serve through.
+        payload_root, payload_sid = stored("read_rehash_payload", closed)
+        if get_verified_score(sa.EID_MIAWSH, root=payload_root) is None:
+            f.append("S14: the control store does not serve its own record before tampering")
+        with open(os.path.join(payload_root, SNAPSHOTS_DIR, payload_sid, RAW_DIR,
+                               "mlb_statsapi_schedule_2026-08-30.json"), "wb") as fh:
+            fh.write(raw.replace("2026-08-30", "2026-08-28").encode("utf-8"))
+        try:
+            out = get_verified_score(sa.EID_MIAWSH, root=payload_root)
+            f.append("S14: a record was served on top of a raw payload whose bytes had been "
+                     "rewritten under an unchanged filename (%r)" % (out,))
+        except SnapshotImmutabilityViolation:
+            pass
+        except Exception as e:
+            f.append("S14: a drifted payload raised %s on read instead of refusing to serve: %s"
+                     % (type(e).__name__, e))
+
         # ---- S9. NOTHING WAS WRITTEN OUTSIDE out_root --------------------------------------
         for r in roots:
             for dirpath, _dirnames, filenames in os.walk(r):
@@ -1547,6 +2273,12 @@ def selftest():
         uncovered = sorted(c for c in DRIFT_MEANING if c not in seen_drift)
         if uncovered:
             f.append("COVERAGE: drift codes this selftest never produces: %s" % uncovered)
+        uncovered = sorted(c for c in CONFLICT_MEANING if c not in seen_conflicts)
+        if uncovered:
+            f.append("COVERAGE: read-time conflict codes this selftest never produces: %s"
+                     % uncovered)
+    except _FixtureAborted:
+        pass          # the named failure is already in f; see must_write
     except Exception as e:
         # A mutant that makes a fixture EXPLODE is caught either way, but an exception with no
         # name attached reads like an infrastructure problem. Name it, so the mutation output
@@ -1566,81 +2298,132 @@ def selftest():
 
 # ---------------------------------------------------------------------------------------------
 # 12. MUTATION SUITE.  A counter that cannot fail is not a check.
-#     Each entry names the DEFECT RESTORED, not a test. Every one must be KILLED by selftest().
+#     Each entry names the DEFECT RESTORED, not a test, and declares the MARKER of the assertion
+#     that must catch it. A mutant killed by some other assertion is not evidence that the
+#     fixture named below is doing anything (cluster O, 2026-08-30 review).
 # ---------------------------------------------------------------------------------------------
 
 MUTANTS = [
     ("an existing snapshot whose bytes have changed is silently accepted as a no-op (R6)",
      "    if not identical:",
-     "    if False:"),
+     "    if False:", "S4:"),
     ("a quarantined entry is checked, and therefore filed, as if it were verified",
      "        if sink in VERIFIED_SINKS:",
-     "        if True:"),
+     "        if True:", "S1:"),
     ("a quarantined record leaks out through the READ path — get_verified_score reaches the "
      "other side of the store (the 8/27 publication path, in getter form)",
      "        for entry in _entries_of(manifest, \"verified\", root):",
      "        for entry in _entries_of(manifest, \"verified\", root) + "
-     "_entries_of(manifest, \"quarantine\", root):"),
+     "_entries_of(manifest, \"quarantine\", root):", "S2:"),
     ("verify_snapshot stops comparing a stored payload's bytes to its recorded hash",
      "        if actual != declared.get(\"sha256\"):",
-     "        if False:"),
+     "        if False:", "S4:"),
     ("the snapshot id stops covering the payload hashes, so drifted bytes leave the id true",
      "            \"payloads\": sorted(payload_descriptors, key=lambda p: p[\"payload_id\"])}",
-     "            \"payloads\": []}"),
+     "            \"payloads\": []}", "S4:"),
     ("the snapshot id stops covering the records, so different content collides on one id",
      "            \"entries\": sorted(entries, key=_canonical),",
-     "            \"entries\": [],"),
+     "            \"entries\": [],", "S7:"),
     ("verify_snapshot stops comparing records.json and quarantine.json to their hashes",
      "        if declared.get(\"sha256\") != actual:",
-     "        if False:"),
+     "        if False:", "S5:"),
     ("routing is decided by the store instead of by the verdict's own recorded lane",
      "        sink = sa.sink_for(verdict)",
-     "        sink = sa.SINK_RESULT_LEDGER"),
+     "        sink = sa.SINK_RESULT_LEDGER", "S1:"),
     ("an admitted record no longer has to validate",
      "    ok, record_problems = sa.validate_record(record)",
-     "    ok, record_problems = True, []"),
+     "    ok, record_problems = True, []", "R: an admitted record that does not validate"),
     ("an admitted record's source hash no longer has to be covered by a stored payload "
      "(owner rule 7 becomes decorative)",
      "    if sha not in payload_shas:",
-     "    if False:"),
+     "    if False:", "R: an admitted record whose source hash is in no payload"),
     ("the ET date of an admitted record is no longer checked against the slate (the UTC-slice "
      "bug, restored)",
      "    if row_date != date_et:",
-     "    if False:"),
+     "    if False:", "R: an ET date sliced from the UTC string"),
     ("a snapshot may be written with no raw payload at all (owner rule 7 unenforced)",
      "    if raw_payloads is None or (isinstance(raw_payloads, (list, tuple)) "
      "and not raw_payloads):",
-     "    if False:"),
+     "    if False:", "R: no raw payload retained"),
     ("an empty snapshot is accepted, so a down lane and an empty slate look identical on disk",
      "    if not isinstance(records, (list, tuple)) or not records:",
-     "    if not isinstance(records, (list, tuple)):"),
+     "    if not isinstance(records, (list, tuple)):", "R: an empty snapshot"),
     ("two admitted records for one event id are accepted",
      "    if event_id in seen_event_ids:",
-     "    if False:"),
+     "    if False:", "R: two admitted records for one event id"),
     ("a caller-supplied sha256 is trusted instead of the sha256 of the bytes",
      "        if declared is not None and str(declared).strip().lower() != sha:",
-     "        if False:"),
+     "        if False:", "R: a typed sha256 that is not the sha256 of the bytes"),
     ("get_verified_score returns the FIRST observation instead of the latest",
-     "    return candidates[-1][\"record\"] if candidates else None",
-     "    return candidates[0][\"record\"] if candidates else None"),
+     "    return sorted(candidates, key=_observation_order)[-1][\"record\"]",
+     "    return sorted(candidates, key=_observation_order)[0][\"record\"]", "S10:"),
     ("the mutable-archive conflict is resolved silently instead of raised",
      "            if conflict:",
-     "            if False:"),
+     "            if False:", "S7:"),
     ("a partial snapshot with no manifest is served around, so 'fewer games' reads as "
      "'a quiet night'",
      "        if not os.path.isfile(manifest_path):",
-     "        if False:"),
+     "        if False:", "S6:"),
+
+    # ---- the 2026-08-30 adversarial review. One mutant per cluster that landed here. --------
+    ("CLUSTER C: observations are ordered by written_at_utc — the store action — again, so a "
+     "stale record written last wins over the one observed last",
+     "    return (_utc(candidate[\"record\"].get(\"source_fetched_at_utc\")) or _UNDATED,",
+     "    return (", "S10:"),
+    ("CLUSTER C: a non-terminal observation may supersede a validated final again, so a "
+     "provider regressing a settled game un-settles it downstream",
+     "    if terminals:",
+     "    if False:", "S10:"),
+    ("CLUSTER D: the read path stops re-deriving, so records.json edited in place on disk is "
+     "served as truth by all three analysis tools",
+     "    drift = _read_integrity(manifest, root)",
+     "    drift = []", "S14:"),
+    ("CLUSTER D: the read path stops re-hashing the stored raw payloads, so an archive that "
+     "rewrites bytes under an unchanged filename is served through the cache",
+     "        if rehashed != declared.get(\"sha256\"):",
+     "        if False:", "S14:"),
+    ("CLUSTER E: a verdict is no longer bound to the record it judged at WRITE time, so a "
+     "genuine CANONICAL verdict copied onto a fabricated record admits it",
+     "            bad.extend(_verdict_binding_problems(record, verdict, i))",
+     "            bad.extend([])", "R: a genuine CANONICAL verdict copied"),
+    ("CLUSTER E: the binding is no longer re-checked at READ time, so a live record edited "
+     "into a final on disk is served as a final",
+     "        for p in _verdict_binding_problems(record, verdict, None):",
+     "        for p in []:", "S12: an IN_PROGRESS record promoted"),
+    ("CLUSTER E: a record's stored content binding is no longer re-derived, so an edited score "
+     "with a rebuilt manifest around it is served",
+     "    if binding is not None and entry.get(\"record_sha256\") != binding:",
+     "    if False:", "S12: a score edited on disk"),
+    ("CLUSTER F: two terminal records that disagree are silently resolved by picking one, "
+     "instead of refused as the contradiction they are",
+     "    if len(scores) > 1:",
+     "    if False:", "S11:"),
+    ("CLUSTER A downstream: a verdict that was never checked against a canonical schedule is "
+     "storable, and readable, as a result",
+     "    if sa.REASON_SCHEDULE_NOT_SUPPLIED in verdict.reason_codes:",
+     "    if False:", "R: an admission never checked"),
 ]
 
 
 def mutation_suite():
-    """Break one protection at a time; every mutant must be caught by selftest().
+    """Break one protection at a time. A mutant must die on the NAMED assertion that owns it.
 
-    Sixteen of the eighteen die on a NAMED assertion. Two (the quarantine entry checked as
-    verified, and the store overriding score_admission's routing) die when a fixture write is
-    refused mid-run; the selftest catches that and prints it as UNEXPECTED with the refusing
-    rule's own message, so the output still says which protection was removed rather than only
-    that something broke.
+    WHAT COUNTS AS A KILL, rewritten 2026-08-30 (cluster O of the review). This suite used to
+    count ANY exception as a kill — including a mutant that died at import before a single
+    fixture ran. That overstates what is proven, and this repo has already paid for the exact
+    overstatement once: score_admission's first mutation run reported 12/12 KILLED while every
+    mutant was dying of an AttributeError at import, i.e. the suite proved nothing at all.
+
+    So, three outcomes and no fourth:
+      KILLED    the selftest returned False, printed at least one named FAIL, printed no
+                UNEXPECTED line, and one of those failures carries this mutant's own marker.
+      ERRORED   anything else that is not a pass: an exception escaping the fixtures, an
+                ImportError or AttributeError at exec, a pattern that no longer matches, or a
+                death on an assertion that belongs to some other protection. Reported, and NOT
+                counted as a kill.
+      SURVIVED  the selftest passed with the protection removed. The fixture is decorative.
+
+    The tally is printed as "N killed, M errored, K survived"; the gate requires all killed.
     """
     src = open(__file__).read()
     # BASELINE FIRST. A failing selftest makes every mutant look killed, so a broken fixture
@@ -1657,30 +2440,63 @@ def mutation_suite():
     # a mutant whose pattern occurs only inside the MUTANTS literal edits its OWN definition,
     # applies cleanly, changes no behaviour and reports SURVIVED.
     body = src[:src.index("MUTANTS = [")]
-    killed = 0
-    for name, old, new in MUTANTS:
+    killed, errored, survived = [], [], []
+    for name, old, new, marker in MUTANTS:
         if old not in src:
-            print("  UNAPPLIED ", name + ": pattern not found")
+            errored.append((name, "the pattern no longer occurs in this file: %r" % old))
+            print("  ERRORED   " + name)
             continue
         if old not in body:
-            print("  SELF_TARGETED ", name + ": pattern occurs only inside the MUTANTS list")
+            errored.append((name, "the pattern occurs only inside the MUTANTS list, so the "
+                                  "mutant edits its own definition"))
+            print("  ERRORED   " + name)
             continue
         ns = {"__file__": __file__, "__name__": "mutant"}
+        out = _io.StringIO()
         try:
             exec(compile(src.replace(old, new, 1), "<mutant>", "exec"), ns)
-            with _cl.redirect_stdout(_io.StringIO()):
+            with _cl.redirect_stdout(out):
                 ok = ns["selftest"]()
-        except Exception:
-            ok = False
-        print(("  KILLED    " if not ok else "  SURVIVED  ") + name)
-        killed += not ok
-    print(f"verified_snapshot mutation suite: {killed}/{len(MUTANTS)} killed"
-          + ("" if killed == len(MUTANTS) else "  — SURVIVORS MEAN DECORATIVE FIXTURES"))
-    return killed == len(MUTANTS)
+        except Exception as e:
+            errored.append((name, "%s before any fixture could judge it: %s"
+                            % (type(e).__name__, str(e)[:200])))
+            print("  ERRORED   " + name)
+            continue
+        failures = [line.strip()[5:].strip() for line in out.getvalue().splitlines()
+                    if line.strip().startswith("FAIL:")]
+        if ok:
+            survived.append(name)
+            print("  SURVIVED  " + name)
+            continue
+        unexpected = [x for x in failures if x.startswith("UNEXPECTED:")]
+        if unexpected:
+            errored.append((name, "died on an unclassified exception rather than an assertion: "
+                            + unexpected[0][:200]))
+            print("  ERRORED   " + name)
+            continue
+        if not failures:
+            errored.append((name, "the selftest returned False and named nothing"))
+            print("  ERRORED   " + name)
+            continue
+        if not any(marker in x for x in failures):
+            errored.append((name, "died on an unrelated assertion; expected one carrying %r, "
+                                  "got %s" % (marker, [x[:90] for x in failures[:3]])))
+            print("  ERRORED   " + name)
+            continue
+        killed.append(name)
+        print("  KILLED    " + name)
+    print("verified_snapshot mutation suite: %d killed, %d errored, %d survived (of %d)"
+          % (len(killed), len(errored), len(survived), len(MUTANTS)))
+    for name, why in errored:
+        print("    ERROR     %s\n              :: %s" % (name, why))
+    for name in survived:
+        print("    SURVIVOR  %s\n              :: the fixture that should catch this is "
+              "decorative" % name)
+    return not errored and not survived and len(killed) == len(MUTANTS)
 
 
 def gate():
-    """Healthcheck entry point: the fixtures hold AND the mutants die."""
+    """Healthcheck entry point: the fixtures hold AND the mutants die on their own assertions."""
     import io as _io, contextlib as _cl
     _b = _io.StringIO()
     with _cl.redirect_stdout(_b):
@@ -1689,6 +2505,11 @@ def gate():
     print("verified snapshot gate: %s (selftest %s, mutants %s)"
           % ("PASS" if (ok_self and ok_mutants) else "FAIL",
              "OK" if ok_self else "FAIL", "OK" if ok_mutants else "FAIL"))
+    # The tally is carried out of the buffer even on a PASS: "mutants OK" is a claim, and the
+    # counts are the evidence for it. Killed / errored / survived are three different facts.
+    for line in _b.getvalue().splitlines():
+        if line.startswith("verified_snapshot mutation suite:"):
+            print("  " + line)
     if not (ok_self and ok_mutants):
         print(_b.getvalue().strip())
     return 0 if (ok_self and ok_mutants) else 1

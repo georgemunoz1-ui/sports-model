@@ -1,0 +1,61 @@
+{
+ "_fixture": {
+  "label": "SYNTHETIC_CACHED_FIXTURE",
+  "why": "stub-mode fixture for the MoneyLine historical-odds client. Typed line_kind values are the point of the fixture; prices are SYNTHETIC.",
+  "provenance": "written by kimi/fu1-feed-adapter, 2026-08-30"
+ },
+ "event": {
+  "id": "ML-0828-HOU-NYM",
+  "league": "mlb",
+  "starts_at": "2026-08-28T23:10:00Z",
+  "home": "New York Mets",
+  "away": "Houston Astros"
+ },
+ "snapshots": [
+  {
+   "snapshot_time": "2026-08-26T12:00:00Z",
+   "role": "opening",
+   "market": "spread",
+   "outcome": "Houston Astros -1.5",
+   "point": -1.5,
+   "american_price": -110,
+   "sportsbook": "consensus"
+  },
+  {
+   "snapshot_time": "2026-08-27T09:30:00Z",
+   "role": "consensus",
+   "market": "spread",
+   "outcome": "Houston Astros -1.5",
+   "point": -1.5,
+   "american_price": -112,
+   "sportsbook": "consensus"
+  },
+  {
+   "snapshot_time": "2026-08-28T19:00:00Z",
+   "role": "best_price",
+   "market": "spread",
+   "outcome": "Houston Astros -1.5",
+   "point": -1.5,
+   "american_price": -105,
+   "sportsbook": "circa"
+  },
+  {
+   "snapshot_time": "2026-08-28T23:02:00Z",
+   "role": "closing",
+   "market": "spread",
+   "outcome": "Houston Astros -2.5",
+   "point": -2.5,
+   "american_price": -115,
+   "sportsbook": "consensus"
+  },
+  {
+   "snapshot_time": "2026-08-28T23:03:00Z",
+   "role": "circa",
+   "market": "spread",
+   "outcome": "Houston Astros -2.5",
+   "point": -2.5,
+   "american_price": -118,
+   "sportsbook": "circa"
+  }
+ ]
+}

@@ -248,6 +248,49 @@ PROVIDER_STATUS_MAPS = {
     PROVIDER_SPORTRADAR: SPORTRADAR_STATUS_TO_STATUS,
 }
 
+#: THE SOURCE ALLOWLIST.  CLUSTER B, 2026-08-30 review: `lane` arrived as an UNVERIFIED CALLER
+#: ASSERTION. Nothing compared record["source"] against it, so a web_search record carrying
+#: lane=CANONICAL reached ADMIT_FINAL, settleable, result_ledger — the 8/27 publication path with
+#: a different label on the envelope. The three PROVIDER_* constants existed and were never used
+#: as an allowlist; they are one now.
+#:
+#: Only these three sources may ride the canonical lane. The list is short because the repo
+#: evidences exactly three provider vocabularies (PROVIDER_STATUS_MAPS); adding a fourth here
+#: without a status map would be describing a feed from memory (R1).
+CANONICAL_SOURCES = frozenset({PROVIDER_MLB_STATSAPI, PROVIDER_ESPN_SCOREBOARD,
+                               PROVIDER_SPORTRADAR})
+
+#: Trust ordering, so "take the lower of the two" is arithmetic rather than a chain of ifs.
+LANE_TRUST_RANK = {LANE_SEARCH: 0, LANE_MARKET: 1, LANE_CANONICAL: 2}
+
+
+def lane_for_source(source):
+    """The lane a source EARNS, independent of the lane its caller declares.
+
+    Unknown sources default to SEARCH, never CANONICAL: an unrecognised name is an unapproved
+    one. This function never returns MARKET — a price source is declared by the caller and is
+    refused as a score source before this is consulted.
+    """
+    if source is None:
+        return LANE_SEARCH
+    return LANE_CANONICAL if str(source).strip().lower() in CANONICAL_SOURCES else LANE_SEARCH
+
+
+def effective_lane(declared_lane, source):
+    """(lane, demoted). The LOWER-trust of what the caller claims and what the source earns.
+
+    Never an upgrade: a canonical feed handed in on the search lane stays on the search lane,
+    because the caller may know something about that fetch that this module does not.
+    """
+    if declared_lane != LANE_CANONICAL:
+        # MARKET is refused as a score source before this is reached, and SEARCH is already the
+        # floor. Only the CANONICAL claim is worth checking, and it is the only one worth forging.
+        return declared_lane, False
+    earned = lane_for_source(source)
+    if LANE_TRUST_RANK[earned] < LANE_TRUST_RANK[LANE_CANONICAL]:
+        return earned, True
+    return declared_lane, False
+
 
 def normalize_status(raw_status, provider):
     """Provider status string -> this vocabulary. Anything unmapped is UNKNOWN, never guessed.
@@ -376,6 +419,7 @@ def earliest_possible_final(scheduled_start_utc, league):
 REASON_LANE_UNKNOWN = "LANE_UNKNOWN"
 REASON_MARKET_LANE_NOT_A_SCORE_SOURCE = "MARKET_LANE_NOT_A_SCORE_SOURCE"
 REASON_LANE_FORBIDDEN_SINK = "LANE_MAY_NOT_WRITE_THIS_SINK"
+REASON_SOURCE_NOT_APPROVED_FOR_LANE = "SOURCE_NOT_APPROVED_FOR_DECLARED_LANE"
 
 REASON_NO_EVENT_ID = "NO_PROVIDER_EVENT_ID"
 REASON_EVENT_ID_MALFORMED = "EVENT_ID_MALFORMED"
@@ -392,7 +436,11 @@ REASON_CANONICAL_STATUS_CONTRADICTS_CLAIM = "CANONICAL_STATUS_CONTRADICTS_CLAIM"
 REASON_MATCHUP_AMBIGUOUS_USE_EVENT_ID = "MATCHUP_AMBIGUOUS_USE_EVENT_ID"
 REASON_SCHEDULE_NOT_SUPPLIED = "CANONICAL_SCHEDULE_NOT_SUPPLIED"
 
+REASON_SCHEDULE_CEILING_UNVERIFIED = "NO_SCHEDULE_ADMISSION_CEILING_UNVERIFIED"
+REASON_SCHEDULED_DATE_OVERRIDE = "CARRIED_SCHEDULED_DATE_DISAGREES_WITH_DERIVATION"
+
 REASON_PRESTART_FINAL_IMPOSSIBLE = "PRESTART_FINAL_IMPOSSIBLE"
+REASON_PRESTART_OBSERVATION_IMPOSSIBLE = "PRESTART_OBSERVED_BEFORE_FIRST_PITCH"
 REASON_MIN_DURATION_NOT_ELAPSED = "MIN_DURATION_NOT_ELAPSED"
 REASON_MIN_DURATION_CLEARED = "MIN_DURATION_CLEARED_BY_CANONICAL_TERMINAL"
 REASON_SEARCH_CANNOT_CLEAR_MIN_DURATION = "SEARCH_LANE_CANNOT_CLEAR_MIN_DURATION"
@@ -418,6 +466,7 @@ REASON_RECORD_NOT_A_MAPPING = "RECORD_NOT_A_MAPPING"
 REASON_MISSING_REQUIRED_FIELD = "MISSING_REQUIRED_FIELD"
 REASON_UNSUPPORTED_LEAGUE = "UNSUPPORTED_LEAGUE"
 REASON_UNPARSEABLE_TIMESTAMP = "UNPARSEABLE_TIMESTAMP"
+REASON_NAIVE_TIMESTAMP = "TIMESTAMP_HAS_NO_UTC_OFFSET"
 REASON_NON_NUMERIC_SCORE = "NON_NUMERIC_SCORE"
 REASON_NEGATIVE_SCORE = "NEGATIVE_SCORE"
 REASON_PARTIAL_SCORE = "PARTIAL_SCORE_ONE_SIDE_ONLY"
@@ -433,6 +482,9 @@ REASON_MEANING = {
     REASON_MARKET_LANE_NOT_A_SCORE_SOURCE: "the market lane carries prices; a price is never a "
                                            "score and never a predictive feature",
     REASON_LANE_FORBIDDEN_SINK: "this lane may not write to that sink (LANE_WRITE_TARGETS)",
+    REASON_SOURCE_NOT_APPROVED_FOR_LANE: "record['source'] is not on CANONICAL_SOURCES, so the "
+                                         "caller's CANONICAL declaration is overruled and the "
+                                         "record is judged on the SEARCH lane (cluster B)",
     REASON_NO_EVENT_ID: "no provider event id at all — team names do not identify a game "
                         "(owner rule 1, and the 8/27 prior-date series join)",
     REASON_EVENT_ID_MALFORMED: "event_id is not '<space>:<season>:<provider_id>' shaped",
@@ -453,8 +505,18 @@ REASON_MEANING = {
                                            "(doubleheader); names cannot choose between them",
     REASON_SCHEDULE_NOT_SUPPLIED: "no canonical schedule was supplied, so the binding cross-check "
                                   "did not run — recorded so its absence is visible in the proof",
+    REASON_SCHEDULE_CEILING_UNVERIFIED: "no canonical schedule was supplied, so nothing bound "
+                                        "this record to a real game: the disposition is capped at "
+                                        "UNVERIFIED and the record can never settle (cluster A)",
+    REASON_SCHEDULED_DATE_OVERRIDE: "the record or entry carries a scheduled_date that disagrees "
+                                    "with the ET date derived from its own UTC instant: a "
+                                    "conflict to report, never a value to prefer (cluster N, "
+                                    "commit 0bf9399)",
     REASON_PRESTART_FINAL_IMPOSSIBLE: "now precedes first pitch: a final is impossible, not "
                                       "improbable. Hard invariant; no status overrides it",
+    REASON_PRESTART_OBSERVATION_IMPOSSIBLE: "the OBSERVATION precedes first pitch: whatever the "
+                                            "source saw, it was not the end of this game. Waiting "
+                                            "until later to judge it changes nothing (cluster M)",
     REASON_MIN_DURATION_NOT_ELAPSED: "now precedes start + the sport's minimum duration",
     REASON_MIN_DURATION_CLEARED: "the soft duration hold was cleared by a terminal status from "
                                  "the canonical lane (rain-shortened and called games survive)",
@@ -486,6 +548,9 @@ REASON_MEANING = {
     REASON_MISSING_REQUIRED_FIELD: "a required field is missing, None, empty or 'TBD'",
     REASON_UNSUPPORTED_LEAGUE: "league is not one of LEAGUES, so no minimum duration exists",
     REASON_UNPARSEABLE_TIMESTAMP: "a timestamp field could not be parsed as an instant",
+    REASON_NAIVE_TIMESTAMP: "a timestamp that gates a decision carries no UTC offset; a naive ET "
+                            "wall clock read as UTC moves first pitch 4-5 hours earlier (R1: a "
+                            "missing offset is missing information, not an assumed zero)",
     REASON_NON_NUMERIC_SCORE: "a score is not an int (ESPN returns scores as STRINGS; the "
                               "normalized record does not)",
     REASON_NEGATIVE_SCORE: "a score is negative",
@@ -523,6 +588,11 @@ REQUIRED_RECORD_FIELDS = ("event_id", "league", "away_team_id", "home_team_id",
                           "scheduled_start_utc", "status", "terminal_verified", "source",
                           "source_fetched_at_utc", "raw_response_sha256")
 
+#: The fields that carry an INSTANT. Every one of them gates a decision — the start gates the
+#: pre-start invariant, the fetch instant gates the observation clock (cluster M), the result
+#: instant gates consensus — so every one of them is refused when it carries no UTC offset.
+TIMESTAMP_RECORD_FIELDS = ("scheduled_start_utc", "source_fetched_at_utc", "result_timestamp_utc")
+
 #: Optional fields admit() and corroboration_count() read when present.
 #:   result_timestamp_utc  when the source says the result was determined (consensus field)
 #:   wire_service          the wire the outlet ran; two outlets on one wire are ONE source
@@ -542,16 +612,64 @@ _PLACEHOLDER_IDS = ("", "NONE", "TBD", "NULL", "0", "PENDING", "DH1", "DH2")
 _SHA256_RE = re.compile(r"^[0-9a-f]{64}$")
 
 
+def _naive_instant(value):
+    """True when `value` states a wall clock and NO offset. R1: that is missing information.
+
+    CLUSTER L, 2026-08-30 review. The first version of _utc() did what feed_espn.parse_utc still
+    does — `p if p.tzinfo else p.replace(tzinfo=UTC)` — which reads a naive string as UTC. An ET
+    first pitch written "2026-08-30T13:35:00" then becomes 13:35Z, FOUR HOURS EARLY, and both
+    halves of the split clock rule are satisfied by a game that has not begun: the record admits
+    AND settles before first pitch, with a canonical schedule supplied. A missing offset is not a
+    zero offset. It is an unanswered question, and this module answers unanswered questions with a
+    refusal.
+
+    parse_utc is still imported and still used, because the ET derivation must live in ONE place;
+    this predicate is the gate in front of it, not a second parser.
+    """
+    if isinstance(value, dt.datetime):
+        return value.tzinfo is None or value.tzinfo.utcoffset(value) is None
+    if value is None:
+        return False
+    try:
+        parsed = dt.datetime.fromisoformat(str(value).strip().replace("Z", "+00:00"))
+    except Exception:
+        return False        # unparseable is a DIFFERENT failure and carries a different code
+    return parsed.tzinfo is None
+
+
 def _utc(value):
-    """Any instant -> tz-aware UTC datetime, or None when unparseable. Never a guess."""
+    """Any instant -> tz-aware UTC datetime, or None when unparseable. Never a guess.
+
+    A timezone-NAIVE value returns None (cluster L). Callers that need to tell "naive" from
+    "gibberish" apart call _instant_problem(); everything else only needs to know it has no
+    instant it may compute on.
+    """
     if value is None:
         return None
+    if _naive_instant(value):
+        return None
     if isinstance(value, dt.datetime):
-        return value if value.tzinfo else value.replace(tzinfo=UTC)
+        return value.astimezone(UTC)
     try:
         return parse_utc(value)
     except Exception:
         return None
+
+
+def _instant_problem(field, value):
+    """None when `value` is an offset-bearing instant; otherwise the problem dict that says why.
+
+    Absent (None) is not this function's business — REQUIRED_RECORD_FIELDS handles absence.
+    """
+    if value is None:
+        return None
+    if _naive_instant(value):
+        return {"code": REASON_NAIVE_TIMESTAMP, "field": field, "value": value,
+                "detail": "no UTC offset: an ET wall clock read as UTC moves first pitch 4-5 "
+                          "hours earlier (cluster L)"}
+    if _utc(value) is None:
+        return {"code": REASON_UNPARSEABLE_TIMESTAMP, "field": field, "value": value}
+    return None
 
 
 def _iso(value):
@@ -624,10 +742,15 @@ def validate_record(record):
         problems.append({"code": REASON_UNSUPPORTED_LEAGUE, "field": "league",
                          "value": record.get("league")})
 
-    for f in ("scheduled_start_utc", "source_fetched_at_utc", "result_timestamp_utc"):
-        if record.get(f) is not None and _utc(record.get(f)) is None:
-            problems.append({"code": REASON_UNPARSEABLE_TIMESTAMP, "field": f,
-                             "value": record.get(f)})
+    for f in TIMESTAMP_RECORD_FIELDS:
+        p = _instant_problem(f, record.get(f))
+        if p is not None:
+            problems.append(p)
+
+    # CLUSTER N. A carried scheduled_date is a CLAIM to be checked, never a value to prefer.
+    conflict, date_problem = carried_scheduled_date_conflict(record)
+    if conflict:
+        problems.append(date_problem)
 
     status = record.get("status")
     if status is not None and status not in STATUSES:
@@ -718,16 +841,42 @@ def index_schedule(schedule):
 
 
 def scheduled_date_of(obj):
-    """The ET calendar date of a record or schedule entry. Derived via feed_espn.et_date_of.
+    """The ET calendar date of a record or schedule entry. ALWAYS DERIVED via feed_espn.et_date_of.
 
     NEVER sliced from the UTC string: a 2026-08-31T00:30Z tip is the ET EVENING of 08-30, and
     slicing is what corrupted a cohort twice.
+
+    CLUSTER N, 2026-08-30 review. The first version preferred a caller-supplied `scheduled_date`
+    string over this derivation, and verified_snapshot uses this function for its slate check. An
+    8/28 final carrying scheduled_date "2026-08-30" was therefore filed and served as an 8/30
+    result — commit 0bf9399, exactly. The field name also collides with a REQUIRED field in
+    result_binding_gate, so the two contracts were one typo apart from agreeing on a lie.
+
+    The instant is the fact. A carried date is a CLAIM about that fact, checked by
+    carried_scheduled_date_conflict() and reported, never preferred.
     """
-    explicit = obj.get("scheduled_date")
-    if explicit:
-        return str(explicit)
     start = _utc(obj.get("scheduled_start_utc"))
     return None if start is None else et_date_of(start)
+
+
+def carried_scheduled_date_conflict(obj):
+    """(conflict, problem|None) when a carried `scheduled_date` disagrees with the derivation.
+
+    Silence on absence: most records carry no scheduled_date at all, and that is the healthy case.
+    Silence when the instant is unusable too — an unparseable or naive start is a different code
+    reported by its own check, and stacking two verdicts on one defect reads as two defects.
+    """
+    if not isinstance(obj, dict):
+        return False, None
+    carried = obj.get("scheduled_date")
+    if carried in (None, ""):
+        return False, None
+    derived = scheduled_date_of(obj)
+    if derived is None or str(carried).strip() == derived:
+        return False, None
+    return True, {"code": REASON_SCHEDULED_DATE_OVERRIDE, "field": "scheduled_date",
+                  "carried": str(carried).strip(), "derived": derived,
+                  "detail": "the UTC instant is the fact; the carried date is a claim about it"}
 
 
 def schedule_entries_for_matchup(schedule, league, away_team_id, home_team_id, scheduled_date=None):
@@ -764,6 +913,13 @@ def _schedule_conflicts(record, entry, lane):
                 else REASON_SCHEDULE_TEAMS_DISAGREE)
         conflicts.append({"code": code, "record": "%s@%s" % (r_away, r_home),
                           "schedule": "%s@%s" % (e_away, e_home)})
+    # CLUSTER N: check the CARRIED date on both sides before comparing the derived ones, so a
+    # record and an entry that both carry the same wrong string cannot agree their way past the
+    # comparison below.
+    for side, obj in (("record", record), ("schedule", entry)):
+        carried_conflict, carried_problem = carried_scheduled_date_conflict(obj)
+        if carried_conflict:
+            conflicts.append(dict(carried_problem, side=side))
     r_date, e_date = scheduled_date_of(record), scheduled_date_of(entry)
     if r_date != e_date:
         conflicts.append({"code": REASON_SCHEDULE_DATE_DISAGREE, "record": r_date,
@@ -899,22 +1055,73 @@ def _search_terminal_verdict(corroborations, reasons, detail):
     return Verdict(NO_CONSENSUS, reasons, None, detail)
 
 
+def _ceiling_unverified(verdict, code):
+    """Cap a verdict at UNVERIFIED, keeping every reason it already carries and adding `code`.
+
+    A ceiling is not a refusal: the record may still be stored, shown and audited as unverified.
+    It may not be believed, and it may not settle. Verdict.settleable reads ADMIT_FINAL, so the
+    demotion closes the settlement path as a consequence of the disposition rather than by a
+    second flag that could disagree with it.
+    """
+    reasons = list(verdict.reason_codes) + [code]
+    if verdict.disposition not in ADMITTING_DISPOSITIONS:
+        return Verdict(verdict.disposition, reasons, verdict.admissible_as, verdict.detail)
+    # REASON_SCHEDULE_CEILING_UNVERIFIED fires ONLY here, on a verdict that would otherwise have
+    # admitted. It is the auditable trace of an admission that was taken back, which the code
+    # naming the missing input cannot express on its own.
+    return Verdict(UNVERIFIED, reasons + [REASON_SCHEDULE_CEILING_UNVERIFIED],
+                   ADMISSIBLE_IDENTIFIED_UNCONFIRMED,
+                   dict(verdict.detail, admission_ceiling=code, terminal_verified=False,
+                        ceiling_replaced=verdict.disposition))
+
+
 def admit(record, *, now_utc, canonical_schedule=None, lane, corroborations=0):
     """THE admission gate. All eight owner rules plus the lead's split clock rule.
 
     record             a normalized record (see RECORD_FIELDS)
     now_utc            the instant the judgement is made; str or datetime
-    canonical_schedule dict keyed by event_id, a sequence of entries, or None
+    canonical_schedule dict keyed by event_id, a sequence of entries, or None. SUPPLY IT. The
+                       parameter keeps its default only because three sibling modules already
+                       call this function; the default is now a CEILING, not a shortcut — see
+                       below.
     lane               one of LANES; keyword-only and REQUIRED, because a caller that forgets to
                        say where the data came from is the 8/27 defect in miniature
     corroborations     independent-source count from corroboration_count(); search lane only
 
     Returns a Verdict. Never a bool, never a bare string.
+
+    CLUSTER A, 2026-08-30 review — the most important finding in that pass, reached independently
+    by four lenses. Owner rules 1, 2 and 6 (bind by provider event id, require exact teams /
+    league / date, reject schedule conflicts) all live inside `if idx is not None`, so with
+    canonical_schedule left at its default the record was checked ONLY AGAINST ITSELF, and a
+    fabricated final reached ADMIT_FINAL / settleable=True / sink=result_ledger. No forged
+    verdict was needed; an omitted argument was enough. The owner's spec was OPT-IN.
+
+    It is not opt-in now. Absence of a schedule is NON-ADMITTING: whatever the rest of the
+    reasoning concludes, a record that was never bound to a real game is capped at UNVERIFIED
+    with CANONICAL_SCHEDULE_NOT_SUPPLIED, and can never be settleable. Binding to nothing is not
+    binding, and a record checked only against itself is a record that agrees with itself.
     """
+    verdict = _admit(record, now_utc=now_utc, canonical_schedule=canonical_schedule, lane=lane,
+                     corroborations=corroborations)
+    # THE CEILING. Applied to whatever _admit concluded, so no branch inside it can leak an
+    # admission past a missing schedule — including branches added later by someone who never
+    # read this docstring.
+    if index_schedule(canonical_schedule) is None:
+        verdict = _ceiling_unverified(verdict, REASON_SCHEDULE_NOT_SUPPLIED)
+    if verdict.detail.get("source_lane_demoted"):
+        verdict = Verdict(verdict.disposition,
+                          list(verdict.reason_codes) + [REASON_SOURCE_NOT_APPROVED_FOR_LANE],
+                          verdict.admissible_as, verdict.detail)
+    return verdict
+
+
+def _admit(record, *, now_utc, canonical_schedule=None, lane, corroborations=0):
+    """The reasoning admit() puts a ceiling on. Call admit(), never this."""
     now = _utc(now_utc)
     detail = {"lane": lane, "now_utc": _iso(now), "corroborations": int(corroborations or 0),
               "event_id": record.get("event_id") if isinstance(record, dict) else None,
-              "schedule_supplied": canonical_schedule is not None}
+              "schedule_supplied": index_schedule(canonical_schedule) is not None}
 
     # ---- rule: lanes ---------------------------------------------------------------------
     if lane not in LANES:
@@ -927,8 +1134,21 @@ def admit(record, *, now_utc, canonical_schedule=None, lane, corroborations=0):
                        dict(detail, permitted_sinks=sorted(LANE_WRITE_TARGETS[LANE_MARKET])))
     if not isinstance(record, dict):
         return Verdict(UNVERIFIED, [REASON_RECORD_NOT_A_MAPPING], None, detail)
+
+    # ---- CLUSTER B: the lane is the CALLER's claim; the source is the EVIDENCE -------------
+    # A declared lane was believed on sight, so a web_search record relabelled CANONICAL admitted
+    # as a settleable FINAL. The declaration may now only LOWER trust, never raise it.
+    declared_lane = lane
+    lane, source_lane_demoted = effective_lane(declared_lane, record.get("source"))
+    detail.update({"lane": lane, "declared_lane": declared_lane,
+                   "source": record.get("source"),
+                   "source_lane": lane_for_source(record.get("source")),
+                   "source_lane_demoted": source_lane_demoted,
+                   "approved_canonical_sources": sorted(CANONICAL_SOURCES)})
+
     if now is None:
-        return Verdict(UNVERIFIED, [REASON_UNPARSEABLE_TIMESTAMP], None,
+        problem = _instant_problem("now_utc", now_utc) or {"code": REASON_MISSING_REQUIRED_FIELD}
+        return Verdict(UNVERIFIED, [problem["code"]], None,
                        dict(detail, field="now_utc", value=str(now_utc)))
 
     # ---- owner rules 1 and 5: bind by provider event id, never by names ------------------
@@ -936,6 +1156,16 @@ def admit(record, *, now_utc, canonical_schedule=None, lane, corroborations=0):
     if not ok_id:
         return Verdict(REJECT_PRESTART_OR_UNBOUND, [p["code"] for p in id_problems], None,
                        dict(detail, record_problems=id_problems))
+
+    # ---- CLUSTER L: every instant that gates a decision must carry its offset -------------
+    # Checked HERE, before binding, because a naive start compared against an aware schedule
+    # entry produces SCHEDULE_START_DISAGREE — a true refusal for the wrong reason, which reads
+    # in the audit as "the schedule caught it" when nothing caught the missing offset.
+    stamp_problems = [p for p in (_instant_problem(f, record.get(f))
+                                  for f in TIMESTAMP_RECORD_FIELDS) if p is not None]
+    if stamp_problems:
+        return Verdict(UNVERIFIED, [p["code"] for p in stamp_problems], None,
+                       dict(detail, record_problems=stamp_problems))
 
     # ---- owner rules 2 and 6: agree with the canonical schedule --------------------------
     entry = None
@@ -951,6 +1181,14 @@ def admit(record, *, now_utc, canonical_schedule=None, lane, corroborations=0):
             return Verdict(REJECT_PRESTART_OR_UNBOUND, reasons, None,
                            dict(detail, matchup_siblings=siblings,
                                 n_schedule_events=len(idx)))
+        entry_stamp = _instant_problem("schedule.scheduled_start_utc",
+                                       entry.get("scheduled_start_utc"))
+        if entry_stamp is not None:
+            # CLUSTER L on the other side of the comparison. A naive entry start is the more
+            # dangerous half: the schedule is the authority the record is measured against, so a
+            # schedule four hours early moves every game of the slate.
+            return Verdict(UNVERIFIED, [entry_stamp["code"]], None,
+                           dict(detail, schedule_problems=[entry_stamp]))
         successor = entry.get("rescheduled_to_event_id")
         if successor and successor != record["event_id"]:
             return Verdict(REJECT_SCHEDULE_CONFLICT,
@@ -976,6 +1214,29 @@ def admit(record, *, now_utc, canonical_schedule=None, lane, corroborations=0):
                             minutes_before_start=round((start_utc - now).total_seconds() / 60.0, 1),
                             rule="now < scheduled_start: a final is impossible. No provider "
                                  "status overrides this (8/30 BOS@NYY, COL@ATL)"))
+
+    # ---- part (a) again, on the OBSERVATION clock. CLUSTER M ------------------------------
+    # The check above asks when the JUDGE looked. That is the wrong clock on its own, and the
+    # review named this the single most damning finding for this module's stated purpose: the
+    # exact 8/30 records — "Yankees 1, Red Sox 0" fetched at 13:30 ET for a 13:35 ET first pitch
+    # — became ADMIT_FINAL, settleable, result_ledger simply by being judged a few hours later.
+    # WAITING DEFEATED THE ONE RULE THE DOCSTRING CALLS UNCONDITIONAL.
+    #
+    # It cannot now. The observation governs: a source that had not yet seen first pitch did not
+    # see the end of the game, and no later judging instant adds information to a fetch that
+    # already happened. Both clocks must pass; neither substitutes for the other.
+    fetched_utc = _utc(record.get("source_fetched_at_utc"))
+    detail["source_fetched_at_utc"] = _iso(fetched_utc)
+    if start_utc is not None and fetched_utc is not None and fetched_utc < start_utc \
+            and (claims_score or claims_terminal):
+        return Verdict(REJECT_PRESTART_OR_UNBOUND,
+                       [REASON_PRESTART_OBSERVATION_IMPOSSIBLE], None,
+                       dict(detail, claims_score=claims_score, claims_terminal=claims_terminal,
+                            minutes_before_start=round(
+                                (start_utc - fetched_utc).total_seconds() / 60.0, 1),
+                            rule="source_fetched_at_utc < scheduled_start: the source observed "
+                                 "this game before it began, so whatever it reported is not a "
+                                 "result. Judging it later does not make it one"))
 
     # ---- owner rules 3 and 7: a source status field, and a retained content hash ----------
     ok_rec, problems = validate_record(record)
@@ -1191,9 +1452,18 @@ def incident_schedule_0830():
     ])
 
 
-def selftest():
-    """Every fixture below is one of the ten regression cases the owner named, or a vocabulary
-    invariant another module depends on. Fixture names are the incident, not a test number."""
+def selftest_failures():
+    """The list of NAMED failures, empty when the module holds. selftest() prints it and returns
+    a bool; the mutation suite reads the list itself.
+
+    CLUSTER O. The suite used to treat ANY exception as a kill, so a mutant that died at import
+    without running a single fixture counted the same as a mutant a fixture caught. This function
+    exists so "killed" can mean what it says: a named expectation was checked and was wrong. An
+    exception is a different fact and is reported as an ERROR, never added to the tally.
+
+    Every fixture below is one of the ten regression cases the owner named, or a vocabulary
+    invariant another module depends on. Fixture names are the incident, not a test number.
+    """
     f = []
     verdicts = []
     seen_codes = set()
@@ -1437,8 +1707,12 @@ def selftest():
     if schedule_entries_for_matchup(dh, "MLB", "SYNTH_KC", "SYNTH_TOR") != [EID_DH_G1, EID_DH_G2]:
         f.append("F4: the matchup did not resolve to TWO events — the fixture is not a "
                  "doubleheader and proves nothing")
+    # fetched AFTER the second game's 20:07Z first pitch: an observation of a game in progress or
+    # over. The default fetch instant in _rec is 17:30Z, which precedes it, and cluster M's
+    # observation clock refuses that correctly — so this fixture states its own fetch time rather
+    # than admitting a final that was observed three hours before the game began.
     v = A(record=_rec(EID_DH_G2, "MLB", "SYNTH_KC", "SYNTH_TOR", "2026-08-30T20:07:00Z",
-                      CLOSED, 13, 2),
+                      CLOSED, 13, 2, fetched=_EVENING),
           now_utc=_EVENING, canonical_schedule=dh, lane=LANE_CANONICAL)
     if v.disposition != ADMIT_FINAL:
         f.append("F4 G2: the correct half of a doubleheader was refused (%s %s)"
@@ -1553,6 +1827,134 @@ def selftest():
                  "duration hold (%s %s) — this is the false-reject owner message 1 warned about"
                  % (v.disposition, v.reason_codes))
 
+    # ---- CLUSTER A. A MISSING SCHEDULE IS NON-ADMITTING ------------------------------------
+    # The review's most important finding: owner rules 1, 2 and 6 lived inside `if idx is not
+    # None`, so omitting one argument turned the whole spec off and a fabricated final reached
+    # ADMIT_FINAL / settleable / result_ledger. The SAME record is used bound and unbound, so
+    # this fixture measures the schedule's absence and nothing else.
+    bindable = _rec(EID_DH_G2, "MLB", "SYNTH_KC", "SYNTH_TOR", "2026-08-30T20:07:00Z",
+                    CLOSED, 13, 2, fetched=_EVENING)
+    v = A(record=bindable, now_utc=_EVENING, canonical_schedule=dh, lane=LANE_CANONICAL)
+    if v.disposition != ADMIT_FINAL or not v.settleable:
+        f.append("A control: the bound half of the pair stopped admitting, so the unbound half "
+                 "below proves nothing (%s %s)" % (v.disposition, v.reason_codes))
+    v = A(record=bindable, now_utc=_EVENING, lane=LANE_CANONICAL)
+    if v.disposition != UNVERIFIED or v.admitted or v.settleable \
+            or REASON_SCHEDULE_NOT_SUPPLIED not in v.reason_codes \
+            or REASON_SCHEDULE_CEILING_UNVERIFIED not in v.reason_codes:
+        f.append("A ceiling: a record with NO canonical schedule to bind against produced "
+                 "%s/%s (admitted=%s, settleable=%s) %s — absence of a schedule must cap the "
+                 "disposition at UNVERIFIED"
+                 % (v.disposition, v.admissible_as, v.admitted, v.settleable, v.reason_codes))
+    if sink_for(v) != SINK_QUARANTINE:
+        f.append("A routing: an unbound final routed to %r instead of quarantine" % sink_for(v))
+    v = A(record=_rec(EID_MIAWSH, "MLB", "SYNTH_MIA", "SYNTH_WSH", _START_1215ET, IN_PROGRESS,
+                      2, 1),
+          now_utc=_EVENING, lane=LANE_CANONICAL)
+    if v.admitted or REASON_SCHEDULE_NOT_SUPPLIED not in v.reason_codes:
+        f.append("A ceiling (live): an unbound in-progress snapshot was ADMITTED (%s/%s) — a "
+                 "snapshot of WHICH game? Nothing bound it to one" % (v.disposition, v.admitted))
+
+    # ---- CLUSTER B. THE LANE IS THE CALLER'S CLAIM; THE SOURCE IS THE EVIDENCE --------------
+    if lane_for_source("web_search") != LANE_SEARCH or \
+            lane_for_source(PROVIDER_MLB_STATSAPI) != LANE_CANONICAL or \
+            lane_for_source(None) != LANE_SEARCH or lane_for_source("Sportradar") != \
+            LANE_CANONICAL:
+        f.append("B allowlist: lane_for_source does not map the three approved providers to "
+                 "CANONICAL and everything else to SEARCH")
+    mislabelled = _rec(EID_DH_G2, "MLB", "SYNTH_KC", "SYNTH_TOR", "2026-08-30T20:07:00Z",
+                       CLOSED, 13, 2, source="web_search", fetched=_EVENING)
+    v = A(record=mislabelled, now_utc=_EVENING, canonical_schedule=dh, lane=LANE_CANONICAL)
+    if v.admitted or v.settleable or REASON_SOURCE_NOT_APPROVED_FOR_LANE not in v.reason_codes \
+            or v.detail.get("lane") != LANE_SEARCH:
+        f.append("B relabelled: a web_search record declared CANONICAL produced %s/%s "
+                 "(settleable=%s, effective lane %r) — the caller's word is not evidence"
+                 % (v.disposition, v.admissible_as, v.settleable, v.detail.get("lane")))
+    if sink_for(v) != SINK_QUARANTINE:
+        f.append("B routing: a relabelled search record routed to %r" % sink_for(v))
+    # ...and never an upgrade. A canonical source handed in on the search lane stays there.
+    v = A(record=_rec(EID_DH_G2, "MLB", "SYNTH_KC", "SYNTH_TOR", "2026-08-30T20:07:00Z",
+                      CLOSED, 13, 2, fetched=_EVENING),
+          now_utc=_EVENING, canonical_schedule=dh, lane=LANE_SEARCH)
+    if v.admitted or v.detail.get("lane") != LANE_SEARCH:
+        f.append("B upgrade: an approved source was PROMOTED to the canonical lane by its own "
+                 "name (%s/%s)" % (v.disposition, v.detail.get("lane")))
+
+    # ---- CLUSTER L. A NAIVE INSTANT IS MISSING INFORMATION, NOT AN ASSUMED ZERO -------------
+    # "2026-08-30T13:35:00" is the BOS@NYY first pitch written in ET with the offset dropped.
+    # Read as UTC it lands four hours early, and the schedule that should have caught it is
+    # written the same way — so at 16:30Z, an hour before the real first pitch, the record
+    # cleared both the pre-start invariant and the 150-minute minimum and settled.
+    naive_sched = index_schedule([
+        _entry(EID_BOSNYY, "SYNTH_BOS", "SYNTH_NYY", "2026-08-30T13:35:00", status=SCHEDULED)])
+    naive_rec = _rec(EID_BOSNYY, "MLB", "SYNTH_BOS", "SYNTH_NYY", "2026-08-30T13:35:00",
+                     CLOSED, 0, 1, fetched="2026-08-30T16:20:00Z")
+    v = A(record=naive_rec, now_utc="2026-08-30T16:30:00Z", canonical_schedule=naive_sched,
+          lane=LANE_CANONICAL)
+    if v.admitted or REASON_NAIVE_TIMESTAMP not in v.reason_codes:
+        f.append("L naive record: an ET wall clock with no offset produced %s %s — read as UTC "
+                 "it admits and settles a game that has not started"
+                 % (v.disposition, v.reason_codes))
+    v = A(record=_rec(EID_BOSNYY, "MLB", "SYNTH_BOS", "SYNTH_NYY", _START_1335ET, CLOSED, 0, 1,
+                      fetched="2026-08-30T20:10:00Z"),
+          now_utc=_EVENING, canonical_schedule=naive_sched, lane=LANE_CANONICAL)
+    if v.admitted or REASON_NAIVE_TIMESTAMP not in v.reason_codes:
+        f.append("L naive schedule: an offset-bearing record measured against a NAIVE schedule "
+                 "entry produced %s %s — the schedule is the authority and it was four hours "
+                 "wrong" % (v.disposition, v.reason_codes))
+    if _utc("2026-08-30T13:35:00") is not None or _utc(dt.datetime(2026, 8, 30, 13, 35)) is not None:
+        f.append("L _utc: a naive value was still coerced to UTC")
+    if _iso(_utc("2026-08-30T13:35:00-04:00")) != "2026-08-30T17:35:00Z":
+        f.append("L _utc: an offset-BEARING instant was not converted to UTC correctly")
+
+    # ---- CLUSTER M. THE OBSERVATION CLOCK, NOT THE JUDGING CLOCK ----------------------------
+    # The single most damning finding for this module's stated purpose. "Yankees 1, Red Sox 0"
+    # was fetched at 17:30Z for a 17:35Z first pitch. Judged at 17:30Z it was refused; judged at
+    # 23:00Z — same bytes, same fetch, later look — it became a settleable FINAL in the result
+    # ledger. Waiting is not evidence.
+    v = A(record=_rec(EID_BOSNYY, "MLB", "SYNTH_BOS", "SYNTH_NYY", _START_1335ET, CLOSED, 0, 1,
+                      fetched=_NOW_1330ET),
+          now_utc=_EVENING, canonical_schedule=sched, lane=LANE_CANONICAL)
+    if v.disposition != REJECT_PRESTART_OR_UNBOUND or v.admitted or \
+            REASON_PRESTART_OBSERVATION_IMPOSSIBLE not in v.reason_codes:
+        f.append("M observation clock: a final OBSERVED five minutes before first pitch and "
+                 "judged five hours later produced %s %s — waiting defeated the one rule this "
+                 "module calls unconditional" % (v.disposition, v.reason_codes))
+    # The same game, the same judging instant, an observation taken AFTER first pitch: admits.
+    # Without this half the rule above could be a blanket refusal of BOS@NYY.
+    v = A(record=_rec(EID_BOSNYY, "MLB", "SYNTH_BOS", "SYNTH_NYY", _START_1335ET, CLOSED, 0, 1,
+                      fetched="2026-08-30T20:10:00Z"),
+          now_utc=_EVENING, canonical_schedule=sched, lane=LANE_CANONICAL)
+    if v.disposition != ADMIT_FINAL or not v.settleable:
+        f.append("M control: a final observed AFTER first pitch and past the minimum duration "
+                 "was refused (%s %s)" % (v.disposition, v.reason_codes))
+
+    # ---- CLUSTER N. THE INSTANT IS THE FACT; A CARRIED DATE IS A CLAIM ABOUT IT -------------
+    # commit 0bf9399 in one line: an evening tip crosses midnight UTC, and a carried
+    # scheduled_date is exactly how a prior day's final gets filed under today.
+    if scheduled_date_of({"scheduled_start_utc": "2026-08-31T00:30:00Z",
+                          "scheduled_date": "2026-08-31"}) != "2026-08-30":
+        f.append("N derivation: scheduled_date_of preferred a carried date over the ET "
+                 "derivation from the UTC instant")
+    lying = _rec(EID_MIAWSH_PRIOR, "MLB", "SYNTH_MIA", "SYNTH_WSH", "2026-08-29T16:15:00Z",
+                 CLOSED, 3, 4, fetched="2026-08-29T19:30:00Z", scheduled_date="2026-08-30")
+    if scheduled_date_of(lying) != "2026-08-29":
+        f.append("N record: yesterday's game answered today's date (%s)"
+                 % scheduled_date_of(lying))
+    v = A(record=lying, now_utc=_EVENING, lane=LANE_CANONICAL)
+    if v.admitted or REASON_SCHEDULED_DATE_OVERRIDE not in v.reason_codes:
+        f.append("N carried date: an 8/29 final carrying scheduled_date 2026-08-30 produced "
+                 "%s %s — that is commit 0bf9399" % (v.disposition, v.reason_codes))
+    lying_entry = index_schedule([
+        _entry(EID_MIAWSH, "SYNTH_MIA", "SYNTH_WSH", _START_1215ET, scheduled_date="2026-08-28")])
+    v = A(record=_rec(EID_MIAWSH, "MLB", "SYNTH_MIA", "SYNTH_WSH", _START_1215ET, CLOSED, 2, 9),
+          now_utc=_EVENING, canonical_schedule=lying_entry, lane=LANE_CANONICAL)
+    if v.disposition != REJECT_SCHEDULE_CONFLICT or \
+            REASON_SCHEDULED_DATE_OVERRIDE not in v.reason_codes:
+        f.append("N carried date (schedule side): a canonical entry whose carried date "
+                 "contradicts its own instant produced %s %s"
+                 % (v.disposition, v.reason_codes))
+
     # ---- SEARCH CONSENSUS: TWO OUTLETS ON ONE WIRE ARE ONE SOURCE ---------------------------
     s1 = _rec(EID_MIAWSH, "MLB", "SYNTH_MIA", "SYNTH_WSH", _START_1215ET, CLOSED, 2, 9,
               source="outlet_a", wire_service="wire_x", result_timestamp_utc=_EVENING)
@@ -1605,7 +2007,7 @@ def selftest():
     # start + 130 minutes: past the WNBA window, inside an MLB one. A search claim there is
     # refused for lack of consensus, NOT held as too soon.
     v = A(record=_rec(EID_WNBA, "WNBA", "SYNTH_MIN", "SYNTH_ATL", "2026-08-30T23:00:00Z", CLOSED,
-                      81, 78, source="web_search"),
+                      81, 78, source="web_search", fetched="2026-08-31T01:10:00Z"),
           now_utc="2026-08-31T01:10:00Z", lane=LANE_SEARCH)
     if v.disposition != NO_CONSENSUS:
         f.append("WNBA: 130 minutes after a WNBA tip is past the 120-minute minimum; got %s %s"
@@ -1711,6 +2113,12 @@ def selftest():
     if uncovered:
         f.append("COVERAGE: reason codes this selftest never produces: %s" % uncovered)
 
+    return f
+
+
+def selftest():
+    """Run every fixture, print the named failures, and return True when there are none."""
+    f = selftest_failures()
     print(f"{MODULE_ID} selftest: {'OK' if not f else 'FAIL'}")
     for x in f:
         print("  FAIL:", x)
@@ -1720,47 +2128,166 @@ def selftest():
 # ---------------------------------------------------------------------------------------------
 # 12. MUTATION SUITE.  A counter that cannot fail is not a check.
 #     Each entry names the DEFECT RESTORED, not a test. Every one must be KILLED by selftest().
+#
+#     CLUSTER O, 2026-08-30 review. The first version of this suite counted ANY exception as a
+#     kill — including a mutant that died at import before a single fixture ran. That is the
+#     failure this module's own docstring already records (12/12 KILLED while every mutant died
+#     of an AttributeError), rediscovered one layer up: the fix had been applied in
+#     test_score_admission.guard_report and not here. A kill now requires a NAMED FAILURE from
+#     selftest_failures(), and the entry's fourth element names WHICH failure must fire, so a
+#     mutant cannot be credited to collateral damage in an unrelated fixture. Anything else is
+#     an ERROR, reported separately and excluded from the tally.
+#
+#     Entry shape: (name, old_source, new_source, expectation)
+#       expectation  a substring that must appear in at least one named failure, OR an exception
+#                    type that the mutant must raise. None means "any named failure will do" and
+#                    is deliberately not used by anything below.
 # ---------------------------------------------------------------------------------------------
 
 MUTANTS = [
     ("a final before first pitch is admitted again (8/30 BOS@NYY, COL@ATL)",
      "    if start_utc is not None and now < start_utc and (claims_score or claims_terminal):",
-     "    if False:"),
+     "    if False:",
+     "F1"),
     ("'complete' counts as validated, so an unvalidated final becomes settleable",
      "VALIDATED_STATES = frozenset({CLOSED})",
-     "VALIDATED_STATES = frozenset({CLOSED, COMPLETE})"),
+     "VALIDATED_STATES = frozenset({CLOSED, COMPLETE})",
+     "F6 complete"),
     ("the SEARCH lane may mint a FINAL",
      "    return lane == LANE_SEARCH",
-     "    return False"),
+     "    return False",
+     "CONSENSUS"),
     ("two corroborating search sources promote the claim to FINAL",
      "        return Verdict(UNVERIFIED, reasons, ADMISSIBLE_CORROBORATED, detail)",
-     "        return Verdict(ADMIT_FINAL, reasons, ADMISSIBLE_FINAL, detail)"),
+     "        return Verdict(ADMIT_FINAL, reasons, ADMISSIBLE_FINAL, detail)",
+     "CONSENSUS"),
     ("the record is never compared against the canonical schedule",
      "    conflicts = _schedule_conflicts(record, entry, lane)",
-     "    conflicts = []"),
+     "    conflicts = []",
+     "CONFLICT"),
     ("the SOFT duration check becomes hard: a canonical terminal status can no longer clear it, "
      "and the rain-shortened game is false-rejected (owner message 1's warning, restored)",
      "    cleared = too_soon and lane == LANE_CANONICAL and status in TERMINAL_STATES",
-     "    cleared = False"),
+     "    cleared = False",
+     "CLOCK(b)"),
     ("the SEARCH lane may write to the board again (the 8/27 publication path)",
      "    LANE_SEARCH: frozenset({SINK_QUARANTINE}),",
-     "    LANE_SEARCH: frozenset({SINK_QUARANTINE, SINK_BOARD}),"),
+     "    LANE_SEARCH: frozenset({SINK_QUARANTINE, SINK_BOARD}),",
+     "S0"),
     ("any string is accepted as an event id",
      '_EVENT_ID_RE = re.compile(r"^[A-Za-z][A-Za-z0-9_-]*:[0-9]{4}:[A-Za-z0-9_.-]+$")',
-     '_EVENT_ID_RE = re.compile(r"^.+$")'),
+     '_EVENT_ID_RE = re.compile(r"^.+$")',
+     "S1"),
     ("the temporal kill-switch is disarmed (every minimum set to zero)",
      'MIN_DURATION_MINUTES = {"MLB": 150, "NBA": 120, "WNBA": 120, "NFL": 165, "CFB": 180}',
-     'MIN_DURATION_MINUTES = {"MLB": 0, "NBA": 0, "WNBA": 0, "NFL": 0, "CFB": 0}'),
+     'MIN_DURATION_MINUTES = {"MLB": 0, "NBA": 0, "WNBA": 0, "NFL": 0, "CFB": 0}',
+     "S0"),
     ("outlets sharing one wire feed count as independent witnesses",
      '    return record.get("wire_service") or record.get("source")',
-     '    return record.get("source")'),
+     '    return record.get("source")',
+     "CONSENSUS"),
     ("admit stops validating the record, so a score with no status field flows through",
      "    ok_rec, problems = validate_record(record)",
-     "    ok_rec, problems = True, []"),
+     "    ok_rec, problems = True, []",
+     "RULE3"),
     ("the market lane may produce a score",
      "    if lane == LANE_MARKET:",
-     "    if False:"),
+     "    if False:",
+     "LANE"),
+
+    # ---- the five 2026-08-30 review findings, each with the fixture that catches it ---------
+    ("CLUSTER A: the no-schedule admission ceiling is removed, so omitting one argument turns "
+     "owner rules 1, 2 and 6 off and a self-consistent fabrication settles",
+     "    if index_schedule(canonical_schedule) is None:",
+     "    if False:",
+     "A ceiling"),
+    ("CLUSTER B: the declared lane is believed again, so a web_search record relabelled "
+     "CANONICAL admits as a settleable FINAL",
+     "    if declared_lane != LANE_CANONICAL:",
+     "    if True:",
+     "B relabelled"),
+    ("CLUSTER L: a naive ISO string is read as UTC again, moving an ET first pitch 4-5 hours "
+     "earlier so a final admits and settles before the game begins",
+     "    return parsed.tzinfo is None",
+     "    return False",
+     "L naive"),
+    ("CLUSTER M: the pre-start invariant consults only the judging clock again, so the 8/30 "
+     "records this module exists to refuse admit as soon as they are judged late enough",
+     "    if start_utc is not None and fetched_utc is not None and fetched_utc < start_utc \\",
+     "    if False and fetched_utc is not None and fetched_utc < start_utc \\",
+     "M observation clock"),
+    ("CLUSTER N: a caller-supplied scheduled_date overrides the ET derivation again, so an "
+     "8/29 final is filed and served as an 8/30 result (commit 0bf9399)",
+     "    return None if start is None else et_date_of(start)",
+     "    return str(obj.get('scheduled_date')) if obj.get('scheduled_date') else ("
+     "None if start is None else et_date_of(start))",
+     "N "),
 ]
+
+#: CLUSTER O's own check. This mutation is not a defect and is not in MUTANTS: it is a canary
+#: that must be classified ERRORED rather than KILLED. A suite that counts crashes as kills
+#: reports a perfect score while proving nothing, which is exactly what happened here once
+#: already, so the classifier is tested rather than trusted.
+ERROR_CANARY = ("the module raises at import, before any fixture runs",
+                "UTC = dt.timezone.utc",
+                "UTC = dt.timezone.utc + _this_name_does_not_exist")
+
+
+#: How one mutant ended. KILLED is the only outcome that PROVES anything, and it is the only one
+#: that requires a named failure to have fired.
+OUTCOME_KILLED = "KILLED"
+OUTCOME_SURVIVED = "SURVIVED"
+OUTCOME_ERRORED = "ERRORED"
+OUTCOME_UNAPPLIED = "UNAPPLIED"
+OUTCOME_SELF_TARGETED = "SELF_TARGETED"
+OUTCOME_MISDIRECTED = "MISDIRECTED"
+
+
+def run_mutant(src, body, old, new, expectation=None):
+    """(outcome, note) for one source-level mutation. CLUSTER O lives here.
+
+    KILLED requires a NAMED failure from selftest_failures() — and, when the entry declares one,
+    the failure that NAMES this defect's own fixture. An exception of any kind, at import or in
+    the run, is OUTCOME_ERRORED: the mutant may well be fatal, but a crash is not evidence that a
+    fixture watches this guard, and counting it as one is how a suite reports 12/12 while proving
+    nothing. An expectation may also be an exception TYPE, for a mutant whose correct behaviour
+    IS to raise; then that exact type is a kill and every other type is still an error.
+    """
+    if old not in src:
+        return OUTCOME_UNAPPLIED, "pattern not found in this module's source"
+    if old not in body:
+        return OUTCOME_SELF_TARGETED, "pattern occurs only inside the MUTANTS list"
+    wants_exception = isinstance(expectation, type) and issubclass(expectation, BaseException)
+    ns = {"__file__": __file__, "__name__": "mutant"}
+    import io as _io, contextlib as _cl
+    try:
+        with _cl.redirect_stdout(_io.StringIO()):
+            exec(compile(src.replace(old, new, 1), "<mutant>", "exec"), ns)
+    except BaseException as e:                      # noqa: BLE001 — classification, not handling
+        if wants_exception and isinstance(e, expectation):
+            return OUTCOME_KILLED, "raised the expected %s at import" % expectation.__name__
+        return OUTCOME_ERRORED, "died at import: %s: %s" % (type(e).__name__, e)
+    if "selftest_failures" not in ns:
+        return OUTCOME_ERRORED, "the mutant module exposes no selftest_failures()"
+    try:
+        with _cl.redirect_stdout(_io.StringIO()):
+            failures = ns["selftest_failures"]()
+    except BaseException as e:                      # noqa: BLE001 — classification, not handling
+        if wants_exception and isinstance(e, expectation):
+            return OUTCOME_KILLED, "raised the expected %s" % expectation.__name__
+        return OUTCOME_ERRORED, "unexpected %s from selftest_failures: %s" % (type(e).__name__, e)
+    if not isinstance(failures, list):
+        return OUTCOME_ERRORED, "selftest_failures returned %s, not a list" % type(failures).__name__
+    if not failures:
+        return OUTCOME_SURVIVED, "every fixture still passed"
+    if wants_exception:
+        return OUTCOME_ERRORED, "expected %s, got %d named failures" % (expectation.__name__,
+                                                                       len(failures))
+    if expectation and not any(expectation in x for x in failures):
+        return OUTCOME_MISDIRECTED, ("killed by %r, but no fixture naming %r fired — the guard "
+                                     "this mutant removes is watched by a DIFFERENT fixture than "
+                                     "the one claimed" % (failures[0][:90], expectation))
+    return OUTCOME_KILLED, failures[0][:120]
 
 
 def mutation_suite():
@@ -1779,25 +2306,38 @@ def mutation_suite():
     # a mutant whose pattern occurs only inside the MUTANTS literal edits its OWN definition,
     # applies cleanly, changes no behaviour and reports SURVIVED.
     body = src[:src.index("MUTANTS = [")]
-    killed = 0
-    for name, old, new in MUTANTS:
-        if old not in src:
-            print("  UNAPPLIED ", name + ": pattern not found")
-            continue
-        if old not in body:
-            print("  SELF_TARGETED ", name + ": pattern occurs only inside the MUTANTS list")
-            continue
-        ns = {"__file__": __file__, "__name__": "mutant"}
-        try:
-            exec(compile(src.replace(old, new, 1), "<mutant>", "exec"), ns)
-            ok = ns["selftest"]()
-        except Exception:
-            ok = False
-        print(("  KILLED    " if not ok else "  SURVIVED  ") + name)
-        killed += not ok
-    print(f"score_admission mutation suite: {killed}/{len(MUTANTS)} killed"
-          + ("" if killed == len(MUTANTS) else "  — SURVIVORS MEAN DECORATIVE FIXTURES"))
-    return killed == len(MUTANTS)
+    tally = {k: 0 for k in (OUTCOME_KILLED, OUTCOME_ERRORED, OUTCOME_SURVIVED,
+                            OUTCOME_UNAPPLIED, OUTCOME_SELF_TARGETED, OUTCOME_MISDIRECTED)}
+    for entry in MUTANTS:
+        name, old, new = entry[0], entry[1], entry[2]
+        expectation = entry[3] if len(entry) > 3 else None
+        outcome, note = run_mutant(src, body, old, new, expectation)
+        tally[outcome] += 1
+        print("  %-14s %s" % (outcome, name))
+        if outcome != OUTCOME_KILLED:
+            print("                 -> %s" % note)
+
+    # CLUSTER O's classifier, tested rather than trusted: a mutant that dies at import must be
+    # reported as an ERROR and must not reach the kill tally.
+    canary_name, canary_old, canary_new = ERROR_CANARY
+    canary_outcome, canary_note = run_mutant(src, body, canary_old, canary_new)
+    canary_ok = canary_outcome == OUTCOME_ERRORED
+    print("  %-14s CANARY %s" % ("OK" if canary_ok else "BROKEN", canary_name))
+    if not canary_ok:
+        print("                 -> classified %s (%s); a suite that calls an import crash a KILL "
+              "counts crashes as proof" % (canary_outcome, canary_note))
+
+    n = len(MUTANTS)
+    print("score_admission mutation suite: %d killed, %d errored, %d survived (of %d)"
+          % (tally[OUTCOME_KILLED], tally[OUTCOME_ERRORED], tally[OUTCOME_SURVIVED], n))
+    extra = {k: v for k, v in tally.items()
+             if v and k in (OUTCOME_UNAPPLIED, OUTCOME_SELF_TARGETED, OUTCOME_MISDIRECTED)}
+    if extra:
+        print("  not applied as written: %s" % extra)
+    if tally[OUTCOME_KILLED] != n:
+        print("  — A MUTANT THAT IS NOT KILLED BY A NAMED FIXTURE PROVES NOTHING. An ERRORED "
+              "mutant is not a kill: it crashed, which no fixture was watching for.")
+    return tally[OUTCOME_KILLED] == n and canary_ok
 
 
 def gate():

@@ -1,8 +1,31 @@
 {
   "schema_version": "1.0",
-  "generated_utc": "2026-08-30T03:25:06Z",
+  "generated_utc": "2026-08-30T10:54:38Z",
   "source_of_truth": "append-only patch records; newest first",
   "patches": [
+    {
+      "patch_id": "P0-ABSENT-ACQUISITION-2026-08-30",
+      "severity": "P0",
+      "status": "PROPOSED_VERIFIED_ON_ISOLATED_BRANCH",
+      "scope": ["shared freshness contract", "mlb starter-cap reporting", "all acquisition-backed sports"],
+      "problem": "The ABSENT-input path accepted any non-empty acquisition response as ACQUIRING without comparing the returned observation's derived age and content age to the sport/kind limit. An empty store could therefore be filled with ancient content and receive the wrong state label.",
+      "changes": [
+        "apply the dual-clock freshness re-gate to ABSENT -> acquired transitions",
+        "keep ancient or unknowable acquired observations DEGRADED",
+        "allow genuinely current acquired observations to recover only to ACQUIRING, which remains fallback-only and non-actionable until refreeze",
+        "derive starter_slots_capped from current-value/action authority so ACQUIRING fallback rows cannot be counted as uncapped"
+      ],
+      "verification": {
+        "freshness_contract_gate": "PASS",
+        "freshness_mutants": "9/9 caught",
+        "absent_acquisition_pair": "PASS — ancient content degrades; genuinely current content recovers",
+        "acquiring_cap_coherence": "PASS — fallback values, capped count, and action state agree",
+        "targeted_acquisition_multisport_tests": "44/44 PASS",
+        "full_handoff_suite": "171/174 in this review environment; only 3 WNBA pyarrow dependency/reproduction tests remain red"
+      },
+      "action_authority": "NO",
+      "notes": "Forward-only. Frozen historical boards remain byte-identical."
+    },
     {
       "patch_id": "P0-MC-CONVERGENCE-2026-08-30",
       "severity": "P0",

@@ -24,9 +24,11 @@ words "NOT a pregame confirmation". The production board builders never read it.
 therefore means opposite things in the two layers: carefully-qualified post-hoc in the evaluation
 store, and full-information PROBABLE on the board. This module makes the qualification travel.
 
-TERMINAL BEHAVIOUR IS FETCH, NOT BLOCK (owner, 2026-08-29). A stale input triggers ACQUISITION.
-Only when acquisition fails does the input degrade — to a widened prior, never to an unbettable
-game. The ladder is FRESH -> ACQUIRING -> DEGRADED, and every rung is bettable.
+TERMINAL BEHAVIOUR SEPARATES FORECAST FROM ACTION (P0, 2026-08-30). A stale input triggers
+ACQUISITION. Only when acquisition fails does the input degrade to a registered fallback. The board
+may still publish that labelled fallback, but stale/absent/unconfirmed evidence is never action
+eligible. The ladder is FRESH -> ACQUIRING -> DEGRADED; ``forecastable`` and ``actionable`` are
+separate fields.
 
 TWO PLACES THIS DELIBERATELY DEPARTS FROM THE DICTATED SPEC, both disclosed rather than silent:
 
@@ -98,7 +100,8 @@ MAX_AGE_DAYS = {
 }
 DEFAULT_MAX_AGE_DAYS = 2
 
-#: dose multipliers by disposition+grade. A degraded input is never zero: the game stays bettable.
+#: dose multipliers by disposition+grade. A degraded input is never zero because a registered
+#: fallback forecast may still be emitted; the action gate is separate and fail-closed.
 DOSE = {
     (FRESH, CONFIRMED): 1.00,
     (FRESH, IDENTIFIED_UNCONFIRMED): 0.75,
@@ -242,9 +245,27 @@ class Disposition:
         self.acquisition = acquisition
 
     @property
-    def bettable(self):
-        """Always true. The contract degrades confidence; it never removes a game."""
+    def forecastable(self):
+        """A board may still emit a labelled fallback forecast.
+
+        This is deliberately separate from actionability. Missing or stale inputs do not have to
+        erase the game from a research board, but they may not be represented as current evidence.
+        """
         return True
+
+    @property
+    def actionable(self):
+        """Only a current, canonical observation may reach the action layer."""
+        return self.disposition == FRESH and self.grade == CONFIRMED
+
+    @property
+    def bettable(self):
+        """Backward-compatible alias for the action gate.
+
+        Before P0-FRESHNESS-2026-08-30 this returned ``True`` for every state. That collapsed
+        "can publish a fallback" into "can bet" and let stale inputs remain decision eligible.
+        """
+        return self.actionable
 
     def to_dict(self, now):
         return {
@@ -252,6 +273,10 @@ class Disposition:
             "disposition": self.disposition,
             "grade": self.grade,
             "dose_multiplier": self.dose_multiplier,
+            "forecastable": self.forecastable,
+            "actionable": self.actionable,
+            "input_value_policy": ("CURRENT_OBSERVED_VALUE" if self.actionable
+                                   else "REGISTERED_FALLBACK_ONLY"),
             "age_days": None if self.age_days is None else round(self.age_days, 4),
             "limit_days": self.limit_days,
             "reason": self.reason,
@@ -280,8 +305,8 @@ def resolve_input(subject, sport, kind, stamp, now=None, acquire=None, max_age_d
         if got is None:
             return Disposition(subject, DEGRADED, ABSENT, DOSE[(DEGRADED, ABSENT)],
                                "NOT IN STORE and acquisition unavailable or failed — falling back "
-                               "to the league-average prior with a widened dose. The game stays "
-                               "bettable; the confidence does not survive.",
+                               "to the registered league-average treatment. A labelled research "
+                               "forecast may remain, but the row is not action eligible.",
                                stamp=stamp, age_days=None, limit_days=limit,
                                acquisition=_acq_note(acquire))
         stamp, acq = got
@@ -453,9 +478,11 @@ def selftest():
     if cohort_dose([d, d2]) >= 1.0:
         f.append("A1c: HOU@NYM still produced a full information dose")
 
-    # A2 — the game stays BETTABLE. Terminal behaviour is fetch/degrade, never block.
-    if not (d.bettable and d2.bettable):
-        f.append("A2: a degraded input made a game unbettable; the contract forbids that")
+    # A2 — the research row survives as a LABELLED FALLBACK, but action fails closed.
+    if not (d.forecastable and d2.forecastable):
+        f.append("A2: degradation erased the research forecast instead of using a fallback")
+    if d.actionable or d2.actionable or d.bettable or d2.bettable:
+        f.append("A2: stale/absent evidence remained action eligible")
     if cohort_dose([d, d2]) <= 0:
         f.append("A2: cohort dose collapsed to zero")
 
@@ -476,6 +503,8 @@ def selftest():
     d5 = resolve_input("fresh guy", "mlb", "starter", _stamp(0.5, now=now), now=now)
     if d5.disposition != FRESH or d5.dose_multiplier != 1.0:
         f.append(f"A5: a same-day confirmed starter got {d5.disposition}/{d5.dose_multiplier}")
+    if not d5.actionable or not d5.bettable:
+        f.append("A5: a same-day confirmed input failed the action gate")
 
     # A6 — IDENTIFIED_UNCONFIRMED never reaches full dose even when fresh.
     d6 = resolve_input("searched", "mlb", "starter",

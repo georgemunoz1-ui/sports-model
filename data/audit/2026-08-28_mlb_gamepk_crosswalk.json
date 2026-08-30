@@ -1,0 +1,164 @@
+{
+ "ARCHIVE": {
+  "cols": 61,
+  "file": "data/raw/2026/daily/2026-08-28.parquet",
+  "origin_main": "2e593d4262395f47374d21f9810c983171adf202",
+  "repo": "lancebroz/mlb-pitcher-data",
+  "rows": 4407
+ },
+ "CONTROL": {
+  "agree": 5,
+  "n": 5,
+  "verdict": "PASS \u2014 the method reproduces every independently captured gamePk",
+  "what": "the 5 rows that ALREADY carry an MLB_GAMEPK are a control on the join method: the archive must independently reproduce an id the board captured from a different source."
+ },
+ "LEDGER": {
+  "exposure_usd": 0,
+  "n_bets": 0,
+  "units": 0.0,
+  "wager_authority": "NO"
+ },
+ "METHOD": {
+  "NOT_used": "adjacency, arithmetic on id ranges, or search snippets. The 8/28 board correctly refused an adjacency reconstruction; this does not reintroduce one.",
+  "join": "(away_team, home_team) within a SINGLE game_date, against the archive's own game_pk grouping",
+  "why_this_join_is_safe_here": "the binding gate warns that (away,home) is a non-unique key across a repeated series. That warning is about joining ACROSS dates. Here the join is scoped to one date, the archive has 15 distinct matchups and the board has the same 15, and the assertion that no matchup repeats on this date is executed, not assumed. A doubleheader would trip it."
+ },
+ "R6": "append-only; new path. The 8/28 board is NOT edited \u2014 its ESPN-only rows stand as frozen. This record sits beside it.",
+ "RESOLVED": {
+  "n": 10,
+  "note": "these are RESOLVED, meaning an admitted archive supplies the id. They are not thereby BOUND \u2014 binding still requires a RESULT row, which this archive does not carry.",
+  "of": "the 10 ESPN_GAMEID-only rows"
+ },
+ "ROWS": [
+  {
+   "archive_game_pk": "824638",
+   "board_canonical_id": "ESPN_GAMEID:401816711",
+   "board_id_space": "ESPN_GAMEID",
+   "control": false,
+   "game": "mlb:CIN@CHC",
+   "resolves_to": "MLB_GAMEPK:824638"
+  },
+  {
+   "agrees": true,
+   "archive_game_pk": "824231",
+   "board_canonical_id": "MLB_GAMEPK:824231",
+   "board_id_space": "MLB_GAMEPK",
+   "control": true,
+   "game": "mlb:LAD@DET"
+  },
+  {
+   "archive_game_pk": "822691",
+   "board_canonical_id": "ESPN_GAMEID:401816707",
+   "board_id_space": "ESPN_GAMEID",
+   "control": false,
+   "game": "mlb:MIA@WSH",
+   "resolves_to": "MLB_GAMEPK:822691"
+  },
+  {
+   "archive_game_pk": "824396",
+   "board_canonical_id": "ESPN_GAMEID:401816705",
+   "board_id_space": "ESPN_GAMEID",
+   "control": false,
+   "game": "mlb:KC@CLE",
+   "resolves_to": "MLB_GAMEPK:824396"
+  },
+  {
+   "archive_game_pk": "823583",
+   "board_canonical_id": "ESPN_GAMEID:401816704",
+   "board_id_space": "ESPN_GAMEID",
+   "control": false,
+   "game": "mlb:HOU@NYM",
+   "resolves_to": "MLB_GAMEPK:823583"
+  },
+  {
+   "archive_game_pk": "822935",
+   "board_canonical_id": "ESPN_GAMEID:401816708",
+   "board_id_space": "ESPN_GAMEID",
+   "control": false,
+   "game": "mlb:SD@TB",
+   "resolves_to": "MLB_GAMEPK:822935"
+  },
+  {
+   "archive_game_pk": "822769",
+   "board_canonical_id": "ESPN_GAMEID:401816709",
+   "board_id_space": "ESPN_GAMEID",
+   "control": false,
+   "game": "mlb:SEA@TOR",
+   "resolves_to": "MLB_GAMEPK:822769"
+  },
+  {
+   "archive_game_pk": "824877",
+   "board_canonical_id": "ESPN_GAMEID:401816703",
+   "board_id_space": "ESPN_GAMEID",
+   "control": false,
+   "game": "mlb:COL@ATL",
+   "resolves_to": "MLB_GAMEPK:824877"
+  },
+  {
+   "agrees": true,
+   "archive_game_pk": "823504",
+   "board_canonical_id": "MLB_GAMEPK:823504",
+   "board_id_space": "MLB_GAMEPK",
+   "control": true,
+   "game": "mlb:BOS@NYY"
+  },
+  {
+   "agrees": true,
+   "archive_game_pk": "823744",
+   "board_canonical_id": "MLB_GAMEPK:823744",
+   "board_id_space": "MLB_GAMEPK",
+   "control": true,
+   "game": "mlb:TEX@MIL"
+  },
+  {
+   "archive_game_pk": "823666",
+   "board_canonical_id": "ESPN_GAMEID:401816710",
+   "board_id_space": "ESPN_GAMEID",
+   "control": false,
+   "game": "mlb:CWS@MIN",
+   "resolves_to": "MLB_GAMEPK:823666"
+  },
+  {
+   "archive_game_pk": "823013",
+   "board_canonical_id": "ESPN_GAMEID:401816712",
+   "board_id_space": "ESPN_GAMEID",
+   "control": false,
+   "game": "mlb:PIT@STL",
+   "resolves_to": "MLB_GAMEPK:823013"
+  },
+  {
+   "agrees": true,
+   "archive_game_pk": "823985",
+   "board_canonical_id": "MLB_GAMEPK:823985",
+   "board_id_space": "MLB_GAMEPK",
+   "control": true,
+   "game": "mlb:PHI@LAA"
+  },
+  {
+   "agrees": true,
+   "archive_game_pk": "824960",
+   "board_canonical_id": "MLB_GAMEPK:824960",
+   "board_id_space": "MLB_GAMEPK",
+   "control": true,
+   "game": "mlb:BAL@ATH"
+  },
+  {
+   "archive_game_pk": "823178",
+   "board_canonical_id": "ESPN_GAMEID:401816714",
+   "board_id_space": "ESPN_GAMEID",
+   "control": false,
+   "game": "mlb:AZ@SF",
+   "resolves_to": "MLB_GAMEPK:823178"
+  }
+ ],
+ "WHAT": "the 8/28 MLB board captured 10 ESPN_GAMEIDs and only 5 MLB_GAMEPKs, and recorded on every ESPN-only row that the gamePk was NOT FOUND and would NOT be inferred by adjacency. The admitted pitch archive carries the real gamePks for that date.",
+ "WHAT_THIS_DOES_AND_DOES_NOT_CLOSE": {
+  "closes": "the ID half of FU-1. The 8/28 MLB board is now gamePk-addressable end to end, 15/15, from an admitted source.",
+  "does_not_close": "the SCORE half. The archive has no runs column \u2014 no bat_score, no post_home_score, nothing. RJ-001B stands. binding_proof will keep returning 0/0 for this cohort until a finals source exists.",
+  "explicitly_refused": "runs ARE in principle reconstructible from the per-plate-appearance events column plus inning, outs and at_bat_number by running a baseball state machine. That would be an INFERRED final wearing the costume of an observed one, and its errors would be silent. It is not done, and it must not be done to satisfy FU-1."
+ },
+ "created_utc": "2026-08-30T11:20:00Z",
+ "record_id": "MLB-GAMEPK-CROSSWALK-2026-08-28",
+ "record_sha256": "8fca189a8f5a031678725c388a26441c38a6c2d42a8552210efbb5d3bac1b3bd",
+ "schema": "ops.id_crosswalk.v1"
+}

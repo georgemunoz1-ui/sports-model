@@ -102,7 +102,7 @@ RAW = "/home/user/sportsdataverse/wehoop-wnba-raw"
 #: exists to prevent, and the module's own selftest had been FAILING on it unnoticed because
 #: nothing invoked that selftest. Both are fixed: the pin is advanced deliberately below, and the
 #: selftest is now wired into healthcheck so it cannot rot silently again.
-COMMIT_PIN = "7a1c7ebaef37590ebdaf75c4d3961b99a493d99b"   # 2026-08-28 06:32 ET; carries the 8/27 finals
+COMMIT_PIN = "5875eba831d8013ed28843353174d3557ba36db0"   # 2026-08-30 06:32 ET; carries the 8/29 finals
 
 _STAT_KEYS = {"fieldGoalsMade-fieldGoalsAttempted": ("fgm", "fga"),
               "threePointFieldGoalsMade-threePointFieldGoalsAttempted": ("fg3m", "fg3a"),

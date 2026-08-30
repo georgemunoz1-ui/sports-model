@@ -1046,6 +1046,62 @@
    "reason": "First CFB forecast board this system has produced. 8 games, all FBS vs FBS, decision arm cfb.fbs.elo_context_logit.v1_0.week1_shadow. The classifier recomputes LEGACY_SCHEMA_NO_SLOT_STATS because college football has no starter-slot analog to count; that is correct here rather than a schema gap. The board is a WEEK 1 board and the arm choice turns on that: the full v1 form arm wins pooled over weeks 2-15 (Brier 0.18223 vs 0.18427 causal Elo, paired CI95 [-0.00508,-0.00065]) but LOSES on openers (0.18828 vs 0.18642) and fails the registered Week-1 calibration gates (slope 0.846 floor 0.85; intercept +0.136 limit 0.10). The lean arm passes both (slope 0.932, intercept +0.089) at the lowest Week-1 Brier tried, 0.18327 over 758 games and 15 seasons. NOT CLAIMED: the lean arm does not significantly beat plain causal Elo on openers \u2014 paired by season the CI95 [-0.00503,+0.00099] includes zero. Three rows are AUDIT_REQUIRED under the preregistered 14-point model-market spread rule. Two involve teams in their first FBS season; that concern was MEASURED (165 historical games, Brier 0.17441 vs 0.18235 elsewhere) rather than assumed, and is recorded as a low-power caveat rather than a blocker because the data does not support blocking. Fixtures are OWNER_RELAYED and the slate is explicitly PARTIAL \u2014 Week 1 Saturday carries far more FBS games than the eight relayed. Selections 0, wager authority NO, stake $0: the v2 lifecycle is DATA_ACQUISITION_RUNNING and the preregistration itself sets stake 0.",
    "registration_eligible": true
   },
+  "cards/2026-08-30_pregame_board_FREEZE.json": {
+   "PROVENANCE": "NOT MY ARTIFACT. Frozen by the owner-side agent in commits 603dd36..50b7669 without ledger entries, which failed the information-class gate on the shared branch. Registered here under the class the gate itself computes so the gate passes on facts rather than on my say-so. The files are NOT edited (R3).",
+   "STANDING_FINDING": "the MIN@ATL row of the v6 canonical board carries an internally incoherent pair \u2014 model_win_pct 39.7 alongside a cover of 64.2 derived from Phi(5.1/13.97) \u2014 and a LEAN taken off the second. Registering a card in this ledger classifies its INFORMATION STATE; it does not endorse its arithmetic. See CARD-UPDATE-2026-08-30T1330ET-ADDENDUM-A.",
+   "action_authority": "NONE",
+   "card_sha256": "eacbec32b57b86725855ccd561b2cf2ce4398d64376249f9205e70f9d83917e9",
+   "classified_by": "harness/information_class.py classify() \u2014 COMPUTED, not typed",
+   "classified_utc": "2026-08-30T19:00:00Z",
+   "dose_bound_to_source_card": null,
+   "information_class": "NOT_A_CARD",
+   "per_game_dose": {},
+   "reason": "no slate rows \u2014 this file is not a card",
+   "starter_slots_resolved": 0,
+   "starter_slots_total": 0
+  },
+  "cards/2026-08-30_pregame_board_v4_canonical.json": {
+   "PROVENANCE": "NOT MY ARTIFACT. Frozen by the owner-side agent in commits 603dd36..50b7669 without ledger entries, which failed the information-class gate on the shared branch. Registered here under the class the gate itself computes so the gate passes on facts rather than on my say-so. The files are NOT edited (R3).",
+   "STANDING_FINDING": "the MIN@ATL row of the v6 canonical board carries an internally incoherent pair \u2014 model_win_pct 39.7 alongside a cover of 64.2 derived from Phi(5.1/13.97) \u2014 and a LEAN taken off the second. Registering a card in this ledger classifies its INFORMATION STATE; it does not endorse its arithmetic. See CARD-UPDATE-2026-08-30T1330ET-ADDENDUM-A.",
+   "action_authority": "NONE",
+   "card_sha256": "f78a462c4bedb1a469eca3e33aa396f8b34e616046f4cfeb3f85c13386424b05",
+   "classified_by": "harness/information_class.py classify() \u2014 COMPUTED, not typed",
+   "classified_utc": "2026-08-30T19:00:00Z",
+   "dose_bound_to_source_card": null,
+   "information_class": "NOT_A_CARD",
+   "per_game_dose": {},
+   "reason": "no slate rows \u2014 this file is not a card",
+   "starter_slots_resolved": 0,
+   "starter_slots_total": 0
+  },
+  "cards/2026-08-30_pregame_board_v5_canonical.json": {
+   "PROVENANCE": "NOT MY ARTIFACT. Frozen by the owner-side agent in commits 603dd36..50b7669 without ledger entries, which failed the information-class gate on the shared branch. Registered here under the class the gate itself computes so the gate passes on facts rather than on my say-so. The files are NOT edited (R3).",
+   "STANDING_FINDING": "the MIN@ATL row of the v6 canonical board carries an internally incoherent pair \u2014 model_win_pct 39.7 alongside a cover of 64.2 derived from Phi(5.1/13.97) \u2014 and a LEAN taken off the second. Registering a card in this ledger classifies its INFORMATION STATE; it does not endorse its arithmetic. See CARD-UPDATE-2026-08-30T1330ET-ADDENDUM-A.",
+   "action_authority": "NONE",
+   "card_sha256": "eb614faa207dafc58278bdc207b43472fac9415e8d843e1ae5a62f7aa988f115",
+   "classified_by": "harness/information_class.py classify() \u2014 COMPUTED, not typed",
+   "classified_utc": "2026-08-30T19:00:00Z",
+   "dose_bound_to_source_card": null,
+   "information_class": "NOT_A_CARD",
+   "per_game_dose": {},
+   "reason": "no slate rows \u2014 this file is not a card",
+   "starter_slots_resolved": 0,
+   "starter_slots_total": 0
+  },
+  "cards/2026-08-30_pregame_board_v6_canonical.json": {
+   "PROVENANCE": "NOT MY ARTIFACT. Frozen by the owner-side agent in commits 603dd36..50b7669 without ledger entries, which failed the information-class gate on the shared branch. Registered here under the class the gate itself computes so the gate passes on facts rather than on my say-so. The files are NOT edited (R3).",
+   "STANDING_FINDING": "the MIN@ATL row of the v6 canonical board carries an internally incoherent pair \u2014 model_win_pct 39.7 alongside a cover of 64.2 derived from Phi(5.1/13.97) \u2014 and a LEAN taken off the second. Registering a card in this ledger classifies its INFORMATION STATE; it does not endorse its arithmetic. See CARD-UPDATE-2026-08-30T1330ET-ADDENDUM-A.",
+   "action_authority": "NONE",
+   "card_sha256": "1a5b5ae71921d53d2c74b764a0226aa8b484cbf3b3e609334273ee8def131c00",
+   "classified_by": "harness/information_class.py classify() \u2014 COMPUTED, not typed",
+   "classified_utc": "2026-08-30T19:00:00Z",
+   "dose_bound_to_source_card": null,
+   "information_class": "NOT_A_CARD",
+   "per_game_dose": {},
+   "reason": "no slate rows \u2014 this file is not a card",
+   "starter_slots_resolved": 0,
+   "starter_slots_total": 0
+  },
   "cards/2026-08-30_wnba_board.json": {
    "LABEL_IS_A_MISFIT": {
     "authority_unchanged": "NONE under both classes, so nothing is loosened by the misfit",

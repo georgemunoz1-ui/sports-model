@@ -1,105 +1,131 @@
 {
-  "schema_version": "1.0",
-  "generated_utc": "2026-08-30T03:25:06Z",
-  "source_of_truth": "append-only patch records; newest first",
-  "patches": [
-    {
-      "patch_id": "P0-MC-CONVERGENCE-2026-08-30",
-      "severity": "P0",
-      "status": "PROPOSED_VERIFIED_ON_ISOLATED_BRANCH",
-      "scope": ["shared MC convergence gate", "forecastable/actionable gate", "all MC-simulated sports"],
-      "problem": "The mc_engine lineage's convergence gate (3-sigma batch-block check on simulated probabilities) raised ConvergenceError and killed the slate builder with exit 1 (observed: 2.968pp on HOU@NYM, 2.715pp on COL@ATL); the sportsmodel/main lineage had no convergence gate at all, so a simulator measuring its own RNG could emit an actionable probability.",
-      "changes": [
-        "port the batch-block convergence check from lineage/mc_engine_20260830/harness/mc_engine.py (CONVERGENCE_SIGMAS=3.0 on the pooled-Bernoulli se of a block proportion, TRIALS=30000, BLOCKS=10) as harness/mc_convergence.py",
-        "register the named tolerance MC_CONVERGENCE_TOL_PP=2.7386pp, derived not tuned: the worst-case (p_pool=0.5) value of the ported per-game threshold 3*sqrt(0.25/3000)*100",
-        "bind the gate INTO the forecastable/actionable gate: a CONVERGENCE_FAIL demotes the game to forecast-only (actionable=False, input_value_policy=REGISTERED_FALLBACK_ONLY, verdict and pre-demotion state recorded for audit); the rest of the board still builds — fail-closed, not fail-loud-process-kill",
-        "convergence never promotes: a clean verdict leaves a degraded freshness disposition non-actionable",
-        "regression tests: synthetic gap above tolerance demotes with audit recorded and the board builds around it; gap below tolerance keeps the normal actionable path"
-      ],
-      "verification": {
-        "mc_convergence_selftest": "PASS",
-        "mc_convergence_mutants": "4/4 caught",
-        "mc_convergence_regression_pytest": "7/7 PASS",
-        "freshness_contract_gate": "PASS (blob 49fb7ef0 verified byte-identical to sportsmodel/main)",
-        "freshness_mutants": "9/9 caught",
-        "frozen_artifacts": "untouched; cards/ and historical boards/grades not modified (append-only)"
-      },
-      "action_authority": "NO",
-      "notes": "Frozen historical boards remain byte-identical. The port is forward-only. Wiring the per-block evidence into a live forward builder (e.g. a v13 sim run in keyed blocks) is flagged as follow-up; build_board_0825 is a frozen-date builder and was deliberately not edited."
-    },
-    {
-      "patch_id": "P0-FRESHNESS-2026-08-30",
-      "severity": "P0",
-      "status": "PROPOSED_VERIFIED_ON_ISOLATED_BRANCH",
-      "scope": ["mlb", "wnba", "cfb", "nfl", "shared freshness contract"],
-      "problem": "Stale or absent observations could remain described as bettable; MLB historical game logs could be stamped as confirmation of tonight's starter; stale pitcher rates still entered V13 before probability shrinkage.",
-      "changes": [
-        "separate forecastable from actionable; only FRESH + CONFIRMED is action eligible",
-        "emit REGISTERED_FALLBACK_ONLY as the value policy for every non-actionable input",
-        "require exact normalized full-name identity instead of trusting people[0]",
-        "grade an MLB game log POST_HOC_NOT_PREGAME for starter identity",
-        "replace stale MLB starter rates with the registered V13 CAP treatment while retaining the old observation for audit",
-        "keep content-age and post-acquisition age re-gates fail-closed"
-      ],
-      "verification": {
-        "freshness_contract_gate": "PASS",
-        "freshness_mutants": "9/9 caught",
-        "acquisition_adapter_selftest": "PASS",
-        "starter_regression": "PASS",
-        "targeted_multisport_tests": "23/23 PASS",
-        "full_handoff_suite": "171/174 in this review environment; 3 WNBA failures because real pyarrow is unavailable"
-      },
-      "action_authority": "NO",
-      "notes": "Frozen historical boards remain byte-identical. The patch is forward-only."
-    },
-    {
-      "patch_id": "P0-CONTENT-AGE-2026-08-29",
-      "severity": "P0",
-      "status": "ON_OPERATIONAL_BRANCH",
-      "scope": ["shared freshness contract"],
-      "problem": "A newly fetched but old observation could appear fresh because fetched_at reset the generous clock.",
-      "changes": [
-        "gate on content_age as well as derived_age",
-        "re-gate newly acquired content against the sport/kind age limit",
-        "refuse refetch-without-new-content"
-      ],
-      "verification": {"freshness_mutants": "9/9 caught"}
-    },
-    {
-      "patch_id": "P0-RESULT-BINDING-2026-08-28",
-      "severity": "P0",
-      "status": "ON_OPERATIONAL_BRANCH",
-      "scope": ["all grading", "mlb incident fixture"],
-      "problem": "Repeated-series matchups allowed prior-date finals to contaminate the next date's grades.",
-      "changes": [
-        "bind sport + canonical game id + scheduled date + away + home",
-        "refuse partial-cohort aggregation and ambiguous identities",
-        "run consecutive-series and adversarial bypass fixtures"
-      ]
-    },
-    {
-      "patch_id": "DATA-WNBA-DATE-AND-EXTENSION-2026-08-29",
-      "severity": "P1",
-      "status": "REVIEWED_WITH_REPRODUCIBILITY_BLOCKER",
-      "scope": ["wnba"],
-      "problem": "UTC-date slicing and duplicate cross-ID content could contaminate the feature pool; the daily extension needed rebuilding.",
-      "changes": [
-        "store utc_instant and derive ET game date",
-        "guard duplicate content across ID spaces",
-        "rebuild the ESPN extension to 89 games"
-      ],
-      "open_blocker": "The review environment has no real pyarrow, so the WNBA end-to-end path did not reproduce."
-    },
-    {
-      "patch_id": "POLICY-MARKET-INDEPENDENCE-2026-08-29",
-      "severity": "POLICY",
-      "status": "ON_OPERATIONAL_BRANCH",
-      "scope": ["all sports"],
-      "changes": [
-        "market, betting splits, line movement, and implied probability are forbidden predictive features",
-        "model outputs freeze before the valuation overlay",
-        "large market disagreement triggers an input audit, not market shrinkage"
-      ]
-    }
-  ]
+ "schema_version": "1.0",
+ "generated_utc": "2026-08-30T18:05:00Z",
+ "source_of_truth": "append-only patch records; newest first",
+ "patches": [
+  {
+   "patch_id": "FU1-FEED-ADAPTER-2026-08-30",
+   "severity": "P1",
+   "status": "PROPOSED_VERIFIED_ON_ISOLATED_BRANCH",
+   "scope": ["mlb", "wnba", "nfl", "cfb", "result acquisition", "market capture (valuation/audit only)", "causal backtest evaluation", "calibration (dormant)"],
+   "problem": "MLB's binding blocker was the absence of a finals source carrying game ids. Schedule, starter and result data arrived via manual odds-page uploads and search relays, which are IDENTIFIED_UNCONFIRMED and can never bind.",
+   "changes": [
+    "ESPN scoreboard API client (no key) for mlb/wnba/nfl/college-football, normalized to a common game record with ET date derivation from the UTC instant — never a UTC slice",
+    "MLB StatsAPI schedule?hydrate=probablePitcher and boxscore client emitting gamePk-keyed records; a starter is CONFIRMED only from a boxscore gamesStarted line once the game is underway, never from a probable listing",
+    "feed_sweep: one command pulls all four leagues, writes append-only content-hashed snapshots under data/feeds/YYYY-MM-DD/, and surfaces cross-feed disagreements as CONFLICT without silently resolving them",
+    "feed-produced result rows carry namespaced canonical ids (ESPN_GAMEID:/MLB_GAMEPK:) plus source and fetched_utc, and bind through result_binding_gate.binding_proof",
+    "market capture layer (VALUATION/AUDIT ONLY, its own namespace, no forecast-path import — enforced by the market_capture firewall): SportsGameOdds + The Odds API env-key clients with loud stub mode, owner-specified record schema, consensus as a set of book prices plus computed medians with Circa as its own labelled sharp-reference book, and 2+ point book disagreement surfaced as CONFLICT",
+    "historical/movement store (market_history + market_moneyline): owner history schema with typed line_kind (OPENING/CONSENSUS/BEST_AVAILABLE/SHARP_BOOK/CLOSING, never one column) and the temporal firewall — a pregame forecast path can never read a closing line or a post-cutoff snapshot",
+    "causal backtest evaluation layer (backtest_causal): PointInTime store fail-closed on post-cutoff reads, entry = last price at/before decision (never backfilled), close = last price in the named 15-minute window (Circa, Pinnacle fallback), consensus close from books observable at the cutoff, CLV post-wager only, walk-forward folds with purge/embargo, shift(1) rolling-feature lint, event-level train/test split, news timestamp trichotomy (publication_time governs)",
+    "calibration layer (calibration.py) shipped DORMANT: sample-size gate refuses any fit under 500 events (current WNBA bound Tier-1 base is n=4), Platt->beta->isotonic ladder, calibrator fits only on out-of-sample predictions, log loss primary, decision table encoded verbatim",
+    "P0 market data quality (market_quality): canonical event identity across feeds, odds quality fields (quote_age_seconds/stale/missingness/market_status/schema_version) attached as new versions never rewrites, versioned snapshot envelopes (raw+normalized+schema_version+ingestion_run_id), and the dq_gate battery (uniqueness, timestamp ordering, ranges, team mapping, missingness)"
+   ],
+   "verification": {
+    "offline_fixture_binding": "the 2026-08-28 MLB cohort binds 15/15 (10 ESPN_GAMEID + 5 MLB_GAMEPK): RESULT_BINDING_PASS 15/15, DATE_COHERENCE_PASS 15/15, CANONICAL_ID_MATCH 15/15, aggregates permitted",
+    "pytest": "26/26 in a clean offline mirror (adds P0 identity/quality/dq-gate tests to the 24 above)",
+    "module_selftests": "feed_espn, feed_mlb_statsapi, feed_sweep, market_capture, market_sportsgameodds, market_theoddsapi, market_history, market_moneyline, backtest_causal, calibration — all OK",
+    "live_fetch": "StatsAPI live fetch succeeded (15 games on 2026-08-28; all 5 board-captured gamePks live-verified against the feed; capture stored at data/feeds/fixtures/2026-08-28/mlb_statsapi_schedule_LIVE_capture.json). ESPN scoreboard returned HTTP 403 from this egress — the offline fixture path is the reproducible one."
+   },
+   "action_authority": "NO",
+   "notes": "Frozen boards, cards/ and historical artifacts are untouched. Fixture scores are labelled SYNTHETIC and exist only to exercise the binding path; the live capture is labelled LIVE_CAPTURE with its sha256."
+  },
+  {
+   "patch_id": "P0-MC-CONVERGENCE-2026-08-30",
+   "severity": "P0",
+   "status": "PROPOSED_VERIFIED_ON_ISOLATED_BRANCH",
+   "scope": ["shared MC convergence gate", "forecastable/actionable gate", "all MC-simulated sports"],
+   "problem": "The mc_engine lineage's convergence gate (3-sigma batch-block check on simulated probabilities) raised ConvergenceError and killed the slate builder with exit 1 (observed: 2.968pp on HOU@NYM, 2.715pp on COL@ATL); the sportsmodel/main lineage had no convergence gate at all, so a simulator measuring its own RNG could emit an actionable probability.",
+   "changes": [
+    "port the batch-block convergence check from lineage/mc_engine_20260830/harness/mc_engine.py (CONVERGENCE_SIGMAS=3.0 on the pooled-Bernoulli se of a block proportion, TRIALS=30000, BLOCKS=10) as harness/mc_convergence.py",
+    "register the named tolerance MC_CONVERGENCE_TOL_PP=2.7386pp, derived not tuned: the worst-case (p_pool=0.5) value of the ported per-game threshold 3*sqrt(0.25/3000)*100",
+    "bind the gate INTO the forecastable/actionable gate: a CONVERGENCE_FAIL demotes the game to forecast-only (actionable=False, input_value_policy=REGISTERED_FALLBACK_ONLY, verdict and pre-demotion state recorded for audit); the rest of the board still builds — fail-closed, not fail-loud-process-kill",
+    "convergence never promotes: a clean verdict leaves a degraded freshness disposition non-actionable",
+    "regression tests: synthetic gap above tolerance demotes with audit recorded and the board builds around it; gap below tolerance keeps the normal actionable path"
+   ],
+   "verification": {
+    "mc_convergence_selftest": "PASS",
+    "mc_convergence_mutants": "4/4 caught",
+    "mc_convergence_regression_pytest": "7/7 PASS",
+    "freshness_contract_gate": "PASS (blob 49fb7ef0 verified byte-identical to sportsmodel/main)",
+    "freshness_mutants": "9/9 caught",
+    "frozen_artifacts": "untouched; cards/ and historical boards/grades not modified (append-only)"
+   },
+   "action_authority": "NO",
+   "notes": "Frozen historical boards remain byte-identical. The port is forward-only. Wiring the per-block evidence into a live forward builder (e.g. a v13 sim run in keyed blocks) is flagged as follow-up; build_board_0825 is a frozen-date builder and was deliberately not edited."
+  },
+  {
+   "patch_id": "P0-FRESHNESS-2026-08-30",
+   "severity": "P0",
+   "status": "PROPOSED_VERIFIED_ON_ISOLATED_BRANCH",
+   "scope": ["mlb", "wnba", "cfb", "nfl", "shared freshness contract"],
+   "problem": "Stale or absent observations could remain described as bettable; MLB historical game logs could be stamped as confirmation of tonight's starter; stale pitcher rates still entered V13 before probability shrinkage.",
+   "changes": [
+    "separate forecastable from actionable; only FRESH + CONFIRMED is action eligible",
+    "emit REGISTERED_FALLBACK_ONLY as the value policy for every non-actionable input",
+    "require exact normalized full-name identity instead of trusting people[0]",
+    "grade an MLB game log POST_HOC_NOT_PREGAME for starter identity",
+    "replace stale MLB starter rates with the registered V13 CAP treatment while retaining the old observation for audit",
+    "keep content-age and post-acquisition age re-gates fail-closed"
+   ],
+   "verification": {
+    "freshness_contract_gate": "PASS",
+    "freshness_mutants": "9/9 caught",
+    "acquisition_adapter_selftest": "PASS",
+    "starter_regression": "PASS",
+    "targeted_multisport_tests": "23/23 PASS",
+    "full_handoff_suite": "171/174 in this review environment; 3 WNBA failures because real pyarrow is unavailable"
+   },
+   "action_authority": "NO",
+   "notes": "Frozen historical boards remain byte-identical. The patch is forward-only."
+  },
+  {
+   "patch_id": "P0-CONTENT-AGE-2026-08-29",
+   "severity": "P0",
+   "status": "ON_OPERATIONAL_BRANCH",
+   "scope": ["shared freshness contract"],
+   "problem": "A newly fetched but old observation could appear fresh because fetched_at reset the generous clock.",
+   "changes": [
+    "gate on content_age as well as derived_age",
+    "re-gate newly acquired content against the sport/kind age limit",
+    "refuse refetch-without-new-content"
+   ],
+   "verification": {"freshness_mutants": "9/9 caught"}
+  },
+  {
+   "patch_id": "P0-RESULT-BINDING-2026-08-28",
+   "severity": "P0",
+   "status": "ON_OPERATIONAL_BRANCH",
+   "scope": ["all grading", "mlb incident fixture"],
+   "problem": "Repeated-series matchups allowed prior-date finals to contaminate the next date's grades.",
+   "changes": [
+    "bind sport + canonical game id + scheduled date + away + home",
+    "refuse partial-cohort aggregation and ambiguous identities",
+    "run consecutive-series and adversarial bypass fixtures"
+   ]
+  },
+  {
+   "patch_id": "DATA-WNBA-DATE-AND-EXTENSION-2026-08-29",
+   "severity": "P1",
+   "status": "REVIEWED_WITH_REPRODUCIBILITY_BLOCKER",
+   "scope": ["wnba"],
+   "problem": "UTC-date slicing and duplicate cross-ID content could contaminate the feature pool; the daily extension needed rebuilding.",
+   "changes": [
+    "store utc_instant and derive ET game date",
+    "guard duplicate content across ID spaces",
+    "rebuild the ESPN extension to 89 games"
+   ],
+   "open_blocker": "The review environment has no real pyarrow, so the WNBA end-to-end path did not reproduce."
+  },
+  {
+   "patch_id": "POLICY-MARKET-INDEPENDENCE-2026-08-29",
+   "severity": "POLICY",
+   "status": "ON_OPERATIONAL_BRANCH",
+   "scope": ["all sports"],
+   "changes": [
+    "market, betting splits, line movement, and implied probability are forbidden predictive features",
+    "model outputs freeze before the valuation overlay",
+    "large market disagreement triggers an input audit, not market shrinkage"
+   ]
+  }
+ ]
 }

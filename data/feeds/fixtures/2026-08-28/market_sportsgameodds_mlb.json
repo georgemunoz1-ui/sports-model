@@ -1,0 +1,64 @@
+{
+ "_fixture": {
+  "label": "SYNTHETIC_CACHED_FIXTURE",
+  "why": "stub-mode fixture for the SportsGameOdds client (no API key in the build environment). Prices are SYNTHETIC, valuation-layer tests only, never a forecast input.",
+  "provenance": "written by kimi/fu1-feed-adapter, 2026-08-30"
+ },
+ "events": [
+  {
+   "eventID": "SGO-0828-HOU-NYM",
+   "status": {
+    "startsAt": "2026-08-28T23:10:00Z"
+   },
+   "teams": {
+    "away": {
+     "name": "Houston Astros"
+    },
+    "home": {
+     "name": "New York Mets"
+    }
+   },
+   "odds": {
+    "spreads": {
+     "draftkings": {
+      "line": -1.5,
+      "price": -110
+     },
+     "fanduel": {
+      "line": -1.5,
+      "price": -108
+     },
+     "betmgm": {
+      "line": -2.5,
+      "price": -110
+     },
+     "circa": {
+      "line": -1.5,
+      "price": -105
+     }
+    },
+    "totals": {
+     "draftkings": {
+      "line": 8.5,
+      "price": -110
+     },
+     "circa": {
+      "line": 8.0,
+      "price": -115
+     }
+    },
+    "moneyline": {
+     "draftkings": {
+      "price": -135
+     },
+     "fanduel": {
+      "price": -130
+     },
+     "circa": {
+      "price": -128
+     }
+    }
+   }
+  }
+ ]
+}

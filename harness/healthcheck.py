@@ -205,17 +205,17 @@ except Exception as e: check(f"ml firewall ({e})", False)
 # 5a2d2. ML-P4 forward generator: frozen-candidate double-hash refusal + disposition fixtures
 try:
     r=subprocess.run([sys.executable,"harness/ml_p4_forward.py"],capture_output=True,text=True)
-    check(f"ml p4 forward ({(r.stdout.strip().splitlines() or ['no output'])[-1][:70]})", r.returncode==0)
+    check(f"ml p4 forward ({(r.stdout.strip().splitlines() or ['?'])[-1][:70]})", r.returncode==0)
 except Exception as e: check(f"ml p4 forward ({e})", False)
 # 5a2d3. ML-E1 player-evolution engine (SHADOW dev): math fixtures + honest evidence gate
 try:
     r=subprocess.run([sys.executable,"engine/player_evolution.py"],capture_output=True,text=True)
-    check(f"player evolution shadow ({(r.stdout.strip().splitlines() or ['no output'])[-1][:70]})", r.returncode==0)
+    check(f"player evolution shadow ({(r.stdout.strip().splitlines() or ['?'])[-1][:70]})", r.returncode==0)
 except Exception as e: check(f"player evolution shadow ({e})", False)
 # 5a2c. model registry + market priority enforcement (P1A)
 try:
     r=subprocess.run([sys.executable,"harness/model_registry.py"],capture_output=True,text=True)
-    check(f"model registry ({(r.stdout.strip().splitlines() or ['no output'])[-1][:70]})", r.returncode==0)
+    check(f"model registry ({(r.stdout.strip().splitlines() or ['?'])[-1][:70]})", r.returncode==0)
     _st=json.load(open("state.json"))
     check("market_priority frozen [ML,K,RL,TOTAL]", _st.get("market_priority")==["ML","K","RL","TOTAL"])
     _ms=_st.get("market_status",{})
@@ -275,7 +275,18 @@ for _m in ("result_provenance","result_content_checks","parse_box_dump",
            # forecastable/actionable gate: CONVERGENCE_FAIL demotes to
            # REGISTERED_FALLBACK_ONLY instead of killing the slate builder. Wired the day it
            # was written, same rule as every module above.
-           "mc_convergence","test_mc_convergence_gate"):
+           "mc_convergence","test_mc_convergence_gate",
+           # FU1-FEED-ADAPTER-2026-08-30: the programmatic first-party feed. Wired the day it was
+           # written — a feed client whose selftest is not executed here is a feed client that
+           # stops working silently (the wnba_refresh_espn lesson).
+           "feed_espn","feed_mlb_statsapi","feed_sweep","test_feed_adapter",
+           # FU-1 market layer (owner Addenda 1-5): current-odds clients, historical/movement
+           # store with the temporal firewall, causal backtest evaluation, dormant calibration.
+           # Valuation/audit only — no forecast path may import these (market_capture firewall).
+           "market_capture","market_sportsgameodds","market_theoddsapi","market_history",
+           "market_moneyline","backtest_causal","calibration","test_market_layer",
+           # Addendum 6 P0 (merge-blocking): canonical event identity, quality fields, dq gate
+           "market_quality"):
     _r=subprocess.run([sys.executable,f"harness/{_m}.py","--selftest"],capture_output=True,text=True)
     _out=(_r.stdout+_r.stderr).strip().splitlines()
     check(f"{_m} selftest ({_out[-1][:72] if _out else 'no output'})", _r.returncode==0)

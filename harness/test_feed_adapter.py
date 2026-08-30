@@ -2,8 +2,22 @@
 and the offline 2026-08-28 binding fixture (15 games: 10 ESPN_GAMEID + 5 MLB_GAMEPK).
 
 The binding test is OFFLINE by design: it reads cached fixtures under
-data/feeds/fixtures/2026-08-28/ (committed, labelled SYNTHETIC scores; ids are the real CAPTURED
-ids from the frozen 8/28 MLB board). A live network pass is attempted only with --live.
+data/feeds/fixtures/2026-08-28/. A live network pass is attempted only with --live.
+
+2026-08-30, owner ruling. As delivered, the StatsAPI half of the 15/15 came from
+mlb_statsapi_schedule.json, which carried the five REAL captured gamePks from the frozen 8/28
+board with INVENTED scores — two of which flipped the winner against the genuine
+mlb_statsapi_schedule_LIVE_capture.json sitting unused in the same directory. The fixture was
+honestly labelled SYNTHETIC_CACHED_FIXTURE, so this was disclosure working; but a synthetic score
+attached to a real provider id is one careless import away from a fabricated final, which is the
+exact class of defect that published five bad finals on 2026-08-27. The label was the only thing
+preventing it and nothing structural was.
+
+So: the synthetic fixture's ids were moved into a reserved 999xxxxxx range and given a synthetic
+counterparty board, and the headline 15/15 now binds against the GENUINE live capture. The
+headline number is unchanged and is now entirely real, where a third of it used to be invented.
+test_synthetic_fixture_cannot_bind_production_board is the structural guard the label was
+standing in for.
 """
 from __future__ import annotations
 
@@ -50,13 +64,34 @@ def board_0828():
     return {"sport": "mlb", "slate_date": "2026-08-28", "games": games}
 
 
+#: the five games the 8/28 board carries as MLB_GAMEPK rather than ESPN_GAMEID. The ESPN
+#: scoreboard fixture supplies the other ten, so these five are the StatsAPI half.
+STATSAPI_HALF = ("824231", "823504", "823744", "823985", "824960")
+
+
 def fixture_rows():
-    """Result rows from the cached 2026-08-28 fixtures (10 ESPN + 5 StatsAPI finals)."""
+    """Result rows from the cached 2026-08-28 fixtures (10 ESPN + 5 StatsAPI finals).
+
+    The StatsAPI half reads the LIVE_CAPTURE, not the synthetic fixture. Both are committed;
+    only one of them contains real scores, and the headline binding claim must rest on that one.
+    """
     espn_payload = json.load(open(os.path.join(FIXTURE_DIR, "espn_scoreboard_mlb.json")))
-    sa_payload = json.load(open(os.path.join(FIXTURE_DIR, "mlb_statsapi_schedule.json")))
+    live = json.load(open(os.path.join(FIXTURE_DIR, "mlb_statsapi_schedule_LIVE_capture.json")))
+    assert live["_capture"]["label"] == "LIVE_CAPTURE", "the headline 15/15 must not rest on a fixture"
+    trimmed = {"dates": [{"games": [g for d in live["dates"] for g in d["games"]
+                                    if str(g["gamePk"]) in STATSAPI_HALF]}]}
     espn_recs = feed_espn.parse_scoreboard(espn_payload, "mlb", FETCHED)
-    sa_recs = feed_mlb_statsapi.parse_schedule(sa_payload, FETCHED)
+    sa_recs = feed_mlb_statsapi.parse_schedule(trimmed, FETCHED)
     return feed_espn.result_rows(espn_recs) + feed_mlb_statsapi.result_rows(sa_recs)
+
+
+def synthetic_rows_and_board():
+    """The SYNTHETIC fixture and its SYNTHETIC counterparty board — logic only, no real ids."""
+    payload = json.load(open(os.path.join(FIXTURE_DIR, "mlb_statsapi_schedule.json")))
+    assert payload["_fixture"]["label"] == "SYNTHETIC_CACHED_FIXTURE"
+    board = json.load(open(os.path.join(FIXTURE_DIR, "mlb_board_SYNTHETIC.json")))
+    recs = feed_mlb_statsapi.parse_schedule(payload, FETCHED)
+    return feed_mlb_statsapi.result_rows(recs), board
 
 
 # ------------------------------------------------------------------ tests
@@ -135,6 +170,29 @@ def test_0828_cohort_binds_15_of_15_offline_fixture():
     # and the guarded aggregate path permits the statistic without an override
     out = result_binding_gate.guarded_aggregate(proof, "winner_record")
     assert out["permitted"] and not out.get("cohort_did_not_bind")
+
+
+def test_synthetic_fixture_binds_against_synthetic_board():
+    """The binding LOGIC, proved without a real provider id anywhere in the exercise."""
+    rows, board = synthetic_rows_and_board()
+    assert len(rows) == 5
+    proof = result_binding_gate.binding_proof(rows, board, "mlb:2026-08-28-SYNTHETIC")
+    assert proof["counters"]["RESULT_BINDING_PASS"] == "5/5", proof["counters"]
+    assert proof["gradable"]
+
+
+def test_synthetic_fixture_cannot_bind_production_board():
+    """THE STRUCTURAL GUARD. A synthetic score must be incapable of binding a real board game.
+
+    Before 2026-08-30 this test would have FAILED: the synthetic fixture carried the real
+    captured gamePks, so its invented scores bound the frozen board cleanly — including two that
+    named the wrong winner. Only the _fixture label stood between that and a published final.
+    """
+    rows, _ = synthetic_rows_and_board()
+    proof = result_binding_gate.binding_proof(rows, board_0828(), "mlb:2026-08-28")
+    assert proof["counters"]["RESULT_BINDING_PASS"] == "0/5", proof["counters"]
+    assert not proof["gradable"]
+    assert not proof["aggregate_verdict"]["aggregates_permitted"]
 
 
 def test_result_rows_carry_provenance_stamps():

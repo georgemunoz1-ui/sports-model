@@ -1,0 +1,58 @@
+{
+ "EGRESS_PROBED_TWICE": {
+  "acquired": "nothing. Only transport outcome, byte length and parse status were recorded; no score, status or id was read out of any body.",
+  "owner_ruling": "probe once, acquire nothing, then decide",
+  "probe_1_approved_fetch_tool": "EGRESS_BLOCKED for statsapi.mlb.com",
+  "probe_2_governed_adapter_via_HTTPS_PROXY": "ProxyError, 'Tunnel connection failed: 403 Forbidden'",
+  "verdict": "BOTH PATHS DENY. The MLB canonical lane is DOWN in this environment and my earlier statement stands. Per /root/.ccr/README.md a 403 is an organization policy denial and is reported, not retried. It will not be probed again.",
+  "why_the_FU-1_build_log_disagrees": "that capture is stamped 2026-08-30T09:50:43Z and notes 'ESPN returned 403 from this egress; StatsAPI worked'. It was made in a DIFFERENT environment with a different policy. So the repo contains genuine StatsAPI data that THIS environment cannot reproduce \u2014 which is a provenance fact worth carrying, not a contradiction."
+ },
+ "LEDGER": {
+  "exposure_usd": 0,
+  "n_bets": 0,
+  "units": 0.0,
+  "wager_authority": "NO"
+ },
+ "R6": "append-only; new path. The frozen 8/28 board was not touched.",
+ "THE_README_15_OF_15": {
+  "as_delivered": "10 rows from a real ESPN scoreboard fixture + 5 rows from mlb_statsapi_schedule.json, which carried the five REAL captured gamePks with INVENTED scores. Two of the five named the WRONG WINNER against the genuine live capture beside it.",
+  "claim": "'the 2026-08-28 cohort binds 15/15 through the result-binding gate'",
+  "fixed_per_owner_ruling": {
+   "counterparty": "a synthetic board, data/feeds/fixtures/2026-08-28/mlb_board_SYNTHETIC.json, so the logic test never touches the frozen production card",
+   "headline_now_genuine": "the 15/15 binds against mlb_statsapi_schedule_LIVE_capture.json, which was sitting in the repo UNUSED while a synthetic fixture carried the headline claim",
+   "ids_moved": "the five synthetic games now carry reserved 999000000+ ids; the real-to-synthetic mapping is recorded in the fixture itself",
+   "structural_guard_added": "test_synthetic_fixture_cannot_bind_production_board asserts 0/5. Before today it would have FAILED \u2014 the synthetic rows bound the real board cleanly, wrong winners and all.",
+   "tests": "7 passed"
+  },
+  "was_it_dishonest": "NO. The file declares label SYNTHETIC_CACHED_FIXTURE and says 'scores are SYNTHETIC'. That is disclosure working as intended, and I initially mis-framed it before reading the provenance block.",
+  "what_was_still_wrong": "a synthetic score attached to a REAL provider id is one careless import away from a fabricated final. The label was the only thing preventing it; nothing structural was. And the headline capability number was a third synthetic while reading as fully real."
+ },
+ "VERDICT": "NOT ADOPTED. The logs show otherwise on the central point, and the real mechanism is both more specific and already named in this repo.",
+ "WAS_A_GOVERNED_LAYER_BYPASSED": {
+  "correct_classification": [
+   "SEARCH_RETURNED_PRIOR_DATE_SERIES_RESULT \u2014 the mechanism",
+   "GOVERNED_RESULT_LAYER_NEVER_POPULATED_FOR_LIVE_DATES \u2014 the vacuum",
+   "AGENT_FILLED_THE_VACUUM_WITH_SEARCH \u2014 the behaviour, correctly refused at the output but correctly identified as the wrong reflex"
+  ],
+  "for_2026-08-28": "a genuine live capture DOES exist and was not consulted, but no 8/28 score was asked for or claimed.",
+  "for_2026-08-30": "NO \u2014 there is nothing to bypass. No verified score artifact exists for 8/30 in any lane. data/verified/ and data/agent_context/ do not exist; data/feeds/ carries fixtures for 8/28 only.",
+  "what_I_accept_from_the_owner_diagnosis": "the behavioural half is right and the remedy is right. I reached for search because the governed path had nothing, and 'the governed path had nothing' is not a licence. The contract now says the output in that state is NO_DATA_LANE_DOWN."
+ },
+ "WHAT_THE_SEARCH_ACTUALLY_RETURNED": {
+  "finding": "the three 'fabricated' finals were NOT fabricated. Every one is the REAL 2026-08-28 result for the same matchup, returned against a 2026-08-30 query.",
+  "mechanism": "PRIOR_DATE_SERIES_JOIN \u2014 the identical hazard flagged in CARD-UPDATE-2026-08-30T1330ET hours earlier, because the 8/30 MLB slate is SET-IDENTICAL to the 8/28 board's fifteen matchups. (away, home) is a non-unique key across a repeated series, and the search engine bound on exactly that.",
+  "proof": {
+   "Braves 6, Rockies 4": "gamePk 824877, 8/28: COL 4 - ATL 6. EXACT MATCH.",
+   "Nationals 9, Marlins 2": "gamePk 822691, 8/28: MIA 2 - WSH 9. EXACT MATCH.",
+   "Yankees 1, Red Sox 0": "gamePk 823504, 8/28: BOS 0 - NYY 1. EXACT MATCH."
+  },
+  "source_of_truth_used": "data/feeds/fixtures/2026-08-28/mlb_statsapi_schedule_LIVE_capture.json, independently cross-checked 15/15 against WPA-derived winners",
+  "the_refusal_was_still_correct": "a true score for the wrong date is not a lesser error than an invented one. It is worse, because it is checkable and convincing.",
+  "why_this_matters": "'hallucination' and 'prior-date series join' call for different fixes. The first says distrust the model; the second says the identity key was never sufficient, which is a defect the binding gate already names and which no amount of source-trust would have fixed."
+ },
+ "created_utc": "2026-08-30T18:50:00Z",
+ "owner_proposed": "AGENT_EGRESS_BYPASS_OF_GOVERNED_RESULT_LAYER, 'unless logs show otherwise'",
+ "record_id": "SCORE-INCIDENT-CLASSIFICATION-2026-08-30",
+ "record_sha256": "6634a0f12678b0a2259b022e7287c6bf189371c1c16935e21050aef7374708b3",
+ "schema": "ops.incident_classification.v1"
+}

@@ -1,0 +1,48 @@
+{
+ "LANE_STATUS_BY_SPORT": {
+  "cfb": {
+   "canonical": "DOWN \u2014 cfbfastR-data is pinned at end-of-2025 and the board rows carry no id in any id space. Unbindable under the current id schema."
+  },
+  "mlb": {
+   "canonical": "DOWN \u2014 statsapi.mlb.com EGRESS_BLOCKED; espn.com and covers.com likewise",
+   "consequence": "per the Score Admission Contract the correct MLB score output is NO_DATA_LANE_DOWN. NOT a search backfill. This is the same posture already taken on NFL, extended to MLB as the owner asked.",
+   "what_would_lift_it": "an approved fetcher injected into feed_mlb_statsapi.fetch_schedule, or a GitHub-hosted mirror carrying finals keyed by gamePk"
+  },
+  "nfl": {
+   "canonical": "N/A \u2014 no forecast quantity exists to bind a result to"
+  },
+  "wnba": {
+   "canonical": "UP \u2014 the wehoop-wnba-raw archive is served by the session git proxy, which reaches github.com",
+   "evidence": "5875eba fetched and read this morning; the 8/29 cohort bound 2/2 from it"
+  }
+ },
+ "LEDGER": {
+  "exposure_usd": 0,
+  "n_bets": 0,
+  "units": 0.0,
+  "wager_authority": "NO"
+ },
+ "PROBE": {
+  "not_routed_around": "standing rule. No shell HTTP was attempted against it, before or after.",
+  "result": "EGRESS_BLOCKED",
+  "tool": "approved fetch tool (not shell HTTP)",
+  "url": "https://statsapi.mlb.com/api/v1/schedule?sportId=1&date=2026-08-30",
+  "verbatim": {
+   "domain": "statsapi.mlb.com",
+   "error_type": "EGRESS_BLOCKED",
+   "message": "Access to statsapi.mlb.com is blocked by the network egress proxy."
+  }
+ },
+ "R6": "append-only; new path",
+ "THE_ASYMMETRY_THAT_MATTERS": {
+  "concrete_next_step": "FU-1's remaining half is: find or build a GitHub-hosted MLB results archive carrying finals keyed by MLB gamePk. The already-admitted lancebroz/mlb-pitcher-data carries gamePks for every game and NO runs column (RJ-001B, standing). A sibling archive with scores would close it.",
+  "explicitly_refused": "reconstructing runs from the pitch-level events column by running a baseball state machine. That would be an INFERRED final wearing the costume of an observed one, and its errors would be silent.",
+  "implication": "the admissible-source frontier for this deployment is 'what is mirrored into a public GitHub repository', not 'what a sports API publishes'. WNBA works precisely because wehoop mirrors ESPN into git.",
+  "observation": "github.com IS reachable (the git proxy serves it) while every sports content domain and now the league's own API are not."
+ },
+ "created_utc": "2026-08-30T18:10:00Z",
+ "record_id": "LANE-STATUS-PROBE-2026-08-30",
+ "record_sha256": "35c7d50897e87fd61c14ad8bfb60c3d26de7ccdaaf4a3001aa1a58b94cc01921",
+ "schema": "ops.lane_status_probe.v1",
+ "why": "the owner asked directly: 'If your environment can reach MLB's Stats API, that becomes your canonical lane for baseball specifically.' Probed with the APPROVED fetch tool. This is the fact the whole MLB lane turns on, so it is recorded rather than assumed."
+}

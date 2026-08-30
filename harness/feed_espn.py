@@ -179,9 +179,38 @@ def parse_summary_probables(payload, game_id, league, fetched_utc):
 
 # ----------------------------------------------------------------- network (called, never imported-time)
 
+
+# 2026-08-30: as delivered, this module's DEFAULT fetcher was a live requests.get against
+# site.api.espn.com. That is direct script HTTP against a sports data site, which this deployment does
+# not permit -- outbound calls go through the org egress proxy and must use approved
+# browsing/search/fetch tooling. The precedent is on file: acquisition_adapters shipped with
+# exactly this defect (urlopen against statsapi.mlb.com), was fixed by making the DEFAULT
+# refuse, and carries ALLOW_DIRECT_HTTP = False to this day. None of the six modules in this
+# delivery imported that gate, so the guard had zero callers on these paths -- the same shape
+# as aggregate_guard before it was wired in.
+#
+# The fix keeps dependency injection exactly as designed and only changes what happens when
+# NOTHING is injected: it refuses, loudly, instead of reaching the network. A caller that
+# wanted a fetch learns it did not happen.
+
+ALLOW_DIRECT_HTTP = False
+
+
+class AcquisitionDisabled(RuntimeError):
+    """Raised when a network fetch is attempted with no approved fetcher injected."""
+
+
 def _default_get(url, timeout=20):
+    """Refuses by default. Pass get=<approved fetcher> to enable acquisition."""
+    if not ALLOW_DIRECT_HTTP:
+        raise AcquisitionDisabled(
+            f"direct HTTP is disabled in this deployment (attempted {url!r}). Pass "
+            "get=<approved fetcher> to the fetch_* call. Refusing rather than silently "
+            "degrading is deliberate: the caller asked for a network fetch and must "
+            "learn it did not happen.")
     import requests
-    r = requests.get(url, timeout=timeout, headers={"User-Agent": "sports-model-fu1/1.0"})
+    r = requests.get(url, timeout=timeout,
+                     headers={"User-Agent": "sports-model-fu1/1.0"})
     r.raise_for_status()
     return r.text
 
@@ -191,7 +220,10 @@ def fetch_scoreboard(league, date_et, get=_default_get):
     if league not in LEAGUES:
         raise ValueError(f"unknown league {league!r}; known: {sorted(LEAGUES)}")
     fetched_utc = dt.datetime.now(UTC).isoformat().replace("+00:00", "Z")
-    raw = _default_get if get is None else get
+    # was: `raw = _default_get if get is None else get` -- assigned, never used, and the
+    # next line then called get() directly, so a get=None caller hit a TypeError instead of
+    # the fallback the line was written to provide. The guard now actually guards.
+    get = _default_get if get is None else get
     text = get(scoreboard_url(league, date_et))
     sha = hashlib.sha256(text.encode()).hexdigest()
     return parse_scoreboard(json.loads(text), league, fetched_utc), text, sha

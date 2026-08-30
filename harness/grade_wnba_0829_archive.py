@@ -18,6 +18,8 @@ registered board. That is a WEAKER warrant than a frozen board and is stamped as
 every row. The provenance that makes them prospective at all is the extension sha and the
 retrieval timestamp, both of which predate the tips.
 """
+
+MODULE_ID = "grade_wnba_0829_archive"
 import json, os, sys, hashlib, math
 from datetime import datetime, timezone
 from zoneinfo import ZoneInfo

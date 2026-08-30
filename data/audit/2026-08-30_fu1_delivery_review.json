@@ -1,0 +1,54 @@
+{
+ "D1_LIVE_HTTP_AS_THE_DEFAULT_PATH": {
+  "finding": "feed_espn._default_get and feed_mlb_statsapi._default_get were live requests.get calls installed as the DEFAULT value of the injected `get` parameter. feed_sweep.sweep() defaults to get=None and takes the branch that calls them with no injection, so sweep('2026-08-30') fires live HTTP at site.api.espn.com and statsapi.mlb.com.",
+  "fix": "both defaults now refuse with AcquisitionDisabled unless ALLOW_DIRECT_HTTP is set. Dependency injection is unchanged; only the uninjected case changed. Verified: feed_sweep.sweep() with no fetcher now refuses at the network boundary instead of reaching out.",
+  "lower_severity_siblings": "market_sportsgameodds and market_theoddsapi also default to requests.get, but both are behind have_key() and raise StubModeNoKey with no key configured. A deployment secret is an acceptable gate. Left as delivered, covered by the new test.",
+  "severity": "HIGH \u2014 standing rule violation",
+  "the_gate_that_should_have_stopped_it": "acquisition_adapters.ALLOW_DIRECT_HTTP = False with AcquisitionDisabled. NONE of the six new network-touching modules imports it. The guard had zero callers on these paths \u2014 the same shape as aggregate_guard before it was wired into binding_proof.",
+  "why_the_tests_missed_it": "every selftest injects a stub fetcher, so the default path was never executed by any test. A suite that only exercises the injected path proves nothing about the path production takes. All four selftests still pass after the fix, which is the proof."
+ },
+ "D2_A_GUARD_THAT_GUARDED_NOTHING": {
+  "finding": "feed_espn.fetch_scoreboard contained `raw = _default_get if get is None else get` \u2014 assigned, never read \u2014 and the NEXT line called get(...) directly. A caller passing get=None hit a TypeError instead of the fallback the line was written to provide.",
+  "fix": "the guard now assigns to `get` and therefore actually guards.",
+  "severity": "MEDIUM",
+  "shape": "compute-then-discard. This is a FIFTH independent instance of that shape, in new code, which is consistent with the 8/30 falsification finding: these are independent bugs sharing a narrative shape, not one defect with one fix."
+ },
+ "HEALTHCHECK": {
+  "after": "HEALTHY \u2014 0 fail, 7 warn",
+  "before": "UNHEALTHY \u2014 6 fail, 6 warn"
+ },
+ "LEDGER": {
+  "exposure_usd": 0,
+  "n_bets": 0,
+  "units": 0.0,
+  "wager_authority": "NO"
+ },
+ "NEW_CHECK": {
+  "claim_it_does_NOT_make": "this does not prove the three historical instances were one defect. It stops the SHAPE from shipping again, which is all a shared check can do.",
+  "module": "harness/test_egress_discipline.py",
+  "what": "asserts every fetch entry point refuses by default, and that key-gated clients raise rather than fall through. Carries a MUTANT: it flips ALLOW_DIRECT_HTTP to True and fails if the refusal survives, so a check that cannot fail is not mistaken for a check that works."
+ },
+ "R6": "append-only; new path",
+ "STILL_OPEN": {
+  "FU-1_remains_open": "the id half is closed (see MLB-GAMEPK-CROSSWALK-2026-08-28). The score half needs the StatsAPI boxscore path to run through an APPROVED fetcher. The code is now honest about refusing; it still needs a fetcher injected before it can acquire anything.",
+  "FU-7_new": "information_class needs a class for 'this sport has no slot concept', distinct from 'this schema predates the field'. The 8/30 WNBA board classifies LEGACY_SCHEMA_NO_SLOT_STATS purely because its rows sit at the top level; the 8/28 board escapes it by nesting them. Class turning on artifact SHAPE rather than information content is a real gap. Authority is NONE either way, so nothing is loosened while it stands."
+ },
+ "THE_26_PYTEST_CASES": {
+  "found": "pytest was not installed in this environment, so test_market_layer.py failed at import and test_mc_convergence_gate.py failed 1/7 \u2014 and the failing case was test_missing_convergence_evidence_is_refused_not_passed, i.e. the refusal test.",
+  "gap": "the repo declares no test dependency anywhere, so a healthcheck FAIL was the only signal that a whole suite was inert. Worth a requirements file.",
+  "reported": "26 pytest cases + healthcheck-runnable selftest",
+  "resolution": "pytest installed; 33 cases collected and 33 PASS. The tests are real and they work. The claim was accurate; the environment could not honour it."
+ },
+ "WHAT_IS_GOOD_HERE": [
+  "the feed layer is dependency-injected throughout, which is what made the fix a two-line change rather than a rewrite",
+  "market_capture.assert_no_market_imports exists \u2014 the market layer polices its own separation from the forecast layer, which is the Market-Independence Rule in code",
+  "the calibration layer ships DORMANT behind a sample-size gate (n<500) rather than being switched on with n=4, which is the right instinct",
+  "feed_mlb_statsapi.fetch_boxscore_starters targets exactly the missing half of FU-1 \u2014 the finals the pitch archive cannot supply"
+ ],
+ "created_utc": "2026-08-30T12:15:00Z",
+ "record_id": "FU1-DELIVERY-REVIEW-2026-08-30",
+ "record_sha256": "28a3c3614beca894dda0710c4146a521eecf037fb76e4cfe297a484843e5f823",
+ "schema": "ops.delivery_review.v1",
+ "subject": "the FU-1 feed + market layer delivery (PRs #4-#7, 15 new modules, 3743 insertions)",
+ "verdict": "ACCEPTED WITH FIXES. The design is sound and the tests are real. Two defects were found and repaired; both are recurrences of shapes already on file."
+}

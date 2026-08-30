@@ -15,7 +15,7 @@
   "FULL_STARTER_INFORMATION": 2,
   "LEGACY_SCHEMA_NO_SLOT_STATS": 5,
   "LOW_STARTER_INFORMATION": 2,
-  "NOT_A_CARD": 14,
+  "NOT_A_CARD": 15,
   "PARTIAL_STARTER_INFORMATION": 25
  },
  "counts_corrections": [
@@ -1045,6 +1045,27 @@
    "per_game_dose": {},
    "reason": "First CFB forecast board this system has produced. 8 games, all FBS vs FBS, decision arm cfb.fbs.elo_context_logit.v1_0.week1_shadow. The classifier recomputes LEGACY_SCHEMA_NO_SLOT_STATS because college football has no starter-slot analog to count; that is correct here rather than a schema gap. The board is a WEEK 1 board and the arm choice turns on that: the full v1 form arm wins pooled over weeks 2-15 (Brier 0.18223 vs 0.18427 causal Elo, paired CI95 [-0.00508,-0.00065]) but LOSES on openers (0.18828 vs 0.18642) and fails the registered Week-1 calibration gates (slope 0.846 floor 0.85; intercept +0.136 limit 0.10). The lean arm passes both (slope 0.932, intercept +0.089) at the lowest Week-1 Brier tried, 0.18327 over 758 games and 15 seasons. NOT CLAIMED: the lean arm does not significantly beat plain causal Elo on openers \u2014 paired by season the CI95 [-0.00503,+0.00099] includes zero. Three rows are AUDIT_REQUIRED under the preregistered 14-point model-market spread rule. Two involve teams in their first FBS season; that concern was MEASURED (165 historical games, Brier 0.17441 vs 0.18235 elsewhere) rather than assumed, and is recorded as a low-power caveat rather than a blocker because the data does not support blocking. Fixtures are OWNER_RELAYED and the slate is explicitly PARTIAL \u2014 Week 1 Saturday carries far more FBS games than the eight relayed. Selections 0, wager authority NO, stake $0: the v2 lifecycle is DATA_ACQUISITION_RUNNING and the preregistration itself sets stake 0.",
    "registration_eligible": true
+  },
+  "cards/2026-08-30_wnba_board.json": {
+   "LABEL_IS_A_MISFIT": {
+    "authority_unchanged": "NONE under both classes, so nothing is loosened by the misfit",
+    "follow_up": "FU-7 \u2014 the classifier needs a class for 'this sport has no slot concept', distinct from 'this schema predates the field'. Same authority (NONE), different meaning. Not done here.",
+    "recorded_class": "LEGACY_SCHEMA_NO_SLOT_STATS",
+    "the_class_means": "pre-2026-07-22 schema: no per-slot starter stats were recorded",
+    "what_I_did_NOT_do": "I did not reshape the board to make the classifier say something nicer, and I did not edit the classifier in the same breath as registering my own artifact under it. Either would be gaming the gate. The computed class is recorded as computed and the misfit is disclosed.",
+    "why_it_is_wrong_here": "this is a 2026-08-30 board on the current schema. It has no starter slot stats because WNBA HAS NO STARTING-PITCHER ANALOG, not because the schema predates the field.",
+    "why_the_8_28_board_escaped_it": "cards/2026-08-28_wnba_board_v2.json nests its rows under a 'wnba' key, so has_rows_list() is False and it classifies NOT_A_CARD. This board puts rows at the top level. The class therefore turns on artifact SHAPE, not on information content."
+   },
+   "action_authority": "NONE",
+   "card_sha256": "3ede5d82946a7d8a439511aa4f1eb35fa30c5ae5e333b5135754196369935eb6",
+   "classified_by": "harness/information_class.py classify() \u2014 the class is COMPUTED, not typed",
+   "classified_utc": "2026-08-30T12:05:00Z",
+   "dose_bound_to_source_card": null,
+   "information_class": "LEGACY_SCHEMA_NO_SLOT_STATS",
+   "per_game_dose": {},
+   "reason": "Per-sport WNBA forecast board, 4 games, 12 arm-rows. COMPLETE by arm partition: all three registered arms emit on all four games, zero blocked, zero null p_home (contrast 2026-08-28 v1, where FEATURE_REFRESH was blocked on an unpublished archive and carried nulls with stated reasons). Per-game dose is EMPTY because WNBA has no starting-pitcher analog and no confirmed starting five was retrieved: starters are REFUSED, not graded, and RJ-005 OFFICIAL_INJURY_AVAILABILITY stands at 0/17 EGRESS_BLOCKED so rotations are unverified for all eight teams. The board is NOT_A_CARD because it carries no market overlay, no break-even, no edge and no selection -- by construction, since it was frozen before any price was consulted. Feature cutoff 2026-08-29 (archive 5875eba, published 06:32 ET today); the base pool still ends at the 2026-07-22 official-plus-one cutoff and the extension carries the 7/25..8/29 window at ESPN_SINGLE_FAMILY_GIT_ARTIFACT grade.",
+   "starter_slots_resolved": 0,
+   "starter_slots_total": 0
   }
  },
  "how_to_read": "One entry per file under cards/. The class is COMPUTED FROM THE SLOT STATS by harness/information_class.py and re-derived by its --gate on every healthcheck; drift between a recorded class and the live card FAILS. Cards are NOT retro-stamped: rewriting a registered artifact would break its hash and violate R3, so the classification lives here instead.",

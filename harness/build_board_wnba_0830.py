@@ -17,6 +17,8 @@ freeze and is not dressed up as one.
 DATE DISCIPLINE. CON@DAL tips 2026-08-31T00:30Z, which is the ET evening of 8/30. The slate
 is enumerated on the ET calendar date derived with zoneinfo, never on the UTC date.
 """
+
+MODULE_ID = "build_board_wnba_0830"
 from __future__ import annotations
 import hashlib, json, os, sys
 from datetime import datetime

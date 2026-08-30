@@ -1,8 +1,27 @@
 {
   "schema_version": "1.0",
-  "generated_utc": "2026-08-30T03:25:06Z",
+  "generated_utc": "2026-08-30T11:00:00Z",
   "source_of_truth": "append-only patch records; newest first",
   "patches": [
+    {
+      "patch_id": "SIM1-SPEC-2026-08-30",
+      "severity": "P1",
+      "status": "SPEC_ONLY_NO_CODE",
+      "scope": ["simulation layer", "mc_engine lineage", "docs corpus"],
+      "problem": "The owner uploaded five Monte Carlo methodology documents (design principles, in-play real-time MC, QMC vs stratified, NFL/NBA stratification boundaries, all-sports state modules). They must live in the governed corpus and be distilled into tiered follow-up work, without touching the frozen TRIALS/BLOCKS/CONVERGENCE constants.",
+      "changes": [
+        "ingest the five documents verbatim into docs/specs/simulation/ (append-only reference corpus, no edits)",
+        "SIM1_SPEC.md distills them into SIM-1a (P1: scenario engine formalization, E[EV]=sum P(s)*EV_s with worst-case and lower-percentile EV; stratified outer + scrambled-Sobol inner; Neyman allocation), SIM-1b (P1: decision-state record fields on every sim output incl. MC standard error), SIM-1c (P2: adaptive stopping as a config-gated candidate config only, never silently replacing TRIALS=30000), SIM-1d (P2: empirical residual/Student-t distribution upgrades, walk-forward-only residual pools), SIM-1e (P2/backlog: canonical live-state schema + sport adapters + OT ruleset branches + shared-latent-factor correlation generator)",
+        "in-play failure controls cross-reference the P0 dq_gate (PR #7) and the mc_convergence demotion gate (PR #5) instead of inventing parallel ones",
+        "governance invariant recorded: nothing in SIM-1 changes TRIALS/BLOCKS/CONVERGENCE_SIGMAS/MC_CONVERGENCE_TOL_PP without an owner-gated candidate config"
+      ],
+      "verification": {
+        "code_changes": "none — docs-only PR",
+        "frozen_artifacts": "untouched; no harness code modified"
+      },
+      "action_authority": "NO",
+      "notes": "Docs-only. Corpus files are verbatim owner uploads; SIM1_SPEC.md is the distilled spec with tier labels on every item."
+    },
     {
       "patch_id": "P0-MC-CONVERGENCE-2026-08-30",
       "severity": "P0",

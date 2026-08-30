@@ -105,6 +105,62 @@ anything more than a file that passes when you run it by hand:
     0 today. Unwired, it is exactly the wnba_refresh_espn shape: documented, implemented, and
     never executed. A rule this gate does not run is a rule that has stopped running.
 
+WHAT THE 2026-08-30 ISOLATION-LAYER REVIEW FOUND IN THIS FILE, AND WHERE EACH REPAIR LIVES.
+Four HIGH findings, each evidenced by a reviewer who read the code, plus the suite-wide one. None
+of them is closed by prose; each names the mutant that proves the repair can fail.
+
+  K  selftest() RETURNED TRUE WITH ITS SUBJECT ABSENT. When verified_snapshot would not import,
+     the run PRINTED the absence and returned True — exit 0. One `except TypeError` arm then
+     covered three different facts at once: a signature this module does not own having drifted,
+     a genuine TypeError raised deep inside the store, and the quarantine-leak check, which sat
+     inside the same block and therefore stopped running whenever either of the first two
+     happened. That is the wnba_refresh_espn precedent, reproduced two hundred lines below the
+     sentence in this docstring forbidding it. NOW: absence is a FAILURE that states the remedy;
+     drift is detected STRUCTURALLY by inspect.signature().bind() BEFORE the call and is the only
+     tolerated outcome; every exception raised by the store — TypeError included — is a failure;
+     and the leak check stands outside that arm. _exercise_store() takes the store as a PARAMETER
+     so the selftest can hand it stand-ins that drift, raise and leak on purpose and require
+     three different answers. Mutants M14, M15, M16, M17.
+
+  P  THE CONTENT-HASH CONFLICT WAS STRUCTURALLY UNREACHABLE ON THE PRODUCTION PATH.
+     score_admission.content_hash_conflict keys on (event_id, source, source_fetched_at_utc), and
+     collect_mlb stamped source_fetched_at_utc with the CALLER'S now_utc — which differs between
+     any two collections by construction. Two observations of one game therefore never shared the
+     key, so owner regression fixture 7 (the mutable archive whose content changes under one
+     filename) could not fire outside a hand-built unit test. NOW: the fetch instant comes from
+     the FETCH — a fetcher may return (body, fetched_at_utc), a caller may pass fetched_utc= — and
+     falling back to the judging clock is REPORTED as FETCHED_AT_ASSUMED_FROM_JUDGEMENT_CLOCK
+     rather than passed off as an observation instant; and observation_conflict() keys on
+     (event_id, source), which is what two observations of one game genuinely share, while still
+     asking the contract's own arms first so the two modules cannot fork on a code name.
+     collect_mlb(prior_observations=...) runs it against an earlier collection. Mutants M18, M19.
+
+  Q  THE BYTES BRANCH HASHED WHAT IT DID NOT KEEP. raw_response_sha256 covered the ORIGINAL bytes
+     while raw_text kept a LOSSY utf-8 decode, so owner rule 7 — preserve the raw response AND
+     content hash — broke on any byte that was not valid utf-8. The collector DETECTED the break
+     and ADMITTED the slate anyway; verified_snapshot then refused the whole slate with a code
+     that reads as tampering, a confusing error standing in for a plain one. NOW: retained_text()
+     decodes STRICT, the collector REFUSES at the point of detection with an explicit NO_DATA
+     instead of handing a record it cannot preserve to admit(), and a CollectResult carrying
+     ADMITTED records under a hash that covers other bytes raises RawResponseIntegrityError
+     rather than returning. Mutants M20, M21, M22.
+
+  R  THE PRE-START INVARIANT WAS TAKEN FROM THE PAYLOAD'S OWN SELF-REPORT. With
+     canonical_schedule=None both halves of the split clock read one payload's own gameDate, so a
+     payload that misstates its start defeats the HARD invariant. score_admission's cluster-A
+     ceiling refuses an unbound record today, but a gate that holds only because its callee holds
+     is one refactor from not holding: collect_mlb now refuses on its own to route an admitting
+     verdict to the admitted list when no canonical schedule was supplied, and says so in the
+     record. Mutant M23 stands in a permissive admit() and requires the collector to refuse
+     without it.
+
+  O  THE MUTATION SUITE COUNTED CRASHES AS KILLS. Any exception — an ImportError before a single
+     fixture ran, an AttributeError from a mutant that never reached an assertion — was tallied
+     as a kill, which overstates what is proven. A mutant is KILLED only when the selftest NAMES a
+     failure, or raises the exception type that mutant declares. Anything else is ERRORED,
+     reported apart from the kills, and fails the gate. The tally reads "N killed, M errored,
+     K survived".
+
 Usage: python3 harness/score_collector.py [--selftest] [--mutants] [--gate]
 """
 from __future__ import annotations
@@ -188,6 +244,11 @@ COLLECT_REBIND_REQUIRED = "REBIND_REQUIRED"
 COLLECT_REBIND_TARGET_RECORDED = "REBIND_TARGET_RECORDED"
 COLLECT_CLOCK_SKEW = "FETCHED_AT_IS_AFTER_NOW"
 COLLECT_HASH_DOES_NOT_COVER_RAW = "CONTENT_HASH_DOES_NOT_COVER_RAW_RESPONSE"
+COLLECT_FETCHED_AT_ASSUMED = "FETCHED_AT_ASSUMED_FROM_JUDGEMENT_CLOCK"
+COLLECT_TERMINAL_OBSERVATIONS_DISAGREE = "TERMINAL_OBSERVATIONS_OF_ONE_GAME_DISAGREE"
+COLLECT_RAW_NOT_DECODABLE = "RAW_RESPONSE_NOT_VALID_UTF8"
+COLLECT_NO_CANONICAL_SCHEDULE = "CANONICAL_SCHEDULE_NOT_SUPPLIED_START_IS_SELF_REPORTED"
+COLLECT_ADMISSION_REFUSED_NO_SCHEDULE = "COLLECTOR_REFUSED_ADMISSION_WITHOUT_SCHEDULE"
 
 COLLECT_REASON_MEANING = {
     COLLECT_GAME_NOT_A_MAPPING:
@@ -238,8 +299,30 @@ COLLECT_REASON_MEANING = {
         "it says it is, and a snapshot's age cannot be trusted until that is resolved",
     COLLECT_HASH_DOES_NOT_COVER_RAW:
         "raw_response_sha256 does not equal the sha256 of the retained raw response. Owner rule 7 "
-        "is 'preserve the raw response AND content hash'; a hash that covers other bytes preserves "
-        "nothing",
+        "is 'preserve the raw response AND content hash'; a hash that covers other bytes "
+        "preserves nothing",
+    COLLECT_FETCHED_AT_ASSUMED:
+        "neither the fetcher nor the caller reported WHEN the fetch happened, so the judging "
+        "instant was used. That is an assumption, not an observation: it is stamped and named "
+        "rather than passed off as the moment the provider was read (2026-08-30 review, the "
+        "unreachable content-hash conflict)",
+    COLLECT_TERMINAL_OBSERVATIONS_DISAGREE:
+        "one event id, one source, two TERMINAL observations, two different scores. A final does "
+        "not change; the archive under it did. Owner regression fixture 7 — the mutable archive — "
+        "on the path a real re-collection actually takes. Reported, never resolved",
+    COLLECT_RAW_NOT_DECODABLE:
+        "the response is not valid utf-8, so the text this collector would retain cannot be "
+        "the bytes it hashed. Owner rule 7 cannot hold for anything parsed out of it, and the "
+        "slate is refused HERE rather than admitted and refused downstream by a code that reads "
+        "as tampering",
+    COLLECT_NO_CANONICAL_SCHEDULE:
+        "no canonical schedule was supplied, so the only start this record can be judged against "
+        "is the PAYLOAD'S OWN gameDate and both halves of the split clock read one self-report. "
+        "The HARD pre-start invariant cannot bind a payload that misstates its own start",
+    COLLECT_ADMISSION_REFUSED_NO_SCHEDULE:
+        "admit() returned an admitting verdict for a record that was never bound to an "
+        "independently acquired schedule, and this collector refused to route it to the admitted "
+        "list. The verdict is kept verbatim — admit() owns that word — and the routing is refused",
 }
 
 COLLECT_REASON_CODES = tuple(sorted(COLLECT_REASON_MEANING))
@@ -254,6 +337,24 @@ COLLECTOR_EXTRA_FIELDS = ("date_et", "official_date", "provider_status_code",
 #: Where the content hash came from.
 HASH_BASIS_RAW_BYTES = "RAW_RESPONSE_BYTES"
 HASH_BASIS_CANONICAL_JSON = "CANONICAL_JSON_REBUILD"
+
+#: Where source_fetched_at_utc came from. It is a fact about the FETCH, and this module says which
+#: of three things it actually knows rather than stamping all three with one name.
+FETCHED_AT_FROM_FETCHER = "REPORTED_BY_FETCHER"
+FETCHED_AT_FROM_CALLER = "SUPPLIED_BY_CALLER"
+FETCHED_AT_ASSUMED_JUDGEMENT = "ASSUMED_EQUAL_TO_JUDGEMENT_INSTANT"
+
+
+class RawResponseIntegrityError(RuntimeError):
+    """Owner rule 7, broken at the one place it is still detectable, with records already admitted.
+
+    2026-08-30 review, the bytes branch. The collector hashed the provider's ORIGINAL bytes and
+    retained a LOSSY utf-8 decode of them; it DETECTED the mismatch inside CollectResult and
+    admitted the slate anyway, leaving verified_snapshot to refuse the whole thing downstream with
+    a code that reads as tampering. A hash covering bytes nobody kept preserves nothing, and a
+    result carrying admitted records under such a hash is not a result. It raises instead of
+    returning, because there is nothing here worth routing.
+    """
 
 
 # ---------------------------------------------------------------------------------------------
@@ -296,6 +397,154 @@ def _canonical_json(payload):
     the provider's bytes. It is not the same claim and it is not labelled as if it were.
     """
     return json.dumps(payload, sort_keys=True, separators=(",", ":"), default=str)
+
+
+def retained_text(raw):
+    """(text, sha256, problem|None) — the bytes this collector KEEPS and the hash of exactly those.
+
+    HASH WHAT YOU KEEP, KEEP WHAT YOU HASH. The old branch did neither: it hashed the ORIGINAL
+    bytes and retained `raw.decode("utf-8", "replace")`, so on any byte utf-8 cannot represent the
+    retained text was a text the provider never sent and the sha covered a response nobody kept.
+    Owner rule 7 was then broken by construction, the break was detected and the record was
+    admitted regardless (2026-08-30 review).
+
+    The decode is STRICT. A replacement character is a fabricated byte, and fabricating bytes is
+    this module's whole subject. Valid utf-8 round-trips exactly, which is why the strict decode
+    and a hash of the original bytes can both be true at once — and the round trip is CHECKED, not
+    believed. On an undecodable response the text is None (nothing false is retained), the sha of
+    the bytes is still returned so a refusal can name what it refused, and the CALLER MUST REFUSE.
+    """
+    if isinstance(raw, bytes):
+        sha = _sha256_of(raw)
+        try:
+            text = raw.decode("utf-8")
+        except UnicodeDecodeError as e:
+            return None, sha, {
+                "code": COLLECT_RAW_NOT_DECODABLE, "sha256": sha, "error": str(e),
+                "detail": "a lossy decode would retain bytes the provider never sent while the "
+                          "hash went on naming the ones it did (owner rule 7)"}
+        if text.encode("utf-8") != raw:
+            # Unreachable while the decode above is strict, and that is exactly its job: it is the
+            # structural backstop for a decode that stops being strict. It RAISES rather than
+            # returning a problem, because a caller holding text that does not reproduce the bytes
+            # it hashed has already broken rule 7 and there is nothing left to route.
+            raise RawResponseIntegrityError(
+                "the retained text does not re-encode to the %d bytes that were hashed (%s). "
+                "Nothing may be parsed out of a response this collector cannot preserve"
+                % (len(raw), sha))
+        return text, sha, None
+    return raw, _sha256_of(raw), None
+
+
+def _fetch_result_parts(raw):
+    """(body, fetch instant|None). A fetcher MAY report WHEN it fetched; this reads it if it did.
+
+    Two shapes, neither invented: the body alone — the get(url) convention feed_espn and
+    feed_mlb_statsapi already use — or the pair (body, fetched_at_utc), which is the instant
+    feed_mlb_statsapi.fetch_schedule builds internally and then throws away. Anything else is the
+    body. Nothing is guessed, and this module still reads no clock of its own.
+    """
+    if isinstance(raw, tuple) and len(raw) == 2:
+        at = _instant(raw[1])
+        if at is not None:
+            return raw[0], at
+    return raw, None
+
+
+def _fetch_instant(reported_at, fetched_utc, now_utc):
+    """(instant, basis, problem|None) — WHEN THE FETCH HAPPENED, taken from the fetch.
+
+    2026-08-30 review. collect_mlb stamped source_fetched_at_utc with the caller's now_utc, so the
+    observation instant was really the judging instant. Two consequences, both real: the contract's
+    content-hash conflict keys on that field and therefore could never match across two
+    collections, and score_admission's cluster-M observation clock was being handed the same number
+    it already had. The judging clock is now the LAST resort and says so.
+    """
+    if reported_at is not None:
+        return reported_at, FETCHED_AT_FROM_FETCHER, None
+    supplied = _instant(fetched_utc)
+    if supplied is not None:
+        return supplied, FETCHED_AT_FROM_CALLER, None
+    return _instant(now_utc), FETCHED_AT_ASSUMED_JUDGEMENT, {
+        "code": COLLECT_FETCHED_AT_ASSUMED, "assumed": _iso(now_utc),
+        "detail": "neither the fetcher nor the caller reported the fetch instant. Pass "
+                  "fetched_utc=, or return (body, fetched_at_utc) from the fetcher, and the "
+                  "observation stops borrowing the judge's clock"}
+
+
+#: What two observations of ONE game genuinely share. NOT the fetch instant — see observation_key.
+OBSERVATION_KEY_FIELDS = ("event_id", "source")
+
+
+def observation_key(record):
+    """The identity two SEPARATE observations of one game have in common: event id and source.
+
+    score_admission.content_hash_conflict keys on (event_id, source, source_fetched_at_utc), which
+    is right for two records claiming to BE one snapshot and structurally unreachable for two
+    observations taken hours apart: their fetch instants differ by construction, so the key never
+    matched and owner regression fixture 7 could not fire on the production path (2026-08-30
+    review, this file). The fetch instant is what DISTINGUISHES two observations; it cannot also be
+    what joins them.
+    """
+    return tuple(record.get(k) for k in OBSERVATION_KEY_FIELDS)
+
+
+def observation_conflict(a, b):
+    """(conflict, problem|None) for two observations of one game. The contract's arms come first.
+
+    sa.content_hash_conflict owns the wording for the two shapes it can see, and it is consulted
+    before anything here so the two modules cannot fork on a code name. What it cannot see is the
+    shape that actually happened on 2026-08-30: an archive rewriting history under one filename,
+    read twice, hours apart. Two TERMINAL observations of one event id from one source that
+    disagree on the score are a contradiction — a final does not change — and it is REPORTED. This
+    module never picks a winner; picking is a store's job and the store must refuse too.
+    """
+    conflict, prob = sa.content_hash_conflict(a, b)
+    if conflict:
+        return True, prob
+    key = observation_key(a)
+    if key[0] is None or key != observation_key(b):
+        return False, None
+    scores_a = (a.get("away_score"), a.get("home_score"))
+    scores_b = (b.get("away_score"), b.get("home_score"))
+    if a.get("status") in sa.TERMINAL_STATES and b.get("status") in sa.TERMINAL_STATES \
+            and scores_a != scores_b:
+        return True, {"code": COLLECT_TERMINAL_OBSERVATIONS_DISAGREE,
+                      "observation_key": list(key),
+                      "scores": [list(scores_a), list(scores_b)],
+                      "source_fetched_at_utc": [a.get("source_fetched_at_utc"),
+                                                b.get("source_fetched_at_utc")],
+                      "raw_response_sha256": [a.get("raw_response_sha256"),
+                                              b.get("raw_response_sha256")],
+                      "detail": "one game, one source, two terminal observations, two scores"}
+    return False, None
+
+
+def observation_conflicts(records, prior_observations):
+    """Every conflict between THIS collection and an EARLIER one, as problems. Nothing is resolved.
+
+    This is the production path owner regression fixture 7 never had: the morning collection of a
+    slate compared against the evening one, on the key the two actually share. Each conflict is
+    recorded on the record as well as at result level, because the snapshot store is where "one
+    key holds one record" is enforceable and it must see the collision travel with the record.
+    """
+    problems = []
+    if not prior_observations:
+        return problems
+    prior_by_key = {}
+    for p in prior_observations:
+        if isinstance(p, dict):
+            prior_by_key.setdefault(observation_key(p), []).append(p)
+    for r in records:
+        if not isinstance(r, dict):
+            continue
+        for p in prior_by_key.get(observation_key(r), ()):
+            conflict, prob = observation_conflict(p, r)
+            if conflict:
+                entry = dict(prob, event_id=r.get("event_id"), against="PRIOR_OBSERVATION")
+                problems.append(entry)
+                r.setdefault("collector_problems", []).append(dict(entry))
+    return problems
 
 
 def _identity_key(record):
@@ -503,7 +752,7 @@ def normalize_statsapi(payload, *, fetched_utc, now_utc, raw_sha256=None, raw_ha
             # one content hash covering two different score sets is regression fixture 7 in
             # payload form. Borrowed, not retyped, so the two modules cannot fork on the wording.
             for other in group[1:]:
-                conflict, prob = sa.content_hash_conflict(group[0], other)
+                conflict, prob = observation_conflict(group[0], other)
                 if conflict:
                     other["collector_problems"].append(
                         dict(prob, detail="two games in one payload claim one event id and "
@@ -608,12 +857,13 @@ class CollectResult:
     """
 
     __slots__ = ("date_et", "league", "lane", "now_utc", "source", "source_url", "raw_text",
-                 "raw_sha256", "raw_hash_basis", "fetched_utc", "normalized", "admitted",
-                 "quarantined", "lanes", "no_data", "problems", "counters")
+                 "raw_sha256", "raw_hash_basis", "fetched_utc", "fetched_at_basis", "normalized",
+                 "admitted", "quarantined", "lanes", "no_data", "problems", "counters")
 
     def __init__(self, *, date_et, league, now_utc, lanes, source_url=None, raw_text=None,
                  raw_sha256=None, raw_hash_basis=None, fetched_utc=None, normalized=None,
-                 admitted=None, quarantined=None, no_data=None, problems=None):
+                 admitted=None, quarantined=None, no_data=None, problems=None,
+                 fetched_at_basis=None):
         self.date_et = date_et
         self.league = league
         self.lane = sa.LANE_CANONICAL
@@ -624,6 +874,8 @@ class CollectResult:
         self.raw_sha256 = raw_sha256
         self.raw_hash_basis = raw_hash_basis
         self.fetched_utc = _iso(fetched_utc)
+        #: WHICH of the three things this result knows about the fetch instant (FETCHED_AT_*).
+        self.fetched_at_basis = fetched_at_basis
         #: The pre-verdict normalization, retained as evidence. A caller reading scores from here
         #: has walked around the gate; read .admitted.
         self.normalized = list(normalized or [])
@@ -634,12 +886,25 @@ class CollectResult:
         self.problems = list(problems or [])
 
         # Owner rule 7, checked rather than asserted: the hash must cover the bytes it names.
+        # DETECTION REFUSES. The first version recorded this problem and handed the caller a result
+        # with admitted records in it anyway; verified_snapshot then refused the entire slate with
+        # a code that reads as tampering, which is a confusing error standing in for a plain one
+        # (2026-08-30 review). collect_mlb refuses upstream of here, so the raise below is the
+        # structural backstop for anyone assembling a result by hand.
         if self.raw_text is not None and self.raw_sha256 is not None \
                 and self.raw_hash_basis == HASH_BASIS_RAW_BYTES:
-            if _sha256_of(self.raw_text) != self.raw_sha256:
+            recomputed = _sha256_of(self.raw_text)
+            if recomputed != self.raw_sha256:
                 self.problems.append({"code": COLLECT_HASH_DOES_NOT_COVER_RAW,
                                       "declared": self.raw_sha256,
-                                      "recomputed": _sha256_of(self.raw_text)})
+                                      "recomputed": recomputed})
+                if self.admitted:
+                    raise RawResponseIntegrityError(
+                        "%s: %d admitted records under a hash that covers other bytes "
+                        "(declared %s, retained text hashes to %s). Owner rule 7 is 'preserve the "
+                        "raw response AND content hash'; nothing here may be routed anywhere"
+                        % (COLLECT_HASH_DOES_NOT_COVER_RAW, len(self.admitted),
+                           self.raw_sha256, recomputed))
 
         # COUNTERS ARE GENERATED HERE, never typed by a caller.
         dispositions = {}
@@ -678,6 +943,7 @@ class CollectResult:
             "league": self.league, "date_et": self.date_et, "lane": self.lane,
             "now_utc": self.now_utc, "source": self.source, "source_url": self.source_url,
             "source_fetched_at_utc": self.fetched_utc,
+            "source_fetched_at_basis": self.fetched_at_basis,
             "raw_response_sha256": self.raw_sha256, "raw_hash_basis": self.raw_hash_basis,
             "counters": dict(self.counters),
             "lane_status": self.lanes,
@@ -694,19 +960,31 @@ class CollectResult:
 # 7. THE CANONICAL LANE.
 # ---------------------------------------------------------------------------------------------
 
-def collect_mlb(date_et, *, now_utc, get=None, canonical_schedule=None):
+def collect_mlb(date_et, *, now_utc, get=None, canonical_schedule=None, fetched_utc=None,
+                prior_observations=None):
     """Acquire one MLB slate, normalize it, and hand every record to score_admission.admit().
 
     get   an approved fetcher, called as get(url) — the feed layer's calling convention
           (feed_espn / feed_mlb_statsapi pass one positional; acquisition_adapters passes a
           timeout keyword, so a fetcher shared across both layers needs `def f(url, timeout=None)`).
-          Omitting it does not fall back to the network: the canonical lane reports DOWN and the
-          answer is NO_DATA_LANE_DOWN.
+          It may return the body, or the pair (body, fetched_at_utc). Omitting it does not fall
+          back to the network: the canonical lane reports DOWN and the answer is NO_DATA_LANE_DOWN.
 
     canonical_schedule  a schedule acquired EARLIER and independently (see
-          schedule_entries_from_records). None is permitted and every verdict then carries
-          CANONICAL_SCHEDULE_NOT_SUPPLIED, so the absence of the cross-check is visible in the
-          artifact rather than assumed away.
+          schedule_entries_from_records). None is permitted, every verdict then carries
+          CANONICAL_SCHEDULE_NOT_SUPPLIED, and NOTHING IS ADMITTED: with no schedule both halves of
+          the split clock read the payload's own gameDate, so a payload that misstates its start
+          would defeat the HARD pre-start invariant. score_admission's cluster-A ceiling refuses
+          such a record too; this collector does not delegate the question (2026-08-30 review).
+
+    fetched_utc  WHEN THE FETCH HAPPENED, when the fetcher cannot say so itself. Used only if the
+          fetcher reported nothing; if neither says, the judging instant is used and the record
+          carries FETCHED_AT_ASSUMED_FROM_JUDGEMENT_CLOCK rather than a borrowed timestamp wearing
+          an observation's name.
+
+    prior_observations  normalized records from an EARLIER collection of the same slate. Compared
+          on (event_id, source) — see observation_conflict — so the mutable-archive contradiction
+          can fire on the production path instead of only in a hand-built pair of records.
     """
     lanes = lane_status(LEAGUE, get=get)
     url = feed_mlb_statsapi.schedule_url(date_et)
@@ -742,8 +1020,30 @@ def collect_mlb(date_et, *, now_utc, get=None, canonical_schedule=None):
         return CollectResult(date_et=date_et, league=LEAGUE, now_utc=now_utc, lanes=lanes,
                              source_url=url, no_data=v)
 
-    raw_text = raw.decode("utf-8", "replace") if isinstance(raw, bytes) else raw
-    raw_sha256 = _sha256_of(raw)
+    # WHEN THE FETCH HAPPENED comes from the FETCH, not from the judge's clock. This module still
+    # reads no clock of its own (see DETERMINISM); it reads the one the fetch layer already has.
+    body, reported_at = _fetch_result_parts(raw)
+    fetch_at, fetch_basis, fetch_problem = _fetch_instant(reported_at, fetched_utc, now_utc)
+    fetch_problems = [fetch_problem] if fetch_problem else []
+
+    # HASH WHAT YOU KEEP, KEEP WHAT YOU HASH, AND REFUSE HERE IF YOU CANNOT.
+    raw_text, raw_sha256, integrity = retained_text(body)
+    if integrity is not None:
+        v = sa.lane_down(LEAGUE, sa.LANE_CANONICAL, reason="PROVIDER_ERROR",
+                         blocked_sources=KNOWN_EGRESS_BLOCKED, date_et=date_et,
+                         detail={"source": SOURCE, "source_url": url,
+                                 "raw_response_sha256": raw_sha256, "integrity": integrity,
+                                 "note": "the response cannot be RETAINED as the bytes that were "
+                                         "hashed, so owner rule 7 cannot hold for anything parsed "
+                                         "out of it. Nothing is admitted from a response this "
+                                         "collector cannot preserve, and nothing is retained "
+                                         "under a name it does not have"})
+        return CollectResult(date_et=date_et, league=LEAGUE, now_utc=now_utc, lanes=lanes,
+                             source_url=url, raw_sha256=raw_sha256,
+                             raw_hash_basis=HASH_BASIS_RAW_BYTES, fetched_utc=fetch_at,
+                             fetched_at_basis=fetch_basis, no_data=v,
+                             problems=fetch_problems + [integrity])
+
     try:
         payload = json.loads(raw_text)
     except Exception as e:                                        # noqa: BLE001
@@ -755,11 +1055,10 @@ def collect_mlb(date_et, *, now_utc, get=None, canonical_schedule=None):
                                  "note": "the bytes were retained and hashed; they are not JSON"})
         return CollectResult(date_et=date_et, league=LEAGUE, now_utc=now_utc, lanes=lanes,
                              source_url=url, raw_text=raw_text, raw_sha256=raw_sha256,
-                             raw_hash_basis=HASH_BASIS_RAW_BYTES, no_data=v)
+                             raw_hash_basis=HASH_BASIS_RAW_BYTES, fetched_utc=fetch_at,
+                             fetched_at_basis=fetch_basis, no_data=v, problems=fetch_problems)
 
-    # The fetch instant is the caller's instant. This module reads no clock (see DETERMINISM).
-    fetched_utc = now_utc
-    records = normalize_statsapi(payload, fetched_utc=fetched_utc, now_utc=now_utc,
+    records = normalize_statsapi(payload, fetched_utc=fetch_at, now_utc=now_utc,
                                  raw_sha256=raw_sha256, raw_hash_basis=HASH_BASIS_RAW_BYTES,
                                  source_url=url)
 
@@ -773,14 +1072,26 @@ def collect_mlb(date_et, *, now_utc, get=None, canonical_schedule=None):
         for p in r["collector_problems"]:
             if p["code"] == COLLECT_DUPLICATE_EVENT_ID:
                 collisions[p["identity"]] = p["n"]
-    problems = [{"code": COLLECT_DUPLICATE_EVENT_ID, "identity": k, "n": n,
-                 "detail": "one payload, %d games claiming this identity. Neither was dropped; "
-                           "the snapshot store must refuse to hold two records under one key" % n}
-                for k, n in sorted(collisions.items())]
+    problems = fetch_problems + [
+        {"code": COLLECT_DUPLICATE_EVENT_ID, "identity": k, "n": n,
+         "detail": "one payload, %d games claiming this identity. Neither was dropped; "
+                   "the snapshot store must refuse to hold two records under one key" % n}
+        for k, n in sorted(collisions.items())]
+
+    # THE MUTABLE ARCHIVE, ON THE PATH A RE-COLLECTION ACTUALLY TAKES. Keyed on what two
+    # observations share, not on the fetch instant that distinguishes them (2026-08-30 review).
+    problems += observation_conflicts(records, prior_observations)
 
     schedule_index = sa.index_schedule(canonical_schedule)
+    schedule_supplied = schedule_index is not None
     admitted, quarantined = [], []
     for record in records:
+        if not schedule_supplied:
+            record["collector_problems"].append(
+                {"code": COLLECT_NO_CANONICAL_SCHEDULE, "event_id": record.get("event_id"),
+                 "scheduled_start_utc": record.get("scheduled_start_utc"),
+                 "detail": "the only start available is this payload's own gameDate, so both "
+                           "halves of the split clock read one self-report"})
         if record.get("status") == sa.POSTPONED and schedule_index:
             entry = schedule_index.get(record.get("event_id")) or {}
             successor = entry.get("rescheduled_to_event_id")
@@ -794,16 +1105,29 @@ def collect_mlb(date_et, *, now_utc, get=None, canonical_schedule=None):
                            lane=sa.LANE_CANONICAL)
         sink = sa.sink_for(verdict)
         entry = {"record": record, "verdict": verdict, "sink": sink}
-        if verdict.admitted:
+        # THE COLLECTOR DOES NOT DELEGATE THE PRE-START INVARIANT. An unbound record was judged
+        # against the start IT reported, so an admitting verdict for one is an admission the
+        # collector has no independent evidence for. The verdict is kept verbatim — admit() owns
+        # that word and this module never rewrites it — and the ROUTING is refused.
+        if verdict.admitted and not schedule_supplied:
+            entry["sink"] = sa.SINK_QUARANTINE
+            record["collector_problems"].append(
+                {"code": COLLECT_ADMISSION_REFUSED_NO_SCHEDULE,
+                 "event_id": record.get("event_id"), "verdict": verdict.disposition,
+                 "admissible_as": verdict.admissible_as,
+                 "detail": "admit() admitted a record bound to nothing; the collector refused to "
+                           "route it. Supply canonical_schedule= from an independent acquisition"})
+            quarantined.append(entry)
+        elif verdict.admitted:
             admitted.append(entry)
         else:
             quarantined.append(entry)
 
     return CollectResult(date_et=date_et, league=LEAGUE, now_utc=now_utc, lanes=lanes,
                          source_url=url, raw_text=raw_text, raw_sha256=raw_sha256,
-                         raw_hash_basis=HASH_BASIS_RAW_BYTES, fetched_utc=fetched_utc,
-                         normalized=records, admitted=admitted, quarantined=quarantined,
-                         problems=problems)
+                         raw_hash_basis=HASH_BASIS_RAW_BYTES, fetched_utc=fetch_at,
+                         fetched_at_basis=fetch_basis, normalized=records, admitted=admitted,
+                         quarantined=quarantined, problems=problems)
 
 
 # ---------------------------------------------------------------------------------------------
@@ -943,10 +1267,11 @@ def snapshot_payload(result):
 
 
 # ---------------------------------------------------------------------------------------------
-# 10. verified_snapshot — imported if it exists, and NAMED as skipped if it does not.
-#     Another module is being built against the same contract in parallel. A selftest that quietly
-#     passes when its subject is absent is itself a defect (precedent: wnba_refresh_espn returned
-#     True with no artifact), so absence is printed, not swallowed.
+# 10. verified_snapshot — imported if it exists, and FAILED if it does not.
+#     Another module is being built against the same contract in parallel. The first version of
+#     this block printed the absence and returned True, which is the wnba_refresh_espn precedent
+#     exactly: a gate that passes without its subject. Absence is now a FAILURE (see selftest),
+#     and the import result is kept here so the failure can state WHY it could not import.
 # ---------------------------------------------------------------------------------------------
 
 VERIFIED_SNAPSHOT_NAMES = ("write_snapshot", "get_verified_score", "get_verified_scores",
@@ -1101,6 +1426,12 @@ def malformed_payload():
     ])
 
 
+#: A response with a byte utf-8 cannot represent. The old branch decoded it with errors="replace",
+#: retained the U+FFFD it invented, hashed the ORIGINAL bytes, detected the mismatch and admitted
+#: the slate anyway. Every one of those steps is now a refusal.
+INVALID_UTF8_RESPONSE = b'{"dates": [{"date": "2026-08-30", "games": []}], "note": "\xff\xfe"}'
+
+
 def _stub_get(text, seen=None):
     """An injected fetcher, called the way the feed layer calls one: get(url)."""
     def _get(url, timeout=None):
@@ -1108,6 +1439,116 @@ def _stub_get(text, seen=None):
             seen.append(url)
         return text
     return _get
+
+
+def _stub_get_at(text, fetched_at):
+    """A fetcher that REPORTS WHEN IT FETCHED: the (body, fetched_at_utc) pair.
+
+    feed_mlb_statsapi.fetch_schedule already computes this instant and then discards it. Reading it
+    is what makes source_fetched_at_utc an observation rather than a copy of the judge's clock.
+    """
+    def _get(url, timeout=None):
+        return (text, fetched_at)
+    return _get
+
+
+def _exercise_store(store, inc, f, skipped, *, label="verified_snapshot"):
+    """Stage 2 -> stage 3, exercised against `store`. ABSENCE is the caller's business, not this.
+
+    CLUSTER K, 2026-08-30 review. This was one try/except TypeError wrapped around the whole
+    handoff, so three unrelated facts arrived at one verdict: a signature this module does not own
+    having drifted (tolerable, and not this file's defect), a genuine TypeError raised deep inside
+    the store (a real failure, silently downgraded to a skip), and the quarantine-leak check — the
+    one assertion here that proves the lane boundary end to end — which sat inside the same block
+    and stopped running whenever either of the first two happened.
+
+    Now: drift is decided STRUCTURALLY with inspect.signature().bind(), BEFORE the call, so no
+    exception raised by the store can ever be mistaken for it. It is the only tolerated outcome.
+    Every exception the store raises is a FAILURE. The leak check runs outside that arm.
+
+    `store` is a parameter rather than the module global precisely so the selftest can hand this
+    function stand-ins that drift, raise and leak on purpose, and require three different answers.
+    """
+    import inspect
+    import shutil
+    import tempfile
+
+    for name in VERIFIED_SNAPSHOT_NAMES:
+        fn = getattr(store, name, None)
+        if fn is None:
+            f.append("SNAPSHOT[%s]: no %s — the documented name this collector was built against"
+                     % (label, name))
+            return
+        if not callable(fn):
+            f.append("SNAPSHOT[%s]: %s is not callable" % (label, name))
+            return
+
+    if hasattr(store, "admission_envelope"):
+        mine = admission_envelopes(inc)[0]
+        theirs = store.admission_envelope(mine["record"], mine["verdict"])
+        if set(mine) != set(theirs):
+            f.append("SNAPSHOT[%s]: the admission envelope forked between the module that admits "
+                     "and the module that stores (%s vs %s)"
+                     % (label, sorted(mine), sorted(theirs)))
+
+    root = tempfile.mkdtemp(prefix="score_collector_selftest_")
+    try:
+        body = snapshot_payload(inc)
+        args = (admission_envelopes(inc),)
+        kwargs = dict(league=inc.league, date_et=inc.date_et, source=inc.source,
+                      raw_payloads=body["raw_payloads"], now_utc=_EVENING, out_root=root)
+        try:
+            inspect.signature(store.write_snapshot).bind(*args, **kwargs)
+        except TypeError as e:
+            # THE ONE TOLERATED OUTCOME, decided before the call so that nothing raised from
+            # inside the store can wear its clothes.
+            skipped.append("%s.write_snapshot's signature does not accept what this collector "
+                           "calls (%s) — the write/read round trip was NOT exercised. Two modules "
+                           "built against one contract disagree about a call; that is a real "
+                           "disagreement, not a pass" % (label, e))
+            return
+
+        sid = None
+        try:
+            sid = store.write_snapshot(*args, **kwargs)
+        except Exception as e:                                    # noqa: BLE001 — never a skip
+            f.append("SNAPSHOT[%s]: the store refused what this collector produced (%s: %s)"
+                     % (label, type(e).__name__, str(e)[:400]))
+        if sid is None:
+            return
+
+        # ---- THE QUARANTINE BOUNDARY. Outside every tolerated arm above, because a record
+        # admit() refused being readable through the analysis surface is the whole lane
+        # separation failing, and it must not be skippable by someone else's signature.
+        for refused in (sa.EID_BOSNYY, sa.EID_COLATL):
+            try:
+                leaked = store.get_verified_score(refused, root=root)
+            except Exception as e:                                # noqa: BLE001
+                f.append("SNAPSHOT[%s]: get_verified_score(%s) raised %s: %s"
+                         % (label, refused, type(e).__name__, str(e)[:200]))
+                continue
+            if leaked is not None:
+                f.append("SNAPSHOT[%s]: %s was REFUSED by admit() and is still readable through "
+                         "get_verified_score — the quarantine boundary leaks" % (label, refused))
+
+        try:
+            got = store.get_verified_score(sa.EID_MIAWSH, root=root)
+            if not got or got.get("home_score") != 9 or got.get("away_score") != 2:
+                f.append("SNAPSHOT[%s]: the admitted record did not survive the round trip (%s)"
+                         % (label, got))
+            slate = store.get_verified_scores(inc.date_et, "MLB", root=root)
+            if len(slate) != len(inc.admitted):
+                f.append("SNAPSHOT[%s]: the slate read back %d records for %d admitted"
+                         % (label, len(slate), len(inc.admitted)))
+            manifest = store.get_source_manifest(sid, root=root)
+            if inc.raw_sha256 not in json.dumps(manifest, default=str):
+                f.append("SNAPSHOT[%s]: the manifest does not carry the raw response hash this "
+                         "collector retained (owner rule 7 broken across the handoff)" % label)
+        except Exception as e:                                    # noqa: BLE001 — never a skip
+            f.append("SNAPSHOT[%s]: the read path raised %s: %s"
+                     % (label, type(e).__name__, str(e)[:400]))
+    finally:
+        shutil.rmtree(root, ignore_errors=True)
 
 
 # =============================================================================== selftest
@@ -1453,6 +1894,137 @@ def selftest():
     conflict, prob = sa.content_hash_conflict(a, b)
     if not conflict or prob["code"] != sa.REASON_SNAPSHOT_CONTENT_CHANGED:
         f.append("F7: two snapshots under one key with different hashes were not flagged")
+    # THE BACKSTOP. A result carrying ADMITTED records under a hash that covers other bytes is not
+    # a result: the first version recorded the problem and returned it, and the slate was then
+    # refused downstream by a code that reads as tampering.
+    try:
+        CollectResult(date_et="2026-08-30", league=LEAGUE, now_utc=_EVENING, lanes=ls,
+                      raw_text="{}", raw_sha256="0" * 64, raw_hash_basis=HASH_BASIS_RAW_BYTES,
+                      admitted=closed.admitted)
+        f.append("F7 backstop: a result carrying ADMITTED records under a hash that covers other "
+                 "bytes was returned instead of refused")
+    except RawResponseIntegrityError:
+        pass
+
+    # ---- FIXTURE 7b. THE BYTES BRANCH. HASH WHAT YOU KEEP, KEEP WHAT YOU HASH ---------------
+    # errors="replace" retained U+FFFD the provider never sent while raw_response_sha256 went on
+    # naming the bytes it did. The break was DETECTED and the slate was ADMITTED anyway.
+    bad_bytes = collect_mlb("2026-08-30", now_utc=_EVENING, canonical_schedule=sched,
+                            get=_stub_get(INVALID_UTF8_RESPONSE))
+    note(bad_bytes)
+    if not bad_bytes.lane_down:
+        f.append("F7b: a response that cannot be retained as the bytes it was hashed from did "
+                 "not refuse; it produced %d admitted records" % len(bad_bytes.admitted))
+    if bad_bytes.raw_text is not None:
+        f.append("F7b: a lossy decode was retained as if it were the provider's response (%r)"
+                 % bad_bytes.raw_text[:60])
+    if not any(p["code"] == COLLECT_RAW_NOT_DECODABLE for p in bad_bytes.problems):
+        f.append("F7b: the undecodable response was not named (%s)"
+                 % [p.get("code") for p in bad_bytes.problems])
+    if bad_bytes.raw_sha256 != _sha256_of(INVALID_UTF8_RESPONSE):
+        f.append("F7b: the refusal does not carry the hash of the bytes it refused")
+    if bad_bytes.normalized or bad_bytes.admitted:
+        f.append("F7b: records were parsed out of a response this collector cannot preserve")
+    good_bytes = collect_mlb("2026-08-30", now_utc=_EVENING, canonical_schedule=sched,
+                             get=_stub_get(json.dumps(complete_not_closed_payload()).encode()))
+    note(good_bytes)
+    if good_bytes.lane_down or good_bytes.raw_text is None:
+        f.append("F7b: a valid utf-8 BYTES response was refused; strictness is not the point")
+    elif good_bytes.raw_text.encode("utf-8") != json.dumps(
+            complete_not_closed_payload()).encode():
+        f.append("F7b: the retained text does not reproduce the bytes that were hashed")
+
+    # ---- FIXTURE 7c. THE MUTABLE ARCHIVE, ON THE PATH A RE-COLLECTION ACTUALLY TAKES --------
+    # content_hash_conflict keys on (event_id, source, source_fetched_at_utc) and this collector
+    # used to stamp that field with the caller's now_utc, so two observations of one game never
+    # shared the key and owner regression fixture 7 could not fire in production.
+    morning_at, evening_at = "2026-08-30T22:00:00Z", "2026-08-31T01:00:00Z"
+    morning = collect_mlb("2026-08-30", now_utc=_EVENING, canonical_schedule=sched,
+                          get=_stub_get_at(json.dumps(_payload([
+                              _game(PK_MIAWSH, "SYNTH_MIA", "SYNTH_WSH", _START_1215ET, "F", 2, 9,
+                                    "Miami Marlins", "Washington Nationals")])), morning_at))
+    note(morning)
+    if morning.fetched_utc != morning_at or morning.fetched_at_basis != FETCHED_AT_FROM_FETCHER:
+        f.append("F7c: the fetcher reported when it fetched (%s) and the collector stamped %r/%r"
+                 % (morning_at, morning.fetched_utc, morning.fetched_at_basis))
+    if not morning.normalized or morning.normalized[0]["source_fetched_at_utc"] != morning_at:
+        f.append("F7c: source_fetched_at_utc is not the FETCH instant (%s)"
+                 % (morning.normalized[0]["source_fetched_at_utc"]
+                    if morning.normalized else None))
+    if morning.normalized and morning.normalized[0]["source_fetched_at_utc"] == morning.now_utc:
+        f.append("F7c: the observation instant is a copy of the judging instant")
+    evening = collect_mlb("2026-08-30", now_utc=_EVENING, canonical_schedule=sched,
+                          fetched_utc=evening_at, prior_observations=morning.normalized,
+                          get=_stub_get(json.dumps(_payload([
+                              _game(PK_MIAWSH, "SYNTH_MIA", "SYNTH_WSH", _START_1215ET, "F", 2, 7,
+                                    "Miami Marlins", "Washington Nationals")]))))
+    note(evening)
+    if evening.fetched_at_basis != FETCHED_AT_FROM_CALLER or evening.fetched_utc != evening_at:
+        f.append("F7c: an explicitly supplied fetch instant was not used (%r/%r)"
+                 % (evening.fetched_utc, evening.fetched_at_basis))
+    m_rec, e_rec = morning.normalized[0], evening.normalized[0]
+    # The finding itself, asserted rather than described: on the contract's key these two do not
+    # even compare. That is WHY this module keys the cross-collection check on its own.
+    if sa.content_hash_conflict(m_rec, e_rec)[0]:
+        f.append("F7c: the fixture is not the one the review named — these two records DO share "
+                 "the contract's (event_id, source, source_fetched_at_utc) key, so it proves "
+                 "nothing about the unreachable path")
+    hit, hit_prob = observation_conflict(m_rec, e_rec)
+    if not hit or hit_prob["code"] != COLLECT_TERMINAL_OBSERVATIONS_DISAGREE:
+        f.append("F7c: two terminal observations of one game disagreeing 9-2 / 7-2 produced %s"
+                 % (hit_prob if hit else "no conflict at all"))
+    if not any(p["code"] == COLLECT_TERMINAL_OBSERVATIONS_DISAGREE for p in evening.problems):
+        f.append("F7c: the re-collection did not raise the archive contradiction to result level")
+    if not any(p["code"] == COLLECT_TERMINAL_OBSERVATIONS_DISAGREE
+               for p in e_rec["collector_problems"]):
+        f.append("F7c: the contradiction did not travel with the record into the snapshot body")
+    if len(evening.admitted) != 1:
+        f.append("F7c: the conflict was RESOLVED instead of reported — admit() owns the verdict "
+                 "and a collector that drops a record has picked a winner (%d admitted)"
+                 % len(evening.admitted))
+
+    # ---- FIXTURE 7d. THE COLLECTOR DOES NOT DELEGATE THE PRE-START INVARIANT ----------------
+    # With no schedule both halves of the split clock read the payload's own gameDate.
+    # score_admission's cluster-A ceiling refuses that today; this fixture stands in a PERMISSIVE
+    # admit() and requires the collector to refuse without it, because a gate that holds only
+    # because its callee holds is one refactor away from not holding.
+    _real_admit = sa.admit
+
+    def _permissive_admit(record, **kw):
+        return sa.Verdict(sa.ADMIT_FINAL, [sa.REASON_STATUS_VALIDATED], sa.ADMISSIBLE_FINAL,
+                          {"lane": kw.get("lane"), "terminal_verified": True})
+    try:
+        sa.admit = _permissive_admit
+        loose = collect_mlb("2026-08-30", now_utc=_NOW_1330ET,
+                            get=_stub_get(json.dumps(incident_payload_0830())))
+        bound = collect_mlb("2026-08-30", now_utc=_NOW_1330ET, canonical_schedule=sched,
+                            get=_stub_get(json.dumps(incident_payload_0830())))
+    finally:
+        sa.admit = _real_admit
+    note(loose)
+    if loose.admitted:
+        f.append("F7d: admit() admitted %d unbound records and the collector routed them to the "
+                 "admitted list. The 8/30 pre-start finals need only a permissive callee"
+                 % len(loose.admitted))
+    if len(loose.quarantined) != 3:
+        f.append("F7d: %d of 3 unbound admissions were refused by the collector"
+                 % len(loose.quarantined))
+    if not any(p["code"] == COLLECT_ADMISSION_REFUSED_NO_SCHEDULE
+               for r in loose.normalized for p in r["collector_problems"]):
+        f.append("F7d: the collector's own refusal was not recorded on the record")
+    if not any(p["code"] == COLLECT_NO_CANONICAL_SCHEDULE
+               for r in loose.normalized for p in r["collector_problems"]):
+        f.append("F7d: a collection judged against its own payload's gameDate did not say so")
+    if [e["sink"] for e in loose.quarantined] != [sa.SINK_QUARANTINE] * len(loose.quarantined):
+        f.append("F7d: a refused admission kept a sink off quarantine (%s)"
+                 % [e["sink"] for e in loose.quarantined])
+    if any(e["verdict"].disposition != sa.ADMIT_FINAL for e in loose.quarantined):
+        f.append("F7d: the collector REWROTE the verdict instead of refusing the routing; admit() "
+                 "owns that word")
+    if len(bound.admitted) != 3:
+        f.append("F7d: with a canonical schedule supplied the same records were still refused "
+                 "(%d admitted) — the gate is a blanket, not a binding check"
+                 % len(bound.admitted))
 
     # ---- THE LIVE CAPTURE. ABSENCE IS A FAILURE, NOT A PASS ---------------------------------
     # The one live StatsAPI payload in this repo was trimmed to the fields parse_schedule reads,
@@ -1491,7 +2063,26 @@ def selftest():
 
     # ---- MALFORMED PAYLOADS: NOTHING IS DROPPED, NOTHING IS FILLED IN -----------------------
     mal_payload = malformed_payload()
-    mal = collect_mlb("2026-08-30", now_utc=_EVENING, get=_stub_get(json.dumps(mal_payload)))
+    # A SCHEDULE IS SUPPLIED HERE ON PURPOSE. What this fixture is about is which malformed games
+    # refuse and which are merely REPORTED; without a schedule every one of them refuses for the
+    # same unrelated reason (no binding), and a fixture where everything fails identically
+    # distinguishes nothing. The two games that must survive are entered as the provider published
+    # them — the season-drift id the payload itself claims, and the doubleheader half.
+    mal_sched = sa.index_schedule([
+        {"event_id": "mlb:2025:" + PK_SEASON_DRIFT, "league": "MLB",
+         "away_team_id": "SYNTH_PIT", "home_team_id": "SYNTH_STL",
+         "scheduled_start_utc": "2026-08-30T23:15:00Z"},
+        {"event_id": sa.EID_DH_G1, "league": "MLB", "away_team_id": "SYNTH_KC",
+         "home_team_id": "SYNTH_TOR", "scheduled_start_utc": "2026-08-30T17:07:00Z",
+         "game_number": 1},
+        # BOUND, and still refused: this one exists in the schedule so that its refusal names the
+        # ABSENT STATUS FIELD (owner rule 3, the shape of the five 8/27 finals) rather than the
+        # unrelated fact that nothing bound it.
+        {"event_id": "mlb:2026:" + PK_NO_STATUS, "league": "MLB", "away_team_id": "SYNTH_MIA",
+         "home_team_id": "SYNTH_WSH", "scheduled_start_utc": _START_1215ET},
+    ])
+    mal = collect_mlb("2026-08-30", now_utc=_EVENING, canonical_schedule=mal_sched,
+                      get=_stub_get(json.dumps(mal_payload)))
     note(mal)
     n_games = len(mal_payload["dates"][0]["games"])
     if mal.counters["GAMES_IN_PAYLOAD"] != n_games:
@@ -1655,65 +2246,82 @@ def selftest():
     if uncovered:
         f.append("COVERAGE: collector codes this selftest never produces: %s" % uncovered)
 
-    # ---- verified_snapshot: integrate if it exists, SAY SO if it does not --------------------
+    # ---- verified_snapshot: ABSENCE IS A FAILURE, AND SO IS A STORE THAT MISBEHAVES --------
+    # CLUSTER K, 2026-08-30 review. This block used to print the absence and return True — exit 0
+    # with the subject of stages 2->3 never exercised, which is the wnba_refresh_espn precedent
+    # this module's own docstring calls forbidden.
     if vs is None:
-        skipped.append("verified_snapshot is not importable (%s) — the write_snapshot / "
-                       "get_verified_score / get_verified_scores / get_source_manifest "
-                       "integration is NOT exercised by this run" % VERIFIED_SNAPSHOT_ABSENCE)
+        f.append("SNAPSHOT: verified_snapshot is not importable (%s). ABSENCE IS A FAILURE, not a "
+                 "skip: this collector's whole output is a body another module writes and reads "
+                 "back, and none of that was exercised by this run. REMEDY: restore "
+                 "harness/verified_snapshot.py so it imports (it must expose %s), then re-run "
+                 "--gate. Until then this gate proves stage 2 alone."
+                 % (VERIFIED_SNAPSHOT_ABSENCE, ", ".join(VERIFIED_SNAPSHOT_NAMES)))
     else:
-        for name in VERIFIED_SNAPSHOT_NAMES:
-            fn = getattr(vs, name, None)
-            if fn is None:
-                f.append("SNAPSHOT: verified_snapshot has no %s — the documented name this "
-                         "collector was built against" % name)
-            elif not callable(fn):
-                f.append("SNAPSHOT: verified_snapshot.%s is not callable" % name)
-        if hasattr(vs, "admission_envelope"):
-            mine = admission_envelopes(inc)[0]
-            theirs = vs.admission_envelope(mine["record"], mine["verdict"])
-            if set(mine) != set(theirs):
-                f.append("SNAPSHOT: the admission envelope forked between the module that admits "
-                         "and the module that stores (%s vs %s)"
-                         % (sorted(mine), sorted(theirs)))
-        # THE HANDOFF, EXERCISED. Stage 2 -> stage 3, into a throwaway root so no repo artifact is
-        # touched (R6 belongs to the store, and a selftest must not append to it). The check that
-        # matters is the LAST one: a record this collector refused must not be reachable through
-        # the read-only analysis surface. That is the whole lane separation, end to end.
-        import shutil, tempfile
-        root = tempfile.mkdtemp(prefix="score_collector_selftest_")
-        try:
-            body = snapshot_payload(inc)
-            sid = vs.write_snapshot(admission_envelopes(inc), league=inc.league,
-                                    date_et=inc.date_et, source=inc.source,
-                                    raw_payloads=body["raw_payloads"], now_utc=_EVENING,
-                                    out_root=root)
-            got = vs.get_verified_score(sa.EID_MIAWSH, root=root)
-            if not got or got.get("home_score") != 9 or got.get("away_score") != 2:
-                f.append("SNAPSHOT: the admitted record did not survive the round trip (%s)"
-                         % got)
-            for refused in (sa.EID_BOSNYY, sa.EID_COLATL):
-                leaked = vs.get_verified_score(refused, root=root)
-                if leaked is not None:
-                    f.append("SNAPSHOT: %s was REFUSED by admit() and is still readable through "
-                             "get_verified_score — the quarantine boundary leaks" % refused)
-            slate = vs.get_verified_scores(inc.date_et, "MLB", root=root)
-            if len(slate) != len(inc.admitted):
-                f.append("SNAPSHOT: the slate read back %d records for %d admitted"
-                         % (len(slate), len(inc.admitted)))
-            manifest = vs.get_source_manifest(sid, root=root)
-            if inc.raw_sha256 not in json.dumps(manifest, default=str):
-                f.append("SNAPSHOT: the manifest does not carry the raw response hash this "
-                         "collector retained (owner rule 7 broken across the handoff)")
-        except TypeError as e:
-            # A signature this module does not own changed. That is not this collector's defect,
-            # and it is not silence either.
-            skipped.append("verified_snapshot's signature does not match what this collector "
-                           "calls (%s) — the write/read round trip was NOT exercised" % e)
-        except Exception as e:                                    # noqa: BLE001
-            f.append("SNAPSHOT: verified_snapshot refused what this collector produced (%s: %s)"
-                     % (type(e).__name__, str(e)[:400]))
-        finally:
-            shutil.rmtree(root, ignore_errors=True)
+        _exercise_store(vs, inc, f, skipped)
+
+    # ---- ...AND THE THREE ANSWERS THIS SELFTEST OWES A MISBEHAVING STORE --------------------
+    # One `except TypeError` arm used to give the same answer to all three of these. Each stand-in
+    # below is the shape of one of them, and each is required to land somewhere different.
+    class _StoreDrifted:
+        """A store whose write_snapshot signature does not accept this collector's call."""
+
+        @staticmethod
+        def write_snapshot(records, *, league, date_et, source, now_utc, out_root=None):
+            raise AssertionError("must never be called: drift is decided BEFORE the call")
+
+        @staticmethod
+        def get_verified_score(event_id, *, root=None):
+            return None
+
+        @staticmethod
+        def get_verified_scores(date, league, *, root=None):
+            return []
+
+        @staticmethod
+        def get_source_manifest(snapshot_id, *, root=None):
+            return {}
+
+    class _StoreRaisesTypeError(_StoreDrifted):
+        """The signature matches; the TypeError comes from INSIDE. The old arm said skip."""
+
+        @staticmethod
+        def write_snapshot(records, *, league, date_et, source, raw_payloads, now_utc,
+                           out_root=None):
+            raise TypeError("deep inside the store: '<' not supported between dict and str")
+
+    class _StoreLeaks(_StoreDrifted):
+        """It writes, then serves a record admit() REFUSED: the check that must not skip."""
+
+        @staticmethod
+        def write_snapshot(records, *, league, date_et, source, raw_payloads, now_utc,
+                           out_root=None):
+            return "snap_stub_leaks"
+
+        @staticmethod
+        def get_verified_score(event_id, *, root=None):
+            return {"event_id": event_id, "away_score": 2, "home_score": 9}
+
+    probe_f, probe_skip = [], []
+    _exercise_store(_StoreDrifted, inc, probe_f, probe_skip, label="stub_drifted")
+    if probe_f or len(probe_skip) != 1:
+        f.append("K/drift: a drifted signature produced %d failures and %d skips. Signature drift "
+                 "in a module this one does not own is the ONE tolerated outcome, and it is "
+                 "decided by inspect.signature().bind() before the call: %s"
+                 % (len(probe_f), len(probe_skip), probe_f))
+    probe_f, probe_skip = [], []
+    _exercise_store(_StoreRaisesTypeError, inc, probe_f, probe_skip, label="stub_typeerror")
+    if probe_skip or not any("TypeError" in x for x in probe_f):
+        f.append("K/typeerror: a TypeError raised INSIDE the store was downgraded to a skip "
+                 "(%d skips, failures=%s). A store that raises is a failing run, not an absent "
+                 "subject" % (len(probe_skip), probe_f))
+    probe_f, probe_skip = [], []
+    _exercise_store(_StoreLeaks, inc, probe_f, probe_skip, label="stub_leaks")
+    if not any("quarantine boundary leaks" in x for x in probe_f):
+        f.append("K/leak: a store serving an event id admit() REFUSED through get_verified_score "
+                 "was not caught, so the leak check is not running on this path (%s)" % probe_f)
+    if probe_skip:
+        f.append("K/leak: the leak probe produced a SKIP (%s)" % probe_skip)
 
     for s in skipped:
         print("  SKIPPED:", s)
@@ -1726,68 +2334,169 @@ def selftest():
 # =============================================================================== mutation suite
 
 MUTANTS = [
+    # (name, pattern, replacement, the exception type name that COUNTS as this mutant's death —
+    #  None when the death must be a NAMED assertion failure instead). CLUSTER O: an exception no
+    #  mutant declared is an ERROR, never a kill.
     ("M1 identity becomes the matchup, so a doubleheader reads as one game reported twice",
      '    return record.get("event_id")',
-     '    return (record.get("away_team_id"), record.get("home_team_id"))'),
+     '    return (record.get("away_team_id"), record.get("home_team_id"))', None),
 
     ("M2 the search lane's only exit stops refusing a verdict that admits",
      "    if verdict.admitted or sa.sink_for(verdict) != sa.SINK_QUARANTINE:",
-     "    if False:"),
+     "    if False:", None),
 
     ("M3 a search claim is submitted as if it came from the canonical lane",
      "_SEARCH_LANE = sa.LANE_SEARCH",
-     "_SEARCH_LANE = sa.LANE_CANONICAL"),
+     "_SEARCH_LANE = sa.LANE_CANONICAL", None),
 
     ("M4 the default fetcher becomes a live call instead of a refusal",
      "DEFAULT_GET = feed_mlb_statsapi._default_get",
-     'DEFAULT_GET = lambda url, timeout=None: json.dumps(incident_payload_0830())'),
+     'DEFAULT_GET = lambda url, timeout=None: json.dumps(incident_payload_0830())', None),
 
     ("M5 a postponed game carries its score forward",
      "        away_score = home_score = None",
-     "        pass"),
+     "        pass", None),
 
     ("M6 terminal_verified is typed from the terminal set instead of generated from the "
      "validated set, so 'complete' becomes settleable",
      '        "terminal_verified": sa.terminal_verified_for(status),',
-     '        "terminal_verified": status in sa.TERMINAL_STATES,'),
+     '        "terminal_verified": status in sa.TERMINAL_STATES,', None),
 
-    ("M7 the content hash stops covering the bytes it names",
-     "    raw_sha256 = _sha256_of(raw)",
-     '    raw_sha256 = "a" * 64'),
+    ("M7 the content hash stops covering the bytes that were kept",
+     "        return text, sha, None",
+     '        return text, "a" * 64, None', "RawResponseIntegrityError"),
 
     ("M8 the provider status is decoded locally instead of through the shared mapping, and the "
      "unobserved 'O' code is promoted to validated",
      "        status = sa.normalize_status(code, sa.PROVIDER_MLB_STATSAPI)",
-     '        status = sa.CLOSED if code in ("F", "O") else sa.UNKNOWN'),
+     '        status = sa.CLOSED if code in ("F", "O") else sa.UNKNOWN', None),
 
     ("M9 the collector decides admissibility itself instead of routing the contract's verdict",
-     "        if verdict.admitted:",
-     "        if True:"),
+     "        elif verdict.admitted:",
+     "        elif True:", None),
 
     ("M10 an absent team id falls back to the team name, so a name becomes an identity",
      "    return team.get(\"id\"), team.get(\"name\")",
-     "    return team.get(\"id\") or team.get(\"name\"), team.get(\"name\")"),
+     "    return team.get(\"id\") or team.get(\"name\"), team.get(\"name\")", None),
 
     ("M11 the canonical lane reports UP with no fetcher injected, so a down feed reads as an "
      "empty slate",
      "    canonical_up = get is not None",
-     "    canonical_up = True"),
+     "    canonical_up = True", None),
 
     ("M12 a game the collector cannot identify is silently dropped instead of refused",
      "        records.append(record)",
-     "        if record.get(\"event_id\"): records.append(record)"),
+     "        if record.get(\"event_id\"): records.append(record)", None),
 
     ("M13 an absent status field is defaulted to UNKNOWN, hiding owner rule 3 behind rule 8",
      "        status = None",
-     "        status = sa.UNKNOWN"),
+     "        status = sa.UNKNOWN", None),
+
+    # ---- CLUSTER K. The store, and the three answers a misbehaving one must get ----
+    ("M14 the store is DELETED: verified_snapshot no longer imports, which the first version of "
+     "this selftest printed and passed",
+     "    import verified_snapshot as vs                 # noqa: E402",
+     '    raise ImportError("MUTANT: harness/verified_snapshot.py was deleted")', None),
+
+    ("M15 an exception raised INSIDE the store is downgraded to a skip, the exact conflation "
+     "cluster K names",
+     '            f.append("SNAPSHOT[%s]: the store refused what this collector '
+     'produced (%s: %s)"',
+     '            skipped.append("SNAPSHOT[%s]: the store refused what this collector produced '
+     '(%s: %s)"', None),
+
+    ("M16 signature drift stops being decided BEFORE the call, so anything the store raises can "
+     "pass for drift",
+     "            inspect.signature(store.write_snapshot).bind(*args, **kwargs)",
+     "            pass", None),
+
+    ("M17 the quarantine-leak check stops running — the assertion that used to sit inside the "
+     "tolerated arm",
+     "        for refused in (sa.EID_BOSNYY, sa.EID_COLATL):",
+     "        for refused in ():", None),
+
+    # ---- CLUSTER P. The observation instant, and the key two observations share ----
+    ("M18 source_fetched_at_utc goes back to being a copy of the judging clock while still "
+     "claiming the fetcher reported it",
+     "        return reported_at, FETCHED_AT_FROM_FETCHER, None",
+     "        return _instant(now_utc), FETCHED_AT_FROM_FETCHER, None", None),
+
+    ("M19 the cross-collection key takes the fetch instant back in, which is what made the "
+     "content-hash conflict structurally unreachable",
+     "    return tuple(record.get(k) for k in OBSERVATION_KEY_FIELDS)",
+     '    return tuple(record.get(k) for k in OBSERVATION_KEY_FIELDS) + '
+     '(record.get("source_fetched_at_utc"),)', None),
+
+    # ---- CLUSTER Q. Hash what you keep ----
+    ("M20 the strict decode becomes the lossy one, so the retained text stops being the response",
+     '            text = raw.decode("utf-8")',
+     '            text = raw.decode("utf-8", "replace")', "RawResponseIntegrityError"),
+
+    ("M21 the detected integrity break stops refusing and the slate is parsed out of bytes that "
+     "were not preserved",
+     "    if integrity is not None:",
+     "    if False:", None),
+
+    ("M22 a result carrying admitted records under a hash covering other bytes is returned "
+     "instead of refused",
+     "                if self.admitted:",
+     "                if False:", None),
+
+    # ---- CLUSTER R. The pre-start invariant is not delegated ----
+    ("M23 the collector delegates the pre-start invariant to admit() again, so a permissive "
+     "callee is enough to publish the 8/30 finals",
+     "        if verdict.admitted and not schedule_supplied:",
+     "        if False:", None),
 ]
 
 
+def _mutant_parts(mutant):
+    """(name, pattern, replacement, expected exception type|None). Three-tuples are still read."""
+    if len(mutant) == 3:
+        return mutant[0], mutant[1], mutant[2], None
+    return mutant
+
+
+def _named_failures(output):
+    """The failures a run NAMED. A kill is a fixture speaking, not a stack trace."""
+    return [ln.strip()[len("FAIL:"):].strip()
+            for ln in output.splitlines() if ln.strip().startswith("FAIL:")]
+
+
+def _run_mutant(src, old, new):
+    """(outcome, payload, printed output) for one mutated source. Nothing here decides a kill."""
+    import io as _io
+    import contextlib as _cl
+    ns = {"__file__": __file__, "__name__": "mutant"}
+    buf = _io.StringIO()
+    try:
+        exec(compile(src.replace(old, new, 1), "<mutant>", "exec"), ns)
+        fn = ns.get("selftest")
+        if not callable(fn):
+            return "NO_SELFTEST", None, buf.getvalue()
+        with _cl.redirect_stdout(buf):
+            ok = fn()
+    except BaseException as e:                                     # noqa: BLE001 — the type IS the
+        return "EXCEPTION", type(e).__name__, buf.getvalue()       # evidence; see cluster O
+    return "RETURNED", ok, buf.getvalue()
+
+
 def mutation_suite():
+    """Every mutant is a claim that a fixture watches a line. This is how that claim is checked.
+
+    CLUSTER O, 2026-08-30 review. This suite counted ANY exception as a kill — including a mutant
+    that died at import before a single fixture ran, and an AttributeError from a mutant that never
+    reached an assertion. A crash is not evidence that a fixture watches a line; it is evidence
+    that the file stopped working, which is a different sentence. A mutant is KILLED only when the
+    selftest NAMES a failure, or raises the exception type that mutant declares as its death.
+    Anything else is ERRORED: reported apart from the kills, never counted as one, and it fails
+    this gate exactly as a survivor does.
+    """
     src = open(__file__).read()
     # BASELINE FIRST. A failing selftest makes every mutant look killed, so a broken fixture
     # reports a perfect score. (module_manifest printed 11/11 that way on 2026-08-25.)
-    import io as _io, contextlib as _cl
+    import io as _io
+    import contextlib as _cl
     _b = _io.StringIO()
     with _cl.redirect_stdout(_b):
         _base = selftest()
@@ -1796,29 +2505,52 @@ def mutation_suite():
               "meaningless until it does")
         print(_b.getvalue().strip())
         return False
+    if _named_failures(_b.getvalue()):
+        print("  BASELINE_FAILING  the unmutated selftest returned True while naming failures")
+        return False
     # a mutant whose pattern occurs only inside the MUTANTS literal edits its OWN definition,
     # applies cleanly, changes no behaviour and reports SURVIVED.
     body = src[:src.index("MUTANTS = [")]
-    killed = 0
-    for name, old, new in MUTANTS:
+    killed, errored, survived = [], [], []
+    for mutant in MUTANTS:
+        name, old, new, expect = _mutant_parts(mutant)
         if old not in src:
-            print("  UNAPPLIED ", name + ": pattern not found")
+            errored.append((name, "UNAPPLIED: pattern not found, so this mutant proves nothing"))
             continue
         if old not in body:
-            print("  SELF_TARGETED ", name + ": pattern occurs only inside the MUTANTS list")
+            errored.append((name, "SELF_TARGETED: the pattern occurs only inside the MUTANTS "
+                                  "list, so the mutant edits its own definition"))
             continue
-        ns = {"__file__": __file__, "__name__": "mutant"}
-        try:
-            exec(compile(src.replace(old, new, 1), "<mutant>", "exec"), ns)
-            with _cl.redirect_stdout(_io.StringIO()):
-                ok = ns["selftest"]()
-        except Exception:
-            ok = False
-        print(("  KILLED    " if not ok else "  SURVIVED  ") + name)
-        killed += not ok
-    print(f"score_collector mutation suite: {killed}/{len(MUTANTS)} killed"
-          + ("" if killed == len(MUTANTS) else "  — SURVIVORS MEAN DECORATIVE FIXTURES"))
-    return killed == len(MUTANTS)
+        outcome, payload, out = _run_mutant(src, old, new)
+        fails = _named_failures(out)
+        if outcome == "NO_SELFTEST":
+            errored.append((name, "the mutated module defines no selftest()"))
+        elif outcome == "EXCEPTION":
+            if expect and payload == expect:
+                killed.append((name, "raised %s, the death this mutant declares" % payload))
+            elif fails:
+                killed.append((name, 'named "%s" and then raised %s' % (fails[0][:100], payload)))
+            else:
+                errored.append((name, "raised %s before any fixture named a failure%s. An "
+                                      "exception is not a kill"
+                                % (payload, "" if not expect
+                                   else "; the declared death is %s" % expect)))
+        elif payload is True:
+            survived.append((name, "the selftest passed with the line rewritten"))
+        elif fails:
+            killed.append((name, '%d named failure(s), first: "%s"'
+                          % (len(fails), fails[0][:110])))
+        else:
+            errored.append((name, "the selftest returned False without naming a failure, so "
+                                  "nothing states what was caught"))
+    for label, rows in (("KILLED   ", killed), ("ERRORED  ", errored), ("SURVIVED ", survived)):
+        for nm, why in rows:
+            print("  %s %s :: %s" % (label, nm, why))
+    print("score_collector mutation suite: %d killed, %d errored, %d survived (of %d)"
+          % (len(killed), len(errored), len(survived), len(MUTANTS))
+          + ("" if len(killed) == len(MUTANTS)
+             else "  — SURVIVORS MEAN DECORATIVE FIXTURES; ERRORS MEAN THE KILL WAS NEVER PROVEN"))
+    return len(killed) == len(MUTANTS) and not errored and not survived
 
 
 def gate():

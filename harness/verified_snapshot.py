@@ -663,7 +663,8 @@ _ADMISSIBLE_IMPLIES = {
 }
 
 #: Fields admit() RECORDS in the verdict's own detail about the record it judged. A verdict lifted
-#: onto some other record disagrees with it here. Each pair is (detail key, how to read the record).
+#: onto some other record disagrees with it here. Each pair is (detail key, how to read it off
+#: the record).
 _VERDICT_DETAIL_BINDINGS = (
     ("event_id", lambda r: r.get("event_id")),
     ("status", lambda r: r.get("status")),
@@ -1137,7 +1138,7 @@ def _read_integrity(manifest, root):
                           "detail": "a stored record was edited after the fact"})
         try:
             entries.extend((json.loads(body.decode("utf-8")) or {}).get("entries") or [])
-        except Exception as e:                                  # noqa: BLE001 — reported, not hidden
+        except Exception as e:                          # noqa: BLE001 — reported, never hidden
             drift.append({"code": DRIFT_ENTRY_FILE_BYTES, "file": name, "detail": str(e)})
     descriptors = [{k: d.get(k) for k in ("payload_id", "sha256", "n_bytes", "fetched_at_utc",
                                           "source", "url")}

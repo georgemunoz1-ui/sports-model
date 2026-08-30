@@ -286,7 +286,15 @@ for _m in ("result_provenance","result_content_checks","parse_box_dump",
            "market_capture","market_sportsgameodds","market_theoddsapi","market_history",
            "market_moneyline","backtest_causal","calibration","test_market_layer",
            # Addendum 6 P0 (merge-blocking): canonical event identity, quality fields, dq gate
-           "market_quality"):
+           "market_quality",
+           # SCORE-ADMISSION ISOLATION LAYER, 2026-08-30. Wired the day the fix pass landed.
+           # Three independent reviewers named "none of these is executed by healthcheck" as HIGH
+           # in the first review AND again in the re-attack, because it caps the exposure of every
+           # other finding: a guard nothing runs is a guard that has already rotted. That is the
+           # wnba_refresh_espn shape, whose own comment once claimed it "is now wired into
+           # healthcheck so it cannot rot silently again" while nothing invoked it.
+           "score_admission","verified_snapshot","score_collector","board_invariants",
+           "test_score_admission","acquisition_orchestrator","export_agent_context"):
     _r=subprocess.run([sys.executable,f"harness/{_m}.py","--selftest"],capture_output=True,text=True)
     _out=(_r.stdout+_r.stderr).strip().splitlines()
     check(f"{_m} selftest ({_out[-1][:72] if _out else 'no output'})", _r.returncode==0)
@@ -296,6 +304,23 @@ for _m in ("result_provenance","result_content_checks","parse_box_dump",
     _banner=[l for l in _out if "selftest:" in l]
     check(f"{_m} selftest names its own module",
           bool(_banner) and _m in _banner[-1], warn=False)
+# 5a2d. MUTATION SUITES. The loop above runs --selftest, which does NOT run the mutation suite.
+# For the isolation layer the mutants are the load-bearing half: a selftest proves the checks pass
+# on good input, a mutation suite proves they FAIL on bad input. The 8/30 review found suites that
+# counted an import crash as a kill, so the tally is parsed rather than trusted -- a run reporting
+# any survivor, or zero mutants, fails here.
+for _m in ("score_admission","verified_snapshot","score_collector","board_invariants",
+           "acquisition_orchestrator"):
+    _r=subprocess.run([sys.executable,f"harness/{_m}.py","--mutants"],capture_output=True,text=True)
+    _out=(_r.stdout+_r.stderr).strip().splitlines()
+    _tail=_out[-1] if _out else "no output"
+    # Parse the tally rather than trust it. First cut used endswith("0"), which read "10 survived"
+    # as zero -- a check that cannot fail, which is the exact thing this block exists to catch.
+    _n=lambda w: (lambda m: int(m.group(1)) if m else None)(re.search(rf"(\d+)\s+{w}", _tail))
+    _killed, _surv, _err = _n("killed"), _n("survived"), _n("errored")
+    check(f"{_m} mutation suite ({_tail[:64]})",
+          _r.returncode==0 and _killed not in (None, 0) and _surv == 0 and _err == 0)
+
 # 5a2e. WORKFLOW SHELL SYNTAX. The first timestamp-anchor run died in under a second on an
 # indented quoted heredoc, whose terminator must sit at column 0. A `run:` block is shell that
 # nothing checked before it reached GitHub. `bash -n` parses without executing, so this costs

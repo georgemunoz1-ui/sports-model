@@ -22,9 +22,38 @@ the OPPOSITE SIGN to the margin implied by its own moneyline row (-3.65 for ATL)
 
 The modules that answer all of that are score_admission.py (the contract), score_collector.py (the
 canonical lane), verified_snapshot.py (the immutable store) and board_invariants.py (the
-pre-publication gate). This file is the regression suite for the TEN failures the owner named. It
-proves the guards fire on the real inputs, and — this is the part the repo keeps having to relearn
-— it proves the fixtures would NOTICE if the guards were removed.
+pre-publication gate). This file is the regression suite for the TEN failures the owner named, plus
+the ELEVEN defect clusters the adversarial review found afterwards. It proves the guards fire on
+the real inputs, and — this is the part the repo keeps having to relearn — it proves the fixtures
+would NOTICE if the guards were removed.
+
+WHAT THE 2026-08-30 ADVERSARIAL REVIEW FOUND, and what it found in THIS FILE.
+data/audit/2026-08-30_isolation_layer_review.json: 24 agents, three lenses (adversary, theatre,
+contract), 35 HIGH findings over 15 defect clusters, verdict "the modules PASS their own gates and
+FAIL adversarial review. Both are true at once, and that gap is the reason the review phase
+exists." Three of those findings were about this suite rather than about its subjects:
+
+  * FIXTURE 8 ASSERTED THE WRONG THING. Its own stated requirement is "the edge SUPPRESSED — not
+    recomputed, not discounted, ABSENT", and absence was asserted nowhere. board_invariants.
+    enforce() published the laundered 14.3pp edge, the 6.9 usable_edge and the assumed 50.0 no-vig
+    verbatim in the enforced board, and this suite passed anyway. A fixture that states a
+    requirement in prose and checks three quarters of it is worse than one that states less: the
+    docstring is what a later reader trusts. It is asserted now, on the row and board-wide.
+
+  * COVERAGE STOPPED AT THE OWNER'S TEN. Nine of the review's clusters had no fixture at all, so
+    a sibling fix could be reverted with the suite still green. Section 2b adds one per cluster,
+    each with its own GUARDS entry, so none of them can quietly become decoration either.
+
+  * CLUSTER O — THE TALLY OVERSTATED WHAT WAS PROVEN. Across this layer the mutation suites
+    counted ANY exception as a KILL, including a mutant that died at import without running a
+    single fixture; score_admission's first run reported 12/12 KILLED on exactly that. A mutant is
+    KILLED here only when a NAMED assertion fails. An unexpected exception type, an ImportError or
+    an AttributeError is an ERROR — reported separately, never counted as proof — and the tally
+    reads "N killed, M errored, K survived" rather than one flattering number.
+
+These fixtures import from modules that were being repaired in the same run as this file. That is
+deliberate and it is stated here so nobody "fixes" it later: if a sibling repair has not landed,
+the fixture FAILS and NAMES the module and the expectation. It never skips and it never passes.
 
 WHAT MAKES A FIXTURE HERE LEGITIMATE. Three rules, each written after a specific defect:
 
@@ -35,9 +64,11 @@ WHAT MAKES A FIXTURE HERE LEGITIMATE. Three rules, each written after a specific
      which is exactly the bug."
 
   2. Every fixture has a GUARD in the GUARDS table below, and the meta-test removes that guard
-     from the subject's source and requires THAT fixture to fail. A fixture that still passes
-     with its guard removed is testing nothing. The precedent is on file: the 8/27 board carried
-     counters that could not fail, and wnba_refresh_espn returned True with no artifact present.
+     from the subject's source and requires THAT fixture to fail ON A NAMED ASSERTION. A fixture
+     that still passes with its guard removed is testing nothing; a fixture whose subject merely
+     CRASHES has not caught anything either, and the two are counted apart (cluster O). The
+     precedent is on file: the 8/27 board carried counters that could not fail, and
+     wnba_refresh_espn returned True with no artifact present.
 
   3. A missing dependency is a FAILURE, never a skip. harness/board_invariants.py,
      harness/score_collector.py and harness/verified_snapshot.py were written in parallel with
@@ -169,6 +200,79 @@ def _entry(event_id, away, home, start, league="MLB", **extra):
 
 def _codes(verdict):
     return set(verdict.reason_codes)
+
+
+# --- Canonical slates the fixtures bind against ----------------------------------------------
+# CLUSTER A, 2026-08-30 adversarial review. admit(canonical_schedule=None) used to check a record
+# ONLY AGAINST ITSELF, so owner rules 1, 2 and 6 were opt-in and a fabricated final reached
+# ADMIT_FINAL / settleable / result_ledger by an OMITTED ARGUMENT. Absence of a schedule is now a
+# ceiling, which means every fixture that expects an admission must SUPPLY a slate. These three
+# builders exist so that supplying one is a named act rather than a dict pasted into each fixture.
+
+def _dh_schedule():
+    """The doubleheader slate: two event ids, one matchup, one date. Names cannot choose here."""
+    return sa.index_schedule([
+        _entry(sa.EID_DH_G1, "SYNTH_KC", "SYNTH_TOR", "2026-08-30T17:07:00Z", game_number=1),
+        _entry(sa.EID_DH_G2, "SYNTH_KC", "SYNTH_TOR", "2026-08-30T20:07:00Z", game_number=2),
+    ])
+
+
+def _ppd_schedule():
+    """The postponed slate: the old id, its successor, and the link between them AS DATA."""
+    return sa.index_schedule([
+        _entry(sa.EID_PPD_OLD, "SYNTH_PIT", "SYNTH_CLE", "2026-08-30T17:10:00Z",
+               status=sa.POSTPONED, rescheduled_to_event_id=sa.EID_PPD_NEW),
+    ])
+
+
+# --- The store, for the four fixtures that assert on what a getter SERVES ---------------------
+
+def _read_text(path):
+    with open(path, encoding="utf-8") as fh:
+        return fh.read()
+
+
+def _write_text(path, text):
+    with open(path, "w", encoding="utf-8") as fh:
+        fh.write(text)
+
+
+def _raw_for(tag):
+    """A distinct raw payload per OBSERVATION. Two fetches of a live game return different bytes,
+    and reusing one payload across two observations would trip content_hash_conflict — the
+    right refusal for the wrong scenario, which reads in an audit as though the defect under
+    test had been caught."""
+    return json.dumps({"dates": [{"date": "2026-08-30", "observation": tag}]}, sort_keys=True)
+
+
+def _observation(status, away_score, home_score, fetched, tag, event_id=None, away="SYNTH_MIA",
+                 home="SYNTH_WSH", start=None, source="mlb_statsapi"):
+    """One record as one observation of one event, hashed to that observation's own payload."""
+    return _rec(event_id or sa.EID_MIAWSH, away, home, start or START_1215ET, status,
+                away_score, home_score, source=source, fetched=fetched,
+                raw_response_sha256=hashlib.sha256(_raw_for(tag).encode("utf-8")).hexdigest())
+
+
+def _store(vs, root, record, tag, written_at, schedule=None):
+    """Admit `record`, then write it as its own snapshot. Returns (snapshot_id, verdict).
+
+    Each observation is a SEPARATE snapshot on purpose: that is the shape the incident took —
+    a second write landing later than the first, carrying an older observation.
+    """
+    schedule = sa.incident_schedule_0830() if schedule is None else schedule
+    verdict = sa.admit(record, now_utc=written_at, canonical_schedule=schedule,
+                       lane=sa.LANE_CANONICAL)
+    assert verdict.admitted, \
+        "the store fixture's own record did not admit (%s: %r), so nothing below is a test of " \
+        "the read path" % (verdict.disposition, verdict.reason_codes)
+    snapshot_id = vs.write_snapshot(
+        [vs.admission_envelope(record, verdict)], league="MLB", date_et="2026-08-30",
+        source=sa.PROVIDER_MLB_STATSAPI,
+        raw_payloads=[{"payload_id": "statsapi_%s.json" % tag, "raw_text": _raw_for(tag),
+                       "fetched_at_utc": record["source_fetched_at_utc"],
+                       "source": sa.PROVIDER_MLB_STATSAPI}],
+        now_utc=written_at, out_root=root)
+    return snapshot_id, verdict
 
 
 def _load_min_atl_game():
@@ -448,7 +552,10 @@ def test_doubleheader_is_ambiguous_by_team_names():
     sc = require_module("score_collector")
 
     payload = sc.doubleheader_payload()
-    result = sc.collect_mlb("2026-08-30", now_utc=EVENING,
+    # The slate is supplied INDEPENDENTLY of the payload (cluster A). Deriving it from the same
+    # response the records came from would be the record agreeing with itself, which is the exact
+    # thing the schedule ceiling exists to refuse.
+    result = sc.collect_mlb("2026-08-30", now_utc=EVENING, canonical_schedule=_dh_schedule(),
                             get=sc._stub_get(json.dumps(payload)))
     assert not result.lane_down, "the doubleheader fixture could not reach its stub fetcher"
     assert result.counters["RECORDS_NORMALIZED"] == 2, \
@@ -522,8 +629,11 @@ def test_postponed_game_with_an_old_event_id():
     assert not v.admitted and sa.sink_for(v) == sa.SINK_QUARANTINE
 
     # The successor id, same teams, same clock, admits normally — the rebind is a real repair and
-    # not a dead end.
-    rebound = _rec(sa.EID_PPD_NEW, "SYNTH_PIT", "SYNTH_CLE", NEXT_DAY, sa.CLOSED, 3, 1)
+    # not a dead end. The fetch instant is AFTER the makeup's first pitch: cluster M made the
+    # observation clock load-bearing, and a record observed before a game starts is not a result
+    # however late it is judged, so the default NOW_1330ET would (correctly) refuse this one.
+    rebound = _rec(sa.EID_PPD_NEW, "SYNTH_PIT", "SYNTH_CLE", NEXT_DAY, sa.CLOSED, 3, 1,
+                   fetched=after_makeup)
     v2 = sa.admit(rebound, now_utc=after_makeup, canonical_schedule=schedule,
                   lane=sa.LANE_CANONICAL)
     assert v2.disposition == sa.ADMIT_FINAL and v2.settleable, \
@@ -532,9 +642,17 @@ def test_postponed_game_with_an_old_event_id():
     # A POSTPONED status is non-final on its own terms (owner rule 8), and a score riding on one
     # is named rather than ignored. The record keeps its ORIGINAL slot, which is what a postponed
     # game's schedule row carries until the makeup is published.
+    # The slate BEFORE a makeup is published: postponed, no successor id yet. That is the state
+    # in which a 0-0 score riding on a postponed row has to be refused on its own terms, with no
+    # rebind available to refuse it for us.
+    not_yet_rescheduled = sa.index_schedule([
+        _entry(sa.EID_PPD_OLD, "SYNTH_PIT", "SYNTH_CLE", "2026-08-30T17:10:00Z",
+               status=sa.POSTPONED),
+    ])
     ppd = _rec(sa.EID_PPD_OLD, "SYNTH_PIT", "SYNTH_CLE", "2026-08-30T17:10:00Z", sa.POSTPONED,
-               0, 0)
-    v3 = sa.admit(ppd, now_utc=EVENING, canonical_schedule=None, lane=sa.LANE_CANONICAL)
+               0, 0, fetched=EVENING)
+    v3 = sa.admit(ppd, now_utc=EVENING, canonical_schedule=not_yet_rescheduled,
+                  lane=sa.LANE_CANONICAL)
     assert v3.disposition == sa.UNVERIFIED, "a postponed game gave %s" % v3.disposition
     assert {sa.REASON_GAME_POSTPONED, sa.REASON_STATUS_NOT_TERMINAL,
             sa.REASON_SCORE_WITHOUT_TERMINAL_STATUS} <= _codes(v3), \
@@ -544,7 +662,7 @@ def test_postponed_game_with_an_old_event_id():
     # The canonical lane drops the 0-0 the payload carries rather than normalizing it into a
     # record: a postponed game has no score, and 0-0 is the most dangerous shape of a wrong one.
     sc = require_module("score_collector")
-    result = sc.collect_mlb("2026-08-30", now_utc=EVENING,
+    result = sc.collect_mlb("2026-08-30", now_utc=EVENING, canonical_schedule=_ppd_schedule(),
                             get=sc._stub_get(json.dumps(sc.postponed_payload())))
     assert result.counters["ADMITTED"] == 0, \
         "a postponed slate admitted %d records" % result.counters["ADMITTED"]
@@ -566,9 +684,10 @@ def test_status_complete_but_not_closed():
     terminal_verified stays False while the status is already terminal — that gap is the whole
     reason terminal_verified exists as a separate field.
     """
+    schedule = sa.incident_schedule_0830()
     complete = _rec(sa.EID_MIAWSH, "SYNTH_MIA", "SYNTH_WSH", START_1215ET, sa.COMPLETE, 2, 9,
                     fetched=EVENING)
-    v = sa.admit(complete, now_utc=EVENING, canonical_schedule=None, lane=sa.LANE_CANONICAL)
+    v = sa.admit(complete, now_utc=EVENING, canonical_schedule=schedule, lane=sa.LANE_CANONICAL)
     assert v.disposition == sa.ADMIT_FINAL, "a complete game gave %s" % v.disposition
     assert v.admissible_as == sa.ADMISSIBLE_FINAL_UNVALIDATED, \
         "'complete' admitted as %r" % v.admissible_as
@@ -583,7 +702,7 @@ def test_status_complete_but_not_closed():
 
     closed = _rec(sa.EID_MIAWSH, "SYNTH_MIA", "SYNTH_WSH", START_1215ET, sa.CLOSED, 2, 9,
                   fetched=EVENING)
-    v2 = sa.admit(closed, now_utc=EVENING, canonical_schedule=None, lane=sa.LANE_CANONICAL)
+    v2 = sa.admit(closed, now_utc=EVENING, canonical_schedule=schedule, lane=sa.LANE_CANONICAL)
     assert v2.disposition == sa.ADMIT_FINAL and v2.admissible_as == sa.ADMISSIBLE_FINAL
     assert v2.settleable and v2.terminal_verified, \
         "a validated final is not settleable: %r" % (v2.reason_codes,)
@@ -614,7 +733,7 @@ def test_status_complete_but_not_closed():
 
     # End to end through the canonical lane: statusCode "O" arrives as COMPLETE, not settled.
     sc = require_module("score_collector")
-    result = sc.collect_mlb("2026-08-30", now_utc=EVENING,
+    result = sc.collect_mlb("2026-08-30", now_utc=EVENING, canonical_schedule=schedule,
                             get=sc._stub_get(json.dumps(sc.complete_not_closed_payload())))
     assert result.counters["ADMITTED"] == 1, "the 'O' slate admitted %r" % (result.counters,)
     entry = result.admitted[0]
@@ -645,7 +764,8 @@ def test_mutable_archive_changes_under_the_same_filename():
     record = _rec(sa.EID_MIAWSH, "SYNTH_MIA", "SYNTH_WSH", START_1215ET, sa.CLOSED, 2, 9,
                   fetched=EVENING)
     record["raw_response_sha256"] = hashlib.sha256(raw_text.encode("utf-8")).hexdigest()
-    verdict = sa.admit(record, now_utc=EVENING, canonical_schedule=None, lane=sa.LANE_CANONICAL)
+    verdict = sa.admit(record, now_utc=EVENING, canonical_schedule=sa.incident_schedule_0830(),
+                       lane=sa.LANE_CANONICAL)
     assert verdict.settleable, "the fixture's own record did not admit: %r" % (verdict.reason_codes,)
 
     payloads = [{"payload_id": "mlb_statsapi_schedule.json", "raw_text": raw_text,
@@ -817,6 +937,95 @@ def test_missing_market_price_with_a_calculated_edge():
                and c["field"] == "decision"]
     assert changed and changed[0]["from"] == "LEAN" and changed[0]["to"] == sa.DECISION_PASS, \
         "the enforced copy did not turn the LEAN into a PASS: %r" % (changed,)
+
+    # ---- THE STATED REQUIREMENT, ASSERTED. "the edge SUPPRESSED — not recomputed, not -------
+    # discounted, ABSENT." Until the 2026-08-30 adversarial review this fixture asserted every
+    # part of that sentence except the last word, and the suite passed while enforce() published
+    # the laundered 14.3, the 6.9 and the assumed 50.0 verbatim in the enforced board. Two lenses
+    # found it (cluster G). Turning a LEAN into a PASS is not suppression if the number a future
+    # reader would pick up survives the enforcement untouched.
+    enforced_row = None
+    for g in enforced["board"]["games"]:
+        if g.get("event_id") != MIN_ATL_EVENT_ID:
+            continue
+        for r in g["markets"]:
+            if r.get("market") == "SPREAD_RL":
+                enforced_row = r
+    assert enforced_row is not None, \
+        "the enforced board no longer carries a MIN@ATL SPREAD_RL row to check"
+
+    probs = enforced_row["probabilities"]
+    for field, was in (("edge_pp", 14.3), ("usable_edge_pp", 6.9),
+                       ("market_no_vig_cover_pct", 50.0)):
+        assert field in probs, \
+            "the enforced row DROPPED probabilities.%s. The key must stay and the value must go: " \
+            "three sibling modules read these keys positively, and deleting one turns a refusal " \
+            "into a KeyError somewhere else — a different accident, not a fix." % field
+        assert probs[field] is None, \
+            "PROHIBITED FIGURE PUBLISHED: the enforced MIN@ATL SPREAD_RL row still carries " \
+            "probabilities.%s = %r (was %r). entry.price_american is null, so the owner invariant " \
+            "prohibits the CALCULATION, not merely the LEAN; a suppression that is computed and " \
+            "then not applied is the compute-then-discard shape this repo has now shipped six " \
+            "times." % (field, probs[field], was)
+
+    # ABSENT, checked by walking the row rather than by reading the three keys back — a fourth
+    # field carrying the same laundered number would satisfy the loop above and fail here. The
+    # redaction ledger is excluded on purpose: it records the refused values deliberately, and
+    # "we removed 14.3" is the opposite of publishing 14.3.
+    audit = enforced_row.pop("board_invariants", None)
+    published = []
+
+    def _leaves(node):
+        if isinstance(node, dict):
+            for v in node.values():
+                _leaves(v)
+        elif isinstance(node, list):
+            for v in node:
+                _leaves(v)
+        elif isinstance(node, float):
+            published.append(node)
+
+    _leaves(enforced_row)
+    enforced_row["board_invariants"] = audit
+    for laundered in (14.3, 6.9):
+        assert laundered not in published, \
+            "the enforced MIN@ATL SPREAD_RL row still publishes %r outside the redaction " \
+            "ledger: %r. The figure was moved, not refused." % (laundered, sorted(set(published)))
+
+    # The removal is RECORDED, verbatim, with the reason. A value that vanishes unrecorded is a
+    # different failure from one that is refused: the second can be audited, the first cannot.
+    assert isinstance(audit, dict), "the enforced row carries no board_invariants block"
+    redacted = {r["field"]: r for r in audit.get("redacted") or []}
+    assert set(redacted) == {"edge_pp", "usable_edge_pp", "market_no_vig_cover_pct"}, \
+        "the redaction ledger names %r, not the three prohibited figures" % (sorted(redacted),)
+    assert redacted["edge_pp"]["was"] == 14.3 and redacted["usable_edge_pp"]["was"] == 6.9, \
+        "the ledger does not preserve the values it refused: %r" % (redacted,)
+    assert redacted["edge_pp"]["reason_code"] == sa.BOARD_REASON_MISSING_MARKET_PRICE
+    assert redacted["market_no_vig_cover_pct"]["reason_code"] == sa.BOARD_REASON_ASSUMED_NO_VIG
+    assert enforced["counters"]["FIELDS_REDACTED"] == 3, \
+        "the enforced board reports %r fields redacted, not the three on this row" \
+        % enforced["counters"].get("FIELDS_REDACTED")
+    for field in ("edge_pp", "usable_edge_pp"):
+        logged = [c for c in enforced["changes"]
+                  if c["event_id"] == MIN_ATL_EVENT_ID and c["market"] == "SPREAD_RL"
+                  and c["field"] == "probabilities." + field]
+        assert logged and logged[0]["to"] is None, \
+            "the removal of %s is not in the change log: %r" % (field, logged)
+
+    # BOARD-WIDE, not one row. 39 rows on this board carry a null price; the invariant is a
+    # property of the enforced artifact, not of the row that happened to be famous.
+    leaks = []
+    for g in enforced["board"]["games"]:
+        for r in g.get("markets") or []:
+            if sa.BOARD_REASON_MISSING_MARKET_PRICE not in (r.get("reason_codes") or []):
+                continue
+            p = r.get("probabilities") or {}
+            for field in ("edge_pp", "usable_edge_pp"):
+                if p.get(field) is not None:
+                    leaks.append((g.get("event_id"), r.get("market"), field, p[field]))
+    assert not leaks, \
+        "the enforced board publishes an edge on %d row(s) whose price was never captured: %r" \
+        % (len(leaks), leaks)
 
 
 def test_ml_and_spread_rows_from_incompatible_margins():
@@ -1018,6 +1227,731 @@ def test_stale_injury_report_beyond_the_freshness_deadline():
 
 
 # =============================================================================================
+# 2b. THE ELEVEN REVIEW FIXTURES.  One per defect cluster the 2026-08-30 adversarial review
+#     found in this layer, written while the sibling fixes were landing.
+#
+#     data/audit/2026-08-30_isolation_layer_review.json, 35 HIGH findings over 15 clusters. The
+#     ten fixtures above proved the guards the OWNER named; twenty-four review agents then found
+#     that the modules "PASS their own gates and FAIL adversarial review", which is a sentence
+#     about tests, not only about code. Each fixture below pins one cluster so the fix cannot be
+#     un-made silently — and each has its own entry in GUARDS, so the fixture itself cannot
+#     become decoration.
+#
+#     THESE IMPORT FROM MODULES BEING FIXED IN THE SAME RUN. If a sibling fix has not landed the
+#     fixture FAILS and names the module and the expectation. It never skips and it never passes.
+# =============================================================================================
+
+def test_admission_without_a_canonical_schedule_is_never_final():
+    """CLUSTER A. `canonical_schedule=None` is the DEFAULT, and it used to be a shortcut.
+
+    Four of the review's lenses reached this independently and it was called "the most important
+    finding in the pass". Owner rules 1, 2 and 6 — bind by provider event id, require exact
+    teams/league/date, reject schedule conflicts — all lived inside `if idx is not None`, so a
+    caller who simply left the argument off got a record checked ONLY AGAINST ITSELF. The result
+    was ADMIT_FINAL, settleable=True, sink=result_ledger. No forged verdict, no fabricated
+    provider: an omitted argument was the whole exploit, and the owner's spec was OPT-IN.
+
+    Required: with no slate, NOTHING is final and nothing settles, whatever else is true about
+    the record. The refusal must NAME the missing schedule — "UNVERIFIED" alone would invite a
+    maintainer to supply a plausible-looking schedule rather than a real one.
+    """
+    fabricated = _rec(sa.EID_MIAWSH, "SYNTH_MIA", "SYNTH_WSH", START_1215ET, sa.CLOSED, 2, 9,
+                      fetched=EVENING)
+
+    for missing in (None, {}, []):
+        v = sa.admit(fabricated, now_utc=EVENING, canonical_schedule=missing,
+                     lane=sa.LANE_CANONICAL)
+        where = "canonical_schedule=%r" % (missing,)
+        assert v.disposition != sa.ADMIT_FINAL, \
+            "%s: a record checked only against ITSELF reached ADMIT_FINAL. score_admission." \
+            "admit() must cap an unbound record at UNVERIFIED (cluster A)." % where
+        assert not v.settleable, "%s: an unbound record is settleable" % where
+        assert sa.sink_for(v) != sa.SINK_RESULT_LEDGER, \
+            "%s: an unbound record was routed to the result ledger" % where
+
+    v = sa.admit(fabricated, now_utc=EVENING, canonical_schedule=None, lane=sa.LANE_CANONICAL)
+    assert v.disposition == sa.UNVERIFIED, \
+        "an unbound canonical final gave %s, not UNVERIFIED" % v.disposition
+    assert {sa.REASON_SCHEDULE_NOT_SUPPLIED, sa.REASON_SCHEDULE_CEILING_UNVERIFIED} <= _codes(v), \
+        "reason codes %r do not name the missing slate AND the admission that was taken back. " \
+        "Binding to nothing is not binding." % (v.reason_codes,)
+    assert v.admissible_as == sa.ADMISSIBLE_IDENTIFIED_UNCONFIRMED, \
+        "an unbound record was graded %r; without a slate it is identified, not confirmed" \
+        % v.admissible_as
+    assert v.detail.get("schedule_supplied") is False, \
+        "the verdict does not record that no slate was supplied: %r" % (v.detail,)
+    assert v.detail.get("ceiling_replaced") == sa.ADMIT_FINAL, \
+        "the verdict does not record WHAT the ceiling took back (%r), so an auditor cannot tell " \
+        "a record that never qualified from one that qualified and was refused for lack of a " \
+        "slate" % v.detail.get("ceiling_replaced")
+
+    # The ceiling is a CEILING, not a blanket refusal: the same record with the real slate in
+    # hand admits and settles. Otherwise the fix would be "refuse everything", which passes this
+    # fixture and ships nothing.
+    ok = sa.admit(fabricated, now_utc=EVENING, canonical_schedule=sa.incident_schedule_0830(),
+                  lane=sa.LANE_CANONICAL)
+    assert ok.disposition == sa.ADMIT_FINAL and ok.settleable, \
+        "with the canonical slate supplied the same record must admit: %s / %r" \
+        % (ok.disposition, ok.reason_codes)
+    assert sa.sink_for(ok) == sa.SINK_RESULT_LEDGER
+
+    # An EMPTY slate is not a missing one. "No games today" and "we never looked" are different
+    # facts and must not collapse into one code — that collapse is the 8/30 absence that invited
+    # a search backfill.
+    empty = sa.admit(fabricated, now_utc=EVENING, canonical_schedule=[], lane=sa.LANE_CANONICAL)
+    assert sa.REASON_EVENT_NOT_IN_SCHEDULE in _codes(empty), \
+        "an empty slate refused with %r; an empty slate is a slate, and this event is not on it" \
+        % (empty.reason_codes,)
+    assert sa.REASON_SCHEDULE_NOT_SUPPLIED not in _codes(empty), \
+        "an EMPTY slate was reported as an ABSENT one: %r" % (empty.reason_codes,)
+
+
+def test_search_source_relabelled_as_the_canonical_lane():
+    """CLUSTER B. The lane was the caller's CLAIM and nothing checked it against the source.
+
+    `lane=` is an unverified assertion by whoever calls admit(). Nothing cross-checked
+    record["source"] against it, and no approved-source allowlist was consulted even though the
+    PROVIDER_* constants were already defined. So the 8/30 search claim, relabelled CANONICAL by
+    one keyword argument, reached ADMIT_FINAL — the single-token version of the 8/27 defect.
+
+    Required: a declaration may LOWER trust and never raise it. The refusal must name
+    SOURCE_NOT_APPROVED_FOR_DECLARED_LANE, because "search cannot mint a final" alone does not
+    tell the reader that a caller mislabelled the lane.
+    """
+    schedule = sa.incident_schedule_0830()
+    # BOS@NYY rather than MIA@WSH: the slate has MIA@WSH IN_PROGRESS, and a demoted record would
+    # then be refused by the status-contradiction rule instead — the right answer for the wrong
+    # reason, which would leave this fixture proving nothing about the lane.
+    forged = _rec(sa.EID_BOSNYY, "SYNTH_BOS", "SYNTH_NYY", START_1335ET, sa.CLOSED, 0, 1,
+                  source="web_search", fetched=EVENING)
+
+    v = sa.admit(forged, now_utc=EVENING, canonical_schedule=schedule, lane=sa.LANE_CANONICAL)
+    assert v.disposition != sa.ADMIT_FINAL and not v.admitted and not v.settleable, \
+        "a web_search record declared CANONICAL reached %s. The lane is the caller's claim; the " \
+        "source is the evidence (cluster B)." % v.disposition
+    assert sa.REASON_SOURCE_NOT_APPROVED_FOR_LANE in _codes(v), \
+        "reason codes %r do not say the SOURCE is not approved for the DECLARED lane" \
+        % (v.reason_codes,)
+    assert sa.REASON_SEARCH_LANE_CANNOT_MINT_FINAL in _codes(v), \
+        "the demoted record was not held to the search ceiling: %r" % (v.reason_codes,)
+    assert v.detail.get("declared_lane") == sa.LANE_CANONICAL \
+        and v.detail.get("lane") == sa.LANE_SEARCH, \
+        "the verdict does not record the demotion (declared %r -> effective %r)" \
+        % (v.detail.get("declared_lane"), v.detail.get("lane"))
+    assert v.detail.get("source_lane_demoted") is True
+    assert sa.sink_for(v) == sa.SINK_QUARANTINE, \
+        "a demoted record was routed to %s" % sa.sink_for(v)
+
+    # The allowlist is DATA, and it is the contract's own set rather than a list retyped here.
+    assert sa.lane_for_source("web_search") == sa.LANE_SEARCH
+    assert sa.lane_for_source(None) == sa.LANE_SEARCH, \
+        "a record with no source earned the CANONICAL lane; an unrecognised name is an " \
+        "unapproved one"
+    assert sa.lane_for_source("mlb_statsapi") == sa.LANE_CANONICAL
+    assert sa.PROVIDER_MLB_STATSAPI in sa.CANONICAL_SOURCES
+    assert "web_search" not in sa.CANONICAL_SOURCES
+
+    # DEMOTION ONLY. A canonical feed handed in on the search lane stays on the search lane: the
+    # caller may know something about that fetch this module does not, and trust never rises.
+    assert sa.effective_lane(sa.LANE_CANONICAL, "web_search") == (sa.LANE_SEARCH, True)
+    assert sa.effective_lane(sa.LANE_SEARCH, "mlb_statsapi") == (sa.LANE_SEARCH, False), \
+        "a canonical source was UPGRADED off the lane its caller declared"
+
+    # And the check is not a constant: the same claim from an approved source, declared honestly,
+    # still admits. A rule that refuses every record proves nothing.
+    honest = _rec(sa.EID_BOSNYY, "SYNTH_BOS", "SYNTH_NYY", START_1335ET, sa.CLOSED, 0, 1,
+                  source=sa.PROVIDER_MLB_STATSAPI, fetched=EVENING)
+    ok = sa.admit(honest, now_utc=EVENING, canonical_schedule=schedule, lane=sa.LANE_CANONICAL)
+    assert ok.disposition == sa.ADMIT_FINAL and ok.settleable, \
+        "an approved canonical source was refused: %s / %r" % (ok.disposition, ok.reason_codes)
+    assert sa.REASON_SOURCE_NOT_APPROVED_FOR_LANE not in _codes(ok)
+
+
+def test_naive_timestamp_is_refused_not_read_as_utc():
+    """CLUSTER L. A wall clock with no offset was read as UTC, and 13:35 ET became 13:35Z.
+
+    feed_espn.parse_utc still does `p if p.tzinfo else p.replace(tzinfo=UTC)`, and the first
+    version of score_admission._utc() copied it. An ET first pitch written "2026-08-30T13:35:00"
+    then moves FOUR HOURS EARLIER, both halves of the split clock rule are satisfied by a game
+    that has not begun, and the record admits AND SETTLES before first pitch — with a canonical
+    schedule supplied. A missing offset is not a zero offset; it is an unanswered question.
+
+    Required: TIMESTAMP_HAS_NO_UTC_OFFSET, on either side of the comparison, and never an
+    assumption.
+    """
+    schedule = sa.incident_schedule_0830()
+
+    assert sa._naive_instant("2026-08-30T13:35:00") is True, \
+        "a bare wall clock is not being recognised as naive, so nothing below can refuse it"
+    assert sa._naive_instant("2026-08-30T13:35:00Z") is False
+    assert sa._naive_instant("2026-08-30T13:35:00-04:00") is False
+
+    # (a) the RECORD's own instants.
+    for field in ("scheduled_start_utc", "source_fetched_at_utc"):
+        naive = _rec(sa.EID_BOSNYY, "SYNTH_BOS", "SYNTH_NYY", START_1335ET, sa.CLOSED, 0, 1,
+                     fetched=EVENING)
+        naive[field] = "2026-08-30T13:35:00"          # the ET wall clock, offset dropped
+        v = sa.admit(naive, now_utc=EVENING, canonical_schedule=schedule, lane=sa.LANE_CANONICAL)
+        assert sa.REASON_NAIVE_TIMESTAMP in _codes(v), \
+            "a naive %s was accepted: %s / %r. Reading it as UTC moves an ET first pitch four " \
+            "hours early (cluster L)." % (field, v.disposition, v.reason_codes)
+        assert not v.admitted and not v.settleable, \
+            "a record with a naive %s admitted" % field
+
+    # (b) the JUDGING clock. The instant a decision is made is an input like any other.
+    v_now = sa.admit(_rec(sa.EID_BOSNYY, "SYNTH_BOS", "SYNTH_NYY", START_1335ET, sa.CLOSED, 0, 1,
+                          fetched=EVENING),
+                     now_utc="2026-08-30T13:30:00", canonical_schedule=schedule,
+                     lane=sa.LANE_CANONICAL)
+    assert sa.REASON_NAIVE_TIMESTAMP in _codes(v_now) and not v_now.admitted, \
+        "a naive now_utc was read as UTC: %s / %r" % (v_now.disposition, v_now.reason_codes)
+
+    # (c) THE SCHEDULE, which is the more dangerous half: the slate is the authority every record
+    # is measured against, so a naive entry moves every game of the night at once.
+    naive_slate = sa.index_schedule([
+        _entry(sa.EID_BOSNYY, "SYNTH_BOS", "SYNTH_NYY", "2026-08-30T13:35:00"),
+    ])
+    v_slate = sa.admit(_rec(sa.EID_BOSNYY, "SYNTH_BOS", "SYNTH_NYY", START_1335ET, sa.CLOSED,
+                            0, 1, fetched=EVENING),
+                       now_utc=EVENING, canonical_schedule=naive_slate, lane=sa.LANE_CANONICAL)
+    assert sa.REASON_NAIVE_TIMESTAMP in _codes(v_slate), \
+        "a naive SCHEDULE entry was read as UTC: %s / %r" \
+        % (v_slate.disposition, v_slate.reason_codes)
+    assert not v_slate.admitted
+
+    # Naive is NOT the same failure as unparseable, and the two carry different codes because
+    # they need different repairs: one is a missing offset, the other is not a timestamp.
+    garbage = _rec(sa.EID_BOSNYY, "SYNTH_BOS", "SYNTH_NYY", "not-a-timestamp", sa.CLOSED, 0, 1,
+                   fetched=EVENING)
+    v_bad = sa.admit(garbage, now_utc=EVENING, canonical_schedule=schedule,
+                     lane=sa.LANE_CANONICAL)
+    assert sa.REASON_UNPARSEABLE_TIMESTAMP in _codes(v_bad), \
+        "an unparseable start was reported as %r" % (v_bad.reason_codes,)
+    assert sa.REASON_NAIVE_TIMESTAMP not in _codes(v_bad), \
+        "gibberish was reported as a missing offset: %r" % (v_bad.reason_codes,)
+
+    # And offset-bearing instants still pass, including a non-Z offset — otherwise the rule would
+    # reject every ET-stamped feed rather than the naive ones.
+    et_stamped = _rec(sa.EID_BOSNYY, "SYNTH_BOS", "SYNTH_NYY", "2026-08-30T13:35:00-04:00",
+                      sa.CLOSED, 0, 1, fetched=EVENING)
+    v_et = sa.admit(et_stamped, now_utc=EVENING, canonical_schedule=schedule,
+                    lane=sa.LANE_CANONICAL)
+    assert sa.REASON_NAIVE_TIMESTAMP not in _codes(v_et), \
+        "a correctly offset ET timestamp was refused as naive: %r" % (v_et.reason_codes,)
+    assert v_et.disposition == sa.ADMIT_FINAL, \
+        "an offset-bearing ET instant did not admit: %s / %r" \
+        % (v_et.disposition, v_et.reason_codes)
+
+
+def test_record_observed_before_first_pitch_and_judged_hours_later():
+    """CLUSTER M. WAITING DEFEATED THE ONE RULE THE DOCSTRING CALLS UNCONDITIONAL.
+
+    The pre-start invariant was evaluated against `now_utc` — when the JUDGE looked — and never
+    against `source_fetched_at_utc` — when the SOURCE looked. So the exact 8/30 records this
+    module exists to refuse, "Yankees 1, Red Sox 0" fetched at 13:30 ET for a 13:35 ET first
+    pitch, became ADMIT_FINAL / settleable / result_ledger simply by being judged in the evening.
+    Nothing about the claim changed. Only the clock on the wall behind the reader.
+
+    Required: BOTH clocks. A source that had not yet seen first pitch did not see the end of the
+    game, and no later judging instant adds information to a fetch that already happened.
+    """
+    schedule = sa.incident_schedule_0830()
+    claims = [("BOS@NYY 'Yankees 1, Red Sox 0'", sa.EID_BOSNYY, "SYNTH_BOS", "SYNTH_NYY", 0, 1),
+              ("COL@ATL 'Braves 6, Rockies 4'", sa.EID_COLATL, "SYNTH_COL", "SYNTH_ATL", 4, 6)]
+
+    for label, eid, away, home, away_score, home_score in claims:
+        for lane, source in ((sa.LANE_CANONICAL, sa.PROVIDER_MLB_STATSAPI),
+                             (sa.LANE_SEARCH, "web_search")):
+            # OBSERVED at 13:30 ET, five minutes before first pitch. JUDGED at 22:00 ET, long
+            # after every duration window has elapsed.
+            record = _rec(eid, away, home, START_1335ET, sa.CLOSED, away_score, home_score,
+                          source=source, fetched=NOW_1330ET)
+            v = sa.admit(record, now_utc=EVENING, canonical_schedule=schedule, lane=lane)
+            where = "%s lane=%s judged at %s" % (label, lane, EVENING)
+            assert v.disposition == sa.REJECT_PRESTART_OR_UNBOUND, \
+                "%s: %s. The observation was made before first pitch; judging it later does not " \
+                "make it a result (cluster M)." % (where, v.disposition)
+            assert sa.REASON_PRESTART_OBSERVATION_IMPOSSIBLE in _codes(v), \
+                "%s: reason codes %r do not name the impossible OBSERVATION" \
+                % (where, v.reason_codes)
+            assert not v.admitted and not v.settleable
+            assert sa.sink_for(v) == sa.SINK_QUARANTINE
+            assert v.detail.get("minutes_before_start") == 5.0, \
+                "%s: the refusal does not say how far before first pitch the SOURCE looked: %r" \
+                % (where, v.detail.get("minutes_before_start"))
+
+    # The two clocks are DIFFERENT refusals and carry different codes, because they are different
+    # repairs: one says re-fetch, the other says wait.
+    judged_early = sa.admit(
+        _rec(sa.EID_BOSNYY, "SYNTH_BOS", "SYNTH_NYY", START_1335ET, sa.CLOSED, 0, 1,
+             fetched=NOW_1330ET),
+        now_utc=NOW_1330ET, canonical_schedule=schedule, lane=sa.LANE_CANONICAL)
+    assert sa.REASON_PRESTART_FINAL_IMPOSSIBLE in _codes(judged_early), \
+        "the judging-clock rule stopped firing: %r" % (judged_early.reason_codes,)
+
+    # A pre-start OBSERVATION with no claim on it is not a final and must not be refused as one:
+    # a scheduled row fetched an hour before the game is the ordinary pre-game slate.
+    pregame = _rec(sa.EID_BOSNYY, "SYNTH_BOS", "SYNTH_NYY", START_1335ET, sa.SCHEDULED,
+                   fetched=NOW_1330ET)
+    v_pre = sa.admit(pregame, now_utc=EVENING, canonical_schedule=schedule,
+                     lane=sa.LANE_CANONICAL)
+    assert sa.REASON_PRESTART_OBSERVATION_IMPOSSIBLE not in _codes(v_pre), \
+        "the observation rule fired on a pre-game row that claimed nothing: %r" \
+        % (v_pre.reason_codes,)
+
+    # And an honest late fetch of the same game still admits, so the rule is not a constant.
+    honest = _rec(sa.EID_BOSNYY, "SYNTH_BOS", "SYNTH_NYY", START_1335ET, sa.CLOSED, 0, 1,
+                  fetched=EVENING)
+    ok = sa.admit(honest, now_utc=EVENING, canonical_schedule=schedule, lane=sa.LANE_CANONICAL)
+    assert ok.disposition == sa.ADMIT_FINAL and ok.settleable, \
+        "a record OBSERVED after the game ended was refused: %s / %r" \
+        % (ok.disposition, ok.reason_codes)
+
+
+def test_carried_scheduled_date_loses_to_the_derived_et_date():
+    """CLUSTER N. A caller-supplied `scheduled_date` was PREFERRED over the zoneinfo derivation.
+
+    scheduled_date_of() read the carried string first and only derived when it was absent, and
+    verified_snapshot uses that function for its slate check. An 8/28 final carrying
+    scheduled_date "2026-08-30" was therefore filed and served as an 8/30 result — commit
+    0bf9399, exactly, and the same field name is a REQUIRED field in result_binding_gate, so the
+    two contracts were one typo apart from agreeing on a lie.
+
+    Required: the UTC instant is the FACT. A carried date is a CLAIM about that fact — checked,
+    reported as a conflict, and never preferred.
+    """
+    # THE INCIDENT, in one line. An 8/28 instant labelled 8/30 derives to 8/28.
+    misdated = {"scheduled_start_utc": "2026-08-28T23:10:00Z", "scheduled_date": "2026-08-30"}
+    assert sa.scheduled_date_of(misdated) == "2026-08-28", \
+        "scheduled_date_of preferred the CARRIED date %r over the derivation. That is commit " \
+        "0bf9399: an 8/28 final published as an 8/30 result (cluster N)." \
+        % misdated["scheduled_date"]
+
+    conflict, problem = sa.carried_scheduled_date_conflict(misdated)
+    assert conflict and problem["code"] == sa.REASON_SCHEDULED_DATE_OVERRIDE, \
+        "the disagreement was not reported as a conflict: %r" % (problem,)
+    assert (problem["carried"], problem["derived"]) == ("2026-08-30", "2026-08-28"), \
+        "the conflict does not state both dates: %r" % (problem,)
+
+    # The ET derivation is still the derivation: a 00:30Z tip is the ET EVENING of the day before,
+    # and slicing that UTC string is what corrupted a cohort twice.
+    assert sa.scheduled_date_of({"scheduled_start_utc": "2026-08-31T00:30:00Z"}) == "2026-08-30", \
+        "the ET date of a 00:30Z tip is being sliced off the UTC string"
+
+    # Through admit(), on BOTH sides of the comparison. A record and a slate entry that carry the
+    # SAME wrong string must not agree their way past the check.
+    schedule = sa.incident_schedule_0830()
+    record = _rec(sa.EID_MIAWSH, "SYNTH_MIA", "SYNTH_WSH", START_1215ET, sa.IN_PROGRESS, 2, 1,
+                  fetched=EVENING, scheduled_date="2026-08-28")
+    v = sa.admit(record, now_utc=EVENING, canonical_schedule=schedule, lane=sa.LANE_CANONICAL)
+    assert v.disposition == sa.REJECT_SCHEDULE_CONFLICT, \
+        "a record carrying a date that disagrees with its own instant gave %s" % v.disposition
+    assert sa.REASON_SCHEDULED_DATE_OVERRIDE in _codes(v), \
+        "reason codes %r do not name the carried-date disagreement" % (v.reason_codes,)
+    assert not v.admitted
+
+    lying_slate = sa.index_schedule([
+        _entry(sa.EID_MIAWSH, "SYNTH_MIA", "SYNTH_WSH", START_1215ET,
+               scheduled_date="2026-08-28"),
+    ])
+    v_slate = sa.admit(_rec(sa.EID_MIAWSH, "SYNTH_MIA", "SYNTH_WSH", START_1215ET, sa.CLOSED,
+                            2, 9, fetched=EVENING),
+                       now_utc=EVENING, canonical_schedule=lying_slate, lane=sa.LANE_CANONICAL)
+    assert sa.REASON_SCHEDULED_DATE_OVERRIDE in _codes(v_slate), \
+        "a SLATE entry carrying a wrong date was not refused: %s / %r" \
+        % (v_slate.disposition, v_slate.reason_codes)
+
+    # Silence on absence and on agreement: most records carry no scheduled_date, and one that
+    # agrees with the derivation is not a defect.
+    assert sa.carried_scheduled_date_conflict({"scheduled_start_utc": START_1215ET}) \
+        == (False, None)
+    agrees = {"scheduled_start_utc": START_1215ET, "scheduled_date": "2026-08-30"}
+    assert sa.carried_scheduled_date_conflict(agrees) == (False, None), \
+        "a carried date that AGREES with the derivation was reported as a conflict"
+
+    # The name is shared with the other side of the repo. A rename over there is a failure here.
+    assert "scheduled_date" not in rbg.REQUIRED_FIELDS or "result_date" in rbg.REQUIRED_FIELDS, \
+        "result_binding_gate's required-field set moved under the colliding name"
+
+
+def test_stale_in_progress_written_after_a_closed_final():
+    """CLUSTER C, first half. A FINAL DOES NOT CHANGE, however late a non-final is stored.
+
+    Five separate review lenses reached cluster C independently — the strongest signal in the
+    run. _resolve() ordered observations by written_at_utc, the STORE ACTION, while the docstring
+    beside it said observation; and nothing preferred a terminal record over a non-terminal one.
+    A stale IN_PROGRESS re-fetched and written after a validated CLOSED therefore SUPERSEDED the
+    final, and get_verified_score served a live snapshot for a settled game.
+
+    Required: the CLOSED 2-9 still wins on read, and the IN_PROGRESS is kept on disk rather than
+    discarded — both are honest observations and neither is deleted.
+    """
+    vs = require_module("verified_snapshot")
+    root = tempfile.mkdtemp(prefix="test_score_admission_clusterC_")
+    try:
+        _store(vs, root, _observation(sa.CLOSED, 2, 9, "2026-08-30T20:30:00Z", "closed"),
+               "closed", "2026-08-30T20:35:00Z")
+        # Observed LATER and written LATER, and still a regression: a canonical feed dropping a
+        # CLOSED game back to IN_PROGRESS is a provider bug, and the contract is explicit that
+        # elapsed time never converts one status into another.
+        _store(vs, root, _observation(sa.IN_PROGRESS, 2, 4, "2026-08-30T21:00:00Z", "live"),
+               "live", "2026-08-30T21:05:00Z")
+
+        served = vs.get_verified_score(sa.EID_MIAWSH, root=root)
+        assert served is not None, "the store serves nothing for an event it holds two records of"
+        assert served["status"] == sa.CLOSED, \
+            "a stale IN_PROGRESS written after a CLOSED final SUPERSEDED it: the store serves " \
+            "%r. A final does not change (cluster C)." % served["status"]
+        assert (served["away_score"], served["home_score"]) == (2, 9), \
+            "the store serves %r-%r, not the settled 2-9" \
+            % (served["away_score"], served["home_score"])
+        assert served["terminal_verified"] is True, \
+            "the served record is not the validated one: %r" % (served,)
+
+        # Both observations are STILL ON DISK. Superseding is a read-time judgement; deleting the
+        # loser would destroy the evidence that the provider regressed.
+        assert len(vs.list_snapshots(root)) == 2, \
+            "an observation was dropped from the store rather than superseded on read"
+
+        # The slate view reaches the same answer as the per-event view. Two getters disagreeing
+        # about one game is how a card and a ledger come apart.
+        slate = vs.get_verified_scores("2026-08-30", "MLB", root=root)
+        assert [r["status"] for r in slate] == [sa.CLOSED], \
+            "get_verified_scores served %r while get_verified_score served CLOSED" \
+            % [r["status"] for r in slate]
+    finally:
+        shutil.rmtree(root, ignore_errors=True)
+
+
+def test_observations_are_ordered_by_when_they_were_observed():
+    """CLUSTER C, second half. written_at_utc is the STORE ACTION; it is not the observation.
+
+    The other way the same defect shows: two live observations of one game, the LATER one written
+    FIRST because a backfill job caught up afterwards. Ordering by write time then serves the
+    18:45 snapshot as the current state of a game last seen at 19:30. The docstring already said
+    "a later OBSERVATION supersedes an earlier one" — the code sorted on the other field.
+    """
+    vs = require_module("verified_snapshot")
+    root = tempfile.mkdtemp(prefix="test_score_admission_clusterCb_")
+    try:
+        # OBSERVED 19:30, WRITTEN 20:00.
+        _store(vs, root, _observation(sa.IN_PROGRESS, 1, 4, "2026-08-30T19:30:00Z", "late"),
+               "late", "2026-08-30T20:00:00Z")
+        # OBSERVED 18:45 — EARLIER — but WRITTEN 21:00, an hour after the other one landed.
+        _store(vs, root, _observation(sa.IN_PROGRESS, 1, 2, "2026-08-30T18:45:00Z", "early"),
+               "early", "2026-08-30T21:00:00Z")
+
+        served = vs.get_verified_score(sa.EID_MIAWSH, root=root)
+        assert served["source_fetched_at_utc"] == "2026-08-30T19:30:00Z", \
+            "the store served the observation made at %r. The later WRITE carried the earlier " \
+            "OBSERVATION, and written_at_utc is when someone got round to storing it (cluster C)." \
+            % served["source_fetched_at_utc"]
+        assert (served["away_score"], served["home_score"]) == (1, 4), \
+            "the store served %r-%r, which is the 18:45 state of a game last seen at 19:30" \
+            % (served["away_score"], served["home_score"])
+    finally:
+        shutil.rmtree(root, ignore_errors=True)
+
+
+def test_records_json_edited_on_disk_is_refused_by_the_getters():
+    """CLUSTER D. verify_snapshot() had ZERO read-path callers.
+
+    Its only production call site was the WRITE path, so every content hash this store generates
+    was checked exactly once — at the moment it was generated, against the bytes it was generated
+    from. records.json edited in place afterwards was then served as truth by all three analysis
+    tools: the exact mutable-archive shape the module was written to defend against, and the
+    third occurrence in this repo of a guard that exists and is never called.
+
+    Required: the GETTERS refuse. Not verify_snapshot when someone remembers to run it — the
+    read path itself, on every call, because a sha recorded once is an observation at a moment.
+    """
+    vs = require_module("verified_snapshot")
+    root = tempfile.mkdtemp(prefix="test_score_admission_clusterD_")
+    try:
+        snapshot_id, _ = _store(
+            vs, root, _observation(sa.CLOSED, 2, 9, "2026-08-30T20:30:00Z", "closed"),
+            "closed", "2026-08-30T20:35:00Z")
+        clean = vs.get_verified_score(sa.EID_MIAWSH, root=root)
+        assert clean["home_score"] == 9, \
+            "the clean store does not serve its own record, so the tamper below proves nothing"
+
+        path = os.path.join(root, vs.SNAPSHOTS_DIR, snapshot_id, vs.VERIFIED_NAME)
+        pristine = _read_text(path)
+        tools = (("get_verified_score",
+                  lambda: vs.get_verified_score(sa.EID_MIAWSH, root=root)),
+                 ("get_verified_scores",
+                  lambda: vs.get_verified_scores("2026-08-30", "MLB", root=root)),
+                 ("get_source_manifest",
+                  lambda: vs.get_source_manifest(snapshot_id, root=root)))
+
+        # (a) THE SCORE IS EDITED. Same filename, one number changed — 9 runs become 1.
+        assert '"home_score":9' in pristine, \
+            "the stored entry document does not carry the score in the form this fixture edits; " \
+            "the fixture is editing nothing: %s" % pristine[:200]
+        _write_text(path, pristine.replace('"home_score":9', '"home_score":1'))
+        for tool, call in tools:
+            try:
+                served = call()
+            except (vs.SnapshotImmutabilityViolation, vs.SnapshotAdmissibilityViolation):
+                continue
+            raise AssertionError(
+                "%s SERVED a record out of a snapshot whose records.json was edited on disk "
+                "(%r). The read path must re-check what it is about to serve; verify_snapshot() "
+                "having no read-path caller is cluster D." % (tool, served))
+        # The evidence is NOT repaired. Repairing erases the fact that the store drifted, which
+        # is the thing worth knowing.
+        assert '"home_score":1' in _read_text(path), \
+            "the read path rewrote the tampered bytes instead of refusing them"
+
+        # (b) AN EDIT ONLY THE FILE HASH CAN SEE. `sink` sits in the entry BESIDE the record, so
+        # it is covered by no record binding and by no verdict comparison — promoting a
+        # board-readable snapshot to the result ledger changes nothing any other check looks at.
+        # This half is what makes re-hashing the stored bytes on every read load-bearing rather
+        # than redundant with the per-entry ceiling: without it, an editor who leaves the record
+        # alone and edits its ROUTING is unopposed.
+        assert '"sink":"%s"' % sa.SINK_RESULT_LEDGER in pristine, \
+            "the stored entry does not carry its sink in the form this half edits: %s" \
+            % pristine[:200]
+        _write_text(path, pristine.replace('"sink":"%s"' % sa.SINK_RESULT_LEDGER,
+                                           '"sink":"%s"' % sa.SINK_BOARD))
+        for tool, call in tools:
+            try:
+                served = call()
+            except vs.SnapshotImmutabilityViolation as e:
+                codes = [d.get("code") for d in (e.detail.get("drift") or [])]
+                assert vs.DRIFT_ENTRY_FILE_BYTES in codes, \
+                    "%s refused with %r, which does not name the edited entry bytes" \
+                    % (tool, codes)
+                continue
+            raise AssertionError(
+                "%s SERVED a record out of a snapshot whose records.json was edited beside the "
+                "record — the routing changed and the record did not, so no per-entry check "
+                "could see it (%r). Only re-hashing the stored bytes on every read catches this, "
+                "and verify_snapshot() having no read-path caller is cluster D." % (tool, served))
+
+        # verify_snapshot names the same drift, so the two paths agree about what happened.
+        report = vs.verify_snapshot(snapshot_id, root=root)
+        assert not report["ok"] and vs.DRIFT_ENTRY_FILE_BYTES in [d["code"] for d in
+                                                                  report["drift"]], \
+            "verify_snapshot reports %r for a records.json that was edited in place" \
+            % ([d["code"] for d in report["drift"]],)
+    finally:
+        shutil.rmtree(root, ignore_errors=True)
+
+
+def test_verdict_copied_from_another_record():
+    """CLUSTER E. A stored Verdict was never checked against the record it sat beside.
+
+    So a GENUINE canonical verdict for game A, paired with record B — source "web_search", scores
+    invented — admitted B as a settleable FINAL. No forgery of any kind: the verdict is real, it
+    simply judged a different game. verified_snapshot's own selftest asserted this was impossible.
+    It was not.
+
+    Required: refused at the WRITE end and again at the READ end, because the write check only
+    ever covers records this build wrote and the premise of the module is that what is on disk
+    is an observation at a moment rather than a permanent fact.
+    """
+    vs = require_module("verified_snapshot")
+    schedule = sa.incident_schedule_0830()
+
+    genuine = _observation(sa.CLOSED, 2, 9, EVENING, "genuine")
+    genuine_verdict = sa.admit(genuine, now_utc=EVENING, canonical_schedule=schedule,
+                               lane=sa.LANE_CANONICAL)
+    assert genuine_verdict.disposition == sa.ADMIT_FINAL and genuine_verdict.settleable, \
+        "the genuine verdict this fixture copies did not admit: %r" \
+        % (genuine_verdict.reason_codes,)
+
+    # Record B: a different game, a search source, a score nobody observed. Shaped so that every
+    # OTHER write-time check passes — same league, same slate date, terminal status, scores
+    # present, hash covered by the payload — so the verdict/record binding is the only thing
+    # standing between it and the result ledger.
+    fabricated = _observation(sa.CLOSED, 0, 1, EVENING, "genuine", event_id=sa.EID_BOSNYY,
+                              away="SYNTH_BOS", home="SYNTH_NYY", start=START_1335ET,
+                              source="web_search")
+    own = sa.admit(fabricated, now_utc=EVENING, canonical_schedule=schedule, lane=sa.LANE_SEARCH)
+    assert not own.admitted, \
+        "the fabricated record admits on its own merits, so lifting a verdict onto it proves " \
+        "nothing: %s / %r" % (own.disposition, own.reason_codes)
+
+    payloads = [{"payload_id": "statsapi_genuine.json", "raw_text": _raw_for("genuine"),
+                 "fetched_at_utc": EVENING, "source": sa.PROVIDER_MLB_STATSAPI}]
+    root = tempfile.mkdtemp(prefix="test_score_admission_clusterE_")
+    try:
+        # (a) THE WRITE END.
+        try:
+            vs.write_snapshot([vs.admission_envelope(fabricated, genuine_verdict)],
+                              league="MLB", date_et="2026-08-30",
+                              source=sa.PROVIDER_MLB_STATSAPI, raw_payloads=payloads,
+                              now_utc=EVENING, out_root=root)
+            raise AssertionError(
+                "verified_snapshot STORED a record beside a verdict that judged a different "
+                "game. A genuine CANONICAL verdict moved sideways onto a web_search record is "
+                "cluster E, and it needs no forgery at all.")
+        except vs.SnapshotRefused as e:
+            codes = [p.get("code") for p in e.problems]
+            assert vs.REFUSE_VERDICT_NOT_BOUND in codes, \
+                "the write was refused as %r, which does not say the verdict did not judge this " \
+                "record" % (codes,)
+
+        # (b) THE READ END. Store the genuine pair, then swap the record under the verdict on
+        # disk and rebuild the manifest AND the directory name around the edit — anyone who can
+        # edit records.json can edit the manifest beside it, so a fixture that only changes the
+        # bytes proves the file hash and nothing else.
+        snapshot_id, _ = _store(vs, root, genuine, "genuine", EVENING)
+
+        def _swap(entry):
+            swapped = json.loads(json.dumps(entry))
+            swapped["record"] = json.loads(json.dumps(fabricated))
+            swapped["record_sha256"] = vs._record_binding(swapped["record"])
+            return swapped
+
+        vs._rebuild_snapshot_on_disk(root, snapshot_id, _swap)
+        try:
+            served = vs.get_verified_score(sa.EID_BOSNYY, root=root)
+            raise AssertionError(
+                "get_verified_score SERVED %r — a fabricated record wearing another game's "
+                "verdict, out of a snapshot rebuilt to be self-consistent on disk. The binding "
+                "must be re-derived on every read (cluster E)." % (served,))
+        except vs.SnapshotAdmissibilityViolation as e:
+            codes = [p.get("code") for p in e.problems]
+            assert vs.CONFLICT_VERDICT_NOT_BOUND in codes, \
+                "the read was refused as %r, which does not name the unbound verdict" % (codes,)
+    finally:
+        shutil.rmtree(root, ignore_errors=True)
+
+
+def test_two_contradictory_terminals_are_refused_not_resolved():
+    """CLUSTER F. Two terminals disagreeing is a CONTRADICTION, not a race to be won.
+
+    _resolve() picked a winner between two records both claiming a terminal status for one event
+    with DIFFERENT scores. A final does not change: if two of them disagree, one of them is
+    wrong and the store does not know which, so serving either is a coin flip presented as a
+    result. content_hash_conflict does not catch this shape — move source_fetched_at_utc by one
+    second and the keys stop matching.
+
+    Required: the store serves NEITHER and NAMES BOTH.
+    """
+    vs = require_module("verified_snapshot")
+    root = tempfile.mkdtemp(prefix="test_score_admission_clusterF_")
+    try:
+        _store(vs, root, _observation(sa.CLOSED, 2, 9, "2026-08-30T20:30:00Z", "a"),
+               "a", "2026-08-30T20:35:00Z")
+        _store(vs, root, _observation(sa.CLOSED, 9, 2, "2026-08-30T21:30:00Z", "b"),
+               "b", "2026-08-30T21:35:00Z")
+
+        try:
+            served = vs.get_verified_score(sa.EID_MIAWSH, root=root)
+            raise AssertionError(
+                "the store RESOLVED two contradictory finals by picking %r-%r. Two terminal "
+                "records for one event with different scores are a contradiction; picking "
+                "between them by any timestamp is how a fabricated final wins (cluster F)."
+                % (served["away_score"], served["home_score"]))
+        except vs.SnapshotContentConflict as e:
+            problem = e.problem
+            assert problem.get("code") == vs.CONFLICT_TERMINAL_DISAGREEMENT, \
+                "the refusal is coded %r, not the terminal disagreement" % (problem.get("code"),)
+            assert sorted(problem.get("scores") or []) == [[2, 9], [9, 2]], \
+                "the refusal does not name BOTH scores it could not choose between: %r" \
+                % (problem.get("scores"),)
+            assert len(problem.get("snapshot_ids") or []) == 2, \
+                "the refusal does not name both snapshots: %r" % (problem.get("snapshot_ids"),)
+
+        # The slate getter refuses too. A per-event refusal that get_verified_scores routes around
+        # would put the contradiction on a card by the other door.
+        try:
+            vs.get_verified_scores("2026-08-30", "MLB", root=root)
+            raise AssertionError(
+                "get_verified_scores served a slate containing an event whose two terminal "
+                "records disagree")
+        except vs.SnapshotContentConflict:
+            pass
+    finally:
+        shutil.rmtree(root, ignore_errors=True)
+
+    # A final that AGREES with itself is not a contradiction — otherwise the rule would refuse
+    # every re-fetch of a settled game, and this check would be a constant.
+    root = tempfile.mkdtemp(prefix="test_score_admission_clusterF_ok_")
+    try:
+        _store(vs, root, _observation(sa.CLOSED, 2, 9, "2026-08-30T20:30:00Z", "a"),
+               "a", "2026-08-30T20:35:00Z")
+        _store(vs, root, _observation(sa.CLOSED, 2, 9, "2026-08-30T21:30:00Z", "b"),
+               "b", "2026-08-30T21:35:00Z")
+        served = vs.get_verified_score(sa.EID_MIAWSH, root=root)
+        assert (served["away_score"], served["home_score"]) == (2, 9), \
+            "two AGREEING terminal observations were refused or resolved wrongly: %r" % (served,)
+    finally:
+        shutil.rmtree(root, ignore_errors=True)
+
+
+def test_enforced_board_does_not_publish_a_prohibited_edge():
+    """CLUSTER G, on the redaction itself. The suppression was computed and then not applied.
+
+    Fixture 8 asserts the whole invariant on the MIN@ATL row; this one exists so the REDACTION
+    STEP has a guard of its own in the meta-test. enforce() reached the right verdict, wrote the
+    decision change into its change log, and then published edge_pp 14.3, usable_edge_pp 6.9 and
+    market_no_vig_cover_pct 50.0 verbatim in the enforced board — the sixth compute-then-discard
+    in this repo. A downstream reader of the ENFORCED copy would have found the laundered number
+    exactly where it was before.
+
+    The keys are KEPT and set to None, never dropped: three sibling modules read them positively,
+    and deleting a key turns a refusal into a KeyError somewhere else.
+    """
+    bi = _board()
+    assert hasattr(bi, "PROHIBITED_EDGE_FIELDS"), \
+        "board_invariants no longer declares which figures a null price prohibits; the redaction " \
+        "is the cluster G fix and it must be data, not an inline literal"
+    assert set(bi.PROHIBITED_EDGE_FIELDS) == {"edge_pp", "usable_edge_pp"}, \
+        "PROHIBITED_EDGE_FIELDS is %r; the owner invariant names the edge AND the usable edge" \
+        % (bi.PROHIBITED_EDGE_FIELDS,)
+
+    enforced = bi.enforce(CANONICAL_BOARD_PATH)
+    rows = [(g.get("event_id"), r) for g in enforced["board"]["games"]
+            for r in (g.get("markets") or [])]
+    assert rows, "the enforced board carries no market rows"
+
+    prohibited = [(eid, r.get("market"), field, (r.get("probabilities") or {}).get(field))
+                  for eid, r in rows
+                  if sa.BOARD_REASON_MISSING_MARKET_PRICE in (r.get("reason_codes") or [])
+                  for field in bi.PROHIBITED_EDGE_FIELDS
+                  if (r.get("probabilities") or {}).get(field) is not None]
+    assert not prohibited, \
+        "the enforced board publishes a prohibited figure on %d row(s): %r. The owner invariant " \
+        "is 'prohibit edge calculation', so the enforced copy must not carry its result." \
+        % (len(prohibited), prohibited)
+
+    assumed = [(eid, r.get("market"))
+               for eid, r in rows
+               if sa.BOARD_REASON_ASSUMED_NO_VIG in (r.get("reason_codes") or [])
+               and (r.get("probabilities") or {}).get(
+                   bi.NO_VIG_FIELD.get(r.get("market"), "")) is not None]
+    assert not assumed, \
+        "the enforced board publishes an ASSUMED no-vig probability on %r. An assumed base is " \
+        "not a smaller measurement, it is not a measurement." % (assumed,)
+
+    # The keys survive. A dropped key is a different accident, not a fix.
+    redacted_rows = [(eid, r) for eid, r in rows
+                     if ((r.get("board_invariants") or {}).get("redacted"))]
+    assert redacted_rows, \
+        "no row on the enforced board was redacted at all, so this fixture is asserting the " \
+        "absence of something that was never there"
+    for eid, row in redacted_rows:
+        for record in row["board_invariants"]["redacted"]:
+            assert record["field"] in (row.get("probabilities") or {}), \
+                "%s/%s: the redaction DELETED probabilities.%s instead of refusing it" \
+                % (eid, row.get("market"), record["field"])
+            assert record["was"] is not None and record.get("reason_code") in bi.REASON_CODES, \
+                "%s/%s: the removal of %s is not recorded with its value and a documented " \
+                "reason: %r" % (eid, row.get("market"), record["field"], record)
+
+    assert enforced["counters"]["FIELDS_REDACTED"] == sum(
+        len(row["board_invariants"]["redacted"]) for _, row in redacted_rows), \
+        "the enforced board's FIELDS_REDACTED counter (%r) disagrees with the redactions on its " \
+        "own rows — a counter that does not count is the 8/27 shape" \
+        % enforced["counters"]["FIELDS_REDACTED"]
+    assert enforced["counters"]["INPUT_UNCHANGED"] is True, "enforce() mutated its input (R3)"
+
+
+# =============================================================================================
 # 3. THE BOARD SUBJECT.  Bound by name, and a rename is a NAMED failure rather than a skip.
 # =============================================================================================
 
@@ -1072,6 +2006,29 @@ TEN_FIXTURES = (
     "test_ml_and_spread_rows_from_incompatible_margins",
     "test_stale_injury_report_beyond_the_freshness_deadline",
 )
+
+#: The ELEVEN added after the 2026-08-30 adversarial review, one per defect cluster it found in
+#: this layer. Kept in a second tuple rather than folded into TEN_FIXTURES because TEN_FIXTURES
+#: names the failures the OWNER named, and that list should stay legible as what it is. Both
+#: tuples are hard-coded for the same reason: a list derived from globals() agrees with whatever
+#: the file happens to contain, so deleting a fixture would delete its own coverage check.
+REVIEW_FIXTURES = (
+    "test_admission_without_a_canonical_schedule_is_never_final",            # cluster A
+    "test_search_source_relabelled_as_the_canonical_lane",                   # cluster B
+    "test_naive_timestamp_is_refused_not_read_as_utc",                       # cluster L
+    "test_record_observed_before_first_pitch_and_judged_hours_later",        # cluster M
+    "test_carried_scheduled_date_loses_to_the_derived_et_date",              # cluster N
+    "test_stale_in_progress_written_after_a_closed_final",                   # cluster C (a)
+    "test_observations_are_ordered_by_when_they_were_observed",              # cluster C (b)
+    "test_records_json_edited_on_disk_is_refused_by_the_getters",            # cluster D
+    "test_verdict_copied_from_another_record",                               # cluster E
+    "test_two_contradictory_terminals_are_refused_not_resolved",             # cluster F
+    "test_enforced_board_does_not_publish_a_prohibited_edge",                # cluster G
+)
+
+#: Every fixture in this file, in a fixed order. This is what the meta-test, the selftest and the
+#: mutation suite iterate; TEN_FIXTURES stays the owner's ten and is a subset of it.
+ALL_FIXTURES = TEN_FIXTURES + REVIEW_FIXTURES
 
 #: fixture name -> (subject module, what the removal restores, old source, new source).
 #: Each `old` is an EXACT substring of the subject's source, matched before the subject's own
@@ -1142,6 +2099,90 @@ GUARDS = {
         "stale or unresolved availability stops suppressing the play that depends on it",
         "    if state == AVAILABILITY_UNKNOWN and play_bearing:",
         "    if False:"),
+
+    # ---- the eleven review clusters ---------------------------------------------------------
+
+    "test_admission_without_a_canonical_schedule_is_never_final": (
+        "score_admission",
+        "the missing-schedule CEILING is lifted, so a record checked only against itself "
+        "admits and settles again (cluster A)",
+        "    if index_schedule(canonical_schedule) is None:",
+        "    if False:"),
+
+    "test_search_source_relabelled_as_the_canonical_lane": (
+        "score_admission",
+        "every source earns the CANONICAL lane, so a declared lane is believed on sight again "
+        "(cluster B)",
+        "    return LANE_CANONICAL if str(source).strip().lower() in CANONICAL_SOURCES "
+        "else LANE_SEARCH",
+        "    return LANE_CANONICAL"),
+
+    "test_naive_timestamp_is_refused_not_read_as_utc": (
+        "score_admission",
+        "a timezone-naive instant stops being recognised, so an ET wall clock is read as UTC "
+        "and first pitch moves four hours earlier (cluster L)",
+        "    return parsed.tzinfo is None",
+        "    return False"),
+
+    "test_record_observed_before_first_pitch_and_judged_hours_later": (
+        "score_admission",
+        "the pre-start rule is evaluated against the JUDGING clock only, so waiting a few hours "
+        "admits the 8/30 records (cluster M)",
+        " and fetched_utc is not None and fetched_utc < start_utc",
+        " and fetched_utc is not None and False"),
+
+    "test_carried_scheduled_date_loses_to_the_derived_et_date": (
+        "score_admission",
+        "a caller-supplied scheduled_date is PREFERRED over the zoneinfo derivation again, so "
+        "an 8/28 final publishes as an 8/30 result (cluster N)",
+        '    start = _utc(obj.get("scheduled_start_utc"))\n'
+        "    return None if start is None else et_date_of(start)",
+        '    if obj.get("scheduled_date"):\n'
+        '        return str(obj["scheduled_date"]).strip()\n'
+        '    start = _utc(obj.get("scheduled_start_utc"))\n'
+        "    return None if start is None else et_date_of(start)"),
+
+    "test_stale_in_progress_written_after_a_closed_final": (
+        "verified_snapshot",
+        "a terminal observation stops outranking a non-terminal one, so a stale IN_PROGRESS "
+        "supersedes a validated final (cluster C)",
+        "    if terminals:\n        candidates = terminals",
+        "    if False:\n        candidates = terminals"),
+
+    "test_observations_are_ordered_by_when_they_were_observed": (
+        "verified_snapshot",
+        "observations are ordered by written_at_utc — the STORE ACTION — instead of by when the "
+        "provider was seen (cluster C)",
+        '    return (_utc(candidate["record"].get("source_fetched_at_utc")) or _UNDATED,',
+        "    return (str(candidate.get(\"written_at_utc\")),"),
+
+    "test_records_json_edited_on_disk_is_refused_by_the_getters": (
+        "verified_snapshot",
+        "the read path stops refusing a drifted snapshot, so records.json edited in place is "
+        "served as truth by all three analysis tools (cluster D)",
+        "    drift = _read_integrity(manifest, root)\n    if drift:",
+        "    drift = _read_integrity(manifest, root)\n    if False:"),
+
+    "test_verdict_copied_from_another_record": (
+        "verified_snapshot",
+        "a stored verdict stops being compared with its own record of what it judged, so a "
+        "genuine verdict moved sideways admits a fabricated record (cluster E)",
+        "        if judged != stored:",
+        "        if False:"),
+
+    "test_two_contradictory_terminals_are_refused_not_resolved": (
+        "verified_snapshot",
+        "two disagreeing terminals are resolved by picking a winner instead of refused "
+        "(cluster F)",
+        "    if len(scores) > 1:",
+        "    if False:"),
+
+    "test_enforced_board_does_not_publish_a_prohibited_edge": (
+        "board_invariants",
+        "the enforced row keeps edge_pp, usable_edge_pp and the assumed no-vig, so the "
+        "suppression is computed and then not applied (cluster G)",
+        "    for field, code in targets:",
+        "    for field, code in []:"),
 }
 
 
@@ -1214,27 +2255,50 @@ def _run_fixture(name):
         return False, type(e).__name__, (str(e).splitlines()[0][:200] if str(e) else "")
 
 
+#: CLUSTER O, 2026-08-30 review, applied to every module in this layer. A mutant is KILLED only
+#: when a NAMED assertion in the fixture that claims it fails. Anything else the subject does —
+#: an unexpected exception type, an ImportError, an AttributeError, a mutant that never applied —
+#: is an ERROR: reported separately, counted separately, and never counted as proof. The tally
+#: below therefore reads "N killed, M errored, K survived" rather than "N/N killed", because
+#: score_admission's first mutation run reported 12/12 KILLED while every one of those mutants
+#: was dying at import without running a single fixture. It proved nothing and looked perfect.
+OUTCOME_KILLED = "KILLED"
+OUTCOME_SURVIVED = "SURVIVED"
+OUTCOME_ERRORED = "ERRORED"
+
+#: Why a particular mutant errored, kept distinct from the outcome so the report can say what to
+#: repair: a guard that moved is a re-pointing job, a subject that crashed is a fixture job.
+ERROR_NO_GUARD = "NO_GUARD_DECLARED"
+ERROR_MISSING_SUBJECT = "MISSING_SUBJECT"
+ERROR_GUARD_NOT_FOUND = "GUARD_NOT_FOUND"
+ERROR_MUTANT_DID_NOT_IMPORT = "MUTANT_DID_NOT_IMPORT"
+ERROR_SUBJECT_CRASHED = "SUBJECT_CRASHED"
+
+
 def guard_report(verbose=False):
     """Remove each fixture's guard and require THAT fixture to fail. Returns (results, problems).
 
-    results is a list of (fixture, guard description, killed: bool, note).
+    results is a list of (fixture, guard description, killed: bool, note, outcome), where outcome
+    is one of OUTCOME_KILLED / OUTCOME_ERRORED / OUTCOME_SURVIVED. `killed` stays third and stays
+    a bool so a caller that only wants the pass/fail answer keeps working.
 
     A kill must be an ASSERTION. A mutant that dies of an AttributeError or a TypeError has not
-    been caught by the fixture, it has crashed the subject, and the two are not the same fact.
-    score_admission's first mutation run reported 12/12 KILLED while every mutant was dying at
-    import — the suite proved nothing and looked perfect doing it. That is checked here.
+    been caught by the fixture, it has crashed the subject, and the two are not the same fact
+    (cluster O). A mutant whose pattern no longer matches the subject has not been APPLIED at
+    all, and counting that as a kill is worse still: it reports proof of a guard that may have
+    been deleted.
     """
     results, problems = [], []
-    missing = [n for n in TEN_FIXTURES if GUARDS.get(n) is None]
+    missing = [n for n in ALL_FIXTURES if GUARDS.get(n) is None]
     for name in missing:
         problems.append(
             "NO_GUARD_DECLARED %s has no entry in GUARDS, so nothing proves it exercises the "
             "code path it claims. An undeclared guard is the wnba_refresh_espn shape: the "
             "fixture may already be passing for free." % name)
-    for name in TEN_FIXTURES:
+    for name in ALL_FIXTURES:
         guard = GUARDS.get(name)
         if guard is None:
-            results.append((name, "(no guard declared)", False, "NO_GUARD_DECLARED"))
+            results.append((name, "(no guard declared)", False, ERROR_NO_GUARD, OUTCOME_ERRORED))
             continue
         module_name, description, old, new = guard
         if module_name in PARALLEL_MODULES and _MODULES.get(module_name) is None:
@@ -1242,18 +2306,21 @@ def guard_report(verbose=False):
                 "MISSING_SUBJECT %s guards harness/%s.py, which is not importable (%s). The "
                 "guard cannot be removed from a module that is not there."
                 % (name, module_name, _IMPORT_ERRORS.get(module_name, "unknown")))
-            results.append((name, description, False, "MISSING_SUBJECT " + module_name))
+            results.append((name, description, False,
+                            ERROR_MISSING_SUBJECT + " " + module_name, OUTCOME_ERRORED))
             continue
         try:
             mutant = _mutant_module(module_name, old, new)
         except AssertionError as e:
             problems.append("%s: %s" % (name, e))
-            results.append((name, description, False, str(e).split()[0]))
+            results.append((name, description, False,
+                            (str(e).split() or [ERROR_GUARD_NOT_FOUND])[0], OUTCOME_ERRORED))
             continue
         except Exception as e:                                # noqa: BLE001
             problems.append("%s: the mutated source of %s did not import: %s: %s"
                             % (name, module_name, type(e).__name__, e))
-            results.append((name, description, False, "MUTANT_DID_NOT_IMPORT"))
+            results.append((name, description, False, ERROR_MUTANT_DID_NOT_IMPORT,
+                            OUTCOME_ERRORED))
             continue
         restore = _install_mutant(module_name, mutant)
         try:
@@ -1261,7 +2328,12 @@ def guard_report(verbose=False):
         finally:
             restore()
         killed = (not passed) and kind == KIND_ASSERTION
-        results.append((name, description, killed, message if not passed else ""))
+        outcome = (OUTCOME_KILLED if killed
+                   else OUTCOME_SURVIVED if passed else OUTCOME_ERRORED)
+        note = message if not passed else ""
+        if not killed and not passed:
+            note = "%s %s: %s" % (ERROR_SUBJECT_CRASHED, kind, message)
+        results.append((name, description, killed, note, outcome))
         if passed:
             problems.append(
                 "GUARD_SURVIVED %s still passes with this guard removed from harness/%s.py — "
@@ -1274,28 +2346,49 @@ def guard_report(verbose=False):
                 "one is the 12/12-killed-at-import failure score_admission recorded."
                 % (name, description, module_name, kind, message))
         if verbose:
-            mark = "  KILLED    " if killed else ("  SURVIVED  " if passed else "  CRASHED   ")
-            print(mark + name + "  <- " + description)
+            print("  %-9s %s  <- %s" % (outcome, name, description))
             if killed:
-                print("             caught by: " + message)
+                print("             caught by: " + note)
+            elif note:
+                print("             " + note)
     return results, problems
+
+
+def guard_tally(results):
+    """(killed, errored, survived) over guard_report's results. Cluster O: three numbers, never
+    one. A single 'N/N killed' cannot distinguish a proven guard from a crashed subject."""
+    counts = {OUTCOME_KILLED: 0, OUTCOME_ERRORED: 0, OUTCOME_SURVIVED: 0}
+    for row in results:
+        counts[row[4]] = counts.get(row[4], 0) + 1
+    return counts[OUTCOME_KILLED], counts[OUTCOME_ERRORED], counts[OUTCOME_SURVIVED]
 
 
 def test_meta_every_fixture_exercises_its_guard():
     """META. Break each guard on purpose; the fixture that names it must fail.
 
-    A counter that cannot fail is not a check, and a fixture that cannot fail is not a test. Ten
-    fixtures, ten guards, ten required kills. This also asserts the suite's own bookkeeping: the
-    ten names exist, the vocabulary they assert against is the contract's and not a retyped copy,
-    and nothing has been quietly removed.
+    A counter that cannot fail is not a check, and a fixture that cannot fail is not a test. Every
+    fixture in ALL_FIXTURES has a guard, and removing that guard must make THAT fixture fail on a
+    NAMED assertion — not crash, not survive. This also asserts the suite's own bookkeeping: the
+    names exist, the vocabulary they assert against is the contract's and not a retyped copy, and
+    nothing has been quietly removed.
+
+    CLUSTER O: the required count is the KILL count, and a mutant that errored is not a kill. The
+    assertion below reads killed == len(ALL_FIXTURES), so an errored mutant fails this test rather
+    than padding it.
     """
-    for name in TEN_FIXTURES:
+    for name in ALL_FIXTURES:
         assert callable(globals().get(name)), \
-            "TEN_FIXTURES names %s and this file does not define it" % name
+            "ALL_FIXTURES names %s and this file does not define it" % name
+    assert set(TEN_FIXTURES) <= set(ALL_FIXTURES), \
+        "TEN_FIXTURES is no longer a subset of ALL_FIXTURES: %r" \
+        % sorted(set(TEN_FIXTURES) - set(ALL_FIXTURES))
+    assert len(set(ALL_FIXTURES)) == len(ALL_FIXTURES), \
+        "a fixture is named twice in ALL_FIXTURES, so one mutant would be run twice and counted "\
+        "twice: %r" % sorted({n for n in ALL_FIXTURES if ALL_FIXTURES.count(n) > 1})
     declared = {n for n in globals() if n.startswith("test_")} - {META_TEST}
-    assert set(TEN_FIXTURES) == declared, \
-        "the fixture set and TEN_FIXTURES have drifted: only in file %r, only in tuple %r" \
-        % (sorted(declared - set(TEN_FIXTURES)), sorted(set(TEN_FIXTURES) - declared))
+    assert set(ALL_FIXTURES) == declared, \
+        "the fixture set and ALL_FIXTURES have drifted: only in file %r, only in tuple %r" \
+        % (sorted(declared - set(ALL_FIXTURES)), sorted(set(ALL_FIXTURES) - declared))
 
     # The record shape asserted by the fixtures is the contract's shape, not a local copy.
     sample = _rec(sa.EID_MIAWSH, "SYNTH_MIA", "SYNTH_WSH", START_1215ET, sa.CLOSED, 2, 9)
@@ -1318,7 +2411,7 @@ def test_meta_every_fixture_exercises_its_guard():
     # own selftest was failing. Checked here too, so the guarantee holds under pytest, where the
     # mutation suite's own baseline gate never runs.
     broken = []
-    for name in TEN_FIXTURES:
+    for name in ALL_FIXTURES:
         passed, kind, message = _run_fixture(name)
         if not passed:
             broken.append("%s (%s): %s" % (name, kind, message))
@@ -1328,10 +2421,12 @@ def test_meta_every_fixture_exercises_its_guard():
 
     results, problems = guard_report()
     assert not problems, "META FAILURES:\n  " + "\n  ".join(problems)
-    killed = [r for r in results if r[2]]
-    assert len(killed) == len(TEN_FIXTURES), \
-        "%d of %d guards were killed; survivors mean decorative fixtures: %r" \
-        % (len(killed), len(TEN_FIXTURES), [r[0] for r in results if not r[2]])
+    killed, errored, survived = guard_tally(results)
+    assert killed == len(ALL_FIXTURES), \
+        "%d killed, %d errored, %d survived over %d guards. A SURVIVOR is a decorative fixture " \
+        "and an ERROR is a crashed subject; neither is proof (cluster O). Not killed: %r" \
+        % (killed, errored, survived, len(ALL_FIXTURES),
+           [(r[0], r[4], r[3]) for r in results if not r[2]])
 
 
 # =============================================================================================
@@ -1342,7 +2437,7 @@ META_TEST = "test_meta_every_fixture_exercises_its_guard"
 
 #: Every callable this file runs, in a fixed order. The meta-test runs LAST so its mutants cannot
 #: leave a module swapped for the fixtures that follow.
-ALL_TESTS = TEN_FIXTURES + (META_TEST,)
+ALL_TESTS = ALL_FIXTURES + (META_TEST,)
 
 
 def selftest():
@@ -1355,7 +2450,7 @@ def selftest():
     f = []
 
     # ASSERTIONS ENABLED. Every fixture in this file is a bare `assert`, so under `python3 -O`
-    # all ten would pass by doing nothing at all — a whole suite silently converted into the
+    # all of them would pass by doing nothing at all — a whole suite silently converted into the
     # wnba_refresh_espn failure mode by one interpreter flag. Proved, not assumed.
     _asserts_live = False
     try:
@@ -1392,7 +2487,7 @@ def mutation_suite():
     while its own selftest was failing.
     """
     baseline = []
-    for name in TEN_FIXTURES:
+    for name in ALL_FIXTURES:
         passed, kind, message = _run_fixture(name)
         if not passed:
             baseline.append("%s [%s]: %s" % (name, kind, message))
@@ -1404,13 +2499,18 @@ def mutation_suite():
         return False
 
     results, problems = guard_report(verbose=True)
-    killed = sum(1 for r in results if r[2])
+    killed, errored, survived = guard_tally(results)
     for line in problems:
         print("   -", line)
-    print("%s mutation suite: %d/%d killed%s"
-          % (MODULE_ID, killed, len(TEN_FIXTURES),
-             "" if killed == len(TEN_FIXTURES) else "  — SURVIVORS MEAN DECORATIVE FIXTURES"))
-    return killed == len(TEN_FIXTURES) and not problems
+    # CLUSTER O: three numbers. A kill is a NAMED assertion failing in the fixture that claims the
+    # guard; an ERROR is the subject crashing, a mutant that never applied, or a subject that is
+    # not importable. Only the first is proof, and collapsing them into one figure is how
+    # score_admission's first run reported 12/12 while every mutant died at import.
+    print("%s mutation suite: %d killed, %d errored, %d survived (of %d guards)%s"
+          % (MODULE_ID, killed, errored, survived, len(ALL_FIXTURES),
+             "" if killed == len(ALL_FIXTURES)
+             else "  — SURVIVORS MEAN DECORATIVE FIXTURES, ERRORS MEAN NOTHING WAS PROVED"))
+    return killed == len(ALL_FIXTURES) and not problems
 
 
 def gate():

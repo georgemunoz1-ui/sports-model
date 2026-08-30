@@ -1,0 +1,123 @@
+{
+ "CARD_STATE": {
+  "leans": 0,
+  "plays": 0,
+  "the_relayed_lean": "ATL +2.5 C-tier remains NOT ENDORSED. Its published 0.643 cover contradicts its own 0.397 moneyline by 17.6pp; my refreshed model puts it at 0.4774. Tonight's result will not settle that \u2014 the defect is in the arithmetic, not the outcome.",
+  "why_zero": "WNBA: all four games are NO PLAY \u2014 three on identified absences the model cannot see, one on absent availability information. MLB: the actionable layer is capped slate-wide (0/15 SP_CONFIRMED, pitcher corpus ends 7/19). CFB: nothing until Sep 3. NFL: no forecast exists."
+ },
+ "LEDGER": {
+  "exposure_usd": 0,
+  "n_bets": 0,
+  "units": 0.0,
+  "wager_authority": "NO"
+ },
+ "PASS_1_RESULTS": {
+  "cfb": {
+   "detail": "the 8/29 cohort stays REFUSED_NOT_BINDABLE (0/8, MISSING_IDENTITY_FIELD). The forward rows are Sep 3+. Nothing played, nothing to grade."
+  },
+  "mlb": {
+   "conclusion": "ZERO MLB finals are POSSIBLE at this timestamp, let alone available.",
+   "detail": "MIA@WSH is ~75 minutes in. A nine-inning game needs roughly 170. The other fourteen have not thrown a pitch; six of them start within ten minutes.",
+   "final": 0,
+   "in_progress": 1,
+   "not_started": 14
+  },
+  "nfl": {
+   "detail": "NO_FORECAST. 53-man cutdown 18:00 ET. Zero forecast quantities exist in either NFL board file, so there is nothing to update. Stated explicitly because silence is not a valid entry."
+  },
+  "wnba": {
+   "detail": "MIN@ATL 15:00 ET, LAS@SEA 17:00, GSV@PDX 19:00, CON@DAL 20:30. The frozen board is prospective on all four.",
+   "tipped": 0
+  }
+ },
+ "PASS_2_LINES": {
+  "consequence": "no CLV computation, no line-movement reclassification, no new EV screen. The entries stand as relayed.",
+  "not_a_workaround": "I did not substitute a search-snippet price for a captured one.",
+  "status": "NOT PERFORMED \u2014 no admissible route",
+  "why": "market_sportsgameodds and market_theoddsapi both require a deployment API key and raise StubModeNoKey with none set; a stub must never invent prices. Direct HTTP now refuses by design (fixed this morning). The only prices on this card are the owner's 04:12 ET DK relay."
+ },
+ "PASS_3_AUDIT_CLAUSE": {
+  "RJ_005": {
+   "component_at_zero": "OFFICIAL_INJURY_AVAILABILITY",
+   "deadline_utc": "2026-08-30T17:00:00Z",
+   "missed_by_minutes": 30,
+   "note": "the deadline passed 30 minutes before this card. Everything in PASS_3 is search-identified precisely BECAUSE this component is at zero. The healthcheck reports it as a FAIL and it is not being quietly re-dated.",
+   "progress": "11/17",
+   "status": "OVERDUE"
+  },
+  "egress": "espn.com and covers.com both returned EGRESS_BLOCKED from the approved fetch tool. Not routed around. Fresh confirmation of RJ-005's standing finding.",
+  "findings": {
+   "CON@DAL": {
+    "action": "NO PLAY. Market ahead.",
+    "board_says": "p_home(DAL) 0.8445 against a relayed market 0.8762",
+    "identified": "Connecticut \u2014 Brittney Griner OUT (knee), Leila Lacan and Kennedy Burke out (overseas), Olivia Nelson-Ododa questionable.",
+    "verdict": "the absences run AGAINST Connecticut, so the market being ahead of the model is the expected direction, not a puzzle. The model is under-favouring Dallas because it cannot see why it should."
+   },
+   "GSV@PDX": {
+    "action": "NO PLAY. The forecast stays frozen as registered \u2014 it is not edited \u2014 and it is flagged unusable for any action layer.",
+    "board_says": "p_home(PDX) 0.2675, i.e. GSV 0.7325",
+    "identified": "Golden State \u2014 Gabby Williams, Janelle Salaun and Cecilia Zandalasini ALL OUT (overseas obligation). Portland \u2014 Karlie Samuelson questionable; Carla Leite and Frieda Buhner out.",
+    "verdict": "THE LARGEST NUMBER ON MY BOARD IS THE LEAST TRUSTWORTHY. The ff7 feature model has NO availability input, so 0.7325 is conditional on a Golden State roster that is not the one taking the floor. This is the same invalidation the owner's V3 board applied, reached independently, and it lands on the same game."
+   },
+   "LAS@SEA": {
+    "action": "NO PLAY.",
+    "board_says": "p_home(SEA) 0.5584",
+    "identified": "Seattle \u2014 Natisha Hiedeman and Awa Fam OUT. Los Angeles \u2014 Emma Cannon questionable; Aaliyah Nye and Ndjakalenga Mwenentanda not with team.",
+    "verdict": "absences on both sides; no clean read at this grade"
+   },
+   "MIN@ATL": {
+    "action": "NO PLAY, and the coherence defect in the relayed lean stands independently of availability.",
+    "board_says": "p_home(ATL) 0.3645, margin -3.21",
+    "explicit_gap": "searches for the Atlanta and Dallas reports returned a LATE-JULY report (Te-Hina Paopao, Alanna Smith). That is 32 days stale and was NOT used. Recording the gap rather than filling it with an old report is the whole point of the freshness contract.",
+    "identified": "Minnesota \u2014 Courtney Williams (foot) probable. ATLANTA: NOTHING IDENTIFIED FOR 2026-08-30.",
+    "verdict": "this is the game the owner's V3 board leaned on, and it is the game where my availability information is WEAKEST."
+   }
+  },
+  "grade": "IDENTIFIED_UNCONFIRMED \u2014 search-identified, binds nothing, and is NOT injected into the frozen board. Audit layer only.",
+  "status": "PERFORMED \u2014 mandatory for WNBA per protocol",
+  "unverified_teams": [
+   "Atlanta Dream",
+   "Dallas Wings"
+  ]
+ },
+ "PASS_4_SCORING": {
+  "note": "the 8/29 residual table was published this morning and is not re-published here. Re-scoring settled games on every refresh is how a record silently double-counts.",
+  "status": "NOTHING TO SCORE \u2014 zero new finals"
+ },
+ "PASS_5_HYPOTHESIS_WATCH": {
+  "archive_mutability": {
+   "implication": "an admitted archive is MUTABLE. Every read must be commit-addressed, and a sha recorded once is an observation at a moment, not a permanent fact. The crosswalk record already pins its commit; this is a warning for anything that does not.",
+   "new_this_pass": "the admitted pitch archive advanced 2e593d4 -> 5652b34 at 16:59Z and REWROTE two historical daily files (2026-08-23 and 2026-08-29 changed bytes). 2026-08-28 is byte-identical, so the gamePk crosswalk filed this morning still holds."
+  },
+  "home_margin_under_projection": {
+   "observed": "8/29, n=2: residuals -12.79 and -28.57, bias -20.68, MAE 20.68 \u2014 same sign, no cancellation",
+   "sigma_to_use": "12.5523 MEASURED (n=1721), never 13.97",
+   "status": "CANDIDATE, NOT A FINDING. n=2.",
+   "test_tonight": "four more bound games. If all four under-project the home margin that is n=6 in one direction and worth naming. If they do not, the candidate dies. Registered here BEFORE the games so it cannot be fitted afterwards."
+  },
+  "totals_bias": {
+   "status": "FALSIFIED 2026-08-30; measured totals SD 18.0156, bias -0.7352 over n=1721. Not reopened by two games."
+  }
+ },
+ "R6": "append-only; new path. No frozen board or prior record was edited.",
+ "REFUSED_FABRICATED_FINALS": {
+  "disposition": "ALL THREE REFUSED. Not recorded, not displayed as results, not graded, not carried into any layer.",
+  "lesson": "a plausibility check against START TIME is cheap and catches a class of fabrication that no amount of source-grading will. Proposed as a standing pre-admission gate: no result may be admitted, at ANY layer including display, for a game whose start time plus a sport-specific minimum duration is in the future.",
+  "severity": "HIGH \u2014 this is the 2026-08-27 defect presenting again, and it was caught",
+  "the_standing_rule_that_caught_it": "snippets IDENTIFY and never BIND. On 2026-08-27 five fabricated finals were published from exactly this kind of summary. The check that stopped it here was not source reputation \u2014 it was arithmetic on the clock.",
+  "what_happened": "a web search for MLB results returned three confident FINAL scores: 'Nationals 9, Marlins 2', 'Yankees 1, Red Sox 0', 'Braves 6, Rockies 4'.",
+  "why_they_are_refused": [
+   "BOS@NYY starts at 13:35 ET. At the moment of the search it had NOT STARTED. A final score for a game that has not begun is not a stale result or a wrong result \u2014 it is a manufactured one.",
+   "COL@ATL likewise starts 13:35 ET. Not started.",
+   "MIA@WSH began 12:15 ET and was ~75 minutes old. A nine-inning game runs about 170. A 9-2 final is not possible yet."
+  ]
+ },
+ "STATE": "PREGAME / EARLY IN-PROGRESS. 1 of 15 MLB games underway, 0 WNBA tipped, 0 finals exist anywhere on the card.",
+ "created_utc": "2026-08-30T17:30:00Z",
+ "local_time_et": "2026-08-30 13:30 EDT",
+ "local_time_owner_tz": "2026-08-30 10:30 PDT (America/Los_Angeles)",
+ "protocol": "harness/CARD_UPDATE_PROTOCOL.md \u2014 all four sports, no single-sport sweep",
+ "record_id": "CARD-UPDATE-2026-08-30T1330ET",
+ "record_sha256": "896f667cca3d19fb85c6d627ee1080a916b92fe93f9068ab82cbe44d0a77882d",
+ "schema": "ops.card_update.v1"
+}

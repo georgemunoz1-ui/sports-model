@@ -120,6 +120,26 @@ def run():
             f.append(f"R4: a 1-day-old slot was capped as {status2!r}; the gate is too aggressive")
         if rs2 is None:
             f.append("R4: a fresh slot lost its run-support value")
+
+        # R4b — an acquisition can be current and exact yet is still fallback-only until a new
+        # board freezes. The values and evidence count must agree: CAP values, capped slot,
+        # no run-support value, and no action authority.
+        acquired_obs = (dt.date.fromisoformat(SLATE) - dt.timedelta(days=1)).isoformat()
+        def acquire_current(subject, sport, kind):
+            return FC.Stamp(observed_at=acquired_obs, effective_at=_NOW, fetched_at=_NOW,
+                            source="regression acquired", source_sha256="b" * 8,
+                            grade=FC.CONFIRMED, subject=subject)
+        sp4b, status4b, rs4b, d4b = B.starter(_PidMap({}), "Acquired Guy",
+                                               acquire=acquire_current, now=_NOW)
+        if d4b["disposition"] != FC.ACQUIRING or d4b.get("actionable"):
+            f.append(f"R4b: current acquisition got {d4b['disposition']}/"
+                     f"actionable={d4b.get('actionable')}")
+        if sp4b != B.V13._sp({}) or rs4b is not None:
+            f.append("R4b: ACQUIRING raw values entered V13 before refreeze")
+        if not B.starter_slot_capped(d4b):
+            f.append("R4b: an ACQUIRING fallback was counted as an uncapped starter slot")
+        if not status4b.startswith("PROBABLE_ACQUIRED"):
+            f.append(f"R4b: acquired state lost its explicit status: {status4b!r}")
     finally:
         B.ASOF.sp_asof_strict = saved
 

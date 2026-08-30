@@ -1,0 +1,157 @@
+{
+ "AGGREGATE_GUARD": {
+  "permitted": false,
+  "refusal": "cfb 2026-08-29 cover rate: REFUSED over cohort 'cfb:2026-08-29' \u2014 8 refused row(s), codes ['MISSING_IDENTITY_FIELD']. To publish anyway, pass descriptive_override naming the weaker claim the number rests on; it will be recorded in the artifact."
+ },
+ "BINDING": {
+  "aggregate_verdict": {
+   "aggregates_permitted": false,
+   "detail": {
+    "code": "AGGREGATE_TOUCHES_REFUSED_ROW",
+    "cohort_problems": [],
+    "detail": "no partial credit: the aggregate is refused whole until every row binds, no two rows claim one game, and the cohort covers the board or is explicitly narrowed with a recorded reason",
+    "n_refused": 8,
+    "refused_codes": [
+     "MISSING_IDENTITY_FIELD"
+    ],
+    "statistic": "any aggregate over cfb:2026-08-29"
+   }
+  },
+  "counters": {
+   "CANONICAL_ID_MATCH": "0/8",
+   "DATE_COHERENCE_PASS": "0/8",
+   "REFUSED_ROWS": [
+    {
+     "codes": [
+      "MISSING_IDENTITY_FIELD",
+      "MISSING_IDENTITY_FIELD",
+      "MISSING_IDENTITY_FIELD"
+     ],
+     "index": 0
+    },
+    {
+     "codes": [
+      "MISSING_IDENTITY_FIELD",
+      "MISSING_IDENTITY_FIELD",
+      "MISSING_IDENTITY_FIELD"
+     ],
+     "index": 1
+    },
+    {
+     "codes": [
+      "MISSING_IDENTITY_FIELD",
+      "MISSING_IDENTITY_FIELD",
+      "MISSING_IDENTITY_FIELD"
+     ],
+     "index": 2
+    },
+    {
+     "codes": [
+      "MISSING_IDENTITY_FIELD",
+      "MISSING_IDENTITY_FIELD",
+      "MISSING_IDENTITY_FIELD"
+     ],
+     "index": 3
+    },
+    {
+     "codes": [
+      "MISSING_IDENTITY_FIELD",
+      "MISSING_IDENTITY_FIELD",
+      "MISSING_IDENTITY_FIELD"
+     ],
+     "index": 4
+    },
+    {
+     "codes": [
+      "MISSING_IDENTITY_FIELD",
+      "MISSING_IDENTITY_FIELD",
+      "MISSING_IDENTITY_FIELD"
+     ],
+     "index": 5
+    },
+    {
+     "codes": [
+      "MISSING_IDENTITY_FIELD",
+      "MISSING_IDENTITY_FIELD",
+      "MISSING_IDENTITY_FIELD"
+     ],
+     "index": 6
+    },
+    {
+     "codes": [
+      "MISSING_IDENTITY_FIELD",
+      "MISSING_IDENTITY_FIELD",
+      "MISSING_IDENTITY_FIELD"
+     ],
+     "index": 7
+    }
+   ],
+   "RESULT_BINDING_PASS": "0/8"
+  },
+  "gradable": false
+ },
+ "C4_WORDING": {
+  "correct": "unbindable UNDER THE CURRENT ID SCHEMA",
+  "incorrect_and_superseded": "'these games can never be formally graded' \u2014 the wording in data/audit/2026-08-29_card_refresh.json WHY_NOTHING_BINDS.cfb",
+  "r6": "the 8/29 record is NOT edited. Its wording is superseded here.",
+  "the_fix": "an id migration: stamp ESPN or CFBD gameIds at CAPTURE time, so the board carries a namespaced canonical id before the games are played. That is FU-2 in the 8/30 postgame audit."
+ },
+ "DISPOSITION": "REFUSED_NOT_BINDABLE \u2014 all eight games",
+ "DO_NOT": {
+  "grade_descriptively_from_search": "REFUSED. Search snippets IDENTIFY and never BIND. Grading these eight from search is precisely how 8/27 published five fabricated finals.",
+  "publish_a_cover_rate": "REFUSED. guarded_aggregate raised AggregateRefused and no descriptive_override has been written for this cohort."
+ },
+ "LEDGER": {
+  "exposure_usd": 0,
+  "n_bets": 0,
+  "units": 0.0,
+  "wager_authority": "NO"
+ },
+ "OTHER_SEVEN": [
+  "cfb:San Jos\u00e9 State @ USC",
+  "cfb:NC State @ Virginia",
+  "cfb:Jacksonville State @ North Dakota State",
+  "cfb:Sacramento State @ Eastern Michigan",
+  "cfb:Hawai'i @ Stanford",
+  "cfb:New Mexico State @ Florida State",
+  "cfb:Memphis @ UNLV"
+ ],
+ "OTHER_SEVEN_DISPOSITION": "no admissible result and no relayed result. Nothing is claimed about them in either direction.",
+ "R6": "append-only; new path",
+ "THE_ONE_RELAYED_RESULT": {
+  "C1_labelling": {
+   "coherent": {
+    "denominator_base": "CFB Week-1 margin residual SD",
+    "numerator": 21.9,
+    "numerator_base": "MODEL residual (ensemble projected margin minus actual)",
+    "sigma": 18.385,
+    "sigma_n": 758,
+    "verdict": "BASE-COHERENT",
+    "z": 1.19
+   },
+   "mixed": {
+    "denominator_base": "CFB Week-1 margin residual SD (MODEL-referenced)",
+    "gauge": -0.73,
+    "numerator": -13.5,
+    "numerator_base": "MARKET residual (line vs actual)",
+    "sigma": 18.385,
+    "verdict": "MIXED BASE \u2014 measures the MARKET's miss against the MODEL's dispersion. Not a verdict on the model."
+   }
+  },
+  "final": "UNC 15 - TCU 10",
+  "game": "cfb:North Carolina @ TCU",
+  "grade": "DESCRIPTIVE_ONLY via owner screenshot relay; accrues NOTHING",
+  "play": "TCU -8.5, rated 67.6% to cover \u2014 LOST",
+  "reading": "1.19 sigma in Week 1 is routine. Under the retired 13.5 constant the same miss would have read 1.62 sigma and looked like a surprise."
+ },
+ "WHY": {
+  "board_side": "the eight rows carry NO identifier in any id space. The refusal code is MISSING_IDENTITY_FIELD on every row for every one of game_pk, scheduled_date, result_date, away and home. The only identity present is a natural-language matchup string.",
+  "odds_side": "the fixtures came from an owner-relayed single-book DK board whose ids are DK_RELAY:<slug>. A book's internal slug is not an identifier of a game in any authority's id space.",
+  "source_side": "cfbfastR-data is pinned at end-of-2025. There is no 2026 CFB schedule in any admitted archive."
+ },
+ "cohort": "cfb:2026-08-29",
+ "created_utc": "2026-08-30T11:12:00Z",
+ "record_id": "CFB-REFUSED-NOT-BINDABLE-2026-08-29",
+ "record_sha256": "46dca38ce16f623692cf329c3a49eefbcc08759c595302504405703c09b3fa39",
+ "schema": "ops.cohort_refusal.v1"
+}

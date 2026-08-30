@@ -269,7 +269,13 @@ for _m in ("result_provenance","result_content_checks","parse_box_dump",
            "route_ladder_v1","checkpoint_schedule","readiness_gate","replacement_workflow",
            "module_manifest","pipeline_e2e","recovery_jobs","result_display","adaptive_challenger","state_coherence",
            # 2026-08-25 owner correction: staleness launches a job; exhaustion publishes a failure
-           "wnba_feature_pipeline"):
+           "wnba_feature_pipeline",
+           # 2026-08-30 MC CONVERGENCE PORT (P0-MC-CONVERGENCE-2026-08-30). The mc_engine
+           # lineage's 3-sigma batch-block gate is ported and bound into the
+           # forecastable/actionable gate: CONVERGENCE_FAIL demotes to
+           # REGISTERED_FALLBACK_ONLY instead of killing the slate builder. Wired the day it
+           # was written, same rule as every module above.
+           "mc_convergence","test_mc_convergence_gate"):
     _r=subprocess.run([sys.executable,f"harness/{_m}.py","--selftest"],capture_output=True,text=True)
     _out=(_r.stdout+_r.stderr).strip().splitlines()
     check(f"{_m} selftest ({_out[-1][:72] if _out else 'no output'})", _r.returncode==0)

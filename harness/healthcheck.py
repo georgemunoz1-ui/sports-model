@@ -294,7 +294,13 @@ for _m in ("result_provenance","result_content_checks","parse_box_dump",
            # wnba_refresh_espn shape, whose own comment once claimed it "is now wired into
            # healthcheck so it cannot rot silently again" while nothing invoked it.
            "score_admission","verified_snapshot","score_collector","board_invariants",
-           "test_score_admission","acquisition_orchestrator","export_agent_context"):
+           "test_score_admission","acquisition_orchestrator","export_agent_context",
+           # NO_ACTION != NO_FORECAST, 2026-08-30. The board forecast 0 of 15 MLB
+           # games against an SP_CONFIRMED gate that a PREGAME board can never
+           # satisfy. relay_parser makes a 4,461-line upload deterministic instead
+           # of skim-dependent; mlb_daily_coordinator refuses to record a
+           # non-mathematical reason as TRUE_NO_FORECAST.
+           "relay_parser","mlb_daily_coordinator"):
     _r=subprocess.run([sys.executable,f"harness/{_m}.py","--selftest"],capture_output=True,text=True)
     _out=(_r.stdout+_r.stderr).strip().splitlines()
     check(f"{_m} selftest ({_out[-1][:72] if _out else 'no output'})", _r.returncode==0)

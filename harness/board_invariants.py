@@ -135,6 +135,49 @@ right, which is precisely why nobody noticed:
      exception type) and the tally reads "N killed, M errored, K survived". Fixtures that used to
      die of an IndexError under a mutant — S3's [0] lookups — were rewritten to fail by name.
 
+THE 2026-08-30 RE-ATTACK (round two), and what it found still broken in here. The record is
+data/audit/2026-08-30_isolation_layer_reattack.json. Round one found untouched defects; round two
+found INCOMPLETE FIXES — "a guard added and then made skippable, a value nulled in one place and
+republished in another". Four of them were in this file:
+
+  G, MOVED NOT REMOVED. enforce() nulled probabilities.edge_pp, usable_edge_pp and the assumed
+     no-vig — and then republished the same three numbers as LIVE values, under the same key
+     names, at row["board_invariants"]["detail"]: 14.3, 6.9 and 50.0, intact, in the enforced
+     copy, with no refusal marker on them. check_row records what it judged and enforce() copied
+     dict(rv.detail) onto the row, so the redaction was applied to one representation of the
+     figure and not to the other. SANITISATION MEANS THE VALUE IS GONE — not that the primary
+     field is null while a copy survives elsewhere. The prohibition is now applied where the
+     figure is BORN, inside RowVerdict (section 6b), so the verdict object, its to_dict(), the
+     enforced row's diagnostics block and anything a caller serialises downstream all inherit it
+     instead of each copy needing its own removal. S23 walks the ENTIRE enforced structure
+     recursively and refuses to find either figure as a live number anywhere outside the labelled
+     refusal ledger.
+
+  I, ONE LEVEL DOWN. check_game() silently SKIPPED a non-mapping entry in game["markets"] while
+     _games_of() and _markets_of() raise for the same class of hazard. Executed against this
+     module: the frozen 8/30 board with every dict row wrapped in a ONE-ELEMENT LIST came back
+     ROWS_CHECKED "0/0", GAMES_CHECKED "19/19", clean=True, reason_totals {} — and enforce() then
+     passed every row through byte-identical, republishing the laundered edge and the LEAN. The
+     counter could not report the gap because both sides of it were the FILTERED count
+     ("%d/%d" % (n_rows, n_rows) is a check that cannot fail). Now: a non-mapping row is a
+     BoardInvariantsError naming the game and the index; ROWS_CHECKED's denominator is the rows
+     SUPPLIED (GameVerdict.rows_supplied, taken from the published list before anything is
+     filtered); and a board with any unchecked row is NOT clean.
+
+  R3, PROVED OVER THE WRONG WINDOW. enforce() took its baseline hash AFTER check_board had already
+     run on the caller's object — load_board() returns the caller's dict by reference — so any
+     mutation check_board made was folded into the "before" and INPUT_UNCHANGED could not see it.
+     The hash is taken FIRST now, immediately after load_board and before the check runs. S26
+     monkeypatches check_board with one that stamps a key on the board it is handed and requires
+     enforce() to raise.
+
+  O, HALF APPLIED. The crash half was closed here in round one (an ERRORED mutant is not a kill).
+     The MISDIRECTION half was not: this runner credited a KILL to ANY named failure, so a mutant
+     dying on a DIFFERENT protection's assertion was tallied as its own kill. Every MUTANTS entry
+     now DECLARES the fixture that owns the guard it removes; a kill requires that fixture to
+     fire and anything else is MISDIRECTED; and an ERROR_CANARY tests the classifier itself
+     rather than trusting it, as score_admission's has since round one.
+
 Vocabulary is IMPORTED from harness/score_admission.py wherever it overlaps (decisions, the four
 board reason codes, AVAILABILITY_UNKNOWN, MIN_ATL_REQUIRED_ROW). Retyping a string literal is how
 a vocabulary forks, and three modules were built against this contract in parallel. Note one
@@ -705,6 +748,99 @@ def check_convergence(game, *, sigma=None, register=None):
 
 
 # ---------------------------------------------------------------------------------------------
+# 6b. PROHIBITED FIGURES.  One rule, one home, applied to EVERY representation of the figure.
+# ---------------------------------------------------------------------------------------------
+#: CLUSTER G, adversarial review 2026-08-30, and its ROUND-TWO REGRESSION. The owner invariant is
+#: "if market_price is null: prohibit edge calculation, prohibit usable_edge calculation" — the
+#: CALCULATION, not the LEAN.
+#:
+#: ROUND ONE. enforce() computed the suppression correctly and then published the enforced row
+#: with edge_pp 14.3, usable_edge_pp 6.9 and market_no_vig_cover_pct 50.0 verbatim: compute-then-
+#: discard, the sixth independent occurrence of that shape in this repo.
+#:
+#: ROUND TWO. The fix nulled those three fields in probabilities and the SAME THREE NUMBERS came
+#: back as live values under the same key names at row["board_invariants"]["detail"], because
+#: check_row records what it judged and enforce() copies dict(rv.detail) onto the enforced row.
+#: A figure that is null in one representation and intact in another has been MOVED, not removed.
+#: So the prohibition is applied HERE, at the point the verdict is constructed, and every
+#: downstream representation inherits it: RowVerdict.detail, RowVerdict.to_dict(), the game and
+#: board verdicts that embed it, row["board_invariants"]["detail"] in the enforced copy, and the
+#: full verdict dict enforce() returns under "verdict".
+#:
+#: THE CHOICE, STATED ONCE: the keys are KEPT and their values set to None, never dropped. Three
+#: sibling modules read row["probabilities"]["edge_pp"] positively; deleting the key turns a
+#: refusal into a KeyError somewhere else, which is a different accident, not a fix.
+#:
+#: THE THREE BOUNDARIES, STATED RATHER THAN LEFT TO BE DISCOVERED, because a scan that quietly
+#: exempts things is how cluster G survived a fix pass:
+#:   1. row["board_invariants"]["redacted"] keeps the refused value as a NUMBER. It is the
+#:      labelled refusal ledger — {field, was, reason_code, reason} — and it is the ONE place the
+#:      figure may exist; harness/test_score_admission.py:1001 binds it by value. "We refused
+#:      14.3" is the opposite of publishing 14.3, and the change log carries the same record.
+#:   2. A verdict's own detail block records its refusals with the value as a STRING
+#:      (`was_repr`), so nothing inside a diagnostics block is a number a consumer could read
+#:      back and use.
+#:   3. detail["no_vig_pct"] (50.0) and detail["edge_pp_recomputed"] (14.2) STAY. They are the
+#:      EVIDENCE for the codes that refused the row — the assumed base itself, and this module's
+#:      own recomputation that showed the published 14.3 does not reproduce from the fields
+#:      beside it — and both are bound by name in harness/test_score_admission.py:890 and :923.
+#:      Neither is the published edge. The two figures the invariant prohibits are gone.
+PROHIBITED_EDGE_FIELDS = ("edge_pp", "usable_edge_pp")
+
+#: The same two figures as they appear in a VERDICT's own detail block. Named separately from
+#: PROHIBITED_EDGE_FIELDS so a future maintainer cannot close one representation and believe the
+#: other followed — which is precisely what happened between round one and round two.
+PROHIBITED_DETAIL_FIELDS = ("edge_pp", "usable_edge_pp")
+
+#: The codes that prohibit an edge from EXISTING, as opposed to prohibiting a play. A row with no
+#: captured price has nothing for an edge to be an edge AGAINST; a row whose no-vig base was
+#: assumed has an edge whose entire denominator was typed in.
+EDGE_PROHIBITING_REASONS = frozenset({REASON_MISSING_MARKET_PRICE, REASON_ASSUMED_NO_VIG})
+
+REDACTION_REASON = {
+    REASON_MISSING_MARKET_PRICE:
+        "REFUSED by board_invariants: entry.price_american is null, so there is no market "
+        "probability for this figure to be an edge AGAINST. The owner invariant prohibits the "
+        "calculation, so the enforced copy must not carry its result.",
+    REASON_ASSUMED_NO_VIG:
+        "REFUSED by board_invariants: no price was captured on either side of this market, so "
+        "this no-vig probability was assumed and not derived. An assumed base publishes as None.",
+}
+
+
+def _figure_repr(value):
+    """A refused figure as TEXT. json.dumps so 14.3 reads back as the string "14.3" and not as a
+    number a consumer could pick up and compute with: named in an explanation, never live."""
+    try:
+        return json.dumps(value)
+    except (TypeError, ValueError):
+        return repr(value)
+
+
+def _refuse_prohibited_detail(detail, codes):
+    """Strip the prohibited derived figures out of a verdict's OWN detail block.
+
+    Returns (detail, refusals). The keys stay and their values become None; each removal is
+    recorded as {field, was_repr, reason_code, reason} under detail["prohibited_figures_refused"]
+    with the value as a STRING, so the refusal is auditable and the number is not readable.
+    """
+    prohibiting = [c for c in _order_codes(codes) if c in EDGE_PROHIBITING_REASONS]
+    if not prohibiting:
+        return detail, []
+    code = prohibiting[0]
+    refusals = []
+    for field in PROHIBITED_DETAIL_FIELDS:
+        if detail.get(field) is None:
+            continue
+        refusals.append({"field": field, "was_repr": _figure_repr(detail[field]),
+                         "reason_code": code, "reason": REDACTION_REASON[code]})
+        detail[field] = None
+    if refusals:
+        detail["prohibited_figures_refused"] = refusals
+    return detail, refusals
+
+
+# ---------------------------------------------------------------------------------------------
 # 7. VERDICTS.  Plain classes, not dataclasses.
 #     `from __future__ import annotations` + @dataclass resolves annotations through
 #     sys.modules[cls.__module__], which does not exist when a file is exec'd into a throwaway
@@ -746,7 +882,8 @@ class RowVerdict:
     """
 
     __slots__ = ("event_id", "game", "market", "decision_in", "decision", "signal_decision_in",
-                 "signal_decision", "posture", "reason_codes", "warnings", "detail", "row_index")
+                 "signal_decision", "posture", "reason_codes", "warnings", "detail", "row_index",
+                 "refused_figures")
 
     def __init__(self, event_id, game, market, decision_in, signal_decision_in, codes, warnings,
                  detail, row_index=None):
@@ -759,6 +896,12 @@ class RowVerdict:
         self.reason_codes = _order_codes(codes)
         self.warnings = _order_codes(warnings)
         self.detail = dict(detail or {})
+        # CLUSTER G, ROUND TWO. The figure is refused where it is BORN, so every representation
+        # downstream inherits the refusal rather than each copy needing its own: the enforced
+        # row's diagnostics block republished 14.3 and 6.9 as live values for exactly as long as
+        # this was done one copy at a time. Section 6b states the rule and its three boundaries.
+        self.detail, self.refused_figures = _refuse_prohibited_detail(self.detail,
+                                                                      self.reason_codes)
         self.decision = _suppress(decision_in, self.reason_codes)
         self.signal_decision = _suppress(signal_decision_in, self.reason_codes)
         self.posture = _posture_for(self.reason_codes, self.decision)
@@ -786,6 +929,7 @@ class RowVerdict:
                 "signal_decision": self.signal_decision, "posture": self.posture,
                 "reason_codes": list(self.reason_codes), "warnings": list(self.warnings),
                 "suppressed": self.suppressed, "changed": self.changed,
+                "refused_figures": [dict(r) for r in self.refused_figures],
                 "detail": dict(self.detail)}
 
 
@@ -793,13 +937,24 @@ class GameVerdict:
     """One game's verdict: the union of its rows plus the cross-market convergence finding."""
 
     __slots__ = ("event_id", "game", "decision_in", "decision", "posture", "reason_codes",
-                 "warnings", "rows", "detail")
+                 "warnings", "rows", "detail", "rows_supplied")
 
-    def __init__(self, event_id, game, decision_in, rows, detail=None):
+    def __init__(self, event_id, game, decision_in, rows, detail=None, rows_supplied=None):
+        """`rows_supplied` is the length of game["markets"] AS PUBLISHED, before anything is
+        filtered, and it is the DENOMINATOR of ROWS_CHECKED.
+
+        Round two of the 2026-08-30 review: the counter read "%d/%d" % (n_rows, n_rows), both
+        sides of it the count of rows that parsed, so a board whose rows were all skipped reported
+        "0/0" and clean=True. A counter that cannot show a shortfall is not a counter. Added as a
+        trailing keyword so a caller that predates it still constructs; when it is not supplied
+        the denominator falls back to the rows this verdict holds, which is honest for a
+        hand-built verdict and never happens on the check_game path.
+        """
         self.event_id = event_id
         self.game = game
         self.decision_in = decision_in
         self.rows = list(rows)
+        self.rows_supplied = len(self.rows) if rows_supplied is None else int(rows_supplied)
         codes, warns = [], []
         for r in self.rows:
             codes.extend(r.reason_codes)
@@ -820,7 +975,8 @@ class GameVerdict:
 
     def to_dict(self):
         return {"schema": "ops.board_invariants.game.v1", "event_id": self.event_id,
-                "game": self.game, "decision_in": self.decision_in, "decision": self.decision,
+                "game": self.game, "rows_supplied": self.rows_supplied,
+                "decision_in": self.decision_in, "decision": self.decision,
                 "posture": self.posture, "reason_codes": list(self.reason_codes),
                 "warnings": list(self.warnings), "changed": self.changed,
                 "detail": dict(self.detail),
@@ -844,10 +1000,14 @@ class BoardVerdict:
                 totals[c] = totals.get(c, 0) + 1
         self.reason_totals = dict(sorted(totals.items()))
         n_rows = len(rows)
+        # SUPPLIED, not parsed. See GameVerdict.rows_supplied: the old denominator was the
+        # numerator, so the re-attack's list-shaped board reported "0/0" and clean=True.
+        n_supplied = sum(g.rows_supplied for g in self.games)
         n_games = len(self.games)
         conv = [g for g in self.games if g.detail.get("convergence_applicable")]
         self.counters = {
-            "ROWS_CHECKED": "%d/%d" % (n_rows, n_rows),
+            "ROWS_CHECKED": "%d/%d" % (n_rows, n_supplied),
+            "ROWS_NOT_CHECKED": n_supplied - n_rows,
             "GAMES_CHECKED": "%d/%d" % (n_games, n_games),
             "ROWS_SUPPRESSED": sum(1 for r in rows if r.suppressed),
             "ROWS_DECISION_CHANGED": sum(1 for r in rows if r.decision != r.decision_in),
@@ -869,6 +1029,14 @@ class BoardVerdict:
 
     @property
     def clean(self):
+        """CLEAN means every supplied row was checked AND none of them had a finding.
+
+        A board that reported clean=True having checked nothing is the whole shape of cluster I,
+        and the re-attack produced it again one level down. An unchecked row is an unanswered
+        question, not a pass.
+        """
+        if self.counters.get("ROWS_NOT_CHECKED"):
+            return False
         return not any(g.reason_codes for g in self.games)
 
     def for_game(self, key):
@@ -1018,24 +1186,43 @@ def check_row(market_row, *, game, availability_state=None, sigma=None, register
 def check_game(game, *, availability_state=None, sigma=None, register=None):
     """Every market row of one game, plus the cross-market convergence finding.
 
-    The index passed to check_row is the row's position in game["markets"] AS PUBLISHED, not its
-    position among the dict-shaped rows: a non-mapping entry in the list must not shift every
-    verdict after it onto the wrong row (cluster H).
+    The index passed to check_row is the row's position in game["markets"] AS PUBLISHED, so a
+    verdict always names the row it was computed from (cluster H).
+
+    CLUSTER I, ONE LEVEL DOWN — the 2026-08-30 re-attack, executed. This function used to FILTER
+    non-mapping rows out (`... for i, r in enumerate(_markets_of(game)) if isinstance(r, dict)`)
+    while _games_of() and _markets_of() raise for the same class of hazard. The frozen 8/30 board
+    with each dict row wrapped in a one-element list therefore came back ROWS_CHECKED "0/0",
+    GAMES_CHECKED "19/19", clean=True, reason_totals {}, and enforce() passed every row through
+    byte-identical — the acceptance board reporting CLEAN with zero findings while every
+    laundered value was republished. A checker that finds nothing to check must SAY SO. The
+    refusal names the game and the row index, because "some row somewhere is malformed" is not a
+    finding anyone can act on.
     """
     if not isinstance(game, dict):
         raise BoardInvariantsError("game is not a mapping: %r" % type(game).__name__)
-    rows = [check_row(r, game=game, availability_state=availability_state, sigma=sigma,
-                      register=register, row_index=i)
-            for i, r in enumerate(_markets_of(game)) if isinstance(r, dict)]
+    markets = _markets_of(game)
+    rows = []
+    for i, r in enumerate(markets):
+        if not isinstance(r, dict):
+            raise BoardInvariantsError(
+                "game %r market row %d is not a mapping (it is %s). This row cannot be checked, "
+                "and a row that cannot be checked is not a row that passed: skipping it reports "
+                "the board CLEAN because nothing was checked, which is the one answer an "
+                "invariant checker must never give."
+                % (game.get("game"), i, type(r).__name__))
+        rows.append(check_row(r, game=game, availability_state=availability_state, sigma=sigma,
+                              register=register, row_index=i))
     conv = check_convergence(game, sigma=sigma, register=register)
     state, why = resolve_availability(availability_state)
     detail = {"convergence_applicable": conv is not None,
               "availability_state": state, "availability_reason": why,
+              "rows_supplied": len(markets),
               "sport": game.get("sport"), "start_time": game.get("start_time")}
     if conv:
         detail["convergence"] = conv["detail"]
     return GameVerdict(game.get("event_id"), game.get("game"), game.get("game_status"), rows,
-                       detail)
+                       detail, rows_supplied=len(markets))
 
 
 def check_board(board_json, *, availability=None, sigma=None, register=None, source=None):
@@ -1091,29 +1278,50 @@ def _canonical_hash(obj):
                                      ensure_ascii=True).encode("utf-8")).hexdigest()
 
 
-#: CLUSTER G, adversarial review 2026-08-30. The owner invariant is "if market_price is null:
-#: prohibit edge calculation, prohibit usable_edge calculation" — the CALCULATION, not the LEAN.
-#: enforce() computed the suppression correctly and then published the enforced row with edge_pp
-#: 14.3, usable_edge_pp 6.9 and market_no_vig_cover_pct 50.0 verbatim: compute-then-discard, the
-#: sixth independent occurrence of that shape in this repo. A downstream reader of the ENFORCED
-#: copy would have found the laundered number exactly where it was before.
-#:
-#: THE CHOICE, STATED ONCE: the keys are KEPT and their values set to None, and never dropped.
-#: Three sibling modules read row["probabilities"]["edge_pp"] positively; deleting the key turns a
-#: refusal into a KeyError somewhere else, which is a different accident, not a fix. Every removal
-#: is recorded verbatim under row["board_invariants"]["redacted"] as {field, was, reason_code,
-#: reason} and is emitted in the change log, so the value is REFUSED, never silently vanished.
-PROHIBITED_EDGE_FIELDS = ("edge_pp", "usable_edge_pp")
+#: The only two places a refused figure may still exist AS A NUMBER: the labelled per-row refusal
+#: ledger (row["board_invariants"]["redacted"][i].was) and the change-log entry that records the
+#: same removal. Both are marked as refusals and carry the reason code; everything else is a live
+#: value a consumer could read. Anchored to the ledger's own shape rather than to a key name, so
+#: a NEW key called "was" somewhere else does not inherit the exemption.
+REFUSAL_LEDGER_PATH_RE = re.compile(r"\.redacted\[\d+\]\.|^\$\.changes\[\d+\]\.from$")
 
-REDACTION_REASON = {
-    REASON_MISSING_MARKET_PRICE:
-        "REFUSED by board_invariants: entry.price_american is null, so there is no market "
-        "probability for this figure to be an edge AGAINST. The owner invariant prohibits the "
-        "calculation, so the enforced copy must not carry its result.",
-    REASON_ASSUMED_NO_VIG:
-        "REFUSED by board_invariants: no price was captured on either side of this market, so "
-        "this no-vig probability was assumed and not derived. An assumed base publishes as None.",
-}
+
+def _number_paths(node, figures, path="$", out=None):
+    """Every path in `node` at which one of `figures` survives as a live number.
+
+    Bools are not numbers here: True == 1 in Python and a flag is not a figure.
+    """
+    if out is None:
+        out = []
+    if isinstance(node, dict):
+        for k in sorted(node, key=str):
+            _number_paths(node[k], figures, "%s.%s" % (path, k), out)
+    elif isinstance(node, list):
+        for i, v in enumerate(node):
+            _number_paths(v, figures, "%s[%d]" % (path, i), out)
+    elif isinstance(node, (int, float)) and not isinstance(node, bool):
+        if any(abs(float(node) - float(x)) < 1e-9 for x in figures):
+            out.append((path, node))
+    return out
+
+
+def prohibited_figure_leaks(enforced, figures):
+    """Every place a prohibited figure survives as a LIVE number in an enforced structure.
+
+    P0-C, the 2026-08-30 re-attack: the round-one fix nulled probabilities.edge_pp and then
+    republished 14.3 under the same key name in the diagnostics block, so a fixture that read the
+    three keys back saw a refusal while a downstream reader saw the number. Reading keys back
+    cannot detect that; walking the whole structure can. Sanitisation means the value is GONE
+    from every representation — the row, the diagnostics block, the verdict this module
+    serialises — not that the primary field is null while a copy survives elsewhere.
+    """
+    return [(p, v) for p, v in _number_paths(enforced, figures)
+            if not REFUSAL_LEDGER_PATH_RE.search(p)]
+
+
+#: The prohibition table lives in section 6b, beside the rule it implements. ONE home for "which
+#: figures may not exist", applied to the ENFORCED ROW here and to the VERDICT'S OWN DETAIL in
+#: RowVerdict — round two of the review found the fix applied to the first and not the second.
 
 
 def _bind_game_verdict(gv, game, index):
@@ -1214,13 +1422,20 @@ def enforce(board_json, *, availability=None, sigma=None, register=None, verdict
       * a path was read TWICE — once for `original`, once inside check_board — and the verdicts
         were paired to the second read POSITIONALLY with nothing asserting they described the same
         board. The file is now read ONCE and the pairing asserts identity per game.
+
+    AND THE ONE THE RE-ATTACK FOUND (round two): the R3 baseline was taken TOO LATE. load_board()
+    returns the CALLER'S dict by reference when a dict is handed in, check_board() then ran on
+    that object, and only afterwards was `before` computed — so anything the check mutated was
+    folded into the baseline and INPUT_UNCHANGED could not see it. The proof did not cover the
+    window it claimed. The hash is taken IMMEDIATELY after load_board and before the check runs,
+    so it now spans the whole call, check_board included. S26 is the fixture: it hands enforce a
+    check_board that stamps a key on the board and requires the R3 assertion to raise.
     """
     original = load_board(board_json)                       # READ ONCE. The second read was the
-    v = verdict if verdict is not None else check_board(    # hazard, not the label it preserved.
+    before = _canonical_hash(original)                      # hazard, not the label it preserved.
+    v = verdict if verdict is not None else check_board(
         original, availability=availability, sigma=sigma, register=register,
         source=board_json if isinstance(board_json, str) else None)
-
-    before = _canonical_hash(original)
     new = copy.deepcopy(original)
     changes = []
 
@@ -1962,6 +2177,209 @@ def selftest():
                  "one read applied to another read of the same filename is exactly the mutable-"
                  "archive hazard" % len(_disk_reads))
 
+    # ---- S23  THE REFUSED FIGURE DOES NOT EXIST ANYWHERE ELSE (cluster G, round two) ---------
+    # Round one nulled probabilities.edge_pp and the round-two re-attack found the SAME NUMBERS
+    # republished as live values at row["board_invariants"]["detail"] — 14.3, 6.9 and 50.0 — with
+    # no refusal marker on them. The guarding fixtures read the three keys back, which cannot see
+    # a copy under a different path. This one walks the ENTIRE enforced structure instead.
+    try:
+        frozen23 = json.load(open(CANONICAL_BOARD_PATH))
+        spread23 = [m for g23 in frozen23["games"] if g23.get("game") == "MIN @ ATL"
+                    for m in g23["markets"] if m.get("market") == MARKET_SPREAD]
+        if len(spread23) != 1:
+            f.append("S23 the frozen card no longer carries exactly one MIN@ATL SPREAD_RL row "
+                     "(found %d)" % len(spread23))
+        else:
+            # R1: the needles are READ from the frozen artifact, never typed into this fixture.
+            figures23 = [spread23[0]["probabilities"][name] for name in PROHIBITED_EDGE_FIELDS]
+            if sorted(figures23) != [6.9, 14.3]:
+                f.append("S23 the frozen card's prohibited pair reads %r; the incident published "
+                         "14.3 and 6.9 and this fixture is pointed at the wrong bytes" % figures23)
+            out23 = enforce(CANONICAL_BOARD_PATH)
+            leaks23 = prohibited_figure_leaks(out23, figures23)
+            if leaks23:
+                f.append("S23 the enforced structure still publishes a prohibited figure as a "
+                         "LIVE number at %r. Nulled in one representation and republished in "
+                         "another is cluster G MOVED, not removed." % (leaks23[:6],))
+            # ... and the scan is not vacuous: the labelled refusal ledger must still hold them.
+            if len(_number_paths(out23, figures23)) < 2:
+                f.append("S23 neither prohibited figure appears anywhere in the enforced "
+                         "structure, not even in the refusal ledger — this scan is asserting the "
+                         "absence of something that was never there")
+            # Every numeric "from" in the change log is a REDACTION record, or the exemption the
+            # scan grants to $.changes[i].from would launder an ordinary field.
+            bad_from23 = [c for c in out23["changes"]
+                          if isinstance(c.get("from"), (int, float))
+                          and not isinstance(c.get("from"), bool)
+                          and not (str(c.get("field") or "").startswith("probabilities.")
+                                   and c.get("to") is None)]
+            if bad_from23:
+                f.append("S23 the change log carries a numeric 'from' that is not a redaction "
+                         "record: %r" % (bad_from23[:3],))
+            # The three representations the owner named, asserted one at a time as well, so a
+            # failure says WHICH copy leaked rather than only that one did.
+            erow23 = [m for g23 in out23["board"]["games"] if g23.get("game") == "MIN @ ATL"
+                      for m in (g23.get("markets") or []) if m.get("market") == MARKET_SPREAD]
+            if len(erow23) != 1:
+                f.append("S23 the enforced copy holds %d MIN@ATL SPREAD_RL rows" % len(erow23))
+            else:
+                audit23 = erow23[0].get("board_invariants") or {}
+                det23 = audit23.get("detail") or {}
+                for name in PROHIBITED_DETAIL_FIELDS:
+                    if (erow23[0].get("probabilities") or {}).get(name) is not None:
+                        f.append("S23 the enforced ROW republishes probabilities.%s" % name)
+                    if det23.get(name) is not None:
+                        f.append("S23 board_invariants.detail republishes %s=%r as a live value; "
+                                 "the row is null and the diagnostics block is not, which is the "
+                                 "same number reachable by a second path"
+                                 % (name, det23.get(name)))
+                refused23 = {r.get("field"): r
+                             for r in (det23.get("prohibited_figures_refused") or [])}
+                for name in PROHIBITED_DETAIL_FIELDS:
+                    rec23 = refused23.get(name)
+                    if rec23 is None:
+                        f.append("S23 detail.%s was emptied with no record; a value that vanishes "
+                                 "unrecorded is not a refusal" % name)
+                    elif not isinstance(rec23.get("was_repr"), str) or not rec23.get("reason"):
+                        f.append("S23 the refusal of detail.%s does not name what it removed as "
+                                 "text: %r" % (name, rec23))
+                # The VERDICT this module serialises is a representation too: enforce() returns
+                # it, and the round-two finding was about a copy, not about the row.
+                vrows23 = [r for g23 in (out23["verdict"].get("games") or [])
+                           for r in (g23.get("rows") or [])
+                           if g23.get("game") == "MIN @ ATL" and r.get("market") == MARKET_SPREAD]
+                for r23 in vrows23:
+                    for name in PROHIBITED_DETAIL_FIELDS:
+                        if (r23.get("detail") or {}).get(name) is not None:
+                            f.append("S23 the serialised verdict republishes detail.%s" % name)
+                if out23["board"]["board_invariants"].get("generated_by") != MODULE_ID:
+                    f.append("S23 the enforced board is stamped %r, not %r"
+                             % (out23["board"]["board_invariants"].get("generated_by"), MODULE_ID))
+            # The object three sibling modules receive, not only the serialised copy.
+            rv23 = check_row(spread23[0], game=dict(spread23[0], markets=[spread23[0]],
+                                                    event_id="synthetic:s23", game="MIN @ ATL"),
+                             register=reg)
+            for name in PROHIBITED_DETAIL_FIELDS:
+                if rv23.detail.get(name) is not None:
+                    f.append("S23 check_row's own verdict detail carries %s=%r on a row it "
+                             "refused for a missing price" % (name, rv23.detail.get(name)))
+            # And the evidence for the codes SURVIVES: a scan that empties the diagnosis is not a
+            # stricter fix, it is a fix that destroys the reason the row was refused.
+            if rv23.detail.get("no_vig_pct") != 50.0 or rv23.detail.get("edge_pp_recomputed") \
+                    != 14.2 or rv23.detail.get("edge_bearing") is not True:
+                f.append("S23 the refusal took the EVIDENCE with it: no_vig_pct %r, "
+                         "edge_pp_recomputed %r, edge_bearing %r — the assumed base and this "
+                         "module's own recomputation are why the row was refused"
+                         % (rv23.detail.get("no_vig_pct"), rv23.detail.get("edge_pp_recomputed"),
+                            rv23.detail.get("edge_bearing")))
+    except Exception as e:
+        f.append("S23 the recursive prohibited-figure scan raised %r" % (e,))
+
+    # ---- S24  A MALFORMED ROW FAILS THE BOARD; IT DOES NOT MAKE IT CLEAN (cluster I, one down) -
+    # EXECUTED in the 2026-08-30 re-attack: the acceptance board with every dict row wrapped in a
+    # one-element list reported ROWS_CHECKED "0/0", GAMES_CHECKED "19/19", clean=True and
+    # reason_totals {}, while enforce() passed all 57 rows through byte-identical.
+    listed24 = copy.deepcopy(json.load(open(CANONICAL_BOARD_PATH)))
+    for g24 in listed24["games"]:
+        g24["markets"] = [[r] for r in g24["markets"]]
+    bare24 = {"games": [_mkgame("SYA @ SYH", ["SPREAD_RL"], event_id="synthetic:bare-row")]}
+    for label24, board24 in (("every row wrapped in a one-element list", listed24),
+                             ("a market row that is a bare string", bare24)):
+        try:
+            v24 = check_board(board24, register=reg)
+            f.append("S24 %s: check_board reported clean=%r with ROWS_CHECKED %r and %d reason "
+                     "totals instead of refusing. A board whose rows cannot be checked is not a "
+                     "board that passed."
+                     % (label24, v24.clean, v24.counters.get("ROWS_CHECKED"),
+                        len(v24.reason_totals)))
+        except BoardInvariantsError:
+            pass
+        except Exception as e:
+            f.append("S24 %s: check_board raised %s, not BoardInvariantsError"
+                     % (label24, type(e).__name__))
+        try:
+            enforce(board24, register=reg)
+            f.append("S24 %s: enforce() ran on a board whose rows it could not check, and every "
+                     "laundered value went out with it" % label24)
+        except BoardInvariantsError:
+            pass
+        except Exception as e:
+            f.append("S24 %s: enforce raised %s, not BoardInvariantsError"
+                     % (label24, type(e).__name__))
+
+    # ---- S25  ROWS_CHECKED COUNTS THE ROWS THAT WERE SUPPLIED ---------------------------------
+    # "%d/%d" % (n_rows, n_rows) is a counter that cannot report a shortfall, because both sides
+    # of it are the count of rows that survived. The denominator is the published list's length.
+    try:
+        g25 = _mkgame("SYA @ SYH", [_mkrow(MARKET_ML, selection="SYH", price=-110)],
+                      event_id="synthetic:counter")
+        gv25 = check_game(g25, availability_state="AVAILABLE", register=reg)
+        if gv25.rows_supplied != 1:
+            f.append("S25 check_game recorded %r supplied rows for a one-row game"
+                     % gv25.rows_supplied)
+        short25 = GameVerdict(gv25.event_id, gv25.game, gv25.decision_in, gv25.rows,
+                              dict(gv25.detail), rows_supplied=3)
+        bv25 = BoardVerdict("synthetic:short-rows", [short25], reg)
+        if bv25.counters.get("ROWS_CHECKED") != "1/3":
+            f.append("S25 ROWS_CHECKED reads %r where one row of three supplied was checked; a "
+                     "denominator that IS the numerator can never show a gap"
+                     % bv25.counters.get("ROWS_CHECKED"))
+        if bv25.counters.get("ROWS_NOT_CHECKED") != 2:
+            f.append("S25 ROWS_NOT_CHECKED is %r, expected 2"
+                     % bv25.counters.get("ROWS_NOT_CHECKED"))
+        if bv25.clean:
+            f.append("S25 a board with two unchecked rows reported CLEAN — 0/0 with no findings "
+                     "is exactly how the re-attack got a laundered board past this gate")
+        if check_board({"games": [g25]}, register=reg).counters.get("ROWS_CHECKED") != "1/1":
+            f.append("S25 the counter stopped agreeing with itself on a board that IS fully "
+                     "checked, so the denominator is not the supplied count")
+    except Exception as e:
+        f.append("S25 the supplied-rows counter fixture raised %r" % (e,))
+
+    # ---- S26  THE R3 BASELINE IS TAKEN BEFORE THE CHECK RUNS ----------------------------------
+    # load_board() hands back the CALLER'S dict by reference, check_board() then runs on that
+    # object, and the baseline used to be hashed afterwards — so a mutation made by the check was
+    # folded into the "before" and INPUT_UNCHANGED could not see it. The proof has to span the
+    # window it claims to cover.
+    _g26 = globals()
+    _real_check_board = _g26["check_board"]
+
+    def _stamping_check_board(board_json, _real=_real_check_board, **kw):
+        v = _real(board_json, **kw)
+        if isinstance(board_json, dict):
+            board_json["_stamped_by_check_board"] = True
+        return v
+
+    board26 = _mk_one_game_board("synthetic:board-26", "SYA @ SYH")
+    _g26["check_board"] = _stamping_check_board
+    try:
+        enforce(board26, register=reg)
+        f.append("S26 check_board stamped a key on the board it was handed and enforce()'s R3 "
+                 "self-proof did not notice: the baseline is hashed AFTER the check runs, so the "
+                 "window the hash proves is not the window it claims")
+    except BoardInvariantsError:
+        pass
+    except Exception as e:
+        f.append("S26 the R3 baseline fixture raised %s, not BoardInvariantsError"
+                 % type(e).__name__)
+    finally:
+        _g26["check_board"] = _real_check_board
+
+    # ---- S27  THE MODULE NAMES ITSELF, AND EVERY MUTANT NAMES ITS FIXTURE ---------------------
+    # healthcheck checks that a selftest banner names its own file (the 2026-08-25 incident in
+    # which one module was overwritten by another and every gate stayed green), and MODULE_ID is
+    # stamped into every enforced board as generated_by. The 8/30 re-attack mutated it to
+    # "not_board_invariants" and reported SURVIVED.
+    if MODULE_ID != "board_invariants":
+        f.append("S27 MODULE_ID is %r; this file is harness/board_invariants.py and the banner, "
+                 "the enforced board's generated_by and healthcheck's identity check all read it"
+                 % (MODULE_ID,))
+    unmarked27 = [e[0][:60] for e in MUTANTS if len(e) < 4 or not e[3]]
+    if unmarked27:
+        f.append("S27 %d mutant(s) declare no owning fixture, so a kill could be credited to "
+                 "collateral damage in an unrelated one (cluster O): %s"
+                 % (len(unmarked27), unmarked27[:3]))
+
     # ---- S14  BOARD SHAPE IS DECLARED, NEVER GUESSED -------------------------------------------
     for bad in ({}, {"games": "nope"}, {"games": [1]}):
         try:
@@ -2034,97 +2452,174 @@ def selftest():
 #     Each entry names the DEFECT RESTORED, not a test. Every one must be KILLED by selftest().
 # ---------------------------------------------------------------------------------------------
 
+#: Every entry is (DEFECT RESTORED, old, new, MARKER). The marker is the SELFTEST FIXTURE that
+#: owns the guard the mutation removes, and a kill requires THAT fixture to fire — cluster O,
+#: round two: this runner used to credit a kill to any named failure, so a mutant dying on an
+#: unrelated protection's assertion was tallied as its own kill. An exception CLASS may stand in
+#: the same slot for a mutant whose correct behaviour is to raise.
 MUTANTS = [
     ("the null-price guard is removed: an edge may again be published where no price was captured",
      "        codes.append(REASON_MISSING_MARKET_PRICE)",
-     "        pass"),
+     "        pass",
+     "S12"),
     ("an assumed no-vig is accepted, so 50.0 standing in for a price stops being a finding",
      "        codes.append(REASON_ASSUMED_NO_VIG)",
-     "        pass"),
+     "        pass",
+     "S12"),
     ("the two implied margins are compared with a tolerance nothing can exceed",
      "CONVERGENCE_MARGIN_TOLERANCE_POINTS = 1.0",
-     "CONVERGENCE_MARGIN_TOLERANCE_POINTS = 1e9"),
+     "CONVERGENCE_MARGIN_TOLERANCE_POINTS = 1e9",
+     "S5"),
     ("a LEAN survives every suppressing code, which is the 8/30 board exactly",
      "    if any(c in SUPPRESSING_REASONS for c in codes) and decision_in in PLAY_DECISIONS:",
-     "    if False:"),
+     "    if False:",
+     "S3"),
     ("two arms disagreeing about the SIGN of the projected margin stop counting as incompatible",
      "                and min(abs(mu_ml), abs(aligned)) >= CONVERGENCE_SIGN_MATERIALITY_POINTS)",
-     "                and False)"),
+     "                and False)",
+     "S4"),
     ("the two arms are compared without aligning the side, so agreement reads as contradiction",
      "    aligned = mu_sp if sp_team == ml_team else -mu_sp",
-     "    aligned = mu_sp"),
+     "    aligned = mu_sp",
+     "S6"),
     ("the convergence finding attaches to the spread arm only, so the ML arm looks innocent",
      "    if market in CONVERGENCE_MARKETS:",
-     "    if market == MARKET_SPREAD:"),
+     "    if market == MARKET_SPREAD:",
+     "S3"),
     ("the declared sigma is no longer read from the row's own note, so the contradiction the "
      "8/30 card documents becomes invisible",
      '                    out[name] = (v, "note:%s" % m.group(0))',
-     "                    pass"),
+     "                    pass",
+     "S3"),
     ("two different sigmas in one game stop being a refusal",
      "        codes.append(REASON_SIGMA_DISAGREEMENT)",
-     "        pass"),
+     "        pass",
+     "S9"),
     ("an unverifiable coherence claim stops suppressing, so a LEAN publishes on an unchecked one",
      "    REASON_CONVERGENCE_UNVERIFIABLE,\n})",
-     "})"),
+     "})",
+     "S8"),
     ("STALE and CAP features stop blocking a play",
      '    if play_bearing and dq.get("status") in SUPPRESSING_DQ_STATUSES:',
-     "    if False:"),
+     "    if False:",
+     "S11"),
     ("unresolved availability reads as AVAILABLE, so silence answers the question",
      "        return AVAILABILITY_UNKNOWN, AVAILABILITY_NOT_SUPPLIED",
-     '        return "AVAILABLE", AVAILABILITY_RESOLVED'),
+     '        return "AVAILABLE", AVAILABILITY_RESOLVED',
+     "S10"),
     ("a stale availability observation still counts as an answer (owner fixture 10, restored)",
      "            if age_h > limit:",
-     "            if False:"),
+     "            if False:",
+     "S10"),
     ("every sigma counts as measured, so 13.97 stops being a registered tolerance",
      "    return sigma_kind(value, register) == SIGMA_KIND_MEASURED",
-     "    return True"),
+     "    return True",
+     "S2"),
     ("a missing sigma register stops being a named refusal",
      "    if not os.path.exists(p):",
-     "    if False:"),
+     "    if False:",
+     "S1"),
     ("enforce() edits the board it was handed instead of a copy (R3)",
      "    new = copy.deepcopy(original)",
-     "    new = original"),
+     "    new = original",
+     "S13"),
     ("edge_pp is no longer recomputed from the fields beside it",
      "            warnings.append(REASON_EDGE_NOT_REPRODUCIBLE)",
-     "            pass"),
+     "            pass",
+     "S12"),
     ("a no-vig published from a one-sided price stops being recorded",
      "        warnings.append(REASON_NO_VIG_ONE_SIDED)",
-     "        pass"),
+     "        pass",
+     "S12"),
     ("the emission order stops matching the owner's required row",
      "    REASON_MISSING_MARKET_PRICE,\n    REASON_AVAILABILITY_UNKNOWN,",
-     "    REASON_AVAILABILITY_UNKNOWN,\n    REASON_MISSING_MARKET_PRICE,"),
+     "    REASON_AVAILABILITY_UNKNOWN,\n    REASON_MISSING_MARKET_PRICE,",
+     "S16"),
 
     # ---- the five from the 2026-08-30 adversarial review ------------------------------------
     ("cluster G: the suppression is computed and then DISCARDED on the write path, so the "
      "enforced copy publishes edge_pp 14.3, usable_edge_pp 6.9 and the assumed 50.0 again",
      "    removed = []\n    for field, code in targets:",
-     "    return []\n    for field, code in targets:"),
+     "    return []\n    for field, code in targets:",
+     "S18"),
     ("cluster H: row verdicts are keyed by market NAME again, so a game with two rows of one "
      "market applies both verdicts to the last row",
      "            row = _bind_row_verdict(rv, markets, gv)",
      '            row = {r.get("market"): r for r in markets'
-     " if isinstance(r, dict)}.get(rv.market)"),
+     " if isinstance(r, dict)}.get(rv.market)",
+     "S19"),
     ("cluster I: _markets_of answers [] for a game whose rows are not under 'markets', so the "
      "board is reported CLEAN because nothing was checked",
      "    if not isinstance(m, list):",
-     "    if not isinstance(m, list):\n        return []\n    if False:"),
+     "    if not isinstance(m, list):\n        return []\n    if False:",
+     "S20"),
     ("the game-identity assertion is removed, so a verdict computed on one board may be applied "
      "to a different board by position (owner regression fixture 7)",
      '    if (gv.event_id, gv.game) != (game.get("event_id"), game.get("game")):',
-     "    if False:"),
+     "    if False:",
+     "S21"),
     ("the row-identity assertion is removed, so a verdict is applied to whatever row now sits at "
      "that index",
      "    if have != want:",
-     "    if False:"),
+     "    if False:",
+     "S21"),
     ("the verdict/board length check is removed, so a short verdict silently leaves the games "
      "after it unenforced",
      "    if len(v.games) != len(games):",
-     "    if False:"),
+     "    if False:",
+     "S21"),
     ("enforce() reads the path a SECOND time inside check_board and pairs the verdicts from read "
      "#1 onto read #2",
      "        original, availability=availability, sigma=sigma, register=register,",
-     "        board_json, availability=availability, sigma=sigma, register=register,"),
+     "        board_json, availability=availability, sigma=sigma, register=register,",
+     "S22"),
+
+    # ---- the four from the 2026-08-30 RE-ATTACK (round two) ----------------------------------
+    ("P0-C, cluster G MOVED NOT REMOVED: the prohibited figure is republished in the verdict's "
+     "own detail block, so edge_pp 14.3 and usable_edge_pp 6.9 come back as live values at "
+     "row['board_invariants']['detail'] while probabilities.edge_pp reads null",
+     "    prohibiting = [c for c in _order_codes(codes) if c in EDGE_PROHIBITING_REASONS]",
+     "    prohibiting = []",
+     "S23"),
+    ("P0-D1: a non-mapping market row is silently SKIPPED again, so the acceptance board with "
+     "every row wrapped in a list reports clean with nothing checked",
+     "    markets = _markets_of(game)\n    rows = []\n    for i, r in enumerate(markets):\n"
+     "        if not isinstance(r, dict):",
+     "    markets = _markets_of(game)\n    rows = []\n    for i, r in enumerate(markets):\n"
+     "        if not isinstance(r, dict):\n            continue\n        if False:",
+     "S24"),
+    ("P0-D2: ROWS_CHECKED goes back to '%d/%d' % (n_rows, n_rows), a counter whose denominator "
+     "is its own numerator and which therefore cannot report a shortfall",
+     '            "ROWS_CHECKED": "%d/%d" % (n_rows, n_supplied),',
+     '            "ROWS_CHECKED": "%d/%d" % (n_rows, n_rows),',
+     "S25"),
+    ("P0-D3: a board with unchecked rows is CLEAN again, so 0 findings out of 0 rows checked "
+     "reads as a pass",
+     '        if self.counters.get("ROWS_NOT_CHECKED"):',
+     "        if False:",
+     "S25"),
+    ("P0-D4: the R3 baseline is hashed AFTER check_board runs, so any mutation the check makes "
+     "to the caller's object is folded into the 'before' and INPUT_UNCHANGED cannot see it",
+     "    before = _canonical_hash(original)                      # hazard, not the label it "
+     "preserved.\n    v = verdict if verdict is not None else check_board(\n"
+     "        original, availability=availability, sigma=sigma, register=register,\n"
+     "        source=board_json if isinstance(board_json, str) else None)",
+     "    v = verdict if verdict is not None else check_board(\n"
+     "        original, availability=availability, sigma=sigma, register=register,\n"
+     "        source=board_json if isinstance(board_json, str) else None)\n"
+     "    before = _canonical_hash(original)",
+     "S26"),
 ]
+
+#: CLUSTER O's own check, matching score_admission's. This mutation is NOT a defect and is NOT in
+#: MUTANTS: it is a canary that must come back ERRORED and never KILLED. A suite that counts a
+#: crash as a kill reports a perfect score while proving nothing, which is what this file did once
+#: already — so the classifier is tested rather than trusted. It targets the MODULE_ID line
+#: because the re-attack mutated exactly that line and reported SURVIVED.
+ERROR_CANARY = ("the module raises at import, before any fixture runs",
+                'MODULE_ID = "board_invariants"',
+                'MODULE_ID = "board_invariants" + _this_name_does_not_exist')
+
 
 #: Cluster O, adversarial review 2026-08-30, and it applies to every file in this layer: the old
 #: suite counted ANY exception as a kill. A mutant that dies at import, or one that turns a
@@ -2138,22 +2633,47 @@ MUTANTS = [
 #:             selftest that returned False without naming anything. Reported SEPARATELY and NOT
 #:             counted as a kill.
 #:   SURVIVED  the defect was restored and the selftest still passed.
+#:   MISDIRECTED  a named failure fired, but not the one the entry DECLARES. The mutant died of
+#:             collateral damage in a fixture that watches something else, so it proves nothing
+#:             about the guard it removed. Cluster O, round two: this runner credited a kill to
+#:             ANY named failure and had no marker at all, while score_admission's had required
+#:             the declared marker since round one.
 MUTANT_KILLED = "KILLED"
 MUTANT_ERRORED = "ERRORED"
 MUTANT_SURVIVED = "SURVIVED"
 MUTANT_UNAPPLIED = "UNAPPLIED"
 MUTANT_SELF_TARGETED = "SELF_TARGETED"
+MUTANT_MISDIRECTED = "MISDIRECTED"
 
 
-def _mutant_outcome(src, old, new, expect_exc=None):
-    """(outcome, evidence) for one mutation. See the cluster O note above for the vocabulary."""
+def _marker_matches(failure, marker):
+    """Does this named failure come from the fixture the mutant DECLARES?
+
+    An S-number matches only as the failure's leading token, so "S1" cannot be credited to a
+    failure from S18 — a prefix collision would make the misdirection check decorative, which is
+    the same class of defect as the tally parser that read "10 survived" as zero.
+    """
+    if " " in marker:
+        return marker in failure
+    return failure.split(None, 1)[:1] == [marker]
+
+
+def _mutant_outcome(src, old, new, expectation=None):
+    """(outcome, evidence) for one mutation. See the cluster O note above for the vocabulary.
+
+    `expectation` is the entry's fourth element: the marker of the fixture that owns the guard,
+    or an exception CLASS for a mutant whose correct behaviour is to raise.
+    """
     import io as _io, contextlib as _cl
+    wants_exception = isinstance(expectation, type) and issubclass(expectation, BaseException)
     ns = {"__file__": os.path.abspath(__file__), "__name__": "mutant"}
     buf = _io.StringIO()
     try:
         with _cl.redirect_stdout(buf):
             exec(compile(src.replace(old, new, 1), "<mutant>", "exec"), ns)
     except Exception as e:
+        if wants_exception and isinstance(e, expectation):
+            return MUTANT_KILLED, "raised the expected %s at import" % expectation.__name__
         return MUTANT_ERRORED, "died at import: %s: %s" % (type(e).__name__, e)
     fn = ns.get("selftest")
     if not callable(fn):
@@ -2163,8 +2683,8 @@ def _mutant_outcome(src, old, new, expect_exc=None):
         with _cl.redirect_stdout(buf):
             ok = fn()
     except Exception as e:
-        if expect_exc is not None and type(e).__name__ == expect_exc:
-            return MUTANT_KILLED, "raised the expected %s: %s" % (expect_exc, e)
+        if wants_exception and isinstance(e, expectation):
+            return MUTANT_KILLED, "raised the expected %s: %s" % (expectation.__name__, e)
         return MUTANT_ERRORED, ("selftest raised %s (%s) instead of failing a named assertion"
                                 % (type(e).__name__, e))
     named = [ln.strip()[5:].strip() for ln in buf.getvalue().splitlines()
@@ -2173,7 +2693,18 @@ def _mutant_outcome(src, old, new, expect_exc=None):
         return MUTANT_SURVIVED, "the defect was restored and every fixture still passed"
     if not named:
         return MUTANT_ERRORED, "selftest returned False without naming a failed assertion"
-    return MUTANT_KILLED, named[0]
+    if wants_exception:
+        return MUTANT_ERRORED, ("expected %s, got %d named failure(s)"
+                                % (expectation.__name__, len(named)))
+    if expectation is None:
+        return MUTANT_MISDIRECTED, ("killed by %r, but the entry names no fixture, so nothing "
+                                    "compares the failure to the guard this mutant removes"
+                                    % (named[0][:90],))
+    if not any(_marker_matches(x, expectation) for x in named):
+        return MUTANT_MISDIRECTED, ("killed by %r, but no %s failure fired — the guard this "
+                                    "mutant removes is watched by a DIFFERENT fixture than the "
+                                    "one it claims" % (named[0][:90], expectation))
+    return MUTANT_KILLED, [x for x in named if _marker_matches(x, expectation)][0]
 
 
 def mutation_suite():
@@ -2193,10 +2724,10 @@ def mutation_suite():
     # applies cleanly, changes no behaviour and reports SURVIVED.
     body = src[:src.index("MUTANTS = [")]
     tally = {MUTANT_KILLED: 0, MUTANT_ERRORED: 0, MUTANT_SURVIVED: 0,
-             MUTANT_UNAPPLIED: 0, MUTANT_SELF_TARGETED: 0}
+             MUTANT_UNAPPLIED: 0, MUTANT_SELF_TARGETED: 0, MUTANT_MISDIRECTED: 0}
     for entry in MUTANTS:
         name, old, new = entry[0], entry[1], entry[2]
-        expect_exc = entry[3] if len(entry) > 3 else None
+        expectation = entry[3] if len(entry) > 3 else None
         if old not in src:
             tally[MUTANT_UNAPPLIED] += 1
             print("  UNAPPLIED      " + name + ": pattern not found")
@@ -2205,21 +2736,38 @@ def mutation_suite():
             tally[MUTANT_SELF_TARGETED] += 1
             print("  SELF_TARGETED  " + name + ": pattern occurs only inside the MUTANTS list")
             continue
-        outcome, evidence = _mutant_outcome(src, old, new, expect_exc)
+        outcome, evidence = _mutant_outcome(src, old, new, expectation)
         tally[outcome] += 1
         print("  %-14s %s\n                   <- %s" % (outcome, name, evidence))
+
+    # CLUSTER O's classifier, TESTED rather than trusted: a mutation that dies at import must be
+    # reported as an ERROR and must never reach the kill tally.
+    canary_name, canary_old, canary_new = ERROR_CANARY
+    canary_outcome, canary_evidence = _mutant_outcome(src, canary_old, canary_new)
+    canary_ok = canary_outcome == MUTANT_ERRORED
+    print("  %-14s CANARY %s\n                   <- %s"
+          % ("OK" if canary_ok else "BROKEN", canary_name, canary_evidence))
+    if not canary_ok:
+        print("  A SUITE THAT CALLS AN IMPORT CRASH A KILL COUNTS CRASHES AS PROOF: the canary "
+              "was classified %s." % canary_outcome)
+
     killed, errored, survived = (tally[MUTANT_KILLED], tally[MUTANT_ERRORED],
                                  tally[MUTANT_SURVIVED])
-    print("board_invariants mutation suite: %d killed, %d errored, %d survived (of %d; %d "
-          "unapplied, %d self-targeted)"
-          % (killed, errored, survived, len(MUTANTS), tally[MUTANT_UNAPPLIED],
-             tally[MUTANT_SELF_TARGETED]))
     if errored:
         print("  ERRORS ARE NOT KILLS. A mutant that crashes proves the file broke, not that a "
               "fixture noticed the defect.")
     if survived:
         print("  SURVIVORS MEAN DECORATIVE FIXTURES.")
-    return killed == len(MUTANTS)
+    if tally[MUTANT_MISDIRECTED]:
+        print("  MISDIRECTED IS NOT A KILL. The mutant died in a fixture that watches something "
+              "else, so nothing here proves the guard it removed is guarded.")
+    # The tally is the LAST line: healthcheck parses it (and once read '10 survived' as zero).
+    print("board_invariants mutation suite: %d killed, %d errored, %d survived (of %d; %d "
+          "unapplied, %d self-targeted, %d misdirected, canary %s)"
+          % (killed, errored, survived, len(MUTANTS), tally[MUTANT_UNAPPLIED],
+             tally[MUTANT_SELF_TARGETED], tally[MUTANT_MISDIRECTED],
+             "OK" if canary_ok else "BROKEN"))
+    return killed == len(MUTANTS) and canary_ok
 
 
 def gate():

@@ -150,7 +150,11 @@ def forecast(snap, *, V13, KS, prior_p):
                 "mathematical_reason": ["ENGINE_RAISED"],
                 "reason_text": [f"{type(e).__name__}: {e}"], "p_home": None}
     state = FORECAST_CLEAN if snap["starter_slots_capped"] == 0 else FORECAST_VALID
+    dose = snap["resolved_information_dose"]
+    p_dosed = apply_dose(sim["p_home"], dose, prior_p)
     return {
+        "p_home_dosed": round(p_dosed, 6),
+        "dose_consumed": True,
         "event": snap["event"], "forecast_state": state,
         "p_home": sim["p_home"], "p_away": round(1 - sim["p_home"], 6),
         "projected_margin_home": sim.get("margin"), "projected_total": sim.get("total"),
@@ -163,6 +167,50 @@ def forecast(snap, *, V13, KS, prior_p):
                         "lineup": "NOT_POSTED", "dose": snap["resolved_information_dose"]},
         "seed": seed, "trials": snap["trials"], "simulation_version": "v13_1",
     }
+
+
+#: Base edge a full-information forecast must clear. The threshold WIDENS as dose falls.
+BASE_EDGE_PP = 3.0
+
+
+def required_edge_pp(dose, base=BASE_EDGE_PP):
+    """How much edge a forecast must show to be actionable AT THIS DOSE.
+
+    2026-08-31. A proposal arrived to consume dose by shrinking the point estimate toward the
+    prior and leaving the decision threshold alone. Tested on the 8/30 slate, that GREW the
+    apparent edge on 9 of 14 games -- LAD@DET went 5.20pp -> 11.33pp -- because the market is
+    priced away from the league prior, so pulling the model toward the prior pulls it AWAY from
+    the market. Removing information made the system look more confident about a disagreement.
+    That is exactly backwards, and the proposal's own worked example hit it (KC@CLE -0.9pp ->
+    +11.3pp) and corrected it by hand rather than by mechanism.
+
+    Shrinking a point estimate is not the same as widening an interval, and only the second one
+    is what low information means. The point estimate still shrinks -- shrink_to_prior is
+    registered and tested and stays -- but the BAR moves with it.
+    """
+    if not dose or dose <= 0:
+        return float("inf")
+    return base / dose
+
+
+def effective_edge_pp(p_raw, novig, dose):
+    """The only edge a forecast may claim: its departure from the market, scaled by what it knows.
+
+    edge -> 0 as dose -> 0. The alternative (shrink the probability, then difference) leaves
+    |prior - market| behind at zero information and reads it as a model edge.
+    """
+    return (dose or 0.0) * 100 * (p_raw - novig)
+
+
+def apply_dose(p_raw, dose, prior):
+    """The registered consumption. NOTE the target is the REGISTERED PRIOR, not 0.5.
+
+    prior for MLB is 0.5205399061032864, the measured home rate over the 1,684-game canonical
+    pool. Shrinking toward 0.5 instead would discard the measured home-field advantage and bias
+    every low-dose forecast against the home side by about half a point of probability.
+    """
+    import freshness_contract as FC
+    return FC.shrink_to_prior(p_raw, dose, prior)
 
 
 def market_overlay(fc, market):
@@ -180,12 +228,34 @@ def market_overlay(fc, market):
 
     ih, ia = implied(market["home_ml"]), implied(market["away_ml"])
     novig_h = ih / (ih + ia)
-    edge = fc["p_home"] - novig_h
+    # THE DECISION EDGE IS THE DOSE-SCALED EDGE, not the dosed probability minus the market.
+    #
+    # 2026-08-31, limit test. Shrinking the probability toward the prior and differencing against
+    # the market gives edge -> |prior - market| as dose -> 0, which for COL@ATL is -15.95pp. At
+    # ZERO information the model would be credited with a 15.9pp disagreement it did not produce;
+    # that number is a market fact (the book is priced away from the league rate), not a model
+    # finding. Scaling the edge itself gives edge -> 0, which is what "no information" has to mean.
+    #
+    # The registered shrink_to_prior stays and p_home_dosed is still what gets REPORTED as the
+    # probability -- it is the right point estimate. It is simply not the right differencer.
+    dose = fc.get("resolved_information_dose") or 0.0
+    raw_edge_pp = 100 * (fc["p_home"] - novig_h)
+    edge_pp = dose * raw_edge_pp
+    need = BASE_EDGE_PP
+    clears = abs(edge_pp) >= need
+    p = fc.get("p_home_dosed", fc["p_home"])
     return {"event": fc["event"], "valued": True,
             "market_no_vig_home": round(novig_h, 6),
-            "edge_pp_home": round(100 * edge, 2),
-            "execution_state": EXEC_WAIT,
-            "why": "actionability is gated separately from the forecast and is not opened here"}
+            "p_home_used": round(p, 6),
+            "edge_pp_home": round(edge_pp, 2),
+            "edge_pp_undosed": round(raw_edge_pp, 2),
+            "dose": dose, "required_edge_pp": round(need, 2),
+            "edge_basis": "dose x (p_raw - market). Goes to zero as information goes to zero.",
+            "clears_dose_scaled_bar": clears,
+            "execution_state": EXEC_ACTIONABLE if clears else EXEC_WAIT,
+            "why": ("edge clears the dose-scaled bar" if clears else
+                    f"edge {abs(edge_pp):.2f}pp is under the {need:.2f}pp this dose demands; "
+                    "low information widens the bar, it does not lower it")}
 
 
 def summarise(rows):

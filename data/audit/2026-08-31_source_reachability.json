@@ -1,0 +1,152 @@
+{
+ "GIT_MIRRORED_ODDS_ARE_REACHABLE": {
+  "but_read_the_caveats_before_using_any_of_them": {
+   "freshness": "these are HISTORICAL archives, not live boards. None was confirmed to carry a current 2026-season line for tonight's slate. For the 8/31 board the odds rung is still OWNER_RELAY.",
+   "nflverse_nfldata": "described as treating its market fields as CLOSING PROXIES rather than authenticated sportsbook snapshots. That is precisely the distinction the survey's own closing warning names, and a proxy labelled as a close is a look-ahead hazard if consumed as one. It would enter as its own labelled kind, never merged into a captured-price field.",
+   "not_adopted": "reachability is not admissibility. None is adopted here; this records that the rail exists and what it would cost to use.",
+   "the_others": "stale by construction \u2014 2019 MLB and prior-season NBA/NFL lines. Useful for BACKTESTING, useless for a live card, and the two must never share a column."
+  },
+  "next_step_if_the_owner_wants_it": "clone nflverse/nfldata and establish (a) whether it carries 2026 rows, (b) what its market fields actually are, and (c) whether they bind to an id space this repo already uses. That is the same three questions wehoop had to answer, and wehoop passed them.",
+  "results": {
+   "nflverse/nfldata": "REACHABLE (refs/heads/master 4ed51fc6)",
+   "papagorgio23/VegasLines": "REACHABLE (0ea42bdf)",
+   "pwu97/bettingtools": "REACHABLE (67131a43)"
+  },
+  "significance": "this is the answer the survey does not contain. Odds mirrored into git are reachable where every odds API and every aggregator page in both tables is not. The category that works is not on the list.",
+  "test": "git ls-remote through the session git proxy, the same rail that serves wehoop"
+ },
+ "LEDGER": {
+  "exposure_usd": 0,
+  "n_bets": 0,
+  "units": 0.0,
+  "wager_authority": "NO"
+ },
+ "METHOD": "each host probed ONCE with the approved fetch tool. Policy denials are reported, not retried (/root/.ccr/README.md). A neutral non-sports control was included precisely so the result could not be misread as a sports-domain policy.",
+ "PROBES": [
+  {
+   "host": "statsapi.mlb.com",
+   "result": "EGRESS_BLOCKED (approved fetch tool) AND 403 Forbidden (container proxy) \u2014 both paths",
+   "rung": "OFFICIAL_API",
+   "sport": "MLB"
+  },
+  {
+   "host": "site.api.espn.com",
+   "result": "EGRESS_BLOCKED",
+   "rung": "OFFICIAL_API",
+   "sport": "multi"
+  },
+  {
+   "host": "www.mlb.com",
+   "result": "EGRESS_BLOCKED",
+   "rung": "OFFICIAL_LEAGUE_PAGE",
+   "sport": "MLB"
+  },
+  {
+   "host": "www.wnba.com",
+   "result": "EGRESS_BLOCKED",
+   "rung": "OFFICIAL_LEAGUE_PAGE",
+   "sport": "WNBA"
+  },
+  {
+   "host": "www.espn.com",
+   "result": "EGRESS_BLOCKED",
+   "rung": "NAMED_AGGREGATOR",
+   "sport": "multi"
+  },
+  {
+   "host": "atlantadream.wnba.com",
+   "result": "ENOTFOUND (host does not resolve)",
+   "rung": "OFFICIAL_TEAM_STATUS",
+   "sport": "WNBA"
+  },
+  {
+   "host": "www.fangraphs.com",
+   "result": "EGRESS_BLOCKED",
+   "rung": "NAMED_AGGREGATOR",
+   "sport": "MLB"
+  },
+  {
+   "host": "www.covers.com",
+   "result": "EGRESS_BLOCKED",
+   "rung": "NAMED_AGGREGATOR",
+   "sport": "multi"
+  },
+  {
+   "host": "www.teamrankings.com",
+   "result": "EGRESS_BLOCKED",
+   "rung": "NAMED_AGGREGATOR",
+   "sport": "multi"
+  },
+  {
+   "host": "www.oddsportal.com",
+   "result": "EGRESS_BLOCKED",
+   "rung": "NAMED_AGGREGATOR",
+   "sport": "multi"
+  },
+  {
+   "host": "api.the-odds-api.com",
+   "result": "EGRESS_BLOCKED",
+   "rung": "SPORTSBOOK_API",
+   "sport": "multi"
+  },
+  {
+   "host": "api.sportsgameodds.com",
+   "result": "EGRESS_BLOCKED",
+   "rung": "SPORTSBOOK_API",
+   "sport": "multi"
+  },
+  {
+   "host": "en.wikipedia.org",
+   "result": "EGRESS_BLOCKED \u2014 the control, and the decisive one",
+   "rung": "CONTROL",
+   "sport": "n/a"
+  }
+ ],
+ "R6": "append-only; new path",
+ "SO_THE_REAL_QUESTION_IS_NOT_WHICH_ODDS_API": {
+  "candidates_worth_searching": "a git-mirrored odds archive is the odds equivalent of what wehoop is for WNBA results. If one exists, it changes the market layer the way wehoop changed WNBA grading. Not yet searched.",
+  "restated": "the survey optimises over a dimension that is not binding here. The binding question is: WHICH ODDS DATA IS MIRRORED INTO A PUBLIC GITHUB REPOSITORY, or relayed by the owner?",
+  "the_honest_fallback": "the owner's own DK relay, which is what the 8/30 board already used, and which is why every price on that board is stamped OWNER_RELAYED.",
+  "why": "github.com is served by the session git proxy and is the ONLY rail that returns a hashed, commit-addressed artifact. Everything else is a snippet or a relay, and neither can bind."
+ },
+ "THE_FINDING": {
+  "already_in_the_repo": "harness/market_sportsgameodds.py and harness/market_theoddsapi.py are the survey's top two API picks and they were built weeks ago. They raise StubModeNoKey without a key \u2014 but a key would NOT unblock them, because api.sportsgameodds.com and api.the-odds-api.com are both EGRESS_BLOCKED. The blocker was never the secret.",
+  "consequence_for_the_survey": "every entry in both tables is unreachable BY FETCH, regardless of free-tier generosity, JSON quality or model-friendliness. The Odds API's 500 credits and SportsGameOdds' 2,500 objects are not the binding constraint; the host is.",
+  "headline": "en.wikipedia.org is EGRESS_BLOCKED. The constraint is NOT a sports-data policy and it is NOT about any source's pricing or free tier. General web FETCH is broadly unavailable in this deployment."
+ },
+ "THE_SURVEYS_LAST_WARNING_IS_ALREADY_IMPLEMENTED": {
+  "evidence": {
+   "consensus": "consensus() returns the SET of book prices plus computed medians, and the docstring says in as many words: never 'the Vegas line' as a single number",
+   "sharp_book": "market_capture.SHARP_REFERENCE_BOOK = 'circa'; Circa carries its own label and is EXCLUDED from the consensus medians",
+   "temporal_firewall": "market_history refuses a closing line to a pregame path, loudly, with the refusal recorded \u2014 and its selftest also asserts a legal OPENING line is not refused, so the rule cannot degenerate into blocking everything"
+  },
+  "reading": "this is the one part of the survey the system already had, and it is the part that actually protects the backtest.",
+  "status": "ENFORCED, and it predates the survey.",
+  "warning": "'preserve the distinction between opening line, consensus line, best available line, sharp-book line and closing line. Mixing those into one historical odds field can create look-ahead bias and make a model appear more profitable than it was.'"
+ },
+ "WHAT_ACTUALLY_WORKS": {
+  "1_WebSearch": {
+   "grade": "IDENTIFIED_UNCONFIRMED \u2014 identifies, never binds",
+   "known_failure_modes": "returned a Las Vegas Aces game when asked about LAS@SEA; returned a detailed 95-77 final for a game that tipped 27 minutes later; returned genuine 8/28 results against an 8/30 query. All three were caught.",
+   "proven_today": "acquired WNBA availability for four teams, a 12-game MLB slate with ET starts, and a probable starter, after four fetch rungs failed",
+   "returns": "snippets and model-written summaries",
+   "status": "UP"
+  },
+  "2_git_to_github": {
+   "grade": "strongest available \u2014 this is why WNBA binds and MLB does not",
+   "in_use": "sportsdataverse/wehoop-wnba-raw, lancebroz/mlb-pitcher-data, sportsdataverse/baseballr-data",
+   "returns": "full artifacts addressed by commit sha and hashed",
+   "status": "UP"
+  },
+  "3_owner_relay": {
+   "grade": "OWNER_RELAYED \u2014 identification only, binds nothing, and no cross-book de-vig is valid over it",
+   "status": "UP"
+  }
+ },
+ "WHAT_I_AM_NOT_DOING": "building integrations against thirty unreachable hosts. Each would be a module whose default path cannot execute, which is precisely the shape already found three times in this repo \u2014 a client that exists, refuses, and gets counted as capability.",
+ "created_utc": "2026-08-31T00:40:00Z",
+ "prompted_by": "an owner survey of ~30 free odds APIs, aggregator pages and sportsbook boards",
+ "record_id": "SOURCE-REACHABILITY-2026-08-31",
+ "record_sha256": "a47debd4a062483d6b83427d3677f27d97ed9c18dc6bfbb2beb6289f57176c9d",
+ "schema": "ops.source_reachability_register.v1"
+}

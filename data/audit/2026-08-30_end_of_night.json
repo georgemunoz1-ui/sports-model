@@ -1,0 +1,187 @@
+{
+ "ADMISSION": {
+  "all_four_dispositions": {
+   "wnba:CON@DAL": "NO_CONSENSUS",
+   "wnba:GSV@PDX": "NO_CONSENSUS",
+   "wnba:LAS@SEA": "NO_CONSENSUS",
+   "wnba:MIN@ATL": "NO_CONSENSUS"
+  },
+  "binds_when": "wehoop publishes ~06:32 ET; trig_01C9iNe4wsa27Kv9etvww7mo fires 11:00Z to bind this cohort canonically against the frozen board.",
+  "meaning": "NO_CONSENSUS on every game \u2014 SEARCH_LANE_CANNOT_MINT_FINAL plus a single source. Every score in this report is RESULT_DISPLAY, graded DESCRIPTIVE_ONLY, and accrues NOTHING to settlement, promotion or the estimator.",
+  "settleable": {
+   "wnba:CON@DAL": false,
+   "wnba:GSV@PDX": false,
+   "wnba:LAS@SEA": false,
+   "wnba:MIN@ATL": false
+  }
+ },
+ "GRADEABLE_PROJECTIONS_BY_SPORT": {
+  "CFB": "the board's CFB section is an EARLY board for Sep 3+. Nothing projected for 8/30.",
+  "MLB": "15 games with entries and ZERO model win or total projections. The only model_* values present are model_push_pct 0.0 on TOTALS rows whose decision is NO_LINE \u2014 a push probability is not a projection. Nothing gradeable, consistent with the slate-wide CAP (0/15 SP_CONFIRMED, pitcher corpus ends 7/19).",
+  "NFL": "NO_FORECAST. 53-man cutdown day. Zero forecast quantities exist in either NFL board file.",
+  "WNBA": "4 games, TWO independent forecast sets \u2014 the owner's V6 board (feature cutoff 8/27) and my frozen board (cutoff 8/29). Both gradeable against the same finals."
+ },
+ "LEDGER": {
+  "exposure_usd": 0,
+  "n_bets": 0,
+  "units": 0.0,
+  "wager_authority": "NO",
+  "why_no_units_or_roi": "ZERO wagers were placed. Units, ROI and a prop record are UNDEFINED, not zero-and-computed. Reporting 0.00 units on 0 bets as if it were a result would manufacture a betting ledger out of a paper exercise."
+ },
+ "MLB_DISPLAY": {
+  "acquired": 3,
+  "disposition": "ACQUISITION_INCOMPLETE for display \u2014 OPEN_WEB_SEARCH returned 3 of 15 and OWNER_RELAY is untried. Labelled rather than presented as a finished sweep.",
+  "finals": {
+   "BOS@NYY": "NYY 16 - BOS 1",
+   "CWS@MIN": "MIN 5 - CWS 1",
+   "PIT@STL": "PIT 5 - STL 4"
+  },
+  "id_note": "the search returned real gamePks in its URLs \u2014 BOS@NYY 823502 tonight against 823504 on 8/28. Same series, adjacent ids, different games: the PRIOR_DATE_SERIES_JOIN hazard visible in the identifiers themselves.",
+  "of": 15,
+  "why_not_pursued_further": "twelve more finals against zero model projections changes no grade. The incompleteness is recorded; it is not hidden."
+ },
+ "NEW_CANDIDATE_TOTALS": {
+  "observation": "total residuals are POSITIVE on 7 of the 8 games graded across two nights. 8/29 bias +13.00; 8/30 bias +8.075. The model projects more points than the games produce.",
+  "status": "CANDIDATE at n=6 with a measured sigma of 18.0156 (n=1721). The per-night z-scores are small (+0.36, +0.63, +0.60, +0.20 tonight) so this is a consistent SIGN, not a large error.",
+  "test": "pre-registered for the next bound cohort, before those games are played.",
+  "why_it_is_not_promoted": "the totals-high-bias hypothesis was FALSIFIED on 2026-08-30 against n=1721 with a measured bias of -0.7352 \u2014 the opposite sign. Six games do not reopen 1721. Registered as a watch item only."
+ },
+ "PREREGISTERED_HYPOTHESIS_RESULT": {
+  "hypothesis": "WNBA home margins are systematically under-projected. 8/29 n=2 showed residuals -12.79 and -28.57, bias -20.68, MAE 20.68, same sign, no cancellation.",
+  "registered": "before tip, in trig_01C9iNe4wsa27Kv9etvww7mo and the 8/29 grading record",
+  "tonight_n4": {
+   "bias": 0.63,
+   "mae": 13.335,
+   "residuals": [
+    -11.21,
+    18.21,
+    9.719999999999999,
+    -14.2
+   ]
+  },
+  "verdict": "HYPOTHESIS DIES. Tonight's four residuals are -11.21, +18.21, +9.72 and -14.20 \u2014 they change sign and very nearly cancel. Pooled over both nights the bias is small and the direction is gone. The candidate was named in advance precisely so it could be killed rather than curve-fitted afterwards, and it is killed."
+ },
+ "R6": "append-only; new path. No frozen board edited.",
+ "SOURCE_CONFLICT_FOUND": {
+  "claim_a": "95-77 (earlier search this evening)",
+  "claim_b": "86-69 (later search)",
+  "disposition": "CONFLICT \u2014 two search sources disagree on the same game and neither binds. Graded on claim_b for display only, with the disagreement recorded rather than resolved. This is the single cleanest argument for why search identifies and never binds.",
+  "game": "GSV@PDX",
+  "note": "the earlier 95-77 was returned when the game had not yet tipped and was refused as PRESTART_FINAL_IMPOSSIBLE at the time."
+ },
+ "THE_ONLY_LEAN": {
+  "V6_rated": "64.2% to cover, via Phi(5.1/13.97)",
+  "honest_reading": "the lean won and I was on the other side of it. n=1. This does NOT adjudicate the coherence defect: the V6 row still published p(ATL win) 39.7% beside a 64.2% cover derived from a projected ATL WIN by 2.6, and two numbers describing opposite teams are incoherent whether or not the game cooperates. A defect in the arithmetic is settled by reading the artifact, not by the outcome \u2014 which is why I filed it before tip.",
+  "my_refreshed_model": "47.74% to cover",
+  "play": "ATL +2.5 (C-tier), the single actionable recommendation on the card",
+  "result": "WON \u2014 Atlanta won outright 89-81, cover margin +10.5"
+ },
+ "WNBA_HEAD_TO_HEAD": {
+  "V6_cutoff_0827": {
+   "brier": 0.192557,
+   "su": "2-2"
+  },
+  "delta_brier_mine_minus_v6": 0.010295,
+  "mine_cutoff_0829": {
+   "brier": 0.202852,
+   "su": "2-2"
+  },
+  "per_game": [
+   {
+    "brier": 0.4038602499999999,
+    "cid": "ESPN_GAMEID:401857186",
+    "codes": [
+     "SEARCH_LANE_CANNOT_MINT_FINAL",
+     "NO_CONSENSUS_FEWER_THAN_TWO_INDEPENDENT_SOURCES"
+    ],
+    "disposition": "NO_CONSENSUS",
+    "final": "MIN 81 - ATL 89",
+    "game": "wnba:MIN@ATL",
+    "m_act": 8,
+    "m_proj": -3.21,
+    "m_res": -11.21,
+    "p_home": 0.3645,
+    "settleable": false,
+    "su": false,
+    "t_act": 170,
+    "t_proj": 176.5,
+    "t_res": 6.5,
+    "z_m": -0.8930634226396756,
+    "z_t": 0.36079841914784966
+   },
+   {
+    "brier": 0.31181056,
+    "cid": "ESPN_GAMEID:401857187",
+    "codes": [
+     "SEARCH_LANE_CANNOT_MINT_FINAL",
+     "NO_CONSENSUS_FEWER_THAN_TWO_INDEPENDENT_SOURCES"
+    ],
+    "disposition": "NO_CONSENSUS",
+    "final": "LAS 90 - SEA 74",
+    "game": "wnba:LAS@SEA",
+    "m_act": -16,
+    "m_proj": 2.21,
+    "m_res": 18.21,
+    "p_home": 0.5584,
+    "settleable": false,
+    "su": false,
+    "t_act": 164,
+    "t_proj": 175.4,
+    "t_res": 11.400000000000006,
+    "z_m": 1.4507301450730146,
+    "z_t": 0.632784919736229
+   },
+   {
+    "brier": 0.07155625,
+    "cid": "ESPN_GAMEID:401857188",
+    "codes": [
+     "SEARCH_LANE_CANNOT_MINT_FINAL",
+     "NO_CONSENSUS_FEWER_THAN_TWO_INDEPENDENT_SOURCES"
+    ],
+    "disposition": "NO_CONSENSUS",
+    "final": "GSV 86 - PDX 69",
+    "game": "wnba:GSV@PDX",
+    "m_act": -17,
+    "m_proj": -7.28,
+    "m_res": 9.719999999999999,
+    "p_home": 0.2675,
+    "settleable": false,
+    "su": true,
+    "t_act": 155,
+    "t_proj": 165.8,
+    "t_res": 10.800000000000011,
+    "z_m": 0.7743600774360077,
+    "z_t": 0.5994804502764277
+   },
+   {
+    "brier": 0.02418024999999999,
+    "cid": "ESPN_GAMEID:401857189",
+    "codes": [
+     "SEARCH_LANE_CANNOT_MINT_FINAL",
+     "NO_CONSENSUS_FEWER_THAN_TWO_INDEPENDENT_SOURCES"
+    ],
+    "disposition": "NO_CONSENSUS",
+    "final": "CON 71 - DAL 97",
+    "game": "wnba:CON@DAL",
+    "m_act": 26,
+    "m_proj": 11.8,
+    "m_res": -14.2,
+    "p_home": 0.8445,
+    "settleable": false,
+    "su": true,
+    "t_act": 168,
+    "t_proj": 171.6,
+    "t_res": 3.5999999999999943,
+    "z_m": -1.1312667797933444,
+    "z_t": 0.19982681675880873
+   }
+  ],
+  "verdict": "THE STALER BOARD SCORED BETTER. My two-day feature refresh did not improve this cohort and slightly worsened the Brier. n=4. That settles nothing in either direction and is reported because burying it would be the only way it could mislead."
+ },
+ "created_utc": "2026-08-31T05:35:00Z",
+ "local_time_owner_tz": "2026-08-30 22:35 PDT",
+ "record_id": "END-OF-NIGHT-2026-08-30",
+ "record_sha256": "342ac20bded44cd673cf49813ae22aff7833526692aab386fafd9fe65faa9b42",
+ "schema": "ops.end_of_night.v1",
+ "scope": "ALL SPORTS per CARD_UPDATE_PROTOCOL \u2014 WNBA, MLB, CFB, NFL"
+}

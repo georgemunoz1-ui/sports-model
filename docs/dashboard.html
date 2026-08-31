@@ -44,7 +44,37 @@
     <tr><td><code>MC_CONVERGENCE_FAIL</code></td><td><code>REGISTERED_FALLBACK_ONLY</code>; simulated value retained for audit only</td><td class="ok">Yes, labelled</td><td class="bad">No</td></tr>
   </tbody></table>
 
-  <h2>Patch notes</h2>
+  
+<section class="patch">
+  <h2>Latest patch — ACQUISITION-EXECUTION-2026-08-30 <span class="sev">P0</span></h2>
+  <p><strong>Status:</strong> FIXED_AND_ACCEPTANCE_TESTED</p>
+  <p><strong>The incident.</strong> On 2026-08-30 a search for Atlanta Dream availability returned
+  a report 32 days stale. <em>Rejecting it was correct.</em> Terminating on it was not: the run
+  reported <code>AVAILABILITY_UNKNOWN</code> when the correct classification was
+  <code>ACQUISITION_INCOMPLETE</code>. One more query on the same working rail returned the current
+  report immediately. The failure was premature termination and query specificity, not source
+  availability.</p>
+  <p><strong>Root cause.</strong> The repo had an acquisition control plane and no execution plane.
+  <code>route_ladder_v1</code> already stated that a blocked rail advances the ladder and that
+  acquisition cannot terminate while an authorized route remains untried — but its entry point
+  judges an already-collected set of attempts. It can say &ldquo;you stopped too soon&rdquo;; it
+  cannot make anything continue.</p>
+  <p><strong>Fix.</strong> <code>harness/acquisition_orchestrator.py</code> executes the ladder.
+  Every non-acquiring outcome advances — BLOCKED, NOT_FOUND, <strong>STALE_REJECTED</strong>,
+  CONTAMINATED, TITLES_ONLY, ERROR. <code>disposition()</code> refuses a terminal answer while any
+  authorized rung is untried. <code>assert_no_premature_termination()</code> fails CI when UNKNOWN,
+  BLOCKED or NO_FORECAST is claimed over an unfinished ladder.</p>
+  <p><strong>Acceptance, live and without an owner upload.</strong> Two games, primary rail
+  genuinely blocked. Seven BLOCKED, one NOT_FOUND and one STALE_REJECTED all advanced; current
+  availability, a 12-game MLB slate and a probable starter were acquired at rung 6; forecasts were
+  produced for <em>both</em> games; actionability was gated separately and PASSed for reasons
+  unrelated to forecast availability. ACTION_BLOCKED throughout — wager authority NO, exposure $0.</p>
+  <p><strong>Residual.</strong> MLB MIA@WSH carries no canonical id, because statsapi.mlb.com is
+  blocked on both egress paths and the pitch archive supplies real gamePks only after a game is
+  played. It is forecastable now and not bindable later. <em>No id was invented</em> — the 8/27
+  pseudo-pk defect is not repeated.</p>
+</section>
+<h2>Patch notes</h2>
   <section class="patches">
     <article class="patch p1"><div class="meta"><span class="tag block">P1</span><span class="tag">FU1-FEED-ADAPTER-2026-08-30</span><span class="tag pass">isolated verification passed</span></div><h3>Programmatic schedule/starter/results feed (FU-1)</h3><ul><li>ESPN scoreboard API client for MLB/WNBA/NFL/CFB plus an MLB StatsAPI client replace manual odds-page uploads; records normalize to one game shape with ET dates derived from UTC instants, never sliced.</li><li>A starter is <code>CONFIRMED</code> only from a boxscore <code>gamesStarted</code> line once a game is underway; probable listings stay <code>IDENTIFIED_UNCONFIRMED</code>.</li><li><code>feed_sweep</code> writes append-only content-hashed snapshots under <code>data/feeds/YYYY-MM-DD/</code> and surfaces cross-feed disagreements as <code>CONFLICT</code>, never silently resolved.</li><li>Market capture layer (owner Addenda 1&ndash;5): SportsGameOdds + The Odds API env-key clients (loud stub mode without a key), owner record schema, consensus as a set of book prices plus computed medians with Circa as its own labelled sharp book, 2+ point book disagreement surfaced as <code>CONFLICT</code>. VALUATION/AUDIT ONLY &mdash; a mechanical firewall keeps market modules out of every forecast path.</li><li>Historical/movement store with typed <code>line_kind</code> (OPENING/CONSENSUS/BEST_AVAILABLE/SHARP_BOOK/CLOSING) and a temporal firewall: a pregame path can never read a closing line or a post-cutoff snapshot. Causal backtest layer: PointInTime store, no entry-price backfill, 15-minute close window, walk-forward folds with purge/embargo, shift(1) lint, event-level splits. Calibration ships <b>DORMANT</b> &mdash; the gate refuses any fit under 500 events (current WNBA bound Tier-1 base is n=4).</li><li>Verified: the 8/28 MLB cohort binds <b>15/15</b> (10 ESPN_GAMEID + 5 MLB_GAMEPK) against the cached fixture; pytest 26/26; StatsAPI live fetch OK (all 5 captured gamePks live-verified), ESPN scoreboard returned 403 from the build egress.</li></ul></article>
     <article class="patch p0"><div class="meta"><span class="tag p0">P0</span><span class="tag">P0-MC-CONVERGENCE-2026-08-30</span><span class="tag pass">isolated verification passed</span></div><h3>Monte-Carlo convergence gate bound into the actionable gate</h3><ul><li>Ported from the mc_engine lineage: 30,000 trials in 10 keyed-seed blocks; a game fails convergence when the max block-vs-pooled gap exceeds 3 pooled-Bernoulli block sigmas. Registered tolerance <code>MC_CONVERGENCE_TOL_PP = 2.7386pp</code> (worst case at p=0.5; derived from the source lineage, not tuned).</li><li>A <code>CONVERGENCE_FAIL</code> now demotes that game to forecast-only — <code>actionable=False</code>, <code>REGISTERED_FALLBACK_ONLY</code>, verdict and pre-demotion state recorded for audit — instead of crashing the slate builder with exit 1. The rest of the board still builds.</li><li>Convergence never promotes: a clean verdict leaves a degraded freshness disposition non-actionable.</li><li>Verified: mc_convergence selftest PASS, 4/4 mutants caught, regression tests 7/7 (synthetic gap above tolerance demotes with audit and the board builds around it; below tolerance keeps the actionable path), freshness gate PASS with 9/9 mutants.</li></ul></article>

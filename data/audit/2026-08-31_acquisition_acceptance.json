@@ -1,0 +1,337 @@
+{
+ "ACCEPTANCE_CRITERION": "bad information is rejected, acquisition CONTINUES, current information is found when reasonably obtainable, THE FORECAST IS STILL PRODUCED, and actionability is gated separately.",
+ "ACQUIRED": {
+  "mlb schedule 2026-08-31": {
+   "conflict_recorded": "the source prose said 11 games while listing 12. Recorded as SLATE_COUNT_CONFLICT, not silently reconciled.",
+   "games": "see ledger artifact",
+   "n_games_enumerated": 12
+  },
+  "mlb starter MIA@WSH": {
+   "away": "TBD at the source \u2014 the club has not announced. A stated null, never a guess, and NOT a ladder failure.",
+   "home": "Ryan Gusto RHP (1-3, 3.98, 53 K), IDENTIFIED_UNCONFIRMED"
+  },
+  "wnba availability CON@DAL": {
+   "CON": {
+    "OUT": [
+     "Brittney Griner (L knee, 8th straight)",
+     "Kennedy Burke (World Cup)",
+     "Leila Lacan (World Cup)"
+    ],
+    "QUESTIONABLE": [
+     "Olivia Nelson-Ododa (R knee)"
+    ]
+   },
+   "DAL": {
+    "OUT": [
+     "Azzi Fudd (R knee surgery \u2014 out for the season)"
+    ],
+    "RETURNING": [
+     "Aziaha James, off the report after 5 games"
+    ]
+   },
+   "grade": "IDENTIFIED_UNCONFIRMED, corroborated across two independent queries",
+   "new_since_this_morning": "the Fudd season-ending status and the James return. Both run toward Dallas \u2014 the side the market already favoured over the model."
+  }
+ },
+ "BOUND": {
+  "mlb:MIA@WSH": {
+   "canonical_id": null,
+   "consequence": "forecastable now, NOT bindable later until an id is captured. Stated up front rather than discovered at grading time.",
+   "id_grade": "ABSENT",
+   "series_hazard": "MIA@WSH also appears on 8/28 and 8/30. Binding this by team names would be PRIOR_DATE_SERIES_JOIN \u2014 the exact mechanism that produced the three 'fabricated' finals on 8/30.",
+   "why": "statsapi is blocked on both paths so no gamePk is obtainable for a FUTURE game, and the pitch archive supplies real gamePks only after a game is played. NO ID WAS INVENTED. The 8/27 pseudo-pk defect is not repeated."
+  },
+  "wnba:CON@DAL": {
+   "canonical_id": "ESPN_GAMEID:401857189",
+   "et_date": "2026-08-30",
+   "note": "tips on the ET EVENING of 8/30; a UTC slice would file it on 8/31 and split the cohort. Bound on the id from my own frozen board, not on team names.",
+   "utc_instant": "2026-08-31T00:30:00Z"
+  }
+ },
+ "CONDITIONS": {
+  "games": "one WNBA (CON@DAL 2026-08-30), one MLB (MIA@WSH 2026-08-31)",
+  "owner_upload": "NONE \u2014 the owner required no relay and none was used. OWNER_RELAY is UNTRIED on all three ladders and did not need to be reached.",
+  "primary_rail": "deliberately and genuinely blocked. Not simulated."
+ },
+ "FORECASTS_PRODUCED": {
+  "mlb:MIA@WSH": [
+   {
+    "arm": "mlb.winner.EXPANDING_HOME_PRIOR",
+    "dose_applies": false,
+    "forecast_status": "FORECAST_REGISTERED",
+    "p_home": 0.5205399061032864,
+    "target": "winner",
+    "why_not": "the dose pulls a model probability TOWARD this prior. Applying it to the prior itself is a no-op by construction, not an omission.",
+    "why_producible": "a registered constant with zero inputs. No acquisition blocker can stop it, which is exactly why it is the baseline arm."
+   },
+   {
+    "arm": "mlb.total.EXPANDING_TOTAL_PRIOR",
+    "forecast_status": "FORECAST_REGISTERED",
+    "projected_total": 8.991092636579573,
+    "target": "total"
+   },
+   {
+    "arm": "mlb.winner.CHAMPION_V13",
+    "dose_has_nothing_to_consume": "shrink_to_prior(None, 0.20, prior) returns None. The dose is computed and REGISTERED here; it is not silently discarded, and it will bite the moment this arm produces a number.",
+    "dose_that_would_apply": 0.2,
+    "forecast_status": "NULL_WITH_STATED_REASON",
+    "null_reason": "the arm consumes starting-pitcher features. The corpus ends 2026-07-19 and the away side is TBD. R1: a null with a reason, never a number invented to fill a column.",
+    "p_home": null,
+    "target": "winner",
+    "unblocked_by": "a pitcher-log refresh through 2026-08-30 \u2014 the admitted archive has 155 contiguous daily files and can supply it \u2014 plus the away announcement"
+   }
+  ],
+  "the_point": "BOTH games produced a forecast. Neither is actionable. Those are different statements and the system now makes them separately.",
+  "wnba:CON@DAL": {
+   "action_status": "PASS_REFERENCE_ONLY",
+   "arm": "wnba.replacement.FEATURE_REFRESH",
+   "feature_cutoff": "2026-08-29",
+   "forecast_status": "FORECAST_REGISTERED",
+   "frozen_in": "cards/2026-08-30_wnba_board.json",
+   "margin_home": 11.8,
+   "p_home_DAL": 0.8445,
+   "projected_total": 171.6,
+   "r3": "the frozen forecast is NOT altered by the newly acquired availability. The availability attaches at the audit layer."
+  }
+ },
+ "FORECAST_VS_EXECUTION": {
+  "dose": {
+   "consumed": "shrink_to_prior(None, 0.20, prior) returns None because CHAMPION_V13 is null. The dose is REGISTERED on the row rather than discarded, and it bites the moment that arm produces a number: shrink_to_prior(0.62, 0.20, 0.52054) = 0.540432.",
+   "derivation": "both MLB starter slots degraded \u2014 away TBD, home named but its profile is 43 days stale \u2014 so the multiplicative combination falls below the contract floor and is floored at 0.20, which is a WIDENED PRIOR and never an excluded game",
+   "value": 0.2,
+   "why_this_matters": "resolved_information_dose was written, validated, printed and rendered for weeks while being multiplied into nothing. It is not being re-orphaned."
+  },
+  "mlb:MIA@WSH": {
+   "blockers": [
+    "ID_ABSENT_CANNOT_BIND_RESULT",
+    "STARTER_TBD_AWAY",
+    "STARTER_CORPUS_STALE_43D",
+    "NO_MARKET_CAPTURED"
+   ],
+   "execution_state": "NOT_ACTIONABLE",
+   "forecast_state": "VALID",
+   "rule": "a blocker suppresses the WAGER. It may not null a computable distribution. NO_FORECAST requires an actual model-computation blocker."
+  },
+  "wnba:CON@DAL": {
+   "blockers": [
+    "AVAILABILITY_IDENTIFIED_UNCONFIRMED_ONLY",
+    "NO_MARKET_CAPTURED",
+    "SYSTEM_NOT_DECISION_READY"
+   ],
+   "execution_state": "NOT_ACTIONABLE",
+   "forecast_state": "VALID",
+   "rule": "a blocker suppresses the WAGER. It may not null a computable distribution. NO_FORECAST requires an actual model-computation blocker."
+  }
+ },
+ "LADDERS": {
+  "mlb 8/31 schedule": {
+   "artifact_hashes": [
+    "57d0753310a0dc2a28f3b24bfbf8af0527a5e23fddfab74a6a0a9a79cb656836"
+   ],
+   "attempts": [
+    {
+     "advances": true,
+     "at_utc": "2026-08-30T18:05:00Z",
+     "detail": "statsapi.mlb.com \u2014 EGRESS_BLOCKED via approved fetch tool AND 403 Forbidden via the container proxy. Policy denial; probed once, not retried.",
+     "outcome": "BLOCKED",
+     "rung": "OFFICIAL_API"
+    },
+    {
+     "advances": true,
+     "at_utc": "2026-08-31T00:00:00Z",
+     "detail": "www.mlb.com/schedule/2026-08-31 \u2014 EGRESS_BLOCKED",
+     "outcome": "BLOCKED",
+     "rung": "OFFICIAL_LEAGUE_PAGE"
+    },
+    {
+     "advances": true,
+     "at_utc": "2026-08-31T00:02:00Z",
+     "detail": "www.fangraphs.com roster-resource probables grid \u2014 EGRESS_BLOCKED",
+     "outcome": "BLOCKED",
+     "rung": "NAMED_AGGREGATOR"
+    },
+    {
+     "advances": false,
+     "artifact_sha256": "57d0753310a0dc2a28f3b24bfbf8af0527a5e23fddfab74a6a0a9a79cb656836",
+     "at_utc": "2026-08-31T00:01:00Z",
+     "detail": "12 matchups enumerated with ET start times",
+     "outcome": "OBTAINED",
+     "rung": "OPEN_WEB_SEARCH"
+    }
+   ],
+   "authorized_rungs": [
+    "OFFICIAL_API",
+    "OFFICIAL_LEAGUE_PAGE",
+    "NAMED_AGGREGATOR",
+    "OPEN_WEB_SEARCH",
+    "OWNER_RELAY"
+   ],
+   "date_et": "2026-08-31",
+   "disposition": {
+    "note": "stronger rungs above this one failed; the artifact carries the grade of the rung that produced it, not of the rungs that did not",
+    "on_rung": "OPEN_WEB_SEARCH",
+    "rungs_tried": 4,
+    "state": "ACQUIRED",
+    "untried_authorized": [
+     "OWNER_RELAY"
+    ]
+   },
+   "field": "schedule",
+   "schema": "ops.acquisition_ledger.v1",
+   "subject": "mlb:2026-08-31 slate"
+  },
+  "mlb MIA@WSH starter": {
+   "artifact_hashes": [
+    "769a34344d4af49e80bb6fe9ab497329c72af3d0e089279d1994a2d7a4f91c4d"
+   ],
+   "attempts": [
+    {
+     "advances": true,
+     "at_utc": "2026-08-30T18:05:00Z",
+     "detail": "statsapi.mlb.com \u2014 EGRESS_BLOCKED / 403",
+     "outcome": "BLOCKED",
+     "rung": "OFFICIAL_API"
+    },
+    {
+     "advances": true,
+     "at_utc": "2026-08-31T00:00:00Z",
+     "detail": "www.mlb.com \u2014 EGRESS_BLOCKED",
+     "outcome": "BLOCKED",
+     "rung": "OFFICIAL_LEAGUE_PAGE"
+    },
+    {
+     "advances": true,
+     "at_utc": "2026-08-31T00:02:00Z",
+     "detail": "mlb.com/nationals/roster/probable-pitchers is under the blocked mlb.com domain",
+     "outcome": "BLOCKED",
+     "rung": "OFFICIAL_TEAM_STATUS"
+    },
+    {
+     "advances": true,
+     "at_utc": "2026-08-31T00:02:00Z",
+     "detail": "www.fangraphs.com \u2014 EGRESS_BLOCKED",
+     "outcome": "BLOCKED",
+     "rung": "NAMED_AGGREGATOR"
+    },
+    {
+     "advances": false,
+     "artifact_sha256": "769a34344d4af49e80bb6fe9ab497329c72af3d0e089279d1994a2d7a4f91c4d",
+     "at_utc": "2026-08-31T00:03:00Z",
+     "detail": "specific query resolved the HOME side; the AWAY side is genuinely TBD at the source",
+     "outcome": "OBTAINED",
+     "rung": "OPEN_WEB_SEARCH"
+    }
+   ],
+   "authorized_rungs": [
+    "OFFICIAL_API",
+    "OFFICIAL_LEAGUE_PAGE",
+    "OFFICIAL_TEAM_STATUS",
+    "NAMED_AGGREGATOR",
+    "OPEN_WEB_SEARCH",
+    "OWNER_RELAY"
+   ],
+   "date_et": "2026-08-31",
+   "disposition": {
+    "note": "stronger rungs above this one failed; the artifact carries the grade of the rung that produced it, not of the rungs that did not",
+    "on_rung": "OPEN_WEB_SEARCH",
+    "rungs_tried": 5,
+    "state": "ACQUIRED",
+    "untried_authorized": [
+     "OWNER_RELAY"
+    ]
+   },
+   "field": "starter",
+   "schema": "ops.acquisition_ledger.v1",
+   "subject": "mlb:MIA@WSH"
+  },
+  "wnba CON@DAL availability": {
+   "artifact_hashes": [
+    "95690852373136c3ee844bd858761042c794c2a4e007b3db097a55d24f2d17b8"
+   ],
+   "attempts": [
+    {
+     "advances": true,
+     "at_utc": "2026-08-30T22:20:00Z",
+     "detail": "site.api.espn.com WNBA scoreboard \u2014 EGRESS_BLOCKED",
+     "outcome": "BLOCKED",
+     "rung": "OFFICIAL_API"
+    },
+    {
+     "advances": true,
+     "at_utc": "2026-08-30T22:21:00Z",
+     "detail": "www.wnba.com/games/2026-08-30 \u2014 EGRESS_BLOCKED",
+     "outcome": "BLOCKED",
+     "rung": "OFFICIAL_LEAGUE_PAGE"
+    },
+    {
+     "advances": true,
+     "at_utc": "2026-08-30T22:22:00Z",
+     "detail": "atlantadream.wnba.com \u2014 ENOTFOUND",
+     "outcome": "NOT_FOUND",
+     "rung": "OFFICIAL_TEAM_STATUS"
+    },
+    {
+     "advances": true,
+     "at_utc": "2026-08-30T22:25:00Z",
+     "detail": "first generic query surfaced a late-July report, 32 days stale \u2014 REJECTED, and the rejection ADVANCES",
+     "outcome": "STALE_REJECTED",
+     "rung": "NAMED_AGGREGATOR"
+    },
+    {
+     "advances": false,
+     "artifact_sha256": "95690852373136c3ee844bd858761042c794c2a4e007b3db097a55d24f2d17b8",
+     "at_utc": "2026-08-30T23:58:00Z",
+     "detail": "two specific queries, corroborating: Athlon final injury report for Sun-Wings",
+     "outcome": "OBTAINED",
+     "rung": "OPEN_WEB_SEARCH"
+    }
+   ],
+   "authorized_rungs": [
+    "OFFICIAL_API",
+    "OFFICIAL_LEAGUE_PAGE",
+    "OFFICIAL_TEAM_STATUS",
+    "NAMED_AGGREGATOR",
+    "OPEN_WEB_SEARCH",
+    "OWNER_RELAY"
+   ],
+   "date_et": "2026-08-30",
+   "disposition": {
+    "note": "stronger rungs above this one failed; the artifact carries the grade of the rung that produced it, not of the rungs that did not",
+    "on_rung": "OPEN_WEB_SEARCH",
+    "rungs_tried": 5,
+    "state": "ACQUIRED",
+    "untried_authorized": [
+     "OWNER_RELAY"
+    ]
+   },
+   "field": "availability",
+   "schema": "ops.acquisition_ledger.v1",
+   "subject": "wnba:CON@DAL"
+  }
+ },
+ "LADDER_SUMMARY": {
+  "advancing_outcomes_demonstrated": [
+   "BLOCKED (7 times)",
+   "NOT_FOUND (1)",
+   "STALE_REJECTED (1)"
+  ],
+  "mlb 2026-08-31 schedule": "4 rungs. statsapi blocked on BOTH paths, mlb.com blocked, fangraphs blocked, OPEN_WEB_SEARCH ACQUIRED 12 matchups with ET start times.",
+  "mlb MIA@WSH starter": "5 rungs, four blocked, OPEN_WEB_SEARCH ACQUIRED the HOME side.",
+  "untried_at_finish": "OWNER_RELAY only, on all three \u2014 correct, because acquisition SUCCEEDED before it was needed",
+  "wnba CON@DAL availability": "5 rungs tried. OFFICIAL_API blocked -> OFFICIAL_LEAGUE_PAGE blocked -> OFFICIAL_TEAM_STATUS not-found -> NAMED_AGGREGATOR STALE_REJECTED -> OPEN_WEB_SEARCH ACQUIRED. The stale rejection ADVANCED; that transition is the whole incident."
+ },
+ "LEDGER": {
+  "exposure_usd": 0,
+  "n_bets": 0,
+  "units": 0.0,
+  "wager_authority": "NO"
+ },
+ "OBJECTIVE_AS_RESTATED_BY_OWNER": "safely find the information -> build the forecast -> then decide whether the wager is. The safety gate is means, not end.",
+ "R6": "append-only; new path. The frozen 8/30 WNBA board is not edited.",
+ "VERDICT": "ACCEPTANCE MET. Bad information rejected (a 32-day-old report, and separately a pre-start final 27 minutes before tip). Acquisition CONTINUED. Current information found on a later authorized route, without an owner upload. Bound to the correct event and date where an id existed, and the absence of an id stated where it did not. Forecasts produced for both games. Actionability gated separately, and PASS in both cases for reasons that have nothing to do with the forecast being unavailable.",
+ "WHAT_WOULD_HAVE_HAPPENED_UNDER_THE_OLD_BEHAVIOUR": "search -> 32-day-old article -> AVAILABILITY_UNKNOWN -> no outcome. Three ladders would have terminated at rung 4 or earlier with nothing acquired, and the MLB slate would not exist at all.",
+ "created_utc": "2026-08-31T00:15:00Z",
+ "record_id": "ACQUISITION-ACCEPTANCE-2026-08-31",
+ "record_sha256": "ed75f649f80787ea7ac0bcee6d8cec54905e9416f02cf53ad40448cc1b9d62b6",
+ "schema": "ops.acquisition_acceptance_test.v1"
+}

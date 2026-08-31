@@ -63,9 +63,8 @@ THE INCIDENTS THIS FILE ANSWERS, each mapped to the rule it produced.
      This is the third guard in this repo that existed and was never called (after aggregate_guard
      and ALLOW_DIRECT_HTTP). The getters now re-derive BEFORE serving: the entry files are
      re-hashed on every read (they are being read anyway, so the hash is nearly free) and the
-     content id is recomputed from the bytes on disk; only the payload-bytes re-hash is cached,
-     keyed on each file's size and mtime_ns. The cache is a speed shortcut over a signal the
-     filesystem supplies, so it is named as a residual and not as a proof.
+     content id is recomputed from the bytes on disk. The payload re-hash was cached on size and
+     mtime_ns; the re-attack below defeated that cache, and it is gone.
    E. A stored verdict was never bound to the record it judged. A genuine CANONICAL verdict copied
      onto a different record admitted that record — source "web_search" and all — as FINAL. No
      forgery was required. Now: every field the verdict RECORDED about what it judged (event_id,
@@ -84,6 +83,60 @@ THE INCIDENTS THIS FILE ANSWERS, each mapped to the rule it produced.
      admission unstorable as a result. harness/test_score_admission.py's FIXTURE 7 currently
      admits with canonical_schedule=None and then reads the record back; that fixture must supply
      a schedule. score_collector's own handoff already passes one.
+
+6. 2026-08-30, the RE-ATTACK on the fix pass above (data/audit/2026-08-30_isolation_layer_-
+   reattack.json). Round one found untouched defects; round two found INCOMPLETE FIXES, and all
+   of round two's findings for this file were in the same half of the same seam: the read path
+   re-derived the BYTES and stopped there. The owner's acceptance criteria, and what closes each.
+
+   A1  READ/WRITE ADMISSION PARITY. _assert_servable applied a SUBSET of what _normalize_entries
+       applies — it never re-checked the record's derived ET date or its league against the
+       manifest's own date_et/league — so a GENUINE 2026-08-28 final, rebuilt self-consistently
+       on disk under an 8/30 snapshot, was served by get_verified_scores('2026-08-30','MLB') with
+       verify_snapshot reporting ok=True. That is the re-attack's stated goal achieved: a TRUE
+       score for the WRONG DATE, on a slate that was set-identical to the 8/28 board's fifteen
+       matchups. Worse than a fabricated one, because it is checkable and it is convincing.
+       Both ends now call ONE function, _admission_invariants: if write refuses it, read refuses
+       it, and there is a single place to look to see whether that is still true.
+   A2  ABSENCE IS A REFUSAL. _verdict_binding_problems opened with `if field not in
+       verdict.detail: continue`, so the entire cluster-E guard was switched off by DELETING keys
+       rather than faking them — a four-key verdict admitted a refused BOS@NYY record to
+       result_ledger, settleable. A missing binding field is now VERDICT_RECORDS_NOTHING_ABOUT_-
+       WHAT_IT_JUDGED.
+   A3  THE LANE IS RE-EARNED FROM record['source']. score_admission.CANONICAL_SOURCES,
+       lane_for_source() and effective_lane() had ZERO callers outside score_admission — the
+       fourth guard-with-no-callers in this repo — while this store routed on the caller-supplied
+       verdict.detail['lane']. _record_source/_earned_lane/_earned_sink call all three, on both
+       paths.
+   A4  STRUCTURAL, NOT CONDITIONAL. _earned_sink hands score_admission.sink_for a verdict whose
+       lane came out of effective_lane(declared, record['source']), so a search-sourced record is
+       never described to the router as CANONICAL and there is no `if` to invert. The read path
+       defines "servable" by calling it, so being filed in records.json is not what makes a
+       record servable. At WRITE the two cannot diverge silently either: a verdict declaring
+       CANONICAL over a source that does not earn it fails the `lane` binding and the write is
+       REFUSED rather than quietly demoted.
+   A5  THE VERDICT IS BOUND TO THE EVIDENCE, source and lane included. _VERDICT_DETAIL_BINDINGS
+       omitted both — the two fields cluster B's fix turned into evidence — so a genuine,
+       unforged CANONICAL verdict sat beside a record reading source "web_search" with inverted
+       scores and was served as a settleable FINAL. The SCORES cannot be bound here (admit() does
+       not record them), so they are bound OUTSIDE the snapshot directory instead: every verified
+       record_sha256 goes into the append-only write_log.jsonl, which had no reader anywhere on
+       the production path, and _journalled_record_bindings() is now that reader. An on-disk
+       rebuild that edits home_score to 99 and recomputes the binding produces one this store
+       never wrote. Residual stated at _journalled_record_bindings and modelled by BOTH fixtures.
+   B1  NO CACHE. The payload re-hash was memoized on (relative path, st_size, st_mtime_ns). An
+       archive that rewrites bytes while preserving size and mtime defeats that key exactly — and
+       that is the mutable-archive threat in item 3 above, the one that really happened on
+       2026-08-30. A cache key that could not be forged would have to cover the content, which is
+       the work the cache existed to skip. Removed.
+   B2  and the fixture that keeps it removed is a WARM-CACHE one (S16): read, edit the bytes at
+       an unchanged length, restore mtime with os.utime, read again. Every drift fixture written
+       before the re-attack wrote new bytes without restoring the mtime, so none of them ever
+       exercised a warm cache, and the defect sat under a suite that looked like it covered it.
+   B3  ONE STORE, ONE ANSWER. A getter and verify_snapshot() disagreed about the same directory
+       in the same process — the getter served through the warm cache while verify_snapshot
+       reported RAW_PAYLOAD_BYTES_DRIFTED. S17 asserts they agree over four stores, and a mutant
+       makes them diverge.
 
 WHY THE ID EXCLUDES now_utc AND INCLUDES fetched_at_utc. The id is content-addressed. A payload's
 fetched_at is a property of the OBSERVATION (the same bytes seen at two instants are two
@@ -109,12 +162,17 @@ THE SURFACE.
     get_quarantine(date, league)      deliberately NOT an analysis tool. Reading the refused
                                       side is an audit act and has to look like one.
 
-Two exceptions a reader may see from the READ path, both added by the 8/30 review:
-    SnapshotImmutabilityViolation     the bytes under out_root are not what they were (D).
+Three exceptions a reader may see from the READ path, all added by the 8/30 review and widened
+by the re-attack:
+    SnapshotImmutabilityViolation     the bytes under out_root are not what they were (D, B1).
     SnapshotAdmissibilityViolation    what is stored on the verified side does not satisfy the
-                                      ceiling the getters enforce: an unbound verdict, a verdict
-                                      that judged some other record, or a record whose stored
-                                      binding no longer covers it (E, A-DOWNSTREAM).
+                                      SAME rules the write path applies: an unbound verdict, a
+                                      verdict that judged some other record or records nothing
+                                      about it, a record whose stored binding no longer covers
+                                      it, a record off the slate it is filed under, a record the
+                                      write path would refuse outright, an entry filed on a side
+                                      its source does not earn, or a record this store never
+                                      wrote (E, A-DOWNSTREAM, A1-A5).
     SnapshotContentConflict           two stored observations of one event contradict (F).
 
 Usage: python3 harness/verified_snapshot.py [--selftest] [--mutants] [--gate]
@@ -208,6 +266,7 @@ REFUSE_PAYLOAD_SHA_MISMATCH = "RAW_PAYLOAD_SHA256_MISMATCH"
 REFUSE_DUPLICATE_PAYLOAD_ID = "DUPLICATE_RAW_PAYLOAD_ID"
 REFUSE_VERDICT_NOT_BOUND = "VERDICT_DID_NOT_JUDGE_THIS_RECORD"
 REFUSE_UNBOUND_NO_SCHEDULE = "ADMITTED_WITHOUT_A_CANONICAL_SCHEDULE"
+REFUSE_VERDICT_SAYS_NOTHING = "VERDICT_RECORDS_NOTHING_ABOUT_WHAT_IT_JUDGED"
 REFUSE_BAD_DATE_ET = "SNAPSHOT_DATE_ET_MALFORMED"
 REFUSE_BAD_SOURCE = "SNAPSHOT_SOURCE_MISSING"
 REFUSE_BAD_SNAPSHOT_ID = "SNAPSHOT_ID_MALFORMED"
@@ -255,6 +314,14 @@ REFUSAL_MEANING = {
                               "record does not satisfy what its admissible_as implies. Copying a "
                               "genuine CANONICAL verdict onto a fabricated record needed no "
                               "forgery at all before this check (2026-08-30 review, cluster E)",
+    REFUSE_VERDICT_SAYS_NOTHING: "a verdict whose detail OMITS one of the fields it is supposed "
+                                 "to have recorded about the record it judged. ABSENCE IS A "
+                                 "REFUSAL: the 2026-08-30 re-attack switched the whole cluster-E "
+                                 "binding check off by DELETING keys rather than faking them, "
+                                 "because the loop skipped any field it did not find "
+                                 "(`if field not in verdict.detail: continue`). A verdict whose "
+                                 "detail does not say what it judged is not a judgement of "
+                                 "anything",
     REFUSE_UNBOUND_NO_SCHEDULE: "a verdict carrying CANONICAL_SCHEDULE_NOT_SUPPLIED on the "
                                 "verified side. Owner rules 1, 2 and 6 live inside admit()'s "
                                 "`if idx is not None`, so a schedule-less admission checked the "
@@ -299,6 +366,10 @@ CONFLICT_VERDICT_NOT_BOUND = "STORED_VERDICT_DID_NOT_JUDGE_THE_RECORD_BESIDE_IT"
 CONFLICT_RECORD_BINDING = "STORED_RECORD_DOES_NOT_MATCH_ITS_RECORDED_BINDING"
 CONFLICT_UNBOUND_ADMISSION = "STORED_ADMISSION_HAD_NO_CANONICAL_SCHEDULE"
 CONFLICT_VERDICT_UNREADABLE = "STORED_VERDICT_IS_NOT_SCORE_ADMISSION_VOCABULARY"
+CONFLICT_RECORD_OFF_SLATE = "STORED_RECORD_IS_NOT_ON_THE_SLATE_IT_IS_FILED_UNDER"
+CONFLICT_RECORD_NOT_ADMISSIBLE = "STORED_RECORD_WOULD_BE_REFUSED_BY_THE_WRITE_PATH"
+CONFLICT_SINK_NOT_EARNED = "STORED_ENTRY_DOES_NOT_EARN_THE_SIDE_IT_IS_FILED_ON"
+CONFLICT_RECORD_NOT_JOURNALLED = "STORED_RECORD_WAS_NEVER_WRITTEN_BY_THIS_STORE"
 
 CONFLICT_MEANING = {
     CONFLICT_TERMINAL_DISAGREEMENT: "two stored records both claim a TERMINAL status for one "
@@ -321,6 +392,36 @@ CONFLICT_MEANING = {
     CONFLICT_VERDICT_UNREADABLE: "a stored verdict is not score_admission's vocabulary. It was "
                                  "checked at write time, so on read it means the entry was "
                                  "edited after the fact",
+    CONFLICT_RECORD_OFF_SLATE: "a stored record's league or its ET date is not the league or the "
+                               "date_et of the snapshot it sits in. THE 2026-08-30 RE-ATTACK'S "
+                               "STATED GOAL: a GENUINE 8/28 final, rebuilt self-consistently on "
+                               "disk under an 8/30 snapshot, was served by get_verified_scores("
+                               "'2026-08-30','MLB'). The write path always refused this "
+                               "(REFUSE_DATE_MISMATCH); the read path re-derived the BYTES and "
+                               "never re-applied the slate rules. A true score for the wrong "
+                               "date is worse than an invented one: it is checkable, and it is "
+                               "convincing",
+    CONFLICT_RECORD_NOT_ADMISSIBLE: "a stored record on the verified side does not satisfy a "
+                                    "record-level rule the write path applies — it fails "
+                                    "score_admission.validate_record, its source hash is covered "
+                                    "by none of this snapshot's payloads, or two entries claim "
+                                    "one event id. Read admissibility is the SAME rule set as "
+                                    "write admissibility, not a subset: if write refuses it, "
+                                    "read refuses it",
+    CONFLICT_SINK_NOT_EARNED: "a stored entry is filed on the verified side, or under a sink, "
+                              "that the record's OWN source does not earn. The lane is "
+                              "re-derived here from record['source'] through "
+                              "score_admission.lane_for_source/effective_lane and is never read "
+                              "off the verdict a caller supplied (cluster B, re-opened at the "
+                              "store boundary by the 8/30 re-attack)",
+    CONFLICT_RECORD_NOT_JOURNALLED: "a stored record's binding appears in no line of "
+                                    "write_log.jsonl, so this store never wrote it. An on-disk "
+                                    "rebuild that edits a score and RECOMPUTES record_sha256 "
+                                    "satisfies every check inside the snapshot directory — the "
+                                    "8/30 re-attack edited a genuine final's home_score to 99 "
+                                    "and had it served as settleable. The append-only journal "
+                                    "sits OUTSIDE the directory that was rebuilt, and it is the "
+                                    "only witness left",
 }
 
 
@@ -580,6 +681,50 @@ def _payload_descriptor(payload):
             "source": payload.get("source"), "url": payload.get("url")}
 
 
+def _record_source(record):
+    """The record's OWN source field — the EVIDENCE, as opposed to the lane a caller declares.
+
+    CLUSTER B, and the shape the 2026-08-30 re-attack found again one layer down: `lane` arrives
+    as an unverified caller assertion, and score_admission.admit() grounds it in the source. That
+    grounding did not survive the trip to disk, because this store routed on
+    verdict.detail['lane'] and never asked the record what its source was. Every lane decision in
+    this module now starts here.
+    """
+    return record.get("source") if isinstance(record, dict) else None
+
+
+def _earned_lane(record):
+    """The lane a record's own source EARNS, recomputed here and never read off the verdict.
+
+    score_admission.CANONICAL_SOURCES is the allowlist and lane_for_source() is the reader of it;
+    an unrecognised source earns SEARCH, never CANONICAL. The re-attack found CANONICAL_SOURCES,
+    lane_for_source() and effective_lane() had ZERO callers outside score_admission — the
+    fourth guard-with-no-callers in this repo — so they are called from here and from
+    _earned_sink() below, on both the write path and the read path.
+    """
+    return sa.lane_for_source(_record_source(record))
+
+
+def _earned_sink(record, verdict):
+    """Where a (record, verdict) pair may be FILED, with the lane RE-EARNED from the record.
+
+    STRUCTURAL, not conditional. score_admission.sink_for() routes on the lane it is handed, so
+    this hands it a verdict whose lane came out of effective_lane(declared, record['source'])
+    rather than out of the caller's detail. A record whose source is a search source therefore
+    cannot be routed to a verified sink at all: sink_for is never given the word CANONICAL for
+    it, so there is no `if` here for a future edit to invert. The read path defines "servable" by
+    calling this too, so a record filed into records.json by hand does not become servable by
+    being filed there.
+
+    Returns (sink, earned_lane, demoted).
+    """
+    declared = verdict.detail.get("lane")
+    lane, demoted = sa.effective_lane(declared, _record_source(record))
+    grounded = sa.Verdict(verdict.disposition, list(verdict.reason_codes), verdict.admissible_as,
+                          dict(verdict.detail, lane=lane))
+    return sa.sink_for(grounded), lane, demoted
+
+
 def _normalize_entries(records, league, date_et, payload_shas):
     """(entries, problems). An entry is {record, verdict, sink}; the SINK is score_admission's."""
     problems, entries = [], []
@@ -609,19 +754,27 @@ def _normalize_entries(records, league, date_et, payload_shas):
                              "disposition": verdict.disposition, "lane": lane})
             continue
 
-        sink = sa.sink_for(verdict)
+        record = env["record"]
+        #: What the verdict CLAIMS, and what the record's own source EARNS. The two are separate
+        #: on purpose: the claim decides whether this entry is CHECKED as a result, the earned
+        #: answer decides where it is FILED. A caller who claims the verified side gets the
+        #: verified side's rules run against it even when its source demotes it to quarantine —
+        #: otherwise a forged lane would buy silence rather than a refusal.
+        declared_sink = sa.sink_for(verdict)
+        sink, earned_lane, demoted = _earned_sink(record, verdict)
         # The lane table is consulted at write time rather than assumed. It cannot refuse
         # anything sink_for returns TODAY, because sink_for is total and lane-consistent — but it
         # is not decoration: mutation M07 replaces sink_for's answer with a constant, and this
         # line is what refuses the resulting SEARCH -> result_ledger write.
         if lane in sa.LANES:
-            sa.assert_write_allowed(lane, sink)
+            sa.assert_write_allowed(lane, declared_sink)
+        if earned_lane in sa.LANES:
+            sa.assert_write_allowed(earned_lane, sink)
 
-        record = env["record"]
-        if sink in VERIFIED_SINKS:
-            bad = _verified_record_problems(record, i, league, date_et, payload_shas,
-                                            seen_event_ids)
-            bad.extend(_verdict_binding_problems(record, verdict, i))
+        if declared_sink in VERIFIED_SINKS or sink in VERIFIED_SINKS:
+            bad = _admission_invariants(record, verdict, i, league=league, date_et=date_et,
+                                        payload_shas=payload_shas,
+                                        seen_event_ids=seen_event_ids)
             if bad:
                 problems.extend(bad)
                 continue
@@ -664,12 +817,22 @@ _ADMISSIBLE_IMPLIES = {
 
 #: Fields admit() RECORDS in the verdict's own detail about the record it judged. A verdict lifted
 #: onto some other record disagrees with it here. Each pair is (detail key, how to read it off
-#: the record).
+#: the record). EVERY key must be PRESENT — see _verdict_binding_problems.
+#:
+#: `source` and `lane` were added 2026-08-30 by the re-attack. They are the two fields cluster B's
+#: fix turned into EVIDENCE inside admit() (detail['source'], detail['source_lane']), and this
+#: table omitted both, so B's guarantee did not survive the trip to disk: a genuine, unforged
+#: CANONICAL verdict placed beside a record whose source read "web_search" and whose scores were
+#: inverted was stored on the verified side and served as a settleable FINAL. `lane` is read off
+#: the RECORD through _earned_lane, never off the verdict — comparing detail['lane'] to itself
+#: would be a check that cannot fail.
 _VERDICT_DETAIL_BINDINGS = (
     ("event_id", lambda r: r.get("event_id")),
     ("status", lambda r: r.get("status")),
     ("terminal_verified", lambda r: bool(r.get("terminal_verified"))),
     ("scheduled_start_utc", lambda r: _iso(r.get("scheduled_start_utc"))),
+    ("source", _record_source),
+    ("lane", _earned_lane),
 )
 
 
@@ -685,12 +848,23 @@ def _verdict_binding_problems(record, verdict, index):
     forks). It compares the verdict against ITS OWN RECORD of what it judged, plus what its
     admissible_as necessarily implies about the record beside it.
 
+    ABSENCE IS A REFUSAL (2026-08-30 re-attack, and the reason this docstring was rewritten).
+    This loop used to open with `if field not in verdict.detail: continue`, so a verdict whose
+    detail simply OMITTED event_id, status, terminal_verified and scheduled_start_utc passed the
+    binding check by having nothing to compare. The re-attack switched the entire cluster-E guard
+    off by DELETING keys — no forgery, no matching, four keys handed in and a refused BOS@NYY
+    record written to sink=result_ledger with settleable=True. A missing field is now
+    VERDICT_RECORDS_NOTHING_ABOUT_WHAT_IT_JUDGED, exactly as absence is a refusal everywhere else
+    in this repo.
+
     RESIDUAL, stated because a half-check that reads as a whole one is worse than none: admit()
-    does not put the scores it saw into the verdict's detail, so a record re-fabricated to match
-    the verdict on event id, status, terminal_verified and start — and re-bound with a recomputed
-    record_sha256 — still passes. Closing that needs a record digest inside the Verdict, which is
-    score_admission's to add. What this closes is the copy: transferring a verdict now requires
-    rebuilding the record around it rather than just moving one dict.
+    does not put the SCORES it saw into the verdict's detail, so this table cannot bind them and
+    a record re-fabricated to match the verdict on every field above — and re-bound with a
+    recomputed record_sha256 — still satisfies this function. That hole is closed OUTSIDE the
+    snapshot directory instead, by _journalled_record_bindings(): the append-only write log names
+    every record binding this store actually wrote, and an on-disk rebuild that recomputes
+    record_sha256 produces one the journal has never seen. The residual there is smaller and
+    stated where it lives.
     """
     if not isinstance(record, dict):
         return [{"code": REFUSE_VERDICT_NOT_BOUND, "index": index,
@@ -698,6 +872,11 @@ def _verdict_binding_problems(record, verdict, index):
     problems = []
     for field, read in _VERDICT_DETAIL_BINDINGS:
         if field not in verdict.detail:
+            problems.append({"code": REFUSE_VERDICT_SAYS_NOTHING, "index": index, "field": field,
+                             "recorded": sorted(verdict.detail),
+                             "detail": "a verdict whose detail does not say what it judged is "
+                                       "not a judgement of anything. Skipping an absent field "
+                                       "turns this whole check off by deletion"})
             continue
         judged, stored = verdict.detail.get(field), read(record)
         if judged != stored:
@@ -754,6 +933,47 @@ def _verified_record_problems(record, index, league, date_et, payload_shas, seen
     elif not problems:
         seen_event_ids[event_id] = index
     return problems
+
+
+def _admission_invariants(record, verdict, index, *, league, date_et, payload_shas,
+                          seen_event_ids):
+    """THE record-level admissibility rules. ONE function, called by BOTH ends of the store.
+
+    P0-A of the 2026-08-30 re-attack, and the reason this function exists rather than two lists
+    that happen to overlap. The read path re-derived the BYTES (cluster D's fix) and then applied
+    a SUBSET of the record-level rules the write path applies: _assert_servable checked the
+    verdict binding and record_sha256 and never re-checked the record's derived ET date or its
+    league against the manifest's own date_et/league. A GENUINE 2026-08-28 final, rebuilt
+    self-consistently on disk under an 8/30 snapshot, was therefore served by
+    get_verified_scores('2026-08-30','MLB') with verify_snapshot reporting ok=True — the exact
+    condition the 8/30 board hit by hand, where the 8/30 MLB slate was set-identical to the 8/28
+    board's fifteen matchups.
+
+    So the rule is not "the read path also checks some of this". It is: IF WRITE REFUSES IT, READ
+    REFUSES IT, and there is one place to look to see whether that is true. The write path names
+    the problems REFUSE_*; the read path renames the same problems CONFLICT_* through
+    _READ_CONFLICT_FOR, because a write that was stopped and a store that holds something it
+    should never have held are different facts about the same rule.
+    """
+    problems = _verified_record_problems(record, index, league, date_et, payload_shas,
+                                         seen_event_ids)
+    problems.extend(_verdict_binding_problems(record, verdict, index))
+    return problems
+
+
+#: The write path's name for a broken rule -> the read path's name for the same rule broken on
+#: disk. A REFUSE_ code that reaches a getter with no entry here is a rule the read path applies
+#: without being able to say what it found, so the selftest asserts the map is total.
+_READ_CONFLICT_FOR = {
+    REFUSE_VERDICT_NOT_BOUND: CONFLICT_VERDICT_NOT_BOUND,
+    REFUSE_VERDICT_SAYS_NOTHING: CONFLICT_VERDICT_NOT_BOUND,
+    REFUSE_UNBOUND_NO_SCHEDULE: CONFLICT_UNBOUND_ADMISSION,
+    REFUSE_ADMITTED_INVALID: CONFLICT_RECORD_NOT_ADMISSIBLE,
+    REFUSE_HASH_NOT_IN_SNAPSHOT: CONFLICT_RECORD_NOT_ADMISSIBLE,
+    REFUSE_DUPLICATE_EVENT_ID: CONFLICT_RECORD_NOT_ADMISSIBLE,
+    REFUSE_LEAGUE_MISMATCH: CONFLICT_RECORD_OFF_SLATE,
+    REFUSE_DATE_MISMATCH: CONFLICT_RECORD_OFF_SLATE,
+}
 
 
 # ---------------------------------------------------------------------------------------------
@@ -942,6 +1162,14 @@ def _append_write_log(root, snapshot_id, league, date_et, source, written_at, co
     The journal is not the index: the getters read the snapshot directories, because an index is
     a second copy of the truth and a second copy is a thing that can disagree. This exists so a
     reviewer can see that a rewrite was attempted and refused-as-a-no-op.
+
+    IT IS ALSO THE ONLY WITNESS OUTSIDE THE SNAPSHOT DIRECTORY, which is why every verified
+    entry's record_sha256 goes into the line (added 2026-08-30). The re-attack observed that this
+    file "has no reader anywhere on the production path" and, separately, edited a stored genuine
+    final's home_score to 99, recomputed record_sha256 with _record_binding, rebuilt the manifest
+    and renamed the directory to the new content id — a snapshot self-consistent under every
+    check that lives inside it. _journalled_record_bindings() is the reader, and the rebuilt
+    record's binding is one this store never wrote.
     """
     path = os.path.join(root, WRITE_LOG_NAME)
     _assert_within(root, path)
@@ -950,9 +1178,46 @@ def _append_write_log(root, snapshot_id, league, date_et, source, written_at, co
             "date_et": date_et, "source": source, "written_at_utc": written_at,
             "n_verified": len(verified), "n_quarantined": len(quarantined),
             "payload_sha256": [d["sha256"] for d in descriptors],
+            "verified_record_sha256": sorted(str(e.get("record_sha256")) for e in verified),
             "deduplicated": bool(deduplicated)}
     with open(path, "a") as fh:
         fh.write(_canonical(line) + "\n")
+
+
+def _journalled_record_bindings(root):
+    """Every verified record binding this store has ever written, out of the append-only journal.
+
+    The read path's only anchor OUTSIDE the snapshot directory. Everything else a getter checks —
+    the entry-file hashes, the content id, record_sha256, the verdict bindings — lives in the
+    directory an on-disk rebuild controls, so a coordinated rebuild satisfies all of it; the
+    2026-08-30 re-attack did exactly that and had a 99-run score served as settleable.
+
+    RESIDUAL, and it is real: write_log.jsonl is a file under out_root, so an adversary who
+    rewrites the store can append to it. This raises the bar from "edit four files" to "edit four
+    files and forge the journal"; it does not close the class. The selftest models BOTH
+    adversaries on purpose — _rebuild_snapshot_on_disk(..., journal=True) is the forger and
+    journal=False is the 2026-08-30 one — so no fixture here reads as proving more than it does.
+    A missing journal means nothing was written by this store, and nothing on the verified side
+    is servable; that is the same posture as a missing manifest, and for the same reason.
+    """
+    path = os.path.join(os.path.abspath(root), WRITE_LOG_NAME)
+    bindings = set()
+    if not os.path.isfile(path):
+        return bindings
+    with open(path) as fh:
+        for raw in fh:
+            raw = raw.strip()
+            if not raw:
+                continue
+            try:
+                line = json.loads(raw)
+            except ValueError:
+                # A journal line that will not parse is not evidence of anything, and it must not
+                # be evidence FOR anything either: it is skipped, never treated as a wildcard.
+                continue
+            for binding in (line.get("verified_record_sha256") or []):
+                bindings.add(str(binding))
+    return bindings
 
 
 # ---------------------------------------------------------------------------------------------
@@ -1057,29 +1322,23 @@ def verify_snapshot(snapshot_id, *, root=DEFAULT_ROOT):
 #     and records.json edited in place was served as truth. Nothing below trusts the manifest.
 # ---------------------------------------------------------------------------------------------
 
-#: Payload bytes are the expensive half of a verification, so they are re-hashed only when the
-#: filesystem says a file changed. The key is (path -> size, mtime_ns) for every file in the
-#: snapshot. RESIDUAL, named rather than implied: an edit that preserves both size and mtime is
-#: not seen by this cache. The entry files are re-hashed on EVERY read regardless (below), because
-#: they are being read to be served anyway, so the record bytes never depend on this shortcut.
-_PAYLOAD_INTEGRITY_CACHE = {}
-
-
-def _fs_signature(directory):
-    """Every file under a snapshot, with its size and mtime_ns. Not a clock read: this is what the
-    filesystem already recorded about bytes that are already there."""
-    signature = []
-    for dirpath, dirnames, filenames in os.walk(directory):
-        dirnames.sort()
-        for name in sorted(filenames):
-            path = os.path.join(dirpath, name)
-            try:
-                st = os.stat(path)
-            except OSError:
-                signature.append((os.path.relpath(path, directory), None, None))
-                continue
-            signature.append((os.path.relpath(path, directory), st.st_size, st.st_mtime_ns))
-    return tuple(signature)
+#: THERE IS NO CACHE HERE, AND THAT IS THE FIX (P0-B1, 2026-08-30 re-attack).
+#:
+#: The read path used to memoize this re-hash on (relative path, st_size, st_mtime_ns) for every
+#: file in the snapshot. An archive that rewrites bytes while PRESERVING size and mtime defeats
+#: that key exactly — and that is not a hypothetical, it is the mutable-archive threat this
+#: module's own docstring names: on 2026-08-30 the admitted MLB pitch archive rewrote two
+#: historical daily files under unchanged filenames. The re-attack warmed the cache with one
+#: read, edited a payload byte, restored the mtime with os.utime, and the second
+#: get_verified_score served the drifted store while verify_snapshot() on the same directory
+#: reported RAW_PAYLOAD_BYTES_DRIFTED. A getter and verify_snapshot disagreeing about the same
+#: bytes in the same process is cluster D again, one layer down.
+#:
+#: The cache was a speed shortcut over a signal the filesystem supplies, and the filesystem's
+#: signal is exactly the one an archive rewrite is free to forge. A cache key that could not be
+#: forged would have to cover the CONTENT, which means reading and hashing the bytes — which is
+#: the work the cache existed to skip. So it is gone, and selftest S16 is the warm-read fixture
+#: that keeps it gone.
 
 
 def _payload_drift(manifest, directory):
@@ -1102,24 +1361,15 @@ def _payload_drift(manifest, directory):
     return drift
 
 
-def _cached_payload_drift(manifest, directory):
-    key = os.path.realpath(directory)
-    signature = _fs_signature(directory)
-    hit = _PAYLOAD_INTEGRITY_CACHE.get(key)
-    if hit is not None and hit[0] == signature:
-        return list(hit[1])
-    drift = _payload_drift(manifest, directory)
-    _PAYLOAD_INTEGRITY_CACHE[key] = (signature, list(drift))
-    return drift
-
-
 def _read_integrity(manifest, root):
     """The drift list a getter must clear BEFORE it serves anything out of this snapshot.
 
-    The entry files are re-hashed here on every call, uncached, and the content id is recomputed
-    from the bytes that were just read — so a manifest rewritten to cover an edited records.json
-    still fails, because the id is the hash of the content and the directory name stops being
-    true. Only the payload half consults the size/mtime cache.
+    EVERY byte is re-hashed here on every call, uncached. The entry files are re-hashed because
+    they are being read to be served anyway; the payloads are re-hashed because the only cache
+    key available to a store that reads no clock is size and mtime, and size and mtime are what a
+    mutable archive is free to preserve (P0-B1). The content id is recomputed from the bytes that
+    were just read, so a manifest rewritten to cover an edited records.json still fails: the id
+    IS the hash of the content, and the directory name stops being true.
     """
     snapshot_id = manifest.get("snapshot_id")
     directory = _snapshot_dir(os.path.abspath(root), snapshot_id)
@@ -1150,7 +1400,7 @@ def _read_integrity(manifest, root):
                       "recomputed": SNAPSHOT_ID_PREFIX + recomputed,
                       "detail": "the id is the hash of the content, so the directory name has "
                                 "stopped being true"})
-    drift.extend(_cached_payload_drift(manifest, directory))
+    drift.extend(_payload_drift(manifest, directory))
     return drift
 
 
@@ -1164,14 +1414,39 @@ def _assert_readable(manifest, root):
             {"snapshot_id": manifest.get("snapshot_id"), "drift": drift})
 
 
-def _assert_servable(entry, snapshot_id):
+def _manifest_payload_shas(manifest):
+    """The payload hashes this snapshot's manifest declares, normalised the way a record's
+    raw_response_sha256 is normalised. _assert_readable has already re-hashed the bytes on disk
+    against these, so by the time a getter uses them they are re-derived and not merely claimed."""
+    return {str((d or {}).get("sha256") or "").strip().lower()
+            for d in manifest.get("payloads") or []}
+
+
+def _assert_servable(entry, manifest, index, seen_event_ids, journalled):
     """The ceiling the getters enforce on one stored VERIFIED entry, re-checked on every read.
 
-    Clusters E and A of the 8/30 review. The write path checks the same two things, and that is
-    not redundancy: the write check only ever covers records this build wrote, and the whole
-    premise of this module is that what is on disk is an observation at a moment rather than a
-    permanent fact.
+    READ/WRITE ADMISSION PARITY (P0-A, 2026-08-30 re-attack). This used to check the verdict
+    binding and record_sha256 and stop there, which is a SUBSET of what _normalize_entries
+    applies at the other end of the store — so the getters served records the writer would have
+    refused. The headline consequence was the one the re-attack set out to produce: a GENUINE
+    2026-08-28 final, moved onto an 8/30 snapshot by a self-consistent on-disk rebuild, came back
+    out of get_verified_scores('2026-08-30','MLB') with verify_snapshot reporting ok=True. A true
+    score for the wrong date is worse than an invented one: it is checkable, and it is
+    convincing, and the 8/30 MLB slate was set-identical to the 8/28 board's fifteen matchups.
+
+    Now: _admission_invariants is THE rule set and both ends call it, so read cannot drift into
+    being a subset without deleting the call. The slate the record is measured against is the
+    MANIFEST's own league and date_et — the one thing no coordinated on-disk edit can satisfy,
+    because moving the manifest's date_et removes the snapshot from the queried slate entirely.
+
+    Three checks live here rather than in the shared rule set, because they are about the STORE
+    rather than about the record:
+      * the earned sink (cluster B at the store boundary). Servable is defined as "the sink this
+        record's own SOURCE earns", not "the file it was found in" — see _earned_sink.
+      * record_sha256, re-derived from the record's own bytes.
+      * the append-only journal, the only witness outside the rebuilt directory.
     """
+    snapshot_id = manifest.get("snapshot_id")
     problems = []
     record = entry.get("record")
     verdict, why = _verdict_of(entry.get("verdict"))
@@ -1179,10 +1454,24 @@ def _assert_servable(entry, snapshot_id):
         problems.append({"code": CONFLICT_VERDICT_UNREADABLE, "snapshot_id": snapshot_id,
                          "detail": why})
     else:
-        for p in _verdict_binding_problems(record, verdict, None):
-            code = (CONFLICT_UNBOUND_ADMISSION if p["code"] == REFUSE_UNBOUND_NO_SCHEDULE
-                    else CONFLICT_VERDICT_NOT_BOUND)
-            problems.append(dict(p, code=code, snapshot_id=snapshot_id))
+        for p in _admission_invariants(record, verdict, index,
+                                       league=sa.normalize_league(manifest.get("league")),
+                                       date_et=manifest.get("date_et"),
+                                       payload_shas=_manifest_payload_shas(manifest),
+                                       seen_event_ids=seen_event_ids):
+            problems.append(dict(p, code=_READ_CONFLICT_FOR[p["code"]],
+                                 write_code=p["code"], snapshot_id=snapshot_id))
+        earned_sink, earned_lane, demoted = _earned_sink(record, verdict)
+        if earned_sink not in VERIFIED_SINKS or earned_sink != entry.get("sink"):
+            problems.append({"code": CONFLICT_SINK_NOT_EARNED, "snapshot_id": snapshot_id,
+                             "filed_under": entry.get("sink"), "earns": earned_sink,
+                             "declared_lane": verdict.detail.get("lane"),
+                             "earned_lane": earned_lane, "demoted": demoted,
+                             "source": _record_source(record),
+                             "approved_canonical_sources": sorted(sa.CANONICAL_SOURCES),
+                             "detail": "the lane is re-earned from the record's own source; "
+                                       "being filed in records.json is not what makes a record "
+                                       "servable"})
     try:
         binding = _record_binding(record)
     except (TypeError, ValueError) as e:
@@ -1192,6 +1481,14 @@ def _assert_servable(entry, snapshot_id):
         problems.append({"code": CONFLICT_RECORD_BINDING, "snapshot_id": snapshot_id,
                          "event_id": record.get("event_id") if isinstance(record, dict) else None,
                          "stored": entry.get("record_sha256"), "recomputed": binding})
+    if binding is not None and binding not in journalled:
+        problems.append({"code": CONFLICT_RECORD_NOT_JOURNALLED, "snapshot_id": snapshot_id,
+                         "event_id": record.get("event_id") if isinstance(record, dict) else None,
+                         "record_sha256": binding,
+                         "detail": "no line of write_log.jsonl names this record binding, so "
+                                   "this store never wrote this record. An edited score with a "
+                                   "recomputed binding satisfies every check inside the snapshot "
+                                   "directory and none outside it"})
     if problems:
         raise SnapshotAdmissibilityViolation(problems)
 
@@ -1287,24 +1584,28 @@ def _observation_order(candidate):
 def _verified_candidates(root, event_id=None, date_et=None, league=None):
     """Every stored VERIFIED entry matching the filter, latest OBSERVATION last.
 
-    Each entry clears _assert_servable first: a stored verdict that did not judge the record
-    beside it, or one that was never checked against a canonical schedule, is not a result no
-    matter which file it is filed in.
+    EVERY verified entry of a matching snapshot clears _assert_servable, not only the entries the
+    filter keeps. Two reasons, both learned: the duplicate-event-id rule is a property of the
+    SNAPSHOT and cannot be evaluated over a filtered subset, and an event-id filter applied first
+    would let an inadmissible neighbour sit unexamined in a store that is being served from. A
+    non-mapping record on the verified side is a REFUSAL rather than a skip for the same reason —
+    the write path refuses it (ADMITTED_RECORD_FAILS_VALIDATION), so the read path must too, and
+    silently stepping over it is how 'fewer games' comes to read as 'a quiet night'.
     """
     normalized = sa.normalize_league(league) if league is not None else None
+    journalled = _journalled_record_bindings(root)
     out = []
     for manifest in list_snapshots(root):
         if date_et is not None and manifest.get("date_et") != date_et:
             continue
         if normalized is not None and sa.normalize_league(manifest.get("league")) != normalized:
             continue
-        for entry in _entries_of(manifest, "verified", root):
+        seen_event_ids = {}
+        for index, entry in enumerate(_entries_of(manifest, "verified", root)):
+            _assert_servable(entry, manifest, index, seen_event_ids, journalled)
             record = entry.get("record")
-            if not isinstance(record, dict):
-                continue
             if event_id is not None and record.get("event_id") != event_id:
                 continue
-            _assert_servable(entry, manifest["snapshot_id"])
             out.append({"record": record, "verdict": entry.get("verdict"),
                         "snapshot_id": manifest["snapshot_id"],
                         "observed_at_utc": _iso(record.get("source_fetched_at_utc")),
@@ -1457,7 +1758,7 @@ class _FixtureAborted(Exception):
     "died on a named assertion" and "blew up somewhere" as different outcomes (cluster O)."""
 
 
-def _rebuild_snapshot_on_disk(root, snapshot_id, mutate):
+def _rebuild_snapshot_on_disk(root, snapshot_id, mutate, journal=True):
     """FIXTURE MACHINERY. Rewrite a stored snapshot's verified entries and then rebuild the
     manifest and the directory name AROUND the edit, so the store is self-consistent on disk.
 
@@ -1465,6 +1766,17 @@ def _rebuild_snapshot_on_disk(root, snapshot_id, mutate):
     edit the manifest beside it, and the 2026-08-30 mutable archive did exactly that under
     unchanged filenames. A fixture that only edits the bytes proves the file hash and nothing
     else. Returns the snapshot's new id.
+
+    `journal` picks WHICH adversary. True (the default, and what every fixture written before
+    2026-08-30 assumes) also appends the rebuilt record bindings to write_log.jsonl: the store is
+    then consistent everywhere, including outside the snapshot directory, so each read-path check
+    is exercised on its own merits rather than being carried by the journal. False is the
+    2026-08-30 re-attack exactly as it ran — it edited records.json, recomputed record_sha256,
+    rebuilt the manifest and renamed the directory, and never touched the journal.
+
+    Stated plainly because the difference is the whole strength of CONFLICT_RECORD_NOT_JOURNALLED:
+    an adversary with write access to out_root can be the first kind. The journal narrows the
+    hole; it does not close the class, and no fixture here is allowed to imply that it does.
     """
     directory = os.path.join(root, SNAPSHOTS_DIR, snapshot_id)
     manifest = _read_json(os.path.join(directory, MANIFEST_NAME))
@@ -1492,6 +1804,13 @@ def _rebuild_snapshot_on_disk(root, snapshot_id, mutate):
     with open(os.path.join(directory, MANIFEST_NAME), "wb") as fh:
         fh.write(_canonical(manifest).encode("utf-8"))
     os.rename(directory, os.path.join(root, SNAPSHOTS_DIR, new_id))
+    if journal:
+        _append_write_log(root, new_id, manifest.get("league"), manifest.get("date_et"),
+                          manifest.get("source"), manifest.get("written_at_utc"),
+                          {"entries": entries},
+                          documents[VERIFIED_NAME].get("entries") or [],
+                          documents[QUARANTINE_NAME].get("entries") or [], descriptors,
+                          deduplicated=False)
     return new_id
 
 
@@ -1574,6 +1893,19 @@ def selftest():
                      % (label, type(e).__name__, str(e)[:400]))
             raise _FixtureAborted(label)
 
+    def serve(label, fn, fallback=None):
+        """A read of the store's OWN happy path, which is supposed to succeed. A mutant that
+        makes the store explode on records it wrote itself must die on a NAMED assertion, not on
+        a bare traceback the mutation suite can only classify as an unclassified error — and an
+        exception escaping here would also abort every fixture after it, which is how one mutant
+        came to report ERRORED while the assertion that owned it was never reached (cluster O)."""
+        try:
+            return fn()
+        except Exception as e:                              # noqa: BLE001 — named, not hidden
+            f.append("%s: the store raised %s reading records it wrote itself: %s"
+                     % (label, type(e).__name__, str(e)[:300]))
+            return fallback
+
     try:
         # ---- S0. POSTURE AND VOCABULARY ---------------------------------------------------
         if MODULE_ID != os.path.basename(__file__)[:-3]:
@@ -1618,6 +1950,35 @@ def selftest():
                          and v not in DRIFT_MEANING)
         if missing:
             f.append("S0: drift codes with no entry in DRIFT_MEANING: %s" % missing)
+        # READ/WRITE PARITY IS TOTAL, and the map that renames a refusal for the read path is the
+        # place it would silently stop being total. A REFUSE_ code _admission_invariants can emit
+        # with no entry here reaches a getter as a KeyError — an unclassified explosion where a
+        # named refusal belongs — so the set is pinned rather than grown by accident.
+        expected_parity = {REFUSE_VERDICT_NOT_BOUND, REFUSE_VERDICT_SAYS_NOTHING,
+                           REFUSE_UNBOUND_NO_SCHEDULE, REFUSE_ADMITTED_INVALID,
+                           REFUSE_HASH_NOT_IN_SNAPSHOT, REFUSE_DUPLICATE_EVENT_ID,
+                           REFUSE_LEAGUE_MISMATCH, REFUSE_DATE_MISMATCH}
+        if set(_READ_CONFLICT_FOR) != expected_parity:
+            f.append("S0: the write path's rules and the read path's names have come apart: "
+                     "_READ_CONFLICT_FOR covers %s, expected %s"
+                     % (sorted(_READ_CONFLICT_FOR), sorted(expected_parity)))
+        for write_code, read_code in sorted(_READ_CONFLICT_FOR.items()):
+            if write_code not in REFUSAL_MEANING:
+                f.append("S0: _READ_CONFLICT_FOR renames %r, which is not a refusal code"
+                         % write_code)
+            if read_code not in CONFLICT_MEANING:
+                f.append("S0: _READ_CONFLICT_FOR renames %r to %r, which has no meaning entry"
+                         % (write_code, read_code))
+        approved = frozenset({sa.PROVIDER_MLB_STATSAPI, sa.PROVIDER_ESPN_SCOREBOARD,
+                              sa.PROVIDER_SPORTRADAR})
+        if sa.CANONICAL_SOURCES != approved:
+            f.append("S0: score_admission.CANONICAL_SOURCES drifted; this store re-earns every "
+                     "lane through it: %r" % (sorted(sa.CANONICAL_SOURCES),))
+        if _earned_lane({"source": "web_search"}) != sa.LANE_SEARCH \
+                or _earned_lane({"source": sa.PROVIDER_MLB_STATSAPI}) != sa.LANE_CANONICAL \
+                or _earned_lane({}) != sa.LANE_SEARCH:
+            f.append("S0: _earned_lane does not read the record's own source through "
+                     "score_admission.lane_for_source")
         missing = sorted(v for k, v in sorted(globals().items())
                          if k.startswith("CONFLICT_") and isinstance(v, str)
                          and v not in CONFLICT_MEANING)
@@ -1689,10 +2050,10 @@ def selftest():
             f.append("S1: the manifest's counts are wrong: %s verified / %s quarantined"
                      % (manifest.get("n_verified"), manifest.get("n_quarantined")))
 
-        got = get_verified_scores("2026-08-30", "MLB", root=root)
+        got = serve("S1", lambda: get_verified_scores("2026-08-30", "MLB", root=root), [])
         if len(got) != 3:
             f.append("S1: get_verified_scores returned %d records, expected 3" % len(got))
-        one = get_verified_score(sa.EID_MIAWSH, root=root)
+        one = serve("S1", lambda: get_verified_score(sa.EID_MIAWSH, root=root))
         if one is None or one.get("away_score") != 2 or one.get("home_score") != 9:
             f.append("S1: get_verified_score did not return the stored validated final: %r" % one)
         report = verify_snapshot(sid, root=root)
@@ -1720,10 +2081,12 @@ def selftest():
                 f.append("S2: a quarantined envelope carries no reason codes")
             if q.get("sink") in VERIFIED_SINKS:
                 f.append("S2: a quarantined entry is filed under a verified sink")
-        for record in get_verified_scores("2026-08-30", "MLB", root=root):
+        for record in serve("S2", lambda: get_verified_scores("2026-08-30", "MLB",
+                                                              root=root), []):
             if record.get("source") == "web_search":
                 f.append("S2: a SEARCH-lane record reached get_verified_scores")
-        if (get_verified_score(sa.EID_MIAWSH, root=root) or {}).get("source") == "web_search":
+        if (serve("S2", lambda: get_verified_score(sa.EID_MIAWSH, root=root))
+                or {}).get("source") == "web_search":
             f.append("S2: get_verified_score returned the quarantined search claim")
         # an event that exists ONLY in quarantine must read as absent, not as a result
         only_quarantined = _record(sa.EID_WNBA, "SYNTH_MIN", "SYNTH_ATL", _EVENING, sa.CLOSED,
@@ -2258,6 +2621,250 @@ def selftest():
             f.append("S14: a drifted payload raised %s on read instead of refusing to serve: %s"
                      % (type(e).__name__, e))
 
+        # ---- S15. READ/WRITE ADMISSION PARITY (P0-A, the 2026-08-30 RE-ATTACK) --------------
+        # Cluster D's fix made the read path re-derive the BYTES. It did not make the read path
+        # re-apply the RECORD-LEVEL rules, so the getters still served records the writer would
+        # have refused. Each fixture below rebuilds the snapshot self-consistently on disk —
+        # entries, record binding, manifest, directory name AND the write journal — so nothing
+        # here is caught by a file hash, by the content id, or by the journal. What refuses them
+        # is the rule set itself, re-applied.
+
+        def rebuild(label, mutate, record=None, journal=True):
+            """Store a genuine admitted final, then rebuild the store around one edit."""
+            r, s = stored(label, record if record is not None else closed)
+            _rebuild_snapshot_on_disk(r, s, mutate, journal=journal)
+            return r
+
+        # (a) THE GOAL THE RE-ATTACK SET ITSELF: a REAL score for the WRONG DATE. A genuine 8/30
+        # final is moved to an 8/28 start — record and verdict together, binding recomputed — and
+        # left filed under the 8/30 snapshot. verify_snapshot reports ok=True, because every byte
+        # on disk is consistent with every other byte. The 8/30 MLB slate was set-identical to
+        # the 8/28 board's fifteen matchups, which is what makes this the dangerous shape: the
+        # score is TRUE, it is checkable, and it is for another day.
+        _AUG28 = "2026-08-28T23:05:00Z"
+
+        def move_to_the_prior_date(entry):
+            entry["record"] = dict(entry["record"], scheduled_start_utc=_AUG28)
+            entry["verdict"] = dict(entry["verdict"],
+                                    detail=dict(entry["verdict"]["detail"],
+                                                scheduled_start_utc=_AUG28))
+            entry["record_sha256"] = _record_binding(entry["record"])
+            return entry
+
+        off_slate_root = rebuild("off_slate", move_to_the_prior_date)
+        if sa.scheduled_date_of(_record(sa.EID_MIAWSH, "SYNTH_MIA", "SYNTH_WSH", _AUG28,
+                                        sa.CLOSED, 2, 9, sha=sha)) != "2026-08-28":
+            f.append("S15a: the fixture's moved start does not derive to 2026-08-28, so it is "
+                     "not testing the prior-date shape at all")
+        expect_conflict("S15a: a genuine 8/28 final served for an 8/30 query",
+                        lambda: get_verified_scores("2026-08-30", "MLB", root=off_slate_root),
+                        CONFLICT_RECORD_OFF_SLATE, SnapshotAdmissibilityViolation)
+        expect_conflict("S15a: the same record through the per-event getter",
+                        lambda: get_verified_score(sa.EID_MIAWSH, root=off_slate_root),
+                        CONFLICT_RECORD_OFF_SLATE, SnapshotAdmissibilityViolation)
+        if verify_snapshot(list_snapshots(off_slate_root)[0]["snapshot_id"],
+                           root=off_slate_root)["ok"] is not True:
+            f.append("S15a: the rebuilt snapshot does not verify clean, so this fixture is being "
+                     "caught by a byte check and proves nothing about the slate rules")
+
+        # (b) ABSENCE IS A REFUSAL. The re-attack switched the whole cluster-E binding check off
+        # by DELETING keys: `if field not in verdict.detail: continue` meant a verdict whose
+        # detail said nothing about what it judged passed by having nothing to compare. Four
+        # keys, no forgery, and a refused BOS@NYY record written to result_ledger as settleable.
+        says_nothing = {"disposition": sa.ADMIT_FINAL,
+                        "reason_codes": [sa.REASON_STATUS_VALIDATED],
+                        "admissible_as": sa.ADMISSIBLE_FINAL,
+                        "detail": {"lane": sa.LANE_CANONICAL}}
+        expect_refusal("S15b: a verdict whose detail says nothing about what it judged",
+                       lambda: write_snapshot(
+                           [admission_envelope(closed, says_nothing)], league="MLB",
+                           date_et="2026-08-30", source=sa.PROVIDER_MLB_STATSAPI,
+                           raw_payloads=payloads, now_utc=_EVENING,
+                           out_root=new_root("says_nothing")),
+                       REFUSE_VERDICT_SAYS_NOTHING)
+
+        def empty_the_detail(entry):
+            entry["verdict"] = dict(entry["verdict"], detail={"lane": sa.LANE_CANONICAL})
+            return entry
+
+        emptied_root = rebuild("detail_emptied", empty_the_detail)
+        expect_conflict("S15b: the same emptied verdict already on disk",
+                        lambda: get_verified_score(sa.EID_MIAWSH, root=emptied_root),
+                        CONFLICT_VERDICT_NOT_BOUND, SnapshotAdmissibilityViolation)
+
+        # (c) A STORED RECORD THE WRITE PATH WOULD REFUSE. Nothing exotic: a required field
+        # emptied. The write path has always called validate_record; the read path did not.
+        def drop_the_away_team(entry):
+            entry["record"] = dict(entry["record"], away_team_id=None)
+            entry["record_sha256"] = _record_binding(entry["record"])
+            return entry
+
+        invalid_root = rebuild("stored_invalid", drop_the_away_team)
+        expect_conflict("S15c: a stored record that fails score_admission.validate_record",
+                        lambda: get_verified_score(sa.EID_MIAWSH, root=invalid_root),
+                        CONFLICT_RECORD_NOT_ADMISSIBLE, SnapshotAdmissibilityViolation)
+
+        # (d) THE SINK IS EARNED, NOT FILED. Every field agrees with every other field here: the
+        # record says web_search, the verdict says web_search, the verdict says the SEARCH lane.
+        # The only lie is the drawer it is in. Being in records.json is not what makes a record
+        # servable — score_admission.sink_for, handed the lane the record's own source earns, is.
+        def relane_to_search(entry):
+            entry["record"] = dict(entry["record"], source="web_search")
+            entry["verdict"] = dict(entry["verdict"],
+                                    detail=dict(entry["verdict"]["detail"],
+                                                source="web_search", lane=sa.LANE_SEARCH))
+            entry["record_sha256"] = _record_binding(entry["record"])
+            return entry
+
+        search_filed_root = rebuild("search_filed_as_verified", relane_to_search)
+        expect_conflict("S15d: a self-consistent SEARCH entry filed on the verified side",
+                        lambda: get_verified_score(sa.EID_MIAWSH, root=search_filed_root),
+                        CONFLICT_SINK_NOT_EARNED, SnapshotAdmissibilityViolation)
+
+        # (e) THE RE-ATTACK'S OWN SHAPE: source "web_search", lane still claiming CANONICAL. Two
+        # independent guards must both fire — the lane the record EARNS disagrees with the lane
+        # the verdict RECORDED, and the sink that lane earns is quarantine.
+        def forge_the_lane(entry):
+            entry["record"] = dict(entry["record"], source="web_search")
+            entry["verdict"] = dict(entry["verdict"],
+                                    detail=dict(entry["verdict"]["detail"], source="web_search"))
+            entry["record_sha256"] = _record_binding(entry["record"])
+            return entry
+
+        forged_lane_root = rebuild("lane_not_earned", forge_the_lane)
+        for code in (CONFLICT_VERDICT_NOT_BOUND, CONFLICT_SINK_NOT_EARNED):
+            expect_conflict("S15e: a web_search record still claiming the canonical lane (%s)"
+                            % code,
+                            lambda: get_verified_score(sa.EID_MIAWSH, root=forged_lane_root),
+                            code, SnapshotAdmissibilityViolation)
+
+        # (f) THE SOURCE IS BOUND. Swapped for ANOTHER APPROVED source, so the lane it earns is
+        # still CANONICAL and the sink it earns is still the result ledger: the source binding is
+        # the only thing left that can see the swap. admit() has recorded detail['source'] since
+        # cluster B; this table simply never compared it.
+        def swap_the_source(entry):
+            entry["record"] = dict(entry["record"], source=sa.PROVIDER_ESPN_SCOREBOARD)
+            entry["record_sha256"] = _record_binding(entry["record"])
+            return entry
+
+        swapped_root = rebuild("source_swapped", swap_the_source)
+        if sa.lane_for_source(sa.PROVIDER_ESPN_SCOREBOARD) != sa.LANE_CANONICAL:
+            f.append("S15f: the swapped-in source does not earn the canonical lane, so this "
+                     "fixture is being caught by the lane rule and not by the source binding")
+        expect_conflict("S15f: a stored record's source swapped under its own verdict",
+                        lambda: get_verified_score(sa.EID_MIAWSH, root=swapped_root),
+                        CONFLICT_VERDICT_NOT_BOUND, SnapshotAdmissibilityViolation)
+
+        # (g) THE SCORE, EDITED TO ANY NUMBER, WITH THE BINDING RECOMPUTED. This is the residual
+        # _verdict_binding_problems states and cannot close on its own: admit() does not record
+        # the scores it saw, so nothing inside the snapshot directory witnesses them once
+        # record_sha256 is recomputed. journal=False is the 2026-08-30 adversary exactly as it
+        # ran — it rebuilt the directory and never touched write_log.jsonl, which is the one
+        # witness that lives outside what it rebuilt.
+        def edit_score_and_rebind(entry):
+            entry["record"] = dict(entry["record"], home_score=99)
+            entry["record_sha256"] = _record_binding(entry["record"])
+            return entry
+
+        rebound_root = rebuild("score_rebound", edit_score_and_rebind, journal=False)
+        expect_conflict("S15g: a genuine final's score edited to 99 with the binding recomputed",
+                        lambda: get_verified_score(sa.EID_MIAWSH, root=rebound_root),
+                        CONFLICT_RECORD_NOT_JOURNALLED, SnapshotAdmissibilityViolation)
+        # ...and the same edit WITH the journal forged is caught by nothing here. Asserted so the
+        # fixture above cannot be read as proving more than it does (see
+        # _journalled_record_bindings' residual).
+        forged_journal_root = rebuild("score_rebound_journalled", edit_score_and_rebind)
+        served = get_verified_score(sa.EID_MIAWSH, root=forged_journal_root)
+        if (served or {}).get("home_score") != 99:
+            f.append("S15g: the journal-forging adversary was refused, so the RESIDUAL stated in "
+                     "_journalled_record_bindings is now wrong and must be rewritten rather than "
+                     "left claiming a hole that has closed: %r" % (served,))
+
+        # ---- S16. THE WARM CACHE (P0-B1/B2). A read, then an edit the filesystem hides. -------
+        # The read path memoized its payload re-hash on (relative path, st_size, st_mtime_ns).
+        # Every drift fixture written before 2026-08-30 wrote new bytes without restoring the
+        # mtime, so no fixture ever exercised a WARM cache — and an archive that rewrites bytes
+        # while preserving size and mtime is precisely the mutable-archive threat this module's
+        # docstring names. The cache is gone; this is the fixture that keeps it gone.
+        warm_root, warm_sid = stored("warm_cache", closed)
+        if (get_verified_score(sa.EID_MIAWSH, root=warm_root) or {}).get("home_score") != 9:
+            f.append("S16: the control store does not serve its own record, so warming it and "
+                     "tampering with it proves nothing")
+        warm_path = os.path.join(warm_root, SNAPSHOTS_DIR, warm_sid, RAW_DIR,
+                                 "mlb_statsapi_schedule_2026-08-30.json")
+        before_stat = os.stat(warm_path)
+        before_bytes = _read_bytes(warm_path)
+        after_bytes = before_bytes.replace(b"2026-08-30", b"2026-08-28")
+        with open(warm_path, "wb") as fh:
+            fh.write(after_bytes)
+        os.utime(warm_path, ns=(before_stat.st_atime_ns, before_stat.st_mtime_ns))
+        after_stat = os.stat(warm_path)
+        if after_bytes == before_bytes or len(after_bytes) != len(before_bytes):
+            f.append("S16: the tampering fixture did not rewrite the bytes at a preserved LENGTH "
+                     "(%d -> %d); it is not the shape this defect needs"
+                     % (len(before_bytes), len(after_bytes)))
+        if (after_stat.st_size, after_stat.st_mtime_ns) != (before_stat.st_size,
+                                                            before_stat.st_mtime_ns):
+            f.append("S16: size and mtime were NOT preserved across the edit (%r -> %r), so a "
+                     "size/mtime cache would have been invalidated by the filesystem and this "
+                     "fixture cannot see the defect it exists for"
+                     % ((before_stat.st_size, before_stat.st_mtime_ns),
+                        (after_stat.st_size, after_stat.st_mtime_ns)))
+        else:
+            try:
+                out = get_verified_score(sa.EID_MIAWSH, root=warm_root)
+                f.append("S16: the SECOND read served %r out of a store whose raw payload bytes "
+                         "were rewritten at an unchanged size and an unchanged mtime. The first "
+                         "read warmed a cache keyed on exactly the two things an archive rewrite "
+                         "preserves" % (out,))
+            except SnapshotImmutabilityViolation:
+                pass
+            except Exception as e:                          # noqa: BLE001 — named, not hidden
+                f.append("S16: the warm-cache read raised %s instead of refusing to serve: %s"
+                         % (type(e).__name__, e))
+
+        # ---- S17. A GETTER AND verify_snapshot NEVER DISAGREE (P0-B3) -----------------------
+        # They disagreed in the same process on the same directory: the getter served through a
+        # warm cache while verify_snapshot on those bytes reported RAW_PAYLOAD_BYTES_DRIFTED.
+        # Two answers to "is this snapshot valid" is the split cluster D was raised about, so it
+        # is asserted here as one property over four stores rather than left to follow from two
+        # implementations happening to stay in step.
+        agree_clean_root, agree_clean_sid = stored("agree_clean", closed)
+        agree_edited_root, agree_edited_sid = stored("agree_edited", closed)
+        edited_path = os.path.join(agree_edited_root, SNAPSHOTS_DIR, agree_edited_sid,
+                                   VERIFIED_NAME)
+        # Read BEFORE opening for write: 'wb' truncates, and an emptied file trips the
+        # JSON-decode branch instead of the hash branch. S5 carries the same warning because the
+        # same mistake was made there once and made the fixture pass for the wrong reason.
+        agree_before = _read_bytes(edited_path)
+        agree_after = agree_before.replace(b'"home_score":9', b'"home_score":8')
+        if agree_after == agree_before:
+            f.append("S17: the edited-records fixture changed nothing; it proves nothing")
+        with open(edited_path, "wb") as fh:
+            fh.write(agree_after)
+        agree_gone_root, agree_gone_sid = stored("agree_payload_gone", closed)
+        os.remove(os.path.join(agree_gone_root, SNAPSHOTS_DIR, agree_gone_sid, RAW_DIR,
+                               "mlb_statsapi_schedule_2026-08-30.json"))
+        for label, a_root, a_sid in (("a clean store", agree_clean_root, agree_clean_sid),
+                                     ("the warm-cache store", warm_root, warm_sid),
+                                     ("an edited records.json", agree_edited_root,
+                                      agree_edited_sid),
+                                     ("a deleted raw payload", agree_gone_root, agree_gone_sid)):
+            says_ok = bool(verify_snapshot(a_sid, root=a_root)["ok"])
+            try:
+                get_verified_scores("2026-08-30", "MLB", root=a_root)
+                get_verified_score(sa.EID_MIAWSH, root=a_root)
+                get_source_manifest(a_sid, root=a_root)
+                served = True
+            except (SnapshotImmutabilityViolation, SnapshotAdmissibilityViolation,
+                    SnapshotContentConflict):
+                served = False
+            if served != says_ok:
+                f.append("S17: verify_snapshot and the getters DISAGREE about %s: "
+                         "verify_snapshot ok=%s while the getters %s. One store, two answers to "
+                         "'is this valid' is the split cluster D was raised about"
+                         % (label, says_ok, "SERVED it" if served else "refused it"))
+
         # ---- S9. NOTHING WAS WRITTEN OUTSIDE out_root --------------------------------------
         for r in roots:
             for dirpath, _dirnames, filenames in os.walk(r):
@@ -2309,13 +2916,13 @@ MUTANTS = [
      "    if not identical:",
      "    if False:", "S4:"),
     ("a quarantined entry is checked, and therefore filed, as if it were verified",
-     "        if sink in VERIFIED_SINKS:",
+     "        if declared_sink in VERIFIED_SINKS or sink in VERIFIED_SINKS:",
      "        if True:", "S1:"),
     ("a quarantined record leaks out through the READ path — get_verified_score reaches the "
      "other side of the store (the 8/27 publication path, in getter form)",
-     "        for entry in _entries_of(manifest, \"verified\", root):",
-     "        for entry in _entries_of(manifest, \"verified\", root) + "
-     "_entries_of(manifest, \"quarantine\", root):", "S2:"),
+     "        for index, entry in enumerate(_entries_of(manifest, \"verified\", root)):",
+     "        for index, entry in enumerate(_entries_of(manifest, \"verified\", root) + "
+     "_entries_of(manifest, \"quarantine\", root)):", "S2:"),
     ("verify_snapshot stops comparing a stored payload's bytes to its recorded hash",
      "        if actual != declared.get(\"sha256\"):",
      "        if False:", "S4:"),
@@ -2329,8 +2936,8 @@ MUTANTS = [
      "        if declared.get(\"sha256\") != actual:",
      "        if False:", "S5:"),
     ("routing is decided by the store instead of by the verdict's own recorded lane",
-     "        sink = sa.sink_for(verdict)",
-     "        sink = sa.SINK_RESULT_LEDGER", "S1:"),
+     "        declared_sink = sa.sink_for(verdict)",
+     "        declared_sink = sa.SINK_RESULT_LEDGER", "S1:"),
     ("an admitted record no longer has to validate",
      "    ok, record_problems = sa.validate_record(record)",
      "    ok, record_problems = True, []", "R: an admitted record that does not validate"),
@@ -2385,12 +2992,25 @@ MUTANTS = [
      "        if False:", "S14:"),
     ("CLUSTER E: a verdict is no longer bound to the record it judged at WRITE time, so a "
      "genuine CANONICAL verdict copied onto a fabricated record admits it",
-     "            bad.extend(_verdict_binding_problems(record, verdict, i))",
-     "            bad.extend([])", "R: a genuine CANONICAL verdict copied"),
+     "            bad = _admission_invariants(record, verdict, i, league=league, date_et=date_et,"
+     "\n                                        payload_shas=payload_shas,"
+     "\n                                        seen_event_ids=seen_event_ids)",
+     "            bad = _verified_record_problems(record, i, league, date_et, payload_shas,"
+     "\n                                            seen_event_ids)",
+     "R: a genuine CANONICAL verdict copied"),
     ("CLUSTER E: the binding is no longer re-checked at READ time, so a live record edited "
      "into a final on disk is served as a final",
-     "        for p in _verdict_binding_problems(record, verdict, None):",
-     "        for p in []:", "S12: an IN_PROGRESS record promoted"),
+     "        for p in _admission_invariants(record, verdict, index,"
+     "\n                                       league=sa.normalize_league("
+     "manifest.get(\"league\")),"
+     "\n                                       date_et=manifest.get(\"date_et\"),"
+     "\n                                       payload_shas=_manifest_payload_shas(manifest),"
+     "\n                                       seen_event_ids=seen_event_ids):",
+     "        for p in _verified_record_problems("
+     "\n                record, index, sa.normalize_league(manifest.get(\"league\")),"
+     "\n                manifest.get(\"date_et\"), _manifest_payload_shas(manifest),"
+     "\n                seen_event_ids):",
+     "S12: an IN_PROGRESS record promoted"),
     ("CLUSTER E: a record's stored content binding is no longer re-derived, so an edited score "
      "with a rebuilt manifest around it is served",
      "    if binding is not None and entry.get(\"record_sha256\") != binding:",
@@ -2403,6 +3023,65 @@ MUTANTS = [
      "storable, and readable, as a result",
      "    if sa.REASON_SCHEDULE_NOT_SUPPLIED in verdict.reason_codes:",
      "    if False:", "R: an admission never checked"),
+
+    # ---- the 2026-08-30 RE-ATTACK. One mutant per acceptance criterion the owner named. -----
+    ("P0-A1: the READ path re-applies only the verdict binding again — the SUBSET it applied "
+     "before the re-attack — so a genuine 8/28 final rebuilt under an 8/30 snapshot is served "
+     "by get_verified_scores('2026-08-30','MLB')",
+     "        for p in _admission_invariants(record, verdict, index,"
+     "\n                                       league=sa.normalize_league("
+     "manifest.get(\"league\")),"
+     "\n                                       date_et=manifest.get(\"date_et\"),"
+     "\n                                       payload_shas=_manifest_payload_shas(manifest),"
+     "\n                                       seen_event_ids=seen_event_ids):",
+     "        for p in _verdict_binding_problems(record, verdict, index):",
+     "S15a:"),
+    ("P0-A2: a binding field the verdict OMITS is SKIPPED again, so deleting keys switches the "
+     "whole cluster-E check off without forging anything",
+     "        if field not in verdict.detail:\n"
+     "            problems.append({\"code\": REFUSE_VERDICT_SAYS_NOTHING, \"index\": index, "
+     "\"field\": field,",
+     "        if field not in verdict.detail:\n"
+     "            continue\n"
+     "        if False:\n"
+     "            problems.append({\"code\": REFUSE_VERDICT_SAYS_NOTHING, \"index\": index, "
+     "\"field\": field,",
+     "S15b:"),
+    ("P0-A3: the lane stops being re-earned from the record's OWN source, so "
+     "CANONICAL_SOURCES / lane_for_source / effective_lane go back to having no caller here and "
+     "the store believes whatever lane the verdict carries",
+     "    return record.get(\"source\") if isinstance(record, dict) else None",
+     "    return sa.PROVIDER_MLB_STATSAPI", "S15e:"),
+    ("P0-A4: the read path serves whatever it finds in records.json instead of what the "
+     "record's source EARNS, so a SEARCH entry filed on the verified side is a verified result",
+     "        if earned_sink not in VERIFIED_SINKS or earned_sink != entry.get(\"sink\"):",
+     "        if False:", "S15d:"),
+    ("P0-A5: the verdict is no longer bound to the record's SOURCE, so cluster B's evidence "
+     "does not survive the trip to disk",
+     "    (\"source\", _record_source),\n",
+     "", "S15f:"),
+    ("P0-A5: the verdict is no longer bound to the LANE the record's source earns",
+     "    (\"lane\", _earned_lane),\n",
+     "", "S15e:"),
+    ("P0-A5/scores: the append-only journal stops being read, so an edited score with a "
+     "recomputed record_sha256 has no witness left outside the directory that was rebuilt",
+     "    if binding is not None and binding not in journalled:",
+     "    if False:", "S15g:"),
+    ("P0-B1/B2: the payload re-hash is memoized on (path, st_size, st_mtime_ns) again, so an "
+     "archive that rewrites bytes while preserving size and mtime is served through a warm cache",
+     "        rehashed = _sha256_bytes(_read_bytes(path))",
+     "        _memo = _payload_drift.__dict__.setdefault(\"_memo\", set())\n"
+     "        _st = os.stat(path)\n"
+     "        _key = (path, _st.st_size, _st.st_mtime_ns)\n"
+     "        if _key in _memo:\n"
+     "            continue\n"
+     "        _memo.add(_key)\n"
+     "        rehashed = _sha256_bytes(_read_bytes(path))",
+     "S16:"),
+    ("P0-B3: the getters stop re-hashing the payloads while verify_snapshot keeps doing it, so "
+     "one store gives two answers to 'is this valid'",
+     "    drift.extend(_payload_drift(manifest, directory))",
+     "    drift.extend([])", "S17:"),
 ]
 
 

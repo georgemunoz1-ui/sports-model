@@ -461,14 +461,38 @@ def test_live_game_incorrectly_labeled_final():
     other = dict(search_claim, source="other_outlet", wire_service="second_wire")
     n = sa.corroboration_count(search_claim, [other])
     assert n == 2, "two independent sources counted as %d" % n
+    # 2026-08-31, P0-E. This assertion used to expect UNVERIFIED, and it passed only because the
+    # soft minimum-duration rule read the JUDGING clock alone. The claim is OBSERVED at 17:30Z,
+    # 75 minutes into MLB's 150-minute minimum, and judging it at 02:00Z the next morning used to
+    # walk it out of the impossible window for free. Waiting is not evidence. The rule now reads
+    # BOTH clocks, so the disposition is correctly UNVERIFIED_TOO_SOON and the observation-clock
+    # codes are named. The requirement this fixture exists for is unchanged and is asserted below.
     v_corr = sa.admit(search_claim, now_utc=EVENING, canonical_schedule=None,
                       lane=sa.LANE_SEARCH, corroborations=n)
-    assert v_corr.disposition == sa.UNVERIFIED, \
+    assert v_corr.disposition == sa.UNVERIFIED_TOO_SOON, \
         "corroborated search gave %s" % v_corr.disposition
-    assert v_corr.admissible_as == sa.ADMISSIBLE_CORROBORATED, \
-        "the search ceiling moved off IDENTIFIED_UNCONFIRMED_CORROBORATED: %r" % v_corr.admissible_as
+    assert {sa.REASON_MIN_DURATION_NOT_ELAPSED,
+            sa.REASON_SEARCH_CANNOT_CLEAR_MIN_DURATION} <= _codes(v_corr), \
+        "a claim OBSERVED inside the impossible window lost the duration rule by being judged " \
+        "later: %r" % (v_corr.reason_codes,)
     assert v_corr.disposition != sa.ADMIT_FINAL and not v_corr.admitted, \
         "SEARCH minted a final on consensus — two outlets on one wire are one source"
+
+    # The corroboration CEILING still has to be pinned somewhere, or the fix above would have
+    # quietly deleted the coverage that proves consensus cannot promote search. Same claim,
+    # OBSERVED after the window closes: the clock no longer objects, and the ceiling is the only
+    # thing left holding it.
+    late_obs = dict(search_claim, source_fetched_at_utc="2026-08-30T19:30:00Z")
+    v_ceiling = sa.admit(late_obs, now_utc=EVENING, canonical_schedule=None,
+                         lane=sa.LANE_SEARCH, corroborations=n)
+    assert v_ceiling.disposition == sa.UNVERIFIED, \
+        "with both clocks satisfied the ceiling should be the only bar left: %s" \
+        % v_ceiling.disposition
+    assert v_ceiling.admissible_as == sa.ADMISSIBLE_CORROBORATED, \
+        "the search ceiling moved off IDENTIFIED_UNCONFIRMED_CORROBORATED: %r" \
+        % v_ceiling.admissible_as
+    assert not v_ceiling.admitted and not v_ceiling.settleable, \
+        "corroboration promoted a search claim past the ceiling"
 
     # Same claim, one wire, two mastheads: NOT two sources.
     same_wire = dict(search_claim, source="third_outlet", wire_service="second_wire")

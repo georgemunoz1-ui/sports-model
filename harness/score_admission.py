@@ -51,6 +51,43 @@ two rules that behave differently, because they are not the same claim:
       STATUS FROM THE CANONICAL LANE clears. A SEARCH snippet can never clear it. That keeps
       message 1's correct instinct (status is primary) without giving up message 2's protection
       (the 8/30 snippets were all inside the window and all had no canonical status to clear it).
+      It reads BOTH CLOCKS, exactly as (a) does — see ROUND TWO below.
+
+ROUND TWO, 2026-08-30 re-attack. Round one found untouched defects. Round two found INCOMPLETE
+FIXES, and every item below is one: a guard repaired on one rule and not the neighbouring one, a
+clock bounded below and not above, a field carried by both sides and compared by neither.
+
+  cluster M, part (b)   The hard pre-start rule was repaired to read both the judging and the
+                        OBSERVATION clock. The soft duration hold was left reading `now` alone,
+                        so the 8/30 MIA@WSH snippet — observed 75 minutes into a 150-minute game
+                        — lost MIN_DURATION_NOT_ELAPSED entirely by being judged that evening.
+                        Same bytes, same fetch, later look, weaker verdict. Both clocks now, with
+                        the SOFT semantics unchanged: a canonical terminal status still clears it.
+  the upper bound       Nothing compared source_fetched_at_utc against now_utc, so a record
+                        claiming to have been fetched in 2027 admitted and settled in 2026. A
+                        stamp a guard READS is a stamp the guard must BOUND.
+                        Disposition: REJECT_PRESTART_OR_UNBOUND, OBSERVED_AFTER_THE_JUDGEMENT_
+                        INSTANT.
+  the schedule key      index_schedule() returned dict(schedule) for a dict input and never asked
+                        whether a key equalled its entry's own event_id, and _schedule_conflicts
+                        never compared them. An entry filed under another game's id bound the
+                        wrong game. Owner rule 1 binds by the PROVIDER's id, not by a caller's
+                        dict key; the entry's own id is now the index key, and the comparison
+                        exists as well.
+  game_number           Declared in OPTIONAL_RECORD_FIELDS and in CANONICAL_SCHEDULE_OPTIONAL_
+                        FIELDS and compared nowhere, so a record claiming doubleheader half 2
+                        bound cleanly to an entry declaring half 1 — owner regression fixture 4
+                        landing inside the binder.
+  the self-schedule     Cluster A made a canonical schedule MANDATORY without making it
+                        INDEPENDENT, so admit(record, canonical_schedule=record) reached
+                        ADMIT_FINAL / settleable / result_ledger: "a record checked only against
+                        itself", which is the phrase cluster A's own docstring used for the
+                        defect it closed.
+  the status field      `record['status']` was an ungrounded caller assertion in exactly the way
+                        `lane` was before cluster B. Nothing checked a status was REACHABLE from
+                        its own source's PROVIDER_STATUS_MAPS, so source='espn_scoreboard_api'
+                        with status='CLOSED' settled — against this file's own docstring, which
+                        says ESPN exposes no statistics-validation state anywhere in this repo.
 
 Also decided by the lead, and encoded here: consensus between two SEARCH sources raises the grade
 at most to IDENTIFIED_UNCONFIRMED_CORROBORATED. Search NEVER mints FINAL, corroborated or not,
@@ -83,6 +120,7 @@ MODULE_ID = "score_admission"
 
 import datetime as dt
 import hashlib
+import json
 import os
 import re
 import sys
@@ -306,6 +344,54 @@ def normalize_status(raw_status, provider):
     return table.get(str(raw_status), UNKNOWN)
 
 
+def reachable_statuses_for_source(source):
+    """Every state `source`'s provider map can actually produce, or None when it has no map.
+
+    None means "this module holds no vocabulary for that source", which is a DIFFERENT fact from
+    "that source can produce nothing" and must not be collapsed into one: a search outlet has no
+    map and is already refused by the lane rules, so inventing a state list for it would add a
+    second, weaker refusal in front of the real one.
+    """
+    if source is None:
+        return None
+    table = PROVIDER_STATUS_MAPS.get(str(source).strip().lower())
+    return None if table is None else frozenset(table.values()) | {UNKNOWN}
+
+
+def terminal_status_unreachable_from_source(source, status):
+    """(unreachable, detail|None) — the record asserts a TERMINAL state its own source cannot emit.
+
+    ROUND-TWO FINDING, 2026-08-30 re-attack. `record['status']` was an ungrounded caller
+    assertion in exactly the way `lane` was before cluster B: nothing compared it against the
+    source's own vocabulary. So source='espn_scoreboard_api' with status='CLOSED' reached
+    ADMIT_FINAL / FINAL / settleable, contradicting this module's own docstring, which says of
+    ESPN: "STATUS_FINAL -> COMPLETE, NOT CLOSED: the scoreboard API exposes no
+    statistics-validation state anywhere in this repo." normalize_status() is a helper a caller
+    may simply not call; this is the check that does not depend on the caller calling it.
+
+    SCOPED TO TERMINAL STATES, deliberately, and this is the whole design decision. The provider
+    maps are PARTIAL BY CONSTRUCTION (R1: only what this repo has witnessed is mapped — F, O, DD
+    and S for MLB StatsAPI, three constants for ESPN). MLB StatsAPI plainly has in-progress
+    states; this repo has never captured one, so IN_PROGRESS is unreachable from the map while
+    being entirely real. Requiring reachability for EVERY status would therefore false-reject
+    genuine live records for a gap in OUR OWN evidence table — the blanket-refusal degeneration
+    the owner warned about on the duration rule, relocated here. A TERMINAL claim is different:
+    it is the claim that mints a final and settles a wager, and refusing an unreachable one
+    cannot false-reject any of the three mapped providers, each of which reaches at least one
+    terminal state (MLB and Sportradar both, ESPN COMPLETE and never CLOSED).
+    """
+    if status not in TERMINAL_STATES:
+        return False, None
+    reachable = reachable_statuses_for_source(source)
+    if reachable is None or status in reachable:
+        return False, None
+    return True, {"code": REASON_STATUS_UNREACHABLE_FROM_SOURCE, "field": "status",
+                  "status": status, "source": source,
+                  "reachable_terminal_states": sorted(reachable & TERMINAL_STATES),
+                  "detail": "no key of this provider's PROVIDER_STATUS_MAPS entry maps to %r; "
+                            "the state is the caller's assertion, not the provider's" % (status,)}
+
+
 def is_terminal(status):
     """The game is over (may or may not be validated)."""
     return status in TERMINAL_STATES
@@ -435,12 +521,16 @@ REASON_POSTPONED_REBIND_REQUIRED = "POSTPONED_REBIND_REQUIRED"
 REASON_CANONICAL_STATUS_CONTRADICTS_CLAIM = "CANONICAL_STATUS_CONTRADICTS_CLAIM"
 REASON_MATCHUP_AMBIGUOUS_USE_EVENT_ID = "MATCHUP_AMBIGUOUS_USE_EVENT_ID"
 REASON_SCHEDULE_NOT_SUPPLIED = "CANONICAL_SCHEDULE_NOT_SUPPLIED"
+REASON_SCHEDULE_EVENT_ID_DISAGREE = "SCHEDULE_ENTRY_EVENT_ID_DISAGREES_WITH_RECORD"
+REASON_SCHEDULE_GAME_NUMBER_DISAGREE = "SCHEDULE_GAME_NUMBER_DISAGREE"
+REASON_SCHEDULE_IS_THE_RECORD = "CANONICAL_SCHEDULE_IS_THE_RECORD"
 
 REASON_SCHEDULE_CEILING_UNVERIFIED = "NO_SCHEDULE_ADMISSION_CEILING_UNVERIFIED"
 REASON_SCHEDULED_DATE_OVERRIDE = "CARRIED_SCHEDULED_DATE_DISAGREES_WITH_DERIVATION"
 
 REASON_PRESTART_FINAL_IMPOSSIBLE = "PRESTART_FINAL_IMPOSSIBLE"
 REASON_PRESTART_OBSERVATION_IMPOSSIBLE = "PRESTART_OBSERVED_BEFORE_FIRST_PITCH"
+REASON_OBSERVATION_AFTER_JUDGEMENT = "OBSERVED_AFTER_THE_JUDGEMENT_INSTANT"
 REASON_MIN_DURATION_NOT_ELAPSED = "MIN_DURATION_NOT_ELAPSED"
 REASON_MIN_DURATION_CLEARED = "MIN_DURATION_CLEARED_BY_CANONICAL_TERMINAL"
 REASON_SEARCH_CANNOT_CLEAR_MIN_DURATION = "SEARCH_LANE_CANNOT_CLEAR_MIN_DURATION"
@@ -448,6 +538,7 @@ REASON_SEARCH_CANNOT_CLEAR_MIN_DURATION = "SEARCH_LANE_CANNOT_CLEAR_MIN_DURATION
 REASON_STATUS_MISSING = "SOURCE_STATUS_MISSING"
 REASON_STATUS_NOT_IN_VOCABULARY = "SOURCE_STATUS_NOT_IN_VOCABULARY"
 REASON_STATUS_UNKNOWN = "SOURCE_STATUS_UNKNOWN"
+REASON_STATUS_UNREACHABLE_FROM_SOURCE = "STATUS_UNREACHABLE_FROM_ITS_OWN_SOURCE"
 REASON_STATUS_NOT_TERMINAL = "STATUS_NOT_TERMINAL"
 REASON_STATUS_TERMINAL_NOT_VALIDATED = "STATUS_TERMINAL_NOT_VALIDATED"
 REASON_STATUS_VALIDATED = "STATUS_VALIDATED"
@@ -505,6 +596,19 @@ REASON_MEANING = {
                                            "(doubleheader); names cannot choose between them",
     REASON_SCHEDULE_NOT_SUPPLIED: "no canonical schedule was supplied, so the binding cross-check "
                                   "did not run — recorded so its absence is visible in the proof",
+    REASON_SCHEDULE_EVENT_ID_DISAGREE: "the schedule entry the record bound to declares a "
+                                       "DIFFERENT event_id than the record: the entry was filed "
+                                       "under a key that is not its own identifier, so the "
+                                       "binding was to a caller-chosen key rather than to the "
+                                       "authority's own id (owner rule 1)",
+    REASON_SCHEDULE_GAME_NUMBER_DISAGREE: "record and schedule entry declare different "
+                                          "doubleheader halves under one event id; a field "
+                                          "carried by both sides and compared by neither reads "
+                                          "in an audit as a check that ran",
+    REASON_SCHEDULE_IS_THE_RECORD: "the 'canonical schedule' is the record itself, or a dict "
+                                   "carrying the record's own observation fields: a record "
+                                   "checked only against itself agrees with itself, which is "
+                                   "the defect cluster A closed and not the fix for it",
     REASON_SCHEDULE_CEILING_UNVERIFIED: "no canonical schedule was supplied, so nothing bound "
                                         "this record to a real game: the disposition is capped at "
                                         "UNVERIFIED and the record can never settle (cluster A)",
@@ -517,7 +621,13 @@ REASON_MEANING = {
     REASON_PRESTART_OBSERVATION_IMPOSSIBLE: "the OBSERVATION precedes first pitch: whatever the "
                                             "source saw, it was not the end of this game. Waiting "
                                             "until later to judge it changes nothing (cluster M)",
-    REASON_MIN_DURATION_NOT_ELAPSED: "now precedes start + the sport's minimum duration",
+    REASON_OBSERVATION_AFTER_JUDGEMENT: "source_fetched_at_utc is LATER than now_utc: the record "
+                                        "claims to have been observed after the instant it is "
+                                        "being judged at. That is as impossible as a final "
+                                        "before first pitch, and the module refused one while "
+                                        "tolerating the other",
+    REASON_MIN_DURATION_NOT_ELAPSED: "the judging clock, the OBSERVATION clock, or both precede "
+                                     "start + the sport's minimum duration",
     REASON_MIN_DURATION_CLEARED: "the soft duration hold was cleared by a terminal status from "
                                  "the canonical lane (rain-shortened and called games survive)",
     REASON_SEARCH_CANNOT_CLEAR_MIN_DURATION: "a search snippet can never clear the duration hold",
@@ -526,6 +636,12 @@ REASON_MEANING = {
     REASON_STATUS_NOT_IN_VOCABULARY: "status is not one of STATUSES — normalize_status() first",
     REASON_STATUS_UNKNOWN: "the provider status did not map to a known state; UNKNOWN is treated "
                            "as non-final (owner rule 8)",
+    REASON_STATUS_UNREACHABLE_FROM_SOURCE: "the record asserts a TERMINAL status its own source "
+                                           "cannot produce: no key of that provider's map in "
+                                           "PROVIDER_STATUS_MAPS reaches it. An ESPN scoreboard "
+                                           "record claiming CLOSED is the shape — ESPN exposes "
+                                           "no statistics-validation state at all, so the claim "
+                                           "is the caller's assertion, not the provider's",
     REASON_STATUS_NOT_TERMINAL: "the status is not a terminal state, so no final may be read",
     REASON_STATUS_TERMINAL_NOT_VALIDATED: "terminal but unvalidated (complete, not closed): "
                                           "readable as a final, NOT settleable",
@@ -829,15 +945,89 @@ CANONICAL_SCHEDULE_OPTIONAL_FIELDS = ("status", "rescheduled_to_event_id", "sche
                                       "game_number")
 
 
+#: Fields only an OBSERVATION carries. A canonical schedule states what is SCHEDULED; it does not
+#: carry a fetch stamp, a content hash, a validation flag or a score. This tuple is what lets
+#: "the schedule is the record" be detected by SHAPE rather than by object identity, so a copy is
+#: caught as well as the object itself.
+RECORD_ONLY_OBSERVATION_FIELDS = ("source", "source_fetched_at_utc", "raw_response_sha256",
+                                  "terminal_verified", "away_score", "home_score")
+
+
 def index_schedule(schedule):
-    """Accept a dict keyed by event_id, a single entry, or a sequence of entries -> dict."""
+    """Accept a dict keyed by event_id, a single entry, or a sequence of entries -> dict.
+
+    ROUND-TWO FINDING, 2026-08-30 re-attack: THIS FUNCTION TRUSTED THE DICT KEY. For a sequence
+    it keyed entries by `e["event_id"]`, but for a dict it returned `dict(schedule)` and never
+    asked whether each key equalled the entry's own event_id. A single mis-filed entry —
+    {"mlb:2026:BOSNYY": <the COL@ATL entry>} — therefore bound a BOS@NYY record to a schedule
+    entry describing a different game, and _schedule_conflicts never compared the two ids either,
+    so the record admitted as a settleable FINAL against someone else's game. Owner rule 1 says
+    bind by the PROVIDER's event id; a caller-chosen dict key is not the provider's event id.
+
+    The authority now wins over the key: an entry that declares its own event_id is indexed under
+    THAT id, so a mis-keyed slate no longer answers a lookup for the key it was filed under. The
+    record is then refused as EVENT_NOT_IN_CANONICAL_SCHEDULE rather than mis-bound. An entry
+    that declares no id at all keeps the caller's key and is caught one layer down, by the
+    event-id comparison in _schedule_conflicts.
+    """
     if schedule is None:
         return None
     if isinstance(schedule, dict):
         if "event_id" in schedule and "games" not in schedule:
             return {schedule["event_id"]: schedule}
-        return dict(schedule)
+        out = {}
+        for key, entry in schedule.items():
+            own = entry.get("event_id") if isinstance(entry, dict) else None
+            out[own if own not in (None, "") else key] = entry
+        return out
     return {e["event_id"]: e for e in schedule}
+
+
+def schedule_digest(indexed_schedule):
+    """A stable sha256 of an indexed canonical schedule, or None when there is none.
+
+    Recorded in every verdict so a stored ADMIT_FINAL says WHAT it was bound against. Two
+    verdicts carrying the same digest were bound against the same slate; a one-entry digest and a
+    fifteen-game digest are visibly different objects, which "schedule_supplied: true" was not.
+    """
+    if indexed_schedule is None:
+        return None
+    return hashlib.sha256(
+        json.dumps(indexed_schedule, sort_keys=True, default=str).encode("utf-8")).hexdigest()
+
+
+def schedule_entry_is_the_record(entry, record):
+    """(is_self, problem|None) — the 'canonical schedule' entry IS the record it must check.
+
+    ROUND-TWO FINDING, 2026-08-30 re-attack, and a hole left inside the CLUSTER A fix. That fix
+    made a canonical schedule MANDATORY (absence is a ceiling) but never made it INDEPENDENT, so
+    `admit(record, canonical_schedule=record)` reached ADMIT_FINAL / FINAL / settleable=True /
+    sink=result_ledger. index_schedule() accepts a single entry, so passing the record produces a
+    one-entry index in which the record is its own schedule entry: every comparison in
+    _schedule_conflicts compares a dict with itself, and the start instant the split clock rule
+    measures against is the record's own claim. That is "a record checked only against itself" —
+    the exact sentence cluster A's own docstring uses for the defect it closed — rebuilt out of a
+    supplied argument instead of an omitted one.
+
+    Detected by SHAPE, not only by identity, so a copy does not evade it: a schedule entry that
+    carries a fetch stamp, a content hash, a validation flag or a score is an observation wearing
+    a schedule's name. score_collector.schedule_entries_from_records() already strips exactly
+    these fields, which is why an honest morning-slate-binds-evening-results schedule passes.
+    """
+    if not isinstance(entry, dict) or not isinstance(record, dict):
+        return False, None
+    if entry is record:
+        return True, {"code": REASON_SCHEDULE_IS_THE_RECORD, "how": "the schedule entry IS the "
+                      "record object", "event_id": record.get("event_id")}
+    if entry == record:
+        return True, {"code": REASON_SCHEDULE_IS_THE_RECORD, "how": "the schedule entry is a "
+                      "copy of the record, field for field", "event_id": record.get("event_id")}
+    carried = [f for f in RECORD_ONLY_OBSERVATION_FIELDS if f in entry]
+    if carried:
+        return True, {"code": REASON_SCHEDULE_IS_THE_RECORD,
+                      "how": "the schedule entry carries observation fields a schedule never has",
+                      "observation_fields": carried, "event_id": record.get("event_id")}
+    return False, None
 
 
 def scheduled_date_of(obj):
@@ -903,6 +1093,24 @@ def schedule_entries_for_matchup(schedule, league, away_team_id, home_team_id, s
 def _schedule_conflicts(record, entry, lane):
     """Every way the record disagrees with the canonical schedule entry. Owner rules 2 and 6."""
     conflicts = []
+    # ROUND TWO. The binding is proved against the ENTRY'S OWN IDENTIFIER, never against the key
+    # it happens to sit under. index_schedule now re-keys a dict by the entry's own event_id, so
+    # this fires for the case it cannot re-key: an entry that declares no event_id at all, which
+    # is an entry that names no event and therefore binds nothing.
+    r_eid, e_eid = record.get("event_id"), entry.get("event_id")
+    if e_eid in (None, "") or str(e_eid) != str(r_eid):
+        conflicts.append({"code": REASON_SCHEDULE_EVENT_ID_DISAGREE,
+                          "record": r_eid, "schedule": e_eid})
+    # ROUND TWO. game_number was declared in OPTIONAL_RECORD_FIELDS and in
+    # CANONICAL_SCHEDULE_OPTIONAL_FIELDS and compared NOWHERE, so a record claiming doubleheader
+    # half 2 bound cleanly to an entry declaring half 1. Event-id binding is the real gate and
+    # nothing was mis-admitted by this alone, but a field carried by both sides and checked by
+    # neither reads in an audit as a check that ran. It is checked now, and only when BOTH sides
+    # declare one: a record that makes no doubleheader claim is not making a false one.
+    r_gn, e_gn = record.get("game_number"), entry.get("game_number")
+    if r_gn is not None and e_gn is not None and str(r_gn) != str(e_gn):
+        conflicts.append({"code": REASON_SCHEDULE_GAME_NUMBER_DISAGREE,
+                          "record": r_gn, "schedule": e_gn})
     if normalize_league(record.get("league")) != normalize_league(entry.get("league")):
         conflicts.append({"code": REASON_SCHEDULE_LEAGUE_DISAGREE,
                           "record": record.get("league"), "schedule": entry.get("league")})
@@ -1119,9 +1327,16 @@ def admit(record, *, now_utc, canonical_schedule=None, lane, corroborations=0):
 def _admit(record, *, now_utc, canonical_schedule=None, lane, corroborations=0):
     """The reasoning admit() puts a ceiling on. Call admit(), never this."""
     now = _utc(now_utc)
+    idx = index_schedule(canonical_schedule)
+    # ROUND TWO. The verdict records the SHAPE of what the record was bound against, on EVERY
+    # branch. Before this, n_schedule_events appeared only on the event-not-found branch, so an
+    # auditor reading a stored ADMIT_FINAL could not tell a fifteen-game slate from a one-entry
+    # schedule that was the record itself. "schedule_supplied: true" was the whole proof.
     detail = {"lane": lane, "now_utc": _iso(now), "corroborations": int(corroborations or 0),
               "event_id": record.get("event_id") if isinstance(record, dict) else None,
-              "schedule_supplied": index_schedule(canonical_schedule) is not None}
+              "schedule_supplied": idx is not None,
+              "n_schedule_events": None if idx is None else len(idx),
+              "canonical_schedule_sha256": schedule_digest(idx)}
 
     # ---- rule: lanes ---------------------------------------------------------------------
     if lane not in LANES:
@@ -1169,7 +1384,6 @@ def _admit(record, *, now_utc, canonical_schedule=None, lane, corroborations=0):
 
     # ---- owner rules 2 and 6: agree with the canonical schedule --------------------------
     entry = None
-    idx = index_schedule(canonical_schedule)
     if idx is not None:
         entry = idx.get(record["event_id"])
         if entry is None:
@@ -1181,6 +1395,17 @@ def _admit(record, *, now_utc, canonical_schedule=None, lane, corroborations=0):
             return Verdict(REJECT_PRESTART_OR_UNBOUND, reasons, None,
                            dict(detail, matchup_siblings=siblings,
                                 n_schedule_events=len(idx)))
+        # ROUND TWO. The schedule must be INDEPENDENT of the record, not merely SUPPLIED. Checked
+        # BEFORE every comparison below, because each of those comparisons is a comparison of a
+        # dict with itself when this fires, and a self-comparison that passes reads in the audit
+        # as a binding that was proved.
+        is_self, self_problem = schedule_entry_is_the_record(entry, record)
+        if is_self:
+            return Verdict(REJECT_PRESTART_OR_UNBOUND, [REASON_SCHEDULE_IS_THE_RECORD], None,
+                           dict(detail, schedule_problems=[self_problem],
+                                rule="a record checked only against itself agrees with itself; "
+                                     "supplying the record as its own schedule is binding to "
+                                     "nothing with an argument filled in"))
         entry_stamp = _instant_problem("schedule.scheduled_start_utc",
                                        entry.get("scheduled_start_utc"))
         if entry_stamp is not None:
@@ -1227,6 +1452,24 @@ def _admit(record, *, now_utc, canonical_schedule=None, lane, corroborations=0):
     # already happened. Both clocks must pass; neither substitutes for the other.
     fetched_utc = _utc(record.get("source_fetched_at_utc"))
     detail["source_fetched_at_utc"] = _iso(fetched_utc)
+
+    # ---- THE OBSERVATION CLOCK'S UPPER BOUND. ROUND TWO ------------------------------------
+    # Cluster M put the observation clock in front of the pre-start rule and gave it no ceiling.
+    # Nothing compared source_fetched_at_utc against now_utc, so a record stamped 2027-01-01 —
+    # months after the instant it was being judged at — reached ADMIT_FINAL, settleable=True,
+    # sink=result_ledger, with no reason code and no detail field recording that the observation
+    # postdated the judgement. `fetched > now` is as impossible as a final before first pitch,
+    # and this module refused one while tolerating the other. A stamp the guard READS is a stamp
+    # the guard must BOUND: an unbounded stamp is a knob, and cluster M's whole point is that a
+    # clock a caller can set freely is not a clock.
+    if fetched_utc is not None and fetched_utc > now:
+        return Verdict(REJECT_PRESTART_OR_UNBOUND, [REASON_OBSERVATION_AFTER_JUDGEMENT], None,
+                       dict(detail,
+                            minutes_after_now=round((fetched_utc - now).total_seconds() / 60.0, 1),
+                            rule="source_fetched_at_utc > now_utc: the record claims an "
+                                 "observation from after the moment it is being judged at. No "
+                                 "fetch has happened yet at that instant"))
+
     if start_utc is not None and fetched_utc is not None and fetched_utc < start_utc \
             and (claims_score or claims_terminal):
         return Verdict(REJECT_PRESTART_OR_UNBOUND,
@@ -1248,6 +1491,19 @@ def _admit(record, *, now_utc, canonical_schedule=None, lane, corroborations=0):
     detail["status"] = status
     detail["terminal_verified"] = terminal_verified_for(status)
     base = [] if idx is not None else [REASON_SCHEDULE_NOT_SUPPLIED]
+
+    # ---- ROUND TWO: A STATUS IS EVIDENCE ONLY IF ITS OWN SOURCE CAN PRODUCE IT -------------
+    # `status` was an ungrounded caller assertion in exactly the way `lane` was before cluster B.
+    # validate_record checks only that the string is in STATUSES; normalize_status() is a helper
+    # a caller may simply not call. So source='espn_scoreboard_api' with status='CLOSED' admitted
+    # as a settleable FINAL although the ESPN map reaches no validated state at all — the module
+    # contradicting its own docstring, in the same shape as the lane forgery.
+    unreachable, unreachable_problem = terminal_status_unreachable_from_source(
+        record.get("source"), status)
+    if unreachable:
+        detail["reachable_statuses"] = sorted(reachable_statuses_for_source(record.get("source")))
+        return Verdict(UNVERIFIED, base + [REASON_STATUS_UNREACHABLE_FROM_SOURCE], None,
+                       dict(detail, record_problems=[unreachable_problem]))
 
     # ---- owner rules 4 and 8: only a terminal status may carry a final --------------------
     if status not in TERMINAL_STATES:
@@ -1272,9 +1528,30 @@ def _admit(record, *, now_utc, canonical_schedule=None, lane, corroborations=0):
         return Verdict(UNVERIFIED, reasons, None, detail)
 
     # ---- the lead's split clock rule, part (b): MINIMUM DURATION IS SOFT ------------------
+    #
+    # ROUND TWO — CLUSTER M, FINISHED. The hard rule above was repaired to read BOTH clocks and
+    # this one was left reading the judging clock alone: `too_soon = now < earliest`. So a
+    # terminal record OBSERVED 75 minutes into a 150-minute game lost MIN_DURATION_NOT_ELAPSED
+    # entirely by being judged that evening — the 8/30 MIA@WSH snippet, same bytes, same fetch
+    # instant, judged at 23:00Z instead of 17:30Z, came back UNVERIFIED with the duration codes
+    # gone. No disposition flipped to a final that would not otherwise be one (canonical clears
+    # the hold by spec, search still cannot mint), but the search hold evaporated by waiting and
+    # the audit trail stopped recording that the observation was made inside the impossible
+    # window. That is the same sentence cluster M was written against: WAITING IS NOT EVIDENCE.
+    #
+    # BOTH clocks now, exactly as the hard rule does. The SOFT semantics are untouched: a
+    # canonical terminal status still clears it, so the rain-shortened and called games owner
+    # message 1 protected are not false-rejected — CLOCK(b) below is the fixture that proves the
+    # rule has not degenerated into a blanket refusal, and it must keep passing.
     earliest = earliest_possible_final(start_utc, record["league"]) if start_utc else None
     detail["earliest_possible_final"] = _iso(earliest)
-    too_soon = earliest is not None and now < earliest
+    judged_too_soon = earliest is not None and now < earliest
+    observed_too_soon = earliest is not None and fetched_utc is not None and fetched_utc < earliest
+    too_soon = judged_too_soon or observed_too_soon
+    if too_soon:
+        detail["min_duration_too_soon_on"] = ([c for c, hit in (("judging", judged_too_soon),
+                                                                ("observation", observed_too_soon))
+                                               if hit])
     cleared = too_soon and lane == LANE_CANONICAL and status in TERMINAL_STATES
     reasons = list(base)
     if too_soon:
@@ -1929,6 +2206,165 @@ def selftest_failures():
         f.append("M control: a final observed AFTER first pitch and past the minimum duration "
                  "was refused (%s %s)" % (v.disposition, v.reason_codes))
 
+    # ---- CLUSTER M, PART (b). THE *SOFT* HOLD READS THE OBSERVATION CLOCK TOO ---------------
+    # The round-two re-attack: part (a) was repaired on both clocks and part (b) was left on the
+    # judging clock alone, so the 8/30 MIA@WSH snippet — OBSERVED 75 minutes into a 150-minute
+    # game — lost MIN_DURATION_NOT_ELAPSED entirely by being judged that evening. Same bytes,
+    # same fetch instant, later look, weaker verdict.
+    observed_inside_window = _rec(EID_MIAWSH, "MLB", "SYNTH_MIA", "SYNTH_WSH", _START_1215ET,
+                                  CLOSED, 2, 9, source="web_search", fetched=_NOW_1330ET)
+    v = A(record=observed_inside_window, now_utc=_EVENING, lane=LANE_SEARCH, corroborations=2)
+    if v.disposition != UNVERIFIED_TOO_SOON or \
+            REASON_MIN_DURATION_NOT_ELAPSED not in v.reason_codes or \
+            REASON_SEARCH_CANNOT_CLEAR_MIN_DURATION not in v.reason_codes:
+        f.append("M(b) soft clock: a terminal claim OBSERVED 75 minutes into a 150-minute game "
+                 "and judged five and a half hours later produced %s %s — the hold evaporated "
+                 "by waiting, which is the sentence cluster M was written against"
+                 % (v.disposition, v.reason_codes))
+    if v.detail.get("min_duration_too_soon_on") != ["observation"]:
+        f.append("M(b) audit trail: the verdict does not record WHICH clock was inside the "
+                 "impossible window (%r)" % (v.detail.get("min_duration_too_soon_on"),))
+    # ...and on the CANONICAL lane the SOFT semantics are unchanged: the terminal status still
+    # clears the hold, and the verdict now KEEPS both codes instead of losing them to a late
+    # judgement. Owner message 1's rain-shortened game survives; the audit records the window.
+    v = A(record=_rec(EID_MIAWSH, "MLB", "SYNTH_MIA", "SYNTH_WSH", _START_1215ET, CLOSED, 2, 9,
+                      fetched=_NOW_1330ET),
+          now_utc=_EVENING, canonical_schedule=sched, lane=LANE_CANONICAL)
+    if v.disposition != ADMIT_FINAL or not v.settleable or \
+            REASON_MIN_DURATION_NOT_ELAPSED not in v.reason_codes or \
+            REASON_MIN_DURATION_CLEARED not in v.reason_codes:
+        f.append("M(b) canonical clearance: a canonical terminal record observed inside the "
+                 "window produced %s %s — the hold must still CLEAR (soft), and the audit must "
+                 "still record that the observation was inside the window"
+                 % (v.disposition, v.reason_codes))
+
+    # ---- THE OBSERVATION CLOCK'S UPPER BOUND -----------------------------------------------
+    # Nothing compared source_fetched_at_utc against now_utc, so a record stamped months after
+    # the judging instant admitted and settled. Cluster M's guard read a stamp it never bounded.
+    v = A(record=_rec(EID_BOSNYY, "MLB", "SYNTH_BOS", "SYNTH_NYY", _START_1335ET, CLOSED, 0, 1,
+                      fetched="2027-01-01T00:00:00Z"),
+          now_utc=_EVENING, canonical_schedule=sched, lane=LANE_CANONICAL)
+    if v.disposition != REJECT_PRESTART_OR_UNBOUND or v.admitted or v.settleable or \
+            REASON_OBSERVATION_AFTER_JUDGEMENT not in v.reason_codes:
+        f.append("E3 observation after judgement: a record claiming to have been FETCHED on "
+                 "2027-01-01 and judged on 2026-08-30 produced %s %s (settleable=%s) — a fetch "
+                 "from after the judging instant has not happened yet"
+                 % (v.disposition, v.reason_codes, v.settleable))
+    # The near miss that must NOT be refused: fetched at exactly the judging instant is the
+    # normal shape of a live collection, and a strict > keeps it admissible.
+    v = A(record=_rec(EID_DH_G2, "MLB", "SYNTH_KC", "SYNTH_TOR", "2026-08-30T20:07:00Z",
+                      CLOSED, 13, 2, fetched=_EVENING),
+          now_utc=_EVENING, canonical_schedule=dh, lane=LANE_CANONICAL)
+    if v.disposition != ADMIT_FINAL:
+        f.append("E3 control: a record fetched at exactly the judging instant was refused (%s "
+                 "%s) — the upper bound must be a bound, not a blanket refusal"
+                 % (v.disposition, v.reason_codes))
+
+    # ---- THE SCHEDULE KEY IS NOT THE AUTHORITY'S IDENTIFIER --------------------------------
+    # A schedule entry filed under someone else's event id bound a record to a DIFFERENT game,
+    # silently: index_schedule returned dict(schedule) for a dict input and _schedule_conflicts
+    # never compared the two ids.
+    mis_keyed = {EID_BOSNYY: _entry(EID_COLATL, "SYNTH_COL", "SYNTH_ATL", _START_1335ET,
+                                    status=SCHEDULED)}
+    v = A(record=_rec(EID_BOSNYY, "MLB", "SYNTH_BOS", "SYNTH_NYY", _START_1335ET, CLOSED, 0, 1,
+                      fetched="2026-08-30T20:10:00Z"),
+          now_utc=_EVENING, canonical_schedule=mis_keyed, lane=LANE_CANONICAL)
+    if v.disposition != REJECT_PRESTART_OR_UNBOUND or v.admitted or \
+            REASON_EVENT_NOT_IN_SCHEDULE not in v.reason_codes:
+        f.append("E4 mis-keyed: a schedule entry filed under ANOTHER game's event id answered "
+                 "the lookup and produced %s %s — binding must be to the authority's own "
+                 "identifier, never to the key a caller chose" % (v.disposition, v.reason_codes))
+    # The entry index_schedule cannot re-key: one that declares no event id at all. It keeps the
+    # caller's key and is caught one layer down, by the comparison in _schedule_conflicts.
+    unidentified = {EID_MIAWSH: {"league": "MLB", "away_team_id": "SYNTH_MIA",
+                                 "home_team_id": "SYNTH_WSH",
+                                 "scheduled_start_utc": _START_1215ET}}
+    v = A(record=_rec(EID_MIAWSH, "MLB", "SYNTH_MIA", "SYNTH_WSH", _START_1215ET, CLOSED, 2, 9,
+                      fetched=_EVENING),
+          now_utc=_EVENING, canonical_schedule=unidentified, lane=LANE_CANONICAL)
+    if v.disposition != REJECT_SCHEDULE_CONFLICT or \
+            REASON_SCHEDULE_EVENT_ID_DISAGREE not in v.reason_codes:
+        f.append("E4 unidentified entry: a schedule entry that names no event bound a record "
+                 "anyway (%s %s)" % (v.disposition, v.reason_codes))
+    if index_schedule({EID_BOSNYY: _entry(EID_COLATL, "SYNTH_COL", "SYNTH_ATL",
+                                          _START_1335ET)}) != index_schedule(
+            [_entry(EID_COLATL, "SYNTH_COL", "SYNTH_ATL", _START_1335ET)]):
+        f.append("E4 index: index_schedule kept a caller's key over the entry's own event_id")
+
+    # ---- game_number IS CARRIED BY BOTH SIDES AND WAS COMPARED BY NEITHER -------------------
+    # Owner regression fixture 4 — the doubleheader — landing inside the binder: a record
+    # claiming half 2 bound cleanly to an entry declaring half 1 under one event id.
+    v = A(record=_rec(EID_DH_G2, "MLB", "SYNTH_KC", "SYNTH_TOR", "2026-08-30T20:07:00Z",
+                      CLOSED, 13, 2, fetched=_EVENING, game_number=1),
+          now_utc=_EVENING, canonical_schedule=dh, lane=LANE_CANONICAL)
+    if v.disposition != REJECT_SCHEDULE_CONFLICT or \
+            REASON_SCHEDULE_GAME_NUMBER_DISAGREE not in v.reason_codes:
+        f.append("E5 doubleheader half: a record declaring game_number 1 bound to the entry for "
+                 "half 2 and produced %s %s" % (v.disposition, v.reason_codes))
+    v = A(record=_rec(EID_DH_G2, "MLB", "SYNTH_KC", "SYNTH_TOR", "2026-08-30T20:07:00Z",
+                      CLOSED, 13, 2, fetched=_EVENING, game_number=2),
+          now_utc=_EVENING, canonical_schedule=dh, lane=LANE_CANONICAL)
+    if v.disposition != ADMIT_FINAL:
+        f.append("E5 control: a record declaring the SAME half as its entry was refused (%s %s) "
+                 "— the comparison must catch a disagreement, not the field's presence"
+                 % (v.disposition, v.reason_codes))
+
+    # ---- A SCHEDULE THAT IS THE RECORD IS NOT A SCHEDULE ------------------------------------
+    # Cluster A made the canonical schedule MANDATORY and never made it INDEPENDENT, so
+    # admit(record, canonical_schedule=record) reached ADMIT_FINAL / settleable / result_ledger:
+    # "a record checked only against itself", rebuilt out of a supplied argument.
+    self_bound = _rec(EID_DH_G2, "MLB", "SYNTH_KC", "SYNTH_TOR", "2026-08-30T20:07:00Z",
+                      CLOSED, 13, 2, fetched=_EVENING)
+    for label, schedule_arg in (("the record itself", self_bound),
+                                ("a copy of the record", dict(self_bound)),
+                                ("a dict of records", {self_bound["event_id"]: dict(self_bound)})):
+        v = A(record=self_bound, now_utc=_EVENING, canonical_schedule=schedule_arg,
+              lane=LANE_CANONICAL)
+        if v.admitted or v.settleable or REASON_SCHEDULE_IS_THE_RECORD not in v.reason_codes:
+            f.append("E6 self-schedule (%s): a record checked only against ITSELF produced "
+                     "%s/%s (settleable=%s) %s" % (label, v.disposition, v.admissible_as,
+                                                   v.settleable, v.reason_codes))
+        if sink_for(v) != SINK_QUARANTINE:
+            f.append("E6 routing (%s): a self-bound record routed to %r" % (label, sink_for(v)))
+    v = A(record=self_bound, now_utc=_EVENING, canonical_schedule=dh, lane=LANE_CANONICAL)
+    if v.disposition != ADMIT_FINAL or not v.settleable:
+        f.append("E6 control: the SAME record against an INDEPENDENT slate must admit (%s %s) — "
+                 "otherwise the refusal above is a blanket one" % (v.disposition, v.reason_codes))
+    if v.detail.get("n_schedule_events") != 2 or not v.detail.get("canonical_schedule_sha256"):
+        f.append("E6 audit trail: the verdict does not record the SHAPE of the slate it was "
+                 "bound against (%r) — 'schedule_supplied: true' cannot tell a fifteen-game "
+                 "slate from a one-entry self-schedule" % (v.detail.get("n_schedule_events"),))
+
+    # ---- A STATUS IS EVIDENCE ONLY IF ITS OWN SOURCE CAN PRODUCE IT -------------------------
+    # `status` was an ungrounded caller assertion in the shape `lane` had before cluster B. ESPN
+    # exposes no statistics-validation state anywhere in this repo, so ESPN can never say CLOSED.
+    espn_sched = index_schedule([
+        _entry(EID_WNBA, "SYNTH_MIN", "SYNTH_ATL", "2026-08-30T23:00:00Z", league="WNBA")])
+    v = A(record=_rec(EID_WNBA, "WNBA", "SYNTH_MIN", "SYNTH_ATL", "2026-08-30T23:00:00Z",
+                      CLOSED, 78, 81, source=PROVIDER_ESPN_SCOREBOARD,
+                      fetched="2026-08-31T02:00:00Z"),
+          now_utc="2026-08-31T02:00:00Z", canonical_schedule=espn_sched, lane=LANE_CANONICAL)
+    if v.admitted or v.settleable or REASON_STATUS_UNREACHABLE_FROM_SOURCE not in v.reason_codes:
+        f.append("E7 espn CLOSED: an ESPN-sourced record asserting a VALIDATED status produced "
+                 "%s/%s (settleable=%s) %s — the ESPN map reaches no validated state at all"
+                 % (v.disposition, v.admissible_as, v.settleable, v.reason_codes))
+    # The state ESPN CAN reach still admits, as FINAL_UNVALIDATED: readable, never settleable.
+    v = A(record=_rec(EID_WNBA, "WNBA", "SYNTH_MIN", "SYNTH_ATL", "2026-08-30T23:00:00Z",
+                      COMPLETE, 78, 81, source=PROVIDER_ESPN_SCOREBOARD,
+                      fetched="2026-08-31T02:00:00Z"),
+          now_utc="2026-08-31T02:00:00Z", canonical_schedule=espn_sched, lane=LANE_CANONICAL)
+    if v.disposition != ADMIT_FINAL or v.admissible_as != ADMISSIBLE_FINAL_UNVALIDATED \
+            or v.settleable:
+        f.append("E7 control: an ESPN final in the state ESPN CAN report was refused (%s/%s) — "
+                 "grounding a status must not become a blanket refusal of the provider"
+                 % (v.disposition, v.admissible_as))
+    if reachable_statuses_for_source("web_search") is not None:
+        f.append("E7 scope: a source with no provider map was given a state list it never "
+                 "declared — that is inventing a vocabulary (R1)")
+    if reachable_statuses_for_source(PROVIDER_ESPN_SCOREBOARD) & VALIDATED_STATES:
+        f.append("E7 map: the ESPN map reaches a VALIDATED state; the docstring says it exposes "
+                 "no statistics-validation state anywhere in this repo")
+
     # ---- CLUSTER N. THE INSTANT IS THE FACT; A CARRIED DATE IS A CLAIM ABOUT IT -------------
     # commit 0bf9399 in one line: an evening tip crosses midnight UTC, and a carried
     # scheduled_date is exactly how a prior day's final gets filed under today.
@@ -1956,8 +2392,13 @@ def selftest_failures():
                  % (v.disposition, v.reason_codes))
 
     # ---- SEARCH CONSENSUS: TWO OUTLETS ON ONE WIRE ARE ONE SOURCE ---------------------------
+    # OBSERVED at 23:00Z, well past the 18:45Z minimum for a 16:15Z first pitch. Stated rather
+    # than defaulted because the SOFT duration rule now reads the observation clock too (round
+    # two, cluster M part b): with the default 17:30Z fetch these records are held TOO_SOON, and
+    # this block is testing CONSENSUS, not the clock.
     s1 = _rec(EID_MIAWSH, "MLB", "SYNTH_MIA", "SYNTH_WSH", _START_1215ET, CLOSED, 2, 9,
-              source="outlet_a", wire_service="wire_x", result_timestamp_utc=_EVENING)
+              source="outlet_a", wire_service="wire_x", result_timestamp_utc=_EVENING,
+              fetched=_EVENING)
     s2 = dict(s1, source="outlet_b")
     s3 = dict(s1, source="outlet_c", wire_service="wire_y")
     s4 = dict(s3, source="outlet_d", wire_service="wire_z", result_timestamp_utc=_NOW_1330ET)
@@ -2216,6 +2657,43 @@ MUTANTS = [
      "    if start_utc is not None and fetched_utc is not None and fetched_utc < start_utc \\",
      "    if False and fetched_utc is not None and fetched_utc < start_utc \\",
      "M observation clock"),
+    # ---- the round-two re-attack's findings, each with the fixture that catches it ----------
+    ("CLUSTER M PART (b): the SOFT duration hold goes back to the judging clock alone, so a "
+     "terminal claim OBSERVED inside the impossible window loses the hold by being judged later",
+     "    too_soon = judged_too_soon or observed_too_soon",
+     "    too_soon = judged_too_soon",
+     "M(b) soft clock"),
+    ("THE OBSERVATION CLOCK LOSES ITS UPPER BOUND: a record stamped as fetched in 2027 is "
+     "judged in 2026 and settles",
+     "    if fetched_utc is not None and fetched_utc > now:",
+     "    if False:",
+     "E3 observation after judgement"),
+    ("index_schedule TRUSTS THE DICT KEY again, so an entry filed under another game's event id "
+     "answers that id's lookup and the record binds to a different game",
+     '            out[own if own not in (None, "") else key] = entry',
+     "            out[key] = entry",
+     "E4 mis-keyed"),
+    ("the binding stops being proved against the schedule entry's OWN identifier, so an entry "
+     "that names no event binds a record anyway",
+     '    if e_eid in (None, "") or str(e_eid) != str(r_eid):',
+     "    if False:",
+     "E4 unidentified entry"),
+    ("game_number goes back to being carried by both sides and compared by neither, so a record "
+     "claiming doubleheader half 1 binds to the entry for half 2",
+     "    if r_gn is not None and e_gn is not None and str(r_gn) != str(e_gn):",
+     "    if False:",
+     "E5 doubleheader half"),
+    ("the canonical schedule may be the RECORD again: cluster A's ceiling required a schedule to "
+     "be supplied and never required it to be independent",
+     "        if is_self:",
+     "        if False:",
+     "E6 self-schedule"),
+    ("record['status'] goes back to being an ungrounded caller assertion, so an ESPN-sourced "
+     "record claiming CLOSED settles although the ESPN map reaches no validated state",
+     "    if unreachable:",
+     "    if False:",
+     "E7 espn CLOSED"),
+
     ("CLUSTER N: a caller-supplied scheduled_date overrides the ET derivation again, so an "
      "8/29 final is filed and served as an 8/30 result (commit 0bf9399)",
      "    return None if start is None else et_date_of(start)",

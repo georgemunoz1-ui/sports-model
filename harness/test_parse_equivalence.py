@@ -185,7 +185,9 @@ def main() -> int:
             if p and p[0] == r["date"]:
                 got = p
                 break
-        if got is None or float(got[2]) != 0.0 or float(got[4]) != 0.0:
+        # 2026-09-01: check the fields EACH ROW declares placeholder (field_indices), not a
+        # hardcoded ER+BB pair — the lancebroz batch placeholds ER only; its BB is genuine.
+        if got is None or any(float(got[i]) != 0.0 for i in r.get("field_indices", [2, 4])):
             drift += 1
             fails.append(f"placeholder drift: {r['pitcher_id']} {r['date']}")
     print(f"6. ER/BB placeholder manifest: {len(pm['rows'])} rows, {drift} drift")

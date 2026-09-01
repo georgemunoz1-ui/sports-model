@@ -118,8 +118,10 @@ try:
             p=ln.strip().split("|")
             if p and p[0]==r["date"]: got=p; break
         if got is None: _bad.append(f"{r['pitcher_id']} {r['date']} row missing")
-        elif not (float(got[2])==0.0 and float(got[4])==0.0):
-            _bad.append(f"{r['pitcher_id']} {r['date']} ER/BB no longer 0 — backfilled? drop it from the manifest")
+        # 2026-09-01: verify the fields EACH ROW declares placeholder (field_indices), not a
+        # hardcoded ER+BB pair — the lancebroz batch has genuine BB with only ER placeheld.
+        elif any(float(got[i])!=0.0 for i in r.get("field_indices",[2,4])):
+            _bad.append(f"{r['pitcher_id']} {r['date']} declared placeholder field no longer 0 — backfilled? drop it from the manifest")
         elif float(got[3])!=r["SO"] or float(got[5])!=r["TBF"]:
             _bad.append(f"{r['pitcher_id']} {r['date']} SO/TBF changed since the manifest was cut")
     check(f"ER/BB placeholder manifest matches logs ({len(_pm['rows'])} rows, {len(_bad)} drift)", not _bad)
@@ -308,7 +310,8 @@ for _m in ("result_provenance","result_content_checks","parse_box_dump",
            # 8/31: the 9/1 pregame builder (freeze-first, market never read) and the
            # canonical 8/30 WNBA board grader (frozen-board warrant, ET date derivation).
            "build_board_0901","grade_wnba_0830","register_owner_0901_v1",
-           "register_owner_0901_v2","market_overlay_0901"):
+           "register_owner_0901_v2","market_overlay_0901",
+           "ingest_lancebroz","refresh_experiment_0901"):
     _r=subprocess.run([sys.executable,f"harness/{_m}.py","--selftest"],capture_output=True,text=True)
     _out=(_r.stdout+_r.stderr).strip().splitlines()
     check(f"{_m} selftest ({_out[-1][:72] if _out else 'no output'})", _r.returncode==0)

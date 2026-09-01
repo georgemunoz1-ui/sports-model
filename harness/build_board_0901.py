@@ -77,6 +77,38 @@ def build(trials=30000):
     return res
 
 
+
+# V2 FREEZE, 2026-09-01, after the owner's relay of the MLB feed. Two rows change and ONLY two:
+#   CWS@HOU  the search snippet had Burke in an Astros uniform; the relay reads Burke for CHICAGO
+#            and Ronel Blanco for HOUSTON. Blanco is not in the registry (NAMED_NO_LOG_CAP).
+#   SEA@BOS  Paez was a single FanGraphs listing, now contradicted by the feed's TBD -> null.
+# The v1 freeze is NOT edited (R3). This is a second artifact with its own file.
+OUT_V2 = "cards/2026-09-01_mlb_board_FREEZE_v2.json"
+
+def events_v2():
+    evs = [dict(e) for e in EVENTS]
+    for e in evs:
+        if e["event"] == "CWS@HOU":
+            e["away_starter"] = "Sean Burke"
+            e["home_starter"] = "Ronel Blanco"
+            e.pop("away_starter_null_reason", None)
+            e["starter_note"] = "attribution corrected per owner relay of the MLB feed"
+        if e["event"] == "SEA@BOS":
+            e["home_starter"] = None
+            e["home_starter_null_reason"] = "MLB_FEED_TBD_PER_OWNER_RELAY_PAEZ_N1_CONTRADICTED"
+    return evs
+
+
+def build_v2(trials=30000):
+    import mlb_daily_coordinator as C
+    res = C.run(SLATE_DATE, [], extra=events_v2(), trials=trials)
+    res["board_version"] = "v2_post_owner_relay"
+    res["changed_from_v1"] = ["CWS@HOU starter attribution", "SEA@BOS home starter -> null"]
+    res["acquisition"] = {"rung": "OWNER_RELAY over OPEN_WEB_SEARCH",
+                          "grade": "OWNER_RELAY", "market_read": False}
+    return res
+
+
 def selftest():
     f = []
     evs = {e["event"] for e in EVENTS}
@@ -100,6 +132,14 @@ def selftest():
     pfs = {g["snapshot"]["park_factor"] for g in r["games"]}
     if pfs == {1.0}:
         f.append("every park factor is 1.0 - the silent-default defect is back")
+    v2e = {e["event"]: e for e in events_v2()}
+    if v2e["CWS@HOU"]["away_starter"] != "Sean Burke" or v2e["CWS@HOU"]["home_starter"] != "Ronel Blanco":
+        f.append("v2 did not carry the corrected CWS@HOU attribution")
+    if v2e["SEA@BOS"]["home_starter"] is not None or not v2e["SEA@BOS"].get("home_starter_null_reason"):
+        f.append("v2 did not null the BOS starter with a reason")
+    if any(EVENTS[i]["event"] == "CWS@HOU" and EVENTS[i].get("home_starter") != "Sean Burke"
+           for i in range(len(EVENTS))):
+        f.append("v1 EVENTS mutated - R3 violated")
     print("%s selftest: %s" % (MODULE_ID, "PASS" if not f else "FAIL"))
     for x in f:
         print("  -", x)
@@ -109,9 +149,11 @@ def selftest():
 if __name__ == "__main__":
     if "--selftest" in sys.argv:
         sys.exit(0 if selftest() else 1)
-    board = build()
+    v2 = "--v2" in sys.argv
+    board = build_v2() if v2 else build()
     os.makedirs("cards", exist_ok=True)
-    with open(OUT, "w") as fh:
+    out = OUT_V2 if v2 else OUT
+    with open(out, "w") as fh:
         json.dump(board, fh, indent=1, sort_keys=True)
-    print("frozen ->", OUT)
+    print("frozen ->", out)
     print(json.dumps(board["summary"], indent=1))

@@ -307,7 +307,8 @@ for _m in ("result_provenance","result_content_checks","parse_box_dump",
            "grade_owner_v5_board",
            # 8/31: the 9/1 pregame builder (freeze-first, market never read) and the
            # canonical 8/30 WNBA board grader (frozen-board warrant, ET date derivation).
-           "build_board_0901","grade_wnba_0830"):
+           "build_board_0901","grade_wnba_0830","register_owner_0901_v1",
+           "register_owner_0901_v2","market_overlay_0901"):
     _r=subprocess.run([sys.executable,f"harness/{_m}.py","--selftest"],capture_output=True,text=True)
     _out=(_r.stdout+_r.stderr).strip().splitlines()
     check(f"{_m} selftest ({_out[-1][:72] if _out else 'no output'})", _r.returncode==0)

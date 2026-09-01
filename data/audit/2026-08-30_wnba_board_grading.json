@@ -1,0 +1,341 @@
+{
+ "ACCRUES": "descriptive grading of a frozen board; n=4 promotes nothing",
+ "AGGREGATE_GUARD": {
+  "basis": "cohort bound clean",
+  "permitted": true,
+  "statistic": "wnba 2026-08-30 arm statistics"
+ },
+ "ARCHIVE": {
+  "board_pin_was": "5875eba831d8013ed28843353174d3557ba36db0",
+  "note": "results read from the FETCHED commit via git show; the working-tree pin is not advanced by grading",
+  "origin_main": "f47c88d98daff904dff4ee4e83f1b36bfc8d4ca5",
+  "origin_main_committed": "2026-09-01T06:32:10-04:00",
+  "working_tree_head": "5875eba831d8013ed28843353174d3557ba36db0"
+ },
+ "ARMS": {
+  "wnba.fallback.STANDINGS_LOG5_v1": [
+   {
+    "brier": 0.425187,
+    "date_slice_would_have_split_cohort": false,
+    "final": "Minnesota Lynx 81 - Atlanta Dream 89",
+    "game": "wnba:MIN@ATL",
+    "game_pk": "ESPN_GAMEID:401857186",
+    "home_won": true,
+    "logloss": 1.055737,
+    "p_home": 0.347936,
+    "su_correct": false,
+    "utc_instant": "2026-08-30T19:00Z"
+   },
+   {
+    "brier": 0.121059,
+    "date_slice_would_have_split_cohort": false,
+    "final": "Los Angeles Sparks 90 - Seattle Storm 74",
+    "game": "wnba:LAS@SEA",
+    "game_pk": "ESPN_GAMEID:401857187",
+    "home_won": false,
+    "logloss": 0.427613,
+    "p_home": 0.347936,
+    "su_correct": true,
+    "utc_instant": "2026-08-30T21:00Z"
+   },
+   {
+    "brier": 0.057781,
+    "date_slice_would_have_split_cohort": false,
+    "final": "Golden State Valkyries 86 - Portland Fire 69",
+    "game": "wnba:GSV@PDX",
+    "game_pk": "ESPN_GAMEID:401857188",
+    "home_won": false,
+    "logloss": 0.274933,
+    "p_home": 0.240377,
+    "su_correct": true,
+    "utc_instant": "2026-08-30T23:00Z"
+   },
+   {
+    "brier": 0.029452,
+    "date_slice_would_have_split_cohort": true,
+    "final": "Connecticut Sun 71 - Dallas Wings 97",
+    "game": "wnba:CON@DAL",
+    "game_pk": "ESPN_GAMEID:401857189",
+    "home_won": true,
+    "logloss": 0.188278,
+    "p_home": 0.828384,
+    "su_correct": true,
+    "utc_instant": "2026-08-31T00:30Z"
+   }
+  ],
+  "wnba.replacement.FEATURE_REFRESH": [
+   {
+    "brier": 0.40386,
+    "date_slice_would_have_split_cohort": false,
+    "final": "Minnesota Lynx 81 - Atlanta Dream 89",
+    "game": "wnba:MIN@ATL",
+    "game_pk": "ESPN_GAMEID:401857186",
+    "home_won": true,
+    "logloss": 1.009229,
+    "margin": {
+     "actual_home": 8,
+     "denominator_base": "WNBA margin residual SD, MEASURED",
+     "numerator_base": "MODEL residual (projected home margin - actual)",
+     "projected_home": -3.21,
+     "residual": -11.21,
+     "sigma": 12.5523,
+     "sigma_n": 1721,
+     "z": -0.8931
+    },
+    "p_home": 0.3645,
+    "su_correct": false,
+    "total": {
+     "actual": 170,
+     "denominator_base": "WNBA totals residual SD, MEASURED",
+     "numerator_base": "MODEL residual (projected total - actual)",
+     "projected": 176.5,
+     "residual": 6.5,
+     "sigma": 18.0156,
+     "sigma_n": 1721,
+     "z": 0.3608
+    },
+    "utc_instant": "2026-08-30T19:00Z"
+   },
+   {
+    "brier": 0.311811,
+    "date_slice_would_have_split_cohort": false,
+    "final": "Los Angeles Sparks 90 - Seattle Storm 74",
+    "game": "wnba:LAS@SEA",
+    "game_pk": "ESPN_GAMEID:401857187",
+    "home_won": false,
+    "logloss": 0.817351,
+    "margin": {
+     "actual_home": -16,
+     "denominator_base": "WNBA margin residual SD, MEASURED",
+     "numerator_base": "MODEL residual (projected home margin - actual)",
+     "projected_home": 2.21,
+     "residual": 18.21,
+     "sigma": 12.5523,
+     "sigma_n": 1721,
+     "z": 1.4507
+    },
+    "p_home": 0.5584,
+    "su_correct": false,
+    "total": {
+     "actual": 164,
+     "denominator_base": "WNBA totals residual SD, MEASURED",
+     "numerator_base": "MODEL residual (projected total - actual)",
+     "projected": 175.4,
+     "residual": 11.4,
+     "sigma": 18.0156,
+     "sigma_n": 1721,
+     "z": 0.6328
+    },
+    "utc_instant": "2026-08-30T21:00Z"
+   },
+   {
+    "brier": 0.071556,
+    "date_slice_would_have_split_cohort": false,
+    "final": "Golden State Valkyries 86 - Portland Fire 69",
+    "game": "wnba:GSV@PDX",
+    "game_pk": "ESPN_GAMEID:401857188",
+    "home_won": false,
+    "logloss": 0.311292,
+    "margin": {
+     "actual_home": -17,
+     "denominator_base": "WNBA margin residual SD, MEASURED",
+     "numerator_base": "MODEL residual (projected home margin - actual)",
+     "projected_home": -7.28,
+     "residual": 9.72,
+     "sigma": 12.5523,
+     "sigma_n": 1721,
+     "z": 0.7744
+    },
+    "p_home": 0.2675,
+    "su_correct": true,
+    "total": {
+     "actual": 155,
+     "denominator_base": "WNBA totals residual SD, MEASURED",
+     "numerator_base": "MODEL residual (projected total - actual)",
+     "projected": 165.8,
+     "residual": 10.8,
+     "sigma": 18.0156,
+     "sigma_n": 1721,
+     "z": 0.5995
+    },
+    "utc_instant": "2026-08-30T23:00Z"
+   },
+   {
+    "brier": 0.02418,
+    "date_slice_would_have_split_cohort": true,
+    "final": "Connecticut Sun 71 - Dallas Wings 97",
+    "game": "wnba:CON@DAL",
+    "game_pk": "ESPN_GAMEID:401857189",
+    "home_won": true,
+    "logloss": 0.169011,
+    "margin": {
+     "actual_home": 26,
+     "denominator_base": "WNBA margin residual SD, MEASURED",
+     "numerator_base": "MODEL residual (projected home margin - actual)",
+     "projected_home": 11.8,
+     "residual": -14.2,
+     "sigma": 12.5523,
+     "sigma_n": 1721,
+     "z": -1.1313
+    },
+    "p_home": 0.8445,
+    "su_correct": true,
+    "total": {
+     "actual": 168,
+     "denominator_base": "WNBA totals residual SD, MEASURED",
+     "numerator_base": "MODEL residual (projected total - actual)",
+     "projected": 171.6,
+     "residual": 3.6,
+     "sigma": 18.0156,
+     "sigma_n": 1721,
+     "z": 0.1998
+    },
+    "utc_instant": "2026-08-31T00:30Z"
+   }
+  ],
+  "wnba.winner.EXPANDING_HOME_PRIOR": [
+   {
+    "brier": 0.214753,
+    "date_slice_would_have_split_cohort": false,
+    "final": "Minnesota Lynx 81 - Atlanta Dream 89",
+    "game": "wnba:MIN@ATL",
+    "game_pk": "ESPN_GAMEID:401857186",
+    "home_won": true,
+    "logloss": 0.62253,
+    "p_home": 0.536585,
+    "su_correct": true,
+    "utc_instant": "2026-08-30T19:00Z"
+   },
+   {
+    "brier": 0.287923,
+    "date_slice_would_have_split_cohort": false,
+    "final": "Los Angeles Sparks 90 - Seattle Storm 74",
+    "game": "wnba:LAS@SEA",
+    "game_pk": "ESPN_GAMEID:401857187",
+    "home_won": false,
+    "logloss": 0.769132,
+    "p_home": 0.536585,
+    "su_correct": false,
+    "utc_instant": "2026-08-30T21:00Z"
+   },
+   {
+    "brier": 0.287923,
+    "date_slice_would_have_split_cohort": false,
+    "final": "Golden State Valkyries 86 - Portland Fire 69",
+    "game": "wnba:GSV@PDX",
+    "game_pk": "ESPN_GAMEID:401857188",
+    "home_won": false,
+    "logloss": 0.769132,
+    "p_home": 0.536585,
+    "su_correct": false,
+    "utc_instant": "2026-08-30T23:00Z"
+   },
+   {
+    "brier": 0.214753,
+    "date_slice_would_have_split_cohort": true,
+    "final": "Connecticut Sun 71 - Dallas Wings 97",
+    "game": "wnba:CON@DAL",
+    "game_pk": "ESPN_GAMEID:401857189",
+    "home_won": true,
+    "logloss": 0.62253,
+    "p_home": 0.536585,
+    "su_correct": true,
+    "utc_instant": "2026-08-31T00:30Z"
+   }
+  ]
+ },
+ "BINDING": {
+  "aggregate_verdict": {
+   "aggregates_permitted": true,
+   "detail": {
+    "code": "BOUND",
+    "n_rows": 4,
+    "statistic": "any aggregate over wnba:2026-08-30"
+   }
+  },
+  "cohort_problems": [],
+  "counters": {
+   "CANONICAL_ID_MATCH": "4/4",
+   "DATE_COHERENCE_PASS": "4/4",
+   "REFUSED_ROWS": 0,
+   "RESULT_BINDING_PASS": "4/4"
+  },
+  "gradable": true
+ },
+ "COHORT_COVERAGE": {
+  "et_slate_game_ids": [
+   "401857186",
+   "401857187",
+   "401857188",
+   "401857189"
+  ],
+  "n_final": 4,
+  "n_in_et_slate": 4
+ },
+ "ET_DERIVATION": {
+  "cohort_stayed_whole": true,
+  "hazard_row": "ESPN_GAMEID:401857189 tips 2026-08-31T00:30Z",
+  "utc_slice_would_have": "filed it on 8/31 and split the cohort"
+ },
+ "LEDGER": {
+  "exposure_usd": 0,
+  "n_bets": 0,
+  "units": 0.0,
+  "wager_authority": "NO"
+ },
+ "SNAPSHOT": {
+  "local_copy": "/tmp/claude-0/-home-user-sports-model/60d4bacd-8ca4-52d5-a4b3-399d198cc22a/scratchpad/wnba_sched_f47c88d.parquet",
+  "path_in_repo": "wnba/schedules/parquet/wnba_schedule_2026.parquet",
+  "sha256": "c26d483f65875f604661916352da1f784aef635f006252991c81fdc2bd58f3ca"
+ },
+ "STANDING_SHAPE_WATCH": {
+  "prior_nights": {
+   "2026-08-29": {
+    "bias": -20.68,
+    "direction": "home under-projected",
+    "n": 2
+   }
+  },
+  "tonight_all_negative": false,
+  "tonight_residuals": [
+   -11.21,
+   18.21,
+   9.72,
+   -14.2
+  ],
+  "verdict": "SHAPE_BROKEN \u2014 2 of 4 tonight are negative; the 8/29 direction did not repeat uniformly. Not promoted either way."
+ },
+ "SUMMARIES": {
+  "wnba.fallback.STANDINGS_LOG5_v1": {
+   "brier": 0.15837,
+   "logloss": 0.48664,
+   "n": 4,
+   "su_record": "3-1"
+  },
+  "wnba.replacement.FEATURE_REFRESH": {
+   "brier": 0.202852,
+   "logloss": 0.576721,
+   "margin_bias": 0.63,
+   "margin_mae": 13.335,
+   "margin_n": 4,
+   "n": 4,
+   "su_record": "2-2"
+  },
+  "wnba.winner.EXPANDING_HOME_PRIOR": {
+   "brier": 0.251338,
+   "logloss": 0.695831,
+   "n": 4,
+   "su_record": "2-2"
+  }
+ },
+ "WARRANT": {
+  "board": "cards/2026-08-30_wnba_board.json",
+  "cohort_hash": "e034438fd2a618058f056effe9bc075ec879e944e583e400b6a06cde89d3c29a",
+  "grade": "FROZEN_REGISTERED_BOARD",
+  "stronger_than": "8/29's SELF_ASSERTED_PREGAME"
+ },
+ "record_id": "WNBA-BOARD-GRADING-2026-08-30",
+ "record_sha256": "12ee02a918e64cafa26aae3b8c90db9a67979ec56a0c8a5818bccfd1f5260037",
+ "schema": "ops.wnba_board_grading.v1",
+ "slate_date_et": "2026-08-30"
+}

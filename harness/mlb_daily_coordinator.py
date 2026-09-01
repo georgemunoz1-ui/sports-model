@@ -95,6 +95,34 @@ def canonical_schedule(date_et, relay_events, extra=()):
     return sched
 
 
+
+# Abbrev -> home park, ALL 30 clubs. Found 2026-08-31 while building the 9/1 board: the pf lookup
+# below fed B.VENUE (15 FULL-NAME keys from the 8/25 slate) with an ABBREV, so every game on the
+# 8/30 regression quietly ran at pf 1.0. A park factor that defaults is a feature that lies;
+# the lookup now refuses instead.
+HOME_PARK = {
+    "ARI": "Chase Field", "AZ": "Chase Field", "ATL": "Truist Park",
+    "ATH": "Sutter Health Park", "OAK": "Sutter Health Park",
+    "BAL": "Oriole Park at Camden Yards", "BOS": "Fenway Park", "CHC": "Wrigley Field",
+    "CIN": "Great American Ball Park", "CLE": "Progressive Field", "COL": "Coors Field",
+    "CWS": "Rate Field", "DET": "Comerica Park", "HOU": "Daikin Park",
+    "KC": "Kauffman Stadium", "LAA": "Angel Stadium", "LAD": "UNIQLO Field at Dodger Stadium",
+    "MIA": "loanDepot park", "MIL": "American Family Field", "MIN": "Target Field",
+    "NYM": "Citi Field", "NYY": "Yankee Stadium", "PHI": "Citizens Bank Park",
+    "PIT": "PNC Park", "SD": "Petco Park", "SEA": "T-Mobile Park", "SF": "Oracle Park",
+    "STL": "Busch Stadium", "TB": "Tropicana Field", "TEX": "Globe Life Field",
+    "TOR": "Rogers Centre", "WSH": "Nationals Park",
+}
+
+
+def park_factor(parks, home_abbrev):
+    """The home club's park factor, or a refusal. Never a silent 1.0."""
+    park = HOME_PARK.get(home_abbrev)
+    if park is None or park not in parks:
+        raise ValueError("PARK_FACTOR_ABSENT:%s" % home_abbrev)
+    return parks[park]
+
+
 def freeze_features(event, *, pid_map, rf, ra, parks, B, trials, slate_date):
     """Stage 2-4. Enrich and FREEZE. No price is read here and none is reachable from here."""
     aab, hab = event["away"], event["home"]
@@ -108,7 +136,7 @@ def freeze_features(event, *, pid_map, rf, ra, parks, B, trials, slate_date):
     import board_freshness as BF
     n_capped = int(capped(disp_a)) + int(capped(disp_h))
     dose = BF.game_dose([disp_a, disp_h])
-    pf = parks.get(B.VENUE.get(hab, ""), 1.0)
+    pf = park_factor(parks, hab)
     return {
         "event": event["event"], "away": aab, "home": hab,
         "away_starter": event.get("away_starter"), "home_starter": event.get("home_starter"),

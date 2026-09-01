@@ -300,7 +300,11 @@ for _m in ("result_provenance","result_content_checks","parse_box_dump",
            # satisfy. relay_parser makes a 4,461-line upload deterministic instead
            # of skim-dependent; mlb_daily_coordinator refuses to record a
            # non-mathematical reason as TRUE_NO_FORECAST.
-           "relay_parser","mlb_daily_coordinator"):
+           "relay_parser","mlb_daily_coordinator",
+           # The owner's v5 selection-first board, graded 2026-08-31. Every counter in
+           # that grading is generated from two literal tables and nothing else; the
+           # selftest is what keeps the generator honest when the tables change.
+           "grade_owner_v5_board"):
     _r=subprocess.run([sys.executable,f"harness/{_m}.py","--selftest"],capture_output=True,text=True)
     _out=(_r.stdout+_r.stderr).strip().splitlines()
     check(f"{_m} selftest ({_out[-1][:72] if _out else 'no output'})", _r.returncode==0)

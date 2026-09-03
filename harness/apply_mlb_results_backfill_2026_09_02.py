@@ -25,6 +25,7 @@ INGESTED_UTC = "2026-09-03T07:15:00Z"
 EXPECTED_START = "2026-08-24"
 EXPECTED_END = "2026-09-02"
 EXPECTED_NEW_GAMES = 135
+IDENTITY_FIELDS = ("date", "away", "home", "away_score", "home_score", "home_win", "margin", "total")
 
 
 def sha256_bytes(data: bytes) -> str:
@@ -33,19 +34,18 @@ def sha256_bytes(data: bytes) -> str:
 
 def load_evidence():
     games = []
-    evidence_hash = {}
     seen = set()
     for path in EVIDENCE:
         raw = path.read_bytes()
         payload = json.loads(raw)
-        evidence_hash[path] = sha256_bytes(raw)
+        evidence_sha = sha256_bytes(raw)
         inherited_date = payload.get("date")
         assert payload.get("source_tier") == 1, f"non-tier-1 evidence: {path}"
         for g in payload["games"]:
             game = dict(g)
             game["date"] = game.get("date") or inherited_date
             game["evidence_path"] = str(path.relative_to(BASE))
-            game["evidence_sha256"] = evidence_hash[path]
+            game["evidence_sha256"] = evidence_sha
             gid = str(game["gamePk"])
             assert gid.isdigit(), f"invalid gamePk {gid!r}"
             assert gid not in seen, f"duplicate evidence gamePk {gid}"
@@ -68,30 +68,13 @@ def load_evidence():
 def canonical_row(game, fieldnames):
     aw, hm = int(game["away_score"]), int(game["home_score"])
     values = {
-        "sport": "mlb",
-        "season": "2026",
-        "game_id": f"mlb:2026:{game['gamePk']}",
-        "date": game["date"],
-        "status": "final",
-        "away": game["away"],
-        "home": game["home"],
-        "away_score": str(aw),
-        "home_score": str(hm),
-        "home_win": "1" if hm > aw else "0",
-        "margin": str(hm - aw),
-        "total": str(hm + aw),
-        "neutral_site": str(int(game.get("neutral_site", 0))),
-        "venue": game["venue"],
-        "close_ml_away": "",
-        "close_ml_home": "",
-        "close_spread_home": "",
-        "close_total": "",
-        "features_json": "",
-        "source": "MLB.com Gameday",
-        "ingested_utc": INGESTED_UTC,
-        "source_tier": "1",
-        "result_status": "FINAL",
-        "evidence_path": game["evidence_path"],
+        "sport": "mlb", "season": "2026", "game_id": f"mlb:2026:{game['gamePk']}",
+        "date": game["date"], "status": "final", "away": game["away"], "home": game["home"],
+        "away_score": str(aw), "home_score": str(hm), "home_win": "1" if hm > aw else "0",
+        "margin": str(hm - aw), "total": str(hm + aw), "neutral_site": str(int(game.get("neutral_site", 0))),
+        "venue": game["venue"], "close_ml_away": "", "close_ml_home": "", "close_spread_home": "",
+        "close_total": "", "features_json": "", "source": "MLB.com Gameday", "ingested_utc": INGESTED_UTC,
+        "source_tier": "1", "result_status": "FINAL", "evidence_path": game["evidence_path"],
         "evidence_sha256": game["evidence_sha256"],
     }
     missing = set(fieldnames) - set(values)
@@ -102,55 +85,38 @@ def canonical_row(game, fieldnames):
 
 def render(apply: bool):
     with RESULTS.open(newline="", encoding="utf-8") as f:
-        reader = csv.DictReader(f)
-        fieldnames = reader.fieldnames
-        assert fieldnames, "results.csv missing header"
-        rows = list(reader)
-
+        reader = csv.DictReader(f); fieldnames = reader.fieldnames; rows = list(reader)
+    assert fieldnames, "results.csv missing header"
     old_ids = {r["game_id"] for r in rows}
     assert len(old_ids) == len(rows), "base results.csv already has duplicate game_id"
-    games = load_evidence()
-    generated = [canonical_row(g, fieldnames) for g in games]
-
-    additions = []
+    generated = [canonical_row(g, fieldnames) for g in load_evidence()]
     generated_by_id = {r["game_id"]: r for r in generated}
     existing_by_id = {r["game_id"]: r for r in rows}
+
+    overlaps=[]; conflicts=[]; additions=[]
     for gid, new in generated_by_id.items():
-        if gid in existing_by_id:
-            old = existing_by_id[gid]
-            # Idempotence only: an already-present row must describe the same game/result.
-            identity_fields = ("date", "away", "home", "away_score", "home_score", "home_win", "margin", "total")
-            assert all(old[k] == new[k] for k in identity_fields), f"conflicting existing row {gid}"
-        else:
-            additions.append(new)
+        if gid not in existing_by_id:
+            additions.append(new); continue
+        old=existing_by_id[gid]
+        diffs={k:{"existing":old[k],"official":new[k]} for k in IDENTITY_FIELDS if old[k] != new[k]}
+        if diffs: conflicts.append({"game_id":gid,"diffs":diffs})
+        else: overlaps.append(gid)
+    if conflicts:
+        print(json.dumps({"status":"CONFLICT","overlap_count":len(overlaps),"conflicts":conflicts}, sort_keys=True))
+        raise SystemExit(2)
 
     merged = rows + additions
     merged.sort(key=lambda r: (r["date"], r["game_id"]))
     ids = [r["game_id"] for r in merged]
     assert len(ids) == len(set(ids)), "duplicate game_id after merge"
     assert max(r["date"] for r in merged if r["status"] == "final") >= EXPECTED_END
-
-    buf = io.StringIO(newline="")
-    writer = csv.DictWriter(buf, fieldnames=fieldnames, lineterminator="\n")
-    writer.writeheader()
-    writer.writerows(merged)
-    out = buf.getvalue()
-
-    print(json.dumps({
-        "base_rows": len(rows),
-        "evidence_games": len(generated),
-        "new_rows": len(additions),
-        "merged_rows": len(merged),
-        "max_final_date": max(r["date"] for r in merged if r["status"] == "final"),
-        "output_sha256": hashlib.sha256(out.encode()).hexdigest(),
-        "mode": "apply" if apply else "check",
-    }, sort_keys=True))
-    if apply:
-        RESULTS.write_text(out, encoding="utf-8", newline="")
+    buf = io.StringIO(newline=""); writer = csv.DictWriter(buf, fieldnames=fieldnames, lineterminator="\n")
+    writer.writeheader(); writer.writerows(merged); out=buf.getvalue()
+    print(json.dumps({"base_rows":len(rows),"evidence_games":len(generated),"existing_verified_overlaps":len(overlaps),
+        "new_rows":len(additions),"merged_rows":len(merged),"max_final_date":max(r["date"] for r in merged if r["status"]=="final"),
+        "output_sha256":hashlib.sha256(out.encode()).hexdigest(),"mode":"apply" if apply else "check"}, sort_keys=True))
+    if apply: RESULTS.write_text(out, encoding="utf-8", newline="")
 
 
 if __name__ == "__main__":
-    p = argparse.ArgumentParser()
-    p.add_argument("--apply", action="store_true", help="rewrite canonical results.csv")
-    args = p.parse_args()
-    render(args.apply)
+    p=argparse.ArgumentParser(); p.add_argument("--apply", action="store_true"); args=p.parse_args(); render(args.apply)

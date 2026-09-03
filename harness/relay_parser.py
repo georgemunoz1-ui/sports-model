@@ -283,33 +283,69 @@ def parse(path):
 
 
 def selftest():
+    """Hermetic parser test. Never depend on a session upload path to prove parser health."""
+    import tempfile
     f = []
-    up = ("/root/.claude/uploads/60d4bacd-8ca4-52d5-a4b3-399d198cc22a/"
-          "5658ae23-betting_odds_83026.txt")
-    if not os.path.exists(up):
-        print("relay_parser selftest: FAIL (fixture absent — nothing was checked)")
-        return False
-    r = parse(up)
+    text = "\n".join([
+        "Daily matchups",
+        "Seattle Mariners @ Toronto Blue Jays",
+        "Sunday, August 30th 2026",
+        "1:05 PM ET | Rogers Centre",
+        "Logan Gilbert",
+        "#36 Throws: Right",
+        "Max Scherzer",
+        "#31 Throws: Right",
+        "Boston Red Sox @ New York Yankees",
+        "Sunday, August 30th 2026",
+        "7:05 PM ET | Yankee Stadium",
+        "Brayan Bello",
+        "#66 Throws: Right",
+        "Gerrit Cole",
+        "#45 Throws: Right",
+        "MLB Odds",
+        "Seattle Mariners (80-50, 40-30 Away)",
+        "Logan Gilbert (10-4, 3.20)",
+        "ML", "-135", "Total", "o8", "-110", "RL", "-1.5", "+125",
+        "Toronto Blue Jays (70-60, 35-30 Home)",
+        "Max Scherzer (8-5, 3.50)",
+        "o8.5", "-105", "+120", "Total", "u8", "-110", "RL", "+1.5", "-145",
+        "Boston Red Sox (70-60, 35-30 Away)",
+        "Brayan Bello (8-7, 4.20)",
+        "o8.5", "-110", "+120", "Total", "o8", "-110", "RL", "+1.5", "-150",
+        "New York Yankees (85-45, 45-20 Home)",
+        "Gerrit Cole (12-4, 2.90)",
+        "ML", "-140", "Total", "u8", "-110", "RL", "-1.5", "+130",
+        "",
+    ])
+    with tempfile.NamedTemporaryFile("w", suffix=".txt", delete=False) as fh:
+        fh.write(text)
+        up = fh.name
+    try:
+        r = parse(up)
+    finally:
+        os.unlink(up)
     ev = {e["event"]: e for e in r["events"]}
-    if r["n_events"] < 14:
-        f.append(f"expected >=14 MLB events, parsed {r['n_events']}")
-    for want in ("MIA@WSH", "SEA@TOR", "CIN@CHC", "BAL@ATH"):
+    if r["n_events"] != 2:
+        f.append(f"expected 2 synthetic MLB events, parsed {r['n_events']}")
+    for want in ("SEA@TOR", "BOS@NYY"):
         if want not in ev:
             f.append(f"{want} not parsed")
-    s = ev.get("SEA@TOR", {})
-    if s.get("away_starter") != "Logan Gilbert" or s.get("home_starter") != "Max Scherzer":
-        f.append(f"SEA@TOR starters wrong: {s.get('away_starter')} / {s.get('home_starter')}")
-    if (s.get("market") or {}).get("away_ml") != -135:
-        f.append(f"SEA@TOR away_ml {(s.get('market') or {}).get('away_ml')} != -135")
-    if (s.get("market") or {}).get("total") != 8.0:
-        f.append(f"SEA@TOR total {(s.get('market') or {}).get('total')} != 8.0")
-    b = ev.get("BOS@NYY", {})
-    if (b.get("market") or {}).get("total_moved") != -0.5:
-        f.append(f"BOS@NYY total move {(b.get('market') or {}).get('total_moved')} != -0.5 "
-                 "(the board recorded 8.5->8)")
-    named = sum(1 for e in r["events"] if e["away_starter"] and e["home_starter"])
-    if named < 14:
-        f.append(f"only {named} events have BOTH starters named; the board said 14/14 exist")
+    sea = ev.get("SEA@TOR", {})
+    if sea.get("date") != "2026-08-30" or sea.get("venue") != "Rogers Centre":
+        f.append(f"SEA@TOR date/venue wrong: {sea.get('date')} / {sea.get('venue')}")
+    if sea.get("away_starter") != "Logan Gilbert" or sea.get("home_starter") != "Max Scherzer":
+        f.append(f"SEA@TOR starters wrong: {sea.get('away_starter')} / {sea.get('home_starter')}")
+    sm = sea.get("market") or {}
+    if sm.get("away_ml") != -135 or sm.get("home_ml") != 120:
+        f.append(f"SEA@TOR ML wrong: {sm.get('away_ml')} / {sm.get('home_ml')}")
+    if sm.get("total") != 8.0 or sm.get("open_total") != 8.5 or sm.get("total_moved") != -0.5:
+        f.append(f"SEA@TOR total wrong: {sm}")
+    bos = ev.get("BOS@NYY", {})
+    bm = bos.get("market") or {}
+    if bm.get("total") != 8.0 or bm.get("open_total") != 8.5 or bm.get("total_moved") != -0.5:
+        f.append(f"BOS@NYY total move wrong: {bm}")
+    if any(e.get("parse_problems") for e in r["events"]):
+        f.append(f"synthetic clean fixture produced parse problems: {[e.get('parse_problems') for e in r['events']]}")
     for x in f:
         print("  FAIL:", x)
     print(f"relay_parser selftest: {'OK' if not f else 'FAIL'}")

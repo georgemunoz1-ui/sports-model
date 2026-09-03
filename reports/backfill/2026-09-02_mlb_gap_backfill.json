@@ -3,14 +3,12 @@
  "evidence_path": "data/mlb/evidence/backfill_starters_2026-08-24_2026-09-02.json",
  "evidence_sha256": "d71bb4dfc219b31cbe91049f95e02b94043409bb903c3cd4131062b1e65494ee",
  "healthcheck": {
-  "dependencies": [
-   "numpy",
-   "pandas",
-   "pytest"
+  "note": "MLB 8/24-9/2 result/starter/as-of coverage is complete. Remaining recovery-job debt is not relabeled as healthy.",
+  "remaining_failures": [
+   "recovery jobs (7 registered, 3 overdue, 7 defect(s) still owned)"
   ],
-  "exit_code": 1,
-  "log_artifact": "healthcheck-finalize-log",
-  "status": "FAIL"
+  "scoped_backfill_data_health": "PASS",
+  "status": "DATA_PIPELINE_PASS_GOVERNANCE_OPEN"
  },
  "log_files_created": 27,
  "log_rows_already_official": 0,

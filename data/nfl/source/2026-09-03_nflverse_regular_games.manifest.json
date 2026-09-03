@@ -1,0 +1,63 @@
+{
+  "captured_before_decision_time": true,
+  "coverage": {
+    "regular_season_rows": 272,
+    "season": 2026,
+    "week1_canonical_espn_ids": [
+      "401872656",
+      "401872657",
+      "401872661",
+      "401872925",
+      "401872923",
+      "401872660",
+      "401872659",
+      "401872922",
+      "401872658",
+      "401872924",
+      "401872926",
+      "401872928",
+      "401872927",
+      "401872929",
+      "401872930",
+      "401872931"
+    ],
+    "week1_rows": 16
+  },
+  "decision_time_utc": "2026-09-03T19:21:08Z",
+  "extraction": {
+    "columns": [
+      "game_id",
+      "season",
+      "game_type",
+      "week",
+      "gameday",
+      "gametime",
+      "away_team",
+      "away_score",
+      "home_team",
+      "home_score",
+      "espn"
+    ],
+    "filter": "game_type == REG",
+    "input_rows": 7548,
+    "retained_rows": 7239
+  },
+  "known_limits": [
+    "No 2026 player availability, quarterback, offensive-line, market, or action data is inferred from this schedule snapshot."
+  ],
+  "local_snapshot": {
+    "path": "data/nfl/source/2026-09-03_nflverse_regular_games.csv",
+    "rows": 7239,
+    "sha256": "7ae62f72bd671365baeb214d06a4fc26353f10efc3e406544328660a8febf388"
+  },
+  "record_id": "NFLVERSE-REGULAR-GAMES-2026-09-03",
+  "schema": "ops.source_snapshot.v1",
+  "source": {
+    "commit": "5e22ffd95b6cbe483a3120b14384f3b13b47ec0b",
+    "git_blob": "495a9a1675e4004192eff3946ad4bb0eafec552c",
+    "path": "data/games.csv",
+    "repository": "nflverse/nfldata",
+    "source_grade": "NAMED_ARCHIVE_WITH_CANONICAL_ESPN_ID"
+  },
+  "sport": "nfl"
+}

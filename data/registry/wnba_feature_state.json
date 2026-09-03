@@ -1,36 +1,54 @@
 {
- "as_of": "2026-07-22",
- "espn_single_family_extension": {
-  "artifact": "data/wnba/source/staging/EXTENSION_ESPN/ext_2026.json",
-  "artifact_sha256": "c48f66faa774ba85f4253d247afc0df0017cf3734082b04ccbe6c5ea68d2b27f",
-  "as_of": "2026-08-26",
-  "grade": "ESPN_SINGLE_FAMILY_GIT_ARTIFACT",
-  "n_games": 87,
-  "note": "the registered model runs current on this; official-plus-one canonical as_of stays 2026-07-22 until official-side artifacts bind",
-  "provenance": {
-   "commit": "b843138d82af8713dc564e6921b20947dc5c0081",
-   "repo": "github.com/sportsdataverse/wehoop-wnba-raw",
-   "retrieved_utc": "2026-08-26T18:29:06Z",
-   "schedule_sha256": "769591a74263f93627299b9df3c7f40be995e6696f04bd758a388a27c2d28b9a"
-  }
- },
- "provisional_extension": {
-  "as_of": "2026-08-26",
-  "canonical_as_of_unchanged": "2026-07-22",
-  "coverage": "48 scored + 1 outcome-only games, 10 of ~15 teams standings-validated",
-  "grade": "PROVISIONAL_SEARCH_ASSEMBLED",
-  "pool": "data/provisional/2026-08-26_results_pool.json",
-  "pool_sha256": "2624ce85b39274ade6230fbaaf46f0a3758f92137c7af8255a7d1fcbbb9c477a"
- },
- "record_id": "WNBA-FEATURE-STATE",
- "record_sha256": "e2cf61eeee2f412962db43e08a39b61fde99b7c6b488465931f8f98793e7c41c",
- "refresh_job": "RJ-005-WNBA-FEATURE-PIPELINE",
- "schema": "ops.feature_state.v1",
- "source_hashes": {
-  "staged_pool": "see data/wnba/MANIFEST.json \u2014 retained artifacts through 2026-07-22; nothing newer is bound"
- },
- "sport": "wnba",
- "staleness_policy": "wnba_feature_pipeline.STALENESS_THRESHOLD_DAYS = 2 for job launch; model ceiling 21 days for action",
- "statement": "the staged official pool ends 2026-07-22; every champion output since is ACTION_BLOCKED / DIAGNOSTIC_ONLY / NOT_PROMOTION_ELIGIBLE past the 21-day ceiling (34 days on 2026-08-25)",
- "updated_utc": "2026-08-26T18:50:00Z"
+  "as_of": "2026-07-22",
+  "espn_single_family_extension": {
+    "artifact": "data/wnba/source/staging/EXTENSION_ESPN/ext_2026.json",
+    "artifact_sha256": "c48f66faa774ba85f4253d247afc0df0017cf3734082b04ccbe6c5ea68d2b27f",
+    "as_of": "2026-08-26",
+    "grade": "ESPN_SINGLE_FAMILY_GIT_ARTIFACT",
+    "n_games": 87,
+    "note": "the registered model runs current on this; official-plus-one canonical as_of stays 2026-07-22 until official-side artifacts bind",
+    "provenance": {
+      "commit": "b843138d82af8713dc564e6921b20947dc5c0081",
+      "repo": "github.com/sportsdataverse/wehoop-wnba-raw",
+      "retrieved_utc": "2026-08-26T18:29:06Z",
+      "schedule_sha256": "769591a74263f93627299b9df3c7f40be995e6696f04bd758a388a27c2d28b9a"
+    }
+  },
+  "official_personnel_backfill": {
+    "reason": "Official injury/availability artifacts were not bound; roster or aggregator identification does not satisfy this component.",
+    "recovery_job": "RJ-005-WNBA-FEATURE-PIPELINE",
+    "remaining_units": 6,
+    "status": "INCOMPLETE"
+  },
+  "operational_extension_as_of": "2026-08-29",
+  "provisional_extension": {
+    "as_of": "2026-08-26",
+    "canonical_as_of_unchanged": "2026-07-22",
+    "coverage": "48 scored + 1 outcome-only games, 10 of ~15 teams standings-validated",
+    "grade": "PROVISIONAL_SEARCH_ASSEMBLED",
+    "pool": "data/provisional/2026-08-26_results_pool.json",
+    "pool_sha256": "2624ce85b39274ade6230fbaaf46f0a3758f92137c7af8255a7d1fcbbb9c477a"
+  },
+  "record_id": "WNBA-FEATURE-STATE",
+  "record_sha256": "08a411ca34acb552432d10a428a2629b8013f97cf95596327a8cdae782626029",
+  "refresh_job": "RJ-005-WNBA-FEATURE-PIPELINE",
+  "results_and_stats_backfill": {
+    "artifact": "data/wnba/source/staging/EXTENSION_ESPN/ext_2026.json",
+    "artifact_sha256": "4112f8b820976443d63ab3b8251bde463f39b934aebca8fe00f5be89a1e51045",
+    "as_of": "2026-08-29",
+    "missing": [],
+    "n_games": 95,
+    "source_commit": "5875eba831d8013ed28843353174d3557ba36db0",
+    "source_grade": "ESPN_SINGLE_FAMILY_GIT_ARTIFACT",
+    "status": "COMPLETE_THROUGH_LAST_INGESTED_GAME",
+    "verified_utc": "2026-09-03T19:21:08Z"
+  },
+  "schema": "ops.feature_state.v1",
+  "source_hashes": {
+    "staged_pool": "see data/wnba/MANIFEST.json — retained artifacts through 2026-07-22; nothing newer is bound"
+  },
+  "sport": "wnba",
+  "staleness_policy": "wnba_feature_pipeline.STALENESS_THRESHOLD_DAYS = 2 for job launch; model ceiling 21 days for action",
+  "statement": "Canonical official-plus-one state remains 2026-07-22 and is ACTION_BLOCKED. A separately labeled ESPN-family result/stat extension is complete through 2026-08-29 (95 games, missing=[]); official availability remains incomplete and no WNBA action status is implied.",
+  "updated_utc": "2026-09-03T19:21:08Z"
 }

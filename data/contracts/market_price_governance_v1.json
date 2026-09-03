@@ -1,0 +1,79 @@
+{
+  "schema": "governance.market_price_governance.v1",
+  "effective_date": "2026-09-03",
+  "core_rule": "FORECAST_AVAILABLE_PLUS_PRICE_UNAVAILABLE_EQUALS_FORECAST_REGISTERED_PLUS_NO_PRICE_PLUS_NO_WAGER",
+  "dependency_order": [
+    "FORECAST_BUNDLE",
+    "MARKET_PRICE_ACQUISITION",
+    "PRICE_QUALITY_CLASSIFIER",
+    "VALUATION",
+    "ACTION_AUTHORIZATION",
+    "WAGER_EXECUTION"
+  ],
+  "hard_invariants": [
+    "PRICE_UNAVAILABLE_MUST_NOT_SUPPRESS_FORECAST",
+    "FORECAST_MUST_FREEZE_BEFORE_PRICE_AUTHORIZATION",
+    "NO_PRICE_MUST_PRESERVE_VALID_FORECAST_FIELDS",
+    "NO_VALID_PRICE_MEANS_NO_EXECUTABLE_EV",
+    "NO_EXECUTABLE_EV_MEANS_NO_PLAY_AND_NO_STAKE",
+    "REFERENCE_EV_MUST_NEVER_AUTHORIZE_WAGER",
+    "SPREAD_RL_TOTAL_LINE_MISMATCH_REQUIRES_REPRICING_FROM_FROZEN_DISTRIBUTION",
+    "QUOTE_FRESHNESS_USES_SOURCE_QUOTE_TIME_NOT_INGEST_TIME",
+    "POST_START_PRICE_CANNOT_AUTHORIZE_PREGAME_ACTION",
+    "FALLBACK_PRICE_MUST_RETAIN_SOURCE_TIER_AND_METADATA"
+  ],
+  "market_states": [
+    "CAPTURED_FRESH",
+    "CAPTURED_RECHECK_REQUIRED",
+    "CROSS_SOURCE_CONFIRMED",
+    "CACHE_FRESH",
+    "STALE_PRICE",
+    "CONSENSUS_ONLY",
+    "NO_PRICE",
+    "MARKET_MISMATCH",
+    "SUSPENDED",
+    "POST_START"
+  ],
+  "action_eligible_market_states": ["CAPTURED_FRESH", "CROSS_SOURCE_CONFIRMED"],
+  "reference_only_market_states": [
+    "CAPTURED_RECHECK_REQUIRED",
+    "CACHE_FRESH",
+    "STALE_PRICE",
+    "CONSENSUS_ONLY"
+  ],
+  "source_tiers": {
+    "1": {"source": "DIRECT_EXECUTABLE_BOOK_QUOTE", "action": "YES"},
+    "2": {"source": "BOOK_LEVEL_TIMESTAMPED_AGGREGATOR", "action": "RECHECK_REQUIRED"},
+    "3": {"source": "INDEPENDENT_SECONDARY_PROVIDER", "action": "POLICY_CONDITIONAL"},
+    "4": {"source": "INTERNAL_CACHED_PREGAME_QUOTE", "action": "DEFAULT_NO"},
+    "5": {"source": "CURRENT_MULTI_BOOK_CONSENSUS", "action": "NO"},
+    "6": {"source": "OPENING_OR_EARLIER_SNAPSHOT", "action": "NO"},
+    "7": {"source": "CLOSING_LINE", "action": "NEVER_PREGAME"},
+    "8": {"source": "DERIVED_MARKET_ESTIMATE", "action": "NEVER"},
+    "9": {"source": "LLM_WEB_SNIPPET_MEMORY_OR_GUESS", "action": "NEVER"}
+  },
+  "freshness_policy_seconds": [
+    {"min_minutes_to_start": 360, "max_quote_age_seconds": 1800},
+    {"min_minutes_to_start": 120, "max_quote_age_seconds": 900},
+    {"min_minutes_to_start": 30, "max_quote_age_seconds": 300},
+    {"min_minutes_to_start": 10, "max_quote_age_seconds": 120},
+    {"min_minutes_to_start": 0, "max_quote_age_seconds": 60}
+  ],
+  "ev_fields": {
+    "reference_ev_per_unit": "NON_EXECUTABLE_REFERENCE_ONLY",
+    "executable_ev_per_unit": "EXACT_ACTION_ELIGIBLE_QUOTE_ONLY"
+  },
+  "provider_states": ["HEALTHY", "DEGRADED", "LIMITED", "OUTAGE", "QUOTA_EXHAUSTED"],
+  "retry_policy_seconds": [0, 15, 60, 300],
+  "required_action_quote_fields": [
+    "event_id",
+    "market_type",
+    "selection_key",
+    "book",
+    "american_odds",
+    "quote_timestamp_utc",
+    "ingested_at_utc",
+    "source_tier",
+    "execution_verified"
+  ]
+}

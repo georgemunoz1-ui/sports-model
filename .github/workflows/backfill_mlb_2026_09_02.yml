@@ -1,0 +1,61 @@
+name: Temporary MLB backfill 2026-09-02
+
+on:
+  push:
+    branches:
+      - backfill-2026-09-02
+
+permissions:
+  contents: write
+
+jobs:
+  apply-backfill:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: backfill-2026-09-02
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Validate evidence and apply canonical backfill
+        run: |
+          python harness/apply_mlb_results_backfill_2026_09_02.py --apply
+          python harness/apply_mlb_results_backfill_2026_09_02.py
+      - name: Targeted result-integrity gate
+        run: |
+          python - <<'PY'
+          import csv
+          from collections import Counter
+          p='data/backfill/mlb/2026/results.csv'
+          rows=list(csv.DictReader(open(p, newline='', encoding='utf-8')))
+          ids=[r['game_id'] for r in rows]
+          assert len(ids)==len(set(ids)), 'duplicate game_id'
+          finals=[r for r in rows if r['status']=='final']
+          assert max(r['date'] for r in finals)=='2026-09-02'
+          added=[r for r in finals if '2026-08-24' <= r['date'] <= '2026-09-02']
+          c=Counter(r['date'] for r in added)
+          expected={'2026-08-24':10,'2026-08-25':15,'2026-08-26':15,'2026-08-27':7,'2026-08-28':15,'2026-08-29':17,'2026-08-30':14,'2026-08-31':12,'2026-09-01':15,'2026-09-02':15}
+          assert dict(sorted(c.items()))==expected, (dict(sorted(c.items())), expected)
+          for r in added:
+              a,h=int(r['away_score']),int(r['home_score'])
+              assert int(r['home_win']) == int(h>a)
+              assert int(r['margin']) == h-a
+              assert int(r['total']) == h+a
+              assert r['source_tier']=='1' and r['result_status']=='FINAL'
+              assert r['evidence_path'] and len(r['evidence_sha256'])==64
+          print(f'BACKFILL_GATE_OK rows={len(rows)} added_window={len(added)} max_final=2026-09-02')
+          PY
+      - name: Commit canonical result file
+        run: |
+          if git diff --quiet -- data/backfill/mlb/2026/results.csv; then
+            echo 'No canonical changes required'
+            exit 0
+          fi
+          git config user.name 'sports-model-backfill-bot'
+          git config user.email 'sports-model-backfill-bot@users.noreply.github.com'
+          git add data/backfill/mlb/2026/results.csv
+          git commit -m 'Backfill MLB canonical results through 2026-09-02'
+          git push origin HEAD:backfill-2026-09-02

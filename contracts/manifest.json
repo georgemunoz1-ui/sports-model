@@ -1,0 +1,18 @@
+{
+  "manifest_version": "1.0",
+  "active_contracts": {
+    "decision_authority": {
+      "policy_version": "parlay-policy-v1.0",
+      "policy": "contracts/decision/policy_v1.json",
+      "schemas": {
+        "forecast": "contracts/decision/forecast.schema.json",
+        "eligible_leg": "contracts/decision/eligible_leg.schema.json",
+        "candidate_ticket": "contracts/decision/candidate_ticket.schema.json",
+        "sealed_decision": "contracts/decision/sealed_decision.schema.json",
+        "renderer_output": "contracts/decision/renderer_output.schema.json"
+      },
+      "gate": "harness/decision_contracts.py --gate",
+      "tests": "harness/test_decision_contracts.py"
+    }
+  }
+}

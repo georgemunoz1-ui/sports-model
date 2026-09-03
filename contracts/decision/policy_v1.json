@@ -1,0 +1,31 @@
+{
+  "policy_version": "parlay-policy-v1.0",
+  "status": "ACTIVE",
+  "doctrine": [
+    "Forecast estimates outcomes.",
+    "Calibration corrects confidence.",
+    "Pricing evaluates exact odds.",
+    "Eligibility determines whether a market may enter optimization.",
+    "The optimizer constructs or rejects candidate tickets.",
+    "Portfolio controls correlated exposure.",
+    "Execution validates liquidity, fill price, and stake feasibility.",
+    "The LLM explains the immutable result."
+  ],
+  "invariants": {
+    "ELIGIBILITY_INVARIANCE": "Changing bankroll amount, requested payout, requested leg count, or wording must not change forecast probabilities, calibrated probabilities, conservative probabilities, market EV, eligibility reasons, eligible-leg universe, or candidate universe at the valuation layer.",
+    "EXECUTION_SENSITIVITY": "Changing requested stake may change executable price, slippage, liquidity tier, maximum executable stake, portfolio exposure, and final execution approval only after theoretical eligibility is fixed.",
+    "NO_BET_IS_SUCCESS": "No validated ticket is a valid successful output and must not be overridden by the renderer.",
+    "LEG_COUNT_NONBINDING": "A requested number of legs constrains candidate search but never authorizes manufacturing an ineligible leg.",
+    "BANKROLL_DOES_NOT_CREATE_ELIGIBILITY": "Bankroll may size or cap an approved position; it may not create edge or alter the eligible-leg universe.",
+    "SEALED_TICKET_IMMUTABLE": "Once a decision object is emitted, any different leg combination requires a new candidate_id, decision_id, EV calculation, and approval cycle.",
+    "LLM_NON_MUTATING": "The LLM may explain, summarize, and render only; it may not add, remove, replace, reprice, restake, or override a sealed decision.",
+    "CLV_EVALUATION_ONLY": "Closing-line information is evaluation evidence and may never retroactively enter the pregame forecast or original decision features."
+  },
+  "joint_probability_tiers": {
+    "0": {"method": "NONE", "action": "REJECT"},
+    "1": {"method": "VALIDATED_APPROXIMATION", "action": "WATCHLIST_ONLY"},
+    "2": {"method": "APPROVED_INDEPENDENCE", "action": "TWO_LEG_CANDIDATE_ONLY"},
+    "3": {"method": "SHARED_MONTE_CARLO", "action": "CANDIDATE_EVALUATION"},
+    "4": {"method": "FULL_SIM_PLUS_EXECUTION_SENSITIVITY", "action": "FINAL_HIGH_STAKE_APPROVAL"}
+  }
+}

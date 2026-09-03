@@ -1,0 +1,21 @@
+{
+  "schema": "ops.release_policy.v1",
+  "policy_id": "MULTISPORT-RELEASE-2026-09-03",
+  "coverage_start": "2026-08-24",
+  "enabled_sports": ["mlb", "wnba", "nfl", "cfb"],
+  "enabled_markets": ["ML", "SPREAD_OR_RUN_LINE", "TOTAL"],
+  "action_authority": "NO",
+  "required_gates": [
+    "backfill", "event_coverage", "data_contract", "freshness", "point_in_time",
+    "forecast_contract", "calibration", "market_mapping", "execution", "evaluation",
+    "regression", "monitoring"
+  ],
+  "global_rule": "Every enabled sport is evaluated independently; the global state is the worst sport state.",
+  "fail_closed_rules": [
+    "Unknown event identity is BLOCKED, never silently dropped.",
+    "Any input timestamp after decision_time_utc is a lookahead violation.",
+    "NOT_APPLICABLE is valid only for a named gate or a zero-game date and cannot erase another blocker.",
+    "SHADOW_ONLY never becomes HEALTHY by inheritance.",
+    "A release manifest is an audit artifact and does not authorize wagers."
+  ]
+}

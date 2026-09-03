@@ -4338,3 +4338,23 @@ with direct HTTP disabled by default — as delivered it called urlopen against 
 which this environment does not permit.
 
 Ledger unchanged: 0 bets, 0.00 units, $0. Wager authority NO.
+
+## 2026-09-03 — multi-sport update ingested and release gate made executable
+
+The six owner notes are now represented by an executable outer release contract. The new
+`release_gate` evaluates MLB, WNBA, NFL and CFB independently across twelve named gates, requires
+every discovered event to carry a terminal disposition, rejects future-dated evidence, binds the
+release artifact to the input bytes, and sets global health to the worst sport state. It is wired
+into both the module identity manifest and the repository healthcheck.
+
+The 18:40:16Z point-in-time capture found 9 MLB games and 11 CFB games. MLB game identities bind to
+official gamePk values; three games were already underway and are explicitly post-start blocked.
+The remaining six are blocked because current forecast, critical pregame input and exact-price
+artifacts are absent. The 11 CFB games are retained rather than dropped, but their schedule source
+is IDENTIFIED_UNCONFIRMED and canonical event ids remain null. WNBA is in its declared FIBA break
+and the NFL regular season has not begun, so each has a zero-game date disposition; their older
+backfill and model-restoration blockers remain active.
+
+Release result: **BLOCKED** for all four sports, 20/20 discovered events classified, zero contract
+problems, zero evidence-hash binding problems. No model probability, edge, selection, or price was
+invented. Ledger unchanged: 0 bets, 0.00 units, $0. Wager authority NO.

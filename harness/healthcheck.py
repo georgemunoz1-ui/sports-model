@@ -269,7 +269,7 @@ for _m in ("result_provenance","result_content_checks","parse_box_dump",
            "uncertainty_estimand","decision_view",
            # Pregame Decision Readiness v1.0, registered 2026-08-25
            "route_ladder_v1","checkpoint_schedule","readiness_gate","replacement_workflow",
-           "module_manifest","pipeline_e2e","recovery_jobs","result_display","adaptive_challenger","state_coherence",
+           "module_manifest","pipeline_e2e","recovery_jobs","release_gate","result_display","adaptive_challenger","state_coherence",
            # 2026-08-25 owner correction: staleness launches a job; exhaustion publishes a failure
            "wnba_feature_pipeline",
            # 2026-08-30 MC CONVERGENCE PORT (P0-MC-CONVERGENCE-2026-08-30). The mc_engine
@@ -555,6 +555,21 @@ try:
             print(f"       ! OVERDUE {_r2['job_id']} {_r2['progress']} due {_r2['deadline_utc']}")
 except Exception as e:
     check(f"recovery jobs ({e})", False)
+
+# 6e2. MULTI-SPORT RELEASE MANIFEST (owner notes ingested 2026-09-03). The daily update must
+# classify every enabled sport and scheduled event, bind to immutable evidence bytes, and fail
+# closed unless the worst sport is HEALTHY. A red release is an honest build failure, not a skip.
+try:
+    _r=subprocess.run([sys.executable,"harness/release_gate.py",
+                       "--evidence","data/acquisition/2026-09-03_update.json",
+                       "--manifest","data/releases/2026-09-03_release.json","--gate"],
+                      capture_output=True,text=True)
+    _rr=json.loads(_r.stdout) if _r.stdout.strip().startswith("{") else {}
+    check(f"2026-09-03 multi-sport release ({_rr.get('global_status','no output')}; "
+          f"{len(_rr.get('artifact_problems') or [])} artifact problem(s), "
+          f"{len(_rr.get('contract_problems') or [])} contract problem(s))", _r.returncode==0)
+except Exception as e:
+    check(f"2026-09-03 multi-sport release ({e})", False)
 
 # 6f. WNBA FEATURE STALENESS LAUNCHES A JOB (owner correction 2026-08-25). Features past the
 #     threshold with no ACTIVE five-component refresh job fail the build — staleness may not sit

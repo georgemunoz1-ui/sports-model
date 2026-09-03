@@ -1,6 +1,24 @@
 {
- "generated_utc": "2026-08-31T00:15:00Z",
+ "generated_utc": "2026-09-03T18:40:16Z",
  "patches": [
+  {
+   "patch_id": "MULTISPORT-RELEASE-GATE-2026-09-03",
+   "status": "IMPLEMENTED_RELEASE_BLOCKED",
+   "severity": "P0",
+   "scope": ["mlb", "wnba", "nfl", "cfb", "daily acquisition", "release governance"],
+   "changes": [
+    "Ingested the 2026-09-03 schedule/status evidence for all enabled sports with point-in-time capture metadata.",
+    "Added a fail-closed release evaluator covering twelve required gates per sport; global health is the worst sport state.",
+    "Bound the dated release artifact to the acquisition evidence SHA-256 and registered the evaluator in the module manifest and healthcheck.",
+    "Explicitly blocked events lacking current forecasts, fresh prices, required inputs, or canonical identity; no probability or selection was fabricated."
+   ],
+   "verification": {
+    "module_selftest": "release_gate selftest: OK",
+    "contract": "20/20 scheduled events classified; zero contract problems; zero artifact-binding problems",
+    "release_result": "BLOCKED: MLB 9/9 classified, CFB 11/11 classified, WNBA and NFL zero-game date dispositions recorded"
+   },
+   "ledger_effect": "NONE. wager authority NO, exposure $0."
+  },
   {
    "acceptance_test": "ACQUISITION-ACCEPTANCE-2026-08-31. Two games, no owner upload, primary rail genuinely blocked. Seven BLOCKED, one NOT_FOUND and one STALE_REJECTED all advanced; current availability, a 12-game MLB slate and a probable starter were acquired at rung 6; forecasts were produced for both games; actionability gated separately and PASSed for reasons unrelated to forecast availability.",
    "architectural_correction": "WebFetch and WebSearch are TOOLS IN THE AGENT LOOP, not Python callables. No Python function can invoke them, so a session-bootstrap `get=` implementation is not constructible in this deployment. feed_espn and acquisition_adapters keep refusing by default and that stays correct. The orchestrator DRIVES the agent loop instead of replacing it, and the CI gate is the real enforcement because it catches premature termination whoever caused it.",

@@ -1,18 +1,18 @@
 {
  "schema_version": "ml-asof-v1",
- "built_utc": "2026-08-25T04:20:44Z",
- "row_count": 1943,
- "eligible_for_evaluation": 1345,
- "flagged_rows": 598,
- "vintage_sha256": "528aee678d37604a17b9174bbce49d4f59eeeca30b6b3aabd1c9f06d8a51ba9d",
+ "built_utc": "2026-09-03T11:22:49Z",
+ "row_count": 2078,
+ "eligible_for_evaluation": 1454,
+ "flagged_rows": 624,
+ "vintage_sha256": "9cfc539d54dc16b343b771589278614d6d1d40cc30914c0638b05359d229afc9",
  "source_hashes": {
   "park_factors": "f99f38b1042b0771ae850dc9aa506498c14e963064b72e110371ea9b48420793",
   "pitchers": "a350ff454f247019e56bd39c6a6e2d393f0ffc5999cb079fb88be55a5e98d6a7",
-  "placeholder_manifest": "5a646765b588766428d47cd7218b55990fec5b26331e6c118e10c4b377f87ec9",
-  "results": "2e8483027359655773d2c9f5f87f2209605738d136df79dc2ff18680795f1df2",
-  "starters": "2d61ebfa4dfb5c32fc09e615b7f4ff5913a17566e1646a565c7f5bf85cd5ef5a"
+  "placeholder_manifest": "f8fbb9bdcb805790a0229e9f824c296ec133f17dcbcd765b9bd4300e16d7df69",
+  "results": "5348addff757908489148ba4aa3bf45c1a4b3362edc82271fa2045fcd310b349",
+  "starters": "dd403bfc3bab404b2900c3c873310441277e271c7d73b9017e60bb651c19d2ad"
  },
- "log_composite_sha256": "a453abca8d9161d7cdbc95abfc9742682379f2952afd614c030f3877bca02872",
+ "log_composite_sha256": "1c80c154bee0a395eed47a6582f793ccc51a6de62f58af40275a129f51e03688",
  "time_rule": "strict date < slate_date; same-day admissible only with source timestamps (none exist -> excluded); doubleheaders start-of-day",
  "determinism": "rows sorted (slate_date, gamePk); no wall-clock in dataset bytes; vintage = sha256(dataset.jsonl)"
 }

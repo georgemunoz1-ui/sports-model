@@ -1,0 +1,136 @@
+name: Temporary MLB starter-log backfill 2026-09-02
+
+on:
+  push:
+    branches:
+      - backfill-2026-09-02
+
+permissions:
+  contents: write
+
+jobs:
+  backfill-starters:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: backfill-2026-09-02
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Backfill official starter box-score rows
+        id: backfill
+        shell: bash
+        env:
+          BACKFILL_RETRIEVED_AT_UTC: '2026-09-03T08:30:00Z'
+        run: |
+          set +e
+          python harness/backfill_mlb_starter_logs_2026_09_02.py --apply > starter-backfill.log 2>&1
+          code=$?
+          cat starter-backfill.log
+          echo "exit_code=$code" >> "$GITHUB_OUTPUT"
+          exit 0
+
+      - name: Upload starter-backfill diagnostic log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: starter-backfill-log
+          path: starter-backfill.log
+
+      - name: Stop on starter backfill failure
+        if: steps.backfill.outputs.exit_code != '0'
+        run: exit 1
+
+      - name: Verify deterministic re-run
+        shell: bash
+        env:
+          BACKFILL_RETRIEVED_AT_UTC: '2026-09-03T08:30:00Z'
+        run: |
+          before=$(git diff -- data/backfill/mlb/2026/pitcher_logs data/mlb/evidence/backfill_starters_2026-08-24_2026-09-02.json reports/backfill/2026-09-02_mlb_gap_backfill.json | sha256sum | cut -d' ' -f1)
+          python harness/backfill_mlb_starter_logs_2026_09_02.py > starter-backfill-rerun.log 2>&1
+          after=$(git diff -- data/backfill/mlb/2026/pitcher_logs data/mlb/evidence/backfill_starters_2026-08-24_2026-09-02.json reports/backfill/2026-09-02_mlb_gap_backfill.json | sha256sum | cut -d' ' -f1)
+          cat starter-backfill-rerun.log
+          test "$before" = "$after"
+
+      - name: Targeted 8/24 through 9/2 model-input coverage gate
+        run: |
+          python - <<'PY'
+          import csv,json
+          from collections import Counter
+          from pathlib import Path
+          results=list(csv.DictReader(open('data/backfill/mlb/2026/results.csv',newline='',encoding='utf-8')))
+          rows=[r for r in results if r['status']=='final' and '2026-08-24'<=r['date']<='2026-09-02']
+          expected={'2026-08-24':10,'2026-08-25':15,'2026-08-26':15,'2026-08-27':7,'2026-08-28':15,'2026-08-29':17,'2026-08-30':14,'2026-08-31':12,'2026-09-01':15,'2026-09-02':15}
+          assert len(rows)==135
+          assert dict(sorted(Counter(r['date'] for r in rows).items()))==expected
+          ev=json.load(open('data/mlb/evidence/backfill_starters_2026-08-24_2026-09-02.json'))
+          slots=ev['starter_slots']; assert len(slots)==270
+          assert max(x['date'] for x in slots)=='2026-09-02'
+          for x in slots:
+              p=Path(f"data/backfill/mlb/2026/pitcher_logs/{x['pitcher_id']}.txt")
+              assert p.exists(), p
+              target=f"{x['date']}|{x['opp']}|{x['IP']}|{x['ER']}|{x['SO']}|{x['BB']}|{x['TBF']}|1"
+              matches=[ln for ln in p.read_text().splitlines() if ln==target]
+              assert len(matches)==1,(p,target,matches)
+          ph=json.load(open('data/backfill/mlb/2026/pitcher_logs/_placeholders.json'))
+          phkeys={(str(r['pitcher_id']),r['date']) for r in ph.get('rows',[])}
+          official={(str(x['pitcher_id']),x['date']) for x in slots}
+          assert not (phkeys & official), sorted(phkeys & official)[:10]
+          print(f'MLB_INPUT_COVERAGE_OK results=135/135 starter_slots=270/270 max_obs=2026-09-02 unique_pitchers={len({x["pitcher_id"] for x in slots})}')
+          PY
+
+      - name: Run full repository healthcheck
+        id: health
+        shell: bash
+        run: |
+          set +e
+          python harness/healthcheck.py > healthcheck-backfill.log 2>&1
+          code=$?
+          cat healthcheck-backfill.log
+          echo "exit_code=$code" >> "$GITHUB_OUTPUT"
+          exit 0
+
+      - name: Upload full healthcheck log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: healthcheck-backfill-log
+          path: healthcheck-backfill.log
+
+      - name: Bind healthcheck result into backfill report
+        if: always() && steps.backfill.outputs.exit_code == '0'
+        env:
+          HEALTH_EXIT: ${{ steps.health.outputs.exit_code }}
+        run: |
+          python - <<'PY'
+          import json,os
+          p='reports/backfill/2026-09-02_mlb_gap_backfill.json'
+          d=json.load(open(p))
+          code=int(os.environ.get('HEALTH_EXIT') or 999)
+          d['healthcheck']={'status':'PASS' if code==0 else 'FAIL','exit_code':code,'log_artifact':'healthcheck-backfill-log'}
+          open(p,'w').write(json.dumps(d,indent=1,sort_keys=True)+'\n')
+          PY
+
+      - name: Commit verified starter-data repair
+        if: steps.backfill.outputs.exit_code == '0'
+        run: |
+          git config user.name 'sports-model-backfill-bot'
+          git config user.email 'sports-model-backfill-bot@users.noreply.github.com'
+          git add data/backfill/mlb/2026/pitcher_logs \
+                  data/mlb/evidence/backfill_starters_2026-08-24_2026-09-02.json \
+                  reports/backfill/2026-09-02_mlb_gap_backfill.json
+          if git diff --cached --quiet; then
+            echo 'No starter-data changes required'
+            exit 0
+          fi
+          git commit -m 'Backfill official MLB starter logs through 2026-09-02'
+          git push origin HEAD:backfill-2026-09-02
+
+      - name: Enforce repository health after preserving diagnostics
+        if: steps.health.outputs.exit_code != '0'
+        run: exit 1

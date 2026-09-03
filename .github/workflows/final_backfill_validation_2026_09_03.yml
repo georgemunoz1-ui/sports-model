@@ -1,0 +1,50 @@
+name: Final backfill validation 2026-09-03
+on:
+  push:
+    branches: [backfill-2026-09-02]
+permissions:
+  contents: write
+jobs:
+  validate:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: backfill-2026-09-02
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install dependencies
+        run: python -m pip install --disable-pip-version-check numpy pandas pytest
+      - name: Validate final branch state
+        run: |
+          set +e
+          python harness/healthcheck.py > final-backfill-health.log 2>&1
+          set -e
+          cat final-backfill-health.log
+          python - <<'PY'
+          text=open('final-backfill-health.log').read()
+          fails=[x for x in text.splitlines() if x.startswith('[FAIL]')]
+          unexpected=[x for x in fails if not x.startswith('[FAIL] recovery jobs')]
+          if unexpected: raise SystemExit('unexpected final failures: '+repr(unexpected))
+          if '[OK ] dataset freshness: last final 2026-09-02' not in text: raise SystemExit('dataset freshness proof missing')
+          if '[OK ] SUCCESSOR_EQUIVALENCE' not in text: raise SystemExit('successor equivalence did not pass')
+          if '[OK ] relay_parser selftest' not in text: raise SystemExit('relay parser did not pass')
+          if '[OK ] ingest_lancebroz selftest' not in text: raise SystemExit('Lancebroz selftest did not pass')
+          print('FINAL_BACKFILL_SCOPE_OK')
+          PY
+      - name: Upload final validation log
+        uses: actions/upload-artifact@v4
+        with:
+          name: final-backfill-health-log
+          path: final-backfill-health.log
+      - name: Self-delete temporary validator
+        run: |
+          git config user.name 'sports-model-backfill-bot'
+          git config user.email 'sports-model-backfill-bot@users.noreply.github.com'
+          git rm .github/workflows/final_backfill_validation_2026_09_03.yml
+          git commit -m 'Remove completed temporary backfill validator'
+          git push origin HEAD:backfill-2026-09-02

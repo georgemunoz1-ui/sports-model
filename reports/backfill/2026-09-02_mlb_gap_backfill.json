@@ -1,0 +1,42 @@
+{
+ "errors": [],
+ "evidence_path": "data/mlb/evidence/backfill_starters_2026-08-24_2026-09-02.json",
+ "evidence_sha256": "d71bb4dfc219b31cbe91049f95e02b94043409bb903c3cd4131062b1e65494ee",
+ "healthcheck": {
+  "exit_code": 1,
+  "log_artifact": "healthcheck-backfill-log",
+  "status": "FAIL"
+ },
+ "log_files_created": 27,
+ "log_rows_already_official": 0,
+ "log_rows_appended": 86,
+ "log_rows_normalized": 0,
+ "log_rows_replaced_lean": 184,
+ "max_starter_observation_date": "2026-09-02",
+ "placeholder_rows_superseded": 184,
+ "record_id": "MLB-GAP-BACKFILL-2026-09-02",
+ "result_counts_by_date": {
+  "2026-08-24": 10,
+  "2026-08-25": 15,
+  "2026-08-26": 15,
+  "2026-08-27": 7,
+  "2026-08-28": 15,
+  "2026-08-29": 17,
+  "2026-08-30": 14,
+  "2026-08-31": 12,
+  "2026-09-01": 15,
+  "2026-09-02": 15
+ },
+ "result_coverage_pct": 100.0,
+ "result_games_expected": 135,
+ "result_games_present": 135,
+ "starter_coverage_pct": 100.0,
+ "starter_slots_expected": 270,
+ "starter_slots_fetched": 270,
+ "status": "BACKFILL_COMPLETE",
+ "unique_pitchers_touched": 177,
+ "window": [
+  "2026-08-24",
+  "2026-09-02"
+ ]
+}

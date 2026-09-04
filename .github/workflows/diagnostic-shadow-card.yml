@@ -39,6 +39,13 @@ on:
         required: true
         default: true
         type: boolean
+  repository_dispatch:
+    types: [shadow-card-request]
+  push:
+    branches:
+      - codex/nfl-wnba-nba-models-v1
+    paths:
+      - "card_requests/*.json"
 
 permissions:
   contents: read
@@ -52,12 +59,89 @@ jobs:
     steps:
       - name: Checkout requested ref
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - name: Resolve request
+        id: resolve
+        shell: bash
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          INPUT_CARD_DATE: ${{ inputs.card_date }}
+          INPUT_LEAGUE: ${{ inputs.league }}
+          INPUT_AS_OF_UTC: ${{ inputs.as_of_utc }}
+          INPUT_SIMULATION_COUNT: ${{ inputs.simulation_count }}
+          INPUT_MODE: ${{ inputs.mode }}
+          INPUT_PUBLISH_SUMMARY: ${{ inputs.publish_summary }}
+          DISPATCH_REQUEST_ID: ${{ github.event.client_payload.request_id }}
+          DISPATCH_CARD_DATE: ${{ github.event.client_payload.card_date }}
+          DISPATCH_LEAGUE: ${{ github.event.client_payload.league }}
+          DISPATCH_AS_OF_UTC: ${{ github.event.client_payload.as_of_utc }}
+          DISPATCH_SIMULATION_COUNT: ${{ github.event.client_payload.simulation_count }}
+          DISPATCH_MODE: ${{ github.event.client_payload.mode }}
+          DISPATCH_PUBLISH_SUMMARY: ${{ github.event.client_payload.publish_summary }}
+        run: |
+          python - <<'PY'
+          import json, os, subprocess
+          from pathlib import Path
+
+          event = os.environ["EVENT_NAME"]
+          if event == "push":
+              names = subprocess.check_output(
+                  ["git", "diff-tree", "--no-commit-id", "--name-only", "-r", os.environ["GITHUB_SHA"]],
+                  text=True,
+              ).splitlines()
+              candidates = sorted(n for n in names if n.startswith("card_requests/") and n.endswith(".json"))
+              if not candidates:
+                  raise SystemExit("CARD_REQUEST_FILE_NOT_FOUND")
+              request_path = Path(candidates[-1])
+              req = json.loads(request_path.read_text())
+              request_id = str(req.get("request_id") or request_path.stem)
+              card_date = str(req["card_date"])
+              league = str(req["league"]).lower()
+              as_of_utc = str(req["as_of_utc"])
+              simulation_count = str(req.get("simulation_count", 100000))
+              mode = str(req.get("mode", "diagnostic_shadow"))
+              publish_summary = str(req.get("publish_summary", True)).lower()
+          elif event == "repository_dispatch":
+              request_id = os.environ.get("DISPATCH_REQUEST_ID") or f"repo-dispatch-{os.environ['GITHUB_RUN_ID']}"
+              card_date = os.environ["DISPATCH_CARD_DATE"]
+              league = os.environ["DISPATCH_LEAGUE"].lower()
+              as_of_utc = os.environ["DISPATCH_AS_OF_UTC"]
+              simulation_count = os.environ.get("DISPATCH_SIMULATION_COUNT") or "100000"
+              mode = os.environ.get("DISPATCH_MODE") or "diagnostic_shadow"
+              publish_summary = (os.environ.get("DISPATCH_PUBLISH_SUMMARY") or "true").lower()
+          else:
+              request_id = f"manual-{os.environ['GITHUB_RUN_ID']}"
+              card_date = os.environ["INPUT_CARD_DATE"]
+              league = os.environ["INPUT_LEAGUE"].lower()
+              as_of_utc = os.environ["INPUT_AS_OF_UTC"]
+              simulation_count = os.environ.get("INPUT_SIMULATION_COUNT") or "100000"
+              mode = os.environ.get("INPUT_MODE") or "diagnostic_shadow"
+              publish_summary = (os.environ.get("INPUT_PUBLISH_SUMMARY") or "true").lower()
+
+          if league not in {"mlb", "cfb", "nfl", "wnba", "nba"}:
+              raise SystemExit(f"unsupported league: {league}")
+
+          outputs = {
+              "request_id": request_id,
+              "card_date": card_date,
+              "league": league,
+              "as_of_utc": as_of_utc,
+              "simulation_count": simulation_count,
+              "mode": mode,
+              "publish_summary": publish_summary,
+          }
+          with open(os.environ["GITHUB_OUTPUT"], "a") as f:
+              for k, v in outputs.items():
+                  f.write(f"{k}={v}\n")
+          print(json.dumps(outputs, indent=2, sort_keys=True))
+          PY
 
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: "3.11"
-          cache: pip
 
       - name: Install dependencies
         shell: bash
@@ -68,16 +152,18 @@ jobs:
       - name: Validate inputs
         shell: bash
         env:
-          CARD_DATE: ${{ inputs.card_date }}
-          AS_OF_UTC: ${{ inputs.as_of_utc }}
-          SIMULATION_COUNT: ${{ inputs.simulation_count }}
-          MODE: ${{ inputs.mode }}
+          CARD_DATE: ${{ steps.resolve.outputs.card_date }}
+          AS_OF_UTC: ${{ steps.resolve.outputs.as_of_utc }}
+          SIMULATION_COUNT: ${{ steps.resolve.outputs.simulation_count }}
+          MODE: ${{ steps.resolve.outputs.mode }}
         run: |
           python - <<'PY'
           import os
           from datetime import date, datetime
           date.fromisoformat(os.environ["CARD_DATE"])
-          datetime.fromisoformat(os.environ["AS_OF_UTC"].replace("Z", "+00:00"))
+          parsed = datetime.fromisoformat(os.environ["AS_OF_UTC"].replace("Z", "+00:00"))
+          if parsed.tzinfo is None:
+              raise SystemExit("as_of_utc must include timezone")
           n = int(os.environ["SIMULATION_COUNT"])
           if n < 50_000:
               raise SystemExit("simulation_count must be >= 50000")
@@ -90,10 +176,10 @@ jobs:
         continue-on-error: true
         shell: bash
         env:
-          CARD_DATE: ${{ inputs.card_date }}
-          LEAGUE: ${{ inputs.league }}
-          AS_OF_UTC: ${{ inputs.as_of_utc }}
-          SIMULATION_COUNT: ${{ inputs.simulation_count }}
+          CARD_DATE: ${{ steps.resolve.outputs.card_date }}
+          LEAGUE: ${{ steps.resolve.outputs.league }}
+          AS_OF_UTC: ${{ steps.resolve.outputs.as_of_utc }}
+          SIMULATION_COUNT: ${{ steps.resolve.outputs.simulation_count }}
         run: |
           mkdir -p output/card
           set +e
@@ -112,10 +198,11 @@ jobs:
         id: validate
         shell: bash
         env:
-          CARD_DATE: ${{ inputs.card_date }}
-          LEAGUE: ${{ inputs.league }}
-          AS_OF_UTC: ${{ inputs.as_of_utc }}
-          SIMULATION_COUNT: ${{ inputs.simulation_count }}
+          REQUEST_ID: ${{ steps.resolve.outputs.request_id }}
+          CARD_DATE: ${{ steps.resolve.outputs.card_date }}
+          LEAGUE: ${{ steps.resolve.outputs.league }}
+          AS_OF_UTC: ${{ steps.resolve.outputs.as_of_utc }}
+          SIMULATION_COUNT: ${{ steps.resolve.outputs.simulation_count }}
           FORECAST_EXIT_CODE: ${{ steps.forecast.outputs.exit_code }}
         run: |
           python - <<'PY'
@@ -146,6 +233,7 @@ jobs:
               overall_status = "FAIL"
 
           manifest = {
+              "request_id": os.environ["REQUEST_ID"],
               "github_run_id": os.environ.get("GITHUB_RUN_ID"),
               "github_run_attempt": os.environ.get("GITHUB_RUN_ATTEMPT"),
               "git_sha": os.environ.get("GITHUB_SHA"),
@@ -176,7 +264,7 @@ jobs:
           PY
 
       - name: Publish card summary
-        if: ${{ always() && inputs.publish_summary }}
+        if: ${{ always() && steps.resolve.outputs.publish_summary == 'true' }}
         shell: bash
         run: |
           if [ -f output/card/manifest.json ]; then
@@ -193,7 +281,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: diagnostic-shadow-card-${{ inputs.league }}-${{ inputs.card_date }}-${{ github.run_id }}
+          name: diagnostic-shadow-card-${{ steps.resolve.outputs.league }}-${{ steps.resolve.outputs.card_date }}-${{ steps.resolve.outputs.request_id }}-${{ github.run_id }}
           path: output/card/
           if-no-files-found: error
           retention-days: 30

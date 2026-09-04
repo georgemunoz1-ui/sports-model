@@ -3,6 +3,10 @@
 
 Consumes a frozen JSON input snapshot. No sportsbook price is an input. Missing
 starter fields fall back to registered league priors and are recorded explicitly.
+
+Version 1.0.2 adds diagnostics/ablation evidence only. The action probability is
+not redefined here; Analytic P remains a separate adapter-level diagnostic and
+Stochastic Sim P remains the empirical Gamma-Poisson result.
 """
 from __future__ import annotations
 
@@ -17,7 +21,7 @@ from pathlib import Path
 import numpy as np
 
 ENGINE_ID = "mlb.v13_1.gamma_poisson_monte_carlo.v1"
-ENGINE_VERSION = "1.0.1"
+ENGINE_VERSION = "1.0.2"
 MIN_SIMS = 50_000
 LG_RPG = 4.45
 LG_ERA = 4.20
@@ -39,6 +43,14 @@ def seed_for(event_id, input_hash, config_hash, n_sims):
     return int.from_bytes(hashlib.sha256(payload.encode()).digest()[:4], "big")
 
 
+def variant_seed(event_id, input_hash, config_hash, n_sims, variant):
+    payload = (
+        f"{event_id}|{input_hash}|{config_hash}|{ENGINE_VERSION}|"
+        f"{int(n_sims)}|ablation:{variant}"
+    )
+    return int.from_bytes(hashlib.sha256(payload.encode()).digest()[:4], "big")
+
+
 def git_commit():
     try:
         return subprocess.check_output(["git", "rev-parse", "HEAD"], text=True).strip()
@@ -55,20 +67,26 @@ def val(x, default):
 
 
 def shrunk(era, games_started):
-    w = games_started / (games_started + 8.0)
-    return w * era + (1 - w) * LG_ERA
+    weight = games_started / (games_started + 8.0)
+    return weight * era + (1 - weight) * LG_ERA
 
 
 def starter_ra9(sp):
     era = val(sp.get("era"), LG_ERA)
-    gs = val(sp.get("gs"), 0)
-    k = val(sp.get("k"), LG_K)
-    bb = val(sp.get("bb"), LG_BB)
-    return max(2.2, shrunk(era, gs) - ((k - bb) - 13.5) * 0.03)
+    games_started = val(sp.get("gs"), 0)
+    strikeout_rate = val(sp.get("k"), LG_K)
+    walk_rate = val(sp.get("bb"), LG_BB)
+    return max(
+        2.2,
+        shrunk(era, games_started) - ((strikeout_rate - walk_rate) - 13.5) * 0.03,
+    )
 
 
 def bipf(sp):
-    return max(0.45, 1 - (val(sp.get("k"), LG_K) + val(sp.get("bb"), LG_BB)) / 100)
+    return max(
+        0.45,
+        1 - (val(sp.get("k"), LG_K) + val(sp.get("bb"), LG_BB)) / 100,
+    )
 
 
 def normalize_sp(sp, side, adjustments):
@@ -81,6 +99,28 @@ def normalize_sp(sp, side, adjustments):
     if missing:
         adjustments.append(f"{side}_STARTER_PRIOR_FALLBACK:" + ",".join(missing))
     return sp
+
+
+def independent_poisson_home_win(mu_home, mu_away, limit=30, tie_home_share=0.5):
+    """Closed-form independent-Poisson home-win probability at fixed rates."""
+    home_pmf = [math.exp(-mu_home)]
+    away_pmf = [math.exp(-mu_away)]
+    for k in range(1, limit + 1):
+        home_pmf.append(home_pmf[-1] * mu_home / k)
+        away_pmf.append(away_pmf[-1] * mu_away / k)
+    probability = 0.0
+    for home_runs, p_home_runs in enumerate(home_pmf):
+        probability += p_home_runs * (
+            sum(away_pmf[:home_runs]) + tie_home_share * away_pmf[home_runs]
+        )
+    return min(1.0, max(0.0, probability))
+
+
+def _safe_corr(x, y):
+    if len(x) < 2 or float(np.std(x)) == 0 or float(np.std(y)) == 0:
+        return 0.0
+    value = float(np.corrcoef(x, y)[0, 1])
+    return value if math.isfinite(value) else 0.0
 
 
 def run(snapshot, config, n, runline=None, total_line=None):
@@ -124,17 +164,20 @@ def run(snapshot, config, n, runline=None, total_line=None):
         + away_pen / 9 * (9 - home_starter_ip)
     ) * home_offense * home_park * 1.005
 
-    away_shape = np.clip(1.8 + (val(home_sp.get("k"), LG_K) - LG_K) * 0.16, 1.2, 6)
-    home_shape = np.clip(1.8 + (val(away_sp.get("k"), LG_K) - LG_K) * 0.16, 1.2, 6)
+    away_shape = float(np.clip(1.8 + (val(home_sp.get("k"), LG_K) - LG_K) * 0.16, 1.2, 6))
+    home_shape = float(np.clip(1.8 + (val(away_sp.get("k"), LG_K) - LG_K) * 0.16, 1.2, 6))
 
-    away_runs = rng.poisson(rng.gamma(away_shape, np.maximum(mu_away, 0.3) / away_shape))
-    home_runs = rng.poisson(rng.gamma(home_shape, np.maximum(mu_home, 0.3) / home_shape))
+    # Keep the registered RNG call order stable: away gamma -> away Poisson ->
+    # home gamma -> home Poisson -> tie resolution.
+    away_latent_rate = rng.gamma(away_shape, np.maximum(mu_away, 0.3) / away_shape)
+    away_runs = rng.poisson(away_latent_rate)
+    home_latent_rate = rng.gamma(home_shape, np.maximum(mu_home, 0.3) / home_shape)
+    home_runs = rng.poisson(home_latent_rate)
 
     ties = home_runs == away_runs
-    # Registered diagnostic extra-inning resolution: fair Bernoulli with a small
-    # home-context adjustment inherited from V13.1.
+    tie_home_share = 0.5 + 0.04 * np.sign(away_pen - home_pen)
     home_win = (home_runs > away_runs) | (
-        ties & (rng.random(n) < (0.5 + 0.04 * np.sign(away_pen - home_pen)))
+        ties & (rng.random(n) < tie_home_share)
     )
     margin = home_runs - away_runs
     totals = home_runs + away_runs
@@ -146,6 +189,120 @@ def run(snapshot, config, n, runline=None, total_line=None):
                 map(float, np.quantile(x, [0.1, 0.25, 0.5, 0.75, 0.9])),
             )
         )
+
+    home_runs_mean = float(np.mean(home_runs))
+    away_runs_mean = float(np.mean(away_runs))
+    total_mean = float(np.mean(totals))
+    margin_mean = float(np.mean(margin))
+    margin_std = float(np.std(margin))
+    total_std = float(np.std(totals))
+    home_expected_runs_mean = float(np.mean(mu_home))
+    away_expected_runs_mean = float(np.mean(mu_away))
+    home_win_p_sim = float(np.mean(home_win))
+
+    # Variant A: fixed-rate independent Poisson. This is the structural baseline
+    # that should closely track the legacy Analytic P definition.
+    ablation_a_home_p = independent_poisson_home_win(
+        home_runs_mean,
+        away_runs_mean,
+        tie_home_share=0.5,
+    )
+
+    # Variant B: fixed mean rates + Gamma overdispersion, but no starter-workload
+    # uncertainty. A dedicated deterministic stream keeps this diagnostic from
+    # perturbing the registered simulation stream.
+    b_seed = variant_seed(snapshot["event_id"], input_hash, config_hash, n, "B_FIXED_GAMMA")
+    b_rng = np.random.Generator(np.random.PCG64(b_seed))
+    b_away_latent = b_rng.gamma(away_shape, max(away_expected_runs_mean, 0.3) / away_shape, n)
+    b_away_runs = b_rng.poisson(b_away_latent)
+    b_home_latent = b_rng.gamma(home_shape, max(home_expected_runs_mean, 0.3) / home_shape, n)
+    b_home_runs = b_rng.poisson(b_home_latent)
+    b_ties = b_home_runs == b_away_runs
+    b_home_win = (b_home_runs > b_away_runs) | (
+        b_ties & (b_rng.random(n) < tie_home_share)
+    )
+    b_total = b_home_runs + b_away_runs
+    ablation_b_home_p = float(np.mean(b_home_win))
+
+    diagnostics = {
+        "projected_home_runs_realized_mean": home_runs_mean,
+        "projected_away_runs_realized_mean": away_runs_mean,
+        "projected_home_runs_latent_mean": home_expected_runs_mean,
+        "projected_away_runs_latent_mean": away_expected_runs_mean,
+        "gamma_shape_home": home_shape,
+        "gamma_shape_away": away_shape,
+        "gamma_scale_home_mean": home_expected_runs_mean / home_shape,
+        "gamma_scale_away_mean": away_expected_runs_mean / away_shape,
+        "gamma_dispersion_mean": 0.5 * ((1.0 / home_shape) + (1.0 / away_shape)),
+        "run_rate_correlation": _safe_corr(home_latent_rate, away_latent_rate),
+        "shared_environment_component": False,
+        "starter_workload_variance": float(
+            0.5 * (np.var(home_starter_ip) + np.var(away_starter_ip))
+        ),
+        "starter_ip_std_home": float(np.std(home_starter_ip)),
+        "starter_ip_std_away": float(np.std(away_starter_ip)),
+        "bullpen_share_home": float(np.mean((9.0 - home_starter_ip) / 9.0)),
+        "bullpen_share_away": float(np.mean((9.0 - away_starter_ip) / 9.0)),
+        "bullpen_sequencing_component": False,
+        "park_factor": park_factor,
+        "extra_inning_probability": float(np.mean(ties)),
+        "analytic_home_p_at_realized_means": ablation_a_home_p,
+        "analytic_home_p_at_latent_means": independent_poisson_home_win(
+            home_expected_runs_mean,
+            away_expected_runs_mean,
+            tie_home_share=0.5,
+        ),
+        "normal_margin_home_p_candidate": (
+            0.5 * (1.0 + math.erf((margin_mean / margin_std) / math.sqrt(2.0)))
+            if margin_std > 0
+            else None
+        ),
+        "ablation": {
+            "A_FIXED_POISSON": {
+                "latent_gamma_variance": False,
+                "shared_environment": False,
+                "starter_workload_randomness": False,
+                "bullpen_sequencing": False,
+                "home_win_p": ablation_a_home_p,
+                "total_variance": home_runs_mean + away_runs_mean,
+                "regulation_tie_probability": None,
+                "method": "closed_form_independent_poisson_at_realized_mean_runs",
+            },
+            "B_FIXED_GAMMA": {
+                "latent_gamma_variance": True,
+                "shared_environment": False,
+                "starter_workload_randomness": False,
+                "bullpen_sequencing": False,
+                "home_win_p": ablation_b_home_p,
+                "total_variance": float(np.var(b_total)),
+                "regulation_tie_probability": float(np.mean(b_ties)),
+                "random_seed": b_seed,
+            },
+            "C_SHARED_ENVIRONMENT": {
+                "status": "NOT_APPLICABLE_CURRENT_ENGINE",
+                "reason": "CURRENT_ENGINE_HAS_NO_SHARED_RUN_ENVIRONMENT_COMPONENT",
+            },
+            "D_STARTER_WORKLOAD": {
+                "latent_gamma_variance": True,
+                "shared_environment": False,
+                "starter_workload_randomness": True,
+                "bullpen_sequencing": False,
+                "home_win_p": home_win_p_sim,
+                "total_variance": float(np.var(totals)),
+                "regulation_tie_probability": float(np.mean(ties)),
+                "note": "Equivalent to full engine because bullpen sequencing is not modeled.",
+            },
+            "E_FULL_CURRENT_ENGINE": {
+                "latent_gamma_variance": True,
+                "shared_environment": False,
+                "starter_workload_randomness": True,
+                "bullpen_sequencing": False,
+                "home_win_p": home_win_p_sim,
+                "total_variance": float(np.var(totals)),
+                "regulation_tie_probability": float(np.mean(ties)),
+            },
+        },
+    }
 
     out = {
         "artifact_type": "mlb_monte_carlo_forecast_bundle_v1",
@@ -162,6 +319,8 @@ def run(snapshot, config, n, runline=None, total_line=None):
             "latent_run_rate": "Gamma(shape, mean/shape)",
             "team_runs": "Poisson(latent_run_rate)",
             "mixture": "Gamma-Poisson / Negative-Binomial-equivalent",
+            "shared_environment": "NOT_MODELED",
+            "bullpen_sequencing": "NOT_MODELED",
         },
         "simulation_count": int(n),
         "random_seed": seed,
@@ -170,17 +329,22 @@ def run(snapshot, config, n, runline=None, total_line=None):
         "runtime_commit": git_commit(),
         "runtime_numpy_version": np.__version__,
         "projection": {
-            "home_win_p_sim": float(np.mean(home_win)),
-            "away_win_p_sim": float(1 - np.mean(home_win)),
-            "home_runs_mean": float(np.mean(home_runs)),
-            "away_runs_mean": float(np.mean(away_runs)),
-            "total_mean": float(np.mean(totals)),
-            "home_margin_mean": float(np.mean(margin)),
+            "home_win_p_sim": home_win_p_sim,
+            "away_win_p_sim": float(1 - home_win_p_sim),
+            "home_runs_mean": home_runs_mean,
+            "away_runs_mean": away_runs_mean,
+            "home_expected_runs_mean": home_expected_runs_mean,
+            "away_expected_runs_mean": away_expected_runs_mean,
+            "total_mean": total_mean,
+            "home_margin_mean": margin_mean,
+            "margin_std": margin_std,
+            "total_std": total_std,
             "home_runs_quantiles": quantiles(home_runs),
             "away_runs_quantiles": quantiles(away_runs),
             "total_quantiles": quantiles(totals),
             "margin_quantiles": quantiles(margin),
         },
+        "diagnostics": diagnostics,
         "quality_adjustments": adjustments,
         "market_features_used": False,
         "governance": {"action_authority": False, "action_status": "SHADOW_ONLY"},
@@ -226,14 +390,14 @@ def run(snapshot, config, n, runline=None, total_line=None):
 
 
 def main():
-    ap = argparse.ArgumentParser()
-    ap.add_argument("--snapshot", required=True)
-    ap.add_argument("--config", required=True)
-    ap.add_argument("--output", required=True)
-    ap.add_argument("--simulations", type=int, default=100000)
-    ap.add_argument("--home-runline", type=float)
-    ap.add_argument("--total-line", type=float)
-    args = ap.parse_args()
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--snapshot", required=True)
+    parser.add_argument("--config", required=True)
+    parser.add_argument("--output", required=True)
+    parser.add_argument("--simulations", type=int, default=100000)
+    parser.add_argument("--home-runline", type=float)
+    parser.add_argument("--total-line", type=float)
+    args = parser.parse_args()
 
     snapshot = json.load(open(args.snapshot))
     config = json.load(open(args.config))

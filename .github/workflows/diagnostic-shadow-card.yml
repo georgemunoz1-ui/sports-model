@@ -1,0 +1,199 @@
+name: Diagnostic Shadow Card
+
+on:
+  workflow_dispatch:
+    inputs:
+      card_date:
+        description: "Forecast date, YYYY-MM-DD"
+        required: true
+        type: string
+      league:
+        description: "League to forecast"
+        required: true
+        default: "mlb"
+        type: choice
+        options:
+          - mlb
+          - cfb
+          - nfl
+          - wnba
+          - nba
+      as_of_utc:
+        description: "Point-in-time cutoff timestamp (ISO-8601 UTC)"
+        required: true
+        type: string
+      simulation_count:
+        description: "Paths per eligible game"
+        required: true
+        default: "100000"
+        type: string
+      mode:
+        description: "Execution mode"
+        required: true
+        default: "diagnostic_shadow"
+        type: choice
+        options:
+          - diagnostic_shadow
+      publish_summary:
+        description: "Render the full Markdown card in the run summary"
+        required: true
+        default: true
+        type: boolean
+
+permissions:
+  contents: read
+
+env:
+  PYTHONUNBUFFERED: "1"
+
+jobs:
+  generate-card:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout requested ref
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - name: Install dependencies
+        shell: bash
+        run: |
+          python -m pip install --upgrade pip
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+
+      - name: Validate inputs
+        shell: bash
+        env:
+          CARD_DATE: ${{ inputs.card_date }}
+          AS_OF_UTC: ${{ inputs.as_of_utc }}
+          SIMULATION_COUNT: ${{ inputs.simulation_count }}
+          MODE: ${{ inputs.mode }}
+        run: |
+          python - <<'PY'
+          import os
+          from datetime import date, datetime
+          date.fromisoformat(os.environ["CARD_DATE"])
+          datetime.fromisoformat(os.environ["AS_OF_UTC"].replace("Z", "+00:00"))
+          n = int(os.environ["SIMULATION_COUNT"])
+          if n < 50_000:
+              raise SystemExit("simulation_count must be >= 50000")
+          if os.environ["MODE"] != "diagnostic_shadow":
+              raise SystemExit("unsupported mode")
+          PY
+
+      - name: Generate diagnostic card
+        id: forecast
+        continue-on-error: true
+        shell: bash
+        env:
+          CARD_DATE: ${{ inputs.card_date }}
+          LEAGUE: ${{ inputs.league }}
+          AS_OF_UTC: ${{ inputs.as_of_utc }}
+          SIMULATION_COUNT: ${{ inputs.simulation_count }}
+        run: |
+          mkdir -p output/card
+          set +e
+          python scripts/generate_card_force.py \
+            --date "$CARD_DATE" \
+            --league "$LEAGUE" \
+            --as-of-utc "$AS_OF_UTC" \
+            --simulations "$SIMULATION_COUNT" \
+            --output-dir output/card \
+            2>&1 | tee output/card/run.log
+          rc=${PIPESTATUS[0]}
+          echo "exit_code=$rc" >> "$GITHUB_OUTPUT"
+          exit 0
+
+      - name: Validate card and write manifest
+        id: validate
+        shell: bash
+        env:
+          CARD_DATE: ${{ inputs.card_date }}
+          LEAGUE: ${{ inputs.league }}
+          AS_OF_UTC: ${{ inputs.as_of_utc }}
+          SIMULATION_COUNT: ${{ inputs.simulation_count }}
+          FORECAST_EXIT_CODE: ${{ steps.forecast.outputs.exit_code }}
+        run: |
+          python - <<'PY'
+          import json, os
+          from pathlib import Path
+
+          out = Path("output/card")
+          required = [out / "diagnostic_card.json", out / "diagnostic_card.csv", out / "diagnostic_card.md"]
+          missing = [str(p) for p in required if not p.exists()]
+          if missing:
+              raise SystemExit(f"missing card artifacts: {missing}")
+
+          card = json.loads((out / "diagnostic_card.json").read_text())
+          scheduled = int(card.get("scheduled_game_count", 0))
+          forecasted = int(card.get("forecast_count", 0))
+          post_start = sum(1 for row in card.get("forecasts", []) if row.get("forecast_status") == "POST_START")
+          pregame = max(0, scheduled - post_start)
+          coverage = float(card.get("pregame_coverage", 0.0))
+          incidents = card.get("incidents", [])
+          exit_code = int(os.environ.get("FORECAST_EXIT_CODE") or 0)
+
+          overall_status = "PASS"
+          if pregame > 0 and forecasted == 0:
+              overall_status = "FAIL"
+          if card.get("coverage_breach_event_ids"):
+              overall_status = "FAIL"
+          if exit_code != 0:
+              overall_status = "FAIL"
+
+          manifest = {
+              "github_run_id": os.environ.get("GITHUB_RUN_ID"),
+              "github_run_attempt": os.environ.get("GITHUB_RUN_ATTEMPT"),
+              "git_sha": os.environ.get("GITHUB_SHA"),
+              "card_date": os.environ["CARD_DATE"],
+              "as_of_utc": os.environ["AS_OF_UTC"],
+              "mode": "DIAGNOSTIC_SHADOW",
+              "league": os.environ["LEAGUE"].upper(),
+              "simulation_count": int(os.environ["SIMULATION_COUNT"]),
+              "scheduled_events": scheduled,
+              "pregame_events": pregame,
+              "forecasted_events": forecasted,
+              "forecast_coverage_pct": coverage,
+              "incident_count": len(incidents),
+              "generator_exit_code": exit_code,
+              "card_artifacts": {
+                  "json": "output/card/diagnostic_card.json",
+                  "csv": "output/card/diagnostic_card.csv",
+                  "markdown": "output/card/diagnostic_card.md",
+                  "log": "output/card/run.log"
+              },
+              "action_authority": False,
+              "overall_status": overall_status
+          }
+          (out / "manifest.json").write_text(json.dumps(manifest, indent=2, sort_keys=True) + "\n")
+          print(json.dumps(manifest, indent=2, sort_keys=True))
+          if overall_status != "PASS":
+              raise SystemExit("diagnostic card validation failed")
+          PY
+
+      - name: Publish card summary
+        if: ${{ always() && inputs.publish_summary }}
+        shell: bash
+        run: |
+          if [ -f output/card/manifest.json ]; then
+            echo '## Forecast Run Manifest' >> "$GITHUB_STEP_SUMMARY"
+            echo '```json' >> "$GITHUB_STEP_SUMMARY"
+            cat output/card/manifest.json >> "$GITHUB_STEP_SUMMARY"
+            echo '```' >> "$GITHUB_STEP_SUMMARY"
+          fi
+          if [ -f output/card/diagnostic_card.md ]; then
+            cat output/card/diagnostic_card.md >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+      - name: Upload diagnostic card artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: diagnostic-shadow-card-${{ inputs.league }}-${{ inputs.card_date }}-${{ github.run_id }}
+          path: output/card/
+          if-no-files-found: error
+          retention-days: 30

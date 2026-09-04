@@ -1,9 +1,8 @@
 #!/usr/bin/env python3
 """Grade frozen MLB forecast cards against final results and accumulate calibration evidence.
 
-This script never regenerates forecasts and never consumes sportsbook prices. It grades
-only probabilities already frozen in a diagnostic card. The durable ledger is idempotent
-by forecast output hash + event id so reproduction runs cannot double-count a forecast.
+The forecast artifact is immutable. This script only appends result-bound child rows to
+the calibration ledger. It never regenerates probabilities and never consumes market data.
 """
 from __future__ import annotations
 
@@ -11,12 +10,15 @@ import argparse
 import hashlib
 import json
 import math
+import statistics
 import urllib.request
 from datetime import datetime, timezone
 from pathlib import Path
 
 BASE = "https://statsapi.mlb.com/api/v1"
 EPS = 1e-12
+GRADER_VERSION = "mlb.calibration_grader.v2"
+RESULT_SOURCE = "MLB_STATSAPI"
 
 
 def utcnow():
@@ -24,7 +26,7 @@ def utcnow():
 
 
 def get_json(url):
-    req = urllib.request.Request(url, headers={"User-Agent": "sports-model-calibration/1.0"})
+    req = urllib.request.Request(url, headers={"User-Agent": "sports-model-calibration/2.0"})
     with urllib.request.urlopen(req, timeout=30) as response:
         return json.load(response)
 
@@ -79,34 +81,31 @@ def log_loss(probability, outcome):
 
 
 def calibration_bin(probability):
-    # Fixed 10-point bins; 1.00 is folded into the final bin.
     low = min(0.9, math.floor(probability * 10.0) / 10.0)
     high = min(1.0, low + 0.1)
     return f"{low:.1f}-{high:.1f}"
 
 
 def load_ledger(path):
-    rows = []
     if not path.exists():
-        return rows
-    for line in path.read_text().splitlines():
-        if line.strip():
-            rows.append(json.loads(line))
-    return rows
+        return []
+    return [json.loads(line) for line in path.read_text().splitlines() if line.strip()]
 
 
 def save_ledger(path, rows):
     path.parent.mkdir(parents=True, exist_ok=True)
     ordered = sorted(rows, key=lambda row: (row.get("card_date", ""), row.get("event_id", ""), row.get("grade_id", "")))
-    text = "".join(json.dumps(row, sort_keys=True, separators=(",", ":")) + "\n" for row in ordered)
-    path.write_text(text)
+    path.write_text("".join(json.dumps(row, sort_keys=True, separators=(",", ":")) + "\n" for row in ordered))
 
 
 def outcome_map(card_date, results_json=None):
     if results_json:
         data = json.loads(Path(results_json).read_text())
+        source = "RESULTS_JSON"
     else:
         data = get_json(f"{BASE}/schedule?sportId=1&date={card_date}")
+        source = RESULT_SOURCE
+    observed_at = utcnow()
     result = {}
     for date_row in data.get("dates", []):
         for game in date_row.get("games", []):
@@ -125,24 +124,71 @@ def outcome_map(card_date, results_json=None):
                     "home_score": int(home_score),
                     "away_score": int(away_score),
                     "home_won": int(home_score) > int(away_score),
+                    "result_source": source,
+                    "result_source_id": event_id,
+                    "result_observed_at_utc": observed_at,
                 }
     return result
 
 
-def forecast_identity(row):
+def forecast_output_hash(row):
     output_hash = (row.get("provenance") or {}).get("output_hash")
-    if not output_hash:
-        payload = {
-            "event_id": row.get("event_id"),
-            "input_snapshot_hash": row.get("input_snapshot_hash"),
-            "model_state_config_hash": row.get("model_state_config_hash"),
-            "simulation": row.get("simulation"),
-            "analytic_p": row.get("analytic_p"),
-            "stochastic_sim_p": row.get("stochastic_sim_p"),
+    if output_hash:
+        return output_hash
+    payload = {
+        "event_id": row.get("event_id"),
+        "input_snapshot_hash": row.get("input_snapshot_hash"),
+        "model_state_config_hash": row.get("model_state_config_hash"),
+        "simulation": row.get("simulation"),
+        "analytic_p": row.get("analytic_p"),
+        "stochastic_sim_p": row.get("stochastic_sim_p"),
+    }
+    return "fallback:" + hashlib.sha256(json.dumps(payload, sort_keys=True, separators=(",", ":")).encode()).hexdigest()
+
+
+def grade_identity(output_hash, result_source_id):
+    raw = f"{output_hash}|{result_source_id}|{GRADER_VERSION}"
+    return hashlib.sha256(raw.encode()).hexdigest()
+
+
+def _paired_summary(rows):
+    if not rows:
+        return {
+            "mean_brier_analytic_minus_sim": None,
+            "median_brier_analytic_minus_sim": None,
+            "mean_log_loss_analytic_minus_sim": None,
+            "median_log_loss_analytic_minus_sim": None,
+            "sim_lower_brier_count": 0,
+            "analytic_lower_brier_count": 0,
+            "brier_tie_count": 0,
+            "sim_lower_log_loss_count": 0,
+            "analytic_lower_log_loss_count": 0,
+            "log_loss_tie_count": 0,
         }
-        output_hash = "fallback:" + hashlib.sha256(json.dumps(payload, sort_keys=True, separators=(",", ":")).encode()).hexdigest()
-    raw = f"{row.get('event_id')}|{output_hash}"
-    return hashlib.sha256(raw.encode()).hexdigest(), output_hash
+    brier_d = [float(r["brier_analytic"]) - float(r["brier_sim"]) for r in rows]
+    log_d = [float(r["log_loss_analytic"]) - float(r["log_loss_sim"]) for r in rows]
+    tol = 1e-15
+    return {
+        "mean_brier_analytic_minus_sim": statistics.fmean(brier_d),
+        "median_brier_analytic_minus_sim": statistics.median(brier_d),
+        "mean_log_loss_analytic_minus_sim": statistics.fmean(log_d),
+        "median_log_loss_analytic_minus_sim": statistics.median(log_d),
+        "sim_lower_brier_count": sum(d > tol for d in brier_d),
+        "analytic_lower_brier_count": sum(d < -tol for d in brier_d),
+        "brier_tie_count": sum(abs(d) <= tol for d in brier_d),
+        "sim_lower_log_loss_count": sum(d > tol for d in log_d),
+        "analytic_lower_log_loss_count": sum(d < -tol for d in log_d),
+        "log_loss_tie_count": sum(abs(d) <= tol for d in log_d),
+    }
+
+
+def _rolling(rows, windows=(30, 60, 100)):
+    ordered = sorted(rows, key=lambda r: (r.get("start_time_utc", ""), r.get("graded_at_utc", "")))
+    result = {}
+    for window in windows:
+        sample = ordered[-window:] if len(ordered) >= window else []
+        result[str(window)] = {"n": len(sample), **_paired_summary(sample)} if sample else {"n": 0}
+    return result
 
 
 def aggregate(rows):
@@ -156,20 +202,30 @@ def aggregate(rows):
             "brier_delta_sim_minus_analytic": None,
             "log_loss_analytic": None,
             "log_loss_sim": None,
+            "directional_accuracy_analytic": None,
+            "directional_accuracy_sim": None,
+            "paired": _paired_summary([]),
+            "rolling_paired": _rolling([]),
             "decision_gate": "INSUFFICIENT_SAMPLE",
             "reliability": {},
         }
 
-    mean = lambda key: sum(float(row[key]) for row in rows) / n
+    mean = lambda key: statistics.fmean(float(row[key]) for row in rows)
     brier_a = mean("brier_analytic")
     brier_s = mean("brier_sim")
     ll_a = mean("log_loss_analytic")
     ll_s = mean("log_loss_sim")
+    acc_a = statistics.fmean(int((float(r["analytic_p_home"]) >= 0.5) == bool(r["home_won"])) for r in rows)
+    acc_s = statistics.fmean(int((float(r["stochastic_sim_p_home"]) >= 0.5) == bool(r["home_won"])) for r in rows)
 
-    if n < 100:
-        decision = "ACCUMULATE_TO_100"
-    elif n < 200:
-        decision = "BRIER_COMPARISON_VISIBLE_CALIBRATION_GATE_NOT_MET"
+    if n < 50:
+        decision = "PIPELINE_VALIDATION_ONLY_UNDER_50"
+    elif n < 100:
+        decision = "ACCUMULATE_50_TO_100_NO_PROMOTION"
+    elif n < 250:
+        decision = "PAIRED_COMPARISON_AND_BROAD_RELIABILITY_ONLY"
+    elif n < 500:
+        decision = "SEASONAL_DIAGNOSTIC_NO_SINGLE_SLICE_CALIBRATION_TRANSFORM"
     elif brier_s < brier_a - 0.005:
         decision = "EVIDENCE_FAVORS_STOCHASTIC_SIM_P_REVIEW_FOR_PROMOTION"
     elif brier_a < brier_s - 0.005:
@@ -200,16 +256,25 @@ def aggregate(rows):
 
     return {
         "n": n,
-        "status": "ACCUMULATING" if n < 200 else "DECISION_SAMPLE_REACHED",
+        "status": "ACCUMULATING" if n < 500 else "DECISION_SAMPLE_REACHED",
         "brier_analytic": brier_a,
         "brier_sim": brier_s,
         "brier_delta_sim_minus_analytic": brier_s - brier_a,
         "log_loss_analytic": ll_a,
         "log_loss_sim": ll_s,
         "log_loss_delta_sim_minus_analytic": ll_s - ll_a,
+        "directional_accuracy_analytic": acc_a,
+        "directional_accuracy_sim": acc_s,
+        "paired": _paired_summary(rows),
+        "rolling_paired": _rolling(rows),
         "decision_gate": decision,
-        "minimum_brier_comparison_games": 100,
-        "minimum_calibration_decision_games": 200,
+        "sample_policy": {
+            "under_50": "pipeline_validation_only",
+            "50_to_99": "bias_and_directionality_no_promotion",
+            "100_to_249": "paired_comparison_and_broad_reliability",
+            "250_to_499": "seasonal_and_rolling_diagnostics",
+            "500_plus": "model_definition_review_permitted_if_time_stable",
+        },
         "promotion_margin_brier": 0.005,
         "reliability": reliability,
     }
@@ -217,9 +282,7 @@ def aggregate(rows):
 
 def grade(card, ledger_rows, results):
     existing = {row["grade_id"] for row in ledger_rows}
-    added = []
-    pending = []
-    skipped = []
+    added, pending, skipped, duplicates = [], [], [], []
 
     for forecast in card.get("forecasts", []):
         if forecast.get("forecast_status") != "FORECAST_GENERATED":
@@ -230,12 +293,15 @@ def grade(card, ledger_rows, results):
             continue
 
         event_id = str(forecast.get("event_id"))
-        identity, output_hash = forecast_identity(forecast)
-        if identity in existing:
-            continue
         outcome = results.get(event_id)
         if outcome is None:
             pending.append(event_id)
+            continue
+
+        output_hash = forecast_output_hash(forecast)
+        identity = grade_identity(output_hash, outcome["result_source_id"])
+        if identity in existing:
+            duplicates.append({"event_id": event_id, "grade_id": identity, "status": "GRADE_ALREADY_EXISTS"})
             continue
 
         analytic_home = home_probability(forecast, "analytic_p_home", "analytic_p")
@@ -246,11 +312,14 @@ def grade(card, ledger_rows, results):
             continue
 
         y = 1 if outcome["home_won"] else 0
+        graded_at = utcnow()
         row = {
             "grade_id": identity,
+            "grader_version": GRADER_VERSION,
             "event_id": event_id,
             "card_date": card.get("card_date"),
             "requested_as_of_utc": card.get("requested_as_of_utc", card.get("as_of_utc")),
+            "forecast_generated_at_utc": card.get("generated_at_utc"),
             "actual_data_vintage_utc": (card.get("pit_provenance") or {}).get("actual_data_vintage_utc"),
             "pit_status": (card.get("pit_provenance") or {}).get("pit_status"),
             "away_team": forecast.get("away_team"),
@@ -258,6 +327,11 @@ def grade(card, ledger_rows, results):
             "start_time_utc": forecast.get("start_time_utc"),
             "forecast_output_hash": output_hash,
             "simulation_engine_version": (forecast.get("simulation") or {}).get("simulation_engine_version"),
+            "forecast_tier": forecast.get("forecast_tier"),
+            "projected_total": forecast.get("projected_total"),
+            "projected_margin": forecast.get("projected_margin"),
+            "analytic_sim_abs_gap_pp": forecast.get("analytic_sim_abs_gap_pp"),
+            "starter_confidence_tier": (forecast.get("diagnostics") or {}).get("starter_confidence_tier"),
             "analytic_p_home": analytic_home,
             "stochastic_sim_p_home": sim_home,
             "normal_margin_candidate_p_home": candidate_home,
@@ -267,13 +341,19 @@ def grade(card, ledger_rows, results):
                 "away_score": outcome["away_score"],
                 "status": outcome["status"],
             },
+            "result_source": outcome["result_source"],
+            "result_source_id": outcome["result_source_id"],
+            "result_observed_at_utc": outcome["result_observed_at_utc"],
             "brier_analytic": brier(analytic_home, y),
             "brier_sim": brier(sim_home, y),
+            "brier_difference_analytic_minus_sim": brier(analytic_home, y) - brier(sim_home, y),
             "log_loss_analytic": log_loss(analytic_home, y),
             "log_loss_sim": log_loss(sim_home, y),
+            "log_loss_difference_analytic_minus_sim": log_loss(analytic_home, y) - log_loss(sim_home, y),
+            "probability_clip_epsilon": EPS,
             "calibration_bin_analytic": calibration_bin(analytic_home),
             "calibration_bin_sim": calibration_bin(sim_home),
-            "graded_at_utc": utcnow(),
+            "graded_at_utc": graded_at,
             "market_features_used": False,
             "action_authority": False,
         }
@@ -284,7 +364,7 @@ def grade(card, ledger_rows, results):
         added.append(row)
         existing.add(identity)
 
-    return added, pending, skipped
+    return added, pending, skipped, duplicates
 
 
 def main():
@@ -303,12 +383,13 @@ def main():
     ledger_path = Path(args.ledger)
     ledger = load_ledger(ledger_path)
     results = outcome_map(card["card_date"], args.results_json)
-    added, pending, skipped = grade(card, ledger, results)
+    added, pending, skipped, duplicates = grade(card, ledger, results)
     save_ledger(ledger_path, ledger)
 
     summary = {
-        "artifact_type": "mlb_probability_calibration_summary_v1",
+        "artifact_type": "mlb_probability_calibration_summary_v2",
         "generated_at_utc": utcnow(),
+        "grader_version": GRADER_VERSION,
         "market_overlay_enabled": False,
         "action_authority": False,
         "metrics": aggregate(ledger),
@@ -318,13 +399,18 @@ def main():
     summary_path.write_text(json.dumps(summary, indent=2, sort_keys=True) + "\n")
 
     report = {
-        "artifact_type": "mlb_forecast_grade_run_v1",
+        "artifact_type": "mlb_forecast_grade_run_v2",
+        "grader_version": GRADER_VERSION,
         "card_date": card.get("card_date"),
         "added_count": len(added),
+        "added_grade_ids": [row["grade_id"] for row in added],
         "pending_event_ids": pending,
         "skipped": skipped,
+        "duplicate_grades": duplicates,
         "ledger_count": len(ledger),
         "summary": summary["metrics"],
+        "market_overlay_enabled": False,
+        "action_authority": False,
     }
     report_path = Path(args.report_out)
     report_path.parent.mkdir(parents=True, exist_ok=True)

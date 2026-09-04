@@ -6,7 +6,6 @@ remains fail-closed until fitted NBA state and PIT team/player features exist.
 from __future__ import annotations
 
 import json
-import urllib.parse
 import urllib.request
 from datetime import datetime, timezone
 from pathlib import Path
@@ -16,17 +15,13 @@ from models.nba.efficiency_monte_carlo_v1 import run as run_mc
 
 STATE = Path("data/models/nba/efficiency_monte_carlo_config_v1.json")
 CARD_TZ = ZoneInfo("America/New_York")
-NBA_SCHEDULE = "https://stats.nba.com/stats/scheduleleaguev2"
+NBA_SCHEDULE = "https://cdn.nba.com/static/json/staticData/scheduleLeagueV2.json"
 NBA_HEADERS = {
-    "Host": "stats.nba.com",
-    "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36",
+    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
     "Accept": "application/json, text/plain, */*",
-    "Accept-Language": "en-US,en;q=0.5",
-    "Connection": "keep-alive",
+    "Accept-Language": "en-US,en;q=0.9",
+    "Origin": "https://www.nba.com",
     "Referer": "https://www.nba.com/",
-    "Pragma": "no-cache",
-    "Cache-Control": "no-cache",
-    "Sec-Fetch-Dest": "empty",
 }
 
 
@@ -51,18 +46,24 @@ def _get_json(url):
 
 
 def _league_schedule(payload):
-    for value in payload.values():
-        if isinstance(value, dict) and isinstance(value.get("gameDates"), list):
-            return value
+    value = payload.get("leagueSchedule")
+    if isinstance(value, dict) and isinstance(value.get("gameDates"), list):
+        return value
+    for candidate in payload.values():
+        if isinstance(candidate, dict) and isinstance(candidate.get("gameDates"), list):
+            return candidate
     raise RuntimeError("NBA_SCHEDULE_RESPONSE_SCHEMA_UNRECOGNIZED")
 
 
 def load_schedule(card_date, as_of_utc):
-    season = _season_key(card_date)
-    url = NBA_SCHEDULE + "?" + urllib.parse.urlencode({"LeagueID": "00", "Season": season})
+    expected_season = _season_key(card_date)
     fetched_at = _utcnow()
-    payload = _get_json(url)
+    payload = _get_json(NBA_SCHEDULE)
     schedule = _league_schedule(payload)
+    season_year = str(schedule.get("seasonYear") or "")
+    if season_year and season_year != expected_season:
+        raise RuntimeError(f"NBA_SCHEDULE_SEASON_MISMATCH:{season_year}!={expected_season}")
+
     rows = []
     for date_row in schedule.get("gameDates", []):
         for game in date_row.get("games", []):
@@ -82,8 +83,8 @@ def load_schedule(card_date, as_of_utc):
                 "away_team": str(away_team),
                 "home_team": str(home_team),
                 "start_time_utc": start_dt.astimezone(timezone.utc).isoformat().replace("+00:00", "Z"),
-                "_schedule_source": "NBA_STATS_SCHEDULELEAGUEV2",
-                "_schedule_season": season,
+                "_schedule_source": "NBA_PUBLIC_CDN_SCHEDULELEAGUEV2",
+                "_schedule_season": expected_season,
                 "_schedule_fetched_at_utc": fetched_at,
             })
     rows.sort(key=lambda row: (row["start_time_utc"], row["event_id"]))
@@ -101,7 +102,7 @@ def build_context(schedule, as_of_utc, allow_stale=True, overrides_path=None):
         if stamp and stamp not in seen:
             seen.add(stamp)
             fetches.append({
-                "source": "NBA_STATS_SCHEDULELEAGUEV2",
+                "source": "NBA_PUBLIC_CDN_SCHEDULELEAGUEV2",
                 "purpose": "NBA_CANONICAL_SCHEDULE",
                 "fetched_at_utc": stamp,
                 "season": event.get("_schedule_season"),
@@ -112,7 +113,7 @@ def build_context(schedule, as_of_utc, allow_stale=True, overrides_path=None):
         "pit_provenance": {
             "pit_mode": "LIVE_SNAPSHOT",
             "pit_reconstruction_supported": False,
-            "adapter_source": "NBA_STATS_SCHEDULELEAGUEV2",
+            "adapter_source": "NBA_PUBLIC_CDN_SCHEDULELEAGUEV2",
             "data_vintage_basis": "FETCH_TIME_PROXY_SCHEDULE_ONLY",
             "source_fetches": fetches,
         },

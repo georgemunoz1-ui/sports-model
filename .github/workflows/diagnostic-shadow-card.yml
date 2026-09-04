@@ -202,6 +202,14 @@ jobs:
             --card output/card/diagnostic_card.json \
             | tee output/card/pit_integrity.json
 
+      - name: Investigate MLB Analytic P vs Stochastic Sim P
+        if: ${{ always() && steps.resolve.outputs.league == 'mlb' && hashFiles('output/card/diagnostic_card.json') != '' }}
+        shell: bash
+        run: |
+          python scripts/investigate_mlb_model_sim_divergence.py \
+            --card output/card/diagnostic_card.json \
+            --output-dir output/card/divergence
+
       - name: Validate card and write manifest
         id: validate
         shell: bash
@@ -218,12 +226,21 @@ jobs:
           from pathlib import Path
 
           out = Path("output/card")
+          league = os.environ["LEAGUE"].lower()
           required = [
               out / "diagnostic_card.json",
               out / "diagnostic_card.csv",
               out / "diagnostic_card.md",
               out / "pit_integrity.json",
           ]
+          if league == "mlb":
+              required.extend(
+                  [
+                      out / "divergence/divergence_report.json",
+                      out / "divergence/divergence_report.csv",
+                      out / "divergence/divergence_report.md",
+                  ]
+              )
           missing = [str(p) for p in required if not p.exists()]
           if missing:
               raise SystemExit(f"missing card artifacts: {missing}")
@@ -254,6 +271,18 @@ jobs:
                   f"delta_seconds={pit.get('pit_delta_seconds')}"
               )
 
+          artifacts = {
+              "json": "output/card/diagnostic_card.json",
+              "csv": "output/card/diagnostic_card.csv",
+              "markdown": "output/card/diagnostic_card.md",
+              "pit_integrity": "output/card/pit_integrity.json",
+              "log": "output/card/run.log",
+          }
+          if league == "mlb":
+              artifacts["divergence_json"] = "output/card/divergence/divergence_report.json"
+              artifacts["divergence_csv"] = "output/card/divergence/divergence_report.csv"
+              artifacts["divergence_markdown"] = "output/card/divergence/divergence_report.md"
+
           manifest = {
               "request_id": os.environ["REQUEST_ID"],
               "github_run_id": os.environ.get("GITHUB_RUN_ID"),
@@ -274,7 +303,7 @@ jobs:
               "pit_threshold_seconds": pit.get("pit_threshold_seconds"),
               "data_vintage_basis": pit.get("data_vintage_basis"),
               "mode": "DIAGNOSTIC_SHADOW",
-              "league": os.environ["LEAGUE"].upper(),
+              "league": league.upper(),
               "simulation_count": int(os.environ["SIMULATION_COUNT"]),
               "scheduled_events": scheduled,
               "pregame_events": pregame,
@@ -282,15 +311,10 @@ jobs:
               "forecast_coverage_pct": coverage,
               "incident_count": len(incidents),
               "generator_exit_code": exit_code,
-              "card_artifacts": {
-                  "json": "output/card/diagnostic_card.json",
-                  "csv": "output/card/diagnostic_card.csv",
-                  "markdown": "output/card/diagnostic_card.md",
-                  "pit_integrity": "output/card/pit_integrity.json",
-                  "log": "output/card/run.log"
-              },
+              "card_artifacts": artifacts,
               "action_authority": False,
-              "overall_status": overall_status
+              "market_overlay_enabled": False,
+              "overall_status": overall_status,
           }
           (out / "manifest.json").write_text(json.dumps(manifest, indent=2, sort_keys=True) + "\n")
           print(json.dumps(manifest, indent=2, sort_keys=True))
@@ -310,6 +334,10 @@ jobs:
           fi
           if [ -f output/card/diagnostic_card.md ]; then
             cat output/card/diagnostic_card.md >> "$GITHUB_STEP_SUMMARY"
+          fi
+          if [ -f output/card/divergence/divergence_report.md ]; then
+            echo '' >> "$GITHUB_STEP_SUMMARY"
+            cat output/card/divergence/divergence_report.md >> "$GITHUB_STEP_SUMMARY"
           fi
 
       - name: Upload diagnostic card artifact

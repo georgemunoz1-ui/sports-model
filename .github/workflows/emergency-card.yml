@@ -11,7 +11,7 @@ on:
         required: true
         default: mlb
         type: choice
-        options: [mlb, cfb]
+        options: [mlb, cfb, nfl, wnba, nba]
       as_of_utc:
         description: Point-in-time cutoff UTC (optional; defaults to runtime)
         required: false

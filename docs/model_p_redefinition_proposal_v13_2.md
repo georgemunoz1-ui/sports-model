@@ -1,6 +1,6 @@
 # MLB Model P Redefinition Proposal — V13.2
 
-Status: **DIAGNOSTIC CANDIDATE ONLY**  
+Status: **DIAGNOSTIC CANDIDATE ONLY — PROMOTION HELD**  
 Action authority: **OFF**  
 Market/EV overlay: **DISABLED**
 
@@ -100,6 +100,36 @@ The divergence report exposes these variants:
 
 This distinction matters: the current engine does **not** contain a shared run-environment factor or bullpen sequencing model, so those mechanisms must not be cited as causes until implemented and validated.
 
+## Observed 2026-09-04 diagnostic evidence
+
+Run `33854661221` produced a 16-game, 100,000-path MLB card with the new PIT and ablation diagnostics. The requested cutoff was `2026-09-04T08:41:00Z`; the maximum live fetch timestamp was about 58 seconds later, so the card was labeled `PIT_ALIGNED` under the 15-minute diagnostic threshold.
+
+The ablation evidence materially narrows the cause of the divergence:
+
+| Diagnostic | 16-game result |
+|---|---:|
+| Mean Analytic-vs-Sim absolute gap | 6.29 pp |
+| Median Analytic-vs-Sim absolute gap | 6.84 pp |
+| A fixed-Poisson → B fixed-Gamma mean favorite compression | **6.14 pp** |
+| A → B median favorite compression | **6.87 pp** |
+| A → B maximum absolute effect | **13.96 pp** |
+| B fixed-Gamma → D starter-workload mean effect | **0.01 pp** |
+| B → D maximum absolute effect | **0.41 pp** |
+
+Interpretation: on this debugging slate, **Gamma run-rate overdispersion explains nearly all of the large Analytic-vs-Sim compression**, while starter-workload randomness contributes very little additional probability movement. This is diagnostic evidence, not yet calibration evidence.
+
+The proposed Normal-margin candidate also did **not** satisfy the working convergence target on this slate:
+
+| Candidate-vs-Sim check | Result |
+|---|---:|
+| Mean absolute gap | 2.51 pp |
+| Median absolute gap | 2.73 pp |
+| Games within 2 pp | **6 / 16 (37.5%)** |
+| Maximum absolute gap | 4.57 pp |
+| Working target | 90% within 2 pp |
+
+Therefore the V13.2 Normal-margin candidate is **not promoted**. The current evidence argues against replacing Analytic P with `Phi(mu_margin / sigma_margin)` merely to force convergence.
+
 ## Migration plan
 
 ### Phase 1 — observe
@@ -123,6 +153,8 @@ Run the divergence report on every MLB shadow card and aggregate results over se
 ### Phase 3 — decide
 
 Only after calibration evidence exists may a model-state change designate one probability definition as canonical. The decision must be versioned and frozen in a model-state artifact.
+
+The current leading question is no longer simply "which closed form best matches Sim P?" It is whether the Gamma-Poisson stochastic distribution is better calibrated out of sample than the fixed-rate Analytic P, and whether a separate deterministic approximation is needed at all.
 
 ### Phase 4 — market overlay
 

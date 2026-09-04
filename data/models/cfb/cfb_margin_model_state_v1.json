@@ -1,0 +1,54 @@
+{
+  "artifact_type": "cfb_margin_model_state_v1",
+  "model_id": "cfb.margin_distribution.v1",
+  "version": "1.0.0",
+  "trained_at_utc": "2026-09-04T00:43:28.863437Z",
+  "as_of_utc": "2026-09-03T17:35:22-07:00",
+  "code_commit": "ddc8c330cc9ddf7e73a43c6aab86a00e389ed7f9",
+  "training_data": {
+    "dataset_id": "cfb_v1_features.parquet",
+    "dataset_hash": "sha256:30dc3cc56cb959cd36c184877525a32ee5d75416dd11cab82d90f980c1a46b90",
+    "n_games": 36901,
+    "n_train": 29520,
+    "n_validation": 7381,
+    "population": "FBS_vs_FBS_only",
+    "target": "home_final_margin",
+    "point_in_time_semantics": "source cfb_v1_features causal pregame rows"
+  },
+  "feature_schema": {
+    "version": "cfb_margin_features_v1",
+    "features": ["elo_diff_with_home_advantage", "neutral_site", "conference_game"]
+  },
+  "parameters": {
+    "intercept": 6.434617402421524,
+    "elo_diff_coefficient": 0.06834225983316476,
+    "neutral_site_coefficient": 1.8074537836065045,
+    "conference_game_coefficient": -7.737799253021843,
+    "home_advantage_embedded_in_elo_diff": true
+  },
+  "residual_model": {
+    "distribution": "normal_margin_v1",
+    "global_sigma": 18.16410395947302,
+    "segment_sigma_by_week": {
+      "1": 20.264697771405878, "2": 21.706910243863277, "3": 20.66985439054838,
+      "4": 20.00345465100577, "5": 18.18526828948097, "6": 18.07566311369877,
+      "7": 17.872985673361786, "8": 17.224320389468105, "9": 16.076219509877713,
+      "10": 17.202451521923567, "11": 16.10442903752641, "12": 16.25896576349102,
+      "13": 16.337023764394047, "14": 16.66058565758147
+    }
+  },
+  "validation": {
+    "method": "chronological_holdout_last_20pct",
+    "n_games": 7381,
+    "margin_mae": 14.370052565718773,
+    "margin_rmse": 18.16410395947302,
+    "ml_brier_induced_by_margin_sim": 0.16753736951407996
+  },
+  "promotion_provenance": {
+    "workflow_run_id": 33822402952,
+    "artifact_id": 9918896639,
+    "artifact_digest": "sha256:be78e004385d0cbd2153e3aadb19ce431e507358d9a80d3851f0c880b73a4b01",
+    "authority": "SHADOW_ONLY"
+  },
+  "status": "SHADOW_CANDIDATE"
+}

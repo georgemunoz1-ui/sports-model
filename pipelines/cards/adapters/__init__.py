@@ -1,0 +1,1 @@
+"""Registered diagnostic card adapters."""

@@ -19,7 +19,7 @@ on:
           - wnba
           - nba
       as_of_utc:
-        description: "Point-in-time cutoff timestamp (ISO-8601 UTC)"
+        description: "Requested point-in-time cutoff timestamp (ISO-8601 UTC)"
         required: true
         type: string
       simulation_count:
@@ -194,6 +194,14 @@ jobs:
           echo "exit_code=$rc" >> "$GITHUB_OUTPUT"
           exit 0
 
+      - name: Check PIT cutoff integrity
+        if: ${{ always() && hashFiles('output/card/diagnostic_card.json') != '' }}
+        shell: bash
+        run: |
+          python scripts/check_cutoff_integrity.py \
+            --card output/card/diagnostic_card.json \
+            | tee output/card/pit_integrity.json
+
       - name: Validate card and write manifest
         id: validate
         shell: bash
@@ -210,7 +218,12 @@ jobs:
           from pathlib import Path
 
           out = Path("output/card")
-          required = [out / "diagnostic_card.json", out / "diagnostic_card.csv", out / "diagnostic_card.md"]
+          required = [
+              out / "diagnostic_card.json",
+              out / "diagnostic_card.csv",
+              out / "diagnostic_card.md",
+              out / "pit_integrity.json",
+          ]
           missing = [str(p) for p in required if not p.exists()]
           if missing:
               raise SystemExit(f"missing card artifacts: {missing}")
@@ -223,6 +236,7 @@ jobs:
           coverage = float(card.get("pregame_coverage", 0.0))
           incidents = card.get("incidents", [])
           exit_code = int(os.environ.get("FORECAST_EXIT_CODE") or 0)
+          pit = card.get("pit_provenance") or {}
 
           overall_status = "PASS"
           if pregame > 0 and forecasted == 0:
@@ -232,6 +246,14 @@ jobs:
           if exit_code != 0:
               overall_status = "FAIL"
 
+          if pit.get("pit_gate") == "WARN":
+              print(
+                  f"::warning title=PIT provenance::{pit.get('pit_status')} "
+                  f"requested={pit.get('requested_as_of_utc')} "
+                  f"actual={pit.get('actual_data_vintage_utc')} "
+                  f"delta_seconds={pit.get('pit_delta_seconds')}"
+              )
+
           manifest = {
               "request_id": os.environ["REQUEST_ID"],
               "github_run_id": os.environ.get("GITHUB_RUN_ID"),
@@ -239,6 +261,18 @@ jobs:
               "git_sha": os.environ.get("GITHUB_SHA"),
               "card_date": os.environ["CARD_DATE"],
               "as_of_utc": os.environ["AS_OF_UTC"],
+              "requested_as_of_utc": card.get("requested_as_of_utc", os.environ["AS_OF_UTC"]),
+              "actual_data_vintage_utc": pit.get("actual_data_vintage_utc"),
+              "generated_at_utc": card.get("generated_at_utc"),
+              "max_source_timestamp_utc": pit.get("max_source_timestamp_utc"),
+              "min_source_timestamp_utc": pit.get("min_source_timestamp_utc"),
+              "pit_mode": pit.get("pit_mode"),
+              "pit_reconstruction_supported": pit.get("pit_reconstruction_supported"),
+              "pit_delta_seconds": pit.get("pit_delta_seconds"),
+              "pit_status": pit.get("pit_status"),
+              "pit_reason": pit.get("pit_reason"),
+              "pit_threshold_seconds": pit.get("pit_threshold_seconds"),
+              "data_vintage_basis": pit.get("data_vintage_basis"),
               "mode": "DIAGNOSTIC_SHADOW",
               "league": os.environ["LEAGUE"].upper(),
               "simulation_count": int(os.environ["SIMULATION_COUNT"]),
@@ -252,6 +286,7 @@ jobs:
                   "json": "output/card/diagnostic_card.json",
                   "csv": "output/card/diagnostic_card.csv",
                   "markdown": "output/card/diagnostic_card.md",
+                  "pit_integrity": "output/card/pit_integrity.json",
                   "log": "output/card/run.log"
               },
               "action_authority": False,

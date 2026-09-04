@@ -1,32 +1,20 @@
 """NBA diagnostic-card adapter.
 
-Canonical schedule acquisition is isolated from model inference. Forecast generation
-remains fail-closed until fitted NBA state and PIT team/player features exist.
+Schedule identity is loaded from immutable source snapshots committed to the repository.
+Model inference remains fail-closed until fitted NBA state and PIT team/player features exist.
 """
 from __future__ import annotations
 
 import json
-import urllib.request
-from datetime import datetime, timezone
+from datetime import datetime
 from pathlib import Path
 from zoneinfo import ZoneInfo
 
 from models.nba.efficiency_monte_carlo_v1 import run as run_mc
 
 STATE = Path("data/models/nba/efficiency_monte_carlo_config_v1.json")
+SCHEDULE_DIR = Path("data/nba/schedule")
 CARD_TZ = ZoneInfo("America/New_York")
-NBA_SCHEDULE = "https://cdn.nba.com/static/json/staticData/scheduleLeagueV2.json"
-NBA_HEADERS = {
-    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
-    "Accept": "application/json, text/plain, */*",
-    "Accept-Language": "en-US,en;q=0.9",
-    "Origin": "https://www.nba.com",
-    "Referer": "https://www.nba.com/",
-}
-
-
-def _utcnow():
-    return datetime.now(timezone.utc).isoformat().replace("+00:00", "Z")
 
 
 def _dt(value):
@@ -39,55 +27,46 @@ def _season_key(card_date):
     return f"{start_year}-{str(start_year + 1)[-2:]}"
 
 
-def _get_json(url):
-    req = urllib.request.Request(url, headers=NBA_HEADERS)
-    with urllib.request.urlopen(req, timeout=30) as response:
-        return json.load(response)
-
-
-def _league_schedule(payload):
-    value = payload.get("leagueSchedule")
-    if isinstance(value, dict) and isinstance(value.get("gameDates"), list):
-        return value
-    for candidate in payload.values():
-        if isinstance(candidate, dict) and isinstance(candidate.get("gameDates"), list):
-            return candidate
-    raise RuntimeError("NBA_SCHEDULE_RESPONSE_SCHEMA_UNRECOGNIZED")
+def _snapshot_path(card_date):
+    return SCHEDULE_DIR / f"nba_schedule_snapshot_v1_{card_date}.json"
 
 
 def load_schedule(card_date, as_of_utc):
+    path = _snapshot_path(card_date)
+    if not path.exists():
+        raise RuntimeError(f"NBA_SCHEDULE_SNAPSHOT_UNAVAILABLE:{path}")
+    snapshot = json.loads(path.read_text())
+    if snapshot.get("artifact_type") != "nba_schedule_snapshot_v1":
+        raise RuntimeError("NBA_SCHEDULE_SNAPSHOT_TYPE_INVALID")
+    if snapshot.get("card_date") != card_date:
+        raise RuntimeError("NBA_SCHEDULE_SNAPSHOT_DATE_MISMATCH")
     expected_season = _season_key(card_date)
-    fetched_at = _utcnow()
-    payload = _get_json(NBA_SCHEDULE)
-    schedule = _league_schedule(payload)
-    season_year = str(schedule.get("seasonYear") or "")
-    if season_year and season_year != expected_season:
-        raise RuntimeError(f"NBA_SCHEDULE_SEASON_MISMATCH:{season_year}!={expected_season}")
+    if snapshot.get("season") != expected_season:
+        raise RuntimeError(f"NBA_SCHEDULE_SEASON_MISMATCH:{snapshot.get('season')}!={expected_season}")
 
     rows = []
-    for date_row in schedule.get("gameDates", []):
-        for game in date_row.get("games", []):
-            start = game.get("gameDateTimeUTC")
-            game_id = game.get("gameId")
-            home = game.get("homeTeam") or {}
-            away = game.get("awayTeam") or {}
-            home_team = home.get("teamTricode")
-            away_team = away.get("teamTricode")
-            if not start or not game_id or not home_team or not away_team:
-                continue
-            start_dt = _dt(start)
-            if start_dt.astimezone(CARD_TZ).date().isoformat() != card_date:
-                continue
-            rows.append({
-                "event_id": str(game_id),
-                "away_team": str(away_team),
-                "home_team": str(home_team),
-                "start_time_utc": start_dt.astimezone(timezone.utc).isoformat().replace("+00:00", "Z"),
-                "_schedule_source": "NBA_PUBLIC_CDN_SCHEDULELEAGUEV2",
-                "_schedule_season": expected_season,
-                "_schedule_fetched_at_utc": fetched_at,
-            })
+    for game in snapshot.get("games", []):
+        event_id = game.get("event_id")
+        away = game.get("away_team")
+        home = game.get("home_team")
+        start = game.get("start_time_utc")
+        if not event_id or not away or not home or not start:
+            raise RuntimeError("NBA_SCHEDULE_CANONICAL_IDENTITY_UNRESOLVED")
+        if _dt(start).astimezone(CARD_TZ).date().isoformat() != card_date:
+            raise RuntimeError(f"NBA_SCHEDULE_EVENT_DATE_MISMATCH:{event_id}")
+        rows.append({
+            "event_id": str(event_id),
+            "away_team": str(away),
+            "home_team": str(home),
+            "start_time_utc": str(start),
+            "_schedule_source": "IMMUTABLE_NBA_SCHEDULE_SNAPSHOT_V1",
+            "_schedule_snapshot_path": str(path),
+            "_schedule_source_snapshot_time_utc": (snapshot.get("source") or {}).get("source_snapshot_time_utc"),
+            "_schedule_source_blob_sha": (snapshot.get("source") or {}).get("mirror_blob_sha"),
+        })
     rows.sort(key=lambda row: (row["start_time_utc"], row["event_id"]))
+    if not rows:
+        raise RuntimeError("NBA_SCHEDULE_SNAPSHOT_EMPTY")
     return rows
 
 
@@ -95,27 +74,24 @@ def build_context(schedule, as_of_utc, allow_stale=True, overrides_path=None):
     if not STATE.exists():
         raise RuntimeError(f"MODEL_STATE_UNAVAILABLE:{STATE}")
     state = json.loads(STATE.read_text())
-    fetches = []
-    seen = set()
-    for event in schedule:
-        stamp = event.get("_schedule_fetched_at_utc")
-        if stamp and stamp not in seen:
-            seen.add(stamp)
-            fetches.append({
-                "source": "NBA_PUBLIC_CDN_SCHEDULELEAGUEV2",
-                "purpose": "NBA_CANONICAL_SCHEDULE",
-                "fetched_at_utc": stamp,
-                "season": event.get("_schedule_season"),
-            })
+    first = schedule[0] if schedule else {}
     return {
         "state": state,
         "as_of_utc": as_of_utc,
+        "schedule_provenance": {
+            "artifact_type": "nba_schedule_snapshot_v1",
+            "snapshot_path": first.get("_schedule_snapshot_path"),
+            "source_snapshot_time_utc": first.get("_schedule_source_snapshot_time_utc"),
+            "source_blob_sha": first.get("_schedule_source_blob_sha"),
+        },
+        # Schedule acquisition is not the model feature-vintage clock. Until team,
+        # player and availability PIT inputs exist, model PIT status must remain unknown.
         "pit_provenance": {
-            "pit_mode": "LIVE_SNAPSHOT",
+            "pit_mode": "IMMUTABLE_SCHEDULE_ONLY",
             "pit_reconstruction_supported": False,
-            "adapter_source": "NBA_PUBLIC_CDN_SCHEDULELEAGUEV2",
-            "data_vintage_basis": "FETCH_TIME_PROXY_SCHEDULE_ONLY",
-            "source_fetches": fetches,
+            "adapter_source": "IMMUTABLE_NBA_SCHEDULE_SNAPSHOT_V1",
+            "data_vintage_basis": "SCHEDULE_IDENTITY_ONLY_MODEL_INPUT_VINTAGE_UNAVAILABLE",
+            "source_fetches": [],
         },
     }
 

@@ -46,7 +46,7 @@ def render_md(card):
     if card["incidents"]: lines += ["","## Coverage incidents","","```json",json.dumps(card["incidents"],indent=2),"```"]
     lines += ["","**Diagnostic only. Action authority is OFF.**"]; return "\n".join(lines)+"\n"
 def main():
-    ap=argparse.ArgumentParser(); ap.add_argument("--date",required=True); ap.add_argument("--league",required=True,choices=["mlb","cfb"]); ap.add_argument("--as-of-utc"); ap.add_argument("--simulations",type=int,default=100000); ap.add_argument("--manual-overrides"); ap.add_argument("--output-dir",default="output"); a=ap.parse_args(); asof=a.as_of_utc or datetime.now(timezone.utc).isoformat().replace("+00:00","Z")
+    ap=argparse.ArgumentParser(); ap.add_argument("--date",required=True); ap.add_argument("--league",required=True,choices=["mlb","cfb","nfl","wnba","nba"]); ap.add_argument("--as-of-utc"); ap.add_argument("--simulations",type=int,default=100000); ap.add_argument("--manual-overrides"); ap.add_argument("--output-dir",default="output"); a=ap.parse_args(); asof=a.as_of_utc or datetime.now(timezone.utc).isoformat().replace("+00:00","Z")
     card=generate(a.date,a.league,asof,a.simulations,a.manual_overrides); out=Path(a.output_dir); out.mkdir(parents=True,exist_ok=True); (out/"diagnostic_card.json").write_text(json.dumps(card,indent=2,sort_keys=True)+"\n"); (out/"diagnostic_card.md").write_text(render_md(card)); fields=["event_id","away_team","home_team","forecast_status","forecast_tier","data_quality","dose","model_winner","model_p","sim_p","projected_margin","projected_total","spread_or_runline","total_market","warnings"]
     with (out/"diagnostic_card.csv").open("w",newline="") as f:
       w=csv.DictWriter(f,fieldnames=fields,extrasaction="ignore"); w.writeheader()

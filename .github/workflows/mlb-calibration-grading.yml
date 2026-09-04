@@ -1,0 +1,176 @@
+name: MLB Calibration Grading
+
+on:
+  workflow_dispatch:
+    inputs:
+      grade_date:
+        description: "Optional registered card date YYYY-MM-DD; blank grades all pending"
+        required: false
+        type: string
+      forecast_run_id:
+        description: "Optional Actions run ID to register for grade_date before grading"
+        required: false
+        type: string
+  schedule:
+    # After the prior MLB slate is normally final. Scheduled workflows execute
+    # only from the repository default branch, so this becomes active after merge.
+    - cron: "30 13 * * *"
+  push:
+    branches:
+      - codex/nfl-wnba-nba-models-v1
+    paths:
+      - "grading_requests/*.json"
+
+permissions:
+  actions: read
+  contents: write
+
+env:
+  PYTHONUNBUFFERED: "1"
+  GH_TOKEN: ${{ github.token }}
+
+jobs:
+  grade:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Resolve grading request
+        id: resolve
+        shell: bash
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          INPUT_GRADE_DATE: ${{ inputs.grade_date }}
+          INPUT_FORECAST_RUN_ID: ${{ inputs.forecast_run_id }}
+        run: |
+          python - <<'PY'
+          import json, os, subprocess
+          from datetime import datetime, timedelta, timezone
+          from pathlib import Path
+
+          event = os.environ["EVENT_NAME"]
+          grade_date = (os.environ.get("INPUT_GRADE_DATE") or "").strip()
+          run_id = (os.environ.get("INPUT_FORECAST_RUN_ID") or "").strip()
+          if event == "push":
+              names = subprocess.check_output(
+                  ["git", "diff-tree", "--no-commit-id", "--name-only", "-r", os.environ["GITHUB_SHA"]],
+                  text=True,
+              ).splitlines()
+              candidates = sorted(n for n in names if n.startswith("grading_requests/") and n.endswith(".json"))
+              if not candidates:
+                  raise SystemExit("GRADING_REQUEST_FILE_NOT_FOUND")
+              req = json.loads(Path(candidates[-1]).read_text())
+              grade_date = str(req.get("grade_date") or "").strip()
+              run_id = str(req.get("forecast_run_id") or "").strip()
+          elif event == "schedule":
+              # At 13:30Z, yesterday's UTC date corresponds to the completed MLB slate.
+              grade_date = (datetime.now(timezone.utc).date() - timedelta(days=1)).isoformat()
+
+          if grade_date:
+              datetime.fromisoformat(grade_date)
+          if run_id and not grade_date:
+              raise SystemExit("forecast_run_id requires grade_date")
+
+          with open(os.environ["GITHUB_OUTPUT"], "a") as handle:
+              handle.write(f"grade_date={grade_date}\n")
+              handle.write(f"run_id={run_id}\n")
+          print(json.dumps({"grade_date": grade_date, "run_id": run_id}, indent=2))
+          PY
+
+      - name: Register explicit forecast run
+        if: ${{ steps.resolve.outputs.run_id != '' }}
+        shell: bash
+        env:
+          GRADE_DATE: ${{ steps.resolve.outputs.grade_date }}
+          RUN_ID: ${{ steps.resolve.outputs.run_id }}
+        run: |
+          python - <<'PY'
+          import json, os
+          from datetime import datetime, timezone
+          from pathlib import Path
+          path = Path("data/grading/mlb/registry.json")
+          registry = json.loads(path.read_text()) if path.exists() else {"schema_version":"mlb_calibration_registry_v1","cards":{}}
+          cards = registry.setdefault("cards", {})
+          date = os.environ["GRADE_DATE"]
+          run_id = int(os.environ["RUN_ID"])
+          existing = cards.get(date)
+          if existing and int(existing.get("run_id")) != run_id:
+              raise SystemExit(f"REGISTERED_CARD_IMMUTABLE:{date}:{existing.get('run_id')} != {run_id}")
+          cards[date] = existing or {
+              "run_id": run_id,
+              "registered_at_utc": datetime.now(timezone.utc).isoformat().replace("+00:00","Z"),
+              "registration_basis": "Explicit prospective registration before grading",
+              "status": "REGISTERED",
+          }
+          path.parent.mkdir(parents=True, exist_ok=True)
+          path.write_text(json.dumps(registry, indent=2, sort_keys=True) + "\n")
+          PY
+
+      - name: Grade registered forecast card(s)
+        shell: bash
+        env:
+          GRADE_DATE: ${{ steps.resolve.outputs.grade_date }}
+        run: |
+          mkdir -p output/mlb_grading
+          args=()
+          if [ -n "$GRADE_DATE" ]; then args+=(--grade-date "$GRADE_DATE"); fi
+          python scripts/grade_mlb_registry.py \
+            --registry data/grading/mlb/registry.json \
+            --ledger data/grading/mlb/calibration_ledger.jsonl \
+            --summary data/grading/mlb/calibration_summary.json \
+            --output-dir output/mlb_grading \
+            "${args[@]}"
+
+      - name: Publish calibration summary
+        if: always()
+        shell: bash
+        run: |
+          echo '## MLB Probability Calibration' >> "$GITHUB_STEP_SUMMARY"
+          if [ -f data/grading/mlb/calibration_summary.json ]; then
+            echo '```json' >> "$GITHUB_STEP_SUMMARY"
+            cat data/grading/mlb/calibration_summary.json >> "$GITHUB_STEP_SUMMARY"
+            echo '```' >> "$GITHUB_STEP_SUMMARY"
+          fi
+          if [ -f output/mlb_grading/registry_grade_run.json ]; then
+            echo '### Grade run' >> "$GITHUB_STEP_SUMMARY"
+            echo '```json' >> "$GITHUB_STEP_SUMMARY"
+            cat output/mlb_grading/registry_grade_run.json >> "$GITHUB_STEP_SUMMARY"
+            echo '```' >> "$GITHUB_STEP_SUMMARY"
+          fi
+          echo '**Market overlay: OFF · Action authority: OFF**' >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Commit durable grading state
+        shell: bash
+        run: |
+          git config user.name "sports-model-calibration-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add data/grading/mlb/registry.json
+          if [ -f data/grading/mlb/calibration_ledger.jsonl ]; then git add data/grading/mlb/calibration_ledger.jsonl; fi
+          if [ -f data/grading/mlb/calibration_summary.json ]; then git add data/grading/mlb/calibration_summary.json; fi
+          if git diff --cached --quiet; then
+            echo "No durable grading changes"
+          else
+            git commit -m "Grade MLB calibration forecasts ${{ steps.resolve.outputs.grade_date }}"
+            git push origin "HEAD:${GITHUB_REF_NAME}"
+          fi
+
+      - name: Upload grading report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: mlb-calibration-grading-${{ steps.resolve.outputs.grade_date }}-${{ github.run_id }}
+          path: |
+            output/mlb_grading/
+            data/grading/mlb/registry.json
+            data/grading/mlb/calibration_ledger.jsonl
+            data/grading/mlb/calibration_summary.json
+          if-no-files-found: warn
+          retention-days: 90

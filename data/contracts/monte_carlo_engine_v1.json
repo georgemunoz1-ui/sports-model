@@ -5,12 +5,13 @@
   "minimum_simulations": 50000,
   "default_simulations": 100000,
   "rng": "numpy.random.Generator(PCG64)",
-  "seed_derivation": "uint32(first_8_bytes(SHA256(event_id|input_snapshot_hash|model_state_config_hash|engine_version)))",
+  "seed_derivation": "uint32(first_4_bytes(SHA256(event_id|input_snapshot_hash|model_state_config_hash|engine_version)))",
   "required_provenance": [
     "simulation_engine", "simulation_engine_version", "distribution_specification",
     "simulation_count", "random_seed", "input_snapshot_hash", "model_state_config_hash",
     "generated_at_utc", "output_hash", "reproduction_command"
   ],
+  "output_hash_semantics": "SHA256 of canonical deterministic forecast payload excluding generated_at_utc and output_hash itself; therefore identical inputs/config/engine/seed produce identical output_hash.",
   "cfb": {
     "primary_distribution": "home_margin ~ Normal(mu_margin, sigma_week)",
     "mu_source": "cfb.margin_distribution.v1",

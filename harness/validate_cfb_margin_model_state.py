@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
+MODULE_ID = 'validate_cfb_margin_model_state'
 import argparse,json,math
 def validate(s):
  v=[]

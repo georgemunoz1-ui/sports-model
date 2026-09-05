@@ -6,15 +6,16 @@ from pathlib import Path
 from zoneinfo import ZoneInfo
 from models.cfb.monte_carlo_v1 import build_snapshot, run as run_mc
 
-SCHEDULE=Path("data/cfb/source/2026-09-03_cfb_schedule.csv")
+SCHEDULE_DIR=Path("data/cfb/source")
 STATE=Path("data/models/cfb/cfb_margin_model_state_v1.json")
 CARD_TZ=ZoneInfo("America/New_York")
 
 def _dt(s): return datetime.fromisoformat(str(s).replace("Z","+00:00"))
 def load_schedule(card_date, as_of_utc):
-    if not SCHEDULE.exists(): raise RuntimeError(f"MODEL_STATE_UNAVAILABLE:{SCHEDULE}")
+    schedule_path = SCHEDULE_DIR / f"{card_date}_cfb_schedule.csv"
+    if not schedule_path.exists(): raise RuntimeError(f"SCHEDULE_SNAPSHOT_UNAVAILABLE:{schedule_path}")
     rows=[]
-    with SCHEDULE.open(newline="") as f:
+    with schedule_path.open(newline="") as f:
         for r in csv.DictReader(f):
             if _dt(r["start_date"]).astimezone(CARD_TZ).date().isoformat()!=card_date: continue
             rows.append({"event_id":str(r["game_id"]),"away_team":r["away_team"],"home_team":r["home_team"],"start_time_utc":r["start_date"],"_row":r})
@@ -43,7 +44,7 @@ def forecast_event(event, context, simulations=100000):
     if tier=="EMERGENCY": warnings.append("CROSS_DIVISION_MEAN_BRIDGE_NOT_FITTED")
     return {"forecast_tier":tier,"data_quality":out["forecast_quality"],"dose":dose,
       "model_winner":event["home_team"] if home_is_pick else event["away_team"],"model_p":model_p,"sim_p":sim_p,
-      "projected_margin":mu,"projected_total":"UNSUPPORTED_BY_TIER","spread_or_runline":"SUPPORTED_AFTER_LINE_ATTACH",
+      "projected_margin":mu,"projected_total":"UNSUPPORTED_BY_TIER","spread_or_runline":"DIAGNOSTIC_ONLY_SETTLEMENT_UNSUPPORTED",
       "total_market":"UNSUPPORTED_BY_TIER","warnings":warnings,"input_snapshot_hash":out["input_snapshot_hash"],
       "model_state_config_hash":out["model_state_config_hash"],"simulation":out["simulation"],
       "provenance":{"model_id":out["model"]["model_id"],"model_version":out["model"]["model_version"],"output_hash":out["output_hash"],

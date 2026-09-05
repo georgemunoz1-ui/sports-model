@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
+MODULE_ID = 'execution_readiness'
 import argparse, importlib.util, json, os, sys
 from pathlib import Path
 

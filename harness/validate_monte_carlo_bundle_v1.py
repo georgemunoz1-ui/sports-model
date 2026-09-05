@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
+MODULE_ID = 'validate_monte_carlo_bundle_v1'
 import argparse,json,math
 REQUIRED=("event_id","generated_at_utc","input_snapshot_hash","model_state_config_hash","output_hash")
 def validate(x):

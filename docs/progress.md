@@ -4358,3 +4358,10 @@ backfill and model-restoration blockers remain active.
 Release result: **BLOCKED** for all four sports, 20/20 discovered events classified, zero contract
 problems, zero evidence-hash binding problems. No model probability, edge, selection, or price was
 invented. Ledger unchanged: 0 bets, 0.00 units, $0. Wager authority NO.
+
+
+## 2026-09-05 — all-sports recovery on codex/all-sports-recovery-20260905
+
+Owner requested process repairs and required data for all sports. The default main branch has no model pipeline; this recovery targets codex/nfl-wnba-nba-models-v1. Source capture run 33997673794 retrieved 157 responses across MLB/NFL/CFB/NBA/WNBA/NHL/MLS without request failure; all 129 retained manifest entries independently matched SHA-256. Seven-day source window is 2026-08-30 through 2026-09-05. Raw source capture is evidence only, not a PIT backfill or forecast registration.
+
+Patched card probability overrides and strict timestamp ordering. Diagnostic card cannot self-certify prospective grading. MLB missing required starter/team metrics now blocks before engine execution. Found reversed defensive-rating effect in WNBA v1; added a separately named v1.1 diagnostic correction, preserving original v1. Tested both symmetric paths on six defensive ratings. No action or market overlay enabled. NHL/MLS card integration, fitted NBA/WNBA/NFL states and full required input provenance remain open. No claim that all sports are model-ready. Health gate is run independently and its actual failures retained.

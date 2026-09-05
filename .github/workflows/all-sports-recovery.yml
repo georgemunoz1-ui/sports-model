@@ -19,6 +19,10 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
+      - name: Preserve code revision
+        run: |
+          mkdir -p output/recovery
+          git archive --format=tar.gz --output=output/recovery/source.tar.gz HEAD
       - name: Governance regression tests
         run: python -m unittest discover -s tests -p test_recovery_governance.py -v
       - name: Capture seven sports and MLB starter evidence
@@ -29,5 +33,30 @@ jobs:
         with:
           name: all-sports-source-evidence-${{ github.sha }}-${{ github.run_id }}-${{ github.run_attempt }}
           path: output/recovery/
+          if-no-files-found: error
+          retention-days: 90
+  health:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install declared dependencies
+        run: python -m pip install -r requirements.txt
+      - name: Model repair regression tests
+        run: python -m unittest discover -s tests -p test_recovery_models.py -v
+      - name: Repository health gate
+        run: |
+          mkdir -p output/health
+          set -o pipefail
+          python harness/healthcheck.py 2>&1 | tee output/health/healthcheck.log
+      - name: Preserve health result
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: recovery-health-${{ github.sha }}-${{ github.run_id }}
+          path: output/health/
           if-no-files-found: error
           retention-days: 90

@@ -5,9 +5,8 @@ live-only source in this adapter: ``as_of_utc`` is a requested cutoff, not a
 historical-replay guarantee. Fetch timestamps are therefore captured separately
 from the numerical snapshot and surfaced as PIT provenance.
 
-Missing probable starter profiles intentionally fall through to the engine's
-registered league priors and are surfaced as quality adjustments; they never
-suppress a diagnostic card.
+Required starter and team profiles fail closed before simulation. Optional
+enrichments remain explicit limitations; this adapter remains diagnostic-only.
 """
 from __future__ import annotations
 
@@ -200,6 +199,25 @@ def forecast_event(event, context, simulations=100000):
     away_sp = override.get("away_sp") or _pitcher(event.get("away_sp"), pit, "away")
     home_sp = override.get("home_sp") or _pitcher(event.get("home_sp"), pit, "home")
 
+    for side, profile in (("away", away_sp), ("home", home_sp)):
+        if not profile or not profile.get("id"):
+            raise RuntimeError(f"REQUIRED_STARTER_MISSING:{side}")
+        for key in ("era", "gs", "k", "bb"):
+            try:
+                value = float(profile[key])
+            except (KeyError, TypeError, ValueError):
+                raise RuntimeError(f"REQUIRED_STARTER_METRIC_MISSING:{side}:{key}")
+            if not math.isfinite(value) or value < 0:
+                raise RuntimeError(f"INVALID_STARTER_METRIC:{side}:{key}")
+    for side, team in (("away", team_away), ("home", team_home)):
+        for key in ("rf_pg", "ra_pg"):
+            try:
+                value = float(team[key])
+            except (KeyError, TypeError, ValueError):
+                raise RuntimeError(f"REQUIRED_TEAM_BASELINE_MISSING:{side}:{key}")
+            if not math.isfinite(value) or value <= 0:
+                raise RuntimeError(f"INVALID_TEAM_BASELINE:{side}:{key}")
+
     snapshot = {
         "event_id": str(event["event_id"]),
         "game_start_utc": event["start_time_utc"],
@@ -283,3 +301,4 @@ def forecast_event(event, context, simulations=100000):
             "model_p_candidate_definition": "Normal CDF of simulated mean margin divided by simulated margin standard deviation; diagnostic only",
         },
     }
+

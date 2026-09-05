@@ -62,6 +62,7 @@ def main():
         for league,route in ROUTES.items():
             specs.append((league,'scoreboard_discovery',f'https://site.api.espn.com/apis/site/v2/sports/{route}/scoreboard?dates={d:%Y%m%d}&limit=1000',2))
         specs.append(('mlb','official_schedule',f'https://statsapi.mlb.com/api/v1/schedule?sportId=1&date={d}&hydrate=probablePitcher,linescore,venue',1))
+    specs.append(('mlb','official_standings',f'https://statsapi.mlb.com/api/v1/standings?leagueId=103,104&season={day.year}&standingsTypes=regularSeason',1))
     with ThreadPoolExecutor(max_workers=8) as pool: fetched=list(pool.map(lambda s:capture(root,s),specs))
     details={}; events={league:set() for league in ROUTES}; today_events={league:set() for league in ROUTES}
     for record,data in fetched:
@@ -70,11 +71,11 @@ def main():
         if record['kind']=='scoreboard_discovery':
             for event in data.get('events',[]):
                 eid=str(event['id']);events[league].add(eid)
-                if event.get('date','')[:10]==str(day):
+                if f'dates={day:%Y%m%d}' in record['url']:
                     today_events[league].add(eid)
                     url=f'https://site.api.espn.com/apis/site/v2/sports/{ROUTES[league]}/summary?event={eid}'
                     details[url]=(league,'event_detail_discovery',url,2)
-        else:
+        elif record['kind']=='official_schedule':
             for date in data.get('dates',[]):
                 for game in date.get('games',[]):
                     if date['date']!=str(day): continue
@@ -97,7 +98,7 @@ def main():
       'sources':records,'sports':{}}
     for league in ROUTES:
         rows=[r for r in records if r['league']==league]
-        report['sports'][league]={'discovery_events_in_window':len(events[league]),'events_with_UTC_date':len(today_events[league]),
+        report['sports'][league]={'discovery_events_in_window':len(events[league]),'events_on_requested_scoreboard':len(today_events[league]),
           'responses_captured':sum(r['status']=='CAPTURED' for r in rows),'requests_failed':sum(r['status']=='FAILED' for r in rows),
           'model_readiness':'BLOCKED_PENDING_FEATURE_AND_PROVENANCE_VALIDATION','required_unverified':REQUIRED[league]}
     save_json(root/'report.json',report)

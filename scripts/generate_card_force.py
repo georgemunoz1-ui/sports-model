@@ -27,7 +27,10 @@ def finite_prob(x):
 
 
 def dt(value):
-    return datetime.fromisoformat(str(value).replace("Z", "+00:00"))
+    parsed = datetime.fromisoformat(str(value).replace("Z", "+00:00"))
+    if parsed.tzinfo is None:
+        raise ValueError("TIMESTAMP_TIMEZONE_REQUIRED")
+    return parsed
 
 
 def iso_utc(value):
@@ -66,6 +69,8 @@ def normalize(event, raw):
 
     analytic_p = float(raw.get("analytic_p", raw["model_p"]))
     stochastic_sim_p = float(raw.get("stochastic_sim_p", raw["sim_p"]))
+    if not finite_prob(analytic_p) or not finite_prob(stochastic_sim_p):
+        raise RuntimeError("INVALID_ESTIMATOR_PROBABILITY")
     signed_gap_pp = 100.0 * (analytic_p - stochastic_sim_p)
     abs_gap_pp = abs(signed_gap_pp)
 
@@ -112,11 +117,12 @@ def summarize_pit(context, requested_as_of_utc, generated_at_utc):
     raw = dict(context.get("pit_provenance") or {})
     fetches = list(raw.get("source_fetches") or [])
     timestamps = []
+    invalid_timestamp = False
     for item in fetches:
         try:
             timestamps.append(dt(item["fetched_at_utc"]))
         except Exception:
-            continue
+            invalid_timestamp = True
 
     requested = dt(requested_as_of_utc)
     generated = dt(generated_at_utc)
@@ -127,7 +133,7 @@ def summarize_pit(context, requested_as_of_utc, generated_at_utc):
         "pit_reconstruction_supported": bool(raw.get("pit_reconstruction_supported", False)),
         "adapter_source": raw.get("adapter_source"),
         "data_vintage_basis": raw.get("data_vintage_basis", "UNKNOWN"),
-        "pit_alignment_threshold_seconds": 900,
+        "pit_alignment_threshold_seconds": 0,
         "pit_threshold_seconds": 3600,
         "source_fetches": fetches,
         "action_authority": False,
@@ -141,25 +147,21 @@ def summarize_pit(context, requested_as_of_utc, generated_at_utc):
             "pit_delta_seconds": None,
             "pit_status": "PIT_UNKNOWN",
             "pit_reason": "SOURCE_FETCH_TIMESTAMP_UNAVAILABLE",
-            "pit_gate": "WARN",
+            "pit_gate": "FAIL",
         })
         return base
 
     minimum = min(timestamps)
     maximum = max(timestamps)
     delta_seconds = int(round((maximum - requested).total_seconds()))
-    absolute_delta = abs(delta_seconds)
-
-    if absolute_delta <= 900:
-        status, reason, gate = "PIT_ALIGNED", "LIVE_FETCH_WITHIN_15_MINUTES_OF_REQUESTED_CUTOFF", "PASS"
-    elif absolute_delta <= 3600:
-        status, reason, gate = "PIT_WARN", "LIVE_FETCH_15_TO_60_MINUTES_FROM_REQUESTED_CUTOFF", "WARN"
-    elif delta_seconds > 3600 and not base["pit_reconstruction_supported"]:
-        status, reason, gate = "PIT_REPLAY_INVALID", "LIVE_ONLY_SOURCE_FETCHED_AFTER_REQUESTED_CUTOFF", "WARN"
+    if invalid_timestamp:
+        status, reason, gate = "PIT_UNKNOWN", "SOURCE_TIMESTAMP_INVALID", "FAIL"
+    elif requested > generated or maximum > generated:
+        status, reason, gate = "PIT_REPLAY_INVALID", "FUTURE_TIMESTAMP", "FAIL"
+    elif maximum > requested:
+        status, reason, gate = "PIT_REPLAY_INVALID", "SOURCE_FETCH_AFTER_CUTOFF", "FAIL"
     else:
-        status = "PIT_STALE"
-        reason = "REQUESTED_CUTOFF_NOT_YET_REACHED_AT_LIVE_FETCH" if requested > generated else "LIVE_FETCH_MORE_THAN_60_MINUTES_BEFORE_REQUESTED_CUTOFF"
-        gate = "WARN"
+        status, reason, gate = "PIT_ORDERED", "FETCH_ORDER_ONLY_SOURCE_PROVENANCE_UNVERIFIED", "WARN"
 
     base.update({
         "actual_data_vintage_utc": iso_utc(maximum),
@@ -209,6 +211,8 @@ def attach_grading(card):
         temporal_pregame = dt(generated_at) < start
         source_pregame = source_cutoff is None or dt(source_cutoff) < start
         eligible = (
+            False  # Diagnostic cards have no writer-owned immutable registration receipt.
+            and
             card.get("league") == "MLB"
             and pit_status == "PIT_ALIGNED"
             and temporal_pregame
@@ -216,7 +220,7 @@ def attach_grading(card):
             and analytic_home is not None
             and sim_home is not None
         )
-        reason = "ELIGIBLE_PIT_ALIGNED_PREGAME" if eligible else "NOT_REGISTERABLE"
+        reason = "REGISTRATION_ATTESTATION_REQUIRED"
         if pit_status != "PIT_ALIGNED":
             reason = f"PIT_STATUS_{pit_status or 'UNKNOWN'}"
         elif not temporal_pregame or not source_pregame:
@@ -253,7 +257,7 @@ def attach_grading(card):
     card["grading_policy"] = {
         "schema_version": "mlb_probability_calibration_v1",
         "eligible_forecast_count": eligible_count,
-        "registration_rule": "MLB + PIT_ALIGNED + source/generation pregame + explicit home probabilities",
+        "registration_rule": "DIAGNOSTIC_ONLY; separate verified writer registration required",
         "market_overlay_enabled": False,
         "action_authority": False,
     }
@@ -436,3 +440,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+

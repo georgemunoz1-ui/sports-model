@@ -1,0 +1,33 @@
+name: All Sports Evidence Recovery
+on:
+  push:
+    branches: [codex/all-sports-recovery-20260905]
+    paths:
+      - 'scripts/recovery_capture.py'
+      - 'scripts/generate_card_force.py'
+      - 'tests/test_recovery_governance.py'
+      - '.github/workflows/all-sports-recovery.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  capture:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Governance regression tests
+        run: python -m unittest discover -s tests -p test_recovery_governance.py -v
+      - name: Capture seven sports and MLB starter evidence
+        run: python scripts/recovery_capture.py --days 7 --output output/recovery
+      - name: Retain source evidence, including partial failures
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: all-sports-source-evidence-${{ github.sha }}-${{ github.run_id }}-${{ github.run_attempt }}
+          path: output/recovery/
+          if-no-files-found: error
+          retention-days: 90

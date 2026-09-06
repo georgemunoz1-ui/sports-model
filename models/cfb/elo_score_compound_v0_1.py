@@ -54,6 +54,7 @@ def analytic_distribution(away_mean: float, home_mean: float, p_ot_home: float):
     a=np.pad(apmf,(0,n-len(apmf)))
     h=np.pad(hpmf,(0,n-len(hpmf)))
     tie=float(np.dot(a,h))
+    # Joint lower triangle: h > a
     home_reg=0.0
     for hs,ph in enumerate(h):
         if ph:
@@ -114,6 +115,7 @@ def forecast_game(game: dict, teams: Dict[str,dict], cutoff_utc: str, n: int=N_S
     away=teams[game["away"]]; home=teams[game["home"]]
     p_elo=elo_prob(home["elo"],away["elo"],game["neutral_site"],True)
     p_ot=elo_prob(home["elo"],away["elo"],True,False)
+    # Empirically calibrated Week-1 probit margin mapping from retained OOF residual SD.
     regulation_margin=float(norm.ppf(p_elo)*WEEK1_MARGIN_SD)
     away_matchup=(away["pf_prior"]+home["pa_prior"])/2.0
     home_matchup=(home["pf_prior"]+away["pa_prior"])/2.0

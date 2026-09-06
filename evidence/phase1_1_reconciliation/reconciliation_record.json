@@ -1,0 +1,50 @@
+{
+  "authoritative_remote": {
+    "branch_protection_observed": {
+      "main": false,
+      "sportsmodel/main": false
+    },
+    "default_branch": "main",
+    "default_branch_head_commit_at_discovery": "c3df041c513bf737b14afb613f0a73789c7d6e9c",
+    "default_branch_schedule_durability": "NOT_ESTABLISHED_FOR_PHASE1_1",
+    "operational_branch": "sportsmodel/main",
+    "operational_branch_head_commit_at_discovery": "98035a19a7ba80bff622e35f4a61661f09082d5c",
+    "repository": "georgemunoz1-ui/sports-model",
+    "sep_5_journal_entry_present": false,
+    "state": "DIVERGED_STALE_REMOTE_LINEAGES"
+  },
+  "discovered_at_utc": "2026-09-06T08:32:45Z",
+  "disposition": {
+    "action_authority": "OFF",
+    "canonical_prospective_grade_eligible": false,
+    "prospective_status": "LOCAL_EVIDENCE_ONLY",
+    "remote_registration_status": "NOT_ESTABLISHED_AT_ORIGINAL_TIME",
+    "retroactive_registration_permitted": false
+  },
+  "local_evidence": {
+    "artifact_count": 32,
+    "artifact_manifest_sha256": "987f18731574268057732553cfa6ca8b46c40d8189ab7455eb9fd143664b54a0",
+    "phase": "1.1",
+    "source_commit_claimed": "c69d7ce12541643148cf04d081d14569faad1f21",
+    "source_manifest_sha256": "ac710b94634cc21f6266440a9e999c9a63fea465164f4b11106382d0eee96f13",
+    "status": "PRESERVED_UNCHANGED"
+  },
+  "planned_remediation": [
+    "merge reviewed Phase 1.1 code lineage through a separate PR",
+    "import evidence manifest append-only through a separate PR",
+    "record late durability import as such, never as pregame remote registration",
+    "adopt remote-first registration with a pregame remote receipt",
+    "migrate default branch to the governed operational lineage before relying on scheduled Actions"
+  ],
+  "postgame_disposition": {
+    "action_authority": "OFF",
+    "cfb_slate_coverage": "INSUFFICIENT",
+    "global_health": "RED",
+    "market_overlay": "OFF",
+    "mlb_live_input_quality": "INSUFFICIENT",
+    "mls_event_identity": "FAILED_FOR_2_FORECASTS",
+    "predictive_advantage": "UNVALIDATED"
+  },
+  "reconciliation_id": "reconcile-2026-09-06-phase1-1",
+  "schema": "sports.lineage_reconciliation.v1"
+}

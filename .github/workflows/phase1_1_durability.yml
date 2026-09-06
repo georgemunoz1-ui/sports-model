@@ -1,0 +1,33 @@
+name: phase1-1-durability
+
+on:
+  pull_request:
+    branches: ["sportsmodel/main", "main"]
+  push:
+    branches: ["sportsmodel/main", "main"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  durability:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - name: Remote durability unit tests
+        working-directory: sports/phase1_1
+        run: python test_durability.py
+      - name: Forbid historical Sept. 5 relabeling as remote pregame registration
+        run: |
+          if test -d evidence/phase1_1_reconciliation; then
+            if grep -R '"event_type"[[:space:]]*:[[:space:]]*"FORECAST_REGISTRATION"' evidence/phase1_1_reconciliation | grep '2026-09-05'; then
+              echo "Historical local evidence must not be relabeled as remote pregame registration"
+              exit 1
+            fi
+          fi

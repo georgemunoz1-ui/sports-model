@@ -1,0 +1,59 @@
+{
+  "schema": "cfb.elo_score_input_snapshot.v0_1",
+  "slate_timezone": "America/Los_Angeles",
+  "forecast_cutoff_utc": "2026-09-06T09:35:36Z",
+  "causal_elo_state": {
+    "repository": "georgemunoz1-ui/sports-model",
+    "branch": "codex/all-sports-recovery-20260905",
+    "branch_commit": "d2203af6aaee1ad0a40eca939fdb36690302c159",
+    "path": "data/cfb/model/cfb_causal_elo_launch_state_2026-09-03.json",
+    "git_blob_sha": "a4bc36c57a6f12574675ba15c88f008c3d61bce1",
+    "training_cutoff_utc": "2025-12-31T23:59:59Z",
+    "source_repository_claimed_in_state": "sportsdataverse/cfbfastR-data",
+    "source_commit_claimed_in_state": "e8d0b51434317c508d1df2fc07ffc5134b009732",
+    "completed_source_rows": 36901,
+    "teams_with_ratings": 780,
+    "same_week_2026_results_used_in_elo": false,
+    "home_advantage_elo": 55,
+    "selection_n": 3414,
+    "selection_brier": 0.17907279528357195,
+    "validation_n_fbs": 10818,
+    "validation_brier_fbs": 0.1841871687099094
+  },
+  "margin_uncertainty": {
+    "source_path": "data/cfb/model/cfb_margin_sd_schedule.json",
+    "week": 1,
+    "oof_week1_n": 758,
+    "sd_used": 18.3852,
+    "mae": 14.3485,
+    "residual_skew": -0.0231,
+    "residual_excess_kurtosis": 0.1009
+  },
+  "scoring_event_fit": {
+    "method": "target-cohort_2025_effective_touchdown_point_share",
+    "effective_td_point_share": 0.8623008108769842,
+    "remaining_point_share_modeled_as_field_goals": 0.1376991891230158,
+    "note": "Effective 7-point TD-package share estimated from 2025 target-team rushing+passing/scoring TD counts and points; return/nonstandard scoring is absorbed into the residual share. This is a shadow baseline, not a promoted scoring-event model."
+  },
+  "teams": {
+    "Texas Southern": {"classification":"FCS","elo":1421.251414245327,"prior_season_games":11,"pf_2025":25.818181818181817,"pa_2025":23.363636363636363,"current_2026_games":1,"current_pf":[42],"current_pa":[30],"pf_prior":27.166666666666668,"pa_prior":23.916666666666668,"sources":["https://swac.org/stats.aspx?path=football&year=2025","https://tsusports.com/sports/football/stats"]},
+    "Prairie View A&M": {"classification":"FCS","elo":1535.31270515172,"prior_season_games":14,"pf_2025":31.571428571428573,"pa_2025":17.857142857142858,"current_2026_games":1,"current_pf":[30],"current_pa":[49],"pf_prior":31.466666666666665,"pa_prior":19.933333333333334,"sources":["https://pvpanthers.com/sports/football/stats/2025","https://pvpanthers.com/sports/football/stats"]},
+    "South Carolina State": {"classification":"FCS","elo":1602.9667247432942,"prior_season_games":13,"pf_2025":32.38461538461539,"pa_2025":27.23076923076923,"current_2026_games":1,"current_pf":[87],"current_pa":[0],"pf_prior":36.285714285714285,"pa_prior":25.285714285714285,"sources":["https://www.scsuathletics.com/sports/football/stats/2025","https://www.scsuathletics.com/news/2026/8/29/football-sc-state-makes-history-in-87-0-season-opening-rout-of-savannah-state.aspx"]},
+    "Florida A&M": {"classification":"FCS","elo":1422.7979133167917,"prior_season_games":12,"pf_2025":24.25,"pa_2025":33.833333333333336,"current_2026_games":1,"current_pf":[20],"current_pa":[7],"pf_prior":23.923076923076923,"pa_prior":31.76923076923077,"sources":["https://famuathletics.com/sports/football/stats/2025","https://famuathletics.com/news/2026/8/29/football-rattlers-record-10-sacks-in-20-7-victory-over-albany-state-ga.aspx"]},
+    "Washington State": {"classification":"FBS","elo":1597.4167105573265,"prior_season_games":13,"pf_2025":22.5,"pa_2025":20.2,"current_2026_games":0,"current_pf":[],"current_pa":[],"pf_prior":22.5,"pa_prior":20.2,"srs_2025":4.78,"sources":["https://www.sports-reference.com/cfb/schools/washington-state/2025.html"]},
+    "Washington": {"classification":"FBS","elo":1716.7634683016797,"prior_season_games":13,"pf_2025":34.1,"pa_2025":18.7,"current_2026_games":0,"current_pf":[],"current_pa":[],"pf_prior":34.1,"pa_prior":18.7,"srs_2025":13.0,"sources":["https://www.sports-reference.com/cfb/schools/washington/2025.html"]},
+    "Louisville": {"classification":"FBS","elo":1702.7279625041015,"prior_season_games":13,"pf_2025":29.9,"pa_2025":21.2,"current_2026_games":0,"current_pf":[],"current_pa":[],"pf_prior":29.9,"pa_prior":21.2,"srs_2025":9.23,"sources":["https://www.sports-reference.com/cfb/schools/louisville/2025.html"]},
+    "Ole Miss": {"classification":"FBS","elo":1830.405652611104,"prior_season_games":15,"pf_2025":36.9,"pa_2025":21.1,"current_2026_games":0,"current_pf":[],"current_pa":[],"pf_prior":36.9,"pa_prior":21.1,"srs_2025":16.2,"sources":["https://www.sports-reference.com/cfb/schools/mississippi/2025.html"]},
+    "Wisconsin": {"classification":"FBS","elo":1524.1816029951276,"prior_season_games":12,"pf_2025":12.8,"pa_2025":21.6,"current_2026_games":0,"current_pf":[],"current_pa":[],"pf_prior":12.8,"pa_prior":21.6,"srs_2025":2.23,"sources":["https://www.sports-reference.com/cfb/schools/wisconsin/2025.html"]},
+    "Notre Dame": {"classification":"FBS","elo":1852.6682215386618,"prior_season_games":12,"pf_2025":42.0,"pa_2025":17.6,"current_2026_games":0,"current_pf":[],"current_pa":[],"pf_prior":42.0,"pa_prior":17.6,"srs_2025":21.85,"sources":["https://www.sports-reference.com/cfb/schools/notre-dame/2025.html"]}
+  },
+  "games": [
+    {"game_id":"CFB_CANONICAL:2026-09-06:TEXSO@PVAMU","away":"Texas Southern","home":"Prairie View A&M","venue":"Panther Stadium","scheduled_start_utc":"2026-09-06T16:00:00Z","scheduled_start_pt":"09:00","neutral_site":false,"classification":"FCS_FCS"},
+    {"game_id":"CFB_CANONICAL:2026-09-06:SCST@FAMU","away":"South Carolina State","home":"Florida A&M","venue":"Hard Rock Stadium","scheduled_start_utc":"2026-09-06T19:00:00Z","scheduled_start_pt":"12:00","neutral_site":true,"classification":"FCS_FCS"},
+    {"game_id":"ESPN_GAMEID:401858437","away":"Washington State","home":"Washington","venue":"Husky Stadium","scheduled_start_utc":"2026-09-06T20:00:00Z","scheduled_start_pt":"13:00","neutral_site":false,"classification":"FBS_FBS"},
+    {"game_id":"ESPN_GAMEID:401856661","away":"Louisville","home":"Ole Miss","venue":"Nissan Stadium","scheduled_start_utc":"2026-09-06T23:30:00Z","scheduled_start_pt":"16:30","neutral_site":true,"classification":"FBS_FBS"},
+    {"game_id":"ESPN_GAMEID:401858438","away":"Wisconsin","home":"Notre Dame","venue":"Lambeau Field","scheduled_start_utc":"2026-09-06T23:30:00Z","scheduled_start_pt":"16:30","neutral_site":true,"classification":"FBS_FBS"}
+  ],
+  "not_consumed": ["sportsbook spreads","sportsbook implied probabilities","injury reports","roster/transfer/talent ratings","quarterback-specific inputs","coaching-change features","weather","travel distance","returning production","play-by-play EPA"],
+  "source_capture_note": "Web-derived numeric scoring inputs are structured extractions observed before cutoff; they are not raw-byte archived source snapshots. The causal Elo state is repository-bound by commit/path/Git blob."
+}

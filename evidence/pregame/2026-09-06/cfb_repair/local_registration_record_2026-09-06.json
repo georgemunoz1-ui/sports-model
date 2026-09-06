@@ -1,0 +1,19 @@
+{
+  "schema": "sports.local_shadow_registration.v1",
+  "registration_id": "cfb-20260906-093746Z-v0_1-shadow",
+  "slate_date": "2026-09-06",
+  "forecast_cutoff_utc": "2026-09-06T09:35:36Z",
+  "local_registered_at_utc": "2026-09-06T09:37:46Z",
+  "earliest_game_start_utc": "2026-09-06T16:00:00Z",
+  "chronology_status": "PASS_LOCAL_PREGAME",
+  "registration_scope": "LOCAL_ONLY_PENDING_REMOTE_GATE",
+  "prospective_grade_eligible": false,
+  "remote_durability": "NOT_ESTABLISHED_AT_LOCAL_REGISTRATION",
+  "action_authority": "OFF",
+  "models": [
+    "cfb.fbs.causal_elo_score_compound.v0_1.shadow",
+    "cfb.fcs.causal_elo_score_compound.v0_1.shadow"
+  ],
+  "simulation_count_per_game": 100000,
+  "note": "Local pregame creation is chronological evidence only. Canonical prospective eligibility remains false unless an exact remote readback/branch-governance receipt independently passes before kickoff."
+}

@@ -1,0 +1,17 @@
+{
+  "action_authority": "OFF",
+  "artifact_manifest_sha256": "987f18731574268057732553cfa6ca8b46c40d8189ab7455eb9fd143664b54a0",
+  "event_id": "late-import-2026-09-06-phase1-1",
+  "event_type": "LATE_DURABILITY_IMPORT",
+  "imported_at_utc": "2026-09-06T08:32:45Z",
+  "note": "Remote commit receipt is appended as a separate IMPORT_RECEIPT event after GitHub accepts the evidence commit; this record is never rewritten.",
+  "original_local_registration_timestamp_claimed": "2026-09-05T09:42:00Z",
+  "prospective_grade_eligible": false,
+  "reason": "REMOTE_DEFAULT_MAIN_AND_OPERATIONAL_BRANCH_MISSING_ORIGINAL_SEP_5_DURABILITY_RECORD",
+  "registration_scope": "LOCAL_ONLY",
+  "remote_durability_at_event_time": "NOT_ESTABLISHED",
+  "remote_import_commit": null,
+  "remote_registration_timestamp": null,
+  "retroactive_registration_permitted": false,
+  "schema": "sports.durability_import_event.v1"
+}

@@ -1,9 +1,11 @@
 from __future__ import annotations
 
-from collections import Counter, defaultdict
+from collections import Counter
 from typing import Any
 
-DESTRUCTIVE = {"PLAYER_OUT", "STARTER_SCRATCHED", "BULLPEN_UNAVAILABLE"}
+from research.news_information.taxonomies import SUPPORTED_LEAGUES, destructive_event_types
+
+DESTRUCTIVE = set().union(*(destructive_event_types(league) for league in SUPPORTED_LEAGUES))
 
 
 def normalize_candidate_claims(component_outputs: list[dict[str, Any]]) -> list[dict[str, Any]]:
@@ -55,9 +57,10 @@ def consensus(component_outputs: list[dict[str, Any]], *, subject_id: str | None
 def destructive_claim_gate(*, event_type: str, cross_model_state: str,
                            source_tier: int, source_verified: bool,
                            nli_label: str | None, entity_resolved: bool,
-                           pit_pass: bool) -> dict[str, Any]:
+                           pit_pass: bool, league: str | None = None) -> dict[str, Any]:
     """Research confidence gate only; never grants forecast adjustment authority."""
-    destructive = event_type in DESTRUCTIVE
+    destructive_set = destructive_event_types(league) if league is not None else DESTRUCTIVE
+    destructive = event_type in destructive_set
     reasons = []
     if not pit_pass: reasons.append("PIT_FAIL")
     if not entity_resolved: reasons.append("ENTITY_UNRESOLVED")
@@ -70,6 +73,7 @@ def destructive_claim_gate(*, event_type: str, cross_model_state: str,
         "research_feature_eligible": eligible,
         "forecast_adjustment_eligible": False,
         "destructive_claim": destructive,
+        "league": league,
         "reasons": reasons,
         "action_authority": "OFF",
     }

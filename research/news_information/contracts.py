@@ -8,16 +8,16 @@ import re
 from pathlib import Path
 from typing import Any
 
+from research.news_information.taxonomies import (
+    SUPPORTED_LEAGUES,
+    all_event_types,
+    validate_event_type_for_league,
+)
+
 EVENT_SCHEMA_VERSION = "sports_information_event.v1"
 FEATURE_CONTRACT_VERSION = "sports_information_state.v0_1.research"
 
-EVENT_TYPES = {
-    "PLAYER_OUT", "PLAYER_DOUBTFUL", "PLAYER_QUESTIONABLE", "PLAYER_ACTIVE",
-    "LINEUP_CONFIRMED", "LINEUP_PROJECTED", "STARTER_CONFIRMED", "STARTER_SCRATCHED",
-    "STARTER_PITCH_LIMIT", "BULLPEN_AVAILABLE", "BULLPEN_LIMITED", "BULLPEN_UNAVAILABLE",
-    "ROSTER_CALLUP", "ROSTER_OPTION", "TRAVEL_DISRUPTION", "WEATHER_DELAY_RISK",
-    "ROOF_STATUS", "WEATHER_CHANGE",
-}
+EVENT_TYPES = all_event_types()
 DESTRUCTIVE_EVENT_TYPES = {"PLAYER_OUT", "STARTER_SCRATCHED", "BULLPEN_UNAVAILABLE"}
 CERTAINTY_VALUES = {"CONFIRMED", "EXPECTED", "POSSIBLE", "UNCERTAIN", "CONTRADICTED"}
 CROSS_MODEL_STATES = {"CONSENSUS", "PARTIAL_AGREEMENT", "CONFLICTING", "ABSTAIN"}
@@ -130,9 +130,14 @@ def validate_usage_policy(policy: dict[str, Any]) -> None:
 def validate_information_event(event: dict[str, Any]) -> dict[str, Any]:
     if event.get("schema_version") != EVENT_SCHEMA_VERSION:
         raise ValueError("unexpected information-event schema")
+    league = str(event.get("league") or "").upper()
+    if league not in SUPPORTED_LEAGUES:
+        raise ValueError("unsupported information-event league")
     claim = event.get("claim") or {}
-    if claim.get("event_type") not in EVENT_TYPES:
+    event_type = claim.get("event_type")
+    if event_type not in EVENT_TYPES:
         raise ValueError("unknown sports information event_type")
+    validate_event_type_for_league(league, str(event_type))
     if claim.get("certainty") not in CERTAINTY_VALUES:
         raise ValueError("unknown claim certainty")
     resolution = event.get("resolution") or {}
@@ -148,6 +153,7 @@ def validate_information_event(event: dict[str, Any]) -> dict[str, Any]:
     if event.get("information_event_id") not in (None, expected_id):
         raise ValueError("information_event_id does not match canonical content")
     out = dict(event)
+    out["league"] = league
     out["information_event_id"] = expected_id
     return out
 

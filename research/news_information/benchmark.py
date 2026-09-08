@@ -3,7 +3,9 @@ from __future__ import annotations
 from collections import Counter
 from typing import Any
 
-DESTRUCTIVE = {"PLAYER_OUT", "STARTER_SCRATCHED", "BULLPEN_UNAVAILABLE"}
+from research.news_information.taxonomies import SUPPORTED_LEAGUES, destructive_event_types
+
+DESTRUCTIVE = set().union(*(destructive_event_types(league) for league in SUPPORTED_LEAGUES))
 
 
 def _key(row: dict[str, Any]):

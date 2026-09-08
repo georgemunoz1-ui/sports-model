@@ -28,10 +28,23 @@ def _completeness(league: str, captures: list[dict[str, Any]]) -> tuple[str, lis
     return level, present, missing
 
 
+def _research_eligible_event(event: dict[str, Any]) -> bool:
+    return (
+        (event.get("forecast_timing") or {}).get("known_before_cutoff") is True
+        and (event.get("usage_policy") or {}).get("research_feature_eligible") is True
+        and (event.get("usage_policy") or {}).get("forecast_adjustment_eligible") is False
+        and (event.get("usage_policy") or {}).get("market_input") is False
+    )
+
+
 def build_full_slate_diagnostics(*, games: list[dict[str, Any]],
                                  source_captures: list[dict[str, Any]],
                                  information_events: list[dict[str, Any]]) -> list[dict[str, Any]]:
-    """Return one diagnostic row per scheduled game; never silently filter on news coverage."""
+    """Return one diagnostic row per scheduled game; never silently filter on news coverage.
+
+    Post-cutoff, conflicting-gate, or otherwise research-ineligible events remain counted for audit but
+    cannot become the displayed structured news state.
+    """
     captures_by_event: dict[str, list[dict[str, Any]]] = defaultdict(list)
     for capture in source_captures:
         captures_by_event[str(capture.get("event_id"))].append(capture)
@@ -44,11 +57,14 @@ def build_full_slate_diagnostics(*, games: list[dict[str, Any]],
         event_id = str(game["event_id"])
         league = str(game["league"]).upper()
         level, present, missing = _completeness(league, captures_by_event.get(event_id, []))
-        game_events = events_by_event.get(event_id, [])
-        if any((e.get("resolution") or {}).get("cross_model_state") == "CONFLICTING" for e in game_events):
+        all_game_events = events_by_event.get(event_id, [])
+        eligible_events = [e for e in all_game_events if _research_eligible_event(e)]
+        rejected_count = len(all_game_events) - len(eligible_events)
+
+        if any((e.get("resolution") or {}).get("cross_model_state") == "CONFLICTING" for e in eligible_events):
             news_state = "CONFLICTING"
         else:
-            types = sorted({(e.get("claim") or {}).get("event_type") for e in game_events
+            types = sorted({(e.get("claim") or {}).get("event_type") for e in eligible_events
                             if (e.get("claim") or {}).get("event_type")})
             news_state = "+".join(types[:4]) if types else "NO_STRUCTURED_EVENT"
             if len(types) > 4:
@@ -74,6 +90,9 @@ def build_full_slate_diagnostics(*, games: list[dict[str, Any]],
             "information_completeness": level,
             "official_anchors_present": present,
             "official_anchors_missing": missing,
+            "information_event_count": len(all_game_events),
+            "research_eligible_information_event_count": len(eligible_events),
+            "rejected_or_noneligible_information_event_count": rejected_count,
             "interpretation": interpretation,
             "market_input": False,
             "action_authority": "OFF",

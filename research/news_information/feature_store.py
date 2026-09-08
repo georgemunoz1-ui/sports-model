@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import json
 from pathlib import Path
 from typing import Any
 
@@ -23,6 +22,10 @@ class ResearchFeatureStore:
     def snapshot(self, *, event_id: str, cutoff_utc: str, events: list[dict[str, Any]]) -> dict[str, Any]:
         valid = [validate_information_event(e) for e in events]
         valid = [e for e in valid if e["event_id"] == event_id and e["forecast_timing"]["known_before_cutoff"]]
+        leagues = sorted({e["league"] for e in valid})
+        if len(leagues) > 1:
+            raise ValueError("information-state snapshot cannot mix leagues")
+        league = leagues[0] if leagues else None
         valid.sort(key=lambda x: x["information_event_id"])
         counts: dict[str, int] = {}
         conflict = 0
@@ -34,6 +37,7 @@ class ResearchFeatureStore:
             "schema_version": "sports_information_state_snapshot.v1",
             "feature_contract_version": "sports_information_state.v0_1.research",
             "event_id": event_id,
+            "league": league,
             "cutoff_utc": cutoff_utc,
             "information_event_ids": [e["information_event_id"] for e in valid],
             "event_type_counts": dict(sorted(counts.items())),

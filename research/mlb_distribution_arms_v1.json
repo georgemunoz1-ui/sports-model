@@ -1,0 +1,80 @@
+{
+  "schema_version": "mlb_distribution_arm_registry.v1",
+  "experiment_id": "mlb.fixed_poisson_vs_gamma_poisson_workload.v1",
+  "status": "RESEARCH_DIAGNOSTIC",
+  "shared_controls": {
+    "same_event_population": true,
+    "same_forecast_cutoff": true,
+    "same_model_id": true,
+    "same_predictive_features": true,
+    "same_expected_run_inputs": true,
+    "market_inputs_used": false,
+    "posthoc_arm_selection_permitted": false
+  },
+  "arms": [
+    {
+      "model_arm_id": "analytic",
+      "contract_id": "fixed_poisson.v1",
+      "scientific_name": "fixed_poisson",
+      "assumptions": {
+        "scoring_distribution": "INDEPENDENT_POISSON",
+        "run_rate_state": "FIXED_AT_FROZEN_EXPECTED_RUN_MEANS",
+        "latent_run_rate_overdispersion": false,
+        "starter_workload_randomness": "NOT_SEPARATELY_SAMPLED_AFTER_EXPECTED_RUN_MEANS_ARE_FIXED",
+        "winner_probability": "ANALYTIC_FROM_FIXED_POISSON_SCORE_DISTRIBUTION",
+        "tie_handling": "USE_FROZEN_ARTIFACT_DISCLOSED_TIE_PROXY"
+      }
+    },
+    {
+      "model_arm_id": "monte_carlo",
+      "contract_id": "gamma_poisson_workload_mc.v1",
+      "scientific_name": "gamma_poisson_workload_mc",
+      "assumptions": {
+        "scoring_distribution": "GAMMA_POISSON_MIXTURE",
+        "run_rate_state": "STOCHASTIC_LATENT_RUN_RATE_AROUND_SHARED_FROZEN_EXPECTATION",
+        "latent_run_rate_overdispersion": true,
+        "starter_workload_randomness": "SAMPLED",
+        "winner_probability": "EMPIRICAL_MONTE_CARLO_FREQUENCY",
+        "simulation_paths_target": 100000,
+        "tie_handling": "USE_FROZEN_SIMULATION_CONTRACT"
+      }
+    }
+  ],
+  "evaluation_contract": {
+    "primary_metric": "PAIRED_LOG_LOSS_DELTA_GAMMA_MINUS_FIXED",
+    "secondary_metric": "PAIRED_BINARY_BRIER_SINGLE_CLASS_DELTA_GAMMA_MINUS_FIXED",
+    "calibration_metrics": [
+      "CALIBRATION_IN_THE_LARGE",
+      "FIXED_10_BIN_ECE",
+      "FIXED_10_BIN_RELIABILITY_TABLE"
+    ],
+    "uncertainty": "PAIRED_DATE_CLUSTER_BOOTSTRAP_95_PERCENT_CI",
+    "favorite_strength_reference": "FIXED_POISSON_FAVORITE_PROBABILITY",
+    "favorite_strength_bands": [
+      [0.50, 0.60],
+      [0.60, 0.70],
+      [0.70, 0.80],
+      [0.80, 1.00]
+    ],
+    "minimum_decision_gate": {
+      "paired_events": 200,
+      "independent_date_clusters": 14,
+      "strong_favorite_stratum_minimum_events": 30
+    },
+    "decision_rule": {
+      "required_primary_signal": "95_PERCENT_DATE_CLUSTER_BOOTSTRAP_CI_EXCLUDES_ZERO",
+      "secondary_metric_must_not_materially_contradict_primary": true,
+      "calibration_diagnostics_must_be_REVIEWED": true,
+      "allowed_conclusion_if_evidence_is_mixed": "NO_CLEAR_WINNER",
+      "automatic_promotion": false,
+      "action_authority": false
+    }
+  },
+  "evidence_policy": {
+    "local_diagnostic_rows_may_inform_research": true,
+    "local_diagnostic_rows_may_support_canonical_promotion": false,
+    "canonical_promotion_requires_remote_durable_prospective_evidence": true,
+    "missing_one_arm_blocks_paired_comparison": true,
+    "market_disagreement_cannot_select_an_arm": true
+  }
+}

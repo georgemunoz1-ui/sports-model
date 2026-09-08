@@ -13,6 +13,7 @@ market overlay, registry writer, canonical-ledger writer, or promotion function 
 - Model-intake validation for identity, hashes, review status and disabled operational access.
 - Read-only frozen-artifact adapters for MLB, CFB and MLS.
 - Deterministic `evaluate_frozen_forecasts` CLI with immutable content-addressed reports.
+- Explicit MLB fixed-Poisson vs Gamma-Poisson workload experiment registry and paired scorer.
 
 ## Frozen-artifact evaluation
 
@@ -75,13 +76,51 @@ rejected, never filtered. Fewer than two independent date clusters yields
 MLS emits explicit H/D/A rows only after identity-valid grading. Quarantined identity failures and
 postponements cannot enter multiclass scoring.
 
+## MLB distribution-arm experiment
+
+`mlb_distribution_arms_v1.json` freezes the research question rather than collapsing the two
+estimators into one answer. The existing MLB adapter continues to emit two separately graded rows:
+`model_arm_id=analytic` is the fixed-Poisson arm and `model_arm_id=monte_carlo` is the
+Gamma-Poisson workload arm. They share the same event population, cutoff, predictive features,
+expected-run inputs and market exclusion. Their distributional assumptions remain intentionally
+different.
+
+The fixed-Poisson arm conditions on frozen expected run means and computes winner probability from
+an independent Poisson score distribution. The Gamma-Poisson workload arm preserves latent run-rate
+overdispersion and sampled starter workload, then estimates winner probability empirically from the
+frozen Monte Carlo contract. Neither arm may be selected post hoc because it is closer to a market
+price or because one slate looks more plausible.
+
+After `evaluate_frozen_forecasts --write-canonical-rows`, run:
+
+```bash
+python -m research.mlb_distribution_experiment \
+  --evaluation-rows <evaluation_rows.jsonl> \
+  --output-dir reports/mlb_distribution_experiment
+```
+
+The scorer requires identical complete arm populations and the same outcome grade for both arms.
+It reports each arm's log loss, single-class binary Brier, calibration-in-the-large, fixed 10-bin
+reliability/ECE, paired Gamma-minus-fixed deltas, paired date-cluster bootstrap intervals once at
+least two dates exist, and fixed-Poisson favorite-strength strata of 50-60%, 60-70%, 70-80% and
+80-100%. Negative paired deltas favor the Gamma-Poisson workload arm; positive deltas favor the
+fixed-Poisson arm.
+
+The predeclared decision gate is intentionally slower than one slate: at least 200 paired events,
+14 independent date clusters and at least 30 events before interpreting a strong-favorite stratum.
+A distribution arm is not automatically promoted even when a confidence interval excludes zero.
+Mixed evidence is allowed to conclude `NO_CLEAR_WINNER`. Local-only rows may inform research but
+cannot support canonical promotion; canonical promotion still requires remote-durable prospective
+evidence and separate operational review.
+
 ## Limits and remaining work
 
 These functions are evaluation infrastructure, not a challenger inference runner. Timestamp claims
 remain dependent on the frozen source evidence; structural chronology validation cannot prove a
-source claim independently. Calibration slope/intercept/reliability curves, CRPS, serial-block
-uncertainty, holdout access ledger, baseline model runners and verified challenger checkpoints remain
-pending.
+source claim independently. Calibration slope/intercept, CRPS, serial-block uncertainty, holdout
+access ledger, baseline model runners and verified challenger checkpoints remain pending. The MLB
+distribution experiment's fixed-bin calibration diagnostics do not replace a later calibration
+slope/intercept analysis.
 
 The de-identified Sept. 6-shaped fixture proves adapter/report compatibility only. A real Sept. 6
 scorecard requires the retained machine-readable append-only grade ledger; narrative closeout text is

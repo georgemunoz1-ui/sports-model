@@ -4377,3 +4377,11 @@ unresolved. Local news-information suite: 41 passing tests including real-source
 corrupt-byte rejection. This is source plumbing, not NLP quality or predictive validation.
 Compact NLP inference, independent labels, MLB lineup/bullpen/weather and A/B/C forecasts
 remain incomplete. No action authority. PR18 remains research-only and unmerged.
+
+## 2026-09-08 — Pilot execution verified remotely
+
+Code commit `4edf9eb99b8f059c656c213bb8ec21c195cc1e34` passed 41 news-information tests
+in Actions, research CI and live official-source capture run `34272196290`. Downloaded
+artifact `10074255735` matched GitHub's SHA-256 and replayed without source retrieval.
+Second ZIP and execution record are retained beside the first capture in pilot_evidence.
+PR #18 remains unmerged research; no extraction-accuracy or predictive-advantage claim.

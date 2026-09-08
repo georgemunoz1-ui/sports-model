@@ -54,3 +54,13 @@ The original capture predates that NFL parser; its report correctly remains capt
    are executable. Keep immutable source snapshots and separate outcome children.
 
 Action authority OFF; predictive improvement unestablished; PR18 remains unmerged research.
+
+## Second execution with NFL parsing
+
+Commit `4edf9eb99b8f059c656c213bb8ec21c195cc1e34` passed 41 news-information tests in
+GitHub Actions and completed capture run [34272196290](https://github.com/georgemunoz1-ui/sports-model/actions/runs/34272196290).
+Its unmodified `official_pilot_4edf9eb.zip` is retained here with independently verified
+ZIP digest and replay details in `second_execution.json`. Both news-information and research
+CI checks passed at this code commit. Actual capture cutoff was 20:00:04.602269Z;
+32 source receipts verified, 15 MLB games retained, 30 active rosters parsed and 11 NFL rows
+emitted as PARSED_UNBOUND_RESEARCH. This does not change any original forecast or grade.

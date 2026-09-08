@@ -1,22 +1,21 @@
 name: news-model-materialization
 
-on:
-  workflow_dispatch:
+"on":
+  workflow_dispatch: {}
   push:
     branches:
-      - 'feature/sports-news-information-state'
+      - feature/sports-news-information-state
     paths:
-      - 'research/news_information/MATERIALIZE_ALL_TRIGGER_20260908.txt'
-      - '.github/workflows/news-model-materialization.yml'
+      - .github/workflows/news-model-materialization.yml
+      - research/news_information/MATERIALIZE_ALL_TRIGGER_20260908.txt
 
 permissions:
   contents: read
 
-env:
-  HF_HOME: ${{ runner.temp }}/hf-home
-
 jobs:
-  materialize-all-pinned:
+  materialize:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
     strategy:
       fail-fast: false
       matrix:
@@ -30,25 +29,31 @@ jobs:
           - sportsbert
           - modernbert_base
           - finbert_control
-    runs-on: ubuntu-24.04
-    timeout-minutes: 120
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
         with:
-          python-version: '3.11'
+          python-version: "3.11"
+
       - name: Install Hugging Face downloader only
-        run: python -m pip install --disable-pip-version-check 'huggingface_hub>=0.34,<2'
+        run: python -m pip install --disable-pip-version-check "huggingface_hub>=0.34,<2"
+
       - name: Materialize exact locked revision and hash files
-        run: |
-          python -m research.news_information.materialize_models \
-            --candidate '${{ matrix.candidate }}' \
-            --cache-dir '${{ runner.temp }}/sports-news-model-cache' \
-            --receipt-dir '${{ runner.temp }}/sports-news-model-receipts'
+        env:
+          CANDIDATE: ${{ matrix.candidate }}
+        run: >-
+          python -m research.news_information.materialize_models
+          --candidate "$CANDIDATE"
+          --cache-dir "$RUNNER_TEMP/sports-news-model-cache"
+          --receipt-dir "$RUNNER_TEMP/sports-news-model-receipts/$CANDIDATE"
+
       - name: Upload receipt only (never weights)
         uses: actions/upload-artifact@v4
         with:
           name: sports-news-model-receipt-${{ matrix.candidate }}-${{ github.sha }}
-          path: ${{ runner.temp }}/sports-news-model-receipts
+          path: ${{ runner.temp }}/sports-news-model-receipts/${{ matrix.candidate }}
           if-no-files-found: error
           retention-days: 30

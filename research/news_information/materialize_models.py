@@ -1,18 +1,17 @@
 """Materialize pinned Hugging Face research candidates and emit immutable receipts.
 
-Weights are never committed to git. A receipt records exact revision, file SHA-256 values,
-aggregate snapshot digest, license metadata from the intake lock, and local materialization path.
+Weights are never committed to git. A receipt records exact revision, local snapshot path,
+per-file SHA-256 values, aggregate snapshot digest and license metadata from the intake lock.
+Materialization never changes trusted/enabled/forecast-impacting state.
 """
 from __future__ import annotations
 
 import argparse
-from datetime import datetime, timezone
 import json
 from pathlib import Path
-import shutil
 
 from research.news_information.contracts import digest, sha256_file, write_immutable_json
-from research.news_information.model_registry import candidates, default_lock_path
+from research.news_information.model_registry import candidates
 
 
 def materialize(candidate_id: str, *, cache_dir: Path, receipt_dir: Path, token: str | None = None):
@@ -27,7 +26,7 @@ def materialize(candidate_id: str, *, cache_dir: Path, receipt_dir: Path, token:
     except ImportError as exc:
         raise RuntimeError("huggingface_hub is required for model materialization") from exc
 
-    local = cache_dir / candidate_id / c.revision
+    local = (Path(cache_dir) / candidate_id / c.revision).resolve()
     local.mkdir(parents=True, exist_ok=True)
     snapshot_download(
         repo_id=c.hf_repo,
@@ -53,11 +52,12 @@ def materialize(candidate_id: str, *, cache_dir: Path, receipt_dir: Path, token:
         "trusted": False,
         "enabled_by_default": False,
         "forecast_adjustment_eligible": False,
+        "snapshot_path": str(local),
         "files": files,
         "snapshot_sha256": digest(files),
     }
     receipt = {**core, "receipt_sha256": digest(core)}
-    dest = receipt_dir / candidate_id / c.revision / receipt["receipt_sha256"] / "materialization_receipt.json"
+    dest = Path(receipt_dir) / candidate_id / c.revision / receipt["receipt_sha256"] / "materialization_receipt.json"
     write_immutable_json(dest, receipt)
     return receipt, dest
 

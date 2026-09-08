@@ -4349,3 +4349,15 @@ No weights downloaded, inference adapters installed, real-data comparison run, o
 Full healthcheck attempted on incomplete local source snapshot; required data/modules missing.
 This does not establish canonical repository health. Full integration validation required before merge.
 Remaining work and exact scoring conventions documented in research/README.md. Production unchanged.
+
+
+## 2026-09-08 — Official-source pilot implementation (PR #18 research only)
+
+Added explicit MLB schedule/roster retrieval and deterministic identity/probable-state parsing,
+NFL raw report capture, full supplied schedule retention, content-addressed raw receipts and
+cutoff state snapshots. Fixed repeated identical-source metadata collisions without rewriting legacy
+captures. State reducer tests cover supersession, conflicts, late retrieval and hash tampering.
+Local news-information tests: 35/35 PASS. Real capture verification is pending the pilot workflow.
+No lineup/bullpen/roof assertions, NLP accuracy claim, A/B/C forecasts, model adjustment or promotion.
+Full repo health remains unverified; local source materialization covers the research module only.
+See research/news_information/OFFICIAL_PILOT.md for commands, limits and artifact retention.

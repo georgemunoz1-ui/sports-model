@@ -25,7 +25,10 @@ class RawArchive:
             raise ValueError("raw bytes do not match source record hash")
         base = self.root / record.raw_bytes_sha256[:2] / record.raw_bytes_sha256
         raw_path = base / "source.bin"
-        meta_path = base / "source_metadata.json"
+        # Identical bytes may be observed repeatedly. Preserve each observation's
+        # chronology instead of colliding with the first capture's metadata.
+        from research.news_information.contracts import digest
+        meta_path = base / "observations" / (digest(asdict(record)) + ".json")
         if raw_path.exists() and raw_path.read_bytes() != raw:
             raise ValueError(f"immutable raw-source collision: {raw_path}")
         if not raw_path.exists():

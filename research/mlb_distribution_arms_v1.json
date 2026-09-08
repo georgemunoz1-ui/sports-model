@@ -5,12 +5,29 @@
   "shared_controls": {
     "same_event_population": true,
     "same_forecast_cutoff": true,
+    "same_schedule_start_contract": true,
+    "same_team_orientation": true,
     "same_model_id": true,
+    "same_model_code_identity": true,
     "same_predictive_features": true,
+    "same_feature_contract_version": true,
+    "same_source_input_hash_set": true,
     "same_expected_run_inputs": true,
     "market_inputs_used": false,
     "posthoc_arm_selection_permitted": false
   },
+  "required_pair_metadata": [
+    "paired_game_universe_hash",
+    "event_orientation_hash",
+    "expected_run_input_hash",
+    "feature_contract_version",
+    "source_input_hash_set_hash",
+    "model_code_identity",
+    "predictive_input_field_names",
+    "market_input_used",
+    "distribution_contract_id",
+    "arm_context_hash"
+  ],
   "arms": [
     {
       "model_arm_id": "analytic",
@@ -61,20 +78,35 @@
       "independent_date_clusters": 14,
       "strong_favorite_stratum_minimum_events": 30
     },
+    "final_holdout": {
+      "start_date": null,
+      "status": "NOT_PREDECLARED",
+      "preregistration_required": true,
+      "selection_rule": "START_DATE_MUST_BE_COMMITTED_BEFORE_ANY_HOLDOUT_EVENT_IS_SCORED",
+      "confirmation_rule": "HOLDOUT_95_PERCENT_DATE_CLUSTER_CI_MUST_EXCLUDE_ZERO_IN_SAME_DIRECTION_AS_DEVELOPMENT"
+    },
     "decision_rule": {
-      "required_primary_signal": "95_PERCENT_DATE_CLUSTER_BOOTSTRAP_CI_EXCLUDES_ZERO",
+      "required_primary_signal": "DEVELOPMENT_95_PERCENT_DATE_CLUSTER_BOOTSTRAP_CI_EXCLUDES_ZERO",
+      "untouched_final_time_block_must_confirm_same_arm": true,
       "secondary_metric_must_not_materially_contradict_primary": true,
+      "predeclared_high_volume_stratum_must_not_materially_favor_opposite_arm": true,
+      "opposite_stratum_disposition": "REGIME_DEPENDENCE_RESEARCH_REQUIRED",
+      "regime_specific_selector_requires_separate_preregistered_experiment": true,
       "calibration_diagnostics_must_be_REVIEWED": true,
       "allowed_conclusion_if_evidence_is_mixed": "NO_CLEAR_WINNER",
       "automatic_promotion": false,
+      "promotion_authority": false,
       "action_authority": false
     }
   },
   "evidence_policy": {
     "local_diagnostic_rows_may_inform_research": true,
     "local_diagnostic_rows_may_support_canonical_promotion": false,
+    "local_diagnostic_rows_count_toward_decision_thresholds": false,
+    "local_diagnostic_rows_count_toward_final_holdout": false,
     "canonical_promotion_requires_remote_durable_prospective_evidence": true,
     "missing_one_arm_blocks_paired_comparison": true,
-    "market_disagreement_cannot_select_an_arm": true
+    "market_disagreement_cannot_select_an_arm": true,
+    "outcome_data_cannot_select_an_arm_posthoc": true
   }
 }

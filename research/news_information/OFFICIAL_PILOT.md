@@ -8,7 +8,10 @@ It has read-only repository permission, no checkout credentials and a 15-minute 
 The MLB parser uses StatsAPI game/team/person IDs and preserves all schedule games, including
 missing probable pitchers. Active rosters populate names and observed membership. Membership starts
 at retrieval, not a fabricated season-start date. A probable is never promoted to confirmed.
-NFL official injury HTML is archived but does not count as parsed injury/roster/game coverage.
+NFL official injury HTML is archived and deterministic report tables are parsed. Blank game
+designations stay UNKNOWN, never ACTIVE. Provider profile URLs are retained; canonical player,
+event, practice date and provider effective/publication times stay null until verified. Parsed
+rows do not establish full NFL roster/game coverage or permit predictive adjustments.
 Official IDs are provider identifiers, not proof of >=99.5% identity accuracy against a labeled corpus.
 No runtime model is necessary for this structured-source pass.
 
@@ -34,6 +37,10 @@ hashes are rechecked. Actions archives expire after 30 days: this is remote rese
 NOT protected canonical pregame durability. Copy audited receipts/evidence into durable project
 storage before expiry. No research quality target passes merely because a parser test passed.
 
-Remaining: NFL structured/HTML parsing and identity binding; MLB lineups, bullpen, roof/weather;
+Remaining: NFL report currency, practice dates and identity binding; MLB lineups, bullpen, roof/weather;
 independently labeled corpus; real compact-stack model smoke tests; data-derived versioned A/B/C
 predictive transforms and prospective equal-population grading. These remain unimplemented here.
+
+First real capture and its offline replay are retained under `pilot_evidence/2026-09-08/`.
+Use `python -m research.news_information.replay_official_pilot <archive.zip>` to independently
+verify receipts, raw bytes, identities, claims and the original bundle without fetching new data.

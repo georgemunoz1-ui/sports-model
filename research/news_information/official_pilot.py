@@ -1,7 +1,7 @@
 """Explicit public-source pilot. Run in a network-enabled research worker, not forecasting.
 
 MLB structured schedule/rosters -> official IDs and probable-state observations.
-NFL report -> immutable HTML only until a provider-specific parser is validated.
+NFL report -> immutable HTML and unbound practice/game-status observations.
 No model download, outcome grading, predictive adjustment, or action interface.
 """
 import argparse
@@ -13,6 +13,7 @@ from urllib.request import Request, urlopen
 
 from research.news_information.contracts import digest, sha256_bytes, write_immutable_json
 from research.news_information.state_reducer import reduce_claims
+from research.news_information.nfl_official_report import parse_nfl_report
 
 
 def now():
@@ -115,6 +116,7 @@ def run(root, date):
     captures, failures = [], []
     games, teams, players, claims = [], {}, {}, []
     roster_teams = []
+    nfl = {'status': 'CAPTURE_FAILED', 'observations': []}
     url = 'https://statsapi.mlb.com/api/v1/schedule?' + urlencode(
         {'sportId': 1, 'date': date, 'hydrate': 'probablePitcher'})
     schedule_ok = False
@@ -137,6 +139,7 @@ def run(root, date):
         raw, receipt = capture('https://www.nfl.com/injuries/', root); captures.append(receipt)
         if b'<html' not in raw.lower():
             raise ValueError('unexpected NFL content format')
+        nfl = parse_nfl_report(raw, receipt)
     except Exception as exc:
         failures.append({'scope': 'NFL_REPORT_CAPTURE', 'error': str(exc)})
     cutoff = now()
@@ -159,11 +162,12 @@ def run(root, date):
               'roster_teams_parsed': len(roster_teams), 'player_ids': len(players),
               'official_roster_player_ids': sum(p.get('identity_source') == 'OFFICIAL_ROSTER' for p in players.values()),
               'capture_count': len(captures), 'raw_hashes_verified': verified,
-              'captures': captures, 'failures': failures, 'nfl_state': 'CAPTURE_ONLY_PARSER_NOT_VALIDATED',
+              'captures': captures, 'failures': failures, 'nfl_state': nfl['status'],
+              'nfl_parsed_observations': len(nfl['observations']),
               'roster_identity_accuracy': None, 'extraction_accuracy': None,
               'forecast_adjustment_enabled': False, 'action_authority': 'OFF',
               'canonical_prospective_eligible': False, 'status': 'RESEARCH_CAPTURE_ONLY'}
-    bundle = {'report': report, 'registry': registry, 'claims': claims,
+    bundle = {'report': report, 'registry': registry, 'claims': claims, 'nfl_observations': nfl,
               'state_snapshot': reduce_claims(claims, cutoff), 'full_slate': games}
     target = root / 'runs' / digest(bundle)
     for name, value in bundle.items():

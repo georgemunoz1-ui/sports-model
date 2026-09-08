@@ -4361,3 +4361,19 @@ Local news-information tests: 35/35 PASS. Real capture verification is pending t
 No lineup/bullpen/roof assertions, NLP accuracy claim, A/B/C forecasts, model adjustment or promotion.
 Full repo health remains unverified; local source materialization covers the research module only.
 See research/news_information/OFFICIAL_PILOT.md for commands, limits and artifact retention.
+
+## 2026-09-08 — Actual pilot capture and replay evidence (PR #18)
+
+Capture commit `4331269123503acd8f1ad23c5f4042c6ca055542` ran successfully in Actions
+run `34271251397`. At actual cutoff 19:50:13.791952Z it retained all 15 MLB provider-date
+games, parsed 30 active rosters (840 roster player IDs and one unresolved probable-only
+membership), and archived 32 raw sources. Downloaded ZIP digest matched GitHub; all 32 raw
+hashes/lengths and deterministic MLB replay passed locally. Evidence is retained under
+`research/news_information/pilot_evidence/2026-09-08/`.
+
+Follow-up adds a deterministic NFL table parser: the archived report yields 11 rows from
+two team tables. Blank designations stay UNKNOWN; player/event/practice-date binding stays
+unresolved. Local news-information suite: 41 passing tests including real-source replay and
+corrupt-byte rejection. This is source plumbing, not NLP quality or predictive validation.
+Compact NLP inference, independent labels, MLB lineup/bullpen/weather and A/B/C forecasts
+remain incomplete. No action authority. PR18 remains research-only and unmerged.

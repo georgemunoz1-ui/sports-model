@@ -4338,3 +4338,12 @@ with direct HTTP disabled by default — as delivered it called urlopen against 
 which this environment does not permit.
 
 Ledger unchanged: 0 bets, 0.00 units, $0. Wager authority NO.
+
+
+## 2026-09-08 — MLB market firewall complete-row coverage (review only)
+
+- Reproduced a validation bypass: assert_no_market_fields inspected only rows[:50]. Nested ODDS in team/SP at zero-based rows 50 and 100 escaped validate().
+- Repair scans all rows; existing token policy, feature definitions, model weights, and frozen datasets/forecasts are unchanged.
+- Added data-free regression tests: python3 -m unittest discover -s tests -p 'test_ml_market_coverage.py' -v. Before repair: four failing subcases; after: all four tests pass, including eight row/section subcases.
+- Healthcheck attempted in partial local source snapshots; missing datasets/modules prevent full-repository validation. This is NOT evidence of canonical repository health. Full firewall integration battery and healthcheck remain required before merge.
+- No model promotion, performance claim, forecast registration, or historical backfill performed. Next: run full checks in complete checkout, then resume PIT feature development.

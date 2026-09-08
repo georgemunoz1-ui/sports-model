@@ -222,7 +222,8 @@ def assert_no_market_fields(rows):
         elif isinstance(o, list):
             for v in o:
                 walk(v, path)
-    for r in rows[:50]:
+    # This is an admission gate, not a sample audit: inspect the entire dataset.
+    for r in rows:
         walk(r["team"], "team"); walk(r["sp"], "sp")
     return bad
 

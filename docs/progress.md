@@ -4338,3 +4338,14 @@ with direct HTTP disabled by default — as delivered it called urlopen against 
 which this environment does not permit.
 
 Ledger unchanged: 0 bets, 0.00 units, $0. Wager authority NO.
+
+
+## 2026-09-08 — Offline benchmark primitives (draft review, not operational)
+
+Added isolated research evaluation primitives: PIT feature contracts, label-aware chronological folds,
+reserved holdout boundary, binary/multiclass scoring, state quantile metrics, paired date-cluster
+bootstrap, intake validation and pending Toto/TabICL/Granite records. Eight synthetic tests pass.
+No weights downloaded, inference adapters installed, real-data comparison run, or model promoted.
+Full healthcheck attempted on incomplete local source snapshot; required data/modules missing.
+This does not establish canonical repository health. Full integration validation required before merge.
+Remaining work and exact scoring conventions documented in research/README.md. Production unchanged.

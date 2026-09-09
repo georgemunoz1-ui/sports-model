@@ -1,0 +1,167 @@
+name: MLB Cohort Registration
+
+on:
+  workflow_dispatch:
+    inputs:
+      request_path:
+        description: "Path to cohort registration request JSON"
+        required: true
+        type: string
+  push:
+    branches:
+      - codex/nfl-wnba-nba-models-v1
+    paths:
+      - "cohort_registration_requests/*.json"
+      - ".github/workflows/mlb-cohort-registration.yml"
+      - "scripts/register_mlb_cohort.py"
+
+permissions:
+  actions: read
+  contents: write
+
+env:
+  GH_TOKEN: ${{ github.token }}
+  PYTHONUNBUFFERED: "1"
+
+jobs:
+  register:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Resolve request
+        id: resolve
+        shell: bash
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          INPUT_REQUEST_PATH: ${{ inputs.request_path }}
+        run: |
+          python - <<'PY'
+          import json, os, subprocess
+          from pathlib import Path
+
+          if os.environ["EVENT_NAME"] == "push":
+              names = subprocess.check_output(
+                  ["git", "diff-tree", "--no-commit-id", "--name-only", "-r", os.environ["GITHUB_SHA"]],
+                  text=True,
+              ).splitlines()
+              candidates = sorted(
+                  n for n in names
+                  if n.startswith("cohort_registration_requests/") and n.endswith(".json")
+              )
+              if not candidates:
+                  print("No cohort request in this push; workflow-only/script-only validation run")
+                  with open(os.environ["GITHUB_OUTPUT"], "a") as f:
+                      f.write("has_request=false\n")
+                  raise SystemExit(0)
+              path = Path(candidates[-1])
+          else:
+              path = Path(os.environ["INPUT_REQUEST_PATH"])
+              if not path.exists():
+                  raise SystemExit(f"REQUEST_NOT_FOUND:{path}")
+
+          req = json.loads(path.read_text())
+          required = ["grade_date", "cohort_id", "forecast_run_id", "event_ids"]
+          missing = [key for key in required if not req.get(key)]
+          if missing:
+              raise SystemExit("REQUEST_FIELDS_MISSING:" + ",".join(missing))
+          if not isinstance(req["event_ids"], list) or not req["event_ids"]:
+              raise SystemExit("EVENT_IDS_MUST_BE_NONEMPTY_LIST")
+
+          outputs = {
+              "has_request": "true",
+              "request_path": str(path),
+              "grade_date": str(req["grade_date"]),
+              "cohort_id": str(req["cohort_id"]),
+              "run_id": str(int(req["forecast_run_id"])),
+              "event_ids_json": json.dumps([str(x) for x in req["event_ids"]], separators=(",", ":")),
+          }
+          with open(os.environ["GITHUB_OUTPUT"], "a") as f:
+              for key, value in outputs.items():
+                  f.write(f"{key}={value}\n")
+          print(json.dumps(outputs, indent=2, sort_keys=True))
+          PY
+
+      - name: Download frozen forecast artifact
+        if: ${{ steps.resolve.outputs.has_request == 'true' }}
+        shell: bash
+        env:
+          RUN_ID: ${{ steps.resolve.outputs.run_id }}
+        run: |
+          rm -rf input/frozen-card
+          mkdir -p input/frozen-card
+          gh run download "$RUN_ID" --dir input/frozen-card
+
+      - name: Register immutable cohort
+        if: ${{ steps.resolve.outputs.has_request == 'true' }}
+        id: register
+        shell: bash
+        env:
+          RUN_ID: ${{ steps.resolve.outputs.run_id }}
+          GRADE_DATE: ${{ steps.resolve.outputs.grade_date }}
+          COHORT_ID: ${{ steps.resolve.outputs.cohort_id }}
+          EVENT_IDS_JSON: ${{ steps.resolve.outputs.event_ids_json }}
+        run: |
+          python - <<'PY'
+          import json, os, subprocess, sys
+          from pathlib import Path
+
+          cards = sorted(Path("input/frozen-card").rglob("diagnostic_card.json"))
+          if len(cards) != 1:
+              raise SystemExit(f"EXPECTED_ONE_DIAGNOSTIC_CARD:found={len(cards)}")
+          manifests = sorted(Path("input/frozen-card").rglob("manifest.json"))
+          if len(manifests) > 1:
+              raise SystemExit(f"EXPECTED_ZERO_OR_ONE_MANIFEST:found={len(manifests)}")
+
+          cmd = [
+              sys.executable,
+              "scripts/register_mlb_cohort.py",
+              "--registry", "data/grading/mlb/cohort_registry.json",
+              "--card", str(cards[0]),
+              "--run-id", os.environ["RUN_ID"],
+              "--grade-date", os.environ["GRADE_DATE"],
+              "--cohort-id", os.environ["COHORT_ID"],
+          ]
+          if manifests:
+              cmd += ["--manifest", str(manifests[0])]
+          for event_id in json.loads(os.environ["EVENT_IDS_JSON"]):
+              cmd += ["--event-id", str(event_id)]
+          subprocess.run(cmd, check=True)
+          PY
+
+      - name: Validate registrar syntax when no request
+        if: ${{ steps.resolve.outputs.has_request != 'true' }}
+        run: python -m py_compile scripts/register_mlb_cohort.py
+
+      - name: Commit cohort registry
+        if: ${{ steps.resolve.outputs.has_request == 'true' }}
+        shell: bash
+        run: |
+          git config user.name "sports-model-cohort-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add data/grading/mlb/cohort_registry.json
+          if git diff --cached --quiet; then
+            echo "No cohort registry changes"
+          else
+            git commit -m "Register MLB cohort ${{ steps.resolve.outputs.grade_date }} ${{ steps.resolve.outputs.cohort_id }}"
+            git push origin "HEAD:${GITHUB_REF_NAME}"
+          fi
+
+      - name: Upload registration evidence
+        if: ${{ always() && steps.resolve.outputs.has_request == 'true' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: mlb-cohort-registration-${{ steps.resolve.outputs.grade_date }}-${{ steps.resolve.outputs.cohort_id }}-${{ github.run_id }}
+          path: |
+            data/grading/mlb/cohort_registry.json
+            ${{ steps.resolve.outputs.request_path }}
+          if-no-files-found: error
+          retention-days: 90

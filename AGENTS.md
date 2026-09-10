@@ -26,11 +26,12 @@ expanded state is available.
   authoritative event universe, freeze PIT baseline inputs, then attempt every expanded-game-state
   dimension required for that league. Missing enrichment stays explicit UNKNOWN/UNAVAILABLE.
 - POSTGAME (after last final): bind finals to frozen forecast identities, grade only supported
-  targets, append results/evidence, update state/progress, and never mutate the pregame artifact.
+  targets, append results/evidence, annotate material post-freeze state shocks separately, update
+  state/progress, and never mutate the pregame artifact or its official score.
 - Legacy MLB K-prop procedures remain in `harness/runbook.md`; do not interpret that narrower
   runbook as permission to omit the repo-wide game-state contract from game forecasts.
 
-## Hard rules (mechanically enforced by healthcheck where possible)
+## Hard rules (mechanically enforced by healthcheck/CI where possible)
 R1 NEVER invent a number. Missing data -> null + flag. Every ledger figure traces to a source.
 R2 NO look-ahead: features must be as-of pregame. Grading uses finals only.
 R3 Frozen things stay frozen: V11 spec; the n=1,461 sides verdict (coin flip — no ML/RL/sides
@@ -77,6 +78,16 @@ R12 IMPACT LINEAGE IS MANDATORY. Any non-zero game-state adjustment must carry a
    Market comparison occurs only after the independent forecast is frozen. Action authority is
    OFF unless separately granted by the existing promotion/go-live process.
 
+R13 POST-FREEZE SHOCKS NEVER REWRITE THE FORECAST. A material injury, replacement, ejection,
+   weather shift, or other state transition after kickoff/puck drop/first pitch/tip must be stored
+   in the separate `post_freeze_realized_state.v1` shock ledger. Layer 1 retains the exact frozen
+   forecast identity and all official Brier/log-loss/margin/total/team-score grading. Layer 2 may
+   annotate realized timing/exposure and, only from a separately versioned player-value model,
+   carry a research value-delta posterior. Until that model exists, the delta is
+   `NOT_ESTABLISHED`, numeric fields stay null, causal attribution is `NOT_ESTABLISHED`, and
+   counterfactual rescoring is disabled. A future validated counterfactual remains research-only
+   and can never alter official prospective scoring or arm-promotion evidence.
+
 ## Coverage labels
 - `FULL_INFORMATION_SHADOW` — baseline plus all required expanded dimensions are resolved for the
   research shadow contract.
@@ -96,6 +107,9 @@ R12 IMPACT LINEAGE IS MANDATORY. Any non-zero game-state adjustment must carry a
 - AUTHORIZATIONS.md ....... doctrine history + standing decisions — READ-ONLY
 - docs/history/ ........... original V11-era protocol docs (context, frozen)
 - models/common/expanded_game_state_standard_v1.py ... machine-readable repo-wide forecast policy
+- models/common/post_freeze_shock_ledger_v1.py ....... two-layer realized-state shock contract
+- docs/POST_FREEZE_SHOCK_LEDGER_V1.md ................. shock grading/valuation doctrine
+- data/*/post_freeze_shocks/ .......................... append-only event shock evidence
 - pipelines/cards/forecast_adapter.py ................. shared adapter boundary enforcing the policy
 - data/backfill/mlb/2026/ . results/features/pitcher logs and related MLB source state
 - engine/ ................. legacy/live engine tracks and experiments

@@ -35,15 +35,18 @@
     },
     "official_grade": {
       "home_won": true,
-      "winner_correct": true,
       "brier": 0.133675059456,
       "log_loss": 0.455100829660504,
+      "actual_home_margin": 3.0,
+      "actual_total": 23.0,
       "margin_absolute_error": 1.883138,
       "total_absolute_error": 23.958898,
-      "home_team_points_absolute_error": 12.921018,
-      "away_team_points_absolute_error": 11.03788,
       "official_grade_unchanged": true,
       "shock_adjustment_applied": false
+    },
+    "official_team_point_errors": {
+      "home_team_points_absolute_error": 12.921018,
+      "away_team_points_absolute_error": 11.03788
     },
     "counterfactual_qb_replacement_applied": false,
     "primary_scores_retained": true

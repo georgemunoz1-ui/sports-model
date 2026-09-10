@@ -1,0 +1,148 @@
+{
+  "schema_version": "post_freeze_shock_ledger.v1",
+  "standard_id": "post_freeze_realized_state.v1",
+  "standard_version": "1.0.0",
+  "shock_id": "NFL_2026-09-09_NE_SEA_001",
+  "event_id": "NFL_2026-09-09_NE_SEA",
+  "diagnostic_label": "POST_FREEZE_QB_REPLACEMENT",
+  "layer_1_official_prospective_grade": {
+    "forecast_identity": {
+      "registration_commit_sha": "dfe530e66758227bb8310d1e1ceeec0ef0b5d734",
+      "forecast_output_hash": "sha256:06b1afebbb335a65510bec3b6763e938175c7d916b6531e59fdc32583d9019cb",
+      "registered_at_utc": "2026-09-10T00:01:52Z",
+      "scheduled_start_utc": "2026-09-10T00:20:00Z",
+      "model_id": "nfl.contextual_information_shadow.v0_2.research",
+      "model_version": "0.2.0"
+    },
+    "pregame_state": {
+      "team_id": "SEA",
+      "expected_player_id": "SAM_DARNOLD",
+      "expected_player_role": "QB1",
+      "qb_availability_probability": 1.0,
+      "forecast_home_win_probability": 0.634384,
+      "forecast_home_margin": 4.883138,
+      "forecast_total": 46.958898,
+      "forecast_home_points": 25.921018,
+      "forecast_away_points": 21.03788
+    },
+    "observed_final": {
+      "home_team": "SEA",
+      "away_team": "NE",
+      "home_score": 13,
+      "away_score": 10,
+      "actual_home_margin": 3.0,
+      "actual_total": 23.0
+    },
+    "official_grade": {
+      "home_won": true,
+      "winner_correct": true,
+      "brier": 0.133675059456,
+      "log_loss": 0.455100829660504,
+      "margin_absolute_error": 1.883138,
+      "total_absolute_error": 23.958898,
+      "home_team_points_absolute_error": 12.921018,
+      "away_team_points_absolute_error": 11.03788,
+      "official_grade_unchanged": true,
+      "shock_adjustment_applied": false
+    },
+    "counterfactual_qb_replacement_applied": false,
+    "primary_scores_retained": true
+  },
+  "layer_2_realized_state_diagnostic": {
+    "realized_state": {
+      "shock_type": "STARTING_QB_INJURY",
+      "occurred_after_kickoff": true,
+      "timing_phase": "FIRST_DRIVE",
+      "exact_game_clock": null,
+      "injury": "HIP",
+      "outgoing_player_id": "SAM_DARNOLD",
+      "outgoing_player_role": "QB1",
+      "outgoing_player_returned": false,
+      "incoming_player_id": "DREW_LOCK",
+      "incoming_player_role": "QB2",
+      "replacement_share_of_game": "NEAR_FULL_GAME",
+      "replacement_opportunity_share_numeric": null,
+      "severity": "HIGH"
+    },
+    "descriptive_observed_output": {
+      "usage": "DESCRIPTIVE_ONLY",
+      "sam_darnold": {
+        "completions": 1,
+        "attempts": 2,
+        "passing_yards": 13
+      },
+      "drew_lock": {
+        "completions": 16,
+        "attempts": 22,
+        "passing_yards": 187,
+        "passing_touchdowns": 1,
+        "interceptions": 0
+      }
+    },
+    "value_delta": {
+      "status": "NOT_ESTABLISHED",
+      "method": "UNVALIDATED_RESEARCH_ESTIMATE",
+      "metric": "EXPECTED_OFFENSIVE_POINTS_PER_FULL_GAME",
+      "outgoing_value": null,
+      "incoming_value": null,
+      "incoming_minus_outgoing": null,
+      "posterior_interval_50": null,
+      "posterior_interval_90": null,
+      "model_confidence": null,
+      "source_model_id": null,
+      "source_model_version": null,
+      "eligible_for_pregame_adjustment": false,
+      "eligible_for_official_rescoring": false,
+      "eligible_for_model_promotion": false
+    },
+    "clean_context_slice": "FLAGGED",
+    "causal_attribution_status": "NOT_ESTABLISHED",
+    "counterfactual_status": "DISABLED",
+    "counterfactual_analysis_allowed": false,
+    "counterfactual_rescoring_of_official_grade": false,
+    "realized_player_output_usage": "DESCRIPTIVE_ONLY",
+    "player_value_update_from_single_game": "DEFERRED_TO_PREDECLARED_PLAYER_VALUE_MODEL"
+  },
+  "evidence": [
+    {
+      "source_type": "FROZEN_PREGAME_REPOSITORY_ARTIFACT",
+      "path": "data/nfl/2026-09-09_contextual_shadow_registration.json",
+      "forecast_output_hash": "sha256:06b1afebbb335a65510bec3b6763e938175c7d916b6531e59fdc32583d9019cb"
+    },
+    {
+      "source_type": "OFFICIAL_TEAM_IN_GAME_INJURY_REPORT",
+      "url": "https://www.seahawks.com/news/2026-week-1-seahawks-vs-patriots-injury-updates",
+      "claim_scope": "Darnold hip injury after Seattle first possession; Lock entered"
+    },
+    {
+      "source_type": "OFFICIAL_LEAGUE_REPORT",
+      "url": "https://www.nfl.com/news/seahawks-qb-sam-darnold-questionable-to-return-vs-patriots-with-hip-injury-drew-lock-enters-in-relief",
+      "claim_scope": "Darnold injured on first drive, Lock replaced him, Darnold ruled out"
+    },
+    {
+      "source_type": "USER_PROVIDED_SCREENSHOT_BUNDLE",
+      "bundle_sha256": "sha256:b75a07db67062ba780520625a39978e718e840803dca6b02ddc8509d49b71e41",
+      "claim_scope": "Final 13-10 score, game statistics, Darnold/Lock descriptive box-score output",
+      "member_sha256": [
+        "sha256:837eed5968d5dc0a9d36a719f7819365473e67e710d52af0e230686436194119",
+        "sha256:da4e139c6af60d97369723e61f4fb0749a15eaba07e3c04a69341a13d5c627bb",
+        "sha256:79b38cabbd3cff6f1ef63ff86d82332b51a679a1880ebbd9772020df5b3e517c",
+        "sha256:710711e16089199e7fbeafcdbbbbd96526fe9218c292a590f83d07f085fd44db",
+        "sha256:01b2a1afe18a2114133b870bc1dcfcfcdae5c6b07e7aa6b0d73f2412ff21ea27",
+        "sha256:0cbf3bdc1b0c73ef83b71c578da4a46ba2d623d9f6bdf39a0b49f324fa5538dc",
+        "sha256:73de91ba3facf3a2a578ef9d1965463cef87045126901725be62be12c705ffa9",
+        "sha256:28a5877e5fce615fcd35f63dc7c519436a6dbbc4a2d4a2ffea668d4112d17745",
+        "sha256:6152053ff9c1cdc4198bd2936f0d260f74729ce1878ba64acef49cd7c8d83450"
+      ]
+    }
+  ],
+  "governance": {
+    "official_pregame_forecast_immutable": true,
+    "official_grade_unchanged": true,
+    "postgame_shock_is_explanatory_context_only": true,
+    "causal_claim_permitted": false,
+    "market_input_used": false,
+    "counterfactual_rescoring": "FORBIDDEN",
+    "action_authority": false
+  }
+}

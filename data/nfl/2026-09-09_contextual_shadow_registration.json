@@ -1,0 +1,124 @@
+{
+  "baseline": {
+    "away_2025_srs": 5.51,
+    "away_team": "NE",
+    "home_2025_srs": 12.85,
+    "home_field_points": 1.8,
+    "home_team": "SEA",
+    "pre_context_margin_home": 5.837,
+    "pre_context_total": 46.61764705882353,
+    "week1_srs_carryover": 0.55
+  },
+  "event_id": "NFL_2026-09-09_NE_SEA",
+  "feature_contributions_home_margin_points": {
+    "NE_BEN_BROWN_OUT_C2": 0.05,
+    "NE_OTHER_DEPTH_INACTIVES": 0.05,
+    "NE_TREVEYON_HENDERSON_OUT_RB2": 0.2,
+    "SEA_MIKE_MORRIS_OUT_DL_DEPTH": -0.05,
+    "SEA_NICK_EMMANWORI_OUT_SECONDARY_ROLE": -0.45,
+    "SEA_OTHER_DEPTH_INACTIVES": -0.05,
+    "SEA_SECONDARY_CLUSTER_INTERACTION": -0.2,
+    "SEA_TORY_HORTON_OUT_WR_RETURN_DEPTH": -0.1,
+    "SEA_TY_OKADA_OUT_STARTING_SAFETY": -0.35,
+    "WEATHER": 0.0
+  },
+  "feature_contributions_total_points": {
+    "NE_HENDERSON_OUT": -0.2,
+    "SEA_SECONDARY_ABSENCES": 0.55,
+    "SEA_WR_DEPTH_ABSENCE": -0.05,
+    "WEATHER": 0.0
+  },
+  "forecast": {
+    "margin_quantiles": {
+      "p10": -13.0,
+      "p25": -5.0,
+      "p50": 5.0,
+      "p75": 15.0,
+      "p90": 23.0
+    },
+    "p_new_england_win": 0.365616,
+    "p_seattle_win": 0.634384,
+    "projected_home_margin": 4.883138,
+    "projected_new_england_points": 21.03788,
+    "projected_seattle_points": 25.921018,
+    "projected_total": 46.958898,
+    "total_quantiles": {
+      "p10": 33.0,
+      "p25": 40.0,
+      "p50": 47.0,
+      "p75": 54.0,
+      "p90": 61.0
+    }
+  },
+  "forecast_output_hash": "sha256:06b1afebbb335a65510bec3b6763e938175c7d916b6531e59fdc32583d9019cb",
+  "governance": {
+    "betting_action_authority": false,
+    "forecast_status": "INFORMATION_ENHANCED_SHADOW_UNVALIDATED",
+    "impact_transform_status": "NEW_RESEARCH_TRANSFORM_NOT_PROSPECTIVELY_VALIDATED",
+    "production_authority": false
+  },
+  "information_state": {
+    "new_england_additions": {
+      "usage": "UNCERTAINTY_CONTEXT_NOT_DIRECT_MEAN_BONUS"
+    },
+    "new_england_inactive": [
+      "Karon Prunty",
+      "TreVeyon Henderson",
+      "Erick Hunter",
+      "Walter Rouse",
+      "Ben Brown",
+      "Efton Chism III",
+      "Behren Morton"
+    ],
+    "news_adjustment_type": "STRUCTURED_AVAILABILITY_ONLY",
+    "roster_continuity": {
+      "seattle_returning_super_bowl_starters": "20_of_22",
+      "usage": "UNCERTAINTY_CONTEXT_NOT_DIRECT_MEAN_BONUS"
+    },
+    "seattle_inactive": [
+      "Tory Horton",
+      "Ty Okada",
+      "Nick Emmanwori",
+      "Nick Kallerup",
+      "Beau Stephens",
+      "Mike Morris",
+      "Jalen Milroe"
+    ],
+    "source_tier": "OFFICIAL_PRIMARY_PLUS_WEATHER_FORECAST",
+    "weather": {
+      "precipitation_risk": "LOW",
+      "state": "NEUTRAL",
+      "temperature_at_kickoff_f_approx": 79,
+      "wind": "LIGHT"
+    }
+  },
+  "model": {
+    "action_authority": false,
+    "base_engine": "nfl.elo_margin_monte_carlo.v1",
+    "base_engine_version": "1.0.0",
+    "market_input_used": false,
+    "market_overlay": false,
+    "model_id": "nfl.contextual_information_shadow.v0_2.research",
+    "model_version": "0.2.0",
+    "rng_seed": 2026090901,
+    "simulation_count": 500000
+  },
+  "registered_at_utc": "2026-09-10T00:01:52Z",
+  "scheduled_start_utc": "2026-09-10T00:20:00Z",
+  "schema_version": "nfl_contextual_shadow_registration.v1",
+  "sources": [
+    "https://www.patriots.com/news/week-1-inactives-patriots-at-seahawks",
+    "https://www.seahawks.com/team/depth-chart/",
+    "https://www.patriots.com/team/depth-chart",
+    "https://www.seahawks.com/news/seahawks-kick-off-2026-season-knowing-we-have-to-start-from-the-bottom-all-over-again",
+    "https://www.pro-football-reference.com/teams/sea/2025.htm",
+    "https://www.pro-football-reference.com/teams/nwe/2025.htm"
+  ],
+  "uncertainty": {
+    "margin_sd": 14.2,
+    "seattle_continuity": "LOWERS_STRUCTURAL_UNCERTAINTY_RELATIVE_TO_FULL_REBUILD_BUT_NO_DIRECT_MEAN_BONUS",
+    "total_sd": 10.8,
+    "week1_roster_integration": "EXPANDED_VARIANCE"
+  },
+  "writer_clock_pregame": true
+}

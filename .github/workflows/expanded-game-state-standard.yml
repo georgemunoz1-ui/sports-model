@@ -1,0 +1,46 @@
+name: expanded-game-state-standard
+
+on:
+  push:
+    paths:
+      - 'AGENTS.md'
+      - 'docs/EXPANDED_GAME_STATE_STANDARD_V1.md'
+      - 'models/common/expanded_game_state_standard_v1.py'
+      - 'pipelines/cards/forecast_adapter.py'
+      - 'pipelines/cards/adapters/**'
+      - 'tests/test_expanded_game_state_standard_v1.py'
+      - '.github/workflows/expanded-game-state-standard.yml'
+  pull_request:
+    paths:
+      - 'AGENTS.md'
+      - 'docs/EXPANDED_GAME_STATE_STANDARD_V1.md'
+      - 'models/common/expanded_game_state_standard_v1.py'
+      - 'pipelines/cards/forecast_adapter.py'
+      - 'pipelines/cards/adapters/**'
+      - 'tests/test_expanded_game_state_standard_v1.py'
+      - '.github/workflows/expanded-game-state-standard.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  contract-tests:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Expanded game-state contract tests
+        run: python3 -m unittest tests/test_expanded_game_state_standard_v1.py -v
+      - name: Shared adapter import smoke test
+        run: |
+          python3 - <<'PY'
+          from pipelines.cards.forecast_adapter import ForecastAdapter
+          from models.common.expanded_game_state_standard_v1 import STANDARD_ID, LEAGUE_DIMENSIONS
+          assert ForecastAdapter.game_state_standard_id == STANDARD_ID
+          assert set(LEAGUE_DIMENSIONS) == {'MLB','NFL','CFB','NBA','WNBA','NHL','MLS'}
+          print('expanded-game-state standard import smoke PASS')
+          PY

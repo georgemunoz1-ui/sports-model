@@ -88,6 +88,16 @@ R13 POST-FREEZE SHOCKS NEVER REWRITE THE FORECAST. A material injury, replacemen
    counterfactual rescoring is disabled. A future validated counterfactual remains research-only
    and can never alter official prospective scoring or arm-promotion evidence.
 
+R14 CONFIDENCE MUST NOT EXCEED INPUT SUPPORT. Apply `pregame_confidence_calibration.v1` before a
+   primary research forecast is presented. In NFL Weeks 1-2, the named
+   `early_season_input_quality_gate.v1` is triggered when ratings are prior-season-only, current
+   state was captured but not applied, and a material disruption is known before kickoff. The
+   forecast remains frozen and its mean/probability are not rewritten; instead mark
+   `forecast_tier=REDUCED`, cap confidence support at the preregistered unvalidated governance dose
+   of 0.6, require widened uncertainty with exact numeric scale `NOT_ESTABLISHED`, and keep action
+   authority OFF. Do not claim the disruption caused the eventual result, do not infer the final
+   score was predictable, and do not use the outcome to manufacture a retroactive probability.
+
 ## Coverage labels
 - `FULL_INFORMATION_SHADOW` — baseline plus all required expanded dimensions are resolved for the
   research shadow contract.
@@ -108,8 +118,11 @@ R13 POST-FREEZE SHOCKS NEVER REWRITE THE FORECAST. A material injury, replacemen
 - docs/history/ ........... original V11-era protocol docs (context, frozen)
 - models/common/expanded_game_state_standard_v1.py ... machine-readable repo-wide forecast policy
 - models/common/post_freeze_shock_ledger_v1.py ....... two-layer realized-state shock contract
+- models/common/pregame_confidence_calibration_v1.py . input-support/confidence governance contract
 - docs/POST_FREEZE_SHOCK_LEDGER_V1.md ................. shock grading/valuation doctrine
+- docs/PREGAME_CONFIDENCE_CALIBRATION_V1.md ........... pregame confidence-support doctrine
 - data/*/post_freeze_shocks/ .......................... append-only event shock evidence
+- data/nfl/governance_lessons/ ........................ append-only NFL confidence lessons
 - pipelines/cards/forecast_adapter.py ................. shared adapter boundary enforcing the policy
 - data/backfill/mlb/2026/ . results/features/pitcher logs and related MLB source state
 - engine/ ................. legacy/live engine tracks and experiments

@@ -1,0 +1,50 @@
+{
+  "schema_version": "pregame_confidence_calibration_lesson.v1",
+  "lesson_type": "CONFIDENCE_CALIBRATION",
+  "event_id": "401872657",
+  "canonical_event_identity_status": "NOT_VERIFIED_IN_THIS_RECORD",
+  "finding": "Forecast confidence (~69% Rams win) exceeded what degraded inputs supported",
+  "known_limitations_before_kickoff": [
+    "prior_season_ratings_only",
+    "current_state_info_captured_not_applied",
+    "travel_schedules_differed",
+    "current_season_form_unavailable_or_insufficient"
+  ],
+  "causal_attribution": "NOT_CLAIMED",
+  "hindsight_bias_check": "PASSED_NO_CLAIM_REALIZED_SCORE_WAS_PREDICTABLE",
+  "frozen_forecast_rewrite": false,
+  "official_grade_rewrite": false,
+  "observed_result_usage": "AUDIT_TRIGGER_AND_CONTEXT_ONLY",
+  "actionable_correction": {
+    "standard_id": "pregame_confidence_calibration.v1",
+    "rule_name": "early_season_input_quality_gate.v1",
+    "trigger": {
+      "league": "NFL",
+      "season_week_max": 2,
+      "rating_freshness": "PRIOR_SEASON_ONLY",
+      "current_state_application": "CAPTURED_NOT_APPLIED",
+      "known_disruption": true
+    },
+    "effect": {
+      "forecast_tier": "REDUCED",
+      "confidence_support_dose_cap": 0.6,
+      "confidence_support_dose_status": "PREREGISTERED_UNVALIDATED_GOVERNANCE_CAP",
+      "uncertainty_policy": "WIDEN_REQUIRED_EXACT_SCALE_NOT_ESTABLISHED",
+      "uncertainty_scale_numeric": null,
+      "mean_forecast_adjustment_permitted": false,
+      "probability_rescaling_permitted": false,
+      "action_authority": false
+    },
+    "implementation_target": "nfl.elo_margin_monte_carlo.v1.1"
+  },
+  "prohibited_inferences": [
+    "travel_caused_the_loss",
+    "realized_score_was_predictable",
+    "single_game_invalidates_model",
+    "outcome_may_be_used_to_rewrite_pregame_probability"
+  ],
+  "evidence_scope": "USER_AUTHORIZED_GOVERNANCE_LESSON",
+  "predictive_validation_status": "NOT_ESTABLISHED",
+  "promotion_authority": false,
+  "action_authority": false
+}

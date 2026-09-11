@@ -6,26 +6,34 @@ on:
       - 'AGENTS.md'
       - 'docs/EXPANDED_GAME_STATE_STANDARD_V1.md'
       - 'docs/POST_FREEZE_SHOCK_LEDGER_V1.md'
+      - 'docs/PREGAME_CONFIDENCE_CALIBRATION_V1.md'
       - 'models/common/expanded_game_state_standard_v1.py'
       - 'models/common/post_freeze_shock_ledger_v1.py'
+      - 'models/common/pregame_confidence_calibration_v1.py'
       - 'pipelines/cards/forecast_adapter.py'
       - 'pipelines/cards/adapters/**'
       - 'data/nfl/post_freeze_shocks/**'
+      - 'data/nfl/governance_lessons/**'
       - 'tests/test_expanded_game_state_standard_v1.py'
       - 'tests/test_post_freeze_shock_ledger_v1.py'
+      - 'tests/test_pregame_confidence_calibration_v1.py'
       - '.github/workflows/expanded-game-state-standard.yml'
   pull_request:
     paths:
       - 'AGENTS.md'
       - 'docs/EXPANDED_GAME_STATE_STANDARD_V1.md'
       - 'docs/POST_FREEZE_SHOCK_LEDGER_V1.md'
+      - 'docs/PREGAME_CONFIDENCE_CALIBRATION_V1.md'
       - 'models/common/expanded_game_state_standard_v1.py'
       - 'models/common/post_freeze_shock_ledger_v1.py'
+      - 'models/common/pregame_confidence_calibration_v1.py'
       - 'pipelines/cards/forecast_adapter.py'
       - 'pipelines/cards/adapters/**'
       - 'data/nfl/post_freeze_shocks/**'
+      - 'data/nfl/governance_lessons/**'
       - 'tests/test_expanded_game_state_standard_v1.py'
       - 'tests/test_post_freeze_shock_ledger_v1.py'
+      - 'tests/test_pregame_confidence_calibration_v1.py'
       - '.github/workflows/expanded-game-state-standard.yml'
   workflow_dispatch:
 
@@ -45,6 +53,8 @@ jobs:
         run: python3 -m unittest tests/test_expanded_game_state_standard_v1.py -v
       - name: Post-freeze shock ledger contract tests
         run: python3 -m unittest tests/test_post_freeze_shock_ledger_v1.py -v
+      - name: Pregame confidence calibration contract tests
+        run: python3 -m unittest tests/test_pregame_confidence_calibration_v1.py -v
       - name: Validate committed shock ledger examples
         run: |
           python3 - <<'PY'
@@ -60,14 +70,47 @@ jobs:
               validate_shock_record(record)
               print(f'validated {path}')
           PY
+      - name: Validate committed confidence lessons
+        run: |
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          from models.common.pregame_confidence_calibration_v1 import evaluate_pregame_confidence
+
+          paths = sorted(Path('data').glob('**/governance_lessons/*confidence_calibration*.json'))
+          if not paths:
+              raise SystemExit('CONFIDENCE_CALIBRATION_LESSON_MISSING')
+          for path in paths:
+              lesson = json.loads(path.read_text())
+              trigger = lesson['actionable_correction']['trigger']
+              effect = lesson['actionable_correction']['effect']
+              record = evaluate_pregame_confidence(
+                  league=trigger['league'],
+                  event_id=lesson['event_id'],
+                  season_week=trigger['season_week_max'],
+                  rating_freshness=trigger['rating_freshness'],
+                  current_state_application=trigger['current_state_application'],
+                  known_disruption=trigger['known_disruption'],
+                  current_season_form_state='UNAVAILABLE',
+              )
+              assert record['forecast_tier'] == effect['forecast_tier']
+              assert record['confidence_support_dose_cap'] == effect['confidence_support_dose_cap']
+              assert record['uncertainty_policy'] == effect['uncertainty_policy']
+              assert record['uncertainty_scale_numeric'] is effect['uncertainty_scale_numeric']
+              assert record['mean_forecast_adjustment_permitted'] is False
+              assert record['probability_rescaling_permitted'] is False
+              print(f'validated {path}')
+          PY
       - name: Shared adapter import smoke test
         run: |
           python3 - <<'PY'
           from pipelines.cards.forecast_adapter import ForecastAdapter
           from models.common.expanded_game_state_standard_v1 import STANDARD_ID, LEAGUE_DIMENSIONS
           from models.common.post_freeze_shock_ledger_v1 import STANDARD_ID as SHOCK_STANDARD_ID
+          from models.common.pregame_confidence_calibration_v1 import STANDARD_ID as CONFIDENCE_STANDARD_ID
           assert ForecastAdapter.game_state_standard_id == STANDARD_ID
           assert set(LEAGUE_DIMENSIONS) == {'MLB','NFL','CFB','NBA','WNBA','NHL','MLS'}
           assert SHOCK_STANDARD_ID == 'post_freeze_realized_state.v1'
-          print('expanded-game-state + post-freeze shock standards import smoke PASS')
+          assert CONFIDENCE_STANDARD_ID == 'pregame_confidence_calibration.v1'
+          print('expanded-game-state + shock + confidence standards import smoke PASS')
           PY

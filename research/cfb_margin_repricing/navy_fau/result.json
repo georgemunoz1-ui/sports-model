@@ -1,0 +1,306 @@
+{
+  "record_type": "FROZEN_FORECAST_REPRICING_NOT_NEW_FORECAST",
+  "generated_at": "2026-09-12T21:55:52.894495+00:00",
+  "event_id": "401862703",
+  "home": "Florida Atlantic Owls",
+  "away": "Navy Midshipmen",
+  "start": "2026-09-12T23:30Z",
+  "forecast_cutoff": "2026-09-12T19:09:15.586211+00:00",
+  "rating_vintage": "2026-09-12T11:02:55.548920+00:00",
+  "model_id": "cfb.team_context_heads.v0_1.research",
+  "parent_sha256": "e70bf92d9a6a5f04130bb2c7b2fa9f6a17d5f6fceb866829f96f87d0f2de5463",
+  "seed": 3432655591765314233,
+  "draws_sha256": "3165d4d40444a6060be2af62ebf5529193f98fe89a11a3b757061518634655b9",
+  "model_navy_margin": 2.4796338046418644,
+  "simulation_navy_margin": 2.51687,
+  "navy_margin_quantiles": {
+    "p10": -23,
+    "p25": -11,
+    "p50": 2,
+    "p75": 16,
+    "p90": 28
+  },
+  "spread": {
+    "schema_version": "cfb.push_repricing.v2",
+    "status": "RESEARCH_DIAGNOSTIC_UNCALIBRATED",
+    "period": "full_game",
+    "home_line": 4,
+    "model": {
+      "home_cover": 0.5204569699660835,
+      "away_cover": 0.4595461857430121,
+      "push": 0.019996844290904425,
+      "home_cover_given_no_push": 0.5310768306552026,
+      "away_cover_given_no_push": 0.4689231693447974
+    },
+    "simulation": {
+      "home_cover": 0.52018,
+      "away_cover": 0.46026,
+      "push": 0.01956,
+      "home_cover_given_no_push": 0.5305577087838114,
+      "away_cover_given_no_push": 0.4694422912161887
+    },
+    "counts": {
+      "home_cover": 52018,
+      "away_cover": 46026,
+      "push": 1956
+    },
+    "n_sims": 100000,
+    "settlement_definition": "home_margin + home_line >0 cover; =0 push; <0 loss",
+    "push_calibration": "NOT_ESTABLISHED",
+    "action_authority": "OFF"
+  },
+  "screenshot_prices": {
+    "navy_minus4": -112,
+    "fau_plus4": -108,
+    "navy_moneyline": -198,
+    "fau_moneyline": 164,
+    "total": 59.5,
+    "quote_timestamp": null
+  },
+  "full_game_total": {
+    "period": "full_game",
+    "line": 59.5,
+    "status": "UNSUPPORTED",
+    "reason": "NO_FULL_GAME_TOTAL_MODEL_OR_DRAWS",
+    "p_over": null,
+    "p_under": null
+  },
+  "first_half": {
+    "fau_points": 13.413883749217268,
+    "navy_points": 16.8424551777887,
+    "model_total": 30.25633892700597,
+    "simulation_total": 30.2201,
+    "quantiles": {
+      "p10": 21,
+      "p25": 25,
+      "p50": 30,
+      "p75": 35,
+      "p90": 39
+    },
+    "team_history_present": {
+      "home": true,
+      "away": false
+    },
+    "not_full_game_total": true
+  },
+  "current_inputs": {
+    "home": {
+      "season": 2026,
+      "players": 100,
+      "quarterbacks": [
+        {
+          "id": "5302741",
+          "name": "Jeremiah Daoud",
+          "roster_status": "Active",
+          "injuries": []
+        },
+        {
+          "id": "5219898",
+          "name": "Drew Devillier",
+          "roster_status": "Active",
+          "injuries": []
+        },
+        {
+          "id": "5215248",
+          "name": "Jordan Magwood",
+          "roster_status": "Active",
+          "injuries": []
+        }
+      ],
+      "starting_qb": "UNCONFIRMED",
+      "game_day_availability": "UNRESOLVED",
+      "roster_is_not_availability": true,
+      "depthchart_status": "UNAVAILABLE",
+      "current_season_team_stats": {
+        "passing": {
+          "completionPct": 64.2,
+          "completions": 34.0,
+          "interceptionPct": 3.8,
+          "interceptions": 2.0,
+          "longPassing": 25.0,
+          "netPassingYards": 276.0,
+          "netPassingYardsPerGame": 276.0,
+          "passingAttempts": 53.0,
+          "passingTouchdownPct": 1.9,
+          "passingTouchdowns": 1.0,
+          "QBRating": 106.50641,
+          "sacks": 2.0,
+          "sackYardsLost": 4.0,
+          "yardsPerPassAttempt": 5.2,
+          "passingYards": 276.0,
+          "passingFumblesLost": 0.0,
+          "teamGamesPlayed": 1.0,
+          "yardsPerGame": 396.0,
+          "totalPointsPerGame": 21.0,
+          "totalPoints": 21.0,
+          "totalTouchdowns": 3.0,
+          "passingYardsPerGame": 276.0,
+          "completionAttempts": null,
+          "sacksYardsLost": null
+        },
+        "rushing": {
+          "rushingAttempts": 37.0,
+          "rushingYards": 120.0,
+          "yardsPerRushAttempt": 3.2,
+          "longRushing": 11.0,
+          "rushingBigPlays": 0.0,
+          "rushingTouchdowns": 2.0,
+          "rushingYardsPerGame": 120.0,
+          "rushingFumbles": 0.0,
+          "rushingFumblesLost": 0.0,
+          "rushingFirstDowns": 7.0,
+          "teamGamesPlayed": 1.0,
+          "totalYards": 396.0,
+          "totalOffensivePlays": 92.0,
+          "totalPointsPerGame": 21.0,
+          "totalPoints": 21.0,
+          "totalTouchdowns": 3.0
+        },
+        "general": {
+          "fumbles": 2.0,
+          "fumblesForced": 0.0,
+          "fumblesRecovered": 0.0,
+          "fumblesTouchdowns": 0.0,
+          "gamesPlayed": 1.0,
+          "fumblesAndLost": null
+        },
+        "scoring": {
+          "rushingTouchdowns": 2.0,
+          "receivingTouchdowns": 1.0,
+          "returnTouchdowns": 0.0,
+          "totalTouchdowns": 3.0,
+          "fieldGoals": 0.0,
+          "kickExtraPoints": 3.0,
+          "totalTwoPointConvs": 0.0,
+          "totalPoints": 21.0,
+          "totalPointsPerGame": 21.0
+        }
+      },
+      "stats_used_as_predictive_features": false,
+      "weather": "UNRESOLVED",
+      "travel": "UNRESOLVED"
+    },
+    "away": {
+      "season": 2026,
+      "players": 100,
+      "quarterbacks": [
+        {
+          "id": "5391331",
+          "name": "Evan Blouir",
+          "roster_status": "Active",
+          "injuries": []
+        },
+        {
+          "id": "5295377",
+          "name": "Ryan Brass",
+          "roster_status": "Active",
+          "injuries": []
+        },
+        {
+          "id": "5391319",
+          "name": "Brady Carmical",
+          "roster_status": "Active",
+          "injuries": []
+        },
+        {
+          "id": "5391322",
+          "name": "Maverick Chance",
+          "roster_status": "Active",
+          "injuries": []
+        },
+        {
+          "id": "5295382",
+          "name": "Michael Dove",
+          "roster_status": "Active",
+          "injuries": []
+        },
+        {
+          "id": "5220473",
+          "name": "Jackson Gutierrez",
+          "roster_status": "Active",
+          "injuries": []
+        }
+      ],
+      "starting_qb": "UNCONFIRMED",
+      "game_day_availability": "UNRESOLVED",
+      "roster_is_not_availability": true,
+      "depthchart_status": "UNAVAILABLE",
+      "current_season_team_stats": {
+        "passing": {
+          "completionPct": 50.0,
+          "completions": 3.0,
+          "interceptionPct": 0.0,
+          "interceptions": 0.0,
+          "longPassing": 10.0,
+          "netPassingYards": 21.0,
+          "netPassingYardsPerGame": 21.0,
+          "passingAttempts": 6.0,
+          "passingTouchdownPct": 0.0,
+          "passingTouchdowns": 0.0,
+          "QBRating": 79.399994,
+          "sacks": 0.0,
+          "sackYardsLost": 0.0,
+          "yardsPerPassAttempt": 3.5,
+          "passingYards": 21.0,
+          "passingFumblesLost": 0.0,
+          "teamGamesPlayed": 1.0,
+          "yardsPerGame": 527.0,
+          "totalPointsPerGame": 42.0,
+          "totalPoints": 42.0,
+          "totalTouchdowns": 6.0,
+          "passingYardsPerGame": 21.0,
+          "completionAttempts": null,
+          "sacksYardsLost": null
+        },
+        "rushing": {
+          "rushingAttempts": 73.0,
+          "rushingYards": 506.0,
+          "yardsPerRushAttempt": 6.9,
+          "longRushing": 38.0,
+          "rushingBigPlays": 0.0,
+          "rushingTouchdowns": 6.0,
+          "rushingYardsPerGame": 506.0,
+          "rushingFumbles": 0.0,
+          "rushingFumblesLost": 0.0,
+          "rushingFirstDowns": 28.0,
+          "teamGamesPlayed": 1.0,
+          "totalYards": 527.0,
+          "totalOffensivePlays": 79.0,
+          "totalPointsPerGame": 42.0,
+          "totalPoints": 42.0,
+          "totalTouchdowns": 6.0
+        },
+        "general": {
+          "fumbles": 1.0,
+          "fumblesForced": 0.0,
+          "fumblesRecovered": 0.0,
+          "fumblesTouchdowns": 0.0,
+          "gamesPlayed": 1.0,
+          "fumblesAndLost": null
+        },
+        "scoring": {
+          "rushingTouchdowns": 6.0,
+          "receivingTouchdowns": 0.0,
+          "returnTouchdowns": 0.0,
+          "totalTouchdowns": 6.0,
+          "fieldGoals": 0.0,
+          "kickExtraPoints": 6.0,
+          "totalTwoPointConvs": 0.0,
+          "totalPoints": 42.0,
+          "totalPointsPerGame": 42.0
+        }
+      },
+      "stats_used_as_predictive_features": false,
+      "weather": "UNRESOLVED",
+      "travel": "UNRESOLVED"
+    }
+  },
+  "validation": {
+    "tests_passed": 17,
+    "exact_seeded_margin_replay": true,
+    "exact_seeded_half_replay": true,
+    "parent_unchanged": true
+  },
+  "action_authority": "OFF",
+  "canonical_prospective_eligible": false
+}

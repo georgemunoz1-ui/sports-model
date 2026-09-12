@@ -1,0 +1,41 @@
+name: Score distribution retention and frozen extraction
+on:
+  push:
+    branches: [codex/nfl-wnba-nba-models-v1]
+    paths: [models/common/score_distributions_v1.py, research/distributions/derive_frozen_distributions.py]
+permissions:
+  contents: read
+  actions: read
+jobs:
+  distributions:
+    runs-on: ubuntu-latest
+    env:
+      PYTHONPATH: .
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: pip install numpy==2.3.5
+      - run: python research/distributions/test_score_distributions.py
+      - uses: actions/download-artifact@v4
+        with:
+          name: prep-20260912-and-closeout-sources
+          run-id: 34689434612
+          github-token: ${{ github.token }}
+          path: parents/mlb
+      - uses: actions/download-artifact@v4
+        with:
+          name: refreshed-cfb-mls-20260912
+          run-id: 34690007684
+          github-token: ${{ github.token }}
+          path: parents/mls
+      - run: python research/distributions/derive_frozen_distributions.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: score-distribution-children-20260912
+          path: distribution-children/
+          retention-days: 90

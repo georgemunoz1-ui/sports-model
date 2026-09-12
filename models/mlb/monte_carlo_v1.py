@@ -123,7 +123,7 @@ def _safe_corr(x, y):
     return value if math.isfinite(value) else 0.0
 
 
-def run(snapshot, config, n, runline=None, total_line=None):
+def run(snapshot, config, n, runline=None, total_line=None, *, score_sink=None):
     if n < MIN_SIMS:
         raise SystemExit(f"SIMULATION_COUNT_BELOW_MINIMUM:{MIN_SIMS}")
 
@@ -303,6 +303,12 @@ def run(snapshot, config, n, runline=None, total_line=None):
             },
         },
     }
+
+    # Optional retention hook consumes no randomness and leaves legacy payload
+    # and seed identity unchanged. Consumers must label these nine-inning proxy
+    # scores: the winner-only tie handler above does not add extra-inning runs.
+    if score_sink is not None:
+        score_sink(home_runs.copy(), away_runs.copy())
 
     out = {
         "artifact_type": "mlb_monte_carlo_forecast_bundle_v1",

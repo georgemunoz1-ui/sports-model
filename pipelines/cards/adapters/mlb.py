@@ -18,6 +18,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 from models.mlb.monte_carlo_v1 import run as run_mc
+from models.common.score_distributions_v1 import extract
 
 CONFIG = Path("data/models/mlb/v13_1_monte_carlo_config_v1.json")
 PARKS = Path("data/backfill/mlb/2026/park_factors.json")
@@ -215,7 +216,10 @@ def forecast_event(event, context, simulations=100000):
         "venue": event.get("venue"),
     }
 
-    out = run_mc(snapshot, context["config"], int(simulations))
+    captured_scores = {}
+    def retain_scores(home, away):
+        captured_scores['distribution'] = extract(home, away, score_period='MLB_NINE_INNING_PROXY')
+    out = run_mc(snapshot, context["config"], int(simulations), score_sink=retain_scores)
     projection = out["projection"]
     home_analytic = _poisson_win_prob(
         float(projection["home_runs_mean"]),
@@ -260,8 +264,8 @@ def forecast_event(event, context, simulations=100000):
         "projected_away_runs": float(projection["away_runs_mean"]),
         "margin_std": projection.get("margin_std"),
         "total_std": projection.get("total_std"),
-        "spread_or_runline": "SUPPORTED_AFTER_LINE_ATTACH",
-        "total_market": "SUPPORTED_AFTER_LINE_ATTACH",
+        "spread_or_runline": "DIAGNOSTIC_PROXY_ONLY_FULL_GAME_SETTLEMENT_UNSUPPORTED",
+        "total_market": "DIAGNOSTIC_PROXY_ONLY_FULL_GAME_SETTLEMENT_UNSUPPORTED",
         "warnings": adjustments,
         "input_snapshot_hash": out["input_snapshot_hash"],
         "model_state_config_hash": out["model_state_config_hash"],
@@ -273,6 +277,9 @@ def forecast_event(event, context, simulations=100000):
             "simulation_count": out["simulation_count"],
             "random_seed": out["random_seed"],
             "rng_algorithm": out.get("rng_algorithm"),
+            "score_distribution": captured_scores['distribution'],
+            "legacy_margin_quantiles": projection['margin_quantiles'],
+            "legacy_total_quantiles": projection['total_quantiles'],
         },
         "provenance": {
             "model_id": context["config"]["model_id"],

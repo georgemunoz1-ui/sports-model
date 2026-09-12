@@ -1,4 +1,4 @@
-"""Append diagnostic children from preserved inputs/draws, never new forecasts."""
+"""Append diagnostic children; replay requires original MLB NumPy 2.4.6."""
 import datetime, hashlib, json
 from pathlib import Path
 import numpy as np

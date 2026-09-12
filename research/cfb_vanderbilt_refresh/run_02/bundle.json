@@ -1,0 +1,137 @@
+{
+  "model_id": "cfb.first_half_division_context.v0_1.research",
+  "event_id": "401856684",
+  "generated_at": "2026-09-12T20:13:06.942837+00:00",
+  "scheduled_start": "2026-09-12T20:15Z",
+  "timing_status": "PREGAME_LOCAL_DIAGNOSTIC",
+  "history_end": "2026-09-11",
+  "n_history": 104,
+  "team_history": {
+    "238": [
+      {
+        "event_id": "401856669",
+        "date": "2026-09-05T23:00Z",
+        "home_id": "238",
+        "away_id": "2046",
+        "home_half": 15.0,
+        "away_half": 9.0,
+        "home_div": "fbs",
+        "away_div": "fcs",
+        "source_sha256": "d8eb51c122d5888bb85d48db2bb7f21f33f80e87c093347eb97f9bdb3e1c2d60"
+      }
+    ],
+    "48": [
+      {
+        "event_id": "401864424",
+        "date": "2026-09-03T23:00Z",
+        "home_id": "48",
+        "away_id": "2771",
+        "home_half": 21.0,
+        "away_half": 0.0,
+        "home_div": "fbs",
+        "away_div": "fcs",
+        "source_sha256": "ff925a2c9aacd5ae465c1a3b8d9162453fc26e8abadcec63a8683bbc9c500e21"
+      }
+    ]
+  },
+  "first_half_home_points": 10.898213757453103,
+  "first_half_away_points": 13.041070900310244,
+  "first_half_total": 23.939284657763345,
+  "first_half_total_quantiles": {
+    "p10": 15,
+    "p25": 19,
+    "p50": 24,
+    "p75": 29,
+    "p90": 33
+  },
+  "in_sample_sigma_uncalibrated": 7.301985897443082,
+  "validation": {
+    "n_train": 92,
+    "n_test": 12,
+    "mae": 8.153006229071554,
+    "baseline_mae": 9.25,
+    "status": "SMALL_CHRONOLOGICAL_DIAGNOSTIC_NOT_VALIDATION",
+    "rows": [
+      {
+        "event_id": "401866411",
+        "error": 1.1921671523020478,
+        "baseline_error": -1.8260869565217384
+      },
+      {
+        "event_id": "401858210",
+        "error": -14.024951043808922,
+        "baseline_error": -11.826086956521738
+      },
+      {
+        "event_id": "401864432",
+        "error": -1.0249510438089224,
+        "baseline_error": 1.1739130434782616
+      },
+      {
+        "event_id": "401858437",
+        "error": 16.975048956191078,
+        "baseline_error": 19.17391304347826
+      },
+      {
+        "event_id": "401856661",
+        "error": 10.975048956191078,
+        "baseline_error": 13.173913043478262
+      },
+      {
+        "event_id": "401858438",
+        "error": 3.9750489561910776,
+        "baseline_error": 6.173913043478262
+      },
+      {
+        "event_id": "401858212",
+        "error": -0.5756714040695314,
+        "baseline_error": 2.1739130434782616
+      },
+      {
+        "event_id": "401858213",
+        "error": -16.484680791316052,
+        "baseline_error": -19.82608695652174
+      },
+      {
+        "event_id": "401858215",
+        "error": -9.609234599171636,
+        "baseline_error": -11.826086956521738
+      },
+      {
+        "event_id": "401858220",
+        "error": -2.090065221602991,
+        "baseline_error": -1.8260869565217384
+      },
+      {
+        "event_id": "401858222",
+        "error": -19.034241592913222,
+        "baseline_error": -19.82608695652174
+      },
+      {
+        "event_id": "401858214",
+        "error": -1.874965031292092,
+        "baseline_error": 2.1739130434782616
+      }
+    ]
+  },
+  "seed": 1738928218968343512,
+  "n_sims": 100000,
+  "numpy_version": "2.3.5",
+  "draws_sha256": "02a3fe0ec6405696e427564bf8bd3705dd285ec73a1efb65405424ed7f8ca84c",
+  "input_hash": "b343cd03b2163a59c0450cb0393bb9d50fedb8148138627b0e2e0661d41d8ea2",
+  "parent_sha256": "e70bf92d9a6a5f04130bb2c7b2fa9f6a17d5f6fceb866829f96f87d0f2de5463",
+  "full_game_margin_frozen_unchanged": 25.092554480756,
+  "full_game_total": "UNSUPPORTED",
+  "whole_number_spread": "UNSUPPORTED",
+  "roster_adjustment_points": null,
+  "action_authority": "OFF",
+  "canonical_prospective_eligible": false,
+  "limitations": [
+    "ONE_GAME_PER_TEAM",
+    "OPPONENT_DIVISION_OFFSET_UNVALIDATED",
+    "CURRENT_ROSTER_IMPACT_ABSENT",
+    "IN_SAMPLE_VARIANCE_UNCALIBRATED",
+    "NO_MARKET_INPUTS",
+    "NO_NEW_FULL_GAME_FORECAST"
+  ]
+}

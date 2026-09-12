@@ -4391,3 +4391,8 @@ Official game-note PDFs downloaded and hashed; Washington page10, Utah State pag
 ## 2026-09-12 — Frozen CFB margin quantiles and half-point repricing
 
 Added research/cfb_margin_repricing: histogram-based margin quantiles and half-point spread utility, exclusive child writes, whole-number/period rejection, full-game totals UNSUPPORTED. BYU -6.5 on frozen19:09:15Z card: model71.72648%, MC71.949%, P10/P25/P50/P75/P90 -7/+5/+18/+31/+43. User-supplied line, no quote timestamp/price; generated after scheduled start, NOT new pregame or live forecast. Nine targeted tests pass; original ordered draw SHA and histogram replay match. No fitted parameter change, parent mutation, action authority or predictive validation. Canonical full-checkout health unavailable; no repository-wide PASS claimed.
+
+
+## 2026-09-12 — Delaware/Vanderbilt halftime history repair
+
+New first-half-only research challenger includes104 completed games throughSept11 with separate team/opponent division indicators. Old FBS/FBS update join excluded both teams' FCS openers. Team histories now1 each (Vanderbilt half15-9; Delaware21-0). Generated20:13:06Z before captured20:15Z kickoff: first-half Vanderbilt10.898, Delaware13.041, total23.939;100K paths, exact replay. Chronological92/12 MAE8.153 vs9.250 constant is exploratory only. Full-game margin unchanged separate baseline; no coherent joint score forecast implied. Roster numerical impact absent; uncertainty still uncalibrated; whole-number ATS/full totals unsupported; actionOFF. Raw full responses local; compressed extracted headers plus receipts, training, parameters and report remote at research/cfb_vanderbilt_refresh. No claim of canonical remote pregame registration or complete raw-source durability.

@@ -1,0 +1,29 @@
+name: September 12 card and September 11 outcome capture
+on:
+  push:
+    branches: [codex/nfl-wnba-nba-models-v1]
+    paths: [research/audits/prep_20260912.py]
+permissions:
+  contents: read
+jobs:
+  prep:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: pip install -r requirements.txt
+      - run: python harness/healthcheck.py > healthcheck-0912.log 2>&1 || true
+      - run: python research/audits/prep_20260912.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: prep-20260912-and-closeout-sources
+          path: |
+            prep-20260912-output/
+            healthcheck-0912.log
+          retention-days: 90

@@ -1,0 +1,32 @@
+{
+  "files": [
+    {
+      "path": "normalized/historical_results.json.gz",
+      "bytes": 537692,
+      "sha256": "66b7ec241532f976aa541fe3fa819280b70d402d16f193078caad2ff940750f0"
+    },
+    {
+      "path": "normalized/slate.json.gz",
+      "bytes": 6534,
+      "sha256": "0afd794c2ff02af6643a5b61b3751150ae8a32906ceceab91948bbfe382371f1"
+    },
+    {
+      "path": "normalized/summary.json.gz",
+      "bytes": 431,
+      "sha256": "02c9b5872c32379e52d5c341350825f6cf7d2d0d64ccd15f4c5e62e1130db014"
+    },
+    {
+      "path": "normalized/team_state.json.gz",
+      "bytes": 176066,
+      "sha256": "28ae5030e6807a9c6fb4305c46d71631eb4be91c60c68b853abf5abededb6f1e"
+    },
+    {
+      "path": "evidence_extracts.zip",
+      "bytes": 1337233,
+      "sha256": "02a7b2bbf69c9f733ace3c22264d0dba51db91bb3e46510391b2ca7f19198ed7"
+    }
+  ],
+  "raw_source_remote_complete": false,
+  "archive_scope": "normalized tables, source receipts, official PDF text extracts, NWS raw JSON, collector source; full ESPN and PDF bytes remain local",
+  "verification": "unique events; score/quarter coherence; halftime bounds; timestamps; gzip exact roundtrip PASS"
+}

@@ -1,0 +1,11 @@
+# First-half total empirical baseline v0.1
+
+This owner-directed research addition models first-half total points directly from actual quarter-one plus quarter-two scores. No full-game halving, fabricated drive rates, market features, or reuse of margin-only probabilities. Excludes second-half and overtime scoring. It is a league baseline, NOT a team-specific total model. No claim of validated value at any quoted price.
+
+Historical cohort: existing 53 completed 2026 FBS/FBS game IDs from the morning causal state, newly retrieved ESPN public summaries. Require final status, matching IDs/finals, integer nonnegative quarters summing to final, and dates before target slate. Match neutral/non-neutral venue class; minimum 30 observations (engineering threshold, not power calculation). Empirical resampling preserves integer totals. 100K paths, keyed seed including count/model/event/history hash, ordered draw hash, exact histogram. Histograms preserve distribution/repricing; source and NumPy version reproduce ordered arrays. No selection of model configuration based on quoted Under 30.5 performance.
+
+Run `python collect.py --state STATE.json`, then `python run.py --state STATE.json --identities IDENTITIES.csv --out NEW_DIRECTORY`. Output directory must be absent; no overwrite of prior forecast. Canonical operational runner integration is pending. Six unit tests cover scoring-period isolation, final/quarter mismatch, pushes, half lines, deterministic replay, and insufficient history. Global repository health remains unvalidated; production, action and canonical registration remain OFF. This is not a claim that all CFB required-input gates passed.
+
+Current QB, injury, weather and team-specific pace/offense/defense are absent. All eligible same-venue games receive the same exact baseline distribution; MC differences are sampling noise. Neutral samples and FCS bridge may block. Started games retained without new forecasts. Results are local research snapshots, not protected-remote prospective evidence. Raw ESPN responses retained locally; extracted history and receipt hashes stored in GitHub. No causal or predictive-performance conclusion.
+
+The raw schedule is gzip-compressed in GitHub. Decompress schedule.json.gz before validating the manifest; the hash refers to original decompressed bytes.

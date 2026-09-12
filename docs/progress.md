@@ -4386,3 +4386,8 @@ Retrieved 223 source responses for schedule and 74 teams (roster/statistics/dept
 ## 2026-09-12 — Official USU/Washington depth-chart ingestion
 
 Official game-note PDFs downloaded and hashed; Washington page10, Utah State page4 extracted. Published QB1/backup now bound: Demond Williams Jr./Elijah Brown and McCae Hillstead/Grady Brosterhous. ESPN Washington roster omission is preserved as a source conflict, not treated as absence or injury. Depth order is not game-day availability. 107 offense/defense entries extracted with source lines/OR markers retained. New single-game diagnostic cutoff19:22:02Z ahead of19:30Z start. Two100K arrays replay exactly; model means unchanged because player-impact transform is absent. In-sample uncertainty remains uncalibrated; action OFF and no claim of roster-driven predictive improvement. Report and source-page archive: research/cfb_depth_ingest/. Scope two teams, not full CFB depth ingestion. Earlier forecasts unchanged.
+
+
+## 2026-09-12 — Frozen CFB margin quantiles and half-point repricing
+
+Added research/cfb_margin_repricing: histogram-based margin quantiles and half-point spread utility, exclusive child writes, whole-number/period rejection, full-game totals UNSUPPORTED. BYU -6.5 on frozen19:09:15Z card: model71.72648%, MC71.949%, P10/P25/P50/P75/P90 -7/+5/+18/+31/+43. User-supplied line, no quote timestamp/price; generated after scheduled start, NOT new pregame or live forecast. Nine targeted tests pass; original ordered draw SHA and histogram replay match. No fitted parameter change, parent mutation, action authority or predictive validation. Canonical full-checkout health unavailable; no repository-wide PASS claimed.

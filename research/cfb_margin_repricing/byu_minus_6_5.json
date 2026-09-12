@@ -1,0 +1,56 @@
+{
+  "schema_version": "cfb_margin_repricing.v1",
+  "generated_at_utc": "2026-09-12T19:44:36.935766+00:00",
+  "record_type": "FROZEN_FORECAST_REPRICING_NOT_NEW_FORECAST",
+  "parent_bundle_sha256": "e70bf92d9a6a5f04130bb2c7b2fa9f6a17d5f6fceb866829f96f87d0f2de5463",
+  "forecast_cutoff": "2026-09-12T19:09:15.586211+00:00",
+  "model_id": "cfb.team_context_heads.v0_1.research",
+  "event_id": "401856810",
+  "home": "BYU Cougars",
+  "away": "Arizona Wildcats",
+  "event_start": "2026-09-12T19:30Z",
+  "model_home_margin": 17.931470694676875,
+  "seed": 16057283844165402241,
+  "original_margin_draws_sha256": "da7a0b412c1bbae5dd65cdcfe9c3b2b0051f3002e1aa0a2cc38ef81bcc3ffe7a",
+  "market_source": "USER_SUPPLIED_NOT_INDEPENDENTLY_VERIFIED",
+  "market_observed_at_utc": null,
+  "price": null,
+  "margin_quantiles": {
+    "orientation": "home_minus_away",
+    "period": "full_game",
+    "method": "empirical_inverse_cdf",
+    "values": {
+      "p10": -7,
+      "p25": 5,
+      "p50": 18,
+      "p75": 31,
+      "p90": 43
+    },
+    "n_sims": 100000,
+    "status": "DIAGNOSTIC_UNCALIBRATED"
+  },
+  "spread": {
+    "home_line": -6.5,
+    "period": "full_game",
+    "model_home_cover": 0.7172647783927729,
+    "model_away_cover": 0.2827352216072271,
+    "sim_home_cover": 0.71949,
+    "sim_away_cover": 0.28051000000000004,
+    "p_push": 0.0,
+    "home_cover_count": 71949,
+    "away_cover_count": 28051,
+    "n_sims": 100000,
+    "mc_standard_error": 0.0014206482319701805,
+    "status": "DIAGNOSTIC_UNCALIBRATED"
+  },
+  "full_game_total": {
+    "period": "full_game",
+    "line": 49.5,
+    "status": "UNSUPPORTED",
+    "reason": "NO_FULL_GAME_TOTAL_MODEL_OR_DRAWS",
+    "p_over": null,
+    "p_under": null
+  },
+  "action_authority": "OFF",
+  "canonical_prospective_eligible": false
+}

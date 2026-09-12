@@ -1,0 +1,54 @@
+{
+  "source_commit": "e7357c702e32317d513d41be14dced8257d42748",
+  "run_id": 34690007684,
+  "artifact_id": 10296437697,
+  "archive_sha256": "7e63299d91874b5d2a64de12c69b8a6c85c2e329fa8bccd852cb6a1a49707282",
+  "cutoff_utc": "2026-09-12T11:02:55.548920+00:00",
+  "source_receipts": {
+    "cfb_history": {
+      "attempt": 1,
+      "retrieved_at_utc": "2026-09-12T11:02:55.385968+00:00",
+      "sha256": "062f9861d06cd0bfb63422abe68a71825963d49fccf12eeefadac76d9218a3f8",
+      "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard?dates=20260801-20260912&groups=80&limit=1000"
+    },
+    "cfb_schedule": {
+      "attempt": 1,
+      "retrieved_at_utc": "2026-09-12T11:02:55.025741+00:00",
+      "sha256": "91bda466485149e3e0ae604adb4ea86ef9aec9edf2ba7053fb5d0a15d31906c3",
+      "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard?dates=20260912-20260912&groups=80&limit=1000"
+    },
+    "mls_history": {
+      "attempt": 1,
+      "retrieved_at_utc": "2026-09-12T11:02:55.461198+00:00",
+      "sha256": "4f79747188692f18fc5b1368bfa7ed0b330408b31257acaf25220d4d192e38c3",
+      "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/usa.1/scoreboard?dates=20260201-20260912&limit=1000"
+    },
+    "mls_schedule": {
+      "attempt": 1,
+      "retrieved_at_utc": "2026-09-12T11:02:55.042825+00:00",
+      "sha256": "51401759426d575cb641a99bf496c4e2aec1e1325e9821316961fe2970991a38",
+      "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/usa.1/scoreboard?dates=20260912-20260912&limit=1000"
+    }
+  },
+  "manifest_members_verified": 75,
+  "exact_simulation_replays": 59,
+  "cfb_generated": 47,
+  "cfb_cross_division_blocked": 33,
+  "mls_generated": 12,
+  "cfb_2026_result_updates": 53,
+  "mls_completed_history": 358,
+  "simulations_per_forecast": 100000,
+  "cfb_simulation_type": "WINNER_OUTCOME_ONLY",
+  "mls_simulation_type": "SCORE_GRID",
+  "canonical_prospective_eligible": false,
+  "action_authority": false,
+  "global_health": "RED_PREEXISTING_FAILURES",
+  "status": "RESEARCH_REFRESH_EXECUTED_VERIFIED_NOT_PRODUCTION_DEPLOYED",
+  "unresolved": [
+    "CFB margin/total calibration",
+    "lineups/injuries/weather/travel adjustments",
+    "independent official schedule reconciliation",
+    "existing repository health failures"
+  ],
+  "model_scope": "New causal Elo current-results arm; no causal Elo substituted into fitted external-rating margin engine"
+}

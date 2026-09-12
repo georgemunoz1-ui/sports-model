@@ -4358,3 +4358,12 @@ backfill and model-restoration blockers remain active.
 Release result: **BLOCKED** for all four sports, 20/20 discovered events classified, zero contract
 problems, zero evidence-hash binding problems. No model probability, edge, selection, or price was
 invented. Ledger unchanged: 0 bets, 0.00 units, $0. Wager authority NO.
+
+
+## 2026-09-12 — CFB/MLS source refresh and research rerun
+
+Executed source commit e7357c702e32317d513d41be14dced8257d42748 on codex/nfl-wnba-nba-models-v1. Workflow 34690007684 succeeded; artifact 10296437697 downloaded and verified (SHA-256 7e63299d91874b5d2a64de12c69b8a6c85c2e329fa8bccd852cb6a1a49707282). New cutoff 2026-09-12T11:02:55.548920Z. 75 manifest members and 59 exact seeded simulation replays passed.
+
+CFB date-range capture returned 80 games: 47 FBS/FBS forecasts, 33 FCS/FBS OOD blocks. Current-results causal Elo research arm updated on 53 completed 2026 FBS/FBS games with original K/home parameters and no repeated season regression. Does NOT inject causal Elo into the external-rating fitted margin model. CFB output is winner probability plus 100K Bernoulli paths, not margin/total/score simulation. Current-strength assimilation repairs coverage in this research arm only; improvement remains unvalidated.
+
+MLS was previously NOT RUN, not crashed. Native independent-Poisson baseline now materialized from 358 completed league matches; 12/12 forecasts with 100K score-grid draws each. No simulation downshift. Raw sources, code copies, states, draws, and manifest retained in artifact. Machine-readable card and freshness record: research/refresh_20260912/results/. Existing production model paths and frozen forecasts unchanged. Lineup/injury/weather/travel effects unresolved; official independent schedule cross-check incomplete. Global health remains RED; action OFF; canonical prospective eligibility false. Read results/freshness.json before claiming these changes operational.

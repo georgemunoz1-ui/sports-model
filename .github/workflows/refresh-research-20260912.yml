@@ -1,0 +1,34 @@
+name: Refresh CFB and MLS research September 12
+on:
+  push:
+    branches: [codex/nfl-wnba-nba-models-v1]
+    paths: [research/refresh_20260912/code/refresh.py]
+permissions:
+  contents: read
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: pip install numpy==2.3.5
+      - name: Bind existing source code and prior state
+        run: |
+          cp pipelines/cards/adapters/mls_baseline_adapter.py research/refresh_20260912/code/
+          cp data/cfb/model/cfb_causal_elo_launch_state_2026-09-03.json research/refresh_20260912/code/launch.json
+          cp data/cfb/source/2026-09-03_cfb_schedule.csv research/refresh_20260912/code/cfb_schedule.csv
+      - name: Capture fresh sources and run 100K research simulations
+        run: python research/refresh_20260912/code/refresh.py
+      - name: Verify exact simulation replay and artifacts
+        run: python research/refresh_20260912/code/validate.py research/refresh_20260912/run-*
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: refreshed-cfb-mls-20260912
+          path: research/refresh_20260912/run-*/
+          retention-days: 90

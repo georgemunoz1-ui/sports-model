@@ -1,0 +1,1286 @@
+{
+  "model_id": "cfb.causal_elo_empirical_margin.v0_1.research",
+  "generated_at_utc": "2026-09-12T18:35:46.953970+00:00",
+  "input_state_cutoff": "2026-09-12T11:02:55.548920+00:00",
+  "input_hash": "2b889c651add11db3710313a66431328c3ccb0d68e998054a3548c606695ec96",
+  "numpy_version": "2.3.5",
+  "source_url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard?dates=20260912-20260912&groups=80&limit=1000",
+  "canonical_prospective_eligible": false,
+  "action_authority": "OFF",
+  "rows": [
+    {
+      "event_id": "401858439",
+      "home": "Indiana Hoosiers",
+      "away": "Howard Bison",
+      "status": "BLOCKED",
+      "reason": "STARTED_OR_START_TIME_PASSED"
+    },
+    {
+      "event_id": "401856683",
+      "home": "Texas A&M Aggies",
+      "away": "Arizona State Sun Devils",
+      "status": "BLOCKED",
+      "reason": "STARTED_OR_START_TIME_PASSED"
+    },
+    {
+      "event_id": "401856679",
+      "home": "Michigan Wolverines",
+      "away": "Oklahoma Sooners",
+      "status": "BLOCKED",
+      "reason": "STARTED_OR_START_TIME_PASSED"
+    },
+    {
+      "event_id": "401858442",
+      "home": "Temple Owls",
+      "away": "Penn State Nittany Lions",
+      "status": "BLOCKED",
+      "reason": "STARTED_OR_START_TIME_PASSED"
+    },
+    {
+      "event_id": "401856781",
+      "home": "Kansas State Wildcats",
+      "away": "Washington State Cougars",
+      "status": "BLOCKED",
+      "reason": "STARTED_OR_START_TIME_PASSED"
+    },
+    {
+      "event_id": "401858218",
+      "home": "North Carolina Tar Heels",
+      "away": "East Tennessee State Buccaneers",
+      "status": "BLOCKED",
+      "reason": "STARTED_OR_START_TIME_PASSED"
+    },
+    {
+      "event_id": "401858221",
+      "home": "Virginia Tech Hokies",
+      "away": "Old Dominion Monarchs",
+      "status": "BLOCKED",
+      "reason": "STARTED_OR_START_TIME_PASSED"
+    },
+    {
+      "event_id": "401858224",
+      "home": "Purdue Boilermakers",
+      "away": "Wake Forest Demon Deacons",
+      "status": "BLOCKED",
+      "reason": "STARTED_OR_START_TIME_PASSED"
+    },
+    {
+      "event_id": "401862702",
+      "home": "Army Black Knights",
+      "away": "South Florida Bulls",
+      "status": "BLOCKED",
+      "reason": "STARTED_OR_START_TIME_PASSED"
+    },
+    {
+      "event_id": "401864571",
+      "home": "East Carolina Pirates",
+      "away": "App State Mountaineers",
+      "status": "BLOCKED",
+      "reason": "STARTED_OR_START_TIME_PASSED"
+    },
+    {
+      "event_id": "401866416",
+      "home": "Kent State Golden Flashes",
+      "away": "Wofford Terriers",
+      "status": "BLOCKED",
+      "reason": "STARTED_OR_START_TIME_PASSED"
+    },
+    {
+      "event_id": "401867929",
+      "home": "James Madison Dukes",
+      "away": "Wagner Seahawks",
+      "status": "BLOCKED",
+      "reason": "STARTED_OR_START_TIME_PASSED"
+    },
+    {
+      "event_id": "401868187",
+      "home": "Liberty Flames",
+      "away": "Gardner-Webb Runnin' Bulldogs",
+      "status": "BLOCKED",
+      "reason": "STARTED_OR_START_TIME_PASSED"
+    },
+    {
+      "event_id": "401856673",
+      "home": "Georgia Bulldogs",
+      "away": "Western Kentucky Hilltoppers",
+      "status": "BLOCKED",
+      "reason": "STARTED_OR_START_TIME_PASSED"
+    },
+    {
+      "event_id": "401856791",
+      "home": "West Virginia Mountaineers",
+      "away": "UT Martin Skyhawks",
+      "status": "BLOCKED",
+      "reason": "STARTED_OR_START_TIME_PASSED"
+    },
+    {
+      "event_id": "401866415",
+      "home": "Central Michigan Chippewas",
+      "away": "Colgate Raiders",
+      "status": "BLOCKED",
+      "reason": "STARTED_OR_START_TIME_PASSED"
+    },
+    {
+      "event_id": "401866417",
+      "home": "Miami (OH) RedHawks",
+      "away": "Holy Cross Crusaders",
+      "status": "BLOCKED",
+      "reason": "STARTED_OR_START_TIME_PASSED"
+    },
+    {
+      "event_id": "401856782",
+      "home": "Oklahoma State Cowboys",
+      "away": "Oregon Ducks",
+      "status": "BLOCKED",
+      "reason": "STARTED_OR_START_TIME_PASSED"
+    },
+    {
+      "event_id": "401866413",
+      "home": "Ball State Cardinals",
+      "away": "Stony Brook Seawolves",
+      "status": "BLOCKED",
+      "reason": "STARTED_OR_START_TIME_PASSED"
+    },
+    {
+      "event_id": "401859184",
+      "home": "Notre Dame Fighting Irish",
+      "away": "Rice Owls",
+      "status": "DIAGNOSTIC_UNCALIBRATED",
+      "model_margin": 26.80508769991833,
+      "sim_margin": 26.87128,
+      "seed": 3621624029530882729,
+      "n_sims": 100000,
+      "draws_sha256": "f48a4644bd9a960341b4e59f1bac56e794c5913a23f8a8a038e20a9b54d5eb77",
+      "n_history": 49,
+      "effective_sample_size": 21.20034856257458,
+      "bandwidth_elo": 166.9771789806511,
+      "book": "DraftKings via ESPN",
+      "home_line": -44.5,
+      "model_cover": {
+        "home_cover": 0.318253954194219,
+        "away_cover": 0.681746045805781,
+        "push": 0.0,
+        "home_conditional_no_push": 0.318253954194219
+      },
+      "sim_cover": {
+        "home_cover": 0.3193300000000001,
+        "away_cover": 0.6806700000000001,
+        "push": 0.0,
+        "home_conditional_no_push": 0.31933000000000006
+      }
+    },
+    {
+      "event_id": "401856674",
+      "home": "Kentucky Wildcats",
+      "away": "Alabama Crimson Tide",
+      "status": "DIAGNOSTIC_UNCALIBRATED",
+      "model_margin": 9.623719546767559,
+      "sim_margin": 9.68172,
+      "seed": 4841717364874874285,
+      "n_sims": 100000,
+      "draws_sha256": "dd1a78ba1b35a0dba9e374496c4e8eb29cc16236c684932a664040fbd83034ec",
+      "n_history": 49,
+      "effective_sample_size": 22.489562038084195,
+      "bandwidth_elo": 166.9771789806511,
+      "book": "DraftKings via ESPN",
+      "home_line": 8.5,
+      "model_cover": {
+        "home_cover": 0.8156216035240521,
+        "away_cover": 0.18437839647594786,
+        "push": 0.0,
+        "home_conditional_no_push": 0.8156216035240521
+      },
+      "sim_cover": {
+        "home_cover": 0.8174,
+        "away_cover": 0.18260000000000004,
+        "push": 0.0,
+        "home_conditional_no_push": 0.8174
+      }
+    },
+    {
+      "event_id": "401856810",
+      "home": "BYU Cougars",
+      "away": "Arizona Wildcats",
+      "status": "DIAGNOSTIC_UNCALIBRATED",
+      "model_margin": 19.36422446714003,
+      "sim_margin": 19.29434,
+      "seed": 16478812146162845180,
+      "n_sims": 100000,
+      "draws_sha256": "e732c7eb536b603484f8a336d7532fc302b1f04aabc169d81119739870a23e45",
+      "n_history": 49,
+      "effective_sample_size": 42.44949955476003,
+      "bandwidth_elo": 166.9771789806511,
+      "book": "DraftKings via ESPN",
+      "home_line": -7.0,
+      "model_cover": {
+        "home_cover": 0.7021973874456046,
+        "away_cover": 0.21544786973677962,
+        "push": 0.08235474281761597,
+        "home_conditional_no_push": 0.7652166040738781
+      },
+      "sim_cover": {
+        "home_cover": 0.70147,
+        "away_cover": 0.21589000000000003,
+        "push": 0.08263999999999999,
+        "home_conditional_no_push": 0.7646616377430888
+      }
+    },
+    {
+      "event_id": "401858446",
+      "home": "Washington Huskies",
+      "away": "Utah State Aggies",
+      "status": "DIAGNOSTIC_UNCALIBRATED",
+      "model_margin": 23.24534753123643,
+      "sim_margin": 23.16611,
+      "seed": 13360581171481401817,
+      "n_sims": 100000,
+      "draws_sha256": "d1b9bdb90ffb010e5fd9598a0472d2935ed3fac5e4d76cef2a23ba9333a09925",
+      "n_history": 49,
+      "effective_sample_size": 37.75656948152718,
+      "bandwidth_elo": 166.9771789806511,
+      "book": "DraftKings via ESPN",
+      "home_line": -28.5,
+      "model_cover": {
+        "home_cover": 0.3928522108114595,
+        "away_cover": 0.6071477891885405,
+        "push": 0.0,
+        "home_conditional_no_push": 0.3928522108114595
+      },
+      "sim_cover": {
+        "home_cover": 0.39126000000000005,
+        "away_cover": 0.6087400000000001,
+        "push": 0.0,
+        "home_conditional_no_push": 0.39126000000000005
+      }
+    },
+    {
+      "event_id": "401856677",
+      "home": "Minnesota Golden Gophers",
+      "away": "Mississippi State Bulldogs",
+      "status": "DIAGNOSTIC_UNCALIBRATED",
+      "model_margin": 20.719376054053104,
+      "sim_margin": 20.76617,
+      "seed": 1240022947396044110,
+      "n_sims": 100000,
+      "draws_sha256": "036afb806320d63e3711d2432c4318202f463cb5a1711cd44c28e5a82ae3ef05",
+      "n_history": 49,
+      "effective_sample_size": 42.230480387763684,
+      "bandwidth_elo": 166.9771789806511,
+      "book": "DraftKings via ESPN",
+      "home_line": 1.5,
+      "model_cover": {
+        "home_cover": 0.879061094803665,
+        "away_cover": 0.120938905196335,
+        "push": 0.0,
+        "home_conditional_no_push": 0.879061094803665
+      },
+      "sim_cover": {
+        "home_cover": 0.8806600000000001,
+        "away_cover": 0.11934,
+        "push": 0.0,
+        "home_conditional_no_push": 0.8806600000000001
+      }
+    },
+    {
+      "event_id": "401856785",
+      "home": "Colorado Buffaloes",
+      "away": "Weber State Wildcats",
+      "status": "BLOCKED",
+      "reason": "FCS_BRIDGE_UNSUPPORTED"
+    },
+    {
+      "event_id": "401856790",
+      "home": "Pittsburgh Panthers",
+      "away": "UCF Knights",
+      "status": "DIAGNOSTIC_UNCALIBRATED",
+      "model_margin": 21.47926621643186,
+      "sim_margin": 21.46505,
+      "seed": 17895977779533893110,
+      "n_sims": 100000,
+      "draws_sha256": "f99585c06ebe95d357f31a8dc27b00622db73fbffe446283ce4b3b01e85c8041",
+      "n_history": 49,
+      "effective_sample_size": 41.532979134665254,
+      "bandwidth_elo": 166.9771789806511,
+      "book": "DraftKings via ESPN",
+      "home_line": -7.0,
+      "model_cover": {
+        "home_cover": 0.7233888829549939,
+        "away_cover": 0.19252118176559294,
+        "push": 0.08408993527941323,
+        "home_conditional_no_push": 0.7898033997209927
+      },
+      "sim_cover": {
+        "home_cover": 0.72384,
+        "away_cover": 0.19263,
+        "push": 0.08353,
+        "home_conditional_no_push": 0.7898130871714295
+      }
+    },
+    {
+      "event_id": "401858216",
+      "home": "Syracuse Orange",
+      "away": "California Golden Bears",
+      "status": "DIAGNOSTIC_UNCALIBRATED",
+      "model_margin": 16.63135288189867,
+      "sim_margin": 16.62855,
+      "seed": 10417632548391351470,
+      "n_sims": 100000,
+      "draws_sha256": "d88ff5b3cde104a128bec41eaaf4e8d6e42ec03c3db2072860d1525ee0bb229d",
+      "n_history": 49,
+      "effective_sample_size": 39.46416617781431,
+      "bandwidth_elo": 166.9771789806511,
+      "book": "DraftKings via ESPN",
+      "home_line": -3.5,
+      "model_cover": {
+        "home_cover": 0.7582471653573241,
+        "away_cover": 0.2417528346426759,
+        "push": 0.0,
+        "home_conditional_no_push": 0.7582471653573241
+      },
+      "sim_cover": {
+        "home_cover": 0.75726,
+        "away_cover": 0.24274000000000004,
+        "push": 0.0,
+        "home_conditional_no_push": 0.75726
+      }
+    },
+    {
+      "event_id": "401858217",
+      "home": "Illinois Fighting Illini",
+      "away": "Duke Blue Devils",
+      "status": "DIAGNOSTIC_UNCALIBRATED",
+      "model_margin": 15.675758772951028,
+      "sim_margin": 15.69729,
+      "seed": 4772412904761920006,
+      "n_sims": 100000,
+      "draws_sha256": "7f97eb5e074a3f690107e907429deeaba374b0079a687a1e35223c9ba80055e7",
+      "n_history": 49,
+      "effective_sample_size": 37.4930063048388,
+      "bandwidth_elo": 166.9771789806511,
+      "book": "DraftKings via ESPN",
+      "home_line": -6.5,
+      "model_cover": {
+        "home_cover": 0.7492299734576894,
+        "away_cover": 0.2507700265423104,
+        "push": 0.0,
+        "home_conditional_no_push": 0.7492299734576895
+      },
+      "sim_cover": {
+        "home_cover": 0.75027,
+        "away_cover": 0.24973,
+        "push": 0.0,
+        "home_conditional_no_push": 0.75027
+      }
+    },
+    {
+      "event_id": "401858440",
+      "home": "Michigan State Spartans",
+      "away": "Eastern Michigan Eagles",
+      "status": "DIAGNOSTIC_UNCALIBRATED",
+      "model_margin": 19.617218882543067,
+      "sim_margin": 19.69709,
+      "seed": 14555813181169137811,
+      "n_sims": 100000,
+      "draws_sha256": "42761a2eaf166d5d89f4532c62314ded215f0d50a19eaeac6fa6f735906631f7",
+      "n_history": 49,
+      "effective_sample_size": 42.50027349423292,
+      "bandwidth_elo": 166.9771789806511,
+      "book": "DraftKings via ESPN",
+      "home_line": -17.5,
+      "model_cover": {
+        "home_cover": 0.5015431868792404,
+        "away_cover": 0.4984568131207598,
+        "push": 0.0,
+        "home_conditional_no_push": 0.5015431868792403
+      },
+      "sim_cover": {
+        "home_cover": 0.50306,
+        "away_cover": 0.49693999999999994,
+        "push": 0.0,
+        "home_conditional_no_push": 0.5030600000000001
+      }
+    },
+    {
+      "event_id": "401858444",
+      "home": "UConn Huskies",
+      "away": "Maryland Terrapins",
+      "status": "DIAGNOSTIC_UNCALIBRATED",
+      "model_margin": 21.107765952389855,
+      "sim_margin": 21.12407,
+      "seed": 13767505573126595426,
+      "n_sims": 100000,
+      "draws_sha256": "b2abb91bce837ecf92c09227319e599f2e2a272ca7871a7a7145eab6bc950a2f",
+      "n_history": 49,
+      "effective_sample_size": 41.93083434297234,
+      "bandwidth_elo": 166.9771789806511,
+      "book": "DraftKings via ESPN",
+      "home_line": 11.5,
+      "model_cover": {
+        "home_cover": 0.9383062254455237,
+        "away_cover": 0.06169377455447647,
+        "push": 0.0,
+        "home_conditional_no_push": 0.9383062254455234
+      },
+      "sim_cover": {
+        "home_cover": 0.9383999999999999,
+        "away_cover": 0.0616,
+        "push": 0.0,
+        "home_conditional_no_push": 0.9384
+      }
+    },
+    {
+      "event_id": "401860884",
+      "home": "Texas State Bobcats",
+      "away": "UTSA Roadrunners",
+      "status": "DIAGNOSTIC_UNCALIBRATED",
+      "model_margin": 16.165086934714836,
+      "sim_margin": 16.1504,
+      "seed": 4468806665229880342,
+      "n_sims": 100000,
+      "draws_sha256": "b17fcc7c38a4919c867cdf880bf647f47ca63ccfcba8076a0dbc05e3babf6005",
+      "n_history": 49,
+      "effective_sample_size": 38.552124376345915,
+      "bandwidth_elo": 166.9771789806511,
+      "book": "DraftKings via ESPN",
+      "home_line": -2.5,
+      "model_cover": {
+        "home_cover": 0.7666465487422683,
+        "away_cover": 0.2333534512577317,
+        "push": 0.0,
+        "home_conditional_no_push": 0.7666465487422683
+      },
+      "sim_cover": {
+        "home_cover": 0.7658400000000001,
+        "away_cover": 0.23416,
+        "push": 0.0,
+        "home_conditional_no_push": 0.7658400000000001
+      }
+    },
+    {
+      "event_id": "401862708",
+      "home": "UAB Blazers",
+      "away": "UL Monroe Warhawks",
+      "status": "DIAGNOSTIC_UNCALIBRATED",
+      "model_margin": 19.670738160749686,
+      "sim_margin": 19.69616,
+      "seed": 5233310209350019513,
+      "n_sims": 100000,
+      "draws_sha256": "612afcde063651ca47fc8f2a72a34ba25eb909675cc7e6c90175ef34bcea2532",
+      "n_history": 49,
+      "effective_sample_size": 42.505797012995444,
+      "bandwidth_elo": 166.9771789806511,
+      "book": "DraftKings via ESPN",
+      "home_line": -9.5,
+      "model_cover": {
+        "home_cover": 0.7052564791946273,
+        "away_cover": 0.29474352080537286,
+        "push": 0.0,
+        "home_conditional_no_push": 0.7052564791946272
+      },
+      "sim_cover": {
+        "home_cover": 0.7065100000000001,
+        "away_cover": 0.29349000000000003,
+        "push": 0.0,
+        "home_conditional_no_push": 0.7065100000000001
+      }
+    },
+    {
+      "event_id": "401866412",
+      "home": "Akron Zips",
+      "away": "Robert Morris Colonials",
+      "status": "BLOCKED",
+      "reason": "FCS_BRIDGE_UNSUPPORTED"
+    },
+    {
+      "event_id": "401866419",
+      "home": "Toledo Rockets",
+      "away": "Central Connecticut Blue Devils",
+      "status": "BLOCKED",
+      "reason": "FCS_BRIDGE_UNSUPPORTED"
+    },
+    {
+      "event_id": "401866420",
+      "home": "Massachusetts Minutemen",
+      "away": "Sacred Heart Pioneers",
+      "status": "BLOCKED",
+      "reason": "FCS_BRIDGE_UNSUPPORTED"
+    },
+    {
+      "event_id": "401862705",
+      "home": "North Texas Mean Green",
+      "away": "UNLV Rebels",
+      "status": "DIAGNOSTIC_UNCALIBRATED",
+      "model_margin": 17.90402170507955,
+      "sim_margin": 17.95056,
+      "seed": 11149705732908805578,
+      "n_sims": 100000,
+      "draws_sha256": "e9ec6efa6f8317773e3835256aa09f3d868fa3989092d21d69f40f567e94995f",
+      "n_history": 49,
+      "effective_sample_size": 41.38868299085226,
+      "bandwidth_elo": 166.9771789806511,
+      "book": "DraftKings via ESPN",
+      "home_line": 3.0,
+      "model_cover": {
+        "home_cover": 0.8418714429925801,
+        "away_cover": 0.1477383203392654,
+        "push": 0.010390236668154522,
+        "home_conditional_no_push": 0.8507105267010948
+      },
+      "sim_cover": {
+        "home_cover": 0.84154,
+        "away_cover": 0.14819000000000002,
+        "push": 0.010270000000000001,
+        "home_conditional_no_push": 0.8502722964848999
+      }
+    },
+    {
+      "event_id": "401858223",
+      "home": "SMU Mustangs",
+      "away": "UC Davis Aggies",
+      "status": "BLOCKED",
+      "reason": "FCS_BRIDGE_UNSUPPORTED"
+    },
+    {
+      "event_id": "401864506",
+      "home": "Wyoming Cowboys",
+      "away": "Northern Colorado Bears",
+      "status": "BLOCKED",
+      "reason": "FCS_BRIDGE_UNSUPPORTED"
+    },
+    {
+      "event_id": "401865252",
+      "home": "New Mexico Lobos",
+      "away": "Mercyhurst Lakers",
+      "status": "BLOCKED",
+      "reason": "FCS_BRIDGE_UNSUPPORTED"
+    },
+    {
+      "event_id": "401868326",
+      "home": "Troy Trojans",
+      "away": "Alabama State Hornets",
+      "status": "BLOCKED",
+      "reason": "FCS_BRIDGE_UNSUPPORTED"
+    },
+    {
+      "event_id": "401856684",
+      "home": "Vanderbilt Commodores",
+      "away": "Delaware Blue Hens",
+      "status": "DIAGNOSTIC_UNCALIBRATED",
+      "model_margin": 22.485657419620775,
+      "sim_margin": 22.56845,
+      "seed": 10391533753458079258,
+      "n_sims": 100000,
+      "draws_sha256": "5479c6acd3236efbdf3f286cb51ad881b2b1f5b2794abce559137afe004d7516",
+      "n_history": 49,
+      "effective_sample_size": 39.81830352087041,
+      "bandwidth_elo": 166.9771789806511,
+      "book": "DraftKings via ESPN",
+      "home_line": -21.0,
+      "model_cover": {
+        "home_cover": 0.4697837813051184,
+        "away_cover": 0.5302162186948816,
+        "push": 0.0,
+        "home_conditional_no_push": 0.4697837813051184
+      },
+      "sim_cover": {
+        "home_cover": 0.47042000000000006,
+        "away_cover": 0.5295799999999999,
+        "push": 0.0,
+        "home_conditional_no_push": 0.47042000000000006
+      }
+    },
+    {
+      "event_id": "401856672",
+      "home": "Florida Gators",
+      "away": "Campbell Fighting Camels",
+      "status": "BLOCKED",
+      "reason": "FCS_BRIDGE_UNSUPPORTED"
+    },
+    {
+      "event_id": "401860881",
+      "home": "Boise State Broncos",
+      "away": "Memphis Tigers",
+      "status": "DIAGNOSTIC_UNCALIBRATED",
+      "model_margin": 16.50137213571783,
+      "sim_margin": 16.51234,
+      "seed": 7870558852653943400,
+      "n_sims": 100000,
+      "draws_sha256": "fb8ba055b6a66b17019276471741b2b7431d89021cbc77b4ae06a2104d5c2f7f",
+      "n_history": 49,
+      "effective_sample_size": 39.220156960888566,
+      "bandwidth_elo": 166.9771789806511,
+      "book": "DraftKings via ESPN",
+      "home_line": -9.5,
+      "model_cover": {
+        "home_cover": 0.6748263742490868,
+        "away_cover": 0.32517362575091324,
+        "push": 0.0,
+        "home_conditional_no_push": 0.6748263742490868
+      },
+      "sim_cover": {
+        "home_cover": 0.6735599999999999,
+        "away_cover": 0.32644,
+        "push": 0.0,
+        "home_conditional_no_push": 0.6735599999999999
+      }
+    },
+    {
+      "event_id": "401866414",
+      "home": "Florida International Panthers",
+      "away": "Buffalo Bulls",
+      "status": "DIAGNOSTIC_UNCALIBRATED",
+      "model_margin": 18.190626621185803,
+      "sim_margin": 18.16428,
+      "seed": 16485605092002894567,
+      "n_sims": 100000,
+      "draws_sha256": "aacbf0c13896b12872a7fbce9d14bd4120197bbcc7f2af1398893d16eccf0e7d",
+      "n_history": 49,
+      "effective_sample_size": 41.69740546689963,
+      "bandwidth_elo": 166.9771789806511,
+      "book": "DraftKings via ESPN",
+      "home_line": -10.0,
+      "model_cover": {
+        "home_cover": 0.6294261983491519,
+        "away_cover": 0.30931811825827715,
+        "push": 0.06125568339257087,
+        "home_conditional_no_push": 0.670498012306337
+      },
+      "sim_cover": {
+        "home_cover": 0.63012,
+        "away_cover": 0.3093600000000001,
+        "push": 0.060520000000000004,
+        "home_conditional_no_push": 0.670711457401967
+      }
+    },
+    {
+      "event_id": "401866418",
+      "home": "Ohio Bobcats",
+      "away": "Jacksonville State Gamecocks",
+      "status": "DIAGNOSTIC_UNCALIBRATED",
+      "model_margin": 18.389375404844426,
+      "sim_margin": 18.38136,
+      "seed": 6435205022259764907,
+      "n_sims": 100000,
+      "draws_sha256": "84e7f3524e6082c9b296ca34eade7c1b909ec7278c5ff4ee9de57334b3de0724",
+      "n_history": 49,
+      "effective_sample_size": 41.88320247275474,
+      "bandwidth_elo": 166.9771789806511,
+      "book": "DraftKings via ESPN",
+      "home_line": -1.5,
+      "model_cover": {
+        "home_cover": 0.7935643679563417,
+        "away_cover": 0.20643563204365845,
+        "push": 0.0,
+        "home_conditional_no_push": 0.7935643679563417
+      },
+      "sim_cover": {
+        "home_cover": 0.7930700000000002,
+        "away_cover": 0.20693,
+        "push": 0.0,
+        "home_conditional_no_push": 0.7930699999999999
+      }
+    },
+    {
+      "event_id": "401866421",
+      "home": "Western Michigan Broncos",
+      "away": "Monmouth Hawks",
+      "status": "BLOCKED",
+      "reason": "FCS_BRIDGE_UNSUPPORTED"
+    },
+    {
+      "event_id": "401856681",
+      "home": "Georgia Tech Yellow Jackets",
+      "away": "Tennessee Volunteers",
+      "status": "DIAGNOSTIC_UNCALIBRATED",
+      "model_margin": 15.059937654337498,
+      "sim_margin": 15.10801,
+      "seed": 17166892353036418434,
+      "n_sims": 100000,
+      "draws_sha256": "df1c53bd916cf5bc191b2e3dfa4e145431e181e9e418aefc6595a27c6df50fa2",
+      "n_history": 49,
+      "effective_sample_size": 36.03576284791473,
+      "bandwidth_elo": 166.9771789806511,
+      "book": "DraftKings via ESPN",
+      "home_line": 12.5,
+      "model_cover": {
+        "home_cover": 0.8810119126986398,
+        "away_cover": 0.11898808730136026,
+        "push": 0.0,
+        "home_conditional_no_push": 0.8810119126986398
+      },
+      "sim_cover": {
+        "home_cover": 0.88134,
+        "away_cover": 0.11866,
+        "push": 0.0,
+        "home_conditional_no_push": 0.88134
+      }
+    },
+    {
+      "event_id": "401856787",
+      "home": "Houston Cougars",
+      "away": "Southern Jaguars",
+      "status": "BLOCKED",
+      "reason": "FCS_BRIDGE_UNSUPPORTED"
+    },
+    {
+      "event_id": "401856680",
+      "home": "South Carolina Gamecocks",
+      "away": "Towson Tigers",
+      "status": "BLOCKED",
+      "reason": "FCS_BRIDGE_UNSUPPORTED"
+    },
+    {
+      "event_id": "401856786",
+      "home": "Cincinnati Bearcats",
+      "away": "Western Carolina Catamounts",
+      "status": "BLOCKED",
+      "reason": "FCS_BRIDGE_UNSUPPORTED"
+    },
+    {
+      "event_id": "401858441",
+      "home": "Nebraska Cornhuskers",
+      "away": "Bowling Green Falcons",
+      "status": "DIAGNOSTIC_UNCALIBRATED",
+      "model_margin": 22.465123260480468,
+      "sim_margin": 22.47087,
+      "seed": 18380073440006060178,
+      "n_sims": 100000,
+      "draws_sha256": "835bfbdbc2d198bb706fd18c4ff04c5e40b7fbcc0bb2d059b47e0375c8aa23e4",
+      "n_history": 49,
+      "effective_sample_size": 39.86391210982531,
+      "bandwidth_elo": 166.9771789806511,
+      "book": "DraftKings via ESPN",
+      "home_line": -30.5,
+      "model_cover": {
+        "home_cover": 0.3771712650460443,
+        "away_cover": 0.6228287349539557,
+        "push": 0.0,
+        "home_conditional_no_push": 0.3771712650460443
+      },
+      "sim_cover": {
+        "home_cover": 0.37570000000000003,
+        "away_cover": 0.6243000000000001,
+        "push": 0.0,
+        "home_conditional_no_push": 0.37570000000000003
+      }
+    },
+    {
+      "event_id": "401860882",
+      "home": "Colorado State Rams",
+      "away": "Southern Utah Thunderbirds",
+      "status": "BLOCKED",
+      "reason": "FCS_BRIDGE_UNSUPPORTED"
+    },
+    {
+      "event_id": "401862707",
+      "home": "Sam Houston Bearkats",
+      "away": "Tulsa Golden Hurricane",
+      "status": "DIAGNOSTIC_UNCALIBRATED",
+      "model_margin": 15.544355000085828,
+      "sim_margin": 15.49327,
+      "seed": 9204335186338915714,
+      "n_sims": 100000,
+      "draws_sha256": "401e050845b3fdfdc4633e5fa9017874c32bd20f7983a1424afdde36c7e82431",
+      "n_history": 49,
+      "effective_sample_size": 37.192720297727696,
+      "bandwidth_elo": 166.9771789806511,
+      "book": "DraftKings via ESPN",
+      "home_line": 12.5,
+      "model_cover": {
+        "home_cover": 0.8864659310138796,
+        "away_cover": 0.11353406898612044,
+        "push": 0.0,
+        "home_conditional_no_push": 0.8864659310138796
+      },
+      "sim_cover": {
+        "home_cover": 0.8849800000000001,
+        "away_cover": 0.11502,
+        "push": 0.0,
+        "home_conditional_no_push": 0.8849800000000001
+      }
+    },
+    {
+      "event_id": "401864503",
+      "home": "Northern Illinois Huskies",
+      "away": "Illinois State Redbirds",
+      "status": "BLOCKED",
+      "reason": "FCS_BRIDGE_UNSUPPORTED"
+    },
+    {
+      "event_id": "401864575",
+      "home": "Tulane Green Wave",
+      "away": "South Alabama Jaguars",
+      "status": "DIAGNOSTIC_UNCALIBRATED",
+      "model_margin": 21.872204279541734,
+      "sim_margin": 21.89711,
+      "seed": 17585748006943033430,
+      "n_sims": 100000,
+      "draws_sha256": "2e1e2ac61697b4e630b789fc2a47308f3bd517c3655a61e37cfef8f9c43e79e3",
+      "n_history": 49,
+      "effective_sample_size": 40.98236004542868,
+      "bandwidth_elo": 166.9771789806511,
+      "book": "DraftKings via ESPN",
+      "home_line": -9.5,
+      "model_cover": {
+        "home_cover": 0.7272492086024379,
+        "away_cover": 0.2727507913975622,
+        "push": 0.0,
+        "home_conditional_no_push": 0.7272492086024379
+      },
+      "sim_cover": {
+        "home_cover": 0.7288100000000001,
+        "away_cover": 0.27119000000000004,
+        "push": 0.0,
+        "home_conditional_no_push": 0.7288100000000001
+      }
+    },
+    {
+      "event_id": "401868241",
+      "home": "Arkansas State Red Wolves",
+      "away": "West Georgia Wolves",
+      "status": "BLOCKED",
+      "reason": "FCS_BRIDGE_UNSUPPORTED"
+    },
+    {
+      "event_id": "401869955",
+      "home": "Kennesaw State Owls",
+      "away": "Georgia State Panthers",
+      "status": "DIAGNOSTIC_UNCALIBRATED",
+      "model_margin": 22.96115092259922,
+      "sim_margin": 23.02584,
+      "seed": 14076400494442469415,
+      "n_sims": 100000,
+      "draws_sha256": "64502ffe216f2efda20055e02b416eb0747cec703d0136e7ca569788e22740e4",
+      "n_history": 49,
+      "effective_sample_size": 38.61756899574366,
+      "bandwidth_elo": 166.9771789806511,
+      "book": "DraftKings via ESPN",
+      "home_line": -8.5,
+      "model_cover": {
+        "home_cover": 0.7374170564215864,
+        "away_cover": 0.2625829435784137,
+        "push": 0.0,
+        "home_conditional_no_push": 0.7374170564215864
+      },
+      "sim_cover": {
+        "home_cover": 0.73634,
+        "away_cover": 0.26366,
+        "push": 0.0,
+        "home_conditional_no_push": 0.73634
+      }
+    },
+    {
+      "event_id": "401871045",
+      "home": "Marshall Thundering Herd",
+      "away": "Middle Tennessee Blue Raiders",
+      "status": "DIAGNOSTIC_UNCALIBRATED",
+      "model_margin": 22.077594764707428,
+      "sim_margin": 22.01801,
+      "seed": 10240399783305726994,
+      "n_sims": 100000,
+      "draws_sha256": "4c7d444293fe996f07d3c10a5e9e532b4c378090d4fa0d289db3ac7bb5c30f37",
+      "n_history": 49,
+      "effective_sample_size": 40.63649717723116,
+      "bandwidth_elo": 166.9771789806511,
+      "book": "DraftKings via ESPN",
+      "home_line": -12.5,
+      "model_cover": {
+        "home_cover": 0.6840494273990407,
+        "away_cover": 0.3159505726009592,
+        "push": 0.0,
+        "home_conditional_no_push": 0.6840494273990407
+      },
+      "sim_cover": {
+        "home_cover": 0.6839500000000001,
+        "away_cover": 0.31605000000000005,
+        "push": 0.0,
+        "home_conditional_no_push": 0.6839500000000001
+      }
+    },
+    {
+      "event_id": "401871046",
+      "home": "Missouri State Bears",
+      "away": "Lindenwood Lions",
+      "status": "BLOCKED",
+      "reason": "FCS_BRIDGE_UNSUPPORTED"
+    },
+    {
+      "event_id": "401858443",
+      "home": "UCLA Bruins",
+      "away": "San Diego State Aztecs",
+      "status": "DIAGNOSTIC_UNCALIBRATED",
+      "model_margin": 15.711488627057827,
+      "sim_margin": 15.76855,
+      "seed": 16299925577916694171,
+      "n_sims": 100000,
+      "draws_sha256": "1ce8afbbd7b8804856ebb09e4d3fcea7d62adb2d6f3715a740933cd6b090fe88",
+      "n_history": 49,
+      "effective_sample_size": 37.573558181892636,
+      "bandwidth_elo": 166.9771789806511,
+      "book": "DraftKings via ESPN",
+      "home_line": -12.5,
+      "model_cover": {
+        "home_cover": 0.5539895039698144,
+        "away_cover": 0.44601049603018544,
+        "push": 0.0,
+        "home_conditional_no_push": 0.5539895039698145
+      },
+      "sim_cover": {
+        "home_cover": 0.5551700000000002,
+        "away_cover": 0.44483000000000006,
+        "push": 0.0,
+        "home_conditional_no_push": 0.55517
+      }
+    },
+    {
+      "event_id": "401858447",
+      "home": "Wisconsin Badgers",
+      "away": "Western Illinois Leathernecks",
+      "status": "BLOCKED",
+      "reason": "FCS_BRIDGE_UNSUPPORTED"
+    },
+    {
+      "event_id": "401856682",
+      "home": "Texas Longhorns",
+      "away": "Ohio State Buckeyes",
+      "status": "DIAGNOSTIC_UNCALIBRATED",
+      "model_margin": 15.637795087480207,
+      "sim_margin": 15.5744,
+      "seed": 17046205437863947506,
+      "n_sims": 100000,
+      "draws_sha256": "e0888db18fe735546fbc946b2ecfaf4c2f818aece8f5436fdfbcd1b529aef940",
+      "n_history": 49,
+      "effective_sample_size": 37.40689728357106,
+      "bandwidth_elo": 166.9771789806511,
+      "book": "DraftKings via ESPN",
+      "home_line": -1.5,
+      "model_cover": {
+        "home_cover": 0.7604228565897657,
+        "away_cover": 0.2395771434102341,
+        "push": 0.0,
+        "home_conditional_no_push": 0.7604228565897659
+      },
+      "sim_cover": {
+        "home_cover": 0.75954,
+        "away_cover": 0.24046000000000003,
+        "push": 0.0,
+        "home_conditional_no_push": 0.75954
+      }
+    },
+    {
+      "event_id": "401867796",
+      "home": "LSU Tigers",
+      "away": "Louisiana Tech Bulldogs",
+      "status": "DIAGNOSTIC_UNCALIBRATED",
+      "model_margin": 20.758072085209488,
+      "sim_margin": 20.69287,
+      "seed": 13619364723636097793,
+      "n_sims": 100000,
+      "draws_sha256": "3a752ce40c20fcce0b4d18fedf1ae9d0d5bd4992cf487d84557ded473db2d3b9",
+      "n_history": 49,
+      "effective_sample_size": 42.20569648392438,
+      "bandwidth_elo": 166.9771789806511,
+      "book": "DraftKings via ESPN",
+      "home_line": -34.5,
+      "model_cover": {
+        "home_cover": 0.3151134567718388,
+        "away_cover": 0.6848865432281612,
+        "push": 0.0,
+        "home_conditional_no_push": 0.3151134567718388
+      },
+      "sim_cover": {
+        "home_cover": 0.31337000000000004,
+        "away_cover": 0.6866300000000001,
+        "push": 0.0,
+        "home_conditional_no_push": 0.31337000000000004
+      }
+    },
+    {
+      "event_id": "401856783",
+      "home": "Oregon State Beavers",
+      "away": "Texas Tech Red Raiders",
+      "status": "BLOCKED",
+      "reason": "ELO_EXTRAPOLATION_BLOCKED"
+    },
+    {
+      "event_id": "401856788",
+      "home": "Iowa Hawkeyes",
+      "away": "Iowa State Cyclones",
+      "status": "DIAGNOSTIC_UNCALIBRATED",
+      "model_margin": 19.86985866879774,
+      "sim_margin": 19.8743,
+      "seed": 5453689654184037708,
+      "n_sims": 100000,
+      "draws_sha256": "47f3e678684afb0aa72e85fe190c5f8335c077f9d18f479443d63519d0e7bbaf",
+      "n_history": 49,
+      "effective_sample_size": 42.51013571489343,
+      "bandwidth_elo": 166.9771789806511,
+      "book": "DraftKings via ESPN",
+      "home_line": -14.0,
+      "model_cover": {
+        "home_cover": 0.5456770178120326,
+        "away_cover": 0.375618872609035,
+        "push": 0.07870410957893256,
+        "home_conditional_no_push": 0.5922929033826877
+      },
+      "sim_cover": {
+        "home_cover": 0.5444,
+        "away_cover": 0.37754,
+        "push": 0.07806000000000002,
+        "home_conditional_no_push": 0.5904939583920863
+      }
+    },
+    {
+      "event_id": "401858219",
+      "home": "Clemson Tigers",
+      "away": "Georgia Southern Eagles",
+      "status": "DIAGNOSTIC_UNCALIBRATED",
+      "model_margin": 19.08596614605059,
+      "sim_margin": 19.08855,
+      "seed": 5264601542929616362,
+      "n_sims": 100000,
+      "draws_sha256": "2f9bba29153682399692621c109f4ab7d9c0d9eb56296f7db972ca7a6232740a",
+      "n_history": 49,
+      "effective_sample_size": 42.34726055709083,
+      "bandwidth_elo": 166.9771789806511,
+      "book": "DraftKings via ESPN",
+      "home_line": -19.5,
+      "model_cover": {
+        "home_cover": 0.41719944215942867,
+        "away_cover": 0.5828005578405712,
+        "push": 0.0,
+        "home_conditional_no_push": 0.4171994421594288
+      },
+      "sim_cover": {
+        "home_cover": 0.41838,
+        "away_cover": 0.58162,
+        "push": 0.0,
+        "home_conditional_no_push": 0.41838
+      }
+    },
+    {
+      "event_id": "401862703",
+      "home": "Florida Atlantic Owls",
+      "away": "Navy Midshipmen",
+      "status": "DIAGNOSTIC_UNCALIBRATED",
+      "model_margin": 5.966346957032296,
+      "sim_margin": 5.95117,
+      "seed": 4908582756886565829,
+      "n_sims": 100000,
+      "draws_sha256": "706a6079480a62fe7f5ecfb4c663abc0d2d7319b9ac61d3fe85dd7d254cc2a55",
+      "n_history": 49,
+      "effective_sample_size": 16.26732859012982,
+      "bandwidth_elo": 166.9771789806511,
+      "book": "DraftKings via ESPN",
+      "home_line": 4.0,
+      "model_cover": {
+        "home_cover": 0.7444601125797969,
+        "away_cover": 0.2555398874202028,
+        "push": 0.0,
+        "home_conditional_no_push": 0.744460112579797
+      },
+      "sim_cover": {
+        "home_cover": 0.74572,
+        "away_cover": 0.25427999999999995,
+        "push": 0.0,
+        "home_conditional_no_push": 0.74572
+      }
+    },
+    {
+      "event_id": "401868008",
+      "home": "Coastal Carolina Chanticleers",
+      "away": "Fordham Rams",
+      "status": "BLOCKED",
+      "reason": "FCS_BRIDGE_UNSUPPORTED"
+    },
+    {
+      "event_id": "401856676",
+      "home": "Ole Miss Rebels",
+      "away": "Charlotte 49ers",
+      "status": "BLOCKED",
+      "reason": "ELO_EXTRAPOLATION_BLOCKED"
+    },
+    {
+      "event_id": "401856671",
+      "home": "Auburn Tigers",
+      "away": "Southern Miss Golden Eagles",
+      "status": "DIAGNOSTIC_UNCALIBRATED",
+      "model_margin": 21.254963895297713,
+      "sim_margin": 21.17492,
+      "seed": 13435509968644638996,
+      "n_sims": 100000,
+      "draws_sha256": "2e3724422831861ef698ba4fc17dae28d38999cb13abf8a75f3e806c69ca745e",
+      "n_history": 49,
+      "effective_sample_size": 41.78672462807166,
+      "bandwidth_elo": 166.9771789806511,
+      "book": "DraftKings via ESPN",
+      "home_line": -32.5,
+      "model_cover": {
+        "home_cover": 0.3246285307120267,
+        "away_cover": 0.6753714692879735,
+        "push": 0.0,
+        "home_conditional_no_push": 0.32462853071202663
+      },
+      "sim_cover": {
+        "home_cover": 0.3234600000000001,
+        "away_cover": 0.6765399999999999,
+        "push": 0.0,
+        "home_conditional_no_push": 0.3234600000000001
+      }
+    },
+    {
+      "event_id": "401856789",
+      "home": "TCU Horned Frogs",
+      "away": "Grambling Tigers",
+      "status": "BLOCKED",
+      "reason": "FCS_BRIDGE_UNSUPPORTED"
+    },
+    {
+      "event_id": "401856784",
+      "home": "Baylor Bears",
+      "away": "Prairie View A&M Panthers",
+      "status": "BLOCKED",
+      "reason": "FCS_BRIDGE_UNSUPPORTED"
+    },
+    {
+      "event_id": "401864504",
+      "home": "San Jos\u00e9 State Spartans",
+      "away": "Cal Poly Mustangs",
+      "status": "BLOCKED",
+      "reason": "FCS_BRIDGE_UNSUPPORTED"
+    },
+    {
+      "event_id": "401864505",
+      "home": "UTEP Miners",
+      "away": "Texas Southern Tigers",
+      "status": "BLOCKED",
+      "reason": "FCS_BRIDGE_UNSUPPORTED"
+    },
+    {
+      "event_id": "401864502",
+      "home": "Air Force Falcons",
+      "away": "North Dakota State Bison",
+      "status": "BLOCKED",
+      "reason": "ELO_EXTRAPOLATION_BLOCKED"
+    },
+    {
+      "event_id": "401856670",
+      "home": "Utah Utes",
+      "away": "Arkansas Razorbacks",
+      "status": "DIAGNOSTIC_UNCALIBRATED",
+      "model_margin": 23.870189411890117,
+      "sim_margin": 23.80332,
+      "seed": 14063610476812414072,
+      "n_sims": 100000,
+      "draws_sha256": "b8fb1b8701faab3cdefbbd5d5c546a772885e22fadf0367327c5a0f9b1a50efe",
+      "n_history": 49,
+      "effective_sample_size": 35.44438544916148,
+      "bandwidth_elo": 166.9771789806511,
+      "book": "DraftKings via ESPN",
+      "home_line": -12.5,
+      "model_cover": {
+        "home_cover": 0.7118321079609681,
+        "away_cover": 0.28816789203903187,
+        "push": 0.0,
+        "home_conditional_no_push": 0.7118321079609681
+      },
+      "sim_cover": {
+        "home_cover": 0.7110700000000001,
+        "away_cover": 0.28893,
+        "push": 0.0,
+        "home_conditional_no_push": 0.7110700000000001
+      }
+    },
+    {
+      "event_id": "401860883",
+      "home": "Fresno State Bulldogs",
+      "away": "Sacramento State Hornets",
+      "status": "DIAGNOSTIC_UNCALIBRATED",
+      "model_margin": 19.126995953555653,
+      "sim_margin": 19.13533,
+      "seed": 11509487960426872712,
+      "n_sims": 100000,
+      "draws_sha256": "c9f5dd0de907cd3015283cd346b1f8d708ebe08f9620bcf6780ca06628a7d6ee",
+      "n_history": 49,
+      "effective_sample_size": 42.365359568846664,
+      "bandwidth_elo": 166.9771789806511,
+      "book": "DraftKings via ESPN",
+      "home_line": -17.5,
+      "model_cover": {
+        "home_cover": 0.49293394294861725,
+        "away_cover": 0.5070660570513829,
+        "push": 0.0,
+        "home_conditional_no_push": 0.49293394294861725
+      },
+      "sim_cover": {
+        "home_cover": 0.49235000000000007,
+        "away_cover": 0.5076499999999999,
+        "push": 0.0,
+        "home_conditional_no_push": 0.49235000000000007
+      }
+    },
+    {
+      "event_id": "401864500",
+      "home": "Nevada Wolf Pack",
+      "away": "Montana State Bobcats",
+      "status": "BLOCKED",
+      "reason": "FCS_BRIDGE_UNSUPPORTED"
+    },
+    {
+      "event_id": "401858445",
+      "home": "USC Trojans",
+      "away": "Louisiana Ragin' Cajuns",
+      "status": "DIAGNOSTIC_UNCALIBRATED",
+      "model_margin": 22.830137607595635,
+      "sim_margin": 22.713,
+      "seed": 17334551038360484133,
+      "n_sims": 100000,
+      "draws_sha256": "5fea6cd6e95013d2223e9f7e6a517f0c93f621084bac63afcab574893cd1feda",
+      "n_history": 49,
+      "effective_sample_size": 38.97715890149989,
+      "bandwidth_elo": 166.9771789806511,
+      "book": "DraftKings via ESPN",
+      "home_line": -30.5,
+      "model_cover": {
+        "home_cover": 0.38444753757278005,
+        "away_cover": 0.6155524624272197,
+        "push": 0.0,
+        "home_conditional_no_push": 0.38444753757278016
+      },
+      "sim_cover": {
+        "home_cover": 0.38166,
+        "away_cover": 0.6183400000000001,
+        "push": 0.0,
+        "home_conditional_no_push": 0.38166
+      }
+    },
+    {
+      "event_id": "401864578",
+      "home": "Hawai'i Rainbow Warriors",
+      "away": "New Mexico State Aggies",
+      "status": "DIAGNOSTIC_UNCALIBRATED",
+      "model_margin": 21.38427556512231,
+      "sim_margin": 21.32423,
+      "seed": 14047041795897294662,
+      "n_sims": 100000,
+      "draws_sha256": "49b9fc2dc8149cb1007e10fe58957c819502fb409e3cc1764aa8abe354de017c",
+      "n_history": 49,
+      "effective_sample_size": 41.64558529991943,
+      "bandwidth_elo": 166.9771789806511,
+      "book": "DraftKings via ESPN",
+      "home_line": -7.5,
+      "model_cover": {
+        "home_cover": 0.7224468345617904,
+        "away_cover": 0.2775531654382095,
+        "push": 0.0,
+        "home_conditional_no_push": 0.7224468345617905
+      },
+      "sim_cover": {
+        "home_cover": 0.7229100000000002,
+        "away_cover": 0.27709000000000006,
+        "push": 0.0,
+        "home_conditional_no_push": 0.72291
+      }
+    }
+  ]
+}

@@ -1,0 +1,9 @@
+# CFB empirical margin research adapter
+
+Owner-requested spread-cover implementation, isolated from production and the frozen morning Bernoulli card. No inverse win-probability-to-margin conversion. Fits a Gaussian-kernel conditional empirical distribution of observed integer final margins on matching causal pregame Elo gaps. Bandwidth is the sample standard deviation of training Elo gaps; minimum 20 same-venue games and effective sample size 15. Extrapolation is blocked. These are engineering defaults, not calibrated thresholds. The small 2026 sample cannot establish predictive value; empirical tails are limited to observed margins. No claim of a learned total model.
+
+Inputs: frozen causal state with pregame update features, source-backed identity CSV, freshly captured ESPN schedule. FCS games, insufficient neutral history, and started events remain visible as blocked. Injury/QB/travel information is not incorporated. Historical source-effective chronology is not independently certified; all results are local diagnostic, not canonical prospective evidence.
+
+Run `python run.py --state STATE.json --identities SCHEDULE.csv --date 2026-09-12 --out NEW_DIRECTORY`. Output directory must not exist. Model never consumes market features. Repricing occurs afterward against DraftKings-via-ESPN quotes. Cover probabilities are empirical estimates, not exact true probabilities; push conditioning is not bookmaker de-vigging. Ordered little-endian int16 draws, 100K paths, seed, NumPy version, source files and hashes retained. Production/action authority stays OFF. No promotion or changes to ML-P4-FORWARD.
+
+Six unit tests cover spread orientation, pushes, half lines, all-push conditioning, deterministic simulation and insufficient history. End-to-end real-source run is a smoke test, not predictive validation. Full repository health was not rerun from a clean checkout. No protected-remote pregame receipt is claimed.

@@ -87,7 +87,7 @@ def normalize(event, raw):
         "stochastic_sim_p": stochastic_sim_p,
         "analytic_sim_gap_pp": signed_gap_pp,
         "analytic_sim_abs_gap_pp": abs_gap_pp,
-        "analytic_sim_divergence": divergence_category(abs_gap_pp),
+        "analytic_sim_divergence": ("DIFFERENT_MODELS_NOT_CONVERGENCE" if raw.get("diagnostics", {}).get("comparison") == "DIFFERENT_MODELS_NOT_ANALYTIC_MC_CONVERGENCE" else divergence_category(abs_gap_pp)),
         "model_p_candidate_normal_margin": raw.get("model_p_candidate_normal_margin"),
         "model_p_candidate_status": raw.get("model_p_candidate_status"),
         "projected_margin": raw.get("projected_margin"),
@@ -229,6 +229,9 @@ def attach_grading(card):
             reason = "HOME_PROBABILITY_UNAVAILABLE"
         elif card.get("league") != "MLB":
             reason = "MLB_CALIBRATION_ONLY"
+        if row.get("diagnostics", {}).get("canonical_prospective_eligible") is False:
+            eligible = False
+            reason = "RESEARCH_ADAPTER_NOT_CANONICAL"
         if eligible:
             eligible_count += 1
 
@@ -408,9 +411,12 @@ def main():
     args = parser.parse_args()
     as_of = args.as_of_utc or now_utc().isoformat().replace("+00:00", "Z")
 
-    card = generate(args.date, args.league, as_of, args.simulations, args.manual_overrides)
     output = Path(args.output_dir)
-    output.mkdir(parents=True, exist_ok=True)
+    output.mkdir(parents=True, exist_ok=False)
+    if args.league == "mlb":
+        import os
+        os.environ["MLB_DRAW_OUTPUT"] = str((output / "draws").resolve())
+    card = generate(args.date, args.league, as_of, args.simulations, args.manual_overrides)
     (output / "diagnostic_card.json").write_text(json.dumps(card, indent=2, sort_keys=True) + "\n")
     (output / "diagnostic_card.md").write_text(render_md(card))
 

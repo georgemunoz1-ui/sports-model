@@ -1,0 +1,41 @@
+name: MLB current path
+on:
+  push:
+    branches: [codex/mlb-current-20260914]
+  pull_request:
+    paths:
+      - 'pipelines/mlb/**'
+      - 'pipelines/cards/adapters/mlb.py'
+      - 'scripts/prepare_mlb_current.py'
+      - 'scripts/generate_card_force.py'
+      - 'tests/test_mlb_current_path.py'
+      - 'data/mlb/current_v1/**'
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install -r requirements-nfl-context.txt pytest==8.4.2 PyYAML==6.0.2
+      - name: Verify clean checkout
+        run: |
+          git rev-parse HEAD
+          test -z "$(git status --porcelain)"
+      - name: Regression and immutable forecast tests
+        run: python -m pytest tests/test_mlb_current_path.py tests/test_release_health_repairs.py tests/test_current_sports_data.py -q
+      - name: Full health evidence
+        run: |
+          set +e
+          python harness/healthcheck.py > "$RUNNER_TEMP/mlb-health.log" 2>&1
+          result=$?
+          printf 'HEALTH_EXIT=%s\n' "$result"
+          cat "$RUNNER_TEMP/mlb-health.log"
+          exit 0
+      - uses: actions/upload-artifact@v4
+        with:
+          name: mlb-current-health
+          path: ${{ runner.temp }}/mlb-health.log

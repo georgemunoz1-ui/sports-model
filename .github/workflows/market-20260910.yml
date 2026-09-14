@@ -1,0 +1,20 @@
+name: September 10 market capture
+on:
+  push:
+    branches: [feature/sports-news-information-state]
+    paths: [research/markets/capture_20260910.py]
+permissions:
+  contents: read
+jobs:
+  capture:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - run: python research/markets/capture_20260910.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: market-20260910
+          path: market-output/
+          retention-days: 90

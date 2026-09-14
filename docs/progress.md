@@ -4386,6 +4386,70 @@ Three-way Brier raw0.546770 -> calibrated0.528574, paired delta-0.018196 with se
 MNF saved-draw overlay DEN+2.5 raw60.869% -> calibrated56.314%; new100K margin simulation56.352%, repeat seed/hash identical. Original final-score draws and forecast unchanged. Added canonical --home-spread option and saved-forecast overlay CLI with hash/model binding, alternate-line consistency and explicit win/push/loss. 38 targeted NFL tests pass; full-repository health unavailable in partial checkout. Totals/halftime not calibrated by this layer. See docs/NFL_SPREAD_CALIBRATION.md.
 
 
+## 2026-09-08 — Offline benchmark primitives (draft review, not operational)
+
+Added isolated research evaluation primitives: PIT feature contracts, label-aware chronological folds,
+reserved holdout boundary, binary/multiclass scoring, state quantile metrics, paired date-cluster
+bootstrap, intake validation and pending Toto/TabICL/Granite records. Eight synthetic tests pass.
+No weights downloaded, inference adapters installed, real-data comparison run, or model promoted.
+Full healthcheck attempted on incomplete local source snapshot; required data/modules missing.
+This does not establish canonical repository health. Full integration validation required before merge.
+Remaining work and exact scoring conventions documented in research/README.md. Production unchanged.
+
+
+## 2026-09-08 — Official-source pilot implementation (PR #18 research only)
+
+Added explicit MLB schedule/roster retrieval and deterministic identity/probable-state parsing,
+NFL raw report capture, full supplied schedule retention, content-addressed raw receipts and
+cutoff state snapshots. Fixed repeated identical-source metadata collisions without rewriting legacy
+captures. State reducer tests cover supersession, conflicts, late retrieval and hash tampering.
+Local news-information tests: 35/35 PASS. Real capture verification is pending the pilot workflow.
+No lineup/bullpen/roof assertions, NLP accuracy claim, A/B/C forecasts, model adjustment or promotion.
+Full repo health remains unverified; local source materialization covers the research module only.
+See research/news_information/OFFICIAL_PILOT.md for commands, limits and artifact retention.
+
+## 2026-09-08 — Actual pilot capture and replay evidence (PR #18)
+
+Capture commit `4331269123503acd8f1ad23c5f4042c6ca055542` ran successfully in Actions
+run `34271251397`. At actual cutoff 19:50:13.791952Z it retained all 15 MLB provider-date
+games, parsed 30 active rosters (840 roster player IDs and one unresolved probable-only
+membership), and archived 32 raw sources. Downloaded ZIP digest matched GitHub; all 32 raw
+hashes/lengths and deterministic MLB replay passed locally. Evidence is retained under
+`research/news_information/pilot_evidence/2026-09-08/`.
+
+Follow-up adds a deterministic NFL table parser: the archived report yields 11 rows from
+two team tables. Blank designations stay UNKNOWN; player/event/practice-date binding stays
+unresolved. Local news-information suite: 41 passing tests including real-source replay and
+corrupt-byte rejection. This is source plumbing, not NLP quality or predictive validation.
+Compact NLP inference, independent labels, MLB lineup/bullpen/weather and A/B/C forecasts
+remain incomplete. No action authority. PR18 remains research-only and unmerged.
+
+## 2026-09-08 — Pilot execution verified remotely
+
+Code commit `4edf9eb99b8f059c656c213bb8ec21c195cc1e34` passed 41 news-information tests
+in Actions, research CI and live official-source capture run `34272196290`. Downloaded
+artifact `10074255735` matched GitHub's SHA-256 and replayed without source retrieval.
+Second ZIP and execution record are retained beside the first capture in pilot_evidence.
+PR #18 remains unmerged research; no extraction-accuracy or predictive-advantage claim.
+
+### 2026-09-14 — Dedicated halftime and joint probability extension
+
+Added fixed-spec four-target halftime/remaining-score Ridge model using the
+existing 100 pregame features and same-game OOF residual vectors. Corrected
+non-chronological play-ID sorting in halftime extraction; all 2,895 games now
+reconcile Q2 postplay/Q3 preplay scores. Initial 41-exclusion run invalidated.
+Frozen 2022 fit evaluated on 816 games from 2023–2025: halftime margin CRPS
+5.76078 versus half-scaled comparator 5.67358; three-way Brier .53317 versus
+.52413. No accuracy promotion. Halftime ties underpredicted (3.58% vs 6.00%).
+Fitted research deployment refits through 2025 with 1,871 OOF residual vectors.
+Explicit --halftime-artifact route emits a separate model result with 100K
+paired draws, exact kernel probabilities, source cutoff, seed/hash and replay.
+MNF exact kernel: DEN 1H+1.5 51.630%; O20.5 66.863%; joint DEN FG+2.5 and
+1H+1.5 43.346%. Different FG marginal from prior calibrated arm; no probability
+transfer. Historical quote archive absent; fixed-line probes are not market
+backtests. Frozen football forecasts and model parameters unchanged. Action OFF.
+
+
 ## NFL assimilation audit — 2026-09-14
 
 2026-09-14 NFL assimilation: 15/15 completed Week 1 games reconciled from official nflverse PBP. Weekly update waits for DEN@KC final under frozen policy. 2015–2025 state reconstructed; 2025 W17 16-game end-to-end replay changed nine next-game features. Added failure fixtures, capability validation/reporter hashes, settlement contract and research forecast stream. 76 targeted local tests passed (includes eight separate halftime-branch tests); football and market-aware bundles replay exactly. No accuracy promotion; action OFF. Full repository health remains unverified.

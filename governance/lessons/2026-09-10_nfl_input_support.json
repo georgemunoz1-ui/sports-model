@@ -1,0 +1,51 @@
+{
+  "schema_version": "1.0",
+  "lesson_type": "INPUT_SUPPORT_AND_COMMUNICATION",
+  "event_id": "401872657",
+  "status": "RECORDED_POLICY_NOT_RUNTIME_ENFORCED",
+  "finding": "Known limitations required diagnostic labeling and blocked action eligibility; the correctness of a 69% probability cannot be determined from this one outcome.",
+  "known_limitations": [
+    "prior_season_ratings_only",
+    "current_state_information_captured_but_not_applied",
+    "different_travel_schedules"
+  ],
+  "statistical_calibration": "NOT_ESTABLISHED",
+  "causal_attribution": "NOT_ESTABLISHED",
+  "historical_forecast_mutation_permitted": false,
+  "forecast_source_commit": "43fe32a2c2969b1296b7a99791790fd072e0b5a1",
+  "grade_source_commit": "89d2ed2051b5f64010d21efac5b13c4c4252c0ab",
+  "prospective_policy": {
+    "rule_name": "early_season_input_quality_gate",
+    "trigger": {
+      "prior_season_only": true,
+      "material_current_state_unapplied": true
+    },
+    "scope": "Apply based on material input gaps, not only when travel differences and week<=2 coincide.",
+    "effects": {
+      "support_level": "DIAGNOSTIC",
+      "action_authority": "OFF",
+      "missing_input_disclosure_required": true,
+      "probability_reliability": "UNVALIDATED_FOR_CURRENT_INPUT_STATE"
+    },
+    "numerical_changes": {
+      "dose_multiplier": null,
+      "variance_multiplier": null,
+      "probability_shrinkage": null,
+      "reason": "No arbitrary numerical adjustment. Predeclare and evaluate any change in a separate prospective challenger."
+    }
+  },
+  "research_plan": {
+    "control": "nfl.elo_margin_monte_carlo.v1 unchanged",
+    "challenger": "Input-quality-dependent uncertainty treatment; not yet implemented or version-released",
+    "requirements": [
+      "Define dose units and semantics before use",
+      "Predeclare adjustment and evaluation protocol",
+      "Use identical populations and cutoffs",
+      "Evaluate probability calibration and proper scores across multiple events",
+      "Assess interval coverage together with width",
+      "Preserve original forecasts and grade all eligible outcomes"
+    ]
+  },
+  "runtime_integration": "NOT_IMPLEMENTED",
+  "merged_to_main": false
+}

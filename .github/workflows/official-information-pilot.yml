@@ -1,0 +1,36 @@
+name: official-information-pilot
+on:
+  push:
+    branches: ['feature/sports-news-information-state']
+    paths:
+      - 'research/news_information/official_pilot.py'
+      - '.github/workflows/official-information-pilot.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  capture:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Test source parsers and state reduction
+        run: python3 -m unittest discover -s research/news_information/tests -v
+      - name: Capture current official source bytes (research only)
+        run: |
+          python3 -m research.news_information.official_pilot --date "$(date -u +%F)" --output pilot-output > pilot-log.json
+      - name: Preserve sources and failures
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: official-information-pilot-${{ github.sha }}-${{ github.run_id }}
+          path: |
+            pilot-output/
+            pilot-log.json
+          if-no-files-found: error
+          retention-days: 30

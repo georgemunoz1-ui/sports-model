@@ -1,0 +1,27 @@
+name: research-tests
+
+on:
+  push:
+    paths:
+      - 'research/**'
+      - '.github/workflows/research-tests.yml'
+  pull_request:
+    paths:
+      - 'research/**'
+      - '.github/workflows/research-tests.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  research-tests:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Check out exact commit
+        uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Run research unit and integration suite
+        run: python3 -m unittest discover -s research -p 'test_*.py' -v

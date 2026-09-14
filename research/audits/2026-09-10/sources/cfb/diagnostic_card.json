@@ -1,0 +1,51 @@
+{
+  "actionable": false,
+  "artifact_type": "diagnostic_force_card_v1",
+  "as_of_utc": "2026-09-10T08:22:50.198604+00:00",
+  "authority": "SHADOW_ONLY",
+  "card_date": "2026-09-10",
+  "coverage_breach_event_ids": [
+    "401858213"
+  ],
+  "forecast_count": 0,
+  "forecasts": [],
+  "generated_at_utc": "2026-09-10T08:22:50.314006Z",
+  "grading_policy": {
+    "action_authority": false,
+    "eligible_forecast_count": 0,
+    "market_overlay_enabled": false,
+    "registration_rule": "MLB + PIT_ALIGNED + source/generation pregame + explicit home probabilities",
+    "schema_version": "mlb_probability_calibration_v1"
+  },
+  "incidents": [
+    {
+      "detail": "RuntimeError:INPUTS_INCOMPLETE:RATING_FALLBACK_EXHAUSTED",
+      "event_id": "401858213",
+      "incident": "FORECAST_COVERAGE_BREACH"
+    }
+  ],
+  "league": "CFB",
+  "pit_provenance": {
+    "action_authority": false,
+    "actual_data_vintage_utc": null,
+    "adapter_source": null,
+    "data_vintage_basis": "UNKNOWN",
+    "generated_at_utc": "2026-09-10T08:22:50.314006Z",
+    "max_source_timestamp_utc": null,
+    "min_source_timestamp_utc": null,
+    "pit_alignment_threshold_seconds": 900,
+    "pit_delta_seconds": null,
+    "pit_gate": "WARN",
+    "pit_mode": "UNKNOWN",
+    "pit_reason": "SOURCE_FETCH_TIMESTAMP_UNAVAILABLE",
+    "pit_reconstruction_supported": false,
+    "pit_status": "PIT_UNKNOWN",
+    "pit_threshold_seconds": 3600,
+    "requested_as_of_utc": "2026-09-10T08:22:50.198604+00:00",
+    "source_fetches": []
+  },
+  "pregame_coverage": 0.0,
+  "requested_as_of_utc": "2026-09-10T08:22:50.198604+00:00",
+  "scheduled_game_count": 1,
+  "simulation_count": 100000
+}

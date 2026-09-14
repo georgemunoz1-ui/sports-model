@@ -23,6 +23,7 @@ The manifest maps path -> module_id. Three rules:
 """
 
 import json
+import hashlib
 import os
 import re
 import sys
@@ -81,9 +82,10 @@ def load(manifest_path=MANIFEST_PATH):
 
 def save(modules, manifest_path=MANIFEST_PATH):
     os.makedirs(os.path.dirname(manifest_path), exist_ok=True)
+    document = json.load(open(manifest_path)) if os.path.exists(manifest_path) else {}
+    document.update(schema="ops.module_manifest.v1", modules=modules)
     with open(manifest_path, "w") as fh:
-        json.dump({"schema": "ops.module_manifest.v1", "modules": modules}, fh,
-                  indent=1, sort_keys=True)
+        json.dump(document, fh, indent=1, sort_keys=True)
 
 
 def check_write(path, new_module_id, operation, modules, replaces=None, reason=None):
@@ -141,6 +143,21 @@ def audit(manifest_path=MANIFEST_PATH, root="harness", exempt_path=None):
             problems.append({"code": CLOBBER, "path": path, "registered": mid, "declares": actual,
                              "note": "the file at this path is a DIFFERENT module from the one "
                                      "registered here"})
+    # Capability registration carries a content pin as well as an identity.
+    document = json.load(open(manifest_path)) if os.path.exists(manifest_path) else {}
+    capabilities = document.get("capabilities", {})
+    required = {"harness/current_sports_data.py"} & set(modules)
+    for path in sorted(required | set(capabilities)):
+        entry = capabilities.get(path, {})
+        fields = ("module_id", "version", "owner", "source_repository", "source_base_commit",
+                  "sha256", "interface", "access_method", "license", "allowed_usage", "runtime_role")
+        if any(not entry.get(field) for field in fields):
+            problems.append({"code": "CAPABILITY_METADATA_INCOMPLETE", "path": path})
+            continue
+        if entry["module_id"] != modules.get(path):
+            problems.append({"code": "CAPABILITY_ID_MISMATCH", "path": path})
+        if not os.path.exists(path) or hashlib.sha256(open(path, "rb").read()).hexdigest() != entry["sha256"]:
+            problems.append({"code": "CAPABILITY_DIGEST_MISMATCH", "path": path})
     # AN UNDECLARED FILE MUST NOT ESCAPE. Checking only files that declare an id would let any
     # module opt out of the manifest by simply not declaring one — the manifest would then police
     # exactly the files that were already cooperating.

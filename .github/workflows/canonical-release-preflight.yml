@@ -13,18 +13,18 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: 34a7ec7e74db64d04197b4188771f2a9868cd045
+          ref: ${{ github.sha }}
           fetch-depth: 0
           persist-credentials: false
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - run: pip install -r requirements-nfl-context.txt pytest==8.4.2
+      - run: pip install -r requirements-nfl-context.txt pytest==8.4.2 PyYAML==6.0.2
       - name: Record checkout and environment before health execution
         run: |
           mkdir -p "$RUNNER_TEMP/release-audit"
           git rev-parse HEAD > "$RUNNER_TEMP/release-audit/commit.txt"
-          test "$(git rev-parse HEAD)" = 34a7ec7e74db64d04197b4188771f2a9868cd045
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
           git status --porcelain=v1 > "$RUNNER_TEMP/release-audit/status-before.txt"
           test ! -s "$RUNNER_TEMP/release-audit/status-before.txt"
           git fsck --full > "$RUNNER_TEMP/release-audit/git-fsck.log" 2>&1
@@ -36,6 +36,8 @@ jobs:
           uname -a > "$RUNNER_TEMP/release-audit/uname.txt"
           printf '%s\n' "$ImageOS" "$ImageVersion" > "$RUNNER_TEMP/release-audit/runner-image.txt"
           git bundle create "$RUNNER_TEMP/release-audit/repository.bundle" HEAD
+      - name: Run repair and current-data regressions
+        run: python -m pytest tests/test_release_health_repairs.py tests/test_current_sports_data.py -q
       - name: Run existing health without changing its gates
         run: |
           set +e

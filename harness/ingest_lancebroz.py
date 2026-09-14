@@ -133,6 +133,17 @@ def archive_commit():
     return r.stdout.strip()
 
 
+def source_health():
+    """Production evidence availability is separate from the portable contract test."""
+    files = [p for p in glob.glob(os.path.join(DAILY, "*.parquet"))
+             if INGEST_FROM <= os.path.basename(p)[:10] < CUTOFF]
+    commit = archive_commit()
+    return {"ok": bool(files) and len(commit) == 40,
+            "source_directory": DAILY, "source_commit": commit or None,
+            "n_files": len(files), "failure": None if files and len(commit) == 40
+            else "PRODUCTION_ARCHIVE_UNAVAILABLE_OR_UNVERSIONED"}
+
+
 def run(write=True):
     import pandas as pd
     files = sorted(glob.glob(os.path.join(DAILY, "*.parquet")))
@@ -263,15 +274,46 @@ def selftest():
         f.append("first PA of the half did not mark GS")
     if rej.get("unknown_event:weird_event") != 1:
         f.append("unknown event not rejected explicitly")
-    dry = run(write=False)
-    # Idempotent after a write: nothing left to append is healthy ONLY if the same rows are
-    # being rejected as already-present duplicates. Zero appendable AND zero duplicates means
-    # the window or the mapping is broken.
-    if dry["n_rows_appended"] == 0 and dry["rejected_duplicate_dates"] < 100:
-        f.append("dry run found nothing to append and nothing already present - window or "
-                 "mapping broken")
-    if any(x["date"] >= CUTOFF for x in []):
-        f.append("unreachable")
+    # Synthetic integration fixture: exercise the actual append and placeholder paths
+    # without reading machine-specific production inputs or modifying canonical logs.
+    import tempfile
+    from pathlib import Path
+    from unittest.mock import patch
+    with tempfile.TemporaryDirectory() as td:
+        root = Path(td)
+        daily, logs = root / "daily", root / "logs"
+        daily.mkdir(); logs.mkdir()
+        (daily / "2026-08-20.parquet").touch()
+        original = b"2026-08-19|6|2|5|1|24|1\n"
+        (logs / "99.txt").write_bytes(original)
+        placeholders = logs / "_placeholders.json"
+        placeholders.write_text('{"rows": []}')
+        with patch.dict(globals(), DAILY=str(daily), LOGS=str(logs),
+                        PLACEHOLDERS=str(placeholders)), \
+             patch.object(pd, "read_parquet", return_value=df), \
+             patch(__name__ + ".archive_commit", return_value="0" * 40):
+            dry = run(write=False)
+            if dry["n_rows_appended"] != 1 or (logs / "99.txt").read_bytes() != original:
+                f.append("dry run must propose one append and preserve bytes")
+            run(write=True)
+            written = (logs / "99.txt").read_bytes()
+            if written != original + b"2026-08-20|1.33|0|1|1|4|1\n":
+                f.append("append output differs from expected synthetic contract")
+            rows = json.loads(placeholders.read_text())["rows"]
+            if len(rows) != 1 or rows[0]["fields_placeholder"] != ["ER"]:
+                f.append("ER placeholder provenance missing")
+            repeat = run(write=False)
+            if repeat["n_rows_appended"] != 0 or repeat["rejected_duplicate_dates"] != 1:
+                f.append("repeated ingestion is not idempotent")
+            with patch.dict(globals(), CUTOFF="2026-08-20"):
+                if run(write=False)["pitchers_in_archive_window"] != 0:
+                    f.append("exclusive cutoff violated")
+    try:
+        derive_day(df.drop(columns=["events"]))
+        f.append("missing required column accepted")
+    except ValueError as exc:
+        if "MISSING_COLUMN:events" not in str(exc):
+            f.append("malformed schema rejection lost its reason")
     print("%s selftest: %s" % (MODULE_ID, "PASS" if not f else "FAIL"))
     for x in f:
         print("  -", x)

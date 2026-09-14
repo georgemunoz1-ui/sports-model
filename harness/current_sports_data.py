@@ -12,6 +12,9 @@ import re
 from pathlib import Path
 from zoneinfo import ZoneInfo
 
+MODULE_ID = "current_sports_data"
+MODULE_VERSION = "1.0.0"
+
 LEAGUES = ('mlb', 'wnba', 'nfl', 'cfb', 'mls', 'nba', 'nhl')
 UTC = dt.timezone.utc
 DEFAULT_TIMEZONE = 'America/Los_Angeles'

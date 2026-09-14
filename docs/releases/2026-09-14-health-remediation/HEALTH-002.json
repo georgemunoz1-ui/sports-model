@@ -1,0 +1,16 @@
+{
+  "issue_id": "HEALTH-002",
+  "component": "ingest_lancebroz",
+  "severity": "release-blocking",
+  "affected_release_profile": "global health prerequisite; frozen ARM_A still requires independent prospective registration",
+  "reproduction": {
+    "command": "python harness/ingest_lancebroz.py --selftest",
+    "code_commit": "34a7ec7e74db64d04197b4188771f2a9868cd045",
+    "environment_evidence": "../2026-09-14-canonical-preflight/audit/manifest.json",
+    "observed_error_evidence": "../2026-09-14-canonical-preflight/audit/healthcheck.log"
+  },
+  "root_cause": "Self-test mixed portable parser assertions with unavailable /home/user production archive",
+  "remediation": "Synthetic append/idempotency/cutoff regression; retain explicit blocking production-source health check",
+  "status": "PRODUCTION_SOURCE_BLOCKED",
+  "closure_rule": "Relevant regression and clean remote health checks pass; unresolved source/recovery evidence cannot be waived"
+}

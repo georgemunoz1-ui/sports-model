@@ -4384,3 +4384,20 @@ Owner requested spread calibration. Froze design bd8cd3f7e5ba230adf56831aac941ba
 Three-way Brier raw0.546770 -> calibrated0.528574, paired delta-0.018196 with season-bootstrap95%CI[-0.021632,-0.012849]. Nonpush Brier0.262645 ->0.253136; market0.250220. Declared retrospective scoring screen passes; market superiority and reliable calibration are not established. Integer-line mean push probability worsens3.24% ->1.79% versus5.71% observed. Do not relabel the scoring pass as full calibration certification.
 
 MNF saved-draw overlay DEN+2.5 raw60.869% -> calibrated56.314%; new100K margin simulation56.352%, repeat seed/hash identical. Original final-score draws and forecast unchanged. Added canonical --home-spread option and saved-forecast overlay CLI with hash/model binding, alternate-line consistency and explicit win/push/loss. 38 targeted NFL tests pass; full-repository health unavailable in partial checkout. Totals/halftime not calibrated by this layer. See docs/NFL_SPREAD_CALIBRATION.md.
+
+### 2026-09-14 — Dedicated halftime and joint probability extension
+
+Added fixed-spec four-target halftime/remaining-score Ridge model using the
+existing 100 pregame features and same-game OOF residual vectors. Corrected
+non-chronological play-ID sorting in halftime extraction; all 2,895 games now
+reconcile Q2 postplay/Q3 preplay scores. Initial 41-exclusion run invalidated.
+Frozen 2022 fit evaluated on 816 games from 2023–2025: halftime margin CRPS
+5.76078 versus half-scaled comparator 5.67358; three-way Brier .53317 versus
+.52413. No accuracy promotion. Halftime ties underpredicted (3.58% vs 6.00%).
+Fitted research deployment refits through 2025 with 1,871 OOF residual vectors.
+Explicit --halftime-artifact route emits a separate model result with 100K
+paired draws, exact kernel probabilities, source cutoff, seed/hash and replay.
+MNF exact kernel: DEN 1H+1.5 51.630%; O20.5 66.863%; joint DEN FG+2.5 and
+1H+1.5 43.346%. Different FG marginal from prior calibrated arm; no probability
+transfer. Historical quote archive absent; fixed-line probes are not market
+backtests. Frozen football forecasts and model parameters unchanged. Action OFF.

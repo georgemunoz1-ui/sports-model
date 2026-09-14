@@ -3,11 +3,13 @@ on:
   pull_request:
     paths:
       - 'models/nfl/contextual/**'
+      - 'models/nfl/modes/**'
       - 'pipelines/cards/adapters/nfl.py'
       - 'scripts/*nfl*'
       - 'scripts/generate_card_force.py'
       - 'data/nfl/contextual_v1/**'
-      - 'tests/test_nfl_context.py'
+      - 'data/nfl/modes_v1/**'
+      - 'tests/test_nfl_*.py'
       - 'requirements-nfl-context.txt'
       - '.github/workflows/nfl-context-integration.yml'
   workflow_dispatch:
@@ -24,4 +26,4 @@ jobs:
           cache: pip
           cache-dependency-path: requirements-nfl-context.txt
       - run: pip install -r requirements-nfl-context.txt
-      - run: python -m unittest discover -s tests -p test_nfl_context.py -v
+      - run: python -m unittest discover -s tests -p 'test_nfl_*.py' -v

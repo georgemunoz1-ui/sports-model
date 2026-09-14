@@ -66,3 +66,11 @@ Create a new source-bound event package before forecasting another date. All
 research arms remain distinct; combined features failed their retrospective
 probability screen and are not a promoted production model. Old forecasts and
 the existing go-live policy remain unchanged.
+
+
+NFL market-aware and live modes are now fitted, not proposed-only. See
+`docs/NFL_MARKET_LIVE_MODELS.md` and `data/nfl/modes_v1/runtime.json`. Use explicit
+`--mode enhanced_pregame` with a source-bound market packet, or `--mode live`
+with that pregame market prior and a current pre-play packet. Keep football-only
+research available. Do not call the market-weighted output an independent edge,
+or a categorical live winner simulation a drive/score simulator.

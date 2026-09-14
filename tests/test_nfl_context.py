@@ -80,8 +80,10 @@ class Integrity(unittest.TestCase):
         self.assertNotIn('AIRPORT_TRAVEL_PROXY',b['current_context_numerically_applied'])
     def test_information_regime_no_relabeling(self):
         args=(self.artifact,self.recovered,self.base,self.context,self.event,self.cutoff,1000)
-        for mode in ('official_pregame','enhanced_pregame','live','postgame_research','typo'):
+        for mode in ('official_pregame','postgame_research','typo'):
             with self.assertRaisesRegex(ValueError,'MODE_UNAVAILABLE'):run(*args,mode=mode)
+        for mode in ('enhanced_pregame','live'):
+            with self.assertRaisesRegex(ValueError,'FITTED_MODE_ARTIFACT_REQUIRED'):run(*args,mode=mode)
         c=copy.deepcopy(self.context);c['market']={'home_probability':.8}
         with self.assertRaisesRegex(ValueError,'UNKNOWN_CONTEXT'):run(self.artifact,self.recovered,self.base,c,self.event,self.cutoff,1000)
     def test_coverage_does_not_claim_observed_workload(self):

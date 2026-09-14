@@ -73,6 +73,8 @@ class Integrity(unittest.TestCase):
         args=(self.artifact,self.recovered,self.base,self.context,self.event,self.cutoff,1000)
         with self.assertRaisesRegex(ValueError,'EXACT_MODEL_ID_REQUIRED'):run(*args,model_id='missing')
         b,_,scores=run(*args,model_id=self.artifact['arms']['qb']['model_id'])
+        e=nfl.load_schedule('2026-09-14',self.cutoff)[0];c=nfl.build_context([e],self.cutoff)
+        with self.assertRaisesRegex(ValueError,'EXACT_MODEL_ID_REQUIRED'):nfl.forecast_event(e,c,1000,model_id='')
         self.assertEqual(b['selected_arm'],'qb');self.assertEqual(b['prediction'],b['arms']['qb']['prediction'])
         self.assertIsNone(scores);self.assertEqual(b['score_simulation']['status'],'UNAVAILABLE_FOR_SELECTED_ARM')
         self.assertNotIn('AIRPORT_TRAVEL_PROXY',b['current_context_numerically_applied'])

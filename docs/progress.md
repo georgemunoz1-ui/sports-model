@@ -4431,3 +4431,20 @@ in Actions, research CI and live official-source capture run `34272196290`. Down
 artifact `10074255735` matched GitHub's SHA-256 and replayed without source retrieval.
 Second ZIP and execution record are retained beside the first capture in pilot_evidence.
 PR #18 remains unmerged research; no extraction-accuracy or predictive-advantage claim.
+
+### 2026-09-14 — Dedicated halftime and joint probability extension
+
+Added fixed-spec four-target halftime/remaining-score Ridge model using the
+existing 100 pregame features and same-game OOF residual vectors. Corrected
+non-chronological play-ID sorting in halftime extraction; all 2,895 games now
+reconcile Q2 postplay/Q3 preplay scores. Initial 41-exclusion run invalidated.
+Frozen 2022 fit evaluated on 816 games from 2023–2025: halftime margin CRPS
+5.76078 versus half-scaled comparator 5.67358; three-way Brier .53317 versus
+.52413. No accuracy promotion. Halftime ties underpredicted (3.58% vs 6.00%).
+Fitted research deployment refits through 2025 with 1,871 OOF residual vectors.
+Explicit --halftime-artifact route emits a separate model result with 100K
+paired draws, exact kernel probabilities, source cutoff, seed/hash and replay.
+MNF exact kernel: DEN 1H+1.5 51.630%; O20.5 66.863%; joint DEN FG+2.5 and
+1H+1.5 43.346%. Different FG marginal from prior calibrated arm; no probability
+transfer. Historical quote archive absent; fixed-line probes are not market
+backtests. Frozen football forecasts and model parameters unchanged. Action OFF.

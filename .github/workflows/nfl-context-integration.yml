@@ -1,0 +1,27 @@
+name: NFL context integration
+on:
+  pull_request:
+    paths:
+      - 'models/nfl/contextual/**'
+      - 'pipelines/cards/adapters/nfl.py'
+      - 'scripts/*nfl*'
+      - 'scripts/generate_card_force.py'
+      - 'data/nfl/contextual_v1/**'
+      - 'tests/test_nfl_context.py'
+      - 'requirements-nfl-context.txt'
+      - '.github/workflows/nfl-context-integration.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  nfl-context-integrity:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: pip
+          cache-dependency-path: requirements-nfl-context.txt
+      - run: pip install -r requirements-nfl-context.txt
+      - run: python -m unittest discover -s tests -p test_nfl_context.py -v

@@ -1,0 +1,13 @@
+{
+  "simulation_id": "OUTCOME_ALIGNED_FINAL_SCORE_KERNEL_V2",
+  "recorded_at_utc": "2026-09-14T09:21:01.078062+00:00",
+  "reason": "Unconditional residual rounding manufactured a 3.7% tie mass; explicitly estimate outcome mass from training finals and fitted non-tie head instead. No forecast outcomes observed.",
+  "change": "SIMULATION_ONLY; all fitted feature coefficients unchanged",
+  "tie_prior": "JEFFREYS_BETA(0.5,0.5)",
+  "training_final_games": 2895,
+  "training_ties": 10,
+  "tie_rate": 0.0036256906077348065,
+  "stratum_shapes": "centered paired OOF final-score residuals rounded/clipped then conditioned on winner/tie",
+  "historical_score_calibration": "NOT_ESTABLISHED",
+  "overtime": "NO_ADDITIONAL_OT"
+}

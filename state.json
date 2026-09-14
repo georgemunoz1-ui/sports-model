@@ -1353,5 +1353,32 @@
    "ml.v14.player_context.shadow.v1": "SPEC_ONLY (prereg committed; identity NOT registered \u2014 cannot run)",
    "k.xk_stuff.shadow.v1": "SPEC_ONLY (prereg committed; zero pitch-level data; identity NOT registered)"
   }
- }
+ },
+  "nfl_context_integration_20260914": {
+    "status": "IMPLEMENTED_RESEARCH_DEFAULT_NOT_PRODUCTION_PROMOTION",
+    "default_research_command": "python scripts/run_nfl_integrated.py --date YYYY-MM-DD --output UNIQUE_DIRECTORY",
+    "adapter": "pipelines.cards.adapters.nfl",
+    "runtime_config": "data/nfl/contextual_v1/runtime.json",
+    "model_id": "nfl.integrated_context.combined.v1.research",
+    "features": 100,
+    "fitted_components": [
+      "BASE_EPA_WEATHER_REST",
+      "QB_PRIOR_CHANGE",
+      "INJURY_POSITION_GROUPS_PRACTICE",
+      "PRIOR_SNAP_ROLE",
+      "AIRPORT_TRAVEL_PROXY"
+    ],
+    "historical_games": 1871,
+    "binary_games": 1865,
+    "combined_screen_passed": false,
+    "combined_brier_delta": 0.0014233059376155544,
+    "production_promotion": false,
+    "action_authority": false,
+    "pending_facts": [
+      "FINAL_INACTIVES",
+      "EXPECTED_WORKLOAD",
+      "ACTUAL_TRAVEL_ITINERARY"
+    ],
+    "report": "docs/NFL_CONTEXT_INTEGRATION.md"
+  }
 }

@@ -51,3 +51,18 @@ R8 All web data via WebFetch tool; verbatim-extraction prompts; on 429 wait 60-9
 ## Who decides what
 Agent: runs cycles, grades honestly, proposes experiments, flags anomalies. Taco: authorizes any
 doctrine change, go-live, real money, new engine tracks. When unsure -> paper + ask in the summary.
+
+
+## NFL integrated research path (2026-09-14)
+
+For NFL model/simulation requests use `python scripts/run_nfl_integrated.py --date YYYY-MM-DD --output UNIQUE_DIRECTORY`.
+The shared card interface is `pipelines.cards.adapters.nfl`; configuration is
+`data/nfl/contextual_v1/runtime.json`. This path emits the recovered EPA reference
+and fitted QB, availability/workload, travel, and combined research arms. Do not
+substitute the small SRS runner while reporting that contextual features are absent.
+Read `docs/NFL_CONTEXT_INTEGRATION.md` and the current event package first. A date
+not present in the package is unacquired, not a verified zero-game slate.
+Create a new source-bound event package before forecasting another date. All
+research arms remain distinct; combined features failed their retrospective
+probability screen and are not a promoted production model. Old forecasts and
+the existing go-live policy remain unchanged.

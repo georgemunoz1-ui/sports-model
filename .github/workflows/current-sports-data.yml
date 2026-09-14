@@ -1,0 +1,26 @@
+name: Current sports data contract
+on:
+  pull_request:
+    paths:
+      - 'harness/current_sports_data.py'
+      - 'harness/healthcheck.py'
+      - 'scripts/refresh_all_sports.py'
+      - 'tests/test_current_sports_data.py'
+      - 'data/current/**'
+      - '.github/workflows/current-sports-data.yml'
+  push:
+    branches: ['sportsmodel/main']
+    paths:
+      - 'harness/current_sports_data.py'
+      - 'scripts/refresh_all_sports.py'
+      - 'data/current/**'
+jobs:
+  date-and-source-contract:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m unittest discover -s tests -p test_current_sports_data.py -v
+      - run: python -m py_compile harness/healthcheck.py scripts/refresh_all_sports.py

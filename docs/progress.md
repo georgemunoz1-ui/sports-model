@@ -4340,6 +4340,52 @@ which this environment does not permit.
 Ledger unchanged: 0 bets, 0.00 units, $0. Wager authority NO.
 
 
+## 2026-09-14 — Unified NFL context implementation and chronological test
+
+Owner requested missing features be rebuilt and incorporated into the main model path. Added canonical pipelines.cards.adapters.nfl and scripts/run_nfl_integrated.py; no silent SRS substitution. Recovered weather/rest/EPA features now run jointly with newly fitted QB, injury/practice/position-group, prior snap-role and airport travel proxies. 100 features; 58,449 historical injury rows, 264,774 snap rows, 7,078 QB-game aggregates; source hashes retained. Duplicate injury reports use latest known pre-kickoff modification.
+
+Five expanding-year arms tested on 2019–2025: 1,871 finals / 1,865 non-ties. Refit base Brier0.229609; QB0.222912; travel0.229529; availability0.236335; combined0.231032. Combined-minus-base+0.001423, season-bootstrap95%CI[-0.002535,+0.005453]; primary screen FAIL. Integration is a research capability deployment, not predictive promotion. Old SRS/EPA/B1/B2 records unchanged; no B2 executed.
+
+MNF current combined mean DEN+0.805791, total47.119722, non-tie DEN54.521660%. Binary and joint final-score simulations100K each. Joint sampler estimates final tie mass from historical finals, preserves three outcomes and does not append another OT. Source inputs include updated NWS Arrowhead-grid hour, expected QB identities, official absences and prior snap shares. Expected workloads/final inactives/actual itinerary remain unknown. Fifteen focused tests pass. Full repository health was not established from the unavailable full checkout. See docs/NFL_CONTEXT_INTEGRATION.md for exact interpretation and reproducibility. ActionOFF; no production promotion.
+
+
+### 2026-09-14 — NFL explicit model selection and coverage semantics
+
+Added explicit model IDs and research information mode to the integrated runtime
+and command. The five existing fitted arms remain available for analytic and
+binary inference; combined alone has its frozen joint score residual bank.
+Unsupported modes/unknown models do not silently fallback or relabel research.
+Coverage now distinguishes matrix completeness from current-source completeness.
+No coefficients, historical forecasts, promotion verdicts, or market input policy
+changed. Added selection, information-regime, and imputation/coverage checks.
+
+
+### 2026-09-14 — Fitted market-aware and live modes
+
+Owner requested completion of both unavailable modes. Design recorded on branch
+at 318ede5014aed5f219b840c0e254d30804fb69fe before fitting. Added exact model IDs,
+portable fitted artifacts, market/source packet binding and canonical CLI routes.
+Market ensemble selected football weights win=0,margin=0,total=.1 on 2019–2021;
+2022–2025 Brier equals market .210455 versus football .229396. No superiority
+promotion. Live HGB fit 2015–2020, temperature 1.25 from 2021–2022; test 2023–2025:
+816 games/51,719 states, three-way Brier .321788 vs static market .422186. This
+measures access to live state, not superiority to another live model. One actual
+tie in test; no tie-calibration claim. Corrected source OT clock normalization;
+first extraction/fit invalidated, frozen fitting rules retained. Final deployment
+refit through 2025. 29 targeted tests passed; 100K simulation replays match.
+See docs/NFL_MARKET_LIVE_MODELS.md. Original artifacts/coefficients unchanged;
+new modes are fitted research capabilities. Official promotion/action remain off.
+
+
+### 2026-09-14 — Fitted full-game spread CDF calibration
+
+Owner requested spread calibration. Froze design bd8cd3f7e5ba230adf56831aac941ba078adf6d6104a0e3e3473eb098e385a31 before fitting; persistent design receipt retained. Local research record, not canonical registration. Fit monotone sigmoid CDF on 797 games in 2020–2022 using only past-year OOF residual kernels; evaluate 816 games in 2023–2025 with 19 pushes. No test retuning or production refit.
+
+Three-way Brier raw0.546770 -> calibrated0.528574, paired delta-0.018196 with season-bootstrap95%CI[-0.021632,-0.012849]. Nonpush Brier0.262645 ->0.253136; market0.250220. Declared retrospective scoring screen passes; market superiority and reliable calibration are not established. Integer-line mean push probability worsens3.24% ->1.79% versus5.71% observed. Do not relabel the scoring pass as full calibration certification.
+
+MNF saved-draw overlay DEN+2.5 raw60.869% -> calibrated56.314%; new100K margin simulation56.352%, repeat seed/hash identical. Original final-score draws and forecast unchanged. Added canonical --home-spread option and saved-forecast overlay CLI with hash/model binding, alternate-line consistency and explicit win/push/loss. 38 targeted NFL tests pass; full-repository health unavailable in partial checkout. Totals/halftime not calibrated by this layer. See docs/NFL_SPREAD_CALIBRATION.md.
+
+
 ## 2026-09-08 — Offline benchmark primitives (draft review, not operational)
 
 Added isolated research evaluation primitives: PIT feature contracts, label-aware chronological folds,

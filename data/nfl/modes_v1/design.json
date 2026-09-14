@@ -1,0 +1,137 @@
+{
+  "schema": "nfl.mode_fit_design.v1",
+  "created_at_utc": "2026-09-14T09:55:10.331193+00:00",
+  "status": "FROZEN_BEFORE_EXTRACTION_AND_FIT",
+  "market": {
+    "model_id": "nfl.market_ensemble.v1.research",
+    "football_arm": "nfl.integrated_context.combined.v1.research",
+    "weight_grid": [
+      0.0,
+      0.1,
+      0.2,
+      0.3,
+      0.4,
+      0.5,
+      0.6,
+      0.7,
+      0.8,
+      0.9,
+      1.0
+    ],
+    "weight_definition": "football_weight; market_weight=1-football_weight",
+    "selection_seasons": [
+      2019,
+      2020,
+      2021
+    ],
+    "evaluation_seasons": [
+      2022,
+      2023,
+      2024,
+      2025
+    ],
+    "probability_objective": "NON_TIE_BRIER",
+    "margin_objective": "MAE",
+    "total_objective": "MAE",
+    "tie_break": "SMALLEST_FOOTBALL_WEIGHT",
+    "devig": "PROPORTIONAL_TWO_SIDED_AMERICAN",
+    "historical_quote_time": "UNARCHIVED_HISTORICAL_PREGAME_MARKET; NOT_INTRADAY_PIT_PROOF",
+    "residual_fit": "SELECTION_SEASONS_ONLY; ENSEMBLE_SPECIFIC",
+    "screen": "Brier improvement >=0.002 vs football and market; CI upper<0 vs market; log loss no worse than market"
+  },
+  "live": {
+    "model_id": "nfl.live_state_hgb.v1.research",
+    "fit_seasons": [
+      2015,
+      2016,
+      2017,
+      2018,
+      2019,
+      2020
+    ],
+    "temperature_selection_seasons": [
+      2021,
+      2022
+    ],
+    "evaluation_seasons": [
+      2023,
+      2024,
+      2025
+    ],
+    "final_fit_seasons": [
+      2015,
+      2016,
+      2017,
+      2018,
+      2019,
+      2020,
+      2021,
+      2022,
+      2023,
+      2024,
+      2025
+    ],
+    "final_temperature": "FROZEN_SELECTION_VALUE",
+    "estimator": "HistGradientBoostingClassifier",
+    "learning_rate": 0.05,
+    "max_iter": 120,
+    "max_leaf_nodes": 15,
+    "min_samples_leaf": 40,
+    "l2_regularization": 10,
+    "early_stopping": false,
+    "random_state": 20260914,
+    "temperature_grid": [
+      0.75,
+      1.0,
+      1.25,
+      1.5,
+      2.0
+    ],
+    "temperature_objective": "GAME_WEIGHTED_3WAY_LOG_LOSS",
+    "temperature_tie_break": "CLOSEST_TO_1_THEN_SMALLER",
+    "sampling": "FIRST_VALID_PREPLAY_STATE_PER_GAME_QUARTER_CLOCK_MINUTE",
+    "game_weight": "EQUAL_TOTAL_WEIGHT_PER_GAME",
+    "pregame_prior": "PROPORTIONALLY_DEVIGGED_HISTORICAL_MONEYLINE",
+    "state_score_fields": [
+      "posteam_score",
+      "defteam_score"
+    ],
+    "never_features": [
+      "total_home_score",
+      "total_away_score",
+      "home_score",
+      "away_score",
+      "epa",
+      "wpa",
+      "home_wp",
+      "vegas_wp",
+      "score_differential_post",
+      "posteam_score_post"
+    ],
+    "target_classes": [
+      "AWAY_WIN",
+      "HOME_WIN",
+      "TIE"
+    ],
+    "target": "REGULAR_SEASON_FINAL_OUTCOME_INCLUDING_OVERTIME",
+    "supported_periods": [
+      1,
+      2,
+      3,
+      4,
+      5
+    ],
+    "market_input": true,
+    "live_input_max_age_seconds": 120,
+    "screen": "GAME_WEIGHTED_3WAY_BRIER improves>=0.01 vs pregame market; game-block CI upper<0; log loss improves"
+  },
+  "evaluation_evidence": "REUSED_RETROSPECTIVE; PBP_CORRECTIONS_AND_MARKET_TIMES_NOT_ARCHIVED",
+  "bootstrap": {
+    "unit": "GAME_FOR_LIVE;SEASON_FOR_MARKET",
+    "replicates": 10000,
+    "seed": 2026091402
+  },
+  "promotion": false,
+  "simulation_draws": 100000,
+  "action_authority": false
+}

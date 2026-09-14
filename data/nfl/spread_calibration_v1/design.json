@@ -1,0 +1,89 @@
+{
+  "experiment_id": "nfl.spread_cdf_calibration.v1.research",
+  "created_at_utc": "2026-09-14T11:25:54.384367+00:00",
+  "status": "DESIGN_FROZEN_BEFORE_FIT_LOCAL_NOT_CANONICAL_REGISTRATION",
+  "reference_model_id": "nfl.integrated_context.combined.v1.research",
+  "target": "FINAL_HOME_MARGIN_INCLUDING_OT_AT_OBSERVED_FULL_GAME_SPREAD",
+  "generation": "Exact weighted marginal distribution of existing OUTCOME_ALIGNED_FINAL_SCORE_KERNEL_V2; past-season OOF residuals and past-season tie rate only",
+  "calibrator": {
+    "formula": "G(F)=sigmoid(a+b*logit(F)); G(0)=0 G(1)=1",
+    "b": "exp(log_b)>0",
+    "fit": "scipy L-BFGS-B mean three-way negative log likelihood + 0.01*(a^2+log_b^2)",
+    "initial": [
+      0.0,
+      0.0
+    ],
+    "bounds": [
+      [
+        -2.0,
+        2.0
+      ],
+      [
+        -2.0,
+        2.0
+      ]
+    ],
+    "maxiter": 1000,
+    "hyperparameter_selection": "NONE_FIXED",
+    "failure_policy": "Abort on unsuccessful fit; do not retune on test"
+  },
+  "calibration_fit_seasons": [
+    2020,
+    2021,
+    2022
+  ],
+  "evaluation_seasons": [
+    2023,
+    2024,
+    2025
+  ],
+  "retrospective_only": true,
+  "history_reused": true,
+  "production_refit": "NONE; use identical 2020-2022 fit for subsequent research overlays",
+  "population": "REG only, one observed home spread per game; exclude invalid lines/missing forecasts/unsupported kernel with ledger; no exclusions based on outcome or predicted edge",
+  "settlement": {
+    "classes": [
+      "HOME_COVER",
+      "PUSH",
+      "HOME_FAIL"
+    ],
+    "home_handicap": "minus nflverse spread_line",
+    "push": "retain third outcome; binary scores exclude pushes only",
+    "cancelled_unplayed": "exclude by missing final outcome",
+    "half_points": "push exactly zero",
+    "ties": "actual final ties graded through handicap, never coin-flipped"
+  },
+  "primary": {
+    "metric": "three_way_Brier",
+    "minimum_improvement": 0.002,
+    "season_bootstrap_95_ci_upper_lt": 0.0,
+    "log_loss_delta_max": 0.0,
+    "production_promotion": false
+  },
+  "uncertainty": {
+    "season_bootstrap": 10000,
+    "game_bootstrap_secondary": 10000,
+    "seed": 2026091412,
+    "note": "Three evaluation seasons limit season-bootstrap inference"
+  },
+  "secondary": [
+    "conditional_nonpush_Brier",
+    "conditional_nonpush_logloss",
+    "reliability_bins_fixed_0.1_width",
+    "push_reliability",
+    "key_number_3_7_subgroups",
+    "Week1",
+    "market_same_line_devig_conditional_nonpush_Brier",
+    "simulation_replay_100000"
+  ],
+  "market_policy": "Historical line defines target; spread odds diagnostic only, absent from fit features. Quote timestamps unverified; not PIT market-edge certification.",
+  "isolation": "Frozen model coefficients, mean forecasts, original draws unchanged. Separate distribution-calibration output, no forced consistency with original analytic winner head. No total or first-half calibration claim.",
+  "input_sha256": {
+    "data/nfl/contextual_v1/fit_03/oof_predictions.csv": "cb11bb530bb7d8149e0fbae8f6d6cc1775f6879ab157051e3c86dff525092510",
+    "data/nfl/contextual_v1/fit_03/features.csv": "4e85683269768322d50d00966d432c37d4179d95bac76cd41fa5933d94ff4e5b",
+    "data/nfl/modes_v1/dataset_02/games.csv": "708929b837db8b287db462293a798882d5437d433f87bb8eb242a19d56a34d4d",
+    "data/nfl/contextual_v1/model_packed.json": "a1fc0436a3e3d4f76d7b7fe9b480314fbb20804e3b9d29288f64913935a80322",
+    "models/nfl/contextual/model.py": "d3b93779983c10fab5eb136d94c2d1540deee9301cd5eaedadc33b796e8b3d06"
+  },
+  "action_authority": false
+}

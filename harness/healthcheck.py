@@ -634,6 +634,15 @@ try:
 except Exception as e:
     check(f"standard acceptance suite ({e})", False)
 
-print(f"\n{'HEALTHY' if not fails else 'UNHEALTHY'} — {len(fails)} fail, {len(warns)} warn")
+# Code integrity is separate from current-date data/feature readiness.
+print(f"\n{'CODE_INTEGRITY_PASS' if not fails else 'CODE_INTEGRITY_FAIL'} — {len(fails)} fail, {len(warns)} warn")
+try:
+    from current_sports_data import runtime_readiness
+    _fresh = runtime_readiness(__import__("pathlib").Path.cwd())
+    print("CURRENT_DATA_READINESS:", _fresh["status"])
+    for _league, _status in _fresh.get("leagues", {}).items():
+        print(f"  {_league}: {_status}")
+except Exception as _exc:
+    print("CURRENT_DATA_READINESS: UNVERIFIED", type(_exc).__name__, str(_exc))
 if fails: print("Fix FAILs before new work:", fails)
 sys.exit(1 if fails else 0)

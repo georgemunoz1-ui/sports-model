@@ -52,3 +52,32 @@ The research functionality is integrated; statistical promotion is separate and 
 Install `requirements-nfl-context.txt`, then run the main command above. Tests: `python -m unittest discover -s tests -p test_nfl_context.py -v`.
 
 Training: `python scripts/build_nfl_context.py --recovered-root PATH_TO_RECOVERED_BUNDLE_CHECKOUT --output NEW_FIT_DIR`. Source filenames and SHA-256 receipts are in `data/nfl/contextual_v1/sources/manifest.json`; the recovered original schedule/PBP bundle supplies the original base feature table. Pack with `scripts/pack_nfl_context_model.py`, then create a new event package with `scripts/prepare_nfl_event.py` using explicit event, base-feature and current-context files. Set `NFL_CONTEXT_PACKAGE` to that new package. Do not alter old bundles or treat replays as new pregame registration.
+
+
+## Explicit selection and information regimes
+
+The integrated command accepts `--model-id` and `--mode`. The compatibility
+mode is `research_pregame`, and its default model remains the combined research
+arm, not an accuracy-preferred or validated production model. Exact fitted IDs
+in the coefficient artifact select base, QB, availability, travel, or combined.
+An unknown model ID fails without substituting another model. All five analytic
+comparison outputs remain included. Binary simulations use the selected arm.
+The joint score residual pool belongs to combined only; other arms explicitly
+report joint-score simulation unavailable and do not reuse that pool.
+
+The requested four future operating modes are listed with capability status in
+`models/nfl/contextual/operating.py`. There is currently no registered validated
+official model, fitted market-aware ensemble, or fitted live model in this runner.
+Those names cannot relabel a research pregame output. Postgame evaluation uses
+the existing dedicated historical scripts, not this pregame inference command.
+This interface does not claim to implement those additional model families.
+A future market-aware model needs its own fitted/versioned input and target
+contract. Current football-only generation still rejects a market context field.
+
+Outputs distinguish fitted matrix-column counts, finite values before imputation,
+head-specific nonzero coefficient counts, imputed feature names, missingness
+indicators, and source limitations. A 100-column matrix is not evidence of 100
+fully observed current facts. Personnel/travel coefficients in this integrated
+arm were newly fitted; they were not recovered historical coefficients of the
+old 18-feature EPA arm. Changing output metadata changes new-run identities and
+seeds; previously frozen arrays and artifacts are untouched.

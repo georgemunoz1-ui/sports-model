@@ -4347,3 +4347,14 @@ Owner requested missing features be rebuilt and incorporated into the main model
 Five expanding-year arms tested on 2019–2025: 1,871 finals / 1,865 non-ties. Refit base Brier0.229609; QB0.222912; travel0.229529; availability0.236335; combined0.231032. Combined-minus-base+0.001423, season-bootstrap95%CI[-0.002535,+0.005453]; primary screen FAIL. Integration is a research capability deployment, not predictive promotion. Old SRS/EPA/B1/B2 records unchanged; no B2 executed.
 
 MNF current combined mean DEN+0.805791, total47.119722, non-tie DEN54.521660%. Binary and joint final-score simulations100K each. Joint sampler estimates final tie mass from historical finals, preserves three outcomes and does not append another OT. Source inputs include updated NWS Arrowhead-grid hour, expected QB identities, official absences and prior snap shares. Expected workloads/final inactives/actual itinerary remain unknown. Fifteen focused tests pass. Full repository health was not established from the unavailable full checkout. See docs/NFL_CONTEXT_INTEGRATION.md for exact interpretation and reproducibility. ActionOFF; no production promotion.
+
+
+### 2026-09-14 — NFL explicit model selection and coverage semantics
+
+Added explicit model IDs and research information mode to the integrated runtime
+and command. The five existing fitted arms remain available for analytic and
+binary inference; combined alone has its frozen joint score residual bank.
+Unsupported modes/unknown models do not silently fallback or relabel research.
+Coverage now distinguishes matrix completeness from current-source completeness.
+No coefficients, historical forecasts, promotion verdicts, or market input policy
+changed. Added selection, information-regime, and imputation/coverage checks.

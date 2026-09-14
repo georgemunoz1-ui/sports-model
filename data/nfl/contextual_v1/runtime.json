@@ -1,8 +1,16 @@
 {
   "default_research_model": "nfl.integrated_context.combined.v1.research",
   "event_package": "event_package_v2.json",
-  "mandatory_comparisons": ["base", "qb", "availability", "travel", "combined"],
+  "mandatory_comparisons": [
+    "base",
+    "qb",
+    "availability",
+    "travel",
+    "combined"
+  ],
   "silent_baseline_fallback": false,
   "production_promotion": false,
-  "action_authority": false
+  "action_authority": false,
+  "information_mode": "research_pregame",
+  "default_is_accuracy_preferred": false
 }

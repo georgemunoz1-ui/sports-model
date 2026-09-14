@@ -1,0 +1,31 @@
+name: news-information-tests
+
+on:
+  push:
+    branches:
+      - 'feature/sports-news-information-state'
+    paths:
+      - 'research/news_information/**'
+      - 'research/model_intake_lock.yaml'
+      - 'research/schemas/sports_information_event.v1.json'
+      - '.github/workflows/news-information-tests.yml'
+  pull_request:
+    paths:
+      - 'research/news_information/**'
+      - 'research/model_intake_lock.yaml'
+      - 'research/schemas/sports_information_event.v1.json'
+      - '.github/workflows/news-information-tests.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  news-information-tests:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Run news information engineering tests (no model downloads)
+        run: python3 -m unittest discover -s research/news_information/tests -p 'test_*.py' -v

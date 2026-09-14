@@ -1,0 +1,21 @@
+name: September 8 postgame source capture
+on:
+  push:
+    branches: [feature/sports-news-information-state]
+    paths: [research/news_information/capture_postgame_20260908.py]
+permissions:
+  contents: read
+jobs:
+  capture:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - run: python3 research/news_information/capture_postgame_20260908.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: postgame-source-20260908
+          path: postgame-output/
+          retention-days: 90

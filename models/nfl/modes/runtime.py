@@ -35,9 +35,13 @@ def enhanced(football,model,market,event,cutoff,n):
     if football['model_id']!=model['football_model_id'] or football['model_artifact_sha256']!=model['football_artifact_sha256']:raise ValueError('ENSEMBLE_FOOTBALL_ARTIFACT_MISMATCH')
     if football['cutoff_utc']!=cutoff or football['event']!=event:raise ValueError('ENSEMBLE_FOOTBALL_CUTOFF_MISMATCH')
     mv,audit=market_values(market,event,cutoff);p=ensemble(model,football['prediction'],mv);ch=code_hashes();identity=digest({'model':model,'football_identity':football['identity'],'market':market,'event':event,'cutoff':cutoff,'code_hashes':ch})
+    if 'original_quote_observed_at_utc' in market and market['original_quote_observed_at_utc'] is None:
+        audit.update(original_quote_time_unknown=True,quote_age_warning=True,executable_now_verified=False)
     draws,wi=bernoulli_simulation(p['home_win'],identity,n);scores,si=simulate_joint(p['home_margin'],p['total_points'],p['home_win'],model['final_score_residuals'],model['tie_rate'],identity,n)
     b=copy.deepcopy(football);b.update({'schema':'nfl.enhanced_pregame_forecast.v1','mode':'enhanced_pregame','model_id':model['model_id'],'model_artifact_sha256':digest(model),'identity':identity,'selected_arm':'market_ensemble','prediction':p,'score_centers':{'home':(p['total_points']+p['home_margin'])/2,'away':(p['total_points']-p['home_margin'])/2},'winner_simulation':wi,'score_simulation':si,'market_input':True,'market_snapshot':market,'market_benchmark':mv,'market_audit':audit,'football_reference':{'model_id':football['model_id'],'identity':football['identity'],'model_artifact_sha256':football['model_artifact_sha256'],'prediction':football['prediction'],'contribution_trace':football['contribution_trace']},'contribution_trace':{k:{'football_weight':model['weights'][k],'football_term':model['weights'][k]*football['prediction'][k],'market_term':(1-model['weights'][k])*mv[k]} for k in p},'mode_code_hashes':ch,'full_game_settlement_validated':False})
     b['feature_coverage']['market_columns']=3;b['feature_coverage']['football_weights_by_target']=model['weights'];b['warnings']+=['MARKET_AWARE_MODEL_EXPLICIT','REUSED_RETROSPECTIVE_FIT_NOT_PROSPECTIVE_VALIDATION']
+    from ..contextual.capabilities import describe_ensemble
+    b['capability_report']=describe_ensemble(football['capability_report'],model,football['prediction'],mv,event,cutoff)
     return b,draws,scores
 
 def live(model,market,snapshot,event,cutoff,n):

@@ -4384,3 +4384,8 @@ Owner requested spread calibration. Froze design bd8cd3f7e5ba230adf56831aac941ba
 Three-way Brier raw0.546770 -> calibrated0.528574, paired delta-0.018196 with season-bootstrap95%CI[-0.021632,-0.012849]. Nonpush Brier0.262645 ->0.253136; market0.250220. Declared retrospective scoring screen passes; market superiority and reliable calibration are not established. Integer-line mean push probability worsens3.24% ->1.79% versus5.71% observed. Do not relabel the scoring pass as full calibration certification.
 
 MNF saved-draw overlay DEN+2.5 raw60.869% -> calibrated56.314%; new100K margin simulation56.352%, repeat seed/hash identical. Original final-score draws and forecast unchanged. Added canonical --home-spread option and saved-forecast overlay CLI with hash/model binding, alternate-line consistency and explicit win/push/loss. 38 targeted NFL tests pass; full-repository health unavailable in partial checkout. Totals/halftime not calibrated by this layer. See docs/NFL_SPREAD_CALIBRATION.md.
+
+
+## NFL assimilation audit — 2026-09-14
+
+2026-09-14 NFL assimilation: 15/15 completed Week 1 games reconciled from official nflverse PBP. Weekly update waits for DEN@KC final under frozen policy. 2015–2025 state reconstructed; 2025 W17 16-game end-to-end replay changed nine next-game features. Added failure fixtures, capability validation/reporter hashes, settlement contract and research forecast stream. 76 targeted local tests passed (includes eight separate halftime-branch tests); football and market-aware bundles replay exactly. No accuracy promotion; action OFF. Full repository health remains unverified.

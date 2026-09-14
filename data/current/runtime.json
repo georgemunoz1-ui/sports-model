@@ -1,0 +1,9 @@
+{
+  "schema": "sports.current_runtime.v1",
+  "status_path": "data/current/20260914T160455Z/status.json",
+  "status_sha256": "d485fda04e628ee38c167a18e480fdb1458a41500d2568217c557fb4a4e1877b",
+  "ttl_hours": 6,
+  "default_timezone": "America/Los_Angeles",
+  "data_snapshot_directory": "data/current/20260914T160455Z",
+  "refresh_command": "python scripts/refresh_all_sports.py --bundle ACQUIRED_BUNDLE --output UNIQUE_DIRECTORY"
+}

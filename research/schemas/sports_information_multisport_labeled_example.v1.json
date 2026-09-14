@@ -1,0 +1,79 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "sports_information_multisport_labeled_example.v1.json",
+  "title": "League-stratified PIT sports information corpus example",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "example_id",
+    "league",
+    "raw_source_sha256",
+    "source_tier",
+    "source_type",
+    "published_at_utc",
+    "retrieved_at_utc",
+    "forecast_cutoff_utc",
+    "game_start_utc",
+    "event_id",
+    "entities_gold",
+    "claims_gold",
+    "pit_valid_gold",
+    "annotation_provenance"
+  ],
+  "properties": {
+    "schema_version": {"const": "sports_information_multisport_labeled_example.v1"},
+    "example_id": {"type": "string", "minLength": 1},
+    "league": {"enum": ["MLB", "NFL", "NBA", "WNBA", "NHL", "CFB", "MLS"]},
+    "raw_source_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "source_tier": {"type": "integer", "minimum": 1, "maximum": 6},
+    "source_type": {"enum": ["LEAGUE_OFFICIAL", "TEAM_OFFICIAL", "BEAT_REPORTER", "NEWS_OUTLET", "AGGREGATOR", "FAN_SOCIAL", "ANONYMOUS"]},
+    "source_anchor_kind": {"type": ["string", "null"]},
+    "published_at_utc": {"type": ["string", "null"], "format": "date-time"},
+    "retrieved_at_utc": {"type": "string", "format": "date-time"},
+    "forecast_cutoff_utc": {"type": "string", "format": "date-time"},
+    "game_start_utc": {"type": "string", "format": "date-time"},
+    "event_id": {"type": "string", "minLength": 1},
+    "entities_gold": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["subject_type", "canonical_id", "mention_text"],
+        "properties": {
+          "subject_type": {"enum": ["PLAYER", "TEAM", "GAME", "VENUE"]},
+          "canonical_id": {"type": "string", "minLength": 1},
+          "mention_text": {"type": "string", "minLength": 1}
+        }
+      }
+    },
+    "claims_gold": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["subject_id", "team_id", "event_type", "status", "certainty"],
+        "properties": {
+          "subject_id": {"type": ["string", "null"]},
+          "team_id": {"type": ["string", "null"]},
+          "event_type": {"type": "string", "minLength": 1},
+          "status": {"type": "string", "minLength": 1},
+          "certainty": {"enum": ["CONFIRMED", "EXPECTED", "POSSIBLE", "UNCERTAIN", "CONTRADICTED"]},
+          "restriction_value": {}
+        }
+      }
+    },
+    "pit_valid_gold": {"type": "boolean"},
+    "annotation_provenance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["annotator_id", "annotated_at_utc", "official_confirmation_status"],
+      "properties": {
+        "annotator_id": {"type": "string", "minLength": 1},
+        "annotated_at_utc": {"type": "string", "format": "date-time"},
+        "official_confirmation_status": {"enum": ["CONFIRMED", "NOT_CONFIRMED", "CONTRADICTED", "NOT_APPLICABLE"]},
+        "notes": {"type": ["string", "null"]}
+      }
+    }
+  }
+}

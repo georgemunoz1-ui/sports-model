@@ -1,0 +1,423 @@
+{
+  "all_models_current": false,
+  "clock": {
+    "as_of_utc": "2026-09-14T16:04:55.381103+00:00",
+    "information_regime": "current",
+    "slate_date": "2026-09-14",
+    "slate_timezone": "America/Los_Angeles",
+    "window_end_utc": "2026-09-15T07:00:00+00:00",
+    "window_start_utc": "2026-09-14T07:00:00+00:00"
+  },
+  "code_base": "f54563e7b6b9cfab5eea99b5325b9ac7c3d77798",
+  "conflicts": [],
+  "historical_forecasts_modified": false,
+  "leagues": [
+    {
+      "acquired_final_games": 469,
+      "acquired_slate_games": 10,
+      "calendar_source": "web.sports:mlb:2026-09-14",
+      "coverage": {
+        "complete": true,
+        "conflicts": 0,
+        "date_from": "2026-09-14",
+        "date_to": "2026-09-14",
+        "expected_slate_count": 10,
+        "phase": "REGULAR_SEASON",
+        "season": 2026,
+        "source": "web.sports:mlb:2026-09-14",
+        "source_sha256": "a70b609d05a95550a3947c3f9314c927fe01e270c44c51841b5847fed310d702",
+        "ttl_hours": 24,
+        "verified_at": "2026-09-14T16:01:11.102485+00:00"
+      },
+      "expected_slate_games": 10,
+      "feature_details": {
+        "note": "New results staged; pitcher logs, current starters, injuries and feature recomputation remain outstanding.",
+        "previous_results_through": "2026-08-23",
+        "status": "STALE_OR_UNVERIFIED"
+      },
+      "feature_status": "STALE_OR_UNVERIFIED",
+      "forecast_ready": false,
+      "league": "mlb",
+      "league_week": null,
+      "phase": "REGULAR_SEASON",
+      "results_through": "2026-09-13",
+      "schedule_status": "RECONCILED",
+      "season": 2026,
+      "slate_date": "2026-09-14"
+    },
+    {
+      "acquired_final_games": 4,
+      "acquired_slate_games": 0,
+      "calendar_source": "https://www.wnba.com/news/2026-schedule-release",
+      "coverage": {
+        "complete": true,
+        "conflicts": 0,
+        "date_from": "2026-09-14",
+        "date_to": "2026-09-14",
+        "expected_slate_count": 0,
+        "phase": "FIBA_BREAK",
+        "season": 2026,
+        "source": "https://www.wnba.com/news/2026-schedule-release",
+        "source_sha256": "432942fda6c2883fc64b53263c712b98daa981b8435e669b47dffd559eefaf32",
+        "ttl_hours": 24,
+        "verified_at": "2026-09-14T16:01:11.102485+00:00"
+      },
+      "expected_slate_games": 0,
+      "feature_details": {
+        "note": "Four complete boxes added; one exhibition removed from new regular-season extension. Existing fitted models unchanged.",
+        "previous_extension_through": "2026-08-29",
+        "status": "BOX_INPUTS_UPDATED_MODEL_REFIT_PENDING",
+        "updated_box_inputs_through": "2026-08-30"
+      },
+      "feature_status": "BOX_INPUTS_UPDATED_MODEL_REFIT_PENDING",
+      "forecast_ready": false,
+      "league": "wnba",
+      "league_week": null,
+      "phase": "FIBA_BREAK",
+      "results_through": "2026-08-30",
+      "schedule_status": "VERIFIED_EMPTY",
+      "season": 2026,
+      "slate_date": "2026-09-14"
+    },
+    {
+      "acquired_final_games": 15,
+      "acquired_slate_games": 1,
+      "calendar_source": "https://www.nfl.com/schedules/2026/reg1/",
+      "coverage": {
+        "complete": true,
+        "conflicts": 0,
+        "date_from": "2026-09-14",
+        "date_to": "2026-09-14",
+        "expected_slate_count": 1,
+        "league_week": 1,
+        "phase": "REGULAR_SEASON",
+        "season": 2026,
+        "source": "https://www.nfl.com/schedules/2026/reg1/",
+        "source_sha256": "1deb973286c953ed2165bf66013f92da39b305e44109d03ac135a11c3f0fd2db",
+        "ttl_hours": 24,
+        "verified_at": "2026-09-14T16:01:11.102485+00:00"
+      },
+      "expected_slate_games": 1,
+      "feature_details": {
+        "note": "Week 1 finals captured. Integrated DEN@KC pregame package exists; no 2026 PBP/EPA backfill or final inactive capture performed in this refresh.",
+        "status": "PARTIAL"
+      },
+      "feature_status": "PARTIAL",
+      "forecast_ready": false,
+      "league": "nfl",
+      "league_week": 1,
+      "phase": "REGULAR_SEASON",
+      "results_through": "2026-09-13",
+      "schedule_status": "RECONCILED",
+      "season": 2026,
+      "slate_date": "2026-09-14"
+    },
+    {
+      "acquired_final_games": 0,
+      "acquired_slate_games": 0,
+      "calendar_source": "https://www.espn.com/college-football/scoreboard/_/week/2/year/2026/seasontype/2/group/80",
+      "coverage": {
+        "complete": false,
+        "conflicts": 0,
+        "date_from": "2026-09-14",
+        "date_to": "2026-09-14",
+        "expected_slate_count": null,
+        "last_completed_week": 2,
+        "phase": "REGULAR_SEASON",
+        "reason": "FBS scoreboard extraction truncated; no complete current-week schedule acquired.",
+        "season": 2026,
+        "source": "https://www.espn.com/college-football/scoreboard/_/week/2/year/2026/seasontype/2/group/80",
+        "source_sha256": "67b9d71711d8112403186c2d099328ba3bef29140e91316363516a4f48f59f36",
+        "ttl_hours": 24,
+        "verified_at": "2026-09-14T16:01:11.102485+00:00"
+      },
+      "expected_slate_games": null,
+      "feature_details": {
+        "note": "Schedule/results refresh is not a model-feature or lineup refresh.",
+        "status": "UNVERIFIED"
+      },
+      "feature_status": "UNVERIFIED",
+      "forecast_ready": false,
+      "league": "cfb",
+      "league_week": null,
+      "phase": "REGULAR_SEASON",
+      "results_through": null,
+      "schedule_status": "UNACQUIRED",
+      "season": 2026,
+      "slate_date": "2026-09-14"
+    },
+    {
+      "acquired_final_games": 3,
+      "acquired_slate_games": 0,
+      "calendar_source": "https://www.espn.com/soccer/schedule/_/league/usa.1",
+      "coverage": {
+        "complete": false,
+        "conflicts": 0,
+        "date_from": "2026-09-14",
+        "date_to": "2026-09-14",
+        "expected_slate_count": null,
+        "phase": "REGULAR_SEASON",
+        "reason": "Schedule table normalized but source timezone and provider IDs unresolved; recent-match history incomplete.",
+        "season": 2026,
+        "source": "https://www.espn.com/soccer/schedule/_/league/usa.1",
+        "source_sha256": "5722685e2ce2fa60e95764212b27c5ddadf4c012e2e520c0580fa28a1c1394d7",
+        "ttl_hours": 24,
+        "verified_at": "2026-09-14T16:01:11.102485+00:00"
+      },
+      "expected_slate_games": null,
+      "feature_details": {
+        "note": "Schedule/results refresh is not a model-feature or lineup refresh.",
+        "status": "UNVERIFIED"
+      },
+      "feature_status": "UNVERIFIED",
+      "forecast_ready": false,
+      "league": "mls",
+      "league_week": null,
+      "phase": "REGULAR_SEASON",
+      "results_through": "2026-09-13",
+      "schedule_status": "ACQUIRED_UNRECONCILED",
+      "season": 2026,
+      "slate_date": "2026-09-14"
+    },
+    {
+      "acquired_final_games": 0,
+      "acquired_slate_games": 0,
+      "calendar_source": "https://www.nba.com/news/key-dates",
+      "coverage": {
+        "complete": true,
+        "conflicts": 0,
+        "date_from": "2026-09-14",
+        "date_to": "2026-09-14",
+        "expected_slate_count": 0,
+        "phase": "OFFSEASON",
+        "season": "2026-27",
+        "source": "https://www.nba.com/news/key-dates",
+        "source_sha256": "eae4293200de74bdc2ba044b77d02ddbc0545ac21e43d445c2b613ee7e803461",
+        "ttl_hours": 24,
+        "verified_at": "2026-09-14T16:01:11.102485+00:00"
+      },
+      "expected_slate_games": 0,
+      "feature_details": {
+        "note": "Schedule/results refresh is not a model-feature or lineup refresh.",
+        "status": "UNVERIFIED"
+      },
+      "feature_status": "UNVERIFIED",
+      "forecast_ready": false,
+      "league": "nba",
+      "league_week": null,
+      "phase": "OFFSEASON",
+      "results_through": null,
+      "schedule_status": "VERIFIED_EMPTY",
+      "season": "2026-27",
+      "slate_date": "2026-09-14"
+    },
+    {
+      "acquired_final_games": 0,
+      "acquired_slate_games": 0,
+      "calendar_source": "https://www.nhl.com/canadiens/news/canadiens-share-2026-27-preseason-schedule",
+      "coverage": {
+        "complete": false,
+        "conflicts": 0,
+        "date_from": "2026-09-14",
+        "date_to": "2026-09-14",
+        "expected_slate_count": null,
+        "phase": "SENIOR_PRESEASON_APPROACHING_PROSPECT_EVENTS_SEPARATE",
+        "reason": "NHL feed reports no games; one team preseason calendar is not an exhaustive league/prospect schedule.",
+        "season": "2026-27",
+        "source": "https://www.nhl.com/canadiens/news/canadiens-share-2026-27-preseason-schedule",
+        "source_sha256": "4d668eb737e2ae341159273c9a78c1106a9d73d8d00b158bc541f64009b3dfd5",
+        "ttl_hours": 24,
+        "verified_at": "2026-09-14T16:01:11.102485+00:00"
+      },
+      "expected_slate_games": null,
+      "feature_details": {
+        "note": "Schedule/results refresh is not a model-feature or lineup refresh.",
+        "status": "UNVERIFIED"
+      },
+      "feature_status": "UNVERIFIED",
+      "forecast_ready": false,
+      "league": "nhl",
+      "league_week": null,
+      "phase": "SENIOR_PRESEASON_APPROACHING_PROSPECT_EVENTS_SEPARATE",
+      "results_through": null,
+      "schedule_status": "UNACQUIRED",
+      "season": "2026-27",
+      "slate_date": "2026-09-14"
+    }
+  ],
+  "model_refits_performed": false,
+  "schema": "sports.current_state.v1",
+  "source_receipts": [
+    {
+      "bytes": 9190,
+      "path": "sources/mlb_2026-08-10.txt",
+      "representation": "tool_extract",
+      "retrieved_at": "2026-09-14T16:01:11.102485+00:00",
+      "sha256": "770019319b963bdfd8b182d509b0e367dc2dfd6bc21ed6829dbb78bddf83f25f",
+      "source": "web.sports:mlb:2026-08-10",
+      "source_available_at": null
+    },
+    {
+      "bytes": 9377,
+      "path": "sources/mlb_2026-08-17.txt",
+      "representation": "tool_extract",
+      "retrieved_at": "2026-09-14T16:01:11.102485+00:00",
+      "sha256": "5ef4a1de1495f8ee75ea1e9fb5fa48a91f5962d97a67df73205cc3794728af86",
+      "source": "web.sports:mlb:2026-08-17",
+      "source_available_at": null
+    },
+    {
+      "bytes": 9192,
+      "path": "sources/mlb_2026-08-24.txt",
+      "representation": "tool_extract",
+      "retrieved_at": "2026-09-14T16:01:11.102485+00:00",
+      "sha256": "7f390532b3c1edb823d06e599eedf628aedbfe876d7acb91dd52a72cd468f600",
+      "source": "web.sports:mlb:2026-08-24",
+      "source_available_at": null
+    },
+    {
+      "bytes": 9580,
+      "path": "sources/mlb_2026-08-31.txt",
+      "representation": "tool_extract",
+      "retrieved_at": "2026-09-14T16:01:11.102485+00:00",
+      "sha256": "1cb8868cfb3db12fe18d486ded0b72367b585dca0fc36b27a28f8b52e8e32eba",
+      "source": "web.sports:mlb:2026-08-31",
+      "source_available_at": null
+    },
+    {
+      "bytes": 8987,
+      "path": "sources/mlb_2026-09-07.txt",
+      "representation": "tool_extract",
+      "retrieved_at": "2026-09-14T16:01:11.102485+00:00",
+      "sha256": "ac492df55cdd11e6fb59e813450cd3f5337b1ac59c023b16c6fb5be647af3bdb",
+      "source": "web.sports:mlb:2026-09-07",
+      "source_available_at": null
+    },
+    {
+      "bytes": 5564,
+      "path": "sources/mlb_2026-09-14.txt",
+      "representation": "tool_extract",
+      "retrieved_at": "2026-09-14T16:01:11.102485+00:00",
+      "sha256": "a70b609d05a95550a3947c3f9314c927fe01e270c44c51841b5847fed310d702",
+      "source": "web.sports:mlb:2026-09-14",
+      "source_available_at": null
+    },
+    {
+      "bytes": 3123,
+      "path": "sources/nfl_2026-09-09.txt",
+      "representation": "tool_extract",
+      "retrieved_at": "2026-09-14T16:01:11.102485+00:00",
+      "sha256": "af3d6e11b8c13e832d59bcc94282e6edd72f6d76d266632baf644a3ec7d00feb",
+      "source": "web.sports:nfl:2026-09-09..2026-09-21",
+      "source_available_at": null
+    },
+    {
+      "bytes": 787729,
+      "path": "sources/wnba_401857186.json",
+      "representation": "github_utf8_tool_copy",
+      "retrieved_at": "2026-09-14T16:01:11.102485+00:00",
+      "sha256": "776ade4981ceb89b493c80585fe079d9a18c3e0d1f80bc8ff8a981b6cb519780",
+      "source": "https://raw.githubusercontent.com/sportsdataverse/wehoop-wnba-raw/fb64a1d56f7ed533951eb60768d02bdb606653de/wnba/json/final/401857186.json",
+      "source_available_at": null
+    },
+    {
+      "bytes": 826767,
+      "path": "sources/wnba_401857187.json",
+      "representation": "github_utf8_tool_copy",
+      "retrieved_at": "2026-09-14T16:01:11.102485+00:00",
+      "sha256": "7cb0ebdc0a4e318ab1374a0f4908987b6e096f46eadd303c5ab92fb7843acd4b",
+      "source": "https://raw.githubusercontent.com/sportsdataverse/wehoop-wnba-raw/fb64a1d56f7ed533951eb60768d02bdb606653de/wnba/json/final/401857187.json",
+      "source_available_at": null
+    },
+    {
+      "bytes": 752026,
+      "path": "sources/wnba_401857188.json",
+      "representation": "github_utf8_tool_copy",
+      "retrieved_at": "2026-09-14T16:01:11.102485+00:00",
+      "sha256": "be393ce1c388142389ff25217932bf434ef21e7bfe0b50efd3a6108ec3e2a09e",
+      "source": "https://raw.githubusercontent.com/sportsdataverse/wehoop-wnba-raw/fb64a1d56f7ed533951eb60768d02bdb606653de/wnba/json/final/401857188.json",
+      "source_available_at": null
+    },
+    {
+      "bytes": 807805,
+      "path": "sources/wnba_401857189.json",
+      "representation": "github_utf8_tool_copy",
+      "retrieved_at": "2026-09-14T16:01:11.102485+00:00",
+      "sha256": "f7977ba8ed8b724929cf9a6c274c151341de6bc1483b0323d2d89754d1a1d37b",
+      "source": "https://raw.githubusercontent.com/sportsdataverse/wehoop-wnba-raw/fb64a1d56f7ed533951eb60768d02bdb606653de/wnba/json/final/401857189.json",
+      "source_available_at": null
+    },
+    {
+      "bytes": 61101,
+      "path": "wnba_prior_extension.json",
+      "representation": "github_utf8_tool_copy",
+      "retrieved_at": "2026-09-14T16:01:11.102485+00:00",
+      "sha256": "39f8f197842eb473a7d55beaa763478b28eca05b3e92d985ad2bbc9973923307",
+      "source": "github:georgemunoz1-ui/sports-model@f54563e7b6b9cfab5eea99b5325b9ac7c3d77798:data/wnba/source/staging/EXTENSION_ESPN/ext_2026.json",
+      "source_available_at": null
+    },
+    {
+      "bytes": 547712,
+      "path": "remote_results.csv",
+      "representation": "github_utf8_tool_copy",
+      "retrieved_at": "2026-09-14T16:01:11.102485+00:00",
+      "sha256": "3a8f7b6b430a78c296bb8ab56cdc6efc3afdd279a067eacd5eff6a111aa81a9f",
+      "source": "github:georgemunoz1-ui/sports-model@f54563e7b6b9cfab5eea99b5325b9ac7c3d77798:data/backfill/mlb/2026/results.csv",
+      "source_available_at": null
+    },
+    {
+      "bytes": 21313,
+      "path": "sources/calendar_nfl.txt",
+      "representation": "tool_extract",
+      "retrieved_at": "2026-09-14T16:01:11.102485+00:00",
+      "sha256": "1deb973286c953ed2165bf66013f92da39b305e44109d03ac135a11c3f0fd2db",
+      "source": "https://www.nfl.com/schedules/2026/reg1/",
+      "source_available_at": null
+    },
+    {
+      "bytes": 14946,
+      "path": "sources/calendar_wnba.txt",
+      "representation": "tool_extract",
+      "retrieved_at": "2026-09-14T16:01:11.102485+00:00",
+      "sha256": "432942fda6c2883fc64b53263c712b98daa981b8435e669b47dffd559eefaf32",
+      "source": "https://www.wnba.com/news/2026-schedule-release",
+      "source_available_at": null
+    },
+    {
+      "bytes": 26998,
+      "path": "sources/calendar_nba.txt",
+      "representation": "tool_extract",
+      "retrieved_at": "2026-09-14T16:01:11.102485+00:00",
+      "sha256": "eae4293200de74bdc2ba044b77d02ddbc0545ac21e43d445c2b613ee7e803461",
+      "source": "https://www.nba.com/news/key-dates",
+      "source_available_at": null
+    },
+    {
+      "bytes": 10773,
+      "path": "sources/nhl_preseason_calendar.txt",
+      "representation": "tool_extract",
+      "retrieved_at": "2026-09-14T16:01:11.102485+00:00",
+      "sha256": "4d668eb737e2ae341159273c9a78c1106a9d73d8d00b158bc541f64009b3dfd5",
+      "source": "https://www.nhl.com/canadiens/news/canadiens-share-2026-27-preseason-schedule",
+      "source_available_at": null
+    },
+    {
+      "bytes": 6797,
+      "path": "sources/mls_current.txt",
+      "representation": "tool_extract",
+      "retrieved_at": "2026-09-14T16:01:11.102485+00:00",
+      "sha256": "5722685e2ce2fa60e95764212b27c5ddadf4c012e2e520c0580fa28a1c1394d7",
+      "source": "https://www.espn.com/soccer/schedule/_/league/usa.1",
+      "source_available_at": null
+    },
+    {
+      "bytes": 17822,
+      "path": "sources/cfb_fbs_week2.txt",
+      "representation": "tool_extract",
+      "retrieved_at": "2026-09-14T16:01:11.102485+00:00",
+      "sha256": "67b9d71711d8112403186c2d099328ba3bef29140e91316363516a4f48f59f36",
+      "source": "https://www.espn.com/college-football/scoreboard/_/week/2/year/2026/seasontype/2/group/80",
+      "source_available_at": null
+    }
+  ]
+}

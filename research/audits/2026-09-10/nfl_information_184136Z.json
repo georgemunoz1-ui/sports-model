@@ -1,0 +1,101 @@
+{
+  "schema_version": "nfl_information_observation.v1",
+  "event_id": "401872657",
+  "observed_at_utc": "2026-09-10T18:41:36Z",
+  "observation_basis": "WEB_RENDERED_SOURCE_REVIEW_NOT_RAW_HTTP_ARCHIVE",
+  "baseline_unchanged": true,
+  "quantitative_adjustment": null,
+  "adjustment_status": "UNVALIDATED_TRANSFORM_NOT_APPLIED",
+  "action_authority": false,
+  "final_inactives": "NOT_YET_VERIFIED",
+  "sources": {
+    "rams_final": "https://www.therams.com/news/rams-injury-report-week-1-vs-49ers-2026-aaron-donald-only-player-ruled-out-among-those-listed-no-designation-for-myles-garrett",
+    "sf_final": "https://www.49ers.com/news/alfred-collins-out-james-thomas-jr-questionable-vs-rams-injury-report-ahead-of-sfvslar",
+    "rams_depth": "https://www.therams.com/team/depth-chart",
+    "sf_depth": "https://www.49ers.com/team/depth-chart",
+    "travel_secondary": "https://www.reuters.com/sports/rams-bet-body-clocks-first-test-super-bowl-ambitions-australia-2026-09-10/"
+  },
+  "quarterbacks": [
+    {
+      "team": "LAR",
+      "player": "Matthew Stafford",
+      "state": "QB1_UNOFFICIAL_TEAM_DEPTH_CHART",
+      "injury_report": "NOT_LISTED"
+    },
+    {
+      "team": "SF",
+      "player": "Brock Purdy",
+      "state": "QB1_UNOFFICIAL_TEAM_DEPTH_CHART",
+      "injury_report": "NOT_LISTED"
+    }
+  ],
+  "injuries": [
+    {
+      "team": "LAR",
+      "player": "Aaron Donald",
+      "status": "OUT",
+      "reason": "NIR_REST"
+    },
+    {
+      "team": "LAR",
+      "player": "Myles Garrett",
+      "status": "NO_GAME_DESIGNATION",
+      "practice": "FULL_ESTIMATED",
+      "injury": "KNEE"
+    },
+    {
+      "team": "LAR",
+      "player": "Jaylen Watson",
+      "status": "NO_GAME_DESIGNATION",
+      "practice": "FULL_ESTIMATED",
+      "injury": "TOE"
+    },
+    {
+      "team": "SF",
+      "player": "Alfred Collins",
+      "status": "OUT",
+      "injury": "KNEE_PATELLAR_TENDON"
+    },
+    {
+      "team": "SF",
+      "player": "James Thompson Jr.",
+      "status": "QUESTIONABLE",
+      "injury": "HAMSTRING"
+    },
+    {
+      "team": "SF",
+      "player": "Nick Bosa",
+      "status": "NO_GAME_DESIGNATION",
+      "practice": "LIMITED",
+      "workload": "CAUTION_NO_NUMERIC_SNAP_LIMIT"
+    },
+    {
+      "team": "SF",
+      "player": "George Kittle",
+      "status": "NO_GAME_DESIGNATION",
+      "practice": "LIMITED",
+      "workload": "CAUTION_NO_NUMERIC_SNAP_LIMIT"
+    }
+  ],
+  "travel": {
+    "neutral_site": true,
+    "venue": "Melbourne Cricket Ground",
+    "kickoff_utc": "2026-09-11T00:35:00Z",
+    "sf_early_arrival": "REPORTED_AND_TEAM_SEPT6_MELBOURNE_ACTIVITIES_CORROBORATE",
+    "rams_late_arrival": "REPORTED_PREVIOUS_DAY_BY_REUTERS",
+    "exact_arrival_utc": null,
+    "acclimation_hours": null,
+    "conflict": "People search summary says game morning; Reuters and Australian reporting say previous day. Exact arrival unverified.",
+    "fatigue_points": null
+  },
+  "source_discrepancies": [
+    "Dynamic injury tables omit final Thursday column; use dated final injury articles for current practice status.",
+    "SF names Thompson Jr.; Rams table abbreviates James Thompson. Retain official SF player identity.",
+    "No designation is not final active-list confirmation."
+  ],
+  "remaining": [
+    "Final inactives",
+    "Exact arrival clocks",
+    "Validated QB/injury/travel coefficient mapping"
+  ]
+}

@@ -1,0 +1,32 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "sports_information_labeled_example.v1.json",
+  "title": "Point-in-time labeled sports information example",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "example_id", "league", "event_id", "forecast_cutoff_utc", "game_start_utc", "raw_bytes_sha256", "source_tier", "subject_id", "team_id", "event_type", "certainty", "known_before_cutoff", "annotation_provenance"],
+  "properties": {
+    "schema_version": {"const": "sports_information_labeled_example.v1"},
+    "example_id": {"type": "string", "minLength": 1},
+    "league": {"enum": ["MLB", "CFB", "NFL", "WNBA", "NBA", "NHL", "MLS"]},
+    "event_id": {"type": "string", "minLength": 1},
+    "forecast_cutoff_utc": {"type": "string", "format": "date-time"},
+    "game_start_utc": {"type": "string", "format": "date-time"},
+    "raw_bytes_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "source_tier": {"type": "integer", "minimum": 1, "maximum": 6},
+    "subject_id": {"type": ["string", "null"]},
+    "team_id": {"type": ["string", "null"]},
+    "event_type": {"type": "string"},
+    "certainty": {"enum": ["CONFIRMED", "EXPECTED", "POSSIBLE", "UNCERTAIN", "CONTRADICTED"]},
+    "known_before_cutoff": {"const": true},
+    "annotation_provenance": {
+      "type": "object",
+      "required": ["annotator_id", "annotated_at_utc", "official_confirmation_status"],
+      "properties": {
+        "annotator_id": {"type": "string"},
+        "annotated_at_utc": {"type": "string", "format": "date-time"},
+        "official_confirmation_status": {"enum": ["CONFIRMED", "NOT_CONFIRMED", "CONTRADICTED", "NOT_APPLICABLE"]}
+      }
+    }
+  }
+}

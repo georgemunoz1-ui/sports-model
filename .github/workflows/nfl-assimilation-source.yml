@@ -34,6 +34,16 @@ jobs:
           (out/"receipt.json").write_text(json.dumps(receipts,indent=2))
           print(json.dumps(receipts,indent=2))
           PY
+      - name: Export receipt bytes for connector replay
+        run: |
+          python3 - <<'PY'
+          import pathlib,gzip,base64
+          for p in sorted(pathlib.Path("nfl-source-receipt").iterdir()):
+            print("SOURCE_EXPORT_BEGIN "+p.name)
+            s=base64.b64encode(gzip.compress(p.read_bytes(),mtime=0)).decode()
+            for i in range(0,len(s),12000):print(s[i:i+12000])
+            print("SOURCE_EXPORT_END "+p.name)
+          PY
       - uses: actions/upload-artifact@v4
         with:
           name: nfl-source-receipt

@@ -1,4 +1,5 @@
 import copy,datetime as dt,json,unittest
+from unittest.mock import patch
 from pathlib import Path
 import numpy as np
 import pandas as pd
@@ -12,6 +13,10 @@ ROOT=Path(__file__).resolve().parents[1];DATA=ROOT/'data/nfl/contextual_v1'
 class Integrity(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
+        # Historical fixture tests must not follow a moving current-package pointer.
+        cls.package_pin=patch.dict('os.environ',{'NFL_CONTEXT_PACKAGE':str(DATA/'event_package_v2.json')})
+        cls.package_pin.start()
+        cls.addClassCleanup(cls.package_pin.stop)
         cls.artifact=load_artifact(DATA/'model_packed.json');cls.recovered=json.loads((DATA/'recovered_parameters.json').read_text());cls.base=json.loads((DATA/'mnf_base_row.json').read_text())[0];cls.context=json.loads((DATA/'mnf_context_integrated.json').read_text());cls.event=json.loads((DATA/'mnf_event.json').read_text());cls.cutoff='2026-09-14T12:00:00Z'
     def test_exact_feature_firewall(self):
         p=self.artifact['arms']['combined'];x={k:0 for k in p['feature_names']};x['moneyline']=-120

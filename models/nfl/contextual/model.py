@@ -92,17 +92,7 @@ def simulate_joint(margin,total,p_home_non_tie,residual_pairs,tie_rate,identity,
 def price_contract(scores,market_type,side,line=None,period='FULL_GAME',tie_policy=None):
     """Downstream-only empirical settlement; fees/prices never enter generation."""
     if period!='FULL_GAME':raise ValueError('PERIOD_UNSUPPORTED')
-    h,a=scores[:,0],scores[:,1]
-    if market_type=='SPREAD':
-        if side not in {'HOME','AWAY'}:raise ValueError('SIDE')
-        v=(h-a if side=='HOME' else a-h)+float(line)
-    elif market_type=='TOTAL':
-        if side not in {'OVER','UNDER'}:raise ValueError('SIDE')
-        v=(h+a-float(line))*(1 if side=='OVER' else -1)
-    elif market_type=='MONEYLINE':
-        if side not in {'HOME','AWAY'} or tie_policy not in {'REFUND','LOSS'}:raise ValueError('MONEYLINE_TIE_CONTRACT_REQUIRED')
-        v=h-a if side=='HOME' else a-h
-    else:raise ValueError('MARKET_TYPE')
+    from .settlement import settlement_values
+    v=settlement_values(scores,market_type,side,line,period=period,score_period='FULL_GAME',tie_policy=tie_policy)
     w=float(np.mean(v>0));p=float(np.mean(v==0));l=float(np.mean(v<0))
-    if market_type=='MONEYLINE' and tie_policy=='LOSS':l+=p;p=0.
     return {'win':w,'push_or_refund':p,'loss':l,'scope':'UNVALIDATED_EMPIRICAL_SETTLEMENT_DIAGNOSTIC','fees_included':False}

@@ -1,0 +1,51 @@
+name: NFL assimilation source receipt
+on:
+  push:
+    branches: [codex/nfl-assimilation-20260914]
+    paths: [.github/workflows/nfl-assimilation-source.yml]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  capture:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Capture official source bytes and receipt
+        run: |
+          python3 - <<'PY'
+          import urllib.request,json,hashlib,datetime,pathlib
+          out=pathlib.Path("nfl-source-receipt");out.mkdir()
+          urls={
+            "play_by_play_2026.csv":"https://github.com/nflverse/nflverse-data/releases/download/pbp/play_by_play_2026.csv",
+            "games.csv":"https://raw.githubusercontent.com/nflverse/nfldata/master/data/games.csv",
+            "weather.json":"https://api.weather.gov/gridpoints/EAX/47,48/forecast/hourly"
+          }
+          receipts=[]
+          for name,url in urls.items():
+            try:
+              req=urllib.request.Request(url,headers={"User-Agent":"sports-model-research/source-audit"})
+              with urllib.request.urlopen(req,timeout=120) as response:
+                data=response.read();headers=dict(response.headers)
+              (out/name).write_bytes(data)
+              receipts.append({"filename":name,"source_url":url,"retrieved_at_utc":datetime.datetime.now(datetime.timezone.utc).isoformat(),"sha256":hashlib.sha256(data).hexdigest(),"bytes":len(data),"headers":headers,"status":"captured"})
+            except Exception as exc:
+              receipts.append({"filename":name,"source_url":url,"retrieved_at_utc":datetime.datetime.now(datetime.timezone.utc).isoformat(),"status":"failed","error":str(exc)})
+          (out/"receipt.json").write_text(json.dumps(receipts,indent=2))
+          print(json.dumps(receipts,indent=2))
+          PY
+      - name: Export receipt bytes for connector replay
+        run: |
+          python3 - <<'PY'
+          import pathlib,gzip,base64
+          for p in sorted(pathlib.Path("nfl-source-receipt").iterdir()):
+            print("SOURCE_EXPORT_BEGIN "+p.name)
+            s=base64.b64encode(gzip.compress(p.read_bytes(),mtime=0)).decode()
+            for i in range(0,len(s),12000):print(s[i:i+12000])
+            print("SOURCE_EXPORT_END "+p.name)
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: nfl-source-receipt
+          path: nfl-source-receipt
+          retention-days: 90

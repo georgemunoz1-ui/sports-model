@@ -54,6 +54,12 @@ jobs:
           manifest={f.name:hashlib.sha256(f.read_bytes()).hexdigest() for f in p.iterdir() if f.is_file()}
           record={'created_at_utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'purpose':'CHECKOUT_AND_HEALTH_AUDIT_ONLY','canonical_prospective_eligible':False,'forecast_executed':False,'production_environment_approved':False,'files':manifest}
           (p/'manifest.json').write_text(json.dumps(record,indent=2))
+          print('AUDIT_MANIFEST_JSON='+json.dumps(record))
+          for name in ['commit.txt','status-before.txt','status-after.txt','health-exit-code.txt','dependency-file.sha256','python-binary.sha256','runner-image.txt','pip-freeze.txt']:
+              if (p/name).exists(): print('AUDIT_FILE_JSON='+json.dumps({'name':name,'content':(p/name).read_text()}))
+          if (p/'healthcheck.log').exists():
+              health=(p/'healthcheck.log').read_text()
+              print('AUDIT_HEALTH_JSON='+json.dumps({'failures':[s for s in health.splitlines() if s.startswith('[FAIL]')], 'summary':health.splitlines()[-1]}))
           PY
       - uses: actions/upload-artifact@v4
         if: always()

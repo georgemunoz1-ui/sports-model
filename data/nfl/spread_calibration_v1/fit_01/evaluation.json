@@ -1,0 +1,620 @@
+{
+  "status": "COMPLETED_REUSED_RETROSPECTIVE_SCREEN",
+  "evaluation_seasons": [
+    2023,
+    2024,
+    2025
+  ],
+  "raw": {
+    "games": 816,
+    "pushes": 19,
+    "three_way_brier": 0.5467696697891024,
+    "three_way_log_loss": 0.798124277735801,
+    "nonpush_games": 797,
+    "conditional_nonpush_brier": 0.26264488124176966,
+    "conditional_nonpush_log_loss": 0.7214862657372559,
+    "predicted_push_rate": 0.01323799743960953,
+    "observed_push_rate": 0.023284313725490197
+  },
+  "calibrated": {
+    "games": 816,
+    "pushes": 19,
+    "three_way_brier": 0.528574074295536,
+    "three_way_log_loss": 0.7845032240305724,
+    "nonpush_games": 797,
+    "conditional_nonpush_brier": 0.2531364601853289,
+    "conditional_nonpush_log_loss": 0.6996910970077678,
+    "predicted_push_rate": 0.0073240302955697835,
+    "observed_push_rate": 0.023284313725490197
+  },
+  "paired_three_way_brier_delta": -0.018195595493566457,
+  "season_block_95_ci": [
+    -0.02163235149999982,
+    -0.0128493832116779
+  ],
+  "game_block_95_ci_secondary": [
+    -0.025925929740633347,
+    -0.010438541061304278
+  ],
+  "retrospective_screen_passed": true,
+  "production_promotion": false,
+  "calibration_reliability_established": false,
+  "market_benchmark": {
+    "games": 797,
+    "conditional_nonpush_brier": 0.25022003963520717,
+    "scope": "Same historical line and odds; quote time unknown; not executable edge evidence"
+  },
+  "per_season": [
+    {
+      "season": 2023,
+      "games": 272,
+      "paired_three_way_brier_delta": -0.0128493832116779
+    },
+    {
+      "season": 2024,
+      "games": 272,
+      "paired_three_way_brier_delta": -0.02010505176902165
+    },
+    {
+      "season": 2025,
+      "games": 272,
+      "paired_three_way_brier_delta": -0.021632351499999824
+    }
+  ],
+  "subgroups_descriptive_only": {
+    "Week1": {
+      "raw": {
+        "games": 48,
+        "pushes": 0,
+        "three_way_brier": 0.5106577008775649,
+        "three_way_log_loss": 0.7220645472809002,
+        "nonpush_games": 48,
+        "conditional_nonpush_brier": 0.2553483111208969,
+        "conditional_nonpush_log_loss": 0.7062962743640057,
+        "predicted_push_rate": 0.01550193463515153,
+        "observed_push_rate": 0.0
+      },
+      "calibrated": {
+        "games": 48,
+        "pushes": 0,
+        "three_way_brier": 0.49735586268110105,
+        "three_way_log_loss": 0.6991236226113497,
+        "nonpush_games": 48,
+        "conditional_nonpush_brier": 0.24862795627619624,
+        "conditional_nonpush_log_loss": 0.6905142406590925,
+        "predicted_push_rate": 0.008529850213138703,
+        "observed_push_rate": 0.0
+      }
+    },
+    "integer_line": {
+      "raw": {
+        "games": 333,
+        "pushes": 19,
+        "three_way_brier": 0.5787808370891939,
+        "three_way_log_loss": 0.9108190394537247,
+        "nonpush_games": 314,
+        "conditional_nonpush_brier": 0.26309858105441847,
+        "conditional_nonpush_log_loss": 0.7231142780199675,
+        "predicted_push_rate": 0.032439056788953084,
+        "observed_push_rate": 0.057057057057057055
+      },
+      "calibrated": {
+        "games": 333,
+        "pushes": 19,
+        "three_way_brier": 0.5605715178601716,
+        "three_way_log_loss": 0.9072406653631845,
+        "nonpush_games": 314,
+        "conditional_nonpush_brier": 0.25295125534664675,
+        "conditional_nonpush_log_loss": 0.6993959078731979,
+        "predicted_push_rate": 0.01794717333689172,
+        "observed_push_rate": 0.057057057057057055
+      }
+    },
+    "half_point_line": {
+      "raw": {
+        "games": 483,
+        "pushes": 0,
+        "three_way_brier": 0.5246998587933871,
+        "three_way_log_loss": 0.7204278892222014,
+        "nonpush_games": 483,
+        "conditional_nonpush_brier": 0.26234992939669355,
+        "conditional_nonpush_log_loss": 0.7204278892222014,
+        "predicted_push_rate": 0.0,
+        "observed_push_rate": 0.0
+      },
+      "calibrated": {
+        "games": 483,
+        "pushes": 0,
+        "three_way_brier": 0.5065137250056319,
+        "three_way_log_loss": 0.6998830005031194,
+        "nonpush_games": 483,
+        "conditional_nonpush_brier": 0.2532568625028159,
+        "conditional_nonpush_log_loss": 0.6998830005031194,
+        "predicted_push_rate": 0.0,
+        "observed_push_rate": 0.0
+      }
+    },
+    "key_3": {
+      "raw": {
+        "games": 119,
+        "pushes": 13,
+        "three_way_brier": 0.6627602572019776,
+        "three_way_log_loss": 1.093174343672964,
+        "nonpush_games": 106,
+        "conditional_nonpush_brier": 0.28349608363735407,
+        "conditional_nonpush_log_loss": 0.7649528303152734,
+        "predicted_push_rate": 0.03219158757629509,
+        "observed_push_rate": 0.1092436974789916
+      },
+      "calibrated": {
+        "games": 119,
+        "pushes": 13,
+        "three_way_brier": 0.6284672514272874,
+        "three_way_log_loss": 1.101817347824753,
+        "nonpush_games": 106,
+        "conditional_nonpush_brier": 0.2631822526151722,
+        "conditional_nonpush_log_loss": 0.7199521766457021,
+        "predicted_push_rate": 0.01789562800967087,
+        "observed_push_rate": 0.1092436974789916
+      }
+    },
+    "key_7": {
+      "raw": {
+        "games": 42,
+        "pushes": 2,
+        "three_way_brier": 0.5532549844298207,
+        "three_way_log_loss": 0.8637914034714811,
+        "nonpush_games": 40,
+        "conditional_nonpush_brier": 0.2552926496378051,
+        "conditional_nonpush_log_loss": 0.7105713861038916,
+        "predicted_push_rate": 0.03207581163465728,
+        "observed_push_rate": 0.047619047619047616
+      },
+      "calibrated": {
+        "games": 42,
+        "pushes": 2,
+        "three_way_brier": 0.5433877356819771,
+        "three_way_log_loss": 0.8627058360993218,
+        "nonpush_games": 40,
+        "conditional_nonpush_brier": 0.24900655598216082,
+        "conditional_nonpush_log_loss": 0.6919897460549331,
+        "predicted_push_rate": 0.017902554359107845,
+        "observed_push_rate": 0.047619047619047616
+      }
+    },
+    "small_line_abs_le_3": {
+      "raw": {
+        "games": 322,
+        "pushes": 13,
+        "three_way_brier": 0.5861844572644318,
+        "three_way_log_loss": 0.8731197951174782,
+        "nonpush_games": 309,
+        "conditional_nonpush_brier": 0.2749433212380607,
+        "conditional_nonpush_log_loss": 0.74638737560434,
+        "predicted_push_rate": 0.016501719350672447,
+        "observed_push_rate": 0.040372670807453416
+      },
+      "calibrated": {
+        "games": 322,
+        "pushes": 13,
+        "three_way_brier": 0.5562266727838012,
+        "three_way_log_loss": 0.855541223528055,
+        "nonpush_games": 309,
+        "conditional_nonpush_brier": 0.2590271337890999,
+        "conditional_nonpush_log_loss": 0.7114965729547487,
+        "predicted_push_rate": 0.00916887582515669,
+        "observed_push_rate": 0.040372670807453416
+      }
+    },
+    "home_underdog": {
+      "raw": {
+        "games": 331,
+        "pushes": 8,
+        "three_way_brier": 0.5319632505655465,
+        "three_way_log_loss": 0.782036254333626,
+        "nonpush_games": 323,
+        "conditional_nonpush_brier": 0.2546343132811337,
+        "conditional_nonpush_log_loss": 0.703166540296562,
+        "predicted_push_rate": 0.014133445692420489,
+        "observed_push_rate": 0.02416918429003021
+      },
+      "calibrated": {
+        "games": 331,
+        "pushes": 8,
+        "three_way_brier": 0.5202184682154004,
+        "three_way_log_loss": 0.7772176621083627,
+        "nonpush_games": 323,
+        "conditional_nonpush_brier": 0.2484288954357808,
+        "conditional_nonpush_log_loss": 0.6899143223812492,
+        "predicted_push_rate": 0.007807708606745599,
+        "observed_push_rate": 0.02416918429003021
+      }
+    },
+    "home_favorite": {
+      "raw": {
+        "games": 485,
+        "pushes": 11,
+        "three_way_brier": 0.5568746693004365,
+        "three_way_log_loss": 0.8091039390680069,
+        "nonpush_games": 474,
+        "conditional_nonpush_brier": 0.26810355940903846,
+        "conditional_nonpush_log_loss": 0.7339699604995854,
+        "predicted_push_rate": 0.012626877085629267,
+        "observed_push_rate": 0.02268041237113402
+      },
+      "calibrated": {
+        "games": 485,
+        "pushes": 11,
+        "three_way_brier": 0.5342765600945563,
+        "three_way_log_loss": 0.7894754322702661,
+        "nonpush_games": 474,
+        "conditional_nonpush_brier": 0.2563443576834387,
+        "conditional_nonpush_log_loss": 0.7063533295064292,
+        "predicted_push_rate": 0.006993932314128144,
+        "observed_push_rate": 0.02268041237113402
+      }
+    }
+  },
+  "reliability": {
+    "raw": [
+      {
+        "class": "HOME_COVER",
+        "bin_low": 0.1,
+        "bin_high": 0.2,
+        "games": 6,
+        "mean_probability": 0.18050060609178886,
+        "observed_rate": 0.8333333333333334,
+        "wilson_95_interval_descriptive": [
+          0.43649717781352987,
+          0.9699466302516935
+        ]
+      },
+      {
+        "class": "HOME_COVER",
+        "bin_low": 0.2,
+        "bin_high": 0.3,
+        "games": 31,
+        "mean_probability": 0.2653121291976519,
+        "observed_rate": 0.5806451612903226,
+        "wilson_95_interval_descriptive": [
+          0.4076626249536972,
+          0.7358445693268778
+        ]
+      },
+      {
+        "class": "HOME_COVER",
+        "bin_low": 0.3,
+        "bin_high": 0.4,
+        "games": 144,
+        "mean_probability": 0.3570102007878377,
+        "observed_rate": 0.4652777777777778,
+        "wilson_95_interval_descriptive": [
+          0.3857722978124188,
+          0.5465876769891811
+        ]
+      },
+      {
+        "class": "HOME_COVER",
+        "bin_low": 0.4,
+        "bin_high": 0.5,
+        "games": 226,
+        "mean_probability": 0.45368818717904713,
+        "observed_rate": 0.47345132743362833,
+        "wilson_95_interval_descriptive": [
+          0.4093443280828985,
+          0.5384457700935947
+        ]
+      },
+      {
+        "class": "HOME_COVER",
+        "bin_low": 0.5,
+        "bin_high": 0.6,
+        "games": 231,
+        "mean_probability": 0.5450548662655803,
+        "observed_rate": 0.4805194805194805,
+        "wilson_95_interval_descriptive": [
+          0.4169373447273095,
+          0.5447389280858665
+        ]
+      },
+      {
+        "class": "HOME_COVER",
+        "bin_low": 0.6,
+        "bin_high": 0.7,
+        "games": 135,
+        "mean_probability": 0.644271850985195,
+        "observed_rate": 0.48148148148148145,
+        "wilson_95_interval_descriptive": [
+          0.3988809024947728,
+          0.5651067994318021
+        ]
+      },
+      {
+        "class": "HOME_COVER",
+        "bin_low": 0.7,
+        "bin_high": 0.8,
+        "games": 37,
+        "mean_probability": 0.7349234662542886,
+        "observed_rate": 0.5945945945945946,
+        "wilson_95_interval_descriptive": [
+          0.43485964730229365,
+          0.7365348180798572
+        ]
+      },
+      {
+        "class": "HOME_COVER",
+        "bin_low": 0.8,
+        "bin_high": 0.9,
+        "games": 6,
+        "mean_probability": 0.8366093486651724,
+        "observed_rate": 0.8333333333333334,
+        "wilson_95_interval_descriptive": [
+          0.43649717781352987,
+          0.9699466302516935
+        ]
+      },
+      {
+        "class": "PUSH",
+        "bin_low": 0.0,
+        "bin_high": 0.1,
+        "games": 816,
+        "mean_probability": 0.01323799743960953,
+        "observed_rate": 0.023284313725490197,
+        "wilson_95_interval_descriptive": [
+          0.014956278747380435,
+          0.03607975800157981
+        ]
+      },
+      {
+        "class": "HOME_FAIL",
+        "bin_low": 0.1,
+        "bin_high": 0.2,
+        "games": 7,
+        "mean_probability": 0.16134806191679413,
+        "observed_rate": 0.14285714285714285,
+        "wilson_95_interval_descriptive": [
+          0.02567962434474355,
+          0.5131278292743189
+        ]
+      },
+      {
+        "class": "HOME_FAIL",
+        "bin_low": 0.2,
+        "bin_high": 0.3,
+        "games": 51,
+        "mean_probability": 0.26716342232379975,
+        "observed_rate": 0.45098039215686275,
+        "wilson_95_interval_descriptive": [
+          0.3226751854937402,
+          0.5861529144963119
+        ]
+      },
+      {
+        "class": "HOME_FAIL",
+        "bin_low": 0.3,
+        "bin_high": 0.4,
+        "games": 149,
+        "mean_probability": 0.3565740567781825,
+        "observed_rate": 0.46308724832214765,
+        "wilson_95_interval_descriptive": [
+          0.3849579354501229,
+          0.5430720631845758
+        ]
+      },
+      {
+        "class": "HOME_FAIL",
+        "bin_low": 0.4,
+        "bin_high": 0.5,
+        "games": 236,
+        "mean_probability": 0.45396231504520607,
+        "observed_rate": 0.5,
+        "wilson_95_interval_descriptive": [
+          0.4367215304464782,
+          0.5632784695535218
+        ]
+      },
+      {
+        "class": "HOME_FAIL",
+        "bin_low": 0.5,
+        "bin_high": 0.6,
+        "games": 218,
+        "mean_probability": 0.5467459190296181,
+        "observed_rate": 0.5229357798165137,
+        "wilson_95_interval_descriptive": [
+          0.4568110955599678,
+          0.5882661413693233
+        ]
+      },
+      {
+        "class": "HOME_FAIL",
+        "bin_low": 0.6,
+        "bin_high": 0.7,
+        "games": 129,
+        "mean_probability": 0.6437027362856939,
+        "observed_rate": 0.5038759689922481,
+        "wilson_95_interval_descriptive": [
+          0.4187404583124836,
+          0.5887873120754477
+        ]
+      },
+      {
+        "class": "HOME_FAIL",
+        "bin_low": 0.7,
+        "bin_high": 0.8,
+        "games": 21,
+        "mean_probability": 0.7395905577710112,
+        "observed_rate": 0.2857142857142857,
+        "wilson_95_interval_descriptive": [
+          0.1381386295212213,
+          0.49956380716085597
+        ]
+      },
+      {
+        "class": "HOME_FAIL",
+        "bin_low": 0.8,
+        "bin_high": 0.9,
+        "games": 5,
+        "mean_probability": 0.814368014577127,
+        "observed_rate": 0.2,
+        "wilson_95_interval_descriptive": [
+          0.03622410863243014,
+          0.6244653702374747
+        ]
+      }
+    ],
+    "calibrated": [
+      {
+        "class": "HOME_COVER",
+        "bin_low": 0.2,
+        "bin_high": 0.3,
+        "games": 3,
+        "mean_probability": 0.29407183556004457,
+        "observed_rate": 0.6666666666666666,
+        "wilson_95_interval_descriptive": [
+          0.2076596008020477,
+          0.9385080552796037
+        ]
+      },
+      {
+        "class": "HOME_COVER",
+        "bin_low": 0.3,
+        "bin_high": 0.4,
+        "games": 65,
+        "mean_probability": 0.37550231879217205,
+        "observed_rate": 0.49230769230769234,
+        "wilson_95_interval_descriptive": [
+          0.37463839458541426,
+          0.6108354751272451
+        ]
+      },
+      {
+        "class": "HOME_COVER",
+        "bin_low": 0.4,
+        "bin_high": 0.5,
+        "games": 371,
+        "mean_probability": 0.4586465253357274,
+        "observed_rate": 0.48517520215633425,
+        "wilson_95_interval_descriptive": [
+          0.4347324019367365,
+          0.5359218580413151
+        ]
+      },
+      {
+        "class": "HOME_COVER",
+        "bin_low": 0.5,
+        "bin_high": 0.6,
+        "games": 323,
+        "mean_probability": 0.5406259889505203,
+        "observed_rate": 0.47368421052631576,
+        "wilson_95_interval_descriptive": [
+          0.41986148355489966,
+          0.5281255311239014
+        ]
+      },
+      {
+        "class": "HOME_COVER",
+        "bin_low": 0.6,
+        "bin_high": 0.7,
+        "games": 50,
+        "mean_probability": 0.6234424707830136,
+        "observed_rate": 0.6,
+        "wilson_95_interval_descriptive": [
+          0.4618143774758936,
+          0.7239161026974346
+        ]
+      },
+      {
+        "class": "HOME_COVER",
+        "bin_low": 0.7,
+        "bin_high": 0.8,
+        "games": 4,
+        "mean_probability": 0.7120546474460732,
+        "observed_rate": 0.75,
+        "wilson_95_interval_descriptive": [
+          0.30064184258240184,
+          0.9544127391902995
+        ]
+      },
+      {
+        "class": "PUSH",
+        "bin_low": 0.0,
+        "bin_high": 0.1,
+        "games": 816,
+        "mean_probability": 0.0073240302955697835,
+        "observed_rate": 0.023284313725490197,
+        "wilson_95_interval_descriptive": [
+          0.014956278747380435,
+          0.03607975800157981
+        ]
+      },
+      {
+        "class": "HOME_FAIL",
+        "bin_low": 0.2,
+        "bin_high": 0.3,
+        "games": 4,
+        "mean_probability": 0.27882736074586517,
+        "observed_rate": 0.25,
+        "wilson_95_interval_descriptive": [
+          0.04558726080970055,
+          0.6993581574175981
+        ]
+      },
+      {
+        "class": "HOME_FAIL",
+        "bin_low": 0.3,
+        "bin_high": 0.4,
+        "games": 72,
+        "mean_probability": 0.3780539982317043,
+        "observed_rate": 0.4166666666666667,
+        "wilson_95_interval_descriptive": [
+          0.3098521747473985,
+          0.5319230206853446
+        ]
+      },
+      {
+        "class": "HOME_FAIL",
+        "bin_low": 0.4,
+        "bin_high": 0.5,
+        "games": 337,
+        "mean_probability": 0.4597536001166961,
+        "observed_rate": 0.49554896142433236,
+        "wilson_95_interval_descriptive": [
+          0.4425198653213231,
+          0.5486783885226199
+        ]
+      },
+      {
+        "class": "HOME_FAIL",
+        "bin_low": 0.5,
+        "bin_high": 0.6,
+        "games": 350,
+        "mean_probability": 0.5410478195405998,
+        "observed_rate": 0.5057142857142857,
+        "wilson_95_interval_descriptive": [
+          0.453558491782839,
+          0.5577460060375448
+        ]
+      },
+      {
+        "class": "HOME_FAIL",
+        "bin_low": 0.6,
+        "bin_high": 0.7,
+        "games": 53,
+        "mean_probability": 0.6281967961685501,
+        "observed_rate": 0.41509433962264153,
+        "wilson_95_interval_descriptive": [
+          0.29260908779813966,
+          0.549055778186556
+        ]
+      }
+    ]
+  },
+  "limitations": [
+    "Reused history; no prospective spread evidence.",
+    "Corrected historical inputs and untimestamped odds are not an archived pregame feed.",
+    "Three test seasons limit season-bootstrap inference.",
+    "CDF transform preserves mass support and cannot fix absent score outcomes.",
+    "A lower Brier score alone does not establish calibration.",
+    "No total, first-half, live, or EV validation claim."
+  ]
+}

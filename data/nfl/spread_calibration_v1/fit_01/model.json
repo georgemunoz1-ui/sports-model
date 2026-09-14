@@ -1,0 +1,33 @@
+{
+  "schema": "nfl.spread_cdf_calibration.v1",
+  "model_id": "nfl.spread_cdf_calibration.v1.research",
+  "reference_model_id": "nfl.integrated_context.combined.v1.research",
+  "intercept": 0.020786507365968803,
+  "slope": 0.5277000175510927,
+  "formula": "G(F)=sigmoid(intercept+slope*logit(F)); exact endpoints",
+  "fit_seasons": [
+    2020,
+    2021,
+    2022
+  ],
+  "fit_games": 797,
+  "fitted_at_utc": "2026-09-14T11:28:40.900239+00:00",
+  "fit_objective": 0.7748612074761619,
+  "optimization_success": true,
+  "design_sha256": "bd8cd3f7e5ba230adf56831aac941ba078adf6d6104a0e3e3473eb098e385a31",
+  "input_sha256": {
+    "data/nfl/contextual_v1/fit_03/oof_predictions.csv": "cb11bb530bb7d8149e0fbae8f6d6cc1775f6879ab157051e3c86dff525092510",
+    "data/nfl/contextual_v1/fit_03/features.csv": "4e85683269768322d50d00966d432c37d4179d95bac76cd41fa5933d94ff4e5b",
+    "data/nfl/modes_v1/dataset_02/games.csv": "708929b837db8b287db462293a798882d5437d433f87bb8eb242a19d56a34d4d",
+    "data/nfl/contextual_v1/model_packed.json": "a1fc0436a3e3d4f76d7b7fe9b480314fbb20804e3b9d29288f64913935a80322",
+    "models/nfl/contextual/model.py": "d3b93779983c10fab5eb136d94c2d1540deee9301cd5eaedadc33b796e8b3d06"
+  },
+  "reference_packed_artifact_sha256": "a1fc0436a3e3d4f76d7b7fe9b480314fbb20804e3b9d29288f64913935a80322",
+  "research_only": true,
+  "promotion": false,
+  "period": "FULL_GAME",
+  "prediction_target": "FINAL_HOME_MARGIN_CDF_INCLUDING_OVERTIME",
+  "calibration_fit_method": "FIXED_PENALIZED_MONOTONE_SIGMOID_CDF",
+  "historical_line_timestamps": "UNVERIFIED",
+  "canonical_prospective_eligible": false
+}

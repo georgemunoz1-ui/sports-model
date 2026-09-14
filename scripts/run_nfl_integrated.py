@@ -7,7 +7,8 @@ from pipelines.cards.adapters import nfl
 from models.nfl.contextual.runtime import run,persist_run
 
 def main():
-    p=argparse.ArgumentParser();p.add_argument('--date',required=True);p.add_argument('--output',type=Path,required=True);p.add_argument('--simulations',type=int,default=100000);p.add_argument('--model-id');p.add_argument('--mode',default='research_pregame');p.add_argument('--market-packet',type=Path);p.add_argument('--live-packet',type=Path);p.add_argument('--event-id');a=p.parse_args()
+    p=argparse.ArgumentParser();p.add_argument('--date',required=True);p.add_argument('--output',type=Path,required=True);p.add_argument('--simulations',type=int,default=100000);p.add_argument('--model-id');p.add_argument('--mode',default='research_pregame');p.add_argument('--market-packet',type=Path);p.add_argument('--live-packet',type=Path);p.add_argument('--event-id');p.add_argument('--home-spread',type=float,action='append',help='Optional downstream full-game spread calibration, HOME handicap orientation');a=p.parse_args()
+    if a.home_spread and (a.mode!='research_pregame' or (a.model_id is not None and a.model_id!='nfl.integrated_context.combined.v1.research')):raise ValueError('SPREAD_CALIBRATION_REQUIRES_COMBINED_FOOTBALL_ARM')
     fitted=nfl.mode_artifact(a.mode) if a.mode!='research_pregame' else None
     market=json.loads(a.market_packet.read_text()) if a.market_packet else None
     live=json.loads(a.live_packet.read_text()) if a.live_packet else None
@@ -16,6 +17,7 @@ def main():
     if a.event_id:
         events=[e for e in events if e['event_id']==a.event_id]
         if not events:raise ValueError('EVENT_NOT_IN_CAPTURED_SCHEDULE')
+    if a.home_spread and len(events)!=1:raise ValueError('SPREAD_OVERLAY_REQUIRES_SINGLE_EVENT_SELECTION')
     context=nfl.build_context(events,cutoff,mode=a.mode)
     for e in events:
         packet={'base':None,'context':None} if a.mode=='live' else context['package']['event_inputs'][e['event_id']]
@@ -23,5 +25,10 @@ def main():
         live_for_event=live.get('event_packets',{}).get(e['event_id']) if live and 'event_packets' in live else live
         result,win,scores=run(context['model'],context['recovered'],packet['base'],packet['context'],e,cutoff,a.simulations,model_id=default_id if a.model_id is None else a.model_id,mode=a.mode,mode_artifact=fitted,market=market_for_event,live_state=live_for_event)
         persist_run(a.output/e['event_id'],result,win,scores,json.loads((nfl.ROOT/'data/nfl/modes_v1/design.json').read_text()) if fitted is not None else context['model']['design'])
+        if a.home_spread:
+            from models.nfl.contextual.spread_runtime import persist_overlay
+            overlay,calibrated_margins=nfl.calibrate_spreads(result,scores,a.home_spread,n=a.simulations)
+            persist_overlay(a.output/e['event_id']/'spread_calibration',overlay,calibrated_margins)
+            print(json.dumps({'spread_calibration':overlay['contracts']},indent=2))
         print(json.dumps({'event':e['event_id'],'prediction':result['prediction'],'binary':result['winner_simulation'],'scores':result['score_simulation']},indent=2))
 if __name__=='__main__':main()

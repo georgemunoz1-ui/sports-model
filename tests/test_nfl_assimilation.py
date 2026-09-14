@@ -93,6 +93,20 @@ class CapabilityValidation(unittest.TestCase):
     def test_reporter_hash(self):
         self.report['reporter_sha256']='bad'
         with self.assertRaisesRegex(ValueError,'REPORTER_HASH'):validate_report(self.report)
+    def test_empty_contribution_rejected(self):
+        self.report['rows'][0]['contribution']={}
+        with self.assertRaisesRegex(ValueError,'WITHOUT_CONTRIBUTION'):validate_report(self.report)
+    def test_mc_paired_flag_alone_insufficient(self):
+        row=self.report['rows'][0];row['contribution_method']='paired_monte_carlo_counterfactual'
+        row['uncertainty']={'paired':True}
+        with self.assertRaisesRegex(ValueError,'MC_ESTIMATOR'):validate_report(self.report)
+    def test_mc_explicit_estimator_and_error(self):
+        row=self.report['rows'][0];row['contribution_method']='paired_monte_carlo_counterfactual'
+        row['uncertainty']={'paired':True,'estimator':'mean_paired_outcome_difference','n_draws':100000,
+          'standard_error':{'home_margin':0.01},'uncertainty_scope':'monte_carlo_only'}
+        validate_report(self.report)
+        row['uncertainty']['standard_error']['home_margin']=-1
+        with self.assertRaisesRegex(ValueError,'MC_STANDARD_ERROR_INVALID'):validate_report(self.report)
     def test_mc_requires_paired_uncertainty(self):
         self.report['rows'][0]['contribution_method']='paired_monte_carlo_counterfactual'
         with self.assertRaisesRegex(ValueError,'UNCERTAINTY'):validate_report(self.report)

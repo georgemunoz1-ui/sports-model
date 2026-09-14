@@ -1,5 +1,7 @@
 name: NFL context integration
 on:
+  push:
+    branches: [sportsmodel/main]
   pull_request:
     paths:
       - 'models/nfl/contextual/**'

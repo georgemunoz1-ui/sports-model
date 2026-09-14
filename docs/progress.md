@@ -4453,3 +4453,8 @@ backtests. Frozen football forecasts and model parameters unchanged. Action OFF.
 ## NFL assimilation audit — 2026-09-14
 
 2026-09-14 NFL assimilation: 15/15 completed Week 1 games reconciled from official nflverse PBP. Weekly update waits for DEN@KC final under frozen policy. 2015–2025 state reconstructed; 2025 W17 16-game end-to-end replay changed nine next-game features. Added failure fixtures, capability validation/reporter hashes, settlement contract and research forecast stream. 76 targeted local tests passed (includes eight separate halftime-branch tests); football and market-aware bundles replay exactly. No accuracy promotion; action OFF. Full repository health remains unverified.
+
+
+## 2026-09-14 — PR 17 through 25 consolidation verification
+
+Owner requested all PRs 17–25 consolidated onto sportsmodel/main. Resolved the stacked journal conflicts by retaining all prior entries. Combined research suite: 91 PASS; NFL/current-date suite: 93 PASS. Canonical NFL command emitted 100K winner, score, halftime and calibrated-spread draws from the assimilation package; football bundle and arrays replay exactly and nine artifact hashes verify. Exact tested code commit and retained archive: docs/releases/2026-09-14-pr17-25/verification.json. Added post-merge NFL CI on sportsmodel/main and replaced the stale landing overview. Full health is not green: local Git-history verification unavailable, one CFB binary unrecovered, existing overdue recovery and readiness failures remain. Weekly state release still waits for MNF final. Research integration only; no coefficient/promotion/authority changes.

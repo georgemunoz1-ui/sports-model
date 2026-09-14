@@ -1,0 +1,49 @@
+{
+  "schema": "nfl.canonical_release_request.v1",
+  "created_at_utc": "2026-09-14T17:28:34.081090+00:00",
+  "event_id": "2026_01_DEN_KC",
+  "away_team": "DEN",
+  "home_team": "KC",
+  "venue": "Arrowhead Stadium",
+  "kickoff_utc": "2026-09-15T00:15:00Z",
+  "requested_arm": "ARM_A",
+  "arm_label": "nfl_baseline_2025_team_strength.v1",
+  "engine_model_id": "nfl.elo_margin_monte_carlo.v1",
+  "engine_version": "1.0.0",
+  "original_reference_bundle_sha256": "8a1bad4c3326c5ceb5089d9cae6d76662bd2a76a0afd76ffd1fbda3c5de7c659",
+  "engine_sha256": "4b290a33b62d9d18d56cbeb1d5ffa5c19221f3d6d8dc9fc7135b829444dba689",
+  "runner_sha256": "fff20f58fbb35f5443593f993c6c0045155125e1518608b96c7570eb20b8c8ba",
+  "config_file_sha256": "12b8bf18cbce25d62b710b851a8b4139f8fbd9fea8e18166c3de6d5d8a90bbe1",
+  "historical_population_file_sha256": "dacde8847fb0990c70244b4b3c63a86fab8595b0943022ef4637a3589f90fad2",
+  "frozen_information_policy": {
+    "strength": "2025_REG_SRS_ZERO_SUM_LEAST_SQUARES_NO_HOME_ADJUSTMENT",
+    "current_qb_injury_weather_travel_effects": false,
+    "home_adjustment_points": 0,
+    "away_adjustment_points": 0,
+    "final_inactives": "OUT_OF_SCOPE_FOR_FROZEN_ARM_A; NOT_A_CURRENT_PERSONNEL_COMPLETE_MODEL",
+    "market_input": false,
+    "full_game_spread_total_supported": false,
+    "simulation_tie_contract": "SCORE_PROXY_TIES_RESOLVED_BY_COIN_FLIP_FOR_BINARY_WINNER_ONLY; NOT_NFL_FULL_GAME_OT_SETTLEMENT",
+    "analytic_probability": "LOGISTIC_MARGIN_SCALE_8",
+    "simulation_probability": "NORMAL_MARGIN_TOTAL_SCORE_PROXY; DIFFERENT_DISTRIBUTION"
+  },
+  "cutoff_policy": {
+    "input_cutoff_utc": null,
+    "registration_deadline_utc": null,
+    "publication_deadline_utc": null,
+    "status": "UNASSIGNED_WHILE_RELEASE_PREFLIGHT_BLOCKED",
+    "required_order": [
+      "capture_and_freeze_inputs",
+      "external_preexecution_registration",
+      "execute_after_registration_receipt",
+      "publish_output_before_kickoff"
+    ],
+    "output_publication_not_required_before_input_cutoff": true
+  },
+  "is_registration": false,
+  "forecast_executed": false,
+  "canonical_prospective_eligible": false,
+  "production_promotion": false,
+  "action_authority": false,
+  "note": "Request and verified original identity only. Does not admit ARM_A to a canonical registry or relabel any previous forecast."
+}

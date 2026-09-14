@@ -1,0 +1,33 @@
+{
+  "record_id": "NFL-RS-EPA-0.2-LIVE-PAPER-PINS-2026-08-11",
+  "model_id": "nfl.rs.epa_logit_ridge.v0_2.shadow",
+  "output_policy_id": "gradeable_prediction_output.v1",
+  "created_utc": "2026-08-11T05:14:00Z",
+  "files": [
+    {
+      "path": "data/nfl/model/runs/2026-08-10_nflverse_2015_2025_oof_v2/final_shadow.joblib",
+      "sha256": "1d72eb8f27d5edfda781373455167ea921ef01a0b736e1096f337bf2a81cf18b"
+    },
+    {
+      "path": "data/nfl/model/runs/2026-08-10_nflverse_2015_2025_oof_v2/final_shadow_metadata.json",
+      "sha256": "1042de457955baaf9fed1e7531834c9ea0bd304a85a8cedbbdba151e328ccab3"
+    },
+    {
+      "path": "data/nfl/model/runs/2026-08-10_nflverse_2015_2025_oof_v2/features.csv",
+      "sha256": "fa1bfdf5fd41c084762f321ed4cab566fbd90ce1c08ad158e1cfc21c842d2755"
+    },
+    {
+      "path": "data/nfl/source/nflverse_2026-08-10T1930Z/nfl_games.csv",
+      "sha256": "59b06a7d7975da88f72fa370fe72cc4fd3aa551cda256c4c1e42e10c720cb850"
+    },
+    {
+      "path": "data/model_interfaces/GRADEABLE_PREDICTION_OUTPUT_V1.json",
+      "sha256": "7c0e191648c3d688bebafd4c184bff2ee0062c63a65c82374252db80d266e0b2"
+    },
+    {
+      "path": "data/nfl/model/NFL_RS_EPA_0_2_PAPER_OPERATIONALIZATION.json",
+      "sha256": "a428e7d09378ccd172c0b9fa7426572c68070427d7788f3252251fd95fbb9668"
+    }
+  ],
+  "rule": "The live paper scorer refuses before loading the model if any path is absent or any byte hash differs."
+}

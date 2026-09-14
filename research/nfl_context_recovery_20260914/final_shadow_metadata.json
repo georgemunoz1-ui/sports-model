@@ -1,0 +1,122 @@
+{
+  "estimators": {
+    "home_margin": {
+      "alpha": 10.0,
+      "type": "Ridge"
+    },
+    "home_win": {
+      "C": 1.0,
+      "penalty": "l2",
+      "type": "LogisticRegression"
+    },
+    "total_points": {
+      "alpha": 10.0,
+      "type": "Ridge"
+    }
+  },
+  "feature_names": [
+    "epa_matchup_edge",
+    "success_matchup_edge",
+    "explosive_matchup_edge",
+    "protection_matchup_edge",
+    "neutral_pass_rate_diff",
+    "pace_seconds_sum",
+    "point_differential_diff",
+    "rest_days_diff",
+    "neutral_site",
+    "roof_indoor",
+    "temperature_f",
+    "wind_mph",
+    "state_experience_min_log",
+    "state_experience_diff_log",
+    "rest_missing",
+    "location_missing",
+    "roof_missing",
+    "weather_missing"
+  ],
+  "model_id": "nfl.rs.epa_logit_ridge.v0_2.shadow",
+  "role": "OFFLINE_SHADOW_ARTIFACT; NO WAGER AUTHORITY",
+  "runtime": {
+    "joblib": "1.5.3",
+    "numpy": "2.3.5",
+    "pandas": "2.2.3",
+    "python": "3.12.13",
+    "scikit_learn": "1.8.0"
+  },
+  "source_hashes": [
+    {
+      "filename": "SOURCE_MANIFEST.json",
+      "sha256": "0ed62004d5e51979b8da56f2da52aaa1d222fb2fdc78d026f4b6d444c2b191b4"
+    },
+    {
+      "filename": "nfl_games.csv",
+      "sha256": "59b06a7d7975da88f72fa370fe72cc4fd3aa551cda256c4c1e42e10c720cb850"
+    },
+    {
+      "filename": "play_by_play_2015.csv.gz",
+      "sha256": "837811471df06c43d55faede7a363274484da11e71f49d8e0801baede3a5965d"
+    },
+    {
+      "filename": "play_by_play_2016.csv.gz",
+      "sha256": "dc1703d9aae3ec697ac2787617f82b6f074d0c151e1a54f8217f570a63dcb5ed"
+    },
+    {
+      "filename": "play_by_play_2017.csv.gz",
+      "sha256": "74032964ca6bdfc5bbe186253231a533d2d82aa531fac02b9382da01b3a8b34e"
+    },
+    {
+      "filename": "play_by_play_2018.csv.gz",
+      "sha256": "d37899610b397b96a90da6902827de5b46c5457b93e0e16d5f95a8eb524e4a7d"
+    },
+    {
+      "filename": "play_by_play_2019.csv.gz",
+      "sha256": "b764668137052be23745953cbc33fa17e537a70c81e9b73785a19a15e7288216"
+    },
+    {
+      "filename": "play_by_play_2020.csv.gz",
+      "sha256": "8f8be4e1f53aa8b504b52b1a4f38559b4d9a6bf5885a4e70bb50fba4228f4838"
+    },
+    {
+      "filename": "play_by_play_2021.csv.gz",
+      "sha256": "e8743a568f99667a8bdcd29ba12224ee1782ad2b7916bee78ee335c099383739"
+    },
+    {
+      "filename": "play_by_play_2022.csv.gz",
+      "sha256": "0c69a71eb39498956c7b1d5c1ca52ce7fe679934a95d1af249facb5ea9829ea4"
+    },
+    {
+      "filename": "play_by_play_2023.csv.gz",
+      "sha256": "4649804ee0f0a40b41e51ec75a1ce921949d7fab5459213488656b92f78560e8"
+    },
+    {
+      "filename": "play_by_play_2024.csv.gz",
+      "sha256": "f7075073401727c98e2c22f88b5ee9a178a98f1e53e10033f972c8bd6f0e940a"
+    },
+    {
+      "filename": "play_by_play_2025.csv.gz",
+      "sha256": "9c25c980f103d58fae5a0675f572aa4857e4672f6599973c1bc8a50e586a04e6"
+    },
+    {
+      "filename": "data/nfl/model/NFL_RS_EPA_0_2_PREREG.json",
+      "sha256": "8e8c935db36c73852d0a4c0cea7c2ed79483d122cc0e585c2cd479e62667fa6b"
+    },
+    {
+      "filename": "data/nfl/model/INPUT_CONTRACT_V0_2.json",
+      "sha256": "0fd19b7b09a1042efd621943188f9b9c0945b4bc07fff81149503d816192a2a4"
+    }
+  ],
+  "training_rows": 2885,
+  "training_seasons": [
+    2015,
+    2016,
+    2017,
+    2018,
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024,
+    2025
+  ]
+}

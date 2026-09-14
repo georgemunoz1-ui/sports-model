@@ -1,0 +1,236 @@
+{
+  "weather": {
+    "event_id": "2026_01_DEN_KC",
+    "retrieved_at_utc": "2026-09-14T08:53:04.527195+00:00",
+    "published_at_utc": "2026-09-13T23:51:00+00:00",
+    "source_sha256": "ffff5a932a263dd1e80b812a0fe54b210ceeaab608fce87fa41392abdbc6942c",
+    "source": "https://forecast.weather.gov/MapClick.php?FcstType=digital&lat=39.1034&lg=english&lon=-94.5831&unit=0",
+    "valid_from_utc": "2026-09-15T00:00:00+00:00",
+    "valid_to_utc": "2026-09-15T01:00:00+00:00",
+    "temperature_f": 86.0,
+    "wind_mph": 11.0,
+    "gust_mph": 22.0,
+    "temperature_kind": "HOURLY_FORECAST",
+    "wind_kind": "SUSTAINED",
+    "spatial_scope": "KANSAS_CITY_POINT_PROXY_39.11_-94.57_NOT_STADIUM",
+    "table_hour_CDT": "2026-09-14T19:00:00-05:00",
+    "selection": "HOURLY_BUCKET_CONTAINING_KICKOFF_NO_INTERPOLATION",
+    "available_by_utc": "2026-09-14T08:53:04.527195+00:00"
+  },
+  "rest": {
+    "event_id": "2026_01_DEN_KC",
+    "retrieved_at_utc": "2026-09-14T08:53:04.527195+00:00",
+    "published_at_utc": null,
+    "source_sha256": "59b06a7d7975da88f72fa370fe72cc4fd3aa551cda256c4c1e42e10c720cb850",
+    "source": "recovered nflverse schedule nfl_games.csv",
+    "home_rest": 7,
+    "away_rest": 7,
+    "definition": "NFlverse Week1 schedule convention; not days since actual preseason travel",
+    "available_by_utc": "2026-08-10T19:30:00+00:00"
+  },
+  "personnel": {
+    "event_id": "2026_01_DEN_KC",
+    "retrieved_at_utc": "2026-09-14T08:53:04.527195+00:00",
+    "published_at_utc": null,
+    "source_sha256": "ffff5a932a263dd1e80b812a0fe54b210ceeaab608fce87fa41392abdbc6942c",
+    "source": "https://www.chiefs.com/news/week-1-injury-report-broncos-vs-chiefs-2026 and https://www.denverbroncos.com/team/rosters",
+    "state": {
+      "quarterbacks": {
+        "KC": {
+          "name": "Patrick Mahomes",
+          "id": "00-0033873",
+          "depth": "QB1",
+          "practice": "FULL",
+          "game_status": "NO_DESIGNATION",
+          "final_inactive_status": "PENDING",
+          "workload": "UNKNOWN"
+        },
+        "DEN": {
+          "name": "Bo Nix",
+          "id": "00-0039732",
+          "depth": "QB1",
+          "game_status": "NOT_LISTED_ON_TEAM_REPORT",
+          "final_inactive_status": "PENDING",
+          "workload": "UNKNOWN"
+        }
+      },
+      "injury_observations": [
+        {
+          "team": "KC",
+          "player": "Chamarri Conner",
+          "position": "DB",
+          "issue": "knee",
+          "practice": "DNP",
+          "game_status": "OUT",
+          "effective_date": "2026-09-12",
+          "player_id": null,
+          "source": "https://www.chiefs.com/news/week-1-injury-report-broncos-vs-chiefs-2026"
+        },
+        {
+          "team": "KC",
+          "player": "Josh Simmons",
+          "position": "T",
+          "issue": "back",
+          "practice": "DNP",
+          "game_status": "OUT",
+          "effective_date": "2026-09-12",
+          "player_id": null,
+          "source": "https://www.chiefs.com/news/week-1-injury-report-broncos-vs-chiefs-2026"
+        },
+        {
+          "team": "KC",
+          "player": "Jack Cochrane",
+          "position": "LB",
+          "issue": "knee",
+          "practice": "FP",
+          "game_status": "NO_DESIGNATION",
+          "effective_date": "2026-09-12",
+          "player_id": null,
+          "source": "https://www.chiefs.com/news/week-1-injury-report-broncos-vs-chiefs-2026"
+        },
+        {
+          "team": "KC",
+          "player": "Ashton Gillotte",
+          "position": "DE",
+          "issue": "foot",
+          "practice": "FP",
+          "game_status": "NO_DESIGNATION",
+          "effective_date": "2026-09-12",
+          "player_id": null,
+          "source": "https://www.chiefs.com/news/week-1-injury-report-broncos-vs-chiefs-2026"
+        },
+        {
+          "team": "KC",
+          "player": "Rashee Rice",
+          "position": "WR",
+          "issue": "knee",
+          "practice": "FP",
+          "game_status": "NO_DESIGNATION",
+          "effective_date": "2026-09-12",
+          "player_id": null,
+          "source": "https://www.chiefs.com/news/week-1-injury-report-broncos-vs-chiefs-2026"
+        },
+        {
+          "team": "KC",
+          "player": "Trey Smith",
+          "position": "G",
+          "issue": "hip",
+          "practice": "FP",
+          "game_status": "NO_DESIGNATION",
+          "effective_date": "2026-09-12",
+          "player_id": null,
+          "source": "https://www.chiefs.com/news/week-1-injury-report-broncos-vs-chiefs-2026"
+        },
+        {
+          "team": "KC",
+          "player": "L\u2019Jarius Sneed",
+          "position": "CB",
+          "issue": "knee",
+          "practice": "LP",
+          "game_status": "NO_DESIGNATION",
+          "effective_date": "2026-09-12",
+          "player_id": null,
+          "source": "https://www.chiefs.com/news/week-1-injury-report-broncos-vs-chiefs-2026"
+        },
+        {
+          "team": "KC",
+          "player": "R Mason Thomas",
+          "position": "DE",
+          "issue": "hamstring",
+          "practice": "FP",
+          "game_status": "NO_DESIGNATION",
+          "effective_date": "2026-09-12",
+          "player_id": null,
+          "source": "https://www.chiefs.com/news/week-1-injury-report-broncos-vs-chiefs-2026"
+        },
+        {
+          "team": "KC",
+          "player": "Xavier Worthy",
+          "position": "WR",
+          "issue": "shoulder",
+          "practice": "FP",
+          "game_status": "NO_DESIGNATION",
+          "effective_date": "2026-09-12",
+          "player_id": null,
+          "source": "https://www.chiefs.com/news/week-1-injury-report-broncos-vs-chiefs-2026"
+        },
+        {
+          "team": "KC",
+          "player": "Patrick Mahomes",
+          "position": "QB",
+          "issue": "knee",
+          "practice": "FP",
+          "game_status": "NO_DESIGNATION",
+          "effective_date": "2026-09-12",
+          "player_id": "00-0033873",
+          "source": "https://www.chiefs.com/news/week-1-injury-report-broncos-vs-chiefs-2026"
+        },
+        {
+          "team": "KC",
+          "player": "Chris Jones",
+          "position": "DT",
+          "issue": "calf",
+          "practice": "DNP",
+          "game_status": "NO_DESIGNATION",
+          "effective_date": "2026-09-12",
+          "player_id": null,
+          "source": "https://www.chiefs.com/news/week-1-injury-report-broncos-vs-chiefs-2026"
+        },
+        {
+          "team": "DEN",
+          "player": "Marvin Mims Jr.",
+          "position": "WR",
+          "issue": "foot",
+          "practice": "FP",
+          "game_status": "NO_DESIGNATION",
+          "effective_date": "2026-09-12",
+          "player_id": null,
+          "source": "https://www.denverbroncos.com/news/injuryreport/injury-report-wr-marvin-mims-jr-not-assigned-game-status-for-week-1-vs-chiefs"
+        }
+      ],
+      "position_groups": [
+        {
+          "team": "KC",
+          "positions": [
+            "LT",
+            "S"
+          ],
+          "depth_listed": [
+            "Josh Simmons",
+            "Chamarri Conner"
+          ],
+          "game_status": "OUT",
+          "handling": "INJURY_STATUS_TAKES_PRECEDENCE_OVER_DEPTH_ORDER",
+          "replacement_listed": [
+            "Kahlil Benson",
+            "Jaden Hicks"
+          ],
+          "replacement_start_confirmed": false
+        }
+      ],
+      "cooper": {
+        "status": "COMMISSIONER_EXEMPT",
+        "confirmation": "CURRENT_OFFICIAL_ROSTER"
+      },
+      "final_inactives": "PENDING",
+      "workload": "UNKNOWN",
+      "capture_adapter_recovered": true
+    },
+    "available_by_utc": "2026-09-14T08:53:04.527195+00:00",
+    "publication_time_status": "EXACT_TIMEZONE_UNKNOWN_OFFICIAL_DATE_SEP12; roster captured Sep14"
+  },
+  "travel": {
+    "event_id": "2026_01_DEN_KC",
+    "retrieved_at_utc": "2026-09-14T08:53:04.527195+00:00",
+    "published_at_utc": null,
+    "source_sha256": "ffff5a932a263dd1e80b812a0fe54b210ceeaab608fce87fa41392abdbc6942c",
+    "source": "https://www.denverbroncos.com/news/injuryreport/injury-report-wr-marvin-mims-jr-not-assigned-game-status-for-week-1-vs-chiefs",
+    "state": {
+      "away_route": "DENVER_TO_KANSAS_CITY",
+      "time_zone_direction": "EAST_ONE_TIME_ZONE",
+      "arrival_time": null,
+      "fitted_travel_coefficient_in_recovered_model": false
+    },
+    "available_by_utc": "2026-09-14T08:53:04.527195+00:00"
+  }
+}

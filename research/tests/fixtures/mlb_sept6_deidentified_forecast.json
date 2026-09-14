@@ -1,0 +1,36 @@
+{
+  "schema": "deidentified_copy_of_sept6_phase1_1_mlb",
+  "forecast_cutoff_utc": "2026-09-06T08:54:51Z",
+  "model_id": "mlb.starter_record_baseline.v0_2.dual_estimator.shadow",
+  "registration_scope": "LOCAL_ONLY",
+  "games": [
+    {
+      "game_id": "MLB_DEIDENTIFIED:SEP6:001",
+      "start_utc": "2026-09-06T17:35:00Z",
+      "forecast_record_hash": "1111111111111111111111111111111111111111111111111111111111111111",
+      "data_quality": ["STARTERS_PROBABLE_UNCONFIRMED", "LINEUP_MISSING", "BULLPEN_UNKNOWN"],
+      "lineup_snapshots": {"away": {"lineup_state": "LINEUP_MISSING"}, "home": {"lineup_state": "LINEUP_MISSING"}},
+      "bullpen_snapshots": {"away": {"bullpen_state": "UNKNOWN"}, "home": {"bullpen_state": "UNKNOWN"}},
+      "weather": {"state": "NOT_BOUND_AT_INITIAL_FREEZE"},
+      "roof": {"state": "NOT_BOUND_AT_INITIAL_FREEZE"},
+      "forecast": {
+        "model_id": "mlb.starter_record_baseline.v0_2.dual_estimator.shadow",
+        "forecast_output_hash": "2222222222222222222222222222222222222222222222222222222222222222",
+        "simulation_output_hash": "3333333333333333333333333333333333333333333333333333333333333333",
+        "analytic_home_win_probability": 0.6628119048941357,
+        "analytic_away_win_probability": 0.33718809510586445,
+        "sim_home_win_probability": 0.66641,
+        "sim_away_win_probability": 0.33359,
+        "home_expected_runs": 4.789254380545806,
+        "away_expected_runs": 3.5595548337443415,
+        "mean_margin_home": 1.24756,
+        "mean_total": 8.3491,
+        "margin_p10": -2.0,
+        "margin_p90": 5.0,
+        "total_p10": 5.0,
+        "total_p90": 12.0,
+        "tie_resolution_method": "neutral_50_50_extra_innings"
+      }
+    }
+  ]
+}

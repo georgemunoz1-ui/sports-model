@@ -4384,3 +4384,14 @@ Owner requested spread calibration. Froze design bd8cd3f7e5ba230adf56831aac941ba
 Three-way Brier raw0.546770 -> calibrated0.528574, paired delta-0.018196 with season-bootstrap95%CI[-0.021632,-0.012849]. Nonpush Brier0.262645 ->0.253136; market0.250220. Declared retrospective scoring screen passes; market superiority and reliable calibration are not established. Integer-line mean push probability worsens3.24% ->1.79% versus5.71% observed. Do not relabel the scoring pass as full calibration certification.
 
 MNF saved-draw overlay DEN+2.5 raw60.869% -> calibrated56.314%; new100K margin simulation56.352%, repeat seed/hash identical. Original final-score draws and forecast unchanged. Added canonical --home-spread option and saved-forecast overlay CLI with hash/model binding, alternate-line consistency and explicit win/push/loss. 38 targeted NFL tests pass; full-repository health unavailable in partial checkout. Totals/halftime not calibrated by this layer. See docs/NFL_SPREAD_CALIBRATION.md.
+
+
+## 2026-09-08 — Offline benchmark primitives (draft review, not operational)
+
+Added isolated research evaluation primitives: PIT feature contracts, label-aware chronological folds,
+reserved holdout boundary, binary/multiclass scoring, state quantile metrics, paired date-cluster
+bootstrap, intake validation and pending Toto/TabICL/Granite records. Eight synthetic tests pass.
+No weights downloaded, inference adapters installed, real-data comparison run, or model promoted.
+Full healthcheck attempted on incomplete local source snapshot; required data/modules missing.
+This does not establish canonical repository health. Full integration validation required before merge.
+Remaining work and exact scoring conventions documented in research/README.md. Production unchanged.

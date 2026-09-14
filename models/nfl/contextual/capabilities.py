@@ -29,11 +29,18 @@ def validate_report(report):
             if not r['implemented'] or not r['fitted_artifact_available']: raise ValueError('ACTIVE_WITHOUT_FITTED_IMPLEMENTATION')
             if r['value_status'] in {'missing','rejected','captured_not_numeric'}: raise ValueError('ACTIVE_MISSING_VALUE')
             if not r['pregame_eligible']: raise ValueError('ACTIVE_INELIGIBLE_INPUT')
-            if r['contribution'] is None or r['contribution_method']=='not_applied': raise ValueError('ACTIVE_WITHOUT_CONTRIBUTION')
+            if not r['contribution'] or r['contribution_method']=='not_applied': raise ValueError('ACTIVE_WITHOUT_CONTRIBUTION')
             if not all(math.isfinite(float(x)) for x in r['contribution'].values()): raise ValueError('NONFINITE_CONTRIBUTION')
         elif not r.get('exclusion_reason'): raise ValueError('INACTIVE_WITHOUT_REASON')
         if r['contribution_method']=='paired_monte_carlo_counterfactual':
-            if not r.get('uncertainty') or not r['uncertainty'].get('paired'): raise ValueError('PAIRED_MC_UNCERTAINTY_REQUIRED')
+            u=r.get('uncertainty') or {}
+            if not u.get('paired'): raise ValueError('PAIRED_MC_UNCERTAINTY_REQUIRED')
+            if u.get('estimator') != 'mean_paired_outcome_difference': raise ValueError('MC_ESTIMATOR_REQUIRED')
+            if type(u.get('n_draws')) is not int or u['n_draws'] < 2: raise ValueError('MC_DRAW_COUNT_REQUIRED')
+            se=u.get('standard_error')
+            if not isinstance(se,dict) or set(se)!=set(r['contribution']): raise ValueError('MC_STANDARD_ERROR_REQUIRED')
+            if any(not math.isfinite(float(v)) or float(v)<0 for v in se.values()): raise ValueError('MC_STANDARD_ERROR_INVALID')
+            if u.get('uncertainty_scope') != 'monte_carlo_only': raise ValueError('MC_UNCERTAINTY_SCOPE_REQUIRED')
     digest(report)  # Reject non-JSON/nonfinite evidence.
     return report
 

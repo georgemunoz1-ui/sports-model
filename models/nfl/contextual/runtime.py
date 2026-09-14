@@ -37,7 +37,19 @@ def live_features(artifact,recovered,base,context,event,cutoff):
     x={**bound['features'],**qb_features(r,ratings,artifact['state']['last_qb']),**av,**travel_features(r,artifact['airports'])}
     return x,{'recovered_model':bound,'personnel_absence_roles':role_audit,'availability_mapping_notes':report_audit,'workload':'PRIOR_SNAP_ROLE_PROXY; CURRENT_EXPECTED_WORKLOAD_UNKNOWN','travel':'HOME_AIRPORT_ROUTE_PROXY; ACTUAL_ITINERARY_UNKNOWN','final_inactives':personnel.get('final_inactives','UNKNOWN')}
 
-def run(artifact,recovered,base,context,event,cutoff,n=100000,*,model_id=None,mode=RESEARCH_MODE):
+def run(artifact,recovered,base,context,event,cutoff,n=100000,*,model_id=None,mode=RESEARCH_MODE,mode_artifact=None,market=None,live_state=None):
+    if mode in {'enhanced_pregame','live'}:
+        from ..modes.runtime import enhanced,live
+        if mode_artifact is None:raise ValueError('FITTED_MODE_ARTIFACT_REQUIRED')
+        if utc(mode_artifact['deployment_packaged_at_utc'])>utc(cutoff):raise ValueError('MODE_ARTIFACT_AFTER_CUTOFF')
+        if model_id is not None and model_id!=mode_artifact['model_id']:raise ValueError('EXACT_MODEL_ID_REQUIRED_NO_FALLBACK')
+        expected_schema='nfl.market_ensemble.v1' if mode=='enhanced_pregame' else 'nfl.live_state_hgb.v1'
+        if mode_artifact['schema']!=expected_schema:raise ValueError('MODE_ARTIFACT_SCHEMA')
+        if mode=='live':return live(mode_artifact,market,live_state,event,cutoff,n)
+        if live_state is not None:raise ValueError('LIVE_INPUT_IN_PREGAME')
+        football,_,_=run(artifact,recovered,base,context,event,cutoff,n,model_id=mode_artifact['football_model_id'])
+        return enhanced(football,mode_artifact,market,event,cutoff,n)
+    if market is not None or live_state is not None:raise ValueError('MARKET_OR_LIVE_INPUT_IN_FOOTBALL_ONLY')
     # Legacy callers keep the documented combined default; selectors never fallback.
     if model_id is None:model_id=artifact['arms']['combined']['model_id']
     selected=select(artifact,model_id,mode)
@@ -64,10 +76,13 @@ def run(artifact,recovered,base,context,event,cutoff,n=100000,*,model_id=None,mo
 
 def persist_run(folder,bundle,winner,scores,design):
     import numpy as np
-    folder=Path(folder);folder.mkdir(parents=True,exist_ok=False)
-    if dt.datetime.now(dt.timezone.utc)>=utc(bundle['event']['start_time_utc']):raise ValueError('START_CROSSED_BEFORE_PERSISTENCE')
+    now=dt.datetime.now(dt.timezone.utc)
+    if utc(bundle['cutoff_utc'])>now:raise ValueError('FUTURE_INFORMATION_CUTOFF_AT_WRITE')
+    folder=Path(folder)
+    if bundle.get('mode')!='live' and dt.datetime.now(dt.timezone.utc)>=utc(bundle['event']['start_time_utc']):raise ValueError('START_CROSSED_BEFORE_PERSISTENCE')
+    folder.mkdir(parents=True,exist_ok=False)
     # Exact UTC registration timestamps are actual writes, never invented history.
-    registration={'created_at_utc':dt.datetime.now(dt.timezone.utc).isoformat(),'type':'LOCAL_RESEARCH_ARTIFACT','forecast_identity':bundle['identity'],'design_sha256':digest(design),'previous_hash':None,'canonical_prospective_eligible':False}
+    registration={'created_at_utc':dt.datetime.now(dt.timezone.utc).isoformat(),'type':'LOCAL_RESEARCH_ARTIFACT','mode':bundle.get('mode','research_pregame'), 'information_cutoff_utc':bundle['cutoff_utc'],'forecast_identity':bundle['identity'],'design_sha256':digest(design),'previous_hash':None,'canonical_prospective_eligible':False}
     registration['record_hash']=digest(registration)
     (folder/'registration.jsonl').write_text(json.dumps(registration)+'\n')
     np.save(folder/'winner_draws.npy',winner,allow_pickle=False)

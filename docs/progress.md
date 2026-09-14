@@ -4358,3 +4358,20 @@ Unsupported modes/unknown models do not silently fallback or relabel research.
 Coverage now distinguishes matrix completeness from current-source completeness.
 No coefficients, historical forecasts, promotion verdicts, or market input policy
 changed. Added selection, information-regime, and imputation/coverage checks.
+
+
+### 2026-09-14 — Fitted market-aware and live modes
+
+Owner requested completion of both unavailable modes. Design recorded on branch
+at 318ede5014aed5f219b840c0e254d30804fb69fe before fitting. Added exact model IDs,
+portable fitted artifacts, market/source packet binding and canonical CLI routes.
+Market ensemble selected football weights win=0,margin=0,total=.1 on 2019–2021;
+2022–2025 Brier equals market .210455 versus football .229396. No superiority
+promotion. Live HGB fit 2015–2020, temperature 1.25 from 2021–2022; test 2023–2025:
+816 games/51,719 states, three-way Brier .321788 vs static market .422186. This
+measures access to live state, not superiority to another live model. One actual
+tie in test; no tie-calibration claim. Corrected source OT clock normalization;
+first extraction/fit invalidated, frozen fitting rules retained. Final deployment
+refit through 2025. 29 targeted tests passed; 100K simulation replays match.
+See docs/NFL_MARKET_LIVE_MODELS.md. Original artifacts/coefficients unchanged;
+new modes are fitted research capabilities. Official promotion/action remain off.

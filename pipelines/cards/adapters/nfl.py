@@ -56,3 +56,9 @@ def forecast_event(event,context,simulations=100000,*,model_id=None,mode='resear
     p=result['prediction'];home=p['home_win']>=.5;winner_name=event['home_team'] if home else event['away_team']
     analytic=p['home_win'] if home else 1-p['home_win'];mc=result['winner_simulation']['home_win_probability'];mc=mc if home else 1-mc
     return {'model_id':result['model_id'],'model_winner':winner_name,'model_p':analytic,'sim_p':mc,'analytic_p':analytic,'stochastic_sim_p':mc,'projected_margin':p['home_margin'] if home else -p['home_margin'],'projected_total':p['total_points'],'projected_home_points':result['score_centers']['home'],'projected_away_points':result['score_centers']['away'],'forecast_tier':'REDUCED','data_quality':'PARTIAL_CURRENT_CONTEXT_APPLIED','dose':0.0,'coverage_label':result['coverage_label'],'model_state_config_hash':result['model_artifact_sha256'],'input_snapshot_hash':digest(result['features']),'model_input_snapshot':result['features'],'diagnostics':result,'simulation':{'binary':result['winner_simulation'],'joint_scores':result['score_simulation']},'warnings':result['warnings'],'provenance':{'source_fetches':context['package']['source_fetches'],'model_id':result['model_id']},'action_authority':False}
+
+
+def calibrate_spreads(frozen_forecast,score_draws,home_handicaps,*,n=100000):
+    """Downstream calibrated spread output; never changes generation inputs."""
+    from models.nfl.contextual.spread_runtime import build_overlay
+    return build_overlay(frozen_forecast,score_draws,home_handicaps,n=n)

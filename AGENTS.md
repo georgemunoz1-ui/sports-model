@@ -74,3 +74,12 @@ NFL market-aware and live modes are now fitted, not proposed-only. See
 with that pregame market prior and a current pre-play packet. Keep football-only
 research available. Do not call the market-weighted output an independent edge,
 or a categorical live winner simulation a drive/score simulator.
+
+
+For full-game NFL spread calibration use the integrated command with
+`--home-spread HANDICAP` (home-team orientation), or
+`scripts/run_nfl_spread_calibration.py` on a preserved forecast directory.
+Read `docs/NFL_SPREAD_CALIBRATION.md`. It emits both raw and calibrated research
+probabilities. The historical scoring screen passed, but integer push reliability
+worsened and market superiority is unestablished. Do not call it validated
+spread pricing or apply it to totals, first halves, or other model IDs.

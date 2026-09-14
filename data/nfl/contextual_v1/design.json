@@ -1,0 +1,88 @@
+{
+  "experiment_id": "nfl.integrated_context.v1.research",
+  "created_at_utc": "2026-09-14T09:09:41.381128+00:00",
+  "status": "DESIGN_RECORDED_BEFORE_FIT",
+  "training_min_season": 2015,
+  "first_oof_season": 2019,
+  "last_evaluation_season": 2025,
+  "evaluation_status": "REUSED_RETROSPECTIVE_HISTORY_NOT_PIT_VALIDATION",
+  "models": [
+    "base",
+    "qb",
+    "availability",
+    "travel",
+    "combined"
+  ],
+  "base_feature_contract": "recovered_epa_v0_2_18_features",
+  "fit_rule": {
+    "logistic_C": 0.1,
+    "ridge_alpha": 50,
+    "imputer": "TRAINING_MEDIAN",
+    "scaler": "TRAINING_STANDARD",
+    "parameter_selection": "NONE_FIXED_BEFORE_EVALUATION",
+    "final_fit_seasons": [
+      2015,
+      2025
+    ]
+  },
+  "qb_rule": {
+    "prior_dropback_shrinkage": 300,
+    "season_retention": 0.55,
+    "updates": "AFTER_ENTIRE_WEEK",
+    "identity": "GSIS_STARTER_FROM_HISTORICAL_SCHEDULE; live official expected QB",
+    "caveat": "HISTORICAL_STARTER_ID_IS_RETROSPECTIVELY_RECORDED_NOT_ARCHIVED_PREGAME"
+  },
+  "availability_rule": {
+    "groups": [
+      "QB",
+      "RB",
+      "WRTE",
+      "OL",
+      "DL",
+      "LB",
+      "DB"
+    ],
+    "statuses": [
+      "OUT",
+      "QUESTIONABLE",
+      "DOUBTFUL"
+    ],
+    "practice": "DNP_COUNT_ONLY; not automatically OUT",
+    "prior_snap_window": 4,
+    "snap_feature": "PRIOR_OFFENSE_OR_DEFENSE_SHARE_ON_OUT_REPORT",
+    "coverage": "MISSING_REPORT_NOT_HEALTHY",
+    "late_modified_reports": "EXCLUDE_WHEN_KNOWN_AFTER_KICKOFF",
+    "missing_published_times": "RETAIN_RETROSPECTIVE_FLAG"
+  },
+  "travel_rule": {
+    "distance": "TEAM_HOME_AIRPORT_TO_HOME_TEAM_AIRPORT_PROXY_KM",
+    "timezone": "IANA_EFFECTIVE_OFFSET_DIFFERENCE",
+    "neutral_and_old_relocations": "UNKNOWN_NOT_IMPUTED_CURRENT_CITY",
+    "actual_itinerary": "NOT_OBSERVED"
+  },
+  "scoring": {
+    "winner": "FINAL_HOME_WIN_BINARY_EXCLUDES_ACTUAL_TIES",
+    "margin": "FINAL_HOME_MINUS_AWAY_INCLUDING_OT",
+    "total": "FINAL_TOTAL_INCLUDING_OT",
+    "all_arms_identical_games": true
+  },
+  "screen": {
+    "primary": "PAIRED_BRIER_COMBINED_MINUS_BASE",
+    "minimum_improvement": 0.002,
+    "season_bootstrap_replicates": 10000,
+    "bootstrap_seed": 2026091409,
+    "ci_upper_required_below": 0,
+    "logloss_delta_max": 0,
+    "margin_mae_delta_max": 0.1,
+    "promotion_from_this_test": false
+  },
+  "simulation": {
+    "n": 100000,
+    "distribution": "PAIRED_OUT_OF_FOLD_FINAL_SCORE_RESIDUAL_BOOTSTRAP",
+    "ties": "RETAIN_THIRD_OUTCOME",
+    "overtime": "ALREADY_IN_FINAL_SCORE_TARGET_NO_ADDITIONAL_OT",
+    "settlement": "RESEARCH_ONLY_EXACT_CONTRACT_REQUIRED"
+  },
+  "market_input": false,
+  "action_authority": false
+}

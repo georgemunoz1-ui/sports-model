@@ -1,0 +1,147 @@
+{
+  "source_manifest": [
+    {
+      "file": "../nfl_recovered_repo/data/nfl/source/nflverse_2026-08-10T1930Z/nfl_games.csv",
+      "sha256": "59b06a7d7975da88f72fa370fe72cc4fd3aa551cda256c4c1e42e10c720cb850"
+    },
+    {
+      "file": "data/nfl/contextual_v1/fit_03/oof_predictions.csv",
+      "sha256": "cb11bb530bb7d8149e0fbae8f6d6cc1775f6879ab157051e3c86dff525092510"
+    },
+    {
+      "file": "../nfl_recovered_repo/data/nfl/source/nflverse_2026-08-10T1930Z/play_by_play_2015.csv.gz",
+      "sha256": "837811471df06c43d55faede7a363274484da11e71f49d8e0801baede3a5965d"
+    },
+    {
+      "file": "../nfl_recovered_repo/data/nfl/source/nflverse_2026-08-10T1930Z/play_by_play_2016.csv.gz",
+      "sha256": "dc1703d9aae3ec697ac2787617f82b6f074d0c151e1a54f8217f570a63dcb5ed"
+    },
+    {
+      "file": "../nfl_recovered_repo/data/nfl/source/nflverse_2026-08-10T1930Z/play_by_play_2017.csv.gz",
+      "sha256": "74032964ca6bdfc5bbe186253231a533d2d82aa531fac02b9382da01b3a8b34e"
+    },
+    {
+      "file": "../nfl_recovered_repo/data/nfl/source/nflverse_2026-08-10T1930Z/play_by_play_2018.csv.gz",
+      "sha256": "d37899610b397b96a90da6902827de5b46c5457b93e0e16d5f95a8eb524e4a7d"
+    },
+    {
+      "file": "../nfl_recovered_repo/data/nfl/source/nflverse_2026-08-10T1930Z/play_by_play_2019.csv.gz",
+      "sha256": "b764668137052be23745953cbc33fa17e537a70c81e9b73785a19a15e7288216"
+    },
+    {
+      "file": "../nfl_recovered_repo/data/nfl/source/nflverse_2026-08-10T1930Z/play_by_play_2020.csv.gz",
+      "sha256": "8f8be4e1f53aa8b504b52b1a4f38559b4d9a6bf5885a4e70bb50fba4228f4838"
+    },
+    {
+      "file": "../nfl_recovered_repo/data/nfl/source/nflverse_2026-08-10T1930Z/play_by_play_2021.csv.gz",
+      "sha256": "e8743a568f99667a8bdcd29ba12224ee1782ad2b7916bee78ee335c099383739"
+    },
+    {
+      "file": "../nfl_recovered_repo/data/nfl/source/nflverse_2026-08-10T1930Z/play_by_play_2022.csv.gz",
+      "sha256": "0c69a71eb39498956c7b1d5c1ca52ce7fe679934a95d1af249facb5ea9829ea4"
+    },
+    {
+      "file": "../nfl_recovered_repo/data/nfl/source/nflverse_2026-08-10T1930Z/play_by_play_2023.csv.gz",
+      "sha256": "4649804ee0f0a40b41e51ec75a1ce921949d7fab5459213488656b92f78560e8"
+    },
+    {
+      "file": "../nfl_recovered_repo/data/nfl/source/nflverse_2026-08-10T1930Z/play_by_play_2024.csv.gz",
+      "sha256": "f7075073401727c98e2c22f88b5ee9a178a98f1e53e10033f972c8bd6f0e940a"
+    },
+    {
+      "file": "../nfl_recovered_repo/data/nfl/source/nflverse_2026-08-10T1930Z/play_by_play_2025.csv.gz",
+      "sha256": "9c25c980f103d58fae5a0675f572aa4857e4672f6599973c1bc8a50e586a04e6"
+    }
+  ],
+  "completed_games": 2895,
+  "market_complete_games": 2894,
+  "excluded_market_games": [
+    {
+      "game_id": "2017_04_CHI_GB",
+      "season": 2017
+    }
+  ],
+  "sampled_live_states": 183966,
+  "live_seasons": {
+    "2015": {
+      "source_rows": 48122,
+      "sampled_states": 16334,
+      "games": 256
+    },
+    "2016": {
+      "source_rows": 47651,
+      "sampled_states": 16304,
+      "games": 256
+    },
+    "2017": {
+      "source_rows": 47245,
+      "sampled_states": 16187,
+      "games": 255
+    },
+    "2018": {
+      "source_rows": 47109,
+      "sampled_states": 16318,
+      "games": 256
+    },
+    "2019": {
+      "source_rows": 47260,
+      "sampled_states": 16245,
+      "games": 256
+    },
+    "2020": {
+      "source_rows": 47705,
+      "sampled_states": 16266,
+      "games": 256
+    },
+    "2021": {
+      "source_rows": 49922,
+      "sampled_states": 17326,
+      "games": 272
+    },
+    "2022": {
+      "source_rows": 49434,
+      "sampled_states": 17267,
+      "games": 271
+    },
+    "2023": {
+      "source_rows": 49665,
+      "sampled_states": 17354,
+      "games": 272
+    },
+    "2024": {
+      "source_rows": 49492,
+      "sampled_states": 17311,
+      "games": 272
+    },
+    "2025": {
+      "source_rows": 48771,
+      "sampled_states": 17054,
+      "games": 272
+    }
+  },
+  "market_join_games": 1871,
+  "features": [
+    "home_score",
+    "away_score",
+    "margin",
+    "seconds_remaining",
+    "quarter_seconds_remaining",
+    "quarter",
+    "possession_home",
+    "yardline_100",
+    "down",
+    "yards_to_go",
+    "home_timeouts",
+    "away_timeouts",
+    "pregame_logit",
+    "margin_time_scaled",
+    "possession_field_position"
+  ],
+  "historical_market_timestamp_status": "NOT_ARCHIVED",
+  "pbp_vintage": "CORRECTED_RETROSPECTIVE_NOT_ORIGINAL_LIVE_RECEIPTS",
+  "output_hashes": {
+    "games.csv": "708929b837db8b287db462293a798882d5437d433f87bb8eb242a19d56a34d4d",
+    "market.csv": "53815c20660c75fed0331383304d6d5462c072003d07594c604c19c02eb09a03",
+    "live.csv": "4977d5d96d58d8032c57163cbbc746ebd35d6188b69c2c8b30435319d801c774"
+  }
+}

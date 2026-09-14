@@ -1,0 +1,20 @@
+{
+  "schema": "nfl.operating_modes.v1",
+  "models": {
+    "enhanced_pregame": {
+      "file": "market_model.json",
+      "model_id": "nfl.market_ensemble.v1.research",
+      "model_digest": "05e0b9b5a9977de27a9c2f47212326ae0deb73bb91edc94873c18774d7c00449",
+      "prediction_status": "FITTED_RESEARCH_NOT_PRODUCTION_PROMOTION"
+    },
+    "live": {
+      "file": "live_model.json",
+      "model_id": "nfl.live_state_hgb.v1.research",
+      "model_digest": "77f36d5ba0efc26096dfe46a379a46165fd9cb6a4151bb1d53ad77f4b31d9b3e",
+      "prediction_status": "FITTED_RESEARCH_NOT_PRODUCTION_PROMOTION"
+    }
+  },
+  "silent_fallback": false,
+  "live_current_game_state_required": true,
+  "official_pregame_model": null
+}

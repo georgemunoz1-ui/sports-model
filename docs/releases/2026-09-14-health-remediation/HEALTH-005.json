@@ -11,6 +11,7 @@
   },
   "root_cause": "t16_clobber_protection calls live manifest audit; unregistered module fails it",
   "remediation": "Fix module registration and enforce capability metadata/hash; no acceptance criteria changed",
-  "status": "LOCAL_16_OF_16_PENDING_REMOTE",
-  "closure_rule": "Relevant regression and clean remote health checks pass; unresolved source/recovery evidence cannot be waived"
+  "status": "VERIFIED_REMOTE_REPAIR",
+  "closure_rule": "Relevant regression and clean remote health checks pass; unresolved source/recovery evidence cannot be waived",
+  "verification": "verification.json"
 }

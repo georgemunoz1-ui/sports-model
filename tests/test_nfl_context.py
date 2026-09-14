@@ -69,6 +69,29 @@ class Integrity(unittest.TestCase):
         self.assertEqual(load_adapter('nfl').__name__,nfl.__name__)
         e=nfl.load_schedule('2026-09-14',self.cutoff)[0];c=nfl.build_context([e],self.cutoff);raw=nfl.forecast_event(e,c,1000);row=normalize(e,raw)
         self.assertEqual(row['dose'],0);self.assertEqual(row['model_id'],'nfl.integrated_context.combined.v1.research');self.assertIn('score_simulation',row['diagnostics'])
+    def test_explicit_arm_no_fallback(self):
+        args=(self.artifact,self.recovered,self.base,self.context,self.event,self.cutoff,1000)
+        with self.assertRaisesRegex(ValueError,'EXACT_MODEL_ID_REQUIRED'):run(*args,model_id='missing')
+        b,_,scores=run(*args,model_id=self.artifact['arms']['qb']['model_id'])
+        e=nfl.load_schedule('2026-09-14',self.cutoff)[0];c=nfl.build_context([e],self.cutoff)
+        with self.assertRaisesRegex(ValueError,'EXACT_MODEL_ID_REQUIRED'):nfl.forecast_event(e,c,1000,model_id='')
+        self.assertEqual(b['selected_arm'],'qb');self.assertEqual(b['prediction'],b['arms']['qb']['prediction'])
+        self.assertIsNone(scores);self.assertEqual(b['score_simulation']['status'],'UNAVAILABLE_FOR_SELECTED_ARM')
+        self.assertNotIn('AIRPORT_TRAVEL_PROXY',b['current_context_numerically_applied'])
+    def test_information_regime_no_relabeling(self):
+        args=(self.artifact,self.recovered,self.base,self.context,self.event,self.cutoff,1000)
+        for mode in ('official_pregame','enhanced_pregame','live','postgame_research','typo'):
+            with self.assertRaisesRegex(ValueError,'MODE_UNAVAILABLE'):run(*args,mode=mode)
+        c=copy.deepcopy(self.context);c['market']={'home_probability':.8}
+        with self.assertRaisesRegex(ValueError,'UNKNOWN_CONTEXT'):run(self.artifact,self.recovered,self.base,c,self.event,self.cutoff,1000)
+    def test_coverage_does_not_claim_observed_workload(self):
+        from models.nfl.contextual.operating import coverage
+        from models.nfl.contextual.runtime import live_features
+        x,a=live_features(self.artifact,self.recovered,self.base,self.context,self.event,self.cutoff)
+        x['wind_mph']=None
+        out=coverage(self.artifact['arms']['combined'],x,a)
+        self.assertEqual(out['matrix_columns_declared'],100);self.assertIn('wind_mph',out['imputed_feature_names'])
+        self.assertIn('UNKNOWN',out['workload_source']);self.assertTrue(out['matrix_coverage_is_not_source_completeness'])
     def test_missing_date_not_zero_slate(self):
         with self.assertRaisesRegex(ValueError,'DATE_NOT_CAPTURED'):nfl.load_schedule('2026-09-21',self.cutoff)
 

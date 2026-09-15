@@ -63,8 +63,11 @@ def main():
     p.add_argument('--season',type=int,default=2026);p.add_argument('--week',type=int,default=1)
     p.add_argument('--historical-source',type=Path);a=p.parse_args();a.output.mkdir(parents=True,exist_ok=False)
     records=json.loads((a.source/'receipt.json').read_text());receipt=next(r for r in records if r['filename']==f'play_by_play_{a.season}.csv')
+    schedule_receipt=next(r for r in records if r['filename']=='games.csv')
+    if bf.sha256_file(a.source/'games.csv')!=schedule_receipt['sha256']:raise ValueError('SCHEDULE_RAW_HASH_MISMATCH')
     all_games=pd.read_csv(a.source/'games.csv',low_memory=False);schedule=all_games.copy();schedule=schedule[(schedule.season==a.season)&(schedule.week==a.week)&(schedule.game_type=='REG')]
-    params=json.loads((ROOT/'data/nfl/contextual_v1/recovered_parameters.json').read_text())
+    from models.nfl.contextual.model import load_artifact
+    params=load_artifact(ROOT/'data/nfl/contextual_v1/model_packed.json')['arms']['base']
     states=rebuild_history(a.historical_source,a.output,params) if a.historical_source else None
     requests=all_games[(all_games.season==a.season)&(all_games.week==a.week+1)&(all_games.game_type=='REG')].to_dict('records')
     # Drop realized targets: this is a state sensitivity demonstration, not a fresh card.
@@ -72,6 +75,24 @@ def main():
         for key in ('home_score','away_score','result','total'):request[key]=None
     result=run_nfl_assimilation_check(path=a.source/receipt['filename'],receipt=receipt,schedule=schedule,
       cutoff=dt.datetime.now(dt.timezone.utc).isoformat(),archive=a.output/'snapshots',output=a.output/'current_week',prior_states=states,params=params,forecast_requests=requests)
+    if result['state_update_applied']:
+        from models.nfl.contextual.week2 import require_assimilation
+        after=json.loads((a.output/'current_week/team_state.json').read_text())
+        evidence={'audit':result,'state_before':serialize_states(states),'state_after':after,
+          'base_feature_code_sha256':bf.sha256_file(ROOT/'models/nfl/contextual/base_features.py'),
+          'schedule_receipt':schedule_receipt}
+        event_rows={};checks={}
+        for request in requests:
+            row=bf._feature_row(pd.Series(request),bf.TeamState(**after[request['home_team']]),bf.TeamState(**after[request['away_team']]))
+            row={k:(None if pd.isna(v) else v) for k,v in row.items()}
+            event={'event_id':request['game_id'],'home_team':request['home_team'],'away_team':request['away_team'],
+                   'gameday':request['gameday'],'gametime':request.get('gametime'),'location':request['location']}
+            checks[event['event_id']]=require_assimilation(row,{'assimilation':evidence},event,result['cutoff_utc'])
+            event_rows[event['event_id']]=row
+        write_once(a.output/'week2_state_packet.json',{'scope':'STATE_ONLY_NOT_FRESH_PREGAME_CONTEXT',
+          'forecast_parameter_model_id':params['model_id'],'forecast_parameter_sha256':digest(params),
+          'assimilation':evidence,'event_base_rows':event_rows,'runtime_state_checks':checks,
+          'official_gamebook_clearance':False,'action_authority':False})
     if states:
         packet=json.loads((ROOT/'data/nfl/contextual_v1/event_package_v2.json').read_text());base=packet['event_inputs']['2026_01_DEN_KC']['base']
         game=schedule[schedule.game_id=='2026_01_DEN_KC'].iloc[0]

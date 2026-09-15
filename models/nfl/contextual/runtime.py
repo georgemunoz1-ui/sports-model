@@ -53,8 +53,10 @@ def run(artifact,recovered,base,context,event,cutoff,n=100000,*,model_id=None,mo
         football,_,_=run(artifact,recovered,base,context,event,cutoff,n,model_id=mode_artifact['football_model_id'])
         return enhanced(football,mode_artifact,market,event,cutoff,n)
     if market is not None or live_state is not None:raise ValueError('MARKET_OR_LIVE_INPUT_IN_FOOTBALL_ONLY')
-    # Legacy callers keep the documented combined default; selectors never fallback.
-    if model_id is None:model_id=artifact['arms']['combined']['model_id']
+    from .week2 import applies,policy,selection,require_assimilation,coherence
+    week2=applies(base,event)
+    if model_id is None:model_id=policy()['default_reference_model'] if week2 else artifact['arms']['combined']['model_id']
+    state_flow=require_assimilation(base,context,event,cutoff) if week2 else None
     selected=select(artifact,model_id,mode)
     if utc(cutoff)>=utc(event['start_time_utc']):raise ValueError('NOT_PREGAME')
     x,audit=live_features(artifact,recovered,base,context,event,cutoff)
@@ -64,17 +66,28 @@ def run(artifact,recovered,base,context,event,cutoff,n=100000,*,model_id=None,mo
         arms[arm]=predict(params,feature)
     from .capabilities import describe_run_capabilities
     capability_report=describe_run_capabilities(artifact['arms'][selected],x,context,base,cutoff,event,digest(artifact),arms[selected]['contribution_trace'])
-    code_hashes={name:hashlib.sha256((Path(__file__).parent/name).read_bytes()).hexdigest() for name in ('runtime.py','personnel.py','model.py','features.py','recovered_inference.py','operating.py','capabilities.py','settlement.py','forecast_stream.py')}
+    code_hashes={name:hashlib.sha256((Path(__file__).parent/name).read_bytes()).hexdigest() for name in ('runtime.py','personnel.py','model.py','features.py','recovered_inference.py','operating.py','capabilities.py','settlement.py','forecast_stream.py','week2.py','joint_distribution.py')}
     identity=digest({'event':event,'features':x,'artifact':artifact,'context':context,'runtime':'nfl.integrated_context.v1','model_id':model_id,'mode':mode,'code_hashes':code_hashes})
     p=arms[selected]['prediction'];winner,win_info=bernoulli_simulation(p['home_win'],identity,n)
     scores=None;score_info={'status':'UNAVAILABLE_FOR_SELECTED_ARM','reason':'FROZEN_JOINT_RESIDUAL_POOL_IS_COMBINED_SPECIFIC'}
     if selected=='combined':scores,score_info=simulate_joint(p['home_margin'],p['total_points'],p['home_win'],artifact['final_score_residuals'],artifact['simulation_v2']['tie_rate'],identity,n)
+    exact=None
+    if selected=='combined':
+        from .joint_distribution import kernel,summary
+        support,weights=kernel(p['home_margin'],p['total_points'],p['home_win'],artifact['final_score_residuals'],artifact['simulation_v2']['tie_rate'])
+        exact=summary(support,weights)
     feature_contributions={t:arms[selected]['contribution_trace'][t]['features'] for t in p}
     means={'home':(p['total_points']+p['home_margin'])/2,'away':(p['total_points']-p['home_margin'])/2}
     result={'schema':'nfl.integrated_context_forecast.v1','model_id':model_id,'event':event,'cutoff_utc':cutoff,'identity':identity,'model_artifact_sha256':digest(artifact),'features':x,'audit':audit,'arms':arms,'prediction':p,'score_centers':means,'winner_simulation':win_info,'score_simulation':score_info,'contribution_trace':feature_contributions,'current_context_numerically_applied':['QB_PRIOR_AND_CHANGE','INJURY_POSITION_GROUPS','PRACTICE','PRIOR_SNAP_WORKLOAD','AIRPORT_TRAVEL_PROXY','WEATHER','REST'],'coverage_label':'FITTED_RESEARCH_FEATURES_WITH_UNRESOLVED_CURRENT_STATE','research_only':True,'canonical_prospective_eligible':False,'market_input':False,'action_authority':False,'warnings':['NEW_FIT_NOT_PROSPECTIVELY_VALIDATED','HISTORICAL_REPORT_AND_STARTER_PIT_LIMITATIONS','FINAL_INACTIVES_PENDING','PRIOR_SNAP_SHARE_IS_NOT_PROMISED_WORKLOAD','TRAVEL_IS_AIRPORT_PROXY','EMPIRICAL_SCORE_SETTLEMENT_UNVALIDATED']}
     if audit['final_inactives']=='VERIFIED':
         result['warnings'].remove('FINAL_INACTIVES_PENDING')
         result['warnings'].append('FINAL_INACTIVES_VERIFIED; NON_INJURY_SCRATCH_IMPACT_UNFITTED')
+    result['selection_policy']=selection(model_id)
+    result['coherence']=coherence(p,exact)
+    result['joint_distribution']=exact
+    result['assimilation']=state_flow
+    result['warnings'].append(result['selection_policy']['presentation_role']+':'+result['selection_policy']['screen_status'])
+    if result['coherence']['cross_head_direction_disagreement']:result['warnings'].append('CROSS_HEAD_DIRECTION_DISAGREEMENT; RIDGE_CENTERS_ARE_NOT_JOINT_EXPECTATIONS')
     result['code_hashes']=code_hashes
     result['capability_report']=capability_report
     result['mode']=mode

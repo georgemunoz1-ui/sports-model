@@ -376,6 +376,16 @@ def render_md(card):
     if pit.get("pit_status") not in (None, "PIT_ALIGNED"):
         lines.extend(["> **PIT WARNING:** this diagnostic card must not be represented as an exact requested-cutoff replay.", ""])
 
+    for row in card["forecasts"]:
+        diagnostic=row.get("diagnostics") or {}
+        selection=diagnostic.get("selection_policy")
+        if selection:
+            lines.extend([f"**NFL selection:** {selection['presentation_role']} · screen {selection['screen_status']} · headline eligible: {selection['headline_eligible']}", ""])
+            coherence=diagnostic.get("coherence", {})
+            lines.extend(["Independent-head directions (home-oriented): `"+json.dumps(coherence.get("home_oriented_signs",{}))+"`. Joint score expectations appear only when available; Ridge centers are diagnostic.", ""])
+            flow=diagnostic.get("assimilation")
+            lines.extend(["Week-state assimilation: **"+(flow.get("status","UNVERIFIED") if flow else "NOT_DEMONSTRATED_FOR_THIS_RUN")+"**", ""])
+
     lines.extend([
         "| Game | Tier | Dose | Winner | Analytic P | Stochastic Sim P | Gap | Divergence | Margin | Total | Grade | Warnings |",
         "|---|---|---:|---|---:|---:|---:|---|---:|---:|---|---|",

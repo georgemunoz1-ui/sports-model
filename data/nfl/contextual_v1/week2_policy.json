@@ -1,0 +1,29 @@
+{
+  "policy_id": "nfl.week2.selection.v2",
+  "effective_season": 2026,
+  "effective_week": 2,
+  "screen_evidence_path": "data/nfl/contextual_v1/evaluation.json",
+  "screen_evidence_sha256": "fcbbcae07a132314dc817ecdbca30442db1232a2276769e661080e1fc2afc84a",
+  "rule": "Select the best saved arm by all-games retrospective Brier, with log loss and hit rate disclosed. Failed arms cannot be default. Selection is provisional research leadership, not official release.",
+  "models": {
+    "nfl.integrated_context.base.v1.research": "REFERENCE",
+    "nfl.integrated_context.combined.v1.research": "FAILED",
+    "nfl.integrated_context.qb.v1.research": "SELECTED_DEFAULT",
+    "nfl.integrated_context.availability.v1.research": "UNSCREENED",
+    "nfl.integrated_context.travel.v1.research": "UNSCREENED"
+  },
+  "default_reference_model": "nfl.integrated_context.qb.v1.research",
+  "action_authority": false,
+  "selection_basis": {
+    "primary": "all-games Brier (minimize)",
+    "tie_break": [
+      "log_loss",
+      "winner_accuracy"
+    ],
+    "population": "1865 non-tied retrospective out-of-fold games; six ties excluded",
+    "prospective_validation": false,
+    "selection_after_inspecting_results": true,
+    "uses_2026_DEN_KC_outcome": false,
+    "user_authorized_default_selection": true
+  }
+}

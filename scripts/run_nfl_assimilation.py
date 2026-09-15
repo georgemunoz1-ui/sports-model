@@ -63,11 +63,15 @@ def main():
     p.add_argument('--season',type=int,default=2026);p.add_argument('--week',type=int,default=1)
     p.add_argument('--historical-source',type=Path);a=p.parse_args();a.output.mkdir(parents=True,exist_ok=False)
     records=json.loads((a.source/'receipt.json').read_text());receipt=next(r for r in records if r['filename']==f'play_by_play_{a.season}.csv')
-    schedule=pd.read_csv(a.source/'games.csv',low_memory=False);schedule=schedule[(schedule.season==a.season)&(schedule.week==a.week)&(schedule.game_type=='REG')]
+    all_games=pd.read_csv(a.source/'games.csv',low_memory=False);schedule=all_games.copy();schedule=schedule[(schedule.season==a.season)&(schedule.week==a.week)&(schedule.game_type=='REG')]
     params=json.loads((ROOT/'data/nfl/contextual_v1/recovered_parameters.json').read_text())
     states=rebuild_history(a.historical_source,a.output,params) if a.historical_source else None
+    requests=all_games[(all_games.season==a.season)&(all_games.week==a.week+1)&(all_games.game_type=='REG')].to_dict('records')
+    # Drop realized targets: this is a state sensitivity demonstration, not a fresh card.
+    for request in requests:
+        for key in ('home_score','away_score','result','total'):request[key]=None
     result=run_nfl_assimilation_check(path=a.source/receipt['filename'],receipt=receipt,schedule=schedule,
-      cutoff=dt.datetime.now(dt.timezone.utc).isoformat(),archive=a.output/'snapshots',output=a.output/'current_week',prior_states=states,params=params)
+      cutoff=dt.datetime.now(dt.timezone.utc).isoformat(),archive=a.output/'snapshots',output=a.output/'current_week',prior_states=states,params=params,forecast_requests=requests)
     if states:
         packet=json.loads((ROOT/'data/nfl/contextual_v1/event_package_v2.json').read_text());base=packet['event_inputs']['2026_01_DEN_KC']['base']
         game=schedule[schedule.game_id=='2026_01_DEN_KC'].iloc[0]

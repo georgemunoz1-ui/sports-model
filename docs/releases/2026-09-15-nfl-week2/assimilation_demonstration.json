@@ -1,0 +1,50 @@
+{
+  "source_run": "https://github.com/georgemunoz1-ui/sports-model/actions/runs/35030382886",
+  "state_packet_sha256": "11f1a24ab036743fef57dbc44d410528211f190e0cccf760cbf68281b1302b03",
+  "completed_week1_games": 16,
+  "week2_runtime_state_checks": 16,
+  "qb_aggregates_applied": 37,
+  "qb_state_sha256": "674d0e1041b7db493533c4ffa98c27e47fe3f542caafeac1f6555ed19e4e3298",
+  "default_model": "nfl.integrated_context.qb.v1.research",
+  "scope": "LOCAL_END_TO_END_USING_HASH_VERIFIED_REMOTE_HISTORICAL_STATE; SENSITIVITY_NOT_FRESH_CARD",
+  "examples": {
+    "2026_02_JAX_DEN": {
+      "model_id": "nfl.integrated_context.qb.v1.research",
+      "prediction_before": {
+        "home_win": 0.5028284986418207,
+        "home_margin": 0.33059700672808057,
+        "total_points": 44.265877729363694
+      },
+      "prediction_after": {
+        "home_win": 0.3689494219676145,
+        "home_margin": -4.303102063662121,
+        "total_points": 43.28555851933082
+      },
+      "delta": {
+        "home_win": -0.13387907667420618,
+        "home_margin": -4.633699070390201,
+        "total_points": -0.9803192100328744
+      },
+      "scope": "STATE_SENSITIVITY_ONLY; SCHEDULE_QB_IDS_NOT_FRESH_CONFIRMED_STARTERS"
+    },
+    "2026_02_IND_KC": {
+      "model_id": "nfl.integrated_context.qb.v1.research",
+      "prediction_before": {
+        "home_win": 0.6230108869471689,
+        "home_margin": 4.2260813136782645,
+        "total_points": 45.887484742156886
+      },
+      "prediction_after": {
+        "home_win": 0.724566835686263,
+        "home_margin": 8.277981105332962,
+        "total_points": 45.87123324372686
+      },
+      "delta": {
+        "home_win": 0.10155594873909413,
+        "home_margin": 4.051899791654698,
+        "total_points": -0.016251498430023048
+      },
+      "scope": "STATE_SENSITIVITY_ONLY; SCHEDULE_QB_IDS_NOT_FRESH_CONFIRMED_STARTERS"
+    }
+  }
+}

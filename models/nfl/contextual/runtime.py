@@ -17,6 +17,8 @@ def live_features(artifact,recovered,base,context,event,cutoff):
     for v in ratings.values():v['sum']*=.55**years;v['n']*=.55**years
     r={**base,'gameday':event['gameday'],'gametime':event['gametime'],'location':event.get('location','Home')}
     personnel=context.get('personnel',{}).get('state',{});reports={};report_audit=[]
+    from .personnel import final_availability,explain_roles
+    final=final_availability(personnel,event,cutoff)
     for side in ('home','away'):
         team=event[side+'_team'];q=personnel.get('quarterbacks',{}).get(team,{})
         r[side+'_qb_id']=q.get('id')
@@ -34,8 +36,9 @@ def live_features(artifact,recovered,base,context,event,cutoff):
         reports.setdefault(team,[]).append({'full_name':absence['player'],'position':absence['position'],'report_status':'OUT','practice_status':None})
         report_audit.append(absence['status']+'_MAPPED_TO_OUT_PROXY; HISTORICAL_RESERVE_COVERAGE_UNVERIFIED')
     av,role_audit=availability_features(r,reports,artifact['state']['roles'])
+    role_audit=explain_roles(role_audit,artifact['state']['roles'],event['gameday'],personnel.get('role_resolutions',{}))
     x={**bound['features'],**qb_features(r,ratings,artifact['state']['last_qb']),**av,**travel_features(r,artifact['airports'])}
-    return x,{'recovered_model':bound,'personnel_absence_roles':role_audit,'availability_mapping_notes':report_audit,'workload':'PRIOR_SNAP_ROLE_PROXY; CURRENT_EXPECTED_WORKLOAD_UNKNOWN','travel':'HOME_AIRPORT_ROUTE_PROXY; ACTUAL_ITINERARY_UNKNOWN','final_inactives':personnel.get('final_inactives','UNKNOWN')}
+    return x,{'recovered_model':bound,'personnel_absence_roles':role_audit,'availability_mapping_notes':report_audit,'workload':'PRIOR_SNAP_ROLE_PROXY; CURRENT_EXPECTED_WORKLOAD_UNKNOWN','travel':'HOME_AIRPORT_ROUTE_PROXY; ACTUAL_ITINERARY_UNKNOWN','final_inactives':final['status'],'final_availability':final}
 
 def run(artifact,recovered,base,context,event,cutoff,n=100000,*,model_id=None,mode=RESEARCH_MODE,mode_artifact=None,market=None,live_state=None):
     if mode in {'enhanced_pregame','live'}:
@@ -61,7 +64,7 @@ def run(artifact,recovered,base,context,event,cutoff,n=100000,*,model_id=None,mo
         arms[arm]=predict(params,feature)
     from .capabilities import describe_run_capabilities
     capability_report=describe_run_capabilities(artifact['arms'][selected],x,context,base,cutoff,event,digest(artifact),arms[selected]['contribution_trace'])
-    code_hashes={name:hashlib.sha256((Path(__file__).parent/name).read_bytes()).hexdigest() for name in ('runtime.py','model.py','features.py','recovered_inference.py','operating.py','capabilities.py','settlement.py','forecast_stream.py')}
+    code_hashes={name:hashlib.sha256((Path(__file__).parent/name).read_bytes()).hexdigest() for name in ('runtime.py','personnel.py','model.py','features.py','recovered_inference.py','operating.py','capabilities.py','settlement.py','forecast_stream.py')}
     identity=digest({'event':event,'features':x,'artifact':artifact,'context':context,'runtime':'nfl.integrated_context.v1','model_id':model_id,'mode':mode,'code_hashes':code_hashes})
     p=arms[selected]['prediction'];winner,win_info=bernoulli_simulation(p['home_win'],identity,n)
     scores=None;score_info={'status':'UNAVAILABLE_FOR_SELECTED_ARM','reason':'FROZEN_JOINT_RESIDUAL_POOL_IS_COMBINED_SPECIFIC'}
@@ -69,6 +72,9 @@ def run(artifact,recovered,base,context,event,cutoff,n=100000,*,model_id=None,mo
     feature_contributions={t:arms[selected]['contribution_trace'][t]['features'] for t in p}
     means={'home':(p['total_points']+p['home_margin'])/2,'away':(p['total_points']-p['home_margin'])/2}
     result={'schema':'nfl.integrated_context_forecast.v1','model_id':model_id,'event':event,'cutoff_utc':cutoff,'identity':identity,'model_artifact_sha256':digest(artifact),'features':x,'audit':audit,'arms':arms,'prediction':p,'score_centers':means,'winner_simulation':win_info,'score_simulation':score_info,'contribution_trace':feature_contributions,'current_context_numerically_applied':['QB_PRIOR_AND_CHANGE','INJURY_POSITION_GROUPS','PRACTICE','PRIOR_SNAP_WORKLOAD','AIRPORT_TRAVEL_PROXY','WEATHER','REST'],'coverage_label':'FITTED_RESEARCH_FEATURES_WITH_UNRESOLVED_CURRENT_STATE','research_only':True,'canonical_prospective_eligible':False,'market_input':False,'action_authority':False,'warnings':['NEW_FIT_NOT_PROSPECTIVELY_VALIDATED','HISTORICAL_REPORT_AND_STARTER_PIT_LIMITATIONS','FINAL_INACTIVES_PENDING','PRIOR_SNAP_SHARE_IS_NOT_PROMISED_WORKLOAD','TRAVEL_IS_AIRPORT_PROXY','EMPIRICAL_SCORE_SETTLEMENT_UNVALIDATED']}
+    if audit['final_inactives']=='VERIFIED':
+        result['warnings'].remove('FINAL_INACTIVES_PENDING')
+        result['warnings'].append('FINAL_INACTIVES_VERIFIED; NON_INJURY_SCRATCH_IMPACT_UNFITTED')
     result['code_hashes']=code_hashes
     result['capability_report']=capability_report
     result['mode']=mode

@@ -1,0 +1,46 @@
+name: NFL Week 2 repair verification
+on:
+  push:
+    branches: [codex/nfl-week2-repair]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  capture:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install -r requirements-nfl-context.txt
+      - name: Acquire current PBP and schedule
+        run: |
+          python - <<'PYCODE'
+          import urllib.request,json,hashlib,datetime,pathlib
+          out=pathlib.Path('week2-source');out.mkdir()
+          urls={'play_by_play_2026.csv':'https://github.com/nflverse/nflverse-data/releases/download/pbp/play_by_play_2026.csv','games.csv':'https://raw.githubusercontent.com/nflverse/nfldata/master/data/games.csv'}
+          receipts=[]
+          for name,url in urls.items():
+              try:
+                  with urllib.request.urlopen(url,timeout=120) as r:data=r.read();headers=dict(r.headers)
+                  (out/name).write_bytes(data)
+                  receipts.append(dict(filename=name,source_url=url,retrieved_at_utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),sha256=hashlib.sha256(data).hexdigest(),headers=headers,status='captured'))
+              except Exception as e:receipts.append(dict(filename=name,source_url=url,status='failed',error=str(e)))
+          (out/'receipt.json').write_text(json.dumps(receipts,indent=2))
+          print(json.dumps(receipts))
+          PYCODE
+      - uses: actions/upload-artifact@v4
+        with:
+          name: week2-source
+          path: week2-source
+      - name: Current-week reconciliation
+        run: python scripts/run_nfl_assimilation.py --source week2-source --output week2-reconciliation
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: week2-reconciliation
+          path: week2-reconciliation

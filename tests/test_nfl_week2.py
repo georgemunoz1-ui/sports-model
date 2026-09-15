@@ -75,6 +75,13 @@ class Week2(unittest.TestCase):
         ev['state_after_sha256']=digest(state)
         evidence={'qb_update':ev,'audit':{'snapshot':{'sha256':'wrong'},'coverage':{'rows':[{'game_id':'2026_01_DEN_KC'}]}}}
         with self.assertRaisesRegex(ValueError,'QB_SOURCE_MISMATCH'):verified(artifact,evidence)
+    def test_legacy_packed_artifact_year_is_bound_to_training(self):
+        from models.nfl.contextual.qb_assimilation import prior
+        from models.nfl.contextual.model import load_artifact
+        model=load_artifact(Path(__file__).resolve().parents[1]/'data/nfl/contextual_v1/model_packed.json')
+        state=prior(model,2026)
+        key=next(iter(model['state']['qb_ratings']))
+        self.assertAlmostEqual(state['qb_ratings'][key]['n'],model['state']['qb_ratings'][key]['n']*.55)
     def test_qb_missing_update_rejected(self):
         from models.nfl.contextual.qb_assimilation import verified
         with self.assertRaisesRegex(ValueError,'QB_WEEK1_ASSIMILATION_REQUIRED'):verified({}, {})

@@ -4,7 +4,9 @@ from .features import canonical
 from .recovered_inference import digest
 
 def prior(artifact,season):
-    state=copy.deepcopy(artifact['state']);years=season-int(state['season'])
+    state=copy.deepcopy(artifact['state'])
+    state_season=state['season'] if 'season' in state else max(artifact['arms']['combined']['training_seasons'])
+    years=season-int(state_season)
     if years!=1:raise ValueError('QB_UPDATE_REQUIRES_NEXT_SEASON_START')
     for value in state['qb_ratings'].values():value['sum']*=.55;value['n']*=.55
     return {'qb_ratings':state['qb_ratings'],'last_qb':state['last_qb']}

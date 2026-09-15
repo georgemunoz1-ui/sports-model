@@ -67,7 +67,8 @@ def main():
     if bf.sha256_file(a.source/'games.csv')!=schedule_receipt['sha256']:raise ValueError('SCHEDULE_RAW_HASH_MISMATCH')
     all_games=pd.read_csv(a.source/'games.csv',low_memory=False);schedule=all_games.copy();schedule=schedule[(schedule.season==a.season)&(schedule.week==a.week)&(schedule.game_type=='REG')]
     from models.nfl.contextual.model import load_artifact
-    params=load_artifact(ROOT/'data/nfl/contextual_v1/model_packed.json')['arms']['base']
+    model=load_artifact(ROOT/'data/nfl/contextual_v1/model_packed.json')
+    params=model['arms']['base']
     states=rebuild_history(a.historical_source,a.output,params) if a.historical_source else None
     requests=all_games[(all_games.season==a.season)&(all_games.week==a.week+1)&(all_games.game_type=='REG')].to_dict('records')
     # Drop realized targets: this is a state sensitivity demonstration, not a fresh card.
@@ -81,7 +82,12 @@ def main():
         evidence={'audit':result,'state_before':serialize_states(states),'state_after':after,
           'base_feature_code_sha256':bf.sha256_file(ROOT/'models/nfl/contextual/base_features.py'),
           'schedule_receipt':schedule_receipt}
-        event_rows={};checks={}
+        from models.nfl.contextual.qb_assimilation import build,apply,prior
+        from models.nfl.contextual.features import qb_features
+        pbp=pd.read_csv(a.source/receipt['filename'],low_memory=False)
+        evidence['qb_update']=build(model,pbp,schedule,receipt['sha256'])
+        qb_before=prior(model,a.season);qb_after=apply(model,evidence['qb_update'])
+        event_rows={};checks={};qb_traces={}
         for request in requests:
             row=bf._feature_row(pd.Series(request),bf.TeamState(**after[request['home_team']]),bf.TeamState(**after[request['away_team']]))
             row={k:(None if pd.isna(v) else v) for k,v in row.items()}
@@ -89,9 +95,19 @@ def main():
                    'gameday':request['gameday'],'gametime':request.get('gametime'),'location':request['location']}
             checks[event['event_id']]=require_assimilation(row,{'assimilation':evidence},event,result['cutoff_utc'])
             event_rows[event['event_id']]=row
+            before_row=bf._feature_row(pd.Series(request),states[request['home_team']],states[request['away_team']])
+            from models.nfl.contextual.recovered_inference import predict
+            qb_params=model['arms']['qb']
+            old={**before_row,**qb_features(request,qb_before['qb_ratings'],qb_before['last_qb'])}
+            new={**row,**qb_features(request,qb_after['qb_ratings'],qb_after['last_qb'])}
+            clean=lambda x:{k:None if pd.isna(x[k]) else float(x[k]) for k in qb_params['feature_names']}
+            b,c=clean(old),clean(new);bp=predict(qb_params,b)['prediction'];cp=predict(qb_params,c)['prediction']
+            qb_traces[event['event_id']]={'model_id':qb_params['model_id'],'before_features':b,'after_features':c,
+              'prediction_before':bp,'prediction_after':cp,'delta':{k:cp[k]-bp[k] for k in bp},
+              'scope':'STATE_SENSITIVITY_ONLY; SCHEDULE_QB_IDS_NOT_FRESH_CONFIRMED_STARTERS'}
         write_once(a.output/'week2_state_packet.json',{'scope':'STATE_ONLY_NOT_FRESH_PREGAME_CONTEXT',
           'forecast_parameter_model_id':params['model_id'],'forecast_parameter_sha256':digest(params),
-          'assimilation':evidence,'event_base_rows':event_rows,'runtime_state_checks':checks,
+          'assimilation':evidence,'event_base_rows':event_rows,'runtime_state_checks':checks,'default_qb_state_traces':qb_traces,
           'official_gamebook_clearance':False,'action_authority':False})
     if states:
         packet=json.loads((ROOT/'data/nfl/contextual_v1/event_package_v2.json').read_text());base=packet['event_inputs']['2026_01_DEN_KC']['base']

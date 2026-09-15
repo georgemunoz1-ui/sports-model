@@ -15,6 +15,11 @@ def live_features(artifact,recovered,base,context,event,cutoff):
     years=int(base['season'])-int(artifact['state'].get('season',max(artifact['arms']['combined']['training_seasons'])))
     if years<0:raise ValueError('FUTURE_FEATURE_STATE')
     for v in ratings.values():v['sum']*=.55**years;v['n']*=.55**years
+    last_qb=artifact['state']['last_qb']
+    if (int(base['season']),int(base['week']))>=(2026,2):
+        from .qb_assimilation import verified
+        qb_state=verified(artifact,context.get('assimilation',{}))
+        ratings=qb_state['qb_ratings'];last_qb=qb_state['last_qb']
     r={**base,'gameday':event['gameday'],'gametime':event['gametime'],'location':event.get('location','Home')}
     personnel=context.get('personnel',{}).get('state',{});reports={};report_audit=[]
     from .personnel import final_availability,explain_roles
@@ -37,7 +42,7 @@ def live_features(artifact,recovered,base,context,event,cutoff):
         report_audit.append(absence['status']+'_MAPPED_TO_OUT_PROXY; HISTORICAL_RESERVE_COVERAGE_UNVERIFIED')
     av,role_audit=availability_features(r,reports,artifact['state']['roles'])
     role_audit=explain_roles(role_audit,artifact['state']['roles'],event['gameday'],personnel.get('role_resolutions',{}))
-    x={**bound['features'],**qb_features(r,ratings,artifact['state']['last_qb']),**av,**travel_features(r,artifact['airports'])}
+    x={**bound['features'],**qb_features(r,ratings,last_qb),**av,**travel_features(r,artifact['airports'])}
     return x,{'recovered_model':bound,'personnel_absence_roles':role_audit,'availability_mapping_notes':report_audit,'workload':'PRIOR_SNAP_ROLE_PROXY; CURRENT_EXPECTED_WORKLOAD_UNKNOWN','travel':'HOME_AIRPORT_ROUTE_PROXY; ACTUAL_ITINERARY_UNKNOWN','final_inactives':final['status'],'final_availability':final}
 
 def run(artifact,recovered,base,context,event,cutoff,n=100000,*,model_id=None,mode=RESEARCH_MODE,mode_artifact=None,market=None,live_state=None):
@@ -66,7 +71,7 @@ def run(artifact,recovered,base,context,event,cutoff,n=100000,*,model_id=None,mo
         arms[arm]=predict(params,feature)
     from .capabilities import describe_run_capabilities
     capability_report=describe_run_capabilities(artifact['arms'][selected],x,context,base,cutoff,event,digest(artifact),arms[selected]['contribution_trace'])
-    code_hashes={name:hashlib.sha256((Path(__file__).parent/name).read_bytes()).hexdigest() for name in ('runtime.py','personnel.py','model.py','features.py','recovered_inference.py','operating.py','capabilities.py','settlement.py','forecast_stream.py','week2.py','joint_distribution.py')}
+    code_hashes={name:hashlib.sha256((Path(__file__).parent/name).read_bytes()).hexdigest() for name in ('runtime.py','personnel.py','model.py','features.py','recovered_inference.py','operating.py','capabilities.py','settlement.py','forecast_stream.py','week2.py','joint_distribution.py','qb_assimilation.py')}
     identity=digest({'event':event,'features':x,'artifact':artifact,'context':context,'runtime':'nfl.integrated_context.v1','model_id':model_id,'mode':mode,'code_hashes':code_hashes})
     p=arms[selected]['prediction'];winner,win_info=bernoulli_simulation(p['home_win'],identity,n)
     scores=None;score_info={'status':'UNAVAILABLE_FOR_SELECTED_ARM','reason':'FROZEN_JOINT_RESIDUAL_POOL_IS_COMBINED_SPECIFIC'}

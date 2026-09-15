@@ -61,6 +61,23 @@ class Week2(unittest.TestCase):
         s=np.array([[21,20],[0,30]]);w=np.array([.6,.4]);a=summary(s,w)
         self.assertGreater(a['p_home_win'],.5);self.assertLess(a['mean_margin'],0)
         self.assertTrue(coherence({'home_win':.6,'home_margin':2},a)['cross_head_direction_disagreement'])
+    def test_qb_update_uses_frozen_shrinkage_and_dropbacks(self):
+        from models.nfl.contextual.qb_assimilation import apply,verified
+        artifact={'state':{'season':2025,'qb_ratings':{'q':{'sum':100.,'n':200.}},'last_qb':{}}}
+        ev={'season':2026,'completed_week':1,'parent_model_sha256':digest(artifact),
+            'completed_game_ids':['2026_01_DEN_KC'],'completed_starters':{'KC':'q'},
+            'source_sha256':'synthetic',
+            'aggregates':[{'game_id':'2026_01_DEN_KC','passer_player_id':'q','epa_sum':10.,'dropbacks':30}]}
+        state=apply(artifact,ev)
+        self.assertAlmostEqual(state['qb_ratings']['q']['sum'],65.)
+        self.assertAlmostEqual(state['qb_ratings']['q']['n'],140.)
+        self.assertEqual(artifact['state']['qb_ratings']['q']['n'],200.)
+        ev['state_after_sha256']=digest(state)
+        evidence={'qb_update':ev,'audit':{'snapshot':{'sha256':'wrong'},'coverage':{'rows':[{'game_id':'2026_01_DEN_KC'}]}}}
+        with self.assertRaisesRegex(ValueError,'QB_SOURCE_MISMATCH'):verified(artifact,evidence)
+    def test_qb_missing_update_rejected(self):
+        from models.nfl.contextual.qb_assimilation import verified
+        with self.assertRaisesRegex(ValueError,'QB_WEEK1_ASSIMILATION_REQUIRED'):verified({}, {})
     def test_missing_stratum_rejected(self):
         with self.assertRaisesRegex(ValueError,'SUPPORT_MISSING'):kernel(0,40,.5,np.zeros((100,2)),.01)
 

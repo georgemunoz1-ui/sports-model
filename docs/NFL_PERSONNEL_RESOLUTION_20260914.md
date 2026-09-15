@@ -21,3 +21,15 @@ All five investigations are explained, but all five numerical role missingness i
 Six new negative/contract tests and eighteen existing NFL context tests pass. The new run has VERIFIED inactive status and keeps role missingness at five. Global health RED, research-only, action OFF and no canonical registration. Historical team state still follows the frozen completed-week policy; current expected workloads and transfer quality remain unsupported. The earlier NWS forecast is retained and is stale under the six-hour policy, so this is not a fully refreshed weather run or official clearance.
 
 Sources are linked individually in data/nfl/personnel_resolution_20260914/role_resolutions.json and final_inactives.json. Exact new forecast and arrays are retained separately from previous runs.
+
+## Closeout addendum: observed information versus numeric use
+
+Information can be captured and reflected in source/coverage manifests while having zero incremental forecast effect when no fitted path converts the new information into a number. The 13:06 and 17:12 PDT artifacts have exactly equal full numeric feature vectors and analytic predictions, verified directly from their saved JSON. Input/code identity and stochastic samples differ. This is an assimilation audit example, not independent model validation.
+
+The precise scope matters: this build already has fitted QB, injury/practice and prior-role features. Newly confirmed inactives add no fitted numeric information beyond existing supported injury absences; healthy scratches and emergency-QB effects are unfitted. ARM_C/H/B1/B2 labels from other designs must not be mapped to this integrated model without an exact model/config/registration referent.
+
+The five numeric weights are serialized as JSON null with missingness retained. Their semantics are unknown/unsupported, never known zero. The explanatory dispositions resolve the investigations, not the numeric support gap; captured_not_numeric describes this distinction but is not a claim that every file literally uses that enum.
+
+The 85-test result is scoped by NFL_TEST_SCOPE_20260914.json: every test ID and source-file hash, plus untested capabilities and known unexercised branches. It is not measured line/branch coverage, health GREEN, or statistical promotion. Remote verification run: https://github.com/georgemunoz1-ui/sports-model/actions/runs/34912252830.
+
+DEN@KC remains research-only with no canonical forecast issued. The earlier research and no-run artifacts remain unchanged. Whole-program Week 1 canonical totals and H/B1/B2 dispositions are not re-audited by this addendum. The requested next queue is the distribution/provenance trace, exact B2 referent and disposition, then prospective registration before the Week 2 cutoff; this note does not assert those gates have passed. Action authority OFF, dose zero.

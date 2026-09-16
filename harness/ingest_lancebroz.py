@@ -41,7 +41,7 @@ from collections import defaultdict
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
-SRC = "/home/user/lancebroz/mlb-pitcher-data"
+SRC = os.environ.get("SPORTSMODEL_LANCEBROZ_ROOT", "/home/user/lancebroz/mlb-pitcher-data")
 DAILY = os.path.join(SRC, "data/raw/2026/daily")
 LOGS = "data/backfill/mlb/2026/pitcher_logs"
 PLACEHOLDERS = os.path.join(LOGS, "_placeholders.json")
@@ -134,14 +134,50 @@ def archive_commit():
 
 
 def source_health():
-    """Production evidence availability is separate from the portable contract test."""
-    files = [p for p in glob.glob(os.path.join(DAILY, "*.parquet"))
-             if INGEST_FROM <= os.path.basename(p)[:10] < CUTOFF]
+    """Verify the published Git window, not merely one file and a plausible SHA.
+
+    Availability here does not prove schedule/game coverage, original historical
+    retrieval, final scores, or current-forecast eligibility.
+    """
+    from pathlib import Path
+    import subprocess
+    def git(*args):
+        result = subprocess.run(["git", "-C", SRC, *args], capture_output=True, text=True)
+        return result.stdout.strip() if result.returncode == 0 else ""
     commit = archive_commit()
-    return {"ok": bool(files) and len(commit) == 40,
+    root_ok = git("rev-parse", "--show-toplevel") == str(Path(SRC).resolve())
+    expected, problems, objects = {}, [], []
+    for line in git("ls-tree", "-r", commit, "--", "data/raw/2026/daily").splitlines():
+        meta, path = line.split("\t", 1)
+        if path.endswith(".parquet") and INGEST_FROM <= Path(path).name[:10] < CUTOFF:
+            expected[path] = meta.split()[2]
+    if not root_ok or len(commit) != 40 or not expected:
+        problems.append("PRODUCTION_ARCHIVE_UNAVAILABLE_OR_UNVERSIONED")
+    expected_commit = os.environ.get("SPORTSMODEL_LANCEBROZ_COMMIT")
+    if expected_commit and commit != expected_commit:
+        problems.append("ARCHIVE_COMMIT_MISMATCH")
+    for path, oid in sorted(expected.items()):
+        file = Path(SRC) / path
+        if not file.is_file() or file.is_symlink():
+            problems.append("ARCHIVE_OBJECT_MISSING:" + path)
+            continue
+        raw = file.read_bytes()
+        actual_oid = hashlib.sha1(b"blob " + str(len(raw)).encode() + b"\0" + raw).hexdigest()
+        if actual_oid != oid:
+            problems.append("ARCHIVE_OBJECT_MODIFIED:" + path)
+        objects.append({"path": path, "git_blob": oid, "sha256": hashlib.sha256(raw).hexdigest(),
+                        "bytes": len(raw)})
+    actual = {str(p.relative_to(SRC)) for p in Path(DAILY).glob("*.parquet")
+              if INGEST_FROM <= p.name[:10] < CUTOFF}
+    for path in sorted(actual - set(expected)):
+        problems.append("UNTRACKED_ARCHIVE_OBJECT:" + path)
+    return {"ok": not problems,
             "source_directory": DAILY, "source_commit": commit or None,
-            "n_files": len(files), "failure": None if files and len(commit) == 40
-            else "PRODUCTION_ARCHIVE_UNAVAILABLE_OR_UNVERSIONED"}
+            "n_files": len(objects), "expected_files": len(expected), "objects": objects,
+            "window": {"from_inclusive": INGEST_FROM, "to_exclusive": CUTOFF},
+            "verification_scope": "PUBLISHED_GIT_OBJECT_WINDOW_ONLY",
+            "schedule_completeness_verified": False, "historical_retrieval_proven": False,
+            "failure": problems[0] if problems else None, "problems": problems}
 
 
 def run(write=True):

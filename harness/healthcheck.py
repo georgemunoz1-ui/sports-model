@@ -546,7 +546,8 @@ except Exception as e:
 try:
     import ingest_lancebroz as _IL
     _source = _IL.source_health()
-    check(f"lancebroz production source ({_source})", _source["ok"])
+    _source_summary = {k: v for k, v in _source.items() if k != "objects"}
+    check(f"lancebroz production source ({_source_summary})", _source["ok"])
 except Exception as e:
     check(f"lancebroz production source ({e})", False)
 
@@ -557,10 +558,15 @@ try:
     _jobs=_RJ.load() or _RJ.default_jobs()
     _rep=_RJ.status_report(_jobs, _dt.datetime.now(_dt.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"))
     check(f"recovery jobs ({_rep['n_jobs']} registered, {_rep['n_overdue']} overdue, "
-          f"{len(_rep['open_blockers'])} defect(s) still owned)", _rep["n_overdue"]==0, warn=False)
+          f"{len(_rep['open_blockers'])} defect(s) still owned)",
+          _rep["n_overdue"]==0 and not _rep.get("integrity_problems"), warn=False)
+    for _problem in _rep.get("integrity_problems", []):
+        print(f"       ! {_problem}")
     for _r2 in _rep["jobs"]:
         if _r2["overdue"]:
             print(f"       ! OVERDUE {_r2['job_id']} {_r2['progress']} due {_r2['deadline_utc']}")
+            for _phase, _detail in _r2.get("phases", {}).items():
+                print(f"         PHASE {_phase}: {_detail}")
 except Exception as e:
     check(f"recovery jobs ({e})", False)
 
@@ -573,9 +579,10 @@ try:
                        "--manifest","data/releases/2026-09-03_release.json","--gate"],
                       capture_output=True,text=True)
     _rr=json.loads(_r.stdout) if _r.stdout.strip().startswith("{") else {}
-    check(f"2026-09-03 multi-sport release ({_rr.get('global_status','no output')}; "
+    check(f"historical 2026-09-03 release eligibility ({_rr.get('global_status','no output')}; "
           f"{len(_rr.get('artifact_problems') or [])} artifact problem(s), "
           f"{len(_rr.get('contract_problems') or [])} contract problem(s))", _r.returncode==0)
+    print("       Historical decision is immutable; this is not a fresh release check.")
 except Exception as e:
     check(f"2026-09-03 multi-sport release ({e})", False)
 
@@ -657,8 +664,20 @@ try:
 except Exception as e:
     check(f"standard acceptance suite ({e})", False)
 
-# Code integrity is separate from current-date data/feature readiness.
-print(f"\n{'CODE_INTEGRITY_PASS' if not fails else 'CODE_INTEGRITY_FAIL'} — {len(fails)} fail, {len(warns)} warn")
+# These checks include external recovery and historical eligibility, not code alone.
+try:
+    _triage_run = subprocess.run([sys.executable, "scripts/standing_health_triage.py"],
+                                capture_output=True, text=True)
+    _triage = json.loads(_triage_run.stdout)
+    check("standing-health issue evidence and hash chain", _triage_run.returncode == 0)
+    for _issue in _triage["issues"]:
+        if _issue["status"] not in ("RESOLVED", "DESCOPED"):
+            print(f"       {_issue['issue_id']}: {_issue['status']}; owner={_issue['owner']}; "
+                  f"due={_issue['due_at_utc']}; next={_issue['next_action']}")
+    print("       TRIAGE_TREND:", _triage["trend"])
+except Exception as _exc:
+    check(f"standing-health evidence register ({_exc})", False)
+print(f"\n{'REPOSITORY_HEALTH_GREEN' if not fails else 'REPOSITORY_HEALTH_RED'} — {len(fails)} fail, {len(warns)} warn")
 try:
     from current_sports_data import runtime_readiness
     _fresh = runtime_readiness(__import__("pathlib").Path.cwd())

@@ -1,0 +1,216 @@
+{
+  "recorded_at_utc": "2026-09-16T04:26:41.997358+00:00",
+  "legacy_reported_overdue": 4,
+  "legacy_false_overdue": [
+    "RJ-003-FALLBACK-ARM"
+  ],
+  "after_reporter_repair": {
+    "now_utc": "2026-09-16T04:26:41.997358+00:00",
+    "n_jobs": 9,
+    "n_overdue": 3,
+    "n_terminal": 5,
+    "integrity_problems": [],
+    "jobs": [
+      {
+        "job_id": "RJ-001-PROVENANCE",
+        "title": "Restore Tier-1 provenance for the 123 provisional rows and the 1,620 with no evidence path",
+        "owner": "acquisition",
+        "status": "OVERDUE",
+        "progress": "123/123",
+        "percent": 100.0,
+        "next_run_utc": "2026-08-28T11:00:00Z",
+        "deadline_utc": "2026-09-01T00:00:00Z",
+        "overdue": true,
+        "terminal_disposition": null,
+        "blocks": [
+          "PRIOR_INPUT_POOL_PROVISIONAL",
+          "UNCERTAINTY_PIPELINE_DEFECT"
+        ],
+        "depends_on": [],
+        "phases": {
+          "RJ-001A_PROVENANCE_ACQUISITION": {
+            "note": "all provisional-set units bound; whole-file 1,948/1,957 after the OAK/ARI variant fold; 9 refusals in two named categories, reconciliation gate sums (88570751 superseded by the regenerated accounting)",
+            "progress": "123/123",
+            "status": "COMPLETE"
+          },
+          "RJ-001B_SCORE_VERIFICATION": {
+            "note": "tier upgrades for the 126 provisional rows need a score-bearing artifact; pitch events carry no runs column (derivation judged infeasible)",
+            "progress": "0/126",
+            "status": "RUNNING"
+          },
+          "RJ-001_INCIDENT": "OPEN"
+        }
+      },
+      {
+        "job_id": "RJ-002-OOF-REPLAY",
+        "title": "Build a leakage-free date-blocked historical replay for uncertainty estimation",
+        "owner": "modelling",
+        "status": "COMPLETE",
+        "progress": "20/20",
+        "percent": 100.0,
+        "next_run_utc": null,
+        "deadline_utc": "2026-09-08T00:00:00Z",
+        "overdue": false,
+        "terminal_disposition": "RECONSTRUCTED",
+        "blocks": [
+          "UNCERTAINTY_PIPELINE_DEFECT",
+          "INSUFFICIENT_EFFECTIVE_CLUSTERS"
+        ],
+        "depends_on": [
+          "RJ-001-PROVENANCE"
+        ],
+        "phases": {}
+      },
+      {
+        "job_id": "RJ-003-FALLBACK-ARM",
+        "title": "Register a conservative fallback arm on reconstructible-as-of inputs, with its own validated uncertainty",
+        "owner": "modelling",
+        "status": "CLOSED_CONDITION_NOT_FIRED",
+        "progress": "0/4",
+        "percent": 0.0,
+        "next_run_utc": null,
+        "deadline_utc": "2026-09-08T00:00:00Z",
+        "overdue": false,
+        "terminal_disposition": "CONDITION_NOT_FIRED",
+        "blocks": [
+          "UNCERTAINTY_PIPELINE_DEFECT"
+        ],
+        "depends_on": [],
+        "phases": {}
+      },
+      {
+        "job_id": "RJ-004-WNBA-INJURY",
+        "title": "Bind the official WNBA injury report for the six teams on tonight's slate (CHI, CON, PDX, DAL, WAS, PHX); a unit is one team's current section bound with retrieval timestamp and content hash",
+        "owner": "wnba_features",
+        "status": "FAILED_TERMINAL",
+        "progress": "0/6",
+        "percent": 0.0,
+        "next_run_utc": "2026-08-25T23:00:00Z",
+        "deadline_utc": "2026-08-25T23:00:00Z",
+        "overdue": false,
+        "terminal_disposition": "SUPERSEDED_BY_WIDER_JOB",
+        "blocks": [
+          "WNBA_FEATURE_STALENESS_34D",
+          "WNBA_PENDING_FEATURE_REFRESH"
+        ],
+        "depends_on": [],
+        "phases": {}
+      },
+      {
+        "job_id": "RJ-005-WNBA-FEATURE-PIPELINE",
+        "title": "Full WNBA feature refresh: schedule+canonical game ids (3), roster+transaction sections (6 teams), official injury/availability sections (6 teams), results and team/player stats through the as-of cutoff (1 bound snapshot), market prices via the separate overlay (1 binding). A unit binds only from a retrieved artifact with source, timestamp and content hash.",
+        "owner": "wnba_features",
+        "status": "RUNNING",
+        "progress": "11/17",
+        "percent": 64.7,
+        "next_run_utc": "2026-09-16T16:00:00Z",
+        "deadline_utc": "2026-09-16T17:00:00Z",
+        "overdue": false,
+        "terminal_disposition": null,
+        "blocks": [
+          "WNBA_FEATURE_STALENESS",
+          "WNBA_ACTION_BLOCKED",
+          "SYSTEM_FAILURE_WNBA_FEATURE_PIPELINE"
+        ],
+        "depends_on": [],
+        "phases": {}
+      },
+      {
+        "job_id": "RJ-006-NFL-MODEL-RESTORATION",
+        "title": "Restore the governed nfl.rs.epa_logit_ridge.v0_2.shadow lineage into the active branch: recovered evidence verified (3/3 partial), immutable run directory, invalidation record for v0_1, source pins, and registry entries; then the current-input + prospective-paper workflow for the regular season (opens 2026-09-09)",
+        "owner": "model_registry",
+        "status": "OVERDUE",
+        "progress": "1/6",
+        "percent": 16.7,
+        "next_run_utc": "2026-08-28T11:00:00Z",
+        "deadline_utc": "2026-09-09T00:00:00Z",
+        "overdue": true,
+        "terminal_disposition": null,
+        "blocks": [
+          "NFL_MODEL_LINEAGE_NOT_RESTORED_TO_ACTIVE_BRANCH"
+        ],
+        "depends_on": [],
+        "phases": {}
+      },
+      {
+        "job_id": "RJ-007-DATELESS-JOIN-REMEDIATION",
+        "title": "Remove the dateless (away,home) join from the four remaining evaluation-side code paths and fold date+gamePk into the canonical game identity",
+        "owner": "harness",
+        "status": "OVERDUE",
+        "progress": "0/6",
+        "percent": 0.0,
+        "next_run_utc": "2026-08-28T11:00:00Z",
+        "deadline_utc": "2026-09-03T00:00:00Z",
+        "overdue": true,
+        "terminal_disposition": null,
+        "blocks": [
+          "RESULT_DATE_COHORT_CONTAMINATION"
+        ],
+        "depends_on": [],
+        "phases": {}
+      },
+      {
+        "job_id": "RJ-008-NFL-LAUNCH-SHADOW",
+        "title": "Register a separate governed NFL regular-season Elo/Platt launch shadow while the recovered EPA v0_2 lineage remains separately unresolved",
+        "owner": "nfl_launch",
+        "status": "COMPLETE",
+        "progress": "4/4",
+        "percent": 100.0,
+        "next_run_utc": "2026-09-03T19:21:08Z",
+        "deadline_utc": "2026-09-03T19:21:08Z",
+        "overdue": false,
+        "terminal_disposition": "FALLBACK_ARM_REGISTERED",
+        "blocks": [
+          "NFL_2026_SCHEDULE_BACKFILL",
+          "NFL_WEEK1_SHADOW_FORECAST_PATH"
+        ],
+        "depends_on": [],
+        "phases": {}
+      },
+      {
+        "job_id": "RJ-009-CFB-LAUNCH-SHADOW",
+        "title": "Restore a governed 2026 CFB schedule and Week 1 causal-Elo launch shadow from a current canonical-ID archive",
+        "owner": "cfb_launch",
+        "status": "COMPLETE",
+        "progress": "4/4",
+        "percent": 100.0,
+        "next_run_utc": "2026-09-03T19:21:08Z",
+        "deadline_utc": "2026-09-03T19:21:08Z",
+        "overdue": false,
+        "terminal_disposition": "FALLBACK_ARM_REGISTERED",
+        "blocks": [
+          "CFB_2026_SCHEDULE_ARCHIVE_GAP",
+          "CFB_WEEK1_SHADOW_FORECAST_PATH"
+        ],
+        "depends_on": [],
+        "phases": {}
+      }
+    ],
+    "open_blockers": {
+      "PRIOR_INPUT_POOL_PROVISIONAL": [
+        "RJ-001-PROVENANCE"
+      ],
+      "UNCERTAINTY_PIPELINE_DEFECT": [
+        "RJ-001-PROVENANCE"
+      ],
+      "WNBA_FEATURE_STALENESS": [
+        "RJ-005-WNBA-FEATURE-PIPELINE"
+      ],
+      "WNBA_ACTION_BLOCKED": [
+        "RJ-005-WNBA-FEATURE-PIPELINE"
+      ],
+      "SYSTEM_FAILURE_WNBA_FEATURE_PIPELINE": [
+        "RJ-005-WNBA-FEATURE-PIPELINE"
+      ],
+      "NFL_MODEL_LINEAGE_NOT_RESTORED_TO_ACTIVE_BRANCH": [
+        "RJ-006-NFL-MODEL-RESTORATION"
+      ],
+      "RESULT_DATE_COHORT_CONTAMINATION": [
+        "RJ-007-DATELESS-JOIN-REMEDIATION"
+      ]
+    },
+    "note": "every defect above is held open by a NAMED job with a deadline. A blocker with no job is a blocker nobody owns."
+  },
+  "previous_triage_session": null,
+  "note": "Five is the count of previously nonterminal records under old classifier, not overdue jobs; after correction four nonterminal, three overdue at this timestamp; RJ-005 due later today."
+}

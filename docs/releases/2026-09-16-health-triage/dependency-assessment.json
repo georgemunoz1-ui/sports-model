@@ -1,0 +1,55 @@
+{
+  "schema": "health.dependency_assessment.v1",
+  "source_commit": "547053102f25952323d123b019df07aed9661fc9",
+  "requested_profile": "official_pregame_v1",
+  "profile_status": "CONTROL-MISSING",
+  "proof_level": "STATIC_SOURCE_INSPECTION_NOT_RUNTIME_UNREACHABILITY_PROOF",
+  "removes_any_existing_gate": false,
+  "edges": [
+    {
+      "from": "global health",
+      "to": "harness/ingest_lancebroz.py:source_health",
+      "classification": "REQUIRED_CURRENT_HEALTH",
+      "evidence": "harness/healthcheck.py"
+    },
+    {
+      "from": "global health",
+      "to": "data/registry/recovery_jobs.json",
+      "classification": "REQUIRED_CURRENT_HEALTH",
+      "evidence": "harness/healthcheck.py"
+    },
+    {
+      "from": "global health",
+      "to": "data/releases/2026-09-03_release.json",
+      "classification": "REQUIRED_HISTORICAL_ELIGIBILITY_CHECK",
+      "evidence": "harness/healthcheck.py"
+    },
+    {
+      "from": "NFL selected QB",
+      "to": "models/nfl/contextual/week2.py",
+      "classification": "REQUIRED_RESEARCH_RUNTIME",
+      "evidence": "scripts/run_nfl_integrated.py"
+    },
+    {
+      "from": "NFL selected QB",
+      "to": "data/nfl/contextual_v1/week2_policy.json",
+      "classification": "REQUIRED_RESEARCH_POLICY",
+      "evidence": "models/nfl/contextual/week2.py"
+    },
+    {
+      "from": "MLB selected V13",
+      "to": "data/mlb/current_v1/runtime.json and source-pinned fresh packet",
+      "classification": "REQUIRED_RESEARCH_RUNTIME",
+      "evidence": "pipelines/cards/adapters/mlb.py"
+    },
+    {
+      "from": "official_pregame_v1",
+      "to": "all declared model/config/source/recovery/publication obligations",
+      "classification": "UNKNOWN_UNTIL_PROFILE_IMPLEMENTED",
+      "evidence": "No implemented profile with that identity located; do not infer optionality from no direct import"
+    }
+  ],
+  "runtime_unreachability_tests": "NOT_RUN_NO_IMPLEMENTED_OFFICIAL_PROFILE",
+  "archive_scope": "Published July-August MLB pitch files; no full final-score, schedule or historical retrieval proof",
+  "no_silent_substitution": true
+}

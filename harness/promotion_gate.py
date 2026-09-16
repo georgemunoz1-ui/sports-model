@@ -161,14 +161,22 @@ def compare_against_references(challenger, references, reps=4000, seed=20260823)
     Returns one block per reference with a LABELLED comparator, plus Holm-adjusted p-values across
     the family of comparisons."""
     by_g = {r["game_id"]: r for r in challenger}
+    if len(by_g) != len(challenger):
+        raise ValueError("DUPLICATE_EVALUATION_GAME_ID:challenger")
     blocks, pvals, names = {}, [], []
     for name, ref in sorted(references.items()):
         rby = {r["game_id"]: r for r in ref}
+        if len(rby) != len(ref):
+            raise ValueError("DUPLICATE_EVALUATION_GAME_ID:" + name)
         common = sorted(set(by_g) & set(rby))
         only_c, only_r = sorted(set(by_g) - set(rby)), sorted(set(rby) - set(by_g))
         rows = []
         for g in common:
             c, rr = by_g[g], rby[g]
+            if c.get("slate_date") and rr.get("slate_date") and c["slate_date"] != rr["slate_date"]:
+                raise ValueError("EVALUATION_DATE_CONFLICT:" + str(g))
+            if "y" in rr and int(c["y"]) != int(rr["y"]):
+                raise ValueError("EVALUATION_OUTCOME_CONFLICT:" + str(g))
             y = int(c["y"])
             rows.append({"game_id": g, "slate_date": c.get("slate_date"),
                          "delta_brier": (float(c["p"]) - y) ** 2 - (float(rr["p"]) - y) ** 2})

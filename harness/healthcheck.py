@@ -664,8 +664,20 @@ try:
 except Exception as e:
     check(f"standard acceptance suite ({e})", False)
 
-# Code integrity is separate from current-date data/feature readiness.
-print(f"\n{'CODE_INTEGRITY_PASS' if not fails else 'CODE_INTEGRITY_FAIL'} — {len(fails)} fail, {len(warns)} warn")
+# These checks include external recovery and historical eligibility, not code alone.
+try:
+    _triage_run = subprocess.run([sys.executable, "scripts/standing_health_triage.py"],
+                                capture_output=True, text=True)
+    _triage = json.loads(_triage_run.stdout)
+    check("standing-health issue evidence and hash chain", _triage_run.returncode == 0)
+    for _issue in _triage["issues"]:
+        if _issue["status"] not in ("RESOLVED", "DESCOPED"):
+            print(f"       {_issue['issue_id']}: {_issue['status']}; owner={_issue['owner']}; "
+                  f"due={_issue['due_at_utc']}; next={_issue['next_action']}")
+    print("       TRIAGE_TREND:", _triage["trend"])
+except Exception as _exc:
+    check(f"standing-health evidence register ({_exc})", False)
+print(f"\n{'REPOSITORY_HEALTH_GREEN' if not fails else 'REPOSITORY_HEALTH_RED'} — {len(fails)} fail, {len(warns)} warn")
 try:
     from current_sports_data import runtime_readiness
     _fresh = runtime_readiness(__import__("pathlib").Path.cwd())

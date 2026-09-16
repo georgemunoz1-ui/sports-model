@@ -44,7 +44,7 @@
       "last_verified_at_utc": "2026-09-16T04:26:41.997358+00:00",
       "last_material_change_at_utc": "2026-09-16T04:26:41.997358+00:00",
       "last_touched_at_utc": "2026-09-16T04:26:41.997358+00:00",
-      "previous_record_sha256": null,
+      "previous_record_sha256": "4964e57d25974aaeeb5d2475dc166028b47b9c6239b16aff52eae8ea29f19f1e",
       "reproducibility_tier": "OPERATOR_REPORTED_PENDING_REMOTE_CI",
       "residual_claim": {
         "fixed": "Only the executed action/evidence described in this card",
@@ -58,7 +58,28 @@
       },
       "escalation_path": "Repository maintainer decision: after third consecutive blocked session require explicit dated risk acceptance or evidenced descope; otherwise OVERDUE-ESCALATED, never automatic clearance.",
       "physical_action_evidence": "harness/ingest_lancebroz.py: all-object verification implemented; remote candidate listing retained",
-      "record_sha256": "4964e57d25974aaeeb5d2475dc166028b47b9c6239b16aff52eae8ea29f19f1e"
+      "record_sha256": "d7f0725689d00c11fe79be22d19d78cbf002dd43dab8b9cb350391ae05524e61",
+      "severity": "release_blocking",
+      "reproduce": {
+        "clean_checkout": true,
+        "commands": [
+          "git clone https://github.com/georgemunoz1-ui/sports-model.git && cd sports-model",
+          "git checkout <verified-code-commit>",
+          "python3 -m pip install -r requirements-consolidated.txt",
+          "python3 -m pytest tests -q",
+          "python3 scripts/standing_health_triage.py"
+        ],
+        "expected_result": {
+          "tests": "342 passed, 8 subtests passed at initial verified repair",
+          "triage_validation_errors": [],
+          "official_release_eligible": false
+        },
+        "scope": "Reproduces governance/contract checks, not unrecovered historical raw inputs",
+        "external_requirements": [
+          "Authorized repository read access",
+          "Archive verification additionally requires declared upstream snapshot and workflow runner"
+        ]
+      }
     },
     {
       "issue_id": "REL-RECOVERY-001",
@@ -91,7 +112,7 @@
       "last_verified_at_utc": "2026-09-16T04:26:41.997358+00:00",
       "last_material_change_at_utc": "2026-09-16T04:26:41.997358+00:00",
       "last_touched_at_utc": "2026-09-16T04:26:41.997358+00:00",
-      "previous_record_sha256": null,
+      "previous_record_sha256": "9518d2b814a1185f0aca5bbb16c49e6eda4ec8cf253b2e54928f3dd8531131e7",
       "reproducibility_tier": "OPERATOR_REPORTED_PENDING_REMOTE_CI",
       "residual_claim": {
         "fixed": "Only the executed action/evidence described in this card",
@@ -106,7 +127,28 @@
       "escalation_path": "Repository maintainer decision: after third consecutive blocked session require explicit dated risk acceptance or evidenced descope; otherwise OVERDUE-ESCALATED, never automatic clearance.",
       "trend_included": false,
       "physical_action_evidence": "Terminal-state/reporting repair and RJ-002 disposition correction applied",
-      "record_sha256": "9518d2b814a1185f0aca5bbb16c49e6eda4ec8cf253b2e54928f3dd8531131e7"
+      "record_sha256": "26191ee363586acbfa4f51f18d1d3eac8d0e267361c590ba0fb7cc6dd45b5b18",
+      "severity": "release_blocking",
+      "reproduce": {
+        "clean_checkout": true,
+        "commands": [
+          "git clone https://github.com/georgemunoz1-ui/sports-model.git && cd sports-model",
+          "git checkout <verified-code-commit>",
+          "python3 -m pip install -r requirements-consolidated.txt",
+          "python3 -m pytest tests -q",
+          "python3 scripts/standing_health_triage.py"
+        ],
+        "expected_result": {
+          "tests": "342 passed, 8 subtests passed at initial verified repair",
+          "triage_validation_errors": [],
+          "official_release_eligible": false
+        },
+        "scope": "Reproduces governance/contract checks, not unrecovered historical raw inputs",
+        "external_requirements": [
+          "Authorized repository read access",
+          "Archive verification additionally requires declared upstream snapshot and workflow runner"
+        ]
+      }
     },
     {
       "issue_id": "REL-HISTORICAL-001",
@@ -128,7 +170,7 @@
         },
         {
           "path": "harness/healthcheck.py",
-          "sha256": "3cd6747f38eb661f2f037133d85c3439926540ef2d7189948fd2076f2b83a7a6"
+          "sha256": "001e8dfb334ad00fd3377ca59443891edb38872870f0606755fe346638c4005f"
         },
         {
           "path": "data/acquisition/2026-09-03_update.json",
@@ -147,7 +189,7 @@
       "last_verified_at_utc": "2026-09-16T04:26:41.997358+00:00",
       "last_material_change_at_utc": "2026-09-03T18:40:16Z",
       "last_touched_at_utc": "2026-09-03T18:40:16Z",
-      "previous_record_sha256": null,
+      "previous_record_sha256": "031566f9dfa20946fde6510c3e5db6e2d1556ae819c071c9dcdd6e63b8e3b67a",
       "reproducibility_tier": "OPERATOR_REPORTED_PENDING_REMOTE_CI",
       "residual_claim": {
         "fixed": "Only the executed action/evidence described in this card",
@@ -163,7 +205,28 @@
       "review_at_utc": "2026-09-17T04:26:41.997358+00:00",
       "rationale": "Accept continued inability to issue official forecasts for one day; this is not acceptance of invalid forecasts or a waiver of the historical gate.",
       "decision_authority": "Maintainer under user-authorized triage; action remains OFF",
-      "record_sha256": "031566f9dfa20946fde6510c3e5db6e2d1556ae819c071c9dcdd6e63b8e3b67a"
+      "record_sha256": "65b4b88f983ada2273b872bc35b061c36188b6c7733adee0ad2c0f5e3ece1504",
+      "severity": "release_blocking",
+      "reproduce": {
+        "clean_checkout": true,
+        "commands": [
+          "git clone https://github.com/georgemunoz1-ui/sports-model.git && cd sports-model",
+          "git checkout <verified-code-commit>",
+          "python3 -m pip install -r requirements-consolidated.txt",
+          "python3 -m pytest tests -q",
+          "python3 scripts/standing_health_triage.py"
+        ],
+        "expected_result": {
+          "tests": "342 passed, 8 subtests passed at initial verified repair",
+          "triage_validation_errors": [],
+          "official_release_eligible": false
+        },
+        "scope": "Reproduces governance/contract checks, not unrecovered historical raw inputs",
+        "external_requirements": [
+          "Authorized repository read access",
+          "Archive verification additionally requires declared upstream snapshot and workflow runner"
+        ]
+      }
     },
     {
       "issue_id": "RJ-001-PROVENANCE",
@@ -195,7 +258,7 @@
       "last_verified_at_utc": "2026-09-16T04:26:41.997358+00:00",
       "last_material_change_at_utc": "2026-08-26T19:15:00Z",
       "last_touched_at_utc": "2026-08-28T07:54:53Z",
-      "previous_record_sha256": null,
+      "previous_record_sha256": "02c8d8ad92234b01b10a43f9d5cec7dba718fcae9242a05868a078082d7af34d",
       "reproducibility_tier": "OPERATOR_REPORTED_PENDING_REMOTE_CI",
       "residual_claim": {
         "fixed": "Only the executed action/evidence described in this card",
@@ -226,7 +289,28 @@
       "review_at_utc": "2026-09-17T04:26:41.997358+00:00",
       "rationale": "This session prioritizes demonstrable reporter/archive/evaluation fixes. Score recovery is deferred one day with official clearance still blocked.",
       "decision_authority": "Maintainer under explicit user triage authority; no gate waiver",
-      "record_sha256": "02c8d8ad92234b01b10a43f9d5cec7dba718fcae9242a05868a078082d7af34d"
+      "record_sha256": "75cdc1ae10d4bbc91756efc4fd301d6e26ced93c3625fd3622696da91e20e702",
+      "severity": "release_blocking",
+      "reproduce": {
+        "clean_checkout": true,
+        "commands": [
+          "git clone https://github.com/georgemunoz1-ui/sports-model.git && cd sports-model",
+          "git checkout <verified-code-commit>",
+          "python3 -m pip install -r requirements-consolidated.txt",
+          "python3 -m pytest tests -q",
+          "python3 scripts/standing_health_triage.py"
+        ],
+        "expected_result": {
+          "tests": "342 passed, 8 subtests passed at initial verified repair",
+          "triage_validation_errors": [],
+          "official_release_eligible": false
+        },
+        "scope": "Reproduces governance/contract checks, not unrecovered historical raw inputs",
+        "external_requirements": [
+          "Authorized repository read access",
+          "Archive verification additionally requires declared upstream snapshot and workflow runner"
+        ]
+      }
     },
     {
       "issue_id": "RJ-002-OOF-REPLAY",
@@ -262,7 +346,7 @@
       "last_verified_at_utc": "2026-09-16T04:26:41.997358+00:00",
       "last_material_change_at_utc": "2026-08-27T06:50:00Z",
       "last_touched_at_utc": "2026-08-27T06:50:00Z",
-      "previous_record_sha256": null,
+      "previous_record_sha256": "a06aa735494007d5ff97c5dc74beba261a7b8dfd4eaa9ba3a58fe19d0cb81d3a",
       "reproducibility_tier": "OPERATOR_REPORTED_PENDING_REMOTE_CI",
       "residual_claim": {
         "fixed": "Only the executed action/evidence described in this card",
@@ -279,7 +363,28 @@
       "phases": {},
       "legacy_overdue_before_repair": false,
       "closure_evidence": "Existing job history and retained artifact referenced above; scope is metadata/registration, not fresh production readiness",
-      "record_sha256": "a06aa735494007d5ff97c5dc74beba261a7b8dfd4eaa9ba3a58fe19d0cb81d3a"
+      "record_sha256": "0ad1939940e7d8c97f74e9a52e248c3e71c83dcb426be3f0dec7777bcf5edfed",
+      "severity": "historical_record_only",
+      "reproduce": {
+        "clean_checkout": true,
+        "commands": [
+          "git clone https://github.com/georgemunoz1-ui/sports-model.git && cd sports-model",
+          "git checkout <verified-code-commit>",
+          "python3 -m pip install -r requirements-consolidated.txt",
+          "python3 -m pytest tests -q",
+          "python3 scripts/standing_health_triage.py"
+        ],
+        "expected_result": {
+          "tests": "342 passed, 8 subtests passed at initial verified repair",
+          "triage_validation_errors": [],
+          "official_release_eligible": false
+        },
+        "scope": "Reproduces governance/contract checks, not unrecovered historical raw inputs",
+        "external_requirements": [
+          "Authorized repository read access",
+          "Archive verification additionally requires declared upstream snapshot and workflow runner"
+        ]
+      }
     },
     {
       "issue_id": "RJ-003-FALLBACK-ARM",
@@ -315,7 +420,7 @@
       "last_verified_at_utc": "2026-09-16T04:26:41.997358+00:00",
       "last_material_change_at_utc": "2026-08-27T06:53:30Z",
       "last_touched_at_utc": "2026-08-27T06:53:30Z",
-      "previous_record_sha256": null,
+      "previous_record_sha256": "5fb09c1aa83b50ecde8aedcf193d729dbf669ec8e2932a26bccd7bb484a16ac2",
       "reproducibility_tier": "OPERATOR_REPORTED_PENDING_REMOTE_CI",
       "residual_claim": {
         "fixed": "Only the executed action/evidence described in this card",
@@ -333,7 +438,28 @@
       "legacy_overdue_before_repair": true,
       "rationale": "Conditional trigger did not fire",
       "scope_proof": "Recorded historical terminal disposition and unchanged surviving dependency record; not a new official-profile exemption",
-      "record_sha256": "5fb09c1aa83b50ecde8aedcf193d729dbf669ec8e2932a26bccd7bb484a16ac2"
+      "record_sha256": "9164e1635e9275d4e9112db9d922d645856a32b11923be6b2eb6ccdcb41e981a",
+      "severity": "historical_record_only",
+      "reproduce": {
+        "clean_checkout": true,
+        "commands": [
+          "git clone https://github.com/georgemunoz1-ui/sports-model.git && cd sports-model",
+          "git checkout <verified-code-commit>",
+          "python3 -m pip install -r requirements-consolidated.txt",
+          "python3 -m pytest tests -q",
+          "python3 scripts/standing_health_triage.py"
+        ],
+        "expected_result": {
+          "tests": "342 passed, 8 subtests passed at initial verified repair",
+          "triage_validation_errors": [],
+          "official_release_eligible": false
+        },
+        "scope": "Reproduces governance/contract checks, not unrecovered historical raw inputs",
+        "external_requirements": [
+          "Authorized repository read access",
+          "Archive verification additionally requires declared upstream snapshot and workflow runner"
+        ]
+      }
     },
     {
       "issue_id": "RJ-004-WNBA-INJURY",
@@ -365,7 +491,7 @@
       "last_verified_at_utc": "2026-09-16T04:26:41.997358+00:00",
       "last_material_change_at_utc": "2026-08-25T22:20:00Z",
       "last_touched_at_utc": "2026-08-25T22:20:00Z",
-      "previous_record_sha256": null,
+      "previous_record_sha256": "7c01beb4df862fa25ae5efa5a609f2fc886d02baaafed4f2cc69678d316c06e6",
       "reproducibility_tier": "OPERATOR_REPORTED_PENDING_REMOTE_CI",
       "residual_claim": {
         "fixed": "Only the executed action/evidence described in this card",
@@ -383,7 +509,28 @@
       "legacy_overdue_before_repair": false,
       "rationale": "Superseded by wider RJ-005 with missing units preserved",
       "scope_proof": "Recorded historical terminal disposition and unchanged surviving dependency record; not a new official-profile exemption",
-      "record_sha256": "7c01beb4df862fa25ae5efa5a609f2fc886d02baaafed4f2cc69678d316c06e6"
+      "record_sha256": "ba967155cc4741f775cb667cb95f8e2168e51a84a5d51884cf3601c197cf6fc1",
+      "severity": "historical_record_only",
+      "reproduce": {
+        "clean_checkout": true,
+        "commands": [
+          "git clone https://github.com/georgemunoz1-ui/sports-model.git && cd sports-model",
+          "git checkout <verified-code-commit>",
+          "python3 -m pip install -r requirements-consolidated.txt",
+          "python3 -m pytest tests -q",
+          "python3 scripts/standing_health_triage.py"
+        ],
+        "expected_result": {
+          "tests": "342 passed, 8 subtests passed at initial verified repair",
+          "triage_validation_errors": [],
+          "official_release_eligible": false
+        },
+        "scope": "Reproduces governance/contract checks, not unrecovered historical raw inputs",
+        "external_requirements": [
+          "Authorized repository read access",
+          "Archive verification additionally requires declared upstream snapshot and workflow runner"
+        ]
+      }
     },
     {
       "issue_id": "RJ-005-WNBA-FEATURE-PIPELINE",
@@ -415,7 +562,7 @@
       "last_verified_at_utc": "2026-09-16T04:26:41.997358+00:00",
       "last_material_change_at_utc": "2026-09-03T19:21:08Z",
       "last_touched_at_utc": "2026-09-03T19:21:08Z",
-      "previous_record_sha256": null,
+      "previous_record_sha256": "7953edd865e81c36dc3c74d68af3546f13fd4773dcc15d712a96dab090d65edd",
       "reproducibility_tier": "OPERATOR_REPORTED_PENDING_REMOTE_CI",
       "residual_claim": {
         "fixed": "Only the executed action/evidence described in this card",
@@ -432,7 +579,28 @@
       "phases": {},
       "legacy_overdue_before_repair": false,
       "external_dependency": "Original official WNBA report objects for the missing historical team/date units",
-      "record_sha256": "7953edd865e81c36dc3c74d68af3546f13fd4773dcc15d712a96dab090d65edd"
+      "record_sha256": "8b8e27aadd76e36e32f599648b0416920cbf7be7f251cb659c94e3294b554fa1",
+      "severity": "release_blocking",
+      "reproduce": {
+        "clean_checkout": true,
+        "commands": [
+          "git clone https://github.com/georgemunoz1-ui/sports-model.git && cd sports-model",
+          "git checkout <verified-code-commit>",
+          "python3 -m pip install -r requirements-consolidated.txt",
+          "python3 -m pytest tests -q",
+          "python3 scripts/standing_health_triage.py"
+        ],
+        "expected_result": {
+          "tests": "342 passed, 8 subtests passed at initial verified repair",
+          "triage_validation_errors": [],
+          "official_release_eligible": false
+        },
+        "scope": "Reproduces governance/contract checks, not unrecovered historical raw inputs",
+        "external_requirements": [
+          "Authorized repository read access",
+          "Archive verification additionally requires declared upstream snapshot and workflow runner"
+        ]
+      }
     },
     {
       "issue_id": "RJ-006-NFL-MODEL-RESTORATION",
@@ -464,7 +632,7 @@
       "last_verified_at_utc": "2026-09-16T04:26:41.997358+00:00",
       "last_material_change_at_utc": "2026-08-27T08:43:15Z",
       "last_touched_at_utc": "2026-08-28T07:54:53Z",
-      "previous_record_sha256": null,
+      "previous_record_sha256": "c94800d14c9127f849240b3bef60d34c30e8a1a38f07a590891f01eb79d7b6c9",
       "reproducibility_tier": "OPERATOR_REPORTED_PENDING_REMOTE_CI",
       "residual_claim": {
         "fixed": "Only the executed action/evidence described in this card",
@@ -481,7 +649,28 @@
       "phases": {},
       "legacy_overdue_before_repair": true,
       "external_dependency": "Owner-held original EPA v0.2 run directory and invalidation artifact",
-      "record_sha256": "c94800d14c9127f849240b3bef60d34c30e8a1a38f07a590891f01eb79d7b6c9"
+      "record_sha256": "c6a9e46d1b76ce1ac67e1524a614691d9ed7be30eca909017ebd1fcc53d97c04",
+      "severity": "release_blocking",
+      "reproduce": {
+        "clean_checkout": true,
+        "commands": [
+          "git clone https://github.com/georgemunoz1-ui/sports-model.git && cd sports-model",
+          "git checkout <verified-code-commit>",
+          "python3 -m pip install -r requirements-consolidated.txt",
+          "python3 -m pytest tests -q",
+          "python3 scripts/standing_health_triage.py"
+        ],
+        "expected_result": {
+          "tests": "342 passed, 8 subtests passed at initial verified repair",
+          "triage_validation_errors": [],
+          "official_release_eligible": false
+        },
+        "scope": "Reproduces governance/contract checks, not unrecovered historical raw inputs",
+        "external_requirements": [
+          "Authorized repository read access",
+          "Archive verification additionally requires declared upstream snapshot and workflow runner"
+        ]
+      }
     },
     {
       "issue_id": "RJ-007-DATELESS-JOIN-REMEDIATION",
@@ -521,7 +710,7 @@
       "last_verified_at_utc": "2026-09-16T04:26:41.997358+00:00",
       "last_material_change_at_utc": "2026-09-16T04:26:41.997358+00:00",
       "last_touched_at_utc": "2026-08-28T07:50:02Z",
-      "previous_record_sha256": null,
+      "previous_record_sha256": "549ec2a1eaa9fe6075403c472e3ebdcc2007c82969f0e11170795ccb0cbb8f28",
       "reproducibility_tier": "OPERATOR_REPORTED_PENDING_REMOTE_CI",
       "residual_claim": {
         "fixed": "Only the executed action/evidence described in this card",
@@ -538,7 +727,28 @@
       "phases": {},
       "legacy_overdue_before_repair": true,
       "physical_action_evidence": "harness/evaluation_standard.py and harness/promotion_gate.py reject duplicate/date/outcome conflicts",
-      "record_sha256": "549ec2a1eaa9fe6075403c472e3ebdcc2007c82969f0e11170795ccb0cbb8f28"
+      "record_sha256": "8b68212ad0438405a29bf2a8decbb0ccf9c4639fb19ebde08671347748c57b22",
+      "severity": "release_blocking",
+      "reproduce": {
+        "clean_checkout": true,
+        "commands": [
+          "git clone https://github.com/georgemunoz1-ui/sports-model.git && cd sports-model",
+          "git checkout <verified-code-commit>",
+          "python3 -m pip install -r requirements-consolidated.txt",
+          "python3 -m pytest tests -q",
+          "python3 scripts/standing_health_triage.py"
+        ],
+        "expected_result": {
+          "tests": "342 passed, 8 subtests passed at initial verified repair",
+          "triage_validation_errors": [],
+          "official_release_eligible": false
+        },
+        "scope": "Reproduces governance/contract checks, not unrecovered historical raw inputs",
+        "external_requirements": [
+          "Authorized repository read access",
+          "Archive verification additionally requires declared upstream snapshot and workflow runner"
+        ]
+      }
     },
     {
       "issue_id": "RJ-008-NFL-LAUNCH-SHADOW",
@@ -570,7 +780,7 @@
       "last_verified_at_utc": "2026-09-16T04:26:41.997358+00:00",
       "last_material_change_at_utc": "2026-09-03T19:21:08Z",
       "last_touched_at_utc": "2026-09-03T19:21:08Z",
-      "previous_record_sha256": null,
+      "previous_record_sha256": "ff4497c4b018be1951a8ff86e50530909eae9fb6cd5c6f9902017695c5e13470",
       "reproducibility_tier": "OPERATOR_REPORTED_PENDING_REMOTE_CI",
       "residual_claim": {
         "fixed": "Only the executed action/evidence described in this card",
@@ -587,7 +797,28 @@
       "phases": {},
       "legacy_overdue_before_repair": false,
       "closure_evidence": "Existing job history and retained artifact referenced above; scope is metadata/registration, not fresh production readiness",
-      "record_sha256": "ff4497c4b018be1951a8ff86e50530909eae9fb6cd5c6f9902017695c5e13470"
+      "record_sha256": "6834e720f8e4aa027ce295db2a6041e829dabfa804151db9766041e744dd9160",
+      "severity": "historical_record_only",
+      "reproduce": {
+        "clean_checkout": true,
+        "commands": [
+          "git clone https://github.com/georgemunoz1-ui/sports-model.git && cd sports-model",
+          "git checkout <verified-code-commit>",
+          "python3 -m pip install -r requirements-consolidated.txt",
+          "python3 -m pytest tests -q",
+          "python3 scripts/standing_health_triage.py"
+        ],
+        "expected_result": {
+          "tests": "342 passed, 8 subtests passed at initial verified repair",
+          "triage_validation_errors": [],
+          "official_release_eligible": false
+        },
+        "scope": "Reproduces governance/contract checks, not unrecovered historical raw inputs",
+        "external_requirements": [
+          "Authorized repository read access",
+          "Archive verification additionally requires declared upstream snapshot and workflow runner"
+        ]
+      }
     },
     {
       "issue_id": "RJ-009-CFB-LAUNCH-SHADOW",
@@ -619,7 +850,7 @@
       "last_verified_at_utc": "2026-09-16T04:26:41.997358+00:00",
       "last_material_change_at_utc": "2026-09-03T19:21:08Z",
       "last_touched_at_utc": "2026-09-03T19:21:08Z",
-      "previous_record_sha256": null,
+      "previous_record_sha256": "4296d982ebded55f990fadcf11c5485cbdb5c8715e820723b8965fda61dc4ec2",
       "reproducibility_tier": "OPERATOR_REPORTED_PENDING_REMOTE_CI",
       "residual_claim": {
         "fixed": "Only the executed action/evidence described in this card",
@@ -636,7 +867,29 @@
       "phases": {},
       "legacy_overdue_before_repair": false,
       "closure_evidence": "Existing job history and retained artifact referenced above; scope is metadata/registration, not fresh production readiness",
-      "record_sha256": "4296d982ebded55f990fadcf11c5485cbdb5c8715e820723b8965fda61dc4ec2"
+      "record_sha256": "c848a25bf42edf69b63314f6c2a12866e56bf3a2e3ee84c5ca51bb9800c2af8a",
+      "severity": "historical_record_only",
+      "reproduce": {
+        "clean_checkout": true,
+        "commands": [
+          "git clone https://github.com/georgemunoz1-ui/sports-model.git && cd sports-model",
+          "git checkout <verified-code-commit>",
+          "python3 -m pip install -r requirements-consolidated.txt",
+          "python3 -m pytest tests -q",
+          "python3 scripts/standing_health_triage.py"
+        ],
+        "expected_result": {
+          "tests": "342 passed, 8 subtests passed at initial verified repair",
+          "triage_validation_errors": [],
+          "official_release_eligible": false
+        },
+        "scope": "Reproduces governance/contract checks, not unrecovered historical raw inputs",
+        "external_requirements": [
+          "Authorized repository read access",
+          "Archive verification additionally requires declared upstream snapshot and workflow runner"
+        ]
+      }
     }
-  ]
+  ],
+  "revision_note": "Add explicit reproduction/severity fields and bind clarified aggregate health labels. Prior issue-card versions preserved in register-initial.json; no new triage session or reset of age."
 }

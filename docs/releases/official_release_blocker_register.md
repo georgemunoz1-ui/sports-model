@@ -91,7 +91,7 @@ Health invokes the September 3 release decision; its artifact and contract verif
 
 **Done definition:** Original September 3 record continues to verify without altered bytes; New event-specific profile has registration, inputs and publication before cutoff; Any historical/current-health separation is versioned and tested
 
-**Evidence:** `harness/release_gate.py` (SHA-256 660d41d46ac80897a4b0a0b80d9ce564a4e0faf9e0b465459a5bf9642ba2fd2a), `harness/healthcheck.py` (SHA-256 3cd6747f38eb661f2f037133d85c3439926540ef2d7189948fd2076f2b83a7a6), `data/acquisition/2026-09-03_update.json` (SHA-256 15a06fa465ee6882cbffd0896a7378d763e8f8e23677543e2ec36f6d9d6ff7de), `data/releases/2026-09-03_release.json` (SHA-256 d1f8ff727bb8eb3744a06240ca11de3692860a5ab47f46c74413f7c20e201414)
+**Evidence:** `harness/release_gate.py` (SHA-256 660d41d46ac80897a4b0a0b80d9ce564a4e0faf9e0b465459a5bf9642ba2fd2a), `harness/healthcheck.py` (SHA-256 001e8dfb334ad00fd3377ca59443891edb38872870f0606755fe346638c4005f), `data/acquisition/2026-09-03_update.json` (SHA-256 15a06fa465ee6882cbffd0896a7378d763e8f8e23677543e2ec36f6d9d6ff7de), `data/releases/2026-09-03_release.json` (SHA-256 d1f8ff727bb8eb3744a06240ca11de3692860a5ab47f46c74413f7c20e201414)
 
 **Residual limitation:** Official release eligibility, historical registration or forecasting superiority. Mandatory health and current-event gates remain.
 
@@ -221,3 +221,5 @@ CFB launch-shadow registration job was already COMPLETE 4/4; current-season assi
 
 **Residual limitation:** Official release eligibility, historical registration or forecasting superiority. Mandatory health and current-event gates remain.
 
+
+Aggregate health now says REPOSITORY_HEALTH_RED/GREEN because it includes code, external recovery and historical eligibility. This label change does not change exit codes or remove gates. The report also validates the triage hash chain and prints owner, next action and due date for every unresolved card.

@@ -1,0 +1,33 @@
+# Phase 1.1 source-lineage attestation
+
+This branch does **not** rewrite the Sept. 5 local source history. It records the exact local lineage claimed by the preserved source bundle so review can reconcile it separately from evidence import.
+
+```text
+local source commit claimed = c69d7ce12541643148cf04d081d14569faad1f21
+local source gitbundle sha256 = 6c6b7f925985fb87e4aaf1e1de1165698ad213cadc6cddddfe1b0152b40bf4d9
+canonical tracked-tree/source manifest sha256 = ac710b94634cc21f6266440a9e999c9a63fea465164f4b11106382d0eee96f13
+model_source_sha256 recorded in Phase 1.1 artifacts = 79e2e216c8fedc495b14df34df8c0c05b65b49d74ccb624786b8cd85a6e73e8d
+dependency_lock_sha256 = 1668a3152e33680d94637b13421c15e68bd97cd8701f7f555c691f5bc5c0b9f3
+```
+
+Tracked local source file hashes:
+
+```text
+README.md  05b96db0cee029dd1cf00a97c9f78c42aeb459002d8809300124e77cd9f8c930
+cfb_phase1_1.py  02de77f14adfb2c62b793e1a818f0d901fed1296a47ad06ae96c01bad5410441
+ci_validate.py  2e3e374a3f8e1dfc09f534a7918ca65a21d97ccadb38a61939ffeecd75337226
+common.py  21911431f76f888e60c2b36ad7770aace8bdefb84770ba3bba79cec257a179db
+ledger.py  376ca8ec68012c62083da50270653c6ae6a5ef9ae80f888c59237aeb450dc522
+mlb_phase1.py  54e4078c327773b10593de745af8a1cd6c7ac9ea3b21aa74f85fdab601b05b0d
+mls_phase1.py  488944ee826f095ed3839fa5872fc6cc38f85a878c8d357233cdb42f9197b7d8
+provenance.py  fdfb20b3d1e3ca628c515f6868ff225bd943437c3aa0c2345886ef7fdb7a5f28
+requirements.lock  1668a3152e33680d94637b13421c15e68bd97cd8701f7f555c691f5bc5c0b9f3
+run_phase1_1.py  d2a810186bc5e7429dffff126ce97ab41ce6368d1974d2905d544244e7271913
+schema_gate.py  c38d66f643f483bad46b1ab868eae9fba88f41cc8d7c063f4d2fc12f83787d3a
+schemas/cfb_experiment_v1_1.json  8c0ab7c3bca48b56b98af0fb06f5bf17884c25741a82cb13e82cbcd97f6b56f9
+schemas/forecast_governance_v1_1.json  ca2caff921be8f4b5bd504f50be9b445a4b4a8f7776d1e5745a6b3fe1094c3fe
+schemas/registry_state_v1_1.json  37beee178b67db34ba3643665ef1376ddc82f665dd2e5d0ca38b27b8c90f79d7
+test_phase1_1.py  7dd54fb061db6184bf693d0f6d271b7865ebf183c394eb576b42900cdd08a6e9
+```
+
+The original source bundle itself remains preserved unchanged in the local reconciliation archive. A later review may import/apply that exact code into active repository paths, but it must not be rewritten as though commit `c69d7ce...` had existed on the authoritative remote on Sept. 5.

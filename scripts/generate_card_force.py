@@ -39,7 +39,12 @@ def now_utc():
 
 
 def load_adapter(league):
-    return importlib.import_module(f"pipelines.cards.adapters.{league.lower()}")
+    from pipelines.cards.selection import select,SelectionError
+    if league.lower() in {'nba','nhl','mls'}:select(league)
+    try:return importlib.import_module(f"pipelines.cards.adapters.{league.lower()}")
+    except ModuleNotFoundError as exc:
+        if exc.name==f"pipelines.cards.adapters.{league.lower()}":raise SelectionError('SELECTED_MODEL_CURRENT_CARD_ADAPTER_UNAVAILABLE:'+league) from exc
+        raise
 
 
 def divergence_category(abs_gap_pp):
@@ -64,10 +69,11 @@ def normalize(event, raw):
     if not math.isfinite(dose) or not 0 <= dose <= 1:
         raise RuntimeError("INVALID_DOSE")
 
-    analytic_p = float(raw.get("analytic_p", raw["model_p"]))
+    mc_only=raw.get("probability_estimator")=="MONTE_CARLO_ONLY"
+    analytic_p = None if mc_only else float(raw.get("analytic_p", raw["model_p"]))
     stochastic_sim_p = float(raw.get("stochastic_sim_p", raw["sim_p"]))
-    signed_gap_pp = 100.0 * (analytic_p - stochastic_sim_p)
-    abs_gap_pp = abs(signed_gap_pp)
+    signed_gap_pp = None if mc_only else 100.0 * (analytic_p - stochastic_sim_p)
+    abs_gap_pp = None if mc_only else abs(signed_gap_pp)
 
     return {
         "event_id": str(event["event_id"]),
@@ -81,13 +87,15 @@ def normalize(event, raw):
         "data_quality": raw.get("data_quality", "PARTIAL"),
         "dose": dose,
         "model_winner": raw.get("model_winner"),
-        "model_p": analytic_p,
+        "model_p": float(raw["model_p"]),
+        "probability_estimator":raw.get("probability_estimator","ANALYTIC_AND_SIMULATION"),
+        "selection_hash":raw.get("selection_hash"),
         "sim_p": stochastic_sim_p,
         "analytic_p": analytic_p,
         "stochastic_sim_p": stochastic_sim_p,
         "analytic_sim_gap_pp": signed_gap_pp,
         "analytic_sim_abs_gap_pp": abs_gap_pp,
-        "analytic_sim_divergence": ("DIFFERENT_MODELS_NOT_CONVERGENCE" if raw.get("diagnostics", {}).get("comparison") == "DIFFERENT_MODELS_NOT_ANALYTIC_MC_CONVERGENCE" else divergence_category(abs_gap_pp)),
+        "analytic_sim_divergence": "NOT_APPLICABLE_MC_ONLY" if mc_only else ("DIFFERENT_MODELS_NOT_CONVERGENCE" if raw.get("diagnostics", {}).get("comparison") == "DIFFERENT_MODELS_NOT_ANALYTIC_MC_CONVERGENCE" else divergence_category(abs_gap_pp)),
         "model_p_candidate_normal_margin": raw.get("model_p_candidate_normal_margin"),
         "model_p_candidate_status": raw.get("model_p_candidate_status"),
         "projected_margin": raw.get("projected_margin"),
@@ -295,6 +303,8 @@ def generate(card_date, league, as_of, simulations, overrides):
             continue
         try:
             raw = adapter.forecast_event(event, context, simulations)
+            from pipelines.cards.selected import apply_default
+            raw = apply_default(league,event,raw)
             # Guard the rare case where network/simulation time crosses first pitch.
             if now_utc() >= event_start:
                 rows.append({
@@ -376,6 +386,12 @@ def render_md(card):
     if pit.get("pit_status") not in (None, "PIT_ALIGNED"):
         lines.extend(["> **PIT WARNING:** this diagnostic card must not be represented as an exact requested-cutoff replay.", ""])
 
+    seen_defaults=set()
+    for row in card["forecasts"]:
+        default=(row.get("diagnostics") or {}).get("default_selection")
+        if default and default['profile'] not in seen_defaults:
+            seen_defaults.add(default['profile'])
+            lines.extend([f"**Selected default:** {default['default_model_id']} · {default['selection_status']}",default['reason'],""])
     for row in card["forecasts"]:
         diagnostic=row.get("diagnostics") or {}
         selection=diagnostic.get("selection_policy")
@@ -395,12 +411,13 @@ def render_md(card):
         if row.get("forecast_status") != "FORECAST_GENERATED":
             lines.append(f"| {game} | POST_START | — | — | — | — | — | — | — | — | INELIGIBLE | post-start; no new pregame forecast |")
             continue
-        pct = lambda x: f"{100 * x:.1f}%"
+        pct = lambda x: "—" if x is None else f"{100 * x:.1f}%"
+        gap = "—" if row["analytic_sim_gap_pp"] is None else f"{row['analytic_sim_gap_pp']:+.2f} pp"
         grade = "AWAITING" if (row.get("grading") or {}).get("awaiting_outcome") else "INELIGIBLE"
         lines.append(
             f"| {game} | {row['forecast_tier']} | {row['dose']:.2f} | {row.get('model_winner', '—')} | "
             f"{pct(row['analytic_p'])} | {pct(row['stochastic_sim_p'])} | "
-            f"{row['analytic_sim_gap_pp']:+.2f} pp | {row['analytic_sim_divergence']} | "
+            f"{gap} | {row['analytic_sim_divergence']} | "
             f"{row.get('projected_margin', '—')} | {row.get('projected_total', '—')} | {grade} | "
             f"{', '.join(row.get('warnings', [])) or 'None'} |"
         )
@@ -413,7 +430,7 @@ def render_md(card):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--date", required=True)
-    parser.add_argument("--league", required=True, choices=["mlb", "cfb", "nfl", "wnba", "nba"])
+    parser.add_argument("--league", required=True, choices=["mlb", "cfb", "nfl", "wnba", "nba", "nhl", "mls"])
     parser.add_argument("--as-of-utc")
     parser.add_argument("--simulations", type=int, default=100000)
     parser.add_argument("--manual-overrides")

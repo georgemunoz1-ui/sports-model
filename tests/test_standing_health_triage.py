@@ -47,17 +47,47 @@ def test_risk_requires_authority_and_review_and_does_not_clear_release(tmp_path)
     c = card(tmp_path)
     c = triage.seal(dict(c, status="ACCEPTED-RISK"))
     assert "RISK_DECISION_INCOMPLETE" in triage.validate_card(c, tmp_path)
-    c = triage.seal(dict(c, review_at_utc="2026-09-15T00:00:00Z", rationale="Defer with no release", decision_authority="owner"))
+    c = triage.seal(dict(c, review_at_utc="2026-09-15T00:00:00Z", rationale="Defer with no release", decision_authority="owner", last_material_change_at_utc=NOW.isoformat()))
     r = triage.report({"issues": [c]}, [], NOW, tmp_path)
     assert r["issues"][0]["status"] == "OVERDUE-ESCALATED"
     assert not r["official_release_eligible"]
+    assert r["accepted_risks_present"] and not r["accepted_risk_release_override"]
 
-def test_third_blocked_session_escalates(tmp_path):
+def test_aged_issue_requires_complete_escalation_without_resetting_age(tmp_path):
     c = card(tmp_path)
-    prior = dict(issues=[dict(issue_id="test", decision="BLOCKED")], trend={"aged_over_14_days": 1})
-    r = triage.report({"issues": [c]}, [prior, prior], NOW, tmp_path)
+    r = triage.report({"issues": [c]}, [], NOW, tmp_path)
+    assert "test:AGED_ESCALATION_INCOMPLETE" in r["validation_errors"]
+    escalation = dict(owner_confirmed="maintainer", escalation_owner="release maintainer",
+        blocker="Missing original object", last_completed_action="Inventoried evidence; object absent",
+        next_action="Check named backup", next_action_at_utc="2026-09-17T00:00:00Z",
+        recorded_at_utc=NOW.isoformat(), decision="BLOCKED_EXTERNALLY", rationale="Backup required; no waiver")
+    c = triage.seal(dict(c, escalation=escalation))
+    r = triage.report({"issues": [c]}, [], NOW, tmp_path)
+    assert not r["validation_errors"]
     assert r["issues"][0]["status"] == "OVERDUE-ESCALATED"
     assert r["trend"]["aged_over_14_days"] == 1
+    expired = triage.seal(dict(c, escalation=dict(escalation, next_action_at_utc=NOW.isoformat())))
+    assert "test:ESCALATION_REVIEW_OVERDUE" in triage.report({"issues": [expired]}, [], NOW, tmp_path)["validation_errors"]
+
+def test_wnba_units_cannot_close_without_binding_or_via_parent(tmp_path):
+    c = triage.seal(dict(card(tmp_path), obligation_kind="WNBA_OFFICIAL_AVAILABILITY",
+        status="RESOLVED", closure_evidence="claimed", unit_binding={}))
+    assert "AVAILABILITY_UNIT_BINDING_INCOMPLETE" in triage.validate_card(c, tmp_path)
+    parent = triage.seal(dict(card(tmp_path), issue_id="parent", status="RESOLVED", closure_evidence="claimed"))
+    child = triage.seal(dict(card(tmp_path), parent_issue_id="parent", unit_ordinal=1))
+    r = triage.report({"issues": [parent, child], "obligation_groups": [{"parent_issue_id":"parent", "expected_units":6}]}, [], NOW, tmp_path)
+    assert "parent:OBLIGATION_INVENTORY_INCOMPLETE" in r["validation_errors"]
+    assert "parent:PARENT_CLOSURE_WITH_UNRESOLVED_UNITS" in r["validation_errors"]
+
+def test_third_blocked_session_escalates(tmp_path):
+    c = triage.seal(dict(card(tmp_path), last_material_change_at_utc=NOW.isoformat()))
+    prior = dict(issues=[dict(issue_id="test", decision="BLOCKED")], trend={"aged_over_14_days": 1})
+    read_only = triage.report({"issues": [c]}, [prior, prior], NOW, tmp_path)
+    assert read_only["issues"][0]["consecutive_blocked_sessions"] == 2
+    assert read_only["issues"][0]["status"] == "BLOCKED"
+    r = triage.report({"issues": [c]}, [prior, prior], NOW, tmp_path, for_new_session=True)
+    assert r["issues"][0]["status"] == "OVERDUE-ESCALATED"
+    assert r["issues"][0]["consecutive_blocked_sessions"] == 3
 
 def test_first_trend_unknown_and_review_does_not_reset_age(tmp_path):
     c = card(tmp_path)

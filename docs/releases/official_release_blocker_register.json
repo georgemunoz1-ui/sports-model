@@ -200,7 +200,7 @@
         },
         {
           "path": "harness/healthcheck.py",
-          "sha256": "001e8dfb334ad00fd3377ca59443891edb38872870f0606755fe346638c4005f"
+          "sha256": "f2d2e00eac1733a70bf7d847387f1529907de0dda4b5fffd1baee411a0e415f3"
         },
         {
           "path": "data/acquisition/2026-09-03_update.json",
@@ -220,10 +220,10 @@
       "release_blocking": true,
       "opened_at_utc": null,
       "opened_at_basis": "First-ever record not established; do not infer from deadline",
-      "last_verified_at_utc": "2026-09-16T04:33:34.386036+00:00",
+      "last_verified_at_utc": "2026-09-16T07:26:12.501234+00:00",
       "last_material_change_at_utc": "2026-09-03T18:40:16Z",
-      "last_touched_at_utc": "2026-09-03T18:40:16Z",
-      "previous_record_sha256": "65b4b88f983ada2273b872bc35b061c36188b6c7733adee0ad2c0f5e3ece1504",
+      "last_touched_at_utc": "2026-09-16T07:26:12.501234+00:00",
+      "previous_record_sha256": "795b83b4fccbf38152b9e9f1ca4d4570d037d337a378d5bb2fb05a587fbb3386",
       "reproducibility_tier": "AUTOMATED_CONTRACT_CHECKS_WITH_EXPLICIT_RECOVERY_LIMITS",
       "residual_claim": {
         "fixed": "Only the executed action/evidence described in this card",
@@ -239,7 +239,7 @@
       "review_at_utc": "2026-09-17T04:26:41.997358+00:00",
       "rationale": "Accept continued inability to issue official forecasts for one day; this is not acceptance of invalid forecasts or a waiver of the historical gate.",
       "decision_authority": "Maintainer under user-authorized triage; action remains OFF",
-      "record_sha256": "795b83b4fccbf38152b9e9f1ca4d4570d037d337a378d5bb2fb05a587fbb3386",
+      "record_sha256": "9d00a960b1177e15d6e203f29a24f34417f5f7d415acb6629aabbcd0ae9836ea",
       "severity": "release_blocking",
       "reproduce": {
         "clean_checkout": true,
@@ -267,7 +267,8 @@
         "workflow_run_id": 35055900817,
         "scope": "Software/triage contracts and archive candidate; not unperformed historical recovery",
         "url": "https://github.com/georgemunoz1-ui/sports-model/actions/runs/35055900817"
-      }
+      },
+      "revision_verification": "Current escalation/card revision requires its own test receipt; prior verification field refers only to the cited earlier commit."
     },
     {
       "issue_id": "RJ-001-PROVENANCE",
@@ -278,8 +279,9 @@
       "next_action": "Inventory the 126 score-verification IDs against current Tier-1 bindings and retain a missing-ID manifest before acquiring finals.",
       "due_at_utc": "2026-09-17T04:26:41.997358+00:00",
       "closure_criteria": [
-        "Declared component evidence retained with hashes",
-        "Component regression/closure checks pass; no merely renamed progress"
+        "Versioned 126-row canonical event inventory reconciles to the declared score-verification cohort.",
+        "Each required final score binds to retained authoritative source bytes, event identity, retrieval time and SHA-256; disagreements are resolved or explicitly excluded under approved scope.",
+        "Score-verification phase closure is independently reproduced; original source-acquisition completion alone cannot close it."
       ],
       "evidence": [
         {
@@ -293,6 +295,10 @@
         {
           "path": "docs/releases/2026-09-16-health-triage/remote-health-summary.json",
           "sha256": "02431e0726344a02ad65dab42a36dd60aae0cfcf7765e50299e58da6586d02c9"
+        },
+        {
+          "path": "docs/releases/2026-09-16-health-escalation/binding-audit.json",
+          "sha256": "37aeb942b785c548760c5ae0ba332a7ee48583fe3e70c9a08e2482919e42c600"
         }
       ],
       "dependency_assessment": "Global health dependency retained; official_pregame_v1 is a requested profile name, not an implemented verified dependency graph.",
@@ -300,10 +306,10 @@
       "release_blocking": true,
       "opened_at_utc": "2026-08-25T02:45:00Z",
       "opened_at_basis": "First retained history entry; not proof of earlier first occurrence",
-      "last_verified_at_utc": "2026-09-16T04:33:34.386036+00:00",
+      "last_verified_at_utc": "2026-09-16T07:26:12.501234+00:00",
       "last_material_change_at_utc": "2026-08-26T19:15:00Z",
-      "last_touched_at_utc": "2026-08-28T07:54:53Z",
-      "previous_record_sha256": "75cdc1ae10d4bbc91756efc4fd301d6e26ced93c3625fd3622696da91e20e702",
+      "last_touched_at_utc": "2026-09-16T07:26:12.501234+00:00",
+      "previous_record_sha256": "c843c7596258d308fd4728c2c1472a4f8cb4747938305f27015420a432ab2f75",
       "reproducibility_tier": "AUTOMATED_CONTRACT_CHECKS_WITH_EXPLICIT_RECOVERY_LIMITS",
       "residual_claim": {
         "fixed": "Only the executed action/evidence described in this card",
@@ -334,8 +340,8 @@
       "review_at_utc": "2026-09-17T04:26:41.997358+00:00",
       "rationale": "This session prioritizes demonstrable reporter/archive/evaluation fixes. Score recovery is deferred one day with official clearance still blocked.",
       "decision_authority": "Maintainer under explicit user triage authority; no gate waiver",
-      "record_sha256": "c843c7596258d308fd4728c2c1472a4f8cb4747938305f27015420a432ab2f75",
-      "severity": "release_blocking",
+      "record_sha256": "d2f074a34b6d9603bb723868384d85c54fa711c72df7cc430071dd05b562e9d3",
+      "severity": "P0_RELEASE_BLOCKER",
       "reproduce": {
         "clean_checkout": true,
         "commands": [
@@ -362,7 +368,21 @@
         "workflow_run_id": 35055900817,
         "scope": "Software/triage contracts and archive candidate; not unperformed historical recovery",
         "url": "https://github.com/georgemunoz1-ui/sports-model/actions/runs/35055900817"
-      }
+      },
+      "escalation": {
+        "recorded_at_utc": "2026-09-16T07:26:12.501234+00:00",
+        "owner_confirmed": "acquisition maintainer (Codex)",
+        "escalation_owner": "release maintainer (Codex)",
+        "blocker": "Score-bearing source bindings were not completed; pitch events without final scores cannot substitute.",
+        "last_completed_action": "2026-08-26: provenance acquisition reached 123/123; separate score phase remains 0/126.",
+        "last_completed_action_evidence": "data/registry/recovery_jobs.json",
+        "next_action": "Inventory the 126 score-verification IDs against current Tier-1 bindings and retain a missing-ID manifest before acquiring finals.",
+        "next_action_at_utc": "2026-09-17T04:26:41.997358+00:00",
+        "decision": "CONTINUE_REMEDIATION",
+        "rationale": "Continue the dated score-inventory task; retain existing time-limited risk acceptance and release block.",
+        "release_override": false
+      },
+      "revision_verification": "Current escalation/card revision requires its own test receipt; prior verification field refers only to the cited earlier commit."
     },
     {
       "issue_id": "RJ-002-OOF-REPLAY",
@@ -619,15 +639,15 @@
     },
     {
       "issue_id": "RJ-005-WNBA-FEATURE-PIPELINE",
-      "specific": "The historical feature job retains 11/17 units with six official availability sections unbound.",
+      "specific": "Historical job remains 11/17: six OFFICIAL_INJURY_AVAILABILITY units lack official bindings, and their rolling team/date obligation mapping is unresolved.",
       "status": "BLOCKED",
       "owner": "wnba_features maintainer (Codex)",
       "why_unresolved": "Current code cannot supply missing historical report bytes or their pregame retrieval proof. Current WNBA data is a separate fresh-packet task.",
-      "next_action": "Identify an official archived report for the exact missing team/date units; hash it or record unavailable historical inputs; build a separately dated future context packet.",
+      "next_action": "Resolve the six-slot historical team/date obligation mapping from source-bound incident/slate records; only then credit independently retained official availability sections.",
       "due_at_utc": "2026-09-17T04:26:41.997358+00:00",
       "closure_criteria": [
-        "Declared component evidence retained with hashes",
-        "Component regression/closure checks pass; no merely renamed progress"
+        "All six ordinal obligation cards have verified canonical team/date/event bindings and official report evidence, or explicit individually evidenced reclassification.",
+        "Reconcile child outcomes to the parent 11/17 ledger without double-counting; fresh future packets do not repair missed historical cutoffs."
       ],
       "evidence": [
         {
@@ -641,6 +661,10 @@
         {
           "path": "docs/releases/2026-09-16-health-triage/remote-health-summary.json",
           "sha256": "02431e0726344a02ad65dab42a36dd60aae0cfcf7765e50299e58da6586d02c9"
+        },
+        {
+          "path": "docs/releases/2026-09-16-health-escalation/binding-audit.json",
+          "sha256": "37aeb942b785c548760c5ae0ba332a7ee48583fe3e70c9a08e2482919e42c600"
         }
       ],
       "dependency_assessment": "Global health dependency retained; official_pregame_v1 is a requested profile name, not an implemented verified dependency graph.",
@@ -648,10 +672,10 @@
       "release_blocking": true,
       "opened_at_utc": "2026-08-25T22:20:00Z",
       "opened_at_basis": "First retained history entry; not proof of earlier first occurrence",
-      "last_verified_at_utc": "2026-09-16T04:33:34.386036+00:00",
+      "last_verified_at_utc": "2026-09-16T07:26:12.501234+00:00",
       "last_material_change_at_utc": "2026-09-03T19:21:08Z",
-      "last_touched_at_utc": "2026-09-03T19:21:08Z",
-      "previous_record_sha256": "8b8e27aadd76e36e32f599648b0416920cbf7be7f251cb659c94e3294b554fa1",
+      "last_touched_at_utc": "2026-09-16T07:26:12.501234+00:00",
+      "previous_record_sha256": "dd06b6248c1edc1212431ef6387f9a65e3718bf6bb9ec8ca34aa297f63385469",
       "reproducibility_tier": "AUTOMATED_CONTRACT_CHECKS_WITH_EXPLICIT_RECOVERY_LIMITS",
       "residual_claim": {
         "fixed": "Only the executed action/evidence described in this card",
@@ -668,7 +692,7 @@
       "phases": {},
       "legacy_overdue_before_repair": false,
       "external_dependency": "Original official WNBA report objects for the missing historical team/date units",
-      "record_sha256": "dd06b6248c1edc1212431ef6387f9a65e3718bf6bb9ec8ca34aa297f63385469",
+      "record_sha256": "ce4926fd87f21251b79cea5fa1b53f971814c7815a560136d647b8d19c078432",
       "severity": "release_blocking",
       "reproduce": {
         "clean_checkout": true,
@@ -696,7 +720,9 @@
         "workflow_run_id": 35055900817,
         "scope": "Software/triage contracts and archive candidate; not unperformed historical recovery",
         "url": "https://github.com/georgemunoz1-ui/sports-model/actions/runs/35055900817"
-      }
+      },
+      "trend_counting": "Count parent once while six ordinal slots lack identities; children are excluded only to avoid duplicate counting, not to reset age.",
+      "revision_verification": "Current escalation/card revision requires its own test receipt; prior verification field refers only to the cited earlier commit."
     },
     {
       "issue_id": "RJ-006-NFL-MODEL-RESTORATION",
@@ -707,8 +733,9 @@
       "next_action": "Locate original data/nfl/model/runs/2026-08-10_nflverse_2015_2025_oof_v2 and invalidation record in owner backup; verify exact source pins before assigning units.",
       "due_at_utc": "2026-09-17T04:26:41.997358+00:00",
       "closure_criteria": [
-        "Declared component evidence retained with hashes",
-        "Component regression/closure checks pass; no merely renamed progress"
+        "Recover and hash original EPA v0.2 run directory, v0.1 invalidation record and source pins with original chronology distinguished from recovery time.",
+        "Reproduce source-to-transform-to-state-to-coefficient-to-feature-row lineage for the original model identity.",
+        "Verify all six declared units or approve a versioned historical research reclassification with current-profile dependency proof; the selected QB model is not lineage recovery."
       ],
       "evidence": [
         {
@@ -722,6 +749,10 @@
         {
           "path": "docs/releases/2026-09-16-health-triage/remote-health-summary.json",
           "sha256": "02431e0726344a02ad65dab42a36dd60aae0cfcf7765e50299e58da6586d02c9"
+        },
+        {
+          "path": "docs/releases/2026-09-16-health-escalation/binding-audit.json",
+          "sha256": "37aeb942b785c548760c5ae0ba332a7ee48583fe3e70c9a08e2482919e42c600"
         }
       ],
       "dependency_assessment": "Global health dependency retained; official_pregame_v1 is a requested profile name, not an implemented verified dependency graph.",
@@ -729,10 +760,10 @@
       "release_blocking": true,
       "opened_at_utc": "2026-08-27T08:43:15Z",
       "opened_at_basis": "First retained history entry; not proof of earlier first occurrence",
-      "last_verified_at_utc": "2026-09-16T04:33:34.386036+00:00",
+      "last_verified_at_utc": "2026-09-16T07:26:12.501234+00:00",
       "last_material_change_at_utc": "2026-08-27T08:43:15Z",
-      "last_touched_at_utc": "2026-08-28T07:54:53Z",
-      "previous_record_sha256": "c6a9e46d1b76ce1ac67e1524a614691d9ed7be30eca909017ebd1fcc53d97c04",
+      "last_touched_at_utc": "2026-09-16T07:26:12.501234+00:00",
+      "previous_record_sha256": "b792d1c80f2b32f4227a00aa0d861fc6fefddbe120e65f7395acc3d4461379ae",
       "reproducibility_tier": "AUTOMATED_CONTRACT_CHECKS_WITH_EXPLICIT_RECOVERY_LIMITS",
       "residual_claim": {
         "fixed": "Only the executed action/evidence described in this card",
@@ -749,8 +780,8 @@
       "phases": {},
       "legacy_overdue_before_repair": true,
       "external_dependency": "Owner-held original EPA v0.2 run directory and invalidation artifact",
-      "record_sha256": "b792d1c80f2b32f4227a00aa0d861fc6fefddbe120e65f7395acc3d4461379ae",
-      "severity": "release_blocking",
+      "record_sha256": "ef7feb4f24d9f7e5e5450e366668a88faf5a50abbbd52b04dd99d7dcc0d2d8d4",
+      "severity": "P0_RELEASE_BLOCKER",
       "reproduce": {
         "clean_checkout": true,
         "commands": [
@@ -777,7 +808,21 @@
         "workflow_run_id": 35055900817,
         "scope": "Software/triage contracts and archive candidate; not unperformed historical recovery",
         "url": "https://github.com/georgemunoz1-ui/sports-model/actions/runs/35055900817"
-      }
+      },
+      "escalation": {
+        "recorded_at_utc": "2026-09-16T07:26:12.501234+00:00",
+        "owner_confirmed": "model_registry maintainer (Codex)",
+        "escalation_owner": "release maintainer (Codex)",
+        "blocker": "Owner-held original EPA v0.2 run directory and invalidation artifact",
+        "last_completed_action": "2026-08-27: three partial metadata artifacts retained; original run lineage still 1/6.",
+        "last_completed_action_evidence": "data/registry/recovery_jobs.json",
+        "next_action": "Locate original data/nfl/model/runs/2026-08-10_nflverse_2015_2025_oof_v2 and invalidation record in owner backup; verify exact source pins before assigning units.",
+        "next_action_at_utc": "2026-09-17T04:26:41.997358+00:00",
+        "decision": "BLOCKED_EXTERNALLY",
+        "rationale": "Original run bytes/source pins are required. No backup access or proof of irrecoverability is available; do not substitute the QB successor.",
+        "release_override": false
+      },
+      "revision_verification": "Current escalation/card revision requires its own test receipt; prior verification field refers only to the cited earlier commit."
     },
     {
       "issue_id": "RJ-007-DATELESS-JOIN-REMEDIATION",
@@ -1029,7 +1074,356 @@
         "scope": "Software/triage contracts and archive candidate; not unperformed historical recovery",
         "url": "https://github.com/georgemunoz1-ui/sports-model/actions/runs/35055900817"
       }
+    },
+    {
+      "owner": "wnba_features maintainer (Codex)",
+      "due_at_utc": "2026-09-17T04:26:41.997358+00:00",
+      "dependency_assessment": "Global health dependency retained; official_pregame_v1 is a requested profile name, not an implemented verified dependency graph.",
+      "release_profile": "official_pregame_v1 (not implemented/verified)",
+      "release_blocking": true,
+      "opened_at_utc": "2026-08-25T22:20:00Z",
+      "last_material_change_at_utc": "2026-09-03T19:21:08Z",
+      "issue_id": "RJ-005-AVAILABILITY-01",
+      "parent_issue_id": "RJ-005-WNBA-FEATURE-PIPELINE",
+      "unit_ordinal": 1,
+      "obligation_kind": "WNBA_OFFICIAL_AVAILABILITY",
+      "unit_binding": {
+        "status": "UNIT_BINDING_UNRESOLVED",
+        "canonical_team_id": null,
+        "event_date": null,
+        "canonical_event_id": null,
+        "official_artifact_path": null
+      },
+      "specific": "Ordinal availability obligation 1/6 has no retained canonical team/date binding or official source object.",
+      "status": "BLOCKED",
+      "why_unresolved": "The inherited 6-unit count rolls between slates; assigning original Aug 25 teams to these slots would invent historical identities.",
+      "external_dependency": "Source-bound historical obligation mapping and the corresponding original official WNBA availability report section.",
+      "next_action": "Recover the historical mapping for slot 1; bind its team, date and event, then hash the matching official report or document a justified reclassification.",
+      "closure_criteria": [
+        "Bind canonical team, event date and canonical event ID to a retained source.",
+        "Retain matching official availability report bytes with source, retrieval timestamp and SHA-256, or approve evidenced historical research-only reclassification.",
+        "Verify this slot independently; a sibling success does not close this slot."
+      ],
+      "evidence": [
+        {
+          "path": "docs/releases/2026-09-16-health-escalation/binding-audit.json",
+          "sha256": "37aeb942b785c548760c5ae0ba332a7ee48583fe3e70c9a08e2482919e42c600"
+        }
+      ],
+      "residual_claim": {
+        "fixed": "Individual tracking slot created",
+        "not_established": "Team/date identity, official availability, pregame receipt or current forecast readiness",
+        "remaining": "Unit binding and official evidence",
+        "next_evidence": "Source-bound mapping plus official report"
+      },
+      "severity": "release_blocking",
+      "trend_included": false,
+      "trend_exclusion_reason": "Included through RJ-005-WNBA-FEATURE-PIPELINE until identity mapping is verified; splitting does not reduce the aged count.",
+      "created_at_utc": "2026-09-16T07:26:12.501234+00:00",
+      "last_verified_at_utc": "2026-09-16T07:26:12.501234+00:00",
+      "previous_record_sha256": null,
+      "reproducibility_tier": "SOURCE_REGISTER_INSPECTION_ONLY",
+      "verification": {
+        "kind": "LOCAL_BINDING_AUDIT",
+        "artifact": "docs/releases/2026-09-16-health-escalation/binding-audit.json",
+        "claim_limit": "Not a recovered official availability section"
+      },
+      "record_sha256": "5fd766a360adfba4b5a04f8291a658957243ea61b28c3231e76b5aeb368ef324"
+    },
+    {
+      "owner": "wnba_features maintainer (Codex)",
+      "due_at_utc": "2026-09-17T04:26:41.997358+00:00",
+      "dependency_assessment": "Global health dependency retained; official_pregame_v1 is a requested profile name, not an implemented verified dependency graph.",
+      "release_profile": "official_pregame_v1 (not implemented/verified)",
+      "release_blocking": true,
+      "opened_at_utc": "2026-08-25T22:20:00Z",
+      "last_material_change_at_utc": "2026-09-03T19:21:08Z",
+      "issue_id": "RJ-005-AVAILABILITY-02",
+      "parent_issue_id": "RJ-005-WNBA-FEATURE-PIPELINE",
+      "unit_ordinal": 2,
+      "obligation_kind": "WNBA_OFFICIAL_AVAILABILITY",
+      "unit_binding": {
+        "status": "UNIT_BINDING_UNRESOLVED",
+        "canonical_team_id": null,
+        "event_date": null,
+        "canonical_event_id": null,
+        "official_artifact_path": null
+      },
+      "specific": "Ordinal availability obligation 2/6 has no retained canonical team/date binding or official source object.",
+      "status": "BLOCKED",
+      "why_unresolved": "The inherited 6-unit count rolls between slates; assigning original Aug 25 teams to these slots would invent historical identities.",
+      "external_dependency": "Source-bound historical obligation mapping and the corresponding original official WNBA availability report section.",
+      "next_action": "Recover the historical mapping for slot 2; bind its team, date and event, then hash the matching official report or document a justified reclassification.",
+      "closure_criteria": [
+        "Bind canonical team, event date and canonical event ID to a retained source.",
+        "Retain matching official availability report bytes with source, retrieval timestamp and SHA-256, or approve evidenced historical research-only reclassification.",
+        "Verify this slot independently; a sibling success does not close this slot."
+      ],
+      "evidence": [
+        {
+          "path": "docs/releases/2026-09-16-health-escalation/binding-audit.json",
+          "sha256": "37aeb942b785c548760c5ae0ba332a7ee48583fe3e70c9a08e2482919e42c600"
+        }
+      ],
+      "residual_claim": {
+        "fixed": "Individual tracking slot created",
+        "not_established": "Team/date identity, official availability, pregame receipt or current forecast readiness",
+        "remaining": "Unit binding and official evidence",
+        "next_evidence": "Source-bound mapping plus official report"
+      },
+      "severity": "release_blocking",
+      "trend_included": false,
+      "trend_exclusion_reason": "Included through RJ-005-WNBA-FEATURE-PIPELINE until identity mapping is verified; splitting does not reduce the aged count.",
+      "created_at_utc": "2026-09-16T07:26:12.501234+00:00",
+      "last_verified_at_utc": "2026-09-16T07:26:12.501234+00:00",
+      "previous_record_sha256": null,
+      "reproducibility_tier": "SOURCE_REGISTER_INSPECTION_ONLY",
+      "verification": {
+        "kind": "LOCAL_BINDING_AUDIT",
+        "artifact": "docs/releases/2026-09-16-health-escalation/binding-audit.json",
+        "claim_limit": "Not a recovered official availability section"
+      },
+      "record_sha256": "8255ef5a8b1b31a6c327fc27b5fb2d9d4ef4a599b12b7a92b29aecbbdb984a72"
+    },
+    {
+      "owner": "wnba_features maintainer (Codex)",
+      "due_at_utc": "2026-09-17T04:26:41.997358+00:00",
+      "dependency_assessment": "Global health dependency retained; official_pregame_v1 is a requested profile name, not an implemented verified dependency graph.",
+      "release_profile": "official_pregame_v1 (not implemented/verified)",
+      "release_blocking": true,
+      "opened_at_utc": "2026-08-25T22:20:00Z",
+      "last_material_change_at_utc": "2026-09-03T19:21:08Z",
+      "issue_id": "RJ-005-AVAILABILITY-03",
+      "parent_issue_id": "RJ-005-WNBA-FEATURE-PIPELINE",
+      "unit_ordinal": 3,
+      "obligation_kind": "WNBA_OFFICIAL_AVAILABILITY",
+      "unit_binding": {
+        "status": "UNIT_BINDING_UNRESOLVED",
+        "canonical_team_id": null,
+        "event_date": null,
+        "canonical_event_id": null,
+        "official_artifact_path": null
+      },
+      "specific": "Ordinal availability obligation 3/6 has no retained canonical team/date binding or official source object.",
+      "status": "BLOCKED",
+      "why_unresolved": "The inherited 6-unit count rolls between slates; assigning original Aug 25 teams to these slots would invent historical identities.",
+      "external_dependency": "Source-bound historical obligation mapping and the corresponding original official WNBA availability report section.",
+      "next_action": "Recover the historical mapping for slot 3; bind its team, date and event, then hash the matching official report or document a justified reclassification.",
+      "closure_criteria": [
+        "Bind canonical team, event date and canonical event ID to a retained source.",
+        "Retain matching official availability report bytes with source, retrieval timestamp and SHA-256, or approve evidenced historical research-only reclassification.",
+        "Verify this slot independently; a sibling success does not close this slot."
+      ],
+      "evidence": [
+        {
+          "path": "docs/releases/2026-09-16-health-escalation/binding-audit.json",
+          "sha256": "37aeb942b785c548760c5ae0ba332a7ee48583fe3e70c9a08e2482919e42c600"
+        }
+      ],
+      "residual_claim": {
+        "fixed": "Individual tracking slot created",
+        "not_established": "Team/date identity, official availability, pregame receipt or current forecast readiness",
+        "remaining": "Unit binding and official evidence",
+        "next_evidence": "Source-bound mapping plus official report"
+      },
+      "severity": "release_blocking",
+      "trend_included": false,
+      "trend_exclusion_reason": "Included through RJ-005-WNBA-FEATURE-PIPELINE until identity mapping is verified; splitting does not reduce the aged count.",
+      "created_at_utc": "2026-09-16T07:26:12.501234+00:00",
+      "last_verified_at_utc": "2026-09-16T07:26:12.501234+00:00",
+      "previous_record_sha256": null,
+      "reproducibility_tier": "SOURCE_REGISTER_INSPECTION_ONLY",
+      "verification": {
+        "kind": "LOCAL_BINDING_AUDIT",
+        "artifact": "docs/releases/2026-09-16-health-escalation/binding-audit.json",
+        "claim_limit": "Not a recovered official availability section"
+      },
+      "record_sha256": "2a7bf7bb64321125af92228fddd46c2023955f0e02ed16a837b1ec5c4dd56503"
+    },
+    {
+      "owner": "wnba_features maintainer (Codex)",
+      "due_at_utc": "2026-09-17T04:26:41.997358+00:00",
+      "dependency_assessment": "Global health dependency retained; official_pregame_v1 is a requested profile name, not an implemented verified dependency graph.",
+      "release_profile": "official_pregame_v1 (not implemented/verified)",
+      "release_blocking": true,
+      "opened_at_utc": "2026-08-25T22:20:00Z",
+      "last_material_change_at_utc": "2026-09-03T19:21:08Z",
+      "issue_id": "RJ-005-AVAILABILITY-04",
+      "parent_issue_id": "RJ-005-WNBA-FEATURE-PIPELINE",
+      "unit_ordinal": 4,
+      "obligation_kind": "WNBA_OFFICIAL_AVAILABILITY",
+      "unit_binding": {
+        "status": "UNIT_BINDING_UNRESOLVED",
+        "canonical_team_id": null,
+        "event_date": null,
+        "canonical_event_id": null,
+        "official_artifact_path": null
+      },
+      "specific": "Ordinal availability obligation 4/6 has no retained canonical team/date binding or official source object.",
+      "status": "BLOCKED",
+      "why_unresolved": "The inherited 6-unit count rolls between slates; assigning original Aug 25 teams to these slots would invent historical identities.",
+      "external_dependency": "Source-bound historical obligation mapping and the corresponding original official WNBA availability report section.",
+      "next_action": "Recover the historical mapping for slot 4; bind its team, date and event, then hash the matching official report or document a justified reclassification.",
+      "closure_criteria": [
+        "Bind canonical team, event date and canonical event ID to a retained source.",
+        "Retain matching official availability report bytes with source, retrieval timestamp and SHA-256, or approve evidenced historical research-only reclassification.",
+        "Verify this slot independently; a sibling success does not close this slot."
+      ],
+      "evidence": [
+        {
+          "path": "docs/releases/2026-09-16-health-escalation/binding-audit.json",
+          "sha256": "37aeb942b785c548760c5ae0ba332a7ee48583fe3e70c9a08e2482919e42c600"
+        }
+      ],
+      "residual_claim": {
+        "fixed": "Individual tracking slot created",
+        "not_established": "Team/date identity, official availability, pregame receipt or current forecast readiness",
+        "remaining": "Unit binding and official evidence",
+        "next_evidence": "Source-bound mapping plus official report"
+      },
+      "severity": "release_blocking",
+      "trend_included": false,
+      "trend_exclusion_reason": "Included through RJ-005-WNBA-FEATURE-PIPELINE until identity mapping is verified; splitting does not reduce the aged count.",
+      "created_at_utc": "2026-09-16T07:26:12.501234+00:00",
+      "last_verified_at_utc": "2026-09-16T07:26:12.501234+00:00",
+      "previous_record_sha256": null,
+      "reproducibility_tier": "SOURCE_REGISTER_INSPECTION_ONLY",
+      "verification": {
+        "kind": "LOCAL_BINDING_AUDIT",
+        "artifact": "docs/releases/2026-09-16-health-escalation/binding-audit.json",
+        "claim_limit": "Not a recovered official availability section"
+      },
+      "record_sha256": "64a893205b187905eecff5aba781d35eef1e66255d1badddb6aea7f350a6f5e3"
+    },
+    {
+      "owner": "wnba_features maintainer (Codex)",
+      "due_at_utc": "2026-09-17T04:26:41.997358+00:00",
+      "dependency_assessment": "Global health dependency retained; official_pregame_v1 is a requested profile name, not an implemented verified dependency graph.",
+      "release_profile": "official_pregame_v1 (not implemented/verified)",
+      "release_blocking": true,
+      "opened_at_utc": "2026-08-25T22:20:00Z",
+      "last_material_change_at_utc": "2026-09-03T19:21:08Z",
+      "issue_id": "RJ-005-AVAILABILITY-05",
+      "parent_issue_id": "RJ-005-WNBA-FEATURE-PIPELINE",
+      "unit_ordinal": 5,
+      "obligation_kind": "WNBA_OFFICIAL_AVAILABILITY",
+      "unit_binding": {
+        "status": "UNIT_BINDING_UNRESOLVED",
+        "canonical_team_id": null,
+        "event_date": null,
+        "canonical_event_id": null,
+        "official_artifact_path": null
+      },
+      "specific": "Ordinal availability obligation 5/6 has no retained canonical team/date binding or official source object.",
+      "status": "BLOCKED",
+      "why_unresolved": "The inherited 6-unit count rolls between slates; assigning original Aug 25 teams to these slots would invent historical identities.",
+      "external_dependency": "Source-bound historical obligation mapping and the corresponding original official WNBA availability report section.",
+      "next_action": "Recover the historical mapping for slot 5; bind its team, date and event, then hash the matching official report or document a justified reclassification.",
+      "closure_criteria": [
+        "Bind canonical team, event date and canonical event ID to a retained source.",
+        "Retain matching official availability report bytes with source, retrieval timestamp and SHA-256, or approve evidenced historical research-only reclassification.",
+        "Verify this slot independently; a sibling success does not close this slot."
+      ],
+      "evidence": [
+        {
+          "path": "docs/releases/2026-09-16-health-escalation/binding-audit.json",
+          "sha256": "37aeb942b785c548760c5ae0ba332a7ee48583fe3e70c9a08e2482919e42c600"
+        }
+      ],
+      "residual_claim": {
+        "fixed": "Individual tracking slot created",
+        "not_established": "Team/date identity, official availability, pregame receipt or current forecast readiness",
+        "remaining": "Unit binding and official evidence",
+        "next_evidence": "Source-bound mapping plus official report"
+      },
+      "severity": "release_blocking",
+      "trend_included": false,
+      "trend_exclusion_reason": "Included through RJ-005-WNBA-FEATURE-PIPELINE until identity mapping is verified; splitting does not reduce the aged count.",
+      "created_at_utc": "2026-09-16T07:26:12.501234+00:00",
+      "last_verified_at_utc": "2026-09-16T07:26:12.501234+00:00",
+      "previous_record_sha256": null,
+      "reproducibility_tier": "SOURCE_REGISTER_INSPECTION_ONLY",
+      "verification": {
+        "kind": "LOCAL_BINDING_AUDIT",
+        "artifact": "docs/releases/2026-09-16-health-escalation/binding-audit.json",
+        "claim_limit": "Not a recovered official availability section"
+      },
+      "record_sha256": "254687af459b28e07b2b1e6d9a99ef89a0775a8824e99ee08f755cf33b36a923"
+    },
+    {
+      "owner": "wnba_features maintainer (Codex)",
+      "due_at_utc": "2026-09-17T04:26:41.997358+00:00",
+      "dependency_assessment": "Global health dependency retained; official_pregame_v1 is a requested profile name, not an implemented verified dependency graph.",
+      "release_profile": "official_pregame_v1 (not implemented/verified)",
+      "release_blocking": true,
+      "opened_at_utc": "2026-08-25T22:20:00Z",
+      "last_material_change_at_utc": "2026-09-03T19:21:08Z",
+      "issue_id": "RJ-005-AVAILABILITY-06",
+      "parent_issue_id": "RJ-005-WNBA-FEATURE-PIPELINE",
+      "unit_ordinal": 6,
+      "obligation_kind": "WNBA_OFFICIAL_AVAILABILITY",
+      "unit_binding": {
+        "status": "UNIT_BINDING_UNRESOLVED",
+        "canonical_team_id": null,
+        "event_date": null,
+        "canonical_event_id": null,
+        "official_artifact_path": null
+      },
+      "specific": "Ordinal availability obligation 6/6 has no retained canonical team/date binding or official source object.",
+      "status": "BLOCKED",
+      "why_unresolved": "The inherited 6-unit count rolls between slates; assigning original Aug 25 teams to these slots would invent historical identities.",
+      "external_dependency": "Source-bound historical obligation mapping and the corresponding original official WNBA availability report section.",
+      "next_action": "Recover the historical mapping for slot 6; bind its team, date and event, then hash the matching official report or document a justified reclassification.",
+      "closure_criteria": [
+        "Bind canonical team, event date and canonical event ID to a retained source.",
+        "Retain matching official availability report bytes with source, retrieval timestamp and SHA-256, or approve evidenced historical research-only reclassification.",
+        "Verify this slot independently; a sibling success does not close this slot."
+      ],
+      "evidence": [
+        {
+          "path": "docs/releases/2026-09-16-health-escalation/binding-audit.json",
+          "sha256": "37aeb942b785c548760c5ae0ba332a7ee48583fe3e70c9a08e2482919e42c600"
+        }
+      ],
+      "residual_claim": {
+        "fixed": "Individual tracking slot created",
+        "not_established": "Team/date identity, official availability, pregame receipt or current forecast readiness",
+        "remaining": "Unit binding and official evidence",
+        "next_evidence": "Source-bound mapping plus official report"
+      },
+      "severity": "release_blocking",
+      "trend_included": false,
+      "trend_exclusion_reason": "Included through RJ-005-WNBA-FEATURE-PIPELINE until identity mapping is verified; splitting does not reduce the aged count.",
+      "created_at_utc": "2026-09-16T07:26:12.501234+00:00",
+      "last_verified_at_utc": "2026-09-16T07:26:12.501234+00:00",
+      "previous_record_sha256": null,
+      "reproducibility_tier": "SOURCE_REGISTER_INSPECTION_ONLY",
+      "verification": {
+        "kind": "LOCAL_BINDING_AUDIT",
+        "artifact": "docs/releases/2026-09-16-health-escalation/binding-audit.json",
+        "claim_limit": "Not a recovered official availability section"
+      },
+      "record_sha256": "cf2153d31d084a92d4638e2878ad9326c680192170b656aa856fe00d8226f755"
     }
   ],
-  "revision_note": "Clean CI receipt and actual pinned archive restoration added; prior card versions preserved. Two standing health categories still fail. No historical eligibility changed."
+  "revision_note": "Explicit P0 escalation for both aged issues; six WNBA ordinal slots exposed without fabricated team/date binding. Material-change clocks unchanged. No recovery units or release gates closed.",
+  "obligation_groups": [
+    {
+      "parent_issue_id": "RJ-005-WNBA-FEATURE-PIPELINE",
+      "expected_units": 6,
+      "component": "OFFICIAL_INJURY_AVAILABILITY"
+    }
+  ],
+  "updated_at_utc": "2026-09-16T07:26:12.501234+00:00",
+  "trend_baseline": {
+    "week_of": "2026-09-15",
+    "aged_items": 2,
+    "issue_ids": [
+      "RJ-001-PROVENANCE",
+      "RJ-006-NFL-MODEL-RESTORATION"
+    ],
+    "next_review_date": "2026-09-22",
+    "target_max": 2,
+    "counting_policy": "Count unresolved obligations once; escalation/status changes do not reset material-change age."
+  }
 }

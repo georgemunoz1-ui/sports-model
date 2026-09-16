@@ -1,231 +1,227 @@
-# Standing-health triage — 2026-09-16
+# Official-release blocker register
 
-Scope: the three standing health failures and all nine recovery records. This is a decision/evidence ledger, not a forecast or promotion. Action OFF; dose 0.0.
+Updated 2026-09-16T07:26:12.501234+00:00. Accepted risk never clears a mandatory release gate. September 3 remains blocked and immutable.
 
-**Corrections verified locally:** four jobs were reported overdue, not five. One was false: RJ-003 had already closed because its trigger did not fire. After the reporter repair, three jobs are overdue and four remain nonterminal; RJ-005 is due later on September 16. RJ-001 acquisition is 123/123 but its separate score-verification phase remains 0/126.
-
-The archive is the MLB pitch-data source at `harness/ingest_lancebroz.py`, window July 1 through August 31 inclusive. It is not the collection of every model coefficient or forecast artifact. The September 3 release has a blocked eligibility decision; verified hashes do not make that decision eligible.
-
-## Decisions
-
-| Issue | Decision | Owner | Next physical action | Due/review |
-|---|---|---|---|---|
-| REL-ARCHIVE-001 | FIX-IN-PROGRESS | data-platform maintainer (Codex) | Reconcile the 58-file candidate against authoritative required-game coverage, inventory August 31 gap, and bind a separately versioned prospective archive profile. | 2026-09-17T04:26:41.997358+00:00 |
-| REL-RECOVERY-001 | FIX-IN-PROGRESS | repository maintainer (Codex) | Run negative regressions and remote health; retain child blockers and phase counts. | 2026-09-17T04:26:41.997358+00:00 |
-| REL-HISTORICAL-001 | ACCEPTED-RISK | release maintainer (Codex) | Keep September 3 evidence immutable; define a separate current-profile check and prove dependencies before replacing any current-health coupling. | 2026-09-17T04:26:41.997358+00:00 |
-| RJ-001-PROVENANCE | ACCEPTED-RISK | acquisition maintainer (Codex) | Inventory the 126 score-verification IDs against current Tier-1 bindings and retain a missing-ID manifest before acquiring finals. | 2026-09-17T04:26:41.997358+00:00 |
-| RJ-002-OOF-REPLAY | RESOLVED | modelling maintainer (Codex) | Retain replay limitation: per-game uncertainty consumption needs separate registration. | 2026-09-17T04:26:41.997358+00:00 |
-| RJ-003-FALLBACK-ARM | DESCOPED | modelling maintainer (Codex) | Retain closed conditional job; do not execute a fallback or substitute it for the selected default. | 2026-09-17T04:26:41.997358+00:00 |
-| RJ-004-WNBA-INJURY | DESCOPED | wnba_features maintainer (Codex) | Carry the remaining availability obligation in RJ-005. | 2026-09-17T04:26:41.997358+00:00 |
-| RJ-005-WNBA-FEATURE-PIPELINE | BLOCKED | wnba_features maintainer (Codex) | Identify an official archived report for the exact missing team/date units; hash it or record unavailable historical inputs; build a separately dated future context packet. | 2026-09-17T04:26:41.997358+00:00 |
-| RJ-006-NFL-MODEL-RESTORATION | BLOCKED | model_registry maintainer (Codex) | Locate original data/nfl/model/runs/2026-08-10_nflverse_2015_2025_oof_v2 and invalidation record in owner backup; verify exact source pins before assigning units. | 2026-09-17T04:26:41.997358+00:00 |
-| RJ-007-DATELESS-JOIN-REMEDIATION | FIX-IN-PROGRESS | harness maintainer (Codex) | Test duplicate/date/outcome refusal; enumerate canonical IDs for historical migration sidecars without changing frozen boards. | 2026-09-17T04:26:41.997358+00:00 |
-| RJ-008-NFL-LAUNCH-SHADOW | RESOLVED | nfl_launch maintainer (Codex) | Preserve registration; use selected QB identity for new eligible research packages. | 2026-09-17T04:26:41.997358+00:00 |
-| RJ-009-CFB-LAUNCH-SHADOW | RESOLVED | cfb_launch maintainer (Codex) | Preserve registration and the CFB CONTROL-MISSING label for current-season assimilation. | 2026-09-17T04:26:41.997358+00:00 |
-
-## Aging and escalation
-
-Baseline: **2 unresolved leaf issues** have gone more than 14 days without a material change. Previous-session count is **unknown**, not zero. No declining trend can yet be claimed. A review, deadline extension or status rename does not reset this clock. Aggregate recovery row is excluded to avoid double counting.
-
-Third consecutive BLOCKED session becomes OVERDUE-ESCALATED. An expired ACCEPTED-RISK decision or missed FIX-IN-PROGRESS due date also escalates. Escalation requests an explicit decision; it never automatically accepts risk or removes a mandatory dependency. Accepted risk here means a dated decision to retain RED/no official forecasts while work is deferred, not approval of unsupported forecasts.
-
-## Reproduce (five commands)
-
-These commands pin the clean-CI verified implementation; private repository read access is required.
-
-```bash
-git clone https://github.com/georgemunoz1-ui/sports-model.git && cd sports-model
-git checkout e13b9d767f6448413c7fb7a724db4fb47b410486
-python3 -m pip install -r requirements-consolidated.txt
-python3 -m pytest tests -q
-python3 scripts/standing_health_triage.py
+```text
+accepted_risks_present: true
+accepted_risk_release_override: false
+official_release_eligible: false
+action_authority: OFF
+dose: 0.0
 ```
 
-Expected on the initial repair: 342 tests pass (plus 8 subtests); triage validation_errors is empty, official_release_eligible is false. Future due-date escalation is expected and is not a failed reproduction. Binary archive recovery is separately executed by `.github/workflows/standing-health-triage.yml`; it records source commit, Git blob identity, SHA-256, required parser columns and exact environment. Software tests do not prove original historical availability or game coverage.
+The two aged P0 issues are RJ-001-PROVENANCE and RJ-006-NFL-MODEL-RESTORATION. Their escalation records retain the original material-change clocks. The September 22 target is at most two aged obligations, with a recorded decision for both.
 
-## Evidence boundaries
+WNBA has six missing official-availability units within a five-component pipeline. The individual cards are ordinal obligation slots: exact historical team/date identities remain unbound. The parent counts once in the aging trend; splitting creates no improvement in the metric.
 
-- Clean remote CI run 35055900817 verifies commit e13b9d767f6448413c7fb7a724db4fb47b410486: 342 tests pass and archive parsing succeeds. A CI artifact is available to authorized repository readers; it is not an anonymous public verification endpoint.
-- Existing RJ-002/008/009 closures are limited to their archived metadata/registration scopes. The original records are evidence, not new prospective validation.
-- No working official_pregame_v1 dependency graph was found. The dependency assessment is provisional and removes no mandatory health check.
-- Current forecasts, P3 assimilation, CFB assimilation control and unresolved action rules remain separate.
-- No historical forecast, packet pin, model coefficient or registration timestamp has been changed.
+The JSON register is authoritative. Earlier CI receipts are explicitly prior-revision evidence; see the merged PR checks for this revision.
 
-## Issue cards
+| Issue | Decision | Owner | Next action |
+|---|---|---|---|
+| REL-ARCHIVE-001 | FIX-IN-PROGRESS | data-platform maintainer (Codex) | Reconcile the 58-file candidate against authoritative required-game coverage, inventory August 31 gap, and bind a separately versioned prospective archive profile. |
+| REL-RECOVERY-001 | FIX-IN-PROGRESS | repository maintainer (Codex) | Run negative regressions and remote health; retain child blockers and phase counts. |
+| REL-HISTORICAL-001 | ACCEPTED-RISK | release maintainer (Codex) | Keep September 3 evidence immutable; define a separate current-profile check and prove dependencies before replacing any current-health coupling. |
+| RJ-001-PROVENANCE | ACCEPTED-RISK | acquisition maintainer (Codex) | Inventory the 126 score-verification IDs against current Tier-1 bindings and retain a missing-ID manifest before acquiring finals. |
+| RJ-002-OOF-REPLAY | RESOLVED | modelling maintainer (Codex) | Retain replay limitation: per-game uncertainty consumption needs separate registration. |
+| RJ-003-FALLBACK-ARM | DESCOPED | modelling maintainer (Codex) | Retain closed conditional job; do not execute a fallback or substitute it for the selected default. |
+| RJ-004-WNBA-INJURY | DESCOPED | wnba_features maintainer (Codex) | Carry the remaining availability obligation in RJ-005. |
+| RJ-005-WNBA-FEATURE-PIPELINE | BLOCKED | wnba_features maintainer (Codex) | Resolve the six-slot historical team/date obligation mapping from source-bound incident/slate records; only then credit independently retained official availability sections. |
+| RJ-006-NFL-MODEL-RESTORATION | BLOCKED | model_registry maintainer (Codex) | Locate original data/nfl/model/runs/2026-08-10_nflverse_2015_2025_oof_v2 and invalidation record in owner backup; verify exact source pins before assigning units. |
+| RJ-007-DATELESS-JOIN-REMEDIATION | FIX-IN-PROGRESS | harness maintainer (Codex) | Test duplicate/date/outcome refusal; enumerate canonical IDs for historical migration sidecars without changing frozen boards. |
+| RJ-008-NFL-LAUNCH-SHADOW | RESOLVED | nfl_launch maintainer (Codex) | Preserve registration; use selected QB identity for new eligible research packages. |
+| RJ-009-CFB-LAUNCH-SHADOW | RESOLVED | cfb_launch maintainer (Codex) | Preserve registration and the CFB CONTROL-MISSING label for current-season assimilation. |
+| RJ-005-AVAILABILITY-01 | BLOCKED | wnba_features maintainer (Codex) | Recover the historical mapping for slot 1; bind its team, date and event, then hash the matching official report or document a justified reclassification. |
+| RJ-005-AVAILABILITY-02 | BLOCKED | wnba_features maintainer (Codex) | Recover the historical mapping for slot 2; bind its team, date and event, then hash the matching official report or document a justified reclassification. |
+| RJ-005-AVAILABILITY-03 | BLOCKED | wnba_features maintainer (Codex) | Recover the historical mapping for slot 3; bind its team, date and event, then hash the matching official report or document a justified reclassification. |
+| RJ-005-AVAILABILITY-04 | BLOCKED | wnba_features maintainer (Codex) | Recover the historical mapping for slot 4; bind its team, date and event, then hash the matching official report or document a justified reclassification. |
+| RJ-005-AVAILABILITY-05 | BLOCKED | wnba_features maintainer (Codex) | Recover the historical mapping for slot 5; bind its team, date and event, then hash the matching official report or document a justified reclassification. |
+| RJ-005-AVAILABILITY-06 | BLOCKED | wnba_features maintainer (Codex) | Recover the historical mapping for slot 6; bind its team, date and event, then hash the matching official report or document a justified reclassification. |
 
-### REL-ARCHIVE-001
+## REL-ARCHIVE-001
 
 Pinned upstream snapshot restored at the configured local source and in clean CI: all 58 published July-August objects verify. August 31 and schedule-level/historical completeness remain unproven.
 
-**Why unresolved / closure scope:** Availability failure fixed; remaining original-history and schedule-coverage closure conditions are not yet satisfied. No historical receipt was fabricated.
+Closure:
+- Pinned binary window recovered and all object hashes verify
+- Required schedule coverage and historical claim scope documented
+- Production runtime configured to the verified mount and source_health passes
 
-**First retained entry:** not established. **Last historical touch:** 2026-09-16T04:26:41.997358+00:00. **Last material change:** 2026-09-16T04:26:41.997358+00:00.
-
-**Done definition:** Pinned binary window recovered and all object hashes verify; Required schedule coverage and historical claim scope documented; Production runtime configured to the verified mount and source_health passes
-
-**Evidence:** `harness/ingest_lancebroz.py` (SHA-256 f2e43cf64c597adc30909d1ac11ff3b6644c7a0600a4e85a3e914618b0a8d616), `docs/releases/2026-09-16-health-triage/archive-candidate.json` (SHA-256 36f7b43d254a0407358a9036ad7761680ec7264d72d5d93985f79682e5d0757f)
-
-**Residual limitation:** Official release eligibility, historical registration or forecasting superiority. Mandatory health and current-event gates remain.
-
-### REL-RECOVERY-001
+## REL-RECOVERY-001
 
 Recovery reporter misclassified CLOSED_CONDITION_NOT_FIRED as overdue and hid incomplete RJ-001 phases behind 123/123.
 
-**Why unresolved / closure scope:** Reporter and job schema diverged; factual repair was not previously made. Other child jobs still require actual recovery.
+Closure:
+- Closed RJ-003 not overdue
+- Incomplete score phase remains visible
+- All child issues have decisions and no unresolved work is silently removed
 
-**First retained entry:** not established. **Last historical touch:** 2026-09-16T04:26:41.997358+00:00. **Last material change:** 2026-09-16T04:26:41.997358+00:00.
-
-**Done definition:** Closed RJ-003 not overdue; Incomplete score phase remains visible; All child issues have decisions and no unresolved work is silently removed
-
-**Evidence:** `harness/recovery_jobs.py` (SHA-256 2282e960f8afdfcdd0ae6b6d1132b55a5db9b8cacf7f7ad606e34138abacce36), `data/registry/recovery_jobs.json` (SHA-256 41e169d346c5f76314c762de4d61e14cb60048578f6ab09067a5b123106e14a1)
-
-**Residual limitation:** Official release eligibility, historical registration or forecasting superiority. Mandatory health and current-event gates remain.
-
-### REL-HISTORICAL-001
+## REL-HISTORICAL-001
 
 Health invokes the September 3 release decision; its artifact and contract verify, but the original decision is BLOCKED.
 
-**Why unresolved / closure scope:** Its past inputs/registration cannot be supplied prospectively now; green historical eligibility would misrepresent chronology. Keeping this gate RED is deliberate while a new prospective profile is specified.
+Closure:
+- Original September 3 record continues to verify without altered bytes
+- New event-specific profile has registration, inputs and publication before cutoff
+- Any historical/current-health separation is versioned and tested
 
-**First retained entry:** not established. **Last historical touch:** 2026-09-03T18:40:16Z. **Last material change:** 2026-09-03T18:40:16Z.
-
-**Done definition:** Original September 3 record continues to verify without altered bytes; New event-specific profile has registration, inputs and publication before cutoff; Any historical/current-health separation is versioned and tested
-
-**Evidence:** `harness/release_gate.py` (SHA-256 660d41d46ac80897a4b0a0b80d9ce564a4e0faf9e0b465459a5bf9642ba2fd2a), `harness/healthcheck.py` (SHA-256 001e8dfb334ad00fd3377ca59443891edb38872870f0606755fe346638c4005f), `data/acquisition/2026-09-03_update.json` (SHA-256 15a06fa465ee6882cbffd0896a7378d763e8f8e23677543e2ec36f6d9d6ff7de), `data/releases/2026-09-03_release.json` (SHA-256 d1f8ff727bb8eb3744a06240ca11de3692860a5ab47f46c74413f7c20e201414)
-
-**Residual limitation:** Official release eligibility, historical registration or forecasting superiority. Mandatory health and current-event gates remain.
-
-### RJ-001-PROVENANCE
+## RJ-001-PROVENANCE
 
 Provenance phase is 123/123, but the distinct official-score verification phase remains 0/126.
 
-**Why unresolved / closure scope:** Score-bearing source bindings were not completed; pitch events without final scores cannot substitute.
+Closure:
+- Versioned 126-row canonical event inventory reconciles to the declared score-verification cohort.
+- Each required final score binds to retained authoritative source bytes, event identity, retrieval time and SHA-256; disagreements are resolved or explicitly excluded under approved scope.
+- Score-verification phase closure is independently reproduced; original source-acquisition completion alone cannot close it.
 
-**First retained entry:** 2026-08-25T02:45:00Z. **Last historical touch:** 2026-08-28T07:54:53Z. **Last material change:** 2026-08-26T19:15:00Z.
+Escalation:
+```json
+{
+  "recorded_at_utc": "2026-09-16T07:26:12.501234+00:00",
+  "owner_confirmed": "acquisition maintainer (Codex)",
+  "escalation_owner": "release maintainer (Codex)",
+  "blocker": "Score-bearing source bindings were not completed; pitch events without final scores cannot substitute.",
+  "last_completed_action": "2026-08-26: provenance acquisition reached 123/123; separate score phase remains 0/126.",
+  "last_completed_action_evidence": "data/registry/recovery_jobs.json",
+  "next_action": "Inventory the 126 score-verification IDs against current Tier-1 bindings and retain a missing-ID manifest before acquiring finals.",
+  "next_action_at_utc": "2026-09-17T04:26:41.997358+00:00",
+  "decision": "CONTINUE_REMEDIATION",
+  "rationale": "Continue the dated score-inventory task; retain existing time-limited risk acceptance and release block.",
+  "release_override": false
+}
+```
 
-**Done definition:** Declared component evidence retained with hashes; Component regression/closure checks pass; no merely renamed progress
-
-**Evidence:** `data/registry/recovery_jobs.json` (SHA-256 41e169d346c5f76314c762de4d61e14cb60048578f6ab09067a5b123106e14a1), `harness/recovery_jobs.py` (SHA-256 2282e960f8afdfcdd0ae6b6d1132b55a5db9b8cacf7f7ad606e34138abacce36)
-
-**Residual limitation:** Official release eligibility, historical registration or forecasting superiority. Mandatory health and current-event gates remain.
-
-### RJ-002-OOF-REPLAY
+## RJ-002-OOF-REPLAY
 
 Existing August 27 completed replay record lacked its required terminal disposition.
 
-**Why unresolved / closure scope:** Metadata omission corrected now; no new model replay or per-game uncertainty approval claimed.
+Closure:
+- Declared component evidence retained with hashes
+- Component regression/closure checks pass; no merely renamed progress
 
-**First retained entry:** 2026-08-25T23:06:00Z. **Last historical touch:** 2026-08-27T06:50:00Z. **Last material change:** 2026-08-27T06:50:00Z.
-
-**Done definition:** Declared component evidence retained with hashes; Component regression/closure checks pass; no merely renamed progress
-
-**Evidence:** `data/registry/recovery_jobs.json` (SHA-256 41e169d346c5f76314c762de4d61e14cb60048578f6ab09067a5b123106e14a1), `harness/recovery_jobs.py` (SHA-256 2282e960f8afdfcdd0ae6b6d1132b55a5db9b8cacf7f7ad606e34138abacce36), `data/audit/2026-08-27_rj002_oof_replay.json` (SHA-256 175dde62b56d74dca298d3c567f4b7965bd6d4946528a9bf09caa0d7f4087509)
-
-**Residual limitation:** Official release eligibility, historical registration or forecasting superiority. Mandatory health and current-event gates remain.
-
-### RJ-003-FALLBACK-ARM
+## RJ-003-FALLBACK-ARM
 
 The conditional fallback job closed August 27 because its reconstruction-failure trigger did not occur.
 
-**Why unresolved / closure scope:** False overdue status came from missing terminal enum support.
+Closure:
+- Declared component evidence retained with hashes
+- Component regression/closure checks pass; no merely renamed progress
 
-**First retained entry:** 2026-08-25T23:06:00Z. **Last historical touch:** 2026-08-27T06:53:30Z. **Last material change:** 2026-08-27T06:53:30Z.
-
-**Done definition:** Declared component evidence retained with hashes; Component regression/closure checks pass; no merely renamed progress
-
-**Evidence:** `data/registry/recovery_jobs.json` (SHA-256 41e169d346c5f76314c762de4d61e14cb60048578f6ab09067a5b123106e14a1), `harness/recovery_jobs.py` (SHA-256 2282e960f8afdfcdd0ae6b6d1132b55a5db9b8cacf7f7ad606e34138abacce36), `data/audit/2026-08-27_rj002_oof_replay.json` (SHA-256 175dde62b56d74dca298d3c567f4b7965bd6d4946528a9bf09caa0d7f4087509)
-
-**Residual limitation:** Official release eligibility, historical registration or forecasting superiority. Mandatory health and current-event gates remain.
-
-### RJ-004-WNBA-INJURY
+## RJ-004-WNBA-INJURY
 
 Old six-team injury task was already superseded by RJ-005; its missing reports were not recovered.
 
-**Why unresolved / closure scope:** Original supersession is recorded, not a claim of successful injury recovery.
+Closure:
+- Declared component evidence retained with hashes
+- Component regression/closure checks pass; no merely renamed progress
 
-**First retained entry:** 2026-08-25T18:00:46Z. **Last historical touch:** 2026-08-25T22:20:00Z. **Last material change:** 2026-08-25T22:20:00Z.
+## RJ-005-WNBA-FEATURE-PIPELINE
 
-**Done definition:** Declared component evidence retained with hashes; Component regression/closure checks pass; no merely renamed progress
+Historical job remains 11/17: six OFFICIAL_INJURY_AVAILABILITY units lack official bindings, and their rolling team/date obligation mapping is unresolved.
 
-**Evidence:** `data/registry/recovery_jobs.json` (SHA-256 41e169d346c5f76314c762de4d61e14cb60048578f6ab09067a5b123106e14a1), `harness/recovery_jobs.py` (SHA-256 2282e960f8afdfcdd0ae6b6d1132b55a5db9b8cacf7f7ad606e34138abacce36)
+Closure:
+- All six ordinal obligation cards have verified canonical team/date/event bindings and official report evidence, or explicit individually evidenced reclassification.
+- Reconcile child outcomes to the parent 11/17 ledger without double-counting; fresh future packets do not repair missed historical cutoffs.
 
-**Residual limitation:** Official release eligibility, historical registration or forecasting superiority. Mandatory health and current-event gates remain.
-
-### RJ-005-WNBA-FEATURE-PIPELINE
-
-The historical feature job retains 11/17 units with six official availability sections unbound.
-
-**Why unresolved / closure scope:** Current code cannot supply missing historical report bytes or their pregame retrieval proof. Current WNBA data is a separate fresh-packet task.
-
-**First retained entry:** 2026-08-25T22:20:00Z. **Last historical touch:** 2026-09-03T19:21:08Z. **Last material change:** 2026-09-03T19:21:08Z.
-
-**Done definition:** Declared component evidence retained with hashes; Component regression/closure checks pass; no merely renamed progress
-
-**Evidence:** `data/registry/recovery_jobs.json` (SHA-256 41e169d346c5f76314c762de4d61e14cb60048578f6ab09067a5b123106e14a1), `harness/recovery_jobs.py` (SHA-256 2282e960f8afdfcdd0ae6b6d1132b55a5db9b8cacf7f7ad606e34138abacce36)
-
-**Residual limitation:** Official release eligibility, historical registration or forecasting superiority. Mandatory health and current-event gates remain.
-
-### RJ-006-NFL-MODEL-RESTORATION
+## RJ-006-NFL-MODEL-RESTORATION
 
 Original EPA v0.2 immutable run directory and remaining lineage components are absent; job remains 1/6.
 
-**Why unresolved / closure scope:** Three recovered metadata files do not contain the original full run; the selected QB successor is a different model identity.
+Closure:
+- Recover and hash original EPA v0.2 run directory, v0.1 invalidation record and source pins with original chronology distinguished from recovery time.
+- Reproduce source-to-transform-to-state-to-coefficient-to-feature-row lineage for the original model identity.
+- Verify all six declared units or approve a versioned historical research reclassification with current-profile dependency proof; the selected QB model is not lineage recovery.
 
-**First retained entry:** 2026-08-27T08:43:15Z. **Last historical touch:** 2026-08-28T07:54:53Z. **Last material change:** 2026-08-27T08:43:15Z.
+Escalation:
+```json
+{
+  "recorded_at_utc": "2026-09-16T07:26:12.501234+00:00",
+  "owner_confirmed": "model_registry maintainer (Codex)",
+  "escalation_owner": "release maintainer (Codex)",
+  "blocker": "Owner-held original EPA v0.2 run directory and invalidation artifact",
+  "last_completed_action": "2026-08-27: three partial metadata artifacts retained; original run lineage still 1/6.",
+  "last_completed_action_evidence": "data/registry/recovery_jobs.json",
+  "next_action": "Locate original data/nfl/model/runs/2026-08-10_nflverse_2015_2025_oof_v2 and invalidation record in owner backup; verify exact source pins before assigning units.",
+  "next_action_at_utc": "2026-09-17T04:26:41.997358+00:00",
+  "decision": "BLOCKED_EXTERNALLY",
+  "rationale": "Original run bytes/source pins are required. No backup access or proof of irrecoverability is available; do not substitute the QB successor.",
+  "release_override": false
+}
+```
 
-**Done definition:** Declared component evidence retained with hashes; Component regression/closure checks pass; no merely renamed progress
-
-**Evidence:** `data/registry/recovery_jobs.json` (SHA-256 41e169d346c5f76314c762de4d61e14cb60048578f6ab09067a5b123106e14a1), `harness/recovery_jobs.py` (SHA-256 2282e960f8afdfcdd0ae6b6d1132b55a5db9b8cacf7f7ad606e34138abacce36)
-
-**Residual limitation:** Official release eligibility, historical registration or forecasting superiority. Mandatory health and current-event gates remain.
-
-### RJ-007-DATELESS-JOIN-REMEDIATION
+## RJ-007-DATELESS-JOIN-REMEDIATION
 
 Evaluation dictionaries silently collapsed duplicate game IDs and allowed cross-date/outcome pairing; historical identity migration remains incomplete.
 
-**Why unresolved / closure scope:** Two live comparison guards repaired; legacy build/grade commands and synthetic historical identities need a separate immutable migration.
+Closure:
+- Declared component evidence retained with hashes
+- Component regression/closure checks pass; no merely renamed progress
 
-**First retained entry:** 2026-08-28T07:17:53Z. **Last historical touch:** 2026-08-28T07:50:02Z. **Last material change:** 2026-09-16T04:26:41.997358+00:00.
-
-**Done definition:** Declared component evidence retained with hashes; Component regression/closure checks pass; no merely renamed progress
-
-**Evidence:** `data/registry/recovery_jobs.json` (SHA-256 41e169d346c5f76314c762de4d61e14cb60048578f6ab09067a5b123106e14a1), `harness/recovery_jobs.py` (SHA-256 2282e960f8afdfcdd0ae6b6d1132b55a5db9b8cacf7f7ad606e34138abacce36), `harness/evaluation_standard.py` (SHA-256 c60647d3f490485435153e1bcbbf9cea54aeeb10e41f103ca89c4f71af32b65d), `harness/promotion_gate.py` (SHA-256 6e419fed61d9e51e4a35de9998641d279a19f64d7d4be52f3d1e8eb58c5d6036)
-
-**Residual limitation:** Official release eligibility, historical registration or forecasting superiority. Mandatory health and current-event gates remain.
-
-### RJ-008-NFL-LAUNCH-SHADOW
+## RJ-008-NFL-LAUNCH-SHADOW
 
 Separate NFL launch-shadow registration job was already COMPLETE 4/4; it never closed original EPA recovery.
 
-**Why unresolved / closure scope:** No remaining work in this narrow registration job; model/current-release gates remain separate.
+Closure:
+- Declared component evidence retained with hashes
+- Component regression/closure checks pass; no merely renamed progress
 
-**First retained entry:** 2026-09-03T19:21:08Z. **Last historical touch:** 2026-09-03T19:21:08Z. **Last material change:** 2026-09-03T19:21:08Z.
-
-**Done definition:** Declared component evidence retained with hashes; Component regression/closure checks pass; no merely renamed progress
-
-**Evidence:** `data/registry/recovery_jobs.json` (SHA-256 41e169d346c5f76314c762de4d61e14cb60048578f6ab09067a5b123106e14a1), `harness/recovery_jobs.py` (SHA-256 2282e960f8afdfcdd0ae6b6d1132b55a5db9b8cacf7f7ad606e34138abacce36)
-
-**Residual limitation:** Official release eligibility, historical registration or forecasting superiority. Mandatory health and current-event gates remain.
-
-### RJ-009-CFB-LAUNCH-SHADOW
+## RJ-009-CFB-LAUNCH-SHADOW
 
 CFB launch-shadow registration job was already COMPLETE 4/4; current-season assimilation is not established by that closure.
 
-**Why unresolved / closure scope:** No remaining work in this narrow registration job; assimilation control remains missing.
+Closure:
+- Declared component evidence retained with hashes
+- Component regression/closure checks pass; no merely renamed progress
 
-**First retained entry:** 2026-09-03T19:21:08Z. **Last historical touch:** 2026-09-03T19:21:08Z. **Last material change:** 2026-09-03T19:21:08Z.
+## RJ-005-AVAILABILITY-01
 
-**Done definition:** Declared component evidence retained with hashes; Component regression/closure checks pass; no merely renamed progress
+Ordinal availability obligation 1/6 has no retained canonical team/date binding or official source object.
 
-**Evidence:** `data/registry/recovery_jobs.json` (SHA-256 41e169d346c5f76314c762de4d61e14cb60048578f6ab09067a5b123106e14a1), `harness/recovery_jobs.py` (SHA-256 2282e960f8afdfcdd0ae6b6d1132b55a5db9b8cacf7f7ad606e34138abacce36)
+Closure:
+- Bind canonical team, event date and canonical event ID to a retained source.
+- Retain matching official availability report bytes with source, retrieval timestamp and SHA-256, or approve evidenced historical research-only reclassification.
+- Verify this slot independently; a sibling success does not close this slot.
 
-**Residual limitation:** Official release eligibility, historical registration or forecasting superiority. Mandatory health and current-event gates remain.
+## RJ-005-AVAILABILITY-02
 
+Ordinal availability obligation 2/6 has no retained canonical team/date binding or official source object.
 
-Aggregate health now says REPOSITORY_HEALTH_RED/GREEN because it includes code, external recovery and historical eligibility. This label change does not change exit codes or remove gates. The report also validates the triage hash chain and prints owner, next action and due date for every unresolved card.
+Closure:
+- Bind canonical team, event date and canonical event ID to a retained source.
+- Retain matching official availability report bytes with source, retrieval timestamp and SHA-256, or approve evidenced historical research-only reclassification.
+- Verify this slot independently; a sibling success does not close this slot.
 
-## Verified recovery update
+## RJ-005-AVAILABILITY-03
 
-Pinned source d49271818de98ee3b582dce134bb724861dda859 is now restored at the configured local source and in clean CI. All 58 window files (42,525,517 bytes) match Git and SHA-256; local/remote object lists agree. Remote parser schemas pass. Source availability now passes; official schedule completeness, August 31 coverage and original historical retrieval remain unproven, so REL-ARCHIVE-001 retains FIX-IN-PROGRESS for its broader closure criteria.
+Ordinal availability obligation 3/6 has no retained canonical team/date binding or official source object.
 
-[Clean remote run and artifacts](https://github.com/georgemunoz1-ui/sports-model/actions/runs/35055900817). Remaining remote health failures: recovery jobs (3 overdue) and historical September 3 eligibility. Canonical JSON is authoritative; prior card versions remain preserved in register-initial.json and register-before-ci.json.
+Closure:
+- Bind canonical team, event date and canonical event ID to a retained source.
+- Retain matching official availability report bytes with source, retrieval timestamp and SHA-256, or approve evidenced historical research-only reclassification.
+- Verify this slot independently; a sibling success does not close this slot.
+
+## RJ-005-AVAILABILITY-04
+
+Ordinal availability obligation 4/6 has no retained canonical team/date binding or official source object.
+
+Closure:
+- Bind canonical team, event date and canonical event ID to a retained source.
+- Retain matching official availability report bytes with source, retrieval timestamp and SHA-256, or approve evidenced historical research-only reclassification.
+- Verify this slot independently; a sibling success does not close this slot.
+
+## RJ-005-AVAILABILITY-05
+
+Ordinal availability obligation 5/6 has no retained canonical team/date binding or official source object.
+
+Closure:
+- Bind canonical team, event date and canonical event ID to a retained source.
+- Retain matching official availability report bytes with source, retrieval timestamp and SHA-256, or approve evidenced historical research-only reclassification.
+- Verify this slot independently; a sibling success does not close this slot.
+
+## RJ-005-AVAILABILITY-06
+
+Ordinal availability obligation 6/6 has no retained canonical team/date binding or official source object.
+
+Closure:
+- Bind canonical team, event date and canonical event ID to a retained source.
+- Retain matching official availability report bytes with source, retrieval timestamp and SHA-256, or approve evidenced historical research-only reclassification.
+- Verify this slot independently; a sibling success does not close this slot.

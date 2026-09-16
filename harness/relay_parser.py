@@ -284,32 +284,36 @@ def parse(path):
 
 def selftest():
     f = []
-    up = ("/root/.claude/uploads/60d4bacd-8ca4-52d5-a4b3-399d198cc22a/"
-          "5658ae23-betting_odds_83026.txt")
-    if not os.path.exists(up):
-        print("relay_parser selftest: FAIL (fixture absent — nothing was checked)")
+    from pathlib import Path
+    import tempfile
+    fixture = Path(HERE).parent / "tests/fixtures/relay_parser/synthetic.txt"
+    metadata = json.loads(fixture.with_name("provenance.json").read_text())
+    if sha256_file(fixture) != metadata["sha256"]:
+        print("relay_parser selftest: FAIL (fixture digest mismatch)")
         return False
-    r = parse(up)
-    ev = {e["event"]: e for e in r["events"]}
-    if r["n_events"] < 14:
-        f.append(f"expected >=14 MLB events, parsed {r['n_events']}")
-    for want in ("MIA@WSH", "SEA@TOR", "CIN@CHC", "BAL@ATH"):
-        if want not in ev:
-            f.append(f"{want} not parsed")
-    s = ev.get("SEA@TOR", {})
-    if s.get("away_starter") != "Logan Gilbert" or s.get("home_starter") != "Max Scherzer":
-        f.append(f"SEA@TOR starters wrong: {s.get('away_starter')} / {s.get('home_starter')}")
-    if (s.get("market") or {}).get("away_ml") != -135:
-        f.append(f"SEA@TOR away_ml {(s.get('market') or {}).get('away_ml')} != -135")
-    if (s.get("market") or {}).get("total") != 8.0:
-        f.append(f"SEA@TOR total {(s.get('market') or {}).get('total')} != 8.0")
-    b = ev.get("BOS@NYY", {})
-    if (b.get("market") or {}).get("total_moved") != -0.5:
-        f.append(f"BOS@NYY total move {(b.get('market') or {}).get('total_moved')} != -0.5 "
-                 "(the board recorded 8.5->8)")
-    named = sum(1 for e in r["events"] if e["away_starter"] and e["home_starter"])
-    if named < 14:
-        f.append(f"only {named} events have BOTH starters named; the board said 14/14 exist")
+    r = parse(str(fixture))
+    expected = metadata["expected"]
+    if r["n_events"] != 1:
+        f.append("synthetic fixture must produce exactly one event")
+    event = r["events"][0] if r["events"] else {}
+    for key, value in expected.items():
+        actual = (event.get("market") or {}).get(key) if key in (
+            "away_ml", "total", "total_moved") else event.get(key)
+        if actual != value:
+            f.append(f"{key}: {actual!r} != {value!r}")
+    with tempfile.TemporaryDirectory() as td:
+        path = Path(td) / "negative.txt"
+        path.write_text("not a sports capture\n")
+        if parse(str(path))["n_events"] != 0:
+            f.append("unrecognized input produced an event")
+        path.write_text(fixture.read_text().replace("\nML\n", "\n"))
+        result = parse(str(path))["events"][0]
+        if not any("NO_ML_TOKEN" in p for p in result["parse_problems"]):
+            f.append("ambiguous opening market was not flagged")
+        path.write_text(fixture.read_text().replace("Max Scherzer (1-1", "Different Starter (1-1"))
+        result = parse(str(path))["events"][0]
+        if not any("STARTER_DISAGREES" in p for p in result["parse_problems"]):
+            f.append("conflicting starter was not flagged")
     for x in f:
         print("  FAIL:", x)
     print(f"relay_parser selftest: {'OK' if not f else 'FAIL'}")

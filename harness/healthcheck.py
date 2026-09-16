@@ -542,6 +542,14 @@ try:
 except Exception as e:
     check(f"pipeline end-to-end ({e})", False)
 
+# Portable parser tests cannot certify availability of the production archive.
+try:
+    import ingest_lancebroz as _IL
+    _source = _IL.source_health()
+    check(f"lancebroz production source ({_source})", _source["ok"])
+except Exception as e:
+    check(f"lancebroz production source ({e})", False)
+
 # 6e. RECOVERY JOBS. Every open defect must be held by a NAMED job with a deadline. A blocker with
 #     no job is a blocker nobody owns, and "scheduled maintenance" in a journal is not a job.
 try:

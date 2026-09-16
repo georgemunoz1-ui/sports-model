@@ -1,4 +1,31 @@
 {
+ "capabilities": {
+  "harness/current_sports_data.py": {
+   "access_method": "Repository-local Python; no network acquisition",
+   "allowed_usage": [
+    "source receipt validation",
+    "clock and freshness diagnostics",
+    "research acquisition orchestration"
+   ],
+   "interface": [
+    "runtime_readiness",
+    "slate_clock",
+    "receipt",
+    "available_before",
+    "parse_sports_extract",
+    "reconcile",
+    "league_status"
+   ],
+   "license": "No standalone license declaration found; repository access does not grant redistribution rights",
+   "module_id": "current_sports_data",
+   "owner": "sports-model maintainers",
+   "runtime_role": "Imported by healthcheck and scripts/refresh_all_sports.py; not a forecast engine or new external data entitlement",
+   "sha256": "13c9ac0fd704847f0d5f2d691e648dccdbcbc3ea8381057d79fd690ee595cad1",
+   "source_base_commit": "34a7ec7e74db64d04197b4188771f2a9868cd045",
+   "source_repository": "georgemunoz1-ui/sports-model",
+   "version": "1.0.0"
+  }
+ },
  "modules": {
   "harness/acquisition_adapters.py": "acquisition_adapters",
   "harness/acquisition_ladder.py": "acquisition_ladder",
@@ -49,6 +76,7 @@
   "harness/cohort_fork.py": "cohort_fork",
   "harness/commit_0725.py": "commit_0725",
   "harness/commit_kboard_0726.py": "commit_kboard_0726",
+  "harness/current_sports_data.py": "current_sports_data",
   "harness/daily_baselines.py": "daily_baselines",
   "harness/decision_card.py": "decision_card",
   "harness/decision_view.py": "decision_view",

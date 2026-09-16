@@ -1,0 +1,17 @@
+{
+  "issue_id": "HEALTH-003",
+  "component": "current_sports_data",
+  "severity": "release-blocking",
+  "affected_release_profile": "global health prerequisite; frozen ARM_A still requires independent prospective registration",
+  "reproduction": {
+    "command": "python harness/module_manifest.py --audit",
+    "code_commit": "34a7ec7e74db64d04197b4188771f2a9868cd045",
+    "environment_evidence": "../2026-09-14-canonical-preflight/audit/manifest.json",
+    "observed_error_evidence": "../2026-09-14-canonical-preflight/audit/healthcheck.log"
+  },
+  "root_cause": "Missing identity declaration and manifest entry",
+  "remediation": "Register identity, version, owner, source, role, access/license limitations and enforced SHA256",
+  "status": "VERIFIED_REMOTE_REPAIR",
+  "closure_rule": "Relevant regression and clean remote health checks pass; unresolved source/recovery evidence cannot be waived",
+  "verification": "verification.json"
+}

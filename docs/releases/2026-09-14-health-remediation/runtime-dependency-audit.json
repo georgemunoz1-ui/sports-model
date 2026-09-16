@@ -1,0 +1,14 @@
+{
+  "engine_path": "research/audits/2026-09-10/nfl_engine.py",
+  "sha256": "4b290a33b62d9d18d56cbeb1d5ffa5c19221f3d6d8dc9fc7135b829444dba689",
+  "direct_imports": [
+    "__future__",
+    "hashlib",
+    "json",
+    "math",
+    "numpy"
+  ],
+  "finding": "Frozen recovered engine directly imports standard library and numpy only; neither relay_parser nor ingest_lancebroz nor current_sports_data is directly imported. This is a direct-import audit, not a transitive proof of source lineage or a release policy exemption.",
+  "release_policy_changed": false,
+  "source_modules_remain_required_by_global_health": true
+}

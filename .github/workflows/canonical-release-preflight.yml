@@ -1,0 +1,72 @@
+name: Canonical release checkout audit
+on:
+  push:
+    branches: [codex/canonical-release-preflight-20260914]
+    paths: [.github/workflows/canonical-release-preflight.yml]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  audit:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install -r requirements-nfl-context.txt pytest==8.4.2 PyYAML==6.0.2
+      - name: Record checkout and environment before health execution
+        run: |
+          mkdir -p "$RUNNER_TEMP/release-audit"
+          git rev-parse HEAD > "$RUNNER_TEMP/release-audit/commit.txt"
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+          git status --porcelain=v1 > "$RUNNER_TEMP/release-audit/status-before.txt"
+          test ! -s "$RUNNER_TEMP/release-audit/status-before.txt"
+          git fsck --full > "$RUNNER_TEMP/release-audit/git-fsck.log" 2>&1
+          git ls-tree -r HEAD > "$RUNNER_TEMP/release-audit/tree.txt"
+          sha256sum requirements-nfl-context.txt > "$RUNNER_TEMP/release-audit/dependency-file.sha256"
+          pip freeze --all > "$RUNNER_TEMP/release-audit/pip-freeze.txt"
+          python -VV > "$RUNNER_TEMP/release-audit/python.txt"
+          sha256sum "$(command -v python)" > "$RUNNER_TEMP/release-audit/python-binary.sha256"
+          uname -a > "$RUNNER_TEMP/release-audit/uname.txt"
+          printf '%s\n' "$ImageOS" "$ImageVersion" > "$RUNNER_TEMP/release-audit/runner-image.txt"
+          git bundle create "$RUNNER_TEMP/release-audit/repository.bundle" HEAD
+      - name: Run repair and current-data regressions
+        run: python -m pytest tests/test_release_health_repairs.py tests/test_current_sports_data.py -q
+      - name: Run existing health without changing its gates
+        run: |
+          set +e
+          python harness/healthcheck.py > "$RUNNER_TEMP/release-audit/healthcheck.log" 2>&1
+          result=$?
+          printf '%s\n' "$result" > "$RUNNER_TEMP/release-audit/health-exit-code.txt"
+          git status --porcelain=v1 > "$RUNNER_TEMP/release-audit/status-after.txt"
+          exit 0
+      - name: Hash and publish audit evidence
+        if: always()
+        run: |
+          python - <<'PY'
+          import os,json,pathlib,hashlib,datetime
+          p=pathlib.Path(os.environ['RUNNER_TEMP'])/'release-audit'
+          p.mkdir(exist_ok=True)
+          manifest={f.name:hashlib.sha256(f.read_bytes()).hexdigest() for f in p.iterdir() if f.is_file()}
+          record={'created_at_utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'purpose':'CHECKOUT_AND_HEALTH_AUDIT_ONLY','canonical_prospective_eligible':False,'forecast_executed':False,'production_environment_approved':False,'files':manifest}
+          (p/'manifest.json').write_text(json.dumps(record,indent=2))
+          print('AUDIT_MANIFEST_JSON='+json.dumps(record))
+          for name in ['commit.txt','status-before.txt','status-after.txt','health-exit-code.txt','dependency-file.sha256','python-binary.sha256','runner-image.txt','pip-freeze.txt']:
+              if (p/name).exists(): print('AUDIT_FILE_JSON='+json.dumps({'name':name,'content':(p/name).read_text()}))
+          if (p/'healthcheck.log').exists():
+              health=(p/'healthcheck.log').read_text()
+              print('AUDIT_HEALTH_JSON='+json.dumps({'failures':[s for s in health.splitlines() if s.startswith('[FAIL]')], 'summary':health.splitlines()[-1]}))
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: canonical-release-checkout-audit
+          path: ${{ runner.temp }}/release-audit/
+          retention-days: 30
+          if-no-files-found: error

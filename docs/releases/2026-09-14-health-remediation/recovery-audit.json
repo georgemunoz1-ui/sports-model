@@ -1,0 +1,129 @@
+{
+  "jobs": [
+    {
+      "job_id": "RJ-001-PROVENANCE",
+      "recorded_status": "RUNNING",
+      "progress": [
+        123,
+        123
+      ],
+      "classification": "MLB research/evaluation recovery",
+      "official_global_gate": "still enforced; no release-profile exception introduced",
+      "disposition": "UNCHANGED_PENDING_EVIDENCE",
+      "unresolved": [
+        "PRIOR_INPUT_POOL_PROVISIONAL",
+        "UNCERTAINTY_PIPELINE_DEFECT"
+      ],
+      "evidence_gap": "Existing count/status is not sufficient evidence for terminal closure"
+    },
+    {
+      "job_id": "RJ-002-OOF-REPLAY",
+      "recorded_status": "COMPLETE",
+      "progress": [
+        20,
+        20
+      ],
+      "classification": "MLB research/evaluation recovery",
+      "official_global_gate": "still enforced; no release-profile exception introduced",
+      "disposition": "UNCHANGED_PENDING_EVIDENCE",
+      "unresolved": [
+        "UNCERTAINTY_PIPELINE_DEFECT",
+        "INSUFFICIENT_EFFECTIVE_CLUSTERS"
+      ],
+      "evidence_gap": "Existing count/status is not sufficient evidence for terminal closure"
+    },
+    {
+      "job_id": "RJ-003-FALLBACK-ARM",
+      "recorded_status": "CLOSED_CONDITION_NOT_FIRED",
+      "progress": [
+        0,
+        4
+      ],
+      "classification": "MLB research/evaluation recovery",
+      "official_global_gate": "still enforced; no release-profile exception introduced",
+      "disposition": "UNCHANGED_PENDING_EVIDENCE",
+      "unresolved": [
+        "UNCERTAINTY_PIPELINE_DEFECT"
+      ],
+      "evidence_gap": "Existing count/status is not sufficient evidence for terminal closure"
+    },
+    {
+      "job_id": "RJ-004-WNBA-INJURY",
+      "recorded_status": "FAILED_TERMINAL",
+      "progress": [
+        0,
+        6
+      ],
+      "classification": "WNBA research recovery",
+      "official_global_gate": "still enforced; no release-profile exception introduced",
+      "disposition": "UNCHANGED_PENDING_EVIDENCE",
+      "unresolved": [
+        "WNBA_FEATURE_STALENESS_34D",
+        "WNBA_PENDING_FEATURE_REFRESH"
+      ],
+      "evidence_gap": "Existing count/status is not sufficient evidence for terminal closure"
+    },
+    {
+      "job_id": "RJ-005-WNBA-FEATURE-PIPELINE",
+      "recorded_status": "RUNNING",
+      "progress": [
+        11,
+        17
+      ],
+      "classification": "WNBA research recovery",
+      "official_global_gate": "still enforced; no release-profile exception introduced",
+      "disposition": "UNCHANGED_PENDING_EVIDENCE",
+      "unresolved": [
+        "SCHEDULE_AND_CANONICAL_GAME_IDS",
+        "ROSTERS_AND_TRANSACTIONS",
+        "OFFICIAL_INJURY_AVAILABILITY",
+        "RESULTS_AND_STATS_THROUGH_ASOF",
+        "MARKET_PRICES_VIA_SEPARATE_OVERLAY"
+      ],
+      "evidence_gap": "Existing count/status is not sufficient evidence for terminal closure"
+    },
+    {
+      "job_id": "RJ-006-NFL-MODEL-RESTORATION",
+      "recorded_status": "RUNNING",
+      "progress": [
+        1,
+        6
+      ],
+      "classification": "NFL historical model recovery",
+      "official_global_gate": "still enforced; no release-profile exception introduced",
+      "disposition": "UNCHANGED_PENDING_EVIDENCE",
+      "unresolved": [
+        "RECOVERED_EVIDENCE_RETAINED_AND_HASHED",
+        "IMMUTABLE_RUN_DIRECTORY_RESTORED",
+        "V0_1_INVALIDATION_RECORD_RESTORED",
+        "NFLVERSE_SOURCE_PINS_REACQUIRED",
+        "ACTIVE_REGISTRY_ENTRIES_CREATED",
+        "PROSPECTIVE_PAPER_WORKFLOW_ARMED"
+      ],
+      "evidence_gap": "Original immutable run directory and invalidation record not found; newer integrated research is a different lineage"
+    },
+    {
+      "job_id": "RJ-007-DATELESS-JOIN-REMEDIATION",
+      "recorded_status": "RUNNING",
+      "progress": [
+        0,
+        6
+      ],
+      "classification": "MLB research/evaluation recovery",
+      "official_global_gate": "still enforced; no release-profile exception introduced",
+      "disposition": "UNCHANGED_PENDING_EVIDENCE",
+      "unresolved": [
+        "build_board_0825 identity+seed (doubleheader collision)",
+        "promotion_gate.compare_against_references",
+        "evaluation_standard.paired_postgame",
+        "grade_0725 finals keys",
+        "board gamePk fields carry synthetic slate ids, not real pks (8/26: 826000-826014; 8/27: 827000-827006) \u2014 the gate cannot corroborate ids from production boards",
+        "backfill the six identity fields onto the 8/24-8/26 result records and re-run bind_cohort"
+      ],
+      "evidence_gap": "Existing count/status is not sufficient evidence for terminal closure"
+    }
+  ],
+  "policy_change": false,
+  "deadlines_extended": false,
+  "jobs_closed": 0
+}

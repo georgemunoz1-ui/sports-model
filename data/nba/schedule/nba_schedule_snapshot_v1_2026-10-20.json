@@ -1,0 +1,58 @@
+{
+  "artifact_type": "nba_schedule_snapshot_v1",
+  "season": "2026-27",
+  "card_date": "2026-10-20",
+  "source": {
+    "provider": "NBA ScheduleLeagueV2 mirror",
+    "original_request": "http://nba.cloud/league/00/2026-27/scheduleleaguev2?Format=json",
+    "source_snapshot_time_utc": "2026-08-20T22:00:05.05Z",
+    "mirror_repository": "SR2501/hoops-gm",
+    "mirror_commit": "cd60545f624635f1e5b7a94e2fe889c6d2890197",
+    "mirror_path": "backend/tests/fixtures/nba_scheduleleaguev2_2026_27_pending_knockout.json",
+    "mirror_blob_sha": "c79dbb84048255dac422c24d9ef0c52bfc36d55c",
+    "provenance_note": "Immutable mirror of an NBA ScheduleLeagueV2 response. Used because NBA/ESPN schedule endpoints are inaccessible from GitHub-hosted Actions. Schedule identity only; no model features or market data."
+  },
+  "games": [
+    {
+      "event_id": "0022600001",
+      "game_code": "20261020/BOSDET",
+      "away_team_id": 1610612738,
+      "away_team": "BOS",
+      "home_team_id": 1610612765,
+      "home_team": "DET",
+      "start_time_utc": "2026-10-20T19:00:00Z",
+      "arena": "Little Caesars Arena",
+      "neutral_site": false,
+      "game_status": 1,
+      "game_status_text": "3:00 pm ET"
+    },
+    {
+      "event_id": "0022600002",
+      "game_code": "20261020/PHINYK",
+      "away_team_id": 1610612755,
+      "away_team": "PHI",
+      "home_team_id": 1610612752,
+      "home_team": "NYK",
+      "start_time_utc": "2026-10-20T23:00:00Z",
+      "arena": "Madison Square Garden",
+      "neutral_site": false,
+      "game_status": 1,
+      "game_status_text": "7:00 pm ET"
+    },
+    {
+      "event_id": "0022600003",
+      "game_code": "20261020/OKCSAS",
+      "away_team_id": 1610612760,
+      "away_team": "OKC",
+      "home_team_id": 1610612759,
+      "home_team": "SAS",
+      "start_time_utc": "2026-10-21T01:30:00Z",
+      "arena": "Frost Bank Center",
+      "neutral_site": false,
+      "game_status": 1,
+      "game_status_text": "9:30 pm ET"
+    }
+  ],
+  "market_features_used": false,
+  "action_authority": false
+}

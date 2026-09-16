@@ -1,0 +1,25 @@
+[build-system]
+requires = ["setuptools>=64"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "sportsim"
+version = "0.1.0"
+description = "Monte Carlo simulation and prediction for NFL, NBA, MLB and NHL"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+dependencies = ["numpy>=1.22"]
+
+[project.optional-dependencies]
+test = ["pytest>=7"]
+
+[project.scripts]
+sportsim = "sportsim.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["sportsim*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+filterwarnings = ["error::RuntimeWarning"]

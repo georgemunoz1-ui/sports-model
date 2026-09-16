@@ -1,0 +1,62 @@
+name: Diagnostic Shadow Card
+on:
+  workflow_dispatch:
+    inputs:
+      card_date:
+        description: Card date YYYY-MM-DD
+        required: true
+        type: string
+      league:
+        description: League
+        required: true
+        default: mlb
+        type: choice
+        options: [mlb, cfb, nfl, wnba, nba]
+      as_of_utc:
+        description: Point-in-time cutoff UTC (optional; defaults to runtime)
+        required: false
+        type: string
+      simulations:
+        description: Monte Carlo paths
+        required: true
+        default: '100000'
+        type: string
+permissions:
+  contents: read
+jobs:
+  diagnostic-card:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      PYTHONPATH: ${{ github.workspace }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install runtime
+        run: python -m pip install --disable-pip-version-check numpy
+      - name: Generate diagnostic card
+        shell: bash
+        run: |
+          set -o pipefail
+          mkdir -p output
+          ARGS=(--date "${{ inputs.card_date }}" --league "${{ inputs.league }}" --simulations "${{ inputs.simulations }}" --output-dir output)
+          if [[ -n "${{ inputs.as_of_utc }}" ]]; then ARGS+=(--as-of-utc "${{ inputs.as_of_utc }}"); fi
+          python scripts/generate_card_force.py "${ARGS[@]}" | tee output/console_card.md
+      - name: Publish numerical card
+        if: always()
+        run: |
+          if [[ -f output/diagnostic_card.md ]]; then cat output/diagnostic_card.md >> "$GITHUB_STEP_SUMMARY"; fi
+      - name: Upload card artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: diagnostic-card-${{ inputs.card_date }}-${{ inputs.league }}-${{ github.run_id }}
+          path: |
+            output/diagnostic_card.json
+            output/diagnostic_card.csv
+            output/diagnostic_card.md
+            output/console_card.md
+          if-no-files-found: error
+          retention-days: 90

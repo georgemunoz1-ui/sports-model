@@ -7,7 +7,7 @@ real fetchers with clean fallback:
   1. LiveStore  -- append-only JSONL hydration cache. write() appends a line; read(subject)
      returns the newest Stamp. Existing lines are NEVER rewritten (R6 append-only).
   2. MLBStatsAPIAdapter -- statsapi.mlb.com, no API key. Player search -> gameLog pitching
-     stats -> CONFIRMED Stamp whose observed_at is the last game date and whose
+     stats -> POST_HOC_NOT_PREGAME Stamp whose observed_at is the last game date and whose
      source_sha256 is the sha256 of the gameLog response bytes. 5s timeout, one retry; ANY
      failure returns None (the contract degrades; the adapter never raises).
   3. SearchIdentifyAdapter -- wraps a caller-supplied search_fn. Snippets IDENTIFY, never

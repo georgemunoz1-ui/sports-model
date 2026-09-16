@@ -1,0 +1,28 @@
+{
+  "captured_before_decision_time": true,
+  "coverage": {
+    "canonical_espn_game_ids": true,
+    "completed_games_at_capture": 8,
+    "season": 2026,
+    "week1_future_fbs_fbs_events": 43
+  },
+  "decision_time_utc": "2026-09-03T19:21:08Z",
+  "known_limits": [
+    "No action authority.",
+    "Only future Week 1 FBS-vs-FBS events after the decision timestamp are forecast."
+  ],
+  "local_snapshot": {
+    "path": "data/cfb/source/2026-09-03_cfb_schedule.csv",
+    "rows": 888,
+    "sha256": "e87121cf3108a51e35dbff61b08f2927404ce3072fcc5279c86e9820e345521e"
+  },
+  "record_id": "CFB-SCHEDULE-2026-09-03",
+  "schema": "ops.source_snapshot.v1",
+  "source": {
+    "commit": "e8d0b51434317c508d1df2fc07ffc5134b009732",
+    "path": "schedules/csv/cfb_schedules_2026.csv",
+    "repository": "sportsdataverse/cfbfastR-data",
+    "source_grade": "NAMED_ARCHIVE_CANONICAL_ESPN_ID"
+  },
+  "sport": "cfb"
+}

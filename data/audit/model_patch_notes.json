@@ -1,192 +1,244 @@
 {
- "generated_utc": "2026-08-31T00:15:00Z",
- "patches": [
-  {
-   "acceptance_test": "ACQUISITION-ACCEPTANCE-2026-08-31. Two games, no owner upload, primary rail genuinely blocked. Seven BLOCKED, one NOT_FOUND and one STALE_REJECTED all advanced; current availability, a 12-game MLB slate and a probable starter were acquired at rung 6; forecasts were produced for both games; actionability gated separately and PASSed for reasons unrelated to forecast availability.",
-   "architectural_correction": "WebFetch and WebSearch are TOOLS IN THE AGENT LOOP, not Python callables. No Python function can invoke them, so a session-bootstrap `get=` implementation is not constructible in this deployment. feed_espn and acquisition_adapters keep refusing by default and that stays correct. The orchestrator DRIVES the agent loop instead of replacing it, and the CI gate is the real enforcement because it catches premature termination whoever caused it.",
-   "changes": [
-    "harness/acquisition_orchestrator.py \u2014 the execution plane. next_action() emits the next UNTRIED authorized rung as an instruction; record_attempt() advances on BLOCKED, NOT_FOUND, STALE_REJECTED, CONTAMINATED, TITLES_ONLY and ERROR alike; disposition() refuses a terminal answer while any authorized rung is untried and returns ACQUISITION_INCOMPLETE naming what is still owed.",
-    "assert_no_premature_termination() \u2014 CI gate. UNKNOWN, BLOCKED or NO_FORECAST over an unfinished ladder fails the build.",
-    "ADVANCING_OUTCOMES made load-bearing. It was computed, stored on every attempt as `advances`, and consulted by nothing \u2014 the compute-then-discard shape, found in the code written to fix an instance of it.",
-    "Mutation suite polarity corrected; it reported 0/4 killed while claiming to pass."
-   ],
-   "incident": "2026-08-30. Searching for Atlanta Dream availability returned a report 32 days stale. THE REJECTION WAS CORRECT. Terminating on it was not: the run reported AVAILABILITY_UNKNOWN, when the correct classification was ACQUISITION_INCOMPLETE. One more query on the SAME working rail returned the current report immediately. The failure was query specificity plus premature termination, not source availability.",
-   "ledger_effect": "NONE. wager_authority NO, exposure $0.",
-   "patch_id": "ACQUISITION-EXECUTION-2026-08-30",
-   "problem": "The repo had an acquisition CONTROL plane and no EXECUTION plane. route_ladder_v1 defines seven rungs and states that a blocked rail advances the ladder and that acquisition cannot terminate while an authorized route remains untried \u2014 but its entry point takes an ALREADY-COLLECTED set of attempts and rules on sufficiency. It can say 'you stopped too soon'. It cannot make anything continue.",
-   "residual": "OWNER_RELAY remains untried on all three ladders \u2014 correctly, since acquisition succeeded first. MLB MIA@WSH has NO canonical id because statsapi is blocked on both paths, so it is forecastable now and not bindable later. No id was invented.",
-   "scope": [
-    "acquisition",
-    "availability",
-    "schedule",
-    "starters",
-    "all sports"
-   ],
-   "severity": "P0",
-   "status": "FIXED_AND_ACCEPTANCE_TESTED",
-   "verification": [
-    "acquisition_orchestrator gate PASS; mutation suite 4 killed, 0 errored, 0 survived, with a crash classified ERRORED rather than credited as a kill",
-    "wired into harness/healthcheck.py: selftest loop AND the mutation-suite gate that parses the tally and fails on any survivor, any error, or zero mutants",
-    "LIVE acceptance test ACQUISITION-ACCEPTANCE-2026-08-31, two games, no owner upload, primary rail genuinely blocked: 7 BLOCKED + 1 NOT_FOUND + 1 STALE_REJECTED all advanced the ladder; current availability, a 12-game MLB slate and a probable starter acquired at rung 6; forecasts produced for both games; actionability gated separately",
-    "the incident case is a permanent fixture: a stale rejection followed by a terminal claim raises PrematureTermination, and the mutant that ungates it is caught",
-    "ADVANCING_OUTCOMES proved load-bearing by a mutant that empties it"
-   ]
-  },
-  {
-   "action_authority": "NO",
-   "changes": [
-    "ESPN scoreboard API client (no key) for mlb/wnba/nfl/college-football, normalized to a common game record with ET date derivation from the UTC instant \u2014 never a UTC slice",
-    "MLB StatsAPI schedule?hydrate=probablePitcher and boxscore client emitting gamePk-keyed records; a starter is CONFIRMED only from a boxscore gamesStarted line once the game is underway, never from a probable listing",
-    "feed_sweep: one command pulls all four leagues, writes append-only content-hashed snapshots under data/feeds/YYYY-MM-DD/, and surfaces cross-feed disagreements as CONFLICT without silently resolving them",
-    "feed-produced result rows carry namespaced canonical ids (ESPN_GAMEID:/MLB_GAMEPK:) plus source and fetched_utc, and bind through result_binding_gate.binding_proof",
-    "market capture layer (VALUATION/AUDIT ONLY, its own namespace, no forecast-path import \u2014 enforced by the market_capture firewall): SportsGameOdds + The Odds API env-key clients with loud stub mode, owner-specified record schema, consensus as a set of book prices plus computed medians with Circa as its own labelled sharp-reference book, and 2+ point book disagreement surfaced as CONFLICT",
-    "historical/movement store (market_history + market_moneyline): owner history schema with typed line_kind (OPENING/CONSENSUS/BEST_AVAILABLE/SHARP_BOOK/CLOSING, never one column) and the temporal firewall \u2014 a pregame forecast path can never read a closing line or a post-cutoff snapshot",
-    "causal backtest evaluation layer (backtest_causal): PointInTime store fail-closed on post-cutoff reads, entry = last price at/before decision (never backfilled), close = last price in the named 15-minute window (Circa, Pinnacle fallback), consensus close from books observable at the cutoff, CLV post-wager only, walk-forward folds with purge/embargo, shift(1) rolling-feature lint, event-level train/test split, news timestamp trichotomy (publication_time governs)",
-    "calibration layer (calibration.py) shipped DORMANT: sample-size gate refuses any fit under 500 events (current WNBA bound Tier-1 base is n=4), Platt->beta->isotonic ladder, calibrator fits only on out-of-sample predictions, log loss primary, decision table encoded verbatim",
-    "P0 market data quality (market_quality): canonical event identity across feeds, odds quality fields (quote_age_seconds/stale/missingness/market_status/schema_version) attached as new versions never rewrites, versioned snapshot envelopes (raw+normalized+schema_version+ingestion_run_id), and the dq_gate battery (uniqueness, timestamp ordering, ranges, team mapping, missingness)"
-   ],
-   "notes": "Frozen boards, cards/ and historical artifacts are untouched. Fixture scores are labelled SYNTHETIC and exist only to exercise the binding path; the live capture is labelled LIVE_CAPTURE with its sha256.",
-   "patch_id": "FU1-FEED-ADAPTER-2026-08-30",
-   "problem": "MLB's binding blocker was the absence of a finals source carrying game ids. Schedule, starter and result data arrived via manual odds-page uploads and search relays, which are IDENTIFIED_UNCONFIRMED and can never bind.",
-   "scope": [
-    "mlb",
-    "wnba",
-    "nfl",
-    "cfb",
-    "result acquisition",
-    "market capture (valuation/audit only)",
-    "causal backtest evaluation",
-    "calibration (dormant)"
-   ],
-   "severity": "P1",
-   "status": "PROPOSED_VERIFIED_ON_ISOLATED_BRANCH",
-   "verification": {
-    "live_fetch": "StatsAPI live fetch succeeded (15 games on 2026-08-28; all 5 board-captured gamePks live-verified against the feed; capture stored at data/feeds/fixtures/2026-08-28/mlb_statsapi_schedule_LIVE_capture.json). ESPN scoreboard returned HTTP 403 from this egress \u2014 the offline fixture path is the reproducible one.",
-    "module_selftests": "feed_espn, feed_mlb_statsapi, feed_sweep, market_capture, market_sportsgameodds, market_theoddsapi, market_history, market_moneyline, backtest_causal, calibration \u2014 all OK",
-    "offline_fixture_binding": "the 2026-08-28 MLB cohort binds 15/15 (10 ESPN_GAMEID + 5 MLB_GAMEPK): RESULT_BINDING_PASS 15/15, DATE_COHERENCE_PASS 15/15, CANONICAL_ID_MATCH 15/15, aggregates permitted",
-    "pytest": "26/26 in a clean offline mirror (adds P0 identity/quality/dq-gate tests to the 24 above)"
-   }
-  },
-  {
-   "action_authority": "NO",
-   "changes": [
-    "port the batch-block convergence check from lineage/mc_engine_20260830/harness/mc_engine.py (CONVERGENCE_SIGMAS=3.0 on the pooled-Bernoulli se of a block proportion, TRIALS=30000, BLOCKS=10) as harness/mc_convergence.py",
-    "register the named tolerance MC_CONVERGENCE_TOL_PP=2.7386pp, derived not tuned: the worst-case (p_pool=0.5) value of the ported per-game threshold 3*sqrt(0.25/3000)*100",
-    "bind the gate INTO the forecastable/actionable gate: a CONVERGENCE_FAIL demotes the game to forecast-only (actionable=False, input_value_policy=REGISTERED_FALLBACK_ONLY, verdict and pre-demotion state recorded for audit); the rest of the board still builds \u2014 fail-closed, not fail-loud-process-kill",
-    "convergence never promotes: a clean verdict leaves a degraded freshness disposition non-actionable",
-    "regression tests: synthetic gap above tolerance demotes with audit recorded and the board builds around it; gap below tolerance keeps the normal actionable path"
-   ],
-   "notes": "Frozen historical boards remain byte-identical. The port is forward-only. Wiring the per-block evidence into a live forward builder (e.g. a v13 sim run in keyed blocks) is flagged as follow-up; build_board_0825 is a frozen-date builder and was deliberately not edited.",
-   "patch_id": "P0-MC-CONVERGENCE-2026-08-30",
-   "problem": "The mc_engine lineage's convergence gate (3-sigma batch-block check on simulated probabilities) raised ConvergenceError and killed the slate builder with exit 1 (observed: 2.968pp on HOU@NYM, 2.715pp on COL@ATL); the sportsmodel/main lineage had no convergence gate at all, so a simulator measuring its own RNG could emit an actionable probability.",
-   "scope": [
-    "shared MC convergence gate",
-    "forecastable/actionable gate",
-    "all MC-simulated sports"
-   ],
-   "severity": "P0",
-   "status": "PROPOSED_VERIFIED_ON_ISOLATED_BRANCH",
-   "verification": {
-    "freshness_contract_gate": "PASS (blob 49fb7ef0 verified byte-identical to sportsmodel/main)",
-    "freshness_mutants": "9/9 caught",
-    "frozen_artifacts": "untouched; cards/ and historical boards/grades not modified (append-only)",
-    "mc_convergence_mutants": "4/4 caught",
-    "mc_convergence_regression_pytest": "7/7 PASS",
-    "mc_convergence_selftest": "PASS"
-   }
-  },
-  {
-   "action_authority": "NO",
-   "changes": [
-    "separate forecastable from actionable; only FRESH + CONFIRMED is action eligible",
-    "emit REGISTERED_FALLBACK_ONLY as the value policy for every non-actionable input",
-    "require exact normalized full-name identity instead of trusting people[0]",
-    "grade an MLB game log POST_HOC_NOT_PREGAME for starter identity",
-    "replace stale MLB starter rates with the registered V13 CAP treatment while retaining the old observation for audit",
-    "keep content-age and post-acquisition age re-gates fail-closed"
-   ],
-   "notes": "Frozen historical boards remain byte-identical. The patch is forward-only.",
-   "patch_id": "P0-FRESHNESS-2026-08-30",
-   "problem": "Stale or absent observations could remain described as bettable; MLB historical game logs could be stamped as confirmation of tonight's starter; stale pitcher rates still entered V13 before probability shrinkage.",
-   "scope": [
-    "mlb",
-    "wnba",
-    "cfb",
-    "nfl",
-    "shared freshness contract"
-   ],
-   "severity": "P0",
-   "status": "PROPOSED_VERIFIED_ON_ISOLATED_BRANCH",
-   "verification": {
-    "acquisition_adapter_selftest": "PASS",
-    "freshness_contract_gate": "PASS",
-    "freshness_mutants": "9/9 caught",
-    "full_handoff_suite": "171/174 in this review environment; 3 WNBA failures because real pyarrow is unavailable",
-    "starter_regression": "PASS",
-    "targeted_multisport_tests": "23/23 PASS"
-   }
-  },
-  {
-   "changes": [
-    "gate on content_age as well as derived_age",
-    "re-gate newly acquired content against the sport/kind age limit",
-    "refuse refetch-without-new-content"
-   ],
-   "patch_id": "P0-CONTENT-AGE-2026-08-29",
-   "problem": "A newly fetched but old observation could appear fresh because fetched_at reset the generous clock.",
-   "scope": [
-    "shared freshness contract"
-   ],
-   "severity": "P0",
-   "status": "ON_OPERATIONAL_BRANCH",
-   "verification": {
-    "freshness_mutants": "9/9 caught"
-   }
-  },
-  {
-   "changes": [
-    "bind sport + canonical game id + scheduled date + away + home",
-    "refuse partial-cohort aggregation and ambiguous identities",
-    "run consecutive-series and adversarial bypass fixtures"
-   ],
-   "patch_id": "P0-RESULT-BINDING-2026-08-28",
-   "problem": "Repeated-series matchups allowed prior-date finals to contaminate the next date's grades.",
-   "scope": [
-    "all grading",
-    "mlb incident fixture"
-   ],
-   "severity": "P0",
-   "status": "ON_OPERATIONAL_BRANCH"
-  },
-  {
-   "changes": [
-    "store utc_instant and derive ET game date",
-    "guard duplicate content across ID spaces",
-    "rebuild the ESPN extension to 89 games"
-   ],
-   "open_blocker": "The review environment has no real pyarrow, so the WNBA end-to-end path did not reproduce.",
-   "patch_id": "DATA-WNBA-DATE-AND-EXTENSION-2026-08-29",
-   "problem": "UTC-date slicing and duplicate cross-ID content could contaminate the feature pool; the daily extension needed rebuilding.",
-   "scope": [
-    "wnba"
-   ],
-   "severity": "P1",
-   "status": "REVIEWED_WITH_REPRODUCIBILITY_BLOCKER"
-  },
-  {
-   "changes": [
-    "market, betting splits, line movement, and implied probability are forbidden predictive features",
-    "model outputs freeze before the valuation overlay",
-    "large market disagreement triggers an input audit, not market shrinkage"
-   ],
-   "patch_id": "POLICY-MARKET-INDEPENDENCE-2026-08-29",
-   "scope": [
-    "all sports"
-   ],
-   "severity": "POLICY",
-   "status": "ON_OPERATIONAL_BRANCH"
-  }
- ],
- "schema_version": "1.0",
- "source_of_truth": "append-only patch records; newest first"
+  "generated_utc": "2026-08-31T00:15:00Z",
+  "patches": [
+    {
+      "patch_id": "MULTISPORT-RELEASE-GATE-2026-09-03",
+      "status": "IMPLEMENTED_RELEASE_BLOCKED",
+      "severity": "P0",
+      "scope": [
+        "mlb",
+        "wnba",
+        "nfl",
+        "cfb",
+        "daily acquisition",
+        "release governance"
+      ],
+      "changes": [
+        "Ingested the 2026-09-03 schedule/status evidence for all enabled sports with point-in-time capture metadata.",
+        "Added a fail-closed release evaluator covering twelve required gates per sport; global health is the worst sport state.",
+        "Bound the dated release artifact to the acquisition evidence SHA-256 and registered the evaluator in the module manifest and healthcheck.",
+        "Explicitly blocked events lacking current forecasts, fresh prices, required inputs, or canonical identity; no probability or selection was fabricated."
+      ],
+      "verification": {
+        "module_selftest": "release_gate selftest: OK",
+        "contract": "20/20 scheduled events classified; zero contract problems; zero artifact-binding problems",
+        "release_result": "BLOCKED: MLB 9/9 classified, CFB 11/11 classified, WNBA and NFL zero-game date dispositions recorded"
+      },
+      "ledger_effect": "NONE. wager authority NO, exposure $0."
+    },
+    {
+      "patch_id": "SIM1-SPEC-2026-08-30",
+      "severity": "P1",
+      "status": "SPEC_ONLY_NO_CODE",
+      "scope": [
+        "simulation layer",
+        "mc_engine lineage",
+        "docs corpus"
+      ],
+      "problem": "The owner uploaded five Monte Carlo methodology documents (design principles, in-play real-time MC, QMC vs stratified, NFL/NBA stratification boundaries, all-sports state modules). They must live in the governed corpus and be distilled into tiered follow-up work, without touching the frozen TRIALS/BLOCKS/CONVERGENCE constants.",
+      "changes": [
+        "ingest the five documents verbatim into docs/specs/simulation/ (append-only reference corpus, no edits)",
+        "SIM1_SPEC.md distills them into SIM-1a (P1: scenario engine formalization, E[EV]=sum P(s)*EV_s with worst-case and lower-percentile EV; stratified outer + scrambled-Sobol inner; Neyman allocation), SIM-1b (P1: decision-state record fields on every sim output incl. MC standard error), SIM-1c (P2: adaptive stopping as a config-gated candidate config only, never silently replacing TRIALS=30000), SIM-1d (P2: empirical residual/Student-t distribution upgrades, walk-forward-only residual pools), SIM-1e (P2/backlog: canonical live-state schema + sport adapters + OT ruleset branches + shared-latent-factor correlation generator)",
+        "in-play failure controls cross-reference the P0 dq_gate (PR #7) and the mc_convergence demotion gate (PR #5) instead of inventing parallel ones",
+        "governance invariant recorded: nothing in SIM-1 changes TRIALS/BLOCKS/CONVERGENCE_SIGMAS/MC_CONVERGENCE_TOL_PP without an owner-gated candidate config"
+      ],
+      "verification": {
+        "code_changes": "none \u2014 docs-only PR",
+        "frozen_artifacts": "untouched; no harness code modified"
+      },
+      "action_authority": "NO",
+      "notes": "Docs-only. Corpus files are verbatim owner uploads; SIM1_SPEC.md is the distilled spec with tier labels on every item."
+    },
+    {
+      "acceptance_test": "ACQUISITION-ACCEPTANCE-2026-08-31. Two games, no owner upload, primary rail genuinely blocked. Seven BLOCKED, one NOT_FOUND and one STALE_REJECTED all advanced; current availability, a 12-game MLB slate and a probable starter were acquired at rung 6; forecasts were produced for both games; actionability gated separately and PASSed for reasons unrelated to forecast availability.",
+      "architectural_correction": "WebFetch and WebSearch are TOOLS IN THE AGENT LOOP, not Python callables. No Python function can invoke them, so a session-bootstrap `get=` implementation is not constructible in this deployment. feed_espn and acquisition_adapters keep refusing by default and that stays correct. The orchestrator DRIVES the agent loop instead of replacing it, and the CI gate is the real enforcement because it catches premature termination whoever caused it.",
+      "changes": [
+        "harness/acquisition_orchestrator.py \u2014 the execution plane. next_action() emits the next UNTRIED authorized rung as an instruction; record_attempt() advances on BLOCKED, NOT_FOUND, STALE_REJECTED, CONTAMINATED, TITLES_ONLY and ERROR alike; disposition() refuses a terminal answer while any authorized rung is untried and returns ACQUISITION_INCOMPLETE naming what is still owed.",
+        "assert_no_premature_termination() \u2014 CI gate. UNKNOWN, BLOCKED or NO_FORECAST over an unfinished ladder fails the build.",
+        "ADVANCING_OUTCOMES made load-bearing. It was computed, stored on every attempt as `advances`, and consulted by nothing \u2014 the compute-then-discard shape, found in the code written to fix an instance of it.",
+        "Mutation suite polarity corrected; it reported 0/4 killed while claiming to pass."
+      ],
+      "incident": "2026-08-30. Searching for Atlanta Dream availability returned a report 32 days stale. THE REJECTION WAS CORRECT. Terminating on it was not: the run reported AVAILABILITY_UNKNOWN, when the correct classification was ACQUISITION_INCOMPLETE. One more query on the SAME working rail returned the current report immediately. The failure was query specificity plus premature termination, not source availability.",
+      "ledger_effect": "NONE. wager_authority NO, exposure $0.",
+      "patch_id": "ACQUISITION-EXECUTION-2026-08-30",
+      "problem": "The repo had an acquisition CONTROL plane and no EXECUTION plane. route_ladder_v1 defines seven rungs and states that a blocked rail advances the ladder and that acquisition cannot terminate while an authorized route remains untried \u2014 but its entry point takes an ALREADY-COLLECTED set of attempts and rules on sufficiency. It can say 'you stopped too soon'. It cannot make anything continue.",
+      "residual": "OWNER_RELAY remains untried on all three ladders \u2014 correctly, since acquisition succeeded first. MLB MIA@WSH has NO canonical id because statsapi is blocked on both paths, so it is forecastable now and not bindable later. No id was invented.",
+      "scope": [
+        "acquisition",
+        "availability",
+        "schedule",
+        "starters",
+        "all sports"
+      ],
+      "severity": "P0",
+      "status": "FIXED_AND_ACCEPTANCE_TESTED",
+      "verification": [
+        "acquisition_orchestrator gate PASS; mutation suite 4 killed, 0 errored, 0 survived, with a crash classified ERRORED rather than credited as a kill",
+        "wired into harness/healthcheck.py: selftest loop AND the mutation-suite gate that parses the tally and fails on any survivor, any error, or zero mutants",
+        "LIVE acceptance test ACQUISITION-ACCEPTANCE-2026-08-31, two games, no owner upload, primary rail genuinely blocked: 7 BLOCKED + 1 NOT_FOUND + 1 STALE_REJECTED all advanced the ladder; current availability, a 12-game MLB slate and a probable starter acquired at rung 6; forecasts produced for both games; actionability gated separately",
+        "the incident case is a permanent fixture: a stale rejection followed by a terminal claim raises PrematureTermination, and the mutant that ungates it is caught",
+        "ADVANCING_OUTCOMES proved load-bearing by a mutant that empties it"
+      ]
+    },
+    {
+      "action_authority": "NO",
+      "changes": [
+        "ESPN scoreboard API client (no key) for mlb/wnba/nfl/college-football, normalized to a common game record with ET date derivation from the UTC instant \u2014 never a UTC slice",
+        "MLB StatsAPI schedule?hydrate=probablePitcher and boxscore client emitting gamePk-keyed records; a starter is CONFIRMED only from a boxscore gamesStarted line once the game is underway, never from a probable listing",
+        "feed_sweep: one command pulls all four leagues, writes append-only content-hashed snapshots under data/feeds/YYYY-MM-DD/, and surfaces cross-feed disagreements as CONFLICT without silently resolving them",
+        "feed-produced result rows carry namespaced canonical ids (ESPN_GAMEID:/MLB_GAMEPK:) plus source and fetched_utc, and bind through result_binding_gate.binding_proof",
+        "market capture layer (VALUATION/AUDIT ONLY, its own namespace, no forecast-path import \u2014 enforced by the market_capture firewall): SportsGameOdds + The Odds API env-key clients with loud stub mode, owner-specified record schema, consensus as a set of book prices plus computed medians with Circa as its own labelled sharp-reference book, and 2+ point book disagreement surfaced as CONFLICT",
+        "historical/movement store (market_history + market_moneyline): owner history schema with typed line_kind (OPENING/CONSENSUS/BEST_AVAILABLE/SHARP_BOOK/CLOSING, never one column) and the temporal firewall \u2014 a pregame forecast path can never read a closing line or a post-cutoff snapshot",
+        "causal backtest evaluation layer (backtest_causal): PointInTime store fail-closed on post-cutoff reads, entry = last price at/before decision (never backfilled), close = last price in the named 15-minute window (Circa, Pinnacle fallback), consensus close from books observable at the cutoff, CLV post-wager only, walk-forward folds with purge/embargo, shift(1) rolling-feature lint, event-level train/test split, news timestamp trichotomy (publication_time governs)",
+        "calibration layer (calibration.py) shipped DORMANT: sample-size gate refuses any fit under 500 events (current WNBA bound Tier-1 base is n=4), Platt->beta->isotonic ladder, calibrator fits only on out-of-sample predictions, log loss primary, decision table encoded verbatim",
+        "P0 market data quality (market_quality): canonical event identity across feeds, odds quality fields (quote_age_seconds/stale/missingness/market_status/schema_version) attached as new versions never rewrites, versioned snapshot envelopes (raw+normalized+schema_version+ingestion_run_id), and the dq_gate battery (uniqueness, timestamp ordering, ranges, team mapping, missingness)"
+      ],
+      "notes": "Frozen boards, cards/ and historical artifacts are untouched. Fixture scores are labelled SYNTHETIC and exist only to exercise the binding path; the live capture is labelled LIVE_CAPTURE with its sha256.",
+      "patch_id": "FU1-FEED-ADAPTER-2026-08-30",
+      "problem": "MLB's binding blocker was the absence of a finals source carrying game ids. Schedule, starter and result data arrived via manual odds-page uploads and search relays, which are IDENTIFIED_UNCONFIRMED and can never bind.",
+      "scope": [
+        "mlb",
+        "wnba",
+        "nfl",
+        "cfb",
+        "result acquisition",
+        "market capture (valuation/audit only)",
+        "causal backtest evaluation",
+        "calibration (dormant)"
+      ],
+      "severity": "P1",
+      "status": "PROPOSED_VERIFIED_ON_ISOLATED_BRANCH",
+      "verification": {
+        "live_fetch": "StatsAPI live fetch succeeded (15 games on 2026-08-28; all 5 board-captured gamePks live-verified against the feed; capture stored at data/feeds/fixtures/2026-08-28/mlb_statsapi_schedule_LIVE_capture.json). ESPN scoreboard returned HTTP 403 from this egress \u2014 the offline fixture path is the reproducible one.",
+        "module_selftests": "feed_espn, feed_mlb_statsapi, feed_sweep, market_capture, market_sportsgameodds, market_theoddsapi, market_history, market_moneyline, backtest_causal, calibration \u2014 all OK",
+        "offline_fixture_binding": "the 2026-08-28 MLB cohort binds 15/15 (10 ESPN_GAMEID + 5 MLB_GAMEPK): RESULT_BINDING_PASS 15/15, DATE_COHERENCE_PASS 15/15, CANONICAL_ID_MATCH 15/15, aggregates permitted",
+        "pytest": "26/26 in a clean offline mirror (adds P0 identity/quality/dq-gate tests to the 24 above)"
+      }
+    },
+    {
+      "action_authority": "NO",
+      "changes": [
+        "port the batch-block convergence check from lineage/mc_engine_20260830/harness/mc_engine.py (CONVERGENCE_SIGMAS=3.0 on the pooled-Bernoulli se of a block proportion, TRIALS=30000, BLOCKS=10) as harness/mc_convergence.py",
+        "register the named tolerance MC_CONVERGENCE_TOL_PP=2.7386pp, derived not tuned: the worst-case (p_pool=0.5) value of the ported per-game threshold 3*sqrt(0.25/3000)*100",
+        "bind the gate INTO the forecastable/actionable gate: a CONVERGENCE_FAIL demotes the game to forecast-only (actionable=False, input_value_policy=REGISTERED_FALLBACK_ONLY, verdict and pre-demotion state recorded for audit); the rest of the board still builds \u2014 fail-closed, not fail-loud-process-kill",
+        "convergence never promotes: a clean verdict leaves a degraded freshness disposition non-actionable",
+        "regression tests: synthetic gap above tolerance demotes with audit recorded and the board builds around it; gap below tolerance keeps the normal actionable path"
+      ],
+      "notes": "Frozen historical boards remain byte-identical. The port is forward-only. Wiring the per-block evidence into a live forward builder (e.g. a v13 sim run in keyed blocks) is flagged as follow-up; build_board_0825 is a frozen-date builder and was deliberately not edited.",
+      "patch_id": "P0-MC-CONVERGENCE-2026-08-30",
+      "problem": "The mc_engine lineage's convergence gate (3-sigma batch-block check on simulated probabilities) raised ConvergenceError and killed the slate builder with exit 1 (observed: 2.968pp on HOU@NYM, 2.715pp on COL@ATL); the sportsmodel/main lineage had no convergence gate at all, so a simulator measuring its own RNG could emit an actionable probability.",
+      "scope": [
+        "shared MC convergence gate",
+        "forecastable/actionable gate",
+        "all MC-simulated sports"
+      ],
+      "severity": "P0",
+      "status": "PROPOSED_VERIFIED_ON_ISOLATED_BRANCH",
+      "verification": {
+        "freshness_contract_gate": "PASS (blob 49fb7ef0 verified byte-identical to sportsmodel/main)",
+        "freshness_mutants": "9/9 caught",
+        "frozen_artifacts": "untouched; cards/ and historical boards/grades not modified (append-only)",
+        "mc_convergence_mutants": "4/4 caught",
+        "mc_convergence_regression_pytest": "7/7 PASS",
+        "mc_convergence_selftest": "PASS"
+      }
+    },
+    {
+      "patch_id": "P0-FRESHNESS-2026-08-30",
+      "severity": "P0",
+      "status": "PROPOSED_VERIFIED_ON_ISOLATED_BRANCH",
+      "scope": [
+        "mlb",
+        "wnba",
+        "cfb",
+        "nfl",
+        "shared freshness contract"
+      ],
+      "problem": "Stale or absent observations could remain described as bettable; MLB historical game logs could be stamped as confirmation of tonight's starter; stale pitcher rates still entered V13 before probability shrinkage.",
+      "changes": [
+        "separate forecastable from actionable; only FRESH + CONFIRMED is action eligible",
+        "emit REGISTERED_FALLBACK_ONLY as the value policy for every non-actionable input",
+        "require exact normalized full-name identity instead of trusting people[0]",
+        "grade an MLB game log POST_HOC_NOT_PREGAME for starter identity",
+        "replace stale MLB starter rates with the registered V13 CAP treatment while retaining the old observation for audit",
+        "keep content-age and post-acquisition age re-gates fail-closed",
+        "apply the same dual-clock re-gate when acquisition fills an ABSENT store slot; an ancient returned observation remains DEGRADED",
+        "derive the starter-slots-capped count from actionable/current-value authority so ACQUIRING fallback rows cannot be counted as uncapped"
+      ],
+      "verification": {
+        "freshness_contract_gate": "PASS",
+        "freshness_mutants": "9/9 caught",
+        "acquisition_adapter_selftest": "PASS",
+        "absent_acquisition_pair": "PASS \u2014 ancient content degrades; genuinely current content recovers",
+        "acquiring_cap_coherence": "PASS \u2014 fallback values, capped count, and action state agree",
+        "starter_regression": "PASS",
+        "targeted_multisport_tests": "23/23 PASS",
+        "full_handoff_suite": "171/174 in this review environment; 3 WNBA failures because real pyarrow is unavailable"
+      },
+      "action_authority": "NO",
+      "notes": "Frozen historical boards remain byte-identical. The patch is forward-only."
+    },
+    {
+      "patch_id": "P0-CONTENT-AGE-2026-08-29",
+      "severity": "P0",
+      "status": "ON_OPERATIONAL_BRANCH",
+      "scope": [
+        "shared freshness contract"
+      ],
+      "problem": "A newly fetched but old observation could appear fresh because fetched_at reset the generous clock.",
+      "changes": [
+        "gate on content_age as well as derived_age",
+        "re-gate newly acquired content against the sport/kind age limit",
+        "refuse refetch-without-new-content"
+      ],
+      "verification": {
+        "freshness_mutants": "9/9 caught"
+      }
+    },
+    {
+      "patch_id": "P0-RESULT-BINDING-2026-08-28",
+      "severity": "P0",
+      "status": "ON_OPERATIONAL_BRANCH",
+      "scope": [
+        "all grading",
+        "mlb incident fixture"
+      ],
+      "problem": "Repeated-series matchups allowed prior-date finals to contaminate the next date's grades.",
+      "changes": [
+        "bind sport + canonical game id + scheduled date + away + home",
+        "refuse partial-cohort aggregation and ambiguous identities",
+        "run consecutive-series and adversarial bypass fixtures"
+      ]
+    },
+    {
+      "patch_id": "DATA-WNBA-DATE-AND-EXTENSION-2026-08-29",
+      "severity": "P1",
+      "status": "REVIEWED_WITH_REPRODUCIBILITY_BLOCKER",
+      "scope": [
+        "wnba"
+      ],
+      "problem": "UTC-date slicing and duplicate cross-ID content could contaminate the feature pool; the daily extension needed rebuilding.",
+      "changes": [
+        "store utc_instant and derive ET game date",
+        "guard duplicate content across ID spaces",
+        "rebuild the ESPN extension to 89 games"
+      ],
+      "open_blocker": "The review environment has no real pyarrow, so the WNBA end-to-end path did not reproduce."
+    },
+    {
+      "patch_id": "POLICY-MARKET-INDEPENDENCE-2026-08-29",
+      "severity": "POLICY",
+      "status": "ON_OPERATIONAL_BRANCH",
+      "scope": [
+        "all sports"
+      ],
+      "changes": [
+        "market, betting splits, line movement, and implied probability are forbidden predictive features",
+        "model outputs freeze before the valuation overlay",
+        "large market disagreement triggers an input audit, not market shrinkage"
+      ]
+    }
+  ],
+  "schema_version": "1.0",
+  "source_of_truth": "append-only patch records; newest first"
 }

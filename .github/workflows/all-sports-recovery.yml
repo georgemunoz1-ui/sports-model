@@ -1,0 +1,73 @@
+name: All Sports Evidence Recovery
+on:
+  push:
+    branches: [codex/all-sports-recovery-20260905]
+    paths:
+      - 'scripts/recovery_capture.py'
+      - 'scripts/recovery_features.py'
+      - 'requirements-recovery.txt'
+      - 'scripts/generate_card_force.py'
+      - 'tests/test_recovery_governance.py'
+      - '.github/workflows/all-sports-recovery.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  capture:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Preserve code revision
+        run: |
+          mkdir -p output/recovery
+          git archive --format=tar.gz --output=output/recovery/source.tar.gz HEAD
+      - name: Governance regression tests
+        run: python -m unittest discover -s tests -p test_recovery_governance.py -v
+      - name: Capture seven sports and MLB starter evidence
+        run: python scripts/recovery_capture.py --days 7 --output output/recovery
+      - name: Materialize diagnostic MLB inputs
+        run: |
+          for capture_root in output/recovery/capture-*; do
+            python scripts/recovery_features.py "$capture_root"
+          done
+      - name: Retain source evidence, including partial failures
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: all-sports-source-evidence-${{ github.sha }}-${{ github.run_id }}-${{ github.run_attempt }}
+          path: output/recovery/
+          if-no-files-found: error
+          retention-days: 90
+  health:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install declared dependencies
+        run: python -m pip install -r requirements-recovery.txt
+      - name: Model repair regression tests
+        run: python -m unittest discover -s tests -p test_recovery_models.py -v
+      - name: Repository health gate
+        run: |
+          mkdir -p output/health
+          set -o pipefail
+          python harness/healthcheck.py 2>&1 | tee output/health/healthcheck.log
+      - name: Preserve health result
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: recovery-health-${{ github.sha }}-${{ github.run_id }}
+          path: output/health/
+          if-no-files-found: error
+          retention-days: 90

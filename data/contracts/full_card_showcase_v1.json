@@ -1,0 +1,39 @@
+{
+  "schema": "ops.full_card_showcase_contract.v1",
+  "contract_id": "FULL_CARD_SHOWCASE_V1",
+  "timezone": "America/Los_Angeles",
+  "intent": "SHOWCASE_FULL_CARD",
+  "triggers": [
+    "show me full card for [date]",
+    "full card [date]",
+    "show the whole slate for [date]",
+    "display every game for [date]",
+    "all games [date]"
+  ],
+  "semantics": "Render the complete canonical schedule-bound board. Never reinterpret as best bets, strongest leans, plays-only, recap, or executive summary.",
+  "required_markets": {
+    "MLB": ["ML", "RL", "TOTAL"],
+    "NFL": ["ML", "SPREAD", "TOTAL"],
+    "CFB": ["ML", "SPREAD", "TOTAL"],
+    "WNBA": ["ML", "SPREAD", "TOTAL"],
+    "NBA": ["ML", "SPREAD", "TOTAL"]
+  },
+  "visible_statuses": ["PLAY", "LEAN", "PASS", "BLOCKED", "NO_PRICE", "NO_MODEL", "POST_START"],
+  "rules": [
+    "Retrieve the canonical schedule for the resolved local card date.",
+    "Render every canonical scheduled event exactly once in chronological order.",
+    "Render every required core market for each event.",
+    "NO_MODEL and POST_START rows are visible and count toward completeness.",
+    "POST_START cannot create a new prospective forecast.",
+    "Run full-card completeness and forecast-action governance before rendering.",
+    "If validation fails, emit CARD_REJECTED with missing event IDs, missing market types, duplicates, and governance errors; never render a partial card as complete.",
+    "Render PLAY-only action rows only after the complete full card.",
+    "Illustrative/sample probabilities are forbidden in production card output."
+  ],
+  "related_intents": {
+    "SHOWCASE_ACTION_CARD": "PLAY rows only, derived from a validated full card",
+    "SHOWCASE_DIAGNOSTICS": "NO_MODEL, NO_PRICE, BLOCKED, stale evidence, divergence and completeness failures",
+    "SETTLE_FORECAST_CARD": "Append grades to frozen forecasts without mutating forecast payloads"
+  },
+  "completion_condition": "all canonical events rendered AND all required markets rendered AND every row has explicit status AND completeness validator passes AND forecast-action governance passes"
+}

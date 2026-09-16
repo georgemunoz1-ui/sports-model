@@ -4458,3 +4458,44 @@ backtests. Frozen football forecasts and model parameters unchanged. Action OFF.
 ## 2026-09-14 — PR 17 through 25 consolidation verification
 
 Owner requested all PRs 17–25 consolidated onto sportsmodel/main. Resolved the stacked journal conflicts by retaining all prior entries. Combined research suite: 91 PASS; NFL/current-date suite: 93 PASS. Canonical NFL command emitted 100K winner, score, halftime and calibrated-spread draws from the assimilation package; football bundle and arrays replay exactly and nine artifact hashes verify. Exact tested code commit and retained archive: docs/releases/2026-09-14-pr17-25/verification.json. Added post-merge NFL CI on sportsmodel/main and replaced the stale landing overview. Full health is not green: local Git-history verification unavailable, one CFB binary unrecovered, existing overdue recovery and readiness failures remain. Weekly state release still waits for MNF final. Research integration only; no coefficient/promotion/authority changes.
+
+
+## 2026-09-03 — multi-sport update ingested and release gate made executable
+
+The six owner notes are now represented by an executable outer release contract. The new
+`release_gate` evaluates MLB, WNBA, NFL and CFB independently across twelve named gates, requires
+every discovered event to carry a terminal disposition, rejects future-dated evidence, binds the
+release artifact to the input bytes, and sets global health to the worst sport state. It is wired
+into both the module identity manifest and the repository healthcheck.
+
+The 18:40:16Z point-in-time capture found 9 MLB games and 11 CFB games. MLB game identities bind to
+official gamePk values; three games were already underway and are explicitly post-start blocked.
+The remaining six are blocked because current forecast, critical pregame input and exact-price
+artifacts are absent. The 11 CFB games are retained rather than dropped, but their schedule source
+is IDENTIFIED_UNCONFIRMED and canonical event ids remain null. WNBA is in its declared FIBA break
+and the NFL regular season has not begun, so each has a zero-game date disposition; their older
+backfill and model-restoration blockers remain active.
+
+Release result: **BLOCKED** for all four sports, 20/20 discovered events classified, zero contract
+problems, zero evidence-hash binding problems. No model probability, edge, selection, or price was
+invented. Ledger unchanged: 0 bets, 0.00 units, $0. Wager authority NO.
+
+
+## 2026-09-05 — all-sports recovery on codex/all-sports-recovery-20260905
+
+Owner requested process repairs and required data for all sports. The default main branch has no model pipeline; this recovery targets codex/nfl-wnba-nba-models-v1. Source capture run 33997673794 retrieved 157 responses across MLB/NFL/CFB/NBA/WNBA/NHL/MLS without request failure; all 129 retained manifest entries independently matched SHA-256. Seven-day source window is 2026-08-30 through 2026-09-05. Raw source capture is evidence only, not a PIT backfill or forecast registration.
+
+Patched card probability overrides and strict timestamp ordering. Diagnostic card cannot self-certify prospective grading. MLB missing required starter/team metrics now blocks before engine execution. Found reversed defensive-rating effect in WNBA v1; added a separately named v1.1 diagnostic correction, preserving original v1. Tested both symmetric paths on six defensive ratings. No action or market overlay enabled. NHL/MLS card integration, fitted NBA/WNBA/NFL states and full required input provenance remain open. No claim that all sports are model-ready. Health gate is run independently and its actual failures retained.
+
+## 2026-09-08 — MLB market firewall complete-row coverage (review only)
+
+- Reproduced a validation bypass: assert_no_market_fields inspected only rows[:50]. Nested ODDS in team/SP at zero-based rows 50 and 100 escaped validate().
+- Repair scans all rows; existing token policy, feature definitions, model weights, and frozen datasets/forecasts are unchanged.
+- Added data-free regression tests: python3 -m unittest discover -s tests -p 'test_ml_market_coverage.py' -v. Before repair: four failing subcases; after: all four tests pass, including eight row/section subcases.
+- Healthcheck attempted in partial local source snapshots; missing datasets/modules prevent full-repository validation. This is NOT evidence of canonical repository health. Full firewall integration battery and healthcheck remain required before merge.
+- No model promotion, performance claim, forecast registration, or historical backfill performed. Next: run full checks in complete checkout, then resume PIT feature development.
+
+
+## 2026-09-15 — User-authorized all-PR consolidation (2026-09-16 UTC)
+
+Reconciled default main and operational history; PR1,9–16,26–30 changes retained. Preserved current selected defaults and archived forecast hashes. Older Gamma-Poisson adapter accessible under an explicit research name. Recovered strict PIT timestamp and no-self-registration checks; preserved newer parser assertions. Local combined suite passed 330 tests before the additional package-integrity regression. New access guide and consistent dependency file added. External health blockers are not cleared by merging. Action authority OFF.

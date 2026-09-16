@@ -1,0 +1,2185 @@
+{
+  "actionable": false,
+  "artifact_type": "diagnostic_force_card_v1",
+  "as_of_utc": "2026-09-14T21:49:07.571245Z",
+  "authority": "SHADOW_ONLY",
+  "card_date": "2026-09-14",
+  "coverage_breach_event_ids": [],
+  "forecast_count": 10,
+  "forecasts": [
+    {
+      "action_authority": false,
+      "action_status": "SHADOW_ONLY",
+      "analytic_p": 0.5211684807265371,
+      "analytic_sim_abs_gap_pp": 5.101848072653708,
+      "analytic_sim_divergence": "DIFFERENT_MODELS_NOT_CONVERGENCE",
+      "analytic_sim_gap_pp": 5.101848072653708,
+      "away_team": "CWS",
+      "coverage_label": "CURRENT_FORM_RESEARCH; NOT_PHASE1_1",
+      "data_quality": "CURRENT_TEAM_FORM_PARTIAL_STARTERS",
+      "diagnostics": {
+        "analytic_before_assimilation_home": 0.5183026207840635,
+        "analytic_home_win": 0.5211684807265371,
+        "analytic_model_id": "d_logistic_2f",
+        "assimilated_results": 311,
+        "assimilation_probability_change_pp": 0.286585994247357,
+        "canonical_prospective_eligible": false,
+        "capped_starter_slots": 2,
+        "comparison": "DIFFERENT_MODELS_NOT_ANALYTIC_MC_CONVERGENCE",
+        "form_before": {
+          "CLE": {
+            "games": 114,
+            "ra": 4.008771929824562,
+            "rf": 3.912280701754386
+          },
+          "CWS": {
+            "games": 112,
+            "ra": 4.383928571428571,
+            "rf": 4.776785714285714
+          }
+        },
+        "form_through": "2026-09-13",
+        "form_used": {
+          "CLE": {
+            "games": 135,
+            "ra": 4.059259259259259,
+            "rf": 4.037037037037037
+          },
+          "CWS": {
+            "games": 133,
+            "ra": 4.421052631578948,
+            "rf": 4.654135338345864
+          }
+        },
+        "seed": 4901271052010843924,
+        "sim_home_win": 0.47015,
+        "simulation_model_id": "mlb.winner.CHAMPION_V13",
+        "simulations": 100000,
+        "starter_dispositions": {
+          "away": {
+            "acquisition": {
+              "attempted": false,
+              "why": "no acquisition adapter injected. This module performs NO network I/O by design \u2014 adapters are supplied by the caller and must route through approved browsing/search/fetch tools, never shell HTTP against sports sites. An unconfigured deployment degrades; it never pretends."
+            },
+            "actionable": false,
+            "age_days": 22.9091,
+            "disposition": "DEGRADED",
+            "dose_multiplier": 0.5,
+            "forecastable": true,
+            "grade": "CONFIRMED",
+            "input_value_policy": "REGISTERED_FALLBACK_ONLY",
+            "limit_days": 2,
+            "reason": "derived_age 22.91d EXCEEDS the 2d limit and acquisition was unavailable or failed \u2014 degraded to a widened dose rather than inheriting the stale value as though it were current",
+            "stamp": {
+              "content_age_days": 22.9091,
+              "derived_age_days": 22.9091,
+              "effective_at": "2026-08-23T00:00:00Z",
+              "fetched_at": null,
+              "grade": "CONFIRMED",
+              "observed_at": "2026-08-23T00:00:00Z",
+              "source": "pitcher_logs/656794.txt via sp_asof_strict",
+              "source_sha256": "2d94e420aa9cb697908b2e92694a9cb774865dc59ff9405da0acb605cf563dbe",
+              "subject": "Sean Newcomb"
+            },
+            "subject": "Sean Newcomb"
+          },
+          "home": {
+            "acquisition": {
+              "attempted": false,
+              "why": "no acquisition adapter injected. This module performs NO network I/O by design \u2014 adapters are supplied by the caller and must route through approved browsing/search/fetch tools, never shell HTTP against sports sites. An unconfigured deployment degrades; it never pretends."
+            },
+            "actionable": false,
+            "age_days": 20.9091,
+            "disposition": "DEGRADED",
+            "dose_multiplier": 0.5,
+            "forecastable": true,
+            "grade": "CONFIRMED",
+            "input_value_policy": "REGISTERED_FALLBACK_ONLY",
+            "limit_days": 2,
+            "reason": "derived_age 20.91d EXCEEDS the 2d limit and acquisition was unavailable or failed \u2014 degraded to a widened dose rather than inheriting the stale value as though it were current",
+            "stamp": {
+              "content_age_days": 20.9091,
+              "derived_age_days": 20.9091,
+              "effective_at": "2026-08-25T00:00:00Z",
+              "fetched_at": null,
+              "grade": "CONFIRMED",
+              "observed_at": "2026-08-25T00:00:00Z",
+              "source": "pitcher_logs/668909.txt via sp_asof_strict",
+              "source_sha256": "716bc427c3070497c549a5964a9cb68461285abde0c0367382c066450baa7e5f",
+              "subject": "Gavin Williams"
+            },
+            "subject": "Gavin Williams"
+          }
+        },
+        "starter_status": {
+          "away": "STALE_DATA_CAP",
+          "home": "STALE_DATA_CAP"
+        }
+      },
+      "dose": 0.0,
+      "event_id": "MLB:824386",
+      "forecast_status": "FORECAST_GENERATED",
+      "forecast_tier": "REDUCED",
+      "grading": {
+        "action_authority": false,
+        "actual_result": null,
+        "analytic_p_home": 0.5211684807265371,
+        "awaiting_outcome": false,
+        "brier_analytic": null,
+        "brier_normal_margin_candidate": null,
+        "brier_sim": null,
+        "calibration_bin_analytic": "0.5-0.6",
+        "calibration_bin_sim": "0.4-0.5",
+        "eligibility_reason": "RESEARCH_ADAPTER_NOT_CANONICAL",
+        "eligible_for_prospective_grading": false,
+        "graded_at_utc": null,
+        "home_won": null,
+        "log_loss_analytic": null,
+        "log_loss_sim": null,
+        "market_features_used": false,
+        "normal_margin_candidate_p_home": null,
+        "schema_version": "forecast_grading_v1",
+        "stochastic_sim_p_home": 0.47015
+      },
+      "home_team": "CLE",
+      "input_snapshot_hash": "4404d00dc302ef141158d073894aae6f89764fd6c6b73bfd6d24b859d7df5628",
+      "margin_std": null,
+      "model_id": "mlb.v13_and_d_logistic_2f.research.v1",
+      "model_input_snapshot": {
+        "away_form": {
+          "games": 133,
+          "ra": 4.421052631578948,
+          "rf": 4.654135338345864
+        },
+        "cutoff": "2026-09-14T21:49:07.571245Z",
+        "event_id": "MLB:824386",
+        "home_form": {
+          "games": 135,
+          "ra": 4.059259259259259,
+          "rf": 4.037037037037037
+        },
+        "model_id": "mlb.v13_and_d_logistic_2f.research.v1",
+        "n": 100000,
+        "park_factor": 1.0,
+        "sp_away": {
+          "bb": null,
+          "era": null,
+          "gs": 0,
+          "k": null
+        },
+        "sp_home": {
+          "bb": null,
+          "era": null,
+          "gs": 0,
+          "k": null
+        }
+      },
+      "model_p": 0.5211684807265371,
+      "model_p_candidate_normal_margin": null,
+      "model_p_candidate_status": null,
+      "model_state_config_hash": "094a8dcf4f8973ee452802a1ba321790eeb0a7108e32d3c45e6ef394c2c70525",
+      "model_winner": "CLE",
+      "projected_away_points": null,
+      "projected_away_runs": 4.392,
+      "projected_home_points": null,
+      "projected_home_runs": 3.911,
+      "projected_margin": null,
+      "projected_total": "UNSUPPORTED_SETTLEMENT",
+      "provenance": {
+        "source_fetches": [
+          {
+            "fetched_at_utc": "2026-09-14T21:47:05.446650+00:00",
+            "sha256": "fb777a2ed086aa7a612db3a68a0cec5408038ab95468a244a32cd447f69f4464",
+            "source": "https://www.mlb.com/probable-pitchers/2026-09-14"
+          },
+          {
+            "fetched_at_utc": "2026-09-14T16:01:11.102485+00:00",
+            "sha256": "042630ac688a412de42efa0dd36f7a668633d64303c995153bbdc7d926acbda9",
+            "source": "retained staged MLB results"
+          }
+        ]
+      },
+      "sim_p": 0.47015,
+      "simulation": {
+        "count": 100000,
+        "draw_directory": "/workspace/scratch/3321ed1a6be1/MLB-20260914-Verified-Board/draws/MLB_824386",
+        "home_win_probability": 0.47015,
+        "seed": 4901271052010843924
+      },
+      "spread_or_runline": "UNSUPPORTED_SETTLEMENT",
+      "start_time_utc": "2026-09-14T22:40:00+00:00",
+      "stochastic_sim_p": 0.47015,
+      "total_market": "UNSUPPORTED_SETTLEMENT",
+      "total_std": null,
+      "warnings": [
+        "RESEARCH_ONLY_GLOBAL_HEALTH_RED",
+        "DIFFERENT_MODELS_NOT_CONVERGENCE",
+        "STARTER_CAPS:2",
+        "LINEUP_AND_INJURY_EFFECTS_UNVERIFIED",
+        "V13_TIE_PROXY_NOT_FULL_EXTRA_INNINGS",
+        "STAGED_RESULTS_NOT_PROMOTED_TO_TIER1"
+      ]
+    },
+    {
+      "action_authority": false,
+      "action_status": "SHADOW_ONLY",
+      "analytic_p": 0.5039952195209005,
+      "analytic_sim_abs_gap_pp": 7.039478047909942,
+      "analytic_sim_divergence": "DIFFERENT_MODELS_NOT_CONVERGENCE",
+      "analytic_sim_gap_pp": -7.039478047909942,
+      "away_team": "LAD",
+      "coverage_label": "CURRENT_FORM_RESEARCH; NOT_PHASE1_1",
+      "data_quality": "CURRENT_TEAM_FORM_PARTIAL_STARTERS",
+      "diagnostics": {
+        "analytic_before_assimilation_home": 0.4987267540600982,
+        "analytic_home_win": 0.4960047804790994,
+        "analytic_model_id": "d_logistic_2f",
+        "assimilated_results": 311,
+        "assimilation_probability_change_pp": -0.2721973580998793,
+        "canonical_prospective_eligible": false,
+        "capped_starter_slots": 2,
+        "comparison": "DIFFERENT_MODELS_NOT_ANALYTIC_MC_CONVERGENCE",
+        "form_before": {
+          "CIN": {
+            "games": 112,
+            "ra": 4.892857142857143,
+            "rf": 4.151785714285714
+          },
+          "LAD": {
+            "games": 113,
+            "ra": 3.752212389380531,
+            "rf": 5.097345132743363
+          }
+        },
+        "form_through": "2026-09-13",
+        "form_used": {
+          "CIN": {
+            "games": 132,
+            "ra": 5.2727272727272725,
+            "rf": 4.287878787878788
+          },
+          "LAD": {
+            "games": 133,
+            "ra": 3.7293233082706765,
+            "rf": 5.052631578947368
+          }
+        },
+        "seed": 7379079150795498314,
+        "sim_home_win": 0.42561,
+        "simulation_model_id": "mlb.winner.CHAMPION_V13",
+        "simulations": 100000,
+        "starter_dispositions": {
+          "away": {
+            "acquisition": {
+              "attempted": false,
+              "why": "no acquisition adapter injected. This module performs NO network I/O by design \u2014 adapters are supplied by the caller and must route through approved browsing/search/fetch tools, never shell HTTP against sports sites. An unconfigured deployment degrades; it never pretends."
+            },
+            "actionable": false,
+            "age_days": 17.9091,
+            "disposition": "DEGRADED",
+            "dose_multiplier": 0.5,
+            "forecastable": true,
+            "grade": "CONFIRMED",
+            "input_value_policy": "REGISTERED_FALLBACK_ONLY",
+            "limit_days": 2,
+            "reason": "derived_age 17.91d EXCEEDS the 2d limit and acquisition was unavailable or failed \u2014 degraded to a widened dose rather than inheriting the stale value as though it were current",
+            "stamp": {
+              "content_age_days": 17.9091,
+              "derived_age_days": 17.9091,
+              "effective_at": "2026-08-28T00:00:00Z",
+              "fetched_at": null,
+              "grade": "CONFIRMED",
+              "observed_at": "2026-08-28T00:00:00Z",
+              "source": "pitcher_logs/669373.txt via sp_asof_strict",
+              "source_sha256": "1fd029b35bc0b7c895efabd99a0e7c6707ef1725d400e3ccf33f6a605cc0544e",
+              "subject": "Tarik Skubal"
+            },
+            "subject": "Tarik Skubal"
+          },
+          "home": {
+            "acquisition": {
+              "attempted": false,
+              "why": "no acquisition adapter injected. This module performs NO network I/O by design \u2014 adapters are supplied by the caller and must route through approved browsing/search/fetch tools, never shell HTTP against sports sites. An unconfigured deployment degrades; it never pretends."
+            },
+            "actionable": false,
+            "age_days": 19.9091,
+            "disposition": "DEGRADED",
+            "dose_multiplier": 0.5,
+            "forecastable": true,
+            "grade": "CONFIRMED",
+            "input_value_policy": "REGISTERED_FALLBACK_ONLY",
+            "limit_days": 2,
+            "reason": "derived_age 19.91d EXCEEDS the 2d limit and acquisition was unavailable or failed \u2014 degraded to a widened dose rather than inheriting the stale value as though it were current",
+            "stamp": {
+              "content_age_days": 19.9091,
+              "derived_age_days": 19.9091,
+              "effective_at": "2026-08-26T00:00:00Z",
+              "fetched_at": null,
+              "grade": "CONFIRMED",
+              "observed_at": "2026-08-26T00:00:00Z",
+              "source": "pitcher_logs/666157.txt via sp_asof_strict",
+              "source_sha256": "bf03b31ef893e9645c313fa7887fb0983dc4e2ca83e86b6fc4d536a6f9b233bb",
+              "subject": "Nick Lodolo"
+            },
+            "subject": "Nick Lodolo"
+          }
+        },
+        "starter_status": {
+          "away": "STALE_DATA_CAP",
+          "home": "STALE_DATA_CAP"
+        }
+      },
+      "dose": 0.0,
+      "event_id": "MLB:824465",
+      "forecast_status": "FORECAST_GENERATED",
+      "forecast_tier": "REDUCED",
+      "grading": {
+        "action_authority": false,
+        "actual_result": null,
+        "analytic_p_home": 0.49600478047909946,
+        "awaiting_outcome": false,
+        "brier_analytic": null,
+        "brier_normal_margin_candidate": null,
+        "brier_sim": null,
+        "calibration_bin_analytic": "0.4-0.5",
+        "calibration_bin_sim": "0.4-0.5",
+        "eligibility_reason": "RESEARCH_ADAPTER_NOT_CANONICAL",
+        "eligible_for_prospective_grading": false,
+        "graded_at_utc": null,
+        "home_won": null,
+        "log_loss_analytic": null,
+        "log_loss_sim": null,
+        "market_features_used": false,
+        "normal_margin_candidate_p_home": null,
+        "schema_version": "forecast_grading_v1",
+        "stochastic_sim_p_home": 0.42561000000000004
+      },
+      "home_team": "CIN",
+      "input_snapshot_hash": "6667c16440a8234a78193abe450f32ea212f72ef0bdc0e4d8ce5b9f33b9ac900",
+      "margin_std": null,
+      "model_id": "mlb.v13_and_d_logistic_2f.research.v1",
+      "model_input_snapshot": {
+        "away_form": {
+          "games": 133,
+          "ra": 3.7293233082706765,
+          "rf": 5.052631578947368
+        },
+        "cutoff": "2026-09-14T21:49:07.571245Z",
+        "event_id": "MLB:824465",
+        "home_form": {
+          "games": 132,
+          "ra": 5.2727272727272725,
+          "rf": 4.287878787878788
+        },
+        "model_id": "mlb.v13_and_d_logistic_2f.research.v1",
+        "n": 100000,
+        "park_factor": 0.97,
+        "sp_away": {
+          "bb": null,
+          "era": null,
+          "gs": 0,
+          "k": null
+        },
+        "sp_home": {
+          "bb": null,
+          "era": null,
+          "gs": 0,
+          "k": null
+        }
+      },
+      "model_p": 0.5039952195209005,
+      "model_p_candidate_normal_margin": null,
+      "model_p_candidate_status": null,
+      "model_state_config_hash": "094a8dcf4f8973ee452802a1ba321790eeb0a7108e32d3c45e6ef394c2c70525",
+      "model_winner": "LAD",
+      "projected_away_points": null,
+      "projected_away_runs": 4.922,
+      "projected_home_points": null,
+      "projected_home_runs": 3.894,
+      "projected_margin": null,
+      "projected_total": "UNSUPPORTED_SETTLEMENT",
+      "provenance": {
+        "source_fetches": [
+          {
+            "fetched_at_utc": "2026-09-14T21:47:05.446650+00:00",
+            "sha256": "fb777a2ed086aa7a612db3a68a0cec5408038ab95468a244a32cd447f69f4464",
+            "source": "https://www.mlb.com/probable-pitchers/2026-09-14"
+          },
+          {
+            "fetched_at_utc": "2026-09-14T16:01:11.102485+00:00",
+            "sha256": "042630ac688a412de42efa0dd36f7a668633d64303c995153bbdc7d926acbda9",
+            "source": "retained staged MLB results"
+          }
+        ]
+      },
+      "sim_p": 0.57439,
+      "simulation": {
+        "count": 100000,
+        "draw_directory": "/workspace/scratch/3321ed1a6be1/MLB-20260914-Verified-Board/draws/MLB_824465",
+        "home_win_probability": 0.42561,
+        "seed": 7379079150795498314
+      },
+      "spread_or_runline": "UNSUPPORTED_SETTLEMENT",
+      "start_time_utc": "2026-09-14T22:40:00+00:00",
+      "stochastic_sim_p": 0.57439,
+      "total_market": "UNSUPPORTED_SETTLEMENT",
+      "total_std": null,
+      "warnings": [
+        "RESEARCH_ONLY_GLOBAL_HEALTH_RED",
+        "DIFFERENT_MODELS_NOT_CONVERGENCE",
+        "STARTER_CAPS:2",
+        "LINEUP_AND_INJURY_EFFECTS_UNVERIFIED",
+        "V13_TIE_PROXY_NOT_FULL_EXTRA_INNINGS",
+        "STAGED_RESULTS_NOT_PROMOTED_TO_TIER1"
+      ]
+    },
+    {
+      "action_authority": false,
+      "action_status": "SHADOW_ONLY",
+      "analytic_p": 0.5175735526293087,
+      "analytic_sim_abs_gap_pp": 4.271355262930871,
+      "analytic_sim_divergence": "DIFFERENT_MODELS_NOT_CONVERGENCE",
+      "analytic_sim_gap_pp": 4.271355262930871,
+      "away_team": "DET",
+      "coverage_label": "CURRENT_FORM_RESEARCH; NOT_PHASE1_1",
+      "data_quality": "CURRENT_TEAM_FORM_PARTIAL_STARTERS",
+      "diagnostics": {
+        "analytic_before_assimilation_home": 0.5132040005888867,
+        "analytic_home_win": 0.5175735526293087,
+        "analytic_model_id": "d_logistic_2f",
+        "assimilated_results": 311,
+        "assimilation_probability_change_pp": 0.4369552040421998,
+        "canonical_prospective_eligible": false,
+        "capped_starter_slots": 2,
+        "comparison": "DIFFERENT_MODELS_NOT_ANALYTIC_MC_CONVERGENCE",
+        "form_before": {
+          "DET": {
+            "games": 112,
+            "ra": 3.9375,
+            "rf": 4.258928571428571
+          },
+          "TOR": {
+            "games": 113,
+            "ra": 4.460176991150442,
+            "rf": 3.8761061946902653
+          }
+        },
+        "form_through": "2026-09-13",
+        "form_used": {
+          "DET": {
+            "games": 133,
+            "ra": 4.037593984962406,
+            "rf": 4.2406015037593985
+          },
+          "TOR": {
+            "games": 133,
+            "ra": 4.345864661654136,
+            "rf": 4.0
+          }
+        },
+        "seed": 15291514092730618900,
+        "sim_home_win": 0.47486,
+        "simulation_model_id": "mlb.winner.CHAMPION_V13",
+        "simulations": 100000,
+        "starter_dispositions": {
+          "away": {
+            "acquisition": {
+              "attempted": false,
+              "why": "no acquisition adapter injected. This module performs NO network I/O by design \u2014 adapters are supplied by the caller and must route through approved browsing/search/fetch tools, never shell HTTP against sports sites. An unconfigured deployment degrades; it never pretends."
+            },
+            "actionable": false,
+            "age_days": 19.9091,
+            "disposition": "DEGRADED",
+            "dose_multiplier": 0.5,
+            "forecastable": true,
+            "grade": "CONFIRMED",
+            "input_value_policy": "REGISTERED_FALLBACK_ONLY",
+            "limit_days": 2,
+            "reason": "derived_age 19.91d EXCEEDS the 2d limit and acquisition was unavailable or failed \u2014 degraded to a widened dose rather than inheriting the stale value as though it were current",
+            "stamp": {
+              "content_age_days": 19.9091,
+              "derived_age_days": 19.9091,
+              "effective_at": "2026-08-26T00:00:00Z",
+              "fetched_at": null,
+              "grade": "CONFIRMED",
+              "observed_at": "2026-08-26T00:00:00Z",
+              "source": "pitcher_logs/675512.txt via sp_asof_strict",
+              "source_sha256": "132f7ba5b85c6f6cb6d8c0fa627e2c3c80110aade2611bafd61231dc7d06514a",
+              "subject": "Troy Melton"
+            },
+            "subject": "Troy Melton"
+          },
+          "home": {
+            "acquisition": {
+              "attempted": false,
+              "why": "no acquisition adapter injected. This module performs NO network I/O by design \u2014 adapters are supplied by the caller and must route through approved browsing/search/fetch tools, never shell HTTP against sports sites. An unconfigured deployment degrades; it never pretends."
+            },
+            "actionable": false,
+            "age_days": 16.9091,
+            "disposition": "DEGRADED",
+            "dose_multiplier": 0.5,
+            "forecastable": true,
+            "grade": "CONFIRMED",
+            "input_value_policy": "REGISTERED_FALLBACK_ONLY",
+            "limit_days": 2,
+            "reason": "derived_age 16.91d EXCEEDS the 2d limit and acquisition was unavailable or failed \u2014 degraded to a widened dose rather than inheriting the stale value as though it were current",
+            "stamp": {
+              "content_age_days": 16.9091,
+              "derived_age_days": 16.9091,
+              "effective_at": "2026-08-29T00:00:00Z",
+              "fetched_at": null,
+              "grade": "CONFIRMED",
+              "observed_at": "2026-08-29T00:00:00Z",
+              "source": "pitcher_logs/667755.txt via sp_asof_strict",
+              "source_sha256": "ca8614e1ff0dfd8c40b064120273a2b4cde1a3942ac30892ea4ae98c8fbde7e1",
+              "subject": "Jos\u00e9 Soriano"
+            },
+            "subject": "Jos\u00e9 Soriano"
+          }
+        },
+        "starter_status": {
+          "away": "STALE_DATA_CAP",
+          "home": "STALE_DATA_CAP"
+        }
+      },
+      "dose": 0.0,
+      "event_id": "MLB:822765",
+      "forecast_status": "FORECAST_GENERATED",
+      "forecast_tier": "REDUCED",
+      "grading": {
+        "action_authority": false,
+        "actual_result": null,
+        "analytic_p_home": 0.5175735526293087,
+        "awaiting_outcome": false,
+        "brier_analytic": null,
+        "brier_normal_margin_candidate": null,
+        "brier_sim": null,
+        "calibration_bin_analytic": "0.5-0.6",
+        "calibration_bin_sim": "0.4-0.5",
+        "eligibility_reason": "RESEARCH_ADAPTER_NOT_CANONICAL",
+        "eligible_for_prospective_grading": false,
+        "graded_at_utc": null,
+        "home_won": null,
+        "log_loss_analytic": null,
+        "log_loss_sim": null,
+        "market_features_used": false,
+        "normal_margin_candidate_p_home": null,
+        "schema_version": "forecast_grading_v1",
+        "stochastic_sim_p_home": 0.47486
+      },
+      "home_team": "TOR",
+      "input_snapshot_hash": "d4365f0ca7169414cb576ab720737cdaa4fccab1fd1b7049fcce7aa8eeab8b00",
+      "margin_std": null,
+      "model_id": "mlb.v13_and_d_logistic_2f.research.v1",
+      "model_input_snapshot": {
+        "away_form": {
+          "games": 133,
+          "ra": 4.037593984962406,
+          "rf": 4.2406015037593985
+        },
+        "cutoff": "2026-09-14T21:49:07.571245Z",
+        "event_id": "MLB:822765",
+        "home_form": {
+          "games": 133,
+          "ra": 4.345864661654136,
+          "rf": 4.0
+        },
+        "model_id": "mlb.v13_and_d_logistic_2f.research.v1",
+        "n": 100000,
+        "park_factor": 1.032,
+        "sp_away": {
+          "bb": null,
+          "era": null,
+          "gs": 0,
+          "k": null
+        },
+        "sp_home": {
+          "bb": null,
+          "era": null,
+          "gs": 0,
+          "k": null
+        }
+      },
+      "model_p": 0.5175735526293087,
+      "model_p_candidate_normal_margin": null,
+      "model_p_candidate_status": null,
+      "model_state_config_hash": "094a8dcf4f8973ee452802a1ba321790eeb0a7108e32d3c45e6ef394c2c70525",
+      "model_winner": "TOR",
+      "projected_away_points": null,
+      "projected_away_runs": 4.18,
+      "projected_home_points": null,
+      "projected_home_runs": 3.904,
+      "projected_margin": null,
+      "projected_total": "UNSUPPORTED_SETTLEMENT",
+      "provenance": {
+        "source_fetches": [
+          {
+            "fetched_at_utc": "2026-09-14T21:47:05.446650+00:00",
+            "sha256": "fb777a2ed086aa7a612db3a68a0cec5408038ab95468a244a32cd447f69f4464",
+            "source": "https://www.mlb.com/probable-pitchers/2026-09-14"
+          },
+          {
+            "fetched_at_utc": "2026-09-14T16:01:11.102485+00:00",
+            "sha256": "042630ac688a412de42efa0dd36f7a668633d64303c995153bbdc7d926acbda9",
+            "source": "retained staged MLB results"
+          }
+        ]
+      },
+      "sim_p": 0.47486,
+      "simulation": {
+        "count": 100000,
+        "draw_directory": "/workspace/scratch/3321ed1a6be1/MLB-20260914-Verified-Board/draws/MLB_822765",
+        "home_win_probability": 0.47486,
+        "seed": 15291514092730618900
+      },
+      "spread_or_runline": "UNSUPPORTED_SETTLEMENT",
+      "start_time_utc": "2026-09-14T23:07:00+00:00",
+      "stochastic_sim_p": 0.47486,
+      "total_market": "UNSUPPORTED_SETTLEMENT",
+      "total_std": null,
+      "warnings": [
+        "RESEARCH_ONLY_GLOBAL_HEALTH_RED",
+        "DIFFERENT_MODELS_NOT_CONVERGENCE",
+        "STARTER_CAPS:2",
+        "LINEUP_AND_INJURY_EFFECTS_UNVERIFIED",
+        "V13_TIE_PROXY_NOT_FULL_EXTRA_INNINGS",
+        "STAGED_RESULTS_NOT_PROMOTED_TO_TIER1"
+      ]
+    },
+    {
+      "action_authority": false,
+      "action_status": "SHADOW_ONLY",
+      "analytic_p": 0.522490125945006,
+      "analytic_sim_abs_gap_pp": 3.054012594500599,
+      "analytic_sim_divergence": "DIFFERENT_MODELS_NOT_CONVERGENCE",
+      "analytic_sim_gap_pp": 3.054012594500599,
+      "away_team": "BAL",
+      "coverage_label": "CURRENT_FORM_RESEARCH; NOT_PHASE1_1",
+      "data_quality": "CURRENT_TEAM_FORM_PARTIAL_STARTERS",
+      "diagnostics": {
+        "analytic_before_assimilation_home": 0.5209665594785189,
+        "analytic_home_win": 0.522490125945006,
+        "analytic_model_id": "d_logistic_2f",
+        "assimilated_results": 311,
+        "assimilation_probability_change_pp": 0.1523566466487103,
+        "canonical_prospective_eligible": false,
+        "capped_starter_slots": 2,
+        "comparison": "DIFFERENT_MODELS_NOT_ANALYTIC_MC_CONVERGENCE",
+        "form_before": {
+          "BAL": {
+            "games": 112,
+            "ra": 4.732142857142857,
+            "rf": 4.5625
+          },
+          "NYM": {
+            "games": 111,
+            "ra": 4.612612612612613,
+            "rf": 4.171171171171171
+          }
+        },
+        "form_through": "2026-09-13",
+        "form_used": {
+          "BAL": {
+            "games": 133,
+            "ra": 4.69172932330827,
+            "rf": 4.541353383458647
+          },
+          "NYM": {
+            "games": 131,
+            "ra": 4.656488549618321,
+            "rf": 4.358778625954199
+          }
+        },
+        "seed": 10576958558773065435,
+        "sim_home_win": 0.49195,
+        "simulation_model_id": "mlb.winner.CHAMPION_V13",
+        "simulations": 100000,
+        "starter_dispositions": {
+          "away": {
+            "acquisition": {
+              "attempted": false,
+              "why": "no acquisition adapter injected. This module performs NO network I/O by design \u2014 adapters are supplied by the caller and must route through approved browsing/search/fetch tools, never shell HTTP against sports sites. An unconfigured deployment degrades; it never pretends."
+            },
+            "actionable": false,
+            "age_days": 17.9091,
+            "disposition": "DEGRADED",
+            "dose_multiplier": 0.5,
+            "forecastable": true,
+            "grade": "CONFIRMED",
+            "input_value_policy": "REGISTERED_FALLBACK_ONLY",
+            "limit_days": 2,
+            "reason": "derived_age 17.91d EXCEEDS the 2d limit and acquisition was unavailable or failed \u2014 degraded to a widened dose rather than inheriting the stale value as though it were current",
+            "stamp": {
+              "content_age_days": 17.9091,
+              "derived_age_days": 17.9091,
+              "effective_at": "2026-08-28T00:00:00Z",
+              "fetched_at": null,
+              "grade": "CONFIRMED",
+              "observed_at": "2026-08-28T00:00:00Z",
+              "source": "pitcher_logs/687064.txt via sp_asof_strict",
+              "source_sha256": "ee9c0f87784d5d563dd9349019c286334728f62f0c4c3adb2c4e7c739fb8278c",
+              "subject": "Brandon Young"
+            },
+            "subject": "Brandon Young"
+          },
+          "home": {
+            "acquisition": {
+              "attempted": false,
+              "why": "no acquisition adapter injected. This module performs NO network I/O by design \u2014 adapters are supplied by the caller and must route through approved browsing/search/fetch tools, never shell HTTP against sports sites. An unconfigured deployment degrades; it never pretends."
+            },
+            "actionable": false,
+            "age_days": null,
+            "disposition": "DEGRADED",
+            "dose_multiplier": 0.25,
+            "forecastable": true,
+            "grade": "ABSENT",
+            "input_value_policy": "REGISTERED_FALLBACK_ONLY",
+            "limit_days": 2,
+            "reason": "NOT IN STORE and acquisition unavailable or failed \u2014 falling back to the registered league-average treatment. A labelled research forecast may remain, but the row is not action eligible.",
+            "stamp": {
+              "content_age_days": null,
+              "derived_age_days": null,
+              "effective_at": null,
+              "fetched_at": null,
+              "grade": "ABSENT",
+              "observed_at": null,
+              "source": "NOT_IN_STORE: NO_PID_CAP(Jonah Tong)",
+              "source_sha256": null,
+              "subject": "Jonah Tong"
+            },
+            "subject": "Jonah Tong"
+          }
+        },
+        "starter_status": {
+          "away": "STALE_DATA_CAP",
+          "home": "NAMED_NO_LOG_RETAINED_CAP[NO_PID_CAP(Jonah Tong)]"
+        }
+      },
+      "dose": 0.0,
+      "event_id": "MLB:823575",
+      "forecast_status": "FORECAST_GENERATED",
+      "forecast_tier": "REDUCED",
+      "grading": {
+        "action_authority": false,
+        "actual_result": null,
+        "analytic_p_home": 0.522490125945006,
+        "awaiting_outcome": false,
+        "brier_analytic": null,
+        "brier_normal_margin_candidate": null,
+        "brier_sim": null,
+        "calibration_bin_analytic": "0.5-0.6",
+        "calibration_bin_sim": "0.4-0.5",
+        "eligibility_reason": "RESEARCH_ADAPTER_NOT_CANONICAL",
+        "eligible_for_prospective_grading": false,
+        "graded_at_utc": null,
+        "home_won": null,
+        "log_loss_analytic": null,
+        "log_loss_sim": null,
+        "market_features_used": false,
+        "normal_margin_candidate_p_home": null,
+        "schema_version": "forecast_grading_v1",
+        "stochastic_sim_p_home": 0.49195
+      },
+      "home_team": "NYM",
+      "input_snapshot_hash": "92c8e7c523b236dbe1d042df38d3da4acd3bf7e8ee80784e2c30b5118966f13c",
+      "margin_std": null,
+      "model_id": "mlb.v13_and_d_logistic_2f.research.v1",
+      "model_input_snapshot": {
+        "away_form": {
+          "games": 133,
+          "ra": 4.69172932330827,
+          "rf": 4.541353383458647
+        },
+        "cutoff": "2026-09-14T21:49:07.571245Z",
+        "event_id": "MLB:823575",
+        "home_form": {
+          "games": 131,
+          "ra": 4.656488549618321,
+          "rf": 4.358778625954199
+        },
+        "model_id": "mlb.v13_and_d_logistic_2f.research.v1",
+        "n": 100000,
+        "park_factor": 1.085,
+        "sp_away": {
+          "bb": null,
+          "era": null,
+          "gs": 0,
+          "k": null
+        },
+        "sp_home": {
+          "bb": null,
+          "era": null,
+          "gs": 0,
+          "k": null
+        }
+      },
+      "model_p": 0.522490125945006,
+      "model_p_candidate_normal_margin": null,
+      "model_p_candidate_status": null,
+      "model_state_config_hash": "094a8dcf4f8973ee452802a1ba321790eeb0a7108e32d3c45e6ef394c2c70525",
+      "model_winner": "NYM",
+      "projected_away_points": null,
+      "projected_away_runs": 4.8,
+      "projected_home_points": null,
+      "projected_home_runs": 4.642,
+      "projected_margin": null,
+      "projected_total": "UNSUPPORTED_SETTLEMENT",
+      "provenance": {
+        "source_fetches": [
+          {
+            "fetched_at_utc": "2026-09-14T21:47:05.446650+00:00",
+            "sha256": "fb777a2ed086aa7a612db3a68a0cec5408038ab95468a244a32cd447f69f4464",
+            "source": "https://www.mlb.com/probable-pitchers/2026-09-14"
+          },
+          {
+            "fetched_at_utc": "2026-09-14T16:01:11.102485+00:00",
+            "sha256": "042630ac688a412de42efa0dd36f7a668633d64303c995153bbdc7d926acbda9",
+            "source": "retained staged MLB results"
+          }
+        ]
+      },
+      "sim_p": 0.49195,
+      "simulation": {
+        "count": 100000,
+        "draw_directory": "/workspace/scratch/3321ed1a6be1/MLB-20260914-Verified-Board/draws/MLB_823575",
+        "home_win_probability": 0.49195,
+        "seed": 10576958558773065435
+      },
+      "spread_or_runline": "UNSUPPORTED_SETTLEMENT",
+      "start_time_utc": "2026-09-14T23:10:00+00:00",
+      "stochastic_sim_p": 0.49195,
+      "total_market": "UNSUPPORTED_SETTLEMENT",
+      "total_std": null,
+      "warnings": [
+        "RESEARCH_ONLY_GLOBAL_HEALTH_RED",
+        "DIFFERENT_MODELS_NOT_CONVERGENCE",
+        "STARTER_CAPS:2",
+        "LINEUP_AND_INJURY_EFFECTS_UNVERIFIED",
+        "V13_TIE_PROXY_NOT_FULL_EXTRA_INNINGS",
+        "STAGED_RESULTS_NOT_PROMOTED_TO_TIER1"
+      ]
+    },
+    {
+      "action_authority": false,
+      "action_status": "SHADOW_ONLY",
+      "analytic_p": 0.5075202254453189,
+      "analytic_sim_abs_gap_pp": 3.149022544531893,
+      "analytic_sim_divergence": "DIFFERENT_MODELS_NOT_CONVERGENCE",
+      "analytic_sim_gap_pp": 3.149022544531893,
+      "away_team": "NYY",
+      "coverage_label": "CURRENT_FORM_RESEARCH; NOT_PHASE1_1",
+      "data_quality": "CURRENT_TEAM_FORM_PARTIAL_STARTERS",
+      "diagnostics": {
+        "analytic_before_assimilation_home": 0.5094422088851114,
+        "analytic_home_win": 0.5075202254453189,
+        "analytic_model_id": "d_logistic_2f",
+        "assimilated_results": 311,
+        "assimilation_probability_change_pp": -0.19219834397924407,
+        "canonical_prospective_eligible": false,
+        "capped_starter_slots": 2,
+        "comparison": "DIFFERENT_MODELS_NOT_ANALYTIC_MC_CONVERGENCE",
+        "form_before": {
+          "MIN": {
+            "games": 113,
+            "ra": 5.061946902654867,
+            "rf": 4.663716814159292
+          },
+          "NYY": {
+            "games": 113,
+            "ra": 3.743362831858407,
+            "rf": 4.557522123893805
+          }
+        },
+        "form_through": "2026-09-13",
+        "form_used": {
+          "MIN": {
+            "games": 133,
+            "ra": 5.097744360902255,
+            "rf": 4.631578947368421
+          },
+          "NYY": {
+            "games": 134,
+            "ra": 3.753731343283582,
+            "rf": 4.656716417910448
+          }
+        },
+        "seed": 5063336148775373225,
+        "sim_home_win": 0.47603,
+        "simulation_model_id": "mlb.winner.CHAMPION_V13",
+        "simulations": 100000,
+        "starter_dispositions": {
+          "away": {
+            "acquisition": {
+              "attempted": false,
+              "why": "no acquisition adapter injected. This module performs NO network I/O by design \u2014 adapters are supplied by the caller and must route through approved browsing/search/fetch tools, never shell HTTP against sports sites. An unconfigured deployment degrades; it never pretends."
+            },
+            "actionable": false,
+            "age_days": 15.9091,
+            "disposition": "DEGRADED",
+            "dose_multiplier": 0.5,
+            "forecastable": true,
+            "grade": "CONFIRMED",
+            "input_value_policy": "REGISTERED_FALLBACK_ONLY",
+            "limit_days": 2,
+            "reason": "derived_age 15.91d EXCEEDS the 2d limit and acquisition was unavailable or failed \u2014 degraded to a widened dose rather than inheriting the stale value as though it were current",
+            "stamp": {
+              "content_age_days": 15.9091,
+              "derived_age_days": 15.9091,
+              "effective_at": "2026-08-30T00:00:00Z",
+              "fetched_at": null,
+              "grade": "CONFIRMED",
+              "observed_at": "2026-08-30T00:00:00Z",
+              "source": "pitcher_logs/701542.txt via sp_asof_strict",
+              "source_sha256": "c294f6f0a839ca21a632d3ff84a4ac5fdaff0b0ee5b53ae118a2b4649cf4cabf",
+              "subject": "Will Warren"
+            },
+            "subject": "Will Warren"
+          },
+          "home": {
+            "acquisition": {
+              "attempted": false,
+              "why": "no acquisition adapter injected. This module performs NO network I/O by design \u2014 adapters are supplied by the caller and must route through approved browsing/search/fetch tools, never shell HTTP against sports sites. An unconfigured deployment degrades; it never pretends."
+            },
+            "actionable": false,
+            "age_days": 17.9091,
+            "disposition": "DEGRADED",
+            "dose_multiplier": 0.5,
+            "forecastable": true,
+            "grade": "CONFIRMED",
+            "input_value_policy": "REGISTERED_FALLBACK_ONLY",
+            "limit_days": 2,
+            "reason": "derived_age 17.91d EXCEEDS the 2d limit and acquisition was unavailable or failed \u2014 degraded to a widened dose rather than inheriting the stale value as though it were current",
+            "stamp": {
+              "content_age_days": 17.9091,
+              "derived_age_days": 17.9091,
+              "effective_at": "2026-08-28T00:00:00Z",
+              "fetched_at": null,
+              "grade": "CONFIRMED",
+              "observed_at": "2026-08-28T00:00:00Z",
+              "source": "pitcher_logs/665152.txt via sp_asof_strict",
+              "source_sha256": "780e45a4a64700dda2f383ce830e2d8d5853436fcfba374379f34d96c3e61839",
+              "subject": "Dean Kremer"
+            },
+            "subject": "Dean Kremer"
+          }
+        },
+        "starter_status": {
+          "away": "STALE_DATA_CAP",
+          "home": "STALE_DATA_CAP"
+        }
+      },
+      "dose": 0.0,
+      "event_id": "MLB:823656",
+      "forecast_status": "FORECAST_GENERATED",
+      "forecast_tier": "REDUCED",
+      "grading": {
+        "action_authority": false,
+        "actual_result": null,
+        "analytic_p_home": 0.5075202254453189,
+        "awaiting_outcome": false,
+        "brier_analytic": null,
+        "brier_normal_margin_candidate": null,
+        "brier_sim": null,
+        "calibration_bin_analytic": "0.5-0.6",
+        "calibration_bin_sim": "0.4-0.5",
+        "eligibility_reason": "RESEARCH_ADAPTER_NOT_CANONICAL",
+        "eligible_for_prospective_grading": false,
+        "graded_at_utc": null,
+        "home_won": null,
+        "log_loss_analytic": null,
+        "log_loss_sim": null,
+        "market_features_used": false,
+        "normal_margin_candidate_p_home": null,
+        "schema_version": "forecast_grading_v1",
+        "stochastic_sim_p_home": 0.47603
+      },
+      "home_team": "MIN",
+      "input_snapshot_hash": "464495668e2689a9ef8c34a52b1367604192937494bfe828d128b66b1a960023",
+      "margin_std": null,
+      "model_id": "mlb.v13_and_d_logistic_2f.research.v1",
+      "model_input_snapshot": {
+        "away_form": {
+          "games": 134,
+          "ra": 3.753731343283582,
+          "rf": 4.656716417910448
+        },
+        "cutoff": "2026-09-14T21:49:07.571245Z",
+        "event_id": "MLB:823656",
+        "home_form": {
+          "games": 133,
+          "ra": 5.097744360902255,
+          "rf": 4.631578947368421
+        },
+        "model_id": "mlb.v13_and_d_logistic_2f.research.v1",
+        "n": 100000,
+        "park_factor": 0.918,
+        "sp_away": {
+          "bb": null,
+          "era": null,
+          "gs": 0,
+          "k": null
+        },
+        "sp_home": {
+          "bb": null,
+          "era": null,
+          "gs": 0,
+          "k": null
+        }
+      },
+      "model_p": 0.5075202254453189,
+      "model_p_candidate_normal_margin": null,
+      "model_p_candidate_status": null,
+      "model_state_config_hash": "094a8dcf4f8973ee452802a1ba321790eeb0a7108e32d3c45e6ef394c2c70525",
+      "model_winner": "MIN",
+      "projected_away_points": null,
+      "projected_away_runs": 4.279,
+      "projected_home_points": null,
+      "projected_home_runs": 3.983,
+      "projected_margin": null,
+      "projected_total": "UNSUPPORTED_SETTLEMENT",
+      "provenance": {
+        "source_fetches": [
+          {
+            "fetched_at_utc": "2026-09-14T21:47:05.446650+00:00",
+            "sha256": "fb777a2ed086aa7a612db3a68a0cec5408038ab95468a244a32cd447f69f4464",
+            "source": "https://www.mlb.com/probable-pitchers/2026-09-14"
+          },
+          {
+            "fetched_at_utc": "2026-09-14T16:01:11.102485+00:00",
+            "sha256": "042630ac688a412de42efa0dd36f7a668633d64303c995153bbdc7d926acbda9",
+            "source": "retained staged MLB results"
+          }
+        ]
+      },
+      "sim_p": 0.47603,
+      "simulation": {
+        "count": 100000,
+        "draw_directory": "/workspace/scratch/3321ed1a6be1/MLB-20260914-Verified-Board/draws/MLB_823656",
+        "home_win_probability": 0.47603,
+        "seed": 5063336148775373225
+      },
+      "spread_or_runline": "UNSUPPORTED_SETTLEMENT",
+      "start_time_utc": "2026-09-14T23:40:00+00:00",
+      "stochastic_sim_p": 0.47603,
+      "total_market": "UNSUPPORTED_SETTLEMENT",
+      "total_std": null,
+      "warnings": [
+        "RESEARCH_ONLY_GLOBAL_HEALTH_RED",
+        "DIFFERENT_MODELS_NOT_CONVERGENCE",
+        "STARTER_CAPS:2",
+        "LINEUP_AND_INJURY_EFFECTS_UNVERIFIED",
+        "V13_TIE_PROXY_NOT_FULL_EXTRA_INNINGS",
+        "STAGED_RESULTS_NOT_PROMOTED_TO_TIER1"
+      ]
+    },
+    {
+      "action_authority": false,
+      "action_status": "SHADOW_ONLY",
+      "analytic_p": 0.525497928924145,
+      "analytic_sim_abs_gap_pp": 0.5172071075854934,
+      "analytic_sim_divergence": "DIFFERENT_MODELS_NOT_CONVERGENCE",
+      "analytic_sim_gap_pp": -0.5172071075854934,
+      "away_team": "ATL",
+      "coverage_label": "CURRENT_FORM_RESEARCH; NOT_PHASE1_1",
+      "data_quality": "CURRENT_TEAM_FORM_PARTIAL_STARTERS",
+      "diagnostics": {
+        "analytic_before_assimilation_home": 0.5219778232459686,
+        "analytic_home_win": 0.525497928924145,
+        "analytic_model_id": "d_logistic_2f",
+        "assimilated_results": 311,
+        "assimilation_probability_change_pp": 0.35201056781763995,
+        "canonical_prospective_eligible": false,
+        "capped_starter_slots": 2,
+        "comparison": "DIFFERENT_MODELS_NOT_ANALYTIC_MC_CONVERGENCE",
+        "form_before": {
+          "ATL": {
+            "games": 111,
+            "ra": 4.018018018018018,
+            "rf": 4.8558558558558556
+          },
+          "CHC": {
+            "games": 111,
+            "ra": 4.486486486486487,
+            "rf": 5.135135135135135
+          }
+        },
+        "form_through": "2026-09-13",
+        "form_used": {
+          "ATL": {
+            "games": 132,
+            "ra": 3.977272727272727,
+            "rf": 4.71969696969697
+          },
+          "CHC": {
+            "games": 132,
+            "ra": 4.5227272727272725,
+            "rf": 5.363636363636363
+          }
+        },
+        "seed": 17806282888971504662,
+        "sim_home_win": 0.53067,
+        "simulation_model_id": "mlb.winner.CHAMPION_V13",
+        "simulations": 100000,
+        "starter_dispositions": {
+          "away": {
+            "acquisition": {
+              "attempted": false,
+              "why": "no acquisition adapter injected. This module performs NO network I/O by design \u2014 adapters are supplied by the caller and must route through approved browsing/search/fetch tools, never shell HTTP against sports sites. An unconfigured deployment degrades; it never pretends."
+            },
+            "actionable": false,
+            "age_days": 50.9091,
+            "disposition": "DEGRADED",
+            "dose_multiplier": 0.5,
+            "forecastable": true,
+            "grade": "CONFIRMED",
+            "input_value_policy": "REGISTERED_FALLBACK_ONLY",
+            "limit_days": 2,
+            "reason": "derived_age 50.91d EXCEEDS the 2d limit and acquisition was unavailable or failed \u2014 degraded to a widened dose rather than inheriting the stale value as though it were current",
+            "stamp": {
+              "content_age_days": 50.9091,
+              "derived_age_days": 50.9091,
+              "effective_at": "2026-07-26T00:00:00Z",
+              "fetched_at": null,
+              "grade": "CONFIRMED",
+              "observed_at": "2026-07-26T00:00:00Z",
+              "source": "pitcher_logs/625643.txt via sp_asof_strict",
+              "source_sha256": "b76a4b73becd83276d0f7f67af05b99a1dd0d243f8f3149355cdba75ae81b37d",
+              "subject": "Reynaldo L\u00f3pez"
+            },
+            "subject": "Reynaldo L\u00f3pez"
+          },
+          "home": {
+            "acquisition": {
+              "attempted": false,
+              "why": "no acquisition adapter injected. This module performs NO network I/O by design \u2014 adapters are supplied by the caller and must route through approved browsing/search/fetch tools, never shell HTTP against sports sites. An unconfigured deployment degrades; it never pretends."
+            },
+            "actionable": false,
+            "age_days": 17.9091,
+            "disposition": "DEGRADED",
+            "dose_multiplier": 0.5,
+            "forecastable": true,
+            "grade": "CONFIRMED",
+            "input_value_policy": "REGISTERED_FALLBACK_ONLY",
+            "limit_days": 2,
+            "reason": "derived_age 17.91d EXCEEDS the 2d limit and acquisition was unavailable or failed \u2014 degraded to a widened dose rather than inheriting the stale value as though it were current",
+            "stamp": {
+              "content_age_days": 17.9091,
+              "derived_age_days": 17.9091,
+              "effective_at": "2026-08-28T00:00:00Z",
+              "fetched_at": null,
+              "grade": "CONFIRMED",
+              "observed_at": "2026-08-28T00:00:00Z",
+              "source": "pitcher_logs/656849.txt via sp_asof_strict",
+              "source_sha256": "f0ad1f27aa37bdcbbe2f364f52465094d0fcf6d863a751e7827493c157a13bed",
+              "subject": "David Peterson"
+            },
+            "subject": "David Peterson"
+          }
+        },
+        "starter_status": {
+          "away": "STALE_DATA_CAP",
+          "home": "STALE_DATA_CAP"
+        }
+      },
+      "dose": 0.0,
+      "event_id": "MLB:824629",
+      "forecast_status": "FORECAST_GENERATED",
+      "forecast_tier": "REDUCED",
+      "grading": {
+        "action_authority": false,
+        "actual_result": null,
+        "analytic_p_home": 0.525497928924145,
+        "awaiting_outcome": false,
+        "brier_analytic": null,
+        "brier_normal_margin_candidate": null,
+        "brier_sim": null,
+        "calibration_bin_analytic": "0.5-0.6",
+        "calibration_bin_sim": "0.5-0.6",
+        "eligibility_reason": "RESEARCH_ADAPTER_NOT_CANONICAL",
+        "eligible_for_prospective_grading": false,
+        "graded_at_utc": null,
+        "home_won": null,
+        "log_loss_analytic": null,
+        "log_loss_sim": null,
+        "market_features_used": false,
+        "normal_margin_candidate_p_home": null,
+        "schema_version": "forecast_grading_v1",
+        "stochastic_sim_p_home": 0.53067
+      },
+      "home_team": "CHC",
+      "input_snapshot_hash": "f71c9ff21f434c1670e7a91cd138842884044ea624ca9c40226daf1eaa7ed8c4",
+      "margin_std": null,
+      "model_id": "mlb.v13_and_d_logistic_2f.research.v1",
+      "model_input_snapshot": {
+        "away_form": {
+          "games": 132,
+          "ra": 3.977272727272727,
+          "rf": 4.71969696969697
+        },
+        "cutoff": "2026-09-14T21:49:07.571245Z",
+        "event_id": "MLB:824629",
+        "home_form": {
+          "games": 132,
+          "ra": 4.5227272727272725,
+          "rf": 5.363636363636363
+        },
+        "model_id": "mlb.v13_and_d_logistic_2f.research.v1",
+        "n": 100000,
+        "park_factor": 1.012,
+        "sp_away": {
+          "bb": null,
+          "era": null,
+          "gs": 0,
+          "k": null
+        },
+        "sp_home": {
+          "bb": null,
+          "era": null,
+          "gs": 0,
+          "k": null
+        }
+      },
+      "model_p": 0.525497928924145,
+      "model_p_candidate_normal_margin": null,
+      "model_p_candidate_status": null,
+      "model_state_config_hash": "094a8dcf4f8973ee452802a1ba321790eeb0a7108e32d3c45e6ef394c2c70525",
+      "model_winner": "CHC",
+      "projected_away_points": null,
+      "projected_away_runs": 4.634,
+      "projected_home_points": null,
+      "projected_home_runs": 5.158,
+      "projected_margin": null,
+      "projected_total": "UNSUPPORTED_SETTLEMENT",
+      "provenance": {
+        "source_fetches": [
+          {
+            "fetched_at_utc": "2026-09-14T21:47:05.446650+00:00",
+            "sha256": "fb777a2ed086aa7a612db3a68a0cec5408038ab95468a244a32cd447f69f4464",
+            "source": "https://www.mlb.com/probable-pitchers/2026-09-14"
+          },
+          {
+            "fetched_at_utc": "2026-09-14T16:01:11.102485+00:00",
+            "sha256": "042630ac688a412de42efa0dd36f7a668633d64303c995153bbdc7d926acbda9",
+            "source": "retained staged MLB results"
+          }
+        ]
+      },
+      "sim_p": 0.53067,
+      "simulation": {
+        "count": 100000,
+        "draw_directory": "/workspace/scratch/3321ed1a6be1/MLB-20260914-Verified-Board/draws/MLB_824629",
+        "home_win_probability": 0.53067,
+        "seed": 17806282888971504662
+      },
+      "spread_or_runline": "UNSUPPORTED_SETTLEMENT",
+      "start_time_utc": "2026-09-14T23:40:00+00:00",
+      "stochastic_sim_p": 0.53067,
+      "total_market": "UNSUPPORTED_SETTLEMENT",
+      "total_std": null,
+      "warnings": [
+        "RESEARCH_ONLY_GLOBAL_HEALTH_RED",
+        "DIFFERENT_MODELS_NOT_CONVERGENCE",
+        "STARTER_CAPS:2",
+        "LINEUP_AND_INJURY_EFFECTS_UNVERIFIED",
+        "V13_TIE_PROXY_NOT_FULL_EXTRA_INNINGS",
+        "STAGED_RESULTS_NOT_PROMOTED_TO_TIER1"
+      ]
+    },
+    {
+      "action_authority": false,
+      "action_status": "SHADOW_ONLY",
+      "analytic_p": 0.5283667584689421,
+      "analytic_sim_abs_gap_pp": 0.39367584689421475,
+      "analytic_sim_divergence": "DIFFERENT_MODELS_NOT_CONVERGENCE",
+      "analytic_sim_gap_pp": 0.39367584689421475,
+      "away_team": "SF",
+      "coverage_label": "CURRENT_FORM_RESEARCH; NOT_PHASE1_1",
+      "data_quality": "CURRENT_TEAM_FORM_PARTIAL_STARTERS",
+      "diagnostics": {
+        "analytic_before_assimilation_home": 0.5310612585829384,
+        "analytic_home_win": 0.5283667584689421,
+        "analytic_model_id": "d_logistic_2f",
+        "assimilated_results": 311,
+        "assimilation_probability_change_pp": -0.2694500113996301,
+        "canonical_prospective_eligible": false,
+        "capped_starter_slots": 2,
+        "comparison": "DIFFERENT_MODELS_NOT_ANALYTIC_MC_CONVERGENCE",
+        "form_before": {
+          "SF": {
+            "games": 112,
+            "ra": 4.705357142857143,
+            "rf": 4.151785714285714
+          },
+          "STL": {
+            "games": 111,
+            "ra": 4.5225225225225225,
+            "rf": 4.5225225225225225
+          }
+        },
+        "form_through": "2026-09-13",
+        "form_used": {
+          "SF": {
+            "games": 134,
+            "ra": 4.7835820895522385,
+            "rf": 4.3283582089552235
+          },
+          "STL": {
+            "games": 131,
+            "ra": 4.755725190839694,
+            "rf": 4.633587786259542
+          }
+        },
+        "seed": 6324623381371925800,
+        "sim_home_win": 0.52443,
+        "simulation_model_id": "mlb.winner.CHAMPION_V13",
+        "simulations": 100000,
+        "starter_dispositions": {
+          "away": {
+            "acquisition": {
+              "attempted": false,
+              "why": "no acquisition adapter injected. This module performs NO network I/O by design \u2014 adapters are supplied by the caller and must route through approved browsing/search/fetch tools, never shell HTTP against sports sites. An unconfigured deployment degrades; it never pretends."
+            },
+            "actionable": false,
+            "age_days": 18.9091,
+            "disposition": "DEGRADED",
+            "dose_multiplier": 0.5,
+            "forecastable": true,
+            "grade": "CONFIRMED",
+            "input_value_policy": "REGISTERED_FALLBACK_ONLY",
+            "limit_days": 2,
+            "reason": "derived_age 18.91d EXCEEDS the 2d limit and acquisition was unavailable or failed \u2014 degraded to a widened dose rather than inheriting the stale value as though it were current",
+            "stamp": {
+              "content_age_days": 18.9091,
+              "derived_age_days": 18.9091,
+              "effective_at": "2026-08-27T00:00:00Z",
+              "fetched_at": null,
+              "grade": "CONFIRMED",
+              "observed_at": "2026-08-27T00:00:00Z",
+              "source": "pitcher_logs/694738.txt via sp_asof_strict",
+              "source_sha256": "c4b941131f52a691f9d81cf3bb709307b1b56037b13a35bdc3d28617a1156f68",
+              "subject": "Landen Roupp"
+            },
+            "subject": "Landen Roupp"
+          },
+          "home": {
+            "acquisition": {
+              "attempted": false,
+              "why": "no acquisition adapter injected. This module performs NO network I/O by design \u2014 adapters are supplied by the caller and must route through approved browsing/search/fetch tools, never shell HTTP against sports sites. An unconfigured deployment degrades; it never pretends."
+            },
+            "actionable": false,
+            "age_days": null,
+            "disposition": "DEGRADED",
+            "dose_multiplier": 0.25,
+            "forecastable": true,
+            "grade": "ABSENT",
+            "input_value_policy": "REGISTERED_FALLBACK_ONLY",
+            "limit_days": 2,
+            "reason": "NOT IN STORE and acquisition unavailable or failed \u2014 falling back to the registered league-average treatment. A labelled research forecast may remain, but the row is not action eligible.",
+            "stamp": {
+              "content_age_days": null,
+              "derived_age_days": null,
+              "effective_at": null,
+              "fetched_at": null,
+              "grade": "ABSENT",
+              "observed_at": null,
+              "source": "NOT_IN_STORE: NO_PID_CAP(Quinn Mathews)",
+              "source_sha256": null,
+              "subject": "Quinn Mathews"
+            },
+            "subject": "Quinn Mathews"
+          }
+        },
+        "starter_status": {
+          "away": "STALE_DATA_CAP",
+          "home": "NAMED_NO_LOG_RETAINED_CAP[NO_PID_CAP(Quinn Mathews)]"
+        }
+      },
+      "dose": 0.0,
+      "event_id": "MLB:823006",
+      "forecast_status": "FORECAST_GENERATED",
+      "forecast_tier": "REDUCED",
+      "grading": {
+        "action_authority": false,
+        "actual_result": null,
+        "analytic_p_home": 0.5283667584689421,
+        "awaiting_outcome": false,
+        "brier_analytic": null,
+        "brier_normal_margin_candidate": null,
+        "brier_sim": null,
+        "calibration_bin_analytic": "0.5-0.6",
+        "calibration_bin_sim": "0.5-0.6",
+        "eligibility_reason": "RESEARCH_ADAPTER_NOT_CANONICAL",
+        "eligible_for_prospective_grading": false,
+        "graded_at_utc": null,
+        "home_won": null,
+        "log_loss_analytic": null,
+        "log_loss_sim": null,
+        "market_features_used": false,
+        "normal_margin_candidate_p_home": null,
+        "schema_version": "forecast_grading_v1",
+        "stochastic_sim_p_home": 0.52443
+      },
+      "home_team": "STL",
+      "input_snapshot_hash": "57c59374c0cdb528d9d823436ebd8b3f2d516e81c602f85bbf4128ec96dd25f2",
+      "margin_std": null,
+      "model_id": "mlb.v13_and_d_logistic_2f.research.v1",
+      "model_input_snapshot": {
+        "away_form": {
+          "games": 134,
+          "ra": 4.7835820895522385,
+          "rf": 4.3283582089552235
+        },
+        "cutoff": "2026-09-14T21:49:07.571245Z",
+        "event_id": "MLB:823006",
+        "home_form": {
+          "games": 131,
+          "ra": 4.755725190839694,
+          "rf": 4.633587786259542
+        },
+        "model_id": "mlb.v13_and_d_logistic_2f.research.v1",
+        "n": 100000,
+        "park_factor": 0.856,
+        "sp_away": {
+          "bb": null,
+          "era": null,
+          "gs": 0,
+          "k": null
+        },
+        "sp_home": {
+          "bb": null,
+          "era": null,
+          "gs": 0,
+          "k": null
+        }
+      },
+      "model_p": 0.5283667584689421,
+      "model_p_candidate_normal_margin": null,
+      "model_p_candidate_status": null,
+      "model_state_config_hash": "094a8dcf4f8973ee452802a1ba321790eeb0a7108e32d3c45e6ef394c2c70525",
+      "model_winner": "STL",
+      "projected_away_points": null,
+      "projected_away_runs": 3.634,
+      "projected_home_points": null,
+      "projected_home_runs": 3.896,
+      "projected_margin": null,
+      "projected_total": "UNSUPPORTED_SETTLEMENT",
+      "provenance": {
+        "source_fetches": [
+          {
+            "fetched_at_utc": "2026-09-14T21:47:05.446650+00:00",
+            "sha256": "fb777a2ed086aa7a612db3a68a0cec5408038ab95468a244a32cd447f69f4464",
+            "source": "https://www.mlb.com/probable-pitchers/2026-09-14"
+          },
+          {
+            "fetched_at_utc": "2026-09-14T16:01:11.102485+00:00",
+            "sha256": "042630ac688a412de42efa0dd36f7a668633d64303c995153bbdc7d926acbda9",
+            "source": "retained staged MLB results"
+          }
+        ]
+      },
+      "sim_p": 0.52443,
+      "simulation": {
+        "count": 100000,
+        "draw_directory": "/workspace/scratch/3321ed1a6be1/MLB-20260914-Verified-Board/draws/MLB_823006",
+        "home_win_probability": 0.52443,
+        "seed": 6324623381371925800
+      },
+      "spread_or_runline": "UNSUPPORTED_SETTLEMENT",
+      "start_time_utc": "2026-09-14T23:45:00+00:00",
+      "stochastic_sim_p": 0.52443,
+      "total_market": "UNSUPPORTED_SETTLEMENT",
+      "total_std": null,
+      "warnings": [
+        "RESEARCH_ONLY_GLOBAL_HEALTH_RED",
+        "DIFFERENT_MODELS_NOT_CONVERGENCE",
+        "STARTER_CAPS:2",
+        "LINEUP_AND_INJURY_EFFECTS_UNVERIFIED",
+        "V13_TIE_PROXY_NOT_FULL_EXTRA_INNINGS",
+        "STAGED_RESULTS_NOT_PROMOTED_TO_TIER1"
+      ]
+    },
+    {
+      "action_authority": false,
+      "action_status": "SHADOW_ONLY",
+      "analytic_p": 0.5100055820311905,
+      "analytic_sim_abs_gap_pp": 0.8975582031190532,
+      "analytic_sim_divergence": "DIFFERENT_MODELS_NOT_CONVERGENCE",
+      "analytic_sim_gap_pp": 0.8975582031190532,
+      "away_team": "SD",
+      "coverage_label": "CURRENT_FORM_RESEARCH; NOT_PHASE1_1",
+      "data_quality": "CURRENT_TEAM_FORM_PARTIAL_STARTERS",
+      "diagnostics": {
+        "analytic_before_assimilation_home": 0.5132603572987828,
+        "analytic_home_win": 0.5100055820311905,
+        "analytic_model_id": "d_logistic_2f",
+        "assimilated_results": 311,
+        "assimilation_probability_change_pp": -0.32547752675923247,
+        "canonical_prospective_eligible": false,
+        "capped_starter_slots": 2,
+        "comparison": "DIFFERENT_MODELS_NOT_ANALYTIC_MC_CONVERGENCE",
+        "form_before": {
+          "COL": {
+            "games": 111,
+            "ra": 5.837837837837838,
+            "rf": 4.7657657657657655
+          },
+          "SD": {
+            "games": 111,
+            "ra": 4.342342342342342,
+            "rf": 4.171171171171171
+          }
+        },
+        "form_through": "2026-09-13",
+        "form_used": {
+          "COL": {
+            "games": 132,
+            "ra": 5.840909090909091,
+            "rf": 4.643939393939394
+          },
+          "SD": {
+            "games": 131,
+            "ra": 4.251908396946565,
+            "rf": 4.221374045801527
+          }
+        },
+        "seed": 12836305991271947190,
+        "sim_home_win": 0.50103,
+        "simulation_model_id": "mlb.winner.CHAMPION_V13",
+        "simulations": 100000,
+        "starter_dispositions": {
+          "away": {
+            "acquisition": {
+              "attempted": false,
+              "why": "no acquisition adapter injected. This module performs NO network I/O by design \u2014 adapters are supplied by the caller and must route through approved browsing/search/fetch tools, never shell HTTP against sports sites. An unconfigured deployment degrades; it never pretends."
+            },
+            "actionable": false,
+            "age_days": 17.9091,
+            "disposition": "DEGRADED",
+            "dose_multiplier": 0.5,
+            "forecastable": true,
+            "grade": "CONFIRMED",
+            "input_value_policy": "REGISTERED_FALLBACK_ONLY",
+            "limit_days": 2,
+            "reason": "derived_age 17.91d EXCEEDS the 2d limit and acquisition was unavailable or failed \u2014 degraded to a widened dose rather than inheriting the stale value as though it were current",
+            "stamp": {
+              "content_age_days": 17.9091,
+              "derived_age_days": 17.9091,
+              "effective_at": "2026-08-28T00:00:00Z",
+              "fetched_at": null,
+              "grade": "CONFIRMED",
+              "observed_at": "2026-08-28T00:00:00Z",
+              "source": "pitcher_logs/663554.txt via sp_asof_strict",
+              "source_sha256": "a3d5b962db9c372718552709c0617a0d09438e3ea8c0a8e071c8fb18094b430f",
+              "subject": "Casey Mize"
+            },
+            "subject": "Casey Mize"
+          },
+          "home": {
+            "acquisition": {
+              "attempted": false,
+              "why": "no acquisition adapter injected. This module performs NO network I/O by design \u2014 adapters are supplied by the caller and must route through approved browsing/search/fetch tools, never shell HTTP against sports sites. An unconfigured deployment degrades; it never pretends."
+            },
+            "actionable": false,
+            "age_days": 17.9091,
+            "disposition": "DEGRADED",
+            "dose_multiplier": 0.5,
+            "forecastable": true,
+            "grade": "CONFIRMED",
+            "input_value_policy": "REGISTERED_FALLBACK_ONLY",
+            "limit_days": 2,
+            "reason": "derived_age 17.91d EXCEEDS the 2d limit and acquisition was unavailable or failed \u2014 degraded to a widened dose rather than inheriting the stale value as though it were current",
+            "stamp": {
+              "content_age_days": 17.9091,
+              "derived_age_days": 17.9091,
+              "effective_at": "2026-08-28T00:00:00Z",
+              "fetched_at": null,
+              "grade": "CONFIRMED",
+              "observed_at": "2026-08-28T00:00:00Z",
+              "source": "pitcher_logs/608372.txt via sp_asof_strict",
+              "source_sha256": "e5bcd57ed0903178940fee137f3bc03ca1e31de5572b6e2d9cdedae6878cd49a",
+              "subject": "Tomoyuki Sugano"
+            },
+            "subject": "Tomoyuki Sugano"
+          }
+        },
+        "starter_status": {
+          "away": "STALE_DATA_CAP",
+          "home": "STALE_DATA_CAP"
+        }
+      },
+      "dose": 0.0,
+      "event_id": "MLB:824308",
+      "forecast_status": "FORECAST_GENERATED",
+      "forecast_tier": "REDUCED",
+      "grading": {
+        "action_authority": false,
+        "actual_result": null,
+        "analytic_p_home": 0.5100055820311905,
+        "awaiting_outcome": false,
+        "brier_analytic": null,
+        "brier_normal_margin_candidate": null,
+        "brier_sim": null,
+        "calibration_bin_analytic": "0.5-0.6",
+        "calibration_bin_sim": "0.5-0.6",
+        "eligibility_reason": "RESEARCH_ADAPTER_NOT_CANONICAL",
+        "eligible_for_prospective_grading": false,
+        "graded_at_utc": null,
+        "home_won": null,
+        "log_loss_analytic": null,
+        "log_loss_sim": null,
+        "market_features_used": false,
+        "normal_margin_candidate_p_home": null,
+        "schema_version": "forecast_grading_v1",
+        "stochastic_sim_p_home": 0.50103
+      },
+      "home_team": "COL",
+      "input_snapshot_hash": "b223b84a15fb9bb66018eaf014e5463cbace835183f104ef4e140769867a151f",
+      "margin_std": null,
+      "model_id": "mlb.v13_and_d_logistic_2f.research.v1",
+      "model_input_snapshot": {
+        "away_form": {
+          "games": 131,
+          "ra": 4.251908396946565,
+          "rf": 4.221374045801527
+        },
+        "cutoff": "2026-09-14T21:49:07.571245Z",
+        "event_id": "MLB:824308",
+        "home_form": {
+          "games": 132,
+          "ra": 5.840909090909091,
+          "rf": 4.643939393939394
+        },
+        "model_id": "mlb.v13_and_d_logistic_2f.research.v1",
+        "n": 100000,
+        "park_factor": 1.11,
+        "sp_away": {
+          "bb": null,
+          "era": null,
+          "gs": 0,
+          "k": null
+        },
+        "sp_home": {
+          "bb": null,
+          "era": null,
+          "gs": 0,
+          "k": null
+        }
+      },
+      "model_p": 0.5100055820311905,
+      "model_p_candidate_normal_margin": null,
+      "model_p_candidate_status": null,
+      "model_state_config_hash": "094a8dcf4f8973ee452802a1ba321790eeb0a7108e32d3c45e6ef394c2c70525",
+      "model_winner": "COL",
+      "projected_away_points": null,
+      "projected_away_runs": 4.87,
+      "projected_home_points": null,
+      "projected_home_runs": 4.945,
+      "projected_margin": null,
+      "projected_total": "UNSUPPORTED_SETTLEMENT",
+      "provenance": {
+        "source_fetches": [
+          {
+            "fetched_at_utc": "2026-09-14T21:47:05.446650+00:00",
+            "sha256": "fb777a2ed086aa7a612db3a68a0cec5408038ab95468a244a32cd447f69f4464",
+            "source": "https://www.mlb.com/probable-pitchers/2026-09-14"
+          },
+          {
+            "fetched_at_utc": "2026-09-14T16:01:11.102485+00:00",
+            "sha256": "042630ac688a412de42efa0dd36f7a668633d64303c995153bbdc7d926acbda9",
+            "source": "retained staged MLB results"
+          }
+        ]
+      },
+      "sim_p": 0.50103,
+      "simulation": {
+        "count": 100000,
+        "draw_directory": "/workspace/scratch/3321ed1a6be1/MLB-20260914-Verified-Board/draws/MLB_824308",
+        "home_win_probability": 0.50103,
+        "seed": 12836305991271947190
+      },
+      "spread_or_runline": "UNSUPPORTED_SETTLEMENT",
+      "start_time_utc": "2026-09-15T00:40:00+00:00",
+      "stochastic_sim_p": 0.50103,
+      "total_market": "UNSUPPORTED_SETTLEMENT",
+      "total_std": null,
+      "warnings": [
+        "RESEARCH_ONLY_GLOBAL_HEALTH_RED",
+        "DIFFERENT_MODELS_NOT_CONVERGENCE",
+        "STARTER_CAPS:2",
+        "LINEUP_AND_INJURY_EFFECTS_UNVERIFIED",
+        "V13_TIE_PROXY_NOT_FULL_EXTRA_INNINGS",
+        "STAGED_RESULTS_NOT_PROMOTED_TO_TIER1"
+      ]
+    },
+    {
+      "action_authority": false,
+      "action_status": "SHADOW_ONLY",
+      "analytic_p": 0.5196887209120782,
+      "analytic_sim_abs_gap_pp": 2.5268720912078155,
+      "analytic_sim_divergence": "DIFFERENT_MODELS_NOT_CONVERGENCE",
+      "analytic_sim_gap_pp": 2.5268720912078155,
+      "away_team": "SEA",
+      "coverage_label": "CURRENT_FORM_RESEARCH; NOT_PHASE1_1",
+      "data_quality": "CURRENT_TEAM_FORM_PARTIAL_STARTERS",
+      "diagnostics": {
+        "analytic_before_assimilation_home": 0.5180095764981126,
+        "analytic_home_win": 0.5196887209120782,
+        "analytic_model_id": "d_logistic_2f",
+        "assimilated_results": 311,
+        "assimilation_probability_change_pp": 0.16791444139655498,
+        "canonical_prospective_eligible": false,
+        "capped_starter_slots": 2,
+        "comparison": "DIFFERENT_MODELS_NOT_ANALYTIC_MC_CONVERGENCE",
+        "form_before": {
+          "LAA": {
+            "games": 113,
+            "ra": 4.743362831858407,
+            "rf": 4.3097345132743365
+          },
+          "SEA": {
+            "games": 113,
+            "ra": 3.9557522123893807,
+            "rf": 4.035398230088496
+          }
+        },
+        "form_through": "2026-09-13",
+        "form_used": {
+          "LAA": {
+            "games": 133,
+            "ra": 4.616541353383458,
+            "rf": 4.2105263157894735
+          },
+          "SEA": {
+            "games": 134,
+            "ra": 4.223880597014926,
+            "rf": 4.1940298507462686
+          }
+        },
+        "seed": 16388908440401345096,
+        "sim_home_win": 0.49442,
+        "simulation_model_id": "mlb.winner.CHAMPION_V13",
+        "simulations": 100000,
+        "starter_dispositions": {
+          "away": {
+            "acquisition": {
+              "attempted": false,
+              "why": "no acquisition adapter injected. This module performs NO network I/O by design \u2014 adapters are supplied by the caller and must route through approved browsing/search/fetch tools, never shell HTTP against sports sites. An unconfigured deployment degrades; it never pretends."
+            },
+            "actionable": false,
+            "age_days": null,
+            "disposition": "DEGRADED",
+            "dose_multiplier": 0.25,
+            "forecastable": true,
+            "grade": "ABSENT",
+            "input_value_policy": "REGISTERED_FALLBACK_ONLY",
+            "limit_days": 2,
+            "reason": "NOT IN STORE and acquisition unavailable or failed \u2014 falling back to the registered league-average treatment. A labelled research forecast may remain, but the row is not action eligible.",
+            "stamp": {
+              "content_age_days": null,
+              "derived_age_days": null,
+              "effective_at": null,
+              "fetched_at": null,
+              "grade": "ABSENT",
+              "observed_at": null,
+              "source": "NOT_IN_STORE: NO_PID_CAP(Kade Anderson)",
+              "source_sha256": null,
+              "subject": "Kade Anderson"
+            },
+            "subject": "Kade Anderson"
+          },
+          "home": {
+            "acquisition": {
+              "attempted": false,
+              "why": "no acquisition adapter injected. This module performs NO network I/O by design \u2014 adapters are supplied by the caller and must route through approved browsing/search/fetch tools, never shell HTTP against sports sites. An unconfigured deployment degrades; it never pretends."
+            },
+            "actionable": false,
+            "age_days": 17.9091,
+            "disposition": "DEGRADED",
+            "dose_multiplier": 0.5,
+            "forecastable": true,
+            "grade": "CONFIRMED",
+            "input_value_policy": "REGISTERED_FALLBACK_ONLY",
+            "limit_days": 2,
+            "reason": "derived_age 17.91d EXCEEDS the 2d limit and acquisition was unavailable or failed \u2014 degraded to a widened dose rather than inheriting the stale value as though it were current",
+            "stamp": {
+              "content_age_days": 17.9091,
+              "derived_age_days": 17.9091,
+              "effective_at": "2026-08-28T00:00:00Z",
+              "fetched_at": null,
+              "grade": "CONFIRMED",
+              "observed_at": "2026-08-28T00:00:00Z",
+              "source": "pitcher_logs/672282.txt via sp_asof_strict",
+              "source_sha256": "25cc14a8b03d15fc33a1e7d9437aeacfa9c151e0970714ea3f5341ed098e1638",
+              "subject": "Reid Detmers"
+            },
+            "subject": "Reid Detmers"
+          }
+        },
+        "starter_status": {
+          "away": "NAMED_NO_LOG_RETAINED_CAP[NO_PID_CAP(Kade Anderson)]",
+          "home": "STALE_DATA_CAP"
+        }
+      },
+      "dose": 0.0,
+      "event_id": "MLB:823981",
+      "forecast_status": "FORECAST_GENERATED",
+      "forecast_tier": "REDUCED",
+      "grading": {
+        "action_authority": false,
+        "actual_result": null,
+        "analytic_p_home": 0.5196887209120782,
+        "awaiting_outcome": false,
+        "brier_analytic": null,
+        "brier_normal_margin_candidate": null,
+        "brier_sim": null,
+        "calibration_bin_analytic": "0.5-0.6",
+        "calibration_bin_sim": "0.4-0.5",
+        "eligibility_reason": "RESEARCH_ADAPTER_NOT_CANONICAL",
+        "eligible_for_prospective_grading": false,
+        "graded_at_utc": null,
+        "home_won": null,
+        "log_loss_analytic": null,
+        "log_loss_sim": null,
+        "market_features_used": false,
+        "normal_margin_candidate_p_home": null,
+        "schema_version": "forecast_grading_v1",
+        "stochastic_sim_p_home": 0.49442
+      },
+      "home_team": "LAA",
+      "input_snapshot_hash": "e3711964f685fa48d25efae2985cc4b4d50fc12ca1cb9a09ff9bcbc1286fd71a",
+      "margin_std": null,
+      "model_id": "mlb.v13_and_d_logistic_2f.research.v1",
+      "model_input_snapshot": {
+        "away_form": {
+          "games": 134,
+          "ra": 4.223880597014926,
+          "rf": 4.1940298507462686
+        },
+        "cutoff": "2026-09-14T21:49:07.571245Z",
+        "event_id": "MLB:823981",
+        "home_form": {
+          "games": 133,
+          "ra": 4.616541353383458,
+          "rf": 4.2105263157894735
+        },
+        "model_id": "mlb.v13_and_d_logistic_2f.research.v1",
+        "n": 100000,
+        "park_factor": 0.887,
+        "sp_away": {
+          "bb": null,
+          "era": null,
+          "gs": 0,
+          "k": null
+        },
+        "sp_home": {
+          "bb": null,
+          "era": null,
+          "gs": 0,
+          "k": null
+        }
+      },
+      "model_p": 0.5196887209120782,
+      "model_p_candidate_normal_margin": null,
+      "model_p_candidate_status": null,
+      "model_state_config_hash": "094a8dcf4f8973ee452802a1ba321790eeb0a7108e32d3c45e6ef394c2c70525",
+      "model_winner": "LAA",
+      "projected_away_points": null,
+      "projected_away_runs": 3.631,
+      "projected_home_points": null,
+      "projected_home_runs": 3.601,
+      "projected_margin": null,
+      "projected_total": "UNSUPPORTED_SETTLEMENT",
+      "provenance": {
+        "source_fetches": [
+          {
+            "fetched_at_utc": "2026-09-14T21:47:05.446650+00:00",
+            "sha256": "fb777a2ed086aa7a612db3a68a0cec5408038ab95468a244a32cd447f69f4464",
+            "source": "https://www.mlb.com/probable-pitchers/2026-09-14"
+          },
+          {
+            "fetched_at_utc": "2026-09-14T16:01:11.102485+00:00",
+            "sha256": "042630ac688a412de42efa0dd36f7a668633d64303c995153bbdc7d926acbda9",
+            "source": "retained staged MLB results"
+          }
+        ]
+      },
+      "sim_p": 0.49442,
+      "simulation": {
+        "count": 100000,
+        "draw_directory": "/workspace/scratch/3321ed1a6be1/MLB-20260914-Verified-Board/draws/MLB_823981",
+        "home_win_probability": 0.49442,
+        "seed": 16388908440401345096
+      },
+      "spread_or_runline": "UNSUPPORTED_SETTLEMENT",
+      "start_time_utc": "2026-09-15T01:38:00+00:00",
+      "stochastic_sim_p": 0.49442,
+      "total_market": "UNSUPPORTED_SETTLEMENT",
+      "total_std": null,
+      "warnings": [
+        "RESEARCH_ONLY_GLOBAL_HEALTH_RED",
+        "DIFFERENT_MODELS_NOT_CONVERGENCE",
+        "STARTER_CAPS:2",
+        "LINEUP_AND_INJURY_EFFECTS_UNVERIFIED",
+        "V13_TIE_PROXY_NOT_FULL_EXTRA_INNINGS",
+        "STAGED_RESULTS_NOT_PROMOTED_TO_TIER1"
+      ]
+    },
+    {
+      "action_authority": false,
+      "action_status": "SHADOW_ONLY",
+      "analytic_p": 0.5246499454897696,
+      "analytic_sim_abs_gap_pp": 2.226994548976957,
+      "analytic_sim_divergence": "DIFFERENT_MODELS_NOT_CONVERGENCE",
+      "analytic_sim_gap_pp": 2.226994548976957,
+      "away_team": "MIA",
+      "coverage_label": "CURRENT_FORM_RESEARCH; NOT_PHASE1_1",
+      "data_quality": "CURRENT_TEAM_FORM_PARTIAL_STARTERS",
+      "diagnostics": {
+        "analytic_before_assimilation_home": 0.5249633750334105,
+        "analytic_home_win": 0.5246499454897696,
+        "analytic_model_id": "d_logistic_2f",
+        "assimilated_results": 311,
+        "assimilation_probability_change_pp": -0.03134295436408863,
+        "canonical_prospective_eligible": false,
+        "capped_starter_slots": 2,
+        "comparison": "DIFFERENT_MODELS_NOT_ANALYTIC_MC_CONVERGENCE",
+        "form_before": {
+          "AZ": {
+            "games": 110,
+            "ra": 4.490909090909091,
+            "rf": 4.554545454545455
+          },
+          "MIA": {
+            "games": 113,
+            "ra": 4.3628318584070795,
+            "rf": 4.371681415929204
+          }
+        },
+        "form_through": "2026-09-13",
+        "form_used": {
+          "AZ": {
+            "games": 131,
+            "ra": 4.442748091603053,
+            "rf": 4.412213740458015
+          },
+          "MIA": {
+            "games": 134,
+            "ra": 4.514925373134329,
+            "rf": 4.455223880597015
+          }
+        },
+        "seed": 11258480551151381216,
+        "sim_home_win": 0.50238,
+        "simulation_model_id": "mlb.winner.CHAMPION_V13",
+        "simulations": 100000,
+        "starter_dispositions": {
+          "away": {
+            "acquisition": {
+              "attempted": false,
+              "why": "no acquisition adapter injected. This module performs NO network I/O by design \u2014 adapters are supplied by the caller and must route through approved browsing/search/fetch tools, never shell HTTP against sports sites. An unconfigured deployment degrades; it never pretends."
+            },
+            "actionable": false,
+            "age_days": 16.9091,
+            "disposition": "DEGRADED",
+            "dose_multiplier": 0.5,
+            "forecastable": true,
+            "grade": "CONFIRMED",
+            "input_value_policy": "REGISTERED_FALLBACK_ONLY",
+            "limit_days": 2,
+            "reason": "derived_age 16.91d EXCEEDS the 2d limit and acquisition was unavailable or failed \u2014 degraded to a widened dose rather than inheriting the stale value as though it were current",
+            "stamp": {
+              "content_age_days": 16.9091,
+              "derived_age_days": 16.9091,
+              "effective_at": "2026-08-29T00:00:00Z",
+              "fetched_at": null,
+              "grade": "CONFIRMED",
+              "observed_at": "2026-08-29T00:00:00Z",
+              "source": "pitcher_logs/645261.txt via sp_asof_strict",
+              "source_sha256": "e35087630d129aab015acca2eb8fe50f529711fa3eed2495ae07d50f1661cfc7",
+              "subject": "Sandy Alcantara"
+            },
+            "subject": "Sandy Alcantara"
+          },
+          "home": {
+            "acquisition": {
+              "attempted": false,
+              "why": "no acquisition adapter injected. This module performs NO network I/O by design \u2014 adapters are supplied by the caller and must route through approved browsing/search/fetch tools, never shell HTTP against sports sites. An unconfigured deployment degrades; it never pretends."
+            },
+            "actionable": false,
+            "age_days": null,
+            "disposition": "DEGRADED",
+            "dose_multiplier": 0.25,
+            "forecastable": true,
+            "grade": "ABSENT",
+            "input_value_policy": "REGISTERED_FALLBACK_ONLY",
+            "limit_days": 2,
+            "reason": "NOT IN STORE and acquisition unavailable or failed \u2014 falling back to the registered league-average treatment. A labelled research forecast may remain, but the row is not action eligible.",
+            "stamp": {
+              "content_age_days": null,
+              "derived_age_days": null,
+              "effective_at": null,
+              "fetched_at": null,
+              "grade": "ABSENT",
+              "observed_at": null,
+              "source": "NOT_IN_STORE: NO_PID_CAP(Corbin Burnes)",
+              "source_sha256": null,
+              "subject": "Corbin Burnes"
+            },
+            "subject": "Corbin Burnes"
+          }
+        },
+        "starter_status": {
+          "away": "STALE_DATA_CAP",
+          "home": "NAMED_NO_LOG_RETAINED_CAP[NO_PID_CAP(Corbin Burnes)]"
+        }
+      },
+      "dose": 0.0,
+      "event_id": "MLB:825034",
+      "forecast_status": "FORECAST_GENERATED",
+      "forecast_tier": "REDUCED",
+      "grading": {
+        "action_authority": false,
+        "actual_result": null,
+        "analytic_p_home": 0.5246499454897696,
+        "awaiting_outcome": false,
+        "brier_analytic": null,
+        "brier_normal_margin_candidate": null,
+        "brier_sim": null,
+        "calibration_bin_analytic": "0.5-0.6",
+        "calibration_bin_sim": "0.5-0.6",
+        "eligibility_reason": "RESEARCH_ADAPTER_NOT_CANONICAL",
+        "eligible_for_prospective_grading": false,
+        "graded_at_utc": null,
+        "home_won": null,
+        "log_loss_analytic": null,
+        "log_loss_sim": null,
+        "market_features_used": false,
+        "normal_margin_candidate_p_home": null,
+        "schema_version": "forecast_grading_v1",
+        "stochastic_sim_p_home": 0.50238
+      },
+      "home_team": "AZ",
+      "input_snapshot_hash": "9c3e28694a05aae028902a859509e1c7ac6aaa00704e41457890a0d5eedbebe2",
+      "margin_std": null,
+      "model_id": "mlb.v13_and_d_logistic_2f.research.v1",
+      "model_input_snapshot": {
+        "away_form": {
+          "games": 134,
+          "ra": 4.514925373134329,
+          "rf": 4.455223880597015
+        },
+        "cutoff": "2026-09-14T21:49:07.571245Z",
+        "event_id": "MLB:825034",
+        "home_form": {
+          "games": 131,
+          "ra": 4.442748091603053,
+          "rf": 4.412213740458015
+        },
+        "model_id": "mlb.v13_and_d_logistic_2f.research.v1",
+        "n": 100000,
+        "park_factor": 1.033,
+        "sp_away": {
+          "bb": null,
+          "era": null,
+          "gs": 0,
+          "k": null
+        },
+        "sp_home": {
+          "bb": null,
+          "era": null,
+          "gs": 0,
+          "k": null
+        }
+      },
+      "model_p": 0.5246499454897696,
+      "model_p_candidate_normal_margin": null,
+      "model_p_candidate_status": null,
+      "model_state_config_hash": "094a8dcf4f8973ee452802a1ba321790eeb0a7108e32d3c45e6ef394c2c70525",
+      "model_winner": "AZ",
+      "projected_away_points": null,
+      "projected_away_runs": 4.453,
+      "projected_home_points": null,
+      "projected_home_runs": 4.42,
+      "projected_margin": null,
+      "projected_total": "UNSUPPORTED_SETTLEMENT",
+      "provenance": {
+        "source_fetches": [
+          {
+            "fetched_at_utc": "2026-09-14T21:47:05.446650+00:00",
+            "sha256": "fb777a2ed086aa7a612db3a68a0cec5408038ab95468a244a32cd447f69f4464",
+            "source": "https://www.mlb.com/probable-pitchers/2026-09-14"
+          },
+          {
+            "fetched_at_utc": "2026-09-14T16:01:11.102485+00:00",
+            "sha256": "042630ac688a412de42efa0dd36f7a668633d64303c995153bbdc7d926acbda9",
+            "source": "retained staged MLB results"
+          }
+        ]
+      },
+      "sim_p": 0.50238,
+      "simulation": {
+        "count": 100000,
+        "draw_directory": "/workspace/scratch/3321ed1a6be1/MLB-20260914-Verified-Board/draws/MLB_825034",
+        "home_win_probability": 0.50238,
+        "seed": 11258480551151381216
+      },
+      "spread_or_runline": "UNSUPPORTED_SETTLEMENT",
+      "start_time_utc": "2026-09-15T01:40:00+00:00",
+      "stochastic_sim_p": 0.50238,
+      "total_market": "UNSUPPORTED_SETTLEMENT",
+      "total_std": null,
+      "warnings": [
+        "RESEARCH_ONLY_GLOBAL_HEALTH_RED",
+        "DIFFERENT_MODELS_NOT_CONVERGENCE",
+        "STARTER_CAPS:2",
+        "LINEUP_AND_INJURY_EFFECTS_UNVERIFIED",
+        "V13_TIE_PROXY_NOT_FULL_EXTRA_INNINGS",
+        "STAGED_RESULTS_NOT_PROMOTED_TO_TIER1"
+      ]
+    }
+  ],
+  "generated_at_utc": "2026-09-14T21:49:07.957881Z",
+  "grading_policy": {
+    "action_authority": false,
+    "eligible_forecast_count": 0,
+    "market_overlay_enabled": false,
+    "registration_rule": "MLB + PIT_ALIGNED + source/generation pregame + explicit home probabilities",
+    "schema_version": "mlb_probability_calibration_v1"
+  },
+  "incidents": [],
+  "league": "MLB",
+  "pit_provenance": {
+    "action_authority": false,
+    "actual_data_vintage_utc": "2026-09-14T21:47:05.446650Z",
+    "adapter_source": "pipelines.cards.adapters.mlb",
+    "data_vintage_basis": "MIXED_CANONICAL_AND_STAGED_RESULTS; CAPPED_STALE_STARTERS",
+    "generated_at_utc": "2026-09-14T21:49:07.957881Z",
+    "max_source_timestamp_utc": "2026-09-14T21:47:05.446650Z",
+    "min_source_timestamp_utc": "2026-09-14T16:01:11.102485Z",
+    "pit_alignment_threshold_seconds": 900,
+    "pit_delta_seconds": -122,
+    "pit_gate": "PASS",
+    "pit_mode": "CURRENT_RESEARCH_STAGED_ASSIMILATION",
+    "pit_reason": "LIVE_FETCH_WITHIN_15_MINUTES_OF_REQUESTED_CUTOFF",
+    "pit_reconstruction_supported": false,
+    "pit_status": "PIT_ALIGNED",
+    "pit_threshold_seconds": 3600,
+    "requested_as_of_utc": "2026-09-14T21:49:07.571245Z",
+    "source_fetches": [
+      {
+        "fetched_at_utc": "2026-09-14T21:47:05.446650+00:00",
+        "sha256": "fb777a2ed086aa7a612db3a68a0cec5408038ab95468a244a32cd447f69f4464",
+        "source": "https://www.mlb.com/probable-pitchers/2026-09-14"
+      },
+      {
+        "fetched_at_utc": "2026-09-14T16:01:11.102485+00:00",
+        "sha256": "042630ac688a412de42efa0dd36f7a668633d64303c995153bbdc7d926acbda9",
+        "source": "retained staged MLB results"
+      }
+    ]
+  },
+  "pregame_coverage": 1.0,
+  "requested_as_of_utc": "2026-09-14T21:49:07.571245Z",
+  "scheduled_game_count": 10,
+  "simulation_count": 100000
+}

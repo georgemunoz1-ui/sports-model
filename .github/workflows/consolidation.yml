@@ -1,0 +1,22 @@
+name: Consolidation verification
+on:
+  push:
+    branches: [codex/consolidate-all-prs]
+permissions:
+  contents: read
+jobs:
+  capture:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - run: |
+          git bundle create /tmp/repository-all.bundle --all
+          git show-ref > /tmp/refs.txt
+      - uses: actions/upload-artifact@v4
+        with:
+          name: consolidation-repository
+          path: |
+            /tmp/repository-all.bundle
+            /tmp/refs.txt

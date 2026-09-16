@@ -1,0 +1,36 @@
+{
+  "journal_version": "1",
+  "event_type": "GOVERNANCE_SEQUENCING_AMENDMENT",
+  "recorded_at_utc": "2026-09-16T04:07:24.281204Z",
+  "previous_journal_record_hash": "25416f603a13b348931d6f2d803a0522ef210724bfb29803495f5ca084131bc2",
+  "previous_journal_path": "docs/releases/2026-09-16-week2-selection/selection-registration.jsonl",
+  "b2": {
+    "earliest_season": 2026,
+    "earliest_week": 3,
+    "week2_execution_allowed": false,
+    "baseline_model_id": "nfl.integrated_context.qb.v1.research",
+    "baseline_source": "FROZEN_PROSPECTIVE_OUTPUTS",
+    "mean_policy_must_remain_fixed": true,
+    "execution_status": "NOT_RUN",
+    "complete_experiment_registration": false,
+    "remaining_specification": [
+      "exact output target",
+      "variance transform and parameter hashes",
+      "QB-specific distribution referent if score variance is targeted",
+      "evaluation cohort",
+      "metrics and decision rule"
+    ]
+  },
+  "p3": {
+    "status": "OPEN_FRESH_EVENT_EFFECT_DEMONSTRATION",
+    "state_reproduction_verified": true,
+    "archived_sensitivity_effects_available": true,
+    "fresh_event_feature_to_output_link_verified": false,
+    "closure": "Fresh Week 2 emitted forecast binds reconciled Week 1 games, before/after state and feature hashes, contributions and forecast delta under fixed parameters and current context."
+  },
+  "week1_relabeling_allowed": false,
+  "official_eligible": false,
+  "action_authority": "OFF",
+  "dose": 0.0,
+  "record_hash": "82b3ab5761382dc08584a6ffe727787d14939f934160ed237c23c49e896d042f"
+}

@@ -4496,6 +4496,6 @@ Patched card probability overrides and strict timestamp ordering. Diagnostic car
 - No model promotion, performance claim, forecast registration, or historical backfill performed. Next: run full checks in complete checkout, then resume PIT feature development.
 
 
-## 2026-09-16 — User-authorized all-PR consolidation
+## 2026-09-15 — User-authorized all-PR consolidation (2026-09-16 UTC)
 
 Reconciled default main and operational history; PR1,9–16,26–30 changes retained. Preserved current selected defaults and archived forecast hashes. Older Gamma-Poisson adapter accessible under an explicit research name. Recovered strict PIT timestamp and no-self-registration checks; preserved newer parser assertions. Local combined suite passed 330 tests before the additional package-integrity regression. New access guide and consistent dependency file added. External health blockers are not cleared by merging. Action authority OFF.

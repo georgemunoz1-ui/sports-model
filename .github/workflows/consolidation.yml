@@ -1,22 +1,52 @@
 name: Consolidation verification
 on:
   push:
-    branches: [codex/consolidate-all-prs]
+    branches: [codex/consolidate-all-prs, main]
+  pull_request:
+    branches: [main]
 permissions:
   contents: read
 jobs:
-  capture:
+  verify:
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - run: |
-          git bundle create /tmp/repository-all.bundle --all
-          git show-ref > /tmp/refs.txt
-      - uses: actions/upload-artifact@v4
+      - uses: actions/setup-python@v5
         with:
-          name: consolidation-repository
+          python-version: '3.12'
+      - run: pip install -r requirements-consolidated.txt
+      - run: python -m pytest tests -q | tee /tmp/unit-tests.txt
+      - run: python scripts/model_defaults.py > /tmp/selected-models.json
+      - run: |
+          python -m sportsim --help > /tmp/sportsim-help.txt
+          python scripts/run_nfl_integrated.py --help > /tmp/nfl-help.txt
+          python scripts/prepare_mlb_current.py --help > /tmp/mlb-help.txt
+      - name: Record health independently from software acceptance
+        run: |
+          set +e
+          python harness/healthcheck.py > /tmp/healthcheck.txt 2>&1
+          result=$?
+          echo "$result" > /tmp/health-exit-code.txt
+          echo "Health exit code: $result (see artifact; tests do not grant release clearance)" >> "$GITHUB_STEP_SUMMARY"
+          exit 0
+      - name: Capture exact merged history
+        if: always()
+        run: |
+          git rev-parse HEAD > /tmp/commit.txt
+          git status --porcelain > /tmp/worktree-status.txt
+          git bundle create /tmp/repository-all.bundle --all
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: consolidation-verification
           path: |
+            /tmp/unit-tests.txt
+            /tmp/selected-models.json
+            /tmp/*-help.txt
+            /tmp/healthcheck.txt
+            /tmp/health-exit-code.txt
+            /tmp/commit.txt
+            /tmp/worktree-status.txt
             /tmp/repository-all.bundle
-            /tmp/refs.txt

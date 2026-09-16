@@ -1,0 +1,49 @@
+{
+  "schema": "governance.forecast_action_separation.v1",
+  "effective_date": "2026-09-03",
+  "rule": "Every scheduled pregame event receives frozen forecast records for every supported market when a legitimate model artifact exists. Wager status controls capital deployment, not whether the model made a prediction.",
+  "supported_core_markets": ["ML", "SPREAD_OR_RUN_LINE", "TOTAL"],
+  "statuses": {
+    "PLAY": {"forecast_registered": true, "wager_permitted": true},
+    "LEAN": {"forecast_registered": true, "wager_permitted": false},
+    "PASS": {"forecast_registered": true, "wager_permitted": false},
+    "BLOCKED": {"forecast_registered": true, "wager_permitted": false},
+    "NO_PRICE": {"forecast_registered": true, "wager_permitted": false},
+    "NO_MODEL": {"forecast_registered": false, "wager_permitted": false},
+    "POST_START": {"forecast_registered": false, "wager_permitted": false}
+  },
+  "hard_invariants": [
+    "PASS_BLOCKED_NO_PRICE_MUST_NOT_ERASE_FORECAST",
+    "NO_MODEL_MUST_NOT_CONTAIN_INFERRED_OR_MANUFACTURED_PROBABILITY",
+    "POST_START_MUST_NOT_CREATE_NEW_PROSPECTIVE_FORECAST",
+    "FORECAST_GRADE_INDEPENDENT_OF_WAGER_ACTION",
+    "ACTION_PNL_ONLY_FOR_ACTUALLY_PLACED_WAGERS",
+    "MARKET_PRICE_MUST_BE_TIMESTAMPED_AND_SOURCE_BOUND",
+    "MODEL_SIM_DIVERGENCE_MUST_NOT_BE_AVERAGED_AWAY_BY_DEFAULT",
+    "MARKET_IMPLIED_PROBABILITY_IS_A_PRICE_HURDLE_NOT_A_PREDICTIVE_INPUT"
+  ],
+  "required_forecast_fields": [
+    "game_id", "sport", "league", "date", "decision_timestamp_pt", "game_start_timestamp_pt",
+    "market_type", "market_selection", "model_p_raw", "sim_p", "conservative_p", "model_margin",
+    "model_total", "sim_median_total", "sim_total_p25", "sim_total_p75", "fair_ml",
+    "captured_market_line", "captured_price", "breakeven_p", "edge_pp", "ev_per_unit",
+    "model_lean", "market_lean", "confidence_tier", "divergence_flag", "status", "status_reason",
+    "forecast_registered", "grade_selection", "evidence_snapshot_id", "result", "action_pnl_units", "clv"
+  ],
+  "ledgers": {
+    "forecast": "Predictive skill, calibration, and frozen market-direction grading for every legitimate pregame forecast.",
+    "market_selection": "Price/threshold/CLV evaluation, including non-bet records with no wager P&L.",
+    "wager": "Actual bankroll outcomes only for wagers that were placed."
+  },
+  "divergence_policy_preliminary": [
+    {"min_pp": 0.0, "max_pp_exclusive": 4.0, "flag": "NONE", "action": "NORMAL_CALIBRATION"},
+    {"min_pp": 4.0, "max_pp_exclusive": 8.0, "flag": "MODERATE", "action": "EXTRA_UNCERTAINTY_COMPRESSION_AND_CAP_AT_LEAN_UNLESS_RESOLVED"},
+    {"min_pp": 8.0, "max_pp_exclusive": 12.0, "flag": "SEVERE", "action": "BLOCK_PLAY_UNTIL_REVIEWED_OR_INDEPENDENTLY_RECONCILED"},
+    {"min_pp": 12.0, "max_pp_exclusive": null, "flag": "CRITICAL", "action": "MODEL_INTEGRITY_EXCEPTION_AND_ORDINARILY_BLOCK_ACTION"}
+  ],
+  "grading": {
+    "forecast": ["W_L_P", "BRIER", "LOG_LOSS", "CALIBRATION", "ACCURACY_BY_BUCKET"],
+    "market_selection": ["W_L_P_AT_CAPTURED_NUMBER", "CLV", "EDGE_BUCKET", "STATUS_BUCKET", "DIVERGENCE_BUCKET"],
+    "wager": ["UNITS", "ROI", "DRAWDOWN", "CLV"]
+  }
+}

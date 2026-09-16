@@ -1,0 +1,25 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "manual_forecast_override_v1.schema.json",
+  "title": "Manual Forecast Override v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["event_id", "captured_at_utc", "source", "verification_status", "overrides"],
+  "properties": {
+    "event_id": {"type": "string", "minLength": 1},
+    "captured_at_utc": {"type": "string", "format": "date-time"},
+    "source": {"const": "MANUAL_OVERRIDE"},
+    "verification_status": {"enum": ["CONFIRMED", "PROBABLE_CONSENSUS", "UNVERIFIED"]},
+    "quality_multiplier": {"type": "number", "minimum": 0.2, "maximum": 1.0, "default": 0.75},
+    "overrides": {
+      "type": "object",
+      "minProperties": 1,
+      "description": "Versioned factual input overrides only. Names must resolve to canonical IDs or the adapter must use its registered neutral fallback; no invented performance features."
+    }
+  },
+  "governance": {
+    "action_authority": false,
+    "unresolved_identity_behavior": "REGISTERED_NEUTRAL_FALLBACK_OR_COVERAGE_INCIDENT",
+    "silent_feature_invention": false
+  }
+}

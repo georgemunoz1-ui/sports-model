@@ -1,0 +1,17 @@
+{
+  "artifact_type":"nfl_elo_margin_monte_carlo_config_v1",
+  "model_id":"nfl.elo_margin_monte_carlo.v1",
+  "version":"1.0.0",
+  "home_field_points":1.8,
+  "points_per_elo":0.036,
+  "league_total_prior":44.0,
+  "margin_sd":13.5,
+  "total_sd":10.5,
+  "margin_logistic_scale":8.0,
+  "minimum_simulations":50000,
+  "default_simulations":100000,
+  "market_features_used":false,
+  "action_authority":false,
+  "status":"EMERGENCY_DIAGNOSTIC_UNVALIDATED",
+  "input_policy":"Frozen pregame Elo plus independently sourced injury/QB adjustments. Market spread/total prohibited as predictive input."
+}

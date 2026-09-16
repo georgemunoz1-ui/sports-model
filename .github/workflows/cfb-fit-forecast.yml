@@ -1,0 +1,63 @@
+name: CFB Fit and Forecast
+on:
+  workflow_dispatch:
+    inputs:
+      card_date:
+        description: YYYY-MM-DD
+        required: true
+        default: '2026-09-03'
+      as_of_utc:
+        description: Point-in-time cutoff UTC
+        required: true
+        default: '2026-09-03T23:31:00Z'
+      simulations:
+        description: Simulation count
+        required: true
+        default: '100000'
+  push:
+    branches: [codex/release-gates-backfill-20260903]
+    paths:
+      - '.github/workflows/cfb-fit-forecast.yml'
+      - 'models/cfb/**'
+      - 'harness/validate_cfb_margin_model_state.py'
+      - 'harness/cfb_spread_simulation_validator.py'
+permissions:
+  contents: read
+jobs:
+  fit-and-validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install fit/runtime dependencies
+        run: python -m pip install --disable-pip-version-check numpy pandas pyarrow
+      - name: Execution readiness
+        run: |
+          python - <<'PY'
+          import pathlib, numpy, pandas, pyarrow
+          required=['data/cfb/model/cfb_v1_features.parquet','data/cfb/source/2026-09-03_cfb_schedule.csv']
+          missing=[p for p in required if not pathlib.Path(p).exists()]
+          if missing: raise SystemExit('EXECUTION_ENVIRONMENT_UNAVAILABLE missing='+','.join(missing))
+          print('FORECAST_EXECUTION_READINESS_GATE: PASS')
+          PY
+      - name: Fit immutable candidate state
+        run: |
+          python models/cfb/fit_margin_distribution_v1.py \
+            --train-data data/cfb/model/cfb_v1_features.parquet \
+            --output run_artifacts/cfb_margin_model_state_v1.json \
+            --validation-output run_artifacts/cfb_margin_model_validation_v1.json \
+            --as-of '${{ inputs.as_of_utc || github.event.head_commit.timestamp }}'
+      - name: Validate fitted state
+        run: python harness/validate_cfb_margin_model_state.py run_artifacts/cfb_margin_model_state_v1.json
+      - name: Simulator integrity selftest
+        run: python harness/cfb_spread_simulation_validator.py
+      - name: Upload fitted state
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cfb-margin-fit-${{ github.run_id }}
+          path: run_artifacts/
+          if-no-files-found: warn

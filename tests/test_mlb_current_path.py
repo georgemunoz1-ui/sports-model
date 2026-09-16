@@ -54,6 +54,17 @@ class CurrentMLBTests(unittest.TestCase):
         for k in arrays:self.assertTrue(np.array_equal(arrays[k],again[k]))
 
 class CurrentMLBIntegrationTests(unittest.TestCase):
+    def setUp(self):
+        # Historical Sep 14 packet is immutable and must fail its code/data pins
+        # after integration changes. These composition tests inject its retained
+        # fixture payload; they do not assert historical replay eligibility.
+        from unittest.mock import patch
+        from pipelines.cards.adapters import mlb
+        config=json.loads((mlb.ROOT/'data/mlb/current_v1/runtime.json').read_text())
+        payload=json.loads((mlb.ROOT/config['package_path']).read_text())
+        mock=patch.object(mlb,'_load',return_value=payload)
+        mock.start();self.addCleanup(mock.stop)
+
     def test_current_packet_reaches_forecast_and_retains_arrays(self):
         import os
         from unittest.mock import patch
@@ -78,3 +89,20 @@ class CurrentMLBIntegrationTests(unittest.TestCase):
             f=Path(td)/'sentinel';f.write_text('original')
             r=subprocess.run([sys.executable,str(ROOT/'scripts/generate_card_force.py'),'--date','2026-09-14','--league','mlb','--output-dir',td],capture_output=True,text=True)
             self.assertNotEqual(r.returncode,0);self.assertIn('FileExistsError',r.stderr);self.assertEqual(f.read_text(),'original')
+
+class PackageIntegrityTests(unittest.TestCase):
+    def test_package_and_input_hashes_remain_enforced(self):
+        from unittest.mock import patch
+        from pipelines.cards.adapters import mlb
+        from pipelines.mlb.current import digest
+        with tempfile.TemporaryDirectory() as td:
+            root=Path(td);runtime=root/'data/mlb/current_v1/runtime.json'
+            runtime.parent.mkdir(parents=True);source=root/'input.json';source.write_text('original')
+            package=root/'package.json';package.write_text(json.dumps({'pins':{'input.json':digest(source)}}))
+            runtime.write_text(json.dumps({'package_path':'package.json','package_sha256':digest(package)}))
+            with patch.object(mlb,'ROOT',root):
+                self.assertIn('pins',mlb._load())
+                source.write_text('changed')
+                with self.assertRaisesRegex(ValueError,'INPUT_OR_CODE_PIN_MISMATCH'):mlb._load()
+                package.write_text('{}')
+                with self.assertRaisesRegex(ValueError,'PACKAGE_HASH_MISMATCH'):mlb._load()

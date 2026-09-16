@@ -1,0 +1,45 @@
+{
+  "schema": "governance.forecast_coverage_sla.v1",
+  "effective_date": "2026-09-03",
+  "policy": "If a scheduled pregame event meets the declared minimum-input contract, the system must generate and freeze its required forecast bundle by deadline; otherwise it raises a forecast-production incident. Action gates may block wagers, but they may never suppress forecast generation.",
+  "coverage_slo_pct": 99.0,
+  "forecast_generation_independent_of": ["ACTION_AUTHORITY", "MARKET_PRICE", "EV", "WAGER_STATUS", "CALIBRATION_AUTHORITY"],
+  "incident_codes": ["FORECAST_JOB_NOT_RUN", "FORECAST_JOB_FAILED", "FORECAST_ARTIFACT_WRITE_FAILED", "FORECAST_ARTIFACT_JOIN_FAILED", "FORECAST_SCHEMA_INVALID", "FORECAST_DEADLINE_MISSED", "FORECAST_OUTPUT_MISSING"],
+  "allowed_no_model_reasons": ["REQUIRED_INPUT_ABSENT", "REQUIRED_INPUT_INVALID", "MARKET_UNSUPPORTED_BY_DESIGN", "OUTSIDE_DECLARED_COVERAGE", "ADDED_AFTER_CUTOFF_AND_EXCLUDED_BY_POLICY", "MANUAL_INTEGRITY_SUSPENSION"],
+  "forbidden_no_model_reasons": ["ACTION_AUTHORITY_NO", "NO_EXACT_FRESH_PRICE", "CALIBRATION_SHADOW_ONLY", "WEAK_EDGE", "PASS_DECISION", "RENDERER_JOIN_FAILURE", "FORECAST_JOB_NOT_RUN", "FORECAST_JOB_FAILED", "FORECAST_ARTIFACT_WRITE_FAILED"],
+  "sports": {
+    "MLB": {
+      "required_markets": ["ML", "RUN_LINE", "TOTAL"],
+      "required_bundle_fields": ["ml_lean", "raw_ml_probability", "projected_away_runs", "projected_home_runs", "expected_margin", "game_total_projection", "sim_ml_probability", "run_line_probability", "total_probability"],
+      "required_inputs": ["canonical_event_id", "team_context_snapshot", "team_stats", "probable_starters", "starter_availability", "bullpen_state", "lineup_state", "environment_state"],
+      "deadline_policy": {"initial_hours_before_start": 8, "final_minutes_before_start": 30}
+    },
+    "CFB": {
+      "required_markets": ["ML", "SPREAD", "TOTAL"],
+      "required_bundle_fields": ["ml_lean", "raw_ml_probability", "projected_margin", "projected_game_total", "sim_ml_probability", "spread_cover_probability", "total_probability"],
+      "required_inputs": ["canonical_event_id", "team_context_snapshot", "team_ratings", "qb_depth_chart_state", "availability_state", "environment_state"],
+      "deadline_policy": {"initial_hours_before_start": 12, "final_minutes_before_start": 60}
+    },
+    "NFL": {
+      "required_markets": ["ML", "SPREAD", "TOTAL"],
+      "required_bundle_fields": ["ml_lean", "raw_ml_probability", "projected_margin", "projected_game_total", "sim_ml_probability", "spread_cover_probability", "total_probability"],
+      "required_inputs": ["canonical_event_id", "team_context_snapshot", "team_ratings", "qb_depth_chart_state", "injury_state", "environment_state"],
+      "deadline_policy": {"initial_hours_before_start": 12, "final_minutes_before_start": 60}
+    },
+    "WNBA": {
+      "required_markets": ["ML", "SPREAD", "TOTAL"],
+      "required_bundle_fields": ["ml_lean", "raw_ml_probability", "expected_margin", "game_total_projection", "sim_ml_probability", "spread_cover_probability", "total_probability"],
+      "required_inputs": ["canonical_event_id", "team_context_snapshot", "team_ratings", "availability_state", "lineup_state"],
+      "deadline_policy": {"initial_hours_before_start": 8, "final_minutes_before_start": 60}
+    }
+  },
+  "fallback_policy": {
+    "fallback_must_be_registered": true,
+    "silent_fallback_forbidden": true,
+    "required_metadata": ["model_id", "model_version", "run_mode", "fallback_used", "fallback_reason"]
+  },
+  "card_labels": {
+    "coverage_fail_forbids": ["FULL_FORECAST_CARD", "MODEL_CARD", "FORECAST_READY", "COMPLETE_PREDICTIONS", "FULL_SLATE_FORECASTS"],
+    "coverage_fail_label": "SCHEDULE_LEDGER_FORECAST_PIPELINE_DEGRADED"
+  }
+}

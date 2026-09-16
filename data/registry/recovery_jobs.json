@@ -1,498 +1,566 @@
 {
- "jobs": {
-  "RJ-001-PROVENANCE": {
-   "blocks": [
-    "PRIOR_INPUT_POOL_PROVISIONAL",
-    "UNCERTAINTY_PIPELINE_DEFECT"
-   ],
-   "deadline_utc": "2026-09-01T00:00:00Z",
-   "depends_on": [],
-   "history": [
-    {
-     "note": "egress blocked on every rung including a neutral control; 9 domains attempted",
-     "status": "BLOCKED_EXTERNAL",
-     "units_done": 0,
-     "utc": "2026-08-25T02:45:00Z"
+  "jobs": {
+    "RJ-001-PROVENANCE": {
+      "blocks": [
+        "PRIOR_INPUT_POOL_PROVISIONAL",
+        "UNCERTAINTY_PIPELINE_DEFECT"
+      ],
+      "deadline_utc": "2026-09-01T00:00:00Z",
+      "depends_on": [],
+      "history": [
+        {
+          "note": "egress blocked on every rung including a neutral control; 9 domains attempted",
+          "status": "BLOCKED_EXTERNAL",
+          "units_done": 0,
+          "utc": "2026-08-25T02:45:00Z"
+        },
+        {
+          "note": "run at 04:35Z ahead of the 06:00Z slot. statsapi.mlb.com and baseball-reference.com both EGRESS_BLOCKED. 0 of 123 rows bound. Rail unchanged since 2026-08-22; this is the 5th consecutive attempt. Next run backed off to 10:00Z.",
+          "status": "BLOCKED_EXTERNAL",
+          "units_done": 0,
+          "utc": "2026-08-25T04:35:00Z"
+        },
+        {
+          "note": "6th consecutive attempt: statsapi.mlb.com EGRESS_BLOCKED via the approved fetch tool; www.mlb.com and www.wnba.com identically blocked at the same clock. 0/123. Next run 22:00Z.",
+          "status": "BLOCKED_EXTERNAL",
+          "units_done": 0,
+          "utc": "2026-08-25T18:02:00Z"
+        },
+        {
+          "note": "7th attempt (22:00Z slot run early at T-45): statsapi.mlb.com and baseball-reference.com both EGRESS_BLOCKED via the approved fetch tool. 0/123. Next run 2026-08-26T04:00:00Z.",
+          "status": "BLOCKED_EXTERNAL",
+          "units_done": 0,
+          "utc": "2026-08-25T21:56:00Z"
+        },
+        {
+          "note": "8th attempt: statsapi.mlb.com and baseball-reference.com both EGRESS_BLOCKED via the approved fetch tool. 0/123. Next 10:00Z.",
+          "status": "BLOCKED_EXTERNAL",
+          "units_done": 0,
+          "utc": "2026-08-26T04:02:00Z"
+        },
+        {
+          "note": "9th attempt: statsapi.mlb.com and baseball-reference.com EGRESS_BLOCKED. 0/123. Next 16:30Z pre-board check.",
+          "status": "BLOCKED_EXTERNAL",
+          "units_done": 0,
+          "utc": "2026-08-26T10:05:00Z"
+        },
+        {
+          "note": "10th attempt: statsapi.mlb.com EGRESS_BLOCKED. 0/123. Next overnight slot 2026-08-27T04:00Z.",
+          "status": "BLOCKED_EXTERNAL",
+          "units_done": 0,
+          "utc": "2026-08-26T16:32:00Z"
+        },
+        {
+          "note": "ROUTE BOUND (GitHub git-proxy): lancebroz/mlb-pitcher-data stores DAILY statsapi-derived pitch parquets in-tree (game_pk, teams, full play record), commit c6b65466 landed 40 min before retrieval. Committed binder mlb_provenance_bind wrote per-day local evidence extracts (548K, each naming the upstream repo/commit/path/sha256) and bound 1,944/1,957 canonical rows — including 124/126 of the tier-2/3 provisional set (units capped at 123/123). Honest refusals: 2 ATL@NYM 7/29 doubleheader rows (per-game disambiguation needed), 4 TEAM_MISMATCH rows flagged for review (possible misingested identities: 824978, 825056-58), 5 pks absent from artifacts. Scores remain relayed-grade (a pitch archive proves identity and play record, not final score) — tier upgrades wait on score derivation or official artifacts. Provenance gate: OK, 1,940 evidence-bound.",
+          "status": "RUNNING",
+          "units_done": 123,
+          "utc": "2026-08-26T19:15:00Z"
+        },
+        {
+          "note": "overnight slot: direct rails still EGRESS_BLOCKED (statsapi 11th attempt). The git route stays productive: archive advanced to commit 448e2ff (04:01Z) with the 8/26 daily parquet; 8/26 evidence extract built (15 games, slate identity for the frozen board now archive-confirmed); pitcher outing logs 8/22-8/26 registered (1bca205e, 604 outings, K+BB<=TBF asserted; two buggy builds caught by sanity checks pre-commit). Score derivation from pitch events judged INFEASIBLE (no runs column) — tier upgrades for the 126 provisional rows still need a score-bearing artifact or official source. Units stay 123/123.",
+          "status": "RUNNING",
+          "units_done": 123,
+          "utc": "2026-08-27T04:15:00Z"
+        },
+        {
+          "note": "phase split per owner correction: acquisition COMPLETE 123/123; score verification RUNNING 0/126; incident OPEN. '123/123 RUNNING' was conflating a finished work package with an open one. Also: the four TEAM_MISMATCH refusals were abbreviation variants (OAK=ATH, ARI=AZ), not wrong games — folded and bound; whole-file coverage 1,948/1,957.",
+          "status": "RUNNING",
+          "units_done": 123,
+          "utc": "2026-08-27T04:40:00Z"
+        },
+        {
+          "note": "11:00Z wake: lancebroz advanced 448e2ff->3aa218a (10:17Z). Schema unchanged — still no runs/score columns; RJ-001B stays 0/126 honestly. 8/26 evidence extract already built from 448e2ff; no rebind needed.",
+          "status": "RUNNING",
+          "units_done": 123,
+          "utc": "2026-08-27T11:06:52Z"
+        },
+        {
+          "note": "NEW OPEN ACTION for the next archive wake (durable here so a container recycle cannot lose it): verify the two SYNTHETIC_UNVERIFIED 8/27 gamePks in harness/result_binding_gate.py's fixture — BAL@STL 823014 and AZ@SF 825038 — against the lancebroz 8/27 daily parquet, then flip their PK_PROVENANCE strings from SYNTHETIC_UNVERIFIED to CAPTURED or replace the values. Disclosure record c373946f. Five other 8/27 pks are captured and recorded (822694, 822771, 823503, 823581, 824879). Also: the 8/27 MLB grading now rests on an OWNER_RELAY of the official scoreboard after RESULT_DATE_COHORT_CONTAMINATION; every archive-bound result row must pass harness/result_binding_gate.py before it regrades anything, and any disagreement with the relay must be reported loudly rather than silently preferred.",
+          "status": "RUNNING",
+          "units_done": 123,
+          "utc": "2026-08-28T07:12:55Z"
+        },
+        {
+          "note": "OPEN ACTION CLOSED (record 989536ad): the two SYNTHETIC_UNVERIFIED 8/27 pks were archive-verified against lancebroz f9bca28. 823014 (BAL@STL) correct; 825038 (AZ@SF) WRONG — no such game exists, real id 823179. Fixture, binding proof (19fdee64) and card corrected. RJ-001B score verification unchanged at 0/126: the 8/27 parquet still carries no runs column.",
+          "status": "RUNNING",
+          "units_done": 123,
+          "utc": "2026-08-28T07:54:53Z"
+        }
+      ],
+      "job_id": "RJ-001-PROVENANCE",
+      "next_run_utc": "2026-08-28T11:00:00Z",
+      "notes": "a unit is one canonical row bound to a retrieved artifact with a game id, a retrieval timestamp and a content hash. Currently blocked on egress; the job records BLOCKED_EXTERNAL rather than silently not running.",
+      "owner_subsystem": "acquisition",
+      "phases": {
+        "RJ-001A_PROVENANCE_ACQUISITION": {
+          "note": "all provisional-set units bound; whole-file 1,948/1,957 after the OAK/ARI variant fold; 9 refusals in two named categories, reconciliation gate sums (88570751 superseded by the regenerated accounting)",
+          "progress": "123/123",
+          "status": "COMPLETE"
+        },
+        "RJ-001B_SCORE_VERIFICATION": {
+          "note": "tier upgrades for the 126 provisional rows need a score-bearing artifact; pitch events carry no runs column (derivation judged infeasible)",
+          "progress": "0/126",
+          "status": "RUNNING"
+        },
+        "RJ-001_INCIDENT": "OPEN"
+      },
+      "status": "RUNNING",
+      "terminal_disposition": null,
+      "title": "Restore Tier-1 provenance for the 123 provisional rows and the 1,620 with no evidence path",
+      "units_done": 123,
+      "units_total": 123
     },
-    {
-     "note": "run at 04:35Z ahead of the 06:00Z slot. statsapi.mlb.com and baseball-reference.com both EGRESS_BLOCKED. 0 of 123 rows bound. Rail unchanged since 2026-08-22; this is the 5th consecutive attempt. Next run backed off to 10:00Z.",
-     "status": "BLOCKED_EXTERNAL",
-     "units_done": 0,
-     "utc": "2026-08-25T04:35:00Z"
+    "RJ-002-OOF-REPLAY": {
+      "blocks": [
+        "UNCERTAINTY_PIPELINE_DEFECT",
+        "INSUFFICIENT_EFFECTIVE_CLUSTERS"
+      ],
+      "deadline_utc": "2026-09-08T00:00:00Z",
+      "depends_on": [
+        "RJ-001-PROVENANCE"
+      ],
+      "history": [
+        {
+          "note": "the 06:30Z slot passed unlogged — a silent miss is a reporting failure, recorded here. No replay is possible before RJ-001 binds provenance (depends_on). Next slot 2026-08-26T06:30Z, conditional on RJ-001's 04:00Z run.",
+          "status": "BLOCKED_EXTERNAL",
+          "units_done": 0,
+          "utc": "2026-08-25T23:06:00Z"
+        },
+        {
+          "note": "06:30Z slot passed: no replay possible, RJ-001 still 0/123. Logged, not silent. Next 2026-08-27T06:30Z conditional on RJ-001.",
+          "status": "BLOCKED_EXTERNAL",
+          "units_done": 0,
+          "utc": "2026-08-26T10:05:00Z"
+        },
+        {
+          "note": "prep for the 06:30Z slot: the dependency is satisfied — 1,944 canonical rows now carry evidence (RJ-001 123/123). The replay plan: date-blocked OOF residuals over the evidence-bound pool per uncertainty_estimand (block = slate date, ddof=1), targeting admissible clusters 2 -> 7+ computable and progress toward 20 effective. Execution needs a focused run; scheduled into the 11:00Z wake rather than silently missing the 06:30Z slot.",
+          "status": "BLOCKED_EXTERNAL",
+          "units_done": 0,
+          "utc": "2026-08-27T04:15:00Z"
+        },
+        {
+          "note": "EXECUTED (record 2026-08-27_rj002_oof_replay.json): 1,607 canonical FINAL evidence-bound rows / 123 date blocks, Kish effective 115.8, LOO within ceiling, OOF coverage 95.1% vs nominal 95 — DECISION_GRADE on the registered gates. FINDING for owner review: SD(r_b)=14.79pp sits BELOW the 15.36pp shrunk-Bernoulli floor, so the date-level epistemic excess is ~0 at these block sizes; the registered estimand is dominated by outcome noise, and the block-sigma -> per-game conservative-edge mapping is UNREGISTERED. Conservative EV therefore remains unavailable pending owner registration of a consumption spec. Refusals enumerated: 259 non-canonical, 74 synthetic-pk (seed policy), 3 unbound.",
+          "status": "COMPLETE",
+          "units_done": 20,
+          "utc": "2026-08-27T06:50:00Z"
+        }
+      ],
+      "job_id": "RJ-002-OOF-REPLAY",
+      "next_run_utc": null,
+      "notes": "a unit is one admissible date block: features reconstructed strictly as-of, graded out of fold. Target is 20 EFFECTIVE clusters, not 20 nominal dates, and not the computable floor of 6.",
+      "owner_subsystem": "modelling",
+      "status": "COMPLETE",
+      "terminal_disposition": null,
+      "title": "Build a leakage-free date-blocked historical replay for uncertainty estimation",
+      "units_done": 20,
+      "units_total": 20
     },
-    {
-     "note": "6th consecutive attempt: statsapi.mlb.com EGRESS_BLOCKED via the approved fetch tool; www.mlb.com and www.wnba.com identically blocked at the same clock. 0/123. Next run 22:00Z.",
-     "status": "BLOCKED_EXTERNAL",
-     "units_done": 0,
-     "utc": "2026-08-25T18:02:00Z"
+    "RJ-003-FALLBACK-ARM": {
+      "blocks": [
+        "UNCERTAINTY_PIPELINE_DEFECT"
+      ],
+      "deadline_utc": "2026-09-08T00:00:00Z",
+      "depends_on": [],
+      "history": [
+        {
+          "note": "the 07:00Z slot passed unlogged — recorded as a miss. This job is INTERNAL (register the conservative fallback arm spec) and does not need egress; it is schedulable now and set RUNNING for the 2026-08-26T07:00Z slot.",
+          "status": "RUNNING",
+          "units_done": 0,
+          "utc": "2026-08-25T23:06:00Z"
+        },
+        {
+          "note": "honest status at the overnight slot: RJ-003's registered fire condition is an RJ-002 finding (rich features not reconstructible as-of without leakage), and RJ-002 has made no finding — it is blocked on RJ-001. Advancing units before the condition fires would build an arm nobody has established is needed. 0/4 stands; the 07:00Z slot logs again unless RJ-002 moves.",
+          "status": "RUNNING",
+          "units_done": 0,
+          "utc": "2026-08-26T04:02:00Z"
+        },
+        {
+          "note": "07:00Z slot passed: fire condition (an RJ-002 finding) still absent; 0/4 stands honestly. Next 2026-08-27T07:00Z.",
+          "status": "RUNNING",
+          "units_done": 0,
+          "utc": "2026-08-26T10:05:00Z"
+        },
+        {
+          "note": "07:00Z slot pre-logged: fire condition (an RJ-002 finding) still absent; RJ-002 replay now actually possible, so the finding may arrive soon. 0/4 stands.",
+          "status": "RUNNING",
+          "units_done": 0,
+          "utc": "2026-08-27T04:15:00Z"
+        },
+        {
+          "note": "RJ-002's finding is in: rich features WERE reconstructible as-of without leakage (1,607 rows replayed; leakage rule enforced by build_ml_asof). The registered fire condition — reconstruction infeasible — did NOT fire. The job closes honestly without building an arm nobody established is needed. The separate NEW question RJ-002 surfaced (estimand noise-floor dominance) is an owner-review item, not this job's condition.",
+          "status": "CLOSED_CONDITION_NOT_FIRED",
+          "units_done": 0,
+          "utc": "2026-08-27T06:53:30Z"
+        }
+      ],
+      "job_id": "RJ-003-FALLBACK-ARM",
+      "next_run_utc": null,
+      "notes": "fires if RJ-002 finds that rich historical features cannot be reconstructed as-of without leakage. Units: define the reconstructible input set; fit the arm; validate its interval coverage; register the identity. A worse honest arm beats an indefinite outage — but it must be a REGISTERED identity with its own coverage validation, never the primary arm with wider error bars.",
+      "owner_subsystem": "modelling",
+      "status": "CLOSED_CONDITION_NOT_FIRED",
+      "terminal_disposition": "CONDITION_NOT_FIRED",
+      "title": "Register a conservative fallback arm on reconstructible-as-of inputs, with its own validated uncertainty",
+      "units_done": 0,
+      "units_total": 4
     },
-    {
-     "note": "7th attempt (22:00Z slot run early at T-45): statsapi.mlb.com and baseball-reference.com both EGRESS_BLOCKED via the approved fetch tool. 0/123. Next run 2026-08-26T04:00:00Z.",
-     "status": "BLOCKED_EXTERNAL",
-     "units_done": 0,
-     "utc": "2026-08-25T21:56:00Z"
+    "RJ-004-WNBA-INJURY": {
+      "blocks": [
+        "WNBA_FEATURE_STALENESS_34D",
+        "WNBA_PENDING_FEATURE_REFRESH"
+      ],
+      "deadline_utc": "2026-08-25T23:00:00Z",
+      "depends_on": [],
+      "history": [
+        {
+          "note": "WebFetch https://www.wnba.com/injury-report -> EGRESS_BLOCKED (org proxy). www.mlb.com identically blocked at the same clock. Retry 18:30Z; OWNER_RELAY is the open rung before 23:00Z tip.",
+          "status": "BLOCKED_EXTERNAL",
+          "units_done": 0,
+          "utc": "2026-08-25T18:00:46Z"
+        },
+        {
+          "note": "2nd attempt: WebFetch https://www.wnba.com/injury-report -> EGRESS_BLOCKED (org proxy), unchanged. 0/6. Next run 19:00Z; OWNER_RELAY remains the open rung before the 23:00Z tip.",
+          "status": "BLOCKED_EXTERNAL",
+          "units_done": 0,
+          "utc": "2026-08-25T18:33:00Z"
+        },
+        {
+          "note": "3rd attempt: WebFetch https://www.wnba.com/injury-report -> EGRESS_BLOCKED (org proxy), unchanged across 3 attempts/64 min. 0/6. Next run 19:45Z; the 21:10Z T-90 checkpoint will retry again. OWNER_RELAY remains the open rung before the 23:00Z tip.",
+          "status": "BLOCKED_EXTERNAL",
+          "units_done": 0,
+          "utc": "2026-08-25T19:04:00Z"
+        },
+        {
+          "note": "4th attempt: WebFetch https://www.wnba.com/injury-report -> EGRESS_BLOCKED (org proxy), unchanged across 4 attempts/107 min. 0/6. Next run folds into the 21:10Z T-90 checkpoint. OWNER_RELAY remains the open rung before the 23:00Z tip.",
+          "status": "BLOCKED_EXTERNAL",
+          "units_done": 0,
+          "utc": "2026-08-25T19:48:00Z"
+        },
+        {
+          "note": "5th attempt at the T-90 checkpoint: www.wnba.com EGRESS_BLOCKED, statsapi.mlb.com EGRESS_BLOCKED at the same clock. 0/6. Next run 21:55Z (T-45, mandatory checkpoint). OWNER_RELAY still the open rung before the 23:00Z tip.",
+          "status": "BLOCKED_EXTERNAL",
+          "units_done": 0,
+          "utc": "2026-08-25T21:16:00Z"
+        },
+        {
+          "note": "6th attempt at the T-45 checkpoint: www.wnba.com EGRESS_BLOCKED, unchanged across 6 attempts/3h55m. 0/6. Deadline is the 23:00Z tip; if still blocked then, the deadline outcome is recorded as missed — not closed, not laundered. OWNER_RELAY open.",
+          "status": "BLOCKED_EXTERNAL",
+          "units_done": 0,
+          "utc": "2026-08-25T21:56:00Z"
+        },
+        {
+          "note": "owner correction: an injuries-only job is one component of five. Folded into RJ-005-WNBA-FEATURE-PIPELINE; 7 attempts, 0/6, every rung EGRESS_BLOCKED except search identification (non-binding).",
+          "status": "FAILED_TERMINAL",
+          "units_done": 0,
+          "utc": "2026-08-25T22:20:00Z"
+        }
+      ],
+      "job_id": "RJ-004-WNBA-INJURY",
+      "next_run_utc": "2026-08-25T23:00:00Z",
+      "notes": "the official route exists and updates continually, so 34-day staleness is a refresh failure, not a board state. Fallback rung: OWNER_RELAY of the report text. Never route around the egress proxy.",
+      "owner_subsystem": "wnba_features",
+      "status": "FAILED_TERMINAL",
+      "terminal_disposition": "SUPERSEDED_BY_WIDER_JOB",
+      "title": "Bind the official WNBA injury report for the six teams on tonight's slate (CHI, CON, PDX, DAL, WAS, PHX); a unit is one team's current section bound with retrieval timestamp and content hash",
+      "units_done": 0,
+      "units_total": 6
     },
-    {
-     "note": "8th attempt: statsapi.mlb.com and baseball-reference.com both EGRESS_BLOCKED via the approved fetch tool. 0/123. Next 10:00Z.",
-     "status": "BLOCKED_EXTERNAL",
-     "units_done": 0,
-     "utc": "2026-08-26T04:02:00Z"
+    "RJ-005-WNBA-FEATURE-PIPELINE": {
+      "blocks": [
+        "WNBA_FEATURE_STALENESS",
+        "WNBA_ACTION_BLOCKED",
+        "SYSTEM_FAILURE_WNBA_FEATURE_PIPELINE"
+      ],
+      "components": [
+        "SCHEDULE_AND_CANONICAL_GAME_IDS",
+        "ROSTERS_AND_TRANSACTIONS",
+        "OFFICIAL_INJURY_AVAILABILITY",
+        "RESULTS_AND_STATS_THROUGH_ASOF",
+        "MARKET_PRICES_VIA_SEPARATE_OVERLAY"
+      ],
+      "deadline_utc": "2026-09-16T17:00:00Z",
+      "depends_on": [],
+      "history": [
+        {
+          "note": "route sweep 21:58-22:10Z: wnba.com/wnba-injury-report (owner's exact URL), stats.wnba.com, espn.com, covers.com, rotowire.com all EGRESS_BLOCKED via the approved fetch tool. WebSearch now returns substantive snippets (rail change from titles-only) — personnel states identified for all three games, IDENTIFYING_ONLY, nothing binds. Owner relay attempted by request in the published report. 0/17 bound; SYSTEM_FAILURE published for tonight's slate.",
+          "status": "BLOCKED_EXTERNAL",
+          "units_done": 0,
+          "utc": "2026-08-25T22:20:00Z"
+        },
+        {
+          "note": "23:00Z deadline tick (scheduled pre-restructure for RJ-004, applied here): one more official-site attempt EGRESS_BLOCKED — the pregame deadline for tonight's slate is MISSED, which is what the published SYSTEM_FAILURE_WNBA_FEATURE_PIPELINE (19a644a8) already records. Job stays open: binding now serves future slates, not tonight's decisions. Market phase: MLB all POST_START since 22:40Z; CHI@CON tipped 23:00Z; PDX@DAL 00:00Z and WAS@PHX 02:00Z follow. Frozen records unchanged. Next run 2026-08-26T04:00Z alongside RJ-001.",
+          "status": "BLOCKED_EXTERNAL",
+          "units_done": 0,
+          "utc": "2026-08-25T23:20:00Z"
+        },
+        {
+          "note": "component sweep: www.wnba.com/wnba-injury-report and stats.wnba.com both EGRESS_BLOCKED; no rail change since 22:10Z. 0/17. Deadline 17:00Z for the next WNBA board — if routes stay exhausted at board-build time the board publishes the failure again. Next 10:00Z alongside RJ-001; OWNER_RELAY remains the open rung.",
+          "status": "BLOCKED_EXTERNAL",
+          "units_done": 0,
+          "utc": "2026-08-26T04:02:00Z"
+        },
+        {
+          "note": "sweep: www.wnba.com/wnba-injury-report EGRESS_BLOCKED. 0/17. Deadline 17:00Z: if a WNBA board builds today with routes exhausted it publishes the failure again. Next 16:30Z.",
+          "status": "BLOCKED_EXTERNAL",
+          "units_done": 0,
+          "utc": "2026-08-26T10:05:00Z"
+        },
+        {
+          "note": "DEADLINE DISPOSITION at 17:00Z: MISSED at 0/17 — every rung still EGRESS_BLOCKED and nothing relayed. No 8/26 board was requested or built; if one is requested while this stands, it publishes SYSTEM_FAILURE_WNBA_FEATURE_PIPELINE per wnba_feature_pipeline.exhaustion. Job stays open (not closed, not laundered); deadline rolls to the next requested WNBA board. Next sweep 2026-08-27T04:00Z.",
+          "status": "BLOCKED_EXTERNAL",
+          "units_done": 0,
+          "utc": "2026-08-26T16:32:00Z"
+        },
+        {
+          "note": "'Fix it' execution attempt: three PREVIOUSLY UNTRIED hostnames — cdn.wnba.com (official schedule/results JSON), cdn.nba.com, en.wikipedia.org (team season game logs) — all EGRESS_BLOCKED. Proxy status confirms the block is the ENVIRONMENT'S NETWORK POLICY: only package registries and Anthropic endpoints bypass; every content domain is denied. Root remediation is owner-side: change this Claude Code environment's network access policy (claude.ai/code environment settings) — that unblocks RJ-001, RJ-005, live prices and canonical settlement in one stroke. Until then OWNER_RELAY is the only binding route; the minimal relay payload is registered in data/audit/2026-08-26_wnba_relay_request.json.",
+          "status": "BLOCKED_EXTERNAL",
+          "units_done": 0,
+          "utc": "2026-08-26T17:20:00Z"
+        },
+        {
+          "note": "the 17:00Z deadline was recorded MISSED (not laundered); per that disposition the deadline rolls to the next board window, 2026-08-27T17:00Z. Fallback arm STANDINGS_LOG5_v1 ran tonight (4d7fd06a) — DIAGNOSTIC_ONLY, binds no unit; 0/17 stands.",
+          "status": "BLOCKED_EXTERNAL",
+          "units_done": 0,
+          "utc": "2026-08-26T17:40:00Z"
+        },
+        {
+          "note": "Owner-directed stale-data fix executed on the working route: 14-team search sweep assembled a PROVISIONAL results pool — 48 scored games 7/29-8/26 (the All-Star break covers 7/22-7/28), 1 outcome-only, 4 ambiguities refused, subset-consistency vs standings PASS for all 10 listed teams (2624ce85). Feature state now carries a provisional extension as_of 2026-08-26 beside the unchanged canonical as_of 2026-07-22. Canonical units remain 0/17 — snippets never bind — and the registered model still needs box-stat artifacts (four-factors inputs) that only real retrieval or relay can supply.",
+          "status": "BLOCKED_EXTERNAL",
+          "units_done": 0,
+          "utc": "2026-08-26T18:25:00Z"
+        },
+        {
+          "note": "ROUTE BOUND: the git proxy serves public GitHub reads — sportsdataverse/wehoop-wnba-raw (commit b843138d, updated this morning) holds the full ESPN schedule parquet and 2026 game JSONs in-tree. Extracted 87 post-cutoff games with per-file sha256 (ext artifact c48f66fa); components SCHEDULE_AND_CANONICAL_GAME_IDS and RESULTS_AND_STATS_THROUGH_ASOF bound -> 4/17 units. The registered model ran current under wnba.replacement.FEATURE_REFRESH. Open: official injury/availability (not in the archive), rosters (partial game_rosters unexplored), market prices. The exhaustion publication is superseded for tonight's games.",
+          "status": "RUNNING",
+          "units_done": 4,
+          "utc": "2026-08-26T18:50:00Z"
+        },
+        {
+          "note": "T-90 sweep: wnba.com injury report still EGRESS_BLOCKED; injury component stays open at 4/17. Refreshed forecasts stand for tonight.",
+          "status": "RUNNING",
+          "units_done": 4,
+          "utc": "2026-08-26T21:15:00Z"
+        },
+        {
+          "note": "overnight sweep: wnba.com injury report still EGRESS_BLOCKED; injuries/rosters/market components stay open at 4/17. The wehoop morning commit (~10:30Z) should carry the 8/26 finals (GSV@CON, TOR@SEA) — fetch and grade the three WNBA arms at the 11:00Z wake.",
+          "status": "RUNNING",
+          "units_done": 4,
+          "utc": "2026-08-27T04:15:00Z"
+        },
+        {
+          "note": "8/27 slate prep: schedule for tonight's two games (GSV@NYL, WSH@PHX) read from the canonical schedule parquet (already-bound component). NEW: game_rosters/json explored — full ESPN gamepackages in-git, each with boxscore rosters and an injuries section. Bound roster+availability snapshots for all four slate teams (record 2026-08-27_wnba_personnel_bind.json): NYL Sabally Out (concussion), GSV Rupert Out, PHX 4 Out, WSH none listed. Units 4->8 (four roster artifacts; unit teams roll with the slate). OFFICIAL injury report still EGRESS_BLOCKED (fresh 07:36Z receipt) — official-grade units stay open; personnel remains PERSONNEL_UNVERIFIED at official grade. 8/26 box scores land in the ~10:30Z upstream commit; feature rebuild through 8/26 executes at the 11:00Z wake before the WNBA board freezes.",
+          "status": "RUNNING",
+          "units_done": 8,
+          "utc": "2026-08-27T06:54:00Z"
+        },
+        {
+          "note": "11:00Z wake: wehoop advanced b843138->3316fa3 ON TIME (no retry sequence needed). Extension rebuilt through 8/26: 89 games, 0 missing, per-file sha256, zero dup gids, targets absent. 8/26 finals ARCHIVE-CONFIRMED (upgrade record above); anchored 8/27 WNBA board FROZEN 11:06:18Z with all three arms. Units 8->10 (RESULTS_AND_STATS_THROUGH_ASOF re-bound current + archive confirmation). Open: official injuries (route still blocked), full market attribution. SUPERSESSION FINDING: the preliminary GSV@NYL (NYL 55.65%) is UNREPRODUCED by the registered machinery on either pool — anchored value is GSV 52.28%; side changed; WAS@PHX reproduced to 4 decimals.",
+          "status": "RUNNING",
+          "units_done": 10,
+          "utc": "2026-08-27T11:06:52Z"
+        },
+        {
+          "note": "17:00Z DEADLINE DISPOSITION: MET IN SUBSTANCE for the board window it guarded — the 8/27 WNBA board froze at 11:06Z on a current, archive-bound feature state (no SYSTEM_FAILURE publication needed); schedule, results-through-asof, roster snapshots and archive confirmation are bound (10/17). NOT met in full: official injury-report units (route still EGRESS_BLOCKED, receipts standing) and complete two-sided market attribution remain open; GSV@NYL ML/spread/total now DK-attributed via relay, WAS-side ML unretained. Deadline rolls to the next board window 2026-08-28T17:00:00Z; the 22:30Z T-90 re-sweeps injuries.",
+          "status": "RUNNING",
+          "units_done": 10,
+          "utc": "2026-08-27T19:18:20Z"
+        },
+        {
+          "note": "overdue slot rolled during 8/28 prep; wehoop has NOT advanced past 3316fa3 so the 8/27 WNBA boxes are not yet available (morning commit lands ~10:30Z)",
+          "status": "RUNNING",
+          "units_done": 10,
+          "utc": "2026-08-28T07:54:53Z"
+        },
+        {
+          "note": "17:00Z DEADLINE DISPOSITION. Real progress today, credited precisely rather than generously. MARKET_PRICES_VIA_SEPARATE_OVERLAY BINDS for the first time: the owner relayed the full DraftKings board for all four 8/28 games, transcription-verified against itself (12 two-sided pairs, implied holds 3.65-4.55%), written as a separately hashed overlay attached to the frozen board and never folded into it. That component had never been credited in this job's history, so units 10 -> 11. RESULTS_AND_STATS_THROUGH_ASOF was refreshed but NOT re-credited: wehoop advanced 3316fa3 -> 7a1c7eb at 11:01Z, both 8/27 finals bound 2/2 through the result-binding gate, extension pool rebuilt 89 -> 91 with the four target ids confirmed absent, and FEATURE_REFRESH unblocked on a superseding v2 board. That is the SAME unit already credited on 8/27 at a later cutoff, not a new one, and double-counting it would inflate the job. Two defects fixed en route: the module's COMMIT_PIN had drifted from the artifact it built (selftest failing unnoticed because nothing invoked it), and my own slate keys used display names where the pool keys on abbreviations, which returned DATA_BLOCKED and reads exactly like an outage. STILL BLOCKED, and this is why the job stays open at 11/17: OFFICIAL_INJURY_AVAILABILITY (6 units) remains 0. No 8/28-dated availability exists for Washington or Los Angeles — the only report found is 8/15 and was refused as stale — and Aneesah Morrow still appears on both Connecticut's and Toronto's lists. Neither will be settled by guess. Deadline rolled to 22:00Z, the WNBA T-90 checkpoint, which is the next window where these units would actually change a published disposition before tonight's 23:30Z tips.",
+          "status": "RUNNING",
+          "units_done": 11,
+          "utc": "2026-08-28T18:10:00Z"
+        },
+        {
+          "note": "22:00Z DEADLINE DISPOSITION: NO UNIT BOUND, units stay 11/17. The 22:00Z checkpoint did resolve a real open item — Aneesah Morrow is Toronto's and is out for the season, settling a conflict where she appeared on two teams' lists — but that came from AGGREGATOR reporting, which identifies and does not bind. OFFICIAL_INJURY_AVAILABILITY stays at 0 of 6. Crediting search identification against a component whose unit definition requires an official section with a retrieval timestamp and content hash would inflate the job, and this job has been honest about that since 8/25. Washington and Los Angeles still have NO 8/28-dated report at all; the only one on file is 8/15 and stays refused as stale. Every official route remains EGRESS_BLOCKED. Rolled to 22:45Z, the last pregame checkpoint before the 23:30Z tips. If nothing binds by then the pregame window for tonight's WNBA slate is MISSED — the same outcome as 8/25, and it should be recorded as missed rather than quietly rolled past. The job stays open because binding then serves future slates, not tonight's dispositions.",
+          "status": "RUNNING",
+          "units_done": 11,
+          "utc": "2026-08-28T22:15:00Z"
+        },
+        {
+          "note": "22:45Z DEADLINE: PREGAME WINDOW FOR TONIGHT'S WNBA SLATE IS MISSED, and recorded as missed rather than rolled past. Tips are at 23:30Z; no official injury section bound at any point today. OFFICIAL_INJURY_AVAILABILITY finishes the day at 0 of 6, units 11/17, every official route EGRESS_BLOCKED. What the day DID achieve on this job: the market-overlay component bound for the first time (unit 11), the extension pool was rebuilt through the 8/27 cutoff and FEATURE_REFRESH unblocked, and the Morrow two-team conflict was resolved — though by aggregator reporting, which identifies and does not bind, so it credits nothing. This is the same outcome as 8/25 and it is the second slate whose pregame window this component has missed. The job stays open because binding serves future slates; the honest record is that it did not serve tonight's.",
+          "status": "RUNNING",
+          "units_done": 11,
+          "utc": "2026-08-28T22:52:00Z"
+        },
+        {
+          "components_still_open": [
+            "OFFICIAL_INJURY_AVAILABILITY",
+            "ROSTERS_AND_TRANSACTIONS"
+          ],
+          "deadline_disposition": "MISSED. Not extended in place — the miss stands in the record. A new deadline is set for the next WNBA board so the job keeps a live clock, and the original is preserved above.",
+          "note": "17:00Z deadline MISSED and recorded as missed rather than extended silently. OFFICIAL_INJURY_AVAILABILITY remains 0 — every official route has been EGRESS_BLOCKED since 2026-08-25 and nothing changed today. What DID advance on other components: the extraction path was rewritten to derive ET via zoneinfo instead of slicing a UTC instant, which removed two double-counted games (CON@IND 401857090, DAL@POR 401857091) and took the extension pool 91 -> 89; wehoop advanced to 8ffb87b and the 2026-08-28 cohort BOUND 4/4 on all six contract fields, the first genuinely bound cohort in this system; wnba_model_v1 was re-pinned to impl v2 under owner authorization for the same ET defect at predict_slate; and per-game margin AND totals residuals are now retained and measured (margin sigma 12.5523, totals sigma 18.0156, n=1721 each). THE OPEN COMPONENT IS LOAD-BEARING TONIGHT, not merely overdue. ff7 carries no injury, rest or availability inputs, and that is precisely why the TOR +365 moneyline was refused this afternoon despite an apparent +82 EV per $100: two eliminated teams (PHX 13-26, TOR 11-28) run late-August rotations the 39-game form window cannot see, and the model's own 6-point margin disagreement with the market is unfalsifiable without this component. The spread was taken and the moneyline refused on exactly this reasoning. The job's open item and the day's largest refused edge are the same gap.",
+          "status": "DEADLINE_MISSED_EXTERNAL_BLOCK",
+          "units_done": 11,
+          "utc": "2026-08-29T21:56:31Z"
+        },
+        {
+          "note": "Backfill audit reconciled the bound ESPN-family extension: ext_2026.json now has 95 games through 2026-08-29 with missing=[] (the final pre-break games), so the historical results/stat extension is COMPLETE_THROUGH_LAST_INGESTED_GAME. OFFICIAL_INJURY_AVAILABILITY remains 0/6 and the job remains open at 11/17; the 2026-08-29 missed deadline remains preserved. New clock is the next scheduled board window after the break.",
+          "status": "RUNNING",
+          "units_done": 11,
+          "utc": "2026-09-03T19:21:08Z"
+        }
+      ],
+      "job_id": "RJ-005-WNBA-FEATURE-PIPELINE",
+      "next_run_utc": "2026-09-16T16:00:00Z",
+      "notes": "After binding: recompute feature state (as_of, source hashes, age); generate separately identified replacement forecasts (wnba.replacement.FEATURE_REFRESH) since the board is frozen; rerun side, margin, total, EV and disposition through side_reselection_gate after anchor. Exhaustion of all authorized routes without binding publishes SYSTEM_FAILURE_WNBA_FEATURE_PIPELINE — never a normal-looking board. 2026-09-03 audit: result/stat recovery is separately complete through 2026-08-29; official availability is still the non-negotiable remaining component.",
+      "owner_subsystem": "wnba_features",
+      "previous_deadline_utc_missed": "2026-08-29T17:00:00Z",
+      "status": "RUNNING",
+      "terminal_disposition": null,
+      "title": "Full WNBA feature refresh: schedule+canonical game ids (3), roster+transaction sections (6 teams), official injury/availability sections (6 teams), results and team/player stats through the as-of cutoff (1 bound snapshot), market prices via the separate overlay (1 binding). A unit binds only from a retrieved artifact with source, timestamp and content hash.",
+      "units_done": 11,
+      "units_total": 17
     },
-    {
-     "note": "9th attempt: statsapi.mlb.com and baseball-reference.com EGRESS_BLOCKED. 0/123. Next 16:30Z pre-board check.",
-     "status": "BLOCKED_EXTERNAL",
-     "units_done": 0,
-     "utc": "2026-08-26T10:05:00Z"
+    "RJ-006-NFL-MODEL-RESTORATION": {
+      "blocks": [
+        "NFL_MODEL_LINEAGE_NOT_RESTORED_TO_ACTIVE_BRANCH"
+      ],
+      "components": [
+        "RECOVERED_EVIDENCE_RETAINED_AND_HASHED",
+        "IMMUTABLE_RUN_DIRECTORY_RESTORED",
+        "V0_1_INVALIDATION_RECORD_RESTORED",
+        "NFLVERSE_SOURCE_PINS_REACQUIRED",
+        "ACTIVE_REGISTRY_ENTRIES_CREATED",
+        "PROSPECTIVE_PAPER_WORKFLOW_ARMED"
+      ],
+      "deadline_utc": "2026-09-09T00:00:00Z",
+      "depends_on": [],
+      "history": [
+        {
+          "note": "OPENED on owner correction (record 2026-08-27_nfl_history_correction.json). Recovered STATUS, reporting disposition and walk-forward metrics retained with sha256 (unit 1/6). Lost commits 1d089d45*/f3cf5b1d* confirmed unresolvable in full local history. Restoration source: owner's recovered historical checkout; the immutable run dir data/nfl/model/runs/2026-08-10_nflverse_2015_2025_oof_v2 is the next unit.",
+          "status": "RUNNING",
+          "units_done": 1,
+          "utc": "2026-08-27T08:43:15Z"
+        },
+        {
+          "note": "15:35Z slot ran inside the T-90 checkpoint (record e64075c9): no unit bindable from this environment — the immutable run directory and v0.1 invalidation record exist only in the owner's recovered checkout; the standing request (upload or PR) is open. Next attempt folds into the 21:30Z NFL checkpoint.",
+          "status": "RUNNING",
+          "units_done": 1,
+          "utc": "2026-08-27T19:17:10Z"
+        },
+        {
+          "note": "overdue slot rolled during 8/28 prep; immutable NFL run directory still awaits owner upload/PR; no unit bindable from this environment",
+          "status": "RUNNING",
+          "units_done": 1,
+          "utc": "2026-08-28T07:54:53Z"
+        }
+      ],
+      "job_id": "RJ-006-NFL-MODEL-RESTORATION",
+      "next_run_utc": "2026-08-28T11:00:00Z",
+      "notes": "A unit binds only from a retained artifact with source, timestamp and content hash. The live_block gates from the recovered STATUS remain binding for any future authority: verified QB/OL/injury snapshots as of forecast time, 100 prospective paper selections under one frozen policy, coherent closing-line capture with positive lower 95% ROI bound, explicit owner authorization. Preseason stays DATA_CAPTURE_ONLY by registered scope.",
+      "owner_subsystem": "model_registry",
+      "status": "RUNNING",
+      "terminal_disposition": null,
+      "title": "Restore the governed nfl.rs.epa_logit_ridge.v0_2.shadow lineage into the active branch: recovered evidence verified (3/3 partial), immutable run directory, invalidation record for v0_1, source pins, and registry entries; then the current-input + prospective-paper workflow for the regular season (opens 2026-09-09)",
+      "units_done": 1,
+      "units_total": 6
     },
-    {
-     "note": "10th attempt: statsapi.mlb.com EGRESS_BLOCKED. 0/123. Next overnight slot 2026-08-27T04:00Z.",
-     "status": "BLOCKED_EXTERNAL",
-     "units_done": 0,
-     "utc": "2026-08-26T16:32:00Z"
+    "RJ-007-DATELESS-JOIN-REMEDIATION": {
+      "blocks": [
+        "RESULT_DATE_COHORT_CONTAMINATION"
+      ],
+      "components": [
+        "build_board_0825 identity+seed (doubleheader collision)",
+        "promotion_gate.compare_against_references",
+        "evaluation_standard.paired_postgame",
+        "grade_0725 finals keys",
+        "board gamePk fields carry synthetic slate ids, not real pks (8/26: 826000-826014; 8/27: 827000-827006) — the gate cannot corroborate ids from production boards",
+        "backfill the six identity fields onto the 8/24-8/26 result records and re-run bind_cohort"
+      ],
+      "deadline_utc": "2026-09-03T00:00:00Z",
+      "depends_on": [],
+      "history": [
+        {
+          "note": "opened from the adversarial audit; four defects enumerated with file, line and measured failure scenario",
+          "status": "RUNNING",
+          "units_done": 0,
+          "utc": "2026-08-28T07:17:53Z"
+        },
+        {
+          "note": "8/24-8/27 audit: no NEW contamination, but every 8/24-8/26 result row would be REFUSED today as MISSING_IDENTITY_FIELD — those dates are clean by calendar luck and write-time ordering, not by any check. Two further components added: production boards carry synthetic pks so the gate's id corroboration is unsatisfiable from them, and the historical result records need identity backfill. Three 8/26 rows (CHC@AZ, CLE@LAA, MIN@ATH) remain UNCHECKED pending an owner relay of the official 8/25 scoreboard.",
+          "status": "RUNNING",
+          "units_done": 0,
+          "utc": "2026-08-28T07:50:02Z"
+        }
+      ],
+      "job_id": "RJ-007-DATELESS-JOIN-REMEDIATION",
+      "next_run_utc": "2026-08-28T11:00:00Z",
+      "notes": "Found by the 2026-08-28 adversarial audit (record above), each verified by running code against real repo data. None is on the write path (grade_slate was, and is fixed), but promotion_gate and evaluation_standard both feed promotion inference, where a silently narrowed population reports a slate difference as a model difference. build_board_0825's fix touches the frozen-board identity schema, so it needs a migration plan rather than an edit.",
+      "owner_subsystem": "harness",
+      "status": "RUNNING",
+      "terminal_disposition": null,
+      "title": "Remove the dateless (away,home) join from the four remaining evaluation-side code paths and fold date+gamePk into the canonical game identity",
+      "units_done": 0,
+      "units_total": 6
     },
-    {
-     "note": "ROUTE BOUND (GitHub git-proxy): lancebroz/mlb-pitcher-data stores DAILY statsapi-derived pitch parquets in-tree (game_pk, teams, full play record), commit c6b65466 landed 40 min before retrieval. Committed binder mlb_provenance_bind wrote per-day local evidence extracts (548K, each naming the upstream repo/commit/path/sha256) and bound 1,944/1,957 canonical rows \u2014 including 124/126 of the tier-2/3 provisional set (units capped at 123/123). Honest refusals: 2 ATL@NYM 7/29 doubleheader rows (per-game disambiguation needed), 4 TEAM_MISMATCH rows flagged for review (possible misingested identities: 824978, 825056-58), 5 pks absent from artifacts. Scores remain relayed-grade (a pitch archive proves identity and play record, not final score) \u2014 tier upgrades wait on score derivation or official artifacts. Provenance gate: OK, 1,940 evidence-bound.",
-     "status": "RUNNING",
-     "units_done": 123,
-     "utc": "2026-08-26T19:15:00Z"
+    "RJ-008-NFL-LAUNCH-SHADOW": {
+      "blocks": [
+        "NFL_2026_SCHEDULE_BACKFILL",
+        "NFL_WEEK1_SHADOW_FORECAST_PATH"
+      ],
+      "components": [
+        "IMMUTABLE_NFLVERSE_SCHEDULE_SNAPSHOT",
+        "CANONICAL_ESPN_ID_BINDING",
+        "CHRONOLOGICAL_ELO_PLATT_VALIDATION",
+        "WEEK1_PAPER_FORECAST_ARTIFACT"
+      ],
+      "deadline_utc": "2026-09-03T19:21:08Z",
+      "depends_on": [],
+      "history": [
+        {
+          "note": "Immutable regular-season snapshot has 272 2026 schedule rows and 16 Week 1 canonical ESPN events; the registered shadow path is data+forecast green only, with NO_ACTION.",
+          "status": "COMPLETE",
+          "units_done": 4,
+          "utc": "2026-09-03T19:21:08Z"
+        }
+      ],
+      "job_id": "RJ-008-NFL-LAUNCH-SHADOW",
+      "next_run_utc": "2026-09-03T19:21:08Z",
+      "notes": "This terminal fallback-arm registration does not close RJ-006-NFL-MODEL-RESTORATION and grants no action authority.",
+      "owner_subsystem": "nfl_launch",
+      "status": "COMPLETE",
+      "terminal_disposition": "FALLBACK_ARM_REGISTERED",
+      "title": "Register a separate governed NFL regular-season Elo/Platt launch shadow while the recovered EPA v0_2 lineage remains separately unresolved",
+      "units_done": 4,
+      "units_total": 4
     },
-    {
-     "note": "overnight slot: direct rails still EGRESS_BLOCKED (statsapi 11th attempt). The git route stays productive: archive advanced to commit 448e2ff (04:01Z) with the 8/26 daily parquet; 8/26 evidence extract built (15 games, slate identity for the frozen board now archive-confirmed); pitcher outing logs 8/22-8/26 registered (1bca205e, 604 outings, K+BB<=TBF asserted; two buggy builds caught by sanity checks pre-commit). Score derivation from pitch events judged INFEASIBLE (no runs column) \u2014 tier upgrades for the 126 provisional rows still need a score-bearing artifact or official source. Units stay 123/123.",
-     "status": "RUNNING",
-     "units_done": 123,
-     "utc": "2026-08-27T04:15:00Z"
-    },
-    {
-     "note": "phase split per owner correction: acquisition COMPLETE 123/123; score verification RUNNING 0/126; incident OPEN. '123/123 RUNNING' was conflating a finished work package with an open one. Also: the four TEAM_MISMATCH refusals were abbreviation variants (OAK=ATH, ARI=AZ), not wrong games \u2014 folded and bound; whole-file coverage 1,948/1,957.",
-     "status": "RUNNING",
-     "units_done": 123,
-     "utc": "2026-08-27T04:40:00Z"
-    },
-    {
-     "note": "11:00Z wake: lancebroz advanced 448e2ff->3aa218a (10:17Z). Schema unchanged \u2014 still no runs/score columns; RJ-001B stays 0/126 honestly. 8/26 evidence extract already built from 448e2ff; no rebind needed.",
-     "status": "RUNNING",
-     "units_done": 123,
-     "utc": "2026-08-27T11:06:52Z"
-    },
-    {
-     "note": "NEW OPEN ACTION for the next archive wake (durable here so a container recycle cannot lose it): verify the two SYNTHETIC_UNVERIFIED 8/27 gamePks in harness/result_binding_gate.py's fixture \u2014 BAL@STL 823014 and AZ@SF 825038 \u2014 against the lancebroz 8/27 daily parquet, then flip their PK_PROVENANCE strings from SYNTHETIC_UNVERIFIED to CAPTURED or replace the values. Disclosure record c373946f. Five other 8/27 pks are captured and recorded (822694, 822771, 823503, 823581, 824879). Also: the 8/27 MLB grading now rests on an OWNER_RELAY of the official scoreboard after RESULT_DATE_COHORT_CONTAMINATION; every archive-bound result row must pass harness/result_binding_gate.py before it regrades anything, and any disagreement with the relay must be reported loudly rather than silently preferred.",
-     "status": "RUNNING",
-     "units_done": 123,
-     "utc": "2026-08-28T07:12:55Z"
-    },
-    {
-     "note": "OPEN ACTION CLOSED (record 989536ad): the two SYNTHETIC_UNVERIFIED 8/27 pks were archive-verified against lancebroz f9bca28. 823014 (BAL@STL) correct; 825038 (AZ@SF) WRONG \u2014 no such game exists, real id 823179. Fixture, binding proof (19fdee64) and card corrected. RJ-001B score verification unchanged at 0/126: the 8/27 parquet still carries no runs column.",
-     "status": "RUNNING",
-     "units_done": 123,
-     "utc": "2026-08-28T07:54:53Z"
+    "RJ-009-CFB-LAUNCH-SHADOW": {
+      "blocks": [
+        "CFB_2026_SCHEDULE_ARCHIVE_GAP",
+        "CFB_WEEK1_SHADOW_FORECAST_PATH"
+      ],
+      "components": [
+        "IMMUTABLE_CFB_SCHEDULE_SNAPSHOT",
+        "CANONICAL_ESPN_ID_BINDING",
+        "CAUSAL_ELO_STATE_AND_VALIDATION",
+        "WEEK1_PAPER_FORECAST_ARTIFACT"
+      ],
+      "deadline_utc": "2026-09-03T19:21:08Z",
+      "depends_on": [],
+      "history": [
+        {
+          "note": "Immutable 2026 schedule snapshot has 888 rows, including 8 completed Week 1 games and 43 future FBS-vs-FBS Week 1 canonical ESPN events; model state excludes all 2026 results.",
+          "status": "COMPLETE",
+          "units_done": 4,
+          "utc": "2026-09-03T19:21:08Z"
+        }
+      ],
+      "job_id": "RJ-009-CFB-LAUNCH-SHADOW",
+      "next_run_utc": "2026-09-03T19:21:08Z",
+      "notes": "This terminal fallback-arm registration is shadow-only; v2 personnel/continuity inputs and all action authority remain blocked.",
+      "owner_subsystem": "cfb_launch",
+      "status": "COMPLETE",
+      "terminal_disposition": "FALLBACK_ARM_REGISTERED",
+      "title": "Restore a governed 2026 CFB schedule and Week 1 causal-Elo launch shadow from a current canonical-ID archive",
+      "units_done": 4,
+      "units_total": 4
     }
-   ],
-   "job_id": "RJ-001-PROVENANCE",
-   "next_run_utc": "2026-08-28T11:00:00Z",
-   "notes": "a unit is one canonical row bound to a retrieved artifact with a game id, a retrieval timestamp and a content hash. Currently blocked on egress; the job records BLOCKED_EXTERNAL rather than silently not running.",
-   "owner_subsystem": "acquisition",
-   "phases": {
-    "RJ-001A_PROVENANCE_ACQUISITION": {
-     "note": "all provisional-set units bound; whole-file 1,948/1,957 after the OAK/ARI variant fold; 9 refusals in two named categories, reconciliation gate sums (88570751 superseded by the regenerated accounting)",
-     "progress": "123/123",
-     "status": "COMPLETE"
-    },
-    "RJ-001B_SCORE_VERIFICATION": {
-     "note": "tier upgrades for the 126 provisional rows need a score-bearing artifact; pitch events carry no runs column (derivation judged infeasible)",
-     "progress": "0/126",
-     "status": "RUNNING"
-    },
-    "RJ-001_INCIDENT": "OPEN"
-   },
-   "status": "RUNNING",
-   "terminal_disposition": null,
-   "title": "Restore Tier-1 provenance for the 123 provisional rows and the 1,620 with no evidence path",
-   "units_done": 123,
-   "units_total": 123
   },
-  "RJ-002-OOF-REPLAY": {
-   "blocks": [
-    "UNCERTAINTY_PIPELINE_DEFECT",
-    "INSUFFICIENT_EFFECTIVE_CLUSTERS"
-   ],
-   "deadline_utc": "2026-09-08T00:00:00Z",
-   "depends_on": [
-    "RJ-001-PROVENANCE"
-   ],
-   "history": [
-    {
-     "note": "the 06:30Z slot passed unlogged \u2014 a silent miss is a reporting failure, recorded here. No replay is possible before RJ-001 binds provenance (depends_on). Next slot 2026-08-26T06:30Z, conditional on RJ-001's 04:00Z run.",
-     "status": "BLOCKED_EXTERNAL",
-     "units_done": 0,
-     "utc": "2026-08-25T23:06:00Z"
-    },
-    {
-     "note": "06:30Z slot passed: no replay possible, RJ-001 still 0/123. Logged, not silent. Next 2026-08-27T06:30Z conditional on RJ-001.",
-     "status": "BLOCKED_EXTERNAL",
-     "units_done": 0,
-     "utc": "2026-08-26T10:05:00Z"
-    },
-    {
-     "note": "prep for the 06:30Z slot: the dependency is satisfied \u2014 1,944 canonical rows now carry evidence (RJ-001 123/123). The replay plan: date-blocked OOF residuals over the evidence-bound pool per uncertainty_estimand (block = slate date, ddof=1), targeting admissible clusters 2 -> 7+ computable and progress toward 20 effective. Execution needs a focused run; scheduled into the 11:00Z wake rather than silently missing the 06:30Z slot.",
-     "status": "BLOCKED_EXTERNAL",
-     "units_done": 0,
-     "utc": "2026-08-27T04:15:00Z"
-    },
-    {
-     "note": "EXECUTED (record 2026-08-27_rj002_oof_replay.json): 1,607 canonical FINAL evidence-bound rows / 123 date blocks, Kish effective 115.8, LOO within ceiling, OOF coverage 95.1% vs nominal 95 \u2014 DECISION_GRADE on the registered gates. FINDING for owner review: SD(r_b)=14.79pp sits BELOW the 15.36pp shrunk-Bernoulli floor, so the date-level epistemic excess is ~0 at these block sizes; the registered estimand is dominated by outcome noise, and the block-sigma -> per-game conservative-edge mapping is UNREGISTERED. Conservative EV therefore remains unavailable pending owner registration of a consumption spec. Refusals enumerated: 259 non-canonical, 74 synthetic-pk (seed policy), 3 unbound.",
-     "status": "COMPLETE",
-     "units_done": 20,
-     "utc": "2026-08-27T06:50:00Z"
-    }
-   ],
-   "job_id": "RJ-002-OOF-REPLAY",
-   "next_run_utc": null,
-   "notes": "a unit is one admissible date block: features reconstructed strictly as-of, graded out of fold. Target is 20 EFFECTIVE clusters, not 20 nominal dates, and not the computable floor of 6.",
-   "owner_subsystem": "modelling",
-   "status": "COMPLETE",
-   "terminal_disposition": null,
-   "title": "Build a leakage-free date-blocked historical replay for uncertainty estimation",
-   "units_done": 20,
-   "units_total": 20
-  },
-  "RJ-003-FALLBACK-ARM": {
-   "blocks": [
-    "UNCERTAINTY_PIPELINE_DEFECT"
-   ],
-   "deadline_utc": "2026-09-08T00:00:00Z",
-   "depends_on": [],
-   "history": [
-    {
-     "note": "the 07:00Z slot passed unlogged \u2014 recorded as a miss. This job is INTERNAL (register the conservative fallback arm spec) and does not need egress; it is schedulable now and set RUNNING for the 2026-08-26T07:00Z slot.",
-     "status": "RUNNING",
-     "units_done": 0,
-     "utc": "2026-08-25T23:06:00Z"
-    },
-    {
-     "note": "honest status at the overnight slot: RJ-003's registered fire condition is an RJ-002 finding (rich features not reconstructible as-of without leakage), and RJ-002 has made no finding \u2014 it is blocked on RJ-001. Advancing units before the condition fires would build an arm nobody has established is needed. 0/4 stands; the 07:00Z slot logs again unless RJ-002 moves.",
-     "status": "RUNNING",
-     "units_done": 0,
-     "utc": "2026-08-26T04:02:00Z"
-    },
-    {
-     "note": "07:00Z slot passed: fire condition (an RJ-002 finding) still absent; 0/4 stands honestly. Next 2026-08-27T07:00Z.",
-     "status": "RUNNING",
-     "units_done": 0,
-     "utc": "2026-08-26T10:05:00Z"
-    },
-    {
-     "note": "07:00Z slot pre-logged: fire condition (an RJ-002 finding) still absent; RJ-002 replay now actually possible, so the finding may arrive soon. 0/4 stands.",
-     "status": "RUNNING",
-     "units_done": 0,
-     "utc": "2026-08-27T04:15:00Z"
-    },
-    {
-     "note": "RJ-002's finding is in: rich features WERE reconstructible as-of without leakage (1,607 rows replayed; leakage rule enforced by build_ml_asof). The registered fire condition \u2014 reconstruction infeasible \u2014 did NOT fire. The job closes honestly without building an arm nobody established is needed. The separate NEW question RJ-002 surfaced (estimand noise-floor dominance) is an owner-review item, not this job's condition.",
-     "status": "CLOSED_CONDITION_NOT_FIRED",
-     "units_done": 0,
-     "utc": "2026-08-27T06:53:30Z"
-    }
-   ],
-   "job_id": "RJ-003-FALLBACK-ARM",
-   "next_run_utc": null,
-   "notes": "fires if RJ-002 finds that rich historical features cannot be reconstructed as-of without leakage. Units: define the reconstructible input set; fit the arm; validate its interval coverage; register the identity. A worse honest arm beats an indefinite outage \u2014 but it must be a REGISTERED identity with its own coverage validation, never the primary arm with wider error bars.",
-   "owner_subsystem": "modelling",
-   "status": "CLOSED_CONDITION_NOT_FIRED",
-   "terminal_disposition": "CONDITION_NOT_FIRED",
-   "title": "Register a conservative fallback arm on reconstructible-as-of inputs, with its own validated uncertainty",
-   "units_done": 0,
-   "units_total": 4
-  },
-  "RJ-004-WNBA-INJURY": {
-   "blocks": [
-    "WNBA_FEATURE_STALENESS_34D",
-    "WNBA_PENDING_FEATURE_REFRESH"
-   ],
-   "deadline_utc": "2026-08-25T23:00:00Z",
-   "depends_on": [],
-   "history": [
-    {
-     "note": "WebFetch https://www.wnba.com/injury-report -> EGRESS_BLOCKED (org proxy). www.mlb.com identically blocked at the same clock. Retry 18:30Z; OWNER_RELAY is the open rung before 23:00Z tip.",
-     "status": "BLOCKED_EXTERNAL",
-     "units_done": 0,
-     "utc": "2026-08-25T18:00:46Z"
-    },
-    {
-     "note": "2nd attempt: WebFetch https://www.wnba.com/injury-report -> EGRESS_BLOCKED (org proxy), unchanged. 0/6. Next run 19:00Z; OWNER_RELAY remains the open rung before the 23:00Z tip.",
-     "status": "BLOCKED_EXTERNAL",
-     "units_done": 0,
-     "utc": "2026-08-25T18:33:00Z"
-    },
-    {
-     "note": "3rd attempt: WebFetch https://www.wnba.com/injury-report -> EGRESS_BLOCKED (org proxy), unchanged across 3 attempts/64 min. 0/6. Next run 19:45Z; the 21:10Z T-90 checkpoint will retry again. OWNER_RELAY remains the open rung before the 23:00Z tip.",
-     "status": "BLOCKED_EXTERNAL",
-     "units_done": 0,
-     "utc": "2026-08-25T19:04:00Z"
-    },
-    {
-     "note": "4th attempt: WebFetch https://www.wnba.com/injury-report -> EGRESS_BLOCKED (org proxy), unchanged across 4 attempts/107 min. 0/6. Next run folds into the 21:10Z T-90 checkpoint. OWNER_RELAY remains the open rung before the 23:00Z tip.",
-     "status": "BLOCKED_EXTERNAL",
-     "units_done": 0,
-     "utc": "2026-08-25T19:48:00Z"
-    },
-    {
-     "note": "5th attempt at the T-90 checkpoint: www.wnba.com EGRESS_BLOCKED, statsapi.mlb.com EGRESS_BLOCKED at the same clock. 0/6. Next run 21:55Z (T-45, mandatory checkpoint). OWNER_RELAY still the open rung before the 23:00Z tip.",
-     "status": "BLOCKED_EXTERNAL",
-     "units_done": 0,
-     "utc": "2026-08-25T21:16:00Z"
-    },
-    {
-     "note": "6th attempt at the T-45 checkpoint: www.wnba.com EGRESS_BLOCKED, unchanged across 6 attempts/3h55m. 0/6. Deadline is the 23:00Z tip; if still blocked then, the deadline outcome is recorded as missed \u2014 not closed, not laundered. OWNER_RELAY open.",
-     "status": "BLOCKED_EXTERNAL",
-     "units_done": 0,
-     "utc": "2026-08-25T21:56:00Z"
-    },
-    {
-     "note": "owner correction: an injuries-only job is one component of five. Folded into RJ-005-WNBA-FEATURE-PIPELINE; 7 attempts, 0/6, every rung EGRESS_BLOCKED except search identification (non-binding).",
-     "status": "FAILED_TERMINAL",
-     "units_done": 0,
-     "utc": "2026-08-25T22:20:00Z"
-    }
-   ],
-   "job_id": "RJ-004-WNBA-INJURY",
-   "next_run_utc": "2026-08-25T23:00:00Z",
-   "notes": "the official route exists and updates continually, so 34-day staleness is a refresh failure, not a board state. Fallback rung: OWNER_RELAY of the report text. Never route around the egress proxy.",
-   "owner_subsystem": "wnba_features",
-   "status": "FAILED_TERMINAL",
-   "terminal_disposition": "SUPERSEDED_BY_WIDER_JOB",
-   "title": "Bind the official WNBA injury report for the six teams on tonight's slate (CHI, CON, PDX, DAL, WAS, PHX); a unit is one team's current section bound with retrieval timestamp and content hash",
-   "units_done": 0,
-   "units_total": 6
-  },
-  "RJ-005-WNBA-FEATURE-PIPELINE": {
-   "blocks": [
-    "WNBA_FEATURE_STALENESS",
-    "WNBA_ACTION_BLOCKED",
-    "SYSTEM_FAILURE_WNBA_FEATURE_PIPELINE"
-   ],
-   "components": [
-    "SCHEDULE_AND_CANONICAL_GAME_IDS",
-    "ROSTERS_AND_TRANSACTIONS",
-    "OFFICIAL_INJURY_AVAILABILITY",
-    "RESULTS_AND_STATS_THROUGH_ASOF",
-    "MARKET_PRICES_VIA_SEPARATE_OVERLAY"
-   ],
-   "deadline_utc": "2026-08-30T17:00:00Z",
-   "depends_on": [],
-   "history": [
-    {
-     "note": "route sweep 21:58-22:10Z: wnba.com/wnba-injury-report (owner's exact URL), stats.wnba.com, espn.com, covers.com, rotowire.com all EGRESS_BLOCKED via the approved fetch tool. WebSearch now returns substantive snippets (rail change from titles-only) \u2014 personnel states identified for all three games, IDENTIFYING_ONLY, nothing binds. Owner relay attempted by request in the published report. 0/17 bound; SYSTEM_FAILURE published for tonight's slate.",
-     "status": "BLOCKED_EXTERNAL",
-     "units_done": 0,
-     "utc": "2026-08-25T22:20:00Z"
-    },
-    {
-     "note": "23:00Z deadline tick (scheduled pre-restructure for RJ-004, applied here): one more official-site attempt EGRESS_BLOCKED \u2014 the pregame deadline for tonight's slate is MISSED, which is what the published SYSTEM_FAILURE_WNBA_FEATURE_PIPELINE (19a644a8) already records. Job stays open: binding now serves future slates, not tonight's decisions. Market phase: MLB all POST_START since 22:40Z; CHI@CON tipped 23:00Z; PDX@DAL 00:00Z and WAS@PHX 02:00Z follow. Frozen records unchanged. Next run 2026-08-26T04:00Z alongside RJ-001.",
-     "status": "BLOCKED_EXTERNAL",
-     "units_done": 0,
-     "utc": "2026-08-25T23:20:00Z"
-    },
-    {
-     "note": "component sweep: www.wnba.com/wnba-injury-report and stats.wnba.com both EGRESS_BLOCKED; no rail change since 22:10Z. 0/17. Deadline 17:00Z for the next WNBA board \u2014 if routes stay exhausted at board-build time the board publishes the failure again. Next 10:00Z alongside RJ-001; OWNER_RELAY remains the open rung.",
-     "status": "BLOCKED_EXTERNAL",
-     "units_done": 0,
-     "utc": "2026-08-26T04:02:00Z"
-    },
-    {
-     "note": "sweep: www.wnba.com/wnba-injury-report EGRESS_BLOCKED. 0/17. Deadline 17:00Z: if a WNBA board builds today with routes exhausted it publishes the failure again. Next 16:30Z.",
-     "status": "BLOCKED_EXTERNAL",
-     "units_done": 0,
-     "utc": "2026-08-26T10:05:00Z"
-    },
-    {
-     "note": "DEADLINE DISPOSITION at 17:00Z: MISSED at 0/17 \u2014 every rung still EGRESS_BLOCKED and nothing relayed. No 8/26 board was requested or built; if one is requested while this stands, it publishes SYSTEM_FAILURE_WNBA_FEATURE_PIPELINE per wnba_feature_pipeline.exhaustion. Job stays open (not closed, not laundered); deadline rolls to the next requested WNBA board. Next sweep 2026-08-27T04:00Z.",
-     "status": "BLOCKED_EXTERNAL",
-     "units_done": 0,
-     "utc": "2026-08-26T16:32:00Z"
-    },
-    {
-     "note": "'Fix it' execution attempt: three PREVIOUSLY UNTRIED hostnames \u2014 cdn.wnba.com (official schedule/results JSON), cdn.nba.com, en.wikipedia.org (team season game logs) \u2014 all EGRESS_BLOCKED. Proxy status confirms the block is the ENVIRONMENT'S NETWORK POLICY: only package registries and Anthropic endpoints bypass; every content domain is denied. Root remediation is owner-side: change this Claude Code environment's network access policy (claude.ai/code environment settings) \u2014 that unblocks RJ-001, RJ-005, live prices and canonical settlement in one stroke. Until then OWNER_RELAY is the only binding route; the minimal relay payload is registered in data/audit/2026-08-26_wnba_relay_request.json.",
-     "status": "BLOCKED_EXTERNAL",
-     "units_done": 0,
-     "utc": "2026-08-26T17:20:00Z"
-    },
-    {
-     "note": "the 17:00Z deadline was recorded MISSED (not laundered); per that disposition the deadline rolls to the next board window, 2026-08-27T17:00Z. Fallback arm STANDINGS_LOG5_v1 ran tonight (4d7fd06a) \u2014 DIAGNOSTIC_ONLY, binds no unit; 0/17 stands.",
-     "status": "BLOCKED_EXTERNAL",
-     "units_done": 0,
-     "utc": "2026-08-26T17:40:00Z"
-    },
-    {
-     "note": "Owner-directed stale-data fix executed on the working route: 14-team search sweep assembled a PROVISIONAL results pool \u2014 48 scored games 7/29-8/26 (the All-Star break covers 7/22-7/28), 1 outcome-only, 4 ambiguities refused, subset-consistency vs standings PASS for all 10 listed teams (2624ce85). Feature state now carries a provisional extension as_of 2026-08-26 beside the unchanged canonical as_of 2026-07-22. Canonical units remain 0/17 \u2014 snippets never bind \u2014 and the registered model still needs box-stat artifacts (four-factors inputs) that only real retrieval or relay can supply.",
-     "status": "BLOCKED_EXTERNAL",
-     "units_done": 0,
-     "utc": "2026-08-26T18:25:00Z"
-    },
-    {
-     "note": "ROUTE BOUND: the git proxy serves public GitHub reads \u2014 sportsdataverse/wehoop-wnba-raw (commit b843138d, updated this morning) holds the full ESPN schedule parquet and 2026 game JSONs in-tree. Extracted 87 post-cutoff games with per-file sha256 (ext artifact c48f66fa); components SCHEDULE_AND_CANONICAL_GAME_IDS and RESULTS_AND_STATS_THROUGH_ASOF bound -> 4/17 units. The registered model ran current under wnba.replacement.FEATURE_REFRESH. Open: official injury/availability (not in the archive), rosters (partial game_rosters unexplored), market prices. The exhaustion publication is superseded for tonight's games.",
-     "status": "RUNNING",
-     "units_done": 4,
-     "utc": "2026-08-26T18:50:00Z"
-    },
-    {
-     "note": "T-90 sweep: wnba.com injury report still EGRESS_BLOCKED; injury component stays open at 4/17. Refreshed forecasts stand for tonight.",
-     "status": "RUNNING",
-     "units_done": 4,
-     "utc": "2026-08-26T21:15:00Z"
-    },
-    {
-     "note": "overnight sweep: wnba.com injury report still EGRESS_BLOCKED; injuries/rosters/market components stay open at 4/17. The wehoop morning commit (~10:30Z) should carry the 8/26 finals (GSV@CON, TOR@SEA) \u2014 fetch and grade the three WNBA arms at the 11:00Z wake.",
-     "status": "RUNNING",
-     "units_done": 4,
-     "utc": "2026-08-27T04:15:00Z"
-    },
-    {
-     "note": "8/27 slate prep: schedule for tonight's two games (GSV@NYL, WSH@PHX) read from the canonical schedule parquet (already-bound component). NEW: game_rosters/json explored \u2014 full ESPN gamepackages in-git, each with boxscore rosters and an injuries section. Bound roster+availability snapshots for all four slate teams (record 2026-08-27_wnba_personnel_bind.json): NYL Sabally Out (concussion), GSV Rupert Out, PHX 4 Out, WSH none listed. Units 4->8 (four roster artifacts; unit teams roll with the slate). OFFICIAL injury report still EGRESS_BLOCKED (fresh 07:36Z receipt) \u2014 official-grade units stay open; personnel remains PERSONNEL_UNVERIFIED at official grade. 8/26 box scores land in the ~10:30Z upstream commit; feature rebuild through 8/26 executes at the 11:00Z wake before the WNBA board freezes.",
-     "status": "RUNNING",
-     "units_done": 8,
-     "utc": "2026-08-27T06:54:00Z"
-    },
-    {
-     "note": "11:00Z wake: wehoop advanced b843138->3316fa3 ON TIME (no retry sequence needed). Extension rebuilt through 8/26: 89 games, 0 missing, per-file sha256, zero dup gids, targets absent. 8/26 finals ARCHIVE-CONFIRMED (upgrade record above); anchored 8/27 WNBA board FROZEN 11:06:18Z with all three arms. Units 8->10 (RESULTS_AND_STATS_THROUGH_ASOF re-bound current + archive confirmation). Open: official injuries (route still blocked), full market attribution. SUPERSESSION FINDING: the preliminary GSV@NYL (NYL 55.65%) is UNREPRODUCED by the registered machinery on either pool \u2014 anchored value is GSV 52.28%; side changed; WAS@PHX reproduced to 4 decimals.",
-     "status": "RUNNING",
-     "units_done": 10,
-     "utc": "2026-08-27T11:06:52Z"
-    },
-    {
-     "note": "17:00Z DEADLINE DISPOSITION: MET IN SUBSTANCE for the board window it guarded \u2014 the 8/27 WNBA board froze at 11:06Z on a current, archive-bound feature state (no SYSTEM_FAILURE publication needed); schedule, results-through-asof, roster snapshots and archive confirmation are bound (10/17). NOT met in full: official injury-report units (route still EGRESS_BLOCKED, receipts standing) and complete two-sided market attribution remain open; GSV@NYL ML/spread/total now DK-attributed via relay, WAS-side ML unretained. Deadline rolls to the next board window 2026-08-28T17:00:00Z; the 22:30Z T-90 re-sweeps injuries.",
-     "status": "RUNNING",
-     "units_done": 10,
-     "utc": "2026-08-27T19:18:20Z"
-    },
-    {
-     "note": "overdue slot rolled during 8/28 prep; wehoop has NOT advanced past 3316fa3 so the 8/27 WNBA boxes are not yet available (morning commit lands ~10:30Z)",
-     "status": "RUNNING",
-     "units_done": 10,
-     "utc": "2026-08-28T07:54:53Z"
-    },
-    {
-     "note": "17:00Z DEADLINE DISPOSITION. Real progress today, credited precisely rather than generously. MARKET_PRICES_VIA_SEPARATE_OVERLAY BINDS for the first time: the owner relayed the full DraftKings board for all four 8/28 games, transcription-verified against itself (12 two-sided pairs, implied holds 3.65-4.55%), written as a separately hashed overlay attached to the frozen board and never folded into it. That component had never been credited in this job's history, so units 10 -> 11. RESULTS_AND_STATS_THROUGH_ASOF was refreshed but NOT re-credited: wehoop advanced 3316fa3 -> 7a1c7eb at 11:01Z, both 8/27 finals bound 2/2 through the result-binding gate, extension pool rebuilt 89 -> 91 with the four target ids confirmed absent, and FEATURE_REFRESH unblocked on a superseding v2 board. That is the SAME unit already credited on 8/27 at a later cutoff, not a new one, and double-counting it would inflate the job. Two defects fixed en route: the module's COMMIT_PIN had drifted from the artifact it built (selftest failing unnoticed because nothing invoked it), and my own slate keys used display names where the pool keys on abbreviations, which returned DATA_BLOCKED and reads exactly like an outage. STILL BLOCKED, and this is why the job stays open at 11/17: OFFICIAL_INJURY_AVAILABILITY (6 units) remains 0. No 8/28-dated availability exists for Washington or Los Angeles \u2014 the only report found is 8/15 and was refused as stale \u2014 and Aneesah Morrow still appears on both Connecticut's and Toronto's lists. Neither will be settled by guess. Deadline rolled to 22:00Z, the WNBA T-90 checkpoint, which is the next window where these units would actually change a published disposition before tonight's 23:30Z tips.",
-     "status": "RUNNING",
-     "units_done": 11,
-     "utc": "2026-08-28T18:10:00Z"
-    },
-    {
-     "note": "22:00Z DEADLINE DISPOSITION: NO UNIT BOUND, units stay 11/17. The 22:00Z checkpoint did resolve a real open item \u2014 Aneesah Morrow is Toronto's and is out for the season, settling a conflict where she appeared on two teams' lists \u2014 but that came from AGGREGATOR reporting, which identifies and does not bind. OFFICIAL_INJURY_AVAILABILITY stays at 0 of 6. Crediting search identification against a component whose unit definition requires an official section with a retrieval timestamp and content hash would inflate the job, and this job has been honest about that since 8/25. Washington and Los Angeles still have NO 8/28-dated report at all; the only one on file is 8/15 and stays refused as stale. Every official route remains EGRESS_BLOCKED. Rolled to 22:45Z, the last pregame checkpoint before the 23:30Z tips. If nothing binds by then the pregame window for tonight's WNBA slate is MISSED \u2014 the same outcome as 8/25, and it should be recorded as missed rather than quietly rolled past. The job stays open because binding then serves future slates, not tonight's dispositions.",
-     "status": "RUNNING",
-     "units_done": 11,
-     "utc": "2026-08-28T22:15:00Z"
-    },
-    {
-     "note": "22:45Z DEADLINE: PREGAME WINDOW FOR TONIGHT'S WNBA SLATE IS MISSED, and recorded as missed rather than rolled past. Tips are at 23:30Z; no official injury section bound at any point today. OFFICIAL_INJURY_AVAILABILITY finishes the day at 0 of 6, units 11/17, every official route EGRESS_BLOCKED. What the day DID achieve on this job: the market-overlay component bound for the first time (unit 11), the extension pool was rebuilt through the 8/27 cutoff and FEATURE_REFRESH unblocked, and the Morrow two-team conflict was resolved \u2014 though by aggregator reporting, which identifies and does not bind, so it credits nothing. This is the same outcome as 8/25 and it is the second slate whose pregame window this component has missed. The job stays open because binding serves future slates; the honest record is that it did not serve tonight's.",
-     "status": "RUNNING",
-     "units_done": 11,
-     "utc": "2026-08-28T22:52:00Z"
-    },
-    {
-     "components_still_open": [
-      "OFFICIAL_INJURY_AVAILABILITY",
-      "ROSTERS_AND_TRANSACTIONS"
-     ],
-     "deadline_disposition": "MISSED. Not extended in place \u2014 the miss stands in the record. A new deadline is set for the next WNBA board so the job keeps a live clock, and the original is preserved above.",
-     "note": "17:00Z deadline MISSED and recorded as missed rather than extended silently. OFFICIAL_INJURY_AVAILABILITY remains 0 \u2014 every official route has been EGRESS_BLOCKED since 2026-08-25 and nothing changed today. What DID advance on other components: the extraction path was rewritten to derive ET via zoneinfo instead of slicing a UTC instant, which removed two double-counted games (CON@IND 401857090, DAL@POR 401857091) and took the extension pool 91 -> 89; wehoop advanced to 8ffb87b and the 2026-08-28 cohort BOUND 4/4 on all six contract fields, the first genuinely bound cohort in this system; wnba_model_v1 was re-pinned to impl v2 under owner authorization for the same ET defect at predict_slate; and per-game margin AND totals residuals are now retained and measured (margin sigma 12.5523, totals sigma 18.0156, n=1721 each). THE OPEN COMPONENT IS LOAD-BEARING TONIGHT, not merely overdue. ff7 carries no injury, rest or availability inputs, and that is precisely why the TOR +365 moneyline was refused this afternoon despite an apparent +82 EV per $100: two eliminated teams (PHX 13-26, TOR 11-28) run late-August rotations the 39-game form window cannot see, and the model's own 6-point margin disagreement with the market is unfalsifiable without this component. The spread was taken and the moneyline refused on exactly this reasoning. The job's open item and the day's largest refused edge are the same gap.",
-     "status": "DEADLINE_MISSED_EXTERNAL_BLOCK",
-     "units_done": 11,
-     "utc": "2026-08-29T21:56:31Z"
-    }
-   ],
-   "job_id": "RJ-005-WNBA-FEATURE-PIPELINE",
-   "next_run_utc": "2026-08-29T11:00:00Z",
-   "notes": "After binding: recompute feature state (as_of, source hashes, age); generate separately identified replacement forecasts (wnba.replacement.FEATURE_REFRESH) since the board is frozen; rerun side, margin, total, EV and disposition through side_reselection_gate after anchor. Exhaustion of all authorized routes without binding publishes SYSTEM_FAILURE_WNBA_FEATURE_PIPELINE \u2014 never a normal-looking board.",
-   "owner_subsystem": "wnba_features",
-   "previous_deadline_utc_missed": "2026-08-29T17:00:00Z",
-   "status": "RUNNING",
-   "terminal_disposition": null,
-   "title": "Full WNBA feature refresh: schedule+canonical game ids (3), roster+transaction sections (6 teams), official injury/availability sections (6 teams), results and team/player stats through the as-of cutoff (1 bound snapshot), market prices via the separate overlay (1 binding). A unit binds only from a retrieved artifact with source, timestamp and content hash.",
-   "units_done": 11,
-   "units_total": 17
-  },
-  "RJ-006-NFL-MODEL-RESTORATION": {
-   "blocks": [
-    "NFL_MODEL_LINEAGE_NOT_RESTORED_TO_ACTIVE_BRANCH"
-   ],
-   "components": [
-    "RECOVERED_EVIDENCE_RETAINED_AND_HASHED",
-    "IMMUTABLE_RUN_DIRECTORY_RESTORED",
-    "V0_1_INVALIDATION_RECORD_RESTORED",
-    "NFLVERSE_SOURCE_PINS_REACQUIRED",
-    "ACTIVE_REGISTRY_ENTRIES_CREATED",
-    "PROSPECTIVE_PAPER_WORKFLOW_ARMED"
-   ],
-   "deadline_utc": "2026-09-09T00:00:00Z",
-   "depends_on": [],
-   "history": [
-    {
-     "note": "OPENED on owner correction (record 2026-08-27_nfl_history_correction.json). Recovered STATUS, reporting disposition and walk-forward metrics retained with sha256 (unit 1/6). Lost commits 1d089d45*/f3cf5b1d* confirmed unresolvable in full local history. Restoration source: owner's recovered historical checkout; the immutable run dir data/nfl/model/runs/2026-08-10_nflverse_2015_2025_oof_v2 is the next unit.",
-     "status": "RUNNING",
-     "units_done": 1,
-     "utc": "2026-08-27T08:43:15Z"
-    },
-    {
-     "note": "15:35Z slot ran inside the T-90 checkpoint (record e64075c9): no unit bindable from this environment \u2014 the immutable run directory and v0.1 invalidation record exist only in the owner's recovered checkout; the standing request (upload or PR) is open. Next attempt folds into the 21:30Z NFL checkpoint.",
-     "status": "RUNNING",
-     "units_done": 1,
-     "utc": "2026-08-27T19:17:10Z"
-    },
-    {
-     "note": "overdue slot rolled during 8/28 prep; immutable NFL run directory still awaits owner upload/PR; no unit bindable from this environment",
-     "status": "RUNNING",
-     "units_done": 1,
-     "utc": "2026-08-28T07:54:53Z"
-    }
-   ],
-   "job_id": "RJ-006-NFL-MODEL-RESTORATION",
-   "next_run_utc": "2026-08-28T11:00:00Z",
-   "notes": "A unit binds only from a retained artifact with source, timestamp and content hash. The live_block gates from the recovered STATUS remain binding for any future authority: verified QB/OL/injury snapshots as of forecast time, 100 prospective paper selections under one frozen policy, coherent closing-line capture with positive lower 95% ROI bound, explicit owner authorization. Preseason stays DATA_CAPTURE_ONLY by registered scope.",
-   "owner_subsystem": "model_registry",
-   "status": "RUNNING",
-   "terminal_disposition": null,
-   "title": "Restore the governed nfl.rs.epa_logit_ridge.v0_2.shadow lineage into the active branch: recovered evidence verified (3/3 partial), immutable run directory, invalidation record for v0_1, source pins, and registry entries; then the current-input + prospective-paper workflow for the regular season (opens 2026-09-09)",
-   "units_done": 1,
-   "units_total": 6
-  },
-  "RJ-007-DATELESS-JOIN-REMEDIATION": {
-   "blocks": [
-    "RESULT_DATE_COHORT_CONTAMINATION"
-   ],
-   "components": [
-    "build_board_0825 identity+seed (doubleheader collision)",
-    "promotion_gate.compare_against_references",
-    "evaluation_standard.paired_postgame",
-    "grade_0725 finals keys",
-    "board gamePk fields carry synthetic slate ids, not real pks (8/26: 826000-826014; 8/27: 827000-827006) \u2014 the gate cannot corroborate ids from production boards",
-    "backfill the six identity fields onto the 8/24-8/26 result records and re-run bind_cohort"
-   ],
-   "deadline_utc": "2026-09-03T00:00:00Z",
-   "depends_on": [],
-   "history": [
-    {
-     "note": "opened from the adversarial audit; four defects enumerated with file, line and measured failure scenario",
-     "status": "RUNNING",
-     "units_done": 0,
-     "utc": "2026-08-28T07:17:53Z"
-    },
-    {
-     "note": "8/24-8/27 audit: no NEW contamination, but every 8/24-8/26 result row would be REFUSED today as MISSING_IDENTITY_FIELD \u2014 those dates are clean by calendar luck and write-time ordering, not by any check. Two further components added: production boards carry synthetic pks so the gate's id corroboration is unsatisfiable from them, and the historical result records need identity backfill. Three 8/26 rows (CHC@AZ, CLE@LAA, MIN@ATH) remain UNCHECKED pending an owner relay of the official 8/25 scoreboard.",
-     "status": "RUNNING",
-     "units_done": 0,
-     "utc": "2026-08-28T07:50:02Z"
-    }
-   ],
-   "job_id": "RJ-007-DATELESS-JOIN-REMEDIATION",
-   "next_run_utc": "2026-08-28T11:00:00Z",
-   "notes": "Found by the 2026-08-28 adversarial audit (record above), each verified by running code against real repo data. None is on the write path (grade_slate was, and is fixed), but promotion_gate and evaluation_standard both feed promotion inference, where a silently narrowed population reports a slate difference as a model difference. build_board_0825's fix touches the frozen-board identity schema, so it needs a migration plan rather than an edit.",
-   "owner_subsystem": "harness",
-   "status": "RUNNING",
-   "terminal_disposition": null,
-   "title": "Remove the dateless (away,home) join from the four remaining evaluation-side code paths and fold date+gamePk into the canonical game identity",
-   "units_done": 0,
-   "units_total": 6
-  }
- },
- "schema": "ops.recovery_jobs.v1"
+  "schema": "ops.recovery_jobs.v1"
 }

@@ -1,0 +1,43 @@
+{
+  "action_authority": false,
+  "artifact_type": "mlb_probability_calibration_summary_v2",
+  "generated_at_utc": "2026-09-04T09:31:42.934947Z",
+  "grader_version": "mlb.calibration_grader.v2",
+  "market_overlay_enabled": false,
+  "metrics": {
+    "brier_analytic": null,
+    "brier_delta_sim_minus_analytic": null,
+    "brier_sim": null,
+    "decision_gate": "INSUFFICIENT_SAMPLE",
+    "directional_accuracy_analytic": null,
+    "directional_accuracy_sim": null,
+    "log_loss_analytic": null,
+    "log_loss_sim": null,
+    "n": 0,
+    "paired": {
+      "analytic_lower_brier_count": 0,
+      "analytic_lower_log_loss_count": 0,
+      "brier_tie_count": 0,
+      "log_loss_tie_count": 0,
+      "mean_brier_analytic_minus_sim": null,
+      "mean_log_loss_analytic_minus_sim": null,
+      "median_brier_analytic_minus_sim": null,
+      "median_log_loss_analytic_minus_sim": null,
+      "sim_lower_brier_count": 0,
+      "sim_lower_log_loss_count": 0
+    },
+    "reliability": {},
+    "rolling_paired": {
+      "100": {
+        "n": 0
+      },
+      "30": {
+        "n": 0
+      },
+      "60": {
+        "n": 0
+      }
+    },
+    "status": "ACCUMULATING"
+  }
+}

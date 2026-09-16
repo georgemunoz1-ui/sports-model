@@ -1,0 +1,25 @@
+{
+  "schema": "ops.season_launch_policy.v1",
+  "policy_id": "SEASON-LAUNCH-SHADOW-2026-09-03",
+  "sports": ["cfb", "nfl"],
+  "green_definition": [
+    "Every in-scope regular-season event has a stable canonical event id.",
+    "The source snapshot is immutable, content-addressed, and captured before the decision timestamp.",
+    "A registered shadow forecast path produces one probability for every future in-scope event without using same-week or post-anchor outcomes.",
+    "Historical validation metrics and the model implementation are retained with the output."
+  ],
+  "not_implied_by_green": [
+    "wager authority",
+    "market availability or price freshness",
+    "injury, quarterback, offensive-line, depth-chart, or availability completeness",
+    "promotion of a shadow model",
+    "a green global release"
+  ],
+  "action_authority": "NO",
+  "fail_closed_rules": [
+    "Missing or duplicate canonical ids fail the sport launch state.",
+    "A source or model state at or after the decision timestamp is a lookahead failure.",
+    "A completed same-week result may be retained for backfill but may not update a Week 1 forecast state.",
+    "A missing current-personnel or market input cannot be relabeled as action-ready."
+  ]
+}

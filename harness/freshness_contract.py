@@ -311,9 +311,26 @@ def resolve_input(subject, sport, kind, stamp, now=None, acquire=None, max_age_d
                                acquisition=_acq_note(acquire))
         stamp, acq = got
         age = stamp.derived_age_days(now)
+        c_age = stamp.content_age_days(now)
+        # Acquisition is a transport event, not evidence of recency. The original ABSENT path
+        # used to trust any non-empty adapter response and label it ACQUIRING without comparing
+        # the returned observation to the sport/kind limit. That left a second laundering path:
+        # an adapter could fill an empty slot with ancient content and receive the acquisition
+        # dose merely because the store had been empty. Re-gate BOTH clocks before assigning any
+        # recovered state, exactly as the stale-input refresh branch does below.
+        if age is None or c_age is None or age > limit or c_age > limit:
+            shown_derived = "unknown" if age is None else f"{age:.2f}d"
+            shown_content = "unknown" if c_age is None else f"{c_age:.2f}d"
+            return Disposition(
+                subject, DEGRADED, stamp.grade, DOSE[(DEGRADED, stamp.grade)],
+                "was ABSENT; acquisition supplied content but it failed the freshness re-gate: "
+                f"derived_age {shown_derived}, content_age {shown_content}, limit {limit}d. "
+                "Filling an empty slot is not proof that the observation is current.",
+                stamp=stamp, age_days=age, limit_days=limit, acquisition=acq)
         return Disposition(subject, ACQUIRING, stamp.grade,
                            DOSE[(ACQUIRING, stamp.grade)],
-                           f"was ABSENT; acquisition supplied a {stamp.grade} stamp", stamp=stamp,
+                           f"was ABSENT; acquisition supplied a {stamp.grade} stamp and both "
+                           f"freshness clocks cleared the {limit}d limit", stamp=stamp,
                            age_days=age, limit_days=limit, acquisition=acq)
 
     age = stamp.derived_age_days(now)
@@ -627,6 +644,25 @@ def selftest():
     if d16.disposition != ACQUIRING or d16.dose_multiplier != 1.0:
         f.append(f"A16: a genuinely fresh acquisition got {d16.disposition}/"
                  f"{d16.dose_multiplier}; acquisition must still be able to restore confidence")
+
+    # A18 — THE ABSENT-STORE ACQUISITION HOLE. Acquisition must face the same age gate whether it
+    #       refreshes an existing stale row or fills an empty slot. Before this fixture, the
+    #       ABSENT branch stamped any non-empty adapter response ACQUIRING without comparing either
+    #       clock to the limit. The paired fresh case prevents this repair becoming a blanket cap.
+    absent = Stamp.absent("empty", "fixture has no stored row")
+    d18_old = resolve_input("empty", "mlb", "starter", absent, now=now,
+                            acquire=_new_but_old)
+    if d18_old.disposition != DEGRADED or d18_old.dose_multiplier >= 1.0:
+        f.append(f"A18a: absent -> ancient acquisition got {d18_old.disposition}/"
+                 f"{d18_old.dose_multiplier}; acquired content bypassed the age gate")
+    if "failed the freshness re-gate" not in (d18_old.reason or ""):
+        f.append(f"A18a: absent -> ancient acquisition did not identify the re-gate failure; "
+                 f"reason was {d18_old.reason!r}")
+    d18_fresh = resolve_input("empty", "mlb", "starter", absent, now=now,
+                              acquire=_really_fresh)
+    if d18_fresh.disposition != ACQUIRING or d18_fresh.dose_multiplier != 1.0:
+        f.append(f"A18b: absent -> fresh acquisition got {d18_fresh.disposition}/"
+                 f"{d18_fresh.dose_multiplier}; valid recovery was blocked")
 
     # A12 — the dose table is total; no lookup can KeyError mid-slate.
     for disp in (FRESH, ACQUIRING, DEGRADED):

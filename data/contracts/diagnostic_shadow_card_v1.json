@@ -1,0 +1,49 @@
+{
+  "artifact_type": "diagnostic_shadow_card_contract_v1",
+  "contract_id": "FORECAST_PUBLICATION_INVARIANT_V1",
+  "forecast_mode": "DIAGNOSTIC_SHADOW",
+  "action_authority": false,
+  "purpose": "Require every diagnostic projection to be reproducible, versioned, frozen, visible, and non-actionable.",
+  "required_forecast_fields": [
+    "event_id", "forecast_mode", "forecast_tier", "forecast_quality",
+    "model_id", "model_version", "model_commit", "input_snapshot_id",
+    "generated_at_utc", "simulation_count", "simulation_seed",
+    "quality_adjustments", "action_authority"
+  ],
+  "probability_semantics": {
+    "model_p": "Independent deterministic point-estimate win probability from the registered engine.",
+    "sim_p": "Fraction of seeded Monte Carlo paths won. If no actual simulation was executed, the field must be null and may not be labeled Sim P.",
+    "conservative_p": "Optional calibrated/compressed probability; must be null unless a validated calibration layer is registered.",
+    "sim_gap": "abs(model_p - sim_p); diagnostic only and never averaged away."
+  },
+  "market_semantics": {
+    "spread_probability_requires_reference_line": true,
+    "runline_probability_requires_reference_line": true,
+    "ou_probability_requires_reference_total": true,
+    "market_price_is_not_forecast_input": true,
+    "price_layer_attached_after_forecast_freeze": true
+  },
+  "tiers": {
+    "PRIMARY_SHADOW": {"gradable": true, "wagerable": false},
+    "BASELINE_DIAGNOSTIC": {"gradable": true, "wagerable": false},
+    "EMERGENCY_DIAGNOSTIC": {"gradable": true, "wagerable": false},
+    "ILLUSTRATIVE": {"gradable": false, "wagerable": false}
+  },
+  "publication_invariant": {
+    "required_outputs": [
+      "forecast_bundles/*.json", "full_card.json", "full_card.csv", "full_card.md", "GITHUB_STEP_SUMMARY"
+    ],
+    "fail_codes": [
+      "FORECAST_RUN_EMPTY", "CARD_RENDER_EMPTY", "CARD_PUBLICATION_FAILED",
+      "CARD_EVENT_COVERAGE_MISMATCH", "FORECAST_COVERAGE_BREACH"
+    ],
+    "success_rule": "No rendered model card means no successful forecast run."
+  },
+  "display_rules": {
+    "unsupported_fields_must_be_null_not_invented": true,
+    "every_scheduled_event_requires_visible_row": true,
+    "fallback_tier_must_be_visible": true,
+    "quality_adjustments_must_be_visible_or_recoverable": true,
+    "action_authority_always_off": true
+  }
+}

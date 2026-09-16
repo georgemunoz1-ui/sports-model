@@ -1,0 +1,22 @@
+{
+  "action_authority": "NO",
+  "decision_time_utc": "2026-09-03T19:21:08Z",
+  "official_personnel": {
+    "consequence": "No official-current feature completeness or action release may be claimed.",
+    "recovery_job": "RJ-005-WNBA-FEATURE-PIPELINE",
+    "remaining_units": 6,
+    "status": "INCOMPLETE"
+  },
+  "overall_status": "AMBER",
+  "record_id": "WNBA-BACKFILL-2026-09-03",
+  "results_and_stats": {
+    "as_of": "2026-08-29",
+    "missing": [],
+    "n_games": 95,
+    "source_artifact": "data/wnba/source/staging/EXTENSION_ESPN/ext_2026.json",
+    "source_commit": "5875eba831d8013ed28843353174d3557ba36db0",
+    "status": "COMPLETE_THROUGH_LAST_INGESTED_GAME"
+  },
+  "schema": "ops.wnba_backfill_status.v1",
+  "statement": "The historical game-result and team-stat extension is fully backfilled through the final pre-break game in the retained source. This does not complete the separately required official availability component."
+}

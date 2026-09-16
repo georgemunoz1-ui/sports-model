@@ -10,7 +10,7 @@ The archive is the MLB pitch-data source at `harness/ingest_lancebroz.py`, windo
 
 | Issue | Decision | Owner | Next physical action | Due/review |
 |---|---|---|---|---|
-| REL-ARCHIVE-001 | FIX-IN-PROGRESS | data-platform maintainer (Codex) | Restore pinned upstream snapshot in clean CI; verify each Git blob and SHA-256; retain raw objects; separately reconcile August 31 and scheduled-game coverage. | 2026-09-17T04:26:41.997358+00:00 |
+| REL-ARCHIVE-001 | FIX-IN-PROGRESS | data-platform maintainer (Codex) | Reconcile the 58-file candidate against authoritative required-game coverage, inventory August 31 gap, and bind a separately versioned prospective archive profile. | 2026-09-17T04:26:41.997358+00:00 |
 | REL-RECOVERY-001 | FIX-IN-PROGRESS | repository maintainer (Codex) | Run negative regressions and remote health; retain child blockers and phase counts. | 2026-09-17T04:26:41.997358+00:00 |
 | REL-HISTORICAL-001 | ACCEPTED-RISK | release maintainer (Codex) | Keep September 3 evidence immutable; define a separate current-profile check and prove dependencies before replacing any current-health coupling. | 2026-09-17T04:26:41.997358+00:00 |
 | RJ-001-PROVENANCE | ACCEPTED-RISK | acquisition maintainer (Codex) | Inventory the 126 score-verification IDs against current Tier-1 bindings and retain a missing-ID manifest before acquiring finals. | 2026-09-17T04:26:41.997358+00:00 |
@@ -31,11 +31,11 @@ Third consecutive BLOCKED session becomes OVERDUE-ESCALATED. An expired ACCEPTED
 
 ## Reproduce (five commands)
 
-Use the exact commit named in the PR/CI record. Replace COMMIT with that SHA; private repository read access is required.
+These commands pin the clean-CI verified implementation; private repository read access is required.
 
 ```bash
 git clone https://github.com/georgemunoz1-ui/sports-model.git && cd sports-model
-git checkout COMMIT
+git checkout e13b9d767f6448413c7fb7a724db4fb47b410486
 python3 -m pip install -r requirements-consolidated.txt
 python3 -m pytest tests -q
 python3 scripts/standing_health_triage.py
@@ -45,7 +45,7 @@ Expected on the initial repair: 342 tests pass (plus 8 subtests); triage validat
 
 ## Evidence boundaries
 
-- Local verification is operator-reported until a clean remote run is linked. A CI artifact is available to authorized repository readers; it is not an anonymous public verification endpoint.
+- Clean remote CI run 35055900817 verifies commit e13b9d767f6448413c7fb7a724db4fb47b410486: 342 tests pass and archive parsing succeeds. A CI artifact is available to authorized repository readers; it is not an anonymous public verification endpoint.
 - Existing RJ-002/008/009 closures are limited to their archived metadata/registration scopes. The original records are evidence, not new prospective validation.
 - No working official_pregame_v1 dependency graph was found. The dependency assessment is provisional and removes no mandatory health check.
 - Current forecasts, P3 assimilation, CFB assimilation control and unresolved action rules remain separate.
@@ -55,9 +55,9 @@ Expected on the initial repair: 342 tests pass (plus 8 subtests); triage validat
 
 ### REL-ARCHIVE-001
 
-The MLB ingestion source directory is absent locally; the old check accepted any one parquet and a 40-character SHA.
+Pinned upstream snapshot restored at the configured local source and in clean CI: all 58 published July-August objects verify. August 31 and schedule-level/historical completeness remain unproven.
 
-**Why unresolved / closure scope:** Archive is outside this repository and its checkout was not restored in this runtime. A reachable upstream candidate does not prove original historical source identity.
+**Why unresolved / closure scope:** Availability failure fixed; remaining original-history and schedule-coverage closure conditions are not yet satisfied. No historical receipt was fabricated.
 
 **First retained entry:** not established. **Last historical touch:** 2026-09-16T04:26:41.997358+00:00. **Last material change:** 2026-09-16T04:26:41.997358+00:00.
 
@@ -223,3 +223,9 @@ CFB launch-shadow registration job was already COMPLETE 4/4; current-season assi
 
 
 Aggregate health now says REPOSITORY_HEALTH_RED/GREEN because it includes code, external recovery and historical eligibility. This label change does not change exit codes or remove gates. The report also validates the triage hash chain and prints owner, next action and due date for every unresolved card.
+
+## Verified recovery update
+
+Pinned source d49271818de98ee3b582dce134bb724861dda859 is now restored at the configured local source and in clean CI. All 58 window files (42,525,517 bytes) match Git and SHA-256; local/remote object lists agree. Remote parser schemas pass. Source availability now passes; official schedule completeness, August 31 coverage and original historical retrieval remain unproven, so REL-ARCHIVE-001 retains FIX-IN-PROGRESS for its broader closure criteria.
+
+[Clean remote run and artifacts](https://github.com/georgemunoz1-ui/sports-model/actions/runs/35055900817). Remaining remote health failures: recovery jobs (3 overdue) and historical September 3 eligibility. Canonical JSON is authoritative; prior card versions remain preserved in register-initial.json and register-before-ci.json.

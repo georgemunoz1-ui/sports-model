@@ -24,6 +24,8 @@ def main():
         packet={'base':None,'context':None} if a.mode=='live' else context['package']['event_inputs'][e['event_id']]
         market_for_event=market.get('event_packets',{}).get(e['event_id']) if market and 'event_packets' in market else market
         live_for_event=live.get('event_packets',{}).get(e['event_id']) if live and 'event_packets' in live else live
+        from models.nfl.contextual.week2 import applies,policy
+        if a.mode=='research_pregame' and a.model_id is None and applies(packet['base'],e):default_id=policy()['default_reference_model']
         result,win,scores=run(context['model'],context['recovered'],packet['base'],packet['context'],e,cutoff,a.simulations,model_id=default_id if a.model_id is None else a.model_id,mode=a.mode,mode_artifact=fitted,market=market_for_event,live_state=live_for_event)
         persist_run(a.output/e['event_id'],result,win,scores,json.loads((nfl.ROOT/'data/nfl/modes_v1/design.json').read_text()) if fitted is not None else context['model']['design'])
         if a.halftime_artifact:
@@ -35,5 +37,5 @@ def main():
             overlay,calibrated_margins=nfl.calibrate_spreads(result,scores,a.home_spread,n=a.simulations)
             persist_overlay(a.output/e['event_id']/'spread_calibration',overlay,calibrated_margins)
             print(json.dumps({'spread_calibration':overlay['contracts']},indent=2))
-        print(json.dumps({'event':e['event_id'],'prediction':result['prediction'],'binary':result['winner_simulation'],'scores':result['score_simulation']},indent=2))
+        print(json.dumps({'event':e['event_id'],'selection_policy':result.get('selection_policy'),'coherence':result.get('coherence'),'assimilation':result.get('assimilation'),'joint_distribution':result.get('joint_distribution'),'independent_head_predictions':result['prediction'],'binary':result['winner_simulation'],'scores':result['score_simulation']},indent=2))
 if __name__=='__main__':main()

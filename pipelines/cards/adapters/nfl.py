@@ -50,12 +50,18 @@ def mode_artifact(mode):
 def forecast_event(event,context,simulations=100000,*,model_id=None,mode='research_pregame',market=None,live_state=None):
     packet={'base':None,'context':None} if mode=='live' else context['package']['event_inputs'][event['event_id']]
     fitted=mode_artifact(mode) if mode!='research_pregame' else None
-    default_id=fitted['model_id'] if fitted is not None else json.loads((DATA/'runtime.json').read_text())['default_research_model']
+    from models.nfl.contextual.week2 import applies,policy
+    default_id=fitted['model_id'] if fitted is not None else (policy()['default_reference_model'] if applies(packet['base'],event) else json.loads((DATA/'runtime.json').read_text())['default_research_model'])
     result,winner,scores=run(context['model'],context['recovered'],packet['base'],packet['context'],event,context['cutoff'],simulations,model_id=default_id if model_id is None else model_id,mode=mode,mode_artifact=fitted,market=market,live_state=live_state)
     if mode=='live':return result
     p=result['prediction'];home=p['home_win']>=.5;winner_name=event['home_team'] if home else event['away_team']
     analytic=p['home_win'] if home else 1-p['home_win'];mc=result['winner_simulation']['home_win_probability'];mc=mc if home else 1-mc
-    return {'model_id':result['model_id'],'model_winner':winner_name,'model_p':analytic,'sim_p':mc,'analytic_p':analytic,'stochastic_sim_p':mc,'projected_margin':p['home_margin'] if home else -p['home_margin'],'projected_total':p['total_points'],'projected_home_points':result['score_centers']['home'],'projected_away_points':result['score_centers']['away'],'forecast_tier':'REDUCED','data_quality':'PARTIAL_CURRENT_CONTEXT_APPLIED','dose':0.0,'coverage_label':result['coverage_label'],'model_state_config_hash':result['model_artifact_sha256'],'input_snapshot_hash':digest(result['features']),'model_input_snapshot':result['features'],'diagnostics':result,'simulation':{'binary':result['winner_simulation'],'joint_scores':result['score_simulation']},'warnings':result['warnings'],'provenance':{'source_fetches':context['package']['source_fetches'],'model_id':result['model_id']},'action_authority':False}
+    joint=result.get('joint_distribution')
+    # Only the joint object supplies score expectations. Independent Ridge heads stay diagnostic.
+    margin=joint['mean_margin'] if joint else None
+    total=joint['mean_total'] if joint else None
+    points={'home':joint['mean_home_score'],'away':joint['mean_away_score']} if joint else {'home':None,'away':None}
+    return {'model_id':result['model_id'],'model_winner':winner_name,'model_p':analytic,'sim_p':mc,'analytic_p':analytic,'stochastic_sim_p':mc,'projected_margin':(margin if home else -margin) if margin is not None else None,'projected_total':total,'projected_home_points':points['home'],'projected_away_points':points['away'],'forecast_tier':'REDUCED','data_quality':'PARTIAL_CURRENT_CONTEXT_APPLIED','dose':0.0,'coverage_label':result['coverage_label'],'model_state_config_hash':result['model_artifact_sha256'],'input_snapshot_hash':digest(result['features']),'model_input_snapshot':result['features'],'diagnostics':result,'simulation':{'binary':result['winner_simulation'],'joint_scores':result['score_simulation']},'warnings':result['warnings'],'provenance':{'source_fetches':context['package']['source_fetches'],'model_id':result['model_id']},'action_authority':False}
 
 
 def calibrate_spreads(frozen_forecast,score_draws,home_handicaps,*,n=100000):

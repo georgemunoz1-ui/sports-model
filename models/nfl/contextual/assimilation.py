@@ -141,7 +141,7 @@ def trace_feature_effects_into_forecasts(prior, updated, request, params):
     b=clean(before);a=clean(after);bp=predict(params,b)['prediction'];ap=predict(params,a)['prediction']
     changed={k:{'before':b[k],'after':a[k]} for k in a if b[k]!=a[k]}
     return {'event_id':request['game_id'],'evidence_type':'TECHNICAL_STATE_ASSIMILATION_REPLAY_NOT_PREDICTIVE_VALIDATION',
-      'before_feature_hash':digest(b),'after_feature_hash':digest(a),'changed_features':changed,
+      'model_id':params.get('model_id'),'parameter_sha256':digest(params),'before_feature_hash':digest(b),'after_feature_hash':digest(a),'changed_features':changed,
       'forecast_before':bp,'forecast_after':ap,'forecast_delta':{k:ap[k]-bp[k] for k in bp},
       'state_before_sha256':digest(serialize_states(prior)),'state_after_sha256':digest(serialize_states(updated))}
 

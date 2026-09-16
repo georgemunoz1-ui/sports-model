@@ -1,0 +1,145 @@
+{
+  "schema": "release.identity_audit.v1",
+  "observed_at_utc": "2026-09-16T02:41:27.455305+00:00",
+  "status": "BLOCKED_NOT_RELEASED",
+  "main_commit_sha": "547053102f25952323d123b019df07aed9661fc9",
+  "sportsmodel_main_commit_sha": "a9957cdadd8e5836c77057e9bb3bd34913fdcb3e",
+  "commit_identity_equal": false,
+  "git_tree_oid_sha1": "c7ecb703d5e380690eb367f1ef91ce48797fcb92",
+  "tree_content_equal": true,
+  "git_ls_tree_r_z_sha256": "f8b378a34a27ec34a2d629a95076e8f466a1dcfe0db04db89f616ad1f4267fe4",
+  "tree_digest_definition": "SHA256 of exact git ls-tree -r -z HEAD bytes (mode, type, Git blob SHA1, path); not a Git SHA256 object ID",
+  "open_prs": 0,
+  "ci": {
+    "run_id": 35047682608,
+    "job_id": 104641016302,
+    "tested_commit": "547053102f25952323d123b019df07aed9661fc9",
+    "workflow_result": "success",
+    "test_command": "python -m pytest tests -q",
+    "test_count": 331,
+    "test_result": "pass",
+    "runner_image": "ubuntu-24.04",
+    "runner_image_version": "20260907.300.1",
+    "container_digest": null,
+    "environment_digest": null,
+    "environment_limitation": "Hosted runner image version recorded; no immutable container digest or full pip-freeze artifact was produced by this run. Requirement file hashes are not an environment digest.",
+    "dependency_file_sha256": {
+      "requirements-consolidated.txt": "377026db8f3f6832f16708f885f395fa1c385baec6fe5f8f9410d7bd81d01c2a",
+      "requirements-nfl-context.txt": "4aba7f1362f8bcfbf708f4bc83366605ab823a9bce7d5db66203e259fd9bfa0d",
+      "pyproject.toml": "f91c9ff3ae5df5992bf737e538660d995492bf2166486a1037433d31dcbe2242"
+    },
+    "artifact_id": 10427846877,
+    "artifact_zip_sha256": "2c66ef2c7b022238d1cc0baa78ba9b90c197ac9eab2840f4c977d630d16229b4",
+    "artifact_digest_matches_github": true,
+    "health_exit_code": 1
+  },
+  "protected_release_tag": null,
+  "official_forecast_generated": false,
+  "action_authority": false,
+  "blockers": [
+    {
+      "id": "PRODUCTION_ARCHIVE",
+      "status": "UNRESTORED",
+      "source_repository": "lancebroz/mlb-pitcher-data",
+      "reachable_via_connector": true,
+      "candidate_pre_cutoff_commit": "d49271818de98ee3b582dce134bb724861dda859",
+      "candidate_is_verified_original_run_source": false,
+      "required": "Restore declared window, verify source identity, raw hashes, coverage/schema and parsing before closing; do not upgrade based on repository reachability."
+    },
+    {
+      "id": "RECOVERY",
+      "status": "OPEN",
+      "jobs": [
+        {
+          "id": "RJ-001-PROVENANCE",
+          "units_done": 123,
+          "units_total": 123,
+          "phases": {
+            "RJ-001A_PROVENANCE_ACQUISITION": {
+              "note": "all provisional-set units bound; whole-file 1,948/1,957 after the OAK/ARI variant fold; 9 refusals in two named categories, reconciliation gate sums (88570751 superseded by the regenerated accounting)",
+              "progress": "123/123",
+              "status": "COMPLETE"
+            },
+            "RJ-001B_SCORE_VERIFICATION": {
+              "note": "tier upgrades for the 126 provisional rows need a score-bearing artifact; pitch events carry no runs column (derivation judged infeasible)",
+              "progress": "0/126",
+              "status": "RUNNING"
+            },
+            "RJ-001_INCIDENT": "OPEN"
+          },
+          "components": null
+        },
+        {
+          "id": "RJ-005-WNBA-FEATURE-PIPELINE",
+          "units_done": 11,
+          "units_total": 17,
+          "phases": null,
+          "components": [
+            "SCHEDULE_AND_CANONICAL_GAME_IDS",
+            "ROSTERS_AND_TRANSACTIONS",
+            "OFFICIAL_INJURY_AVAILABILITY",
+            "RESULTS_AND_STATS_THROUGH_ASOF",
+            "MARKET_PRICES_VIA_SEPARATE_OVERLAY"
+          ]
+        },
+        {
+          "id": "RJ-006-NFL-MODEL-RESTORATION",
+          "units_done": 1,
+          "units_total": 6,
+          "phases": null,
+          "components": [
+            "RECOVERED_EVIDENCE_RETAINED_AND_HASHED",
+            "IMMUTABLE_RUN_DIRECTORY_RESTORED",
+            "V0_1_INVALIDATION_RECORD_RESTORED",
+            "NFLVERSE_SOURCE_PINS_REACQUIRED",
+            "ACTIVE_REGISTRY_ENTRIES_CREATED",
+            "PROSPECTIVE_PAPER_WORKFLOW_ARMED"
+          ]
+        },
+        {
+          "id": "RJ-007-DATELESS-JOIN-REMEDIATION",
+          "units_done": 0,
+          "units_total": 6,
+          "phases": null,
+          "components": [
+            "build_board_0825 identity+seed (doubleheader collision)",
+            "promotion_gate.compare_against_references",
+            "evaluation_standard.paired_postgame",
+            "grade_0725 finals keys",
+            "board gamePk fields carry synthetic slate ids, not real pks (8/26: 826000-826014; 8/27: 827000-827006) \u2014 the gate cannot corroborate ids from production boards",
+            "backfill the six identity fields onto the 8/24-8/26 result records and re-run bind_cohort"
+          ]
+        }
+      ],
+      "required": "Retain original obligations. RJ-001 provenance complete is not score verification complete (0/126). Close only against retained evidence."
+    },
+    {
+      "id": "HISTORICAL_RELEASE_COUPLING",
+      "status": "BLOCKING",
+      "path": "harness/healthcheck.py",
+      "historical_manifest": "data/releases/2026-09-03_release.json",
+      "artifact_problems": 0,
+      "contract_problems": 0,
+      "historical_status": "BLOCKED",
+      "finding": "Global health hard-codes the old release verdict, including action/price requirements. This is not evidence that its bytes or hashes are missing. Preserve history; implement an explicit versioned current forecast profile with dependency trace before any scope change."
+    }
+  ],
+  "test_scope": {
+    "covered": "Repository tests directory: unit, contract, chronology, model-selection, simulation and immutable-package integrity tests. Exact collected suite in tested commit.",
+    "not_established": [
+      "current source completeness for any future event",
+      "historical calibration of every arm",
+      "production archive reconstruction",
+      "prospective registration",
+      "all requested named official-release checks or branch/tag protection",
+      "container-level reproducibility"
+    ]
+  },
+  "retained_evidence_sha256": {
+    "healthcheck.txt": "1fd7ee54eb64fec56b4ab42e3841b43da30340eb9dcdd34849e79e7f64f95687",
+    "health-exit-code.txt": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865",
+    "commit.txt": "65a0cc5f1821fc6a7bc469dcfed3c344cfe7f5eae050e672c709fcf451bd3a6f",
+    "unit-tests.txt": "9cb53529731030e2bb4e2b7d92a2be4806134050dc1ef77912ce68d29467a8e0",
+    "selected-models.json": "13d56cc0f49cbf03daf659d9a41192259600c840f74121f53418619c45183d8f"
+  }
+}

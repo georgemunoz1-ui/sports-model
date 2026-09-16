@@ -1,0 +1,114 @@
+name: Standing health triage evidence
+on:
+  push:
+    branches: [codex/standing-health-triage-20260916]
+  pull_request:
+    branches: [main]
+    paths:
+      - 'scripts/standing_health_triage.py'
+      - 'harness/recovery_jobs.py'
+      - 'harness/ingest_lancebroz.py'
+      - 'tests/test_standing_health_triage.py'
+      - '.github/workflows/standing-health-triage.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Preserve clean checkout identity
+        run: |
+          mkdir -p "$RUNNER_TEMP/health-triage"
+          git rev-parse HEAD > "$RUNNER_TEMP/health-triage/commit.txt"
+          git status --porcelain > "$RUNNER_TEMP/health-triage/status-before.txt"
+          test ! -s "$RUNNER_TEMP/health-triage/status-before.txt"
+          sha256sum requirements-consolidated.txt requirements-nfl-context.txt > "$RUNNER_TEMP/health-triage/requirements.sha256"
+      - run: pip install -r requirements-consolidated.txt
+      - name: Regression checks and governance evidence
+        run: |
+          set -o pipefail
+          python -m pytest tests -q | tee "$RUNNER_TEMP/health-triage/tests.txt"
+          python harness/recovery_jobs.py --mutants > "$RUNNER_TEMP/health-triage/recovery-mutants.txt"
+          python scripts/standing_health_triage.py > "$RUNNER_TEMP/health-triage/triage.json"
+          pip freeze --all > "$RUNNER_TEMP/health-triage/pip-freeze.txt"
+          python -VV > "$RUNNER_TEMP/health-triage/python.txt"
+      - name: Recover explicitly named candidate snapshot
+        uses: actions/checkout@v4
+        with:
+          repository: lancebroz/mlb-pitcher-data
+          ref: d49271818de98ee3b582dce134bb724861dda859
+          path: recovered-pitch-archive
+          sparse-checkout: data/raw/2026/daily
+          persist-credentials: false
+      - name: Verify restored bytes and parser schema
+        env:
+          SPORTSMODEL_LANCEBROZ_ROOT: ${{ github.workspace }}/recovered-pitch-archive
+          SPORTSMODEL_LANCEBROZ_COMMIT: d49271818de98ee3b582dce134bb724861dda859
+        run: |
+          python - <<'PY'
+          import os,json,pathlib,datetime
+          import pandas as pd
+          from harness import ingest_lancebroz as m
+          r=m.source_health()
+          r['retrieved_at_utc']=datetime.datetime.now(datetime.timezone.utc).isoformat()
+          r['source_kind']='EXPLICIT_RECOVERY_CANDIDATE_NOT_ORIGINAL_HISTORICAL_RECEIPT'
+          r['required_columns']=['game_pk','game_date','top_bottom','pitcher_id','at_bat_number','events']
+          r['parser_problems']=[]
+          for obj in r['objects']:
+              try:
+                  frame=pd.read_parquet(pathlib.Path(m.SRC)/obj['path'],columns=r['required_columns'])
+                  _, rejects=m.derive_day(frame)
+                  obj['rows']=len(frame); obj['parser_rejects']=dict(rejects)
+              except Exception as e: r['parser_problems'].append({'path':obj['path'],'error':str(e)})
+          p=pathlib.Path(os.environ['RUNNER_TEMP'])/'health-triage/archive-verification.json'
+          p.write_text(json.dumps(r,indent=2))
+          print('ARCHIVE_VERIFICATION='+json.dumps({k:v for k,v in r.items() if k!='objects'}))
+          assert r['ok'] and not r['parser_problems']
+          PY
+      - name: Record unchanged mandatory health failures
+        if: always()
+        env:
+          SPORTSMODEL_LANCEBROZ_ROOT: ${{ github.workspace }}/recovered-pitch-archive
+          SPORTSMODEL_LANCEBROZ_COMMIT: d49271818de98ee3b582dce134bb724861dda859
+        run: |
+          set +e
+          python harness/healthcheck.py > "$RUNNER_TEMP/health-triage/health.log" 2>&1
+          result=$?
+          echo "$result" > "$RUNNER_TEMP/health-triage/health-exit-code.txt"
+          git status --porcelain > "$RUNNER_TEMP/health-triage/status-after.txt"
+          exit 0
+      - name: Publish exact evidence manifest
+        if: always()
+        run: |
+          python - <<'PY'
+          import os,pathlib,hashlib,json,datetime
+          p=pathlib.Path(os.environ['RUNNER_TEMP'])/'health-triage'
+          r={'created_at_utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'commit':os.environ['GITHUB_SHA'],'workflow_run_id':os.environ['GITHUB_RUN_ID'],'official_release_eligible':False,'action_authority':'OFF','files':{f.name:hashlib.sha256(f.read_bytes()).hexdigest() for f in p.iterdir() if f.is_file()}}
+          (p/'manifest.json').write_text(json.dumps(r,indent=2))
+          print('TRIAGE_MANIFEST='+json.dumps(r))
+          for name in ['tests.txt','health-exit-code.txt','archive-verification.json']:
+              f=p/name
+              if f.exists(): print('TRIAGE_FILE='+json.dumps({'name':name,'content':f.read_text()}))
+          h=p/'health.log'
+          if h.exists(): print('TRIAGE_HEALTH='+json.dumps([s for s in h.read_text().splitlines() if s.startswith('[FAIL]')]))
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: standing-health-triage-evidence
+          path: ${{ runner.temp }}/health-triage/
+          retention-days: 90
+      - uses: actions/upload-artifact@v4
+        with:
+          name: pinned-pitch-recovery-candidate
+          path: recovered-pitch-archive/data/raw/2026/daily/
+          retention-days: 90

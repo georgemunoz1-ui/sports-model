@@ -30,12 +30,15 @@ RUNNING = "RUNNING"
 BLOCKED_EXTERNAL = "BLOCKED_EXTERNAL"
 COMPLETE = "COMPLETE"
 FAILED_TERMINAL = "FAILED_TERMINAL"
+CLOSED_CONDITION_NOT_FIRED = "CLOSED_CONDITION_NOT_FIRED"
+TERMINAL_STATUSES = (COMPLETE, FAILED_TERMINAL, CLOSED_CONDITION_NOT_FIRED)
 OVERDUE = "OVERDUE"
-STATUSES = (PENDING, RUNNING, BLOCKED_EXTERNAL, COMPLETE, FAILED_TERMINAL)
+STATUSES = (PENDING, RUNNING, BLOCKED_EXTERNAL, *TERMINAL_STATUSES)
 
 #: a terminal disposition is required to close a job, and "we stopped looking" is not one
 TERMINAL_DISPOSITIONS = ("RESTORED", "RECONSTRUCTED", "FALLBACK_ARM_REGISTERED",
-                         "UNRESOLVABLE_WITH_STATED_REASON", "SUPERSEDED_BY_WIDER_JOB")
+                         "UNRESOLVABLE_WITH_STATED_REASON", "SUPERSEDED_BY_WIDER_JOB",
+                         "CONDITION_NOT_FIRED")
 
 REQUIRED_FIELDS = ("job_id", "title", "owner_subsystem", "next_run_utc", "deadline_utc",
                    "units_total", "units_done", "status", "blocks")
@@ -118,11 +121,13 @@ def advance(job, now_utc, units_done=None, status=None, disposition=None, note=N
             return None, f"UNKNOWN_STATUS: {status}"
         if status == COMPLETE and j["units_done"] < j["units_total"]:
             return None, (f"{INCOMPLETE_CLOSE}: {j['units_done']}/{j['units_total']}")
-        if status in (COMPLETE, FAILED_TERMINAL):
+        if status in TERMINAL_STATUSES:
             if not disposition:
                 return None, NO_DISPOSITION
             if disposition not in TERMINAL_DISPOSITIONS:
                 return None, f"{UNKNOWN_DISPOSITION}: {disposition}"
+            if status == CLOSED_CONDITION_NOT_FIRED and disposition != "CONDITION_NOT_FIRED":
+                return None, "REFUSED_CONDITIONAL_CLOSE_WITHOUT_MATCHING_DISPOSITION"
             j["terminal_disposition"] = disposition
         j["status"] = status
     if next_run_utc is not None:
@@ -134,10 +139,16 @@ def advance(job, now_utc, units_done=None, status=None, disposition=None, note=N
 
 def status_report(jobs, now_utc):
     """What is late, what is blocked, and which defects are still held open by which job."""
-    rows, open_blocks = [], {}
+    rows, open_blocks, integrity_problems = [], {}, []
     for jid in sorted(jobs or {}):
         j = jobs[jid]
-        terminal = j["status"] in (COMPLETE, FAILED_TERMINAL)
+        terminal = j["status"] in TERMINAL_STATUSES
+        if j["status"] not in STATUSES:
+            integrity_problems.append(f"{jid}:UNKNOWN_STATUS:{j['status']}")
+        if terminal and j.get("terminal_disposition") not in TERMINAL_DISPOSITIONS:
+            integrity_problems.append(f"{jid}:TERMINAL_DISPOSITION_MISSING_OR_INVALID")
+        if j["status"] == CLOSED_CONDITION_NOT_FIRED and j.get("terminal_disposition") != "CONDITION_NOT_FIRED":
+            integrity_problems.append(f"{jid}:CONDITIONAL_DISPOSITION_MISMATCH")
         overdue = (not terminal) and str(now_utc) >= str(j["deadline_utc"])
         pct = (100.0 * j["units_done"] / j["units_total"]) if j["units_total"] else 0.0
         rows.append({"job_id": jid, "title": j["title"], "owner": j["owner_subsystem"],
@@ -146,13 +157,15 @@ def status_report(jobs, now_utc):
                      "percent": round(pct, 1), "next_run_utc": j["next_run_utc"],
                      "deadline_utc": j["deadline_utc"], "overdue": overdue,
                      "terminal_disposition": j.get("terminal_disposition"),
-                     "blocks": j["blocks"], "depends_on": j.get("depends_on") or []})
+                     "blocks": j["blocks"], "depends_on": j.get("depends_on") or [],
+                     "phases": j.get("phases", {})})
         if not terminal:
             for b in j["blocks"]:
                 open_blocks.setdefault(b, []).append(jid)
     return {"now_utc": now_utc, "n_jobs": len(rows),
             "n_overdue": sum(1 for r in rows if r["overdue"]),
-            "n_terminal": sum(1 for r in rows if r["terminal_disposition"]),
+            "n_terminal": sum(j["status"] in TERMINAL_STATUSES for j in jobs.values()),
+            "integrity_problems": integrity_problems,
             "jobs": rows, "open_blockers": open_blocks,
             "note": "every defect above is held open by a NAMED job with a deadline. A blocker with "
                     "no job is a blocker nobody owns."}
@@ -276,7 +289,7 @@ MUTANTS = [
      '        overdue = (not terminal) and str(now_utc) >= str(j["deadline_utc"])',
      "        overdue = False"),
     ("a completed job is still reported overdue",
-     "        terminal = j[\"status\"] in (COMPLETE, FAILED_TERMINAL)",
+     "        terminal = j[\"status\"] in TERMINAL_STATUSES",
      "        terminal = False"),
     ("open blockers stop being attributed to a job",
      "        if not terminal:\n            for b in j[\"blocks\"]:", "        if False:\n            for b in j[\"blocks\"]:"),

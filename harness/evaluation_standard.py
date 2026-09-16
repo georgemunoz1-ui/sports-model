@@ -430,11 +430,17 @@ def paired_postgame(rows_a, rows_b, label_a="CHAMPION", label_b="CHALLENGER"):
     games it won its advantage on and which it gave it back on."""
     by_a = {r["game_id"]: r for r in rows_a}
     by_b = {r["game_id"]: r for r in rows_b}
+    if len(by_a) != len(rows_a) or len(by_b) != len(rows_b):
+        raise ValueError("DUPLICATE_EVALUATION_GAME_ID")
     common = sorted(set(by_a) & set(by_b))
     only_a, only_b = sorted(set(by_a) - set(by_b)), sorted(set(by_b) - set(by_a))
     per = []
     for g in common:
         a, b = by_a[g], by_b[g]
+        if a.get("slate_date") and b.get("slate_date") and a["slate_date"] != b["slate_date"]:
+            raise ValueError("EVALUATION_DATE_CONFLICT:" + str(g))
+        if int(a["home_win"]) != int(b["home_win"]):
+            raise ValueError("EVALUATION_OUTCOME_CONFLICT:" + str(g))
         y = int(a["home_win"])
         pa, pb = float(a["p_model"]), float(b["p_model"])
         ba, bb = (pa - y) ** 2, (pb - y) ** 2

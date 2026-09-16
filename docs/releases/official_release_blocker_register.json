@@ -1,0 +1,642 @@
+{
+  "schema": "health.triage.register.v1",
+  "created_at_utc": "2026-09-16T04:26:41.997358+00:00",
+  "source_commit": "547053102f25952323d123b019df07aed9661fc9",
+  "scope": "Three standing failures plus every recovery-job child",
+  "status_vocabulary": [
+    "ACCEPTED-RISK",
+    "BLOCKED",
+    "DESCOPED",
+    "FIX-IN-PROGRESS",
+    "OVERDUE-ESCALATED",
+    "RESOLVED"
+  ],
+  "profile_status": "CONTROL-MISSING: official_pregame_v1 dependency graph is not implemented/verified",
+  "issues": [
+    {
+      "issue_id": "REL-ARCHIVE-001",
+      "specific": "The MLB ingestion source directory is absent locally; the old check accepted any one parquet and a 40-character SHA.",
+      "status": "FIX-IN-PROGRESS",
+      "owner": "data-platform maintainer (Codex)",
+      "why_unresolved": "Archive is outside this repository and its checkout was not restored in this runtime. A reachable upstream candidate does not prove original historical source identity.",
+      "next_action": "Restore pinned upstream snapshot in clean CI; verify each Git blob and SHA-256; retain raw objects; separately reconcile August 31 and scheduled-game coverage.",
+      "due_at_utc": "2026-09-17T04:26:41.997358+00:00",
+      "closure_criteria": [
+        "Pinned binary window recovered and all object hashes verify",
+        "Required schedule coverage and historical claim scope documented",
+        "Production runtime configured to the verified mount and source_health passes"
+      ],
+      "evidence": [
+        {
+          "path": "harness/ingest_lancebroz.py",
+          "sha256": "f2e43cf64c597adc30909d1ac11ff3b6644c7a0600a4e85a3e914618b0a8d616"
+        },
+        {
+          "path": "docs/releases/2026-09-16-health-triage/archive-candidate.json",
+          "sha256": "36f7b43d254a0407358a9036ad7761680ec7264d72d5d93985f79682e5d0757f"
+        }
+      ],
+      "dependency_assessment": "Global health dependency retained; official_pregame_v1 is a requested profile name, not an implemented verified dependency graph.",
+      "release_profile": "official_pregame_v1 (not implemented/verified)",
+      "release_blocking": true,
+      "opened_at_utc": null,
+      "opened_at_basis": "First-ever record not established; do not infer from deadline",
+      "last_verified_at_utc": "2026-09-16T04:26:41.997358+00:00",
+      "last_material_change_at_utc": "2026-09-16T04:26:41.997358+00:00",
+      "last_touched_at_utc": "2026-09-16T04:26:41.997358+00:00",
+      "previous_record_sha256": null,
+      "reproducibility_tier": "OPERATOR_REPORTED_PENDING_REMOTE_CI",
+      "residual_claim": {
+        "fixed": "Only the executed action/evidence described in this card",
+        "not_established": "Official release eligibility, historical registration or forecasting superiority",
+        "remaining": "Mandatory health and current-event gates remain",
+        "next_evidence": [
+          "Pinned binary window recovered and all object hashes verify",
+          "Required schedule coverage and historical claim scope documented",
+          "Production runtime configured to the verified mount and source_health passes"
+        ]
+      },
+      "escalation_path": "Repository maintainer decision: after third consecutive blocked session require explicit dated risk acceptance or evidenced descope; otherwise OVERDUE-ESCALATED, never automatic clearance.",
+      "physical_action_evidence": "harness/ingest_lancebroz.py: all-object verification implemented; remote candidate listing retained",
+      "record_sha256": "4964e57d25974aaeeb5d2475dc166028b47b9c6239b16aff52eae8ea29f19f1e"
+    },
+    {
+      "issue_id": "REL-RECOVERY-001",
+      "specific": "Recovery reporter misclassified CLOSED_CONDITION_NOT_FIRED as overdue and hid incomplete RJ-001 phases behind 123/123.",
+      "status": "FIX-IN-PROGRESS",
+      "owner": "repository maintainer (Codex)",
+      "why_unresolved": "Reporter and job schema diverged; factual repair was not previously made. Other child jobs still require actual recovery.",
+      "next_action": "Run negative regressions and remote health; retain child blockers and phase counts.",
+      "due_at_utc": "2026-09-17T04:26:41.997358+00:00",
+      "closure_criteria": [
+        "Closed RJ-003 not overdue",
+        "Incomplete score phase remains visible",
+        "All child issues have decisions and no unresolved work is silently removed"
+      ],
+      "evidence": [
+        {
+          "path": "harness/recovery_jobs.py",
+          "sha256": "2282e960f8afdfcdd0ae6b6d1132b55a5db9b8cacf7f7ad606e34138abacce36"
+        },
+        {
+          "path": "data/registry/recovery_jobs.json",
+          "sha256": "41e169d346c5f76314c762de4d61e14cb60048578f6ab09067a5b123106e14a1"
+        }
+      ],
+      "dependency_assessment": "Global health dependency retained; official_pregame_v1 is a requested profile name, not an implemented verified dependency graph.",
+      "release_profile": "official_pregame_v1 (not implemented/verified)",
+      "release_blocking": true,
+      "opened_at_utc": null,
+      "opened_at_basis": "First-ever record not established; do not infer from deadline",
+      "last_verified_at_utc": "2026-09-16T04:26:41.997358+00:00",
+      "last_material_change_at_utc": "2026-09-16T04:26:41.997358+00:00",
+      "last_touched_at_utc": "2026-09-16T04:26:41.997358+00:00",
+      "previous_record_sha256": null,
+      "reproducibility_tier": "OPERATOR_REPORTED_PENDING_REMOTE_CI",
+      "residual_claim": {
+        "fixed": "Only the executed action/evidence described in this card",
+        "not_established": "Official release eligibility, historical registration or forecasting superiority",
+        "remaining": "Mandatory health and current-event gates remain",
+        "next_evidence": [
+          "Closed RJ-003 not overdue",
+          "Incomplete score phase remains visible",
+          "All child issues have decisions and no unresolved work is silently removed"
+        ]
+      },
+      "escalation_path": "Repository maintainer decision: after third consecutive blocked session require explicit dated risk acceptance or evidenced descope; otherwise OVERDUE-ESCALATED, never automatic clearance.",
+      "trend_included": false,
+      "physical_action_evidence": "Terminal-state/reporting repair and RJ-002 disposition correction applied",
+      "record_sha256": "9518d2b814a1185f0aca5bbb16c49e6eda4ec8cf253b2e54928f3dd8531131e7"
+    },
+    {
+      "issue_id": "REL-HISTORICAL-001",
+      "specific": "Health invokes the September 3 release decision; its artifact and contract verify, but the original decision is BLOCKED.",
+      "status": "ACCEPTED-RISK",
+      "owner": "release maintainer (Codex)",
+      "why_unresolved": "Its past inputs/registration cannot be supplied prospectively now; green historical eligibility would misrepresent chronology. Keeping this gate RED is deliberate while a new prospective profile is specified.",
+      "next_action": "Keep September 3 evidence immutable; define a separate current-profile check and prove dependencies before replacing any current-health coupling.",
+      "due_at_utc": "2026-09-17T04:26:41.997358+00:00",
+      "closure_criteria": [
+        "Original September 3 record continues to verify without altered bytes",
+        "New event-specific profile has registration, inputs and publication before cutoff",
+        "Any historical/current-health separation is versioned and tested"
+      ],
+      "evidence": [
+        {
+          "path": "harness/release_gate.py",
+          "sha256": "660d41d46ac80897a4b0a0b80d9ce564a4e0faf9e0b465459a5bf9642ba2fd2a"
+        },
+        {
+          "path": "harness/healthcheck.py",
+          "sha256": "3cd6747f38eb661f2f037133d85c3439926540ef2d7189948fd2076f2b83a7a6"
+        },
+        {
+          "path": "data/acquisition/2026-09-03_update.json",
+          "sha256": "15a06fa465ee6882cbffd0896a7378d763e8f8e23677543e2ec36f6d9d6ff7de"
+        },
+        {
+          "path": "data/releases/2026-09-03_release.json",
+          "sha256": "d1f8ff727bb8eb3744a06240ca11de3692860a5ab47f46c74413f7c20e201414"
+        }
+      ],
+      "dependency_assessment": "Global health dependency retained; official_pregame_v1 is a requested profile name, not an implemented verified dependency graph.",
+      "release_profile": "official_pregame_v1 (not implemented/verified)",
+      "release_blocking": true,
+      "opened_at_utc": null,
+      "opened_at_basis": "First-ever record not established; do not infer from deadline",
+      "last_verified_at_utc": "2026-09-16T04:26:41.997358+00:00",
+      "last_material_change_at_utc": "2026-09-03T18:40:16Z",
+      "last_touched_at_utc": "2026-09-03T18:40:16Z",
+      "previous_record_sha256": null,
+      "reproducibility_tier": "OPERATOR_REPORTED_PENDING_REMOTE_CI",
+      "residual_claim": {
+        "fixed": "Only the executed action/evidence described in this card",
+        "not_established": "Official release eligibility, historical registration or forecasting superiority",
+        "remaining": "Mandatory health and current-event gates remain",
+        "next_evidence": [
+          "Original September 3 record continues to verify without altered bytes",
+          "New event-specific profile has registration, inputs and publication before cutoff",
+          "Any historical/current-health separation is versioned and tested"
+        ]
+      },
+      "escalation_path": "Repository maintainer decision: after third consecutive blocked session require explicit dated risk acceptance or evidenced descope; otherwise OVERDUE-ESCALATED, never automatic clearance.",
+      "review_at_utc": "2026-09-17T04:26:41.997358+00:00",
+      "rationale": "Accept continued inability to issue official forecasts for one day; this is not acceptance of invalid forecasts or a waiver of the historical gate.",
+      "decision_authority": "Maintainer under user-authorized triage; action remains OFF",
+      "record_sha256": "031566f9dfa20946fde6510c3e5db6e2d1556ae819c071c9dcdd6e63b8e3b67a"
+    },
+    {
+      "issue_id": "RJ-001-PROVENANCE",
+      "specific": "Provenance phase is 123/123, but the distinct official-score verification phase remains 0/126.",
+      "status": "ACCEPTED-RISK",
+      "owner": "acquisition maintainer (Codex)",
+      "why_unresolved": "Score-bearing source bindings were not completed; pitch events without final scores cannot substitute.",
+      "next_action": "Inventory the 126 score-verification IDs against current Tier-1 bindings and retain a missing-ID manifest before acquiring finals.",
+      "due_at_utc": "2026-09-17T04:26:41.997358+00:00",
+      "closure_criteria": [
+        "Declared component evidence retained with hashes",
+        "Component regression/closure checks pass; no merely renamed progress"
+      ],
+      "evidence": [
+        {
+          "path": "data/registry/recovery_jobs.json",
+          "sha256": "41e169d346c5f76314c762de4d61e14cb60048578f6ab09067a5b123106e14a1"
+        },
+        {
+          "path": "harness/recovery_jobs.py",
+          "sha256": "2282e960f8afdfcdd0ae6b6d1132b55a5db9b8cacf7f7ad606e34138abacce36"
+        }
+      ],
+      "dependency_assessment": "Global health dependency retained; official_pregame_v1 is a requested profile name, not an implemented verified dependency graph.",
+      "release_profile": "official_pregame_v1 (not implemented/verified)",
+      "release_blocking": true,
+      "opened_at_utc": "2026-08-25T02:45:00Z",
+      "opened_at_basis": "First retained history entry; not proof of earlier first occurrence",
+      "last_verified_at_utc": "2026-09-16T04:26:41.997358+00:00",
+      "last_material_change_at_utc": "2026-08-26T19:15:00Z",
+      "last_touched_at_utc": "2026-08-28T07:54:53Z",
+      "previous_record_sha256": null,
+      "reproducibility_tier": "OPERATOR_REPORTED_PENDING_REMOTE_CI",
+      "residual_claim": {
+        "fixed": "Only the executed action/evidence described in this card",
+        "not_established": "Official release eligibility, historical registration or forecasting superiority",
+        "remaining": "Mandatory health and current-event gates remain",
+        "next_evidence": [
+          "Declared component evidence retained with hashes",
+          "Component regression/closure checks pass; no merely renamed progress"
+        ]
+      },
+      "escalation_path": "Repository maintainer decision: after third consecutive blocked session require explicit dated risk acceptance or evidenced descope; otherwise OVERDUE-ESCALATED, never automatic clearance.",
+      "original_deadline_utc": "2026-09-01T00:00:00Z",
+      "legacy_progress": "123/123",
+      "phases": {
+        "RJ-001A_PROVENANCE_ACQUISITION": {
+          "note": "all provisional-set units bound; whole-file 1,948/1,957 after the OAK/ARI variant fold; 9 refusals in two named categories, reconciliation gate sums (88570751 superseded by the regenerated accounting)",
+          "progress": "123/123",
+          "status": "COMPLETE"
+        },
+        "RJ-001B_SCORE_VERIFICATION": {
+          "note": "tier upgrades for the 126 provisional rows need a score-bearing artifact; pitch events carry no runs column (derivation judged infeasible)",
+          "progress": "0/126",
+          "status": "RUNNING"
+        },
+        "RJ-001_INCIDENT": "OPEN"
+      },
+      "legacy_overdue_before_repair": true,
+      "review_at_utc": "2026-09-17T04:26:41.997358+00:00",
+      "rationale": "This session prioritizes demonstrable reporter/archive/evaluation fixes. Score recovery is deferred one day with official clearance still blocked.",
+      "decision_authority": "Maintainer under explicit user triage authority; no gate waiver",
+      "record_sha256": "02c8d8ad92234b01b10a43f9d5cec7dba718fcae9242a05868a078082d7af34d"
+    },
+    {
+      "issue_id": "RJ-002-OOF-REPLAY",
+      "specific": "Existing August 27 completed replay record lacked its required terminal disposition.",
+      "status": "RESOLVED",
+      "owner": "modelling maintainer (Codex)",
+      "why_unresolved": "Metadata omission corrected now; no new model replay or per-game uncertainty approval claimed.",
+      "next_action": "Retain replay limitation: per-game uncertainty consumption needs separate registration.",
+      "due_at_utc": "2026-09-17T04:26:41.997358+00:00",
+      "closure_criteria": [
+        "Declared component evidence retained with hashes",
+        "Component regression/closure checks pass; no merely renamed progress"
+      ],
+      "evidence": [
+        {
+          "path": "data/registry/recovery_jobs.json",
+          "sha256": "41e169d346c5f76314c762de4d61e14cb60048578f6ab09067a5b123106e14a1"
+        },
+        {
+          "path": "harness/recovery_jobs.py",
+          "sha256": "2282e960f8afdfcdd0ae6b6d1132b55a5db9b8cacf7f7ad606e34138abacce36"
+        },
+        {
+          "path": "data/audit/2026-08-27_rj002_oof_replay.json",
+          "sha256": "175dde62b56d74dca298d3c567f4b7965bd6d4946528a9bf09caa0d7f4087509"
+        }
+      ],
+      "dependency_assessment": "Global health dependency retained; official_pregame_v1 is a requested profile name, not an implemented verified dependency graph.",
+      "release_profile": "official_pregame_v1 (not implemented/verified)",
+      "release_blocking": false,
+      "opened_at_utc": "2026-08-25T23:06:00Z",
+      "opened_at_basis": "First retained history entry; not proof of earlier first occurrence",
+      "last_verified_at_utc": "2026-09-16T04:26:41.997358+00:00",
+      "last_material_change_at_utc": "2026-08-27T06:50:00Z",
+      "last_touched_at_utc": "2026-08-27T06:50:00Z",
+      "previous_record_sha256": null,
+      "reproducibility_tier": "OPERATOR_REPORTED_PENDING_REMOTE_CI",
+      "residual_claim": {
+        "fixed": "Only the executed action/evidence described in this card",
+        "not_established": "Official release eligibility, historical registration or forecasting superiority",
+        "remaining": "Mandatory health and current-event gates remain",
+        "next_evidence": [
+          "Declared component evidence retained with hashes",
+          "Component regression/closure checks pass; no merely renamed progress"
+        ]
+      },
+      "escalation_path": "Repository maintainer decision: after third consecutive blocked session require explicit dated risk acceptance or evidenced descope; otherwise OVERDUE-ESCALATED, never automatic clearance.",
+      "original_deadline_utc": "2026-09-08T00:00:00Z",
+      "legacy_progress": "20/20",
+      "phases": {},
+      "legacy_overdue_before_repair": false,
+      "closure_evidence": "Existing job history and retained artifact referenced above; scope is metadata/registration, not fresh production readiness",
+      "record_sha256": "a06aa735494007d5ff97c5dc74beba261a7b8dfd4eaa9ba3a58fe19d0cb81d3a"
+    },
+    {
+      "issue_id": "RJ-003-FALLBACK-ARM",
+      "specific": "The conditional fallback job closed August 27 because its reconstruction-failure trigger did not occur.",
+      "status": "DESCOPED",
+      "owner": "modelling maintainer (Codex)",
+      "why_unresolved": "False overdue status came from missing terminal enum support.",
+      "next_action": "Retain closed conditional job; do not execute a fallback or substitute it for the selected default.",
+      "due_at_utc": "2026-09-17T04:26:41.997358+00:00",
+      "closure_criteria": [
+        "Declared component evidence retained with hashes",
+        "Component regression/closure checks pass; no merely renamed progress"
+      ],
+      "evidence": [
+        {
+          "path": "data/registry/recovery_jobs.json",
+          "sha256": "41e169d346c5f76314c762de4d61e14cb60048578f6ab09067a5b123106e14a1"
+        },
+        {
+          "path": "harness/recovery_jobs.py",
+          "sha256": "2282e960f8afdfcdd0ae6b6d1132b55a5db9b8cacf7f7ad606e34138abacce36"
+        },
+        {
+          "path": "data/audit/2026-08-27_rj002_oof_replay.json",
+          "sha256": "175dde62b56d74dca298d3c567f4b7965bd6d4946528a9bf09caa0d7f4087509"
+        }
+      ],
+      "dependency_assessment": "Global health dependency retained; official_pregame_v1 is a requested profile name, not an implemented verified dependency graph.",
+      "release_profile": "official_pregame_v1 (not implemented/verified)",
+      "release_blocking": false,
+      "opened_at_utc": "2026-08-25T23:06:00Z",
+      "opened_at_basis": "First retained history entry; not proof of earlier first occurrence",
+      "last_verified_at_utc": "2026-09-16T04:26:41.997358+00:00",
+      "last_material_change_at_utc": "2026-08-27T06:53:30Z",
+      "last_touched_at_utc": "2026-08-27T06:53:30Z",
+      "previous_record_sha256": null,
+      "reproducibility_tier": "OPERATOR_REPORTED_PENDING_REMOTE_CI",
+      "residual_claim": {
+        "fixed": "Only the executed action/evidence described in this card",
+        "not_established": "Official release eligibility, historical registration or forecasting superiority",
+        "remaining": "Mandatory health and current-event gates remain",
+        "next_evidence": [
+          "Declared component evidence retained with hashes",
+          "Component regression/closure checks pass; no merely renamed progress"
+        ]
+      },
+      "escalation_path": "Repository maintainer decision: after third consecutive blocked session require explicit dated risk acceptance or evidenced descope; otherwise OVERDUE-ESCALATED, never automatic clearance.",
+      "original_deadline_utc": "2026-09-08T00:00:00Z",
+      "legacy_progress": "0/4",
+      "phases": {},
+      "legacy_overdue_before_repair": true,
+      "rationale": "Conditional trigger did not fire",
+      "scope_proof": "Recorded historical terminal disposition and unchanged surviving dependency record; not a new official-profile exemption",
+      "record_sha256": "5fb09c1aa83b50ecde8aedcf193d729dbf669ec8e2932a26bccd7bb484a16ac2"
+    },
+    {
+      "issue_id": "RJ-004-WNBA-INJURY",
+      "specific": "Old six-team injury task was already superseded by RJ-005; its missing reports were not recovered.",
+      "status": "DESCOPED",
+      "owner": "wnba_features maintainer (Codex)",
+      "why_unresolved": "Original supersession is recorded, not a claim of successful injury recovery.",
+      "next_action": "Carry the remaining availability obligation in RJ-005.",
+      "due_at_utc": "2026-09-17T04:26:41.997358+00:00",
+      "closure_criteria": [
+        "Declared component evidence retained with hashes",
+        "Component regression/closure checks pass; no merely renamed progress"
+      ],
+      "evidence": [
+        {
+          "path": "data/registry/recovery_jobs.json",
+          "sha256": "41e169d346c5f76314c762de4d61e14cb60048578f6ab09067a5b123106e14a1"
+        },
+        {
+          "path": "harness/recovery_jobs.py",
+          "sha256": "2282e960f8afdfcdd0ae6b6d1132b55a5db9b8cacf7f7ad606e34138abacce36"
+        }
+      ],
+      "dependency_assessment": "Global health dependency retained; official_pregame_v1 is a requested profile name, not an implemented verified dependency graph.",
+      "release_profile": "official_pregame_v1 (not implemented/verified)",
+      "release_blocking": false,
+      "opened_at_utc": "2026-08-25T18:00:46Z",
+      "opened_at_basis": "First retained history entry; not proof of earlier first occurrence",
+      "last_verified_at_utc": "2026-09-16T04:26:41.997358+00:00",
+      "last_material_change_at_utc": "2026-08-25T22:20:00Z",
+      "last_touched_at_utc": "2026-08-25T22:20:00Z",
+      "previous_record_sha256": null,
+      "reproducibility_tier": "OPERATOR_REPORTED_PENDING_REMOTE_CI",
+      "residual_claim": {
+        "fixed": "Only the executed action/evidence described in this card",
+        "not_established": "Official release eligibility, historical registration or forecasting superiority",
+        "remaining": "Mandatory health and current-event gates remain",
+        "next_evidence": [
+          "Declared component evidence retained with hashes",
+          "Component regression/closure checks pass; no merely renamed progress"
+        ]
+      },
+      "escalation_path": "Repository maintainer decision: after third consecutive blocked session require explicit dated risk acceptance or evidenced descope; otherwise OVERDUE-ESCALATED, never automatic clearance.",
+      "original_deadline_utc": "2026-08-25T23:00:00Z",
+      "legacy_progress": "0/6",
+      "phases": {},
+      "legacy_overdue_before_repair": false,
+      "rationale": "Superseded by wider RJ-005 with missing units preserved",
+      "scope_proof": "Recorded historical terminal disposition and unchanged surviving dependency record; not a new official-profile exemption",
+      "record_sha256": "7c01beb4df862fa25ae5efa5a609f2fc886d02baaafed4f2cc69678d316c06e6"
+    },
+    {
+      "issue_id": "RJ-005-WNBA-FEATURE-PIPELINE",
+      "specific": "The historical feature job retains 11/17 units with six official availability sections unbound.",
+      "status": "BLOCKED",
+      "owner": "wnba_features maintainer (Codex)",
+      "why_unresolved": "Current code cannot supply missing historical report bytes or their pregame retrieval proof. Current WNBA data is a separate fresh-packet task.",
+      "next_action": "Identify an official archived report for the exact missing team/date units; hash it or record unavailable historical inputs; build a separately dated future context packet.",
+      "due_at_utc": "2026-09-17T04:26:41.997358+00:00",
+      "closure_criteria": [
+        "Declared component evidence retained with hashes",
+        "Component regression/closure checks pass; no merely renamed progress"
+      ],
+      "evidence": [
+        {
+          "path": "data/registry/recovery_jobs.json",
+          "sha256": "41e169d346c5f76314c762de4d61e14cb60048578f6ab09067a5b123106e14a1"
+        },
+        {
+          "path": "harness/recovery_jobs.py",
+          "sha256": "2282e960f8afdfcdd0ae6b6d1132b55a5db9b8cacf7f7ad606e34138abacce36"
+        }
+      ],
+      "dependency_assessment": "Global health dependency retained; official_pregame_v1 is a requested profile name, not an implemented verified dependency graph.",
+      "release_profile": "official_pregame_v1 (not implemented/verified)",
+      "release_blocking": true,
+      "opened_at_utc": "2026-08-25T22:20:00Z",
+      "opened_at_basis": "First retained history entry; not proof of earlier first occurrence",
+      "last_verified_at_utc": "2026-09-16T04:26:41.997358+00:00",
+      "last_material_change_at_utc": "2026-09-03T19:21:08Z",
+      "last_touched_at_utc": "2026-09-03T19:21:08Z",
+      "previous_record_sha256": null,
+      "reproducibility_tier": "OPERATOR_REPORTED_PENDING_REMOTE_CI",
+      "residual_claim": {
+        "fixed": "Only the executed action/evidence described in this card",
+        "not_established": "Official release eligibility, historical registration or forecasting superiority",
+        "remaining": "Mandatory health and current-event gates remain",
+        "next_evidence": [
+          "Declared component evidence retained with hashes",
+          "Component regression/closure checks pass; no merely renamed progress"
+        ]
+      },
+      "escalation_path": "Repository maintainer decision: after third consecutive blocked session require explicit dated risk acceptance or evidenced descope; otherwise OVERDUE-ESCALATED, never automatic clearance.",
+      "original_deadline_utc": "2026-09-16T17:00:00Z",
+      "legacy_progress": "11/17",
+      "phases": {},
+      "legacy_overdue_before_repair": false,
+      "external_dependency": "Original official WNBA report objects for the missing historical team/date units",
+      "record_sha256": "7953edd865e81c36dc3c74d68af3546f13fd4773dcc15d712a96dab090d65edd"
+    },
+    {
+      "issue_id": "RJ-006-NFL-MODEL-RESTORATION",
+      "specific": "Original EPA v0.2 immutable run directory and remaining lineage components are absent; job remains 1/6.",
+      "status": "BLOCKED",
+      "owner": "model_registry maintainer (Codex)",
+      "why_unresolved": "Three recovered metadata files do not contain the original full run; the selected QB successor is a different model identity.",
+      "next_action": "Locate original data/nfl/model/runs/2026-08-10_nflverse_2015_2025_oof_v2 and invalidation record in owner backup; verify exact source pins before assigning units.",
+      "due_at_utc": "2026-09-17T04:26:41.997358+00:00",
+      "closure_criteria": [
+        "Declared component evidence retained with hashes",
+        "Component regression/closure checks pass; no merely renamed progress"
+      ],
+      "evidence": [
+        {
+          "path": "data/registry/recovery_jobs.json",
+          "sha256": "41e169d346c5f76314c762de4d61e14cb60048578f6ab09067a5b123106e14a1"
+        },
+        {
+          "path": "harness/recovery_jobs.py",
+          "sha256": "2282e960f8afdfcdd0ae6b6d1132b55a5db9b8cacf7f7ad606e34138abacce36"
+        }
+      ],
+      "dependency_assessment": "Global health dependency retained; official_pregame_v1 is a requested profile name, not an implemented verified dependency graph.",
+      "release_profile": "official_pregame_v1 (not implemented/verified)",
+      "release_blocking": true,
+      "opened_at_utc": "2026-08-27T08:43:15Z",
+      "opened_at_basis": "First retained history entry; not proof of earlier first occurrence",
+      "last_verified_at_utc": "2026-09-16T04:26:41.997358+00:00",
+      "last_material_change_at_utc": "2026-08-27T08:43:15Z",
+      "last_touched_at_utc": "2026-08-28T07:54:53Z",
+      "previous_record_sha256": null,
+      "reproducibility_tier": "OPERATOR_REPORTED_PENDING_REMOTE_CI",
+      "residual_claim": {
+        "fixed": "Only the executed action/evidence described in this card",
+        "not_established": "Official release eligibility, historical registration or forecasting superiority",
+        "remaining": "Mandatory health and current-event gates remain",
+        "next_evidence": [
+          "Declared component evidence retained with hashes",
+          "Component regression/closure checks pass; no merely renamed progress"
+        ]
+      },
+      "escalation_path": "Repository maintainer decision: after third consecutive blocked session require explicit dated risk acceptance or evidenced descope; otherwise OVERDUE-ESCALATED, never automatic clearance.",
+      "original_deadline_utc": "2026-09-09T00:00:00Z",
+      "legacy_progress": "1/6",
+      "phases": {},
+      "legacy_overdue_before_repair": true,
+      "external_dependency": "Owner-held original EPA v0.2 run directory and invalidation artifact",
+      "record_sha256": "c94800d14c9127f849240b3bef60d34c30e8a1a38f07a590891f01eb79d7b6c9"
+    },
+    {
+      "issue_id": "RJ-007-DATELESS-JOIN-REMEDIATION",
+      "specific": "Evaluation dictionaries silently collapsed duplicate game IDs and allowed cross-date/outcome pairing; historical identity migration remains incomplete.",
+      "status": "FIX-IN-PROGRESS",
+      "owner": "harness maintainer (Codex)",
+      "why_unresolved": "Two live comparison guards repaired; legacy build/grade commands and synthetic historical identities need a separate immutable migration.",
+      "next_action": "Test duplicate/date/outcome refusal; enumerate canonical IDs for historical migration sidecars without changing frozen boards.",
+      "due_at_utc": "2026-09-17T04:26:41.997358+00:00",
+      "closure_criteria": [
+        "Declared component evidence retained with hashes",
+        "Component regression/closure checks pass; no merely renamed progress"
+      ],
+      "evidence": [
+        {
+          "path": "data/registry/recovery_jobs.json",
+          "sha256": "41e169d346c5f76314c762de4d61e14cb60048578f6ab09067a5b123106e14a1"
+        },
+        {
+          "path": "harness/recovery_jobs.py",
+          "sha256": "2282e960f8afdfcdd0ae6b6d1132b55a5db9b8cacf7f7ad606e34138abacce36"
+        },
+        {
+          "path": "harness/evaluation_standard.py",
+          "sha256": "c60647d3f490485435153e1bcbbf9cea54aeeb10e41f103ca89c4f71af32b65d"
+        },
+        {
+          "path": "harness/promotion_gate.py",
+          "sha256": "6e419fed61d9e51e4a35de9998641d279a19f64d7d4be52f3d1e8eb58c5d6036"
+        }
+      ],
+      "dependency_assessment": "Global health dependency retained; official_pregame_v1 is a requested profile name, not an implemented verified dependency graph.",
+      "release_profile": "official_pregame_v1 (not implemented/verified)",
+      "release_blocking": true,
+      "opened_at_utc": "2026-08-28T07:17:53Z",
+      "opened_at_basis": "First retained history entry; not proof of earlier first occurrence",
+      "last_verified_at_utc": "2026-09-16T04:26:41.997358+00:00",
+      "last_material_change_at_utc": "2026-09-16T04:26:41.997358+00:00",
+      "last_touched_at_utc": "2026-08-28T07:50:02Z",
+      "previous_record_sha256": null,
+      "reproducibility_tier": "OPERATOR_REPORTED_PENDING_REMOTE_CI",
+      "residual_claim": {
+        "fixed": "Only the executed action/evidence described in this card",
+        "not_established": "Official release eligibility, historical registration or forecasting superiority",
+        "remaining": "Mandatory health and current-event gates remain",
+        "next_evidence": [
+          "Declared component evidence retained with hashes",
+          "Component regression/closure checks pass; no merely renamed progress"
+        ]
+      },
+      "escalation_path": "Repository maintainer decision: after third consecutive blocked session require explicit dated risk acceptance or evidenced descope; otherwise OVERDUE-ESCALATED, never automatic clearance.",
+      "original_deadline_utc": "2026-09-03T00:00:00Z",
+      "legacy_progress": "0/6",
+      "phases": {},
+      "legacy_overdue_before_repair": true,
+      "physical_action_evidence": "harness/evaluation_standard.py and harness/promotion_gate.py reject duplicate/date/outcome conflicts",
+      "record_sha256": "549ec2a1eaa9fe6075403c472e3ebdcc2007c82969f0e11170795ccb0cbb8f28"
+    },
+    {
+      "issue_id": "RJ-008-NFL-LAUNCH-SHADOW",
+      "specific": "Separate NFL launch-shadow registration job was already COMPLETE 4/4; it never closed original EPA recovery.",
+      "status": "RESOLVED",
+      "owner": "nfl_launch maintainer (Codex)",
+      "why_unresolved": "No remaining work in this narrow registration job; model/current-release gates remain separate.",
+      "next_action": "Preserve registration; use selected QB identity for new eligible research packages.",
+      "due_at_utc": "2026-09-17T04:26:41.997358+00:00",
+      "closure_criteria": [
+        "Declared component evidence retained with hashes",
+        "Component regression/closure checks pass; no merely renamed progress"
+      ],
+      "evidence": [
+        {
+          "path": "data/registry/recovery_jobs.json",
+          "sha256": "41e169d346c5f76314c762de4d61e14cb60048578f6ab09067a5b123106e14a1"
+        },
+        {
+          "path": "harness/recovery_jobs.py",
+          "sha256": "2282e960f8afdfcdd0ae6b6d1132b55a5db9b8cacf7f7ad606e34138abacce36"
+        }
+      ],
+      "dependency_assessment": "Global health dependency retained; official_pregame_v1 is a requested profile name, not an implemented verified dependency graph.",
+      "release_profile": "official_pregame_v1 (not implemented/verified)",
+      "release_blocking": false,
+      "opened_at_utc": "2026-09-03T19:21:08Z",
+      "opened_at_basis": "First retained history entry; not proof of earlier first occurrence",
+      "last_verified_at_utc": "2026-09-16T04:26:41.997358+00:00",
+      "last_material_change_at_utc": "2026-09-03T19:21:08Z",
+      "last_touched_at_utc": "2026-09-03T19:21:08Z",
+      "previous_record_sha256": null,
+      "reproducibility_tier": "OPERATOR_REPORTED_PENDING_REMOTE_CI",
+      "residual_claim": {
+        "fixed": "Only the executed action/evidence described in this card",
+        "not_established": "Official release eligibility, historical registration or forecasting superiority",
+        "remaining": "Mandatory health and current-event gates remain",
+        "next_evidence": [
+          "Declared component evidence retained with hashes",
+          "Component regression/closure checks pass; no merely renamed progress"
+        ]
+      },
+      "escalation_path": "Repository maintainer decision: after third consecutive blocked session require explicit dated risk acceptance or evidenced descope; otherwise OVERDUE-ESCALATED, never automatic clearance.",
+      "original_deadline_utc": "2026-09-03T19:21:08Z",
+      "legacy_progress": "4/4",
+      "phases": {},
+      "legacy_overdue_before_repair": false,
+      "closure_evidence": "Existing job history and retained artifact referenced above; scope is metadata/registration, not fresh production readiness",
+      "record_sha256": "ff4497c4b018be1951a8ff86e50530909eae9fb6cd5c6f9902017695c5e13470"
+    },
+    {
+      "issue_id": "RJ-009-CFB-LAUNCH-SHADOW",
+      "specific": "CFB launch-shadow registration job was already COMPLETE 4/4; current-season assimilation is not established by that closure.",
+      "status": "RESOLVED",
+      "owner": "cfb_launch maintainer (Codex)",
+      "why_unresolved": "No remaining work in this narrow registration job; assimilation control remains missing.",
+      "next_action": "Preserve registration and the CFB CONTROL-MISSING label for current-season assimilation.",
+      "due_at_utc": "2026-09-17T04:26:41.997358+00:00",
+      "closure_criteria": [
+        "Declared component evidence retained with hashes",
+        "Component regression/closure checks pass; no merely renamed progress"
+      ],
+      "evidence": [
+        {
+          "path": "data/registry/recovery_jobs.json",
+          "sha256": "41e169d346c5f76314c762de4d61e14cb60048578f6ab09067a5b123106e14a1"
+        },
+        {
+          "path": "harness/recovery_jobs.py",
+          "sha256": "2282e960f8afdfcdd0ae6b6d1132b55a5db9b8cacf7f7ad606e34138abacce36"
+        }
+      ],
+      "dependency_assessment": "Global health dependency retained; official_pregame_v1 is a requested profile name, not an implemented verified dependency graph.",
+      "release_profile": "official_pregame_v1 (not implemented/verified)",
+      "release_blocking": false,
+      "opened_at_utc": "2026-09-03T19:21:08Z",
+      "opened_at_basis": "First retained history entry; not proof of earlier first occurrence",
+      "last_verified_at_utc": "2026-09-16T04:26:41.997358+00:00",
+      "last_material_change_at_utc": "2026-09-03T19:21:08Z",
+      "last_touched_at_utc": "2026-09-03T19:21:08Z",
+      "previous_record_sha256": null,
+      "reproducibility_tier": "OPERATOR_REPORTED_PENDING_REMOTE_CI",
+      "residual_claim": {
+        "fixed": "Only the executed action/evidence described in this card",
+        "not_established": "Official release eligibility, historical registration or forecasting superiority",
+        "remaining": "Mandatory health and current-event gates remain",
+        "next_evidence": [
+          "Declared component evidence retained with hashes",
+          "Component regression/closure checks pass; no merely renamed progress"
+        ]
+      },
+      "escalation_path": "Repository maintainer decision: after third consecutive blocked session require explicit dated risk acceptance or evidenced descope; otherwise OVERDUE-ESCALATED, never automatic clearance.",
+      "original_deadline_utc": "2026-09-03T19:21:08Z",
+      "legacy_progress": "4/4",
+      "phases": {},
+      "legacy_overdue_before_repair": false,
+      "closure_evidence": "Existing job history and retained artifact referenced above; scope is metadata/registration, not fresh production readiness",
+      "record_sha256": "4296d982ebded55f990fadcf11c5485cbdb5c8715e820723b8965fda61dc4ec2"
+    }
+  ]
+}

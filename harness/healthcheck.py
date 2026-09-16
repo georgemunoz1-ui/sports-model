@@ -546,7 +546,8 @@ except Exception as e:
 try:
     import ingest_lancebroz as _IL
     _source = _IL.source_health()
-    check(f"lancebroz production source ({_source})", _source["ok"])
+    _source_summary = {k: v for k, v in _source.items() if k != "objects"}
+    check(f"lancebroz production source ({_source_summary})", _source["ok"])
 except Exception as e:
     check(f"lancebroz production source ({e})", False)
 
@@ -557,10 +558,15 @@ try:
     _jobs=_RJ.load() or _RJ.default_jobs()
     _rep=_RJ.status_report(_jobs, _dt.datetime.now(_dt.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"))
     check(f"recovery jobs ({_rep['n_jobs']} registered, {_rep['n_overdue']} overdue, "
-          f"{len(_rep['open_blockers'])} defect(s) still owned)", _rep["n_overdue"]==0, warn=False)
+          f"{len(_rep['open_blockers'])} defect(s) still owned)",
+          _rep["n_overdue"]==0 and not _rep.get("integrity_problems"), warn=False)
+    for _problem in _rep.get("integrity_problems", []):
+        print(f"       ! {_problem}")
     for _r2 in _rep["jobs"]:
         if _r2["overdue"]:
             print(f"       ! OVERDUE {_r2['job_id']} {_r2['progress']} due {_r2['deadline_utc']}")
+            for _phase, _detail in _r2.get("phases", {}).items():
+                print(f"         PHASE {_phase}: {_detail}")
 except Exception as e:
     check(f"recovery jobs ({e})", False)
 
@@ -573,9 +579,10 @@ try:
                        "--manifest","data/releases/2026-09-03_release.json","--gate"],
                       capture_output=True,text=True)
     _rr=json.loads(_r.stdout) if _r.stdout.strip().startswith("{") else {}
-    check(f"2026-09-03 multi-sport release ({_rr.get('global_status','no output')}; "
+    check(f"historical 2026-09-03 release eligibility ({_rr.get('global_status','no output')}; "
           f"{len(_rr.get('artifact_problems') or [])} artifact problem(s), "
           f"{len(_rr.get('contract_problems') or [])} contract problem(s))", _r.returncode==0)
+    print("       Historical decision is immutable; this is not a fresh release check.")
 except Exception as e:
     check(f"2026-09-03 multi-sport release ({e})", False)
 

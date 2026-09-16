@@ -52,6 +52,12 @@ def validate_card(card, root):
         errors.append("NO_CLOSURE_EVIDENCE")
     if status == "DESCOPED" and not all(card.get(k) for k in ("rationale", "scope_proof")):
         errors.append("NO_DESCOPE_PROOF")
+    if card.get("obligation_kind") == "WNBA_OFFICIAL_AVAILABILITY":
+        if status == "RESOLVED" and not all(card.get("unit_binding", {}).get(k) for k in
+                                           ("canonical_team_id", "event_date", "canonical_event_id", "official_artifact_path")):
+            errors.append("AVAILABILITY_UNIT_BINDING_INCOMPLETE")
+        if status == "RESOLVED" and card.get("unit_binding", {}).get("official_artifact_path") not in {e["path"] for e in card.get("evidence", [])}:
+            errors.append("AVAILABILITY_ARTIFACT_NOT_VERIFIED")
     for field in ("due_at_utc", "review_at_utc", "opened_at_utc", "last_material_change_at_utc"):
         if card.get(field):
             try:
@@ -61,6 +67,9 @@ def validate_card(card, root):
     return errors
 
 def effective_status(card, now, blocked_sessions):
+    if card["status"] not in ("RESOLVED", "DESCOPED") and card.get("last_material_change_at_utc"):
+        if (now - stamp(card["last_material_change_at_utc"])).total_seconds() > 14 * 86400:
+            return "OVERDUE-ESCALATED"
     if card["status"] == "BLOCKED" and blocked_sessions > 2:
         return "OVERDUE-ESCALATED"
     if card["status"] == "ACCEPTED-RISK" and stamp(card["review_at_utc"]) <= now:
@@ -82,7 +91,7 @@ def read_sessions(path):
         previous = row["record_sha256"]
     return rows
 
-def report(register, sessions, now, root=ROOT):
+def report(register, sessions, now, root=ROOT, for_new_session=False):
     errors, rows = [], []
     seen = set()
     for card in register["issues"]:
@@ -91,8 +100,8 @@ def report(register, sessions, now, root=ROOT):
             errors.append(key + ":DUPLICATE_ISSUE")
         seen.add(key)
         errors.extend(key + ":" + e for e in validate_card(card, root))
-        streak = 1 if card["status"] == "BLOCKED" else 0
-        if streak:
+        streak = int(for_new_session) if card["status"] == "BLOCKED" else 0
+        if card["status"] == "BLOCKED":
             for previous in reversed(sessions):
                 old = next((r for r in previous["issues"] if r["issue_id"] == key), None)
                 if not old or old["decision"] != "BLOCKED":
@@ -103,6 +112,24 @@ def report(register, sessions, now, root=ROOT):
             age = (now - stamp(card["last_material_change_at_utc"])).total_seconds() / 86400
             if age < 0:
                 errors.append(key + ":FUTURE_MATERIAL_CHANGE")
+        escalation = card.get("escalation", {})
+        if age is not None and age > 14 and card["status"] not in ("RESOLVED", "DESCOPED"):
+            required = ("owner_confirmed", "escalation_owner", "blocker", "last_completed_action",
+                        "next_action", "next_action_at_utc", "recorded_at_utc", "decision", "rationale")
+            if not all(escalation.get(k) for k in required):
+                errors.append(key + ":AGED_ESCALATION_INCOMPLETE")
+            else:
+                if escalation["decision"] not in ("CONTINUE_REMEDIATION", "ACCEPTED-RISK", "BLOCKED_EXTERNALLY", "RECLASSIFY", "RETIRE_OR_SUPERSEDE"):
+                    errors.append(key + ":INVALID_ESCALATION_DECISION")
+                for field in ("recorded_at_utc", "next_action_at_utc"):
+                    try:
+                        value = stamp(escalation[field])
+                        if field == "recorded_at_utc" and value > now:
+                            errors.append(key + ":FUTURE_ESCALATION_RECORD")
+                        if field == "next_action_at_utc" and value <= now:
+                            errors.append(key + ":ESCALATION_REVIEW_OVERDUE")
+                    except (ValueError, TypeError):
+                        errors.append(key + ":INVALID_ESCALATION_TIMESTAMP:" + field)
         status = effective_status(card, now, streak) if not validate_card(card, root) else "OVERDUE-ESCALATED"
         rows.append({"issue_id": key, "decision": card["status"], "status": status,
                      "consecutive_blocked_sessions": streak,
@@ -111,10 +138,19 @@ def report(register, sessions, now, root=ROOT):
                      "release_blocking": card.get("release_blocking", True),
                      "owner": card["owner"], "next_action": card["next_action"],
                      "due_at_utc": card["due_at_utc"], "card_sha256": card["record_sha256"]})
+        if escalation:
+            rows[-1]["escalation"] = escalation
     active = [r for r in rows if r["trend_included"] and r["status"] not in ("RESOLVED", "DESCOPED")]
     aged = sum(r["days_without_material_change"] is not None and r["days_without_material_change"] > 14 for r in active)
     unknown = sum(r["days_without_material_change"] is None for r in active)
     previous = sessions[-1]["trend"]["aged_over_14_days"] if sessions else None
+    for group in register.get("obligation_groups", []):
+        children = [c for c in register["issues"] if c.get("parent_issue_id") == group["parent_issue_id"]]
+        if len(children) != group["expected_units"] or {c.get("unit_ordinal") for c in children} != set(range(1, group["expected_units"] + 1)):
+            errors.append(group["parent_issue_id"] + ":OBLIGATION_INVENTORY_INCOMPLETE")
+        parent = next((c for c in register["issues"] if c["issue_id"] == group["parent_issue_id"]), None)
+        if parent is None or (parent["status"] in ("RESOLVED", "DESCOPED") and any(c["status"] not in ("RESOLVED", "DESCOPED") for c in children)):
+            errors.append(group["parent_issue_id"] + ":PARENT_CLOSURE_WITH_UNRESOLVED_UNITS")
     return {"schema": "health.triage.report.v1", "checked_at_utc": now.isoformat(),
             "issues": rows, "validation_errors": errors,
             "trend": {"aged_over_14_days": aged, "unknown_age": unknown,
@@ -122,6 +158,8 @@ def report(register, sessions, now, root=ROOT):
                       "direction": "BASELINE_NOT_AVAILABLE" if previous is None else
                       ("INCREASED_REQUIRES_EXPLANATION" if aged > previous else "NON_INCREASING"),
                       "clock_policy": "material evidence change; a review or status rename does not reset age"},
+            "accepted_risks_present": any(c["status"] == "ACCEPTED-RISK" for c in register["issues"]),
+            "accepted_risk_release_override": False,
             "official_release_eligible": False, "action_authority": "OFF", "dose": 0.0,
             "note": "Triage status cannot waive mandatory gates; profile-specific clearance is separate."}
 
@@ -134,7 +172,8 @@ def main():
     args = p.parse_args()
     now = stamp(args.as_of) if args.as_of else dt.datetime.now(dt.timezone.utc)
     sessions = read_sessions(ROOT / args.ledger)
-    result = report(json.loads((ROOT / args.register).read_text()), sessions, now)
+    result = report(json.loads((ROOT / args.register).read_text()), sessions, now,
+                    for_new_session=bool(args.append_session))
     if args.append_session:
         if result["validation_errors"]:
             raise ValueError("CANNOT_APPEND_INVALID_CARDS")

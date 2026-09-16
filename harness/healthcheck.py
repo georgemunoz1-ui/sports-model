@@ -675,8 +675,15 @@ try:
             print(f"       {_issue['issue_id']}: {_issue['status']}; owner={_issue['owner']}; "
                   f"due={_issue['due_at_utc']}; next={_issue['next_action']}")
     print("       TRIAGE_TREND:", _triage["trend"])
+    for _field in ("accepted_risks_present", "accepted_risk_release_override", "official_release_eligible"):
+        print(f"{_field}: {json.dumps(_triage[_field])}")
+    for _error in _triage["validation_errors"]:
+        print(f"       TRIAGE_ERROR: {_error}")
 except Exception as _exc:
     check(f"standing-health evidence register ({_exc})", False)
+    print("accepted_risks_present: unknown")
+    print("accepted_risk_release_override: false")
+    print("official_release_eligible: false")
 print(f"\n{'REPOSITORY_HEALTH_GREEN' if not fails else 'REPOSITORY_HEALTH_RED'} — {len(fails)} fail, {len(warns)} warn")
 try:
     from current_sports_data import runtime_readiness

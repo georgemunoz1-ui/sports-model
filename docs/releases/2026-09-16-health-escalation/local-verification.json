@@ -1,0 +1,27 @@
+{
+  "verified_at_utc": "2026-09-16T07:27:45.896515+00:00",
+  "environment": {
+    "python": "3.12.14",
+    "kind": "LOCAL_WORKING_TREE"
+  },
+  "commands": [
+    "python -m pytest tests -q",
+    "python harness/healthcheck.py",
+    "python scripts/standing_health_triage.py"
+  ],
+  "test_result": "344 passed, 8 subtests passed in 15.18s",
+  "health_lines": [
+    "[FAIL] recovery jobs (9 registered, 3 overdue, 7 defect(s) still owned)",
+    "[FAIL] historical 2026-09-03 release eligibility (BLOCKED; 0 artifact problem(s), 0 contract problem(s))",
+    "accepted_risks_present: true",
+    "accepted_risk_release_override: false",
+    "official_release_eligible: false",
+    "REPOSITORY_HEALTH_RED \u2014 2 fail, 7 warn"
+  ],
+  "source_sha256": {
+    "scripts/standing_health_triage.py": "03d88b468c4be0cb3f0f41ca0485e3a18f4fc0af212f969a488c08bcd423233c",
+    "harness/healthcheck.py": "f2d2e00eac1733a70bf7d847387f1529907de0dda4b5fffd1baee411a0e415f3",
+    "tests/test_standing_health_triage.py": "b991dcd7999b6b6140a7d874671d3965020fd48d7d7332998d7b984af03709ab"
+  },
+  "claim_limit": "Local verification; clean remote CI is separate. No historical recovery or release clearance."
+}

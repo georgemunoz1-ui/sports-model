@@ -1,0 +1,81 @@
+{
+  "schema": "health.unit.binding.audit.v1",
+  "checked_at_utc": "2026-09-16T07:26:12.501234+00:00",
+  "source_commit": "e6eb097f491154c23aab0a8594fecc220175c8ef",
+  "sources": [
+    {
+      "path": "data/registry/recovery_jobs.json",
+      "sha256": "41e169d346c5f76314c762de4d61e14cb60048578f6ab09067a5b123106e14a1"
+    },
+    {
+      "path": "data/registry/wnba_feature_state.json",
+      "sha256": "496bf478d5a4b5db61328d828f973985e1f244a12828cecac72f5eb0508ddf47"
+    },
+    {
+      "path": "data/audit/2026-08-25_system_failure_wnba_feature_pipeline.json",
+      "sha256": "5c58f36bbe46ebf688534692fe7c2f2f71935406723daabca1b733b87237b262"
+    },
+    {
+      "path": "harness/wnba_feature_pipeline.py",
+      "sha256": "d8b4fe6f4681a79834b7533cdf46ba5966e6ff0039cc15ce85e0aace5594649b"
+    }
+  ],
+  "wnba": {
+    "registered_components": [
+      "SCHEDULE_AND_CANONICAL_GAME_IDS",
+      "ROSTERS_AND_TRANSACTIONS",
+      "OFFICIAL_INJURY_AVAILABILITY",
+      "RESULTS_AND_STATS_THROUGH_ASOF",
+      "MARKET_PRICES_VIA_SEPARATE_OVERLAY"
+    ],
+    "remaining_component": "OFFICIAL_INJURY_AVAILABILITY",
+    "remaining_units": 6,
+    "unit_identity_status": "UNIT_BINDING_UNRESOLVED",
+    "why": "The job explicitly rolls unit teams with the slate (Aug 27 history); the feature-state record retains only remaining_units=6. No six-entry canonical team/date obligation mapping is recorded in these inspected sources. Original Aug 25 teams cannot be silently reused for later slates.",
+    "original_incident_date": "2026-08-25",
+    "original_incident_teams": [
+      "CHI",
+      "CON",
+      "PDX",
+      "DAL",
+      "WAS",
+      "PHX"
+    ],
+    "original_incident_is_current_obligation_binding": false,
+    "new_cards_are": "Six ordinal recovery slots, not six identified team/date pairs or six separate capabilities",
+    "next_action": "Recover or explicitly redefine the exact historical obligation cohort in a versioned mapping before any official-report unit is credited."
+  },
+  "nfl": {
+    "original_run_directory": "data/nfl/model/runs/2026-08-10_nflverse_2015_2025_oof_v2",
+    "directory_exists_in_checked_workspace": false,
+    "registered_components": [
+      "RECOVERED_EVIDENCE_RETAINED_AND_HASHED",
+      "IMMUTABLE_RUN_DIRECTORY_RESTORED",
+      "V0_1_INVALIDATION_RECORD_RESTORED",
+      "NFLVERSE_SOURCE_PINS_REACQUIRED",
+      "ACTIVE_REGISTRY_ENTRIES_CREATED",
+      "PROSPECTIVE_PAPER_WORKFLOW_ARMED"
+    ],
+    "registered_progress": "1/6",
+    "claim_limit": "Local absence does not prove absence from owner backups or irrecoverability."
+  },
+  "score_verification": {
+    "registered_phases": {
+      "RJ-001A_PROVENANCE_ACQUISITION": {
+        "note": "all provisional-set units bound; whole-file 1,948/1,957 after the OAK/ARI variant fold; 9 refusals in two named categories, reconciliation gate sums (88570751 superseded by the regenerated accounting)",
+        "progress": "123/123",
+        "status": "COMPLETE"
+      },
+      "RJ-001B_SCORE_VERIFICATION": {
+        "note": "tier upgrades for the 126 provisional rows need a score-bearing artifact; pitch events carry no runs column (derivation judged infeasible)",
+        "progress": "0/126",
+        "status": "RUNNING"
+      },
+      "RJ-001_INCIDENT": "OPEN"
+    },
+    "claim_limit": "No authoritative final-score reconciliation or 126-ID inventory was executed by this binding audit."
+  },
+  "official_release_eligible": false,
+  "action_authority": "OFF",
+  "dose": 0.0
+}

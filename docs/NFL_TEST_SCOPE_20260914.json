@@ -1,0 +1,161 @@
+{
+  "schema": "nfl.test_scope.v1",
+  "tested_commit": "faa5b0c5f320f2a6fe87a0dd6c0af4ba332e0bb6",
+  "command": "python -m unittest discover -s tests -p 'test_nfl_*.py' -v",
+  "total": 85,
+  "groups": [
+    {
+      "file": "tests/test_nfl_assimilation.py",
+      "sha256": "976c319141f489492e0d5fd788afc7d1bc638f17e00c7a649d039b2b29dfb58d",
+      "count": 30,
+      "test_ids": [
+        "test_nfl_assimilation.Assimilation.test_clean_coverage_and_half",
+        "test_nfl_assimilation.Assimilation.test_missing_completed_game",
+        "test_nfl_assimilation.Assimilation.test_duplicate_play",
+        "test_nfl_assimilation.Assimilation.test_after_cutoff",
+        "test_nfl_assimilation.Assimilation.test_publication_after_cutoff",
+        "test_nfl_assimilation.Assimilation.test_swapped_binding",
+        "test_nfl_assimilation.Assimilation.test_revision_quarantines",
+        "test_nfl_assimilation.Assimilation.test_no_week_release_with_mnf_pending",
+        "test_nfl_assimilation.Assimilation.test_missing_epa",
+        "test_nfl_assimilation.Assimilation.test_invalid_clock",
+        "test_nfl_assimilation.Assimilation.test_order_sequence_not_identifier",
+        "test_nfl_assimilation.Assimilation.test_halftime_boundary_missing",
+        "test_nfl_assimilation.Assimilation.test_score_mismatch",
+        "test_nfl_assimilation.Assimilation.test_immutable_snapshot_and_failure_report",
+        "test_nfl_assimilation.Assimilation.test_assimilation_changes_only_declared_features",
+        "test_nfl_assimilation.Assimilation.test_end_to_end_orchestrator_and_same_week_refusal",
+        "test_nfl_assimilation.CapabilityValidation.test_valid",
+        "test_nfl_assimilation.CapabilityValidation.test_active_missing_value",
+        "test_nfl_assimilation.CapabilityValidation.test_active_missing_contribution",
+        "test_nfl_assimilation.CapabilityValidation.test_active_missing_fit",
+        "test_nfl_assimilation.CapabilityValidation.test_reporter_hash",
+        "test_nfl_assimilation.CapabilityValidation.test_empty_contribution_rejected",
+        "test_nfl_assimilation.CapabilityValidation.test_mc_paired_flag_alone_insufficient",
+        "test_nfl_assimilation.CapabilityValidation.test_mc_explicit_estimator_and_error",
+        "test_nfl_assimilation.CapabilityValidation.test_mc_requires_paired_uncertainty",
+        "test_nfl_assimilation.Settlement.test_integer_push_and_halfpoint",
+        "test_nfl_assimilation.Settlement.test_period_mismatch",
+        "test_nfl_assimilation.Settlement.test_price_absent_and_fee",
+        "test_nfl_assimilation.Settlement.test_first_half_and_void",
+        "test_nfl_assimilation.Settlement.test_moneyline_tie"
+      ]
+    },
+    {
+      "file": "tests/test_nfl_context.py",
+      "sha256": "4c4aaf1c550d069f2269bb03f904cb93aa3b32498de381c2d15c8e28e67f7199",
+      "count": 18,
+      "test_ids": [
+        "test_nfl_context.Integrity.test_exact_feature_firewall",
+        "test_nfl_context.Integrity.test_postcutoff_weather_rejected",
+        "test_nfl_context.Integrity.test_wrong_event_binding",
+        "test_nfl_context.Integrity.test_night_low_not_hourly",
+        "test_nfl_context.Integrity.test_latest_prestart_report",
+        "test_nfl_context.Integrity.test_full_practice_not_unrestricted",
+        "test_nfl_context.Integrity.test_unknown_role_not_one_full_starter",
+        "test_nfl_context.Integrity.test_feature_effect_and_trace",
+        "test_nfl_context.Integrity.test_travel_relocation_unknown",
+        "test_nfl_context.Integrity.test_current_travel_east_one_zone",
+        "test_nfl_context.Integrity.test_weekly_no_future_qb_or_snap_leak",
+        "test_nfl_context.Integrity.test_joint_replay_and_tie_mass",
+        "test_nfl_context.Integrity.test_product_settlement",
+        "test_nfl_context.Integrity.test_canonical_loader_and_zero_dose",
+        "test_nfl_context.Integrity.test_explicit_arm_no_fallback",
+        "test_nfl_context.Integrity.test_information_regime_no_relabeling",
+        "test_nfl_context.Integrity.test_coverage_does_not_claim_observed_workload",
+        "test_nfl_context.Integrity.test_missing_date_not_zero_slate"
+      ]
+    },
+    {
+      "file": "tests/test_nfl_halftime.py",
+      "sha256": "5aa8d02e3773878424ac3138dba6a0b644300b7573cee202489fad3450030a37",
+      "count": 8,
+      "test_ids": [
+        "test_nfl_halftime.HalftimeTests.test_known_contract_counts",
+        "test_nfl_halftime.HalftimeTests.test_complement_and_joint_bounds",
+        "test_nfl_halftime.HalftimeTests.test_same_game_residual_pairing_and_replay",
+        "test_nfl_halftime.HalftimeTests.test_first_half_ties_not_resolved_by_full_game",
+        "test_nfl_halftime.HalftimeTests.test_invalid_scores",
+        "test_nfl_halftime.HalftimeTests.test_crps_known_answer",
+        "test_nfl_halftime.HalftimeTests.test_portable_predict_and_no_market_feature",
+        "test_nfl_halftime.HalftimeTests.test_play_id_is_not_chronology"
+      ]
+    },
+    {
+      "file": "tests/test_nfl_modes.py",
+      "sha256": "15b26fd2628110f0ef42b6829dffe68b48a340a91a9133b2c8f7dd75859b97cd",
+      "count": 11,
+      "test_ids": [
+        "test_nfl_modes.Modes.test_devig_known_pair_and_orientation",
+        "test_nfl_modes.Modes.test_enhanced_runs_fitted_selected_weights",
+        "test_nfl_modes.Modes.test_bad_id_or_wrong_football_artifact_never_fallback",
+        "test_nfl_modes.Modes.test_pregame_market_and_live_time_firewalls",
+        "test_nfl_modes.Modes.test_live_requires_start_and_fresh_state",
+        "test_nfl_modes.Modes.test_live_end_to_end_three_way",
+        "test_nfl_modes.Modes.test_actual_postplay_scores_cannot_enter_features",
+        "test_nfl_modes.Modes.test_overtime_clock_normalization",
+        "test_nfl_modes.Modes.test_future_writer_cutoff_never_saved",
+        "test_nfl_modes.Modes.test_market_wrong_product_event_or_future_model",
+        "test_nfl_modes.Modes.test_live_raw_state_rejects_extra_or_inconsistent_fields"
+      ]
+    },
+    {
+      "file": "tests/test_nfl_personnel_resolution.py",
+      "sha256": "9fd6b1549c9fefff7de018e13665966daab96f0c08a5630a5bbec89e21a33895",
+      "count": 6,
+      "test_ids": [
+        "test_nfl_personnel_resolution.PersonnelResolution.test_complete_lists_and_emergency_qbs",
+        "test_nfl_personnel_resolution.PersonnelResolution.test_future_capture_refused",
+        "test_nfl_personnel_resolution.PersonnelResolution.test_unsubstantiated_verified_label_refused",
+        "test_nfl_personnel_resolution.PersonnelResolution.test_hash_and_team_coverage",
+        "test_nfl_personnel_resolution.PersonnelResolution.test_inactive_expected_qb_blocks",
+        "test_nfl_personnel_resolution.PersonnelResolution.test_roles_disclosed_without_invented_weights"
+      ]
+    },
+    {
+      "file": "tests/test_nfl_spread_calibration.py",
+      "sha256": "fb59748388ca2141685afeda7f1178fc3974ff6ed8e4fc575541974936ee1558",
+      "count": 12,
+      "test_ids": [
+        "test_nfl_spread_calibration.SpreadCalibrationTests.test_hand_computed_push_contract",
+        "test_nfl_spread_calibration.SpreadCalibrationTests.test_identity_exact",
+        "test_nfl_spread_calibration.SpreadCalibrationTests.test_known_sigmoid_transform",
+        "test_nfl_spread_calibration.SpreadCalibrationTests.test_probability_mass_coherence",
+        "test_nfl_spread_calibration.SpreadCalibrationTests.test_opposing_sides_and_monotonic_alternates",
+        "test_nfl_spread_calibration.SpreadCalibrationTests.test_reject_bad_inputs_and_first_half",
+        "test_nfl_spread_calibration.SpreadCalibrationTests.test_exact_kernel_matches_mc",
+        "test_nfl_spread_calibration.SpreadCalibrationTests.test_seeded_calibrated_replay",
+        "test_nfl_spread_calibration.SpreadCalibrationTests.test_overlay_isolation_and_adapter",
+        "test_nfl_spread_calibration.SpreadCalibrationTests.test_overlay_rejects_forecast_or_draw_substitution",
+        "test_nfl_spread_calibration.SpreadCalibrationTests.test_overlay_exclusive_persistence",
+        "test_nfl_spread_calibration.SpreadCalibrationTests.test_fitted_artifact_and_evaluation_population"
+      ]
+    }
+  ],
+  "scope_type": "TEST_INVENTORY_NOT_MEASURED_LINE_OR_BRANCH_COVERAGE",
+  "not_established": [
+    "Live source retrieval and independent parsing accuracy against all provider payloads",
+    "Complete roster, reserve, PUP and emergency-QB numerical transforms",
+    "Current-role estimates for five unsupported players",
+    "Actual player workload or post-injury performance",
+    "All branch coverage: no coverage instrumentation was run",
+    "Statistical promotion, prospective calibration, or betting advantage",
+    "Production archive recovery and overdue-job closure",
+    "Canonical registration or external-publication eligibility",
+    "Fresh weather acquisition and enforcement across every entry point"
+  ],
+  "known_unexercised_negative_cases_in_personnel_suite": [
+    "Duplicate inactive entry rejection branch",
+    "Inactive event-ID mismatch rejection branch",
+    "Missing source or false completeness rejection branch"
+  ],
+  "paired_artifact_observation": {
+    "feature_vectors_exactly_equal": true,
+    "analytic_predictions_exactly_equal": true,
+    "identities_differ": true,
+    "prior_cutoff": "2026-09-14T20:06:54.535154+00:00",
+    "later_cutoff": "2026-09-15T00:12:14.814280+00:00",
+    "fitted_personnel_layer_exists": true,
+    "new_inactive_information_has_incremental_numeric_effect": false
+  }
+}

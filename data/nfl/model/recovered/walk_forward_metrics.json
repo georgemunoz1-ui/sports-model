@@ -1,0 +1,60 @@
+{
+  "games": 1865,
+  "home_margin": {
+    "model_mae": 10.407998836136626,
+    "paired_mae_difference_model_minus_base": {
+      "blocks": 124,
+      "bootstrap_reps": 20000,
+      "bootstrap_seed": 20260810,
+      "ci95_high": -0.5431326631964546,
+      "ci95_low": -0.9109283885864172,
+      "estimate": -0.7272806555332211
+    },
+    "training_mean_baseline_mae": 11.135279491669847
+  },
+  "home_win": {
+    "accuracy_at_0_5": 0.604289544235925,
+    "base_rate_brier": 0.24974273656170026,
+    "base_rate_log_loss": 0.692648783189417,
+    "calibration_intercept": -0.0753890181267914,
+    "calibration_slope": 0.9066352353420483,
+    "ece_equal_count_10": 0.045092131684962684,
+    "model_brier": 0.22979921243103538,
+    "model_log_loss": 0.6509348722690145,
+    "paired_brier_difference_model_minus_base": {
+      "blocks": 124,
+      "bootstrap_reps": 20000,
+      "bootstrap_seed": 20260810,
+      "ci95_high": -0.013656705309261864,
+      "ci95_low": -0.026116682736164663,
+      "estimate": -0.019943524130664855
+    },
+    "primary_gate_pass": true,
+    "roc_auc": 0.6637521708605846
+  },
+  "market_benchmark": "NOT_AVAILABLE unless separately supplied as a coherent evaluation-only board",
+  "model_id": "nfl.rs.epa_logit_ridge.v0_2.shadow",
+  "promotion": "NO_PROMOTE; prospective and operational gates remain unsatisfied regardless of retrospective metrics",
+  "role": "WALK_FORWARD_DIAGNOSTIC; NO WAGER AUTHORITY",
+  "seasons": [
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024,
+    2025
+  ],
+  "total_points": {
+    "model_mae": 11.009992832771484,
+    "paired_mae_difference_model_minus_base": {
+      "blocks": 124,
+      "bootstrap_reps": 20000,
+      "bootstrap_seed": 20260810,
+      "ci95_high": 0.13760705952531038,
+      "ci95_low": -0.07071476332218331,
+      "estimate": 0.03228104397169908
+    },
+    "training_mean_baseline_mae": 10.977711788799787
+  }
+}

@@ -1,0 +1,88 @@
+{
+ "bound": 1948,
+ "canonical_rows": 1957,
+ "correction": "the earlier note said 2 doubleheader ambiguities; the true count and full category table are here \u2014 every refused row named",
+ "created_utc": "2026-08-27T04:30:00Z",
+ "gate": "bound_rows + refusal_reason_counts = canonical_rows (asserted)",
+ "record_id": "RJ001-REFUSAL-ACCOUNTING-2026-08-27",
+ "record_sha256": "344d8e018856aa4a86e36096a0f74142f7687d2e6eb5df5d6cb0eeac2d4de24b",
+ "refusal_detail": [
+  {
+   "away": "Colorado Rockies",
+   "category": "PK_NOT_IN_ARTIFACT",
+   "date": "2026-05-13",
+   "game_id": "mlb:2026:823386",
+   "home": "Pittsburgh Pirates",
+   "tier": "1"
+  },
+  {
+   "away": "Tampa Bay Rays",
+   "category": "PK_NOT_IN_ARTIFACT",
+   "date": "2026-05-23",
+   "game_id": "mlb:2026:823543",
+   "home": "New York Yankees",
+   "tier": "1"
+  },
+  {
+   "away": "Boston Red Sox",
+   "category": "PK_NOT_IN_ARTIFACT",
+   "date": "2026-06-06",
+   "game_id": "mlb:2026:823539",
+   "home": "New York Yankees",
+   "tier": "1"
+  },
+  {
+   "away": "Detroit Tigers",
+   "category": "PK_NOT_IN_ARTIFACT",
+   "date": "2026-06-14",
+   "game_id": "mlb:2026:824424",
+   "home": "Cleveland Guardians",
+   "tier": "1"
+  },
+  {
+   "away": "San Francisco Giants",
+   "category": "PK_NOT_IN_ARTIFACT",
+   "date": "2026-06-18",
+   "game_id": "mlb:2026:824911",
+   "home": "Atlanta Braves",
+   "tier": "1"
+  },
+  {
+   "away": "CLE",
+   "category": "DOUBLEHEADER_AMBIGUOUS",
+   "date": "2026-07-28",
+   "game_id": "mlb:2026:box0728-CLECIN",
+   "home": "CIN",
+   "tier": "1"
+  },
+  {
+   "away": "CLE",
+   "category": "DOUBLEHEADER_AMBIGUOUS",
+   "date": "2026-07-28",
+   "game_id": "mlb:2026:box0728-CLECINb",
+   "home": "CIN",
+   "tier": "1"
+  },
+  {
+   "away": "ATL",
+   "category": "DOUBLEHEADER_AMBIGUOUS",
+   "date": "2026-07-29",
+   "game_id": "mlb:2026:ws0729-ATLNYM",
+   "home": "NYM",
+   "tier": "3"
+  },
+  {
+   "away": "ATL",
+   "category": "DOUBLEHEADER_AMBIGUOUS",
+   "date": "2026-07-29",
+   "game_id": "mlb:2026:ws0729-ATLNYMb",
+   "home": "NYM",
+   "tier": "3"
+  }
+ ],
+ "refusals_by_category": {
+  "DOUBLEHEADER_AMBIGUOUS": 4,
+  "PK_NOT_IN_ARTIFACT": 5
+ },
+ "schema": "ops.refusal_accounting.v1"
+}

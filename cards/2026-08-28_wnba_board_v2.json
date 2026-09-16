@@ -1,0 +1,443 @@
+{
+ "FALLBACK_EDGE_EVAPORATED": {
+  "finding": "on WSH@LAS the records-only fallback had Washington at 71.80% against a market break-even of 67.21% \u2014 the largest apparent edge on the board. The feature model puts Washington at 52.69%.",
+  "why_it_matters": "the v1 card said the fallback's large edges were 'describing its own blindness' rather than finding value. That was a judgement then; it is a measurement now."
+ },
+ "GAME_IDENTITY": {
+  "captured": 4,
+  "field": "canonical_id",
+  "form": "ESPN_GAMEID:<integer>",
+  "inference_refused": "all four ids sit on a contiguous run 401857180-401857183 and the surrounding parquet rows continue it \u2014 exactly the shape that invites the 8/27 P0. Each id was read from its own parquet row.",
+  "inferred": 0,
+  "normalization": "the acquisition emitted these as BARE integers, which are indistinguishable from an MLB gamePk; namespaced before any artifact was written",
+  "synthetic_pseudo_pks": 0
+ },
+ "LEDGERS": {
+  "model_authorized_wagers_usd": 0,
+  "n_bets": 0,
+  "units": 0.0
+ },
+ "RECORD_STALENESS": {
+  "handling": "the affected game is computed under BOTH outcomes and carries the interval; the reported value uses the parquet record as-is. No record was rolled forward on an unbound result.",
+  "n_stale_of_8": 1,
+  "resolved": true,
+  "resolved_note": "Washington's 8/27 result is now bound; the published interval held",
+  "teams_playing_tonight_that_played_2026-08-27": [
+   "Washington Mystics"
+  ],
+  "unaffected_games": [
+   "wnba:POR@ATL",
+   "wnba:CON@IND",
+   "wnba:TOR@LV"
+  ]
+ },
+ "SEPARATION": "MLB, WNBA and NFL are separate cohorts on separate boards, never pooled",
+ "STALENESS_INTERVAL_RESOLVED": {
+  "outcome": "Washington beat Phoenix 80-73 on 2026-08-27; the archive now reads 24-15",
+  "v1_published": "exactly one of tonight's eight teams (Washington) had a record stale by one game; v1 refused to roll it forward on an unbound result and published the interval instead",
+  "verdict": "the realized value lands inside the published band, on its win end. Refusing to guess cost nothing and the disclosure was accurate."
+ },
+ "WHAT_CHANGED": {
+  "archive_advanced": {
+   "carries": "both 8/27 finals (401857178, 401857179)",
+   "from": "3316fa3",
+   "landed_utc": "2026-08-28 06:32 ET",
+   "to": "7a1c7eb"
+  },
+  "arms_blocked": 0,
+  "arms_now_emitted": 3,
+  "carried_unchanged": [
+   "wnba.winner.EXPANDING_HOME_PRIOR"
+  ],
+  "recomputed": [
+   {
+    "arm": "wnba.fallback.STANDINGS_LOG5_v1",
+    "cause": "the 8/27 result this row explicitly refused to assume is now bound",
+    "game": "wnba:WSH@LAS",
+    "lands_inside_published_interval": true,
+    "new_p_home": 0.273422,
+    "new_records": {
+     "LAS": "13-25",
+     "WSH": "24-15"
+    },
+    "old_p_home": 0.28195829561864705,
+    "old_records": {
+     "LAS": "13-25",
+     "WSH": "23-15"
+    },
+    "published_interval": [
+     0.273422,
+     0.295206
+    ]
+   }
+  ],
+  "unblocked": "wnba.replacement.FEATURE_REFRESH \u2014 the extension pool was rebuilt through the 8/27 cutoff once the archive published that day"
+ },
+ "action_authority": "NONE \u2014 the fallback is DIAGNOSTIC_ONLY by registration and FEATURE_REFRESH is ACTION_BLOCKED while SYSTEM_NOT_DECISION_READY",
+ "availability_open_items": [
+  "CONFLICT: Aneesah Morrow appears on Connecticut's list (questionable, chest) and on Toronto's list (left knee). These cannot both be current. Reported, not resolved \u2014 no retained artifact settles it.",
+  "REFUSED FOR DATE: the only Sparks/Mystics injury report surfaced is dated 8/15/2026, ~13 days stale. Carrying it forward would be a guess. 8/28 availability for both clubs is NULL / UNKNOWN.",
+  "LV: A'ja Wilson downgraded to QUESTIONABLE (back) after being off the report, but the same snippet has her scoring 27 in the 8/23 meeting \u2014 the tag may be stale.",
+  "ATL: Brionna Jones OUT (left leg); the consecutive-games-missed count differs between snippets and is unreconciled."
+ ],
+ "builder": "harness/build_board_wnba_0828_v2.py (COMMITTED)",
+ "cohort": "WNBA \u2014 never pooled with MLB or NFL",
+ "cohort_hashes": {
+  "wnba": "2fdb5c9ae59afee676c61908c4ce03df314d2add6e87e4a75e675f476330f6cc"
+ },
+ "earliest_start_utc": "2026-08-28T23:30:00Z",
+ "forecast_anchor_utc": "2026-08-28T11:25:00Z",
+ "leakage_check": "the four target ids 401857180-183 are absent from the extension pool; the pool's latest event is strictly before the earliest tip",
+ "model_identity": [
+  "wnba.winner.EXPANDING_HOME_PRIOR",
+  "wnba.fallback.STANDINGS_LOG5_v1 (DIAGNOSTIC_ONLY, action-blocked)",
+  "wnba.replacement.FEATURE_REFRESH"
+ ],
+ "n_games": 4,
+ "pool": {
+  "base_games": 2287,
+  "extension_games": 91,
+  "extension_sha256": "ab7044acd6df3c8059fa4b7d6f157ebac948520f56cccb86b95741fca71d2add",
+  "extension_window": "2026-07-22 (excl) .. 2026-08-28"
+ },
+ "provenance": {
+  "commit": "7a1c7ebaef37590ebdaf75c4d3961b99a493d99b",
+  "repo": "github.com/sportsdataverse/wehoop-wnba-raw",
+  "retrieved_utc": "2026-08-28T11:15:09Z",
+  "schedule_sha256": "81d55d63216a16736aea5515276fb050494f5b4ec684f2f92f5375d32526f3b5"
+ },
+ "record_id": "BOARD-2026-08-28-WNBA-V2",
+ "slate_date": "2026-08-28",
+ "sport": "wnba",
+ "supersedes": {
+  "file": "cards/2026-08-28_wnba_board.json",
+  "file_sha256": "0e328ff1bde5428dcd0a2e272171cd9afcf7919278b0978d99f298c627773159",
+  "record": "BOARD-2026-08-28-WNBA",
+  "rule": "R3 \u2014 the v1 file is NOT edited; this record supersedes it"
+ },
+ "wnba": {
+  "cohort_id": "wnba:2026-08-28",
+  "n_games": 4,
+  "rows": [
+   {
+    "action_status": "NO_RETAINED_MARKET_ARTIFACT",
+    "arm": "wnba.winner.EXPANDING_HOME_PRIOR",
+    "availability_grade": "SEARCH_IDENTIFIED_UNCONFIRMED",
+    "away": "Portland Fire",
+    "canonical_id": "ESPN_GAMEID:401857180",
+    "forecast_status": "FORECAST_REGISTERED",
+    "game": "wnba:POR@ATL",
+    "game_start_utc": "2026-08-28T23:30:00Z",
+    "home": "Atlanta Dream",
+    "id_grade": "CAPTURED",
+    "id_space": "ESPN_GAMEID",
+    "input_dependency": "NONE",
+    "lineups": "PERSONNEL_UNVERIFIED",
+    "output_grade": "REGISTERED_PRIOR",
+    "p_home": 0.536585,
+    "schedule_grade": "ESPN_SINGLE_FAMILY_GIT_ARTIFACT",
+    "sport": "wnba",
+    "target": "winner"
+   },
+   {
+    "action_status": "NO_RETAINED_MARKET_ARTIFACT",
+    "arm": "wnba.fallback.STANDINGS_LOG5_v1",
+    "availability_grade": "SEARCH_IDENTIFIED_UNCONFIRMED",
+    "away": "Portland Fire",
+    "canonical_id": "ESPN_GAMEID:401857180",
+    "forecast_status": "FORECAST_REGISTERED",
+    "game": "wnba:POR@ATL",
+    "game_start_utc": "2026-08-28T23:30:00Z",
+    "home": "Atlanta Dream",
+    "id_grade": "CAPTURED",
+    "id_space": "ESPN_GAMEID",
+    "input_dependency": "SEASON_RECORDS_ONLY",
+    "input_grade": "WEHOOP_GIT_ARTIFACT_RECORDS",
+    "lineups": "PERSONNEL_UNVERIFIED",
+    "log5": 0.7467532467532468,
+    "output_grade": "DIAGNOSTIC_ONLY_ACTION_BLOCKED",
+    "p_home": 0.7734635147503538,
+    "records": {
+     "ATL": "25-13",
+     "POR": "15-23"
+    },
+    "records_asof": "2026-08-27 (archive 7a1c7eb; 8/27 finals bound)",
+    "schedule_grade": "ESPN_SINGLE_FAMILY_GIT_ARTIFACT",
+    "sport": "wnba",
+    "target": "winner"
+   },
+   {
+    "action_status": "NO_RETAINED_MARKET_ARTIFACT",
+    "arm": "wnba.replacement.FEATURE_REFRESH",
+    "availability_grade": "SEARCH_IDENTIFIED_UNCONFIRMED",
+    "away": "Portland Fire",
+    "canonical_id": "ESPN_GAMEID:401857180",
+    "coherence_gap_pp": 2.78,
+    "coherence_pass": true,
+    "forecast_status": "FORECAST_REGISTERED",
+    "game": "wnba:POR@ATL",
+    "game_start_utc": "2026-08-28T23:30:00Z",
+    "games_used": {
+     "away": 39,
+     "home": 38
+    },
+    "home": "Atlanta Dream",
+    "id_grade": "CAPTURED",
+    "id_space": "ESPN_GAMEID",
+    "input_dependency": "EXTENSION_POOL_THROUGH_CUTOFF",
+    "input_grade": "ESPN_SINGLE_FAMILY_GIT_ARTIFACT",
+    "lineups": "PERSONNEL_UNVERIFIED",
+    "margin_home": 9.71,
+    "model_side": "Atlanta Dream",
+    "p_home": 0.7843,
+    "projected_total": 177.6,
+    "schedule_grade": "ESPN_SINGLE_FAMILY_GIT_ARTIFACT",
+    "sport": "wnba",
+    "target": "winner",
+    "unblocked_from": "BLOCKED_PENDING_FEATURE_REBUILD"
+   },
+   {
+    "action_status": "NO_RETAINED_MARKET_ARTIFACT",
+    "arm": "wnba.winner.EXPANDING_HOME_PRIOR",
+    "availability_grade": "SEARCH_IDENTIFIED_UNCONFIRMED",
+    "away": "Connecticut Sun",
+    "canonical_id": "ESPN_GAMEID:401857181",
+    "forecast_status": "FORECAST_REGISTERED",
+    "game": "wnba:CON@IND",
+    "game_start_utc": "2026-08-28T23:30:00Z",
+    "home": "Indiana Fever",
+    "id_grade": "CAPTURED",
+    "id_space": "ESPN_GAMEID",
+    "input_dependency": "NONE",
+    "lineups": "PERSONNEL_UNVERIFIED",
+    "output_grade": "REGISTERED_PRIOR",
+    "p_home": 0.536585,
+    "schedule_grade": "ESPN_SINGLE_FAMILY_GIT_ARTIFACT",
+    "sport": "wnba",
+    "target": "winner"
+   },
+   {
+    "action_status": "NO_RETAINED_MARKET_ARTIFACT",
+    "arm": "wnba.fallback.STANDINGS_LOG5_v1",
+    "availability_grade": "SEARCH_IDENTIFIED_UNCONFIRMED",
+    "away": "Connecticut Sun",
+    "canonical_id": "ESPN_GAMEID:401857181",
+    "forecast_status": "FORECAST_REGISTERED",
+    "game": "wnba:CON@IND",
+    "game_start_utc": "2026-08-28T23:30:00Z",
+    "home": "Indiana Fever",
+    "id_grade": "CAPTURED",
+    "id_space": "ESPN_GAMEID",
+    "input_dependency": "SEASON_RECORDS_ONLY",
+    "input_grade": "WEHOOP_GIT_ARTIFACT_RECORDS",
+    "lineups": "PERSONNEL_UNVERIFIED",
+    "log5": 0.8333333333333335,
+    "output_grade": "DIAGNOSTIC_ONLY_ACTION_BLOCKED",
+    "p_home": 0.8527129935099196,
+    "records": {
+     "CON": "10-28",
+     "IND": "25-14"
+    },
+    "records_asof": "2026-08-27 (archive 7a1c7eb; 8/27 finals bound)",
+    "schedule_grade": "ESPN_SINGLE_FAMILY_GIT_ARTIFACT",
+    "sport": "wnba",
+    "target": "winner"
+   },
+   {
+    "action_status": "NO_RETAINED_MARKET_ARTIFACT",
+    "arm": "wnba.replacement.FEATURE_REFRESH",
+    "availability_grade": "SEARCH_IDENTIFIED_UNCONFIRMED",
+    "away": "Connecticut Sun",
+    "canonical_id": "ESPN_GAMEID:401857181",
+    "coherence_gap_pp": 4.37,
+    "coherence_pass": true,
+    "forecast_status": "FORECAST_REGISTERED",
+    "game": "wnba:CON@IND",
+    "game_start_utc": "2026-08-28T23:30:00Z",
+    "games_used": {
+     "away": 39,
+     "home": 40
+    },
+    "home": "Indiana Fever",
+    "id_grade": "CAPTURED",
+    "id_space": "ESPN_GAMEID",
+    "input_dependency": "EXTENSION_POOL_THROUGH_CUTOFF",
+    "input_grade": "ESPN_SINGLE_FAMILY_GIT_ARTIFACT",
+    "lineups": "PERSONNEL_UNVERIFIED",
+    "margin_home": 15.04,
+    "model_side": "Indiana Fever",
+    "p_home": 0.9029,
+    "projected_total": 178.6,
+    "schedule_grade": "ESPN_SINGLE_FAMILY_GIT_ARTIFACT",
+    "sport": "wnba",
+    "target": "winner",
+    "unblocked_from": "BLOCKED_PENDING_FEATURE_REBUILD"
+   },
+   {
+    "action_status": "NO_RETAINED_MARKET_ARTIFACT",
+    "arm": "wnba.winner.EXPANDING_HOME_PRIOR",
+    "availability_grade": "SEARCH_IDENTIFIED_UNCONFIRMED",
+    "away": "Toronto Tempo",
+    "canonical_id": "ESPN_GAMEID:401857182",
+    "forecast_status": "FORECAST_REGISTERED",
+    "game": "wnba:TOR@LV",
+    "game_start_utc": "2026-08-29T02:00:00Z",
+    "home": "Las Vegas Aces",
+    "id_grade": "CAPTURED",
+    "id_space": "ESPN_GAMEID",
+    "input_dependency": "NONE",
+    "lineups": "PERSONNEL_UNVERIFIED",
+    "output_grade": "REGISTERED_PRIOR",
+    "p_home": 0.536585,
+    "schedule_grade": "ESPN_SINGLE_FAMILY_GIT_ARTIFACT",
+    "sport": "wnba",
+    "target": "winner"
+   },
+   {
+    "action_status": "NO_RETAINED_MARKET_ARTIFACT",
+    "arm": "wnba.fallback.STANDINGS_LOG5_v1",
+    "availability_grade": "SEARCH_IDENTIFIED_UNCONFIRMED",
+    "away": "Toronto Tempo",
+    "canonical_id": "ESPN_GAMEID:401857182",
+    "forecast_status": "FORECAST_REGISTERED",
+    "game": "wnba:TOR@LV",
+    "game_start_utc": "2026-08-29T02:00:00Z",
+    "home": "Las Vegas Aces",
+    "id_grade": "CAPTURED",
+    "id_space": "ESPN_GAMEID",
+    "input_dependency": "SEASON_RECORDS_ONLY",
+    "input_grade": "WEHOOP_GIT_ARTIFACT_RECORDS",
+    "lineups": "PERSONNEL_UNVERIFIED",
+    "log5": 0.8307692307692307,
+    "output_grade": "DIAGNOSTIC_ONLY_ACTION_BLOCKED",
+    "p_home": 0.8503935136033043,
+    "records": {
+     "LV": "26-13",
+     "TOR": "11-27"
+    },
+    "records_asof": "2026-08-27 (archive 7a1c7eb; 8/27 finals bound)",
+    "schedule_grade": "ESPN_SINGLE_FAMILY_GIT_ARTIFACT",
+    "sport": "wnba",
+    "target": "winner"
+   },
+   {
+    "action_status": "NO_RETAINED_MARKET_ARTIFACT",
+    "arm": "wnba.replacement.FEATURE_REFRESH",
+    "availability_grade": "SEARCH_IDENTIFIED_UNCONFIRMED",
+    "away": "Toronto Tempo",
+    "canonical_id": "ESPN_GAMEID:401857182",
+    "coherence_gap_pp": 4.08,
+    "coherence_pass": true,
+    "forecast_status": "FORECAST_REGISTERED",
+    "game": "wnba:TOR@LV",
+    "game_start_utc": "2026-08-29T02:00:00Z",
+    "games_used": {
+     "away": 38,
+     "home": 39
+    },
+    "home": "Las Vegas Aces",
+    "id_grade": "CAPTURED",
+    "id_space": "ESPN_GAMEID",
+    "input_dependency": "EXTENSION_POOL_THROUGH_CUTOFF",
+    "input_grade": "ESPN_SINGLE_FAMILY_GIT_ARTIFACT",
+    "lineups": "PERSONNEL_UNVERIFIED",
+    "margin_home": 12.34,
+    "model_side": "Las Vegas Aces",
+    "p_home": 0.8523,
+    "projected_total": 170.7,
+    "schedule_grade": "ESPN_SINGLE_FAMILY_GIT_ARTIFACT",
+    "sport": "wnba",
+    "target": "winner",
+    "unblocked_from": "BLOCKED_PENDING_FEATURE_REBUILD"
+   },
+   {
+    "action_status": "NO_RETAINED_MARKET_ARTIFACT",
+    "arm": "wnba.winner.EXPANDING_HOME_PRIOR",
+    "availability_grade": "SEARCH_IDENTIFIED_UNCONFIRMED",
+    "away": "Washington Mystics",
+    "canonical_id": "ESPN_GAMEID:401857183",
+    "forecast_status": "FORECAST_REGISTERED",
+    "game": "wnba:WSH@LAS",
+    "game_start_utc": "2026-08-29T02:00:00Z",
+    "home": "Los Angeles Sparks",
+    "id_grade": "CAPTURED",
+    "id_space": "ESPN_GAMEID",
+    "input_dependency": "NONE",
+    "lineups": "PERSONNEL_UNVERIFIED",
+    "output_grade": "REGISTERED_PRIOR",
+    "p_home": 0.536585,
+    "schedule_grade": "ESPN_SINGLE_FAMILY_GIT_ARTIFACT",
+    "sport": "wnba",
+    "target": "winner"
+   },
+   {
+    "action_status": "NO_RETAINED_MARKET_ARTIFACT",
+    "arm": "wnba.fallback.STANDINGS_LOG5_v1",
+    "availability_grade": "SEARCH_IDENTIFIED_UNCONFIRMED",
+    "away": "Washington Mystics",
+    "canonical_id": "ESPN_GAMEID:401857183",
+    "forecast_status": "FORECAST_REGISTERED",
+    "game": "wnba:WSH@LAS",
+    "game_start_utc": "2026-08-29T02:00:00Z",
+    "home": "Los Angeles Sparks",
+    "id_grade": "CAPTURED",
+    "id_space": "ESPN_GAMEID",
+    "input_dependency": "SEASON_RECORDS_ONLY",
+    "input_grade": "WEHOOP_GIT_ARTIFACT_RECORDS",
+    "lineups": "PERSONNEL_UNVERIFIED",
+    "log5": 0.2452830188679245,
+    "output_grade": "DIAGNOSTIC_ONLY_ACTION_BLOCKED",
+    "p_home": 0.27342226985084195,
+    "record_staleness": {
+     "detail": "Washington Mystics played on 2026-08-27 (at Phoenix) and that result is not in this parquet and is not bound anywhere, so its record is stale by exactly one game.",
+     "interval_width_pp": 2.178,
+     "p_home_if_that_game_was_a_loss": 0.295206,
+     "p_home_if_that_game_was_a_win": 0.273422,
+     "reported_value_uses": "the parquet record as-is; the interval bounds the error rather than picking an outcome we do not have",
+     "resolved": true,
+     "resolved_by": "WSH beat PHX 80-73 on 2026-08-27, bound from archive 7a1c7eb",
+     "side": "away",
+     "team": "WSH"
+    },
+    "records": {
+     "LAS": "13-25",
+     "WSH": "24-15"
+    },
+    "records_asof": "2026-08-27 (archive 7a1c7eb; 8/27 finals bound)",
+    "schedule_grade": "ESPN_SINGLE_FAMILY_GIT_ARTIFACT",
+    "sport": "wnba",
+    "target": "winner"
+   },
+   {
+    "action_status": "NO_RETAINED_MARKET_ARTIFACT",
+    "arm": "wnba.replacement.FEATURE_REFRESH",
+    "availability_grade": "SEARCH_IDENTIFIED_UNCONFIRMED",
+    "away": "Washington Mystics",
+    "canonical_id": "ESPN_GAMEID:401857183",
+    "coherence_gap_pp": 0.89,
+    "coherence_pass": true,
+    "forecast_status": "FORECAST_REGISTERED",
+    "game": "wnba:WSH@LAS",
+    "game_start_utc": "2026-08-29T02:00:00Z",
+    "games_used": {
+     "away": 39,
+     "home": 38
+    },
+    "home": "Los Angeles Sparks",
+    "id_grade": "CAPTURED",
+    "id_space": "ESPN_GAMEID",
+    "input_dependency": "EXTENSION_POOL_THROUGH_CUTOFF",
+    "input_grade": "ESPN_SINGLE_FAMILY_GIT_ARTIFACT",
+    "lineups": "PERSONNEL_UNVERIFIED",
+    "margin_home": -1.26,
+    "model_side": "Washington Mystics",
+    "p_home": 0.4731,
+    "projected_total": 172.8,
+    "schedule_grade": "ESPN_SINGLE_FAMILY_GIT_ARTIFACT",
+    "sport": "wnba",
+    "target": "winner",
+    "unblocked_from": "BLOCKED_PENDING_FEATURE_REBUILD"
+   }
+  ]
+ }
+}

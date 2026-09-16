@@ -1,0 +1,484 @@
+{
+ "record_id": "ML-FULL-DIAGNOSTIC-REPORT-2026-08-10",
+ "n_games": 1054,
+ "n_dates": 81,
+ "home_win_rate": 0.5161290322580645,
+ "item1_lpm_range": {
+  "min": -5.375,
+  "max": 5.0,
+  "n_below_0": 20,
+  "n_above_1": 12,
+  "pct_outside_0_1": 3.0360531309297913,
+  "brier_raw_unclipped": 0.4445198153002485,
+  "brier_clipped": 0.2555271458119895,
+  "note": "Clipping can only help Brier when predictions leave [0,1]; the gap quantifies how much of the LPM's score is repaired by clipping rather than earned by the fit."
+ },
+ "item2_roc_auc": {
+  "LPM": 0.5534998558246829,
+  "logistic": 0.564525663206459,
+  "ridge": 0.5647563437139562,
+  "V13": 0.5661782727797001
+ },
+ "item2_note": "AUC measures RANKING only and is invariant to monotone recalibration, so a model can rank well and still be badly calibrated \u2014 which is exactly the LPM's situation and why the earlier 'ranking is fine' phrasing was replaced.",
+ "item3_calibration": {
+  "LPM": {
+   "calibration": {
+    "intercept": 0.06323834010049446,
+    "slope": 0.028325027942311277
+   },
+   "brier_decomposition": {
+    "brier": 0.2555271458119895,
+    "reliability": 0.003227088507725062,
+    "resolution": 0.004476867809146317,
+    "uncertainty": 0.2497398543184183
+   },
+   "reliability_bins": [
+    {
+     "n": 106,
+     "pred": 0.31976631189321475,
+     "actual": 0.36792452830188677
+    },
+    {
+     "n": 106,
+     "pred": 0.46467643417179677,
+     "actual": 0.4716981132075472
+    },
+    {
+     "n": 106,
+     "pred": 0.4916269594258423,
+     "actual": 0.5283018867924528
+    },
+    {
+     "n": 106,
+     "pred": 0.5090068238323631,
+     "actual": 0.4528301886792453
+    },
+    {
+     "n": 105,
+     "pred": 0.5236577265114093,
+     "actual": 0.6
+    },
+    {
+     "n": 105,
+     "pred": 0.5371865515861757,
+     "actual": 0.580952380952381
+    },
+    {
+     "n": 105,
+     "pred": 0.5494156774695451,
+     "actual": 0.49523809523809526
+    },
+    {
+     "n": 105,
+     "pred": 0.5647927574836633,
+     "actual": 0.5619047619047619
+    },
+    {
+     "n": 105,
+     "pred": 0.5840258000808726,
+     "actual": 0.5428571428571428
+    },
+    {
+     "n": 105,
+     "pred": 0.67625954693781,
+     "actual": 0.5619047619047619
+    }
+   ]
+  },
+  "logistic": {
+   "calibration": {
+    "intercept": -0.04540601238888409,
+    "slope": 0.9787220212075214
+   },
+   "brier_decomposition": {
+    "brier": 0.24662319045173806,
+    "reliability": 0.002334432895566791,
+    "resolution": 0.005783915278164353,
+    "uncertainty": 0.2497398543184183
+   },
+   "reliability_bins": [
+    {
+     "n": 106,
+     "pred": 0.41696404967784084,
+     "actual": 0.3584905660377358
+    },
+    {
+     "n": 106,
+     "pred": 0.47117970747030224,
+     "actual": 0.49056603773584906
+    },
+    {
+     "n": 106,
+     "pred": 0.4941287576297552,
+     "actual": 0.5094339622641509
+    },
+    {
+     "n": 106,
+     "pred": 0.5111012237175948,
+     "actual": 0.4339622641509434
+    },
+    {
+     "n": 105,
+     "pred": 0.5256351832200705,
+     "actual": 0.6
+    },
+    {
+     "n": 105,
+     "pred": 0.5383630153775174,
+     "actual": 0.5523809523809524
+    },
+    {
+     "n": 105,
+     "pred": 0.5503845257299532,
+     "actual": 0.5142857142857142
+    },
+    {
+     "n": 105,
+     "pred": 0.5649627489311935,
+     "actual": 0.5619047619047619
+    },
+    {
+     "n": 105,
+     "pred": 0.5831885571252112,
+     "actual": 0.5047619047619047
+    },
+    {
+     "n": 105,
+     "pred": 0.6251058111363239,
+     "actual": 0.638095238095238
+    }
+   ]
+  },
+  "ridge": {
+   "calibration": {
+    "intercept": -0.05517780525941761,
+    "slope": 1.0692000168618703
+   },
+   "brier_decomposition": {
+    "brier": 0.2468213896230325,
+    "reliability": 0.0015268273402675385,
+    "resolution": 0.004765674750060234,
+    "uncertainty": 0.2497398543184183
+   },
+   "reliability_bins": [
+    {
+     "n": 106,
+     "pred": 0.42749638711021115,
+     "actual": 0.37735849056603776
+    },
+    {
+     "n": 106,
+     "pred": 0.4798942952788613,
+     "actual": 0.4339622641509434
+    },
+    {
+     "n": 106,
+     "pred": 0.500989128607092,
+     "actual": 0.5283018867924528
+    },
+    {
+     "n": 106,
+     "pred": 0.5159486938051465,
+     "actual": 0.46226415094339623
+    },
+    {
+     "n": 105,
+     "pred": 0.5268164458947067,
+     "actual": 0.5714285714285714
+    },
+    {
+     "n": 105,
+     "pred": 0.536924832375778,
+     "actual": 0.580952380952381
+    },
+    {
+     "n": 105,
+     "pred": 0.5460571617176011,
+     "actual": 0.5142857142857142
+    },
+    {
+     "n": 105,
+     "pred": 0.5561852655481618,
+     "actual": 0.5142857142857142
+    },
+    {
+     "n": 105,
+     "pred": 0.5739541669096314,
+     "actual": 0.580952380952381
+    },
+    {
+     "n": 105,
+     "pred": 0.6159259443737316,
+     "actual": 0.6
+    }
+   ]
+  },
+  "V13": {
+   "calibration": {
+    "intercept": 0.06136479948979072,
+    "slope": 0.8423910511708614
+   },
+   "brier_decomposition": {
+    "brier": 0.24707133238562087,
+    "reliability": 0.003821910835173847,
+    "resolution": 0.0069318972950733705,
+    "uncertainty": 0.2497398543184183
+   },
+   "reliability_bins": [
+    {
+     "n": 106,
+     "pred": 0.38925911949685527,
+     "actual": 0.33962264150943394
+    },
+    {
+     "n": 106,
+     "pred": 0.4358119496855346,
+     "actual": 0.5377358490566038
+    },
+    {
+     "n": 106,
+     "pred": 0.4598597484276729,
+     "actual": 0.37735849056603776
+    },
+    {
+     "n": 106,
+     "pred": 0.4768311320754716,
+     "actual": 0.5283018867924528
+    },
+    {
+     "n": 105,
+     "pred": 0.493588253968254,
+     "actual": 0.5333333333333333
+    },
+    {
+     "n": 105,
+     "pred": 0.5068695238095238,
+     "actual": 0.6
+    },
+    {
+     "n": 105,
+     "pred": 0.5213203174603175,
+     "actual": 0.5333333333333333
+    },
+    {
+     "n": 105,
+     "pred": 0.5429495238095238,
+     "actual": 0.5619047619047619
+    },
+    {
+     "n": 105,
+     "pred": 0.5701444444444443,
+     "actual": 0.6
+    },
+    {
+     "n": 105,
+     "pred": 0.6171603174603175,
+     "actual": 0.5523809523809524
+    }
+   ]
+  }
+ },
+ "item4_preprocessing_audit": {
+  "standardization": "FITTED INSIDE FOLD \u2014 mean/std computed on the training rows only (_standardize(Xtr, Xte)); verified by a selftest that a test-set outlier does not move the training moments.",
+  "ridge_penalty_selection": "FITTED INSIDE FOLD \u2014 chosen on an inner 80/20 split of the TRAINING window; scoring rows are never used to pick l2.",
+  "coefficients": "FITTED INSIDE FOLD \u2014 every model is refit on each expanding window.",
+  "imputation": "NOT FOLD-FITTED, and disclosed: missing SP K%/BB%/ERA fall back to FIXED GLOBAL CONSTANTS (LG_ERA 4.20, K 22.0, BB 8.5) and the ERA shrinkage prior is the same constant. These are PRIORS, not quantities estimated from data, so they carry no outcome information and cannot leak the future \u2014 but they are not re-estimated per fold, and a purist implementation would fit them on the training window. Materiality is small: rows with missing TEAM form are dropped outright rather than imputed.",
+  "row_filtering": "Rows lacking team run data are EXCLUDED (R1: not imputed). The filter uses no outcome information.",
+  "target_leakage": "None: no market price, no post-game quantity, and no same-day information enters the features; the training window is strictly date < test date."
+ },
+ "item5_coefficients": {
+  "standardized": true,
+  "note": "Features are standardised inside each fold, so coefficients are per-SD and directly comparable. The IQR translation below is the honest effect size: how much the predicted probability moves across the interquartile range of that feature, evaluated at p=0.5 where the logistic slope is steepest (0.25) \u2014 i.e. an UPPER bound on the marginal effect.",
+  "effects": {
+   "sp_era_edge": {
+    "coef_standardized": 0.19942233655522784,
+    "raw_iqr": 1.1507848721625806,
+    "iqr_in_sd": 1.2558960402190549,
+    "delta_logodds_per_IQR": 0.2504537228109423,
+    "delta_prob_at_p50_per_IQR": 0.06261343070273558
+   },
+   "team_rd_edge": {
+    "coef_standardized": 0.021867034886290507,
+    "raw_iqr": 1.5769999999999995,
+    "iqr_in_sd": 0.8274620344302385,
+    "delta_logodds_per_IQR": 0.018094141173966943,
+    "delta_prob_at_p50_per_IQR": 0.004523535293491736
+   },
+   "off_edge": {
+    "coef_standardized": 0.004697049080634939,
+    "raw_iqr": 1.054,
+    "iqr_in_sd": 0.9652163192749966,
+    "delta_logodds_per_IQR": 0.004533668425064462,
+    "delta_prob_at_p50_per_IQR": 0.0011334171062661155
+   },
+   "def_edge": {
+    "coef_standardized": 0.02976246752268318,
+    "raw_iqr": 1.3125,
+    "iqr_in_sd": 1.068887398407648,
+    "delta_logodds_per_IQR": 0.031812726480512935,
+    "delta_prob_at_p50_per_IQR": 0.007953181620128234
+   },
+   "sp_k_edge": {
+    "coef_standardized": 0.041879052638860825,
+    "raw_iqr": 10.0,
+    "iqr_in_sd": 1.1888984906851452,
+    "delta_logodds_per_IQR": 0.04978994247366538,
+    "delta_prob_at_p50_per_IQR": 0.012447485618416345
+   },
+   "sp_bb_edge": {
+    "coef_standardized": -0.008025518867096399,
+    "raw_iqr": 5.3999999999999995,
+    "iqr_in_sd": 1.0545713048800545,
+    "delta_logodds_per_IQR": -0.008463481904013345,
+    "delta_prob_at_p50_per_IQR": -0.0021158704760033363
+   },
+   "park": {
+    "coef_standardized": -0.1137511647467841,
+    "raw_iqr": 0.10599999999999998,
+    "iqr_in_sd": 0.9858762175400999,
+    "delta_logodds_per_IQR": -0.11214456804134026,
+    "delta_prob_at_p50_per_IQR": -0.028036142010335066
+   }
+  }
+ },
+ "item6_block_ablations": {
+  "full_model_brier": 0.24662319045173806,
+  "full_model_auc": 0.564525663206459,
+  "blocks": {
+   "starter": {
+    "features_removed": [
+     "sp_era_edge",
+     "sp_k_edge",
+     "sp_bb_edge"
+    ],
+    "brier_without_block": 0.24934784011169817,
+    "delta_vs_full": 0.00272464965996011,
+    "auc_without_block": 0.5231978085351788
+   },
+   "offense": {
+    "features_removed": [
+     "off_edge"
+    ],
+    "brier_without_block": 0.24660759837676133,
+    "delta_vs_full": -1.5592074976727988e-05,
+    "auc_without_block": 0.5647239042675893
+   },
+   "defense": {
+    "features_removed": [
+     "def_edge"
+    ],
+    "brier_without_block": 0.2466076889194841,
+    "delta_vs_full": -1.5501532253964223e-05,
+    "auc_without_block": 0.5646518166089965
+   },
+   "park": {
+    "features_removed": [
+     "park"
+    ],
+    "brier_without_block": 0.2470799527527003,
+    "delta_vs_full": 0.00045676230096225456,
+    "auc_without_block": 0.5606978085351788
+   },
+   "run_diff": {
+    "features_removed": [
+     "team_rd_edge"
+    ],
+    "brier_without_block": 0.2466232630717322,
+    "delta_vs_full": 7.261999415697495e-08,
+    "auc_without_block": 0.5645220588235295
+   }
+  },
+  "reading": "delta_vs_full > 0 means removing the block HURT (the block carries signal)."
+ },
+ "item7_inference": {
+  "date_block_bootstrap": {
+   "logistic_vs_V13": {
+    "dBrier": -0.00044814193388288155,
+    "ci95": [
+     -0.004167803753955184,
+     0.00337997036685516
+    ],
+    "p": 0.84,
+    "n_dates": 81
+   },
+   "logistic_vs_base": {
+    "dBrier": -0.003475017748914742,
+    "ci95": [
+     -0.006834304128238783,
+     0.000189179065237963
+    ],
+    "p": 0.0625,
+    "n_dates": 81
+   },
+   "LPM_vs_base": {
+    "dBrier": 0.005428937611336673,
+    "ci95": [
+     -0.003939146484183314,
+     0.018001695466106454
+    ],
+    "p": 0.3265,
+    "n_dates": 81
+   },
+   "V13_vs_base": {
+    "dBrier": -0.0030268758150318606,
+    "ci95": [
+     -0.0073820057425419685,
+     0.001247774414381101
+    ],
+    "p": 0.1735,
+    "n_dates": 81
+   },
+   "ridge_vs_V13": {
+    "dBrier": -0.00024994276258841804,
+    "ci95": [
+     -0.003853434455314729,
+     0.0035505264378687443
+    ],
+    "p": 0.915,
+    "n_dates": 81
+   },
+   "LPM_vs_logistic": {
+    "dBrier": 0.008903955360251417,
+    "ci95": [
+     -0.0004826356246171074,
+     0.02238371348218476
+    ],
+    "p": 0.07,
+    "n_dates": 81
+   }
+  },
+  "holm": {
+   "logistic_vs_base": {
+    "p_raw": 0.0625,
+    "p_holm": 0.375,
+    "reject_0.05": false
+   },
+   "LPM_vs_logistic": {
+    "p_raw": 0.07,
+    "p_holm": 0.375,
+    "reject_0.05": false
+   },
+   "V13_vs_base": {
+    "p_raw": 0.1735,
+    "p_holm": 0.694,
+    "reject_0.05": false
+   },
+   "LPM_vs_base": {
+    "p_raw": 0.3265,
+    "p_holm": 0.9795,
+    "reject_0.05": false
+   },
+   "logistic_vs_V13": {
+    "p_raw": 0.84,
+    "p_holm": 1.0,
+    "reject_0.05": false
+   },
+   "ridge_vs_V13": {
+    "p_raw": 0.915,
+    "p_holm": 1.0,
+    "reject_0.05": false
+   }
+  },
+  "note": "Resampling whole DATES, not individual games: games on a date share slate, schedule and weather effects, so a game-level bootstrap would understate the SE. Holm is applied across all six comparisons."
+ }
+}

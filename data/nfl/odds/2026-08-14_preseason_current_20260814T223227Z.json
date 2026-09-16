@@ -1,0 +1,285 @@
+{
+  "schema_version": "nfl.preseason.current_lines.v1",
+  "capture_id": "NFL-PS-LINES-20260814T223227Z",
+  "sport": "NFL",
+  "season_phase": "PRESEASON",
+  "capture_kind": "CURRENT_LINES",
+  "captured_at_utc": "2026-08-14T22:32:27Z",
+  "target_window": "RECOVERY_T_MINUS_30",
+  "missed_contract_window": "T_MINUS_90",
+  "backfills_missed_window": false,
+  "capture_status": "LATE_RECOVERY_CAPTURE; NOT_A_T_MINUS_90_REPLACEMENT",
+  "schedule_source": {
+    "name": "NFL official schedule",
+    "url": "https://www.nfl.com/schedules/2026/by-week/preseason-week-1",
+    "accessed_at_utc": "2026-08-14T22:30:45Z"
+  },
+  "provenance": {
+    "grade": "WEB_EXTRACTED_NOT_RAW_BYTE_BOUND",
+    "raw_source_bytes_on_disk": false,
+    "rule": "Every quote remains source-specific. No cross-source average, best-price synthesis, de-vig, implied probability, EV, or model value is computed.",
+    "limitation": "This recovery snapshot is auditable from URLs and verbatim extracted fields but does not satisfy a future raw-byte capture requirement."
+  },
+  "grade_scope": "MARKET_BENCHMARK_ONLY",
+  "promotion_eligible": false,
+  "wager_authority": "NO",
+  "stake": "$0",
+  "games": [
+    {
+      "game_id": "401873278",
+      "away_team": "DEN",
+      "home_team": "ATL",
+      "game_start_utc": "2026-08-14T23:00:00Z",
+      "model_forecast": null,
+      "forecast_status": "NO_INDEPENDENT_PRESEASON_MODEL",
+      "market_status": "CURRENT_FAVORITE_SIGN_RESOLVED; SOURCE_SPECIFIC_QUOTES_ONLY",
+      "current_favorite": "DEN",
+      "source_quotes": [
+        {
+          "quote_id": "DEN-ATL-ESPN-DK-20260814T223045Z",
+          "quote_scope": "SOURCE_SPECIFIC",
+          "display_source": "ESPN game odds",
+          "underlying_book_attribution": "DraftKings",
+          "source_url": "https://www.espn.com/nfl/game/_/gameId/401873278/broncos-falcons",
+          "accessed_at_utc": "2026-08-14T22:30:45Z",
+          "source_updated_at_utc": null,
+          "away_spread": -3.0,
+          "away_spread_price": -112,
+          "home_spread": 3.0,
+          "home_spread_price": -108,
+          "away_moneyline": -162,
+          "home_moneyline": 136,
+          "total": 39.5,
+          "over_price": -105,
+          "under_price": -115
+        },
+        {
+          "quote_id": "DEN-ATL-FANDUEL-RESEARCH-20260814T223045Z",
+          "quote_scope": "SOURCE_SPECIFIC",
+          "display_source": "FanDuel Research book-attributed article",
+          "underlying_book_attribution": "FanDuel Sportsbook",
+          "source_url": "https://www.fanduel.com/research/nfl-preseason-picks-4-nfl-best-bets-and-predictions-for-preseason-today-friday-8-14-26",
+          "accessed_at_utc": "2026-08-14T22:30:45Z",
+          "source_updated_at_utc": null,
+          "away_spread": null,
+          "away_spread_price": null,
+          "home_spread": 3.5,
+          "home_spread_price": -110,
+          "away_moneyline": null,
+          "home_moneyline": null,
+          "total": null,
+          "over_price": null,
+          "under_price": null
+        },
+        {
+          "quote_id": "DEN-ATL-FOX-20260814T223045Z",
+          "quote_scope": "SOURCE_SPECIFIC",
+          "display_source": "FOX Sports matchup odds",
+          "underlying_book_attribution": null,
+          "source_url": "https://www.foxsports.com/nfl/preseason-week-1-denver-broncos-vs-atlanta-falcons-aug-14-2026-game-boxscore-11144",
+          "accessed_at_utc": "2026-08-14T22:30:45Z",
+          "source_updated_at_utc": null,
+          "away_spread": -3.5,
+          "away_spread_price": null,
+          "home_spread": 3.5,
+          "home_spread_price": null,
+          "away_moneyline": -205,
+          "home_moneyline": 164,
+          "total": 40.5,
+          "over_price": null,
+          "under_price": null
+        }
+      ],
+      "pregame_personnel": {
+        "status": "PARTIAL_WITH_EXPLICIT_TARGET_GAME_PLANS",
+        "facts": [
+          {
+            "team": "DEN",
+            "source_family": "TEAM_OFFICIAL",
+            "source_url": "https://www.denverbroncos.com/news/broncos-starters-expected-to-play-15-snaps-vs-falcons-qb-bo-nix-to-make-preseason-debut-vs-packers",
+            "published_at_utc": "2026-08-12T18:59:00Z",
+            "captured_at_utc": "2026-08-14T22:31:50Z",
+            "fact": "Bo Nix will not play; Denver starters are expected to play about 15 snaps; Jarrett Stidham and Sam Ehlinger are each slated to play one half."
+          },
+          {
+            "team": "ATL",
+            "source_family": "TEAM_OFFICIAL",
+            "source_url": "https://www.atlantafalcons.com/news/",
+            "published_at_utc": "2026-08-12T00:00:00Z",
+            "captured_at_utc": "2026-08-14T22:31:50Z",
+            "fact": "Atlanta's official news index says Tua Tagovailoa will start and Cooper Rush and Jack Strand will rotate; starters will play. No exact snap count was published in the captured text."
+          }
+        ],
+        "conflicts": []
+      }
+    },
+    {
+      "game_id": "401873277",
+      "away_team": "MIA",
+      "home_team": "WAS",
+      "game_start_utc": "2026-08-14T23:00:00Z",
+      "model_forecast": null,
+      "forecast_status": "NO_INDEPENDENT_PRESEASON_MODEL",
+      "market_status": "CURRENT_FAVORITE_SIGN_RESOLVED; SOURCE_SPECIFIC_QUOTES_ONLY",
+      "current_favorite": "MIA",
+      "source_quotes": [
+        {
+          "quote_id": "MIA-WAS-FANDUEL-RESEARCH-20260814T223045Z",
+          "quote_scope": "SOURCE_SPECIFIC",
+          "display_source": "FanDuel Research book-attributed article",
+          "underlying_book_attribution": "FanDuel Sportsbook",
+          "source_url": "https://www.fanduel.com/research/nfl-preseason-picks-4-nfl-best-bets-and-predictions-for-preseason-today-friday-8-14-26",
+          "accessed_at_utc": "2026-08-14T22:30:45Z",
+          "source_updated_at_utc": null,
+          "away_spread": -3.5,
+          "away_spread_price": null,
+          "home_spread": null,
+          "home_spread_price": null,
+          "away_moneyline": -166,
+          "home_moneyline": null,
+          "total": 36.5,
+          "over_price": null,
+          "under_price": -115
+        },
+        {
+          "quote_id": "MIA-WAS-BLEACHER-20260814T223045Z",
+          "quote_scope": "SOURCE_SPECIFIC",
+          "display_source": "Bleacher Report live odds display",
+          "underlying_book_attribution": null,
+          "source_url": "https://bleacherreport.com/game/miami-dolphins-vs-washington-commanders-2026-8-14-18-00",
+          "accessed_at_utc": "2026-08-14T22:30:45Z",
+          "source_updated_at_utc": null,
+          "away_spread": -3.5,
+          "away_spread_price": -110,
+          "home_spread": 3.5,
+          "home_spread_price": -110,
+          "away_moneyline": -178,
+          "home_moneyline": 150,
+          "total": 36.5,
+          "over_price": -120,
+          "under_price": -102
+        },
+        {
+          "quote_id": "MIA-WAS-FOX-20260814T223045Z",
+          "quote_scope": "SOURCE_SPECIFIC",
+          "display_source": "FOX Sports matchup odds",
+          "underlying_book_attribution": null,
+          "source_url": "https://www.foxsports.com/nfl/preseason-week-1-miami-dolphins-vs-washington-commanders-aug-14-2026-game-boxscore-11145",
+          "accessed_at_utc": "2026-08-14T22:30:45Z",
+          "source_updated_at_utc": null,
+          "away_spread": -3.5,
+          "away_spread_price": null,
+          "home_spread": 3.5,
+          "home_spread_price": null,
+          "away_moneyline": -180,
+          "home_moneyline": 145,
+          "total": 36.5,
+          "over_price": null,
+          "under_price": null
+        }
+      ],
+      "pregame_personnel": {
+        "status": "PARTIAL_WITH_OFFICIAL_WAS_INACTIVES",
+        "facts": [
+          {
+            "team": "MIA",
+            "source_family": "SECONDARY_TEAM_REPORT",
+            "source_url": "https://www.thephinsider.com/miami-dolphins-training-camp/121569/dolphins-vs-commanders-preseason-game-malik-willis-starters-playing",
+            "published_at_utc": null,
+            "captured_at_utc": "2026-08-14T22:31:50Z",
+            "fact": "Head coach Jeff Hafley was reported to plan to play Malik Willis and the first-team offense; no exact snap or quarter limit was captured."
+          },
+          {
+            "team": "WAS",
+            "source_family": "TEAM_OFFICIAL",
+            "source_url": "https://www.commanders.com/news/commanders-dolphins-inactives-preseason-week-1",
+            "published_at_utc": null,
+            "captured_at_utc": "2026-08-14T22:31:50Z",
+            "fact": "Washington announced 25 non-participants, including QB Jayden Daniels, WR Terry McLaurin, LT Laremy Tunsil, both listed starting guards, RT Josh Conerly, TE Chig Okonkwo, WR Stefon Diggs, and multiple defensive starters."
+          }
+        ],
+        "conflicts": []
+      }
+    },
+    {
+      "game_id": "401873276",
+      "away_team": "TB",
+      "home_team": "NYJ",
+      "game_start_utc": "2026-08-14T23:00:00Z",
+      "model_forecast": null,
+      "forecast_status": "NO_INDEPENDENT_PRESEASON_MODEL",
+      "market_status": "CURRENT_FAVORITE_SIGN_RESOLVED; SOURCE_SPECIFIC_QUOTES_ONLY",
+      "current_favorite": "NYJ",
+      "source_quotes": [
+        {
+          "quote_id": "TB-NYJ-FANDUEL-RESEARCH-20260814T223045Z",
+          "quote_scope": "SOURCE_SPECIFIC",
+          "display_source": "FanDuel Research book-attributed article",
+          "underlying_book_attribution": "FanDuel Sportsbook",
+          "source_url": "https://www.fanduel.com/research/nfl-preseason-picks-4-nfl-best-bets-and-predictions-for-preseason-today-friday-8-14-26",
+          "accessed_at_utc": "2026-08-14T22:30:45Z",
+          "source_updated_at_utc": null,
+          "away_spread": null,
+          "away_spread_price": null,
+          "home_spread": -5.5,
+          "home_spread_price": -120,
+          "away_moneyline": null,
+          "home_moneyline": null,
+          "total": 35.5,
+          "over_price": null,
+          "under_price": -110
+        },
+        {
+          "quote_id": "TB-NYJ-FOX-20260814T223045Z",
+          "quote_scope": "SOURCE_SPECIFIC",
+          "display_source": "FOX Sports matchup odds",
+          "underlying_book_attribution": null,
+          "source_url": "https://www.foxsports.com/nfl/preseason-week-1-tampa-bay-buccaneers-vs-new-york-jets-aug-14-2026-game-boxscore-11143",
+          "accessed_at_utc": "2026-08-14T22:30:45Z",
+          "source_updated_at_utc": null,
+          "away_spread": 6.5,
+          "away_spread_price": null,
+          "home_spread": -6.5,
+          "home_spread_price": null,
+          "away_moneyline": 223,
+          "home_moneyline": -282,
+          "total": 35.5,
+          "over_price": null,
+          "under_price": null
+        }
+      ],
+      "pregame_personnel": {
+        "status": "LATE_CONFLICT_UNRESOLVED",
+        "facts": [
+          {
+            "team": "NYJ",
+            "source_family": "TEAM_OFFICIAL",
+            "source_url": "https://www.newyorkjets.com/news/jets-buccaneers-preseason-game-preview-aaron-glenn-wants-to-see-4-things-starters-08-14-2026",
+            "published_at_utc": "2026-08-14T17:00:00Z",
+            "captured_at_utc": "2026-08-14T22:31:50Z",
+            "fact": "The official team preview repeated Aaron Glenn's prior plan that everyone would play, without a fixed allocation of the stated 25-to-30 aggregate preseason reps."
+          },
+          {
+            "team": "NYJ",
+            "source_family": "SECONDARY_LATE_REPORT",
+            "source_url": "https://nypost.com/2026/08/14/sports/geno-smith-not-playing-in-jets-preseason-opener-surprise/",
+            "published_at_utc": "2026-08-14T22:12:40Z",
+            "captured_at_utc": "2026-08-14T22:31:50Z",
+            "fact": "A source-based late report says Geno Smith will not play because of foot soreness and Cade Klubnik is expected to take most quarterback snaps."
+          },
+          {
+            "team": "TB",
+            "source_family": "BOOK_AFFILIATED_SECONDARY_REPORT",
+            "source_url": "https://www.fanduel.com/research/nfl-preseason-picks-4-nfl-best-bets-and-predictions-for-preseason-today-friday-8-14-26",
+            "published_at_utc": null,
+            "captured_at_utc": "2026-08-14T22:31:50Z",
+            "fact": "Baker Mayfield was reported out and Jake Browning was reported in doubt after a back injury; no official target-game snap allocation was captured."
+          }
+        ],
+        "conflicts": [
+          "NYJ official earlier play plan conflicts with a later secondary report that Geno Smith is out. Keep starting-QB state unresolved until an official target-game update; do not infer intent from the market move."
+        ]
+      }
+    }
+  ]
+}

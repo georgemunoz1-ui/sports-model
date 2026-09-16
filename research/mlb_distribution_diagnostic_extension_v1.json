@@ -1,0 +1,113 @@
+{
+  "schema_version": "mlb_distribution_diagnostic_extension.v1",
+  "experiment_id": "mlb.fixed_poisson_vs_gamma_poisson_workload.v1",
+  "status": "PREREGISTERED_DIAGNOSTIC_EXTENSION",
+  "effective_for_future_eligible_events_only": true,
+  "governance": {
+    "automatic_arm_promotion": false,
+    "automatic_arm_retirement": false,
+    "automatic_blend": false,
+    "posthoc_parameter_retuning": false,
+    "posthoc_direction_flip_threshold_rule": false,
+    "market_input_used": false,
+    "promotion_authority": false,
+    "action_authority": false,
+    "canonical_decisions_require_remote_durable_prospective_evidence": true,
+    "same_exact_paired_forecast_population_required": true
+  },
+  "research_tracks": {
+    "distribution": {
+      "question": "Does fixed Poisson or Gamma-Poisson/workload better represent winner-probability uncertainty when the expected-run inputs are held fixed?",
+      "primary_metric": "PAIRED_LOG_LOSS_DELTA_GAMMA_MINUS_FIXED",
+      "secondary_metric": "PAIRED_BINARY_BRIER_SINGLE_CLASS_DELTA_GAMMA_MINUS_FIXED",
+      "descriptive_metric": "WINNER_ACCURACY",
+      "required_strata": [
+        "fixed_poisson_favorite_strength",
+        "absolute_arm_probability_divergence",
+        "direction_flip",
+        "absolute_fixed_probability_minus_0_5",
+        "absolute_gamma_probability_minus_0_5"
+      ],
+      "direction_flip_definition": "(fixed_home_win_probability >= 0.5) != (gamma_home_win_probability >= 0.5)",
+      "near_even_threshold": null,
+      "near_even_threshold_status": "NOT_PREDECLARED_DO_NOT_INFER_FROM_2026_09_08_TO_09_SAMPLE",
+      "anti_gamma_flip_rule_permitted": false,
+      "anti_gamma_flip_rule_note": "A rule such as do-not-flip-under-53-percent is forbidden unless separately preregistered before its evaluation population begins."
+    },
+    "mean_run_environment": {
+      "question": "Are the frozen expected-run means centered correctly by team, game, and slate environment independently of the distribution arm?",
+      "priority": "HIGH",
+      "required_metrics": [
+        "GAME_TOTAL_SIGNED_ERROR_ACTUAL_MINUS_PROJECTED",
+        "GAME_TOTAL_ABSOLUTE_ERROR",
+        "HOME_RUN_SIGNED_ERROR_ACTUAL_MINUS_PROJECTED",
+        "AWAY_RUN_SIGNED_ERROR_ACTUAL_MINUS_PROJECTED",
+        "HOME_RUN_ABSOLUTE_ERROR",
+        "AWAY_RUN_ABSOLUTE_ERROR"
+      ],
+      "required_audit_dimensions": [
+        "park_factor_state",
+        "weather_state",
+        "roof_state",
+        "starter_binding_state",
+        "bullpen_workload_state",
+        "lineup_binding_state",
+        "home_away_run_allocation",
+        "expected_total"
+      ],
+      "expected_total_bands": null,
+      "expected_total_band_status": "NOT_PREDECLARED",
+      "rule": "Distribution-arm changes must not be used as a substitute for repairing biased expected-run means."
+    },
+    "data_quality": {
+      "question": "Were required inputs complete, point-in-time valid, and bound to the correct event/team/player identities at forecast cutoff?",
+      "required_dimensions": [
+        "starter_completeness",
+        "lineup_completeness",
+        "bullpen_completeness",
+        "weather_completeness",
+        "park_roof_completeness",
+        "identity_binding_status",
+        "pit_chronology_status"
+      ],
+      "primary_promotion_population_rule": "Known fallback-starter or materially incomplete-input games are excluded from the primary promotion population unless the existing canonical contract explicitly marks them eligible; retain them in a separately labeled low-quality stratum."
+    }
+  },
+  "next_registry_report_contract": {
+    "required_fields": [
+      "period",
+      "league",
+      "registered_runs",
+      "eligible_final_events",
+      "input_quality_tier",
+      "fixed.log_loss",
+      "fixed.brier",
+      "fixed.accuracy",
+      "fixed.calibration_intercept_or_calibration_in_the_large",
+      "fixed.calibration_slope_when_estimable",
+      "gamma.log_loss",
+      "gamma.brier",
+      "gamma.accuracy",
+      "gamma.calibration_intercept_or_calibration_in_the_large",
+      "gamma.calibration_slope_when_estimable",
+      "paired.mean_log_loss_delta_gamma_minus_fixed",
+      "paired.mean_brier_delta_gamma_minus_fixed",
+      "paired.date_block_bootstrap_interval",
+      "strata.favorite_strength",
+      "strata.divergence",
+      "strata.direction_flip",
+      "strata.expected_total_band",
+      "strata.park_roof_weather_state",
+      "strata.starter_lineup_bullpen_completeness"
+    ],
+    "calibration_slope_policy": "Emit only when sample size and outcome variation make the estimate numerically defensible; otherwise null plus explicit status.",
+    "population_rule": "Every arm comparison uses the same exact eligible event population."
+  },
+  "decision_state": {
+    "fixed_poisson": "CONTROL",
+    "gamma_poisson_workload_mc": "ACTIVE_CHALLENGER",
+    "promotion": "NOT_ESTABLISHED",
+    "retirement": "NOT_ESTABLISHED",
+    "blend": "NOT_ESTABLISHED"
+  }
+}

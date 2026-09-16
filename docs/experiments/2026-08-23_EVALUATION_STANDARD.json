@@ -1,0 +1,92 @@
+{
+ "record_id": "EVALUATION-STANDARD-2026-08-23",
+ "created_utc": "2026-08-23T09:30:00Z",
+ "authority": "owner development mandate 2026-08-23: freeze presentation, concentrate on predictive signal, calibration and current information",
+ "delivered": {
+  "harness/evaluation_standard.py": "35/35 mutants; the full standard, never pooled across sport / arm / estimand / information class",
+  "harness/adaptive_layers.py": "17/17; layers REASSIGNED to the owner's second specification",
+  "wired": "healthcheck selftest loop"
+ },
+ "layer_reassignment": {
+  "FAST": "availability-type facts only — player availability, inactives, bullpen workload, recent lineup/minutes, QB rotation, snap shares, rest/travel, roster cuts",
+  "MEDIUM": "team ratings, recency weights, starter and player posteriors, residual variance, WNBA pace and efficiencies, depth-chart quality",
+  "SLOW": "global coefficients, park effects, calibration, feature set, architecture, thresholds",
+  "NEVER": "evidence rules, de-vig requirement, TIMING GATES, IMMUTABLE IDENTITIES, grading definitions, wager authority, promotion standards, market-as-feature",
+  "what_moved": "ratings and pitcher posteriors FAST -> MEDIUM; calibration and park effects MEDIUM -> SLOW. The quantities that move a forecast furthest now move least often.",
+  "the_audit_caught_my_own_omission": "Adding timing_gates and immutable_identities to the never-adapt list FAILED the healthcheck immediately, because neither had a bound enforcer. That is the audit doing exactly its job, one day after it was built to catch the same shape in same_book_devig_requirement."
+ },
+ "THE_HEADLINE_RESULT": {
+  "what_changed": "Every prior comparison measured the challenger against the ALL-CAP BASELINE. The owner's standard measures against the EXPANDING PRIOR. Same 30 games, different reference, opposite conclusion.",
+  "expanding_prior": {
+   "record": "22-8",
+   "brier": 0.2403,
+   "note": "a constant .527 probability. It picks home every game and home went 22-8 across these two nights."
+  },
+  "all_cap_baseline": {
+   "record": "16-14",
+   "brier": 0.24942,
+   "brier_skill": -0.03794,
+   "skill_ci": [
+    -0.06134,
+    -0.01454
+   ],
+   "verdict": "NEGATIVE_SKILL_WORSE_THAN_THE_PRIOR",
+   "reading": "a WINNING record whose entire skill interval lies below zero. The probabilities subtracted information relative to the base rate. This is precisely the combination the standard exists to surface, and it appeared on the first real run."
+  },
+  "challenger_starter_informed": {
+   "record": "18-12",
+   "brier": 0.24008,
+   "brier_skill": 0.00094,
+   "skill_ci": [
+    -0.00216,
+    0.00404
+   ],
+   "verdict": "NO_PREDICTIVE_PROGRESS",
+   "reading": "positive sign, interval spanning zero, no distance from the prior at all"
+  },
+  "the_conclusion_that_matters": "Almost the entire -0.00934 advantage the challenger showed over the all-CAP baseline was the BASELINE BEING BAD, not the challenger being good. Against the correct reference the challenger's skill is +0.00094 with an interval spanning zero. Nine days of MLB work has not yet produced a model that beats a constant .527 by a measurable amount. Reporting the -0.00934 without the prior comparison would have described progress that does not exist."
+ },
+ "paired_postgame": {
+  "n": 30,
+  "mean_delta_brier": -0.00934,
+  "gained_on": 21,
+  "lost_on": 9,
+  "total_brier_gained": 0.6078,
+  "total_brier_lost": 0.3275,
+  "unpaired": "none",
+  "by_direction": {
+   "TOWARD_HOME": {
+    "n": 19,
+    "mean_delta_brier": -0.02121,
+    "gained": "16/19",
+    "net_brier": 0.403
+   },
+   "TOWARD_AWAY": {
+    "n": 11,
+    "mean_delta_brier": 0.01115,
+    "gained": "5/11",
+    "net_brier": -0.1227
+   }
+  },
+  "largest_gains": [
+   "2026-08-19-TOR@TB .543->.643 home won, -0.0814, TOWARD_HOME",
+   "2026-08-21-TOR@NYY .550->.631 home won, -0.0663, TOWARD_HOME",
+   "2026-08-19-STL@CIN .467->.531 home won, -0.0641, TOWARD_HOME, FLIP"
+  ],
+  "largest_losses": [
+   "2026-08-21-DET@KC .459->.384 home won, +0.0868, TOWARD_AWAY",
+   "2026-08-19-MIA@PHI .500->.430 home won, +0.0749, TOWARD_AWAY, FLIP",
+   "2026-08-19-CWS@CHC .528->.569 away won, +0.0450, TOWARD_HOME"
+  ],
+  "reading": "Four of the five largest gains are moves TOWARD HOME on nights home teams went 22-8; three of the five largest losses are moves TOWARD AWAY. The directional confound reported yesterday is not softened by looking game by game — it is the shape of the whole result."
+ },
+ "two_defects_found_by_running_on_real_data": [
+  "NO MATERIALITY GUARD: +0.00094 skill on 30 games was graded PREDICTIVE_PROGRESS because the sign was positive. A slate-clustered interval on the skill score now governs, and the verdict consults the interval BEFORE the point estimate's sign — so a negative point estimate whose interval spans zero is NO_PREDICTIVE_PROGRESS, not NEGATIVE_SKILL. Overclaiming in the negative direction is the same error as overclaiming in the positive one.",
+  "CALIBRATION FITTED TO A NEAR-CONSTANT FORECAST: the expanding-prior arm drew an intercept of +189 and a slope of -2139, which reads as catastrophic miscalibration and is a degenerate fit. An exact-equality guard MISSED it because the prior drifts a hair between slate dates; the floor is now 0.1pp of spread and the result is reported as UNDEFINED, not miscalibrated."
+ ],
+ "what_this_does_not_do": [
+  "No new model was built. The MLB challenger described in the mandate is not yet implemented.",
+  "Nothing is promoted. Gate 0/100 NO_PROMOTE, ledger $0, execution UNAUTHORIZED, wager NO."
+ ],
+ "next": "build the MLB challenger: expanding prior as intercept, recency-weighted offense/defense, hierarchical starter projections with expected innings, handedness, bullpen, confirmed lineups, park/weather, separate starter and bullpen run distributions, wider variance for debuts and CAP substitutions"
+}

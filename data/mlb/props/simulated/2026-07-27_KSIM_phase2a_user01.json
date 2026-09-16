@@ -1,0 +1,63 @@
+{
+ "record_id": "KSIM-0727-U01",
+ "phase": "2A",
+ "capture_class": "USER_SUPPLIED_OPPORTUNISTIC_CAPTURE",
+ "phase1_sha256": "7f827fd0014e5835ec3bf3572bbe1ff36dce452d5e0a55b735d04fe665c12d2f",
+ "protocol_sections": "A, B, C, D (complete for 2026-07-27)",
+ "received_at_utc": "2026-07-27T04:14:43Z",
+ "user_reported_capture_time": null,
+ "image_metadata_time": null,
+ "eligibility_timestamp_used": "received_at_utc",
+ "eligibility_basis": "D1 default. The image supplies no visible clock or quote time and no readable metadata was available, so the arrival stamp governs.",
+ "evidence": {
+  "evidence_path": null,
+  "evidence_sha256": null,
+  "retained": false,
+  "failure": "EVIDENCE_FILE_NOT_RETRIEVABLE",
+  "detail": "The screenshot arrived as inline conversation content, not as a file on this filesystem. A filesystem search over /root/.claude, /tmp/claude-0 and /tmp for images created after 2026-07-27T03:00Z returned nothing. There is therefore no artifact to hash. NO HASH IS RECORDED - a fabricated digest would be worse than an absent one (R1).",
+  "consequence": "A5 and C5 require the original file, preserved and hashed. This capture does not meet that bar. Retention requires the operator to supply the image as a file; the only current copy is the conversation transcript, which is outside our control.",
+  "status": "OPEN - retention gap"
+ },
+ "source": {
+  "kind": "aggregator",
+  "note": "One page rendering five book COLUMNS (DraftKings, FanDuel, BetMGM, BetRivers, Caesars). This is ONE source response, not five.",
+  "market_header": "Strikeouts"
+ },
+ "classification": {
+  "SOURCE_RESPONSE": "SUCCESS",
+  "SLATE_MATCH": false,
+  "STATUS": "NO_QUALIFYING_MARKET",
+  "REASON": "STALE_PRIOR_SLATE_WITH_BLANK_PRICES",
+  "QUALIFYING_2026_07_27_QUOTES": 0,
+  "EXECUTABLE_DECISIONS": 0,
+  "confirmed_by": "independent mechanical check, below"
+ },
+ "verification": {
+  "method": "Compared the 30 pitcher names visible in the image against the frozen 2026-07-27 board and against data/mlb/props/2026-07-26_kboard_full.json.",
+  "overlap_with_frozen_2026_07_27": 0,
+  "overlap_with_stored_2026_07_26": "30 of 30",
+  "on_0726_board_but_absent_from_image": 0,
+  "in_image_but_absent_from_0726_board": 0,
+  "finding": "Not merely stale - a WHOLESALE match to the prior slate. Same thirty arms, none added, none dropped. Corroborated by arms already on the 7/26 record: Jose Soriano (the pending 7/26 play), and Fedde, Freeland, Avila and Baz (the four short-line arms named in the 7/27 guard note)."
+ },
+ "two_independent_disqualifications": [
+  "WRONG SLATE: zero of the 30 displayed arms start on 2026-07-27.",
+  "NO PRICES: the Under and Over columns are blank for every book. Line-only. Even on the correct slate this would fail C7 - a line without both prices is not a FIRST_CAPTURED_COMPLETE_QUOTE."
+ ],
+ "prohibitions_recorded": [
+  "The displayed numbers are NOT 2026-07-27 lines and must never be described as such.",
+  "Not ingested, not passed to select_play(), not used as evidence about any 7/27 projection.",
+  "Values not transcribed into this record: they carry no permitted analytic use, and transcribing 150 cells from an image would add error for no purpose."
+ ],
+ "scope_limit": {
+  "establishes": "Only that THIS source had not populated a qualifying 2026-07-27 strikeout board as of received_at_utc.",
+  "does_not_establish": "That no sportsbook had 2026-07-27 markets available. It is an aggregator's rendering, and per C3 an aggregator column is not a source response from the book it names.",
+  "per_book_status": "DK, FD, MGM, BR and CZR remain CAPTURE_NOT_RUN as individual sources. No per-book NO_QUALIFYING_MARKET or ACCESS_BLOCKED status is written from this image."
+ },
+ "amendment_window": {
+  "rule": "B5 / D3",
+  "state": "OPEN",
+  "reason": "This is not a qualifying capture - 0 qualifying quotes, 0 executable decisions. The 2026-07-27 window does not close."
+ },
+ "real_money": "$0.00, unauthorized"
+}

@@ -1,0 +1,63 @@
+{
+ "LEDGERS": {
+  "model_authorized_wagers_usd": 0,
+  "n_bets": 0,
+  "units": 0.0
+ },
+ "chronology_status": "ANCHOR_PRECEDES_EARLIEST_START",
+ "cohort_hashes": {
+  "nfl": "c86ed8cb57e536ec9dcf82d25d524226154d2677c5d1d92e86f758b8afc42a43"
+ },
+ "competition_phase": "PRESEASON_FINAL_WEEK (authoritative basis in 2026-08-27_schedule_acquisition.json)",
+ "dispositions": "every row SYSTEM_FAILURE_NO_FORECAST \u2014 no probability, no side, no EV can exist without a registered model; PENDING is not used",
+ "earliest_start_utc": "2026-08-27T23:00:00Z",
+ "forecast_anchor_utc": "2026-08-27T06:59:25Z",
+ "market": "NO_RETAINED_MARKET_ARTIFACT \u2014 same EGRESS_BLOCKED receipts as MLB (2026-08-27_market_acquisition.json)",
+ "n_games": 4,
+ "personnel_grade": "SEARCH_IDENTIFIED_UNCONFIRMED \u2014 coach statements via multi-pass search; preseason finales rest starters league-wide, the Chargers series-count plan is the exception",
+ "record_id": "BOARD-2026-08-27-NFL",
+ "registry_verdict": "No NFL model has EVER been registered in this system. All prior NFL rows were market-benchmark-only with Brier/EV null by design (cohort_backtest.json: 'NO MODEL EXISTS'). Nothing was withdrawn to revive; nothing is invented to fill the board. MLB/WNBA logic is not reused.",
+ "rows": [
+  {
+   "away": "Pittsburgh Steelers",
+   "game": "nfl:PIT@BUF",
+   "home": "Buffalo Bills",
+   "personnel": "Both starting QBs sitting (Allen out per Brady; Rodgers has not played this preseason). Final look at Drew Allar and Will Howard (PIT).",
+   "start_utc": "2026-08-27T23:00:00Z",
+   "tv": "NFLN"
+  },
+  {
+   "away": "New England Patriots",
+   "game": "nfl:NE@CLE",
+   "home": "Cleveland Browns",
+   "personnel": "CLE starters out incl. Watson; Sanders also sitting; Gabriel and rookie Green to play (Monken). NE starters have not played this preseason.",
+   "start_utc": "2026-08-28T00:00:00Z",
+   "tv": "Prime Video"
+  },
+  {
+   "away": "San Francisco 49ers",
+   "game": "nfl:SF@LV",
+   "home": "Las Vegas Raiders",
+   "personnel": "Shanahan: few-to-no SF starters (Australia week-1 travel).",
+   "start_utc": "2026-08-28T00:00:00Z",
+   "tv": "local"
+  },
+  {
+   "away": "Los Angeles Rams",
+   "game": "nfl:LAR@LAC",
+   "home": "Los Angeles Chargers",
+   "personnel": "LAR rookie Ty Simpson significant snaps (McVay); LAC starters one-two series incl. Herbert (Harbaugh).",
+   "start_utc": "2026-08-28T02:00:00Z",
+   "tv": "NFLN"
+  }
+ ],
+ "slate_date": "2026-08-27",
+ "slate_grade": "SEARCH_IDENTIFIED_UNCONFIRMED \u2014 benchmark-schedule rows only; reconciliation discovered 4 = canonical 0 + refused 4 (no canonical preseason source; nflverse authoritative for phase only)",
+ "sport": "nfl",
+ "status": [
+  "SYSTEM_FAILURE_NFL_MODEL_NOT_REGISTERED_OR_CURRENT",
+  "DATA_PREPARATION_COMPLETE",
+  "NO_FORECAST",
+  "NO_SELECTION"
+ ]
+}

@@ -1,0 +1,31 @@
+{
+ "record_id": "FIRST-PITCH-METADATA-CORRECTION-2026-08-22",
+ "raised_by": "owner DraftKings board capture at 6:07 PM PT (2026-08-23T01:07Z) showing live game states",
+ "severity": "DATA_DEFECT_IN_REGISTERED_PROVENANCE — the registrations themselves remain VALID",
+
+ "what_the_board_showed": "CIN@AZ live in the 4th inning with 0 out; CLE@COL live in the 4th with 2 outs; MIN@SD live in the 2nd with 1 out — all at 01:07Z.",
+
+ "the_contradiction": "I registered CIN@AZ with first_pitch_utc 03:10:00Z and CLE@COL with 02:10:00Z. A game cannot be in the 4th inning at 01:07Z if first pitch is still two or three hours away. Both recorded times are refuted outright by the board.",
+
+ "reconstruction_from_the_live_state": {
+  "method": "innings elapsed x 13-16 minutes per inning, back-projected from the 01:07Z board",
+  "CIN@AZ": {"recorded": "03:10Z", "implied_actual": "00:19Z - 00:28Z", "error_hours": "~2.8"},
+  "CLE@COL": {"recorded": "02:10Z", "implied_actual": "00:08Z - 00:19Z", "error_hours": "~2.0"},
+  "MIN@SD": {"recorded": "00:40Z", "implied_actual": "00:45Z - 00:49Z", "error_minutes": "~5-9, within tolerance"}
+ },
+
+ "REGISTRATIONS_REMAIN_VALID": "All three forecasts were appended at 2026-08-22T23:56:22Z, which is EARLIER than every reconstructed first pitch (00:08Z at the earliest). No post-start registration occurred and no forecast needs quarantining. This was checked before anything else, because a post-start registration would have been a contract breach requiring immediate exclusion.",
+
+ "WHAT_IS_WRONG": "The provenance fields are false. registered_minutes_before_first_pitch was recorded as T-134m for CLE@COL and T-194m for CIN@AZ. The true margins were approximately T-12m to T-23m and T-23m to T-32m. The registrations were comfortable on paper and thin in reality — a roughly ten-fold overstatement of the safety margin.",
+
+ "ROOT_CAUSE": "I took the start times from SEARCH PROSE — 'first pitch scheduled for 8:10 pm in Denver' and '8:10 pm in Phoenix' — one turn after establishing that whole-slate prose is unreliable and that per-game corroboration by publisher titles, URL slugs and venue strings is the method that works. I then applied prose to the single most timing-critical field in the pipeline. The lesson had been written and was not applied where it mattered most.",
+
+ "WHY_IT_MATTERS_BEYOND_TONIGHT": "Registration margin is the control that keeps a pregame forecast pregame. A metadata field that overstates it by two hours would, on a slightly different night, let a post-start registration pass a review that checks the recorded margin rather than the observed game state. The defect is in the evidence, not the arithmetic, so no gate caught it — only an external observation did.",
+
+ "CORRECTIVE_ACTIONS": [
+  "This record supersedes the first_pitch_utc and registered_minutes_before_first_pitch fields on P4-20260822-CLE@COL and P4-20260822-CIN@AZ append-only. The forecast rows themselves are immutable and are NOT edited (R3/R6).",
+  "Start times sourced from prose must be labelled TIER_3_PROSE and may not populate a timing field that a gate relies on. A start time needs the same per-game corroboration the schedule itself needs.",
+  "Proposed gate: at settlement, reconcile every registered first_pitch_utc against the observed final/live state and flag any registration whose recorded margin cannot be reconciled."
+ ],
+ "recorded_utc": "2026-08-23T01:10:00Z"
+}

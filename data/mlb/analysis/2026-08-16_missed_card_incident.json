@@ -1,0 +1,19 @@
+{
+ "record_id": "MISSED-CARD-2026-08-16",
+ "built_utc": "2026-08-16T23:26:32Z",
+ "severity": "HIGH",
+ "finding": "NO card was produced for 2026-08-16 in any sport. Zero MLB forecasts, zero WNBA registrations, zero boards, zero slate file.",
+ "why_no_card_can_be_created_now": "Checked at 2026-08-16T23:26:32Z. ALL 18 games had already started: the last MLB first pitch was SEA@HOU at 23:20Z and the last WNBA tip was PDX@PHX at 23:00Z. Generating a 'card' now would mean creating pregame forecasts after the games began \u2014 a direct violation of 'Never recreate a missing forecast with postgame data', and it is exactly what the repository's own post_start_forecasts gate exists to catch. R1 forbids it and no exception is available.",
+ "what_was_done_instead": [
+  "authoritative 8/16 schedule identity written (15 MLB + 3 WNBA + 0 NFL, NFL emptiness verified not assumed)",
+  "per-game acquisition rows opened for all 18 games \u2014 results tracking is required even when no card existed",
+  "each row carries backtestable=false and terminal_class_when_final=RESULT_BACKFILL_ONLY_NOT_BACKTESTABLE, so these results can never be mistaken for a prospective backtest",
+  "two WNBA orientations flagged UNCONFIRMED rather than guessed (source phrasing 'face'/'vs' does not establish venue)"
+ ],
+ "root_cause": "card generation is manual and request-driven; the 06:03Z and 06:17Z jobs armed for 8/16 were RESULTS sweeps, not card generation, and the session's scheduling rail (send_later MCP) disconnected on 8/15, so the surviving cron jobs are session-local and cover results only. No automation exists that generates a pregame card.",
+ "legitimate_options_remaining": {
+  "RETROSPECTIVE_REPLAY": "V13 may be replayed over the 8/16 slate ONLY if labelled RETROSPECTIVE_REPLAY, kept in a separate cohort, and never merged with prospective results. It is NOT a backtest and NOT evidence of forecasting skill, because the starters, lines and outcomes are already known.",
+  "prospective_repair": "the next legitimate prospective card is 2026-08-17, generated before its first pitch."
+ },
+ "authority": "paper only; wager authority NO; gate 0/100 NO_PROMOTE"
+}

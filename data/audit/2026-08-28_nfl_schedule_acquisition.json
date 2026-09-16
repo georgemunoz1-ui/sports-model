@@ -1,0 +1,153 @@
+{
+  "record_id": "NFL-SCHEDULE-ACQUISITION-2026-08-28",
+  "schema": "ops.schedule_acquisition.v1",
+  "created_utc": "2026-08-28T00:00:00Z",
+  "sport": "nfl",
+  "slate_date": "2026-08-28",
+  "slate_calendar_rule": "US Eastern calendar date; kickoffs at or after 20:00 ET cross into 2026-08-29 UTC and are still 8/28 Eastern rows",
+  "grade": "SEARCH_IDENTIFIED_UNCONFIRMED",
+
+  "competition_phase": "PRESEASON — final preseason week (Aug 27-29). Phase determined from the authoritative nflverse source; fixtures are NOT from it.",
+
+  "authoritative_source": {
+    "path": "/home/user/nflverse/nfldata/data/games.csv",
+    "repo": "github.com/nflverse/nfldata",
+    "read_with": "python3 csv.DictReader",
+    "finding": "7548 total rows; 272 rows for season 2026, all game_type=REG; first 2026 gameday 2026-09-09 (NE@SEA 20:20, espn 401872656); game_type domain across the whole file is {REG,WC,DIV,CON,SB} with 0 rows outside it; 0 rows with a gameday in August in ANY season.",
+    "verdict": "PRESEASON IS STRUCTURALLY ABSENT FROM THIS SOURCE. The absence is the finding, not a gap to fill. This source is AUTHORITATIVE FOR PHASE ONLY and is silent on 8/28 fixtures.",
+    "week1_espn_ids_for_contrast": [401872656, 401872657, 401872661, 401872925]
+  },
+
+  "reconciliation": {
+    "discovered": 10,
+    "canonical": 0,
+    "explicit_refusals": 10,
+    "identity": "10 = 0 + 10",
+    "refusal_class": "NO_CANONICAL_PRESEASON_SOURCE_IN_ENVIRONMENT — every 8/28 row is benchmark-schedule only"
+  },
+
+  "model_scope": {
+    "registered_preseason_model": "NONE",
+    "shadow_model": "nfl.rs.epa_logit_ridge.v0_2.shadow",
+    "shadow_status": "passed its retrospective gate but is REGULAR-SEASON scope; preseason is PRESEASON_EXCLUDED_BY_REGISTERED_SCOPE",
+    "consequence": "BENCHMARK ONLY. No probability, side, edge or EV may be emitted for any 8/28 row. Brier/logloss/EV are NULL BY RULE.",
+    "wager_authority": "NO",
+    "stake": 0
+  },
+
+  "id_capture_policy": {
+    "rule": "Each ESPN gameId below was captured from that game's OWN ESPN URL, surfaced by a dedicated per-game search. No id was derived, incremented or decremented from any other id.",
+    "p0_reference": "2026-08-27 P0: results joined on team names without a game id; a later archive-verification found one of two INFERRED ids was wrong (AZ@SF 825038 -> 823179).",
+    "why_inference_would_have_failed_here": "The captured ids are NOT ordered by kickoff time and do NOT occupy one contiguous block. Within the 4018733xx block the mapping is 301=CIN@PHI(8:00pm), 302=WSH@BAL(6:00pm), 303=NYG@NYJ(7:30pm), 304=ATL@MIA(7:00pm), 305=SEA@KC(8:00pm), 306=TB@JAX(7:30pm), 307=HOU@CAR(7:00pm) — sorting by kickoff and assigning sequentially would have mis-assigned EVERY row. Three further games sit entirely outside that block (401873614, 401874048, 401874102), and the 2026 REG week-1 ids (4018726xx/401872925) interleave below them.",
+    "binding_status": "IDENTIFIED, NOT BOUND. Search snippets identify and never bind. These ids are retained here so a future result-binding pass has a real key to archive-verify against, exactly as the 8/27 MLB artifact retained real gamePks."
+  },
+
+  "earliest_start_utc": "2026-08-28T22:00:00Z",
+
+  "games": [
+    {"game": "nfl:WSH@BAL", "away": "Washington Commanders", "home": "Baltimore Ravens",
+     "start_utc": "2026-08-28T22:00:00Z", "kickoff_local": "6:00 PM ET", "tv": "NFL Network",
+     "canonical_id": "espn:401873302",
+     "id_provenance": "CAPTURED from espn.com/nfl/game/_/gameId/401873302/commanders-ravens (ESPN URL surfaced in a dedicated per-game WebSearch)"},
+
+    {"game": "nfl:HOU@CAR", "away": "Houston Texans", "home": "Carolina Panthers",
+     "start_utc": "2026-08-28T23:00:00Z", "kickoff_local": "7:00 PM ET", "tv": "NFL Network / Panthers TV Network",
+     "venue": "Bank of America Stadium, Charlotte NC",
+     "canonical_id": "espn:401873307",
+     "id_provenance": "CAPTURED from espn.com/nfl/game/_/gameId/401873307/texans-panthers"},
+
+    {"game": "nfl:ATL@MIA", "away": "Atlanta Falcons", "home": "Miami Dolphins",
+     "start_utc": "2026-08-28T23:00:00Z", "kickoff_local": "7:00 PM ET", "tv": "local",
+     "canonical_id": "espn:401873304",
+     "id_provenance": "CAPTURED from espn.com/nfl/game/_/gameId/401873304/falcons-dolphins (corroborated by africa.espn.com mirror carrying the same gameId)"},
+
+    {"game": "nfl:NYG@NYJ", "away": "New York Giants", "home": "New York Jets",
+     "start_utc": "2026-08-28T23:30:00Z", "kickoff_local": "7:30 PM ET", "tv": "WNBC / WNJU",
+     "venue": "MetLife Stadium",
+     "canonical_id": "espn:401873303",
+     "id_provenance": "CAPTURED from espn.com/nfl/game/_/gameId/401873303/giants-jets",
+     "direction_conflict_resolved": "One enumeration pass rendered this 'New York Jets at New York Giants'. Three later independent sources put the Giants as VISITORS (giants.com how-to-watch, Big Blue Interactive 'Preview: New York Giants at New York Jets, August 28, 2026', and the ESPN slug giants-jets). NYG away / NYJ home stands 3-1."},
+
+    {"game": "nfl:TB@JAX", "away": "Tampa Bay Buccaneers", "home": "Jacksonville Jaguars",
+     "start_utc": "2026-08-28T23:30:00Z", "kickoff_local": "7:30 PM ET", "tv": "NBC / local",
+     "venue": "EverBank Stadium, Jacksonville FL",
+     "canonical_id": "espn:401873306",
+     "id_provenance": "CAPTURED from espn.com/nfl/game/_/gameId/401873306/buccaneers-jaguars"},
+
+    {"game": "nfl:NO@DAL", "away": "New Orleans Saints", "home": "Dallas Cowboys",
+     "start_utc": "2026-08-29T00:00:00Z", "kickoff_local": "8:00 PM ET / 7:00 PM CT", "tv": "local",
+     "venue": "AT&T Stadium, Arlington TX",
+     "canonical_id": "espn:401874048",
+     "id_provenance": "CAPTURED from espn.com/nfl/game/_/gameId/401874048/saints-cowboys — NOTE this id is far outside the 4018733xx block, the single clearest proof that incrementing would have fabricated"},
+
+    {"game": "nfl:SEA@KC", "away": "Seattle Seahawks", "home": "Kansas City Chiefs",
+     "start_utc": "2026-08-29T00:00:00Z", "kickoff_local": "8:00 PM ET / 5:00 PM PT", "tv": "local",
+     "venue": "Arrowhead Stadium",
+     "canonical_id": "espn:401873305",
+     "id_provenance": "CAPTURED from espn.com/nfl/game/_/gameId/401873305/seahawks-chiefs"},
+
+    {"game": "nfl:ARI@GB", "away": "Arizona Cardinals", "home": "Green Bay Packers",
+     "start_utc": "2026-08-29T00:00:00Z", "kickoff_local": "8:00 PM ET / 7:00 PM CT", "tv": "local",
+     "venue": "Lambeau Field, Green Bay WI",
+     "canonical_id": "espn:401874102",
+     "id_provenance": "CAPTURED from espn.com/nfl/preview/_/gameId/401874102 (ESPN pregame URL; also outside the 4018733xx block)"},
+
+    {"game": "nfl:CIN@PHI", "away": "Cincinnati Bengals", "home": "Philadelphia Eagles",
+     "start_utc": "2026-08-29T00:00:00Z", "kickoff_local": "8:00 PM ET", "tv": "CBS / Paramount+",
+     "venue": "Lincoln Financial Field, Philadelphia PA",
+     "canonical_id": "espn:401873301",
+     "id_provenance": "CAPTURED from espn.com/nfl/game/_/gameId/401873301/bengals-eagles"},
+
+    {"game": "nfl:MIN@DEN", "away": "Minnesota Vikings", "home": "Denver Broncos",
+     "start_utc": "2026-08-29T01:00:00Z", "kickoff_local": "9:00 PM ET / 8:00 PM CT", "tv": "NFL Network",
+     "venue": "Empower Field at Mile High, Denver CO",
+     "canonical_id": "espn:401873614",
+     "id_provenance": "CAPTURED from espn.com/nfl/game/_/gameId/401873614/vikings-broncos"}
+  ],
+
+  "starter_identification": {
+    "status": "NOT_CAPTURED for all 10 games",
+    "reason": "Starting QBs were not identified per-game. Preseason finales rest starters league-wide, but that is a tendency, not a per-game attestation, and no number or name may be asserted from it.",
+    "single_known_personnel_fact": "NYJ QB Geno Smith will not play vs the Giants; most Jets starters who played this preseason are expected to sit (SEARCH_IDENTIFIED_UNCONFIRMED). This is an absence, not a starter identification.",
+    "grade": "SEARCH_IDENTIFIED_UNCONFIRMED"
+  },
+
+  "week_label_discrepancy": {
+    "nfl_com": "Preseason Week 3",
+    "espn": "Week 4 preseason (HOF-game-inclusive numbering); one ESPN schedule URL for these fixtures is /week/4/year/2026/seasontype/1",
+    "team_sites": "azcardinals.com calls it 'Preseason Game No. 4'",
+    "note": "Label only. The phase itself is unambiguous and matches the discrepancy already recorded on 2026-08-27."
+  },
+
+  "cross_day_note": "The 8/27 board's NE@CLE and SF@LV (2026-08-28T00:00Z) and LAR@LAC (2026-08-28T02:00Z) carry 8/28 UTC timestamps but are 8/27 US Eastern rows and belong to the 8/27 cohort. They are NOT double-counted here.",
+
+  "structural_corroboration": "4 games Thu 8/27 + 10 games Fri 8/28 + 2 games Sat 8/29 (DET@IND 1:00 PM ET, CHI@TEN 6:00 PM ET) = 16 games / 32 teams, each team appearing exactly once. The 8/28 count of 10 is consistent with full league coverage.",
+
+  "routes": [
+    {"route": "nflverse/nfldata data/games.csv (local file, python3)",
+     "outcome": "AUTHORITATIVE_FOR_PHASE / REFUSED_FOR_FIXTURES",
+     "detail": "CANONICAL_SOURCE_LACKS_PRESEASON — 0 August rows in 7548; confirms phase, silent on 8/28 fixtures"},
+    {"route": "www.nfl.com/schedules/2026/by-week/preseason-week-3 (WebFetch)",
+     "outcome": "REFUSED", "error": "EGRESS_BLOCKED", "observed_utc": "2026-08-28"},
+    {"route": "www.espn.com/nfl/schedule/_/week/3/year/2026/seasontype/1 (WebFetch)",
+     "outcome": "REFUSED", "error": "EGRESS_BLOCKED", "observed_utc": "2026-08-28"},
+    {"route": "media.nfl.com official 2026 preseason TV schedule PDF (WebFetch)",
+     "outcome": "REFUSED", "error": "EGRESS_BLOCKED", "observed_utc": "2026-08-28"},
+    {"route": "fbschedules.com 2026 preseason schedule page (WebFetch)",
+     "outcome": "REFUSED", "error": "EGRESS_BLOCKED", "observed_utc": "2026-08-28",
+     "note": "a non-official aggregator was also denied — the block is broader than the named official hosts"},
+    {"route": "statsapi.mlb.com / sportsbook.draftkings.com / www.wnba.com",
+     "outcome": "NOT_ATTEMPTED",
+     "note": "known EGRESS_BLOCKED; MLB/WNBA hosts are wrong-sport, and no market artifact is required for a board with zero wager authority"},
+    {"route": "WebSearch slate enumeration, 3 independent passes",
+     "outcome": "IDENTIFIED",
+     "detail": "pass1 returned all 10 Friday games; pass2 returned only 6 and carried a stale trailing sentence ('10 games on Saturday') that contradicted its own day-labeled lists; pass3 returned all 10 matching pass1 exactly. 10 stands 2-of-3 plus the 32-team structural check."},
+    {"route": "WebSearch per-game ESPN gameId capture, 10 dedicated queries",
+     "outcome": "IDENTIFIED",
+     "detail": "one query per game; 10/10 real ESPN gameIds captured from that game's own ESPN URL; zero ids inferred"}
+  ],
+
+  "no_silent_disappearance": "Every matchup discovered on 8/28 appears in games[] and in the refusal list. Nothing was dropped for being inconvenient.",
+
+  "disposition": "SYSTEM_FAILURE_NO_FORECAST for every row — no registered preseason model exists, so no probability, side or EV can be produced. Rows are retained for benchmark display and for future result-binding against the captured ESPN ids."
+}

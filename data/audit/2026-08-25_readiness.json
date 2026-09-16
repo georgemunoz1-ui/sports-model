@@ -1,0 +1,65 @@
+{
+ "assessed_utc": "2026-08-25T02:30:00Z",
+ "consequence": "the product is SYSTEM_NOT_DECISION_READY. Under section 7 it must not publish a page that appears decision-ready while containing a slate of blocked rows. The report is republished as a readiness statement naming the missing infrastructure, not as a decision board.",
+ "estimator_spec_as_it_stands": {
+  "cluster_definition": "slate date",
+  "conservative_ev_conversion_method": null,
+  "coverage_validation": null,
+  "exact_estimand": "SD_OF_BLOCK_MEAN_SIGNED_CALIBRATION_RESIDUAL",
+  "frozen_at_utc": null,
+  "input_and_evidence_hashes": null,
+  "minimum_admissible_cluster_count": 6,
+  "refusal_behavior_outside_validated_support": "REFUSED_TOO_UNSTABLE_FOR_DECISION_USE",
+  "subgroup_pooling_rules": null,
+  "training_and_calibration_population": null,
+  "versioned_model_identity": null
+ },
+ "owner_of_the_remedy": "the pipeline, not the analyst. Sections 7 and 10 make provenance restoration and OOF rebuilding an AUTONOMOUS MAINTENANCE TASK that runs before the next production board, rather than something discovered at decision time.",
+ "record_id": "READINESS-2026-08-25",
+ "record_sha256": "6cd9269df5fb7792d80710f5a14dfcf288e6c1d2365df4e46a04a5bb6ed94888",
+ "result": {
+  "may_publish_decision_board": false,
+  "note": "a missing estimator is a BOARD-READINESS failure with a pipeline owner, not a per-game explanation with an analyst owner. The product publishes SYSTEM_NOT_DECISION_READY and names the missing infrastructure; it does not publish a page that looks like a decision board and is full of blocked rows.",
+  "publication_rule": "MUST_NOT_PUBLISH_A_PAGE_THAT_APPEARS_DECISION_READY",
+  "reasons": [
+   {
+    "code": "ESTIMATOR_SPEC_INCOMPLETE",
+    "missing_parts": [
+     "training_and_calibration_population",
+     "subgroup_pooling_rules",
+     "coverage_validation",
+     "versioned_model_identity",
+     "input_and_evidence_hashes",
+     "conservative_ev_conversion_method",
+     "frozen_at_utc"
+    ]
+   },
+   {
+    "admissible": 2,
+    "code": "INSUFFICIENT_ADMISSIBLE_CLUSTERS",
+    "required": 6
+   },
+   {
+    "code": "PRIOR_INPUT_POOL_PROVISIONAL",
+    "note": "training evidence that cannot be traced to a retained artifact cannot certify an estimator built on it"
+   }
+  ],
+  "required_parts": [
+   "exact_estimand",
+   "training_and_calibration_population",
+   "cluster_definition",
+   "minimum_admissible_cluster_count",
+   "subgroup_pooling_rules",
+   "coverage_validation",
+   "versioned_model_identity",
+   "input_and_evidence_hashes",
+   "conservative_ev_conversion_method",
+   "refusal_behavior_outside_validated_support",
+   "frozen_at_utc"
+  ],
+  "status": "SYSTEM_NOT_DECISION_READY"
+ },
+ "schema": "ops.readiness.v1",
+ "standard": "PregameDecisionReadiness v1.0",
+ "standard_sha256": "3595b0e3351864ac3d4a318bf8492ea695834a31367d02f69d10d77239f07e1f"
+}

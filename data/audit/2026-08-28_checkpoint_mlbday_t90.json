@@ -1,0 +1,76 @@
+{
+ "anchor": {
+  "canonical_id": "ESPN_GAMEID:401816711",
+  "first_pitch_utc": "2026-08-28T18:20:00Z",
+  "game": "mlb:CIN@CHC",
+  "minutes_remaining": 85
+ },
+ "block": "MLB day (CIN@CHC 18:20Z \u2014 the only game before 22:40Z)",
+ "created_utc": "2026-08-28T16:55:00Z",
+ "disposition": {
+  "action_blocker_scope": "an action blocker suppresses the ACTION layer only, never model output",
+  "mlb:CIN@CHC": "FORECAST_ONLY_NO_MARKET \u2014 no retained MLB price artifact, so no break-even, no edge, no selection and no EV. The action layer is shut and model output is untouched: all six arms above stand exactly as frozen."
+ },
+ "forecast_unchanged": {
+  "mlb.total.CHAMPION_V13": 11.188,
+  "mlb.winner.CHALLENGER_ADAPTIVE": 0.5160498982517796,
+  "mlb.winner.CHALLENGER_WIDENED": 0.5109058443800826,
+  "mlb.winner.CHAMPION_V13": 0.5529333333333334,
+  "mlb.winner.EXPANDING_HOME_PRIOR": 0.5205399061032864,
+  "resolved_information_dose": 1.0
+ },
+ "frozen_board": {
+  "byte_identical_to_committed_freeze": true,
+  "cohort_hash": "3723e6801e2f65f7c60c97581d65252c025909e01ad2372c9105899d3478361a",
+  "path": "cards/2026-08-28_mlb_board.json",
+  "sha256": "5a558cfc17dc571ca33632c727e4e44415718e77b670e8e3db19e6124db548b8",
+  "verified_by": "sha256 of the working file compared against `git show HEAD:<path>`",
+  "why_this_line_exists": "a checkpoint that does not prove the board is unchanged proves nothing"
+ },
+ "ledger": {
+  "exposure_usd": 0,
+  "n_bets": 0,
+  "units": 0.0,
+  "wager_authority": "NO"
+ },
+ "market_attempt": {
+  "no_workaround": "org egress 403s are never routed around; TLS verification was not disabled and no mirror or scraper was substituted. The block is the receipt.",
+  "note": "the WNBA prices on file arrived by OWNER RELAY, not by a route that has ever opened here",
+  "observed_utc": "2026-08-28T16:55:00Z",
+  "outcome": "REFUSED",
+  "routes": [
+   {
+    "error": "EGRESS_BLOCKED \u2014 curl exit 56, CONNECT tunnel failed, response 403",
+    "route": "curl https://sportsbook.draftkings.com/leagues/baseball/mlb"
+   },
+   {
+    "error": "EGRESS_BLOCKED \u2014 curl exit 56, CONNECT tunnel failed, response 403",
+    "route": "curl https://sportsbook-nash.draftkings.com/sites/US-SB/api/v5/eventgroups/84240"
+   },
+   {
+    "error": "EGRESS_BLOCKED \u2014 domain blocked by the network egress proxy",
+    "route": "WebFetch https://sportsbook.draftkings.com/leagues/baseball/mlb (approved tool)"
+   }
+  ]
+ },
+ "next": "T-45 17:35Z (trig_018sqpJXGmQPn8vMZLfeNnFY)",
+ "record_id": "CHECKPOINT-2026-08-28-MLB-DAY-T90",
+ "record_sha256": "c7c4ea6e55263fa3ae0d358839231f428732581a834a34fdba61464cd4f0d851",
+ "schema": "ops.checkpoint.v1",
+ "starters": {
+  "mlb:CIN@CHC": {
+   "board_away": "Rhett Lowder",
+   "board_home": "David Peterson",
+   "grade": "SEARCH_IDENTIFIED_UNCONFIRMED \u2014 aggregator naming, not official confirmation; snippets identify and never bind",
+   "recheck_result": "NO CHANGE. Rhett Lowder (CIN, 5-8, 5.13) and David Peterson (CHC, 7-7, 5.17) confirmed across four independent aggregators; the stat lines match the ones carried at freeze, which is a stronger match than the names alone.",
+   "recheck_utc": "2026-08-28T16:55:00Z",
+   "replacement_path": "NOT RUN \u2014 no starter changed, so there is nothing to replace and the frozen forecast stands unmodified",
+   "starter_class": {
+    "away": "PROBABLE",
+    "home": "PROBABLE"
+   }
+  },
+  "start_time_corroboration": "the same sources render this a 2:20 PM ET matinee, consistent with the frozen 18:20:00Z start"
+ },
+ "trigger": "trig_01PUh3pU8ukKnFPHfZuKxGNn (fired 16:50:35Z)"
+}

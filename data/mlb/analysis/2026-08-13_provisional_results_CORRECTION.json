@@ -1,0 +1,50 @@
+{
+ "record_id": "PROVISIONAL-RESULTS-2026-08-13-CORRECTION-1",
+ "built_utc": "2026-08-14T06:05:00Z",
+ "corrects": "PROVISIONAL-RESULTS-2026-08-13 (data/mlb/analysis/2026-08-13_provisional_results.json)",
+ "append_only_note": "The original record is NOT modified (R6). This record supersedes its LAS@NYL row and every aggregate derived from it. Any future reader must take the WNBA night numbers from HERE.",
+
+ "error": {
+  "what": "LAS@NYL was recorded final '85-81' in away-home order (LAS 85, NYL 81, home LOSS, side=false, brier 0.5607, margin_err -12.3).",
+  "truth": "NYL (home, Liberty) won 85-81. Source phrasing 'Liberty 85-81 Sparks' is WINNER-FIRST, not away-home order. Correct away-home final: LAS 81 @ NYL 85, home_win = 1.",
+  "mechanism": "ORIENTATION FLIP — the exact failure mode this repository documented on 2026-08-08 (ATH@BOS) and in the crosswalk hazard note: a flipped pair stays internally self-consistent, so arithmetic checks cannot see it. This instance was a transcription-convention error by the operator, not a source error.",
+  "detection_trail": "(1) re-read of the source phrasing against the winner-first convention; (2) the erroneous record was internally INCONSISTENT — its own rows implied sides 2/3 while the night block said '3/3' (a hardcoded string), which is itself a defect: aggregates must be computed from the rows, never typed.",
+  "why_gates_missed_it": "winner_name_mismatch() only covers the MLB results.csv + evidence-file path; this WNBA provisional analysis file is outside that check's scope. Gap recorded below."
+ },
+
+ "corrected_row": {
+  "g": "LAS@NYL",
+  "final": "81-85",
+  "home_win": 1,
+  "p_home": 0.7488,
+  "brier": 0.0631,
+  "side": true,
+  "margin_pred": 8.31,
+  "margin_actual": 4,
+  "margin_err": -4.31,
+  "total_pred": 173.1,
+  "total_actual": 166,
+  "total_err": -7.1
+ },
+
+ "corrected_aggregates": {
+  "wnba_night_2026_08_13": {
+   "sides": "3/3",
+   "briers": [0.0892, 0.0631, 0.0466],
+   "mean_brier": 0.0663
+  },
+  "lifetime_prospective": {
+   "sides": "6/6 over two nights (8/12: 0.0768/0.0375/0.0666; 8/13: 0.0892/0.0631/0.0466)",
+   "mean_brier": 0.0633,
+   "small_sample_guard": "P(6/6 | the model's own stated probabilities) = product of the six side probabilities = 0.4324 x 0.4119 = 0.178. Six favourites in the 70-80 pct band landing is unusual-but-not-remarkable; nothing here licenses a promotion claim."
+  },
+  "margin_tail_finding_updated": "The finding STRENGTHENS slightly on side but the LAS@NYL exhibit changes character: corrected margin_err is -4.31 (mild), not -12.3. The tail-compression evidence remains ATL@CON (pred -5.8, actual -35, err -29.2) and 8/12 CHI@GSV (pred +8.3, actual +20). Successor-prereg candidate #3 stands, evidence base restated honestly."
+ },
+
+ "process_actions": [
+  "Standing rule adopted for provisional analysis records: night-level 'sides' and 'brier' aggregates must be COMPUTED from the rows in the same record, never hardcoded — the hardcoded '3/3' both masked and (accidentally) matched the corrected truth here, which is worse, not better.",
+  "Gap noted: winner-name verification is only enforced for MLB results.csv rows with evidence files. WNBA provisional records have no equivalent check. Candidate fix (roadmap, not applied tonight): extend winner_name_mismatch() to accept WNBA evidence records carrying a verbatim winner name."
+ ],
+
+ "grading_status": "Still PROVISIONAL, tier-3, ungraded. Official grading of the 8/13 WNBA card waits for tier-1 capture; the registered forecasts in data/wnba/forecasts/2026-08-13_card.json are untouched and sealed."
+}

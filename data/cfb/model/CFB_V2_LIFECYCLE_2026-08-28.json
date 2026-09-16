@@ -1,0 +1,78 @@
+{
+ "evidence": {
+  "acquisition_manifest": "data/cfb/model/CFB_V2_ACQUISITION_MANIFEST.json",
+  "acquisition_manifest_sha256": "60d04db355011c70bf0a9911023b76a8e1745c6212257ce697f32088fc57f2e0",
+  "oof_evaluation": "data/cfb/model/CFB_V1_OOF_EVALUATION.json",
+  "oof_evaluation_sha256": "1102479918c41f8c408e8b6106812e67840f3a71f3953a72ad4061f9889df5aa"
+ },
+ "from": "PREREGISTERED_DATA_ACQUISITION_PENDING",
+ "model_id": "cfb.fbs.epa_talent_hgb.v2_0.challenger",
+ "predecessor_record": "data/cfb/model/CFB_V2_SOURCE_DISCOVERY.json",
+ "record_id": "CFB-V2-LIFECYCLE-2026-08-28-ACQUISITION",
+ "schema": "ops.lifecycle_transition.v1",
+ "stake": 0,
+ "to": "DATA_ACQUISITION_RUNNING",
+ "transitioned_utc": "2026-08-28T11:50:00Z",
+ "v1_port": {
+  "baselines": {
+   "causal_elo_brier": 0.18427,
+   "expanding_home_rate_brier": 0.24346
+  },
+  "external_diagnostic_espn_pregame_elo_brier": 0.18553,
+  "features": "the preregistered v1_state block, asserted equal at build time",
+  "model_id": "cfb.fbs.elo_form_logit_ridge.v1_0.shadow",
+  "module": "harness/cfb_v1_port.py",
+  "oof": {
+   "auc": 0.7922,
+   "brier": 0.18223,
+   "calibration_intercept": -0.034,
+   "calibration_slope": 0.956,
+   "ece": 0.0142,
+   "games": 10818,
+   "logloss": 0.53914,
+   "season_week_blocks": 230,
+   "seasons": "2011-2025"
+  },
+  "paired_vs_strongest": {
+   "baseline": "causal_elo",
+   "blocks": 230,
+   "ci95": [
+    -0.00508,
+    -0.00065
+   ],
+   "improves": true,
+   "mean_diff": -0.00256
+  },
+  "verdict": "POOLED WEEKS: passes. Lower Brier than both internal baselines, paired CI excludes zero, calibration slope 0.956 and intercept -0.034 inside the registered gates, and no single season contributes more than 16.7% of the gain."
+ },
+ "wager_authority": "NO",
+ "week1_finding": {
+  "also_rejected": "a Week-1-only training set \u2014 worse on every arm",
+  "cause": "EWMA form carries last season's scoring into an opener played by a substantially different team \u2014 precisely what week_one_policy warned against",
+  "explicitly_not_claimed": "the week-1 arm is NOT a demonstrated improvement over plain causal Elo: paired by season the mean Brier difference is -0.00224 with a 95% interval [-0.00503,+0.00099], which INCLUDES ZERO",
+  "full_v1_arm_week1": {
+   "brier": 0.18828,
+   "calibration_intercept": 0.136,
+   "calibration_slope": 0.846,
+   "causal_elo_brier": 0.18642,
+   "verdict": "FAILS the registered calibration gates on Week 1 and does not beat plain Elo"
+  },
+  "headline": "the validated pooled result does NOT carry to season openers",
+  "week1_arm_adopted": {
+   "brier": 0.18327,
+   "calibration_intercept": 0.089,
+   "calibration_slope": 0.932,
+   "features": [
+    "elo_diff_with_home_advantage",
+    "neutral_site",
+    "conference_game"
+   ],
+   "model_id": "cfb.fbs.elo_context_logit.v1_0.week1_shadow",
+   "n_games": 758,
+   "n_seasons": 15,
+   "passes_week1_calibration_gates": true
+  }
+ },
+ "what_this_unblocks": "not v2. It unblocks the preregistration's own week_one_policy, which says that when the Week 1 blocks are missing the system publishes v1 baseline forecasts with V2_INPUT_BLOCKED \u2014 and that requires a clean v1 port, which was recorded ABSENT_AT_PREREGISTRATION and now exists.",
+ "why_not_further": "RUNNING, not ACQUIRED. Schedules for 2001-2025 are bound with per-file hashes, but v2's ordered feature blocks also require play-by-play EPA, success rate, explosiveness, talent, returning production, quarterback and coach continuity. NONE of those were acquired. Moving to DATA_ACQUIRED_FEATURE_BUILD_PENDING would assert a completeness that does not exist."
+}

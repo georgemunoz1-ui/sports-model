@@ -1,0 +1,87 @@
+{
+ "record_id": "P4-SLATE-PREP-2026-08-06",
+ "built_utc": "2026-08-06T06:54:33Z",
+ "status": "PRE-ODDS PREP (FULL-TRACKING card only; P4 forecasts BLOCKED until the owner's frozen odds board arrives)",
+ "slate_source": "WebSearch per-series confirmation 2026-08-06 (MLB.com probable-pitchers pages, ESPN game pages, baseball-reference previews, sportsline/covers). NOT a scoreboard enumeration: no single source listed the full slate.",
+ "coverage_caveat": "8 games confirmed. NYY confirmed OFF (next 8/7). The other 12 idle teams appear to be on Thursday travel days, but a Thursday series opener not surfaced by search would be MISSED here; the owner's board is the completeness authority.",
+ "games": [
+  {
+   "away": "LAA",
+   "home": "BAL",
+   "et": "12:35p",
+   "utc": "16:35Z",
+   "away_sp": "TBD",
+   "home_sp": "Brandon Young",
+   "note": "BAL goes for 3-game sweep; media line seen (BAL -163, O/U 9.5, sportsline) recorded as CONTEXT ONLY - not a board quote, no P4 use"
+  },
+  {
+   "away": "NYM",
+   "home": "CLE",
+   "et": "1:10p",
+   "utc": "17:10Z",
+   "away_sp": "Nolan McLean",
+   "home_sp": "Foster Griffin",
+   "note": "series finale"
+  },
+  {
+   "away": "PIT",
+   "home": "MIL",
+   "et": "2:10p",
+   "utc": "18:10Z",
+   "away_sp": "Braxton Ashcraft",
+   "home_sp": "Dustin May",
+   "gamePk": 823754,
+   "note": "May's MIL debut post-trade (ex-STL); gamePk from mlb.com/stories/game-preview/823754"
+  },
+  {
+   "away": "ATH",
+   "home": "CIN",
+   "et": null,
+   "utc": null,
+   "away_sp": "TBD",
+   "home_sp": "Rhett Lowder",
+   "note": "game confirmed (FOX boxscore 96393); first-pitch time not surfaced"
+  },
+  {
+   "away": "SD",
+   "home": "AZ",
+   "et": null,
+   "utc": null,
+   "away_sp": "TBD",
+   "home_sp": "TBD",
+   "note": "4-game series finale confirmed; '6:40pm' listing TZ-UNRESOLVED (local vs ET); both SP unresolved"
+  },
+  {
+   "away": "CWS",
+   "home": "BOS",
+   "et": "7:10p",
+   "utc": "23:10Z",
+   "away_sp": "Luis Castillo",
+   "home_sp": "Ranger Suarez"
+  },
+  {
+   "away": "MIA",
+   "home": "ATL",
+   "et": "7:15p",
+   "utc": "23:15Z",
+   "away_sp": "Janson Junk",
+   "home_sp": "Martin Perez"
+  },
+  {
+   "away": "MIN",
+   "home": "KC",
+   "et": "7:40p",
+   "utc": "23:40Z",
+   "away_sp": "Bailey Ober",
+   "home_sp": "Michael Wacha",
+   "note": "teams meet for final time in 2026; ESPN national game"
+  }
+ ],
+ "starters_note": "probables ONLY (never 'confirmed'); all 12 named starters have local pitcher logs; TBD -> CAP league-average per daily_card rule",
+ "card": "cards/2026-08-06_card.json (V13 FULL-TRACKING, no lines: odds board absent)",
+ "pending": [
+  "owner odds board -> data/mlb/odds/2026-08-06_gameboards.json -> build_p4_slate -> ml_p4_forward forecasts (pre-pitch)",
+  "remaining gamePks",
+  "SD@AZ + LAA/ATH starters"
+ ]
+}

@@ -1,0 +1,64 @@
+{
+ "CONTROL": {
+  "gamePk_route": "matchup join within the single date 2026-08-26 against lancebroz/mlb-pitcher-data, with an executed assertion that no matchup repeats on the date. Same method as MLB-GAMEPK-CROSSWALK-2026-08-28, which carried a 5/5 control of its own.",
+  "result": "AGREE 15/15, DISAGREE 0, MISSING 0",
+  "test": "derive the winner for all fifteen 2026-08-26 games and compare against the finals recorded in data/audit/2026-08-26_result_display.json, which came from an owner relay and has NO connection to this archive",
+  "verdict": "PASS",
+  "why": "a method that has never been checked against a known answer is a hypothesis. This one is checkable, so it was checked before being proposed."
+ },
+ "COVERAGE_CHECK": {
+  "finding": "all fifteen 2026-08-28 gamePks are present in the fresh pull",
+  "stale_copy_warning": "an earlier scratch copy of the same file, pulled at 06:49 today, had 1989 games and contained ZERO of those fifteen. The fresh pull has 2043. Same filename, different content \u2014 the same mutability hazard the pitch archive showed this morning. Every read must be commit-addressed and content-hashed, and this record pins both."
+ },
+ "LEDGER": {
+  "exposure_usd": 0,
+  "n_bets": 0,
+  "units": 0.0,
+  "wager_authority": "NO"
+ },
+ "PROPOSED_GRADE": {
+  "decision": "NOT ADOPTED UNILATERALLY. A new grade changes what binds, so it is proposed here and left for the owner. Nothing is graded under it until then.",
+  "proposal": "CONFIRMED_DERIVED \u2014 first-party league data, derived by a second party, read by us as a git blob addressed by commit and hashed at extraction.",
+  "why_not_CONFIRMED": "CONFIRMED is reserved for a first-party league feed for THIS game. A derived table is one step removed and the record should say so.",
+  "why_not_IDENTIFIED_UNCONFIRMED": "that grade is for snippets, which identify and never bind. This is a hashed artifact with a commit sha and a 15/15 control. Filing it beside a search snippet would understate it as badly as calling it CONFIRMED overstates it."
+ },
+ "R6": "append-only; new path. Nothing was graded, promoted or settled by this record.",
+ "SOURCE": {
+  "card_says_source": "sdv-py mlb_run_expectancy / mlb_win_expectancy over statsapi.mlb.com regular-season pbp",
+  "commit": "05d06b2fafafed22d3eb7f278f5342747f162636",
+  "file": "mlb/game_state/parquet/mlb_wpa_2026.parquet",
+  "games": 2043,
+  "id_range": [
+   822690,
+   825108
+  ],
+  "reachable": "YES via the session git proxy. statsapi.mlb.com itself is EGRESS_BLOCKED \u2014 see LANE-STATUS-PROBE-2026-08-30. The mirror is reachable where the API is not, which is the defining asymmetry of this deployment.",
+  "repo": "sportsdataverse/baseballr-data",
+  "rows": 157092,
+  "sha256": "7c3e187f75c161e4804db65169a1b2fc5bc65e0334b2b372a942ddd0889ba0e2"
+ },
+ "THE_DERIVATION": {
+  "identity": "WPA is DEFINED so the home team's summed change in win probability over a completed game equals final WP minus initial WP: 1 - 0.5 = +0.5 for a home win, 0 - 0.5 = -0.5 for a home loss.",
+  "is_this_an_inference": "NO, and the distinction matters because I refused a different derivation this morning. Reconstructing RUNS from the pitch-level events column requires simulating a baseball state machine \u2014 that is an inference whose errors are silent, and it stays refused. Reading a sign off a published quantity is DECODING, not simulating. The archive already did the derivation from the league feed; I am reading its answer, not producing my own.",
+  "observed": {
+   "games": 2043,
+   "note": "EVERY game sums to exactly +0.5 or -0.5. No game lands anywhere else.",
+   "sums": {
+    "-0.5": 964,
+    "0.5": 1079
+   }
+  },
+  "what_it_does_NOT_give": "runs, margins, totals, innings, or anything about HOW a game was won. mlb.total.* arms stay blocked. Only mlb.winner.* becomes gradeable."
+ },
+ "WHAT": "a validated route to MLB game WINNERS, bound to real gamePks, from an archive the git proxy can already reach. This closes the WINNER half of FU-1. It does NOT supply runs.",
+ "WHAT_THIS_WOULD_UNLOCK": {
+  "cohorts": "the 62 MLB board games of 2026-08-24..28 become winner-gradeable",
+  "so_the_realistic_first_win": "the 8/28 cohort, 15 games, board side already correct, winner now obtainable. That is the first MLB cohort that could move from Tier 2 to Tier 1.",
+  "still_blocked_by_identity": "47 of those 62 carry manufactured pseudo-pks (824000-824009, 825000-825014, 826000-826014, 827000-827006) and need the same crosswalk treatment before they can bind. The 15 games of 8/28 already carry real captured ids.",
+  "totals": "unchanged. No runs, no totals, no margins. RJ-001B stands."
+ },
+ "created_utc": "2026-08-30T18:25:00Z",
+ "record_id": "MLB-WINNER-SOURCE-CANDIDATE-2026-08-30",
+ "record_sha256": "8dfa048cf864cc66c46f1475ceb1761a059a06a0d529f455a24d70b8361001ec",
+ "schema": "ops.source_candidate.v1"
+}

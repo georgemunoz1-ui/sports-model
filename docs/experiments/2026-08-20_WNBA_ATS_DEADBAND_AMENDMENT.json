@@ -1,0 +1,20 @@
+{
+ "schema": "governance.amendment.v1",
+ "record_id": "WNBA-ATS-DEADBAND-AMENDMENT-2026-08-20",
+ "created_utc": "2026-08-20T05:13:45Z",
+ "authority": "owner correction 2026-08-20 after the 0-2 ATS opening night",
+ "prior_state_precisely": "The frozen prereg WNBA-ATS-PREREG-2026-08-19 carried NO threshold \u2014 'none, deliberately: the diagnostic cohort evaluates EVERY available game without discretion. A threshold belongs to wagering.' No ATS deadband existed to bypass; the 2.0 figure that existed pre-tonight is unified_card.QUALIFIED_MIN_CONS_EDGE_PP \u2014 a MONEYLINE probability-point bar, not a spread-point deadband. The diagnostic selections were prereg-compliant, paper, $0. The failure was the ADVICE layer: 'only defensible side' language elevated a 0.97-point diagnostic cushion from a margin head with a known blowout-compression defect, and the assistant echoed that framing instead of raising the compression defect against an underdog read. Records govern over recollection (lesson 01's sibling).",
+ "owner_rules_verbatim": [
+  "1. Winner, ATS, and total are separate decisions. A correct winner probability cannot authorize the opposite ATS side.",
+  "2. ATS difference under 2.0 points = PASS, mechanically. No rounding up.",
+  "3. Shadow ATS forecasts remain paper-only until a preregistered prospective sample is completed.",
+  "4. No WNBA total recommendations. The total head is diagnostic only after repeated double-digit misses.",
+  "5. Any underdog ATS read produced by a compressed margin head receives MARGIN_COMPRESSION_BLOCK.",
+  "6. 'Best available option' cannot be translated into 'bet.' If nothing qualifies, the answer must simply be NO BET."
+ ],
+ "implementation_interpretation_pending_ratification": "Rule 2 binds the CARD ACTION layer, not the diagnostic registration: the frozen prereg's no-threshold selection rule stands unchanged (R3 \u2014 and the diagnostic sample must not be biased toward big-delta games), while the decision surface mechanically renders PASS for any ATS read with |home_cover_delta| < 2.0 and MARGIN_COMPRESSION_BLOCK for any underdog-side read regardless of delta. If the owner intended sub-2.0 selections to stop REGISTERING as well, that is a prereg amendment and needs an explicit instruction.",
+ "mechanical_enforcement": "unified_card.wnba_ats_status() (deadband 2.0 spread points, frozen; dog-read block) + decision_card translations; selftests wired into healthcheck",
+ "tonight_reclassified_under_new_rules": "GSV +2.5 (delta +0.97): ATS_DEADBAND_PASS \u2014 and MARGIN_COMPRESSION_BLOCK besides (underdog read). TOR +9.5 (delta -5.63): clears the deadband numerically but is an underdog read from the compressed head -> MARGIN_COMPRESSION_BLOCK. Under these rules NEITHER would have appeared as anything but PASS/BLOCKED. Applied prospectively; tonight's grades stand as written (append-only).",
+ "margin_compression_evidence": "8/19: both winners underestimated by 7-10 points (WAS +3.9 pred vs +11; MIN -1.5 pred vs -11); prior nights' pattern consistent. Winner head 11/15 while ATS opens 0-2 \u2014 the heads are behaving differently and are now decision-separated by rule 1.",
+ "small_sample_note": "n=2 grades remain non-evidence about ATS skill; the correction is about PROCESS (deadband + compression block + advice discipline), not about concluding from 0-2."
+}

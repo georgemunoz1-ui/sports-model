@@ -1,0 +1,38 @@
+{
+ "record_id": "NFL-PRE1-FRI-BOARD-2026-08-14-CORRECTION-1",
+ "built_utc": "2026-08-14T22:41:11Z",
+ "corrects": "NFL-PRE1-FRI-BOARD-2026-08-14 (data/nfl/odds/2026-08-14_pre1_fri_board.json) \u2014 original untouched per R6",
+ "basis": "FIRST cross-workspace delivery whose bytes arrived and were verified locally: capture sha256 b3aacb7f64f66203f09006553fc6ccb1781b8182f08b0fb6ce3311ea330649e5 matches the claim exactly; harness/nfl_preseason_line_guard.py --selftest PASS (3 games, 8 source-specific quotes, pregame at 22:32Z vs 23:00Z kicks). Under the file-delivery doctrine this is VERIFIED, not attested \u2014 the doctrine's first positive case.",
+ "adjudication": {
+  "C1_MIA_WAS_unresolved": {
+   "verdict": "CONCEDED \u2014 benchmark updated to MIA",
+   "reason": "my rule ('one uncorroborated tier-3 point does not resolve a sign conflict') was applied correctly to the evidence I had, but the recovery capture supplies THREE same-day source-specific quotes (FanDuel-attributed, Bleacher Report, FOX) all MIA -3.5 with no simultaneous conflict \u2014 that meets the guard's two-source-agreement bar and resolves the sign. The 8/13 Caesars flip is historical evidence of book disagreement, not a current unresolved state. Carrying a stale conflict forward after a current capture resolves it is itself an error class, now named."
+  },
+  "C2_TB_NYJ_move_size": {
+   "verdict": "CONCEDED \u2014 the 7-point characterization overstated the move",
+   "reason": "my '7-point move' treated 'TB -1.5 open' as market-wide; the correcting workspace's per-book 8/13 board shows Caesars ALONE at TB -1.5 with Circa/Boomers/BetMGM already NYJ -2/-2.5. A single outlier cannot define the cross-book opener. Defensible movement: NYJ -2/-2.5 -> -5.5/-6.5, roughly 3-4 points. Corroboration from MY OWN records: my 8/13 board's MIA@WAS note already identified Caesars as the flip source ('same class as the frozen Caesars flips') \u2014 the outlier account fits what this repo knew. Caveat: their per-book 8/13 board itself is not statable here, so the opener detail is accepted-attested; the CURRENT quotes are verified."
+  },
+  "C3_DEN_stability": {
+   "verdict": "CONCEDED \u2014 'stable' was wrong even on my own numbers",
+   "reason": "my frozen 8/13 record reads DEN -3.5/-4.5; the current verified capture is DEN -3 (DK) / -3.5 (FanDuel, FOX). That is a SHORTEN toward ATL, not stability. Their frozen board (-4.5/-5.5 per-book) makes the shorten larger; the range discrepancy between the two 8/13 tier-1 captures (owner-screenshot summary vs per-book) is recorded as UNRESOLVED \u2014 direction verdict unaffected.",
+   "note": "the shorten coheres with personnel: Bo Nix out for DEN while ATL's official index has its starters playing"
+  },
+  "C4_model_identity_wording": {
+   "verdict": "CONCEDED \u2014 wording corrected",
+   "correct_statement": "THIS repository carries no NFL model (rows null per R1). A regular-season NFL SHADOW model exists externally (delivered 8/10; preregistered primary retrospective gate passed). No independent NFL PRESEASON model exists anywhere in the program. These statements are not interchangeable and the original record conflated the first and third."
+  }
+ },
+ "updated_benchmarks_2026_08_14": {
+  "DEN@ATL": "DEN (current -3/-3.5, three sources)",
+  "MIA@WAS": "MIA (current -3.5, three sources; supersedes NO_BENCHMARK)",
+  "TB@NYJ": "NYJ (current -5.5/-6.5)",
+  "grading": "all three grade vs finals under the tie rule; grade_scope MARKET_BENCHMARK_ONLY"
+ },
+ "personnel_bound": "DEN: Nix out, starters ~15 snaps, Stidham/Ehlinger a half each (official). WAS: 25 non-participants incl. Daniels, McLaurin, Tunsil (official) vs MIA reported playing starters \u2014 coherent with MIA -3.5. NYJ: EXPLICIT UNRESOLVED CONFLICT \u2014 official 17:00Z plan 'everyone plays' vs 22:12Z report Geno Smith out (foot); kept as a stated conflict, never inferred from the line.",
+ "adopted": [
+  "harness/nfl_preseason_line_guard.py installed verbatim (fail-closed; forbidden-key sweep; two-source favorite agreement; pregame timestamps; personnel binding)",
+  "incident data/nfl/incidents/2026-08-14_preseason_odds_route_failure.json installed verbatim \u2014 OPEN generator defect: screenshot rail served REGULAR_SEASON WEEK_1 instead of the preseason route; the six-step generator fix list (schedule-first resolution, slate rejection, per-source capture, no stale-conflict carry-forward, T-48h/T-3h/T-90m cadence, personnel binding) is adopted as the NFL capture-rail roadmap",
+  "window honesty: the capture retains RECOVERY_T_MINUS_30 identity; the missed T-minus-90 window is NOT backfilled"
+ ],
+ "provenance_note": "the delivering workspace (checkout a520674) did not commit \u2014 its own gate fails on registry hash drift and a stale namespace-firewall baseline. Integration into the live remote is performed HERE with verified bytes; this is the durability path working as designed for the first time."
+}

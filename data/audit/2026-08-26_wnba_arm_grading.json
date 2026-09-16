@@ -1,0 +1,58 @@
+{
+ "arms": [
+  {
+   "arm": "wnba.replacement.FEATURE_REFRESH",
+   "brier": 0.1027,
+   "note": "correct on both; owner's 0.1029 is a rounding variant of the same computation",
+   "record": "2-0"
+  },
+  {
+   "arm": "wnba.fallback.STANDINGS_LOG5_v1",
+   "brier": 0.2028,
+   "note": "correct on GSV; incorrectly favored TOR",
+   "record": "1-1"
+  },
+  {
+   "arm": "wnba.winner.EXPANDING_HOME_PRIOR",
+   "brier": 0.2513,
+   "note": "wrong on CON, correct on SEA",
+   "record": "1-1"
+  }
+ ],
+ "created_utc": "2026-08-27T04:55:00Z",
+ "diagnostics": {
+  "margin_mae": 11.8,
+  "total_bias": 8.95,
+  "total_mae": 8.95,
+  "wagers": "0 / $0",
+  "winner_record": "2-0"
+ },
+ "finals": {
+  "wnba:GSV@CON": "GSV 89, CON 64",
+  "wnba:TOR@SEA": "SEA 90, TOR 78"
+ },
+ "games": [
+  {
+   "final": "GSV 89-64",
+   "forecast": "GSV 81.7%, margin GSV +10.3, total 165.6",
+   "game": "wnba:GSV@CON",
+   "margin_error": 14.68,
+   "side": "CORRECT",
+   "total_error": "+12.6 (165.6 -> 153)"
+  },
+  {
+   "final": "SEA 90-78",
+   "forecast": "SEA 58.5%, margin SEA +3.1, total 173.3",
+   "game": "wnba:TOR@SEA",
+   "margin_error": 8.93,
+   "side": "CORRECT",
+   "total_error": "+5.3 (173.3 -> 168)"
+  }
+ ],
+ "prequential": "forecasts frozen 2026-08-26T18:50Z (7d8776f6), anchored pre-tip; integrity record 4892bac4",
+ "record_id": "WNBA-ARM-GRADING-2026-08-26",
+ "record_sha256": "79a8b450329a1924e62ab37a3fec5c596d536ef5b09a2dae56b06b5652892c66",
+ "schema": "ops.arm_grading.v1",
+ "source_grade": "OWNER_RELAY \u2014 descriptive only until the wehoop artifact binds (the archive commit carrying these finals lands ~10:30Z; confirmation scheduled at the 11:00Z wake). No settlement, no promotion, no estimator input.",
+ "thesis": "The feature refresh was materially useful: it correctly selected both winners and, most importantly, chose Seattle in the direct disagreement with the standings fallback. However, both projected margins were too conservative \u2014 GSV won by 25 instead of 10.3 and Seattle won by 12 instead of 3.1 \u2014 while both totals were projected too high. The winner model had a strong two-game result; the margin and total models still showed compression and overprojection. Two games do not establish general superiority, but this is a clean prospective win for the repaired pipeline. With no August 26 market artifact there is no candidate P&L or betting-performance claim."
+}

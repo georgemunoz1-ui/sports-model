@@ -1,0 +1,41 @@
+{
+ "record_id": "V19-AUDIT-INTAKE-2026-08-14",
+ "built_utc": "2026-08-14T08:50:00Z",
+ "responds_to": "external auditor session message on the V19 delivery (auditor HEAD a9ac7ea, 65 commits)",
+ "prior_record": "V19-EXTERNAL-ATTESTED-2026-08-14 (data/mlb/forecasts/2026-08-14_v19_external_attested.json) — untouched per R6; this record upgrades and extends it",
+
+ "point_1_slate_verification": {
+  "auditor_claim": "statsapi totalGames=14 for 2026-08-14; all 14 carded matchups resolve exactly; all doubleHeader:N; all Scheduled; earliest first pitch 18:20Z vs card written ~06:20Z",
+  "disposition": "ACCEPTED — upgrades the attested record's slate_plausibility from 'plausible, unverified' to EXTERNALLY_VERIFIED. First slate in the external sequence verified clean end-to-end. The two travel turnarounds I flagged (CHC, NYY) are therefore real schedule facts, not anomalies."
+ },
+
+ "point_2_power_analysis": {
+  "auditor_claim": "delta 0.000663 needs n=446/1784/4013/7134 at per-game paired-diff SD 0.005/0.010/0.015/0.020 (80% power); ~287 nights at sd 0.015; the 2025 season (~2430 games) is underpowered for the reported effect",
+  "independent_recomputation": "n = (1.960+0.842)^2 * sd^2 / delta^2 -> 446 / 1786 / 4018 / 7142; nights at sd 0.015 = 287.0. MATCHES within z-rounding.",
+  "disposition": "VERIFIED AND ADOPTED. Standing conclusion: the season-level feature surface (starter durability, roster defense, and kin) cannot produce retrospectively MEASURABLE Brier gains at achievable sample sizes — quantified support for the personnel/bullpen roadmap priority that does not depend on any single night having been informative.",
+  "caveat_recorded": "this is a DETECTABILITY statement about the design (it cannot detect effects of size 0.000663), not a post-hoc power claim about whether V18's effect is real. The correct reading is exactly the auditor's: only prospective accumulation can resolve it, and even that runs ~287 nights at plausible SD — i.e., treat V19's shadow run as character evidence, not a promotion path."
+ },
+
+ "point_3_compression_diagnostic": {
+  "auditor_claim": "V19 mean 54.33, SD 3.76pp, 2 of 14 >= 58%, 4 in the coin band; 8/12 was one of fifteen above 58% with a 53.5% mean; spread unchanged, so the new features did not touch the discrimination constraint",
+  "independent_recomputation": {
+   "v19_2026_08_14": "mean 54.33, sample SD 3.76, >=58%: 2, coin-band (pick <= 52%): 4 — MATCHES exactly",
+   "v13_2026_08_12": "favorite-side home_wp: n 15, mean 54.03, SD 3.48, >=58%: 1 (max 63.7) — count MATCHES; mean differs 54.03 vs auditor 53.5 by 0.5pp, presumably a definitional difference (which artifact / rounding / capped rows). Flagged for pinning, not a contradiction.",
+   "v13_2026_08_13": "n 7, mean 53.20, SD 2.40, >=58%: 0 — added as a third baseline point"
+  },
+  "disposition": "ADOPTED AS STANDING DIAGNOSTIC: per-card favorite-probability mean and sample SD, plus counts >=58% and in the coin band, computed at card time and at grading time for every cohort. Interpretation rule (frozen): a successor version that does not WIDEN the spread has not touched the binding discrimination constraint, whatever its Brier delta does. Baselines: V13 8/12 SD 3.48; V13 8/13 SD 2.40; V19 8/14 SD 3.76."
+ },
+
+ "point_4_shadow_phrasing": {
+  "auditor_claim": "'V19 uses its exact frozen artifact prospectively' glides past the tension; the card should state outright that it forecasts with a NO_PROMOTE artifact in shadow",
+  "disposition": "ADOPTED AS STANDING RULE: any card emitted from an artifact that is NO_PROMOTE or otherwise unvalidated must carry the statement explicitly on the card — 'forecasting with a NO_PROMOTE artifact in shadow, to gather the evidence the retrospective test could not supply' — so no reader has to infer that the running model failed its own gate. The WNBA card's existing 'SHADOW DIAGNOSTIC' banner already complies; the V19 attested record is hereby annotated to carry it; the external session should add it to the canonical card."
+ },
+
+ "point_5_file_delivery_doctrine": {
+  "auditor_claim": "none of the seven files reached that session either; uploads still end 2026-07-29; a file is delivered only when the receiving side can stat it",
+  "disposition": "ADOPTED AS DOCTRINE, matching this workspace's existing attestation practice: a cross-workspace file claim is UNVERIFIED until the receiving side can stat the bytes; cross-workspace hashes likewise. Recorded without reading intent into the Library mechanism — it may be real and simply invisible from both containers. Consequence: every derived record must state its actual basis (message transcription vs canonical bytes), as V19-EXTERNAL-ATTESTED-2026-08-14 does."
+ },
+
+ "concessions_to_the_external_mlb_session": "unchanged from the attested record: honest bundle-origin disclosure, correct NO_PROMOTE call, correct fitting hygiene — all three affirmed by the auditor independently",
+ "status": "14 V19 forecasts sealed and gradeable against an externally verified slate; wager authority NO; gate 0/100 NO_PROMOTE; paper only"
+}

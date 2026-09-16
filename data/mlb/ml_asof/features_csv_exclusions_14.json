@@ -1,0 +1,133 @@
+{
+ "record_id": "FEATURES-CSV-14-EXCLUSIONS",
+ "what": "The 14 finals silently dropped from the n=1461 verdict population (Phase-0 reproducibility finding). Identified by gamePk with reasons. The new ml_asof dataset RETAINS such rows flagged, with exclusion records.",
+ "n": 14,
+ "rows": [
+  {
+   "gamePk": "824621",
+   "date": "2026-04-03",
+   "matchup": "Toronto Blue Jays@Chicago White Sox",
+   "missing_sides": [
+    "home"
+   ],
+   "reason": "home SP: prior rows exist but enrich produced null (tbf<10?)"
+  },
+  {
+   "gamePk": "823317",
+   "date": "2026-04-12",
+   "matchup": "Colorado Rockies@San Diego Padres",
+   "missing_sides": [
+    "away"
+   ],
+   "reason": "away SP: prior rows exist but enrich produced null (tbf<10?)"
+  },
+  {
+   "gamePk": "823400",
+   "date": "2026-04-13",
+   "matchup": "Washington Nationals@Pittsburgh Pirates",
+   "missing_sides": [
+    "away"
+   ],
+   "reason": "away SP: prior rows exist but enrich produced null (tbf<10?)"
+  },
+  {
+   "gamePk": "824210",
+   "date": "2026-04-14",
+   "matchup": "Colorado Rockies@Houston Astros",
+   "missing_sides": [
+    "home"
+   ],
+   "reason": "home SP: no prior rows before 2026-04-14 in log 681293"
+  },
+  {
+   "gamePk": "824615",
+   "date": "2026-04-15",
+   "matchup": "Tampa Bay Rays@Chicago White Sox",
+   "missing_sides": [
+    "away"
+   ],
+   "reason": "away SP: prior rows exist but enrich produced null (tbf<10?)"
+  },
+  {
+   "gamePk": "824273",
+   "date": "2026-05-20",
+   "matchup": "Cleveland Guardians@Detroit Tigers",
+   "missing_sides": [
+    "home"
+   ],
+   "reason": "home SP: no starter id"
+  },
+  {
+   "gamePk": "823379",
+   "date": "2026-05-26",
+   "matchup": "Chicago Cubs@Pittsburgh Pirates",
+   "missing_sides": [
+    "home"
+   ],
+   "reason": "home SP: prior rows exist but enrich produced null (tbf<10?)"
+  },
+  {
+   "gamePk": "823376",
+   "date": "2026-05-27",
+   "matchup": "Chicago Cubs@Pittsburgh Pirates",
+   "missing_sides": [
+    "home"
+   ],
+   "reason": "home SP: prior rows exist but enrich produced null (tbf<10?)"
+  },
+  {
+   "gamePk": "824594",
+   "date": "2026-05-29",
+   "matchup": "Detroit Tigers@Chicago White Sox",
+   "missing_sides": [
+    "home"
+   ],
+   "reason": "home SP: prior rows exist but enrich produced null (tbf<10?)"
+  },
+  {
+   "gamePk": "823047",
+   "date": "2026-06-07",
+   "matchup": "Cincinnati Reds@St. Louis Cardinals",
+   "missing_sides": [
+    "away"
+   ],
+   "reason": "away SP: prior rows exist but enrich produced null (tbf<10?)"
+  },
+  {
+   "gamePk": "824583",
+   "date": "2026-06-24",
+   "matchup": "Cleveland Guardians@Chicago White Sox",
+   "missing_sides": [
+    "home"
+   ],
+   "reason": "home SP: prior rows exist but enrich produced null (tbf<10?)"
+  },
+  {
+   "gamePk": "824985",
+   "date": "2026-07-01",
+   "matchup": "Los Angeles Dodgers@Athletics",
+   "missing_sides": [
+    "away"
+   ],
+   "reason": "away SP: no starter id"
+  },
+  {
+   "gamePk": "823935",
+   "date": "2026-07-02",
+   "matchup": "San Diego Padres@Los Angeles Dodgers",
+   "missing_sides": [
+    "away"
+   ],
+   "reason": "away SP: prior rows exist but enrich produced null (tbf<10?)"
+  },
+  {
+   "gamePk": "824335",
+   "date": "2026-07-02",
+   "matchup": "Miami Marlins@Colorado Rockies",
+   "missing_sides": [
+    "away"
+   ],
+   "reason": "away SP: prior rows exist but enrich produced null (tbf<10?)"
+  }
+ ]
+}

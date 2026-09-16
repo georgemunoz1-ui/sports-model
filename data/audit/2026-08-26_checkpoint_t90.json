@@ -1,0 +1,30 @@
+{
+ "attempts": [
+  {
+   "result": "EGRESS_BLOCKED",
+   "url": "statsapi.mlb.com schedule+probables"
+  },
+  {
+   "result": "EGRESS_BLOCKED",
+   "url": "www.wnba.com/wnba-injury-report"
+  },
+  {
+   "result": "DRY \u2014 no new names surfaced for the twelve TBD evening slots; frozen CAP treatment stands (dose 0.5)",
+   "route": "SEARCH_IDENTIFICATION probables sweep"
+  }
+ ],
+ "checkpoint": "T_MINUS_90M (evening block, first pitch 22:40Z)",
+ "duty": "refresh all material inputs; identify unresolved statuses",
+ "next": "T_MINUS_45M (MANDATORY_ALWAYS) ~21:55Z",
+ "notes": [
+  "afternoon games (TB@DET 17:10Z inferred, CHC@AZ, CIN@SF, CLE@LAA, PHI@SEA, PIT@SD) are POST_START \u2014 no replacements; forecasts stand as frozen for grading only",
+  "no owner relay this window: no slate confirmation, no prices \u2014 the 8/26 board remains a forecast card with zero decision rows",
+  "GitHub archives (bound earlier today) carry completed games, not probables \u2014 they cannot fill pregame starter slots",
+  "WNBA: refreshed model forecasts (7d8776f6) stand for GSV@CON 23:00Z and TOR@SEA 02:00Z; personnel unverified; RJ-005 4/17"
+ ],
+ "record_id": "CHECKPOINT-2026-08-26-T_MINUS_90M",
+ "record_sha256": "d946446afdb27b20af37a31e25bbd3a0d4afbbda2702365d34ba7c4889833c4e",
+ "run_utc": "2026-08-26T21:15:00Z",
+ "schema": "ops.checkpoint.v1",
+ "system_state": "SYSTEM_NOT_DECISION_READY; execution BLOCKED; 0 bets / $0"
+}

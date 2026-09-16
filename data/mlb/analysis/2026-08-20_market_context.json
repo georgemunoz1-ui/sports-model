@@ -1,0 +1,126 @@
+{
+ "record_id": "MARKET-IMPLIED-CONTEXT-2026-08-20",
+ "built_utc": "2026-08-21T05:45:00Z",
+ "label": "MARKET_IMPLIED_CONTEXT",
+ "price_provenance": "REGISTRATION-VINTAGE same-board two-sided moneylines from the 16:41Z owner board (data/mlb/evidence/2026-08-20_owner_slate.json). These are NOT closing prices. Same-board two-sided de-vig is valid; no cross-book best-odds pair was de-vigged. Closing prices were not acquired, so closing-line comparison remains MARKET_COMPARISON_UNAVAILABLE.",
+ "n": 8,
+ "model_mean_brier": 0.249333,
+ "market_mean_brier": 0.238932,
+ "model_side_record": "5-3",
+ "market_side_record": "6-2",
+ "direction_flips": [
+  "WSH@TEX"
+ ],
+ "compression_gate_fired": [
+  "LAA@HOU",
+  "SF@CLE",
+  "TOR@TB",
+  "WSH@TEX"
+ ],
+ "rows": [
+  {
+   "game": "ATH@KC",
+   "p_model_home": 0.523,
+   "market_p_home_devig": 0.5534,
+   "home_win": 1,
+   "model_brier": 0.227529,
+   "market_brier": 0.199423,
+   "direction_flip": false,
+   "compression_gate_fired": false,
+   "model_correct": true,
+   "market_correct": true
+  },
+  {
+   "game": "ATL@CWS",
+   "p_model_home": 0.487,
+   "market_p_home_devig": 0.4964,
+   "home_win": 0,
+   "model_brier": 0.237169,
+   "market_brier": 0.246451,
+   "direction_flip": false,
+   "compression_gate_fired": false,
+   "model_correct": true,
+   "market_correct": true
+  },
+  {
+   "game": "LAA@HOU",
+   "p_model_home": 0.56,
+   "market_p_home_devig": 0.6278,
+   "home_win": 0,
+   "model_brier": 0.3136,
+   "market_brier": 0.394168,
+   "direction_flip": false,
+   "compression_gate_fired": true,
+   "model_correct": false,
+   "market_correct": false
+  },
+  {
+   "game": "NYY@BAL",
+   "p_model_home": 0.484,
+   "market_p_home_devig": 0.4893,
+   "home_win": 0,
+   "model_brier": 0.234256,
+   "market_brier": 0.239434,
+   "direction_flip": false,
+   "compression_gate_fired": false,
+   "model_correct": true,
+   "market_correct": true
+  },
+  {
+   "game": "SEA@MIL",
+   "p_model_home": 0.555,
+   "market_p_home_devig": 0.5534,
+   "home_win": 1,
+   "model_brier": 0.198025,
+   "market_brier": 0.199423,
+   "direction_flip": false,
+   "compression_gate_fired": false,
+   "model_correct": true,
+   "market_correct": true
+  },
+  {
+   "game": "SF@CLE",
+   "p_model_home": 0.519,
+   "market_p_home_devig": 0.6512,
+   "home_win": 1,
+   "model_brier": 0.231361,
+   "market_brier": 0.121634,
+   "direction_flip": false,
+   "compression_gate_fired": true,
+   "model_correct": true,
+   "market_correct": true
+  },
+  {
+   "game": "TOR@TB",
+   "p_model_home": 0.511,
+   "market_p_home_devig": 0.602,
+   "home_win": 0,
+   "model_brier": 0.261121,
+   "market_brier": 0.362418,
+   "direction_flip": false,
+   "compression_gate_fired": true,
+   "model_correct": false,
+   "market_correct": false
+  },
+  {
+   "game": "WSH@TEX",
+   "p_model_home": 0.46,
+   "market_p_home_devig": 0.6146,
+   "home_win": 1,
+   "model_brier": 0.2916,
+   "market_brier": 0.148506,
+   "direction_flip": true,
+   "compression_gate_fired": true,
+   "model_correct": false,
+   "market_correct": true
+  }
+ ],
+ "totals_report_v1": {
+  "n": 8,
+  "mae": 4.25,
+  "median_ae": 2.8,
+  "signed_bias": 0.28,
+  "largest_miss": -13.2
+ },
+ "small_n_warning": "n=8. One slate is not evidence of model quality in either direction."
+}

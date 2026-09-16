@@ -1,0 +1,184 @@
+<title>WNBA Forecast Board — August 27</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=Public+Sans:wght@400;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  --bg:#f7f4f1; --panel:#ffffff; --ink:#2d2723; --muted:#6b6058; --line:#ddd5cd;
+  --accent:#b35a1f; --warn-bg:#fdf3e3; --warn-ink:#7a5218; --warn-line:#e5c894;
+  --pend-bg:#eef0f6; --pend-ink:#3d4b73; --chip:#f0ebe5; --good:#2e6e4e; --flag:#a04b2f;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#1b1714; --panel:#241f1b; --ink:#e9e3dd; --muted:#a2968b; --line:#3f3730;
+    --accent:#e08a4a; --warn-bg:#2d2415; --warn-ink:#e3c07f; --warn-line:#59492a;
+    --pend-bg:#232837; --pend-ink:#aebbdf; --chip:#2e2823; --good:#4da97c; --flag:#d98a68;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#1b1714; --panel:#241f1b; --ink:#e9e3dd; --muted:#a2968b; --line:#3f3730;
+  --accent:#e08a4a; --warn-bg:#2d2415; --warn-ink:#e3c07f; --warn-line:#59492a;
+  --pend-bg:#232837; --pend-ink:#aebbdf; --chip:#2e2823; --good:#4da97c; --flag:#d98a68;
+}
+body{background:var(--bg);color:var(--ink);font:16px/1.55 "Public Sans",system-ui,sans-serif;margin:0;padding:0 16px 64px}
+main{max-width:960px;margin:0 auto}
+h1,h2{font-family:"Archivo",system-ui,sans-serif;text-wrap:balance;line-height:1.15}
+h1{font-size:1.9rem;margin:28px 0 4px}
+h2{font-size:1.25rem;margin:34px 0 10px}
+.sub{color:var(--muted);margin:0 0 18px}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0}
+.chip{background:var(--chip);border:1px solid var(--line);border-radius:999px;padding:3px 12px;font-size:.82rem}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:18px 20px;margin:16px 0}
+.answers{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px}
+.answers .a{border-left:3px solid var(--accent);padding:2px 0 2px 10px}
+.answers .q{font-size:.72rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted)}
+.answers .v{font-weight:600}
+.pending{background:var(--pend-bg);color:var(--pend-ink);border-radius:10px;padding:14px 18px;margin:14px 0}
+.warn{background:var(--warn-bg);color:var(--warn-ink);border:1px solid var(--warn-line);border-radius:10px;padding:12px 16px;margin:14px 0}
+.scroll{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:.9rem}
+th,td{padding:7px 10px;border-bottom:1px solid var(--line);text-align:right;font-variant-numeric:tabular-nums}
+th{font-family:"Archivo";font-size:.75rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
+th.l,td.l{text-align:left}
+td.n{font-family:"IBM Plex Mono",monospace;font-size:.85rem}
+details{border:1px solid var(--line);border-radius:10px;padding:12px 18px;margin:12px 0;background:var(--panel)}
+summary{cursor:pointer;font-family:"Archivo";font-weight:600}
+code{font-family:"IBM Plex Mono",monospace;font-size:.85em;background:var(--chip);padding:1px 5px;border-radius:4px}
+p{max-width:70ch}
+.flag{color:var(--flag);font-weight:600}
+.proof{background:var(--chip);border:1px solid var(--line);border-radius:10px;padding:12px 16px;margin:14px 0;font-family:"IBM Plex Mono",monospace;font-size:.82rem;line-height:1.7;overflow-x:auto}
+.proof b{font-family:"Archivo",sans-serif}
+</style>
+<main>
+<h1>WNBA Forecast Board — Thursday, August 27</h1>
+<p class="sub">Final · 2 games · anchored board frozen 11:06Z · winners 2–0, totals 0–2 · paper research only</p>
+
+<div class="chips">
+<span class="chip">REFRESH ARM <b>2–0</b> · BRIER <b>0.2027</b></span>
+<span class="chip">FALLBACK <b>2–0</b> · BRIER <b>0.1323</b> — BETTER</span>
+<span class="chip">TOTAL MAE <b>22.2</b> · LEANS <b>0–2</b></span>
+<span class="chip">SIDE FLIP VINDICATED</span>
+<span class="chip"><b>0</b> BETS · <b>$0</b></span>
+</div>
+
+<div class="proof"><b>RESULT BINDING PROOF</b> &mdash; wnba:2026-08-27 &middot; <code>f63c6066</code><br>
+RESULT_BINDING_PASS = 2/2<br>
+DATE_COHERENCE_PASS = 2/2<br>
+CANONICAL_ID_MATCH = 2/2<br>
+REFUSED_ROWS = 0<br>
+<span style="font-family:Public Sans,sans-serif">Both rows bound to canonical wehoop game ids (401857178, 401857179) with scores verified against retained evidence.</span></div>
+
+<div class="panel answers">
+<div class="a"><div class="q">What the model said</div><div class="v">GSV 52.28% at NYL · WAS 57.84% at PHX</div></div>
+<div class="a"><div class="q">What happened</div><div class="v">Both won — GSV 79–60, WAS 80–73. Winner arm 2–0</div></div>
+<div class="a"><div class="q">Probability quality</div><div class="v">Brier 0.2027 — but the standings fallback beat it at 0.1323</div></div>
+<div class="a"><div class="q">Score models</div><div class="v">Failed: margin MAE 11.19, total MAE 22.20, both over-projections, total leans 0–2</div></div>
+<div class="a"><div class="q">Wagers</div><div class="v">0 bets · 0.00u · $0 — GSV +120 was a candidate, never authorized</div></div>
+</div>
+
+<h2>Model output versus result</h2>
+<div class="scroll"><table>
+<thead><tr><th class="l">Game</th><th class="l">Model</th><th class="l">Market</th><th class="l">Final</th><th class="l">Result</th></tr></thead>
+<tbody>
+<tr><td class="l"><b>GSV@NYL</b></td><td class="l"><b>GSV 52.28%</b> · GSV +1.18 · 167.0</td><td class="l">GSV +120 / +2.5 / 161.5</td><td class="l"><b>GSV 79–60</b></td><td class="l">Winner ✓ · spread lean ✓ · <span class="flag">over wrong by 28</span></td></tr>
+<tr><td class="l"><b>WSH@PHX</b></td><td class="l"><b>WAS 57.84%</b> · WAS +2.44 · 169.4</td><td class="l">WSH −4.5 / 166.5</td><td class="l"><b>WSH 80–73</b></td><td class="l">Winner ✓ · <span class="flag">PHX +4.5 lean wrong</span> · <span class="flag">over wrong by 16</span></td></tr>
+</tbody></table></div>
+
+<h2>Arm metrics — the fallback out-scored the refresh arm</h2>
+<div class="scroll"><table>
+<thead><tr><th class="l">Winner arm</th><th>Record</th><th>Brier</th><th>Log loss</th><th class="l">Reading</th></tr></thead>
+<tbody>
+<tr><td class="l"><code>wnba.fallback.STANDINGS_LOG5_v1</code></td><td class="n">2–0</td><td class="n"><b>0.1323</b></td><td class="n"><b>0.4468</b></td><td class="l">Best probability quality tonight — a standings heuristic</td></tr>
+<tr><td class="l"><code>wnba.replacement.FEATURE_REFRESH</code></td><td class="n">2–0</td><td class="n">0.2027</td><td class="n">0.5980</td><td class="l">Right on both sides, far less confident</td></tr>
+<tr><td class="l"><code>wnba.winner.EXPANDING_HOME_PRIOR</code></td><td class="n">0–2</td><td class="n">0.2879</td><td class="n">0.7691</td><td class="l">Both home teams lost</td></tr>
+</tbody></table></div>
+<p class="sub">Across its first four current-feature forecasts the refresh arm is <b>4–0, pooled Brier 0.1527</b>, against the fallback’s 3–1 / 0.1676 and the prior’s 1–3 / 0.2696. Four games are four games: descriptive only, zero promotion accrual.</p>
+
+<div class="warn"><b>The score models are the standing defect.</b> Margin MAE 11.19 (GSV projected +1.18, actual +19). Total MAE 22.20, and the direction is consistent, not random: <b>all four</b> refreshed-arm totals across 8/26–8/27 came in <i>above</i> the final. There has never been a sign flip — an earlier claim of one was wrong and is withdrawn. Winner direction is promising; margins compress and totals systematically over-project.</div>
+
+<h2>Supersession — preliminary → anchored, shown as required</h2>
+<div class="scroll"><table>
+<thead><tr><th class="l">Game</th><th class="l">Preliminary (09:14Z)</th><th class="l">Anchored (11:06Z)</th><th class="l">Change</th></tr></thead>
+<tbody>
+<tr><td class="l"><b>GSV@NYL</b></td><td class="l">NYL 55.65% · NYL +0.88 · 166.9</td><td class="l"><b>GSV 52.28% · GSV +1.18 · 167.0</b></td><td class="l"><span class="flag">SIDE CHANGED NYL → GSV</span></td></tr>
+<tr><td class="l"><b>WAS@PHX</b></td><td class="l">WAS 57.84% · WAS +2.44 · 169.4</td><td class="l">WAS 57.84% · WAS +2.44 · 169.4</td><td class="l">none</td></tr>
+</tbody></table></div>
+<div class="warn"><b>Outcome: the flip was right.</b> Golden State won 79–60 — the anchored side was correct and the superseded preliminary would have been wrong. That vindicates the rebuild-first workflow and the reproduction audit <i>descriptively</i>, as process, not the model statistically: one game cannot do the latter.</div>
+<div class="warn"><b>Reproduction finding.</b> The preliminary GSV@NYL value could not be
+reproduced by the registered machinery on either pool — the superseded 87-game pool yields GSV
+50.11% and the anchored 89-game pool GSV 52.28%, never NYL 55.65% — while WAS@PHX reproduces to
+four decimals. The discrepancy isolates to the preliminary run's handling of Golden State's
+appended 8/26 blowout (89–64 at CON, which materially raises GSV's four-factors state). The
+anchored archive-bound run is authoritative; the finding is flagged for the PR #3 correction
+record and its coverage registry.</div>
+
+<h2>All three arms — kept separate</h2>
+<div class="scroll"><table>
+<thead><tr><th class="l">Game</th><th class="l">FEATURE_REFRESH</th><th class="l">STANDINGS_LOG5 (diagnostic)</th><th class="l">EXPANDING_PRIOR</th><th class="l">Diagnostic read</th></tr></thead>
+<tbody>
+<tr><td class="l"><b>GSV@NYL</b></td><td class="l"><b>GSV 52.3%</b></td><td class="l">GSV 57.0% (27–11 vs 24–15)</td><td class="l">NYL 53.7%</td><td class="l">Refresh and fallback take the road team; the prior opposes — grades the home prior</td></tr>
+<tr><td class="l"><b>WAS@PHX</b></td><td class="l"><b>WAS 57.8%</b></td><td class="l">WAS 71.8% (23–15 vs 13–25)</td><td class="l">PHX 53.7%</td><td class="l">Same shape; the fallback is far more confident than the refresh arm</td></tr>
+</tbody></table></div>
+
+<div class="warn"><b>Archive confirmation of last night:</b> the morning commit binds GSV 89–64
+and SEA 90–78 exactly as relayed — the 8/26 refresh-arm grading (2–0, Brier 0.1027) now rests
+on an archive-bound artifact (upgrade record <code>04e917ab</code>), no longer on relay
+alone.</div>
+
+<div class="pending"><b>Action state is separate from forecast state.</b>
+The model output exists and is shown above. <code>PERSONNEL_UNVERIFIED</code>,
+partial/display-only markets, and the pending anchored refresh keep <code>ACTION_BLOCKED</code>;
+they do not make the model side disappear. No moneyline EV is computable from spread-only prices,
+and no spread/total EV is legal without a registered cover/total distribution.</div>
+
+<h2>Tonight's slate — canonical schedule artifact</h2>
+<div class="scroll"><table>
+<thead><tr><th class="l">Game</th><th class="l">Venue</th><th>Tip (UTC)</th><th class="l">ESPN id</th><th class="l">Status</th></tr></thead>
+<tbody>
+<tr><td class="l"><b>Golden State @ New York Liberty</b></td><td class="l">Barclays Center</td><td class="n">08-28 00:00</td><td class="l n">401857178</td><td class="l">Scheduled</td></tr>
+<tr><td class="l"><b>Washington @ Phoenix</b></td><td class="l">Mortgage Matchup Center</td><td class="n">08-28 02:00</td><td class="l n">401857179</td><td class="l">Scheduled</td></tr>
+</tbody></table></div>
+<p class="sub">Source: in-git ESPN schedule parquet, commit <code>b843138</code>, file sha <code>769591a7…</code>. Reconciliation: 2 discovered = 2 canonical + 0 refusals.</p>
+
+
+<h2>Personnel — strongest retained evidence, honestly graded</h2>
+<div class="warn"><b>Official grade: PERSONNEL_UNVERIFIED.</b> The official injury-report route
+is still egress-blocked (fresh 06:52Z receipt). The strongest retained evidence is in-git ESPN
+game payloads from each team's most recent archived game (1–3 days old, hashed, commit-pinned):</div>
+<div class="scroll"><table>
+<thead><tr><th class="l">Team</th><th class="l">Listed out (as of last archived game)</th><th class="l">Snapshot age</th></tr></thead>
+<tbody>
+<tr><td class="l"><b>New York Liberty</b></td><td class="l"><span class="flag">Satou Sabally — concussion</span>; Maley, Balogun (coach's decision)</td><td class="l">vs LVA (most recent)</td></tr>
+<tr><td class="l"><b>Golden State</b></td><td class="l">Iliana Rupert (not injury related)</td><td class="l">at MIN (most recent)</td></tr>
+<tr><td class="l"><b>Phoenix</b></td><td class="l">Ciezki, Dunn (coach's decision); Suarez (head); Nogic</td><td class="l">Tue vs WSH</td></tr>
+<tr><td class="l"><b>Washington</b></td><td class="l">none listed in the payload (recorded as listed, not asserted healthy)</td><td class="l">Tue at PHX</td></tr>
+</tbody></table></div>
+<p class="sub">Postgame correction: Sabally was indeed out, but a pregame checkpoint also identified Sabrina Ionescu as ruled out — <b>she played 29 minutes with four assists</b>. That identification was wrong and is withdrawn; the checkpoint record is superseded on that point, not edited. It changed no forecast (personnel is display-lane, and no personnel replacement identity is registered), but it is a false pregame availability claim and is recorded as one. The record carrying the false claim is <code>2026-08-27_checkpoint_wnba_t45.json</code> (published by commit <code>4986b1f</code>); the clean personnel evidence above is <code>2026-08-27_wnba_personnel_bind.json</code>, which never mentioned Ionescu.</p>
+
+<h2>Market and dispositions</h2>
+<div class="panel"><p><b>Current DK relay (v2 capture <code>54486905</code>):</b> GSV +120
+moneyline, GSV +2.5, total 161.5 (moved from 162.5). At the anchored GSV 52.28%, the +120
+moneyline screens <b>+$15.02 per $100 at full precision</b> — the day's strongest raw
+market-relative screen, and still only a 52.3% model side. The model total of 167.0 now sits
+5.5 over the moved 161.5. Sabally remains listed out for New York. The WAS-side moneyline for
+WSH@PHX was not retained — that row is PRICE_BLOCKED.</p></div>
+<div class="warn"><b>Disposition: GSV +120 = CANDIDATE_NOT_AUTHORIZED_PENDING_UNCERTAINTY ·
+WAS@PHX = PRICE_BLOCKED.</b> Positive raw EV authorizes nothing: conservative EV is unavailable
+until the RJ-002 per-action consumption rule is approved, spread/total EV would additionally
+need a registered cover distribution, and a fresh execution-time quote is mandatory regardless.
+Ledger: 0 bets · 0.00u · $0.</div>
+
+<h2>Technical & acquisition appendix</h2>
+<details><summary>Feature pipeline state and evidence chain</summary>
+<p>Canonical pool as-of 7/22 (frozen prereg) + ESPN extension through 8/25 (87 games, per-file
+sha256, zero dedup overlap, pool hash bound at the 8/26 freeze). The 11:00Z rebuild appends
+8/26's two games from the archive's morning commit, records max included event time, combined
+pool hash and an explicit leakage check, and verifies 401857178/401857179 are absent from the
+pool. Recovery job RJ-005 stands at 8/17 units (schedule, results, four roster artifacts bound;
+official injuries and market open). Yesterday's refresh-arm validation is prequentially clean:
+forecasts frozen 18:50Z pre-tip, integrity record <code>4892bac4</code>.</p></details>
+<details><summary>Checkpoints</summary>
+<p>T−90 22:30Z and T−45 23:15Z (trigger ids in the server-verified inventory
+<code>263fe16b</code>, each confirmed by routine-list read-back); the 00:15Z
+MLB-late checkpoint folds in the WSH@PHX pre-tip availability check. Each refreshes
+availability and market with receipts, runs side reselection through the registered gate on any
+replacement crossover, and leaves the frozen board byte-identical.</p></details>
+</main>

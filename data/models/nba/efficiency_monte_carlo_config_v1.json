@@ -1,0 +1,33 @@
+{
+  "artifact_type": "nba_model_state_v1",
+  "model_id": "nba.efficiency_monte_carlo.v1",
+  "version": "1.0.1",
+  "status": "PROVISIONAL_SHADOW",
+  "fit_required": true,
+  "action_authority": false,
+  "market_features_used": false,
+  "minimum_simulations": 50000,
+  "default_simulations": 100000,
+  "parameters": {
+    "league_ortg": null,
+    "home_court_points_per100": null,
+    "pace_sd": null,
+    "shared_eff_sd": null,
+    "team_eff_sd": null,
+    "margin_logistic_scale": null
+  },
+  "fit_provenance": {
+    "fit_completed": false,
+    "training_sample_count": null,
+    "validation_sample_count": null,
+    "training_window": null,
+    "validation_window": null,
+    "feature_snapshot_hash": null,
+    "training_data_hash": null,
+    "validation_data_hash": null,
+    "code_version": null,
+    "metrics": null
+  },
+  "input_policy": "Frozen PIT team ratings and explicit PIT availability/minutes adjustments only. No sportsbook market features. Missing fitted parameters must fail closed rather than use defaults.",
+  "block_reason": "NBA_MODEL_STATE_PARAMETER_ESTIMATION_REQUIRED"
+}

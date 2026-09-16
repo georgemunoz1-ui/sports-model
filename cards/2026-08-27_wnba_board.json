@@ -1,0 +1,172 @@
+{
+ "LEDGERS": {
+  "model_authorized_wagers_usd": 0,
+  "n_bets": 0,
+  "units": 0.0
+ },
+ "archive_confirmation_of_0826": "GSV 89-64 and SEA 90-78 now bound from the canonical schedule artifact (commit 3316fa3) \u2014 the owner-relayed finals are archive-confirmed",
+ "builder": "11:00Z wake anchored refresh (wnba_refresh_espn.run_slate, frozen wnba_model_v1 machinery)",
+ "chronology_status": "ANCHOR_PRECEDES_EARLIEST_START",
+ "cohort": "WNBA \u2014 never pooled with MLB or NFL",
+ "cohort_hashes": {
+  "wnba": "3edfbc75df487577976960df300c0ea2d33b7d8a9097aaad51a2b93b1c737ef4"
+ },
+ "earliest_start_utc": "2026-08-28T00:00:00Z",
+ "forecast_anchor_utc": "2026-08-27T11:06:18Z",
+ "input_hash": {
+  "extension_sha256": "276fa95a47a0b4b96436f197b55ff3ac4d5a17377906563c23debd2aa01bca34",
+  "schedule_sha256": "0f57279f944ba5a9ac5713578ce899ca3970c04801f004a2e0e1f3ebbf4a792e"
+ },
+ "market_comparisons_not_selections": {
+  "ev": "UNAVAILABLE \u2014 no moneylines, no registered cover/total distribution; comparisons only",
+  "wnba:GSV@NYL": "DK NYL -2.5 / 162.5: model winner GSV outright (52.3%) -> spread lean GSV +2.5; total lean over (167.0)",
+  "wnba:WSH@PHX": "display-only WSH -3.5 / 166.5: model winner WAS by 2.44 -> spread lean PHX +3.5 vs the displayed line is WRONG-WAY (model has WAS winning but by less than 3.5 -> lean WAS not covering: PHX +3.5); total lean over (169.4)"
+ },
+ "model_identity": [
+  "wnba.replacement.FEATURE_REFRESH",
+  "wnba.fallback.STANDINGS_LOG5_v1",
+  "wnba.winner.EXPANDING_HOME_PRIOR"
+ ],
+ "pool": {
+  "base_games": 2287,
+  "extension_games": 89,
+  "extension_sha256": "276fa95a47a0b4b96436f197b55ff3ac4d5a17377906563c23debd2aa01bca34",
+  "extension_window": "2026-07-22 (excl) .. 2026-08-27",
+  "leakage_check": "target gids 401857178/401857179 absent from the 89-game extension and the 2,287-game base; zero duplicate gids; max included event time 2026-08-27T02:00Z (TOR@SEA), strictly before both tips",
+  "provenance": {
+   "commit": "3316fa3c116a3d6ce2549699bd65a47d0e6773d5",
+   "repo": "github.com/sportsdataverse/wehoop-wnba-raw",
+   "retrieved_utc": "2026-08-27T11:04:38Z",
+   "schedule_sha256": "0f57279f944ba5a9ac5713578ce899ca3970c04801f004a2e0e1f3ebbf4a792e"
+  }
+ },
+ "prospectivity_status": "SELF_ASSERTED_PREGAME (anchor ~13h before first tip)",
+ "record_id": "BOARD-2026-08-27-WNBA",
+ "slate_date": "2026-08-27",
+ "sport": "wnba",
+ "supersession_of_preliminary": {
+  "rule": "append-only; PRELIMINARY_ASOF 09:14:21Z values superseded here, old -> new displayed",
+  "wnba:GSV@NYL": {
+   "new": "GSV 52.28% (p_home 0.4772) / GSV +1.18 / 167.0",
+   "old": "NYL 55.65% / NYL +0.88 / 166.9",
+   "reproduction_note": "the preliminary GSV@NYL is UNREPRODUCED by the registered machinery: this tree yields GSV 50.11% on the superseded 87-game pool and GSV 52.28% on the anchored 89-game pool \u2014 never NYL 55.65%. WAS@PHX reproduces to 4 decimals, isolating the discrepancy to the preliminary run's handling of GSV's appended 8/26 game. Flagged for the PR #3 correction record.",
+   "side_change": "NYL -> GSV"
+  },
+  "wnba:WSH@PHX": {
+   "delta": "none",
+   "new": "WAS 57.84% / WAS +2.44 / 169.4",
+   "old": "WAS 57.84% / WAS +2.44 / 169.4",
+   "side_change": null
+  }
+ },
+ "wnba": {
+  "cohort_id": "wnba:2026-08-27",
+  "n_games": 2,
+  "rows": [
+   {
+    "action_status": "ACTION_BLOCKED",
+    "arm": "wnba.replacement.FEATURE_REFRESH",
+    "coherence_gap_pp": 1.08,
+    "espn_id": 401857178,
+    "forecast_status": "FORECAST_REGISTERED",
+    "game": "wnba:GSV@NYL",
+    "game_start_utc": "2026-08-28T00:00:00Z",
+    "games_used": {
+     "away": 38,
+     "home": 38
+    },
+    "lineups": "PERSONNEL_UNVERIFIED",
+    "margin_home": -1.18,
+    "model_side": "GSV",
+    "p_home": 0.4772,
+    "projected_total": 167.0,
+    "schedule_grade": "ESPN_SINGLE_FAMILY_GIT_ARTIFACT",
+    "sport": "wnba",
+    "target": "winner"
+   },
+   {
+    "action_status": "ACTION_BLOCKED",
+    "arm": "wnba.fallback.STANDINGS_LOG5_v1",
+    "espn_id": 401857178,
+    "forecast_status": "FORECAST_REGISTERED",
+    "game": "wnba:GSV@NYL",
+    "game_start_utc": "2026-08-28T00:00:00Z",
+    "lineups": "PERSONNEL_UNVERIFIED",
+    "output_grade": "DIAGNOSTIC_ONLY",
+    "p_home": 0.43012627788513086,
+    "records": {
+     "GSV": "27-11",
+     "NYL": "24-15"
+    },
+    "schedule_grade": "ESPN_SINGLE_FAMILY_GIT_ARTIFACT",
+    "sport": "wnba",
+    "target": "winner"
+   },
+   {
+    "action_status": "ACTION_BLOCKED",
+    "arm": "wnba.winner.EXPANDING_HOME_PRIOR",
+    "espn_id": 401857178,
+    "forecast_status": "FORECAST_REGISTERED",
+    "game": "wnba:GSV@NYL",
+    "game_start_utc": "2026-08-28T00:00:00Z",
+    "lineups": "PERSONNEL_UNVERIFIED",
+    "p_home": 0.536585,
+    "schedule_grade": "ESPN_SINGLE_FAMILY_GIT_ARTIFACT",
+    "sport": "wnba",
+    "target": "winner"
+   },
+   {
+    "action_status": "ACTION_BLOCKED",
+    "arm": "wnba.replacement.FEATURE_REFRESH",
+    "coherence_gap_pp": 0.9,
+    "espn_id": 401857179,
+    "forecast_status": "FORECAST_REGISTERED",
+    "game": "wnba:WSH@PHX",
+    "game_start_utc": "2026-08-28T02:00:00Z",
+    "games_used": {
+     "away": 38,
+     "home": 38
+    },
+    "lineups": "PERSONNEL_UNVERIFIED",
+    "margin_home": -2.44,
+    "model_side": "WAS",
+    "p_home": 0.4216,
+    "projected_total": 169.4,
+    "schedule_grade": "ESPN_SINGLE_FAMILY_GIT_ARTIFACT",
+    "sport": "wnba",
+    "target": "winner"
+   },
+   {
+    "action_status": "ACTION_BLOCKED",
+    "arm": "wnba.fallback.STANDINGS_LOG5_v1",
+    "espn_id": 401857179,
+    "forecast_status": "FORECAST_REGISTERED",
+    "game": "wnba:WSH@PHX",
+    "game_start_utc": "2026-08-28T02:00:00Z",
+    "lineups": "PERSONNEL_UNVERIFIED",
+    "output_grade": "DIAGNOSTIC_ONLY",
+    "p_home": 0.28195829561864705,
+    "records": {
+     "PHX": "13-25",
+     "WAS": "23-15"
+    },
+    "schedule_grade": "ESPN_SINGLE_FAMILY_GIT_ARTIFACT",
+    "sport": "wnba",
+    "target": "winner"
+   },
+   {
+    "action_status": "ACTION_BLOCKED",
+    "arm": "wnba.winner.EXPANDING_HOME_PRIOR",
+    "espn_id": 401857179,
+    "forecast_status": "FORECAST_REGISTERED",
+    "game": "wnba:WSH@PHX",
+    "game_start_utc": "2026-08-28T02:00:00Z",
+    "lineups": "PERSONNEL_UNVERIFIED",
+    "p_home": 0.536585,
+    "schedule_grade": "ESPN_SINGLE_FAMILY_GIT_ARTIFACT",
+    "sport": "wnba",
+    "target": "winner"
+   }
+  ]
+ }
+}

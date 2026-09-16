@@ -1,0 +1,152 @@
+{
+ "record_id": "CORRECTIONS-ROUND2-2026-08-17",
+ "built_utc": "2026-08-17T09:40:00Z",
+ "authority": "owner corrections + lineage ruling, 2026-08-17",
+ "supersedes_claims_in": ["docs/audits/2026-08-17_tier1_refresh_cycle.json",
+                          "docs/experiments/2026-08-17_FORM_USEFULNESS.json"],
+ "rewrites_nothing": "R6. Both superseded records are left byte-intact. What changes here is the STATUS of two claims and the WORDING of a third.",
+
+ "CORRECTION_1_COMPLETENESS_OVERCLAIMED": {
+  "what_I_claimed": "COMPLETE_BY_INVARIANT — 15 games covering all 30 franchises exactly once proves the slate complete by construction.",
+  "owner_correction_ACCEPTED": "Covering all 30 franchises once proves an internally complete 15-game PARTITION. It does not independently prove the official schedule had exactly 15 games — such as no doubleheader.",
+  "why_the_correction_is_right": "a slate containing a doubleheader plus a corresponding off-day pair ALSO partitions the roster: 30 franchises, 15 games, each appearing once. The partition is consistent with more than one true schedule, so it cannot settle the count. My claim that 'a 16th game is impossible without repeating a franchise' was false — a 16th game with two teams already appearing would repeat, but a doubleheader combined with two teams idle would not.",
+  "status_renamed": "COMPLETE_BY_ROSTER_PARTITION",
+  "missing_tier1_games_basis": "roster partition only — PROVISIONAL",
+  "what_would_settle_it": "exact gamePk SET match against a SEPARATELY captured official schedule manifest at data/mlb/schedule/official_manifest_{date}.json. The gate now looks for it, reports its absence as a named consequence, and promotes the status to COMPLETE_VERIFIED_AGAINST_OFFICIAL_SCHEDULE only on an exact set match.",
+  "manifest_available": false,
+  "manifest_blocked_by": "outbound HTTPS 403 at the org egress proxy; not routed around",
+  "SECOND_OVERCLAIM_ALSO_WITHDRAWN": {
+   "what_I_claimed": "the '+2 games per slate team' check is an independent second confirmation from an unrelated code path.",
+   "owner_correction_ACCEPTED": "it reuses the same evidence and is not independent.",
+   "why": "that assertion is computed from the SAME ingested rows. Two code paths reading one source is not two sources. It re-expresses the partition rather than testing it, and calling it independent corroboration was the more serious of the two errors here because it dressed a single-source claim as a cross-check.",
+   "retained_value": "it remains a useful INTERNAL consistency check — it would fire if the date filters were wrong — and is recorded as that and nothing more."
+  },
+  "gate_selftest_now_asserts": "a roster partition is NEVER reported as schedule-verified while no manifest exists"
+ },
+
+ "CORRECTION_2_ATTRIBUTION_WAS_INVALID": {
+  "what_I_claimed": "the 8/15-8/16 refresh is 81% of the total.",
+  "owner_correction_ACCEPTED": "Mean absolute changes are non-additive. 0.3457 + 0.1973 = 0.5430pp, not 0.4254pp.",
+  "the_error_precisely": "I divided a PER-PATH mean |delta| (0.3457pp) by the NET mean |delta| (0.4254pp). Those have different denominators, so the quotient is a share of nothing. 0.3457/0.4254 = 81.3% — arithmetically what I printed, and meaningless as an attribution. Mean absolute movements are not additive because signed per-game contributions partially cancel; the gross exceeds the net by exactly the amount that cancels.",
+  "CORRECTED_FIGURES": {
+   "net_combined_movement_pp": 0.4254,
+   "gross_path_movement_pp": 0.5429,
+   "refresh_share_of_GROSS": "63.7%",
+   "repair_share_of_GROSS": "36.3%",
+   "note_on_gross_shares": "order-dependent by construction: each path is measured holding the other factor fixed at one particular value."
+  },
+  "ORDER_NEUTRAL_SHAPLEY_now_computed": {
+   "method": "two-factor Shapley over R (8/15-8/16 refresh) and H (8/13 hole repair), using a fourth form state S_D = all dates except 8/13 so both orderings are available. phi_R = 1/2[(D-A)+(C-B)], phi_H = 1/2[(B-A)+(C-D)], and phi_R + phi_H = C-A exactly per game.",
+   "shapley_refresh_mean_abs_pp": 0.3481,
+   "shapley_repair_mean_abs_pp": 0.1964,
+   "shapley_refresh_share_ORDER_NEUTRAL": "63.9%",
+   "mean_abs_interaction_pp": 0.0093,
+   "reading": "the Shapley share (63.9%) lands essentially on the gross share (63.7%) because the interaction is tiny — 0.0093pp against ~0.35pp effects. The two factors are near-additive per game. That means the retracted 81% was NOT a subtlety about interaction; it was purely a denominator error.",
+   "additivity_enforced": "the module's selftest asserts phi_R + phi_H equals the net signed change to 1e-12 on every game, and that gross >= net."
+  },
+  "per_game_signed_contributions": "now emitted for all four paths (B->C, A->D, A->B, D->C) plus both Shapley values and the interaction, per game, in data/audit/form_refresh_diff.json",
+  "THE_CORRECT_ANALYTICAL_CONCLUSION_owner_verbatim": "Conditional on repairing the 8/13 hole, adding the 8/15-8/16 results changed V13 probabilities by 0.346pp on average, caused no robust side flips, and has no demonstrated prospective accuracy benefit.",
+  "this_wording_is_the_record": "adopted verbatim, including the conditioning clause. The conditioning is not a formality: the unconditional figure differs, and reporting 0.346pp without 'conditional on repairing the 8/13 hole' would reintroduce the same conflation the 81% came from."
+ },
+
+ "CORRECTION_3_NO_DETECTABLE_IMPROVEMENT_IS_NOT_EQUIVALENCE": {
+  "owner_correction_ACCEPTED": "The OOF result of -0.0005 Brier, p=0.59 means NO DETECTABLE IMPROVEMENT, not equivalence; retain its confidence interval and a practical-effect threshold.",
+  "why_this_matters_more_than_it_looks": "I had been citing 'FULL vs STALE -0.0005 Brier, p=0.59' as though it settled the question. It does not. A non-significant result at n=1460 games over 111 slate dates constrains the effect only as tightly as the interval allows, and the interval here is wide relative to effects this program already treats as material.",
+  "CONFIDENCE_INTERVALS_RETAINED": {
+   "FULL_vs_STALE_freshness": {"mean_brier_diff": -0.000520, "ci95_block_bootstrap": [-0.002421, 0.000993], "p": 0.5872, "n_games": 1417},
+   "FULL_vs_NO_FORM_form_at_all": {"mean_brier_diff": 0.004601, "ci95_block_bootstrap": [0.000745, 0.008689], "p": 0.0194, "p_holm": 0.0592, "n_games": 1460},
+   "stratum_50_plus_prior_games": {"mean_brier_diff": -0.000470, "ci95": [-0.003568, 0.002623], "p": 0.7704, "n_games": 716}
+  },
+  "PRACTICAL_EFFECT_THRESHOLD": {
+   "yardstick": "the 2026-08-10 MLV2 block ablation, in which dropping the STARTER block cost +0.00272 Brier and collapsed AUC 0.5645 -> 0.5232. That is the largest structural effect this repository has measured and the only one it has ever treated as material, so it is the honest unit to express other effects in.",
+   "threshold_adopted": "an effect is PRACTICALLY MEANINGFUL if it reaches 0.00272 Brier, i.e. 100% of the starter-block effect. A secondary marker at 25% (0.00068 Brier) is recorded as the smallest effect worth a modelling change.",
+   "WHAT_THE_FRESHNESS_TEST_ACTUALLY_EXCLUDES": {
+    "largest_improvement_NOT_excluded": "0.00242 Brier = 89% of the starter-block effect",
+    "largest_harm_NOT_excluded": "0.00099 Brier = 37% of the starter-block effect",
+    "verdict": "the test does NOT rule out form freshness being worth nearly as much as the entire starter block. It is under-powered against its own practical threshold. 'No detectable improvement' is the correct and only supported statement; 'no effect', 'equivalent' or 'form freshness does not matter' are NOT supported and are withdrawn wherever I implied them."
+   },
+   "WHAT_THE_50_PLUS_STRATUM_EXCLUDES": {
+    "largest_improvement_NOT_excluded": "0.00357 Brier = 131% of the starter-block effect",
+    "verdict": "at mid-August support levels the data are even less constraining. Nothing about form's value at 50+ prior games is settled."
+   },
+   "WHAT_IS_STILL_SUPPORTED": "the 0-9 prior-games stratum: +0.0375 Brier, CI [0.0192, 0.0553], p=0.0002, surviving Holm over 4 strata. That lower bound is 7x the starter-block effect, so unshrunk early-season form being materially HARMFUL is established, not merely detected.",
+   "power_note": "reaching the 0.00068 secondary marker with this CI width would need roughly an order of magnitude more games than one season provides. A single-season ablation cannot settle small-effect questions about form, and future citations should say so rather than reporting p and stopping."
+  }
+ },
+
+ "LINEAGE_RULING_EXECUTED": {
+  "owner_decision": "do not purge V13; fork a clean successor lineage.",
+  "1_V13_preserved_and_tagged": {
+   "done": true,
+   "identity": "ml.v13_1.hfa1005.card.s722n30000",
+   "data_lineage_tag": "LEGACY_TIER_EXPOSURE_136",
+   "promotion_status": "NO_PROMOTE",
+   "also_tagged": "ml.v13_1.hfa1005.card.s722n30000.per_game_reset (same source, same exposure)",
+   "recorded_in": "harness/model_registry.py, with the row count, date range, class composition and the statement that this is a PERMANENT property of this identity rather than a defect to repair"
+  },
+  "2_clean_lineage_built": {
+   "done": true,
+   "path": "data/backfill/mlb/2026/results_tier1.csv",
+   "sha256": "fbf294d18f86f69c...",
+   "rows": 1727,
+   "builder": "harness/tier1_lineage.py",
+   "manifest": "data/audit/tier1_lineage_manifest.json",
+   "predicate": "tier_discipline.is_canonical_final",
+   "nature": "a DERIVED VIEW, regenerated deterministically from the canonical file — not a second source of truth and never hand-edited"
+  },
+  "3_never_rewrite_V13_inputs": {
+   "done": true,
+   "enforcement": "the builder captures results.csv's sha256 before and after every build and RAISES if they differ. Verified unchanged at 05a4a6a9b2a865aa. This is enforced, not promised.",
+   "v13_reads": "data/backfill/mlb/2026/results.csv (unchanged)",
+   "successor_reads": "data/backfill/mlb/2026/results_tier1.csv"
+  },
+  "4_retrain_and_walk_forward": {
+   "done": false,
+   "status": "BLOCKED — and the blocker is a finding, not an excuse",
+   "THE_FINDING": "the tier-1-only lineage is not merely smaller than the canonical file. It removes NINE ENTIRE DAYS on which zero canonical finals survive (2026-07-29, 07-31, 08-01, 08-02, 08-03, 08-04, 08-05, 08-07, 08-11), plus partial losses on 07-23 (4/5), 08-08 (4/15) and 08-10 (9/10). All 30 franchises lose 7-11 games each, roughly 6-9% of the season.",
+   "why_that_blocks_a_retrain": "as-of team form computed on this lineage is form over OBSERVED CANONICAL GAMES, not over games actually played. For every slate after 2026-07-29 the two differ. A model trained on it learns a rate whose denominator is wrong, and a missing game is not a neutral omission — it is a scoring event that happened and is being averaged out. Retraining now would produce a successor that is CLEANER in provenance and WORSE in coverage, and the coverage defect would be invisible in its own metrics.",
+   "the_lineage_refuses_to_certify_itself": "harness/tier1_lineage.py reports SUCCESSOR_READINESS = DEGRADED_INTERIOR_GAPS and emits a named BLOCKING_ACQUISITION_REQUIREMENT per missing date. Its selftest asserts the gate cannot certify READY while whole days are missing.",
+   "BLOCKING_ACQUISITION_REQUIREMENT": ["tier-1 finals for 2026-07-29", "2026-07-31", "2026-08-01", "2026-08-02", "2026-08-03", "2026-08-04", "2026-08-05", "2026-08-07", "2026-08-11", "completion of 2026-07-23 (4/5)", "2026-08-08 (4/15)", "2026-08-10 (9/10)"],
+   "blocked_by": "outbound HTTPS 403; needs an owner-supplied official board for those dates or restored egress",
+   "what_happens_when_unblocked": "the lineage flips to READY on rebuild, and the walk-forward successor build proceeds from it under its own prereg and its own identity — never as an edit to V13."
+  }
+ },
+
+ "CAPTURE_RAIL_THE_LARGER_PROBLEM": {
+  "owner": "no 8/18 slate or prices means another potential day without usable, gradeable betting output. The capture rail must deliver an official gamePk schedule, starters/lineups, and timestamped prices before first pitch; model gates cannot compensate for absent pregame inputs.",
+  "accepted_and_it_names_the_real_failure_mode": "every gate built here checks the QUALITY of data that arrived. None fired when data simply never arrived — which is exactly what cost 2026-08-16 (no card in any sport, detected at 23:26Z after all 18 first pitches). Silent absence has cost more gradeable output than any data-quality defect has.",
+  "built": "harness/pregame_preflight.py — inverts the polarity: for a named date, are the THREE pregame inputs present, and how long remains before they stop being acquirable?",
+  "inputs_tracked": {
+   "schedule": "data/mlb/schedule/official_manifest_{date}.json — deadline 240m before first pitch",
+   "starters": "data/mlb/slates/{date}_slate*.psv — deadline 180m; TBD starters accepted but COUNTED, since starter resolution moved 8/17 probabilities ~5x more than form freshness",
+   "prices": "data/mlb/odds/{date}_*.json — deadline 90m; without them there is no break-even, no edge, no selection"
+  },
+  "design_choice_that_matters": "the gate fails on MISSING_PAST_DEADLINE, not on mere absence. A gate keyed to absence would fail every morning and be ignored by lunchtime — which is how the rail died in the first place. Absence with slack is reported as MISSING_BUT_RECOVERABLE with the minutes remaining.",
+  "wired_into_healthcheck_for": "today and tomorrow — tomorrow being the one that gets forgotten",
+  "LIVE_READINGS_AT_2026_08_17T09_2xZ": {
+   "2026-08-17": "FORECAST_ONLY_NO_MARKET_GRADE — slate present (11 games, 4 with a TBD, 63.6% resolved), first pitch 17:40Z, 531 minutes remaining. Schedule manifest and PRICES are MISSING BUT STILL RECOVERABLE with 291m and 441m of slack respectively. This is actionable now, not a post-mortem.",
+   "2026-08-18": "INPUTS_MISSING — no slate, so no first pitch to time anything against. All three inputs absent."
+  },
+  "a_bug_this_gate_found_in_itself": "the first implementation took min() over first-pitch time STRINGS, so the 8/17 slate's 00:05Z next-day start sorted ahead of the 17:40Z opener and a live pregame check reported '523 minutes PAST first pitch'. A preflight gate that thinks the day is already lost is worse than none. Times are now resolved to absolute UTC datetimes with a day rollover below 10:00Z, and the selftest asserts the 8/17 opener resolves to 17:40Z.",
+  "what_this_gate_CANNOT_do": "fetch. Egress is 403 and is not routed around. It makes an absence loud and timed; it cannot make data appear. A gate that pretended to acquire would be the same silent failure with extra steps."
+ },
+
+ "VERIFIABILITY": {
+  "owner_note": "I cannot independently inspect commit 1cadf13 from the bytes available here, so its implementation and healthcheck remain message-attested.",
+  "accepted": "correct, and the same applies to this round. Nothing here asks to be believed on the strength of a summary.",
+  "what_is_checkable_without_trusting_me": [
+   "every module carries a --selftest with adversarial fixtures that must FAIL on the defect they guard; run them",
+   "harness/tier1_board_gate.py --gate, harness/tier1_lineage.py --gate, harness/pregame_preflight.py --date <d> --gate and harness/form_refresh_diff.py --selftest each re-derive their claims from the repository rather than from a record",
+   "harness/model_registry.py recomputes every pinned source hash and FAILS on drift",
+   "the artifacts under data/audit/ carry the input file hashes they were computed from"
+  ],
+  "artifact_hashes_this_round": "recorded in each artifact's own header; results.csv 05a4a6a9b2a865aa, tier-1 lineage fbf294d18f86f69c, 8/17 v3 card 1cac39733f68d6b0"
+ },
+
+ "STANDING_STATUS_UNCHANGED": {
+  "gate": "0/100 NO_PROMOTE",
+  "model_authorized_ledger_usd": 0,
+  "execution": "UNAUTHORIZED, paper only",
+  "v13": "FROZEN and now TAGGED LEGACY_TIER_EXPOSURE_136 / NO_PROMOTE — no forecast altered, none regraded, no parameter, RNG policy, promotion gate or market input changed by anything in this round"
+ }
+}

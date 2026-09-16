@@ -1,0 +1,13 @@
+{
+ "note": "truncated partial from the first --run: json.dump crashed on a numpy bool AFTER the deterministic fit completed but before a valid result was written. Quarantined rather than deleted (R6). The re-run is a byte-level reproduction of the same fit: the estimator has no RNG and the inputs are hash-pinned.",
+ "quarantined_utc": "2026-08-18T08:45:00Z",
+ "preserved_traceback": "TypeError: Object of type bool is not JSON serializable \u2014 raised inside json.dump at encoder.py:180 via _iterencode_dict, writing rep['inference'][*]['favors_v14'] (numpy.bool_). Full chain: ml_v14_starter.py:394 __main__ -> run_once():312 json.dump(rep, ...) -> json/encoder.py 432/406/326/439/180. The fit itself had completed before the raise.",
+ "deterministic_reproduction_proof": {
+  "method": "in-process re-execution to a scratch path, compared to the on-disk result excluding built_utc",
+  "sha256_ex_timestamp_on_disk": "e4d2c5e6a6ff1b853509f327",
+  "sha256_ex_timestamp_reproduction": "e4d2c5e6a6ff1b853509f327",
+  "identical": true,
+  "verified_utc": "2026-08-18T09:05:00Z"
+ },
+ "correct_description": "ONE ANALYTICAL RESULT FROM TWO DETERMINISTIC EXECUTIONS \u2014 the second being recovery after post-fit serialization failure. Owner wording, adopted."
+}

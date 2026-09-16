@@ -1,0 +1,144 @@
+{
+ "ARCHIVE_BOUND_IDENTITY_FINDINGS": {
+  "method_validated": "half_inning determines which side pitched: top -> HOME, bottom -> AWAY. Validated against CIN@CHC, whose lineups were POSTED and independently confirmed at the T-45 checkpoint \u2014 the convention reproduces Lowder for Cincinnati and Peterson for the Cubs. The convention was tested before any claim rested on it.",
+  "mlb:CIN@CHC": {
+   "gamepk_captured": 824638,
+   "note": "the acquisition had refused 824636 as an 08/30 id; the real one is 824638, so the refusal was right and the guess it declined to make would have been wrong.",
+   "verdict": "BOARD CORRECT \u2014 Lowder for Cincinnati, Peterson for the Cubs"
+  },
+  "mlb:LAD@DET": {
+   "archive": "Drew Anderson pitched for DETROIT (89 pitches, home); Tarik Skubal for the DODGERS (83 pitches, away)",
+   "board_carried": "away LAD = Drew Anderson, home DET = Tarik Skubal \u2014 REVERSED",
+   "forecast_impact": {
+    "move_pp": -11.75,
+    "p_home_frozen": 0.4911333333333333,
+    "p_home_truth": 0.3736,
+    "reading": "the frozen board had this at LAD 50.89%; on the true assignment it is LAD 62.64%. An 11.75-point error, and the largest identity-driven error found all week.",
+    "side_flips": false,
+    "why_it_bit_here": "both pitchers HAVE retained logs and they are far apart (Skubal rs 2.96 vs Anderson 4.13), so putting the better pitcher on the wrong team moved the number badly. MIA@WSH's swap moved nothing precisely because neither pitcher was retained."
+   },
+   "gamepk_confirmed": 824231,
+   "verdict": "*** NEW SIDE SWAP \u2014 NEVER FLAGGED, AND THE LARGEST ERROR OF THE DAY ***"
+  },
+  "mlb:MIA@WSH": {
+   "archive": "Eury P\u00e9rez pitched for MIAMI (74 pitches); Jackson Kent for WASHINGTON (106)",
+   "board_carried": "away TBD, home Eury Perez \u2014 both slots wrong",
+   "evidence_upgrade": "was SEARCH_IDENTIFIED at T-90; now ARCHIVE-BOUND",
+   "forecast_impact": "ZERO \u2014 neither pitcher has a retained log, so both slots capped either way",
+   "gamepk_captured": 822691,
+   "verdict": "SIDE SWAP ARCHIVE-CONFIRMED"
+  },
+  "source": {
+   "commit": "41f26c8",
+   "commit_utc": "2026-08-29T01:32:03Z",
+   "coverage": "only 3 of 15 games \u2014 the archive committed at 01:32Z, before the late games finished. PARTIAL, and stated as such.",
+   "file": "data/raw/2026/daily/2026-08-28.parquet",
+   "game_pks_present": [
+    822691,
+    824231,
+    824638
+   ],
+   "repo": "github.com/lancebroz/mlb-pitcher-data",
+   "rows": 930
+  }
+ },
+ "COMPRESSION_CHECK": {
+  "note_for_when_it_runs": "five plus-money sides is n=5 on ONE night. Whether those dogs won or lost cannot settle a calibration question; state n and say plainly that it has no power rather than reading a verdict into it.",
+  "performed": false,
+  "reason": "requires results. Deferred."
+ },
+ "CONTAMINATION_NEAR_MISS": {
+  "board_games_and_their_true_status": [
+   {
+    "canonical_id": "ESPN_GAMEID:401857180",
+    "game": "wnba:POR@ATL",
+    "note": "carries the owner ticket's POR +13 leg",
+    "status": "STATUS_SCHEDULED"
+   },
+   {
+    "canonical_id": "ESPN_GAMEID:401857181",
+    "game": "wnba:CON@IND",
+    "status": "STATUS_SCHEDULED"
+   },
+   {
+    "canonical_id": "ESPN_GAMEID:401857182",
+    "game": "wnba:TOR@LV",
+    "status": "STATUS_SCHEDULED"
+   },
+   {
+    "canonical_id": "ESPN_GAMEID:401857183",
+    "game": "wnba:WSH@LAS",
+    "status": "STATUS_SCHEDULED"
+   }
+  ],
+  "fix": "the probe now binds on the BOARD'S OWN canonical ids (ESPN_GAMEID 401857180-83) and asks whether those specific games are completed. They are all STATUS_SCHEDULED at 0-0. Identity-based, which is what the binding contract required in the first place.",
+  "severity": "CAUGHT BEFORE PUBLICATION \u2014 no bad number reached a record",
+  "this_is_the_named_P0": "RESULT_DATE_COHORT_CONTAMINATION \u2014 the same defect class as the 8/27 incident, arriving through a different door: not a matchup join without a date, but a date filter in the wrong timezone.",
+  "what_actually_saved_it": "the guard was written to abort rather than to proceed on a surprising reading, so a wrong premise produced a halt instead of a grade. The lesson is not that the check was clever \u2014 it was wrong \u2014 but that a check which fails loudly gives you a chance to notice it is wrong. A silent version of the same query would have graded two 8/27 games as 8/28.",
+  "what_happened": "the first version of the post-slate WNBA probe asked wehoop 'are there completed rows where date == 2026-08-28?'. It answered YES, 2 rows, and the module halted with ARCHIVE_STATE_CHANGED \u2014 telling me to go grade the cohort.",
+  "why_that_was_wrong": "wehoop's `date` column is UTC. The two rows were ESPN 401857178 (GSV 79-60 NYL, 2026-08-28T00:00Z) and 401857179 (WSH 80-73 PHX, 2026-08-28T02:00Z) \u2014 both 8/27 EVENING ET games. Neither is on the 8/28 board. Both were already graded in the 8/27 review, where GSV 79-60 appears in finals_identified. A UTC date filter manufactures a two-game '8/28 result set' out of the previous slate."
+ },
+ "FILING": {
+  "R6_NOTE": "this record was first written to the 8/27 review's path, overwriting it. That was an append-only violation: the 8/27 record would have been destroyed with no trace that it had ever said anything different. The 8/27 file was restored byte-for-byte from git and this review was filed at its own path. Disclosed rather than silently corrected.",
+  "naming_convention": "night reviews are filed under the date they are WRITTEN, not the slate they review, because the review runs after midnight UTC. The 8/27 slate's review is therefore at data/audit/2026-08-28_end_of_night_review.json (record_id END-OF-NIGHT-REVIEW-2026-08-27). Read the record_id, not the filename, to know which slate a review covers.",
+  "path": "data/audit/2026-08-29_end_of_night_review.json",
+  "reviews_slate_date": "2026-08-28",
+  "written_utc": "2026-08-29"
+ },
+ "GRADING": {
+  "arms_graded": 0,
+  "binding_proofs": {
+   "generated_by": "harness/postslate_binding_0828.py",
+   "mlb": "data/governance/bindings/2026-08-28_mlb_results_binding_proof_postslate.json",
+   "posture": "POST_SLATE \u2014 these SUPPLEMENT the prospective proofs written before first pitch and do not replace them. Both sets read 0/0, but the prospective 0/0 meant 'the slate has not started' and the post-slate 0/0 means 'the slate is over and the archives still do not carry it'. Same counters, different claim, so both stand.",
+   "wnba": "data/governance/bindings/2026-08-28_wnba_v2_results_binding_proof_postslate.json"
+  },
+  "counters": {
+   "mlb": {
+    "CANONICAL_ID_MATCH": "0/0",
+    "DATE_COHERENCE_PASS": "0/0",
+    "REFUSED_ROWS": 0,
+    "RESULT_BINDING_PASS": "0/0"
+   },
+   "wnba": {
+    "CANONICAL_ID_MATCH": "0/0",
+    "DATE_COHERENCE_PASS": "0/0",
+    "REFUSED_ROWS": 0,
+    "RESULT_BINDING_PASS": "0/0"
+   }
+  },
+  "counters_generated_by": "harness/result_binding_gate.binding_proof \u2014 never typed",
+  "performed": false,
+  "records_published": 0,
+  "what_0_of_0_means": "nothing is CLAIMED, not that nothing was checked. All 15 MLB and 4 WNBA board games were loaded and every canonical id read; no score-bearing source carries 8/28.",
+  "what_was_NOT_done": "search was not used to manufacture finals. Snippets identify and never bind. This is the exact point at which the 8/27 review published five fabricated finals, and the correct output when nothing binds is an empty record, not a populated one.",
+  "why": {
+   "mlb": "the lancebroz archive advanced to 41f26c8 and carries an 8/28 daily file, but has NO score column \u2014 it never has. RJ-001B stays 0/126, unchanged and honest.",
+   "wnba": "the wehoop archive has NOT advanced past 7a1c7eb (8/28 06:32 ET); no 8/28 boxes."
+  }
+ },
+ "HEADLINE": "NO RESULT WAS GRADED, because no result could be BOUND. Three identity findings were archive-bound from pitch data, and one of them is the largest forecast error of the day.",
+ "LESSON_ON_THE_FLAGGING_HEURISTIC": {
+  "action": "carried into the 8/29 cycle as a required check \u2014 verify starter SIDES against an archive after the fact for every game, not only for rows that looked contentious.",
+  "consequence": "the side-swap defect class is broader than the flagged set, and the flag was tracking SOURCE CONFLICT rather than SWAP RISK. Those are different things: the dangerous case is confident agreement on a reversed pair, which produces no conflict to notice.",
+  "what_happened": "the three rows I flagged and chased all day resolved as immaterial (MIA@WSH), cleared (CWS@MIN) or already-correct (PIT@STL, COL@ATL). The row that actually carried an 11.75-point error was LAD@DET, which was never flagged at all.",
+  "why_it_slipped": "the acquisition recorded 'starters consistent across 2 snippets' and treated agreement as clearance. Two sources agreeing can be wrong the same way, especially if they share an upstream. Agreement is not independence."
+ },
+ "NEXT": "archives publish through the morning; grade then",
+ "OWNER_TICKET": {
+  "graded": false,
+  "model_ledger_unaffected": "0 bets, $0, as it will remain regardless of the outcome",
+  "reason": "its legs need finals, and none could be bound. Grades when the archives publish.",
+  "ticket": "217916739"
+ },
+ "created_utc": "2026-08-29T04:45:00Z",
+ "ledger": {
+  "exposure_usd": 0,
+  "n_bets": 0,
+  "units": 0.0,
+  "wager_authority": "NO"
+ },
+ "record_id": "END-OF-NIGHT-REVIEW-2026-08-28",
+ "record_sha256": "984dbee52e1d88fbe19976c7a5d0198744a0c94b64fd09842c63798187b67ea6",
+ "schema": "ops.night_review.v1"
+}

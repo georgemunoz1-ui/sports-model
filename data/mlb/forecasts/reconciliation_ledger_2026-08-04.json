@@ -1,0 +1,41 @@
+{
+ "record_id": "RECONCILIATION-LEDGER-2026-08-04",
+ "supersedes": "RECONCILIATION-LEDGER-2026-08-02-v3",
+ "generated_utc": "2026-08-04T07:33:00Z",
+ "update": "8/3 finals ingested (gamePk-keyed, WebSearch multi-source, 8/8 cross-checked) and the 8 frozen 8/3 P4 forecasts GRADED on the corrected DK same-book market benchmark.",
+ "data_state": {
+  "results_max_date": "2026-08-03",
+  "total_finals": 1689,
+  "coverage_recent": {
+   "2026-07-28": 15,
+   "2026-07-29": 16,
+   "2026-07-30": 10,
+   "2026-07-31": 15,
+   "2026-08-01": 15,
+   "2026-08-02": 15,
+   "2026-08-03": 8
+  },
+  "contiguity": "SOLID through 8/3"
+ },
+ "grading_8_3": {
+  "n": 8,
+  "home_won": 3,
+  "candidate_brier": 0.2628,
+  "dk_market_brier": 0.2688,
+  "v13_brier": 0.2772,
+  "candidate_acc": "2/8",
+  "market_acc": "4/8",
+  "v13_acc": "3/8",
+  "reading": "On this 8-game slate the candidate's Brier was LOWER than the DK market's (0.2628 vs 0.2688) and its accuracy WORSE (2/8 vs 4/8): road teams won 5/8 and favorites underperformed, so the candidate's compression toward .500 avoided confidently-wrong favorite bets (better Brier) but picked few sides correctly (worse accuracy). DESCRIPTIVE ONLY, n=8 -- no conclusion.",
+  "compression_flags": "WSH (models liked road WSH; PHI won -> models wrong) and STL (models liked road STL; STL won 13-7 -> models right) SPLIT. actionable_ev=null was correct: neither was a play."
+ },
+ "cumulative_diagnostic": {
+  "n": 39,
+  "candidate_brier": 0.257,
+  "home_won": "16/39",
+  "caveat": "DIAGNOSTIC cohort; clean n toward 300 still 0; market benchmark differs by date (7/29-7/31 cross-book/flawed, 8/3 DK same-book) so a pooled market comparison is not clean -- candidate figure is benchmark-independent and consistent."
+ },
+ "grades_total": 52,
+ "forecasts_total": 56,
+ "governance": "gate 0/100; NO_PROMOTE; model ledger $0; executed recreational -$199.92 (separate); not pushing."
+}

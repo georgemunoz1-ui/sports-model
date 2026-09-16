@@ -1,0 +1,36 @@
+{
+ "ALL_THREE_SIDE_SWAP_ROWS_NOW_SETTLED": {
+  "mlb:CWS@MIN": "CLEARED \u2014 Kremer (CWS) / Castillo (MIN) exactly as boarded. Settled at T-90.",
+  "mlb:MIA@WSH": "SWAP REAL \u2014 Perez is Miami's, Kent is Washington's; the frozen row has both slots wrong. Replacement rerun on the frozen seed moves the number by ZERO (0.5471 -> 0.5471) because neither pitcher has a retained log. Settled at T-90.",
+  "mlb:PIT@STL": "CONFIRMED at this checkpoint \u2014 Jared Jones starts for the PIRATES (2-5, 4.76) and Quinn Mathews for the CARDINALS (0-2, 6.43). The acquisition-time correction, which reversed a source that had them swapped, was RIGHT. 8:15 PM ET also confirms the frozen 00:15Z start."
+ },
+ "also_settled_at_t90": {
+  "col_atl": "CONFIRMED Sugano/Holmes",
+  "gamepk_captured": "SEA@TOR 822769",
+  "sea_starter": "RESOLVED to Emerson Hancock; replacement moved p_home 0.5183 -> 0.4905 and the side FLIPS TOR -> SEA, a sub-51% crossover flagged against the 8/27 0-2 precedent",
+  "sea_tor_start": "CONFIRMED 7:15 PM ET = 23:15Z; tolerance closed"
+ },
+ "block": "MLB evening T-40 (LAD@DET 22:40Z); nine games start 22:40Z-23:40Z",
+ "created_utc": "2026-08-28T22:10:00Z",
+ "disposition": "FORECAST_ONLY_NO_MARKET for all rows without a relayed price; the five relayed games carry a two-sided screen with 0 selections",
+ "frozen_board": {
+  "byte_identical_to_committed_freeze": true,
+  "cohort_hash": "3723e6801e2f65f7c60c97581d65252c025909e01ad2372c9105899d3478361a",
+  "path": "cards/2026-08-28_mlb_board.json",
+  "sha256": "5a558cfc17dc571ca33632c727e4e44415718e77b670e8e3db19e6124db548b8"
+ },
+ "ledger": {
+  "exposure_usd": 0,
+  "n_bets": 0,
+  "units": 0.0,
+  "wager_authority": "NO"
+ },
+ "market_attempt": {
+  "cumulative": "every MLB price route attempted today has refused; the only MLB prices on file arrived by owner relay",
+  "outcome": "REFUSED \u2014 EGRESS_BLOCKED, curl exit 56, CONNECT tunnel 403",
+  "route": "curl sportsbook.draftkings.com/leagues/baseball/mlb"
+ },
+ "next": "22:45Z",
+ "record_id": "CHECKPOINT-2026-08-28-MLB-EVENING-T40",
+ "schema": "ops.checkpoint.v1"
+}

@@ -1,0 +1,40 @@
+{
+ "record_id": "V14-SHADOW-PREREG",
+ "created_utc": "2026-08-10T19:29:58Z",
+ "status": "NON-EXECUTABLE SHADOW \u2014 specification only. No code path may produce a card, forecast, price or wager from V14.",
+ "authority": "owner 2026-08-10; V13 frozen concurrently (data/mlb/ml_asof/V13_FREEZE.json)",
+ "motivation": "Ablation shows discrimination is concentrated almost entirely in the starter block (AUC 0.5645 -> 0.5232 when removed). The remaining team-level features are inert. If there is headroom, it is in STARTER DETAIL \u2014 not in another estimator.",
+ "hypothesis": "Replacing the single shrunk-ERA starter summary with recent-form, times-through-order and opponent-handedness detail measurably improves out-of-sample DISCRIMINATION (AUC / Brier resolution) over V13 on the frozen as-of set.",
+ "prereg_before_any_fitting": {
+  "primary_metric": "Out-of-sample Brier on expanding-window walk-forward, date-ordered.",
+  "secondary": [
+   "ROC-AUC",
+   "Brier resolution",
+   "calibration slope"
+  ],
+  "inference": "Date-block bootstrap (never game-level) + Holm correction across every comparison run.",
+  "success_threshold": "V14 must beat V13 on the PRIMARY metric with a Holm-adjusted p < 0.05 under the date-block bootstrap. Anything weaker is INCONCLUSIVE, not a win.",
+  "failure_is_recorded": "A negative result is written up and kept; the disposition set is ADOPT / REJECT / INCONCLUSIVE / DATA_BLOCKED with no indefinite PENDING."
+ },
+ "candidate_features_to_build": [
+  "starter recent form (last 3-5 starts, as-of only)",
+  "times-through-order penalty",
+  "opponent handedness splits vs the starter's hand",
+  "starter rest days",
+  "bullpen quality/availability behind the starter (currently invisible to every model)",
+  "park x starter batted-ball interaction (park is the 2nd strongest block)"
+ ],
+ "hard_constraints": [
+  "Strict as-of features only; the training window must remain date < test date.",
+  "No market price may ever be an input.",
+  "Missing data is flagged and the row excluded, never imputed with an outcome-informed value (R1).",
+  "V14 gets a NEW model_id and registry entry; it never writes into V13's identity (R3).",
+  "Shadow means shadow: no card, no board, no ledger, no gate movement."
+ ],
+ "known_data_gaps_that_block_it": [
+  "features.csv ends 2026-07-19 \u2014 only 1475 games with as-of features.",
+  "126 outcome labels remain PROVISIONAL (tier-3) pending re-sourcing.",
+  "No lineup, bullpen-state or rest data exists in the repo at all \u2014 these must be acquired before the hypothesis is even testable."
+ ],
+ "sample_size_reality": "1054 scored games gives a bootstrap CI on dBrier of roughly +/-0.004. A true improvement smaller than that is undetectable with the data on hand, so a null result will be genuinely ambiguous rather than evidence of no effect."
+}

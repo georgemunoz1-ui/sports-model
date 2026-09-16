@@ -1,0 +1,1363 @@
+{
+ "ADAPTIVE_IDENTITY": {
+  "identity": "adaptive_v0_2",
+  "supersedes": "adaptive_v0_1 (CLOSED \u2014 constants lost with an uncommitted builder; its frozen 2026-08-24 rows remain gradable; no continuity is claimed between the identities)"
+ },
+ "EVIDENCE": {
+  "information_cutoff": "canonical rows strictly before 2026-08-27 (latest canonical date 2026-08-21)",
+  "results_sha256": "97cf45f503cde33586f6feae572a0f66bf6cc960ec2ea865adcfd4685e6c22c1",
+  "slate_sha256": "8a5cc8a9844f002bde53e72a9f6d9b74433116ba87224eceac42c688da7c3123"
+ },
+ "LEDGERS": {
+  "model_authorized_wagers_usd": 0,
+  "n_bets": 0,
+  "units": 0.0
+ },
+ "PRIORS": {
+  "mlb_home": {
+   "n": 1684,
+   "p": 0.5205399061032864,
+   "unchanged_because": "no canonical result exists after 2026-08-21; later finals are relayed/derived, not canonical"
+  },
+  "mlb_total": {
+   "n": 1684,
+   "runs": 8.991092636579573
+  }
+ },
+ "SEPARATION": "MLB, WNBA and NFL are separate cohorts on separate boards, never pooled",
+ "WIDENING": {
+  "formula": "logit(p_wide) = logit(prior) + k * residual_f",
+  "solved_k": 4.786455780049437,
+  "solver": {
+   "attained_sd_pp": 7.705838820784017,
+   "iterations_bracket": [
+    0.0,
+    50.0
+   ],
+   "k": 4.786455780049437,
+   "prior_p": 0.5205399061032864,
+   "ratio_approximation_k": null,
+   "residual_sd": 0.06664529219785634,
+   "status": "WIDENING_SOLVED",
+   "target_sd_pp": 7.705838820494343
+  },
+  "target_sd_pp": 7.705838820494343
+ },
+ "action_authority": "NONE \u2014 NO_RETAINED_MARKET_ARTIFACT for this slate at freeze (EGRESS_BLOCKED receipts in 2026-08-27_market_acquisition.json); prices attach only as a separately hashed overlay; conservative EV unavailable pending the RJ-002 consumption-spec review",
+ "board_scope": {
+  "mlb": 7,
+  "n_games": 7
+ },
+ "builder": "harness/build_board_0827.py (COMMITTED)",
+ "chronology_status": "ANCHOR_PRECEDES_EARLIEST_START",
+ "cohort_hashes": {
+  "mlb": "5980bda26aad3de57400de893ed68da7d9f308c60efbcd6b2550d6131fa648c8"
+ },
+ "earliest_start_utc": "2026-08-27T17:05:00Z",
+ "forecast_anchor_utc": "2026-08-27T06:58:28Z",
+ "generated_at_utc_self_asserted": "2026-08-27T06:58:28Z",
+ "mlb": {
+  "cohort_id": "mlb:2026-08-27",
+  "n_games": 7,
+  "rows": [
+   {
+    "action_status": "NO_RETAINED_MARKET_ARTIFACT",
+    "arm": "mlb.winner.EXPANDING_HOME_PRIOR",
+    "away_starter": "Gabriel Hughes",
+    "forecast_status": "FORECAST_REGISTERED",
+    "game": "mlb:COL@WSH",
+    "gamePk": "827000",
+    "game_start_utc": "2026-08-27T17:05:00Z",
+    "home_starter": "Jake Irvin",
+    "lineups": "UNCONFIRMED_AT_REGISTRATION",
+    "p_home": 0.5205399061032864,
+    "park_factor": 1.086,
+    "prospectivity": "SELF_ASSERTED_PREGAME",
+    "resolved_information_dose": 1.0,
+    "sp_status": {
+     "away": "RESOLVED",
+     "home": "RESOLVED"
+    },
+    "sport": "mlb",
+    "start_time_grade": "SEARCH_INFERRED_START_ET_STATED",
+    "starter_class": {
+     "away": "PROBABLE",
+     "home": "PROBABLE"
+    },
+    "starter_identification_grade": "SEARCH_IDENTIFIED_UNCONFIRMED",
+    "starter_slots_capped": 0,
+    "target": "winner"
+   },
+   {
+    "action_status": "NO_RETAINED_MARKET_ARTIFACT",
+    "arm": "mlb.winner.CHAMPION_V13",
+    "away_starter": "Gabriel Hughes",
+    "forecast_status": "FORECAST_REGISTERED",
+    "game": "mlb:COL@WSH",
+    "gamePk": "827000",
+    "game_start_utc": "2026-08-27T17:05:00Z",
+    "home_starter": "Jake Irvin",
+    "lineups": "UNCONFIRMED_AT_REGISTRATION",
+    "monte_carlo_sd_pp": 0.28850361766779875,
+    "p_home": 0.5172333333333333,
+    "park_factor": 1.086,
+    "prospectivity": "SELF_ASSERTED_PREGAME",
+    "resolved_information_dose": 1.0,
+    "simulation_seed": 7711880651714467797,
+    "simulation_trials": 30000,
+    "simulation_version": "v13_1",
+    "sp_status": {
+     "away": "RESOLVED",
+     "home": "RESOLVED"
+    },
+    "sport": "mlb",
+    "start_time_grade": "SEARCH_INFERRED_START_ET_STATED",
+    "starter_class": {
+     "away": "PROBABLE",
+     "home": "PROBABLE"
+    },
+    "starter_identification_grade": "SEARCH_IDENTIFIED_UNCONFIRMED",
+    "starter_slots_capped": 0,
+    "target": "winner",
+    "trial_standard": "LEGACY_TRIAL_COUNT"
+   },
+   {
+    "action_status": "NO_RETAINED_MARKET_ARTIFACT",
+    "arm": "mlb.winner.CHALLENGER_ADAPTIVE",
+    "away_starter": "Gabriel Hughes",
+    "forecast_status": "FORECAST_REGISTERED",
+    "game": "mlb:COL@WSH",
+    "gamePk": "827000",
+    "game_start_utc": "2026-08-27T17:05:00Z",
+    "home_starter": "Jake Irvin",
+    "identity_note": "adaptive_v0_1 (CLOSED \u2014 constants lost with an uncommitted builder; its frozen 2026-08-24 rows remain gradable; no continuity is claimed between the identities)",
+    "lineups": "UNCONFIRMED_AT_REGISTRATION",
+    "p_home": 0.5070603106261167,
+    "park_factor": 1.086,
+    "prospectivity": "SELF_ASSERTED_PREGAME",
+    "residual_f": -0.05396276769509979,
+    "resolved_information_dose": 1.0,
+    "simulation_trials": 0,
+    "simulation_version": "adaptive_v0_2",
+    "sp_status": {
+     "away": "RESOLVED",
+     "home": "RESOLVED"
+    },
+    "sport": "mlb",
+    "start_time_grade": "SEARCH_INFERRED_START_ET_STATED",
+    "starter_class": {
+     "away": "PROBABLE",
+     "home": "PROBABLE"
+    },
+    "starter_identification_grade": "SEARCH_IDENTIFIED_UNCONFIRMED",
+    "starter_slots_capped": 0,
+    "target": "winner"
+   },
+   {
+    "action_status": "NO_RETAINED_MARKET_ARTIFACT",
+    "arm": "mlb.winner.CHALLENGER_WIDENED",
+    "away_starter": "Gabriel Hughes",
+    "forecast_status": "FORECAST_REGISTERED",
+    "game": "mlb:COL@WSH",
+    "gamePk": "827000",
+    "game_start_utc": "2026-08-27T17:05:00Z",
+    "home_starter": "Jake Irvin",
+    "lineups": "UNCONFIRMED_AT_REGISTRATION",
+    "p_home": 0.45609226232734174,
+    "park_factor": 1.086,
+    "prospectivity": "SELF_ASSERTED_PREGAME",
+    "resolved_information_dose": 1.0,
+    "simulation_version": "widened(adaptive_v0_2)",
+    "sp_status": {
+     "away": "RESOLVED",
+     "home": "RESOLVED"
+    },
+    "sport": "mlb",
+    "start_time_grade": "SEARCH_INFERRED_START_ET_STATED",
+    "starter_class": {
+     "away": "PROBABLE",
+     "home": "PROBABLE"
+    },
+    "starter_identification_grade": "SEARCH_IDENTIFIED_UNCONFIRMED",
+    "starter_slots_capped": 0,
+    "target": "winner",
+    "widening_k": 4.786455780049437
+   },
+   {
+    "action_status": "NO_RETAINED_MARKET_ARTIFACT",
+    "arm": "mlb.total.EXPANDING_TOTAL_PRIOR",
+    "away_starter": "Gabriel Hughes",
+    "forecast_status": "FORECAST_REGISTERED",
+    "game": "mlb:COL@WSH",
+    "gamePk": "827000",
+    "game_start_utc": "2026-08-27T17:05:00Z",
+    "home_starter": "Jake Irvin",
+    "lineups": "UNCONFIRMED_AT_REGISTRATION",
+    "park_factor": 1.086,
+    "projected_total": 8.991092636579573,
+    "prospectivity": "SELF_ASSERTED_PREGAME",
+    "resolved_information_dose": 1.0,
+    "sp_status": {
+     "away": "RESOLVED",
+     "home": "RESOLVED"
+    },
+    "sport": "mlb",
+    "start_time_grade": "SEARCH_INFERRED_START_ET_STATED",
+    "starter_class": {
+     "away": "PROBABLE",
+     "home": "PROBABLE"
+    },
+    "starter_identification_grade": "SEARCH_IDENTIFIED_UNCONFIRMED",
+    "starter_slots_capped": 0,
+    "target": "total",
+    "target_authority": "NEVER_DECISION_BEARING"
+   },
+   {
+    "action_status": "NO_RETAINED_MARKET_ARTIFACT",
+    "arm": "mlb.total.CHAMPION_V13",
+    "away_starter": "Gabriel Hughes",
+    "forecast_status": "FORECAST_REGISTERED",
+    "game": "mlb:COL@WSH",
+    "gamePk": "827000",
+    "game_start_utc": "2026-08-27T17:05:00Z",
+    "home_starter": "Jake Irvin",
+    "lineups": "UNCONFIRMED_AT_REGISTRATION",
+    "park_factor": 1.086,
+    "projected_total": 11.407,
+    "prospectivity": "SELF_ASSERTED_PREGAME",
+    "resolved_information_dose": 1.0,
+    "simulation_seed": 7711880651714467797,
+    "simulation_trials": 30000,
+    "sp_status": {
+     "away": "RESOLVED",
+     "home": "RESOLVED"
+    },
+    "sport": "mlb",
+    "start_time_grade": "SEARCH_INFERRED_START_ET_STATED",
+    "starter_class": {
+     "away": "PROBABLE",
+     "home": "PROBABLE"
+    },
+    "starter_identification_grade": "SEARCH_IDENTIFIED_UNCONFIRMED",
+    "starter_slots_capped": 0,
+    "target": "total",
+    "target_authority": "NEVER_DECISION_BEARING"
+   },
+   {
+    "action_status": "NO_RETAINED_MARKET_ARTIFACT",
+    "arm": "mlb.winner.EXPANDING_HOME_PRIOR",
+    "away_starter": "Trevor Rogers",
+    "forecast_status": "FORECAST_REGISTERED",
+    "game": "mlb:BAL@STL",
+    "gamePk": "827001",
+    "game_start_utc": "2026-08-27T18:15:00Z",
+    "home_starter": "TBD",
+    "lineups": "UNCONFIRMED_AT_REGISTRATION",
+    "p_home": 0.5205399061032864,
+    "park_factor": 0.856,
+    "prospectivity": "SELF_ASSERTED_PREGAME",
+    "resolved_information_dose": 0.5,
+    "sp_status": {
+     "away": "RESOLVED",
+     "home": "OFFICIAL_TBD_CAP"
+    },
+    "sport": "mlb",
+    "start_time_grade": "SEARCH_INFERRED_START_ET_STATED",
+    "starter_class": {
+     "away": "PROBABLE",
+     "home": "TBD_CAP"
+    },
+    "starter_identification_grade": "SEARCH_IDENTIFIED_UNCONFIRMED",
+    "starter_slots_capped": 1,
+    "target": "winner"
+   },
+   {
+    "action_status": "NO_RETAINED_MARKET_ARTIFACT",
+    "arm": "mlb.winner.CHAMPION_V13",
+    "away_starter": "Trevor Rogers",
+    "forecast_status": "FORECAST_REGISTERED",
+    "game": "mlb:BAL@STL",
+    "gamePk": "827001",
+    "game_start_utc": "2026-08-27T18:15:00Z",
+    "home_starter": "TBD",
+    "lineups": "UNCONFIRMED_AT_REGISTRATION",
+    "monte_carlo_sd_pp": 0.2886486977984497,
+    "p_home": 0.49323333333333336,
+    "park_factor": 0.856,
+    "prospectivity": "SELF_ASSERTED_PREGAME",
+    "resolved_information_dose": 0.5,
+    "simulation_seed": 2972608870947761512,
+    "simulation_trials": 30000,
+    "simulation_version": "v13_1",
+    "sp_status": {
+     "away": "RESOLVED",
+     "home": "OFFICIAL_TBD_CAP"
+    },
+    "sport": "mlb",
+    "start_time_grade": "SEARCH_INFERRED_START_ET_STATED",
+    "starter_class": {
+     "away": "PROBABLE",
+     "home": "TBD_CAP"
+    },
+    "starter_identification_grade": "SEARCH_IDENTIFIED_UNCONFIRMED",
+    "starter_slots_capped": 1,
+    "target": "winner",
+    "trial_standard": "LEGACY_TRIAL_COUNT"
+   },
+   {
+    "action_status": "NO_RETAINED_MARKET_ARTIFACT",
+    "arm": "mlb.winner.CHALLENGER_ADAPTIVE",
+    "away_starter": "Trevor Rogers",
+    "forecast_status": "FORECAST_REGISTERED",
+    "game": "mlb:BAL@STL",
+    "gamePk": "827001",
+    "game_start_utc": "2026-08-27T18:15:00Z",
+    "home_starter": "TBD",
+    "identity_note": "adaptive_v0_1 (CLOSED \u2014 constants lost with an uncommitted builder; its frozen 2026-08-24 rows remain gradable; no continuity is claimed between the identities)",
+    "lineups": "UNCONFIRMED_AT_REGISTRATION",
+    "p_home": 0.5163789427872177,
+    "park_factor": 0.856,
+    "prospectivity": "SELF_ASSERTED_PREGAME",
+    "residual_f": -0.01666666666666672,
+    "resolved_information_dose": 0.5,
+    "simulation_trials": 0,
+    "simulation_version": "adaptive_v0_2",
+    "sp_status": {
+     "away": "RESOLVED",
+     "home": "OFFICIAL_TBD_CAP"
+    },
+    "sport": "mlb",
+    "start_time_grade": "SEARCH_INFERRED_START_ET_STATED",
+    "starter_class": {
+     "away": "PROBABLE",
+     "home": "TBD_CAP"
+    },
+    "starter_identification_grade": "SEARCH_IDENTIFIED_UNCONFIRMED",
+    "starter_slots_capped": 1,
+    "target": "winner"
+   },
+   {
+    "action_status": "NO_RETAINED_MARKET_ARTIFACT",
+    "arm": "mlb.winner.CHALLENGER_WIDENED",
+    "away_starter": "Trevor Rogers",
+    "forecast_status": "FORECAST_REGISTERED",
+    "game": "mlb:BAL@STL",
+    "gamePk": "827001",
+    "game_start_utc": "2026-08-27T18:15:00Z",
+    "home_starter": "TBD",
+    "lineups": "UNCONFIRMED_AT_REGISTRATION",
+    "p_home": 0.5006079058126528,
+    "park_factor": 0.856,
+    "prospectivity": "SELF_ASSERTED_PREGAME",
+    "resolved_information_dose": 0.5,
+    "simulation_version": "widened(adaptive_v0_2)",
+    "sp_status": {
+     "away": "RESOLVED",
+     "home": "OFFICIAL_TBD_CAP"
+    },
+    "sport": "mlb",
+    "start_time_grade": "SEARCH_INFERRED_START_ET_STATED",
+    "starter_class": {
+     "away": "PROBABLE",
+     "home": "TBD_CAP"
+    },
+    "starter_identification_grade": "SEARCH_IDENTIFIED_UNCONFIRMED",
+    "starter_slots_capped": 1,
+    "target": "winner",
+    "widening_k": 4.786455780049437
+   },
+   {
+    "action_status": "NO_RETAINED_MARKET_ARTIFACT",
+    "arm": "mlb.total.EXPANDING_TOTAL_PRIOR",
+    "away_starter": "Trevor Rogers",
+    "forecast_status": "FORECAST_REGISTERED",
+    "game": "mlb:BAL@STL",
+    "gamePk": "827001",
+    "game_start_utc": "2026-08-27T18:15:00Z",
+    "home_starter": "TBD",
+    "lineups": "UNCONFIRMED_AT_REGISTRATION",
+    "park_factor": 0.856,
+    "projected_total": 8.991092636579573,
+    "prospectivity": "SELF_ASSERTED_PREGAME",
+    "resolved_information_dose": 0.5,
+    "sp_status": {
+     "away": "RESOLVED",
+     "home": "OFFICIAL_TBD_CAP"
+    },
+    "sport": "mlb",
+    "start_time_grade": "SEARCH_INFERRED_START_ET_STATED",
+    "starter_class": {
+     "away": "PROBABLE",
+     "home": "TBD_CAP"
+    },
+    "starter_identification_grade": "SEARCH_IDENTIFIED_UNCONFIRMED",
+    "starter_slots_capped": 1,
+    "target": "total",
+    "target_authority": "NEVER_DECISION_BEARING"
+   },
+   {
+    "action_status": "NO_RETAINED_MARKET_ARTIFACT",
+    "arm": "mlb.total.CHAMPION_V13",
+    "away_starter": "Trevor Rogers",
+    "forecast_status": "FORECAST_REGISTERED",
+    "game": "mlb:BAL@STL",
+    "gamePk": "827001",
+    "game_start_utc": "2026-08-27T18:15:00Z",
+    "home_starter": "TBD",
+    "lineups": "UNCONFIRMED_AT_REGISTRATION",
+    "park_factor": 0.856,
+    "projected_total": 7.758,
+    "prospectivity": "SELF_ASSERTED_PREGAME",
+    "resolved_information_dose": 0.5,
+    "simulation_seed": 2972608870947761512,
+    "simulation_trials": 30000,
+    "sp_status": {
+     "away": "RESOLVED",
+     "home": "OFFICIAL_TBD_CAP"
+    },
+    "sport": "mlb",
+    "start_time_grade": "SEARCH_INFERRED_START_ET_STATED",
+    "starter_class": {
+     "away": "PROBABLE",
+     "home": "TBD_CAP"
+    },
+    "starter_identification_grade": "SEARCH_IDENTIFIED_UNCONFIRMED",
+    "starter_slots_capped": 1,
+    "target": "total",
+    "target_authority": "NEVER_DECISION_BEARING"
+   },
+   {
+    "action_status": "NO_RETAINED_MARKET_ARTIFACT",
+    "arm": "mlb.winner.EXPANDING_HOME_PRIOR",
+    "away_starter": "Hayden Wesneski",
+    "forecast_status": "FORECAST_REGISTERED",
+    "game": "mlb:HOU@NYY",
+    "gamePk": "827002",
+    "game_start_utc": "2026-08-27T23:05:00Z",
+    "home_starter": "Cam Schlittler",
+    "lineups": "UNCONFIRMED_AT_REGISTRATION",
+    "p_home": 0.5205399061032864,
+    "park_factor": 1.104,
+    "prospectivity": "SELF_ASSERTED_PREGAME",
+    "resolved_information_dose": 0.75,
+    "sp_status": {
+     "away": "NO_PID_CAP(Hayden Wesneski)",
+     "home": "RESOLVED"
+    },
+    "sport": "mlb",
+    "start_time_grade": "SEARCH_INFERRED_START_ET_STATED",
+    "starter_class": {
+     "away": "NAMED_NO_LOG_RETAINED_CAP[NO_PID_CAP(Hayden Wesneski)]",
+     "home": "PROBABLE"
+    },
+    "starter_identification_grade": "SEARCH_IDENTIFIED_UNCONFIRMED",
+    "starter_slots_capped": 1,
+    "target": "winner"
+   },
+   {
+    "action_status": "NO_RETAINED_MARKET_ARTIFACT",
+    "arm": "mlb.winner.CHAMPION_V13",
+    "away_starter": "Hayden Wesneski",
+    "forecast_status": "FORECAST_REGISTERED",
+    "game": "mlb:HOU@NYY",
+    "gamePk": "827002",
+    "game_start_utc": "2026-08-27T23:05:00Z",
+    "home_starter": "Cam Schlittler",
+    "lineups": "UNCONFIRMED_AT_REGISTRATION",
+    "monte_carlo_sd_pp": 0.2828936660589917,
+    "p_home": 0.5995666666666667,
+    "park_factor": 1.104,
+    "prospectivity": "SELF_ASSERTED_PREGAME",
+    "resolved_information_dose": 0.75,
+    "simulation_seed": 8614633097868974221,
+    "simulation_trials": 30000,
+    "simulation_version": "v13_1",
+    "sp_status": {
+     "away": "NO_PID_CAP(Hayden Wesneski)",
+     "home": "RESOLVED"
+    },
+    "sport": "mlb",
+    "start_time_grade": "SEARCH_INFERRED_START_ET_STATED",
+    "starter_class": {
+     "away": "NAMED_NO_LOG_RETAINED_CAP[NO_PID_CAP(Hayden Wesneski)]",
+     "home": "PROBABLE"
+    },
+    "starter_identification_grade": "SEARCH_IDENTIFIED_UNCONFIRMED",
+    "starter_slots_capped": 1,
+    "target": "winner",
+    "trial_standard": "LEGACY_TRIAL_COUNT"
+   },
+   {
+    "action_status": "NO_RETAINED_MARKET_ARTIFACT",
+    "arm": "mlb.winner.CHALLENGER_ADAPTIVE",
+    "away_starter": "Hayden Wesneski",
+    "forecast_status": "FORECAST_REGISTERED",
+    "game": "mlb:HOU@NYY",
+    "gamePk": "827002",
+    "game_start_utc": "2026-08-27T23:05:00Z",
+    "home_starter": "Cam Schlittler",
+    "identity_note": "adaptive_v0_1 (CLOSED \u2014 constants lost with an uncommitted builder; its frozen 2026-08-24 rows remain gradable; no continuity is claimed between the identities)",
+    "lineups": "UNCONFIRMED_AT_REGISTRATION",
+    "p_home": 0.528593158065828,
+    "park_factor": 1.104,
+    "prospectivity": "SELF_ASSERTED_PREGAME",
+    "residual_f": 0.03229166666666666,
+    "resolved_information_dose": 0.75,
+    "simulation_trials": 0,
+    "simulation_version": "adaptive_v0_2",
+    "sp_status": {
+     "away": "NO_PID_CAP(Hayden Wesneski)",
+     "home": "RESOLVED"
+    },
+    "sport": "mlb",
+    "start_time_grade": "SEARCH_INFERRED_START_ET_STATED",
+    "starter_class": {
+     "away": "NAMED_NO_LOG_RETAINED_CAP[NO_PID_CAP(Hayden Wesneski)]",
+     "home": "PROBABLE"
+    },
+    "starter_identification_grade": "SEARCH_IDENTIFIED_UNCONFIRMED",
+    "starter_slots_capped": 1,
+    "target": "winner"
+   },
+   {
+    "action_status": "NO_RETAINED_MARKET_ARTIFACT",
+    "arm": "mlb.winner.CHALLENGER_WIDENED",
+    "away_starter": "Hayden Wesneski",
+    "forecast_status": "FORECAST_REGISTERED",
+    "game": "mlb:HOU@NYY",
+    "gamePk": "827002",
+    "game_start_utc": "2026-08-27T23:05:00Z",
+    "home_starter": "Cam Schlittler",
+    "lineups": "UNCONFIRMED_AT_REGISTRATION",
+    "p_home": 0.5589171493138256,
+    "park_factor": 1.104,
+    "prospectivity": "SELF_ASSERTED_PREGAME",
+    "resolved_information_dose": 0.75,
+    "simulation_version": "widened(adaptive_v0_2)",
+    "sp_status": {
+     "away": "NO_PID_CAP(Hayden Wesneski)",
+     "home": "RESOLVED"
+    },
+    "sport": "mlb",
+    "start_time_grade": "SEARCH_INFERRED_START_ET_STATED",
+    "starter_class": {
+     "away": "NAMED_NO_LOG_RETAINED_CAP[NO_PID_CAP(Hayden Wesneski)]",
+     "home": "PROBABLE"
+    },
+    "starter_identification_grade": "SEARCH_IDENTIFIED_UNCONFIRMED",
+    "starter_slots_capped": 1,
+    "target": "winner",
+    "widening_k": 4.786455780049437
+   },
+   {
+    "action_status": "NO_RETAINED_MARKET_ARTIFACT",
+    "arm": "mlb.total.EXPANDING_TOTAL_PRIOR",
+    "away_starter": "Hayden Wesneski",
+    "forecast_status": "FORECAST_REGISTERED",
+    "game": "mlb:HOU@NYY",
+    "gamePk": "827002",
+    "game_start_utc": "2026-08-27T23:05:00Z",
+    "home_starter": "Cam Schlittler",
+    "lineups": "UNCONFIRMED_AT_REGISTRATION",
+    "park_factor": 1.104,
+    "projected_total": 8.991092636579573,
+    "prospectivity": "SELF_ASSERTED_PREGAME",
+    "resolved_information_dose": 0.75,
+    "sp_status": {
+     "away": "NO_PID_CAP(Hayden Wesneski)",
+     "home": "RESOLVED"
+    },
+    "sport": "mlb",
+    "start_time_grade": "SEARCH_INFERRED_START_ET_STATED",
+    "starter_class": {
+     "away": "NAMED_NO_LOG_RETAINED_CAP[NO_PID_CAP(Hayden Wesneski)]",
+     "home": "PROBABLE"
+    },
+    "starter_identification_grade": "SEARCH_IDENTIFIED_UNCONFIRMED",
+    "starter_slots_capped": 1,
+    "target": "total",
+    "target_authority": "NEVER_DECISION_BEARING"
+   },
+   {
+    "action_status": "NO_RETAINED_MARKET_ARTIFACT",
+    "arm": "mlb.total.CHAMPION_V13",
+    "away_starter": "Hayden Wesneski",
+    "forecast_status": "FORECAST_REGISTERED",
+    "game": "mlb:HOU@NYY",
+    "gamePk": "827002",
+    "game_start_utc": "2026-08-27T23:05:00Z",
+    "home_starter": "Cam Schlittler",
+    "lineups": "UNCONFIRMED_AT_REGISTRATION",
+    "park_factor": 1.104,
+    "projected_total": 8.599,
+    "prospectivity": "SELF_ASSERTED_PREGAME",
+    "resolved_information_dose": 0.75,
+    "simulation_seed": 8614633097868974221,
+    "simulation_trials": 30000,
+    "sp_status": {
+     "away": "NO_PID_CAP(Hayden Wesneski)",
+     "home": "RESOLVED"
+    },
+    "sport": "mlb",
+    "start_time_grade": "SEARCH_INFERRED_START_ET_STATED",
+    "starter_class": {
+     "away": "NAMED_NO_LOG_RETAINED_CAP[NO_PID_CAP(Hayden Wesneski)]",
+     "home": "PROBABLE"
+    },
+    "starter_identification_grade": "SEARCH_IDENTIFIED_UNCONFIRMED",
+    "starter_slots_capped": 1,
+    "target": "total",
+    "target_authority": "NEVER_DECISION_BEARING"
+   },
+   {
+    "action_status": "NO_RETAINED_MARKET_ARTIFACT",
+    "arm": "mlb.winner.EXPANDING_HOME_PRIOR",
+    "away_starter": "TBD",
+    "forecast_status": "FORECAST_REGISTERED",
+    "game": "mlb:KC@TOR",
+    "gamePk": "827003",
+    "game_start_utc": "2026-08-27T23:07:00Z",
+    "home_starter": "TBD",
+    "lineups": "UNCONFIRMED_AT_REGISTRATION",
+    "p_home": 0.5205399061032864,
+    "park_factor": 1.032,
+    "prospectivity": "SELF_ASSERTED_PREGAME",
+    "resolved_information_dose": 0.5,
+    "sp_status": {
+     "away": "OFFICIAL_TBD_CAP",
+     "home": "OFFICIAL_TBD_CAP"
+    },
+    "sport": "mlb",
+    "start_time_grade": "SEARCH_INFERRED_START_ET_STATED",
+    "starter_class": {
+     "away": "CONFLICT_CAP(Noah Cameron|Randy Dobnak)",
+     "home": "CONFLICT_CAP(Spencer Arrighetti|Spencer Miles)"
+    },
+    "starter_identification_grade": "SEARCH_IDENTIFIED_UNCONFIRMED",
+    "starter_slots_capped": 2,
+    "target": "winner"
+   },
+   {
+    "action_status": "NO_RETAINED_MARKET_ARTIFACT",
+    "arm": "mlb.winner.CHAMPION_V13",
+    "away_starter": "TBD",
+    "forecast_status": "FORECAST_REGISTERED",
+    "game": "mlb:KC@TOR",
+    "gamePk": "827003",
+    "game_start_utc": "2026-08-27T23:07:00Z",
+    "home_starter": "TBD",
+    "lineups": "UNCONFIRMED_AT_REGISTRATION",
+    "monte_carlo_sd_pp": 0.2886000924000776,
+    "p_home": 0.4886,
+    "park_factor": 1.032,
+    "prospectivity": "SELF_ASSERTED_PREGAME",
+    "resolved_information_dose": 0.5,
+    "simulation_seed": 4416442528311906014,
+    "simulation_trials": 30000,
+    "simulation_version": "v13_1",
+    "sp_status": {
+     "away": "OFFICIAL_TBD_CAP",
+     "home": "OFFICIAL_TBD_CAP"
+    },
+    "sport": "mlb",
+    "start_time_grade": "SEARCH_INFERRED_START_ET_STATED",
+    "starter_class": {
+     "away": "CONFLICT_CAP(Noah Cameron|Randy Dobnak)",
+     "home": "CONFLICT_CAP(Spencer Arrighetti|Spencer Miles)"
+    },
+    "starter_identification_grade": "SEARCH_IDENTIFIED_UNCONFIRMED",
+    "starter_slots_capped": 2,
+    "target": "winner",
+    "trial_standard": "LEGACY_TRIAL_COUNT"
+   },
+   {
+    "action_status": "NO_RETAINED_MARKET_ARTIFACT",
+    "arm": "mlb.winner.CHALLENGER_ADAPTIVE",
+    "away_starter": "TBD",
+    "forecast_status": "FORECAST_REGISTERED",
+    "game": "mlb:KC@TOR",
+    "gamePk": "827003",
+    "game_start_utc": "2026-08-27T23:07:00Z",
+    "home_starter": "TBD",
+    "identity_note": "adaptive_v0_1 (CLOSED \u2014 constants lost with an uncommitted builder; its frozen 2026-08-24 rows remain gradable; no continuity is claimed between the identities)",
+    "lineups": "UNCONFIRMED_AT_REGISTRATION",
+    "p_home": 0.5163873343057919,
+    "park_factor": 1.032,
+    "prospectivity": "SELF_ASSERTED_PREGAME",
+    "residual_f": -0.01663306451612906,
+    "resolved_information_dose": 0.5,
+    "simulation_trials": 0,
+    "simulation_version": "adaptive_v0_2",
+    "sp_status": {
+     "away": "OFFICIAL_TBD_CAP",
+     "home": "OFFICIAL_TBD_CAP"
+    },
+    "sport": "mlb",
+    "start_time_grade": "SEARCH_INFERRED_START_ET_STATED",
+    "starter_class": {
+     "away": "CONFLICT_CAP(Noah Cameron|Randy Dobnak)",
+     "home": "CONFLICT_CAP(Spencer Arrighetti|Spencer Miles)"
+    },
+    "starter_identification_grade": "SEARCH_IDENTIFIED_UNCONFIRMED",
+    "starter_slots_capped": 2,
+    "target": "winner"
+   },
+   {
+    "action_status": "NO_RETAINED_MARKET_ARTIFACT",
+    "arm": "mlb.winner.CHALLENGER_WIDENED",
+    "away_starter": "TBD",
+    "forecast_status": "FORECAST_REGISTERED",
+    "game": "mlb:KC@TOR",
+    "gamePk": "827003",
+    "game_start_utc": "2026-08-27T23:07:00Z",
+    "home_starter": "TBD",
+    "lineups": "UNCONFIRMED_AT_REGISTRATION",
+    "p_home": 0.500648114551114,
+    "park_factor": 1.032,
+    "prospectivity": "SELF_ASSERTED_PREGAME",
+    "resolved_information_dose": 0.5,
+    "simulation_version": "widened(adaptive_v0_2)",
+    "sp_status": {
+     "away": "OFFICIAL_TBD_CAP",
+     "home": "OFFICIAL_TBD_CAP"
+    },
+    "sport": "mlb",
+    "start_time_grade": "SEARCH_INFERRED_START_ET_STATED",
+    "starter_class": {
+     "away": "CONFLICT_CAP(Noah Cameron|Randy Dobnak)",
+     "home": "CONFLICT_CAP(Spencer Arrighetti|Spencer Miles)"
+    },
+    "starter_identification_grade": "SEARCH_IDENTIFIED_UNCONFIRMED",
+    "starter_slots_capped": 2,
+    "target": "winner",
+    "widening_k": 4.786455780049437
+   },
+   {
+    "action_status": "NO_RETAINED_MARKET_ARTIFACT",
+    "arm": "mlb.total.EXPANDING_TOTAL_PRIOR",
+    "away_starter": "TBD",
+    "forecast_status": "FORECAST_REGISTERED",
+    "game": "mlb:KC@TOR",
+    "gamePk": "827003",
+    "game_start_utc": "2026-08-27T23:07:00Z",
+    "home_starter": "TBD",
+    "lineups": "UNCONFIRMED_AT_REGISTRATION",
+    "park_factor": 1.032,
+    "projected_total": 8.991092636579573,
+    "prospectivity": "SELF_ASSERTED_PREGAME",
+    "resolved_information_dose": 0.5,
+    "sp_status": {
+     "away": "OFFICIAL_TBD_CAP",
+     "home": "OFFICIAL_TBD_CAP"
+    },
+    "sport": "mlb",
+    "start_time_grade": "SEARCH_INFERRED_START_ET_STATED",
+    "starter_class": {
+     "away": "CONFLICT_CAP(Noah Cameron|Randy Dobnak)",
+     "home": "CONFLICT_CAP(Spencer Arrighetti|Spencer Miles)"
+    },
+    "starter_identification_grade": "SEARCH_IDENTIFIED_UNCONFIRMED",
+    "starter_slots_capped": 2,
+    "target": "total",
+    "target_authority": "NEVER_DECISION_BEARING"
+   },
+   {
+    "action_status": "NO_RETAINED_MARKET_ARTIFACT",
+    "arm": "mlb.total.CHAMPION_V13",
+    "away_starter": "TBD",
+    "forecast_status": "FORECAST_REGISTERED",
+    "game": "mlb:KC@TOR",
+    "gamePk": "827003",
+    "game_start_utc": "2026-08-27T23:07:00Z",
+    "home_starter": "TBD",
+    "lineups": "UNCONFIRMED_AT_REGISTRATION",
+    "park_factor": 1.032,
+    "projected_total": 8.252,
+    "prospectivity": "SELF_ASSERTED_PREGAME",
+    "resolved_information_dose": 0.5,
+    "simulation_seed": 4416442528311906014,
+    "simulation_trials": 30000,
+    "sp_status": {
+     "away": "OFFICIAL_TBD_CAP",
+     "home": "OFFICIAL_TBD_CAP"
+    },
+    "sport": "mlb",
+    "start_time_grade": "SEARCH_INFERRED_START_ET_STATED",
+    "starter_class": {
+     "away": "CONFLICT_CAP(Noah Cameron|Randy Dobnak)",
+     "home": "CONFLICT_CAP(Spencer Arrighetti|Spencer Miles)"
+    },
+    "starter_identification_grade": "SEARCH_IDENTIFIED_UNCONFIRMED",
+    "starter_slots_capped": 2,
+    "target": "total",
+    "target_authority": "NEVER_DECISION_BEARING"
+   },
+   {
+    "action_status": "NO_RETAINED_MARKET_ARTIFACT",
+    "arm": "mlb.winner.EXPANDING_HOME_PRIOR",
+    "away_starter": "Jacob Misiorowski",
+    "forecast_status": "FORECAST_REGISTERED",
+    "game": "mlb:MIL@NYM",
+    "gamePk": "827004",
+    "game_start_utc": "2026-08-27T23:10:00Z",
+    "home_starter": "Sean Manaea",
+    "lineups": "UNCONFIRMED_AT_REGISTRATION",
+    "p_home": 0.5205399061032864,
+    "park_factor": 1.085,
+    "prospectivity": "SELF_ASSERTED_PREGAME",
+    "resolved_information_dose": 1.0,
+    "sp_status": {
+     "away": "RESOLVED",
+     "home": "RESOLVED"
+    },
+    "sport": "mlb",
+    "start_time_grade": "SEARCH_INFERRED_START_ET_STATED",
+    "starter_class": {
+     "away": "PROBABLE",
+     "home": "PROBABLE"
+    },
+    "starter_identification_grade": "SEARCH_IDENTIFIED_UNCONFIRMED",
+    "starter_slots_capped": 0,
+    "target": "winner"
+   },
+   {
+    "action_status": "NO_RETAINED_MARKET_ARTIFACT",
+    "arm": "mlb.winner.CHAMPION_V13",
+    "away_starter": "Jacob Misiorowski",
+    "forecast_status": "FORECAST_REGISTERED",
+    "game": "mlb:MIL@NYM",
+    "gamePk": "827004",
+    "game_start_utc": "2026-08-27T23:10:00Z",
+    "home_starter": "Sean Manaea",
+    "lineups": "UNCONFIRMED_AT_REGISTRATION",
+    "monte_carlo_sd_pp": 0.26977751876246026,
+    "p_home": 0.32206666666666667,
+    "park_factor": 1.085,
+    "prospectivity": "SELF_ASSERTED_PREGAME",
+    "resolved_information_dose": 1.0,
+    "simulation_seed": 7413521887050372477,
+    "simulation_trials": 30000,
+    "simulation_version": "v13_1",
+    "sp_status": {
+     "away": "RESOLVED",
+     "home": "RESOLVED"
+    },
+    "sport": "mlb",
+    "start_time_grade": "SEARCH_INFERRED_START_ET_STATED",
+    "starter_class": {
+     "away": "PROBABLE",
+     "home": "PROBABLE"
+    },
+    "starter_identification_grade": "SEARCH_IDENTIFIED_UNCONFIRMED",
+    "starter_slots_capped": 0,
+    "target": "winner",
+    "trial_standard": "LEGACY_TRIAL_COUNT"
+   },
+   {
+    "action_status": "NO_RETAINED_MARKET_ARTIFACT",
+    "arm": "mlb.winner.CHALLENGER_ADAPTIVE",
+    "away_starter": "Jacob Misiorowski",
+    "forecast_status": "FORECAST_REGISTERED",
+    "game": "mlb:MIL@NYM",
+    "gamePk": "827004",
+    "game_start_utc": "2026-08-27T23:10:00Z",
+    "home_starter": "Sean Manaea",
+    "identity_note": "adaptive_v0_1 (CLOSED \u2014 constants lost with an uncommitted builder; its frozen 2026-08-24 rows remain gradable; no continuity is claimed between the identities)",
+    "lineups": "UNCONFIRMED_AT_REGISTRATION",
+    "p_home": 0.4764128003704692,
+    "park_factor": 1.085,
+    "prospectivity": "SELF_ASSERTED_PREGAME",
+    "residual_f": -0.17662476826103082,
+    "resolved_information_dose": 1.0,
+    "simulation_trials": 0,
+    "simulation_version": "adaptive_v0_2",
+    "sp_status": {
+     "away": "RESOLVED",
+     "home": "RESOLVED"
+    },
+    "sport": "mlb",
+    "start_time_grade": "SEARCH_INFERRED_START_ET_STATED",
+    "starter_class": {
+     "away": "PROBABLE",
+     "home": "PROBABLE"
+    },
+    "starter_identification_grade": "SEARCH_IDENTIFIED_UNCONFIRMED",
+    "starter_slots_capped": 0,
+    "target": "winner"
+   },
+   {
+    "action_status": "NO_RETAINED_MARKET_ARTIFACT",
+    "arm": "mlb.winner.CHALLENGER_WIDENED",
+    "away_starter": "Jacob Misiorowski",
+    "forecast_status": "FORECAST_REGISTERED",
+    "game": "mlb:MIL@NYM",
+    "gamePk": "827004",
+    "game_start_utc": "2026-08-27T23:10:00Z",
+    "home_starter": "Sean Manaea",
+    "lineups": "UNCONFIRMED_AT_REGISTRATION",
+    "p_home": 0.3179517512881131,
+    "park_factor": 1.085,
+    "prospectivity": "SELF_ASSERTED_PREGAME",
+    "resolved_information_dose": 1.0,
+    "simulation_version": "widened(adaptive_v0_2)",
+    "sp_status": {
+     "away": "RESOLVED",
+     "home": "RESOLVED"
+    },
+    "sport": "mlb",
+    "start_time_grade": "SEARCH_INFERRED_START_ET_STATED",
+    "starter_class": {
+     "away": "PROBABLE",
+     "home": "PROBABLE"
+    },
+    "starter_identification_grade": "SEARCH_IDENTIFIED_UNCONFIRMED",
+    "starter_slots_capped": 0,
+    "target": "winner",
+    "widening_k": 4.786455780049437
+   },
+   {
+    "action_status": "NO_RETAINED_MARKET_ARTIFACT",
+    "arm": "mlb.total.EXPANDING_TOTAL_PRIOR",
+    "away_starter": "Jacob Misiorowski",
+    "forecast_status": "FORECAST_REGISTERED",
+    "game": "mlb:MIL@NYM",
+    "gamePk": "827004",
+    "game_start_utc": "2026-08-27T23:10:00Z",
+    "home_starter": "Sean Manaea",
+    "lineups": "UNCONFIRMED_AT_REGISTRATION",
+    "park_factor": 1.085,
+    "projected_total": 8.991092636579573,
+    "prospectivity": "SELF_ASSERTED_PREGAME",
+    "resolved_information_dose": 1.0,
+    "sp_status": {
+     "away": "RESOLVED",
+     "home": "RESOLVED"
+    },
+    "sport": "mlb",
+    "start_time_grade": "SEARCH_INFERRED_START_ET_STATED",
+    "starter_class": {
+     "away": "PROBABLE",
+     "home": "PROBABLE"
+    },
+    "starter_identification_grade": "SEARCH_IDENTIFIED_UNCONFIRMED",
+    "starter_slots_capped": 0,
+    "target": "total",
+    "target_authority": "NEVER_DECISION_BEARING"
+   },
+   {
+    "action_status": "NO_RETAINED_MARKET_ARTIFACT",
+    "arm": "mlb.total.CHAMPION_V13",
+    "away_starter": "Jacob Misiorowski",
+    "forecast_status": "FORECAST_REGISTERED",
+    "game": "mlb:MIL@NYM",
+    "gamePk": "827004",
+    "game_start_utc": "2026-08-27T23:10:00Z",
+    "home_starter": "Sean Manaea",
+    "lineups": "UNCONFIRMED_AT_REGISTRATION",
+    "park_factor": 1.085,
+    "projected_total": 8.6,
+    "prospectivity": "SELF_ASSERTED_PREGAME",
+    "resolved_information_dose": 1.0,
+    "simulation_seed": 7413521887050372477,
+    "simulation_trials": 30000,
+    "sp_status": {
+     "away": "RESOLVED",
+     "home": "RESOLVED"
+    },
+    "sport": "mlb",
+    "start_time_grade": "SEARCH_INFERRED_START_ET_STATED",
+    "starter_class": {
+     "away": "PROBABLE",
+     "home": "PROBABLE"
+    },
+    "starter_identification_grade": "SEARCH_IDENTIFIED_UNCONFIRMED",
+    "starter_slots_capped": 0,
+    "target": "total",
+    "target_authority": "NEVER_DECISION_BEARING"
+   },
+   {
+    "action_status": "NO_RETAINED_MARKET_ARTIFACT",
+    "arm": "mlb.winner.EXPANDING_HOME_PRIOR",
+    "away_starter": "Roki Sasaki",
+    "forecast_status": "FORECAST_REGISTERED",
+    "game": "mlb:LAD@ATL",
+    "gamePk": "827005",
+    "game_start_utc": "2026-08-27T23:15:00Z",
+    "home_starter": "AJ Smith-Shawver",
+    "lineups": "UNCONFIRMED_AT_REGISTRATION",
+    "p_home": 0.5205399061032864,
+    "park_factor": 0.996,
+    "prospectivity": "SELF_ASSERTED_PREGAME",
+    "resolved_information_dose": 0.75,
+    "sp_status": {
+     "away": "RESOLVED",
+     "home": "NO_PID_CAP(AJ Smith-Shawver)"
+    },
+    "sport": "mlb",
+    "start_time_grade": "SEARCH_INFERRED_START_ET_STATED",
+    "starter_class": {
+     "away": "PROBABLE",
+     "home": "NAMED_NO_LOG_RETAINED_CAP[NO_PID_CAP(AJ Smith-Shawver)]"
+    },
+    "starter_identification_grade": "SEARCH_IDENTIFIED_UNCONFIRMED",
+    "starter_slots_capped": 1,
+    "target": "winner"
+   },
+   {
+    "action_status": "NO_RETAINED_MARKET_ARTIFACT",
+    "arm": "mlb.winner.CHAMPION_V13",
+    "away_starter": "Roki Sasaki",
+    "forecast_status": "FORECAST_REGISTERED",
+    "game": "mlb:LAD@ATL",
+    "gamePk": "827005",
+    "game_start_utc": "2026-08-27T23:15:00Z",
+    "home_starter": "AJ Smith-Shawver",
+    "lineups": "UNCONFIRMED_AT_REGISTRATION",
+    "monte_carlo_sd_pp": 0.28864547972030147,
+    "p_home": 0.5071666666666667,
+    "park_factor": 0.996,
+    "prospectivity": "SELF_ASSERTED_PREGAME",
+    "resolved_information_dose": 0.75,
+    "simulation_seed": 8913268515645756769,
+    "simulation_trials": 30000,
+    "simulation_version": "v13_1",
+    "sp_status": {
+     "away": "RESOLVED",
+     "home": "NO_PID_CAP(AJ Smith-Shawver)"
+    },
+    "sport": "mlb",
+    "start_time_grade": "SEARCH_INFERRED_START_ET_STATED",
+    "starter_class": {
+     "away": "PROBABLE",
+     "home": "NAMED_NO_LOG_RETAINED_CAP[NO_PID_CAP(AJ Smith-Shawver)]"
+    },
+    "starter_identification_grade": "SEARCH_IDENTIFIED_UNCONFIRMED",
+    "starter_slots_capped": 1,
+    "target": "winner",
+    "trial_standard": "LEGACY_TRIAL_COUNT"
+   },
+   {
+    "action_status": "NO_RETAINED_MARKET_ARTIFACT",
+    "arm": "mlb.winner.CHALLENGER_ADAPTIVE",
+    "away_starter": "Roki Sasaki",
+    "forecast_status": "FORECAST_REGISTERED",
+    "game": "mlb:LAD@ATL",
+    "gamePk": "827005",
+    "game_start_utc": "2026-08-27T23:15:00Z",
+    "home_starter": "AJ Smith-Shawver",
+    "identity_note": "adaptive_v0_1 (CLOSED \u2014 constants lost with an uncommitted builder; its frozen 2026-08-24 rows remain gradable; no continuity is claimed between the identities)",
+    "lineups": "UNCONFIRMED_AT_REGISTRATION",
+    "p_home": 0.5285931580658281,
+    "park_factor": 0.996,
+    "prospectivity": "SELF_ASSERTED_PREGAME",
+    "residual_f": 0.03229166666666672,
+    "resolved_information_dose": 0.75,
+    "simulation_trials": 0,
+    "simulation_version": "adaptive_v0_2",
+    "sp_status": {
+     "away": "RESOLVED",
+     "home": "NO_PID_CAP(AJ Smith-Shawver)"
+    },
+    "sport": "mlb",
+    "start_time_grade": "SEARCH_INFERRED_START_ET_STATED",
+    "starter_class": {
+     "away": "PROBABLE",
+     "home": "NAMED_NO_LOG_RETAINED_CAP[NO_PID_CAP(AJ Smith-Shawver)]"
+    },
+    "starter_identification_grade": "SEARCH_IDENTIFIED_UNCONFIRMED",
+    "starter_slots_capped": 1,
+    "target": "winner"
+   },
+   {
+    "action_status": "NO_RETAINED_MARKET_ARTIFACT",
+    "arm": "mlb.winner.CHALLENGER_WIDENED",
+    "away_starter": "Roki Sasaki",
+    "forecast_status": "FORECAST_REGISTERED",
+    "game": "mlb:LAD@ATL",
+    "gamePk": "827005",
+    "game_start_utc": "2026-08-27T23:15:00Z",
+    "home_starter": "AJ Smith-Shawver",
+    "lineups": "UNCONFIRMED_AT_REGISTRATION",
+    "p_home": 0.5589171493138256,
+    "park_factor": 0.996,
+    "prospectivity": "SELF_ASSERTED_PREGAME",
+    "resolved_information_dose": 0.75,
+    "simulation_version": "widened(adaptive_v0_2)",
+    "sp_status": {
+     "away": "RESOLVED",
+     "home": "NO_PID_CAP(AJ Smith-Shawver)"
+    },
+    "sport": "mlb",
+    "start_time_grade": "SEARCH_INFERRED_START_ET_STATED",
+    "starter_class": {
+     "away": "PROBABLE",
+     "home": "NAMED_NO_LOG_RETAINED_CAP[NO_PID_CAP(AJ Smith-Shawver)]"
+    },
+    "starter_identification_grade": "SEARCH_IDENTIFIED_UNCONFIRMED",
+    "starter_slots_capped": 1,
+    "target": "winner",
+    "widening_k": 4.786455780049437
+   },
+   {
+    "action_status": "NO_RETAINED_MARKET_ARTIFACT",
+    "arm": "mlb.total.EXPANDING_TOTAL_PRIOR",
+    "away_starter": "Roki Sasaki",
+    "forecast_status": "FORECAST_REGISTERED",
+    "game": "mlb:LAD@ATL",
+    "gamePk": "827005",
+    "game_start_utc": "2026-08-27T23:15:00Z",
+    "home_starter": "AJ Smith-Shawver",
+    "lineups": "UNCONFIRMED_AT_REGISTRATION",
+    "park_factor": 0.996,
+    "projected_total": 8.991092636579573,
+    "prospectivity": "SELF_ASSERTED_PREGAME",
+    "resolved_information_dose": 0.75,
+    "sp_status": {
+     "away": "RESOLVED",
+     "home": "NO_PID_CAP(AJ Smith-Shawver)"
+    },
+    "sport": "mlb",
+    "start_time_grade": "SEARCH_INFERRED_START_ET_STATED",
+    "starter_class": {
+     "away": "PROBABLE",
+     "home": "NAMED_NO_LOG_RETAINED_CAP[NO_PID_CAP(AJ Smith-Shawver)]"
+    },
+    "starter_identification_grade": "SEARCH_IDENTIFIED_UNCONFIRMED",
+    "starter_slots_capped": 1,
+    "target": "total",
+    "target_authority": "NEVER_DECISION_BEARING"
+   },
+   {
+    "action_status": "NO_RETAINED_MARKET_ARTIFACT",
+    "arm": "mlb.total.CHAMPION_V13",
+    "away_starter": "Roki Sasaki",
+    "forecast_status": "FORECAST_REGISTERED",
+    "game": "mlb:LAD@ATL",
+    "gamePk": "827005",
+    "game_start_utc": "2026-08-27T23:15:00Z",
+    "home_starter": "AJ Smith-Shawver",
+    "lineups": "UNCONFIRMED_AT_REGISTRATION",
+    "park_factor": 0.996,
+    "projected_total": 9.842,
+    "prospectivity": "SELF_ASSERTED_PREGAME",
+    "resolved_information_dose": 0.75,
+    "simulation_seed": 8913268515645756769,
+    "simulation_trials": 30000,
+    "sp_status": {
+     "away": "RESOLVED",
+     "home": "NO_PID_CAP(AJ Smith-Shawver)"
+    },
+    "sport": "mlb",
+    "start_time_grade": "SEARCH_INFERRED_START_ET_STATED",
+    "starter_class": {
+     "away": "PROBABLE",
+     "home": "NAMED_NO_LOG_RETAINED_CAP[NO_PID_CAP(AJ Smith-Shawver)]"
+    },
+    "starter_identification_grade": "SEARCH_IDENTIFIED_UNCONFIRMED",
+    "starter_slots_capped": 1,
+    "target": "total",
+    "target_authority": "NEVER_DECISION_BEARING"
+   },
+   {
+    "action_status": "NO_RETAINED_MARKET_ARTIFACT",
+    "arm": "mlb.winner.EXPANDING_HOME_PRIOR",
+    "away_starter": "TBD",
+    "forecast_status": "FORECAST_REGISTERED",
+    "game": "mlb:AZ@SF",
+    "gamePk": "827006",
+    "game_start_utc": "2026-08-28T01:45:00Z",
+    "home_starter": "TBD",
+    "lineups": "UNCONFIRMED_AT_REGISTRATION",
+    "p_home": 0.5205399061032864,
+    "park_factor": 0.923,
+    "prospectivity": "SELF_ASSERTED_PREGAME",
+    "resolved_information_dose": 0.5,
+    "sp_status": {
+     "away": "OFFICIAL_TBD_CAP",
+     "home": "OFFICIAL_TBD_CAP"
+    },
+    "sport": "mlb",
+    "start_time_grade": "SEARCH_INFERRED_START_ET_STATED",
+    "starter_class": {
+     "away": "TBD_CAP",
+     "home": "TBD_CAP"
+    },
+    "starter_identification_grade": "SEARCH_IDENTIFIED_UNCONFIRMED",
+    "starter_slots_capped": 2,
+    "target": "winner"
+   },
+   {
+    "action_status": "NO_RETAINED_MARKET_ARTIFACT",
+    "arm": "mlb.winner.CHAMPION_V13",
+    "away_starter": "TBD",
+    "forecast_status": "FORECAST_REGISTERED",
+    "game": "mlb:AZ@SF",
+    "gamePk": "827006",
+    "game_start_utc": "2026-08-28T01:45:00Z",
+    "home_starter": "TBD",
+    "lineups": "UNCONFIRMED_AT_REGISTRATION",
+    "monte_carlo_sd_pp": 0.28809070330944964,
+    "p_home": 0.4682,
+    "park_factor": 0.923,
+    "prospectivity": "SELF_ASSERTED_PREGAME",
+    "resolved_information_dose": 0.5,
+    "simulation_seed": 2890757564565093021,
+    "simulation_trials": 30000,
+    "simulation_version": "v13_1",
+    "sp_status": {
+     "away": "OFFICIAL_TBD_CAP",
+     "home": "OFFICIAL_TBD_CAP"
+    },
+    "sport": "mlb",
+    "start_time_grade": "SEARCH_INFERRED_START_ET_STATED",
+    "starter_class": {
+     "away": "TBD_CAP",
+     "home": "TBD_CAP"
+    },
+    "starter_identification_grade": "SEARCH_IDENTIFIED_UNCONFIRMED",
+    "starter_slots_capped": 2,
+    "target": "winner",
+    "trial_standard": "LEGACY_TRIAL_COUNT"
+   },
+   {
+    "action_status": "NO_RETAINED_MARKET_ARTIFACT",
+    "arm": "mlb.winner.CHALLENGER_ADAPTIVE",
+    "away_starter": "TBD",
+    "forecast_status": "FORECAST_REGISTERED",
+    "game": "mlb:AZ@SF",
+    "gamePk": "827006",
+    "game_start_utc": "2026-08-28T01:45:00Z",
+    "home_starter": "TBD",
+    "identity_note": "adaptive_v0_1 (CLOSED \u2014 constants lost with an uncommitted builder; its frozen 2026-08-24 rows remain gradable; no continuity is claimed between the identities)",
+    "lineups": "UNCONFIRMED_AT_REGISTRATION",
+    "p_home": 0.503866189022703,
+    "park_factor": 0.923,
+    "prospectivity": "SELF_ASSERTED_PREGAME",
+    "residual_f": -0.06674082313681867,
+    "resolved_information_dose": 0.5,
+    "simulation_trials": 0,
+    "simulation_version": "adaptive_v0_2",
+    "sp_status": {
+     "away": "OFFICIAL_TBD_CAP",
+     "home": "OFFICIAL_TBD_CAP"
+    },
+    "sport": "mlb",
+    "start_time_grade": "SEARCH_INFERRED_START_ET_STATED",
+    "starter_class": {
+     "away": "TBD_CAP",
+     "home": "TBD_CAP"
+    },
+    "starter_identification_grade": "SEARCH_IDENTIFIED_UNCONFIRMED",
+    "starter_slots_capped": 2,
+    "target": "winner"
+   },
+   {
+    "action_status": "NO_RETAINED_MARKET_ARTIFACT",
+    "arm": "mlb.winner.CHALLENGER_WIDENED",
+    "away_starter": "TBD",
+    "forecast_status": "FORECAST_REGISTERED",
+    "game": "mlb:AZ@SF",
+    "gamePk": "827006",
+    "game_start_utc": "2026-08-28T01:45:00Z",
+    "home_starter": "TBD",
+    "lineups": "UNCONFIRMED_AT_REGISTRATION",
+    "p_home": 0.4409651145221947,
+    "park_factor": 0.923,
+    "prospectivity": "SELF_ASSERTED_PREGAME",
+    "resolved_information_dose": 0.5,
+    "simulation_version": "widened(adaptive_v0_2)",
+    "sp_status": {
+     "away": "OFFICIAL_TBD_CAP",
+     "home": "OFFICIAL_TBD_CAP"
+    },
+    "sport": "mlb",
+    "start_time_grade": "SEARCH_INFERRED_START_ET_STATED",
+    "starter_class": {
+     "away": "TBD_CAP",
+     "home": "TBD_CAP"
+    },
+    "starter_identification_grade": "SEARCH_IDENTIFIED_UNCONFIRMED",
+    "starter_slots_capped": 2,
+    "target": "winner",
+    "widening_k": 4.786455780049437
+   },
+   {
+    "action_status": "NO_RETAINED_MARKET_ARTIFACT",
+    "arm": "mlb.total.EXPANDING_TOTAL_PRIOR",
+    "away_starter": "TBD",
+    "forecast_status": "FORECAST_REGISTERED",
+    "game": "mlb:AZ@SF",
+    "gamePk": "827006",
+    "game_start_utc": "2026-08-28T01:45:00Z",
+    "home_starter": "TBD",
+    "lineups": "UNCONFIRMED_AT_REGISTRATION",
+    "park_factor": 0.923,
+    "projected_total": 8.991092636579573,
+    "prospectivity": "SELF_ASSERTED_PREGAME",
+    "resolved_information_dose": 0.5,
+    "sp_status": {
+     "away": "OFFICIAL_TBD_CAP",
+     "home": "OFFICIAL_TBD_CAP"
+    },
+    "sport": "mlb",
+    "start_time_grade": "SEARCH_INFERRED_START_ET_STATED",
+    "starter_class": {
+     "away": "TBD_CAP",
+     "home": "TBD_CAP"
+    },
+    "starter_identification_grade": "SEARCH_IDENTIFIED_UNCONFIRMED",
+    "starter_slots_capped": 2,
+    "target": "total",
+    "target_authority": "NEVER_DECISION_BEARING"
+   },
+   {
+    "action_status": "NO_RETAINED_MARKET_ARTIFACT",
+    "arm": "mlb.total.CHAMPION_V13",
+    "away_starter": "TBD",
+    "forecast_status": "FORECAST_REGISTERED",
+    "game": "mlb:AZ@SF",
+    "gamePk": "827006",
+    "game_start_utc": "2026-08-28T01:45:00Z",
+    "home_starter": "TBD",
+    "lineups": "UNCONFIRMED_AT_REGISTRATION",
+    "park_factor": 0.923,
+    "projected_total": 7.88,
+    "prospectivity": "SELF_ASSERTED_PREGAME",
+    "resolved_information_dose": 0.5,
+    "simulation_seed": 2890757564565093021,
+    "simulation_trials": 30000,
+    "sp_status": {
+     "away": "OFFICIAL_TBD_CAP",
+     "home": "OFFICIAL_TBD_CAP"
+    },
+    "sport": "mlb",
+    "start_time_grade": "SEARCH_INFERRED_START_ET_STATED",
+    "starter_class": {
+     "away": "TBD_CAP",
+     "home": "TBD_CAP"
+    },
+    "starter_identification_grade": "SEARCH_IDENTIFIED_UNCONFIRMED",
+    "starter_slots_capped": 2,
+    "target": "total",
+    "target_authority": "NEVER_DECISION_BEARING"
+   }
+  ]
+ },
+ "model_identity": {
+  "total": [
+   "mlb.total.EXPANDING_TOTAL_PRIOR",
+   "mlb.total.CHAMPION_V13"
+  ],
+  "winner": [
+   "mlb.winner.EXPANDING_HOME_PRIOR",
+   "mlb.winner.CHAMPION_V13 (frozen 2026-08-10, v13_1)",
+   "mlb.winner.CHALLENGER_ADAPTIVE",
+   "mlb.winner.CHALLENGER_WIDENED"
+  ]
+ },
+ "prospectivity_status": "SELF_ASSERTED_LOCAL until the CI anchor on this push lands; per-game field carries any exception",
+ "record_id": "BOARD-2026-08-27-MLB",
+ "slate_date": "2026-08-27",
+ "slate_grade": "SEARCH_IDENTIFIED_UNCONFIRMED \u2014 see module docstring and data/audit/2026-08-27_schedule_acquisition.json",
+ "sport": "mlb"
+}

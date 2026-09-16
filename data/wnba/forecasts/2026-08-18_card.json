@@ -1,0 +1,76 @@
+{
+ "record_id": "WNBA-CARD-2026-08-18",
+ "model_id": "wnba.rs.ff7_logit_ridge.v1_0.shadow",
+ "generated_at_utc": "2026-08-18T07:30:00Z",
+ "slate_date": "2026-08-18",
+ "feature_state_as_of": "2026-07-22",
+ "staleness_days": 27,
+ "target_status": {
+  "home_win": "VALIDATED_VS_BASELINE",
+  "margin": "VALIDATED_VS_BASELINE",
+  "total": "VALIDATED_VS_BASELINE"
+ },
+ "single_arm_note": "NO v1/v2/v3 arms exist for WNBA: this model has no starter input and its feature state is frozen at 2026-07-22, so there is exactly ONE input state per slate. The MLB arms exist because MLB inputs (starters, form) arrive incrementally; three WNBA arms would be three identical cards with different labels.",
+ "total_limitation": "cross-era level term (frozen); runs HIGH vs realized totals (now 6 of 9 graded over-predicted, incl. DAL@GSV +15.8)",
+ "authority": "SHADOW DIAGNOSTIC, paper only, wager_authority NO, stake 0",
+ "lines_evidence": "data/wnba/evidence_2026-08-18_owner_lines.json",
+ "lines_evidence_sha256": "c9c60d28ecede997bee42cc2326a87beb9b39d669b5b752b0e84aeb80f1a9b4a",
+ "rows": [
+  {
+   "away": "LAS",
+   "home": "CON",
+   "tip_utc": "2026-08-18T23:00Z",
+   "p_home": 0.4943,
+   "margin_home": 0.87,
+   "total": 172.3,
+   "coherence_gap_pp": 3.05,
+   "coherence_pass": true,
+   "games_used": {
+    "home": 27,
+    "away": 26
+   }
+  },
+  {
+   "away": "IND",
+   "home": "TOR",
+   "tip_utc": "2026-08-18T23:00Z",
+   "p_home": 0.3217,
+   "margin_home": -4.98,
+   "total": 175.7,
+   "coherence_gap_pp": 3.9,
+   "coherence_pass": true,
+   "games_used": {
+    "home": 26,
+    "away": 27
+   }
+  },
+  {
+   "away": "NYL",
+   "home": "CHI",
+   "tip_utc": "2026-08-19T01:00Z",
+   "p_home": 0.4301,
+   "margin_home": -1.61,
+   "total": 173.7,
+   "coherence_gap_pp": 2.39,
+   "coherence_pass": true,
+   "games_used": {
+    "home": 27,
+    "away": 27
+   }
+  },
+  {
+   "away": "ATL",
+   "home": "LVA",
+   "tip_utc": "2026-08-19T01:00Z",
+   "p_home": 0.6811,
+   "margin_home": 5.06,
+   "total": 170.8,
+   "coherence_gap_pp": 3.98,
+   "coherence_pass": true,
+   "games_used": {
+    "home": 26,
+    "away": 26
+   }
+  }
+ ]
+}

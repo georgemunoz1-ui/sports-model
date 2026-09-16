@@ -1,0 +1,14 @@
+{
+ "record_id": "LEDGER-ADOPTION-2026-08-16",
+ "built_utc": "2026-08-16T02:40:42Z",
+ "responds_to": "external workspace: result_capture_ledger implementation + NFL tracking critique",
+ "concessions": [
+  "CORRECT: this repo had no durable NFL per-game grades ledger \u2014 the '1-3 and pending' tally lived in provisional analysis records and chat; now persisted in data/nfl/results_ledger.jsonl (16 rows: 8/13 x6, 8/14 x3, 8/15 x7) with per-game grade states",
+  "CORRECT: date-level deferral is structurally worse than per-game queueing \u2014 the 8/15 echo incident kept per-game *detail* but not a per-game *queue*; adopted: every unresolved game is now an explicit OPEN queue row; date-level NOT_CAPTURED/DEFERRED states rejected going forward",
+  "CORRECT: results tracking must run regardless of whether a pregame card existed"
+ ],
+ "slate_resolution": "8/15 MLB = 15 games CONFIRMED by series-state arithmetic: 14 Friday series continuations + PHI@MIN (PHI and MIN were the two idle teams on 8/14, so 'Phillies @ Twins' in the corrupted schedule summary was REAL; 'Padres @ Cardinals' remains the corruption)",
+ "divergence_flagged_for_owner": "the external rule 'only Tier-1, date-consistent finals can enter results.csv' is STRICTER than this repo's standing practice (labeled tier-3 PROVISIONAL rows are in results.csv for 8/11/8/13 and pass the provenance audit; the winner-only representation depends on row presence). Aligning would require re-architecting the completeness gate. UNRESOLVED \u2014 this repo keeps its labeled-provisional practice until the owner rules; both practices agree that only verified rows GRADE forecasts.",
+ "attested_not_delivered": "result_capture_ledger.py, the external MLB/WNBA ledgers, and runbook.md were not statable here \u2014 implemented natively instead; if the bytes arrive, reconcile schemas and record any diffs",
+ "their_workspace_notes": "fastparquet/CFB failure is external-workspace scope; their 16 preseason benchmark forecasts (registered pre-kick) are a parallel cohort \u2014 under the cohort rule their grades and this ledger's grades cite each other when compared"
+}

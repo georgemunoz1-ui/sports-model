@@ -1,0 +1,92 @@
+# RUNBOOK — daily procedures (URL patterns below are TESTED-WORKING; don't improvise new ones)
+
+## pregame  (run ~15:00 UTC / before first pitch)
+1. healthcheck.py; read state.json.
+2. Slate: WebFetch `https://statsapi.mlb.com/api/v1/schedule?sportId=1&date=YYYY-MM-DD&hydrate=probablePitcher`
+   -> gamePk|away|home|time|aSP name+id|hSP name+id. Save data/mlb/schedule/YYYY-MM-DD_slate.json.
+3. K lines — SOURCE OF TRUTH: Taco's RotoWire CSV export (he clicks Export Table Data->CSV on
+   rotowire.com/betting/mlb/player-props.php and drops the file in chat; check /root/.claude/uploads/
+   for today's newest .csv/.xls). Parse flexibly: header row names the books; row = player, team,
+   opp, line, under price, over price per book — use DraftKings column primarily, best-price across
+   books for the EV line if unambiguous. Screenshots/pasted text are the fallback. If neither:
+   projection-only card, do NOT guess prices (R1). RotoWire pages themselves are JS shells —
+   direct fetch does NOT work (tested 2026-07-22); don't burn fetches retrying.
+4. Projections+plays: MUST use engine/kprops.py price_board() (canonical: proj -> select_play with
+   gs gates + qualify-then-best baked in). NO ad-hoc pricing scripts — that's how the Sale flaw and
+   the unwired-fix gap happened. START-ONLY accumulation from pitcher_logs
+   (bug history: relief outings inflate TBF/start). <5 prior GS -> skip. |proj-line|>=1.5 -> R5 audit.
+5. Card = FULL-TRACKING (Taco standing order 7/22): run `python3 harness/daily_card.py DATE slate.psv`
+   -> ALL games x {lines, V13 H%/projT/RLcov/blow%, K projs, gap-vs-market} displayed as TRACKING.
+   Plays remain kprop-only: EV>0 AND edge>=4pp AND |dev|>=0.8 -> paper play (weight 0.5 if GS<10). Write
+   cards/YYYY-MM-DD_kprops.json + html; append plays to state.json ledgers.kprops_paper.plays_pending;
+   SendUserFile card to Taco. NO sides plays (R3) — log V13 directional silently if V13 inputs handy.
+6. LINE SNAPSHOT (free, feeds E3): WebFetch ESPN core odds for today's event ids (runbook pattern in
+   session history / sports/registry.py espn_odds_url) -> save data/mlb/odds/YYYY-MM-DD_pregame.json.
+   ML+totals only; prop prices still come from Taco's boards.
+7. Append docs/progress.md (3-6 lines). git commit; bash harness/push.sh.
+
+## postgame  (run ~05:30 UTC after last final)
+1. healthcheck.py.
+2. Finals: WebFetch `...schedule?sportId=1&startDate=D&endDate=D&hydrate=linescore,venue`
+   -> date|gamePk|away|home|ascore|hscore|status|venue. UPSERT into results.csv (sports/ingest_mlb.py
+   pattern; overwrite same game_id — verify AFTER flush, in a separate process, not mid-write).
+3. Actual K for carded pitchers: WebFetch `.../people/{id}/stats?stats=gameLog&group=pitching&season=2026&fields=stats,splits,date,stat,inningsPitched,earnedRuns,strikeOuts,baseOnBalls,battersFaced,gamesStarted`
+   -> last row = tonight. ALSO append that row to pitcher_logs/{id}.txt (keeps projections current).
+4. Grade pending plays (BOTH ledgers: kprops_paper + kprops_taco_baseline). Per entry fill:
+   result (WIN/LOSS/VOID), pl, roi = pl/weight, outcome y = 1 if the played side hit,
+   brier_raw=(raw_p−y)^2, brier_shrunk=(shrunk_p−y)^2, logloss_raw=−ln(raw_p if y else 1−raw_p),
+   logloss_shrunk likewise. close_line/close_price from Taco's latest board if posted (CLV), else
+   null+note. Move pending->graded; update records/units; append docs/kprop_ledger.md.
+   WEEKLY: cumulative brier_raw vs brier_shrunk answers the shrinkage A/B with proper scoring,
+   not just W-L.
+5. Update v13_forward_directional if slate was logged. Update state.json.updated_utc + next_actions.
+6. Append docs/progress.md; git commit; run `bash harness/push.sh` (durability push to origin —
+   if push fails, WARN in the summary but continue; local commit still made).
+7. Message Taco: record, running units, notable grades, tomorrow.
+
+## edge cases (postgame)
+- LATE FINALS: 05:30Z fire can catch West-coast extras still live. Grade what is FINAL; leave the
+  rest in plays_pending with a note — next postgame sweeps them. NEVER grade a non-final.
+- POSTPONED game on a carded play -> play is VOID (remove from pending, 0u, note in ledger).
+- DOUBLEHEADERS: match pitcher's gameLog row by date AND opponent; two same-date rows possible.
+
+## weekly review (Sundays, after postgame)
+- Recompute K-prop calibration on ALL graded forward plays vs backtest curve (drift check).
+- Check gates in state.json (kprops_go_live progress n/100). Report to Taco.
+- Pick ONE experiment from experiment_queue if capacity; pre-register method BEFORE running (R7).
+- BACKUP: `git bundle create /tmp/sportsmodel_backup_$(date +%F).bundle --all` -> SendUserFile to Taco.
+- LEDGER DASHBOARD: regenerate docs/dashboard.html (running record, units curve, calibration table)
+  -> SendUserFile so Taco tracks visually without asking.
+
+## pricing discipline (adopted from OddsJam patterns, 7/22)
+- LINE-SHOP: Taco's board carries 6+ books — always take the BEST price per play (record book).
+  Never default to DK if another book pays more. Free ROI, no model change.
+- NO-VIG FAIR P: for every play compute market fair prob (proportional devig of the two-sided
+  quote) and display model-vs-fair gap. Also LOG fair p per graded play -> over time this gives a
+  props Brier-vs-market benchmark (same test that killed sides, now for props).
+- LINE SPLITS: when books hang DIFFERENT lines (e.g. Singer 5.5 DK vs 4.5 MGM), flag it — stale/soft
+  line signal + potential middle. Display, don't bet middles (out of scope).
+- SKIP arbitrage/middle betting (needs real-time multi-book execution, not our mission).
+
+## log repair & reconciliation protocol (Taco spec, 7/23 — Sale corruption incident)
+Detection (healthcheck, WARN not FAIL — spacing is a detector, never a verdict):
+- dupe date rows (note: both-ends-of-DH relief CAN be legit — lean format lacks opponent, so verify)
+- traditional starters (IP>3 both) with starts <3 days apart
+Reconciliation (before ANY overwrite):
+1. StatMuse (server-rendered, WebFetch-viable, VERIFIED 7/23):
+   https://www.statmuse.com/mlb/ask/{pitcher-name}-game-log-2026
+   relievers >24 rows: split ...-game-log-from-march-1-2026-to-may-31-2026 / june-1...to-{today}
+2. Cross-check season G/GS/SO/TBF sums vs MLB.com player profile AND statsapi season line.
+3. Rows must match date+opponent where available; NEVER delete a row on spacing alone.
+4. Openers/relievers: adjacent GS=1 days are legit (Holton 5/3+5/4) — confirm via independent log.
+5. Totals irreconcilable -> QUARANTINE the pitcher (skip from cards, note in state.known_issues)
+   until resolved. Caveat: StatMuse/MLB.com/statsapi share MLB's upstream feed — this catches OUR
+   extraction errors (the actual 7/23 failure mode), not hypothetical upstream errors.
+Forward format: NEW log rows should use 8-field date|opp|IP|ER|SO|BB|TBF|GS (opponent enables the
+date+opponent dupe key); parsers already accept mixed formats.
+
+## fetch discipline (hard-won)
+- WebFetch only; big JSON truncates -> always use `fields=` and <=7-day windows.
+- ESPN odds vanish at final -> pregame capture only. statsapi standings = stale; never use.
+- 429: wait 60-90s, retry ONCE, log gap. Same-URL retry <15min hits cache — vary a param.
+- FanGraphs per-team (`team={id}&pageitems=60`) works; full-board truncates.

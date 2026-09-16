@@ -1,0 +1,37 @@
+{
+ "corrections": [
+  {
+   "actual_window": "written 2026-08-27T06:51-06:52Z (between commits cfd0bef and 3a96eb7)",
+   "disposition": "original retained (committed); corrected here",
+   "field": "created_utc",
+   "file": "data/audit/2026-08-27_schedule_acquisition.json",
+   "recorded": "2026-08-27T07:06:00Z"
+  },
+  {
+   "actual_window": "written ~2026-08-27T06:54-06:55Z; fetch attempts observed ~06:53Z",
+   "disposition": "original retained (committed); corrected here",
+   "fields": {
+    "attempts.observed_utc": [
+     "07:09:00Z",
+     "07:09:30Z"
+    ],
+    "created_utc": "07:10:00Z"
+   },
+   "file": "data/audit/2026-08-27_market_acquisition.json"
+  },
+  {
+   "disposition": "uncommitted \u2014 restamped in place to 06:53:00Z/06:52:30Z and rehashed",
+   "file": "data/audit/2026-08-27_wnba_personnel_bind.json"
+  },
+  {
+   "disposition": "uncommitted history entries restamped in place (06:50:00Z/06:53:30Z/06:54:00Z)",
+   "file": "data/registry/recovery_jobs.json"
+  }
+ ],
+ "created_utc": "2026-08-27T06:59:30Z",
+ "defect": "self-asserted created_utc/observed_utc values in this morning's records were written as wall-clock ESTIMATES that ran 8-45 minutes AHEAD of the actual clock (verified: date -u read 2026-08-27T06:58:36Z after all of them were written). A timestamp that postdates the clock is a fabricated timestamp; same class as the placeholder-timestamp publish failure.",
+ "record_id": "TIMESTAMP-CORRECTIONS-2026-08-27",
+ "record_sha256": "90540ae5f753e6d4fec835d2ed048bd0d1442c3094ca6f0b0af421f0c43d9ff2",
+ "rule_forward": "records stamp created_utc from the clock at write time (datetime.now), never from a narrative estimate; scripts that hardcode NOW must read the clock",
+ "schema": "ops.corrections.v1"
+}

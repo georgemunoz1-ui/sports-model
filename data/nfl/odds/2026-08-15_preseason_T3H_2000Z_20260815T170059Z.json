@@ -1,0 +1,136 @@
+{
+ "schema_version": "nfl.preseason.current_lines.v1",
+ "capture_id": "NFL-PS-LINES-20260815T170059Z-T3H-2000Z",
+ "sport": "NFL",
+ "season_phase": "PRESEASON",
+ "capture_kind": "CURRENT_LINES",
+ "captured_at_utc": "2026-08-15T17:00:59Z",
+ "target_window": "T_MINUS_3H",
+ "window_state": "ON_TIME (kicks 20:00Z)",
+ "t_minus_48_note": "T_MINUS_48_MISSED per plan record; not backfilled",
+ "grade_scope": "MARKET_BENCHMARK_ONLY",
+ "promotion_eligible": false,
+ "wager_authority": "NO",
+ "stake": "$0",
+ "provenance": {
+  "grade": "WEB_EXTRACTED_NOT_RAW_BYTE_BOUND",
+  "raw_source_bytes_on_disk": false,
+  "rule": "source-specific quotes; no averaging across sign conflicts; these are the movement BASELINE for the T-90M run \u2014 not openers"
+ },
+ "games": [
+  {
+   "away_team": "LAR",
+   "home_team": "KC",
+   "game_start_utc": "2026-08-15T20:00:00Z",
+   "model_forecast": null,
+   "forecast_status": "NO_INDEPENDENT_PRESEASON_MODEL",
+   "source_quotes": [
+    {
+     "quote_id": "LAR-KC-DKNETWORK-20260815T170059Z",
+     "quote_scope": "SOURCE_SPECIFIC",
+     "display_source": "DraftKings Network / consensus summary",
+     "underlying_book_attribution": "DraftKings (article class)",
+     "attribution_confidence": "MEDIUM",
+     "source_url": "https://dknetwork.draftkings.com/2026/08/15/los-angeles-rams-at-kansas-city-chiefs-prediction-pick-for-nfl-preseason-on-8-15-26/",
+     "accessed_at_utc": "2026-08-15T17:00:59Z",
+     "away_spread": 2.5,
+     "home_spread": -2.5,
+     "away_moneyline": 114,
+     "home_moneyline": -135,
+     "total": 36.5
+    },
+    {
+     "quote_id": "LAR-KC-FANDUEL-20260815T170059Z",
+     "quote_scope": "SOURCE_SPECIFIC",
+     "display_source": "FanDuel Research week-1 odds page",
+     "underlying_book_attribution": "FanDuel Sportsbook",
+     "attribution_confidence": "MEDIUM",
+     "source_url": "https://www.fanduel.com/research/nfl-preseason-week-1-schedule-betting-odds-for-every-game",
+     "accessed_at_utc": "2026-08-15T17:00:59Z",
+     "away_spread": null,
+     "home_spread": null,
+     "away_moneyline": 118,
+     "home_moneyline": null,
+     "total": null
+    }
+   ],
+   "current_favorite": "KC",
+   "favorite_basis": "TWO_SOURCE_SAME_SIGN (DK-class KC -2.5/-135; FanDuel LAR +118 implies KC favored) \u2014 benchmark DECLARED: KC",
+   "pregame_personnel": {
+    "status": "CAPTURED",
+    "facts": [
+     {
+      "team": "KC",
+      "source_family": "SECONDARY_REPORT (HC Reid quoted)",
+      "source_url": "https://au.sports.yahoo.com/starters-play-week-1-nfl-212254598.html",
+      "captured_at_utc": "2026-08-15T17:00:59Z",
+      "fact": "QBs Justin Fields, Garrett Nussmeier, Chris Oladokun to play per HC Reid; Mahomes recovering from injury; starters likely sitting."
+     },
+     {
+      "team": "LAR",
+      "source_family": "SECONDARY_REPORT",
+      "source_url": "https://www.therams.com/news/los-angeles-rams-kansas-city-chiefs-how-to-watch-listen-to-and-live-stream-2026-preseason-week-1",
+      "captured_at_utc": "2026-08-15T17:00:59Z",
+      "fact": "Stetson Bennett to start; rookie first-rounder Ty Simpson to see first live action. Stafford's status NOT stated in captured text \u2014 not inferred."
+     }
+    ],
+    "conflicts": []
+   }
+  },
+  {
+   "away_team": "JAX",
+   "home_team": "NO",
+   "game_start_utc": "2026-08-15T20:00:00Z",
+   "model_forecast": null,
+   "forecast_status": "NO_INDEPENDENT_PRESEASON_MODEL",
+   "source_quotes": [
+    {
+     "quote_id": "JAX-NO-CONSENSUS-20260815T170059Z",
+     "quote_scope": "SOURCE_SPECIFIC",
+     "display_source": "covers/consensus summary",
+     "underlying_book_attribution": null,
+     "attribution_confidence": "MEDIUM",
+     "source_url": "https://www.covers.com/nfl/jaguars-vs-saints-predictions-picks-best-bets-saturday-august-15-2026",
+     "accessed_at_utc": "2026-08-15T17:00:59Z",
+     "away_spread": 2.5,
+     "home_spread": -2.5,
+     "away_moneyline": 110,
+     "home_moneyline": -130,
+     "total": 35.5
+    },
+    {
+     "quote_id": "JAX-NO-ESPN-20260815T170059Z",
+     "quote_scope": "SOURCE_SPECIFIC",
+     "display_source": "ESPN game odds page",
+     "underlying_book_attribution": null,
+     "attribution_confidence": "MEDIUM",
+     "source_url": "https://www.espn.com/nfl/odds/_/gameId/401873281",
+     "accessed_at_utc": "2026-08-15T17:00:59Z",
+     "away_spread": 1.5,
+     "home_spread": -1.5,
+     "away_moneyline": 108,
+     "home_moneyline": null,
+     "total": null
+    }
+   ],
+   "current_favorite": "NO",
+   "favorite_basis": "TWO_SOURCE_SAME_SIGN (NO -2.5 and NO -1.5) \u2014 benchmark DECLARED: NO",
+   "pregame_personnel": {
+    "status": "PARTIAL_WITH_ATTRIBUTION_FLAG",
+    "facts": [
+     {
+      "team": "JAX",
+      "source_family": "SECONDARY_REPORT (HC Coen quoted 8/11)",
+      "source_url": "https://au.sports.yahoo.com/starters-play-week-1-nfl-212254598.html",
+      "captured_at_utc": "2026-08-15T17:00:59Z",
+      "fact": "HC Liam Coen: Jacksonville starters will not play in the opener."
+     }
+    ],
+    "conflicts": [
+     "A summary line reported 'Spencer Rattler will start the Jaguars' preseason opener' \u2014 attribution conflicts with Rattler's known Saints affiliation; likely a garbled Saints fact. Recorded UNRESOLVED, asserted for neither team.",
+     "A CBS headline about Tyler Shough starting the Saints' SECOND preseason game is date-mismatched for this opener \u2014 REJECTED as temporal echo; Saints QB plan for tonight: NOT CAPTURED."
+    ]
+   }
+  }
+ ]
+}

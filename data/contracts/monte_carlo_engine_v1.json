@@ -1,0 +1,34 @@
+{
+  "artifact_type": "monte_carlo_engine_contract_v1",
+  "engine_id": "sports.diagnostic_monte_carlo.v1",
+  "engine_version": "1.0.0",
+  "minimum_simulations": 50000,
+  "default_simulations": 100000,
+  "rng": "numpy.random.Generator(PCG64)",
+  "seed_derivation": "uint32(first_4_bytes(SHA256(event_id|input_snapshot_hash|model_state_config_hash|engine_version)))",
+  "required_provenance": [
+    "simulation_engine", "simulation_engine_version", "distribution_specification",
+    "simulation_count", "random_seed", "input_snapshot_hash", "model_state_config_hash",
+    "generated_at_utc", "output_hash", "reproduction_command"
+  ],
+  "output_hash_semantics": "SHA256 of canonical deterministic forecast payload excluding generated_at_utc and output_hash itself; therefore identical inputs/config/engine/seed produce identical output_hash.",
+  "cfb": {
+    "primary_distribution": "home_margin ~ Normal(mu_margin, sigma_week)",
+    "mu_source": "cfb.margin_distribution.v1",
+    "sigma_source": "fitted state segment_sigma_by_week; global_sigma fallback",
+    "score_distribution_status": "DISABLED_UNTIL_INDEPENDENT_TOTAL_MODEL_VALIDATED",
+    "supported_outputs": ["home_win_p_sim", "away_win_p_sim", "margin_quantiles", "spread_cover_p_sim_when_reference_line_supplied"]
+  },
+  "mlb": {
+    "primary_distribution": "starter innings truncated Normal; expected runs from offense/SP/bullpen/park; team runs Negative-Binomial via Gamma-Poisson mixture",
+    "source_engine": "V13.1 logic ported from engine/score_and_calibrate.py",
+    "supported_outputs": ["home_win_p_sim", "away_win_p_sim", "projected_runs", "run_quantiles", "runline_cover_p_sim_when_reference_line_supplied", "total_p_sim_when_reference_total_supplied"]
+  },
+  "governance": {
+    "forecast_mode": "DIAGNOSTIC_SHADOW",
+    "action_authority": false,
+    "market_features_used_in_forecast": false,
+    "same_inputs_plus_same_seed_must_reproduce": true,
+    "raw_draws_need_not_be_stored_if_output_and_provenance_are_stored": true
+  }
+}

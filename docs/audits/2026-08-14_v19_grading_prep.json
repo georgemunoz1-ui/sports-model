@@ -1,0 +1,18 @@
+{
+ "record_id": "V19-GRADING-PREP-2026-08-14",
+ "built_utc": "2026-08-14T08:58:00Z",
+ "directive": "owner-relayed operational step: when finals arrive, grade the 14 sealed V19 rows on side, Brier, AND the compression diagnostics; promotion stays blocked unless prospective evidence clears prewritten gates; development priority is discrimination via personnel/bullpen/lineup/starter-state features, not estimator swaps",
+
+ "grading_plan": {
+  "cohorts_for_2026_08_14": "V19 attested (14 rows, sealed 08:24Z) — the only cohort registered in this workspace for 8/14; no V13 card was requested or built for 8/14",
+  "grade_on": ["side correctness (14 binary)", "per-game and night Brier vs the sealed probabilities", "compression diagnostic at grading: realized favorite win-rate vs the card's mean 54.33 / SD 3.76, and whether the two >=58% games (CWS@DET 63.3, ARI@ATL 59.2) behaved differently from the coin band"],
+  "also_open_from_prior_nights": ["TEX@LAA and MIL@LAD 8/13 finals (unresolved at last capture)", "six 8/11 winner-only rows still awaiting scores", "tier-1 capture to convert 8/13 provisional grades (MLB v1x7 + v2x3, WNBA x3) to official"],
+  "armed_check_in": "self check-in scheduled for 2026-08-15T06:00Z — pull finals, grade, commit, push; source-quality hierarchy applies (gameday-title URLs over tier-3 text; MIL@SD-class watch entries double-checked)"
+ },
+
+ "cross_workspace_inventory_note": {
+  "fact": "the reporting workspace states its local repo is at a520674 with UNTRACKED 'MLB v16 files', and that 8311ad2 is not reachable there (its origin is not the live GitHub remote)",
+  "why_recorded": "(1) v16 is a model thread that exists nowhere in any ledger — under the file-delivery doctrine it is unverified inventory, and under the power-analysis conclusion adopted today, another estimator iteration on the season-level feature surface cannot produce measurable retrospective gains; whoever owns v16 should know that before spending on it. (2) The unreachability of 8311ad2 from that workspace is the same durability fault class as the cron repo-name issue: the live remote is github.com/georgemunoz1-ui/sports-model (WITH hyphen), branch sportsmodel/main. A workspace that cannot fetch it is building on a fork of history.",
+  "no_action_taken": "inventory note only; nothing graded, nothing merged"
+ }
+}

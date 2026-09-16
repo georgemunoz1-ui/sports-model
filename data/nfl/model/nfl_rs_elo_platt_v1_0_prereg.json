@@ -1,0 +1,63 @@
+{
+  "does_not_supersede": "nfl.rs.epa_logit_ridge.v0_2.shadow; that lineage remains governed by RJ-006-NFL-MODEL-RESTORATION",
+  "implementation": {
+    "module": "harness/season_launch.py",
+    "module_id": "season_launch"
+  },
+  "inputs": {
+    "identity": "ESPN game id required for every emitted event",
+    "required_fields": [
+      "game_id",
+      "season",
+      "game_type",
+      "week",
+      "gameday",
+      "gametime",
+      "away_team",
+      "away_score",
+      "home_team",
+      "home_score",
+      "espn"
+    ],
+    "schedule_snapshot": "data/nfl/source/2026-09-03_nflverse_regular_games.csv"
+  },
+  "model_id": "nfl.rs.elo_platt.v1_0.launch_shadow",
+  "outputs": {
+    "action_authority": "NO",
+    "forecast_status": "SHADOW_FORECAST_READY",
+    "required_reason_codes": [
+      "ACTION_AUTHORITY_NO",
+      "QB_OL_INJURY_INPUTS_NOT_BOUND",
+      "MARKET_NOT_INGESTED"
+    ]
+  },
+  "parameters": {
+    "calibration": "unregularized logistic Platt scaling on raw Elo log-odds",
+    "home_advantage": 55,
+    "k": 20,
+    "season_regression": 0.75
+  },
+  "record_id": "NFL-RS-ELO-PLATT-V1-0-LAUNCH-SHADOW",
+  "restrictions": [
+    "NO_ACTION",
+    "NO_MARKET_INPUTS",
+    "NO_2026_RESULT_UPDATES",
+    "NO_PERSONNEL_COMPLETENESS_CLAIM"
+  ],
+  "role": "LAUNCH_SHADOW",
+  "schema": "ops.model_registration.v1",
+  "status": "SHADOW_ONLY",
+  "temporal_contract": {
+    "2026_score_inputs": "forbidden",
+    "calibration_train_seasons": [
+      2002,
+      2018
+    ],
+    "future_week1_state": "end-of-2025 ratings after one 2026 season regression",
+    "no_same_week_result_updates": true,
+    "validation_seasons": [
+      2019,
+      2025
+    ]
+  }
+}

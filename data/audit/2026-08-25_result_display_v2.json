@@ -1,0 +1,170 @@
+{
+ "as_of_utc": "2026-08-26T02:45:00Z",
+ "corrections_vs_v1": [
+  {
+   "defect": "FALSE_SNIPPET_DISPLAYED_AS_FINAL \u2014 the search snippet was wrong in shape and winner; displaying snippet scores under a FINAL label overstated the grade even with the UNCONFIRMED tag. Lesson 37.",
+   "game": "mlb:MIL@NYM",
+   "official": "NYM 3, MIL 2",
+   "v1_displayed": "MIL 9, NYM 2 (FINAL_IDENTIFIED)"
+  },
+  {
+   "defect": "score drifted between snippet capture and final",
+   "game": "mlb:TEX@CWS",
+   "official": "CWS 11, TEX 7",
+   "v1_displayed": "CWS 10, TEX 7"
+  },
+  {
+   "defect": "none \u2014 v1 correctly refused to call it final",
+   "game": "mlb:KC@TOR",
+   "official": "KC 5, TOR 3",
+   "v1_displayed": "KC 4, TOR 1 (live, late)"
+  },
+  {
+   "defect": "none \u2014 the conflict refusal was correct",
+   "game": "mlb:HOU@NYY",
+   "official": "HOU 9, NYY 7",
+   "v1_displayed": "IDENTIFICATION_CONFLICTED"
+  },
+  {
+   "defect": "none \u2014 the conflicting recap headlines included a genuinely wrong one; refusing to display was correct (a search summary had asserted a PDX 84-83 win that did not happen)",
+   "game": "wnba:PDX@DAL",
+   "official": "DAL 96, PDX 78",
+   "v1_displayed": "IDENTIFICATION_CONFLICTED"
+  }
+ ],
+ "display_gate": "RESULT_DISPLAY_OK",
+ "record_id": "RESULT-DISPLAY-2026-08-25-v2",
+ "record_sha256": "84f93525101429a42676bd5cf2a3e0f1ae3f0643d5b1a7127fad3584d3599c2b",
+ "rows": [
+  {
+   "displayed_as_final": true,
+   "game": "mlb:TB@DET",
+   "score": "DET 4, TB 1",
+   "source_grade": "OWNER_RELAY",
+   "status": "FINAL"
+  },
+  {
+   "displayed_as_final": true,
+   "game": "mlb:BOS@MIA",
+   "score": "BOS 7, MIA 3 (11 inn)",
+   "source_grade": "OWNER_RELAY",
+   "status": "FINAL"
+  },
+  {
+   "displayed_as_final": true,
+   "game": "mlb:COL@WSH",
+   "score": "COL 3, WSH 1",
+   "source_grade": "OWNER_RELAY",
+   "status": "FINAL"
+  },
+  {
+   "displayed_as_final": true,
+   "game": "mlb:HOU@NYY",
+   "score": "HOU 9, NYY 7",
+   "source_grade": "OWNER_RELAY",
+   "status": "FINAL"
+  },
+  {
+   "displayed_as_final": true,
+   "game": "mlb:KC@TOR",
+   "score": "KC 5, TOR 3",
+   "source_grade": "OWNER_RELAY",
+   "status": "FINAL"
+  },
+  {
+   "displayed_as_final": true,
+   "game": "mlb:MIL@NYM",
+   "score": "NYM 3, MIL 2",
+   "source_grade": "OWNER_RELAY",
+   "status": "FINAL"
+  },
+  {
+   "displayed_as_final": true,
+   "game": "mlb:LAD@ATL",
+   "score": "ATL 4, LAD 3",
+   "source_grade": "OWNER_RELAY",
+   "status": "FINAL"
+  },
+  {
+   "displayed_as_final": true,
+   "game": "mlb:TEX@CWS",
+   "score": "CWS 11, TEX 7",
+   "source_grade": "OWNER_RELAY",
+   "status": "FINAL"
+  },
+  {
+   "displayed_as_final": true,
+   "game": "mlb:BAL@STL",
+   "score": "BAL 13, STL 1",
+   "source_grade": "OWNER_RELAY",
+   "status": "FINAL"
+  },
+  {
+   "displayed_as_final": true,
+   "game": "wnba:CHI@CON",
+   "score": "CON 87, CHI 81",
+   "source_grade": "OWNER_RELAY",
+   "status": "FINAL"
+  },
+  {
+   "displayed_as_final": true,
+   "game": "wnba:PDX@DAL",
+   "score": "DAL 96, PDX 78",
+   "source_grade": "OWNER_RELAY",
+   "status": "FINAL"
+  },
+  {
+   "displayed_as_final": false,
+   "game": "mlb:CLE@LAA",
+   "score": null,
+   "source_grade": "LIVE_UNOFFICIAL",
+   "status": "LIVE"
+  },
+  {
+   "displayed_as_final": false,
+   "game": "mlb:CHC@AZ",
+   "score": null,
+   "source_grade": "LIVE_UNOFFICIAL",
+   "status": "LIVE"
+  },
+  {
+   "displayed_as_final": false,
+   "game": "mlb:PIT@SD",
+   "score": null,
+   "source_grade": "LIVE_UNOFFICIAL",
+   "status": "LIVE"
+  },
+  {
+   "displayed_as_final": false,
+   "game": "mlb:MIN@ATH",
+   "score": null,
+   "source_grade": "LIVE_UNOFFICIAL",
+   "status": "LIVE"
+  },
+  {
+   "displayed_as_final": false,
+   "game": "mlb:PHI@SEA",
+   "score": null,
+   "source_grade": "LIVE_UNOFFICIAL",
+   "status": "LIVE"
+  },
+  {
+   "displayed_as_final": false,
+   "game": "mlb:CIN@SF",
+   "score": null,
+   "source_grade": "LIVE_UNOFFICIAL",
+   "status": "LIVE"
+  },
+  {
+   "displayed_as_final": false,
+   "game": "wnba:WAS@PHX",
+   "score": null,
+   "source_grade": "LIVE_UNOFFICIAL",
+   "status": "LIVE"
+  }
+ ],
+ "schema": "ops.result_display.v2",
+ "settlement": "BLOCKED \u2014 owner relay grades descriptively; the five canonical effects wait on tier-1 artifacts (RJ-001); ledger 0 bets / $0",
+ "source_class": "OWNER_RELAY of the official MLB scoreboard and ESPN/CBS WNBA finals",
+ "supersedes": "RESULT-DISPLAY-2026-08-25 (d41f471d) \u2014 retained, never edited"
+}

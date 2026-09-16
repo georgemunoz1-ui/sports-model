@@ -1,0 +1,368 @@
+{
+ "LEDGER": {
+  "exposure_usd": 0,
+  "n_bets": 0,
+  "units": 0.0,
+  "wager_authority": "NO"
+ },
+ "MARKET": "NOT JOINED at registration",
+ "OWNER_META": {
+  "market_used": false,
+  "probable_starters": "29/30 (BOS TBD)",
+  "record_name": "MLB_PA_STATE_2026-09-01_v2",
+  "status": "SHADOW_FORECAST",
+  "supersedes": "owner shadow v1 - starter state was wrong for multiple games there",
+  "trials": 100000,
+  "warrant": "OWNER_RELAY; probabilities are the owner's"
+ },
+ "RECONCILIATION": {
+  "direction_agreement_with_freeze": "11/15",
+  "largest_owner_self_corrections_pp": [
+   {
+    "event": "NYY@LAA",
+    "moved_pp": 4.7
+   },
+   {
+    "event": "SF@PIT",
+    "moved_pp": -3.89
+   },
+   {
+    "event": "SD@CIN",
+    "moved_pp": 3.57
+   },
+   {
+    "event": "SEA@BOS",
+    "moved_pp": -3.39
+   },
+   {
+    "event": "ATH@TEX",
+    "moved_pp": 3.39
+   }
+  ],
+  "n": 15,
+  "rows": [
+   {
+    "direction_agrees": true,
+    "event": "SD@CIN",
+    "freeze_minus_owner_pp": 4.69,
+    "freeze_v2_p_home_raw": 0.4861,
+    "owner_avg_home": 0.4392,
+    "owner_flags": [],
+    "owner_model_home": 0.4432,
+    "owner_sim_home": 0.43520000000000003,
+    "owner_sim_runs": "SD 4.76-3.89",
+    "owner_v1_avg_home": 0.4035,
+    "owner_v2_minus_v1_pp": 3.57
+   },
+   {
+    "direction_agrees": true,
+    "event": "SF@PIT",
+    "freeze_minus_owner_pp": 1.11,
+    "freeze_v2_p_home_raw": 0.5617,
+    "owner_avg_home": 0.5506,
+    "owner_flags": [],
+    "owner_model_home": 0.5637,
+    "owner_sim_home": 0.5375,
+    "owner_sim_runs": "PIT 4.64-4.53",
+    "owner_v1_avg_home": 0.5895,
+    "owner_v2_minus_v1_pp": -3.89
+   },
+   {
+    "direction_agrees": true,
+    "event": "NYM@TB",
+    "freeze_minus_owner_pp": -2.23,
+    "freeze_v2_p_home_raw": 0.5292,
+    "owner_avg_home": 0.5514,
+    "owner_flags": [],
+    "owner_model_home": 0.5637,
+    "owner_sim_home": 0.5392,
+    "owner_sim_runs": "TB 4.69-4.53",
+    "owner_v1_avg_home": 0.5515,
+    "owner_v2_minus_v1_pp": -0.0
+   },
+   {
+    "direction_agrees": true,
+    "event": "TOR@CLE",
+    "freeze_minus_owner_pp": -5.29,
+    "freeze_v2_p_home_raw": 0.5156,
+    "owner_avg_home": 0.5685,
+    "owner_flags": [],
+    "owner_model_home": 0.5642,
+    "owner_sim_home": 0.5727,
+    "owner_sim_runs": "CLE 4.28-3.78",
+    "owner_v1_avg_home": 0.57,
+    "owner_v2_minus_v1_pp": -0.15
+   },
+   {
+    "direction_agrees": true,
+    "event": "SEA@BOS",
+    "freeze_minus_owner_pp": -6.17,
+    "freeze_v2_p_home_raw": 0.5244,
+    "owner_avg_home": 0.5861,
+    "owner_flags": [
+     "BOS_SP_TBD_LEAGUE_AVG_FALLBACK"
+    ],
+    "owner_model_home": 0.5889,
+    "owner_sim_home": 0.5832999999999999,
+    "owner_sim_runs": "BOS 3.95-3.44",
+    "owner_v1_avg_home": 0.62,
+    "owner_v2_minus_v1_pp": -3.39
+   },
+   {
+    "direction_agrees": false,
+    "event": "ATL@WSH",
+    "freeze_minus_owner_pp": 4.75,
+    "freeze_v2_p_home_raw": 0.5119,
+    "owner_avg_home": 0.4644,
+    "owner_flags": [],
+    "owner_model_home": 0.4722,
+    "owner_sim_home": 0.45659999999999995,
+    "owner_sim_runs": "ATL 6.01-5.24",
+    "owner_v1_avg_home": 0.4385,
+    "owner_v2_minus_v1_pp": 2.59
+   },
+   {
+    "direction_agrees": false,
+    "event": "DET@MIN",
+    "freeze_minus_owner_pp": 12.16,
+    "freeze_v2_p_home_raw": 0.5085,
+    "owner_avg_home": 0.3869,
+    "owner_flags": [],
+    "owner_model_home": 0.40270000000000006,
+    "owner_sim_home": 0.3711,
+    "owner_sim_runs": "DET 4.43-2.99",
+    "owner_v1_avg_home": 0.361,
+    "owner_v2_minus_v1_pp": 2.59
+   },
+   {
+    "direction_agrees": false,
+    "event": "MIA@KC",
+    "freeze_minus_owner_pp": -3.01,
+    "freeze_v2_p_home_raw": 0.4789,
+    "owner_avg_home": 0.509,
+    "owner_flags": [
+     "MODEL_SIM_DIRECTION_SPLIT"
+    ],
+    "owner_model_home": 0.5191,
+    "owner_sim_home": 0.4988,
+    "owner_sim_runs": "SPLIT",
+    "owner_v1_avg_home": 0.494,
+    "owner_v2_minus_v1_pp": 1.5
+   },
+   {
+    "direction_agrees": false,
+    "event": "MIL@CHC",
+    "freeze_minus_owner_pp": -2.75,
+    "freeze_v2_p_home_raw": 0.4878,
+    "owner_avg_home": 0.5153,
+    "owner_flags": [],
+    "owner_model_home": 0.5105,
+    "owner_sim_home": 0.5202,
+    "owner_sim_runs": "CHC 4.35-4.40",
+    "owner_v1_avg_home": 0.508,
+    "owner_v2_minus_v1_pp": 0.73
+   },
+   {
+    "direction_agrees": true,
+    "event": "ATH@TEX",
+    "freeze_minus_owner_pp": -6.97,
+    "freeze_v2_p_home_raw": 0.5067,
+    "owner_avg_home": 0.5764,
+    "owner_flags": [],
+    "owner_model_home": 0.5697,
+    "owner_sim_home": 0.5832,
+    "owner_sim_runs": "TEX 4.95-4.35",
+    "owner_v1_avg_home": 0.5425,
+    "owner_v2_minus_v1_pp": 3.39
+   },
+   {
+    "direction_agrees": true,
+    "event": "CWS@HOU",
+    "freeze_minus_owner_pp": 12.3,
+    "freeze_v2_p_home_raw": 0.4671,
+    "owner_avg_home": 0.3441,
+    "owner_flags": [],
+    "owner_model_home": 0.3593,
+    "owner_sim_home": 0.32880000000000004,
+    "owner_sim_runs": "CWS 6.12-3.95",
+    "owner_v1_avg_home": 0.349,
+    "owner_v2_minus_v1_pp": -0.49
+   },
+   {
+    "direction_agrees": true,
+    "event": "BAL@COL",
+    "freeze_minus_owner_pp": 11.95,
+    "freeze_v2_p_home_raw": 0.4943,
+    "owner_avg_home": 0.3748,
+    "owner_flags": [
+     "COORS_TOTAL_NOT_AN_OVER_REC"
+    ],
+    "owner_model_home": 0.3845,
+    "owner_sim_home": 0.365,
+    "owner_sim_runs": "BAL 7.07-5.07",
+    "owner_v1_avg_home": 0.374,
+    "owner_v2_minus_v1_pp": 0.07
+   },
+   {
+    "direction_agrees": true,
+    "event": "NYY@LAA",
+    "freeze_minus_owner_pp": 10.87,
+    "freeze_v2_p_home_raw": 0.4636,
+    "owner_avg_home": 0.355,
+    "owner_flags": [
+     "BVP_UNFAVOURABLE_TO_COLE_APPLIED"
+    ],
+    "owner_model_home": 0.37200000000000005,
+    "owner_sim_home": 0.3379,
+    "owner_sim_runs": "NYY 4.58-2.89",
+    "owner_v1_avg_home": 0.308,
+    "owner_v2_minus_v1_pp": 4.7
+   },
+   {
+    "direction_agrees": true,
+    "event": "PHI@AZ",
+    "freeze_minus_owner_pp": -1.6,
+    "freeze_v2_p_home_raw": 0.5048,
+    "owner_avg_home": 0.5208,
+    "owner_flags": [],
+    "owner_model_home": 0.5241,
+    "owner_sim_home": 0.5176,
+    "owner_sim_runs": "AZ 3.99-3.91",
+    "owner_v1_avg_home": 0.5145,
+    "owner_v2_minus_v1_pp": 0.63
+   },
+   {
+    "direction_agrees": true,
+    "event": "STL@LAD",
+    "freeze_minus_owner_pp": -3.56,
+    "freeze_v2_p_home_raw": 0.5508,
+    "owner_avg_home": 0.5864,
+    "owner_flags": [],
+    "owner_model_home": 0.57,
+    "owner_sim_home": 0.6029,
+    "owner_sim_runs": "LAD 4.21-3.49",
+    "owner_v1_avg_home": 0.5655,
+    "owner_v2_minus_v1_pp": 2.09
+   }
+  ]
+ },
+ "record_id": "2026-09-01_mlb_owner_shadow_v2",
+ "rows": [
+  {
+   "event": "SD@CIN",
+   "flags": [],
+   "model_home_pct": 44.32,
+   "sim_home_pct": 43.52,
+   "sim_runs": "SD 4.76-3.89"
+  },
+  {
+   "event": "SF@PIT",
+   "flags": [],
+   "model_home_pct": 56.37,
+   "sim_home_pct": 53.75,
+   "sim_runs": "PIT 4.64-4.53"
+  },
+  {
+   "event": "NYM@TB",
+   "flags": [],
+   "model_home_pct": 56.37,
+   "sim_home_pct": 53.92,
+   "sim_runs": "TB 4.69-4.53"
+  },
+  {
+   "event": "TOR@CLE",
+   "flags": [],
+   "model_home_pct": 56.42,
+   "sim_home_pct": 57.27,
+   "sim_runs": "CLE 4.28-3.78"
+  },
+  {
+   "event": "SEA@BOS",
+   "flags": [
+    "BOS_SP_TBD_LEAGUE_AVG_FALLBACK"
+   ],
+   "model_home_pct": 58.89,
+   "sim_home_pct": 58.33,
+   "sim_runs": "BOS 3.95-3.44"
+  },
+  {
+   "event": "ATL@WSH",
+   "flags": [],
+   "model_home_pct": 47.22,
+   "sim_home_pct": 45.66,
+   "sim_runs": "ATL 6.01-5.24"
+  },
+  {
+   "event": "DET@MIN",
+   "flags": [],
+   "model_home_pct": 40.27,
+   "sim_home_pct": 37.11,
+   "sim_runs": "DET 4.43-2.99"
+  },
+  {
+   "event": "MIA@KC",
+   "flags": [
+    "MODEL_SIM_DIRECTION_SPLIT"
+   ],
+   "model_home_pct": 51.91,
+   "sim_home_pct": 49.88,
+   "sim_runs": "SPLIT"
+  },
+  {
+   "event": "MIL@CHC",
+   "flags": [],
+   "model_home_pct": 51.05,
+   "sim_home_pct": 52.02,
+   "sim_runs": "CHC 4.35-4.40"
+  },
+  {
+   "event": "ATH@TEX",
+   "flags": [],
+   "model_home_pct": 56.97,
+   "sim_home_pct": 58.32,
+   "sim_runs": "TEX 4.95-4.35"
+  },
+  {
+   "event": "CWS@HOU",
+   "flags": [],
+   "model_home_pct": 35.93,
+   "sim_home_pct": 32.88,
+   "sim_runs": "CWS 6.12-3.95"
+  },
+  {
+   "event": "BAL@COL",
+   "flags": [
+    "COORS_TOTAL_NOT_AN_OVER_REC"
+   ],
+   "model_home_pct": 38.45,
+   "sim_home_pct": 36.5,
+   "sim_runs": "BAL 7.07-5.07"
+  },
+  {
+   "event": "NYY@LAA",
+   "flags": [
+    "BVP_UNFAVOURABLE_TO_COLE_APPLIED"
+   ],
+   "model_home_pct": 37.2,
+   "sim_home_pct": 33.79,
+   "sim_runs": "NYY 4.58-2.89"
+  },
+  {
+   "event": "PHI@AZ",
+   "flags": [],
+   "model_home_pct": 52.41,
+   "sim_home_pct": 51.76,
+   "sim_runs": "AZ 3.99-3.91"
+  },
+  {
+   "event": "STL@LAD",
+   "flags": [],
+   "model_home_pct": 57.0,
+   "sim_home_pct": 60.29,
+   "sim_runs": "LAD 4.21-3.49"
+  }
+ ],
+ "schema": "ops.owner_shadow_board.v2",
+ "slate_date": "2026-09-01",
+ "sport": "mlb"
+}

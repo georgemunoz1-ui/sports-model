@@ -1,0 +1,116 @@
+{
+ "F1_THE_ONLY_LEAN_CONTRADICTS_ITS_OWN_MONEYLINE": {
+  "arithmetic": {
+   "board_p_ATL_win": 0.397,
+   "board_published_cover_prob": 0.643,
+   "discrepancy_pp": 17.6,
+   "implied_ATL_margin_at_sigma_13.97": -3.65,
+   "implied_cover_prob_at_measured_12.5523": 0.4753,
+   "implied_cover_prob_for_ATL_+2.5": 0.4673,
+   "margin_that_0.643_would_require": 2.62,
+   "moneyline_that_margin_would_imply": 0.5744
+  },
+  "independent_corroboration": "my own refreshed model, fit on data two days newer, projects ATL at -3.21 and puts ATL +2.5 at 0.4774 to cover. That lands next to the 0.467 the board's own moneyline implies, not next to the 0.643 it published.",
+  "not_a_sigma_problem": "the sigma choice moves this by 0.8pp. The 17.6pp gap is not about sigma.",
+  "reading": "for the 0.643 to be right, ATL would have to be projected to WIN by about 2.6, which is a moneyline near .574. The board says .397. The two numbers describe opposite teams. The inconsistency runs in the direction that MANUFACTURES the +14.3pp spread edge; reconciled either way, the edge is negative and there is no lean on this card at all.",
+  "row": "MIN @ ATL, LEAN ATL +2.5 (C-tier), published cover probability 0.643",
+  "severity": "HIGH \u2014 this is the board's single actionable recommendation",
+  "the_check": "a cover probability and a moneyline probability on the same row are two readings of ONE projected margin distribution. They must reconcile."
+ },
+ "F2_SIGMA_13.97_IS_NOT_A_DISTRIBUTIONAL_CONSTANT": {
+  "board_says": "sigma=13.97 frozen",
+  "register": "data/audit/2026-08-30_sigma_provenance_register.json",
+  "register_says": "13.97 is a REGISTERED COHERENCE TOLERANCE. It is not a residual SD and not a cover law. Using it as the denominator of a normal CDF is a category error regardless of any measurement.",
+  "severity": "MEDIUM \u2014 a category error that survives here because it barely bites on this row",
+  "size_of_the_effect_here": "ATL +2.5 cover moves 0.4673 -> 0.4753. Small on this row, and it will not stay small on a row where the line sits further from the projection.",
+  "the_measured_values": {
+   "files": [
+    "data/wnba/model/wnba_margin_sd_measurement.json",
+    "data/wnba/model/wnba_total_sd_measurement.json"
+   ],
+   "n": 1721,
+   "wnba_margin_residual_sd": 12.5523,
+   "wnba_totals_residual_sd": 18.0156
+  }
+ },
+ "F3_THE_WNBA_CUTOFF_IS_NO_LONGER_8_27": {
+  "actual": "the wehoop archive published 5875eba at 06:32 ET this morning carrying both 8/29 finals. I advanced the pin, re-extracted (95 extension games, selftest OK) and the cutoff is now 2026-08-29.",
+  "board_says": "cutoff 8/27 DATA_STALE",
+  "frozen_board": "cards/2026-08-30_wnba_board.json, three arms, four games, cohort_hash e034438fd2a61805",
+  "severity": "MEDIUM \u2014 the board is built on inputs two days staler than what is available",
+  "what_moved": {
+   "wnba:CON@DAL": {
+    "effect": "still short of the .8762 market; market ahead either way",
+    "refreshed_p_DAL": 0.8445,
+    "relayed_p_DAL": 0.833
+   },
+   "wnba:GSV@PDX": {
+    "effect": "still well above the .6369 market, still subject to the board's own availability invalidation",
+    "refreshed_p_GSV": 0.7325,
+    "relayed_p_GSV": 0.747
+   },
+   "wnba:LAS@SEA": {
+    "effect": "unchanged in kind",
+    "refreshed_p_SEA": 0.5584,
+    "relayed_p_SEA": 0.561
+   },
+   "wnba:MIN@ATL": {
+    "effect": "the lean gets WORSE, not better",
+    "refreshed_margin_ATL": -3.21,
+    "refreshed_p_ATL": 0.3645,
+    "relayed_p_ATL": 0.397
+   }
+  }
+ },
+ "F4_THE_MLB_SLATE_IS_THE_SAME_FIFTEEN_MATCHUPS_AS_8_28": {
+  "finding": "the fifteen 8/30 matchups are set-identical to the fifteen on cards/2026-08-28_mlb_board.json. Checked, not eyeballed.",
+  "required": "every 8/30 MLB result row must carry game_pk and result_date and bind through binding_proof. No matchup-keyed join, at any stage, for any purpose.",
+  "secondary": "the relay writes ARI@SF where the board writes AZ@SF. One club, two team codes. That is the adaptive_state full-name-versus-abbreviation defect in a new place; normalise at capture or it will silently drop a row.",
+  "severity": "HIGH \u2014 this is the 8/27 contamination door, open today",
+  "why_it_bites_harder_this_time": "the 8/28 MLB board is one of only two cohorts on file carrying REAL captured ids. Contaminating it would destroy the most bindable MLB artifact in the repo.",
+  "why_it_is_dangerous": "it is exactly the PRIOR_DATE_SERIES_JOIN condition result_binding_gate was written for: (away, home) is a NON-UNIQUE key across a repeated series, so any result join keyed on team names can bind an 8/30 final to an 8/28 board row, or the reverse, and produce a clean-looking record over the wrong games.",
+  "why_it_is_normal": "a Friday-to-Sunday series repeats the matchup. This is expected baseball."
+ },
+ "F5_THE_MLB_PITCHER_CORPUS_CAN_BE_EXTENDED_TODAY": {
+  "board_says": "pitcher corpus ends 7/19 -> registered CAP, 0/14 SP_CONFIRMED",
+  "but": "the admitted lancebroz/mlb-pitcher-data archive carries 155 daily pitch files from 2026-03-25 to 2026-08-29 with ZERO missing days between 7/19 and 8/29. The 42-day gap that forces the cap is sitting in a source already on the admitted list.",
+  "caveat": "the same archive has NO runs column, so it extends FEATURES and still does not supply FINALS. RJ-001B stands.",
+  "severity": "HIGH \u2014 this is the standing MLB blocker and it is closable",
+  "so": "the cap is a consequence of an unrun refresh, not of unavailable data. That is a different and much better problem to have.",
+  "the_cap_is_correct_right_now": "yes. Nothing here disputes the CAP as applied to this board."
+ },
+ "F6_CFB_USES_THE_WRONG_WEEK_SIGMA": {
+  "board_says": "Baylor vs Auburn ... sigma=18.385",
+  "correct_value": 17.7084,
+  "effect": "a Week-2 miss scored at the Week-1 sigma reads about 3.8% smaller than it is",
+  "file": "data/cfb/model/cfb_margin_sd_schedule.json",
+  "n": 665,
+  "problem": "18.3852 is the measured WEEK 1 margin residual SD (n=758). The CFB rows on this board are Sep 3+, which is Week 2.",
+  "severity": "LOW"
+ },
+ "LEDGER": {
+  "exposure_usd": 0,
+  "n_bets": 0,
+  "units": 0.0,
+  "wager_authority": "NO"
+ },
+ "R6": "append-only; new path. The relayed board is not edited or replaced.",
+ "WHAT_I_AGREE_WITH": [
+  "NFL NO_FORECAST on cutdown day is right, and matches the audit finding that no NFL forecast quantity exists in either board file.",
+  "GSV@POR: refusing an 11pp raw edge on an unverified availability state is the correct call, and it is the same reason the TOR +365 refusal was made on 8/29.",
+  "CON@DAL: the market is ahead of the model on both the relayed and the refreshed numbers. PASS is right.",
+  "recording entries for CLV while the actionable layer is capped is the right posture.",
+  "classifying market movement as new_information versus unknown, and never fading the unknown, is the correct discipline."
+ ],
+ "WHAT_I_CANNOT_CHECK": [
+  "the DK prices themselves. They are an owner relay; snippets and relays IDENTIFY and never BIND, and no cross-book de-vig is valid.",
+  "the CFB line movements and the MLB entry prices, for the same reason.",
+  "the claimed brier 0.2112 / AUC 0.722 for wnba.rs.ff7_logit_ridge.v1_0.shadow \u2014 that is a different arm from the three on my frozen board and I have not re-derived its metrics."
+ ],
+ "created_utc": "2026-08-30T11:45:00Z",
+ "posture": "review, not replacement. The relayed board is the owner's artifact; this record states what I can independently check and what I found.",
+ "record_id": "BOARD-REVIEW-2026-08-30-V3-RELAY",
+ "record_sha256": "7cb415070feed41d586a16a53a852b3cbe48c2574f28657aaef5a11218639c88",
+ "schema": "ops.board_review.v1",
+ "subject": "the owner-relayed Sunday 8/30 Board V3 (live dark card, version 586faaa)"
+}

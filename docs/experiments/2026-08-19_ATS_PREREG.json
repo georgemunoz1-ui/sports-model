@@ -1,0 +1,25 @@
+{
+ "record_id": "WNBA-ATS-PREREG-2026-08-19",
+ "built_utc": "2026-08-19T05:10:00Z",
+ "status": "FROZEN before the next WNBA slate. Diagnostic grading cohort only — NOT a betting rule.",
+ "authority": "owner approval 2026-08-19, rule text owner-specified verbatim",
+ "model_id": "wnba.rs.ff7_logit_ridge.v1_0.shadow (margin head; unchanged, refit forbidden)",
+ "RULE_FROZEN_owner_verbatim": [
+  "home_margin_pred = predicted home points - predicted away points",
+  "home_spread_line = sportsbook handicap applied to home",
+  "home_cover_delta = home_margin_pred + home_spread_line",
+  "if home_cover_delta > 0: select HOME ATS",
+  "if home_cover_delta < 0: select AWAY ATS",
+  "if home_cover_delta = 0 or line missing: NO_SELECTION"
+ ],
+ "notation_note": "the ambiguous sign(fair spread - line) formulation is REJECTED in favour of home_cover_delta above; the four 8/18 worked examples (CON +2.4, TOR +4.5, CHI +2.9, LVA +1.6 -> HOME ATS each) were reproduced programmatically before freezing.",
+ "no_threshold": "none, deliberately: the diagnostic cohort evaluates EVERY available game without discretion. A threshold belongs to wagering, which would additionally require validated cover probabilities, prices, uncertainty, and a preregistered edge threshold — none of which exists. Wager authority NO.",
+ "BIND_PRE_TIP_per_selection": ["ats_selection_id", "exact line and juice", "book/source and capture timestamp",
+                                "home_margin_pred", "home_cover_delta", "selected team", "rule_id (this record)"],
+ "grading": {"primary": "registration-line result", "secondary": "closing-line result, diagnostic only",
+             "push": "line lands exactly on margin -> PUSH, excluded from W-L, counted",
+             "source": "tier-1 FINAL evidence only, each selection graded once"},
+ "storage": "data/wnba/forecasts/ats_selections.jsonl (append-only), grades alongside the winner grades but in SEPARATE records — never combined",
+ "starts": "next WNBA slate, 0-0. The 8/18 retrospective 3/4 overlay is NOT imported.",
+ "report_headings_contract": "future card and settlement reports use three separate headings — WINNER, ATS, TOTAL — and the settlement gate rejects generic 'side' language (harness/settlement_contract.py)."
+}

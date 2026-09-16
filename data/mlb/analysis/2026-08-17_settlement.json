@@ -1,0 +1,110 @@
+{
+ "record_id": "SETTLEMENT-2026-08-17",
+ "built_utc": "2026-08-18T04:40:00Z",
+ "evidence": "data/mlb/evidence/2026-08-17_owner_board.json",
+ "evidence_sha256": "bbcbdb69946fb45bee90be84878170b9d862a97a3053ce4d17d9f6cde4bf39ec",
+ "source_tier": 1, "source_family": "OWNER_BOARD", "result_status": "FINAL",
+ "price_timing": "POST_FINAL — closing prices captured after every game ended. Used for EV-at-close EVALUATION ONLY. No selection here was ever a pregame play, and none is presented as one.",
+ "firewall": "the board's EST Score / EST Line columns are ANOTHER MODEL's predictions. Not transcribed, not ingested, not compared against, not used to adjust anything.",
+
+ "HEADLINE": "The market beat every model arm by a wide margin on this slate. V13 Brier 0.235-0.246 against a closing-line Brier of 0.185-0.190. The model's probabilities have roughly ONE THIRD the spread of the market's, so where it disagreed most it was most wrong.",
+
+ "cohorts_graded_separately_never_pooled": {
+  "v1": {"n": 10, "record": "5-5", "accuracy": 0.500, "brier": 0.24596, "logloss": 0.68503,
+         "market_brier_at_close": 0.18478},
+  "v2": {"n": 11, "record": "8-3", "accuracy": 0.727, "brier": 0.23496, "logloss": 0.66300,
+         "market_brier_at_close": 0.18965},
+  "v3": {"n": 11, "record": "7-4", "accuracy": 0.636, "brier": 0.23789, "logloss": 0.66886,
+         "market_brier_at_close": 0.18965},
+  "reading": "v2 (stale form) outscored v3 (fresh form) 8-3 vs 7-4. That is NOISE at n=11 and is NOT evidence that stale form is better. The prospective ablation already found form freshness has no detectable accuracy effect, and one slate cannot overturn or confirm that. Reporting v2 as the 'winner' would be exactly the error this program exists to avoid.",
+  "power": "n=11 (10 for v1). No cohort difference here is distinguishable from chance. These grades are LEDGER MAINTENANCE, not evidence of skill."
+ },
+
+ "THE_DISCRIMINATION_PROBLEM_QUANTIFIED": {
+  "model_p_home": {"mean": 0.5042, "sd_pp": 3.25, "range": [0.452, 0.547]},
+  "market_p_home": {"mean": 0.5294, "sd_pp": 11.48, "range": [0.273, 0.704]},
+  "market_spread_multiple": 3.53,
+  "consequence": "V13 prices an 11-game slate inside a 9.5pp band while the market spans 43pp. Every strong market opinion therefore registers as a large model 'edge' — not because the model found something, but because it has no mechanism to be confident. This is the standing 'discrimination is the binding constraint' finding, now measured against real closing prices rather than inferred."
+ },
+
+ "EV_AT_CLOSE_EVALUATION_ONLY": {
+  "v3_sum_EV_at_close": 0.453,
+  "v3_realized_flat_1u_all_11_sides": 1.058,
+  "WHY_THE_PROFIT_IS_NOT_EVIDENCE": "its composition is the opposite of an edge. Split by the sign of the claimed edge:",
+  "positive_edge_games_the_only_ones_a_value_rule_would_fire_on": {
+   "n": 6, "record": "3-3", "realized_units": -0.283, "sum_ev_at_close": 1.135},
+  "negative_edge_games_minus_EV_by_construction_a_selector_would_never_play": {
+   "n": 5, "record": "4-1", "realized_units": 1.341, "sum_ev_at_close": -0.682},
+  "large_positive_edges_5pp_or_more_where_a_bettor_would_size_up": {
+   "n": 2, "record": "0-2", "realized_units": -2.0,
+   "games": ["BAL@TB +11.37pp LOST", "LAD@COL +23.48pp LOST"]},
+  "verdict": "ALL of the +1.058u came from games the model had NEGATIVE edge on — bets a value rule would never place. The games it actually liked went 3-3 and LOST money, and the two it liked most went 0-2. A slate that looks profitable on the bottom line is a losing slate for the strategy that would have been run.",
+  "LAD_at_COL_the_clearest_case": "model 50.8% COL vs market 27.3% — a 23.5pp disagreement claiming +0.829 EV per unit. COL lost 5-11. The model had no COL-specific information; it simply cannot express 27%."
+ },
+
+ "TOTALS": {"mean_signed_error_runs": -1.14, "mean_abs_error_runs": 3.70,
+            "reading": "V13 ran LOW by ~1.1 runs on average with a 3.7-run mean absolute error. On an 8-11 run slate that is not a usable totals signal."},
+
+ "STARTER_DEFECTS_4_OF_11": [
+  {"game": "STL@CIN-G1", "card": "TBD / Rhett Lowder", "actual": "Mathews / Emanuel",
+   "note": "the card put Lowder in game 1; he started game 2. Both sides wrong."},
+  {"game": "STL@CIN-G2", "card": "TBD / TBD", "actual": "Pallante / Lowder",
+   "note": "both sides ran on league-average pitching"},
+  {"game": "DET@PIT", "card": "Framber Valdez / TBD", "actual": "Valdez / Mlodzinski"},
+  {"game": "AZ@BOS", "card": "Mitch Bratt / TBD", "actual": "Bratt / Gamboa"}
+ ],
+ "starter_defect_impact": "unquantified here. The v1-vs-v2 contrast measured starter resolution moving probabilities ~2.14pp, ~5x form freshness, so 4 of 11 games running on league-average pitching is a material degradation of this card — larger than anything the 8/15-8/16 form refresh contributed.",
+ "diacritics_note": "a naive name compare reported 6 starter changes; MIA@PHI (Sánchez) and ATL@MIN (Pérez) were accent artifacts. The grader NFKD-folds names, so the true count is 4.",
+
+ "DOUBLEHEADER_MAPPING": {
+  "rule_applied": "by SCHEDULED ORDER: card DH1 (17:40Z) -> board Game 1; card DH2 (22:40Z) -> board Game 2. v1's single 22:40Z STL@CIN row -> board Game 2.",
+  "why_not_by_starter": "the card's DH1 named Rhett Lowder, who actually started game 2. Mapping by starter would have graded the 17:40Z forecast against a game it was not registered for. The forecast was made FOR a scheduled slot; a wrong starter is an input defect, not a different game.",
+  "alternative_recorded": "mapping by starter would pair DH1 with board Game 2. Rejected, and recorded here so the choice is auditable rather than invisible."
+ },
+
+ "UNRESOLVED_DATA_CONFLICT": {
+  "item": "CIN starter Rhett Lowder's season line",
+  "repo": "data/backfill/mlb/2026/pitcher_logs/695076.txt holds 17 appearances; the v3 card used ERA 5.98, 13 GS, K% 18.2",
+  "board": "0-0, 0 G, 0 GS, ERA 0.00, WHIP 0.000, BAA 0.000, SO% 0.0%",
+  "assessment": "NOT resolved. The leading hypothesis is a board display defect rather than a genuine zero: the board shows the same all-zero block for Emanuel, while Gamboa (also 0 GS) carries real rate stats (1.59 ERA over 9 G). An all-zero rate block reads as 'no data loaded', not 'no games pitched'.",
+  "action_taken": "NONE. No pitcher log was edited, no card was regraded. Recorded as an open conflict between two tier-1-class sources.",
+  "why_it_does_not_affect_these_grades": "grades use only the final score."
+ },
+
+ "INGESTION": {
+  "rows_added_to_results_csv": 11, "date": "2026-08-17", "source_tier": 1, "result_status": "FINAL",
+  "game_id_convention": "mlb:2026:OWNERBOARD-20260817-NN — deliberately NOT numeric-looking, so it can never be mistaken for an official gamePk. The official gamePk set is still unacquired.",
+  "close_price_columns_left_EMPTY": "prices are never features. Populating close_* on a new date would also breach the close_* contamination manifest. Prices live only in the evidence board and this grading artifact.",
+  "slate_completeness": "DOUBLEHEADER_PRESENT_INVARIANT_INAPPLICABLE — STL and CIN appear twice, so the roster-partition test cannot settle the count. Still awaiting an official schedule manifest.",
+  "ml_asof_rebuilt": "1874 rows, vintage c3cc13d3652f11c3"
+ },
+
+ "GATE_FAILURES_I_CAUSED_AND_FIXED": [
+  {"gate": "forecast_registry", "failure": "HASH CHAIN BROKEN / head counts disagree",
+   "cause": "grade_slate appended raw lines to grades.jsonl instead of calling forecast_registry.append_grade, leaving head.json stale",
+   "fix": "reverted the uncommitted appends, routed grade_slate through append_grade (which validates each record and rewrites head), re-graded. 218 grades, chain intact."},
+  {"gate": "card_render", "failure": "replay no longer reproduced the registered card (STL@CIN 0.452 -> 0.456)",
+   "cause": "the renderer replayed with the CURRENT results file, but a card dated D was built from results strictly BEFORE D. Ingesting 8/17 finals gave the replay look-ahead into the very day it was forecasting.",
+   "fix": "form is now filtered to date < the card's slate date. impl v2."},
+  {"gate": "form_refresh_diff", "failure": "teams no longer gained exactly 2 games across the refresh",
+   "cause": "S_C was defined as 'all dates', true only until 8/17 landed, after which the as-of state silently grew a day",
+   "fix": "S_C and S_D pinned to CUTOFF_C = 2026-08-16. impl v4."},
+  {"lesson": "an as-of state must be pinned to its date, never to whatever is on disk. All three failures were the same bug wearing different clothes, and all three were caught by gates rather than by inspection."}
+ ],
+
+ "WNBA_NOT_GRADED": {
+  "game": "DAL@GSV", "state_at_report": "0:16 remaining, 4Q, Wings 70 Valkyries 76",
+  "status": "IN PROGRESS — NOT FINAL, NOT GRADED",
+  "why": "official-plus-one finality. A game with time on the clock has no final, and grading it would be inventing one. It grades once a final is captured.",
+  "model_card_for_reference": {"p_home_GSV": 0.6209, "model_margin_home": 4.16, "model_total": 163.8,
+                               "feature_state_as_of": "2026-07-22", "staleness_days": 26,
+                               "authority": "SHADOW DIAGNOSTIC, wager authority NO, stake 0"},
+  "market_at_report": {"spread_home": -5.5, "total": 162.5},
+  "note": "no comparison of model vs outcome is drawn here, because there is no outcome yet."
+ },
+
+ "STANDING_STATUS": {"gate": "0/100 NO_PROMOTE", "ledger_usd": 0,
+                     "execution": "UNAUTHORIZED, paper only",
+                     "v13": "FROZEN, tagged LEGACY_TIER_EXPOSURE_136 / NO_PROMOTE",
+                     "forecasts_altered": 0, "cards_rewritten": 0}
+}

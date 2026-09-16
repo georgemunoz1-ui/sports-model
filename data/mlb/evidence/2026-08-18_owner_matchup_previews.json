@@ -1,0 +1,45 @@
+{
+ "schema": "mlb.owner_matchup_preview_board.v1",
+ "record_id": "OWNER-MATCHUPS-20260818-0915Z",
+ "captured_at_utc": "2026-08-18T09:15:00Z",
+ "received_from": "owner paste 2026-08-18 (daily matchup previews)",
+ "source_tier": 1,
+ "source_family": "OWNER_BOARD",
+ "starter_class": "PROJECTED (preview board; NOT a T-90 confirmation \u2014 does not satisfy V14 forward eligibility)",
+ "firewall": "career-vs-current-roster and Statcast columns (PA, K%, BB%, AVG, wOBA, exit velo, xBA, xSLG, xwOBA) are NOT V13 inputs and are NOT ingested as features anywhere. The V13 feature list is closed and the V14 vector is frozen; these numbers are preserved in this evidence file only.",
+ "slate_date": "2026-08-18",
+ "starter_updates_vs_probables_board": [
+  {
+   "game": "MIA@PHI",
+   "side": "away",
+   "was": "Gibson (resolved to Trey Gibson by GS-disambiguation)",
+   "now": "Cade Gibson #58 (L)",
+   "consequence": "v2's MIA side consumed TREY Gibson's log \u2014 the WRONG PITCHER. Cade Gibson is absent from pitchers.csv, so the correct state is CAP, not Trey's stats. This is a v2 starter-resolution DEFECT, now manifest."
+  },
+  {
+   "game": "AZ@BOS",
+   "side": "home",
+   "was": "Suarez (ambiguous, CAP)",
+   "now": "Ranger Suarez #55 (L) \u2014 RESOLVED, in registry (17 GS)"
+  },
+  {
+   "game": "WSH@TEX",
+   "side": "away",
+   "was": "Kent (no registry match, CAP)",
+   "now": "Jackson Kent #25 (L) \u2014 full name known, still absent from registry, stays CAP"
+  },
+  {
+   "game": "ATH@KC",
+   "side": "home",
+   "was": "Lynch (no registry match, CAP)",
+   "now": "To be announced \u2014 UNCONFIRMED, TBD"
+  },
+  {
+   "game": "CWS@CHC",
+   "side": "away",
+   "was": "Bryan Hudson",
+   "now": "To be announced \u2014 UNCONFIRMED, TBD"
+  }
+ ],
+ "handedness_now_available": "all named starters carry throws L/R on this board; recorded here, NOT a model feature (V13 has no handedness input; V14's coverage rule excluded it pre-fit and the vector is closed)"
+}

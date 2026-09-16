@@ -1,0 +1,94 @@
+{
+ "consequence": {
+  "break_even_probability": null,
+  "edge": null,
+  "ev": null,
+  "grading": "forecast-only. Nothing on 8/28 is gradeable against a market unless prices are relayed.",
+  "model_output": "UNAFFECTED. The MLB board carries all six registered arms on 15 games and the NFL board carries its no-forecast rows. An action blocker suppresses the ACTION layer only; it must never suppress valid model output (PR #3).",
+  "reason": "NO_RETAINED_MARKET_ARTIFACT \u2014 nothing to compute a break-even against",
+  "selection": null
+ },
+ "created_utc": "2026-08-28T08:36:00Z",
+ "de_vig_position": "UNCHANGED. Cross-book 'Best Odds' de-vig remains INVALID for recovering market probability (8/3 ruling). The WNBA relay is a SINGLE book, so nothing here combines books; break-even is taken from each side's own posted price and no de-vigged figure is treated as the market probability for any purpose. The two-sided hold is used only to verify the transcription.",
+ "no_workaround_attempted": "Org egress 403s are never routed around. TLS verification was not disabled, HTTPS_PROXY was not unset, and no alternate host, mirror or scraper was used to reach a blocked sports domain. The block is the receipt.",
+ "owner_relay_channel": "OPEN. A relayed DraftKings price set would move 8/28 from NO_RETAINED_MARKET_ARTIFACT to a separately hashed price overlay, attached to the frozen board rather than folded into it, and would be graded at full precision. Unit size $100. Paper only; execution UNAUTHORIZED; wager authority NO.",
+ "per_sport": {
+  "cfb": {
+   "book_has_no_games_today": "ESTABLISHED. The board's first section header reads 'Tomorrow', so DraftKings carries no college football for 2026-08-28.",
+   "detail": "two owner relays of the DraftKings college football board arrived (10:55Z and a follow-up reaching the top of the board). All 22 rows are dated 2026-08-29, 09-03 or 09-04 \u2014 none price tonight's seven games. Retained as a forward market snapshot for the CFB v2 challenger, never attached to the 8/28 card.",
+   "does_not_establish": "that the 8/28 acquisition is wrong or that its zero-FBS finding is corroborated. A book with nothing today is consistent with an all-FCS-vs-FCS slate IF the book omits such matchups, and inconsistent with it otherwise; DraftKings' inclusion rule is not known and is not inferred from a 22-game sample. The zero-FBS finding rests on the schedule acquisition alone.",
+   "n_games_priced_on_2026_08_28": 0,
+   "n_games_relayed": 22,
+   "relay_received": "data/cfb/odds/2026-08-28_owner_relay_dk_forward.json",
+   "state": "NO_PRICES_FOR_THIS_SLATE",
+   "transcription_verification": "PASS. Spread/total holds 4.42-4.55%, moneyline holds 2.19-4.15% (wider 2-12% band, since hold runs lower on heavy favourites); 5 moneylines padlocked and recorded null. Eight games were captured twice and all 70 repeated prices agree."
+  },
+  "mlb": {
+   "consequence": "forecast-only; no break-even, edge, selection or EV for any of the 15 games",
+   "n_games_priced": 0,
+   "state": "NO_RETAINED_MARKET_ARTIFACT"
+  },
+  "nfl": {
+   "consequence": "moot \u2014 no forecast exists for a price to be compared against",
+   "n_games_priced": 0,
+   "state": "NO_RETAINED_MARKET_ARTIFACT"
+  },
+  "wnba": {
+   "book": "DraftKings",
+   "n_games_priced": 4,
+   "overlay": "data/wnba/odds/2026-08-28_owner_relay_dk.json",
+   "overlay_sha256": "60085099b7f5033a7af978b8aa3f27ac191cdc0096d9125402b6bf1898e99455",
+   "selections": 0,
+   "state": "RETAINED_OWNER_RELAY_SINGLE_BOOK",
+   "transcription_verification": "PASS \u2014 12 two-sided pairs, implied holds 3.65-4.55%",
+   "why_zero_selections": "both surviving arms are non-selecting by registration; the one arm that could carry a real view is blocked on the feature rebuild"
+  }
+ },
+ "record_id": "MARKET-ACQUISITION-2026-08-28",
+ "routes_attempted": [
+  {
+   "error": "EGRESS_BLOCKED \u2014 curl exit 56, CONNECT tunnel failed, response 403",
+   "observed_utc": "2026-08-28T08:35:00Z",
+   "outcome": "REFUSED",
+   "route": "curl https://sportsbook.draftkings.com/leagues/baseball/mlb"
+  },
+  {
+   "error": "EGRESS_BLOCKED \u2014 curl exit 56, CONNECT tunnel failed, response 403",
+   "observed_utc": "2026-08-28T08:35:00Z",
+   "outcome": "REFUSED",
+   "route": "curl https://sportsbook-nash.draftkings.com/sites/US-SB/api/v5/eventgroups/84240"
+  },
+  {
+   "error": "EGRESS_BLOCKED \u2014 curl exit 56, CONNECT tunnel failed, response 403",
+   "observed_utc": "2026-08-28T08:35:00Z",
+   "outcome": "REFUSED",
+   "route": "curl https://site.api.espn.com/apis/site/v2/sports/baseball/mlb/scoreboard?dates=20260828"
+  },
+  {
+   "error": "EGRESS_BLOCKED \u2014 curl exit 56, CONNECT tunnel failed, response 403",
+   "observed_utc": "2026-08-28T08:35:00Z",
+   "outcome": "REFUSED",
+   "route": "curl https://api.the-odds-api.com/v4/sports/baseball_mlb/odds"
+  },
+  {
+   "error": "EGRESS_BLOCKED \u2014 domain blocked by the network egress proxy",
+   "observed_utc": "2026-08-28T08:36:00Z",
+   "outcome": "REFUSED",
+   "route": "WebFetch https://sportsbook.draftkings.com/leagues/baseball/mlb (approved tool)"
+  }
+ ],
+ "schema": "ops.market_acquisition.v1",
+ "slate_date": "2026-08-28",
+ "sports_covered": [
+  "mlb",
+  "wnba",
+  "nfl"
+ ],
+ "superseded_verdict": {
+  "superseded_utc": "2026-08-28T10:45:00Z",
+  "was": "NO_RETAINED_MARKET_ARTIFACT",
+  "why": "an owner relay of the DraftKings WNBA board arrived after the boards were frozen. It changes the WNBA action layer only; MLB and NFL remain unpriced and forecast-only."
+ },
+ "verdict": "PARTIAL \u2014 WNBA RETAINED (owner relay); MLB and NFL NO_RETAINED_MARKET_ARTIFACT",
+ "why_this_record_exists": "Market capture is run SEPARATELY from, and AFTER, the board freeze. The boards for 8/28 were frozen before this file was written, so no price could have reached a forecast even in principle. Prices are never predictive features; they enter only the action/EV overlay."
+}

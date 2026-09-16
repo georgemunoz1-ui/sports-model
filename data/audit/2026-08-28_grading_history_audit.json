@@ -1,0 +1,36 @@
+{
+ "created_utc": "2026-08-28T07:50:02Z",
+ "headline": "56 gradable rows examined, ZERO new contaminated rows, 13 rows not score-testable and disclosed as such",
+ "independent_proof_of_the_correction": "recomputing cards/2026-08-27_mlb_board.json against (a) the correct 8/27 finals and (b) the 8/26 same-matchup join produces two distinct 4-arm signatures. The LIVE records publish 5-2/0.2455, 3-4/0.2452, 4-3/0.2454, 4-3/0.2475 \u2014 an exact 4-decimal match to the CORRECT column. The quarantined caf9a897 publishes 5-1/0.2358, 4-2/0.2143, 5-1/0.2075, 4-2/0.2436 \u2014 an exact match to the 8/26-JOIN column. This independently confirms both that the quarantined record was contaminated and that no contaminated number survives into any live record.",
+ "isolated_or_systemic": {
+  "conclusion": "8/24, 8/25 and 8/26 are clean by write-time ordering and the luck of the calendar, NOT by any binding check they passed. Only 8/27, post-fix, is clean by construction.",
+  "enabling_condition": "SYSTEMIC \u2014 every stored result row on 8/24, 8/25 and 8/26 is keyed on the dateless mlb:AWAY@HOME string and carries NONE of the six required identity fields. Run against bind_row today, each is refused MISSING_IDENTITY_FIELD (4-6 fields missing). Exposure was maximal: 10/10 of 8/24's matchups repeat on 8/25, 15/15 of 8/25's repeat on 8/26, 6/7 of 8/27's repeat on 8/26, and statsapi pks across the boundary are adjacent integers.",
+  "realized_defect": "ISOLATED \u2014 exactly one contaminated record in the window (caf9a897/a287dbb, already quarantined); a repo-wide grep for the five 8/26 score strings hits only the 8/26 record itself, the quarantined record, the correction that quotes them as wrong, and the gate's fixture"
+ },
+ "ledger": {
+  "exposure_usd": 0,
+  "n_bets": 0,
+  "units": 0.0
+ },
+ "method": "5-agent workflow, one adversarial auditor per date plus synthesis; every claim reproduced by running code against real repo data, with authoritative adjacent-date sources (wehoop parquet for WNBA identity+scores, 8/26 evidence extract for MLB identity)",
+ "new_structural_finding": "cards/2026-08-26_board.json stores synthetic slate-row ids (826000-826014) in its gamePk field rather than real MLB pks \u2014 all 15 mismatch the evidence extract (COL@WSH board 826007 vs real 822692). cards/2026-08-27_mlb_board.json likewise carries pseudo-pks 827000-827006. The gate's pk corroboration therefore CANNOT be satisfied from the production boards alone; the 8/27 proof was built against a hand-assembled board carrying real pks. Folded into RJ-007.",
+ "owner_action_requested": "relay the official 2026-08-25 MLB scoreboard (or 8/26) to close the three UNCHECKED 8/26 rows; that is the only remaining route",
+ "record_id": "GRADING-HISTORY-CONTAMINATION-AUDIT-0824-0827",
+ "record_sha256": "87e50f3b1472b000ef8350992e29f75884f4aa0e77d9e8c9f54d124bf12e4be7",
+ "schema": "ops.audit.v1",
+ "scope": "every grading/result-bearing record for games played 2026-08-24 through 2026-08-27 (owner P0 requirement 5)",
+ "unverifiable_rows_13": {
+  "2026-08-24": "4 rows (CLE@LAA, PIT@SD, PHI@SEA, CIN@SF) \u2014 same matchup on 8/25, 8/25 score never relayed, same winner, so a copy is indistinguishable from a true value",
+  "2026-08-25": "6 rows carry no score at all (winners solved from owner-relayed slate aggregates); 4 of the 6 repeat their 8/24 winner",
+  "2026-08-26": "3 rows UNCHECKED, not clean \u2014 CHC@AZ (AZ 2-0), CLE@LAA (CLE 4-3), MIN@ATH (ATH 7-4). Resolvable ONLY by an owner relay of the official 8/25 or 8/26 scoreboard for these three.",
+  "2026-08-27": "ID provenance only \u2014 pks 823014 and 825038 are SYNTHETIC_UNVERIFIED, so CANONICAL_ID_MATCH 7/7 is self-referential for those two rows (the row and the board echo the same inferred number). Note 825038 was inferred from 825039 = CHC@AZ, a DIFFERENT matchup. Neither row can carry the contamination signature.",
+  "repo_wide_gap": "no independent MLB score source exists for any date in the window \u2014 results.csv stops at 2026-08-23 (zero rows for 8/24-8/27), the only August-2x evidence extract is identity-only, and data/mlb/evidence owner-finals stop at 8/23. All 40 MLB rows are copy-tested but not absolutely verified; their scores rest on owner relay alone. The 7 WNBA rows on 8/24-8/26 ARE absolutely verified against the wehoop parquet; the 2 on 8/27 are not (parquet snapshot has 8/27 as SCHEDULED 0-0)."
+ },
+ "verdict_by_date": {
+  "2026-08-24": "CLEAN (4 MLB rows unverifiable) \u2014 D-1 structurally impossible (8/23 slate wholly disjoint, Sunday->Monday turnover); all 10 matchups repeat on 8/25 but no row carries an 8/25 score and the record was written ~19h before the 8/25 late first pitches; both WNBA rows exact vs parquet",
+  "2026-08-25": "CLEAN (6 MLB rows unverifiable) \u2014 0 of 9 scored rows equal their 8/24 or 8/26 counterpart; 5 of 9 structurally immune (series opened 8/25); all six records written before the 8/26 first pitch, so forward contamination was physically impossible; 3/3 WNBA exact vs parquet",
+  "2026-08-26": "CLEAN (3 MLB rows unverifiable) \u2014 MAXIMUM exposure (15/15 matchups repeat on 8/25, 6 recur on 8/27) and no row matches an adjacent score. DECISIVE: all four winner arms recomputed from the frozen board reproduce the 8/26 grading record EXACTLY against 8/26 finals (widened 12-3/0.2332, prior 8-7/0.2491, adaptive 8-7/0.2458, champion 6-9/0.2512) and reproduce NOTHING against 8/25 finals",
+  "2026-08-27": "CLEAN \u2014 all 9 rows match the official scoreboard; 6 of 7 MLB matchups repeat on 8/26 and all 6 differ; MIL@NYM checked digit-for-digit (8-2 vs 8/26's 8-1, one run apart)",
+  "2026-08-27_NFL": "NO_GRADABLE_ROWS \u2014 0/0 by design, nothing claimed"
+ }
+}

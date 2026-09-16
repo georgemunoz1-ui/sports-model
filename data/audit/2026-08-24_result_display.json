@@ -1,0 +1,155 @@
+{
+ "canonical_admission_path": "RJ-001-PROVENANCE remains the route: retained artifacts with game ids, retrieval timestamps and content hashes. When it lands, these same games settle canonically and this display record is superseded, not edited.",
+ "created_utc": "2026-08-25T05:15:00Z",
+ "display_gate": {
+  "n_problems": 0,
+  "problems": [],
+  "status": "RESULT_DISPLAY_OK"
+ },
+ "finals_mlb": {
+  "mlb:BOS@MIA": {
+   "away": 4,
+   "home": 2
+  },
+  "mlb:CHC@AZ": {
+   "away": 7,
+   "home": 0
+  },
+  "mlb:CIN@SF": {
+   "away": 0,
+   "home": 5
+  },
+  "mlb:CLE@LAA": {
+   "away": 4,
+   "home": 2
+  },
+  "mlb:COL@WSH": {
+   "away": 3,
+   "home": 13
+  },
+  "mlb:MIN@ATH": {
+   "away": 9,
+   "home": 6
+  },
+  "mlb:PHI@SEA": {
+   "away": 2,
+   "home": 9
+  },
+  "mlb:TB@DET": {
+   "away": 4,
+   "home": 1
+  },
+  "mlb:TEX@CWS": {
+   "away": 11,
+   "home": 2
+  }
+ },
+ "finals_wnba": {
+  "wnba:ATL@LAS": {
+   "away": 78,
+   "home": 71
+  },
+  "wnba:GSV@MIN": {
+   "away": 80,
+   "home": 66
+  }
+ },
+ "layer": "RESULT_DISPLAY",
+ "live": {
+  "mlb:PIT@SD": {
+   "as_of": "2026-08-25T05:12:00Z self-asserted",
+   "inning": "mid 10th",
+   "score": "2-2"
+  }
+ },
+ "provisional_performance": {
+  "basis": "nine MLB finals; PIT@SD live and excluded; DESCRIPTIVE ONLY",
+  "blocked_positive_ev_sides": {
+   "dispersion_review_update": "the pregame MODEL_MARKET_DISPERSION_REVIEW flagged 9 of 10 positive-EV sides as underdogs and 9 of 10 totals as OVER. Both leans now look like model bias on this slate: the underdog sides went 0-7 and the champion averaged 0.52 runs UNDER realised totals. One slate, descriptive, but the review now has its first data point.",
+   "pit_sd": "still live",
+   "reading": "one slate validates nothing \u2014 a 0-7 on seven correlated underdog-leaning sides is a plausible single-slate outcome under many models. What it shows vividly is the asymmetry: raw EV without an error estimate would have authorized seven losing wagers. The uncertainty rule is not thereby proven; the cost of not having one is thereby illustrated.",
+   "record": "0-7",
+   "sides": [
+    "COL +169",
+    "PHI -108",
+    "ATH +142",
+    "MIA +115",
+    "AZ +130",
+    "DET +115",
+    "LAA +147"
+   ]
+  },
+  "champion_totals": {
+   "mae": 3.43,
+   "mean_bias": -0.52,
+   "note": "bias -0.52: the champion projected UNDER the realised totals on average this slate, the opposite direction from the pregame 9-of-10-over lean vs the MARKET lines \u2014 different comparators, not a contradiction.",
+   "prior_mae": 3.89,
+   "rmse": 3.57
+  },
+  "winner_arms": {
+   "mlb.winner.CHALLENGER_ADAPTIVE": {
+    "brier": 0.25,
+    "record": "4-5"
+   },
+   "mlb.winner.CHALLENGER_WIDENED": {
+    "brier": 0.24,
+    "record": "3-6"
+   },
+   "mlb.winner.CHAMPION_V13": {
+    "brier": 0.2391,
+    "record": "6-3"
+   },
+   "mlb.winner.EXPANDING_HOME_PRIOR": {
+    "brier": 0.2573,
+    "record": "3-6"
+   }
+  },
+  "wnba_diagnostic": {
+   "detail": {
+    "wnba:ATL@LAS": {
+     "actual_margin": -7,
+     "actual_total": 149,
+     "p_home_shadow": 0.3587,
+     "projected_margin": -4.57,
+     "projected_total": 175.9
+    },
+    "wnba:GSV@MIN": {
+     "actual_margin": -14,
+     "actual_total": 146,
+     "p_home_shadow": 0.6837,
+     "projected_margin": 5.8,
+     "projected_total": 163.8
+    }
+   },
+   "margin_mae": 11.12,
+   "prior_brier": 0.2879,
+   "reading": "the 33-day-stale shadow did not beat the winner prior and missed both totals badly \u2014 consistent with every flag it carried.",
+   "shadow_brier": 0.2981,
+   "total_mae": 22.35,
+   "winner_record": "1-1"
+  }
+ },
+ "record_id": "RESULT-DISPLAY-2026-08-24",
+ "record_sha256": "b3c0523757c0668957d2f1aa78f3ec5766cafb5fdbf72827b51bc7f74365444f",
+ "ruling": "RESULT_DISPLAY and CANONICAL_EVIDENCE_ADMISSION are separate layers. Missing canonical provenance may block settlement, promotion and estimator input; it may never hide an available score from the visible results card.",
+ "schema": "ops.result_display.v1",
+ "source": {
+  "artifact_retained": false,
+  "family": "OWNER_RELAY",
+  "grade": "SOURCE_NAMED_BY_CLASS_NOT_ARTIFACT",
+  "named_sources": [
+   "official MLB scoreboard (mlb.com/scores/2026-08-24)",
+   "official Valkyries recap (valkyries.wnba.com)",
+   "AP report via washingtonpost.com"
+  ],
+  "why_not_canonical": "no payload was retrievable from this environment; every fetch rail remains EGRESS_BLOCKED. These scores DISPLAY and DESCRIBE; they do not settle, promote, enter the prior pool or feed the estimator."
+ },
+ "verification": "every owner-card figure recomputed from the frozen board and the relayed finals; all reproduce exactly. Two Brier values differ by 0.0001 from the card (recomputed 0.2391 vs card 0.2390 for CHAMPION_V13; 0.2400 vs 0.2401 for CHALLENGER_WIDENED) \u2014 rounding, and the recomputed values are taken as binding.",
+ "what_this_record_does_not_do": [
+  "settle the wager ledger (0 bets / $0, unchanged)",
+  "enter any score into the canonical results table",
+  "advance any promotion count",
+  "feed the uncertainty estimator or the prior pool",
+  "grade PIT@SD or the three-arm cohort officially"
+ ]
+}

@@ -1,0 +1,60 @@
+{
+ "CORRECTION_1_A3_IS_ALREADY_CLOSED": {
+  "but": "I REINTRODUCED THE SHAPE. harness/mlb_daily_coordinator.py, which I wrote yesterday, computed the dose, stored it on the row, and multiplied it into nothing. The finding was stale about the old builder and live about my new one. Now fixed there too.",
+  "claim": "IMPROVEMENT_REVIEW A3 \u2014 'dose is annotation-only, computed, returned, thrown away'",
+  "status": "STALE. Fixed 2026-08-29. build_board_0828.apply_information_dose() calls freshness_contract.shrink_to_prior() and is wired at line 259; A17 and the selftest cover it."
+ },
+ "CORRECTION_2_THE_TARGET_IS_NOT_0.5": {
+  "proposed": "p' = 0.5 + d*(p - 0.5)",
+  "registered": "p' = prior + dose*(p - prior), prior = 0.5205399061032864",
+  "why_it_matters": "0.5205 is the MEASURED home rate over the 1,684-game canonical pool. Shrinking to 0.5 discards the measured home-field advantage and biases every low-dose forecast against the home side by about half a point of probability, systematically, on exactly the games where the model knows least."
+ },
+ "LEDGER": {
+  "exposure_usd": 0,
+  "n_bets": 0,
+  "units": 0.0,
+  "wager_authority": "NO"
+ },
+ "PROPOSAL": "consume dose inside the model rather than labelling it afterward. AGREED, adopted, and corrected in two places before adoption.",
+ "R6": "append-only; new path",
+ "THE_8_30_SLATE_UNDER_THE_CORRECTED_RULE": {
+  "actionable": {
+   "KC@CLE": "eff edge -3.28pp, model likes KC",
+   "PHI@LAA": "eff edge +3.14pp, model likes LAA"
+  },
+  "graded": "BOTH LOST. Cleveland won 11-1; Philadelphia won 4-2. 0-2 on the actionable layer.",
+  "honest_read": "the corrected rule produced two plays and both lost. n=2 says nothing about the rule. What the rule DID do is drop COL@ATL \u2014 a 14.57pp raw edge resting on a starter who is not in the pitcher registry at all \u2014 from ACTIONABLE to WAIT, and that is the behaviour it was built for.",
+  "summary": {
+   "actionable": 2,
+   "forecasted": 15,
+   "no_line": 1,
+   "scheduled": 15,
+   "true_no_forecast": 0,
+   "valued": 14,
+   "wait": 12
+  },
+  "under_the_proposed_uncorrected_rule": "COL@ATL and PHI@LAA would have been the two plays, and COL@ATL is ungradeable because the only available final for it was a 2-2 tie, which is impossible."
+ },
+ "THE_REAL_DEFECT_IN_THE_PROPOSED_MECHANISM": {
+  "limit_test": {
+   "market": "COL@ATL, market p_home 0.680, priced well away from the league prior",
+   "shrink_the_edge": "edge -> 0.00pp as dose -> 0, which is what no information has to mean",
+   "shrink_the_probability": "edge -> -15.95pp as dose -> 0, which is exactly |prior - market|. At ZERO information the model is credited with a 15.9pp disagreement it did not produce. That number is a market fact \u2014 the book is priced away from the league rate \u2014 not a model finding."
+  },
+  "proposal": "shrink the probability toward the prior, compare to the market, keep the threshold",
+  "result": "THE APPARENT EDGE GREW ON 9 OF 14 GAMES. LAD@DET went 5.20pp -> 11.33pp. Removing information made the system look MORE confident about disagreeing with the market.",
+  "tested_on": "the 8/30 slate, 14 priced games",
+  "the_proposal_hit_this_itself": "its own worked table shows KC@CLE going -0.9pp to +11.3pp and labels it 'fake edge from missing data'. The defect was caught by hand, not by the mechanism. A rule a human has to override on 9 of 14 rows is not the rule.",
+  "why_it_happens": "the market is priced away from the prior. Pulling the model TOWARD the prior pulls it AWAY from the market. Shrinking a point estimate is not the same operation as widening an interval, and only the second is what low information means."
+ },
+ "WHAT_WAS_IMPLEMENTED": {
+  "bar": "fixed at 3.0pp against the dose-scaled edge. An earlier attempt scaled the BAR by 1/dose instead and it was not enough \u2014 COL@ATL still cleared 15.65pp against a 15.00pp bar, i.e. the largest surviving edge sat on the game with the WORST information. Recorded because the intermediate fix looked convincing and was insufficient.",
+  "decision_edge": "effective_edge_pp = dose * (p_raw - market). Goes to zero as dose goes to zero. This is the ONLY edge a forecast may claim.",
+  "module": "harness/mlb_daily_coordinator.py",
+  "point_estimate": "shrink_to_prior stays, targeting the REGISTERED prior. p_home_dosed is what gets reported as the probability; it is the right point estimate."
+ },
+ "created_utc": "2026-08-31T07:40:00Z",
+ "record_id": "DOSE-IN-MODEL-2026-08-31",
+ "record_sha256": "fb4323aa26561738dfa8cbfa26daafb9580703c43d314dd96fffd84506a4171f",
+ "schema": "ops.dose_consumption.v1"
+}

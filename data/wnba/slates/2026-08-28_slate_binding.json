@@ -1,0 +1,118 @@
+{
+ "acquisition_rung": "RETAINED_GIT_ARTIFACT",
+ "availability_grade": "SEARCH_IDENTIFIED_UNCONFIRMED \u2014 identification only, binds nothing",
+ "availability_open_items": [
+  "CONFLICT: Aneesah Morrow appears on Connecticut's list (questionable, chest) and on Toronto's list (left knee). These cannot both be current. Reported, not resolved \u2014 no retained artifact settles it.",
+  "REFUSED FOR DATE: the only Sparks/Mystics injury report surfaced is dated 8/15/2026, ~13 days stale. Carrying it forward would be a guess. 8/28 availability for both clubs is NULL / UNKNOWN.",
+  "LV: A'ja Wilson downgraded to QUESTIONABLE (back) after being off the report, but the same snippet has her scoring 27 in the 8/23 meeting \u2014 the tag may be stale.",
+  "ATL: Brionna Jones OUT (left leg); the consecutive-games-missed count differs between snippets and is unreconciled."
+ ],
+ "board_freeze_precondition": "BLOCKED. The WNBA feature rebuild must run through the 8/27 cutoff before any 8/28 forecast is frozen, and wehoop has NOT advanced past 3316fa3 (8/27 06:34 ET) as of 2026-08-28T08:20:00Z. Rebuild-first is not waived because a slate is available.",
+ "created_utc": "2026-08-28T08:20:00Z",
+ "earliest_start_utc": "2026-08-28T23:30:00Z",
+ "grade": "ESPN_SINGLE_FAMILY_GIT_ARTIFACT",
+ "id_namespace": {
+  "ESPN_GAMEID": [
+   401857180,
+   401857181,
+   401857182,
+   401857183
+  ],
+  "form": "ESPN_GAMEID:<integer>",
+  "normalization_applied": "The acquisition report emitted these as BARE integers. A bare integer in an id column is indistinguishable from an MLB gamePk, which is the highest-risk encoding on the whole 8/28 slate. Namespaced here before any artifact was written."
+ },
+ "inference_refused": "All four ids sit on a contiguous run 401857180-401857183 and the surrounding parquet rows continue it \u2014 exactly the shape that invites the 8/27 P0. Each id was read from its own parquet row; none was derived from a neighbour.",
+ "n": 4,
+ "reconciliation": {
+  "canonical": 4,
+  "discovered": 4,
+  "explicit_refusals": 0,
+  "identity": "4 = 4 + 0"
+ },
+ "record_id": "WNBA-SLATE-BINDING-2026-08-28",
+ "routes_attempted": [
+  "IN-REPO AUTHORITATIVE: python3+pandas read of /home/user/sportsdataverse/wehoop-wnba-raw/wnba/schedules/parquet/wnba_schedule_2026.parquet \u2014 SUCCESS. 333 rows, 72 cols; 'date' and 'start_date' are UTC strings; converted to America/New_York to isolate the ET Friday 2026-08-28 slate (4 rows: parquet indices 293-296).",
+  "git -C /home/user/sportsdataverse/wehoop-wnba-raw rev-parse HEAD \u2014 SUCCESS: 3316fa3c116a3d6ce2549699bd65a47d0e6773d5 (parquet mtime 2026-08-27 11:02).",
+  "Parquet column game_json_url \u2014 NaN for all four Friday rows, so no retained per-game ESPN JSON payload existed to open. Recorded rather than worked around.",
+  "curl https://www.wnba.com/schedule \u2014 EGRESS_BLOCKED. curl exit 56, 'CONNECT tunnel failed, response 403' from the agent proxy. Not retried, TLS verification never disabled.",
+  "curl https://site.api.espn.com/apis/site/v2/sports/basketball/wnba/scoreboard?dates=20260828 \u2014 EGRESS_BLOCKED. curl exit 56, CONNECT tunnel 403.",
+  "curl https://sportsbook.draftkings.com/leagues/basketball/wnba \u2014 EGRESS_BLOCKED. curl exit 56, CONNECT tunnel 403.",
+  "statsapi.mlb.com \u2014 NOT ATTEMPTED. MLB-only endpoint, no WNBA data; also documented EGRESS_BLOCKED in this environment.",
+  "nfl.com \u2014 NOT ATTEMPTED. Wrong sport for this task; also documented EGRESS_BLOCKED.",
+  "WebFetch against espn.com / wnba.com / foxsports.com game pages \u2014 NOT ATTEMPTED. espn.com and www.wnba.com direct fetches are EGRESS_BLOCKED per task governance and confirmed above by the curl probes; search snippets were used for identification only and bind nothing.",
+  "WebSearch: 'WNBA injury report August 28 2026 Indiana Fever Connecticut Sun' \u2014 SUCCESS (identification only).",
+  "WebSearch: 'Portland Fire at Atlanta Dream August 28 2026 injury report availability' \u2014 SUCCESS but results were not date-pinned to 8/28; flagged as such in notes.",
+  "WebSearch: \"Toronto Tempo at Las Vegas Aces August 28 2026 injury report A'ja Wilson\" \u2014 SUCCESS (identification only).",
+  "WebSearch: 'Washington Mystics at Los Angeles Sparks August 28 2026 final injury report' \u2014 SUCCESS but returned only an 8/15/2026 report; refused to carry forward.",
+  "WebSearch: '\"Portland Fire\" \"Atlanta Dream\" August 28 2026 game preview starting lineup' \u2014 SUCCESS; surfaced ESPN gameId 401857180 and records 15-23 / 25-13 matching the parquet.",
+  "WebSearch: 'Connecticut Sun injury report late August 2026 out questionable' \u2014 SUCCESS (identification only; produced the Aneesah Morrow team conflict).",
+  "WebSearch: 'espn.com/wnba/game/_/gameId/401857182 Tempo Aces August 28 2026' \u2014 SUCCESS; ESPN URL and records 26-13 / 11-27 match the parquet.",
+  "WebSearch: 'espn gameId 401857181 Sun Fever August 28 2026' \u2014 SUCCESS; ESPN URL and records 10-28 / 25-14 match the parquet.",
+  "WebSearch: 'espn gameId 401857183 Mystics Sparks August 28 2026' \u2014 SUCCESS; ESPN URL confirms the matchup and date.",
+  "WebSearch: 'Sparks Mystics injury report Cameron Brink Kiki Iriafen August 27 2026' \u2014 SUCCESS but explicitly returned 8/15/2026 data; refused.",
+  "WebSearch: 'Atlanta Dream injury report Brionna Jones Rhyne Howard August 28 2026 Fire' \u2014 SUCCESS (identification only; snippet games-missed count for Jones conflicts with an earlier snippet, flagged in notes).",
+  "ID-INFERENCE ROUTE \u2014 DELIBERATELY NOT USED. All four ids sit on a contiguous run (401857180-401857183) and the surrounding rows continue that run, which is exactly the shape that invites the 2026-08-27 P0 defect. Every id here was read individually from its own parquet row; none was derived by incrementing or decrementing a neighbor."
+ ],
+ "rows": [
+  {
+   "away": "Portland Fire",
+   "canonical_id": "ESPN_GAMEID:401857180",
+   "game": "wnba:Portland Fire @ Atlanta Dream",
+   "home": "Atlanta Dream",
+   "id_grade": "CAPTURED",
+   "id_provenance": "CAPTURED wehoop parquet 3316fa3c116a3d6ce2549699bd65a47d0e6773d5 (wnba_schedule_2026.parquet row 293; columns id == game_id == 401857180; uid s:40~l:59~e:401857180~c:401857180). Independently corroborated (identification only, non-binding) by ESPN URL espn.com/wnba/game/_/gameId/401857180/fire-dream surfaced in WebSearch. NOT inferred from any adjacent game id.",
+   "id_space": "ESPN_GAMEID",
+   "notes": "VENUE: Gateway Center Arena, College Park, GA (ESPN venue_id 6282). STATUS: STATUS_SCHEDULED / state=pre / completed=false; parquet status_type_detail 'Fri, August 28th at 7:30 PM EDT'. TV: ION. Parquet records: POR 15-23 (8-11 H / 7-12 R), ATL 25-13 (12-6 H / 13-7 R). STARTERS: away_starter/home_starter intentionally NULL/omitted \u2014 REFUSED, not guessed. WNBA has no starting-pitcher analog and no confirmed starting five was retrieved from any retained artifact. INJURY/AVAILABILITY \u2014 SEARCH_IDENTIFIED_UNCONFIRMED, and NOT date-pinned to 8/28 by any retained artifact: Atlanta reported to have ruled OUT Brionna Jones (left leg, described as missing a 4th-then-5th consecutive contest across differing snippets \u2014 the exact game count is unreconciled); Rhyne Howard reported active and playing. Portland reported to have Sarah Ashlee Barker and Sania Feagin OUT for the remainder of the season (torn left ACLs), and Carla Leite previously questionable (left knee) then listed available. Preview context (also search-identified): Portland on a three-game losing streak, Atlanta on a four-game winning streak and having clinched a postseason berth. Treat every clause in this INJURY block as identification only.",
+   "start_utc": "2026-08-28T23:30:00Z"
+  },
+  {
+   "away": "Connecticut Sun",
+   "canonical_id": "ESPN_GAMEID:401857181",
+   "game": "wnba:Connecticut Sun @ Indiana Fever",
+   "home": "Indiana Fever",
+   "id_grade": "CAPTURED",
+   "id_provenance": "CAPTURED wehoop parquet 3316fa3c116a3d6ce2549699bd65a47d0e6773d5 (wnba_schedule_2026.parquet row 294; id == game_id == 401857181; uid s:40~l:59~e:401857181~c:401857181). Independently corroborated (identification only, non-binding) by ESPN URL espn.com/wnba/game/_/gameId/401857181/sun-fever surfaced in WebSearch. NOT inferred from any adjacent game id.",
+   "id_space": "ESPN_GAMEID",
+   "notes": "VENUE: Gainbridge Fieldhouse, Indianapolis, IN (ESPN venue_id 2183). STATUS: STATUS_SCHEDULED / state=pre / completed=false; parquet status_type_detail 'Fri, August 28th at 7:30 PM EDT'. TV: ION (search additionally mentions WNBA League Pass / ESPN+). Parquet records: CON 10-28 (7-13 H / 3-15 R), IND 25-14 (13-6 H / 12-8 R) \u2014 search snippet independently reported the identical 10-28 and 25-14, a useful cross-check on the row identity. STARTERS: away_starter/home_starter intentionally NULL/omitted \u2014 REFUSED, not guessed; no confirmed starting five retrieved. INJURY/AVAILABILITY \u2014 SEARCH_IDENTIFIED_UNCONFIRMED: Indiana reported Damiris Dantas OUT (left knee, given an extra rest day) and Caitlin Clark PROBABLE (back). Connecticut reported Brittney Griner OUT (left knee) and Aaliyah Edwards OUT (left ankle); nearby late-August snippets also list Olivia Nelson-Ododa DOUBTFUL (back) and Bria Hartley OUT (right knee). CONFLICT FLAG: one Connecticut snippet lists Aneesah Morrow as questionable (chest) while a Las Vegas/Toronto snippet lists an Aneesah Morrow on the Tempo injury list (left knee) \u2014 these two cannot both be current; I am reporting the conflict rather than resolving it, because no retained artifact settles it.",
+   "start_utc": "2026-08-28T23:30:00Z"
+  },
+  {
+   "away": "Toronto Tempo",
+   "canonical_id": "ESPN_GAMEID:401857182",
+   "game": "wnba:Toronto Tempo @ Las Vegas Aces",
+   "home": "Las Vegas Aces",
+   "id_grade": "CAPTURED",
+   "id_provenance": "CAPTURED wehoop parquet 3316fa3c116a3d6ce2549699bd65a47d0e6773d5 (wnba_schedule_2026.parquet row 295; id == game_id == 401857182; uid s:40~l:59~e:401857182~c:401857182). Independently corroborated (identification only, non-binding) by ESPN URL espn.com/wnba/game/_/gameId/401857182/tempo-aces surfaced in WebSearch. NOT inferred from any adjacent game id.",
+   "id_space": "ESPN_GAMEID",
+   "notes": "US-EASTERN FRIDAY 8/28 GAME despite the 2026-08-29 UTC date \u2014 10:00 PM EDT Friday. VENUE: Michelob ULTRA Arena, Las Vegas, NV (ESPN venue_id 4005). STATUS: STATUS_SCHEDULED / state=pre / completed=false; parquet status_type_detail 'Fri, August 28th at 10:00 PM EDT'. TV: ION. Parquet records: TOR 11-27 (7-13 H / 4-14 R), LV 26-13 (12-7 H / 14-6 R) \u2014 search snippet independently reported the identical 11-27 and 26-13. STARTERS: away_starter/home_starter intentionally NULL/omitted \u2014 REFUSED, not guessed. INJURY/AVAILABILITY \u2014 SEARCH_IDENTIFIED_UNCONFIRMED: Las Vegas reported to have downgraded A'ja Wilson to QUESTIONABLE (back) after she was initially off the report, with Evans QUESTIONABLE (left leg, in danger of a sixth straight miss); note Wilson played and scored 27 in the teams' 8/23 meeting per the same snippet, so the questionable tag may be stale. Toronto reported with five listed: Marina Mabrey OUT (right adductor), Brittney Sykes (left foot), Aneesah Morrow (left knee), Maria Conde (left calf), Nyara Sabally (left calf) \u2014 all reported DNP on 8/23. See the CONFLICT FLAG on game 401857181 regarding Aneesah Morrow's team. Search-identified context: an Aces preview frames this as their last game before the FIBA World Cup break; a Fever preview similarly calls 8/28 the final game before the break \u2014 consistent with the parquet showing a schedule gap after 8/30.",
+   "start_utc": "2026-08-29T02:00:00Z"
+  },
+  {
+   "away": "Washington Mystics",
+   "canonical_id": "ESPN_GAMEID:401857183",
+   "game": "wnba:Washington Mystics @ Los Angeles Sparks",
+   "home": "Los Angeles Sparks",
+   "id_grade": "CAPTURED",
+   "id_provenance": "CAPTURED wehoop parquet 3316fa3c116a3d6ce2549699bd65a47d0e6773d5 (wnba_schedule_2026.parquet row 296; id == game_id == 401857183; uid s:40~l:59~e:401857183~c:401857183). Independently corroborated (identification only, non-binding) by ESPN URL espn.com/wnba/game/_/gameId/401857183/mystics-sparks surfaced in WebSearch. NOT inferred from any adjacent game id.",
+   "id_space": "ESPN_GAMEID",
+   "notes": "US-EASTERN FRIDAY 8/28 GAME despite the 2026-08-29 UTC date \u2014 10:00 PM EDT Friday. VENUE: crypto.com Arena, Los Angeles, CA (ESPN venue_id 1841). STATUS: STATUS_SCHEDULED / state=pre / completed=false; parquet status_type_detail 'Fri, August 28th at 10:00 PM EDT'. TV: ION. Parquet records: WAS 23-15 (13-7 H / 10-8 R), LAS 13-25 (6-13 H / 7-12 R). STARTERS: away_starter/home_starter intentionally NULL/omitted \u2014 REFUSED, not guessed. INJURY/AVAILABILITY \u2014 EXPLICIT REFUSAL for this date. The only Sparks-Mystics injury report I could surface is for their 8/15/2026 meeting (Cameron Brink OUT rib; Monique Akoa Makani OUT right ankle; Mystics reported with nobody listed). I am NOT carrying that forward as 8/28 status \u2014 that would be a guess. No 8/28-dated availability report for either club was found. Anything below is prior-game context, SEARCH_IDENTIFIED_UNCONFIRMED and stale by ~13 days: Brink has an ongoing rib/injury-scare history this season; Kiki Iriafen was reported playing well for Washington as of 8/22. Current 8/28 availability for both teams: NULL / UNKNOWN.",
+   "start_utc": "2026-08-29T02:00:00Z"
+  }
+ ],
+ "schema": "ops.slate_binding.v2",
+ "slate_calendar_rule": "US Eastern calendar date. TOR@LV and WSH@LAS tip at 10:00 PM ET Friday and therefore carry a 2026-08-29 UTC start_utc; both are 8/28 Eastern rows.",
+ "slate_date": "2026-08-28",
+ "source_of_record": {
+  "commit": "3316fa3c116a3d6ce2549699bd65a47d0e6773d5",
+  "parquet_rows_used": [
+   293,
+   294,
+   295,
+   296
+  ],
+  "path": "wnba/schedules/parquet/wnba_schedule_2026.parquet",
+  "repo": "github.com/sportsdataverse/wehoop-wnba-raw",
+  "single_family_caveat": "wehoop is an ESPN mirror. Corroborating ESPN URLs from search are the SAME family, so they raise identification confidence and add no independent source."
+ },
+ "starters": "REFUSED, not guessed. WNBA has no starting-pitcher analog and no confirmed starting five was retrieved from any retained artifact."
+}

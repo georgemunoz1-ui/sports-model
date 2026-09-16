@@ -1,0 +1,153 @@
+{
+ "schema": "mlb.owner_slate_board.v2",
+ "record_id": "OWNER-MLB-SLATE-20260820",
+ "captured_at_utc": "2026-08-20T16:41:38Z",
+ "received_from": "owner paste 2026-08-20 (VSiN slate board, prices included)",
+ "source_tier": 1,
+ "source_family": "OWNER_BOARD",
+ "slate_date": "2026-08-20",
+ "slate_shape": "9 games / 18 teams \u2014 a getaway-day PARTIAL slate. The franchise-partition completeness claim does NOT apply (12 teams idle); the slate is taken as-delivered, count unverified without a schedule manifest.",
+ "price_class": "single-source two-sided moneylines (one board, both sides) -> de-vig VALID per the standing same-board rule; totals carry LINES ONLY (no juice) -> O/U probabilities computable, no total EV.",
+ "firewall": "VSiN EST Score/EST Line columns and Profit columns are third-party projections/descriptive \u2014 never model inputs, never price substitutes.",
+ "intake_timing": "captured 16:41:38Z \u2014 STL@CIN (16:40Z first pitch) was IN PROGRESS at intake by ~98 seconds: NO prospective forecast registers for it (pregame provenance unprovable); card row displayed as POST_START_AT_INTAKE only. All other 8 games pre-start at registration.",
+ "starter_ambiguities": [
+  "LAA 'Rodriguez' (R, 3-5, 7.17): FOUR registry matches (eduardo/grayson/elmer/bradgley) \u2014 identity NOT bindable from a last name; runs CAP with AMBIGUOUS_REGISTRY_MATCH flag (Gibson lesson: never pick the plausible match)",
+  "ATL 'Holmes' (R, 7-5, 24G): clay-vs-grant disambiguated to GRANT HOLMES \u2014 Clay Holmes started for CHC yesterday (8/19 finals board) and cannot start consecutive days for two teams; disambiguation is inferential and flagged"
+ ],
+ "games": [
+  {
+   "g": "STL@CIN",
+   "utc": "16:40Z",
+   "asp": "Michael McGreevy",
+   "hsp": "Brady Singer",
+   "ml": {
+    "STL": -106,
+    "CIN": -102
+   },
+   "total_line": 9.0,
+   "venue": "Great American Ball Park",
+   "wx": "overcast 76F W5",
+   "ump": "Hunter Wendelstedt (14ov/10un/1p)",
+   "series": "G5/5 tied 2-2",
+   "post_start_at_intake": true
+  },
+  {
+   "g": "TOR@TB",
+   "utc": "17:10Z",
+   "asp": "Shane Bieber",
+   "hsp": "Ian Seymour",
+   "ml": {
+    "TOR": 147,
+    "TB": -158
+   },
+   "total_line": 7.0,
+   "venue": "Tropicana Field (indoors)",
+   "ump": "Sean Barber (11ov/10un/1p)",
+   "series": "G3/3 tied 1-1"
+  },
+  {
+   "g": "SF@CLE",
+   "utc": "17:10Z",
+   "asp": "Landen Roupp",
+   "hsp": "Gavin Williams",
+   "ml": {
+    "SF": 182,
+    "CLE": -196
+   },
+   "total_line": 7.0,
+   "venue": "Progressive Field",
+   "wx": "overcast 73F E6",
+   "ump": "Steven Jaschinski (7ov/5un/0p)",
+   "series": "G3/3 tied 1-1"
+  },
+  {
+   "g": "ATH@KC",
+   "utc": "18:10Z",
+   "asp": "Gage Jump",
+   "hsp": "Randy Dobnak",
+   "ml": {
+    "ATH": 120,
+    "KC": -129
+   },
+   "total_line": 8.0,
+   "venue": "Kauffman Stadium",
+   "wx": "clear 76F ENE5",
+   "ump": "Corey Blaser (8ov/12un/1p)",
+   "series": "G4/4 KC lead 3-0"
+  },
+  {
+   "g": "ATL@CWS",
+   "utc": "18:10Z",
+   "asp": "Grant Holmes",
+   "hsp": "Anthony Kay",
+   "ml": {
+    "ATL": -105,
+    "CWS": -102
+   },
+   "total_line": 8.5,
+   "venue": "Rate Field",
+   "wx": "clear 76F N8",
+   "ump": "Ron Kulpa (7ov/7un/2p)",
+   "series": "G1/1",
+   "disambiguation_flag": "ATL Holmes = Grant (inferential, see starter_ambiguities)"
+  },
+  {
+   "g": "SEA@MIL",
+   "utc": "18:10Z",
+   "asp": "George Kirby",
+   "hsp": "Robert Gasser",
+   "ml": {
+    "SEA": 120,
+    "MIL": -129
+   },
+   "total_line": 8.0,
+   "venue": "American Family Field",
+   "wx": "clear 76F ENE8",
+   "ump": "Quinn Wolcott (11ov/13un/1p)",
+   "series": "G3/3 tied 1-1"
+  },
+  {
+   "g": "NYY@BAL",
+   "utc": "22:35Z",
+   "asp": "Gerrit Cole",
+   "hsp": "Kyle Bradish",
+   "ml": {
+    "NYY": -108,
+    "BAL": 101
+   },
+   "total_line": 7.5,
+   "venue": "Oriole Park At Camden Yards",
+   "wx": "broken clouds 81F ESE3",
+   "series": "G3/3 NYY lead 2-0"
+  },
+  {
+   "g": "WSH@TEX",
+   "utc": "00:05Z",
+   "asp": "Andrew Alvarez",
+   "hsp": "Jacob deGrom",
+   "ml": {
+    "WSH": 155,
+    "TEX": -167
+   },
+   "total_line": 7.5,
+   "venue": "Globe Life Field",
+   "wx": "broken clouds 95F W8",
+   "series": "G3/3 tied 1-1"
+  },
+  {
+   "g": "LAA@HOU",
+   "utc": "00:10Z",
+   "asp": "Rodriguez (LAA, identity ambiguous)",
+   "hsp": "Peter Lambert",
+   "ml": {
+    "LAA": 164,
+    "HOU": -177
+   },
+   "total_line": 8.5,
+   "venue": "Daikin Park",
+   "wx": "few clouds 91F SSW11",
+   "series": "G3/3 tied 1-1",
+   "ambiguity_flag": "AMBIGUOUS_REGISTRY_MATCH -> CAP"
+  }
+ ]
+}

@@ -1,0 +1,149 @@
+{
+ "board_slate_date": "2026-08-27",
+ "cohort": "mlb:2026-08-27",
+ "cohort_problems": [],
+ "counters": {
+  "CANONICAL_ID_MATCH": "7/7",
+  "DATE_COHERENCE_PASS": "7/7",
+  "REFUSED_ROWS": 0,
+  "RESULT_BINDING_PASS": "7/7"
+ },
+ "created_utc": "2026-08-28T07:54:35Z",
+ "gradable": true,
+ "pk_provenance": {
+  "822694": "CAPTURED mlb.com slug (COL@WSH), T-45 record 3f3fef17",
+  "822771": "CAPTURED mlb.com slug (KC@TOR), T-90 record 4645b5a3",
+  "823014": "ARCHIVE_VERIFIED 2026-08-28 (lancebroz f9bca28, 8/27 daily parquet) \u2014 the earlier inference from 8/26 pk 823015 was CORRECT, now confirmed rather than assumed",
+  "823179": "ARCHIVE_VERIFIED 2026-08-28 (lancebroz f9bca28, 8/27 daily parquet). REPLACES the inferred 825038, which was WRONG: decremented from 825039 = CHC@AZ, a DIFFERENT matchup, and no game 825038 exists on 8/27 at all. One of the two inferences was wrong \u2014 which is exactly why an inferred id is a fabrication even when plausible.",
+  "823503": "CAPTURED mlb.com slug (HOU@NYY), schedule record b9717911",
+  "823581": "CAPTURED mlb.com slug (MIL@NYM), night review",
+  "824879": "CAPTURED mlb.com slug (LAD@ATL), schedule record b9717911"
+ },
+ "record_sha256": "19fdee64cb05e04f5f544a148f582a801106cf21b2ff979057a3749f8057b89c",
+ "rows": [
+  {
+   "bound_to": "mlb:COL@WSH",
+   "codes": [
+    "BOUND"
+   ],
+   "index": 0,
+   "row": {
+    "away": "COL",
+    "away_score": 1,
+    "game_pk": 822694,
+    "home": "WSH",
+    "home_score": 7,
+    "result_date": "2026-08-27",
+    "scheduled_date": "2026-08-27",
+    "sport": "mlb"
+   }
+  },
+  {
+   "bound_to": "mlb:BAL@STL",
+   "codes": [
+    "BOUND"
+   ],
+   "index": 1,
+   "row": {
+    "away": "BAL",
+    "away_score": 5,
+    "game_pk": 823014,
+    "home": "STL",
+    "home_score": 7,
+    "result_date": "2026-08-27",
+    "scheduled_date": "2026-08-27",
+    "sport": "mlb"
+   }
+  },
+  {
+   "bound_to": "mlb:HOU@NYY",
+   "codes": [
+    "BOUND"
+   ],
+   "index": 2,
+   "row": {
+    "away": "HOU",
+    "away_score": 5,
+    "game_pk": 823503,
+    "home": "NYY",
+    "home_score": 1,
+    "result_date": "2026-08-27",
+    "scheduled_date": "2026-08-27",
+    "sport": "mlb"
+   }
+  },
+  {
+   "bound_to": "mlb:KC@TOR",
+   "codes": [
+    "BOUND"
+   ],
+   "index": 3,
+   "row": {
+    "away": "KC",
+    "away_score": 13,
+    "game_pk": 822771,
+    "home": "TOR",
+    "home_score": 2,
+    "result_date": "2026-08-27",
+    "scheduled_date": "2026-08-27",
+    "sport": "mlb"
+   }
+  },
+  {
+   "bound_to": "mlb:MIL@NYM",
+   "codes": [
+    "BOUND"
+   ],
+   "index": 4,
+   "row": {
+    "away": "MIL",
+    "away_score": 8,
+    "game_pk": 823581,
+    "home": "NYM",
+    "home_score": 2,
+    "result_date": "2026-08-27",
+    "scheduled_date": "2026-08-27",
+    "sport": "mlb"
+   }
+  },
+  {
+   "bound_to": "mlb:LAD@ATL",
+   "codes": [
+    "BOUND"
+   ],
+   "index": 5,
+   "row": {
+    "away": "LAD",
+    "away_score": 0,
+    "game_pk": 824879,
+    "home": "ATL",
+    "home_score": 1,
+    "result_date": "2026-08-27",
+    "scheduled_date": "2026-08-27",
+    "sport": "mlb"
+   }
+  },
+  {
+   "bound_to": "mlb:AZ@SF",
+   "codes": [
+    "BOUND"
+   ],
+   "index": 6,
+   "row": {
+    "away": "AZ",
+    "away_score": 1,
+    "game_pk": 823179,
+    "home": "SF",
+    "home_score": 6,
+    "result_date": "2026-08-27",
+    "scheduled_date": "2026-08-27",
+    "sport": "mlb"
+   }
+  }
+ ],
+ "rule": "a single failed row blocks every aggregate over this cohort; no partial metric may silently exclude or substitute it",
+ "schema": "ops.binding_proof.v1",
+ "source_grade": "scores OWNER_RELAY_OFFICIAL_SCOREBOARD; game ids ARCHIVE_VERIFIED against lancebroz f9bca28 8/27 daily parquet (7/7 present, teams matched)",
+ "sport": "mlb",
+ "supersedes": "49996e05 \u2014 its CANONICAL_ID_MATCH 7/7 was SELF-REFERENTIAL for two rows. Archive verification on 2026-08-28 confirmed six ids and FALSIFIED one: AZ@SF was carried as 825038 (inferred by decrementing 825039 = CHC@AZ, a different matchup); no such game exists on 8/27 and the real id is 823179. The AZ@SF row was therefore bound to a nonexistent identifier in the superseded proof. Scores and grading are unaffected (SF 6-1 is correct and AZ@SF has no adjacent-date repeat), but the id claim was false and is corrected here."
+}

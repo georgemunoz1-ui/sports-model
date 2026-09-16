@@ -1,0 +1,116 @@
+{
+ "schema": "mlb.owner_slate_capture.v1",
+ "record_id": "OWNER-SLATE-20260819-0922Z",
+ "captured_at_utc": "2026-08-19T09:22:00Z",
+ "ingested_at_utc": "2026-08-19T09:32:00Z",
+ "received_from": "owner relay of the external session's VSiN slate capture (description + intake flags; full probables list NOT transmitted)",
+ "source_tier": 1,
+ "source_family": "OWNER_BOARD",
+ "price_state": "PRICE_DATA_BLOCKED \u2014 every price field on the source board is '\u2014'; no moneylines, no sportsbook totals",
+ "firewall": "VSiN EST Score / EST Line are THIRD-PARTY PROJECTIONS, not executable odds. They are NOT model features and NEVER substitute for missing prices.",
+ "slate_basis": "the board attests 15 games / 30 teams each exactly once, earliest DET@PIT 16:35Z, all scores 0-0 (legally pregame). The matchup list is the series-continuation set from the settled 8/18 slate (all 15 series had games remaining), which the board's partition attestation confirms. Game times other than DET@PIT were not transmitted -> TBD.",
+ "starters": "probables attested PRESENT on the source board but the full list was NOT transmitted. Three low-GS flags name pitchers, none of whom exists in pitchers.csv (Jobe, Smith-Shawver, Stock) -> those sides run CAP regardless. All slate starters therefore TBD/named-unregistered; a v2 forks when the full probables list arrives.",
+ "intake_flags": {
+  "DET@PIT": "Jobe only 2 GS; high uncertainty (DET side; not in registry -> CAP)",
+  "ATL@MIN": "Smith-Shawver only 1 GS (ATL side; not in registry -> CAP)",
+  "SD@NYM": "Stock only 3 GS (SIDE NOT DETERMINABLE from the flag; not in registry -> CAP either way)",
+  "ATH@KC": "light-rain monitoring",
+  "TOR@TB": "indoor; weather excluded",
+  "LAD@COL": "Coors park-factor sensitivity",
+  "remaining": "probable starters present on source board"
+ },
+ "refresh_schedule": "first starter/lineup refresh 15:05Z (T-90 before DET@PIT); later starter changes create attribution flags, never overwrite",
+ "slate_date": "2026-08-19",
+ "games": [
+  {
+   "seq": 1,
+   "away": "DET",
+   "home": "PIT",
+   "utc": "16:35Z"
+  },
+  {
+   "seq": 2,
+   "away": "MIA",
+   "home": "PHI",
+   "utc": "TBD"
+  },
+  {
+   "seq": 3,
+   "away": "STL",
+   "home": "CIN",
+   "utc": "TBD"
+  },
+  {
+   "seq": 4,
+   "away": "SD",
+   "home": "NYM",
+   "utc": "TBD"
+  },
+  {
+   "seq": 5,
+   "away": "LAD",
+   "home": "COL",
+   "utc": "TBD"
+  },
+  {
+   "seq": 6,
+   "away": "NYY",
+   "home": "BAL",
+   "utc": "TBD"
+  },
+  {
+   "seq": 7,
+   "away": "TOR",
+   "home": "TB",
+   "utc": "TBD"
+  },
+  {
+   "seq": 8,
+   "away": "ATH",
+   "home": "KC",
+   "utc": "TBD"
+  },
+  {
+   "seq": 9,
+   "away": "LAA",
+   "home": "HOU",
+   "utc": "TBD"
+  },
+  {
+   "seq": 10,
+   "away": "SF",
+   "home": "CLE",
+   "utc": "TBD"
+  },
+  {
+   "seq": 11,
+   "away": "AZ",
+   "home": "BOS",
+   "utc": "TBD"
+  },
+  {
+   "seq": 12,
+   "away": "SEA",
+   "home": "MIL",
+   "utc": "TBD"
+  },
+  {
+   "seq": 13,
+   "away": "ATL",
+   "home": "MIN",
+   "utc": "TBD"
+  },
+  {
+   "seq": 14,
+   "away": "WSH",
+   "home": "TEX",
+   "utc": "TBD"
+  },
+  {
+   "seq": 15,
+   "away": "CWS",
+   "home": "CHC",
+   "utc": "TBD"
+  }
+ ]
+}

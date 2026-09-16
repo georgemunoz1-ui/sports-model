@@ -1,0 +1,805 @@
+{
+ "drop": "data/mlb/props/drops/2026-07-28_agg5book.json",
+ "date": "2026-07-28",
+ "source_type": "aggregator",
+ "source_note": "Operator screenshots, aggregator 'MLB Odds 2026-07-28' K-props page, two scroll views cross-read; per-book columns DK/FD/MGM/BR fully visible, Caesars prices cut off -> line-only. Cells where the two reads disagreed were OMITTED (R1): Landen Roupp MGM (4.5 vs 5.5 rung conflict). MGM one-sided cells kept one-sided (Bieber over 120, Jump over 130). Bubba Chandler BR reads inverted vs DK/FD (-165/123, same shape as BR's 7/27 Keller alt rung) -- both reads agree, kept, rung-flagged. received_at basis: images embedded in operator message; no file mtime exists; captured_utc = processing wall clock at transcription.",
+ "captured_utc": "2026-07-28T17:54:40Z",
+ "processed_utc": "2026-07-28T17:55:22Z",
+ "selector": "engine.kprops.select_play, unmodified",
+ "staked": 0.0,
+ "rows": [
+  {
+   "pitcher": "Aaron Nola",
+   "status": "no play",
+   "game": null,
+   "first_pitch": null,
+   "ek": 5.378751225890814,
+   "gs": 20,
+   "ek_source": "engine.kprops.proj on the live log -- NOT frozen pre-slate. Fine on a same-day pregame drop, leaky on a replay",
+   "quotes_in": 5,
+   "quotes_kept": 4,
+   "gate_eligible": false,
+   "eligibility": "first pitch unknown (arm not on the card) -> cannot prove pre-lock",
+   "tests": [
+    "T1 DK 5.5 hold 5.55%",
+    "T1 FD 5.5 hold 6.08%",
+    "T1 MGM 4.5 hold 7.11%",
+    "T1 BR 5.5 hold 7.29%",
+    "T3 spread 1.0 K over 4 books"
+   ],
+   "warnings": [],
+   "rejections": [
+    "CZR: line only, no price (R1: not a market)"
+   ],
+   "play": null
+  },
+  {
+   "pitcher": "Shane Bieber",
+   "status": "no play",
+   "game": null,
+   "first_pitch": null,
+   "ek": 4.233962264150944,
+   "gs": 6,
+   "ek_source": "engine.kprops.proj on the live log -- NOT frozen pre-slate. Fine on a same-day pregame drop, leaky on a replay",
+   "quotes_in": 5,
+   "quotes_kept": 4,
+   "gate_eligible": false,
+   "eligibility": "first pitch unknown (arm not on the card) -> cannot prove pre-lock",
+   "tests": [
+    "T1 DK 4.5 hold 5.25%",
+    "T1 FD 4.5 hold 5.88%",
+    "T1 MGM 4.5 n/a (one-sided)",
+    "T1 BR 4.5 hold 7.50%",
+    "T3 spread 0.0 K over 4 books"
+   ],
+   "warnings": [],
+   "rejections": [
+    "CZR: line only, no price (R1: not a market)"
+   ],
+   "play": null
+  },
+  {
+   "pitcher": "Logan Henderson",
+   "status": "no play",
+   "game": null,
+   "first_pitch": null,
+   "ek": 5.346153846153846,
+   "gs": 7,
+   "ek_source": "engine.kprops.proj on the live log -- NOT frozen pre-slate. Fine on a same-day pregame drop, leaky on a replay",
+   "quotes_in": 5,
+   "quotes_kept": 4,
+   "gate_eligible": false,
+   "eligibility": "first pitch unknown (arm not on the card) -> cannot prove pre-lock",
+   "tests": [
+    "T1 DK 5.5 hold 5.93%",
+    "T1 FD 5.5 hold 5.98%",
+    "T1 MGM 4.5 hold 7.47%",
+    "T1 BR 5.5 hold 7.05%",
+    "T3 spread 1.0 K over 4 books"
+   ],
+   "warnings": [],
+   "rejections": [
+    "CZR: line only, no price (R1: not a market)"
+   ],
+   "play": null
+  },
+  {
+   "pitcher": "Reid Detmers",
+   "status": "no play",
+   "game": null,
+   "first_pitch": null,
+   "ek": 6.324721393815728,
+   "gs": 20,
+   "ek_source": "engine.kprops.proj on the live log -- NOT frozen pre-slate. Fine on a same-day pregame drop, leaky on a replay",
+   "quotes_in": 5,
+   "quotes_kept": 4,
+   "gate_eligible": false,
+   "eligibility": "first pitch unknown (arm not on the card) -> cannot prove pre-lock",
+   "tests": [
+    "T1 DK 6.5 hold 5.97%",
+    "T1 FD 6.5 hold 6.06%",
+    "T1 MGM 6.5 hold 7.62%",
+    "T1 BR 6.5 hold 6.83%",
+    "T3 spread 0.0 K over 4 books"
+   ],
+   "warnings": [],
+   "rejections": [
+    "CZR: line only, no price (R1: not a market)"
+   ],
+   "play": null
+  },
+  {
+   "pitcher": "Gage Jump",
+   "status": "no play",
+   "game": null,
+   "first_pitch": null,
+   "ek": 5.476087912087912,
+   "gs": 11,
+   "ek_source": "engine.kprops.proj on the live log -- NOT frozen pre-slate. Fine on a same-day pregame drop, leaky on a replay",
+   "quotes_in": 5,
+   "quotes_kept": 4,
+   "gate_eligible": false,
+   "eligibility": "first pitch unknown (arm not on the card) -> cannot prove pre-lock",
+   "tests": [
+    "T1 DK 5.5 hold 5.97%",
+    "T1 FD 5.5 hold 5.95%",
+    "T1 MGM 5.5 n/a (one-sided)",
+    "T1 BR 5.5 hold 7.26%",
+    "T3 spread 0.0 K over 4 books"
+   ],
+   "warnings": [],
+   "rejections": [
+    "CZR: line only, no price (R1: not a market)"
+   ],
+   "play": null
+  },
+  {
+   "pitcher": "Sandy Alcantara",
+   "status": "no play",
+   "game": null,
+   "first_pitch": null,
+   "ek": 5.127572016460905,
+   "gs": 21,
+   "ek_source": "engine.kprops.proj on the live log -- NOT frozen pre-slate. Fine on a same-day pregame drop, leaky on a replay",
+   "quotes_in": 5,
+   "quotes_kept": 4,
+   "gate_eligible": false,
+   "eligibility": "first pitch unknown (arm not on the card) -> cannot prove pre-lock",
+   "tests": [
+    "T1 DK 5.5 hold 5.70%",
+    "T1 FD 5.5 hold 5.97%",
+    "T1 MGM 5.5 hold 7.62%",
+    "T1 BR 5.5 hold 6.84%",
+    "T3 spread 0.0 K over 4 books"
+   ],
+   "warnings": [],
+   "rejections": [
+    "CZR: line only, no price (R1: not a market)"
+   ],
+   "play": null
+  },
+  {
+   "pitcher": "Peter Lambert",
+   "status": "no play",
+   "game": null,
+   "first_pitch": null,
+   "ek": 5.616167870657034,
+   "gs": 16,
+   "ek_source": "engine.kprops.proj on the live log -- NOT frozen pre-slate. Fine on a same-day pregame drop, leaky on a replay",
+   "quotes_in": 4,
+   "quotes_kept": 3,
+   "gate_eligible": false,
+   "eligibility": "first pitch unknown (arm not on the card) -> cannot prove pre-lock",
+   "tests": [
+    "T1 DK 5.5 hold 5.91%",
+    "T1 FD 5.5 hold 6.14%",
+    "T1 BR 5.5 hold 7.26%",
+    "T3 spread 0.0 K over 3 books"
+   ],
+   "warnings": [],
+   "rejections": [
+    "CZR: line only, no price (R1: not a market)"
+   ],
+   "play": null
+  },
+  {
+   "pitcher": "Cade Cavalli",
+   "status": "SHADOW",
+   "game": null,
+   "first_pitch": null,
+   "ek": 5.6063982521847695,
+   "gs": 21,
+   "ek_source": "engine.kprops.proj on the live log -- NOT frozen pre-slate. Fine on a same-day pregame drop, leaky on a replay",
+   "quotes_in": 5,
+   "quotes_kept": 4,
+   "gate_eligible": false,
+   "eligibility": "first pitch unknown (arm not on the card) -> cannot prove pre-lock",
+   "tests": [
+    "T1 DK 4.5 hold 5.96%",
+    "T1 FD 4.5 hold 6.08%",
+    "T1 MGM 4.5 hold 7.45%",
+    "T1 BR 4.5 hold 6.96%",
+    "T3 spread 0.0 K over 4 books"
+   ],
+   "warnings": [],
+   "rejections": [
+    "CZR: line only, no price (R1: not a market)"
+   ],
+   "play": {
+    "book": "FD",
+    "line": 4.5,
+    "side": "OVER",
+    "price": 120,
+    "p": 0.659,
+    "edge": 0.204,
+    "ev": 0.449,
+    "disp": 1.11,
+    "p_push": 0.0,
+    "weight": 1.0
+   }
+  },
+  {
+   "pitcher": "Michael King",
+   "status": "no play",
+   "game": null,
+   "first_pitch": null,
+   "ek": 4.866496163682864,
+   "gs": 20,
+   "ek_source": "engine.kprops.proj on the live log -- NOT frozen pre-slate. Fine on a same-day pregame drop, leaky on a replay",
+   "quotes_in": 4,
+   "quotes_kept": 3,
+   "gate_eligible": false,
+   "eligibility": "first pitch unknown (arm not on the card) -> cannot prove pre-lock",
+   "tests": [
+    "T1 DK 5.5 hold 6.06%",
+    "T1 FD 5.5 hold 5.85%",
+    "T1 BR 5.5 hold 6.82%",
+    "T3 spread 0.0 K over 3 books"
+   ],
+   "warnings": [],
+   "rejections": [
+    "CZR: line only, no price (R1: not a market)"
+   ],
+   "play": null
+  },
+  {
+   "pitcher": "Gerrit Cole",
+   "status": "no play",
+   "game": null,
+   "first_pitch": null,
+   "ek": 5.968272921108741,
+   "gs": 11,
+   "ek_source": "engine.kprops.proj on the live log -- NOT frozen pre-slate. Fine on a same-day pregame drop, leaky on a replay",
+   "quotes_in": 4,
+   "quotes_kept": 3,
+   "gate_eligible": false,
+   "eligibility": "first pitch unknown (arm not on the card) -> cannot prove pre-lock",
+   "tests": [
+    "T1 DK 6.5 hold 5.44%",
+    "T1 FD 6.5 hold 5.95%",
+    "T1 BR 6.5 hold 6.94%",
+    "T3 spread 0.0 K over 3 books"
+   ],
+   "warnings": [],
+   "rejections": [
+    "CZR: line only, no price (R1: not a market)"
+   ],
+   "play": null
+  },
+  {
+   "pitcher": "Chase Burns",
+   "status": "no play",
+   "game": null,
+   "first_pitch": null,
+   "ek": 6.352361634308895,
+   "gs": 18,
+   "ek_source": "engine.kprops.proj on the live log -- NOT frozen pre-slate. Fine on a same-day pregame drop, leaky on a replay",
+   "quotes_in": 5,
+   "quotes_kept": 4,
+   "gate_eligible": false,
+   "eligibility": "first pitch unknown (arm not on the card) -> cannot prove pre-lock",
+   "tests": [
+    "T1 DK 6.5 hold 5.92%",
+    "T1 FD 6.5 hold 5.92%",
+    "T1 MGM 6.5 hold 7.30%",
+    "T1 BR 6.5 hold 7.18%",
+    "T3 spread 0.0 K over 4 books"
+   ],
+   "warnings": [],
+   "rejections": [
+    "CZR: line only, no price (R1: not a market)"
+   ],
+   "play": null
+  },
+  {
+   "pitcher": "Luis Castillo",
+   "status": "no play",
+   "game": null,
+   "first_pitch": null,
+   "ek": 4.7739682539682535,
+   "gs": 15,
+   "ek_source": "engine.kprops.proj on the live log -- NOT frozen pre-slate. Fine on a same-day pregame drop, leaky on a replay",
+   "quotes_in": 5,
+   "quotes_kept": 4,
+   "gate_eligible": false,
+   "eligibility": "first pitch unknown (arm not on the card) -> cannot prove pre-lock",
+   "tests": [
+    "T1 DK 4.5 hold 6.03%",
+    "T1 FD 4.5 hold 6.05%",
+    "T1 MGM 4.5 hold 6.93%",
+    "T1 BR 4.5 hold 7.01%",
+    "T3 spread 0.0 K over 4 books"
+   ],
+   "warnings": [],
+   "rejections": [
+    "CZR: line only, no price (R1: not a market)"
+   ],
+   "play": null
+  },
+  {
+   "pitcher": "Colin Rea",
+   "status": "no play",
+   "game": null,
+   "first_pitch": null,
+   "ek": 4.06296992481203,
+   "gs": 16,
+   "ek_source": "engine.kprops.proj on the live log -- NOT frozen pre-slate. Fine on a same-day pregame drop, leaky on a replay",
+   "quotes_in": 5,
+   "quotes_kept": 4,
+   "gate_eligible": false,
+   "eligibility": "first pitch unknown (arm not on the card) -> cannot prove pre-lock",
+   "tests": [
+    "T1 DK 3.5 hold 6.03%",
+    "T1 FD 3.5 hold 6.14%",
+    "T1 MGM 3.5 hold 7.62%",
+    "T1 BR 3.5 hold 7.18%",
+    "T3 spread 0.0 K over 4 books"
+   ],
+   "warnings": [],
+   "rejections": [
+    "CZR: line only, no price (R1: not a market)"
+   ],
+   "play": null
+  },
+  {
+   "pitcher": "Taj Bradley",
+   "status": "no play",
+   "game": null,
+   "first_pitch": null,
+   "ek": 6.283181185208107,
+   "gs": 20,
+   "ek_source": "engine.kprops.proj on the live log -- NOT frozen pre-slate. Fine on a same-day pregame drop, leaky on a replay",
+   "quotes_in": 4,
+   "quotes_kept": 3,
+   "gate_eligible": false,
+   "eligibility": "first pitch unknown (arm not on the card) -> cannot prove pre-lock",
+   "tests": [
+    "T1 DK 6.5 hold 6.00%",
+    "T1 FD 6.5 hold 6.05%",
+    "T1 BR 6.5 hold 6.88%",
+    "T3 spread 0.0 K over 3 books"
+   ],
+   "warnings": [],
+   "rejections": [
+    "CZR: line only, no price (R1: not a market)"
+   ],
+   "play": null
+  },
+  {
+   "pitcher": "Griffin Jax",
+   "status": "SHADOW",
+   "game": null,
+   "first_pitch": null,
+   "ek": 4.591954022988506,
+   "gs": 15,
+   "ek_source": "engine.kprops.proj on the live log -- NOT frozen pre-slate. Fine on a same-day pregame drop, leaky on a replay",
+   "quotes_in": 5,
+   "quotes_kept": 4,
+   "gate_eligible": false,
+   "eligibility": "first pitch unknown (arm not on the card) -> cannot prove pre-lock",
+   "tests": [
+    "T1 DK 5.5 hold 6.20%",
+    "T1 FD 5.5 hold 6.03%",
+    "T1 MGM 5.5 hold 6.78%",
+    "T1 BR 5.5 hold 7.05%",
+    "T3 spread 0.0 K over 4 books"
+   ],
+   "warnings": [],
+   "rejections": [
+    "CZR: line only, no price (R1: not a market)"
+   ],
+   "play": {
+    "book": "MGM",
+    "line": 5.5,
+    "side": "UNDER",
+    "price": -125,
+    "p": 0.687,
+    "edge": 0.132,
+    "ev": 0.237,
+    "disp": -0.91,
+    "p_push": 0.0,
+    "weight": 1.0
+   }
+  },
+  {
+   "pitcher": "Michael Lorenzen",
+   "status": "no play",
+   "game": null,
+   "first_pitch": null,
+   "ek": 3.8806646769379682,
+   "gs": 20,
+   "ek_source": "engine.kprops.proj on the live log -- NOT frozen pre-slate. Fine on a same-day pregame drop, leaky on a replay",
+   "quotes_in": 5,
+   "quotes_kept": 4,
+   "gate_eligible": false,
+   "eligibility": "first pitch unknown (arm not on the card) -> cannot prove pre-lock",
+   "tests": [
+    "T1 DK 3.5 hold 6.10%",
+    "T1 FD 3.5 hold 6.05%",
+    "T1 MGM 3.5 hold 5.76%",
+    "T1 BR 3.5 hold 7.18%",
+    "T3 spread 0.0 K over 4 books"
+   ],
+   "warnings": [],
+   "rejections": [
+    "CZR: line only, no price (R1: not a market)"
+   ],
+   "play": null
+  },
+  {
+   "pitcher": "Slade Cecconi",
+   "status": "no play",
+   "game": null,
+   "first_pitch": null,
+   "ek": 4.232416502946955,
+   "gs": 19,
+   "ek_source": "engine.kprops.proj on the live log -- NOT frozen pre-slate. Fine on a same-day pregame drop, leaky on a replay",
+   "quotes_in": 5,
+   "quotes_kept": 4,
+   "gate_eligible": false,
+   "eligibility": "first pitch unknown (arm not on the card) -> cannot prove pre-lock",
+   "tests": [
+    "T1 DK 4.5 hold 6.10%",
+    "T1 FD 4.5 hold 6.10%",
+    "T1 MGM 4.5 hold 6.93%",
+    "T1 BR 4.5 hold 7.13%",
+    "T3 spread 0.0 K over 4 books"
+   ],
+   "warnings": [],
+   "rejections": [
+    "CZR: line only, no price (R1: not a market)"
+   ],
+   "play": null
+  },
+  {
+   "pitcher": "Landen Roupp",
+   "status": "no play",
+   "game": null,
+   "first_pitch": null,
+   "ek": 5.530909090909091,
+   "gs": 19,
+   "ek_source": "engine.kprops.proj on the live log -- NOT frozen pre-slate. Fine on a same-day pregame drop, leaky on a replay",
+   "quotes_in": 4,
+   "quotes_kept": 3,
+   "gate_eligible": false,
+   "eligibility": "first pitch unknown (arm not on the card) -> cannot prove pre-lock",
+   "tests": [
+    "T1 DK 5.5 hold 6.21%",
+    "T1 FD 5.5 hold 6.21%",
+    "T1 BR 5.5 hold 6.90%",
+    "T3 spread 0.0 K over 3 books"
+   ],
+   "warnings": [],
+   "rejections": [
+    "CZR: line only, no price (R1: not a market)"
+   ],
+   "play": null
+  },
+  {
+   "pitcher": "Anthony Kay",
+   "status": "no play",
+   "game": null,
+   "first_pitch": null,
+   "ek": 4.334308051578841,
+   "gs": 18,
+   "ek_source": "engine.kprops.proj on the live log -- NOT frozen pre-slate. Fine on a same-day pregame drop, leaky on a replay",
+   "quotes_in": 5,
+   "quotes_kept": 4,
+   "gate_eligible": false,
+   "eligibility": "first pitch unknown (arm not on the card) -> cannot prove pre-lock",
+   "tests": [
+    "T1 DK 4.5 hold 6.03%",
+    "T1 FD 4.5 hold 6.14%",
+    "T1 MGM 4.5 hold 6.93%",
+    "T1 BR 4.5 hold 7.13%",
+    "T3 spread 0.0 K over 4 books"
+   ],
+   "warnings": [],
+   "rejections": [
+    "CZR: line only, no price (R1: not a market)"
+   ],
+   "play": null
+  },
+  {
+   "pitcher": "Troy Melton",
+   "status": "no play",
+   "game": null,
+   "first_pitch": null,
+   "ek": 5.443232716650438,
+   "gs": 10,
+   "ek_source": "engine.kprops.proj on the live log -- NOT frozen pre-slate. Fine on a same-day pregame drop, leaky on a replay",
+   "quotes_in": 4,
+   "quotes_kept": 3,
+   "gate_eligible": false,
+   "eligibility": "first pitch unknown (arm not on the card) -> cannot prove pre-lock",
+   "tests": [
+    "T1 DK 5.5 hold 6.07%",
+    "T1 FD 5.5 hold 6.03%",
+    "T1 MGM 5.5 hold 7.45%",
+    "T3 spread 0.0 K over 3 books"
+   ],
+   "warnings": [],
+   "rejections": [
+    "CZR: line only, no price (R1: not a market)"
+   ],
+   "play": null
+  },
+  {
+   "pitcher": "Cal Quantrill",
+   "status": "SHADOW",
+   "game": null,
+   "first_pitch": null,
+   "ek": 3.526900584795322,
+   "gs": 5,
+   "ek_source": "engine.kprops.proj on the live log -- NOT frozen pre-slate. Fine on a same-day pregame drop, leaky on a replay",
+   "quotes_in": 3,
+   "quotes_kept": 2,
+   "gate_eligible": false,
+   "eligibility": "first pitch unknown (arm not on the card) -> cannot prove pre-lock",
+   "tests": [
+    "T1 DK 2.5 hold 5.57%",
+    "T1 FD 2.5 hold 5.98%",
+    "T3 spread 0.0 K over 2 books"
+   ],
+   "warnings": [
+    "posted line 2.5 <= 3.5: a short posted line IS the book encoding a short outing, and the engine's E[TBF] prior does not read it. Known defect (Fedde/Freeland/Avila/Baz, 7/26). Held to shadow; --allow-short-lines to override."
+   ],
+   "rejections": [
+    "CZR: line only, no price (R1: not a market)"
+   ],
+   "play": {
+    "book": "DK",
+    "line": 2.5,
+    "side": "OVER",
+    "price": -152,
+    "p": 0.684,
+    "edge": 0.081,
+    "ev": 0.134,
+    "disp": 1.03,
+    "p_push": 0.0,
+    "weight": 0.5
+   }
+  },
+  {
+   "pitcher": "Brandon Pfaadt",
+   "status": "no play",
+   "game": null,
+   "first_pitch": null,
+   "ek": 3.7549256826823374,
+   "gs": 8,
+   "ek_source": "engine.kprops.proj on the live log -- NOT frozen pre-slate. Fine on a same-day pregame drop, leaky on a replay",
+   "quotes_in": 5,
+   "quotes_kept": 4,
+   "gate_eligible": false,
+   "eligibility": "first pitch unknown (arm not on the card) -> cannot prove pre-lock",
+   "tests": [
+    "T1 DK 3.5 hold 5.98%",
+    "T1 FD 3.5 hold 6.08%",
+    "T1 MGM 3.5 hold 6.71%",
+    "T1 BR 4.5 hold 7.11%",
+    "T3 spread 1.0 K over 4 books"
+   ],
+   "warnings": [],
+   "rejections": [
+    "CZR: line only, no price (R1: not a market)"
+   ],
+   "play": null
+  },
+  {
+   "pitcher": "Dean Kremer",
+   "status": "SHADOW",
+   "game": null,
+   "first_pitch": null,
+   "ek": 5.570355191256831,
+   "gs": 5,
+   "ek_source": "engine.kprops.proj on the live log -- NOT frozen pre-slate. Fine on a same-day pregame drop, leaky on a replay",
+   "quotes_in": 4,
+   "quotes_kept": 3,
+   "gate_eligible": false,
+   "eligibility": "first pitch unknown (arm not on the card) -> cannot prove pre-lock",
+   "tests": [
+    "T1 DK 4.5 hold 5.93%",
+    "T1 FD 4.5 hold 6.08%",
+    "T1 MGM 4.5 hold 7.11%",
+    "T3 spread 0.0 K over 3 books"
+   ],
+   "warnings": [],
+   "rejections": [
+    "CZR: line only, no price (R1: not a market)"
+   ],
+   "play": {
+    "book": "MGM",
+    "line": 4.5,
+    "side": "OVER",
+    "price": -140,
+    "p": 0.653,
+    "edge": 0.07,
+    "ev": 0.12,
+    "disp": 1.07,
+    "p_push": 0.0,
+    "weight": 0.5
+   }
+  },
+  {
+   "pitcher": "Jake Bennett",
+   "status": "SHADOW",
+   "game": null,
+   "first_pitch": null,
+   "ek": 4.465919840677122,
+   "gs": 10,
+   "ek_source": "engine.kprops.proj on the live log -- NOT frozen pre-slate. Fine on a same-day pregame drop, leaky on a replay",
+   "quotes_in": 5,
+   "quotes_kept": 4,
+   "gate_eligible": false,
+   "eligibility": "first pitch unknown (arm not on the card) -> cannot prove pre-lock",
+   "tests": [
+    "T1 DK 3.5 hold 5.88%",
+    "T1 FD 3.5 hold 5.97%",
+    "T1 MGM 3.5 hold 7.62%",
+    "T1 BR 3.5 hold 7.05%",
+    "T3 spread 0.0 K over 4 books"
+   ],
+   "warnings": [
+    "posted line 3.5 <= 3.5: a short posted line IS the book encoding a short outing, and the engine's E[TBF] prior does not read it. Known defect (Fedde/Freeland/Avila/Baz, 7/26). Held to shadow; --allow-short-lines to override."
+   ],
+   "rejections": [
+    "CZR: line only, no price (R1: not a market)"
+   ],
+   "play": {
+    "book": "FD",
+    "line": 3.5,
+    "side": "OVER",
+    "price": -148,
+    "p": 0.652,
+    "edge": 0.055,
+    "ev": 0.092,
+    "disp": 0.97,
+    "p_push": 0.0,
+    "weight": 1.0
+   }
+  },
+  {
+   "pitcher": "Bubba Chandler",
+   "status": "SHADOW",
+   "game": null,
+   "first_pitch": null,
+   "ek": 4.476665676665677,
+   "gs": 18,
+   "ek_source": "engine.kprops.proj on the live log -- NOT frozen pre-slate. Fine on a same-day pregame drop, leaky on a replay",
+   "quotes_in": 4,
+   "quotes_kept": 3,
+   "gate_eligible": false,
+   "eligibility": "first pitch unknown (arm not on the card) -> cannot prove pre-lock",
+   "tests": [
+    "T1 DK 3.5 hold 5.79%",
+    "T1 FD 3.5 hold 5.88%",
+    "T1 BR 3.5 hold 7.11%",
+    "T3 spread 0.0 K over 3 books"
+   ],
+   "warnings": [
+    "posted line 3.5 <= 3.5: a short posted line IS the book encoding a short outing, and the engine's E[TBF] prior does not read it. Known defect (Fedde/Freeland/Avila/Baz, 7/26). Held to shadow; --allow-short-lines to override."
+   ],
+   "rejections": [
+    "CZR: line only, no price (R1: not a market)"
+   ],
+   "play": {
+    "book": "BR",
+    "line": 3.5,
+    "side": "OVER",
+    "price": 123,
+    "p": 0.654,
+    "edge": 0.205,
+    "ev": 0.458,
+    "disp": 0.98,
+    "p_push": 0.0,
+    "weight": 1.0
+   }
+  },
+  {
+   "pitcher": "Seth Lugo",
+   "status": "SHADOW",
+   "game": null,
+   "first_pitch": null,
+   "ek": 4.567733312367324,
+   "gs": 20,
+   "ek_source": "engine.kprops.proj on the live log -- NOT frozen pre-slate. Fine on a same-day pregame drop, leaky on a replay",
+   "quotes_in": 5,
+   "quotes_kept": 4,
+   "gate_eligible": false,
+   "eligibility": "first pitch unknown (arm not on the card) -> cannot prove pre-lock",
+   "tests": [
+    "T1 DK 3.5 hold 5.93%",
+    "T1 FD 4.5 hold 5.88%",
+    "T1 MGM 4.5 hold 6.99%",
+    "T1 BR 3.5 hold 7.00%",
+    "T3 spread 1.0 K over 4 books"
+   ],
+   "warnings": [
+    "posted line 3.5 <= 3.5: a short posted line IS the book encoding a short outing, and the engine's E[TBF] prior does not read it. Known defect (Fedde/Freeland/Avila/Baz, 7/26). Held to shadow; --allow-short-lines to override."
+   ],
+   "rejections": [
+    "CZR: line only, no price (R1: not a market)"
+   ],
+   "play": {
+    "book": "DK",
+    "line": 3.5,
+    "side": "OVER",
+    "price": -165,
+    "p": 0.669,
+    "edge": 0.046,
+    "ev": 0.074,
+    "disp": 1.07,
+    "p_push": 0.0,
+    "weight": 1.0
+   }
+  },
+  {
+   "pitcher": "Gavin Williams",
+   "status": "no play",
+   "game": null,
+   "first_pitch": null,
+   "ek": 7.134920634920635,
+   "gs": 21,
+   "ek_source": "engine.kprops.proj on the live log -- NOT frozen pre-slate. Fine on a same-day pregame drop, leaky on a replay",
+   "quotes_in": 1,
+   "quotes_kept": 1,
+   "gate_eligible": false,
+   "eligibility": "first pitch unknown (arm not on the card) -> cannot prove pre-lock",
+   "tests": [
+    "T1 FD 7.5 hold 6.00%",
+    "T3 skipped: only 1 book"
+   ],
+   "warnings": [],
+   "rejections": [],
+   "play": null
+  },
+  {
+   "pitcher": "Chris Sale",
+   "status": "REJECTED",
+   "game": null,
+   "first_pitch": null,
+   "ek": 6.786895368782162,
+   "gs": 19,
+   "ek_source": "engine.kprops.proj on the live log -- NOT frozen pre-slate. Fine on a same-day pregame drop, leaky on a replay",
+   "quotes_in": 5,
+   "quotes_kept": 0,
+   "gate_eligible": false,
+   "eligibility": "first pitch unknown (arm not on the card) -> cannot prove pre-lock",
+   "tests": [
+    "T3 skipped: only 0 book"
+   ],
+   "warnings": [],
+   "rejections": [
+    "DK: line only, no price (R1: not a market)",
+    "FD: line only, no price (R1: not a market)",
+    "MGM: line only, no price (R1: not a market)",
+    "BR: line only, no price (R1: not a market)",
+    "CZR: line only, no price (R1: not a market)"
+   ],
+   "play": null
+  },
+  {
+   "pitcher": "Christian Scott",
+   "status": "REJECTED",
+   "game": null,
+   "first_pitch": null,
+   "ek": 5.465465465465465,
+   "gs": 13,
+   "ek_source": "engine.kprops.proj on the live log -- NOT frozen pre-slate. Fine on a same-day pregame drop, leaky on a replay",
+   "quotes_in": 3,
+   "quotes_kept": 0,
+   "gate_eligible": false,
+   "eligibility": "first pitch unknown (arm not on the card) -> cannot prove pre-lock",
+   "tests": [
+    "T3 skipped: only 0 book"
+   ],
+   "warnings": [],
+   "rejections": [
+    "DK: line only, no price (R1: not a market)",
+    "FD: line only, no price (R1: not a market)",
+    "CZR: line only, no price (R1: not a market)"
+   ],
+   "play": null
+  }
+ ]
+}

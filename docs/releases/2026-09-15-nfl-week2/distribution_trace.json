@@ -1,0 +1,81 @@
+{
+  "status": "EIGHT_STEP_TRACE_REPRODUCED",
+  "forecast_identity": "e3870fd7ffd40c1afa40a75d961cb9c354ca2183a6df1ee1f0e39012f513ffbf",
+  "forecast_sha256": "ae62fa4b7e3660fac044f32cc37a02b659d1cc6cc76b24410d71d35861f02203",
+  "trace": [
+    {
+      "step": 1,
+      "object": "frozen source/features",
+      "feature_sha256": "94dac060a9d1bb29c490ec52b9a660424f2853be22254b0e27ec83763cdeeba8"
+    },
+    {
+      "step": 2,
+      "object": "exact fitted coefficient artifact",
+      "model_sha256": "c1cdf49dbb1a98bbf2b3d4286042a316c132dc7d472f3138c3bbbb1e0cb1c3cd"
+    },
+    {
+      "step": 3,
+      "object": "separate logistic and Ridge heads",
+      "predictions": {
+        "home_win": 0.44644666117130705,
+        "home_margin": 0.3986765215795396,
+        "total_points": 44.43207952090133
+      }
+    },
+    {
+      "step": 4,
+      "object": "out-of-fold paired final-score residuals",
+      "count": 1871,
+      "sha256": "0303ab2252c6ca694e82c6c0643f2c6e9a9b101e633be27c491964852a6ea05b"
+    },
+    {
+      "step": 5,
+      "object": "recenter residuals, add Ridge centers, clip nonnegative, round integer",
+      "support_sha256": "75d67be5a93d105d3bbd83344ce651dafb777cb88a4dfd50753523e2c13031d0"
+    },
+    {
+      "step": 6,
+      "object": "stratify home/away/tie, assign fitted logistic and tie masses",
+      "tie_rate": 0.0036256906077348065
+    },
+    {
+      "step": 7,
+      "object": "exact weighted joint measure",
+      "summary": {
+        "distribution": "OUTCOME_ALIGNED_FINAL_SCORE_KERNEL_V2",
+        "measure_sha256": "4884ae7900b8e9152f9a884cdaf8b9014a968474a4e3673fafd36be7888779f1",
+        "p_home_win": 0.4448279837050435,
+        "p_away_win": 0.5515463256872216,
+        "p_tie": 0.0036256906077348056,
+        "p_home_win_conditional_non_tie": 0.44644666117130694,
+        "mean_home_score": 21.775678526784816,
+        "mean_away_score": 22.6840094308301,
+        "mean_margin": -0.9083309040452826,
+        "mean_total": 44.45968795761492,
+        "source": "EXACT_WEIGHTED_SUPPORT_NOT_MONTE_CARLO",
+        "calibration_established": false
+      },
+      "home_by_at_least_21": 0.06888285025748764,
+      "away_at_most_10": 0.10259619929870906,
+      "home_minus_2_5": {
+        "win": 0.3875873053220608,
+        "push_or_refund": 0.0,
+        "loss": 0.6124126946779391,
+        "scope": "UNVALIDATED_EXACT_KERNEL_SETTLEMENT"
+      }
+    },
+    {
+      "step": 8,
+      "object": "seeded sampler and draw hash",
+      "seed": 2357191008857872652,
+      "sha256": "fa1c3f6378255baf86cce10130a72f25709ffa80edb2039974bf395d39345942",
+      "draws_identical": true,
+      "draw_count": 100000
+    }
+  ],
+  "normal_sigma_parameter": null,
+  "normal_backsolves_are_not_distribution_validation": true,
+  "independent_calibration_validation": false,
+  "old_forecast_modified": false,
+  "action_authority": false
+}

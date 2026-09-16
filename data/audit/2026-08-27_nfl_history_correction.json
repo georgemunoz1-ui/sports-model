@@ -1,0 +1,37 @@
+{
+ "authority": "owner correction with three recovered evidence artifacts, 2026-08-27",
+ "corrected_states": [
+  "NFL_REGULAR_SEASON_MODEL_BUILT_RETROSPECTIVE_GATE_PASSED",
+  "NFL_MODEL_LINEAGE_NOT_RESTORED_TO_ACTIVE_BRANCH",
+  "PRESEASON_EXCLUDED_BY_REGISTERED_SCOPE",
+  "NO_COMPETITION_ELIGIBLE_PRESEASON_FORECAST",
+  "0 BETS \u00b7 $0"
+ ],
+ "created_utc": "2026-08-27T08:43:15Z",
+ "failure_pattern": "same class as the WNBA drought: completed model work exists but the operational pipeline presented its absence as though the work never happened. This is a model-restoration incident, not a from-scratch build problem.",
+ "record_id": "NFL-HISTORY-CORRECTION-2026-08-27",
+ "record_sha256": "53f7c9a9b5a35a8b2f2dc216988b932c44e339e5f1d0f2e34256bf3ae476a1b1",
+ "recovered_evidence": {
+  "files": {
+   "data/nfl/model/recovered/NFL_V0_2_REPORTING_DISPOSITION_2026-08-11.json": "b4fbc2d66d81652bf0220efb1f6ec54901bdfc49a807126f8b45b8fb273a5989",
+   "data/nfl/model/recovered/STATUS.json": "6935de06e3f4d25e93880b2f29f29252aaf711260fbf35342c6b3bb6bd0469ef",
+   "data/nfl/model/recovered/walk_forward_metrics.json": "9ae70459bf8762aba12ec9f52f7b611a2ab00e85c23ece0e1ee54bdae805a8aa"
+  },
+  "grade": "OWNER_UPLOADED_RECOVERED_ARTIFACT \u2014 recovered from the historical checkout, not the lost commit-pinned lineage; restoration of the immutable run directory remains open work"
+ },
+ "schema": "ops.corrections.v1",
+ "supersedes_in": "cards/2026-08-27_nfl_board.json registry_verdict and status fields (frozen board bytes unchanged, append-only); reports/2026-08-27_nfl_forecast_and_market_review.html corrected in place",
+ "tonights_outcome": "no-forecast REMAINS CORRECT \u2014 for the registered-scope reason, not the never-built reason",
+ "verified_facts": {
+  "correct_disposition": "VALIDATED_SHADOW_ARTIFACT / NO_PROMOTE / NO LIVE FORECAST AUTHORITY / $0",
+  "lineage_loss": "recorded commits 1d089d45* and f3cf5b1d* resolve NOWHERE in the full local history or the current remote (verified: git cat-file fails on both prefixes across --all)",
+  "model_id": "nfl.rs.epa_logit_ridge.v0_2.shadow",
+  "preseason_scope": "preseason was EXCLUDED by the registered scope (DATA_CAPTURE_ONLY / NO_FORECAST: planned QB/starter snap share and substitution intent are not reconstructible historically as pregame timestamped features)",
+  "retrospective_record": "2,895 completed RS games with PBP; 1,865 walk-forward predictions 2019-2025; winner Brier 0.2298 vs 0.2497 expanding baseline; paired CI95 [-0.0261,-0.0137] over 124 season-week blocks, 20000 reps; margin MAE 10.41 vs 11.14; total MAE 11.01 vs 10.98 NOT validated (CI crosses zero); primary retrospective gate PASS"
+ },
+ "what_was_true": "the ACTIVE branch registry carries no NFL model \u2014 the audit correctly described sportsmodel/main and incorrectly generalized to 'ever'",
+ "withdrawn_claims": [
+  "SYSTEM_FAILURE_NFL_MODEL_NOT_REGISTERED (as a statement about system history)",
+  "'No NFL model has ever been registered' \u2014 FALSE. nfl.rs.epa_logit_ridge.v0_1.shadow (REJECTED_DO_NOT_USE, append-only invalidation) and v0_2.shadow (VALIDATED_SHADOW_ARTIFACT) were built and preregistered."
+ ]
+}

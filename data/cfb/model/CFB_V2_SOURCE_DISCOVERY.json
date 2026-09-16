@@ -1,0 +1,36 @@
+{
+  "record_id": "CFB-V2-SOURCE-DISCOVERY-20260827T064922Z",
+  "observed_utc": "2026-08-27T06:49:22Z",
+  "status": "DISCOVERED_NOT_YET_ACQUIRED",
+  "sources": [
+    {
+      "repository": "sportsdataverse/cfbfastR-raw",
+      "head_commit_observed": "328c9511f9ae3e7b263bae62080314a6ea873ebc",
+      "role": "RAW_ESPN_CACHE"
+    },
+    {
+      "repository": "sportsdataverse/cfbfastR-cfb-raw",
+      "head_commit_observed": "ea83e8640b2f44c9c83b69ab4bc4d58738599dae",
+      "role": "ENRICHED_PER_GAME_JSON"
+    },
+    {
+      "repository": "sportsdataverse/cfbfastR-cfb-data",
+      "head_commit_observed": "5eb380494e8d1c745ca58e5924e8604f8e8539f4",
+      "role": "ANALYSIS_READY_TABLE_BUILDERS_AND_SCHEMAS"
+    },
+    {
+      "repository": "sportsdataverse/sportsdataverse-data",
+      "head_commit_observed": "b8631fe13186a4e12285ce9f14eb8e8dced3b10d",
+      "role": "GITHUB_RELEASE_HOST"
+    },
+    {
+      "repository": "CFBD/cfbd-python",
+      "head_commit_observed": "52f2bbf7d02beecf3c569255715c7770916a06a3",
+      "role": "OPTIONAL_VERSIONED_API_CLIENT"
+    }
+  ],
+  "discovery_is_not_binding": "A HEAD observation is not a source pin. Acquisition must select a commit, retain exact files, hash every byte and create a separate immutable manifest before fitting.",
+  "market_data_predictive_use": "FORBIDDEN",
+  "wager_authority": "NO",
+  "stake": 0
+}

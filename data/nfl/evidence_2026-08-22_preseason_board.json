@@ -1,0 +1,20 @@
+{
+ "record_id": "NFL-PRESEASON-BOARD-2026-08-22",
+ "schema": "nfl.board.v1",
+ "captured_at_utc": "2026-08-23T00:05:00Z",
+ "slate_date": "2026-08-22",
+ "source_tier": 2,
+ "source_family": "ONLINE_ACQUISITION_TITLES_AND_SLUGS",
+ "acquisition_note": "Every official and reference NFL host (nfl.com, espn.com) is denied by the org egress policy. Corroboration came from agreement across independent publisher titles and URL slugs.",
+ "grade_scope": "MARKET_BENCHMARK_ONLY — no NFL model identity exists in the registry and no immutable pregame probability card is registered. Brier, log loss, edge and EV are NULL BY RULE, not omitted by oversight.",
+ "games_pregame_at_capture": [
+  {"away": "DAL", "home": "ARI", "kickoff_utc": "2026-08-23T02:00:00Z",
+   "venue": "State Farm Stadium, Glendale AZ", "kickoff_local": "10:00 PM ET",
+   "benchmark_side": null,
+   "benchmark_null_reason": "NO_ATTRIBUTABLE_LINE — no same-book spread or moneyline was acquired. A benchmark side requires a capture-time line; a snippet-only or unattributable price is EVIDENCE ONLY and cannot produce a selection (8/3 ruling)."}
+ ],
+ "games_already_kicked_not_registered": "Week 2 reportedly carried ~10 games on this date, most kicking between 16:00Z and 23:00Z. Those are past kickoff and are NEVER registered.",
+ "enumeration_limitation": "The full 10-game list could not be transcribed reliably: the available enumeration merged multiple games into single bullets, omitted a kickoff time for one, and its accompanying results paragraph mixed in five games that are not from 2026-08-22. Only the game whose kickoff time and venue were independently corroborated is recorded here.",
+ "brier": null, "logloss": null, "model_edge": null, "ev": null,
+ "null_reason": "MARKET_BENCHMARK_ONLY + NO_ATTRIBUTABLE_LINE"
+}

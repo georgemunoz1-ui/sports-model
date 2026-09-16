@@ -1,0 +1,58 @@
+{
+ "record_id": "SLATE-GRADING-2026-08-08-CORRECTED",
+ "built_utc": "2026-08-10T04:47:04Z",
+ "supersedes": "data/mlb/forecasts/2026-08-08_grading.json (built on tier-3 WebSearch results, 4 of 15 wrong)",
+ "source": "tier-1 owner box dump, parsed by harness/parse_box_dump.py (27/30 linescore-verified)",
+ "corrected_vs_reported": {
+  "v13_straight_up": {
+   "reported": "7/15 (47%)",
+   "actual": "8/15 (53%)"
+  },
+  "v13_brier": {
+   "reported": 0.2558,
+   "actual": 0.2614,
+   "note": "accuracy improved but Brier got WORSE \u2014 the wrong rows were games the model was CONFIDENT about, so correcting them cost more in calibration than it gained in hit-rate"
+  },
+  "market_favorite": {
+   "reported": "6/15 (40%)",
+   "actual": "7/15 (47%)"
+  },
+  "pass1_marketblind": {
+   "reported": "7/12",
+   "actual": "8/12"
+  },
+  "attractive_plays": {
+   "reported": "3/3",
+   "actual": "3/3",
+   "note": "UNCHANGED \u2014 MIL/CWS/TB all genuinely won; this conclusion survives"
+  },
+  "home_teams": {
+   "reported": "10/15",
+   "actual": "9/15"
+  }
+ },
+ "claims_status": {
+  "SURVIVES": [
+   "'attractive plays 3/3' \u2014 MIL, CWS, TB all really won",
+   "PASS/$0 slate decision \u2014 made PRE-game on pre-game information, unaffected by result errors",
+   "V13 edged the market (8/15 vs 7/15) \u2014 still true, margin unchanged at +1"
+  ],
+  "WEAKENED": [
+   "'upset-heavy night' \u2014 market favorites went 7/15 (47%), not 6/15 (40%); still a losing night for chalk but less extreme",
+   "'V13 Brier 0.2558, worse than a coin flip' \u2014 actually 0.2614, WORSE than reported; the model is further from validated than stated"
+  ],
+  "VOID": [
+   "any per-game narrative about ATH@BOS, LAA@MIA, DET@SF or TB@SEA in the 8/8 grading and progress.md"
+  ]
+ },
+ "grading_2026_08_09": {
+  "v13": "11/15 (73%)",
+  "brier": 0.2353,
+  "home_teams": "8/15",
+  "MAJOR_CAVEAT": "13 of 15 games were CAP (starters unconfirmed at card time -> league-average SP). V13 went 10/13 on those. So the 73% is largely TEAM-FORM + HFA, not the starter-aware simulation. Do NOT read it as validation of the pitching model.",
+  "note": "No odds board was captured for 8/9, so there is NO market benchmark and NO EV/edge comparison for this slate."
+ },
+ "governance": "gate 0/100 NO_PROMOTE; ledger $0; both slates were PASS/$0 (no money at risk from the bad data)",
+ "SUPERSEDED_BY": "2026-08-10_claim_retractions.json",
+ "SUPERSEDED_NOTE": "Several headline claims in this file are VOID \u2014 see the retractions record. Do not cite without it."
+}

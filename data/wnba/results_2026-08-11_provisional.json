@@ -1,0 +1,157 @@
+{
+ "record_id": "WNBA-RESULTS-2026-08-11",
+ "recorded_utc": "2026-08-12T09:07:12Z",
+ "source_tier": 3,
+ "result_status": "PROVISIONAL \u2014 assembled from dated news coverage (Washington Post 8/11-8/12 story URLs and matching recaps). NOT tier-1. Becomes FINAL only on an owner capture or official box. No grade rows were written anywhere.",
+ "echo_guard": "none of the three score pairs duplicates the 8/10 finals (95-107, 88-97); stale stories about OTHER Fever-Liberty and Mercury-Sparks games (102-88, 91-80, 86-82, and a 2024 Wilson 28/17 recap) surfaced in the same searches and were REJECTED on date/roster evidence \u2014 Sabally appearing as a Mercury player marks one story as pre-2026",
+ "finals_provisional": [
+  {
+   "game": "NYL@IND",
+   "score": "92-106",
+   "winner": "IND",
+   "total": 198,
+   "key_stats": "Mitchell 28; Clark 22p/10a/4r (played through QUESTIONABLE)"
+  },
+  {
+   "game": "WAS@LVA",
+   "score": "76-86",
+   "winner": "LVA",
+   "total": 162,
+   "key_stats": "Wilson 26p/13r/4blk (10-18 FG); Young 25; ends WAS 7-game win streak"
+  },
+  {
+   "game": "PHX@LAS",
+   "score": "94-87",
+   "winner": "PHX",
+   "total": 181,
+   "key_stats": "Brochant season-high 24 (rookie, projected five); Thomas 16 incl. 9 in 4th; PHX snaps 3-game skid"
+  }
+ ],
+ "market_settlement_vs_owner_board": {
+  "note": "spread/total only \u2014 the 8/11 board carried no priced pairs, so no de-vig probabilities exist to grade",
+  "NYL@IND": "IND -2.5 COVERED (by 14); total 198 vs 190.5 OVER",
+  "WAS@LVA": "LVA -6.5 COVERED (by 10); total 162 vs 170.5 UNDER",
+  "PHX@LAS": "LAS -2.5 LOST OUTRIGHT \u2014 PHX +2.5 covered by 9.5; total 181 vs 178.5 OVER",
+  "sign_flip_postscript": "the market's overnight move from PHX -1 to LAS -2.5 (which the personnel layer explained via Plum OUT) moved TOWARD the loser. The market was wrong on this one; n=1, recorded not concluded."
+ },
+ "external_model_cohorts_PREVIEW": {
+  "authority": "grading belongs to the other session's ledger from tier-1 evidence; this is the pre-committed ALL-COHORTS preview required by the rule frozen at commit cac39f6 BEFORE any final was known",
+  "v0_5_active": {
+   "rows": [
+    {
+     "game": "NYL@IND",
+     "p_home": 0.787,
+     "home_won": 1,
+     "brier": 0.0454,
+     "side_correct": true,
+     "margin_pred": 9.2,
+     "margin_actual": 14,
+     "margin_err": 4.8,
+     "total_pred": 177.4,
+     "total_actual": 198,
+     "total_err": 20.6
+    },
+    {
+     "game": "WAS@LVA",
+     "p_home": 0.567,
+     "home_won": 1,
+     "brier": 0.1875,
+     "side_correct": true,
+     "margin_pred": 2.9,
+     "margin_actual": 10,
+     "margin_err": 7.1,
+     "total_pred": 163.6,
+     "total_actual": 162,
+     "total_err": -1.6
+    },
+    {
+     "game": "PHX@LAS",
+     "p_home": 0.484,
+     "home_won": 0,
+     "brier": 0.2343,
+     "side_correct": true,
+     "margin_pred": -0.2,
+     "margin_actual": -7,
+     "margin_err": -6.8,
+     "total_pred": 173.7,
+     "total_actual": 181,
+     "total_err": 7.3
+    }
+   ],
+   "brier_mean": 0.1557,
+   "sides": "3/3",
+   "margin_mae": 6.2,
+   "total_mae": 9.8
+  },
+  "v0_4_superseded_pre_tip": {
+   "rows": [
+    {
+     "game": "NYL@IND",
+     "p_home": 0.722,
+     "home_won": 1,
+     "brier": 0.0773,
+     "side_correct": true,
+     "margin_pred": 7.4,
+     "margin_actual": 14,
+     "margin_err": 6.6,
+     "total_pred": 166.1,
+     "total_actual": 198,
+     "total_err": 31.9
+    },
+    {
+     "game": "WAS@LVA",
+     "p_home": 0.477,
+     "home_won": 1,
+     "brier": 0.2735,
+     "side_correct": false,
+     "margin_pred": 1.1,
+     "margin_actual": 10,
+     "margin_err": 8.9,
+     "total_pred": 152.2,
+     "total_actual": 162,
+     "total_err": 9.8
+    },
+    {
+     "game": "PHX@LAS",
+     "p_home": 0.237,
+     "home_won": 0,
+     "brier": 0.0562,
+     "side_correct": true,
+     "margin_pred": -3.2,
+     "margin_actual": -7,
+     "margin_err": -3.8,
+     "total_pred": 160.4,
+     "total_actual": 181,
+     "total_err": 20.6
+    }
+   ],
+   "brier_mean": 0.1357,
+   "sides": "2/3",
+   "margin_mae": 6.4,
+   "total_mae": 20.8
+  },
+  "v0_3_superseded_incident": "rows not held in this repository; must be graded in the other session's ledger alongside these",
+  "the_rule_earning_its_keep": "v0.4 (mean Brier 0.1357) OUTSCORED v0.5 (0.1557) on n=3 \u2014 driven entirely by the PHX@LAS row, where v0.4's internally-incoherent 23.7% happened to sit on the winning side of a game PHX won by 7. This is precisely the scenario the frozen rule anticipated: the incoherent number was WRONG for a reason (its own margin said 40.9%) and got PAID by variance. A 17.2pp self-contradiction does not become good modeling because the coin landed its way. No cohort may be cited without the others; n=3 resolves nothing.",
+  "what_v05_did_show": "3/3 sides, and its two repaired estimands behaved: totals MAE 9.8 (vs v0.4's 17.4 \u2014 the +11 level shift was directionally right on all three), margins MAE 6.2 (vs 7.5)."
+ },
+ "personnel_layer_validation": {
+  "plum_out_phx_won_anyway": "the projected-five rookie Brochant scored a season-high 24 \u2014 the capture had the right five on the floor",
+  "clark_questionable_played": "22/10/4 \u2014 consistent with the layer's rule of keeping QUESTIONABLE visible rather than coercing to out",
+  "assessment": "first live night for the personnel layer: both of its judgment calls were correct"
+ },
+ "board_integrity_flag": {
+  "lva_record_discrepancy": "post-game coverage lists the Aces at 23-11; the owner's pregame board had LVA 22-12, which implies 23-12 after the win. One loss of daylight between sources. NOT resolved here \u2014 flagged for reconciliation against the official standings, same handling as prior board-integrity items."
+ },
+ "third_party_est_columns_recorded_not_adopted": {
+  "IND": "EST line -5.6 -> actual -14 (side right, magnitude short)",
+  "LAS": "EST line LAS +3.2 -> LAS lost by 7 (side WRONG)",
+  "totals": "EST 183.7/173.5/179.4 vs actual 198/162/181",
+  "quarantine": "same rule as always: recorded verbatim, never adopted, never a feature"
+ },
+ "governance": {
+  "gate": "0/100 NO_PROMOTE",
+  "ledger": "$0",
+  "model_layer_here": "ABSENT \u2014 no WNBA model exists in this repository; nothing above is this repo's forecast grade",
+  "registry": "untouched"
+ }
+}

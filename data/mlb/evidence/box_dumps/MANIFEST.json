@@ -1,0 +1,15 @@
+{
+ "record_id": "BOXDUMP-EVIDENCE-2026-08-08_09",
+ "frozen_utc": "2026-08-10T05:20:09Z",
+ "source_tier": 1,
+ "path": "data/mlb/evidence/box_dumps/2026-08-08_09_statcast_box_dump.txt",
+ "sha256": "5e978c3c83405d0363d0e6b260dc5a0cdd2e3ccc4429c15ac1e85425a9829c98",
+ "parser": "harness/parse_box_dump.py",
+ "parsed": "data/mlb/evidence/box_dumps/2026-08-08_09_parsed.json",
+ "games": {
+  "2026-08-08": 15,
+  "2026-08-09": 15
+ },
+ "independent_verification": "27/30 games verified by linescore-sum inside the dump itself; 3 lack a linescore and are marked no-linescore",
+ "why": "AUDIT FINDING (self-inflicted): the correction of 2026-08-10 originally cited only a TRUNCATED hash of a file living outside the repo (an ephemeral upload path). That made the correction unreproducible and unfalsifiable \u2014 the same defect this audit criticised in the tier-3 ingestion it replaced. The raw evidence is now frozen in-repo with its full hash, and the parse is reproducible from the frozen copy."
+}

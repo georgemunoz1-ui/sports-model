@@ -1,0 +1,97 @@
+{
+ "record_id": "CARD-PRESENTATION-CORRECTION-2026-08-21",
+ "created_utc": "2026-08-21T12:25:00Z",
+ "authority": "owner review 2026-08-21; all four defects verified against artifacts before acceptance",
+ "method": "APPEND_ONLY. Render-gate rules added and the 8/21 decision surface re-rendered. No forecast, card, grade or evidence file was modified; the underlying probabilities are unchanged.",
+ "defect_1_margin_sign": {
+  "withdrawn": "WNBA rows displayed 'model margin: WAS -7.23 spread points' / 'CHI -4.08', which reads as those teams being FAVORED and contradicts their own win probabilities (WAS 25.2%, CHI 36.5%).",
+  "root_cause": "the stored field is home_margin_pred = home points - away points. A negative value means the HOME team LOSES. The betting fair spread is its NEGATION. Rendering the raw field with a minus sign silently reused spread notation for a margin quantity.",
+  "correct_display": [
+   {
+    "game": "MIN@WAS",
+    "home_margin": -7.23,
+    "plain": "WAS projected to lose by 7.23",
+    "fair_home_spread": "WAS +7.23"
+   },
+   {
+    "game": "GSV@CHI",
+    "home_margin": -4.08,
+    "plain": "CHI projected to lose by 4.08",
+    "fair_home_spread": "CHI +4.08"
+   },
+   {
+    "game": "PDX@TOR",
+    "home_margin": 3.55,
+    "plain": "TOR projected to win by 3.55",
+    "fair_home_spread": "TOR -3.55"
+   }
+  ],
+  "enforcement": "decision_card.margin_display() emits team + direction in words AND the explicitly labeled fair spread; render_gate check #9 fails any margin lacking either. Selftest fixtures: a bare 'B -7.23' must fail; the correct wording must pass.",
+  "repeat_offence": "this is the SECOND time this surface defect has been corrected (first: 2026-08-20 TOR@WAS, where margin and fair spread were blended). It is now mechanical rather than editorial."
+ },
+ "defect_2_delta_attribution": {
+  "withdrawn": "the column labeled 'Starter move vs v1' and prose such as 'Schlittler's addition moved New York 8.1 points' and 'Cameron moved Kansas City -7.5'.",
+  "why_wrong": [
+   "the quantity is p_home(v2) - p_home(v1), an OBSERVED delta that contains starter information PLUS sequential-RNG coupling noise, because daily_card.py consumes one global RNG in slate order",
+   "attributing a game-level delta to ONE pitcher is over-attribution: in DET@KC both Melton and Cameron changed from league-average simultaneously, so neither can be credited alone",
+   "the keyed-seed/high-n harness already exists and is the only noise-separated figure available"
+  ],
+  "correct_treatment": "show BOTH: the observed delta (labeled as such) and the keyed-seed reference figure. Only the latter may be called a starter effect, and even then it is a joint effect of both slots that changed.",
+  "enforcement": "decision_card.delta_display(); render_gate check #10 fails any text calling a delta a 'starter effect' without the keyed-seed reference.",
+  "figures": {
+   "observed_mean_abs_pp": 3.19,
+   "keyed_reference_mean_abs_pp": 3.28,
+   "mean_abs_difference_pp": 0.38
+  }
+ },
+ "defect_3_completeness_denominator": {
+  "withdrawn": "'starters 80% resolved' shown beside a slot-level narrative.",
+  "exact_accounting": {
+   "denominator": "30 starter slots",
+   "named_on_board": 27,
+   "tbd_on_board": 3,
+   "named_but_registry_missing": 1,
+   "registry_miss": "Hayden Wesneski (HOU)",
+   "model_resolved": "26 of 30 starter slots (86.7%)",
+   "cap_slots": "4 of 30 (13.3%)",
+   "game_level_alternative": "10 of 15 games fully resolved on both sides (66.7%); 5 of 15 carry at least one league-average slot"
+  },
+  "source_of_the_80_percent": "harness/pregame_preflight.py counts GAMES that carry a TBD *name*: 12 of 15 = 80.0%. That denominator silently excludes Wesneski, who is named (so not TBD) but registry-missing (so still league-average). Three different denominators were in play at once and none was labeled.",
+  "owner_figure_confirmed": "26/30 = 86.7% model-resolved with four CAP slots is exactly right.",
+  "enforcement": "decision_card.completeness_display() prints numerator, denominator and the NAMED unit; render_gate check #11 fails any bare 'NN% resolved' string in the decision text."
+ },
+ "defect_4_neutral_site": {
+  "withdrawn": "'that 61.2% should be discounted by an unknown amount' \u2014 not an executable correction, as the owner noted.",
+  "new_permanent_status": "OUT_OF_DOMAIN\u2014NEUTRAL_SITE_HCA_UNMODELED",
+  "applies_to": "PDX@TOR 2026-08-21, played at Rogers Arena Vancouver while Toronto is nominally home; the frozen WNBA feature set has no neutral-site term and applied a full home-court advantage.",
+  "semantics": [
+   "forces final_action BLOCKED",
+   "survives prices arriving \u2014 it is NOT a no-prices block",
+   "the row REMAINS in the immutable WINNER validation cohort (the forecast is registered and will grade)",
+   "and remains in the complete ATS diagnostic cohort if the frozen preregistration requires it",
+   "it is blocked from CARD ACTION only \u2014 the same registration/action/settlement separation ratified on 2026-08-20"
+  ],
+  "enforcement": "PERMANENT_BLOCKS in decision_card.py; render_gate check #8 fails any OUT_OF_DOMAIN row whose action is not BLOCKED. Selftest fixture included."
+ },
+ "defect_5_cross_model_contamination": {
+  "withdrawn": "the suggestion that MIN@WAS at 74.8% deserves extra scepticism because a DIFFERENT model's most-confident MLB pick lost on 2026-08-20.",
+  "why_wrong": "that is cross-model contamination of reasoning. The MLB V13 simulation and the WNBA ridge-logit shadow are separate models with separate validation histories; one model's miss carries no information about another model's calibration. The 8/20 finding was explicitly narrowed by the owner to a statement about V13 on that slate.",
+  "correct_treatment": "MIN@WAS warrants ROUTINE high-confidence review \u2014 the same scrutiny any high-confidence forecast gets \u2014 and nothing more.",
+  "owner_wording": "it should not be discounted because a different MLB model's most-confident prediction lost yesterday."
+ },
+ "odds_fragments": "owner confirms the 12:00Z handling was correct: record incomplete fragments as evidence, do not construct a board or screen from them.",
+ "writes": {
+  "forecasts_altered": 0,
+  "grades_appended": 0,
+  "cards_modified": 0,
+  "evidence_modified": 0,
+  "gate_rules_added": 4,
+  "decision_surface_rerendered": 1,
+  "new_records": 1
+ },
+ "standing": {
+  "gate": "0/100 NO_PROMOTE",
+  "ledger_usd": 0,
+  "wager_authority": "NO"
+ }
+}

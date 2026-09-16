@@ -1,0 +1,38 @@
+{
+ "schema": "mlb.v14_exclusion_ledger.v1",
+ "record_id": "V14-EXCLUSIONS-2026-08-19",
+ "created_utc": "2026-08-19T22:14:13Z",
+ "protocol_ref": "docs/experiments/2026-08-18_V14_FORWARD_PROTOCOL.json (ELIGIBILITY_FROZEN)",
+ "slate_outcome": "ZERO V14-eligible games on 2026-08-19. No V14 forecast registered. Every exclusion counted below with its class.",
+ "classes": {
+  "PROJECTED_ONLY": [
+   "DET@PIT",
+   "SD@NYM",
+   "ATL@MIN",
+   "CWS@CHC",
+   "AZ@BOS",
+   "NYY@BAL",
+   "SEA@MIL",
+   "WSH@TEX",
+   "LAD@COL"
+  ],
+  "UNKNOWN_STARTER": [
+   "ATH@KC (both sides unresolved through T-90 22:10Z)",
+   "SF@CLE (Wilkinson MLB debut \u2014 no starter history; league-average substitution never produces a V14 forecast)",
+   "LAA@HOU (Pecko \u2014 no MLB record; same rule; also only lineup-posted attestation)"
+  ],
+  "AMBIGUOUS_POSTED_LINEUP_ATTESTATION": [
+   "MIA@PHI",
+   "TOR@TB",
+   "STL@CIN"
+  ]
+ },
+ "the_ambiguous_class_explained": "The owner's 20:30Z discretionary card states 'both lineups are posted' for these three games, with both starters registry-known (Alcantara/Nola, Scherzer/Rasmussen, Liberatore/Burns). A posted MLB lineup card operationally implies the confirmed starter. But the frozen eligibility rule requires a tier-1 capture that SAYS CONFIRMED of starter identity, and this message is a discretionary betting card, not a starter-class capture. Loosening the frozen token in-flight is exactly the class-inflation the protocol forbids, so these three are EXCLUDED and counted \u2014 the conservative reading costs eligible games, never cleanliness.",
+ "operational_miss_recorded": "If the owner rules 'posted lineups' = CONFIRMED-class, then MIA@PHI (22:05Z start) was an eligible game whose V14 registration window was missed: the 20:30Z message was processed as a discretion card and its starter-class implication was not evaluated until this 22:10Z check, 9 minutes after MIA@PHI began. That recognition failure is the assistant's and is recorded regardless of the ruling. TOR@TB and STL@CIN were still pre-start at evaluation (22:14Z vs 22:40Z) and are excluded on class grounds alone, not timing.",
+ "owner_ruling_requested": "For future slates: does an owner message attesting 'both lineups posted' (or 'confirmed order') constitute a T-90 CONFIRMED-class starter capture for V14 eligibility when the starters are registry-known? A yes-rule will be applied prospectively only \u2014 today's exclusions stand either way (R3: the frozen rule as written governed this slate).",
+ "running_count": {
+  "eligible_to_date": 0,
+  "excluded_to_date": 15,
+  "promotion_bar": "500 games / 60 dates"
+ }
+}

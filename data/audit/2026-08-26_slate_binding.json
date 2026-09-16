@@ -1,0 +1,45 @@
+{
+ "board": "cards/2026-08-26_board.json (mlb cohort 4d1b67c4, frozen 2026-08-26T16:55:49Z self-asserted, commit 91ec7ec anchors it)",
+ "created_utc": "2026-08-26T17:00:00Z",
+ "grade": "SEARCH_IDENTIFIED_UNCONFIRMED",
+ "ladder": [
+  {
+   "result": "EGRESS_BLOCKED",
+   "rung": "OFFICIAL_API",
+   "url": "statsapi.mlb.com schedule 2026-08-26"
+  },
+  {
+   "result": "EGRESS_BLOCKED",
+   "rung": "OFFICIAL_SITE",
+   "url": "mlb.com/probable-pitchers/2026-08-26"
+  },
+  {
+   "result": "15 games identified; matchups are the same fifteen series as 8/25 (concordant across two result sets); start times listed without a stated timezone, Pacific inferred and flagged; probables identified for PHI@SEA (Luzardo/Woo), PIT@SD (Chandler/Vasquez), MIN@ATH (Prielipp/Ginn); all other slots TBD -> preregistered CAP dose 0.5",
+   "rung": "SEARCH_IDENTIFICATION"
+  },
+  {
+   "result": "REQUESTED \u2014 confirmation or correction of this slate, start times, probables and any prices",
+   "rung": "OWNER_RELAY"
+  }
+ ],
+ "record_id": "SLATE-BINDING-2026-08-26",
+ "record_sha256": "2c016ee4a4dd646c47d179bc7db908a63d48845780b073f77a1787f4939620d1",
+ "rules": "snippets identify and never bind; nothing built on this slate settles, promotes or feeds the estimator; a false identification is corrected append-only (lesson 37)",
+ "schema": "ops.slate_binding.v2",
+ "slate_file": "data/mlb/slates/2026-08-26_slate.psv",
+ "slate_sha256": "641694a9ca068c26a88bb0e7cc3b6885e09f2f204f624d890bd3672de179c436",
+ "wnba": {
+  "disposition": "SCHEDULE NOTED ONLY \u2014 the WNBA cohort publishes SYSTEM_FAILURE_WNBA_FEATURE_PIPELINE (RJ-005 0/17); no forecasts are generated from a failed pipeline; note the alias namespace: wnba:TOR is Toronto Tempo, distinct from mlb TOR",
+  "grade": "SEARCH_IDENTIFIED_UNCONFIRMED (single source, Yahoo listing)",
+  "identified": [
+   {
+    "game": "wnba:GSV@CON",
+    "start_local": "7 p.m. (tz unstated)"
+   },
+   {
+    "game": "wnba:TOR@SEA",
+    "start_local": "10 p.m. (tz unstated)"
+   }
+  ]
+ }
+}

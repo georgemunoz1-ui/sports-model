@@ -1,0 +1,47 @@
+{
+ "record_id": "NFL-DK-PRICE-CAPTURE-20260822-DAL@ARI",
+ "schema": "nfl.owner_price_board.v1",
+ "supersedes_by_appending": "data/nfl/evidence_2026-08-22_preseason_board.json recorded benchmark_side NULL for want of an attributable line. That record is not edited (R6); this one supplies the line and fills the benchmark.",
+ "captured_at_utc": "2026-08-23T01:04:00Z",
+ "device_clock_shown": "6:03 PM PT, countdown 'Starts in 00:56:49'",
+ "book": "DraftKings",
+ "book_attribution": "SINGLE BOOK, BOTH SIDES. The DraftKings logo is on the board and every market shows both sides from that one book.",
+ "source_tier": 1,
+ "source_family": "OWNER_SOURCE_PIXELS",
+
+ "PRICE_BASIS": "SAME_BOOK_TWO_SIDED — DE-VIG VALID. This is the first same-book two-sided capture of the night and it is materially different from the WNBA aggregator board. The arithmetic confirms the badge: overround +4.75% on the moneyline, +4.62% on the spread, +4.75% on the main total, +6.52% on both SGP alternates. A genuine single-book vig. The WNBA capture two hours earlier carried +0.58% and +0.41%, which is the signature of best-odds shopping across books and is why de-vig was refused there. THE OVERROUND IS THE TEST AND THIS BOARD PASSES IT.",
+
+ "game": {"away": "DAL", "home": "ARI", "kickoff_utc": "2026-08-23T02:00:00Z",
+          "kickoff_local": "Today 7:00 PM PT", "venue": "State Farm Stadium, Glendale AZ",
+          "pct_of_bets_placed": {"DAL": 52, "ARI": 48},
+          "book_odds_movement": "DK implied chart shows DAL 50% / ARI 50% at capture"},
+
+ "markets": {
+  "moneyline": {"DAL": -108, "ARI": -112, "overround_pct": 4.75,
+                "devig": {"DAL": 0.4957, "ARI": 0.5043}},
+  "spread_main": {"DAL": {"line": 1.5, "price": -118}, "ARI": {"line": -1.5, "price": -102},
+                  "overround_pct": 4.62, "devig_cover": {"DAL": 0.5174, "ARI": 0.4826}},
+  "total_main": {"line": 38.5, "over": -112, "under": -108, "overround_pct": 4.75,
+                 "devig": {"over": 0.5043, "under": 0.4957}},
+  "spread_alt": {"DAL": {"line": 2.5, "price": -130}, "ARI": {"line": -2.5, "price": 100},
+                 "overround_pct": 6.52, "tag": "SGP"},
+  "total_alt": {"line": 37.5, "over": -130, "under": 100, "overround_pct": 6.52, "tag": "SGP"}
+ },
+
+ "MODEL_STATUS": "NO NFL MODEL EXISTS. There is no NFL model identity in the registry and no immutable pregame probability card. A valid de-vig produces a MARKET probability; it does not produce an edge, because there is nothing to compare it against. Brier, log loss, model edge and EV remain NULL BY RULE, not omitted by oversight. A valid price basis raises the quality of the market evidence, not the existence of a model.",
+
+ "benchmark_registration": {
+  "convention": "registered NFL benchmark convention — the capture-time market favourite is the benchmark side; a tie grades PUSH and is counted separately",
+  "benchmark_side": "ARI",
+  "basis": "ARI is the favourite on both the moneyline (-112 vs -108) and the spread (-1.5)",
+  "benchmark_ml_price": -112,
+  "benchmark_spread": -1.5,
+  "benchmark_spread_price": -102,
+  "market_devig_p_ari": 0.5043,
+  "registered_minutes_before_kickoff": 56,
+  "grade_scope": "MARKET_BENCHMARK_ONLY. This measures the market, not the model."
+ },
+
+ "SGP_CORRELATION_NOTE": "The alternate spread and alternate total are tagged SGP (same-game parlay). Legs inside one game are CORRELATED — a DAL +2.5 cover and an Over 37.5 are not independent events — and books price SGP combinations with a correlation adjustment that is not visible on this screen. The independence multiplication used in the 2026-08-22 parlay screen is defensible ACROSS different games and is NOT valid within one game. Any same-game combination would need the book's own combined price, and even then carries no model view here.",
+ "alt_line_juice_note": "Both SGP alternates carry +6.52% overround against +4.62-4.75% on the main lines — roughly 40% more vig for moving the number one point."
+}

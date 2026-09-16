@@ -1,0 +1,66 @@
+{
+ "DOES_TONIGHT_SETTLE_IT": "NO. If ATL +2.5 covers, the 64.2 was still not derived from a distribution consistent with 39.7, and the price was still assumed. If it does not cover, that is one game. The defect is in the arithmetic and it is settled by reading the artifact, which is why this record is written BEFORE tip.",
+ "I_WAS_RIGHT_BUT_THE_BETTER_FRAMING_IS_THIS": {
+  "my_earlier_wording": "'the cover probability contradicts its own moneyline by 17.6pp'",
+  "the_fair_alternative_I_had_to_rule_out": "the two numbers could come from two DIFFERENT arms \u2014 a win-probability model and a margin model \u2014 which are entitled to disagree.",
+  "verdict": "either reading blocks the lean. The board's own note ('divergence from spread recorded') shows the divergence WAS noticed \u2014 it was recorded and then leaned on anyway. Noticing is not resolving.",
+  "why_it_does_not_rescue_the_lean": [
+   "if they are ONE distribution, the two numbers cannot both be true and the board is internally inconsistent.",
+   "if they are TWO arms, the disagreement is a CONVERGENCE_FAIL \u2014 and this board HAS that posture and uses it. CONVERGENCE_FAIL appears exactly ONCE in the frozen file, on HOU@NYM. It is not applied to MIN@ATL, which is the one game where two of the board's own numbers describe opposite outcomes.",
+   "and a LEAN was taken off the disagreeing arm without naming which arm is authoritative or why."
+  ]
+ },
+ "LEDGER": {
+  "exposure_usd": 0,
+  "n_bets": 0,
+  "units": 0.0,
+  "wager_authority": "NO"
+ },
+ "MY_OWN_NUMBER_FOR_THE_SAME_GAME": {
+  "and_I_still_do_not_play_it": "NO PLAY. Atlanta's availability is NOT IDENTIFIED for 8/30; the only report search returned was 32 days stale and was not used.",
+  "board": "cards/2026-08-30_wnba_board.json, arm wnba.replacement.FEATURE_REFRESH, feature cutoff 2026-08-29",
+  "coherence": "my two numbers agree with each other by construction \u2014 the cover probability is derived FROM the projected margin, not computed beside it.",
+  "cover_prob_ATL_plus_2.5": 0.4774,
+  "p_home_ATL": 0.3645,
+  "projected_margin_ATL": -3.21
+ },
+ "R6": "append-only. The frozen board is NOT edited. The prior card-update record is NOT edited; this extends it.",
+ "SECOND_DEFECT_IN_THE_SAME_ROW": {
+  "compounding": "usable_edge_pp 6.9 is 14.3 discounted by DQ 0.65 x Unc 0.75. Discounting a number whose base is wrong does not repair the base; it launders it into something that looks conservatively derived.",
+  "consequence": "the 14.3pp edge is model 64.2 minus an ASSUMED 50.0, not minus a measured no-vig number. At a typical -110/-110 the no-vig cover is 50.0, so the assumption is reasonable; at the -102 to -125 prices elsewhere on this same card it is not.",
+  "finding": "market_no_vig_cover_pct is 50.0 and entry.price_american is null \u2014 the spread price was never captured, only the line.",
+  "reading": "the row is honest about it \u2014 data_quality says 'entry price not captured in relay' and execution_status is NOT_ACTIONABLE. But an edge computed against an assumed price is not an edge, and it is the number the LEAN is sized from."
+ },
+ "SIGMA": {
+  "effect_on_this_row": "Phi(5.1/12.5523) = 0.6577 versus Phi(5.1/13.97) = 0.6425. Two points. The sigma is the smallest thing wrong with this row.",
+  "measured_value": 12.5523,
+  "n": 1721,
+  "used_by_the_board": 13.97,
+  "what_13.97_is": "a REGISTERED COHERENCE TOLERANCE, per data/audit/2026-08-30_sigma_provenance_register.json"
+ },
+ "WHAT_THE_ARTIFACT_ACTUALLY_SAYS": {
+  "ML_row": {
+   "decision": "PASS",
+   "model_win_pct": 39.7,
+   "note": "ML edge negative; divergence from spread recorded",
+   "selection": "ATL"
+  },
+  "SPREAD_row": {
+   "decision": "LEAN",
+   "edge_pp": 14.3,
+   "model_cover_pct": 64.2,
+   "selection": "ATL +2.5",
+   "stated_derivation": "cover p = Phi(5.1/13.97)",
+   "usable_edge_pp": 6.9
+  },
+  "game": "MIN @ ATL, event_id wnba_min_atl_2026-08-30",
+  "what_39.7_means": "a 39.7% win probability requires a NEGATIVE projected ATL margin: -3.65 at sigma 13.97.",
+  "what_5.1_means": "5.1 = projected ATL margin + 2.5, so the spread row is built on a projected ATL margin of +2.6 \u2014 ATL WINNING by two and a half."
+ },
+ "created_utc": "2026-08-30T17:45:00Z",
+ "extends": "CARD-UPDATE-2026-08-30T1330ET",
+ "record_id": "CARD-UPDATE-2026-08-30T1330ET-ADDENDUM-A",
+ "record_sha256": "0bef78aaf3399fe5d84c98dde22008ed6df2dd3629305c2244fe8f1884bf8e31",
+ "schema": "ops.card_update_addendum.v1",
+ "why": "the 8/30 board was frozen into the repo (cards/2026-08-30_pregame_board_v6_canonical.json, commits 603dd36..50b7669) while the card update was being written. My earlier finding was made against the CHAT RELAY. It now has the frozen artifact underneath it, which both confirms it and sharpens the correct framing."
+}

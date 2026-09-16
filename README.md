@@ -1,3 +1,7 @@
+# Consolidated sports models
+
+Start with [model access and commands](docs/CONSOLIDATED_MODEL_ACCESS.md) and [tested default selection](docs/MODEL_DEFAULT_SELECTION.md). The dated status below is retained as historical context; the access guide describes the consolidated runtime.
+
 # Sports Model Research System
 
 Sports forecasting and simulation research across MLB, CFB, WNBA, NFL, MLS, NBA and NHL.

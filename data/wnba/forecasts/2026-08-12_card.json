@@ -1,0 +1,69 @@
+{
+ "record_id": "WNBA-CARD-2026-08-12",
+ "model_id": "wnba.rs.ff7_logit_ridge.v1_0.shadow",
+ "generated_at_utc": "2026-08-12T17:44:09Z",
+ "slate_date": "2026-08-12",
+ "feature_state_as_of": "2026-07-22",
+ "staleness_days": 21,
+ "target_status": {
+  "home_win": "VALIDATED_VS_BASELINE",
+  "margin": "VALIDATED_VS_BASELINE",
+  "total": "VALIDATED_VS_BASELINE"
+ },
+ "total_limitation": "the league-level term accumulates ACROSS eras (prereg said within-era). It validated vs baseline under the frozen protocol anyway, but the level lags the hotter 2026 environment \u2014 treat totals as directionally low. Fixing the accumulator requires a successor prereg, not an edit.",
+ "authority": "SHADOW DIAGNOSTIC, paper only, wager_authority NO, stake 0. Promotion requires a separate prospective gate.",
+ "walkforward_evidence": {
+  "n": 1633,
+  "brier": 0.2112318736147291,
+  "base": 0.2471628938348657,
+  "auc": 0.7222466960352423,
+  "cal_slope": 1.0546488072300644,
+  "win_p_holm": 0.0,
+  "margin_mae": 9.994992200020839,
+  "total_mae": 14.16358826210898
+ },
+ "rows": [
+  {
+   "away": "TOR",
+   "home": "DAL",
+   "tip_utc": "2026-08-13T00:00Z",
+   "p_home": 0.7229,
+   "margin_home": 7.54,
+   "total": 170.4,
+   "coherence_gap_pp": 1.77,
+   "coherence_pass": true,
+   "games_used": {
+    "home": 27,
+    "away": 26
+   }
+  },
+  {
+   "away": "MIN",
+   "home": "PDX",
+   "tip_utc": "2026-08-13T02:00Z",
+   "p_home": 0.1937,
+   "margin_home": -10.39,
+   "total": 170.9,
+   "coherence_gap_pp": 3.48,
+   "coherence_pass": true,
+   "games_used": {
+    "home": 27,
+    "away": 28
+   }
+  },
+  {
+   "away": "CHI",
+   "home": "GSV",
+   "tip_utc": "2026-08-13T02:00Z",
+   "p_home": 0.7419,
+   "margin_home": 8.35,
+   "total": 167.1,
+   "coherence_gap_pp": 1.7,
+   "coherence_pass": true,
+   "games_used": {
+    "home": 27,
+    "away": 27
+   }
+  }
+ ]
+}

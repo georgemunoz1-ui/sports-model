@@ -1,0 +1,27 @@
+{
+ "schema": "ops.scheduled_refresh.v1",
+ "record_id": "REFRESH-20260819-1650Z",
+ "fired_at_utc": "2026-08-19T16:50:00Z",
+ "executed_at_utc": "2026-08-19T16:51:27Z",
+ "purpose": "T-90 check before CWS@CHC 18:20Z \u2014 the THREE_SOURCE_CONFLICT game (VSiN Kay / preview Newcomb / odds-board Urquidy)",
+ "new_boards_since_1005Z": "NONE \u2014 no owner starter/lineup/price attestation has arrived",
+ "acquisition_attempt": {
+  "targets": [
+   "statsapi.mlb.com/api/v1/schedule",
+   "api.the-odds-api.com/v4/sports/baseball_mlb/odds"
+  ],
+  "result": "HTTP 000 \u2014 CONNECT tunnel refused (403) at the org egress proxy, both targets",
+  "not_routed_around": true
+ },
+ "cws_chc_t90_outcome": "MISSED \u2014 no resolving attestation by T-90. CWS@CHC stays BLOCKED\u2014STARTER_MISMATCH (THREE_SOURCE_CONFLICT) through first pitch; its unified row never unblocks and no selection can mint for it today. The conflict resolves only at settlement, when the finals board names the actual starter \u2014 that attribution lands in the grade record, not in a retroactive card edit.",
+ "slate_state": "DET@PIT in progress since 16:35Z (no in-game data consumed; forecasts frozen pregame). SD@NYM 17:10Z and ATL@MIN 17:40Z start inside this hour \u2014 both carry PROJECTED starters; V14 excludes and counts them per protocol.",
+ "v14_running_count": "No CONFIRMED-class capture all day: every 8/19 game passing first pitch is excluded-and-counted. Transport test accrues zero eligible games from this slate unless a CONFIRMED capture precedes a remaining game's T-90.",
+ "remaining_deadlines": "SF@CLE T-90 21:10Z, ATH@KC T-90 22:10Z; WNBA TOR@WAS tips 23:30Z, MIN@GSV 02:00Z (grades on finals; ATS cohort 0-0)",
+ "cohorts_unchanged": {
+  "v1": "immutable",
+  "v2": "frozen screening basis",
+  "v3": "not forked \u2014 no new starter attestation"
+ },
+ "betting_output": "ZERO \u2014 unchanged; gate 0/100 NO_PROMOTE, paper only, execution UNAUTHORIZED",
+ "next_check": "re-armed 22:10Z (ATH@KC T-90; SF@CLE's 21:10Z T-90 state recorded there honestly if still nothing arrives)"
+}

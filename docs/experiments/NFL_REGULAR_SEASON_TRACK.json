@@ -1,0 +1,165 @@
+{
+ "record_id": "NFL-REGULAR-SEASON-TRACK-SPEC-v0",
+ "created_utc": "2026-08-10T21:05:00Z",
+ "base_commit": "28088e82bd281e488e0ad54e6cd24b9eb9e4842c",
+ "status": "SPEC_ONLY — PRE-REGISTRATION. No data acquired. No estimator fitted. No forecast emitted.",
+ "authority": "owner disposition D3, data/nfl/DISPOSITION.json",
+ "r1_statement": "This document contains ZERO estimated quantities. Every number below is a threshold or a design constant chosen before seeing data, not a result.",
+
+ "objective": {
+  "target": "P(home team wins) for NFL regular-season games, as of a frozen pregame timestamp",
+  "secondary_targets_deferred": ["margin distribution", "total points"],
+  "explicitly_not_a_target": "preseason games (see disposition D2)"
+ },
+
+ "as_of_discipline": {
+  "rule": "Every feature must be computable from information published strictly BEFORE the freeze timestamp. A feature that cannot be reconstructed as-of is DISQUALIFIED, not approximated.",
+  "freeze_schedule": {
+   "T_minus_120": "primary freeze — inactives are not yet official; features marked PROVISIONAL",
+   "T_minus_30": "final verification — NFL inactives are official 90 minutes before kickoff, so this freeze uses CONFIRMED status",
+   "overwrite_rule": "The T-120 provisional card is never overwritten. The T-30 card is a separate version. Both are retained and graded separately."
+  },
+  "look_ahead_tests_required": [
+   "for a random sample of games, re-derive every feature from sources timestamped before the freeze and assert byte-equality with the stored feature row",
+   "assert no feature draws on any row of the outcome table for the game being predicted or any later game"
+  ]
+ },
+
+ "feature_blocks": [
+  {
+   "block": "early_down_epa_causal",
+   "intent": "Offensive and defensive efficiency on 1st and 2nd down, which is less contaminated by score-state and clock effects than all-down EPA.",
+   "definition_constraints": [
+    "restrict to 1st and 2nd down",
+    "exclude garbage time by a pregame-fixed win-probability band, not by score margin chosen after inspection",
+    "opponent-adjust (see opponent_adjustment block) — raw EPA rank is a schedule artifact",
+    "use a pre-registered shrinkage toward league mean for small samples; the shrinkage constant is fixed BEFORE fitting, not tuned on the validation window"
+   ],
+   "as_of_risk": "LOW — play-by-play is published same-day and is not revised in a way that changes pregame availability."
+  },
+  {
+   "block": "qb_status",
+   "intent": "Starting QB identity and health, the single largest personnel effect in the sport.",
+   "definition_constraints": [
+    "starter identity as CONFIRMED at T-30 (inactives), PROVISIONAL at T-120",
+    "a QB change must be represented as a discrete level change, not as a smooth team-strength decay",
+    "backup quality is its own term; 'QB out' is not one number"
+   ],
+   "as_of_risk": "MEDIUM — beat-reporter status is tier-3 until the official inactive list posts. PROVISIONAL/CONFIRMED must be recorded per the existing source-tier rules."
+  },
+  {
+   "block": "ol_health",
+   "intent": "Offensive line continuity, which mediates the QB effect.",
+   "definition_constraints": [
+    "count of projected Week-1 starters available, plus continuity (games this unit has started together)",
+    "position-weighted; LT and C are not interchangeable with RG",
+    "requires depth-chart state as-of kickoff"
+   ],
+   "as_of_risk": "HIGH — depth charts are frequently revised retroactively. This block is the most likely to be DATA_BLOCKED and must be built so the model runs without it."
+  },
+  {
+   "block": "opponent_adjustment",
+   "intent": "Strength-of-schedule correction applied to every efficiency input.",
+   "definition_constraints": [
+    "adjust using only games played before the freeze",
+    "iterative/ridge-regularized adjustment, with the regularization fixed before fitting",
+    "early-season adjustment must shrink hard — a 2-game sample opponent adjustment is noise amplification"
+   ],
+   "as_of_risk": "LOW"
+  },
+  {
+   "block": "rest",
+   "intent": "Days since last game and short-week/bye asymmetry.",
+   "definition_constraints": [
+    "days-rest differential, plus explicit indicators for Thursday short week and post-bye",
+    "indicators, not a linear day count — the effect is not linear in days"
+   ],
+   "as_of_risk": "NONE — schedule is known well in advance."
+  },
+  {
+   "block": "travel",
+   "intent": "Distance, time-zone crossings and direction.",
+   "definition_constraints": [
+    "great-circle distance, signed time-zone delta, and an international-game indicator",
+    "must not be conflated with home-field advantage, which is a separate constant"
+   ],
+   "as_of_risk": "NONE"
+  },
+  {
+   "block": "weather",
+   "intent": "Wind, precipitation and temperature at kickoff, for outdoor venues only.",
+   "definition_constraints": [
+    "FORECAST as-of the freeze, never the realized observation — using realized weather is look-ahead",
+    "dome/retractable-roof games take a fixed indoor level, not a forecast",
+    "wind is the term with real support; temperature effects are small and must not be over-parameterized"
+   ],
+   "as_of_risk": "MEDIUM — requires storing the forecast at freeze time. It cannot be reconstructed later."
+  },
+  {
+   "block": "injuries_non_qb",
+   "intent": "Skill-position and defensive-front availability beyond QB and OL.",
+   "definition_constraints": [
+    "official injury report designations as-of the freeze, plus the official inactive list at T-30",
+    "aggregate by snap-share-weighted absence, not by player count",
+    "snap shares must come from games before the freeze"
+   ],
+   "as_of_risk": "MEDIUM"
+  }
+ ],
+
+ "estimator": {
+  "form": "logistic regression on standardized features (link chosen a priori; the MLB work established that a linear-probability model ranks worse by AUC and produces out-of-range predictions)",
+  "regularization": "ridge, penalty selected inside each training fold only",
+  "standardization": "fitted on the training fold ONLY; never on the full sample",
+  "prohibited_without_a_new_pre-registration": [
+   "swapping to a tree ensemble or neural model",
+   "adding interaction terms discovered by inspecting validation performance",
+   "any feature added after seeing a validation result"
+  ]
+ },
+
+ "validation": {
+  "scheme": "expanding-window walk-forward, strictly date-ordered. Random splits are prohibited — they leak future information across a season.",
+  "minimum_train": "one full prior season before the first forecast",
+  "metrics_required": [
+   "Brier, with the Murphy decomposition (reliability / resolution / uncertainty)",
+   "ROC-AUC",
+   "calibration intercept and slope from logistic recalibration; the target is intercept 0, slope 1",
+   "log loss"
+  ],
+  "inference": {
+   "method": "week-block bootstrap (resample whole WEEKS, not individual games — games in a week share weather regimes, schedule and injury-report timing)",
+   "multiplicity": "Holm-Bonferroni across all model comparisons reported in a release",
+   "note": "The MLB work found a comparison that looked significant at t = -1.98 and did not survive date-block bootstrap plus Holm (p_raw 0.062, p_holm 0.375). Assume the same will happen here."
+  },
+  "ablations_required": "leave-one-block-out walk-forward for every feature block above. A block that does not improve out-of-sample Brier is removed, regardless of coefficient magnitude.",
+  "coefficient_rule": "Coefficient magnitude is NOT evidence. Only out-of-sample improvement under the bootstrap is evidence."
+ },
+
+ "pre_registered_thresholds": {
+  "note": "Fixed before any data is acquired. Changing them requires a new record, not an edit to this one.",
+  "min_games_before_any_forecast_is_emitted": 256,
+  "promotion_requires_all_of": [
+   "out-of-sample Brier better than a home-field-only baseline, with the week-block bootstrap 95% CI excluding zero after Holm",
+   "calibration slope within [0.85, 1.15] and intercept within [-0.15, 0.15]",
+   "ROC-AUC above the baseline on the same folds",
+   "every retained block passing its own ablation",
+   "a full look-ahead audit passing on a random sample of frozen feature rows"
+  ],
+  "gate_on_failure": "NO_PROMOTE. A failed threshold is a result, not a reason to retune."
+ },
+
+ "execution_status": {
+  "gate": "0/100 NO_PROMOTE",
+  "ledger": "$0, model-authorized",
+  "mode": "paper",
+  "execution": "UNAUTHORIZED",
+  "note": "This spec authorizes building and measuring. It authorizes no wager and no promotion."
+ },
+
+ "known_blockers_at_spec_time": [
+  "No NFL play-by-play, injury, depth-chart, schedule or weather data exists in this repository. Every block above is currently DATA_BLOCKED.",
+  "ol_health and weather require prospective capture; weather forecasts in particular cannot be reconstructed after the fact.",
+  "Until acquisition completes, the correct status is DATA_BLOCKED, not a degraded model."
+ ]
+}

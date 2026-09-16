@@ -1,0 +1,164 @@
+<title>NFL Readiness Board — August 27</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=Public+Sans:wght@400;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  --bg:#f4f5f7; --panel:#ffffff; --ink:#252a33; --muted:#5f6773; --line:#d6dae1;
+  --accent:#44546e; --fail-bg:#f8e9e4; --fail-ink:#8a3b2a; --fail-line:#e0b3a4;
+  --warn-bg:#fdf3e3; --warn-ink:#7a5218; --warn-line:#e5c894; --chip:#eceef2;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#171a1f; --panel:#1f242c; --ink:#e3e7ec; --muted:#98a1ad; --line:#37404c;
+    --accent:#8ba3c7; --fail-bg:#2e1f1b; --fail-ink:#e2a08c; --fail-line:#5c3a2f;
+    --warn-bg:#2d2415; --warn-ink:#e3c07f; --warn-line:#59492a; --chip:#293039;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#171a1f; --panel:#1f242c; --ink:#e3e7ec; --muted:#98a1ad; --line:#37404c;
+  --accent:#8ba3c7; --fail-bg:#2e1f1b; --fail-ink:#e2a08c; --fail-line:#5c3a2f;
+  --warn-bg:#2d2415; --warn-ink:#e3c07f; --warn-line:#59492a; --chip:#293039;
+}
+body{background:var(--bg);color:var(--ink);font:16px/1.55 "Public Sans",system-ui,sans-serif;margin:0;padding:0 16px 64px}
+main{max-width:960px;margin:0 auto}
+h1,h2{font-family:"Archivo",system-ui,sans-serif;text-wrap:balance;line-height:1.15}
+h1{font-size:1.9rem;margin:28px 0 4px}
+h2{font-size:1.25rem;margin:34px 0 10px}
+.sub{color:var(--muted);margin:0 0 18px}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0}
+.chip{background:var(--chip);border:1px solid var(--line);border-radius:999px;padding:3px 12px;font-size:.82rem}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:18px 20px;margin:16px 0}
+.answers{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px}
+.answers .a{border-left:3px solid var(--accent);padding:2px 0 2px 10px}
+.answers .q{font-size:.72rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted)}
+.answers .v{font-weight:600}
+.fail{background:var(--fail-bg);color:var(--fail-ink);border:1px solid var(--fail-line);border-radius:10px;padding:14px 18px;margin:14px 0}
+.warn{background:var(--warn-bg);color:var(--warn-ink);border:1px solid var(--warn-line);border-radius:10px;padding:12px 16px;margin:14px 0}
+.scroll{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:.9rem}
+th,td{padding:7px 10px;border-bottom:1px solid var(--line);text-align:right;font-variant-numeric:tabular-nums}
+th{font-family:"Archivo";font-size:.75rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
+th.l,td.l{text-align:left}
+td.n{font-family:"IBM Plex Mono",monospace;font-size:.85rem}
+details{border:1px solid var(--line);border-radius:10px;padding:12px 18px;margin:12px 0;background:var(--panel)}
+summary{cursor:pointer;font-family:"Archivo";font-weight:600}
+code{font-family:"IBM Plex Mono",monospace;font-size:.85em;background:var(--chip);padding:1px 5px;border-radius:4px}
+p{max-width:70ch}
+.proof{background:var(--chip);border:1px solid var(--line);border-radius:10px;padding:12px 16px;margin:14px 0;font-family:"IBM Plex Mono",monospace;font-size:.82rem;line-height:1.7;overflow-x:auto}
+.proof b{font-family:"Archivo",sans-serif}
+</style>
+<main>
+<h1>NFL Readiness Board — Thursday, August 27</h1>
+<p class="sub">Final · preseason week · 4 games · benchmark results only — no model, no forecast, no grade</p>
+
+<div class="chips">
+<span class="chip">NFL_REGULAR_SEASON_MODEL_BUILT_RETROSPECTIVE_GATE_PASSED</span>
+<span class="chip">NFL_MODEL_LINEAGE_NOT_RESTORED_TO_ACTIVE_BRANCH</span>
+<span class="chip">PRESEASON_EXCLUDED_BY_REGISTERED_SCOPE</span>
+<span class="chip">NO_COMPETITION_ELIGIBLE_PRESEASON_FORECAST</span>
+<span class="chip">BENCHMARK_INPUTS_RETAINED</span>
+<span class="chip">CANONICAL_PRESEASON_SCHEDULE_UNAVAILABLE</span>
+<span class="chip">0 BETS · $0</span>
+</div>
+
+<div class="proof"><b>RESULT BINDING PROOF</b> &mdash; nfl:2026-08-27 &middot; <code>3fd7b14b</code><br>
+RESULT_BINDING_PASS = 0/0<br>
+DATE_COHERENCE_PASS = 0/0<br>
+CANONICAL_ID_MATCH = 0/0<br>
+REFUSED_ROWS = 0<br>
+<span style="font-family:Public Sans,sans-serif">0/0 means <b>nothing claimed</b>, not nothing checked: no probability was emitted for this phase, so there are no result rows to bind. The four finals on this page are benchmark display only.</span></div>
+
+<h2>Results — benchmark evidence only</h2>
+<div class="scroll"><table>
+<thead><tr><th class="l">Game</th><th class="l">Final</th><th class="l">Relayed spread</th><th class="l">Benchmark note</th></tr></thead>
+<tbody>
+<tr><td class="l">PIT @ BUF</td><td class="l"><b>BUF 28–27</b></td><td class="l">BUF −3</td><td class="l">Favorite won, did not cover</td></tr>
+<tr><td class="l">NE @ CLE</td><td class="l"><b>CLE 37–13</b></td><td class="l">NE −2.5</td><td class="l">Favorite lost outright</td></tr>
+<tr><td class="l">SF @ LV</td><td class="l"><b>SF 18–12</b></td><td class="l">LV −3.5</td><td class="l">Favorite lost outright</td></tr>
+<tr><td class="l">LAR @ LAC</td><td class="l"><b>LAR 20–18</b></td><td class="l">LAC −3.5</td><td class="l">Favorite lost outright</td></tr>
+</tbody></table></div>
+<div class="fail"><b>These are not model results.</b> No probability was emitted for any of these games, so there is no record, no Brier, no EV, no P&amp;L and no promotion credit — the columns are blank by rule, not by omission. A registered NFL regular-season shadow model exists (v0.2, retrospectively gate-passed, $0 authority, lineage awaiting restoration); preseason sits outside its registered competition scope. The market-favorite benchmark went 1–3 outright tonight, which is a fact about preseason favorites, not about any model here.</div>
+
+<div class="panel answers">
+<div class="a"><div class="q">Model predicts</div><div class="v">Preseason: no side because this phase is excluded; regular-season v0.2 shadow model exists and passed its retrospective winner gate</div></div>
+<div class="a"><div class="q">How strong</div><div class="v">Regular-season evidence: Brier 0.2298 vs 0.2497 baseline; no preseason probability is emitted</div></div>
+<div class="a"><div class="q">Market offers</div><div class="v">Unknown — NO_RETAINED_MARKET_ARTIFACT (routes blocked)</div></div>
+<div class="a"><div class="q">Candidate / pass / blocked</div><div class="v">Every row: phase out-of-scope; this does not erase the regular-season model</div></div>
+<div class="a"><div class="q">What prevents action</div><div class="v">Preseason is out of registered scope; the model lineage also awaits restoration to the active branch; shadow authority is $0 regardless</div></div>
+</div>
+
+<div class="fail"><b>Historical-state correction — this card previously carried a material
+error, now withdrawn.</b> Earlier versions said "no NFL model has ever been registered." That
+is false. The system built and preregistered <code>nfl.rs.epa_logit_ridge.v0_1.shadow</code>
+(rejected with an append-only invalidation record) and <code>v0_2.shadow</code>, which was
+retrospectively scored on 2,895 completed regular-season games: 1,865 walk-forward predictions
+2019–2025, winner Brier <b>0.2298 vs 0.2497</b> baseline, paired CI95
+<b>[−0.0261, −0.0137]</b> over 124 season-week blocks, margin MAE <b>10.41 vs 11.14</b>; the
+total model did not validate. The primary retrospective gate <b>passed</b>; its disposition was
+and remains <code>VALIDATED_SHADOW_ARTIFACT / NO_PROMOTE / NO LIVE FORECAST AUTHORITY / $0</code>.
+What actually failed is preservation: the model's recorded commits resolve nowhere in the
+current history (verified), so the lineage was never restored to the active branch — the same
+failure pattern as the WNBA drought, where completed work was presented as absent. This is now
+a <b>model-restoration incident</b> (RJ-006, opened, recovered evidence retained and hashed),
+not a from-scratch build problem. Tonight's no-forecast outcome stands, but for the correct
+reason: <b>preseason is excluded by the model's registered scope</b> — planned QB snaps,
+starter availability and substitution intent cannot be reconstructed historically without
+leakage. Benchmark inputs were retained under <code>BENCHMARK_INPUTS_RETAINED</code> with
+<code>CANONICAL_PRESEASON_SCHEDULE_UNAVAILABLE</code> stated plainly: 4 games discovered =
+0 canonical + 4 explicit refusals.</div>
+
+<h2>Competition phase — determined, not assumed</h2>
+<div class="panel"><p>The authoritative nflverse schedule file (fetched fresh this morning,
+commit <code>68d754b</code> at 06:35Z) shows the 2026 <b>regular season opens September 9</b>
+and contains no August games — preseason is structurally absent from that source. Multi-pass
+search identification places tonight's four games in the <b>final preseason week (Aug 27–29)</b>.
+ESPN numbers this week "4" (Hall-of-Fame-game inclusive), NFL.com numbers it "3" — the label
+discrepancy is recorded; the phase itself is unambiguous: <b>PRESEASON</b>.</p></div>
+
+<h2>Tonight's slate — benchmark schedule (search-identified)</h2>
+<div class="scroll"><table>
+<thead><tr><th class="l">Game</th><th>Kick (UTC)</th><th class="l">TV</th><th class="l">Personnel expectation (coach statements, identification grade)</th></tr></thead>
+<tbody>
+<tr><td class="l"><b>PIT @ BUF</b></td><td class="n">23:00</td><td class="l">NFLN</td><td class="l">Both starting QBs sit (Allen held; Rodgers has not played this preseason). Allar and Howard get the PIT reps.</td></tr>
+<tr><td class="l"><b>NE @ CLE</b></td><td class="n">00:00</td><td class="l">Prime</td><td class="l">CLE starters out incl. Watson; Gabriel + rookie Green play. NE starters have not appeared this preseason.</td></tr>
+<tr><td class="l"><b>SF @ LV</b></td><td class="n">00:00</td><td class="l">local</td><td class="l">Shanahan: few-to-no SF starters (week-1 Australia travel).</td></tr>
+<tr><td class="l"><b>LAR @ LAC</b></td><td class="n">02:00</td><td class="l">NFLN</td><td class="l">LAR rookie Simpson gets significant snaps; LAC starters one-two series incl. Herbert.</td></tr>
+</tbody></table></div>
+<p class="sub">Reconciliation: 4 discovered = 0 canonical + 4 explicit refusals (no canonical preseason source exists on the working rails; rows are benchmark-schedule only). No matchup silently disappeared.</p>
+
+<h2>Market and dispositions</h2>
+<div class="warn"><b>DraftKings spreads retained (owner relay): BUF −3 · NE −2.5 · LV −3.5 ·
+LAC −3.5.</b> Benchmark display only, quarantined from any model input. Even with prices, no
+EV can exist: no preseason probability is emitted. Every row's terminal state is
+<code>NO_COMPETITION_ELIGIBLE_PRESEASON_FORECAST</code> — "PENDING" is not used.
+Ledger 0 bets · 0.00u · $0.</div>
+
+<h2>The path forward — restoration, then prospective paper</h2>
+<div class="panel"><p><b>RJ-006 (model restoration, opened today):</b> verify the recovered
+evidence (done — three artifacts retained and hashed), restore the immutable run directory and
+the v0.1 invalidation record, re-acquire the nflverse source pins, and register the identities
+in the active branch before the regular season opens 2026-09-09.</p>
+<p><b>Then the recovered model's own live-block gates govern any future authority</b> (they are
+binding and unchanged): verified starting-QB status and planned availability as of forecast
+time, offensive-line and injury/inactive snapshots, 100 prospective paper selections under one
+frozen policy, coherent closing-line capture with a positive lower 95% ROI bound, and explicit
+owner authorization. Until all of that, the model is a $0 shadow. Preseason stays
+DATA_CAPTURE_ONLY by registered scope regardless. Tonight's search-identified schedule,
+personnel expectations and eventual results remain display/benchmark evidence only — nothing
+accrues to model training until canonical game IDs and retained as-of artifacts bind.</p></div>
+
+<h2>Technical & acquisition appendix</h2>
+<details><summary>Sources, hashes, refusals</summary>
+<p>nflverse/nfldata <code>games.csv</code> sha <code>e980b1d5…</code>, commit
+<code>68d754b</code> (2026-08-27T06:35:12Z): 272 REG games for 2026, first gameday 2026-09-09,
+game-type domain {CON, DIV, REG, SB, WC} — refusal <code>CANONICAL_SOURCE_LACKS_PRESEASON</code>
+recorded. nfl.com/espn.com fetch: known egress-denied (8/22 ladder receipts). Slate + personnel:
+two-pass search consensus, grade SEARCH_IDENTIFIED_UNCONFIRMED. Board record
+<code>BOARD-2026-08-27-NFL</code>, anchor 06:59:25Z, cohort hash <code>c86ed8cb…</code>.
+Checkpoints 21:30Z/22:15Z verified server-side (inventory <code>263fe16b</code>).
+Recovered model evidence (owner-uploaded, grade OWNER_UPLOADED_RECOVERED_ARTIFACT):
+<code>data/nfl/model/recovered/</code> — STATUS <code>6935de06…</code>, reporting disposition
+<code>b4fbc2d6…</code>, walk-forward metrics <code>9ae70459…</code>; lost commits
+<code>1d089d45…</code>/<code>f3cf5b1d…</code> confirmed unresolvable; history-correction record
+<code>53f7c9a9</code>; restoration incident RJ-006 1/6. The frozen 8/27 NFL board's
+registry-verdict text is superseded by that record; its bytes stay unchanged.</p></details>
+</main>

@@ -1,0 +1,31 @@
+{
+ "schema": "governance.incident.v1",
+ "record_id": "INC-20260819-TOTALS-REPORT",
+ "created_utc": "2026-08-19T10:39:42Z",
+ "title": "O/P/U probabilities asserted in the 10:05Z-turn report that no replay ever produced",
+ "what_happened": "The assistant's chat report after commit bb97de7 displayed a four-row table of totals probabilities (TOR@TB 7.5 .674/.090/.236; DET@PIT 7.5 .646/.093/.261 and 8.0 .553/.096/.351; MIA@PHI 8.5 .615/.088/.297; LAD@COL 11.5 .580/.073/.347) attributed to the verified replay. Those numbers were never computed by any tool call \u2014 the report was written without reading the replay artifact back.",
+ "how_it_was_caught": "Owner cross-checked the next card display against the earlier report and found the two surfaces inconsistent. The decisive tell, per owner: push probability on HALF-POINT lines. Simulated run totals are integers, so P(total == x.5) is structurally zero; any triple with push mass at 7.5/8.5/11.5 cannot have come from the arrays.",
+ "which_surface_was_wrong": "THE CHAT REPORT ONLY. The committed artifacts (unified-card price_evaluation lines, replay artifact) are mutually identical, obey half-line-push-zero, and reproduce under a fresh certification replay.",
+ "root_cause": "R1-class reporting failure by the assistant: values asserted in the user-facing summary without sourcing them from the artifact. Same failure family as invented data \u2014 the artifact chain was clean, the narration was not.",
+ "quarantine_and_resolution": {
+  "imposed": "TOTAL_PROBABILITY_REPLAY_CONFLICT on all MLB total probabilities (owner instruction); O/P/U suppressed from display while in force",
+  "resolution_evidence": [
+   "unified_card.totals_gate() implemented with owner's rules: half-line n_push==0; counts partition the array exactly (p_over+p_push+p_under==1; half-line p_over+p_under==1); every distinct captured total quote carries its own quote_id; no collapsing split lines into one probability pair; every quote binds the exact line value and the sim-array sha256",
+   "selftest fixtures added, including the incident case (push mass on a half line MUST fail) \u2014 unified_card selftest PASS",
+   "fresh certification replay: 6-field verification PASS 15/15 games; totals_gate PASS on all 30 quotes; certified probabilities IDENTICAL to the committed unified card"
+  ],
+  "status": "RESOLVED 2026-08-19T10:39:42Z \u2014 quarantine lifted; O/P/U may be displayed ONLY from gate-certified values with quote_ids"
+ },
+ "standing_rule": "Report-layer numbers are subject to R1 exactly like artifact numbers: any probability shown to the owner must be read from a tool-produced artifact in the same turn, never reconstructed. The totals_gate makes the half-line invariant mechanical so this class of fabrication is detectable on sight.",
+ "wnba_display_convention_correction": {
+  "issue": "the same report rendered TOR@WAS as 'Proj margin (home): WAS \u22123.9\u2026 i.e. +3.87 WAS' \u2014 mixing margin and fair spread",
+  "correct_display_owner_verbatim": {
+   "home_margin_pred": "+3.87 for Washington",
+   "fair_home_spread": "WAS \u22123.87",
+   "registered_home_line": "WAS \u22129.5",
+   "home_cover_delta": "+3.87 \u2212 9.5 = \u22125.63",
+   "ats_diagnostic": "TOR +9.5"
+  },
+  "note": "stored artifacts were already correct (margin_home=+3.87, delta=\u22125.63, selection TOR +9.5); display convention now fixed: margin and fair spread are stated as separate labeled quantities, never blended. MIN@GSV was already coherent (GSV home margin \u22121.53, line +2.5, delta +0.97, ATS GSV +2.5)."
+ }
+}

@@ -1,0 +1,65 @@
+{
+ "schema_version": "nfl.preseason.current_lines.v1",
+ "capture_id": "NFL-PS-LINES-20260815T213135Z-T90M-2300Z",
+ "sport": "NFL",
+ "season_phase": "PRESEASON",
+ "capture_kind": "CURRENT_LINES",
+ "captured_at_utc": "2026-08-15T21:31:35Z",
+ "target_window": "T_MINUS_90M",
+ "window_state": "ON_TIME (kick 23:00Z)",
+ "grade_scope": "MARKET_BENCHMARK_ONLY",
+ "promotion_eligible": false,
+ "wager_authority": "NO",
+ "stake": "$0",
+ "provenance": {
+  "grade": "WEB_EXTRACTED_NOT_RAW_BYTE_BOUND",
+  "raw_source_bytes_on_disk": false,
+  "rule": "source-specific quotes; no averaging; movement vs held T-3H capture NFL-PS-LINES-20260815T200129Z-T3H-2300Z"
+ },
+ "games": [
+  {
+   "away_team": "PHI",
+   "home_team": "BAL",
+   "game_start_utc": "2026-08-15T23:00:00Z",
+   "model_forecast": null,
+   "forecast_status": "NO_INDEPENDENT_PRESEASON_MODEL",
+   "source_quotes": [
+    {
+     "quote_id": "PHI-BAL-FANDUEL-20260815T213135Z",
+     "quote_scope": "SOURCE_SPECIFIC",
+     "display_source": "scoresandodds display attributing FanDuel",
+     "underlying_book_attribution": "FanDuel Sportsbook",
+     "attribution_confidence": "MEDIUM",
+     "source_url": "https://www.scoresandodds.com/nfl/eagles-vs-ravens",
+     "accessed_at_utc": "2026-08-15T21:31:35Z",
+     "away_spread": -3.5,
+     "away_spread_price": -110,
+     "home_spread": 3.5,
+     "home_spread_price": -110,
+     "away_moneyline": -198,
+     "home_moneyline": 166,
+     "total": 37.5,
+     "over_price": -102,
+     "under_price": -120
+    }
+   ],
+   "current_favorite": "PHI",
+   "favorite_basis": "TWO_SOURCE_SAME_SIGN across windows: DK PHI -3.5 (T-3H) + FanDuel PHI -3.5 (this run) \u2014 the deferred benchmark is now DECLARED: PHI",
+   "movement_vs_t3h": "spread unchanged (PHI -3.5); total 36.5 -> 37.5 (+1); ML -180 -> -198 (toward PHI)",
+   "betting_splits_context": "source-attributed context only, not a quote: 78% of ML money / 60% of bets on PHI; 57% of spread bets / 68% of spread money on BAL +3.5",
+   "pregame_personnel": {
+    "status": "CARRIED_FROM_T3H \u2014 no late scratches surfaced this run",
+    "facts": [
+     {
+      "team": "BOTH",
+      "source_family": "SECONDARY_REPORT",
+      "source_url": "https://www.sportsbettingdime.com/news/nfl/eagles-vs-ravens-picks-odds-whos-playing/",
+      "captured_at_utc": "2026-08-15T21:31:35Z",
+      "fact": "Confirmed again: neither team plays established starters (Hurts sits/McKee features; Lamar and Campbell OUT per T-3H capture)."
+     }
+    ],
+    "conflicts": []
+   }
+  }
+ ]
+}

@@ -1,0 +1,203 @@
+{
+ "HIGH_BY_SURFACE": {
+  "malformed_market_rows": [
+   {
+    "claim": "The cluster-I refusal was added to check_game() (line 1186) and NOT to the row-level readers underneath it. _market_named (line 529) and declared_sigmas (line 568) still do `if not isinstance(row, dict): continue`, so a non-mapping entry in game['markets'] makes check_row() return a CLEAN RowVerdict and check_convergence() return None \u2014 the guard added at one level, skippable at the level below.",
+    "evidence": "Executed against the frozen canonical board (bi.CANONICAL_BOARD_PATH), game MIN @ ATL, the one game on the 8/30 card where convergence is applicable. Control: check_row(ML row, game=intact) -> reason_codes ['MODEL_CONVERGENCE_FAIL'], detail carries 'convergence'. Wrap the sibling SPREAD row in a one-element list: check_row(ML row, game=mangled) -> reason_codes [] and no 'convergence' key \u2014 clean. Replace the sibling SPREAD row with the bare string 'SPREAD ATL -2.5': reason_codes [] \u2014 clean. check_convergence(mangled) -> None ('the question does not arise'). declared_sigmas(mangled) -> {} where the intact game yields {'SPREAD_RL': (13.97, 'note:Phi(5.1/13.97)')}. check_row and check_convergence are pinned public API \u2014 harness/test_score_admission.py:1985 lists them in BOARD_SURFACE and that sibling calls check_row at lines 896/923/932 and check_convergence at 1115/1167. Script: /tmp/claude-0/-home-user-sports-model/60d4bacd-8ca4-52d5-a4b3-399d198cc22a/scratchpad/p4b.py",
+    "executed": true,
+    "file": "harness/board_invariants.py",
+    "severity": "HIGH",
+    "suggested_fix": null,
+    "surface": "malformed_market_rows"
+   },
+   {
+    "claim": "_markets_of() refuses a wrong KEY but accepts an EMPTY LIST, so the board can still report CLEAN at 0/0. A board whose games all carry markets:[] returns clean=True with ROWS_CHECKED '0/0'; a board with games:[] returns clean=True with ROWS_CHECKED '0/0' and GAMES_CHECKED '0/0'; and enforce() runs both through with CHANGES 0 and INPUT_UNCHANGED True. The BoardVerdict.clean docstring (line 1031) says 'a board that reported clean=True having checked nothing is the whole shape of cluster I', and this is that board.",
+    "evidence": "Executed with bi.check_board(..., register=bi.load_sigma_register()) on the frozen canonical board (19 games / 57 rows). Baseline: clean=False, ROWS_CHECKED 57/57, 8 reason/warning totals. Set every game's markets to []: SERVED clean=True, ROWS_CHECKED 0/0, ROWS_NOT_CHECKED 0, reason_totals {}. check_board({'games': []}): SERVED clean=True, ROWS_CHECKED 0/0, GAMES_CHECKED 0/0. Sharpest case \u2014 empty ONLY the markets of MIN @ ATL, the one game carrying the board's reason codes: SERVED clean=True at ROWS_CHECKED 54/54, i.e. deleting three rows flips the whole frozen 8/30 board from clean=False to CLEAN and no counter shows a shortfall, because ROWS_NOT_CHECKED is (supplied - parsed) and the supplied list is the one that was emptied. bi.enforce(board with markets=[] everywhere) RAN and returned counters {'CHANGES':0,'ROWS_CHANGED':0,'GAMES_CHANGED':0,'FIELDS_REDACTED':0,'INPUT_UNCHANGED':True}. Script: /tmp/claude-0/-home-user-sports-model/60d4bacd-8ca4-52d5-a4b3-399d198cc22a/scratchpad/p4.py",
+    "executed": true,
+    "file": "harness/board_invariants.py",
+    "severity": "HIGH",
+    "suggested_fix": null,
+    "surface": "malformed_market_rows"
+   }
+  ],
+  "missing_verdict_bindings": [
+   {
+    "claim": "The A2 \"absence is a refusal\" fix checks that the six binding keys are PRESENT and MATCH, but every one of them is read off the record on both sides, so a verdict dict a caller TYPES \u2014 mirroring the record's own event_id/status/terminal_verified/scheduled_start_utc/source plus lane=CANONICAL \u2014 satisfies _verdict_binding_problems completely. No temporal invariant of admit() is re-applied at the store, so the literal 2026-08-30 BOS@NYY record (\"Yankees 1, Red Sox 0\", observed 13:30 ET for a 13:35 ET first pitch) is written to result_ledger, settleable=True, served by get_verified_score, with verify_snapshot ok=True. Fixture S15b passes only because its says_nothing verdict OMITS the four keys; filling them in from the record goes straight through.",
+    "evidence": "Executed /tmp/claude-0/-home-user-sports-model/60d4bacd-8ca4-52d5-a4b3-399d198cc22a/scratchpad/atk3.py. sa.admit() on that exact record: 'REJECT_PRESTART_OR_UNBOUND [PRESTART_FINAL_IMPOSSIBLE]' at 13:30 ET and 'REJECT_PRESTART_OR_UNBOUND [PRESTART_OBSERVED_BEFORE_FIRST_PITCH]' judged in the evening. Same record + typed verdict through write_snapshot/get_verified_score: 'A1 BOS@NYY prestart + typed verdict SERVED sink=result_ledger settleable=True verify_ok=True score=0-1 src=mlb_statsapi status=CLOSED'. Code: _VERDICT_DETAIL_BINDINGS (verified_snapshot.py:828-836) and _verdict_binding_problems (verified_snapshot.py:839-904); neither now_utc, source_fetched_at_utc, earliest_possible_final, canonical_schedule_sha256 nor min_duration_too_soon_on \u2014 all of which admit() writes into detail \u2014 is bound or re-derived.",
+    "executed": true,
+    "file": "/home/user/sports-model/harness/verified_snapshot.py",
+    "severity": "HIGH",
+    "suggested_fix": null,
+    "surface": "missing_verdict_bindings"
+   },
+   {
+    "claim": "With a FULLY GENUINE, unforged CANONICAL verdict (no typed dict at all), the record handed in beside it at write time may differ in scores, team ids and source_fetched_at_utc \u2014 none of those are in _VERDICT_DETAIL_BINDINGS. The compensating control named in _journalled_record_bindings does not apply: write_snapshot writes write_log.jsonl in the same call, so the fabricated binding is journalled by the store itself and CONFLICT_RECORD_NOT_JOURNALLED can never fire. S15g and test_score_admission's cluster-E fixture both only model an ON-DISK rebuild, and cluster E's fixture only moves a verdict onto a DIFFERENT event id, so the same-event write-path substitution is untested. Note detail['source_fetched_at_utc'] IS recorded by admit() (score_admission.py:~1466) and simply omitted from the table \u2014 the clock cluster M made load-bearing is carried by both sides and compared by neither.",
+    "evidence": "Executed atk1.py and atk2.py. Genuine verdict for MIA@WSH 2-9 CLOSED, paired with (a) home_score=99/away_score=0: 'W1 WRITE ACCEPTED ... W1 SERVED {... \"away_score\": 0, \"home_score\": 99 ...} W1 verify ok= True W1 entry sink= result_ledger verdict settleable= True'; (b) away/home_team_id swapped to SYNTH_COL/SYNTH_ATL under MIA@WSH's event id: 'W3 wrong teams ACCEPTED+SERVED verify_ok=True'; (c) source_fetched_at_utc moved to 2026-08-30T15:30:00Z, 45 minutes BEFORE first pitch: 'W2 prestart observation ACCEPTED+SERVED verify_ok=True' while sa.admit() on that same record returns REJECT_PRESTART_OR_UNBOUND.",
+    "executed": true,
+    "file": "/home/user/sports-model/harness/verified_snapshot.py",
+    "severity": "HIGH",
+    "suggested_fix": null,
+    "surface": "missing_verdict_bindings"
+   }
+  ],
+  "nulled_values_republished": [
+   {
+    "claim": "enforce() nulls probabilities.market_no_vig_cover_pct (50.0) under MARKET_NO_VIG_ASSUMED_NOT_CAPTURED \u2014 whose reason text is literally 'An assumed base publishes as None' \u2014 and republishes the same 50.0 as a live float in the row's diagnostics block and in the serialized verdict. PROHIBITED_DETAIL_FIELDS (line 793) covers only edge_pp/usable_edge_pp and has no no-vig entry, so _refuse_prohibited_detail never touches detail['no_vig_pct'] (set at line 1130).",
+    "evidence": "EXECUTED. B.prohibited_figure_leaks(B.enforce(B.CANONICAL_BOARD_PATH), [14.3,6.9,50.0]) returns two leaks: $.board.games[0].markets[1].board_invariants.detail.no_vig_pct = 50.0 (float) and $.verdict.games[0].rows[1].detail.no_vig_pct = 50.0, while probabilities.market_no_vig_cover_pct is None and changes[5] records from=50.0 to=None. Same value printed live by the audit path: `python3 board_invariants.py --acceptance` line 191 emits \"no_vig_pct\": 50.0. Leak persists with availability= supplied, with dict input, and with path input. In-memory proof of fix (no file edited): setting B.PROHIBITED_DETAIL_FIELDS = ('edge_pp','usable_edge_pp','no_vig_pct') drops leaks to [], keeps the evidence as was_repr '50.0' (a string) in prohibited_figures_refused, leaves the priced ML row's legitimate 44.9 intact, and the MIN@ATL acceptance case still returns PASS with MISSING_MARKET_PRICE + AVAILABILITY_UNKNOWN + MODEL_CONVERGENCE_FAIL.",
+    "executed": true,
+    "file": "/home/user/sports-model/harness/board_invariants.py",
+    "severity": "HIGH",
+    "suggested_fix": null,
+    "surface": "nulled_values_republished"
+   },
+   {
+    "claim": "detail['edge_pp_recomputed'] = round(model_p - no_vig, 1) (line 1156) stays live on rows whose edge_pp was refused, so the prohibited edge is republished VERBATIM whenever the card's published edge reproduces from its own fields. Section 6b boundary 3 defends this on the grounds that 14.2 != the published 14.3, but that 0.1 gap is an artifact of this one card's arithmetic bug, not a property of the rule. The refused edge is also trivially reconstructible from the same block: model_probability_pct 64.2 and no_vig_pct 50.0 both remain live.",
+    "evidence": "EXECUTED. Synthetic board built with B._mkrow/_mkgame, three priceless SPREAD_RL rows whose edges reproduce exactly (cover 61.1/58.3/72.4 vs assumed no-vig 50.0/25.0/75.0). enforce() redacts probabilities.edge_pp = 11.1, 33.3, -2.6 and republishes each identical value at $.board.games[0].markets[N].board_invariants.detail.edge_pp_recomputed and $.verdict.games[0].rows[N].detail.edge_pp_recomputed. Generic sweep (every changes[] entry with field starting 'probabilities.' scanned back through prohibited_figure_leaks) printed 'REPUBLISHED probabilities.edge_pp 11.1 -> ...detail.edge_pp_recomputed' and the same for 33.3 and -2.6. On the real card the same block carries model_probability_pct=64.2, no_vig_pct=50.0, edge_pp_recomputed=14.2.",
+    "executed": true,
+    "file": "/home/user/sports-model/harness/board_invariants.py",
+    "severity": "HIGH",
+    "suggested_fix": null,
+    "surface": "nulled_values_republished"
+   }
+  ],
+  "source_lane_laundering": [
+   {
+    "claim": "terminal_status_unreachable_from_source() \u2014 the round-two guard that stops a record asserting a TERMINAL status its own provider map cannot emit \u2014 has exactly ONE caller in the repo, inside admit() (score_admission.py:1501). verified_snapshot re-applies sa.validate_record at both ends via _verified_record_problems but never this one, so the guard does not survive the trip to disk. An espn_scoreboard_api record claiming CLOSED (ESPN exposes no statistics-validation state anywhere in this repo; ESPN_STATUS_TO_STATUS maps STATUS_FINAL -> COMPLETE only) is stored and served as a settleable FINAL from the result_ledger. Reachable two ways: a typed verdict at write, and an on-disk rebuild that swaps record['source'] AND verdict.detail['source'] together \u2014 fixture S15f stops one edit short by leaving detail['source'] stale, so it is caught by the source binding rather than by any status rule.",
+    "evidence": "Executed atk3.py and atk4.py. 'score_admission says ESPN+CLOSED unreachable: True'; write path: 'A2 espn_scoreboard_api + CLOSED SERVED sink=result_ledger settleable=True verify_ok=True score=0-1 src=espn_scoreboard_api status=CLOSED'; on-disk variant of S15f finished: 'ON-DISK espn+CLOSED SERVED: espn_scoreboard_api CLOSED 2 - 9 verify_ok= True'. Caller census: grep -rn 'terminal_status_unreachable_from_source|reachable_statuses_for_source' over the repo returns hits only inside harness/score_admission.py (definition 361, sole production call 1501, selftest 2361/2364).",
+    "executed": true,
+    "file": "/home/user/sports-model/harness/score_admission.py",
+    "severity": "HIGH",
+    "suggested_fix": null,
+    "surface": "source_lane_laundering"
+   }
+  ],
+  "warm_cache_byte_mutation": [
+   {
+    "claim": "manifest.json is unauthenticated outside the fields that feed _content_object. Its bytes can be rewritten under an unchanged filename at preserved st_size and st_mtime_ns, and get_source_manifest() \u2014 one of the three ANALYSIS_TOOL_SURFACE getters, whose docstring at line 1527 claims 'The manifest is re-derived against the bytes on disk before it is handed over' \u2014 serves the forged manifest, while verify_snapshot() reports ok=True with an empty drift list.",
+    "evidence": "Executed. Built a one-record 8/30 MLB snapshot, did a WARM get_verified_score, then rewrote manifest.json in place with equal-length substitutions and restored mtime with os.utime (asserted (st_size, st_mtime_ns) identical before/after). Every one of these was SERVED by get_source_manifest with verify_snapshot ok=True and all getters serving: written_at_utc 2026-08-30T23:00:00Z -> 2026-08-28T23:00:00Z; verified_event_ids ['...MIAWSH-0830'] -> ['...BOSNYY-0830']; dispositions {ADMIT_FINAL:1} -> {ADMIT_LIVEX:1}; n_verified 1 -> 9; n_entries 1 -> 4; n_quarantined 0 -> 7; content_sha256 'e8a2...' -> '08a2...'; schema manifest.v1 -> manifest.v9; files['records.json'].n_bytes 1516 -> 1511; payloads[0].path raw/...2026-08-30.json -> raw/...2026-08-28.json. Control: league MLB -> NFL (a field _content_object at verified_snapshot.py:983 covers) IS refused. _read_integrity (line 1364) re-derives only league/date_et/source, the six-key payload descriptors, and files[*].sha256; verify_snapshot (line 1227) sets report['content_sha256'] from disk and never compares it to the manifest's own declared content_sha256, so owner rule 7's hash is the one number in the file nothing recomputes against its own claim. Script: /tmp/claude-0/-home-user-sports-model/60d4bacd-8ca4-52d5-a4b3-399d198cc22a/scratchpad/p3c.py",
+    "executed": true,
+    "file": "harness/verified_snapshot.py",
+    "severity": "HIGH",
+    "suggested_fix": null,
+    "surface": "warm_cache_byte_mutation"
+   },
+   {
+    "claim": "The same preserved-size/preserved-mtime rewrite of manifest['date_et'] (or ['league']) SILENTLY SHRINKS A SLATE instead of refusing. list_snapshots() (line 1500) reads manifests with no integrity check and _verified_candidates() (line 1584) filters on those unauthenticated date_et/league fields BEFORE _assert_readable ever runs, so a drifted snapshot drops out of get_verified_scores() as an absence rather than a refusal \u2014 the 'fewer games reads like a quiet night' shape list_snapshots' own docstring says it refuses to serve around.",
+    "evidence": "Executed. One root, two snapshots (MIAWSH, BOSNYY), both league=MLB date_et=2026-08-30. Warm read: get_verified_scores('2026-08-30','MLB') -> ['...BOSNYY-0830','...MIAWSH-0830']. Then rewrote snapshot B's manifest.json bytes '\"date_et\":\"2026-08-30\"' -> '\"date_et\":\"2026-08-29\"' (equal length) and restored mtime; asserted (st_size, st_mtime_ns) unchanged. Second read: get_verified_scores('2026-08-30','MLB') -> ['...MIAWSH-0830'] \u2014 one game, NO exception. Meanwhile verify_snapshot(B).ok=False with SNAPSHOT_ID_NO_LONGER_MATCHES_CONTENT, get_verified_score(EID_BOSNYY) raises SnapshotImmutabilityViolation, and get_source_manifest(B) raises SnapshotImmutabilityViolation. So the slate getter and verify_snapshot give two different answers about the same drifted snapshot, and the slate getter's answer is the quiet one. Script: /tmp/claude-0/-home-user-sports-model/60d4bacd-8ca4-52d5-a4b3-399d198cc22a/scratchpad/p3d.py",
+    "executed": true,
+    "file": "harness/verified_snapshot.py",
+    "severity": "HIGH",
+    "suggested_fix": null,
+    "surface": "warm_cache_byte_mutation"
+   },
+   {
+    "claim": "verify_snapshot() and the getters disagree about the same snapshot for the whole admissibility class, including the 2026-08-30 re-attack exactly as it ran. Selftest S17 (line 2828) states the property 'one store, two answers to is this valid is the split cluster D was raised about' but exercises it over only four byte-drift stores, all of which happen to satisfy it; it is false on every store whose tampering is admissibility-shaped rather than byte-shaped.",
+    "evidence": "Executed. Four stores built with the module's own _rebuild_snapshot_on_disk (manifest and directory name rebuilt around the edit), each probed with S17's own definition of served (get_verified_scores + get_verified_score + get_source_manifest all succeed): (1) score edited to 99 with record_sha256 recomputed, journal untouched \u2014 i.e. the 8/30 adversary as _rebuild_snapshot_on_disk's docstring describes it \u2014 verify_ok=True, getters refuse SnapshotAdmissibilityViolation; (2) terminal_verified falsified with the journal forged \u2014 verify_ok=True, getters refuse; (3) entry sink rewritten to quarantine \u2014 verify_ok=True, getters refuse; (4) record source rewritten to a non-canonical provider \u2014 verify_ok=True, getters refuse. Control clean store: verify_ok=True, served=True. An auditor running verify_snapshot over a store holding the re-attack's own artifact gets a green light. Script: /tmp/claude-0/-home-user-sports-model/60d4bacd-8ca4-52d5-a4b3-399d198cc22a/scratchpad/p3e.py",
+    "executed": true,
+    "file": "harness/verified_snapshot.py",
+    "severity": "HIGH",
+    "suggested_fix": null,
+    "surface": "warm_cache_byte_mutation"
+   }
+  ]
+ },
+ "LEDGER": {
+  "exposure_usd": 0,
+  "n_bets": 0,
+  "units": 0.0,
+  "wager_authority": "NO"
+ },
+ "MY_TRIAGE": {
+  "hardest": "a TYPED verdict dict mirroring the record satisfies every binding, because all six bindings are read off the record on both sides. Binding a verdict to the record it judged cannot be done with fields the forger also supplies; it needs something only the store could have written.",
+  "mechanical_and_cheap": [
+   "_market_named and declared_sigmas still `continue` on a non-mapping row \u2014 the cluster-I refusal was added to check_game() and not to the readers underneath it",
+   "_markets_of() accepts an EMPTY LIST, so markets:[] and games:[] both still report CLEAN at 0/0 \u2014 P0-D3 asked for exactly this not to happen",
+   "edge_pp_recomputed and market_no_vig_cover_pct stop being live floats"
+  ],
+  "structural": [
+   "manifest.json is unauthenticated outside the fields feeding _content_object, so rewriting date_et at preserved size and mtime SILENTLY SHRINKS A SLATE rather than refusing \u2014 and get_source_manifest, an ANALYSIS_TOOL_SURFACE getter, documents an integrity claim it does not make",
+   "S17's equivalence property is stated correctly and exercised too narrowly, so verify_snapshot and the getters still disagree across a whole class"
+  ]
+ },
+ "OTHER_FINDINGS": [
+  {
+   "claim": "Provider-key normalisation is asymmetric: lane_for_source() and reachable_statuses_for_source() both do str(source).strip().lower() before consulting CANONICAL_SOURCES/PROVIDER_STATUS_MAPS, while normalize_status() indexes PROVIDER_STATUS_MAPS with the raw provider string. A record whose source is '  MLB_StatsAPI  ' therefore earns the CANONICAL lane and has CLOSED judged reachable, while the same string makes normalize_status('F', src) return UNKNOWN. No escalation demonstrated (the string still names a real approved provider), but a builder using normalize_status and a guard using reachable_statuses_for_source disagree about the same record.",
+   "evidence": "Executed inline: lane_for_source -> CANONICAL; normalize_status('F', '  MLB_StatsAPI  ') -> UNKNOWN; reachable_statuses_for_source -> ['CLOSED','COMPLETE','POSTPONED','SCHEDULED','UNKNOWN']; terminal_status_unreachable_from_source(src, CLOSED)[0] -> False.",
+   "executed": true,
+   "file": "/home/user/sports-model/harness/score_admission.py",
+   "severity": "LOW",
+   "suggested_fix": null,
+   "surface": "other"
+  },
+  {
+   "claim": "Pre-existing and unrelated to these surfaces: harness/healthcheck.py reports UNHEALTHY on a recovery-job check, not on any module gate. All five module gates pass (verified_snapshot 36 killed/0 errored/0 survived; board_invariants 31 killed/0 errored/0 survived; score_admission and score_collector gates PASS). Reported only so the FAIL is not mistaken for fallout from this review \u2014 I edited no file and ran no git command.",
+   "evidence": "timeout 1200 python3 harness/healthcheck.py -> '[FAIL] recovery jobs (7 registered, 1 overdue, 7 defect(s) still owned) ! OVERDUE RJ-005-WNBA-FEATURE-PIPELINE 11/17 due 2026-08-30T17:00:00Z' and 'UNHEALTHY - 1 fail, 6 warn'; git status --short shows only the two files the sibling agents already had modified (harness/score_admission.py, harness/verified_snapshot.py), unchanged by me.",
+   "executed": true,
+   "file": "/home/user/sports-model/harness/healthcheck.py",
+   "severity": "LOW",
+   "suggested_fix": null,
+   "surface": "other"
+  },
+  {
+   "claim": "Pre-existing repo-level gate failure unrelated to my two surfaces, reported so it is not mistaken for something I introduced: healthcheck.py exits UNHEALTHY on 'recovery jobs (7 registered, 1 overdue, 7 defect(s) still owned)' \u2014 OVERDUE RJ-005-WNBA-FEATURE-PIPELINE 11/17 due 2026-08-30T17:00:00Z.",
+   "evidence": "Executed `python healthcheck.py`: 1 fail, 6 warn. All five modules under review are green in the same run \u2014 score_admission/verified_snapshot/score_collector/board_invariants/test_score_admission selftests OK, and mutation suites 24/36/23/31 killed with 0 errored and 0 survived. I made no edits and ran no git command, so this FAIL predates this round.",
+   "executed": true,
+   "file": "harness/healthcheck.py",
+   "severity": "LOW",
+   "suggested_fix": null,
+   "surface": "other"
+  },
+  {
+   "claim": "The module's own leak detector is scoped to the two figures already fixed, so it structurally cannot observe a leak of any other refused figure. Selftest S23 (line 2194) builds its scan set as figures23 = [spread23[0]['probabilities'][name] for name in PROHIBITED_EDGE_FIELDS] \u2014 i.e. [14.3, 6.9] \u2014 and calls prohibited_figure_leaks with only those. S23 line 2268 then positively asserts detail['no_vig_pct'] == 50.0 and detail['edge_pp_recomputed'] == 14.2, pinning both live leaks in place. This is the round-two pattern: a guard added and then scoped narrower than the rule it enforces.",
+   "evidence": "EXECUTED. `python3 board_invariants.py --gate` returns PASS, 31 killed / 0 errored / 0 survived, with both leaks live. prohibited_figure_leaks(out, [14.3,6.9]) == [] (what S23 checks) versus prohibited_figure_leaks(out, [14.3,6.9,50.0]) == two leaks (what the owner named). Zero mutants and zero fixtures in the suite exercise the owner's figure set.",
+   "executed": true,
+   "file": "/home/user/sports-model/harness/board_invariants.py",
+   "severity": "MEDIUM",
+   "suggested_fix": null,
+   "surface": "nulled_values_republished"
+  },
+  {
+   "claim": "Re-enforcing an already-enforced board erases the refusal record. enforce() replaces row['board_invariants'] wholesale, so the second pass writes redacted=[] over the first pass's ledger, and because probabilities.edge_pp is already None the codes MISSING_MARKET_PRICE, MARKET_NO_VIG_ASSUMED_NOT_CAPTURED and STALE_FEATURES no longer fire. A downstream re-verification of a published enforced artifact therefore sees a PASS row with only MODEL_CONVERGENCE_FAIL and no trace that 14.3, 6.9 and 50.0 were ever refused \u2014 an append-only (R6) audit trail that is silently truncated by an idempotent-looking second call.",
+   "evidence": "EXECUTED. o1 = enforce(card); o2 = enforce(o1['board']). o2 row[1] board_invariants: redacted == [], reason_codes == ['MODEL_CONVERGENCE_FAIL'], decision == 'PASS'. o1 row[1] carried three redaction records and five reason codes. No figure leaks on pass two (values are already null), so this is audit erasure rather than republication.",
+   "executed": true,
+   "file": "/home/user/sports-model/harness/board_invariants.py",
+   "severity": "LOW",
+   "suggested_fix": null,
+   "surface": "other"
+  }
+ ],
+ "P0_CLOSED_GENUINELY": {
+  "note": "the fix pass was not wasted. The five modules went from 93 to 118 mutants, 0 errored, 0 survived, and an independent repro script re-ran the round-two attacks against the fixed module: all five REFUSED, including the moved-slate record, the edited score with a recomputed binding, and the warm-cache byte mutation at preserved size and mtime.",
+  "what_round_three_found_is_different": "round one found untouched defects; round two found incomplete fixes; round three finds the fixes' EDGES \u2014 the guard applied at one level and not the level below it, the check whose scope is the two figures it was written for, the empty collection that is not malformed but still yields 0/0 CLEAN."
+ },
+ "R6": "append-only; new path",
+ "RESULT": "NOT MET. 10 HIGH survive, ALL EXECUTED \u2014 every one demonstrated by running code, not asserted.",
+ "STATUS": "THE ISOLATION LAYER IS NOT COMPLETE, and is not being described as complete. All five gates pass and 118 mutants hold, which is a real floor and not the bar the owner set.",
+ "THE_BOUNDARY_I_FLAGGED_IS_RESOLVED_AGAINST_THE_AGENT": {
+  "my_read_now": "the agent's reasoning was principled and I was right to flag rather than accept \u2014 but the reviewer's counter-evidence is stronger than either of us had. edge_pp_recomputed should be a string or a stated delta, not a float that happens to equal the banned number.",
+  "still_the_owner_ruling": "whether the EVIDENCE behind a refusal may exist at all. But it can no longer be defended on the ground that it differs from the prohibited figure, because in general it does not.",
+  "what_I_did": "I found 14.3, 6.9 and 50.0 surviving in the enforced structure, read the module's documented three boundaries, judged the argument strong, declined to overrule it unilaterally, and put it to the owner.",
+  "what_the_reviewer_showed": [
+   "detail['edge_pp_recomputed'] = round(model_p - no_vig, 1). Whenever the card's published edge DOES reproduce from its own fields, that recomputation is NUMERICALLY IDENTICAL to the prohibited edge. The defence was '14.2 is not the published 14.3' \u2014 true on this row, and not a property of the design. The prohibited figure is republished verbatim in the common case.",
+   "enforce() nulls probabilities.market_no_vig_cover_pct under a reason code whose own text reads 'An assumed base publishes as None', and then republishes the same 50.0 as a live float in the row's diagnostics and in the serialized verdict. That is not an evidence-versus-published judgement call; it is the module contradicting its own reason text."
+  ]
+ },
+ "THE_SHAPE_THAT_KEEPS_RECURRING": {
+  "candidate": "a call-graph reachability gate over every function whose name or docstring marks it as a guard. That is the one structural thing that would have caught four of these five before review.",
+  "count": "FIFTH independent instance of a guard that exists and is never called on the path that needs it, after aggregate_guard, ALLOW_DIRECT_HTTP, verify_snapshot's read path, and cluster B's effective_lane before P0-A3 wired it.",
+  "instance": "terminal_status_unreachable_from_source() \u2014 the round-two guard stopping a record asserting a TERMINAL status its own provider map cannot emit \u2014 has exactly ONE caller in the repo, inside admit().",
+  "per_the_falsification": "these remain independent bugs sharing a shape. What a shared CHECK can do is stop the shape shipping again, and the repo still has no check that asks 'does this guard have a caller on the path it defends?'"
+ },
+ "created_utc": "2026-08-31T00:45:00Z",
+ "owner_bar": "zero surviving HIGH on five named surfaces before the layer may be called complete",
+ "record_id": "ISOLATION-LAYER-DIRECTED-REATTACK-2026-08-31",
+ "record_sha256": "317fe84109edea296aed8aa3f17a85c5bb50bd228f4f90f743d2c8255a4680b2",
+ "schema": "ops.adversarial_review.v1",
+ "surfaces": {
+  "malformed_market_rows": 2,
+  "missing_verdict_bindings": 2,
+  "nulled_values_republished": 2,
+  "source_lane_laundering": 1,
+  "warm_cache_byte_mutation": 3
+ }
+}

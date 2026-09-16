@@ -1,0 +1,123 @@
+{
+ "record_id": "AUDIT-V04-METRICS-AND-CARDS-2026-08-11",
+ "built_utc": "2026-08-11T04:30:00Z",
+ "auditor_head": "70630fed4981319c3933da076467f60abf837916",
+ "supersedes_parts_of": "docs/audits/2026-08-11_wnba_v04_forecast_coherence.json — corrections to that record's method and count are stated below",
+ "scope_limit": "Three supplied artifacts were read directly (walk_forward_metrics.json, WNBA_RS_FF_0_4_STATUS.json, WNBA_NFL_SIMULATION_FRAME_V1.json) plus the two posted cards. Commit de400dcb and the referenced run/card/ledger paths remain unreachable from this repository; no implementation, artifact hash, ledger row or scorer was inspected.",
+
+ "corrections_to_my_own_prior_audit": [
+  {
+   "item": "game-count reconciliation",
+   "was": "2,118 lands within 27 games (1.3%) of my reconstruction",
+   "now": "It reconciles to within 2 games (0.09%). Restricting correctly to REGULAR SEASON and using the official family's own 2026 inventory: 1,918 official regular-season games 2017-2025 plus 202 official regular-season 2026 games through 2026-07-22 = 2,120 against their 2,118.",
+   "why_i_was_off": "My earlier figure applied a proportional playoff deduction to a reconciled all-types count and used my own stricter date+teams+scores 2026 match (175) instead of the official inventory (202). The reported inventory is better corroborated than I first stated."
+  },
+  {
+   "item": "the implied-margin-sd statistic",
+   "was": "used as a per-row coherence diagnostic across all rows",
+   "now": "WITHDRAWN as a general statistic. It degenerates near p = 0.5, because the implied sd is margin divided by a z-score approaching zero. It produced spurious values on near-pick'em NFL rows (NE@SEA -5.70, CHI@CAR 3.98, MIA@LV 27.92) that mean nothing.",
+   "what_replaces_it": "the divergence in percentage points between the stated probability and the probability implied by the margin at the empirical sd. That statistic is stable everywhere.",
+   "what_survives": "PHX@LA sits at p = 0.237, far from 0.5, so its implied sd of 4.47 is NOT degenerate and remains valid."
+  }
+ ],
+
+ "what_the_artifacts_confirm": [
+  {
+   "item": "walk-forward inference is properly specified",
+   "detail": "425 game-date blocks, 20,000 bootstrap reps, seed 20260810. This is the date-block bootstrap the frozen contract requires. My earlier open question about whether it was i.i.d. is answered: it is blocked correctly.",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "item": "home-win result",
+   "detail": "Brier 0.22334 vs 0.24921, paired difference -0.02587, CI95 [-0.03485, -0.01668] excluding zero; ROC-AUC 0.685; accuracy 0.627; ECE 0.0439; calibration intercept -0.055, slope 0.878.",
+   "verdict": "REAL. The interval excludes zero under the correct block structure. Slope 0.878 indicates mild overconfidence, which is a normal and honestly-reported finding rather than a defect."
+  },
+  {
+   "item": "margin result",
+   "detail": "MAE 10.579 vs 11.416 baseline, paired CI95 [-1.141, -0.526] excluding zero — a genuine 0.84-point improvement.",
+   "verdict": "REAL"
+  },
+  {
+   "item": "the v0.3 incident record",
+   "detail": "Standardizing sparse binary indicators produced 32.5-sigma neutral-site leverage and an invalid 0.113% LA home-win probability. V0.4 leaves binary indicators unscaled; the v0.3 rows are preserved as superseded rather than edited.",
+   "verdict": "CORRECTLY DIAGNOSED AND CORRECTLY HANDLED. Never standardizing sparse binaries is now in the integration gate, which is the right place for it — a rule, not a lesson."
+  }
+ ],
+
+ "findings": [
+  {
+   "id": "M1",
+   "severity": "HIGH",
+   "title": "PHX@LA remains incoherent by 17.2pp, and it is not a calibration artifact",
+   "detail": "The v0.4 card still carries P(home) = 23.7% with a home margin of -3.2. At the empirical WNBA margin sd of 13.97 measured from the source bytes staged here, a -3.2 margin implies P(home) = 40.9%.",
+   "calibration_does_not_explain_it": "Applying the model's OWN reported recalibration (intercept -0.0552, slope 0.8776) moves 23.7% to 25.3%. The gap to 40.9% is still 15.6pp. This is a genuine disagreement between the classifier and the margin estimator, not miscalibration.",
+   "cross_sport_control": "The NFL Week-1 card, built by the same process and the same team, is internally coherent on all 16 rows: median divergence 1.23pp, mean 1.50pp, maximum 4.00pp (DEN@KC). PHX@LA is 4.3x the worst NFL row. Whatever produces it is specific to the WNBA path, not general to the method.",
+   "note": "The report flags WAS/LVA, where the two estimands disagree on SIGN (47.7% against a +1.1 margin). That flag is correct and the sign disagreement is real. It is simply not the largest one on the card."
+  },
+  {
+   "id": "M2",
+   "severity": "HIGH",
+   "title": "The totals failure and the bank failure are one failure, and it is diagnosable",
+   "the_two_symptoms": [
+    "total MAE 14.6125 against a training-mean baseline of 14.5108 — the model is WORSE by 0.1017, with paired CI95 [-0.1579, +0.3566] spanning zero",
+    "the v5 residual bank fails on the TOTAL-residual arm specifically: fold scale ratio 1.534 against the frozen 1.35, and maximum fold bias 0.667 pooled SD against 0.35"
+   ],
+   "the_margin_arm_is_fine": "margin MAE beats its baseline with a CI excluding zero, and the report cites only the total-residual arm as failing homogeneity",
+   "diagnosis": "Margin is a DIFFERENCE and cancels any league-wide scoring-level shift. Total is a SUM and accumulates it. A model that does not track the WNBA scoring environment across seasons produces exactly this pair: margins fine, totals no better than a constant, and total residuals carrying a large fold-level bias. One cause, two symptoms.",
+   "actionable": "The fix is a league scoring-level term (or per-season level recentering fitted inside each training fold), not more features. If that is right, correcting it should simultaneously move the total MAE below baseline and collapse the fold bias. That is a falsifiable prediction and should be treated as one — preregistered before the change, not claimed after."
+  },
+  {
+   "id": "M3",
+   "severity": "CONFIRMATION_NOT_DEFECT",
+   "title": "The fold gate is now well-calibrated, and its failure is real",
+   "detail": "The frozen layout is five chronological 100-game folds, which is exactly the operating point this repository's earlier audit recommended over the 10x50 configuration that false-blocked 83% of clean banks.",
+   "measured": {
+    "false_block_rate_of_the_sd_arm_at_5x100_under_the_null": "2.59%",
+    "null_P_of_a_ratio_above_the_observed_1.534": "0.03%",
+    "fold_bias_arm": "0.667 pooled SD at n=100 is 6.67 sigma, two-sided p = 2.6e-11; even across 5 folds x 2 series, p ~ 2.6e-10"
+   },
+   "verdict": "This is NOT the gate crying wolf. The bias arm is astronomically far from the null. Withholding settlement was the correct action, and the fact that a properly-calibrated gate caught a real break is the strongest single piece of evidence in this release."
+  },
+  {
+   "id": "M4",
+   "severity": "MEDIUM",
+   "title": "A total that does not beat a constant is published in the same column as one that does",
+   "detail": "Every WNBA and NFL row publishes a total alongside a margin. The margin clears its baseline with a CI excluding zero; the WNBA total does not clear its baseline at all. The status record states this plainly, and the guide states it, but the CARD does not distinguish them.",
+   "risk": "A number sitting in the same table as validated numbers, with no per-column flag, will eventually be read as validated. data_quality_flags currently carries input-availability problems; it does not carry output-validation status.",
+   "fix": "Add a per-target validation status to the emitted row — margin VALIDATED_VS_BASELINE, total NOT_BETTER_THAN_BASELINE — so the distinction travels with the forecast instead of living in a separate document."
+  },
+  {
+   "id": "M5",
+   "severity": "MEDIUM",
+   "title": "Model state remains 20 days stale and the cards do not carry the state date",
+   "detail": "Model state ends 2026-07-22; the WNBA card forecasts 2026-08-11. This repository independently confirms that boundary is correctly derived — the official family's 2026 regular-season inventory through 7/22 is 202 games, matching their count, and ESPN alone runs further.",
+   "assessment": "Excluding the 16 uncorroborated ESPN-only finals rather than promoting them is the RIGHT call and should not change.",
+   "gap": "The required frame columns include generated_at_utc but no feature-state-as-of date. A grader cannot currently separate model error from 20-day staleness error.",
+   "fix": "Add feature_state_as_of_utc to the gradeable_prediction_output frame and score stale-state rows in their own cohort."
+  }
+ ],
+
+ "on_the_frame_itself": {
+  "endorsed": [
+   "REGISTERED_GRADEABLE independent from promotion, with wager_authority=NO and stake=0 as defaults — this breaks the deadlock where a gate suppresses the very sample needed to clear it",
+   "the forbidden_columns list on the simulation adapter now includes away_score, home_score, home_win_actual and grade, not just market fields — that closes result leakage into the adapter, which the earlier version did not",
+   "'A simulation block does not erase the direct prediction' stated as a rule",
+   "'No p > 0.5 forecast is called an edge' — the single most important sentence in the guide",
+   "NFL simulation still withdrawn, with the half-point ordering test at 2.5/3/3.5 and 6.5/7/7.5 now explicit and requiring nonzero value, which closes the loophole where any integer-lattice model trivially passes by having push(-3.5) = 0",
+   "the WNBA tie rule now moves toward the sign of the CONTINUOUS drawn margin, which is the unbiased fix this repository derived and verified to reproduce P(M>0) exactly",
+   "exact 500-row enumeration replacing the Monte Carlo layer, with numerical error stated as zero"
+  ],
+  "still_open": [
+   "the cross-sport ledger should not pool the NFL preseason market-consensus benchmark with model forecasts in any cumulative score — the benchmark will score well BECAUSE it is the market, and pooling flatters the aggregate. A cohort tag the scorer refuses to aggregate across is needed.",
+   "any citation of the ledger should be required to carry the gate state and the full registered set, so a winner-filtered subset cannot be quoted alone"
+  ]
+ },
+
+ "disposition": "The evidence base is real and the inference is correctly specified. Two of three WNBA rows still fail an arithmetic coherence check that costs nothing to run at registration time, and the totals output is published without a validation status. Recommend adding a direct-vs-margin coherence gate and a per-target validation flag, then re-deriving. Preserve existing rows append-only.",
+
+ "governance": {
+  "gate": "0/100 NO_PROMOTE — unchanged",
+  "ledger": "$0, paper, execution UNAUTHORIZED — unchanged",
+  "model_layer_here": "still ABSENT in this repository; nothing was imported, built or run here"
+ }
+}

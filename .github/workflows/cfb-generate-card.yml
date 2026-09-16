@@ -1,0 +1,81 @@
+name: CFB Generate Forecast Card
+on:
+  workflow_dispatch:
+    inputs:
+      card_date:
+        description: Card date YYYY-MM-DD
+        required: true
+        type: string
+      as_of_utc:
+        description: Point-in-time cutoff UTC
+        required: true
+        type: string
+      model_state_ref:
+        description: Approved fitted model-state path
+        required: true
+        default: data/models/cfb/cfb_margin_model_state_v1.json
+        type: string
+      simulations:
+        description: Seeded simulations per eligible game
+        required: true
+        default: '100000'
+        type: string
+      authority_mode:
+        description: Forecast authority
+        required: true
+        default: shadow_only
+        type: choice
+        options: [shadow_only, production]
+permissions:
+  contents: read
+concurrency:
+  group: cfb-card-${{ inputs.card_date }}
+  cancel-in-progress: false
+jobs:
+  preflight:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - name: Install dependencies
+        run: python -m pip install --disable-pip-version-check numpy pandas pyarrow scikit-learn
+      - name: Validate inference readiness
+        run: |
+          python harness/execution_readiness.py --league cfb \
+            --require-package numpy --require-package pandas --require-package pyarrow \
+            --require-file '${{ inputs.model_state_ref }}' \
+            --require-file data/cfb/source/2026-09-03_cfb_schedule.csv \
+            --require-module models.cfb.spread_simulator_v1 \
+            --output-dir run_artifacts --report run_artifacts/execution_readiness.json
+      - name: Validate approved model state
+        run: python harness/validate_cfb_margin_model_state.py '${{ inputs.model_state_ref }}'
+      - name: Enforce prospective cutoff contract
+        run: |
+          python - <<'PY'
+          from datetime import datetime, timezone
+          import os
+          asof=datetime.fromisoformat(os.environ['ASOF'].replace('Z','+00:00'))
+          if asof.tzinfo is None: raise SystemExit('AS_OF_MUST_BE_TIMEZONE_AWARE')
+          n=int(os.environ['SIMS'])
+          if n < 10000: raise SystemExit('SIMULATION_COUNT_BELOW_MINIMUM')
+          print('INFERENCE_PREFLIGHT: PASS; forecast generation remains fail-closed until materializer module is registered')
+          PY
+        env:
+          ASOF: ${{ inputs.as_of_utc }}
+          SIMS: ${{ inputs.simulations }}
+      - name: Block unsupported synthetic card generation
+        run: |
+          echo 'FORECAST_PRODUCTION_BLOCKED: CARD_MATERIALIZER_NOT_REGISTERED'
+          echo 'Fit is intentionally not performed in this workflow.'
+          echo 'No model-like numbers will be synthesized.'
+          exit 2
+      - name: Upload diagnostics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cfb-card-preflight-${{ inputs.card_date }}-${{ github.run_id }}
+          path: run_artifacts/
+          if-no-files-found: warn
+          retention-days: 90

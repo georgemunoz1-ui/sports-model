@@ -1,0 +1,28 @@
+{
+ "CORROBORATION": "four separate fixes were already required and written. If it were one defect, one fix would have closed it. It did not.",
+ "DISTINCT_MECHANISMS_AND_FIXES": {
+  "aggregate_guard": "call-graph reachability \u2014 fixed, selftest B10 + _mutant_unwire_guard",
+  "information_dose": "dataflow-to-arithmetic \u2014 fixed, A17 + apply_information_dose",
+  "last_start_date": "producer/consumer field coverage \u2014 fixed in starter()",
+  "walk_forward_residuals": "retention-at-granularity \u2014 fixed, residuals stored to .npy"
+ },
+ "TEST": {
+  "shared_code_path": "NO \u2014 build_ml_asof, result_binding_gate, build_board_0828, wnba_model_v1",
+  "shared_commit_lineage": "NO \u2014 d9118f1 2026-07-28, f70dfbd 2026-08-12, 9a55809 and c4b9768 both 2026-08-28 but distinct commits",
+  "would_one_check_catch_all_four": "NO \u2014 2 of 4"
+ },
+ "VERDICT": "HYPOTHESIS REJECTED. Four independent bugs sharing a narrative shape, not one defect.",
+ "WHAT_SURVIVES": "a narrative pattern useful for FINDING bugs and useless for EXPLAINING them. It was doing analytical work it cannot support, and that is the correction.",
+ "WHAT_THEY_ACTUALLY_SHARE": "only that each was found by asking 'where did this value go?' \u2014 an investigative habit, not a code property",
+ "WHY_TWO_OF_FOUR_ESCAPE": {
+  "information_dose": "it IS consumed \u2014 written to the row, validated by forecast_contract, printed, rendered in HTML. A consumption check sees it live. Only a SEMANTIC check (does it reach a probability?) catches it.",
+  "walk_forward_residuals": "collapsed to MAE by evaluate(), which is its intended consumer. Nothing is unconsumed; the defect is GRANULARITY at the storage boundary."
+ },
+ "created_utc": "2026-08-30T06:15:01Z",
+ "falsification_test_proposed_by": "owner",
+ "hypothesis": "the four 'value computed, returned and discarded' findings this week are four instances of ONE governance defect",
+ "proposed_by": "me",
+ "record_id": "GOVERNANCE-DEFECT-HYPOTHESIS-FALSIFIED-2026-08-30",
+ "record_sha256": "d28bef002d6b46823109c2a058f880bc39f35c723d16676984c4305a3f38e0e5",
+ "schema": "ops.hypothesis_falsification.v1"
+}

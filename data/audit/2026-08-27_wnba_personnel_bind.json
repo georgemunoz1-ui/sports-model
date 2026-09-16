@@ -1,0 +1,96 @@
+{
+ "created_utc": "2026-08-27T06:53:00Z",
+ "grade": "ESPN_GAMEPACKAGE_GIT_ARTIFACT \u2014 in-git ESPN game payloads; NOT the official WNBA injury report (that route remains EGRESS_BLOCKED, receipt below). Personnel for tonight remains PERSONNEL_UNVERIFIED at the official grade; these snapshots are the strongest retained evidence.",
+ "official_route_receipt": {
+  "error": "EGRESS_BLOCKED",
+  "observed_utc": "2026-08-27T06:52:30Z",
+  "url": "https://www.wnba.com/wnba-injury-report"
+ },
+ "record_id": "WNBA-PERSONNEL-BIND-2026-08-27",
+ "record_sha256": "98de4179edca10c6c82c83b6c75a7c2346af64f5bfa22217f060171abd675f24",
+ "roster_component": "each artifact carries the full game roster (boxscore player lists) for both teams \u2014 binds ROSTERS units for the four slate teams at the same grade",
+ "schema": "ops.personnel_bind.v1",
+ "staleness_note": "snapshots are 1-3 days old (each team's most recent archived game); tonight's availability can differ \u2014 re-check at T-90/T-45",
+ "teams": {
+  "GSV": {
+   "artifact": {
+    "commit": "b843138d82af8713dc564e6921b20947dc5c0081",
+    "path": "wnba/game_rosters/json/401857171.json",
+    "sha256": "a94960a559a953393407396844dd969caa49c5f62bb11e21c50e1525dacbc681"
+   },
+   "as_of_game": "GS@MIN (most recent archived)",
+   "injuries": [
+    {
+     "player": "Iliana Rupert",
+     "reason": "Not Injury Related",
+     "status": "Out"
+    }
+   ]
+  },
+  "NYL": {
+   "artifact": {
+    "commit": "b843138d82af8713dc564e6921b20947dc5c0081",
+    "path": "wnba/game_rosters/json/401857321.json",
+    "sha256": "da8605663405a5a601a964125b30a7585696567393928728f0b33b5280224b91"
+   },
+   "as_of_game": "LV@NY (most recent archived)",
+   "injuries": [
+    {
+     "player": "Satou Sabally",
+     "reason": "Concussion",
+     "status": "Out"
+    },
+    {
+     "player": "Anneli Maley",
+     "reason": "Coach's Decision",
+     "status": "Out"
+    },
+    {
+     "player": "Elizabeth Balogun",
+     "reason": "Coach's Decision",
+     "status": "Out"
+    }
+   ]
+  },
+  "PHX": {
+   "artifact": {
+    "commit": "b843138d82af8713dc564e6921b20947dc5c0081",
+    "path": "wnba/game_rosters/json/401857175.json",
+    "sha256": "5f92ee8910278dc4ca76ebde734fcdd4ca47d2aeb9492b03339b080ddf565dc8"
+   },
+   "as_of_game": "WSH@PHX 2026-08-26T02:00Z",
+   "injuries": [
+    {
+     "player": "Shay Ciezki",
+     "reason": "Coach's Decision",
+     "status": "Out"
+    },
+    {
+     "player": "Kara Dunn",
+     "reason": "Coach's Decision",
+     "status": "Out"
+    },
+    {
+     "player": "Marta Suarez",
+     "reason": "Head",
+     "status": "Out"
+    },
+    {
+     "player": "Jovana Nogic",
+     "reason": "Not Injury Related",
+     "status": "Out"
+    }
+   ]
+  },
+  "WSH": {
+   "artifact": {
+    "commit": "b843138d82af8713dc564e6921b20947dc5c0081",
+    "path": "wnba/game_rosters/json/401857175.json",
+    "sha256": "5f92ee8910278dc4ca76ebde734fcdd4ca47d2aeb9492b03339b080ddf565dc8"
+   },
+   "as_of_game": "WSH@PHX 2026-08-26T02:00Z",
+   "injuries": [],
+   "note": "no WSH entries in the payload's injuries section \u2014 recorded as listed, not asserted healthy"
+  }
+ }
+}

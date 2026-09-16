@@ -1,0 +1,56 @@
+{
+ "record_id": "V19-EXTERNAL-ATTESTED-2026-08-14",
+ "received_utc": "2026-08-14T08:24:31Z",
+ "sealed_pre_pitch": true,
+ "earliest_first_pitch_estimate": "2026-08-14T18:20Z (STL@CHC day game); seal precedes it by ~10h",
+
+ "provenance": {
+  "channel": "owner message relaying an external MLB session delivery (V19)",
+  "claimed_commit": "1871a1caa9af275b0b8b0b7cbb27428a366b0e34",
+  "commit_present_on_live_remote": false,
+  "external_origin": "local Git bundle, NOT GitHub — the delivering session itself stated it did not claim a remote push",
+  "artifact_links": "arrived as empty placeholders; the referenced card/report/bundle bytes did NOT reach this container",
+  "attestation_basis": "the 14 rows below are transcribed VERBATIM from the owner's message; this record's authority is the message itself, timestamped in-conversation before first pitch. It is NOT a reproduction of the external canonical card. If the canonical bytes later arrive and disagree, the canonical card governs and the discrepancy must be recorded — never silently merged."
+ },
+
+ "model_claims_register": {
+  "model_id_claimed": "V19 = V18's exact frozen artifact used prospectively",
+  "v18_deltas_2025": {"brier": "0.244749 -> 0.244086 (delta -0.000663, -0.27% rel)", "auc": "0.566775 -> 0.571105 (+0.00433)"},
+  "promotion_status_claimed": "NO_PROMOTE — paired CIs crossed zero; V19 is prospective shadow of the frozen artifact",
+  "features_added": "starter durability; prior-season roster defense; starter/lineup watcher with LATEST.json pointer (11 matches, 3 official TBDs, 0 named changes, 0 posted lineups at refresh)",
+  "hygiene_claims": "8/13 2/7 night not used for fitting; WNBA 6/6 contributed nothing to MLB fitting/promotion; zero fabricated grades; wager authority NO"
+ },
+
+ "rows_verbatim": [
+  {"g": "STL@CHC", "pick": "CHC", "p": 0.568, "flag": null},
+  {"g": "MIA@CIN", "pick": "CIN", "p": 0.511, "flag": null},
+  {"g": "BOS@PIT", "pick": "BOS", "p": 0.521, "flag": null},
+  {"g": "CWS@DET", "pick": "DET", "p": 0.633, "flag": null},
+  {"g": "BAL@TB",  "pick": "TB",  "p": 0.521, "flag": "BAL starter projected"},
+  {"g": "WSH@NYM", "pick": "WSH", "p": 0.501, "flag": null},
+  {"g": "SD@CLE",  "pick": "CLE", "p": 0.567, "flag": null},
+  {"g": "NYY@TOR", "pick": "NYY", "p": 0.515, "flag": null},
+  {"g": "ARI@ATL", "pick": "ATL", "p": 0.592, "flag": "ATL starter projected"},
+  {"g": "SEA@HOU", "pick": "HOU", "p": 0.538, "flag": null},
+  {"g": "KC@LAA",  "pick": "LAA", "p": 0.509, "flag": null},
+  {"g": "TEX@ATH", "pick": "TEX", "p": 0.528, "flag": "ATH starter projected"},
+  {"g": "MIL@LAD", "pick": "LAD", "p": 0.568, "flag": null},
+  {"g": "COL@SF",  "pick": "SF",  "p": 0.534, "flag": null}
+ ],
+
+ "internal_consistency_checks": {
+  "flags_vs_refresh_claim": "PASS — exactly 3 'starter projected' flags (BAL, ATL, ATH) matches the claimed 'three official TBDs'",
+  "pick_orientation": "PASS — every pick is the side carrying the stated >50% probability; WSH@NYM 50.1% is a road pick (home 49.9%), coherent",
+  "probability_band": "all 14 picks in [50.1%, 63.3%], mean 54.33% — the V13-family compression band; expected sides if calibrated = 7.60/14; expected night Brier if perfectly calibrated = 0.2468. A single night grades character, not quality",
+  "baseline_cross_check": "the claimed V13 baseline AUC 0.566775 matches THIS workspace's independent MLV2 measurement of V13 2025 AUC ~0.566 — the two workspaces measured the same baseline separately and agree",
+  "delta_plausibility": "Brier -0.000663 with CI crossing zero at one-season n is exactly the magnitude the MLV2 program predicted for feature-level tweaks against the discrimination constraint; the NO_PROMOTE call is the correct reading of it",
+  "slate_plausibility": "14 games; series turnarounds vs our 8/13 slate are coherent (CIN home after at-CWS; BOS at PIT after at-TOR; MIL@LAD continuing). Two tight travel turnarounds noted (CHC: at-WSH 8/13 -> home 8/14; NYY: hosted SEA 8/13 -> at TOR 8/14) — plausible, unverified pending our own slate capture"
+ },
+
+ "governance": {
+  "cohort_rule": "this attested cohort joins tonight's grading family. Per the frozen rule, ALL cohorts registered for 8/14 grade against the same finals and none is cited alone. If this workspace registers a V13 card for 8/14, both grade side by side.",
+  "durability_flag": "V19's artifacts exist only in the external workspace + a Library zip — the exact evaporation class documented on 8/13 (cron clones the wrong repo name; bundle-only origins). The delivering session was honest about it. Standing recommendation: ship the bundle into the live remote or grant the external workspace push credentials.",
+  "experiments_pause_note": "V18 was a new fitted experiment run in the external workspace. The pause question (audit #2) was never ruled on by the owner for either workspace; the owner's delivery message reads as endorsement. Recorded, not relitigated.",
+  "authority": "paper only; wager authority NO; gate 0/100 NO_PROMOTE unchanged; nothing in this record touches the MLB gate counts — it is an attested external cohort, firewalled until canonical bytes arrive"
+ }
+}

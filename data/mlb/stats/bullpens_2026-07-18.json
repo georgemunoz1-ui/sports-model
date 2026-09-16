@@ -1,0 +1,76 @@
+{
+  "sport": "mlb",
+  "season": 2026,
+  "as_of_date": "2026-07-18",
+  "capture_time_utc": "2026-07-18T04:33:22Z",
+  "status": "FAILED_NO_DATA_CAPTURED",
+  "intended_metric": "Team-level RELIEVER (bullpen) splits: Team, IP, ERA, FIP, K%, BB%",
+  "intended_source": "https://www.fangraphs.com/api/leaders/major-league/data?age=&pos=all&stats=rel&lg=all&qual=0&season=2026&season1=2026&month=0&team=0%2Cts&pageitems=40&pagenum=1&ind=0&rost=0&players=0&type=8&sortcol=7&sortdir=default",
+  "teams": null,
+  "fields_missing": [
+    "Team",
+    "IP",
+    "ERA",
+    "FIP",
+    "K%",
+    "BB%"
+  ],
+  "attempts": [
+    {
+      "n": 1,
+      "variant": "team=0%2Cts (prescribed), pageitems=40",
+      "outcome": "HTTP 200 but data array contained INDIVIDUAL PLAYER rows (e.g. Danny Young, Mason Miller, Blake Treinen, Bryse Wilson visible) - team aggregation param not honored"
+    },
+    {
+      "n": 2,
+      "variant": "team=0,ts literal comma, pageitems=40",
+      "outcome": "HTTP 200, PLAYER rows again"
+    },
+    {
+      "n": 3,
+      "variant": "team=0%2Cto (prescribed fallback), pageitems=40",
+      "outcome": "HTTP 200, PLAYER rows (Mason Miller SDP, Louie Varland TOR, Jhoan Duran PHI, Dylan Lee ATL, Trevor Megill MIL, Adrian Morejon SDP visible)"
+    },
+    {
+      "n": 4,
+      "variant": "full site param set (startdate/enddate/hand/postseason), team=0%2Cts, pageitems=30",
+      "outcome": "PROXY_REJECTED HTTP 403"
+    },
+    {
+      "n": 5,
+      "variant": "HTML leaderboard page /leaders/major-league?...&team=0%2Cts",
+      "outcome": "HTTP 200 but client-rendered shell only: 'No data is available', '1 - 0 of 0 results' (table populates via API after page load)"
+    },
+    {
+      "n": 6,
+      "variant": "retry of attempt 4 URL",
+      "outcome": "HTTP 403"
+    },
+    {
+      "n": 7,
+      "variant": "pageitems=35 variant",
+      "outcome": "HTTP 429 rate limited"
+    },
+    {
+      "n": 8,
+      "variant": "pageitems=45 after 75s wait",
+      "outcome": "HTTP 429"
+    },
+    {
+      "n": 9,
+      "variant": "pageitems=32 after 130s further wait",
+      "outcome": "HTTP 429"
+    },
+    {
+      "n": 10,
+      "variant": "pageitems=33 after 180s further wait",
+      "outcome": "HTTP 429"
+    }
+  ],
+  "failure_analysis": "Two distinct failure modes: (1) When responses did return (attempts 1-3), the team=0,ts / 0,to aggregation parameter was NOT honored through this fetch pipeline - the API returned the default per-player reliever leaderboard. Player rows were NOT captured or aggregated (would require paginating 400+ qual=0 relievers and IP-weighted local aggregation; out of scope and not authorized as a substitute). (2) From attempt 4 onward FanGraphs/proxy blocked all requests with sustained 403/429 across ~8 minutes of backoff, so no further param variants could be tested.",
+  "recommendations": [
+    "Retry after rate-limit clears (>15-30 min); verify team aggregation by checking rows carry TeamName without a player Name field before trusting values.",
+    "Fallback if aggregation param still not honored: paginate player-level stats=rel rows and aggregate to team locally (ERA = 9*sum(ER)/sum(IP-decimal); K%/BB% PA-weighted) - flag as locally-derived, not FanGraphs-verbatim.",
+    "No values were guessed or substituted from memory; all bullpen fields remain null."
+  ]
+}

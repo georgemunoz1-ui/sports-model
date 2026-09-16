@@ -1,0 +1,29 @@
+{
+ "attempts": [
+  {
+   "result": "EGRESS_BLOCKED (org proxy)",
+   "url": "https://statsapi.mlb.com/api/v1/schedule?sportId=1&date=2026-08-25&hydrate=probablePitcher"
+  },
+  {
+   "result": "EGRESS_BLOCKED (org proxy)",
+   "url": "https://www.wnba.com/injury-report"
+  }
+ ],
+ "checkpoint": "T_MINUS_90M",
+ "duty": "refresh all material inputs; identify unresolved statuses",
+ "escalation": "ALTERNATE_SOURCE_SEARCH_BEGINS \u2014 every fetch rail remains blocked (7th+ consecutive window since 2026-08-22); the alternate source that remains authorized and open is OWNER_RELAY",
+ "market_phase": "PRE_GAME (first pitch 22:40Z; now 21:16Z)",
+ "next_checkpoint": "T_MINUS_45M at ~21:55Z (MANDATORY_ALWAYS)",
+ "record_id": "CHECKPOINT-2026-08-25-T_MINUS_90M",
+ "record_sha256": "3ff1395b8b3133a3d955bc75baadf994108e9c6142d68341f17076a5556801e8",
+ "run_utc": "2026-08-25T21:16:00Z",
+ "schema": "ops.checkpoint.v1",
+ "slate_first_pitch_utc": "2026-08-25T22:40:00Z",
+ "system_state": "SYSTEM_NOT_DECISION_READY; execution BLOCKED; 0 bets / $0",
+ "unresolved_statuses": [
+  "Mason Adams NO_PID_CAP (COL@WSH away)",
+  "MLB official page TBD state for the three identified slots (owner-relayed, unverified directly)",
+  "WNBA features 34d stale; RJ-004 0/6 BLOCKED_EXTERNAL",
+  "market state MARKET_CAPTURED_CURRENT observed <= 16:48Z \u2014 a fresh pre-execution quote is mandatory before any action"
+ ]
+}

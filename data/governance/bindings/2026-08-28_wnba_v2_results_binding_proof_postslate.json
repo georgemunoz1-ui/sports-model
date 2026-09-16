@@ -1,0 +1,209 @@
+{
+ "WHAT_0_OF_0_MEANS_HERE": "NOTHING IS CLAIMED, and the reason is specific and worse than the prospective proof's: the slate is OVER and no admissible source carries it. All 12 board rows were loaded and every canonical_id was read. This is NOT 'nothing was checked'.",
+ "accrual": "NOTHING accrues to settlement, promotion, or the estimator from this record",
+ "aggregate_verdict": {
+  "aggregates_permitted": false,
+  "detail": {
+   "code": "AGGREGATE_TOUCHES_REFUSED_ROW",
+   "cohort_problems": [
+    {
+     "code": "COHORT_COVERAGE_INCOMPLETE",
+     "detail": "an aggregate over a partial cohort reports a denominator it did not earn; exclude explicitly with require_full_coverage=False and say why",
+     "missing": [
+      "wnba:CON@IND",
+      "wnba:POR@ATL",
+      "wnba:TOR@LV",
+      "wnba:WSH@LAS"
+     ],
+     "n_board_games": 4,
+     "n_bound": 0
+    }
+   ],
+   "detail": "no partial credit: the aggregate is refused whole until every row binds, no two rows claim one game, and the cohort covers the board or is explicitly narrowed with a recorded reason",
+   "n_refused": 0,
+   "refused_codes": [
+    "COHORT_COVERAGE_INCOMPLETE"
+   ],
+   "statistic": "any aggregate over wnba:2026-08-28"
+  }
+ },
+ "board_identity": {
+  "id_grades": {
+   "CAPTURED": 12
+  },
+  "id_space_mixture_check": "PASS \u2014 every board id is namespaced; a bare integer beside a namespaced one would be a surviving pseudo-pk and is refused at cohort level (check B9)",
+  "id_spaces": {
+   "ESPN_GAMEID": 4
+  },
+  "inferred": 0,
+  "n_games": 4,
+  "synthetic_pseudo_pks": 0
+ },
+ "board_path": "cards/2026-08-28_wnba_board_v2.json",
+ "board_sha256": "b58b40af81221d12b38265b2b7fbf2ec6fbb1776d4b44058f72436478782b057",
+ "board_slate_date": "2026-08-28",
+ "cohort": "wnba:2026-08-28",
+ "cohort_problems": [
+  {
+   "code": "COHORT_COVERAGE_INCOMPLETE",
+   "detail": "an aggregate over a partial cohort reports a denominator it did not earn; exclude explicitly with require_full_coverage=False and say why",
+   "missing": [
+    "wnba:CON@IND",
+    "wnba:POR@ATL",
+    "wnba:TOR@LV",
+    "wnba:WSH@LAS"
+   ],
+   "n_board_games": 4,
+   "n_bound": 0
+  }
+ ],
+ "counters": {
+  "CANONICAL_ID_MATCH": "0/0",
+  "DATE_COHERENCE_PASS": "0/0",
+  "REFUSED_ROWS": 0,
+  "RESULT_BINDING_PASS": "0/0"
+ },
+ "generated_utc": "2026-08-29T07:33:26Z",
+ "gradable": false,
+ "posture": "POST_SLATE",
+ "rows": [],
+ "rule": "a single failed row blocks every aggregate over this cohort; no partial metric may silently exclude or substitute it",
+ "schema": "ops.binding_proof.v1",
+ "sport": "wnba",
+ "supplements_and_does_not_replace": {
+  "distinction": "the prospective proof's 0/0 meant 'the slate has not started'. This proof's 0/0 means 'the slate finished and the archives still do not carry it'. Identical counters, different claim \u2014 so the earlier record stands unmodified under R6 rather than being edited to say something it did not say at the time.",
+  "prospective_proof": "data/governance/bindings/2026-08-28_wnba_results_binding_proof.json",
+  "prospective_sha256": "0fa6e9b530638bea28a9579c2af2a121d2bf2f61c81b4c85bdf969049b32aba7"
+ },
+ "wager_authority": "NO",
+ "what_was_refused": "manufacturing finals from search. Snippets IDENTIFY and never BIND. The 8/27 cycle published five fabricated finals at exactly this juncture; the correct output when no admissible source carries a result is a proof that says so.",
+ "why_no_results": {
+  "lancebroz_mlb_pitcher_data": {
+   "daily_file_probe": {
+    "columns": [
+     "game_pk",
+     "game_date",
+     "play_id",
+     "home_team",
+     "away_team",
+     "venue",
+     "inning",
+     "top_bottom",
+     "half_inning",
+     "pitcher_id",
+     "pitcher_name",
+     "pitcher_hand",
+     "batter_id",
+     "batter_name",
+     "batter_hand",
+     "stand",
+     "balls",
+     "strikes",
+     "count",
+     "outs",
+     "at_bat_number",
+     "pitch_number",
+     "pitch_type",
+     "pitch_name",
+     "start_speed",
+     "end_speed",
+     "plate_x",
+     "plate_z",
+     "zone",
+     "sz_top",
+     "sz_bottom",
+     "release_x",
+     "release_y",
+     "release_z",
+     "extension",
+     "pfx_x",
+     "pfx_z",
+     "vx0",
+     "vy0",
+     "vz0",
+     "ax",
+     "ay",
+     "az",
+     "spin_rate",
+     "spin_direction",
+     "break_angle",
+     "break_length",
+     "break_y",
+     "call_code",
+     "call_description",
+     "is_strike",
+     "is_ball",
+     "is_in_play",
+     "events",
+     "launch_speed",
+     "launch_angle",
+     "hit_distance",
+     "trajectory",
+     "hardness",
+     "hit_x",
+     "hit_y"
+    ],
+    "exists": true,
+    "n_columns": 61,
+    "n_rows": 930,
+    "path": "lancebroz/mlb-pitcher-data/data/raw/2026/daily/2026-08-28.parquet",
+    "score_bearing_columns": [],
+    "verdict": "NO_SCORE_BEARING_COLUMN \u2014 the file carries pitch-level detail only; pitchers and game_pks are present, finals are not"
+   },
+   "head": "41f26c8379e8c5c0caeeae263dd522577c1f6024",
+   "head_committed_utc": "2026-08-29T01:32:03+00:00",
+   "standing_finding": "RJ-001B stands at 0/126 because this archive has NEVER carried a runs column. The 8/28 file advancing does not change that."
+  },
+  "observed_utc": "2026-08-29T07:33:26Z",
+  "wehoop_wnba_raw": {
+   "advanced_since_pin": false,
+   "head": "7a1c7ebaef37590ebdaf75c4d3961b99a493d99b",
+   "head_committed_utc": "2026-08-28T06:32:20-04:00",
+   "pinned_in_harness": "7a1c7ebaef37590ebdaf75c4d3961b99a493d99b",
+   "schedule_probe": {
+    "board_games_probed": 4,
+    "completed_board_games": 0,
+    "exists": true,
+    "path": "sportsdataverse/wehoop-wnba-raw/wnba/schedules/parquet/wnba_schedule_2026.parquet",
+    "per_game": [
+     {
+      "canonical_id": "ESPN_GAMEID:401857181",
+      "completed": false,
+      "game": "wnba:CON@IND",
+      "present_in_archive": true,
+      "status": "STATUS_SCHEDULED",
+      "utc_start": "2026-08-28T23:30Z"
+     },
+     {
+      "canonical_id": "ESPN_GAMEID:401857180",
+      "completed": false,
+      "game": "wnba:POR@ATL",
+      "present_in_archive": true,
+      "status": "STATUS_SCHEDULED",
+      "utc_start": "2026-08-28T23:30Z"
+     },
+     {
+      "canonical_id": "ESPN_GAMEID:401857182",
+      "completed": false,
+      "game": "wnba:TOR@LV",
+      "present_in_archive": true,
+      "status": "STATUS_SCHEDULED",
+      "utc_start": "2026-08-29T02:00Z"
+     },
+     {
+      "canonical_id": "ESPN_GAMEID:401857183",
+      "completed": false,
+      "game": "wnba:WSH@LAS",
+      "present_in_archive": true,
+      "status": "STATUS_SCHEDULED",
+      "utc_start": "2026-08-29T02:00Z"
+     }
+    ],
+    "probe": "BY_CANONICAL_ID_NOT_BY_DATE",
+    "utc_date_filter_would_have_returned": "401857178 (GSV 79-60 NYL) and 401857179 (WSH 80-73 PHX) \u2014 8/27 EVENING ET games whose UTC timestamps fall on 8/28. NEITHER is on the 8/28 board. A date-column filter here manufactures a two-game 8/28 'result set' out of the previous slate; both were already graded on 8/27.",
+    "verdict": "NO_BOARD_GAME_COMPLETED"
+   },
+   "what_this_head_carries": "the 8/27 finals \u2014 it has not advanced past its 8/28 06:32 ET update, so no 8/28 boxes exist at any admissible source"
+  }
+ }
+}

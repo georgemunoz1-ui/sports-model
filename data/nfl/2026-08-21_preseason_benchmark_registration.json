@@ -1,0 +1,96 @@
+{
+ "record_id": "NFL-PRE-BENCHMARK-REGISTRATION-2026-08-21",
+ "registered_utc": "2026-08-21T06:58:00Z",
+ "scope": "MARKET_BENCHMARK_ONLY \u2014 no NFL model identity exists in the registry and no probability card is registered. Brier, log loss, model edge and EV are NULL BY RULE and will remain null at settlement.",
+ "board_evidence": "data/nfl/evidence_2026-08-20_preseason_board.json",
+ "board_evidence_sha256": "9106bae72d8e8dbbddab473ea0aad30c24694d1a99235907ff573b3204c37517",
+ "registered_pre_kick": "YES \u2014 registered 06:58Z against the earliest kickoff 20:00Z (13h02m margin)",
+ "tie_rule": "a tie grades PUSH on the benchmark side and is counted separately",
+ "games": [
+  {
+   "g": "NYJ@PIT",
+   "away": "NYJ",
+   "home": "PIT",
+   "kick_utc": "2026-08-21T20:00Z",
+   "open": {
+    "spread": "PIT -3 (-110)",
+    "total": "o39.5 (-115)"
+   },
+   "capture_spread": {
+    "NYJ": -1.5,
+    "PIT": 1.5
+   },
+   "capture_ml": {
+    "NYJ": -125,
+    "PIT": 105
+   },
+   "capture_total": {
+    "line": 36.5,
+    "over": -110,
+    "under": -110
+   },
+   "registered_benchmark_side": "NYJ",
+   "benchmark_basis": "capture-time favorite: NYJ -1.5 (-102), ML -125",
+   "line_move_note": "OPEN had PIT -3; the line flipped to NYJ -1.5 by capture. Both recorded."
+  },
+  {
+   "g": "CAR@JAX",
+   "away": "CAR",
+   "home": "JAX",
+   "kick_utc": "2026-08-21T20:30Z",
+   "open": {
+    "spread": "JAX -1.5 (-115)",
+    "total": "o39.5 (-115)"
+   },
+   "capture_spread": {
+    "CAR": -1.5,
+    "JAX": 1.5
+   },
+   "capture_ml": {
+    "CAR": -135,
+    "JAX": 110
+   },
+   "capture_total": {
+    "line": 37.5,
+    "over": -112,
+    "under": -108
+   },
+   "registered_benchmark_side": "CAR",
+   "benchmark_basis": "capture-time favorite: CAR -1.5 (-110), ML -135",
+   "line_move_note": "OPEN had JAX -1.5; flipped to CAR -1.5 by capture. Both recorded."
+  },
+  {
+   "g": "GB@DEN",
+   "away": "GB",
+   "home": "DEN",
+   "kick_utc": "2026-08-21T22:00Z",
+   "open": {
+    "spread": "DEN -3.5 (-115)",
+    "total": "o38.5 (-115)"
+   },
+   "capture_spread": {
+    "GB": 6.0,
+    "DEN": -6.0
+   },
+   "capture_ml": {
+    "GB": 200,
+    "DEN": -245
+   },
+   "capture_total": {
+    "line": 40.5,
+    "over": -118,
+    "under": -102
+   },
+   "registered_benchmark_side": "DEN",
+   "benchmark_basis": "capture-time favorite: DEN -6 (-108), ML -245",
+   "line_move_note": "OPEN had DEN -3.5; moved to DEN -6 by capture (same side, larger number)."
+  }
+ ],
+ "game_count": 3,
+ "grading_plan": "at settlement each row reports registered side, final, outright W/L/T and ATS result at the REGISTERED capture-time spread (not the closing line), disposition BENCHMARK_GRADED / MODEL_GRADE_NOT_APPLICABLE.",
+ "not_a_model_output": "These sides are the market's, restated. They are not predictions of this system and no accuracy claim about any model may be derived from them.",
+ "standing": {
+  "wager_authority": "NO",
+  "stake": 0
+ }
+}

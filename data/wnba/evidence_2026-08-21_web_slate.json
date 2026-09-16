@@ -1,0 +1,48 @@
+{
+ "schema": "wnba.acquired_slate.v1",
+ "record_id": "WEB-WNBA-SLATE-20260821",
+ "captured_at_utc": "2026-08-21T06:55:00Z",
+ "source_tier": 1,
+ "source_family": "OFFICIAL_WEB",
+ "slate_date": "2026-08-21",
+ "game_count": 3,
+ "games": [
+  {
+   "away": "MIN",
+   "home": "WAS",
+   "tip_utc": "2026-08-21T23:30Z",
+   "venue": "CareFirst Arena",
+   "source_ids": [
+    "wnba.com 1022600272 (min-vs-was)",
+    "covers matchup 374115"
+   ],
+   "confidence": "HIGH"
+  },
+  {
+   "away": "GSV",
+   "home": "CHI",
+   "tip_utc": "2026-08-22T02:00Z",
+   "venue": "Wintrust Arena",
+   "source_ids": [],
+   "confidence": "MEDIUM \u2014 matchup and 10:00 PM ET tip from schedule listing; no game id captured"
+  },
+  {
+   "away": "PDX",
+   "home": "TOR",
+   "tip_utc": "2026-08-22T02:00Z",
+   "venue": "Rogers Arena, Vancouver BC",
+   "source_ids": [
+    "wnba.com 1022600274 (pdx-vs-tor)"
+   ],
+   "confidence": "HIGH",
+   "note": "Toronto hosts at Rogers Arena, Vancouver \u2014 an alternate home site, part of a two-game Vancouver series (PDX 8/21, LVA 8/23)."
+  }
+ ],
+ "evidence_conflict_resolved": {
+  "conflict": "one schedule snippet listed the third game as 'Portland Fire vs Seattle Storm'; another listed 'Portland Fire at Toronto Tempo, Rogers Arena, Vancouver'.",
+  "resolution": "PDX@TOR. Corroborated by wnba.com game id 1022600274 plus five independent ticketing/local sources (TickPick, NightOut, do604, Miss604, Destination Vancouver) all naming the Vancouver date. The Seattle claim has zero corroboration and is REJECTED.",
+  "rejected_claim": "PDX@SEA on 2026-08-21"
+ },
+ "price_state": "NO PRICES ACQUIRED \u2014 no spreads, totals or moneylines. Under the frozen ATS prereg a missing line is NO_SELECTION, so ZERO ATS selections register for this slate.",
+ "completeness": "3 games. Not independently manifest-verified beyond these listings; a WNBA slate has no franchise-partition invariant to check against."
+}

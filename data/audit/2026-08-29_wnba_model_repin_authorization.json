@@ -1,0 +1,45 @@
+{
+ "APPEND_ONLY_DISCIPLINE": {
+  "effect": "impl_version 1 stays authorized and readable forever, so every forecast record that binds f444d2a42baa29c9ce86bdb8bd7c1b4a720b4b14d7b39f0845a19528225ffd56 still resolves through authorized_source_hash() instead of reporting drift. Only the newest version is permitted on disk.",
+  "rule": "owner instruction 2026-08-17 \u2014 keep the source re-pin append-only as a new generator implementation version; never replace the historical pin"
+ },
+ "AUTHORIZATION": {
+  "granted_by": "owner",
+  "granted_on": "2026-08-29",
+  "verbatim": "Authorize the registry version bump for the model ET fix",
+  "why_it_needed_authorization": "harness/wnba_model_v1.py is the pinned source of a REGISTERED model. Swapping it drifted the registry hash and the immutability gate failed the build, correctly. A registered model's source cannot change in place, because past forecasts would then be attributed to an implementation that no longer exists on disk."
+ },
+ "BEHAVIOUR_IMPACT_MEASURED": {
+  "2026_schedule_rows": 333,
+  "reading": "this is NOT a cosmetic change. Rest and back-to-back features change for the majority of 2026 tips, because WNBA games are played in the ET evening and therefore carry a next-day UTC timestamp. Any forecast produced by impl_version 1 used the UTC slice and must stay attributed to it.",
+  "share": "51.1%",
+  "tips_where_utc_date_differs_from_et_date": 170
+ },
+ "REVALIDATION_OWED": "the 2026-08-12 walk-forward calibration artifact was produced under impl_version 1's UTC-slice rest/b2b features. Its VALIDATED_VS_BASELINE verdict is NOT automatically inherited by impl_version 2 and is not claimed here. Re-running it is open work.",
+ "SCOPE_UNCHANGED": {
+  "firewall": "no output reaches the MLB gate, forecasts or ledger",
+  "ledger": {
+   "n_bets": 0,
+   "units": 0.0,
+   "wager_authority": "NO"
+  },
+  "promotion": "NOT promoted. This re-pin authorizes an implementation fix, not a status change.",
+  "role": "WNBA_SHADOW_DIAGNOSTIC"
+ },
+ "WHAT_CHANGED": {
+  "defect": "predict_slate computed rest and back-to-back features from tip[:10] \u2014 a slice of the UTC instant. A 2026-07-23T00:00Z tip is the ET EVENING of 2026-07-22, so against a last game on ET 07-21 it is a back-to-back (rest=1, b2b=1) and the UTC slice reported rest=2. Same defect class as the wnba_refresh_espn extraction bug: derive the calendar date, never slice it.",
+  "diff_scope_lines": 52,
+  "fix": "et_date() derives America/New_York via zoneinfo; predict_slate uses it for both teams' feats lookup",
+  "rows_now_carry": [
+   "et_date",
+   "date_timezone"
+  ]
+ },
+ "created_utc": "2026-08-29T08:39:56Z",
+ "model_identity": "wnba.rs.ff7_logit_ridge.v1_0.shadow",
+ "new_sha256": "7f128ba323ee939b8f40bf55eb2e1f6e9a24611e29ca4eb743962af2608af4e0",
+ "record_id": "REPIN-wnba.rs.ff7_logit_ridge-ET-DATE-FIX",
+ "schema": "ops.model_repin_authorization.v1",
+ "source": "harness/wnba_model_v1.py",
+ "superseded_sha256": "f444d2a42baa29c9ce86bdb8bd7c1b4a720b4b14d7b39f0845a19528225ffd56"
+}

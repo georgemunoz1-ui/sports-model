@@ -1,0 +1,105 @@
+{
+ "record_id": "ROADMAP-2026-08-22-STATUS",
+ "created_utc": "2026-08-22T08:05:00Z",
+ "authority": "owner roadmap 2026-08-22 (8 items + card presentation)",
+ "HONEST_STATUS": "PARTIALLY DELIVERED. One item is done and tested. Five are QUARANTINED DRAFTS that must not be used. Three are records that need owner review.",
+ "delivered_and_tested": {
+  "item_9_card_presentation": "DONE. decision_card.render_md now leads with exactly Game | Model prediction | Fair number | Market number | Action. Everything else moved to the appendix. fair_number_display returns the NEGATED home margin (the margin-vs-spread rule made structural); market_number_display renders null-WITH-REASON rather than a blank cell. Fixtures assert the five-field header is present, the demoted fields are gone from the lead table, and the reason text still appears in the appendix rather than vanishing. render_gate is unchanged and still runs over the full structured rows, so the controls are not weakened by the shorter surface."
+ },
+ "QUARANTINED_NOT_WIRED": {
+  "modules": [
+   "harness/starter_attribution.py",
+   "harness/daily_baselines.py",
+   "harness/subgroup_monitor.py",
+   "harness/totals_eval.py",
+   "harness/freshness_gates.py"
+  ],
+  "status": "Each carries a QUARANTINED DRAFT header. None is imported by healthcheck. None is used for any card, grade or decision. Their numbers must not be quoted.",
+  "why": "An adversarial review pass (mutation testing against each module's own selftest) found critical/high defects in all five AND \u2014 the more important finding \u2014 that many fixtures are DECORATIVE: they stay green when the rule they supposedly guard is deleted. A passing selftest in these modules therefore proves very little.",
+  "defect_counts": {
+   "daily_baselines.py": {
+    "defects": 9,
+    "critical_or_high": 6,
+    "decorative_fixtures": 10,
+    "verdict": "BROKEN \u2014 the guard rails hold but the numbers do not. 63 mutants run against the selftest (41 killed, 21 survived). The refusal/omission machinery is genuinely "
+   },
+   "starter_attribution.py": {
+    "defects": 10,
+    "critical_or_high": 3,
+    "decorative_fixtures": 8,
+    "verdict": "NOT SOUND AS CLAIMED. The 29 claimed mutants are real \u2014 I reproduced every one against a mirrored copy and all 29 die. But the mutant set was drawn from the fix"
+   },
+   "totals_eval.py": {
+    "defects": 11,
+    "critical_or_high": 3,
+    "decorative_fixtures": 13,
+    "verdict": "CORE INVARIANTS ARE REAL; THE GOVERNANCE LAYER AROUND THEM IS NOT. I reproduced the claimed mutation suite: all 23 rule-deletions I could construct from the cla"
+   },
+   "subgroup_monitor.py": {
+    "defects": 11,
+    "critical_or_high": 3,
+    "decorative_fixtures": 7,
+    "verdict": "MIXED \u2014 the refusal machinery for CELL DEFINITIONS is real and genuinely tested (34 of 44 rule-deletion mutations went red: SPEC_CHANGED, SPEC_TAMPERED, NO_FROZ"
+   },
+   "freshness_gates.py": {
+    "defects": 11,
+    "critical_or_high": 4,
+    "decorative_fixtures": 7,
+    "verdict": "The six gates are real and the fixture suite is overwhelmingly load-bearing \u2014 all 6 whole-gate deletions and 41 of 45 behaviour-changing sub-rule mutations turn"
+   },
+   "2026-08-22_WNBA_COHERENT_DISTRIBUTION_PREREG.json": {
+    "defects": 18,
+    "critical_or_high": 8,
+    "decorative_fixtures": 9,
+    "verdict": "REJECT \u2014 do not implement against this record; a successor record is required. The original file was not edited. All work is in /tmp/coh (coherent.py = faithful"
+   },
+   "2026-08-22_WNBA_TOTAL_HEAD_SUPPRESSION_AND_REBUILD.json": {
+    "defects": 18,
+    "critical_or_high": 8,
+    "decorative_fixtures": 7,
+    "verdict": "BREAKS. The record's factual/evidence layer is exceptionally clean \u2014 every Part A statistic (n=21, MAE 10.87, median 8.5, signed bias -0.40, largest miss -36.1,"
+   }
+  },
+  "worst_examples": [
+   "daily_baselines: no Brier or log-loss VALUE is pinned by any fixture \u2014 the entire scoring arithmetic is untested and can be silently wrong while the suite passes. CROSS_BOOK_DEVIG_PROHIBITED is bypassable via label variants.",
+   "starter_attribution: reports joint delta as a numeric 0.0 when NEITHER slot is treated \u2014 a structural zero presented as a measurement. No fixture covers the as-of/no-look-ahead rule, the transcription-fidelity gate, or the no-writes guard.",
+   "totals_eval: the preregistration hash pin lives in the same file as the thresholds it pins, so it does not survive the one edit it exists to stop. promotion_status never reads the underpowered flags, so a window can report THRESHOLDS_MET on underpowered cells.",
+   "subgroup_monitor: the freeze covers only the levellers \u2014 every rule that PRODUCES or SUPPRESSES a number is outside the hash, so an existing freeze still validates after those change. No look-ahead control exists at all.",
+   "freshness_gates: 4 critical/high defects, 7 decorative fixtures."
+  ]
+ },
+ "records_needing_owner_review": {
+  "files": [
+   "docs/experiments/2026-08-22_WNBA_COHERENT_DISTRIBUTION_PREREG.json",
+   "docs/experiments/2026-08-22_WNBA_TOTAL_HEAD_SUPPRESSION_AND_REBUILD.json",
+   "docs/experiments/2026-08-22_NO_RECALIBRATION_RULE.json"
+  ],
+  "status": "DRAFTED, NOT RATIFIED. The review flagged 8 critical/high issues in each of the two WNBA records. They are candidate texts for the owner to correct or approve, not frozen preregistrations. Nothing may be fit against them in this state.",
+  "note": "A preregistration only has force once the owner approves it and it is frozen before any fit \u2014 the V14 precedent."
+ },
+ "what_this_means_for_the_roadmap": {
+  "not_done": [
+   "item 1 keyed causal attribution",
+   "item 2 frozen daily baselines",
+   "item 3 subgroup monitor",
+   "item 4 totals forward eval",
+   "item 5 WNBA coherent distribution",
+   "item 6 WNBA total rebuild",
+   "item 7 freshness/domain gates"
+  ],
+  "in_force_already_regardless": [
+   "WNBA totals are already hard-blocked from recommendation language by the existing card contract (owner rule 4, 2026-08-20)",
+   "the OUT_OF_DOMAIN neutral-site block is already live and permanent",
+   "the ATS compression block and 2.0-point deadband are already live",
+   "no recalibration has been added to anything \u2014 item 8 is a prohibition, and it is being honored by inaction"
+  ],
+  "honest_summary": "The roadmap's INTENT is protected today by the gates already shipped. What is NOT yet true is that these five new measurement modules can be trusted, and I will not present drafts with known-decorative fixtures as delivered instrumentation."
+ },
+ "next_step_recommendation": "Close the defect list module by module, proving each fixture KILLS its mutant before wiring anything into healthcheck. Prioritise daily_baselines (the expanding-home baseline is the one that would have caught the 14-1 base-rate problem, and its scoring arithmetic is currently unpinned).",
+ "standing": {
+  "gate": "0/100 NO_PROMOTE",
+  "ledger_usd": 0,
+  "bets": 0,
+  "wager_authority": "NO"
+ }
+}

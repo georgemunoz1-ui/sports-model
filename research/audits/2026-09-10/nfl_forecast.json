@@ -1,0 +1,72 @@
+{
+  "scope": "BASELINE_DIAGNOSTIC",
+  "generated_at_utc": "2026-09-10T08:25:06.046870+00:00",
+  "game_start_utc": "2026-09-11T00:35Z",
+  "venue": "Melbourne Cricket Ground",
+  "model_source_commit": "fb2183dad9fa092850714a2a508d217b25bfcebd",
+  "rating_method": "2025_REG_SRS_ZERO_SUM_LEAST_SQUARES_NO_HOME_ADJUSTMENT",
+  "history_sha256": "dacde8847fb0990c70244b4b3c63a86fab8595b0943022ef4637a3589f90fad2",
+  "source_history_path": "data/nfl/source/2026-09-03_nflverse_regular_games.csv",
+  "snapshot": {
+    "event_id": "401872657",
+    "home_team": "Los Angeles Rams",
+    "away_team": "San Francisco 49ers",
+    "home_elo": 1841.943310529899,
+    "away_elo": 1660.2230289522574,
+    "neutral_site": true,
+    "home_adjustment_points": 0.0,
+    "away_adjustment_points": 0.0,
+    "total_prior": 49.1764705882353
+  },
+  "config": {
+    "home_field_points": 1.8,
+    "points_per_elo": 0.036,
+    "margin_sd": 13.5,
+    "total_sd": 10.5,
+    "margin_logistic_scale": 8.0,
+    "league_total_prior": 44.0
+  },
+  "forecast": {
+    "model_id": "nfl.elo_margin_monte_carlo.v1",
+    "model_version": "1.0.0",
+    "model_p": 0.6937566635626112,
+    "sim_p": 0.68609,
+    "projected_margin": 6.5596,
+    "projected_total": 49.15928,
+    "home_score_mean": 27.85944,
+    "away_score_mean": 21.29984,
+    "input_snapshot_hash": "sha256:8b0065bd619d672dc40911363e6d046714d014e34ec5237a0a75703bd2c101cf",
+    "model_state_config_hash": "sha256:caa7032459d85c514c7c58dd46785a42cc5d53fcd5240f4044a64a613208a881",
+    "simulation": {
+      "engine": "nfl.elo_margin_monte_carlo.v1",
+      "version": "1.0.0",
+      "rng": "numpy.random.Generator(PCG64)",
+      "count": 100000,
+      "seed": 776288761,
+      "margin_quantiles": {
+        "0.1": -11.0,
+        "0.25": -3.0,
+        "0.5": 7.0,
+        "0.75": 16.0,
+        "0.9": 24.0
+      },
+      "total_quantiles": {
+        "0.1": 36.0,
+        "0.25": 42.0,
+        "0.5": 49.0,
+        "0.75": 56.0,
+        "0.9": 63.0
+      }
+    }
+  },
+  "input_limits": [
+    "PRIOR_SEASON_ONLY",
+    "QB_LINEUP_INJURY_UNBOUND",
+    "TRAVEL_REST_WEATHER_UNBOUND",
+    "NO_VALIDATED_OFFSEASON_CARRYOVER"
+  ],
+  "market_inputs_used": false,
+  "action_authority": false,
+  "promotion_eligible": false,
+  "artifact_sha256": "cef6540338db35885ca7eb9b68dd06f1fa94e108b079f24ccc4424e93a3b1e28"
+}

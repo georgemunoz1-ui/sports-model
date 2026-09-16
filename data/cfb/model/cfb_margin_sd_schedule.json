@@ -1,0 +1,133 @@
+{
+ "derivation": "per-week SD of (actual margin - predicted margin) over retained out-of-fold residuals. MEASURED, not inferred from MAE.",
+ "n_games": 10818,
+ "normality_check": {
+  "excess_kurtosis": 0.1009,
+  "reading": "essentially Gaussian, which is WHY the MAE inference landed within 0.08 - that is the assumption holding, not the method being sound. The measurement was available all along.",
+  "skew": -0.0231
+ },
+ "per_week": {
+  "1": {
+   "mae": 14.3485,
+   "n": 758,
+   "sd_measured": 18.3852,
+   "sd_used": 18.3852,
+   "thin_n_fallback": false
+  },
+  "2": {
+   "mae": 14.2438,
+   "n": 665,
+   "sd_measured": 17.7084,
+   "sd_used": 17.7084,
+   "thin_n_fallback": false
+  },
+  "3": {
+   "mae": 14.0598,
+   "n": 716,
+   "sd_measured": 17.8131,
+   "sd_used": 17.8131,
+   "thin_n_fallback": false
+  },
+  "4": {
+   "mae": 13.2143,
+   "n": 762,
+   "sd_measured": 16.8356,
+   "sd_used": 16.8356,
+   "thin_n_fallback": false
+  },
+  "5": {
+   "mae": 12.8766,
+   "n": 785,
+   "sd_measured": 16.1549,
+   "sd_used": 16.1549,
+   "thin_n_fallback": false
+  },
+  "6": {
+   "mae": 13.1244,
+   "n": 771,
+   "sd_measured": 16.4296,
+   "sd_used": 16.4296,
+   "thin_n_fallback": false
+  },
+  "7": {
+   "mae": 12.899,
+   "n": 770,
+   "sd_measured": 16.2572,
+   "sd_used": 16.2572,
+   "thin_n_fallback": false
+  },
+  "8": {
+   "mae": 13.4443,
+   "n": 806,
+   "sd_measured": 16.7698,
+   "sd_used": 16.7698,
+   "thin_n_fallback": false
+  },
+  "9": {
+   "mae": 13.2366,
+   "n": 788,
+   "sd_measured": 16.423,
+   "sd_used": 16.423,
+   "thin_n_fallback": false
+  },
+  "10": {
+   "mae": 12.9239,
+   "n": 828,
+   "sd_measured": 16.2417,
+   "sd_used": 16.2417,
+   "thin_n_fallback": false
+  },
+  "11": {
+   "mae": 12.7307,
+   "n": 828,
+   "sd_measured": 15.7431,
+   "sd_used": 15.7431,
+   "thin_n_fallback": false
+  },
+  "12": {
+   "mae": 13.0459,
+   "n": 836,
+   "sd_measured": 16.3827,
+   "sd_used": 16.3827,
+   "thin_n_fallback": false
+  },
+  "13": {
+   "mae": 13.0019,
+   "n": 883,
+   "sd_measured": 16.3544,
+   "sd_used": 16.3544,
+   "thin_n_fallback": false
+  },
+  "14": {
+   "mae": 12.8643,
+   "n": 496,
+   "sd_measured": 16.1435,
+   "sd_used": 16.1435,
+   "thin_n_fallback": false
+  },
+  "15": {
+   "mae": 14.4969,
+   "n": 103,
+   "sd_measured": 18.7558,
+   "sd_used": 16.7157,
+   "thin_n_fallback": true
+  },
+  "16": {
+   "mae": 10.3751,
+   "n": 23,
+   "sd_measured": 13.0222,
+   "sd_used": 16.7157,
+   "thin_n_fallback": true
+  }
+ },
+ "pooled": {
+  "mae": 13.279,
+  "n": 10818,
+  "sd_inferred_from_mae": 16.6427,
+  "sd_measured": 16.7157
+ },
+ "schema": "cfb.margin_sd_schedule.v1",
+ "source": "data/cfb/model/cfb_v1_oof.parquet",
+ "thin_n_rule": "weeks with n < 200 fall back to the pooled SD rather than fitting noise",
+ "week_1_note": "18.385 against 16.577 for weeks 2+, a +1.808 excess on n=758. Tonight's slate is Week 1, so the frozen scalar understates tonight by ~1.7 points."
+}

@@ -1,0 +1,18 @@
+{
+ "record_id": "OWNER-CONTROLS-2026-08-14",
+ "built_utc": "2026-08-14T22:48:16Z",
+ "authority": "owner instruction, 2026-08-14",
+ "controls": [
+  {
+   "id": "C-V19-SUPERSESSION",
+   "rule": "If canonical V19 bytes later differ from the message-attested record (data/mlb/forecasts/2026-08-14_v19_external_attested.json), the attested record is PRESERVED untouched and a superseding correction is APPENDED. History is never overwritten.",
+   "existing_anchor": "the attested record's attestation_basis clause already states the canonical card governs on disagreement; this control makes the append-only mechanics explicit and owner-bound (R3/R6)."
+  },
+  {
+   "id": "C-WEEK1-NO-SETTLE",
+   "rule": "The NFL regular-season Week 1 opener board (data/nfl/odds/2026-08-14_week1_openers_board.json) does NOT settle at the 2026-08-15T06:00Z sweep or any August grading pass. It remains a line-movement baseline vintage until its games kick off Sep 9-14, at which point movement (not outcomes) is the first-class measurement.",
+   "existing_anchor": "the board record and the 06:00Z wake-up prompt already exclude it from tonight's grading; this control forecloses any future sweep accidentally grading it."
+  }
+ ],
+ "settling_at_0600Z_unchanged": "MLB V13 x14 + attested V19 x14 (separate cohorts, same finals), WNBA x2 (own chain), NFL preseason 3 benchmark sides (MARKET_BENCHMARK_ONLY, tie rule), plus 8/13 stragglers"
+}

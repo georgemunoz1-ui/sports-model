@@ -1,0 +1,135 @@
+{
+ "CLUSTERS": {
+  "A_SCHEDULE_OPTIONAL": {
+   "consequence": "a fabricated final reaches ADMIT_FINAL, settleable=True, sink=result_ledger \u2014 no forged verdict required, just an omitted argument",
+   "defect": "admit(canonical_schedule=None) is the DEFAULT, and owner rules 1, 2 and 6 live entirely inside `if idx is not None`. With no schedule the record is checked only against ITSELF.",
+   "found_by": 4,
+   "severity": "HIGH",
+   "verdict": "the owner's spec is currently OPT-IN. This is the most important finding in the pass."
+  },
+  "B_LANE_UNVERIFIED": {
+   "consequence": "a SEARCH record relabelled CANONICAL reaches ADMIT_FINAL",
+   "defect": "`lane` is an unverified caller assertion. Nothing cross-checks record['source'] against it, and no approved-source allowlist exists despite PROVIDER_* constants being defined.",
+   "found_by": 1,
+   "severity": "HIGH"
+  },
+  "C_RESOLVE_BY_WRITE_TIME": {
+   "consequence": "a stale IN_PROGRESS written after a CLOSED final supersedes the final on the read-only analysis surface",
+   "defect": "_resolve orders observations by written_at_utc (the STORE ACTION) instead of source_fetched_at_utc (the OBSERVATION), contradicting its own docstring",
+   "found_by": 5,
+   "note": "five independent lenses reached this separately, which is the strongest signal in the run",
+   "severity": "HIGH"
+  },
+  "D_READ_PATH_NEVER_REHASHES": {
+   "consequence": "records.json edited in place is served as truth by all three analysis tools \u2014 the exact mutable-archive shape the module was written to defend against",
+   "defect": "verify_snapshot() has ZERO read-path callers. Its only production call site is the WRITE path.",
+   "found_by": 2,
+   "note": "this is the aggregate_guard shape and the ALLOW_DIRECT_HTTP shape for the third time: a guard that exists and is never called. Per the 8/30 falsification these are independent bugs sharing a shape, and the shared CHECK is what stops the shape shipping.",
+   "severity": "HIGH"
+  },
+  "E_VERDICT_NOT_BOUND_TO_RECORD": {
+   "consequence": "a genuine CANONICAL verdict for game A, paired with record B (source: 'web_search'), admits B as a settleable FINAL. No forgery needed.",
+   "defect": "a stored Verdict is never checked against the record it sits beside",
+   "found_by": 2,
+   "severity": "HIGH"
+  },
+  "F_CONTRADICTORY_TERMINALS_RESOLVED_SILENTLY": {
+   "consequence": "a final does not change; two disagreeing terminals are a contradiction and must raise",
+   "defect": "two records both claiming TERMINAL for one event with DIFFERENT scores are resolved by picking a winner, not refused",
+   "found_by": 1,
+   "severity": "HIGH"
+  },
+  "G_EDGE_NOT_ACTUALLY_REMOVED": {
+   "consequence": "the owner invariant is 'prohibit edge calculation, prohibit usable_edge'. The enforced board still publishes 14.3 and the laundered 6.9. The suppression is computed and then not applied.",
+   "defect": "enforce() never strips edge_pp, usable_edge_pp or the assumed no-vig from a MISSING_MARKET_PRICE row",
+   "found_by": 2,
+   "severity": "HIGH"
+  },
+  "H_ENFORCE_KEYED_BY_MARKET_NAME": {
+   "consequence": "the offending row keeps its LEAN with no reason codes and a clean row is demoted",
+   "defect": "enforce() writes verdicts back through a dict keyed by market NAME; two rows of one market both receive the LAST verdict",
+   "found_by": 1,
+   "severity": "HIGH"
+  },
+  "I_MARKETS_OF_SILENT_EMPTY": {
+   "consequence": "a board whose rows sit under any key but 'markets' reports CLEAN with every LEAN intact",
+   "defect": "_markets_of() returns [] silently where _games_of() raises",
+   "found_by": 1,
+   "severity": "HIGH"
+  },
+  "J_NOT_WIRED_INTO_HEALTHCHECK": {
+   "consequence": "every gate reviewed here is dead in CI",
+   "defect": "none of the five modules is executed by harness/healthcheck.py",
+   "found_by": 3,
+   "note": "cited by the reviewers as the wnba_refresh_espn precedent, whose own comment claimed it 'is now wired into healthcheck so it cannot rot silently again'",
+   "severity": "HIGH"
+  },
+  "K_SELFTEST_PASSES_WHEN_SUBJECT_ABSENT": {
+   "consequence": "absence is PRINTED, not FAILED \u2014 the precedent the module's own docstring forbids, reproduced inside it",
+   "defect": "score_collector.selftest() returns True when verified_snapshot is absent, and its `except TypeError` arm downgrades any internal TypeError in the store to a skip",
+   "found_by": 3,
+   "severity": "HIGH"
+  },
+  "L_NAIVE_DATETIME_READ_AS_UTC": {
+   "consequence": "an ET first pitch moves 4-5 hours earlier and a final admits AND settles before the game begins, WITH a canonical schedule supplied",
+   "defect": "_utc() silently reads a timezone-naive ISO string as UTC",
+   "found_by": 1,
+   "severity": "HIGH"
+  },
+  "M_PRESTART_USES_JUDGING_CLOCK_ONLY": {
+   "consequence": "the exact 8/30 records this module exists to refuse become ADMIT_FINAL if judged a few hours later. WAITING DEFEATS THE ONE RULE THE DOCSTRING CALLS UNCONDITIONAL.",
+   "defect": "the pre-start invariant is evaluated against now_utc and never against source_fetched_at_utc",
+   "found_by": 1,
+   "severity": "HIGH"
+  },
+  "N_CALLER_SCHEDULED_DATE_OVERRIDE": {
+   "consequence": "an 8/28 final can be published as an 8/30 result \u2014 the exact incident of commit 0bf9399",
+   "defect": "scheduled_date_of prefers a caller-supplied `scheduled_date` over the zoneinfo derivation, and the field name collides with a REQUIRED field in result_binding_gate",
+   "found_by": 2,
+   "severity": "HIGH"
+  },
+  "O_MUTANTS_KILLED_BY_CRASH": {
+   "consequence": "the mutant tallies overstate what is proven",
+   "defect": "all four modules' mutation suites count an arbitrary crash \u2014 including a mutant that dies at import without running a fixture \u2014 as a KILL",
+   "found_by": 1,
+   "note": "verbatim the incident the contract module's own docstring cites as its reason for using plain classes; the fix was applied only in test_score_admission.guard_report",
+   "severity": "HIGH"
+  }
+ },
+ "LEDGER": {
+  "exposure_usd": 0,
+  "n_bets": 0,
+  "units": 0.0,
+  "wager_authority": "NO"
+ },
+ "R6": "append-only; new path",
+ "RESULT": {
+  "distinct_defect_clusters": 15,
+  "high": 35,
+  "verdict": "the modules PASS their own gates and FAIL adversarial review. Both are true at once, and that gap is the reason the review phase exists."
+ },
+ "STATUS": "CHECKPOINTED, NOT SHIPPED. None of the five is wired into healthcheck and nothing consumes them, so no production path is exposed to these defects. They are committed so the work is not lost and the findings are on the record before the fix pass.",
+ "WHAT_PASSES_ALREADY": {
+  "acceptance_test": "board_invariants.check_board on cards/2026-08-30_pregame_board_v6_canonical.json returns MIN@ATL decision PASS with reason_codes MISSING_MARKET_PRICE, AVAILABILITY_UNKNOWN, MODEL_CONVERGENCE_FAIL \u2014 the owner's required output, plus MARKET_NO_VIG_ASSUMED_NOT_CAPTURED and STALE_FEATURES.",
+  "and_it_regenerated_my_hand_arithmetic": "implied_margin_ml -3.6478, implied_margin_spread +2.5824, gap 6.2303 points, opposite_signs true. I computed -3.65 and +2.62 by hand this morning.",
+  "board_wide": "57 rows over 19 games; 39 rows carry a null price; 1 computes an edge on one; 2 convergence failures",
+  "sigma": "flagged 13.97 as REGISTERED_TOLERANCE from the register file, not from a hardcode"
+ },
+ "created_utc": "2026-08-30T22:40:00Z",
+ "method": {
+  "agents": 24,
+  "completed": 22,
+  "failed": "2 verify lenses on score_admission.py hit the session usage limit; the adversary lens for that file DID run, so the file is reviewed but less thoroughly than the other four. Disclosed rather than counted as clean.",
+  "lenses": [
+   "adversary \u2014 try to get a fabricated final past it",
+   "theatre \u2014 hunt dead guards and tests that prove nothing",
+   "contract \u2014 fidelity to the owner spec and cross-module vocabulary coherence"
+  ],
+  "subagent_tokens": 4752523,
+  "tool_uses": 983
+ },
+ "record_id": "SCORE-ISOLATION-LAYER-REVIEW-2026-08-30",
+ "record_sha256": "929c06f19405ada8c24cb5b70b7847b21d2bacd16fdd5a8c26f787e1fc94eba9",
+ "schema": "ops.adversarial_review.v1",
+ "subject": "the five new modules of the score-ingestion isolation layer, as first written"
+}

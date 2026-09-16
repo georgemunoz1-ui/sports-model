@@ -1,0 +1,416 @@
+{
+ "COUNTERFACTUAL_DECOMPOSITION": {
+  "method": "same engine, same seed, same shared features; ONLY the starter dicts swapped from the registered fallback to the refreshed genuine-window features. LABELED counterfactual, not a board - the freshness contract still forbids consuming these.",
+  "question": "is the model-vs-owner disagreement specifically caused by pitcher freshness?",
+  "readings": {
+   "ATL@WSH": "partial - .5119 -> .4798 with only Irvin consumable (Smith-Shawver unmapped); moves toward the owner but does not flip on one arm alone.",
+   "BAL@COL": "NO, and instructive - the counterfactual moves +3.98pp AWAY from the owner because Hughes's genuine-ER window (pre-7/23) reads era 3.19 while his season figure is 6.61. The ER hole (RJ-001B), not the age gate, is the binding defect on this row: six weeks of earned runs are invisible to my ERA and always will be until a runs column exists.",
+   "CWS@HOU": "weak test - Blanco unmapped; Burke alone moves -2.1pp toward the owner.",
+   "DET@MIN": "YES - consuming Melton (era 1.997, 16 GS) flips p_home .5085 -> .4391. The direction dispute with the owner is specifically the discarded pitcher evidence.",
+   "NYY@LAA": "mostly - .4636 -> .3712 with G.Rodriguez at era 8.754 closes ~85% of the gap to the owner's .355."
+  },
+  "rows": {
+   "ATL@WSH": {
+    "board_p_home_after": 0.5119,
+    "counterfactual_p_home_if_features_consumed": 0.4798,
+    "delta_vs_board_pp": -3.21,
+    "event": "ATL@WSH",
+    "features_shared": {
+     "park_factor": 1.086,
+     "ra_away": 4.018018018018018,
+     "ra_home": 5.105263157894737,
+     "rf_away": 4.8558558558558556,
+     "rf_home": 5.385964912280702
+    },
+    "sp_away_counterfactual": {
+     "name": "AJ Smith-Shawver",
+     "sp": null,
+     "status": "UNMAPPED"
+    },
+    "sp_home_counterfactual": {
+     "name": "Jake Irvin",
+     "sp": {
+      "bb": 10.77,
+      "era": 5.273,
+      "gs": 17,
+      "k": 22.65,
+      "last_start": "2026-08-27"
+     },
+     "status": "OK"
+    }
+   },
+   "BAL@COL": {
+    "board_p_home_after": 0.4943,
+    "counterfactual_p_home_if_features_consumed": 0.5341333333333333,
+    "delta_vs_board_pp": 3.98,
+    "event": "BAL@COL",
+    "features_shared": {
+     "park_factor": 1.11,
+     "ra_away": 4.732142857142857,
+     "ra_home": 5.837837837837838,
+     "rf_away": 4.5625,
+     "rf_home": 4.7657657657657655
+    },
+    "sp_away_counterfactual": {
+     "name": "Trevor Rogers",
+     "sp": {
+      "bb": 6.39,
+      "era": 4.433,
+      "gs": 25,
+      "k": 20.9,
+      "last_start": "2026-08-27"
+     },
+     "status": "OK"
+    },
+    "sp_home_counterfactual": {
+     "name": "Gabriel Hughes",
+     "sp": {
+      "bb": 9.0,
+      "era": 3.191,
+      "gs": 9,
+      "k": 18.01,
+      "last_start": "2026-08-27"
+     },
+     "status": "OK"
+    }
+   },
+   "CWS@HOU": {
+    "board_p_home_after": 0.4670666666666667,
+    "counterfactual_p_home_if_features_consumed": 0.4459666666666667,
+    "delta_vs_board_pp": -2.11,
+    "event": "CWS@HOU",
+    "features_shared": {
+     "park_factor": 0.959,
+     "ra_away": 4.383928571428571,
+     "ra_home": 5.070796460176991,
+     "rf_away": 4.776785714285714,
+     "rf_home": 4.530973451327434
+    },
+    "sp_away_counterfactual": {
+     "name": "Sean Burke",
+     "sp": {
+      "bb": 8.16,
+      "era": 3.294,
+      "gs": 23,
+      "k": 26.26,
+      "last_start": "2026-08-26"
+     },
+     "status": "OK"
+    },
+    "sp_home_counterfactual": {
+     "name": "Ronel Blanco",
+     "sp": null,
+     "status": "UNMAPPED"
+    }
+   },
+   "DET@MIN": {
+    "board_p_home_after": 0.5085333333333333,
+    "counterfactual_p_home_if_features_consumed": 0.43906666666666666,
+    "delta_vs_board_pp": -6.95,
+    "event": "DET@MIN",
+    "features_shared": {
+     "park_factor": 0.918,
+     "ra_away": 3.9375,
+     "ra_home": 5.061946902654867,
+     "rf_away": 4.258928571428571,
+     "rf_home": 4.663716814159292
+    },
+    "sp_away_counterfactual": {
+     "name": "Troy Melton",
+     "sp": {
+      "bb": 7.33,
+      "era": 1.997,
+      "gs": 16,
+      "k": 20.94,
+      "last_start": "2026-08-26"
+     },
+     "status": "OK"
+    },
+    "sp_home_counterfactual": {
+     "name": "Andrew Morris",
+     "sp": {
+      "bb": 7.33,
+      "era": 3.759,
+      "gs": 2,
+      "k": 21.61,
+      "last_start": "2026-06-04"
+     },
+     "status": "OK"
+    }
+   },
+   "NYY@LAA": {
+    "board_p_home_after": 0.46363333333333334,
+    "counterfactual_p_home_if_features_consumed": 0.37116666666666664,
+    "delta_vs_board_pp": -9.25,
+    "event": "NYY@LAA",
+    "features_shared": {
+     "park_factor": 0.887,
+     "ra_away": 3.743362831858407,
+     "ra_home": 4.743362831858407,
+     "rf_away": 4.557522123893805,
+     "rf_home": 4.3097345132743365
+    },
+    "sp_away_counterfactual": {
+     "name": "Gerrit Cole",
+     "sp": {
+      "bb": 5.22,
+      "era": 4.03,
+      "gs": 17,
+      "k": 26.62,
+      "last_start": "2026-08-27"
+     },
+     "status": "OK"
+    },
+    "sp_home_counterfactual": {
+     "name": "Grayson Rodriguez",
+     "sp": {
+      "bb": 9.63,
+      "era": 8.754,
+      "gs": 15,
+      "k": 20.19,
+      "last_start": "2026-08-26"
+     },
+     "status": "OK"
+    }
+   }
+  }
+ },
+ "COVERAGE": {
+  "dispositions_after": {
+   "AJ Smith-Shawver": {
+    "age_days": null,
+    "disposition": "DEGRADED",
+    "observed_at": null
+   },
+   "Andrew Morris": {
+    "age_days": 89.4947,
+    "disposition": "DEGRADED",
+    "observed_at": "2026-06-04T00:00:00Z"
+   },
+   "Bryan Woo": {
+    "age_days": 6.4947,
+    "disposition": "DEGRADED",
+    "observed_at": "2026-08-26T00:00:00Z"
+   },
+   "Eric Lauer": {
+    "age_days": 14.4947,
+    "disposition": "DEGRADED",
+    "observed_at": "2026-08-18T00:00:00Z"
+   },
+   "Gabriel Hughes": {
+    "age_days": 5.4947,
+    "disposition": "DEGRADED",
+    "observed_at": "2026-08-27T00:00:00Z"
+   },
+   "Gavin Williams": {
+    "age_days": 7.4947,
+    "disposition": "DEGRADED",
+    "observed_at": "2026-08-25T00:00:00Z"
+   },
+   "Gerrit Cole": {
+    "age_days": 5.4947,
+    "disposition": "DEGRADED",
+    "observed_at": "2026-08-27T00:00:00Z"
+   },
+   "Grayson Rodriguez": {
+    "age_days": 6.4947,
+    "disposition": "DEGRADED",
+    "observed_at": "2026-08-26T00:00:00Z"
+   },
+   "Ian Seymour": {
+    "age_days": 1.4947,
+    "disposition": "FRESH",
+    "observed_at": "2026-08-31T00:00:00Z"
+   },
+   "J.T. Ginn": {
+    "age_days": 6.4947,
+    "disposition": "DEGRADED",
+    "observed_at": "2026-08-26T00:00:00Z"
+   },
+   "Jake Irvin": {
+    "age_days": 5.4947,
+    "disposition": "DEGRADED",
+    "observed_at": "2026-08-27T00:00:00Z"
+   },
+   "Jes\u00fas Luzardo": {
+    "age_days": 6.4947,
+    "disposition": "DEGRADED",
+    "observed_at": "2026-08-26T00:00:00Z"
+   },
+   "Logan Webb": {
+    "age_days": 6.4947,
+    "disposition": "DEGRADED",
+    "observed_at": "2026-08-26T00:00:00Z"
+   },
+   "MacKenzie Gore": {
+    "age_days": 6.4947,
+    "disposition": "DEGRADED",
+    "observed_at": "2026-08-26T00:00:00Z"
+   },
+   "Matthew Boyd": {
+    "age_days": 6.4947,
+    "disposition": "DEGRADED",
+    "observed_at": "2026-08-26T00:00:00Z"
+   },
+   "Michael McGreevy": {
+    "age_days": 6.4947,
+    "disposition": "DEGRADED",
+    "observed_at": "2026-08-26T00:00:00Z"
+   },
+   "Nick Lodolo": {
+    "age_days": 6.4947,
+    "disposition": "DEGRADED",
+    "observed_at": "2026-08-26T00:00:00Z"
+   },
+   "Paul Skenes": {
+    "age_days": 7.4947,
+    "disposition": "DEGRADED",
+    "observed_at": "2026-08-25T00:00:00Z"
+   },
+   "Randy Dobnak": {
+    "age_days": 6.4947,
+    "disposition": "DEGRADED",
+    "observed_at": "2026-08-26T00:00:00Z"
+   },
+   "Randy V\u00e1squez": {
+    "age_days": 6.4947,
+    "disposition": "DEGRADED",
+    "observed_at": "2026-08-26T00:00:00Z"
+   },
+   "Robert Gasser": {
+    "age_days": 12.4947,
+    "disposition": "DEGRADED",
+    "observed_at": "2026-08-20T00:00:00Z"
+   },
+   "Robert Stock": {
+    "age_days": null,
+    "disposition": "DEGRADED",
+    "observed_at": null
+   },
+   "Ronel Blanco": {
+    "age_days": null,
+    "disposition": "DEGRADED",
+    "observed_at": null
+   },
+   "Sean Burke": {
+    "age_days": 6.4947,
+    "disposition": "DEGRADED",
+    "observed_at": "2026-08-26T00:00:00Z"
+   },
+   "Spencer Arrighetti": {
+    "age_days": 5.4947,
+    "disposition": "DEGRADED",
+    "observed_at": "2026-08-27T00:00:00Z"
+   },
+   "Trevor Rogers": {
+    "age_days": 5.4947,
+    "disposition": "DEGRADED",
+    "observed_at": "2026-08-27T00:00:00Z"
+   },
+   "Troy Melton": {
+    "age_days": 6.4947,
+    "disposition": "DEGRADED",
+    "observed_at": "2026-08-26T00:00:00Z"
+   },
+   "Tyler Phillips": {
+    "age_days": 7.4947,
+    "disposition": "DEGRADED",
+    "observed_at": "2026-08-25T00:00:00Z"
+   }
+  },
+  "fresh_after_refresh": 1,
+  "latest_observation_by_starter": {
+   "AJ Smith-Shawver": null,
+   "Andrew Morris": "2026-08-29",
+   "Bryan Woo": "2026-08-26",
+   "Eric Lauer": "2026-08-26",
+   "Gabriel Hughes": "2026-08-27",
+   "Gavin Williams": "2026-08-25",
+   "Gerrit Cole": "2026-08-27",
+   "Grayson Rodriguez": "2026-08-26",
+   "Ian Seymour": "2026-08-31",
+   "J.T. Ginn": "2026-08-26",
+   "Jake Irvin": "2026-08-27",
+   "Jes\u00fas Luzardo": "2026-08-26",
+   "Logan Webb": "2026-08-26",
+   "MacKenzie Gore": "2026-08-26",
+   "Matthew Boyd": "2026-08-26",
+   "Michael McGreevy": "2026-08-26",
+   "Nick Lodolo": "2026-08-26",
+   "Paul Skenes": "2026-08-25",
+   "Randy Dobnak": "2026-08-26",
+   "Randy V\u00e1squez": "2026-08-26",
+   "Robert Gasser": "2026-08-26",
+   "Robert Stock": null,
+   "Ronel Blanco": null,
+   "Sean Burke": "2026-08-26",
+   "Spencer Arrighetti": "2026-08-27",
+   "Trevor Rogers": "2026-08-27",
+   "Troy Melton": "2026-08-26",
+   "Tyler Phillips": "2026-08-25"
+  },
+  "mapped_and_refreshed": 25,
+  "named": 28,
+  "null_with_reason": 2,
+  "slate_slots": 30,
+  "still_stale_after_refresh": 24,
+  "unmapped_no_pid": [
+   "Robert Stock",
+   "AJ Smith-Shawver",
+   "Ronel Blanco"
+  ]
+ },
+ "DESIGN": {
+  "after": "cards/2026-09-01_mlb_board_POSTREFRESH.json - same coordinator, seeds, trials 30000, parks, RF/RA, thresholds",
+  "baseline": "cards/2026-09-01_refresh_baseline.json (assembled, not recomputed)",
+  "control": "patched plumbing + as-of 9/1 on the UNREFRESHED corpus reproduced FREEZE_v2 exactly, 15/15 games, tolerance 1e-12",
+  "owner_board": "fixed external comparator, never rerun, never altered"
+ },
+ "INGESTION": {
+  "append_only": "asserted byte-prefix per file",
+  "cutoff_exclusive": "2026-09-01",
+  "er_rule": "ER written as registered 0-placeholder; ERA computed over genuine-ER rows ONLY - a zero-genuine-window pitcher stays capped rather than earning a fabricated 0.00",
+  "identity": "25/25 slate pids name-verified against the archive's pitcher_name - zero mismatches",
+  "n_pitchers_appended": 255,
+  "n_rows_appended": 1860,
+  "rejects": {
+   "duplicate_pitcher_date_across_files": 53,
+   "rejected_duplicate_dates_append_window": 748,
+   "unknown_event:stolen_base_3b": 1,
+   "unmapped_pitchers_skipped": 402
+  },
+  "source": "lancebroz/mlb-pitcher-data @ ee25bdaa1ba2"
+ },
+ "LEDGER": {
+  "exposure_usd": 0,
+  "n_bets": 0,
+  "units": 0.0,
+  "wager_authority": "NO"
+ },
+ "NOT_CLAIMED": "convergence toward the owner board is not treated as success anywhere above; each movement is tied to a named, checkable cause.",
+ "OPEN": [
+  "owner ruling: MAX_AGE for mlb/starter log evidence keyed to rotation cadence (e.g. 6-7d) or to 'no intervening start since observation' - threshold change was OUT OF SCOPE here",
+  "TB 9/1 starter unknown (Seymour started 8/31); relay when posted",
+  "map Blanco/Smith-Shawver/Stock or accept their caps",
+  "RJ-001B: earned runs remain underivable from the archive"
+ ],
+ "R6": "append-only; FREEZE_v2, the baseline, and the owner boards are untouched",
+ "RESULT_THE_HEADLINE": {
+  "finding": "the refresh is NECESSARY BUT NOT SUFFICIENT. 25 slate starters now carry observations 1-6 days old, yet 29 of 30 slots remain DEGRADED and consume the registered league fallback, because MAX_AGE_DAYS[(mlb,starter)]=2 measures OBSERVATION age against wall clock - and a rested starter is 4-6 days from his last start BY DEFINITION of a rotation. The registered contract cannot mark a rested starter FRESH. This is the SP_CONFIRMED shape again: a gate no pregame slate can satisfy.",
+  "games_whose_probability_moved": [
+   "NYM@TB"
+  ],
+  "n_moved": 1,
+  "the_one_row_that_moved": {
+   "and_the_contradiction_it_exposed": "a pitcher who STARTED on 8/31 is almost certainly not the 9/1 starter. The one slot the contract could refresh went fresh precisely because the identity claim behind it is now doubtful. Flagged SP_IDENTITY_CONTRADICTED_BY_FRESH_EVIDENCE; TB's actual 9/1 starter is UNKNOWN.",
+   "dose": "0.20 -> 0.25",
+   "event": "NYM@TB",
+   "raw": "0.5292 -> 0.5030",
+   "why": "Ian Seymour's 8/31 START (6.33 IP, 10 K, gs=1, derived from the archive) is 1.49d old -> FRESH/CONFIRMED -> his real era 5.007 (genuine window)/K 29.3%/BB 6.8% consumed"
+  }
+ },
+ "created_utc": "2026-09-01T11:54:46.933496+00:00",
+ "record_id": "2026-09-01_lancebroz_refresh_experiment",
+ "record_sha256": "62b9225ee366117ce0a034d34b482d2a90d9b72a4a6e1189e706af5a481e1f7f",
+ "schema": "ops.audit.refresh_experiment.v1"
+}

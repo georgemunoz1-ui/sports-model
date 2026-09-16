@@ -1,0 +1,56 @@
+{
+ "record_id": "WNBA-RS-V1-PREREG-2026-08-12",
+ "created_utc": "2026-08-12T17:10:00Z",
+ "status": "PREREGISTERED_BEFORE_FITTING — everything below is frozen as of this record; changes require a successor record",
+ "authority": "owner instruction 2026-08-12: 'if model needs to be built - BUILD the model to the highest build quality available - create a high level WNBA model and fulfill all data requirements'",
+ "model_id": "wnba.rs.ff7_logit_ridge.v1_0.shadow",
+
+ "lineage_and_lessons": "This build applies every practice the program has accumulated: preregister-then-fit (MLV2); official-plus-one finality and the season-aware crosswalk (8/11 acquisition); binaries unscaled (external v0.3 incident); league scoring-level term for totals (v0.4 audit M2); direct-vs-margin coherence gate AT REGISTRATION independent of any simulator (v0.4 audit C2/M1); per-target validation status on the emitted row (M4); feature-state stamp (M5); date-block bootstrap + Holm on every claim (8/10 corrections); walk-forward expanding split with fold-local standardization and inner-split penalty selection.",
+
+ "data": {
+  "sources": "staged bytes only (data/wnba/source/staging/**), 2017-2026, both families, hashes in the staging manifest + extension",
+  "labels": "OFFICIAL-PLUS-ONE: a game enters the training/evaluation set only when the WNBA_OFFICIAL team-grain row and the ESPN team_box row agree on date + both teams + both scores under the season-aware crosswalk (Phoenix swap honoured; 11 exhibition codes excluded)",
+  "features_source": "WNBA_OFFICIAL team-grain rows only (measure_type IS NULL), strictly before the game date",
+  "known_gap": "official 2026 rows end 2026-07-22; ESPN-only finals after that are excluded from labels AND features per the finality rule. Every emitted forecast carries feature_state_as_of."
+ },
+
+ "features_frozen_7": [
+  "net_rtg_edge : season-to-date (points per possession scored minus allowed), home minus away, shrunk toward 0 by w = g/(g+10); possessions = FGA - OREB + TOV + 0.44*FTA",
+  "efg_edge    : season-to-date effective FG% (FGM + 0.5*FG3M)/FGA, home minus away",
+  "tov_edge    : season-to-date TOV per possession, AWAY minus HOME (positive = home better)",
+  "orb_edge    : season-to-date OREB rate proxy OREB/(FGA-FGM), home minus away",
+  "ftr_edge    : season-to-date FTA/FGA, home minus away",
+  "rest_edge   : days since last game (capped 5, first game = 5), home minus away — CONTINUOUS",
+  "b2b_edge    : back-to-back indicator (rest == 1), home minus away, values {-1,0,1} — BINARY-LIKE, NEVER STANDARDIZED"
+ ],
+ "targets": {
+  "home_win": "ridge logistic on the 7 features; fold-local standardization of the 6 continuous features only; l2 from {0.1,1,10,100} on an inner 80/20 split of the training window",
+  "home_margin": "ridge OLS, same features, same discipline",
+  "total": "ridge OLS on [league_mean_total_as_of (expanding, within-era), pace_sum_dev, net_rtg_sum] — the league level term is the M2 lesson and is the FIRST feature, not an afterthought"
+ },
+ "split": "expanding walk-forward by game date across 2017-2026; burn_in 300 labelled games; a game is eligible only when both teams have >= 5 prior games that season",
+ "eligibility_note_2020": "the 2020 bubble season has no true home court; rows are kept (the intercept and rest features absorb what they can) and this is recorded as a known limitation, not silently dropped",
+
+ "inference_and_gates": {
+  "comparisons_holm_family": [
+   "home_win vs expanding base-rate baseline (paired Brier, game-date block bootstrap, 4000 reps, seed 11)",
+   "home_margin vs expanding training-mean baseline (paired MAE, same bootstrap)",
+   "total vs expanding training-mean baseline (paired MAE, same bootstrap)"
+  ],
+  "emission_gates_ALL_required_for_the_win_target": [
+   "p_holm < 0.05 with the CI on the improving side",
+   "calibration slope in [0.85, 1.15] and intercept in [-0.15, 0.15]",
+   "ROC-AUC > 0.5 baseline sanity"
+  ],
+  "per_target_validation_status": "each target is stamped VALIDATED_VS_BASELINE or NOT_BETTER_THAN_BASELINE on every emitted row; a failed margin/total target is still emitted with its failure visible (M4), but a failed WIN target blocks the card entirely",
+  "registration_coherence_gate": "no row may be registered with |p_home - Phi(margin_pred / 13.97)| > 0.05; 13.97 is the empirical margin sd measured from the staged bytes on 8/11. This gate runs at registration, needs no simulator, and is the gate whose absence produced the external PHX@LA incident.",
+  "on_fail": "NO_CARD. The record states which gate failed and the model stays shadow-diagnostic. No retuning without a successor prereg."
+ },
+
+ "governance": {
+  "identity": "new model_id, registered in harness/model_registry.py; V13/V14 identities untouched",
+  "firewall": "unchanged — no WNBA number reaches the MLB gate, forecasts, ledger or policy gate. WNBA forecasts live in data/wnba/forecasts/, hash-bound, OUTSIDE the MLB chain so MLB gate counts cannot be polluted",
+  "wnba_market_module": "unchanged — the market layer stays structurally model-free; model output lives in separate artifacts",
+  "authority_of_output": "SHADOW DIAGNOSTIC. Paper only. Promotion requires a separate prospective gate. Wagers 0/100 NO_PROMOTE regardless of every result above."
+ }
+}

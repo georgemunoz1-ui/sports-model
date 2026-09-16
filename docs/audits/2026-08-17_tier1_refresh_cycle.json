@@ -1,0 +1,143 @@
+{
+ "record_id": "TIER1-REFRESH-CYCLE-2026-08-17",
+ "built_utc": "2026-08-17T09:05:00Z",
+ "authority": "owner instruction 2026-08-17: acquire and validate complete tier-1 boards for 2026-08-15 and 2026-08-16 before generating the next card; rebuild form-dependent inputs through 8/16; rerun the affected 8/15 and 8/16 cards under the frozen model; generate the next card from the updated as-of state; produce a before/after diff.",
+
+ "STOP_CONDITIONS": {
+  "LATEST_TIER1_FORM_DATE": "2026-08-16",
+  "LATEST_TIER1_FORM_DATE_meets_requirement": true,
+  "missing_tier1_games_8_15": 0,
+  "missing_tier1_games_8_16": 0,
+  "canonical_results_contamination_IN_ACQUISITION_WINDOW": 0,
+  "canonical_results_contamination_WHOLE_FILE": 136,
+  "gate_artifact": "data/audit/tier1_board_gate.json",
+  "gate_module": "harness/tier1_board_gate.py"
+ },
+
+ "1_ACQUISITION": {
+  "new_network_acquisition_attempted": true,
+  "outcome": "BLOCKED — outbound HTTPS returns 403 CONNECT at the org egress proxy (verified against statsapi.mlb.com). Not routed around, per standing rule. No substitute source was used and nothing was fetched.",
+  "why_this_did_not_block_the_cycle": "the required tier-1 evidence was ALREADY on disk from the owner-supplied official capture at 2026-08-17T05:20:56Z. Acquisition therefore resolved to VALIDATING existing evidence rather than fetching new evidence, which is a stronger position, not a weaker one — the bytes were already hashed and bound.",
+  "evidence_file": "data/mlb/evidence/2026-08-15_2026-08-16_mlb_official_form_board.json",
+  "evidence_sha256": "22cd684068317ab3f7e78691400a15fe78583d0998cbcc27f18801a8ca4cc7d7",
+  "evidence_hash_reverified_this_cycle": true,
+  "source_family": "MLB_OFFICIAL (mlb.com/scores direct official form board)",
+  "source_urls": ["https://www.mlb.com/scores/2026-08-15", "https://www.mlb.com/scores/2026-08-16"],
+  "capture_transport": "WebFetch",
+  "captured_at_utc": "2026-08-17T05:20:56Z",
+  "ingested_utc_on_every_row": "2026-08-17T05:20:56Z",
+  "provenance_preserved": "all 30 rows carry source, ingested_utc, source_tier=1, result_status=FINAL, evidence_path and evidence_sha256. Every row's evidence file was re-hashed from disk this cycle and matched."
+ },
+
+ "2_COMPLETENESS_HOW_IT_IS_PROVEN": {
+  "the_problem": "a count cannot prove completeness against itself. 15 rows are 15 rows whether or not a 16th game existed, so trusting the board's own expected_game_count=15 would be circular.",
+  "the_invariant_used": "MLB has 30 franchises. On a full single-header slate each appears in exactly one game. 15 games in which all 30 KNOWN franchise abbreviations appear exactly once is complete BY CONSTRUCTION: a 16th game would repeat a franchise, and a missing game would leave two absent.",
+  "result_2026_08_15": "COMPLETE_BY_INVARIANT — 15 canonical tier-1 finals, 30/30 franchises, max appearances 1",
+  "result_2026_08_16": "COMPLETE_BY_INVARIANT — 15 canonical tier-1 finals, 30/30 franchises, max appearances 1",
+  "independent_second_confirmation": "the diff module's selftest asserts every team gains EXACTLY 2 games between the pre-refresh and post-refresh form states. It passes for all 20 slate teams — which is only possible if both dates were full 15-game slates. Two unrelated code paths agree.",
+  "a_hole_this_closed_in_my_own_gate": "the invariant first counted DISTINCT NAMES, so a typo ('NY Yankees') would have read as a 30th franchise while a real one was absent, and the slate would have passed. Its own selftest caught this before it was ever run on live data; the check is now set membership against the frozen 30 abbreviations, with a dedicated typo fixture.",
+  "not_asserted": "on a partial slate the invariant genuinely cannot distinguish an off-day from a missing game. Such a date is reported UNVERIFIABLE_BY_INVARIANT_PARTIAL_SLATE with the absent franchises named — never as complete."
+ },
+
+ "3_UNRESOLVED_GAMES_AND_FIELDS": {
+  "unresolved_games": "NONE. 15/15 on each date are canonical tier-1 FINAL.",
+  "unresolved_fields": "NONE. All 16 required fields are non-blank on all 30 rows (game_id, date, away, home, away_score, home_score, home_win, margin, total, venue, source, ingested_utc, source_tier, result_status, evidence_path, evidence_sha256).",
+  "venues": "30/30 non-blank and 30/30 present in park_factors.json, so no park factor silently collapses to 1.0.",
+  "internal_coherence": "30/30 pass: away+home == total, home-away == margin, home_win agrees with the linescore, no ties.",
+  "provenance_failures": 0,
+  "duplicate_game_ids_whole_file": 0,
+  "cross_date_echo_flags": "NONE — no matchup repeats an identical score across the two dates. This matters because the 2026-08-15 capture session was previously quarantined for a six-game publication-date masquerade (data/mlb/analysis/2026-08-15_echo_incident.json); the tier-1 board is echo-clean and supersedes it.",
+  "tier_2_3_substitutes_in_the_window": 0
+ },
+
+ "4_CONTAMINATION_THE_HONEST_NUMBER": {
+  "in_window": 0,
+  "whole_file": 136,
+  "whole_file_composition": {"tier1/PROVISIONAL": 10, "tier2/PROVISIONAL": 17, "tier3/PROVISIONAL": 109},
+  "whole_file_date_range": ["2026-07-23", "2026-08-11"],
+  "statement": "The acquisition window is clean: zero tier-2/3 substitutes were admitted for 8/15 or 8/16, and the requirement 'reject tier-2/3 substitutes from canonical results/form inputs' is satisfied for this refresh. Separately, 136 LEGACY rows dated 7/23-8/11 predate the owner's 2026-08-16 tier-1-only ruling and remain visible to the repository's tier-blind production predicate, so they still feed V13's season-to-date form.",
+  "why_they_were_not_purged": "removing them would change a FROZEN model's as-of inputs in the middle of a live prospective record (R3). Measured impact of applying the canonical predicate to the production path: 30 of 62 team labels move on a slate. That is an OWNER DECISION, not a repair, and this instruction scoped the tier-1-only requirement to the acquisition — it did not authorize a retroactive purge that would silently rewrite the inputs of already-registered forecasts.",
+  "what_IS_enforced": "the exposure is frozen at a 136-row baseline and harness/tier_discipline.py FAILS the healthcheck the moment it GROWS. Today's contamination is enumerated and cannot increase unnoticed.",
+  "OWNER_DECISION_OUTSTANDING": "whether to apply is_canonical_final() to the production form path. If yes, it should be a NEW model identity with its own prereg, not an edit to the frozen one."
+ },
+
+ "5_FORM_DEPENDENT_INPUTS_REBUILT": {
+  "daily_card_team_form": "read live from results.csv at build time — automatically through 8/16. VERIFIED by byte-identical card reproduction (below).",
+  "ml_asof_dataset": {
+   "rebuilt": true,
+   "rows": 1863, "max_slate_date": "2026-08-16",
+   "dataset_sha256_before": "4cc973444e4b74ac...", "dataset_sha256_after": "4cc973444e4b74ac...",
+   "byte_identical": true,
+   "why_it_was_rebuilt_anyway": "the manifest's results source hash still pointed at the PRE-normalization results.csv (152e947979a8) after line endings were normalized CRLF->LF. The rebuild re-binds it to the live file (05a4a6a9b2a8) and the byte-identical dataset PROVES the normalization was content-neutral, which had been asserted but not demonstrated at the manifest level."
+  },
+  "features_csv": "NOT extended, by design. It is the FROZEN as-of feature window through 2026-07-19 that the V13 freeze, the historical replay runner and the form OOF ablation all evaluate against. harness/daily_card.py does not read it, so no live card input is stale. Extending it would move an evaluation window mid-analysis.",
+  "pitcher_logs": "UNTOUCHED by this intake — it delivered team game results, not pitcher game logs. Verified field-by-field: all 11 games' asp_stats, hsp_stats and starter names are identical between the registered v2 and v3 cards, 0 mismatches."
+ },
+
+ "6_THE_8_15_AND_8_16_CARDS_THERE_ARE_NONE": {
+  "instruction": "rerun the affected 8/15 and 8/16 cards under the frozen model",
+  "finding": "there is nothing to rerun. ZERO MLB cards and ZERO forecasts exist for either date. cards/ goes 2026-08-14 -> 2026-08-17. forecasts.jsonl has 0 rows for both dates.",
+  "why_8_15_has_none": "the capture session was quarantined mid-cycle for a six-game publication-date masquerade and zero 8/15 rows were ingested that night; no card had been registered either (data/mlb/analysis/2026-08-15_echo_incident.json).",
+  "why_8_16_has_none": "card generation is manual and request-driven; the armed jobs were RESULTS sweeps, not card generation. The miss was detected at 23:26Z, after all 18 games had started (data/mlb/analysis/2026-08-16_missed_card_incident.json).",
+  "what_I_did_NOT_do": "generate cards for those dates now. Producing a pregame-shaped forecast for a completed slate is exactly what the repository's post_start_forecasts gate exists to catch, and R1 forbids it. A card built today on today's data would also be strictly worse than useless: it would look prospective and be graded as such.",
+  "the_only_legal_path": "a RETROSPECTIVE_REPLAY, kept in its own cohort, never merged with prospective results and never counted as evidence of forecasting skill. That path remains open and is NOT taken here without an explicit instruction, because a replay artifact sitting in cards/ is the kind of thing that gets mistaken for a forecast six weeks later.",
+  "consequence_for_the_stop_conditions": "none. The stop conditions concern tier-1 DATA completeness, which is met. The absent cards are a separate, already-recorded incident."
+ },
+
+ "7_THE_NEXT_CARD_FROM_THE_UPDATED_AS_OF_STATE": {
+  "delivered": "cards/2026-08-17_card_v3.json — the 11-game 8/17 MLB card, model ml.v13_1.hfa1005.card.s722n30000 (FROZEN), built on form complete through 2026-08-16.",
+  "PROOF_it_is_current": "rebuilding it at 2026-08-17T08:2xZ from the present as-of state reproduces sha256 1cac39733f68d6b0d605133791adf15ed3ccb5817ac5c5c240eaf5f87bd27bc8 BYTE-FOR-BYTE. The registered card and a card built now from the refreshed inputs are the same bytes, so 'generated from the updated as-of state' is demonstrated rather than asserted.",
+  "registered_pregame": "yes — registered ~06:4xZ against a first pitch of 17:40Z (earliest game). Still pregame at the time of this record.",
+  "2026_08_18_card_NOT_generated": {
+   "reason": "the 8/18 slate does not exist in this repository and cannot be acquired: no schedule file on disk for that date, and outbound HTTPS is 403 at the egress proxy. Probable starters for 8/18 are likewise unavailable.",
+   "what_was_NOT_done": "no slate was inferred from series continuation, and no starters were guessed. R1: a card built on an invented slate is worse than no card.",
+   "unblocker": "either an owner-supplied 8/18 schedule + probables board, or restored egress."
+  }
+ },
+
+ "8_BEFORE_AFTER_DIFF": {
+  "artifact": "data/audit/form_refresh_diff.json",
+  "module": "harness/form_refresh_diff.py (ml.v13_1.form_refresh_diff.measurement)",
+  "why_v2_vs_v3_is_NOT_the_requested_diff": "the 05:20:56Z intake applied 39 tier-1 rows at once: 9 on 8/13 (closing an interior hole) plus 15 on 8/15 and 15 on 8/16. The registered v2->v3 contrast therefore bundles the 8/13 repair with the 8/15-8/16 refresh. Attributing all of it to 8/15-8/16 would overstate the refresh. This diff separates them into three form states.",
+  "verification_gate": "the reconstructed pre-refresh state reproduces the REGISTERED v2 card's probabilities EXACTLY, and the post-refresh state reproduces the REGISTERED v3 card's EXACTLY. Both PASS on all 11 games. Without that the decomposition would be of the wrong thing, so the module refuses to emit anything if either fails.",
+  "canonical_file_mutated": false,
+  "results": {
+   "8_15_16_refresh_ALONE_mean_abs_pp": 0.3457,
+   "8_15_16_refresh_max_abs_pp": 0.8167,
+   "8_13_hole_repair_ALONE_mean_abs_pp": 0.1973,
+   "total_mean_abs_pp": 0.4254,
+   "share_of_total_attributable_to_8_15_16": "81%",
+   "all_figures_are": "high-precision REFERENCE ESTIMATES from paired common-random-numbers replicates at n=2,000,000, each with a Monte-Carlo CI. Not 'true' or 'noiseless' values.",
+   "games_distinguishable_from_zero_after_Holm": "11/11",
+   "side_flips_at_the_frozen_n": 1,
+   "side_flips_surviving_noise_separation": 0,
+   "rank_changes": 2
+  },
+  "team_form_values": "20 of 20 slate teams changed, each gaining exactly 2 games. Largest movement STL rf/g +0.083 (4.336->4.419); largest defensive movement CHC ra/g +0.084. Every delta is small because two games move a ~122-game season rate very little — which is precisely why the probability effect is a third of a percentage point.",
+  "pitcher_form_values": "UNCHANGED, verified field-by-field across all 11 games (asp_stats, hsp_stats and starter names identical between the registered v2 and v3 cards, 0 mismatches). The intake carried team results, not pitcher logs.",
+  "probabilities": "all 11 moved; see the per-game table in the artifact.",
+  "rankings": "2 changes, and they are a single adjacent swap: BAL@TB 6->7 and LAD@COL 7->6. The other 9 games hold rank. The top of the board (CWS@CHC 1, MIA@PHI 2, SD@NYM 3) is unchanged.",
+  "side_flip_BAL_AT_TB": "the frozen-n card crossed .500 (.5075 -> .4960), but the reference estimate for the refresh is -0.578pp, which moves .5075 to .5017 — still HOME. The apparent flip is RNG re-coupling noise on a single draw, not the data. Consistent with the identical retraction made on 2026-08-17 for the same game in the v2->v3 contrast. NO side flip is attributable to the 8/15-8/16 refresh.",
+  "edges": null,
+  "break_even_probabilities": null,
+  "final_selections": null,
+  "why_those_three_are_null": "NO market prices exist on file for 2026-08-17. Every row's lines.ml_home, lines.ml_away, mkt_home_prob and gap_home is null in BOTH the v2 and v3 registered cards, and no data/mlb/odds/2026-08-17_*.json exists. Edge = p_model - p_breakeven is undefined without a posted price, and the card's selection rule ('no plays unless the kprop EV rule fires') cannot fire without one. Per R1 these are reported NULL AND FLAGGED, not estimated. They did not change — not because they were stable, but because they were absent before and after. Any nonzero edge or selection delta reported for this slate would be invented.",
+  "price_acquisition": "blocked by the same 403; no price was substituted from another book or another date."
+ },
+
+ "9_CONSTRAINTS_HONOURED": {
+  "model_parameters": "UNCHANGED — HFA 1.005 from engine/hfa.py, seed 722, 30,000 sims/game. ml.v13_1.hfa1005.card.s722n30000 FROZEN.",
+  "rng_policy": "UNCHANGED — global sequential slate-order stream in the card path. The diff's per-game keyed seeds are used ONLY in the measurement arm and never in a card.",
+  "promotion_gates": "UNCHANGED — 0/100 NO_PROMOTE, model-authorized ledger $0, execution UNAUTHORIZED, paper only.",
+  "market_inputs": "UNCHANGED — none existed for 8/17 before this cycle and none was added.",
+  "forecasts": "none altered; none regraded. The 11 P4-20260817v3-* records stand as registered.",
+  "canonical_results_file": "APPENDED to only (30 tier-1 rows at 05:20:56Z, before this cycle). Not rewritten by anything in this cycle; the diff reads it through in-memory date filters."
+ },
+
+ "10_STILL_OPEN": [
+  "the 8/17 cohorts (v1 x10, v2 x11, v3 x11, WNBA DAL@GSV) remain UNGRADED, awaiting tier-1 finals. Each grades exactly once; cohorts are never pooled.",
+  "no 2026-08-18 card is possible until a schedule + probables board arrives or egress is restored.",
+  "owner decision outstanding on whether to apply the canonical tier-1 predicate to the PRODUCTION form path (the 136 legacy rows).",
+  "card generation remains manual and request-driven — the root cause of the 8/16 miss. No automation generates a pregame card."
+ ]
+}

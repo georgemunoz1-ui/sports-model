@@ -1,0 +1,146 @@
+{
+ "as_of_utc": "2026-08-26T02:20:24Z",
+ "display_gate": "RESULT_DISPLAY_OK",
+ "layer": "RESULT_DISPLAY only \u2014 CANONICAL_EVIDENCE_ADMISSION is a separate layer; no row below settles the ledger, enters the prior pool, counts toward promotion, enters the estimator, or grades officially",
+ "note_v13": "no per-arm grading here: grading requires canonical finals and registered sides; this record displays reports, it does not score models",
+ "record_id": "RESULT-DISPLAY-2026-08-25",
+ "record_sha256": "d41f471dddc2bfa4bc506183b3e962447db92a1e854ffbd0de408691fe3f9e33",
+ "rows": [
+  {
+   "game": "mlb:TB@DET",
+   "note": "",
+   "score": "DET 4, TB 1",
+   "source_grade": "SEARCH_IDENTIFIED_UNCONFIRMED",
+   "status": "FINAL_IDENTIFIED"
+  },
+  {
+   "game": "mlb:BOS@MIA",
+   "note": "the reselected candidate side MIA did not win, per this unconfirmed report",
+   "score": "BOS 7, MIA 3 (11 inn)",
+   "source_grade": "SEARCH_IDENTIFIED_UNCONFIRMED",
+   "status": "FINAL_IDENTIFIED"
+  },
+  {
+   "game": "mlb:COL@WSH",
+   "note": "",
+   "score": "COL 3, WSH 1",
+   "source_grade": "SEARCH_IDENTIFIED_UNCONFIRMED",
+   "status": "FINAL_IDENTIFIED"
+  },
+  {
+   "game": "mlb:HOU@NYY",
+   "note": "snippets disagree (HOU 8-7 bot 8 vs 6-6 through 8); nothing displayable as final",
+   "score": null,
+   "source_grade": "SEARCH_IDENTIFIED_UNCONFIRMED",
+   "status": "IDENTIFICATION_CONFLICTED"
+  },
+  {
+   "game": "mlb:KC@TOR",
+   "note": "last identified in the 7th-9th; final not captured",
+   "score": "KC 4, TOR 1 (late, unconfirmed final)",
+   "source_grade": "SEARCH_IDENTIFIED_UNCONFIRMED",
+   "status": "LIVE_LAST_IDENTIFIED"
+  },
+  {
+   "game": "mlb:MIL@NYM",
+   "note": "",
+   "score": "MIL 9, NYM 2",
+   "source_grade": "SEARCH_IDENTIFIED_UNCONFIRMED",
+   "status": "FINAL_IDENTIFIED"
+  },
+  {
+   "game": "mlb:LAD@ATL",
+   "note": "",
+   "score": "ATL 4, LAD 3",
+   "source_grade": "SEARCH_IDENTIFIED_UNCONFIRMED",
+   "status": "FINAL_IDENTIFIED"
+  },
+  {
+   "game": "mlb:TEX@CWS",
+   "note": "",
+   "score": "CWS 10, TEX 7",
+   "source_grade": "SEARCH_IDENTIFIED_UNCONFIRMED",
+   "status": "FINAL_IDENTIFIED"
+  },
+  {
+   "game": "mlb:BAL@STL",
+   "note": "the reselected candidate side BAL won, per this unconfirmed report",
+   "score": "BAL 13, STL 1",
+   "source_grade": "SEARCH_IDENTIFIED_UNCONFIRMED",
+   "status": "FINAL_IDENTIFIED"
+  },
+  {
+   "game": "mlb:CLE@LAA",
+   "note": "started 01:38Z; not queried",
+   "score": null,
+   "source_grade": "LIVE_UNOFFICIAL",
+   "status": "IN_PROGRESS"
+  },
+  {
+   "game": "mlb:CHC@AZ",
+   "note": "started 01:40Z; not queried",
+   "score": null,
+   "source_grade": "LIVE_UNOFFICIAL",
+   "status": "IN_PROGRESS"
+  },
+  {
+   "game": "mlb:PIT@SD",
+   "note": "started 01:40Z; not queried",
+   "score": null,
+   "source_grade": "LIVE_UNOFFICIAL",
+   "status": "IN_PROGRESS"
+  },
+  {
+   "game": "mlb:MIN@ATH",
+   "note": "started 01:40Z; not queried",
+   "score": null,
+   "source_grade": "LIVE_UNOFFICIAL",
+   "status": "IN_PROGRESS"
+  },
+  {
+   "game": "mlb:PHI@SEA",
+   "note": "started 01:40Z; not queried",
+   "score": null,
+   "source_grade": "LIVE_UNOFFICIAL",
+   "status": "IN_PROGRESS"
+  },
+  {
+   "game": "mlb:CIN@SF",
+   "note": "started 01:45Z; not queried",
+   "score": null,
+   "source_grade": "LIVE_UNOFFICIAL",
+   "status": "IN_PROGRESS"
+  },
+  {
+   "game": "wnba:CHI@CON",
+   "note": "tipped 23:00Z; no score surfaced in snippets on any open route",
+   "score": null,
+   "source_grade": "SEARCH_IDENTIFIED_UNCONFIRMED",
+   "status": "FINAL_OCCURRED_NOT_IDENTIFIED"
+  },
+  {
+   "game": "wnba:PDX@DAL",
+   "note": "two opposing recap headlines (a closing-seconds PDX win vs a PDX comeback falling short), one carrying an off-season Commissioner's Cup claim; nothing displayable",
+   "score": null,
+   "source_grade": "SEARCH_IDENTIFIED_UNCONFIRMED",
+   "status": "IDENTIFICATION_CONFLICTED"
+  },
+  {
+   "game": "wnba:WAS@PHX",
+   "note": "tipped 02:00Z",
+   "score": null,
+   "source_grade": "LIVE_UNOFFICIAL",
+   "status": "IN_PROGRESS"
+  }
+ ],
+ "schema": "ops.result_display.v2",
+ "settlement": "BLOCKED \u2014 nothing settles until tier-1 artifacts bind (RJ-001); the two positive-EV candidates (MIA, BAL) were never bets; ledger 0 bets / $0",
+ "source_class": "SEARCH_IDENTIFIED_UNCONFIRMED \u2014 the search rail returns substantive snippets (rail change first observed 2026-08-25 ~22:00Z); snippets identify and never bind; tier-1 rails remain EGRESS_BLOCKED (statsapi.mlb.com re-attempted 02:20Z)",
+ "sources_identified_by_search": [
+  "espn.com/mlb/scoreboard 2026-08-25",
+  "mlb.com game stories 822773/823505/824881",
+  "cbssports.com gametrackers",
+  "blazersedge.com recaps (conflicting)",
+  "sports.yahoo.com scoreboards"
+ ]
+}

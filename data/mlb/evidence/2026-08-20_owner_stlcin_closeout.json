@@ -1,0 +1,23 @@
+{
+ "schema": "mlb.owner_board_addendum.v1",
+ "record_id": "OWNER-STLCIN-CLOSEOUT-20260820",
+ "ingested_at_utc": "2026-08-21T06:30:00Z",
+ "received_from": "owner paste 2026-08-21 (VSiN single-game final board, STL@CIN)",
+ "source_tier": 1,
+ "source_family": "OWNER_BOARD",
+ "scope": "ONE game: STL@CIN, 2026-08-20, Great American Ball Park, Game 5 of 5 (series tied 2-2).",
+ "final": {"away": "STL", "away_score": 10, "home": "CIN", "home_score": 9, "status": "FINAL"},
+ "corroboration": "MATCHES the already-accepted final in data/mlb/evidence/2026-08-20_web_finals.json (STL 10 - CIN 9, mlb.com gamePk 824474 / ESPN 401816603) and the results.csv row. This is a third independent confirmation of that score; nothing is revised.",
+ "closing_prices_newly_available": {"ml_away_STL": -110, "ml_home_CIN": 103, "total_line": 9.0,
+   "ou_result_marker": "board shows the over arrow; actual total 19 cleared 9",
+   "note": "These are CLOSING prices and were NOT available at any point before this game started."},
+ "hp_umpire": "Hunter Wendelstedt (14 ov | 10 un | 0 p)",
+ "probables_as_printed": {"STL": "(R) McGreevy 5-9, 3.48 ERA, 1.220 WHIP", "CIN": "(R) Singer 5-11, 4.66 ERA, 1.440 WHIP"},
+ "firewall": "EST Score and EST Line columns are third-party projections and the Profit column is descriptive; none are model inputs and none substitute for a price.",
+
+ "GRADING_EFFECT": "NONE. STL@CIN has no registered forecast (data/mlb/analysis/2026-08-20_STLCIN_exclusion.json, forecast_registered: false) because the intake board arrived 16:41:38Z against a 16:40Z first pitch. A result plus a closing price cannot manufacture a pregame forecast after the fact. The game remains NO FORECAST - LATE CAPTURE and is graded nowhere: 0 records in data/mlb/forecasts/grades.jsonl match P4-20260820-STL.",
+ "GHOST_GRADE_REFUSED": "The sealed card row for this game does carry a displayed lean (home_wp 0.432, i.e. STL 0.568) and STL won. Scoring that after the outcome is known would be a ghost grade of exactly the class blocked on 2026-08-19 for the WNBA ATS overlay. It is NOT computed, NOT entered in any ledger, and does NOT touch the 8-game v1 cohort record (5-3, Brier 0.24933), which stands unchanged.",
+ "MARKET_COMPARISON_STATUS_UNCHANGED": "Closing prices now exist for ONE ungraded game. The eight GRADED v1 forecasts still have no closing prices, so their market-relative fields remain null with reason and closing-line comparison remains MARKET_COMPARISON_UNAVAILABLE. A single-game closing line is not extrapolated to the other eight.",
+ "writes": {"grades_appended": 0, "forecasts_created": 0, "existing_records_modified": 0, "new_evidence_records": 1},
+ "standing": {"gate": "0/100 NO_PROMOTE", "model_authorized_ledger_usd": 0, "wager_authority": "NO", "execution": "UNAUTHORIZED"}
+}

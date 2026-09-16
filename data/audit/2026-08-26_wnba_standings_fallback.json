@@ -1,0 +1,134 @@
+{
+ "created_utc": "2026-08-26T17:35:00Z",
+ "forecasts": [
+  {
+   "away_record": "26-11",
+   "game": "wnba:GSV@CON",
+   "home_record": "10-27",
+   "p_home": 0.1536,
+   "parts": {
+    "home_shift_logit": 0.1466,
+    "identity": "wnba.fallback.STANDINGS_LOG5_v1",
+    "input_grade": "PROVISIONAL_SEARCH_ASSEMBLED",
+    "log5": 0.1355,
+    "output_grade": "DIAGNOSTIC_ONLY_ACTION_BLOCKED"
+   },
+   "start_utc_inferred": "2026-08-26T23:00:00Z (tz-inferred from '7 p.m.')"
+  },
+  {
+   "away_record": "11-26",
+   "game": "wnba:TOR@SEA",
+   "home_record": "7-31",
+   "p_home": 0.382,
+   "parts": {
+    "home_shift_logit": 0.1466,
+    "identity": "wnba.fallback.STANDINGS_LOG5_v1",
+    "input_grade": "PROVISIONAL_SEARCH_ASSEMBLED",
+    "log5": 0.348,
+    "output_grade": "DIAGNOSTIC_ONLY_ACTION_BLOCKED"
+   },
+   "start_utc_inferred": "2026-08-27T02:00:00Z (tz-inferred from '10 p.m.')"
+  }
+ ],
+ "identity": "wnba.fallback.STANDINGS_LOG5_v1",
+ "input_grade": "PROVISIONAL_SEARCH_ASSEMBLED",
+ "method": "log5 on season win% + registered home-prior logit shift; module harness/wnba_standings_fallback.py, mutation 5/5",
+ "never": "no settlement, no promotion, no estimator input, no wager authority; personnel unverified (no injury report bound for GSV/TOR/SEA/CON tonight)",
+ "not_units": "RJ-005 remains 0/17 \u2014 nothing here binds a pipeline unit; the SYSTEM_FAILURE publication stands until retrieved artifacts bind",
+ "output_grade": "DIAGNOSTIC_ONLY_ACTION_BLOCKED",
+ "record_id": "WNBA-STANDINGS-FALLBACK-2026-08-26",
+ "record_sha256": "4d7fd06a2eac2cc88dbc43442fdb220b0249ae12933272d36bed6fba095871c0",
+ "schema": "ops.fallback_forecast.v1",
+ "snapshot": {
+  "as_of_determination": "the listed standings exclude the 8/25 finals (CHI 15-23 and CON 9-27 match the PREGAME 8/25 preview), so the snapshot is as-of 2026-08-25 pregame; rolled forward with the three known 8/25 finals",
+  "concordance": "SEA cross-checked (7-30 'early August' -> 7-31 listed, consistent trajectory); GSV cross-checked via swept season series vs TOR and opening-night win vs SEA; single-source for the rest",
+  "records_as_listed": {
+   "CHI": [
+    15,
+    23
+   ],
+   "CON": [
+    9,
+    27
+   ],
+   "DAL": [
+    22,
+    16
+   ],
+   "GSV": [
+    26,
+    11
+   ],
+   "NYL": [
+    23,
+    15
+   ],
+   "PDX": [
+    15,
+    22
+   ],
+   "PHX": [
+    13,
+    24
+   ],
+   "SEA": [
+    7,
+    31
+   ],
+   "TOR": [
+    11,
+    26
+   ],
+   "WAS": [
+    22,
+    15
+   ]
+  },
+  "rolled_records_current": {
+   "CHI": [
+    15,
+    24
+   ],
+   "CON": [
+    10,
+    27
+   ],
+   "DAL": [
+    23,
+    16
+   ],
+   "GSV": [
+    26,
+    11
+   ],
+   "NYL": [
+    23,
+    15
+   ],
+   "PDX": [
+    15,
+    23
+   ],
+   "PHX": [
+    13,
+    25
+   ],
+   "SEA": [
+    7,
+    31
+   ],
+   "TOR": [
+    11,
+    26
+   ],
+   "WAS": [
+    23,
+    15
+   ]
+  },
+  "sources": [
+   "sportbusy.com standings listing (primary snapshot)",
+   "ESPN game pages (GSV series, SEA record cross-check)"
+  ]
+ }
+}

@@ -1,0 +1,2605 @@
+{
+  "card_metadata": {
+    "board_version": "586faaa",
+    "card_version": "V6",
+    "lineage": "V1 (08:15 ET, registered) -> V2 (13:40 ET) -> V3 (14:30 ET) -> V4 (format: strict 3-market schema; no decision changes) -> V5 (market-specific probability fields: model_win_pct/model_cover_pct/model_over-under_pct + push_pct; no decision changes) -> V6 (signal/execution separation, movement.market qualification, source-status flags, clock semantics rename; no decision changes)",
+    "decision_time": "2026-08-30T08:15:00-04:00",
+    "entry_cutoff": "2026-08-30T04:12:00-04:00",
+    "feature_cutoff": "2026-08-27T23:59:00-04:00",
+    "paper_only": true,
+    "ledger": 0,
+    "model_version": "wnba.rs.ff7_logit_ridge.v1_0.shadow",
+    "calibrator_status": "DORMANT",
+    "v1_sha256": "2ab780f7c4df87107d3cfe2737dac20542502b3fc45b6108b7c0aad5b71c49b6",
+    "formatter_spec": "owner upload 'The cleanest way is' (3-market schema; JSON canonical; decision precedence NO_FORECAST/BLOCKED > CLV_ONLY > WAIT > PASS > LEAN > PLAY) + addendum 'Add explicit market-specific probability fields'",
+    "entry_snapshot_cutoff": "2026-08-30T04:12:00-04:00",
+    "price_as_of_note": "price_as_of 04:12 ET; decision generated 08:15 ET; conservative (stale-price) test, not an executable 08:15 wager. No new market information recorded between 04:12 and 08:15 ET; first post-decision re-verification 13:40 ET (V2, append-only, cannot alter V1 fields).",
+    "review_notes_applied": "owner upload 'V5 is internally consistent' (signal vs execution, clock rename, movement.market, source-status flags, extended validation)"
+  },
+  "games": [
+    {
+      "event_id": "wnba_min_atl_2026-08-30",
+      "game": "MIN @ ATL",
+      "sport": "WNBA",
+      "start_time": "2026-08-30T15:00:00-04:00",
+      "game_status": "LEAN",
+      "markets": [
+        {
+          "market": "ML",
+          "selection": "ATL",
+          "line": null,
+          "entry": {
+            "book": "DraftKings",
+            "price_american": 114,
+            "timestamp": "2026-08-30T04:12:00-04:00"
+          },
+          "probabilities": {
+            "model_win_pct": 39.7,
+            "model_loss_pct": 60.3,
+            "model_draw_pct": null,
+            "market_no_vig_pct": 44.9,
+            "edge_pp": -5.2,
+            "usable_edge_pp": -5.2
+          },
+          "movement": {
+            "classification": null,
+            "confidence": null,
+            "open": null,
+            "current": null,
+            "market": null,
+            "side": null
+          },
+          "data_quality": {
+            "status": "STALE",
+            "score": null,
+            "reason": "feature cutoff 8/27 (DATA_STALE)"
+          },
+          "decision": "PASS",
+          "note": "ML edge negative; divergence from spread recorded",
+          "signal_decision": "PASS",
+          "execution_status": "NOT_ACTIONABLE",
+          "actionable": false,
+          "line_available": false,
+          "price_available": true,
+          "probability_available": true,
+          "source_available": true,
+          "clv_eligible": true,
+          "roi_eligible": false
+        },
+        {
+          "market": "SPREAD_RL",
+          "selection": "ATL +2.5",
+          "line": 2.5,
+          "entry": {
+            "book": "DraftKings",
+            "price_american": null,
+            "timestamp": "2026-08-30T04:12:00-04:00"
+          },
+          "probabilities": {
+            "model_cover_pct": 64.2,
+            "model_push_pct": 0.0,
+            "model_noncover_pct": 35.8,
+            "market_no_vig_cover_pct": 50.0,
+            "edge_pp": 14.3,
+            "usable_edge_pp": 6.9
+          },
+          "movement": {
+            "classification": null,
+            "confidence": null,
+            "open": null,
+            "current": null,
+            "market": null,
+            "side": null
+          },
+          "data_quality": {
+            "status": "STALE",
+            "score": null,
+            "reason": "feature cutoff 8/27; entry price not captured in relay (line captured)"
+          },
+          "decision": "LEAN",
+          "note": "C-tier; usable edge +6.9pp = 14.3 x 0.65 DQ x 0.75 unc; cover p = Phi(5.1/13.97) | Model signal LEAN; paper execution BLOCKED \u2014 entry price missing. Line retained for model evaluation only; no entry EV/CLV from line-only observation.",
+          "signal_decision": "LEAN",
+          "execution_status": "NO_PRICE",
+          "actionable": false,
+          "line_available": true,
+          "price_available": false,
+          "probability_available": true,
+          "source_available": true,
+          "clv_eligible": false,
+          "roi_eligible": false
+        },
+        {
+          "market": "TOTALS",
+          "selection": null,
+          "line": 176.5,
+          "entry": {
+            "book": "DraftKings",
+            "price_american": null,
+            "timestamp": "2026-08-30T04:12:00-04:00"
+          },
+          "probabilities": {
+            "model_over_pct": null,
+            "model_under_pct": null,
+            "model_push_pct": 0.0,
+            "market_no_vig_selected_pct": null,
+            "edge_pp": null,
+            "usable_edge_pp": null
+          },
+          "movement": {
+            "classification": "unknown",
+            "confidence": 0.2,
+            "open": 179.5,
+            "current": 176.5,
+            "market": "TOTALS",
+            "side": null
+          },
+          "data_quality": {
+            "status": "INCOMPLETE",
+            "score": null,
+            "reason": "totals unvalidated; side/price not carded"
+          },
+          "decision": "NO_LINE",
+          "note": "model total 176.6 aligns; move 179.5->176.5 unexplained, not faded",
+          "signal_decision": "NO_SIGNAL",
+          "execution_status": "NO_LINE",
+          "actionable": false,
+          "line_available": true,
+          "price_available": false,
+          "probability_available": false,
+          "source_available": true,
+          "clv_eligible": false,
+          "roi_eligible": false
+        }
+      ],
+      "note": "Brionna Jones out (pre-open); ATL possible B2B - model blind; only edge surviving reverse checks"
+    },
+    {
+      "event_id": "wnba_las_sea_2026-08-30",
+      "game": "LAS @ SEA",
+      "sport": "WNBA",
+      "start_time": "2026-08-30T17:00:00-04:00",
+      "game_status": "PASS",
+      "markets": [
+        {
+          "market": "ML",
+          "selection": "SEA",
+          "line": null,
+          "entry": {
+            "book": "DraftKings",
+            "price_american": -105,
+            "timestamp": "2026-08-30T04:12:00-04:00"
+          },
+          "probabilities": {
+            "model_win_pct": 56.1,
+            "model_loss_pct": 43.9,
+            "model_draw_pct": null,
+            "market_no_vig_pct": 51.1,
+            "edge_pp": 5.0,
+            "usable_edge_pp": 2.3
+          },
+          "movement": {
+            "classification": null,
+            "confidence": null,
+            "open": null,
+            "current": null,
+            "market": null,
+            "side": null
+          },
+          "data_quality": {
+            "status": "STALE",
+            "score": null,
+            "reason": "feature cutoff 8/27"
+          },
+          "decision": "PASS",
+          "note": "usable +2.3pp below conviction floor",
+          "signal_decision": "PASS",
+          "execution_status": "NOT_ACTIONABLE",
+          "actionable": false,
+          "line_available": false,
+          "price_available": true,
+          "probability_available": true,
+          "source_available": true,
+          "clv_eligible": true,
+          "roi_eligible": false
+        },
+        {
+          "market": "SPREAD_RL",
+          "selection": null,
+          "line": -1.5,
+          "entry": {
+            "book": "DraftKings",
+            "price_american": null,
+            "timestamp": "2026-08-30T04:12:00-04:00"
+          },
+          "probabilities": {
+            "model_cover_pct": null,
+            "model_push_pct": 0.0,
+            "model_noncover_pct": null,
+            "market_no_vig_cover_pct": null,
+            "edge_pp": null,
+            "usable_edge_pp": null
+          },
+          "movement": {
+            "classification": null,
+            "confidence": null,
+            "open": null,
+            "current": null,
+            "market": null,
+            "side": null
+          },
+          "data_quality": {
+            "status": "STALE",
+            "score": null,
+            "reason": "line SEA -1.5 captured; price not captured"
+          },
+          "decision": "PASS",
+          "note": "~1pt displacement only",
+          "signal_decision": "PASS",
+          "execution_status": "NOT_ACTIONABLE",
+          "actionable": false,
+          "line_available": true,
+          "price_available": false,
+          "probability_available": false,
+          "source_available": true,
+          "clv_eligible": false,
+          "roi_eligible": false
+        },
+        {
+          "market": "TOTALS",
+          "selection": null,
+          "line": 172.5,
+          "entry": {
+            "book": "DraftKings",
+            "price_american": null,
+            "timestamp": "2026-08-30T04:12:00-04:00"
+          },
+          "probabilities": {
+            "model_over_pct": null,
+            "model_under_pct": null,
+            "model_push_pct": 0.0,
+            "market_no_vig_selected_pct": null,
+            "edge_pp": null,
+            "usable_edge_pp": null
+          },
+          "movement": {
+            "classification": null,
+            "confidence": null,
+            "open": null,
+            "current": null,
+            "market": null,
+            "side": null
+          },
+          "data_quality": {
+            "status": "INCOMPLETE",
+            "score": null,
+            "reason": "totals unvalidated"
+          },
+          "decision": "NO_LINE",
+          "note": "model total 175.6",
+          "signal_decision": "NO_SIGNAL",
+          "execution_status": "NO_LINE",
+          "actionable": false,
+          "line_available": true,
+          "price_available": false,
+          "probability_available": false,
+          "source_available": true,
+          "clv_eligible": false,
+          "roi_eligible": false
+        }
+      ],
+      "note": "coin-flip zone with stale data"
+    },
+    {
+      "event_id": "wnba_gsv_por_2026-08-30",
+      "game": "GSV @ POR",
+      "sport": "WNBA",
+      "start_time": "2026-08-30T19:00:00-04:00",
+      "game_status": "PASS",
+      "markets": [
+        {
+          "market": "ML",
+          "selection": "GSV",
+          "line": null,
+          "entry": {
+            "book": "DraftKings",
+            "price_american": -198,
+            "timestamp": "2026-08-30T04:12:00-04:00"
+          },
+          "probabilities": {
+            "model_win_pct": 74.7,
+            "model_loss_pct": 25.3,
+            "model_draw_pct": null,
+            "market_no_vig_pct": 63.7,
+            "edge_pp": 11.0,
+            "usable_edge_pp": 0.0
+          },
+          "movement": {
+            "classification": null,
+            "confidence": null,
+            "open": null,
+            "current": null,
+            "market": null,
+            "side": null
+          },
+          "data_quality": {
+            "status": "STALE",
+            "score": null,
+            "reason": "feature cutoff 8/27 + unresolved rotation"
+          },
+          "decision": "PASS",
+          "note": "raw +11.0pp INVALID: 3 starters World Cup departures today; scenario-adj p .53-.62 -> edge ~0; scenario-adjusted +0.8pp -> usable 0.0pp",
+          "signal_decision": "PASS",
+          "execution_status": "NOT_ACTIONABLE",
+          "actionable": false,
+          "line_available": false,
+          "price_available": true,
+          "probability_available": true,
+          "source_available": true,
+          "clv_eligible": true,
+          "roi_eligible": false
+        },
+        {
+          "market": "SPREAD_RL",
+          "selection": null,
+          "line": -4.5,
+          "entry": {
+            "book": "DraftKings",
+            "price_american": null,
+            "timestamp": "2026-08-30T04:12:00-04:00"
+          },
+          "probabilities": {
+            "model_cover_pct": null,
+            "model_push_pct": 0.0,
+            "model_noncover_pct": null,
+            "market_no_vig_cover_pct": null,
+            "edge_pp": null,
+            "usable_edge_pp": null
+          },
+          "movement": {
+            "classification": "new_information",
+            "confidence": 0.8,
+            "open": -5.5,
+            "current": -4.5,
+            "market": "SPREAD_RL",
+            "side": null
+          },
+          "data_quality": {
+            "status": "STALE",
+            "score": null,
+            "reason": "rotation unknown"
+          },
+          "decision": "PASS",
+          "note": "market move is the departure information arriving",
+          "signal_decision": "PASS",
+          "execution_status": "NOT_ACTIONABLE",
+          "actionable": false,
+          "line_available": true,
+          "price_available": false,
+          "probability_available": false,
+          "source_available": true,
+          "clv_eligible": false,
+          "roi_eligible": false
+        },
+        {
+          "market": "TOTALS",
+          "selection": null,
+          "line": 158.5,
+          "entry": {
+            "book": "DraftKings",
+            "price_american": null,
+            "timestamp": "2026-08-30T04:12:00-04:00"
+          },
+          "probabilities": {
+            "model_over_pct": null,
+            "model_under_pct": null,
+            "model_push_pct": 0.0,
+            "market_no_vig_selected_pct": null,
+            "edge_pp": null,
+            "usable_edge_pp": null
+          },
+          "movement": {
+            "classification": null,
+            "confidence": null,
+            "open": null,
+            "current": null,
+            "market": null,
+            "side": null
+          },
+          "data_quality": {
+            "status": "INCOMPLETE",
+            "score": null,
+            "reason": "totals unvalidated"
+          },
+          "decision": "NO_LINE",
+          "note": "model total 166.0; tot move shares departure cause",
+          "signal_decision": "NO_SIGNAL",
+          "execution_status": "NO_LINE",
+          "actionable": false,
+          "line_available": true,
+          "price_available": false,
+          "probability_available": false,
+          "source_available": true,
+          "clv_eligible": false,
+          "roi_eligible": false
+        }
+      ],
+      "note": "scenario engine: full rotation .747 vs 3-out .53-.62; model and market agree post-adjustment"
+    },
+    {
+      "event_id": "wnba_con_dal_2026-08-30",
+      "game": "CON @ DAL",
+      "sport": "WNBA",
+      "start_time": "2026-08-30T20:30:00-04:00",
+      "game_status": "PASS",
+      "markets": [
+        {
+          "market": "ML",
+          "selection": "DAL",
+          "line": null,
+          "entry": {
+            "book": "DraftKings",
+            "price_american": -1050,
+            "timestamp": "2026-08-30T04:12:00-04:00"
+          },
+          "probabilities": {
+            "model_win_pct": 83.3,
+            "model_loss_pct": 16.7,
+            "model_draw_pct": null,
+            "market_no_vig_pct": 87.6,
+            "edge_pp": -4.3,
+            "usable_edge_pp": -4.3
+          },
+          "movement": {
+            "classification": null,
+            "confidence": null,
+            "open": null,
+            "current": null,
+            "market": null,
+            "side": null
+          },
+          "data_quality": {
+            "status": "STALE",
+            "score": null,
+            "reason": "feature cutoff 8/27"
+          },
+          "decision": "PASS",
+          "note": "market ahead of model on Griner-out + CON B2B",
+          "signal_decision": "PASS",
+          "execution_status": "NOT_ACTIONABLE",
+          "actionable": false,
+          "line_available": false,
+          "price_available": true,
+          "probability_available": true,
+          "source_available": true,
+          "clv_eligible": true,
+          "roi_eligible": false
+        },
+        {
+          "market": "SPREAD_RL",
+          "selection": null,
+          "line": -13.5,
+          "entry": {
+            "book": "DraftKings",
+            "price_american": null,
+            "timestamp": "2026-08-30T04:12:00-04:00"
+          },
+          "probabilities": {
+            "model_cover_pct": null,
+            "model_push_pct": 0.0,
+            "model_noncover_pct": null,
+            "market_no_vig_cover_pct": null,
+            "edge_pp": null,
+            "usable_edge_pp": null
+          },
+          "movement": {
+            "classification": "new_information",
+            "confidence": 0.85,
+            "open": -9.5,
+            "current": -13.5,
+            "market": "SPREAD_RL",
+            "side": null
+          },
+          "data_quality": {
+            "status": "STALE",
+            "score": null,
+            "reason": "model blind to all three news items"
+          },
+          "decision": "PASS",
+          "note": "steam -9.5->-13.5 IS the news; contrarian rejected",
+          "signal_decision": "PASS",
+          "execution_status": "NOT_ACTIONABLE",
+          "actionable": false,
+          "line_available": true,
+          "price_available": false,
+          "probability_available": false,
+          "source_available": true,
+          "clv_eligible": false,
+          "roi_eligible": false
+        },
+        {
+          "market": "TOTALS",
+          "selection": null,
+          "line": 166.5,
+          "entry": {
+            "book": "DraftKings",
+            "price_american": null,
+            "timestamp": "2026-08-30T04:12:00-04:00"
+          },
+          "probabilities": {
+            "model_over_pct": null,
+            "model_under_pct": null,
+            "model_push_pct": 0.0,
+            "market_no_vig_selected_pct": null,
+            "edge_pp": null,
+            "usable_edge_pp": null
+          },
+          "movement": {
+            "classification": null,
+            "confidence": null,
+            "open": null,
+            "current": null,
+            "market": null,
+            "side": null
+          },
+          "data_quality": {
+            "status": "INCOMPLETE",
+            "score": null,
+            "reason": "totals unvalidated"
+          },
+          "decision": "NO_LINE",
+          "note": "model total 171.2",
+          "signal_decision": "NO_SIGNAL",
+          "execution_status": "NO_LINE",
+          "actionable": false,
+          "line_available": true,
+          "price_available": false,
+          "probability_available": false,
+          "source_available": true,
+          "clv_eligible": false,
+          "roi_eligible": false
+        }
+      ],
+      "note": "no contrarian play against explained steam"
+    },
+    {
+      "event_id": "mlb_mia_wsh_2026-08-30",
+      "game": "MIA @ WSH",
+      "sport": "MLB",
+      "start_time": "2026-08-30T12:15:00-04:00",
+      "game_status": "PASS",
+      "markets": [
+        {
+          "market": "ML",
+          "selection": "MIA",
+          "line": null,
+          "entry": {
+            "book": "DraftKings",
+            "price_american": -108,
+            "timestamp": "2026-08-30T04:12:00-04:00"
+          },
+          "probabilities": {
+            "model_win_pct": null,
+            "model_loss_pct": null,
+            "model_draw_pct": null,
+            "market_no_vig_pct": null,
+            "edge_pp": null,
+            "usable_edge_pp": null
+          },
+          "movement": {
+            "classification": null,
+            "confidence": null,
+            "open": null,
+            "current": null,
+            "market": null,
+            "side": null
+          },
+          "data_quality": {
+            "status": "CAP",
+            "score": null,
+            "reason": "SP_CONFIRMED unavailable"
+          },
+          "decision": "CLV_ONLY",
+          "note": "entry retained for closing-line evaluation only; actionable layer blocked slate-wide",
+          "signal_decision": "NO_SIGNAL",
+          "execution_status": "CLV_ONLY",
+          "actionable": false,
+          "line_available": false,
+          "price_available": true,
+          "probability_available": false,
+          "source_available": true,
+          "clv_eligible": true,
+          "roi_eligible": false
+        },
+        {
+          "market": "SPREAD_RL",
+          "selection": null,
+          "line": null,
+          "entry": {
+            "book": null,
+            "price_american": null,
+            "timestamp": null
+          },
+          "probabilities": {
+            "model_cover_pct": null,
+            "model_push_pct": null,
+            "model_noncover_pct": null,
+            "market_no_vig_cover_pct": null,
+            "edge_pp": null,
+            "usable_edge_pp": null
+          },
+          "movement": {
+            "classification": null,
+            "confidence": null,
+            "open": null,
+            "current": null,
+            "market": null,
+            "side": null
+          },
+          "data_quality": {
+            "status": "MISSING",
+            "score": null,
+            "reason": "run line not supplied"
+          },
+          "decision": "NO_LINE",
+          "note": null,
+          "signal_decision": "NO_SIGNAL",
+          "execution_status": "NO_LINE",
+          "actionable": false,
+          "line_available": false,
+          "price_available": false,
+          "probability_available": false,
+          "source_available": false,
+          "clv_eligible": false,
+          "roi_eligible": false
+        },
+        {
+          "market": "TOTALS",
+          "selection": null,
+          "line": 9.0,
+          "entry": {
+            "book": "DraftKings",
+            "price_american": null,
+            "timestamp": "2026-08-30T04:12:00-04:00"
+          },
+          "probabilities": {
+            "model_over_pct": null,
+            "model_under_pct": null,
+            "model_push_pct": null,
+            "market_no_vig_selected_pct": null,
+            "edge_pp": null,
+            "usable_edge_pp": null
+          },
+          "movement": {
+            "classification": null,
+            "confidence": null,
+            "open": null,
+            "current": null,
+            "market": null,
+            "side": null
+          },
+          "data_quality": {
+            "status": "INCOMPLETE",
+            "score": null,
+            "reason": "total side/price not supplied; totals not decision-bearing"
+          },
+          "decision": "NO_LINE",
+          "note": "do not infer Over or Under",
+          "signal_decision": "NO_SIGNAL",
+          "execution_status": "NO_LINE",
+          "actionable": false,
+          "line_available": true,
+          "price_available": false,
+          "probability_available": false,
+          "source_available": true,
+          "clv_eligible": false,
+          "roi_eligible": false
+        }
+      ],
+      "note": "SP conflict RESOLVED V2 (Janson Junk)"
+    },
+    {
+      "event_id": "mlb_col_atl_2026-08-30",
+      "game": "COL @ ATL",
+      "sport": "MLB",
+      "start_time": "2026-08-30T13:35:00-04:00",
+      "game_status": "PASS",
+      "markets": [
+        {
+          "market": "ML",
+          "selection": "ATL",
+          "line": null,
+          "entry": {
+            "book": "DraftKings",
+            "price_american": -224,
+            "timestamp": "2026-08-30T04:12:00-04:00"
+          },
+          "probabilities": {
+            "model_win_pct": null,
+            "model_loss_pct": null,
+            "model_draw_pct": null,
+            "market_no_vig_pct": null,
+            "edge_pp": null,
+            "usable_edge_pp": null
+          },
+          "movement": {
+            "classification": null,
+            "confidence": null,
+            "open": null,
+            "current": null,
+            "market": null,
+            "side": null
+          },
+          "data_quality": {
+            "status": "CAP",
+            "score": null,
+            "reason": "SP_CONFIRMED unavailable"
+          },
+          "decision": "CLV_ONLY",
+          "note": "entry retained for closing-line evaluation only; actionable layer blocked slate-wide",
+          "signal_decision": "NO_SIGNAL",
+          "execution_status": "CLV_ONLY",
+          "actionable": false,
+          "line_available": false,
+          "price_available": true,
+          "probability_available": false,
+          "source_available": true,
+          "clv_eligible": true,
+          "roi_eligible": false
+        },
+        {
+          "market": "SPREAD_RL",
+          "selection": null,
+          "line": null,
+          "entry": {
+            "book": null,
+            "price_american": null,
+            "timestamp": null
+          },
+          "probabilities": {
+            "model_cover_pct": null,
+            "model_push_pct": null,
+            "model_noncover_pct": null,
+            "market_no_vig_cover_pct": null,
+            "edge_pp": null,
+            "usable_edge_pp": null
+          },
+          "movement": {
+            "classification": null,
+            "confidence": null,
+            "open": null,
+            "current": null,
+            "market": null,
+            "side": null
+          },
+          "data_quality": {
+            "status": "MISSING",
+            "score": null,
+            "reason": "run line not supplied"
+          },
+          "decision": "NO_LINE",
+          "note": null,
+          "signal_decision": "NO_SIGNAL",
+          "execution_status": "NO_LINE",
+          "actionable": false,
+          "line_available": false,
+          "price_available": false,
+          "probability_available": false,
+          "source_available": false,
+          "clv_eligible": false,
+          "roi_eligible": false
+        },
+        {
+          "market": "TOTALS",
+          "selection": null,
+          "line": 8.5,
+          "entry": {
+            "book": "DraftKings",
+            "price_american": null,
+            "timestamp": "2026-08-30T04:12:00-04:00"
+          },
+          "probabilities": {
+            "model_over_pct": null,
+            "model_under_pct": null,
+            "model_push_pct": 0.0,
+            "market_no_vig_selected_pct": null,
+            "edge_pp": null,
+            "usable_edge_pp": null
+          },
+          "movement": {
+            "classification": null,
+            "confidence": null,
+            "open": null,
+            "current": null,
+            "market": null,
+            "side": null
+          },
+          "data_quality": {
+            "status": "INCOMPLETE",
+            "score": null,
+            "reason": "total side/price not supplied; totals not decision-bearing"
+          },
+          "decision": "NO_LINE",
+          "note": "do not infer Over or Under",
+          "signal_decision": "NO_SIGNAL",
+          "execution_status": "NO_LINE",
+          "actionable": false,
+          "line_available": true,
+          "price_available": false,
+          "probability_available": false,
+          "source_available": true,
+          "clv_eligible": false,
+          "roi_eligible": false
+        }
+      ],
+      "note": "ATL bullpen depleted (Suarez IL)"
+    },
+    {
+      "event_id": "mlb_bos_nyy_2026-08-30",
+      "game": "BOS @ NYY",
+      "sport": "MLB",
+      "start_time": "2026-08-30T13:35:00-04:00",
+      "game_status": "WAIT",
+      "markets": [
+        {
+          "market": "ML",
+          "selection": "BOS",
+          "line": null,
+          "entry": {
+            "book": "DraftKings",
+            "price_american": -115,
+            "timestamp": "2026-08-30T04:12:00-04:00"
+          },
+          "probabilities": {
+            "model_win_pct": null,
+            "model_loss_pct": null,
+            "model_draw_pct": null,
+            "market_no_vig_pct": null,
+            "edge_pp": null,
+            "usable_edge_pp": null
+          },
+          "movement": {
+            "classification": null,
+            "confidence": null,
+            "open": null,
+            "current": null,
+            "market": null,
+            "side": null
+          },
+          "data_quality": {
+            "status": "CAP",
+            "score": null,
+            "reason": "SP_CONFIRMED unavailable"
+          },
+          "decision": "CLV_ONLY",
+          "note": "entry retained for closing-line evaluation only; actionable layer blocked slate-wide",
+          "signal_decision": "NO_SIGNAL",
+          "execution_status": "CLV_ONLY",
+          "actionable": false,
+          "line_available": false,
+          "price_available": true,
+          "probability_available": false,
+          "source_available": true,
+          "clv_eligible": true,
+          "roi_eligible": false
+        },
+        {
+          "market": "SPREAD_RL",
+          "selection": null,
+          "line": null,
+          "entry": {
+            "book": null,
+            "price_american": null,
+            "timestamp": null
+          },
+          "probabilities": {
+            "model_cover_pct": null,
+            "model_push_pct": null,
+            "model_noncover_pct": null,
+            "market_no_vig_cover_pct": null,
+            "edge_pp": null,
+            "usable_edge_pp": null
+          },
+          "movement": {
+            "classification": null,
+            "confidence": null,
+            "open": null,
+            "current": null,
+            "market": null,
+            "side": null
+          },
+          "data_quality": {
+            "status": "MISSING",
+            "score": null,
+            "reason": "run line not supplied"
+          },
+          "decision": "NO_LINE",
+          "note": null,
+          "signal_decision": "NO_SIGNAL",
+          "execution_status": "NO_LINE",
+          "actionable": false,
+          "line_available": false,
+          "price_available": false,
+          "probability_available": false,
+          "source_available": false,
+          "clv_eligible": false,
+          "roi_eligible": false
+        },
+        {
+          "market": "TOTALS",
+          "selection": null,
+          "line": 8.0,
+          "entry": {
+            "book": "DraftKings",
+            "price_american": null,
+            "timestamp": "2026-08-30T04:12:00-04:00"
+          },
+          "probabilities": {
+            "model_over_pct": null,
+            "model_under_pct": null,
+            "model_push_pct": null,
+            "market_no_vig_selected_pct": null,
+            "edge_pp": null,
+            "usable_edge_pp": null
+          },
+          "movement": {
+            "classification": "unknown",
+            "confidence": 0.2,
+            "open": 8.5,
+            "current": 8.0,
+            "market": "TOTALS",
+            "side": null
+          },
+          "data_quality": {
+            "status": "INCOMPLETE",
+            "score": null,
+            "reason": "total side/price not supplied; totals not decision-bearing"
+          },
+          "decision": "NO_LINE",
+          "note": "do not infer Over or Under",
+          "signal_decision": "NO_SIGNAL",
+          "execution_status": "NO_LINE",
+          "actionable": false,
+          "line_available": true,
+          "price_available": false,
+          "probability_available": false,
+          "source_available": true,
+          "clv_eligible": false,
+          "roi_eligible": false
+        }
+      ],
+      "note": "Story/Anthony lineup status; tot steam unexplained"
+    },
+    {
+      "event_id": "mlb_sea_tor_2026-08-30",
+      "game": "SEA @ TOR",
+      "sport": "MLB",
+      "start_time": "2026-08-30T13:37:00-04:00",
+      "game_status": "PASS",
+      "markets": [
+        {
+          "market": "ML",
+          "selection": "SEA",
+          "line": null,
+          "entry": {
+            "book": "DraftKings",
+            "price_american": -135,
+            "timestamp": "2026-08-30T04:12:00-04:00"
+          },
+          "probabilities": {
+            "model_win_pct": null,
+            "model_loss_pct": null,
+            "model_draw_pct": null,
+            "market_no_vig_pct": null,
+            "edge_pp": null,
+            "usable_edge_pp": null
+          },
+          "movement": {
+            "classification": null,
+            "confidence": null,
+            "open": null,
+            "current": null,
+            "market": null,
+            "side": null
+          },
+          "data_quality": {
+            "status": "CAP",
+            "score": null,
+            "reason": "SP_CONFIRMED unavailable"
+          },
+          "decision": "CLV_ONLY",
+          "note": "entry retained for closing-line evaluation only; actionable layer blocked slate-wide",
+          "signal_decision": "NO_SIGNAL",
+          "execution_status": "CLV_ONLY",
+          "actionable": false,
+          "line_available": false,
+          "price_available": true,
+          "probability_available": false,
+          "source_available": true,
+          "clv_eligible": true,
+          "roi_eligible": false
+        },
+        {
+          "market": "SPREAD_RL",
+          "selection": null,
+          "line": null,
+          "entry": {
+            "book": null,
+            "price_american": null,
+            "timestamp": null
+          },
+          "probabilities": {
+            "model_cover_pct": null,
+            "model_push_pct": null,
+            "model_noncover_pct": null,
+            "market_no_vig_cover_pct": null,
+            "edge_pp": null,
+            "usable_edge_pp": null
+          },
+          "movement": {
+            "classification": null,
+            "confidence": null,
+            "open": null,
+            "current": null,
+            "market": null,
+            "side": null
+          },
+          "data_quality": {
+            "status": "MISSING",
+            "score": null,
+            "reason": "run line not supplied"
+          },
+          "decision": "NO_LINE",
+          "note": null,
+          "signal_decision": "NO_SIGNAL",
+          "execution_status": "NO_LINE",
+          "actionable": false,
+          "line_available": false,
+          "price_available": false,
+          "probability_available": false,
+          "source_available": false,
+          "clv_eligible": false,
+          "roi_eligible": false
+        },
+        {
+          "market": "TOTALS",
+          "selection": null,
+          "line": 8.0,
+          "entry": {
+            "book": "DraftKings",
+            "price_american": null,
+            "timestamp": "2026-08-30T04:12:00-04:00"
+          },
+          "probabilities": {
+            "model_over_pct": null,
+            "model_under_pct": null,
+            "model_push_pct": null,
+            "market_no_vig_selected_pct": null,
+            "edge_pp": null,
+            "usable_edge_pp": null
+          },
+          "movement": {
+            "classification": null,
+            "confidence": null,
+            "open": null,
+            "current": null,
+            "market": null,
+            "side": null
+          },
+          "data_quality": {
+            "status": "INCOMPLETE",
+            "score": null,
+            "reason": "total side/price not supplied; totals not decision-bearing"
+          },
+          "decision": "NO_LINE",
+          "note": "do not infer Over or Under",
+          "signal_decision": "NO_SIGNAL",
+          "execution_status": "NO_LINE",
+          "actionable": false,
+          "line_available": true,
+          "price_available": false,
+          "probability_available": false,
+          "source_available": true,
+          "clv_eligible": false,
+          "roi_eligible": false
+        }
+      ],
+      "note": "roof TBD"
+    },
+    {
+      "event_id": "mlb_kc_cle_2026-08-30",
+      "game": "KC @ CLE",
+      "sport": "MLB",
+      "start_time": "2026-08-30T13:40:00-04:00",
+      "game_status": "PASS",
+      "markets": [
+        {
+          "market": "ML",
+          "selection": "CLE",
+          "line": null,
+          "entry": {
+            "book": "DraftKings",
+            "price_american": -180,
+            "timestamp": "2026-08-30T04:12:00-04:00"
+          },
+          "probabilities": {
+            "model_win_pct": null,
+            "model_loss_pct": null,
+            "model_draw_pct": null,
+            "market_no_vig_pct": null,
+            "edge_pp": null,
+            "usable_edge_pp": null
+          },
+          "movement": {
+            "classification": "unknown",
+            "confidence": 0.18,
+            "open": -167,
+            "current": -180,
+            "market": "ML",
+            "side": null
+          },
+          "data_quality": {
+            "status": "CAP",
+            "score": null,
+            "reason": "SP_CONFIRMED unavailable"
+          },
+          "decision": "CLV_ONLY",
+          "note": "entry retained for closing-line evaluation only; actionable layer blocked slate-wide",
+          "signal_decision": "NO_SIGNAL",
+          "execution_status": "CLV_ONLY",
+          "actionable": false,
+          "line_available": false,
+          "price_available": true,
+          "probability_available": false,
+          "source_available": true,
+          "clv_eligible": true,
+          "roi_eligible": false
+        },
+        {
+          "market": "SPREAD_RL",
+          "selection": null,
+          "line": null,
+          "entry": {
+            "book": null,
+            "price_american": null,
+            "timestamp": null
+          },
+          "probabilities": {
+            "model_cover_pct": null,
+            "model_push_pct": null,
+            "model_noncover_pct": null,
+            "market_no_vig_cover_pct": null,
+            "edge_pp": null,
+            "usable_edge_pp": null
+          },
+          "movement": {
+            "classification": null,
+            "confidence": null,
+            "open": null,
+            "current": null,
+            "market": null,
+            "side": null
+          },
+          "data_quality": {
+            "status": "MISSING",
+            "score": null,
+            "reason": "run line not supplied"
+          },
+          "decision": "NO_LINE",
+          "note": null,
+          "signal_decision": "NO_SIGNAL",
+          "execution_status": "NO_LINE",
+          "actionable": false,
+          "line_available": false,
+          "price_available": false,
+          "probability_available": false,
+          "source_available": false,
+          "clv_eligible": false,
+          "roi_eligible": false
+        },
+        {
+          "market": "TOTALS",
+          "selection": null,
+          "line": 7.5,
+          "entry": {
+            "book": "DraftKings",
+            "price_american": null,
+            "timestamp": "2026-08-30T04:12:00-04:00"
+          },
+          "probabilities": {
+            "model_over_pct": null,
+            "model_under_pct": null,
+            "model_push_pct": 0.0,
+            "market_no_vig_selected_pct": null,
+            "edge_pp": null,
+            "usable_edge_pp": null
+          },
+          "movement": {
+            "classification": null,
+            "confidence": null,
+            "open": null,
+            "current": null,
+            "market": null,
+            "side": null
+          },
+          "data_quality": {
+            "status": "INCOMPLETE",
+            "score": null,
+            "reason": "total side/price not supplied; totals not decision-bearing"
+          },
+          "decision": "NO_LINE",
+          "note": "do not infer Over or Under",
+          "signal_decision": "NO_SIGNAL",
+          "execution_status": "NO_LINE",
+          "actionable": false,
+          "line_available": true,
+          "price_available": false,
+          "probability_available": false,
+          "source_available": true,
+          "clv_eligible": false,
+          "roi_eligible": false
+        }
+      ],
+      "note": "unexplained steam, not faded (audit clause)"
+    },
+    {
+      "event_id": "mlb_lad_det_2026-08-30",
+      "game": "LAD @ DET",
+      "sport": "MLB",
+      "start_time": "2026-08-30T13:40:00-04:00",
+      "game_status": "PASS",
+      "markets": [
+        {
+          "market": "ML",
+          "selection": "LAD",
+          "line": null,
+          "entry": {
+            "book": "DraftKings",
+            "price_american": -166,
+            "timestamp": "2026-08-30T04:12:00-04:00"
+          },
+          "probabilities": {
+            "model_win_pct": null,
+            "model_loss_pct": null,
+            "model_draw_pct": null,
+            "market_no_vig_pct": null,
+            "edge_pp": null,
+            "usable_edge_pp": null
+          },
+          "movement": {
+            "classification": null,
+            "confidence": null,
+            "open": null,
+            "current": null,
+            "market": null,
+            "side": null
+          },
+          "data_quality": {
+            "status": "CAP",
+            "score": null,
+            "reason": "SP_CONFIRMED unavailable"
+          },
+          "decision": "CLV_ONLY",
+          "note": "entry retained for closing-line evaluation only; actionable layer blocked slate-wide",
+          "signal_decision": "NO_SIGNAL",
+          "execution_status": "CLV_ONLY",
+          "actionable": false,
+          "line_available": false,
+          "price_available": true,
+          "probability_available": false,
+          "source_available": true,
+          "clv_eligible": true,
+          "roi_eligible": false
+        },
+        {
+          "market": "SPREAD_RL",
+          "selection": null,
+          "line": null,
+          "entry": {
+            "book": null,
+            "price_american": null,
+            "timestamp": null
+          },
+          "probabilities": {
+            "model_cover_pct": null,
+            "model_push_pct": null,
+            "model_noncover_pct": null,
+            "market_no_vig_cover_pct": null,
+            "edge_pp": null,
+            "usable_edge_pp": null
+          },
+          "movement": {
+            "classification": null,
+            "confidence": null,
+            "open": null,
+            "current": null,
+            "market": null,
+            "side": null
+          },
+          "data_quality": {
+            "status": "MISSING",
+            "score": null,
+            "reason": "run line not supplied"
+          },
+          "decision": "NO_LINE",
+          "note": null,
+          "signal_decision": "NO_SIGNAL",
+          "execution_status": "NO_LINE",
+          "actionable": false,
+          "line_available": false,
+          "price_available": false,
+          "probability_available": false,
+          "source_available": false,
+          "clv_eligible": false,
+          "roi_eligible": false
+        },
+        {
+          "market": "TOTALS",
+          "selection": null,
+          "line": 7.5,
+          "entry": {
+            "book": "DraftKings",
+            "price_american": null,
+            "timestamp": "2026-08-30T04:12:00-04:00"
+          },
+          "probabilities": {
+            "model_over_pct": null,
+            "model_under_pct": null,
+            "model_push_pct": 0.0,
+            "market_no_vig_selected_pct": null,
+            "edge_pp": null,
+            "usable_edge_pp": null
+          },
+          "movement": {
+            "classification": null,
+            "confidence": null,
+            "open": null,
+            "current": null,
+            "market": null,
+            "side": null
+          },
+          "data_quality": {
+            "status": "INCOMPLETE",
+            "score": null,
+            "reason": "total side/price not supplied; totals not decision-bearing"
+          },
+          "decision": "NO_LINE",
+          "note": "do not infer Over or Under",
+          "signal_decision": "NO_SIGNAL",
+          "execution_status": "NO_LINE",
+          "actionable": false,
+          "line_available": true,
+          "price_available": false,
+          "probability_available": false,
+          "source_available": true,
+          "clv_eligible": false,
+          "roi_eligible": false
+        }
+      ],
+      "note": "stale-source total conflict quarantined (Doc's 9.0)"
+    },
+    {
+      "event_id": "mlb_sd_tb_2026-08-30",
+      "game": "SD @ TB",
+      "sport": "MLB",
+      "start_time": "2026-08-30T13:40:00-04:00",
+      "game_status": "PASS",
+      "markets": [
+        {
+          "market": "ML",
+          "selection": "TB",
+          "line": null,
+          "entry": {
+            "book": "DraftKings",
+            "price_american": -165,
+            "timestamp": "2026-08-30T04:12:00-04:00"
+          },
+          "probabilities": {
+            "model_win_pct": null,
+            "model_loss_pct": null,
+            "model_draw_pct": null,
+            "market_no_vig_pct": null,
+            "edge_pp": null,
+            "usable_edge_pp": null
+          },
+          "movement": {
+            "classification": null,
+            "confidence": null,
+            "open": null,
+            "current": null,
+            "market": null,
+            "side": null
+          },
+          "data_quality": {
+            "status": "CAP",
+            "score": null,
+            "reason": "SP_CONFIRMED unavailable"
+          },
+          "decision": "CLV_ONLY",
+          "note": "entry retained for closing-line evaluation only; actionable layer blocked slate-wide",
+          "signal_decision": "NO_SIGNAL",
+          "execution_status": "CLV_ONLY",
+          "actionable": false,
+          "line_available": false,
+          "price_available": true,
+          "probability_available": false,
+          "source_available": true,
+          "clv_eligible": true,
+          "roi_eligible": false
+        },
+        {
+          "market": "SPREAD_RL",
+          "selection": null,
+          "line": null,
+          "entry": {
+            "book": null,
+            "price_american": null,
+            "timestamp": null
+          },
+          "probabilities": {
+            "model_cover_pct": null,
+            "model_push_pct": null,
+            "model_noncover_pct": null,
+            "market_no_vig_cover_pct": null,
+            "edge_pp": null,
+            "usable_edge_pp": null
+          },
+          "movement": {
+            "classification": null,
+            "confidence": null,
+            "open": null,
+            "current": null,
+            "market": null,
+            "side": null
+          },
+          "data_quality": {
+            "status": "MISSING",
+            "score": null,
+            "reason": "run line not supplied"
+          },
+          "decision": "NO_LINE",
+          "note": null,
+          "signal_decision": "NO_SIGNAL",
+          "execution_status": "NO_LINE",
+          "actionable": false,
+          "line_available": false,
+          "price_available": false,
+          "probability_available": false,
+          "source_available": false,
+          "clv_eligible": false,
+          "roi_eligible": false
+        },
+        {
+          "market": "TOTALS",
+          "selection": null,
+          "line": 7.5,
+          "entry": {
+            "book": "DraftKings",
+            "price_american": null,
+            "timestamp": "2026-08-30T04:12:00-04:00"
+          },
+          "probabilities": {
+            "model_over_pct": null,
+            "model_under_pct": null,
+            "model_push_pct": 0.0,
+            "market_no_vig_selected_pct": null,
+            "edge_pp": null,
+            "usable_edge_pp": null
+          },
+          "movement": {
+            "classification": null,
+            "confidence": null,
+            "open": null,
+            "current": null,
+            "market": null,
+            "side": null
+          },
+          "data_quality": {
+            "status": "INCOMPLETE",
+            "score": null,
+            "reason": "total side/price not supplied; totals not decision-bearing"
+          },
+          "decision": "NO_LINE",
+          "note": "do not infer Over or Under",
+          "signal_decision": "NO_SIGNAL",
+          "execution_status": "NO_LINE",
+          "actionable": false,
+          "line_available": true,
+          "price_available": false,
+          "probability_available": false,
+          "source_available": true,
+          "clv_eligible": false,
+          "roi_eligible": false
+        }
+      ],
+      "note": null
+    },
+    {
+      "event_id": "mlb_tex_mil_2026-08-30",
+      "game": "TEX @ MIL",
+      "sport": "MLB",
+      "start_time": "2026-08-30T14:10:00-04:00",
+      "game_status": "WAIT",
+      "markets": [
+        {
+          "market": "ML",
+          "selection": "MIL",
+          "line": null,
+          "entry": {
+            "book": "DraftKings",
+            "price_american": -162,
+            "timestamp": "2026-08-30T04:12:00-04:00"
+          },
+          "probabilities": {
+            "model_win_pct": null,
+            "model_loss_pct": null,
+            "model_draw_pct": null,
+            "market_no_vig_pct": null,
+            "edge_pp": null,
+            "usable_edge_pp": null
+          },
+          "movement": {
+            "classification": "unknown",
+            "confidence": 0.22,
+            "open": -173,
+            "current": -162,
+            "market": "ML",
+            "side": null
+          },
+          "data_quality": {
+            "status": "CAP",
+            "score": null,
+            "reason": "SP_CONFIRMED unavailable"
+          },
+          "decision": "CLV_ONLY",
+          "note": "entry retained for closing-line evaluation only; actionable layer blocked slate-wide",
+          "signal_decision": "NO_SIGNAL",
+          "execution_status": "CLV_ONLY",
+          "actionable": false,
+          "line_available": false,
+          "price_available": true,
+          "probability_available": false,
+          "source_available": true,
+          "clv_eligible": true,
+          "roi_eligible": false
+        },
+        {
+          "market": "SPREAD_RL",
+          "selection": null,
+          "line": null,
+          "entry": {
+            "book": null,
+            "price_american": null,
+            "timestamp": null
+          },
+          "probabilities": {
+            "model_cover_pct": null,
+            "model_push_pct": null,
+            "model_noncover_pct": null,
+            "market_no_vig_cover_pct": null,
+            "edge_pp": null,
+            "usable_edge_pp": null
+          },
+          "movement": {
+            "classification": null,
+            "confidence": null,
+            "open": null,
+            "current": null,
+            "market": null,
+            "side": null
+          },
+          "data_quality": {
+            "status": "MISSING",
+            "score": null,
+            "reason": "run line not supplied"
+          },
+          "decision": "NO_LINE",
+          "note": null,
+          "signal_decision": "NO_SIGNAL",
+          "execution_status": "NO_LINE",
+          "actionable": false,
+          "line_available": false,
+          "price_available": false,
+          "probability_available": false,
+          "source_available": false,
+          "clv_eligible": false,
+          "roi_eligible": false
+        },
+        {
+          "market": "TOTALS",
+          "selection": null,
+          "line": 8.5,
+          "entry": {
+            "book": "DraftKings",
+            "price_american": null,
+            "timestamp": "2026-08-30T04:12:00-04:00"
+          },
+          "probabilities": {
+            "model_over_pct": null,
+            "model_under_pct": null,
+            "model_push_pct": 0.0,
+            "market_no_vig_selected_pct": null,
+            "edge_pp": null,
+            "usable_edge_pp": null
+          },
+          "movement": {
+            "classification": null,
+            "confidence": null,
+            "open": null,
+            "current": null,
+            "market": null,
+            "side": null
+          },
+          "data_quality": {
+            "status": "INCOMPLETE",
+            "score": null,
+            "reason": "total side/price not supplied; totals not decision-bearing"
+          },
+          "decision": "NO_LINE",
+          "note": "do not infer Over or Under",
+          "signal_decision": "NO_SIGNAL",
+          "execution_status": "NO_LINE",
+          "actionable": false,
+          "line_available": true,
+          "price_available": false,
+          "probability_available": false,
+          "source_available": true,
+          "clv_eligible": false,
+          "roi_eligible": false
+        }
+      ],
+      "note": "MIL SP unresolved (May 'could start') -> lineup card"
+    },
+    {
+      "event_id": "mlb_cws_min_2026-08-30",
+      "game": "CWS @ MIN",
+      "sport": "MLB",
+      "start_time": "2026-08-30T14:10:00-04:00",
+      "game_status": "WAIT",
+      "markets": [
+        {
+          "market": "ML",
+          "selection": "MIN",
+          "line": null,
+          "entry": {
+            "book": "DraftKings",
+            "price_american": -112,
+            "timestamp": "2026-08-30T04:12:00-04:00"
+          },
+          "probabilities": {
+            "model_win_pct": null,
+            "model_loss_pct": null,
+            "model_draw_pct": null,
+            "market_no_vig_pct": null,
+            "edge_pp": null,
+            "usable_edge_pp": null
+          },
+          "movement": {
+            "classification": null,
+            "confidence": null,
+            "open": null,
+            "current": null,
+            "market": null,
+            "side": null
+          },
+          "data_quality": {
+            "status": "CAP",
+            "score": null,
+            "reason": "SP_CONFIRMED unavailable"
+          },
+          "decision": "CLV_ONLY",
+          "note": "entry retained for closing-line evaluation only; actionable layer blocked slate-wide",
+          "signal_decision": "NO_SIGNAL",
+          "execution_status": "CLV_ONLY",
+          "actionable": false,
+          "line_available": false,
+          "price_available": true,
+          "probability_available": false,
+          "source_available": true,
+          "clv_eligible": true,
+          "roi_eligible": false
+        },
+        {
+          "market": "SPREAD_RL",
+          "selection": null,
+          "line": null,
+          "entry": {
+            "book": null,
+            "price_american": null,
+            "timestamp": null
+          },
+          "probabilities": {
+            "model_cover_pct": null,
+            "model_push_pct": null,
+            "model_noncover_pct": null,
+            "market_no_vig_cover_pct": null,
+            "edge_pp": null,
+            "usable_edge_pp": null
+          },
+          "movement": {
+            "classification": null,
+            "confidence": null,
+            "open": null,
+            "current": null,
+            "market": null,
+            "side": null
+          },
+          "data_quality": {
+            "status": "MISSING",
+            "score": null,
+            "reason": "run line not supplied"
+          },
+          "decision": "NO_LINE",
+          "note": null,
+          "signal_decision": "NO_SIGNAL",
+          "execution_status": "NO_LINE",
+          "actionable": false,
+          "line_available": false,
+          "price_available": false,
+          "probability_available": false,
+          "source_available": false,
+          "clv_eligible": false,
+          "roi_eligible": false
+        },
+        {
+          "market": "TOTALS",
+          "selection": null,
+          "line": 8.5,
+          "entry": {
+            "book": "DraftKings",
+            "price_american": null,
+            "timestamp": "2026-08-30T04:12:00-04:00"
+          },
+          "probabilities": {
+            "model_over_pct": null,
+            "model_under_pct": null,
+            "model_push_pct": 0.0,
+            "market_no_vig_selected_pct": null,
+            "edge_pp": null,
+            "usable_edge_pp": null
+          },
+          "movement": {
+            "classification": null,
+            "confidence": null,
+            "open": null,
+            "current": null,
+            "market": null,
+            "side": null
+          },
+          "data_quality": {
+            "status": "INCOMPLETE",
+            "score": null,
+            "reason": "total side/price not supplied; totals not decision-bearing"
+          },
+          "decision": "NO_LINE",
+          "note": "do not infer Over or Under",
+          "signal_decision": "NO_SIGNAL",
+          "execution_status": "NO_LINE",
+          "actionable": false,
+          "line_available": true,
+          "price_available": false,
+          "probability_available": false,
+          "source_available": true,
+          "clv_eligible": false,
+          "roi_eligible": false
+        }
+      ],
+      "note": "Buxton day-to-day, projection CONFLICT"
+    },
+    {
+      "event_id": "mlb_pit_stl_2026-08-30",
+      "game": "PIT @ STL",
+      "sport": "MLB",
+      "start_time": "2026-08-30T14:15:00-04:00",
+      "game_status": "PASS",
+      "markets": [
+        {
+          "market": "ML",
+          "selection": "PIT",
+          "line": null,
+          "entry": {
+            "book": "DraftKings",
+            "price_american": -113,
+            "timestamp": "2026-08-30T04:12:00-04:00"
+          },
+          "probabilities": {
+            "model_win_pct": null,
+            "model_loss_pct": null,
+            "model_draw_pct": null,
+            "market_no_vig_pct": null,
+            "edge_pp": null,
+            "usable_edge_pp": null
+          },
+          "movement": {
+            "classification": null,
+            "confidence": null,
+            "open": null,
+            "current": null,
+            "market": null,
+            "side": null
+          },
+          "data_quality": {
+            "status": "CAP",
+            "score": null,
+            "reason": "SP_CONFIRMED unavailable"
+          },
+          "decision": "CLV_ONLY",
+          "note": "entry retained for closing-line evaluation only; actionable layer blocked slate-wide",
+          "signal_decision": "NO_SIGNAL",
+          "execution_status": "CLV_ONLY",
+          "actionable": false,
+          "line_available": false,
+          "price_available": true,
+          "probability_available": false,
+          "source_available": true,
+          "clv_eligible": true,
+          "roi_eligible": false
+        },
+        {
+          "market": "SPREAD_RL",
+          "selection": null,
+          "line": null,
+          "entry": {
+            "book": null,
+            "price_american": null,
+            "timestamp": null
+          },
+          "probabilities": {
+            "model_cover_pct": null,
+            "model_push_pct": null,
+            "model_noncover_pct": null,
+            "market_no_vig_cover_pct": null,
+            "edge_pp": null,
+            "usable_edge_pp": null
+          },
+          "movement": {
+            "classification": null,
+            "confidence": null,
+            "open": null,
+            "current": null,
+            "market": null,
+            "side": null
+          },
+          "data_quality": {
+            "status": "MISSING",
+            "score": null,
+            "reason": "run line not supplied"
+          },
+          "decision": "NO_LINE",
+          "note": null,
+          "signal_decision": "NO_SIGNAL",
+          "execution_status": "NO_LINE",
+          "actionable": false,
+          "line_available": false,
+          "price_available": false,
+          "probability_available": false,
+          "source_available": false,
+          "clv_eligible": false,
+          "roi_eligible": false
+        },
+        {
+          "market": "TOTALS",
+          "selection": null,
+          "line": 8.0,
+          "entry": {
+            "book": "DraftKings",
+            "price_american": null,
+            "timestamp": "2026-08-30T04:12:00-04:00"
+          },
+          "probabilities": {
+            "model_over_pct": null,
+            "model_under_pct": null,
+            "model_push_pct": null,
+            "market_no_vig_selected_pct": null,
+            "edge_pp": null,
+            "usable_edge_pp": null
+          },
+          "movement": {
+            "classification": "unknown",
+            "confidence": 0.2,
+            "open": 8.5,
+            "current": 8.0,
+            "market": "TOTALS",
+            "side": null
+          },
+          "data_quality": {
+            "status": "INCOMPLETE",
+            "score": null,
+            "reason": "total side/price not supplied; totals not decision-bearing"
+          },
+          "decision": "NO_LINE",
+          "note": "do not infer Over or Under",
+          "signal_decision": "NO_SIGNAL",
+          "execution_status": "NO_LINE",
+          "actionable": false,
+          "line_available": true,
+          "price_available": false,
+          "probability_available": false,
+          "source_available": true,
+          "clv_eligible": false,
+          "roi_eligible": false
+        }
+      ],
+      "note": "90F noted"
+    },
+    {
+      "event_id": "mlb_hou_nym_2026-08-30",
+      "game": "HOU @ NYM",
+      "sport": "MLB",
+      "start_time": "2026-08-30T15:10:00-04:00",
+      "game_status": "WAIT",
+      "markets": [
+        {
+          "market": "ML",
+          "selection": "NYM",
+          "line": null,
+          "entry": {
+            "book": "DraftKings",
+            "price_american": -119,
+            "timestamp": "2026-08-30T04:12:00-04:00"
+          },
+          "probabilities": {
+            "model_win_pct": null,
+            "model_loss_pct": null,
+            "model_draw_pct": null,
+            "market_no_vig_pct": null,
+            "edge_pp": null,
+            "usable_edge_pp": null
+          },
+          "movement": {
+            "classification": null,
+            "confidence": null,
+            "open": null,
+            "current": null,
+            "market": null,
+            "side": null
+          },
+          "data_quality": {
+            "status": "CAP",
+            "score": null,
+            "reason": "SP_CONFIRMED unavailable"
+          },
+          "decision": "CLV_ONLY",
+          "note": "entry retained for closing-line evaluation only; actionable layer blocked slate-wide",
+          "signal_decision": "NO_SIGNAL",
+          "execution_status": "CLV_ONLY",
+          "actionable": false,
+          "line_available": false,
+          "price_available": true,
+          "probability_available": false,
+          "source_available": true,
+          "clv_eligible": true,
+          "roi_eligible": false
+        },
+        {
+          "market": "SPREAD_RL",
+          "selection": null,
+          "line": null,
+          "entry": {
+            "book": null,
+            "price_american": null,
+            "timestamp": null
+          },
+          "probabilities": {
+            "model_cover_pct": null,
+            "model_push_pct": null,
+            "model_noncover_pct": null,
+            "market_no_vig_cover_pct": null,
+            "edge_pp": null,
+            "usable_edge_pp": null
+          },
+          "movement": {
+            "classification": null,
+            "confidence": null,
+            "open": null,
+            "current": null,
+            "market": null,
+            "side": null
+          },
+          "data_quality": {
+            "status": "MISSING",
+            "score": null,
+            "reason": "run line not supplied"
+          },
+          "decision": "NO_LINE",
+          "note": null,
+          "signal_decision": "NO_SIGNAL",
+          "execution_status": "NO_LINE",
+          "actionable": false,
+          "line_available": false,
+          "price_available": false,
+          "probability_available": false,
+          "source_available": false,
+          "clv_eligible": false,
+          "roi_eligible": false
+        },
+        {
+          "market": "TOTALS",
+          "selection": null,
+          "line": 9.0,
+          "entry": {
+            "book": "DraftKings",
+            "price_american": null,
+            "timestamp": "2026-08-30T04:12:00-04:00"
+          },
+          "probabilities": {
+            "model_over_pct": null,
+            "model_under_pct": null,
+            "model_push_pct": null,
+            "market_no_vig_selected_pct": null,
+            "edge_pp": null,
+            "usable_edge_pp": null
+          },
+          "movement": {
+            "classification": null,
+            "confidence": null,
+            "open": null,
+            "current": null,
+            "market": null,
+            "side": null
+          },
+          "data_quality": {
+            "status": "INCOMPLETE",
+            "score": null,
+            "reason": "total side/price not supplied; totals not decision-bearing"
+          },
+          "decision": "NO_LINE",
+          "note": "do not infer Over or Under",
+          "signal_decision": "NO_SIGNAL",
+          "execution_status": "NO_LINE",
+          "actionable": false,
+          "line_available": true,
+          "price_available": false,
+          "probability_available": false,
+          "source_available": true,
+          "clv_eligible": false,
+          "roi_eligible": false
+        }
+      ],
+      "note": "CONVERGENCE_FAIL posture stands; no new verified inputs"
+    },
+    {
+      "event_id": "mlb_bal_ath_2026-08-30",
+      "game": "BAL @ ATH",
+      "sport": "MLB",
+      "start_time": "2026-08-30T16:05:00-04:00",
+      "game_status": "PASS",
+      "markets": [
+        {
+          "market": "ML",
+          "selection": "BAL",
+          "line": null,
+          "entry": {
+            "book": "DraftKings",
+            "price_american": -148,
+            "timestamp": "2026-08-30T04:12:00-04:00"
+          },
+          "probabilities": {
+            "model_win_pct": null,
+            "model_loss_pct": null,
+            "model_draw_pct": null,
+            "market_no_vig_pct": null,
+            "edge_pp": null,
+            "usable_edge_pp": null
+          },
+          "movement": {
+            "classification": null,
+            "confidence": null,
+            "open": null,
+            "current": null,
+            "market": null,
+            "side": null
+          },
+          "data_quality": {
+            "status": "CAP",
+            "score": null,
+            "reason": "SP_CONFIRMED unavailable"
+          },
+          "decision": "CLV_ONLY",
+          "note": "entry retained for closing-line evaluation only; actionable layer blocked slate-wide",
+          "signal_decision": "NO_SIGNAL",
+          "execution_status": "CLV_ONLY",
+          "actionable": false,
+          "line_available": false,
+          "price_available": true,
+          "probability_available": false,
+          "source_available": true,
+          "clv_eligible": true,
+          "roi_eligible": false
+        },
+        {
+          "market": "SPREAD_RL",
+          "selection": null,
+          "line": null,
+          "entry": {
+            "book": null,
+            "price_american": null,
+            "timestamp": null
+          },
+          "probabilities": {
+            "model_cover_pct": null,
+            "model_push_pct": null,
+            "model_noncover_pct": null,
+            "market_no_vig_cover_pct": null,
+            "edge_pp": null,
+            "usable_edge_pp": null
+          },
+          "movement": {
+            "classification": null,
+            "confidence": null,
+            "open": null,
+            "current": null,
+            "market": null,
+            "side": null
+          },
+          "data_quality": {
+            "status": "MISSING",
+            "score": null,
+            "reason": "run line not supplied"
+          },
+          "decision": "NO_LINE",
+          "note": null,
+          "signal_decision": "NO_SIGNAL",
+          "execution_status": "NO_LINE",
+          "actionable": false,
+          "line_available": false,
+          "price_available": false,
+          "probability_available": false,
+          "source_available": false,
+          "clv_eligible": false,
+          "roi_eligible": false
+        },
+        {
+          "market": "TOTALS",
+          "selection": null,
+          "line": 10.5,
+          "entry": {
+            "book": "DraftKings",
+            "price_american": null,
+            "timestamp": "2026-08-30T04:12:00-04:00"
+          },
+          "probabilities": {
+            "model_over_pct": null,
+            "model_under_pct": null,
+            "model_push_pct": 0.0,
+            "market_no_vig_selected_pct": null,
+            "edge_pp": null,
+            "usable_edge_pp": null
+          },
+          "movement": {
+            "classification": null,
+            "confidence": null,
+            "open": null,
+            "current": null,
+            "market": null,
+            "side": null
+          },
+          "data_quality": {
+            "status": "INCOMPLETE",
+            "score": null,
+            "reason": "total side/price not supplied; totals not decision-bearing"
+          },
+          "decision": "NO_LINE",
+          "note": "do not infer Over or Under",
+          "signal_decision": "NO_SIGNAL",
+          "execution_status": "NO_LINE",
+          "actionable": false,
+          "line_available": true,
+          "price_available": false,
+          "probability_available": false,
+          "source_available": true,
+          "clv_eligible": false,
+          "roi_eligible": false
+        }
+      ],
+      "note": null
+    },
+    {
+      "event_id": "mlb_phi_laa_2026-08-30",
+      "game": "PHI @ LAA",
+      "sport": "MLB",
+      "start_time": "2026-08-30T16:07:00-04:00",
+      "game_status": "PASS",
+      "markets": [
+        {
+          "market": "ML",
+          "selection": "PHI",
+          "line": null,
+          "entry": {
+            "book": "DraftKings",
+            "price_american": -186,
+            "timestamp": "2026-08-30T04:12:00-04:00"
+          },
+          "probabilities": {
+            "model_win_pct": null,
+            "model_loss_pct": null,
+            "model_draw_pct": null,
+            "market_no_vig_pct": null,
+            "edge_pp": null,
+            "usable_edge_pp": null
+          },
+          "movement": {
+            "classification": null,
+            "confidence": null,
+            "open": null,
+            "current": null,
+            "market": null,
+            "side": null
+          },
+          "data_quality": {
+            "status": "CAP",
+            "score": null,
+            "reason": "SP_CONFIRMED unavailable"
+          },
+          "decision": "CLV_ONLY",
+          "note": "entry retained for closing-line evaluation only; actionable layer blocked slate-wide",
+          "signal_decision": "NO_SIGNAL",
+          "execution_status": "CLV_ONLY",
+          "actionable": false,
+          "line_available": false,
+          "price_available": true,
+          "probability_available": false,
+          "source_available": true,
+          "clv_eligible": true,
+          "roi_eligible": false
+        },
+        {
+          "market": "SPREAD_RL",
+          "selection": null,
+          "line": null,
+          "entry": {
+            "book": null,
+            "price_american": null,
+            "timestamp": null
+          },
+          "probabilities": {
+            "model_cover_pct": null,
+            "model_push_pct": null,
+            "model_noncover_pct": null,
+            "market_no_vig_cover_pct": null,
+            "edge_pp": null,
+            "usable_edge_pp": null
+          },
+          "movement": {
+            "classification": null,
+            "confidence": null,
+            "open": null,
+            "current": null,
+            "market": null,
+            "side": null
+          },
+          "data_quality": {
+            "status": "MISSING",
+            "score": null,
+            "reason": "run line not supplied"
+          },
+          "decision": "NO_LINE",
+          "note": null,
+          "signal_decision": "NO_SIGNAL",
+          "execution_status": "NO_LINE",
+          "actionable": false,
+          "line_available": false,
+          "price_available": false,
+          "probability_available": false,
+          "source_available": false,
+          "clv_eligible": false,
+          "roi_eligible": false
+        },
+        {
+          "market": "TOTALS",
+          "selection": null,
+          "line": 8.0,
+          "entry": {
+            "book": "DraftKings",
+            "price_american": null,
+            "timestamp": "2026-08-30T04:12:00-04:00"
+          },
+          "probabilities": {
+            "model_over_pct": null,
+            "model_under_pct": null,
+            "model_push_pct": null,
+            "market_no_vig_selected_pct": null,
+            "edge_pp": null,
+            "usable_edge_pp": null
+          },
+          "movement": {
+            "classification": "unknown",
+            "confidence": 0.2,
+            "open": 8.5,
+            "current": 8.0,
+            "market": "TOTALS",
+            "side": null
+          },
+          "data_quality": {
+            "status": "INCOMPLETE",
+            "score": null,
+            "reason": "total side/price not supplied; totals not decision-bearing"
+          },
+          "decision": "NO_LINE",
+          "note": "do not infer Over or Under",
+          "signal_decision": "NO_SIGNAL",
+          "execution_status": "NO_LINE",
+          "actionable": false,
+          "line_available": true,
+          "price_available": false,
+          "probability_available": false,
+          "source_available": true,
+          "clv_eligible": false,
+          "roi_eligible": false
+        }
+      ],
+      "note": "price+line both moved (true movement), no news match"
+    },
+    {
+      "event_id": "mlb_cin_chc_2026-08-30",
+      "game": "CIN @ CHC",
+      "sport": "MLB",
+      "start_time": "2026-08-30T19:20:00-04:00",
+      "game_status": "WAIT",
+      "markets": [
+        {
+          "market": "ML",
+          "selection": "CHC",
+          "line": null,
+          "entry": {
+            "book": "DraftKings",
+            "price_american": -142,
+            "timestamp": "2026-08-30T04:12:00-04:00"
+          },
+          "probabilities": {
+            "model_win_pct": null,
+            "model_loss_pct": null,
+            "model_draw_pct": null,
+            "market_no_vig_pct": null,
+            "edge_pp": null,
+            "usable_edge_pp": null
+          },
+          "movement": {
+            "classification": null,
+            "confidence": null,
+            "open": null,
+            "current": null,
+            "market": null,
+            "side": null
+          },
+          "data_quality": {
+            "status": "CAP",
+            "score": null,
+            "reason": "SP_CONFIRMED unavailable"
+          },
+          "decision": "CLV_ONLY",
+          "note": "entry retained for closing-line evaluation only; actionable layer blocked slate-wide",
+          "signal_decision": "NO_SIGNAL",
+          "execution_status": "CLV_ONLY",
+          "actionable": false,
+          "line_available": false,
+          "price_available": true,
+          "probability_available": false,
+          "source_available": true,
+          "clv_eligible": true,
+          "roi_eligible": false
+        },
+        {
+          "market": "SPREAD_RL",
+          "selection": null,
+          "line": null,
+          "entry": {
+            "book": null,
+            "price_american": null,
+            "timestamp": null
+          },
+          "probabilities": {
+            "model_cover_pct": null,
+            "model_push_pct": null,
+            "model_noncover_pct": null,
+            "market_no_vig_cover_pct": null,
+            "edge_pp": null,
+            "usable_edge_pp": null
+          },
+          "movement": {
+            "classification": null,
+            "confidence": null,
+            "open": null,
+            "current": null,
+            "market": null,
+            "side": null
+          },
+          "data_quality": {
+            "status": "MISSING",
+            "score": null,
+            "reason": "run line not supplied"
+          },
+          "decision": "NO_LINE",
+          "note": null,
+          "signal_decision": "NO_SIGNAL",
+          "execution_status": "NO_LINE",
+          "actionable": false,
+          "line_available": false,
+          "price_available": false,
+          "probability_available": false,
+          "source_available": false,
+          "clv_eligible": false,
+          "roi_eligible": false
+        },
+        {
+          "market": "TOTALS",
+          "selection": null,
+          "line": 9.0,
+          "entry": {
+            "book": "DraftKings",
+            "price_american": null,
+            "timestamp": "2026-08-30T04:12:00-04:00"
+          },
+          "probabilities": {
+            "model_over_pct": null,
+            "model_under_pct": null,
+            "model_push_pct": null,
+            "market_no_vig_selected_pct": null,
+            "edge_pp": null,
+            "usable_edge_pp": null
+          },
+          "movement": {
+            "classification": null,
+            "confidence": null,
+            "open": null,
+            "current": null,
+            "market": null,
+            "side": null
+          },
+          "data_quality": {
+            "status": "INCOMPLETE",
+            "score": null,
+            "reason": "total side/price not supplied; totals not decision-bearing"
+          },
+          "decision": "NO_LINE",
+          "note": "do not infer Over or Under",
+          "signal_decision": "NO_SIGNAL",
+          "execution_status": "NO_LINE",
+          "actionable": false,
+          "line_available": true,
+          "price_available": false,
+          "probability_available": false,
+          "source_available": true,
+          "clv_eligible": false,
+          "roi_eligible": false
+        }
+      ],
+      "note": "Wrigley wind MISSING"
+    },
+    {
+      "event_id": "mlb_ari_sf_2026-08-30",
+      "game": "ARI @ SF",
+      "sport": "MLB",
+      "start_time": "2026-08-30T16:05:00-04:00",
+      "game_status": "BLOCKED",
+      "markets": [
+        {
+          "market": "ML",
+          "selection": null,
+          "line": null,
+          "entry": {
+            "book": null,
+            "price_american": null,
+            "timestamp": null
+          },
+          "probabilities": {
+            "model_win_pct": null,
+            "model_loss_pct": null,
+            "model_draw_pct": null,
+            "market_no_vig_pct": null,
+            "edge_pp": null,
+            "usable_edge_pp": null
+          },
+          "movement": {
+            "classification": null,
+            "confidence": null,
+            "open": null,
+            "current": null,
+            "market": null,
+            "side": null
+          },
+          "data_quality": {
+            "status": "MISSING",
+            "score": null,
+            "reason": "no line on any checked book"
+          },
+          "decision": "NO_LINE",
+          "note": null,
+          "signal_decision": "NO_SIGNAL",
+          "execution_status": "NO_LINE",
+          "actionable": false,
+          "line_available": false,
+          "price_available": false,
+          "probability_available": false,
+          "source_available": false,
+          "clv_eligible": false,
+          "roi_eligible": false
+        },
+        {
+          "market": "SPREAD_RL",
+          "selection": null,
+          "line": null,
+          "entry": {
+            "book": null,
+            "price_american": null,
+            "timestamp": null
+          },
+          "probabilities": {
+            "model_cover_pct": null,
+            "model_push_pct": null,
+            "model_noncover_pct": null,
+            "market_no_vig_cover_pct": null,
+            "edge_pp": null,
+            "usable_edge_pp": null
+          },
+          "movement": {
+            "classification": null,
+            "confidence": null,
+            "open": null,
+            "current": null,
+            "market": null,
+            "side": null
+          },
+          "data_quality": {
+            "status": "MISSING",
+            "score": null,
+            "reason": "no line on any checked book"
+          },
+          "decision": "NO_LINE",
+          "note": null,
+          "signal_decision": "NO_SIGNAL",
+          "execution_status": "NO_LINE",
+          "actionable": false,
+          "line_available": false,
+          "price_available": false,
+          "probability_available": false,
+          "source_available": false,
+          "clv_eligible": false,
+          "roi_eligible": false
+        },
+        {
+          "market": "TOTALS",
+          "selection": null,
+          "line": null,
+          "entry": {
+            "book": null,
+            "price_american": null,
+            "timestamp": null
+          },
+          "probabilities": {
+            "model_over_pct": null,
+            "model_under_pct": null,
+            "model_push_pct": null,
+            "market_no_vig_selected_pct": null,
+            "edge_pp": null,
+            "usable_edge_pp": null
+          },
+          "movement": {
+            "classification": null,
+            "confidence": null,
+            "open": null,
+            "current": null,
+            "market": null,
+            "side": null
+          },
+          "data_quality": {
+            "status": "MISSING",
+            "score": null,
+            "reason": "no line on any checked book"
+          },
+          "decision": "NO_LINE",
+          "note": null,
+          "signal_decision": "NO_SIGNAL",
+          "execution_status": "NO_LINE",
+          "actionable": false,
+          "line_available": false,
+          "price_available": false,
+          "probability_available": false,
+          "source_available": false,
+          "clv_eligible": false,
+          "roi_eligible": false
+        }
+      ],
+      "note": "absent from DK board; starters TBD; confirmed via schedule/board reconciliation"
+    }
+  ]
+}

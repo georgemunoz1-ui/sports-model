@@ -1,0 +1,3 @@
+# The model's probabilities are compressed toward the coin flip; the market's are not — apparent underdog value is the artifact.
+Facts on record: model win-prob SD ~3.25pp vs market ~11.5pp; the market has out-Briered every model arm by ~0.04 on both settled priced slates; edges >= 5pp are 0-6 lifetime. The frozen gate (market_conf − model_conf >= 5pp) exists to refuse paying the model for being uncertain.
+Corollary: when model and market agree on the winner but disagree on magnitude, the "value" price on the dog is manufactured. When they disagree on the winner (direction flip), that is a separate audit class — also historically losing.

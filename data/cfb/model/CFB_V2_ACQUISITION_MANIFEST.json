@@ -1,0 +1,379 @@
+{
+ "MARKET_FIREWALL": {
+  "acquired": false,
+  "betting_directory_present_upstream": true,
+  "rule": "prices are never predictive features. The cheapest guarantee is not to have them on disk in the model's source tree."
+ },
+ "SUBDIVISION_CLASSIFICATION_NOW_SOURCED": {
+  "finding": "home_division and away_division give a sourced FBS/FCS classification. This repository has repeatedly REFUSED to classify teams from memory \u2014 most recently across 22 relayed market rows \u2014 because no registered list existed and several programs changed subdivision in the 2024-2026 realignment.",
+  "scope_of_the_lift": "the refusal is lifted ONLY for teams appearing in this artifact, and only for seasons it covers. A 2026 team absent here stays unclassified.",
+  "teams_with_multiple_divisions_observed": {
+   "Brevard College": [
+    "ii",
+    "iii"
+   ],
+   "Charlotte": [
+    "fbs",
+    "fcs"
+   ],
+   "Coastal Carolina": [
+    "fbs",
+    "fcs"
+   ],
+   "Delaware": [
+    "fbs",
+    "fcs"
+   ],
+   "East Texas A&M": [
+    "fcs",
+    "ii"
+   ],
+   "Emory & Henry College": [
+    "ii",
+    "iii"
+   ],
+   "Ferrum": [
+    "ii",
+    "iii"
+   ],
+   "Florida A&M": [
+    "fbs",
+    "fcs"
+   ],
+   "Florida Atlantic": [
+    "fbs",
+    "fcs"
+   ],
+   "Florida International": [
+    "fbs",
+    "fcs"
+   ],
+   "Georgia Southern": [
+    "fbs",
+    "fcs"
+   ],
+   "Georgia State": [
+    "fbs",
+    "fcs"
+   ],
+   "Idaho": [
+    "fbs",
+    "fcs"
+   ],
+   "Jacksonville State": [
+    "fbs",
+    "fcs"
+   ],
+   "James Madison": [
+    "fbs",
+    "fcs"
+   ],
+   "Kennesaw State": [
+    "fbs",
+    "fcs"
+   ],
+   "Liberty": [
+    "fbs",
+    "fcs"
+   ],
+   "Lindenwood": [
+    "fcs",
+    "ii"
+   ],
+   "McMurry": [
+    "ii",
+    "iii"
+   ],
+   "Mercyhurst": [
+    "fcs",
+    "ii"
+   ],
+   "Merrimack": [
+    "fcs",
+    "ii"
+   ],
+   "Missouri State": [
+    "fbs",
+    "fcs"
+   ],
+   "New Haven": [
+    "fcs",
+    "ii"
+   ],
+   "North Alabama": [
+    "fcs",
+    "ii"
+   ],
+   "Sam Houston": [
+    "fbs",
+    "fcs"
+   ],
+   "Savannah St": [
+    "fcs",
+    "ii"
+   ],
+   "Stonehill": [
+    "fcs",
+    "ii"
+   ],
+   "Sul Ross State": [
+    "ii",
+    "iii"
+   ],
+   "Tarleton State": [
+    "fcs",
+    "ii"
+   ],
+   "Texas State": [
+    "fbs",
+    "fcs"
+   ],
+   "UMass": [
+    "fbs",
+    "fcs"
+   ],
+   "West Georgia": [
+    "fcs",
+    "ii"
+   ],
+   "Western Kentucky": [
+    "fbs",
+    "fcs"
+   ]
+  }
+ },
+ "WHAT_THIS_ACQUISITION_CANNOT_SUPPLY": {
+  "no_2026_season": "the archive ends at the 2025 season; there is no 2026 file. This acquisition supplies NO 2026 team state, so any 2026 forecast is a genuine season-opener problem governed by the preregistration's week_one_policy.",
+  "no_personnel": "no talent, returning production, quarterback or coach continuity.",
+  "no_play_by_play": "schedules only. The v2 feature blocks that need EPA, success rate and explosiveness are NOT satisfied by this acquisition and remain outstanding."
+ },
+ "acquired_utc": "2026-08-28T11:20:00Z",
+ "column_policy": {
+  "external_diagnostic_only": {
+   "columns": [
+    "home_pregame_elo",
+    "away_pregame_elo"
+   ],
+   "rule": "ESPN's own pregame Elo. The preregistration permits it as an evaluation-only diagnostic and forbids treating it as an internally controlled baseline. It is NOT a feature and NOT a promotion baseline."
+  },
+  "outcome_only": {
+   "columns": [
+    "home_points",
+    "away_points"
+   ],
+   "rule": "targets and grading only; may never enter a feature"
+  },
+  "permitted": [
+   "game_id",
+   "season",
+   "week",
+   "season_type",
+   "start_date",
+   "completed",
+   "neutral_site",
+   "conference_game",
+   "venue_id",
+   "home_id",
+   "home_team",
+   "home_division",
+   "home_conference",
+   "away_id",
+   "away_team",
+   "away_division",
+   "away_conference",
+   "home_points",
+   "away_points",
+   "home_pregame_elo",
+   "away_pregame_elo"
+  ],
+  "why_enumerated": "a later widening of the column set is then a visible diff rather than a silent one"
+ },
+ "coverage": {
+  "distinct_teams": 780,
+  "espn_pregame_elo_present_on_fbs_vs_fbs": 17472,
+  "fbs_vs_fbs_completed": 17472,
+  "fbs_vs_fcs_completed": 2346,
+  "rows_completed_with_scores": 36901,
+  "rows_total": 36915
+ },
+ "files": [
+  {
+   "bytes": 45220,
+   "path": "schedules/parquet/cfb_schedules_2001.parquet",
+   "season": 2001,
+   "sha256": "8724a79408ed01cb9467194d657033d927dc73d1c9938259f75254ddb7e8fe14"
+  },
+  {
+   "bytes": 47803,
+   "path": "schedules/parquet/cfb_schedules_2002.parquet",
+   "season": 2002,
+   "sha256": "c8a1b97ca677f6369cf2128c16bea5a1cec329f4af420fea669d692e7ca116b4"
+  },
+  {
+   "bytes": 48549,
+   "path": "schedules/parquet/cfb_schedules_2003.parquet",
+   "season": 2003,
+   "sha256": "50d62aceea41999412bf7ba139f2579559330586a9e19ae9a1e4f9adda1141a3"
+  },
+  {
+   "bytes": 43886,
+   "path": "schedules/parquet/cfb_schedules_2004.parquet",
+   "season": 2004,
+   "sha256": "db119a13a2b372085a2a1e6271ead324477c63d707e143d5a4b6256961f4c13b"
+  },
+  {
+   "bytes": 43744,
+   "path": "schedules/parquet/cfb_schedules_2005.parquet",
+   "season": 2005,
+   "sha256": "0343de3e75b5b04c0efe4c0b86d061e5497b0536b38dd96d459949f25ee8c26b"
+  },
+  {
+   "bytes": 48400,
+   "path": "schedules/parquet/cfb_schedules_2006.parquet",
+   "season": 2006,
+   "sha256": "a0d1604278fd5667c1dab35653d1c36dc316a3f3799573100206d94df8ee6e2b"
+  },
+  {
+   "bytes": 49820,
+   "path": "schedules/parquet/cfb_schedules_2007.parquet",
+   "season": 2007,
+   "sha256": "40ab95f62372b37bed8bf79b128a4dfe535dd9da82a90b52296ecd4dd2ac3461"
+  },
+  {
+   "bytes": 49440,
+   "path": "schedules/parquet/cfb_schedules_2008.parquet",
+   "season": 2008,
+   "sha256": "dee6c6d2e6fb49ca06b9e9dadaec66b1bd1098e19824b135439d6834463cc8a6"
+  },
+  {
+   "bytes": 45303,
+   "path": "schedules/parquet/cfb_schedules_2009.parquet",
+   "season": 2009,
+   "sha256": "9656bfc975cef85e04155eff543bda66b3038b6988333af7bd71388edb9382d0"
+  },
+  {
+   "bytes": 72424,
+   "path": "schedules/parquet/cfb_schedules_2010.parquet",
+   "season": 2010,
+   "sha256": "393e46e2431ba97fc3c27ad8d48625f38ce882f986c7894f02c2fb65472dd6f2"
+  },
+  {
+   "bytes": 73290,
+   "path": "schedules/parquet/cfb_schedules_2011.parquet",
+   "season": 2011,
+   "sha256": "ce67fd75eb1467f0ec4919127a2846f4a21cc94ace987f8c72e3bf84079d6411"
+  },
+  {
+   "bytes": 78404,
+   "path": "schedules/parquet/cfb_schedules_2012.parquet",
+   "season": 2012,
+   "sha256": "556c54131da097e6395956e08462194871109999c3a989f4575a763639543a76"
+  },
+  {
+   "bytes": 80072,
+   "path": "schedules/parquet/cfb_schedules_2013.parquet",
+   "season": 2013,
+   "sha256": "b02281dd35040a5b57af4af24466e95c78219c9f38ba23cdd3d5093d0ca9b73d"
+  },
+  {
+   "bytes": 94966,
+   "path": "schedules/parquet/cfb_schedules_2014.parquet",
+   "season": 2014,
+   "sha256": "375fd3add14e66bdb7e83bb158fc6637c1f90c8938cac477f65a8b7348018aba"
+  },
+  {
+   "bytes": 93922,
+   "path": "schedules/parquet/cfb_schedules_2015.parquet",
+   "season": 2015,
+   "sha256": "b2d7f8295ad2683107d3ff8d5756cf37a8d7b5b67ab7b5083c5cd440eed98019"
+  },
+  {
+   "bytes": 103432,
+   "path": "schedules/parquet/cfb_schedules_2016.parquet",
+   "season": 2016,
+   "sha256": "77c1e6f0f19164644cfacea6aa32b866e11bc8b72aae8259e14692ce369547d3"
+  },
+  {
+   "bytes": 105727,
+   "path": "schedules/parquet/cfb_schedules_2017.parquet",
+   "season": 2017,
+   "sha256": "6662313b163fbe2bfe4187422051c415934ebddddffd2c24d5b4301d3eafe621"
+  },
+  {
+   "bytes": 107218,
+   "path": "schedules/parquet/cfb_schedules_2018.parquet",
+   "season": 2018,
+   "sha256": "384c53865c1e12cab7115e1ea9646f622bd07182668d0815d4763bb15bb5242a"
+  },
+  {
+   "bytes": 108775,
+   "path": "schedules/parquet/cfb_schedules_2019.parquet",
+   "season": 2019,
+   "sha256": "7ab3e13313ad8c6d37b8f6f64859107eded64992c281e934b463bacd1076ff7f"
+  },
+  {
+   "bytes": 63376,
+   "path": "schedules/parquet/cfb_schedules_2020.parquet",
+   "season": 2020,
+   "sha256": "b5f1f74681f0eb275d3b3a4335a1ed21b35edf548713aee5721cebb53c369c11"
+  },
+  {
+   "bytes": 119714,
+   "path": "schedules/parquet/cfb_schedules_2021.parquet",
+   "season": 2021,
+   "sha256": "8b2d1306c92de0c12930e30156af35c3ae4441e97a4ac5226eac60765fb97585"
+  },
+  {
+   "bytes": 175367,
+   "path": "schedules/parquet/cfb_schedules_2022.parquet",
+   "season": 2022,
+   "sha256": "b9dcbee1e823edf54c811941190e4b678e6774d86156396888c3ee38e0dc9034"
+  },
+  {
+   "bytes": 181534,
+   "path": "schedules/parquet/cfb_schedules_2023.parquet",
+   "season": 2023,
+   "sha256": "6bf45f7ade2353fc6f511162eb9fe67f999d2fc7eb0bfaca660554a9c84c5246"
+  },
+  {
+   "bytes": 191897,
+   "path": "schedules/parquet/cfb_schedules_2024.parquet",
+   "season": 2024,
+   "sha256": "c6b9b210c0771155c5805657747814a0d9197a4f236c286c4cc56964bbf86bbf"
+  },
+  {
+   "bytes": 174631,
+   "path": "schedules/parquet/cfb_schedules_2025.parquet",
+   "season": 2025,
+   "sha256": "7c172a3bdc48dc1965606ba594ea856c70193d5f84ef58138f0b774f878eba29"
+  }
+ ],
+ "meets_preregistered_minimums": {
+  "blocks_ok": true,
+  "games_ok": true,
+  "minimum_games": 1000,
+  "minimum_season_week_blocks": 60,
+  "observed_fbs_vs_fbs": 17472,
+  "observed_season_week_blocks": 379
+ },
+ "model_id": "cfb.fbs.epa_talent_hgb.v2_0.challenger",
+ "n_files": 25,
+ "record_id": "CFB-V2-ACQUISITION-2026-08-28",
+ "schema": "ops.source_binding.v1",
+ "seasons": {
+  "first": 2001,
+  "interior_gaps": [],
+  "last": 2025,
+  "n": 25
+ },
+ "source": {
+  "acquisition_method": "git partial clone (--filter=blob:none), sparse checkout of schedules/parquet only",
+  "commit": "c1af1a0ab26d63dea1be4d3ea730ea48a16d8b43",
+  "repository": "github.com/sportsdataverse/cfbfastR-data",
+  "retained_locally_at": "/home/user/sportsdataverse/cfbfastR-data",
+  "subdirectory": "schedules/parquet"
+ },
+ "stake": 0,
+ "supersedes": "data/cfb/model/CFB_V2_SOURCE_DISCOVERY.json \u2014 a HEAD observation, which the preregistration states is NOT a source pin",
+ "wager_authority": "NO"
+}

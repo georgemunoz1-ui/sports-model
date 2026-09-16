@@ -1,0 +1,100 @@
+{
+ "note": "Frozen exposure baseline. A RISE means new non-tier-1 rows became visible to tier-blind consumers — that is a gate failure, not a warning. A FALL is fine (contamination was removed). Rebaseline only on an owner decision.",
+ "consumers": [
+  [
+   "harness/build_ml_asof.py:126",
+   "ML training/eval dataset labels",
+   "CRITICAL"
+  ],
+  [
+   "harness/build_p4_slate.py:72",
+   "live slate as-of team form (production forecast path)",
+   "CRITICAL"
+  ],
+  [
+   "sports/enrich_mlb.py:81",
+   "features.csv labels",
+   "CRITICAL"
+  ],
+  [
+   "sports/enrich_mlb.py:15",
+   "features.csv as-of rf/ra accumulator",
+   "HIGH"
+  ],
+  [
+   "harness/daily_card.py:30",
+   "daily card team_rf/team_ra — direct V13 card inputs",
+   "HIGH"
+  ],
+  [
+   "harness/ml_v2_experiment.py:54",
+   "MLV2 rest_edge / form10_edge features",
+   "HIGH"
+  ],
+  [
+   "harness/build_p4_slate.py:121",
+   "slate completeness/contiguity reconciler",
+   "MEDIUM"
+  ],
+  [
+   "harness/healthcheck.py:33",
+   "finals>=1505 threshold counts provisional rows",
+   "MEDIUM"
+  ],
+  [
+   "sports/schema.py:72",
+   "operator-facing 'N finals' confirmation line",
+   "MEDIUM"
+  ],
+  [
+   "harness/result_content_checks.py:41",
+   "_finals() helper (defensible for echo detection)",
+   "LOW"
+  ]
+ ],
+ "exposure": {
+  "rows": 1957,
+  "naive_finals": 1943,
+  "canonical_finals": 1684,
+  "leaked_into_naive_predicate": 259,
+  "leaked_by_class": {
+   "tier1/PROVISIONAL": 133,
+   "tier2/PROVISIONAL": 17,
+   "tier3/PROVISIONAL": 109
+  },
+  "leaked_by_date": {
+   "2026-07-23": 1,
+   "2026-07-29": 16,
+   "2026-07-31": 15,
+   "2026-08-01": 15,
+   "2026-08-02": 15,
+   "2026-08-03": 8,
+   "2026-08-04": 15,
+   "2026-08-05": 15,
+   "2026-08-06": 11,
+   "2026-08-07": 15,
+   "2026-08-08": 15,
+   "2026-08-09": 15,
+   "2026-08-10": 8,
+   "2026-08-11": 9,
+   "2026-08-12": 15,
+   "2026-08-14": 14,
+   "2026-08-17": 11,
+   "2026-08-18": 15,
+   "2026-08-19": 15,
+   "2026-08-21": 1,
+   "2026-08-23": 15
+  },
+  "blank_venue_finals": 0
+ },
+ "rebaseline_history": [
+  {
+   "utc": "2026-08-24T02:10:00Z",
+   "from": 136,
+   "to": 259,
+   "authorized_by": "owner directive 2026-08-24 — downgrade OWNER_RELAY evidence to provisional until an addendum identifies the exact Tier-1 source artifact",
+   "why_it_grew": "the downgrade moved 123 rows from FINAL to PROVISIONAL. They are still visible to the TIER-BLIND consumers listed above, so the measured leak grew by exactly that number. The rise is the gate working, not a regression.",
+   "what_this_does_NOT_fix": "nine tier-blind consumers remain. adaptive_state.asof was made tier-and-status aware under this directive; build_ml_asof, build_p4_slate, enrich_mlb, daily_card and the rest still admit a PROVISIONAL row into an authoritative computation. That is real outstanding work and the new baseline records its size rather than hiding it."
+  }
+ ]
+}

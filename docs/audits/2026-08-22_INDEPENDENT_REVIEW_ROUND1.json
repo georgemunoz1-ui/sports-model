@@ -1,0 +1,41 @@
+{
+ "record_id": "INDEPENDENT-REVIEW-ROUND1-2026-08-22",
+ "why": "Owner ruling: a module stays QUARANTINED until an INDEPENDENT review kills its mutants. A module's own suite passing is explicitly not sufficient (lesson 21).",
+ "method": "23 agents. Independent attack on each module, then adversarial refutation of every claimed finding (default REFUTED unless personally reproduced), then a release verdict that spot-checked the two most consequential confirmed findings by running them.",
+
+ "verdicts": {
+  "harness/starter_attribution.py": "HOLD_QUARANTINE",
+  "harness/daily_baselines.py": "HOLD_WITH_NAMED_FIXES",
+  "harness/journal_continuity.py": "HOLD_WITH_NAMED_FIXES"
+ },
+
+ "outcome": "Every named fix is closed and every surviving mutant is now killed. THE QUARANTINES STILL HOLD: passing a second private suite is not what the owner asked for. Round 2 must be independent again.",
+
+ "blocking_finding": {
+  "module": "starter_attribution",
+  "issue": "The published standard error described a different number than the estimate beside it. deltas_pp was replicate 0; delta_se_pp was sd/sqrt(reps) — the error of the MEAN of all replicates. Every emitted interval was too small by sqrt(reps) = 2.24x at the default.",
+  "how_it_was_verified": "The reviewer captured the module's own per-replicate list rather than reconstructing arms (their first reconstruction disagreed and they discarded it rather than report it). I re-measured independently: point==rep0 True, point==mean False, se==sd/sqrt(5) True to 5e-5, se==sd False.",
+  "worst_observed_case": "joint interaction published as 1.47 +/- 0.253 while its own replicate spread was [1.47, 0.035, 0.40, 0.47, 0.165], sd 0.566 — the reported point was an extreme of its own sampling distribution, advertised as the most precise of the four quantities.",
+  "fix": "One estimator for both: the replicate MEAN with sd/sqrt(reps) as its standard error. Replicate 0 kept as deltas_pp_replicate0 so the stored arm probabilities still recompute; the full replicate vector is emitted; the arithmetic is pinned on a hand-computed vector ([1,3,5] -> mean 3.0, SE 1.15470053838) that does not call the module's estimator."
+ },
+
+ "the_repeat_offender": {
+  "issue": "CROSS_BOOK_DEVIG_PROHIBITED bypassable, THIRD occurrence, each time one field over.",
+  "history": ["2026-08-22 morning: basis spellings ('best odds', 'best_line', 'consensus') — closed with an allowlist", "2026-08-22 morning: one-sided book attribution contradicting the top-level book — closed with set agreement", "2026-08-22 evening (this review): the BOOK NAME itself, e.g. {'book': 'best_odds'} — de-vigged happily because the allowlist was applied to `basis` and nothing else"],
+  "lesson": "The 8/3 ruling is about WHERE the prices came from. Enforcing that on one field at a time will keep failing; it is now enforced on every field that names a board, including the keys of the per-book map."
+ },
+
+ "live_defect_in_a_wired_module": {
+  "module": "journal_continuity",
+  "issue": "The redirect rule was POSITION-DEPENDENT: a closed journal carrying entries dated 2026-08-25 against a canonical journal dated 2026-08-20 passed with zero failures, because the marker sat at the bottom of the file and the scan only looked below it. Move the marker, hide the defect.",
+  "also": "find_journals had no fixture at all — every check() fixture injects the journal list — and was name-only, so a live rival called docs/handoff.md was invisible to the rule whose entire purpose is noticing handoff state accumulating where nothing reads it.",
+  "fix": "Position-independent rule (a redirect newer than canonical FAILS regardless of marker placement), shape-based discovery with an explicit one-line self-declaration for genuine dated records, and the declaration deliberately NOT honoured on the canonical journal."
+ },
+
+ "what_the_review_got_wrong": "Three of six claims against starter_attribution were correctly REFUTED by the verification pass, including the most dramatic — a claimed 'structural zero rendered as MEASURED 0.0' for a gs=0 debut starter, which fails because the triggering input is unreachable across all 796 registered slots and because the proposed relabel would assert something false. An independent review that can only say no is as useless as one that can only say yes.",
+
+ "process_note_from_the_review_that_stands": "The author's --mutants suite reported 16/16 killed while a mutant deleting the module's central rule survived. That number must not be treated as the release gate on the next pass either.",
+
+ "mutation_suites_after_repair": {"starter_attribution": "43/43", "daily_baselines": "74/74", "journal_continuity": "29/29", "note": "These are the AUTHOR's suites. They are evidence of work, not a release condition."},
+ "recorded_utc": "2026-08-22"
+}

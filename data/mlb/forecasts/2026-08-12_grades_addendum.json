@@ -1,0 +1,53 @@
+{
+ "record_id": "SLATE-GRADES-2026-08-12-ADDENDUM",
+ "built_utc": "2026-08-13T06:52:48Z",
+ "appends_to": "data/mlb/forecasts/2026-08-12_grades.json and data/wnba/forecasts/2026-08-12_grades_summary.json (both unchanged, per append-only)",
+ "trigger": "external audit of the 8/12 grading report; every claim below was re-verified locally before acceptance or rebuttal",
+ "conceded_and_corrected": [
+  {
+   "id": "A1",
+   "title": "R4 double standard \u2014 'third consecutive null' is RETRACTED",
+   "detail": "The v1-vs-v2 comparison (dBrier -0.0015 on n=15, sides identical 6/15) has essentially no statistical power: the difference is a small fraction of the per-game Brier dispersion and the discrete metric produced zero differentiation. That is an ABSENT result, not a null result, and it was wrong to count it as a third confirmation of the 'MLB accuracy is a data problem' conclusion. The first two nulls (the 8/10 walk-forward and MLV2, both n>1000 with block bootstrap) stand on their own; the strategic conclusion rests on THEM and on nothing from tonight. R4 binds hardest against conclusions already believed \u2014 the auditor is exactly right, and the WNBA section's own guard proves the rule was available and selectively applied."
+  },
+  {
+   "id": "A2",
+   "title": "The night's most decision-relevant result was omitted: sim 0/3 on market disagreements",
+   "detail": "The pre-game overlay flagged three games where the sim disagreed with the board favourite (PIT@MIA, CHC@WSH, BAL@MIN) and classified the disagreements as compression artifacts, not signal. All three lost; the sim went 0/3 on disagreements and 6/12 on agreements. This is the DIRECT test of the standing compression diagnosis, it landed in the diagnosis's favour, and it was absent from a report that graded everything else. n=3 confirms nothing alone; the omission is the defect. Recorded here; the running disagreement-vs-agreement split becomes a standing line item in every future grade record."
+  },
+  {
+   "id": "A3",
+   "title": "P(3/3) is 0.4324, not ~0.44",
+   "detail": "0.723 x 0.806 x 0.742 = 0.4324; the report rounded up. Conceded. One nuance recorded for honesty in both directions: overstating P(3/3) made the 3/3 night look MORE ordinary, which strengthened the non-evidence guard \u2014 the slip favoured the ARGUMENT being made, which is its own bias class even when it deflates the model."
+  },
+  {
+   "id": "A4",
+   "title": "MLB totals were never graded; recomputed and the auditor's numbers verify exactly",
+   "detail": "v2 projected-total MAE 2.713 vs a naive always-8.5 baseline of 2.967 \u2014 an 8.5 pct edge on n=15, four times the WNBA totals margin the report celebrated. RL/TOTAL remain DATA_CAPTURE markets, so this is diagnostic only \u2014 but a grading report must grade every emitted number, and this one did not. Totals join the standing grade template."
+  },
+  {
+   "id": "A5",
+   "title": "'Roughly tied elsewhere' understated the WNBA totals loss",
+   "detail": "Against the closing lines the model's total was closer than the line on ONE of three games (MIN@PDX 4.9 vs 20.5), and LOST on TOR@DAL (11.6 vs 1.5) and CHI@GSV (5.1 vs 4.5). 'All three came in under' is true; 'the model was closer' held on one of three. A near-constant ~170 predictor beats the line automatically on any collectively-high night and has no per-game totals skill \u2014 the report's own 'luck, not design' framing was correct and is hereby stated at full strength: 1-for-3."
+  }
+ ],
+ "contested_with_evidence": [
+  {
+   "id": "B1",
+   "claim": "'e665c8092a is not a valid object, git remote -v is empty, third fabricated push'",
+   "finding": "NOT A FABRICATION \u2014 a two-workspace divergence, now in its third round in BOTH directions. Verified live in this workspace at audit time: git cat-file -t e665c8092a... returns 'commit'; git remote -v shows origin https://github.com/georgemunoz1-ui/sports-model; git ls-remote origin sportsmodel/main returns e665c8092a16877cdc5a61c9ea06b048c0d470cd. The auditing workspace is a bundle-based clone with no remote configured and cannot see commits made here \u2014 exactly as this workspace could not see 33d7f287, de400dcb, fc42fb7c or a411de6 when the roles were reversed, none of which were fabrications either. A fresh bundle carrying e665c809/onward accompanies this record so the claim is verifiable there.",
+   "standing_fix": "every cross-workspace release claim should ship WITH its bundle; a hash the other side cannot resolve is an unverifiable claim, not a lie, and both sides now have this failure mode on record"
+  },
+  {
+   "id": "B2",
+   "claim": "'MIN@PDX line miss is 19.5 not 20.5; model closer by 14.6 not 15.6; three slips all leaning the model's way'",
+   "finding": "OPEN-VS-CLOSE, not a slip. The pregame freeze (data/wnba/odds/2026-08-12_board.json) carries PDX total 185.5; the owner's FINALS board carries 186.5, and the evidence extract recorded the move explicitly ('PDX total 185.5->186.5') before grading. Against the CLOSING line: |186.5-166| = 20.5 and the model is 15.6 closer. Against the OPEN: 19.5 and 14.6. The report graded against close, which is the standard convention and the number the auditor's own paste shows. With B2 resolved, the 'three slips all one direction' pattern reduces to one slip (A3) \u2014 whose direction, per A3, favoured the guard rather than the model."
+  }
+ ],
+ "governance": {
+  "records_mutated": 0,
+  "registry": "untouched (164/162)",
+  "gate": "0/100 NO_PROMOTE",
+  "ledger": "$0",
+  "note": "the WNBA-section discipline the auditor praised and the MLB-section lapse they caught came from the same author on the same night; the asymmetry, not the arithmetic, was the finding that matters"
+ }
+}

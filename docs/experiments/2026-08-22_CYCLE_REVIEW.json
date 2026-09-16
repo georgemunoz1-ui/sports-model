@@ -1,0 +1,72 @@
+{
+ "record_id": "CYCLE-REVIEW-2026-08-22",
+ "reviewed_at_utc": "2026-08-23T06:05:00Z",
+ "verdict": "A CYCLE THAT PRODUCED NO SETTLED RESULTS AND SIX GOVERNANCE FINDINGS. The forecasting worked; the acquisition and the evidence discipline are where everything happened.",
+
+ "what_was_registered": {
+  "MLB": "3 of 15 games. P4-20260822-MIN@SD (T-44m, p_home .493), CLE@COL (T-134m, .526), CIN@AZ (T-194m, .548). The other 12 had already started when the card was built and are NEVER registered.",
+  "WNBA": "2 of 3. CON@LAS p_home .6279 margin +3.40, ATL@PHX p_home .3859 margin -3.58, both coherence PASS. IND@NYL had tipped.",
+  "NFL": "1 benchmark-only registration, ARI as capture-time favourite. No NFL model exists.",
+  "chain": "330 forecasts / 329 grades, verified intact."
+ },
+ "what_was_settled": "NOTHING. Zero canonical grades for 8/22. Two grades were written and then WITHDRAWN append-only. Six games sit PENDING, expiry 2026-08-24T17:45Z.",
+ "betting_output": "ZERO. Wager authority NO, execution UNAUTHORIZED, gate 0/100, ledger $0 across the whole cycle.",
+
+ "SIX_FINDINGS": [
+  {"n": 1, "severity": "process", "finding": "I treated 'no owner board' as a terminal blocker and asked for screenshots — violating standing acquisition autonomy. The owner corrected it. The search rail was available the entire time and, when actually used, produced a corroborated 15-game schedule.",
+   "fix": "harness/acquisition_ladder.py — six-state machine with no dead ends, 15/15 mutants. A fixture caught an ordering bug in my own classify(): a single denied rail reached a terminal state while another rail sat untried, which is the error encoded exactly."},
+  {"n": 2, "severity": "high", "finding": "TIMEZONE ERROR. I read every reported start time as Eastern and concluded the entire slate had started. The '4:15 PM' listings were PACIFIC. Three games were still pregame and I nearly missed all three.",
+   "caught_by": "the owner stating the local time",
+   "consequence_avoided": "3 of the 3 registrable MLB games"},
+  {"n": 3, "severity": "high", "finding": "FIRST-PITCH METADATA DEFECT. I recorded CIN@AZ at 03:10Z and CLE@COL at 02:10Z from search PROSE; the true starts were ~00:19-00:28Z and ~00:08-00:19Z. Recorded margins of T-194m and T-134m against true margins near T-23m and T-12m — a ten-fold overstatement of the safety cushion.",
+   "registrations_still_valid": "yes — all three were appended at 23:56:22Z, before the earliest reconstructed first pitch. Checked before anything else.",
+   "root_cause": "I applied prose to the most timing-critical field one turn after establishing that prose is unreliable and per-game title corroboration is the method.",
+   "caught_by": "the owner's live DraftKings board showing games in the 4th inning"},
+  {"n": 4, "severity": "STRUCTURAL", "finding": "I ingested TIER-2 online finals into the CANONICAL results table and graded two forecasts against them. A standing ruling bars this; missing_data_audit.new_tier23_canonical is classed STRUCTURAL precisely so it cannot pass. Three defects in one append: blank venue (park factor silently 1.0), source_tier stamped 1 on tier-2 evidence, result_status FINAL when only tier-1 may be FINAL.",
+   "caught_by": "healthcheck, which went RED on the append and ESCALATED as I patched surface fields, until the message named the ruling rather than the symptoms",
+   "remediation": "rows removed, both grades superseded append-only, games returned to PENDING, ml_asof rebuilt, HEALTHY restored",
+   "the_lesson": "I spent the session enforcing evidence tiers on everyone else's data, then ingested tier-2 into the canonical table myself the moment I had a result I wanted to grade. Prose would not have stopped me; the mechanised ruling did, in four minutes."},
+  {"n": 5, "severity": "high", "finding": "FIVE PRIOR-DAY ECHOES. Search summarisers returned the previous day's results attached to 8/22, once returning FOUR AT ONCE presented as 'the final scores for August 22'. All four matched my registry's 8/21 rows exactly. The CIN@AZ 9-0 echo appeared twice in separate sweeps.",
+   "caught_by": "cross-checking every claimed final against already-graded history",
+   "fix": "harness/echo_gate.py, 7/7 mutants, wired into healthcheck. Refuses a claimed final that reproduces the same matchup's most recent graded result within 3 days — REFUSED PENDING CONFIRMATION, not a verdict of falsehood."},
+  {"n": 6, "severity": "medium", "finding": "DEGENERATE CARD BUILD. My first 8/22 card passed a DATE to team_form(), which takes results TEXT. Every park factor came out exactly 1.000 and every probability ~.500.",
+   "caught_by": "me, before registration, because 15 identical park factors is not a plausible slate",
+   "fix": "rebuilt with cr._results_before(DATE); correct card spans park 0.865-1.131, p_home .431-.553"}
+ ],
+
+ "WHAT_THE_MODEL_ACTUALLY_DID": {
+  "caveat": "NOT A GRADE. Four of these six games were never registered, and the two that were are withdrawn pending tier-1. Diagnostic only.",
+  "record": "1-5 on the six games with title-corroborated finals",
+  "mean_brier": 0.27784,
+  "vs_flat_50": "WORSE than 0.25000",
+  "totals": "MAE 3.15, median 3.9, signed -0.32, largest -5.2 (STL@PHI, a 12-run game the card had at 9.8)",
+  "base_rate": "home went 4-2; always-pick-home would have gone 4-2 against the model's 1-5",
+  "why_this_is_unsurprising": "every starter slot was league-average CAP because no starter was ever verified from an attributable source. This was close to a park-and-home-field model and it performed like one. The 8/21 base-rate lesson repeating on a card with even less information in it."
+ },
+
+ "PRICE_DISCIPLINE_HELD_AND_THE_CONTRAST_IS_THE_POINT": {
+  "WNBA_aggregator_00:30Z": "overround +0.58% and +0.41% — best-odds shopping across books. DE-VIG REFUSED (8/3 ruling).",
+  "NFL_DraftKings_01:04Z": "overround +4.75% — a genuine single-book vig. DE-VIG VALID.",
+  "WNBA_DraftKings_01:08Z": "overround +4.23%. DE-VIG VALID.",
+  "finding": "Same evening, same screening code, opposite rulings, both mechanical. The overround is the test and it decided correctly each time.",
+  "the_substantive_result": "ATL@PHX PHX +285: on the cross-book board the +14.20pp edge could be dismissed as a shopping artifact. On the clean single-book de-vig the edge is +13.67pp — it SURVIVES. The model genuinely disagrees with DraftKings by that margin, which CONFIRMS the compression conflict rather than resolving it. Edges >=5pp are 0-6 lifetime.",
+  "best_single_row": "CON +190, the only leg clearing the compression gate: edge +2.73pp, EV +7.91%. But that edge is 0.84 SD of the model's own probability noise (~3.25pp) — SMALLER than one standard deviation of the estimator producing it. A 2.73pp error flips it.",
+  "parlays": "Zero recommendations. Only 4 priced legs existed and two pairs were mutually exclusive, so no valid 3-leg parlay could be formed. The top 2-leg screened +70.7% EV and is an illusion: under market probabilities the identical parlay is -0.0%, and PHX carried 88% of the edge while being the compression-blocked leg."
+ },
+
+ "OWNER_DISCRETION": "DAL + PHX, recorded WALLED at T-45m and T-55m, price/market/stake/structure all null-with-reason because they were not transmitted. Grades in the discretion lane only; the model-authorized ledger stays 0 bets / $0. ATL@PHX will settle in BOTH lanes off one final — the model's blocked read and the owner's live position, graded separately and never pooled.",
+
+ "SHIPPED_THIS_CYCLE": ["harness/acquisition_ladder.py (15/15)", "harness/echo_gate.py (7/7)",
+   "harness/sports_acquisition.py (24/24)", "harness/retry_ladder.py (15/15)",
+   "harness/journal_continuity.py repaired (29/29)", "pregame_preflight wording corrected",
+   "daily_baselines repaired (74/74) — still quarantined, awaiting independent review"],
+
+ "OUTSTANDING": {
+  "settlement": "6 games PENDING, expiry 2026-08-24T17:45Z, then UNRESOLVED_SOURCE_GAP",
+  "retries_armed": "3 — 06:15Z, 07:45Z, 17:45Z",
+  "capability": "13 tier-1 routes denied at the org proxy; only GitHub reachable",
+  "quarantines": "starter_attribution and daily_baselines remain unwired pending INDEPENDENT review; round 1 found real defects in all three modules including the wired one",
+  "unaccounted_roadmap_items": "the two WNBA prereg records, independently REJECTED, with no successor written"
+ },
+ "honest_summary": "Six governance findings, four of them mine and three caught only because the owner supplied information I had got wrong or had stopped looking for. The gates worked: every one of my errors was caught by a mechanism rather than by my own review, and the one STRUCTURAL violation was reverted in four minutes. Nothing was settled and nothing was wagered, which is the correct outcome for a night where no tier-1 source was reachable."
+}

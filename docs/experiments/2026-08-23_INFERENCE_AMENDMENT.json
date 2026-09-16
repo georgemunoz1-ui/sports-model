@@ -1,0 +1,92 @@
+{
+ "record_id": "INFERENCE-DEFECT-AMENDMENT-2026-08-23",
+ "created_utc": "2026-08-23T12:15:00Z",
+ "authority": "owner amendment 2026-08-23 (inference defect)",
+ "preserves": "487c3ad, retained as an INTERMEDIATE AUDIT COMMIT. Its inferential numbers are withdrawn; its descriptive means and structural findings stand.",
+ "status": "FORWARD_ONLY_PENDING",
+ "THE_DEFECT_VERIFIED": {
+  "the_claim": "with two clusters a Holm-adjusted p of .0081 cannot be a valid date-block result",
+  "verified": true,
+  "arithmetic": "An exact cluster-level sign-flip test with k clusters has 2^k assignments, so the smallest attainable two-sided p is 2/2^k. For k=2 that is 0.5000. The reported .0081 is 62 times smaller than the test can produce.",
+  "root_cause": "_p_from_interval applied a normal approximation to a bootstrap whose resample space holds three distinct means. The z-statistic it produced carried the degrees of freedom of 30 GAMES, not of 2 CLUSTERS. The independence assumption was correctly avoided in the interval and then reintroduced in the p-value.",
+  "table_of_floors": {
+   "k=1": 1.0,
+   "k=2": 0.5,
+   "k=3": 0.25,
+   "k=4": 0.125,
+   "k=5": 0.0625,
+   "k=6": 0.03125
+  }
+ },
+ "AMENDMENT_1_SUPPRESSION": {
+  "rule": "k >= log2(2/alpha), DERIVED from the test and not chosen. At alpha=.05 that is SIX clusters.",
+  "no_new_threshold": "the 500-game / 60-slate-date gate remains the binding one; this rule only decides whether an inferential verdict may be PRINTED",
+  "output_now": {
+   "interval": "NON_DECISION_GRADE",
+   "holm_p": "UNAVAILABLE_INSUFFICIENT_CLUSTERS",
+   "beats": "NOT_EVALUABLE"
+  },
+  "raw_means_retained": {
+   "vs_V13_ALL_CAP_INPUTS": -0.00934,
+   "vs_EXPANDING_HOME_PRIOR": -0.00023,
+   "note": "descriptive only; no inference attaches to either"
+  },
+  "a_trap_this_exposed": "NOT_EVALUABLE is a truthy string, so bool() would have read a suppressed verdict as a PASS. The gate now compares to True explicitly, and a fixture drives a suppressed comparison at it to prove the difference."
+ },
+ "AMENDMENT_2_CHRONOLOGY": {
+  "accepted": "prior_last_game_date=2026-08-18 does not prove safety against a cutoff of 2026-08-19T00:00:00Z. That cutoff is 17:00 Pacific on August 18, and West Coast games dated the 18th were still in progress.",
+  "required_orderings": [
+   "prior_last_game_finalized_at_utc < prior_cutoff_utc",
+   "prior_cutoff_utc <= generated_at_utc < game_start_utc"
+  ],
+  "RESULT_ON_THE_REAL_COHORT": {
+   "pool_leak_audit": "PREQUENTIAL_CLEAN 30/30 — no same-slate or target-game result in any prior",
+   "chronology_audit": "NO_FINALIZATION_TIMESTAMP_AVAILABLE 30/30",
+   "meaning": "The repository stores no result-finalization timestamps at all. The prior's chronological safety is therefore UNPROVEN, not proven and not disproven. The cohort audit now FAILS on this, and zero_integrity_failures joins the blocking list where it previously read clean on a calendar-date check that could not see the problem."
+  }
+ },
+ "AMENDMENT_3_ARM_IDENTITY": {
+  "registered": {
+   "V13_ALL_CAP_INPUTS": "arm_4cbf9a687530e728de08d7c4",
+   "V13_STARTER_INFORMED": "arm_ccd72d1f32d10991ba0aa9fd"
+  },
+  "binds": [
+   "model_id",
+   "input_policy_id",
+   "feature_manifest_sha256",
+   "cap_substitution_policy_id",
+   "simulation_config_id",
+   "training_cutoff_policy_id"
+  ],
+  "THE_FINDING": "No evaluation_arm_id, input_policy_id or CAP-substitution policy existed anywhere before today. The registry carried free-text experiment_arm labels that DIFFER between the two dates for the same conceptual arm — 08-19 recorded V1_SERIES_SLATE_PRICE_BLOCKED, 08-21 recorded V1_WEB_SCHEDULE_NO_STARTERS_NO_PRICES. Those describe each day's acquisition circumstances, not a frozen policy. The two 08-19 arms were generated 26 minutes apart the same morning with no prior registration.",
+  "the_only_candidate_prereg": "2026-08-18_V14_STARTER_PREREG.json predates the cohort but registers a V14 estimator with its own feature set, not these V13 input policies",
+  "DERIVED_LABEL": "RETROSPECTIVE_INPUT_POLICY_ABLATION",
+  "consequence": "The 30-game comparison is NOT prospective challenger evidence and must not be cited as such. The registered identities are prospective from 2026-08-23 forward. Prospectivity is derived from two instants; no field an author can set asserts it, and a fixture proves a record claiming prospectivity is overridden."
+ },
+ "AMENDMENT_4_ESTIMABILITY_IS_NOT_ACCEPTANCE": {
+  "accepted": "the Hessian rule is a numerical estimability guard only",
+  "now": "calibration_estimability and calibration_acceptable are separate fields with separate reasons. An UNDEFINED calibration is explicitly NOT acceptable — defaulting it would let the least measurable arm clear the strictest condition.",
+  "on_the_real_arms": {
+   "V13_ALL_CAP_INPUTS": "estimable, slope -0.574 intercept 1.028 -> NOT acceptable",
+   "V13_STARTER_INFORMED": "estimable, slope 1.109 intercept 0.954 -> NOT acceptable, intercept far outside the band"
+  }
+ },
+ "BINDING_GATE": {
+  "status": "FORWARD_ONLY_PENDING",
+  "blocking": [
+   "sample_500_games",
+   "sample_60_slate_dates",
+   "beats_every_reference",
+   "holm_intervals_below_zero",
+   "calibration_acceptable",
+   "zero_integrity_failures"
+  ]
+ },
+ "SUBSTANTIVE_CONCLUSION_UNCHANGED": "Improvement over the expanding prior is NOT ESTABLISHED, and neither reference comparison is presently inference-grade.",
+ "modules": {
+  "harness/promotion_gate.py": "35/35",
+  "harness/prequential.py": "20/20",
+  "harness/evaluation_arm.py": "13/13",
+  "harness/evaluation_standard.py": "43/43"
+ }
+}

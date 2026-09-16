@@ -1,0 +1,99 @@
+{
+ "record_id": "RECONCILIATION-LEDGER-THROUGH-2026-08-01",
+ "generated_utc": "2026-07-31T10:40:00Z",
+ "purpose": "Full gap/simulation reconciliation sweep. Enumerates every date's data, forecast, grade and settlement state; identifies what is CLOSED, what is BLOCKED-ON-UPLOAD, and what is PENDING-PLAY. Nothing fabricated (R1).",
+ "data_coverage_finals": {
+  "max_date": "2026-07-30",
+  "total_finals": 1620,
+  "recent": {
+   "2026-07-20": 15,
+   "2026-07-21": 13,
+   "2026-07-22": 17,
+   "2026-07-23": 4,
+   "2026-07-24": 15,
+   "2026-07-25": 15,
+   "2026-07-26": 15,
+   "2026-07-27": 11,
+   "2026-07-28": 15,
+   "2026-07-30": 10
+  },
+  "GAPS": [
+   {
+    "date": "2026-07-29",
+    "status": "HOLE \u2014 0 finals; 16 games played, boxes never uploaded",
+    "severity": "CRITICAL",
+    "blocks": [
+     "grading 16 frozen P4-2026-07-29 forecasts",
+     "correct team-form aggregates for every club (all 30 omit a full day)",
+     "settlement completeness for the 7/29 K-prop and card displays"
+    ],
+    "unblock": "upload 7/29 box scores (any paste format), OR restore statsapi network access"
+   },
+   {
+    "date": "2026-07-23",
+    "status": "PARTIAL \u2014 4 finals (known thin capture day, pre-existing)",
+    "severity": "LOW"
+   },
+   {
+    "note": "2026-07-13..07-15 are the All-Star break (0 games) \u2014 NOT gaps; the reconciliation contiguity check now correctly ignores leading gameless stretches."
+   }
+  ]
+ },
+ "forecast_grade_state": {
+  "totals": {
+   "forecasts": 48,
+   "grades": 13
+  },
+  "cohorts": {
+   "RETRO-2026-07-28": {
+    "n": 15,
+    "graded": 13,
+    "ungraded": 2,
+    "why": "CLE_CIN doubleheader forecast-to-game mapping ambiguous; ATL_NYM no result (7/28 PPD)"
+   },
+   "P4-2026-07-29": {
+    "n": 16,
+    "graded": 0,
+    "status": "BLOCKED on 7/29 finals"
+   },
+   "P4-2026-07-31": {
+    "n": 15,
+    "graded": 0,
+    "status": "PENDING PLAY (first pitch 18:20Z today)"
+   },
+   "POINTER": {
+    "n": 2,
+    "note": "immutable pointer records, never graded"
+   }
+  }
+ },
+ "simulation_state_phase4": {
+  "2026-07-29": "COMPLETE \u2014 16 forecasts frozen pre-pitch, all DIAGNOSTIC",
+  "2026-07-30": "MISSED SLATE \u2014 no pregame capture; 1 quarantine (SEA@LAD); recorded as honest gap",
+  "2026-07-31": "COMPLETE \u2014 15 forecasts frozen pre-pitch, all DIAGNOSTIC (carry 7/29-hole staleness)",
+  "2026-08-01": "NOT YET \u2014 no board/matchup capture exists; cannot simulate without slate composition (R1)"
+ },
+ "external_positions_kalshi": {
+  "2026-07-30": "SETTLED \u2014 3-leg combo LOST -$99.96 (SD leg lost)",
+  "2026-07-31": "PENDING \u2014 4 combos ($99.96 total) frozen pregame, settle on 7/31 finals"
+ },
+ "infrastructure_fix_this_sweep": {
+  "reconciliation_contiguity": "build_p4_slate reconciliation was max-date-only -> an interior results hole (7/29) would FALSELY pass once a later date (7/31) was backfilled. Fixed to require a contiguous trailing window with INTERIOR-hole detection (All-Star break ignored). Slate meta now surfaces team_results_holes_in_trailing_14d. Frozen 7/29/7/31 slates unchanged."
+ },
+ "unlock_chain": {
+  "upload_7_29_finals": [
+   "grade 16 P4-2026-07-29 (4-column: candidate/V13/market/external-v2)",
+   "close the results contiguity hole -> future slates reconcile cleanly",
+   "retro-correct team-form understanding (frozen forecasts stay frozen, annotated)"
+  ],
+  "7_31_finals_tonight": [
+   "grade 15 P4-2026-07-31",
+   "settle 4 Kalshi combos",
+   "settle 7/31 card/K displays"
+  ],
+  "then_8_1_board": [
+   "first slate with contiguity-verified team form IF 7/29 also filled"
+  ]
+ },
+ "governance": "gate 0/100; verdict NO_PROMOTE; real-money ledger $0/unauthorized; n toward Phase-4 n=300 still 0 clean (every forecast to date is DIAGNOSTIC by disposition)."
+}

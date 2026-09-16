@@ -1,0 +1,88 @@
+{
+ "record_id": "V14-STARTER-PREREG-2026-08-18",
+ "created_utc": "2026-08-18T08:05:00Z",
+ "status": "FORWARD_ONLY_PENDING — preregistration FROZEN BEFORE FITTING. Paper only, gate 0/100, no wagers, no promotion, no V13 replacement.",
+ "authority": "owner approval 2026-08-18: 'build and freeze the preregistration, then fit the starter-focused shadow once. No feature shopping, V13 replacement, or betting authority.'",
+ "supersedes": "docs/experiments/V14_shadow_prereg.json (2026-08-10, NON-EXECUTABLE spec-only). That record stays byte-intact; this prereg instantiates the reserved identity under the owner's 2026-08-18 conditions.",
+ "identity_check": "V14 verified reserved-but-never-instantiated before this prereg: 0 references in harness/model_registry.py, 0 in forecasts.jsonl, 0 in grades.jsonl, 0 card artifacts. The name is therefore usable per the owner's condition.",
+ "model_id": "ml.v14_starter.rlog.shadow",
+
+ "evidentiary_basis_three_independent_findings": [
+  "coefficient concentration: IQR effect sp_era_edge +0.0626 vs team_rd_edge +0.0045 (~14x), 8/10 full report",
+  "OOF ablation: team form adds no detectable value given the starter; unshrunk early-season form harmful (+0.0375 Brier, 0-9-games stratum, survives Holm), 8/17",
+  "market comparison: V13 probability SD 3.25pp vs market 11.48pp on 8/17 closing prices — a discrimination diagnosis, NOT outcome validation"
+ ],
+
+ "PRIMARY_HYPOTHESIS": "A leakage-safe starter block improves Brier, log loss, AUC, and probability RESOLUTION (Murphy resolution component) versus (a) raw V13 and (b) the identical estimator without starter features, on identical games under expanding date-ordered walk-forward.",
+ "resolution_is_reported_not_sufficient": "V19 demonstrated wider probabilities can merely be more confident errors. Widening alone is NEVER success; improvement must appear in proper scoring (Brier, log loss), discrimination (AUC), and calibration TOGETHER.",
+
+ "ESTIMATOR_FROZEN": {
+  "family": "ridge logistic regression (the MLV2 estimator family, fold-discipline identical to the audited 8/10 build)",
+  "walk_forward": "expanding, date-ordered. Fold k trains on all slate dates strictly before date k, predicts date k. Minimum training window: 30 slate dates; earlier dates are burn-in, never scored.",
+  "per_fold_fitting": "standardization (train-moments only), ridge penalty (inner 80/20 split of the TRAINING window, grid lambda in {0.01,0.03,0.1,0.3,1,3,10}), coefficients — ALL inside the fold. Imputation: NONE in the primary vector; a row missing any primary feature is excluded (see missingness).",
+  "seed": "deterministic closed form — no RNG in the estimator"
+ },
+
+ "FEATURES_FROZEN": {
+  "primary_vector": [
+   "sp_shrunk_era_edge: [w*era + (1-w)*4.20, w=gs/(gs+8)] home minus away",
+   "sp_shrunk_kbb_edge: [(k_pct - bb_pct) shrunk toward 13.5 with w=gs/(gs+8)] home minus away",
+   "sp_rest_days_edge: (slate_date - last_start_date) days, capped at 15, home minus away",
+   "sp_workload_ip30_edge: total IP in the trailing 30 days strictly before slate_date, from pitcher logs, home minus away",
+   "sp_exp_ip_edge: mean IP over last 5 starts shrunk toward 5.4 with w=n_starts/(n_starts+3), home minus away",
+   "park_factor (venue constant, present in BOTH arms — it is not team form)"
+  ],
+  "exclusions_frozen": {
+   "unshrunk_team_form": "EXCLUDED from the primary vector (owner condition; OOF ablation shows harm)",
+   "shrunk_team_form": "NOT a retained feature. May appear ONLY as a named post-hoc ablation arm, reported separately, never merged into the primary result",
+   "handedness": "EXCLUDED — 0% coverage (pitchers.csv carries name/id only). Coverage rule: a feature enters only with >=90% coverage in the training window; recorded as failed-coverage, not silently dropped",
+   "times_through_order": "EXCLUDED — no TTO data in the repository; same coverage rule",
+   "market_prices": "FORBIDDEN as predictive inputs, unconditionally"
+  },
+  "no_feature_shopping": "this list is closed. The fit runs ONCE against exactly this vector. Any variation is a NEW prereg."
+ },
+
+ "LEAKAGE_RULES_FROZEN": {
+  "feature_cutoff": "every feature computed from data strictly before the slate date (the ml_asof firewall dataset's existing strict-prior guarantee, already enforced by its own gates)",
+  "starter_identity_limitation_DISCLOSED": "historical rows carry starter_status=RESOLVED_POST_HOC — the actual starter, not an archived pregame probable. Using it assumes probable==actual, which 8/17 showed fails (Lowder G1/G2). This mild identity leakage is a FROZEN, DISCLOSED limitation of the development window; it cannot be repaired retroactively because pregame probables were not archived. The PROMOTION test is immune: it runs only on prospective forward games with starter_confirmed_pregame=true.",
+  "unknown_starter": "BLOCKS the forecast for that game. League-average substitution may be displayed on a card for tracking but can NEVER produce a betting candidate and is excluded from V14 scoring entirely."
+ },
+
+ "COMPARATORS_FROZEN_identical_games": [
+  {"name": "raw_V13", "source": "data/mlb/evaluations/v13_full_30k.jsonl (pinned historical replay, per-game seed, n=30000), joined on gamePk"},
+  {"name": "calibrated_V13", "method": "Platt scaling of raw V13: logistic fit of y on logit(p_v13) over the SAME expanding training window per fold — refit each fold, never on scoring rows"},
+  {"name": "expanding_home_rate", "method": "home-win base rate over all training dates in the fold"},
+  {"name": "no_starter_ablation", "method": "identical ridge-logistic pipeline, feature vector = park_factor only"}
+ ],
+
+ "MISSINGNESS_FROZEN": {
+  "row_eligibility": "eligible_for_evaluation=true AND both sp blocks present AND both last_start_date present AND label present. Expected n~1255 over ~105 scored dates (of 108; first 30 are burn-in). Every exclusion counted and reported by reason; kept+excluded must reconcile to the dataset total.",
+  "no_imputation_in_primary": "a missing primary feature excludes the row; nothing is filled"
+ },
+
+ "CALIBRATION_METHOD_FROZEN": "V14 raw outputs scored as-is (ridge logistic is natively probabilistic). Calibration ASSESSED via logistic recalibration fit (slope/intercept), 10 equal-count reliability bins, and Murphy decomposition (reliability/resolution/uncertainty). No output recalibration of V14 in this experiment.",
+
+ "PRACTICAL_EFFECT_THRESHOLDS_FROZEN": {
+  "yardstick": "the 8/10 starter-block ablation effect, 0.00272 Brier",
+  "minimum_practical_improvement": "0.00068 Brier (25% of yardstick) vs the no-starter ablation",
+  "development_signal": "Holm-adjusted date-block bootstrap CI for dBrier vs no_starter_ablation excluding zero AND mean improvement >= 0.00068",
+  "auc_requirement": "V14 AUC > no_starter_ablation AUC and > raw V13 AUC, point estimates, with date-block bootstrap CI reported",
+  "calibration_acceptable": "recalibration slope in [0.80, 1.20] AND |intercept| <= 0.12 AND reliability component <= 0.004"
+ },
+
+ "INFERENCE_FROZEN": "date-block bootstrap (resample slate dates with replacement, 10000 draws, seed 20260818) on paired per-date mean score differences; Holm across the comparison family {V14 vs raw_V13, V14 vs calibrated_V13, V14 vs expanding_home_rate, V14 vs no_starter_ablation} x {Brier, logloss} = 8 tests.",
+
+ "PROMOTION_CRITERIA_FROZEN_ALL_REQUIRED": [
+  ">=500 PROSPECTIVE games across >=60 slate dates, forward-only, starter_confirmed_pregame=true on every scored game",
+  "Holm-adjusted paired date-block intervals favoring V14 over raw V13 AND over the no-starter ablation on Brier",
+  "higher AUC than both",
+  "calibration acceptable per the frozen thresholds",
+  "ZERO chronology, provenance, or personnel failures across the prospective record",
+  "explicit owner sign-off; nothing promotes automatically"
+ ],
+ "until_then": "FORWARD_ONLY_PENDING: shadow forecasts may be registered pre-pitch in their own cohort, never pooled with V13 cohorts, ledger_eligible=false, promotion_eligible=false, wager authority NO, stake 0, gate 0/100 unchanged.",
+
+ "ONE_SHOT_RULE": "the walk-forward fit runs ONCE after this prereg is committed. The result stands whatever it says. Re-runs are permitted only for byte-identical reproduction verification. Any change to features, estimator, thresholds, eligibility or inference is a NEW preregistration with a NEW identity.",
+ "V13_UNTOUCHED": "ml.v13_1.hfa1005.card.s722n30000 remains byte-frozen (LEGACY_TIER_EXPOSURE_136 / NO_PROMOTE) and continues producing the daily card. V14 replaces nothing.",
+ "label_source_DISCLOSED": "labels come from the ml_asof firewall dataset, which reads the canonical results table including the 136-row legacy tier-2/3 window (7/23-8/11). Label risk is winner-error only; the winner-reconciliation gate has found zero winner errors (the one score discrepancy found, PHI@MIN 8/13, had the winner right). The clean tier-1 lineage remains DEGRADED_INTERIOR_GAPS and is not used here because V14's primary vector contains no team-form denominators — the gap risk the lineage ruling addressed does not attach to starter features."
+}

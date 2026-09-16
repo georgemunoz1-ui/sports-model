@@ -1,0 +1,128 @@
+{
+ "record_id": "PROVISIONAL-RESULTS-2026-08-13",
+ "built_utc": "2026-08-14T05:34:33Z",
+ "source_tier": 3,
+ "status": "PROVISIONAL \u2014 gameday-title URLs and dated recaps (the source class that went 10/10 on 8/12); NOT graded in any registry; tier-1 capture converts this",
+ "echo_check": "no MLB pair duplicates 8/12; WNBA LAS@NYL 85-81 numerically equals 8/12's MIN@PDX score but is a different matchup \u2014 noted, not an echo",
+ "mlb": {
+  "resolved": [
+   {
+    "g": "PIT@MIA",
+    "final": "13-1",
+    "p_home": 0.501,
+    "brier": 0.251,
+    "side": false,
+    "cohort": "v1"
+   },
+   {
+    "g": "CIN@CWS",
+    "final": "9-8",
+    "p_home": 0.552,
+    "brier": 0.3047,
+    "side": false,
+    "cohort": "v1"
+   },
+   {
+    "g": "CLE@DET",
+    "final": "0-3",
+    "p_home": 0.549,
+    "brier": 0.2034,
+    "side": true,
+    "cohort": "v1"
+   },
+   {
+    "g": "SEA@NYY",
+    "final": "1-0",
+    "p_home": 0.562,
+    "brier": 0.3158,
+    "side": false,
+    "cohort": "v1"
+   },
+   {
+    "g": "BOS@TOR",
+    "final": "7-0",
+    "p_home": 0.462,
+    "brier": 0.2134,
+    "side": true,
+    "cohort": "v1"
+   },
+   {
+    "g": "CHC@WSH",
+    "final": "0-7",
+    "p_home": 0.49,
+    "brier": 0.2601,
+    "side": false,
+    "cohort": "v1"
+   },
+   {
+    "g": "PHI@MIN",
+    "final": "2-1",
+    "p_home": 0.566,
+    "brier": 0.3204,
+    "side": false,
+    "cohort": "v2"
+   }
+  ],
+  "unresolved": [
+   "TEX@LAA (deGrom OUT after 2 IP, right triceps fatigue)",
+   "MIL@LAD"
+  ],
+  "night_prov": {
+   "brier": 0.267,
+   "sides": "2/7"
+  }
+ },
+ "wnba": {
+  "rows": [
+   {
+    "g": "ATL@CON",
+    "final": "104-69",
+    "p_home": 0.2986,
+    "brier": 0.0892,
+    "side": true,
+    "margin_err": -29.2,
+    "total_err": 1.4
+   },
+   {
+    "g": "LAS@NYL",
+    "final": "85-81",
+    "p_home": 0.7488,
+    "brier": 0.5607,
+    "side": false,
+    "margin_err": -12.3,
+    "total_err": -7.1
+   },
+   {
+    "g": "WAS@LVA",
+    "final": "76-83",
+    "p_home": 0.7842,
+    "brier": 0.0466,
+    "side": true,
+    "margin_err": -1.8,
+    "total_err": -8.0
+   }
+  ],
+  "night": {
+   "brier": 0.2322,
+   "sides": "3/3"
+  },
+  "lifetime_prospective": "6/6 sides over two nights; mean Brier 0.0633; the standing guard applies with full force \u2014 six 70-80 pct favourites landing is P~0.19, still coin-adjacent",
+  "margin_tail_finding": "sides perfect, MARGINS compressed: ATL predicted -5.8 won by 35 (err 29.2); yesterday GSV predicted +8.3 won by 20. The ridge margin under-spreads blowout tails \u2014 recorded as successor-prereg candidate #3 alongside within-era totals and injury features"
+ },
+ "nfl_capture_D2": {
+  "finals": [
+   "DET@CIN 14-16 (benchmark side CIN right; -4.5/-6.5 did NOT cover)",
+   "GB@PIT 9-28 (PIT right, covered)",
+   "IND@NE 13-13 TIE \u2014 the grading frame's NFL tie rule gets its first live exercise: excluded from binary, valid for margin/total",
+   "LAC@HOU 27-7 (books were split at pick; HOU benchmark side wrong)",
+   "ARI@LV 27-14 (LV side wrong)",
+   "TEN@SF 19-10 \u2014 TEN covered -6: the 8.5-point personnel-driven reversal was RIGHT"
+  ],
+  "benchmark_night": "3 right, 2 wrong, 1 tie \u2014 and the informative result is that the SNAP-PLAN moves (TEN, CIN) were the market's real signal, exactly why preseason stays NO_FORECAST"
+ },
+ "expert_notes": [
+  "deGrom's 2-IP exit is the night's clearest exhibit for the availability/personnel layer: pregame workload and injury-risk state is capturable; in-game attrition is not \u2014 but the market priced TEX -147 on a name whose risk state existed before first pitch",
+  "V13 provisional 2/7 tonight; the four losses at CHC@WSH (7-0 dog win), SEA@NYY (1-0 dog shutout), CIN@CWS (9-8), PHI@MIN \u2014 all in the compression band, zero information",
+  "WNBA model vs market: the LVA +0.14 standout row WON and covered; ATL (-470 market, model 70.1) won by 35 \u2014 the model was RIGHT on side and badly shy on margin, same tail signature"
+ ]
+}

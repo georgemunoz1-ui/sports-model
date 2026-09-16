@@ -1,0 +1,19 @@
+{
+ "record_id": "V13-FREEZE-2026-08-10",
+ "built_utc": "2026-08-10T19:29:58Z",
+ "decision": "V13 IS FROZEN",
+ "authority": "owner instruction 2026-08-10: 'If starter dominance survives those tests, freeze V13 and build the starter-detail work only as a non-executable V14 shadow experiment.'",
+ "test_that_triggered_it": "Walk-forward block ablation: removing the starter block costs +0.00272 Brier and collapses AUC from 0.5645 to 0.5232, while removing run-differential/offense/defense changes nothing. Starter dominance SURVIVED.",
+ "supporting": "V13 also has the highest AUC (0.5662) and highest resolution (0.00693) of the four models \u2014 it discriminates best; its weakness is calibration (slope 0.842), not signal extraction.",
+ "what_frozen_means": [
+  "V13's arithmetic, HFA (1.005), seeding policy and sims-per-game are unchanged.",
+  "No estimator swap, no refit, no feature addition to V13.",
+  "Any starter-detail work happens in a SEPARATE, NON-EXECUTABLE shadow identity (V14), never inside V13.",
+  "Frozen does not mean trusted: V13 remains statistically indistinguishable from the base rate."
+ ],
+ "explicitly_not_authorized": [
+  "Promotion from tonight's 10 games \u2014 ten games cannot resolve estimator or feature quality.",
+  "Promotion from coefficient magnitude alone.",
+  "Any change to the gate (0/100 NO_PROMOTE) or the ledger ($0)."
+ ]
+}

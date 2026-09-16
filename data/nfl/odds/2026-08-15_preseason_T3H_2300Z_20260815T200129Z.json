@@ -1,0 +1,67 @@
+{
+ "schema_version": "nfl.preseason.current_lines.v1",
+ "capture_id": "NFL-PS-LINES-20260815T200129Z-T3H-2300Z",
+ "sport": "NFL",
+ "season_phase": "PRESEASON",
+ "capture_kind": "CURRENT_LINES",
+ "captured_at_utc": "2026-08-15T20:01:29Z",
+ "target_window": "T_MINUS_3H",
+ "window_state": "ON_TIME (kick 23:00Z, M&T Bank Stadium)",
+ "t_minus_48_note": "T_MINUS_48_MISSED per plan record; not backfilled",
+ "grade_scope": "MARKET_BENCHMARK_ONLY",
+ "promotion_eligible": false,
+ "wager_authority": "NO",
+ "stake": "$0",
+ "provenance": {
+  "grade": "WEB_EXTRACTED_NOT_RAW_BYTE_BOUND",
+  "raw_source_bytes_on_disk": false,
+  "rule": "source-specific quotes; no averaging; baseline for the 21:30Z T-90M run \u2014 not an opener"
+ },
+ "games": [
+  {
+   "away_team": "PHI",
+   "home_team": "BAL",
+   "game_start_utc": "2026-08-15T23:00:00Z",
+   "model_forecast": null,
+   "forecast_status": "NO_INDEPENDENT_PRESEASON_MODEL",
+   "source_quotes": [
+    {
+     "quote_id": "PHI-BAL-DK-20260815T200129Z",
+     "quote_scope": "SOURCE_SPECIFIC",
+     "display_source": "DraftKings Network article",
+     "underlying_book_attribution": "DraftKings",
+     "attribution_confidence": "MEDIUM",
+     "source_url": "https://dknetwork.draftkings.com/2026/08/15/philadelphia-eagles-at-baltimore-ravens-prediction-pick-for-nfl-preseason-on-8-15-26/",
+     "accessed_at_utc": "2026-08-15T20:01:29Z",
+     "away_spread": -3.5,
+     "home_spread": 3.5,
+     "away_moneyline": -180,
+     "home_moneyline": 150,
+     "total": 36.5
+    }
+   ],
+   "current_favorite": "PHI",
+   "favorite_basis": "SINGLE_SOURCE (DK) \u2014 a ROAD favorite with both starting QBs sitting; benchmark declaration deferred to the T-90M run for the two-source bar, mirroring the T-3H BUF precedent",
+   "pregame_personnel": {
+    "status": "CAPTURED",
+    "facts": [
+     {
+      "team": "PHI",
+      "source_family": "SECONDARY_REPORT",
+      "source_url": "https://www.covers.com/nfl/eagles-vs-ravens-predictions-picks-best-bets-saturday-august-15-2026",
+      "captured_at_utc": "2026-08-15T20:01:29Z",
+      "fact": "Jalen Hurts will not play; Tanner McKee featured at QB."
+     },
+     {
+      "team": "BAL",
+      "source_family": "SECONDARY_REPORT",
+      "source_url": "https://www.covers.com/nfl/eagles-vs-ravens-predictions-picks-best-bets-saturday-august-15-2026",
+      "captured_at_utc": "2026-08-15T20:01:29Z",
+      "fact": "Lamar Jackson OUT; DE Calais Campbell OUT."
+     }
+    ],
+    "conflicts": []
+   }
+  }
+ ]
+}

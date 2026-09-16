@@ -1,0 +1,12 @@
+{
+ "amends": [
+  "data/audit/2026-08-26_checkpoint_t90.json (d946446a)",
+  "data/audit/2026-08-26_checkpoint_t45.json (4c978da3)"
+ ],
+ "correction": "both checkpoints said 'the twelve TBD slots ride frozen CAP'. Twelve TBD GAMES existed on the full board, but only EIGHT were in the nine-game evening block the checkpoints covered (BOS@MIA, COL@WSH, HOU@NYY, KC@TOR, MIL@NYM, LAD@ATL, TEX@CWS, BAL@STL); MIN@ATH had named starters, and four TBD games sat in the earlier POST_START block. Correct statement: no new identities were found for the eight remaining TBD evening games; those rows retained their frozen 0.50 CAP treatment.",
+ "created_utc": "2026-08-27T04:40:00Z",
+ "original_records_retained": true,
+ "record_id": "CHECKPOINT-CORRECTIONS-2026-08-27",
+ "record_sha256": "46b5a34aeaccfa4bfa282a3928a4ddf6bd54df05f1b818b680bad5d3860690b7",
+ "schema": "ops.correction.v1"
+}

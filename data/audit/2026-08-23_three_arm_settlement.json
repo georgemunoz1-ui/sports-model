@@ -1,0 +1,730 @@
+{
+ "record_id": "THREE-ARM-SETTLEMENT-2026-08-23",
+ "schema": "eval.three_arm_settlement.v1",
+ "settled_utc": "2026-08-24T00:05:00Z",
+ "cohort": "cards/2026-08-23_three_arm_card.json",
+ "arms_registered_utc": "2026-08-23T10:04:27Z",
+ "first_game_start_utc": "2026-08-23T17:35:00Z",
+ "prospectivity": "PROSPECTIVE_CHALLENGER_EVIDENCE — all three arms registered 7h31m before first pitch",
+ "evidence": {
+  "mlb": "data/mlb/evidence/2026-08-23_owner_relay_finals.json",
+  "wnba": "data/wnba/evidence_2026-08-23_finals.json",
+  "nfl": "data/nfl/2026-08-23_owner_relay_finals.json",
+  "tier": 1,
+  "family": "OWNER_RELAY"
+ },
+ "HEADLINE": "INFERENCE SUPPRESSED. Every number in this record is DESCRIPTIVE. One slate date is one cluster; the smallest attainable two-sided p on k=1 is 1.0, so nothing here establishes or refutes improvement over the expanding prior. Improvement is NOT ESTABLISHED — which is not the same as absent, and not the same as present.",
+ "inference": {
+  "n_slate_date_clusters": 1,
+  "min_clusters_for_alpha_0_05": 6,
+  "smallest_attainable_two_sided_p": 1.0,
+  "grade": [
+   false,
+   "1 independent cluster(s): an exact cluster sign-flip test has 2 assignments, so its smallest attainable two-sided p is 1.0000, above alpha=0.05. Inference needs at least 6 clusters and Holm adjustment can only increase a p-value, never rescue one."
+  ],
+  "interval": "NON_DECISION_GRADE",
+  "holm_p": "UNAVAILABLE_INSUFFICIENT_CLUSTERS",
+  "beats": "NOT_EVALUABLE",
+  "why": "ONE slate date is one cluster. An exact cluster-level sign-flip test on k=1 has 2 possible assignments, so the smallest attainable two-sided p is 1.0. Every number below is DESCRIPTIVE. Nothing here establishes or refutes improvement over the expanding prior.",
+  "not_pooled": "this cohort is not merged with the 8/19-8/21 comparison. Those were a different registration under a different input policy; pooling cohorts is exactly what lesson 12 forbids."
+ },
+ "winner_by_arm": {
+  "BASELINE": {
+   "n": 15,
+   "record": "10-5",
+   "accuracy": 0.6666666666666666,
+   "brier": 0.24224519469409317,
+   "logloss": 0.6776249908193905,
+   "prior_brier": 0.24224519469409317,
+   "prior_logloss": 0.6776249908193905,
+   "brier_skill_score": 0.0,
+   "logloss_improvement_over_prior": 0.0,
+   "calibration_intercept": null,
+   "calibration_slope": null,
+   "calibration_undefined_reason": "the forecast takes a single value across every game, so the regressor has no variation; this is undefined, not miscalibrated",
+   "calibration_estimability": "NOT_NUMERICALLY_ESTIMABLE",
+   "calibration_estimability_reason": "the forecast takes a single value across every game, so the regressor has no variation; this is undefined, not miscalibrated",
+   "calibration_acceptable": false,
+   "calibration_acceptability_reason": "calibration is UNDEFINED (the line was not estimable), which is not the same as acceptable and must never be read as it",
+   "probability_spread_pp": 0.0,
+   "discrimination_auc": 0.5,
+   "reliability": [
+    {
+     "bucket": "[0.00,0.40)",
+     "n": 0,
+     "status": "INSUFFICIENT_SAMPLE",
+     "mean_forecast": null,
+     "observed_frequency": null,
+     "why": "n=0 is below the floor of 5; a bucket this small is not a calibration measurement"
+    },
+    {
+     "bucket": "[0.40,0.45)",
+     "n": 0,
+     "status": "INSUFFICIENT_SAMPLE",
+     "mean_forecast": null,
+     "observed_frequency": null,
+     "why": "n=0 is below the floor of 5; a bucket this small is not a calibration measurement"
+    },
+    {
+     "bucket": "[0.45,0.50)",
+     "n": 0,
+     "status": "INSUFFICIENT_SAMPLE",
+     "mean_forecast": null,
+     "observed_frequency": null,
+     "why": "n=0 is below the floor of 5; a bucket this small is not a calibration measurement"
+    },
+    {
+     "bucket": "[0.50,0.55)",
+     "n": 15,
+     "status": "MEASURED",
+     "mean_forecast": 0.5251641137855579,
+     "observed_frequency": 0.6666666666666666,
+     "gap": 0.1415025528811087
+    },
+    {
+     "bucket": "[0.55,0.60)",
+     "n": 0,
+     "status": "INSUFFICIENT_SAMPLE",
+     "mean_forecast": null,
+     "observed_frequency": null,
+     "why": "n=0 is below the floor of 5; a bucket this small is not a calibration measurement"
+    },
+    {
+     "bucket": "[0.60,0.70)",
+     "n": 0,
+     "status": "INSUFFICIENT_SAMPLE",
+     "mean_forecast": null,
+     "observed_frequency": null,
+     "why": "n=0 is below the floor of 5; a bucket this small is not a calibration measurement"
+    },
+    {
+     "bucket": "[0.70,1.01)",
+     "n": 0,
+     "status": "INSUFFICIENT_SAMPLE",
+     "mean_forecast": null,
+     "observed_frequency": null,
+     "why": "n=0 is below the floor of 5; a bucket this small is not a calibration measurement"
+    }
+   ],
+   "skill_ci": null
+  },
+  "CHAMPION": {
+   "n": 15,
+   "record": "9-6",
+   "accuracy": 0.6,
+   "brier": 0.24206033333333332,
+   "logloss": 0.6770684786062108,
+   "prior_brier": 0.24224519469409317,
+   "prior_logloss": 0.6776249908193905,
+   "brier_skill_score": 0.0007631167296973107,
+   "logloss_improvement_over_prior": 0.0005565122131797606,
+   "calibration_intercept": 0.6508764200822322,
+   "calibration_slope": 1.5591578079708892,
+   "calibration_undefined_reason": null,
+   "calibration_estimability": "NUMERICALLY_ESTIMABLE",
+   "calibration_estimability_reason": "rcond 4.539e-02 above the preregistered floor 1.490e-08",
+   "calibration_acceptable": false,
+   "calibration_acceptability_reason": "slope 1.559 outside (0.8, 1.25); |intercept| 0.651 above 0.5",
+   "probability_spread_pp": 5.509947713864789,
+   "discrimination_auc": 0.58,
+   "reliability": [
+    {
+     "bucket": "[0.00,0.40)",
+     "n": 0,
+     "status": "INSUFFICIENT_SAMPLE",
+     "mean_forecast": null,
+     "observed_frequency": null,
+     "why": "n=0 is below the floor of 5; a bucket this small is not a calibration measurement"
+    },
+    {
+     "bucket": "[0.40,0.45)",
+     "n": 2,
+     "status": "INSUFFICIENT_SAMPLE",
+     "mean_forecast": 0.436,
+     "observed_frequency": null,
+     "why": "n=2 is below the floor of 5; a bucket this small is not a calibration measurement"
+    },
+    {
+     "bucket": "[0.45,0.50)",
+     "n": 5,
+     "status": "MEASURED",
+     "mean_forecast": 0.4694,
+     "observed_frequency": 0.6,
+     "gap": 0.1306
+    },
+    {
+     "bucket": "[0.50,0.55)",
+     "n": 4,
+     "status": "INSUFFICIENT_SAMPLE",
+     "mean_forecast": 0.5282500000000001,
+     "observed_frequency": null,
+     "why": "n=4 is below the floor of 5; a bucket this small is not a calibration measurement"
+    },
+    {
+     "bucket": "[0.55,0.60)",
+     "n": 3,
+     "status": "INSUFFICIENT_SAMPLE",
+     "mean_forecast": 0.5656666666666667,
+     "observed_frequency": null,
+     "why": "n=3 is below the floor of 5; a bucket this small is not a calibration measurement"
+    },
+    {
+     "bucket": "[0.60,0.70)",
+     "n": 1,
+     "status": "INSUFFICIENT_SAMPLE",
+     "mean_forecast": 0.616,
+     "observed_frequency": null,
+     "why": "n=1 is below the floor of 5; a bucket this small is not a calibration measurement"
+    },
+    {
+     "bucket": "[0.70,1.01)",
+     "n": 0,
+     "status": "INSUFFICIENT_SAMPLE",
+     "mean_forecast": null,
+     "observed_frequency": null,
+     "why": "n=0 is below the floor of 5; a bucket this small is not a calibration measurement"
+    }
+   ],
+   "skill_ci": null
+  },
+  "CHALLENGER": {
+   "n": 15,
+   "record": "11-4",
+   "accuracy": 0.7333333333333333,
+   "brier": 0.23331119004783948,
+   "logloss": 0.6596903323077092,
+   "prior_brier": 0.24224519469409317,
+   "prior_logloss": 0.6776249908193905,
+   "brier_skill_score": 0.03688000770267308,
+   "logloss_improvement_over_prior": 0.0179346585116813,
+   "calibration_intercept": 0.12380036119832095,
+   "calibration_slope": 5.856478376520823,
+   "calibration_undefined_reason": null,
+   "calibration_estimability": "NUMERICALLY_ESTIMABLE",
+   "calibration_estimability_reason": "rcond 1.493e-02 above the preregistered floor 1.490e-08",
+   "calibration_acceptable": false,
+   "calibration_acceptability_reason": "slope 5.856 outside (0.8, 1.25)",
+   "probability_spread_pp": 3.1904058639513124,
+   "discrimination_auc": 0.66,
+   "reliability": [
+    {
+     "bucket": "[0.00,0.40)",
+     "n": 0,
+     "status": "INSUFFICIENT_SAMPLE",
+     "mean_forecast": null,
+     "observed_frequency": null,
+     "why": "n=0 is below the floor of 5; a bucket this small is not a calibration measurement"
+    },
+    {
+     "bucket": "[0.40,0.45)",
+     "n": 0,
+     "status": "INSUFFICIENT_SAMPLE",
+     "mean_forecast": null,
+     "observed_frequency": null,
+     "why": "n=0 is below the floor of 5; a bucket this small is not a calibration measurement"
+    },
+    {
+     "bucket": "[0.45,0.50)",
+     "n": 3,
+     "status": "INSUFFICIENT_SAMPLE",
+     "mean_forecast": 0.4811414943197743,
+     "observed_frequency": null,
+     "why": "n=3 is below the floor of 5; a bucket this small is not a calibration measurement"
+    },
+    {
+     "bucket": "[0.50,0.55)",
+     "n": 8,
+     "status": "MEASURED",
+     "mean_forecast": 0.5261155945446568,
+     "observed_frequency": 0.75,
+     "gap": 0.22388440545534316
+    },
+    {
+     "bucket": "[0.55,0.60)",
+     "n": 4,
+     "status": "INSUFFICIENT_SAMPLE",
+     "mean_forecast": 0.5646685439161215,
+     "observed_frequency": null,
+     "why": "n=4 is below the floor of 5; a bucket this small is not a calibration measurement"
+    },
+    {
+     "bucket": "[0.60,0.70)",
+     "n": 0,
+     "status": "INSUFFICIENT_SAMPLE",
+     "mean_forecast": null,
+     "observed_frequency": null,
+     "why": "n=0 is below the floor of 5; a bucket this small is not a calibration measurement"
+    },
+    {
+     "bucket": "[0.70,1.01)",
+     "n": 0,
+     "status": "INSUFFICIENT_SAMPLE",
+     "mean_forecast": null,
+     "observed_frequency": null,
+     "why": "n=0 is below the floor of 5; a bucket this small is not a calibration measurement"
+    }
+   ],
+   "skill_ci": null
+  }
+ },
+ "winner_by_dose": {
+  "0.0": {
+   "BASELINE": {
+    "n": 1,
+    "brier": 0.22546911883705456,
+    "accuracy": 1.0
+   },
+   "CHAMPION": {
+    "n": 1,
+    "brier": 0.28302400000000005,
+    "accuracy": 0.0
+   },
+   "CHALLENGER": {
+    "n": 1,
+    "brier": 0.22486445619795603,
+    "accuracy": 1.0
+   },
+   "n": 1,
+   "underpowered": true,
+   "information_class": "ALL_CAP_BASELINE"
+  },
+  "0.5": {
+   "BASELINE": {
+    "n": 4,
+    "brier": 0.22546911883705456,
+    "accuracy": 1.0
+   },
+   "CHAMPION": {
+    "n": 4,
+    "brier": 0.23545475,
+    "accuracy": 0.5
+   },
+   "CHALLENGER": {
+    "n": 4,
+    "brier": 0.22158342641678788,
+    "accuracy": 0.75
+   },
+   "n": 4,
+   "underpowered": true,
+   "information_class": "PARTIAL_STARTER_INFORMATION"
+  },
+  "1.0": {
+   "BASELINE": {
+    "n": 10,
+    "brier": 0.2506332326226125,
+    "accuracy": 0.5
+   },
+   "CHAMPION": {
+    "n": 10,
+    "brier": 0.24060619999999994,
+    "accuracy": 0.7
+   },
+   "CHALLENGER": {
+    "n": 10,
+    "brier": 0.2388469688852485,
+    "accuracy": 0.7
+   },
+   "n": 10,
+   "underpowered": true,
+   "information_class": "FULL_STARTER_INFORMATION"
+  }
+ },
+ "totals_point_error": {
+  "BASELINE": {
+   "estimand": "TOTAL_POINT_ERROR_VS_ACTUAL",
+   "n": 15,
+   "mae": 3.5364666666666666,
+   "rmse": 4.927967714991647,
+   "signed_bias": -0.4898000000000002,
+   "median_abs_error": 1.9730000000000008,
+   "largest_miss": -12.77,
+   "underpowered": true
+  },
+  "CHAMPION": {
+   "estimand": "TOTAL_POINT_ERROR_VS_ACTUAL",
+   "n": 15,
+   "mae": 3.4733333333333336,
+   "rmse": 5.091103351272033,
+   "signed_bias": -0.7133333333333333,
+   "median_abs_error": 2.3000000000000007,
+   "largest_miss": -14.0,
+   "underpowered": true
+  },
+  "CHALLENGER": {
+   "estimand": "TOTAL_POINT_ERROR_VS_ACTUAL",
+   "n": 15,
+   "mae": 3.5364666666666666,
+   "rmse": 4.927967714991647,
+   "signed_bias": -0.4898000000000002,
+   "median_abs_error": 1.9730000000000008,
+   "largest_miss": -12.77,
+   "underpowered": true
+  },
+  "EXPANDING_TOTAL_PRIOR": {
+   "estimand": "TOTAL_POINT_ERROR_VS_ACTUAL",
+   "n": 15,
+   "mae": 3.334369219385868,
+   "rmse": 4.790198889862962,
+   "signed_bias": -0.4155382907880135,
+   "median_abs_error": 2.0155382907880135,
+   "largest_miss": -12.015538290788013,
+   "underpowered": true
+  }
+ },
+ "totals_notes": {
+  "baseline_column_is_the_challengers": "the card's BASELINE total is the CHALLENGER's total in all 15 games, so those two blocks are identical by construction and neither is a comparator for the other. The real comparator is EXPANDING_TOTAL_PRIOR, added under amendment 3.",
+  "prior_value_runs": 8.984461709211987,
+  "prior_n": 1802,
+  "market_over_under": "MARKET_OU_UNAVAILABLE_NO_INDEPENDENT_LINE",
+  "distribution_scores": "NOT_COMPUTABLE — no arm retained a simulated total distribution"
+ },
+ "owner_watchlist": [
+  {
+   "game": "CHC@SEA",
+   "final": "19-2",
+   "home_won": false,
+   "champion_p_home": 0.461,
+   "challenger_p_home": 0.5276367583384537,
+   "champion_brier": 0.21252100000000002,
+   "challenger_brier": 0.27840054874991177,
+   "challenger_better": false,
+   "flipped_winner": true
+  },
+  {
+   "game": "MIN@SD",
+   "final": "1-8",
+   "home_won": true,
+   "champion_p_home": 0.452,
+   "challenger_p_home": 0.5129210360753467,
+   "champion_brier": 0.30030400000000007,
+   "challenger_brier": 0.23724591709791373,
+   "challenger_better": true,
+   "flipped_winner": true
+  },
+  {
+   "game": "PIT@LAD",
+   "final": "0-4",
+   "home_won": true,
+   "champion_p_home": 0.468,
+   "challenger_p_home": 0.5258012482113054,
+   "champion_brier": 0.28302400000000005,
+   "challenger_brier": 0.22486445619795603,
+   "challenger_better": true,
+   "flipped_winner": true
+  },
+  {
+   "game": "DET@KC",
+   "final": "7-11",
+   "home_won": true,
+   "champion_p_home": 0.441,
+   "challenger_p_home": 0.4991554767049166,
+   "champion_brier": 0.31248099999999995,
+   "challenger_brier": 0.25084523651467927,
+   "challenger_better": true,
+   "flipped_winner": false
+  },
+  {
+   "game": "TB@BAL",
+   "final": "3-1",
+   "home_won": false,
+   "champion_p_home": 0.431,
+   "challenger_p_home": 0.48368227763853905,
+   "champion_brier": 0.18576099999999998,
+   "challenger_brier": 0.23394854570160478,
+   "challenger_better": false,
+   "flipped_winner": false
+  },
+  {
+   "game": "WSH@MIA",
+   "final": "2-6",
+   "home_won": true,
+   "champion_p_home": 0.481,
+   "challenger_p_home": 0.5149387029080398,
+   "champion_brier": 0.269361,
+   "challenger_brier": 0.2352844619365349,
+   "challenger_better": true,
+   "flipped_winner": true
+  }
+ ],
+ "wnba": {
+  "BASELINE": {
+   "n": 4,
+   "record": "1-3",
+   "accuracy": 0.25,
+   "brier": 0.287989,
+   "logloss": 0.7696121570483316,
+   "prior_brier": 0.287989,
+   "prior_logloss": 0.7696121570483316,
+   "brier_skill_score": 0.0,
+   "logloss_improvement_over_prior": 0.0,
+   "calibration_intercept": null,
+   "calibration_slope": null,
+   "calibration_undefined_reason": "the forecast takes a single value across every game, so the regressor has no variation; this is undefined, not miscalibrated",
+   "calibration_estimability": "NOT_NUMERICALLY_ESTIMABLE",
+   "calibration_estimability_reason": "the forecast takes a single value across every game, so the regressor has no variation; this is undefined, not miscalibrated",
+   "calibration_acceptable": false,
+   "calibration_acceptability_reason": "calibration is UNDEFINED (the line was not estimable), which is not the same as acceptable and must never be read as it",
+   "probability_spread_pp": 0.0,
+   "discrimination_auc": 0.5,
+   "reliability": [
+    {
+     "bucket": "[0.00,0.40)",
+     "n": 0,
+     "status": "INSUFFICIENT_SAMPLE",
+     "mean_forecast": null,
+     "observed_frequency": null,
+     "why": "n=0 is below the floor of 5; a bucket this small is not a calibration measurement"
+    },
+    {
+     "bucket": "[0.40,0.45)",
+     "n": 0,
+     "status": "INSUFFICIENT_SAMPLE",
+     "mean_forecast": null,
+     "observed_frequency": null,
+     "why": "n=0 is below the floor of 5; a bucket this small is not a calibration measurement"
+    },
+    {
+     "bucket": "[0.45,0.50)",
+     "n": 0,
+     "status": "INSUFFICIENT_SAMPLE",
+     "mean_forecast": null,
+     "observed_frequency": null,
+     "why": "n=0 is below the floor of 5; a bucket this small is not a calibration measurement"
+    },
+    {
+     "bucket": "[0.50,0.55)",
+     "n": 0,
+     "status": "INSUFFICIENT_SAMPLE",
+     "mean_forecast": null,
+     "observed_frequency": null,
+     "why": "n=0 is below the floor of 5; a bucket this small is not a calibration measurement"
+    },
+    {
+     "bucket": "[0.55,0.60)",
+     "n": 4,
+     "status": "INSUFFICIENT_SAMPLE",
+     "mean_forecast": 0.567,
+     "observed_frequency": null,
+     "why": "n=4 is below the floor of 5; a bucket this small is not a calibration measurement"
+    },
+    {
+     "bucket": "[0.60,0.70)",
+     "n": 0,
+     "status": "INSUFFICIENT_SAMPLE",
+     "mean_forecast": null,
+     "observed_frequency": null,
+     "why": "n=0 is below the floor of 5; a bucket this small is not a calibration measurement"
+    },
+    {
+     "bucket": "[0.70,1.01)",
+     "n": 0,
+     "status": "INSUFFICIENT_SAMPLE",
+     "mean_forecast": null,
+     "observed_frequency": null,
+     "why": "n=0 is below the floor of 5; a bucket this small is not a calibration measurement"
+    }
+   ],
+   "skill_ci": null
+  },
+  "CHAMPION": {
+   "n": 4,
+   "record": "4-0",
+   "accuracy": 1.0,
+   "brier": 0.12436425,
+   "logloss": 0.4275337184463607,
+   "prior_brier": 0.287989,
+   "prior_logloss": 0.7696121570483316,
+   "brier_skill_score": 0.568163193733094,
+   "logloss_improvement_over_prior": 0.34207843860197096,
+   "calibration_intercept": -11.49333760253347,
+   "calibration_slope": 23.718668018433256,
+   "calibration_undefined_reason": null,
+   "calibration_estimability": "NUMERICALLY_ESTIMABLE",
+   "calibration_estimability_reason": "rcond 4.766e-01 above the preregistered floor 1.490e-08",
+   "calibration_acceptable": false,
+   "calibration_acceptability_reason": "slope 23.719 outside (0.8, 1.25); |intercept| 11.493 above 0.5",
+   "probability_spread_pp": 20.485828434961245,
+   "discrimination_auc": 1.0,
+   "reliability": [
+    {
+     "bucket": "[0.00,0.40)",
+     "n": 2,
+     "status": "INSUFFICIENT_SAMPLE",
+     "mean_forecast": 0.31899999999999995,
+     "observed_frequency": null,
+     "why": "n=2 is below the floor of 5; a bucket this small is not a calibration measurement"
+    },
+    {
+     "bucket": "[0.40,0.45)",
+     "n": 0,
+     "status": "INSUFFICIENT_SAMPLE",
+     "mean_forecast": null,
+     "observed_frequency": null,
+     "why": "n=0 is below the floor of 5; a bucket this small is not a calibration measurement"
+    },
+    {
+     "bucket": "[0.45,0.50)",
+     "n": 1,
+     "status": "INSUFFICIENT_SAMPLE",
+     "mean_forecast": 0.478,
+     "observed_frequency": null,
+     "why": "n=1 is below the floor of 5; a bucket this small is not a calibration measurement"
+    },
+    {
+     "bucket": "[0.50,0.55)",
+     "n": 0,
+     "status": "INSUFFICIENT_SAMPLE",
+     "mean_forecast": null,
+     "observed_frequency": null,
+     "why": "n=0 is below the floor of 5; a bucket this small is not a calibration measurement"
+    },
+    {
+     "bucket": "[0.55,0.60)",
+     "n": 0,
+     "status": "INSUFFICIENT_SAMPLE",
+     "mean_forecast": null,
+     "observed_frequency": null,
+     "why": "n=0 is below the floor of 5; a bucket this small is not a calibration measurement"
+    },
+    {
+     "bucket": "[0.60,0.70)",
+     "n": 0,
+     "status": "INSUFFICIENT_SAMPLE",
+     "mean_forecast": null,
+     "observed_frequency": null,
+     "why": "n=0 is below the floor of 5; a bucket this small is not a calibration measurement"
+    },
+    {
+     "bucket": "[0.70,1.01)",
+     "n": 1,
+     "status": "INSUFFICIENT_SAMPLE",
+     "mean_forecast": 0.749,
+     "observed_frequency": null,
+     "why": "n=1 is below the floor of 5; a bucket this small is not a calibration measurement"
+    }
+   ],
+   "skill_ci": null
+  },
+  "CHALLENGER": {
+   "n": 4,
+   "record": "1-3",
+   "accuracy": 0.25,
+   "brier": 0.287989,
+   "logloss": 0.7696121570483316,
+   "prior_brier": 0.287989,
+   "prior_logloss": 0.7696121570483316,
+   "brier_skill_score": 0.0,
+   "logloss_improvement_over_prior": 0.0,
+   "calibration_intercept": null,
+   "calibration_slope": null,
+   "calibration_undefined_reason": "the forecast takes a single value across every game, so the regressor has no variation; this is undefined, not miscalibrated",
+   "calibration_estimability": "NOT_NUMERICALLY_ESTIMABLE",
+   "calibration_estimability_reason": "the forecast takes a single value across every game, so the regressor has no variation; this is undefined, not miscalibrated",
+   "calibration_acceptable": false,
+   "calibration_acceptability_reason": "calibration is UNDEFINED (the line was not estimable), which is not the same as acceptable and must never be read as it",
+   "probability_spread_pp": 0.0,
+   "discrimination_auc": 0.5,
+   "reliability": [
+    {
+     "bucket": "[0.00,0.40)",
+     "n": 0,
+     "status": "INSUFFICIENT_SAMPLE",
+     "mean_forecast": null,
+     "observed_frequency": null,
+     "why": "n=0 is below the floor of 5; a bucket this small is not a calibration measurement"
+    },
+    {
+     "bucket": "[0.40,0.45)",
+     "n": 0,
+     "status": "INSUFFICIENT_SAMPLE",
+     "mean_forecast": null,
+     "observed_frequency": null,
+     "why": "n=0 is below the floor of 5; a bucket this small is not a calibration measurement"
+    },
+    {
+     "bucket": "[0.45,0.50)",
+     "n": 0,
+     "status": "INSUFFICIENT_SAMPLE",
+     "mean_forecast": null,
+     "observed_frequency": null,
+     "why": "n=0 is below the floor of 5; a bucket this small is not a calibration measurement"
+    },
+    {
+     "bucket": "[0.50,0.55)",
+     "n": 0,
+     "status": "INSUFFICIENT_SAMPLE",
+     "mean_forecast": null,
+     "observed_frequency": null,
+     "why": "n=0 is below the floor of 5; a bucket this small is not a calibration measurement"
+    },
+    {
+     "bucket": "[0.55,0.60)",
+     "n": 4,
+     "status": "INSUFFICIENT_SAMPLE",
+     "mean_forecast": 0.567,
+     "observed_frequency": null,
+     "why": "n=4 is below the floor of 5; a bucket this small is not a calibration measurement"
+    },
+    {
+     "bucket": "[0.60,0.70)",
+     "n": 0,
+     "status": "INSUFFICIENT_SAMPLE",
+     "mean_forecast": null,
+     "observed_frequency": null,
+     "why": "n=0 is below the floor of 5; a bucket this small is not a calibration measurement"
+    },
+    {
+     "bucket": "[0.70,1.01)",
+     "n": 0,
+     "status": "INSUFFICIENT_SAMPLE",
+     "mean_forecast": null,
+     "observed_frequency": null,
+     "why": "n=0 is below the floor of 5; a bucket this small is not a calibration measurement"
+    }
+   ],
+   "skill_ci": null
+  },
+  "home_record": "1-3",
+  "null_arm_demonstration": "CHALLENGER and BASELINE return byte-identical metrics, as they must: the challenger IS the baseline on this sport. That is the negative control behaving exactly as a negative control should, and it is the reason it cannot count as challenger coverage."
+ },
+ "nfl": {
+  "game": "SEA@TEN",
+  "final": "16-19",
+  "home_won": true,
+  "baseline_p_home": 0.52,
+  "brier": 0.2304,
+  "n": 1,
+  "note": "one game, one arm. A single Bernoulli trial carries no information about skill and is reported so it is not silently dropped, not because it means anything."
+ },
+ "THE_OWNER_QUESTION": {
+  "asked": "whether the prior-heavy challenger improves calibration while sacrificing discrimination",
+  "descriptive_answer": "On this slate it did the OPPOSITE of the feared failure mode. Discrimination went UP, not down: AUC 0.660 challenger vs 0.580 champion vs 0.500 baseline. Calibration is the half that failed — the challenger's calibration slope is 5.86, meaning the outcomes moved about six times as much as its forecasts did. It compressed, and it compressed far too much.",
+  "so_the_diagnosis_inverts": "the challenger has ordering skill its probabilities do not express. That is a fixable defect (the offset is over-regularised) and a different problem from the one the compression statistic suggested.",
+  "caveat": "n=15 on one night, and a calibration line fitted across a 12pp forecast range. The slope is NUMERICALLY_ESTIMABLE under the Hessian rule and is still not evidence of anything at this sample size. calibration_acceptable is FALSE for both fitted arms, separately from estimability, exactly as the two rules are meant to separate."
+ },
+ "WHAT_ACTUALLY_MATTERS_MOST": {
+  "finding": "THE EXPANDING TOTAL PRIOR BEAT EVERY MODEL ARM ON TOTALS.",
+  "numbers": {
+   "expanding_prior_mae": 3.334,
+   "champion_mae": 3.473,
+   "challenger_mae": 3.536,
+   "card_baseline_mae": 3.536
+  },
+  "why_it_matters": "the card's BASELINE total was the CHALLENGER's total, so the card as shipped had no comparator at all on this estimand and this result was invisible. The comparator added under amendment 3 — a single league-mean number, 8.984 runs, that knows nothing about the teams — is the most accurate total on the board. Lesson 20 arriving on schedule: check the base rate before crediting the model.",
+  "direction": "all four are negatively biased (signed −0.42 to −0.71): every arm under-projected scoring, and CHC 19-2 supplies the largest miss in each."
+ },
+ "CHAMPION_READ": "9-6, Brier skill +0.00076 over the prior. That is three orders of magnitude below the challenger's and is indistinguishable from zero at any sample size. The frozen V13 arm added essentially nothing over a single league-average number on this slate.",
+ "WNBA_READ": "the champion went 4-0 with Brier skill +0.568 and AUC 1.0 — on FOUR games, every one of them action-blocked for a feature state 32 days stale against a 21-day ceiling. Four Bernoulli trials cannot distinguish a good model from a lucky one, and a perfect AUC on n=4 occurs by chance about 4% of the time under a coin flip. The correct reading is 'not evaluable and interesting', not 'the stale arm was right all along'. The CHALLENGER returns byte-identical numbers to the BASELINE, as a negative control must.",
+ "NFL_READ": "one game, one arm, home won. Reported so it is not silently dropped, not because it means anything.",
+ "LEDGERS": {
+  "model_authorized": "$0 at 0 bets. UNCHANGED. No arm on this card carried action authority: every MLB row was PASS_REFERENCE_ONLY and ATL@MIL was blocked outright for the neutral site.",
+  "gate": "0/100 NO_PROMOTE, unchanged. This cohort adds 15 games on 1 date toward the binding gate of 500 games across 60 dates.",
+  "owner_discretion_walled": {
+   "action": "TEN moneyline −170, 0.5u — the owner's information-adjusted preseason reference selection from the 8/23 Reference v2 card, explicitly not trained-model output",
+   "result": "TEN 19, SEA 16 — WIN",
+   "settled_units": 0.294,
+   "lane": "OWNER DISCRETION ONLY. This win does not touch the model-authorized ledger, is not gate progress, and is not evidence about any arm. 7/25 precedent: discretion picks and EV rules never mix."
+  }
+ },
+ "STATUS": "FORWARD_ONLY_PENDING. Improvement over the expanding prior is NOT ESTABLISHED on this cohort and cannot be from a single slate date."
+}

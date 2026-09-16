@@ -1,0 +1,88 @@
+{
+ "COORDINATOR": {
+  "firewall": "market_overlay() takes the frozen forecast as an argument and returns a separate object. There is no call path by which a price reaches v13_sim \u2014 market independence as a call graph, not a promise.",
+  "module": "harness/mlb_daily_coordinator.py",
+  "order": "schedule -> enrich -> FREEZE FEATURES -> forecast -> register -> market overlay",
+  "true_no_forecast_is_reserved": {
+   "admissible": [
+    "ENGINE_RAISED",
+    "TEAM_RUN_FORM_ABSENT",
+    "NO_STARTER_TREATMENT"
+   ],
+   "enforcement": "assert_mathematical() RAISES ForecastSuppressed on any rejected reason, so a future caller cannot record one without editing the list in the same commit",
+   "rejected_by_assertion": [
+    "SP_NOT_CONFIRMED",
+    "LINEUP_NOT_POSTED",
+    "RELAY_FIELD_MISSING",
+    "FEED_EGRESS_BLOCKED",
+    "SOURCE_STALE",
+    "NO_MARKET_PRICE",
+    "AVAILABILITY_UNKNOWN"
+   ]
+  }
+ },
+ "GRADE_OF_THIS_EXERCISE": {
+  "stamp": "POST_HOC_NOT_PREGAME",
+  "what_would_make_it_prospective": "running the coordinator before first pitch and freezing the board, which is what it now exists to do",
+  "why": "the inputs are all pregame-dated \u2014 the relay capture, the pitcher registry, team form through the cutoff \u2014 but I RAN the engine after the games were played and while knowing the outcomes. This demonstrates what the pipeline WOULD have produced. It is not a prospective forecast and accrues NOTHING to settlement, promotion or the estimator."
+ },
+ "INVARIANT_ADOPTED": "NO_ACTION != NO_FORECAST. Every canonically scheduled MLB game receives a registered forecast unless the PREDICTION ENGINE ITSELF cannot execute.",
+ "LEDGER": {
+  "exposure_usd": 0,
+  "n_bets": 0,
+  "units": 0.0,
+  "wager_authority": "NO"
+ },
+ "PARSER": {
+  "cross_check": "every parsed current ML equals the value the board itself recorded; the four total moves it derives (BOS@NYY, PHI@LAA, PIT@STL 8.5->8.0; HOU@NYM 8.5->9.0) match the board's own movement notes",
+  "module": "harness/relay_parser.py",
+  "result": "14/14 games, 14/14 starter pairs, 14/14 markets, ZERO parse problems",
+  "why_deterministic": "a 4,461-line artifact is exactly where 'I read it' and 'I extracted it' diverge. The DK Open column is genuinely ambiguous \u2014 the FAVOURITE's row carries an opening moneyline and the underdog's an opening total \u2014 so the parser detects the literal ML token rather than assuming away-or-home, and refuses fields it cannot read unambiguously."
+ },
+ "R6": "append-only; new path",
+ "REGRESSION_RESULT": {
+  "schedule_reconciliation": "ARI@SF was absent from the sportsbook board. It is RETAINED as a scheduled game, forecast at p_home 0.4658, and marked NO_LINE \u2014 not dropped, and not confused with a game that could not be modelled.",
+  "summary": {
+   "actionable": 0,
+   "forecasted": 15,
+   "no_line": 1,
+   "scheduled": 15,
+   "true_no_forecast": 0,
+   "valued": 14,
+   "wait": 14
+  }
+ },
+ "WHAT_THE_BOARD_DID": {
+  "forecasted": 0,
+  "scheduled": 15,
+  "stated_reason": "0/14 SP_CONFIRMED (probable-only) + pitcher corpus ends 2026-07-19"
+ },
+ "WHAT_THE_MODEL_WOULD_HAVE_PROJECTED": {
+  "brier": 0.234835,
+  "graded": 13,
+  "honest_read": "the model did NOT beat the market. It won one the market lost (BOS@NYY: model NYY .5274, market had BOS) and lost three the market won (CWS@MIN, HOU@NYM, MIA@WSH). At n=13 this settles nothing in either direction.",
+  "market_on_the_same_12_priced_games": "10-2",
+  "record": "9-4 (69.2%)",
+  "refused": 2,
+  "refused_finals": {
+   "COL@ATL": "source returned a 2-2 tie, impossible in an MLB regular-season game",
+   "LAD@DET": "source truncated the score"
+  }
+ },
+ "WHAT_WAS_ACTUALLY_AVAILABLE": {
+  "conclusion": "the engine could have executed fifteen times and executed zero",
+  "park_factors": "30/30 parks",
+  "pitcher_registry": "25 of 28 starters present; the other 3 CAP to the registered league treatment, which the engine already handles",
+  "relay": "the owner's 4,461-line capture named 28 starters across 14 games with times, venues, records, starter W-L/ERA and the full DK ML/total/run-line board",
+  "team_run_form": "30/30 teams"
+ },
+ "WHY_THAT_REASON_COULD_NEVER_BE_SATISFIED": {
+  "consequence": "a board evaluated at 08:15 ET is tested against a condition that cannot exist until after first pitch. Not 'usually fails' \u2014 CANNOT be satisfied. Every pregame MLB board is CLV_ONLY by construction, permanently.",
+  "rule_verbatim": "feed_mlb_statsapi: 'NEVER mint CONFIRMED from a probable. Confirmation requires the boxscore to show the game past first pitch' and confirmed_starter_or_probable: 'never promoted, whatever its freshness'.",
+  "verdict": "a dead branch reported as an information problem"
+ },
+ "created_utc": "2026-08-31T07:00:00Z",
+ "record_id": "MLB-0830-NO-ACTION-NOT-NO-FORECAST",
+ "record_sha256": "5d7bef129e47b5106933ac6bb4d9b269aa94979ba82b44d03fe9ab8dec7dfa8e",
+ "schema": "ops.mlb_regression.v1"
+}

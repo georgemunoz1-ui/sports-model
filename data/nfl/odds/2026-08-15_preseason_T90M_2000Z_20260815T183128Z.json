@@ -1,0 +1,102 @@
+{
+ "schema_version": "nfl.preseason.current_lines.v1",
+ "capture_id": "NFL-PS-LINES-20260815T183128Z-T90M-2000Z",
+ "sport": "NFL",
+ "season_phase": "PRESEASON",
+ "capture_kind": "CURRENT_LINES",
+ "captured_at_utc": "2026-08-15T18:31:28Z",
+ "target_window": "T_MINUS_90M",
+ "window_state": "ON_TIME (kicks 20:00Z; NO game center confirms 3:00pm CT)",
+ "grade_scope": "MARKET_BENCHMARK_ONLY",
+ "promotion_eligible": false,
+ "wager_authority": "NO",
+ "stake": "$0",
+ "provenance": {
+  "grade": "WEB_EXTRACTED_NOT_RAW_BYTE_BOUND",
+  "raw_source_bytes_on_disk": false,
+  "rule": "source-specific quotes; no averaging; movement measured vs held T-3H capture NFL-PS-LINES-20260815T170059Z-T3H-2000Z"
+ },
+ "games": [
+  {
+   "away_team": "LAR",
+   "home_team": "KC",
+   "game_start_utc": "2026-08-15T20:00:00Z",
+   "model_forecast": null,
+   "forecast_status": "NO_INDEPENDENT_PRESEASON_MODEL",
+   "source_quotes": [
+    {
+     "quote_id": "LAR-KC-CONSENSUS-20260815T183128Z",
+     "quote_scope": "SOURCE_SPECIFIC",
+     "display_source": "covers/predictem consensus summary",
+     "underlying_book_attribution": null,
+     "attribution_confidence": "MEDIUM",
+     "source_url": "https://www.covers.com/nfl/rams-vs-chiefs-predictions-picks-best-bets-saturday-august-15-2026",
+     "accessed_at_utc": "2026-08-15T18:31:28Z",
+     "away_spread": 1.5,
+     "home_spread": -1.5,
+     "away_moneyline": 114,
+     "home_moneyline": -135,
+     "total": 38.5
+    }
+   ],
+   "current_favorite": "KC",
+   "favorite_basis": "sign unchanged vs T-3H (KC favored at both windows) \u2014 benchmark KC stands",
+   "movement_vs_t3h": "KC -2.5 -> -1.5 (1 pt toward LAR); total 36.5 -> 38.5 (+2). ML printed unchanged (-135/+114) while spread/total moved \u2014 flagged as possible source lag, recorded verbatim per source.",
+   "pregame_personnel": {
+    "status": "CARRIED_FROM_T3H (no late changes surfaced)",
+    "facts": [],
+    "conflicts": []
+   }
+  },
+  {
+   "away_team": "JAX",
+   "home_team": "NO",
+   "game_start_utc": "2026-08-15T20:00:00Z",
+   "model_forecast": null,
+   "forecast_status": "NO_INDEPENDENT_PRESEASON_MODEL",
+   "source_quotes": [
+    {
+     "quote_id": "JAX-NO-CONSENSUS-20260815T183128Z",
+     "quote_scope": "SOURCE_SPECIFIC",
+     "display_source": "sportsbookreview/actionnetwork consensus summary",
+     "underlying_book_attribution": null,
+     "attribution_confidence": "MEDIUM",
+     "source_url": "https://www.sportsbookreview.com/picks/nfl/jaguars-vs-saints-prediction-picks-best-bets-preseason-aug-15-2026/",
+     "accessed_at_utc": "2026-08-15T18:31:28Z",
+     "away_spread": 1.5,
+     "home_spread": -1.5,
+     "away_moneyline": 120,
+     "home_moneyline": -142,
+     "total": 38.5
+    }
+   ],
+   "current_favorite": "NO",
+   "favorite_basis": "sign unchanged vs T-3H (NO favored at both windows) \u2014 benchmark NO stands",
+   "movement_vs_t3h": "NO -2.5 -> -1.5 (1 pt toward JAX); total 35.5 -> 38.5 (+3); ML -130/+110 -> -142/+120 \u2014 ML moved TOWARD NO while spread moved AWAY: cross-source incoherence flagged, both recorded verbatim, neither averaged",
+   "reported_open_context": "Yahoo (dated article): 'Saints open as 1.5-point underdogers' \u2014 i.e. JAX -1.5 at open, a REPORTED opener from a source, not a held capture. If accurate, the sign flipped from JAX-favored open to NO-favored now; recorded as source-attributed context only.",
+   "pregame_personnel": {
+    "status": "UPDATED_THIS_RUN \u2014 closes the T-3H Saints gap and RESOLVES the Rattler conflict",
+    "facts": [
+     {
+      "team": "NO",
+      "source_family": "TEAM_OFFICIAL + SECONDARY",
+      "source_url": "https://www.neworleanssaints.com/news/jacksonville-jaguars-vs-new-orleans-saints-game-preview-2026-nfl-preseason-week-1-series-history-stats-connections",
+      "captured_at_utc": "2026-08-15T18:31:28Z",
+      "fact": "Tyler Shough starts at QB for the Saints tonight; Spencer Rattler is the backup; Zach Wilson also to play."
+     },
+     {
+      "team": "JAX",
+      "source_family": "SECONDARY_REPORT",
+      "source_url": "https://www.si.com/nfl/jaguars/onsi/jacksonville-predicting-which-start-vs-the-saints-in-preseason-opener",
+      "captured_at_utc": "2026-08-15T18:31:28Z",
+      "fact": "Nick Mullens expected to take the first snap, a drive or two only; Carter Bradley most of the game; starters rest after joint practices."
+     }
+    ],
+    "conflicts_resolved": [
+     "T-3H Rattler conflict RESOLVED: Rattler is the Saints' backup \u2014 the 'Jaguars opener' phrasing was garbled source text, as suspected.",
+     "T-3H Shough 'second game' echo re-adjudicated: fresher tonight-dated sources confirm Shough DOES start tonight; the CBS headline was mis-dated for this week but the underlying fact holds. Rejection of the stale source stands; the fact enters via current sources."
+    ]
+   }
+  }
+ ]
+}

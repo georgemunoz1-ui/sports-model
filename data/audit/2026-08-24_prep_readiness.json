@@ -1,0 +1,62 @@
+{
+ "record_id": "PREP-2026-08-24-READINESS",
+ "created_utc": "2026-08-24T10:30:00Z",
+ "question": "can a full 8/24 board be produced?",
+ "answer": "NO — not from anything reachable. The schedule is unacquired and no fetch rail reaches any domain. Everything that does not depend on acquisition is done and frozen.",
+ "READY_NOW": {
+  "arms_preregistered": "data/audit/2026-08-24_evaluation_arms_preregistration.json — five namespaced arms with distinct immutable ids, including the widening challenger the owner authorized. Frozen BEFORE any 8/24 game, which is the only moment that registration is worth anything.",
+  "priors_recomputed": {
+   "home": 0.52054,
+   "home_n": 1684,
+   "home_sd_pp": 1.21,
+   "total_runs": 8.9911,
+   "total_n": 1684,
+   "total_sd_runs": 4.546,
+   "note": "post-downgrade pool; last canonical game 2026-08-21"
+  },
+  "contracts_in_force": [
+   "totals mandatory, gradable, NEVER_DECISION_BEARING",
+   "arms namespaced <sport>.<target>.<ARM>",
+   "one page-wide identity per label; one row per identity",
+   "result_status enforced in the canonical consumer",
+   "source-artifact gate on every owner-relay row",
+   "prospectivity graded, not asserted"
+  ]
+ },
+ "BLOCKED": {
+  "schedule": {
+   "status": "ACQUISITION_BLOCKED",
+   "consequence": "no game population, so no cohort, no card, and no first pitch to time anything against"
+  },
+  "starters": {
+   "status": "BLOCKED_BY_SCHEDULE",
+   "consequence": "information dose is undefined; every game would fall to ALL_CAP_BASELINE if forced"
+  },
+  "prices": {
+   "status": "BLOCKED_BY_SCHEDULE",
+   "consequence": "no market estimand, no edge, no selection. Betting output is zero without a price overlay, as always"
+  },
+  "rails_retested_2026-08-24T10:18Z": {
+   "WebFetch": "EGRESS_BLOCKED on statsapi.mlb.com AND on en.wikipedia.org, the neutral control — so this is a rail failure, not a statement about any sports domain",
+   "WebSearch": "AVAILABLE but returned only index pages for this date; no per-game titles yet",
+   "shell HTTP": "NOT ATTEMPTED — standing rule against routing around the org egress proxy"
+  }
+ },
+ "WHAT_WOULD_UNBLOCK_A_FULL_BOARD": [
+  "an owner-relayed schedule with venues and probable starters — the same route that produced the 8/23 finals, and the fastest one",
+  "a captured official artifact (a statsapi schedule payload, an MLB.com schedule page) which would ALSO satisfy the source-artifact gate that the relay route does not",
+  "an outbound fetch rail reaching any domain from this environment"
+ ],
+ "STANDING_ITEMS_FOR_8_24": {
+  "wnba_champion_staleness": "33 days against a 21-day ceiling as of today, up from 32. Any WNBA champion row is action-blocked and DIAGNOSTIC_ONLY for evidence.",
+  "8_22_slate_expiry": "the 36h window closes 2026-08-24T17:45Z. 0 of 18 games ever confirmed at tier 1; terminal disposition UNRESOLVED_SOURCE_GAP. A check-in is scheduled.",
+  "8_23_cohort": "settled and now resting on PROVISIONAL results. Values stand as descriptive; not canonical evidence until an addendum names the source artifacts.",
+  "prospectivity_mechanism": "no remote-observed clock exists. A CI-on-push workflow, a release, or an issue comment would each fix it for the NEXT card and each writes something visible in the repository, so none was created unasked."
+ },
+ "LEDGERS": {
+  "wager": "$0 at 0 model-authorized bets",
+  "model_promotion_gate": "15/500 games, 1/60 slate dates — and the 15 now rest on provisional results, so treat it as 0/500 until promoted",
+  "real_money_authorization": "0/100, BLOCKED, requires explicit human approval"
+ },
+ "status": "FORWARD_ONLY_PENDING"
+}

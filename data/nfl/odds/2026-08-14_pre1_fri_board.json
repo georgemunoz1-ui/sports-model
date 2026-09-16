@@ -1,0 +1,42 @@
+{
+ "record_id": "NFL-PRE1-FRI-BOARD-2026-08-14",
+ "built_utc": "2026-08-14T14:09:42Z",
+ "posture": "D2 DATA_CAPTURE_ONLY \u2014 no NFL model exists; model columns NULL by design (R1); market favorites tracked as benchmark only; NFL tie rule applies at grading",
+ "why_this_record": "the owner's 8/14 VegasInsider screenshot rail served the REGULAR-SEASON Week 1 board \u2014 proper preseason lines were not on it. Tonight's slate acquired independently; lines below are the best available states with tiers marked.",
+ "slate_source": "web (tier 3): three games Friday 2026-08-14, all 7:00p ET (23:00Z) \u2014 DEN@ATL, MIA@WAS (Northwest Stadium), TB@NYJ (MetLife, NFL Network)",
+ "games": [
+  {
+   "g": "DEN@ATL",
+   "kick_utc": "2026-08-14T23:00Z",
+   "line_state": {
+    "tier1_2026_08_13": "DEN -3.5/-4.5 road",
+    "tier3_2026_08_14": "DEN -3.5"
+   },
+   "benchmark_side": "DEN (road favorite, stable across both captures)",
+   "model": null
+  },
+  {
+   "g": "MIA@WAS",
+   "kick_utc": "2026-08-14T23:00Z",
+   "line_state": {
+    "tier1_2026_08_13": "CROSS-BOOK SIGN DISAGREEMENT \u2014 MIA -3/-3.5 at some books, others posting MIA as dog (+3.5)",
+    "tier3_2026_08_14": "MIA -3.5"
+   },
+   "benchmark_side": "NONE DECLARED \u2014 the standing rule: never average unresolved sign flips; a benchmark requires the books to agree on WHO is favored. Tonight's tier-3 read leans MIA but one uncorroborated tier-3 point does not resolve a documented cross-book sign conflict.",
+   "model": null
+  },
+  {
+   "g": "TB@NYJ",
+   "kick_utc": "2026-08-14T23:00Z",
+   "line_state": {
+    "tier1_2026_08_13": "TB open -1.5 -> TB +5.5 at most books (large move toward NYJ)",
+    "tier3_2026_08_14": "NYJ -5.5 (NYJ -258 / TB +210, total 35.5); 'TB -1.5' still circulating in some results = STALE OPENER ECHO, matches our recorded open"
+   },
+   "benchmark_side": "NYJ (post-move consensus)",
+   "note": "7-point preseason move \u2014 same class as 8/13's TEN reversal (which covered). Snap-plan/personnel is the market's real signal in preseason; this is exhibit two for why NO_FORECAST stands.",
+   "model": null
+  }
+ ],
+ "echo_guard_note": "the mixed 'TB -1.5 / NYJ -5.5' answers across sources are open-vs-current states of ONE market, not a cross-book sign disagreement \u2014 distinguished from MIA@WAS, where books disagree simultaneously.",
+ "grading_frame": "benchmark sides grade against finals (tie rule: excluded from binary); MIA@WAS grades NO_BENCHMARK unless a pre-kick capture resolves the sign conflict"
+}

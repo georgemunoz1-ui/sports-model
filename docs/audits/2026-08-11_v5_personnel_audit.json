@@ -1,0 +1,59 @@
+{
+ "record_id": "AUDIT-V5-PERSONNEL-AND-V05-TRANSITION-2026-08-11",
+ "built_utc": "2026-08-11T21:45:00Z",
+ "auditor_head": "2f8fdaca61cfeeb99980ae9ea5109f11ce4a16bd",
+ "scope_limit": "Five supplied documents read directly. Commit a411de6 and the referenced bundle are not reachable from this repository; harness/pregame_personnel.py and the registry were not inspected. Numeric claims below were verified arithmetically against the supplied views and this repo's staged WNBA bytes.",
+ "headline_finding": {
+  "id": "P1",
+  "severity": "HIGH_REPORTING_OMISSION",
+  "title": "The active WNBA card silently moved from v0.4 to v0.5 with materially different numbers, inside a release described as personnel-context-only",
+  "detail": "The release note says 'Original gradeable predictions preserved; no duplicate ledger rows or probability rewrites', and the view file itself says probabilities are 'the already registered, gradeable claims'. Both statements are true ONLY relative to a 20:15:30Z card that was never announced. The card registered at 06:56:12Z (v0.4) carried NYL@IND 72.2%/+7.4/166.1, WAS@LVA 47.7%/+1.1/152.2, PHX@LA 23.7%/-3.2/160.4. The view binds a 20260811T201530Z card with 78.7%/+9.2/177.4, 56.7%/+2.9/163.6, 48.4%/-0.2/173.7 \u2014 moves of +6.5pp, +9.0pp and +24.7pp, with totals up a near-uniform +11.3 to +13.3 points. The operating guide mentions 'the current WNBA v0.5' only in passing.",
+  "what_it_is_not": "NOT an R3 violation, assuming the v0.5 card was registered append-only before tip with v0.4 preserved \u2014 which the ledger conventions described would produce. The rows were not rewritten; a successor was issued.",
+  "what_it_is": "A model transition with a 24.7pp output change on one game, shipped without a status record, walk-forward validation, preregistration reference, or supersession record \u2014 discoverable only by diffing the view against the morning's card. The v0.3->v0.4 transition got an incident record and a lineage block; v0.4->v0.5 got a parenthetical.",
+  "required": [
+   "the v0.5 STATUS record (analogous to WNBA_RS_FF_0_4_STATUS.json) with walk-forward metrics, preregistration reference and lineage/supersession block",
+   "confirmation of the v0.5 registration timestamp relative to the 23:30Z first tip",
+   "what changed between v0.4 and v0.5, stated as a diff of frozen choices, not inferred by an auditor"
+  ]
+ },
+ "verified_improvements_in_v05": {
+  "note": "Whatever v0.5 is, its numbers now pass the checks v0.4 failed \u2014 consistent with implementing this repo's audit recommendations.",
+  "coherence_gate": "direct-vs-margin divergence at empirical sd 13.97: NYL@IND +4.2pp, WAS@LVA -1.5pp, PHX@LA -1.0pp. All three inside 5pp; v0.4's worst was 17.2pp and its sign disagreement is gone.",
+  "level_shift": "totals moved +11.3/+11.4/+13.3 \u2014 the near-uniform league scoring-level correction that audit finding M2 predicted would be the fix. v0.4's 152.2 sat 18 points under the market line; v0.5's totals sit 5-13 under, plausible for a market-blind model.",
+  "caveat": "Passing coherence is necessary, not sufficient. Whether v0.5's changes were preregistered before seeing v0.4's audit failures, and whether its walk-forward still clears the primary gate, is exactly what the missing status record must show."
+ },
+ "grading_cohort_rule_frozen_before_finals": {
+  "why_now": "Tonight's three games tip from 23:30Z. There are now (at least) three registered cards for the same slate: v0.3 (superseded incident), v0.4 (06:56Z), v0.5 (20:15Z). Without a rule frozen BEFORE results, tomorrow's summary can quote whichever version scored better \u2014 the exact post-hoc selection this system has already retracted once.",
+  "rule": [
+   "ALL registered rows are graded: v0.3, v0.4 and v0.5 each against the same tier-1 finals.",
+   "v0.5 is the ACTIVE claim of record for 2026-08-11; v0.4 grades in a SUPERSEDED_PRE_TIP cohort; v0.3 in SUPERSEDED_INCIDENT.",
+   "No citation of tonight's outcome may quote one cohort without the others. In particular, if v0.4's PHX@LA (23.7%) happens to score better than v0.5's (48.4%), that is a coin flip on n=1 and confers nothing on v0.4.",
+   "n=3 resolves nothing about either model. The grades are ledger maintenance."
+  ],
+  "binding": "frozen at this record's commit, before any 8/11 WNBA final is known to this repository"
+ },
+ "personnel_layer_assessment": {
+  "endorsed": [
+   "predictive binding vs context binding, with probability_change_from_registered_forecast required to equal 0.0 \u2014 this is the T-120/T-30 freeze discipline from docs/OPERATING_WORKFLOW.md implemented as a schema rule; late news is retained without rewriting a frozen card",
+   "captured_at <= generated_at < game_start causality plus POSTGAME_INELIGIBLE as a state, not a footnote",
+   "QUESTIONABLE is never coerced to 50/50; scenario weights must be learned from historical pregame designation transitions",
+   "a missed capture window stays visibly missed \u2014 'the system never pretends a refresh occurred'",
+   "source honesty: CURRENT_ESPN_CAPTURE; OFFICIAL_REPORT_NOT_PARSED rather than promoting secondary evidence to official",
+   "the first-capture incident (ESPN vs official player-ID namespaces) was preserved, corrected by appending, and documented \u2014 the recovery rule was exercised, not just written",
+   "preseason snap intent stays UNKNOWN for all 32 teams; depth-chart QB1 explicitly not a participation claim; the personnel view uses the CORRECTED kickoff dates (8/13-15), consistent with this repo's D4 timestamp finding"
+  ],
+  "gaps": [
+   "no scheduler exists to run the T-24h/T-90m/T-15m windows \u2014 same approval-gated state as this repo's lineup Routine; tonight's T-15m WNBA window will be missed and must show as missed",
+   "WNBA projected fives lean on 'up to five strictly prior official boxes' \u2014 this repo measured the official mirror at ~9 days stale (nothing after 8/01), so decayed start-shares for 8/11 are built on 10-day-old participation unless a fresher official source was parsed; staleness of the PRIOR-BOX inputs should be stamped on the snapshot",
+   "the predictive-snapshot states carry no age bound; staleness thresholds are deferred to per-model freezes, which is acceptable but unenforced until a personnel-aware model exists"
+  ]
+ },
+ "observation_recorded_not_asserted": {
+  "phx_las_line_flip_candidate_cause": "Yesterday's capture had PHX -1 (Caesars); today's owner board has LAS -2.5 \u2014 a ~3.5-point move toward LA that this repo flagged as unexplained. Tonight's personnel view shows Kelsey Plum OUT for PHX. A star guard OUT is a sufficient conventional explanation for a move of that size. This is the personnel layer demonstrating its value on day one: it surfaced the plausible cause of a market move that every frozen model here is blind to. Recorded as observation; n=1 proves nothing."
+ },
+ "governance": {
+  "gate": "0/100 NO_PROMOTE \u2014 unchanged",
+  "ledger": "$0, paper, execution UNAUTHORIZED \u2014 unchanged",
+  "firewall": "document review only; nothing imported, nothing run, no WNBA/NFL model exists in this repository"
+ }
+}

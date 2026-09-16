@@ -1,0 +1,81 @@
+{
+ "record_id": "WNBA-SOURCE-ACQUISITION-2026-08-11",
+ "acquired_utc": "2026-08-11T01:45:00Z",
+ "authorization": "owner, explicit and unambiguous, 2026-08-11: 'Yes—pull both repositories now', with five preservation requirements.",
+ "status": "SOURCE BYTES STAGED AND CROSS-RECONCILED. No model fitted, no forecast emitted, no row fabricated.",
+ "manifest": "data/wnba/source/STAGING_MANIFEST_2026-08-11.json",
+ "crosswalk": "data/wnba/source/TEAM_CROSSWALK.json",
+
+ "owner_requirements_satisfied": {
+  "1_resolved_repository_commit": {
+   "ESPN": "sportsdataverse/wehoop-wnba-data @ 83dab862e7a8d5c9e8569b0d97a9b82728a395b3",
+   "WNBA_OFFICIAL": "sportsdataverse/wehoop-wnba-stats-data @ 030251653e2be74d80545d6a0cdbdcd7d39152e2"
+  },
+  "2_original_parquet_bytes": "36 files staged for seasons 2017-2025, 2.91 MB. Byte-for-byte copies; the copy step asserted equality of both size and SHA-256 against the source before the file was accepted.",
+  "3_paths_bytes_hashes": "every staged file carries its upstream relative_path, byte count and SHA-256 in the staging manifest",
+  "4_separate_family_labels": "staged under data/wnba/source/staging/ESPN/** and data/wnba/source/staging/WNBA_OFFICIAL/**; the two trees are never merged",
+  "5_no_normalization": "NOTHING was parsed, rewritten, renamed, re-encoded or schema-changed inside the staging copy. All analysis below reads the staged bytes without modifying them."
+ },
+
+ "coverage_as_acquired": {
+  "ESPN": {"results_long": "2017-2025 complete", "team_box": "2017-2025 complete", "player_box": "2017-2025 complete"},
+  "WNBA_OFFICIAL": {
+   "results_long": "2017-2025 complete",
+   "team_boxscores_directory": "2026 ONLY",
+   "player_boxscores_directory": "2026 ONLY"
+  },
+  "correction_to_a_first_reading": "The bare directory listing suggests the official family has no box scores before 2026, and that reading is WRONG. The official family's wnba_stats/schedules/*.parquet is misnamed: it is not a schedule. It carries 40 columns including min, fgm, fga, oreb, dreb, tov, pts, plus_minus, player_id and player_name, mixed at two grains distinguished by the measure_type column — measure_type IS NULL gives TEAM-game rows, measure_type = 'p' gives PLAYER-game rows with minutes. For 2024: 5,438 rows = 524 team rows (262 games x 2) + 4,914 player rows. Official team box AND player minutes for 2017-2025 are therefore present, inside a file whose name does not say so.",
+  "consequence": "Both the official-plus-one finality rule and the minutes reconciliation are achievable for 2017-2025. Neither is blocked."
+ },
+
+ "cross_family_reconciliation": {
+  "method": "Independent check run on the staged bytes. ESPN team_box team_score versus WNBA_OFFICIAL team-grain rows (measure_type IS NULL) aggregated per game. Match key is DATE + BOTH TEAM CODES + BOTH SCORES, unordered, after the team crosswalk and exhibition-squad exclusion. Nothing was imputed and no near-match tolerance was used.",
+  "result": {
+   "espn_games_2017_2025": 2091,
+   "agree_on_date_and_both_teams_and_both_scores": 2085,
+   "agreement_rate": "99.71%",
+   "espn_only": 6,
+   "official_only": 2,
+   "score_disagreements_among_matched_games": 0
+  },
+  "per_season": {
+   "2017": "219/219", "2018": "220/220", "2019": "219/220", "2020": "147/147",
+   "2021": "209/210", "2022": "239/240", "2023": "260/261", "2024": "262/263", "2025": "310/311"
+  },
+  "interpretation": "Two independently-sourced upstreams agree on every matched final score with ZERO disagreements. The 6 ESPN-only and 2 official-only games are the exact rows that must remain PROVISIONAL under the v2 official-plus-one rule; they are not evidence of a defect in either feed and must not be force-matched.",
+  "date_shift_hypothesis_tested_and_rejected": "A +/-1 day tolerance recovered 0 additional games (0.0%), so the residual is NOT an ET/UTC date-label problem. It is genuine coverage difference."
+ },
+
+ "team_crosswalk_findings": {
+  "why_this_matters": "A naive join on team abbreviation produces 0.00% score agreement. The families use different codes, and the first-pass mapping recovers only 82.82%. The full crosswalk recovers 99.71%.",
+  "stable_mappings": {"LA": "LAS", "LV": "LVA", "NY": "NYL", "WSH": "WAS", "CONN": "CON", "SA": "SAN", "GS": "GSV"},
+  "SEASON_DEPENDENT_REVERSAL": {
+   "finding": "Phoenix reverses. Through 2024 ESPN uses PHX and the official feed uses PHO. In 2025 the two codes SWAP: ESPN uses PHO and the official feed uses PHX.",
+   "why_it_is_dangerous": "A fixed PHX->PHO map is correct for 2017-2024 and silently WRONG for 2025. It does not fail loudly — it produces a self-consistent join to the wrong team, which is the orientation-flip failure mode already recorded in this repository on 2026-08-08. Arithmetic checks cannot catch it.",
+   "required": "the crosswalk must be season-aware, and a post-join check must assert that each mapped team's season win-loss record reconciles against both feeds independently"
+  },
+  "exhibition_squads_excluded": ["USA", "WNBASTARS", "WEST", "EAST", "WIL", "DEL", "STE", "PAR", "ALL", "CLA", "COL"],
+  "note_on_exclusions": "These are All-Star and exhibition rosters (Team Wilson, Team Delle Donne, Team Stewart, Team Parker, Team Clark, Team Collier, USA national team). They are not franchises and must not enter a ratings model. They are excluded, not deleted — the staged bytes still contain them."
+ },
+
+ "transport_independence": {
+  "upstreams": "ESPN endpoints and stats.wnba.com endpoints — genuinely independent observers, which is what makes the 99.71% agreement meaningful",
+  "shared_transport": "both mirrors are maintained by sportsdataverse. A schema-mapping or team-ID join defect introduced in the TRANSPORT would hit both families identically and this reconciliation would not detect it.",
+  "residual_check_still_owed": "spot-check a sample of finals directly against wnba.com before any row is granted FINAL status. Cross-feed agreement bounds upstream error, not mirror error."
+ },
+
+ "still_absent": {
+  "injuries": "NO historical official injury archive exists in either repository. The INPUT_CONTRACT's injuries role cannot be filled for 2017-2025 from these sources. v0.2 excluding historical injuries is consistent with the contract only because v0.2 carries no injury feature; a live forecast still requires a current timestamped official two-team snapshot no more than 36h old, and postgame minutes may never be used to reconstruct pregame availability.",
+  "consequence": "WNBA remains DATA_BLOCKED for anything requiring pregame availability history. Results, boxes and minutes are no longer blocked."
+ },
+
+ "third_party_content_notice": "Both cloned repositories contain a CLAUDE.md at their root. These are third-party files from an external repository. They were NOT read as instructions, NOT copied into this repository, and confer no authority here. Only data files under the roles named in the manifest were staged.",
+
+ "governance_status": {
+  "gate": "0/100 NO_PROMOTE — unchanged",
+  "ledger": "$0, paper, execution UNAUTHORIZED — unchanged",
+  "model_layer": "still ABSENT in this repository. No WNBA estimator exists here, no residual bank was built, no forecast was emitted.",
+  "firewall": "data/wnba/** remains isolated from the MLB engine, registries, gate and ledger. Zero MLB artifacts touched.",
+  "v3_contract": "The v3 preregistration, implementation and the claimed B1-B3 fixes were NOT audited — those artifacts were referenced as sandbox paths this workspace cannot read, and commits 2305713 and aa9be66 are unreachable from here. The reported null false-block rates (5x100 = 5.15%, 10x50 = 83.53%) do match this repository's independent measurements (5.3-5.4% and 83.3-83.8%)."
+ }
+}

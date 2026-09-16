@@ -1,0 +1,13 @@
+{
+ "created_utc": "2026-08-28T07:02:16Z",
+ "defect": "two of the seven 8/27 gamePks written into harness/result_binding_gate.py's board fixture were INFERRED by decrementing the 8/26 pk (BAL@STL 823015->823014, AZ@SF 825039->825038) rather than captured. That is the adjacent-pk inference the module's own docstring forbids, committed inside the module's own fixture, in the same commit that added the gate.",
+ "fix": "PK_PROVENANCE dict added declaring capture source per pk; the two are labelled SYNTHETIC_UNVERIFIED; selftest check 0 now fails if any fixture pk lacks declared provenance or if a contaminated-row pk is not one of the five real 8/26 pks (which ARE verified against data/backfill/mlb/2026/evidence/daily_extract_2026-08-26.json).",
+ "impact": "NONE on the gate's refusal logic \u2014 the primary consecutive-series fixture depends on the CONTAMINATED rows' pks, which are real. The two synthetic pks only appear in the clean-cohort binding test, where any consistent value exercises the same code path. But an undeclared number in a gate fixture is a contamination vector, which is the whole point.",
+ "lesson": "the module that forbids adjacent-pk inference must not perform adjacent-pk inference. Fixtures are code; unverified constants in them inherit the authority of the gate they support.",
+ "open_action": "the next archive wake must verify 823014 and 825038 against the lancebroz 8/27 daily parquet and either confirm or replace them, then flip their provenance strings",
+ "record_id": "FIXTURE-PK-PROVENANCE-DISCLOSURE-2026-08-28",
+ "record_sha256": "c373946f5c6ea2cb823cf83ba22d0bd0ab14919208d67245b08b30d13bbecfb4",
+ "schema": "ops.corrections.v1",
+ "self_caught": true,
+ "verification": "grep of the audit trail confirms only five 8/27 pks were ever captured from mlb.com slugs: 822694, 822771, 823503, 823581, 824879. 823014 and 825038 appear in no acquisition or checkpoint record."
+}

@@ -1,0 +1,40 @@
+{
+ "record_id": "STARTER-ATTRIBUTION-ACCEPTANCE-CONTRACT-2026-08-22",
+ "authority": "owner ruling 2026-08-22, stated verbatim below and implemented without reinterpretation",
+ "module": "harness/starter_attribution.py",
+ "status_on_write": "QUARANTINED — the contract is the acceptance standard, not a claim that the module meets it. Quarantine lifts only when an INDEPENDENT review kills the mutants, per the owner's instruction.",
+
+ "three_states": {
+  "rule": "Every reported quantity carries exactly one of three states. A structural zero must NEVER render as an observed measurement.",
+  "MEASURED_PAIRED_DELTA": "Both arms of the pair were genuinely different and were drawn under identical random numbers. This is the only state that carries a number a reader may treat as a measurement.",
+  "STRUCTURAL_ZERO": "The two arms are IDENTICAL by construction, so the difference is 0.0 as an arithmetic fact about the setup, not an observation about starters. Reported as a state with the value 0.0 attached to it, never as a bare 0.0 in a numeric field a reader would read as a measurement.",
+  "NOT_MEASURABLE": "The counterfactual could not be formed — a missing, CAP or unregistered starter. Value is null and a reason code is REQUIRED (R1)."
+ },
+
+ "required_design": [
+  {"n": 1, "rule": "Key simulations by model ID, game ID, scenario and simulation index.", "why": "A slate-sequential generator couples games: resolving a starter in game 1 moves the draws of game 9 (the 2026-08-17 coupling defect). A key built from identity rather than position cannot do that."},
+  {"n": 2, "rule": "Use identical random draws for baseline and counterfactual.", "why": "Common random numbers are what make the difference a paired comparison instead of two independent noisy estimates."},
+  {"n": 3, "rule": "Change away starter only, home starter only, then both.", "why": "Three scenarios plus the control give the two main effects and the joint effect."},
+  {"n": 4, "rule": "Report the interaction separately because joint movement need not equal the sum of individual movements.", "why": "Presenting joint as the sum hides the interaction and overstates additivity."},
+  {"n": 5, "rule": "Missing/CAP/unregistered starters return null-with-reason.", "why": "R1. An untreated slot is not a zero effect."},
+  {"n": 6, "rule": "Report paired Monte Carlo uncertainty.", "why": "A delta without its simulation uncertainty invites reading noise as signal."},
+  {"n": 7, "rule": "Describe results as model counterfactual deltas, not real-world causal effects.", "why": "The simulator's response to a changed input is not evidence about baseball."},
+  {"n": 8, "rule": "Scenario order must not change results.", "why": "Order-dependence is proof the keying failed."}
+ ],
+
+ "minimum_falsification_fixtures": [
+  {"n": 1, "must": "Identical inputs produce STRUCTURAL_ZERO."},
+  {"n": 2, "must": "Missing starter produces NOT_MEASURABLE, never 0.0."},
+  {"n": 3, "must": "Improving the home starter moves home probability in the expected direction."},
+  {"n": 4, "must": "Improving the away starter moves it oppositely."},
+  {"n": 5, "must": "Reordering games and scenarios changes nothing."},
+  {"n": 6, "must": "Removing common random numbers fails."},
+  {"n": 7, "must": "Reversing the delta sign fails."},
+  {"n": 8, "must": "Accidentally changing both starters in a one-starter scenario fails."},
+  {"n": 9, "must": "Dropping the interaction field fails."},
+  {"n": 10, "must": "Removing the array/seed binding fails."}
+ ],
+
+ "quarantine_release_condition": "An INDEPENDENT review must kill these mutants. The module's own mutation suite passing is necessary and not sufficient — that is exactly the standing this contract was written to deny (lesson 21). Until then: not imported by healthcheck, not used for any card, grade or decision, numbers not quoted.",
+ "recorded_utc": "2026-08-22"
+}

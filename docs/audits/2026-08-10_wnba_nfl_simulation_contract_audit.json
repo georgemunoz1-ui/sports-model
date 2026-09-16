@@ -1,0 +1,139 @@
+{
+ "record_id": "AUDIT-WNBA-NFL-SIM-CONTRACT-2026-08-10",
+ "built_utc": "2026-08-10T21:40:00Z",
+ "auditor_head": "60aafd34fdc17bea099994a089ac20bd7c9f32fa",
+ "scope_limit": "CONTRACTS ONLY. Commit 33d7f287f47e795f66d737595a01411e37b709b7 is NOT reachable from this repository and harness/wnba_nfl_simulation.py does not exist here. Nothing below is a review of the implementation, the healthcheck results, or the reported bundle hash — none of those were inspected. Only the three supplied documents were audited.",
+ "documents_audited": [
+  "WNBA_NFL_SIMULATION_GUIDE.md",
+  "WNBA_NFL_SIMULATION_CONTRACT.json (WNBA-NFL-SIMULATION-CONTRACT-V1)",
+  "INPUT_CONTRACT.json (WNBA-RS-FF-0.1-INPUT-CONTRACT)"
+ ],
+ "overall": "The governance layer is strong and in several places better than this repository's own. The SCORE MODEL has four defects, two of which are disqualifying for NFL as specified. All findings below were reproduced numerically before being recorded.",
+
+ "endorsed": [
+  "Paired residual sampling rather than independent margin/total draws — correct, and the stated reason (preserves empirical dependence and tails) is the right reason.",
+  "Residuals must come from walk-forward OOF predictions, never fitted values — this is the single most common way simulation variance gets understated, and it is closed explicitly.",
+  "training_cutoff_utc < game_start_utc enforced per residual row — causality checked at the row level, not asserted in prose.",
+  "Model identity is immutable and residual banks may not be shared across estimators, with an explicit prohibition on borrowing residuals to clear the 500-game minimum — that is exactly the shortcut that would otherwise be taken.",
+  "Direct classifier probability and simulated probability declared separate estimands with silent averaging forbidden.",
+  "Market data forbidden in the prediction adapter and residual bank; lines admitted only as post-simulation settlement thresholds; cross-book best-odds explicitly rejected as a de-vig market — consistent with the 2026-08-03 ruling.",
+  "'massey' named in forbidden_predictive_columns — the 8/8 overlay lesson encoded as a schema rule rather than a note.",
+  "__TEAM_CLEAR__ sentinel with a may-not-coexist constraint — a real solution to the empty-injury-report ambiguity.",
+  "'Do not reconstruct intent from postgame minutes or snaps' — the same constraint that made NFL preseason unmodelable, correctly generalized.",
+  "Refusing to manufacture historical rows and holding at DATA_BLOCKED. That is the correct call and the most important line in the report."
+ ],
+
+ "findings": [
+  {
+   "id": "F1",
+   "severity": "DISQUALIFYING_FOR_NFL",
+   "title": "The paired residual bootstrap destroys NFL key numbers, and push probabilities are the casualty",
+   "claim": "Residuals are defined as actual_margin - OOF_margin_mean. Because OOF_margin_mean varies across games, adding those residuals back to a SINGLE M-hat convolves the integer key-number spikes with the spread of historical predictions. The spikes at 3 and 7 — which are the whole of NFL spread pricing — are smeared out.",
+   "reproduction": "Built an 800-game population with real NFL margin frequencies, predictions ~N(2.5, 6.5), residuals per the contract's own definition, then bootstrapped 300k draws for one game at M-hat=+2.5 and applied the integer lattice.",
+   "measured": {
+    "abs_margin_3": "population 18.5% -> simulated 6.7% (2.8x understated)",
+    "abs_margin_7": "population 11.6% -> simulated 6.2% (1.9x understated)",
+    "abs_margin_0": "population 0.8% -> simulated 2.6% (3.3x overstated)",
+    "push_at_home_minus_3": "3.0% simulated, against a population rate near 9%",
+    "push_at_home_minus_7": "3.4% simulated, against a population rate near 6%"
+   },
+   "consequence": "Every NFL cover/push/fail probability the contract promises in minimum_output is wrong at the only lines that matter, and wrong in a direction that makes buying the half-point look cheaper than it is. The -3/-3.5 pair comes out identical on cover (37.3% both) when in reality the half-point is worth several points of probability.",
+   "why_wnba_is_different": "Basketball has no comparable key-number structure; margin mass is nearly smooth. The same procedure is defensible for WNBA and is not defensible for NFL. Sharing one simulation_version across both sports is the design error — the contract already accepts sport-specific gates, so it should accept a sport-specific score model.",
+   "fix": "For NFL, either simulate on a score lattice that reproduces the empirical margin distribution (a key-number-aware model, or residual sampling conditioned on predicted margin bucket), or declare NFL spread/push output OUT OF SCOPE for v1 and emit moneyline only. Do not ship push probabilities from a smeared distribution."
+  },
+  {
+   "id": "F2",
+   "severity": "HIGH",
+   "title": "The integer lattice manufactures ties in a sport that cannot tie",
+   "claim": "WNBA games cannot end tied — overtime resolves them. But H=(T+M)/2 and A=(T-M)/2 rounded to integers produce margin==0 draws at a rate set by the margin density at zero, and minimum_output reports a tie probability for both sports.",
+   "measured": {
+    "pickem_margin_sd_11.0": "P(simulated margin == 0) = 3.67%",
+    "pickem_margin_sd_12.5": "3.10%",
+    "pickem_margin_sd_14.0": "2.83%",
+    "home_minus_3_favorite_sd_12.5": "3.07%"
+   },
+   "consequence": "About 3% of probability mass is assigned to an impossible outcome. If home-win is computed as P(M>0), home-win probability is systematically understated by roughly 1.5 percentage points on near-pick'em games. That bias then feeds the simulation-minus-direct divergence diagnostic, so the audit signal fires on the simulator's own lattice artifact rather than on model inconsistency — the diagnostic is disabled by the defect it should have caught.",
+   "note": "The sport-gates table lists 'ties reported explicitly' only under NFL, which suggests ties were treated as an NFL concern. The lattice generates them for WNBA regardless.",
+   "fix": "For WNBA, forbid a tie outcome structurally: resolve margin==0 draws through an explicit OT rule, or compute win probability on the continuous margin before the lattice is applied. A tie probability field for WNBA should fail the selftest, the same way a non-null model_prob does in wnba_market.py."
+  },
+  {
+   "id": "F3",
+   "severity": "MEDIUM",
+   "title": "Rounding home and away independently injects noise into both margin and total",
+   "claim": "The lattice rule ROUND_ACCEPTED_HOME_AND_AWAY_TO_INTEGER rounds two derived quantities separately, so round(H)-round(A) is not round(M) and round(H)+round(A) is not round(T). Each rounding error is uniform on [-0.5,0.5] and they enter margin with opposite sign.",
+   "measured": {
+    "sd_margin_int_minus_continuous": "0.409 points (theory sqrt(2/12) = 0.408 — matches)",
+    "sd_total_int_minus_continuous": "0.408 points",
+    "parity_check": "50.1% even margins — no parity bias, so this is added variance, not a shift"
+   },
+   "consequence": "Negligible for win probability. NOT negligible for the exact-integer quantities the contract reports: push probabilities and any settlement at an integer line are computed from a margin carrying an extra +/-1 of jitter.",
+   "fix": "Round the MARGIN to the lattice first, derive scores from the rounded margin and rounded total, and enforce the parity constraint (margin and total share parity) rather than rounding two derived halves independently."
+  },
+  {
+   "id": "F4",
+   "severity": "MEDIUM",
+   "title": "Rejecting negative-score draws truncates rather than censors",
+   "claim": "'Negative-score draws are rejected' with maximum_invalid_fraction 0.02. Rejection removes the pair, which truncates the low-scoring tail and shifts the simulated mean upward. Real scores are censored at zero, not absent.",
+   "measured": "At NFL scale (total ~44, sd 10, margin sd 13.5) the rejection rate is 0.96% — under the 2% cap, so the guard never fires while the bias is still present. At WNBA scale the rate is 0.00% and the rule is inert.",
+   "consequence": "The 2% cap detects a catastrophic parameterization but does not detect the ordinary bias, because the ordinary bias occurs comfortably under the cap.",
+   "fix": "Censor at zero rather than reject, or keep rejection but report the induced shift in mean total and mean margin as an output field so it is visible instead of silent."
+  },
+  {
+   "id": "F5",
+   "severity": "HIGH",
+   "title": "100,000 draws from a 500-row bank report a precision the bank cannot support",
+   "claim": "minimum_output requires Monte Carlo standard errors. With a 500-row residual bank and 100k draws, each residual pair is reused about 200 times. The MC standard error measures resampling of a fixed bank; it does not measure the fact that the bank itself is a sample of 500.",
+   "measured": {
+    "mc_se_on_p_near_0.5": "0.158 percentage points at 100k draws",
+    "se_from_resampling_the_500_row_bank": "2.229 percentage points",
+    "ratio": "14x"
+   },
+   "consequence": "A reported probability of 55.4% +/- 0.16pp is a real number attached to a fake interval. The honest interval is roughly +/- 2.2pp. The guide's disclaimer covers misspecification, calibration and drift but not this — and unlike those, this component is directly computable.",
+   "fix": "Report a residual-bank bootstrap interval alongside the MC SE, or state the effective sample size (500, not 100,000) next to every simulated probability. Raising the draw count does not narrow the real interval and should not be presented as if it does."
+  },
+  {
+   "id": "F6",
+   "severity": "HIGH",
+   "title": "Two-of-three source agreement does not establish independence",
+   "claim": "INPUT_CONTRACT allows WNBA_OFFICIAL, ESPN and CBS as result families and treats any two agreeing families as sufficient for finality. ESPN and CBS both derive from the league feed; they are transport layers over a common upstream, not independent observers.",
+   "consequence": "Two agreeing dependent sources carry roughly the information of one. This is precisely the echo failure mode already recorded in this repository: on 8/8, three of eleven ingested winners were wrong, and two were verbatim echoes of the prior day that agreed with each other.",
+   "fix": "Require WNBA_OFFICIAL to be one of the two agreeing families, or declare a source-independence map so correlated families cannot jointly finalize a row. Also port the adjacent-day echo detector (harness/result_content_checks.py, dup_score_pairs) — agreement between two feeds does not detect an echo that both inherited."
+  },
+  {
+   "id": "F7",
+   "severity": "MEDIUM",
+   "title": "Pooling residuals across expanding-window folds mixes an undertrained model's errors with a trained one's",
+   "claim": "Expanding walk-forward means early folds are fitted on little data and produce systematically larger residuals. The v1 pool rule requires 500 eligible games but does not exclude or downweight early folds, though fold_id and training_cutoff_utc are both carried in the schema.",
+   "consequence": "The residual bank overstates the variance appropriate to a current, fully-trained prediction. Simulated distributions come out too wide, win probabilities are pulled toward 0.5, and — given the pressure to reach 500 rows — the incentive runs toward including the worst folds.",
+   "fix": "Pre-register a minimum training size per contributing fold, or weight residuals by fold maturity. Whatever is chosen must be fixed before fitting, since the choice moves every simulated probability."
+  },
+  {
+   "id": "F8",
+   "severity": "LOW",
+   "title": "The seed does not bind the residual bank",
+   "claim": "seed_identity is seed_salt + simulation_version + sport + model_id + game_id. Regenerating the bank with more history yields different results under an identical seed while the run still presents as deterministic.",
+   "fix": "Add a residual-bank content hash to the seed identity or record it in the output. Reproducibility must be reproducibility of a run, not of a random stream."
+  },
+  {
+   "id": "F9",
+   "severity": "LOW",
+   "title": "The divergence check is prose, not a gate",
+   "claim": "'A large divergence is an audit signal' names no threshold and blocks nothing.",
+   "consequence": "This is the exact failure the 49-agent audit identified in this system: lessons written as prose rather than gates. An unthresholded audit signal is a comment.",
+   "fix": "Pre-register a numeric divergence threshold that sets availability_status to a blocking value. Note that F2 must be fixed first, since the WNBA tie artifact alone contributes roughly 1.5pp of divergence."
+  }
+ ],
+
+ "on_the_500_game_minimum": {
+  "assessment": "Correct in spirit and worth quantifying, because it determines when the WNBA shadow can activate at all.",
+  "arithmetic": "13 teams x 44 games / 2 = 286 games per season. 500 OOF games therefore requires about 1.75 seasons of out-of-fold predictions, and expanding walk-forward needs a training window before the first OOF game — so roughly 2.7 to 3.1 seasons of immutable captured bytes.",
+  "implication": "DATA_BLOCKED is not a short-term state. It cannot be cleared by capturing the current season, and it cannot be cleared by any amount of compute. Stating the season count makes the block auditable rather than open-ended."
+ },
+
+ "governance_status": {
+  "gate": "0/100 NO_PROMOTE — unchanged",
+  "ledger": "$0, paper, execution UNAUTHORIZED — unchanged",
+  "firewall": "This audit is a document review. No code was imported, no model identity registered, no forecast emitted.",
+  "integration_position": "None of the audited work is in this repository. Before any of it is merged, F1 and F2 must be resolved or the affected outputs withdrawn: as specified, the contract would emit NFL push probabilities that are wrong by roughly 3x at the key numbers, and WNBA tie probabilities for an outcome that cannot occur."
+ }
+}

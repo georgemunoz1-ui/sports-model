@@ -1,0 +1,164 @@
+{
+ "book": "DRAFTKINGS",
+ "coverage": "18/18 games carry a model-side price: 7 explicit, 11 derived exactly from the relayed EV at the frozen probability. No totals or spreads were relayed; those fields remain unpopulated rather than guessed.",
+ "current_opening_separated": true,
+ "fresh_pre_execution_recheck_required": true,
+ "hold_ranges_as_relayed": {
+  "mlb_moneyline": [
+   0.01531,
+   0.01852
+  ],
+  "note": "homogeneous within each sport stratum, consistent with hold policy v2's calibrated MLB bands and the same single-book pattern as 8/24. Two-sided quotes were not relayed row by row, so per-game holds are not independently recomputable from this capture.",
+  "wnba_moneyline": [
+   0.04215,
+   0.04545
+  ]
+ },
+ "named_sources": [
+  "espn.com/mlb/odds (DraftKings-attributed)",
+  "espn.com/wnba/odds (DraftKings-attributed)"
+ ],
+ "observed_no_later_than_utc": "2026-08-25T16:48:00Z",
+ "record_id": "PRICE-BOARD-2026-08-25-DRAFTKINGS",
+ "record_sha256": "80e8210ad35fa1b3288fa18c2bcc27f3c917ef5b4a61687698f91cf308213723",
+ "route": "OWNER_RELAY",
+ "rows": [
+  {
+   "game": "mlb:KC@TOR",
+   "model_side": "away",
+   "model_side_price": 116,
+   "price_provenance": "OWNER_RELAY_EXPLICIT",
+   "sport": "mlb"
+  },
+  {
+   "game": "mlb:CLE@LAA",
+   "model_side": "home",
+   "model_side_price": 131,
+   "price_provenance": "OWNER_RELAY_EXPLICIT",
+   "sport": "mlb"
+  },
+  {
+   "game": "mlb:TB@DET",
+   "model_side": "home",
+   "model_side_price": 116,
+   "price_provenance": "OWNER_RELAY_EXPLICIT",
+   "sport": "mlb"
+  },
+  {
+   "game": "mlb:PIT@SD",
+   "model_side": "away",
+   "model_side_price": 111,
+   "price_provenance": "OWNER_RELAY_EXPLICIT",
+   "sport": "mlb"
+  },
+  {
+   "game": "mlb:TEX@CWS",
+   "model_side": "home",
+   "model_side_price": -101,
+   "price_provenance": "OWNER_RELAY_EXPLICIT",
+   "sport": "mlb"
+  },
+  {
+   "game": "mlb:PHI@SEA",
+   "model_side": "home",
+   "model_side_price": -105,
+   "price_provenance": "OWNER_RELAY_EXPLICIT",
+   "sport": "mlb"
+  },
+  {
+   "game": "mlb:CHC@AZ",
+   "model_side": "away",
+   "model_side_price": -108,
+   "price_provenance": "OWNER_RELAY_EXPLICIT",
+   "sport": "mlb"
+  },
+  {
+   "derivation": "price = american((EV/100 + (1-p))/p) at the frozen champion p; the relayed EV is the primary datum, the price its exact inverse",
+   "game": "mlb:BOS@MIA",
+   "model_side": "away",
+   "model_side_price": -139,
+   "price_provenance": "DERIVED_FROM_RELAYED_EV",
+   "sport": "mlb"
+  },
+  {
+   "derivation": "price = american((EV/100 + (1-p))/p) at the frozen champion p; the relayed EV is the primary datum, the price its exact inverse",
+   "game": "mlb:COL@WSH",
+   "model_side": "home",
+   "model_side_price": -147,
+   "price_provenance": "DERIVED_FROM_RELAYED_EV",
+   "sport": "mlb"
+  },
+  {
+   "derivation": "price = american((EV/100 + (1-p))/p) at the frozen champion p; the relayed EV is the primary datum, the price its exact inverse",
+   "game": "mlb:HOU@NYY",
+   "model_side": "home",
+   "model_side_price": -140,
+   "price_provenance": "DERIVED_FROM_RELAYED_EV",
+   "sport": "mlb"
+  },
+  {
+   "derivation": "price = american((EV/100 + (1-p))/p) at the frozen champion p; the relayed EV is the primary datum, the price its exact inverse",
+   "game": "mlb:MIL@NYM",
+   "model_side": "away",
+   "model_side_price": -162,
+   "price_provenance": "DERIVED_FROM_RELAYED_EV",
+   "sport": "mlb"
+  },
+  {
+   "derivation": "price = american((EV/100 + (1-p))/p) at the frozen champion p; the relayed EV is the primary datum, the price its exact inverse",
+   "game": "mlb:LAD@ATL",
+   "model_side": "away",
+   "model_side_price": -148,
+   "price_provenance": "DERIVED_FROM_RELAYED_EV",
+   "sport": "mlb"
+  },
+  {
+   "derivation": "price = american((EV/100 + (1-p))/p) at the frozen champion p; the relayed EV is the primary datum, the price its exact inverse",
+   "game": "mlb:BAL@STL",
+   "model_side": "home",
+   "model_side_price": -124,
+   "price_provenance": "DERIVED_FROM_RELAYED_EV",
+   "sport": "mlb"
+  },
+  {
+   "derivation": "price = american((EV/100 + (1-p))/p) at the frozen champion p; the relayed EV is the primary datum, the price its exact inverse",
+   "game": "mlb:MIN@ATH",
+   "model_side": "away",
+   "model_side_price": -147,
+   "price_provenance": "DERIVED_FROM_RELAYED_EV",
+   "sport": "mlb"
+  },
+  {
+   "derivation": "price = american((EV/100 + (1-p))/p) at the frozen champion p; the relayed EV is the primary datum, the price its exact inverse",
+   "game": "mlb:CIN@SF",
+   "model_side": "away",
+   "model_side_price": -103,
+   "price_provenance": "DERIVED_FROM_RELAYED_EV",
+   "sport": "mlb"
+  },
+  {
+   "game": "wnba:CHI@CON",
+   "model_side": "away",
+   "model_side_price": -250,
+   "price_provenance": "DERIVED_FROM_RELAYED_EV",
+   "sport": "wnba"
+  },
+  {
+   "game": "wnba:PDX@DAL",
+   "model_side": "home",
+   "model_side_price": -360,
+   "price_provenance": "DERIVED_FROM_RELAYED_EV",
+   "sport": "wnba"
+  },
+  {
+   "game": "wnba:WAS@PHX",
+   "model_side": "home",
+   "model_side_price": 100,
+   "price_provenance": "DERIVED_FROM_RELAYED_EV",
+   "sport": "wnba"
+  }
+ ],
+ "source_artifact_grade": "SOURCE_NAMED_BY_CLASS_NOT_ARTIFACT",
+ "source_authority": "NAMED_BOOK_AGGREGATOR",
+ "state": "MARKET_CAPTURED_CURRENT"
+}

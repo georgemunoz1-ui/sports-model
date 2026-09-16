@@ -1,0 +1,334 @@
+{
+ "record_id": "FORM-OOF-ABLATION-2026-08-17",
+ "built_utc": "2026-08-17T07:49:52Z",
+ "role": "MEASUREMENT_NON_FORECASTING",
+ "question": "Is team form USEFUL (out-of-sample skill), not merely ACTIVE (output sensitivity)?",
+ "sign_convention": "diffs are arm minus reference on a LOSS. NEGATIVE = the arm predicts better.",
+ "sims_per_game": 200000,
+ "stale_lag_days_min": 3,
+ "features_file": "data/backfill/mlb/2026/features.csv",
+ "features_file_sha256": "b3c57fb2cff42100bb3fd6b3ba138e73c10d365b9fd9ff67ecaff68b0757221f",
+ "window": {
+  "first_date": "2026-03-25",
+  "last_date": "2026-07-19",
+  "games": 1475
+ },
+ "out_of_sample_basis": "V13 fits nothing: no training set, no refit, no outcome-tuned parameter. Inputs are the strict as-of state (cutoff: date < slate date); labels were never seen. Date-ordered by construction.",
+ "logloss_rows_hitting_clip": 0,
+ "absolute_levels_form_present_rows": {
+  "p_full": {
+   "n": 1460,
+   "brier": 0.252794,
+   "logloss": 0.699736,
+   "mean_p": 0.501455
+  },
+  "p_none": {
+   "n": 1460,
+   "brier": 0.248194,
+   "logloss": 0.68951,
+   "mean_p": 0.501632
+  },
+  "p_stale": {
+   "n": 1417,
+   "brier": 0.252146,
+   "logloss": 0.698737,
+   "mean_p": 0.500077
+  },
+  "reference_constant_base_rate": {
+   "p": 0.521233,
+   "brier": 0.249549,
+   "logloss": 0.692245,
+   "note": "in-sample home-win base rate; a floor that uses no game information at all"
+  }
+ },
+ "contrasts": {
+  "form_present_only_PRIMARY": {
+   "brier::FULL_vs_NO_FORM": {
+    "contrast": "FULL_vs_NO_FORM",
+    "n_games": 1460,
+    "n_dates": 112,
+    "mean_diff": 0.004600768369691783,
+    "ci95_block_bootstrap": [
+     0.0007454859426313039,
+     0.008689380363640928
+    ],
+    "p_two_sided_block_bootstrap": 0.019400000000000084,
+    "dates_arm_better": 52,
+    "dates_arm_worse": 60,
+    "p_sign_test_on_dates": 0.5085131799736614,
+    "direction": "ARM WORSE"
+   },
+   "brier::FULL_vs_STALE": {
+    "contrast": "FULL_vs_STALE",
+    "n_games": 1417,
+    "n_dates": 109,
+    "mean_diff": -0.0005200292399082551,
+    "ci95_block_bootstrap": [
+     -0.002420683128139027,
+     0.0009928532516379626
+    ],
+    "p_two_sided_block_bootstrap": 0.5872,
+    "dates_arm_better": 54,
+    "dates_arm_worse": 55,
+    "p_sign_test_on_dates": 1.0,
+    "direction": "ARM BETTER"
+   },
+   "brier::STALE_vs_NO_FORM": {
+    "contrast": "STALE_vs_NO_FORM",
+    "n_games": 1417,
+    "n_dates": 109,
+    "mean_diff": 0.003995681767095979,
+    "ci95_block_bootstrap": [
+     0.00010818051752795856,
+     0.00817785448003993
+    ],
+    "p_two_sided_block_bootstrap": 0.04180000000000006,
+    "dates_arm_better": 47,
+    "dates_arm_worse": 62,
+    "p_sign_test_on_dates": 0.179671070794672,
+    "direction": "ARM WORSE"
+   },
+   "logloss::FULL_vs_NO_FORM": {
+    "contrast": "FULL_vs_NO_FORM",
+    "n_games": 1460,
+    "n_dates": 112,
+    "mean_diff": 0.010226346818116863,
+    "ci95_block_bootstrap": [
+     0.0018926192292575597,
+     0.019082168139348214
+    ],
+    "p_two_sided_block_bootstrap": 0.014799999999999924,
+    "dates_arm_better": 51,
+    "dates_arm_worse": 61,
+    "p_sign_test_on_dates": 0.39519335735782307,
+    "direction": "ARM WORSE"
+   },
+   "logloss::FULL_vs_STALE": {
+    "contrast": "FULL_vs_STALE",
+    "n_games": 1417,
+    "n_dates": 109,
+    "mean_diff": -0.0018043458091175568,
+    "ci95_block_bootstrap": [
+     -0.006128412870391256,
+     0.0015331551596961723
+    ],
+    "p_two_sided_block_bootstrap": 0.3614,
+    "dates_arm_better": 55,
+    "dates_arm_worse": 54,
+    "p_sign_test_on_dates": 1.0,
+    "direction": "ARM BETTER"
+   },
+   "logloss::STALE_vs_NO_FORM": {
+    "contrast": "STALE_vs_NO_FORM",
+    "n_games": 1417,
+    "n_dates": 109,
+    "mean_diff": 0.009313828012305613,
+    "ci95_block_bootstrap": [
+     0.0009691015071470808,
+     0.01840214985980946
+    ],
+    "p_two_sided_block_bootstrap": 0.026999999999999913,
+    "dates_arm_better": 48,
+    "dates_arm_worse": 61,
+    "p_sign_test_on_dates": 0.25028200469192174,
+    "direction": "ARM WORSE"
+   }
+  },
+  "all_labelled_rows": {
+   "brier::FULL_vs_NO_FORM": {
+    "contrast": "FULL_vs_NO_FORM",
+    "n_games": 1475,
+    "n_dates": 114,
+    "mean_diff": 0.004553980894745765,
+    "ci95_block_bootstrap": [
+     0.0007739177429145065,
+     0.008653464330945052
+    ],
+    "p_two_sided_block_bootstrap": 0.018799999999999928,
+    "dates_arm_better": 52,
+    "dates_arm_worse": 60,
+    "p_sign_test_on_dates": 0.5085131799736614,
+    "direction": "ARM WORSE"
+   },
+   "brier::FULL_vs_STALE": {
+    "contrast": "FULL_vs_STALE",
+    "n_games": 1417,
+    "n_dates": 109,
+    "mean_diff": -0.0005200292399082551,
+    "ci95_block_bootstrap": [
+     -0.002420683128139027,
+     0.0009928532516379626
+    ],
+    "p_two_sided_block_bootstrap": 0.5872,
+    "dates_arm_better": 54,
+    "dates_arm_worse": 55,
+    "p_sign_test_on_dates": 1.0,
+    "direction": "ARM BETTER"
+   },
+   "brier::STALE_vs_NO_FORM": {
+    "contrast": "STALE_vs_NO_FORM",
+    "n_games": 1417,
+    "n_dates": 109,
+    "mean_diff": 0.003995681767095979,
+    "ci95_block_bootstrap": [
+     0.00010818051752795856,
+     0.00817785448003993
+    ],
+    "p_two_sided_block_bootstrap": 0.04180000000000006,
+    "dates_arm_better": 47,
+    "dates_arm_worse": 62,
+    "p_sign_test_on_dates": 0.179671070794672,
+    "direction": "ARM WORSE"
+   },
+   "logloss::FULL_vs_NO_FORM": {
+    "contrast": "FULL_vs_NO_FORM",
+    "n_games": 1475,
+    "n_dates": 114,
+    "mean_diff": 0.010122350070813978,
+    "ci95_block_bootstrap": [
+     0.001966104793852534,
+     0.01899671775935052
+    ],
+    "p_two_sided_block_bootstrap": 0.015200000000000102,
+    "dates_arm_better": 51,
+    "dates_arm_worse": 61,
+    "p_sign_test_on_dates": 0.39519335735782307,
+    "direction": "ARM WORSE"
+   },
+   "logloss::FULL_vs_STALE": {
+    "contrast": "FULL_vs_STALE",
+    "n_games": 1417,
+    "n_dates": 109,
+    "mean_diff": -0.0018043458091175568,
+    "ci95_block_bootstrap": [
+     -0.006128412870391256,
+     0.0015331551596961723
+    ],
+    "p_two_sided_block_bootstrap": 0.3614,
+    "dates_arm_better": 55,
+    "dates_arm_worse": 54,
+    "p_sign_test_on_dates": 1.0,
+    "direction": "ARM BETTER"
+   },
+   "logloss::STALE_vs_NO_FORM": {
+    "contrast": "STALE_vs_NO_FORM",
+    "n_games": 1417,
+    "n_dates": 109,
+    "mean_diff": 0.009313828012305613,
+    "ci95_block_bootstrap": [
+     0.0009691015071470808,
+     0.01840214985980946
+    ],
+    "p_two_sided_block_bootstrap": 0.026999999999999913,
+    "dates_arm_better": 48,
+    "dates_arm_worse": 61,
+    "p_sign_test_on_dates": 0.25028200469192174,
+    "direction": "ARM WORSE"
+   }
+  }
+ },
+ "holm_primary_family": [
+  {
+   "test": "brier::FULL_vs_NO_FORM",
+   "p_raw": 0.019400000000000084,
+   "p_holm": 0.0591999999999997,
+   "survives_holm_05": false
+  },
+  {
+   "test": "brier::FULL_vs_STALE",
+   "p_raw": 0.5872,
+   "p_holm": 0.7228,
+   "survives_holm_05": false
+  },
+  {
+   "test": "logloss::FULL_vs_NO_FORM",
+   "p_raw": 0.014799999999999924,
+   "p_holm": 0.0591999999999997,
+   "survives_holm_05": false
+  },
+  {
+   "test": "logloss::FULL_vs_STALE",
+   "p_raw": 0.3614,
+   "p_holm": 0.7228,
+   "survives_holm_05": false
+  }
+ ],
+ "monthly_brier_diff_full_minus_noform": {
+  "2026-03": {
+   "n": 61,
+   "mean_brier_diff_full_minus_noform": 0.05044
+  },
+  "2026-04": {
+   "n": 392,
+   "mean_brier_diff_full_minus_noform": 0.010836
+  },
+  "2026-05": {
+   "n": 419,
+   "mean_brier_diff_full_minus_noform": -0.002829
+  },
+  "2026-06": {
+   "n": 394,
+   "mean_brier_diff_full_minus_noform": 0.001478
+  },
+  "2026-07": {
+   "n": 194,
+   "mean_brier_diff_full_minus_noform": -2.2e-05
+  }
+ },
+ "stratified_by_form_support_FULL_vs_NO_FORM": {
+  "0-9_prior_games": {
+   "n_games": 137,
+   "n_dates": 12,
+   "mean_brier_diff": 0.037495,
+   "ci95": [
+    0.019248,
+    0.055269
+   ],
+   "p": 0.00019999999999997797,
+   "mean_logloss_diff": 0.083921,
+   "direction": "ARM WORSE"
+  },
+  "10-24": {
+   "n_games": 227,
+   "n_dates": 19,
+   "mean_brier_diff": 0.007578,
+   "ci95": [
+    -0.003569,
+    0.020063
+   ],
+   "p": 0.1886000000000001,
+   "mean_logloss_diff": 0.016087,
+   "direction": "ARM WORSE"
+  },
+  "25-49": {
+   "n_games": 380,
+   "n_dates": 33,
+   "mean_brier_diff": 0.000518,
+   "ci95": [
+    -0.006299,
+    0.007394
+   ],
+   "p": 0.871,
+   "mean_logloss_diff": 0.001111,
+   "direction": "ARM WORSE"
+  },
+  "50+": {
+   "n_games": 716,
+   "n_dates": 57,
+   "mean_brier_diff": -0.00047,
+   "ci95": [
+    -0.003568,
+    0.002623
+   ],
+   "p": 0.7704,
+   "mean_logloss_diff": -0.000894,
+   "direction": "ARM BETTER"
+  }
+ },
+ "scope_limits": [
+  "Measures team form's INCREMENTAL value GIVEN V13's SP, park and HFA terms \u2014 not form's value in isolation, and not its value inside a different model.",
+  "The frozen feature window ends 2026-07-19, so this does not cover the 2026-08-17 slate the sensitivity study used.",
+  "The STALE arm lags form by at least the stated number of days using each team's own earlier snapshot. It is an analogue of the 8/17 v2->v3 freshness contrast, not a reconstruction of it.",
+  "A null result here is evidence of no detectable skill AT THIS SAMPLE SIZE, which is not the same as evidence of no effect."
+ ]
+}

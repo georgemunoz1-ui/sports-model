@@ -1,0 +1,193 @@
+{
+  "player": {
+    "name": "Tarik Skubal",
+    "mlbam_id": 669373,
+    "team": "Detroit Tigers"
+  },
+  "context": "Listed as DET probable starter for 2026-07-18. Earlier fetch of the 2026 gameLog appeared to show only 7 entries ending 2026-04-29; injury absence vs data truncation was unresolved.",
+  "capture_time_utc": "2026-07-18T04:25:23Z",
+  "fetch_window_utc": "2026-07-18T04:19Z to 2026-07-18T04:25:23Z",
+  "fetches": [
+    {
+      "label": "gamelog_attempt_1",
+      "url": "https://statsapi.mlb.com/api/v1/people/669373/stats?stats=gameLog&group=pitching&season=2026",
+      "result": "7 entries listed, 2026-03-26 through 2026-04-29",
+      "assessment": "TRUNCATED (payload cut off in fetch pipeline)"
+    },
+    {
+      "label": "season_hydrate",
+      "url": "https://statsapi.mlb.com/api/v1/people/669373?hydrate=stats(group=[pitching],type=[season],season=2026)",
+      "result_verbatim": {
+        "gamesPlayed": 8,
+        "gamesStarted": 8,
+        "inningsPitched": "48.0",
+        "era": "2.81",
+        "strikeOuts": 49,
+        "baseOnBalls": 7,
+        "wins": 3,
+        "losses": 3
+      },
+      "assessment": "STALE cached snapshot: exactly equals game-log aggregate through 2026-06-13 (8 G, 48.0 IP, 15 ER -> 2.81 ERA)"
+    },
+    {
+      "label": "gamelog_attempt_2",
+      "url": "https://statsapi.mlb.com/api/v1/people/669373/stats?stats=gameLog&group=pitching&season=2026&sportId=1",
+      "result": "10 entries listed, through 2026-06-24",
+      "assessment": "STILL TRUNCATED"
+    },
+    {
+      "label": "gamelog_final_fields_filtered",
+      "url": "https://statsapi.mlb.com/api/v1/people/669373/stats?stats=gameLog&group=pitching&season=2026&fields=stats,splits,date,opponent,name,stat,inningsPitched,earnedRuns,strikeOuts,baseOnBalls",
+      "result": "13 entries, 2026-03-26 through 2026-07-12",
+      "assessment": "COMPLETE (small payload; matches season totals exactly)"
+    },
+    {
+      "label": "season_final_fields_filtered",
+      "url": "https://statsapi.mlb.com/api/v1/people/669373/stats?stats=season&group=pitching&season=2026&fields=stats,splits,stat,gamesPlayed,gamesStarted,inningsPitched,era,strikeOuts,baseOnBalls,whip",
+      "result_verbatim": {
+        "gamesPlayed": 13,
+        "gamesStarted": 13,
+        "inningsPitched": "75.2",
+        "era": "3.09",
+        "strikeOuts": 89,
+        "baseOnBalls": 11,
+        "whip": "0.95"
+      },
+      "assessment": "CURRENT season line"
+    }
+  ],
+  "game_log_final": [
+    {
+      "date": "2026-03-26",
+      "opponent": "San Diego Padres",
+      "ip": "6.0",
+      "er": 0,
+      "k": 6,
+      "bb": 0
+    },
+    {
+      "date": "2026-04-01",
+      "opponent": "Arizona Diamondbacks",
+      "ip": "7.0",
+      "er": 1,
+      "k": 3,
+      "bb": 0
+    },
+    {
+      "date": "2026-04-07",
+      "opponent": "Minnesota Twins",
+      "ip": "4.2",
+      "er": 4,
+      "k": 7,
+      "bb": 2
+    },
+    {
+      "date": "2026-04-12",
+      "opponent": "Miami Marlins",
+      "ip": "6.2",
+      "er": 1,
+      "k": 7,
+      "bb": 2
+    },
+    {
+      "date": "2026-04-18",
+      "opponent": "Boston Red Sox",
+      "ip": "6.0",
+      "er": 1,
+      "k": 10,
+      "bb": 2
+    },
+    {
+      "date": "2026-04-23",
+      "opponent": "Milwaukee Brewers",
+      "ip": "6.0",
+      "er": 4,
+      "k": 5,
+      "bb": 0
+    },
+    {
+      "date": "2026-04-29",
+      "opponent": "Atlanta Braves",
+      "ip": "7.0",
+      "er": 2,
+      "k": 7,
+      "bb": 0
+    },
+    {
+      "date": "2026-06-13",
+      "opponent": "Cleveland Guardians",
+      "ip": "4.2",
+      "er": 2,
+      "k": 4,
+      "bb": 1
+    },
+    {
+      "date": "2026-06-19",
+      "opponent": "Chicago White Sox",
+      "ip": "5.2",
+      "er": 3,
+      "k": 8,
+      "bb": 1
+    },
+    {
+      "date": "2026-06-24",
+      "opponent": "New York Yankees",
+      "ip": "6.0",
+      "er": 4,
+      "k": 9,
+      "bb": 0
+    },
+    {
+      "date": "2026-06-30",
+      "opponent": "New York Yankees",
+      "ip": "6.0",
+      "er": 1,
+      "k": 9,
+      "bb": 0
+    },
+    {
+      "date": "2026-07-07",
+      "opponent": "Athletics",
+      "ip": "5.0",
+      "er": 1,
+      "k": 9,
+      "bb": 2
+    },
+    {
+      "date": "2026-07-12",
+      "opponent": "Philadelphia Phillies",
+      "ip": "5.0",
+      "er": 2,
+      "k": 5,
+      "bb": 1
+    }
+  ],
+  "season_totals_final": {
+    "g": 13,
+    "gs": 13,
+    "ip": "75.2",
+    "era": "3.09",
+    "k": 89,
+    "bb": 11,
+    "whip": "0.95"
+  },
+  "cross_validation": {
+    "gamelog_count_vs_season_gs": "13 == 13 OK",
+    "ip_sum_check": "log sum 75.6667 decimal innings = 75.2 baseball notation == season 75.2 OK",
+    "er_era_check": "log ER sum 26; 26*9/75.6667 = 3.0925 -> 3.09 == season 3.09 OK",
+    "k_check": "89 == 89 OK",
+    "bb_check": "11 == 11 OK",
+    "attempt1_recent5_values": "IP/ER/K/BB for 4/7-4/29 in attempt 1 match the final log exactly"
+  },
+  "verdict": {
+    "headline": "BOTH factors were real, but the 7/18 start is ROUTINE, not a return from absence.",
+    "truncation": "The 7-entry game log was fetch-pipeline truncation, not the full record. True 2026 log = 13 starts through 2026-07-12, verified by exact agreement of summed IP/ER/K/BB with the fresh season line (13 GS, 75.2 IP, 3.09 ERA, 89 K, 11 BB). The earlier 8 G / 48.0 IP / 2.81 season hydrate was a stale snapshot equal to totals through 6/13.",
+    "genuine_absence": "Skubal DID miss time: no starts between 2026-04-29 and 2026-06-13 (45 days, ~8 missed turns, consistent with an IL stint).",
+    "current_status": "6 post-return starts on regular rest (6/13, 6/19, 6/24, 6/30, 7/7, 7/12). 7/18 = 5 days after 7/12 across the All-Star break: a normal-rest start.",
+    "model_flags": [
+      "Post-return workload capped: avg 5.39 decimal IP/start (max 6.0) vs 6.19 pre-injury; possible pitch-count management.",
+      "Post-return line: 6 GS, 32.1 IP, 13 ER (3.62 ERA), 44 K, 5 BB.",
+      "Pre-injury line: 7 GS, 43.1 IP, 13 ER (2.70 ERA)."
+    ]
+  }
+}

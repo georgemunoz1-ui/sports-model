@@ -1,0 +1,44 @@
+{
+ "record_id": "RESULTS-CORRECTION-2026-08-10",
+ "built_utc": "2026-08-10T04:45:57Z",
+ "trigger": "owner supplied authoritative Statcast box dump for 8/8+8/9",
+ "source": {
+  "tier": 1,
+  "sha256": "5e978c3c83405d0363d0e6b260dc5a0cdd2e3ccc4429c15ac1e85425a9829c98",
+  "parser": "harness/parse_box_dump.py",
+  "independent_check": "27/30 games verified by linescore-sum; 3 had no linescore in the dump"
+ },
+ "supersedes": "WebSearch-snippet ingestion of 2026-08-08 (tier-3)",
+ "corrections": [
+  {
+   "game": "LAA@MIA",
+   "was": "4-3",
+   "now": "0-7",
+   "winner_flipped": true,
+   "linescore_verified": true
+  },
+  {
+   "game": "ATH@BOS",
+   "was": "3-7",
+   "now": "7-3",
+   "winner_flipped": true,
+   "linescore_verified": true
+  },
+  {
+   "game": "DET@SF",
+   "was": "2-5",
+   "now": "8-0",
+   "winner_flipped": true,
+   "linescore_verified": true
+  },
+  {
+   "game": "TB@SEA",
+   "was": "2-1",
+   "now": "3-2",
+   "winner_flipped": false,
+   "linescore_verified": null
+  }
+ ],
+ "error_rate": "4 of 15 wrong (27%); 3 with the WRONG WINNER (20%)",
+ "note": "All three winner-flips are linescore-VERIFIED in the tier-1 source; the correction is not itself in doubt."
+}

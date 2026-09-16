@@ -1,0 +1,85 @@
+{
+ "record_id": "ML-REGRESSION-EVAL-2026-08-10",
+ "built_utc": "2026-08-10T19:01:49Z",
+ "request": "owner: 'model should be machine learning in order to be less wrong \u2014 LINEAR REGRESSION'",
+ "method": "Expanding-window walk-forward, date-ordered, on the frozen as-of features.csv (no look-ahead, no market prices as inputs). 1054 scored games after a 400-game burn-in. Compared against V13 on the SAME games via the frozen historical replay.",
+ "results": {
+  "base_rate": {
+   "brier": 0.2501,
+   "acc": 0.516
+  },
+  "LPM_linear_regression": {
+   "brier": 0.2555,
+   "acc": 0.544
+  },
+  "logistic": {
+   "brier": 0.2466,
+   "acc": 0.548
+  },
+  "ridge_logistic": {
+   "brier": 0.2468,
+   "acc": 0.551
+  },
+  "V13_monte_carlo": {
+   "brier": 0.2471,
+   "acc": 0.552
+  }
+ },
+ "headline_finding": "LINEAR REGRESSION IS THE WORST MODEL TESTED \u2014 Brier 0.2555, WORSE than simply predicting the league home-win rate (0.2501). The specific thing requested does not make the model less wrong; it makes it more wrong.",
+ "why": "The target is binary. OLS on a 0/1 outcome (the Linear Probability Model) fits a straight line to a probability, so it pushes predictions toward and past the 0/1 boundary where the true response must flatten, and its errors are heteroscedastic by construction. Its accuracy (54.4%) is respectable \u2014 it ranks games acceptably \u2014 but its PROBABILITIES are poorly calibrated, and Brier and log loss both punish that. Logistic regression is the same idea with the correct link function.",
+ "significance": {
+  "logistic_vs_V13": {
+   "dBrier": -0.00045,
+   "t": -0.24,
+   "ci95": [
+    -0.00416,
+    0.00327
+   ],
+   "verdict": "NOT SIGNIFICANT \u2014 logistic does NOT beat V13; the two are indistinguishable on this sample"
+  },
+  "logistic_vs_base_rate": {
+   "dBrier": -0.00348,
+   "t": -1.98,
+   "ci95": [
+    -0.00692,
+    -3e-05
+   ],
+   "verdict": "SIGNIFICANT, but marginally (CI barely excludes 0) and tiny in magnitude"
+  },
+  "V13_vs_base_rate": {
+   "dBrier": -0.00303,
+   "t": -1.42,
+   "ci95": [
+    -0.0072,
+    0.00115
+   ],
+   "verdict": "NOT significant \u2014 V13 still cannot be distinguished from the base rate"
+  },
+  "LPM_vs_base_rate": {
+   "dBrier": 0.00543,
+   "t": 1.49,
+   "verdict": "worse than base rate, not significantly so"
+  }
+ },
+ "honest_verdict": "Fitting a model helped, but barely. The ONLY model that separates from the base rate at all is logistic regression, by 0.0035 Brier with a confidence interval that barely excludes zero. It does NOT beat V13. Nothing here is a validated edge, and none of it changes the gate.",
+ "what_the_coefficients_say": {
+  "sp_era_edge": 0.1994,
+  "park": -0.1138,
+  "sp_k_edge": 0.0419,
+  "def_edge": 0.0298,
+  "team_rd_edge": 0.0219,
+  "sp_bb_edge": -0.008,
+  "off_edge": 0.0047,
+  "reading": "Starting-pitcher quality dominates \u2014 its coefficient is 9x the team run-differential term. Park is second and NEGATIVE, i.e. hitter-friendly parks slightly favour the visitor once the starters are accounted for. Team offence is nearly worthless once SP and defence are in. This is a real, useful finding: the model's signal is concentrated in the starter, which is also the input most vulnerable to a late scratch."
+ },
+ "calibration": "Monotone across deciles at the extremes (bucket 1 pred .417/actual .358; bucket 10 pred .625/actual .638) but noisy in the middle (bucket 4 pred .511/actual .434; bucket 5 pred .526/actual .600). The model has some genuine ranking ability at the tails and essentially none in the middle.",
+ "limits": [
+  "Trained on 1475 games from ONE partial season \u2014 small for 7 features.",
+  "features.csv ends 2026-07-19, so nothing after that is in training or scoring.",
+  "No market benchmark: prices are deliberately not inputs, and the 8/10 board is cross-book so it cannot supply one.",
+  "Beating a base rate is not an edge; beating the CLOSING PRICE after vig is, and that has not been demonstrated."
+ ],
+ "recommended_next": "The gain is in features, not in the estimator. Bullpen quality, rest/travel, lineup handedness splits and confirmed-lineup data are absent, and the coefficients say the starter is where the signal lives \u2014 so starter-level detail (recent form, times-through-order, opponent handedness) is the highest-value addition. Swapping estimators again will not move this.",
+ "SUPERSEDED_BY": "2026-08-10_ml_claim_corrections.json",
+ "SUPERSEDED_NOTE": "Several headline claims in this file are WRONG (LPM 'ranking fine'; logistic-vs-base 'significant'). Do not cite without the corrections record."
+}

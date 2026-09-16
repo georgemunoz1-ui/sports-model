@@ -1,0 +1,150 @@
+{
+ "schema_version": "nfl.preseason.current_lines.v1",
+ "capture_id": "NFL-PS-LINES-20260815T153046Z-T90M-1700Z",
+ "sport": "NFL",
+ "season_phase": "PRESEASON",
+ "capture_kind": "CURRENT_LINES",
+ "captured_at_utc": "2026-08-15T15:30:46Z",
+ "target_window": "T_MINUS_90M",
+ "window_state": "ON_TIME (kicks 17:00Z)",
+ "grade_scope": "MARKET_BENCHMARK_ONLY",
+ "promotion_eligible": false,
+ "wager_authority": "NO",
+ "stake": "$0",
+ "provenance": {
+  "grade": "WEB_EXTRACTED_NOT_RAW_BYTE_BOUND",
+  "raw_source_bytes_on_disk": false,
+  "rule": "source-specific quotes; no averaging across sign conflicts; movement measured ONLY vs the held T-3H capture (NFL-PS-LINES-20260815T140215Z-T3H-1700Z), never called 'opening'"
+ },
+ "games": [
+  {
+   "away_team": "CAR",
+   "home_team": "BUF",
+   "game_start_utc": "2026-08-15T17:00:00Z",
+   "model_forecast": null,
+   "forecast_status": "NO_INDEPENDENT_PRESEASON_MODEL",
+   "source_quotes": [
+    {
+     "quote_id": "CAR-BUF-DK-20260815T153046Z",
+     "quote_scope": "SOURCE_SPECIFIC",
+     "display_source": "DraftKings Network article",
+     "underlying_book_attribution": "DraftKings",
+     "source_url": "https://dknetwork.draftkings.com/2026/08/14/carolina-panthers-at-buffalo-bills-prediction-pick-for-nfl-preseason-on-8-15-26/",
+     "accessed_at_utc": "2026-08-15T15:30:46Z",
+     "away_spread": 3.0,
+     "home_spread": -3.0,
+     "away_moneyline": 130,
+     "home_moneyline": -155,
+     "total": 38.5
+    },
+    {
+     "quote_id": "CAR-BUF-FANDUEL-20260815T153046Z",
+     "quote_scope": "SOURCE_SPECIFIC",
+     "display_source": "FanDuel Research",
+     "underlying_book_attribution": "FanDuel Sportsbook",
+     "source_url": "https://www.fanduel.com/research/panthers-vs-bills-prediction-picks-odds-and-best-bets-today-saturday-august-15-2026",
+     "accessed_at_utc": "2026-08-15T15:30:46Z",
+     "away_spread": 1.5,
+     "away_spread_price": -120,
+     "home_spread": -1.5,
+     "home_spread_price": -102,
+     "total": 38.5
+    }
+   ],
+   "current_favorite": "BUF",
+   "favorite_basis": "TWO_SOURCE_SAME_SIGN (DK -3, FanDuel -1.5) \u2014 benchmark DECLARED: BUF",
+   "movement_vs_t3h": "FanDuel BUF -3.0 -> -1.5 (moved toward CAR by 1.5 within one book); DK holds -3",
+   "pregame_personnel": {
+    "status": "CARRIED_FROM_T3H",
+    "facts": [
+     {
+      "team": "BUF",
+      "source_family": "SECONDARY_REPORT",
+      "source_url": "https://www.covers.com/nfl/panthers-vs-bills-predictions-picks-best-bets-saturday-august-15-2026",
+      "captured_at_utc": "2026-08-15T15:30:46Z",
+      "fact": "Josh Allen expected to play (first preseason appearance in two years); healthy starters get time per HC Brady."
+     }
+    ],
+    "conflicts": []
+   }
+  },
+  {
+   "away_team": "CLE",
+   "home_team": "CHI",
+   "game_start_utc": "2026-08-15T17:00:00Z",
+   "model_forecast": null,
+   "forecast_status": "NO_INDEPENDENT_PRESEASON_MODEL",
+   "source_quotes": [
+    {
+     "quote_id": "CLE-CHI-SEARCHSUMMARY-20260815T153046Z",
+     "quote_scope": "SOURCE_SPECIFIC",
+     "display_source": "search-summary quote, attribution UNCLEAR (FanDuel week-1 page or bettorsinsider guide)",
+     "underlying_book_attribution": null,
+     "attribution_confidence": "LOW",
+     "source_url": "https://www.fanduel.com/research/nfl-preseason-week-1-schedule-betting-odds-for-every-game",
+     "accessed_at_utc": "2026-08-15T15:30:46Z",
+     "away_spread": 2.5,
+     "away_spread_price": -108,
+     "home_spread": -2.5,
+     "home_spread_price": -112,
+     "total": 40.5
+    }
+   ],
+   "current_favorite": null,
+   "favorite_basis": "NONE DECLARED \u2014 SIGN CONFLICT vs T-3H: FanDuel-attributed CLE -3 at 14:02Z vs CHI -2.5 in this capture with LOW-confidence attribution. Cannot distinguish a real 5.5-point temporal flip from a cross-source conflict or an extraction error. Never average; never declare on a conflict.",
+   "movement_vs_t3h": "UNRESOLVED SIGN STATE (CLE -3 -> CHI -2.5 if real; needs a clean two-source read that never arrived pre-kick)",
+   "pregame_personnel": {
+    "status": "CARRIED_FROM_T3H",
+    "facts": [
+     {
+      "team": "CLE",
+      "source_family": "SECONDARY_REPORT",
+      "source_url": "https://www.si.com/nfl/panthers/cleveland-browns-carolina-panthers-best-nfl-preseason-games-shedeur-sanders",
+      "captured_at_utc": "2026-08-15T15:30:46Z",
+      "fact": "Watson first half, Sanders second half (unchanged since T-3H; no scratch news surfaced)."
+     }
+    ],
+    "conflicts": []
+   }
+  },
+  {
+   "away_team": "MIN",
+   "home_team": "NYG",
+   "game_start_utc": "2026-08-15T17:00:00Z",
+   "model_forecast": null,
+   "forecast_status": "NO_INDEPENDENT_PRESEASON_MODEL",
+   "source_quotes": [
+    {
+     "quote_id": "MIN-NYG-SEARCHSUMMARY-20260815T153046Z",
+     "quote_scope": "SOURCE_SPECIFIC",
+     "display_source": "search-summary quote, attribution UNCLEAR",
+     "underlying_book_attribution": null,
+     "attribution_confidence": "LOW",
+     "source_url": "https://www.fanduel.com/research/nfl-preseason-week-1-schedule-betting-odds-for-every-game",
+     "accessed_at_utc": "2026-08-15T15:30:46Z",
+     "away_spread": 2.5,
+     "away_spread_price": -105,
+     "home_spread": -2.5,
+     "home_spread_price": -115,
+     "total": 41.5
+    }
+   ],
+   "current_favorite": null,
+   "favorite_basis": "NONE DECLARED \u2014 SIGN CONFLICT vs T-3H: MIN -1.5 at 14:02Z vs NYG -2.5 here (LOW-confidence attribution). A 4-point swing toward NYG would cohere with the personnel facts below, but per doctrine intent is never inferred from the line and a benchmark is never declared on a conflict.",
+   "movement_vs_t3h": "UNRESOLVED SIGN STATE (MIN -1.5 -> NYG -2.5 if real); total 42.5 -> 41.5",
+   "pregame_personnel": {
+    "status": "UPDATED_THIS_RUN",
+    "facts": [
+     {
+      "team": "MIN",
+      "source_family": "TEAM_OFFICIAL",
+      "source_url": "https://www.vikings.com/news/previewing-2026-preseason-game-1-giants",
+      "captured_at_utc": "2026-08-15T15:30:46Z",
+      "fact": "Kyler Murray named starting QB; HC O'Connell plans to play both Murray and J.J. McCarthy; Murray likely a series or two at most; Justin Jefferson will NOT play; plenty of other starters in action; Wentz and Brosmer could log snaps."
+     }
+    ],
+    "conflicts": []
+   }
+  }
+ ]
+}

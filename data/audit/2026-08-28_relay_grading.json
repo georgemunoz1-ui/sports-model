@@ -1,0 +1,1282 @@
+{
+ "AGGREGATE_GUARD": {
+  "per_sport": {
+   "mlb": {
+    "basis": "DESCRIPTIVE_OVERRIDE",
+    "cohort_did_not_bind": true,
+    "override_reason": "IDENTITY_MATCH ONLY. Every relayed score attaches to a canonical id that is on the board with the same matchup, and that is the whole warrant. The cohort does not bind under the registered contract because the relay carries no result_date. These statistics are DESCRIPTIVE and accrue nothing to settlement, promotion or the estimator.",
+    "permitted": true,
+    "refused_codes": [
+     "COHORT_COVERAGE_INCOMPLETE",
+     "MISSING_IDENTITY_FIELD"
+    ],
+    "statistic": "mlb arm statistics",
+    "warning": "this statistic was published over a cohort that DID NOT BIND. It is descriptive only and accrues nothing to settlement, promotion or the estimator."
+   },
+   "wnba": {
+    "basis": "DESCRIPTIVE_OVERRIDE",
+    "cohort_did_not_bind": true,
+    "override_reason": "IDENTITY_MATCH ONLY. Every relayed score attaches to a canonical id that is on the board with the same matchup, and that is the whole warrant. The cohort does not bind under the registered contract because the relay carries no result_date. These statistics are DESCRIPTIVE and accrue nothing to settlement, promotion or the estimator.",
+    "permitted": true,
+    "refused_codes": [
+     "COHORT_COVERAGE_INCOMPLETE",
+     "MISSING_IDENTITY_FIELD"
+    ],
+    "statistic": "wnba arm statistics",
+    "warning": "this statistic was published over a cohort that DID NOT BIND. It is descriptive only and accrues nothing to settlement, promotion or the estimator."
+   }
+  },
+  "status": "EVERY statistic in this record was published over a cohort that DID NOT BIND, under an explicit descriptive override.",
+  "why_this_block_exists": "until 2026-08-29 aggregate_guard \u2014 the function whose own docstring calls it 'the check that would have stopped the 8/27 damage' \u2014 had ZERO production callers. binding_proof returned its rule as a STRING and every consumer, this module included, computed and published statistics without consulting it. The refusal recorded in BINDING above blocked nothing. It does now: guarded_aggregate raises unless a caller states, in code, why it is publishing anyway."
+ },
+ "BINDING": {
+  "BOARD_SCHEMA_FINDING": {
+   "disposition": "derivation disclosed per board via TEAMS_DERIVED_FROM_GAME_KEY rather than performed silently. Carrying away/home as MLB fields is the real fix and is NOT applied here \u2014 the board is frozen under R3.",
+   "how_it_surfaced": "the first pass refused all 15 MLB rows with MISSING_IDENTITY_FIELD while all 4 WNBA rows bound cleanly. The asymmetry is the board schema, not the relay.",
+   "severity": "BOUNDED. An archive row brings its own away/home, so TEAMS_REVERSED can still fire there. The narrow exposure is that a game key BUILT backwards at freeze time would have nothing on the board to contradict it \u2014 the same shape as the LAD@DET starter reversal: one source, nothing to disagree with it.",
+   "what": "the MLB board stores away and home ONLY inside the composite game key (\"mlb:CIN@CHC\"). The WNBA board stores them as explicit fields. Two of the six binding-contract fields are therefore not independently held on an MLB board."
+  },
+  "CORRECTION": {
+   "effect_on_the_grades": "NONE of the recomputed metrics change. They were always computed by joining the frozen board to the relayed finals on the game key, which is the identity match. What changes is the WARRANT published beside them: from 'bound, gradable' to 'identity-matched, date unestablished, descriptive only'.",
+   "how_it_was_found": "an adversarial audit of this repo's retrieval surface, not by re-reading the output. The record and the card both looked correct.",
+   "what_is_true_instead": "IDENTITY matches for every game: each relayed score attaches to a canonical id that is on the board with the same matchup. That is a real and useful claim. It is strictly weaker than binding: it does not establish that the score is that game's score, and it establishes nothing about the date.",
+   "what_was_published": "the 2026-08-28 full card and the first version of this record published RESULT_BINDING_PASS = 15/15 (mlb) and 4/4 (wnba), DATE_COHERENCE_PASS identical, and gradable = true for both cohorts.",
+   "why_that_was_wrong": "this module stamped result_date from its own SLATE_DATE constant. That is the missing field being MANUFACTURED so the row would bind \u2014 the same evasion selftest B1 exists to refuse, performed one level up where B1 could not see it. The counter compared a constant against the board's own date and was structurally incapable of failing. Had the wrong night's finals been relayed \u2014 the exact 2026-08-27 P0 \u2014 it would still have read 15/15."
+  },
+  "VERDICT": "NOT BOUND \u2014 and it never was. See CORRECTION below.",
+  "counters_full_contract": {
+   "mlb": {
+    "CANONICAL_ID_MATCH": "0/15",
+    "DATE_COHERENCE_PASS": "0/15",
+    "REFUSED_ROWS": [
+     {
+      "codes": [
+       "MISSING_IDENTITY_FIELD"
+      ],
+      "index": 0
+     },
+     {
+      "codes": [
+       "MISSING_IDENTITY_FIELD"
+      ],
+      "index": 1
+     },
+     {
+      "codes": [
+       "MISSING_IDENTITY_FIELD"
+      ],
+      "index": 2
+     },
+     {
+      "codes": [
+       "MISSING_IDENTITY_FIELD"
+      ],
+      "index": 3
+     },
+     {
+      "codes": [
+       "MISSING_IDENTITY_FIELD"
+      ],
+      "index": 4
+     },
+     {
+      "codes": [
+       "MISSING_IDENTITY_FIELD"
+      ],
+      "index": 5
+     },
+     {
+      "codes": [
+       "MISSING_IDENTITY_FIELD"
+      ],
+      "index": 6
+     },
+     {
+      "codes": [
+       "MISSING_IDENTITY_FIELD"
+      ],
+      "index": 7
+     },
+     {
+      "codes": [
+       "MISSING_IDENTITY_FIELD"
+      ],
+      "index": 8
+     },
+     {
+      "codes": [
+       "MISSING_IDENTITY_FIELD"
+      ],
+      "index": 9
+     },
+     {
+      "codes": [
+       "MISSING_IDENTITY_FIELD"
+      ],
+      "index": 10
+     },
+     {
+      "codes": [
+       "MISSING_IDENTITY_FIELD"
+      ],
+      "index": 11
+     },
+     {
+      "codes": [
+       "MISSING_IDENTITY_FIELD"
+      ],
+      "index": 12
+     },
+     {
+      "codes": [
+       "MISSING_IDENTITY_FIELD"
+      ],
+      "index": 13
+     },
+     {
+      "codes": [
+       "MISSING_IDENTITY_FIELD"
+      ],
+      "index": 14
+     }
+    ],
+    "RESULT_BINDING_PASS": "0/15"
+   },
+   "wnba": {
+    "CANONICAL_ID_MATCH": "0/4",
+    "DATE_COHERENCE_PASS": "0/4",
+    "REFUSED_ROWS": [
+     {
+      "codes": [
+       "MISSING_IDENTITY_FIELD"
+      ],
+      "index": 0
+     },
+     {
+      "codes": [
+       "MISSING_IDENTITY_FIELD"
+      ],
+      "index": 1
+     },
+     {
+      "codes": [
+       "MISSING_IDENTITY_FIELD"
+      ],
+      "index": 2
+     },
+     {
+      "codes": [
+       "MISSING_IDENTITY_FIELD"
+      ],
+      "index": 3
+     }
+    ],
+    "RESULT_BINDING_PASS": "0/4"
+   }
+  },
+  "gradable_full_contract": {
+   "mlb": false,
+   "wnba": false
+  },
+  "identity_only": {
+   "mlb": {
+    "IDENTITY_MATCH": "15/15",
+    "per_game": [
+     {
+      "away_score": 10,
+      "board_matchup": "AZ@SF",
+      "canonical_id": "ESPN_GAMEID:401816714",
+      "game": "mlb:AZ@SF",
+      "home_score": 6,
+      "present_on_board": true
+     },
+     {
+      "away_score": 4,
+      "board_matchup": "BAL@ATH",
+      "canonical_id": "MLB_GAMEPK:824960",
+      "game": "mlb:BAL@ATH",
+      "home_score": 3,
+      "present_on_board": true
+     },
+     {
+      "away_score": 0,
+      "board_matchup": "BOS@NYY",
+      "canonical_id": "MLB_GAMEPK:823504",
+      "game": "mlb:BOS@NYY",
+      "home_score": 1,
+      "present_on_board": true
+     },
+     {
+      "away_score": 10,
+      "board_matchup": "CIN@CHC",
+      "canonical_id": "ESPN_GAMEID:401816711",
+      "game": "mlb:CIN@CHC",
+      "home_score": 8,
+      "present_on_board": true
+     },
+     {
+      "away_score": 4,
+      "board_matchup": "COL@ATL",
+      "canonical_id": "ESPN_GAMEID:401816703",
+      "game": "mlb:COL@ATL",
+      "home_score": 6,
+      "present_on_board": true
+     },
+     {
+      "away_score": 7,
+      "board_matchup": "CWS@MIN",
+      "canonical_id": "ESPN_GAMEID:401816710",
+      "game": "mlb:CWS@MIN",
+      "home_score": 4,
+      "present_on_board": true
+     },
+     {
+      "away_score": 3,
+      "board_matchup": "HOU@NYM",
+      "canonical_id": "ESPN_GAMEID:401816704",
+      "game": "mlb:HOU@NYM",
+      "home_score": 1,
+      "present_on_board": true
+     },
+     {
+      "away_score": 3,
+      "board_matchup": "KC@CLE",
+      "canonical_id": "ESPN_GAMEID:401816705",
+      "game": "mlb:KC@CLE",
+      "home_score": 0,
+      "present_on_board": true
+     },
+     {
+      "away_score": 2,
+      "board_matchup": "LAD@DET",
+      "canonical_id": "MLB_GAMEPK:824231",
+      "game": "mlb:LAD@DET",
+      "home_score": 1,
+      "present_on_board": true
+     },
+     {
+      "away_score": 2,
+      "board_matchup": "MIA@WSH",
+      "canonical_id": "ESPN_GAMEID:401816707",
+      "game": "mlb:MIA@WSH",
+      "home_score": 9,
+      "present_on_board": true
+     },
+     {
+      "away_score": 5,
+      "board_matchup": "PHI@LAA",
+      "canonical_id": "MLB_GAMEPK:823985",
+      "game": "mlb:PHI@LAA",
+      "home_score": 3,
+      "present_on_board": true
+     },
+     {
+      "away_score": 1,
+      "board_matchup": "PIT@STL",
+      "canonical_id": "ESPN_GAMEID:401816712",
+      "game": "mlb:PIT@STL",
+      "home_score": 4,
+      "present_on_board": true
+     },
+     {
+      "away_score": 4,
+      "board_matchup": "SD@TB",
+      "canonical_id": "ESPN_GAMEID:401816708",
+      "game": "mlb:SD@TB",
+      "home_score": 9,
+      "present_on_board": true
+     },
+     {
+      "away_score": 1,
+      "board_matchup": "SEA@TOR",
+      "canonical_id": "ESPN_GAMEID:401816709",
+      "game": "mlb:SEA@TOR",
+      "home_score": 8,
+      "present_on_board": true
+     },
+     {
+      "away_score": 1,
+      "board_matchup": "TEX@MIL",
+      "canonical_id": "MLB_GAMEPK:823744",
+      "game": "mlb:TEX@MIL",
+      "home_score": 6,
+      "present_on_board": true
+     }
+    ],
+    "what_this_is": "canonical id present on the board and matchup agrees. It proves WHICH game each score is attached to. It does NOT prove the score is that game's score, and it does NOT establish the date.",
+    "what_this_is_not": "binding under the registered contract"
+   },
+   "wnba": {
+    "IDENTITY_MATCH": "4/4",
+    "per_game": [
+     {
+      "away_score": 91,
+      "board_matchup": "Connecticut Sun@Indiana Fever",
+      "canonical_id": "ESPN_GAMEID:401857181",
+      "game": "wnba:CON@IND",
+      "home_score": 111,
+      "present_on_board": true
+     },
+     {
+      "away_score": 101,
+      "board_matchup": "Portland Fire@Atlanta Dream",
+      "canonical_id": "ESPN_GAMEID:401857180",
+      "game": "wnba:POR@ATL",
+      "home_score": 83,
+      "present_on_board": true
+     },
+     {
+      "away_score": 73,
+      "board_matchup": "Toronto Tempo@Las Vegas Aces",
+      "canonical_id": "ESPN_GAMEID:401857182",
+      "game": "wnba:TOR@LV",
+      "home_score": 93,
+      "present_on_board": true
+     },
+     {
+      "away_score": 82,
+      "board_matchup": "Washington Mystics@Los Angeles Sparks",
+      "canonical_id": "ESPN_GAMEID:401857183",
+      "game": "wnba:WSH@LAS",
+      "home_score": 88,
+      "present_on_board": true
+     }
+    ],
+    "what_this_is": "canonical id present on the board and matchup agrees. It proves WHICH game each score is attached to. It does NOT prove the score is that game's score, and it does NOT establish the date.",
+    "what_this_is_not": "binding under the registered contract"
+   }
+  },
+  "owner_stated_join": "slate_date + canonical_id + away + home",
+  "registered_contract": "sport + canonical_game_id + scheduled_date + result_date + away + home",
+  "why_it_cannot_bind": "a relay of bare scores carries NO result_date. The gate refuses a row that omits it \u2014 selftest B1 pins that behaviour, because omitting result_date was MORE permissive than stating it honestly, and the published wrong KC@TOR final on 2026-08-27 bound cleanly precisely by omission. So these rows are correctly REFUSED under the full contract."
+ },
+ "CFB": {
+  "n_games": 8,
+  "owner_correction_accepted": "the earlier seven FCS scores came from the 8/28 acquisition/refusal record, not from the published Saturday 8/29 CFB board, and are withdrawn from every metric. The 8/29 board is an 8-game partial and remains pregame.",
+  "status": "PREGAME_UNGRADED"
+ },
+ "EVIDENCE_LAYER": {
+  "accrual": "NOTHING. Descriptive grading on relayed finals accrues nothing toward settlement, promotion, or the estimator. The archives still do not carry 8/28; when they do, these numbers must be re-derived from them and any disagreement recorded rather than reconciled away.",
+  "is_canonical_evidence_admission": false,
+  "layer": "RESULT_DISPLAY",
+  "relay_source": "owner relay, 2026-08-29 \u2014 official MLB / WNBA / NFL scoreboards cited by the owner. NOT an archive read; the score-bearing archives still do not carry 8/28.",
+  "what_was_recomputed": "every record, Brier, logloss, MAE, RMSE and bias \u2014 from the frozen boards, so the relayed summary is checked, not echoed",
+  "what_was_taken_from_the_relay": "the FINALS only"
+ },
+ "LADDET_COUNTERFACTUAL": {
+  "STATUS": "DIAGNOSTIC \u2014 NOT A SCORE, NOT RECORDED AS THE ARM'S RESULT",
+  "corrected_p_LAD": 0.6264,
+  "corrected_p_home_DET": 0.3736,
+  "delta": -0.006775,
+  "frozen_p_LAD": 0.508867,
+  "frozen_p_home_DET": 0.491133,
+  "owner_position_confirmed": "the owner's reading is right \u2014 the side stays LAD either way, so the winning result does not validate the malformed input. Recomputation adds that the defect cost the champion 0.0068 of Brier rather than flattering it.",
+  "reading": "the correction moves the champion's slate Brier from 0.2304 to 0.2236 \u2014 IN THE CHAMPION'S FAVOUR, because the corrected probability is more confident on the side that actually won. Two things follow and they point opposite ways. The recorded 0.2304 is CONSERVATIVE: the arm was penalised for an input defect, not for its own judgment. And 0.2236 is NOT claimable: the prospective registered forecast was the malformed one, and an arm does not get to keep the score it would have earned on input it never had. The recorded number stays 0.2304.",
+  "row": "mlb:LAD@DET",
+  "row_brier_corrected": 0.139577,
+  "row_brier_frozen": 0.241212,
+  "slate_brier_corrected": 0.223637,
+  "slate_brier_frozen": 0.230412
+ },
+ "LEDGER": {
+  "exposure_usd": 0,
+  "n_bets": 0,
+  "units": 0.0,
+  "wager_authority": "NO"
+ },
+ "MLB": {
+  "extra_innings": {
+   "mlb:BAL@ATH": 10
+  },
+  "note": "BAL@ATH went 10 innings. It is flagged rather than silently averaged into the totals error \u2014 a 10-inning game is not the same object as a 9-inning one, and the totals arms were fit on 9.",
+  "total_arms": {
+   "mlb.total.CHAMPION_V13": {
+    "bias": 0.6288,
+    "mae": 3.9785,
+    "n": 15,
+    "per_game": [
+     {
+      "actual": 16,
+      "err": -8.061,
+      "game": "mlb:AZ@SF",
+      "proj": 7.939
+     },
+     {
+      "actual": 7,
+      "err": 7.558,
+      "game": "mlb:BAL@ATH",
+      "proj": 14.558
+     },
+     {
+      "actual": 1,
+      "err": 7.698,
+      "game": "mlb:BOS@NYY",
+      "proj": 8.698
+     },
+     {
+      "actual": 18,
+      "err": -6.812,
+      "game": "mlb:CIN@CHC",
+      "proj": 11.188
+     },
+     {
+      "actual": 10,
+      "err": -0.125,
+      "game": "mlb:COL@ATL",
+      "proj": 9.875
+     },
+     {
+      "actual": 11,
+      "err": -2.184,
+      "game": "mlb:CWS@MIN",
+      "proj": 8.816
+     },
+     {
+      "actual": 4,
+      "err": 4.851,
+      "game": "mlb:HOU@NYM",
+      "proj": 8.851
+     },
+     {
+      "actual": 3,
+      "err": 4.724,
+      "game": "mlb:KC@CLE",
+      "proj": 7.724
+     },
+     {
+      "actual": 3,
+      "err": 4.843,
+      "game": "mlb:LAD@DET",
+      "proj": 7.843
+     },
+     {
+      "actual": 11,
+      "err": -0.594,
+      "game": "mlb:MIA@WSH",
+      "proj": 10.406
+     },
+     {
+      "actual": 8,
+      "err": 0.621,
+      "game": "mlb:PHI@LAA",
+      "proj": 8.621
+     },
+     {
+      "actual": 5,
+      "err": 3.166,
+      "game": "mlb:PIT@STL",
+      "proj": 8.166
+     },
+     {
+      "actual": 13,
+      "err": -5.454,
+      "game": "mlb:SD@TB",
+      "proj": 7.546
+     },
+     {
+      "actual": 9,
+      "err": -1.893,
+      "game": "mlb:SEA@TOR",
+      "proj": 7.107
+     },
+     {
+      "actual": 7,
+      "err": 1.094,
+      "game": "mlb:TEX@MIL",
+      "proj": 8.094
+     }
+    ],
+    "rmse": 4.8107
+   },
+   "mlb.total.EXPANDING_TOTAL_PRIOR": {
+    "bias": 0.5911,
+    "mae": 3.9327,
+    "n": 15,
+    "per_game": [
+     {
+      "actual": 16,
+      "err": -7.0089,
+      "game": "mlb:AZ@SF",
+      "proj": 8.991092636579573
+     },
+     {
+      "actual": 7,
+      "err": 1.9911,
+      "game": "mlb:BAL@ATH",
+      "proj": 8.991092636579573
+     },
+     {
+      "actual": 1,
+      "err": 7.9911,
+      "game": "mlb:BOS@NYY",
+      "proj": 8.991092636579573
+     },
+     {
+      "actual": 18,
+      "err": -9.0089,
+      "game": "mlb:CIN@CHC",
+      "proj": 8.991092636579573
+     },
+     {
+      "actual": 10,
+      "err": -1.0089,
+      "game": "mlb:COL@ATL",
+      "proj": 8.991092636579573
+     },
+     {
+      "actual": 11,
+      "err": -2.0089,
+      "game": "mlb:CWS@MIN",
+      "proj": 8.991092636579573
+     },
+     {
+      "actual": 4,
+      "err": 4.9911,
+      "game": "mlb:HOU@NYM",
+      "proj": 8.991092636579573
+     },
+     {
+      "actual": 3,
+      "err": 5.9911,
+      "game": "mlb:KC@CLE",
+      "proj": 8.991092636579573
+     },
+     {
+      "actual": 3,
+      "err": 5.9911,
+      "game": "mlb:LAD@DET",
+      "proj": 8.991092636579573
+     },
+     {
+      "actual": 11,
+      "err": -2.0089,
+      "game": "mlb:MIA@WSH",
+      "proj": 8.991092636579573
+     },
+     {
+      "actual": 8,
+      "err": 0.9911,
+      "game": "mlb:PHI@LAA",
+      "proj": 8.991092636579573
+     },
+     {
+      "actual": 5,
+      "err": 3.9911,
+      "game": "mlb:PIT@STL",
+      "proj": 8.991092636579573
+     },
+     {
+      "actual": 13,
+      "err": -4.0089,
+      "game": "mlb:SD@TB",
+      "proj": 8.991092636579573
+     },
+     {
+      "actual": 9,
+      "err": -0.0089,
+      "game": "mlb:SEA@TOR",
+      "proj": 8.991092636579573
+     },
+     {
+      "actual": 7,
+      "err": 1.9911,
+      "game": "mlb:TEX@MIL",
+      "proj": 8.991092636579573
+     }
+    ],
+    "rmse": 4.7668
+   }
+  },
+  "winner_arms": {
+   "mlb.winner.CHALLENGER_ADAPTIVE": {
+    "brier": 0.248819,
+    "logloss": 0.69079,
+    "losses": 6,
+    "n": 15,
+    "per_game": [
+     {
+      "brier": 0.26206,
+      "correct": false,
+      "game": "mlb:AZ@SF",
+      "home_won": false,
+      "p_home": 0.511918
+     },
+     {
+      "brier": 0.217018,
+      "correct": true,
+      "game": "mlb:BAL@ATH",
+      "home_won": false,
+      "p_home": 0.465852
+     },
+     {
+      "brier": 0.234641,
+      "correct": true,
+      "game": "mlb:BOS@NYY",
+      "home_won": true,
+      "p_home": 0.515603
+     },
+     {
+      "brier": 0.266307,
+      "correct": false,
+      "game": "mlb:CIN@CHC",
+      "home_won": false,
+      "p_home": 0.51605
+     },
+     {
+      "brier": 0.212275,
+      "correct": true,
+      "game": "mlb:COL@ATL",
+      "home_won": true,
+      "p_home": 0.539267
+     },
+     {
+      "brier": 0.239818,
+      "correct": true,
+      "game": "mlb:CWS@MIN",
+      "home_won": false,
+      "p_home": 0.489712
+     },
+     {
+      "brier": 0.302811,
+      "correct": false,
+      "game": "mlb:HOU@NYM",
+      "home_won": false,
+      "p_home": 0.550283
+     },
+     {
+      "brier": 0.27348,
+      "correct": false,
+      "game": "mlb:KC@CLE",
+      "home_won": false,
+      "p_home": 0.522953
+     },
+     {
+      "brier": 0.27724,
+      "correct": false,
+      "game": "mlb:LAD@DET",
+      "home_won": false,
+      "p_home": 0.526536
+     },
+     {
+      "brier": 0.249744,
+      "correct": true,
+      "game": "mlb:MIA@WSH",
+      "home_won": true,
+      "p_home": 0.500256
+     },
+     {
+      "brier": 0.284944,
+      "correct": false,
+      "game": "mlb:PHI@LAA",
+      "home_won": false,
+      "p_home": 0.533802
+     },
+     {
+      "brier": 0.22198,
+      "correct": true,
+      "game": "mlb:PIT@STL",
+      "home_won": true,
+      "p_home": 0.528853
+     },
+     {
+      "brier": 0.241619,
+      "correct": true,
+      "game": "mlb:SD@TB",
+      "home_won": true,
+      "p_home": 0.508452
+     },
+     {
+      "brier": 0.237934,
+      "correct": true,
+      "game": "mlb:SEA@TOR",
+      "home_won": true,
+      "p_home": 0.512216
+     },
+     {
+      "brier": 0.210414,
+      "correct": true,
+      "game": "mlb:TEX@MIL",
+      "home_won": true,
+      "p_home": 0.541291
+     }
+    ],
+    "record": "9-6",
+    "wins": 9
+   },
+   "mlb.winner.CHALLENGER_WIDENED": {
+    "brier": 0.246548,
+    "logloss": 0.686155,
+    "losses": 8,
+    "n": 15,
+    "per_game": [
+     {
+      "brier": 0.252043,
+      "correct": false,
+      "game": "mlb:AZ@SF",
+      "home_won": false,
+      "p_home": 0.502038
+     },
+     {
+      "brier": 0.163461,
+      "correct": true,
+      "game": "mlb:BAL@ATH",
+      "home_won": false,
+      "p_home": 0.404304
+     },
+     {
+      "brier": 0.240153,
+      "correct": true,
+      "game": "mlb:BOS@NYY",
+      "home_won": true,
+      "p_home": 0.509946
+     },
+     {
+      "brier": 0.261025,
+      "correct": false,
+      "game": "mlb:CIN@CHC",
+      "home_won": false,
+      "p_home": 0.510906
+     },
+     {
+      "brier": 0.193098,
+      "correct": true,
+      "game": "mlb:COL@ATL",
+      "home_won": true,
+      "p_home": 0.56057
+     },
+     {
+      "brier": 0.206593,
+      "correct": true,
+      "game": "mlb:CWS@MIN",
+      "home_won": false,
+      "p_home": 0.454525
+     },
+     {
+      "brier": 0.340927,
+      "correct": false,
+      "game": "mlb:HOU@NYM",
+      "home_won": false,
+      "p_home": 0.58389
+     },
+     {
+      "brier": 0.276376,
+      "correct": false,
+      "game": "mlb:KC@CLE",
+      "home_won": false,
+      "p_home": 0.525715
+     },
+     {
+      "brier": 0.284507,
+      "correct": false,
+      "game": "mlb:LAD@DET",
+      "home_won": false,
+      "p_home": 0.533392
+     },
+     {
+      "brier": 0.273493,
+      "correct": false,
+      "game": "mlb:MIA@WSH",
+      "home_won": true,
+      "p_home": 0.477034
+     },
+     {
+      "brier": 0.30132,
+      "correct": false,
+      "game": "mlb:PHI@LAA",
+      "home_won": false,
+      "p_home": 0.548927
+     },
+     {
+      "brier": 0.21312,
+      "correct": true,
+      "game": "mlb:PIT@STL",
+      "home_won": true,
+      "p_home": 0.538351
+     },
+     {
+      "brier": 0.255429,
+      "correct": false,
+      "game": "mlb:SD@TB",
+      "home_won": true,
+      "p_home": 0.4946
+     },
+     {
+      "brier": 0.24733,
+      "correct": true,
+      "game": "mlb:SEA@TOR",
+      "home_won": true,
+      "p_home": 0.502677
+     },
+     {
+      "brier": 0.189338,
+      "correct": true,
+      "game": "mlb:TEX@MIL",
+      "home_won": true,
+      "p_home": 0.564871
+     }
+    ],
+    "record": "7-8",
+    "wins": 7
+   },
+   "mlb.winner.CHAMPION_V13": {
+    "brier": 0.230412,
+    "logloss": 0.653666,
+    "losses": 5,
+    "n": 15,
+    "per_game": [
+     {
+      "brier": 0.219992,
+      "correct": true,
+      "game": "mlb:AZ@SF",
+      "home_won": false,
+      "p_home": 0.469033
+     },
+     {
+      "brier": 0.167991,
+      "correct": true,
+      "game": "mlb:BAL@ATH",
+      "home_won": false,
+      "p_home": 0.409867
+     },
+     {
+      "brier": 0.205511,
+      "correct": true,
+      "game": "mlb:BOS@NYY",
+      "home_won": true,
+      "p_home": 0.546667
+     },
+     {
+      "brier": 0.305735,
+      "correct": false,
+      "game": "mlb:CIN@CHC",
+      "home_won": false,
+      "p_home": 0.552933
+     },
+     {
+      "brier": 0.20256,
+      "correct": true,
+      "game": "mlb:COL@ATL",
+      "home_won": true,
+      "p_home": 0.549933
+     },
+     {
+      "brier": 0.223256,
+      "correct": true,
+      "game": "mlb:CWS@MIN",
+      "home_won": false,
+      "p_home": 0.4725
+     },
+     {
+      "brier": 0.271788,
+      "correct": false,
+      "game": "mlb:HOU@NYM",
+      "home_won": false,
+      "p_home": 0.521333
+     },
+     {
+      "brier": 0.253076,
+      "correct": false,
+      "game": "mlb:KC@CLE",
+      "home_won": false,
+      "p_home": 0.503067
+     },
+     {
+      "brier": 0.241212,
+      "correct": true,
+      "game": "mlb:LAD@DET",
+      "home_won": false,
+      "p_home": 0.491133
+     },
+     {
+      "brier": 0.205088,
+      "correct": true,
+      "game": "mlb:MIA@WSH",
+      "home_won": true,
+      "p_home": 0.547133
+     },
+     {
+      "brier": 0.265672,
+      "correct": false,
+      "game": "mlb:PHI@LAA",
+      "home_won": false,
+      "p_home": 0.515433
+     },
+     {
+      "brier": 0.277237,
+      "correct": false,
+      "game": "mlb:PIT@STL",
+      "home_won": true,
+      "p_home": 0.473467
+     },
+     {
+      "brier": 0.22572,
+      "correct": true,
+      "game": "mlb:SD@TB",
+      "home_won": true,
+      "p_home": 0.5249
+     },
+     {
+      "brier": 0.232067,
+      "correct": true,
+      "game": "mlb:SEA@TOR",
+      "home_won": true,
+      "p_home": 0.518267
+     },
+     {
+      "brier": 0.159281,
+      "correct": true,
+      "game": "mlb:TEX@MIL",
+      "home_won": true,
+      "p_home": 0.6009
+     }
+    ],
+    "record": "10-5",
+    "wins": 10
+   },
+   "mlb.winner.EXPANDING_HOME_PRIOR": {
+    "brier": 0.251791,
+    "logloss": 0.696732,
+    "losses": 8,
+    "n": 15,
+    "per_game": [
+     {
+      "brier": 0.270962,
+      "correct": false,
+      "game": "mlb:AZ@SF",
+      "home_won": false,
+      "p_home": 0.52054
+     },
+     {
+      "brier": 0.270962,
+      "correct": false,
+      "game": "mlb:BAL@ATH",
+      "home_won": false,
+      "p_home": 0.52054
+     },
+     {
+      "brier": 0.229882,
+      "correct": true,
+      "game": "mlb:BOS@NYY",
+      "home_won": true,
+      "p_home": 0.52054
+     },
+     {
+      "brier": 0.270962,
+      "correct": false,
+      "game": "mlb:CIN@CHC",
+      "home_won": false,
+      "p_home": 0.52054
+     },
+     {
+      "brier": 0.229882,
+      "correct": true,
+      "game": "mlb:COL@ATL",
+      "home_won": true,
+      "p_home": 0.52054
+     },
+     {
+      "brier": 0.270962,
+      "correct": false,
+      "game": "mlb:CWS@MIN",
+      "home_won": false,
+      "p_home": 0.52054
+     },
+     {
+      "brier": 0.270962,
+      "correct": false,
+      "game": "mlb:HOU@NYM",
+      "home_won": false,
+      "p_home": 0.52054
+     },
+     {
+      "brier": 0.270962,
+      "correct": false,
+      "game": "mlb:KC@CLE",
+      "home_won": false,
+      "p_home": 0.52054
+     },
+     {
+      "brier": 0.270962,
+      "correct": false,
+      "game": "mlb:LAD@DET",
+      "home_won": false,
+      "p_home": 0.52054
+     },
+     {
+      "brier": 0.229882,
+      "correct": true,
+      "game": "mlb:MIA@WSH",
+      "home_won": true,
+      "p_home": 0.52054
+     },
+     {
+      "brier": 0.270962,
+      "correct": false,
+      "game": "mlb:PHI@LAA",
+      "home_won": false,
+      "p_home": 0.52054
+     },
+     {
+      "brier": 0.229882,
+      "correct": true,
+      "game": "mlb:PIT@STL",
+      "home_won": true,
+      "p_home": 0.52054
+     },
+     {
+      "brier": 0.229882,
+      "correct": true,
+      "game": "mlb:SD@TB",
+      "home_won": true,
+      "p_home": 0.52054
+     },
+     {
+      "brier": 0.229882,
+      "correct": true,
+      "game": "mlb:SEA@TOR",
+      "home_won": true,
+      "p_home": 0.52054
+     },
+     {
+      "brier": 0.229882,
+      "correct": true,
+      "game": "mlb:TEX@MIL",
+      "home_won": true,
+      "p_home": 0.52054
+     }
+    ],
+    "record": "7-8",
+    "wins": 7
+   }
+  }
+ },
+ "NFL": {
+  "n_games": 10,
+  "note": "no model record, Brier, EV or P&L. The registered NFL shadow is regular-season only; SEA 9-9 KC is a tie and would score no winner even if an arm had been eligible.",
+  "status": "BENCHMARK_ONLY"
+ },
+ "OWNER_TICKET": {
+  "cash_pnl_usd": -50.0,
+  "layer": "OWNER_DISCRETION",
+  "legs": [
+   {
+    "final": "KC 3-0 CLE",
+    "leg": "KC +110",
+    "model_position": "the model's side was CLE at 50.3% \u2014 this leg won AGAINST the model",
+    "settlement": "WON"
+   },
+   {
+    "final": "HOU 3-1 NYM",
+    "leg": "NYM -110",
+    "model_position": "the model's side was NYM at 52.1% \u2014 this leg followed the model and lost",
+    "settlement": "LOST"
+   },
+   {
+    "final": "POR 101-83 ATL",
+    "leg": "POR +13 -110",
+    "model_position": "the model's side was ATL at 78.4% with ATL -9.7 \u2014 this leg won against the model's most confident WNBA call of the night",
+    "push_branch": "never engaged; POR won outright by 18, so +13 and +12.5 settle identically here and the push protection cost nothing and bought nothing",
+    "settlement": "WON OUTRIGHT"
+   }
+  ],
+  "model_ledger": {
+   "exposure_usd": 0,
+   "n_bets": 0,
+   "units": 0.0,
+   "wager_authority": "NO"
+  },
+  "result": "2 of 3 legs won; the parlay LOST",
+  "separation": "7/25 precedent \u2014 owner-discretion picks and model EV rules never mix. This -$50 does not settle against the model ledger, which stays $0 at 0 bets. Two of the three legs won against the model's own side, which is n=2 and evidence of nothing.",
+  "ticket": "217916739"
+ },
+ "WNBA": {
+  "margin": {
+   "wnba.replacement.FEATURE_REFRESH": {
+    "bias": 1.9575,
+    "mae": 11.8975,
+    "n": 4,
+    "per_game": [
+     {
+      "actual_home_margin": 20,
+      "err": -4.96,
+      "game": "wnba:CON@IND",
+      "proj_home_margin": 15.04
+     },
+     {
+      "actual_home_margin": -18,
+      "err": 27.71,
+      "game": "wnba:POR@ATL",
+      "proj_home_margin": 9.71
+     },
+     {
+      "actual_home_margin": 20,
+      "err": -7.66,
+      "game": "wnba:TOR@LV",
+      "proj_home_margin": 12.34
+     },
+     {
+      "actual_home_margin": 6,
+      "err": -7.26,
+      "game": "wnba:WSH@LAS",
+      "proj_home_margin": -1.26
+     }
+    ],
+    "rmse": 15.0319
+   }
+  },
+  "total": {
+   "wnba.replacement.FEATURE_REFRESH": {
+    "bias": -5.575,
+    "mae": 9.325,
+    "n": 4,
+    "per_game": [
+     {
+      "actual": 202,
+      "err": -23.4,
+      "game": "wnba:CON@IND",
+      "proj": 178.6
+     },
+     {
+      "actual": 184,
+      "err": -6.4,
+      "game": "wnba:POR@ATL",
+      "proj": 177.6
+     },
+     {
+      "actual": 166,
+      "err": 4.7,
+      "game": "wnba:TOR@LV",
+      "proj": 170.7
+     },
+     {
+      "actual": 170,
+      "err": 2.8,
+      "game": "wnba:WSH@LAS",
+      "proj": 172.8
+     }
+    ],
+    "rmse": 12.4343
+   }
+  },
+  "winner_arms": {
+   "wnba.fallback.STANDINGS_LOG5_v1": {
+    "brier": 0.292559,
+    "logloss": 0.775744,
+    "losses": 2,
+    "n": 4,
+    "per_game": [
+     {
+      "brier": 0.021693,
+      "correct": true,
+      "game": "wnba:CON@IND",
+      "home_won": true,
+      "p_home": 0.852713
+     },
+     {
+      "brier": 0.598246,
+      "correct": false,
+      "game": "wnba:POR@ATL",
+      "home_won": false,
+      "p_home": 0.773464
+     },
+     {
+      "brier": 0.022382,
+      "correct": true,
+      "game": "wnba:TOR@LV",
+      "home_won": true,
+      "p_home": 0.850394
+     },
+     {
+      "brier": 0.527915,
+      "correct": false,
+      "game": "wnba:WSH@LAS",
+      "home_won": true,
+      "p_home": 0.273422
+     }
+    ],
+    "record": "2-2",
+    "wins": 2
+   },
+   "wnba.replacement.FEATURE_REFRESH": {
+    "brier": 0.230998,
+    "logloss": 0.636069,
+    "losses": 2,
+    "n": 4,
+    "per_game": [
+     {
+      "brier": 0.009428,
+      "correct": true,
+      "game": "wnba:CON@IND",
+      "home_won": true,
+      "p_home": 0.9029
+     },
+     {
+      "brier": 0.615126,
+      "correct": false,
+      "game": "wnba:POR@ATL",
+      "home_won": false,
+      "p_home": 0.7843
+     },
+     {
+      "brier": 0.021815,
+      "correct": true,
+      "game": "wnba:TOR@LV",
+      "home_won": true,
+      "p_home": 0.8523
+     },
+     {
+      "brier": 0.277624,
+      "correct": false,
+      "game": "wnba:WSH@LAS",
+      "home_won": true,
+      "p_home": 0.4731
+     }
+    ],
+    "record": "2-2",
+    "wins": 2
+   },
+   "wnba.winner.EXPANDING_HOME_PRIOR": {
+    "brier": 0.233046,
+    "logloss": 0.659181,
+    "losses": 1,
+    "n": 4,
+    "per_game": [
+     {
+      "brier": 0.214753,
+      "correct": true,
+      "game": "wnba:CON@IND",
+      "home_won": true,
+      "p_home": 0.536585
+     },
+     {
+      "brier": 0.287923,
+      "correct": false,
+      "game": "wnba:POR@ATL",
+      "home_won": false,
+      "p_home": 0.536585
+     },
+     {
+      "brier": 0.214753,
+      "correct": true,
+      "game": "wnba:TOR@LV",
+      "home_won": true,
+      "p_home": 0.536585
+     },
+     {
+      "brier": 0.214753,
+      "correct": true,
+      "game": "wnba:WSH@LAS",
+      "home_won": true,
+      "p_home": 0.536585
+     }
+    ],
+    "record": "3-1",
+    "wins": 3
+   }
+  }
+ },
+ "created_utc": "2026-08-29T07:33:18Z",
+ "record_id": "RELAY-GRADING-2026-08-28",
+ "record_sha256": "560045e0038712db309ec60c1a8a673485a11fe9deacc12c23518e09e4e0382b",
+ "schema": "ops.relay_grading.v1"
+}

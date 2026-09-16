@@ -1,0 +1,15 @@
+{
+ "record_id": "OWNER-RULING-2026-08-16-CANONICAL-RESULTS",
+ "built_utc": "2026-08-16T02:44:12Z",
+ "ruling_1_results_csv": {
+  "rule": "results.csv contains ONLY tier-1, date-consistent finals. Tier-3/provisional observations live in per-game acquisition ledgers. Rationale accepted: a result_status field cannot protect older consumers that select status=final without checking it.",
+  "executed": "9 tier-3 8/13 rows removed to data/mlb/acquisition_ledger_2026-08-13.jsonl; 6 8/11 rows restored BYTE-IDENTICAL to their tier-1 winner-only originals (scores to data/mlb/acquisition_ledger_2026-08-11.jsonl); ml_asof rebuilt and returned exactly to pre-sweep vintage b4b58f16 \u2014 byte-level proof the surgery was precise",
+  "grading_note": "the 8/13 chain grades (G-P4-20260813-*) were appended on tier-3-corroborated winners BEFORE this ruling; the chain is append-only so they stand, documented here as pre-ruling exceptions. GOING FORWARD only tier-1 finals grade forecasts. The winner-basis MIL@LAD grade rests on tier-1 series-state and is unaffected.",
+  "completeness_migration": "slate-completeness enforcement conceptually moves to the acquisition ledger; the current results.csv-based check stays green under this surgery (8/13 has no rows -> date not ingested; 8/11 winner-only rows still satisfy it). A ledger-based completeness check is the successor tooling item."
+ },
+ "ruling_2_frozen_benchmarks": "CLE@CHI and MIN@NYG carry frozen registered forecasts (NFL-PS-2026-CLE-CHI-MKT0_1, NFL-PS-2026-MIN-NYG-MKT0_1) in the external 16-game cohort \u2014 my 'NO_BENCHMARK' conflated 'no late executable snapshot' with 'no gradeable benchmark'. Ledger revision-2 rows added; each grades EXACTLY ONCE against its tier-1 final; frozen payloads not held here, delivery queued.",
+ "ruling_3_wnba_matchups": "populated from the verified official schedule: NYL@CON, LAS@WAS, MIN@LVA \u2014 null-state superseded, finals still owed",
+ "ruling_4_phi_min": "authority = official schedule/gamePk (gamePk still owed); idle-team arithmetic demoted to corroboration",
+ "morning_sweep_contract": "16/16 NFL terminal result states + 16 benchmark dispositions (IND@NE tie: terminal, fully recorded, excluded from binary/Brier). Dispositions for the two frozen-external forecasts require their payload sides \u2014 queued as attested-pending if not delivered by sweep time.",
+ "architecture_confirmed": "16 durable NFL rows; 15 MLB + 3 WNBA per-game queues; quarantine never closes an unresolved game; provisional observations visible but cannot grade; tier-1 finals grade immutable pregame forecasts exactly once; no card required for historical result tracking"
+}

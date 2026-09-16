@@ -1,0 +1,51 @@
+{
+ "as_of_utc": "2026-08-26T02:45:00Z",
+ "buckets": [
+  {
+   "bucket": "POSITIVE_RAW_EV_CANDIDATES",
+   "counterfactual_usd_at_100": 347.01,
+   "detail": "KC +116 W, DET +116 W, CWS -101 W, BAL +116 W, MIA +130 L",
+   "record": "4-1"
+  },
+  {
+   "bucket": "NEGATIVE_EV_MODEL_SIDES",
+   "counterfactual_usd_at_100": -400.0,
+   "detail": "WSH -147, NYY -140, MIL -162, LAD -148 all lost; passing avoided four losing favorites",
+   "record": "0-4"
+  },
+  {
+   "brier": 0.2557,
+   "bucket": "PRIMARY_MODEL_ALL_NINE",
+   "detail": "the raw winner model was below .500 and did not beat one constant league-average probability on these nine games",
+   "prior_brier": 0.2527,
+   "record": "4-5"
+  },
+  {
+   "bucket": "REPLACEMENT_SIDES",
+   "counterfactual_usd_at_100": 16.0,
+   "detail": "BAL flip won 13-1; MIA flip lost 7-3 in 11; mechanically necessary, no accuracy breakthrough \u2014 a twelve-run margin does not count more than a loss for winner accuracy",
+   "record": "1-1"
+  },
+  {
+   "bucket": "ACTUAL_AUTHORIZED_WAGERS",
+   "counterfactual_usd_at_100": 0.0,
+   "detail": "ledger unchanged",
+   "record": "0"
+  }
+ ],
+ "descriptive_only": "no promotion progress, no estimator input, no settlement \u2014 descriptive grading on owner-relayed finals",
+ "failure_pattern": "comparable uncertainty-blocked sides went 1-7 on 2026-08-24 and 4-1 among early 2026-08-25 finals \u2014 a combined 5-8. That violent one-day reversal is why raw EV alone cannot authorize wagers yet",
+ "record_id": "MODEL-THESIS-2026-08-25-EARLY",
+ "record_sha256": "c5e7548f621893690268bed23c3062e09c96176ec31d648753a677d46ed02672",
+ "schema": "ops.model_thesis.v1",
+ "scope": "nine completed early MLB games + two completed WNBA games; six MLB games and WAS@PHX still live and excluded",
+ "thesis": "The early results do not validate the primary winner model. They provide descriptive evidence that price-sensitive screening separated the model's stronger opportunities from its weak, overpriced favorite leans.",
+ "verification": "all figures recomputed from the frozen board (cohort e1346b3b), the anchored replacement probabilities and the relayed prices; reproduced exactly",
+ "wnba": {
+  "note": "shadow's strong DAL probability partially offset the CHI miss; with two games and 34-day-old features neither statistic establishes anything \u2014 it reinforces the RJ-005 refresh requirement",
+  "prior_brier_2games": 0.2148,
+  "prior_record": "2-0",
+  "shadow_brier_2games": 0.198,
+  "shadow_record": "1-1"
+ }
+}

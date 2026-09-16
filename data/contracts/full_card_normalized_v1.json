@@ -1,0 +1,30 @@
+{
+  "schema": "ops.full_card_normalized_contract.v1",
+  "artifact_type": "full_card_normalized",
+  "required_authority_modes": ["PRODUCTION", "SHADOW", "DISABLED"],
+  "required_statuses": ["PLAY", "LEAN", "PASS", "BLOCKED", "NO_PRICE", "NO_MODEL", "POST_START"],
+  "required_core_markets": {
+    "MLB": ["ML", "RL", "TOTAL"],
+    "CFB": ["ML", "SPREAD", "TOTAL"],
+    "NFL": ["ML", "SPREAD", "TOTAL"],
+    "WNBA": ["ML", "SPREAD", "TOTAL"]
+  },
+  "invariants": [
+    "schedule_coverage_is_distinct_from_forecast_coverage",
+    "forecast_coverage_is_distinct_from_full_card_readiness",
+    "full_card_readiness_is_distinct_from_wager_authorization",
+    "authority_mode_does_not_replace_wager_status",
+    "NO_MODEL_must_not_contain_model_probability_sim_probability_conservative_probability_fair_odds_edge_ev_selection_or_grade_selection",
+    "POST_START_must_not_create_a_new_recovery_forecast",
+    "normalization_may_materialize_historical_evidence_but_must_not_represent_post_hoc_reconstruction_as_prospective",
+    "only_supported_timestamp_valid_forecasts_may_be_attached",
+    "unsupported_market_rows_must_be_materialized_with_explicit_nulls_and_reasons",
+    "action_pnl_is_null_unless_an_actual_PLAY_wager_exists"
+  ],
+  "readiness_states": [
+    "CARD_REJECTED",
+    "CARD_COMPLETE_ACTION_BLOCKED",
+    "CARD_COMPLETE_PARTIAL_FORECAST_COVERAGE",
+    "CARD_ACTIONABLE"
+  ]
+}

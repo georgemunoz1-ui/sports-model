@@ -1,0 +1,24 @@
+{
+ "record_id": "VENUE-DERIVATION-20260823",
+ "created_utc": "2026-08-24T00:12:00Z",
+ "why": "the owner's scoreboard relay carried scores, not venues, and the tier-discipline gate refuses a canonical final with a blank venue because a blank venue silently makes the park factor 1.0.",
+ "method": "each home team's venue was taken from that team's most recent tier-1 row already in results.csv dated before 2026-08-23. Nothing is invented: every value already existed in the canonical table under the same home team.",
+ "not_applied_to": "ATL@MIL, which carries its neutral-site venue from the acquisition record and was set at ingest",
+ "derived": {
+  "AZ": "Chase Field",
+  "BAL": "Oriole Park at Camden Yards",
+  "BOS": "Fenway Park",
+  "COL": "Coors Field",
+  "CWS": "Rate Field",
+  "HOU": "Daikin Park",
+  "KC": "Kauffman Stadium",
+  "LAD": "Dodger Stadium",
+  "MIA": "loanDepot park",
+  "NYY": "Yankee Stadium",
+  "PHI": "Citizens Bank Park",
+  "SD": "Petco Park",
+  "SEA": "T-Mobile Park",
+  "TEX": "Globe Life Field"
+ },
+ "limitation": "a venue carried forward is an INFERENCE that the home team played at its usual park. It is correct for a normal home game and wrong for any relocated or neutral-site game not already flagged. ATL@MIL was flagged; nothing else on this slate was."
+}

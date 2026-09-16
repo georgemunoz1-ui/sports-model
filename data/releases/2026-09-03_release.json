@@ -1,0 +1,37 @@
+{
+  "schema": "ops.release_artifact.v1",
+  "release_id": "DAILY-UPDATE-2026-09-03",
+  "generated_utc": "2026-09-03T18:40:16Z",
+  "evidence_path": "data/acquisition/2026-09-03_update.json",
+  "evidence_sha256": "15a06fa465ee6882cbffd0896a7378d763e8f8e23677543e2ec36f6d9d6ff7de",
+  "global_status": "BLOCKED",
+  "action_authority": "NO",
+  "contract_problems": [],
+  "sports": {
+    "mlb": {
+      "status": "BLOCKED",
+      "expected_event_count": 9,
+      "classified_event_count": 9,
+      "reason_codes": ["ACTION_AUTHORITY_NO","CALIBRATION_DORMANT","CURRENT_FEATURE_SNAPSHOT_ABSENT","CURRENT_FORECAST_ARTIFACT_ABSENT","NO_EXACT_FRESH_PRICE","PREGAME_INPUTS_INCOMPLETE","RECOVERY_JOB_OVERDUE","REPOSITORY_HEALTHCHECK_UNHEALTHY"]
+    },
+    "wnba": {
+      "status": "BLOCKED",
+      "expected_event_count": 0,
+      "classified_event_count": 0,
+      "reason_codes": ["ACTION_AUTHORITY_NO","BACKFILL_INCOMPLETE_SINCE_2026_08_24","CALIBRATION_SAMPLE_BELOW_MINIMUM","CANONICAL_FEATURE_STATE_STALE","CURRENT_FORECAST_PATH_UNAVAILABLE","RECOVERY_JOB_OVERDUE","REPOSITORY_HEALTHCHECK_UNHEALTHY"]
+    },
+    "nfl": {
+      "status": "BLOCKED",
+      "expected_event_count": 0,
+      "classified_event_count": 0,
+      "reason_codes": ["ACTION_AUTHORITY_NO","BACKFILL_INCOMPLETE_SINCE_2026_08_24","CALIBRATION_NOT_ACTIVE","CANONICAL_RESULTS_LEDGER_STALE","CURRENT_FEATURE_SNAPSHOT_ABSENT","MODEL_RESTORATION_INCOMPLETE","RECOVERY_JOB_OVERDUE","REPOSITORY_HEALTHCHECK_UNHEALTHY"]
+    },
+    "cfb": {
+      "status": "BLOCKED",
+      "expected_event_count": 11,
+      "classified_event_count": 11,
+      "reason_codes": ["ACTION_AUTHORITY_NO","CALIBRATION_NOT_ACTIVE","CANONICAL_SOURCE_ARCHIVE_ENDS_2025","CURRENT_FEATURE_SNAPSHOT_ABSENT","CURRENT_REGISTERED_FORECAST_PATH_UNAVAILABLE","DEPTH_CHART_PIPELINE_UNVERIFIED","EVENT_ID_UNRESOLVED","NO_EXACT_FRESH_PRICE","RECOVERY_JOB_OVERDUE","REPOSITORY_HEALTHCHECK_UNHEALTHY"]
+    }
+  },
+  "release_note": "Schedule evidence was ingested. No probability, edge, price, selection, or wager was manufactured."
+}

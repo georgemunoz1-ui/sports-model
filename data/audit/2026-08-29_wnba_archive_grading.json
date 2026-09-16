@@ -1,0 +1,192 @@
+{
+ "AGGREGATE_GUARD": {
+  "basis": "cohort bound clean",
+  "permitted": true,
+  "statistic": "wnba 2026-08-29 arm statistics"
+ },
+ "ARCHIVE": {
+  "note": "the working tree stays at its pin; the snapshot is read out of the fetched commit with git show, so the pin is not silently advanced",
+  "origin_main": "5875eba831d8013ed28843353174d3557ba36db0",
+  "origin_main_committed": "2026-08-30T06:32:08-04:00",
+  "working_tree_head": "7a1c7ebaef37590ebdaf75c4d3961b99a493d99b"
+ },
+ "BINDING": {
+  "aggregate_verdict": {
+   "aggregates_permitted": true,
+   "detail": {
+    "code": "BOUND",
+    "n_rows": 2,
+    "statistic": "any aggregate over wnba:2026-08-29"
+   }
+  },
+  "cohort_problems": [],
+  "counters": {
+   "CANONICAL_ID_MATCH": "2/2",
+   "DATE_COHERENCE_PASS": "2/2",
+   "REFUSED_ROWS": 0,
+   "RESULT_BINDING_PASS": "2/2"
+  },
+  "gradable": true
+ },
+ "COHORT_COVERAGE": {
+  "et_slate_game_ids": [
+   "401857184",
+   "401857185"
+  ],
+  "n_final": 2,
+  "n_forecast": 2,
+  "n_in_et_slate": 2,
+  "note": "the ET slate is enumerated from the archive, not assumed. A forecast count below the slate count is disclosed rather than hidden."
+ },
+ "GAMES": [
+  {
+   "brier": 0.09193,
+   "date_slice_would_have_split_cohort": false,
+   "et_date_derived": "2026-08-29",
+   "final": "Chicago Sky 66 - New York Liberty 85",
+   "game": "wnba:CHI@NYL",
+   "game_pk": "ESPN_GAMEID:401857184",
+   "home_won": true,
+   "logloss": 0.361257,
+   "margin": {
+    "actual_home": 19,
+    "base_coherence": "COHERENT",
+    "denominator_base": "WNBA margin residual SD, MEASURED",
+    "numerator_base": "MODEL residual (projected home margin minus actual)",
+    "projected_home": 6.21,
+    "residual": -12.79,
+    "sigma": 12.5523,
+    "sigma_n": 1721,
+    "z": -1.0189
+   },
+   "matchup": "Chicago Sky@New York Liberty",
+   "p_home": 0.6968,
+   "su_correct": true,
+   "total": {
+    "actual": 151,
+    "base_coherence": "COHERENT",
+    "denominator_base": "WNBA totals residual SD, MEASURED",
+    "numerator_base": "MODEL residual (projected total minus actual)",
+    "projected": 176.6,
+    "residual": 25.6,
+    "sigma": 18.0156,
+    "sigma_n": 1721,
+    "z": 1.421
+   },
+   "utc_date_would_have_been": "2026-08-29",
+   "utc_instant": "2026-08-29T17:00Z"
+  },
+  {
+   "brier": 0.150932,
+   "date_slice_would_have_split_cohort": true,
+   "et_date_derived": "2026-08-29",
+   "final": "Toronto Tempo 69 - Phoenix Mercury 101",
+   "game": "wnba:TOR@PHX",
+   "game_pk": "ESPN_GAMEID:401857185",
+   "home_won": true,
+   "logloss": 0.49184,
+   "margin": {
+    "actual_home": 32,
+    "base_coherence": "COHERENT",
+    "denominator_base": "WNBA margin residual SD, MEASURED",
+    "numerator_base": "MODEL residual (projected home margin minus actual)",
+    "projected_home": 3.43,
+    "residual": -28.57,
+    "sigma": 12.5523,
+    "sigma_n": 1721,
+    "z": -2.2761
+   },
+   "matchup": "Toronto Tempo@Phoenix Mercury",
+   "p_home": 0.6115,
+   "su_correct": true,
+   "total": {
+    "actual": 170,
+    "base_coherence": "COHERENT",
+    "denominator_base": "WNBA totals residual SD, MEASURED",
+    "numerator_base": "MODEL residual (projected total minus actual)",
+    "projected": 170.4,
+    "residual": 0.4,
+    "sigma": 18.0156,
+    "sigma_n": 1721,
+    "z": 0.0222
+   },
+   "utc_date_would_have_been": "2026-08-30",
+   "utc_instant": "2026-08-30T02:00Z"
+  }
+ ],
+ "LEDGER": {
+  "exposure_usd": 0,
+  "n_bets": 0,
+  "units": 0.0,
+  "wager_authority": "NO"
+ },
+ "PLAY_SETTLEMENT": {
+  "wnba:TOR@PHX TOR +365 ML \u2014 REFUSED": {
+   "does_not_accrue": "no promotion, no estimator update, no change to the refusal rule",
+   "ev_at_refusal": "+82 per 100",
+   "honest_accounting": "the refusal was RIGHT on this instance. That is worth almost nothing as evidence: n=1, and a +365 price is supposed to lose roughly 78% of the time, so a single loss is the MODAL outcome for a bet that was correctly priced AND for one that was a mistake to skip. This settles nothing about whether the refusal rule is calibrated. What it does confirm is that the STATED reason \u2014 an unverified rotation state on two eliminated teams \u2014 was pointing at a real risk: Phoenix won by 32.",
+   "outcome": "Toronto lost by 32. The refusal AVOIDED a full-unit loss.",
+   "refused_because": "the same 6-point margin disagreement as the spread but with no cushion, and RJ-005 OFFICIAL_INJURY_AVAILABILITY still 0/17 EGRESS_BLOCKED \u2014 ff7 could not see rotations for two eliminated teams"
+  },
+  "wnba:TOR@PHX TOR +9.5 (-108)": {
+   "C1_labelling": {
+    "denominator_base": "WNBA margin residual SD \u2014 MODEL-referenced",
+    "gauge": -1.79,
+    "numerator": -22.5,
+    "numerator_base": "COVER margin \u2014 MARKET-referenced (actual minus the line)",
+    "sigma": 12.5523,
+    "sigma_n": 1721,
+    "the_coherent_number_instead": {
+     "numerator": -28.57,
+     "numerator_base": "MODEL residual",
+     "verdict": "BASE-COHERENT \u2014 this is the one that says something about the model",
+     "z": -2.2761
+    },
+    "verdict": "MIXED BASE \u2014 a gauge, NOT a z-score. Reported only because the register requires the mixed-base figures already in circulation to stay labelled."
+   },
+   "actual": "Toronto lost by 32; the side needed 9.5",
+   "cover_margin": -22.5,
+   "rated_cover_prob": 0.686,
+   "reading": "the model was RIGHT about the side of the game and badly wrong about its size. A 3.43 projected home margin against a 32 actual is the second-worst single-game margin miss on file at 2.28 sigma.",
+   "result": "LOST"
+  }
+ },
+ "PROVENANCE": {
+  "extension_sha256": "2373022df440b34acc12e408c5cc0916ce0b9ec0d682e4c7181d016f6b856656",
+  "grade": "SELF_ASSERTED_PREGAME",
+  "recorded_in": "data/audit/2026-08-29_card_refresh.json",
+  "standing_gap": "no board was frozen for this slate. A forecast that never became an artifact is a forecast that cannot be scored cleanly, and the only reason it is scoreable at all is that the conversation record carries the retrieval timestamp and the source sha.",
+  "weaker_than": "a frozen registered board",
+  "why_prospective": "the feature run was retrieved 2026-08-29T08:23:35Z; CHI@NYL tipped 2026-08-29T17:00Z (+8.6h) and TOR@PHX 2026-08-30T02:00Z (+17.6h)"
+ },
+ "R6": "append-only; new path, no existing record edited",
+ "SNAPSHOT": {
+  "local_copy": "/tmp/claude-0/-home-user-sports-model/60d4bacd-8ca4-52d5-a4b3-399d198cc22a/scratchpad/wnba_sched_5875eba.parquet",
+  "path_in_repo": "wnba/schedules/parquet/wnba_schedule_2026.parquet",
+  "sha256": "a434f5a88cbbd5e2dda27cd950dc85a7dc510ba7f2722b3b9666e80a51e258c0"
+ },
+ "SUMMARY": {
+  "accrues": "NOTHING. n=2 at a SELF_ASSERTED_PREGAME warrant. Reported, not promoted, and not fed to the estimator.",
+  "brier": 0.121431,
+  "logloss": 0.426548,
+  "margin_bias": -20.68,
+  "margin_mae": 20.68,
+  "n": 2,
+  "su_record": "2-0",
+  "total_bias": 13.0,
+  "total_mae": 13.0
+ },
+ "WHAT_THIS_COHORT_ACTUALLY_SHOWS": {
+  "magnitudes": "BOTH home margins were under-projected, and by a lot: -12.79 and -28.57, bias -20.68 with MAE 20.68. The two residuals do not cancel because they point the same way. At n=2 that is not a bias finding, but it is the thing to watch: a model that picks sides correctly while systematically under-projecting their size will look good on moneylines and lose on spreads, which is exactly what happened to TOR +9.5.",
+  "n_2_caveat": "two games. Nothing here promotes, settles or updates anything.",
+  "sides": "2-0. Both home favourites won. Brier 0.121431.",
+  "the_UTC_slice_check": "TOR@PHX tipped 2026-08-30T02:00Z. A UTC date slice files it under 8/30 and splits this two-game cohort in half. The ET derivation kept it whole, and the record carries date_slice_would_have_split_cohort=true on that row as evidence the fix did work on live data rather than only in the selftest.",
+  "totals": "split. CHI@NYL over-projected by 25.6 (+1.42 sigma); TOR@PHX landed within 0.4 points (+0.02 sigma). No signal either way at n=2."
+ },
+ "created_utc": "2026-08-30T11:10:00Z",
+ "local_time_owner_tz": "2026-08-30 04:10 PDT (America/Los_Angeles)",
+ "record_id": "WNBA-ARCHIVE-GRADING-2026-08-29",
+ "record_sha256": "75c6bb06f9e274a8cd38e975b77c781cdc6ad19984263887a8952c51b5e5ed55",
+ "schema": "ops.wnba_archive_grading.v1",
+ "slate_date_et": "2026-08-29"
+}

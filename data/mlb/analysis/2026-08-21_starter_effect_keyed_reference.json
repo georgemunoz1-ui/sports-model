@@ -1,0 +1,173 @@
+{
+ "record_id": "STARTER-EFFECT-2026-08-21",
+ "built_utc": "2026-08-21T06:58:00Z",
+ "purpose": "owner-required dual reporting of the v1->v2 starter effect: raw registered deltas AND a keyed-seed/high-n reference that removes sequential-RNG coupling noise.",
+ "measurement_only": "No registered card, forecast or grade was read-modified. This is a reference computation; it produces no forecast and enters no ledger.",
+ "method": {
+  "registered_cards": "daily_card.py uses ONE global RNG consumed in slate order, so changing an early game's starter reshuffles every later game's draws \u2014 the raw delta mixes starter effect with coupling noise.",
+  "reference": "per-game keyed seed (sha256 of game|date), COMMON RANDOM NUMBERS across the CAP arm and the named-starter arm (paired), n=200,000 per arm \u2014 removes both cross-game coupling and most MC noise.",
+  "unchanged": "identical sim math, form cutoff, park factors, HFA and pitcher registry as the registered cards."
+ },
+ "headline": {
+  "mean_abs_delta_raw_pp": 3.19,
+  "mean_abs_delta_keyed_pp": 3.28,
+  "max_abs_raw_pp": 8.1,
+  "max_abs_keyed_pp": 7.49,
+  "mean_abs_raw_minus_keyed_pp": 0.38
+ },
+ "interpretation": "The starter effect SURVIVES noise removal: 3.19pp raw vs 3.28pp keyed-reference, with only 0.38pp mean attributable to coupling plus residual MC noise. The registered v1->v2 deltas were therefore substantially honest, and the effect size is consistent with the 8/17-8/20 measurements (~3pp, roughly 5x form freshness).",
+ "control_precision": "The owner described the three unresolved slots as internal no-treatment controls. Precisely: the controls are SLOT-level (3 of 30 slots stay CAP in both cohorts), not game-level \u2014 every one of the 15 games received at least one named starter, so no game is a clean untreated control for a game-level delta.",
+ "n_per_arm": 200000,
+ "rows": [
+  {
+   "game": "ATL@MIL",
+   "treated_slots": 2,
+   "raw_registered_delta_pp": 1.1,
+   "keyed_ref_delta_pp": 1.5,
+   "raw_registered_total_delta": -2.4,
+   "keyed_ref_total_delta": -2.32,
+   "keyed_ref_p_home_v1": 0.5257,
+   "keyed_ref_p_home_v2": 0.5407
+  },
+  {
+   "game": "STL@PHI",
+   "treated_slots": 1,
+   "raw_registered_delta_pp": 1.8,
+   "keyed_ref_delta_pp": 1.66,
+   "raw_registered_total_delta": -0.5,
+   "keyed_ref_total_delta": -0.53,
+   "keyed_ref_p_home_v1": 0.501,
+   "keyed_ref_p_home_v2": 0.5176
+  },
+  {
+   "game": "TOR@NYY",
+   "treated_slots": 1,
+   "raw_registered_delta_pp": 8.1,
+   "keyed_ref_delta_pp": 7.33,
+   "raw_registered_total_delta": -1.0,
+   "keyed_ref_total_delta": -1.04,
+   "keyed_ref_p_home_v1": 0.5465,
+   "keyed_ref_p_home_v2": 0.6199
+  },
+  {
+   "game": "SF@BOS",
+   "treated_slots": 2,
+   "raw_registered_delta_pp": 2.5,
+   "keyed_ref_delta_pp": 2.63,
+   "raw_registered_total_delta": -0.7,
+   "keyed_ref_total_delta": -0.77,
+   "keyed_ref_p_home_v1": 0.5516,
+   "keyed_ref_p_home_v2": 0.5779
+  },
+  {
+   "game": "WSH@MIA",
+   "treated_slots": 2,
+   "raw_registered_delta_pp": 0.4,
+   "keyed_ref_delta_pp": 0.38,
+   "raw_registered_total_delta": 0.3,
+   "keyed_ref_total_delta": 0.25,
+   "keyed_ref_p_home_v1": 0.4634,
+   "keyed_ref_p_home_v2": 0.4672
+  },
+  {
+   "game": "TB@BAL",
+   "treated_slots": 2,
+   "raw_registered_delta_pp": 2.2,
+   "keyed_ref_delta_pp": 3.02,
+   "raw_registered_total_delta": 0.5,
+   "keyed_ref_total_delta": 0.42,
+   "keyed_ref_p_home_v1": 0.4866,
+   "keyed_ref_p_home_v2": 0.5168
+  },
+  {
+   "game": "NYM@CWS",
+   "treated_slots": 2,
+   "raw_registered_delta_pp": 4.3,
+   "keyed_ref_delta_pp": 3.82,
+   "raw_registered_total_delta": -0.2,
+   "keyed_ref_total_delta": -0.23,
+   "keyed_ref_p_home_v1": 0.546,
+   "keyed_ref_p_home_v2": 0.5842
+  },
+  {
+   "game": "DET@KC",
+   "treated_slots": 2,
+   "raw_registered_delta_pp": -7.5,
+   "keyed_ref_delta_pp": -7.49,
+   "raw_registered_total_delta": -0.3,
+   "keyed_ref_total_delta": -0.2,
+   "keyed_ref_p_home_v1": 0.4594,
+   "keyed_ref_p_home_v2": 0.3845
+  },
+  {
+   "game": "ATH@HOU",
+   "treated_slots": 2,
+   "raw_registered_delta_pp": -1.0,
+   "keyed_ref_delta_pp": -1.58,
+   "raw_registered_total_delta": -0.2,
+   "keyed_ref_total_delta": -0.22,
+   "keyed_ref_p_home_v1": 0.5306,
+   "keyed_ref_p_home_v2": 0.5147
+  },
+  {
+   "game": "LAA@TEX",
+   "treated_slots": 2,
+   "raw_registered_delta_pp": -1.5,
+   "keyed_ref_delta_pp": -2.15,
+   "raw_registered_total_delta": 0.1,
+   "keyed_ref_total_delta": 0.18,
+   "keyed_ref_p_home_v1": 0.5022,
+   "keyed_ref_p_home_v2": 0.4807
+  },
+  {
+   "game": "CLE@COL",
+   "treated_slots": 2,
+   "raw_registered_delta_pp": -2.2,
+   "keyed_ref_delta_pp": -1.89,
+   "raw_registered_total_delta": 0.2,
+   "keyed_ref_total_delta": 0.18,
+   "keyed_ref_p_home_v1": 0.5334,
+   "keyed_ref_p_home_v2": 0.5145
+  },
+  {
+   "game": "CIN@AZ",
+   "treated_slots": 2,
+   "raw_registered_delta_pp": 3.8,
+   "keyed_ref_delta_pp": 4.58,
+   "raw_registered_total_delta": -0.2,
+   "keyed_ref_total_delta": -0.22,
+   "keyed_ref_p_home_v1": 0.5387,
+   "keyed_ref_p_home_v2": 0.5846
+  },
+  {
+   "game": "MIN@SD",
+   "treated_slots": 1,
+   "raw_registered_delta_pp": 2.5,
+   "keyed_ref_delta_pp": 2.62,
+   "raw_registered_total_delta": 0.2,
+   "keyed_ref_total_delta": 0.25,
+   "keyed_ref_p_home_v1": 0.4873,
+   "keyed_ref_p_home_v2": 0.5135
+  },
+  {
+   "game": "PIT@LAD",
+   "treated_slots": 2,
+   "raw_registered_delta_pp": 6.2,
+   "keyed_ref_delta_pp": 5.79,
+   "raw_registered_total_delta": -0.2,
+   "keyed_ref_total_delta": -0.29,
+   "keyed_ref_p_home_v1": 0.5183,
+   "keyed_ref_p_home_v2": 0.5762
+  },
+  {
+   "game": "CHC@SEA",
+   "treated_slots": 2,
+   "raw_registered_delta_pp": 2.8,
+   "keyed_ref_delta_pp": 2.81,
+   "raw_registered_total_delta": -0.5,
+   "keyed_ref_total_delta": -0.51,
+   "keyed_ref_p_home_v1": 0.4275,
+   "keyed_ref_p_home_v2": 0.4556
+  }
+ ]
+}

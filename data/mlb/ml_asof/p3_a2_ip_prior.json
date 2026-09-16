@@ -1,0 +1,24 @@
+{
+ "record_id": "ML-P3-A2-IP-PRIOR",
+ "prereg": "docs/experiments/ML-P2P3_prereg.md",
+ "dataset_vintage": "431e689cf629e3952354f417de4825caee4907f5ca490a376a940a75ae40d203",
+ "model_identity": "ml.v13_1.p2eval.hfa_param.n4000.per_row_reset",
+ "paired": true,
+ "n": 708,
+ "baseline": {
+  "brier": 0.2486,
+  "logloss": 0.6903,
+  "acc": 0.5127
+ },
+ "a2_ip_prior": {
+  "brier": 0.2489,
+  "logloss": 0.6909,
+  "acc": 0.5226,
+  "calib": [
+   0.096,
+   0.624
+  ]
+ },
+ "delta_brier_a2_minus_base": 0.000297,
+ "paired_se": 0.00027
+}

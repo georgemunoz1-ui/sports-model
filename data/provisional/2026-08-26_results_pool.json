@@ -1,0 +1,524 @@
+{
+ "created_utc": "2026-08-26T18:20:00Z",
+ "feature_state_effect": "WNBA canonical as_of stays 2026-07-22; provisional extension as_of 2026-08-26 at its own grade, recorded in the feature-state registry",
+ "grade": "PROVISIONAL_SEARCH_ASSEMBLED (WNBA) / OWNER_RELAY (MLB) \u2014 NEVER canonical: no settlement, no promotion, no estimator input, binds no RJ-001/RJ-005 unit",
+ "mlb": {
+  "2026-08-22": {
+   "grade": "OWNER_RELAY",
+   "source": "data/audit/2026-08-22_closeout .. _late_source_addendum.json (61a7e057) \u2014 15 finals relayed 8/25",
+   "status": "scores held in the addendum record"
+  },
+  "2026-08-23": {
+   "grade": "GAP",
+   "status": "no finals record held in the repo for 8/23; listed as a gap, not guessed"
+  },
+  "2026-08-24": {
+   "grade": "OWNER_RELAY",
+   "source": "data/audit/2026-08-24_result_display*.json (12 finals incl. PIT 3-2/12)",
+   "status": "scores held"
+  },
+  "2026-08-25": {
+   "grade": "OWNER_RELAY + DERIVED",
+   "source": "result_display v2-v4 (9 relayed finals with scores; 6 late winner outcomes uniquely derived from relayed aggregates, scores unrelayed)",
+   "status": "partial scores"
+  }
+ },
+ "record_id": "PROVISIONAL-RESULTS-POOL-2026-08-26",
+ "record_sha256": "2624ce85b39274ade6230fbaaf46f0a3758f92137c7af8255a7d1fcbbb9c477a",
+ "schema": "ops.provisional_pool.v1",
+ "wnba": {
+  "discrepancies": [
+   "GSV 92-81 TOR on 8/4: one video title said 92-82; ESPN final-score page (92-81) taken as primary, discrepancy flagged"
+  ],
+  "excluded_ambiguous": [
+   {
+    "date": "2026-08-23",
+    "reason": "direction ambiguous in the summary ('Sky played Fever, final 113-90'); neither team's sweep resolves it \u2014 refused per lesson 37",
+    "score": "113-90",
+    "teams": "CHI? IND?"
+   },
+   {
+    "date": "2026-08-10",
+    "reason": "game exists (wnba url tor-vs-atl-1022600243); no score surfaced",
+    "score": "unknown",
+    "teams": "TOR@ATL"
+   },
+   {
+    "date": "2026-08-20",
+    "reason": "a Lynx-Valkyries game was scheduled 8/20; no score surfaced",
+    "score": "unknown",
+    "teams": "MIN@GSV or GSV@MIN"
+   },
+   {
+    "date": "(date unknown)",
+    "reason": "headline without a date; refused until datable",
+    "score": "",
+    "teams": "WAS beat ATL 79-74"
+   }
+  ],
+  "games_with_scores": [
+   {
+    "date": "2026-08-01",
+    "l_pts": 92,
+    "loser": "PHX",
+    "n_sources": 2,
+    "w_pts": 94,
+    "winner": "NYL",
+    "winner_venue": "A"
+   },
+   {
+    "date": "2026-08-02",
+    "l_pts": 101,
+    "loser": "PDX",
+    "n_sources": 2,
+    "w_pts": 106,
+    "winner": "LAS",
+    "winner_venue": "A"
+   },
+   {
+    "date": "2026-08-02",
+    "l_pts": 79,
+    "loser": "TOR",
+    "n_sources": 2,
+    "w_pts": 96,
+    "winner": "GSV",
+    "winner_venue": "H"
+   },
+   {
+    "date": "2026-08-03",
+    "l_pts": 83,
+    "loser": "SEA",
+    "n_sources": 2,
+    "w_pts": 95,
+    "winner": "NYL",
+    "winner_venue": null
+   },
+   {
+    "date": "2026-08-03",
+    "l_pts": 87,
+    "loser": "ATL",
+    "n_sources": 2,
+    "w_pts": 109,
+    "winner": "LVA",
+    "winner_venue": "A"
+   },
+   {
+    "date": "2026-08-03",
+    "l_pts": 101,
+    "loser": "CHI",
+    "n_sources": 1,
+    "w_pts": 106,
+    "winner": "PHX",
+    "winner_venue": null
+   },
+   {
+    "date": "2026-08-04",
+    "l_pts": 81,
+    "loser": "TOR",
+    "n_sources": 2,
+    "w_pts": 92,
+    "winner": "GSV",
+    "winner_venue": "H"
+   },
+   {
+    "date": "2026-08-05",
+    "l_pts": 92,
+    "loser": "DAL",
+    "n_sources": 2,
+    "w_pts": 96,
+    "winner": "WAS",
+    "winner_venue": "H"
+   },
+   {
+    "date": "2026-08-05",
+    "l_pts": 86,
+    "loser": "SEA",
+    "n_sources": 2,
+    "w_pts": 92,
+    "winner": "NYL",
+    "winner_venue": "H"
+   },
+   {
+    "date": "2026-08-05",
+    "l_pts": 82,
+    "loser": "PHX",
+    "n_sources": 1,
+    "w_pts": 96,
+    "winner": "ATL",
+    "winner_venue": "H"
+   },
+   {
+    "date": "2026-08-06",
+    "l_pts": 82,
+    "loser": "MIN",
+    "n_sources": 2,
+    "w_pts": 89,
+    "winner": "LAS",
+    "winner_venue": null
+   },
+   {
+    "date": "2026-08-06",
+    "l_pts": 83,
+    "loser": "TOR",
+    "n_sources": 2,
+    "w_pts": 97,
+    "winner": "PDX",
+    "winner_venue": "H"
+   },
+   {
+    "date": "2026-08-07",
+    "l_pts": 76,
+    "loser": "DAL",
+    "n_sources": 2,
+    "w_pts": 94,
+    "winner": "GSV",
+    "winner_venue": "A"
+   },
+   {
+    "date": "2026-08-07",
+    "l_pts": 72,
+    "loser": "PHX",
+    "n_sources": 2,
+    "w_pts": 75,
+    "winner": "CON",
+    "winner_venue": "H"
+   },
+   {
+    "date": "2026-08-08",
+    "l_pts": 93,
+    "loser": "SEA",
+    "n_sources": 2,
+    "w_pts": 100,
+    "winner": "PDX",
+    "winner_venue": "H"
+   },
+   {
+    "date": "2026-08-08",
+    "l_pts": 86,
+    "loser": "CHI",
+    "n_sources": 2,
+    "w_pts": 90,
+    "winner": "IND",
+    "winner_venue": "A"
+   },
+   {
+    "date": "2026-08-09",
+    "l_pts": 78,
+    "loser": "LVA",
+    "n_sources": 1,
+    "w_pts": 84,
+    "winner": "GSV",
+    "winner_venue": null
+   },
+   {
+    "date": "2026-08-09",
+    "l_pts": 90,
+    "loser": "DAL",
+    "n_sources": 2,
+    "w_pts": 103,
+    "winner": "MIN",
+    "winner_venue": "H"
+   },
+   {
+    "date": "2026-08-09",
+    "l_pts": 75,
+    "loser": "PHX",
+    "n_sources": 2,
+    "w_pts": 95,
+    "winner": "WAS",
+    "winner_venue": "H"
+   },
+   {
+    "date": "2026-08-10",
+    "l_pts": 88,
+    "loser": "CHI",
+    "n_sources": 1,
+    "w_pts": 97,
+    "winner": "SEA",
+    "winner_venue": null
+   },
+   {
+    "date": "2026-08-11",
+    "l_pts": 92,
+    "loser": "NYL",
+    "n_sources": 2,
+    "w_pts": 106,
+    "winner": "IND",
+    "winner_venue": "H"
+   },
+   {
+    "date": "2026-08-11",
+    "l_pts": 87,
+    "loser": "LAS",
+    "n_sources": 2,
+    "w_pts": 94,
+    "winner": "PHX",
+    "winner_venue": "A"
+   },
+   {
+    "date": "2026-08-12",
+    "l_pts": 71,
+    "loser": "CHI",
+    "n_sources": 1,
+    "w_pts": 91,
+    "winner": "GSV",
+    "winner_venue": null
+   },
+   {
+    "date": "2026-08-13",
+    "l_pts": 76,
+    "loser": "WAS",
+    "n_sources": 2,
+    "w_pts": 83,
+    "winner": "LVA",
+    "winner_venue": "H"
+   },
+   {
+    "date": "2026-08-13",
+    "l_pts": 81,
+    "loser": "LAS",
+    "n_sources": 2,
+    "w_pts": 85,
+    "winner": "NYL",
+    "winner_venue": "H"
+   },
+   {
+    "date": "2026-08-14",
+    "l_pts": 87,
+    "loser": "DAL",
+    "n_sources": 2,
+    "w_pts": 98,
+    "winner": "IND",
+    "winner_venue": "H"
+   },
+   {
+    "date": "2026-08-14",
+    "l_pts": 82,
+    "loser": "SEA",
+    "n_sources": 2,
+    "w_pts": 84,
+    "winner": "PDX",
+    "winner_venue": "A"
+   },
+   {
+    "date": "2026-08-15",
+    "l_pts": 87,
+    "loser": "LVA",
+    "n_sources": 2,
+    "w_pts": 92,
+    "winner": "MIN",
+    "winner_venue": null
+   },
+   {
+    "date": "2026-08-15",
+    "l_pts": 75,
+    "loser": "CON",
+    "n_sources": 1,
+    "w_pts": 82,
+    "winner": "NYL",
+    "winner_venue": null
+   },
+   {
+    "date": "2026-08-16",
+    "l_pts": 91,
+    "loser": "ATL",
+    "n_sources": 2,
+    "w_pts": 95,
+    "winner": "IND",
+    "winner_venue": null
+   },
+   {
+    "date": "2026-08-16",
+    "l_pts": 85,
+    "loser": "PHX",
+    "n_sources": 1,
+    "w_pts": 88,
+    "winner": "PDX",
+    "winner_venue": null
+   },
+   {
+    "date": "2026-08-17",
+    "l_pts": 70,
+    "loser": "DAL",
+    "n_sources": 2,
+    "w_pts": 78,
+    "winner": "GSV",
+    "winner_venue": null
+   },
+   {
+    "date": "2026-08-18",
+    "l_pts": 82,
+    "loser": "LVA",
+    "n_sources": 1,
+    "w_pts": 97,
+    "winner": "ATL",
+    "winner_venue": "H"
+   },
+   {
+    "date": "2026-08-18",
+    "l_pts": 86,
+    "loser": "NYL",
+    "n_sources": 2,
+    "w_pts": 93,
+    "winner": "CHI",
+    "winner_venue": "H"
+   },
+   {
+    "date": "2026-08-18",
+    "l_pts": 95,
+    "loser": "TOR",
+    "n_sources": 2,
+    "w_pts": 101,
+    "winner": "IND",
+    "winner_venue": "A"
+   },
+   {
+    "date": "2026-08-19",
+    "l_pts": 82,
+    "loser": "TOR",
+    "n_sources": 1,
+    "w_pts": 93,
+    "winner": "WAS",
+    "winner_venue": null
+   },
+   {
+    "date": "2026-08-20",
+    "l_pts": 78,
+    "loser": "CON",
+    "n_sources": 2,
+    "w_pts": 101,
+    "winner": "LVA",
+    "winner_venue": "H"
+   },
+   {
+    "date": "2026-08-20",
+    "l_pts": 85,
+    "loser": "IND",
+    "n_sources": 2,
+    "w_pts": 91,
+    "winner": "DAL",
+    "winner_venue": "H"
+   },
+   {
+    "date": "2026-08-20",
+    "l_pts": 88,
+    "loser": "LAS",
+    "n_sources": 2,
+    "w_pts": 124,
+    "winner": "ATL",
+    "winner_venue": "A"
+   },
+   {
+    "date": "2026-08-21",
+    "l_pts": 79,
+    "loser": "PDX",
+    "n_sources": 2,
+    "w_pts": 82,
+    "winner": "TOR",
+    "winner_venue": "H"
+   },
+   {
+    "date": "2026-08-21",
+    "l_pts": 70,
+    "loser": "GSV",
+    "n_sources": 2,
+    "w_pts": 73,
+    "winner": "CHI",
+    "winner_venue": "H"
+   },
+   {
+    "date": "2026-08-22",
+    "l_pts": 102,
+    "loser": "IND",
+    "n_sources": 2,
+    "w_pts": 109,
+    "winner": "NYL",
+    "winner_venue": "H"
+   },
+   {
+    "date": "2026-08-23",
+    "l_pts": 70,
+    "loser": "SEA",
+    "n_sources": 2,
+    "w_pts": 92,
+    "winner": "DAL",
+    "winner_venue": "H"
+   },
+   {
+    "date": "2026-08-23",
+    "l_pts": 100,
+    "loser": "PDX",
+    "n_sources": 2,
+    "w_pts": 105,
+    "winner": "WAS",
+    "winner_venue": "A"
+   },
+   {
+    "date": "2026-08-24",
+    "l_pts": 71,
+    "loser": "LAS",
+    "n_sources": 1,
+    "w_pts": 78,
+    "winner": "ATL",
+    "winner_venue": "A"
+   },
+   {
+    "date": "2026-08-25",
+    "l_pts": 81,
+    "loser": "CHI",
+    "n_sources": 3,
+    "w_pts": 87,
+    "winner": "CON",
+    "winner_venue": "H"
+   },
+   {
+    "date": "2026-08-25",
+    "l_pts": 78,
+    "loser": "PDX",
+    "n_sources": 3,
+    "w_pts": 96,
+    "winner": "DAL",
+    "winner_venue": "H"
+   },
+   {
+    "date": "2026-08-25",
+    "l_pts": 84,
+    "loser": "PHX",
+    "n_sources": 3,
+    "w_pts": 94,
+    "winner": "WAS",
+    "winner_venue": "A"
+   }
+  ],
+  "limits": "score-level only \u2014 the registered wnba_model_v1 needs per-game box stats (four-factors inputs) that snippets cannot supply; this pool serves form/record validation, fallback-arm inputs and future reconciliation against real artifacts",
+  "outcome_only": [
+   {
+    "date": "2026-08-24",
+    "l_pts": null,
+    "loser": "MIN",
+    "n_sources": 1,
+    "note": "GSV won at MIN per recap language + wnba.com game url gsv-vs-min-1022600282; score not identified",
+    "w_pts": null,
+    "winner": "GSV",
+    "winner_venue": "A"
+   }
+  ],
+  "sources": "ESPN final-score pages (primary), wnba.com game urls (venue), FOX/CBS/Yahoo/team-site recaps (concordance); every game seen in at least one source, most in two (both teams' sweeps)",
+  "validation": {
+   "coverage": {
+    "CHI": "2W+5L collected of 15-24 listed",
+    "CON": "2W+2L collected of 10-27 listed",
+    "DAL": "3W+5L collected of 23-16 listed",
+    "GSV": "7W+1L collected of 26-11 listed",
+    "NYL": "6W+2L collected of 23-15 listed",
+    "PDX": "4W+4L collected of 15-23 listed",
+    "PHX": "2W+6L collected of 13-25 listed",
+    "SEA": "1W+5L collected of 7-31 listed",
+    "TOR": "1W+5L collected of 11-26 listed",
+    "WAS": "5W+1L collected of 23-15 listed"
+   },
+   "method": "subset-consistency \u2014 per-team collected W/L must not exceed the rolled standings; PASS for all 10 standings-listed teams"
+  },
+  "window": "2026-07-29 .. 2026-08-26 (the staged pool ends 2026-07-22; the All-Star break covered 7/25, so the true gap starts ~7/29)"
+ }
+}

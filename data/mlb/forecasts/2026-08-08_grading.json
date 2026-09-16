@@ -1,0 +1,33 @@
+{
+ "record_id": "SLATE-GRADING-2026-08-08",
+ "built_utc": "2026-08-09T05:43:11Z",
+ "classification": "DIAGNOSTIC validation (slate was PASS/$0; no money). Grades the model READ against results.",
+ "night_context": "UPSET-HEAVY: market favorites went 6/15 (40%); home teams 10/15.",
+ "mlb": {
+  "v13_straight_up": "7/15 (47%)",
+  "v13_brier": 0.2558,
+  "market_favorite": "6/15 (40%)",
+  "pass1_marketblind_evening": "7/12 (58%)",
+  "pass2_attractive_plays": {
+   "record": "3/3",
+   "legs": [
+    "MIL (fav) WON",
+    "CWS (dog) WON",
+    "TB (dog) WON"
+   ]
+  },
+  "note": "V13 (7/15) edged the market (6/15) on an upset-heavy night \u2014 compression toward .500 caught winning dogs (WSH/CWS/TB). Brier 0.2558 still > coin-flip 0.25: model not validated, one night is noise. But the two-pass method's actual selections (MIL/CWS/TB) all cashed."
+ },
+ "wnba": {
+  "model_ratings": "3/3",
+  "legs": [
+   "Lynx WON",
+   "Fever WON (Clark played 26/11)",
+   "Portland WON 100-93 (Leite hurt <4min, held on)"
+  ]
+ },
+ "injury_overlay_finding": "Pass-1 injury adjustment was NET POSITIVE on the evening (7/12 vs V13 raw 6/12): weighting deGrom->TEX and ->SD helped; but the Wood-out->fade-WSH flip HURT (WSH won 8-2). Heuristic overlay is noisy at n=1 slate.",
+ "honest_verdict": "Good night for the disciplined two-pass read (Pass-1 7/12, attractive plays 3/3, WNBA 3/3), but a single upset-heavy slate is not validation. Recorded as diagnostic evidence toward the promotion gate; gate stays 0/100, ledger $0.",
+ "SUPERSEDED_BY": "2026-08-10_claim_retractions.json + 2026-08-08_grading_CORRECTED.json",
+ "SUPERSEDED_NOTE": "Several headline claims in this file are VOID \u2014 see the retractions record. Do not cite without it."
+}

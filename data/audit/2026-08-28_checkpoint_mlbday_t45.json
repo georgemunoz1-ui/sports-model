@@ -1,0 +1,80 @@
+{
+ "DISPOSITION_FINAL": {
+  "consequences": {
+   "break_even": null,
+   "edge": null,
+   "ev": null,
+   "gradeable_vs_market": false,
+   "gradeable_vs_model": true,
+   "selection": null
+  },
+  "firmed_from": "provisional forecast-only",
+  "mlb:CIN@CHC": "NO_PRICE",
+  "model_output": "UNSUPPRESSED \u2014 all six arms stand as frozen. An action blocker never suppresses model output.",
+  "why_not_PASS_NEGATIVE_EV": "that label asserts a price was examined and found negative. No MLB price exists on file, so there is nothing to be negative against. NO_PRICE is the honest terminal state and is not a softer version of a pass."
+ },
+ "anchor": {
+  "canonical_id": "ESPN_GAMEID:401816711",
+  "first_pitch_utc": "2026-08-28T18:20:00Z",
+  "game": "mlb:CIN@CHC",
+  "minutes_remaining": 40
+ },
+ "block": "MLB day (CIN@CHC) \u2014 LAST checkpoint before this game is live",
+ "created_utc": "2026-08-28T17:40:00Z",
+ "forecast_final_unmodified": {
+  "mlb.total.CHAMPION_V13": 11.188,
+  "mlb.total.EXPANDING_TOTAL_PRIOR": 8.991092636579573,
+  "mlb.winner.CHALLENGER_ADAPTIVE": 0.5160498982517796,
+  "mlb.winner.CHALLENGER_WIDENED": 0.5109058443800826,
+  "mlb.winner.CHAMPION_V13": 0.5529333333333334,
+  "mlb.winner.EXPANDING_HOME_PRIOR": 0.5205399061032864,
+  "note": "no arm moved between freeze and first pitch, because no input to any arm changed",
+  "resolved_information_dose": 1.0
+ },
+ "frozen_board": {
+  "byte_identical_to_committed_freeze": true,
+  "cohort_hash": "3723e6801e2f65f7c60c97581d65252c025909e01ad2372c9105899d3478361a",
+  "path": "cards/2026-08-28_mlb_board.json",
+  "sha256": "5a558cfc17dc571ca33632c727e4e44415718e77b670e8e3db19e6124db548b8",
+  "verified_by": "sha256 of the working file compared against `git show HEAD:<path>`"
+ },
+ "ledger": {
+  "exposure_usd": 0,
+  "n_bets": 0,
+  "units": 0.0,
+  "wager_authority": "NO"
+ },
+ "market_attempt_final": {
+  "cumulative_today": "five distinct MLB price routes attempted across the morning record and two checkpoints; every one refused. No MLB price has been obtainable in this environment at any point today.",
+  "observed_utc": "2026-08-28T17:40:00Z",
+  "outcome": "REFUSED",
+  "routes": [
+   {
+    "error": "EGRESS_BLOCKED \u2014 curl exit 56, CONNECT tunnel failed, response 403",
+    "route": "curl https://sportsbook.draftkings.com/leagues/baseball/mlb"
+   },
+   {
+    "error": "EGRESS_BLOCKED \u2014 curl exit 56, CONNECT tunnel failed, response 403",
+    "route": "curl https://api.the-odds-api.com/v4/sports/baseball_mlb/odds"
+   }
+  ]
+ },
+ "next": "MLB evening T-90 + NFL T-50 at 21:10Z (trig_011vhvdsmRZTvroEDb95QNAC)",
+ "prospectivity_note": "after 2026-08-28T18:20:00Z the CIN@CHC row is no longer prospective and must read PROSPECTIVITY_NOT_ESTABLISHED on any later artifact. The other 14 games are unaffected and remain prospective until their own starts.",
+ "record_id": "CHECKPOINT-2026-08-28-MLB-DAY-T45",
+ "record_sha256": "8a734dacc4e257366208ca7dd0a4432210fefb7fdee8a3b20ce690ac9d712967",
+ "schema": "ops.checkpoint.v1",
+ "starters_final": {
+  "away": "Rhett Lowder",
+  "evidence_class_upgrade": {
+   "board_carried": "lineups: UNCONFIRMED_AT_REGISTRATION",
+   "note": "this UPGRADES the evidence for this one game. It does NOT modify the frozen board (R3); the upgrade lives here. The other 14 games are untouched and their lineups remain unconfirmed.",
+   "now": "both clubs' batting orders are posted",
+   "standing_rule_satisfied": "'verify starters, lineups and injuries before any recommendation' is now satisfied for CIN@CHC \u2014 though no recommendation exists, because no market does"
+  },
+  "explicit_negative": "this checkpoint was the last point at which a late scratch could have been caught before first pitch. None was found, and that is recorded as a checked negative rather than left as silence.",
+  "home": "David Peterson",
+  "scratch_check": "NO SCRATCH. Rhett Lowder and David Peterson both confirmed at T-45 with POSTED LINEUPS behind them."
+ },
+ "trigger": "trig_018sqpJXGmQPn8vMZLfeNnFY (fired 17:35:23Z)"
+}

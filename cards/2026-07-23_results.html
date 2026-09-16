@@ -1,0 +1,50 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>7/23 Final — Graded</title><style>
+:root{--bg:#0d1117;--card:#161b22;--line:#232b36;--ink:#e6edf3;--dim:#8b949e;--grn:#3fb950;--red:#f85149;--amb:#d29922;--blu:#58a6ff}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:13px/1.5 -apple-system,Segoe UI,Helvetica,Arial,sans-serif}
+.wrap{max-width:1040px;margin:0 auto;padding:24px 16px 50px}
+h1{font-size:19px;margin:0 0 2px}h2{font-size:13px;text-transform:uppercase;letter-spacing:.04em;color:var(--dim);margin:20px 0 7px;border-bottom:1px solid var(--line);padding-bottom:5px}
+.sub{color:var(--dim);font-size:12px;margin-bottom:11px}
+table{width:100%;border-collapse:collapse;font-size:12px}th,td{padding:6px 8px;text-align:right;border-bottom:1px solid var(--line);white-space:nowrap}
+th{color:var(--dim);font-size:10px;text-transform:uppercase}td:first-child,th:first-child,td:nth-child(2),th:nth-child(2){text-align:left}
+.b{font-weight:700}.mut{color:var(--dim)}.pos{color:var(--grn)}.neg{color:var(--red)}.blu{color:var(--blu)}.amb{color:var(--amb)}.k{font-size:10.5px;color:var(--dim)}
+.note{border:1px solid var(--line);border-radius:8px;padding:10px 13px;margin:9px 0;font-size:12px;background:#11161d}
+.win{border-left:3px solid var(--grn)}.loss{border-left:3px solid var(--red)}.warn{border-left:3px solid var(--amb)}.info{border-left:3px solid var(--blu)}
+.pill{display:inline-block;font-size:10px;font-weight:700;padding:1px 7px;border-radius:9px;margin-left:6px}
+.pw{background:rgba(63,185,80,.16);color:var(--grn)}.pl{background:rgba(248,81,73,.16);color:var(--red)}
+.foot{color:var(--dim);font-size:10.5px;margin-top:14px;border-top:1px solid var(--line);padding-top:8px}</style></head><body><div class="wrap">
+<h1>Thursday, July 23, 2026 — FINAL / Graded</h1>
+<div class="sub">K-prop ledger <b>4-5, −1.61u</b> · gate <b>9/100</b> · baseline A/B <b>3-2, +0.48u</b> · ML tracking <b>5-2</b> · V13 dir <b>21-12</b> · $0 real money</div>
+
+<h2>🎯 Engine K-prop plays — 1-1, −0.58u on the night</h2>
+<div class="note win"><b>Ian Seymour OVER 4.5 K</b> <span class="pill pw">WIN +0.42u</span> — <b>7 K</b> (proj 5.34, half-weight −119). Clean hit; the swingman-workload read is now 3-for-3 (Rasmussen, Jump, Seymour).</div>
+<div class="note loss"><b>Chris Sale UNDER 7.5 K</b> <span class="pill pl">LOSS −1.00u</span> — <b>11 K</b> (proj 6.54, full-weight −145). The flagship play got torched. Sale had <b>23 swinging strikes</b> vs a high-K Padres lineup (SD fanned 15 as a team).</div>
+<div class="note warn"><b>⚠ Two-day pattern — a hypothesis, not a verdict.</b> Cole 11K (7/22) and Sale 11K (7/23): two straight premium-strikeout arms beat our UNDER, both on displacements under 1.0K. This <i>strengthens</i> the pre-registered E1 hypothesis (a plausible opponent-K% omission), but <b>two misses do not prove "book-info over book-error" or systematic underprojection</b> — they are equally consistent with short-run clustering at n=2. E1 must improve the 1,759-start historical replay before the opponent-K explanation earns causal status; that test decides whether this is a repeatable deficiency or noise. Escalated to top for <b>testing</b>.</div>
+
+<h2>⚖️ Engine vs Taco baseline — the honest read</h2>
+<div class="note info">Baseline "won" the night (+0.48u vs −0.58u), but <b>not because the engine's filters were too tight.</b> The 4 plays the engine declined/skipped went <b>2-2, −0.36u flat</b> — the filters correctly <b>avoided the Bradley (−153 juice) and McGreevy (no-displacement) losses</b>, and only genuinely missed Williams and Dobnak. Baseline's profit came from the <b>shared Seymour play</b> (+0.84 full vs the engine's +0.42 half-weight). The engine lost the night <b>purely on its unique Sale play.</b> One true "shrinkage cost a winner": <b>Gavin Williams</b> (elite-K arm, shrinkage pulled his displacement 0.75→0.47, under the gate — he K'd 11). A/B night-1 Brier: raw 0.244 vs shrunk 0.258 (n=4, noise).</div>
+
+<h2>📋 All 5 games — projections vs actual</h2>
+<table><thead><tr><th>Game (final)</th><th>Pitcher</th><th>Proj K</th><th>Line</th><th>Actual K</th><th>Engine</th><th>Baseline</th></tr></thead><tbody>
+<tr><td class='b'>SD 5 @ ATL 6</td><td>Chris Sale</td><td>6.54</td><td>U7.5</td><td class='b'>11</td><td class='neg'>LOSS</td><td class='mut'>—</td></tr>
+<tr><td class='mut'>&nbsp;</td><td>Griffin Canning</td><td>4.77</td><td class='mut'>—</td><td>4</td><td class='mut'>—</td><td class='mut'>—</td></tr>
+<tr><td class='b'>TB 1 @ TOR 3</td><td>Ian Seymour</td><td>5.34</td><td>O4.5</td><td class='b'>7</td><td class='pos'>WIN</td><td class='pos'>WIN</td></tr>
+<tr><td class='mut'>&nbsp;</td><td>Shane Bieber</td><td>4.38</td><td class='mut'>—</td><td>3</td><td class='mut'>—</td><td class='mut'>—</td></tr>
+<tr><td class='b'>MIN 3 @ CLE 1</td><td>Gavin Williams</td><td>6.97</td><td>O6.5</td><td class='b'>11</td><td class='amb'>declined</td><td class='pos'>WIN</td></tr>
+<tr><td class='mut'>&nbsp;</td><td>Taj Bradley</td><td>6.34</td><td>O5.5</td><td>5</td><td class='amb'>declined ✓</td><td class='neg'>LOSS</td></tr>
+<tr><td class='b'>ARI 10 @ STL 6</td><td>Michael McGreevy</td><td>3.96</td><td>O3.5</td><td>3</td><td class='amb'>declined ✓</td><td class='neg'>LOSS</td></tr>
+<tr><td class='mut'>&nbsp;</td><td>Brandon Pfaadt</td><td>4.02</td><td class='mut'>—</td><td class='neg'>1</td><td class='mut'>—</td><td class='mut'>—</td></tr>
+<tr><td class='b'>KC 3 @ DET 4</td><td>Randy Dobnak</td><td class='mut'>skip</td><td>U3.5</td><td>3</td><td class='amb'>skip (1GS)</td><td class='pos'>WIN</td></tr>
+<tr><td class='mut'>&nbsp;</td><td>Troy Melton</td><td>5.48</td><td class='mut'>—</td><td class='pos'>5</td><td class='mut'>—</td><td class='mut'>—</td></tr>
+</tbody></table>
+<div class="sub" style="margin-top:6px">✓ = engine's decline was correct (baseline lost it). Melton 5.48→5 and Canning 4.77→4 were near-exact model reads (no lines). Pfaadt 4.02→1 was the day's biggest projection miss (no play).</div>
+
+<h2>💵 ML tracking — 2-1 (cumulative 5-2)</h2>
+<table><thead><tr><th>Pick</th><th>Game (final)</th><th>ML</th><th>V13 WP</th><th>Result</th></tr></thead><tbody>
+<tr><td class='b'>MIN</td><td>MIN 3 @ CLE 1 (F/12)</td><td>+112</td><td>54%</td><td class='pos b'>WIN — dog cashed</td></tr>
+<tr><td class='b'>ATL</td><td>SD 5 @ ATL 6</td><td class='mut'>dir</td><td>71%</td><td class='pos b'>WIN</td></tr>
+<tr><td class='b'>STL</td><td>ARI 10 @ STL 6</td><td>−125</td><td>55%</td><td class='neg b'>LOSS</td></tr>
+</tbody></table>
+
+<div class="foot"><b>P/L convention:</b> each play settles to a 2-decimal payout; running units = sum of those rounded values (column sums exactly to total). Baseline is +0.48u under this rule (+0.49u if payouts are summed unrounded). A/B Brier n=4 (Dobnak excluded — engine produced no probability).<br>
+Both K-prop ledgers + ML graded · dataset 1,539 finals (7/23 upserted) · Sale log corrected + reconciled to external (19 GS / 134 SO) · runbook 8-field log bug logged (would crash card parser; reverted to 7-field). Next: pre-register + run E1 (opponent-K%). Sunday: weekly review + dashboard + backup bundle.</div>
+</div></body></html>

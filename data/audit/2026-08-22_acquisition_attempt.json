@@ -1,0 +1,50 @@
+{
+ "record_id": "ACQUISITION-ATTEMPT-2026-08-22",
+ "schema": "ops.acquisition_attempt.v1",
+ "attempted_utc": "2026-08-22T23:30:00Z",
+ "instruction": "owner: pull boards and fill gaps via online sources (standing data-acquisition autonomy)",
+ "outcome": "NOT_INGESTED — all three sports. Prose enumerations were obtained; no capturable source was reachable, and two of the three enumerations contradict verified data.",
+
+ "rails_attempted": {
+  "direct_https_curl": {
+   "hosts": ["statsapi.mlb.com", "stats.wnba.com", "site.api.espn.com"],
+   "result": "CONNECT tunnel failed, response 403 — organization egress policy denial, logged by the proxy as connect_rejected. NOT routed around.",
+   "proxy_state": "selective=false, so the denial is at the upstream org gateway, not a local allowlist"
+  },
+  "webfetch": {
+   "hosts_blocked": ["statsapi.mlb.com", "www.baseball-reference.com", "www.rotowire.com",
+                     "www.fantasypros.com", "en.wikipedia.org", "www.mlb.com"],
+   "result": "EGRESS_BLOCKED on every sports/reference domain tried",
+   "control": "github.com returned HTTP 404 (private repo), NOT EGRESS_BLOCKED — so the denial is domain-specific policy, not a total network failure. Characterized rather than assumed."
+  },
+  "websearch": {
+   "result": "WORKS — returns result links plus a model-written summary",
+   "limitation": "the summary is MODEL-GENERATED PROSE ABOUT PAGES THAT CANNOT BE OPENED. Under the 2026-08-19 standing rule ('a model-generated or assistant-transcribed quote can never supersede captured source pixels') it is the weakest possible class of evidence, and here there are no pixels to supersede — the underlying pages are all blocked."
+  }
+ },
+
+ "what_the_prose_claimed_and_why_it_was_REFUSED": {
+  "MLB": {
+   "claim": "15 games: TOR@NYY, ATL@MIL, WSH@MIA, STL@PHI, TB@BAL, LAA@TEX, ATH@HOU, NYM@CWS, DET@KC, PIT@LAD, CHC@SEA, SF@BOS, AZ@CIN, CLE@COL, MIN@SD",
+   "refusal": "ECHO_SUSPECTED_AND_ORIENTATION_CONFLICT. 14 of the 15 matchups are IDENTICAL to the verified 2026-08-21 slate held in the forecast registry. The fifteenth is the same pairing with HOME AND AWAY REVERSED: the registry has CIN@AZ for 8/21, the prose has AZ@CIN for 8/22. A continuing series is plausible; a mid-series park swap is not. One of the two is wrong and no reachable source can settle it.",
+   "why_it_matters": "A home/away flip inverts the HFA term and flips the sign of the projected margin for that game — the single most consequential transcription error available, and the class the 8/19 SD sign incident already cost us.",
+   "second_signal": "The only score the summary cited (TOR@NYY, 'Blue Jays 1, Yankees 0 after a runner to third with 1 out') reads as an in-progress description, not a final. Post-start content presented as slate content is the STL@CIN failure mode."
+  },
+  "WNBA": {
+   "claim": "Washington Mystics at Portland Fire; 'the Toronto Tempo also had a game against the Fire on that date'",
+   "refusal": "INTERNALLY_CONTRADICTORY. Portland cannot host both Washington and Toronto on one date. The registry holds PDX@TOR for 8/21 (played at a neutral site in Vancouver), so the most likely explanation is that the summary conflated the 8/21 game with 8/22. No game count was produced at all."
+  },
+  "NFL": {
+   "claim": "10 games, e.g. WAS@DET 12:00 ET, BAL@MIN 13:00, BUF@CLE 13:00, ATL@IND 13:00, NO@LAR 16:00, NYG@MIA 16:00, PHI@NE, DAL@ARI 22:00",
+   "refusal": "UNATTRIBUTABLE_AND_CONTAMINATED. More internally coherent than the other two, but still prose over unopenable pages, its own list is malformed (two games merged into single bullets, one with no kickoff time), and its 'Results' paragraph mixes five games that are NOT from 2026-08-22 into the same answer. Registering a benchmark board from this would put unverifiable matchups into the evidence chain even though NFL carries no model."
+  }
+ },
+
+ "rule_applied": "R1 — unknown is null plus a flag, never a guess. A slate assembled from unattributable prose is a manufactured slate. This is the third instance of the class this week: the Hunter Dobbins single-source probable (8/21, correctly declined — and the adjudication showed 2 of 3 such names would have been right, which is exactly why 'usually right' is not the standard), the two half-surfaced prices at 12:00Z on 8/21, and now this.",
+ "what_would_unblock": [
+  "an owner-posted board or screenshot (source pixels govern)",
+  "an egress-policy grant for the sports data hosts listed above",
+  "any reachable source that can be captured and hashed rather than summarized"
+ ],
+ "state_changes": "NONE. No forecast registered, no card built, no evidence file claiming a slate, no artifact modified. Betting output zero."
+}

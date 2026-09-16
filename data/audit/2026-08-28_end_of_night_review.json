@@ -1,0 +1,90 @@
+{
+ "completion": "the 11:00Z wake binds archives, grades all arms canonically-as-possible, folds in AZ@SF / WSH@PHX / remaining NFL, and updates the cards with the results layer",
+ "created_utc": "2026-08-28T06:03:14Z",
+ "finals_identified": {
+  "mlb:BAL@STL": "BAL 8-7",
+  "mlb:COL@WSH": "WSH 7-1 (pk 822694 from slug)",
+  "mlb:HOU@NYY": "NYY 9-3",
+  "mlb:KC@TOR": "TOR 3-0",
+  "mlb:LAD@ATL": "ATL 6-5",
+  "mlb:MIL@NYM": "MIL 8-1 (pk 823581)",
+  "nfl:PIT@BUF": "BUF 28-27 (benchmark only; BUF -3 did not cover)",
+  "wnba:GSV@NYL": "GSV 79-60 (espn id 401857178 matches canonical schedule)"
+ },
+ "grade": "SEARCH_IDENTIFIED_FINALS \u2014 descriptive only; archive binding at the 8/28 11:00Z wake upgrades what it can; NOTHING here accrues to settlement, promotion, or the estimator",
+ "hypothetical_candidate_accounting": {
+  "passes": "the three passes (WSH, BAL, NYY) all had the model side WIN \u2014 negative-EV passes losing hypothetical winnings is the price discipline working as registered, not an error",
+  "rows": [
+   {
+    "hyp": "+99.01",
+    "result": "WON",
+    "row": "TOR -101"
+   },
+   {
+    "hyp": "+52.08",
+    "result": "WON",
+    "row": "MIL -192"
+   },
+   {
+    "hyp": "-100.00",
+    "result": "LOST",
+    "row": "LAD +111"
+   },
+   {
+    "hyp": "+120.00",
+    "result": "WON",
+    "row": "GSV +120"
+   }
+  ],
+  "rule": "DESCRIPTIVE ONLY \u2014 no wager was authorized or placed; ledger 0 bets / 0.00u / $0",
+  "running": "+171.09 per $100-flat through four decided candidates; AZ -105 pending",
+  "warning": "four decided candidates are a coin-flip sample; tonight's +171.09 validates the PROCESS (price-relative screening on frozen/replacement forecasts) no more than a losing night would refute it"
+ },
+ "in_progress_or_pending": [
+  "mlb:AZ@SF (started 01:45Z)",
+  "wnba:WSH@PHX (tips 02:00Z)",
+  "nfl:NE@CLE",
+  "nfl:SF@LV",
+  "nfl:LAR@LAC"
+ ],
+ "ledger": {
+  "exposure_usd": 0,
+  "n_bets": 0,
+  "units": 0.0
+ },
+ "mlb_partial": {
+  "active_path": "5-1 through six finals (WSH, BAL, NYY, TOR, MIL correct; LAD wrong), Brier 0.2136",
+  "arms": {
+   "ADAPTIVE": "5-1 / 0.2358",
+   "CHAMPION_V13": "5-1 / 0.2075 (best Brier; its KC pick was the miss, its ATL pick was right)",
+   "PRIOR": "4-2 / 0.2436",
+   "WIDENED": "4-2 / 0.2143"
+  },
+  "note": "champion beating the active path tonight (0.2075 vs 0.2136) is one-night noise driven by the LAD flip; the coupled gate did its job regardless \u2014 sides followed the newest valid pregame information",
+  "replacement_flips_split": "1-1: the TOR flip (conflict resolution) was right, the LAD flip (Yamamoto/Sale basis) was wrong by one run \u2014 and 50.08% claimed no conviction",
+  "totals": "champion MAE 3.48 bias -0.59 across six vs flat-prior MAE 3.00 \u2014 the prior wins the partial night; KC@TOR (8.25 -> 3) and BAL@STL (7.76 -> 15) the big misses"
+ },
+ "process_breakdown": {
+  "caught_tonight": [
+   "preliminary WNBA output unreproduced -> anchored rebuild flipped the side that then WON",
+   "Jose-vs-Edward Cabrera starter identity corrected pre-start (pid binding now required)",
+   "Rodriguez fragment resolved as Wednesday spot start (Cole stood, and NYY won)",
+   "KC@TOR two-source conflict resolved and confirmed; flipped side won"
+  ],
+  "fleet": "10/10 checkpoints executed with receipts; frozen boards byte-identical all night; every starter slot NAMED by first pitch",
+  "open_defects": [
+   "conservative-EV consumption rule (RJ-002 finding) still awaits owner decision \u2014 tonight it was the only thing between four raw candidates and authorization requests",
+   "official injury route and two-sided market capture still egress-blocked (owner-side network fix)",
+   "NFL immutable run dir still awaits owner upload/PR (RJ-006 1/6)"
+  ]
+ },
+ "record_id": "END-OF-NIGHT-REVIEW-2026-08-27",
+ "record_sha256": "caf9a8979f0c9fde35bff782c4bdbe1f705cc3176a2325f7646754bb5e5fcd77",
+ "schema": "ops.night_review.v1",
+ "wnba_headline": {
+  "arms": "refresh GSV 52.3% CORRECT; fallback GSV 57.0% CORRECT; prior NYL 53.7% WRONG",
+  "margin_total": "margin GSV +1.18 projected vs +19 actual (compression again, third straight); total 167.0 projected vs 139 actual \u2014 the over-161.5 lean MISSED by 22.5 and the persistent overprojection flipped sign vs 8/26's +8.95: totals remain unvalidated in both directions",
+  "personnel_context": "NYL played without Sabally and Ionescu; Stewart returned \u2014 the thin-Liberty warning aligned with the blowout",
+  "result": "the anchored archive-bound rebuild called GSV 52.28% \u2014 a SIDE FLIP from the unreproduced preliminary (NYL 55.65%) \u2014 and GSV won 79-60. The rebuild-first rule and the reproduction audit were decision-relevant tonight: the preliminary side would have been wrong; the anchored side and the +$15.02 GSV +120 screen were right."
+ }
+}

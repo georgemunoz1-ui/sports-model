@@ -1,0 +1,65 @@
+{
+ "record_id": "WNBA-FINALS-2026-08-10",
+ "recorded_utc": "2026-08-11T02:40:00Z",
+ "source_tier": 1,
+ "source": "owner paste: WNBA scoreboard + full player box scores, August 10 2026",
+ "result_status": "FINAL",
+ "model_status": "ABSENT — no WNBA model exists in this system. Nothing below is a forecast grade, because there is no forecast to grade.",
+
+ "games": [
+  {"away": "TOR", "home": "ATL", "away_score": 95, "home_score": 107, "venue": "Gateway Center",
+   "margin_home": 12, "total": 202, "status": "FINAL"},
+  {"away": "CHI", "home": "SEA", "away_score": 88, "home_score": 97, "venue": "Climate Pledge Arena",
+   "margin_home": 9, "total": 185, "status": "FINAL"}
+ ],
+
+ "integrity_checks": {
+  "method": "Deterministic checks on the pasted player boxes. Nothing was imputed and no value was taken on trust.",
+  "team_minutes": {
+   "rule": "a 40-minute WNBA game with five on the floor is exactly 200 team-minutes",
+   "TOR": "200.02", "ATL": "200.03", "CHI": "200.00", "SEA": "200.00",
+   "verdict": "PASS — the 0.02-0.03 residual is second-level rounding in the per-player MM:SS values, and no game shows an overtime-sized excess"
+  },
+  "player_sums_vs_totals_row": "PASS for all four teams on FGM, FGA, 3PM, FTM and PTS",
+  "points_identity": "PASS — 2*(FGM-3PM) + 3*3PM + FTM equals stated PTS exactly for all four teams (95, 107, 88, 97)",
+  "box_vs_scoreboard": "PASS — summed player points equal the scoreboard final for all four teams",
+  "significance": "These catch transcription and arithmetic corruption. They cannot detect a source that is internally consistent and wrong; that is what the tier-1 requirement is for."
+ },
+
+ "market_layer_outcome": {
+  "basis": "data/wnba/analysis/2026-08-10_market.json — same-book two-sided de-vig across the 4-book panel, valid here (unlike the MLB cross-book board)",
+  "TOR_at_ATL": {"consensus_market_implied_home": 0.872, "home_won": true, "brier": 0.0164},
+  "CHI_at_SEA": {"consensus_market_implied_home": 0.446, "home_won": true, "brier": 0.3069},
+  "market_brier_n2": 0.1616,
+  "sides": "the market's favourite won 1 of 2 — ATL held at -1000 across all four books delivered; CHI, a 55.4% road favourite, lost outright by 9",
+  "spreads": "ATL -15.5 did NOT cover, winning by 12. CHI -2.5 lost outright, so SEA +2.5 covered.",
+  "totals": "both went OVER — 202 against 187.5, and 185 against 179.5",
+  "EVIDENCE_CLASS": "n = 2. This establishes nothing about the market, and it cannot, because two games carry no information. It is recorded to keep the ledger contiguous, not to support a claim."
+ },
+
+ "third_party_projection_recorded_not_adopted": {
+  "what_it_is": "The pasted scoreboard carries EST Score and EST Line columns from an external projection system. It is NOT this system's output and is NOT adopted as one.",
+  "verbatim": [
+   {"game": "TOR@ATL", "est_away": 88.4, "est_home": 98.4, "est_line_home": -10.0, "est_total": 186.8},
+   {"game": "CHI@SEA", "est_away": 88.7, "est_home": 91.9, "est_line_home": -3.2, "est_total": 180.7}
+  ],
+  "observed": "external margin errors were +2.0 (ATL by 12 against a projected 10) and +5.8 (SEA by 9 against a projected 3.2). Notably the external projection favoured SEA by 3.2 while the market favoured CHI by 2.5 — they disagreed on the SIDE, and the external system was right.",
+  "handling_rule": "This is the same class as the Massey overlay flagged on 2026-08-08. External ratings are quarantined: they may be recorded verbatim as observed third-party output, and they may never become a feature, a benchmark, or a substitute for a model this system does not have. 'massey' is already in the frozen forbidden_predictive_columns list for exactly this reason.",
+  "caution": "One game in which an external system beat the market is not evidence about that system. Treating it as such is precisely the post-hoc, winner-filtered reasoning already retracted in this repository on 2026-08-10."
+ },
+
+ "mirror_currency_finding": {
+  "test": "Attempted to cross-validate this owner box against the two sportsdataverse mirrors cloned earlier today.",
+  "result": "NOT POSSIBLE. Both mirrors stop before this slate: ESPN team_box 2026 has a maximum game_date of 2026-08-01, and the official-family 2026 box files likewise carry no 2026-08-10 row.",
+  "measured_lag": "approximately 9 days behind the live slate as of 2026-08-11",
+  "operational_consequence": "The mirrors are usable for HISTORICAL walk-forward training, which is what they were acquired for. They are NOT usable for prospective grading — a forecast registered today cannot be graded from them for over a week. Prospective grading must come from a tier-1 owner capture or a direct official pull, and the ingestion design must not assume the mirror is current.",
+  "relation_to_the_transport_caveat": "This also means the mirror-independence spot-check I still owe cannot be run against recent games; it must be run against a historical sample where both the mirror and wnba.com carry the same date."
+ },
+
+ "governance": {
+  "gate": "0/100 NO_PROMOTE — unchanged; no WNBA number reaches the MLB gate",
+  "ledger": "$0, paper, execution UNAUTHORIZED — no wager existed on either game",
+  "firewall": "data/wnba/** remains isolated from the MLB engine, registries, gate and ledger",
+  "model_layer": "still ABSENT. These results are outcome bytes. They are not a validation of anything, because there is nothing here to validate."
+ }
+}

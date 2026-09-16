@@ -1,0 +1,178 @@
+{
+ "board": "cards/2026-08-25_board.json",
+ "board_hashes": {
+  "mlb": "e1346b3b06a6ac1261dbd350551c02a58b2a50a011ae69ca3e0f325a9778254a",
+  "wnba": "d0c59870f4f760d8989bb5dce198b34f6afa42f69dbd4ca160b41dce9f8407c9"
+ },
+ "capture_scope": "MONEYLINE_ONLY_PARTIAL_CAPTURE \u2014 totals and spreads not ingested",
+ "created_utc": "2026-08-25T18:00:46Z",
+ "defect": {
+  "code": "SIDE_RETENTION_AFTER_CROSSOVER",
+  "discovered_by": "OWNER_REVIEW 2026-08-25",
+  "gate_added": "replacement_workflow.side_reselection_gate (mutation suite 18/18)",
+  "statement": "v1/v2 kept screening the pre-replacement priced side after the replacement probability crossed 50%. BOS@MIA showed PASS_NEGATIVE_EV (BOS -14.96) while the active side MIA at +130 carried +16.25 raw EV; BAL@STL likewise (BAL +116, +11.00). Probability, chosen side, that side's price, EV and disposition are one coupled update."
+ },
+ "ev_precision": "EV computed from full-precision replacement probabilities (e.g. 0.5054333333333333, not the displayed 0.5054); the displayed rounded probability reproduces +16.24, the record value is +16.2497 -> +16.25",
+ "execution": "BLOCKED \u2014 SYSTEM_NOT_DECISION_READY; candidates are not bets; conservative EV unavailable until the uncertainty estimator exists",
+ "pass_negative_ev": [
+  [
+   "mlb:WSH",
+   -147,
+   -8.37
+  ],
+  [
+   "mlb:NYY",
+   null,
+   -10.31
+  ],
+  [
+   "mlb:MIL",
+   null,
+   -3.12
+  ],
+  [
+   "mlb:LAD",
+   null,
+   -11.54
+  ],
+  [
+   "mlb:MIN",
+   null,
+   -10.95
+  ],
+  [
+   "mlb:CIN",
+   null,
+   -0.08
+  ]
+ ],
+ "pending_uncertainty": [
+  [
+   "mlb:KC",
+   116,
+   25.84
+  ],
+  [
+   "mlb:LAA",
+   131,
+   24.65
+  ],
+  [
+   "mlb:DET",
+   116,
+   14.83
+  ],
+  [
+   "mlb:PIT",
+   111,
+   14.05
+  ],
+  [
+   "mlb:CWS",
+   -101,
+   8.42
+  ],
+  [
+   "mlb:SEA",
+   -105,
+   7.62
+  ],
+  [
+   "mlb:CHC",
+   -108,
+   6.99
+  ],
+  [
+   "mlb:MIA",
+   130,
+   16.25
+  ],
+  [
+   "mlb:BAL",
+   116,
+   11.0
+  ]
+ ],
+ "record_id": "ACTION-OVERLAY-2026-08-25-v3",
+ "record_sha256": "3915734dd18a408bc8786da44cfd223bf383fe25373f6899e78f7c6f6ed6f25d",
+ "reselected_rows": [
+  {
+   "abandoned_side": "BOS",
+   "abandoned_side_price_class": "NON_AUTHORITATIVE_RECONSTRUCTION(-139 from relayed EV -9.78)",
+   "away": "BOS",
+   "disposition": "PENDING_UNCERTAINTY",
+   "ev": 16.2497,
+   "ev_full_precision": 16.249666666666663,
+   "game": "mlb:BOS@MIA",
+   "gate": "side_reselection_gate OK",
+   "home": "MIA",
+   "original_p_home": 0.4753,
+   "p_side_full_precision": 0.5054333333333333,
+   "pre_execution_recheck_required": true,
+   "price": 130,
+   "price_authoritative": false,
+   "price_authority": "NAMED_BOOK_AGGREGATOR",
+   "price_book": "DRAFTKINGS (ESPN-displayed)",
+   "price_route": "OWNER_RELAY",
+   "price_side": "MIA",
+   "price_status": "MARKET_CAPTURED_CURRENT",
+   "replacement_p_home": 0.5054333333333333,
+   "side": "MIA"
+  },
+  {
+   "abandoned_side": null,
+   "abandoned_side_price_class": null,
+   "away": "COL",
+   "disposition": "PASS_NEGATIVE_EV",
+   "ev": -8.3692,
+   "ev_full_precision": -8.369160997732429,
+   "game": "mlb:COL@WSH",
+   "gate": "side_reselection_gate OK",
+   "home": "WSH",
+   "original_p_home": 0.5477,
+   "p_side_full_precision": 0.5453333333333333,
+   "pre_execution_recheck_required": true,
+   "price": -147,
+   "price_authoritative": false,
+   "price_authority": "NAMED_BOOK_AGGREGATOR",
+   "price_book": "DRAFTKINGS (ESPN-displayed)",
+   "price_route": "OWNER_RELAY",
+   "price_side": "WSH",
+   "price_status": "MARKET_CAPTURED_CURRENT",
+   "replacement_p_home": 0.5453333333333333,
+   "side": "WSH"
+  },
+  {
+   "abandoned_side": "STL",
+   "abandoned_side_price_class": "NON_AUTHORITATIVE_RECONSTRUCTION(from relayed EV -8.03/-12.18)",
+   "away": "BAL",
+   "disposition": "PENDING_UNCERTAINTY",
+   "ev": 10.9952,
+   "ev_full_precision": 10.995200000000004,
+   "game": "mlb:BAL@STL",
+   "gate": "side_reselection_gate OK",
+   "home": "STL",
+   "original_p_home": 0.5090666666666667,
+   "p_side_full_precision": 0.5138666666666667,
+   "pre_execution_recheck_required": true,
+   "price": 116,
+   "price_authoritative": false,
+   "price_authority": "NAMED_BOOK_AGGREGATOR",
+   "price_book": "DRAFTKINGS (ESPN-displayed)",
+   "price_route": "OWNER_RELAY",
+   "price_side": "BAL",
+   "price_status": "MARKET_CAPTURED_CURRENT",
+   "replacement_p_home": 0.4861333333333333,
+   "side": "BAL"
+  }
+ ],
+ "schema": "ops.action_overlay.v3",
+ "supersedes": "ACTION-OVERLAY-2026-08-25-v2 (5d505c9c) \u2014 retained, never edited",
+ "tally": {
+  "PASS_NEGATIVE_EV": 6,
+  "PENDING_UNCERTAINTY": 9,
+  "WNBA_PENDING_FEATURE_REFRESH": 3,
+  "bets": 0,
+  "exposure_usd": 0
+ }
+}

@@ -1,0 +1,22 @@
+{
+ "record_id": "ECHO-INCIDENT-2026-08-15-MLB-MASS-MASQUERADE",
+ "built_utc": "2026-08-16T02:42:00Z",
+ "class": "publication-date masquerade at SLATE SCALE \u2014 the 8/11 mechanism, but six games at once",
+ "rejected_as_echoes_of_8_14": [
+  "LAD 3-1 MIL ('Andy Pages...') \u2014 byte-identical to graded 8/14 final",
+  "SD 7-5 CLE \u2014 identical to 8/14",
+  "AZ 2-0 ATL with 'Pfaadt 7 IP win' \u2014 Pfaadt STARTED THE 8/14 GAME; the starter detail proves the echo",
+  "PIT 8-4 BOS \u2014 identical to 8/14",
+  "HOU 10-7 SEA (10 inn, Walker walk-off) \u2014 identical to 8/14",
+  "BAL 6-5 TB \u2014 recap text itself says 'Friday night... snapped the Rays' nine-game win streak' = the 8/14 game"
+ ],
+ "probability_note": "six independent same-matchup repeats at identical scores on consecutive days is effectively impossible; the season base rate for even ONE echo pair is ~1.9%",
+ "held_unverified_not_ingested": [
+  "CWS 4-3 DET (differs from 8/14's 9-5 \u2014 plausibly real, but the capture session is contaminated)",
+  "STL 8-4 CHC (differs from 0-3; note 8-4 also equals 8/14 PIT@BOS score floating in the same result set)",
+  "TOR 2-1 NYY (differs from 8/14's 3-1 by one run \u2014 suspiciously adjacent)"
+ ],
+ "disposition": "ZERO 8/15 MLB rows ingested tonight. All 8/15 MLB and WNBA results deferred to a fresh-session capture (armed ~06:17Z) using gameday-title URLs with per-game date checks. The 8/15 slate itself (15 games, series continuations) is also only summary-grade \u2014 the schedule summary contained impossible entries ('Padres @ Cardinals', 'Phillies @ Twins') and is NOT trusted as a slate.",
+ "wnba_status": "no 8/15 WNBA scores surfaced at all \u2014 NOT CAPTURED, no invention (R1)",
+ "context": "no MLB/WNBA card was registered for 8/15, so nothing is waiting on these results for grading; the only cost of deferral is results-table freshness"
+}

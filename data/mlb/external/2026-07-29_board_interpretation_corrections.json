@@ -1,0 +1,75 @@
+{
+ "record_id": "EXTERNAL-BOARD-2026-07-29-INTERPRETATION-CORRECTIONS",
+ "applies_to": [
+  "data/mlb/external/2026-07-29_slate_board_v2.html (sha 557afade1a705b88...)",
+  "my comparison analysis delivered in-session 2026-07-29",
+  "commit a1d3c6a capture note"
+ ],
+ "rule": "APPEND-ONLY (R6). Owner corrections 2026-07-29. v1 is NEVER used for anything (wrong starter attributions); grading uses v2 only.",
+ "classification": [
+  "EXTERNAL_MARKET_ANCHORED_REFERENCE",
+  "PROVENANCE_INCOMPLETE",
+  "DESCRIPTIVE_ONLY"
+ ],
+ "c1_push_mass_WITHDRAWN": {
+  "withdrawn_claim": "'their integer totals have no push mass'",
+  "correction": "The board incorporates integer pushes into EV; displayed Over/Under percentages are CONDITIONAL-ON-SETTLEMENT probabilities. Numeric support (owner): BAL-DET Under 8.0 at -125: conditional no-push EV = 0.589*(100/125) - 0.411 = +6.02%; reported +5.4% implies ~10% push mass (1 - 5.4/6.02 = 0.103).",
+  "valid_residual_criticism": "P(push) is not DISPLAYED and therefore cannot be audited directly.",
+  "standing_rule": "Any adopted implementation must display separate P(over), P(push), P(under)."
+ },
+ "c2_lineup_language_REPLACED": {
+  "withdrawn": "'lineup-level model' / 'lineup-aware'",
+  "correct_term": "TOP-NINE-VOLUME ROSTER PROXY \u2014 the board states no lineups were posted and each club's nine highest-volume hitters substitute. It does NOT test confirmed-lineup value."
+ },
+ "c3_independence_WITHDRAWN": {
+  "withdrawn_claim": "'two independent constructions confirm the BOS@ATH artifact'",
+  "correction": "The external total model is slate-scaled by 0.950 to match the market-average total -> market-anchored, NOT independent of the market. BOS@ATH remains a strong DIAGNOSTIC disagreement and the V13 R5 flag stands, but the cause is NOT confirmed."
+ },
+ "c4_k_methodology_RECLASSIFIED": {
+  "classification": "MARKET-ANCHORED MATCHUP ADJUSTMENT",
+  "reason": "The K line already embeds workload, pitcher skill, matchup and market judgment; applying log5 to it may double-count opponent information.",
+  "prohibition": "Do NOT import this design into the independent K engine.",
+  "permitted_future_benchmarks": [
+   "separately sourced pitcher-outs line as workload proxy",
+   "the K line with NO independence claim on the resulting forecast"
+  ],
+  "observed_consequence": "their Skubal projects OVER (+0.7, 9.16 vs 8.5) where our history-based E[K] says UNDER (-1.8) \u2014 the two methods are not measuring the same thing."
+ },
+ "c5_market_provenance": {
+  "requirement_per_row": [
+   "source used for Market%",
+   "exact two-sided prices de-vigged",
+   "book used for executable EV",
+   "best available price + its book",
+   "observed_at timestamp"
+  ],
+  "owner_example": "PHI -164 / MIA +157 (displayed prices) proportional-devig to 61.5/38.5, not the displayed 60.5/39.5.",
+  "reconciliation_attempt_not_assertion": "View B of our frozen capture (PHI -170 / MIA +143) proportional-devigs to exactly 60.5/39.5. CONSISTENT with the board de-vigging a different two-sided pair (view-B book) than the best-odds pair it displays in the price column \u2014 mixed provenance across columns, which is precisely the PROVENANCE_INCOMPLETE finding. Recorded as hypothesis; the board does not say.",
+  "extract_note": "external K rows also show lines differing from our frozen kboard on some arms (e.g. Davis Martin 5.5 vs our DK 4.5) \u2014 unattributed book/time, same finding."
+ },
+ "grading_directive": {
+  "columns": "candidate, V13, market, external-v2 (labeled MARKET-ANCHORED) side by side",
+  "report": [
+   "row-level Brier + log loss for ML",
+   "RL outcome + quoted-price EV classification",
+   "totals outcome incl. pushes handled explicitly",
+   "K projection error",
+   "exclusions and starter defects"
+  ],
+  "scope_limit": "ONE 16-game slate is DESCRIPTIVE. It does not establish whether lineup-aware context improves accuracy."
+ },
+ "v14_reuse_ruling": {
+  "consider_independently_implementing": [
+   "negative-binomial score distributions + convolution",
+   "explicit P(over)/P(push)/P(under)",
+   "player-level projections",
+   "confirmed-lineup updates",
+   "named-price provenance"
+  ],
+  "do_not_copy": [
+   "slate-specific market-total scaling into the independent model",
+   "K-line-as-workload logic",
+   "top-nine-volume proxy under a 'confirmed lineup' label"
+  ]
+ }
+}

@@ -1,0 +1,71 @@
+{
+ "record_id": "BASE-RATE-CAVEAT-2026-08-21",
+ "created_utc": "2026-08-22T14:10:00Z",
+ "authority": "owner finding 2026-08-22, verified against the graded artifacts before acceptance",
+ "the_finding_owner_wording": "home teams went 14-1. V2 was 10-1 on its home picks but 0-4 on away picks, so the 10-5 headline overstates how discriminating the card was.",
+ "verified": true,
+ "verification": {
+  "home_record": "14-1 (the only away win was CLE@COL 9-1)",
+  "v2_home_picks": "10-1 across 11 games",
+  "v2_away_picks": "0-4 across 4 games",
+  "v1_home_picks": "8-1 across 9 games",
+  "v1_away_picks": "0-6 across 6 games",
+  "note": "BOTH cohorts went 0-for on every away pick. Neither model got a single away call right."
+ },
+ "the_sharper_version_of_the_caveat": {
+  "always_pick_home_benchmark": "14-1 (.933) on this slate",
+  "v2_actual": "10-5 (.667)",
+  "conclusion": "A trivial always-pick-home heuristic BEAT v2 outright on this slate, by four games. The 10-5 record therefore does not merely overstate discrimination \u2014 on this night it was worse than the crudest possible base-rate strategy. The Brier still beats a flat 50% (.23062 vs .25000), so the probabilities carried some information, but the WIN-LOSS headline is actively misleading and must never be quoted alone."
+ },
+ "what_this_does_and_does_not_do_to_the_starter_experiment": {
+  "does_not_invalidate": "the v1-vs-v2 comparison is still internally valid: both cohorts faced the same 14-1 home slate, so the base rate is common to both and cannot explain the DIFFERENCE between them.",
+  "does_qualify": "but the v2 gain came from 4 flips (STL@PHI, TB@BAL, MIN@SD gained; LAA@TEX lost), and three of the four gains were flips TOWARD the home side on a night when home teams went 14-1. On a neutral or away-heavy slate the same starter information could have flipped those the other way. n=15, 4 flips: the effect is not established.",
+  "revised_claim": "v2 outperformed v1 on this slate. That is descriptive. It is NOT a measured starter effect, both because the simulation coupling is not separated in the registered deltas and because the flips align with an extreme base rate."
+ },
+ "full_slate_cohort_numbers": {
+  "v1": {
+   "rec": "8-7",
+   "brier": 0.24633313333333332,
+   "ll": 0.6858266016281954,
+   "tot": {
+    "n": 15,
+    "mae": 2.46,
+    "median_ae": 2.0,
+    "signed_bias": 1.05,
+    "largest_miss": 6.1
+   },
+   "home_picks": "8-1",
+   "away_picks": "0-6",
+   "n_home_picks": 9,
+   "n_away_picks": 6
+  },
+  "v2": {
+   "rec": "10-5",
+   "brier": 0.23062133333333332,
+   "ll": 0.6540430692837961,
+   "tot": {
+    "n": 15,
+    "mae": 2.39,
+    "median_ae": 2.7,
+    "signed_bias": 0.72,
+    "largest_miss": 4.7
+   },
+   "home_picks": "10-1",
+   "away_picks": "0-4",
+   "n_home_picks": 11,
+   "n_away_picks": 4
+  }
+ },
+ "owner_numbers_reproduced_exactly": [
+  "v1 8-7 / .24633 / .68583 / MAE 2.46 / signed +1.05",
+  "v2 10-5 / .23062 / .65404 / MAE 2.39 / signed +0.72",
+  "flips: PHI, BAL, SD gained; LAA lost"
+ ],
+ "standing": {
+  "gate": "0/100 NO_PROMOTE",
+  "ledger_usd": 0,
+  "bets": 0,
+  "pnl_usd": 0,
+  "wager_authority": "NO"
+ }
+}

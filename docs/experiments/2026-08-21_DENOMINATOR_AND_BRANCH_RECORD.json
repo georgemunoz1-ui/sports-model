@@ -1,0 +1,91 @@
+{
+ "record_id": "DENOMINATOR-CORRECTION-AND-BRANCH-AUTHORIZATION-2026-08-21",
+ "created_utc": "2026-08-21T18:20:00Z",
+ "method": "APPEND_ONLY. No forecast, card, grade or evidence file modified.",
+ "part_1_denominator_correction": {
+  "owner_challenge": "4 CAP slots sit in 4 distinct games, so fully model-resolved games should be 11/15, not 10/15 \u2014 and if the artifact says 10/15 a fifth game-level blocker exists and must be named.",
+  "verdict": "OWNER ARITHMETIC CORRECT, AND A FIFTH BLOCKER DOES EXIST. Both numbers are right under different predicates; my error was printing one without naming its predicate \u2014 the same conflation the completeness rule was just written to stop.",
+  "the_fifth_blocker": {
+   "game": "WSH@MIA",
+   "slot": "away \u2014 Brad Lord",
+   "status": "LOW_SAMPLE (gs=1)",
+   "explanation": "Lord IS in the frozen pitcher registry and carries real statistics, so he is NOT a CAP substitution. But with 1 game started the shrinkage weight w = gs/(gs+8) = 1/9 pulls his projection about 89% toward league average, and daily_card's `capped` flag fires on gs<2. He therefore reduces the fully-resolved game count without adding a CAP slot."
+  },
+  "three_distinct_predicates": {
+   "TBD": "no starter announced \u2014 3 slots (STL away, TOR away, SD home)",
+   "REGISTRY_MISS": "named but absent from the registry -> league-average CAP \u2014 1 slot (Hayden Wesneski, HOU)",
+   "LOW_SAMPLE": "registered, real stats, gs<2, heavily shrunk \u2014 1 slot (Brad Lord, WSH)",
+   "RESOLVED": "registered with gs>=2 \u2014 25 slots"
+  },
+  "mechanically_derived_counts": {
+   "denominator_slots": 30,
+   "cap_slots": 4,
+   "model_resolved_slots": 26,
+   "low_sample_slots": 1,
+   "games": 15,
+   "games_with_no_cap_slot": 11,
+   "games_fully_resolved_both_slots_gs_ge_2": 10,
+   "predicate_note": "'CAP slot' = TBD or REGISTRY_MISS. 'fully resolved' additionally requires gs >= 2 on both slots, so a LOW_SAMPLE starter reduces the fully-resolved game count without adding a CAP slot. The two counts differ by design."
+  },
+  "reconciliation": {
+   "CAP slots (TBD + REGISTRY_MISS)": "4 of 30 -> 26 of 30 model-resolved (86.7%)",
+   "games with NO CAP slot": "11 of 15 \u2014 the owner's figure, correct",
+   "games fully resolved (both slots gs>=2)": "10 of 15 \u2014 correct under the stricter predicate, and the difference is exactly WSH@MIA",
+   "identity": "11 - 1 (WSH@MIA low-sample) = 10"
+  },
+  "unresolved_detail": [
+   {
+    "game": "STL@PHI",
+    "away": "TBD",
+    "home": "RESOLVED"
+   },
+   {
+    "game": "TOR@NYY",
+    "away": "TBD",
+    "home": "RESOLVED"
+   },
+   {
+    "game": "WSH@MIA",
+    "away": "LOW_SAMPLE",
+    "home": "RESOLVED"
+   },
+   {
+    "game": "ATH@HOU",
+    "away": "RESOLVED",
+    "home": "REGISTRY_MISS"
+   },
+   {
+    "game": "MIN@SD",
+    "away": "RESOLVED",
+    "home": "TBD"
+   }
+  ],
+  "enforcement": "harness/unified_card.slot_status() and starter_completeness() now derive all of this mechanically from card rows; no report reuses the old TBD-name count. Selftest fixtures assert that REGISTRY_MISS and LOW_SAMPLE are never conflated and that the two game counts differ by exactly the low-sample game."
+ },
+ "part_2_branch_change_authorization": {
+  "authorization_received": "owner, 2026-08-21, explicit: change the repository default branch from main to sportsmodel/main via the GitHub API; do not delete, rewrite, merge or rename either branch; then verify default_branch and both SHAs and record append-only.",
+  "authorization_status": "ACCEPTED \u2014 the instruction is clear and the prerequisites were audited clean at 12:25Z.",
+  "execution_status": "NOT EXECUTED \u2014 CAPABILITY UNAVAILABLE, not declined.",
+  "why": "This session's GitHub access is the MCP server only; the environment states plainly that there is no gh CLI, no hub CLI and no direct GitHub API access. The MCP server exposes tools for contents, branches (create only), pull requests, issues, releases, tags, actions, search, collaborators and secret scanning. It exposes NO repository-settings/metadata tool \u2014 there is no update_repository equivalent, so PATCH /repos/{owner}/{repo} with {\"default_branch\": ...} cannot be issued. Confirmed by two separate tool searches.",
+  "not_routed_around": "A raw curl to api.github.com with a token would be exactly the kind of tooling bypass this project forbids, and the same standing rule that governs the egress-proxy 403s. Not attempted.",
+  "owner_action_required": "GitHub -> repo Settings -> General -> Default branch -> switch icon -> select sportsmodel/main -> Update. Two clicks, repository metadata only.",
+  "post_change_verification_i_will_run_on_request": [
+   "confirm the API reports default_branch: sportsmodel/main",
+   "confirm main is still 73db50d531a8093cd4f2bb0ade66e00b3ebadf5f (unchanged, not deleted)",
+   "confirm sportsmodel/main SHA is unchanged by the settings change",
+   "record the verified result append-only"
+  ],
+  "pre_change_state_recorded_now": {
+   "default_branch_at_record_time": "main",
+   "main_sha": "73db50d531a8093cd4f2bb0ade66e00b3ebadf5f",
+   "sportsmodel_main_sha": "cb062c3 (HEAD at 18:01Z check)",
+   "protections": "none on any of the 4 branches (GitHub API, verified 12:25Z)",
+   "automation_targeting_main": "none \u2014 no Actions, no Pages, no hooks; the single doc reference was fixed at 12:25Z"
+  }
+ },
+ "standing": {
+  "gate": "0/100 NO_PROMOTE",
+  "ledger_usd": 0,
+  "wager_authority": "NO"
+ }
+}

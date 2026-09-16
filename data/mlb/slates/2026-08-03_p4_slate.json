@@ -1,0 +1,520 @@
+{
+ "record_id": "P4-SLATE-2026-08-03",
+ "built_utc": "2026-08-03T07:37:40Z",
+ "odds_source": {
+  "path": "data/mlb/odds/2026-08-03_gameboards.json",
+  "sha256": "5d06615a6cc1cfd635d28b29d19b671c46f7c8bd76f4fc586ccac0e930fb82bd"
+ },
+ "assumptions": [
+  "first-pitch times: board shows no TZ; ET presumed (EDT=UTC-4), robustly pre-pitch under any US timezone at generation time",
+  "team form: normalized labels, full-season as-of (P2 spec); firewall's raw-label keying diverges post-7/19 label switch \u2014 disclosed, not hidden"
+ ],
+ "unmatched_starters": [
+  "Trevor Williams"
+ ],
+ "team_results_complete_through": "2026-08-02",
+ "team_results_holes_in_trailing_14d": [],
+ "games": [
+  {
+   "gamePk": null,
+   "slate_date": "2026-08-03",
+   "away": "WSH",
+   "home": "PHI",
+   "dh_game": null,
+   "first_pitch_utc": "2026-08-03T22:40:00Z",
+   "first_pitch_verbatim": "2026-08-03T22:40:00Z",
+   "team": {
+    "away": {
+     "rf_pg": 5.372,
+     "ra_pg": 5.23,
+     "games_before": 113
+    },
+    "home": {
+     "rf_pg": 4.375,
+     "ra_pg": 4.411,
+     "games_before": 112
+    }
+   },
+   "team_results_complete_through": "2026-08-02",
+   "team_results_reconciled": true,
+   "sp": {
+    "away": {
+     "pid": null,
+     "name": "Trevor Williams",
+     "confirmed": false,
+     "staleness_tier": "PROVISIONAL",
+     "stale_block_verified": false,
+     "no_log": true,
+     "era": null,
+     "gs": null,
+     "k_pct": null,
+     "bb_pct": null
+    },
+    "home": {
+     "pid": 605400,
+     "name": "Aaron Nola",
+     "confirmed": false,
+     "staleness_tier": "STALE_BLOCK",
+     "stale_block_verified": false,
+     "no_log": false,
+     "era": 5.838,
+     "gs": 20,
+     "k_pct": 23.89,
+     "bb_pct": 7.74,
+     "asof_flags": {
+      "placeholder_in_window": false
+     }
+    }
+   },
+   "park_factor": 1.131,
+   "quote": {
+    "book": null,
+    "ml_home": -145,
+    "ml_away": 136,
+    "observed_at_utc": "2026-08-03T07:35:30Z",
+    "board_view": "view_a (single-book board; operator tab not visible -> book UNRESOLVED)"
+   }
+  },
+  {
+   "gamePk": null,
+   "slate_date": "2026-08-03",
+   "away": "STL",
+   "home": "NYY",
+   "dh_game": null,
+   "first_pitch_utc": "2026-08-03T23:05:00Z",
+   "first_pitch_verbatim": "2026-08-03T23:05:00Z",
+   "team": {
+    "away": {
+     "rf_pg": 4.297,
+     "ra_pg": 4.423,
+     "games_before": 111
+    },
+    "home": {
+     "rf_pg": 4.571,
+     "ra_pg": 3.777,
+     "games_before": 112
+    }
+   },
+   "team_results_complete_through": "2026-08-02",
+   "team_results_reconciled": true,
+   "sp": {
+    "away": {
+     "pid": 700241,
+     "name": "Michael McGreevy",
+     "confirmed": false,
+     "staleness_tier": "STALE_WARNING",
+     "stale_block_verified": false,
+     "no_log": false,
+     "era": 3.114,
+     "gs": 20,
+     "k_pct": 16.23,
+     "bb_pct": 5.92,
+     "asof_flags": {
+      "placeholder_in_window": false
+     }
+    },
+    "home": {
+     "pid": 693645,
+     "name": "Cam Schlittler",
+     "confirmed": false,
+     "staleness_tier": "STALE_BLOCK",
+     "stale_block_verified": false,
+     "no_log": false,
+     "era": 2.246,
+     "gs": 21,
+     "k_pct": 29.65,
+     "bb_pct": 5.11,
+     "asof_flags": {
+      "placeholder_in_window": false
+     }
+    }
+   },
+   "park_factor": 1.104,
+   "quote": {
+    "book": null,
+    "ml_home": -190,
+    "ml_away": 185,
+    "observed_at_utc": "2026-08-03T07:35:30Z",
+    "board_view": "view_a (single-book board; operator tab not visible -> book UNRESOLVED)"
+   }
+  },
+  {
+   "gamePk": null,
+   "slate_date": "2026-08-03",
+   "away": "PIT",
+   "home": "MIL",
+   "dh_game": null,
+   "first_pitch_utc": "2026-08-03T23:40:00Z",
+   "first_pitch_verbatim": "2026-08-03T23:40:00Z",
+   "team": {
+    "away": {
+     "rf_pg": 5.115,
+     "ra_pg": 4.85,
+     "games_before": 113
+    },
+    "home": {
+     "rf_pg": 5.0,
+     "ra_pg": 3.784,
+     "games_before": 111
+    }
+   },
+   "team_results_complete_through": "2026-08-02",
+   "team_results_reconciled": true,
+   "sp": {
+    "away": {
+     "pid": 696149,
+     "name": "Bubba Chandler",
+     "confirmed": false,
+     "staleness_tier": "STALE_BLOCK",
+     "stale_block_verified": false,
+     "no_log": false,
+     "era": 4.891,
+     "gs": 18,
+     "k_pct": 20.19,
+     "bb_pct": 13.06,
+     "asof_flags": {
+      "placeholder_in_window": false
+     }
+    },
+    "home": {
+     "pid": 687075,
+     "name": "Brandon Sproat",
+     "confirmed": false,
+     "staleness_tier": "STALE_BLOCK",
+     "stale_block_verified": false,
+     "no_log": false,
+     "era": 5.389,
+     "gs": 16,
+     "k_pct": 24.72,
+     "bb_pct": 11.08,
+     "asof_flags": {
+      "placeholder_in_window": false
+     }
+    }
+   },
+   "park_factor": 0.973,
+   "quote": {
+    "book": null,
+    "ml_home": -138,
+    "ml_away": 133,
+    "observed_at_utc": "2026-08-03T07:35:30Z",
+    "board_view": "view_a (single-book board; operator tab not visible -> book UNRESOLVED)"
+   }
+  },
+  {
+   "gamePk": null,
+   "slate_date": "2026-08-03",
+   "away": "SF",
+   "home": "TEX",
+   "dh_game": null,
+   "first_pitch_utc": "2026-08-04T00:05:00Z",
+   "first_pitch_verbatim": "2026-08-04T00:05:00Z",
+   "team": {
+    "away": {
+     "rf_pg": 4.196,
+     "ra_pg": 4.67,
+     "games_before": 112
+    },
+    "home": {
+     "rf_pg": 4.152,
+     "ra_pg": 4.473,
+     "games_before": 112
+    }
+   },
+   "team_results_complete_through": "2026-08-02",
+   "team_results_reconciled": true,
+   "sp": {
+    "away": {
+     "pid": 657277,
+     "name": "Logan Webb",
+     "confirmed": false,
+     "staleness_tier": "STALE_BLOCK",
+     "stale_block_verified": false,
+     "no_log": false,
+     "era": 3.895,
+     "gs": 17,
+     "k_pct": 19.41,
+     "bb_pct": 6.16,
+     "asof_flags": {
+      "placeholder_in_window": false
+     }
+    },
+    "home": {
+     "pid": 615698,
+     "name": "Cal Quantrill",
+     "confirmed": false,
+     "staleness_tier": "STALE_BLOCK",
+     "stale_block_verified": false,
+     "no_log": false,
+     "era": 4.066,
+     "gs": 5,
+     "k_pct": 14.35,
+     "bb_pct": 6.48,
+     "asof_flags": {
+      "placeholder_in_window": false
+     }
+    }
+   },
+   "park_factor": 0.938,
+   "quote": {
+    "book": null,
+    "ml_home": -105,
+    "ml_away": 100,
+    "observed_at_utc": "2026-08-03T07:35:30Z",
+    "board_view": "view_a (single-book board; operator tab not visible -> book UNRESOLVED)"
+   }
+  },
+  {
+   "gamePk": null,
+   "slate_date": "2026-08-03",
+   "away": "LAD",
+   "home": "CHC",
+   "dh_game": null,
+   "first_pitch_utc": "2026-08-04T00:05:00Z",
+   "first_pitch_verbatim": "2026-08-04T00:05:00Z",
+   "team": {
+    "away": {
+     "rf_pg": 5.107,
+     "ra_pg": 3.768,
+     "games_before": 112
+    },
+    "home": {
+     "rf_pg": 5.107,
+     "ra_pg": 4.295,
+     "games_before": 112
+    }
+   },
+   "team_results_complete_through": "2026-08-02",
+   "team_results_reconciled": true,
+   "sp": {
+    "away": {
+     "pid": 680736,
+     "name": "Justin Wrobleski",
+     "confirmed": false,
+     "staleness_tier": "STALE_BLOCK",
+     "stale_block_verified": false,
+     "no_log": false,
+     "era": 2.716,
+     "gs": 15,
+     "k_pct": 18.3,
+     "bb_pct": 5.01,
+     "asof_flags": {
+      "placeholder_in_window": false
+     }
+    },
+    "home": {
+     "pid": 571510,
+     "name": "Matthew Boyd",
+     "confirmed": false,
+     "staleness_tier": "STALE_BLOCK",
+     "stale_block_verified": false,
+     "no_log": false,
+     "era": 4.329,
+     "gs": 10,
+     "k_pct": 23.5,
+     "bb_pct": 6.45,
+     "asof_flags": {
+      "placeholder_in_window": false
+     }
+    }
+   },
+   "park_factor": 1.012,
+   "quote": {
+    "book": null,
+    "ml_home": 115,
+    "ml_away": -120,
+    "observed_at_utc": "2026-08-03T07:35:30Z",
+    "board_view": "view_a (single-book board; operator tab not visible -> book UNRESOLVED)"
+   }
+  },
+  {
+   "gamePk": null,
+   "slate_date": "2026-08-03",
+   "away": "TOR",
+   "home": "HOU",
+   "dh_game": null,
+   "first_pitch_utc": "2026-08-04T00:10:00Z",
+   "first_pitch_verbatim": "2026-08-04T00:10:00Z",
+   "team": {
+    "away": {
+     "rf_pg": 3.92,
+     "ra_pg": 4.438,
+     "games_before": 112
+    },
+    "home": {
+     "rf_pg": 4.673,
+     "ra_pg": 4.912,
+     "games_before": 113
+    }
+   },
+   "team_results_complete_through": "2026-08-02",
+   "team_results_reconciled": true,
+   "sp": {
+    "away": {
+     "pid": 669456,
+     "name": "Shane Bieber",
+     "confirmed": false,
+     "staleness_tier": "STALE_WARNING",
+     "stale_block_verified": false,
+     "no_log": false,
+     "era": 4.881,
+     "gs": 6,
+     "k_pct": 16.67,
+     "bb_pct": 9.09,
+     "asof_flags": {
+      "placeholder_in_window": false
+     }
+    },
+    "home": {
+     "pid": 664299,
+     "name": "Cristian Javier",
+     "confirmed": false,
+     "staleness_tier": "STALE_BLOCK",
+     "stale_block_verified": false,
+     "no_log": false,
+     "era": 9.935,
+     "gs": 4,
+     "k_pct": 16.87,
+     "bb_pct": 18.07,
+     "asof_flags": {
+      "placeholder_in_window": false
+     }
+    }
+   },
+   "park_factor": 0.959,
+   "quote": {
+    "book": null,
+    "ml_home": -126,
+    "ml_away": 120,
+    "observed_at_utc": "2026-08-03T07:35:30Z",
+    "board_view": "view_a (single-book board; operator tab not visible -> book UNRESOLVED)"
+   }
+  },
+  {
+   "gamePk": null,
+   "slate_date": "2026-08-03",
+   "away": "TB",
+   "home": "COL",
+   "dh_game": null,
+   "first_pitch_utc": "2026-08-04T00:40:00Z",
+   "first_pitch_verbatim": "2026-08-04T00:40:00Z",
+   "team": {
+    "away": {
+     "rf_pg": 4.36,
+     "ra_pg": 4.081,
+     "games_before": 111
+    },
+    "home": {
+     "rf_pg": 4.804,
+     "ra_pg": 5.679,
+     "games_before": 112
+    }
+   },
+   "team_results_complete_through": "2026-08-02",
+   "team_results_reconciled": true,
+   "sp": {
+    "away": {
+     "pid": 693855,
+     "name": "Ian Seymour",
+     "confirmed": false,
+     "staleness_tier": "STALE_WARNING",
+     "stale_block_verified": false,
+     "no_log": false,
+     "era": 5.007,
+     "gs": 8,
+     "k_pct": 28.01,
+     "bb_pct": 8.79,
+     "asof_flags": {
+      "placeholder_in_window": false
+     }
+    },
+    "home": {
+     "pid": 547179,
+     "name": "Michael Lorenzen",
+     "confirmed": false,
+     "staleness_tier": "STALE_BLOCK",
+     "stale_block_verified": false,
+     "no_log": false,
+     "era": 6.449,
+     "gs": 20,
+     "k_pct": 15.77,
+     "bb_pct": 8.21,
+     "asof_flags": {
+      "placeholder_in_window": false
+     }
+    }
+   },
+   "park_factor": 1.11,
+   "quote": {
+    "book": null,
+    "ml_home": 150,
+    "ml_away": -155,
+    "observed_at_utc": "2026-08-03T07:35:30Z",
+    "board_view": "view_a (single-book board; operator tab not visible -> book UNRESOLVED)"
+   }
+  },
+  {
+   "gamePk": null,
+   "slate_date": "2026-08-03",
+   "away": "SD",
+   "home": "AZ",
+   "dh_game": null,
+   "first_pitch_utc": "2026-08-04T01:40:00Z",
+   "first_pitch_verbatim": "2026-08-04T01:40:00Z",
+   "team": {
+    "away": {
+     "rf_pg": 4.214,
+     "ra_pg": 4.321,
+     "games_before": 112
+    },
+    "home": {
+     "rf_pg": 4.486,
+     "ra_pg": 4.505,
+     "games_before": 111
+    }
+   },
+   "team_results_complete_through": "2026-08-02",
+   "team_results_reconciled": true,
+   "sp": {
+    "away": {
+     "pid": 650633,
+     "name": "Michael King",
+     "confirmed": false,
+     "staleness_tier": "STALE_BLOCK",
+     "stale_block_verified": false,
+     "no_log": false,
+     "era": 3.405,
+     "gs": 20,
+     "k_pct": 20.69,
+     "bb_pct": 9.7,
+     "asof_flags": {
+      "placeholder_in_window": false
+     }
+    },
+    "home": {
+     "pid": 694297,
+     "name": "Brandon Pfaadt",
+     "confirmed": false,
+     "staleness_tier": "STALE_WARNING",
+     "stale_block_verified": false,
+     "no_log": false,
+     "era": 4.63,
+     "gs": 8,
+     "k_pct": 16.01,
+     "bb_pct": 7.12,
+     "asof_flags": {
+      "placeholder_in_window": false
+     }
+    }
+   },
+   "park_factor": 1.033,
+   "quote": {
+    "book": null,
+    "ml_home": -104,
+    "ml_away": 102,
+    "observed_at_utc": "2026-08-03T07:35:30Z",
+    "board_view": "view_a (single-book board; operator tab not visible -> book UNRESOLVED)"
+   }
+  }
+ ]
+}

@@ -1,0 +1,135 @@
+<title>NFL Board &mdash; August 28</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=Public+Sans:wght@400;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  --bg:#f6f5f2; --panel:#ffffff; --ink:#22302b; --muted:#5c6b64; --line:#d8ddd8;
+  --accent:#2e6e4e; --accent-ink:#ffffff; --warn-bg:#fdf3e3; --warn-ink:#7a5218; --warn-line:#e5c894;
+  --block-bg:#f8e9e4; --block-ink:#8a3b2a; --chip:#eef1ee; --good:#2e6e4e; --flag:#a04b2f;
+}
+:root:not([data-theme="light"]){}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#161b18; --panel:#1e2521; --ink:#e4e9e5; --muted:#93a29a; --line:#33403a;
+    --accent:#4da97c; --accent-ink:#10251b; --warn-bg:#2d2415; --warn-ink:#e3c07f; --warn-line:#59492a;
+    --block-bg:#2e1f1b; --block-ink:#e2a08c; --chip:#28312c; --good:#4da97c; --flag:#d98a68;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#161b18; --panel:#1e2521; --ink:#e4e9e5; --muted:#93a29a; --line:#33403a;
+  --accent:#4da97c; --accent-ink:#10251b; --warn-bg:#2d2415; --warn-ink:#e3c07f; --warn-line:#59492a;
+  --block-bg:#2e1f1b; --block-ink:#e2a08c; --chip:#28312c; --good:#4da97c; --flag:#d98a68;
+}
+body{background:var(--bg);color:var(--ink);font:16px/1.55 "Public Sans",system-ui,sans-serif;margin:0;padding:0 16px 64px}
+main{max-width:960px;margin:0 auto}
+h1,h2,h3{font-family:"Archivo",system-ui,sans-serif;text-wrap:balance;line-height:1.15}
+h1{font-size:1.9rem;margin:28px 0 4px}
+h2{font-size:1.25rem;margin:34px 0 10px}
+.sub{color:var(--muted);margin:0 0 18px}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0}
+.chip{background:var(--chip);border:1px solid var(--line);border-radius:999px;padding:3px 12px;font-size:.82rem;letter-spacing:.02em}
+.chip b{font-family:"IBM Plex Mono",monospace}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:18px 20px;margin:16px 0}
+.answers{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px}
+.answers .a{border-left:3px solid var(--accent);padding:2px 0 2px 10px}
+.answers .q{font-size:.72rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted)}
+.answers .v{font-weight:600}
+.warn{background:var(--warn-bg);color:var(--warn-ink);border:1px solid var(--warn-line);border-radius:10px;padding:12px 16px;margin:14px 0}
+.block{background:var(--block-bg);color:var(--block-ink);border-radius:10px;padding:12px 16px;margin:14px 0}
+.scroll{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:.9rem}
+th,td{padding:7px 10px;border-bottom:1px solid var(--line);text-align:right;font-variant-numeric:tabular-nums}
+th{font-family:"Archivo";font-size:.75rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
+th.l,td.l{text-align:left}
+td.n{font-family:"IBM Plex Mono",monospace;font-size:.85rem}
+.pick{color:var(--good);font-weight:600}
+.flag{color:var(--flag);font-weight:600}
+details{border:1px solid var(--line);border-radius:10px;padding:12px 18px;margin:12px 0;background:var(--panel)}
+summary{cursor:pointer;font-family:"Archivo";font-weight:600}
+code{font-family:"IBM Plex Mono",monospace;font-size:.85em;background:var(--chip);padding:1px 5px;border-radius:4px}
+p{max-width:70ch}
+.proof{background:var(--chip);border:1px solid var(--line);border-radius:10px;padding:12px 16px;margin:14px 0;font-family:"IBM Plex Mono",monospace;font-size:.82rem;line-height:1.7;overflow-x:auto}
+.proof b{font-family:"Archivo",sans-serif}
+</style>
+<main>
+<h1>NFL Board &mdash; Friday, August 28</h1>
+<p class="sub">Prospective &middot; 10 preseason games &middot; frozen
+2026-08-28T08:20:55Z &middot; benchmark only, no forecast &middot; paper research
+only</p>
+
+<div class="chips">
+<span class="chip">GAMES <b>10</b></span>
+<span class="chip">CANONICAL <b>0</b> &middot; REFUSED <b>10</b></span>
+<span class="chip">GAME IDS <b>10/10 CAPTURED</b></span>
+<span class="chip">FORECAST <b>NONE</b></span>
+<span class="chip">BETS <b>0</b> &middot; <b>$0</b></span>
+</div>
+
+<div class="proof"><b>RESULT BINDING PROOF</b> &mdash; nfl:2026-08-28 &middot; <code>05bc0a95</code><br>
+RESULT_BINDING_PASS = 0/0<br>
+DATE_COHERENCE_PASS = 0/0<br>
+CANONICAL_ID_MATCH = 0/0<br>
+REFUSED_ROWS = 0<br>
+<span style="font-family:Public Sans,sans-serif">No result is claimed for this slate and none will be: these are benchmark rows with no forecast to grade. The counters read <b>0/0</b> because <b>nothing is claimed</b>, not because nothing was checked &mdash; all 10 board games were loaded and every captured ESPN id was read. Brier, logloss and EV are <b>null by rule</b>, and a null with a stated reason is a different object from a missing value.</span></div>
+
+<h2>The correction this board exists to carry</h2>
+<div class="warn">
+<p><b>Yesterday's NFL board said no NFL model had ever been registered in this system. That was
+false, and it has been withdrawn.</b> The 8/27 board itself stays byte-unchanged &mdash; frozen
+records are not edited &mdash; and the correction record supersedes it. What follows is the
+corrected position.</p>
+<ul><li>SYSTEM_FAILURE_NFL_MODEL_NOT_REGISTERED (as a statement about system history)</li><li>'No NFL model has ever been registered' — FALSE. nfl.rs.epa_logit_ridge.v0_1.shadow (REJECTED_DO_NOT_USE, append-only invalidation) and v0_2.shadow (VALIDATED_SHADOW_ARTIFACT) were built and preregistered.</li></ul>
+</div>
+<div class="panel">
+<p>nfl.rs.epa_logit_ridge.v0_2.shadow WAS built and preregistered and PASSED its retrospective gate (2,895 completed RS games with PBP; 1,865 walk-forward predictions 2019-2025; winner Brier 0.2298 vs 0.2497 expanding baseline; paired CI95 [-0.0261,-0.0137] over 124 season-week blocks; margin MAE 10.41 vs 11.14; total MAE 11.01 vs 10.98 NOT validated, CI crosses zero). Its disposition is VALIDATED_SHADOW_ARTIFACT / NO_PROMOTE / no live forecast authority / $0. v0_1.shadow exists as REJECTED_DO_NOT_USE under an append-only invalidation. What is separately true is narrower: the ACTIVE branch registry carries no NFL model, and its lineage is not restored — the recorded commits 1d089d45* and f3cf5b1d* resolve nowhere in local history or the current remote.</p>
+<p><b>And there is still no forecast tonight, for a different and real reason.</b>
+the registered scope of v0_2.shadow is REGULAR SEASON. Preseason was excluded at preregistration because planned QB and starter snap share and substitution intent are not reconstructible historically as pregame timestamped features. Every 8/28 game is preseason. The no-forecast outcome is unchanged; only the reason is corrected, from 'never built' to 'outside registered scope'.</p>
+<p><b>Open work:</b> RJ-006 — restoration of the immutable v0_2 run directory awaits an owner upload; 1 of 6 components closed.</p>
+</div>
+
+<h2>The slate</h2>
+<p>Every row is <code>REFUSED_NOT_CANONICAL</code>. The authoritative source for phase &mdash;
+nflverse's games.csv &mdash; is structurally silent on preseason: it holds zero August gamedays in
+any season, and its game type domain is regular season and postseason only. That absence is the
+finding, not a gap to be filled from somewhere else.</p>
+<div class="scroll"><table>
+<thead><tr><th class="l">Game</th><th class="l">Canonical id</th><th class="l">Kickoff (UTC)</th>
+<th class="l">Row disposition</th><th class="l">Probability</th><th class="l">Why null</th></tr></thead>
+<tbody>
+<tr><td class="l"><b>WSH@BAL</b></td><td class="n">ESPN_GAMEID:401873302</td><td class="l">2026-08-28T22:00:00Z</td><td class="l">REFUSED_NOT_CANONICAL</td><td class="l">&mdash;</td><td class="l">PRESEASON_EXCLUDED_BY_REGISTERED_SCOPE</td></tr><tr><td class="l"><b>HOU@CAR</b></td><td class="n">ESPN_GAMEID:401873307</td><td class="l">2026-08-28T23:00:00Z</td><td class="l">REFUSED_NOT_CANONICAL</td><td class="l">&mdash;</td><td class="l">PRESEASON_EXCLUDED_BY_REGISTERED_SCOPE</td></tr><tr><td class="l"><b>ATL@MIA</b></td><td class="n">ESPN_GAMEID:401873304</td><td class="l">2026-08-28T23:00:00Z</td><td class="l">REFUSED_NOT_CANONICAL</td><td class="l">&mdash;</td><td class="l">PRESEASON_EXCLUDED_BY_REGISTERED_SCOPE</td></tr><tr><td class="l"><b>NYG@NYJ</b> <span class="flag">home/away resolved 3&ndash;1</span></td><td class="n">ESPN_GAMEID:401873303</td><td class="l">2026-08-28T23:30:00Z</td><td class="l">REFUSED_NOT_CANONICAL</td><td class="l">&mdash;</td><td class="l">PRESEASON_EXCLUDED_BY_REGISTERED_SCOPE</td></tr><tr><td class="l"><b>TB@JAX</b></td><td class="n">ESPN_GAMEID:401873306</td><td class="l">2026-08-28T23:30:00Z</td><td class="l">REFUSED_NOT_CANONICAL</td><td class="l">&mdash;</td><td class="l">PRESEASON_EXCLUDED_BY_REGISTERED_SCOPE</td></tr><tr><td class="l"><b>NO@DAL</b></td><td class="n">ESPN_GAMEID:401874048</td><td class="l">2026-08-29T00:00:00Z</td><td class="l">REFUSED_NOT_CANONICAL</td><td class="l">&mdash;</td><td class="l">PRESEASON_EXCLUDED_BY_REGISTERED_SCOPE</td></tr><tr><td class="l"><b>SEA@KC</b></td><td class="n">ESPN_GAMEID:401873305</td><td class="l">2026-08-29T00:00:00Z</td><td class="l">REFUSED_NOT_CANONICAL</td><td class="l">&mdash;</td><td class="l">PRESEASON_EXCLUDED_BY_REGISTERED_SCOPE</td></tr><tr><td class="l"><b>ARI@GB</b></td><td class="n">ESPN_GAMEID:401874102</td><td class="l">2026-08-29T00:00:00Z</td><td class="l">REFUSED_NOT_CANONICAL</td><td class="l">&mdash;</td><td class="l">PRESEASON_EXCLUDED_BY_REGISTERED_SCOPE</td></tr><tr><td class="l"><b>CIN@PHI</b></td><td class="n">ESPN_GAMEID:401873301</td><td class="l">2026-08-29T00:00:00Z</td><td class="l">REFUSED_NOT_CANONICAL</td><td class="l">&mdash;</td><td class="l">PRESEASON_EXCLUDED_BY_REGISTERED_SCOPE</td></tr><tr><td class="l"><b>MIN@DEN</b></td><td class="n">ESPN_GAMEID:401873614</td><td class="l">2026-08-29T01:00:00Z</td><td class="l">REFUSED_NOT_CANONICAL</td><td class="l">&mdash;</td><td class="l">PRESEASON_EXCLUDED_BY_REGISTERED_SCOPE</td></tr>
+</tbody></table></div>
+
+<h2>Why the ids are here at all</h2>
+<div class="panel">
+<p>These rows produce no forecast, so the ids buy nothing tonight. They are retained because a
+future binding pass needs a real key to verify against, and because capturing them proved something
+worth recording: <b>the ids are not ordered by kickoff and do not occupy one block.</b> Inside the
+4018733xx run the mapping is 301 = CIN@PHI (8:00), 302 = WSH@BAL (6:00), 303 = NYG@NYJ (7:30),
+304 = ATL@MIA (7:00), 305 = SEA@KC (8:00), 306 = TB@JAX (7:30), 307 = HOU@CAR (7:00). Sorting by
+kickoff and assigning sequentially &mdash; the natural shortcut &mdash; would have mis-assigned
+<b>every single row</b>. Three more games sit entirely outside that block. Each id was captured
+from its own game page.</p>
+<p>One row carries a resolved contradiction: <b>NYG@NYJ</b>. One enumeration pass rendered it
+&ldquo;Jets at Giants&rdquo;; three independent sources put the Giants away. A reversed home and
+away is the same class of error as a reversed starter, so it is marked rather than quietly
+settled.</p>
+</div>
+
+<h2>Personnel</h2>
+<div class="panel">
+<p><b>Starters are NOT_CAPTURED for all twenty slots.</b> Preseason finales rest starters
+league-wide, and that is exactly the kind of true-in-general statement that must not become a
+per-game assertion. No quarterback is named on this board.</p>
+</div>
+
+<h2>Market</h2>
+<div class="block">
+<p><b>NO_RETAINED_MARKET_ARTIFACT.</b> The action layer cannot open in any case: there is no forecast
+for a price to be compared against. Wager authority <b>NO</b>, stake <b>$0</b>, 0 bets.</p>
+</div>
+
+<h2>Standing position</h2>
+<div class="panel">
+<p>MLB, WNBA and NFL are separate cohorts on separate boards and are never pooled. This card
+displays; it admits nothing and settles nothing. Nothing here accrues toward promotion.</p>
+</div>
+</main>

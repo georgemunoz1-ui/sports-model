@@ -1,0 +1,132 @@
+{
+ "record_id": "EXTERNAL-POSITION-2026-07-30-KALSHI",
+ "classification": [
+  "OWNER_PERSONAL_REAL_MONEY_POSITION",
+  "OUTSIDE_SYSTEM_GATES",
+  "NO_MODEL_FORECAST_EXISTED",
+  "EVIDENCE_CAPTURE_ONLY"
+ ],
+ "observed_at_utc": "2026-07-31T01:55:32Z",
+ "governance": {
+  "system_ledger": "UNCHANGED: ledgers.real_money stays risked=0.0 / authorized=false \u2014 the SYSTEM risked nothing and authorized nothing; this is the owner's personal position, recorded as observed evidence, not entered into any ledger or gate.",
+  "gate": "kprops 0/100 unchanged; ML verdict NO_PROMOTE unchanged; no Phase-4 forecast existed for any 2026-07-30 game (the slate was never captured pregame - see missed_slate).",
+  "non_endorsement": "The model neither endorsed nor opposed these legs: it had NO 7/30 view at all."
+ },
+ "position": {
+  "venue": "Kalshi",
+  "type": "3 MARKETS COMBO",
+  "cost_usd": 99.96,
+  "max_payout_usd": 500.5,
+  "implied_combined_cost": 0.19972,
+  "slip_timestamp_display": "7.30.26 6:48PM (PDT presumed from game-time context)",
+  "legs": [
+   {
+    "market": "Boston vs A's, Today 6:40pm PDT",
+    "side": "Boston to win",
+    "cost_pct": 60,
+    "in_play_at_purchase": "YES (slip 6:48pm > 6:40pm first pitch)"
+   },
+   {
+    "market": "San Francisco vs San Diego, Today 6:40pm PDT",
+    "side": "San Diego to win",
+    "cost_pct": 54,
+    "in_play_at_purchase": "YES (slip 6:48pm > 6:40pm first pitch)"
+   },
+   {
+    "market": "Seattle vs Los Angeles D, Today 7:10pm PDT",
+    "side": "Los Angeles D to win",
+    "cost_pct": 59,
+    "in_play_at_purchase": "NO (pregame at purchase)"
+   }
+  ]
+ },
+ "market_reference_same_capture": {
+  "source": "3 aggregator app screenshots, on-screen clock 6:49pm, Today=Thu 7/30",
+  "quotes": {
+   "BOS@ATH": {
+    "ml": [
+     -141,
+     138
+    ],
+    "rl": {
+     "BOS-1.5": 106,
+     "ATH+1.5": -113
+    },
+    "total": [
+     9.5,
+     102,
+     -104
+    ]
+   },
+   "SF@SD": {
+    "ml": [
+     110,
+     -113
+    ],
+    "rl": {
+     "SF+1.5": -186,
+     "SD-1.5": 186
+    },
+    "total": [
+     8.5,
+     -122,
+     116
+    ]
+   },
+   "SEA@LAD": {
+    "ml": [
+     138,
+     -141
+    ],
+    "rl": {
+     "SEA+1.5": -146,
+     "LAD-1.5": 140
+    },
+    "total": [
+     8.5,
+     -104,
+     104
+    ]
+   }
+  },
+  "note": "mixed per-price book icons (aggregator best-odds); records/L10/H2H displayed; BOS@ATH and SF@SD quotes captured ~9 min in-play, SEA@LAD pregame"
+ },
+ "missed_slate": {
+  "fact": "No 7/30 odds/slate/starters capture existed before first pitch; therefore ZERO Phase-4 forecasts for 7/30. The three games above are known only from these screenshots; full 7/30 slate composition is NOT on record and is not guessed.",
+  "phase4_effect": "7/30 is a MISSED SLATE for the forward cohort \u2014 an honest gap, not a defect in the frozen protocol. n toward 300 unaffected (still 0 clean)."
+ },
+ "devig_read": {
+  "method": "proportional, from the same-capture aggregator pairs (fixed method per prereg)",
+  "legs": [
+   {
+    "side": "BOS",
+    "kalshi_cost": 0.6,
+    "devig_fair": 0.582,
+    "unit_ev_pct": -3.0
+   },
+   {
+    "side": "SD",
+    "kalshi_cost": 0.54,
+    "devig_fair": 0.527,
+    "unit_ev_pct": -2.4
+   },
+   {
+    "side": "LAD",
+    "kalshi_cost": 0.59,
+    "devig_fair": 0.582,
+    "unit_ev_pct": -1.4
+   }
+  ],
+  "combo": {
+   "fair_if_independent": 0.1785,
+   "cost": 0.1997,
+   "unit_ev_pct": -10.6
+  },
+  "caveats": [
+   "two legs were IN-PLAY at purchase; comparing an in-play Kalshi price to a near-simultaneous book quote is fair, but game state (score/baserunners at 6:48-6:49pm) is unrecorded, so this is approximate",
+   "Kalshi combo pricing may embed fees inside the 99.96/500.50 ratio",
+   "leg independence assumed for the combo fair value",
+   "this is a MARKET-vs-MARKET read; our models contribute nothing here (no 7/30 forecast)"
+  ]
+ }
+}

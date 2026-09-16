@@ -1,0 +1,126 @@
+{
+ "schema": "mlb.owner_discretion_card.v1",
+ "record_id": "OWNER-CARD-20260819-2030Z",
+ "captured_at_utc": "2026-08-19T20:30:36Z",
+ "received_from": "owner paste 2026-08-19 ~20:30Z (discretionary card + holds + lineup/weather/starter notes)",
+ "source_tier": 1,
+ "source_family": "OWNER_BOARD",
+ "authority_wall": "OWNER PERSONAL DISCRETION. These are the owner's own units, selected by the owner's reasoning. They are NOT model output, NOT model-authorized, NOT gate progress, and NOT settled against the model-authorized ledger (which remains $0). Recorded prospectively for honest owner-attributed tracking only \u2014 the 7/25 precedent: discretion picks and EV rules never mix.",
+ "prospective_check": "all seven legs pre-start at capture (earliest MIA@PHI 22:05Z; WNBA 23:30Z / 02:00Z)",
+ "legs": [
+  {
+   "leg": 1,
+   "sel": "CIN ML",
+   "price": -128,
+   "stake_u": 1.0,
+   "owner_case": "Burns 14-2/2.47/151K vs Liberatore 5-10/5.07; CIN lineup posted (De La Cruz, Stewart, Suarez, McLain); thunderstorm potential early/late, window mostly cloudy"
+  },
+  {
+   "leg": 2,
+   "sel": "TB -1.5",
+   "price": 111,
+   "stake_u": 1.0,
+   "owner_case": "Rasmussen 12-5/2.78 vs Scherzer 1-5/6.59; both orders posted; TB 75-50, 42-22 home; prefers RL to ~-193 ML"
+  },
+  {
+   "leg": 3,
+   "sel": "CLE -1.5",
+   "price": -101,
+   "stake_u": 0.75,
+   "owner_case": "Messick 9-7/2.59/142K vs Wilkinson MLB DEBUT; Kwan/Ramirez confirmed, SF Devers/Adames/Eldridge confirmed \u2014 no lineup gate left; CLE ML -218 so RL is the expression"
+  },
+  {
+   "leg": 4,
+   "sel": "MIA ML",
+   "price": 120,
+   "stake_u": 0.75,
+   "owner_case": "Alcantara 13-7/3.43 vs Nola 4-9/5.33; complete lineups posted; MIA 38-25 away; starting-pitching displacement at plus money, not an offense fade; weather hot but clear enough"
+  },
+  {
+   "leg": 5,
+   "sel": "TOR/WAS UNDER 168.5",
+   "price": null,
+   "stake_u": 0.75,
+   "owner_case": "owner total position, WNBA"
+  },
+  {
+   "leg": 6,
+   "sel": "GSV +2.5",
+   "price": null,
+   "stake_u": 0.5,
+   "owner_case": "matches the registered ATS diagnostic selection"
+  },
+  {
+   "leg": 7,
+   "sel": "LAA ML",
+   "price": 142,
+   "stake_u": 0.5,
+   "owner_case": "Urena 8-8/2.67 vs Pecko (no MLB record); both orders posted (Trout/Neto; Pena/Alvarez/Paredes/Altuve); sized down for Pecko sample-zero uncertainty"
+  }
+ ],
+ "total_exposure_u": 5.25,
+ "holds_not_executed": [
+  {
+   "sel": "SEA ML +111",
+   "condition": "MIL lineup still TBD at last pull; do NOT use yesterday's 22-0 MIL win as predictive justification either direction"
+  },
+  {
+   "sel": "WSH ML +120",
+   "condition": "WSH lineup TBD; if normal core posts, +110 or better playable at 0.50u (owner rule)"
+  },
+  {
+   "sel": "NYY-BAL",
+   "condition": "BLOCKED - BAL lineup TBD; Bassitt recently off IL; Warren 2.25 ERA in 2 starts vs BAL this season; lineup gate not violated"
+  },
+  {
+   "sel": "LAD-COL",
+   "condition": "BLOCKED - both lineups TBD + Denver mid-evening thunderstorm risk; Sasaki/Freeland points LAD but no Coors exposure before lineup/weather resolution"
+  }
+ ],
+ "new_tier1_facts_recorded": {
+  "starter_attestations": {
+   "SF@CLE": "Matt Wilkinson CONFIRMED by owner text \u2014 MLB DEBUT (explains registry absence). Resolves the odds-board Houser conflict IN FAVOR OF the v2 basis; no fork needed (v2 already carries Wilkinson).",
+   "LAA@HOU": "Ethan Pecko has no MLB record/ERA (debut-class; CAP was correct)"
+  },
+  "lineups_posted": {
+   "CIN": "De La Cruz, Stewart, Suarez, McLain",
+   "TB_TOR": "both orders posted",
+   "CLE": "Kwan, Ramirez",
+   "SF": "Devers, Adames, Eldridge",
+   "MIA_PHI": "complete both sides",
+   "LAA": "Trout, Neto",
+   "HOU": "Pena, Alvarez, Paredes, Altuve",
+   "SEA": "posted",
+   "MIL": "TBD",
+   "TEX": "confirmed",
+   "WSH": "TBD",
+   "BAL": "TBD",
+   "LAD": "TBD",
+   "COL": "TBD"
+  },
+  "prices_second_vintage": {
+   "CIN_ML": -128,
+   "TB_RL_-1.5": 111,
+   "TB_ML_approx": -193,
+   "CLE_RL_-1.5": -101,
+   "CLE_ML": -218,
+   "MIA_ML": 120,
+   "LAA_ML": 142,
+   "SEA_ML": 111,
+   "WSH_ML": 120
+  },
+  "weather": {
+   "CIN": "thunderstorm potential early/late; game window mostly cloudy",
+   "PHI": "hot, clear enough",
+   "DEN": "mid-evening thunderstorm risk"
+  },
+  "season_stat_lines_quoted": "recorded verbatim in owner_case fields; NOT retrofitted into the frozen as-of pitcher registry (R3) \u2014 the registered cohorts stand on their build-time stats",
+  "form_note": "the 8/18 SEA@MIL result is already in tier-1 results and flows through the frozen form pipeline mechanically; the owner's instruction bars DISCRETIONARY use of it as justification, which this record honors"
+ },
+ "model_ledger_unchanged": {
+  "model_authorized_usd": 0,
+  "gate": "0/100 NO_PROMOTE",
+  "execution": "UNAUTHORIZED",
+  "wager_authority": "NO"
+ }
+}

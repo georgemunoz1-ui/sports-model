@@ -1,0 +1,18 @@
+{
+  "schema_version": "sports_information_source_allowlist.v1",
+  "policy": {
+    "tier_1": ["LEAGUE_OFFICIAL", "TEAM_OFFICIAL"],
+    "tier_2": ["BEAT_REPORTER"],
+    "tier_3": ["NEWS_OUTLET"],
+    "tier_4": ["AGGREGATOR"],
+    "tier_5": ["FAN_SOCIAL"],
+    "tier_6": ["ANONYMOUS"],
+    "direct_forecast_input_max_tier": null,
+    "research_extraction_max_tier": 3,
+    "discovery_only_min_tier": 4,
+    "tier_2_requires_corroboration_for_future_forecast_use": true,
+    "market_tip_accounts_excluded": true
+  },
+  "sources": [],
+  "notes": "Populate named source IDs only from verified identities. Empty allowlist is fail-closed for named-source trust; source-type policy remains testable."
+}

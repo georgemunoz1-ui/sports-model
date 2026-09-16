@@ -1,0 +1,92 @@
+{
+ "record_id": "KSIM-0727-U02-DQTAGS-CLASSIFICATION",
+ "appends_to": "data/mlb/props/evidence/2026-07-27/KSIM-0727-U02_dq_tags.json",
+ "appends_to_sha256": "7c004cf4a75579c18c97426dd096edbe1013714e0f490b0a16b383d5e800f39f",
+ "note_on_method": "The tag file is NOT edited. Its hash is published in commit aeadfbc and in the diagnostic doc, and corrections are append-only (R6). This record supersedes its LABEL.",
+ "CLASSIFICATION": "OUTCOME-BLINDED, POST-START SENSITIVITY DEFINITION",
+ "supersedes_label": "'Row-level data-quality tags frozen BEFORE any 2026-07-27 outcome is inspected' -- that wording implied a PREGAME pre-registration, which it was not.",
+ "why": "The tags were frozen at 2026-07-28T01:40:27Z. That is AFTER HOU@LAA's scheduled 01:38:00Z first pitch, 27 seconds AFTER BOS@ATH's scheduled 01:40:00Z first pitch, and hours after the earlier games began. Games were in progress. This cannot be a pregame pre-registration.",
+ "minutes_after_first_pitch_at_freeze": [
+  {
+   "game": "SEA@TEX",
+   "first_pitch_utc": "2026-07-27T18:35Z",
+   "minutes_elapsed": 425.4
+  },
+  {
+   "game": "BAL@DET",
+   "first_pitch_utc": "2026-07-27T22:40Z",
+   "minutes_elapsed": 180.4
+  },
+  {
+   "game": "PHI@MIA",
+   "first_pitch_utc": "2026-07-27T22:40Z",
+   "minutes_elapsed": 180.4
+  },
+  {
+   "game": "ARI@PIT",
+   "first_pitch_utc": "2026-07-27T22:40Z",
+   "minutes_elapsed": 180.4
+  },
+  {
+   "game": "TOR@WSH",
+   "first_pitch_utc": "2026-07-27T22:45Z",
+   "minutes_elapsed": 175.4
+  },
+  {
+   "game": "CLE@CIN",
+   "first_pitch_utc": "2026-07-27T23:10Z",
+   "minutes_elapsed": 150.4
+  },
+  {
+   "game": "ATL@NYM",
+   "first_pitch_utc": "2026-07-27T23:10Z",
+   "minutes_elapsed": 150.4
+  },
+  {
+   "game": "NYY@CHW",
+   "first_pitch_utc": "2026-07-27T23:40Z",
+   "minutes_elapsed": 120.5
+  },
+  {
+   "game": "CHC@STL",
+   "first_pitch_utc": "2026-07-27T23:45Z",
+   "minutes_elapsed": 115.5
+  },
+  {
+   "game": "HOU@LAA",
+   "first_pitch_utc": "2026-07-28T01:38Z",
+   "minutes_elapsed": 2.5
+  },
+  {
+   "game": "BOS@ATH",
+   "first_pitch_utc": "2026-07-28T01:40Z",
+   "minutes_elapsed": 0.5
+  },
+  {
+   "game": "MIL@SF",
+   "first_pitch_utc": "2026-07-28T01:45Z",
+   "minutes_elapsed": -4.5
+  }
+ ],
+ "attestation_retained": {
+  "claim": "outcomes_inspected_at_freeze = false",
+  "status": "RETAINED as a PROCESS ATTESTATION",
+  "limit": "An attestation that no outcome was looked at does NOT restore pregame status. It is a statement about our conduct, not about the information available in the world. Blindness is asserted, not structurally guaranteed."
+ },
+ "consequences": [
+  "Subset B is EXPLORATORY SENSITIVITY ANALYSIS ONLY. It is not a pre-registered valid-data subset.",
+  "Report A (all 23 rows, operational pipeline performance) remains the headline.",
+  "Neither A nor B may be used confirmatorily for the 2026-07-27 slate.",
+  "A FUTURE UNTOUCHED SLATE is required for any confirmatory use -- tags frozen before ANY first pitch.",
+  "KPROP-INFO-TEST carries THE SAME LABEL for 2026-07-27 and is exploratory on this slate."
+ ],
+ "unchanged": "No outcome, selector decision, or frozen artifact is altered. The KSIM-0727-U02 decision set 60fe448c...1279e2 and Phase-1 7f827fd0...c12d2f are untouched.",
+ "revision": "REV 2 (2026-07-28): extended to also supersede the per-row placeholder_note wording. REV 1's sha256 65b2c1b1...780112 was quoted in the diagnostic doc; that citation is updated to this revision's hash. This file is a CORRECTIONS record, not an experimental artifact -- extending it is the intended home for further corrections to the same tag file.",
+ "superseded_field_language": {
+  "field": "rows[].placeholder_note (appears 23 times in the tag file)",
+  "superseded_text": "ER/BB placeholders sit in fields 2 and 4; kprops._parse reads p[3]=SO and p[5]=TBF only. Contamination is real for ERA, orthogonal to E[K].",
+  "replacement_text": "The placeholder ER and BB fields are not read directly by the current E[K] calculation, assuming SO and TBF on those rows are accurate.",
+  "why": "'Orthogonal' overstated it. Field-level non-use does not establish that the affected row, or the collection process that produced it, is trustworthy: the same fetch that left ER and BB unpopulated also produced SO and TBF, and nothing independently confirms those values.",
+  "method": "The tag file is NOT edited -- its hash is published. This record supersedes the wording (R6)."
+ }
+}

@@ -1,0 +1,217 @@
+{
+ "record_id": "WNBA-COHERENT-DIST-PREREG-2026-08-22",
+ "created_utc": "2026-08-22T00:00:00Z",
+ "schema": "preregistration_record-v1 (RECORD, NOT CODE — this file contains no executable content and is never imported by a fitting module; it is read, hashed, and verified)",
+ "status": "PREREGISTERED_BEFORE_ANY_FIT — every design decision below is frozen as of this record. Changes require a SUCCESSOR record with a new record_id; this file is never edited in place.",
+ "frozen_before_any_fit": true,
+ "authority": "owner roadmap item 5 (2026-08-22): replace the WNBA's disconnected heads with ONE coherent predictive margin distribution.",
+ "candidate_model_id": "wnba.rs.coherent_margin.v1_0.candidate_shadow",
+ "comparator_model_id": "wnba.rs.ff7_logit_ridge.v1_0.shadow",
+ "adoption_state": "CANDIDATE — NOT AN ADOPTED MODEL. Nothing in this record promotes, replaces, or authorizes anything.",
+
+ "THE_DEFECT": {
+  "one_sentence": "Win probability, fair spread and cover probability are produced by SEPARATE HEADS that can contradict each other, and nothing in the architecture makes contradiction impossible — only a tolerance gate makes gross contradiction unlikely.",
+  "current_architecture": {
+   "winner_head": "ridge logistic on the frozen 7 features -> p_home (harness/wnba_model_v1.py, prereg docs/experiments/2026-08-12_WNBA_V1_PREREG.json)",
+   "margin_head": "ridge OLS on the same 7 features -> margin_home, fitted and emitted INDEPENDENTLY of p_home",
+   "fair_spread": "not produced by any head at all; derived at render time as the negation of the displayed margin (harness/decision_card.py margin_display)",
+   "cover_probability": "DOES NOT EXIST. The ATS layer emits a point delta only: home_cover_delta = home_margin_pred + home_spread_line (docs/experiments/2026-08-19_ATS_PREREG.json). The 8/21 unified card states the gap in its own words: 'no cover/push/fail distribution exists for the WNBA shadow'.",
+   "the_only_thing_holding_the_two_heads_together": "a TOLERANCE gate at registration: |p_home - Phi(margin_pred / 13.97)| must not exceed 0.05 (WNBA V1 prereg, registration_coherence_gate). MARGIN_SD = 13.97 is frozen in harness/wnba_model_v1.py:35."
+  },
+  "why_a_tolerance_is_not_coherence": [
+   "A tolerance permits a 5-percentage-point band of licensed disagreement between two numbers that describe the same game.",
+   "Inside that band the two heads may disagree ON THE SIGN, which is the only thing a reader actually acts on. Worked example, arithmetic verified against the frozen sd 13.97: margin_home = +0.50 (home favored) paired with p_home = 0.470 (home an underdog) gives |0.470 - Phi(0.50/13.97)| = |0.470 - 0.5143| = 4.43pp, which PASSES the current gate. A directly contradictory row is admissible today.",
+   "A tolerance is decided by rounding at its boundary. On the 2026-08-21 registered card, MIN@WAS carries p_home 0.2523 and margin_home -7.23; the exact gap under sd 13.97 is |0.2523 - 0.30240| = 5.009pp, which is GREATER than the 5.00pp gate, while the artifact records coherence_gap_pp 5.0 and coherence_pass true. An identity has no boundary and cannot be rounded past.",
+   "A tolerance cannot bind a third quantity that does not exist: no cover probability is produced, so there is nothing for the gate to reconcile the ATS surface against."
+  ],
+  "motivating_incident_owner_statement_verbatim": "The 8/21 card displayed CHI at -4.08 predicted margin while giving Chicago a 36.5% win probability - internally inconsistent.",
+  "verified_on_disk_values_for_that_row": {
+   "artifact": "data/wnba/forecasts/2026-08-21_card.json (registered) and data/cards_decision/2026-08-21.json / .md (rendered)",
+   "game": "GSV@CHI, tip 2026-08-22T02:00Z, home = CHI",
+   "registered_fields": {"p_home": 0.3646, "margin_home": -4.08, "total": 167.1, "coherence_gap_pp": 2.05, "coherence_pass": true},
+   "rendered_decision_line": "Predicted winner: GSV 63.5% (CHI 36.5%)",
+   "rendered_margin_line": "CHI projected to lose by 4.08 (fair spread CHI +4.08)",
+   "what_the_reader_saw": "the raw registered field for the HOME team CHI is 'margin_home: -4.08'. Read in the spread notation every bettor reads, 'CHI -4.08' means CHI favored by 4.08 points, standing beside 'CHI 36.5%'. The two statements contradict each other on the surface the owner was shown.",
+   "what_is_true_underneath": "margin_home is signed (home points minus away points), so -4.08 and 36.5% happen to agree in sign on THIS row (coherence_gap_pp 2.05). The agreement is ACCIDENTAL, not structural: it is produced by two separately fitted heads that a 5pp tolerance did not have to reconcile. This record does not claim this particular row was numerically incoherent; it records that the architecture permits incoherence, that the display permitted a contradictory reading, and that neither fact is fixable by relabelling.",
+   "R1_note": "no value in this block is inferred or reconstructed; each is copied from the named artifact. Where the owner's reading and the stored sign convention differ, BOTH are recorded rather than one being silently corrected."
+  },
+  "second_order_defect": "Three surfaces (WINNER, ATS, TOTAL) are contractually separate estimands (docs/experiments/2026-08-19_ATS_PREREG.json, report_headings_contract) but the first two are NOT separate questions — they are two readings of one margin law. Separating the reports was right; separating the ESTIMATORS is the defect."
+ },
+
+ "THE_REPLACEMENT": {
+  "principle": "ONE object per game. A single predictive margin distribution is the SOLE source of win probability, predicted margin, fair spread and every cover/push/fail probability. Nothing else may produce any of those four quantities.",
+  "the_object": {
+   "definition": "G_g, the predictive law of M_g = (home points - away points) for game g: a continuous location-scale law with location mu_g and scale sigma_g, whose CDF is strictly increasing and whose MEDIAN is mu_g.",
+   "primary_family_frozen": "Normal(mu_g, sigma_g). Symmetric, so mean = median = mu_g.",
+   "named_secondary_arm": "Student-t with df = 7, location mu_g, scale sigma_g. Reported SEPARATELY as a named arm, never merged into the primary result, never chosen after seeing scores.",
+   "why_median_not_mean": "the sign identity below must survive any later family change. It depends only on the median being the displayed location and the CDF being strictly increasing — it does NOT depend on symmetry. Freezing the displayed margin as the MEDIAN makes the identity a property of the construction rather than of the Normal family.",
+   "lattice_representation": "WNBA margins are NONZERO INTEGERS (regulation ties go to overtime), so P(M = 0) = 0 EXACTLY and pushes exist only on nonzero integer spreads. Quoted-line probabilities apply the frozen continuity-corrected cell rule below. The lattice rule is a deterministic REPRESENTATION of the same (mu_g, sigma_g) — it is not a second model and introduces no second estimate."
+  },
+  "the_four_quantities_all_derived_from_G_g": {
+   "predicted_home_margin": "m_g := median(G_g) = mu_g. This is the only margin number that may ever be displayed.",
+   "fair_home_spread": "fair_g := -m_g, computed by NEGATION of m_g. One operation, one input, no second estimator, no rounding to a book increment.",
+   "home_win_probability": "p_home_g := P_G(M_g > 0). Because P(M = 0) = 0, p_home_g + p_away_g = 1 exactly.",
+   "cover_probabilities_at_a_quoted_home_line_s": {
+    "cover_continuous(s)": "P_G(M_g > -s). Used for the fair-spread identity and for monotonicity.",
+    "half_point_line_or_pickem": "p_home_cover = cover_continuous(s); p_push = 0 EXACTLY (no cell exists at a half point; and at s = 0 no cell is applied because a WNBA game cannot end tied); p_away_cover = 1 - p_home_cover.",
+    "nonzero_integer_line": "p_home_cover = cover_continuous(s - 0.5); p_push = P_G(-s - 0.5 <= M_g <= -s + 0.5); p_away_cover = cover_continuous_complement(s + 0.5). The three intervals partition the real line, so the three probabilities sum to 1 exactly."
+   }
+  },
+  "what_is_deleted_by_this_design": [
+   "the independent ridge-logistic winner head as a SOURCE of p_home (it remains alive and frozen as the COMPARATOR, see below)",
+   "the registration tolerance gate |p_home - Phi(margin/13.97)| <= 0.05, which becomes meaningless for the candidate: there are no longer two estimates to reconcile, so the gate is replaced by IDENTITY ASSERTIONS that admit no tolerance",
+   "any render-time arithmetic that reconstructs a probability from a margin or a margin from a probability"
+  ]
+ },
+
+ "MECHANICAL_IDENTITIES_GUARANTEED_BY_CONSTRUCTION": {
+  "enforcement": "each identity is an ASSERTION evaluated on every emitted row before it may be written or rendered. A failed assertion is a CODE DEFECT, not a modelling result: the row is refused, the run is voided, and a successor record is required. No identity has a tolerance, an exemption, or a rounding allowance.",
+  "I1_sign": "p_home_g > 0.500 <=> m_g > 0; p_home_g = 0.500 <=> m_g = 0; p_home_g < 0.500 <=> m_g < 0. EXACT. Holds for any continuous law whose median is m_g and whose CDF is strictly increasing, hence survives the family change to the Student-t arm.",
+  "I2_fair_spread": "fair_g == -m_g, bit-for-bit, by negation of the single displayed margin. The fair spread is never separately estimated, never independently rounded, and never derived from a price.",
+  "I3_same_distribution": "every cover, push and fail probability is computed by integrating the SAME per-game object that produced m_g and p_home_g. Every emitted row carries one distribution_id and one parameter hash; any probability presented beside a margin MUST carry that row's distribution_id or it cannot be rendered.",
+  "I4_fair_spread_is_the_coin_flip": "cover_continuous(-m_g) == 0.500 exactly. The fair spread is DEFINED as the line at which the cover probability is one half, and it equals -m_g by construction — so 'fair spread' and 'predicted margin' can no longer drift apart.",
+  "I5_moneyline_is_the_pickem_spread": "p_home_g == p_home_cover at s = 0. The win probability is the zero-spread case of the cover function, not a separate head.",
+  "I6_partition": "p_home_cover + p_push + p_away_cover == 1 exactly at every quoted line; p_push == 0 exactly at every half-point line and at a pick'em. This reuses the discipline of the 2026-08-19 O/P/U totals incident (docs/experiments/2026-08-19_TOTALS_REPORT_INCIDENT.json; harness/unified_card.py totals_gate), where push mass asserted on a half-point line was the tell that four probability rows had never come from any replay.",
+  "I7_monotone": "s -> p_home_cover(s) is nondecreasing over any grid of lines, and strictly increasing between distinct half-point lines. A more generous spread can never lower the home cover probability.",
+  "I8_integer_offset": "for a nonzero integer line s, p_home_cover(s) == cover_continuous(s - 0.5) exactly. The half-point offset is the push cell and is stated here so it is never mistaken for a discrepancy between two heads.",
+  "why_contradictions_CANNOT_REACH_THE_CARD": [
+   "There is one numeric source per game. The renderer receives a distribution object, not four independent floats, and computes all four displayed quantities from it. There is no code path in which a probability and a margin come from different estimators, because there is only one estimator.",
+   "A contradiction would require an identity assertion to fail, and a failed assertion refuses the row rather than degrading it — the card shows nothing rather than showing two numbers that disagree.",
+   "The existing render gate (harness/decision_card.py render_gate) already refuses a margin displayed without its explicitly labelled fair spread. Under this design that label is not a formatting rule, it is the same number negated, so the rendered sentence cannot contradict the rendered probability.",
+   "The 5pp tolerance is gone. A tolerance can be satisfied by two wrong numbers that are merely close; an identity cannot be satisfied by two numbers at all, because there is only one."
+  ]
+ },
+
+ "ESTIMATOR_FROZEN": {
+  "design_intent": "this experiment changes the OUTPUT OBJECT, not the inputs. Features are held identical to the incumbent so that any measured difference is attributable to coherence and distributional fitting, not to feature shopping.",
+  "features_frozen_identical_to_incumbent": ["net_rtg_edge", "efg_edge", "tov_edge", "orb_edge", "ftr_edge", "rest_edge", "b2b_edge"],
+  "feature_discipline": "as in the 2026-08-12 WNBA V1 prereg: fold-local standardization of the 6 continuous features only; b2b_edge is BINARY-LIKE and is NEVER standardized; features computed strictly before the game date from WNBA_OFFICIAL team-grain rows under official-plus-one finality.",
+  "no_feature_shopping": "this list is CLOSED. Any addition, removal or transformation is a NEW preregistration with a NEW identity.",
+  "location_mu": "ridge OLS on the frozen 7 features, expanding date-ordered walk-forward, penalty chosen on an inner 80/20 split of the TRAINING window only.",
+  "location_recalibration_fold_local": "within each fold, actual margin is regressed on predicted margin using TRAINING rows only; the fitted slope and intercept are applied to the scoring fold. This is the preregistered mechanism by which the candidate may repair the documented blowout compression (card margin_limitation 2026-08-21: 'blowout compression active and re-confirmed 8/20, errors -5.6/+31.4/-10.0'). It uses no scoring-fold outcome and is frozen here so it cannot be introduced later as a rescue.",
+  "scale_sigma": "sigma_fold = residual standard deviation of the RECALIBRATED location on TRAINING rows only, recomputed per fold. Constant within a fold and across games in that fold. A heteroskedastic (per-game) sigma is NOT preregistered and may not be fitted under this record.",
+  "sigma_is_not_13_97": "13.97 is the incumbent's frozen empirical margin sd (harness/wnba_model_v1.py:35) and is used ONLY to construct the comparator's implied distribution (below). The candidate's sigma is fitted, and the two must never be swapped for one another in any report.",
+  "eligibility": "as the incumbent: both teams >= 5 prior games that season; burn-in dates never scored; 2020 bubble rows retained with the known home-court limitation recorded, not silently dropped.",
+  "seed_and_rng": "deterministic closed form; no simulation layer, no RNG. Any future simulation layer is a new record.",
+  "one_shot_rule": "the walk-forward development fit runs ONCE against exactly this record. The result stands whatever it says. Re-runs are permitted only for byte-identical reproduction verification. Development performance is DIAGNOSTIC ONLY and can never satisfy a promotion gate."
+ },
+
+ "THE_COMPARATOR_REMAINS_FROZEN": {
+  "model_id": "wnba.rs.ff7_logit_ridge.v1_0.shadow",
+  "status": "FROZEN. Refit, retune, recalibration and replacement are FORBIDDEN under this record.",
+  "it_is_never_replaced_by_fiat": "the incumbent continues to produce the WNBA card for the entire life of this experiment. It is not deprecated, not paused, not shadowed out, and not 'superseded pending results'. A candidate that is more coherent is not thereby more accurate, and coherence is not evidence of skill.",
+  "the_candidate_must_beat_it_PROSPECTIVELY": "on identical games, forward only, under the gates below. Losing to the incumbent, or failing to separate from it, means the candidate is recorded FAILED and the incumbent continues unchanged.",
+  "comparator_gets_a_fair_distributional_shot": "for the distributional comparison the incumbent is not penalised for lacking a distribution. Its implied law is constructed as Normal(margin_home_v1, 13.97) using its OWN frozen sd — the same object its coherence gate already assumes. Scoring the incumbent against a distribution it never claimed would be a rigged comparison and is forbidden.",
+  "incumbent_development_record_for_reference_only": {
+   "artifact": "data/wnba/model/2026-08-12_v1_walkforward.json",
+   "n": 1633, "dates": 642, "brier": 0.2112318736147291, "base_brier": 0.2471628938348657,
+   "auc": 0.7222466960352423, "calibration_slope": 1.0546488072300644, "calibration_intercept": -0.04515628030269122,
+   "margin_mae": 9.994992200020839, "target_status": "all three targets VALIDATED_VS_BASELINE",
+   "caveat": "DEVELOPMENT WINDOW. These numbers are not the comparator's prospective performance and may never be cited as the bar the candidate must clear."
+  },
+  "incumbent_prospective_record_to_date": {
+   "artifact": "data/wnba/forecasts/grades.jsonl, tier-1 FINAL evidence only",
+   "winner_graded_games": 21, "slate_dates": 8, "window": "2026-08-12 through 2026-08-21",
+   "mean_brier": 0.1675, "sides_correct": "15 of 21",
+   "margin_error_block_banned_mean_rule": {"n": 21, "mae": 8.65, "median_ae": 7.08, "signed_bias": 1.55,
+     "largest_miss": 31.43, "largest_miss_forecast_id": "WNBA-V1-20260820-ATL@LAS"},
+   "why_all_four_margin_statistics_travel_together": "the mean never travels alone (harness/unified_card.py totals_report). A signed bias of +1.55 beside a largest miss of +31.43 is the compression signature; reporting either alone would hide it.",
+   "sample_is_too_small_to_compare_against": "21 games over 8 dates is nowhere near the sample size required below. It is recorded so the candidate's forward numbers are read against a stated baseline, NOT as a comparison."
+  }
+ },
+
+ "PROMOTION_GATES_ALL_REQUIRED": {
+  "G0_out_of_sample_is_the_binding_requirement": "every scored game's outcome must have been UNKNOWN at the moment this record was frozen and at the moment the candidate's parameters were frozen. Forward only. No refit, no recalibration, no threshold change, no feature change, no family change, no sigma change during the evaluation window. Development-window improvement is NOT evidence for promotion and may never be narrated as such.",
+  "G1_preregistered_sample_size": {
+   "requirement": ">= 200 prospective WNBA games across >= 60 distinct slate dates, forward only.",
+   "registration_completeness": "if a slate has eligible games, ALL eligible games register. Never a subset chosen by lines, apparent edge, coherence, or model confidence. A slate where registration was impossible is recorded as such with its reason code.",
+   "immutability": "exactly one distribution per eligible game, registered PRE-TIP, never revised, never superseded by a later capture.",
+   "seasons_note": "at the observed WNBA rate of roughly 2.6 games per slate date, 200 games over 60 dates is NOT reachable in the remainder of the 2026 regular season. The gate therefore spans seasons and the candidate stays SHADOW until it is met. A short season is not a reason to lower the number, and this sentence exists so that reduction cannot later be presented as a technicality.",
+   "checkpoints": "descriptive only at 50 and 100 games: counts, scores, calibration, identity-assertion tally. NO interim significance claims, NO tuning, NO narrative promotion (V14 forward-protocol precedent)."
+  },
+  "G2_proper_scoring_winner": "paired per-game BRIER and LOG LOSS versus the frozen comparator on IDENTICAL games. Improvement required on BOTH. Inference: date-block bootstrap resampling SLATE DATES with replacement, 10000 draws, seed 20260822, on paired per-date mean score differences; 95% CI must exclude zero on the improving side.",
+  "G3_proper_scoring_distribution": "CRPS of the candidate's full predictive margin law versus the comparator's implied Normal(margin_home_v1, 13.97), paired per game, same bootstrap, CI excluding zero favouring the candidate. CRPS is the primary distributional gate because the object being preregistered IS a distribution; a margin MAE comparison is reported alongside but cannot substitute for it.",
+  "G4_multiplicity": "Holm across the family {candidate vs comparator on Brier, candidate vs comparator on log loss, candidate vs comparator on CRPS, candidate vs expanding base rate on Brier} = 4 tests. The base-rate test is a sanity floor that must ALSO pass; the promotion claim rests only on the comparator tests.",
+  "G5_calibration": {
+   "winner_calibration_slope": "logistic recalibration slope in [0.85, 1.15] AND intercept in [-0.15, 0.15] — identical thresholds to the incumbent's own frozen gate (2026-08-12 WNBA V1 prereg). Not loosened for the candidate under any circumstance.",
+   "margin_calibration_slope": "OLS regression of ACTUAL margin on PREDICTED median margin must give slope in [0.85, 1.15]. This is the gate that measures blowout compression directly: a compressed location head produces slope > 1. The comparator's measured slope on the same games is reported beside it.",
+   "distributional_calibration": "empirical coverage of the central 50% and 80% intervals of the predictive law must each fall within 0.10 of nominal. PIT histogram and a KS statistic are reported as DESCRIPTIVE diagnostics and are NOT inferential gates.",
+   "resolution_is_reported_not_sufficient": "wider or sharper probabilities are never success on their own (the V19 lesson carried in the V14 prereg). Improvement must appear in proper scoring, discrimination and calibration TOGETHER."
+  },
+  "G6_identity_integrity": "ZERO identity-assertion failures (I1 through I8) across the entire forward window. A single failure voids the run: it is a defect in the implementation, not a result about the world, and it requires a successor record rather than a patch mid-window.",
+  "G7_provenance_integrity": "ZERO chronology, provenance, personnel or evidence failures across the prospective record. All grading against tier-1 FINAL evidence only, each game graded once.",
+  "G8_owner_sign_off": "nothing promotes automatically. Meeting G0 through G7 makes the candidate ELIGIBLE FOR A PROMOTION DECISION and nothing more. Promotion additionally requires explicit owner sign-off recorded in a successor record naming this record's hash.",
+  "on_failure": "the candidate is recorded FAILED against this record and the incumbent continues unchanged. No retuning, no threshold renegotiation, no re-slicing of the window, no post-hoc subgroup that 'would have passed'. A different design is a NEW preregistration with a NEW identity."
+ },
+
+ "AUTHORITY_AND_CARD_ACTION": {
+  "adoption": "CANDIDATE, NOT AN ADOPTED MODEL.",
+  "wager_authority": "NO",
+  "stake": 0,
+  "ledger_eligible": false,
+  "promotion_eligible": false,
+  "no_card_action_derives_from_it": "until every gate above is met AND owner sign-off is recorded, no candidate number may produce a trust status, a final_action, an ATS selection, a total selection, a price screen, an edge, or any sort order on any card. The candidate may appear ONLY inside the Audit Appendix, explicitly labelled CANDIDATE — NOT ADOPTED, and never on the bettor-facing Decision Card.",
+  "existing_blocks_remain_in_force": [
+   "MARGIN_COMPRESSION_BLOCK on any underdog ATS read from the compressed margin head",
+   "the 2.0-spread-point ATS deadband (docs/experiments/2026-08-20_WNBA_ATS_DEADBAND_AMENDMENT.json; harness/unified_card.py wnba_ats_status)",
+   "OUT_OF_DOMAIN neutral-site permanent block (the PDX@TOR at Rogers Arena class)",
+   "BLOCKED—NO_PRICES_EXIST where no market has been captured"
+  ],
+  "coherence_does_not_lift_a_block": "a coherent distribution is a well-formed answer, not a correct one. None of the blocks above may be relaxed on the grounds that the numbers now agree with each other.",
+  "firewall_unchanged": "no WNBA number reaches the MLB gate, forecasts, ledger or policy gate. Candidate artifacts live under data/wnba/ and are OUTSIDE the MLB chain."
+ },
+
+ "WRITE_DISCIPLINE": {
+  "never_write_to_registered_artifacts": "this experiment writes ONLY to new paths it creates. The following are READ-ONLY to it: data/wnba/forecasts/registrations.jsonl, data/wnba/forecasts/grades.jsonl, data/wnba/forecasts/ats_selections.jsonl, data/wnba/forecasts/*_card.json, data/cards_unified/**, data/cards_decision/**, data/wnba/model/2026-08-12_v1_walkforward.json.",
+  "candidate_output_paths_reserved": {
+   "forward_registrations": "data/wnba/forecasts/coherent_v1_shadow.jsonl (append-only, cohort WNBA_COHERENT_SHADOW, never pooled with the V1 cohort)",
+   "development_result": "data/wnba/model/2026-08-22_coherent_v1_development.json (written once)",
+   "forward_readout": "data/wnba/model/coherent_v1_forward_readout.json (written only at the 200-game/60-date readout)"
+  },
+  "immutability": "pregame rows are immutable; grading APPENDS. A pregame row that already exists is never rewritten (harness/unified_card.py build_wnba refuses an existing file rather than overwriting it).",
+  "R1_unknown_is_null_plus_a_reason_code": "no quantity is ever invented, defaulted or substituted. An unavailable quantity is emitted as null with one of the frozen reason codes: R1_NO_FEATURE_STATE, R1_INELIGIBLE_TEAM_GAMES, R1_NO_LINE_CAPTURED, R1_OUT_OF_DOMAIN_NEUTRAL_SITE, R1_STALE_FEATURES_BEYOND_LIMIT, R1_NO_TIER1_EVIDENCE. A league-average or last-known substitution is FORBIDDEN and would itself be an R1 violation."
+ },
+
+ "HASH_VERIFICATION_V14_PRECEDENT": {
+  "rule": "any later fit, forward run, or readout MUST verify this record's sha256 BEFORE running, and MUST abort if it differs.",
+  "mechanism": "the sha256 is computed over this file's committed bytes AFTER it is written, and pinned as a constant in the implementing module. The module recomputes the hash of this path and aborts before touching data if the value differs. Every result artifact carries prereg (this path), prereg_sha256 (the pinned value) and prereg_verified_before_fit: true. The module's selftest additionally FAILS if an existing result artifact on disk does not carry the pinned hash — so a result produced against a different version of this record cannot sit quietly beside a passing test.",
+  "precedent": "harness/ml_v14_starter.py, against docs/experiments/2026-08-18_V14_STARTER_PREREG.json: PREREG and PREREG_SHA pinned at module scope (lines 26-27), hash checked before the fit (line 260), stamped into the result (line 293), and re-verified from the result artifact inside selftest (line 375). Also harness/ml_p2_baselines.py, which stamps prereg_sha256 into data/mlb/ml_asof/p2_baselines.json.",
+  "self_hash_note": "this record cannot contain its own hash — writing the hash into the file changes the hash. The hash therefore lives in the implementing module and in every result artifact, and this file is never edited after commit. An edit is detected as a hash mismatch, which is the intended behaviour: it aborts the run rather than silently re-anchoring the experiment.",
+  "supersession": "if this record must change, a SUCCESSOR record is written with a new record_id and a new hash, and it names this record_id and hash as its predecessor. This file stays byte-intact forever."
+ },
+
+ "REQUIRED_FALSIFICATION_FIXTURES_FOR_THE_IMPLEMENTING_MODULE": {
+  "rule": "each fixture must FAIL if the rule it guards is deleted. A fixture that still passes with its rule removed is not a fixture. At least one per identity.",
+  "F1_sign_identity": "mu = +0.5, sigma = 13.97 must yield p_home > 0.500; mu = -0.5 must yield p_home < 0.500; mu = 0 must yield exactly 0.500. Delete I1 and an emitter may pair a positive margin with a sub-.500 probability.",
+  "F2_tolerance_replay": "the pair (mu = +0.50, p_home = 0.470) must be REFUSED by the coherent emitter, and the same fixture must assert that this pair PASSES the incumbent's tolerance gate (|0.470 - Phi(0.50/13.97)| = 4.43pp < 5.00pp). Replacing the identity with a tolerance turns this fixture red — that is the whole point of the roadmap item.",
+  "F3_boundary_rounding": "the 2026-08-21 MIN@WAS pair (p_home 0.2523, margin -7.23) must be shown to have exact gap 5.009pp under sd 13.97 while the registered artifact records 5.0 and pass. The fixture asserts that the coherent emitter has NO quantity that can be rounded past a gate.",
+  "F4_fair_spread_negation": "fair_spread == -m exactly for m = -4.08 (the GSV@CHI value) and for a grid of values. A fixture in which the fair spread is produced by any second path — rounding to the nearest half point, re-deriving from p_home, or reading a book number — must FAIL.",
+  "F5_fair_spread_crossing": "cover_continuous(-m) == 0.500 to within 1e-12 across a panel of (mu, sigma).",
+  "F6_partition_and_push": "cover + push + fail == 1 exactly at a nonzero integer line; push == 0 EXACTLY at every half-point line; push == 0 EXACTLY at a pick'em because a WNBA game cannot end tied. This is the 2026-08-19 O/P/U mechanism reapplied to spreads.",
+  "F7_same_object_binding": "a row whose cover probability carries a distribution_id different from the row's margin distribution_id must be REFUSED, not reconciled.",
+  "F8_monotonicity": "s -> p_home_cover(s) nondecreasing over a half-point grid from -20.5 to +20.5.",
+  "F9_moneyline_equals_pickem": "p_home == p_home_cover(0) exactly.",
+  "F10_integer_offset": "p_home_cover(integer s) == cover_continuous(s - 0.5) exactly, so the push cell is never mistaken for head disagreement.",
+  "F11_R1": "a game with no feature state emits null plus a reason code; a fixture that supplies a league-average default must FAIL.",
+  "F12_hash_gate": "a result artifact whose prereg_sha256 differs from the pinned value must FAIL the selftest (V14 precedent).",
+  "F13_comparator_immutability": "replaying a slate with the candidate present must leave every incumbent artifact byte-identical. The candidate never mutates, supersedes or reorders an incumbent row.",
+  "F14_card_action_barrier": "no candidate number may reach a trust status, final_action, selection or sort order while wager authority is NO — a fixture that routes a candidate probability into the decision surface must FAIL."
+ },
+
+ "KNOWN_LIMITATIONS_RECORDED_BEFORE_THE_FACT": [
+  "FEATURE STALENESS: WNBA_OFFICIAL rows end 2026-07-22 under the official-plus-one finality rule; the 2026-08-21 card carried feature_state_as_of 2026-07-22 and staleness_days 30. Both arms consume the SAME stale feature state, so the comparison is fair, but no result under this record is a claim about a fresh-feature model.",
+  "COHERENCE IS NOT ACCURACY: this experiment removes a class of internal contradiction. It does not, by itself, make any number closer to the truth, and no report may imply that it does.",
+  "COMPRESSION IS MEASURED, NOT ASSUMED FIXED: the fold-local location recalibration is the only preregistered mechanism aimed at blowout compression. If it does not work, the margin calibration slope gate (G5) fails and the candidate does not promote. That outcome is a result, not a reason to add a mechanism.",
+  "SIGMA IS HOMOSKEDASTIC WITHIN A FOLD: per-game uncertainty is not modelled, so the candidate still supplies no per-game sigma for the moneyline screen's conservative bound (harness/unified_card.py price_screen would still receive uncertainty_basis NOT_QUANTIFIED). Anyone reading a candidate cover probability as a per-game confidence statement is reading it wrong.",
+  "NEUTRAL SITES: the frozen feature set has no neutral-site term. Such games remain OUT_OF_DOMAIN and are excluded from scoring with reason code R1_OUT_OF_DOMAIN_NEUTRAL_SITE, counted, never silently dropped.",
+  "NO PRICES ON MANY SLATES: cover probabilities require a captured line. Where no line exists the cover block is null with reason code R1_NO_LINE_CAPTURED; the margin and win probability still exist because they do not depend on a market."
+ ],
+
+ "WHAT_THIS_RECORD_DOES_NOT_AUTHORIZE": [
+  "any wager, at any stake, on any WNBA game",
+  "any change to the incumbent model, its parameters, its card, or its registered artifacts",
+  "any relaxation of the compression block, the ATS deadband, the neutral-site block or the no-prices block",
+  "any card, report or message describing the candidate as the WNBA model, the new model, or an improvement, before its gates are met",
+  "any fit, of any kind, before this record's hash is verified"
+ ]
+}

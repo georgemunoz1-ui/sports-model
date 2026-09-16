@@ -1,0 +1,119 @@
+{
+ "record_id": "CONTROLLED-ADAPTIVE-LEARNING-2026-08-23",
+ "created_utc": "2026-08-23T04:00:00Z",
+ "authority": "owner specification 2026-08-23: controlled adaptive learning",
+ "thesis_implemented": "Adapt at three speeds. Governance, evidence tiers, deadbands and wager authority never adapt automatically.",
+ "status": "IMPLEMENTED AND WIRED. Independent review not yet run. No adaptive forecast has been registered; the machinery exists, the arms are not yet running daily.",
+ "modules": {
+  "harness/adaptive_layers.py": {
+   "mutants": "17/17",
+   "does": "the FAST/MEDIUM/SLOW register, the never-adapt list, the temporal rule, and the nine-step cycle gate. Refusal is the default: an unregistered quantity cannot be updated at any speed, because an unregistered quantity is an unaudited one."
+  },
+  "harness/adaptive_state.py": {
+   "mutants": "18/18",
+   "does": "expanding Bayesian home prior, shrunk team ratings, hierarchical pitcher profiles, and the preregistered decay windows"
+  },
+  "harness/empirical_uncertainty.py": {
+   "mutants": "16/16",
+   "does": "uncertainty inflation by condition and conservative_edge = raw - 1.645*empirical_sd"
+  },
+  "harness/drift_monitor.py": {
+   "mutants": "20/20",
+   "does": "rolling 50/100/250 checks against frozen thresholds, and the response ladder"
+  },
+  "harness/champion_challenger.py": {
+   "mutants": "14/14",
+   "does": "simultaneous three-arm registration on one population and one cutoff"
+  },
+  "harness/never_adapt_audit.py": {
+   "mutants": "n/a (selftest + live gate)",
+   "does": "asserts every never-adapt item is bound to a module that actually RUNS"
+  }
+ },
+ "THE_AUDIT_FOUND_A_LIVE_GAP": {
+  "what": "same_book_devig_requirement — the 2026-08-03 ruling that cross-book best-odds de-vig is INVALID for market probability — was on the never-adapt list with NO enforcing module running in the healthcheck.",
+  "the_guard_existed": "freshness_gates.py carries _BEST_ODDS_BASES = (best_odds, best_price, best_available, best_line, cross_book) and a full passing selftest for it. It had simply never been added to the healthcheck selftest loop.",
+  "how_long": "unknown; the module predates this session. For that entire period the rule was documented, implemented, and unexecuted.",
+  "fixed": "freshness_gates is now wired, and the audit itself is now a gate that fails on any never-adapt item without a running enforcer",
+  "the_general_lesson": "The failure mode is not a missing rule. It is a rule that is present, correct and never run — which from the outside is indistinguishable from a rule that works. Three cross-book de-vig bypasses have been caught by hand this month; none of them was caught by this guard, and now it is clear why."
+ },
+ "worked_examples": {
+  "pitcher_shrinkage_one_9_00_run_start": {
+   "established_120_starts": {
+    "tier": "ESTABLISHED",
+    "posterior_mean": 3.476,
+    "shift": "+0.276",
+    "sd": 0.567,
+    "evidence_weight": 0.048
+   },
+   "developing_12_starts": {
+    "tier": "DEVELOPING",
+    "posterior_mean": 3.727,
+    "shift": "+0.527",
+    "sd": 0.784,
+    "evidence_weight": 0.091
+   },
+   "debut_1_start": {
+    "tier": "DEBUT",
+    "posterior_mean": 4.167,
+    "shift": "+0.967",
+    "sd": 1.061,
+    "evidence_weight": 0.167
+   },
+   "no_history": {
+    "tier": "NO_PROFILE",
+    "posterior_mean": 5.8,
+    "shift": "+1.600",
+    "sd": 1.848,
+    "evidence_weight": 0.333,
+    "fallback": "LEAGUE_AVERAGE_CAP, declared"
+   },
+   "reading": "One bad start moves an established pitcher by 0.28 runs and a debut by 0.97, and the debut carries an interval roughly twice as wide. That is the owner's requirement met on both halves: the mean moves less AND the uncertainty stays wider. A model that updated the mean but not the interval would have learned nothing about how little it knows."
+  },
+  "bayesian_home_prior_as_of_2026_08_22": {
+   "p": 0.52516,
+   "n": 1808,
+   "sd": 0.01168,
+   "pool": "tier-1 only"
+  },
+  "empirical_screen_re_run_on_the_2026_08_22_rows": {
+   "method": "conservative_edge = raw - 1.645 * empirical_sd, all-CAP class -> sd 5.20pp",
+   "rows": [
+    {
+     "row": "CON +190 (WNBA)",
+     "raw_pp": 2.73,
+     "sigma": 0.53,
+     "conservative_pp": -5.82,
+     "screen": "FAIL"
+    },
+    {
+     "row": "PHX +285 single-book de-vig",
+     "raw_pp": 13.67,
+     "sigma": 2.63,
+     "conservative_pp": 5.12,
+     "screen": "PASS"
+    },
+    {
+     "row": "PHX +285 cross-book best-odds",
+     "raw_pp": 14.2,
+     "sigma": 2.73,
+     "conservative_pp": 5.65,
+     "screen": "PASS"
+    }
+   ],
+   "the_honest_reading": "The screen does what it was built for on CON +190: a 2.73pp edge against a 5.20pp empirical spread is 0.53 sigma and fails without argument, where against a 0.30pp Monte Carlo standard error it would have read as 9 sigma. It does NOT rescue us from the compression conflict. PHX +285 survives the screen at 2.63 sigma — and the 5pp-plus edge band is 0-6 lifetime. The empirical screen and the compression gate are different controls, and PHX is blocked by the second, not the first. Reporting the screen as if it had resolved PHX would be exactly the kind of overclaim it exists to prevent."
+  }
+ },
+ "what_this_does_not_do": [
+  "No adaptive forecast has been registered. No arm is running daily yet.",
+  "Nothing is promoted, and no module here can promote anything. The gate remains 0/100 NO_PROMOTE, the model-authorized ledger $0, execution UNAUTHORIZED, wager authority NO.",
+  "No window was changed. Every decay window is frozen at its 2026-08-23 registration, and window_change_is_a_challenger has no code path that returns permission for a substitution.",
+  "The challenger arm cannot register with action authority by any route in champion_challenger."
+ ],
+ "defects_found_while_building_this": [
+  "NON-MONOTONE POSTERIOR VARIANCE: the first pitcher posterior mixed prior and evidence variances with weights k/(k+n)^2 and n/(k+n)^2, so with a wide observation spread the interval WIDENED for the first several starts. A posterior that gets less certain as evidence arrives is not a posterior. Replaced with the conjugate form obs_sd^2/(k+n), monotone by construction. The monotonicity fixture caught it; no amount of reading the formula would have.",
+  "A HEALTHY-WINDOW FIXTURE THAT WAS NOT HEALTHY: the drift monitor's clean-window fixture assigned probabilities FROM the outcome, which produced a calibration slope far above 1 and a directional Brier gap that was pure confounding. Rebuilt with genuinely calibrated probabilities symmetric about .5 and wins spread evenly through each group, so every rolling window sees the same mixture. The first version fired alarms on its own tail.",
+  "SEVEN DECORATIVE RULES across five modules survived first-pass mutation because their fixtures overlapped with a stricter neighbour. Each now has a case only it can catch: a never-adapt quantity proposed AT the NEVER layer; an unregistered quantity with no declared layer; a rescheduled game keeping its game_id; a settlement stamped before its own start; a directional split at p=.51 against a .527 prior; three arms all omitting the cutoff; three empty arms."
+ ],
+ "next": "independent review of all six modules; then run the three arms daily so the champion/challenger population accumulates toward the 100-game preliminary stage"
+}

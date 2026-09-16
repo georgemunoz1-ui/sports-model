@@ -1,0 +1,89 @@
+{
+ "BASE_COHERENCE_RULE": "a z-score requires numerator and denominator on the SAME base. A COVER margin is MARKET-referenced (actual vs the line); a model residual SD is MODEL-referenced. Dividing one by the other is a rough gauge, not a z-score, and must be labelled as such.",
+ "CLAIM_WITHDRAWN": "a '12.53 measured against covers' value has been referenced. No such artifact exists in this repo. There is NO measured cover-based SD anywhere. The only measured ~12.55 figure is the MARGIN RESIDUAL SD.",
+ "REGISTER": {
+  "12.3840": {
+   "base": "WNBA margin MAE * sqrt(pi/2)",
+   "kind": "INFERRED",
+   "note": "understates the measured value by 0.1683; superseded by 12.5523"
+  },
+  "12.5523": {
+   "answers": "how far the MODEL's margin sits from the ACTUAL margin",
+   "base": "WNBA margin residual (m_pred - m_act), per game",
+   "bias": 0.2523,
+   "file": "data/wnba/model/wnba_margin_sd_measurement.json",
+   "kind": "MEASURED",
+   "mae": 9.881,
+   "n": 1721
+  },
+  "13.97": {
+   "base": "MARGIN_SD, a COHERENCE TOLERANCE",
+   "kind": "REGISTERED_TOLERANCE",
+   "note": "NOT a cover law and NOT a residual SD. Using it as a distributional constant is a category error regardless of any measurement."
+  },
+  "14.9134": {
+   "base": "8/28 archive-bound MAE 11.90 * sqrt(pi/2), n=4",
+   "kind": "INFERRED",
+   "note": "a FOUR-GAME sample; not comparable to the n=1721 figure"
+  },
+  "16.716": {
+   "base": "CFB pooled margin residual SD",
+   "kind": "MEASURED",
+   "n": 10818
+  },
+  "18.0156": {
+   "base": "WNBA totals residual (t_pred - t_act)",
+   "bias": -0.7352,
+   "file": "data/wnba/model/wnba_total_sd_measurement.json",
+   "kind": "MEASURED",
+   "mae": 14.1737,
+   "n": 1721
+  },
+  "18.385": {
+   "base": "CFB Week-1 margin residual SD",
+   "file": "data/cfb/model/cfb_margin_sd_schedule.json",
+   "kind": "MEASURED",
+   "n": 758
+  }
+ },
+ "RULE_GOING_FORWARD": "every residual verdict must state numerator base, denominator base and n",
+ "VERDICTS_IN_CIRCULATION": [
+  {
+   "numerator": -28.57,
+   "numerator_base": "model residual",
+   "play": "Toronto",
+   "sigma": 12.5523,
+   "verdict": "BASE-COHERENT",
+   "z": -2.28
+  },
+  {
+   "numerator": -22.5,
+   "numerator_base": "cover margin (MARKET-referenced)",
+   "play": "Toronto",
+   "sigma": 12.5523,
+   "verdict": "MIXED BASE \u2014 gauge, not a z-score",
+   "z": -1.79
+  },
+  {
+   "numerator": 21.9,
+   "numerator_base": "model residual",
+   "play": "TCU",
+   "sigma": 18.385,
+   "verdict": "BASE-COHERENT",
+   "z": 1.19
+  },
+  {
+   "numerator": -13.5,
+   "numerator_base": "MARKET residual (line vs actual)",
+   "play": "TCU",
+   "sigma": 18.385,
+   "verdict": "MIXED BASE \u2014 this measures the MARKET's miss against the MODEL's dispersion",
+   "z": -0.73
+  }
+ ],
+ "WHY": "multiple sigma values are in circulation across documents and they are NOT interchangeable. Without a declared base, residual verdicts stop being comparable between records. This register is the single place that says which is which.",
+ "created_utc": "2026-08-30T06:15:01Z",
+ "record_id": "SIGMA-PROVENANCE-2026-08-30",
+ "record_sha256": "7c1d1b95375e35b547dcf415ff44def795c91033810fcf38f1345c6065d99233",
+ "schema": "ops.sigma_provenance_register.v1"
+}

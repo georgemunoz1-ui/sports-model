@@ -1,0 +1,107 @@
+{
+  "schema_version": "mlb_two_night_diagnostic_observation.v1",
+  "period": {
+    "start_date": "2026-09-08",
+    "end_date": "2026-09-09",
+    "games": 30
+  },
+  "evidence_scope": "USER_PROVIDED_DIAGNOSTIC_SUMMARY_NOT_CANONICAL_PROMOTION_EVIDENCE",
+  "canonical_prospective_eligible": false,
+  "counts_toward_distribution_decision_gate": false,
+  "counts_toward_final_holdout": false,
+  "experiment_id": "mlb.fixed_poisson_vs_gamma_poisson_workload.v1",
+  "arm_results": {
+    "fixed_poisson": {
+      "winner_record": {
+        "wins": 16,
+        "losses": 14
+      },
+      "probability_score_summary": "BETTER_OVERALL",
+      "probability_score_values": null
+    },
+    "gamma_poisson_workload_mc": {
+      "winner_record": {
+        "wins": 12,
+        "losses": 18
+      },
+      "probability_score_summary": "WORSE_OVERALL_THAN_FIXED_IN_THIS_DIAGNOSTIC_SAMPLE",
+      "probability_score_values": null
+    }
+  },
+  "direction_flip_observation": {
+    "near_even_direction_flips": 4,
+    "gamma_selected_side_wins": 0,
+    "fixed_selected_side_wins": 4,
+    "known_events": [
+      {
+        "date": "2026-09-08",
+        "event": "LAA_AT_BOS",
+        "fixed_direction": "LAA",
+        "gamma_direction": "BOS",
+        "actual_winner": "LAA"
+      },
+      {
+        "date": "2026-09-08",
+        "event": "TB_AT_ATL",
+        "fixed_direction": "TB",
+        "gamma_direction": "ATL",
+        "actual_winner": "TB"
+      }
+    ],
+    "unresolved_event_details": [
+      {
+        "date": "2026-09-09",
+        "gamma_direction": "ATL",
+        "actual_result": "LOSS",
+        "event_id": null
+      },
+      {
+        "date": "2026-09-09",
+        "gamma_direction": "CWS",
+        "actual_result": "LOSS",
+        "event_id": null
+      }
+    ],
+    "hypothesis": "Current Gamma compression may override weak but useful mean-side signals near the 0.5 decision boundary.",
+    "status": "HYPOTHESIS_ONLY_SMALL_SAMPLE",
+    "hardcoded_threshold_rule": false
+  },
+  "strong_favorite_observation": {
+    "date": "2026-09-08",
+    "critical_divergence_favorites": 3,
+    "fixed_winner_correct": 3,
+    "gamma_winner_correct": 3,
+    "difference_interpretation": "PROBABILITY_SHARPNESS_ONLY_IN_THIS_SAMPLE",
+    "events": ["COL_AT_NYY", "CHC_AT_MIL", "CIN_AT_LAD"]
+  },
+  "run_environment_observation": {
+    "2026-09-08": {
+      "game_total_mae_runs": 3.27,
+      "game_total_mean_signed_error_actual_minus_projected_runs": null,
+      "aggregate_total_center_summary": "NEAR_ZERO_MEAN_ERROR_PER_PRIOR_DIAGNOSTIC_SUMMARY"
+    },
+    "2026-09-09": {
+      "game_total_mae_runs": 5.44,
+      "game_total_mean_signed_error_actual_minus_projected_runs": -2.58,
+      "sign_convention_note": "Value preserved exactly as supplied in the diagnostic summary; interpretation supplied there was projected totals too low on average, so sign convention requires canonical reconciliation before machine use."
+    },
+    "priority": "HIGH",
+    "diagnosis": "MEAN_RUN_ENVIRONMENT_AUDIT_REQUIRED_BEFORE_DISTRIBUTION_RETUNING"
+  },
+  "decisions": {
+    "keep_fixed_as_control": true,
+    "keep_gamma_as_challenger": true,
+    "promote_arm": false,
+    "retire_arm": false,
+    "blend_arms": false,
+    "posthoc_retuning": false,
+    "anti_gamma_near_even_rule": false,
+    "run_mean_audit_priority": "HIGH"
+  },
+  "required_followup": [
+    "Reconcile both nights to prospectively registered cohort-aware PR17 evaluation rows before any canonical score claim.",
+    "Resolve the two unspecified September 9 direction-flip event identities before event-level machine analysis.",
+    "Resolve the September 9 signed-error convention against raw projected and observed totals before using the -2.58 value computationally.",
+    "Audit park, weather, roof, starter binding, bullpen workload, lineup binding, and home-away run allocation independently of the distribution-arm comparison."
+  ]
+}

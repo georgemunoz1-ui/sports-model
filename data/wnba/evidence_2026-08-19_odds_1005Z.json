@@ -1,0 +1,56 @@
+{
+ "schema": "wnba.owner_odds_capture.v2",
+ "record_id": "OWNER-WNBA-ODDS-20260819-1005Z",
+ "captured_at_utc": "2026-08-19T10:05:16Z",
+ "ingested_at_utc": "2026-08-19T10:11:10Z",
+ "received_from": "owner paste 2026-08-19 (WNBA odds screenshot, 10:05Z capture)",
+ "source_tier": 1,
+ "source_family": "OWNER_BOARD",
+ "owner_screenshot_sha256_truncated": "c4b22d95...664cc1",
+ "capture_class": "SECONDARY_EXECUTION_OBSERVATION \u2014 the registered 8/19 card and ATS selections are already frozen; these later prices are execution observations only and never re-select or re-grade anything",
+ "games": [
+  {
+   "g": "TOR@WSH",
+   "ml": {
+    "TOR": 430,
+    "WSH": -520
+   },
+   "spread": {
+    "TOR": 11.5,
+    "WSH": -10.5
+   },
+   "total": {
+    "over_line": 168.5,
+    "under_line": 169.5,
+    "split": true
+   },
+   "registered_primary": {
+    "ats": "TOR +9.5 (ATS-20260819-TOR@WAS)",
+    "total_registered": 170.5
+   },
+   "ruling": "TOR still grades at +9.5; +11.5 is a secondary execution observation. TOR +430 remains COMPRESSION_CONFLICT despite the improved price (was +380 at registration screen)."
+  },
+  {
+   "g": "MIN@GSV",
+   "ml": {
+    "MIN": -125,
+    "GSV": 114
+   },
+   "spread": {
+    "MIN": -1.5,
+    "GSV": 2.5
+   },
+   "total": {
+    "over_line": 164.0,
+    "under_line": 165.5,
+    "split": true
+   },
+   "registered_primary": {
+    "ats": "GSV +2.5 (ATS-20260819-MIN@GSV)",
+    "total_registered": 165.5
+   },
+   "ruling": "GSV +2.5 remains available at this capture; registered line unchanged."
+  }
+ ],
+ "devig_rule": "totals are split across lines and sides may come from different books; no cross-line or cross-book de-vigging (8/3 ruling)"
+}

@@ -1,0 +1,43 @@
+{
+ "record_id": "WNBA-CARD-2026-08-19",
+ "model_id": "wnba.rs.ff7_logit_ridge.v1_0.shadow",
+ "generated_at_utc": "2026-08-19T05:30:00Z",
+ "slate_date": "2026-08-19",
+ "feature_state_as_of": "2026-07-22",
+ "staleness_days": 28,
+ "report_headings_contract": "WINNER / ATS / TOTAL are separate estimands per the 2026-08-19 settlement contract; no generic 'side' language",
+ "total_limitation": "cross-era level term (frozen); two-night misses of -20 and +16 on record \u2014 treat TOTAL rows with corresponding skepticism",
+ "authority": "SHADOW DIAGNOSTIC, paper only, wager_authority NO, stake 0",
+ "lines_evidence": "data/wnba/evidence_2026-08-19_owner_lines.json",
+ "lines_evidence_sha256": "f8cc17f4e9f18dcfd83911ccdcb4a764fd50390fa2c639dc04a65b4fff233405",
+ "rows": [
+  {
+   "away": "TOR",
+   "home": "WAS",
+   "tip_utc": "2026-08-19T23:30Z",
+   "p_home": 0.5953,
+   "margin_home": 3.87,
+   "total": 168.5,
+   "coherence_gap_pp": 1.38,
+   "coherence_pass": true,
+   "games_used": {
+    "home": 26,
+    "away": 26
+   }
+  },
+  {
+   "away": "MIN",
+   "home": "GSV",
+   "tip_utc": "2026-08-20T02:00Z",
+   "p_home": 0.4329,
+   "margin_home": -1.53,
+   "total": 163.8,
+   "coherence_gap_pp": 2.34,
+   "coherence_pass": true,
+   "games_used": {
+    "home": 27,
+    "away": 28
+   }
+  }
+ ]
+}

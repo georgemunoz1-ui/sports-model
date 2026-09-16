@@ -1,0 +1,19 @@
+{
+ "record_id": "SOURCE-ATTRIBUTION-ADDENDUM-20260823",
+ "created_utc": "2026-08-24T01:10:00Z",
+ "why_an_addendum": "data/mlb/evidence/2026-08-23_owner_relay_finals.json is cited by hash on 15 results.csv rows and 15 grade records. Appending to it would change that hash and invalidate every binding — the same reason the 2026-08-21 late final got its own file. Evidence files are immutable once cited.",
+ "applies_to": [
+  "data/mlb/evidence/2026-08-23_owner_relay_finals.json",
+  "data/wnba/evidence_2026-08-23_finals.json",
+  "data/nfl/2026-08-23_owner_relay_finals.json"
+ ],
+ "correction": "OWNER_RELAY names the acquisition ROUTE. It is not the underlying authority, and the tier-1 record must identify the official source as well.",
+ "owner_stated_verbatim": [
+  "MLB scoreboard",
+  "WNBA results",
+  "NFL scoreboard"
+ ],
+ "resolution_status": "UNDERSPECIFIED — these name a CLASS of source, not a retrievable artifact. I did not see the page the owner read and will not resolve 'MLB scoreboard' to a specific host on its behalf; that would be inventing provenance.",
+ "what_would_close_it": "the specific official source and, ideally, a capture — e.g. an MLB Gameday or statsapi game feed, a WNBA official box, an NFL official box — recorded per game.",
+ "effect_on_tier": "NONE. The tier-1 classification rests on the owner declaration family, which is the same basis as the 2026-08-21 addendum. This addendum records that the attribution is thinner than the tier alone suggests, so a future reader is not misled by 'tier 1' into believing an official artifact was retrieved and hashed."
+}

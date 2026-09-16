@@ -1,0 +1,45 @@
+{
+ "schema": "wnba.owner_results_board.v1",
+ "record_id": "WNBA-FINALS-20260823-OWNER-RELAY",
+ "captured_at_utc": "2026-08-24T00:05:00Z",
+ "received_from": "owner message: WNBA results relay",
+ "source_tier": 1,
+ "source_family": "OWNER_RELAY",
+ "slate_date": "2026-08-23",
+ "orientation_basis": "the owner's list is not marked away-first, so ORIENTATION IS TAKEN FROM THE REGISTERED CARD and only the scores are read from the relay. Scores attach to the named team, so every winner is unambiguous either way: DAL over SEA, IND over CHI, WAS over PDX, LVA over TOR. Three of the four are away wins under both readings; SEA@DAL is the only row where the orderings differ, and the card settles it.",
+ "identity_binding": "the relay writes POR and LV; the card writes PDX and LVA. Both bind to one canonical id through franchise_identity, which is the amendment-8 case arriving the day it was written — before binding, two of these four games would have failed to pair silently.",
+ "games": [
+  {
+   "away": "SEA",
+   "home": "DAL",
+   "away_score": 70,
+   "home_score": 92,
+   "as_written_by_owner": "DAL 92-70 SEA",
+   "canonical_game_key": "wnba:SEA@DAL"
+  },
+  {
+   "away": "IND",
+   "home": "CHI",
+   "away_score": 113,
+   "home_score": 90,
+   "as_written_by_owner": "IND 113-90 CHI",
+   "canonical_game_key": "wnba:IND@CHI"
+  },
+  {
+   "away": "WAS",
+   "home": "PDX",
+   "away_score": 105,
+   "home_score": 100,
+   "as_written_by_owner": "WSH 105-100 POR",
+   "canonical_game_key": "wnba:WAS@PDX"
+  },
+  {
+   "away": "LVA",
+   "home": "TOR",
+   "away_score": 88,
+   "home_score": 78,
+   "as_written_by_owner": "LV 88-78 TOR",
+   "canonical_game_key": "wnba:LVA@TOR"
+  }
+ ]
+}

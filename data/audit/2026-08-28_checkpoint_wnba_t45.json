@@ -1,0 +1,95 @@
+{
+ "BOARD_STATE_FINAL": {
+  "current": {
+   "arms_blocked": 0,
+   "arms_emitted": 3,
+   "byte_identical_to_committed": true,
+   "cohort": "2fdb5c9ae59afee676c61908c4ce03df314d2add6e87e4a75e675f476330f6cc",
+   "record": "BOARD-2026-08-28-WNBA-V2"
+  },
+  "superseded": {
+   "byte_identical_to_committed": true,
+   "cohort": "1c8b7653",
+   "note": "untouched under R3",
+   "record": "BOARD-2026-08-28-WNBA"
+  },
+  "was_the_board_closed": "NO \u2014 and the prompt's contingency does not apply. It asked me to record a closed board as the final state if the rebuild never unblocked. The rebuild DID run at 11:25Z once the archive published 8/27, so all three registered arms carry real numbers and no retroactive forecast was ever needed."
+ },
+ "FINAL_DISPOSITIONS": {
+  "wnba:CON@IND": {
+   "DISPOSITION": "NO_SELECTION_ACTION_BLOCKED",
+   "dk_away": 1100,
+   "dk_home": -2100,
+   "fallback_p_home": 0.8527129935099196,
+   "feature_refresh_p_home": 0.9029,
+   "model_side": "IND",
+   "p_side": 0.9029,
+   "prior_p_home": 0.536585,
+   "projected_margin_home": 15.04,
+   "projected_total": 178.6
+  },
+  "wnba:POR@ATL": {
+   "DISPOSITION": "NO_SELECTION_ACTION_BLOCKED",
+   "dk_away": 525,
+   "dk_home": -750,
+   "fallback_p_home": 0.7734635147503538,
+   "feature_refresh_p_home": 0.7843,
+   "model_side": "ATL",
+   "p_side": 0.7843,
+   "prior_p_home": 0.536585,
+   "projected_margin_home": 9.71,
+   "projected_total": 177.6
+  },
+  "wnba:TOR@LV": {
+   "DISPOSITION": "NO_SELECTION_ACTION_BLOCKED",
+   "dk_away": 700,
+   "dk_home": -1100,
+   "fallback_p_home": 0.8503935136033043,
+   "feature_refresh_p_home": 0.8523,
+   "model_side": "LV",
+   "p_side": 0.8523,
+   "prior_p_home": 0.536585,
+   "projected_margin_home": 12.34,
+   "projected_total": 170.7
+  },
+  "wnba:WSH@LAS": {
+   "DISPOSITION": "NO_SELECTION_ACTION_BLOCKED",
+   "dk_away": -205,
+   "dk_home": 170,
+   "fallback_p_home": 0.27342226985084195,
+   "feature_refresh_p_home": 0.4731,
+   "model_side": "WSH",
+   "p_side": 0.5269,
+   "prior_p_home": 0.536585,
+   "projected_margin_home": -1.26,
+   "projected_total": 172.8
+  }
+ },
+ "availability_final": {
+  "grade": "SEARCH_IDENTIFIED_UNCONFIRMED throughout \u2014 identifies, binds nothing",
+  "resolved": "Aneesah Morrow is Toronto's and is out for the season (knee), with Brittney Sykes (foot); the Connecticut listing was stale",
+  "still_open_at_tip": [
+   "A'ja Wilson questionable (back) \u2014 tag persists, never cleared",
+   "NO 8/28-dated availability for Washington or Los Angeles; the only report on file is 8/15 and stays refused as stale"
+  ]
+ },
+ "calendar_note": "TOR@LV and WSH@LAS carry 2026-08-29T02:00:00Z but are 10pm ET FRIDAY games and belong to the 8/28 EASTERN slate. Reading the UTC date as the slate date would split this cohort across two days and break any aggregate over it.",
+ "created_utc": "2026-08-28T22:50:00Z",
+ "ledger": {
+  "exposure_usd": 0,
+  "n_bets": 0,
+  "units": 0.0,
+  "wager_authority": "NO"
+ },
+ "market_attempt": {
+  "outcome": "REFUSED \u2014 EGRESS_BLOCKED, curl exit 56, CONNECT tunnel 403",
+  "prices_on_file": "owner relay only, unchanged since 10:40Z",
+  "route": "curl sportsbook.draftkings.com/leagues/basketball/wnba"
+ },
+ "record_id": "CHECKPOINT-2026-08-28-WNBA-T45",
+ "schema": "ops.checkpoint.v1",
+ "selections": 0,
+ "status": "LAST PREGAME CHECKPOINT \u2014 tips at 23:30Z",
+ "trigger": "trig_016Gw7jBea6yhFQ2MWaaWUSZ (fired 22:45:28Z)",
+ "why_zero_is_final": "registration, not judgement. STANDINGS_LOG5_v1 is DIAGNOSTIC_ONLY_ACTION_BLOCKED; EXPANDING_HOME_PRIOR is a constant with no game-specific information; FEATURE_REFRESH is ACTION_BLOCKED while the pipeline is SYSTEM_NOT_DECISION_READY. Unblocking an arm's forecast never opened the action layer, and no EV figure on file can override a registration."
+}

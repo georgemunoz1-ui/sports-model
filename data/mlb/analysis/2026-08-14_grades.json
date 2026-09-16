@@ -1,0 +1,250 @@
+{
+ "record_id": "GRADES-2026-08-14",
+ "built_utc": "2026-08-15T04:56:21Z",
+ "source_tier": 1,
+ "evidence": "data/mlb/evidence/2026-08-14_owner_finals_board.txt",
+ "evidence_sha256": "ec7480dadad2956d88ee79cdafaa0f755d7ee69c95d43fadd576d7192ea5f7fc",
+ "aggregates_note": "every aggregate below computed from the row dicts in this record (standing rule)",
+ "mlb": {
+  "v13": {
+   "rows": {
+    "STL@CHC": {
+     "p_home": 0.622,
+     "home_win": 1,
+     "brier": 0.1429,
+     "side": true
+    },
+    "MIA@CIN": {
+     "p_home": 0.481,
+     "home_win": 1,
+     "brier": 0.2694,
+     "side": false
+    },
+    "CWS@DET": {
+     "p_home": 0.51,
+     "home_win": 0,
+     "brier": 0.2601,
+     "side": false
+    },
+    "BOS@PIT": {
+     "p_home": 0.429,
+     "home_win": 1,
+     "brier": 0.326,
+     "side": false
+    },
+    "BAL@TB": {
+     "p_home": 0.541,
+     "home_win": 0,
+     "brier": 0.2927,
+     "side": false
+    },
+    "SD@CLE": {
+     "p_home": 0.467,
+     "home_win": 0,
+     "brier": 0.2181,
+     "side": true
+    },
+    "WSH@NYM": {
+     "p_home": 0.443,
+     "home_win": 1,
+     "brier": 0.3102,
+     "side": false
+    },
+    "NYY@TOR": {
+     "p_home": 0.448,
+     "home_win": 1,
+     "brier": 0.3047,
+     "side": false
+    },
+    "AZ@ATL": {
+     "p_home": 0.58,
+     "home_win": 0,
+     "brier": 0.3364,
+     "side": false
+    },
+    "SEA@HOU": {
+     "p_home": 0.547,
+     "home_win": 1,
+     "brier": 0.2052,
+     "side": true
+    },
+    "KC@LAA": {
+     "p_home": 0.447,
+     "home_win": 0,
+     "brier": 0.1998,
+     "side": true
+    },
+    "TEX@ATH": {
+     "p_home": 0.505,
+     "home_win": 1,
+     "brier": 0.245,
+     "side": true
+    },
+    "MIL@LAD": {
+     "p_home": 0.568,
+     "home_win": 1,
+     "brier": 0.1866,
+     "side": true
+    },
+    "COL@SF": {
+     "p_home": 0.531,
+     "home_win": 0,
+     "brier": 0.282,
+     "side": false
+    }
+   },
+   "sides": "6/14",
+   "mean_brier": 0.2556,
+   "p_le_observed_given_own_probs": 0.2602,
+   "chain": "14 grades appended; forecast_registry verify PASS (188/177)"
+  },
+  "v19": {
+   "rows": {
+    "STL@CHC": {
+     "p_home": 0.568,
+     "home_win": 1,
+     "brier": 0.1866,
+     "side": true
+    },
+    "MIA@CIN": {
+     "p_home": 0.511,
+     "home_win": 1,
+     "brier": 0.2391,
+     "side": true
+    },
+    "BOS@PIT": {
+     "p_home": 0.479,
+     "home_win": 1,
+     "brier": 0.2714,
+     "side": false
+    },
+    "CWS@DET": {
+     "p_home": 0.633,
+     "home_win": 0,
+     "brier": 0.4007,
+     "side": false
+    },
+    "BAL@TB": {
+     "p_home": 0.521,
+     "home_win": 0,
+     "brier": 0.2714,
+     "side": false
+    },
+    "WSH@NYM": {
+     "p_home": 0.499,
+     "home_win": 1,
+     "brier": 0.251,
+     "side": false
+    },
+    "SD@CLE": {
+     "p_home": 0.567,
+     "home_win": 0,
+     "brier": 0.3215,
+     "side": false
+    },
+    "NYY@TOR": {
+     "p_home": 0.485,
+     "home_win": 1,
+     "brier": 0.2652,
+     "side": false
+    },
+    "AZ@ATL": {
+     "p_home": 0.592,
+     "home_win": 0,
+     "brier": 0.3505,
+     "side": false
+    },
+    "SEA@HOU": {
+     "p_home": 0.538,
+     "home_win": 1,
+     "brier": 0.2134,
+     "side": true
+    },
+    "KC@LAA": {
+     "p_home": 0.509,
+     "home_win": 0,
+     "brier": 0.2591,
+     "side": false
+    },
+    "TEX@ATH": {
+     "p_home": 0.472,
+     "home_win": 1,
+     "brier": 0.2788,
+     "side": false
+    },
+    "MIL@LAD": {
+     "p_home": 0.568,
+     "home_win": 1,
+     "brier": 0.1866,
+     "side": true
+    },
+    "COL@SF": {
+     "p_home": 0.534,
+     "home_win": 0,
+     "brier": 0.2852,
+     "side": false
+    }
+   },
+   "sides": "4/14",
+   "mean_brier": 0.27,
+   "p_le_observed_given_own_probs": 0.047,
+   "basis": "graded against the ATTESTED cohort (message-transcribed); canonical-bytes supersession control C-V19-SUPERSESSION applies",
+   "highlight": "both >=58% picks LOST (CWS@DET .633 home lost 9-5 to a changed CWS starter; AZ@ATL .592 home shut out 2-0). The widened tail pointed the wrong way tonight."
+  },
+  "head_to_head_disagreements": {
+   "MIA@CIN": "V13 MIA vs V19 CIN -> CIN won 1-0: V19",
+   "SD@CLE": "V13 SD vs V19 CLE -> SD won 7-5: V13",
+   "KC@LAA": "V13 KC vs V19 LAA -> KC won 7-6: V13",
+   "TEX@ATH": "V13 ATH .505 vs V19 TEX -> ATH won 8-3: V13",
+   "tally": "V13 3, V19 1"
+  },
+  "market_context": {
+   "market_favorites": "6/13 (TEX@ATH pick-em excluded) \u2014 an upset-heavy slate",
+   "v13_vs_market_disagreements": {
+    "MIA@CIN": "market right",
+    "SD@CLE": "V13 RIGHT",
+    "WSH@NYM": "market right"
+   },
+   "ledger_update": "tonight disagreements 1/3, agreements 4/10; cumulative: disagreements 4/12, agreements 20/41"
+  },
+  "spread_diagnostic_realized": {
+   "v13": "pregame mean fav 54.92 SD 3.07; realized fav rate 6/14 = 42.9%; its one >=58% row (STL@CHC .622) WON",
+   "v19": "pregame mean 54.33 SD 3.76; realized 4/14 = 28.6%; its two >=58% rows went 0/2",
+   "read": "one night grades character not quality \u2014 but the first head-to-head says the added spread did not add discrimination; it added confident errors. Needs nights, not conclusions."
+  },
+  "starter_change_exhibit": {
+   "changes_vs_morning_board": {
+    "CWS@DET": "Urquidy[P] -> Newcomb (bulk from pen, 1 prior GS)",
+    "BAL@TB": "BOTH sides: Bassitt -> Bradish; Scholtens[P] -> Matz"
+   },
+   "flags_performance": "every actual change occurred on a row that carried a projection flag (board [P]: CWS, TB; V19 flags: BAL, +ATL/ATH which held). The flags WORK as risk markers.",
+   "cost": "V13 simulated CWS@DET and BAL@TB with wrong starters; both graded losses. Personnel/starter-state remains the top roadmap item and tonight priced it again."
+  },
+  "straggler_resolved": "8/13 MIL@LAD: MIL won game 1 per tonight's tier-1 series state ('Game 2 of 4 - Brewers Lead 1-0'); P4-20260813v2-MIL@LAD graded (v2 took MIL 54% \u2014 CORRECT); winner-only, no score; TEX@LAA 8/13 still open"
+ },
+ "wnba": {
+  "official_ledger_tier1": "4/5 sides, mean brier 0.1305 (8/12 x3 + 8/14 x2; the 8/13 night remains tier-3 provisional and is NOT in the official ledger)",
+  "provisional_inclusive": "7/8 sides, mean 0.1064",
+  "tonight": {
+   "DAL@IND": {
+    "final": "87-98",
+    "p_home": 0.6312,
+    "side": true,
+    "brier": 0.136,
+    "margin_err": 7.16,
+    "total_err": 8.5
+   },
+   "PDX@SEA": {
+    "final": "84-82",
+    "p_home": 0.5793,
+    "side": false,
+    "brier": 0.3356,
+    "margin_err": -4.99,
+    "total_err": -4.2
+   }
+  },
+  "first_side_loss": "PDX@SEA \u2014 the flagged risk (PDX = first-year expansion sample, 29 games) was the exact row that missed; DAL@IND total_err +8.5 is the first POSITIVE total error (cross-era level term reads low; 6 of 8 totals now under)",
+  "market_note": "closing IND -7.5 covered (11); model had IND by 3.8 \u2014 model too soft on the favorite AGAIN at the margin level (same compression signature as ATL/GSV)"
+ },
+ "nfl": "see data/nfl/2026-08-14_preseason_benchmark_grades.json (benchmark 1/3) and data/nfl/incidents/2026-08-13_tensf_score_correction.json (TEN 19-13: -6 PUSH not cover)"
+}

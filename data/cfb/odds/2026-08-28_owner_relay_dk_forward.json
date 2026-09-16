@@ -1,0 +1,764 @@
+{
+ "COHORT_CLASSIFICATION_REFUSED": {
+  "resolve_by": "filling the split from the registered FBS list when v2's PREREGISTERED_DATA_ACQUISITION actually runs",
+  "status": "REFUSED_UNCLASSIFIED for all 19 rows",
+  "why": "cfb.fbs.epa_talent_hgb.v2_0.challenger is FBS-only and NO registered FBS team list exists in this repository. Several teams in this relay changed subdivision during the 2024-2026 realignment window, so classifying them from memory would be an invented input. R1: missing data is null plus a flag, never a guess."
+ },
+ "DATE_SCOPE": {
+  "applied_to_the_8_28_card": "NOTHING. The 8/28 boards and card are unchanged. This file is never attached as an 8/28 overlay.",
+  "book_has_no_games_today": "ESTABLISHED by the second capture. The board opens on 'Tomorrow', so DraftKings is carrying no college football for 2026-08-28. The first capture could not support this and explicitly declined to claim it.",
+  "by_game_date": {
+   "2026-08-29": 8,
+   "2026-09-03": 11,
+   "2026-09-04": 3
+  },
+  "finding": "ZERO of the 19 relayed games are on the 2026-08-28 slate. This relay prices none of tonight's card.",
+  "how_the_dates_were_established": "CONFIRMED by the board's own first section header, which reads 'Tomorrow'. From Friday 2026-08-28 that is Saturday 2026-08-29, and the later headers 'Thu 3 Sep' and 'Fri 4 Sep' follow in sequence. The first capture had to infer the Saturday date from scroll position; the second reached the top of the board, so the inference is no longer load-bearing \u2014 and it was correct.",
+  "n_games": 22,
+  "rows_on_2026_08_28": 0,
+  "what_this_does_NOT_establish": "That the 8/28 schedule acquisition is wrong, or that its zero-FBS finding is corroborated. The acquisition found seven 8/28 games, all FCS against FCS. A book with nothing today is consistent with that IF it omits FCS-vs-FCS matchups and inconsistent with it if it prices all college football. Distinguishing those requires DraftKings' inclusion rule, which is not known and is NOT inferred from this sample \u2014 inferring it would rest on the same FBS/FCS classification refused elsewhere in this record. The zero-FBS finding continues to rest on the schedule acquisition alone."
+ },
+ "DISPOSITION": {
+  "exposure_usd": 0,
+  "n_bets": 0,
+  "reason": "no registered CFB model may forecast these games; the FBS challenger is preregistered and pending data acquisition",
+  "selections": 0,
+  "units": 0.0,
+  "wager_authority": "NO"
+ },
+ "TIMEZONE_COROBORATION": {
+  "bears_on": "the open WNBA start-time discrepancy recorded in data/wnba/odds/2026-08-28_owner_relay_dk.json",
+  "effect": "the timezone half of the WNBA discrepancy is now corroborated on independent grounds. The remaining +10 minute gap between the book and the wehoop parquet is UNCHANGED and still unresolved.",
+  "finding": "This relay independently supports the PACIFIC reading of the phone clock. Under Eastern the Thursday college slots would be 3:00, 4:00, 5:00 and 6:00 PM ET, which are not real Thursday-night college football windows. Under Pacific they are 6:00, 7:00, 8:00 and 9:00 PM ET, which are exactly the canonical windows, and Memphis at UNLV becomes a 10:00 PM ET Vegas late game. The second capture adds North Carolina at TCU in a 'Sat 9:00 AM' slot, which is not a college kickoff time in Eastern and is a routine noon ET window in Pacific.",
+  "still_inferred": "no screenshot states its timezone. This is strong corroboration from slot plausibility, not a confirmation."
+ },
+ "TRANSCRIPTION_VERIFICATION": {
+  "cross_screenshot_check": "West Georgia @ Kennesaw State appears at the bottom of one screenshot and the top of the next; both renderings agree on every one of its six prices.",
+  "method": "every two-sided pair must imply a hold in band. Spread and total use 2-8%; moneyline uses a wider 2-12% because hold runs lower on heavy favourites and the narrow band would flag five sound rows as errors.",
+  "moneyline_hold_range_pct": [
+   2.1868,
+   4.1458
+  ],
+  "moneylines_padlocked": 5,
+  "pairs_checked": 61,
+  "problems": [],
+  "repeat_capture_check": {
+   "disagreements": 0,
+   "games_repeated": 8,
+   "individual_prices_compared": 70,
+   "method": "eight games were re-rendered in the second capture, re-transcribed independently, and compared price by price. A repeat rendering is a stronger check than the hold band: the band only says a row is internally plausible, this says it is the same row twice.",
+   "verdict": "PASS"
+  },
+  "spread_hold_range_pct": [
+   4.4192,
+   4.5455
+  ],
+  "total_hold_range_pct": [
+   4.4962,
+   4.5455
+  ],
+  "verdict": "PASS"
+ },
+ "VALUE_FOR_CFB_V2": {
+  "retention_rule": "held as a dated market observation. If v2 ever forecasts these dates, this snapshot is a PRE-existing price record and must be treated as such rather than as a closing line.",
+  "status_unchanged": "cfb.fbs.epa_talent_hgb.v2_0.challenger remains PREREGISTERED_DATA_ACQUISITION_PENDING. No forecast, no selection, no EV. Prices are never predictive features.",
+  "why_this_is_worth_keeping": "the v2 challenger has an EMPTY cohort tonight \u2014 8/28 surfaced seven games and every one was FCS against FCS. These three dates plainly are not empty, so this is the first market snapshot covering dates on which the challenger could have a cohort at all."
+ },
+ "captured_utc_asserted": "2026-08-28T10:55:00Z",
+ "games": [
+  {
+   "away": "North Carolina",
+   "cohort": null,
+   "cohort_status": "REFUSED_UNCLASSIFIED",
+   "game_date": "2026-08-29",
+   "home": "TCU",
+   "moneyline": {
+    "away": 270,
+    "break_even_away": 0.27027,
+    "break_even_home": 0.772727,
+    "home": -340,
+    "null_reason": null,
+    "two_sided_hold_pct": 4.1225
+   },
+   "rank_shown_on_book": null,
+   "slot_as_displayed": "Sat 9:00 AM",
+   "spread": {
+    "away": 8.5,
+    "away_px": -105,
+    "home": -8.5,
+    "home_px": -115,
+    "two_sided_hold_pct": 4.4962
+   },
+   "total": {
+    "line": 46.5,
+    "over_px": -112,
+    "two_sided_hold_pct": 4.5376,
+    "under_px": -108
+   }
+  },
+  {
+   "away": "San Jose State",
+   "cohort": null,
+   "cohort_status": "REFUSED_UNCLASSIFIED",
+   "game_date": "2026-08-29",
+   "home": "USC",
+   "moneyline": {
+    "away": null,
+    "break_even_away": null,
+    "break_even_home": null,
+    "home": null,
+    "null_reason": "MONEYLINE_NOT_OFFERED \u2014 padlocked on the book; a price the book declines to offer is not a price to estimate",
+    "two_sided_hold_pct": null
+   },
+   "rank_shown_on_book": {
+    "USC": 15
+   },
+   "slot_as_displayed": "Sat 12:00 PM",
+   "spread": {
+    "away": 38.5,
+    "away_px": -102,
+    "home": -38.5,
+    "home_px": -118,
+    "two_sided_hold_pct": 4.4192
+   },
+   "total": {
+    "line": 61.5,
+    "over_px": -108,
+    "two_sided_hold_pct": 4.5376,
+    "under_px": -112
+   }
+  },
+  {
+   "away": "NC State",
+   "cohort": null,
+   "cohort_status": "REFUSED_UNCLASSIFIED",
+   "game_date": "2026-08-29",
+   "home": "Virginia",
+   "moneyline": {
+    "away": 160,
+    "break_even_away": 0.384615,
+    "break_even_home": 0.657534,
+    "home": -192,
+    "null_reason": null,
+    "two_sided_hold_pct": 4.0445
+   },
+   "rank_shown_on_book": null,
+   "slot_as_displayed": "Sat 12:30 PM",
+   "spread": {
+    "away": 4.0,
+    "away_px": -115,
+    "home": -4.0,
+    "home_px": -105,
+    "two_sided_hold_pct": 4.4962
+   },
+   "total": {
+    "line": 51.5,
+    "over_px": -108,
+    "two_sided_hold_pct": 4.5376,
+    "under_px": -112
+   }
+  },
+  {
+   "away": "Jacksonville State",
+   "cohort": null,
+   "cohort_status": "REFUSED_UNCLASSIFIED",
+   "game_date": "2026-08-29",
+   "home": "North Dakota State",
+   "moneyline": {
+    "away": 225,
+    "break_even_away": 0.307692,
+    "break_even_home": 0.73545,
+    "home": -278,
+    "null_reason": null,
+    "two_sided_hold_pct": 4.1358
+   },
+   "rank_shown_on_book": null,
+   "slot_as_displayed": "Sat 2:30 PM",
+   "spread": {
+    "away": 7.0,
+    "away_px": -115,
+    "home": -7.0,
+    "home_px": -105,
+    "two_sided_hold_pct": 4.4962
+   },
+   "total": {
+    "line": 46.5,
+    "over_px": -112,
+    "two_sided_hold_pct": 4.5376,
+    "under_px": -108
+   }
+  },
+  {
+   "away": "Sacramento State",
+   "cohort": null,
+   "cohort_status": "REFUSED_UNCLASSIFIED",
+   "game_date": "2026-08-29",
+   "home": "Eastern Michigan",
+   "moneyline": {
+    "away": 295,
+    "break_even_away": 0.253165,
+    "break_even_home": 0.789474,
+    "home": -375,
+    "null_reason": null,
+    "two_sided_hold_pct": 4.0895
+   },
+   "rank_shown_on_book": null,
+   "slot_as_displayed": "Sat 3:30 PM",
+   "spread": {
+    "away": 9.5,
+    "away_px": -108,
+    "home": -9.5,
+    "home_px": -112,
+    "two_sided_hold_pct": 4.5376
+   },
+   "total": {
+    "line": 53.5,
+    "over_px": -112,
+    "two_sided_hold_pct": 4.5376,
+    "under_px": -108
+   }
+  },
+  {
+   "away": "Hawaii",
+   "cohort": null,
+   "cohort_status": "REFUSED_UNCLASSIFIED",
+   "game_date": "2026-08-29",
+   "home": "Stanford",
+   "moneyline": {
+    "away": 164,
+    "break_even_away": 0.378788,
+    "break_even_home": 0.66443,
+    "home": -198,
+    "null_reason": null,
+    "two_sided_hold_pct": 4.1427
+   },
+   "rank_shown_on_book": null,
+   "slot_as_displayed": "Sat 4:00 PM",
+   "spread": {
+    "away": 4.0,
+    "away_px": -108,
+    "home": -4.0,
+    "home_px": -112,
+    "two_sided_hold_pct": 4.5376
+   },
+   "total": {
+    "line": 48.5,
+    "over_px": -112,
+    "two_sided_hold_pct": 4.5376,
+    "under_px": -108
+   }
+  },
+  {
+   "away": "New Mexico State",
+   "cohort": null,
+   "cohort_status": "REFUSED_UNCLASSIFIED",
+   "game_date": "2026-08-29",
+   "home": "Florida State",
+   "moneyline": {
+    "away": 3000,
+    "break_even_away": 0.032258,
+    "break_even_home": 0.990099,
+    "home": -10000,
+    "null_reason": null,
+    "two_sided_hold_pct": 2.1868
+   },
+   "rank_shown_on_book": null,
+   "slot_as_displayed": "Sat (slot row not captured)",
+   "spread": {
+    "away": 31.5,
+    "away_px": -108,
+    "home": -31.5,
+    "home_px": -112,
+    "two_sided_hold_pct": 4.5376
+   },
+   "total": {
+    "line": 53.5,
+    "over_px": -112,
+    "two_sided_hold_pct": 4.5376,
+    "under_px": -108
+   }
+  },
+  {
+   "away": "Memphis",
+   "cohort": null,
+   "cohort_status": "REFUSED_UNCLASSIFIED",
+   "game_date": "2026-08-29",
+   "home": "UNLV",
+   "moneyline": {
+    "away": 160,
+    "break_even_away": 0.384615,
+    "break_even_home": 0.657534,
+    "home": -192,
+    "null_reason": null,
+    "two_sided_hold_pct": 4.0445
+   },
+   "rank_shown_on_book": null,
+   "slot_as_displayed": "Sat 7:00 PM",
+   "spread": {
+    "away": 4.5,
+    "away_px": -115,
+    "home": -4.5,
+    "home_px": -105,
+    "two_sided_hold_pct": 4.4962
+   },
+   "total": {
+    "line": 56.5,
+    "over_px": -112,
+    "two_sided_hold_pct": 4.5376,
+    "under_px": -108
+   }
+  },
+  {
+   "away": "UMass",
+   "cohort": null,
+   "cohort_status": "REFUSED_UNCLASSIFIED",
+   "game_date": "2026-09-03",
+   "home": "Rutgers",
+   "moneyline": {
+    "away": 2500,
+    "break_even_away": 0.038462,
+    "break_even_home": 0.989011,
+    "home": -9000,
+    "null_reason": null,
+    "two_sided_hold_pct": 2.6738
+   },
+   "rank_shown_on_book": null,
+   "slot_as_displayed": "Thu 3:00 PM",
+   "spread": {
+    "away": 29.5,
+    "away_px": -110,
+    "home": -29.5,
+    "home_px": -110,
+    "two_sided_hold_pct": 4.5455
+   },
+   "total": {
+    "line": 52.5,
+    "over_px": -112,
+    "two_sided_hold_pct": 4.5376,
+    "under_px": -108
+   }
+  },
+  {
+   "away": "Merrimack",
+   "cohort": null,
+   "cohort_status": "REFUSED_UNCLASSIFIED",
+   "game_date": "2026-09-03",
+   "home": "Delaware",
+   "moneyline": {
+    "away": 3500,
+    "break_even_away": 0.027778,
+    "break_even_home": 0.995025,
+    "home": -20000,
+    "null_reason": null,
+    "two_sided_hold_pct": 2.2294
+   },
+   "rank_shown_on_book": null,
+   "slot_as_displayed": "Thu 4:00 PM",
+   "spread": {
+    "away": 28.5,
+    "away_px": -112,
+    "home": -28.5,
+    "home_px": -108,
+    "two_sided_hold_pct": 4.5376
+   },
+   "total": {
+    "line": 55.5,
+    "over_px": -108,
+    "two_sided_hold_pct": 4.5376,
+    "under_px": -112
+   }
+  },
+  {
+   "away": "West Georgia",
+   "cohort": null,
+   "cohort_status": "REFUSED_UNCLASSIFIED",
+   "game_date": "2026-09-03",
+   "home": "Kennesaw State",
+   "moneyline": {
+    "away": 1500,
+    "break_even_away": 0.0625,
+    "break_even_home": 0.972973,
+    "home": -3600,
+    "null_reason": null,
+    "two_sided_hold_pct": 3.4258
+   },
+   "rank_shown_on_book": null,
+   "slot_as_displayed": "Thu 4:00 PM",
+   "spread": {
+    "away": 22.5,
+    "away_px": -115,
+    "home": -22.5,
+    "home_px": -105,
+    "two_sided_hold_pct": 4.4962
+   },
+   "total": {
+    "line": 51.5,
+    "over_px": -112,
+    "two_sided_hold_pct": 4.5376,
+    "under_px": -108
+   }
+  },
+  {
+   "away": "Bethune-Cookman",
+   "cohort": null,
+   "cohort_status": "REFUSED_UNCLASSIFIED",
+   "game_date": "2026-09-03",
+   "home": "UCF",
+   "moneyline": {
+    "away": null,
+    "break_even_away": null,
+    "break_even_home": null,
+    "home": null,
+    "null_reason": "MONEYLINE_NOT_OFFERED \u2014 padlocked on the book; a price the book declines to offer is not a price to estimate",
+    "two_sided_hold_pct": null
+   },
+   "rank_shown_on_book": null,
+   "slot_as_displayed": "Thu 4:00 PM",
+   "spread": {
+    "away": 42.5,
+    "away_px": -110,
+    "home": -42.5,
+    "home_px": -110,
+    "two_sided_hold_pct": 4.5455
+   },
+   "total": {
+    "line": 59.5,
+    "over_px": -112,
+    "two_sided_hold_pct": 4.5376,
+    "under_px": -108
+   }
+  },
+  {
+   "away": "Albany NY",
+   "cohort": null,
+   "cohort_status": "REFUSED_UNCLASSIFIED",
+   "game_date": "2026-09-03",
+   "home": "Buffalo",
+   "moneyline": {
+    "away": 1800,
+    "break_even_away": 0.052632,
+    "break_even_home": 0.980392,
+    "home": -5000,
+    "null_reason": null,
+    "two_sided_hold_pct": 3.1968
+   },
+   "rank_shown_on_book": null,
+   "slot_as_displayed": "Thu 4:00 PM",
+   "spread": {
+    "away": 24.5,
+    "away_px": -112,
+    "home": -24.5,
+    "home_px": -108,
+    "two_sided_hold_pct": 4.5376
+   },
+   "total": {
+    "line": 48.5,
+    "over_px": -108,
+    "two_sided_hold_pct": 4.5376,
+    "under_px": -112
+   }
+  },
+  {
+   "away": "Akron",
+   "cohort": null,
+   "cohort_status": "REFUSED_UNCLASSIFIED",
+   "game_date": "2026-09-03",
+   "home": "Wake Forest",
+   "moneyline": {
+    "away": 1500,
+    "break_even_away": 0.0625,
+    "break_even_home": 0.972973,
+    "home": -3600,
+    "null_reason": null,
+    "two_sided_hold_pct": 3.4258
+   },
+   "rank_shown_on_book": null,
+   "slot_as_displayed": "Thu 4:00 PM",
+   "spread": {
+    "away": 23.5,
+    "away_px": -105,
+    "home": -23.5,
+    "home_px": -115,
+    "two_sided_hold_pct": 4.4962
+   },
+   "total": {
+    "line": 48.5,
+    "over_px": -105,
+    "two_sided_hold_pct": 4.4962,
+    "under_px": -115
+   }
+  },
+  {
+   "away": "Colorado",
+   "cohort": null,
+   "cohort_status": "REFUSED_UNCLASSIFIED",
+   "game_date": "2026-09-03",
+   "home": "Georgia Tech",
+   "moneyline": {
+    "away": 210,
+    "break_even_away": 0.322581,
+    "break_even_home": 0.72067,
+    "home": -258,
+    "null_reason": null,
+    "two_sided_hold_pct": 4.1458
+   },
+   "rank_shown_on_book": null,
+   "slot_as_displayed": "Thu 5:00 PM",
+   "spread": {
+    "away": 6.5,
+    "away_px": -105,
+    "home": -6.5,
+    "home_px": -115,
+    "two_sided_hold_pct": 4.4962
+   },
+   "total": {
+    "line": 50.5,
+    "over_px": -115,
+    "two_sided_hold_pct": 4.4962,
+    "under_px": -105
+   }
+  },
+  {
+   "away": "Arkansas-Pine Bluff",
+   "cohort": null,
+   "cohort_status": "REFUSED_UNCLASSIFIED",
+   "game_date": "2026-09-03",
+   "home": "Missouri",
+   "moneyline": {
+    "away": null,
+    "break_even_away": null,
+    "break_even_home": null,
+    "home": null,
+    "null_reason": "MONEYLINE_NOT_OFFERED \u2014 padlocked on the book; a price the book declines to offer is not a price to estimate",
+    "two_sided_hold_pct": null
+   },
+   "rank_shown_on_book": {
+    "Missouri": 25
+   },
+   "slot_as_displayed": "Thu 5:00 PM",
+   "spread": {
+    "away": 54.5,
+    "away_px": -108,
+    "home": -54.5,
+    "home_px": -112,
+    "two_sided_hold_pct": 4.5376
+   },
+   "total": {
+    "line": 60.5,
+    "over_px": -108,
+    "two_sided_hold_pct": 4.5376,
+    "under_px": -112
+   }
+  },
+  {
+   "away": "Eastern Illinois",
+   "cohort": null,
+   "cohort_status": "REFUSED_UNCLASSIFIED",
+   "game_date": "2026-09-03",
+   "home": "Minnesota",
+   "moneyline": {
+    "away": null,
+    "break_even_away": null,
+    "break_even_home": null,
+    "home": null,
+    "null_reason": "MONEYLINE_NOT_OFFERED \u2014 padlocked on the book; a price the book declines to offer is not a price to estimate",
+    "two_sided_hold_pct": null
+   },
+   "rank_shown_on_book": null,
+   "slot_as_displayed": "Thu 5:00 PM",
+   "spread": {
+    "away": 43.5,
+    "away_px": -112,
+    "home": -43.5,
+    "home_px": -108,
+    "two_sided_hold_pct": 4.5376
+   },
+   "total": {
+    "line": 51.5,
+    "over_px": -110,
+    "two_sided_hold_pct": 4.5455,
+    "under_px": -110
+   }
+  },
+  {
+   "away": "Idaho",
+   "cohort": null,
+   "cohort_status": "REFUSED_UNCLASSIFIED",
+   "game_date": "2026-09-03",
+   "home": "Utah",
+   "moneyline": {
+    "away": 3500,
+    "break_even_away": 0.027778,
+    "break_even_home": 0.995025,
+    "home": -20000,
+    "null_reason": null,
+    "two_sided_hold_pct": 2.2294
+   },
+   "rank_shown_on_book": {
+    "Utah": 21
+   },
+   "slot_as_displayed": "Thu (slot row not captured)",
+   "spread": {
+    "away": 33.5,
+    "away_px": -108,
+    "home": -33.5,
+    "home_px": -112,
+    "two_sided_hold_pct": 4.5376
+   },
+   "total": {
+    "line": 56.5,
+    "over_px": -108,
+    "two_sided_hold_pct": 4.5376,
+    "under_px": -112
+   }
+  },
+  {
+   "away": "UAB",
+   "cohort": null,
+   "cohort_status": "REFUSED_UNCLASSIFIED",
+   "game_date": "2026-09-03",
+   "home": "Illinois",
+   "moneyline": {
+    "away": 2200,
+    "break_even_away": 0.043478,
+    "break_even_home": 0.987654,
+    "home": -8000,
+    "null_reason": null,
+    "two_sided_hold_pct": 3.0193
+   },
+   "rank_shown_on_book": null,
+   "slot_as_displayed": "Thu 6:00 PM",
+   "spread": {
+    "away": 28.5,
+    "away_px": -112,
+    "home": -28.5,
+    "home_px": -108,
+    "two_sided_hold_pct": 4.5376
+   },
+   "total": {
+    "line": 56.5,
+    "over_px": -108,
+    "two_sided_hold_pct": 4.5376,
+    "under_px": -112
+   }
+  },
+  {
+   "away": "San Jose State",
+   "cohort": null,
+   "cohort_status": "REFUSED_UNCLASSIFIED",
+   "game_date": "2026-09-04",
+   "home": "Eastern Michigan",
+   "moneyline": {
+    "away": 180,
+    "break_even_away": 0.357143,
+    "break_even_home": 0.685535,
+    "home": -218,
+    "null_reason": null,
+    "two_sided_hold_pct": 4.0931
+   },
+   "rank_shown_on_book": null,
+   "slot_as_displayed": "Sep 4th",
+   "spread": {
+    "away": 4.5,
+    "away_px": -105,
+    "home": -4.5,
+    "home_px": -115,
+    "two_sided_hold_pct": 4.4962
+   },
+   "total": {
+    "line": 53.5,
+    "over_px": -112,
+    "two_sided_hold_pct": 4.5376,
+    "under_px": -108
+   }
+  },
+  {
+   "away": "North Carolina A&T",
+   "cohort": null,
+   "cohort_status": "REFUSED_UNCLASSIFIED",
+   "game_date": "2026-09-04",
+   "home": "Georgia State",
+   "moneyline": {
+    "away": 1700,
+    "break_even_away": 0.055556,
+    "break_even_home": 0.978261,
+    "home": -4500,
+    "null_reason": null,
+    "two_sided_hold_pct": 3.271
+   },
+   "rank_shown_on_book": null,
+   "slot_as_displayed": "Sep 4th",
+   "spread": {
+    "away": 28.5,
+    "away_px": -112,
+    "home": -28.5,
+    "home_px": -108,
+    "two_sided_hold_pct": 4.5376
+   },
+   "total": {
+    "line": 63.5,
+    "over_px": -110,
+    "two_sided_hold_pct": 4.5455,
+    "under_px": -110
+   }
+  },
+  {
+   "away": "Indiana State",
+   "cohort": null,
+   "cohort_status": "REFUSED_UNCLASSIFIED",
+   "game_date": "2026-09-04",
+   "home": "Purdue",
+   "moneyline": {
+    "away": null,
+    "break_even_away": null,
+    "break_even_home": null,
+    "home": null,
+    "null_reason": "MONEYLINE_NOT_OFFERED \u2014 padlocked on the book; a price the book declines to offer is not a price to estimate",
+    "two_sided_hold_pct": null
+   },
+   "rank_shown_on_book": null,
+   "slot_as_displayed": "Sep 4th (row truncated at screen edge)",
+   "spread": {
+    "away": 35.5,
+    "away_px": -110,
+    "home": -35.5,
+    "home_px": -110,
+    "two_sided_hold_pct": 4.5455
+   },
+   "total": {
+    "line": 56.5,
+    "over_px": -110,
+    "two_sided_hold_pct": 4.5455,
+    "under_px": -110
+   }
+  }
+ ],
+ "record_id": "CFB-MARKET-RELAY-2026-08-28-DK-FORWARD",
+ "relay": {
+  "capture_1": {
+   "clock": [
+    "3:38",
+    "3:38",
+    "3:38",
+    "3:39",
+    "3:39"
+   ],
+   "n_screenshots": 5,
+   "reach": "mid-board through Fri 4 Sep; top NOT shown"
+  },
+  "capture_2": {
+   "clock": [
+    "3:38",
+    "3:38",
+    "3:38"
+   ],
+   "n_screenshots": 3,
+   "reach": "TOP of board (first header 'Tomorrow') plus a re-render of eight already-captured games"
+  },
+  "channel": "owner relay, two captures, eight screenshots total",
+  "grade": "OWNER_RELAYED_SINGLE_BOOK",
+  "source": "DraftKings sportsbook, College Football Game Lines, filter 'All'"
+ },
+ "schema": "ops.market_relay_forward.v1",
+ "sport": "cfb"
+}

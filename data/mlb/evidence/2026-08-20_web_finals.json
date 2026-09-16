@@ -1,0 +1,246 @@
+{
+ "schema": "mlb.owner_finals_board.v2",
+ "record_id": "WEB-MLB-FINALS-20260820",
+ "captured_at_utc": "2026-08-21T05:45:00Z",
+ "received_from": "tier-1 web acquisition (mlb.com Gameday titles + ESPN/wire cross-checks), adversarially re-verified per game",
+ "source_tier": 1,
+ "source_family": "OFFICIAL_WEB",
+ "slate_date": "2026-08-20",
+ "price_state": "NO closing prices acquired \u2014 market-relative grading fields null with reason. Registration-vintage same-board two-sided moneylines exist on the card and are used only as MARKET_IMPLIED_CONTEXT in the analysis file, never as closing prices.",
+ "acquisition_notes": "25-agent verification fan-out: per-game search + independent adversarial refutation pass (0 of 14 refuted); independent schedule manifests per league (MLB 9 / WNBA 3 / NFL 2, no doubleheaders, no postponements). www.mlb.com, www.espn.com and www.wnba.com are egress-blocked for direct fetch; finals taken from date-stamped source titles cross-checked against wire/local recaps.",
+ "games": [
+  {
+   "seq": 1,
+   "away": "STL",
+   "home": "CIN",
+   "away_score": 10,
+   "home_score": 9,
+   "close_ml_away": null,
+   "close_ml_home": null,
+   "close_total": null,
+   "away_sp": "Michael McGreevy",
+   "home_sp": "Brady Singer",
+   "source_game_id": "824474 (mlb.com gamePk); 401816603 (ESPN gameId)",
+   "source_urls": [
+    "https://www.mlb.com/gameday/cardinals-vs-reds/2026/08/20/824474/final/box",
+    "https://www.espn.com/mlb/recap/_/gameId/401816603",
+    "https://www.mlb.com/stories/game/824474",
+    "https://www.toledoblade.com/sports/pro/2026/08/20/dane-myers-dropped-fly-9th-gives-cardinals-wild-win-reds/stories/20260820120"
+   ],
+   "date_confirmed": "08/20/2026",
+   "echoes_rejected": [
+    "08/18/2026 \u2014 'MLB Gameday: Cardinals 3, Reds 0 Final Score (08/18/2026)' gamePk 824475 \u2014 rejected, wrong date",
+    "08/19/2026 \u2014 'MLB Gameday: Cardinals 4, Reds 5 Final Score (08/19/2026)' gamePk 824476 \u2014 rejected, wrong date",
+    "08/17/2026 \u2014 'MLB Gameday: Cardinals 2, Reds 1 Final Score (08/17/2026)' gamePk 824514 \u2014 rejected, wrong date"
+   ]
+  },
+  {
+   "seq": 2,
+   "away": "TOR",
+   "home": "TB",
+   "away_score": 5,
+   "home_score": 1,
+   "close_ml_away": null,
+   "close_ml_home": null,
+   "close_total": null,
+   "away_sp": "Shane Bieber",
+   "home_sp": "Ian Seymour",
+   "source_game_id": "822934 (mlb.com gamePk); 401816604 (ESPN gameId)",
+   "source_urls": [
+    "https://www.mlb.com/gameday/blue-jays-vs-rays/2026/08/20/822934/final/box",
+    "https://www.espn.com/mlb/game/_/gameId/401816604/blue-jays-rays",
+    "https://www.foxsports.com/articles/mlb/blue-jays-hit-3-homers-to-power-past-rays-51",
+    "https://www.bozemandailychronicle.com/wire/sports/blue-jays-hit-3-homers-to-power-past-rays-5-1/article_bad04fcd-a33e-5255-ba26-00ee6ef1385c.html"
+   ],
+   "date_confirmed": "08/20/2026",
+   "echoes_rejected": [
+    "08/19/2026 \u2014 'MLB Gameday: Blue Jays 6, Rays 7 Final Score (08/19/2026)' gamePk 822937 \u2014 rejected, wrong date",
+    "08/18/2026 \u2014 'MLB Gameday: Blue Jays 10, Rays 5 Resultado Final (18/08/2026)' gamePk 822938 \u2014 rejected, wrong date",
+    "ESPN Australia 'Rays 7-6 Blue Jays (20 Aug, 2026) Game Recap' gameId 401816593 \u2014 rejected: the 7-6 score matches the 08/19 game (gamePk 822937); this is a timezone-shifted echo on the AU edition, not the 08/20 game, whose ESPN gameId is 401816604"
+   ]
+  },
+  {
+   "seq": 3,
+   "away": "SF",
+   "home": "CLE",
+   "away_score": 2,
+   "home_score": 5,
+   "close_ml_away": null,
+   "close_ml_home": null,
+   "close_total": null,
+   "away_sp": "Landen Roupp",
+   "home_sp": "Gavin Williams",
+   "source_game_id": "mlb gamePk 824395; ESPN gameId 401816602",
+   "source_urls": [
+    "https://www.mlb.com/gameday/giants-vs-guardians/2026/08/20/824395/final/wrap",
+    "https://www.espn.com/mlb/game/_/gameId/401816602/giants-guardians",
+    "https://www.espn.com/mlb/recap/_/gameId/401816602",
+    "https://www.cleveland19.com/2026/08/20/gavin-williams-guardians-handle-giants-5-2/"
+   ],
+   "date_confirmed": "08/20/2026 (Aug 20, 2026)",
+   "echoes_rejected": [
+    "mlb.com gamePk 824394 - 'MLB Gameday: Giants 1, Guardians 0 Final Score (08/19/2026)' - WRONG DATE 08/19/2026, rejected as prior-day echo",
+    "mlb.com gamePk 824398 - 'MLB Gameday: Giants 1, Guardians 8 Final Score (08/18/2026)' - WRONG DATE 08/18/2026, rejected as prior-day echo",
+    "https://www.mlb.com/gameday/giants-vs-guardians/2026/08/20/824395/live - correct date but LIVE/in-progress page, not used as the score source (the /final/wrap page was used instead)",
+    "mlb.com gamePk 822865 - 'Giants 4, Rangers 5 Final Score (08/04/2026)' - wrong opponent and wrong date"
+   ]
+  },
+  {
+   "seq": 4,
+   "away": "ATH",
+   "home": "KC",
+   "away_score": 2,
+   "home_score": 6,
+   "close_ml_away": null,
+   "close_ml_home": null,
+   "close_total": null,
+   "away_sp": "Gage Jump",
+   "home_sp": "Randy Dobnak",
+   "source_game_id": "ESPN gameId 401816606; mlb gamePk 824074",
+   "source_urls": [
+    "https://www.espn.com/mlb/boxscore/_/gameId/401816606",
+    "https://sports.yahoo.com/articles/swept-royals-drop-finale-6-211757727.html",
+    "https://www.royalsreview.com/kansas-city-royals-scores-standings/104226/royals-stage-another-comeback-to-take-the-series-from-the-athletics"
+   ],
+   "date_confirmed": "08/20/2026 (Aug 20, 2026)",
+   "echoes_rejected": [
+    "mlb.com gamePk 824076 - 'MLB Gameday: Athletics 7, Royals 9 Final Score (08/19/2026)' / ESPN gameId 401816595 'Royals 9-7 Athletics (Aug 19, 2026)' / KMMO 'ROYALS ROMP IN EIGHTH TO STUN ATHLETICS 9-7' - WRONG DATE 08/19/2026, rejected as prior-day echo",
+    "ESPN gameId 401816580 - 'Royals 4-3 Athletics (Aug 18, 2026) Final Score' - WRONG DATE 08/18/2026, rejected as prior-day echo",
+    "mlb.com gamePk 824077 / ESPN gameId 401816568 - 'Athletics 5, Royals 9 Final Score (08/17/2026)' - WRONG DATE 08/17/2026, rejected",
+    "https://www.foxsports.com/mlb/athletics-vs-kansas-city-royals-aug-19-2026-game-boxscore-96567 - FOX Sports boxscore dated Aug 19, 2026, rejected as prior-day echo",
+    "mlb.com gamePk 823990 - 'Royals 0, Angels 1 Final Score (08/15/2026)' - wrong opponent and date",
+    "https://www.mlb.com/gameday/athletics-vs-royals/2026/08/20/824074/live - correct date but LIVE/in-progress page, not used as the score source"
+   ]
+  },
+  {
+   "seq": 5,
+   "away": "ATL",
+   "home": "CWS",
+   "away_score": 2,
+   "home_score": 0,
+   "close_ml_away": null,
+   "close_ml_home": null,
+   "close_total": null,
+   "away_sp": "Grant Holmes",
+   "home_sp": "Anthony Kay",
+   "source_game_id": "824589 (mlb.com gamePk); 401877087 (ESPN gameId)",
+   "source_urls": [
+    "https://www.mlb.com/gameday/braves-vs-white-sox/2026/08/20/824589/preview",
+    "https://www.mlb.com/stories/game/824589",
+    "https://www.espn.com/mlb/recap?gameId=401877087",
+    "https://www.espn.com/mlb/game/_/gameId/401877087"
+   ],
+   "date_confirmed": "08/20/2026",
+   "echoes_rejected": [
+    "No same-matchup ATL@CWS games existed on 08/18/2026 or 08/19/2026 - this was not a continuing ATL/CWS series. Non-matchup results seen and excluded: 'Twins 6-4 Braves (Aug 19, 2026)' ESPN gameId 401816607 (ATL played MIN on 8/19), and 'MLB Gameday: White Sox 3, Cubs 0 Final Score (08/19/2026)' gamePk 824640 (CWS played CHC on 8/19). Neither was used."
+   ]
+  },
+  {
+   "seq": 6,
+   "away": "SEA",
+   "home": "MIL",
+   "away_score": 4,
+   "home_score": 7,
+   "close_ml_away": null,
+   "close_ml_home": null,
+   "close_total": null,
+   "away_sp": "George Kirby",
+   "home_sp": "Robert Gasser",
+   "source_game_id": "823747 (mlb.com gamePk); 401816608 (ESPN gameId)",
+   "source_urls": [
+    "https://www.mlb.com/gameday/mariners-vs-brewers/2026/08/20/823747/final",
+    "https://www.espn.com/mlb/recap?gameId=401816608",
+    "https://sports.yahoo.com/articles/brewers-rubber-match-over-mariners-211245753.html",
+    "https://www.brewcrewball.com/milwaukee-brewers-scores-standings/88143/brewers-take-rubber-match-over-mariners-7-4"
+   ],
+   "date_confirmed": "08/20/2026",
+   "echoes_rejected": [
+    "08/18/2026 - 'MLB Gameday: Mariners 0, Brewers 22 Final Score (08/18/2026)' mlb.com gamePk 823749 / ESPN 'Brewers 22-0 Mariners (Aug 18, 2026)' gameId 401816583 - ECHO, not used",
+    "08/19/2026 - ESPN 'Mariners 7-5 Brewers (Aug 19, 2026) Final Score' gameId 401816598 (Mariners won 7-5) - ECHO, not used",
+    "03/08/2026 - 'MLB Gameday: Mariners 3, Brewers 6 Final Score (03/08/2026)' gamePk 831740 (spring training) - not used"
+   ]
+  },
+  {
+   "seq": 7,
+   "away": "NYY",
+   "home": "BAL",
+   "away_score": 6,
+   "home_score": 1,
+   "close_ml_away": null,
+   "close_ml_home": null,
+   "close_total": null,
+   "away_sp": "Gerrit Cole",
+   "home_sp": "Kyle Bradish",
+   "source_game_id": "824802 (mlb.com gamePk); 401816601 (ESPN gameId)",
+   "source_urls": [
+    "https://www.mlb.com/gameday/yankees-vs-orioles/2026/08/20/824802/live",
+    "https://www.mlb.com/stories/game/824802",
+    "https://www.espn.com/mlb/boxscore/_/gameId/401816601",
+    "https://www.pinstripealley.com/yankees-scores-standings/203544/yankees-orioles-sweep-game-score-recap-gerrit-cole-heliot-ramos-spencer-jones-luis-garcia"
+   ],
+   "date_confirmed": "08/20/2026",
+   "echoes_rejected": [
+    "08/19/2026 NYY@BAL - 'MLB Gameday: Yankees 5, Orioles 3 Final Score (08/19/2026)' gamePk 824801 / ESPN gameId 401816589 - REJECTED as prior-day echo",
+    "08/18/2026 NYY@BAL - 'MLB Gameday: Yankees 3, Orioles 1 Final Score (08/18/2026)' gamePk 824803 / ESPN gameId 401816574 - REJECTED as prior-day echo",
+    "FOX Sports 'New York Yankees vs. Baltimore Orioles - Final Score - August 19, 2026' (game-boxscore-96565) - REJECTED as prior-day echo",
+    "FOX Sports 'New York Yankees vs. Baltimore Orioles - Live Score - August 20, 2026' (game-boxscore-96576) - REJECTED as a live/in-progress page, not used"
+   ]
+  },
+  {
+   "seq": 8,
+   "away": "WSH",
+   "home": "TEX",
+   "away_score": 0,
+   "home_score": 2,
+   "close_ml_away": null,
+   "close_ml_home": null,
+   "close_total": null,
+   "away_sp": "Andrew Alvarez",
+   "home_sp": "Jacob deGrom",
+   "source_game_id": "822861 (mlb.com gamePk); 401816609 (ESPN gameId)",
+   "source_urls": [
+    "https://www.mlb.com/gameday/nationals-vs-rangers/2026/08/20/822861/final",
+    "https://www.espn.com/mlb/recap?gameId=401816609",
+    "https://www.mlb.com/scores/2026-08-20"
+   ],
+   "date_confirmed": "08/20/2026",
+   "echoes_rejected": [
+    "08/19/2026 WSH@TEX - 'MLB Gameday: Nationals 6, Rangers 0 Final Score (08/19/2026)' gamePk 822860 / ESPN gameId 401816599 ('Nationals 6-0 Rangers (Aug 19, 2026) Box Score') - REJECTED as prior-day echo",
+    "08/18/2026 WSH@TEX - 'MLB Gameday: Nationals 0, Rangers 5 Final Score (08/18/2026)' gamePk 822859 / ESPN gameId 401816584 ('Rangers 5-0 Nationals (Aug 18, 2026) Game Recap') - REJECTED as prior-day echo",
+    "baseballbiographies.com 'Rangers Shut Out Nationals 5-0 Behind Strong Pitching' - undated headline matching the 08/18/2026 result - REJECTED as prior-day echo",
+    "FOX Sports 'Washington Nationals vs. Texas Rangers - Live Score - August 20, 2026' (game-boxscore-96577) - REJECTED as a live/in-progress page, not used"
+   ]
+  },
+  {
+   "seq": 9,
+   "away": "LAA",
+   "home": "HOU",
+   "away_score": 18,
+   "home_score": 3,
+   "close_ml_away": null,
+   "close_ml_home": null,
+   "close_total": null,
+   "away_sp": "Rodriguez LAA-AMBIG",
+   "home_sp": "Peter Lambert",
+   "source_game_id": "mlb.com gamePk 824153; ESPN gameId 401816605",
+   "source_urls": [
+    "https://www.espn.com/mlb/matchup?gameId=401816605",
+    "https://www.espn.com/mlb/boxscore/_/gameId/401816605",
+    "https://www.cbssports.com/mlb/gametracker/boxscore/MLB_20260820_LAA@HOU/",
+    "https://www.mlb.com/news/zach-neto-has-7-rbis-in-angels-rout-of-astros"
+   ],
+   "date_confirmed": "Aug 20, 2026 (ESPN title \"Angels 18-3 Astros (Aug 20, 2026) Game Stats\"); CBS Sports gametracker slug MLB_20260820_LAA@HOU titled \"August 20, 2026\"; NBC Sports player-news URL path /2026-08-20/",
+   "echoes_rejected": [
+    "08/18/2026 LAA@HOU - \"MLB Gameday: Angels 3, Astros 1 Final Score (08/18/2026)\" (mlb.com gamePk 824154; ESPN gameId 401816579) - REJECTED as prior-day echo",
+    "08/19/2026 LAA@HOU - \"MLB Gameday: Angels 2, Astros 3 Final Score (08/19/2026)\" / ESPN \"Astros 3-2 Angels (Aug 19, 2026) Game Recap\" (mlb.com gamePk 824155; ESPN gameId 401816594) - REJECTED as prior-day echo",
+    "08/19/2026 - tonyspicks.com \"Los Angeles Angels vs Houston Astros Bettors Recap: Houston Astros Wins 3-2 (August 19, 2026)\" - REJECTED as prior-day echo (also a betting page)",
+    "07/29/2026 HOU@LAA - \"Astros 7, Angels 4 Final Score (07/29/2026)\" (gamePk 824002) - REJECTED, wrong date and reversed home/away",
+    "07/27/2026 - \"Astros 6, Angels 4 Final Score (07/27/2026)\" (gamePk 824001) - REJECTED, wrong date",
+    "06/08/2026 HOU@LAA - \"Astros 5, Angels 4 Final Score (06/08/2026)\" (gamePk 824025) - REJECTED, wrong date and reversed home/away",
+    "09/22/2024 LAA@HOU - CBS Sports recap MLB_20240922_LAA@HOU and CBS News \"Zach Neto has 2 homers, 6 RBIs to lead Angels to 9-8 win over Astros\" - REJECTED, wrong season",
+    "Yahoo Sports \"Los Angeles Angels at Houston Astros MLB Prediction, Preview, Odds for August 20, 2026\" - correct date but REJECTED as a preview/odds page",
+    "ESPN \"Angels vs. Astros (Aug 20, 2026) Live Score\" (gameId 401816605) - stale live-score page title for the correct game; score taken instead from the same gameId's final Game Stats/Box Score titles"
+   ]
+  }
+ ]
+}

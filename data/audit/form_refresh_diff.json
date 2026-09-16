@@ -1,0 +1,1165 @@
+{
+ "record_id": "FORM-REFRESH-DIFF-2026-08-17",
+ "built_utc": "2026-08-17T08:51:34Z",
+ "role": "MEASUREMENT_NON_FORECASTING",
+ "question": "what changed SOLELY because the 2026-08-15/16 tier-1 data became available",
+ "model_identity": "ml.v13_1.hfa1005.card.s722n30000 \u2014 FROZEN; no parameter, RNG policy, promotion gate or market input altered by this refresh",
+ "why_v2_vs_v3_is_not_the_answer": "the 2026-08-17T05:20:56Z intake applied 39 tier-1 rows: 8/13 x9 (interior hole repair) plus 8/15 x15 and 8/16 x15. v2->v3 bundles both. This report separates them and the 8/15-8/16 column is the one that answers the question.",
+ "verification_gate": {
+  "S_A_reproduces_registered_v2": {
+   "games": 11,
+   "mismatches": [],
+   "PASS": true
+  },
+  "S_C_reproduces_registered_v3": {
+   "games": 11,
+   "mismatches": [],
+   "PASS": true
+  }
+ },
+ "state_definitions": {
+  "S_A": "date <= 2026-08-14, excluding 2026-08-13 \u2014 reproduces registered v2 exactly",
+  "S_B": "date <= 2026-08-14 \u2014 S_A plus the 2026-08-13 hole repair",
+  "S_C": "all dates through 2026-08-16 \u2014 reproduces registered v3 exactly",
+  "canonical_file_mutated": false
+ },
+ "slate_totals": {
+  "games": 11,
+  "refresh_mean_abs_pp_frozen_n": 0.3839,
+  "refresh_mean_abs_pp_reference": 0.3457,
+  "refresh_max_abs_pp_reference": 0.8167,
+  "hole_repair_mean_abs_pp_frozen_n": 0.1876,
+  "total_mean_abs_pp_frozen_n": 0.4739,
+  "hole_repair_mean_abs_pp_reference": 0.1973,
+  "net_mean_abs_pp_reference": 0.4254,
+  "gross_path_movement_pp": 0.5429,
+  "refresh_share_of_GROSS_path_movement": 0.6367,
+  "repair_share_of_GROSS_path_movement": 0.3633,
+  "shapley_refresh_mean_abs_pp": 0.3481,
+  "shapley_repair_mean_abs_pp": 0.1964,
+  "shapley_refresh_share_ORDER_NEUTRAL": 0.6393,
+  "mean_abs_interaction_pp": 0.0093,
+  "share_note": "MEAN ABSOLUTE MOVEMENTS ARE NOT ADDITIVE. gross (0.543-scale) exceeds net because signed per-game contributions partially cancel. A per-path mean |delta| divided by the NET mean |delta| is a share of nothing \u2014 that error produced the retracted '81%'. Quote the GROSS share for path-specific movement, or the SHAPLEY share when an order-neutral split is required.",
+  "side_flips_at_frozen_n": 1,
+  "side_flips_surviving_reference_estimate": 0,
+  "rank_changes": 2,
+  "games_surviving_holm": 11
+ },
+ "team_form_values_changed_by_8_15_16": [
+  {
+   "team": "ATH",
+   "before_8_15_16": {
+    "games": 121,
+    "rf_per_g": 4.3636,
+    "ra_per_g": 5.7438,
+    "rf_total": 528,
+    "ra_total": 695
+   },
+   "after_8_15_16": {
+    "games": 123,
+    "rf_per_g": 4.3577,
+    "ra_per_g": 5.7073,
+    "rf_total": 536,
+    "ra_total": 702
+   },
+   "d_games": 2,
+   "d_rf_per_g": -0.0059,
+   "d_ra_per_g": -0.0365
+  },
+  {
+   "team": "ATL",
+   "before_8_15_16": {
+    "games": 122,
+    "rf_per_g": 4.8443,
+    "ra_per_g": 3.8443,
+    "rf_total": 591,
+    "ra_total": 469
+   },
+   "after_8_15_16": {
+    "games": 124,
+    "rf_per_g": 4.8306,
+    "ra_per_g": 3.8871,
+    "rf_total": 599,
+    "ra_total": 482
+   },
+   "d_games": 2,
+   "d_rf_per_g": -0.0137,
+   "d_ra_per_g": 0.0428
+  },
+  {
+   "team": "AZ",
+   "before_8_15_16": {
+    "games": 122,
+    "rf_per_g": 4.5246,
+    "ra_per_g": 4.4098,
+    "rf_total": 552,
+    "ra_total": 538
+   },
+   "after_8_15_16": {
+    "games": 124,
+    "rf_per_g": 4.5565,
+    "ra_per_g": 4.4032,
+    "rf_total": 565,
+    "ra_total": 546
+   },
+   "d_games": 2,
+   "d_rf_per_g": 0.0319,
+   "d_ra_per_g": -0.0066
+  },
+  {
+   "team": "BAL",
+   "before_8_15_16": {
+    "games": 122,
+    "rf_per_g": 4.5,
+    "ra_per_g": 4.7869,
+    "rf_total": 549,
+    "ra_total": 584
+   },
+   "after_8_15_16": {
+    "games": 124,
+    "rf_per_g": 4.5403,
+    "ra_per_g": 4.75,
+    "rf_total": 563,
+    "ra_total": 589
+   },
+   "d_games": 2,
+   "d_rf_per_g": 0.0403,
+   "d_ra_per_g": -0.0369
+  },
+  {
+   "team": "BOS",
+   "before_8_15_16": {
+    "games": 122,
+    "rf_per_g": 4.4426,
+    "ra_per_g": 3.7705,
+    "rf_total": 542,
+    "ra_total": 460
+   },
+   "after_8_15_16": {
+    "games": 124,
+    "rf_per_g": 4.4274,
+    "ra_per_g": 3.7742,
+    "rf_total": 549,
+    "ra_total": 468
+   },
+   "d_games": 2,
+   "d_rf_per_g": -0.0152,
+   "d_ra_per_g": 0.0037
+  },
+  {
+   "team": "CHC",
+   "before_8_15_16": {
+    "games": 123,
+    "rf_per_g": 5.1789,
+    "ra_per_g": 4.2764,
+    "rf_total": 637,
+    "ra_total": 526
+   },
+   "after_8_15_16": {
+    "games": 125,
+    "rf_per_g": 5.16,
+    "ra_per_g": 4.36,
+    "rf_total": 645,
+    "ra_total": 545
+   },
+   "d_games": 2,
+   "d_rf_per_g": -0.0189,
+   "d_ra_per_g": 0.0836
+  },
+  {
+   "team": "CIN",
+   "before_8_15_16": {
+    "games": 121,
+    "rf_per_g": 4.1074,
+    "ra_per_g": 4.7355,
+    "rf_total": 497,
+    "ra_total": 573
+   },
+   "after_8_15_16": {
+    "games": 123,
+    "rf_per_g": 4.0813,
+    "ra_per_g": 4.7805,
+    "rf_total": 502,
+    "ra_total": 588
+   },
+   "d_games": 2,
+   "d_rf_per_g": -0.0261,
+   "d_ra_per_g": 0.045
+  },
+  {
+   "team": "COL",
+   "before_8_15_16": {
+    "games": 121,
+    "rf_per_g": 4.7851,
+    "ra_per_g": 5.7273,
+    "rf_total": 579,
+    "ra_total": 693
+   },
+   "after_8_15_16": {
+    "games": 123,
+    "rf_per_g": 4.8211,
+    "ra_per_g": 5.748,
+    "rf_total": 593,
+    "ra_total": 707
+   },
+   "d_games": 2,
+   "d_rf_per_g": 0.036,
+   "d_ra_per_g": 0.0207
+  },
+  {
+   "team": "CWS",
+   "before_8_15_16": {
+    "games": 121,
+    "rf_per_g": 4.8182,
+    "ra_per_g": 4.4545,
+    "rf_total": 583,
+    "ra_total": 539
+   },
+   "after_8_15_16": {
+    "games": 123,
+    "rf_per_g": 4.8293,
+    "ra_per_g": 4.4472,
+    "rf_total": 594,
+    "ra_total": 547
+   },
+   "d_games": 2,
+   "d_rf_per_g": 0.0111,
+   "d_ra_per_g": -0.0073
+  },
+  {
+   "team": "DET",
+   "before_8_15_16": {
+    "games": 122,
+    "rf_per_g": 4.5656,
+    "ra_per_g": 3.8607,
+    "rf_total": 557,
+    "ra_total": 471
+   },
+   "after_8_15_16": {
+    "games": 124,
+    "rf_per_g": 4.5565,
+    "ra_per_g": 3.8871,
+    "rf_total": 565,
+    "ra_total": 482
+   },
+   "d_games": 2,
+   "d_rf_per_g": -0.0091,
+   "d_ra_per_g": 0.0264
+  },
+  {
+   "team": "KC",
+   "before_8_15_16": {
+    "games": 122,
+    "rf_per_g": 4.1475,
+    "ra_per_g": 5.0656,
+    "rf_total": 506,
+    "ra_total": 618
+   },
+   "after_8_15_16": {
+    "games": 124,
+    "rf_per_g": 4.1048,
+    "ra_per_g": 4.9919,
+    "rf_total": 509,
+    "ra_total": 619
+   },
+   "d_games": 2,
+   "d_rf_per_g": -0.0427,
+   "d_ra_per_g": -0.0737
+  },
+  {
+   "team": "LAD",
+   "before_8_15_16": {
+    "games": 122,
+    "rf_per_g": 4.9836,
+    "ra_per_g": 3.8197,
+    "rf_total": 608,
+    "ra_total": 466
+   },
+   "after_8_15_16": {
+    "games": 124,
+    "rf_per_g": 4.9274,
+    "ra_per_g": 3.8387,
+    "rf_total": 611,
+    "ra_total": 476
+   },
+   "d_games": 2,
+   "d_rf_per_g": -0.0562,
+   "d_ra_per_g": 0.019
+  },
+  {
+   "team": "MIA",
+   "before_8_15_16": {
+    "games": 123,
+    "rf_per_g": 4.3415,
+    "ra_per_g": 4.2683,
+    "rf_total": 534,
+    "ra_total": 525
+   },
+   "after_8_15_16": {
+    "games": 125,
+    "rf_per_g": 4.392,
+    "ra_per_g": 4.24,
+    "rf_total": 549,
+    "ra_total": 530
+   },
+   "d_games": 2,
+   "d_rf_per_g": 0.0505,
+   "d_ra_per_g": -0.0283
+  },
+  {
+   "team": "MIN",
+   "before_8_15_16": {
+    "games": 123,
+    "rf_per_g": 4.6504,
+    "ra_per_g": 4.9593,
+    "rf_total": 572,
+    "ra_total": 610
+   },
+   "after_8_15_16": {
+    "games": 125,
+    "rf_per_g": 4.624,
+    "ra_per_g": 5.008,
+    "rf_total": 578,
+    "ra_total": 626
+   },
+   "d_games": 2,
+   "d_rf_per_g": -0.0264,
+   "d_ra_per_g": 0.0487
+  },
+  {
+   "team": "NYM",
+   "before_8_15_16": {
+    "games": 123,
+    "rf_per_g": 4.1789,
+    "ra_per_g": 4.5366,
+    "rf_total": 514,
+    "ra_total": 558
+   },
+   "after_8_15_16": {
+    "games": 125,
+    "rf_per_g": 4.184,
+    "ra_per_g": 4.52,
+    "rf_total": 523,
+    "ra_total": 565
+   },
+   "d_games": 2,
+   "d_rf_per_g": 0.0051,
+   "d_ra_per_g": -0.0166
+  },
+  {
+   "team": "PHI",
+   "before_8_15_16": {
+    "games": 123,
+    "rf_per_g": 4.4065,
+    "ra_per_g": 4.4146,
+    "rf_total": 542,
+    "ra_total": 543
+   },
+   "after_8_15_16": {
+    "games": 125,
+    "rf_per_g": 4.464,
+    "ra_per_g": 4.392,
+    "rf_total": 558,
+    "ra_total": 549
+   },
+   "d_games": 2,
+   "d_rf_per_g": 0.0575,
+   "d_ra_per_g": -0.0226
+  },
+  {
+   "team": "PIT",
+   "before_8_15_16": {
+    "games": 124,
+    "rf_per_g": 5.0403,
+    "ra_per_g": 4.8065,
+    "rf_total": 625,
+    "ra_total": 596
+   },
+   "after_8_15_16": {
+    "games": 126,
+    "rf_per_g": 5.0238,
+    "ra_per_g": 4.7857,
+    "rf_total": 633,
+    "ra_total": 603
+   },
+   "d_games": 2,
+   "d_rf_per_g": -0.0165,
+   "d_ra_per_g": -0.0208
+  },
+  {
+   "team": "SD",
+   "before_8_15_16": {
+    "games": 122,
+    "rf_per_g": 4.2459,
+    "ra_per_g": 4.2951,
+    "rf_total": 518,
+    "ra_total": 524
+   },
+   "after_8_15_16": {
+    "games": 124,
+    "rf_per_g": 4.2258,
+    "ra_per_g": 4.2742,
+    "rf_total": 524,
+    "ra_total": 530
+   },
+   "d_games": 2,
+   "d_rf_per_g": -0.0201,
+   "d_ra_per_g": -0.0209
+  },
+  {
+   "team": "STL",
+   "before_8_15_16": {
+    "games": 122,
+    "rf_per_g": 4.3361,
+    "ra_per_g": 4.3689,
+    "rf_total": 529,
+    "ra_total": 533
+   },
+   "after_8_15_16": {
+    "games": 124,
+    "rf_per_g": 4.4194,
+    "ra_per_g": 4.3629,
+    "rf_total": 548,
+    "ra_total": 541
+   },
+   "d_games": 2,
+   "d_rf_per_g": 0.0833,
+   "d_ra_per_g": -0.006
+  },
+  {
+   "team": "TB",
+   "before_8_15_16": {
+    "games": 120,
+    "rf_per_g": 4.5167,
+    "ra_per_g": 4.075,
+    "rf_total": 542,
+    "ra_total": 489
+   },
+   "after_8_15_16": {
+    "games": 122,
+    "rf_per_g": 4.4836,
+    "ra_per_g": 4.123,
+    "rf_total": 547,
+    "ra_total": 503
+   },
+   "d_games": 2,
+   "d_rf_per_g": -0.0331,
+   "d_ra_per_g": 0.048
+  }
+ ],
+ "pitcher_form": {
+  "changed_by_this_refresh": false,
+  "basis": "the refresh added TEAM game results, not pitcher game logs. Every game's asp_stats/hsp_stats are byte-identical between the v2 and v3 registered cards, and both arms of every contrast here are driven from those same stats. harness/daily_card.py reads pitcher form from data/backfill/mlb/2026/pitcher_logs/, which this intake did not touch.",
+  "verified_field_by_field": {
+   "games_compared": 11,
+   "asp_stats_identical_v2_vs_v3": true,
+   "hsp_stats_identical_v2_vs_v3": true,
+   "starter_names_identical_v2_vs_v3": true,
+   "mismatches": []
+  }
+ },
+ "edges_and_selections": {
+  "edge": null,
+  "break_even_prob": null,
+  "selection": null,
+  "REASON": "NO market prices exist on file for 2026-08-17: every row's lines.ml_home / lines.ml_away / mkt_home_prob / gap_home is null in BOTH the v2 and v3 registered cards, and no data/mlb/odds/2026-08-17_*.json exists. Edge = p_model - p_breakeven is undefined without a posted price, and the card's selection rule ('no plays unless the kprop EV rule fires') cannot fire without one. Per R1 these are reported NULL AND FLAGGED, not estimated.",
+  "did_the_refresh_change_them": "NO \u2014 and not because they were stable, but because they were absent before and after. Any nonzero edge or selection delta reported for this slate would be invented.",
+  "acquisition_blocked": "outbound HTTPS returns 403 at the org egress proxy; no price was fetched and none was substituted from another book or another date."
+ },
+ "games": [
+  {
+   "game": "STL@CIN-DH1",
+   "gamePk": "DH1",
+   "away_sp": "TBD",
+   "home_sp": "Rhett Lowder",
+   "starters_changed_by_refresh": false,
+   "p_home_S_A_v2_state": 0.4554,
+   "p_home_S_B_after_8_13_repair": 0.45653,
+   "p_home_S_C_after_8_15_16": 0.4515,
+   "delta_pp_frozen_n_8_13_repair": 0.1133,
+   "delta_pp_frozen_n_8_15_16_REFRESH": -0.5033,
+   "delta_pp_frozen_n_total": -0.39,
+   "refresh_reference_estimate": {
+    "mean_signed_pp": -0.7183,
+    "sd_pp": 0.0364,
+    "se_pp": 0.0115,
+    "ci95": [
+     -0.7409,
+     -0.6957
+    ],
+    "ci_simultaneous": [
+     -0.7509,
+     -0.6857
+    ],
+    "p_holm": 1.1e-299,
+    "survives_holm_05": true,
+    "excl_zero_simultaneous": true,
+    "n_sims": 2000000,
+    "reps": 10
+   },
+   "hole_repair_reference_estimate": {
+    "mean_signed_pp": 0.2348,
+    "ci95": [
+     0.2144,
+     0.2552
+    ],
+    "p_holm": 5.61482992575059e-112,
+    "survives_holm_05": true
+   },
+   "signed_contributions_pp": {
+    "refresh_given_hole_repaired_B_to_C": -0.7183,
+    "refresh_given_hole_open_A_to_D": -0.7049,
+    "repair_given_refresh_absent_A_to_B": 0.2348,
+    "repair_given_refresh_applied_D_to_C": 0.2215,
+    "shapley_refresh": -0.7116,
+    "shapley_repair": 0.2282,
+    "shapley_sum": -0.4834,
+    "net_A_to_C": -0.39,
+    "interaction_pp": -0.0134
+   },
+   "side_at_frozen_n_before": "AWAY",
+   "side_at_frozen_n_after": "AWAY",
+   "side_flipped_at_frozen_n": false,
+   "side_flip_survives_reference_estimate": null,
+   "p_home_under_reference_estimate": 0.44935,
+   "rank_by_p_home_before": 11,
+   "rank_by_p_home_after": 11,
+   "rank_change": 0,
+   "market_price_on_file": null,
+   "break_even_prob": null,
+   "edge": null,
+   "selection": null
+  },
+  {
+   "game": "BAL@TB",
+   "gamePk": "NG02",
+   "away_sp": "Brandon Young",
+   "home_sp": "Shane McClanahan",
+   "starters_changed_by_refresh": false,
+   "p_home_S_A_v2_state": 0.50827,
+   "p_home_S_B_after_8_13_repair": 0.50753,
+   "p_home_S_C_after_8_15_16": 0.49603,
+   "delta_pp_frozen_n_8_13_repair": -0.0733,
+   "delta_pp_frozen_n_8_15_16_REFRESH": -1.15,
+   "delta_pp_frozen_n_total": -1.2233,
+   "refresh_reference_estimate": {
+    "mean_signed_pp": -0.5782,
+    "sd_pp": 0.0263,
+    "se_pp": 0.0083,
+    "ci95": [
+     -0.5946,
+     -0.5619
+    ],
+    "ci_simultaneous": [
+     -0.6018,
+     -0.5546
+    ],
+    "p_holm": 1.1e-299,
+    "survives_holm_05": true,
+    "excl_zero_simultaneous": true,
+    "n_sims": 2000000,
+    "reps": 10
+   },
+   "hole_repair_reference_estimate": {
+    "mean_signed_pp": 0.0,
+    "ci95": [
+     0.0,
+     0.0
+    ],
+    "p_holm": 1.1e-299,
+    "survives_holm_05": true
+   },
+   "signed_contributions_pp": {
+    "refresh_given_hole_repaired_B_to_C": -0.5782,
+    "refresh_given_hole_open_A_to_D": -0.5782,
+    "repair_given_refresh_absent_A_to_B": 0.0,
+    "repair_given_refresh_applied_D_to_C": 0.0,
+    "shapley_refresh": -0.5782,
+    "shapley_repair": 0.0,
+    "shapley_sum": -0.5782,
+    "net_A_to_C": -1.2233,
+    "interaction_pp": 0.0
+   },
+   "side_at_frozen_n_before": "HOME",
+   "side_at_frozen_n_after": "AWAY",
+   "side_flipped_at_frozen_n": true,
+   "side_flip_survives_reference_estimate": false,
+   "p_home_under_reference_estimate": 0.50175,
+   "rank_by_p_home_before": 6,
+   "rank_by_p_home_after": 7,
+   "rank_change": -1,
+   "market_price_on_file": null,
+   "break_even_prob": null,
+   "edge": null,
+   "selection": null
+  },
+  {
+   "game": "MIA@PHI",
+   "gamePk": "NG03",
+   "away_sp": "Janson Junk",
+   "home_sp": "Cristopher S\u00e1nchez",
+   "starters_changed_by_refresh": false,
+   "p_home_S_A_v2_state": 0.54047,
+   "p_home_S_B_after_8_13_repair": 0.54373,
+   "p_home_S_C_after_8_15_16": 0.54423,
+   "delta_pp_frozen_n_8_13_repair": 0.3267,
+   "delta_pp_frozen_n_8_15_16_REFRESH": 0.05,
+   "delta_pp_frozen_n_total": 0.3767,
+   "refresh_reference_estimate": {
+    "mean_signed_pp": 0.0478,
+    "sd_pp": 0.0364,
+    "se_pp": 0.0115,
+    "ci95": [
+     0.0252,
+     0.0704
+    ],
+    "ci_simultaneous": [
+     0.0152,
+     0.0804
+    ],
+    "p_holm": 3.315406450010906e-05,
+    "survives_holm_05": true,
+    "excl_zero_simultaneous": true,
+    "n_sims": 2000000,
+    "reps": 10
+   },
+   "hole_repair_reference_estimate": {
+    "mean_signed_pp": 0.4417,
+    "ci95": [
+     0.4317,
+     0.4517
+    ],
+    "p_holm": 1.1e-299,
+    "survives_holm_05": true
+   },
+   "signed_contributions_pp": {
+    "refresh_given_hole_repaired_B_to_C": 0.0478,
+    "refresh_given_hole_open_A_to_D": 0.0536,
+    "repair_given_refresh_absent_A_to_B": 0.4417,
+    "repair_given_refresh_applied_D_to_C": 0.436,
+    "shapley_refresh": 0.0507,
+    "shapley_repair": 0.4388,
+    "shapley_sum": 0.4895,
+    "net_A_to_C": 0.3767,
+    "interaction_pp": -0.0058
+   },
+   "side_at_frozen_n_before": "HOME",
+   "side_at_frozen_n_after": "HOME",
+   "side_flipped_at_frozen_n": false,
+   "side_flip_survives_reference_estimate": null,
+   "p_home_under_reference_estimate": 0.54421,
+   "rank_by_p_home_before": 2,
+   "rank_by_p_home_after": 2,
+   "rank_change": 0,
+   "market_price_on_file": null,
+   "break_even_prob": null,
+   "edge": null,
+   "selection": null
+  },
+  {
+   "game": "STL@CIN-DH2",
+   "gamePk": "DH2",
+   "away_sp": "TBD",
+   "home_sp": "TBD",
+   "starters_changed_by_refresh": false,
+   "p_home_S_A_v2_state": 0.4723,
+   "p_home_S_B_after_8_13_repair": 0.4727,
+   "p_home_S_C_after_8_15_16": 0.46777,
+   "delta_pp_frozen_n_8_13_repair": 0.04,
+   "delta_pp_frozen_n_8_15_16_REFRESH": -0.4933,
+   "delta_pp_frozen_n_total": -0.4533,
+   "refresh_reference_estimate": {
+    "mean_signed_pp": -0.8167,
+    "sd_pp": 0.0309,
+    "se_pp": 0.0098,
+    "ci95": [
+     -0.8359,
+     -0.7976
+    ],
+    "ci_simultaneous": [
+     -0.8445,
+     -0.7889
+    ],
+    "p_holm": 1.1e-299,
+    "survives_holm_05": true,
+    "excl_zero_simultaneous": true,
+    "n_sims": 2000000,
+    "reps": 10
+   },
+   "hole_repair_reference_estimate": {
+    "mean_signed_pp": 0.2512,
+    "ci95": [
+     0.2331,
+     0.2693
+    ],
+    "p_holm": 3.777751968712737e-162,
+    "survives_holm_05": true
+   },
+   "signed_contributions_pp": {
+    "refresh_given_hole_repaired_B_to_C": -0.8167,
+    "refresh_given_hole_open_A_to_D": -0.8287,
+    "repair_given_refresh_absent_A_to_B": 0.2512,
+    "repair_given_refresh_applied_D_to_C": 0.2631,
+    "shapley_refresh": -0.8227,
+    "shapley_repair": 0.2571,
+    "shapley_sum": -0.5655,
+    "net_A_to_C": -0.4533,
+    "interaction_pp": 0.012
+   },
+   "side_at_frozen_n_before": "AWAY",
+   "side_at_frozen_n_after": "AWAY",
+   "side_flipped_at_frozen_n": false,
+   "side_flip_survives_reference_estimate": null,
+   "p_home_under_reference_estimate": 0.46453,
+   "rank_by_p_home_before": 9,
+   "rank_by_p_home_after": 9,
+   "rank_change": 0,
+   "market_price_on_file": null,
+   "break_even_prob": null,
+   "edge": null,
+   "selection": null
+  },
+  {
+   "game": "DET@PIT",
+   "gamePk": "NG05",
+   "away_sp": "Framber Valdez",
+   "home_sp": "TBD",
+   "starters_changed_by_refresh": false,
+   "p_home_S_A_v2_state": 0.4864,
+   "p_home_S_B_after_8_13_repair": 0.48973,
+   "p_home_S_C_after_8_15_16": 0.49103,
+   "delta_pp_frozen_n_8_13_repair": 0.3333,
+   "delta_pp_frozen_n_8_15_16_REFRESH": 0.13,
+   "delta_pp_frozen_n_total": 0.4633,
+   "refresh_reference_estimate": {
+    "mean_signed_pp": 0.0308,
+    "sd_pp": 0.0199,
+    "se_pp": 0.0063,
+    "ci95": [
+     0.0185,
+     0.0431
+    ],
+    "ci_simultaneous": [
+     0.0129,
+     0.0487
+    ],
+    "p_holm": 1.881263972018294e-06,
+    "survives_holm_05": true,
+    "excl_zero_simultaneous": true,
+    "n_sims": 2000000,
+    "reps": 10
+   },
+   "hole_repair_reference_estimate": {
+    "mean_signed_pp": 0.455,
+    "ci95": [
+     0.4419,
+     0.468
+    ],
+    "p_holm": 1.1e-299,
+    "survives_holm_05": true
+   },
+   "signed_contributions_pp": {
+    "refresh_given_hole_repaired_B_to_C": 0.0308,
+    "refresh_given_hole_open_A_to_D": 0.0584,
+    "repair_given_refresh_absent_A_to_B": 0.455,
+    "repair_given_refresh_applied_D_to_C": 0.4274,
+    "shapley_refresh": 0.0446,
+    "shapley_repair": 0.4412,
+    "shapley_sum": 0.4858,
+    "net_A_to_C": 0.4633,
+    "interaction_pp": -0.0276
+   },
+   "side_at_frozen_n_before": "AWAY",
+   "side_at_frozen_n_after": "AWAY",
+   "side_flipped_at_frozen_n": false,
+   "side_flip_survives_reference_estimate": null,
+   "p_home_under_reference_estimate": 0.49004,
+   "rank_by_p_home_before": 8,
+   "rank_by_p_home_after": 8,
+   "rank_change": 0,
+   "market_price_on_file": null,
+   "break_even_prob": null,
+   "edge": null,
+   "selection": null
+  },
+  {
+   "game": "AZ@BOS",
+   "gamePk": "NG06",
+   "away_sp": "Mitch Bratt",
+   "home_sp": "TBD",
+   "starters_changed_by_refresh": false,
+   "p_home_S_A_v2_state": 0.5195,
+   "p_home_S_B_after_8_13_repair": 0.52127,
+   "p_home_S_C_after_8_15_16": 0.51623,
+   "delta_pp_frozen_n_8_13_repair": 0.1767,
+   "delta_pp_frozen_n_8_15_16_REFRESH": -0.5033,
+   "delta_pp_frozen_n_total": -0.3267,
+   "refresh_reference_estimate": {
+    "mean_signed_pp": -0.2835,
+    "sd_pp": 0.0236,
+    "se_pp": 0.0075,
+    "ci95": [
+     -0.2981,
+     -0.2688
+    ],
+    "ci_simultaneous": [
+     -0.3048,
+     -0.2622
+    ],
+    "p_holm": 1.1e-299,
+    "survives_holm_05": true,
+    "excl_zero_simultaneous": true,
+    "n_sims": 2000000,
+    "reps": 10
+   },
+   "hole_repair_reference_estimate": {
+    "mean_signed_pp": 0.1603,
+    "ci95": [
+     0.1456,
+     0.175
+    ],
+    "p_holm": 1.2269134859198434e-100,
+    "survives_holm_05": true
+   },
+   "signed_contributions_pp": {
+    "refresh_given_hole_repaired_B_to_C": -0.2835,
+    "refresh_given_hole_open_A_to_D": -0.3019,
+    "repair_given_refresh_absent_A_to_B": 0.1603,
+    "repair_given_refresh_applied_D_to_C": 0.1787,
+    "shapley_refresh": -0.2927,
+    "shapley_repair": 0.1695,
+    "shapley_sum": -0.1232,
+    "net_A_to_C": -0.3267,
+    "interaction_pp": 0.0184
+   },
+   "side_at_frozen_n_before": "HOME",
+   "side_at_frozen_n_after": "HOME",
+   "side_flipped_at_frozen_n": false,
+   "side_flip_survives_reference_estimate": null,
+   "p_home_under_reference_estimate": 0.51843,
+   "rank_by_p_home_before": 5,
+   "rank_by_p_home_after": 5,
+   "rank_change": 0,
+   "market_price_on_file": null,
+   "break_even_prob": null,
+   "edge": null,
+   "selection": null
+  },
+  {
+   "game": "SD@NYM",
+   "gamePk": "NG07",
+   "away_sp": "Walker Buehler",
+   "home_sp": "Nolan McLean",
+   "starters_changed_by_refresh": false,
+   "p_home_S_A_v2_state": 0.53103,
+   "p_home_S_B_after_8_13_repair": 0.5317,
+   "p_home_S_C_after_8_15_16": 0.53267,
+   "delta_pp_frozen_n_8_13_repair": 0.0667,
+   "delta_pp_frozen_n_8_15_16_REFRESH": 0.0967,
+   "delta_pp_frozen_n_total": 0.1633,
+   "refresh_reference_estimate": {
+    "mean_signed_pp": 0.1733,
+    "sd_pp": 0.0373,
+    "se_pp": 0.0118,
+    "ci95": [
+     0.1502,
+     0.1964
+    ],
+    "ci_simultaneous": [
+     0.1398,
+     0.2068
+    ],
+    "p_holm": 2.4581403176137184e-48,
+    "survives_holm_05": true,
+    "excl_zero_simultaneous": true,
+    "n_sims": 2000000,
+    "reps": 10
+   },
+   "hole_repair_reference_estimate": {
+    "mean_signed_pp": 0.0,
+    "ci95": [
+     0.0,
+     0.0
+    ],
+    "p_holm": 1.1e-299,
+    "survives_holm_05": true
+   },
+   "signed_contributions_pp": {
+    "refresh_given_hole_repaired_B_to_C": 0.1733,
+    "refresh_given_hole_open_A_to_D": 0.1733,
+    "repair_given_refresh_absent_A_to_B": 0.0,
+    "repair_given_refresh_applied_D_to_C": 0.0,
+    "shapley_refresh": 0.1733,
+    "shapley_repair": 0.0,
+    "shapley_sum": 0.1733,
+    "net_A_to_C": 0.1633,
+    "interaction_pp": 0.0
+   },
+   "side_at_frozen_n_before": "HOME",
+   "side_at_frozen_n_after": "HOME",
+   "side_flipped_at_frozen_n": false,
+   "side_flip_survives_reference_estimate": null,
+   "p_home_under_reference_estimate": 0.53343,
+   "rank_by_p_home_before": 3,
+   "rank_by_p_home_after": 3,
+   "rank_change": 0,
+   "market_price_on_file": null,
+   "break_even_prob": null,
+   "edge": null,
+   "selection": null
+  },
+  {
+   "game": "ATH@KC",
+   "gamePk": "NG08",
+   "away_sp": "Mason Barnett",
+   "home_sp": "Michael Wacha",
+   "starters_changed_by_refresh": false,
+   "p_home_S_A_v2_state": 0.52713,
+   "p_home_S_B_after_8_13_repair": 0.52373,
+   "p_home_S_C_after_8_15_16": 0.52487,
+   "delta_pp_frozen_n_8_13_repair": -0.34,
+   "delta_pp_frozen_n_8_15_16_REFRESH": 0.1133,
+   "delta_pp_frozen_n_total": -0.2267,
+   "refresh_reference_estimate": {
+    "mean_signed_pp": -0.2086,
+    "sd_pp": 0.0343,
+    "se_pp": 0.0109,
+    "ci95": [
+     -0.2299,
+     -0.1873
+    ],
+    "ci_simultaneous": [
+     -0.2395,
+     -0.1777
+    ],
+    "p_holm": 1.4228882376574027e-81,
+    "survives_holm_05": true,
+    "excl_zero_simultaneous": true,
+    "n_sims": 2000000,
+    "reps": 10
+   },
+   "hole_repair_reference_estimate": {
+    "mean_signed_pp": 0.0,
+    "ci95": [
+     0.0,
+     0.0
+    ],
+    "p_holm": 1.1e-299,
+    "survives_holm_05": true
+   },
+   "signed_contributions_pp": {
+    "refresh_given_hole_repaired_B_to_C": -0.2086,
+    "refresh_given_hole_open_A_to_D": -0.2086,
+    "repair_given_refresh_absent_A_to_B": 0.0,
+    "repair_given_refresh_applied_D_to_C": 0.0,
+    "shapley_refresh": -0.2086,
+    "shapley_repair": 0.0,
+    "shapley_sum": -0.2086,
+    "net_A_to_C": -0.2267,
+    "interaction_pp": 0.0
+   },
+   "side_at_frozen_n_before": "HOME",
+   "side_at_frozen_n_after": "HOME",
+   "side_flipped_at_frozen_n": false,
+   "side_flip_survives_reference_estimate": null,
+   "p_home_under_reference_estimate": 0.52165,
+   "rank_by_p_home_before": 4,
+   "rank_by_p_home_after": 4,
+   "rank_change": 0,
+   "market_price_on_file": null,
+   "break_even_prob": null,
+   "edge": null,
+   "selection": null
+  },
+  {
+   "game": "ATL@MIN",
+   "gamePk": "NG09",
+   "away_sp": "Mart\u00edn P\u00e9rez",
+   "home_sp": "Bailey Ober",
+   "starters_changed_by_refresh": false,
+   "p_home_S_A_v2_state": 0.4683,
+   "p_home_S_B_after_8_13_repair": 0.4654,
+   "p_home_S_C_after_8_15_16": 0.46593,
+   "delta_pp_frozen_n_8_13_repair": -0.29,
+   "delta_pp_frozen_n_8_15_16_REFRESH": 0.0533,
+   "delta_pp_frozen_n_total": -0.2367,
+   "refresh_reference_estimate": {
+    "mean_signed_pp": -0.0698,
+    "sd_pp": 0.0287,
+    "se_pp": 0.0091,
+    "ci95": [
+     -0.0876,
+     -0.052
+    ],
+    "ci_simultaneous": [
+     -0.0956,
+     -0.044
+    ],
+    "p_holm": 4.554314809886962e-14,
+    "survives_holm_05": true,
+    "excl_zero_simultaneous": true,
+    "n_sims": 2000000,
+    "reps": 10
+   },
+   "hole_repair_reference_estimate": {
+    "mean_signed_pp": -0.1733,
+    "ci95": [
+     -0.1877,
+     -0.159
+    ],
+    "p_holm": 4.2264829386528106e-123,
+    "survives_holm_05": true
+   },
+   "signed_contributions_pp": {
+    "refresh_given_hole_repaired_B_to_C": -0.0698,
+    "refresh_given_hole_open_A_to_D": -0.0606,
+    "repair_given_refresh_absent_A_to_B": -0.1733,
+    "repair_given_refresh_applied_D_to_C": -0.1825,
+    "shapley_refresh": -0.0652,
+    "shapley_repair": -0.1779,
+    "shapley_sum": -0.2431,
+    "net_A_to_C": -0.2367,
+    "interaction_pp": -0.0092
+   },
+   "side_at_frozen_n_before": "AWAY",
+   "side_at_frozen_n_after": "AWAY",
+   "side_flipped_at_frozen_n": false,
+   "side_flip_survives_reference_estimate": null,
+   "p_home_under_reference_estimate": 0.4647,
+   "rank_by_p_home_before": 10,
+   "rank_by_p_home_after": 10,
+   "rank_change": 0,
+   "market_price_on_file": null,
+   "break_even_prob": null,
+   "edge": null,
+   "selection": null
+  },
+  {
+   "game": "CWS@CHC",
+   "gamePk": "NG10",
+   "away_sp": "Luis Castillo",
+   "home_sp": "Shota Imanaga",
+   "starters_changed_by_refresh": false,
+   "p_home_S_A_v2_state": 0.55283,
+   "p_home_S_B_after_8_13_repair": 0.5502,
+   "p_home_S_C_after_8_15_16": 0.54677,
+   "delta_pp_frozen_n_8_13_repair": -0.2633,
+   "delta_pp_frozen_n_8_15_16_REFRESH": -0.3433,
+   "delta_pp_frozen_n_total": -0.6067,
+   "refresh_reference_estimate": {
+    "mean_signed_pp": -0.3281,
+    "sd_pp": 0.0288,
+    "se_pp": 0.0091,
+    "ci95": [
+     -0.3459,
+     -0.3102
+    ],
+    "ci_simultaneous": [
+     -0.3539,
+     -0.3023
+    ],
+    "p_holm": 7.310913723598229e-284,
+    "survives_holm_05": true,
+    "excl_zero_simultaneous": true,
+    "n_sims": 2000000,
+    "reps": 10
+   },
+   "hole_repair_reference_estimate": {
+    "mean_signed_pp": -0.3894,
+    "ci95": [
+     -0.4043,
+     -0.3744
+    ],
+    "p_holm": 1.1e-299,
+    "survives_holm_05": true
+   },
+   "signed_contributions_pp": {
+    "refresh_given_hole_repaired_B_to_C": -0.3281,
+    "refresh_given_hole_open_A_to_D": -0.3263,
+    "repair_given_refresh_absent_A_to_B": -0.3894,
+    "repair_given_refresh_applied_D_to_C": -0.3912,
+    "shapley_refresh": -0.3272,
+    "shapley_repair": -0.3903,
+    "shapley_sum": -0.7175,
+    "net_A_to_C": -0.6067,
+    "interaction_pp": -0.0018
+   },
+   "side_at_frozen_n_before": "HOME",
+   "side_at_frozen_n_after": "HOME",
+   "side_flipped_at_frozen_n": false,
+   "side_flip_survives_reference_estimate": null,
+   "p_home_under_reference_estimate": 0.54692,
+   "rank_by_p_home_before": 1,
+   "rank_by_p_home_after": 1,
+   "rank_change": 0,
+   "market_price_on_file": null,
+   "break_even_prob": null,
+   "edge": null,
+   "selection": null
+  },
+  {
+   "game": "LAD@COL",
+   "gamePk": "NG11",
+   "away_sp": "Blake Snell",
+   "home_sp": "Tomoyuki Sugano",
+   "starters_changed_by_refresh": false,
+   "p_home_S_A_v2_state": 0.5006,
+   "p_home_S_B_after_8_13_repair": 0.5002,
+   "p_home_S_C_after_8_15_16": 0.50807,
+   "delta_pp_frozen_n_8_13_repair": -0.04,
+   "delta_pp_frozen_n_8_15_16_REFRESH": 0.7867,
+   "delta_pp_frozen_n_total": 0.7467,
+   "refresh_reference_estimate": {
+    "mean_signed_pp": 0.5472,
+    "sd_pp": 0.0327,
+    "se_pp": 0.0103,
+    "ci95": [
+     0.527,
+     0.5675
+    ],
+    "ci_simultaneous": [
+     0.518,
+     0.5764
+    ],
+    "p_holm": 1.1e-299,
+    "survives_holm_05": true,
+    "excl_zero_simultaneous": true,
+    "n_sims": 2000000,
+    "reps": 10
+   },
+   "hole_repair_reference_estimate": {
+    "mean_signed_pp": 0.0641,
+    "ci95": [
+     0.0473,
+     0.0809
+    ],
+    "p_holm": 7.67165664857105e-14,
+    "survives_holm_05": true
+   },
+   "signed_contributions_pp": {
+    "refresh_given_hole_repaired_B_to_C": 0.5472,
+    "refresh_given_hole_open_A_to_D": 0.5613,
+    "repair_given_refresh_absent_A_to_B": 0.0641,
+    "repair_given_refresh_applied_D_to_C": 0.05,
+    "shapley_refresh": 0.5543,
+    "shapley_repair": 0.0571,
+    "shapley_sum": 0.6113,
+    "net_A_to_C": 0.7467,
+    "interaction_pp": -0.0141
+   },
+   "side_at_frozen_n_before": "HOME",
+   "side_at_frozen_n_after": "HOME",
+   "side_flipped_at_frozen_n": false,
+   "side_flip_survives_reference_estimate": null,
+   "p_home_under_reference_estimate": 0.50567,
+   "rank_by_p_home_before": 7,
+   "rank_by_p_home_after": 6,
+   "rank_change": 1,
+   "market_price_on_file": null,
+   "break_even_prob": null,
+   "edge": null,
+   "selection": null
+  }
+ ],
+ "scope_limit": "LOCAL SENSITIVITY of a frozen artifact. The date-ordered OOF ablation (docs/experiments/2026-08-17_FORM_USEFULNESS.json) found form freshness has NO detectable effect on prospective accuracy: FULL vs STALE -0.0005 Brier, p=0.59. Probability movement here is not accuracy improvement."
+}

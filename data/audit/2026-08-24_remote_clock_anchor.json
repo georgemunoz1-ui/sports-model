@@ -1,0 +1,68 @@
+{
+ "record_id": "REMOTE-CLOCK-ANCHOR-2026-08-24",
+ "created_utc": "2026-08-24T10:52:00Z",
+ "authority": "owner authorization 2026-08-24 for a read-only CI-on-push clock",
+ "ESTABLISHED": true,
+ "run": {
+  "number": 3,
+  "id": 32718640880,
+  "conclusion": "success",
+  "url": "https://github.com/georgemunoz1-ui/sports-model/actions/runs/32718640880",
+  "head_sha": "190441a98b54450ca7ef66a723e1419339592756",
+  "github_generated_run_created_at": "2026-08-24T10:48:32Z",
+  "step_completed_at": "2026-08-24T10:48:38Z"
+ },
+ "WHAT_IS_PROVEN": "the arm registry data/audit/2026-08-24_evaluation_arms_preregistration.json and the board cards/2026-08-24_board.json existed, with the hashes the run printed, NO LATER THAN 2026-08-24T10:48:32Z by GitHub's own clock. That is an UPPER BOUND and it is the entire claim.",
+ "WHAT_IS_NOT_PROVEN": "nothing about the commit's own author date, which I wrote and which stays unverifiable forever. A later observation cannot retroactively corroborate an earlier assertion.",
+ "MARGIN_TO_FIRST_PITCH": {
+  "mlb_first_pitch_utc": "2026-08-24T22:40:00Z",
+  "anchor_utc": "2026-08-24T10:48:32Z",
+  "lead": "11h51m28s",
+  "note": "this is the first prospectivity claim in this repository's history that rests on a clock that is not mine"
+ },
+ "prospectivity_grade": "REMOTE_OBSERVED",
+ "verdict_for_the_8_24_cohorts": "PROSPECTIVITY_REMOTELY_OBSERVED",
+ "cohort_hashes_verified": {
+  "mlb": "479cdb131004b0bf0740ab9063ef83972c40dd2fdab097279e67dba85f4af42b",
+  "wnba": "122787abb30631fa1ea20e2041e95f0ed8c8ffb9ca73515aa2da764753d5971d"
+ },
+ "board_sha256": "23ed3b0028e5ff20f9ea9f39af2e50268eefc581ec12f3bcdd5a7d210ca8f3f2",
+ "three_runs": [
+  {
+   "run": 1,
+   "conclusion": "failure",
+   "cause": "indented quoted heredoc — the terminator must sit at column 0, so the shell never closed it and the step died in under a second",
+   "anchored": false
+  },
+  {
+   "run": 2,
+   "conclusion": "failure",
+   "cause": "KeyError 'created_at' — reading a run's created_at needs actions: read, and the authorized block is contents: read only. Hashing and cohort verification had already succeeded",
+   "anchored": false
+  },
+  {
+   "run": 3,
+   "conclusion": "success",
+   "cause": null,
+   "anchored": true,
+   "fix": "read GitHub's clock from the Date header of an api.github.com response: no token, no extra permission, and still an instant after the artifacts were hashed"
+  }
+ ],
+ "constraints_held": {
+  "permissions": "contents: read",
+  "secrets": "none passed",
+  "write_back": "none — no commit, push, tag, comment or artifact upload",
+  "records": [
+   "pushed SHA",
+   "card-set digest",
+   "arm-registry digest",
+   "per-cohort hashes"
+  ],
+  "fails_on": [
+   "absent artifact",
+   "unreadable artifact",
+   "pinned cohort hash no longer matching",
+   "no readable server-generated instant"
+  ]
+ }
+}

@@ -1,0 +1,44 @@
+{
+ "board_identity": {
+  "captured": 4,
+  "id_space_mixture_check": "PASS \u2014 every board id is namespaced",
+  "id_spaces": {
+   "ESPN_GAMEID": 4
+  },
+  "inferred": 0,
+  "n_games": 4,
+  "synthetic_pseudo_pks": 0
+ },
+ "board_sha256": "0e328ff1bde5428dcd0a2e272171cd9afcf7919278b0978d99f298c627773159",
+ "board_slate_date": "2026-08-28",
+ "cohort": "wnba:2026-08-28",
+ "cohort_problems": [
+  {
+   "code": "COHORT_COVERAGE_INCOMPLETE",
+   "detail": "an aggregate over a partial cohort reports a denominator it did not earn; exclude explicitly with require_full_coverage=False and say why",
+   "missing": [
+    "wnba:CON@IND",
+    "wnba:POR@ATL",
+    "wnba:TOR@LV",
+    "wnba:WSH@LAS"
+   ],
+   "n_board_games": 4,
+   "n_bound": 0
+  }
+ ],
+ "counters": {
+  "CANONICAL_ID_MATCH": "0/0",
+  "DATE_COHERENCE_PASS": "0/0",
+  "REFUSED_ROWS": 0,
+  "RESULT_BINDING_PASS": "0/0"
+ },
+ "generated_by": "harness/result_binding_gate.binding_proof \u2014 counters computed, never typed",
+ "gradable": false,
+ "partial_board_note": "This board emits 2 of 3 registered arms. The blocked arm's rows carry p_home null with a stated reason and are NOT absent, so a future grading pass will find 4 games and must grade only the arms that actually forecast. Grading a null as a miss would be as wrong as omitting it.",
+ "prospective": true,
+ "rows": [],
+ "rule": "a single failed row blocks every aggregate over this cohort; no partial metric may silently exclude or substitute it",
+ "schema": "ops.binding_proof.v1",
+ "sport": "wnba",
+ "what_0_of_0_means": "ZERO RESULT ROWS EXIST FOR THIS DATE. The counters read 0/0 because NOTHING IS CLAIMED, not because nothing was checked: all 4 board games were loaded and every canonical id was read. The cohort is reported NOT GRADABLE with COHORT_COVERAGE_INCOMPLETE, the correct state for a slate that has not tipped. When finals arrive they must bind on sport + canonical_id + scheduled_date + result_date + away + home, and one refused row blocks every aggregate over the cohort."
+}

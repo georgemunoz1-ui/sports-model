@@ -1,0 +1,1889 @@
+{
+ "date_et": "2026-09-01",
+ "experiment_tag": "AFTER_LANCEBROZ_REFRESH",
+ "games": [
+  {
+   "event": "ATH@TEX",
+   "forecast": {
+    "arms": {
+     "mlb.winner.CHAMPION_V13": 0.5067333333333334,
+     "mlb.winner.EXPANDING_HOME_PRIOR": 0.5205399061032864
+    },
+    "dose_consumed": true,
+    "event": "ATH@TEX",
+    "forecast_state": "VALID_WITH_UNCERTAINTY",
+    "monte_carlo_sd_pp": 0.2886489576297492,
+    "p_away": 0.493267,
+    "p_home": 0.5067333333333334,
+    "p_home_dosed": 0.517088,
+    "projected_margin_home": null,
+    "projected_total": null,
+    "resolved_information_dose": 0.25,
+    "seed": 1321269393463478326,
+    "simulation_version": "v13_1",
+    "starter_slots_capped": 2,
+    "trials": 30000,
+    "uncertainty": {
+     "dose": 0.25,
+     "lineup": "NOT_POSTED",
+     "starter": "PROBABLE"
+    }
+   },
+   "in_relay": false,
+   "overlay": {
+    "event": "ATH@TEX",
+    "execution_state": "NO_LINE",
+    "valued": false,
+    "why": "scheduled game carries no captured price; retained, never dropped"
+   },
+   "snapshot": {
+    "away": "ATH",
+    "away_starter": "J.T. Ginn",
+    "event": "ATH@TEX",
+    "frozen": true,
+    "home": "TEX",
+    "home_starter": "MacKenzie Gore",
+    "market_read": false,
+    "park_factor": 0.938,
+    "ra_away": 5.63063063063063,
+    "ra_home": 4.345132743362832,
+    "resolved_information_dose": 0.25,
+    "rf_away": 4.387387387387387,
+    "rf_home": 4.132743362831858,
+    "slate_date": "2026-09-01",
+    "sp_away": {
+     "bb": null,
+     "era": null,
+     "gs": 0,
+     "k": null
+    },
+    "sp_home": {
+     "bb": null,
+     "era": null,
+     "gs": 0,
+     "k": null
+    },
+    "sp_status": {
+     "away": "STALE_DATA_CAP",
+     "home": "STALE_DATA_CAP"
+    },
+    "starter_dispositions": {
+     "away": {
+      "acquisition": {
+       "attempted": false,
+       "why": "no acquisition adapter injected. This module performs NO network I/O by design \u2014 adapters are supplied by the caller and must route through approved browsing/search/fetch tools, never shell HTTP against sports sites. An unconfigured deployment degrades; it never pretends."
+      },
+      "actionable": false,
+      "age_days": 6.4947,
+      "disposition": "DEGRADED",
+      "dose_multiplier": 0.5,
+      "forecastable": true,
+      "grade": "CONFIRMED",
+      "input_value_policy": "REGISTERED_FALLBACK_ONLY",
+      "limit_days": 2,
+      "reason": "derived_age 6.49d EXCEEDS the 2d limit and acquisition was unavailable or failed \u2014 degraded to a widened dose rather than inheriting the stale value as though it were current",
+      "stamp": {
+       "content_age_days": 6.4947,
+       "derived_age_days": 6.4947,
+       "effective_at": "2026-08-26T00:00:00Z",
+       "fetched_at": null,
+       "grade": "CONFIRMED",
+       "observed_at": "2026-08-26T00:00:00Z",
+       "source": "pitcher_logs/669372.txt via sp_asof_strict",
+       "source_sha256": "d6feb14b850edf1bd50a88b853f1df70bff1a546dcf836655c99d782dfebbd2f",
+       "subject": "J.T. Ginn"
+      },
+      "subject": "J.T. Ginn"
+     },
+     "home": {
+      "acquisition": {
+       "attempted": false,
+       "why": "no acquisition adapter injected. This module performs NO network I/O by design \u2014 adapters are supplied by the caller and must route through approved browsing/search/fetch tools, never shell HTTP against sports sites. An unconfigured deployment degrades; it never pretends."
+      },
+      "actionable": false,
+      "age_days": 6.4947,
+      "disposition": "DEGRADED",
+      "dose_multiplier": 0.5,
+      "forecastable": true,
+      "grade": "CONFIRMED",
+      "input_value_policy": "REGISTERED_FALLBACK_ONLY",
+      "limit_days": 2,
+      "reason": "derived_age 6.49d EXCEEDS the 2d limit and acquisition was unavailable or failed \u2014 degraded to a widened dose rather than inheriting the stale value as though it were current",
+      "stamp": {
+       "content_age_days": 6.4947,
+       "derived_age_days": 6.4947,
+       "effective_at": "2026-08-26T00:00:00Z",
+       "fetched_at": null,
+       "grade": "CONFIRMED",
+       "observed_at": "2026-08-26T00:00:00Z",
+       "source": "pitcher_logs/669022.txt via sp_asof_strict",
+       "source_sha256": "fb75b7d3977e6b1a9ee3892387c3feeb38c29f6380ad8f529879f129b145f031",
+       "subject": "MacKenzie Gore"
+      },
+      "subject": "MacKenzie Gore"
+     }
+    },
+    "starter_slots_capped": 2,
+    "trials": 30000
+   }
+  },
+  {
+   "event": "ATL@WSH",
+   "forecast": {
+    "arms": {
+     "mlb.winner.CHAMPION_V13": 0.5119,
+     "mlb.winner.EXPANDING_HOME_PRIOR": 0.5205399061032864
+    },
+    "dose_consumed": true,
+    "event": "ATL@WSH",
+    "forecast_state": "VALID_WITH_UNCERTAINTY",
+    "monte_carlo_sd_pp": 0.28859336444208133,
+    "p_away": 0.4881,
+    "p_home": 0.5119,
+    "p_home_dosed": 0.518812,
+    "projected_margin_home": null,
+    "projected_total": null,
+    "resolved_information_dose": 0.2,
+    "seed": 6124170875261791222,
+    "simulation_version": "v13_1",
+    "starter_slots_capped": 2,
+    "trials": 30000,
+    "uncertainty": {
+     "dose": 0.2,
+     "lineup": "NOT_POSTED",
+     "starter": "PROBABLE"
+    }
+   },
+   "in_relay": false,
+   "overlay": {
+    "event": "ATL@WSH",
+    "execution_state": "NO_LINE",
+    "valued": false,
+    "why": "scheduled game carries no captured price; retained, never dropped"
+   },
+   "snapshot": {
+    "away": "ATL",
+    "away_starter": "AJ Smith-Shawver",
+    "event": "ATL@WSH",
+    "frozen": true,
+    "home": "WSH",
+    "home_starter": "Jake Irvin",
+    "market_read": false,
+    "park_factor": 1.086,
+    "ra_away": 4.018018018018018,
+    "ra_home": 5.105263157894737,
+    "resolved_information_dose": 0.2,
+    "rf_away": 4.8558558558558556,
+    "rf_home": 5.385964912280702,
+    "slate_date": "2026-09-01",
+    "sp_away": {
+     "bb": null,
+     "era": null,
+     "gs": 0,
+     "k": null
+    },
+    "sp_home": {
+     "bb": null,
+     "era": null,
+     "gs": 0,
+     "k": null
+    },
+    "sp_status": {
+     "away": "NAMED_NO_LOG_RETAINED_CAP[NO_PID_CAP(AJ Smith-Shawver)]",
+     "home": "STALE_DATA_CAP"
+    },
+    "starter_dispositions": {
+     "away": {
+      "acquisition": {
+       "attempted": false,
+       "why": "no acquisition adapter injected. This module performs NO network I/O by design \u2014 adapters are supplied by the caller and must route through approved browsing/search/fetch tools, never shell HTTP against sports sites. An unconfigured deployment degrades; it never pretends."
+      },
+      "actionable": false,
+      "age_days": null,
+      "disposition": "DEGRADED",
+      "dose_multiplier": 0.25,
+      "forecastable": true,
+      "grade": "ABSENT",
+      "input_value_policy": "REGISTERED_FALLBACK_ONLY",
+      "limit_days": 2,
+      "reason": "NOT IN STORE and acquisition unavailable or failed \u2014 falling back to the registered league-average treatment. A labelled research forecast may remain, but the row is not action eligible.",
+      "stamp": {
+       "content_age_days": null,
+       "derived_age_days": null,
+       "effective_at": null,
+       "fetched_at": null,
+       "grade": "ABSENT",
+       "observed_at": null,
+       "source": "NOT_IN_STORE: NO_PID_CAP(AJ Smith-Shawver)",
+       "source_sha256": null,
+       "subject": "AJ Smith-Shawver"
+      },
+      "subject": "AJ Smith-Shawver"
+     },
+     "home": {
+      "acquisition": {
+       "attempted": false,
+       "why": "no acquisition adapter injected. This module performs NO network I/O by design \u2014 adapters are supplied by the caller and must route through approved browsing/search/fetch tools, never shell HTTP against sports sites. An unconfigured deployment degrades; it never pretends."
+      },
+      "actionable": false,
+      "age_days": 5.4947,
+      "disposition": "DEGRADED",
+      "dose_multiplier": 0.5,
+      "forecastable": true,
+      "grade": "CONFIRMED",
+      "input_value_policy": "REGISTERED_FALLBACK_ONLY",
+      "limit_days": 2,
+      "reason": "derived_age 5.49d EXCEEDS the 2d limit and acquisition was unavailable or failed \u2014 degraded to a widened dose rather than inheriting the stale value as though it were current",
+      "stamp": {
+       "content_age_days": 5.4947,
+       "derived_age_days": 5.4947,
+       "effective_at": "2026-08-27T00:00:00Z",
+       "fetched_at": null,
+       "grade": "CONFIRMED",
+       "observed_at": "2026-08-27T00:00:00Z",
+       "source": "pitcher_logs/663623.txt via sp_asof_strict",
+       "source_sha256": "b33a7b9982a260ee77109ab76c8e2021a8701797dd72fedc5b8a87a095c0fe0f",
+       "subject": "Jake Irvin"
+      },
+      "subject": "Jake Irvin"
+     }
+    },
+    "starter_slots_capped": 2,
+    "trials": 30000
+   }
+  },
+  {
+   "event": "BAL@COL",
+   "forecast": {
+    "arms": {
+     "mlb.winner.CHAMPION_V13": 0.4943,
+     "mlb.winner.EXPANDING_HOME_PRIOR": 0.5205399061032864
+    },
+    "dose_consumed": true,
+    "event": "BAL@COL",
+    "forecast_state": "VALID_WITH_UNCERTAINTY",
+    "monte_carlo_sd_pp": 0.2886563758750763,
+    "p_away": 0.5057,
+    "p_home": 0.4943,
+    "p_home_dosed": 0.51398,
+    "projected_margin_home": null,
+    "projected_total": null,
+    "resolved_information_dose": 0.25,
+    "seed": 632465614534885840,
+    "simulation_version": "v13_1",
+    "starter_slots_capped": 2,
+    "trials": 30000,
+    "uncertainty": {
+     "dose": 0.25,
+     "lineup": "NOT_POSTED",
+     "starter": "PROBABLE"
+    }
+   },
+   "in_relay": false,
+   "overlay": {
+    "event": "BAL@COL",
+    "execution_state": "NO_LINE",
+    "valued": false,
+    "why": "scheduled game carries no captured price; retained, never dropped"
+   },
+   "snapshot": {
+    "away": "BAL",
+    "away_starter": "Trevor Rogers",
+    "event": "BAL@COL",
+    "frozen": true,
+    "home": "COL",
+    "home_starter": "Gabriel Hughes",
+    "market_read": false,
+    "park_factor": 1.11,
+    "ra_away": 4.732142857142857,
+    "ra_home": 5.837837837837838,
+    "resolved_information_dose": 0.25,
+    "rf_away": 4.5625,
+    "rf_home": 4.7657657657657655,
+    "slate_date": "2026-09-01",
+    "sp_away": {
+     "bb": null,
+     "era": null,
+     "gs": 0,
+     "k": null
+    },
+    "sp_home": {
+     "bb": null,
+     "era": null,
+     "gs": 0,
+     "k": null
+    },
+    "sp_status": {
+     "away": "STALE_DATA_CAP",
+     "home": "STALE_DATA_CAP"
+    },
+    "starter_dispositions": {
+     "away": {
+      "acquisition": {
+       "attempted": false,
+       "why": "no acquisition adapter injected. This module performs NO network I/O by design \u2014 adapters are supplied by the caller and must route through approved browsing/search/fetch tools, never shell HTTP against sports sites. An unconfigured deployment degrades; it never pretends."
+      },
+      "actionable": false,
+      "age_days": 5.4947,
+      "disposition": "DEGRADED",
+      "dose_multiplier": 0.5,
+      "forecastable": true,
+      "grade": "CONFIRMED",
+      "input_value_policy": "REGISTERED_FALLBACK_ONLY",
+      "limit_days": 2,
+      "reason": "derived_age 5.49d EXCEEDS the 2d limit and acquisition was unavailable or failed \u2014 degraded to a widened dose rather than inheriting the stale value as though it were current",
+      "stamp": {
+       "content_age_days": 5.4947,
+       "derived_age_days": 5.4947,
+       "effective_at": "2026-08-27T00:00:00Z",
+       "fetched_at": null,
+       "grade": "CONFIRMED",
+       "observed_at": "2026-08-27T00:00:00Z",
+       "source": "pitcher_logs/669432.txt via sp_asof_strict",
+       "source_sha256": "04dd25d25e81d18e83a933fbca7661be4867ed3d6af600a1c30a4a7496163c41",
+       "subject": "Trevor Rogers"
+      },
+      "subject": "Trevor Rogers"
+     },
+     "home": {
+      "acquisition": {
+       "attempted": false,
+       "why": "no acquisition adapter injected. This module performs NO network I/O by design \u2014 adapters are supplied by the caller and must route through approved browsing/search/fetch tools, never shell HTTP against sports sites. An unconfigured deployment degrades; it never pretends."
+      },
+      "actionable": false,
+      "age_days": 5.4947,
+      "disposition": "DEGRADED",
+      "dose_multiplier": 0.5,
+      "forecastable": true,
+      "grade": "CONFIRMED",
+      "input_value_policy": "REGISTERED_FALLBACK_ONLY",
+      "limit_days": 2,
+      "reason": "derived_age 5.49d EXCEEDS the 2d limit and acquisition was unavailable or failed \u2014 degraded to a widened dose rather than inheriting the stale value as though it were current",
+      "stamp": {
+       "content_age_days": 5.4947,
+       "derived_age_days": 5.4947,
+       "effective_at": "2026-08-27T00:00:00Z",
+       "fetched_at": null,
+       "grade": "CONFIRMED",
+       "observed_at": "2026-08-27T00:00:00Z",
+       "source": "pitcher_logs/687312.txt via sp_asof_strict",
+       "source_sha256": "df4d2c8fed1f24490aaeaa6d0200415b2d6db45ddb442eaddc13d11e906131cd",
+       "subject": "Gabriel Hughes"
+      },
+      "subject": "Gabriel Hughes"
+     }
+    },
+    "starter_slots_capped": 2,
+    "trials": 30000
+   }
+  },
+  {
+   "event": "CWS@HOU",
+   "forecast": {
+    "arms": {
+     "mlb.winner.CHAMPION_V13": 0.4670666666666667,
+     "mlb.winner.EXPANDING_HOME_PRIOR": 0.5205399061032864
+    },
+    "dose_consumed": true,
+    "event": "CWS@HOU",
+    "forecast_state": "VALID_WITH_UNCERTAINTY",
+    "monte_carlo_sd_pp": 0.28804825727387856,
+    "p_away": 0.532933,
+    "p_home": 0.4670666666666667,
+    "p_home_dosed": 0.509845,
+    "projected_margin_home": null,
+    "projected_total": null,
+    "resolved_information_dose": 0.2,
+    "seed": 5798558761198676556,
+    "simulation_version": "v13_1",
+    "starter_slots_capped": 2,
+    "trials": 30000,
+    "uncertainty": {
+     "dose": 0.2,
+     "lineup": "NOT_POSTED",
+     "starter": "PROBABLE"
+    }
+   },
+   "in_relay": false,
+   "overlay": {
+    "event": "CWS@HOU",
+    "execution_state": "NO_LINE",
+    "valued": false,
+    "why": "scheduled game carries no captured price; retained, never dropped"
+   },
+   "snapshot": {
+    "away": "CWS",
+    "away_starter": "Sean Burke",
+    "event": "CWS@HOU",
+    "frozen": true,
+    "home": "HOU",
+    "home_starter": "Ronel Blanco",
+    "market_read": false,
+    "park_factor": 0.959,
+    "ra_away": 4.383928571428571,
+    "ra_home": 5.070796460176991,
+    "resolved_information_dose": 0.2,
+    "rf_away": 4.776785714285714,
+    "rf_home": 4.530973451327434,
+    "slate_date": "2026-09-01",
+    "sp_away": {
+     "bb": null,
+     "era": null,
+     "gs": 0,
+     "k": null
+    },
+    "sp_home": {
+     "bb": null,
+     "era": null,
+     "gs": 0,
+     "k": null
+    },
+    "sp_status": {
+     "away": "STALE_DATA_CAP",
+     "home": "NAMED_NO_LOG_RETAINED_CAP[NO_PID_CAP(Ronel Blanco)]"
+    },
+    "starter_dispositions": {
+     "away": {
+      "acquisition": {
+       "attempted": false,
+       "why": "no acquisition adapter injected. This module performs NO network I/O by design \u2014 adapters are supplied by the caller and must route through approved browsing/search/fetch tools, never shell HTTP against sports sites. An unconfigured deployment degrades; it never pretends."
+      },
+      "actionable": false,
+      "age_days": 6.4947,
+      "disposition": "DEGRADED",
+      "dose_multiplier": 0.5,
+      "forecastable": true,
+      "grade": "CONFIRMED",
+      "input_value_policy": "REGISTERED_FALLBACK_ONLY",
+      "limit_days": 2,
+      "reason": "derived_age 6.49d EXCEEDS the 2d limit and acquisition was unavailable or failed \u2014 degraded to a widened dose rather than inheriting the stale value as though it were current",
+      "stamp": {
+       "content_age_days": 6.4947,
+       "derived_age_days": 6.4947,
+       "effective_at": "2026-08-26T00:00:00Z",
+       "fetched_at": null,
+       "grade": "CONFIRMED",
+       "observed_at": "2026-08-26T00:00:00Z",
+       "source": "pitcher_logs/680732.txt via sp_asof_strict",
+       "source_sha256": "ee3e626a5c2bbbde55686340dd3328d36c6f489d21d04afb644e4764408b3f67",
+       "subject": "Sean Burke"
+      },
+      "subject": "Sean Burke"
+     },
+     "home": {
+      "acquisition": {
+       "attempted": false,
+       "why": "no acquisition adapter injected. This module performs NO network I/O by design \u2014 adapters are supplied by the caller and must route through approved browsing/search/fetch tools, never shell HTTP against sports sites. An unconfigured deployment degrades; it never pretends."
+      },
+      "actionable": false,
+      "age_days": null,
+      "disposition": "DEGRADED",
+      "dose_multiplier": 0.25,
+      "forecastable": true,
+      "grade": "ABSENT",
+      "input_value_policy": "REGISTERED_FALLBACK_ONLY",
+      "limit_days": 2,
+      "reason": "NOT IN STORE and acquisition unavailable or failed \u2014 falling back to the registered league-average treatment. A labelled research forecast may remain, but the row is not action eligible.",
+      "stamp": {
+       "content_age_days": null,
+       "derived_age_days": null,
+       "effective_at": null,
+       "fetched_at": null,
+       "grade": "ABSENT",
+       "observed_at": null,
+       "source": "NOT_IN_STORE: NO_PID_CAP(Ronel Blanco)",
+       "source_sha256": null,
+       "subject": "Ronel Blanco"
+      },
+      "subject": "Ronel Blanco"
+     }
+    },
+    "starter_slots_capped": 2,
+    "trials": 30000
+   }
+  },
+  {
+   "event": "DET@MIN",
+   "forecast": {
+    "arms": {
+     "mlb.winner.CHAMPION_V13": 0.5085333333333333,
+     "mlb.winner.EXPANDING_HOME_PRIOR": 0.5205399061032864
+    },
+    "dose_consumed": true,
+    "event": "DET@MIN",
+    "forecast_state": "VALID_WITH_UNCERTAINTY",
+    "monte_carlo_sd_pp": 0.28863309016940647,
+    "p_away": 0.491467,
+    "p_home": 0.5085333333333333,
+    "p_home_dosed": 0.517538,
+    "projected_margin_home": null,
+    "projected_total": null,
+    "resolved_information_dose": 0.25,
+    "seed": 3969712567407252022,
+    "simulation_version": "v13_1",
+    "starter_slots_capped": 2,
+    "trials": 30000,
+    "uncertainty": {
+     "dose": 0.25,
+     "lineup": "NOT_POSTED",
+     "starter": "PROBABLE"
+    }
+   },
+   "in_relay": false,
+   "overlay": {
+    "event": "DET@MIN",
+    "execution_state": "NO_LINE",
+    "valued": false,
+    "why": "scheduled game carries no captured price; retained, never dropped"
+   },
+   "snapshot": {
+    "away": "DET",
+    "away_starter": "Troy Melton",
+    "event": "DET@MIN",
+    "frozen": true,
+    "home": "MIN",
+    "home_starter": "Andrew Morris",
+    "market_read": false,
+    "park_factor": 0.918,
+    "ra_away": 3.9375,
+    "ra_home": 5.061946902654867,
+    "resolved_information_dose": 0.25,
+    "rf_away": 4.258928571428571,
+    "rf_home": 4.663716814159292,
+    "slate_date": "2026-09-01",
+    "sp_away": {
+     "bb": null,
+     "era": null,
+     "gs": 0,
+     "k": null
+    },
+    "sp_home": {
+     "bb": null,
+     "era": null,
+     "gs": 0,
+     "k": null
+    },
+    "sp_status": {
+     "away": "STALE_DATA_CAP",
+     "home": "STALE_DATA_CAP"
+    },
+    "starter_dispositions": {
+     "away": {
+      "acquisition": {
+       "attempted": false,
+       "why": "no acquisition adapter injected. This module performs NO network I/O by design \u2014 adapters are supplied by the caller and must route through approved browsing/search/fetch tools, never shell HTTP against sports sites. An unconfigured deployment degrades; it never pretends."
+      },
+      "actionable": false,
+      "age_days": 6.4947,
+      "disposition": "DEGRADED",
+      "dose_multiplier": 0.5,
+      "forecastable": true,
+      "grade": "CONFIRMED",
+      "input_value_policy": "REGISTERED_FALLBACK_ONLY",
+      "limit_days": 2,
+      "reason": "derived_age 6.49d EXCEEDS the 2d limit and acquisition was unavailable or failed \u2014 degraded to a widened dose rather than inheriting the stale value as though it were current",
+      "stamp": {
+       "content_age_days": 6.4947,
+       "derived_age_days": 6.4947,
+       "effective_at": "2026-08-26T00:00:00Z",
+       "fetched_at": null,
+       "grade": "CONFIRMED",
+       "observed_at": "2026-08-26T00:00:00Z",
+       "source": "pitcher_logs/675512.txt via sp_asof_strict",
+       "source_sha256": "132f7ba5b85c6f6cb6d8c0fa627e2c3c80110aade2611bafd61231dc7d06514a",
+       "subject": "Troy Melton"
+      },
+      "subject": "Troy Melton"
+     },
+     "home": {
+      "acquisition": {
+       "attempted": false,
+       "why": "no acquisition adapter injected. This module performs NO network I/O by design \u2014 adapters are supplied by the caller and must route through approved browsing/search/fetch tools, never shell HTTP against sports sites. An unconfigured deployment degrades; it never pretends."
+      },
+      "actionable": false,
+      "age_days": 89.4947,
+      "disposition": "DEGRADED",
+      "dose_multiplier": 0.5,
+      "forecastable": true,
+      "grade": "CONFIRMED",
+      "input_value_policy": "REGISTERED_FALLBACK_ONLY",
+      "limit_days": 2,
+      "reason": "derived_age 89.49d EXCEEDS the 2d limit and acquisition was unavailable or failed \u2014 degraded to a widened dose rather than inheriting the stale value as though it were current",
+      "stamp": {
+       "content_age_days": 89.4947,
+       "derived_age_days": 89.4947,
+       "effective_at": "2026-06-04T00:00:00Z",
+       "fetched_at": null,
+       "grade": "CONFIRMED",
+       "observed_at": "2026-06-04T00:00:00Z",
+       "source": "pitcher_logs/702193.txt via sp_asof_strict",
+       "source_sha256": "38c635bce98c24653a924c6767e573624acaff667b4df261b50622426b3e2e3e",
+       "subject": "Andrew Morris"
+      },
+      "subject": "Andrew Morris"
+     }
+    },
+    "starter_slots_capped": 2,
+    "trials": 30000
+   }
+  },
+  {
+   "event": "MIA@KC",
+   "forecast": {
+    "arms": {
+     "mlb.winner.CHAMPION_V13": 0.47886666666666666,
+     "mlb.winner.EXPANDING_HOME_PRIOR": 0.5205399061032864
+    },
+    "dose_consumed": true,
+    "event": "MIA@KC",
+    "forecast_state": "VALID_WITH_UNCERTAINTY",
+    "monte_carlo_sd_pp": 0.28841716443502585,
+    "p_away": 0.521133,
+    "p_home": 0.47886666666666666,
+    "p_home_dosed": 0.510122,
+    "projected_margin_home": null,
+    "projected_total": null,
+    "resolved_information_dose": 0.25,
+    "seed": 4701130033222323218,
+    "simulation_version": "v13_1",
+    "starter_slots_capped": 2,
+    "trials": 30000,
+    "uncertainty": {
+     "dose": 0.25,
+     "lineup": "NOT_POSTED",
+     "starter": "PROBABLE"
+    }
+   },
+   "in_relay": false,
+   "overlay": {
+    "event": "MIA@KC",
+    "execution_state": "NO_LINE",
+    "valued": false,
+    "why": "scheduled game carries no captured price; retained, never dropped"
+   },
+   "snapshot": {
+    "away": "MIA",
+    "away_starter": "Tyler Phillips",
+    "event": "MIA@KC",
+    "frozen": true,
+    "home": "KC",
+    "home_starter": "Randy Dobnak",
+    "market_read": false,
+    "park_factor": 1.036,
+    "ra_away": 4.3628318584070795,
+    "ra_home": 4.947368421052632,
+    "resolved_information_dose": 0.25,
+    "rf_away": 4.371681415929204,
+    "rf_home": 4.157894736842105,
+    "slate_date": "2026-09-01",
+    "sp_away": {
+     "bb": null,
+     "era": null,
+     "gs": 0,
+     "k": null
+    },
+    "sp_home": {
+     "bb": null,
+     "era": null,
+     "gs": 0,
+     "k": null
+    },
+    "sp_status": {
+     "away": "STALE_DATA_CAP",
+     "home": "STALE_DATA_CAP"
+    },
+    "starter_dispositions": {
+     "away": {
+      "acquisition": {
+       "attempted": false,
+       "why": "no acquisition adapter injected. This module performs NO network I/O by design \u2014 adapters are supplied by the caller and must route through approved browsing/search/fetch tools, never shell HTTP against sports sites. An unconfigured deployment degrades; it never pretends."
+      },
+      "actionable": false,
+      "age_days": 7.4947,
+      "disposition": "DEGRADED",
+      "dose_multiplier": 0.5,
+      "forecastable": true,
+      "grade": "CONFIRMED",
+      "input_value_policy": "REGISTERED_FALLBACK_ONLY",
+      "limit_days": 2,
+      "reason": "derived_age 7.49d EXCEEDS the 2d limit and acquisition was unavailable or failed \u2014 degraded to a widened dose rather than inheriting the stale value as though it were current",
+      "stamp": {
+       "content_age_days": 7.4947,
+       "derived_age_days": 7.4947,
+       "effective_at": "2026-08-25T00:00:00Z",
+       "fetched_at": null,
+       "grade": "CONFIRMED",
+       "observed_at": "2026-08-25T00:00:00Z",
+       "source": "pitcher_logs/663969.txt via sp_asof_strict",
+       "source_sha256": "5ba5549bc4c7c5ec4d442b83ddbdd685e7dbb7f3c1ce4ae3655b4667a3fd08db",
+       "subject": "Tyler Phillips"
+      },
+      "subject": "Tyler Phillips"
+     },
+     "home": {
+      "acquisition": {
+       "attempted": false,
+       "why": "no acquisition adapter injected. This module performs NO network I/O by design \u2014 adapters are supplied by the caller and must route through approved browsing/search/fetch tools, never shell HTTP against sports sites. An unconfigured deployment degrades; it never pretends."
+      },
+      "actionable": false,
+      "age_days": 6.4947,
+      "disposition": "DEGRADED",
+      "dose_multiplier": 0.5,
+      "forecastable": true,
+      "grade": "CONFIRMED",
+      "input_value_policy": "REGISTERED_FALLBACK_ONLY",
+      "limit_days": 2,
+      "reason": "derived_age 6.49d EXCEEDS the 2d limit and acquisition was unavailable or failed \u2014 degraded to a widened dose rather than inheriting the stale value as though it were current",
+      "stamp": {
+       "content_age_days": 6.4947,
+       "derived_age_days": 6.4947,
+       "effective_at": "2026-08-26T00:00:00Z",
+       "fetched_at": null,
+       "grade": "CONFIRMED",
+       "observed_at": "2026-08-26T00:00:00Z",
+       "source": "pitcher_logs/677976.txt via sp_asof_strict",
+       "source_sha256": "5a42d7f4268e83a7aac7bf7c772ef0f6ed6899e080f4f6328fa5bff0bddc15ad",
+       "subject": "Randy Dobnak"
+      },
+      "subject": "Randy Dobnak"
+     }
+    },
+    "starter_slots_capped": 2,
+    "trials": 30000
+   }
+  },
+  {
+   "event": "MIL@CHC",
+   "forecast": {
+    "arms": {
+     "mlb.winner.CHAMPION_V13": 0.48783333333333334,
+     "mlb.winner.EXPANDING_HOME_PRIOR": 0.5205399061032864
+    },
+    "dose_consumed": true,
+    "event": "MIL@CHC",
+    "forecast_state": "VALID_WITH_UNCERTAINTY",
+    "monte_carlo_sd_pp": 0.2885896580626907,
+    "p_away": 0.512167,
+    "p_home": 0.48783333333333334,
+    "p_home_dosed": 0.512363,
+    "projected_margin_home": null,
+    "projected_total": null,
+    "resolved_information_dose": 0.25,
+    "seed": 2543671037681725505,
+    "simulation_version": "v13_1",
+    "starter_slots_capped": 2,
+    "trials": 30000,
+    "uncertainty": {
+     "dose": 0.25,
+     "lineup": "NOT_POSTED",
+     "starter": "PROBABLE"
+    }
+   },
+   "in_relay": false,
+   "overlay": {
+    "event": "MIL@CHC",
+    "execution_state": "NO_LINE",
+    "valued": false,
+    "why": "scheduled game carries no captured price; retained, never dropped"
+   },
+   "snapshot": {
+    "away": "MIL",
+    "away_starter": "Robert Gasser",
+    "event": "MIL@CHC",
+    "frozen": true,
+    "home": "CHC",
+    "home_starter": "Matthew Boyd",
+    "market_read": false,
+    "park_factor": 1.012,
+    "ra_away": 3.6607142857142856,
+    "ra_home": 4.486486486486487,
+    "resolved_information_dose": 0.25,
+    "rf_away": 5.0625,
+    "rf_home": 5.135135135135135,
+    "slate_date": "2026-09-01",
+    "sp_away": {
+     "bb": null,
+     "era": null,
+     "gs": 0,
+     "k": null
+    },
+    "sp_home": {
+     "bb": null,
+     "era": null,
+     "gs": 0,
+     "k": null
+    },
+    "sp_status": {
+     "away": "STALE_DATA_CAP",
+     "home": "STALE_DATA_CAP"
+    },
+    "starter_dispositions": {
+     "away": {
+      "acquisition": {
+       "attempted": false,
+       "why": "no acquisition adapter injected. This module performs NO network I/O by design \u2014 adapters are supplied by the caller and must route through approved browsing/search/fetch tools, never shell HTTP against sports sites. An unconfigured deployment degrades; it never pretends."
+      },
+      "actionable": false,
+      "age_days": 12.4947,
+      "disposition": "DEGRADED",
+      "dose_multiplier": 0.5,
+      "forecastable": true,
+      "grade": "CONFIRMED",
+      "input_value_policy": "REGISTERED_FALLBACK_ONLY",
+      "limit_days": 2,
+      "reason": "derived_age 12.49d EXCEEDS the 2d limit and acquisition was unavailable or failed \u2014 degraded to a widened dose rather than inheriting the stale value as though it were current",
+      "stamp": {
+       "content_age_days": 12.4947,
+       "derived_age_days": 12.4947,
+       "effective_at": "2026-08-20T00:00:00Z",
+       "fetched_at": null,
+       "grade": "CONFIRMED",
+       "observed_at": "2026-08-20T00:00:00Z",
+       "source": "pitcher_logs/688107.txt via sp_asof_strict",
+       "source_sha256": "c43a4e6c6c3f4c5cc0fe629e145b97bbb23bcd0c001445c3e24e8bf85342ed1a",
+       "subject": "Robert Gasser"
+      },
+      "subject": "Robert Gasser"
+     },
+     "home": {
+      "acquisition": {
+       "attempted": false,
+       "why": "no acquisition adapter injected. This module performs NO network I/O by design \u2014 adapters are supplied by the caller and must route through approved browsing/search/fetch tools, never shell HTTP against sports sites. An unconfigured deployment degrades; it never pretends."
+      },
+      "actionable": false,
+      "age_days": 6.4947,
+      "disposition": "DEGRADED",
+      "dose_multiplier": 0.5,
+      "forecastable": true,
+      "grade": "CONFIRMED",
+      "input_value_policy": "REGISTERED_FALLBACK_ONLY",
+      "limit_days": 2,
+      "reason": "derived_age 6.49d EXCEEDS the 2d limit and acquisition was unavailable or failed \u2014 degraded to a widened dose rather than inheriting the stale value as though it were current",
+      "stamp": {
+       "content_age_days": 6.4947,
+       "derived_age_days": 6.4947,
+       "effective_at": "2026-08-26T00:00:00Z",
+       "fetched_at": null,
+       "grade": "CONFIRMED",
+       "observed_at": "2026-08-26T00:00:00Z",
+       "source": "pitcher_logs/571510.txt via sp_asof_strict",
+       "source_sha256": "5f937c7b8d4a35cae198300041ed2b86e57531a28d534784d83aaebef98a54fd",
+       "subject": "Matthew Boyd"
+      },
+      "subject": "Matthew Boyd"
+     }
+    },
+    "starter_slots_capped": 2,
+    "trials": 30000
+   }
+  },
+  {
+   "event": "NYM@TB",
+   "forecast": {
+    "arms": {
+     "mlb.winner.CHAMPION_V13": 0.503,
+     "mlb.winner.EXPANDING_HOME_PRIOR": 0.5205399061032864
+    },
+    "dose_consumed": true,
+    "event": "NYM@TB",
+    "forecast_state": "VALID_WITH_UNCERTAINTY",
+    "monte_carlo_sd_pp": 0.28866993839562394,
+    "p_away": 0.497,
+    "p_home": 0.503,
+    "p_home_dosed": 0.516155,
+    "projected_margin_home": null,
+    "projected_total": null,
+    "resolved_information_dose": 0.25,
+    "seed": 4905842204551745651,
+    "simulation_version": "v13_1",
+    "starter_slots_capped": 1,
+    "trials": 30000,
+    "uncertainty": {
+     "dose": 0.25,
+     "lineup": "NOT_POSTED",
+     "starter": "PROBABLE"
+    }
+   },
+   "in_relay": false,
+   "overlay": {
+    "event": "NYM@TB",
+    "execution_state": "NO_LINE",
+    "valued": false,
+    "why": "scheduled game carries no captured price; retained, never dropped"
+   },
+   "snapshot": {
+    "away": "NYM",
+    "away_starter": "Robert Stock",
+    "event": "NYM@TB",
+    "frozen": true,
+    "home": "TB",
+    "home_starter": "Ian Seymour",
+    "market_read": false,
+    "park_factor": 1.021,
+    "ra_away": 4.612612612612613,
+    "ra_home": 4.178571428571429,
+    "resolved_information_dose": 0.25,
+    "rf_away": 4.171171171171171,
+    "rf_home": 4.4375,
+    "slate_date": "2026-09-01",
+    "sp_away": {
+     "bb": null,
+     "era": null,
+     "gs": 0,
+     "k": null
+    },
+    "sp_home": {
+     "bb": 6.79,
+     "era": 5.007,
+     "gs": 13,
+     "k": 29.3
+    },
+    "sp_status": {
+     "away": "NAMED_NO_LOG_RETAINED_CAP[NO_PID_CAP(Robert Stock)]",
+     "home": "PROBABLE"
+    },
+    "starter_dispositions": {
+     "away": {
+      "acquisition": {
+       "attempted": false,
+       "why": "no acquisition adapter injected. This module performs NO network I/O by design \u2014 adapters are supplied by the caller and must route through approved browsing/search/fetch tools, never shell HTTP against sports sites. An unconfigured deployment degrades; it never pretends."
+      },
+      "actionable": false,
+      "age_days": null,
+      "disposition": "DEGRADED",
+      "dose_multiplier": 0.25,
+      "forecastable": true,
+      "grade": "ABSENT",
+      "input_value_policy": "REGISTERED_FALLBACK_ONLY",
+      "limit_days": 2,
+      "reason": "NOT IN STORE and acquisition unavailable or failed \u2014 falling back to the registered league-average treatment. A labelled research forecast may remain, but the row is not action eligible.",
+      "stamp": {
+       "content_age_days": null,
+       "derived_age_days": null,
+       "effective_at": null,
+       "fetched_at": null,
+       "grade": "ABSENT",
+       "observed_at": null,
+       "source": "NOT_IN_STORE: NO_PID_CAP(Robert Stock)",
+       "source_sha256": null,
+       "subject": "Robert Stock"
+      },
+      "subject": "Robert Stock"
+     },
+     "home": {
+      "acquisition": null,
+      "actionable": true,
+      "age_days": 1.4947,
+      "disposition": "FRESH",
+      "dose_multiplier": 1.0,
+      "forecastable": true,
+      "grade": "CONFIRMED",
+      "input_value_policy": "CURRENT_OBSERVED_VALUE",
+      "limit_days": 2,
+      "reason": "derived_age 1.49d and content_age 1.49d both within the 2d limit for mlb/starter",
+      "stamp": {
+       "content_age_days": 1.4947,
+       "derived_age_days": 1.4947,
+       "effective_at": "2026-08-31T00:00:00Z",
+       "fetched_at": null,
+       "grade": "CONFIRMED",
+       "observed_at": "2026-08-31T00:00:00Z",
+       "source": "pitcher_logs/693855.txt via sp_asof_strict",
+       "source_sha256": "9f2f4331edae4dccc13472ff32e60ce98294420396ee66e83e36fe2448ed8c42",
+       "subject": "Ian Seymour"
+      },
+      "subject": "Ian Seymour"
+     }
+    },
+    "starter_slots_capped": 1,
+    "trials": 30000
+   }
+  },
+  {
+   "event": "NYY@LAA",
+   "forecast": {
+    "arms": {
+     "mlb.winner.CHAMPION_V13": 0.46363333333333334,
+     "mlb.winner.EXPANDING_HOME_PRIOR": 0.5205399061032864
+    },
+    "dose_consumed": true,
+    "event": "NYY@LAA",
+    "forecast_state": "VALID_WITH_UNCERTAINTY",
+    "monte_carlo_sd_pp": 0.28791055645550495,
+    "p_away": 0.536367,
+    "p_home": 0.46363333333333334,
+    "p_home_dosed": 0.506313,
+    "projected_margin_home": null,
+    "projected_total": null,
+    "resolved_information_dose": 0.25,
+    "seed": 8098087183736281553,
+    "simulation_version": "v13_1",
+    "starter_slots_capped": 2,
+    "trials": 30000,
+    "uncertainty": {
+     "dose": 0.25,
+     "lineup": "NOT_POSTED",
+     "starter": "PROBABLE"
+    }
+   },
+   "in_relay": false,
+   "overlay": {
+    "event": "NYY@LAA",
+    "execution_state": "NO_LINE",
+    "valued": false,
+    "why": "scheduled game carries no captured price; retained, never dropped"
+   },
+   "snapshot": {
+    "away": "NYY",
+    "away_starter": "Gerrit Cole",
+    "event": "NYY@LAA",
+    "frozen": true,
+    "home": "LAA",
+    "home_starter": "Grayson Rodriguez",
+    "market_read": false,
+    "park_factor": 0.887,
+    "ra_away": 3.743362831858407,
+    "ra_home": 4.743362831858407,
+    "resolved_information_dose": 0.25,
+    "rf_away": 4.557522123893805,
+    "rf_home": 4.3097345132743365,
+    "slate_date": "2026-09-01",
+    "sp_away": {
+     "bb": null,
+     "era": null,
+     "gs": 0,
+     "k": null
+    },
+    "sp_home": {
+     "bb": null,
+     "era": null,
+     "gs": 0,
+     "k": null
+    },
+    "sp_status": {
+     "away": "STALE_DATA_CAP",
+     "home": "STALE_DATA_CAP"
+    },
+    "starter_dispositions": {
+     "away": {
+      "acquisition": {
+       "attempted": false,
+       "why": "no acquisition adapter injected. This module performs NO network I/O by design \u2014 adapters are supplied by the caller and must route through approved browsing/search/fetch tools, never shell HTTP against sports sites. An unconfigured deployment degrades; it never pretends."
+      },
+      "actionable": false,
+      "age_days": 5.4947,
+      "disposition": "DEGRADED",
+      "dose_multiplier": 0.5,
+      "forecastable": true,
+      "grade": "CONFIRMED",
+      "input_value_policy": "REGISTERED_FALLBACK_ONLY",
+      "limit_days": 2,
+      "reason": "derived_age 5.49d EXCEEDS the 2d limit and acquisition was unavailable or failed \u2014 degraded to a widened dose rather than inheriting the stale value as though it were current",
+      "stamp": {
+       "content_age_days": 5.4947,
+       "derived_age_days": 5.4947,
+       "effective_at": "2026-08-27T00:00:00Z",
+       "fetched_at": null,
+       "grade": "CONFIRMED",
+       "observed_at": "2026-08-27T00:00:00Z",
+       "source": "pitcher_logs/543037.txt via sp_asof_strict",
+       "source_sha256": "b30e5d04d82f417d1032ef9aa97ed3213e9733879625a1e43a2b8cddf0dea06a",
+       "subject": "Gerrit Cole"
+      },
+      "subject": "Gerrit Cole"
+     },
+     "home": {
+      "acquisition": {
+       "attempted": false,
+       "why": "no acquisition adapter injected. This module performs NO network I/O by design \u2014 adapters are supplied by the caller and must route through approved browsing/search/fetch tools, never shell HTTP against sports sites. An unconfigured deployment degrades; it never pretends."
+      },
+      "actionable": false,
+      "age_days": 6.4947,
+      "disposition": "DEGRADED",
+      "dose_multiplier": 0.5,
+      "forecastable": true,
+      "grade": "CONFIRMED",
+      "input_value_policy": "REGISTERED_FALLBACK_ONLY",
+      "limit_days": 2,
+      "reason": "derived_age 6.49d EXCEEDS the 2d limit and acquisition was unavailable or failed \u2014 degraded to a widened dose rather than inheriting the stale value as though it were current",
+      "stamp": {
+       "content_age_days": 6.4947,
+       "derived_age_days": 6.4947,
+       "effective_at": "2026-08-26T00:00:00Z",
+       "fetched_at": null,
+       "grade": "CONFIRMED",
+       "observed_at": "2026-08-26T00:00:00Z",
+       "source": "pitcher_logs/680570.txt via sp_asof_strict",
+       "source_sha256": "e7ce61c0c2ea01a4e437d5d9aae606bf9e244cb60d588f9c6ef14993fbe3d93d",
+       "subject": "Grayson Rodriguez"
+      },
+      "subject": "Grayson Rodriguez"
+     }
+    },
+    "starter_slots_capped": 2,
+    "trials": 30000
+   }
+  },
+  {
+   "event": "PHI@AZ",
+   "forecast": {
+    "arms": {
+     "mlb.winner.CHAMPION_V13": 0.5048333333333334,
+     "mlb.winner.EXPANDING_HOME_PRIOR": 0.5205399061032864
+    },
+    "dose_consumed": true,
+    "event": "PHI@AZ",
+    "forecast_state": "VALID_WITH_UNCERTAINTY",
+    "monte_carlo_sd_pp": 0.2886616467359256,
+    "p_away": 0.495167,
+    "p_home": 0.5048333333333334,
+    "p_home_dosed": 0.517399,
+    "projected_margin_home": null,
+    "projected_total": null,
+    "resolved_information_dose": 0.2,
+    "seed": 674536634233502535,
+    "simulation_version": "v13_1",
+    "starter_slots_capped": 2,
+    "trials": 30000,
+    "uncertainty": {
+     "dose": 0.2,
+     "lineup": "NOT_POSTED",
+     "starter": "PROBABLE"
+    }
+   },
+   "in_relay": false,
+   "overlay": {
+    "event": "PHI@AZ",
+    "execution_state": "NO_LINE",
+    "valued": false,
+    "why": "scheduled game carries no captured price; retained, never dropped"
+   },
+   "snapshot": {
+    "away": "PHI",
+    "away_starter": "Jes\u00fas Luzardo",
+    "event": "PHI@AZ",
+    "frozen": true,
+    "home": "AZ",
+    "home_starter": null,
+    "market_read": false,
+    "park_factor": 1.033,
+    "ra_away": 4.401785714285714,
+    "ra_home": 4.457943925233645,
+    "resolved_information_dose": 0.2,
+    "rf_away": 4.4375,
+    "rf_home": 4.5327102803738315,
+    "slate_date": "2026-09-01",
+    "sp_away": {
+     "bb": null,
+     "era": null,
+     "gs": 0,
+     "k": null
+    },
+    "sp_home": {
+     "bb": null,
+     "era": null,
+     "gs": 0,
+     "k": null
+    },
+    "sp_status": {
+     "away": "STALE_DATA_CAP",
+     "home": "NAMED_NO_LOG_RETAINED_CAP[OFFICIAL_TBD_CAP]"
+    },
+    "starter_dispositions": {
+     "away": {
+      "acquisition": {
+       "attempted": false,
+       "why": "no acquisition adapter injected. This module performs NO network I/O by design \u2014 adapters are supplied by the caller and must route through approved browsing/search/fetch tools, never shell HTTP against sports sites. An unconfigured deployment degrades; it never pretends."
+      },
+      "actionable": false,
+      "age_days": 6.4947,
+      "disposition": "DEGRADED",
+      "dose_multiplier": 0.5,
+      "forecastable": true,
+      "grade": "CONFIRMED",
+      "input_value_policy": "REGISTERED_FALLBACK_ONLY",
+      "limit_days": 2,
+      "reason": "derived_age 6.49d EXCEEDS the 2d limit and acquisition was unavailable or failed \u2014 degraded to a widened dose rather than inheriting the stale value as though it were current",
+      "stamp": {
+       "content_age_days": 6.4947,
+       "derived_age_days": 6.4947,
+       "effective_at": "2026-08-26T00:00:00Z",
+       "fetched_at": null,
+       "grade": "CONFIRMED",
+       "observed_at": "2026-08-26T00:00:00Z",
+       "source": "pitcher_logs/666200.txt via sp_asof_strict",
+       "source_sha256": "a7abc2c6a41306751ba715c4bdb85a3e8b7d94f43c7834261c230c48bf4fbebe",
+       "subject": "Jes\u00fas Luzardo"
+      },
+      "subject": "Jes\u00fas Luzardo"
+     },
+     "home": {
+      "acquisition": {
+       "attempted": false,
+       "why": "no acquisition adapter injected. This module performs NO network I/O by design \u2014 adapters are supplied by the caller and must route through approved browsing/search/fetch tools, never shell HTTP against sports sites. An unconfigured deployment degrades; it never pretends."
+      },
+      "actionable": false,
+      "age_days": null,
+      "disposition": "DEGRADED",
+      "dose_multiplier": 0.25,
+      "forecastable": true,
+      "grade": "ABSENT",
+      "input_value_policy": "REGISTERED_FALLBACK_ONLY",
+      "limit_days": 2,
+      "reason": "NOT IN STORE and acquisition unavailable or failed \u2014 falling back to the registered league-average treatment. A labelled research forecast may remain, but the row is not action eligible.",
+      "stamp": {
+       "content_age_days": null,
+       "derived_age_days": null,
+       "effective_at": null,
+       "fetched_at": null,
+       "grade": "ABSENT",
+       "observed_at": null,
+       "source": "NOT_IN_STORE: OFFICIAL_TBD_CAP",
+       "source_sha256": null,
+       "subject": null
+      },
+      "subject": null
+     }
+    },
+    "starter_slots_capped": 2,
+    "trials": 30000
+   }
+  },
+  {
+   "event": "SD@CIN",
+   "forecast": {
+    "arms": {
+     "mlb.winner.CHAMPION_V13": 0.48606666666666665,
+     "mlb.winner.EXPANDING_HOME_PRIOR": 0.5205399061032864
+    },
+    "dose_consumed": true,
+    "event": "SD@CIN",
+    "forecast_state": "VALID_WITH_UNCERTAINTY",
+    "monte_carlo_sd_pp": 0.2885630273280705,
+    "p_away": 0.513933,
+    "p_home": 0.48606666666666665,
+    "p_home_dosed": 0.511922,
+    "projected_margin_home": null,
+    "projected_total": null,
+    "resolved_information_dose": 0.25,
+    "seed": 6288534373202196016,
+    "simulation_version": "v13_1",
+    "starter_slots_capped": 2,
+    "trials": 30000,
+    "uncertainty": {
+     "dose": 0.25,
+     "lineup": "NOT_POSTED",
+     "starter": "PROBABLE"
+    }
+   },
+   "in_relay": false,
+   "overlay": {
+    "event": "SD@CIN",
+    "execution_state": "NO_LINE",
+    "valued": false,
+    "why": "scheduled game carries no captured price; retained, never dropped"
+   },
+   "snapshot": {
+    "away": "SD",
+    "away_starter": "Randy V\u00e1squez",
+    "event": "SD@CIN",
+    "frozen": true,
+    "home": "CIN",
+    "home_starter": "Nick Lodolo",
+    "market_read": false,
+    "park_factor": 0.97,
+    "ra_away": 4.342342342342342,
+    "ra_home": 4.892857142857143,
+    "resolved_information_dose": 0.25,
+    "rf_away": 4.171171171171171,
+    "rf_home": 4.151785714285714,
+    "slate_date": "2026-09-01",
+    "sp_away": {
+     "bb": null,
+     "era": null,
+     "gs": 0,
+     "k": null
+    },
+    "sp_home": {
+     "bb": null,
+     "era": null,
+     "gs": 0,
+     "k": null
+    },
+    "sp_status": {
+     "away": "STALE_DATA_CAP",
+     "home": "STALE_DATA_CAP"
+    },
+    "starter_dispositions": {
+     "away": {
+      "acquisition": {
+       "attempted": false,
+       "why": "no acquisition adapter injected. This module performs NO network I/O by design \u2014 adapters are supplied by the caller and must route through approved browsing/search/fetch tools, never shell HTTP against sports sites. An unconfigured deployment degrades; it never pretends."
+      },
+      "actionable": false,
+      "age_days": 6.4947,
+      "disposition": "DEGRADED",
+      "dose_multiplier": 0.5,
+      "forecastable": true,
+      "grade": "CONFIRMED",
+      "input_value_policy": "REGISTERED_FALLBACK_ONLY",
+      "limit_days": 2,
+      "reason": "derived_age 6.49d EXCEEDS the 2d limit and acquisition was unavailable or failed \u2014 degraded to a widened dose rather than inheriting the stale value as though it were current",
+      "stamp": {
+       "content_age_days": 6.4947,
+       "derived_age_days": 6.4947,
+       "effective_at": "2026-08-26T00:00:00Z",
+       "fetched_at": null,
+       "grade": "CONFIRMED",
+       "observed_at": "2026-08-26T00:00:00Z",
+       "source": "pitcher_logs/681190.txt via sp_asof_strict",
+       "source_sha256": "645a2ba8dd936fc02abaf74db900f196fc5ed833ca2f228016c4dc929c1d5c99",
+       "subject": "Randy V\u00e1squez"
+      },
+      "subject": "Randy V\u00e1squez"
+     },
+     "home": {
+      "acquisition": {
+       "attempted": false,
+       "why": "no acquisition adapter injected. This module performs NO network I/O by design \u2014 adapters are supplied by the caller and must route through approved browsing/search/fetch tools, never shell HTTP against sports sites. An unconfigured deployment degrades; it never pretends."
+      },
+      "actionable": false,
+      "age_days": 6.4947,
+      "disposition": "DEGRADED",
+      "dose_multiplier": 0.5,
+      "forecastable": true,
+      "grade": "CONFIRMED",
+      "input_value_policy": "REGISTERED_FALLBACK_ONLY",
+      "limit_days": 2,
+      "reason": "derived_age 6.49d EXCEEDS the 2d limit and acquisition was unavailable or failed \u2014 degraded to a widened dose rather than inheriting the stale value as though it were current",
+      "stamp": {
+       "content_age_days": 6.4947,
+       "derived_age_days": 6.4947,
+       "effective_at": "2026-08-26T00:00:00Z",
+       "fetched_at": null,
+       "grade": "CONFIRMED",
+       "observed_at": "2026-08-26T00:00:00Z",
+       "source": "pitcher_logs/666157.txt via sp_asof_strict",
+       "source_sha256": "bf03b31ef893e9645c313fa7887fb0983dc4e2ca83e86b6fc4d536a6f9b233bb",
+       "subject": "Nick Lodolo"
+      },
+      "subject": "Nick Lodolo"
+     }
+    },
+    "starter_slots_capped": 2,
+    "trials": 30000
+   }
+  },
+  {
+   "event": "SEA@BOS",
+   "forecast": {
+    "arms": {
+     "mlb.winner.CHAMPION_V13": 0.5243666666666666,
+     "mlb.winner.EXPANDING_HOME_PRIOR": 0.5205399061032864
+    },
+    "dose_consumed": true,
+    "event": "SEA@BOS",
+    "forecast_state": "VALID_WITH_UNCERTAINTY",
+    "monte_carlo_sd_pp": 0.2883321380835856,
+    "p_away": 0.475633,
+    "p_home": 0.5243666666666666,
+    "p_home_dosed": 0.521305,
+    "projected_margin_home": null,
+    "projected_total": null,
+    "resolved_information_dose": 0.2,
+    "seed": 5749814365638924403,
+    "simulation_version": "v13_1",
+    "starter_slots_capped": 2,
+    "trials": 30000,
+    "uncertainty": {
+     "dose": 0.2,
+     "lineup": "NOT_POSTED",
+     "starter": "PROBABLE"
+    }
+   },
+   "in_relay": false,
+   "overlay": {
+    "event": "SEA@BOS",
+    "execution_state": "NO_LINE",
+    "valued": false,
+    "why": "scheduled game carries no captured price; retained, never dropped"
+   },
+   "snapshot": {
+    "away": "SEA",
+    "away_starter": "Bryan Woo",
+    "event": "SEA@BOS",
+    "frozen": true,
+    "home": "BOS",
+    "home_starter": null,
+    "market_read": false,
+    "park_factor": 0.971,
+    "ra_away": 3.9557522123893807,
+    "ra_home": 3.72972972972973,
+    "resolved_information_dose": 0.2,
+    "rf_away": 4.035398230088496,
+    "rf_home": 4.2342342342342345,
+    "slate_date": "2026-09-01",
+    "sp_away": {
+     "bb": null,
+     "era": null,
+     "gs": 0,
+     "k": null
+    },
+    "sp_home": {
+     "bb": null,
+     "era": null,
+     "gs": 0,
+     "k": null
+    },
+    "sp_status": {
+     "away": "STALE_DATA_CAP",
+     "home": "NAMED_NO_LOG_RETAINED_CAP[OFFICIAL_TBD_CAP]"
+    },
+    "starter_dispositions": {
+     "away": {
+      "acquisition": {
+       "attempted": false,
+       "why": "no acquisition adapter injected. This module performs NO network I/O by design \u2014 adapters are supplied by the caller and must route through approved browsing/search/fetch tools, never shell HTTP against sports sites. An unconfigured deployment degrades; it never pretends."
+      },
+      "actionable": false,
+      "age_days": 6.4947,
+      "disposition": "DEGRADED",
+      "dose_multiplier": 0.5,
+      "forecastable": true,
+      "grade": "CONFIRMED",
+      "input_value_policy": "REGISTERED_FALLBACK_ONLY",
+      "limit_days": 2,
+      "reason": "derived_age 6.49d EXCEEDS the 2d limit and acquisition was unavailable or failed \u2014 degraded to a widened dose rather than inheriting the stale value as though it were current",
+      "stamp": {
+       "content_age_days": 6.4947,
+       "derived_age_days": 6.4947,
+       "effective_at": "2026-08-26T00:00:00Z",
+       "fetched_at": null,
+       "grade": "CONFIRMED",
+       "observed_at": "2026-08-26T00:00:00Z",
+       "source": "pitcher_logs/693433.txt via sp_asof_strict",
+       "source_sha256": "10c0246db3aa86c9e6ec3a6996088850520eeb09fb9b1dd5d7421dd5f0494eb9",
+       "subject": "Bryan Woo"
+      },
+      "subject": "Bryan Woo"
+     },
+     "home": {
+      "acquisition": {
+       "attempted": false,
+       "why": "no acquisition adapter injected. This module performs NO network I/O by design \u2014 adapters are supplied by the caller and must route through approved browsing/search/fetch tools, never shell HTTP against sports sites. An unconfigured deployment degrades; it never pretends."
+      },
+      "actionable": false,
+      "age_days": null,
+      "disposition": "DEGRADED",
+      "dose_multiplier": 0.25,
+      "forecastable": true,
+      "grade": "ABSENT",
+      "input_value_policy": "REGISTERED_FALLBACK_ONLY",
+      "limit_days": 2,
+      "reason": "NOT IN STORE and acquisition unavailable or failed \u2014 falling back to the registered league-average treatment. A labelled research forecast may remain, but the row is not action eligible.",
+      "stamp": {
+       "content_age_days": null,
+       "derived_age_days": null,
+       "effective_at": null,
+       "fetched_at": null,
+       "grade": "ABSENT",
+       "observed_at": null,
+       "source": "NOT_IN_STORE: OFFICIAL_TBD_CAP",
+       "source_sha256": null,
+       "subject": null
+      },
+      "subject": null
+     }
+    },
+    "starter_slots_capped": 2,
+    "trials": 30000
+   }
+  },
+  {
+   "event": "SF@PIT",
+   "forecast": {
+    "arms": {
+     "mlb.winner.CHAMPION_V13": 0.5616666666666666,
+     "mlb.winner.EXPANDING_HOME_PRIOR": 0.5205399061032864
+    },
+    "dose_consumed": true,
+    "event": "SF@PIT",
+    "forecast_state": "VALID_WITH_UNCERTAINTY",
+    "monte_carlo_sd_pp": 0.2864711865803274,
+    "p_away": 0.438333,
+    "p_home": 0.5616666666666666,
+    "p_home_dosed": 0.530822,
+    "projected_margin_home": null,
+    "projected_total": null,
+    "resolved_information_dose": 0.25,
+    "seed": 7216336495970471263,
+    "simulation_version": "v13_1",
+    "starter_slots_capped": 2,
+    "trials": 30000,
+    "uncertainty": {
+     "dose": 0.25,
+     "lineup": "NOT_POSTED",
+     "starter": "PROBABLE"
+    }
+   },
+   "in_relay": false,
+   "overlay": {
+    "event": "SF@PIT",
+    "execution_state": "NO_LINE",
+    "valued": false,
+    "why": "scheduled game carries no captured price; retained, never dropped"
+   },
+   "snapshot": {
+    "away": "SF",
+    "away_starter": "Logan Webb",
+    "event": "SF@PIT",
+    "frozen": true,
+    "home": "PIT",
+    "home_starter": "Paul Skenes",
+    "market_read": false,
+    "park_factor": 1.092,
+    "ra_away": 4.705357142857143,
+    "ra_home": 4.769911504424779,
+    "resolved_information_dose": 0.25,
+    "rf_away": 4.151785714285714,
+    "rf_home": 5.221238938053097,
+    "slate_date": "2026-09-01",
+    "sp_away": {
+     "bb": null,
+     "era": null,
+     "gs": 0,
+     "k": null
+    },
+    "sp_home": {
+     "bb": null,
+     "era": null,
+     "gs": 0,
+     "k": null
+    },
+    "sp_status": {
+     "away": "STALE_DATA_CAP",
+     "home": "STALE_DATA_CAP"
+    },
+    "starter_dispositions": {
+     "away": {
+      "acquisition": {
+       "attempted": false,
+       "why": "no acquisition adapter injected. This module performs NO network I/O by design \u2014 adapters are supplied by the caller and must route through approved browsing/search/fetch tools, never shell HTTP against sports sites. An unconfigured deployment degrades; it never pretends."
+      },
+      "actionable": false,
+      "age_days": 6.4947,
+      "disposition": "DEGRADED",
+      "dose_multiplier": 0.5,
+      "forecastable": true,
+      "grade": "CONFIRMED",
+      "input_value_policy": "REGISTERED_FALLBACK_ONLY",
+      "limit_days": 2,
+      "reason": "derived_age 6.49d EXCEEDS the 2d limit and acquisition was unavailable or failed \u2014 degraded to a widened dose rather than inheriting the stale value as though it were current",
+      "stamp": {
+       "content_age_days": 6.4947,
+       "derived_age_days": 6.4947,
+       "effective_at": "2026-08-26T00:00:00Z",
+       "fetched_at": null,
+       "grade": "CONFIRMED",
+       "observed_at": "2026-08-26T00:00:00Z",
+       "source": "pitcher_logs/657277.txt via sp_asof_strict",
+       "source_sha256": "ad4f810703bbf47227cc4f98a6ca69cb04ecd16a4a1a41c704c19c4fc18da4af",
+       "subject": "Logan Webb"
+      },
+      "subject": "Logan Webb"
+     },
+     "home": {
+      "acquisition": {
+       "attempted": false,
+       "why": "no acquisition adapter injected. This module performs NO network I/O by design \u2014 adapters are supplied by the caller and must route through approved browsing/search/fetch tools, never shell HTTP against sports sites. An unconfigured deployment degrades; it never pretends."
+      },
+      "actionable": false,
+      "age_days": 7.4947,
+      "disposition": "DEGRADED",
+      "dose_multiplier": 0.5,
+      "forecastable": true,
+      "grade": "CONFIRMED",
+      "input_value_policy": "REGISTERED_FALLBACK_ONLY",
+      "limit_days": 2,
+      "reason": "derived_age 7.49d EXCEEDS the 2d limit and acquisition was unavailable or failed \u2014 degraded to a widened dose rather than inheriting the stale value as though it were current",
+      "stamp": {
+       "content_age_days": 7.4947,
+       "derived_age_days": 7.4947,
+       "effective_at": "2026-08-25T00:00:00Z",
+       "fetched_at": null,
+       "grade": "CONFIRMED",
+       "observed_at": "2026-08-25T00:00:00Z",
+       "source": "pitcher_logs/694973.txt via sp_asof_strict",
+       "source_sha256": "0da95cb15e8a512d8e3958424ef6ed5acbff05ac6a15d29d5e77f6fba6ade2b6",
+       "subject": "Paul Skenes"
+      },
+      "subject": "Paul Skenes"
+     }
+    },
+    "starter_slots_capped": 2,
+    "trials": 30000
+   }
+  },
+  {
+   "event": "STL@LAD",
+   "forecast": {
+    "arms": {
+     "mlb.winner.CHAMPION_V13": 0.5508,
+     "mlb.winner.EXPANDING_HOME_PRIOR": 0.5205399061032864
+    },
+    "dose_consumed": true,
+    "event": "STL@LAD",
+    "forecast_state": "VALID_WITH_UNCERTAINTY",
+    "monte_carlo_sd_pp": 0.2871813364409324,
+    "p_away": 0.4492,
+    "p_home": 0.5508,
+    "p_home_dosed": 0.528105,
+    "projected_margin_home": null,
+    "projected_total": null,
+    "resolved_information_dose": 0.25,
+    "seed": 8094203630209008225,
+    "simulation_version": "v13_1",
+    "starter_slots_capped": 2,
+    "trials": 30000,
+    "uncertainty": {
+     "dose": 0.25,
+     "lineup": "NOT_POSTED",
+     "starter": "PROBABLE"
+    }
+   },
+   "in_relay": false,
+   "overlay": {
+    "event": "STL@LAD",
+    "execution_state": "NO_LINE",
+    "valued": false,
+    "why": "scheduled game carries no captured price; retained, never dropped"
+   },
+   "snapshot": {
+    "away": "STL",
+    "away_starter": "Michael McGreevy",
+    "event": "STL@LAD",
+    "frozen": true,
+    "home": "LAD",
+    "home_starter": "Eric Lauer",
+    "market_read": false,
+    "park_factor": 0.93,
+    "ra_away": 4.5225225225225225,
+    "ra_home": 3.752212389380531,
+    "resolved_information_dose": 0.25,
+    "rf_away": 4.5225225225225225,
+    "rf_home": 5.097345132743363,
+    "slate_date": "2026-09-01",
+    "sp_away": {
+     "bb": null,
+     "era": null,
+     "gs": 0,
+     "k": null
+    },
+    "sp_home": {
+     "bb": null,
+     "era": null,
+     "gs": 0,
+     "k": null
+    },
+    "sp_status": {
+     "away": "STALE_DATA_CAP",
+     "home": "STALE_DATA_CAP"
+    },
+    "starter_dispositions": {
+     "away": {
+      "acquisition": {
+       "attempted": false,
+       "why": "no acquisition adapter injected. This module performs NO network I/O by design \u2014 adapters are supplied by the caller and must route through approved browsing/search/fetch tools, never shell HTTP against sports sites. An unconfigured deployment degrades; it never pretends."
+      },
+      "actionable": false,
+      "age_days": 6.4947,
+      "disposition": "DEGRADED",
+      "dose_multiplier": 0.5,
+      "forecastable": true,
+      "grade": "CONFIRMED",
+      "input_value_policy": "REGISTERED_FALLBACK_ONLY",
+      "limit_days": 2,
+      "reason": "derived_age 6.49d EXCEEDS the 2d limit and acquisition was unavailable or failed \u2014 degraded to a widened dose rather than inheriting the stale value as though it were current",
+      "stamp": {
+       "content_age_days": 6.4947,
+       "derived_age_days": 6.4947,
+       "effective_at": "2026-08-26T00:00:00Z",
+       "fetched_at": null,
+       "grade": "CONFIRMED",
+       "observed_at": "2026-08-26T00:00:00Z",
+       "source": "pitcher_logs/700241.txt via sp_asof_strict",
+       "source_sha256": "b7078cc809a09fcb08652d4abe887c8c0c35b115d76f021c5ce25b8a843127d3",
+       "subject": "Michael McGreevy"
+      },
+      "subject": "Michael McGreevy"
+     },
+     "home": {
+      "acquisition": {
+       "attempted": false,
+       "why": "no acquisition adapter injected. This module performs NO network I/O by design \u2014 adapters are supplied by the caller and must route through approved browsing/search/fetch tools, never shell HTTP against sports sites. An unconfigured deployment degrades; it never pretends."
+      },
+      "actionable": false,
+      "age_days": 14.4947,
+      "disposition": "DEGRADED",
+      "dose_multiplier": 0.5,
+      "forecastable": true,
+      "grade": "CONFIRMED",
+      "input_value_policy": "REGISTERED_FALLBACK_ONLY",
+      "limit_days": 2,
+      "reason": "derived_age 14.49d EXCEEDS the 2d limit and acquisition was unavailable or failed \u2014 degraded to a widened dose rather than inheriting the stale value as though it were current",
+      "stamp": {
+       "content_age_days": 14.4947,
+       "derived_age_days": 14.4947,
+       "effective_at": "2026-08-18T00:00:00Z",
+       "fetched_at": null,
+       "grade": "CONFIRMED",
+       "observed_at": "2026-08-18T00:00:00Z",
+       "source": "pitcher_logs/641778.txt via sp_asof_strict",
+       "source_sha256": "96a9fbb8d47163c6fc0c2ca5742e9fec22d93b2d70812fdb603478a6af57f53f",
+       "subject": "Eric Lauer"
+      },
+      "subject": "Eric Lauer"
+     }
+    },
+    "starter_slots_capped": 2,
+    "trials": 30000
+   }
+  },
+  {
+   "event": "TOR@CLE",
+   "forecast": {
+    "arms": {
+     "mlb.winner.CHAMPION_V13": 0.5156,
+     "mlb.winner.EXPANDING_HOME_PRIOR": 0.5205399061032864
+    },
+    "dose_consumed": true,
+    "event": "TOR@CLE",
+    "forecast_state": "VALID_WITH_UNCERTAINTY",
+    "monte_carlo_sd_pp": 0.28853459642360624,
+    "p_away": 0.4844,
+    "p_home": 0.5156,
+    "p_home_dosed": 0.519305,
+    "projected_margin_home": null,
+    "projected_total": null,
+    "resolved_information_dose": 0.25,
+    "seed": 2310336533111743878,
+    "simulation_version": "v13_1",
+    "starter_slots_capped": 2,
+    "trials": 30000,
+    "uncertainty": {
+     "dose": 0.25,
+     "lineup": "NOT_POSTED",
+     "starter": "PROBABLE"
+    }
+   },
+   "in_relay": false,
+   "overlay": {
+    "event": "TOR@CLE",
+    "execution_state": "NO_LINE",
+    "valued": false,
+    "why": "scheduled game carries no captured price; retained, never dropped"
+   },
+   "snapshot": {
+    "away": "TOR",
+    "away_starter": "Spencer Arrighetti",
+    "event": "TOR@CLE",
+    "frozen": true,
+    "home": "CLE",
+    "home_starter": "Gavin Williams",
+    "market_read": false,
+    "park_factor": 1.0,
+    "ra_away": 4.460176991150442,
+    "ra_home": 4.008771929824562,
+    "resolved_information_dose": 0.25,
+    "rf_away": 3.8761061946902653,
+    "rf_home": 3.912280701754386,
+    "slate_date": "2026-09-01",
+    "sp_away": {
+     "bb": null,
+     "era": null,
+     "gs": 0,
+     "k": null
+    },
+    "sp_home": {
+     "bb": null,
+     "era": null,
+     "gs": 0,
+     "k": null
+    },
+    "sp_status": {
+     "away": "STALE_DATA_CAP",
+     "home": "STALE_DATA_CAP"
+    },
+    "starter_dispositions": {
+     "away": {
+      "acquisition": {
+       "attempted": false,
+       "why": "no acquisition adapter injected. This module performs NO network I/O by design \u2014 adapters are supplied by the caller and must route through approved browsing/search/fetch tools, never shell HTTP against sports sites. An unconfigured deployment degrades; it never pretends."
+      },
+      "actionable": false,
+      "age_days": 5.4947,
+      "disposition": "DEGRADED",
+      "dose_multiplier": 0.5,
+      "forecastable": true,
+      "grade": "CONFIRMED",
+      "input_value_policy": "REGISTERED_FALLBACK_ONLY",
+      "limit_days": 2,
+      "reason": "derived_age 5.49d EXCEEDS the 2d limit and acquisition was unavailable or failed \u2014 degraded to a widened dose rather than inheriting the stale value as though it were current",
+      "stamp": {
+       "content_age_days": 5.4947,
+       "derived_age_days": 5.4947,
+       "effective_at": "2026-08-27T00:00:00Z",
+       "fetched_at": null,
+       "grade": "CONFIRMED",
+       "observed_at": "2026-08-27T00:00:00Z",
+       "source": "pitcher_logs/681293.txt via sp_asof_strict",
+       "source_sha256": "ad4afb4d59b9098e6396694becced0889af905e25c518769a49de67367fd6872",
+       "subject": "Spencer Arrighetti"
+      },
+      "subject": "Spencer Arrighetti"
+     },
+     "home": {
+      "acquisition": {
+       "attempted": false,
+       "why": "no acquisition adapter injected. This module performs NO network I/O by design \u2014 adapters are supplied by the caller and must route through approved browsing/search/fetch tools, never shell HTTP against sports sites. An unconfigured deployment degrades; it never pretends."
+      },
+      "actionable": false,
+      "age_days": 7.4947,
+      "disposition": "DEGRADED",
+      "dose_multiplier": 0.5,
+      "forecastable": true,
+      "grade": "CONFIRMED",
+      "input_value_policy": "REGISTERED_FALLBACK_ONLY",
+      "limit_days": 2,
+      "reason": "derived_age 7.49d EXCEEDS the 2d limit and acquisition was unavailable or failed \u2014 degraded to a widened dose rather than inheriting the stale value as though it were current",
+      "stamp": {
+       "content_age_days": 7.4947,
+       "derived_age_days": 7.4947,
+       "effective_at": "2026-08-25T00:00:00Z",
+       "fetched_at": null,
+       "grade": "CONFIRMED",
+       "observed_at": "2026-08-25T00:00:00Z",
+       "source": "pitcher_logs/668909.txt via sp_asof_strict",
+       "source_sha256": "716bc427c3070497c549a5964a9cb68461285abde0c0367382c066450baa7e5f",
+       "subject": "Gavin Williams"
+      },
+      "subject": "Gavin Williams"
+     }
+    },
+    "starter_slots_capped": 2,
+    "trials": 30000
+   }
+  }
+ ],
+ "n_scheduled": 15,
+ "schema": "ops.mlb_daily_cycle.v1",
+ "summary": {
+  "actionable": 0,
+  "forecasted": 15,
+  "no_line": 15,
+  "scheduled": 15,
+  "true_no_forecast": 0,
+  "valued": 0,
+  "wait": 0
+ }
+}

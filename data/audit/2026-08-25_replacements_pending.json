@@ -1,0 +1,82 @@
+{
+ "cases": [
+  {
+   "changed_input": "home starter: TBD -> Tyler Phillips",
+   "delta_pp": 3.01,
+   "game": "mlb:BOS@MIA",
+   "original": {
+    "dose": 0.5,
+    "identity": "mlb.winner.CHAMPION_V13",
+    "p_home": 0.4753
+   },
+   "replacement": {
+    "dose": 1.0,
+    "identity": "mlb.replacement.CONFIRMED_LINEUP",
+    "p_home": 0.5054333333333333,
+    "proj_total": 6.672,
+    "seed": 3048143396892799848,
+    "trials": 30000
+   },
+   "source": "OWNER_RELAY of the official board (ESPN/DraftKings-attributed)",
+   "start_utc": "2026-08-25T22:40:00Z",
+   "starter_states": {
+    "away": "RESOLVED",
+    "home": "RESOLVED"
+   }
+  },
+  {
+   "changed_input": "away starter: TBD -> Mason Adams",
+   "delta_pp": -0.24,
+   "game": "mlb:COL@WSH",
+   "original": {
+    "dose": 0.5,
+    "identity": "mlb.winner.CHAMPION_V13",
+    "p_home": 0.5477
+   },
+   "replacement": {
+    "dose": 0.75,
+    "identity": "mlb.replacement.CONFIRMED_LINEUP",
+    "p_home": 0.5453333333333333,
+    "proj_total": 11.278,
+    "seed": 3673509777564233304,
+    "trials": 30000
+   },
+   "source": "OWNER_RELAY of the official board (ESPN/DraftKings-attributed)",
+   "start_utc": "2026-08-25T22:45:00Z",
+   "starter_states": {
+    "away": "NO_PID_CAP(Mason Adams)",
+    "home": "RESOLVED"
+   }
+  },
+  {
+   "changed_input": "home starter: TBD -> Matthew Liberatore",
+   "delta_pp": -2.29,
+   "game": "mlb:BAL@STL",
+   "original": {
+    "dose": 0.5,
+    "identity": "mlb.winner.CHAMPION_V13",
+    "p_home": 0.5090666666666667
+   },
+   "replacement": {
+    "dose": 1.0,
+    "identity": "mlb.replacement.CONFIRMED_LINEUP",
+    "p_home": 0.4861333333333333,
+    "proj_total": 8.45,
+    "seed": 5697847494109753170,
+    "trials": 30000
+   },
+   "source": "OWNER_RELAY of the official board (ESPN/DraftKings-attributed)",
+   "start_utc": "2026-08-25T23:45:00Z",
+   "starter_states": {
+    "away": "RESOLVED",
+    "home": "RESOLVED"
+   }
+  }
+ ],
+ "created_utc": "2026-08-25T17:10:00Z",
+ "record_id": "REPLACEMENTS-2026-08-25-PENDING-ANCHOR",
+ "record_sha256": "c8c260c230efbf77da13ae8752e639ec0543d8838cd3ef36786701fd293c58e8",
+ "schema": "ops.replacement_pending.v1",
+ "status": "PENDING_REMOTE_ANCHOR",
+ "workflow": "section 5: originals preserved byte-identical in the frozen board; replacements under the preregistered identity mlb.replacement.CONFIRMED_LINEUP with their own seeds; the CI anchor on the push carrying this record supplies anchored_at_utc, after which replacement_workflow.replace() finalizes each and a second push records it. A replacement not anchored before first pitch is refused, not used."
+}

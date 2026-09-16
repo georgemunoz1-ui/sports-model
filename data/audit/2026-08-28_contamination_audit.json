@@ -1,0 +1,40 @@
+{
+ "clean_checks": [
+  "no OTHER artifact carries numbers derived from the contaminated finals beyond the two known retained records",
+  "no other date's grading record shows a duplicate-score prior-date join",
+  "the 8/26 WNBA archive confirmation and the corrected 8/27 grading are internally consistent"
+ ],
+ "confirmed_live_code_defects": {
+  "harness/build_board_0825.py": "MEDIUM, OPEN \u2014 mints the dateless identity mlb:AWAY@HOME used by all boards; 6 keys shared between the 8/26 and 8/27 boards, five of them the contaminated games. Also derives the sim seed from that key, so a doubleheader would produce two rows with one identity AND one seed (starter_attribution.py already defends this hazard with a DH suffix; the board builder does not). Fix folds existing data (doc slate_date, per-row gamePk) into the key \u2014 no new acquisition needed.",
+  "harness/evaluation_standard.py": "MEDIUM, OPEN \u2014 paired_postgame has the same bare-game_id index while grouping output by slate_date; a duplicate key narrows the population silently, which its own note (lines 456-459) asserts cannot happen.",
+  "harness/grade_0725.py": "LOW, OPEN \u2014 bare AWAY@HOME keys; cross-date collision unreachable today (date literals) but doubleheaders collapse to one entry.",
+  "harness/grade_slate.py": "HIGH \u2014 SAME DEFECT, ON THE WRITE PATH. board_key=(away,home); run() filtered forecasts by date but never checked the BOARD's date. Measured: 15/15 matchups repeat between the 8/18 and 8/19 finals boards and 12/15 have opposite winners; grading 8/19 against the 8/18 board produced 15 wrong labels with zero errors, and --commit appends them to the append-only grade ledger where grade_ledger.rebuild treats them as canonical. FIXED: assert_board_is_for_date() refuses a board whose declared slate_date/date differs from --date, and refuses a board that declares no date at all; selftest exercises the real 8/18-vs-8/19 case.",
+  "harness/promotion_gate.py": "MEDIUM, OPEN \u2014 compare_against_references indexes challenger and reference on bare game_id with no date and no duplicate detection, inside an explicitly multi-slate-date evaluator; a repeated series silently drops a date, can pair rows that never coexisted, reports zero unpaired, and understates the cluster count that gates whether a p-value may print."
+ },
+ "created_utc": "2026-08-28T07:17:53Z",
+ "gate_bypasses_found_and_fixed": {
+  "B1_result_date_optional": "MOST SEVERE \u2014 omitting result_date was more permissive than stating it. The published wrong KC@TOR final carrying the CORRECT 8/27 pk bound as BOUND; all five contaminated rows bound with aggregate_guard permitting the aggregate. The entire published damage path reopened with the gate stamping approval. FIXED: result_date is a required identity field; regression fixture pins that exact row.",
+  "B2_final_lag_unbounded": "a final 27h after first pitch bound cleanly \u2014 that is the NEXT game of the series. FIXED: MAX_FINAL_LAG_HOURS=18 with an explicit suspended_resumed escape.",
+  "B3a_duplicate_binding": "two rows binding one board game undetected (makeup game / DH half / duplicated relay) \u2014 8 rows bound to a 7-game board, one game bound twice to contradictory finals, aggregate permitted. FIXED: cohort injectivity check.",
+  "B3b_partial_cohort": "a 3-of-7 cohort was gradable and its aggregate permitted \u2014 the WRONG DENOMINATOR shape, which is what '5-1' partly was. FIXED: coverage check with an explicit require_full_coverage=False escape.",
+  "B4_doubleheader_siblings": "DH halves share sport, teams and both dates, so every corroborating check collapses to the self-declared pk. FIXED: when the board holds siblings, the row must carry a matching game_number.",
+  "B5_placeholder_board_pk": "a board pk of TBD/None made the pk check circular \u2014 anything echoing the placeholder bound. FIXED: board pk must be a real identifier."
+ },
+ "gate_status": "6 regression fixtures added, one per bypass; mutation suite 3 -> 6 mutants, all caught; the gate is now CALLED by production code (grade_slate) rather than only self-tested",
+ "headline": "the incident's data damage was corrected, but the defect class was still live in production code and the gate written to stop it was decorative",
+ "ledger": {
+  "exposure_usd": 0,
+  "n_bets": 0,
+  "units": 0.0
+ },
+ "method": "10-agent adversarial workflow: 4 multi-modal repo sweeps (derived numbers, other dates, code paths, WNBA/cards) + 5 independent gate-bypass attempts on distinct angles + synthesis. Every finding was required to be reproduced by running code, not asserted.",
+ "record_defects_fixed": {
+  "affected_commit_accounting": "only a287dbb was marked; commit 4986b1f published the false Ionescu claim in its own subject line and was unmarked repo-wide. Both now named in the correction record.",
+  "supersession_index_stale": "built 2026-08-16, so neither 8/28 supersession was reachable through the mechanism built to find them. Regenerated: 37 entries.",
+  "wnba_card_wrong_pointer": "the card's Ionescu withdrawal named 2026-08-27_wnba_personnel_bind.json \u2014 an innocent record that never mentioned Ionescu \u2014 while the record carrying the false claim (2026-08-27_checkpoint_wnba_t45.json) went unnamed. Corrected."
+ },
+ "record_id": "CONTAMINATION-AUDIT-2026-08-28",
+ "record_sha256": "acfc86a9bc86910d887e0e7da3d5016641f365303c5e28c14ec6f134c52001fa",
+ "residual_open": "the four MEDIUM/LOW dateless-join code paths above are recorded, not yet fixed \u2014 they are evaluation-side rather than write-path, and fixing the identity key touches frozen-board schemas; queued rather than rushed at 01:00Z",
+ "schema": "ops.audit.v1"
+}

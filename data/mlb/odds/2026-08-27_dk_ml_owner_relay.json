@@ -1,0 +1,51 @@
+{
+ "book": "DraftKings",
+ "capture_class": "MONEYLINE_ONLY_PARTIAL_CAPTURE \u2014 one-sided: only the frozen model side's price was relayed per game; the opposite side, spreads and totals were not captured. Hold NOT computable from a one-sided board. Opening prices not captured; these are CURRENT prices at relay time.",
+ "capture_route": "OWNER_RELAY of the visible ESPN/DraftKings MLB odds board",
+ "created_utc": "2026-08-27T08:49:35Z",
+ "devig_policy": "single-price EV screening only (8/3 ruling); no market probability is derived",
+ "observed_utc_relay": "2026-08-27T08:49:35Z",
+ "prices_never_features": "prices enter only this overlay; no model input, simulation or side selection consumed them",
+ "record_id": "MLB-MARKET-2026-08-27-DK-OWNER-RELAY",
+ "record_sha256": "a61038c36a593315cd8ce2672d3b06ff1711b7c9afff27be5c3cb6a664a27acb",
+ "rows": [
+  {
+   "game": "mlb:COL@WSH",
+   "price": -119,
+   "side": "WSH"
+  },
+  {
+   "game": "mlb:BAL@STL",
+   "price": -114,
+   "side": "BAL"
+  },
+  {
+   "game": "mlb:HOU@NYY",
+   "price": -163,
+   "side": "NYY"
+  },
+  {
+   "game": "mlb:KC@TOR",
+   "note": "model side flipped to TOR under replacement; TOR price NOT relayed",
+   "price": -113,
+   "side": "KC"
+  },
+  {
+   "game": "mlb:MIL@NYM",
+   "price": -230,
+   "side": "MIL"
+  },
+  {
+   "game": "mlb:LAD@ATL",
+   "note": "model side flipped to LAD under replacement; LAD price NOT relayed",
+   "price": -115,
+   "side": "ATL"
+  },
+  {
+   "game": "mlb:AZ@SF",
+   "price": -114,
+   "side": "AZ"
+  }
+ ],
+ "schema": "ops.market_overlay.v1"
+}

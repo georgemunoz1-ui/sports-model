@@ -1,0 +1,26 @@
+{
+ "record_id": "V14-WORDING-CORRECTIONS-2026-08-18",
+ "built_utc": "2026-08-18T09:05:00Z",
+ "authority": "owner corrections 2026-08-18; both verified factually before adoption, not adopted on say-so",
+ "corrects_wording_in": [
+  "data/mlb/ml_asof/2026-08-18_v14_result.json (byte-intact; this record governs its interpretation)",
+  "docs/experiments/2026-08-18_V14_STARTER_PREREG.json (byte-intact)"
+ ],
+ "correction_1_IDENTITY_TERM": {
+  "withdrawn_term": "identity leakage",
+  "adopted_term": "HISTORICAL STARTER-IDENTITY MEASUREMENT LIMITATION",
+  "the_factual_test_the_owner_set": "the term 'leakage' applies only if postgame starter identity entered a pregame feature \u2014 which would have DISQUALIFIED the development run.",
+  "verification_performed": "traced what the fit consumed. Every sp stat field is strict-prior (build_ml_asof enforces last_start_date < slate_date with its own gate). The identity selects WHICH pitcher's pregame stats enter \u2014 and the first pitcher of a game is determined before first pitch by definition; no outcome of the game feeds back into who threw its first pitch. The dataset merely MEASURED that pregame fact through a postgame record because pregame probables were not archived.",
+  "verdict": "the build remained CAUSAL. The development run is not disqualified. 'Measurement limitation' is the accurate term: the identity variable carries measurement error relative to the pregame-known probable (the 8/17 Lowder G1/G2 case is exactly such an error), not information from the future.",
+  "residual_caveat_kept": "openers and bullpen games blur 'the starter' as a concept; the first-pitcher definition is applied uniformly and stated."
+ },
+ "correction_2_EXECUTION_COUNT": {
+  "withdrawn_description": "the estimator executed twice / re-run",
+  "adopted_description": "ONE ANALYTICAL RESULT FROM TWO DETERMINISTIC EXECUTIONS, the second being recovery after post-fit serialization failure",
+  "preserved": {
+   "partial_artifact": "data/mlb/ml_asof/2026-08-18_v14_result.PARTIAL_SERIALIZATION_FAILURE.quarantine (6435 bytes, truncated mid-encode)",
+   "traceback": "transcribed into the quarantine note",
+   "identical_result_proof": "in-process reproduction, sha256 ex-timestamp e4d2c5e6a6ff1b85... identical to the on-disk result; the estimator contains no RNG and the bootstrap seed is fixed in the prereg, so parameters and every reported number are bit-stable"
+  }
+ }
+}

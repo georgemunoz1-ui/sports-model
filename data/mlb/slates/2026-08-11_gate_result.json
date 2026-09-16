@@ -1,0 +1,32 @@
+{
+ "record_id": "SLATE-GATE-2026-08-11",
+ "built_utc": "2026-08-11T05:20:00Z",
+ "disposition": "RESOLVED — full 15-game slate verified by structural and coherence cross-validation",
+ "source_tier": 3,
+ "sources": "WebSearch snippets (multiple independent outlets); direct page fetches egress-blocked; statsapi.mlb.com egress-blocked (not routed around)",
+ "why_tier3_is_usable_here": "Per the 2026-08-10 precedent: a tier-3 slate becomes usable only when cross-validated against this repository's own tier-1 record. Four independent checks were run; all pass. Pregame slate data also carries a different risk profile than outcome data — a wrong starter contaminates one card row and is corrected at grading, it cannot corrupt the results ledger.",
+ "validation": [
+  {
+   "check": "structural pairing",
+   "result": "PASS — the 8/10 tier-1 slate occupied 20 teams, leaving exactly 10 idle: CHC, CIN, CLE, CWS, DET, MIA, NYY, PIT, SEA, WSH. A 15-game day requires all 30 teams. The web-claimed new series (CLE@DET, PIT@MIA, CHC@WSH, CIN@CWS) pair 8 of the 10 idle teams, forcing NYY/SEA as the fifth pair — and SEA@NYY was then independently confirmed with a real gamePk (823512) leaked by an mlb.com gameday URL. The 10 continuing series match the 8/10 slate's fixtures exactly."
+  },
+  {
+   "check": "starter-team coherence vs this repo's own prior cards and slates",
+   "result": "PASS 16/16 with history, 0 contradictions on the other 4 — every claimed starter whose team is recorded in any prior card or slate matches: Bibee=CLE, Cease=TOR, Imanaga=CHC, McLean=NYM, E.Pérez=MIA, Sandoval=BOS, Skenes=PIT, Wacha=KC, M.Pérez=ATL, Woo=SEA, Weathers=NYY, Young=BAL, Ober=MIN, Sánchez=PHI, Pallante=STL, Johnson=LAA, Sugano=COL, Buehler=SD, Martínez=TB, Brown=HOU, Whisenhunt=SF, Burke=CWS, Bratt=AZ. Cody Bradford (TEX) and Mason Barnett (ATH) have no repo history (Bradford is a second start back from elbow surgery), which is absence, not contradiction."
+  },
+  {
+   "check": "independent confirmation of this repo's 8/10 tier-1 finals by today's sources",
+   "result": "PASS — the Philadelphia Inquirer headline confirms PHI 6-5 STL ('Andrew Painter and Phillies bullpen ... deliver 6-5 win over Cardinals'), and Arizona Sports confirms AZ over COL in 'Soroka's return' — both match the graded 8/10 record exactly. Sources that agree with our tier-1 data on yesterday are more credible about today."
+  },
+  {
+   "check": "standings reconciliation",
+   "result": "PASS — the pre-Monday records quoted for PHI (63-56) and STL (59-59) match records computed from results.csv through 8/9 exactly."
+  }
+ ],
+ "gaps": [
+  "WSH starter unknown (TBD) — every source shows TBD for the Nationals",
+  "KC@LAD first pitch assumed 02:10Z from the 8/10 fixture time; not directly quoted today",
+  "gamePks are placeholders (NE01-NE15) except SEA@NYY (823512, from the mlb.com gameday URL)"
+ ],
+ "governance": "Forecast first, price second: no odds board exists for 8/11 in this repo, so the card is market-blind by construction. Gate 0/100 NO_PROMOTE, ledger $0, paper only."
+}

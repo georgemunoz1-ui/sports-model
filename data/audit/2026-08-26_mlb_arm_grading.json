@@ -1,0 +1,81 @@
+{
+ "arms": [
+  {
+   "arm": "mlb.winner.CHALLENGER_WIDENED",
+   "brier": 0.2332,
+   "logloss": 0.6594,
+   "misses": [
+    "TB@DET (took DET)",
+    "CIN@SF (took SF)",
+    "TEX@CWS (took TEX)"
+   ],
+   "note": "reversed nine champion calls correctly (SD, AZ, CLE, MIA, COL, TOR, ATL, BAL, and PHI held) \u2014 genuine prospective separation, not a post-result rescreen",
+   "record": "12-3"
+  },
+  {
+   "arm": "mlb.winner.EXPANDING_HOME_PRIOR",
+   "brier": 0.2491,
+   "logloss": 0.6913,
+   "note": "GRADED FROM THE IMMUTABLE ARTIFACT \u2014 the prior was never omitted from the frozen board (p_home 0.520540 on all 15 rows); it was omitted only from the page's display table, now fixed, and an arm-completeness gate now runs in healthcheck",
+   "record": "8-7"
+  },
+  {
+   "arm": "mlb.winner.CHALLENGER_ADAPTIVE",
+   "brier": 0.2458,
+   "logloss": 0.6846,
+   "record": "8-7"
+  },
+  {
+   "arm": "mlb.winner.CHAMPION_V13",
+   "brier": 0.2512,
+   "logloss": 0.6955,
+   "record": "6-9"
+  }
+ ],
+ "created_utc": "2026-08-27T05:15:00Z",
+ "record_id": "MLB-ARM-GRADING-2026-08-26",
+ "record_sha256": "b3482724e6d27cdf24082e37f53c119a050ec5e82a10440eece27938af94cf0f",
+ "schema": "ops.arm_grading.v1",
+ "source_grade": "OWNER_RELAY \u2014 descriptive only",
+ "totals": {
+  "CHAMPION_V13_TOTAL": {
+   "bias": 0.04,
+   "mae": 4.15,
+   "rmse": 5.12
+  },
+  "EXPANDING_TOTAL_PRIOR": {
+   "bias": 0.12,
+   "mae": 4.53,
+   "rmse": 5.15
+  },
+  "largest_errors": [
+   [
+    "CIN@SF",
+    -11.34
+   ],
+   [
+    "CHC@AZ",
+    7.77
+   ],
+   [
+    "BAL@STL",
+    -7.26
+   ],
+   [
+    "TEX@CWS",
+    -5.81
+   ],
+   [
+    "PIT@SD",
+    5.68
+   ]
+  ],
+  "note": "first slate where the game-specific total model beat its prior (8/25 was 4.77 vs 4.20 the other way); modest margin, near-zero bias, misses in both directions"
+ },
+ "two_day": {
+  "conclusion": "The widened challenger now has meaningful prospective evidence worth accumulating. The champion continues to underperform, while the widened arm has produced the strongest two-day probability record. Promotion still requires the registered sample horizon and uncertainty gates \u2014 not the 12-3 headline alone.",
+  "warning": "the 6-9 -> 12-3 reversal is itself the caution against promoting from one exceptional slate",
+  "widened": "18-12 pooled, Brier 0.2436 (0.2540 then 0.2332)"
+ },
+ "verification": "all figures recomputed from cards/2026-08-26_board.json (mlb cohort 4d1b67c4); owner table reproduced exactly (three 0.1pp rounding variants)"
+}

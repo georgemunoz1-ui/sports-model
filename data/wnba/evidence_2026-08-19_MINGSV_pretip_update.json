@@ -1,0 +1,53 @@
+{
+ "schema": "wnba.owner_odds_capture.v2",
+ "record_id": "OWNER-MINGSV-UPDATE-20260820-0156Z",
+ "ingested_at_utc": "2026-08-20T01:56:17Z",
+ "pre_tip": "YES \u2014 MIN@GSV tips 02:00Z; ingested T-4min",
+ "slate_date": "2026-08-19 (00:xxZ-02:00Z window belongs to the 8/19 slate under the <10:00Z rollover rule)",
+ "source_tier": 1,
+ "source_family": "OWNER_BOARD",
+ "markets": [
+  {
+   "m": "GSV +2.5",
+   "price": -104,
+   "owner_verdict": "Best read \u2014 the exact registered pregame ATS selection, now at -104; nearly one point beyond the model's projected MIN margin (-1.53)"
+  },
+  {
+   "m": "GSV ML",
+   "price": 133,
+   "owner_verdict": "Pass \u2014 model GSV 43.3% vs break-even 42.9%, negligible edge",
+   "screen_check": "+0.37pp \u2014 verified vs registered p"
+  },
+  {
+   "m": "MIN ML",
+   "price": -129,
+   "owner_verdict": "Pass \u2014 model MIN 56.7% vs break-even 56.3%, negligible edge",
+   "screen_check": "+0.38pp \u2014 verified vs registered p"
+  },
+  {
+   "m": "Kalshi NO: MIN wins by 2+",
+   "price_cents": 46,
+   "owner_verdict": "Secondary \u2014 effectively GSV +1.5, a worse number than +2.5"
+  },
+  {
+   "m": "Over 162.5",
+   "price": 104,
+   "owner_verdict": "Pass \u2014 model total 163.8, only 1.3 points of separation"
+  },
+  {
+   "m": "Kalshi Over 163.5",
+   "price_cents": 47,
+   "owner_verdict": "Pass \u2014 threshold virtually equals the model mean"
+  }
+ ],
+ "lineup_ruling_owner": "Expected core lineups appear intact; listed absences show no major rotation loss that invalidates the projection \u2014 supports GRADING the original read rather than blocking it.",
+ "owner_deadband_correction": "under the established basketball totals deadband, even Over 160.5 (3.3 pts below model) was insufficiently separated; at 162.5/163.5 the total is an easy pass \u2014 supersedes the owner's earlier looser total framing.",
+ "descriptive_not_predictive": "public percentages and L10 trend panels recorded as descriptive only, never model overrides",
+ "owner_action": {
+  "position": "GSV +2.5 -104",
+  "sizing": "paper or at most 0.25u ($25) \u2014 owner's own discretion; REVISES the 20:30Z card's 0.50u GSV leg downward",
+  "attribution": "OWNER DISCRETION \u2014 never model-authorized; model ledger stays $0",
+  "rationale": "ATS track record is extremely young (opens 0-0 tonight)"
+ },
+ "registered_read_unchanged": "ATS-20260819-MIN@GSV: GSV +2.5, home_cover_delta +0.97 \u2014 grades at the registration line as primary, exactly as preregistered; this capture changes nothing about the selection, only documents execution prices"
+}

@@ -1,0 +1,30 @@
+{
+ "record_id": "SLATE-GATE-2026-08-12",
+ "built_utc": "2026-08-12T06:15:00Z",
+ "disposition": "RESOLVED with GAPS \u2014 15-game slate structurally certain; starters sourced for 13 sides, 2 dropped to TBD on coherence conflict, 7 sides unsourced TBD",
+ "source_tier": 3,
+ "validation": [
+  {
+   "check": "structural",
+   "result": "PASS \u2014 all 15 of the 8/11 series continue per their own series-state lines (G2s and G3s; BOS@TOR and TEX@LAA are G3 of 4). Matchup set is identical to 8/11 by construction; day games sourced for BAL@MIN (1:40p) and MIL@SD (4:10p)."
+  },
+  {
+   "check": "starter-team coherence",
+   "result": "18/20 named starters match repo history or have no history (absence != contradiction). TWO CONFLICTS: Jose Soriano claimed TOR but repo history says LAA; Robbie Ray claimed SD but repo history says SF. Single-source claims contradicting our own boards are exactly the 8/10 garble signature, so both sides are registered TBD rather than risk a wrong-starter input. If the owner board confirms either as a deadline move, the resolution lands in the overlay, not a card rewrite."
+  },
+  {
+   "check": "echo rejection",
+   "result": "one probables search returned the 8/11 starters verbatim (Lodolo/Burke, Sanchez/Pallante, Bradford/Johnson) \u2014 rejected; those games stay TBD"
+  },
+  {
+   "check": "provisional back-confirmation",
+   "result": "today's sources call COL@AZ a 'rubber match', independently corroborating the tier-3 provisional COL win on 8/11; 'Athletics take home losing streak' likewise consistent with the provisional TB win"
+  }
+ ],
+ "gaps": [
+  "CIN@CWS, PHI@STL, HOU@SF, KC@LAD both sides TBD; WSH, TOR, SD, LAA one side TBD",
+  "times assumed from the series' 8/11 slots except the three sourced",
+  "FEATURE_STATE_AS_OF_2026-08-10: the 8/11 finals are tier-3 provisional and NOT ingested into results.csv, so team form and pitcher logs end at 8/10 \u2014 stamped on every forecast per the M5 lesson"
+ ],
+ "wnba": "3-game slate identified (TOR@DAL 8p, CHI@GSV 10p, MIN@POR 10p ET) \u2014 first Golden State and Portland appearances in this repo's record. No priced board exists; market layer requires an owner paste. No WNBA model here (R1)."
+}

@@ -1,0 +1,380 @@
+<title>Bound, Refused, Withheld</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Serif:wght@500;600&display=swap">
+<style>
+:root{
+  --ink:#14161F; --ink-2:#3A3E4F; --muted:#6C7186;
+  --ground:#F6F7FA; --surface:#FFFFFF; --surface-2:#EEF0F6;
+  --line:#DCDFE9; --line-strong:#C3C8D8;
+  --accent:#2C3A6B; --accent-soft:#E7EAF4;
+  --bound:#186B4C; --bound-soft:#E1F0E9;
+  --refused:#8F2A2A; --refused-soft:#F6E5E5;
+  --withheld:#7A5E17; --withheld-soft:#F5EEDC;
+  --none:#5A5F73; --none-soft:#E9EBF1;
+  --shadow:0 1px 2px rgba(20,22,31,.05),0 8px 24px -18px rgba(20,22,31,.35);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --ink:#E8EAF2; --ink-2:#B9BECF; --muted:#878DA3;
+    --ground:#0F1117; --surface:#161923; --surface-2:#1D2130;
+    --line:#2A2F3F; --line-strong:#3A4055;
+    --accent:#9DB0E8; --accent-soft:#1C2440;
+    --bound:#63C79B; --bound-soft:#12291F;
+    --refused:#E08A8A; --refused-soft:#2C1717;
+    --withheld:#D9BC6A; --withheld-soft:#2A2413;
+    --none:#9AA0B5; --none-soft:#1E2230;
+    --shadow:0 1px 2px rgba(0,0,0,.4),0 10px 28px -18px rgba(0,0,0,.8);
+  }
+}
+:root[data-theme="dark"]{
+  --ink:#E8EAF2; --ink-2:#B9BECF; --muted:#878DA3;
+  --ground:#0F1117; --surface:#161923; --surface-2:#1D2130;
+  --line:#2A2F3F; --line-strong:#3A4055;
+  --accent:#9DB0E8; --accent-soft:#1C2440;
+  --bound:#63C79B; --bound-soft:#12291F;
+  --refused:#E08A8A; --refused-soft:#2C1717;
+  --withheld:#D9BC6A; --withheld-soft:#2A2413;
+  --none:#9AA0B5; --none-soft:#1E2230;
+  --shadow:0 1px 2px rgba(0,0,0,.4),0 10px 28px -18px rgba(0,0,0,.8);
+}
+
+*{box-sizing:border-box}
+body{
+  background:var(--ground); color:var(--ink);
+  font-family:"IBM Plex Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  font-size:16px; line-height:1.6; margin:0;
+  -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:920px; margin:0 auto; padding:0 24px 96px}
+p{margin:0 0 1em; max-width:68ch}
+a{color:var(--accent)}
+code,.mono{font-family:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace; font-variant-numeric:tabular-nums}
+
+/* ---------- masthead ---------- */
+.mast{padding:72px 0 28px; border-bottom:2px solid var(--line-strong)}
+.eyebrow{font-family:"IBM Plex Mono",monospace; font-size:11px; letter-spacing:.16em;
+  text-transform:uppercase; color:var(--muted); margin:0 0 18px}
+h1{font-family:"IBM Plex Serif",Georgia,serif; font-weight:600; font-size:clamp(2.1rem,5.5vw,3.1rem);
+  line-height:1.08; letter-spacing:-.02em; margin:0 0 18px; text-wrap:balance}
+.dek{font-size:1.075rem; color:var(--ink-2); max-width:62ch; margin:0 0 26px}
+.mast-meta{display:flex; flex-wrap:wrap; gap:8px 10px; font-family:"IBM Plex Mono",monospace; font-size:11.5px}
+.chip{border:1px solid var(--line-strong); border-radius:2px; padding:4px 9px; color:var(--ink-2); background:var(--surface)}
+.chip.warn{border-color:var(--refused); color:var(--refused); background:var(--refused-soft)}
+
+/* ---------- sections ---------- */
+section{padding-top:52px}
+h2{font-family:"IBM Plex Serif",Georgia,serif; font-weight:600; font-size:1.55rem; letter-spacing:-.01em;
+  margin:0 0 6px; text-wrap:balance}
+h3{font-family:"IBM Plex Sans",sans-serif; font-weight:600; font-size:1.02rem; margin:30px 0 8px; color:var(--ink)}
+.sub{color:var(--muted); font-size:.9rem; margin:0 0 24px; max-width:62ch}
+.rule{height:1px; background:var(--line); border:0; margin:0}
+
+/* ---------- tier badge ---------- */
+.tier{display:inline-flex; align-items:center; gap:7px; font-family:"IBM Plex Mono",monospace;
+  font-size:10.5px; letter-spacing:.1em; text-transform:uppercase; font-weight:600;
+  padding:4px 9px; border-radius:2px; white-space:nowrap}
+.t1{background:var(--bound-soft); color:var(--bound); border:1px solid var(--bound)}
+.t2{background:var(--withheld-soft); color:var(--withheld); border:1px solid var(--withheld)}
+.t0{background:var(--none-soft); color:var(--none); border:1px solid var(--line-strong)}
+
+/* ---------- counter strip ---------- */
+.counters{display:flex; flex-wrap:wrap; gap:8px; margin:14px 0 4px}
+.ctr{font-family:"IBM Plex Mono",monospace; font-size:12px; border:1px solid var(--line-strong);
+  border-radius:2px; overflow:hidden; display:flex; background:var(--surface)}
+.ctr .k{padding:5px 9px; color:var(--muted); border-right:1px solid var(--line); font-size:10.5px;
+  letter-spacing:.06em; text-transform:uppercase; align-self:center}
+.ctr .v{padding:5px 10px; font-weight:600; font-variant-numeric:tabular-nums}
+.ctr.pass .v{background:var(--bound-soft); color:var(--bound)}
+.ctr.fail .v{background:var(--refused-soft); color:var(--refused)}
+.ctr.null .v{background:var(--none-soft); color:var(--none)}
+
+/* ---------- league cards ---------- */
+.grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(268px,1fr)); gap:16px; margin-top:8px}
+.card{background:var(--surface); border:1px solid var(--line); border-radius:3px; padding:20px 20px 18px;
+  box-shadow:var(--shadow); position:relative}
+.card::before{content:""; position:absolute; left:0; top:0; bottom:0; width:3px; background:var(--line-strong)}
+.card.is-t1::before{background:var(--bound)}
+.card.is-t2::before{background:var(--withheld)}
+.card.is-t0::before{background:var(--none)}
+.card h4{margin:0 0 2px; font-size:1.15rem; font-family:"IBM Plex Serif",Georgia,serif; font-weight:600}
+.card .n{font-family:"IBM Plex Mono",monospace; font-size:12px; color:var(--muted); margin:0 0 12px}
+.card p{font-size:.9rem; color:var(--ink-2); margin:12px 0 0}
+
+/* ---------- tables ---------- */
+.tw{overflow-x:auto; margin:18px 0 6px; border:1px solid var(--line); border-radius:3px; background:var(--surface)}
+table{border-collapse:collapse; width:100%; font-size:.88rem; min-width:520px}
+th,td{text-align:left; padding:10px 14px; border-bottom:1px solid var(--line); vertical-align:top}
+thead th{font-family:"IBM Plex Mono",monospace; font-size:10.5px; letter-spacing:.09em; text-transform:uppercase;
+  color:var(--muted); font-weight:500; background:var(--surface-2); border-bottom:1px solid var(--line-strong)}
+tbody tr:last-child td{border-bottom:0}
+td.num,th.num{text-align:right; font-family:"IBM Plex Mono",monospace; font-variant-numeric:tabular-nums}
+td.name{font-family:"IBM Plex Mono",monospace; font-size:.82rem}
+tr.hi td{background:var(--accent-soft)}
+
+/* ---------- callouts ---------- */
+.note{border-left:3px solid var(--accent); background:var(--surface); padding:16px 20px; margin:20px 0;
+  border-radius:0 3px 3px 0; border-top:1px solid var(--line); border-right:1px solid var(--line); border-bottom:1px solid var(--line)}
+.note.bad{border-left-color:var(--refused)}
+.note.good{border-left-color:var(--bound)}
+.note .lab{font-family:"IBM Plex Mono",monospace; font-size:10.5px; letter-spacing:.11em; text-transform:uppercase;
+  color:var(--muted); display:block; margin-bottom:7px}
+.note p{margin:0; font-size:.94rem}
+.note p + p{margin-top:.7em}
+
+/* ---------- correction list ---------- */
+.corr{display:grid; gap:0; border:1px solid var(--line); border-radius:3px; background:var(--surface); overflow:hidden}
+.corr .row{display:grid; grid-template-columns:78px 1fr; gap:0; border-bottom:1px solid var(--line)}
+.corr .row:last-child{border-bottom:0}
+.corr .id{font-family:"IBM Plex Mono",monospace; font-size:11px; font-weight:600; color:var(--accent);
+  padding:16px 0 16px 18px; letter-spacing:.04em}
+.corr .body{padding:16px 20px 16px 0}
+.corr .body strong{display:block; font-size:.95rem; margin-bottom:3px}
+.corr .body span{font-size:.89rem; color:var(--ink-2)}
+
+/* ---------- big number ---------- */
+.figure{display:flex; flex-wrap:wrap; align-items:baseline; gap:16px 26px; margin:22px 0 6px;
+  padding:22px 24px; background:var(--surface); border:1px solid var(--line); border-radius:3px}
+.figure .big{font-family:"IBM Plex Mono",monospace; font-size:2.4rem; font-weight:600; line-height:1;
+  letter-spacing:-.02em; font-variant-numeric:tabular-nums}
+.figure .lab{font-size:.85rem; color:var(--muted); max-width:34ch}
+
+/* ---------- lists ---------- */
+ul.clean{list-style:none; padding:0; margin:14px 0 0}
+ul.clean li{padding:11px 0 11px 20px; border-bottom:1px solid var(--line); font-size:.93rem;
+  color:var(--ink-2); position:relative; max-width:72ch}
+ul.clean li:last-child{border-bottom:0}
+ul.clean li::before{content:"—"; position:absolute; left:0; color:var(--line-strong); font-family:"IBM Plex Mono",monospace}
+ul.clean li strong{color:var(--ink)}
+
+/* ---------- footer ---------- */
+footer{margin-top:64px; padding-top:24px; border-top:2px solid var(--line-strong);
+  font-family:"IBM Plex Mono",monospace; font-size:11.5px; color:var(--muted)}
+footer div{margin-bottom:6px; word-break:break-all}
+footer .k{color:var(--ink-2)}
+@media (max-width:560px){
+  .corr .row{grid-template-columns:1fr}
+  .corr .id{padding:14px 18px 0}
+  .corr .body{padding:6px 18px 14px}
+}
+</style>
+
+<div class="wrap">
+
+<header class="mast">
+  <p class="eyebrow">Postgame model audit · 24–29 August 2026 · MLB · WNBA · CFB · NFL</p>
+  <h1>Bound, Refused, Withheld</h1>
+  <p class="dek">Ninety-four board rows across four leagues. Four of them are admissible as evidence. This is the report on why — and on which of the failures are repairable.</p>
+  <div class="mast-meta">
+    <span class="chip">PAPER ONLY</span>
+    <span class="chip warn">WAGER AUTHORITY · NO</span>
+    <span class="chip">EXPOSURE $0</span>
+    <span class="chip">UNIT $100 (notional)</span>
+    <span class="chip">RECORD POSTGAME-AUDIT-2026-08-30</span>
+  </div>
+</header>
+
+<section>
+  <h2>What this report is not</h2>
+  <p>It is not a list of winning and losing picks. A pick that won over an unbound cohort tells you nothing about the model, and this window produced a great many of those. The organizing question is narrower and harsher: <strong>for each result, can the system prove which game it belongs to?</strong> Where it can, the result is evidence. Where it cannot, the result may still be true and may still be displayed — it simply accrues nothing.</p>
+  <p>Every counter below was produced by <code>harness/result_binding_gate.binding_proof</code> running over the frozen boards in this pass. None were typed. Where a figure comes from the audit run rather than this pass, it says so.</p>
+</section>
+
+<section>
+  <h2>The five corrections, applied</h2>
+  <p class="sub">The audit's first draft framed several things more confidently than the evidence allowed. These are the corrections, and they are load-bearing rather than cosmetic — two of them change the report's structure and one reverses a conclusion.</p>
+  <div class="corr">
+    <div class="row"><div class="id">C1</div><div class="body"><strong>σ provenance is pinned</strong><span>Every residual verdict now states numerator base, denominator base, and n. The claim that 12.53 was “measured against covers” is <em>withdrawn</em> — no such artifact exists. The only measured ~12.55 figure is the WNBA margin residual SD at n=1,721, and 13.97 is a coherence tolerance, not a cover law.</span></div></div>
+    <div class="row"><div class="id">C2</div><div class="body"><strong>Two tiers, not one bin</strong><span>Luck-clean history is no longer discarded wholesale. Tier 1 (bound) is inferential. Tier 2 (descriptive) gets sign and hit-rate only — no curves, no calibration, no buckets — and accrues nothing to promotion, settlement, or the estimator.</span></div></div>
+    <div class="row"><div class="id">C3</div><div class="body"><strong>The single-defect story was falsified</strong><span>My hypothesis that this week's four “computed then discarded” bugs were one governance defect was tested and <em>rejected</em>. Four modules, four commits spanning 7/28–8/28, and one check catches only two of the four. It was a useful habit for finding bugs, doing analytical work it cannot support.</span></div></div>
+    <div class="row"><div class="id">C4</div><div class="body"><strong>“Unbindable under the current id schema”</strong><span>Not “can never be graded.” The CFB rows carry no identifier in any id space; the repair is an id migration that stamps ESPN/CFBD gameIds at capture. That is a schema fix with a cost, not an impossibility.</span></div></div>
+    <div class="row"><div class="id">C5</div><div class="body"><strong>The 8/29 posture was never a contradiction</strong><span>The graded 4–6 update is valid at RESULT_DISPLAY. The audit's refusal is at CANONICAL_EVIDENCE_ADMISSION. Verified in this pass: the wehoop snapshot <code>8ffb87b</code> still carries game 401857184 (CHI@NYL) and 401857185 (TOR@PHX) as STATUS_SCHEDULED at 0–0. The finals had not published when the audit ran.</span></div></div>
+  </div>
+</section>
+
+<section>
+  <h2>Scorecard</h2>
+  <p class="sub">Counters regenerated in this pass. <code>0/0</code> means “nothing claimed,” which is not the same as “nothing checked.”</p>
+  <div class="grid">
+
+    <div class="card is-t2">
+      <h4>MLB</h4>
+      <p class="n">62 board games · 5 slates</p>
+      <span class="tier t2">Tier 2 · descriptive</span>
+      <div class="counters">
+        <span class="ctr fail"><span class="k">Bind</span><span class="v">0/62</span></span>
+        <span class="ctr fail"><span class="k">Date</span><span class="v">0/62</span></span>
+        <span class="ctr fail"><span class="k">ID</span><span class="v">0/62</span></span>
+      </div>
+      <p>Every row refused on <code>MISSING_IDENTITY_FIELD</code>. But the cause splits in two, and only one half is fatal — see below.</p>
+    </div>
+
+    <div class="card is-t1">
+      <h4>WNBA</h4>
+      <p class="n">cohort A · 4 games · 8/28</p>
+      <span class="tier t1">Tier 1 · inferential</span>
+      <div class="counters">
+        <span class="ctr pass"><span class="k">Bind</span><span class="v">4/4</span></span>
+        <span class="ctr pass"><span class="k">Date</span><span class="v">4/4</span></span>
+        <span class="ctr pass"><span class="k">ID</span><span class="v">4/4</span></span>
+      </div>
+      <p>The only bound cohort in the window. Bound on canonical id against the archive, with the game date derived in ET rather than sliced on UTC. Three further WNBA cohorts sit at weaker layers and are not admitted.</p>
+    </div>
+
+    <div class="card is-t0">
+      <h4>CFB</h4>
+      <p class="n">8 board games · 8/29</p>
+      <span class="tier t0">Below Tier 2</span>
+      <div class="counters">
+        <span class="ctr fail"><span class="k">Bind</span><span class="v">0/8</span></span>
+        <span class="ctr fail"><span class="k">Date</span><span class="v">0/8</span></span>
+        <span class="ctr fail"><span class="k">ID</span><span class="v">0/8</span></span>
+      </div>
+      <p><code>guarded_aggregate</code> raised <code>AggregateRefused</code>, and no descriptive override was ever written for this cohort. Not even the weaker claim is on file.</p>
+    </div>
+
+    <div class="card is-t0">
+      <h4>NFL</h4>
+      <p class="n">14 board rows · 2 slates</p>
+      <span class="tier t0">No forecast</span>
+      <div class="counters">
+        <span class="ctr null"><span class="k">Forecasts</span><span class="v">0</span></span>
+        <span class="ctr null"><span class="k">Nulls 8/28</span><span class="v">69</span></span>
+      </div>
+      <p>A leaf scan of both board files found zero forecast quantities. There is nothing to grade and nothing to describe. The 69 nulls carry stated reasons — R1 working as designed.</p>
+    </div>
+
+  </div>
+</section>
+
+<section>
+  <h2>The finding that changes what to do next</h2>
+  <p class="sub">“0/62 bound” reads as one uniform failure. It is two failures with opposite prognoses.</p>
+
+  <div class="tw">
+    <table>
+      <thead><tr><th>Slates</th><th class="num">Games</th><th>Identifiers on the board</th><th>Diagnosis</th><th>Recoverable?</th></tr></thead>
+      <tbody>
+        <tr><td class="name">8/24 · 8/25 · 8/26 · 8/27</td><td class="num">47</td>
+            <td class="name">824000–824009, 825000–825014,<br>826000–826014, 827000–827006</td>
+            <td>Sequential, date-encoded <strong>pseudo-pks</strong>. They identify nothing; they encode the slate date and an index.</td>
+            <td><strong>No</strong> — not without re-capture from an authority.</td></tr>
+        <tr class="hi"><td class="name">8/28</td><td class="num">15</td>
+            <td class="name">10 × ESPN_GAMEID<br>5 × MLB_GAMEPK<br>id_grade CAPTURED · inferred 0</td>
+            <td><strong>The board side is already correct.</strong> An adapter (<code>gate_board</code>) already maps it into the binding contract.</td>
+            <td><strong>Yes</strong> — one data source away.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="note good">
+    <span class="lab">What actually blocks MLB</span>
+    <p>Re-running the post-slate proof for 8/28 returns <code>0/0</code> on every counter — nothing claimed, because there are <strong>zero result rows to bind</strong>. The pitcher archive's 8/28 file carries 930 rows across 61 columns and <code>score_cols=[]</code>. It has never carried a runs column; the standing finding sits at 0/126.</p>
+    <p>So MLB's blocker is <em>not</em> identity. It is the absence of any admissible MLB finals source that carries game ids. The finals in hand are owner relays keyed by team name, which identify a game to a reader and bind nothing. Fifteen games are sitting one source away from Tier 1 with no model change required.</p>
+  </div>
+</section>
+
+<section>
+  <h2>Tier 1 — the whole inferential base</h2>
+  <span class="tier t1">Bound · 4/4 · aggregate permitted</span>
+  <p class="sub" style="margin-top:14px">One cohort. Four games. Three arms. This is the entirety of what the audit window can support an inference about.</p>
+
+  <div class="tw">
+    <table>
+      <thead><tr><th>Arm</th><th class="num">Brier</th><th class="num">Log loss</th><th class="num">SU</th></tr></thead>
+      <tbody>
+        <tr><td class="name">wnba.replacement.FEATURE_REFRESH</td><td class="num">0.230998</td><td class="num">0.636069</td><td class="num">2–2</td></tr>
+        <tr><td class="name">wnba.winner.EXPANDING_HOME_PRIOR</td><td class="num">0.233046</td><td class="num">0.659181</td><td class="num">3–1</td></tr>
+        <tr><td class="name">wnba.fallback.STANDINGS_LOG5_v1</td><td class="num">0.292559</td><td class="num">0.775744</td><td class="num">2–2</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="figure">
+    <div><div class="big">−0.0163</div><div class="lab">paired <em>t</em>, refreshed model vs. the constant prior (df = 3)</div></div>
+    <div><div class="big">[−0.403, +0.399]</div><div class="lab">95% interval on the Brier difference — 0.80 wide, on a statistic whose entire range is [0, 1]</div></div>
+  </div>
+
+  <div class="note bad">
+    <span class="lab">Verdict</span>
+    <p><strong>Zero evidence — not weak evidence.</strong> The refreshed model beats the constant prior by 0.002047 Brier while <em>losing</em> the straight-up record 2–2 to 3–1. The interval covers zero with room on both sides that exceeds the entire plausible effect.</p>
+    <p>What actually happened: the refreshed model was better on CON@IND (−0.205) and TOR@LV (−0.193), and worse on POR@ATL (+0.327) and WSH@LAS (+0.063). One game carries the whole deficit — POR@ATL, where it pushed p_home to 0.784 and Atlanta lost 101–83. The constant prior “won” the record by having no opinion at all: it forecast 0.5366 in every game.</p>
+    <p><strong>Consequence: no promotion, no estimator update.</strong> The registered sample horizon is not met, and the interval does not exclude zero.</p>
+  </div>
+
+  <p>Against the standings fallback the refreshed model looks better — 0.061561 Brier — and that interval also covers zero (<em>t</em> = −0.9741, [−0.263, +0.140]). At n = 4 nothing separates from anything. That is the honest reading, and it is the reading regardless of which arm it flatters.</p>
+</section>
+
+<section>
+  <h2>Tier 2 — descriptive, accruing nothing</h2>
+  <p class="sub">Sign and hit-rate. No calibration decomposition, no reliability curves, no probability buckets, no PIT plots.</p>
+
+  <h3>MLB · 62 games · 0 bound</h3>
+  <div class="counters">
+    <span class="ctr null"><span class="k">Record</span><span class="v">30–32</span></span>
+    <span class="ctr null"><span class="k">Hit rate</span><span class="v">.4839</span></span>
+  </div>
+  <p style="margin-top:14px">Record and hit-rate re-derived from the frozen boards. One deviation from the Tier 2 rule, stated openly: the audit run computed paired Brier intervals for all three challenger arms against the champion, and <strong>all three include zero</strong> (CHAMPION_V13 at −0.006713, <em>t</em> = −1.010; McNemar p = 0.73). I am reporting that null rather than withholding it, because suppressing a null does not protect the record — it lets the champion keep an unearned benefit of the doubt. A null cannot inflate a claim. Those intervals are the audit run's figures and were not re-derived in this pass.</p>
+
+  <h3>CFB · the one relayed result</h3>
+  <p>UNC 15 – TCU 10. The TCU −8.5 side lost. Descriptive only, and below even Tier 2 since no override is on file. Labelled per C1:</p>
+  <div class="tw">
+    <table>
+      <thead><tr><th>Quantity</th><th class="num">Value</th><th>Numerator base</th><th>Denominator base</th><th class="num">n</th><th>Coherence</th></tr></thead>
+      <tbody>
+        <tr><td class="name">z (model)</td><td class="num">+1.19</td><td>Model residual — ensemble projected margin minus actual, 21.9</td><td>CFB Week-1 margin residual SD, 18.385</td><td class="num">758</td><td><strong style="color:var(--bound)">Base-coherent</strong></td></tr>
+        <tr><td class="name">gauge</td><td class="num">−0.73</td><td>Market residual — line vs actual, −13.5</td><td>CFB Week-1 margin residual SD, 18.385</td><td class="num">758</td><td><strong style="color:var(--refused)">Mixed base</strong> — measures the market's miss against the model's dispersion. Not a verdict on the model.</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p>A 1.19σ ensemble miss in Week 1 is routine. Under the retired 13.5 constant the same miss would have read 1.62σ and masqueraded as a surprise — which is the practical argument for having measured the per-week schedule at all.</p>
+
+  <h3>NFL</h3>
+  <p>Nothing. No forecast quantity was ever produced, so there is no descriptive claim to make either. This is the one league in the window where the correct output was silence, and the system produced silence with reasons attached.</p>
+</section>
+
+<section>
+  <h2>What the audit withdrew on its own initiative</h2>
+  <div class="note bad">
+    <span class="lab">mlb:2026-08-27 · downgraded</span>
+    <p>The 8/27 cohort had a binding proof publishing <strong>7/7</strong>. It is withdrawn. The frozen board carries pseudo-pks 827000–827006, and the proof stamped <code>result_date</code> from a constant — which means <code>DATE_COHERENCE_PASS</code> was structurally incapable of failing.</p>
+    <p>This is the exact manufacture already withdrawn for 8/28 at commit <code>67104b9</code>. Both instances are now withdrawn. <strong>A counter that cannot fail is not a check</strong>, and a passing counter is worth nothing until you have shown the arrangement under which it would have failed.</p>
+  </div>
+</section>
+
+<section>
+  <h2>Honest limits</h2>
+  <ul class="clean">
+    <li><strong>n = 4 is the entire inferential base.</strong> One bound cohort, four games, three arms. Any statement in this report stronger than “we cannot tell” is either descriptive or wrong.</li>
+    <li>The MLB paired intervals are the audit run's figures and were not re-derived here. They are descriptive and accrue nothing in either direction.</li>
+    <li>No CFB result in the window is admissible, so <strong>nothing is known about CFB model quality</strong> from this window — including the parts that looked good.</li>
+    <li>RJ-005 <code>OFFICIAL_INJURY_AVAILABILITY</code> stands at 0/17, egress-blocked. Lineup and rotation state is unverified for the WNBA arms, including the bound cohort.</li>
+    <li>The MLB pitcher-log corpus ends around 2026-07-19. MLB starter features are stale by construction, and no freshness contract repairs a corpus that stops.</li>
+    <li>MLB and WNBA cohorts are never pooled, and nothing in this report pools them.</li>
+  </ul>
+</section>
+
+<section>
+  <h2>What this opens</h2>
+  <div class="tw">
+    <table>
+      <thead><tr><th class="num">#</th><th>Follow-up</th><th>Why</th></tr></thead>
+      <tbody>
+        <tr class="hi"><td class="num">FU-1</td><td><strong>An MLB finals source carrying game ids</strong></td><td>Converts the 15 bound-ready 8/28 games from Tier 2 to Tier 1 with no model change. Highest leverage item in this report.</td></tr>
+        <tr><td class="num">FU-2</td><td>CFB id migration — stamp ESPN/CFBD gameIds at capture</td><td>C4. Unbindable under the <em>current</em> schema is a schema fix, not a dead end.</td></tr>
+        <tr><td class="num">FU-3</td><td>Wire <code>board_shape</code> into both MLB builders</td><td>Both boards currently fail it.</td></tr>
+        <tr><td class="num">FU-4</td><td>Preregistered CFB margin evaluation</td><td>The OOF file already has everything needed.</td></tr>
+        <tr><td class="num">FU-5</td><td>Retain per-game WNBA residuals permanently in the walk-forward pipeline</td><td>The granularity defect surfaced by C3's falsification test.</td></tr>
+        <tr><td class="num">FU-6</td><td>Back-fill real ids for 8/24–8/27 MLB, or accept those 47 games as permanently descriptive</td><td>Owner decision. There is no third option.</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<footer>
+  <div><span class="k">record_id</span> &nbsp;POSTGAME-AUDIT-2026-08-30</div>
+  <div><span class="k">record_sha256</span> &nbsp;c7aa4c5ffd3b4714ead1802c0f0d95b94615ce8c514f5f80b8609412adec5a47</div>
+  <div><span class="k">artifact</span> &nbsp;data/audit/2026-08-30_postgame_audit.json</div>
+  <div><span class="k">ledger</span> &nbsp;wager_authority NO · exposure $0 · n_bets 0 · units 0.0</div>
+  <div><span class="k">r6</span> &nbsp;append-only; no existing record edited. Two frozen binding proofs were re-run in verification, reproduced byte-identically except generated_utc, and were restored to their committed state.</div>
+</footer>
+
+</div>

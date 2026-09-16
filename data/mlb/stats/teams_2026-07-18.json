@@ -1,0 +1,655 @@
+{
+  "sport": "mlb",
+  "season": 2026,
+  "as_of_date": "2026-07-18",
+  "capture_time_utc": "2026-07-18T04:19:45Z",
+  "written_at_utc": "2026-07-18T04:25:23Z",
+  "source": {
+    "url": "https://statsapi.mlb.com/api/v1/standings?leagueId=103,104&season=2026&standingsTypes=regularSeason",
+    "method": "WebFetch",
+    "notes": "wins/losses/runsScored/runsAllowed and home/away splitRecords captured verbatim; league/division labels are static MLB alignment metadata, not fetched fields. rf_pg=runsScored/(W+L), ra_pg=runsAllowed/(W+L), computed locally."
+  },
+  "qc": {
+    "team_count": 30,
+    "total_wins": 1170,
+    "total_losses": 1170,
+    "wins_equal_losses": true,
+    "total_runs_scored": 10489,
+    "total_runs_allowed": 10489,
+    "rs_equals_ra_leaguewide": true,
+    "home_plus_away_equals_overall_all_teams": true,
+    "issues": []
+  },
+  "teams": [
+    {
+      "team": "Yankees",
+      "league": "AL",
+      "division": "East",
+      "wins": 46,
+      "losses": 31,
+      "games": 77,
+      "runs_scored": 392,
+      "runs_allowed": 282,
+      "run_diff": 110,
+      "home_record": {
+        "wins": 22,
+        "losses": 15
+      },
+      "away_record": {
+        "wins": 24,
+        "losses": 16
+      },
+      "rf_pg": 5.0909,
+      "ra_pg": 3.6623
+    },
+    {
+      "team": "Rays",
+      "league": "AL",
+      "division": "East",
+      "wins": 43,
+      "losses": 32,
+      "games": 75,
+      "runs_scored": 328,
+      "runs_allowed": 321,
+      "run_diff": 7,
+      "home_record": {
+        "wins": 26,
+        "losses": 11
+      },
+      "away_record": {
+        "wins": 17,
+        "losses": 21
+      },
+      "rf_pg": 4.3733,
+      "ra_pg": 4.28
+    },
+    {
+      "team": "Blue Jays",
+      "league": "AL",
+      "division": "East",
+      "wins": 39,
+      "losses": 40,
+      "games": 79,
+      "runs_scored": 327,
+      "runs_allowed": 352,
+      "run_diff": -25,
+      "home_record": {
+        "wins": 22,
+        "losses": 19
+      },
+      "away_record": {
+        "wins": 17,
+        "losses": 21
+      },
+      "rf_pg": 4.1392,
+      "ra_pg": 4.4557
+    },
+    {
+      "team": "Orioles",
+      "league": "AL",
+      "division": "East",
+      "wins": 38,
+      "losses": 42,
+      "games": 80,
+      "runs_scored": 375,
+      "runs_allowed": 395,
+      "run_diff": -20,
+      "home_record": {
+        "wins": 22,
+        "losses": 19
+      },
+      "away_record": {
+        "wins": 16,
+        "losses": 23
+      },
+      "rf_pg": 4.6875,
+      "ra_pg": 4.9375
+    },
+    {
+      "team": "Red Sox",
+      "league": "AL",
+      "division": "East",
+      "wins": 31,
+      "losses": 45,
+      "games": 76,
+      "runs_scored": 296,
+      "runs_allowed": 304,
+      "run_diff": -8,
+      "home_record": {
+        "wins": 12,
+        "losses": 25
+      },
+      "away_record": {
+        "wins": 19,
+        "losses": 20
+      },
+      "rf_pg": 3.8947,
+      "ra_pg": 4.0
+    },
+    {
+      "team": "White Sox",
+      "league": "AL",
+      "division": "Central",
+      "wins": 40,
+      "losses": 37,
+      "games": 77,
+      "runs_scored": 359,
+      "runs_allowed": 362,
+      "run_diff": -3,
+      "home_record": {
+        "wins": 25,
+        "losses": 12
+      },
+      "away_record": {
+        "wins": 15,
+        "losses": 25
+      },
+      "rf_pg": 4.6623,
+      "ra_pg": 4.7013
+    },
+    {
+      "team": "Guardians",
+      "league": "AL",
+      "division": "Central",
+      "wins": 41,
+      "losses": 38,
+      "games": 79,
+      "runs_scored": 315,
+      "runs_allowed": 323,
+      "run_diff": -8,
+      "home_record": {
+        "wins": 19,
+        "losses": 17
+      },
+      "away_record": {
+        "wins": 22,
+        "losses": 21
+      },
+      "rf_pg": 3.9873,
+      "ra_pg": 4.0886
+    },
+    {
+      "team": "Twins",
+      "league": "AL",
+      "division": "Central",
+      "wins": 38,
+      "losses": 42,
+      "games": 80,
+      "runs_scored": 389,
+      "runs_allowed": 408,
+      "run_diff": -19,
+      "home_record": {
+        "wins": 20,
+        "losses": 20
+      },
+      "away_record": {
+        "wins": 18,
+        "losses": 22
+      },
+      "rf_pg": 4.8625,
+      "ra_pg": 5.1
+    },
+    {
+      "team": "Tigers",
+      "league": "AL",
+      "division": "Central",
+      "wins": 34,
+      "losses": 44,
+      "games": 78,
+      "runs_scored": 319,
+      "runs_allowed": 322,
+      "run_diff": -3,
+      "home_record": {
+        "wins": 22,
+        "losses": 16
+      },
+      "away_record": {
+        "wins": 12,
+        "losses": 28
+      },
+      "rf_pg": 4.0897,
+      "ra_pg": 4.1282
+    },
+    {
+      "team": "Royals",
+      "league": "AL",
+      "division": "Central",
+      "wins": 33,
+      "losses": 46,
+      "games": 79,
+      "runs_scored": 333,
+      "runs_allowed": 376,
+      "run_diff": -43,
+      "home_record": {
+        "wins": 19,
+        "losses": 22
+      },
+      "away_record": {
+        "wins": 14,
+        "losses": 24
+      },
+      "rf_pg": 4.2152,
+      "ra_pg": 4.7595
+    },
+    {
+      "team": "Mariners",
+      "league": "AL",
+      "division": "West",
+      "wins": 40,
+      "losses": 39,
+      "games": 79,
+      "runs_scored": 326,
+      "runs_allowed": 309,
+      "run_diff": 17,
+      "home_record": {
+        "wins": 22,
+        "losses": 19
+      },
+      "away_record": {
+        "wins": 18,
+        "losses": 20
+      },
+      "rf_pg": 4.1266,
+      "ra_pg": 3.9114
+    },
+    {
+      "team": "Athletics",
+      "league": "AL",
+      "division": "West",
+      "wins": 38,
+      "losses": 40,
+      "games": 78,
+      "runs_scored": 364,
+      "runs_allowed": 418,
+      "run_diff": -54,
+      "home_record": {
+        "wins": 18,
+        "losses": 23
+      },
+      "away_record": {
+        "wins": 20,
+        "losses": 17
+      },
+      "rf_pg": 4.6667,
+      "ra_pg": 5.359
+    },
+    {
+      "team": "Rangers",
+      "league": "AL",
+      "division": "West",
+      "wins": 38,
+      "losses": 40,
+      "games": 78,
+      "runs_scored": 313,
+      "runs_allowed": 323,
+      "run_diff": -10,
+      "home_record": {
+        "wins": 19,
+        "losses": 18
+      },
+      "away_record": {
+        "wins": 19,
+        "losses": 22
+      },
+      "rf_pg": 4.0128,
+      "ra_pg": 4.141
+    },
+    {
+      "team": "Astros",
+      "league": "AL",
+      "division": "West",
+      "wins": 38,
+      "losses": 43,
+      "games": 81,
+      "runs_scored": 367,
+      "runs_allowed": 408,
+      "run_diff": -41,
+      "home_record": {
+        "wins": 20,
+        "losses": 21
+      },
+      "away_record": {
+        "wins": 18,
+        "losses": 22
+      },
+      "rf_pg": 4.5309,
+      "ra_pg": 5.037
+    },
+    {
+      "team": "Angels",
+      "league": "AL",
+      "division": "West",
+      "wins": 32,
+      "losses": 48,
+      "games": 80,
+      "runs_scored": 362,
+      "runs_allowed": 403,
+      "run_diff": -41,
+      "home_record": {
+        "wins": 17,
+        "losses": 21
+      },
+      "away_record": {
+        "wins": 15,
+        "losses": 27
+      },
+      "rf_pg": 4.525,
+      "ra_pg": 5.0375
+    },
+    {
+      "team": "Braves",
+      "league": "NL",
+      "division": "East",
+      "wins": 48,
+      "losses": 29,
+      "games": 77,
+      "runs_scored": 377,
+      "runs_allowed": 281,
+      "run_diff": 96,
+      "home_record": {
+        "wins": 24,
+        "losses": 14
+      },
+      "away_record": {
+        "wins": 24,
+        "losses": 15
+      },
+      "rf_pg": 4.8961,
+      "ra_pg": 3.6494
+    },
+    {
+      "team": "Phillies",
+      "league": "NL",
+      "division": "East",
+      "wins": 42,
+      "losses": 36,
+      "games": 78,
+      "runs_scored": 330,
+      "runs_allowed": 337,
+      "run_diff": -7,
+      "home_record": {
+        "wins": 23,
+        "losses": 19
+      },
+      "away_record": {
+        "wins": 19,
+        "losses": 17
+      },
+      "rf_pg": 4.2308,
+      "ra_pg": 4.3205
+    },
+    {
+      "team": "Nationals",
+      "league": "NL",
+      "division": "East",
+      "wins": 41,
+      "losses": 38,
+      "games": 79,
+      "runs_scored": 420,
+      "runs_allowed": 405,
+      "run_diff": 15,
+      "home_record": {
+        "wins": 17,
+        "losses": 22
+      },
+      "away_record": {
+        "wins": 24,
+        "losses": 16
+      },
+      "rf_pg": 5.3165,
+      "ra_pg": 5.1266
+    },
+    {
+      "team": "Marlins",
+      "league": "NL",
+      "division": "East",
+      "wins": 40,
+      "losses": 39,
+      "games": 79,
+      "runs_scored": 339,
+      "runs_allowed": 340,
+      "run_diff": -1,
+      "home_record": {
+        "wins": 26,
+        "losses": 17
+      },
+      "away_record": {
+        "wins": 14,
+        "losses": 22
+      },
+      "rf_pg": 4.2911,
+      "ra_pg": 4.3038
+    },
+    {
+      "team": "Mets",
+      "league": "NL",
+      "division": "East",
+      "wins": 34,
+      "losses": 43,
+      "games": 77,
+      "runs_scored": 311,
+      "runs_allowed": 342,
+      "run_diff": -31,
+      "home_record": {
+        "wins": 18,
+        "losses": 18
+      },
+      "away_record": {
+        "wins": 16,
+        "losses": 25
+      },
+      "rf_pg": 4.039,
+      "ra_pg": 4.4416
+    },
+    {
+      "team": "Brewers",
+      "league": "NL",
+      "division": "Central",
+      "wins": 47,
+      "losses": 29,
+      "games": 76,
+      "runs_scored": 399,
+      "runs_allowed": 279,
+      "run_diff": 120,
+      "home_record": {
+        "wins": 25,
+        "losses": 15
+      },
+      "away_record": {
+        "wins": 22,
+        "losses": 14
+      },
+      "rf_pg": 5.25,
+      "ra_pg": 3.6711
+    },
+    {
+      "team": "Cardinals",
+      "league": "NL",
+      "division": "Central",
+      "wins": 42,
+      "losses": 34,
+      "games": 76,
+      "runs_scored": 352,
+      "runs_allowed": 347,
+      "run_diff": 5,
+      "home_record": {
+        "wins": 22,
+        "losses": 17
+      },
+      "away_record": {
+        "wins": 20,
+        "losses": 17
+      },
+      "rf_pg": 4.6316,
+      "ra_pg": 4.5658
+    },
+    {
+      "team": "Cubs",
+      "league": "NL",
+      "division": "Central",
+      "wins": 40,
+      "losses": 37,
+      "games": 77,
+      "runs_scored": 366,
+      "runs_allowed": 345,
+      "run_diff": 21,
+      "home_record": {
+        "wins": 23,
+        "losses": 17
+      },
+      "away_record": {
+        "wins": 17,
+        "losses": 20
+      },
+      "rf_pg": 4.7532,
+      "ra_pg": 4.4805
+    },
+    {
+      "team": "Pirates",
+      "league": "NL",
+      "division": "Central",
+      "wins": 39,
+      "losses": 39,
+      "games": 78,
+      "runs_scored": 391,
+      "runs_allowed": 377,
+      "run_diff": 14,
+      "home_record": {
+        "wins": 20,
+        "losses": 19
+      },
+      "away_record": {
+        "wins": 19,
+        "losses": 20
+      },
+      "rf_pg": 5.0128,
+      "ra_pg": 4.8333
+    },
+    {
+      "team": "Reds",
+      "league": "NL",
+      "division": "Central",
+      "wins": 37,
+      "losses": 40,
+      "games": 77,
+      "runs_scored": 326,
+      "runs_allowed": 373,
+      "run_diff": -47,
+      "home_record": {
+        "wins": 19,
+        "losses": 20
+      },
+      "away_record": {
+        "wins": 18,
+        "losses": 20
+      },
+      "rf_pg": 4.2338,
+      "ra_pg": 4.8442
+    },
+    {
+      "team": "Dodgers",
+      "league": "NL",
+      "division": "West",
+      "wins": 50,
+      "losses": 29,
+      "games": 79,
+      "runs_scored": 407,
+      "runs_allowed": 273,
+      "run_diff": 134,
+      "home_record": {
+        "wins": 26,
+        "losses": 14
+      },
+      "away_record": {
+        "wins": 24,
+        "losses": 15
+      },
+      "rf_pg": 5.1519,
+      "ra_pg": 3.4557
+    },
+    {
+      "team": "Padres",
+      "league": "NL",
+      "division": "West",
+      "wins": 40,
+      "losses": 37,
+      "games": 77,
+      "runs_scored": 297,
+      "runs_allowed": 306,
+      "run_diff": -9,
+      "home_record": {
+        "wins": 20,
+        "losses": 19
+      },
+      "away_record": {
+        "wins": 20,
+        "losses": 18
+      },
+      "rf_pg": 3.8571,
+      "ra_pg": 3.974
+    },
+    {
+      "team": "D-backs",
+      "league": "NL",
+      "division": "West",
+      "wins": 39,
+      "losses": 39,
+      "games": 78,
+      "runs_scored": 333,
+      "runs_allowed": 359,
+      "run_diff": -26,
+      "home_record": {
+        "wins": 24,
+        "losses": 17
+      },
+      "away_record": {
+        "wins": 15,
+        "losses": 22
+      },
+      "rf_pg": 4.2692,
+      "ra_pg": 4.6026
+    },
+    {
+      "team": "Giants",
+      "league": "NL",
+      "division": "West",
+      "wins": 31,
+      "losses": 46,
+      "games": 77,
+      "runs_scored": 317,
+      "runs_allowed": 371,
+      "run_diff": -54,
+      "home_record": {
+        "wins": 14,
+        "losses": 20
+      },
+      "away_record": {
+        "wins": 17,
+        "losses": 26
+      },
+      "rf_pg": 4.1169,
+      "ra_pg": 4.8182
+    },
+    {
+      "team": "Rockies",
+      "league": "NL",
+      "division": "West",
+      "wins": 31,
+      "losses": 48,
+      "games": 79,
+      "runs_scored": 359,
+      "runs_allowed": 448,
+      "run_diff": -89,
+      "home_record": {
+        "wins": 17,
+        "losses": 21
+      },
+      "away_record": {
+        "wins": 14,
+        "losses": 27
+      },
+      "rf_pg": 4.5443,
+      "ra_pg": 5.6709
+    }
+  ]
+}

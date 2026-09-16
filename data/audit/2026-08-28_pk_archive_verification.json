@@ -1,0 +1,25 @@
+{
+ "closes": "the open RJ-001 action queued on 2026-08-28 (disclosure c373946f)",
+ "created_utc": "2026-08-28T07:54:35Z",
+ "impact": "grading UNAFFECTED \u2014 the AZ@SF score (SF 6-1) is correct and that matchup has no adjacent-date repeat, so the contamination signature was never possible there. The affected claim was the ID, and the superseded proof's CANONICAL_ID_MATCH 7/7 was self-referential for that row.",
+ "lesson": "an inferred identifier is a fabrication even when it is plausible, and plausibility is not a 50/50 coin: one of two inferences here was wrong. The disclosure discipline (labelling it SYNTHETIC_UNVERIFIED rather than letting it read as ground truth) is what made this correctable instead of permanent.",
+ "now_verified": {
+  "822694": "COL@WSH",
+  "822771": "KC@TOR",
+  "823014": "BAL@STL",
+  "823179": "AZ@SF (corrected)",
+  "823503": "HOU@NYY",
+  "823581": "MIL@NYM",
+  "824879": "LAD@ATL"
+ },
+ "outcome": "6 of 7 board ids already matched. The two INFERRED ids split: 823014 (BAL@STL) was CORRECT; 825038 (AZ@SF) was WRONG \u2014 it does not exist on 8/27, and the real id is 823179. The inference had been made by decrementing 825039, which is CHC@AZ on 8/26 \u2014 a different matchup entirely.",
+ "record_id": "PK-ARCHIVE-VERIFICATION-2026-08-28",
+ "record_sha256": "989536adad8b40ff46b66687832cf1b2bc06cdbb2142f20bee7594bfc8bdb45d",
+ "schema": "ops.verification.v1",
+ "source": {
+  "commit": "f9bca28b8b2237d88fe89715dbffb510b9f45dfc",
+  "n_games": 7,
+  "path": "data/raw/2026/daily/2026-08-27.parquet",
+  "repo": "github.com/lancebroz/mlb-pitcher-data"
+ }
+}

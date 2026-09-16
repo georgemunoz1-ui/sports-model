@@ -1,0 +1,69 @@
+{
+ "record_id": "KSIM-0727-U02-SHADOW-OUTCOMES",
+ "created_utc": "2026-07-28T05:19:08Z",
+ "classification": "EVIDENCE_DEFICIENT_SHADOW \u2014 descriptive only, per KSIM-0727-U02_capture_CLASSIFICATION.json",
+ "ledger_effect": "NONE. These grades enter no ledger and move no gate. Gate remains 0/100 under dp-2026-07-27.",
+ "real_money": {
+  "risked": 0.0,
+  "authorized": false
+ },
+ "source": "data/mlb/box/2026-07-27_extract.json (SINGLE SOURCE, see its limitation field)",
+ "outcomes": [
+  {
+   "pitcher": "David Peterson",
+   "side": "OVER",
+   "book": "MGM",
+   "line": 3.5,
+   "price": 120,
+   "weight": 1.0,
+   "actual_K": 3,
+   "result": "LOSS",
+   "pl_units": -1.0
+  },
+  {
+   "pitcher": "Tatsuya Imai",
+   "side": "UNDER",
+   "book": "FD",
+   "line": 6.5,
+   "price": -150,
+   "weight": 1.0,
+   "actual_K": 1,
+   "result": "WIN",
+   "pl_units": 0.667,
+   "note": "started, 0.2 IP; UNDER wins on any K<=6 regardless of exit timing"
+  },
+  {
+   "pitcher": "Jack Perkins",
+   "side": "OVER",
+   "book": "MGM",
+   "line": 4.5,
+   "price": -120,
+   "weight": 0.5,
+   "actual_K": 4,
+   "result": "LOSS",
+   "pl_units": -1.0
+  },
+  {
+   "pitcher": "Andrew Alvarez",
+   "side": "OVER",
+   "book": "BR",
+   "line": 3.5,
+   "price": 100,
+   "weight": 0.5,
+   "actual_K": 3,
+   "result": "BOOK-RULE DEPENDENT",
+   "branch_if_action": "LOSS (3 <= 3.5), pl -1.0u",
+   "branch_if_must_start": "VOID (did not start; Eddy Yean opened), pl 0.0u",
+   "rule_status": "BetRivers' K-prop settlement rule for non-starting listed pitchers is NOT KNOWN to this repo. Neither branch is asserted (R1). Grading stays open on this row.",
+   "dq_note": "opener_workload_risk=HIGH was assigned to this row in the pre-outcome DQ tags; the risk materialized"
+  }
+ ],
+ "descriptive_record": "1-2 with 1 book-rule-dependent",
+ "notional_pl_units": {
+  "unweighted_if_action": -1.333,
+  "unweighted_if_void": -0.333,
+  "weight_adjusted_if_action": -1.333,
+  "weight_adjusted_if_void": -0.833
+ },
+ "pattern_note": "All three OVER signals lost; the lone UNDER won. Direction-consistent with defect D-B (low-GS/etbf upward bias). n=4: under R4 this moves nothing; it is a direction to test on a future untouched slate, not a finding."
+}

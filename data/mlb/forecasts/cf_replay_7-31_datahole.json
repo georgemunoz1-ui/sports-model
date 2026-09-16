@@ -1,0 +1,119 @@
+{
+ "record_id": "CF-REPLAY-7-31-DATAHOLE",
+ "method": "no-refit; frozen beta; SP features fixed; only team-form completeness changed (adds 7/29+7/30)",
+ "games": [
+  {
+   "game": "NYY@CHC",
+   "y": 0,
+   "p_frozen": 0.5317,
+   "p_counterfactual": 0.532,
+   "delta": 0.0003
+  },
+  {
+   "game": "PIT@CIN",
+   "y": 1,
+   "p_frozen": 0.457,
+   "p_counterfactual": 0.4572,
+   "delta": 0.0002
+  },
+  {
+   "game": "PHI@BAL",
+   "y": 1,
+   "p_frozen": 0.553,
+   "p_counterfactual": 0.5534,
+   "delta": 0.0004
+  },
+  {
+   "game": "STL@TOR",
+   "y": 1,
+   "p_frozen": 0.5585,
+   "p_counterfactual": 0.5593,
+   "delta": 0.0007
+  },
+  {
+   "game": "CWS@TB",
+   "y": 0,
+   "p_frozen": 0.58,
+   "p_counterfactual": 0.5805,
+   "delta": 0.0004
+  },
+  {
+   "game": "AZ@CLE",
+   "y": 0,
+   "p_frozen": 0.5501,
+   "p_counterfactual": 0.5504,
+   "delta": 0.0002
+  },
+  {
+   "game": "MIA@NYM",
+   "y": 0,
+   "p_frozen": 0.5091,
+   "p_counterfactual": 0.5095,
+   "delta": 0.0004
+  },
+  {
+   "game": "WSH@ATL",
+   "y": 1,
+   "p_frozen": 0.4748,
+   "p_counterfactual": 0.4751,
+   "delta": 0.0003
+  },
+  {
+   "game": "TEX@HOU",
+   "y": 1,
+   "p_frozen": 0.5233,
+   "p_counterfactual": 0.5241,
+   "delta": 0.0008
+  },
+  {
+   "game": "KC@COL",
+   "y": 1,
+   "p_frozen": 0.4835,
+   "p_counterfactual": 0.4829,
+   "delta": -0.0006
+  },
+  {
+   "game": "MIL@LAA",
+   "y": 0,
+   "p_frozen": 0.427,
+   "p_counterfactual": 0.4284,
+   "delta": 0.0013
+  },
+  {
+   "game": "DET@ATH",
+   "y": 0,
+   "p_frozen": 0.3881,
+   "p_counterfactual": 0.3881,
+   "delta": 0.0001
+  },
+  {
+   "game": "SF@SD",
+   "y": 1,
+   "p_frozen": 0.4913,
+   "p_counterfactual": 0.4893,
+   "delta": -0.002
+  },
+  {
+   "game": "MIN@SEA",
+   "y": 0,
+   "p_frozen": 0.6201,
+   "p_counterfactual": 0.6198,
+   "delta": -0.0004
+  },
+  {
+   "game": "BOS@LAD",
+   "y": 0,
+   "p_frozen": 0.5525,
+   "p_counterfactual": 0.5526,
+   "delta": 0.0001
+  }
+ ],
+ "mean_abs_delta": 0.0006,
+ "max_abs_delta": 0.002,
+ "moved_toward_outcome": "6/15",
+ "brier_7_31_only": {
+  "frozen": 0.2615,
+  "counterfactual": 0.2616
+ },
+ "interpretation": "Measures the DIRECT effect of the data hole on the frozen 7/31 candidate probabilities. Does NOT prove the hole caused the full-cohort scoring gap; it quantifies only how much completeness would have moved these specific probabilities, no refit."
+}

@@ -1,0 +1,185 @@
+{
+ "record_id": "SETTLEMENT-REPORT-2026-08-20",
+ "built_utc": "2026-08-21T05:45:00Z",
+ "completeness": {
+  "MLB": {
+   "scheduled_independent_manifest": 9,
+   "registered_cards": 9,
+   "forecasts_registered": 8,
+   "dispositions": {
+    "GRADED": 8,
+    "EXCLUDED_WITH_REASON": 1
+   },
+   "exclusion": "STL@CIN \u2014 POST_START_AT_INTAKE (board captured 16:41:38Z, first pitch 16:40Z). No forecast was ever registered; the final is recorded in results.csv but nothing is graded. No retrospective forecast created."
+  },
+  "WNBA": {
+   "scheduled_independent_manifest": 3,
+   "registered": 3,
+   "dispositions": {
+    "GRADED": 3
+   },
+   "estimands_per_game": [
+    "WINNER",
+    "MARGIN",
+    "TOTAL",
+    "ATS"
+   ]
+  },
+  "NFL": {
+   "scheduled_independent_manifest": 2,
+   "registered_model_forecasts": 0,
+   "dispositions": {
+    "EXCLUDED_WITH_REASON": 2
+   },
+   "exclusion": "MARKET_BENCHMARK_ONLY \u2014 no NFL model identity in the registry, no immutable pregame probability card. Brier/logloss/edge/EV NULL BY RULE."
+  }
+ },
+ "evidence_conflicts": "NONE UNRESOLVED. 14/14 finals survived an independent adversarial refutation pass (0 refuted). Prior-day echoes (8/17-8/19 same-series games, and one timezone-shifted ESPN-AU page) were identified and rejected per game; the rejected echoes are listed in the evidence files.",
+ "mlb_v1": {
+  "n": 8,
+  "correct": 5,
+  "accuracy": 0.625,
+  "brier": 0.249333,
+  "logloss": 0.691855,
+  "mean_abs_total_error": 4.25,
+  "mean_signed_total_error": 0.275,
+  "market_brier_at_close": null,
+  "ev_at_close_flat_unit_sum": null,
+  "realized_units_flat_1u_all_model_sides": null,
+  "priced_rows": 0
+ },
+ "mlb_market_context": {
+  "label": "MARKET_IMPLIED_CONTEXT",
+  "n": 8,
+  "model_mean_brier": 0.249333,
+  "market_mean_brier": 0.238932,
+  "model_side_record": "5-3",
+  "market_side_record": "6-2",
+  "direction_flips": [
+   "WSH@TEX"
+  ],
+  "compression_gate_fired": [
+   "LAA@HOU",
+   "SF@CLE",
+   "TOR@TB",
+   "WSH@TEX"
+  ],
+  "totals_report_v1": {
+   "n": 8,
+   "mae": 4.25,
+   "median_ae": 2.8,
+   "signed_bias": 0.28,
+   "largest_miss": -13.2
+  },
+  "price_provenance": "REGISTRATION-VINTAGE same-board two-sided moneylines from the 16:41Z owner board (data/mlb/evidence/2026-08-20_owner_slate.json). These are NOT closing prices. Same-board two-sided de-vig is valid; no cross-book best-odds pair was de-vigged. Closing prices were not acquired, so closing-line comparison remains MARKET_COMPARISON_UNAVAILABLE."
+ },
+ "wnba": {
+  "winner": "2/3 correct; Brier .2594 (IND@DAL wrong), .1287, .0180 -> mean .1354",
+  "margin_errors_pts": {
+   "IND@DAL": -5.58,
+   "ATL@LAS": 31.43,
+   "CON@LVA": -9.98
+  },
+  "total_errors_pts": {
+   "IND@DAL": 0.5,
+   "ATL@LAS": -36.1,
+   "CON@LVA": -11.7
+  },
+  "total_status": "DIAGNOSTIC ONLY \u2014 no qualifying total-selection rule was preregistered before tip",
+  "ats_ledgers": {
+   "FULL": {
+    "n_graded": 5,
+    "W-L-P": "1-4-0",
+    "pending": 0
+   },
+   "ACTION_ELIGIBLE": {
+    "n_graded": 0,
+    "W-L-P": "0-0-0",
+    "pending": 0
+   },
+   "BLOCKED_SUBSET": {
+    "n_graded": 3,
+    "W-L-P": "1-2-0",
+    "pending": 0
+   }
+  },
+  "ats_detail": {
+   "ATS-20260820-IND@DAL": "WIN (DAL +2.5, home margin +6)",
+   "ATS-20260820-ATL@LAS": "LOSS (LAS +8.5, home margin -36)",
+   "ATS-20260820-CON@LVA": "LOSS (CON +14.5, home margin +23)"
+  },
+  "ats_classification": "all three were registered diagnostics BLOCKED from card action (MARGIN_COMPRESSION_BLOCK). They are not plays, recommendations, or missed wagers."
+ },
+ "nfl_benchmark": [
+  {
+   "g": "LV@HOU",
+   "away": "LV",
+   "home": "HOU",
+   "final": "LV 22, HOU 20",
+   "away_score": 22,
+   "home_score": 20,
+   "registered_benchmark_side": "HOU",
+   "benchmark_basis": "capture-time board (16:41Z evidence): HOU -1.5 (-105), HOU ML -120 -> HOU is the registered market favorite; board OPEN column had LV -1.5, a full line flip, recorded",
+   "binary": "WRONG",
+   "ats": "HOU -1.5 NOT covered (HOU lost outright by 2)",
+   "tie": false,
+   "source_game_id": "401873286",
+   "source_urls": [
+    "https://www.espn.com/nfl/boxscore/_/gameId/401873286",
+    "https://www.wral.com/news/ap/0ca39-fernando-mendoza-throws-a-pick-6-struggles-in-1st-half-of-raiders-22-20-preseason-win-over-texans/",
+    "https://www.reviewjournal.com/sports/raiders/fernando-mendoza-int-aidan-oconnell-led-raiders-comeback-win-stand-out-vs-texans-3867082/"
+   ],
+   "brier": null,
+   "logloss": null,
+   "model_edge": null,
+   "ev": null,
+   "null_reason": "MARKET_BENCHMARK_ONLY"
+  },
+  {
+   "g": "SF@LAC",
+   "away": "SF",
+   "home": "LAC",
+   "final": "SF 41, LAC 17",
+   "away_score": 41,
+   "home_score": 17,
+   "registered_benchmark_side": "SF",
+   "benchmark_basis": "capture-time board: SF -1.5 (-102), SF ML -120 -> SF is the registered market favorite; board OPEN column had LAC -1.5, a full line flip, recorded",
+   "binary": "CORRECT",
+   "ats": "SF -1.5 covered (SF won by 24)",
+   "tie": false,
+   "source_game_id": "401873285",
+   "source_urls": [
+    "https://www.nbcbayarea.com/news/sports/nfl/san-francisco-49ers/brock-purdy-live-updates-score-highlights-chargers/4130523/",
+    "https://www.vavel.com/en-us/nfl/2026/08/21/1268365-chargers-vs-49ers-live-score-nfl-preseason.html",
+    "https://www.espn.com/nfl/boxscore/_/gameId/401873285"
+   ],
+   "brier": null,
+   "logloss": null,
+   "model_edge": null,
+   "ev": null,
+   "null_reason": "MARKET_BENCHMARK_ONLY"
+  }
+ ],
+ "audit": {
+  "forecasts_altered": 0,
+  "new_grades_appended": {
+   "mlb": 8,
+   "wnba": 12
+  },
+  "existing_grades_verified": 0,
+  "duplicates_found": 0,
+  "artifact_hashes_checked": [
+   "cards/2026-08-20_card.json",
+   "data/wnba/forecasts/2026-08-20_card.json"
+  ],
+  "chain_before": "297 forecasts / 287 grades",
+  "chain_after": "297 forecasts / 295 grades"
+ },
+ "standing": {
+  "gate": "0/100 NO_PROMOTE",
+  "model_authorized_ledger_usd": 0,
+  "wager_authority": "NO",
+  "execution": "UNAUTHORIZED"
+ },
+ "honest_interpretation": "n=8 MLB and n=3 WNBA. Outcome accuracy, proper scoring, margin error, total error and market comparison are distinct and are reported separately. Nothing here supports a claim of model improvement or decline; one slate is not evidence."
+}

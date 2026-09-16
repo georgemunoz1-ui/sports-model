@@ -1,0 +1,37 @@
+{
+ "record_id": "ROADMAP-ACCOUNTING-CORRECTION-2026-08-22",
+ "supersedes_by_appending": "docs/experiments/2026-08-22_ROADMAP_STATUS.json — that record is not edited (R6). This one corrects its count and names what it left unaccounted.",
+ "owner_correction_accepted_verbatim": "Under the delivery definition we established, this is 1 of 8 delivered, not 2 of 8. Mutation-proven but awaiting independent review is a distinct status.",
+
+ "why_i_got_it_wrong": "I counted daily_baselines as delivered because its defect list was closed and its mutation suite was green. That conflates two predicates. DELIVERED means wired and load-bearing. MUTATION-PROVEN means the module's OWN suite kills its OWN mutants — which is precisely the standing lesson 21 says is not enough, and which I had written down myself two hours earlier. This is the fourth instance of the unnamed-predicate family (10/15 vs 11/15 denominators, CAP-slot classes, 'no automation targeting main'), so the fix is the same one: name the predicate on every count.",
+
+ "status_predicates": {
+  "DELIVERED": "wired, load-bearing, and its controls run in healthcheck",
+  "MUTATION_PROVEN_AWAITING_INDEPENDENT_REVIEW": "defect list closed and every rule killed by its own mutation suite, but NOT independently reviewed and NOT wired. Distinct from DELIVERED, by owner ruling.",
+  "QUARANTINED": "built, defect list OPEN, not wired, numbers not quotable",
+  "RECORD_REJECTED": "a preregistration record was drafted AND independently reviewed AND the review returned REJECT/BREAKS. No successor record has been written. This is worse than 'awaiting review' and I previously reported it as the weaker thing.",
+  "SATISFIED_BY_PROHIBITION": "the item forbids an action; it is met by not having taken it, and the absence is verified rather than asserted"
+ },
+
+ "the_eight_items": [
+  {"n": 1, "item": "keyed causal attribution", "artifact": "harness/starter_attribution.py", "status": "QUARANTINED", "note": "Rebuilt 2026-08-22 to the owner acceptance contract: three states, model-keyed draws, paired replicate uncertainty, draw binding, one-slot assertion, order invariance. 29/29 own mutants killed. Quarantine HELD — the owner's release condition is an INDEPENDENT review, not the module's own suite."},
+  {"n": 2, "item": "frozen daily baselines including the expanding-home prior", "artifact": "harness/daily_baselines.py", "status": "MUTATION_PROVEN_AWAITING_INDEPENDENT_REVIEW", "note": "9 defects closed, 59/59 mutants killed, comparator order and manifest-bound coverage added. NOT wired. NOT delivered."},
+  {"n": 3, "item": "away-pick subgroup monitor, frozen before more data", "artifact": "harness/subgroup_monitor.py", "status": "QUARANTINED", "note": "11 defects open, 3 critical/high. The freeze excludes every number-producing rule and there is no look-ahead control."},
+  {"n": 4, "item": "MLB totals forward evaluation", "artifact": "harness/totals_eval.py", "status": "QUARANTINED", "note": "11 defects open, 3 critical/high. The prereg hash pin lives in the same file as the thresholds it pins."},
+  {"n": 5, "item": "WNBA coherent probability/margin distribution", "artifact": "docs/experiments/2026-08-22_WNBA_COHERENT_DISTRIBUTION_PREREG.json", "status": "RECORD_REJECTED", "review_verdict": "REJECT — do not implement against this record; a successor record is required", "note": "UNACCOUNTED FOR. I reported this as 'drafted, needs owner review'. It had already been independently reviewed and rejected, with 18 defects and 8 critical/high. No successor record exists."},
+  {"n": 6, "item": "WNBA total: rebuild or suppress", "artifact": "docs/experiments/2026-08-22_WNBA_TOTAL_HEAD_SUPPRESSION_AND_REBUILD.json", "status": "RECORD_REJECTED", "review_verdict": "BREAKS", "note": "UNACCOUNTED FOR. Same misreport as item 5: 18 defects, 8 critical/high, no successor record. The record's factual layer is clean; its rule layer breaks."},
+  {"n": 7, "item": "mechanical freshness and domain gates", "artifact": "harness/freshness_gates.py", "status": "QUARANTINED", "note": "11 defects open, 4 critical/high."},
+  {"n": 8, "item": "do not 'just recalibrate'", "artifact": "docs/experiments/2026-08-22_NO_RECALIBRATION_RULE.json", "status": "SATISFIED_BY_PROHIBITION", "verification": "No recalibration, shrinkage retune, HFA adjustment or probability rescaling was added anywhere. V13 remains frozen at ml.v13_1.hfa1005.card.s722n30000 with seed 722 / n=30000 / HFA 1.005. The WNBA feature state remains frozen at 2026-07-22. Verified by inspection rather than asserted."}
+ ],
+ "card_presentation_spec": {"item": "five-field decision card", "status": "DELIVERED", "note": "wired in harness/decision_card.py, render gate unchanged, selftest in healthcheck"},
+
+ "corrected_counts": {
+  "delivered": 1,
+  "mutation_proven_awaiting_independent_review": 1,
+  "quarantined": 4,
+  "record_rejected_and_unaccounted": 2,
+  "satisfied_by_prohibition": 1,
+  "denominator_note": "The owner's count of 8 places the card presentation spec inside the eight. Enumerated as the owner's roadmap listed them, items 1-8 are the eight improvement items and the card spec was stated alongside them; under either reading the number DELIVERED is 1, and the two UNACCOUNTED items are 5 and 6. The predicate is named on every line above so the counts cannot be re-conflated."
+ },
+ "recorded_utc": "2026-08-22"
+}

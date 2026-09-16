@@ -1,0 +1,67 @@
+{
+ "record_id": "NFL-DISPOSITION-2026-08-10",
+ "recorded_utc": "2026-08-10T21:05:00Z",
+ "authority": "owner, accepted verbatim 2026-08-10",
+ "base_commit": "28088e82bd281e488e0ad54e6cd24b9eb9e4842c",
+ "supersedes": null,
+ "note": "This record states decisions, not results. It emits no probability, edge or EV. Gate remains 0/100 NO_PROMOTE; model-authorized ledger remains $0; execution remains UNAUTHORIZED.",
+
+ "dispositions": [
+  {
+   "id": "D1_ABANDON_JULY27_BRANCH",
+   "decision": "ABANDON",
+   "scope": "the NFL preseason feature branch cut from the 2026-07-27 checkpoint bundle",
+   "prohibited_actions": [
+    "commit onto it",
+    "merge it",
+    "cherry-pick from it",
+    "copy files out of it"
+   ],
+   "reason": "A 2026-07-27 base is 57 commits stale and predates the entire outcome-label control layer (result_provenance.py, result_content_checks.py, parse_box_dump.py, the registration-required-to-grade gate), the 8/8 results corrections (3 reversed winners), and the V13 freeze. Rebasing is not sufficient reassurance when the branch's only content is a preseason model that is itself being abandoned (see D2).",
+   "residual_value_retained": "NONE from code. The two board defects found while reviewing that work ARE retained, in data/nfl/INTEGRATION_RISK.json and the frozen board."
+  },
+  {
+   "id": "D2_PRESEASON_DATA_CAPTURE_ONLY",
+   "decision": "DATA_CAPTURE_ONLY / NO_FORECAST",
+   "scope": "NFL preseason, 2026 and prior",
+   "permitted": [
+    "capture and freeze market boards as timestamped evaluation records",
+    "capture official schedule/kickoff, and record label defects verbatim alongside corrections",
+    "capture final scores as tier-1 outcome records"
+   ],
+   "prohibited": [
+    "any preseason win probability, spread projection, total projection, edge or EV",
+    "training any estimator on preseason outcomes",
+    "using preseason outcomes as features or validation for the regular-season track"
+   ],
+   "reason": "Preseason outcomes are driven by planned QB rotation and snap intent, which were never historically captured as of-kickoff state in this repository. Reconstructing them from postgame box scores injects look-ahead. Without a pregame record of rotation/snap intention, a defensible preseason model cannot be trained now — not with more compute, and not with more market data.",
+   "reopen_condition": "Only if pregame rotation/snap-intent records are captured prospectively, as-of kickoff, for a sufficient number of games. That capture may begin at any time; it cannot be backfilled."
+  },
+  {
+   "id": "D3_REGULAR_SEASON_TRACK",
+   "decision": "BUILD as a separate track from current HEAD",
+   "base": "28088e82bd281e488e0ad54e6cd24b9eb9e4842c (branch sportsmodel/main)",
+   "spec": "docs/experiments/NFL_REGULAR_SEASON_TRACK.json",
+   "status_at_record_time": "SPEC_ONLY — no data acquired, no estimator fitted, no forecast emitted",
+   "reason": "The regular-season signal set (causal early-down EPA, QB/OL health, opponent adjustment, rest, travel, weather, injuries) is recoverable as of-kickoff state, which is exactly what preseason lacks."
+  },
+  {
+   "id": "D4_BOARD_INTEGRITY_ISOLATED",
+   "decision": "ISOLATE — treat as board-integrity defects, not as model input",
+   "defects": [
+    "timestamp/date defect: board prints UTC labeled 'ET'; the uniform -4h correction moves four games to the previous day (LAC@HOU, ARI@LV, TEN@SF Fri 8/14 -> Thu 8/13; DAL@SEA Sun 8/16 -> Sat 8/15)",
+    "Caesars sign flips: Caesars posts the opposite favorite from the other three books on at least five games (LAC@HOU, TB@NYJ, MIA@WAS, CAR@BUF, JAX@NO)"
+   ],
+   "rule": "NEVER average across an unresolved sign flip. A cross-book consensus that averages a flipped line produces a number with no referent — it is neither book's price and no one can transact it. Each book's quote is stored per book. A flip must be resolved to a single orientation by evidence, or that book excluded from that game, before any aggregation.",
+   "enforced_by": "data/nfl/odds/2026-08-13_16_preseason_board.json stores quotes per book with the verbatim label preserved; no consensus/average field exists in the NFL section."
+  }
+ ],
+
+ "carried_constraints": {
+  "firewall": "data/nfl/** remains isolated from the MLB engine, registries, gate and ledger. Zero edits to MLB artifacts from NFL work.",
+  "model_identity": "Any NFL estimator must be registered as a NEW model_id. It may not reuse or extend a V13/V14 identity. V13 is FROZEN as of 2026-08-10.",
+  "price_quarantine": "Prices are never features. Forecast first, price second.",
+  "gate_impact": "NONE",
+  "ledger_impact": "NONE ($0, paper, execution UNAUTHORIZED)"
+ }
+}

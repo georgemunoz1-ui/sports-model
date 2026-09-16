@@ -1,0 +1,194 @@
+{
+ "_fixture": {
+  "DO_NOT": "never bind this fixture against a production board. It binds only against mlb_board_SYNTHETIC.json in the same directory.",
+  "ID_POLICY": {
+   "mapping_real_to_synthetic": {
+    "823504": 999000001,
+    "823744": 999000002,
+    "823985": 999000003,
+    "824231": 999000000,
+    "824960": 999000004
+   },
+   "real_ids_it_used_to_carry": [
+    "823504",
+    "823744",
+    "823985",
+    "824231",
+    "824960"
+   ],
+   "reserved_range": "999000000+",
+   "where_the_real_ids_still_live": "cards/2026-08-28_mlb_board.json (frozen, untouched) and data/feeds/fixtures/2026-08-28/mlb_statsapi_schedule_LIVE_capture.json (genuine)",
+   "why_changed": "as delivered this fixture carried the five REAL captured gamePks from cards/2026-08-28_mlb_board.json with INVENTED scores, two of which flipped the winner against the genuine LIVE_capture sitting beside it. The label was the only thing preventing a synthetic score from being read as a real final; nothing structural was. A synthetic score attached to a real provider id is one careless import away from a fabricated final, which is the exact class of defect that published five bad finals on 2026-08-27."
+  },
+  "label": "SYNTHETIC_CACHED_FIXTURE",
+  "provenance": "written by kimi/fu1-feed-adapter 2026-08-30; ids desynthesised 2026-08-30 by owner ruling",
+  "why": "offline binding test for the FU-1 adapter. Scores AND ids are SYNTHETIC."
+ },
+ "dates": [
+  {
+   "date": "2026-08-28",
+   "games": [
+    {
+     "gameDate": "2026-08-28T22:40:00Z",
+     "gameNumber": 1,
+     "gamePk": 999000000,
+     "officialDate": "2026-08-28",
+     "probablePitchers": {
+      "away": {
+       "fullName": "Drew Anderson"
+      },
+      "home": {
+       "fullName": "Tarik Skubal"
+      }
+     },
+     "status": {
+      "detailedState": "Final",
+      "statusCode": "F"
+     },
+     "teams": {
+      "away": {
+       "score": 3,
+       "team": {
+        "name": "Los Angeles Dodgers"
+       }
+      },
+      "home": {
+       "score": 6,
+       "team": {
+        "name": "Detroit Tigers"
+       }
+      }
+     }
+    },
+    {
+     "gameDate": "2026-08-28T23:15:00Z",
+     "gameNumber": 1,
+     "gamePk": 999000001,
+     "officialDate": "2026-08-28",
+     "probablePitchers": {
+      "away": {
+       "fullName": "Patrick Sandoval"
+      },
+      "home": {
+       "fullName": "Gerrit Cole"
+      }
+     },
+     "status": {
+      "detailedState": "Final",
+      "statusCode": "F"
+     },
+     "teams": {
+      "away": {
+       "score": 2,
+       "team": {
+        "name": "Boston Red Sox"
+       }
+      },
+      "home": {
+       "score": 5,
+       "team": {
+        "name": "New York Yankees"
+       }
+      }
+     }
+    },
+    {
+     "gameDate": "2026-08-28T23:40:00Z",
+     "gameNumber": 1,
+     "gamePk": 999000002,
+     "officialDate": "2026-08-28",
+     "probablePitchers": {
+      "away": {
+       "fullName": "Cody Bradford"
+      },
+      "home": {
+       "fullName": "Logan Henderson"
+      }
+     },
+     "status": {
+      "detailedState": "Final",
+      "statusCode": "F"
+     },
+     "teams": {
+      "away": {
+       "score": 1,
+       "team": {
+        "name": "Texas Rangers"
+       }
+      },
+      "home": {
+       "score": 4,
+       "team": {
+        "name": "Milwaukee Brewers"
+       }
+      }
+     }
+    },
+    {
+     "gameDate": "2026-08-29T01:38:00Z",
+     "gameNumber": 1,
+     "gamePk": 999000003,
+     "officialDate": "2026-08-28",
+     "probablePitchers": {
+      "away": {
+       "fullName": "Andrew Painter"
+      },
+      "home": {
+       "fullName": "Reid Detmers"
+      }
+     },
+     "status": {
+      "detailedState": "Final",
+      "statusCode": "F"
+     },
+     "teams": {
+      "away": {
+       "score": 6,
+       "team": {
+        "name": "Philadelphia Phillies"
+       }
+      },
+      "home": {
+       "score": 2,
+       "team": {
+        "name": "Los Angeles Angels"
+       }
+      }
+     }
+    },
+    {
+     "gameDate": "2026-08-29T01:40:00Z",
+     "gameNumber": 1,
+     "gamePk": 999000004,
+     "officialDate": "2026-08-28",
+     "probablePitchers": {
+      "away": {
+       "fullName": "Brandon Young"
+      },
+      "home": {
+       "fullName": "Jacob Lopez"
+      }
+     },
+     "status": {
+      "detailedState": "Final",
+      "statusCode": "F"
+     },
+     "teams": {
+      "away": {
+       "score": 3,
+       "team": {
+        "name": "Baltimore Orioles"
+       }
+      },
+      "home": {
+       "score": 7,
+       "team": {
+        "name": "Athletics"
+       }
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

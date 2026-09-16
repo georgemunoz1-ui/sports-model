@@ -1,0 +1,109 @@
+<!doctype html><meta charset=utf-8><title>MLB card 2026-07-26</title>
+<style>
+body{font:14px/1.5 -apple-system,Segoe UI,Roboto,sans-serif;max-width:1180px;margin:24px auto;padding:0 16px;color:#111}
+h1{margin:0 0 2px} h2{margin:26px 0 8px;font-size:17px;border-bottom:2px solid #111;padding-bottom:4px}
+table{border-collapse:collapse;width:100%;margin:8px 0;font-size:13px}
+th,td{border:1px solid #d5d5d5;padding:5px 7px;text-align:left} th{background:#f2f2f2}
+.n{text-align:right;font-variant-numeric:tabular-nums} tr.cap{background:#fbfbfb;color:#888}
+.t{font-size:10px;background:#e8e8e8;padding:1px 4px;border-radius:3px;color:#555}
+.w{color:#a15c00} .sub{color:#666;margin:0 0 14px}
+.box{border:1px solid #ccc;border-left:4px solid #444;padding:10px 14px;margin:10px 0;background:#fafafa}
+.bad{border-left-color:#b00} .ok{border-left-color:#0a7} .warn{border-left-color:#c80}
+code{background:#f0f0f0;padding:1px 4px} ul{margin:6px 0 6px 18px} li{margin:3px 0}
+</style>
+<h1>MLB &mdash; 2026-07-26 (Sunday)</h1>
+<p class=sub>Paper / tracking only. $0 staked, no bet authority. Board captured 2026-07-25T22:30Z, roughly
+14.0h before the earliest first pitch (2026-07-26T16:15Z) &mdash; genuinely pre-slate.</p>
+
+<div class="box ok"><b>Board verification (this is the cleanest board ingested so far)</b>
+<ul>
+<li><b>Matchups &amp; first pitch:</b> 15/15 exact match against the statsapi hydrated schedule &mdash; every pairing and every UTC start time.</li>
+<li><b>Starting pitchers:</b> 26/30 exact match vs statsapi <code>probablePitcher</code> (accent-normalized).</li>
+<li><b>Moneyline vig:</b> every game holds between 2.08% and 3.85% (mean 3.03%), and no game arbs.
+A misread price would almost certainly have broken this &mdash; it is the check that makes the transcription trustworthy.</li>
+</ul></div>
+
+<div class="box bad"><b>What the totals column actually is &mdash; and why 12 of 15 totals are missing below</b>
+<p>The source quotes the over and the under at <i>different lines</i> in 12 of 15 games, and the under line is
+<b>never</b> lower than the over line (displacement min +0.0, max +1.0, zero negatives). That signature is a
+best-price-across-books display, not one book's two-sided market: the best over sits at the lowest number on the board, the best
+under at the highest. Pairing them describes a <b>middle</b>, not a market.</p>
+<p>So for those games the consensus total is not identified, only bounded &mdash; shown as
+<span class=w>[lo&ndash;hi]</span>. No total lean is emitted for them. Only <b>ATL@BAL, COL@MIL, HOU@CWS</b> quote a single number on
+both sides and are treated as real. This is the same defect class as the 7/25 strikeout alt-line ladder, caught by the same
+displacement test. <b>The moneyline column is unaffected</b> &mdash; one price per team, unambiguous side attribution &mdash; which is
+why the pre-registered ledger, which trades moneylines only, is not contaminated by this.</p></div>
+
+<h2>Full slate &mdash; all 15 games</h2>
+<table><tr><th>Game</th><th>Start</th><th>ML (A/H)</th><th>Total</th><th>V13 home%</th><th>proj</th><th>lean</th>
+<th>gap(H)</th><th>blowout A/H</th><th>K projections</th></tr>
+<tr><td><b>CLE@TB</b></td><td>16:15Z</td><td class=n>+120 / -134</td><td class=n><span class=w>[6.5&ndash;7.5]</span></td><td class=n>54%</td><td class=n>7.3</td><td>&mdash;</td><td class=n>-2.3%</td><td class=n>15% / 11%</td><td>Parker Messick <b>5.71</b> / Drew Rasmussen <b>5.39</b></td></tr><tr><td><b>ATL@BAL</b></td><td>17:35Z</td><td class=n>-105 / -110</td><td class=n>8.5</td><td class=n>45%</td><td class=n>9.5</td><td>OVER</td><td class=n>-5.5%</td><td class=n>16% / 23%</td><td>Reynaldo Lopez <b>4.24</b> / Shane Baz <b>5.22</b></td></tr><tr class=cap><td><b>AZ@WSH</b> <span class=t>CAP</span></td><td>17:35Z</td><td class=n>-118 / +105</td><td class=n><span class=w>[9.5&ndash;10.0]</span></td><td class=n>54%</td><td class=n>11.3</td><td>&mdash;</td><td class=n>+6.8%</td><td class=n>25% / 20%</td><td>Kohl Drake <b>&mdash;</b> / Miles Mikolas <b>3.75</b></td></tr><tr><td><b>CHC@PIT</b></td><td>17:35Z</td><td class=n>+107 / -122</td><td class=n><span class=w>[8.5&ndash;9.0]</span></td><td class=n>54%</td><td class=n>11.1</td><td>&mdash;</td><td class=n>+0.9%</td><td class=n>26% / 16%</td><td>Jameson Taillon <b>4.68</b> / Braxton Ashcraft <b>6.52</b></td></tr><tr class=cap><td><b>TOR@BOS</b> <span class=t>CAP</span></td><td>17:35Z</td><td class=n>+116 / -130</td><td class=n><span class=w>[8.0&ndash;8.5]</span></td><td class=n>56%</td><td class=n>7.7</td><td>&mdash;</td><td class=n>+0.7%</td><td class=n>16% / 12%</td><td>Kevin Gausman <b>5.72</b> / TBD <b>&mdash;</b></td></tr><tr class=cap><td><b>KC@DET</b> <span class=t>CAP</span></td><td>17:40Z</td><td class=n>+162 / -184</td><td class=n><span class=w>[9.0&ndash;9.5]</span></td><td class=n>55%</td><td class=n>8.1</td><td>&mdash;</td><td class=n>-8.3%</td><td class=n>18% / 15%</td><td>TBD <b>&mdash;</b> / Framber Valdez <b>4.69</b></td></tr><tr><td><b>LAD@NYM</b></td><td>17:40Z</td><td class=n>-154 / +137</td><td class=n><span class=w>[9.0&ndash;9.5]</span></td><td class=n>42%</td><td class=n>10.2</td><td>&mdash;</td><td class=n>+0.5%</td><td class=n>13% / 26%</td><td>Emmet Sheehan <b>5.43</b> / Freddy Peralta <b>5.21</b></td></tr><tr><td><b>SD@MIA</b></td><td>17:40Z</td><td class=n>+110 / -125</td><td class=n><span class=w>[8.5&ndash;9.0]</span></td><td class=n>56%</td><td class=n>7.7</td><td>&mdash;</td><td class=n>+1.7%</td><td class=n>19% / 14%</td><td>Walker Buehler <b>4.35</b> / Janson Junk <b>4.28</b></td></tr><tr><td><b>ATH@MIN</b></td><td>18:10Z</td><td class=n>+125 / -140</td><td class=n><span class=w>[10.0&ndash;10.5]</span></td><td class=n>60%</td><td class=n>8.9</td><td>&mdash;</td><td class=n>+3.4%</td><td class=n>26% / 9%</td><td>Jeffrey Springs <b>4.55</b> / Joe Ryan <b>6.23</b></td></tr><tr><td><b>COL@MIL</b></td><td>18:10Z</td><td class=n>+265 / -295</td><td class=n>7.5</td><td class=n>68%</td><td class=n>9.7</td><td>OVER</td><td class=n>-5.5%</td><td class=n>34% / 5%</td><td>Kyle Freeland <b>4.75</b> / Jacob Misiorowski <b>8.65</b></td></tr><tr class=cap><td><b>HOU@CWS</b> <span class=t>CAP</span></td><td>18:10Z</td><td class=n>-105 / -108</td><td class=n>9.5</td><td class=n>54%</td><td class=n>8.8</td><td>UNDER</td><td class=n>+3.6%</td><td class=n>19% / 17%</td><td>Ronel Blanco <b>&mdash;</b> / Erick Fedde <b>3.69</b></td></tr><tr><td><b>CIN@STL</b></td><td>18:15Z</td><td class=n>+115 / -132</td><td class=n><span class=w>[8.5&ndash;9.0]</span></td><td class=n>52%</td><td class=n>7.2</td><td>&mdash;</td><td class=n>-2.8%</td><td class=n>17% / 13%</td><td>Andrew Abbott <b>4.35</b> / Kyle Leahy <b>4.33</b></td></tr><tr><td><b>SEA@TEX</b></td><td>18:35Z</td><td class=n>-108 / -108</td><td class=n><span class=w>[7.0&ndash;7.5]</span></td><td class=n>49%</td><td class=n>6.7</td><td>&mdash;</td><td class=n>-0.9%</td><td class=n>10% / 10%</td><td>Logan Gilbert <b>6.28</b> / Jacob deGrom <b>6.54</b></td></tr><tr class=cap><td><b>LAA@SF</b> <span class=t>CAP</span></td><td>20:05Z</td><td class=n>+100 / -115</td><td class=n><span class=w>[7.5&ndash;8.0]</span></td><td class=n>49%</td><td class=n>7.5</td><td>&mdash;</td><td class=n>-2.7%</td><td class=n>12% / 16%</td><td>Jose Soriano <b>5.68</b> / TBD <b>&mdash;</b></td></tr><tr><td><b>NYY@PHI</b></td><td>23:20Z</td><td class=n>+140 / -155</td><td class=n><span class=w>[7.5&ndash;8.5]</span></td><td class=n>51%</td><td class=n>8.8</td><td>&mdash;</td><td class=n>-8.4%</td><td class=n>18% / 14%</td><td>Will Warren <b>5.08</b> / Cristopher Sanchez <b>6.93</b></td></tr></table>
+<p class=sub>Greyed rows are capped (a starter is TBD or has too thin a start log) and are excluded from play selection by rule 3.
+"Total" in <span class=w>brackets</span> is a bound, not a line. "gap(H)" is V13's home win probability minus the de-vigged market probability.</p>
+
+<h2>Pre-registered moneyline EV picks</h2>
+<div class=box><b>The rule, fixed before the board was scored:</b>
+<code>EV&gt;0 AND edge=(p-implied)&gt;=0.04, both sides of every game, capped games excluded, no discretion</code><br>
+Registered 2026-07-26T02:13Z, which is 14.0h before first pitch. Both sides of every game are
+scored; there is no pre-filtering by which team V13 likes, no conviction ranking, and no veto.</div>
+<table><tr><th>Pick</th><th>Game</th><th>V13 p</th><th>implied</th><th>edge</th><th>EV/unit</th><th>V13 also leans this way?</th></tr>
+<tr><td><b>COL</b> +265</td><td>COL@MIL</td><td class=n>0.324</td><td class=n>0.274</td><td class=n>+0.050</td><td class=n>+0.183</td><td><b>no</b></td></tr><tr><td><b>NYY</b> +140</td><td>NYY@PHI</td><td class=n>0.491</td><td class=n>0.417</td><td class=n>+0.074</td><td class=n>+0.178</td><td><b>no</b></td></tr></table>
+<p class=sub><b>Neither pick is a team V13 expects to win.</b> COL is projected at 32.4% and NYY at
+49.1%. They qualify because the price is far enough off V13's number to be +EV. That is the objective
+function working as specified: profitability is positive EV against the break-even price, not win% above 50. Expect this
+ledger's win-loss record to look mediocre even when it is doing its job &mdash; units and closing-line value are the readouts.</p>
+
+<h2>Excluded by rule 3, recorded so the cost is visible</h2>
+<table><tr><th>Side</th><th>Game</th><th>ML</th><th>edge</th><th>EV/unit</th><th>Why excluded</th></tr>
+<tr><td><b>KC</b></td><td>KC@DET</td><td class=n>+162</td><td class=n>+0.072</td><td class=n>+0.189</td><td>starters TBD (gs 0) / Framber Valdez (gs 19)</td></tr><tr><td><b>WSH</b></td><td>AZ@WSH</td><td class=n>+105</td><td class=n>+0.054</td><td class=n>+0.111</td><td>starters Kohl Drake (gs 0) / Miles Mikolas (gs 8)</td></tr></table>
+<p class=sub>Separately, three games (TOR@BOS, KC@DET, LAA@SF) were capped because statsapi lists the starter as TBD even though the
+odds board names one. A shadow slate built with the board's unconfirmed names, run through the identical rule, produces exactly one
+extra pick &mdash; <b>KC +162</b> (p=0.440, edge +0.058, EV +0.153). That is the measured price of trusting first-party data over the
+scrape. The shadow run wrote nothing: its card was diverted and the canonical card regenerated.</p>
+
+<h2>R5 audit &mdash; |projection &minus; line| &ge; 1.5</h2>
+<table><tr><th>Game</th><th>line</th><th>V13 proj</th><th>displacement</th><th>status</th></tr>
+<tr><td>ATL@BAL</td><td class=n>8.5</td><td class=n>9.5</td><td class=n>+1.0</td><td>ok</td></tr><tr><td>COL@MIL</td><td class=n>7.5</td><td class=n>9.7</td><td class=n>+2.2</td><td><b>AUDIT REQUIRED</b></td></tr><tr><td>HOU@CWS</td><td class=n>9.5</td><td class=n>8.8</td><td class=n>-0.7</td><td>ok</td></tr></table>
+<div class="box warn"><b>COL@MIL fails R5 and it matters, because COL is also a registered pick.</b>
+Kyle Freeland carries a 7.61 ERA; Jacob Misiorowski a 1.63 ERA with a 39.6% strikeout rate. V13 projects 9.7 total runs against a
+market line of 7.5 &mdash; a +2.2 displacement. The likely cause is that the engine punishes a bad starter without bound, inflating
+Milwaukee's expected scoring past what the market will pay for. If V13 misprices run scoring in this game, its win probability in
+the same game is suspect too. The pick was registered anyway: rule 4 forbids discretionary vetoes, and quietly dropping a play
+after seeing a diagnostic is exactly the contamination the pre-registration exists to prevent. It is flagged here instead.</div>
+
+<h2>Ledger state</h2>
+<p>ml_ev_tracking: <b>2&ndash;3, -0.60u</b> on 5 graded and 0 pending.
+The one graded play is KC +154 on 7/25, confirmed <b>WIN</b> (final 3&ndash;2, statsapi gamePk 824244) &mdash; a side V13 leaned
+<i>against</i>, taken purely on price. The 7/25 COL +186 and STL &minus;116 plays were still Pre-Game at capture time and remain
+ungraded. The older discretionary <code>ml_tracking</code> ledger stays frozen at 7&ndash;3 and is not being extended.</p>
+
+<h2>Data integrity &mdash; what is wrong with this card</h2>
+<ol>
+<li><b>Every price here was read from an image by a model.</b> The audits above (15/15 schedule match, 26/30 starters, no-arb hold
+band) make transcription error unlikely, but they do not make it impossible. A CSV export from the source would remove this entire
+class of risk.</li>
+<li><b>12 of 15 totals are not identified</b>, only bounded, because the source displays best-price rather than a market. Any
+"total lean" for those games would be fabricated, so none is shown.</li>
+<li><b>The run-line column was not transcribed at all.</b> Side attribution across the two rows per game is unverified, and under R3
+sides are dead, so it was left out rather than guessed.</li>
+<li><b>ATH@MIN has a starter conflict</b> &mdash; the board says Travis Adams, statsapi says Joe Ryan. The game was modeled with Joe
+Ryan. No side there cleared the rule, so nothing was registered either way, but the book's price may have been made against a
+different pitcher entirely.</li>
+<li><b>Rule 3's written text and its implementation disagree.</b> The text says "TBD or &lt;5 GS"; the code says "TBD or &lt;2 GS".
+7/25 was graded under the code's definition, so 7/26 was selected the same way for consistency. Checked explicitly: zero picks on
+this slate flip between the two readings. The text will be amended to match the code effective 7/27 &mdash; forward only, never
+re-selecting rows whose outcomes are already visible.</li>
+<li><b>No closing snapshot has ever been captured.</b> Every price in this ledger is an opening or near-opening number, so
+closing-line value &mdash; the readout that actually settles whether this works &mdash; is still unmeasured. This is the binding
+constraint on the whole project, and it blocks experiment E4.</li>
+<li><b>V13 may simply be a favorite-fader.</b> Across 50 priced, uncapped game-rows on 5 cards, V13's home win probability sits
+0.086 <i>below</i> the market where the home team is a big favorite, and 0.019 below in the middle. Four of the five picks this
+ledger has ever made are underdogs. The ledger may be one systematic bet wearing several uniforms. This is a hypothesis generated
+from the same rows the ledger selects from, so it cannot confirm itself &mdash; it is pre-registered as <b>E4</b> against a forward
+holdout from 7/27, and it was deliberately not used to touch today's picks.</li>
+<li><b>Still zero strikeout-prop prices</b>, a third consecutive slate. The 100-play authorization gate remains stuck at 9/100.
+Model quality is not the bottleneck; price access is.</li>
+</ol>
+<p class=sub>Generated by <code>harness/build_card_0726.py</code> from <code>cards/2026-07-26_card.json</code>,
+<code>data/mlb/odds/2026-07-26_pregame.json</code>, <code>cards/2026-07-26_ml_ev_picks.json</code> and <code>state.json</code>.
+No figure on this page was typed by hand.</p>

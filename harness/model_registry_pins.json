@@ -1,0 +1,324 @@
+{
+ "schema": "model_registry_pins-v2",
+ "policy": "APPEND-ONLY (owner instruction 2026-08-17: 'Keep the source re-pin append-only as a new generator implementation/version; never replace the historical pin'). Each source carries an ordered list of AUTHORIZED generator implementation versions. A re-pin APPENDS; it never rewrites or deletes an earlier entry, because registered forecasts bind the sha of the implementation that produced them and those bindings must stay resolvable forever. `current` is always versions[-1].sha256 and is the only version permitted on disk. v1 of this file (a flat path->sha map) was replace-in-place; the history below was reconstructed from that file's own git history, so no version was lost.",
+ "sources": {
+  "engine/calibrate.py": {
+   "current": "35a9a848bf5014fc70ac39f5fb0af3cc4c642afa77238abd49c5f6db31191cb5",
+   "versions": [
+    {
+     "impl_version": 1,
+     "sha256": "35a9a848bf5014fc70ac39f5fb0af3cc4c642afa77238abd49c5f6db31191cb5",
+     "authorized_utc": "2026-07-28T05:46:38Z",
+     "pin_commit": "616c650c",
+     "note": "reconstructed from the git history of this pins file (2026-08-17 append-only migration); superseded"
+    }
+   ]
+  },
+  "engine/card_2026_07_19.py": {
+   "current": "8bda7fcb671b200157cfcccc346e0b1bf287b97b089e16059ed0fad469a2ba45",
+   "versions": [
+    {
+     "impl_version": 1,
+     "sha256": "8bda7fcb671b200157cfcccc346e0b1bf287b97b089e16059ed0fad469a2ba45",
+     "authorized_utc": "2026-07-28T05:46:38Z",
+     "pin_commit": "616c650c",
+     "note": "reconstructed from the git history of this pins file (2026-08-17 append-only migration); superseded"
+    }
+   ]
+  },
+  "engine/card_2026_07_20.py": {
+   "current": "496668a3dd1fe081fd9cd66be8e19e9e966b20fd0cb78467d2392ea329f742bc",
+   "versions": [
+    {
+     "impl_version": 1,
+     "sha256": "496668a3dd1fe081fd9cd66be8e19e9e966b20fd0cb78467d2392ea329f742bc",
+     "authorized_utc": "2026-07-28T05:46:38Z",
+     "pin_commit": "616c650c",
+     "note": "reconstructed from the git history of this pins file (2026-08-17 append-only migration); superseded"
+    }
+   ]
+  },
+  "engine/park_compare.py": {
+   "current": "b4ab65c53d473c914765ce46eade7679ab81f9343d4d447ca3f1e3aad7e395f6",
+   "versions": [
+    {
+     "impl_version": 1,
+     "sha256": "b4ab65c53d473c914765ce46eade7679ab81f9343d4d447ca3f1e3aad7e395f6",
+     "authorized_utc": "2026-07-28T05:46:38Z",
+     "pin_commit": "616c650c",
+     "note": "reconstructed from the git history of this pins file (2026-08-17 append-only migration); superseded"
+    }
+   ]
+  },
+  "engine/score_and_calibrate.py": {
+   "current": "16f7a7ca08a54eaf6764d7eac1a79507a321e629e9a662e29a3a216dfae08303",
+   "versions": [
+    {
+     "impl_version": 1,
+     "sha256": "16f7a7ca08a54eaf6764d7eac1a79507a321e629e9a662e29a3a216dfae08303",
+     "authorized_utc": "2026-07-28T05:46:38Z",
+     "pin_commit": "616c650c",
+     "note": "reconstructed from the git history of this pins file (2026-08-17 append-only migration); superseded"
+    }
+   ]
+  },
+  "engine/v13_1.py": {
+   "current": "a4835b7351a5c90d7c5ea0267b12c2f1aef47aaa1b11dc90f1ea86c3ea8ef44c",
+   "versions": [
+    {
+     "impl_version": 1,
+     "sha256": "a4835b7351a5c90d7c5ea0267b12c2f1aef47aaa1b11dc90f1ea86c3ea8ef44c",
+     "authorized_utc": "2026-07-28T05:46:38Z",
+     "pin_commit": "616c650c",
+     "note": "reconstructed from the git history of this pins file (2026-08-17 append-only migration); superseded"
+    }
+   ]
+  },
+  "engine/v13_1_pooled.py": {
+   "current": "d24885e82c9f3ff577c60abdabdfd6033840b9241603ef8743bf016c87d81a17",
+   "versions": [
+    {
+     "impl_version": 1,
+     "sha256": "d24885e82c9f3ff577c60abdabdfd6033840b9241603ef8743bf016c87d81a17",
+     "authorized_utc": "2026-07-28T05:46:38Z",
+     "pin_commit": "616c650c",
+     "note": "reconstructed from the git history of this pins file (2026-08-17 append-only migration); superseded"
+    }
+   ]
+  },
+  "engine/v13_2_pitcher_index.py": {
+   "current": "4ba6956c8ee3367080ad67770749f1325cce0900829ecd9ffc3733b0c52debde",
+   "versions": [
+    {
+     "impl_version": 1,
+     "sha256": "4ba6956c8ee3367080ad67770749f1325cce0900829ecd9ffc3733b0c52debde",
+     "authorized_utc": "2026-07-28T05:46:38Z",
+     "pin_commit": "616c650c",
+     "note": "reconstructed from the git history of this pins file (2026-08-17 append-only migration); superseded"
+    }
+   ]
+  },
+  "harness/daily_card.py": {
+   "current": "f57980f107287592aca3c9f1245fa04ada84201e474422a61943869adbf4a8ca",
+   "versions": [
+    {
+     "impl_version": 1,
+     "sha256": "a901787198d0796b8b1f7779a2e7e5f008c136e0bd0cd9718f5c0e73a4cb2532",
+     "authorized_utc": "2026-07-28T05:46:38Z",
+     "pin_commit": "616c650c",
+     "note": "reconstructed from the git history of this pins file (2026-08-17 append-only migration); superseded"
+    },
+    {
+     "impl_version": 2,
+     "sha256": "5765d0ec929b291cd35deb044e128c257c812a3584d95a5c71994c073f5433dc",
+     "authorized_utc": "2026-07-28T05:47:06Z",
+     "pin_commit": "5f175ab3",
+     "note": "reconstructed from the git history of this pins file (2026-08-17 append-only migration); superseded"
+    },
+    {
+     "impl_version": 3,
+     "sha256": "b58e3f51f9ca6b2e1a8df65893a68057a9353802de3c046ca91f0c5e0c231462",
+     "authorized_utc": "2026-07-29T07:29:36Z",
+     "pin_commit": "1da046f8",
+     "note": "reconstructed from the git history of this pins file (2026-08-17 append-only migration); superseded"
+    },
+    {
+     "impl_version": 4,
+     "sha256": "f9cad5d3e2b7227d1c5117185e415882930f33918752b6ce7f975d8cf8dfec9f",
+     "authorized_utc": "2026-07-29T08:42:23Z",
+     "pin_commit": "46e46da2",
+     "note": "IMPL v4 \u2014 the long-lived generator: hardcoded output path cards/{date}_card.json, no write guard. Produced every registered MLB card from 2026-07-29 through the 2026-08-17 v1/v2/v3 cohorts. Every forecast record binding this sha is correctly bound; this pin is RETAINED so those bindings resolve."
+    },
+    {
+     "impl_version": 5,
+     "sha256": "f57980f107287592aca3c9f1245fa04ada84201e474422a61943869adbf4a8ca",
+     "authorized_utc": "2026-08-17T07:18:28Z",
+     "pin_commit": "9d76ebc1",
+     "note": "IMPL v5 \u2014 I/O ONLY: adds --out and replaces open(path,'w') with os.open(O_WRONLY|O_CREAT|O_EXCL) so a rebuild can no longer clobber a registered cohort artifact. Simulation, RNG policy, seed, features and emitted numbers untouched. Behavioural invariance PROVEN byte-for-byte: rebuilding the registered 8/17 v3 card with this binary reproduces sha256 1cac39733f68d6b0... exactly. Record: docs/audits/2026-08-17_authorized_repin.json. Model identity ml.v13_1.hfa1005.card.s722n30000 is UNCHANGED because the outputs are unchanged; only the generator implementation is versioned."
+    }
+   ]
+  },
+  "harness/ml_p2_baselines.py": {
+   "current": "d69d01ff326237ea68beb65bbb1f49ed75c66faca75d80939f6e7a1bc464d994",
+   "versions": [
+    {
+     "impl_version": 1,
+     "sha256": "c7a67c77856229e339540c3822d1e50b058b4863130596bbcce752aeb12ee5d3",
+     "authorized_utc": "2026-07-28T19:44:42Z",
+     "pin_commit": "81afa765",
+     "note": "reconstructed from the git history of this pins file (2026-08-17 append-only migration); superseded"
+    },
+    {
+     "impl_version": 2,
+     "sha256": "d69d01ff326237ea68beb65bbb1f49ed75c66faca75d80939f6e7a1bc464d994",
+     "authorized_utc": "2026-07-28T19:46:49Z",
+     "pin_commit": "6895208c",
+     "note": "reconstructed from the git history of this pins file (2026-08-17 append-only migration); superseded"
+    }
+   ]
+  },
+  "harness/ml_p4_forward.py": {
+   "current": "a555567bfb1bf949c93dcb64905d63511f2d3e236467dfea125c6ecff1630c4b",
+   "versions": [
+    {
+     "impl_version": 1,
+     "sha256": "637ee3cedc7b85452873b35f7204e9f7308eaf37fb0b20a4409cb03b12ca3887",
+     "authorized_utc": "2026-07-28T20:32:18Z",
+     "pin_commit": "33a397a3",
+     "note": "reconstructed from the git history of this pins file (2026-08-17 append-only migration); superseded"
+    },
+    {
+     "impl_version": 2,
+     "sha256": "a555567bfb1bf949c93dcb64905d63511f2d3e236467dfea125c6ecff1630c4b",
+     "authorized_utc": "2026-07-29T07:23:50Z",
+     "pin_commit": "f906a451",
+     "note": "reconstructed from the git history of this pins file (2026-08-17 append-only migration); superseded"
+    }
+   ]
+  },
+  "harness/rng_noise_study.py": {
+   "current": "eb7d157a5b31f34875ea6c8e8fde281771042a39c74c4e39454968e81a3ba249",
+   "versions": [
+    {
+     "impl_version": 1,
+     "sha256": "4fddd2aea7e1ff345efd47ef7e5050cfa63d85218cae67a6d689e258e506308e",
+     "authorized_utc": "2026-08-17T07:18:28Z",
+     "pin_commit": "9d76ebc1",
+     "note": "reconstructed from the git history of this pins file (2026-08-17 append-only migration); superseded"
+    },
+    {
+     "impl_version": 2,
+     "sha256": "eb7d157a5b31f34875ea6c8e8fde281771042a39c74c4e39454968e81a3ba249",
+     "authorized_utc": "2026-08-17T07:37:45Z",
+     "pin_commit": null,
+     "note": "IMPL v2 \u2014 DOCUMENTATION ONLY: terminology corrected per owner ruling 2026-08-17 ('call 2,000,000 draws a high-precision reference estimate, not true or noiseless'), plus an explicit scope limit stating that every figure is a LOCAL SENSITIVITY of a frozen artifact and not evidence of prospective accuracy. No line of the simulation, the seeding policy or the statistics changed; --verify-math still reproduces the registered v3 card probabilities exactly.",
+     "record": "docs/experiments/2026-08-17_MECHANISM_CLOSEOUT_CORRECTION.json"
+    }
+   ]
+  },
+  "harness/run_v13_historical.py": {
+   "current": "d2fdf977cbd8eb34759af3bf23b19112ad02af99968973c1f0bc721a88470cba",
+   "versions": [
+    {
+     "impl_version": 1,
+     "sha256": "d2fdf977cbd8eb34759af3bf23b19112ad02af99968973c1f0bc721a88470cba",
+     "authorized_utc": "2026-08-04T09:47:57Z",
+     "pin_commit": "0a2e2bac",
+     "note": "reconstructed from the git history of this pins file (2026-08-17 append-only migration); superseded"
+    }
+   ]
+  },
+  "harness/wnba_model_v1.py": {
+   "current": "7f128ba323ee939b8f40bf55eb2e1f6e9a24611e29ca4eb743962af2608af4e0",
+   "versions": [
+    {
+     "impl_version": 1,
+     "sha256": "f444d2a42baa29c9ce86bdb8bd7c1b4a720b4b14d7b39f0845a19528225ffd56",
+     "authorized_utc": "2026-08-12T17:44:44Z",
+     "pin_commit": "f70dfbd9",
+     "note": "reconstructed from the git history of this pins file (2026-08-17 append-only migration); superseded"
+    },
+    {
+     "impl_version": 2,
+     "sha256": "7f128ba323ee939b8f40bf55eb2e1f6e9a24611e29ca4eb743962af2608af4e0",
+     "authorized_utc": "2026-08-29T08:39:56Z",
+     "pin_commit": null,
+     "note": "ET-date fix in predict_slate: rest/b2b derived via zoneinfo America/New_York instead of a tip[:10] UTC slice. Affects 170 of 333 (51.1%) 2026 tips. Authorized by owner 2026-08-29. impl_version 1 stays authorized so prior forecasts resolve. Not a promotion; calibration revalidation owed.",
+     "record": "data/audit/2026-08-29_wnba_model_repin_authorization.json"
+    }
+   ]
+  },
+  "harness/form_oof_ablation.py": {
+   "current": "65ee1d2abb68a09967047d473b02357eedf796e65d83e22aadebe696dc41ee08",
+   "versions": [
+    {
+     "impl_version": 1,
+     "sha256": "3105da03e03b05c9747cc3a850bc166daa002e8fce23c31e508d1b47038c6235",
+     "authorized_utc": "2026-08-17T07:44:19Z",
+     "pin_commit": null,
+     "note": "IMPL v1 \u2014 initial registration. Date-ordered OOF ablation of team form (FULL / STALE / NO_FORM) on paired Brier and log-loss, per owner caution 2026-08-17: 'To establish that form is useful \u2014 not merely active \u2014 run a date-ordered OOF ablation comparing form vs no-form on paired Brier/log-loss.' Imports v13_sim/load_rows/_sp from the pinned harness/run_v13_historical.py; contains no transcribed sim math.",
+     "record": "docs/experiments/2026-08-17_FORM_USEFULNESS.json"
+    },
+    {
+     "impl_version": 2,
+     "sha256": "65ee1d2abb68a09967047d473b02357eedf796e65d83e22aadebe696dc41ee08",
+     "authorized_utc": "2026-08-17T07:50:22Z",
+     "pin_commit": null,
+     "note": "IMPL v2 \u2014 added stratification of the FULL vs NO_FORM contrast by how many prior games the weaker-supported side's form rests on (counted from the same frozen file, strictly before the row, so leak-free). V13 applies rf/LG_RPG with NO shrinkage, so the pre-registered prediction was that damage concentrates where support is thinnest; a flat profile would have refuted it. Analysis addition only: no arm definition, seed, sim call or metric changed, and the pooled figures are byte-identical to impl v1's run.",
+     "record": "docs/experiments/2026-08-17_FORM_USEFULNESS.json"
+    }
+   ]
+  },
+  "harness/form_refresh_diff.py": {
+   "current": "800c8623be66ef688e55a394e70a6c75d87e8bce3489dcb955f31324be3a2639",
+   "versions": [
+    {
+     "impl_version": 1,
+     "sha256": "84099795a832df0296f3e54d7154761af31a760764c4707852c81667fe7507cc",
+     "authorized_utc": "2026-08-17T08:14:01Z",
+     "pin_commit": null,
+     "note": "IMPL v1 \u2014 initial registration. Three-state decomposition separating the 2026-08-13 interior-hole repair from the 2026-08-15/16 tier-1 refresh, which the registered v2->v3 contrast bundles together because one intake applied all 39 rows. Form states are built by DATE FILTER over the canonical results file in memory; the file is never mutated. Refuses to report unless the reconstructed states reproduce the REGISTERED v2 and v3 card probabilities exactly. Owner instruction 2026-08-17.",
+     "record": "docs/audits/2026-08-17_tier1_refresh_cycle.json"
+    },
+    {
+     "impl_version": 2,
+     "sha256": "0541cfa257849bb77c03571244c603f06a4713c38a5cd3e4b9508d1a7b329904",
+     "authorized_utc": "2026-08-17T08:22:11Z",
+     "pin_commit": null,
+     "note": "IMPL v2 \u2014 corrected an inverted boolean: pitcher_form.changed_by_this_refresh was emitting 'not _sp_changed', so a field-by-field comparison finding ZERO starter differences was reported as CHANGED. The underlying verification and every probability figure were unaffected; only the summary flag was wrong. Caught by reading the emitted artifact rather than trusting the code path.",
+     "record": "docs/audits/2026-08-17_tier1_refresh_cycle.json"
+    },
+    {
+     "impl_version": 3,
+     "sha256": "b22ddf561f3eb2482289bf1a11b08e76f8df59abd5ea61c4c9cc4422e6e68ee7",
+     "authorized_utc": "2026-08-17T08:53:29Z",
+     "pin_commit": null,
+     "note": "IMPL v3 \u2014 owner correction 2026-08-17: the '81% of total' attribution was invalid. It divided a per-path mean |delta| by the NET mean |delta| (different denominators), and mean absolute movements are non-additive because signed per-game contributions cancel. Adds a fourth form state S_D (all dates except the hole date) so both factor orderings exist, then reports GROSS path shares and order-neutral two-factor SHAPLEY values with per-game signed contributions and the interaction term. Selftest now asserts phi_R + phi_H equals the net signed change to 1e-12 per game and that gross >= net.",
+     "record": "docs/experiments/2026-08-17_CORRECTIONS_ROUND2.json"
+    },
+    {
+     "impl_version": 4,
+     "sha256": "800c8623be66ef688e55a394e70a6c75d87e8bce3489dcb955f31324be3a2639",
+     "authorized_utc": "2026-08-18T04:20:18Z",
+     "pin_commit": null,
+     "note": "IMPL v4 \u2014 pins S_C (and S_D) to CUTOFF_C = 2026-08-16 instead of 'all dates'. S_C is the form state the v3 card was BUILT on; writing it as 'all dates' was true only until 8/17 results were ingested, after which the state silently grew a day and stopped reproducing the registered card. An as-of state must be pinned to its date, not to whatever is on disk.",
+     "record": "data/mlb/analysis/2026-08-17_grades.json"
+    }
+   ]
+  },
+  "harness/card_render.py": {
+   "current": "37df793e1c349ce16f4bdc544bbe8beb15318b474dbe5956f07b2d7d947d395a",
+   "versions": [
+    {
+     "impl_version": 1,
+     "sha256": "49cc3fb57c61aaa6e52d67363bc6b2eac3a4c672b31f9764648d9b5f62ffd350",
+     "authorized_utc": "2026-08-17T23:52:20Z",
+     "pin_commit": null,
+     "note": "IMPL v1 \u2014 initial registration. Renders a registered card as model output in betting units (fair ML, fair run line, per-side projected score, model total, one-run/extra-inning/blowout probabilities, K expectations). Contains a verbatim transcription of daily_card.py sim() to recover per-side score means the stored card does not keep; refuses to render unless the replay reproduces all six stored V13 fields exactly on every game. Owner instruction 2026-08-17: cards must carry model predictions/output.",
+     "record": "data/audit/card_render_2026-08-17.json"
+    },
+    {
+     "impl_version": 2,
+     "sha256": "37df793e1c349ce16f4bdc544bbe8beb15318b474dbe5956f07b2d7d947d395a",
+     "authorized_utc": "2026-08-18T04:20:18Z",
+     "pin_commit": null,
+     "note": "IMPL v2 \u2014 AS-OF FORM FIX. The replay used the CURRENT results file, but a card dated D was built by daily_card from results strictly BEFORE D. Once 2026-08-17 finals were ingested the replay silently included that day's own results (look-ahead) and stopped reproducing the registered card: STL@CIN home_wp moved 0.452 -> 0.456. Now filters results.csv to date < the card's slate date. Caught by the module's own refuse-on-mismatch gate the moment the finals landed.",
+     "record": "data/mlb/analysis/2026-08-17_grades.json"
+    }
+   ]
+  },
+  "harness/ml_v14_starter.py": {
+   "current": "56ba10f9ef0e5a5ea583ea432028178d29b336737270aef76ffb0de0ea214a69",
+   "versions": [
+    {
+     "impl_version": 1,
+     "sha256": "56ba10f9ef0e5a5ea583ea432028178d29b336737270aef76ffb0de0ea214a69",
+     "authorized_utc": "2026-08-18T08:44:31Z",
+     "pin_commit": null,
+     "note": "IMPL v1 \u2014 the one-shot V14 starter-shadow runner, written AFTER the prereg was frozen at commit 8855503 (sha 9cb65230) and implementing exactly it: closed 6-feature vector, fold-internal standardization + inner-split ridge selection, four comparators on identical games, date-block bootstrap + Holm. Refuses to fit against drifted prereg bytes; refuses a second fit while a valid result exists. Includes the serialization fix (numpy bool casts) applied after the first run crashed writing its output; the partial was quarantined, not deleted, and the deterministic refit reproduced the identical numbers.",
+     "record": "data/mlb/ml_asof/2026-08-18_v14_result.json"
+    }
+   ]
+  }
+ }
+}

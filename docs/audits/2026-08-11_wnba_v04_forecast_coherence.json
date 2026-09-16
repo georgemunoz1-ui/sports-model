@@ -1,0 +1,103 @@
+{
+ "record_id": "AUDIT-WNBA-V04-FORECAST-COHERENCE-2026-08-11",
+ "built_utc": "2026-08-11T03:30:00Z",
+ "auditor_head": "ec4ea1d6c05a7e142f14d17c0ffd8aa1936bb8f9",
+ "scope_limit": "Commit de400dcb1b9001df98cd374a5d8652d37d15fd71 is unreachable from this repository and the listed files are sandbox paths this workspace cannot read. Nothing below inspects the implementation, the fit, the walk-forward code or the ledger. This is arithmetic on the REPORTED numbers, checked against the WNBA source bytes staged here at data/wnba/source/staging/**.",
+
+ "ground_truth_used": {
+  "source": "staged ESPN team_box 2017-2025, exhibition squads excluded",
+  "n_games": 2091,
+  "home_margin_mean": 2.03,
+  "home_margin_sd": 13.97,
+  "home_win_rate": 0.5557,
+  "constant_base_rate_brier": 0.24690
+ },
+
+ "what_corroborates": [
+  {
+   "item": "game count",
+   "reported": "2,118 official-plus-one games",
+   "check": "This repository's independent reconciliation gives 2,085 agreeing games for 2017-2025 (all season types). Removing the playoff share (169 of 2,087 official games) gives ~1,916 regular-season, plus 175 reconciled 2026 games through 2026-07-22 = 2,091.",
+   "verdict": "CORROBORATES to within 27 games (1.3%). The residual is consistent with a game-id crosswalk recovering rows that this repository's stricter date+teams+scores key left unmatched. Two independently-built reconciliations landing 1.3% apart is a good sign for both."
+  },
+  {
+   "item": "base rate Brier",
+   "reported": 0.24921,
+   "check": "full-sample p(1-p) from the staged bytes = 0.24690",
+   "verdict": "CONSISTENT. An expanding-window baseline should score slightly worse than the full-sample rate, which is the direction observed."
+  },
+  {
+   "item": "Brier improvement and its interval",
+   "reported": "0.22334 vs 0.24921, paired 95% CI [-0.03485, -0.01668], n=1,184",
+   "check": "point difference -0.02587 sits inside the interval; the half-width of 0.009085 implies SE 0.004635 and therefore a per-game paired Brier-difference sd of 0.160, which is a plausible magnitude",
+   "verdict": "ARITHMETICALLY COHERENT and the interval excludes zero.",
+   "open_question": "The report does not state whether this is a GAME-DATE BLOCK bootstrap. The frozen v2/v3 contract mandates game-date blocks, and an i.i.d. game bootstrap would produce an interval that is too narrow. This needs stating, not assuming."
+  },
+  {
+   "item": "walk-forward sizing",
+   "reported": "1,184 walk-forward predictions of 2,118 games",
+   "check": "implies ~934 initial training games; the frozen floors are 500 training and 500 OOF",
+   "verdict": "SATISFIES the contract's own floors."
+  }
+ ],
+
+ "findings": [
+  {
+   "id": "C1",
+   "severity": "BLOCKING",
+   "title": "PHX@LA is internally incoherent by 17.2 percentage points, and it was not flagged",
+   "detail": "The report flags WAS/LVA as the game where the classifier and margin estimator disagree. WAS/LVA is not the worst row. Using the empirical WNBA margin sd of 13.97 from the staged bytes:",
+   "table": [
+    {"game": "NYL@IND", "P_home": 0.722, "home_margin": 7.4, "P_implied_by_margin": 0.702, "divergence_pp": 2.0, "implied_sd_needed": 12.57, "verdict": "coherent"},
+    {"game": "WAS@LVA", "P_home": 0.477, "home_margin": 1.1, "P_implied_by_margin": 0.531, "divergence_pp": -5.4, "implied_sd_needed": -19.07, "verdict": "FLAGGED by the report; the two numbers disagree on SIGN"},
+    {"game": "PHX@LA", "P_home": 0.237, "home_margin": -3.2, "P_implied_by_margin": 0.409, "divergence_pp": -17.2, "implied_sd_needed": 4.47, "verdict": "NOT FLAGGED, and 3.2x worse than the one that was"}
+   ],
+   "the_sharpest_statement": "For PHX@LA's own two published numbers to agree, WNBA margins would need a standard deviation of 4.47 points. The empirical value in the staged bytes is 13.97. The row is asserting a league 3.1x more predictable than it is.",
+   "consequence": "A 3.2-point favourite is worth roughly 59% in this league, not 76.3%. The classifier is far more confident than its own margin estimate supports, in the direction of overconfidence on the road side."
+  },
+  {
+   "id": "C2",
+   "severity": "BLOCKING",
+   "title": "The one gate that would have caught C1 is defined against a simulator that is offline",
+   "detail": "The frozen divergence gate is specified as |exact all-bank-row SIMULATED home-win probability - direct classifier probability| <= 0.03, and its failure consequence is to withhold settlement outputs. The report states the v5 residual bank FAILS the total-residual homogeneity gate, so no simulated probability exists and the divergence gate cannot evaluate.",
+   "consequence": "With the simulator offline, NOTHING checks coherence between the direct classifier and the margin estimator. Two of three registered forecasts exceed the frozen 3.0pp threshold on the direct-vs-margin comparison (5.4pp and 17.2pp), and totals were published for all three anyway.",
+   "why_this_is_structural": "The gate was attached to the wrong pair. Simulated-vs-direct is the check that matters when the simulator runs; direct-vs-margin is the check that matters always, because the classifier and the margin/total estimators are separately fitted and always able to contradict each other. The report itself says 'both estimands are preserved rather than averaged' — preserving both is correct, and it is exactly why a coherence bound on the pair is required.",
+   "fix": "Add a direct-vs-margin coherence gate that runs whenever a forecast is registered, independent of simulator availability, using the empirical margin sd. Freeze its threshold before re-running the card."
+  },
+  {
+   "id": "C3",
+   "severity": "HIGH",
+   "title": "Two of three forecasts disagree with a four-book market consensus by 24-27 points",
+   "basis": "data/wnba/analysis/2026-08-10_market.json — same-book two-sided de-vig across DraftKings-class panel, which is valid on that board",
+   "table": [
+    {"game": "NYL@IND", "model_home": 0.722, "market_home": 0.607, "gap_pp": 11.5, "model_ml": "-260", "market_ml": "-154"},
+    {"game": "WAS@LVA", "model_home": 0.477, "market_home": 0.745, "gap_pp": -26.8, "model_ml": "+110", "market_ml": "-292"},
+    {"game": "PHX@LA", "model_home": 0.237, "market_home": 0.478, "gap_pp": -24.1, "model_ml": "+322", "market_ml": "+109"}
+   ],
+   "assessment": "A model that prices Las Vegas at +110 while four books independently price them at -292 is far more likely to be broken than to have found an edge. The same holds for a home side at +322 against a market +109. These are not edges of the size a four-factor model discovers; they are the size of a data or state defect.",
+   "note": "This is a market-coherence observation, not a claim that the market is correct. It is recorded because a 27-point gap is a diagnostic signal that something upstream should be checked BEFORE the result arrives, not after."
+  },
+  {
+   "id": "C4",
+   "severity": "HIGH",
+   "title": "The model state is 20 days stale relative to the games it is forecasting",
+   "detail": "The report states model state ends 2026-07-22 because 16 later ESPN-only finals lacked official corroboration. The three registered games are on the 2026-08-11 slate.",
+   "independent_confirmation": "This repository measured the same boundary from the mirrors: reconciled ESPN-plus-official 2026 coverage stops at 2026-07-22 (175 games), while ESPN alone continues to 2026-08-01 (219 games). The official family's 2026 file carries 202 games. The cutoff is real and correctly derived.",
+   "consequence": "Team ratings are 20 days old. Three weeks of WNBA form, rotation and availability change are absent from every one of these forecasts. Refusing to ingest uncorroborated finals is the RIGHT call under the official-plus-one rule — but the cost is that the forecast is stale, and staleness is a plausible cause of C3.",
+   "required": "State the state-date on every registered forecast so a grader can separate model error from staleness error. A forecast whose feature state is 20 days old should not be scored in the same cohort as one built from current state."
+  }
+ ],
+
+ "disposition": {
+  "on_the_claim_operational": "The pipeline evidence (2,118 reconciled games, 40,696 minute rows, 1,184 walk-forward predictions, a CI excluding zero, 0-failure healthcheck) is real work and the acceptance standard was the right one to adopt. But two of the three forecasts it produced fail an arithmetic coherence check that costs nothing to run, and the gate that should have caught them is bound to a component that is offline.",
+  "recommendation": "Do not treat the three registered rows as a clean prospective sample. Add the direct-vs-margin coherence gate, re-derive the card, and register again. The rows already written should be preserved as-is under the append-only rule and marked with this audit rather than deleted.",
+  "what_is_NOT_being_claimed": "This audit does not say the model is wrong, does not say the market is right, and does not say the Brier result is invalid. n=3 forecasts cannot establish any of that. It says two published rows contradict themselves, which is checkable without waiting for outcomes."
+ },
+
+ "governance": {
+  "gate": "0/100 NO_PROMOTE — unchanged",
+  "ledger": "$0, paper, execution UNAUTHORIZED — unchanged",
+  "firewall": "no WNBA number reaches the MLB gate, forecasts or ledger",
+  "model_layer_here": "still ABSENT in this repository; no WNBA estimator was built, imported or run here"
+ }
+}

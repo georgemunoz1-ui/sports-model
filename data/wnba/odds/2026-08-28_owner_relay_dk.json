@@ -1,0 +1,351 @@
+{
+ "DISPOSITION": {
+  "exposure_usd": 0,
+  "n_bets": 0,
+  "read_the_ev_column_this_way": "The large positive EVs sit on heavy underdogs, and that is exactly where this arm is weakest rather than where an opportunity is. STANDINGS_LOG5_v1 sees only season win-loss records: no injuries, no rest, no lineup. Tonight A'ja Wilson is questionable, Brionna Jones is out, Toronto has five players listed, and no 8/28-dated report exists for Washington or Los Angeles at all. A model blind to all of that, disagreeing with a market that prices it, is describing its own blindness. Treat these as a calibration diagnostic on the fallback arm, not as edges.",
+  "selections": 0,
+  "units": 0.0,
+  "wager_authority": "NO",
+  "why_no_selection_is_a_fact_not_a_judgement": "Both arms that survive this morning's block are non-selecting by construction. STANDINGS_LOG5_v1 is DIAGNOSTIC_ONLY_ACTION_BLOCKED in its own registration. EXPANDING_HOME_PRIOR is a registered constant with no game-specific information. The one arm that could have carried a real view, FEATURE_REFRESH, is blocked on the feature rebuild. There is therefore no arm on this board that is permitted to select, whatever the EV column says."
+ },
+ "FEATURE_REFRESH_ADDED": {
+  "headline": "the fallback's largest apparent edge disappears. On WSH@LAS it had Washington at 71.80% against a 67.21% break-even; the feature model says 52.69%, which is 14.5 points BELOW break-even. The v1 card called those edges 'describing its own blindness' \u2014 that was a judgement then and is a measurement now.",
+  "selections_still": 0,
+  "when": "2026-08-28T11:25:00Z",
+  "why": "the arm was blocked at first publication and is now unblocked; leaving the overlay on the crude fallback alone would have left the most misleading numbers standing as the only ones"
+ },
+ "INDEPENDENT_SLATE_CORROBORATION": {
+  "finding": "DraftKings lists exactly four WNBA games today, and they are the same four matchups with the same home/away orientation as the frozen board.",
+  "what_it_does_not_do": "it does not corroborate the ESPN game IDS, which DraftKings does not publish. Id provenance is unchanged.",
+  "why_it_matters": "the board's schedule grade is ESPN_SINGLE_FAMILY_GIT_ARTIFACT \u2014 wehoop mirrors ESPN, so the ESPN URLs that corroborated it were the same family and added no independent source. A sportsbook is NOT in that family. This is the first genuinely independent corroboration of the 8/28 WNBA slate COMPOSITION."
+ },
+ "START_TIME_DISCREPANCY": {
+  "corroboration_appended_2026-08-28T10:55Z": {
+   "effect": "the TIMEZONE half of this discrepancy is now corroborated on independent grounds. The +10 minute gap between the book and the wehoop parquet is UNCHANGED and still unresolved.",
+   "finding": "the College Football relay independently supports the PACIFIC reading. Under Eastern its Thursday slots would be 3:00, 4:00, 5:00 and 6:00 PM ET, which are not real Thursday-night college football windows; under Pacific they are 6:00, 7:00, 8:00 and 9:00 PM ET, exactly the canonical ones, and Memphis at UNLV becomes a 10:00 PM ET Vegas late game.",
+   "source": "data/cfb/odds/2026-08-28_owner_relay_dk_forward.json (same phone, 3:38-3:39)",
+   "still_not_confirmed": "no screenshot states its timezone; this is slot-plausibility corroboration, not a confirmation. The original finding above is left exactly as written."
+  },
+  "observed": "DraftKings displays the two early games at 4:40 and the two late games at 7:10 in the phone's local time; the wehoop parquet says 7:30 PM and 10:00 PM EDT.",
+  "operational_impact": "at most 10 minutes on tip time, well inside the checkpoint spacing; the 22:00Z and 22:45Z checkpoints are unaffected. Flagged there for confirmation.",
+  "reading": "the game-to-slot pairing matches the board exactly (two early, two late). Read as Pacific, DraftKings is a consistent +10 minutes against the parquet on all four games. The screenshot does not state its timezone, so the Pacific reading is INFERRED and not confirmed; the 'Sat 10:10 AM' row for tomorrow's CHI@NYL is what makes Eastern implausible.",
+  "resolution": "UNRESOLVED \u2014 recorded, not settled. Neither source is discarded."
+ },
+ "TRANSCRIPTION_VERIFICATION": {
+  "method": "every two-sided pair must imply a hold inside 2-8%. A dropped digit, a flipped sign or a row misaligned to the wrong game throws the implied hold far outside that band, so the relay is checked against itself without needing a second source.",
+  "observed_hold_range_pct": [
+   3.6496,
+   4.5455
+  ],
+  "pairs_checked": 12,
+  "problems": [],
+  "verdict": "PASS"
+ },
+ "attaches_to": {
+  "board": "cards/2026-08-28_wnba_board_v2.json",
+  "board_cohort_hash": "2fdb5c9ae59afee676c61908c4ce03df314d2add6e87e4a75e675f476330f6cc",
+  "board_sha256": "f5e5f429b1a00a6b11342ac8a29a35e974ecece6b793e94a50c5147053deede6",
+  "rule": "prices are never predictive features; the overlay is hashed separately and the board is unchanged by it",
+  "supersedes_attachment_to": "cards/2026-08-28_wnba_board.json"
+ },
+ "games": {
+  "wnba:CON@IND": {
+   "arms": {
+    "wnba.fallback.STANDINGS_LOG5_v1": {
+     "edge_away_pp": 6.3954,
+     "edge_home_pp": -10.1832,
+     "ev_away_per_100": 76.7444,
+     "ev_home_per_100": -10.6682,
+     "may_select": false,
+     "output_grade": "DIAGNOSTIC_ONLY_ACTION_BLOCKED",
+     "p_away": 0.147287,
+     "p_home": 0.8527129935099196,
+     "recomputed_on": "BOARD-2026-08-28-WNBA-V2 (records current through 8/27)",
+     "why_not": "DIAGNOSTIC_ONLY_ACTION_BLOCKED by registration"
+    },
+    "wnba.replacement.FEATURE_REFRESH": {
+     "edge_away_pp": 1.3767,
+     "edge_home_pp": -5.1645,
+     "ev_away_per_100": 16.52,
+     "ev_home_per_100": -5.4105,
+     "may_select": false,
+     "output_grade": "ACTION_BLOCKED_SYSTEM_NOT_DECISION_READY",
+     "p_away": 0.0971,
+     "p_home": 0.9029,
+     "unblocked_at": "2026-08-28T11:25:00Z",
+     "why_not": "the registered replacement arm is action-blocked while the pipeline is SYSTEM_NOT_DECISION_READY; unblocking it forecast-side does not open the action layer"
+    },
+    "wnba.winner.EXPANDING_HOME_PRIOR": {
+     "edge_away_pp": 38.0082,
+     "edge_home_pp": -41.796,
+     "ev_away_per_100": 456.098,
+     "ev_home_per_100": -43.7863,
+     "may_select": false,
+     "output_grade": "REGISTERED_PRIOR",
+     "p_away": 0.463415,
+     "p_home": 0.536585,
+     "why_not": "a registered constant carries no game-specific information; an edge against a market is the market moving away from a constant"
+    }
+   },
+   "away": "CON",
+   "canonical_id": "ESPN_GAMEID:401857181",
+   "disposition": "NO_SELECTION",
+   "dk_slot_as_displayed": "Today 4:40 PM",
+   "home": "IND",
+   "moneyline": {
+    "away": 1100,
+    "break_even_away": 0.083333,
+    "break_even_home": 0.954545,
+    "home": -2100,
+    "two_sided_hold_pct": 3.6496
+   },
+   "spread": {
+    "away": 17.5,
+    "away_px": -115,
+    "home": -17.5,
+    "home_px": -105,
+    "model_position": "NO REGISTERED WNBA COVER DISTRIBUTION \u2014 no spread probability exists, so no spread EV is computable",
+    "two_sided_hold_pct": 4.4962
+   },
+   "total": {
+    "line": 178.5,
+    "model_position": "the surviving arms emit a winner probability only; FEATURE_REFRESH, which carries the total, is blocked. No total EV is computable.",
+    "over_px": -108,
+    "two_sided_hold_pct": 4.5376,
+    "under_px": -112
+   }
+  },
+  "wnba:POR@ATL": {
+   "arms": {
+    "wnba.fallback.STANDINGS_LOG5_v1": {
+     "edge_away_pp": 6.6536,
+     "edge_home_pp": -10.8889,
+     "ev_away_per_100": 41.5853,
+     "ev_home_per_100": -12.3408,
+     "may_select": false,
+     "output_grade": "DIAGNOSTIC_ONLY_ACTION_BLOCKED",
+     "p_away": 0.226536,
+     "p_home": 0.7734635147503538,
+     "recomputed_on": "BOARD-2026-08-28-WNBA-V2 (records current through 8/27)",
+     "why_not": "DIAGNOSTIC_ONLY_ACTION_BLOCKED by registration"
+    },
+    "wnba.replacement.FEATURE_REFRESH": {
+     "edge_away_pp": 5.57,
+     "edge_home_pp": -9.8053,
+     "ev_away_per_100": 34.8125,
+     "ev_home_per_100": -11.1127,
+     "may_select": false,
+     "output_grade": "ACTION_BLOCKED_SYSTEM_NOT_DECISION_READY",
+     "p_away": 0.2157,
+     "p_home": 0.7843,
+     "unblocked_at": "2026-08-28T11:25:00Z",
+     "why_not": "the registered replacement arm is action-blocked while the pipeline is SYSTEM_NOT_DECISION_READY; unblocking it forecast-side does not open the action layer"
+    },
+    "wnba.winner.EXPANDING_HOME_PRIOR": {
+     "edge_away_pp": 30.3415,
+     "edge_home_pp": -34.5768,
+     "ev_away_per_100": 189.6344,
+     "ev_home_per_100": -39.187,
+     "may_select": false,
+     "output_grade": "REGISTERED_PRIOR",
+     "p_away": 0.463415,
+     "p_home": 0.536585,
+     "why_not": "a registered constant carries no game-specific information; an edge against a market is the market moving away from a constant"
+    }
+   },
+   "away": "POR",
+   "canonical_id": "ESPN_GAMEID:401857180",
+   "disposition": "NO_SELECTION",
+   "dk_slot_as_displayed": "Today 4:40 PM",
+   "home": "ATL",
+   "moneyline": {
+    "away": 525,
+    "break_even_away": 0.16,
+    "break_even_home": 0.882353,
+    "home": -750,
+    "two_sided_hold_pct": 4.0632
+   },
+   "spread": {
+    "away": 12.5,
+    "away_px": -110,
+    "home": -12.5,
+    "home_px": -110,
+    "model_position": "NO REGISTERED WNBA COVER DISTRIBUTION \u2014 no spread probability exists, so no spread EV is computable",
+    "two_sided_hold_pct": 4.5455
+   },
+   "total": {
+    "line": 180.5,
+    "model_position": "the surviving arms emit a winner probability only; FEATURE_REFRESH, which carries the total, is blocked. No total EV is computable.",
+    "over_px": -105,
+    "two_sided_hold_pct": 4.4962,
+    "under_px": -115
+   }
+  },
+  "wnba:TOR@LV": {
+   "arms": {
+    "wnba.fallback.STANDINGS_LOG5_v1": {
+     "edge_away_pp": 2.4606,
+     "edge_home_pp": -6.6273,
+     "ev_away_per_100": 19.6852,
+     "ev_home_per_100": -7.2298,
+     "may_select": false,
+     "output_grade": "DIAGNOSTIC_ONLY_ACTION_BLOCKED",
+     "p_away": 0.149606,
+     "p_home": 0.8503935136033043,
+     "recomputed_on": "BOARD-2026-08-28-WNBA-V2 (records current through 8/27)",
+     "why_not": "DIAGNOSTIC_ONLY_ACTION_BLOCKED by registration"
+    },
+    "wnba.replacement.FEATURE_REFRESH": {
+     "edge_away_pp": 2.27,
+     "edge_home_pp": -6.4367,
+     "ev_away_per_100": 18.16,
+     "ev_home_per_100": -7.0218,
+     "may_select": false,
+     "output_grade": "ACTION_BLOCKED_SYSTEM_NOT_DECISION_READY",
+     "p_away": 0.1477,
+     "p_home": 0.8523,
+     "unblocked_at": "2026-08-28T11:25:00Z",
+     "why_not": "the registered replacement arm is action-blocked while the pipeline is SYSTEM_NOT_DECISION_READY; unblocking it forecast-side does not open the action layer"
+    },
+    "wnba.winner.EXPANDING_HOME_PRIOR": {
+     "edge_away_pp": 33.8415,
+     "edge_home_pp": -38.0082,
+     "ev_away_per_100": 270.732,
+     "ev_home_per_100": -41.4635,
+     "may_select": false,
+     "output_grade": "REGISTERED_PRIOR",
+     "p_away": 0.463415,
+     "p_home": 0.536585,
+     "why_not": "a registered constant carries no game-specific information; an edge against a market is the market moving away from a constant"
+    }
+   },
+   "away": "TOR",
+   "canonical_id": "ESPN_GAMEID:401857182",
+   "disposition": "NO_SELECTION",
+   "dk_slot_as_displayed": "Today 7:10 PM",
+   "home": "LV",
+   "moneyline": {
+    "away": 700,
+    "break_even_away": 0.125,
+    "break_even_home": 0.916667,
+    "home": -1100,
+    "two_sided_hold_pct": 4.0
+   },
+   "spread": {
+    "away": 13.5,
+    "away_px": -105,
+    "home": -13.5,
+    "home_px": -115,
+    "model_position": "NO REGISTERED WNBA COVER DISTRIBUTION \u2014 no spread probability exists, so no spread EV is computable",
+    "two_sided_hold_pct": 4.4962
+   },
+   "total": {
+    "line": 175.5,
+    "model_position": "the surviving arms emit a winner probability only; FEATURE_REFRESH, which carries the total, is blocked. No total EV is computable.",
+    "over_px": -112,
+    "two_sided_hold_pct": 4.5376,
+    "under_px": -108
+   }
+  },
+  "wnba:WSH@LAS": {
+   "arms": {
+    "wnba.fallback.STANDINGS_LOG5_v1": {
+     "edge_away_pp": 5.4447,
+     "edge_home_pp": -9.6948,
+     "ev_away_per_100": 8.1006,
+     "ev_home_per_100": -26.176,
+     "may_select": false,
+     "output_grade": "DIAGNOSTIC_ONLY_ACTION_BLOCKED",
+     "p_away": 0.726578,
+     "p_home": 0.27342226985084195,
+     "recomputed_on": "BOARD-2026-08-28-WNBA-V2 (records current through 8/27)",
+     "why_not": "DIAGNOSTIC_ONLY_ACTION_BLOCKED by registration"
+    },
+    "wnba.replacement.FEATURE_REFRESH": {
+     "edge_away_pp": -14.5231,
+     "edge_home_pp": 10.273,
+     "ev_away_per_100": -21.6076,
+     "ev_home_per_100": 27.737,
+     "may_select": false,
+     "output_grade": "ACTION_BLOCKED_SYSTEM_NOT_DECISION_READY",
+     "p_away": 0.5269,
+     "p_home": 0.4731,
+     "unblocked_at": "2026-08-28T11:25:00Z",
+     "why_not": "the registered replacement arm is action-blocked while the pipeline is SYSTEM_NOT_DECISION_READY; unblocking it forecast-side does not open the action layer"
+    },
+    "wnba.winner.EXPANDING_HOME_PRIOR": {
+     "edge_away_pp": -20.8716,
+     "edge_home_pp": 16.6215,
+     "ev_away_per_100": -31.0529,
+     "ev_home_per_100": 44.8779,
+     "may_select": false,
+     "output_grade": "REGISTERED_PRIOR",
+     "p_away": 0.463415,
+     "p_home": 0.536585,
+     "why_not": "a registered constant carries no game-specific information; an edge against a market is the market moving away from a constant"
+    }
+   },
+   "away": "WSH",
+   "canonical_id": "ESPN_GAMEID:401857183",
+   "disposition": "NO_SELECTION",
+   "dk_slot_as_displayed": "Today 7:10 PM",
+   "home": "LAS",
+   "moneyline": {
+    "away": -205,
+    "break_even_away": 0.672131,
+    "break_even_home": 0.37037,
+    "home": 170,
+    "two_sided_hold_pct": 4.0769
+   },
+   "spread": {
+    "away": -5.5,
+    "away_px": -105,
+    "home": 5.5,
+    "home_px": -115,
+    "model_position": "NO REGISTERED WNBA COVER DISTRIBUTION \u2014 no spread probability exists, so no spread EV is computable",
+    "two_sided_hold_pct": 4.4962
+   },
+   "total": {
+    "line": 167.5,
+    "model_position": "the surviving arms emit a winner probability only; FEATURE_REFRESH, which carries the total, is blocked. No total EV is computable.",
+    "over_px": -110,
+    "two_sided_hold_pct": 4.5455,
+    "under_px": -110
+   }
+  }
+ },
+ "method": {
+  "de_vig": "NOT PERFORMED. The two-sided hold is reported as a transcription check only; no de-vigged number is treated as the market probability. The 8/3 ruling invalidating cross-book Best-Odds de-vig is untouched \u2014 nothing here combines books, and only one book is on file.",
+  "ev_formula": "EV per $100 = p*profit(price) - (1-p)*100, full precision, no rounding before the final store",
+  "screen": "SINGLE_PRICE_EV \u2014 break-even taken from each side's own posted price"
+ },
+ "next_day_row_recorded_not_pooled": {
+  "away_ml": 275,
+  "away_spread": 8.5,
+  "away_spread_px": -108,
+  "dk_slot": "Sat 10:10 AM",
+  "game": "wnba:CHI@NYL",
+  "home_ml": -345,
+  "home_spread": -8.5,
+  "home_spread_px": -112,
+  "note": "2026-08-29 game. Recorded for completeness; NOT part of the 8/28 cohort and never pooled into it.",
+  "over_px": -110,
+  "total": 178.5,
+  "under_px": -110
+ },
+ "record_id": "WNBA-PRICE-OVERLAY-2026-08-28-DK",
+ "relay": {
+  "captured_utc_asserted": "2026-08-28T10:40:00Z",
+  "channel": "owner relay, two screenshots",
+  "grade": "OWNER_RELAYED_SINGLE_BOOK",
+  "screenshot_clock": [
+   "3:30",
+   "3:31"
+  ],
+  "source": "DraftKings sportsbook, WNBA Game Lines"
+ },
+ "schema": "ops.price_overlay.v1",
+ "slate_date": "2026-08-28",
+ "sport": "wnba",
+ "unit_usd": 100.0
+}

@@ -1,0 +1,116 @@
+{
+ "record_id": "COMPOSITE-SLATE-2026-08-10",
+ "built_utc": "2026-08-10T19:27:03Z",
+ "purpose": "Bind the 8/10 slate's ten forecasts to the TWO card versions they were each registered against, so all ten can be graded WITHOUT retroactively rebinding any forecast to a different artifact.",
+ "principle": "No registry row is altered and no artifact is rewritten. v1 stays byte-exact as registered; v2 is a separate version. This manifest is a read-side index, not a mutation.",
+ "versions": {
+  "v1": {
+   "path": "cards/2026-08-10_card.json",
+   "sha256": "6dc4057214cf090ee5fc527f5e07989f5f17461d5660af620a4fb900f90d1f97",
+   "games": 6,
+   "note": "the originally frozen 6-game card; restored byte-exact after the R3 incident"
+  },
+  "v2": {
+   "path": "cards/2026-08-10_card_v2_full10.json",
+   "sha256": "2040c2db22a5499c7d0ca60a74df344dcbfb256aaa28a660542fa3287313b4aa",
+   "games": 10,
+   "note": "expanded card built from the tier-1 owner board; carries the 4 games v1 lacked"
+  }
+ },
+ "n_forecasts": 10,
+ "all_hashes_resolve": true,
+ "grading_instruction": "Grade each forecast_id against the official final for its game_ref. Both versions' rows are DIAGNOSTIC_PROSPECTIVE and diagnostic_grade_eligible; none is promotion_eligible.",
+ "evidence_class_warning": "LEDGER MAINTENANCE ONLY. Ten games cannot resolve estimator or feature quality; this grading is not evidence for changing the model, and must not be cited as such.",
+ "entries": [
+  {
+   "forecast_id": "P4-20260810-BAL@MIN",
+   "game_ref": "BAL@MIN:2026-08-10",
+   "card_version": "v1",
+   "artifact_path": "cards/2026-08-10_card.json",
+   "original_file_hash": "6dc4057214cf090ee5fc527f5e07989f5f17461d5660af620a4fb900f90d1f97",
+   "hash_resolves_now": true,
+   "v13_home_wp": 0.493
+  },
+  {
+   "forecast_id": "P4-20260810-BOS@TOR",
+   "game_ref": "BOS@TOR:2026-08-10",
+   "card_version": "v1",
+   "artifact_path": "cards/2026-08-10_card.json",
+   "original_file_hash": "6dc4057214cf090ee5fc527f5e07989f5f17461d5660af620a4fb900f90d1f97",
+   "hash_resolves_now": true,
+   "v13_home_wp": 0.381
+  },
+  {
+   "forecast_id": "P4-20260810-COL@AZ",
+   "game_ref": "COL@AZ:2026-08-10",
+   "card_version": "v1",
+   "artifact_path": "cards/2026-08-10_card.json",
+   "original_file_hash": "6dc4057214cf090ee5fc527f5e07989f5f17461d5660af620a4fb900f90d1f97",
+   "hash_resolves_now": true,
+   "v13_home_wp": 0.538
+  },
+  {
+   "forecast_id": "P4-20260810-NYM@ATL",
+   "game_ref": "NYM@ATL:2026-08-10",
+   "card_version": "v1",
+   "artifact_path": "cards/2026-08-10_card.json",
+   "original_file_hash": "6dc4057214cf090ee5fc527f5e07989f5f17461d5660af620a4fb900f90d1f97",
+   "hash_resolves_now": true,
+   "v13_home_wp": 0.553
+  },
+  {
+   "forecast_id": "P4-20260810-PHI@STL",
+   "game_ref": "PHI@STL:2026-08-10",
+   "card_version": "v1",
+   "artifact_path": "cards/2026-08-10_card.json",
+   "original_file_hash": "6dc4057214cf090ee5fc527f5e07989f5f17461d5660af620a4fb900f90d1f97",
+   "hash_resolves_now": true,
+   "v13_home_wp": 0.526
+  },
+  {
+   "forecast_id": "P4-20260810-TEX@LAA",
+   "game_ref": "TEX@LAA:2026-08-10",
+   "card_version": "v1",
+   "artifact_path": "cards/2026-08-10_card.json",
+   "original_file_hash": "6dc4057214cf090ee5fc527f5e07989f5f17461d5660af620a4fb900f90d1f97",
+   "hash_resolves_now": true,
+   "v13_home_wp": 0.504
+  },
+  {
+   "forecast_id": "P4-20260810v2-HOU@SF",
+   "game_ref": "HOU@SF:2026-08-10",
+   "card_version": "v2",
+   "artifact_path": "cards/2026-08-10_card_v2_full10.json",
+   "original_file_hash": "2040c2db22a5499c7d0ca60a74df344dcbfb256aaa28a660542fa3287313b4aa",
+   "hash_resolves_now": true,
+   "v13_home_wp": 0.482
+  },
+  {
+   "forecast_id": "P4-20260810v2-KC@LAD",
+   "game_ref": "KC@LAD:2026-08-10",
+   "card_version": "v2",
+   "artifact_path": "cards/2026-08-10_card_v2_full10.json",
+   "original_file_hash": "2040c2db22a5499c7d0ca60a74df344dcbfb256aaa28a660542fa3287313b4aa",
+   "hash_resolves_now": true,
+   "v13_home_wp": 0.639
+  },
+  {
+   "forecast_id": "P4-20260810v2-MIL@SD",
+   "game_ref": "MIL@SD:2026-08-10",
+   "card_version": "v2",
+   "artifact_path": "cards/2026-08-10_card_v2_full10.json",
+   "original_file_hash": "2040c2db22a5499c7d0ca60a74df344dcbfb256aaa28a660542fa3287313b4aa",
+   "hash_resolves_now": true,
+   "v13_home_wp": 0.454
+  },
+  {
+   "forecast_id": "P4-20260810v2-TB@ATH",
+   "game_ref": "TB@ATH:2026-08-10",
+   "card_version": "v2",
+   "artifact_path": "cards/2026-08-10_card_v2_full10.json",
+   "original_file_hash": "2040c2db22a5499c7d0ca60a74df344dcbfb256aaa28a660542fa3287313b4aa",
+   "hash_resolves_now": true,
+   "v13_home_wp": 0.451
+  }
+ ]
+}

@@ -1,0 +1,28 @@
+{
+ "block": "MLB evening (first pitch 23:05Z)",
+ "created_utc": "2026-08-27T22:21:20Z",
+ "dispositions_standing": "NYY pass -10.18; TOR/MIL/LAD raw candidates NOT authorized; evening block enters first pitch in this state",
+ "frozen_board": "cards/2026-08-27_mlb_board.json byte-identical (faf45f6d)",
+ "ledger": {
+  "exposure_usd": 0,
+  "n_bets": 0,
+  "units": 0.0
+ },
+ "market_attempt": {
+  "error": "EGRESS_BLOCKED",
+  "note": "same-host receipt 4 minutes old; v2 owner relay remains the retained capture",
+  "observed_utc": "2026-08-27T22:16Z (NFL T-45 receipt, same host)",
+  "outcome": "REFUSED",
+  "route": "sportsbook.draftkings.com (WebFetch)"
+ },
+ "next": "WNBA T-90 22:30Z",
+ "other": "no scratch identified for MIL@NYM or LAD@ATL; Braves/Lopez fragment is a different date, recorded as noise",
+ "record_id": "CHECKPOINT-2026-08-27-MLB-EVENING-T45",
+ "record_sha256": "7c324d0e66e925757cec9bbbf6d46da633569c77174077ae477d967cadf90ca8",
+ "schema": "ops.checkpoint.v1",
+ "starter_conflict_check": {
+  "mlb:HOU@NYY": "a single fragment suggested Elmer Rodriguez starts tonight (rotation shuffle to hold Schlittler for BOS). Corroboration run: two passes plus the owner-relayed morning board support GERRIT COLE for Thursday; the Rodriguez fragment self-resolves as WEDNESDAY's spot start. VERDICT: Cole stands (identification-corroborated, one ambiguous fragment recorded); the anchored replacement (NYY 54.46%) is unchanged. No resolving attestation of a change -> no rerun, no retroactive edit.",
+  "mlb:KC@TOR": "resolution stands per T-90 (Cameron vs Arrighetti, pk 822771)"
+ },
+ "trigger": "trig_01JXKEZ4c7s4iDSyJQihbQ7M (fired 22:20:21Z)"
+}

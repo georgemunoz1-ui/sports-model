@@ -1,0 +1,112 @@
+{
+ "record_id": "EVALUATION-ARMS-2026-08-24-PREREGISTRATION",
+ "registered_utc": "2026-08-24T10:25:00Z",
+ "slate_date": "2026-08-24",
+ "state": "ARMS_PREREGISTERED_COHORT_UNBOUND",
+ "why_unbound": "the 2026-08-24 schedule has not been acquired — every fetch rail is EGRESS_BLOCKED including a neutral control, and the search rail returned no per-game detail for this date. An arm set can be frozen without a game population; a COHORT cannot. champion_challenger.register is all-or-nothing on the population and is NOT called here. When the slate lands these identities bind to it unchanged, or they are not these identities.",
+ "identities_distinct": true,
+ "n_arms": 5,
+ "arms": [
+  {
+   "evaluation_arm_id": "arm_0012c5d3524e9ee7d2775cd5",
+   "arm_name": "mlb.winner.EXPANDING_HOME_PRIOR",
+   "registered_utc": "2026-08-24T10:25:00Z",
+   "model_id": "mlb.expanding_home_prior.beta_10_10",
+   "input_policy_id": "NO_TEAM_NO_STARTER_INPUTS",
+   "feature_manifest_sha256": "a4ee50ea18b1be50d38bcb997cfe371b0597ecd05d14808ff5eae814ddbef309",
+   "cap_substitution_policy_id": "NOT_APPLICABLE_NO_STARTER_INPUTS",
+   "simulation_config_id": "CLOSED_FORM_NO_SIMULATION",
+   "training_cutoff_policy_id": "STRICTLY_BEFORE_SLATE_DATE_CANONICAL_ONLY"
+  },
+  {
+   "evaluation_arm_id": "arm_7f884b388b98f29c7d02e6e6",
+   "arm_name": "mlb.winner.CHAMPION_V13",
+   "registered_utc": "2026-08-24T10:25:00Z",
+   "model_id": "ml.v13_1.hfa1005.card.s722n30000",
+   "input_policy_id": "PREVIEW_BOARD_STARTER_RESOLUTION_WITH_CAP_FALLBACK",
+   "feature_manifest_sha256": "FROZEN_V13_NO_FEATURE_REFRESH",
+   "cap_substitution_policy_id": "LEAGUE_MEAN_CAP_ERA420_GS0",
+   "simulation_config_id": "seed722_n30000_hfa1005_global_sequential",
+   "training_cutoff_policy_id": "FROZEN_AT_RELEASE"
+  },
+  {
+   "evaluation_arm_id": "arm_3a9eccf9e9a781f9e4bd6f12",
+   "arm_name": "mlb.winner.CHALLENGER_ADAPTIVE",
+   "registered_utc": "2026-08-24T10:25:00Z",
+   "model_id": "mlb.baseline_offset.adaptive.v0_1",
+   "input_policy_id": "PREVIEW_BOARD_STARTER_RESOLUTION_WITH_HIERARCHICAL_FALLBACK",
+   "feature_manifest_sha256": "a4ee50ea18b1be50d38bcb997cfe371b0597ecd05d14808ff5eae814ddbef309",
+   "cap_substitution_policy_id": "LEAGUE_MEAN_PRIOR_PITCHER_STARTS_AS_EVIDENCE",
+   "simulation_config_id": "CLOSED_FORM_NO_SIMULATION",
+   "training_cutoff_policy_id": "STRICTLY_BEFORE_SLATE_DATE_CANONICAL_ONLY"
+  },
+  {
+   "evaluation_arm_id": "arm_098b64cda05fbdb6a837b4ad",
+   "arm_name": "mlb.winner.CHALLENGER_WIDENED",
+   "registered_utc": "2026-08-24T10:25:00Z",
+   "model_id": "mlb.baseline_offset.adaptive.v0_2_dispersion_matched",
+   "input_policy_id": "PREVIEW_BOARD_STARTER_RESOLUTION_WITH_HIERARCHICAL_FALLBACK",
+   "feature_manifest_sha256": "a4ee50ea18b1be50d38bcb997cfe371b0597ecd05d14808ff5eae814ddbef309",
+   "cap_substitution_policy_id": "LEAGUE_MEAN_PRIOR_PITCHER_STARTS_AS_EVIDENCE",
+   "simulation_config_id": "CLOSED_FORM_NO_SIMULATION",
+   "training_cutoff_policy_id": "STRICTLY_BEFORE_SLATE_DATE_CANONICAL_ONLY"
+  },
+  {
+   "evaluation_arm_id": "arm_28ebbf24e2b145d2966e0b93",
+   "arm_name": "mlb.total.EXPANDING_TOTAL_PRIOR",
+   "registered_utc": "2026-08-24T10:25:00Z",
+   "model_id": "mlb.expanding_total_prior.league_mean",
+   "input_policy_id": "NO_TEAM_NO_STARTER_INPUTS_PARK_OPTIONAL",
+   "feature_manifest_sha256": "a8f167259c81b930e233918cbf6282c785662eaca335deb6c2a6bd35b012c559",
+   "cap_substitution_policy_id": "NOT_APPLICABLE_NO_STARTER_INPUTS",
+   "simulation_config_id": "CLOSED_FORM_NO_SIMULATION",
+   "training_cutoff_policy_id": "STRICTLY_BEFORE_SLATE_DATE_CANONICAL_ONLY"
+  }
+ ],
+ "THE_WIDENING_CHALLENGER": {
+  "arm": "mlb.winner.CHALLENGER_WIDENED",
+  "authorized_by": "owner 2026-08-24: the calibration slope motivates a prospectively registered widening experiment but cannot authorize adaptation",
+  "the_rule_and_why_it_is_not_fitted_to_the_outcome": "The obvious move is to widen by the observed slope, 5.86. That is fitting a parameter to a settled result and is exactly what the authorization forbids. This arm uses a DISPERSION-MATCHING rule computed entirely from PREGAME quantities: scale the offset so the challenger's cross-game p_home standard deviation on a slate equals the CHAMPION's on that same slate. Both are properties of forecasts, available before any game starts. No outcome enters the calculation, and the rule would read identically had 8/23 gone the other way.",
+  "formula": "logit(p_home) = logit(prior) + k * beta * expected_run_differential, with k = CROSS_GAME_P_SD(champion, slate) / CROSS_GAME_P_SD(challenger, slate) computed on the slate being forecast, and beta = 0.20 frozen from v0_1",
+  "worked_value_on_the_8_23_slate": {
+   "champion_cross_game_p_sd_pp": 5.32,
+   "challenger_cross_game_p_sd_pp": 3.08,
+   "k": 1.727,
+   "note": "shown only to make the rule concrete. 8/23 is SETTLED and this arm is NOT graded on it — an arm registered today cannot earn evidence from yesterday."
+  },
+  "what_it_assumes_and_may_be_wrong_about": "that the champion's dispersion is approximately right. That is unestablished: the champion's own Brier skill over the prior on 8/23 was +0.00076. This is a registered candidate whose job is to be tested, not a claim that dispersion-matching is correct.",
+  "may_not": [
+   "be retuned after seeing a result",
+   "be graded on any slate before 2026-08-24",
+   "carry action authority — it registers SHADOW_ONLY like every challenger"
+  ]
+ },
+ "PRIORS_AS_OF_2026_08_24": {
+  "expanding_home_prior": {
+   "p": 0.5205399061032864,
+   "n": 1684,
+   "sd_pp": 1.21,
+   "uncertainty_kind": "PRIOR_PARAMETER_SD",
+   "last_canonical_game_date": "2026-08-21",
+   "source_hash": "a4ee50ea18b1be50d38bcb997cfe371b0597ecd05d14808ff5eae814ddbef309"
+  },
+  "expanding_total_prior": {
+   "runs": 8.991092636579573,
+   "n": 1684,
+   "sd_runs": 4.545986482748937,
+   "uncertainty_kind": "PRIOR_POOL_SD_RUNS"
+  },
+  "what_moved_and_why": "both priors are computed on the POST-DOWNGRADE canonical pool. n fell 1823 -> 1684 when 123 owner-relay rows went PROVISIONAL and adaptive_state.asof began enforcing result_status. The home prior moved 0.526316 -> 0.520540. The most recent canonical game is 2026-08-21 — the 8/23 results are NOT in this prior, because they are provisional."
+ },
+ "PROSPECTIVITY": {
+  "status_if_registered_now": "PROSPECTIVITY_SELF_ASSERTED_NOT_REMOTELY_CORROBORATED",
+  "why": "this record's timestamp is my own clock and a git commit date is a field I write. Nothing in this repository is stamped by a clock that is not mine.",
+  "what_would_fix_it_and_needs_your_approval": [
+   "a CI workflow that runs on push — cleanest, stamps every card commit automatically",
+   "a release or tag cut after the card push",
+   "an issue comment naming the pushed SHA"
+  ],
+  "note": "each writes something visible in your repository, so I have created none of them. Name one and the next card carries a REMOTE_OBSERVED stamp."
+ },
+ "action_authority": "NONE for every arm at registration. No path in this record sets otherwise."
+}

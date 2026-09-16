@@ -1,0 +1,28 @@
+8/16 ACQUISITION EVIDENCE — captured 2026-08-17T05:18:11Z.
+TIER 3. Ledger-only per the owner ruling: these enter neither results.csv nor any grade.
+NO CARD EXISTED FOR 8/16, so none of these can grade a forecast under any circumstance.
+
+METHOD NOTE — this date was exceptionally contaminated. FOUR separate search batches returned
+prior-day finals presented as 8/16 results (8/14 finals in one batch, 8/15 finals in three).
+Only LITERAL, DATE-STAMPED page titles carrying a distinct gamePk/gameId were accepted;
+every prose summary was rejected. Each accepted score was diffed against the verified 8/15 final
+for the same matchup.
+
+MLB NYY@TOR 4-3 FINAL  src: mlb gameday 822774 'Yankees 4, Blue Jays 3 Final Score (08/16/2026)' (away-first)
+MLB COL@SF 13-7 FINAL  src: mlb gameday 823182 'Rockies 13, Giants 7 (08/16/2026)'
+MLB STL@CHC 11-4 FINAL  src: mlb gameday 824642 + espn 401816557 'Cardinals 11-4 Cubs (Aug 16, 2026)' — DOUBLE-SOURCED
+MLB BAL@TB 10-2 FINAL  src: mlb gameday 822940 + espn 401816548 'Orioles 10-2 Rays (Aug 16, 2026)' — DOUBLE-SOURCED; recap: Holliday 3 RBI, 7-run 6th
+MLB MIL@LAD 6-2 FINAL  src: mlb gameday 823912 'Brewers 6, Dodgers 2 (08/16/2026)'
+MLB MIA@CIN 7-1 FINAL  src: espn 401816551 'Marlins 7-1 Reds (Aug 16, 2026)' (winner-first -> MIA away won); recap: Hernandez/Sanoja HRs, Sunday afternoon
+MLB CWS@DET 7-5 FINAL  src: espn 401816550 'White Sox 7-5 Tigers (Aug 16, 2026)'; recap: Murakami 28th HR for 6-4 lead, Callahan MLB-debut triple
+MLB PHI@MIN 7-5 FINAL  src: espn 401816555 'Phillies 7-5 Twins (Aug 16, 2026)'; recap: Brooks Lee grand slam for MIN, Bohm ties it 5-all in the 8th
+MLB SEA@HOU 3-2 FINAL  src: espn dated recap 'Mariners 3, Astros 2 (Aug 16)'; Raleigh + Arozarena HRs, Sunday night — gameId not captured, single-source
+MLB BOS@PIT UNRESOLVED  reason: every returned score was 4-0 = the VERIFIED 8/15 final (BOS 4 @ PIT 0)
+MLB AZ@ATL UNRESOLVED  reason: every returned score was 10-3 = the VERIFIED 8/15 final (AZ 10 @ ATL 3)
+MLB WSH@NYM UNRESOLVED  reason: every returned score was 4-5 = the VERIFIED 8/15 final (WSH 4 @ NYM 5)
+MLB SD@CLE UNRESOLVED  reason: every returned score was 1-6 = the VERIFIED 8/15 final (SD 1 @ CLE 6)
+MLB TEX@ATH UNRESOLVED  reason: 'Rangers 5, Athletics 3' returned twice but one source explicitly stamped it 08/15 metadata; likely the 8/15 game, not 8/16
+MLB KC@LAA UNRESOLVED  reason: 'Royals 0, Angels 1' returned twice with the same 08/15 metadata caveat; likely the 8/15 game, not 8/16
+WNBA CHI@SEA 82-80 FINAL  src: espn 401857148 'Sky 82-80 Storm (Aug 16, 2026)'; orientation was already CONFIRMED ('Sky visit the Storm')
+WNBA IND@ATL 95-91 FINAL  src: espn 401857150 slug 'fever-dream'; IND 95 ATL 91 in OT. ORIENTATION RESOLVED: ESPN slugs are away-home (verified against cardinals-cubs, panthers-bills, liberty-sun) — supersedes the UNCONFIRMED flag
+WNBA PDX@PHX 88-85 FINAL  src: espn 401857149 slug 'fire-mercury' 'Fire 88-85 Mercury (Aug 16, 2026)'. ORIENTATION RESOLVED by the same slug convention

@@ -1,0 +1,55 @@
+{
+ "board_identity": {
+  "captured": 15,
+  "id_space_mixture_check": "PASS \u2014 every board id is namespaced; a bare integer beside a namespaced one would be a surviving pseudo-pk and is refused at cohort level (check B9)",
+  "id_spaces": {
+   "ESPN_GAMEID": 10,
+   "MLB_GAMEPK": 5
+  },
+  "inferred": 0,
+  "n_games": 15,
+  "synthetic_pseudo_pks": 0
+ },
+ "board_sha256": "5a558cfc17dc571ca33632c727e4e44415718e77b670e8e3db19e6124db548b8",
+ "board_slate_date": "2026-08-28",
+ "cohort": "mlb:2026-08-28",
+ "cohort_problems": [
+  {
+   "code": "COHORT_COVERAGE_INCOMPLETE",
+   "detail": "an aggregate over a partial cohort reports a denominator it did not earn; exclude explicitly with require_full_coverage=False and say why",
+   "missing": [
+    "mlb:AZ@SF",
+    "mlb:BAL@ATH",
+    "mlb:BOS@NYY",
+    "mlb:CIN@CHC",
+    "mlb:COL@ATL",
+    "mlb:CWS@MIN",
+    "mlb:HOU@NYM",
+    "mlb:KC@CLE",
+    "mlb:LAD@DET",
+    "mlb:MIA@WSH",
+    "mlb:PHI@LAA",
+    "mlb:PIT@STL",
+    "mlb:SD@TB",
+    "mlb:SEA@TOR",
+    "mlb:TEX@MIL"
+   ],
+   "n_board_games": 15,
+   "n_bound": 0
+  }
+ ],
+ "counters": {
+  "CANONICAL_ID_MATCH": "0/0",
+  "DATE_COHERENCE_PASS": "0/0",
+  "REFUSED_ROWS": 0,
+  "RESULT_BINDING_PASS": "0/0"
+ },
+ "generated_by": "harness/result_binding_gate.binding_proof \u2014 counters computed, never typed",
+ "gradable": false,
+ "prospective": true,
+ "rows": [],
+ "rule": "a single failed row blocks every aggregate over this cohort; no partial metric may silently exclude or substitute it",
+ "schema": "ops.binding_proof.v1",
+ "sport": "mlb",
+ "what_0_of_0_means": "ZERO RESULT ROWS EXIST FOR THIS DATE AT THE TIME OF THIS PROOF. The counters read 0/0 because NOTHING IS CLAIMED, not because nothing was checked. The board's 15 games were loaded, every canonical_id was read, and the cohort is reported NOT GRADABLE with COHORT_COVERAGE_INCOMPLETE \u2014 which is the correct state for a slate whose earliest game has not started. When finals arrive they must bind on sport + canonical_id + scheduled_date + result_date + away + home, and one refused row blocks every aggregate over the cohort."
+}

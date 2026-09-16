@@ -1,0 +1,197 @@
+<title>MLB Forecast Board — August 27</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=Public+Sans:wght@400;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  --bg:#f6f5f2; --panel:#ffffff; --ink:#22302b; --muted:#5c6b64; --line:#d8ddd8;
+  --accent:#2e6e4e; --accent-ink:#ffffff; --warn-bg:#fdf3e3; --warn-ink:#7a5218; --warn-line:#e5c894;
+  --block-bg:#f8e9e4; --block-ink:#8a3b2a; --chip:#eef1ee; --good:#2e6e4e; --flag:#a04b2f;
+}
+:root:not([data-theme="light"]){}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#161b18; --panel:#1e2521; --ink:#e4e9e5; --muted:#93a29a; --line:#33403a;
+    --accent:#4da97c; --accent-ink:#10251b; --warn-bg:#2d2415; --warn-ink:#e3c07f; --warn-line:#59492a;
+    --block-bg:#2e1f1b; --block-ink:#e2a08c; --chip:#28312c; --good:#4da97c; --flag:#d98a68;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#161b18; --panel:#1e2521; --ink:#e4e9e5; --muted:#93a29a; --line:#33403a;
+  --accent:#4da97c; --accent-ink:#10251b; --warn-bg:#2d2415; --warn-ink:#e3c07f; --warn-line:#59492a;
+  --block-bg:#2e1f1b; --block-ink:#e2a08c; --chip:#28312c; --good:#4da97c; --flag:#d98a68;
+}
+body{background:var(--bg);color:var(--ink);font:16px/1.55 "Public Sans",system-ui,sans-serif;margin:0;padding:0 16px 64px}
+main{max-width:960px;margin:0 auto}
+h1,h2,h3{font-family:"Archivo",system-ui,sans-serif;text-wrap:balance;line-height:1.15}
+h1{font-size:1.9rem;margin:28px 0 4px}
+h2{font-size:1.25rem;margin:34px 0 10px}
+.sub{color:var(--muted);margin:0 0 18px}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0}
+.chip{background:var(--chip);border:1px solid var(--line);border-radius:999px;padding:3px 12px;font-size:.82rem;letter-spacing:.02em}
+.chip b{font-family:"IBM Plex Mono",monospace}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:18px 20px;margin:16px 0}
+.answers{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px}
+.answers .a{border-left:3px solid var(--accent);padding:2px 0 2px 10px}
+.answers .q{font-size:.72rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted)}
+.answers .v{font-weight:600}
+.warn{background:var(--warn-bg);color:var(--warn-ink);border:1px solid var(--warn-line);border-radius:10px;padding:12px 16px;margin:14px 0}
+.block{background:var(--block-bg);color:var(--block-ink);border-radius:10px;padding:12px 16px;margin:14px 0}
+.scroll{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:.9rem}
+th,td{padding:7px 10px;border-bottom:1px solid var(--line);text-align:right;font-variant-numeric:tabular-nums}
+th{font-family:"Archivo";font-size:.75rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
+th.l,td.l{text-align:left}
+td.n{font-family:"IBM Plex Mono",monospace;font-size:.85rem}
+.pick{color:var(--good);font-weight:600}
+.flag{color:var(--flag);font-weight:600}
+details{border:1px solid var(--line);border-radius:10px;padding:12px 18px;margin:12px 0;background:var(--panel)}
+summary{cursor:pointer;font-family:"Archivo";font-weight:600}
+code{font-family:"IBM Plex Mono",monospace;font-size:.85em;background:var(--chip);padding:1px 5px;border-radius:4px}
+p{max-width:70ch}
+.proof{background:var(--chip);border:1px solid var(--line);border-radius:10px;padding:12px 16px;margin:14px 0;font-family:"IBM Plex Mono",monospace;font-size:.82rem;line-height:1.7;overflow-x:auto}
+.proof b{font-family:"Archivo",sans-serif}
+</style>
+<main>
+<h1>MLB Forecast Board — Thursday, August 27</h1>
+<p class="sub">Final · 7 games · frozen 06:58:28Z · graded against the official scoreboard · paper research only</p>
+
+<div class="chips">
+<span class="chip">ACTIVE PATH <b>2–5</b> · BRIER <b>0.2400</b></span>
+<span class="chip">ADAPTIVE <b>5–2</b> BEST DIRECTION</span>
+<span class="chip">SIDE RESELECTION <b>0–2</b></span>
+<span class="chip">TOTALS: PRIOR BEAT THE CHAMPION AGAIN</span>
+<span class="chip"><b>0</b> BETS · <b>0.00u</b> · <b>$0</b></span>
+</div>
+
+<div class="proof"><b>RESULT BINDING PROOF</b> &mdash; mlb:2026-08-27 &middot; <code>19fdee64</code><br>
+RESULT_BINDING_PASS = 7/7<br>
+DATE_COHERENCE_PASS = 7/7<br>
+CANONICAL_ID_MATCH = 7/7<br>
+REFUSED_ROWS = 0<br>
+<span style="font-family:Public Sans,sans-serif">Every row bound to its scheduled game id and date, with scores verified against the retained evidence for that same game &mdash; not merely a file hash. A single failed row would have blocked every record, Brier, MAE and P&amp;L on this card. All seven game ids are now <b>archive-verified</b> against the upstream 8/27 daily artifact. That check falsified one of them: AZ@SF had been carried as 825038, an id inferred by decrementing a <i>different</i> matchup’s 8/26 id, and no such game exists — the real id is 823179. Scores and grading are unaffected (SF 6–1 is correct and that matchup has no adjacent-date repeat); the false claim was the identifier, and the earlier proof’s 7/7 was self-referential for that row. Record <code>989536ad</code>.</span></div>
+
+<div class="panel answers">
+<div class="a"><div class="q">What the model said</div><div class="v">Active sides WSH, BAL, NYY, TOR, MIL, LAD, AZ — one strong signal (MIL 67.8%), six near coin-flips</div></div>
+<div class="a"><div class="q">What happened</div><div class="v">2–5. Only WSH and MIL came in; both replacement side-flips lost</div></div>
+<div class="a"><div class="q">Probability quality</div><div class="v">Brier 0.2400 — the best of any path, and it came from compressing confidence on misses, not from picking winners</div></div>
+<div class="a"><div class="q">Market outcome</div><div class="v">Priced passes 2–3; the diagnostic candidate screen 2–3 (−$127.92 at forced $100)</div></div>
+<div class="a"><div class="q">Wagers</div><div class="v">0 bets · 0.00u · $0 — nothing was ever authorized</div></div>
+</div>
+
+<h2>Plain-language thesis</h2>
+<div class="panel">
+<p><b>Direction and calibration moved in opposite directions, and direction is what a side selection is.</b> The active replacement path finished <b>2–5</b> — only Washington and Milwaukee delivered — while posting the best Brier on the board (0.2400). That is not a contradiction: the replacements lowered confidence on games the model got wrong, which flatters the probability score without producing a single extra winner. The frozen champion, untouched by any replacement, went 4–3; the adaptive challenger went <b>5–2</b>, the best direction of the night.</p>
+<p><b>Side reselection went 0–2 and both crossovers were sub-51% calls.</b> Toronto (50.64%) lost 13–2 and the Dodgers (50.08%) lost 1–0. The coupled gate behaved exactly as registered — probability, side, price, EV and disposition moved together on the newest valid pregame information — but the information it moved on carried no conviction. A crossover at 50.1% is a coin flip changing sides, and tonight it cost the board two games it would otherwise have won.</p>
+<p><b>No stable market edge appeared.</b> The five priced passes finished 2–3; forcing $100 on each would have returned −$172.49, so passing protected a losing basket — but the three current-capture passes (WSH −119, BAL −124, NYY −154) went 1–2, not 3–0, and any claim that every passed side won is false. The separately captured morning screen’s four raw candidates finished 1–3 (−$247.92); adding the WNBA GSV +120 winner makes all five candidates 2–3 at −$127.92. Both captures are retained artifacts and are graded separately, never merged. Nothing was authorized and nothing was wagered.</p>
+</div>
+
+<h2>Model output versus result — all seven games</h2>
+<div class="scroll"><table>
+<thead><tr><th class="l">Game</th><th class="l">Active side</th><th>Prob.</th><th class="l">Pregame disposition</th><th class="l">Final</th><th class="l">Takeaway</th></tr></thead>
+<tbody>
+<tr><td class="l"><b>COL@WSH</b></td><td class="l pick">WSH</td><td class="n">51.72%</td><td class="l">pass at −119</td><td class="l"><b>WSH 7–1</b> ✓</td><td class="l">Model right; expensive side still passed</td></tr>
+<tr><td class="l"><b>BAL@STL</b></td><td class="l flag">BAL</td><td class="n">50.68%</td><td class="l">pass at −124</td><td class="l"><b>STL 7–5</b> ✗</td><td class="l">Pass avoided a loss</td></tr>
+<tr><td class="l"><b>HOU@NYY</b></td><td class="l flag">NYY</td><td class="n">54.46%</td><td class="l">pass at −154</td><td class="l"><b>HOU 5–1</b> ✗</td><td class="l">Cole replacement cut NYY confidence; side still wrong</td></tr>
+<tr><td class="l"><b>KC@TOR</b></td><td class="l flag"><b>TOR</b></td><td class="n">50.64%</td><td class="l">raw candidate −101, unauthorized</td><td class="l"><b>KC 13–2</b> ✗</td><td class="l"><b>Replacement crossover lost — badly</b></td></tr>
+<tr><td class="l"><b>MIL@NYM</b></td><td class="l pick"><b>MIL</b></td><td class="n">67.79%</td><td class="l">raw candidate −192, unauthorized</td><td class="l"><b>MIL 8–2</b> ✓</td><td class="l">The slate’s one strong signal won</td></tr>
+<tr><td class="l"><b>LAD@ATL</b></td><td class="l flag"><b>LAD</b></td><td class="n">50.08%</td><td class="l">raw candidate +111, unauthorized</td><td class="l"><b>ATL 1–0</b> ✗</td><td class="l"><b>Replacement crossover lost by one run</b></td></tr>
+<tr><td class="l"><b>AZ@SF</b></td><td class="l flag">AZ</td><td class="n">53.15%</td><td class="l">raw candidate −105, unauthorized</td><td class="l"><b>SF 6–1</b> ✗</td><td class="l">Pass-equivalent; nothing was authorized</td></tr>
+</tbody></table></div>
+<p class="sub">Finals from the official scoreboard by owner relay. Every row is bound to its scheduled game id and date under the new result-binding gate — the grading that reversed this table’s first version had joined five of these matchups to the previous day’s games.</p>
+
+<h2>Arm metrics — direction versus calibration</h2>
+<div class="scroll"><table>
+<thead><tr><th class="l">Winner path</th><th>Record</th><th>Brier</th><th class="l">Interpretation</th></tr></thead>
+<tbody>
+<tr><td class="l"><b>Active replacements</b></td><td class="n"><b>2–5</b></td><td class="n"><b>0.2400</b></td><td class="l">Best probability score, worst direction — compression on misses, not extra winners</td></tr>
+<tr><td class="l"><code>CHALLENGER_ADAPTIVE</code></td><td class="n"><b>5–2</b></td><td class="n">0.2455</td><td class="l">Best direction of the night</td></tr>
+<tr><td class="l"><code>CHAMPION_V13</code> (frozen)</td><td class="n">4–3</td><td class="n">0.2454</td><td class="l">Beat the active path on direction by leaving the crossovers alone</td></tr>
+<tr><td class="l"><code>CHALLENGER_WIDENED</code></td><td class="n">3–4</td><td class="n">0.2452</td><td class="l">The 12–3 day did not extend; three-day pooled 21–16 / 0.2439</td></tr>
+<tr><td class="l">Expanding home prior</td><td class="n">4–3</td><td class="n">0.2475</td><td class="l">Beat three of four model arms on direction</td></tr>
+</tbody></table></div>
+<div class="scroll"><table>
+<thead><tr><th class="l">Total output</th><th>MAE</th><th>RMSE</th><th>Bias</th><th class="l">Reading</th></tr></thead>
+<tbody>
+<tr><td class="l">Champion total</td><td class="n">4.02</td><td class="n">4.82</td><td class="n">+0.48</td><td class="l">Beaten by a flat constant again</td></tr>
+<tr><td class="l">Expanding-total prior</td><td class="n"><b>3.43</b></td><td class="n"><b>4.21</b></td><td class="n">+0.56</td><td class="l">Wins on MAE and RMSE</td></tr>
+</tbody></table></div>
+<p class="sub">The two largest misses ran in <i>opposite</i> directions — LAD@ATL projected 9.84 against an actual 1 (8.84 high) and KC@TOR projected 8.25 against an actual 15 (6.75 low). That is weak game-level discrimination, not a correctable one-sided bias.</p>
+
+<h2>Frozen arm comparison — immutable board</h2>
+<div class="scroll"><table>
+<thead><tr><th class="l">Game (ET start)</th><th>Champion V13</th><th>Widened</th><th>Adaptive</th><th>Prior</th><th>V13 total</th><th>Total prior</th><th class="l">Starters (class)</th></tr></thead>
+<tbody>
+<tr><td class="l"><b>COL@WSH</b> 1:05p</td><td class="n">WSH 51.7%</td><td class="n flag">COL 54.4%</td><td class="n">WSH 50.7%</td><td class="n">WSH 52.1%</td><td class="n">11.41</td><td class="n">8.99</td><td class="l">Hughes / Irvin (probable)</td></tr>
+<tr><td class="l"><b>BAL@STL</b> 2:15p</td><td class="n flag">BAL 50.7%</td><td class="n">STL 50.1%</td><td class="n">STL 51.6%</td><td class="n">STL 52.1%</td><td class="n">7.76</td><td class="n">8.99</td><td class="l">Rogers / <span class="flag">TBD</span></td></tr>
+<tr><td class="l"><b>HOU@NYY</b> 7:05p</td><td class="n pick">NYY 60.0%</td><td class="n">NYY 55.9%</td><td class="n">NYY 52.9%</td><td class="n">NYY 52.1%</td><td class="n">8.60</td><td class="n">8.99</td><td class="l">Wesneski (no log retained) / Schlittler</td></tr>
+<tr><td class="l"><b>KC@TOR</b> 7:07p</td><td class="n flag">KC 51.1%</td><td class="n">TOR 50.1%</td><td class="n">TOR 51.6%</td><td class="n">TOR 52.1%</td><td class="n">8.25</td><td class="n">8.99</td><td class="l"><span class="flag">CONFLICT both slots</span></td></tr>
+<tr><td class="l"><b>MIL@NYM</b> 7:10p</td><td class="n pick">MIL 67.8%</td><td class="n pick">MIL 68.2%</td><td class="n">MIL 52.4%</td><td class="n flag">NYM 52.1%</td><td class="n">8.60</td><td class="n">8.99</td><td class="l">Misiorowski / Manaea (probable)</td></tr>
+<tr><td class="l"><b>LAD@ATL</b> 7:15p</td><td class="n">ATL 50.7%</td><td class="n">ATL 55.9%</td><td class="n">ATL 52.9%</td><td class="n">ATL 52.1%</td><td class="n">9.84</td><td class="n">8.99</td><td class="l">Sasaki / Smith-Shawver (no log retained)</td></tr>
+<tr><td class="l"><b>AZ@SF</b> 9:45p</td><td class="n flag">AZ 53.2%</td><td class="n">AZ 55.9%*</td><td class="n">SF 50.4%</td><td class="n">SF 52.1%</td><td class="n">7.88</td><td class="n">8.99</td><td class="l"><span class="flag">TBD / TBD</span></td></tr>
+</tbody></table></div>
+<p class="sub">Percentages are the arm's pick with its probability. *Widened shows the away side at 55.9% (home 44.1%). Totals are never decision-bearing.</p>
+
+<h2>Market accounting — both captures, graded separately</h2>
+<div class="panel">
+<p><b>Retained overlay (five priced rows, all passes at capture time):</b> those model sides finished <b>2–3</b>. Forcing $100 of risk on each would have returned <b>−$172.49</b> — the pass discipline protected a losing basket. The three current-capture passes specifically (WSH −119, BAL −124, NYY −154) went <b>1–2</b>.</p>
+<p><b>Separately captured morning screen (diagnostic, not merged):</b> its four MLB raw candidates — TOR −101, MIL −192, LAD +111, AZ −105 — finished <b>1–3</b> at <b>−$247.92</b>. Adding the WNBA GSV +120 winner, all five candidates finished <b>2–3</b> at <b>−$127.92</b>. A positive raw-EV screen that goes 1–3 on its baseball rows is the exact reason conservative EV exists as a separate gate.</p>
+<div class="block"><b>Ledger: 0 bets · 0.00u · $0 exposure.</b> No wager was ever authorized. Every P&amp;L figure above is a counterfactual computed at a forced $100 risk for diagnosis only; none of it accrues to any ledger, promotion denominator or estimator.</div>
+</div>
+
+<h2>How the disagreements resolved</h2>
+<div class="panel">
+<ul>
+<li><b>COL@WSH</b> — champion took Washington, widened took Colorado. <b>Washington won 7–1</b>: the champion was right on the one game where the two challengers split from it cleanly.</li>
+<li><b>MIL@NYM</b> — the prior opposed all three model arms. <b>Milwaukee won 8–2</b>: the slate’s primary diagnostic went to the models, and it was the only strong signal on the board.</li>
+<li><b>KC@TOR</b> and <b>LAD@ATL</b> — the two reselection crossovers. <b>Both lost</b> (13–2 and 1–0), and in both cases the frozen champion’s original side would have won. This is the night’s central finding: reselection at 50.1–50.6% moved off winners.</li>
+<li><b>AZ@SF</b> — champion and widened took Arizona, adaptive and prior took San Francisco. <b>San Francisco won 6–1</b>: the two arms that deferred to the baseline were right.</li>
+</ul>
+<p>Pattern worth watching, not concluding from: on four of the five split games, the lower-conviction arm closer to the baseline was correct. One slate cannot establish that; it is registered as a question for the accumulation ledger.</p>
+</div>
+
+<h2>Grading incident — this card’s first results version was wrong</h2>
+<div class="block">
+<p><b>What happened.</b> The first end-of-night grading of this slate joined five of these games to the <i>previous day’s</i> finals of the same matchups — BAL@STL, HOU@NYY, KC@TOR, MIL@NYM and LAD@ATL are all continuing series, and the join was keyed on team names with no date or game-id requirement. It reported the active path at 5–1 when it was 2–5, the crossovers as a 1–1 split when they were 0–2, and a positive counterfactual P&amp;L that was actually negative.</p>
+<p><b>Why the id alone would not have saved it.</b> Consecutive-series game ids are adjacent integers — KC@TOR is 822772 on 8/26 and 822771 on 8/27; HOU@NYY 823506 and 823503; LAD@ATL 824878 and 824879. A single-digit slip lands on the neighbouring day’s game with every team name still agreeing.</p>
+<p><b>What now prevents it.</b> A registered result-binding gate (<code>harness/result_binding_gate.py</code>) requires sport + game id + scheduled date + away + home on every result row, and refuses date mismatches, prior-date series joins, unmatched or ambiguous ids, finals timestamped before first pitch, and <i>any aggregate touching a refused row</i> — no partial credit, because the damage was never the five rows, it was the records, Brier scores and P&amp;L computed over them. Its primary fixture feeds these exact five prior-day finals into this exact board and requires all five to be refused by name. Three mutation tests confirm the fixture cannot pass with the protections removed. The superseded record is retained unedited and accrues nothing.</p>
+</div>
+
+<h2>Data-quality and personnel warnings</h2>
+<div class="warn">
+<b>Slate and starters are search-identified, not officially confirmed.</b> The schedule API is
+egress-blocked; the 7-game slate was cross-checked across four search passes and two real
+gamePks were captured from MLB.com URL slugs. Starter names are aggregator identifications
+(class PROBABLE at best) — verified starters, lineups and injuries could not be bound at freeze
+and are re-checked at T−90/T−45. Pitcher rate features (ERA/K%/BB%) are as-of the retained-log
+cutoff 7/23; per-outing K/BB/TBF evidence is current through 8/26 but carries no runs, so ERA
+cannot be refreshed from it. Wesneski and Smith-Shawver have public logs that were never
+retained — their slots are capped for that reason (<code>NAMED_NO_LOG_RETAINED_CAP</code>),
+which is a retention gap on our side, not a missing log in the world.
+</div>
+
+<h2>Technical & acquisition appendix</h2>
+<details><summary>Freeze record, hashes and identities</summary>
+<p><code>BOARD-2026-08-27-MLB</code> · anchor <code>2026-08-27T06:58:28Z</code> · earliest start
+<code>17:05Z</code> · chronology <code>ANCHOR_PRECEDES_EARLIEST_START</code> · cohort hash
+<code>5980bda2…</code> · slate psv <code>8a5cc8a9…</code> · builder
+<code>harness/build_board_0827.py</code> (committed) · seeds keyed per game, 30,000 trials ·
+priors frozen at n=1,684 (p_home 0.520540, total 8.991) because no canonical result exists
+after 8/21. Winner arms: EXPANDING_HOME_PRIOR, CHAMPION_V13 (frozen 8/10), CHALLENGER_ADAPTIVE,
+CHALLENGER_WIDENED. Total arms: EXPANDING_TOTAL_PRIOR, CHAMPION_V13.</p></details>
+<details><summary>Uncertainty estimator (RJ-002) status</summary>
+<p>The date-blocked out-of-fold replay ran this morning over the evidence-bound canonical pool:
+1,607 rows / 123 date blocks, effective clusters 115.8, leave-one-date-out within ceiling,
+out-of-fold coverage 95.1% vs nominal 95 — the registered gates all pass. Finding for owner
+review: the registered estimand SD(r_b)=14.79pp sits <i>below</i> its 15.36pp shrunk-Bernoulli
+floor, i.e. date-level epistemic drift is indistinguishable from zero at these block sizes, and
+the mapping from block-level sigma to per-game conservative edge is unregistered. Conservative
+EV therefore remains unavailable. Record <code>2026-08-27_rj002_oof_replay.json</code>.</p></details>
+<details><summary>Acquisition routes and refusals</summary>
+<p>statsapi.mlb.com — EGRESS_BLOCKED (fetch receipt 06:44Z). DraftKings site and API —
+EGRESS_BLOCKED (06:53Z). Schedule: 4 search passes, membership consensus, reconciliation
+7 discovered = 7 canonical + 0 refusals. Starter conflict KC@TOR: Cameron|Dobnak (away),
+Arrighetti|Miles (home) — capped, retried at 21:35Z. Evidence extract for 8/26:
+15/15 games bound from <code>lancebroz/mlb-pitcher-data@448e2ff</code>. Timestamp corrections
+record <code>90540ae5</code> covers self-asserted stamps that ran ahead of the clock this
+morning. Checkpoint triggers verified server-side by routine-list read-back (inventory
+<code>263fe16b</code>).</p></details>
+</main>

@@ -1,0 +1,510 @@
+{
+ "CAVEATS": [
+  "search-lane prices identify a market; they are not a book feed and may be stale",
+  "lineups unconfirmed 0/30 at capture; BOS starter TBD",
+  "verify starters/lineups/injuries before acting on any recommendation"
+ ],
+ "LEDGER": {
+  "exposure_usd": 0,
+  "n_bets": 0,
+  "no_guarantees": true,
+  "paper_only": true,
+  "units": 0.0,
+  "wager_authority": "NO"
+ },
+ "MIL_CHC_CONFLICT": {
+  "code": "CONFLICTED_PRICE_OPPOSITE_FAVOURITES",
+  "rawchili": {
+   "away_ml": 108,
+   "home_ml": -126
+  },
+  "youwager": {
+   "away_ml": -132,
+   "home_ml": 110
+  }
+ },
+ "MY_V13_OVERLAY": [
+  {
+   "clears_dose_scaled_bar": false,
+   "dose": 0.25,
+   "edge_basis": "dose x (p_raw - market). Goes to zero as information goes to zero.",
+   "edge_pp_home": -1.75,
+   "edge_pp_undosed": -7.01,
+   "event": "ATH@TEX",
+   "execution_state": "WAIT",
+   "market_no_vig_home": 0.57684,
+   "p_home_used": 0.517088,
+   "price_source": "youwager blog 8/31",
+   "required_edge_pp": 3.0,
+   "valued": true,
+   "why": "edge 1.75pp is under the 3.00pp this dose demands; low information widens the bar, it does not lower it"
+  },
+  {
+   "clears_dose_scaled_bar": false,
+   "dose": 0.2,
+   "edge_basis": "dose x (p_raw - market). Goes to zero as information goes to zero.",
+   "edge_pp_home": 2.17,
+   "edge_pp_undosed": 10.84,
+   "event": "ATL@WSH",
+   "execution_state": "WAIT",
+   "market_no_vig_home": 0.403472,
+   "p_home_used": 0.518812,
+   "price_source": "rawchili 5086844",
+   "required_edge_pp": 3.0,
+   "valued": true,
+   "why": "edge 2.17pp is under the 3.00pp this dose demands; low information widens the bar, it does not lower it"
+  },
+  {
+   "clears_dose_scaled_bar": false,
+   "dose": 0.25,
+   "edge_basis": "dose x (p_raw - market). Goes to zero as information goes to zero.",
+   "edge_pp_home": 1.44,
+   "edge_pp_undosed": 5.78,
+   "event": "BAL@COL",
+   "execution_state": "WAIT",
+   "market_no_vig_home": 0.436508,
+   "p_home_used": 0.51398,
+   "price_source": "rawchili 5086844",
+   "required_edge_pp": 3.0,
+   "valued": true,
+   "why": "edge 1.44pp is under the 3.00pp this dose demands; low information widens the bar, it does not lower it"
+  },
+  {
+   "clears_dose_scaled_bar": false,
+   "dose": 0.2,
+   "edge_basis": "dose x (p_raw - market). Goes to zero as information goes to zero.",
+   "edge_pp_home": -2.2,
+   "edge_pp_undosed": -10.98,
+   "event": "CWS@HOU",
+   "execution_state": "WAIT",
+   "market_no_vig_home": 0.57684,
+   "p_home_used": 0.509845,
+   "price_source": "youwager blog 8/31",
+   "required_edge_pp": 3.0,
+   "valued": true,
+   "why": "edge 2.20pp is under the 3.00pp this dose demands; low information widens the bar, it does not lower it"
+  },
+  {
+   "clears_dose_scaled_bar": false,
+   "dose": 0.25,
+   "edge_basis": "dose x (p_raw - market). Goes to zero as information goes to zero.",
+   "edge_pp_home": 0.44,
+   "edge_pp_undosed": 1.74,
+   "event": "DET@MIN",
+   "execution_state": "WAIT",
+   "market_no_vig_home": 0.491091,
+   "p_home_used": 0.517538,
+   "price_source": "rawchili 5086844",
+   "required_edge_pp": 3.0,
+   "valued": true,
+   "why": "edge 0.44pp is under the 3.00pp this dose demands; low information widens the bar, it does not lower it"
+  },
+  {
+   "clears_dose_scaled_bar": false,
+   "dose": 0.25,
+   "edge_basis": "dose x (p_raw - market). Goes to zero as information goes to zero.",
+   "edge_pp_home": -1.02,
+   "edge_pp_undosed": -4.1,
+   "event": "MIA@KC",
+   "execution_state": "WAIT",
+   "market_no_vig_home": 0.519824,
+   "p_home_used": 0.510122,
+   "price_source": "rawchili 5086844",
+   "required_edge_pp": 3.0,
+   "valued": true,
+   "why": "edge 1.02pp is under the 3.00pp this dose demands; low information widens the bar, it does not lower it"
+  },
+  {
+   "event": "MIL@CHC",
+   "execution_state": "NO_LINE",
+   "valued": false,
+   "why": "CONFLICTED_PRICE_OPPOSITE_FAVOURITES"
+  },
+  {
+   "clears_dose_scaled_bar": false,
+   "dose": 0.2,
+   "edge_basis": "dose x (p_raw - market). Goes to zero as information goes to zero.",
+   "edge_pp_home": -0.16,
+   "edge_pp_undosed": -0.78,
+   "event": "NYM@TB",
+   "execution_state": "WAIT",
+   "market_no_vig_home": 0.536961,
+   "p_home_used": 0.522265,
+   "price_source": "rawchili 5086844",
+   "required_edge_pp": 3.0,
+   "valued": true,
+   "why": "edge 0.16pp is under the 3.00pp this dose demands; low information widens the bar, it does not lower it"
+  },
+  {
+   "clears_dose_scaled_bar": false,
+   "dose": 0.25,
+   "edge_basis": "dose x (p_raw - market). Goes to zero as information goes to zero.",
+   "edge_pp_home": 0.87,
+   "edge_pp_undosed": 3.47,
+   "event": "NYY@LAA",
+   "execution_state": "WAIT",
+   "market_no_vig_home": 0.428884,
+   "p_home_used": 0.506313,
+   "price_source": "youwager blog 8/31",
+   "required_edge_pp": 3.0,
+   "valued": true,
+   "why": "edge 0.87pp is under the 3.00pp this dose demands; low information widens the bar, it does not lower it"
+  },
+  {
+   "clears_dose_scaled_bar": false,
+   "dose": 0.2,
+   "edge_basis": "dose x (p_raw - market). Goes to zero as information goes to zero.",
+   "edge_pp_home": 1.11,
+   "edge_pp_undosed": 5.55,
+   "event": "PHI@AZ",
+   "execution_state": "WAIT",
+   "market_no_vig_home": 0.449343,
+   "p_home_used": 0.517399,
+   "price_source": "rawchili 5086844",
+   "required_edge_pp": 3.0,
+   "valued": true,
+   "why": "edge 1.11pp is under the 3.00pp this dose demands; low information widens the bar, it does not lower it"
+  },
+  {
+   "clears_dose_scaled_bar": false,
+   "dose": 0.25,
+   "edge_basis": "dose x (p_raw - market). Goes to zero as information goes to zero.",
+   "edge_pp_home": 0.92,
+   "edge_pp_undosed": 3.67,
+   "event": "SD@CIN",
+   "execution_state": "WAIT",
+   "market_no_vig_home": 0.449343,
+   "p_home_used": 0.511922,
+   "price_source": "rawchili 5086844",
+   "required_edge_pp": 3.0,
+   "valued": true,
+   "why": "edge 0.92pp is under the 3.00pp this dose demands; low information widens the bar, it does not lower it"
+  },
+  {
+   "clears_dose_scaled_bar": false,
+   "dose": 0.2,
+   "edge_basis": "dose x (p_raw - market). Goes to zero as information goes to zero.",
+   "edge_pp_home": -0.17,
+   "edge_pp_undosed": -0.84,
+   "event": "SEA@BOS",
+   "execution_state": "WAIT",
+   "market_no_vig_home": 0.532788,
+   "p_home_used": 0.521305,
+   "price_source": "rawchili 5086844",
+   "required_edge_pp": 3.0,
+   "valued": true,
+   "why": "edge 0.17pp is under the 3.00pp this dose demands; low information widens the bar, it does not lower it"
+  },
+  {
+   "clears_dose_scaled_bar": false,
+   "dose": 0.25,
+   "edge_basis": "dose x (p_raw - market). Goes to zero as information goes to zero.",
+   "edge_pp_home": -0.79,
+   "edge_pp_undosed": -3.17,
+   "event": "SF@PIT",
+   "execution_state": "WAIT",
+   "market_no_vig_home": 0.59337,
+   "p_home_used": 0.530822,
+   "price_source": "rawchili 5086844",
+   "required_edge_pp": 3.0,
+   "valued": true,
+   "why": "edge 0.79pp is under the 3.00pp this dose demands; low information widens the bar, it does not lower it"
+  },
+  {
+   "clears_dose_scaled_bar": false,
+   "dose": 0.25,
+   "edge_basis": "dose x (p_raw - market). Goes to zero as information goes to zero.",
+   "edge_pp_home": -1.64,
+   "edge_pp_undosed": -6.56,
+   "event": "STL@LAD",
+   "execution_state": "WAIT",
+   "market_no_vig_home": 0.616438,
+   "p_home_used": 0.528105,
+   "price_source": "sportsbetting3/BetRivers",
+   "required_edge_pp": 3.0,
+   "valued": true,
+   "why": "edge 1.64pp is under the 3.00pp this dose demands; low information widens the bar, it does not lower it"
+  },
+  {
+   "clears_dose_scaled_bar": false,
+   "dose": 0.25,
+   "edge_basis": "dose x (p_raw - market). Goes to zero as information goes to zero.",
+   "edge_pp_home": -2.57,
+   "edge_pp_undosed": -10.27,
+   "event": "TOR@CLE",
+   "execution_state": "WAIT",
+   "market_no_vig_home": 0.618321,
+   "p_home_used": 0.519305,
+   "price_source": "rawchili 5086844",
+   "required_edge_pp": 3.0,
+   "valued": true,
+   "why": "edge 2.57pp is under the 3.00pp this dose demands; low information widens the bar, it does not lower it"
+  }
+ ],
+ "ORDER": {
+  "cross_book_devig": "NOT DONE (invalid)",
+  "forecasts_frozen_first": [
+   "cards/2026-09-01_mlb_board_FREEZE_v2.json",
+   "cards/2026-09-01_mlb_owner_shadow_v2.json"
+  ],
+  "price_lane": "SEARCH - single named source per pair, de-vig within pair only",
+  "prices_captured_after": true
+ },
+ "OWNER_PA_STATE_OVERLAY": [
+  {
+   "decision": "PASS",
+   "edge_basis": "owner mean(Model,Sim) minus same-pair novig; UNSHRUNK - the owner board carries no dose register",
+   "edge_pp_unshrunk": 1.01,
+   "event": "SD@CIN",
+   "flags": [],
+   "novig_selection": 0.5507,
+   "p_selection": 0.5608,
+   "price_source": "rawchili 5086844",
+   "selection": "SD ML",
+   "selection_ml": -134
+  },
+  {
+   "decision": "LEAN",
+   "edge_basis": "owner mean(Model,Sim) minus same-pair novig; UNSHRUNK - the owner board carries no dose register",
+   "edge_pp_unshrunk": 4.28,
+   "event": "SF@PIT",
+   "flags": [],
+   "novig_selection": 0.4066,
+   "p_selection": 0.4494,
+   "price_source": "rawchili 5086844",
+   "selection": "SF ML",
+   "selection_ml": 136
+  },
+  {
+   "decision": "PASS",
+   "edge_basis": "owner mean(Model,Sim) minus same-pair novig; UNSHRUNK - the owner board carries no dose register",
+   "edge_pp_unshrunk": 1.45,
+   "event": "NYM@TB",
+   "flags": [],
+   "novig_selection": 0.537,
+   "p_selection": 0.5514,
+   "price_source": "rawchili 5086844",
+   "selection": "TB ML",
+   "selection_ml": -126
+  },
+  {
+   "decision": "LEAN",
+   "edge_basis": "owner mean(Model,Sim) minus same-pair novig; UNSHRUNK - the owner board carries no dose register",
+   "edge_pp_unshrunk": 4.99,
+   "event": "TOR@CLE",
+   "flags": [],
+   "novig_selection": 0.3817,
+   "p_selection": 0.4315,
+   "price_source": "rawchili 5086844",
+   "selection": "TOR ML",
+   "selection_ml": 152
+  },
+  {
+   "decision": "LEAN",
+   "edge_basis": "owner mean(Model,Sim) minus same-pair novig; UNSHRUNK - the owner board carries no dose register",
+   "edge_pp_unshrunk": 5.33,
+   "event": "SEA@BOS",
+   "flags": [
+    "BOS_SP_TBD_LEAGUE_AVG_FALLBACK"
+   ],
+   "novig_selection": 0.5328,
+   "p_selection": 0.5861,
+   "price_source": "rawchili 5086844",
+   "selection": "BOS ML",
+   "selection_ml": -124
+  },
+  {
+   "decision": "PLAY",
+   "edge_basis": "owner mean(Model,Sim) minus same-pair novig; UNSHRUNK - the owner board carries no dose register",
+   "edge_pp_unshrunk": 6.09,
+   "event": "ATL@WSH",
+   "flags": [],
+   "novig_selection": 0.4035,
+   "p_selection": 0.4644,
+   "price_source": "rawchili 5086844",
+   "selection": "WSH ML",
+   "selection_ml": 138
+  },
+  {
+   "decision": "PLAY",
+   "edge_basis": "owner mean(Model,Sim) minus same-pair novig; UNSHRUNK - the owner board carries no dose register",
+   "edge_pp_unshrunk": 10.42,
+   "event": "DET@MIN",
+   "flags": [],
+   "novig_selection": 0.5089,
+   "p_selection": 0.6131,
+   "price_source": "rawchili 5086844",
+   "selection": "DET ML",
+   "selection_ml": -112
+  },
+  {
+   "decision": "NO_SIDE",
+   "event": "MIA@KC",
+   "flags": [
+    "MODEL_SIM_DIRECTION_SPLIT"
+   ],
+   "why": "owner DIR_SPLIT rule: engines cross 50%"
+  },
+  {
+   "decision": "NO_LINE",
+   "event": "MIL@CHC",
+   "flags": [],
+   "why": "CONFLICTED_PRICE_OPPOSITE_FAVOURITES"
+  },
+  {
+   "decision": "PASS",
+   "edge_basis": "owner mean(Model,Sim) minus same-pair novig; UNSHRUNK - the owner board carries no dose register",
+   "edge_pp_unshrunk": 0.04,
+   "event": "ATH@TEX",
+   "flags": [],
+   "novig_selection": 0.4232,
+   "p_selection": 0.4236,
+   "price_source": "youwager blog 8/31",
+   "selection": "ATH ML",
+   "selection_ml": 126
+  },
+  {
+   "decision": "PLAY",
+   "edge_basis": "owner mean(Model,Sim) minus same-pair novig; UNSHRUNK - the owner board carries no dose register",
+   "edge_pp_unshrunk": 23.28,
+   "event": "CWS@HOU",
+   "flags": [],
+   "novig_selection": 0.4232,
+   "p_selection": 0.656,
+   "price_source": "youwager blog 8/31",
+   "selection": "CWS ML",
+   "selection_ml": 126
+  },
+  {
+   "decision": "PLAY",
+   "edge_basis": "owner mean(Model,Sim) minus same-pair novig; UNSHRUNK - the owner board carries no dose register",
+   "edge_pp_unshrunk": 6.18,
+   "event": "BAL@COL",
+   "flags": [
+    "COORS_TOTAL_NOT_AN_OVER_REC"
+   ],
+   "novig_selection": 0.5635,
+   "p_selection": 0.6252,
+   "price_source": "rawchili 5086844",
+   "selection": "BAL ML",
+   "selection_ml": -142
+  },
+  {
+   "decision": "PLAY",
+   "edge_basis": "owner mean(Model,Sim) minus same-pair novig; UNSHRUNK - the owner board carries no dose register",
+   "edge_pp_unshrunk": 7.39,
+   "event": "NYY@LAA",
+   "flags": [
+    "BVP_UNFAVOURABLE_TO_COLE_APPLIED"
+   ],
+   "novig_selection": 0.5711,
+   "p_selection": 0.645,
+   "price_source": "youwager blog 8/31",
+   "selection": "NYY ML",
+   "selection_ml": -145
+  },
+  {
+   "decision": "PLAY",
+   "edge_basis": "owner mean(Model,Sim) minus same-pair novig; UNSHRUNK - the owner board carries no dose register",
+   "edge_pp_unshrunk": 7.15,
+   "event": "PHI@AZ",
+   "flags": [],
+   "novig_selection": 0.4493,
+   "p_selection": 0.5208,
+   "price_source": "rawchili 5086844",
+   "selection": "AZ ML",
+   "selection_ml": 114
+  },
+  {
+   "decision": "PASS",
+   "edge_basis": "owner mean(Model,Sim) minus same-pair novig; UNSHRUNK - the owner board carries no dose register",
+   "edge_pp_unshrunk": 3.0,
+   "event": "STL@LAD",
+   "flags": [],
+   "novig_selection": 0.3836,
+   "p_selection": 0.4136,
+   "price_source": "sportsbetting3/BetRivers",
+   "selection": "STL ML",
+   "selection_ml": 150
+  }
+ ],
+ "PRICES": {
+  "ATH@TEX": {
+   "alt_quote": "rawchili +160/-190 same direction, wider",
+   "away_ml": 126,
+   "home_ml": -152,
+   "source": "youwager blog 8/31"
+  },
+  "ATL@WSH": {
+   "away_ml": -164,
+   "home_ml": 138,
+   "source": "rawchili 5086844"
+  },
+  "BAL@COL": {
+   "away_ml": -142,
+   "home_ml": 120,
+   "source": "rawchili 5086844"
+  },
+  "CWS@HOU": {
+   "alt_quote": "unpaired 'HOU -130' snippet, same direction",
+   "away_ml": 126,
+   "home_ml": -152,
+   "source": "youwager blog 8/31"
+  },
+  "DET@MIN": {
+   "away_ml": -112,
+   "home_ml": -104,
+   "source": "rawchili 5086844"
+  },
+  "MIA@KC": {
+   "away_ml": 100,
+   "home_ml": -118,
+   "source": "rawchili 5086844"
+  },
+  "MIL@CHC": null,
+  "NYM@TB": {
+   "away_ml": 108,
+   "home_ml": -126,
+   "source": "rawchili 5086844"
+  },
+  "NYY@LAA": {
+   "away_ml": -145,
+   "home_ml": 125,
+   "source": "youwager blog 8/31"
+  },
+  "PHI@AZ": {
+   "away_ml": -134,
+   "home_ml": 114,
+   "source": "rawchili 5086844"
+  },
+  "SD@CIN": {
+   "away_ml": -134,
+   "home_ml": 114,
+   "source": "rawchili 5086844"
+  },
+  "SEA@BOS": {
+   "away_ml": 106,
+   "home_ml": -124,
+   "source": "rawchili 5086844"
+  },
+  "SF@PIT": {
+   "away_ml": 136,
+   "home_ml": -162,
+   "source": "rawchili 5086844"
+  },
+  "STL@LAD": {
+   "away_ml": 150,
+   "home_ml": -180,
+   "source": "sportsbetting3/BetRivers"
+  },
+  "TOR@CLE": {
+   "away_ml": 152,
+   "home_ml": -180,
+   "source": "rawchili 5086844"
+  }
+ },
+ "record_id": "2026-09-01_mlb_market_overlay",
+ "schema": "ops.market_overlay.v1",
+ "slate_date": "2026-09-01",
+ "sport": "mlb"
+}

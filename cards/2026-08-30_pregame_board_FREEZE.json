@@ -1,0 +1,40 @@
+{
+  "record_id": "PREGAME-BOARD-2026-08-30-FREEZE",
+  "frozen_at_utc": "2026-08-30T15:10:00Z",
+  "frozen_at_et": "2026-08-30 11:10 ET",
+  "timestamp_field_resolution": {
+    "issue": "Card displayed 04:12 ET and 08:15 ET adjacent without field separation, reading as an inconsistency.",
+    "resolution": "The two instants are distinct fields, not one timestamp: market_snapshot_time_et = 04:12 (when the DK entry prices were captured); decision_time_et = 08:15 (when FORECAST_V1 was registered). Constraint satisfied: market_snapshot_time <= decision_time for every entry price on the board. The 13:40 ET reverification and 14:30 ET V3 issue are append-only delta timestamps and do not modify V1.",
+    "fields": {
+      "market_snapshot_time_et": "2026-08-30 04:12",
+      "decision_time_et": "2026-08-30 08:15",
+      "v2_delta_time_et": "2026-08-30 13:40",
+      "v3_delta_time_et": "2026-08-30 14:30",
+      "feature_cutoff_et": "2026-08-27 23:59",
+      "closing_line_capture": "PENDING - tonight's CARD_UPDATE_PROTOCOL sweep; recorded post-game, never an input"
+    }
+  },
+  "frozen_artifacts": {
+    "v1_registered_forecast": {
+      "file": "cards/2026-08-30_pregame_board.md",
+      "sha256": "2ab780f7c4df87107d3cfe2737dac20542502b3fc45b6108b7c0aad5b71c49b6",
+      "bytes": 8275
+    },
+    "v2_append_only_delta": {
+      "file": "cards/2026-08-30_pregame_board_v2_delta.md",
+      "sha256": "fa33a8f61b3aa7a96204667bb8987b6909ce9dcfa8b2c5ad02bf2d28e3126ae1",
+      "bytes": 2778
+    },
+    "v3_append_only_delta": {
+      "file": "cards/2026-08-30_pregame_board_v3.md",
+      "sha256": "820dd8a1b182bd5a47628ee2a0998ba968822d740ff1b0142d78a03d27ae6bf8",
+      "bytes": 6236
+    }
+  },
+  "governance": {
+    "append_only": true,
+    "ledger_usd": 0,
+    "wager_authority": "NO",
+    "grading_basis": "V1 registered forecast graded against closing lines; V2/V3 evaluated as append-only deltas"
+  }
+}

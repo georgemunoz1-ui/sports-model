@@ -1,0 +1,143 @@
+{
+  "schema": "ops.daily_release_evidence.v1",
+  "release_id": "DAILY-UPDATE-2026-09-03",
+  "as_of_date": "2026-09-03",
+  "decision_time_utc": "2026-09-03T18:40:16Z",
+  "coverage_start": "2026-08-24",
+  "enabled_sports": ["mlb", "wnba", "nfl", "cfb"],
+  "enabled_markets": ["ML", "SPREAD_OR_RUN_LINE", "TOTAL"],
+  "source_evidence": [
+    {
+      "sport": "mlb",
+      "url": "https://www.mlb.com/schedule/2026-09-03",
+      "publisher": "MLB",
+      "source_class": "TIER_1_OFFICIAL",
+      "captured_at_utc": "2026-09-03T18:40:16Z",
+      "use": "schedule, canonical MLB gamePk, and capture-time game state"
+    },
+    {
+      "sport": "wnba",
+      "url": "https://www.wnba.com/keydates",
+      "publisher": "WNBA",
+      "source_class": "TIER_1_OFFICIAL",
+      "captured_at_utc": "2026-09-03T18:40:16Z",
+      "use": "FIBA World Cup break from 2026-08-31 through 2026-09-16"
+    },
+    {
+      "sport": "nfl",
+      "url": "https://www.nfl.com/schedules/2026/REG1/",
+      "publisher": "NFL",
+      "source_class": "TIER_1_OFFICIAL",
+      "captured_at_utc": "2026-09-03T18:40:16Z",
+      "use": "regular-season Week 1 begins after 2026-09-03"
+    },
+    {
+      "sport": "cfb",
+      "url": "https://www.cbssports.com/college-football/schedule/",
+      "publisher": "CBS Sports",
+      "source_class": "IDENTIFIED_UNCONFIRMED",
+      "captured_at_utc": "2026-09-03T18:40:16Z",
+      "use": "schedule discovery only; not accepted as canonical event identity"
+    }
+  ],
+  "sports": {
+    "mlb": {
+      "expected_event_count": 9,
+      "date_disposition": "ACTIVE_SLATE_BLOCKED",
+      "events": [
+        {"event_key":"MLB_GAMEPK:823337","canonical_event_id":"MLB_GAMEPK:823337","away":"SF","home":"PIT","scheduled_start_utc":"2026-09-03T16:35:00Z","disposition":"EXPLICITLY_BLOCKED","reason_codes":["CAPTURED_AFTER_START","PREGAME_INPUTS_INCOMPLETE","NO_EXACT_FRESH_PRICE"]},
+        {"event_key":"MLB_GAMEPK:824388","canonical_event_id":"MLB_GAMEPK:824388","away":"TOR","home":"CLE","scheduled_start_utc":"2026-09-03T17:10:00Z","disposition":"EXPLICITLY_BLOCKED","reason_codes":["CAPTURED_AFTER_START","PREGAME_INPUTS_INCOMPLETE","NO_EXACT_FRESH_PRICE"]},
+        {"event_key":"MLB_GAMEPK:824144","canonical_event_id":"MLB_GAMEPK:824144","away":"CWS","home":"HOU","scheduled_start_utc":"2026-09-03T18:10:00Z","disposition":"EXPLICITLY_BLOCKED","reason_codes":["CAPTURED_AFTER_START","PREGAME_INPUTS_INCOMPLETE","NO_EXACT_FRESH_PRICE"]},
+        {"event_key":"MLB_GAMEPK:824796","canonical_event_id":"MLB_GAMEPK:824796","away":"BOS","home":"BAL","scheduled_start_utc":"2026-09-03T23:15:00Z","disposition":"EXPLICITLY_BLOCKED","reason_codes":["CURRENT_FORECAST_ARTIFACT_ABSENT","PREGAME_INPUTS_INCOMPLETE","NO_EXACT_FRESH_PRICE"]},
+        {"event_key":"MLB_GAMEPK:824632","canonical_event_id":"MLB_GAMEPK:824632","away":"MIL","home":"CHC","scheduled_start_utc":"2026-09-03T23:15:00Z","disposition":"EXPLICITLY_BLOCKED","reason_codes":["CURRENT_FORECAST_ARTIFACT_ABSENT","PREGAME_INPUTS_INCOMPLETE","NO_EXACT_FRESH_PRICE"]},
+        {"event_key":"MLB_GAMEPK:824069","canonical_event_id":"MLB_GAMEPK:824069","away":"MIA","home":"KC","scheduled_start_utc":"2026-09-03T23:40:00Z","disposition":"EXPLICITLY_BLOCKED","reason_codes":["CURRENT_FORECAST_ARTIFACT_ABSENT","PREGAME_INPUTS_INCOMPLETE","NO_EXACT_FRESH_PRICE"]},
+        {"event_key":"MLB_GAMEPK:822853","canonical_event_id":"MLB_GAMEPK:822853","away":"TB","home":"TEX","scheduled_start_utc":"2026-09-04T00:05:00Z","disposition":"EXPLICITLY_BLOCKED","reason_codes":["CURRENT_FORECAST_ARTIFACT_ABSENT","PREGAME_INPUTS_INCOMPLETE","NO_EXACT_FRESH_PRICE"]},
+        {"event_key":"MLB_GAMEPK:823095","canonical_event_id":"MLB_GAMEPK:823095","away":"ATH","home":"SEA","scheduled_start_utc":"2026-09-04T01:40:00Z","disposition":"EXPLICITLY_BLOCKED","reason_codes":["CURRENT_FORECAST_ARTIFACT_ABSENT","PREGAME_INPUTS_INCOMPLETE","NO_EXACT_FRESH_PRICE"]},
+        {"event_key":"MLB_GAMEPK:823907","canonical_event_id":"MLB_GAMEPK:823907","away":"STL","home":"LAD","scheduled_start_utc":"2026-09-04T02:10:00Z","disposition":"EXPLICITLY_BLOCKED","reason_codes":["CURRENT_FORECAST_ARTIFACT_ABSENT","PREGAME_INPUTS_INCOMPLETE","NO_EXACT_FRESH_PRICE"]}
+      ],
+      "gates": {
+        "backfill":{"status":"PASS","reason_codes":[]},
+        "event_coverage":{"status":"PASS","reason_codes":[]},
+        "data_contract":{"status":"BLOCKED","reason_codes":["PREGAME_INPUTS_INCOMPLETE"]},
+        "freshness":{"status":"BLOCKED","reason_codes":["CURRENT_FEATURE_SNAPSHOT_ABSENT"]},
+        "point_in_time":{"status":"PASS","reason_codes":[]},
+        "forecast_contract":{"status":"BLOCKED","reason_codes":["CURRENT_FORECAST_ARTIFACT_ABSENT"]},
+        "calibration":{"status":"SHADOW_ONLY","reason_codes":["CALIBRATION_DORMANT"]},
+        "market_mapping":{"status":"BLOCKED","reason_codes":["NO_EXACT_FRESH_PRICE"]},
+        "execution":{"status":"BLOCKED","reason_codes":["ACTION_AUTHORITY_NO"]},
+        "evaluation":{"status":"NOT_APPLICABLE","reason_codes":[]},
+        "regression":{"status":"BLOCKED","reason_codes":["REPOSITORY_HEALTHCHECK_UNHEALTHY"]},
+        "monitoring":{"status":"BLOCKED","reason_codes":["RECOVERY_JOB_OVERDUE"]}
+      }
+    },
+    "wnba": {
+      "expected_event_count": 0,
+      "date_disposition": "NOT_APPLICABLE_FIBA_BREAK",
+      "events": [],
+      "gates": {
+        "backfill":{"status":"BLOCKED","reason_codes":["BACKFILL_INCOMPLETE_SINCE_2026_08_24"]},
+        "event_coverage":{"status":"NOT_APPLICABLE","reason_codes":[]},
+        "data_contract":{"status":"BLOCKED","reason_codes":["CANONICAL_FEATURE_STATE_STALE"]},
+        "freshness":{"status":"BLOCKED","reason_codes":["CANONICAL_FEATURE_STATE_STALE"]},
+        "point_in_time":{"status":"PASS","reason_codes":[]},
+        "forecast_contract":{"status":"BLOCKED","reason_codes":["CURRENT_FORECAST_PATH_UNAVAILABLE"]},
+        "calibration":{"status":"SHADOW_ONLY","reason_codes":["CALIBRATION_SAMPLE_BELOW_MINIMUM"]},
+        "market_mapping":{"status":"NOT_APPLICABLE","reason_codes":[]},
+        "execution":{"status":"BLOCKED","reason_codes":["ACTION_AUTHORITY_NO"]},
+        "evaluation":{"status":"NOT_APPLICABLE","reason_codes":[]},
+        "regression":{"status":"BLOCKED","reason_codes":["REPOSITORY_HEALTHCHECK_UNHEALTHY"]},
+        "monitoring":{"status":"BLOCKED","reason_codes":["RECOVERY_JOB_OVERDUE"]}
+      }
+    },
+    "nfl": {
+      "expected_event_count": 0,
+      "date_disposition": "NOT_APPLICABLE_PRESEASON_GAP",
+      "events": [],
+      "gates": {
+        "backfill":{"status":"BLOCKED","reason_codes":["BACKFILL_INCOMPLETE_SINCE_2026_08_24"]},
+        "event_coverage":{"status":"NOT_APPLICABLE","reason_codes":[]},
+        "data_contract":{"status":"BLOCKED","reason_codes":["CANONICAL_RESULTS_LEDGER_STALE"]},
+        "freshness":{"status":"BLOCKED","reason_codes":["CURRENT_FEATURE_SNAPSHOT_ABSENT"]},
+        "point_in_time":{"status":"PASS","reason_codes":[]},
+        "forecast_contract":{"status":"BLOCKED","reason_codes":["MODEL_RESTORATION_INCOMPLETE"]},
+        "calibration":{"status":"SHADOW_ONLY","reason_codes":["CALIBRATION_NOT_ACTIVE"]},
+        "market_mapping":{"status":"NOT_APPLICABLE","reason_codes":[]},
+        "execution":{"status":"BLOCKED","reason_codes":["ACTION_AUTHORITY_NO"]},
+        "evaluation":{"status":"NOT_APPLICABLE","reason_codes":[]},
+        "regression":{"status":"BLOCKED","reason_codes":["REPOSITORY_HEALTHCHECK_UNHEALTHY"]},
+        "monitoring":{"status":"BLOCKED","reason_codes":["RECOVERY_JOB_OVERDUE"]}
+      }
+    },
+    "cfb": {
+      "expected_event_count": 11,
+      "date_disposition": "DISCOVERED_CANONICAL_IDENTITY_BLOCKED",
+      "events": [
+        {"event_key":"PROVISIONAL:CFB:2026-09-03:UMASS@RUTGERS","canonical_event_id":null,"away":"UMass","home":"Rutgers","scheduled_start_utc":"2026-09-03T22:00:00Z","disposition":"EXPLICITLY_BLOCKED","reason_codes":["EVENT_ID_UNRESOLVED","CURRENT_REGISTERED_FORECAST_PATH_UNAVAILABLE","DEPTH_CHART_PIPELINE_UNVERIFIED"]},
+        {"event_key":"PROVISIONAL:CFB:2026-09-03:UALBANY@BUFFALO","canonical_event_id":null,"away":"UAlbany","home":"Buffalo","scheduled_start_utc":"2026-09-03T23:00:00Z","disposition":"EXPLICITLY_BLOCKED","reason_codes":["EVENT_ID_UNRESOLVED","CURRENT_REGISTERED_FORECAST_PATH_UNAVAILABLE","DEPTH_CHART_PIPELINE_UNVERIFIED"]},
+        {"event_key":"PROVISIONAL:CFB:2026-09-03:AKRON@WAKE_FOREST","canonical_event_id":null,"away":"Akron","home":"Wake Forest","scheduled_start_utc":"2026-09-03T23:00:00Z","disposition":"EXPLICITLY_BLOCKED","reason_codes":["EVENT_ID_UNRESOLVED","CURRENT_REGISTERED_FORECAST_PATH_UNAVAILABLE","DEPTH_CHART_PIPELINE_UNVERIFIED"]},
+        {"event_key":"PROVISIONAL:CFB:2026-09-03:MERRIMACK@DELAWARE","canonical_event_id":null,"away":"Merrimack","home":"Delaware","scheduled_start_utc":"2026-09-03T23:00:00Z","disposition":"EXPLICITLY_BLOCKED","reason_codes":["EVENT_ID_UNRESOLVED","CURRENT_REGISTERED_FORECAST_PATH_UNAVAILABLE","DEPTH_CHART_PIPELINE_UNVERIFIED"]},
+        {"event_key":"PROVISIONAL:CFB:2026-09-03:BETHUNE_COOKMAN@UCF","canonical_event_id":null,"away":"Bethune-Cookman","home":"UCF","scheduled_start_utc":"2026-09-03T23:00:00Z","disposition":"EXPLICITLY_BLOCKED","reason_codes":["EVENT_ID_UNRESOLVED","CURRENT_REGISTERED_FORECAST_PATH_UNAVAILABLE","DEPTH_CHART_PIPELINE_UNVERIFIED"]},
+        {"event_key":"PROVISIONAL:CFB:2026-09-03:WEST_GEORGIA@KENNESAW_STATE","canonical_event_id":null,"away":"West Georgia","home":"Kennesaw State","scheduled_start_utc":"2026-09-03T23:00:00Z","disposition":"EXPLICITLY_BLOCKED","reason_codes":["EVENT_ID_UNRESOLVED","CURRENT_REGISTERED_FORECAST_PATH_UNAVAILABLE","DEPTH_CHART_PIPELINE_UNVERIFIED"]},
+        {"event_key":"PROVISIONAL:CFB:2026-09-03:EASTERN_ILLINOIS@MINNESOTA","canonical_event_id":null,"away":"Eastern Illinois","home":"Minnesota","scheduled_start_utc":"2026-09-04T00:00:00Z","disposition":"EXPLICITLY_BLOCKED","reason_codes":["EVENT_ID_UNRESOLVED","CURRENT_REGISTERED_FORECAST_PATH_UNAVAILABLE","DEPTH_CHART_PIPELINE_UNVERIFIED"]},
+        {"event_key":"PROVISIONAL:CFB:2026-09-03:COLORADO@GEORGIA_TECH","canonical_event_id":null,"away":"Colorado","home":"Georgia Tech","scheduled_start_utc":"2026-09-04T00:00:00Z","disposition":"EXPLICITLY_BLOCKED","reason_codes":["EVENT_ID_UNRESOLVED","CURRENT_REGISTERED_FORECAST_PATH_UNAVAILABLE","DEPTH_CHART_PIPELINE_UNVERIFIED"]},
+        {"event_key":"PROVISIONAL:CFB:2026-09-03:ARKANSAS_PINE_BLUFF@MISSOURI","canonical_event_id":null,"away":"Arkansas-Pine Bluff","home":"Missouri","scheduled_start_utc":"2026-09-04T00:00:00Z","disposition":"EXPLICITLY_BLOCKED","reason_codes":["EVENT_ID_UNRESOLVED","CURRENT_REGISTERED_FORECAST_PATH_UNAVAILABLE","DEPTH_CHART_PIPELINE_UNVERIFIED"]},
+        {"event_key":"PROVISIONAL:CFB:2026-09-03:UAB@ILLINOIS","canonical_event_id":null,"away":"UAB","home":"Illinois","scheduled_start_utc":"2026-09-04T01:00:00Z","disposition":"EXPLICITLY_BLOCKED","reason_codes":["EVENT_ID_UNRESOLVED","CURRENT_REGISTERED_FORECAST_PATH_UNAVAILABLE","DEPTH_CHART_PIPELINE_UNVERIFIED"]},
+        {"event_key":"PROVISIONAL:CFB:2026-09-03:IDAHO@UTAH","canonical_event_id":null,"away":"Idaho","home":"Utah","scheduled_start_utc":"2026-09-04T01:00:00Z","disposition":"EXPLICITLY_BLOCKED","reason_codes":["EVENT_ID_UNRESOLVED","CURRENT_REGISTERED_FORECAST_PATH_UNAVAILABLE","DEPTH_CHART_PIPELINE_UNVERIFIED"]}
+      ],
+      "gates": {
+        "backfill":{"status":"BLOCKED","reason_codes":["CANONICAL_SOURCE_ARCHIVE_ENDS_2025"]},
+        "event_coverage":{"status":"BLOCKED","reason_codes":["EVENT_ID_UNRESOLVED"]},
+        "data_contract":{"status":"BLOCKED","reason_codes":["DEPTH_CHART_PIPELINE_UNVERIFIED"]},
+        "freshness":{"status":"BLOCKED","reason_codes":["CURRENT_FEATURE_SNAPSHOT_ABSENT"]},
+        "point_in_time":{"status":"PASS","reason_codes":[]},
+        "forecast_contract":{"status":"BLOCKED","reason_codes":["CURRENT_REGISTERED_FORECAST_PATH_UNAVAILABLE"]},
+        "calibration":{"status":"SHADOW_ONLY","reason_codes":["CALIBRATION_NOT_ACTIVE"]},
+        "market_mapping":{"status":"BLOCKED","reason_codes":["NO_EXACT_FRESH_PRICE"]},
+        "execution":{"status":"BLOCKED","reason_codes":["ACTION_AUTHORITY_NO"]},
+        "evaluation":{"status":"NOT_APPLICABLE","reason_codes":[]},
+        "regression":{"status":"BLOCKED","reason_codes":["REPOSITORY_HEALTHCHECK_UNHEALTHY"]},
+        "monitoring":{"status":"BLOCKED","reason_codes":["RECOVERY_JOB_OVERDUE"]}
+      }
+    }
+  }
+}

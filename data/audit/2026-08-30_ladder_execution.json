@@ -1,0 +1,135 @@
+{
+ "AVAILABILITY_ACQUIRED": {
+  "grade": "IDENTIFIED_UNCONFIRMED \u2014 rung 6. Binds nothing. Audit layer only, which is exactly what the audit-clause pass calls for.",
+  "wnba:CON@DAL": {
+   "note": "the James return is NEW information I did not have this morning and it runs toward Dallas, the side the market already favoured over the model",
+   "now": "Griner OUT (8th straight), Burke and Lacan out for the World Cup, Nelson-Ododa questionable. Dallas: three listed; Aziaha James OFF the report and returning after five games.",
+   "state": "AVAILABILITY_IDENTIFIED_UNCONFIRMED"
+  },
+  "wnba:GSV@PDX": {
+   "contradiction_flagged": "a rung-6 recap of the game claims Salaun scored 18 off the bench. That contradicts the availability report AND the game has not started. Recorded as a conflict, not resolved.",
+   "now": "Golden State missing Gabby Williams, Salaun and Zandalasini (World Cup). Portland: Samuelson questionable, Leite and Buhner out.",
+   "state": "AVAILABILITY_IDENTIFIED_UNCONFIRMED"
+  },
+  "wnba:LAS@SEA": {
+   "now": "Seattle missing Hiedeman and Fam; Los Angeles missing Nye and Mwenentanda, Cannon questionable.",
+   "state": "AVAILABILITY_IDENTIFIED_UNCONFIRMED"
+  },
+  "wnba:MIN@ATL": {
+   "now": "Brionna Jones OUT. Expected starters Gray, Canada, Howard, Hillmon, Reese. Minnesota: Courtney Williams probable.",
+   "state": "AVAILABILITY_IDENTIFIED_UNCONFIRMED",
+   "was": "AVAILABILITY_UNKNOWN \u2014 Atlanta not identified"
+  }
+ },
+ "I_STOPPED_TOO_SOON_AND_THE_OWNER_IS_RIGHT": {
+  "correct_classification": "ACQUISITION_INCOMPLETE, not AVAILABILITY_UNKNOWN",
+  "proof_it_was_incomplete": "one specific query on the SAME rung I had already used returned the current Atlanta availability in a single call. The information was one query away, on a rail that was already working.",
+  "the_rule_I_had_already_written": "harness/route_ladder_v1.py defines seven rungs and states that a blocked rail ADVANCES the ladder and that acquisition cannot terminate while an authorized route remains untried. I wrote the policy and then did not execute it.",
+  "what_I_did": "searched twice for Atlanta Dream availability, got a late-July report, rejected it as 32 days stale, and terminated with AVAILABILITY_UNKNOWN.",
+  "what_was_correct": "rejecting the July artifact",
+  "what_was_wrong": "treating that rejection as an OUTCOME. A stale artifact is evidence that ONE artifact is unusable. It says nothing about whether current information exists. STALE_REJECTED is a transition, not a terminus."
+ },
+ "LADDER_EXECUTED": {
+  "rungs": [
+   {
+    "action": "ADVANCE",
+    "attempt": "site.api.espn.com WNBA scoreboard 20260830",
+    "n": 1,
+    "outcome": "EGRESS_BLOCKED",
+    "rung": "official API"
+   },
+   {
+    "action": "ADVANCE",
+    "attempt": "www.wnba.com/games/2026-08-30",
+    "n": 2,
+    "outcome": "EGRESS_BLOCKED",
+    "rung": "official league page"
+   },
+   {
+    "action": "ADVANCE",
+    "attempt": "atlantadream.wnba.com",
+    "n": 3,
+    "note": "a different failure class from EGRESS_BLOCKED and worth distinguishing in the ledger; both advance",
+    "outcome": "ENOTFOUND \u2014 host does not resolve",
+    "rung": "official team page"
+   },
+   {
+    "action": "SKIP_INELIGIBLE",
+    "attempt": "not applicable to availability",
+    "n": 4,
+    "rung": "sportsbook"
+   },
+   {
+    "action": "ADVANCE_TO_RECORD",
+    "attempt": "reached indirectly through rung 6 results (CBS, covers, Athlon, RotoWire surfaced)",
+    "n": 5,
+    "outcome": "content obtained",
+    "rung": "named aggregator"
+   },
+   {
+    "action": "RECORD",
+    "attempt": "FOUR specific queries rather than one generic one",
+    "n": 6,
+    "outcome": "CURRENT INFORMATION OBTAINED",
+    "rung": "open-web search"
+   },
+   {
+    "action": "UNUSED",
+    "attempt": "not needed this pass",
+    "n": 7,
+    "rung": "owner relay"
+   }
+  ],
+  "subject": "WNBA 2026-08-30 \u2014 availability for all four games, and results",
+  "the_difference_that_mattered": "query specificity on a rail that already worked. 'Atlanta Dream injuries August 30 2026' returned a July article. 'Atlanta Dream starting lineup availability report August 30 2026 Lynx' returned the current one. One generic query is not an acquisition strategy."
+ },
+ "LEDGER": {
+  "exposure_usd": 0,
+  "n_bets": 0,
+  "units": 0.0,
+  "wager_authority": "NO"
+ },
+ "R6": "append-only; new path. No frozen board or prior record edited.",
+ "RESULT_CLAIMS_RUN_THROUGH_THE_GATE": {
+  "method": "score_admission.admit(), lane=SEARCH, against a canonical schedule built from my own frozen board's captured ESPN ids. Verdicts GENERATED, not typed.",
+  "now_utc": "2026-08-30T22:33:00Z",
+  "scorecard": "four games, one contaminated answer, one impossible final, one too-soon, and exactly zero admitted as final. Tomorrow's wehoop archive binds them canonically.",
+  "wnba:CON@DAL": {
+   "disposition": "NOT_CLAIMED \u2014 starts in 116 minutes"
+  },
+  "wnba:GSV@PDX": {
+   "claim": "GSV 95 - PDX 77, with a named-player recap",
+   "disposition": "REJECT_PRESTART_OR_UNBOUND",
+   "minutes_before_start": 27.0,
+   "reading": "THE HARD INVARIANT FIRED ON LIVE DATA. A detailed, confidently written final for a game that tips in 27 minutes. This is the same class as the three MLB finals this morning and it was caught by arithmetic, not by judgement.",
+   "reasons": [
+    "PRESTART_FINAL_IMPOSSIBLE"
+   ]
+  },
+  "wnba:LAS@SEA": {
+   "claim": "none usable \u2014 the search returned a Las Vegas Aces game instead",
+   "disposition": "NOT_CLAIMED",
+   "reading": "the summarizer flagged its own doubt. Search identifies and is unreliable AT THE SUMMARY LAYER, which is a second reason it may never bind. Also 93 min elapsed against a 120 min minimum, so it would have been UNVERIFIED_TOO_SOON regardless."
+  },
+  "wnba:MIN@ATL": {
+   "claim": "ATL 89 - MIN 81",
+   "disposition": "NO_CONSENSUS",
+   "reading": "clock-eligible (213 min elapsed against a 120 min minimum) and still not admissible, because one search source is one search source",
+   "reasons": [
+    "SEARCH_LANE_CANNOT_MINT_FINAL",
+    "NO_CONSENSUS_FEWER_THAN_TWO_INDEPENDENT_SOURCES"
+   ],
+   "settleable": false
+  }
+ },
+ "WHAT_THIS_PROVES_AND_WHAT_IT_DOES_NOT": {
+  "also_proves": "the admission gate is not theatre. It refused a confidently-formatted final for an unstarted game 27 minutes before tip, on live data, with a named-player recap attached.",
+  "does_not_prove": "that search is now a usable result source. Zero of tonight's four games were admitted. The gate working correctly means the answer is still 'No canonical final admitted'.",
+  "proves": "the acquisition failure was mine, not the environment's. Current information existed and was reachable on a rail that was already working."
+ },
+ "created_utc": "2026-08-30T22:33:00Z",
+ "local_time_owner_tz": "2026-08-30 15:33 PDT",
+ "record_id": "LADDER-EXECUTION-2026-08-30T1833ET",
+ "record_sha256": "73d203e744b89f0b733df405791e38987ad36cdac9defb14b0c599f165e5df7b",
+ "schema": "ops.acquisition_ladder_execution.v1"
+}

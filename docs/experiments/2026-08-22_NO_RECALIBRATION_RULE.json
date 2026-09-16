@@ -1,0 +1,292 @@
+{
+ "record_id": "NO-RECALIBRATION-RULE-2026-08-22",
+ "created_utc": "2026-08-22T07:57:10Z",
+ "schema": "governance.standing_rule-v1 (RECORD, NOT CODE — this file contains no executable content, is never imported by any fitting or rendering module, and is only read, hashed and verified)",
+ "status": "STANDING — binds prospectively from 2026-08-22 until a SUCCESSOR record with a new record_id supersedes it. This file is never edited in place (R6 append-only supersession). Loosening it requires the overturning evidence named below, not an edit.",
+ "authority": "owner roadmap item 8 (2026-08-22): \"do not just recalibrate\".",
+ "scope": {
+  "binds": "every model in this repo that emits a probability — MLB V13/V13.1 and any successor, V14, the WNBA shadow and its coherent-distribution candidate, any NFL model that ever exists, and any candidate proposed against any of them.",
+  "binds_who": "the assistant, primarily. This rule exists because the reflex it forbids is the assistant's reflex: a poor Brier arrives, a calibration layer is the cheapest thing to reach for, and it is reachable without acquiring any data.",
+  "does_not_bind": "owner discretion, which is walled from model authority (lesson 14) and is not governed by this or any model-governance record."
+ },
+ "THE_RULE": {
+  "one_sentence": "CALIBRATION CANNOT MANUFACTURE DISCRIMINATION. A recalibration layer re-maps the probabilities a model already produced; it cannot add information the model never had, and it therefore cannot be the answer to a model that does not discriminate.",
+  "the_distinction_the_rule_turns_on": {
+   "calibration": "do the stated probabilities match observed frequencies? A property of the MAP from score to probability. Fixable by a 1-2 parameter re-map fitted on outcomes.",
+   "discrimination_resolution": "does the model separate the games that happen from the games that do not? A property of the RANKING. Fixable only by better information or a better function of it.",
+   "why_they_are_not_interchangeable": "Murphy decomposition: Brier = reliability - resolution + uncertainty. Recalibration attacks the reliability term only. Uncertainty is a property of the outcome, not the model. If reliability is already small, the recoverable gain is small BY ARITHMETIC, and it is bounded above by the reliability term itself — which is measurable before any fitting is done."
+  },
+  "the_dichotomy_that_closes_the_argument": {
+   "case_1_globally_monotone_map": "Platt, temperature, a single isotonic fit — any strictly increasing map applied uniformly. Ranking is preserved EXACTLY, so AUC is unchanged EXACTLY and resolution cannot increase. Zero discrimination is gained, by construction. harness/ml_full_report.py:103 already states this in the codebase: 'AUC measures RANKING only and is invariant to monotone recalibration'.",
+   "case_2_date_varying_or_walk_forward_map": "a different map per date — which is what any honest out-of-sample recalibration must be. The composition is NOT globally monotone, so it CAN change the ranking. It has no mechanism for changing it in the right direction, because the outcomes it fits on are the training window's, not the scoring window's. Measured result: AUC fell 0.0404 (see EVIDENCE_ON_RECORD.MLV2).",
+   "conclusion": "in the best case recalibration is NEUTRAL on discrimination; in the case actually measured against V13 it DESTROYED discrimination. There is no third case in which it creates any. That is why the rule is a prohibition and not a preference."
+  }
+ },
+ "EVIDENCE_ON_RECORD": {
+  "why_this_block_exists": "the rule is not an argument from principle alone. Platt recalibration was ALREADY TESTED against V13, under this program's full rigor stack, and it lost. A second, independent calibration attempt (temperature, 2026-07-20) also lost. Both are recorded below with the numbers, so no future session can propose recalibration as an untried idea.",
+  "MLV2": {
+   "prereg": "docs/experiments/2026-08-11_MLV2_PREREG.json (frozen BEFORE fitting)",
+   "outcome_record": "docs/experiments/2026-08-11_MLV2_OUTCOME.json",
+   "experiment_artifact": "data/mlb/ml_asof/2026-08-11_mlv2_experiment.json",
+   "design": "3 preregistered candidates vs frozen V13 on identical games with identical labels; expanding date-ordered walk-forward, burn-in 400; paired date-block bootstrap 4000 reps seed 11, two-sided; Holm over a 4-test family. n = 1054 games across 81 dates.",
+   "verdict": "NO_ADOPT on all three, on frozen gates. C1 (Platt recalibration of V13's own output) scored 0 of 4 checks — the worst of the three. C2 (refit of the same 7 features) tied. C3 (+rest, +form10) added nothing and its block ablation died at p_holm 1.0.",
+   "C1_platt_the_candidate_this_rule_is_about": {
+    "what_it_was": "walk-forward Platt: at each date D fit logistic(y ~ a + b*logit(p_v13)) on all graded games strictly before D (min 300), apply to D's games. Two parameters. It targeted the measured compression directly and was falsifiable by construction — if V13 were well calibrated, b would land near 1 and nothing would change.",
+    "V13_reference": {
+     "brier": 0.24707133238562087,
+     "auc": 0.5661782727797001,
+     "calibration_slope": 0.8423910511708614,
+     "calibration_intercept": 0.06136479948979072
+    },
+    "C1_result": {
+     "brier": 0.24949809509148463,
+     "auc": 0.5257352941176471,
+     "calibration_slope": 2.0237072487311023,
+     "calibration_intercept": -0.16558190577176438
+    },
+    "paired_comparison": {
+     "dBrier_candidate_minus_v13": 0.0024267627058637523,
+     "ci95": [
+      -0.0015459002496502588,
+      0.006446823061065142
+     ],
+     "p_raw": 0.238,
+     "p_holm": 0.952,
+     "reading": "WORSE, and not distinguishable from noise in the worse direction either. It did not merely fail to help."
+    },
+    "gate_checks": {
+     "result": "0 of 4",
+     "detail": {
+      "p_holm_lt_0.05_and_improving": false,
+      "cal_slope_in_band": false,
+      "cal_intercept_in_band": false,
+      "auc_not_worse_than_v13_minus_005": false
+     }
+    }
+   },
+   "THE_ARITHMETIC_THAT_MAKES_THIS_A_RULE_AND_NOT_AN_ANECDOTE": {
+    "murphy_components_v13": {
+     "reliability": 0.003821910835173847,
+     "resolution": 0.0069318972950733705,
+     "uncertainty": 0.2497398543184183
+    },
+    "murphy_components_C1_platt": {
+     "reliability": 0.002891247734271525,
+     "resolution": 0.0031844823217803404,
+     "uncertainty": 0.2497398543184183
+    },
+    "delta_reliability": {
+     "value": -0.0009306631009023221,
+     "meaning": "NEGATIVE = recalibration IMPROVED calibration. It did exactly what it promised, on its own objective."
+    },
+    "delta_resolution": {
+     "value": -0.00374741497329303,
+     "meaning": "NEGATIVE = recalibration DESTROYED discrimination."
+    },
+    "the_ratio": {
+     "resolution_loss_over_reliability_gain": 4.0266,
+     "plain_english": "the discrimination lost was 4.03x the calibration gained. Recalibration paid for its own success four times over out of the one term it cannot rebuild. This is the single most compact statement of why the rule exists."
+    },
+    "delta_auc": {
+     "value": -0.040443,
+     "gate_required_at_least": 0.561178,
+     "meaning": "a walk-forward recalibration is a date-varying map, hence not globally monotone, hence able to scramble the ranking — and it did."
+    },
+    "calibration_slope_movement": {
+     "v13": 0.8423910511708614,
+     "after_platt": 2.0237072487311023,
+     "meaning": "both slopes are measured on the SAME 1,054-game evaluation window. V13's 0.842 (< 1) says its small deviations from .500 were already slightly TOO LARGE for the signal they carry — it was mildly OVER-confident relative to its information, not under-confident. The correction fitted to repair that produced an output measuring 2.024 on the games it was applied to: a two-parameter map, fitted honestly on data strictly preceding each scored date, still overshot on the dates it had not seen."
+    },
+    "R1_disclosure_on_the_decomposition": "the reported decomposition is BIN-BASED and does not sum to the reported Brier exactly: V13 reliability - resolution + uncertainty = 0.24662987 vs Brier 0.24707133 (residual 0.00044146); C1 = 0.24944662 vs 0.24949810 (residual 0.00005148). The conclusion is unaffected — the resolution loss exceeds the reliability gain by 0.00281675, an order of magnitude above both residuals — but the components are quoted as computed, not silently reconciled."
+   },
+   "the_finding_verbatim_from_the_outcome_record": "V13's binding constraint is DISCRIMINATION, not calibration. ... A recalibration layer cannot fix a weak-AUC model (C1 proved it by losing), and refitting the same 7 features cannot either (C2 tied). The 'compression' the owner named is real as a description of the output distribution, but the cure is more signal, not a stretch of the existing signal."
+  },
+  "CAL_1_the_earlier_independent_attempt": {
+   "source": "AUTHORIZATIONS.md lines 144-166 (2026-07-20), fitter engine/calibrate.py and engine/score_and_calibrate.py, temperature grid 0.50..2.00 (harness/run_v13_historical.py:242)",
+   "design": "one global temperature T, p_cal = sigmoid(logit(p)/T), fitted on 1,461 backfilled games scored with as-of-date inputs (no look-ahead), 70/30 train/test split",
+   "result_verbatim": "Fitted temperature T = 1.50 (UPPER boundary) — the fit wants to SHRINK V13's probs toward the 52% base rate. (The n=26 July fit said T=0.55/widen — the exact OPPOSITE. Small sample lied.) Held-out Brier: raw 0.2521 -> calibrated 0.2500 = COIN FLIP. Market reference ~0.238.",
+   "the_two_things_this_adds_to_MLV2": [
+    "DIRECTION. Asked to fix a model whose output range is visibly compressed, the honest calibration fit asked to compress it FURTHER — all the way to the boundary of its own grid. A calibration map can only widen a distribution if the outcomes say the model is under-confident. Twice now, on two independent samples with two different methods, the outcomes said the opposite.",
+    "CEILING. Calibration moved held-out Brier from 0.2521 to exactly 0.2500 — the coin flip. That is where a perfectly calibrated model with no resolution lands. Recalibration delivered its entire theoretical payoff and the result was still a coin flip, 0.012 behind the market. The ceiling on calibration is the absence of information underneath it."
+   ],
+   "third_lesson_carried_forward": "the n=26 fit (T=0.55, widen) and the n=1,461 fit (T=1.50, shrink) disagreed on SIGN. A calibration layer fitted on a small sample does not merely add noise, it can point the wrong way — which is why step 3 of the correct sequence is fold-internal and step 4 is out-of-sample."
+  }
+ },
+ "THE_CORRECT_SEQUENCE": {
+  "preamble": "These four steps run IN THIS ORDER. The ordering is the content of the rule: every step exists to make the next one interpretable, and any step taken out of order produces a number that cannot be read. Calibration is step 3 of 4 and it is never step 1.",
+  "STEP_1_improve_underlying_resolution": {
+   "what": "acquire or construct information the model does not currently have, and demonstrate that it moves the RANKING. Resolution, AUC, and the block ablation that isolates the new information are the metrics; a proper score alone cannot tell you whether a gain came from the new block.",
+   "why_first": "this is the only step that can raise the ceiling. Steps 2-4 measure and re-map what step 1 produced; none of them can exceed it. MLV2 established that for V13 this is a DATA ACQUISITION problem, not a fitting problem: the cheap residual features (rest, 10-game form) added nothing (block ablation p_raw 0.4635, p_holm 1.0), while starter resolution moves probabilities ~3pp, roughly 5x form freshness (2026-08-17 V3 cohort, re-measured 8/21).",
+   "exit_condition": "a measured, preregistered improvement in a ranking metric, surviving multiplicity correction, on data the change was not fitted to."
+  },
+  "STEP_2_evaluate_raw_probabilities_prospectively": {
+   "what": "score the model's UNTOUCHED outputs on games whose outcomes were unknown when the model was frozen. No calibration layer is present at this step. Report proper scores, discrimination, AND the calibration diagnostic (slope, intercept, reliability) — assessed, not applied.",
+   "why_second": "the calibration diagnostic measured here is the ONLY honest input to the decision in step 3. Fitting a calibration layer before knowing the raw model's prospective behaviour means fitting a correction to a defect you have not measured out of sample. The reliability term measured here is also the upper bound on what step 3 can possibly recover — if it is small, stop.",
+   "precedent_this_is_already_repo_practice": "docs/experiments/2026-08-18_V14_STARTER_PREREG.json CALIBRATION_METHOD_FROZEN: 'V14 raw outputs scored as-is ... Calibration ASSESSED via logistic recalibration fit (slope/intercept), 10 equal-count reliability bins, and Murphy decomposition. No output recalibration of V14 in this experiment.'",
+   "exit_condition": "a prospective sample large enough that its calibration slope is not itself noise, and a measured reliability term worth attacking."
+  },
+  "STEP_3_test_calibration_FOLD_INTERNALLY": {
+   "what": "fit the calibration map inside each fold, on TRAINING rows only, and apply it to that fold's held-out rows. Walk-forward or blocked by date. The map must be preregistered — family, parameter count and fitting window frozen before any fit.",
+   "why_third_and_why_fold_internal": "a calibration map fitted on all the data and then scored on all the data will always look like an improvement, because it was fitted to the very outcomes it is scored against. Fold-internal fitting is what makes the number mean anything. MLV2's C1 was already built this way and still lost — which is exactly what a correctly built test is for.",
+   "conforming_example_live_in_this_repo": "docs/experiments/2026-08-22_WNBA_COHERENT_DISTRIBUTION_PREREG.json ESTIMATOR_FROZEN.location_recalibration_fold_local: actual margin regressed on predicted margin using TRAINING rows only, fitted slope and intercept applied to the scoring fold, frozen before any fit, and gated at G5 on an out-of-sample margin calibration slope in [0.85, 1.15]. That record's own limitation clause states the standard this rule generalises: 'If it does not work, the margin calibration slope gate (G5) fails and the candidate does not promote. That outcome is a result, not a reason to add a mechanism.'",
+   "exit_condition": "fold-internal evidence that the map helps, with the fitting procedure frozen for step 4."
+  },
+  "STEP_4_retain_only_if_proper_scores_AND_calibration_slope_improve_OUT_OF_SAMPLE": {
+   "what": "carry the frozen map onto games whose outcomes were unknown when it was frozen. Retention requires BOTH conditions, jointly, on that out-of-sample set: (a) a proper score (Brier and/or log loss) improves, under multiplicity correction, with the interval on the correct side; AND (b) the calibration slope moves toward 1 and stays inside the frozen band. Discrimination must not have degraded — the AUC floor from the incumbent's own gate still applies.",
+   "why_BOTH": "either alone is gameable. A proper score can improve while calibration worsens, and a calibration slope can be driven to 1 by a map that flattens the probabilities toward the base rate — which improves the slope and destroys the model. C1 is the worked example of the failure this catches: it improved reliability (its own objective) and still lost on the proper score, because the resolution loss was 4.03x larger.",
+   "why_OUT_OF_SAMPLE": "this repo has a measured precedent for an honest fold-internal fit overshooting on the dates it had not seen: on the same 1,054-game window, V13's calibration slope was 0.842 while the walk-forward-recalibrated output's was 2.024. The map was fitted correctly and still overshot. Step 3 passing is not step 4 passing.",
+   "on_fail": "the layer is NOT retained. The finding is recorded with the numbers, and the failure is NOT converted into a retune, a threshold move, a family swap, or a second attempt without a successor prereg (MLV2 on_fail clause, applied).",
+   "precedent": "docs/experiments/2026-08-22_WNBA_COHERENT_DISTRIBUTION_PREREG.json G5_calibration.resolution_is_reported_not_sufficient: 'Improvement must appear in proper scoring, discrimination and calibration TOGETHER.'"
+  },
+  "the_ordering_stated_as_one_line": "resolution first, raw prospective scoring second, fold-internal calibration third, out-of-sample retention fourth. Calibration is the LAST step and it is conditional on the first three."
+ },
+ "THE_PROHIBITION": {
+  "text": "NO RECALIBRATION LAYER MAY BE ADDED TO ANY MODEL IN THIS REPO AS A RESPONSE TO A POOR BRIER SCORE WITHOUT COMPLETING THE FOUR-STEP SEQUENCE ABOVE FIRST.",
+  "what_specifically_is_forbidden": [
+   "adding Platt, temperature, isotonic, beta, vector or any other output re-mapping to a live or shadow model because a Brier, log loss, or record came in poor.",
+   "proposing recalibration as the remedy in any card, report, grading note, or plan, without citing MLV2's C1 result and stating what has changed since it.",
+   "fitting a calibration map on all available data and reporting the resulting in-sample improvement as evidence of anything.",
+   "fitting a calibration map on a slate, a night, or any sample too small for its own slope to be distinguishable from noise (the n=26 T=0.55 vs n=1,461 T=1.50 sign reversal).",
+   "retaining a calibration layer on a proper-score improvement alone, or on a calibration-slope improvement alone. Both, out of sample, or it does not stay.",
+   "describing a compressed output range as a calibration defect. It is a resolution symptom until a measured reliability term says otherwise.",
+   "re-running MLV2's C1 or an equivalent under a new name without a successor prereg. It has been tested; a fourth null result on the same surface is not new information."
+  ],
+  "what_a_violation_looks_like_in_practice": "a session sees a night's Brier near or above 0.25, reaches for the cheapest available fix, and ships a two-parameter layer that requires no new data and no new acquisition. It will usually look like it worked, because it will have been fitted to the outcomes it is scored against. That is the exact sequence this rule interrupts.",
+  "enforcement_status": "DECLARED, NOT YET MECHANICAL. No module currently refuses a calibration layer. This record is the standing rule and the specification; the fixtures below are what an enforcing gate must assert if one is built. Stating this honestly is required — a rule described as enforced when it is not is worse than no rule."
+ },
+ "WHAT_IS_NOT_PROHIBITED": {
+  "preamble": "the rule forbids recalibration as a REFLEX and as a RESCUE. It does not forbid calibration as a measurement or as a preregistered component.",
+  "explicitly_allowed": [
+   "MEASURING calibration always and everywhere: logistic recalibration slope and intercept, reliability bins, Murphy decomposition, PIT and coverage. Assessment is mandatory, not optional — step 2 depends on it.",
+   "a calibration component that is PART OF A CANDIDATE'S FROZEN ESTIMATOR, preregistered before any fit, fitted fold-internally, and gated out of sample. Example already live: the WNBA coherent-distribution candidate's fold-local location recalibration.",
+   "reporting that a model is miscalibrated, and saying so plainly on a card.",
+   "a successor prereg proposing a calibration layer AFTER steps 1 and 2 have been completed and the measured reliability term justifies the attempt."
+  ],
+  "the_test_that_separates_allowed_from_forbidden": "was the layer frozen BEFORE the poor score was seen, or proposed AFTER it? A calibration component preregistered as part of a candidate is a hypothesis. The same component added after a bad night is a rescue, and a rescue is not evidence."
+ },
+ "CURRENT_EVIDENCE_THIS_RULE_IS_TIED_TO": {
+  "the_observation": "V13's registered probabilities on the 2026-08-20 MLB slate spanned 0.440 to 0.560 — a 12.00-point band across both sides of 8 games. That is the compression the owner named, and it is the observation most likely to be misread as a calibration defect.",
+  "provenance": {
+   "artifact": "data/mlb/forecasts/forecasts.jsonl, 8 rows with slate_date 2026-08-20, field payload.p_home",
+   "card": "cards/2026-08-20_card.json (sha256 090795a77ecae8854c993126319767268ddc5090f19d553262b4d17d4b3e4a3c), generated 2026-08-20T16:43:29Z",
+   "model_id": "ml.v13_1.hfa1005.card.s722n30000",
+   "registered_p_home": {
+    "ATH@KC": 0.523,
+    "ATL@CWS": 0.487,
+    "LAA@HOU": 0.56,
+    "NYY@BAL": 0.484,
+    "SEA@MIL": 0.555,
+    "SF@CLE": 0.519,
+    "TOR@TB": 0.511,
+    "WSH@TEX": 0.46
+   },
+   "note": "STL@CIN is excluded — the board arrived ~90s after its first pitch and no forecast was ever registered for it (data/mlb/analysis/2026-08-20_STLCIN_exclusion.json). n = 8, not 9."
+  },
+  "measured_dispersion": {
+   "both_side_range": "0.440 to 0.560",
+   "band_width_points": 12.0,
+   "max_confidence_abs_p_minus_half": 0.06,
+   "mean_confidence_abs_p_minus_half": 0.02963,
+   "population_sd_of_p_home": 0.03247
+  },
+  "WHY_THIS_IS_A_RESOLUTION_PROBLEM_AND_NOT_A_CALIBRATION_PROBLEM": {
+   "argument_1_the_range_is_a_consequence_not_a_cause": "a probability far from .500 is a CLAIM about which team wins. A model emits such claims when its inputs separate the teams. V13's inputs do not separate them, so it does not emit them. The narrow band is the model correctly reporting that it does not know. Widening the band by decree replaces an honest 'I do not know' with a manufactured 'I do', and nothing was learned in between.",
+   "argument_2_the_market_on_the_same_8_games": {
+    "market_both_side_range": "0.3488 to 0.6512",
+    "market_band_width_points": 30.24,
+    "market_mean_confidence": 0.07709,
+    "market_population_sd": 0.05627,
+    "model_brier": 0.249333,
+    "market_brier": 0.238932,
+    "model_minus_market_brier": 0.010401,
+    "sides": "model 5-3, market 6-2",
+    "price_provenance_caveat": "registration-vintage same-board two-sided de-vig from the 16:41Z owner board, NOT closing prices. Closing-line comparison remains MARKET_COMPARISON_UNAVAILABLE (data/mlb/analysis/2026-08-20_market_context.json).",
+    "reading": "the market's band is 2.52x wider AND its Brier is 0.0104 better on the identical 8 games. The market did not obtain its wider range from a better calibration map; it obtained it from knowing more. That is the whole distinction, measured on one slate."
+   },
+   "argument_3_the_widening_replay": {
+    "what_was_done": "a deterministic illustration, computed for this record: apply the single temperature T = 0.386281 — the unique T for which p_cal = sigmoid(logit(p)/T) maps V13's most confident call (LAA@HOU 0.560) exactly onto the market's most confident call (0.6512). This is literally 'just recalibrate to the market's dispersion', executed.",
+    "resulting_band_points": 30.24,
+    "brier_before": 0.249333,
+    "brier_after_widening": 0.252717,
+    "brier_delta": 0.003384,
+    "sides_changed": 0,
+    "games_improved": 5,
+    "games_worsened": 3,
+    "the_three_that_worsened": {
+     "LAA@HOU": 0.110461,
+     "WSH@TEX": 0.071176,
+     "TOR@TB": 0.018139
+    },
+    "reading": "widening the distribution to the market's exact dispersion made the score WORSE by 0.003384, and flipped ZERO sides. The reason is lesson 16: the model's most confident registered call, LAA@HOU at 0.560, was its single worst forecast (Brier 0.3136, lost 3-18). A monotone map preserves the ordering exactly, so widening amplifies a wrong ordering along with a right one. LAA@HOU alone contributed +0.013808 to the mean Brier — four times the NET damage of the whole exercise, since the other seven games partly offset it — because it was the game the widening was most confident about.",
+    "R1_STATUS_AND_LIMITS": "ILLUSTRATIVE, NOT INFERENTIAL. n = 8, retrospective, and T was chosen to hit an observed target, so this is an in-sample demonstration of DIRECTION, not a test. It may never be quoted as evidence of a model property (lesson 16's narrowing: describe the slate, do not promote it). The inferential evidence for this rule is MLV2 (n = 1054, 81 dates, walk-forward, date-block bootstrap, Holm). This replay is included because it makes the mechanism visible on the exact slate that prompted the roadmap item, and because it is reproducible from the cited artifact in a few lines."
+   },
+   "argument_4_the_direction_of_every_honest_fit_so_far": "both calibration fits ever run against V13 asked to SHRINK it, not widen it: T = 1.50 at the grid's upper boundary on n = 1,461 (2026-07-20), and a measured calibration slope of 0.842 on n = 1,054 (MLV2). A calibration map fitted to outcomes widens a distribution only when the outcomes say the model is under-confident. They have never said that about V13. Recalibrating this compressed distribution would compress it further."
+  },
+  "the_conclusion_this_rule_draws": "0.440-0.560 is a RESOLUTION problem. Recalibrating a compressed distribution cannot widen it — an honest fit would shrink it, and a decreed widening preserves the ordering that is what is actually broken. The band widens when, and only when, the model is given information that separates the teams.",
+  "what_this_does_not_claim": [
+   "not that V13 is well calibrated. Its measured slope is 0.842, outside the [0.85, 1.15] band used elsewhere in this repo, and it carries a positive intercept. It is mildly miscalibrated.",
+   "not that the 8 registered probabilities carried no information. Brier 0.249333 beat a constant-0.500 baseline of 0.250000 by 0.000670 and log loss beat ln(2) by 0.00129 (docs/experiments/2026-08-21_FINDINGS_CORRECTION.json). Some information, barely.",
+   "not that recalibration is worthless in general. It is worthless HERE, on a model whose reliability term is 0.0038 and whose resolution term is 0.0069, for the arithmetic reason stated above."
+  ]
+ },
+ "REQUIRED_FALSIFICATION_FIXTURES_FOR_ANY_MODULE_THAT_ENFORCES_THIS_RULE": {
+  "rule": "each fixture must FAIL if the clause it guards is deleted. A fixture that still passes with its clause removed is not a fixture. These are the assertions an enforcing gate must carry; they are specified here so the rule is implementable without reinterpretation.",
+  "F1_reflex_refusal": "a proposal object of the form {trigger: 'poor Brier', remedy: 'add calibration layer', steps_completed: []} must be REFUSED. Delete the prohibition and this proposal is accepted — which is the entire failure mode.",
+  "F2_sequence_order_is_load_bearing": "the same proposal with steps_completed = [3, 4] but NOT [1, 2] must ALSO be REFUSED. A fixture that accepts a fold-internal, out-of-sample-validated calibration layer on a model whose resolution was never addressed would pass with the ordering clause deleted.",
+  "F3_both_conditions_at_step_4": "a candidate presenting dBrier improving with p_holm < 0.05 but a calibration slope moving AWAY from 1 must be REFUSED; and a candidate presenting a slope of exactly 1.000 with a WORSE proper score must ALSO be REFUSED. Two fixtures, because dropping either half of the AND leaves the other passing.",
+  "F4_the_C1_replay": "replay MLV2's C1 numbers as a candidate — dBrier +0.0024267627, p_holm 0.952, slope 2.0237, AUC 0.5257 against a V13 AUC of 0.5661783 — and assert NO_ADOPT with 0 of 4 checks. If a future gate's thresholds have drifted far enough to admit C1, the gate has been loosened and this fixture turns red. This is the anchor fixture: it binds the rule to a real, frozen, already-adjudicated result rather than to a hypothetical.",
+  "F5_reliability_ceiling": "given a measured reliability term of 0.0038 and resolution of 0.0069, a gate must report the maximum recoverable Brier improvement as bounded by the reliability term and refuse a proposal claiming more. A fixture asserting a claimed gain of 0.02 is REFUSED would pass trivially if the ceiling check were deleted, so the fixture must also assert that a claimed gain of 0.003 is ACCEPTED as arithmetically possible — a one-sided fixture proves nothing.",
+  "F6_monotone_map_cannot_change_AUC": "apply any strictly increasing map to a fixed probability vector and assert the AUC is unchanged to within 1e-12. Delete the case-1 clause and a module may claim a discrimination gain from a temperature change. The companion assertion: a DATE-VARYING map applied to the same vector must be allowed to change the AUC — otherwise the fixture is asserting the wrong theorem and would hide the C1 mechanism.",
+  "F7_compression_is_not_miscalibration": "a model whose output band is 12 points wide but whose measured calibration slope is inside the frozen band must NOT be routed to a calibration remedy. Delete this clause and every compressed model gets a calibration layer by default, which is the roadmap item's exact complaint.",
+  "F8_small_sample_refusal": "a calibration fit whose fitting window is smaller than the frozen minimum must be REFUSED even if it improves every metric on that window. Anchored to the measured sign reversal: T = 0.55 (widen) at n = 26 vs T = 1.50 (shrink) at n = 1,461, on the same model.",
+  "F9_R1": "a proposal missing any of the four steps' evidence emits null plus a reason code for the missing step, never a default of 'assumed complete'. A fixture that supplies a default must FAIL.",
+  "F10_allowed_case_must_pass": "the WNBA coherent-distribution candidate's fold-local location recalibration — preregistered before any fit, fitted on training rows only, gated at G5 out of sample — must be ACCEPTED. Without this fixture the rule could be implemented as a blanket ban on the word 'calibration', which would block a correctly constructed live candidate. A rule with no passing case is a rule nobody can satisfy."
+ },
+ "WHAT_WOULD_OVERTURN_THIS_RULE": [
+  "a preregistered candidate that completes steps 1-4 in order and shows a proper-score improvement AND a calibration-slope improvement out of sample, under multiplicity correction, with discrimination not degraded. That candidate's calibration layer is retained, and this record is superseded by the outcome record, not contradicted by it.",
+  "a measured reliability term large enough that the arithmetic changes. If a future model's Murphy reliability is an order of magnitude above its resolution, calibration is where the recoverable loss actually lives and step 3 becomes the highest-value step — the SEQUENCE still holds, but the priority within it moves.",
+  "evidence that a specific non-monotone calibration family can increase resolution. None is known here, and the dichotomy above says a globally monotone one cannot; a claim to the contrary needs its own prereg and its own out-of-sample test, not an assertion.",
+  "NOT overturned by: a night, a slate, or a cohort scoring poorly. That is the trigger this rule exists to refuse."
+ ],
+ "RELATED_RECORDS_AND_LESSONS": {
+  "records": [
+   "docs/experiments/2026-08-11_MLV2_PREREG.json — the frozen prereg; C1 is the Platt candidate",
+   "docs/experiments/2026-08-11_MLV2_OUTCOME.json — NO_ADOPT on all three; 'the binding constraint is DISCRIMINATION, not calibration'",
+   "docs/experiments/2026-08-18_V14_STARTER_PREREG.json — calibration ASSESSED, not applied (step 2 done correctly)",
+   "docs/experiments/2026-08-18_V14_FORWARD_PROTOCOL.json — 'refit_recalibration: FORBIDDEN' during a forward window",
+   "docs/experiments/2026-08-22_WNBA_COHERENT_DISTRIBUTION_PREREG.json — owner roadmap item 5; the conforming step-3 example and the G5 gate this rule's step 4 mirrors",
+   "docs/experiments/2026-08-21_FINDINGS_CORRECTION.json — the 0.440-0.560 band and the confidence ranking",
+   "data/mlb/analysis/2026-08-20_market_context.json — the same-slate market comparison",
+   "AUTHORIZATIONS.md 2026-07-20 — CAL-1: T = 1.50, held-out Brier 0.2500"
+  ],
+  "lessons": [
+   "07 compression pattern — the model's probabilities are compressed toward the coin flip; the market's are not, and apparent underdog value is the artifact",
+   "16 confidence-rank before calling it noise — compression is a property of the whole distribution and says nothing about where in it the errors landed; this is why widening a compressed distribution can make things worse",
+   "20 check the base rate before crediting the model"
+  ],
+  "house_rules": [
+   "R1 never invent a number",
+   "R4 small samples do not move verdicts",
+   "R6 append-only supersession",
+   "R7 one preregistered change per experiment"
+  ]
+ },
+ "STANDING": {
+  "gate": "0/100 NO_PROMOTE",
+  "model_authorized_ledger_usd": 0,
+  "bets": 0,
+  "wager_authority": "NO",
+  "artifacts_modified_by_this_record": 0,
+  "forecasts_altered": 0,
+  "grades_appended": 0,
+  "code_changed": 0,
+  "note": "this record is a governance write only. It creates one new file in docs/experiments/ and touches nothing registered."
+ },
+ "WHAT_THIS_RECORD_DOES_NOT_AUTHORIZE": [
+  "it does not promote, demote, freeze, unfreeze or modify any model. V13 remains frozen; the WNBA shadow and its candidate are unaffected.",
+  "it does not alter any gate threshold, any registered forecast, any grade, or any card.",
+  "it does not authorize a wager. The gate stays 0/100 NO_PROMOTE and the ledger stays $0.",
+  "it does not implement itself. Enforcement is DECLARED, not mechanical; the fixtures above are a specification for a gate that does not yet exist.",
+  "it does not forbid measuring calibration. Measurement is mandatory under step 2."
+ ]
+}

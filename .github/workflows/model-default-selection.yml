@@ -1,0 +1,30 @@
+name: Tested model defaults
+on:
+  push:
+    branches: [codex/tested-defaults-all-sports]
+  pull_request:
+    paths:
+      - 'pipelines/cards/selection.py'
+      - 'pipelines/cards/selected.py'
+      - 'data/model_selection/**'
+      - 'tests/test_model_defaults.py'
+      - 'scripts/model_defaults.py'
+permissions:
+  contents: read
+jobs:
+  selection:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install -r requirements-nfl-context.txt
+      - run: python -m unittest discover -s tests -p 'test_model_defaults.py'
+      - run: python -m unittest discover -s tests -p 'test_nfl_*.py'
+      - run: python -m unittest discover -s tests -p 'test_mlb_current_path.py'
+      - run: python scripts/model_defaults.py > selected-models.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: selected-models
+          path: selected-models.json

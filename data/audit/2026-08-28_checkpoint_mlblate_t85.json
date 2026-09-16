@@ -1,0 +1,97 @@
+{
+ "AZ_SF_BINDING_WARNING": {
+  "binding_rule": "when this final arrives it must bind on sport + ESPN_GAMEID:401816714 + scheduled_date 2026-08-28 + result_date + away + home. NEVER on the matchup. The 8/27 pk for this same matchup is 823179 and must not be reused.",
+  "canonical_id": "ESPN_GAMEID:401816714",
+  "extra_note": "the 8/27 AZ@SF id was itself the one archive verification proved FABRICATED \u2014 carried as 825038, which does not exist. This matchup has already produced one identity failure this week.",
+  "game": "mlb:AZ@SF",
+  "hazard": "AZ@SF also played on 8/27 \u2014 a CONTINUING SERIES, which is the exact shape that produced the 8/27 prior-date join in which five 8/26 finals were attached to 8/27 games.",
+  "start_utc": "2026-08-29T02:15:00Z"
+ },
+ "STARTER_HAZARDS_IN_THIS_BLOCK_BOTH_CLOSED": {
+  "mlb:CWS@MIN": {
+   "now": "CLEARED at T-90. Dean Kremer starts for the WHITE SOX (2-4, 5.22) and Luis Castillo for the TWINS (4-10, 5.19), exactly as boarded.",
+   "outcome": "the suspicion was reasonable and it was WRONG; recorded as a checked negative rather than dropped",
+   "was": "SIDE_SWAP_SUSPECTED \u2014 single source, same one whose PIT@STL line was verified swapped"
+  },
+  "mlb:PIT@STL": {
+   "now": "CONFIRMED at T-40. Jared Jones starts for the PIRATES (2-5, 4.76) and Quinn Mathews for the CARDINALS (0-2, 6.43). 8:15 PM ET also confirms the frozen 00:15Z.",
+   "outcome": "the acquisition-time correction was RIGHT",
+   "was": "SIDE_SWAP_CORRECTED \u2014 a source had both pitchers on the wrong clubs and the acquisition reversed them"
+  }
+ },
+ "block": "MLB late (CWS@MIN 00:10Z first of five; PIT@STL 00:15Z, PHI@LAA 01:38Z, BAL@ATH 01:40Z, AZ@SF 02:15Z)",
+ "created_utc": "2026-08-28T22:52:00Z",
+ "disposition": "NO_PRICE for all five late games \u2014 none was in the relayed price set",
+ "frozen_board": {
+  "byte_identical_to_committed_freeze": true,
+  "cohort_hash": "3723e6801e2f65f7c60c97581d65252c025909e01ad2372c9105899d3478361a",
+  "path": "cards/2026-08-28_mlb_board.json",
+  "sha256": "5a558cfc17dc571ca33632c727e4e44415718e77b670e8e3db19e6124db548b8"
+ },
+ "late_block_rows": {
+  "mlb:AZ@SF": {
+   "DISPOSITION": "NO_PRICE",
+   "canonical_id": "ESPN_GAMEID:401816714",
+   "dose": 0.5,
+   "identity_risk": null,
+   "model_side": "AZ",
+   "p_side": 0.530967,
+   "start_utc": "2026-08-29T02:15:00Z",
+   "starters": "Blade Tidwell / Kohl Drake"
+  },
+  "mlb:BAL@ATH": {
+   "DISPOSITION": "NO_PRICE",
+   "canonical_id": "MLB_GAMEPK:824960",
+   "dose": 1.0,
+   "identity_risk": null,
+   "model_side": "BAL",
+   "p_side": 0.590133,
+   "start_utc": "2026-08-29T01:40:00Z",
+   "starters": "Brandon Young / Jacob Lopez"
+  },
+  "mlb:CWS@MIN": {
+   "DISPOSITION": "NO_PRICE",
+   "canonical_id": "ESPN_GAMEID:401816710",
+   "dose": 1.0,
+   "identity_risk": "SIDE_SWAP_SUSPECTED",
+   "model_side": "CWS",
+   "p_side": 0.5275,
+   "start_utc": "2026-08-29T00:10:00Z",
+   "starters": "Dean Kremer / Luis Castillo"
+  },
+  "mlb:PHI@LAA": {
+   "DISPOSITION": "NO_PRICE",
+   "canonical_id": "MLB_GAMEPK:823985",
+   "dose": 1.0,
+   "identity_risk": null,
+   "model_side": "LAA",
+   "p_side": 0.515433,
+   "start_utc": "2026-08-29T01:38:00Z",
+   "starters": "Andrew Painter / Reid Detmers"
+  },
+  "mlb:PIT@STL": {
+   "DISPOSITION": "NO_PRICE",
+   "canonical_id": "ESPN_GAMEID:401816712",
+   "dose": 0.75,
+   "identity_risk": "SIDE_SWAP_CORRECTED",
+   "model_side": "PIT",
+   "p_side": 0.526533,
+   "start_utc": "2026-08-29T00:15:00Z",
+   "starters": "Jared Jones / Quinn Mathews"
+  }
+ },
+ "ledger": {
+  "exposure_usd": 0,
+  "n_bets": 0,
+  "units": 0.0,
+  "wager_authority": "NO"
+ },
+ "market_attempt": {
+  "cumulative_today": "every MLB price route attempted today refused; the only MLB prices on file arrived by owner relay, covering 5 of 15 games",
+  "outcome": "REFUSED \u2014 EGRESS_BLOCKED, curl exit 56, CONNECT tunnel 403",
+  "route": "curl sportsbook.draftkings.com/leagues/baseball/mlb"
+ },
+ "next": "end-of-night review",
+ "record_id": "CHECKPOINT-2026-08-28-MLB-LATE-T85",
+ "schema": "ops.checkpoint.v1"
+}

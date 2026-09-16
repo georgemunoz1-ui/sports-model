@@ -1,0 +1,240 @@
+{
+ "FOLLOW_UPS_OPENED": [
+  {
+   "id": "FU-1",
+   "priority": "highest leverage in this report",
+   "what": "MLB finals source carrying game ids",
+   "why": "converts the 15 bound-ready 8/28 games from Tier 2 to Tier 1 with no model change"
+  },
+  {
+   "id": "FU-2",
+   "what": "CFB id migration \u2014 stamp ESPN/CFBD gameIds at capture",
+   "why": "C4. The CFB cohort is unbindable under the CURRENT schema, which is a schema fix, not a dead end."
+  },
+  {
+   "id": "FU-3",
+   "what": "wire board_shape into both MLB builders",
+   "why": "both boards currently fail it"
+  },
+  {
+   "id": "FU-4",
+   "what": "preregistered CFB margin evaluation",
+   "why": "the OOF file already has everything needed"
+  },
+  {
+   "id": "FU-5",
+   "what": "retain per-game WNBA residuals in the walk-forward pipeline permanently",
+   "why": "the granularity defect from C3's falsification test"
+  },
+  {
+   "id": "FU-6",
+   "what": "back-fill real ids for 8/24-8/27 MLB or accept those 47 games as permanently descriptive",
+   "why": "owner decision"
+  }
+ ],
+ "HONEST_LIMITS": [
+  "n=4 is the entire inferential base of this audit. One bound cohort, four games, three arms.",
+  "the MLB paired intervals in TIER_2 are the audit run's figures and were not re-derived in this pass; they are descriptive and accrue nothing either way.",
+  "no CFB result in the audit window is admissible, so nothing is known about CFB model quality from this window.",
+  "RJ-005 OFFICIAL_INJURY_AVAILABILITY stands at 0/17 EGRESS_BLOCKED. Lineup and rotation state is unverified for the WNBA arms.",
+  "the MLB pitcher-log corpus ends ~2026-07-19. MLB starter features are stale by construction regardless of the freshness contract."
+ ],
+ "LEDGER": {
+  "exposure_usd": 0,
+  "n_bets": 0,
+  "units": 0.0,
+  "wager_authority": "NO"
+ },
+ "NEW_FINDING_THIS_PASS": {
+  "cause_A_board_side": {
+   "consequence": "these 47 games are permanently Tier 2 unless real ids are back-filled",
+   "dates": [
+    "2026-08-24",
+    "2026-08-25",
+    "2026-08-26",
+    "2026-08-27"
+   ],
+   "diagnosis": "sequential date-encoded PSEUDO-PKs. They identify nothing. This is a board-side identity failure and cannot be repaired without re-capture from an authority.",
+   "games": 47,
+   "ids_observed": "824000-824009, 825000-825014, 826000-826014, 827000-827006"
+  },
+  "cause_B_result_side": {
+   "adapter": "harness/postslate_binding_0828.gate_board() already maps this board into the binding contract",
+   "consequence": "MLB's blocker is NOT identity. It is the absence of any admissible MLB finals source that carries game ids. Owner-relayed finals identify by team name only.",
+   "date": "2026-08-28",
+   "diagnosis": "the BOARD side is ready. binding_proof returns 0/0 \u2014 'nothing claimed', not 'nothing checked' \u2014 because there are ZERO result rows to bind.",
+   "evidence": "lancebroz 8/28 file: 930 rows x 61 cols, score_cols=[] . The archive has never carried a runs column (RJ-001B, 0/126).",
+   "games": 15,
+   "ids_observed": "10 ESPN_GAMEID + 5 MLB_GAMEPK, all id_grade CAPTURED, pseudo_pk_used False, inferred=0"
+  },
+  "headline": "the MLB 0/62 has TWO different causes, and only one of them is an identity problem",
+  "why_this_matters": "'0/62 bound' reads as one uniform failure. It is not. 15 of those games are one data source away from Tier 1; 47 are not recoverable at all."
+ },
+ "OWNER_CORRECTIONS_APPLIED": {
+  "C1_sigma_provenance": {
+   "applied": true,
+   "correction": "every residual verdict must state numerator base, denominator base and n",
+   "register": "data/audit/2026-08-30_sigma_provenance_register.json",
+   "withdrawn": "'12.53 measured against covers' \u2014 no such artifact exists in this repo; the only measured ~12.55 is the WNBA MARGIN RESIDUAL SD (n=1721)"
+  },
+  "C2_two_tier_reporting": {
+   "applied": true,
+   "correction": "luck-clean history is not discarded; it is reported at a weaker layer",
+   "tier1": "BOUND -> inferential. curves, calibration, buckets, promotion input permitted.",
+   "tier2": "luck-clean / DESCRIPTIVE -> sign and hit-rate only. no curves, no calibration, no buckets. accrues NOTHING to promotion, settlement or the estimator."
+  },
+  "C3_falsification": {
+   "applied": true,
+   "correction": "the single-governance-defect hypothesis needed a falsification test, not a narrative",
+   "record": "data/audit/2026-08-30_governance_hypothesis_falsified.json",
+   "verdict": "HYPOTHESIS REJECTED \u2014 four independent bugs sharing a narrative shape, not one defect"
+  },
+  "C4_id_schema_wording": {
+   "applied": true,
+   "correction": "'can never be formally graded' overstated it; the correct claim is 'unbindable UNDER THE CURRENT ID SCHEMA'",
+   "fix_is": "an id migration \u2014 stamp ESPN/CFBD gameIds at capture time \u2014 not an impossibility",
+   "r6_note": "the 8/29 record is NOT edited. This entry supersedes its wording; the original stands.",
+   "supersedes_wording_in": "data/audit/2026-08-29_card_refresh.json -> WHY_NOTHING_BINDS.cfb"
+  },
+  "C5_0829_posture_reconciliation": {
+   "CANONICAL_EVIDENCE_ADMISSION": "the audit's refusal stands here. Nothing from 8/29 is admissible.",
+   "RESULT_DISPLAY": "the 4-6 graded update is VALID here. Owner-relayed finals identify games and may be displayed.",
+   "applied": true,
+   "correction": "the graded 4-6 update and the audit's refusal appeared to conflict; they are at different layers",
+   "not_a_contradiction": "a result can be true, displayable and still inadmissible as evidence. That is the whole point of keeping the two layers separate.",
+   "verified_now": "wehoop snapshot 8ffb87b carries game_id 401857184 (CHI@NYL) and 401857185 (TOR@PHX) both STATUS_SCHEDULED at 0-0. The finals had not published when the audit ran."
+  }
+ },
+ "R6": "append-only. No existing record was edited to produce this one. Two frozen binding proofs were re-run during verification and reproduced byte-identically except for generated_utc; both were restored to their committed state.",
+ "SCORECARD_REGENERATED": {
+  "cfb": {
+   "aggregate": "AggregateRefused raised; NO descriptive_override exists for this cohort, so not even Tier 2 applies",
+   "board_games": 8,
+   "bound": 0,
+   "counters": "0/8 on all three",
+   "refusal_code": "MISSING_IDENTITY_FIELD",
+   "tier": null
+  },
+  "method": "counters produced by harness/result_binding_gate.binding_proof over the frozen boards in this pass. Generated, never typed.",
+  "mlb": {
+   "board_games": 62,
+   "bound": 0,
+   "counters": "0/62 on RESULT_BINDING_PASS, DATE_COHERENCE_PASS and CANONICAL_ID_MATCH across all five boards",
+   "refusal_code": "MISSING_IDENTITY_FIELD",
+   "tier": 2
+  },
+  "nfl": {
+   "board_rows": 14,
+   "forecast_quantities_found": 0,
+   "leaf_scan": "cards/2026-08-27_nfl_board.json 45 leaves / 0 nulls / 0 forecast-ish numerics; cards/2026-08-28_nfl_board.json 254 leaves / 69 nulls / 0 forecast-ish numerics",
+   "tier": null,
+   "verdict": "NO_FORECAST \u2014 there is nothing to grade. 69 nulls carry stated reasons, which is R1 behaving correctly."
+  },
+  "wnba": {
+   "bound": 4,
+   "cohort_A_games": 4,
+   "counters": "4/4 on all three; REFUSED_ROWS 0; aggregate guard PERMITTED",
+   "other_cohorts": "three further WNBA cohorts at weaker evidence layers are NOT admitted",
+   "tier": 1
+  }
+ },
+ "TIER_1_INFERENTIAL": {
+  "VERDICT": "ZERO evidence, not weak evidence. The refreshed model beats the constant prior by 0.002047 Brier while LOSING the straight-up record 2-2 to 3-1. t = -0.0163. The 95% interval is [-0.403, +0.399] \u2014 0.80 wide on a statistic whose entire range is [0,1]. A four-game cohort cannot separate these arms and this one does not.",
+  "arms": {
+   "wnba.fallback.STANDINGS_LOG5_v1": {
+    "brier": 0.292559,
+    "logloss": 0.775744,
+    "record": "2-2"
+   },
+   "wnba.replacement.FEATURE_REFRESH": {
+    "brier": 0.230998,
+    "logloss": 0.636069,
+    "record": "2-2"
+   },
+   "wnba.winner.EXPANDING_HOME_PRIOR": {
+    "brier": 0.233046,
+    "logloss": 0.659181,
+    "record": "3-1"
+   }
+  },
+  "binding": "RESULT_BINDING_PASS 4/4, DATE_COHERENCE_PASS 4/4, CANONICAL_ID_MATCH 4/4, REFUSED_ROWS 0",
+  "cohort": "wnba:2026-08-28 (cohort A)",
+  "consequence": "NO promotion. NO estimator update. The registered sample horizon is not met and the interval does not exclude zero.",
+  "n": 4,
+  "paired_test_FEATURE_REFRESH_minus_EXPANDING_HOME_PRIOR": {
+   "ci95": [
+    -0.402898,
+    0.398803
+   ],
+   "df": 3,
+   "includes_zero": true,
+   "mean_delta_brier": -0.002047,
+   "per_game_deltas": {
+    "CON@IND": -0.2053,
+    "POR@ATL": 0.3272,
+    "TOR@LV": -0.1929,
+    "WSH@LAS": 0.0629
+   },
+   "sd": 0.251913,
+   "se": 0.125957,
+   "t": -0.0163
+  },
+  "paired_test_FEATURE_REFRESH_minus_STANDINGS_LOG5": {
+   "ci95": [
+    -0.262673,
+    0.139552
+   ],
+   "df": 3,
+   "includes_zero": true,
+   "mean_delta_brier": -0.061561,
+   "se": 0.063194,
+   "t": -0.9741
+  },
+  "what_actually_happened": "the refreshed model was better on CON@IND and TOR@LV and worse on POR@ATL and WSH@LAS. One game \u2014 POR@ATL, where it pushed p_home to 0.784 and Atlanta lost 101-83 \u2014 accounts for the entire deficit. The constant prior 'won' the record by having no opinion at all.",
+  "why_admissible": "the first and only genuinely bound cohort in the audit window. Bound on canonical id against the wehoop ARCHIVE, with the game date derived in ET via zoneinfo rather than sliced on the UTC date."
+ },
+ "TIER_2_DESCRIPTIVE": {
+  "cfb": {
+   "bound": 0,
+   "cohort": "cfb:2026-08-29, 8 games",
+   "residual_verdict_C1_labelled": {
+    "base_coherence": "COHERENT",
+    "denominator": 18.385,
+    "denominator_base": "CFB Week-1 margin residual SD",
+    "n": 758,
+    "note": "a separate -0.73 figure divides the MARKET's miss by the MODEL's dispersion. That is a mixed-base gauge, not a z-score, and is not a verdict on the model.",
+    "numerator": 21.9,
+    "numerator_base": "MODEL residual (ensemble projected margin minus actual)",
+    "z": 1.19
+   },
+   "single_relayed_result": "UNC 15 - TCU 10; TCU -8.5 LOST. DESCRIPTIVE_ONLY, accrues nothing.",
+   "status": "NOT EVEN TIER 2 \u2014 guarded_aggregate raised AggregateRefused and no descriptive_override was ever written for this cohort"
+  },
+  "mlb": {
+   "arm_comparison": "the 8/30 audit run computed paired Brier intervals for all three challenger arms against the champion. ALL THREE INCLUDE ZERO (CHAMPION_V13 -0.006713, t = -1.010; McNemar p = 0.73). This is reported as a NULL. Withholding a null would let the champion keep an unearned benefit of the doubt; it cannot inflate any claim.",
+   "bound": 0,
+   "cohort": "62 games, 2026-08-24 .. 2026-08-28",
+   "hit_rate": 0.4839,
+   "provenance": "record and hit-rate re-derived from the frozen boards; the paired intervals are the 8/30 audit run's figures and are NOT re-derived in this record",
+   "record_su": "30-32",
+   "withheld_under_tier2": "no calibration decomposition, no reliability curves, no probability buckets, no PIT plots"
+  },
+  "nfl": "nothing. No forecast quantity was ever produced, so there is no descriptive claim to make either.",
+  "rule": "sign and hit-rate only. accrues NOTHING to promotion, settlement or the estimator.",
+  "wnba_non_admitted_cohorts": "three cohorts at weaker evidence layers. Displayed in the night records; not admitted here and not scored."
+ },
+ "WHAT_THE_AUDIT_DOWNGRADED_ON_ITS_OWN": {
+  "cohort": "mlb:2026-08-27",
+  "note": "a counter that cannot fail is not a check. Both instances are now withdrawn.",
+  "now": "withdrawn \u2014 the frozen board carries pseudo-pks 827000-827006 and the proof stamped result_date from a constant, so DATE_COHERENCE_PASS could not fail",
+  "precedent": "this is the exact manufacture withdrawn for 8/28 at commit 67104b9",
+  "was": "a binding proof publishing 7/7"
+ },
+ "created_utc": "2026-08-30T07:40:00Z",
+ "local_time_owner_tz": "2026-08-30 00:40 PDT (America/Los_Angeles)",
+ "posture": "model-evaluation exercise, not a win/loss list. paper only. wager_authority NO. exposure_usd 0.",
+ "record_id": "POSTGAME-AUDIT-2026-08-30",
+ "record_sha256": "c7aa4c5ffd3b4714ead1802c0f0d95b94615ce8c514f5f80b8609412adec5a47",
+ "schema": "ops.postgame_audit.v1",
+ "scope": "MLB, WNBA, CFB, NFL \u2014 2026-08-24 through 2026-08-29"
+}

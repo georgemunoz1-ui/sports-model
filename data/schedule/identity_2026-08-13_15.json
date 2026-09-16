@@ -1,0 +1,406 @@
+{
+ "record_id": "SCHEDULE-IDENTITY-2026-08-13_15",
+ "purpose": "Authoritative expected-game inventory for the audited window. Layer-1 of the four-layer audit.",
+ "authority_note": "Counts were NOT taken from the requester's stated totals. MLB 8/15 = 15 is derived independently: the 8/14 tier-1 finals board shows 14 games in progress as series, and PHI and MIN were the only two teams idle that day, so their series resumed 8/15 -> 14 continuations + PHI@MIN = 15. WNBA = 3 and NFL 8/15 = 7 were verified against league schedule sources.",
+ "rejected_phantom_games": [
+  {
+   "listing": "Padres @ Cardinals 2026-08-15",
+   "why_rejected": "San Diego was at Cleveland on 8/15 (series continuation from the tier-1 8/14 SD@CLE final); St. Louis was at Chicago. The listing came from a corrupted schedule summary in a contaminated capture session and matches no real series state."
+  }
+ ],
+ "egress_limitation": "statsapi.mlb.com, site.api.espn.com, www.mlb.com and www.baseball-reference.com all return CONNECT tunnel 403 through this container's egress proxy. Official IDs are therefore present only where a repository artifact literally carries one. Absent IDs are null WITH A REASON, never guessed.",
+ "counts": {
+  "nfl": 16,
+  "mlb": 15,
+  "wnba": 3,
+  "total": 34,
+  "official_ids_present": 31
+ },
+ "games": [
+  {
+   "sport": "nfl",
+   "date": "2026-08-13",
+   "away": "DET",
+   "home": "CIN",
+   "official_id": "espn:401873272",
+   "official_id_reason": null,
+   "official_id_source": "owner 8/13 finals table ESPN links",
+   "scheduled_start_utc": "2026-08-13T23:00:00Z",
+   "scheduled_start_reason": null
+  },
+  {
+   "sport": "nfl",
+   "date": "2026-08-13",
+   "away": "IND",
+   "home": "NE",
+   "official_id": "espn:401873273",
+   "official_id_reason": null,
+   "official_id_source": "owner 8/13 finals table ESPN links",
+   "scheduled_start_utc": "2026-08-13T23:00:00Z",
+   "scheduled_start_reason": null
+  },
+  {
+   "sport": "nfl",
+   "date": "2026-08-13",
+   "away": "LAC",
+   "home": "HOU",
+   "official_id": "espn:401873274",
+   "official_id_reason": null,
+   "official_id_source": "owner 8/13 finals table ESPN links",
+   "scheduled_start_utc": "2026-08-13T23:00:00Z",
+   "scheduled_start_reason": null
+  },
+  {
+   "sport": "nfl",
+   "date": "2026-08-13",
+   "away": "GB",
+   "home": "PIT",
+   "official_id": "espn:401873275",
+   "official_id_reason": null,
+   "official_id_source": "owner 8/13 finals table ESPN links",
+   "scheduled_start_utc": "2026-08-13T23:00:00Z",
+   "scheduled_start_reason": null
+  },
+  {
+   "sport": "nfl",
+   "date": "2026-08-13",
+   "away": "ARI",
+   "home": "LV",
+   "official_id": "espn:401873640",
+   "official_id_reason": null,
+   "official_id_source": "owner 8/13 finals table ESPN links",
+   "scheduled_start_utc": "2026-08-13T23:00:00Z",
+   "scheduled_start_reason": null
+  },
+  {
+   "sport": "nfl",
+   "date": "2026-08-13",
+   "away": "TEN",
+   "home": "SF",
+   "official_id": "espn:401874392",
+   "official_id_reason": null,
+   "official_id_source": "owner 8/13 finals table ESPN links",
+   "scheduled_start_utc": "2026-08-13T23:00:00Z",
+   "scheduled_start_reason": null
+  },
+  {
+   "sport": "nfl",
+   "date": "2026-08-14",
+   "away": "TB",
+   "home": "NYJ",
+   "official_id": "espn:401873276",
+   "official_id_reason": null,
+   "official_id_source": "data/nfl/odds/2026-08-14_preseason_current_20260814T223227Z.json (sha b3aacb7f, guard PASS)",
+   "scheduled_start_utc": "2026-08-14T23:00:00Z",
+   "scheduled_start_reason": null
+  },
+  {
+   "sport": "nfl",
+   "date": "2026-08-14",
+   "away": "MIA",
+   "home": "WAS",
+   "official_id": "espn:401873277",
+   "official_id_reason": null,
+   "official_id_source": "data/nfl/odds/2026-08-14_preseason_current_20260814T223227Z.json (sha b3aacb7f, guard PASS)",
+   "scheduled_start_utc": "2026-08-14T23:00:00Z",
+   "scheduled_start_reason": null
+  },
+  {
+   "sport": "nfl",
+   "date": "2026-08-14",
+   "away": "DEN",
+   "home": "ATL",
+   "official_id": "espn:401873278",
+   "official_id_reason": null,
+   "official_id_source": "data/nfl/odds/2026-08-14_preseason_current_20260814T223227Z.json (sha b3aacb7f, guard PASS)",
+   "scheduled_start_utc": "2026-08-14T23:00:00Z",
+   "scheduled_start_reason": null
+  },
+  {
+   "sport": "nfl",
+   "date": "2026-08-15",
+   "away": "CAR",
+   "home": "BUF",
+   "official_id": "espn:401873282",
+   "official_id_reason": null,
+   "official_id_source": "ESPN game URL captured in results sweep",
+   "scheduled_start_utc": "2026-08-15T17:00:00Z",
+   "scheduled_start_reason": null
+  },
+  {
+   "sport": "nfl",
+   "date": "2026-08-15",
+   "away": "CLE",
+   "home": "CHI",
+   "official_id": null,
+   "official_id_reason": "league API egress-blocked (403 via proxy); no repo artifact carries this game's official id",
+   "official_id_source": null,
+   "scheduled_start_utc": "2026-08-15T17:00:00Z",
+   "scheduled_start_reason": null
+  },
+  {
+   "sport": "nfl",
+   "date": "2026-08-15",
+   "away": "MIN",
+   "home": "NYG",
+   "official_id": null,
+   "official_id_reason": "league API egress-blocked (403 via proxy); no repo artifact carries this game's official id",
+   "official_id_source": null,
+   "scheduled_start_utc": "2026-08-15T17:00:00Z",
+   "scheduled_start_reason": null
+  },
+  {
+   "sport": "nfl",
+   "date": "2026-08-15",
+   "away": "LAR",
+   "home": "KC",
+   "official_id": null,
+   "official_id_reason": "league API egress-blocked (403 via proxy); no repo artifact carries this game's official id",
+   "official_id_source": null,
+   "scheduled_start_utc": "2026-08-15T20:00:00Z",
+   "scheduled_start_reason": null
+  },
+  {
+   "sport": "nfl",
+   "date": "2026-08-15",
+   "away": "JAX",
+   "home": "NO",
+   "official_id": "espn:401873281",
+   "official_id_reason": null,
+   "official_id_source": "ESPN odds URL captured in T-3H board",
+   "scheduled_start_utc": "2026-08-15T20:00:00Z",
+   "scheduled_start_reason": null
+  },
+  {
+   "sport": "nfl",
+   "date": "2026-08-15",
+   "away": "PHI",
+   "home": "BAL",
+   "official_id": "espn:401873284",
+   "official_id_reason": null,
+   "official_id_source": "ESPN boxscore URL captured in results sweep",
+   "scheduled_start_utc": "2026-08-15T23:00:00Z",
+   "scheduled_start_reason": null
+  },
+  {
+   "sport": "nfl",
+   "date": "2026-08-15",
+   "away": "DAL",
+   "home": "SEA",
+   "official_id": "espn:401873279",
+   "official_id_reason": null,
+   "official_id_source": "captured verbatim from source URLs during the 2026-08-16 acquisition workflow",
+   "scheduled_start_utc": "2026-08-16T00:00:00Z",
+   "scheduled_start_reason": null
+  },
+  {
+   "sport": "mlb",
+   "date": "2026-08-15",
+   "away": "CWS",
+   "home": "DET",
+   "official_id": "espn:401816535|gamePk:824239",
+   "official_id_reason": null,
+   "official_id_source": "captured verbatim from source URLs during the 2026-08-16 acquisition workflow",
+   "scheduled_start_utc": null,
+   "scheduled_start_reason": "no tier-1 schedule source captured; league API egress-blocked"
+  },
+  {
+   "sport": "mlb",
+   "date": "2026-08-15",
+   "away": "STL",
+   "home": "CHC",
+   "official_id": "gamePk:824644|espn:401816542",
+   "official_id_reason": null,
+   "official_id_source": "mlb.com/stories/game/824644 URL captured + espn id captured 2026-08-16",
+   "scheduled_start_utc": null,
+   "scheduled_start_reason": "no tier-1 schedule source captured; league API egress-blocked"
+  },
+  {
+   "sport": "mlb",
+   "date": "2026-08-15",
+   "away": "NYY",
+   "home": "TOR",
+   "official_id": "espn:401816537|gamePk:822775",
+   "official_id_reason": null,
+   "official_id_source": "captured verbatim from source URLs during the 2026-08-16 acquisition workflow",
+   "scheduled_start_utc": null,
+   "scheduled_start_reason": "no tier-1 schedule source captured; league API egress-blocked"
+  },
+  {
+   "sport": "mlb",
+   "date": "2026-08-15",
+   "away": "COL",
+   "home": "SF",
+   "official_id": "espn:401816543",
+   "official_id_reason": null,
+   "official_id_source": "captured verbatim from source URLs during the 2026-08-16 acquisition workflow",
+   "scheduled_start_utc": null,
+   "scheduled_start_reason": "no tier-1 schedule source captured; league API egress-blocked"
+  },
+  {
+   "sport": "mlb",
+   "date": "2026-08-15",
+   "away": "WSH",
+   "home": "NYM",
+   "official_id": "espn:401816539",
+   "official_id_reason": null,
+   "official_id_source": "captured verbatim from source URLs during the 2026-08-16 acquisition workflow",
+   "scheduled_start_utc": null,
+   "scheduled_start_reason": "no tier-1 schedule source captured; league API egress-blocked"
+  },
+  {
+   "sport": "mlb",
+   "date": "2026-08-15",
+   "away": "BAL",
+   "home": "TB",
+   "official_id": "espn:401816533|gamePk:822941",
+   "official_id_reason": null,
+   "official_id_source": "captured verbatim from source URLs during the 2026-08-16 acquisition workflow",
+   "scheduled_start_utc": null,
+   "scheduled_start_reason": "no tier-1 schedule source captured; league API egress-blocked"
+  },
+  {
+   "sport": "mlb",
+   "date": "2026-08-15",
+   "away": "MIA",
+   "home": "CIN",
+   "official_id": "espn:401816536",
+   "official_id_reason": null,
+   "official_id_source": "captured verbatim from source URLs during the 2026-08-16 acquisition workflow",
+   "scheduled_start_utc": null,
+   "scheduled_start_reason": "no tier-1 schedule source captured; league API egress-blocked"
+  },
+  {
+   "sport": "mlb",
+   "date": "2026-08-15",
+   "away": "SEA",
+   "home": "HOU",
+   "official_id": "espn:401816541",
+   "official_id_reason": null,
+   "official_id_source": "captured verbatim from source URLs during the 2026-08-16 acquisition workflow",
+   "scheduled_start_utc": null,
+   "scheduled_start_reason": "no tier-1 schedule source captured; league API egress-blocked"
+  },
+  {
+   "sport": "mlb",
+   "date": "2026-08-15",
+   "away": "KC",
+   "home": "LAA",
+   "official_id": "espn:401816544",
+   "official_id_reason": null,
+   "official_id_source": "captured verbatim from source URLs during the 2026-08-16 acquisition workflow",
+   "scheduled_start_utc": null,
+   "scheduled_start_reason": "no tier-1 schedule source captured; league API egress-blocked"
+  },
+  {
+   "sport": "mlb",
+   "date": "2026-08-15",
+   "away": "TEX",
+   "home": "ATH",
+   "official_id": "espn:401816546",
+   "official_id_reason": null,
+   "official_id_source": "captured verbatim from source URLs during the 2026-08-16 acquisition workflow",
+   "scheduled_start_utc": null,
+   "scheduled_start_reason": "no tier-1 schedule source captured; league API egress-blocked"
+  },
+  {
+   "sport": "mlb",
+   "date": "2026-08-15",
+   "away": "MIL",
+   "home": "LAD",
+   "official_id": "gamePk:823914|espn:401816545",
+   "official_id_reason": null,
+   "official_id_source": "mlb.com/stories/game/823914 URL captured + espn id captured 2026-08-16",
+   "scheduled_start_utc": null,
+   "scheduled_start_reason": "no tier-1 schedule source captured; league API egress-blocked"
+  },
+  {
+   "sport": "mlb",
+   "date": "2026-08-15",
+   "away": "BOS",
+   "home": "PIT",
+   "official_id": "espn:401816534",
+   "official_id_reason": null,
+   "official_id_source": "captured verbatim from source URLs during the 2026-08-16 acquisition workflow",
+   "scheduled_start_utc": null,
+   "scheduled_start_reason": "no tier-1 schedule source captured; league API egress-blocked"
+  },
+  {
+   "sport": "mlb",
+   "date": "2026-08-15",
+   "away": "SD",
+   "home": "CLE",
+   "official_id": "espn:401816538|gamePk:824400",
+   "official_id_reason": null,
+   "official_id_source": "captured verbatim from source URLs during the 2026-08-16 acquisition workflow",
+   "scheduled_start_utc": null,
+   "scheduled_start_reason": "no tier-1 schedule source captured; league API egress-blocked"
+  },
+  {
+   "sport": "mlb",
+   "date": "2026-08-15",
+   "away": "AZ",
+   "home": "ATL",
+   "official_id": "espn:401816532|gamePk:824884",
+   "official_id_reason": null,
+   "official_id_source": "captured verbatim from source URLs during the 2026-08-16 acquisition workflow",
+   "scheduled_start_utc": null,
+   "scheduled_start_reason": "no tier-1 schedule source captured; league API egress-blocked"
+  },
+  {
+   "sport": "mlb",
+   "date": "2026-08-15",
+   "away": "PHI",
+   "home": "MIN",
+   "official_id": "espn:401816540",
+   "official_id_reason": null,
+   "official_id_source": "mlb.com/stories/game/823671 URL captured + espn id captured 2026-08-16",
+   "scheduled_start_utc": null,
+   "scheduled_start_reason": "no tier-1 schedule source captured; league API egress-blocked"
+  },
+  {
+   "sport": "wnba",
+   "date": "2026-08-15",
+   "away": "NYL",
+   "home": "CON",
+   "official_id": "espn:401857145",
+   "official_id_reason": null,
+   "official_id_source": "captured verbatim from source URLs during the 2026-08-16 acquisition workflow",
+   "scheduled_start_utc": null,
+   "scheduled_start_reason": "no tier-1 schedule source captured; league API egress-blocked",
+   "identity_source": "official WNBA schedule, owner-verified 2026-08-16"
+  },
+  {
+   "sport": "wnba",
+   "date": "2026-08-15",
+   "away": "LAS",
+   "home": "WAS",
+   "official_id": "espn:401857146",
+   "official_id_reason": null,
+   "official_id_source": "captured verbatim from source URLs during the 2026-08-16 acquisition workflow",
+   "scheduled_start_utc": null,
+   "scheduled_start_reason": "no tier-1 schedule source captured; league API egress-blocked",
+   "identity_source": "official WNBA schedule, owner-verified 2026-08-16"
+  },
+  {
+   "sport": "wnba",
+   "date": "2026-08-15",
+   "away": "MIN",
+   "home": "LVA",
+   "official_id": "espn:401857147",
+   "official_id_reason": null,
+   "official_id_source": "captured verbatim from source URLs during the 2026-08-16 acquisition workflow",
+   "scheduled_start_utc": null,
+   "scheduled_start_reason": "no tier-1 schedule source captured; league API egress-blocked",
+   "identity_source": "official WNBA schedule, owner-verified 2026-08-16"
+  }
+ ],
+ "revisions": [
+  {
+   "revision": 2,
+   "at": "2026-08-16T03:41:02Z",
+   "change": "enriched 16 previously-null official_ids for 2026-08-15 from URLs captured verbatim during the acquisition workflow; 8/15 now fully identified",
+   "unchanged": "NFL CLE@CHI, MIN@NYG, LAR@KC official ids remain null-with-reason (not captured; league API still egress-blocked)"
+  }
+ ]
+}

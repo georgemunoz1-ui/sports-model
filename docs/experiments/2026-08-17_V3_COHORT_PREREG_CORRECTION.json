@@ -1,0 +1,72 @@
+{
+ "record_id": "V3-COHORT-PREREG-2026-08-17-CORRECTION-1",
+ "built_utc": "2026-08-17T06:58:03Z",
+ "corrects": "V3-COHORT-PREREG-2026-08-17 (docs/experiments/2026-08-17_V3_COHORT_PREREG.json) \u2014 original untouched (R6)",
+ "trigger": "adversarial verification workflow, 4 independent read-only skeptics, 2026-08-17",
+ "no_forecast_changed": "NOT ONE registered forecast is altered. v1/v2/v3 payloads and hashes stand; this corrects DESCRIPTIVE claims in the prereg only.",
+ "correction_1_common_game_count": {
+  "severity": "HIGH",
+  "wrong": "prereg said v1-vs-v2 has '9 COMMON games only, NOT 10', and called that a correction to the owner's contract",
+  "right": "it is 10. The owner's original figure was CORRECT and my 'correction' was the error.",
+  "why_i_was_wrong": "my reasoning inverted its own premise: I established that v1's single STL@CIN row corresponds to the v2 doubleheader G2, then treated that correspondence as grounds for EXCLUDING the game. A row that corresponds to G2 makes G2 common. Only G1 is v2-only.",
+  "independent_confirmation": "slate-correction record (G1 1:40pm ET, G2 6:40pm ET; v1 carried only the 6:40 game) + v1 tip 22:40Z == v2 G2 tip 22:40Z"
+ },
+ "correction_2_biased_statistic": {
+  "severity": "HIGH",
+  "problem": "the dropped game was the CONTROL. STL@CIN G2 has starters TBD/TBD in BOTH v1 and v2, so the manipulated variable (starter resolution) did not change for it. Its |delta| is the smallest of the ten at 0.20pp. Removing exactly the game where the treatment was absent inflates a statistic whose stated purpose is to isolate that treatment.",
+  "corrected_numbers": {
+   "mean_abs_delta_pp": 2.31,
+   "was": 5.6,
+   "upward_bias_pct": 10.1,
+   "side_flips": "4/10 (was reported 4/9)",
+   "ratio_vs_form_freshness": 5.08
+  }
+ },
+ "correction_3_v1_v2_is_not_single_variable": {
+  "severity": "MEDIUM",
+  "finding": "v1-vs-v2 changes MORE than starters. RNG policy is sequential_slate_order with seed 722, so a game's position determines its RNG stream \u2014 and the v1 and v2 slates differ in both ORDER and SIZE (10 vs 11 rows). Slate order and slate size are therefore additional variables.",
+  "consequence": "2.31pp cannot be read as pure starter resolution. It is an upper bound that also contains RNG-stream reassignment. The direction (pitcher identity dominates team form) survives; the clean causal reading does not. Only v2-vs-v3 is a true single-variable contrast.",
+  "retraction": "the phrase 'the sharpest quantitative statement the program has made about where V13's information comes from' is RETRACTED as overclaiming."
+ },
+ "correction_4_form_state_is_two_causal_channels": {
+  "severity": "MEDIUM",
+  "finding": "results.csv is one FILE but TWO channels into the card. daily_card.py:35 derives venue_of[home] from it (last final row wins) and :96 looks up the park factor by that venue string. The 39 added rows CHANGED two venue strings: LAA 'Angel Stadium Of Anaheim'->'Angel Stadium', LAD 'Dodger Stadium'->'UNIQLO Field at Dodger Stadium'. Both OLD strings are ABSENT from park_factors.json (silent 1.0 default); both NEW strings are present (0.887, 0.93). So a pure form refresh silently moved LAA's park factor 1.0->0.887 and LAD's 1.0->0.93.",
+  "inert_here": "neither LAA nor LAD is a home team on the 8/17 slate, so all 11 card `park` values are identical between v2 and v3 \u2014 verified field-by-field. The v2-vs-v3 contrast is unaffected.",
+  "but": "this is a live latent defect for FUTURE cards: a form update can silently change park factors. Recorded as a roadmap item.",
+  "bonus_finding": "it also means two venue strings were previously defaulting to 1.0 because they were absent from park_factors.json \u2014 a pre-existing silent miss now surfaced."
+ },
+ "correction_5_arm_label_overstates": {
+  "severity": "MEDIUM",
+  "finding": "9 of the 39 added rows are dated 2026-08-13 \u2014 OLDER than v2's 8/14 cutoff. Those are interior-hole REPAIR (completeness), not recency. Only the 30 rows at 8/15-8/16 are freshness.",
+  "consequence": "23% of the input change is hole repair. 'V3_FRESH_FORM' / 'isolates form freshness' overstates it; the honest label is FORM-STATE COMPLETENESS + RECENCY. The design cannot separate the two components.",
+  "note": "the prereg did already state the three-date delta; this sharpens the label to match."
+ },
+ "correction_6_code_byte_identical_wording": {
+  "severity": "LOW",
+  "wrong": "'code is byte-identical'",
+  "right": "'forecast COMPUTE PATH code is byte-identical'",
+  "detail": "harness/tier_discipline.py was MODIFIED and harness/mlb_form_state.py ADDED between da6f44b and 5c189bc. Neither is imported by daily_card.py (which imports only stdlib, numpy and hfa) \u2014 grep finds zero references. The two files actually in the compute path, daily_card.py f9cad5d3 and engine/hfa.py 029c5f6d, are byte-identical and absent from that diff. Substance survives; the wording was too broad."
+ },
+ "correction_7_undisclosed_input": {
+  "severity": "MEDIUM",
+  "finding": "daily_card.py:85-89 reads data/mlb/odds/{date}_pregame.json if present. That input is in NEITHER my claim enumeration NOR the v3 input_bindings manifest \u2014 it was completely unpinned.",
+  "inert_here": "no 8/17 odds file exists (never in git), so lines/mkt_home_prob/gap_home/total_lean and p_over/p_push/p_under are null in BOTH cards.",
+  "fix": "future bindings must pin the odds path (present-or-absent + hash). Recorded."
+ },
+ "correction_8_spread_statistic_transform": {
+  "severity": "LOW",
+  "finding": "the prereg's 'spread' figures reproduce ONLY under favourite-side probability max(p,1-p) with sample (n-1) SD \u2014 an unstated transform. On raw home_wp the dispersion is roughly double: v2 SD 3.20pp, v3 SD 3.25pp.",
+  "does_the_conclusion_survive": "YES, directionally \u2014 the change is +0.03pp on the favourite transform and +0.05pp on raw home_wp; either way the spread barely moved. But the transform must be stated."
+ },
+ "verification_that_PASSED_and_strengthened_the_record": {
+  "immutability": "CLAIM_HOLDS. v1 blob de16335b and v2 blob 26007ac6 unchanged from their registering commits through HEAD; each card touched by exactly ONE commit across all refs; forecasts.jsonl proven APPEND-ONLY by byte-exact prefix stability across all 17 commits that ever touched it; hash chain independently recomputed and equal to head.json.",
+  "pre_start": "CLAIM_HOLDS. v3 generated 06:42:35Z; minimum margin to first pitch 10.957 h (STL@CIN G1 17:40Z), maximum 17.957 h. 11/11 gen<tip. v2 min margin 17.369 h, v1 min 17.059 h. All 32 rows pre-start.",
+  "confound_hunt": "CLAIM_HOLDS by CONSTRUCTIVE PROOF, stronger than my own check: the skeptic built a non-writing replica of daily_card.py and ran it twice against the same slate, swapping ONLY results.csv between its da6f44b blob and HEAD. Run A reproduced cards/2026-08-17_card_v2.json bit-for-bit (da1b65d2); run B reproduced card_v3.json bit-for-bit (1cac3973). A single-variable swap regenerates both artifacts exactly, so no confound can exist.",
+  "v2_vs_v3_numbers": "ALL SIX reproduce exactly: mean 0.454545->0.45pp, max 1.20pp BAL@TB, 1 side flip, v2 52.7091%/1.5751pp, v3 52.7273%/1.6057pp. Field-by-field diff: every input-side field byte-equal across all 11 rows; differences confined to the v13 output block."
+ },
+ "operational_finding_artifact_immutability_is_unenforced": {
+  "severity": "MEDIUM",
+  "finding": "mtime forensics show cards/2026-08-17_card.json (the REGISTERED v1 artifact) was WRITTEN at 06:41:18.838Z, 25.9 ms after card_v3.json \u2014 inside my v3 build. Cause: daily_card.py:120 hardcodes output to cards/{date}_card.json with no version suffix and no write guard, so it clobbers the v1 path; I restored v1 from a pre-build copy. Content survived (sha 9d802f1f intact, git blob unchanged, tree clean) so immutability HELD \u2014 but it held by my discipline, not by enforcement. A future build that failed to restore would silently destroy a registered arm.",
+  "fix_applied": "harness/artifact_immutability.py \u2014 recomputes every registered forecast's original_file_hash against its artifact on disk and FAILS the healthcheck on any mismatch. Immutability is now enforced, not merely verified."
+ }
+}

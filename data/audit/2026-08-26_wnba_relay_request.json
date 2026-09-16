@@ -1,0 +1,31 @@
+{
+ "created_utc": "2026-08-26T17:20:00Z",
+ "on_receipt": "recompute feature state (as_of, hashes, age); run wnba_model_v1 on current features under a separately identified replacement identity; rerun side, margin, total, EV and disposition through the coupled reselection gate; supersede the SYSTEM_FAILURE card append-only",
+ "payload_spec": [
+  {
+   "binds": "RESULTS_AND_STATS_THROUGH_ASOF + SCHEDULE_AND_CANONICAL_GAME_IDS",
+   "format": "one line per game: date, away@home, final score (e.g. 2026-08-25 CHI@CON 81-87). A paste of any full schedule/results listing is fine \u2014 ~80 games",
+   "unit": "results since 2026-07-22"
+  },
+  {
+   "binds": "OFFICIAL_INJURY_AVAILABILITY",
+   "format": "paste of the report for GSV, CON, TOR(Tempo), SEA sections (all six teams if convenient)",
+   "unit": "tonight's official injury report text"
+  },
+  {
+   "binds": "ROSTERS_AND_TRANSACTIONS",
+   "format": "free text",
+   "unit": "roster changes since 2026-07-22 (if any)"
+  },
+  {
+   "binds": "MARKET_PRICES_VIA_SEPARATE_OVERLAY",
+   "format": "prices per side",
+   "unit": "DraftKings WNBA moneylines for GSV@CON and TOR@SEA"
+  }
+ ],
+ "purpose": "the minimal owner-relay payload that lets RJ-005 bind and the existing wnba_model_v1 run on current features tonight",
+ "record_id": "WNBA-RELAY-REQUEST-2026-08-26",
+ "record_sha256": "cb94aa815496a84609a19dd384bc73d8b8b6bcdeabf79b1c1e2ff3cedb612e74",
+ "root_remediation": "environment network policy change (owner-side, claude.ai/code environment settings) \u2014 unblocks every rail; documented at code.claude.com/docs/en/claude-code-on-the-web",
+ "schema": "ops.relay_request.v1"
+}

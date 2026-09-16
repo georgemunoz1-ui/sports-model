@@ -1,0 +1,22 @@
+{
+ "schema": "ops.scheduled_refresh.v1",
+ "record_id": "REFRESH-20260821-1800Z",
+ "fired_at_utc": "2026-08-21T18:01:16Z",
+ "executed_at_utc": "2026-08-21T18:01:29Z",
+ "purpose": "price window check, T-2h09m to ATL@MIL 20:10Z",
+ "new_boards_since_1202Z": "NONE \u2014 no owner price board, no probables update, no lineup source.",
+ "acquisition_attempt": {
+  "target": "api.the-odds-api.com/v4/sports/baseball_mlb/odds",
+  "result": "HTTP 000 \u2014 CONNECT tunnel refused (403) at the org egress proxy",
+  "not_routed_around": true
+ },
+ "preflight": "FORECAST_ONLY_NO_MARKET_GRADE. Schedule manifest is now MISSING_PAST_DEADLINE (the 240-minute window closed ~16:10Z), so the slate stays COMPLETE_BY_ROSTER_PARTITION and is never schedule-verified for this date. Prices MISSING_BUT_RECOVERABLE with only 39 minutes of slack against the 90-minute pregame rule.",
+ "price_deadline": "~18:40Z. After that a price captured for this slate can no longer inform a pregame screen for the 20:10Z opener, and each later game keeps its own T-90 window.",
+ "starter_slots": "unchanged: 26 of 30 slots model-resolved (86.7%); 3 unannounced (STL away, TOR away, SD home) plus Hayden Wesneski named-but-registry-missing. NO v3 fork \u2014 absence of new information is not a starter change.",
+ "wnba": "no spread lines acquired, so ZERO ATS diagnostics register (frozen prereg: missing line = NO_SELECTION). Ledgers unchanged: FULL 1-4, ACTION_ELIGIBLE 0-0, BLOCKED_SUBSET 1-2.",
+ "pdx_tor": "remains OUT_OF_DOMAIN\u2014NEUTRAL_SITE_HCA_UNMODELED, a permanent card-action block that would survive prices arriving.",
+ "v14": "STARVED \u2014 no explicitly official confirmed-lineup source; board class PROJECTED. Every 8/21 game passing its T-90 without such a capture is excluded and counted.",
+ "betting_output": "ZERO \u2014 all 18 MLB and WNBA rows BLOCKED; NFL rows are benchmark-only with no model metrics.",
+ "pending_owner": "default-branch switch to sportsmodel/main. Prerequisites audited clean at 12:25Z (no Actions, Pages, protections, hooks or automation targeting main; the one stale doc reference is fixed). The settings change itself is outward-facing and remains the owner's to authorize.",
+ "next_check": "re-armed 03:30Z for the 8/21 settlement window (last first pitch CHC@SEA 02:10Z, WNBA 02:00Z)"
+}

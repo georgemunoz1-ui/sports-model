@@ -1,0 +1,182 @@
+{
+ "created_utc": "2026-08-27T07:06:00Z",
+ "mlb": {
+  "earliest_start_utc": "2026-08-27T17:05:00Z",
+  "gamepk_note": "slate psv keeps the pseudo-pk contract (827000+); two real pks surfaced in mlb.com gameday URL slugs and are recorded here for future binding; baseball-reference preview SFN202608270 confirms AZ@SF single game",
+  "grade": "SEARCH_IDENTIFIED_UNCONFIRMED",
+  "n_games": 7,
+  "real_gamepks_identified": {
+   "mlb:HOU@NYY": 823503,
+   "mlb:LAD@ATL": 824879
+  },
+  "reconciliation": {
+   "canonical": 7,
+   "discovered": 7,
+   "explicit_refusals": 0
+  },
+  "routes": [
+   {
+    "error": "EGRESS_BLOCKED",
+    "observed_utc": "2026-08-27T06:44:00Z",
+    "outcome": "REFUSED",
+    "route": "statsapi.mlb.com schedule API (WebFetch)"
+   },
+   {
+    "outcome": "IDENTIFIED",
+    "passes": "pass1 full slate 7 games; pass2 corroborated 5 night games; pass3 corroborated both day games w/ venues; per-game passes named probables",
+    "route": "web search identification, 4 passes"
+   }
+  ],
+  "slate_psv": "data/mlb/slates/2026-08-27_slate.psv",
+  "slate_psv_sha256": "8a5cc8a9844f002bde53e72a9f6d9b74433116ba87224eceac42c688da7c3123",
+  "start_time_notes": {
+   "mlb:AZ@SF": "01:45Z resolved from '6:45 PM' local in two snippets (one pass earlier said 9:30 ET; 9:45 ET wins 2-of-3 and matches the local-time quote); chronology rule: earliest-plausible-bound used for prospectivity",
+   "rule": "if a start cannot be confirmed, the earliest defensible start bounds chronology (strictest rule for prospectivity claims)"
+  },
+  "starter_identification": {
+   "grade": "SEARCH_IDENTIFIED_UNCONFIRMED \u2014 named-aggregator identification, not official confirmation",
+   "mlb:AZ@SF": {
+    "away": "TBD_CAP",
+    "home": "TBD_CAP"
+   },
+   "mlb:BAL@STL": {
+    "away": "Trevor Rogers (PROBABLE)",
+    "home": "TBD_CAP \u2014 one earlier-report McGreevy mention, official page TBD"
+   },
+   "mlb:COL@WSH": {
+    "away": "Gabriel Hughes (PROBABLE)",
+    "home": "Jake Irvin (PROBABLE)"
+   },
+   "mlb:HOU@NYY": {
+    "away": "Hayden Wesneski (PROBABLE)",
+    "home": "Cam Schlittler (PROBABLE)"
+   },
+   "mlb:KC@TOR": {
+    "away": "CONFLICT_CAP \u2014 Noah Cameron (one source) vs Randy Dobnak (team-page snippet)",
+    "home": "CONFLICT_CAP \u2014 Spencer Arrighetti (one source) vs Spencer Miles (team-page snippet)",
+    "treatment": "two-source conflict; both slots capped (TBD-equivalent) until a resolving attestation; revisit at T-90"
+   },
+   "mlb:LAD@ATL": {
+    "away": "Roki Sasaki (PROBABLE)",
+    "home": "AJ Smith-Shawver (PROBABLE)"
+   },
+   "mlb:MIL@NYM": {
+    "away": "Jacob Misiorowski (PROBABLE)",
+    "home": "Sean Manaea (PROBABLE)"
+   }
+  }
+ },
+ "nfl": {
+  "authoritative_source": {
+   "commit": "68d754badc28daa52af631cd22941e64c4c00d38",
+   "commit_time_utc": "2026-08-27T06:35:12Z",
+   "finding": "272 REG games for season 2026, first gameday 2026-09-09; game_type domain {CON,DIV,REG,SB,WC} \u2014 preseason structurally absent from this source",
+   "path": "data/games.csv",
+   "repo": "github.com/nflverse/nfldata",
+   "sha256_prefix": "e980b1d54bc9b2dd"
+  },
+  "competition_phase": "PRESEASON \u2014 final preseason week (Aug 27-29); determined from authoritative nflverse data showing the 2026 REG season opens 2026-09-09, plus multi-pass search identification of the finale week; ESPN numbers this week 4 (HOF-inclusive), nfl.com numbers it week 3 \u2014 label discrepancy recorded, phase unambiguous",
+  "earliest_start_utc": "2026-08-27T23:00:00Z",
+  "games": [
+   {
+    "away": "Pittsburgh Steelers",
+    "game": "nfl:PIT@BUF",
+    "home": "Buffalo Bills",
+    "start_utc": "2026-08-27T23:00:00Z",
+    "tv": "NFLN"
+   },
+   {
+    "away": "New England Patriots",
+    "game": "nfl:NE@CLE",
+    "home": "Cleveland Browns",
+    "start_utc": "2026-08-28T00:00:00Z",
+    "tv": "Prime Video"
+   },
+   {
+    "away": "San Francisco 49ers",
+    "game": "nfl:SF@LV",
+    "home": "Las Vegas Raiders",
+    "start_utc": "2026-08-28T00:00:00Z",
+    "tv": "local"
+   },
+   {
+    "away": "Los Angeles Rams",
+    "game": "nfl:LAR@LAC",
+    "home": "Los Angeles Chargers",
+    "start_utc": "2026-08-28T02:00:00Z",
+    "tv": "NFLN"
+   }
+  ],
+  "grade": "SEARCH_IDENTIFIED_UNCONFIRMED",
+  "n_games": 4,
+  "reconciliation": {
+   "canonical": 0,
+   "discovered": 4,
+   "explicit_refusals": 4,
+   "refusal_class": "SEARCH_IDENTIFIED_UNCONFIRMED \u2014 no canonical binding source for preseason fixtures; rows carried as benchmark-schedule only"
+  },
+  "routes": [
+   {
+    "outcome": "REFUSED_FOR_PRESEASON",
+    "refusal": "CANONICAL_SOURCE_LACKS_PRESEASON \u2014 authoritative for phase, silent on preseason fixtures",
+    "route": "nflverse/nfldata games.csv"
+   },
+   {
+    "basis": "2026-08-22 acquisition ladder run recorded both domains egress-denied",
+    "outcome": "NOT_ATTEMPTED_KNOWN_EGRESS_DENIED",
+    "route": "nfl.com / espn.com schedule pages (fetch)"
+   },
+   {
+    "outcome": "IDENTIFIED",
+    "passes": "pass1 and pass2 agree on the same 4 Thursday games and times",
+    "route": "web search identification, 2 passes"
+   }
+  ]
+ },
+ "no_silent_disappearance": "every matchup any route surfaced appears above as canonical or refused",
+ "record_id": "SCHEDULE-ACQUISITION-2026-08-27",
+ "record_sha256": "b9717911d996143111c236ca837a1c4fd3a455975c714da4f3dee83d53daafbe",
+ "schema": "ops.schedule_acquisition.v1",
+ "slate_calendar_rule": "US-Eastern calendar date, consistent with every prior board",
+ "wnba": {
+  "earliest_start_utc": "2026-08-28T00:00:00Z",
+  "games": [
+   {
+    "away": "Golden State Valkyries",
+    "broadcast": "Prime Video",
+    "espn_id": 401857178,
+    "game": "wnba:GSV@NYL",
+    "home": "New York Liberty",
+    "start_utc": "2026-08-28T00:00:00Z",
+    "status": "STATUS_SCHEDULED",
+    "venue": "Barclays Center"
+   },
+   {
+    "away": "Washington Mystics",
+    "broadcast": "Prime Video",
+    "espn_id": 401857179,
+    "game": "wnba:WSH@PHX",
+    "home": "Phoenix Mercury",
+    "start_utc": "2026-08-28T02:00:00Z",
+    "status": "STATUS_SCHEDULED",
+    "venue": "Mortgage Matchup Center"
+   }
+  ],
+  "grade": "ESPN_SINGLE_FAMILY_GIT_ARTIFACT \u2014 canonical in-git schedule artifact",
+  "n_games": 2,
+  "reconciliation": {
+   "canonical": 2,
+   "discovered": 2,
+   "explicit_refusals": 0
+  },
+  "source": {
+   "commit": "b843138d82af8713dc564e6921b20947dc5c0081",
+   "path": "wnba/schedules/parquet/wnba_schedule_2026.parquet",
+   "repo": "github.com/sportsdataverse/wehoop-wnba-raw",
+   "retrieved_utc": "2026-08-27T06:47:00Z",
+   "sha256": "769591a74263f93627299b9df3c7f40be995e6696f04bd758a388a27c2d28b9a",
+   "upstream_note": "commit predates 8/26 finals; schedule rows for 8/27 slate are forward fixtures; re-verified at the ~10:30Z upstream refresh"
+  },
+  "utc_date_note": "parquet dates are UTC; the 8/27T02:00Z row is Wednesday's TOR@SEA (already graded), and the US-Thursday slate is the 8/28T00:00Z/02:00Z pair"
+ }
+}

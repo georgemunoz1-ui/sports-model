@@ -1,0 +1,524 @@
+{
+ "schema": "decision_card.v2",
+ "date": "2026-08-21",
+ "rendered_at_utc": "2026-08-21T12:20:00Z",
+ "format": "four_field_lead.v2 + margin/spread separation + observed-vs-keyed delta + named denominators + permanent OUT_OF_DOMAIN block",
+ "banner": "Official betting output: NO QUALIFIED BETS",
+ "vintage_note": "Pregame reads frozen at registration: MLB v2 06:45Z (13h25m before the earliest first pitch), WNBA 06:55Z (16h35m before the earliest tip). MLB starter completeness is 26 of 30 starter slots (86.7% of starter slots) carrying real statistics \u2014 the other 4 slots run league-average (3 unannounced, 1 named but absent from the pitcher registry). Separately, 10 of 15 games (66.7% of games) are fully resolved on both sides. NO PRICES have been acquired, so every row is blocked before screening can occur and no selection of any kind exists. Each MLB row shows both the observed v1-to-v2 change and the keyed-seed reference figure; only the latter is a noise-separated starter effect. NFL preseason appears in a separate benchmark section with no model probabilities, because no NFL model exists. Paper only.",
+ "render_gate": "PASS",
+ "decision_rows": [
+  {
+   "game": "ATL@MIL",
+   "teams": [
+    "ATL",
+    "MIL"
+   ],
+   "start": "20:10Z",
+   "predicted_winner": {
+    "team": "MIL",
+    "win_prob": 0.536,
+    "other_team": "ATL",
+    "other_prob": 0.464
+   },
+   "projected_score": null,
+   "best_price_read": null,
+   "best_total_read": null,
+   "delta_text": "observed change +1.10 points versus the all-league-average version (not yet separated from simulation coupling noise); keyed-seed reference starter effect +1.50 points",
+   "trust_label": "Blocked \u2014 no betting prices exist for this game yet, so nothing can be priced or acted on",
+   "final_action": "BLOCKED",
+   "governing_status": "BLOCKED\u2014NO_PRICES_EXIST",
+   "reason": "Sale and Misiorowski together cut the projected total by 2.4 runs, the largest scoring change on the board.",
+   "sort_edge": null,
+   "extra": "starters Chris Sale vs Jacob Misiorowski; projected total 6.7 runs"
+  },
+  {
+   "game": "STL@PHI",
+   "teams": [
+    "STL",
+    "PHI"
+   ],
+   "start": "22:40Z",
+   "predicted_winner": {
+    "team": "PHI",
+    "win_prob": 0.517,
+    "other_team": "STL",
+    "other_prob": 0.483
+   },
+   "projected_score": null,
+   "best_price_read": null,
+   "best_total_read": null,
+   "delta_text": "observed change +1.80 points versus the all-league-average version (not yet separated from simulation coupling noise); keyed-seed reference starter effect +1.66 points",
+   "trust_label": "Blocked \u2014 no betting prices exist for this game yet, so nothing can be priced or acted on",
+   "final_action": "BLOCKED",
+   "governing_status": "BLOCKED\u2014NO_PRICES_EXIST",
+   "reason": "Philadelphia has named Luzardo but St. Louis has not announced, so half this matchup is still league-average.",
+   "sort_edge": null,
+   "extra": "starters TBD vs Jesus Luzardo \u2014 league-average substitution: STL starter unannounced; projected total 9.3 runs"
+  },
+  {
+   "game": "TOR@NYY",
+   "teams": [
+    "TOR",
+    "NYY"
+   ],
+   "start": "23:05Z",
+   "predicted_winner": {
+    "team": "NYY",
+    "win_prob": 0.631,
+    "other_team": "TOR",
+    "other_prob": 0.369
+   },
+   "projected_score": null,
+   "best_price_read": null,
+   "best_total_read": null,
+   "delta_text": "observed change +8.10 points versus the all-league-average version (not yet separated from simulation coupling noise); keyed-seed reference starter effect +7.33 points",
+   "trust_label": "Blocked \u2014 no betting prices exist for this game yet, so nothing can be priced or acted on",
+   "final_action": "BLOCKED",
+   "governing_status": "BLOCKED\u2014NO_PRICES_EXIST",
+   "reason": "New York moved the most of any game once Schlittler was named, while Toronto remains unannounced.",
+   "sort_edge": null,
+   "extra": "starters TBD vs Cam Schlittler \u2014 league-average substitution: TOR starter unannounced; projected total 7.9 runs"
+  },
+  {
+   "game": "SF@BOS",
+   "teams": [
+    "SF",
+    "BOS"
+   ],
+   "start": "23:10Z",
+   "predicted_winner": {
+    "team": "BOS",
+    "win_prob": 0.576,
+    "other_team": "SF",
+    "other_prob": 0.424
+   },
+   "projected_score": null,
+   "best_price_read": null,
+   "best_total_read": null,
+   "delta_text": "observed change +2.50 points versus the all-league-average version (not yet separated from simulation coupling noise); keyed-seed reference starter effect +2.63 points",
+   "trust_label": "Blocked \u2014 no betting prices exist for this game yet, so nothing can be priced or acted on",
+   "final_action": "BLOCKED",
+   "governing_status": "BLOCKED\u2014NO_PRICES_EXIST",
+   "reason": "Webb against Gray is the sharpest named pitching matchup on the board and it barely moved the number.",
+   "sort_edge": null,
+   "extra": "starters Logan Webb vs Sonny Gray; projected total 7.3 runs"
+  },
+  {
+   "game": "WSH@MIA",
+   "teams": [
+    "WSH",
+    "MIA"
+   ],
+   "start": "23:10Z",
+   "predicted_winner": {
+    "team": "WSH",
+    "win_prob": 0.53,
+    "other_team": "MIA",
+    "other_prob": 0.47
+   },
+   "projected_score": null,
+   "best_price_read": null,
+   "best_total_read": null,
+   "delta_text": "observed change +0.40 points versus the all-league-average version (not yet separated from simulation coupling noise); keyed-seed reference starter effect +0.38 points",
+   "trust_label": "Blocked \u2014 no betting prices exist for this game yet, so nothing can be priced or acted on",
+   "final_action": "BLOCKED",
+   "governing_status": "BLOCKED\u2014NO_PRICES_EXIST",
+   "reason": "Two low-profile starters left this almost exactly where the all-league-average version had it.",
+   "sort_edge": null,
+   "extra": "starters Brad Lord vs Ryan Gusto \u2014 league-average substitution: MIA starter absent from the pitcher registry; projected total 8.5 runs"
+  },
+  {
+   "game": "TB@BAL",
+   "teams": [
+    "TB",
+    "BAL"
+   ],
+   "start": "23:15Z",
+   "predicted_winner": {
+    "team": "BAL",
+    "win_prob": 0.519,
+    "other_team": "TB",
+    "other_prob": 0.481
+   },
+   "projected_score": null,
+   "best_price_read": null,
+   "best_total_read": null,
+   "delta_text": "observed change +2.20 points versus the all-league-average version (not yet separated from simulation coupling noise); keyed-seed reference starter effect +3.02 points",
+   "trust_label": "Blocked \u2014 no betting prices exist for this game yet, so nothing can be priced or acted on",
+   "final_action": "BLOCKED",
+   "governing_status": "BLOCKED\u2014NO_PRICES_EXIST",
+   "reason": "Peralta and Rogers between them nudged Baltimore up and raised the projected total.",
+   "sort_edge": null,
+   "extra": "starters Freddy Peralta vs Trevor Rogers; projected total 9.3 runs"
+  },
+  {
+   "game": "NYM@CWS",
+   "teams": [
+    "NYM",
+    "CWS"
+   ],
+   "start": "23:40Z",
+   "predicted_winner": {
+    "team": "CWS",
+    "win_prob": 0.59,
+    "other_team": "NYM",
+    "other_prob": 0.41
+   },
+   "projected_score": null,
+   "best_price_read": null,
+   "best_total_read": null,
+   "delta_text": "observed change +4.30 points versus the all-league-average version (not yet separated from simulation coupling noise); keyed-seed reference starter effect +3.82 points",
+   "trust_label": "Blocked \u2014 no betting prices exist for this game yet, so nothing can be priced or acted on",
+   "final_action": "BLOCKED",
+   "governing_status": "BLOCKED\u2014NO_PRICES_EXIST",
+   "reason": "Chicago moved more than four points toward the home side once both starters were named.",
+   "sort_edge": null,
+   "extra": "starters Sean Manaea vs Sean Burke; projected total 8.0 runs"
+  },
+  {
+   "game": "DET@KC",
+   "teams": [
+    "DET",
+    "KC"
+   ],
+   "start": "00:10Z",
+   "predicted_winner": {
+    "team": "DET",
+    "win_prob": 0.616,
+    "other_team": "KC",
+    "other_prob": 0.384
+   },
+   "projected_score": null,
+   "best_price_read": null,
+   "best_total_read": null,
+   "delta_text": "observed change -7.50 points versus the all-league-average version (not yet separated from simulation coupling noise); keyed-seed reference starter effect -7.49 points",
+   "trust_label": "Blocked \u2014 no betting prices exist for this game yet, so nothing can be priced or acted on",
+   "final_action": "BLOCKED",
+   "governing_status": "BLOCKED\u2014NO_PRICES_EXIST",
+   "reason": "The largest move against a home team on the board, with both starters changing from league-average at once.",
+   "sort_edge": null,
+   "extra": "starters Troy Melton vs Noah Cameron; projected total 8.6 runs"
+  },
+  {
+   "game": "ATH@HOU",
+   "teams": [
+    "ATH",
+    "HOU"
+   ],
+   "start": "00:10Z",
+   "predicted_winner": {
+    "team": "HOU",
+    "win_prob": 0.519,
+    "other_team": "ATH",
+    "other_prob": 0.481
+   },
+   "projected_score": null,
+   "best_price_read": null,
+   "best_total_read": null,
+   "delta_text": "observed change -1.00 points versus the all-league-average version (not yet separated from simulation coupling noise); keyed-seed reference starter effect -1.58 points",
+   "trust_label": "Blocked \u2014 no betting prices exist for this game yet, so nothing can be priced or acted on",
+   "final_action": "BLOCKED",
+   "governing_status": "BLOCKED\u2014NO_PRICES_EXIST",
+   "reason": "Houston's starter is named but absent from the pitcher registry, so that side runs league-average anyway.",
+   "sort_edge": null,
+   "extra": "starters J.T. Ginn vs Hayden Wesneski \u2014 league-average substitution: HOU starter absent from the pitcher registry; projected total 8.6 runs"
+  },
+  {
+   "game": "LAA@TEX",
+   "teams": [
+    "LAA",
+    "TEX"
+   ],
+   "start": "00:15Z",
+   "predicted_winner": {
+    "team": "LAA",
+    "win_prob": 0.513,
+    "other_team": "TEX",
+    "other_prob": 0.487
+   },
+   "projected_score": null,
+   "best_price_read": null,
+   "best_total_read": null,
+   "delta_text": "observed change -1.50 points versus the all-league-average version (not yet separated from simulation coupling noise); keyed-seed reference starter effect -2.15 points",
+   "trust_label": "Blocked \u2014 no betting prices exist for this game yet, so nothing can be priced or acted on",
+   "final_action": "BLOCKED",
+   "governing_status": "BLOCKED\u2014NO_PRICES_EXIST",
+   "reason": "Detmers against Gore is a true coin flip after both starters resolved.",
+   "sort_edge": null,
+   "extra": "starters Reid Detmers vs MacKenzie Gore; projected total 7.7 runs"
+  },
+  {
+   "game": "CLE@COL",
+   "teams": [
+    "CLE",
+    "COL"
+   ],
+   "start": "00:40Z",
+   "predicted_winner": {
+    "team": "COL",
+    "win_prob": 0.514,
+    "other_team": "CLE",
+    "other_prob": 0.486
+   },
+   "projected_score": null,
+   "best_price_read": null,
+   "best_total_read": null,
+   "delta_text": "observed change -2.20 points versus the all-league-average version (not yet separated from simulation coupling noise); keyed-seed reference starter effect -1.89 points",
+   "trust_label": "Blocked \u2014 no betting prices exist for this game yet, so nothing can be priced or acted on",
+   "final_action": "BLOCKED",
+   "governing_status": "BLOCKED\u2014NO_PRICES_EXIST",
+   "reason": "Coors keeps the projected total near ten regardless of who pitches.",
+   "sort_edge": null,
+   "extra": "starters Joey Cantillo vs Tanner Gordon; projected total 9.9 runs"
+  },
+  {
+   "game": "CIN@AZ",
+   "teams": [
+    "CIN",
+    "AZ"
+   ],
+   "start": "01:40Z",
+   "predicted_winner": {
+    "team": "AZ",
+    "win_prob": 0.581,
+    "other_team": "CIN",
+    "other_prob": 0.419
+   },
+   "projected_score": null,
+   "best_price_read": null,
+   "best_total_read": null,
+   "delta_text": "observed change +3.80 points versus the all-league-average version (not yet separated from simulation coupling noise); keyed-seed reference starter effect +4.58 points",
+   "trust_label": "Blocked \u2014 no betting prices exist for this game yet, so nothing can be priced or acted on",
+   "final_action": "BLOCKED",
+   "governing_status": "BLOCKED\u2014NO_PRICES_EXIST",
+   "reason": "Eduardo Rodriguez is named unambiguously here, unlike yesterday's four-way surname problem.",
+   "sort_edge": null,
+   "extra": "starters Nick Lodolo vs Eduardo Rodriguez; projected total 8.7 runs"
+  },
+  {
+   "game": "MIN@SD",
+   "teams": [
+    "MIN",
+    "SD"
+   ],
+   "start": "01:40Z",
+   "predicted_winner": {
+    "team": "SD",
+    "win_prob": 0.517,
+    "other_team": "MIN",
+    "other_prob": 0.483
+   },
+   "projected_score": null,
+   "best_price_read": null,
+   "best_total_read": null,
+   "delta_text": "observed change +2.50 points versus the all-league-average version (not yet separated from simulation coupling noise); keyed-seed reference starter effect +2.62 points",
+   "trust_label": "Blocked \u2014 no betting prices exist for this game yet, so nothing can be priced or acted on",
+   "final_action": "BLOCKED",
+   "governing_status": "BLOCKED\u2014NO_PRICES_EXIST",
+   "reason": "San Diego has not announced, so the home side is still league-average.",
+   "sort_edge": null,
+   "extra": "starters Connor Prielipp vs TBD \u2014 league-average substitution: SD starter unannounced; projected total 8.0 runs"
+  },
+  {
+   "game": "PIT@LAD",
+   "teams": [
+    "PIT",
+    "LAD"
+   ],
+   "start": "02:10Z",
+   "predicted_winner": {
+    "team": "LAD",
+    "win_prob": 0.582,
+    "other_team": "PIT",
+    "other_prob": 0.418
+   },
+   "projected_score": null,
+   "best_price_read": null,
+   "best_total_read": null,
+   "delta_text": "observed change +6.20 points versus the all-league-average version (not yet separated from simulation coupling noise); keyed-seed reference starter effect +5.79 points",
+   "trust_label": "Blocked \u2014 no betting prices exist for this game yet, so nothing can be priced or acted on",
+   "final_action": "BLOCKED",
+   "governing_status": "BLOCKED\u2014NO_PRICES_EXIST",
+   "reason": "Los Angeles moved six points once Yamamoto was named; Pittsburgh's Chandler did not offset it.",
+   "sort_edge": null,
+   "extra": "starters Bubba Chandler vs Yoshinobu Yamamoto; projected total 8.8 runs"
+  },
+  {
+   "game": "CHC@SEA",
+   "teams": [
+    "CHC",
+    "SEA"
+   ],
+   "start": "02:10Z",
+   "predicted_winner": {
+    "team": "CHC",
+    "win_prob": 0.541,
+    "other_team": "SEA",
+    "other_prob": 0.459
+   },
+   "projected_score": null,
+   "best_price_read": null,
+   "best_total_read": null,
+   "delta_text": "observed change +2.80 points versus the all-league-average version (not yet separated from simulation coupling noise); keyed-seed reference starter effect +2.81 points",
+   "trust_label": "Blocked \u2014 no betting prices exist for this game yet, so nothing can be priced or acted on",
+   "final_action": "BLOCKED",
+   "governing_status": "BLOCKED\u2014NO_PRICES_EXIST",
+   "reason": "Both starters named moved this toward Seattle, but the Cubs remain the model's pick.",
+   "sort_edge": null,
+   "extra": "starters Matthew Boyd vs Emerson Hancock; projected total 7.5 runs"
+  },
+  {
+   "game": "MIN@WAS",
+   "teams": [
+    "MIN",
+    "WAS"
+   ],
+   "start": "23:30Z",
+   "predicted_winner": {
+    "team": "MIN",
+    "win_prob": 0.7477,
+    "other_team": "WAS",
+    "other_prob": 0.2523
+   },
+   "projected_score": null,
+   "best_price_read": null,
+   "best_total_read": null,
+   "margin_text": "WAS projected to lose by 7.23 (fair spread WAS +7.23)",
+   "trust_label": "Blocked \u2014 no betting prices exist for this game yet, so nothing can be priced or acted on",
+   "final_action": "BLOCKED",
+   "governing_status": "BLOCKED\u2014NO_PRICES_EXIST",
+   "reason": "Minnesota is the model's clearest read on either board tonight; the spread model's known blowout compression means even a 7-point projected margin understates its own tail.",
+   "sort_edge": null,
+   "extra": "model total 169.3 points (diagnostic only, never a recommendation); no spread line exists, so no spread selection was registered"
+  },
+  {
+   "game": "GSV@CHI",
+   "teams": [
+    "GSV",
+    "CHI"
+   ],
+   "start": "02:00Z",
+   "predicted_winner": {
+    "team": "GSV",
+    "win_prob": 0.6354,
+    "other_team": "CHI",
+    "other_prob": 0.3646
+   },
+   "projected_score": null,
+   "best_price_read": null,
+   "best_total_read": null,
+   "margin_text": "CHI projected to lose by 4.08 (fair spread CHI +4.08)",
+   "trust_label": "Blocked \u2014 no betting prices exist for this game yet, so nothing can be priced or acted on",
+   "final_action": "BLOCKED",
+   "governing_status": "BLOCKED\u2014NO_PRICES_EXIST",
+   "reason": "Golden State favored on the road by a margin head that has missed badly on exactly this shape.",
+   "sort_edge": null,
+   "extra": "model total 167.1 points (diagnostic only, never a recommendation); no spread line exists, so no spread selection was registered"
+  },
+  {
+   "game": "PDX@TOR",
+   "teams": [
+    "PDX",
+    "TOR"
+   ],
+   "start": "02:00Z",
+   "predicted_winner": {
+    "team": "TOR",
+    "win_prob": 0.6117,
+    "other_team": "PDX",
+    "other_prob": 0.3883
+   },
+   "projected_score": null,
+   "best_price_read": null,
+   "best_total_read": null,
+   "margin_text": "TOR projected to win by 3.55 (fair spread TOR -3.55)",
+   "trust_label": "Blocked permanently \u2014 this game is at a neutral site and the model applied a full home-court advantage it has not earned; the forecast is outside the model's domain",
+   "final_action": "BLOCKED",
+   "governing_status": "OUT_OF_DOMAIN\u2014NEUTRAL_SITE_HCA_UNMODELED",
+   "reason": "Toronto is nominally the home team but the game is in Vancouver, and the model applied a full home-court advantage it has not earned \u2014 this row is outside the model's domain and stays blocked even after prices arrive.",
+   "sort_edge": null,
+   "extra": "model total 170.1 points (diagnostic only, never a recommendation); no spread line exists, so no spread selection was registered"
+  }
+ ],
+ "nfl_benchmark": [
+  {
+   "g": "NYJ@PIT",
+   "away": "NYJ",
+   "home": "PIT",
+   "kick_utc": "2026-08-21T20:00Z",
+   "open": {
+    "spread": "PIT -3 (-110)",
+    "total": "o39.5 (-115)"
+   },
+   "capture_spread": {
+    "NYJ": -1.5,
+    "PIT": 1.5
+   },
+   "capture_ml": {
+    "NYJ": -125,
+    "PIT": 105
+   },
+   "capture_total": {
+    "line": 36.5,
+    "over": -110,
+    "under": -110
+   },
+   "registered_benchmark_side": "NYJ",
+   "benchmark_basis": "capture-time favorite: NYJ -1.5 (-102), ML -125",
+   "line_move_note": "OPEN had PIT -3; the line flipped to NYJ -1.5 by capture. Both recorded."
+  },
+  {
+   "g": "CAR@JAX",
+   "away": "CAR",
+   "home": "JAX",
+   "kick_utc": "2026-08-21T20:30Z",
+   "open": {
+    "spread": "JAX -1.5 (-115)",
+    "total": "o39.5 (-115)"
+   },
+   "capture_spread": {
+    "CAR": -1.5,
+    "JAX": 1.5
+   },
+   "capture_ml": {
+    "CAR": -135,
+    "JAX": 110
+   },
+   "capture_total": {
+    "line": 37.5,
+    "over": -112,
+    "under": -108
+   },
+   "registered_benchmark_side": "CAR",
+   "benchmark_basis": "capture-time favorite: CAR -1.5 (-110), ML -135",
+   "line_move_note": "OPEN had JAX -1.5; flipped to CAR -1.5 by capture. Both recorded."
+  },
+  {
+   "g": "GB@DEN",
+   "away": "GB",
+   "home": "DEN",
+   "kick_utc": "2026-08-21T22:00Z",
+   "open": {
+    "spread": "DEN -3.5 (-115)",
+    "total": "o38.5 (-115)"
+   },
+   "capture_spread": {
+    "GB": 6.0,
+    "DEN": -6.0
+   },
+   "capture_ml": {
+    "GB": 200,
+    "DEN": -245
+   },
+   "capture_total": {
+    "line": 40.5,
+    "over": -118,
+    "under": -102
+   },
+   "registered_benchmark_side": "DEN",
+   "benchmark_basis": "capture-time favorite: DEN -6 (-108), ML -245",
+   "line_move_note": "OPEN had DEN -3.5; moved to DEN -6 by capture (same side, larger number)."
+  }
+ ],
+ "supersedes": "data/cards_decision/2026-08-21.md rendered 07:10Z (four presentation defects)"
+}

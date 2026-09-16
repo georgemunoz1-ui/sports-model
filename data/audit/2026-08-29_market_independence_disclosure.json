@@ -1,0 +1,58 @@
+{
+ "ANTI_CONTRARIAN": {
+  "clause": "market independence does not mean fading favorites. Direction comes exclusively from model evidence.",
+  "enforcement": "DIAGNOSTIC, never a refusal. Requiring some minimum agreement with the market would be anchoring with the sign flipped, which the rule forbids.",
+  "measured_2026_08_29_cfb": {
+   "agree_with_favorite": 6,
+   "flag": "OK",
+   "n": 8,
+   "share": 0.75
+  }
+ },
+ "FALSE_POSITIVE_GUARD": {
+  "guard": "selftest F3 pins that exact case plus line_yards and money_down_conversion",
+  "history": "an earlier crude firewall in this repo matched the substring 'point' and rejected home_ewma_points_for, a PREREGISTERED feature. A false positive that breaks a legitimate model is not a safe failure \u2014 it deletes real signal and looks like caution."
+ },
+ "FINDING_ON_FIRST_RUN": {
+  "adjudication": "TRUE market data, but a MARKET COMPARISON output rather than a feature: it is computed after the model margin exists and compares the two. Classified into the market layer.",
+  "the_real_finding": "the CFB board has NO structural layer separation. A comparison artifact sits in the same key namespace as features, so the only thing distinguishing them is a hand-maintained list. That is fragile, and it is why REQUIRED_LAYERS is enforced for decision artifacts going forward.",
+  "what": "the gate refused all 8 CFB rows on 'fbs_fcs_extreme_spread_review', the preregistered 14-point extreme-disagreement audit flag."
+ },
+ "LEDGER": {
+  "n_bets": 0,
+  "units": 0.0,
+  "wager_authority": "NO"
+ },
+ "NON_COMPLIANCE_DISCLOSED": {
+  "accrual": "NOTHING accrues to settlement, promotion or the estimator",
+  "date": "2026-08-28",
+  "status": "WITHDRAWN as a model forecast; retained on record as a market-comparison exercise",
+  "what": "market de-vig was used as a PREDICTIVE ensemble component \u2014 CFB w=0.3, MLB/WNBA w=0.6, meaning the MLB and WNBA 'forecasts' were majority-market",
+  "why_it_matters": "a majority-market forecast is not a forecast. It is the market's opinion with a model-shaped error bar, and any edge measured against the market by such a thing is measuring the market against itself."
+ },
+ "OPEN": "MLB and WNBA both HAVE registered market-independent arms \u2014 6 MLB arms on the 8/28 board with zero market features, and wnba.rs.ff7_logit_ridge.v1_0.shadow, run against tonight's slate. The claim that neither sport has one is false. MLB's impairment tonight is starter data 37-48 days stale, which is a freshness problem, not an absence problem, and the two need opposite fixes.",
+ "THE_RULE_IS_NOT_NEW": {
+  "consequence": "the 2026-08-28 market-weighted ensemble did not violate a rule adopted afterwards. It violated a constraint already in force. Writing it down changed the enforceability, not the obligation \u2014 and that is the more serious reading, so it is the one recorded.",
+  "finding": "the constraint predates the written artifact. 'Prices are never predictive features and enter only the action/EV overlay' was already asserted in five places in the board builders before this document existed.",
+  "locations": [
+   "harness/build_board_0828.py:334",
+   "harness/build_card_0828.py:306",
+   "harness/build_full_card_0828.py:684",
+   "harness/build_full_card_0828.py:829",
+   "harness/build_board_nfl_0828.py:174"
+  ]
+ },
+ "VERIFIED_COMPLIANT_ON_ADOPTION": {
+  "cards/2026-08-28_mlb_board.json": "PASS \u2014 90 rows, zero market-derived features",
+  "cards/2026-08-28_wnba_board_v2.json": "PASS \u2014 12 rows",
+  "cards/2026-08-29_cfb_board.json": "PASS after classifying the audit flag (see below)",
+  "method": "schema scan by harness/market_independence.validate_board, not assertion"
+ },
+ "created_utc": "2026-08-29T10:30:55Z",
+ "enforced_by": "harness/market_independence.py (wired into harness/healthcheck.py)",
+ "record_id": "MARKET-INDEPENDENCE-2026-08-29",
+ "record_sha256": "772ef35e0958c358438ca70683fccd67c454afba95f70904a8c4760dbf46e26a",
+ "rule": "docs/MARKET_INDEPENDENCE_RULE.md",
+ "schema": "ops.governance_disclosure.v1",
+ "standing": "same force as R1, R3, R6"
+}

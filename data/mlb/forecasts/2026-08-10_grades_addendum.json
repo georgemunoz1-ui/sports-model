@@ -1,0 +1,43 @@
+{
+ "record_id": "SLATE-GRADES-2026-08-10-ADDENDUM",
+ "graded_utc": "2026-08-11T20:13:24Z",
+ "appends_to": "data/mlb/forecasts/2026-08-10_grades.json (unchanged, per append-only)",
+ "what_changed": "The three games held for lack of a FINAL marker are now resolved by the owner's 8/11 pregame board: every one of the 20 teams that played 8/10 moved exactly +1W or +1L vs results.csv, the 10 idle teams moved zero, and the series states read TEX 1-0, TB 1-0, LAD 1-0. Winners are therefore tier-1 corroborated two independent ways (8/10 linescore capture + 8/11 records/series).",
+ "resolved": [
+  {
+   "forecast_id": "P4-20260810v2-TB@ATH",
+   "final": "10-6",
+   "home_won": 0,
+   "v13_home_wp": 0.451,
+   "brier": 0.2034,
+   "side_correct": true,
+   "result_status": "FINAL (dual evidence)"
+  },
+  {
+   "forecast_id": "P4-20260810v2-KC@LAD",
+   "final": "5-6",
+   "home_won": 1,
+   "v13_home_wp": 0.639,
+   "brier": 0.1303,
+   "side_correct": true,
+   "result_status": "FINAL (dual evidence)"
+  },
+  {
+   "forecast_id": "P4-20260810-TEX@LAA",
+   "final_winner": "TEX (away)",
+   "home_won": 0,
+   "v13_home_wp": 0.504,
+   "brier": 0.254,
+   "side_correct": false,
+   "result_status": "winner FINAL; score PROVISIONAL (4-1 was mid-10th at capture)"
+  }
+ ],
+ "ten_game_totals": {
+  "n": 10,
+  "brier": 0.2554,
+  "side_accuracy": "4/10",
+  "constant_0.5_brier": 0.25,
+  "evidence_class": "LEDGER MAINTENANCE ONLY \u2014 ten games resolve nothing about estimator or feature quality, exactly as pre-agreed. The full-slate Brier landing above a coin at n=10 carries the same non-information as the 7-game figure did."
+ },
+ "registry": "10 grade rows appended (chain verifies: 134 forecasts, 117 grades); 10 results.csv rows appended (9 FINAL, TEX@LAA PROVISIONAL score); ml_asof rebuilt to vintage 5769038 after the gate correctly caught the drift"
+}

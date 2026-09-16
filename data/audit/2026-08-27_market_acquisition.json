@@ -1,0 +1,36 @@
+{
+ "attempts": [
+  {
+   "error": "EGRESS_BLOCKED",
+   "observed_utc": "2026-08-27T07:09:00Z",
+   "outcome": "REFUSED",
+   "route": "sportsbook.draftkings.com/leagues/baseball/mlb (WebFetch)"
+  },
+  {
+   "error": "EGRESS_BLOCKED",
+   "observed_utc": "2026-08-27T07:09:30Z",
+   "outcome": "REFUSED",
+   "route": "sportsbook-nash.draftkings.com API (WebFetch)"
+  }
+ ],
+ "book_policy": "DraftKings named-book capture, opening and current separately; cross-book best-odds de-vig remains INVALID (8/3 ruling)",
+ "created_utc": "2026-08-27T07:10:00Z",
+ "ev_policy": "no raw EV, no conservative EV, no candidate/pass EV dispositions can be computed without a retained price; prices never reconstructed backward from EV",
+ "record_id": "MARKET-ACQUISITION-2026-08-27",
+ "record_sha256": "0c1264ebf3c31389ab765e232983d91c583f7403cf63c3b15de88eff3806bb68",
+ "retry_plan": "re-attempt at each registered T-90/T-45 checkpoint per sport; owner relay remains an authorized route",
+ "schema": "ops.market_acquisition.v1",
+ "snippet_prices_seen_not_retained": [
+  {
+   "disposition": "IDENTIFIED_NEVER_BOUND \u2014 snippets are not canonical evidence; no book attribution chain; NOT a retained price",
+   "fragment": "Nationals -120 (ESPN snippet)",
+   "game": "mlb:COL@WSH"
+  },
+  {
+   "disposition": "IDENTIFIED_NEVER_BOUND \u2014 same",
+   "fragment": "Orioles -120 (ESPN snippet)",
+   "game": "mlb:BAL@STL"
+  }
+ ],
+ "state": "NO_RETAINED_MARKET_ARTIFACT \u2014 acquisition failed on every authorized route at this hour; this is an acquisition failure, never a claim that no market exists"
+}

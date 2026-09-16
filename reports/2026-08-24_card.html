@@ -1,0 +1,103 @@
+<title>August 24 Forecast Board</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,600&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>:root{
+  --ground:#EEF1F4; --surface:#FFFFFF; --sunk:#F5F7F9;
+  --ink:#0F1418; --muted:#5C6873; --hair:#D5DCE1; --hair2:#E7EBEE;
+  --accent:#14515F; --accent-soft:#DFEDF0;
+  --warn:#8A4E17; --warn-soft:#F5E9DB;
+  --refuse:#8A2A38; --refuse-soft:#F6E3E5;
+  --ok:#245F4A; --ok-soft:#DFEDE7;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --ground:#0C1115; --surface:#141A1F; --sunk:#10161A;
+    --ink:#E3E9ED; --muted:#93A2AE; --hair:#27323A; --hair2:#1D262D;
+    --accent:#6FC4D4; --accent-soft:#11303A;
+    --warn:#D9A46A; --warn-soft:#2F2415;
+    --refuse:#E0899A; --refuse-soft:#31191F;
+    --ok:#7DC7A9; --ok-soft:#112C24;
+  }
+}
+:root[data-theme="dark"]{
+  --ground:#0C1115; --surface:#141A1F; --sunk:#10161A;
+  --ink:#E3E9ED; --muted:#93A2AE; --hair:#27323A; --hair2:#1D262D;
+  --accent:#6FC4D4; --accent-soft:#11303A;
+  --warn:#D9A46A; --warn-soft:#2F2415;
+  --refuse:#E0899A; --refuse-soft:#31191F;
+  --ok:#7DC7A9; --ok-soft:#112C24;
+}
+*{box-sizing:border-box}
+body{background:var(--ground);color:var(--ink);
+  font:400 16px/1.6 "IBM Plex Sans",system-ui,-apple-system,sans-serif;
+  margin:0;padding:clamp(20px,4vw,56px) clamp(14px,3vw,32px)}
+.wrap{max-width:1140px;margin:0 auto;display:flex;flex-direction:column;gap:26px}
+header{border-bottom:2px solid var(--ink);padding-bottom:22px;display:flex;flex-direction:column;gap:10px}
+h1{font:600 clamp(30px,4.4vw,50px)/1.06 Newsreader,Georgia,serif;margin:0;text-wrap:balance;letter-spacing:-.015em}
+.dek{font:400 17px/1.55 Newsreader,Georgia,serif;color:var(--muted);max-width:66ch;margin:0}
+.meta{display:flex;flex-wrap:wrap;gap:8px 20px;font:500 11.5px/1.5 "IBM Plex Mono",monospace;
+  color:var(--muted);letter-spacing:.06em;text-transform:uppercase;margin-top:2px}
+.meta b{color:var(--ink);font-weight:600}
+section{background:var(--surface);border:1px solid var(--hair);border-radius:3px;
+  padding:clamp(16px,2.6vw,26px);display:flex;flex-direction:column;gap:14px}
+h2{font:600 21px/1.25 Newsreader,Georgia,serif;margin:0;text-wrap:balance}
+h3{font:600 11px/1 "IBM Plex Mono",monospace;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--muted);margin:0 0 7px}
+p{margin:0 0 10px;max-width:74ch} p:last-child{margin-bottom:0}
+.amhead{display:flex;align-items:baseline;gap:14px;border-bottom:1px solid var(--hair2);padding-bottom:11px}
+.num{font:600 12px/1 "IBM Plex Mono",monospace;color:var(--accent);
+  border:1px solid var(--accent);border-radius:2px;padding:5px 7px;flex:none;white-space:nowrap}
+.amgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:22px}
+.result{background:var(--sunk);border-left:3px solid var(--accent);padding:13px 16px;border-radius:0 3px 3px 0}
+.scroll{overflow-x:auto;border:1px solid var(--hair2);border-radius:3px}
+table{border-collapse:collapse;width:100%;font-size:13.5px}
+th{background:var(--sunk);text-align:right;padding:9px 11px;border-bottom:1px solid var(--hair);
+  font:600 10.5px/1.35 "IBM Plex Mono",monospace;letter-spacing:.04em;color:var(--muted);
+  vertical-align:bottom}
+th.l,td.l{text-align:left}
+td{padding:9px 11px;border-bottom:1px solid var(--hair2);text-align:right;vertical-align:top}
+tbody tr:last-child td{border-bottom:none}
+td.n,td.t,.mono{font-family:"IBM Plex Mono",monospace;font-variant-numeric:tabular-nums}
+td.t{color:var(--muted);font-size:12.5px}
+.sub{font:400 10.5px/1.4 "IBM Plex Mono",monospace;color:var(--muted);margin-top:3px;white-space:normal}
+.tag{display:inline-block;font:500 10.5px/1.4 "IBM Plex Mono",monospace;padding:2px 6px;
+  border-radius:2px;white-space:normal;overflow:visible;text-overflow:clip;max-width:none}
+.block{background:var(--refuse-soft);color:var(--refuse)}
+.pass{background:var(--ok-soft);color:var(--ok)}
+.warn,.null{background:var(--warn-soft);color:var(--warn)}
+.flip{background:var(--accent-soft);color:var(--accent)}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1px;
+  background:var(--hair2);border:1px solid var(--hair2);border-radius:3px;overflow:hidden}
+.stat{background:var(--surface);padding:13px 15px;display:flex;flex-direction:column;gap:5px}
+.stat span{font:600 10px/1.4 "IBM Plex Mono",monospace;letter-spacing:.04em;color:var(--muted)}
+.stat b{font:500 25px/1 "IBM Plex Mono",monospace;font-variant-numeric:tabular-nums}
+.stat i{font-style:normal;font-size:11.5px;color:var(--muted);line-height:1.45}
+ul{margin:0;padding-left:18px} li{margin-bottom:6px;max-width:72ch}
+code{font-family:"IBM Plex Mono",monospace;font-size:12.5px;background:var(--sunk);padding:1px 4px;border-radius:2px}
+footer{color:var(--muted);font-size:13px;border-top:1px solid var(--hair);padding-top:18px;max-width:78ch}
+a:focus-visible,:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+@media (max-width:640px){.amgrid{grid-template-columns:1fr}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+.n.win{color:var(--ok);font-weight:600}.tag.ok{background:var(--ok-soft);color:var(--ok)}
+.banner{background:var(--refuse-soft);border:1px solid var(--refuse);border-radius:3px;padding:16px 19px}
+.banner b{color:var(--refuse)}
+.banner.concl{background:var(--accent-soft);border-color:var(--accent)}.banner.concl b{color:var(--accent)}
+.kv{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:1px;background:var(--hair2);
+ border:1px solid var(--hair2);border-radius:3px;overflow:hidden}
+.kv>div{background:var(--surface);padding:12px 15px;display:flex;flex-direction:column;gap:4px}
+.kv span{font:600 10px/1.4 "IBM Plex Mono",monospace;letter-spacing:.04em;color:var(--muted)}
+.kv b{font:500 17px/1.15 "IBM Plex Mono",monospace}
+.kv i{font-style:normal;font-size:11.5px;color:var(--muted);line-height:1.45}
+</style>
+<div class="wrap"><header><h1>August 24 Forecast Board</h1><p class="dek">Twelve games, two cohorts, every arm registered and anchored before first pitch. No selections, because there is nothing to select against &mdash; read the first box.</p><div class="meta"><span>slate <b>2026-08-24</b></span><span>anchored <b>10:48:32Z REMOTE_OBSERVED</b></span><span>wagers <b>$0 at 0 bets</b></span><span>execution <b>NO</b></span><span>status <b>FORWARD_ONLY_PENDING</b></span></div></header>
+<div class="banner"><p><b>THIS IS NOT A BETTING CARD, AND IT CANNOT BE ONE TODAY.</b> A selection needs a model probability, a price, an EV, an uncertainty and a stated risk. <b>No prices exist for this slate.</b> Every fetch rail is blocked, no market board was captured, and no captured board for any recent slate clears the same-book bar in full.</p><p>Without a price there is no break-even probability, so there is no edge, so there is no selection &mdash; not a thin one, not a lean, not a "best of the board". Every row below is <code>PASS_REFERENCE_ONLY</code> or <code>ACTION_BLOCKED</code>, action authority is NONE on all twelve games, and the model-authorized ledger stays at $0 across 0 bets. If a price board reaches the action overlay before first pitch, EV can be computed against these frozen probabilities &mdash; which is exactly why they are frozen and anchored now.</p></div>
+<div class="kv"><div><span>mlb.winner.EXPANDING_HOME_PRIOR</span><b>0.520540</b><i>n=1,684 canonical games. PRIOR_PARAMETER_SD 1.21pp. Latest canonical result 8/21 &mdash; the 8/23 finals are provisional and are not in it.</i></div><div><span>mlb.total.EXPANDING_TOTAL_PRIOR</span><b>8.99 runs</b><i>PRIOR_POOL_SD_RUNS 4.55. It beat every model arm on 8/23, which is why it is on the board.</i></div><div><span>CROSS_GAME_P_SD &middot; mlb.winner.CHAMPION_V13</span><b>4.30 pp</b><i>Dispersion across the slate. Not a handicap, not an uncertainty.</i></div><div><span>CROSS_GAME_P_SD &middot; mlb.winner.CHALLENGER_ADAPTIVE</span><b>1.67 pp</b><i>The compression the widened arm exists to test.</i></div></div>
+<section><h2>MLB &mdash; 10 games</h2><div class="scroll"><table><thead><tr><th class="l">Game</th><th>First pitch</th><th>mlb.winner.EXPANDING_HOME_PRIOR</th><th>mlb.winner.CHAMPION_V13</th><th>mlb.winner.CHAMPION_V13_100K</th><th>mlb.winner.CHALLENGER_ADAPTIVE</th><th>mlb.winner.CHALLENGER_WIDENED</th><th>mlb.total.CHAMPION_V13</th><th>mlb.total.CHAMPION_V13_100K</th><th>Information dose</th><th class="l">Action status</th></tr></thead><tbody><tr><td class="l"><b>BOS@MIA</b><div class="sub">loanDepot park &middot; Ranger Suárez / Sandy Alcantara</div></td><td class="t">3:40 PM PT</td><td class="n">0.5205</td><td class="n">0.4981</td><td class="n">0.4999</td><td class="n">0.5167</td><td class="n">0.5104</td><td class="n">7.73</td><td class="n">7.70</td><td class="n">1.0</td><td class="l"><span class="tag pass">PASS_REFERENCE_ONLY</span></td></tr><tr><td class="l"><b>TB@DET</b><div class="sub">Comerica Park &middot; Drew Rasmussen / Framber Valdez</div></td><td class="t">3:40 PM PT</td><td class="n">0.5205</td><td class="n">0.4871</td><td class="n">0.4824</td><td class="n">0.5149</td><td class="n">0.5059</td><td class="n">7.86</td><td class="n">7.86</td><td class="n">1.0</td><td class="l"><span class="tag pass">PASS_REFERENCE_ONLY</span></td></tr><tr><td class="l"><b>COL@WSH</b><div class="sub">Nationals Park &middot; Ryan Feltner / Cade Cavalli</div></td><td class="t">3:45 PM PT</td><td class="n">0.5205</td><td class="n">0.5666</td><td class="n">0.5623</td><td class="n">0.5303</td><td class="n">0.5459</td><td class="n">11.02</td><td class="n">10.92</td><td class="n">1.0</td><td class="l"><span class="tag pass">PASS_REFERENCE_ONLY</span></td></tr><tr><td class="l"><b>TEX@CWS</b><div class="sub">Rate Field &middot; Kumar Rocker / TBD <span class="tag warn">OFFICIAL TBD</span></div></td><td class="t">4:40 PM PT</td><td class="n">0.5205</td><td class="n">0.5340</td><td class="n">0.5412</td><td class="n">0.5224</td><td class="n">0.5255</td><td class="n">8.80</td><td class="n">8.88</td><td class="n">0.5</td><td class="l"><span class="tag pass">PASS_REFERENCE_ONLY</span></td></tr><tr><td class="l"><b>CLE@LAA</b><div class="sub">Angel Stadium &middot; Parker Messick / George Klassen</div></td><td class="t">6:38 PM PT</td><td class="n">0.5205</td><td class="n">0.4172</td><td class="n">0.4157</td><td class="n">0.4649</td><td class="n">0.3778</td><td class="n">8.77</td><td class="n">8.76</td><td class="n">1.0</td><td class="l"><span class="tag pass">PASS_REFERENCE_ONLY</span></td></tr><tr><td class="l"><b>PHI@SEA</b><div class="sub">T-Mobile Park &middot; Zack Wheeler / Logan Gilbert</div></td><td class="t">6:40 PM PT</td><td class="n">0.5205</td><td class="n">0.4368</td><td class="n">0.4420</td><td class="n">0.5133</td><td class="n">0.5017</td><td class="n">6.82</td><td class="n">6.85</td><td class="n">1.0</td><td class="l"><span class="tag pass">PASS_REFERENCE_ONLY</span></td></tr><tr><td class="l"><b>PIT@SD</b><div class="sub">Petco Park &middot; Braxton Ashcraft / Robbie Ray</div></td><td class="t">6:40 PM PT</td><td class="n">0.5205</td><td class="n">0.4591</td><td class="n">0.4545</td><td class="n">0.5214</td><td class="n">0.5229</td><td class="n">8.56</td><td class="n">8.55</td><td class="n">1.0</td><td class="l"><span class="tag pass">PASS_REFERENCE_ONLY</span></td></tr><tr><td class="l"><b>MIN@ATH</b><div class="sub">Sutter Health Park &middot; Zebby Matthews / Jeffrey Springs</div></td><td class="t">6:40 PM PT</td><td class="n">0.5205</td><td class="n">0.4478</td><td class="n">0.4507</td><td class="n">0.5161</td><td class="n">0.5090</td><td class="n">10.61</td><td class="n">10.67</td><td class="n">1.0</td><td class="l"><span class="tag pass">PASS_REFERENCE_ONLY</span></td></tr><tr><td class="l"><b>CHC@AZ</b><div class="sub">Chase Field &middot; Kevin Gausman / Merrill Kelly</div></td><td class="t">6:40 PM PT</td><td class="n">0.5205</td><td class="n">0.4638</td><td class="n">0.4620</td><td class="n">0.5159</td><td class="n">0.5084</td><td class="n">10.17</td><td class="n">10.19</td><td class="n">1.0</td><td class="l"><span class="tag pass">PASS_REFERENCE_ONLY</span></td></tr><tr><td class="l"><b>CIN@SF</b><div class="sub">Oracle Park &middot; Chase Burns / TBD <span class="tag warn">OFFICIAL TBD</span></div></td><td class="t">6:45 PM PT</td><td class="n">0.5205</td><td class="n">0.4651</td><td class="n">0.4692</td><td class="n">0.5115</td><td class="n">0.4969</td><td class="n">7.55</td><td class="n">7.53</td><td class="n">0.5</td><td class="l"><span class="tag pass">PASS_REFERENCE_ONLY</span></td></tr></tbody></table></div><p>All probabilities are p(home). <b>TEX@CWS and CIN@SF carry an official TBD</b> at the home slot and stay at dose 0.5; the third-party names circulating for both were not substituted. Lineups are unconfirmed and cannot alter a locked probability &mdash; no replacement-identity workflow is enabled on this card.</p><p>Every total on this board is <code>NEVER_DECISION_BEARING</code> by contract. It is mandatory, it is graded, and it decides nothing &mdash; and this time the full simulated distribution is retained, so log score and CRPS are computable at settlement.</p></section>
+<section><h2>The widened challenger, solved rather than approximated</h2><div class="kv"><div><span>solved k</span><b>2.6089</b><i>bisection on pregame dispersion only</i></div><div><span>attained</span><b>4.3019 pp</b><i>matches the champion exactly</i></div><div><span>the SD ratio would give</span><b>2.5685</b><i>attaining 4.2379pp &mdash; it misses</i></div><div><span>refusals</span><b>3 predefined</b><i>zero dispersion, no solution, extreme k &mdash; fixed before the card, not after seeing it</i></div></div><p>The residual is scaled; the prior offset is not. k comes only from pregame forecast dispersion &mdash; never from the settled calibration slope, which supports a hypothesis and authorizes nothing.</p></section>
+<section><h2>WNBA &mdash; 2 games, separate cohort</h2><div class="scroll"><table><thead><tr><th class="l">Game</th><th>Tip</th><th>wnba.winner.EXPANDING_HOME_PRIOR</th><th>wnba.winner.CHAMPION_WNBA_SHADOW</th><th>wnba.winner.NEGATIVE_CONTROL</th><th>wnba.margin.CHAMPION_WNBA_SHADOW</th><th>wnba.total.CHAMPION_WNBA_SHADOW</th><th class="l">Status</th></tr></thead><tbody><tr><td class="l"><b>GSV@MIN</b><div class="sub">Target Center &middot; official id 1022600282</div></td><td class="t">5:00 PM PT</td><td class="n">0.5366</td><td class="n">0.6837</td><td class="n">0.5366</td><td class="n">+5.80</td><td class="n">163.8</td><td class="l"><span class="tag block">ACTION_BLOCKED</span> <span class="tag warn">DIAGNOSTIC_ONLY</span> <span class="tag warn">NOT_PROMOTION_ELIGIBLE</span></td></tr><tr><td class="l"><b>ATL@LAS</b><div class="sub">Crypto.com Arena &middot; official id 1022600283</div></td><td class="t">7:00 PM PT</td><td class="n">0.5366</td><td class="n">0.3587</td><td class="n">0.5366</td><td class="n">-4.57</td><td class="n">175.9</td><td class="l"><span class="tag block">ACTION_BLOCKED</span> <span class="tag warn">DIAGNOSTIC_ONLY</span> <span class="tag warn">NOT_PROMOTION_ELIGIBLE</span></td></tr></tbody></table></div><p>Personnel is <code>PERSONNEL_UNVERIFIED</code>: no captured official artifact supports availability for this slate, and stale listings are not used to infer it. The champion&rsquo;s features are frozen at 2026-07-22 &mdash; <b>33 days against a 21-day ceiling</b> &mdash; so every champion output is blocked, diagnostic-only and barred from promotion evidence. wnba.winner.NEGATIVE_CONTROL reproduces the prior exactly, by design; a tie against it is the expected result, not a finding.</p><p>This cohort keeps its own hash, its own cluster count and its own promotion denominator. Nothing here is pooled with MLB.</p></section>
+<section><h2>Gates, unchanged</h2><div class="kv"><div><span>model promotion &middot; mlb</span><b>0/500</b><i>games &middot; 0/60 dates</i></div><div><span>model promotion &middot; wnba</span><b>0/500</b><i>games &middot; 0/60 dates, separate denominator</i></div><div><span>real-money authorization</span><b>0/100</b><i>BLOCKED &mdash; requires explicit human approval</i></div><div><span>model-authorized wagers</span><b>$0</b><i>0 bets. Unit size $100, unused.</i></div></div><p>The 8/23 cohort&rsquo;s 15 games are not counted: those results are provisional until a Tier-1 addendum binds the official artifact, its retrieval timestamp and its content hash.</p></section>
+<section><h2>What would change this board</h2><ul><li><b>A captured price board.</b> Prices enter the action overlay only and never the model. With one, EV becomes computable against the probabilities above, which are already frozen.</li><li><b>Official starter artifacts for TEX@CWS and CIN@SF.</b> Until then both stay at dose 0.5.</li><li><b>A Tier-1 addendum</b> for the 123 downgraded rows would restore canonical evidence and move the promotion denominators off zero.</li><li><b>A WNBA feature refresh.</b> Nothing about that cohort becomes action- or promotion-eligible while the feature state is 33 days stale.</li></ul></section>
+<footer>Board <code>cards/2026-08-24_board.json</code>. MLB cohort <code>479cdb13</code>, WNBA cohort <code>122787ab</code>, both verified in the anchor run. Prospectivity <code>REMOTE_OBSERVED</code> at 2026-08-24T10:48:32Z by GitHub&rsquo;s clock, 11h51m before the earliest first pitch &mdash; an upper bound, and no evidence at all about the commit&rsquo;s own author date.</footer>
+</div>

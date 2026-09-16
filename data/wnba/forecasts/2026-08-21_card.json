@@ -1,0 +1,60 @@
+{
+ "record_id": "WNBA-CARD-2026-08-21",
+ "model_id": "wnba.rs.ff7_logit_ridge.v1_0.shadow",
+ "generated_at_utc": "2026-08-21T06:55:00Z",
+ "slate_date": "2026-08-21",
+ "feature_state_as_of": "2026-07-22",
+ "staleness_days": 30,
+ "report_headings_contract": "WINNER / ATS / TOTAL are separate estimands",
+ "total_limitation": "cross-era level term; misses -20/+16/+20.8/-36.1 on record \u2014 DIAGNOSTIC ONLY, never a recommendation (owner rule 4)",
+ "margin_limitation": "blowout compression active and re-confirmed 8/20 (errors -5.6/+31.4/-10.0); any underdog ATS read gets MARGIN_COMPRESSION_BLOCK",
+ "authority": "SHADOW DIAGNOSTIC, paper only, wager_authority NO, stake 0",
+ "action_layer": "2.0-spread-point deadband + MARGIN_COMPRESSION_BLOCK live",
+ "price_state": "NO PRICES ACQUIRED \u2014 no spreads or moneylines exist for this slate, so NO ATS selections can register (line missing -> NO_SELECTION per the frozen prereg rule)",
+ "slate_evidence": "data/wnba/evidence_2026-08-21_web_slate.json",
+ "venue_note": "PDX@TOR is played at Rogers Arena, Vancouver \u2014 Toronto hosting away from its home market. The model applies its standard home-court term to TOR; no neutral-site adjustment exists in the frozen feature set. Recorded as a known limitation of this row.",
+ "rows": [
+  {
+   "away": "MIN",
+   "home": "WAS",
+   "tip_utc": "2026-08-21T23:30Z",
+   "p_home": 0.2523,
+   "margin_home": -7.23,
+   "total": 169.3,
+   "coherence_gap_pp": 5.0,
+   "coherence_pass": true,
+   "games_used": {
+    "home": 26,
+    "away": 28
+   }
+  },
+  {
+   "away": "GSV",
+   "home": "CHI",
+   "tip_utc": "2026-08-22T02:00Z",
+   "p_home": 0.3646,
+   "margin_home": -4.08,
+   "total": 167.1,
+   "coherence_gap_pp": 2.05,
+   "coherence_pass": true,
+   "games_used": {
+    "home": 27,
+    "away": 27
+   }
+  },
+  {
+   "away": "PDX",
+   "home": "TOR",
+   "tip_utc": "2026-08-22T02:00Z",
+   "p_home": 0.6117,
+   "margin_home": 3.55,
+   "total": 170.1,
+   "coherence_gap_pp": 1.13,
+   "coherence_pass": true,
+   "games_used": {
+    "home": 26,
+    "away": 27
+   }
+  }
+ ]
+}

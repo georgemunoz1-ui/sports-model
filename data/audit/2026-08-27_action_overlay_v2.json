@@ -1,0 +1,96 @@
+{
+ "authorization_rule": "conservative EV unavailable pending owner approval of the RJ-002 per-action consumption rule; positive raw EV alone authorizes nothing; fresh execution-time quote mandatory regardless",
+ "created_utc": "2026-08-27T19:15:29Z",
+ "fragility_notes": {
+  "mlb:AZ@SF": "+0.74 are sub-$1 edges that one tick erases",
+  "mlb:KC@TOR": "+0.78 and",
+  "mlb:LAD@ATL": "+5.68 is price-manufactured \u2014 the model is 50.08%",
+  "wnba:GSV@NYL": "+15.02 is the strongest screen but a 52.3% side, not a conviction call"
+ },
+ "gate": "side_reselection_gate re-run with prices attached on the two formerly price-blocked rows (KC@TOR->TOR, LAD@ATL->LAD): both PASS \u2014 probability, side, price, EV, disposition move together",
+ "ledger": {
+  "exposure_usd": 0,
+  "n_bets": 0,
+  "units": 0.0
+ },
+ "market_artifact": "data/mlb/odds/2026-08-27_dk_owner_relay_v2.json",
+ "owner_verification": "all nine screens reproduced at full precision within $0.01",
+ "record_id": "ACTION-OVERLAY-2026-08-27-V2",
+ "record_sha256": "7ed8ed82d277884f46a223d3676b93d81547e0673aa1a8e87b93026d781deefa",
+ "rows": [
+  {
+   "disposition": "CANDIDATE_NOT_AUTHORIZED_PENDING_UNCERTAINTY",
+   "game": "wnba:GSV@NYL",
+   "p": 0.5228,
+   "price": 120,
+   "raw_ev": 15.016,
+   "side": "GSV"
+  },
+  {
+   "disposition": "PRICE_BLOCKED",
+   "game": "wnba:WSH@PHX",
+   "p": 0.5784,
+   "price": null,
+   "raw_ev": null,
+   "side": "WAS"
+  },
+  {
+   "disposition": "PASS_NEGATIVE_EV / POST_START_NO_ACTION",
+   "game": "mlb:COL@WSH",
+   "p": 0.517233,
+   "price": -119,
+   "raw_ev": -4.8117,
+   "side": "WSH"
+  },
+  {
+   "disposition": "PASS_NEGATIVE_EV",
+   "game": "mlb:BAL@STL",
+   "p": 0.506767,
+   "price": -124,
+   "raw_ev": -8.455,
+   "side": "BAL"
+  },
+  {
+   "disposition": "PASS_NEGATIVE_EV",
+   "game": "mlb:HOU@NYY",
+   "p": 0.5446,
+   "price": -154,
+   "raw_ev": -10.1764,
+   "side": "NYY"
+  },
+  {
+   "disposition": "CANDIDATE_NOT_AUTHORIZED_PENDING_UNCERTAINTY",
+   "game": "mlb:KC@TOR",
+   "p": 0.5064,
+   "price": -101,
+   "raw_ev": 0.7786,
+   "side": "TOR"
+  },
+  {
+   "disposition": "CANDIDATE_NOT_AUTHORIZED_PENDING_UNCERTAINTY",
+   "game": "mlb:MIL@NYM",
+   "p": 0.677933,
+   "price": -192,
+   "raw_ev": 3.1023,
+   "side": "MIL"
+  },
+  {
+   "disposition": "CANDIDATE_NOT_AUTHORIZED_PENDING_UNCERTAINTY",
+   "game": "mlb:LAD@ATL",
+   "p": 0.500833,
+   "price": 111,
+   "raw_ev": 5.6758,
+   "side": "LAD"
+  },
+  {
+   "disposition": "CANDIDATE_NOT_AUTHORIZED_PENDING_UNCERTAINTY",
+   "game": "mlb:AZ@SF",
+   "p": 0.515967,
+   "price": -105,
+   "raw_ev": 0.7364,
+   "side": "AZ"
+  }
+ ],
+ "schema": "ops.action_overlay.v1",
+ "tally": "5 raw candidates (all CANDIDATE_NOT_AUTHORIZED_PENDING_UNCERTAINTY), 3 economic passes (one post-start), 1 price-blocked; 0 authorized bets"
+}

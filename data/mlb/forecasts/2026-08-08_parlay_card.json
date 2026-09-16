@@ -1,0 +1,249 @@
+{
+ "record_id": "PARLAY-CARD-2026-08-08-EVENING-BOARD",
+ "generated_utc": "2026-08-08T18:23:53Z",
+ "supersedes": "data/mlb/forecasts/2026-08-08_parlay_card.json (pre-board, prob-only) \u2014 this version uses the owner board (real ML) and board-authoritative probables",
+ "scope": "games with first pitch >= 6:00pm ET (after 3pm PDT), both starters carrying mature logs",
+ "prepitch": "board pasted ~2:15pm ET; all evening games pre-pitch. PAPER/ADVISORY only; model ledger $0; gate 0/100 NO_PROMOTE",
+ "board": "data/mlb/odds/2026-08-08_gameboards.json (single-book view, book UNRESOLVED)",
+ "probable_corrections_from_board": [
+  "LAD Yamamoto (not Sasaki)",
+  "AZ Pfaadt (not Kelly)",
+  "TB Jax (not Rasmussen)",
+  "SEA Kirby (not Gilbert)",
+  "MIN Bradley",
+  "MIL Gasser",
+  "HOU Lambert",
+  "SD King"
+ ],
+ "excluded": {
+  "afternoon_<6pmET": [
+   "ATL@NYY 3:05p",
+   "LAA@MIA 4:10p",
+   "ATH@BOS 4:10p"
+  ],
+  "CAP_no_starter_log": [
+   "NYM@PIT (Stock)",
+   "DET@SF (Jobe)"
+  ]
+ },
+ "method": "V13 Monte Carlo (n=30000, seed 722, per-slate RNG) gives model win prob per side; market de-vig = single-book two-sided; EV/$1 = p_model*decimal(price)-1; parlay joint p = product (independence across different games); parlay decimal = product of offered decimals; parlay EV = joint_p*parlay_decimal-1",
+ "legs": [
+  {
+   "game": "CHC@KC",
+   "fav_side": "CHC",
+   "fav_p": 0.598,
+   "fav_price": -158,
+   "fav_mktdevig": 0.602,
+   "fav_ev": -0.0235,
+   "fav_edge": -0.004,
+   "ev_side": "KC",
+   "ev_p": 0.402,
+   "ev_price": 147,
+   "ev_ev": -0.0071,
+   "ev_edge": 0.004,
+   "total": 9.5,
+   "overround": 0.0173
+  },
+  {
+   "game": "LAD@AZ",
+   "fav_side": "LAD",
+   "fav_p": 0.572,
+   "fav_price": -193,
+   "fav_mktdevig": 0.6476,
+   "fav_ev": -0.1316,
+   "fav_edge": -0.0756,
+   "ev_side": "AZ",
+   "ev_p": 0.428,
+   "ev_price": 179,
+   "ev_ev": 0.1941,
+   "ev_edge": 0.0756,
+   "total": 8.5,
+   "overround": 0.0171
+  },
+  {
+   "game": "TOR@PHI",
+   "fav_side": "PHI",
+   "fav_p": 0.567,
+   "fav_price": -163,
+   "fav_mktdevig": 0.6097,
+   "fav_ev": -0.0851,
+   "fav_edge": -0.0427,
+   "ev_side": "TOR",
+   "ev_p": 0.433,
+   "ev_price": 152,
+   "ev_ev": 0.0912,
+   "ev_edge": 0.0427,
+   "total": 9.5,
+   "overround": 0.0166
+  },
+  {
+   "game": "CLE@CWS",
+   "fav_side": "CWS",
+   "fav_p": 0.561,
+   "fav_price": 125,
+   "fav_mktdevig": 0.437,
+   "fav_ev": 0.2623,
+   "fav_edge": 0.124,
+   "ev_side": "CWS",
+   "ev_p": 0.561,
+   "ev_price": 125,
+   "ev_ev": 0.2623,
+   "ev_edge": 0.124,
+   "total": 7.5,
+   "overround": 0.0171
+  },
+  {
+   "game": "MIN@MIL",
+   "fav_side": "MIL",
+   "fav_p": 0.526,
+   "fav_price": -140,
+   "fav_mktdevig": 0.574,
+   "fav_ev": -0.0983,
+   "fav_edge": -0.048,
+   "ev_side": "MIN",
+   "ev_p": 0.474,
+   "ev_price": 131,
+   "ev_ev": 0.0949,
+   "ev_edge": 0.048,
+   "total": 8.0,
+   "overround": 0.0162
+  },
+  {
+   "game": "COL@STL",
+   "fav_side": "STL",
+   "fav_p": 0.526,
+   "fav_price": -148,
+   "fav_mktdevig": 0.5868,
+   "fav_ev": -0.1186,
+   "fav_edge": -0.0608,
+   "ev_side": "COL",
+   "ev_p": 0.474,
+   "ev_price": 138,
+   "ev_ev": 0.1281,
+   "ev_edge": 0.0608,
+   "total": 8.5,
+   "overround": 0.0169
+  },
+  {
+   "game": "CIN@WSH",
+   "fav_side": "WSH",
+   "fav_p": 0.517,
+   "fav_price": 131,
+   "fav_mktdevig": 0.426,
+   "fav_ev": 0.1943,
+   "fav_edge": 0.091,
+   "ev_side": "WSH",
+   "ev_p": 0.517,
+   "ev_price": 131,
+   "ev_ev": 0.1943,
+   "ev_edge": 0.091,
+   "total": 8.5,
+   "overround": 0.0162
+  },
+  {
+   "game": "HOU@SD",
+   "fav_side": "HOU",
+   "fav_p": 0.516,
+   "fav_price": 107,
+   "fav_mktdevig": 0.4746,
+   "fav_ev": 0.0681,
+   "fav_edge": 0.0414,
+   "ev_side": "HOU",
+   "ev_p": 0.516,
+   "ev_price": 107,
+   "ev_ev": 0.0681,
+   "ev_edge": 0.0414,
+   "total": 8.0,
+   "overround": 0.018
+  },
+  {
+   "game": "BAL@TEX",
+   "fav_side": "BAL",
+   "fav_p": 0.508,
+   "fav_price": 136,
+   "fav_mktdevig": 0.4166,
+   "fav_ev": 0.1989,
+   "fav_edge": 0.0914,
+   "ev_side": "BAL",
+   "ev_p": 0.508,
+   "ev_price": 136,
+   "ev_ev": 0.1989,
+   "ev_edge": 0.0914,
+   "total": 7.5,
+   "overround": 0.0172
+  },
+  {
+   "game": "TB@SEA",
+   "fav_side": "TB",
+   "fav_p": 0.506,
+   "fav_price": 105,
+   "fav_mktdevig": 0.4801,
+   "fav_ev": 0.0373,
+   "fav_edge": 0.0259,
+   "ev_side": "TB",
+   "ev_p": 0.506,
+   "ev_price": 105,
+   "ev_ev": 0.0373,
+   "ev_edge": 0.0259,
+   "total": 7.0,
+   "overround": 0.0161
+  }
+ ],
+ "finding_probability_parlay": "the highest-probability V13 favorite sides (CHC/LAD/PHI/CWS) are dominated by heavy market favorites the model rates BELOW their price -> the 2-3 leg probability parlay is NEGATIVE EV (-15% to -22%) at board prices",
+ "finding_value_parlay": "V13's positive-edge legs are the market underdogs/contrarian favorites (CWS +125, BAL +136, WSH +131). A value parlay shows large +EV (+51% 2-leg to +100% 5-leg), BUT SEE CAVEAT",
+ "CRITICAL_CAVEAT": "V13's known bias is COMPRESSION toward .500 (it under-rates favorites, over-rates underdogs). That same bias MECHANICALLY manufactures apparent +EV on every underdog. On 8/6 the model went 3/8 on sides vs the book 5/8; there is NO evidence these model edges are real. The +EV 'value' parlay is most likely a compression artifact, not a genuine edge. HONEST POSTURE: at these prices the market is probably closer to right; neither parlay is a trustworthy +EV play. Report as diagnostic, not a recommendation to fire.",
+ "probability_parlays": [
+  {
+   "legs": [
+    "CHC -158",
+    "LAD -193"
+   ],
+   "joint_p": 0.342,
+   "combined_price": "+148",
+   "parlay_EV": -0.152
+  },
+  {
+   "legs": [
+    "CHC",
+    "LAD",
+    "PHI -163"
+   ],
+   "joint_p": 0.194,
+   "combined_price": "+300",
+   "parlay_EV": -0.224
+  },
+  {
+   "legs": [
+    "CHC",
+    "LAD",
+    "PHI",
+    "CWS +125"
+   ],
+   "joint_p": 0.109,
+   "combined_price": "+800",
+   "parlay_EV": -0.021
+  }
+ ],
+ "value_parlays_DIAGNOSTIC": [
+  {
+   "legs": [
+    "CWS +125",
+    "BAL +136"
+   ],
+   "joint_p": 0.285,
+   "combined_price": "+431",
+   "parlay_EV": 0.513
+  },
+  {
+   "legs": [
+    "CWS",
+    "BAL",
+    "WSH +131"
+   ],
+   "joint_p": 0.147,
+   "combined_price": "+1127",
+   "parlay_EV": 0.807
+  }
+ ],
+ "wnba_board": "a WNBA panel (Aces/Lynx, Fever/Sky, Storm/Fire, +Sun) was in the same paste. OUT OF SCOPE: this system is MLB-only; there is NO WNBA model. Per R1 (never invent numbers) no WNBA probabilities are produced."
+}

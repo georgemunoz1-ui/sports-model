@@ -1,0 +1,46 @@
+{
+ "record_id": "V3-COHORT-PREREG-2026-08-17",
+ "built_utc": "2026-08-17T06:43:29Z",
+ "authority": "owner instruction 2026-08-17: register v3 now, contract stated in-message",
+ "design": {
+  "arms": {
+   "v1": "TBD starters + form cutoff 8/14 (hole at 8/13). 10 games. sha 9d802f1f",
+   "v2": "owner-board starters + form cutoff 8/14 (hole at 8/13). 11 games. sha da1b65d2",
+   "v3": "owner-board starters + form cutoff 8/16, CURRENT_COMPLETE. 11 games. sha 1cac3973"
+  },
+  "contrasts": {
+   "v2_vs_v3": "11 identical games, ONE variable (form state) -> isolates form freshness",
+   "v1_vs_v2": "9 COMMON games only -> isolates starter resolution. NB the owner's contract said 10 common games; the true figure is 9, because v1's single STL@CIN row corresponds to the v2 doubleheader G2 and v1 never carried G1. Recorded as a correction to the stated design, not a silent change.",
+   "v1_vs_v3": "two variables -> DESCRIPTIVE ONLY, never causal"
+  },
+  "power": "11 games cannot promote anything and cannot support a CI. This is a mechanism probe, not evidence of skill."
+ },
+ "pre_outcome_result": {
+  "v2_vs_v3": {
+   "mean_abs_delta_pp": 0.45,
+   "max_delta_pp": 1.2,
+   "side_flips": "1/11 (BAL@TB .508->.496)",
+   "spread_v2": "mean 52.71%, SD 1.58pp",
+   "spread_v3": "mean 52.73%, SD 1.61pp",
+   "reading": "39 tier-1 finals of fresh form moved probabilities by a mean of 0.45pp and flipped exactly one coin-flip side. Late-August team form is a WEAK input to V13 at this sample size \u2014 consistent with the standing finding that V13's binding constraint is discrimination, not data recency. The spread barely moved (SD 1.58 -> 1.61pp), so under the standing spread diagnostic form freshness did NOT touch the binding constraint."
+  },
+  "v1_vs_v2": {
+   "mean_abs_delta_pp": 2.54,
+   "side_flips": "4/9",
+   "reading": "starter resolution moved probabilities 5.6x more than form freshness (2.54pp vs 0.45pp) and flipped four sides. Pitcher identity dominates team form in this engine \u2014 the sharpest quantitative statement the program has made about where V13's information actually comes from, and it aligns with the personnel-layer roadmap priority."
+  }
+ },
+ "grading_contract": {
+  "evidence": "tier-1 date-consistent FINAL only",
+  "grade_once_per_forecast": true,
+  "report": "paired Brier and log-loss differences, probability changes, side flips \u2014 per arm, never pooled",
+  "cohort_rule": "all three arms grade against the same finals; none cited alone",
+  "authority": "paper only; wager authority NO; gate 0/100 NO_PROMOTE"
+ },
+ "immutability_verified": {
+  "v1_sha_after_v3_build": "9d802f1f892f26f5 INTACT",
+  "v2_byte_identical": true,
+  "registry": "220 forecasts, 186 grades, chain intact"
+ },
+ "no_v4_implicated": "no starter or personnel input changed after v2; nothing was folded into v3"
+}

@@ -1,0 +1,110 @@
+{
+ "record_id": "PREP-2026-08-09",
+ "built_utc": "2026-08-09T06:00:33Z",
+ "status": "PRE-ODDS PRELIMINARY prep (FULL-TRACKING card only). P4 forecasts BLOCKED until owner odds board.",
+ "slate_source": "WebSearch schedule confirmation 2026-08-09 (ESPN/MLB.com). 15 games, all same pairings as 8/8 (Sunday series finales). Times confirmed.",
+ "mlb_games": [
+  {
+   "g": "CIN@WSH",
+   "et": "12:15p",
+   "sp_away": "Brady Singer",
+   "sp_home": "Brad Lord (limited log -> CAP)"
+  },
+  {
+   "g": "ATH@BOS",
+   "et": "1:35p",
+   "sp": "TBD"
+  },
+  {
+   "g": "NYM@PIT",
+   "et": "1:35p",
+   "sp": "TBD"
+  },
+  {
+   "g": "TOR@PHI",
+   "et": "1:35p",
+   "sp_away": "Shane Bieber",
+   "sp_home": "Jesus Luzardo",
+   "note": "both logged"
+  },
+  {
+   "g": "ATL@NYY",
+   "et": "1:35p",
+   "sp": "TBD",
+   "note": "REJECTED 8/8-echo 'Sale/Cole' (both pitched 8/8, cannot repeat) -> TBD"
+  },
+  {
+   "g": "LAA@MIA",
+   "et": "1:40p",
+   "sp": "TBD"
+  },
+  {
+   "g": "CHC@KC",
+   "et": "2:10p",
+   "sp": "TBD"
+  },
+  {
+   "g": "CLE@CWS",
+   "et": "2:10p",
+   "sp": "TBD"
+  },
+  {
+   "g": "MIN@MIL",
+   "et": "2:10p",
+   "sp": "TBD"
+  },
+  {
+   "g": "COL@STL",
+   "et": "2:15p",
+   "sp": "TBD"
+  },
+  {
+   "g": "BAL@TEX",
+   "et": "2:35p",
+   "sp": "TBD"
+  },
+  {
+   "g": "DET@SF",
+   "et": "4:05p",
+   "sp": "TBD"
+  },
+  {
+   "g": "LAD@AZ",
+   "et": "4:10p",
+   "sp_away": "Justin Wrobleski",
+   "sp_home": "Eduardo Rodriguez",
+   "note": "both logged"
+  },
+  {
+   "g": "TB@SEA",
+   "et": "4:10p",
+   "sp_away": "TBD",
+   "sp_home": "Emerson Hancock"
+  },
+  {
+   "g": "HOU@SD",
+   "et": "8:20p (SNB)",
+   "sp_away": "Cristian Javier",
+   "sp_home": "TBD"
+  }
+ ],
+ "wnba_games": [
+  {
+   "g": "Phoenix Mercury @ Washington Mystics",
+   "et": "~3:00p"
+  },
+  {
+   "g": "Golden State Valkyries @ Los Angeles Sparks",
+   "et": "~7:00p"
+  }
+ ],
+ "card": "cards/2026-08-09_card.json (PRELIMINARY V13 FULL-TRACKING; TBD starters -> CAP league-average)",
+ "data_state": "team form current through 8/8 (contiguous); no look-ahead",
+ "pending": [
+  "remaining 8/9 confirmed starters (ATL@NYY real starter, ATH/NYM/LAA/CHC/CLE/MIN/COL/BAL/DET; TB away; SD home) -> T-120 pregame pull",
+  "owner odds board -> data/mlb/odds/2026-08-09_gameboards.json -> P4 forecasts (single-book benchmark)",
+  "confirmed lineups + injuries -> T-120 / T-30 pregame pull",
+  "WNBA 4-book board (owner)"
+ ],
+ "operating_workflow": "per docs/OPERATING_WORKFLOW.md: T-120 FORECAST_T120_v1 with confirmed starters, T-30 FINAL_PREGAME|DIAGNOSTIC; card regenerates as inputs confirm; frozen versions graded postgame."
+}

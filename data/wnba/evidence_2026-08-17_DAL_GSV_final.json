@@ -1,0 +1,24 @@
+{
+ "schema": "wnba.final_evidence.v1",
+ "record_id": "WNBA-FINAL-20260817-DALGSV-20260818T0510Z",
+ "captured_at_utc": "2026-08-18T05:10:00Z",
+ "received_from": "owner screenshots (4), app box score, 2026-08-18",
+ "source_tier": 1,
+ "source_family": "OWNER_BOARD",
+ "game": {
+  "date": "2026-08-17", "away": "DAL", "home": "GSV", "venue": "Chase Center",
+  "status": "FINAL", "away_score": 70, "home_score": 78, "home_win": 1, "total": 148,
+  "quarters": {"away": [19, 9, 18, 24], "home": [20, 24, 18, 16]},
+  "quarters_sum_check": {"away": "19+9+18+24=70 PASS", "home": "20+24+18+16=78 PASS"}
+ },
+ "orientation_basis": "app header renders away on the left (Wings 70) and home on the right (Valkyries 78) with venue Chase Center = GSV home. Away-home orientation, not winner-first; consistent with the pre-tip registration DAL@GSV.",
+ "market_at_close_from_earlier_owner_message": {"spread_home": -5.5, "total": 162.5,
+  "note": "from the in-progress relay at 0:16 4Q; app postgame banner says 'GSV by 6.5, Valkyries covered' — the two spread figures differ (line moved or book differs). Both recorded, neither used for grading; the shadow model grades on outcome only."},
+ "box_extract": {
+  "DAL": {"fg": "26/58 (44.8%)", "fg3": "5/22 (22.7%)", "ft": "13/15 (86.7%)", "to": 16, "reb": 33, "ast": 15, "blk": 4,
+          "leaders": {"Ogunbowale": "17 pts", "Bueckers": "21 pts 33 min", "Smith": "13 pts"}},
+  "GSV": {"fg": "27/72 (37.5%)", "fg3": "12/36 (33.3%)", "ft": "12/14 (85.7%)", "to": 11, "reb": 30, "ast": 17, "blk": 1,
+          "leaders": {"Williams": "23 pts", "Burton": "16 pts"}},
+  "consistency_note": "DAL 26 FG with 5 threes -> 21x2 + 5x3 + 13 FT = 42+15+13 = 70 PASS; GSV 27 FG with 12 threes -> 15x2 + 12x3 + 12 FT = 30+36+12 = 78 PASS"
+ }
+}

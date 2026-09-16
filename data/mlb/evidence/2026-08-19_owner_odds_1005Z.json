@@ -1,0 +1,429 @@
+{
+ "schema": "mlb.owner_odds_board.v1",
+ "record_id": "OWNER-ODDS-20260819-1005Z",
+ "captured_at_utc": "2026-08-19T10:05:16Z",
+ "ingested_at_utc": "2026-08-19T10:11:10Z",
+ "received_from": "owner paste 2026-08-19 (best-odds board screenshot + owner text)",
+ "source_tier": 1,
+ "source_family": "OWNER_BOARD",
+ "owner_screenshot_sha256_truncated": "a6057aa8...ad89f0",
+ "price_class": "BEST_ODDS_MULTIBOOK \u2014 executable-looking quotes; each side may come from a different book. Single-price EV screening permitted; cross-book de-vigging PROHIBITED (8/3 ruling). No market probability is derivable from this board; single-side implied probability (vig included) is the only price-derived quantity used, and only for the frozen compression-gate comparison, disclosed as vig-biased.",
+ "starter_column": "board names starters per team; class PROJECTED \u2014 NOT a T-90 confirmation",
+ "games": [
+  {
+   "g": "DET@PIT",
+   "ml": {
+    "DET": 143,
+    "PIT": -146
+   },
+   "rl": {
+    "DET_+1.5": -160,
+    "PIT_-1.5": 150
+   },
+   "total": {
+    "over": {
+     "line": 7.5,
+     "price": -120
+    },
+    "under": {
+     "line": 8.0,
+     "price": -108
+    },
+    "split_line": true
+   },
+   "starters": {
+    "DET": "Jackson Jobe",
+    "PIT": "Paul Skenes"
+   }
+  },
+  {
+   "g": "SD@NYM",
+   "ml": {
+    "SD": 128,
+    "NYM": 120
+   },
+   "ml_flags": [
+    "SIGN_CONFLICT: screenshot cell reads -128 for SD; owner text states +128 and drives the BOTH_SIDES_PLUS audit. Owner quote governs; the conflict itself supports the stale/executability audit \u2014 at least one representation is wrong or stale."
+   ],
+   "rl": {
+    "SD_-1.5": 135,
+    "NYM_+1.5": -145
+   },
+   "total": {
+    "over": {
+     "line": 8.5,
+     "price": -110
+    },
+    "under": {
+     "line": 8.5,
+     "price": 100
+    }
+   },
+   "starters": {
+    "SD": "Michael King",
+    "NYM": "Robert Stock"
+   }
+  },
+  {
+   "g": "ATL@MIN",
+   "ml": {
+    "ATL": -104,
+    "MIN": 102
+   },
+   "rl": {
+    "ATL_-1.5": 155,
+    "MIN_+1.5": -165
+   },
+   "total": {
+    "over": {
+     "line": 8.5,
+     "price": -110
+    },
+    "under": {
+     "line": 8.5,
+     "price": 100
+    }
+   },
+   "starters": {
+    "ATL": "AJ Smith-Shawver",
+    "MIN": "Taj Bradley"
+   }
+  },
+  {
+   "g": "CWS@CHC",
+   "ml": {
+    "CWS": 130,
+    "CHC": -136
+   },
+   "rl": {
+    "CWS_+1.5": -170,
+    "CHC_-1.5": 160
+   },
+   "total": {
+    "over": {
+     "line": 8.0,
+     "price": -118
+    },
+    "under": {
+     "line": 8.5,
+     "price": -120
+    },
+    "split_line": true
+   },
+   "starters": {
+    "CWS": "Jose Urquidy",
+    "CHC": "Clay Holmes"
+   },
+   "starter_flags": [
+    "THREE_SOURCE_CONFLICT: VSiN Kay / preview-board Newcomb / odds-board Urquidy"
+   ]
+  },
+  {
+   "g": "AZ@BOS",
+   "ml": {
+    "AZ": 134,
+    "BOS": -140
+   },
+   "rl": {
+    "AZ_+1.5": -165,
+    "BOS_-1.5": 155
+   },
+   "total": {
+    "over": {
+     "line": 8.0,
+     "price": -118
+    },
+    "under": {
+     "line": 8.5,
+     "price": -113
+    },
+    "split_line": true
+   },
+   "starters": {
+    "AZ": "Brandon Pfaadt",
+    "BOS": "Payton Tolle"
+   }
+  },
+  {
+   "g": "MIA@PHI",
+   "ml": {
+    "MIA": 116,
+    "PHI": -121
+   },
+   "rl": {
+    "MIA_+1.5": -180,
+    "PHI_-1.5": 170
+   },
+   "total": {
+    "over": {
+     "line": 8.5,
+     "price": -105
+    },
+    "under": {
+     "line": 8.5,
+     "price": -105
+    }
+   },
+   "starters": {
+    "MIA": "Sandy Alcantara",
+    "PHI": "Aaron Nola"
+   }
+  },
+  {
+   "g": "NYY@BAL",
+   "ml": {
+    "NYY": -115,
+    "BAL": 110
+   },
+   "rl": {
+    "NYY_-1.5": 135,
+    "BAL_+1.5": -145
+   },
+   "total": {
+    "over": {
+     "line": 9.0,
+     "price": -120
+    },
+    "under": {
+     "line": 9.5,
+     "price": -110
+    },
+    "split_line": true
+   },
+   "starters": {
+    "NYY": "Will Warren",
+    "BAL": "Chris Bassitt"
+   }
+  },
+  {
+   "g": "STL@CIN",
+   "ml": {
+    "STL": 130,
+    "CIN": -140
+   },
+   "rl": {
+    "STL_+1.5": -165,
+    "CIN_-1.5": 160
+   },
+   "total": {
+    "over": {
+     "line": 8.5,
+     "price": -103
+    },
+    "under": {
+     "line": 8.5,
+     "price": -110
+    }
+   },
+   "starters": {
+    "STL": "Matthew Liberatore",
+    "CIN": "Chase Burns"
+   }
+  },
+  {
+   "g": "TOR@TB",
+   "ml": {
+    "TOR": 190,
+    "TB": -200
+   },
+   "rl": {
+    "TOR_+1.5": -115,
+    "TB_-1.5": 110
+   },
+   "total": {
+    "over": {
+     "line": 7.5,
+     "price": -109
+    },
+    "under": {
+     "line": 7.5,
+     "price": 100
+    }
+   },
+   "starters": {
+    "TOR": "Max Scherzer",
+    "TB": "Drew Rasmussen"
+   }
+  },
+  {
+   "g": "SF@CLE",
+   "ml": {
+    "SF": 165,
+    "CLE": -175
+   },
+   "rl": {
+    "SF_+1.5": -135,
+    "CLE_-1.5": 125
+   },
+   "total": {
+    "over": {
+     "line": 7.0,
+     "price": -120
+    },
+    "under": {
+     "line": 7.5,
+     "price": -120
+    },
+    "split_line": true
+   },
+   "starters": {
+    "SF": "Adrian Houser",
+    "CLE": "Parker Messick"
+   },
+   "starter_flags": [
+    "V2_MISMATCH: preview board named Matt Wilkinson for SF; odds board names Adrian Houser (VSiN also Houser)"
+   ]
+  },
+  {
+   "g": "ATH@KC",
+   "ml": {
+    "ATH": 120,
+    "KC": -130
+   },
+   "rl": {
+    "ATH_+1.5": -175,
+    "KC_-1.5": 165
+   },
+   "total": {
+    "over": {
+     "line": 8.5,
+     "price": 100
+    },
+    "under": {
+     "line": 8.5,
+     "price": -110
+    }
+   },
+   "starters": {
+    "ATH": "Jeffrey Springs",
+    "KC": "Seth Lugo"
+   },
+   "starter_flags": [
+    "V2_INCOMPLETE: v2 carries TBD/TBD; odds board names Springs/Lugo (VSiN Jump/Lugo \u2014 away side conflicts)"
+   ]
+  },
+  {
+   "g": "SEA@MIL",
+   "ml": {
+    "SEA": 111,
+    "MIL": -117
+   },
+   "rl": {
+    "SEA_+1.5": -195,
+    "MIL_-1.5": null
+   },
+   "rl_flags": [
+    "ILLEGIBLE_SUSPECT: MIL cover cells read '1.5 / -210' in screenshot \u2014 a -117 favorite laying -1.5 at -210 is implausible and the line sign is unreadable; recorded null, not guessed (R1)"
+   ],
+   "total": {
+    "over": {
+     "line": 7.0,
+     "price": -120
+    },
+    "under": {
+     "line": 7.5,
+     "price": -110
+    },
+    "split_line": true
+   },
+   "starters": {
+    "SEA": "Logan Gilbert",
+    "MIL": "Dustin May"
+   }
+  },
+  {
+   "g": "WSH@TEX",
+   "ml": {
+    "WSH": 127,
+    "TEX": -130
+   },
+   "rl": {
+    "WSH_+1.5": -185,
+    "TEX_-1.5": 184
+   },
+   "total": {
+    "over": {
+     "line": 7.5,
+     "price": -110
+    },
+    "under": {
+     "line": 7.5,
+     "price": -110
+    }
+   },
+   "starters": {
+    "WSH": "Cade Cavalli",
+    "TEX": "Kumar Rocker"
+   }
+  },
+  {
+   "g": "LAA@HOU",
+   "ml": {
+    "LAA": 147,
+    "HOU": -155
+   },
+   "rl": {
+    "LAA_+1.5": -150,
+    "HOU_-1.5": 140
+   },
+   "total": {
+    "over": {
+     "line": 8.5,
+     "price": 100
+    },
+    "under": {
+     "line": 8.5,
+     "price": 100
+    }
+   },
+   "starters": {
+    "LAA": "Walbert Urena",
+    "HOU": "Ethan Pecko"
+   }
+  },
+  {
+   "g": "LAD@COL",
+   "ml": {
+    "LAD": -185,
+    "COL": 175
+   },
+   "rl": {
+    "LAD_-1.5": -120,
+    "COL_+1.5": 110
+   },
+   "total": {
+    "over": {
+     "line": 11.5,
+     "price": null
+    },
+    "under": {
+     "line": 11.5,
+     "price": -110
+    }
+   },
+   "total_flags": [
+    "LOW_CONFIDENCE: LAD over-price cell unreadable; recorded null (R1)"
+   ],
+   "starters": {
+    "LAD": "Roki Sasaki",
+    "COL": "Kyle Freeland"
+   }
+  }
+ ],
+ "owner_dispositions_verbatim": {
+  "WSH": "COMPRESSION_CONFLICT",
+  "MIA": "AUDIT_REQUIRED\u2014NO_PROMOTE",
+  "SD": "AUDIT_REQUIRED\u2014BOTH_SIDES_PLUS",
+  "LAA": "COMPRESSION_CONFLICT",
+  "SF": "BLOCKED\u2014STARTER_MISMATCH",
+  "COL": "COMPRESSION_CONFLICT",
+  "DET": "COMPRESSION_CONFLICT",
+  "AZ": "COMPRESSION_CONFLICT",
+  "ATH": "BLOCKED\u2014STARTER_MISMATCH",
+  "STL": "PRICE_SENSITIVE_WATCH",
+  "CWS@CHC": "THREE_SOURCE_CONFLICT (starter reconciliation table)",
+  "smaller_screens": "ATL -104, BAL +110, TOR +190 and MIL -117 do not clear an uncertainty buffer",
+  "arb_note": "SD +128 and NYM +120 simultaneously form an apparent cross-book arbitrage; that is a stale/executability audit trigger, not an automatic wager",
+  "bottom_line": "prices have unblocked evaluation, but not a qualified wager. Starter conflicts, V13's NO_PROMOTE status, and the compression pattern keep the betting output at zero."
+ }
+}

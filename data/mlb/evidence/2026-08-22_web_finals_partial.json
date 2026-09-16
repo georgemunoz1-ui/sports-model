@@ -1,0 +1,31 @@
+{
+ "schema": "mlb.web_finals_board.v2",
+ "record_id": "WEB-MLB-FINALS-20260822-PARTIAL",
+ "captured_at_utc": "2026-08-23T05:05:00Z",
+ "received_from": "online acquisition; per-game corroboration by publisher title strings carrying the score",
+ "source_tier": 2,
+ "source_family": "ONLINE_TITLE_CORROBORATED",
+ "slate_date": "2026-08-22",
+ "completeness": "PARTIAL — 2 of the 3 registered games. CIN@AZ is not yet indexed and is recorded PENDING, not guessed.",
+ "price_state": "NO closing prices acquired for these games — market-relative fields null with reason.",
+ "echo_rejected": {
+  "claim": "Multiple sources returned 'Diamondbacks 9-0 Reds' for a CIN@AZ game and one summary attached it to August 22.",
+  "why_rejected": "That is the AUGUST 21 game. ESPN's own title dates it 'Aug 21, 2026' (gameId 401816622), the recaps describe 'Friday night' and Aug 21 2026 was a Friday, and the result is ALREADY IN THE REGISTRY as 2026-08-21 CIN 0 @ AZ 9 status final. Cross-checking the claimed final against our own graded history is what caught it.",
+  "aug_22_game_state": "ESPN gameId 401816637 still titled 'Live Score' / 'Pregame' at index time — no final available."
+ },
+ "games": [
+  {"seq": 1, "away": "MIN", "home": "SD", "away_score": 5, "home_score": 7,
+   "close_ml_away": null, "close_ml_home": null, "close_total": null,
+   "source_title": "Padres 7-5 Twins (Aug 22, 2026) Box Score - ESPN",
+   "source_urls": ["https://www.espn.com/mlb/boxscore/_/gameId/401816638",
+                   "https://www.mlb.com/stories/game/823261"],
+   "date_confirmed": "title carries both the score and the date"},
+  {"seq": 2, "away": "CLE", "home": "COL", "away_score": 4, "home_score": 3,
+   "close_ml_away": null, "close_ml_home": null, "close_total": null,
+   "source_title": "Guardians 4-3 Rockies (Aug 22, 2026) Box Score - ESPN",
+   "source_urls": ["https://www.espn.com/mlb/boxscore/_/gameId/401816635",
+                   "https://www.mlb.com/stories/game/824316",
+                   "https://www.foxsports.com/mlb/cleveland-guardians-vs-colorado-rockies-aug-22-2026-game-boxscore-96605"],
+   "date_confirmed": "title carries both the score and the date; the separate 'Guardians 9-1 Rockies' title is dated Aug 21 and was NOT used"}
+ ]
+}

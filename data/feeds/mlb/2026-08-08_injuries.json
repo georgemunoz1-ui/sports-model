@@ -1,0 +1,810 @@
+{
+ "record_id": "FEED-MLB-INJURIES-2026-08-08",
+ "retrieved_utc": "2026-08-08T19:10:35Z",
+ "provenance_class": "WEBSEARCH_MULTI_SOURCE (agentic sweep; snippet-level, NOT table-verified \u2014 WebFetch egress-blocked for primary stats domains)",
+ "authorization": "docs/authorizations/2026-08-08_data_acquisition.json",
+ "confidence": "MEDIUM \u2014 every status is 'expected', confirm on the official day-of report before acting",
+ "as_of": "~2026-08-08 afternoon ET",
+ "games": [
+  {
+   "game": "TOR@PHI (Blue Jays at Phillies)",
+   "teams": [
+    {
+     "team": "Toronto Blue Jays",
+     "key_injuries_or_absences": [
+      {
+       "player": "Vladimir Guerrero Jr.",
+       "position": "1B",
+       "status": "Returned/active (day-to-day, R hamstring)",
+       "note": "Missed several games with hamstring tightness; returned to lineup Fri 8/7 batting 2nd at 1B, expected to play 8/8. Manager Schneider called it tightness/fatigue, 'nothing to worry about.' Positive for TOR offense."
+      },
+      {
+       "player": "Anthony Santander",
+       "position": "OF/DH",
+       "status": "60-day IL (shoulder)",
+       "note": "Out; removes a middle-order bat."
+      },
+      {
+       "player": "Addison Barger",
+       "position": "INF/OF",
+       "status": "60-day IL (elbow)",
+       "note": "Out; lineup depth loss."
+      },
+      {
+       "player": "Luis Urias",
+       "position": "INF",
+       "status": "10-day IL (quad)",
+       "note": "Bench/utility infielder out."
+      },
+      {
+       "player": "Lenyn Sosa",
+       "position": "INF",
+       "status": "60-day IL (wrist)",
+       "note": "Out."
+      }
+     ],
+     "lineup_rotation_notes": "As of ~8/8 afternoon ET: Vlad Jr. back at 1B (returned 8/7, hit 2nd). Kazuma Okamoto (24 HR, 70 RBI per beat coverage) a regular run producer. Everyday core otherwise intact aside from Santander/Barger absences.",
+     "rest_or_bullpen_or_bench": "Bullpen thinned by IL (multiple relievers out per FanGraphs RosterResource, incl. Yimi Garcia, Joe Mantiply). Specific TOR closer availability for 8/8 not independently confirmed in sources reviewed."
+    },
+    {
+     "team": "Philadelphia Phillies",
+     "key_injuries_or_absences": [
+      {
+       "player": "Rafael Marchan",
+       "position": "C (backup)",
+       "status": "10-day IL (knee)",
+       "note": "Backup catcher; limited line impact."
+      },
+      {
+       "player": "Derek Hill",
+       "position": "OF (bench)",
+       "status": "Day-to-day (shoulder)",
+       "note": "Reserve outfielder."
+      }
+     ],
+     "lineup_rotation_notes": "As of ~8/8 afternoon ET: Core healthy and in the projected lineup \u2014 Kyle Schwarber (leadoff, 33 HR), Bryce Harper (3rd), Trea Turner all playing. No material everyday position-player absence confirmed.",
+     "rest_or_bullpen_or_bench": "Closer Jhoan Duran active and available (25 SV, 1.83 ERA per game preview) \u2014 a strong, healthy back-end. No notable bullpen IL flagged among high-leverage arms."
+    }
+   ],
+   "material_to_line": {
+    "verdict": "YES",
+    "explanation": "Vlad Jr.'s return from a hamstring scare is a positive swing for the Toronto lineup, while Santander/Barger remain out. Phillies enter at near-full strength with an elite, available closer (Duran). The star-availability picture on both sides is line-relevant."
+   }
+  },
+  {
+   "game": "CIN@WSH (Reds at Nationals)",
+   "teams": [
+    {
+     "team": "Cincinnati Reds",
+     "key_injuries_or_absences": [
+      {
+       "player": "Blake Dunn",
+       "position": "OF",
+       "status": "60-day IL (R elbow sprain)",
+       "note": "Depth outfielder; limited line impact."
+      },
+      {
+       "player": "Tony Santillan",
+       "position": "RHP (reliever)",
+       "status": "15-day IL (oblique)",
+       "note": "High-leverage reliever out \u2014 thins the pen."
+      },
+      {
+       "player": "Nick Lodolo",
+       "position": "LHP (starter)",
+       "status": "15-day IL (finger)",
+       "note": "Rotation depth (SP already set for 8/8)."
+      }
+     ],
+     "lineup_rotation_notes": "As of ~8/8 afternoon ET: Everyday lineup intact \u2014 Elly De La Cruz active and atop the order (De La Cruz, Sal Stewart, JJ Bleday), with Eugenio Suarez and Tyler Stephenson also in. No material everyday-hitter absence.",
+     "rest_or_bullpen_or_bench": "Bullpen down setup arm Santillan (oblique); Graham Ashcraft (60-day) and Brandon Williamson (60-day) also out."
+    },
+    {
+     "team": "Washington Nationals",
+     "key_injuries_or_absences": [
+      {
+       "player": "James Wood",
+       "position": "OF",
+       "status": "10-day IL (oblique)",
+       "note": "Nationals' star middle-of-order bat OUT \u2014 most material absence in this game."
+      },
+      {
+       "player": "Drew Millas",
+       "position": "C",
+       "status": "Out (finger)",
+       "note": "Catching depth affected."
+      },
+      {
+       "player": "Josiah Gray",
+       "position": "RHP",
+       "status": "60-day IL (flexor)",
+       "note": "Out (pitching)."
+      }
+     ],
+     "lineup_rotation_notes": "As of ~8/8 afternoon ET: With Wood out, CJ Abrams leads off (often as DH vs RHP), pushing Nasim Nunez to SS and Jose Tena to 2B; Dylan Crews, Brady House, Harry Ford, Jacob Young in the lineup.",
+     "rest_or_bullpen_or_bench": "No specific closer/bullpen availability change flagged in sources reviewed."
+    }
+   ],
+   "material_to_line": {
+    "verdict": "YES",
+    "explanation": "James Wood (Washington's best hitter) being on the IL is a clear negative for the Nationals' offense and reshuffles their lineup; Cincinnati's pen is missing setup man Santillan. Wood's absence is the key line factor."
+   }
+  },
+  {
+   "game": "CLE@CWS (Guardians at White Sox)",
+   "teams": [
+    {
+     "team": "Cleveland Guardians",
+     "key_injuries_or_absences": [
+      {
+       "player": "Jose Ramirez",
+       "position": "3B",
+       "status": "Active/returning (L wrist inflammation)",
+       "note": "Star 3B; sat vs Mets earlier in the week with wrist inflammation but reported back in the 8/8 lineup batting 3rd. Major positive if confirmed on the official card."
+      },
+      {
+       "player": "Slade Cecconi",
+       "position": "RHP",
+       "status": "15-day IL (arm fatigue)",
+       "note": "Pitching depth out."
+      },
+      {
+       "player": "Shawn Armstrong",
+       "position": "RHP (reliever)",
+       "status": "60-day IL (calf)",
+       "note": "Bullpen arm out."
+      }
+     ],
+     "lineup_rotation_notes": "As of ~8/8 afternoon ET: Reported lineup \u2014 Kwan CF, DeLauter DH, J.Ramirez 3B, Adell RF, A.Martinez LF, Hoskins 1B, Rocchio SS, Hedges C, Genao 2B. J-Ram's return is the swing item; verify on the official lineup given his recent wrist maintenance.",
+     "rest_or_bullpen_or_bench": "Bullpen down Armstrong (60-day) and Drew Thorpe (60-day); Cecconi (arm fatigue) out."
+    },
+    {
+     "team": "Chicago White Sox",
+     "key_injuries_or_absences": [
+      {
+       "player": "Kyle Teel",
+       "position": "C",
+       "status": "10-day IL (ankle)",
+       "note": "Starting-caliber catcher out."
+      },
+      {
+       "player": "Joey Bart",
+       "position": "C",
+       "status": "Out (broken hand)",
+       "note": "Catching corps depleted; Edgar Quero recalled to pair with Drew Romo."
+      },
+      {
+       "player": "Jordan Leasure",
+       "position": "RHP (reliever)",
+       "status": "60-day IL (flexor)",
+       "note": "Bullpen arm out."
+      }
+     ],
+     "lineup_rotation_notes": "As of ~8/8 afternoon ET (per White Sox beat/SI): Meidroth in the lineup, no Antonacci, Doyle in CF. Catching is thin with Teel and Bart out \u2014 Quero/Romo tandem behind the plate.",
+     "rest_or_bullpen_or_bench": "Bullpen missing Leasure and other arms (per team injury page); no confirmed closer change noted."
+    }
+   ],
+   "material_to_line": {
+    "verdict": "YES",
+    "explanation": "Jose Ramirez being back in Cleveland's lineup materially upgrades the Guardians' offense; Chicago's catching depth is gutted (Teel, Bart out). Both are line-relevant, with J-Ram's status the biggest single factor \u2014 worth confirming on the official card given his wrist maintenance."
+   }
+  },
+  {
+   "game": "CHC@KC (Cubs at Royals)",
+   "teams": [
+    {
+     "team": "Chicago Cubs",
+     "key_injuries_or_absences": [
+      {
+       "player": "Shelby Miller",
+       "position": "RHP (reliever)",
+       "status": "60-day IL (R elbow UCL)",
+       "note": "High-leverage reliever lost for the year \u2014 notable bullpen hit."
+      },
+      {
+       "player": "Hoby Milner",
+       "position": "LHP (reliever)",
+       "status": "15-day IL (appendicitis)",
+       "note": "Lefty specialist out \u2014 thins the pen."
+      },
+      {
+       "player": "Ben Brown",
+       "position": "RHP",
+       "status": "60-day IL (neck)",
+       "note": "Out (pitching)."
+      }
+     ],
+     "lineup_rotation_notes": "As of ~8/8 afternoon ET: No confirmed everyday position-player absence found; regular lineup expected. Injuries are concentrated on the pitching staff.",
+     "rest_or_bullpen_or_bench": "Bullpen down two useful arms \u2014 Shelby Miller (season-ending UCL) and Hoby Milner (appendicitis)."
+    },
+    {
+     "team": "Kansas City Royals",
+     "key_injuries_or_absences": [
+      {
+       "player": "Bobby Witt Jr.",
+       "position": "SS",
+       "status": "Active (returned from back tightness)",
+       "note": "Activated 8/4; 3 hits in his return, batting 2nd. Workload managed game-to-game (could DH/rest), but active \u2014 big positive for KC."
+      },
+      {
+       "player": "Vinnie Pasquantino",
+       "position": "1B",
+       "status": "10-day IL (R wrist)",
+       "note": "Everyday middle-order bat OUT \u2014 material. Jac Caglianone slides to 1B; Salvador Perez can see time there."
+      },
+      {
+       "player": "Maikel Garcia",
+       "position": "3B/UTIL",
+       "status": "10-day IL (L hand strain)",
+       "note": "Regular contributor OUT \u2014 material lineup loss."
+      },
+      {
+       "player": "Nick Mears",
+       "position": "RHP (reliever)",
+       "status": "60-day IL (shoulder impingement)",
+       "note": "Bullpen arm out; pen also thinned by multiple pitcher injuries."
+      }
+     ],
+     "lineup_rotation_notes": "As of ~8/8 afternoon ET: Witt Jr. back (bats 2nd) but Pasquantino and Maikel Garcia both on the IL. Caglianone likely at 1B; Tyler Tolbert and Carter Jensen contributing.",
+     "rest_or_bullpen_or_bench": "Bullpen/staff heavily depleted (Mears out; broader pitching-injury attrition per FanGraphs)."
+    }
+   ],
+   "material_to_line": {
+    "verdict": "YES",
+    "explanation": "Mixed but material for KC: Bobby Witt Jr. is back and active (positive), while Pasquantino (wrist) and Maikel Garcia (hand) are both out (negative for the offense). Cubs lost two useful relievers (Shelby Miller season-ending, Milner). Multiple line-relevant items."
+   }
+  },
+  {
+   "game": "MIN@MIL (Twins at Brewers)",
+   "teams": [
+    {
+     "team": "Minnesota Twins",
+     "key_injuries_or_absences": [
+      {
+       "player": "Byron Buxton",
+       "position": "CF",
+       "status": "10-day IL (R hip impingement)",
+       "note": "All-Star CF OUT \u2014 went back on the IL 7/29 (re-aggravation); 25 HR bat removed from the middle of the order. Most material absence for MIN."
+      },
+      {
+       "player": "Joe Ryan",
+       "position": "RHP",
+       "status": "15-day IL (glute)",
+       "note": "Out (rotation)."
+      },
+      {
+       "player": "Pablo Lopez",
+       "position": "RHP",
+       "status": "60-day IL (elbow)",
+       "note": "Out (rotation)."
+      }
+     ],
+     "lineup_rotation_notes": "As of ~8/8 afternoon ET: Lineup without Buxton in center \u2014 meaningful downgrade to the offense/defense. Other everyday regulars expected to play.",
+     "rest_or_bullpen_or_bench": "Bullpen down several arms (Cole Sands 60-day, Anthony Banda 60-day, Mick Abel 60-day per FanGraphs)."
+    },
+    {
+     "team": "Milwaukee Brewers",
+     "key_injuries_or_absences": [
+      {
+       "player": "Sal Frelick",
+       "position": "OF",
+       "status": "10-day IL (shoulder)",
+       "note": "Everyday outfielder out \u2014 moderate lineup impact."
+      },
+      {
+       "player": "JoJo Romero",
+       "position": "LHP (reliever)",
+       "status": "15-day IL (appendix)",
+       "note": "Bullpen lefty out."
+      },
+      {
+       "player": "Kyle Harrison",
+       "position": "LHP",
+       "status": "Day-to-day (calf)",
+       "note": "Pitching; monitor."
+      }
+     ],
+     "lineup_rotation_notes": "As of ~8/8 afternoon ET: Everyday core (Yelich, Chourio, W.Contreras) expected; Frelick's absence is the notable lineup subtraction. Brewers are the far stronger club by record.",
+     "rest_or_bullpen_or_bench": "Closer Trevor Megill has reclaimed the 9th-inning role and appears available; Abner Uribe primary setup. Pen otherwise largely intact aside from Romero/Kuhnel."
+    }
+   ],
+   "material_to_line": {
+    "verdict": "YES",
+    "explanation": "Byron Buxton (star CF) on the IL is a clear negative for Minnesota's lineup; Milwaukee is missing regular OF Sal Frelick but has closer Megill available. Buxton's absence is the key line factor."
+   }
+  },
+  {
+   "game": "COL@STL (Rockies at Cardinals)",
+   "teams": [
+    {
+     "team": "Colorado Rockies",
+     "key_injuries_or_absences": [
+      {
+       "player": "Kris Bryant",
+       "position": "OF/DH",
+       "status": "60-day IL (back)",
+       "note": "Long-standing absence, almost certainly already priced into lines."
+      },
+      {
+       "player": "Jose Quintana",
+       "position": "LHP",
+       "status": "60-day IL (elbow)",
+       "note": "Out (pitching)."
+      },
+      {
+       "player": "Chase Dollander",
+       "position": "RHP",
+       "status": "60-day IL (elbow)",
+       "note": "Out (pitching)."
+      }
+     ],
+     "lineup_rotation_notes": "As of ~8/8 afternoon ET: No newly-confirmed everyday-hitter absence beyond long-term IL names; injuries concentrated on the pitching staff.",
+     "rest_or_bullpen_or_bench": "Bullpen depleted by numerous arm injuries (per FanGraphs RosterResource); no specific fresh closer change flagged."
+    },
+    {
+     "team": "St. Louis Cardinals",
+     "key_injuries_or_absences": [
+      {
+       "player": "Jordan Walker",
+       "position": "OF",
+       "status": "Day-to-day (R knee inflammation)",
+       "note": "Game-time decision \u2014 could sit; the only fresh watch item for STL."
+      },
+      {
+       "player": "Ramon Urias",
+       "position": "INF",
+       "status": "60-day IL (R elbow)",
+       "note": "Bench/depth infielder out."
+      }
+     ],
+     "lineup_rotation_notes": "As of ~8/8 afternoon ET: Everyday core (Arenado, Winn, W.Contreras, Nootbaar) expected; Jordan Walker is the lineup uncertainty to confirm on the official card.",
+     "rest_or_bullpen_or_bench": "Cardinals 9th-inning role appears to be a committee (sources reviewed were inconsistent on specific names) \u2014 treat closer identity/availability as UNCONFIRMED rather than assert a name."
+    }
+   ],
+   "material_to_line": {
+    "verdict": "NO",
+    "explanation": "No fresh line-moving injury news: the notable Rockies absences (Bryant, rotation arms) are long-standing and already reflected, and St. Louis is near full strength with only Jordan Walker a minor day-to-day watch. The Cardinals' committee closer situation is unconfirmed but not clearly material to this line."
+   }
+  },
+  {
+   "game": "BAL@TEX (Orioles at Rangers) \u2014 evening, Globe Life Field",
+   "teams": [
+    {
+     "team": "Baltimore Orioles",
+     "key_injuries_or_absences": [
+      {
+       "player": "Blaze Alexander",
+       "position": "INF",
+       "status": "10-day IL",
+       "note": "Infield depth; not a middle-of-order bat"
+      },
+      {
+       "player": "Colin Selby",
+       "position": "RHP (reliever)",
+       "status": "60-day IL (shoulder)",
+       "note": "Bullpen depth out long-term"
+      }
+     ],
+     "lineup_rotation_notes": "Kyle Bradish reported as Baltimore's probable starter for 8/8 (per SportsGrid/scoresandstats previews). No star position-player OUT identified for the O's lineup as of ~2026-08-08 afternoon ET.",
+     "rest_or_bullpen_or_bench": "Selby (60-day) thins the bullpen; no back-to-back/rest flag noted."
+    },
+    {
+     "team": "Texas Rangers",
+     "key_injuries_or_absences": [
+      {
+       "player": "Josh Jung",
+       "position": "3B",
+       "status": "10-day IL (left calf strain)",
+       "note": "Everyday 3B out \u2014 material lineup hole"
+      },
+      {
+       "player": "Jack Leiter",
+       "position": "RHP (SP)",
+       "status": "15-day IL (ankle)",
+       "note": "Rotation piece out"
+      },
+      {
+       "player": "Jakob Junis",
+       "position": "RHP",
+       "status": "15-day IL (left adductor strain)",
+       "note": ""
+      },
+      {
+       "player": "Danny Jansen",
+       "position": "C",
+       "status": "60-day IL (forearm)",
+       "note": "Catching depth"
+      },
+      {
+       "player": "Robert Garcia",
+       "position": "LHP (reliever)",
+       "status": "60-day IL (left shoulder inflammation)",
+       "note": "Bullpen depth out"
+      }
+     ],
+     "lineup_rotation_notes": "Jacob deGrom reported as Texas's probable starter for 8/8 (per Aug 8 previews) \u2014 an ace on the mound is material to the line/total. Josh Jung's absence is the main everyday-lineup subtraction.",
+     "rest_or_bullpen_or_bench": "Bullpen down Robert Garcia (60-day) and Junis; deGrom start is the dominant pitching factor."
+    }
+   ],
+   "material_to_line": {
+    "verdict": "YES",
+    "explanation": "deGrom starting for Texas plus Josh Jung (everyday 3B) out on the 10-day IL are line-relevant. As of ~2026-08-08 afternoon ET. Confirm actual lineup at first pitch."
+   }
+  },
+  {
+   "game": "HOU@SD (Astros at Padres) \u2014 evening, Petco Park",
+   "teams": [
+    {
+     "team": "Houston Astros",
+     "key_injuries_or_absences": [
+      {
+       "player": "Carlos Correa",
+       "position": "SS",
+       "status": "60-day IL \u2014 season-ending (left ankle tendon surgery)",
+       "note": "Out for year \u2014 major everyday-lineup subtraction"
+      },
+      {
+       "player": "Brice Matthews",
+       "position": "INF",
+       "status": "10-day IL (left knee sprain)",
+       "note": ""
+      },
+      {
+       "player": "Mike Burrows",
+       "position": "RHP",
+       "status": "15-day IL (right elbow neuritis)",
+       "note": ""
+      },
+      {
+       "player": "Brandon Walter",
+       "position": "LHP",
+       "status": "60-day IL (left elbow surgery)",
+       "note": ""
+      }
+     ],
+     "lineup_rotation_notes": "Ronel Blanco reported as a probable Astros starter in the SD series (per FantasyPros/preview aggregation) \u2014 verify which day. Correa's season-ending loss is the standing material factor for Houston's offense/defense.",
+     "rest_or_bullpen_or_bench": "No back-to-back/rest flag noted; verify closer availability at game time."
+    },
+    {
+     "team": "San Diego Padres",
+     "key_injuries_or_absences": [
+      {
+       "player": "Nick Pivetta",
+       "position": "RHP (SP)",
+       "status": "60-day IL (right elbow inflammation)",
+       "note": "Rotation depth out"
+      },
+      {
+       "player": "Lucas Giolito",
+       "position": "RHP (SP)",
+       "status": "15-day IL (elbow)",
+       "note": "Rotation depth out"
+      },
+      {
+       "player": "Joe Musgrove",
+       "position": "RHP (SP)",
+       "status": "60-day IL (elbow)",
+       "note": ""
+      },
+      {
+       "player": "Jason Adam",
+       "position": "RHP (reliever)",
+       "status": "60-day IL (shoulder)",
+       "note": "High-leverage bullpen arm out \u2014 material to late-game"
+      },
+      {
+       "player": "Ramon Laureano",
+       "position": "OF",
+       "status": "60-day IL (hip)",
+       "note": "Outfield/bench depth"
+      }
+     ],
+     "lineup_rotation_notes": "Robbie Ray reported as San Diego's probable starter for 8/8 (per Pick Dawgz preview). Rotation is thinned (Pivetta/Giolito/Musgrove all out), leaning on healthy arms.",
+     "rest_or_bullpen_or_bench": "Jason Adam (60-day) removes a key high-leverage reliever \u2014 relevant to late-game/total; confirm current closer role at game time."
+    }
+   ],
+   "material_to_line": {
+    "verdict": "YES",
+    "explanation": "Correa (season-ending) for Houston and a depleted Padres rotation/bullpen (Adam out of high leverage) are line-relevant; Robbie Ray probable for SD. As of ~2026-08-08 afternoon ET."
+   }
+  },
+  {
+   "game": "LAD@AZ (Dodgers at Diamondbacks) \u2014 evening, Chase Field",
+   "teams": [
+    {
+     "team": "Los Angeles Dodgers",
+     "key_injuries_or_absences": [
+      {
+       "player": "Shohei Ohtani",
+       "position": "DH/RHP",
+       "status": "Playing as DH; managing left knee inflammation + right biceps discomfort",
+       "note": "Reportedly in lineup as DH, not pitching \u2014 monitor; day-to-day maintenance"
+      },
+      {
+       "player": "Tyler Glasnow",
+       "position": "RHP (SP)",
+       "status": "60-day IL",
+       "note": "Rotation out"
+      },
+      {
+       "player": "Blake Snell",
+       "position": "LHP (SP)",
+       "status": "60-day IL",
+       "note": "Rotation out"
+      },
+      {
+       "player": "Gavin Stone",
+       "position": "RHP (SP)",
+       "status": "60-day IL",
+       "note": "Rotation out"
+      },
+      {
+       "player": "Will Smith",
+       "position": "C",
+       "status": "60-day IL (neck inflammation)",
+       "note": "Everyday catcher out \u2014 material"
+      },
+      {
+       "player": "Will Klein",
+       "position": "RHP (reliever)",
+       "status": "15-day IL (right elbow discomfort)",
+       "note": "Bullpen depth"
+      }
+     ],
+     "lineup_rotation_notes": "Yoshinobu Yamamoto reported as LA's probable starter for 8/8 (healthy ace) per multiple previews. Despite a heavily depleted rotation on the IL, the Saturday starter is a strength. Will Smith's absence behind the plate is a standing lineup factor.",
+     "rest_or_bullpen_or_bench": "Bullpen down Will Klein; verify Dalton Rushing/catching setup and Ohtani's DH status on the posted lineup."
+    },
+    {
+     "team": "Arizona Diamondbacks",
+     "key_injuries_or_absences": [
+      {
+       "player": "Merrill Kelly",
+       "position": "RHP (SP)",
+       "status": "Day-to-day \u2014 cramping/leg; left Friday 8/7 start in the 6th",
+       "note": "Pitched 8/7, so NOT the 8/8 starter; noted for rotation health"
+      },
+      {
+       "player": "Justin Martinez",
+       "position": "RHP (reliever)",
+       "status": "60-day IL (elbow)",
+       "note": "High-leverage bullpen arm out \u2014 material to late-game"
+      }
+     ],
+     "lineup_rotation_notes": "Brandon Pfaadt reported as Arizona's probable starter for 8/8 (per previews). Merrill Kelly's cramping was in Friday's game and does not affect Saturday's starter, but bears on rotation depth.",
+     "rest_or_bullpen_or_bench": "Justin Martinez (60-day) subtracts a key reliever \u2014 relevant to bullpen/late-game and total."
+    }
+   ],
+   "material_to_line": {
+    "verdict": "YES",
+    "explanation": "Yamamoto (LAD) vs Pfaadt (AZ) probable; Ohtani managing knee/biceps but expected as DH; Will Smith out for LA and Justin Martinez out of the AZ bullpen are line-relevant. As of ~2026-08-08 afternoon ET \u2014 confirm Ohtani on the posted lineup."
+   }
+  },
+  {
+   "game": "TB@SEA (Rays at Mariners) \u2014 evening, T-Mobile Park",
+   "teams": [
+    {
+     "team": "Tampa Bay Rays",
+     "key_injuries_or_absences": [
+      {
+       "player": "Jake Fraley",
+       "position": "OF",
+       "status": "60-day IL (hernia/groin)",
+       "note": "Outfield/bench depth out"
+      },
+      {
+       "player": "Ben Williamson",
+       "position": "INF",
+       "status": "10-day IL (right hamstring strain)",
+       "note": "Per aggregated report; verify attribution"
+      },
+      {
+       "player": "Cole Sulser",
+       "position": "RHP (reliever)",
+       "status": "15-day IL (lower back spasms)",
+       "note": "Bullpen depth; verify attribution"
+      },
+      {
+       "player": "Edwin Uceta",
+       "position": "RHP (reliever)",
+       "status": "60-day IL (right shoulder impingement)",
+       "note": "Bullpen depth"
+      }
+     ],
+     "lineup_rotation_notes": "Drew Rasmussen reported as Tampa Bay's probable starter for 8/8 (RHP, ~2.82 ERA per preview) \u2014 a strength on the mound. No clear star-hitter OUT for the Rays lineup identified as of ~2026-08-08 afternoon ET.",
+     "rest_or_bullpen_or_bench": "Bullpen thinned by Uceta (60-day) and Sulser (15-day); confirm closer availability at game time."
+    },
+    {
+     "team": "Seattle Mariners",
+     "key_injuries_or_absences": [
+      {
+       "player": "Luke Raley",
+       "position": "OF/1B",
+       "status": "10-day IL (elbow)",
+       "note": "Regular bat out \u2014 material lineup subtraction"
+      },
+      {
+       "player": "Matt Brash",
+       "position": "RHP (reliever)",
+       "status": "15-day IL (right lat strain)",
+       "note": "High-leverage bullpen arm out"
+      },
+      {
+       "player": "Cole Wilcox",
+       "position": "RHP",
+       "status": "15-day IL (oblique strain)",
+       "note": ""
+      },
+      {
+       "player": "Cooper Criswell",
+       "position": "RHP",
+       "status": "60-day IL (right shoulder strain)",
+       "note": ""
+      },
+      {
+       "player": "Logan Evans",
+       "position": "RHP",
+       "status": "60-day IL (right UCL reconstruction)",
+       "note": ""
+      }
+     ],
+     "lineup_rotation_notes": "Logan Gilbert reported as Seattle's probable starter for 8/8 (RHP) \u2014 a healthy front-line arm. Luke Raley's absence is the main everyday-lineup subtraction.",
+     "rest_or_bullpen_or_bench": "Bullpen down Matt Brash (high leverage) \u2014 relevant to late-game/total."
+    }
+   ],
+   "material_to_line": {
+    "verdict": "YES",
+    "explanation": "Rasmussen vs Gilbert probable (two quality arms \u2014 total-relevant); Luke Raley out for Seattle and Brash out of the SEA bullpen are line factors. As of ~2026-08-08 afternoon ET."
+   }
+  },
+  {
+   "game": "DET@SF (Tigers at Giants) \u2014 evening, Oracle Park",
+   "teams": [
+    {
+     "team": "Detroit Tigers",
+     "key_injuries_or_absences": [
+      {
+       "player": "Wenceel Perez",
+       "position": "INF/OF",
+       "status": "60-day IL (left orbital fracture)",
+       "note": "Versatile bat/bench piece out long-term"
+      }
+     ],
+     "lineup_rotation_notes": "Keider Montero reported as Detroit's probable starter for 8/8 (RHP, ~3.28 ERA per preview). No additional star-lineup OUT identified as of ~2026-08-08 afternoon ET.",
+     "rest_or_bullpen_or_bench": "No back-to-back/rest flag noted; confirm bullpen/closer at game time."
+    },
+    {
+     "team": "San Francisco Giants",
+     "key_injuries_or_absences": [
+      {
+       "player": "Matt Chapman",
+       "position": "3B",
+       "status": "10-day IL (abdominal strain)",
+       "note": "Everyday 3B and key bat out \u2014 material"
+      },
+      {
+       "player": "Casey Schmitt",
+       "position": "INF",
+       "status": "10-day IL",
+       "note": "Infield depth/starter out"
+      },
+      {
+       "player": "Harrison Bader",
+       "position": "OF",
+       "status": "IL (left plantar fasciitis; setback after scooter accident)",
+       "note": "Outfield regular out"
+      },
+      {
+       "player": "Joel Peguero",
+       "position": "LHP",
+       "status": "60-day IL (left hamstring strain)",
+       "note": "Pitching depth"
+      }
+     ],
+     "lineup_rotation_notes": "JT Brubaker reported as San Francisco's probable starter for 8/8 (per preview). With Chapman, Schmitt and Bader out, SF is leaning on younger contributors (e.g., Bryce Eldridge) \u2014 a weakened lineup.",
+     "rest_or_bullpen_or_bench": "Multiple everyday absences shorten the bench; confirm bullpen usage at game time."
+    }
+   ],
+   "material_to_line": {
+    "verdict": "YES",
+    "explanation": "Giants missing multiple regulars (Chapman, Schmitt, Bader) meaningfully weakens their lineup \u2014 line/total relevant. As of ~2026-08-08 afternoon ET."
+   }
+  },
+  {
+   "game": "NYM@PIT (Mets at Pirates) \u2014 evening, PNC Park",
+   "teams": [
+    {
+     "team": "New York Mets",
+     "key_injuries_or_absences": [
+      {
+       "player": "Juan Soto",
+       "position": "OF",
+       "status": "OUT \u2014 10-day IL (Grade 2 left calf strain, since ~July 24)",
+       "note": "Best hitter out; targeted 2-3+ weeks, late-Aug return earliest \u2014 major offensive subtraction"
+      },
+      {
+       "player": "Reed Garrett",
+       "position": "RHP (reliever)",
+       "status": "60-day IL (right elbow inflammation)",
+       "note": "High-leverage bullpen arm out"
+      },
+      {
+       "player": "Austin Warren",
+       "position": "RHP (reliever)",
+       "status": "15-day IL (right forearm strain)",
+       "note": "Bullpen depth"
+      }
+     ],
+     "lineup_rotation_notes": "Zac Thornton reported as the Mets' probable starter for 8/8 (LHP per Amazin' Avenue/preview). Juan Soto's absence is the dominant lineup factor \u2014 the middle of the order is materially weaker.",
+     "rest_or_bullpen_or_bench": "Bullpen down Garrett (60-day) and Warren (15-day); confirm closer at game time."
+    },
+    {
+     "team": "Pittsburgh Pirates",
+     "key_injuries_or_absences": [
+      {
+       "player": "Ryan O'Hearn",
+       "position": "1B/DH",
+       "status": "IL (quad)",
+       "note": "One of Pittsburgh's most productive bats out \u2014 material"
+      },
+      {
+       "player": "Oneil Cruz",
+       "position": "SS/OF",
+       "status": "60-day IL (hand)",
+       "note": "Power/speed threat out \u2014 material lineup subtraction"
+      }
+     ],
+     "lineup_rotation_notes": "Carmen Mlodzinski reported as Pittsburgh's probable starter for 8/8 (RHP per Amazin' Avenue/preview). With O'Hearn and Cruz out, the Pirates lineup is notably thinned.",
+     "rest_or_bullpen_or_bench": "No back-to-back/rest flag noted; confirm bullpen availability at game time."
+    }
+   ],
+   "material_to_line": {
+    "verdict": "YES",
+    "explanation": "Both lineups are missing top bats \u2014 Juan Soto (Mets) and O'Hearn + Oneil Cruz (Pirates) \u2014 clearly line/total relevant. As of ~2026-08-08 afternoon ET."
+   }
+  }
+ ],
+ "sources": [
+  "https://arizonasports.com/mlb/arizona-diamondbacks/merrill-kelly-diamondbacks-dodgers-arizona-cramping-dbacks",
+  "https://athlonsports.com/mlb/kansas-city-royals/bobby-witt-jr-activated-from-injured-list",
+  "https://athlonsports.com/mlb/toronto-blue-jays/blue-jays-john-schneider-announces-vladimir-guerrero-jr-news-before-phillies-game",
+  "https://bleacherreport.com/game/tampa-bay-rays-vs-seattle-mariners-2026-8-8-17-50",
+  "https://heavy.com/sports/mlb/los-angeles-dodgers/dodgers-shohei-ohtani-lineup-decision-before-diamondbacks-series-opener/",
+  "https://natsjournal.com/p/game-118-reds-at-nats",
+  "https://pickdawgz.com/mlb-picks/los-angeles-dodgers-vs-arizona-diamondbacks-prediction-8-8-2026-todays-mlb-picks/",
+  "https://sports.yahoo.com/articles/houston-astros-injury-report-ahead-000005339.html",
+  "https://sports.yahoo.com/articles/philadelphia-phillies-announce-bryce-harper-220636026.html",
+  "https://sportssd.iheart.com/content/2026-08-06-astros-vs-padres-series-injured-list-aug-7-9/",
+  "https://www.amazinavenue.com/new-york-mets-discussion/99175/new-york-mets-pittsburgh-pirates-lineups-broadcast-info-open-thread-mlb-thornton-mlodzinski",
+  "https://www.aol.com/articles/mets-place-juan-soto-calf-192312631.html",
+  "https://www.cbssports.com/fantasy/baseball/news/fantasy-baseball-bullpen-report-trevor-megill-reclaims-the-closer-role/",
+  "https://www.cbssports.com/mlb/teams/BAL/baltimore-orioles/injuries/",
+  "https://www.cbssports.com/mlb/teams/DET/detroit-tigers/injuries/",
+  "https://www.covers.com/sport/baseball/mlb/matchup/370279/picks",
+  "https://www.espn.com/mlb/injuries",
+  "https://www.espn.com/mlb/story/_/id/49465276/juan-soto-calf-expects-return-mets-lineup-year",
+  "https://www.espn.com/mlb/story/_/id/49475860/blue-jays-vladimir-guerrero-jr-leaves-game-nationals-right-hamstring-tightness",
+  "https://www.espn.com/mlb/story/_/id/49483410/twins-byron-buxton-returns-10-day-il-hip-injury",
+  "https://www.fangraphs.com/roster-resource/injury-report/blue-jays",
+  "https://www.fangraphs.com/roster-resource/injury-report/mariners",
+  "https://www.fangraphs.com/roster-resource/injury-report/reds",
+  "https://www.fangraphs.com/roster-resource/injury-report/royals",
+  "https://www.fangraphs.com/roster-resource/injury-report/tigers",
+  "https://www.fantasypros.com/mlb/probable-pitchers.php",
+  "https://www.federalbaseball.com/washington-nationals-discussions/93287/washington-nationals-vs-cincinnati-reds-game-thread",
+  "https://www.joxfm.com/2026/08/04/guardians-sit-3b-jose-ramirez-wrist-inflammation-vs-mets/",
+  "https://www.mlb.com/news/giants-injuries-and-roster-moves",
+  "https://www.mlb.com/news/jose-ramirez-activated-off-injured-list-returns-vs-twins",
+  "https://www.mlb.com/probable-pitchers",
+  "https://www.mlbtraderumors.com/2026/07/twins-place-byron-buxton-on-10-day-il-with-right-hip-impingement.html",
+  "https://www.redlegnation.com/2026/08/07/cincinnati-reds-vs-washington-nationals-august-7-2026/",
+  "https://www.royalsreview.com/kansas-city-royals-roster/103027/vinnie-pasquantino-heads-back-to-the-injured-list-with-a-wrist-injury",
+  "https://www.scoresandstats.com/previews/baseball/mlb/orioles-vs-rangers/",
+  "https://www.si.com/mlb/whitesox/onsi/white-sox-vs-guardians-lineup-can-meidroth-stay-hot-no-antonacci-doyle-in-cf-7",
+  "https://www.sportsgrid.com/mlb/game/baltimore-orioles-texas-rangers-scores-odds-picks-props-august-08-2026/c7cb6506-a026-48c0-8140-95721f65f8b8",
+  "https://www.teamrankings.com/mlb/matchup/dodgers-diamondbacks-2026-08-08/injuries",
+  "https://www.thebiglead.com/juan-soto-injury-update-pirates-game/",
+  "https://www.thespread.com/mlb-articles/mets-vs-pirates-prediction-august-8-can-pittsburgh-stop-their-free-fall/",
+  "https://www.washingtonpost.com/sports/mlb/2026/08/04/royals-bobby-witt-jr-return/95e7268c-9051-11f1-9fdc-0a725c989a7b_story.html",
+  "https://www.washingtonpost.com/sports/mlb/2026/08/07/diamondbacks-merrill-kelly-cramping/"
+ ]
+}

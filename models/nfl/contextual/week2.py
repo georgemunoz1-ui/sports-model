@@ -19,6 +19,8 @@ def policy():
     best=min(metrics,key=lambda a:(metrics[a]['all']['brier'],metrics[a]['all']['log_loss'],-metrics[a]['all']['winner_accuracy']))
     if p['default_reference_model']!=f'nfl.integrated_context.{best}.v1.research':
         raise ValueError('DEFAULT_DOES_NOT_MATCH_DECLARED_SELECTION_RULE')
+    from pipelines.cards.selection import require_default
+    require_default("nfl",p["default_reference_model"])
     return p
 
 def applies(base,event):

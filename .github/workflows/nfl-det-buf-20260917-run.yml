@@ -1,0 +1,78 @@
+name: DET BUF sealed research inference
+on:
+  push:
+    branches: [codex/nfl-det-buf-20260917-sealed-run]
+    paths: ['.github/workflows/nfl-det-buf-20260917-run.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  prepare:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    outputs:
+      artifact-id: ${{ steps.sealed.outputs.artifact-id }}
+      artifact-digest: ${{ steps.sealed.outputs.artifact-digest }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install -r requirements-nfl-context.txt beautifulsoup4==4.13.4
+      - uses: actions/download-artifact@v4
+        with:
+          name: det-buf-capture-35288221132
+          run-id: 35288221132
+          github-token: ${{ github.token }}
+          path: upstream/capture
+      - uses: actions/download-artifact@v4
+        with:
+          name: week2-reconciliation
+          run-id: 35030382886
+          github-token: ${{ github.token }}
+          path: upstream/history
+      - uses: actions/download-artifact@v4
+        with:
+          name: det-buf-checks-35288221132
+          run-id: 35288221132
+          github-token: ${{ github.token }}
+          path: upstream/checks
+      - name: Prepare source-bound input; no simulation
+        run: |
+          python scripts/prepare_det_buf_20260917.py --capture upstream/capture --history upstream/history --output run-data
+          cp -r upstream/checks run-data/health
+          python scripts/prepare_nfl_event.py --model data/nfl/contextual_v1/model_packed.json --base run-data/base.json --context run-data/context.json --event run-data/event.json --recovered-parameters data/nfl/contextual_v1/recovered_parameters.json --output run-data/event_package.json
+          python -m unittest discover -s tests -p 'test_nfl_*.py' -v > run-data/nfl-tests.txt 2>&1
+          tail -6 run-data/nfl-tests.txt
+          python scripts/seal_det_buf_20260917.py prepare --folder run-data
+      - uses: actions/upload-artifact@v4
+        id: sealed
+        with:
+          name: det-buf-sealed-inputs-${{ github.run_id }}
+          path: run-data
+          retention-days: 90
+  inference:
+    needs: prepare
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install -r requirements-nfl-context.txt
+      - uses: actions/download-artifact@v4
+        with:
+          name: det-buf-sealed-inputs-${{ github.run_id }}
+          path: run-data
+      - name: Verify external input receipt, execute 100000 draws and exact replay
+        run: python scripts/seal_det_buf_20260917.py execute --folder run-data --artifact-id '${{ needs.prepare.outputs.artifact-id }}' --artifact-digest '${{ needs.prepare.outputs.artifact-digest }}'
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: det-buf-completed-${{ github.run_id }}
+          path: run-data
+          retention-days: 90

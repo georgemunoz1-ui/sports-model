@@ -317,7 +317,7 @@
           "v13_wp": 0.54,
           "mkt_fair": 0.58,
           "blow_risk": 0.1,
-          "note": "dir pick agrees w/ market but LESS confident — tests V13 vs market fair",
+          "note": "dir pick agrees w/ market but LESS confident \u2014 tests V13 vs market fair",
           "result": "LOSS"
         },
         {
@@ -355,7 +355,7 @@
           "game": "SD@ATL",
           "ml": null,
           "v13_wp": 0.71,
-          "note": "highest conviction on slate (Sale vs Canning, SD blow-risk 34%) — no board price captured, graded directional-only",
+          "note": "highest conviction on slate (Sale vs Canning, SD blow-risk 34%) \u2014 no board price captured, graded directional-only",
           "result": "WIN"
         },
         {
@@ -365,7 +365,7 @@
           "ml": 112,
           "v13_wp": 0.61,
           "mkt_impl": 0.47,
-          "note": "V13 flips +112 road dog to 61% favorite — FULL-TRUST (Luzardo accent-cap fixed; flip holds with both real arms modeled). Day's one real market disagreement.",
+          "note": "V13 flips +112 road dog to 61% favorite \u2014 FULL-TRUST (Luzardo accent-cap fixed; flip holds with both real arms modeled). Day's one real market disagreement.",
           "v13_trust": "full",
           "result": "WIN",
           "pl": 1.12,
@@ -406,7 +406,7 @@
       "why_frozen": "Selection rule was 'V13 directional lean + my discretion', which is not an EV rule and was never written down in advance. Its 7-3 record therefore measures an unspecified process and cannot be extended. Frozen rather than deleted: the 10 graded rows stay as history. All ML tracking from 2026-07-25 forward uses ml_ev_tracking, whose rule was pre-registered before first pitch (R7)."
     },
     "kprops_taco_baseline": {
-      "desc": "Taco raw-rate binomial baseline (no shrinkage, price-EV only, no displacement req) — A/B vs engine",
+      "desc": "Taco raw-rate binomial baseline (no shrinkage, price-EV only, no displacement req) \u2014 A/B vs engine",
       "record_w": 3,
       "record_l": 2,
       "units": 0.48,
@@ -420,7 +420,7 @@
           "price": -119,
           "ek_taco": 5.43,
           "ek_engine": 5.34,
-          "note": "both models agree — also the engine's official play",
+          "note": "both models agree \u2014 also the engine's official play",
           "raw_ek": 5.43,
           "shrunk_ek": 5.34,
           "raw_p": 0.631,
@@ -579,7 +579,7 @@
         "brier_shrunk_mean": 0.2584,
         "logloss_raw_mean": 0.6806,
         "logloss_shrunk_mean": 0.7102,
-        "note": "A/B night 1: RAW beat SHRUNK on both Brier and logloss. Two high-K arms (Williams 11K) went OVER where shrinkage pulled p toward 0.5. n=4 shared plays — pure noise, marathon scoring."
+        "note": "A/B night 1: RAW beat SHRUNK on both Brier and logloss. Two high-K arms (Williams 11K) went OVER where shrinkage pulled p toward 0.5. n=4 shared plays \u2014 pure noise, marathon scoring."
       }
     },
     "kprops_shadow": {
@@ -636,14 +636,14 @@
           "edge": 0.072,
           "ev_per_unit": 0.184,
           "v13_directional_lean_agrees": false,
-          "price_snapshot": "opening, covers.com, 2026-07-25T05:50Z — WILL MOVE; closing price to be captured before lock",
+          "price_snapshot": "opening, covers.com, 2026-07-25T05:50Z \u2014 WILL MOVE; closing price to be captured before lock",
           "weight": 1,
           "staked": 0,
           "final": "3-2",
           "gamePk": 824244,
           "result": "WIN",
           "pl": 1.54,
-          "closing_price": "not captured — game was already final when the late snapshot was taken"
+          "closing_price": "not captured \u2014 game was already final when the late snapshot was taken"
         },
         {
           "date": "2026-07-25",
@@ -655,7 +655,7 @@
           "edge": 0.112,
           "ev_per_unit": 0.321,
           "v13_directional_lean_agrees": false,
-          "price_snapshot": "opening, covers.com, 2026-07-25T05:50Z — WILL MOVE; closing price to be captured before lock",
+          "price_snapshot": "opening, covers.com, 2026-07-25T05:50Z \u2014 WILL MOVE; closing price to be captured before lock",
           "weight": 1,
           "staked": 0,
           "late_price_2210Z": 186,
@@ -676,7 +676,7 @@
           "edge": 0.055,
           "ev_per_unit": 0.102,
           "v13_directional_lean_agrees": true,
-          "price_snapshot": "opening, covers.com, 2026-07-25T05:50Z — WILL MOVE; closing price to be captured before lock",
+          "price_snapshot": "opening, covers.com, 2026-07-25T05:50Z \u2014 WILL MOVE; closing price to be captured before lock",
           "weight": 1,
           "staked": 0,
           "late_price_2210Z": -116,
@@ -697,11 +697,11 @@
           "edge": 0.05,
           "ev_per_unit": 0.183,
           "v13_directional_lean_agrees": false,
-          "price_snapshot": "user screenshot board, captured 2026-07-26T02:13Z, ~14.0h pre-slate (earliest first pitch 2026-07-26T16:15Z) — WILL MOVE; closing price to be captured before lock",
+          "price_snapshot": "user screenshot board, captured 2026-07-26T02:13Z, ~14.0h pre-slate (earliest first pitch 2026-07-26T16:15Z) \u2014 WILL MOVE; closing price to be captured before lock",
           "weight": 1,
           "staked": 0,
-          "transcription_risk": "HIGH — read from an image. Board passed a full integrity audit: 15/15 matchup+time match vs statsapi, 26/30 starter match, ML hold 2.08-3.85% (mean 3.03%) with no arb in any game.",
-          "caveat": "Same game triggers an R5 total audit (V13 proj 9.7 vs line 7.5, disp +2.2). If V13 misprices run scoring here, its win probability in this game is suspect too. Registered anyway — rule 4 forbids discretionary vetoes.",
+          "transcription_risk": "HIGH \u2014 read from an image. Board passed a full integrity audit: 15/15 matchup+time match vs statsapi, 26/30 starter match, ML hold 2.08-3.85% (mean 3.03%) with no arb in any game.",
+          "caveat": "Same game triggers an R5 total audit (V13 proj 9.7 vs line 7.5, disp +2.2). If V13 misprices run scoring here, its win probability in this game is suspect too. Registered anyway \u2014 rule 4 forbids discretionary vetoes.",
           "provenance_correction": "Timestamp corrected 2026-07-26T03:20Z. The original stamp assumed a 3.8h-fast container clock; that belief has been withdrawn. Still genuinely pre-slate, so the registration stands unaltered.",
           "final": "2-11",
           "result": "LOSS",
@@ -730,10 +730,10 @@
           "edge": 0.074,
           "ev_per_unit": 0.178,
           "v13_directional_lean_agrees": false,
-          "price_snapshot": "user screenshot board, captured 2026-07-26T02:13Z, ~14.0h pre-slate (earliest first pitch 2026-07-26T16:15Z) — WILL MOVE; closing price to be captured before lock",
+          "price_snapshot": "user screenshot board, captured 2026-07-26T02:13Z, ~14.0h pre-slate (earliest first pitch 2026-07-26T16:15Z) \u2014 WILL MOVE; closing price to be captured before lock",
           "weight": 1,
           "staked": 0,
-          "transcription_risk": "HIGH — read from an image. Board passed a full integrity audit: 15/15 matchup+time match vs statsapi, 26/30 starter match, ML hold 2.08-3.85% (mean 3.03%) with no arb in any game.",
+          "transcription_risk": "HIGH \u2014 read from an image. Board passed a full integrity audit: 15/15 matchup+time match vs statsapi, 26/30 starter match, ML hold 2.08-3.85% (mean 3.03%) with no arb in any game.",
           "provenance_correction": "Timestamp corrected 2026-07-26T03:20Z. The original stamp assumed a 3.8h-fast container clock; that belief has been withdrawn. Still genuinely pre-slate, so the registration stands unaltered.",
           "final": "4-11",
           "result": "LOSS",
@@ -788,7 +788,7 @@
       "rule_reconciliation_2026_07_26": {
         "issue": "Rule 3 as WRITTEN says 'a starter is TBD or has <5 GS'. The CODE that actually produced the capped flag (harness/daily_card.py) uses 'gs<2 or TBD'. The two definitions differ.",
         "what_was_actually_applied": "7/25 was graded with the CODE definition (gs<2). To keep the ledger internally consistent, 7/26 was ALSO selected with the code definition.",
-        "effect_on_2026_07_26": "NONE. Zero registered sides on this slate would flip under the gs<5 reading — checked explicitly, not assumed.",
+        "effect_on_2026_07_26": "NONE. Zero registered sides on this slate would flip under the gs<5 reading \u2014 checked explicitly, not assumed.",
         "forward_fix": "The written text will be amended to match the code (gs<2 or TBD) effective 2026-07-27. Amending forward-only; the 7/25-7/26 rows are NOT re-selected under a rule chosen after seeing their outcomes."
       },
       "conservative_tbd_cost_2026_07_26": {
@@ -806,7 +806,7 @@
         "board": "Travis Adams",
         "statsapi": "Joe Ryan",
         "resolution": "Modeled with Joe Ryan (first-party wins).",
-        "note": "The board's -140 MIN price may have been made against a different pitcher. No side in this game cleared the rule, so nothing was registered either way — but the conflict is logged because a future slate may not be so lucky."
+        "note": "The board's -140 MIN price may have been made against a different pitcher. No side in this game cleared the rule, so nothing was registered either way \u2014 but the conflict is logged because a future slate may not be so lucky."
       },
       "roi_pct": -12,
       "n_note": "n=5. Far too few plays to distinguish skill from noise; a 3-play ROI is a number, not evidence. No bootstrap CI is quoted because at n=5 it would span every plausible value."
@@ -858,7 +858,7 @@
     {
       "id": "E1",
       "passes": false,
-      "status": "NO-PROMOTE / CONFIRMATORY INDETERMINATE (2026-07-24). Original n=1759 confirmatory CLOSED as UNRECOVERABLE (row IDs never stored: backtest kept anonymous arrays; data vintage mutated since; see docs/experiments/E1_confirmatory_closure.md). The n=1757 run is EXPLORATORY (reconstructed pop, 7/24 vintage, <=7/19 horizon), NOT confirmatory: overall ΔMAE +0.011K (<0.03), interaction -0.037K, calib slope 1.009. Bounded conclusion: E1 as specified showed no material incremental value on the observed sample; does NOT explain the Cole/Sale misses (cause unexplained). The 1757 rows cannot be reused as confirmatory; a real E1-R needs a pre-registered FORWARD holdout. ENGINE UNCHANGED.",
+      "status": "NO-PROMOTE / CONFIRMATORY INDETERMINATE (2026-07-24). Original n=1759 confirmatory CLOSED as UNRECOVERABLE (row IDs never stored: backtest kept anonymous arrays; data vintage mutated since; see docs/experiments/E1_confirmatory_closure.md). The n=1757 run is EXPLORATORY (reconstructed pop, 7/24 vintage, <=7/19 horizon), NOT confirmatory: overall \u0394MAE +0.011K (<0.03), interaction -0.037K, calib slope 1.009. Bounded conclusion: E1 as specified showed no material incremental value on the observed sample; does NOT explain the Cole/Sale misses (cause unexplained). The 1757 rows cannot be reused as confirmatory; a real E1-R needs a pre-registered FORWARD holdout. ENGINE UNCHANGED.",
       "title": "Opponent-K% adjustment for K-props",
       "prereg_doc": "docs/experiments/E1_opponent_k_prereg.md",
       "method": "log5/odds-ratio combine of pitcher as-of shrunk K-rate p with as-of opponent team K-rate-taken o [o = (SigmaSO + L*N0)/(Sigma(AB+BB) + N0), N0=200, denominator AB+BB per principal 7/24] vs league L: adj=(p*o/L)/((p*o/L)+((1-p)(1-o)/(1-L))); E[TBF] unchanged; Poisson tails unchanged. Strict as-of (date<D), DH=start-of-day both games.",
@@ -880,7 +880,7 @@
     {
       "id": "E2",
       "passes": false,
-      "status": "queued (AFTER E3, per Taco 7/24 — tail quality is useful but does NOT address the book-info question)",
+      "status": "queued (AFTER E3, per Taco 7/24 \u2014 tail quality is useful but does NOT address the book-info question)",
       "title": "Negative-binomial K tails vs Poisson",
       "method": "fit dispersion on backtest; must improve P(over) calibration buckets",
       "queue_hold_2026_07_28": "PARKED_BY_ML_PRIORITY: non-ML (K tails). Pre-registration preserved; no work authorized."
@@ -888,7 +888,7 @@
     {
       "id": "E3",
       "passes": false,
-      "status": "NEXT (E3 BEFORE E2, per Taco 7/24) — directly tests whether market movement carries information missing from the projection (the unresolved book-info question), with NO engine change. Pre-register before running.",
+      "status": "NEXT (E3 BEFORE E2, per Taco 7/24) \u2014 directly tests whether market movement carries information missing from the projection (the unresolved book-info question), with NO engine change. Pre-register before running.",
       "title": "Line-move capture for props",
       "method": "capture DK K-lines at 2 timestamps/day; measure if OUR flagged deviations get steamed toward projection (CLV-for-props = independent edge evidence)",
       "queue_hold_2026_07_28": "CAPTURE-ONLY: passive line/odds capture allowed and encouraged; no model change."
@@ -900,7 +900,7 @@
       "title": "Lineup-aware offense for sides (reopen attempt)",
       "method": "daily lineups + batter wOBA as-of; only worth building if E1-E3 show the pipeline sustains quality",
       "id_history": "Was a SECOND E4 alongside the favorite-fade experiment. Renumbered to E7 on 2026-07-28. The favorite-fade experiment KEEPS E4 because it is the one with a pre-registration and with references throughout docs/progress.md; this entry was 'queued' with no doc and no references, so moving it breaks nothing.",
-      "queue_hold_2026_07_28": "PARKED_BY_ML_PRIORITY: ML-feature reopen attempt — held until Phase 3 ablations; single-active rule. Pre-registration preserved; no work authorized."
+      "queue_hold_2026_07_28": "PARKED_BY_ML_PRIORITY: ML-feature reopen attempt \u2014 held until Phase 3 ablations; single-active rule. Pre-registration preserved; no work authorized."
     },
     {
       "id": "E5",
@@ -915,10 +915,10 @@
       "status": "PRE-REGISTERED, not yet run",
       "registered_utc": "2026-07-25T22:30Z",
       "title": "Is V13's disagreement with the moneyline market an edge or a favorite-fading bias?",
-      "motivation": "Across 50 priced+uncapped game-rows on 5 cards, mean(V13_home_wp - market_home_wp) is -0.086 where the home team is a big favorite (mkt>0.58, n=8), -0.019 in the middle (n=40), +0.005 where home is a big dog (n=2). V13 compresses toward 50/50 relative to the market. Every ml_ev_tracking pick so far (KC +154, COL +186, STL -116, COL +265, NYY +140) is consistent with that shape: 4 of 5 are underdogs. The ledger may be one systematic bet — 'fade favorites' — wearing five different uniforms.",
+      "motivation": "Across 50 priced+uncapped game-rows on 5 cards, mean(V13_home_wp - market_home_wp) is -0.086 where the home team is a big favorite (mkt>0.58, n=8), -0.019 in the middle (n=40), +0.005 where home is a big dog (n=2). V13 compresses toward 50/50 relative to the market. Every ml_ev_tracking pick so far (KC +154, COL +186, STL -116, COL +265, NYY +140) is consistent with that shape: 4 of 5 are underdogs. The ledger may be one systematic bet \u2014 'fade favorites' \u2014 wearing five different uniforms.",
       "hypothesis": "H0: V13's favorite-fade is genuine edge -> ml_ev_tracking picks show positive CLV. H1: it is calibration bias -> CLV is <=0 and units bleed even when W-L looks respectable.",
       "primary_readout": "Closing-line value in cents, NOT win-loss. Pre-specified because W-L is the wrong readout for a +EV objective function.",
-      "holdout": "Forward slates from 2026-07-27 onward. The 7/25 and 7/26 rows are EXPLORATORY — they generated this hypothesis, so they cannot confirm it.",
+      "holdout": "Forward slates from 2026-07-27 onward. The 7/25 and 7/26 rows are EXPLORATORY \u2014 they generated this hypothesis, so they cannot confirm it.",
       "blocking": "Requires a genuine closing snapshot at lock, which has never yet been captured. E4 cannot start until closing capture works. This is the same binding constraint (price access) already logged.",
       "must_not_do": "This diagnostic MUST NOT be used to veto or trim picks on 7/26 or any registered slate. Rule 4 forbids discretion; the whole point of pre-registration is that a mid-flight hunch does not get to edit the pick list.",
       "queue_hold_2026_07_28": "ML DIAGNOSTIC, retained; runs only as a Phase 3 pre-registered ablation under the single-active rule."
@@ -951,6 +951,24 @@
       "r7_note": "ONE numeric parameter: hr_shrink (prior strength HR_K). The normalisation SCHEME is a MODEL-ARCHITECTURE FORK and a researcher degree of freedom -- NOT a second numeric free parameter; A and B are different models, not two settings of one knob. Choosing between them after seeing which calibrates better is exactly the degree of freedom pre-registration removes. Pre-committing to A (ANCHOR_HR) and assigning B (multinomial softmax) to a separate experiment with its own pre-registration remains the correct control.",
       "why": "The reviewed construction's algebra is correct but two analytical claims about it were wrong, and the proposed hr_shrink is unidentified until the four prereqs are answered. Recording it as a pre-registered hypothesis keeps it out of the frozen formula path while preserving the idea.",
       "queue_hold_2026_07_28": "PARKED_BY_ML_PRIORITY: non-ML (HR event model; also DATA-BLOCKED). Pre-registration preserved; no work authorized."
+    },
+    {
+      "id": "INDEPENDENT-CANDIDATES-20260916",
+      "passes": false,
+      "status": "COMPLETE DEVELOPMENT SCREEN / NO PROMOTION",
+      "title": "Independent standard methods and source-bound candidate assimilation",
+      "prereg_doc": "research/candidate_methods/protocol.json",
+      "protocol_sha256": "7057c7ba013cb75ef77d77f05bb1dd1cf330233696eae28e5dc7d288d7b2478e",
+      "promotion": "NONE; 2025/2026 NFL holdouts sealed; no operational default changes",
+      "subexperiments": [
+        "coaching-feature-group",
+        "ridge-vs-xgb",
+        "sigmoid-calibration",
+        "wnba-lineup-data-gate"
+      ],
+      "report": "docs/INDEPENDENT_CANDIDATES.md",
+      "evidence": "data/research/candidate_methods_v1/verified_20260916",
+      "result": "1599 games; coaching MAE delta +0.00840, XGB +0.07582; WNBA source fit blocked; 2025/2026 excluded"
     }
   ],
   "known_issues": [
@@ -990,7 +1008,7 @@
     "RUNBOOK BUG (found 7/24): the 8-field forward log format 'date|opp|IP|...' CRASHES sp_asof (parses field[1] as IP -> float(opp) error) and is skipped by healthcheck log-integrity (len!=7 and !=10). Logs stay 7-field 'date|IP|ER|SO|BB|TBF|GS' until parsers are made opponent-aware. Fix: add len==8 branch offset-by-1, then update runbook.",
     "ELITE-ARM UNDER misses (HYPOTHESIS, not confirmed): Cole 11K (7/22) + Sale 11K (7/23) are 2 consecutive premium-arm UNDER misses. PLAUSIBLE cause = TBF-capped projection omitting opponent-K%; equally consistent with short-run clustering at n=2. E1 replay must show improvement before causal status. Escalated to top for TESTING, not treated as established.",
     {
-      "issue": "PRICE ACCESS is the binding constraint on this project — not model quality.",
+      "issue": "PRICE ACCESS is the binding constraint on this project \u2014 not model quality.",
       "evidence": "2026-07-24: no board reachable pregame; board only found post-slate -> shadow only. 2026-07-25: multi-book LINE board obtained (27 arms) but NO prices anywhere reachable. oddsindex serves a cached 7/24 page; vegasinsider renders prices without unambiguous over/under attribution (assigning a price to the wrong side would be price invention, so refused); rotoballer/rotowire are JS shells; oddshark ROBOTS_DISALLOWED; editorial articles for 7/25 carried outs props and batter props, no K prices.",
       "consequence": "K-prop gate has been stuck at 9/100 for two consecutive slates for reasons that have nothing to do with the engine. Meanwhile the engine posted MAE 0.49 vs a real main-line column.",
       "unblocking_artifact": "The source Taco screenshotted has an 'Export Table Data -> Excel / CSV / PDF' button. One CSV export containing prices converts a dead slate into a priceable board and is worth more than any further modeling work right now.",
@@ -1143,7 +1161,7 @@
       "source": "Taco screenshot, multi-book strikeout table, transcribed by eye 2026-07-25T06:35Z",
       "file": "data/mlb/props/2026-07-25_klines.json",
       "n_arms": 27,
-      "prices": "NONE — lines only; all quotes null (R1)",
+      "prices": "NONE \u2014 lines only; all quotes null (R1)",
       "engine_run": "harness/shadow_price.py -> 0 of 27 qualified, by construction. state.json unchanged.",
       "column_diagnostic": {
         "mean_signed_disp": {
@@ -1162,7 +1180,7 @@
         },
         "conclusion": "Only the BetRivers column behaves like a main line. DK/FD/CZR post >=7.5 K lines on 16.9-19.8 K% starters (Pallante, Elder, Bibee), which no book does. Treat those columns as an alt-line ladder pending confirmation."
       },
-      "engine_validation": "Against the BR column the engine's MAE is 0.49 K across 24 projected arms. The engine was built with no knowledge of this board. This is the first external multi-book line set the K engine has been checked against; it is a validation signal, NOT a profitability signal — matching the line means agreeing with the market, which by itself produces no edge.",
+      "engine_validation": "Against the BR column the engine's MAE is 0.49 K across 24 projected arms. The engine was built with no knowledge of this board. This is the first external multi-book line set the K engine has been checked against; it is a validation signal, NOT a profitability signal \u2014 matching the line means agreeing with the market, which by itself produces no edge.",
       "near_miss_recorded": "Naive ingestion would have produced 11 fake R5-level UNDER edges by comparing projections against alt lines. Did not happen; recorded anyway.",
       "watchlist_vs_BR": [
         {
@@ -1200,7 +1218,7 @@
         }
       ],
       "blocking": "Needs real prices. The source page has an Export Table Data -> CSV button; that export is the unblocking artifact.",
-      "TIMING_CORRECTION": "Ingested 2026-07-26T02:04Z = 22:04 ET Sat, AFTER the 7/25 slate finished. I had read a stale container clock and believed it was 02:40 ET. Board is SHADOW-ONLY regardless of whether prices ever arrive. The column diagnostic and the MAE-0.49 engine validation are unaffected — those compare projections to LINES, and lines are set pre-game, so no result information leaks into them.",
+      "TIMING_CORRECTION": "Ingested 2026-07-26T02:04Z = 22:04 ET Sat, AFTER the 7/25 slate finished. I had read a stale container clock and believed it was 02:40 ET. Board is SHADOW-ONLY regardless of whether prices ever arrive. The column diagnostic and the MAE-0.49 engine validation are unaffected \u2014 those compare projections to LINES, and lines are set pre-game, so no result information leaks into them.",
       "gate_eligible": false
     },
     "calibration_2026_07_25_oos": {
@@ -1324,8 +1342,9 @@
     "E4": "V13 vs moneyline: edge or favorite-fading bias?",
     "E5": "WNBA port",
     "E6": "HR log-odds shrinkage in a log5 event model",
-    "E7": "Lineup-aware offense for sides (reopen attempt) — was a duplicate E4 until 2026-07-28",
-    "_note": "docs/progress.md also uses 'E5' in PROSE for a shrinkage experiment. That prose usage is SUPERSEDED: the shrinkage work is E6. E5 in this registry is the WNBA port. Historical prose is left as written (R6); this registry is authoritative."
+    "E7": "Lineup-aware offense for sides (reopen attempt) \u2014 was a duplicate E4 until 2026-07-28",
+    "_note": "docs/progress.md also uses 'E5' in PROSE for a shrinkage experiment. That prose usage is SUPERSEDED: the shrinkage work is E6. E5 in this registry is the WNBA port. Historical prose is left as written (R6); this registry is authoritative.",
+    "INDEPENDENT-CANDIDATES-20260916": "Independent standard methods and candidate evidence"
   },
   "market_priority": [
     "ML",
@@ -1349,8 +1368,8 @@
     "ml_recovery_status": "Phases 2+3 COMPLETE 2026-07-28. P2 pooled dev (n=708): d_logistic 0.2460 Brier beat a_v13 0.2486, c 0.2496, b 0.2500. A1 (HFA) and A2 (IP prior) both CLOSED, no improvement -- HFA remains UNRESOLVED. Candidate d_logistic_2f frozen (config 132523ac86695b85), holdout 6/29-7/19 opened ONCE: candidate 0.2438 Brier / 0.6808 logloss beat every reference including a_v13 (0.2447). ML remains NO_PROMOTE: the market benchmark is still unmeasured (~0.238 reference), the margin over the incumbent is thin, and promotion requires Phase 4 forward paper validation against live de-vigged prices, which is NOT yet authorized.",
     "shadow_development": {
       "rule": "Owner-directed 2026-07-28: parallel SHADOW development track. Changes NO production model, NO frozen artifact, NO Phase-4 path; ML-P4-FORWARD remains the single ACTIVE model-changing experiment. Shadow models register an identity immediately before their FIRST shadow forecast, not earlier.",
-      "ML-E1-PLAYER-EVOLUTION-V1": "SHADOW_ACTIVE (engine + schema + prereg committed; DATA GATE: EVIDENCE_ABSENT — zero batter-level event histories/ages/multi-year data in repo; no projection producible until owner-supplied or R8-fetched data)",
-      "ml.v14.player_context.shadow.v1": "SPEC_ONLY (prereg committed; identity NOT registered — cannot run)",
+      "ML-E1-PLAYER-EVOLUTION-V1": "SHADOW_ACTIVE (engine + schema + prereg committed; DATA GATE: EVIDENCE_ABSENT \u2014 zero batter-level event histories/ages/multi-year data in repo; no projection producible until owner-supplied or R8-fetched data)",
+      "ml.v14.player_context.shadow.v1": "SPEC_ONLY (prereg committed; identity NOT registered \u2014 cannot run)",
       "k.xk_stuff.shadow.v1": "SPEC_ONLY (prereg committed; zero pitch-level data; identity NOT registered)"
     }
   },

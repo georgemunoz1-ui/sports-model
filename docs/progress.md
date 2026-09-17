@@ -4499,3 +4499,21 @@ Patched card probability overrides and strict timestamp ordering. Diagnostic car
 ## 2026-09-15 — User-authorized all-PR consolidation (2026-09-16 UTC)
 
 Reconciled default main and operational history; PR1,9–16,26–30 changes retained. Preserved current selected defaults and archived forecast hashes. Older Gamma-Poisson adapter accessible under an explicit research name. Recovered strict PIT timestamp and no-self-registration checks; preserved newer parser assertions. Local combined suite passed 330 tests before the additional package-integrity regression. New access guide and consistent dependency file added. External health blockers are not cleared by merging. Action authority OFF.
+
+
+## 2026-09-16 — Independent candidate assimilation (research only)
+
+Owner requested independently learned standard methods and review-candidate collection.
+Registered INDEPENDENT-CANDIDATES-20260916 before fitting. Added ridge/XGBoost,
+train-only preprocessing, chronological tuning/calibration/tests, strict source/PIT
+contracts and portable model replay. Six test seasons, 1,599 games: ridge MAE
+10.35055; plus coaching 10.35895; XGBoost 10.42637. No promotion. NFL 2025/2026
+excluded from this experiment. Historical publication timestamps remain unverified.
+Captured all 16 Week1 games as 32 team rows and 259 player/game/touch-type records.
+Independent WNBA lineup method implemented; actual fit blocked by 39 invalid-point
+rows and 405 scoring-identity mismatches in the external source. Registered 23
+feature/method families with distinct observed/fitted/used states. 19 targeted tests
+pass; retained fitted model predictions replay without retraining. See
+docs/INDEPENDENT_CANDIDATES.md and data/research/candidate_methods_v1.
+Existing local health remains red; no complete-checkout health certification.
+Forecast defaults, preserved forecasts and action authority unchanged; action OFF.

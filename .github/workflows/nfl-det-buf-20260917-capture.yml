@@ -1,0 +1,86 @@
+name: DET BUF 20260917 immutable capture
+on:
+  push:
+    branches: [codex/nfl-det-buf-20260917-sealed-run]
+    paths: ['.github/workflows/nfl-det-buf-20260917-capture.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  capture:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Preserve exact code before any inference
+        run: |
+          mkdir -p det-buf-capture
+          git archive --format=tar.gz HEAD > det-buf-capture/repository.tar.gz
+          git rev-parse HEAD > det-buf-capture/source_commit.txt
+          date -u +%Y-%m-%dT%H:%M:%SZ > det-buf-capture/writer_started_at.txt
+      - name: Capture source bytes with actual retrieval times
+        run: |
+          python - <<'PY'
+          import urllib.request,json,hashlib,datetime,pathlib,concurrent.futures
+          root=pathlib.Path('det-buf-capture');out=root/'sources';out.mkdir()
+          urls={
+          'det_inactives.html':'https://www.detroitlions.com/news/inactives-lions-vs-bills-miller-mahogany-rakestraw',
+          'buf_inactives.html':'https://www.buffalobills.com/news/buffalo-bills-inactives-vs-lions-week-2',
+          'det_injuries.html':'https://www.detroitlions.com/news/lions-at-bills-injury-report-sept-16-mahogany-miller-reed',
+          'buf_injuries.html':'https://www.buffalobills.com/news/buffalo-bills-injury-report-vs-lions-week-2',
+          'det_schedule.html':'https://www.detroitlions.com/schedule/',
+          'buf_schedule.html':'https://www.buffalobills.com/schedule/',
+          'det_depth.html':'https://www.detroitlions.com/team/depth-chart',
+          'buf_depth.html':'https://www.buffalobills.com/team/depth-chart',
+          'games.csv':'https://raw.githubusercontent.com/nflverse/nfldata/master/data/games.csv',
+          'play_by_play_2026.csv':'https://github.com/nflverse/nflverse-data/releases/download/pbp/play_by_play_2026.csv',
+          'espn_scoreboard.json':'https://site.api.espn.com/apis/site/v2/sports/football/nfl/scoreboard?dates=20260917',
+          'nws_points.json':'https://api.weather.gov/points/42.7748,-78.7870'}
+          def capture(item):
+              name,url=item;record={'filename':name,'source_url':url,'request_started_at_utc':datetime.datetime.now(datetime.timezone.utc).isoformat()}
+              try:
+                  req=urllib.request.Request(url,headers={'User-Agent':'sports-model research source archive'})
+                  with urllib.request.urlopen(req,timeout=90) as r: data=r.read();headers=dict(r.headers);final_url=r.url
+                  record.update(status='captured',retrieved_at_utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),sha256=hashlib.sha256(data).hexdigest(),bytes=len(data),headers=headers,resolved_url=final_url)
+                  (out/name).write_bytes(data)
+              except Exception as e:record.update(status='failed',error=repr(e),retrieved_at_utc=datetime.datetime.now(datetime.timezone.utc).isoformat())
+              return record
+          with concurrent.futures.ThreadPoolExecutor(max_workers=5) as pool: receipts=list(pool.map(capture,urls.items()))
+          points=out/'nws_points.json'
+          if points.exists():
+              url=json.loads(points.read_text())['properties']['forecastHourly'];receipts.append(capture(('nws_hourly.json',url)))
+          (out/'receipt.json').write_text(json.dumps(receipts,indent=2))
+          manifest={str(p.relative_to(root)):hashlib.sha256(p.read_bytes()).hexdigest() for p in root.rglob('*') if p.is_file()}
+          (root/'capture_manifest.json').write_text(json.dumps(manifest,indent=2))
+          print(json.dumps([{k:r.get(k) for k in ['filename','status','sha256','retrieved_at_utc','error']} for r in receipts],indent=2))
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: det-buf-capture-${{ github.run_id }}
+          path: det-buf-capture
+          retention-days: 90
+      - name: Install existing NFL dependencies
+        run: pip install -r requirements-nfl-context.txt
+      - name: Retain global health result without bypassing it
+        run: |
+          mkdir -p det-buf-checks
+          set +e
+          python harness/healthcheck.py > det-buf-checks/healthcheck.txt 2>&1
+          echo $? > det-buf-checks/healthcheck.exit
+          python -m unittest discover -s tests -p 'test_nfl_*.py' -v > det-buf-checks/nfl-tests.txt 2>&1
+          echo $? > det-buf-checks/nfl-tests.exit
+          cat det-buf-checks/healthcheck.txt
+          tail -10 det-buf-checks/nfl-tests.txt
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: det-buf-checks-${{ github.run_id }}
+          path: det-buf-checks
+          retention-days: 90

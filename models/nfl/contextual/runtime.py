@@ -10,7 +10,16 @@ from .recovered_inference import bind_context,predict,digest,bernoulli_simulatio
 def live_features(artifact,recovered,base,context,event,cutoff):
     if base['game_id']!=event['event_id']:raise ValueError('BASE_EVENT_ID')
     if (base['home_team'],base['away_team'])!=(event['home_team'],event['away_team']):raise ValueError('HOME_AWAY_BINDING')
-    bound=bind_context(recovered,base,context,cutoff,event['start_time_utc'])
+    # Assimilation is mandatory provenance/state evidence, not a recovered-model
+    # feature dimension. Validate it before removing ONLY that reserved key.
+    # Unknown dimensions (including market data) still reach the strict firewall.
+    from .week2 import applies,require_assimilation
+    if applies(base,event):
+        require_assimilation(base,context,event,cutoff)
+    elif 'assimilation' in context:
+        raise ValueError('ASSIMILATION_OUTSIDE_WEEK2_SCOPE')
+    football_context={k:v for k,v in context.items() if k!='assimilation'}
+    bound=bind_context(recovered,base,football_context,cutoff,event['start_time_utc'])
     ratings=copy.deepcopy(artifact['state']['qb_ratings'])
     years=int(base['season'])-int(artifact['state'].get('season',max(artifact['arms']['combined']['training_seasons'])))
     if years<0:raise ValueError('FUTURE_FEATURE_STATE')

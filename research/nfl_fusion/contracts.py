@@ -125,7 +125,7 @@ def observations(pbp):
     automatically active predictive field.
     """
     d=pbp.copy()
-    if 'no_play' not in d:d['no_play']=d.play_type.astype('string').str.lower().eq('no_play').astype(int)
+    if 'no_play' not in d:d['no_play']=d.play_type.astype('string').str.lower().eq('no_play').fillna(False).astype('int8')
     ok=d.play_type.isin(['pass','run']) & d.no_play.fillna(0).eq(0) & d.qb_kneel.fillna(0).eq(0) & d.qb_spike.fillna(0).eq(0)
     if d.loc[ok,['posteam','defteam']].isna().any().any():raise ValueError('ELIGIBLE_PLAY_TEAM_ID_MISSING')
     d=d[ok].copy();rows=[]

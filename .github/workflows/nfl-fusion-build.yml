@@ -27,10 +27,10 @@ jobs:
       - run: pip install -r requirements-consolidated.txt -r _candidate/research/candidate_methods/requirements.txt nflreadpy
       - name: Retain real health status without claiming global release clearance
         run: |
-          mkdir evidence
+          mkdir fusion-checks
           python - <<'PY'
           import subprocess,pathlib,json
-          p=pathlib.Path('evidence')
+          p=pathlib.Path('fusion-checks')
           with (p/'health.txt').open('w') as f:
               try:code=subprocess.run(['python','-u','harness/healthcheck.py'],stdout=f,stderr=subprocess.STDOUT,timeout=180).returncode
               except subprocess.TimeoutExpired:code=124
@@ -42,10 +42,10 @@ jobs:
       - name: Compile and run intact NFL contracts; no tee status masking
         run: |
           python -m compileall -q models/nfl scripts/capture_nfl_fusion.py
-          python -m unittest discover -s tests -p 'test_nfl_*.py' -v > evidence/existing_nfl_tests.txt 2>&1
-          tail -5 evidence/existing_nfl_tests.txt
+          python -m unittest discover -s tests -p 'test_nfl_*.py' -v > fusion-checks/existing_nfl_tests.txt 2>&1
+          tail -5 fusion-checks/existing_nfl_tests.txt
       - name: Build input data and previously specified OOF arms
-        run: python -u scripts/capture_nfl_fusion.py --candidate-root _candidate --output fusion-inputs > evidence/build.txt 2>&1
+        run: python -u scripts/capture_nfl_fusion.py --candidate-root _candidate --output fusion-inputs > fusion-checks/build.txt 2>&1
       - name: Build portable nonraw distribution manifest
         if: always()
         run: |
@@ -73,5 +73,5 @@ jobs:
         if: always()
         with:
           name: nfl-fusion-build-checks-${{ github.run_id }}
-          path: evidence
+          path: fusion-checks
           retention-days: 90

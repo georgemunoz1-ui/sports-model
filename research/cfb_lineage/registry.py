@@ -2,7 +2,7 @@
 from __future__ import annotations
 import math
 from pathlib import Path
-from .core import Store, require, GateError, digest, utc, now
+from .core import Store, require, GateError, digest, utc, now, hash_ok
 
 PBP_FAMILIES = {'cfbfastR_legacy_pbp', 'espn_cfb_pbp'}
 TARGETS = {'home_win_probability':'DECIMAL_0_1', 'home_margin':'POINTS_HOME_MINUS_AWAY', 'game_total':'POINTS_HOME_PLUS_AWAY'}
@@ -40,8 +40,9 @@ def validate_observation(definition: dict, row: dict, source: dict, cutoff: str,
         require(utc(t)<=utc(cutoff),'FEATURE_AFTER_CUTOFF')
     require(utc(row['source_max_event_time'])<utc(cutoff),'FEATURE_EVENT_NOT_PRIOR')
     require(row['home_away'] in ('HOME','AWAY') and row['team_id']!=row['opponent_team_id'],'IDENTITY_OR_ORIENTATION')
+    require('UNVERIFIED' not in definition['unit'] and 'UNVERIFIED' not in definition['orientation'] and 'MUST_BE_VERIFIED' not in definition['orientation'],'UNVERIFIED_METRIC_SEMANTICS')
     if upstream_model_required:
-        require(bool(row.get('upstream_model_hash')) and row['upstream_model_hash']==source.get('upstream_model_hash'),'UPSTREAM_MODEL_GENERATION_UNPINNED')
+        require(hash_ok(row.get('upstream_model_hash')) and row['upstream_model_hash']==source.get('upstream_model_hash'),'UPSTREAM_MODEL_GENERATION_UNPINNED')
     if row['is_missing']:
         require(bool(row['missingness_reason']) and row['feature_value_raw'] is None,'AMBIGUOUS_MISSINGNESS')
         require(row['feature_value_model'] is None,'IMPUTATION_REQUIRES_FITTED_PREPROCESSOR')
@@ -50,8 +51,9 @@ def validate_observation(definition: dict, row: dict, source: dict, cutoff: str,
         for key in ('feature_value_raw','feature_value_model'):
             x=row[key];require(type(x) in (float,int) and math.isfinite(x),'FINITE_FEATURE_REQUIRED')
         if definition['unit']=='FRACTION':require(0<=row['feature_value_raw']<=1,'RATE_UNIT_MISMATCH')
+        if definition['unit']=='BINARY':require(row['feature_value_raw'] in (0,1),'BINARY_UNIT_MISMATCH')
         if definition.get('requires_denominator'):
-            require(type(row.get('denominator')) in (float,int) and row['denominator']>0,'NONZERO_DENOMINATOR_REQUIRED')
+            require(type(row.get('denominator')) in (float,int) and math.isfinite(row['denominator']) and row['denominator']>0,'NONZERO_DENOMINATOR_REQUIRED')
             require(row.get('numerator') is not None and abs(row['feature_value_raw']-row['numerator']/row['denominator'])<1e-10,'RATE_NUMERATOR_DENOMINATOR_MISMATCH')
 
 
@@ -75,6 +77,7 @@ def snapshot(store: Store, set_hash: str, state_hash: str, event: dict, rows: li
     require(len(actual)==len(rows) and actual<=set(fs['payload']['feature_ids']),'UNREGISTERED_OR_DUPLICATE_FEATURE')
     require(set(fs['payload']['required_features'])<=actual,'REQUIRED_FEATURE_MISSING')
     for r in rows:
+        require(r.get('validation_status')=='PASS' and r.get('as_of_eligible') is True,'OBSERVATION_NOT_ELIGIBLE')
         require(r['event_id']==event['event_id'],'OBSERVATION_EVENT_MISMATCH')
         require((r['season'],r['week'])==(event['season'],event['week']),'OBSERVATION_WEEK_MISMATCH')
         home,away=event['home_id'],event['away_id']
@@ -99,10 +102,14 @@ def check_model_path(path: dict, definition: dict, model: dict, feature_set_hash
 
 
 def active_eligible(observation: dict, path: dict, evaluation: dict) -> bool:
-    """Nonzero weight is necessary for an ensemble path, never sufficient."""
+    """Decision helper after path validation; standalone models need no ensemble."""
+    w=path.get('member_weight')
+    ensemble=(bool(path.get('ensemble_id')) and path.get('path_end_state')=='REACHES_FINAL_FORECAST'
+              and w is not None and math.isfinite(w) and 0<w<=1)
+    standalone=(not path.get('ensemble_id') and path.get('path_end_state')=='REACHES_STANDALONE_FORECAST' and w in (None,1))
     return (observation.get('validation_status')=='PASS' and observation.get('as_of_eligible') is True
             and not observation.get('is_missing') and path.get('path_status')=='FITTED'
-            and path.get('member_weight') is not None and path['member_weight']>0 and evaluation.get('decision')=='PROMOTION_CANDIDATE'
+            and (ensemble or standalone) and evaluation.get('decision')=='PROMOTION_CANDIDATE'
             and evaluation.get('prospective_gate_passed') is True and evaluation.get('integrity_gate_passed') is True)
 
 

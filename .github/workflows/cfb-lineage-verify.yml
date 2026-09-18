@@ -17,7 +17,23 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with: {python-version: '3.12'}
-      - run: pip install -r research/cfb_lineage/requirements.txt
+      - name: Isolate official CFBD client dependency environment
+        run: |
+          mkdir cfb-verification
+          python -m venv "$RUNNER_TEMP/cfbd-client-env"
+          "$RUNNER_TEMP/cfbd-client-env/bin/pip" install -r research/cfb_lineage/acquisition-requirements.txt > cfb-verification/acquisition-install.txt 2>&1
+          "$RUNNER_TEMP/cfbd-client-env/bin/python" - <<'PY'
+          import cfbd,importlib.metadata,json,pathlib
+          methods={'GamesApi':hasattr(cfbd,'GamesApi'),'RatingsApi':hasattr(cfbd,'RatingsApi'),'ApiClient':hasattr(cfbd,'ApiClient')}
+          if not all(methods.values()):raise RuntimeError('CFBD_CLIENT_SURFACE_MISMATCH')
+          pathlib.Path('cfb-verification/cfbd-client.json').write_text(json.dumps({'cfbd':importlib.metadata.version('cfbd'),'pydantic':importlib.metadata.version('pydantic'),'interfaces':methods,'authenticated_request':'NOT_RUN','scope':'SEPARATE_ACQUISITION_PROCESS'},indent=2))
+          PY
+          "$RUNNER_TEMP/cfbd-client-env/bin/pip" freeze > cfb-verification/acquisition-lock.txt
+      - name: Install registry and tracker dependencies independently
+        run: |
+          pip install -r research/cfb_lineage/requirements.txt > cfb-verification/tracker-install.txt 2>&1
+          pip check > cfb-verification/pip-check.txt
+          pip freeze > cfb-verification/tracker-lock.txt
       - uses: actions/download-artifact@v4
         with:
           name: cfb-lineage-source-35386151523
@@ -26,7 +42,6 @@ jobs:
           path: cfb-capture
       - name: Compile and run the full CFB lineage suite with real exit checks
         run: |
-          mkdir cfb-verification
           python -m compileall -q research/cfb_lineage tests/test_cfb_lineage.py tests/test_cfb_lineage_graph.py
           python - <<'PY'
           import unittest,json,pathlib

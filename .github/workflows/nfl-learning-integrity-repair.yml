@@ -1,0 +1,51 @@
+name: NFL learning integrity repair
+on:
+  push:
+    branches: [codex/nfl-det-buf-learning-audit-20260918]
+    paths:
+      - 'models/nfl/contextual/assimilation.py'
+      - 'models/nfl/contextual/qb_assimilation.py'
+      - 'tests/test_nfl_learning_integrity_repair.py'
+      - '.github/workflows/nfl-learning-integrity-repair.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  verify:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install -r requirements-nfl-context.txt
+      - name: Existing NFL regressions plus repair contracts
+        run: python -m unittest discover -s tests -p 'test_nfl_*.py' -v
+      - uses: actions/download-artifact@v4
+        with:
+          name: det-buf-learning-source-35320323493
+          run-id: 35320323493
+          github-token: ${{ github.token }}
+          path: inputs/capture
+      - uses: actions/download-artifact@v4
+        with:
+          name: det-buf-completed-35289006699
+          run-id: 35289006699
+          github-token: ${{ github.token }}
+          path: inputs/frozen
+      - name: Re-run real-source acceptance tests against repaired boundary
+        env:
+          NFL_LEARNING_CAPTURE: inputs/capture
+          NFL_LEARNING_FROZEN: inputs/frozen
+          NFL_LEARNING_OUTPUT: repair-evidence/cases
+        run: python -m unittest discover -s tests -p test_learning_acceptance_det_buf.py -v | tee repair-evidence.txt
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: nfl-learning-repair-${{ github.run_id }}
+          path: |
+            repair-evidence.txt
+            repair-evidence
+          retention-days: 90

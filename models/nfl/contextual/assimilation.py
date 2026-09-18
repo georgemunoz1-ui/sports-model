@@ -8,7 +8,7 @@ import pandas as pd
 from . import base_features as bf
 from .recovered_inference import digest, utc, predict
 
-PARSER_VERSION='nfl.pbp.assimilation.v1'
+PARSER_VERSION='nfl.pbp.assimilation.v2'\nTRANSITION_VERSION='nfl.weekly_state_transition.v2'\nSCHEDULE_BINDING_SCHEMA='nfl.authoritative_schedule_binding.v1'
 PBP_REQUIRED=['game_id','play_id','home_team','away_team','season','week','qtr',
  'quarter_seconds_remaining','total_home_score','total_away_score','down','play_type',
  'qb_kneel','qb_spike','no_play','wp','posteam','defteam','epa','success','yards_gained',
@@ -145,7 +145,7 @@ def trace_feature_effects_into_forecasts(prior, updated, request, params):
       'forecast_before':bp,'forecast_after':ap,'forecast_delta':{k:ap[k]-bp[k] for k in bp},
       'state_before_sha256':digest(serialize_states(prior)),'state_after_sha256':digest(serialize_states(updated))}
 
-def run_nfl_assimilation_check(*,path,receipt,schedule,cutoff,archive,output,prior_states=None,forecast_requests=(),params=None,previous_finals=None):
+def run_nfl_assimilation_check(*,path,receipt,schedule,cutoff,archive,output,prior_states=None,forecast_requests=(),params=None,previous_finals=None,authoritative_schedule=None,parent_state_record=None):
     """Always persist an audit, including parsing, coverage and assimilation failures."""
     out=Path(output);out.mkdir(parents=True,exist_ok=False)
     report={'schema':'nfl.assimilation.audit.v1','parser_version':PARSER_VERSION,'cutoff_utc':cutoff,
@@ -154,7 +154,7 @@ def run_nfl_assimilation_check(*,path,receipt,schedule,cutoff,archive,output,pri
     try:
         pbp,snapshot=ingest_pbp_snapshot(path,receipt,archive);report['snapshot']=snapshot
         cov=reconcile_game_coverage(pbp,schedule,snapshot,cutoff,previous_finals);report['coverage']=cov
-        report['phase_observations']=build_scoring_and_play_attribution(pbp,cov)
+        report['phase_observations']=build_scoring_and_play_attribution(scoped_pbp,cov)
         report['status']='reconciled' if cov['completed_coverage_complete'] else 'quarantined'
         prior_hash=digest(serialize_states(prior_states)) if prior_states is not None else None
         quarantine=Path(archive)/'_quarantine'/str(prior_hash)
@@ -169,7 +169,7 @@ def run_nfl_assimilation_check(*,path,receipt,schedule,cutoff,archive,output,pri
             report['reason'].append('PRIOR_STATE_QUARANTINED_REBUILD_REQUIRED')
             cov['weekly_state_update_eligible']=False;report['status']='quarantined'
         if cov['weekly_state_update_eligible'] and prior_states is not None:
-            updated,qa=advance_states(prior_states,schedule,pbp);report['qualifying_play_audit']=qa
+            updated,qa=advance_states(prior_states,schedule,scoped_pbp);report['qualifying_play_audit']=qa\n            parent_hash=digest(serialize_states(prior_states));processed=[]\n            for gid in binding['game_ids']:\n                part=scoped_pbp[scoped_pbp.game_id.astype(str)==gid].sort_values('order_sequence' if 'order_sequence' in scoped_pbp else 'play_id')\n                processed.append({'game_id':gid,'content_sha256':digest(part.to_dict('records'))})\n            if parent_state_record:\n                seen=set(parent_state_record.get('processed_game_ids',[]));overlap=sorted(seen & set(binding['game_ids']))\n                if overlap:raise ValueError('DUPLICATE_GAME_STATE_TRANSITION:'+','.join(overlap))\n            tid=transition_identity(parent_hash,binding,processed);report['transition']={'transition_id':tid,'parent_state_hash':parent_hash,'child_state_hash':digest(serialize_states(updated)),'processed_games':processed,'processed_game_ids':binding['game_ids'],'updater_version':TRANSITION_VERSION,'feature_schema_version':bf.MODEL_ID}
             report['state_before_sha256']=digest(serialize_states(prior_states));report['state_after_sha256']=digest(serialize_states(updated))
             report['state_update_applied']=True
             write_once(out/'team_state.json',serialize_states(updated))

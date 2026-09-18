@@ -1,0 +1,73 @@
+name: MLB 2026-09-18 pregame card
+on:
+  push:
+    branches: [codex/nfl-det-buf-learning-audit-20260918]
+    paths: ['.github/workflows/mlb-pregame-20260918.yml']
+  workflow_dispatch:
+permissions: {contents: read}
+jobs:
+  card:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - run: pip install -r requirements-consolidated.txt
+      - name: Capture official schedules/results and construct source-bound eligible slate
+        run: |
+          python - <<'PY'
+          import urllib.request,json,pathlib,hashlib,datetime
+          root=pathlib.Path('mlb-0918');raw=root/'raw';raw.mkdir(parents=True)
+          names={'Arizona Diamondbacks':'ARI','Athletics':'OAK','Atlanta Braves':'ATL','Baltimore Orioles':'BAL','Boston Red Sox':'BOS','Chicago Cubs':'CHC','Chicago White Sox':'CWS','Cincinnati Reds':'CIN','Cleveland Guardians':'CLE','Colorado Rockies':'COL','Detroit Tigers':'DET','Houston Astros':'HOU','Kansas City Royals':'KC','Los Angeles Angels':'LAA','Los Angeles Dodgers':'LAD','Miami Marlins':'MIA','Milwaukee Brewers':'MIL','Minnesota Twins':'MIN','New York Mets':'NYM','New York Yankees':'NYY','Philadelphia Phillies':'PHI','Pittsburgh Pirates':'PIT','San Diego Padres':'SD','San Francisco Giants':'SF','Seattle Mariners':'SEA','St. Louis Cardinals':'STL','Tampa Bay Rays':'TB','Texas Rangers':'TEX','Toronto Blue Jays':'TOR','Washington Nationals':'WSH'}
+          receipts=[];payloads={}
+          for day in [f'2026-09-{d:02d}' for d in range(3,19)]:
+            url=f'https://statsapi.mlb.com/api/v1/schedule?sportId=1&date={day}&hydrate=probablePitcher,linescore,venue'
+            t=datetime.datetime.now(datetime.timezone.utc).isoformat();req=urllib.request.Request(url,headers={'User-Agent':'sports-model research'})
+            with urllib.request.urlopen(req,timeout=60) as r:b=r.read()
+            p=raw/(day+'.json');p.write_bytes(b);h=hashlib.sha256(b).hexdigest();payloads[day]=json.loads(b)
+            receipts.append({'date':day,'url':url,'retrieved_at':t,'sha256':h})
+          staged=[];target=payloads['2026-09-18'];blocked=[];events=[]
+          for day,data in payloads.items():
+            rec=next(x for x in receipts if x['date']==day)
+            for dd in data.get('dates',[]):
+              for g in dd.get('games',[]):
+                away=g['teams']['away'];home=g['teams']['home'];an=away['team']['name'];hn=home['team']['name']
+                if an not in names or hn not in names:raise SystemExit('TEAM_MAP:'+an+':'+hn)
+                base={'league':'mlb','slate_date':day,'event_id':'MLB:'+str(g['gamePk']),'start_utc':g['gameDate'],'away':an,'home':hn,'away_code':names[an],'home_code':names[hn],'source_sha256':rec['sha256'],'retrieved_at':rec['retrieved_at']}
+                if day<'2026-09-18':
+                  final=g['status']['abstractGameState']=='Final' and away.get('score') is not None and home.get('score') is not None
+                  if final:staged.append({**base,'status':'final','away_score':int(away['score']),'home_score':int(home['score'])})
+                else:
+                  ast=away.get('probablePitcher',{}).get('fullName');hst=home.get('probablePitcher',{}).get('fullName')
+                  if not ast or not hst:
+                    blocked.append({**base,'reason':'STARTER_IDENTITY_MISSING','away_starter':ast,'home_starter':hst})
+                  else:
+                    staged.append({**base,'status':'scheduled'})
+                    events.append({'event_id':base['event_id'],'game_pk':g['gamePk'],'away_team':names[an],'home_team':names[hn],'start_time_utc':g['gameDate'],'source_away_name':an,'source_home_name':hn,'away_starter':ast,'home_starter':hst})
+          stage=root/'stage';stage.mkdir();(stage/'events.json').write_text(json.dumps(staged,indent=2))
+          (stage/'manifest.json').write_text(json.dumps({'events.json':hashlib.sha256((stage/'events.json').read_bytes()).hexdigest()},indent=2))
+          evidence={'slate_date':'2026-09-18','retrieved_at':receipts[-1]['retrieved_at'],'source':receipts[-1]['url'],'expected_games':len(events),'events':events,'full_slate_games':len(events)+len(blocked),'blocked_games':blocked}
+          (root/'events-source.json').write_text(json.dumps(evidence,indent=2));(root/'receipts.json').write_text(json.dumps(receipts,indent=2))
+          print(json.dumps({'eligible':len(events),'blocked':len(blocked),'blocked_games':[x['away']+' @ '+x['home'] for x in blocked]},indent=2))
+          PY
+      - name: Prepare immutable current package
+        run: python scripts/prepare_mlb_current.py --target-date 2026-09-18 --staged-directory mlb-0918/stage --events-file mlb-0918/events-source.json --output data/mlb/current_v1/20260918_live --activate
+      - name: Run 100000-draw card
+        run: |
+          python scripts/generate_card_force.py --date 2026-09-18 --league mlb --simulations 100000 --output-dir mlb-0918/card 2>&1 | tee mlb-0918/card.log
+      - name: Hash output
+        if: always()
+        run: |
+          python - <<'PY'
+          import pathlib,hashlib,json,datetime,subprocess
+          r=pathlib.Path('mlb-0918')
+          m={str(p.relative_to(r)):hashlib.sha256(p.read_bytes()).hexdigest() for p in r.rglob('*') if p.is_file()}
+          (r/'manifest.json').write_text(json.dumps({'created_at_utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'commit':subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),'files':m,'action_authority':False},indent=2))
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: mlb-pregame-20260918-${{ github.run_id }}
+          path: mlb-0918
+          retention-days: 90

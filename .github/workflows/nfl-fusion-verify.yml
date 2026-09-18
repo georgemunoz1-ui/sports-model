@@ -1,0 +1,54 @@
+name: NFLverse metric ensemble verification
+on:
+  push:
+    branches: [codex/nflverse-metric-ensemble-20260918]
+    paths: ['research/nfl_fusion/**', 'tests/test_nfl_fusion.py', '.github/workflows/nfl-fusion-verify.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  verify:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    env:
+      OMP_NUM_THREADS: '1'
+      OPENBLAS_NUM_THREADS: '1'
+      MKL_NUM_THREADS: '1'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - run: pip install -r requirements-consolidated.txt -r research/nfl_fusion/requirements.txt
+      - uses: actions/download-artifact@v4
+        with:
+          name: nfl-fusion-inputs-35381140577
+          run-id: 35381140577
+          github-token: ${{ github.token }}
+          path: fusion-inputs
+      - name: Compile and test with checked Python return status
+        run: |
+          mkdir fusion-verification
+          python -m compileall -q research/nfl_fusion tests/test_nfl_fusion.py
+          python -m unittest discover -s tests -p 'test_nfl_*.py' -v > fusion-verification/tests.txt 2>&1
+          tail -5 fusion-verification/tests.txt
+      - name: Execute preregistered chronological ensemble and real package metric audit
+        run: python -u -m research.nfl_fusion.run --inputs fusion-inputs --output fusion-verification/results > fusion-verification/run.txt 2>&1
+      - name: Preserve code, output and actual status evidence
+        if: always()
+        run: |
+          python - <<'PY'
+          import pathlib,json,hashlib,datetime,subprocess,os
+          root=pathlib.Path('fusion-verification');root.mkdir(exist_ok=True)
+          with (root/'code.tar.gz').open('xb') as f:subprocess.run(['git','archive','--format=tar.gz','HEAD'],stdout=f,check=True)
+          info={'created_at_utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'source_commit':subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),'workflow_run_id':os.environ['GITHUB_RUN_ID'],'upstream_artifact':{'id':10561959968,'run_id':35381140577,'zip_sha256':'47a31f05130a3dc7f3ca18b0884ae6010dc367cb56fd1e0f6a3cce4c6ae4ce03'},'no_current_forecasts':True,'action_authority':False,'default_changed':False}
+          (root/'provenance.json').write_text(json.dumps(info,indent=2))
+          files={str(p.relative_to(root)):hashlib.sha256(p.read_bytes()).hexdigest() for p in root.rglob('*') if p.is_file()}
+          (root/'manifest.json').write_text(json.dumps(files,indent=2))
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: nfl-fusion-verified-${{ github.run_id }}
+          path: fusion-verification
+          retention-days: 90

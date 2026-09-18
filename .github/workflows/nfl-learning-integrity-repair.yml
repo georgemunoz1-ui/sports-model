@@ -22,7 +22,9 @@ jobs:
           python-version: '3.12'
       - run: pip install -r requirements-nfl-context.txt
       - name: Existing NFL regressions plus repair contracts
-        run: python -m unittest discover -s tests -p 'test_nfl_*.py' -v
+        run: |
+          mkdir -p repair-evidence
+          python -m unittest discover -s tests -p 'test_nfl_*.py' -v 2>&1 | tee repair-evidence/nfl-tests.txt
       - uses: actions/download-artifact@v4
         with:
           name: det-buf-learning-source-35320323493
@@ -45,7 +47,5 @@ jobs:
         if: always()
         with:
           name: nfl-learning-repair-${{ github.run_id }}
-          path: |
-            repair-evidence.txt
-            repair-evidence
+          path: repair-evidence
           retention-days: 90

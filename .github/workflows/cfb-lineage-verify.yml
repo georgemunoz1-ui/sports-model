@@ -1,0 +1,61 @@
+name: CFB PIT lineage verification
+on:
+  push:
+    branches: [codex/cfb-pit-lineage-20260918]
+    paths: ['research/cfb_lineage/**', 'tests/test_cfb_lineage*.py', '.github/workflows/cfb-lineage-verify.yml']
+  workflow_dispatch:
+permissions: {contents: read, actions: read}
+jobs:
+  verify:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    env:
+      MLFLOW_ENABLE_SYSTEM_METRICS_LOGGING: 'false'
+      DO_NOT_TRACK: '1'
+      DVC_NO_ANALYTICS: '1'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - run: pip install -r research/cfb_lineage/requirements.txt
+      - uses: actions/download-artifact@v4
+        with:
+          name: cfb-lineage-source-35386151523
+          run-id: 35386151523
+          github-token: ${{ github.token }}
+          path: cfb-capture
+      - name: Compile and run the full CFB lineage suite with real exit checks
+        run: |
+          mkdir cfb-verification
+          python -m compileall -q research/cfb_lineage tests/test_cfb_lineage.py tests/test_cfb_lineage_graph.py
+          python - <<'PY'
+          import unittest,json,pathlib
+          p=pathlib.Path('cfb-verification')
+          suite=unittest.defaultTestLoader.discover('tests',pattern='test_cfb_lineage*.py')
+          with (p/'tests.txt').open('w') as f:result=unittest.TextTestRunner(stream=f,verbosity=2).run(suite)
+          record={'tests':result.testsRun,'errors':len(result.errors),'failures':len(result.failures),'skipped':len(result.skipped),'passed':result.wasSuccessful() and not result.skipped}
+          (p/'test-summary.json').write_text(json.dumps(record,indent=2))
+          print(record)
+          raise SystemExit(0 if record['passed'] and record['tests']>=69 else 1)
+          PY
+      - name: Execute real source audit, Parquet registry, DVC and MLflow smoke
+        run: python -u -m research.cfb_lineage.run --capture cfb-capture --output cfb-verification/pilot --storage-smoke > cfb-verification/pilot.log 2>&1
+      - name: Preserve exact code and result evidence
+        if: always()
+        run: |
+          python - <<'PY'
+          import pathlib,subprocess,json,hashlib,os,datetime
+          root=pathlib.Path('cfb-verification');root.mkdir(exist_ok=True)
+          with (root/'code.tar.gz').open('xb') as f:subprocess.run(['git','archive','--format=tar.gz','HEAD'],stdout=f,check=True)
+          record={'created_at_utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'source_commit':subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),'workflow_run_id':os.environ['GITHUB_RUN_ID'],'source_artifact_id':10564046686,'source_artifact_zip_sha256':'2f5d5483f0471dc904bea8afdedf6b5252d6088cc28111c3e1ed170ff7aa2587','scope':'RESEARCH_INFRASTRUCTURE_NO_LIVE_PREDICTION','action_authority':False,'default_changed':False}
+          (root/'provenance.json').write_text(json.dumps(record,indent=2))
+          files={str(p.relative_to(root)):hashlib.sha256(p.read_bytes()).hexdigest() for p in root.rglob('*') if p.is_file()}
+          (root/'manifest.json').write_text(json.dumps(files,indent=2))
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: cfb-lineage-verified-${{ github.run_id }}
+          path: cfb-verification
+          include-hidden-files: true
+          retention-days: 90

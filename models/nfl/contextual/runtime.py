@@ -10,7 +10,7 @@ from .recovered_inference import bind_context,predict,digest,bernoulli_simulatio
 def live_features(artifact,recovered,base,context,event,cutoff):
     if base['game_id']!=event['event_id']:raise ValueError('BASE_EVENT_ID')
     if (base['home_team'],base['away_team'])!=(event['home_team'],event['away_team']):raise ValueError('HOME_AWAY_BINDING')
-    bound=bind_context(recovered,base,context,cutoff,event['start_time_utc'])
+    fitted_context={k:v for k,v in context.items() if k in {'weather','rest','personnel','travel'}}\n    bound=bind_context(recovered,base,fitted_context,cutoff,event['start_time_utc'])
     ratings=copy.deepcopy(artifact['state']['qb_ratings'])
     years=int(base['season'])-int(artifact['state'].get('season',max(artifact['arms']['combined']['training_seasons'])))
     if years<0:raise ValueError('FUTURE_FEATURE_STATE')

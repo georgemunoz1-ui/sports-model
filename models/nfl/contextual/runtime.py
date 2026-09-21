@@ -116,8 +116,7 @@ def persist_run(folder,bundle,winner,scores,design):
     registration['reporter_sha256']=bundle.get('capability_report',{}).get('reporter_sha256')
     registration['capability_report_sha256']=digest(bundle['capability_report']) if 'capability_report' in bundle else None
     registration['record_hash']=digest(registration)
-    (folder/'registration.jsonl').write_text(json.dumps(registration)+'
-')
+    (folder/'registration.jsonl').write_text(json.dumps(registration)+'\\n')
     np.save(folder/'winner_draws.npy',winner,allow_pickle=False)
     if 'capability_report' in bundle:(folder/'capabilities.json').write_text(json.dumps(bundle['capability_report'],indent=2,allow_nan=False))
     if scores is not None:np.save(folder/'score_draws.npy',scores,allow_pickle=False)

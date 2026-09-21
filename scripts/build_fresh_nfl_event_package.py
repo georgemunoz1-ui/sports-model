@@ -129,9 +129,7 @@ def main():
               "definition":"nflverse schedule home_rest/away_rest"}
         personnel_rec={"event_id":gid,"retrieved_at_utc":fetched,"available_by_utc":fetched,"published_at_utc":None,
               "source_sha256":digest({"injuries":injury_hash,"depth":depth_hash}),"source":"nflverse.load_injuries + load_depth_charts","state":personnel}
-        events.append(event);inputs[gid]={"base":base,"context":{"rest":rest,"personnel":personnel_rec},
-            "assimilation":{"audit":audit,"state_before":before,"state_after":after,
-                "base_feature_code_sha256":bf.sha256_file(bf.__file__),"qb_update":qb_update}}
+        assimilation={"audit":audit,"state_before":before,"state_after":after,\n                "base_feature_code_sha256":bf.sha256_file(bf.__file__),"qb_update":qb_update}\n        events.append(event);inputs[gid]={"base":base,"context":{"rest":rest,"personnel":personnel_rec,"assimilation":assimilation},\n            "assimilation":assimilation}
     package={"schema":"nfl.event_package.v2","package_mode":"FRESH_FORECAST","captured_at_utc":fetched,
       "scope":"REQUESTED_DATE_FRESH_ACQUISITION","covered_dates":[a.date],"events":events,
       "model_path":"model_packed.json","model_digest":model_digest(artifact),

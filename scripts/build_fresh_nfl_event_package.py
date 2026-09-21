@@ -100,7 +100,15 @@ def main():
         if teamcol:
             inj["_team"]=inj[teamcol].map(canon)
             sub=inj[inj["_team"].isin([home,away])]
-            if weekcol:sub=sub[pd.to_numeric(sub[weekcol],errors="coerce")<=int(g["week"])]
+            if weekcol:
+                wk=pd.to_numeric(sub[weekcol],errors="coerce")
+                exact=sub[wk.eq(int(g["week"]))]
+                sub=exact if not exact.empty else sub[wk.le(int(g["week"]))]
+            idcol=next((c for c in ("gsis_id","player_id","full_name","player_name","name") if c in sub.columns),None)
+            if idcol and not sub.empty:
+                timecol=next((c for c in ("date_modified","date","report_date") if c in sub.columns),None)
+                if timecol: sub=sub.sort_values(timecol).drop_duplicates(idcol,keep="last")
+                else: sub=sub.drop_duplicates(idcol,keep="last")
             for r in sub.to_dict("records"):
                 obs.append({"team":canon(r.get(teamcol)),"player":str(val(r,"full_name","player_name","name",default="UNKNOWN")),
                     "position":str(val(r,"position",default="UNK")),"issue":val(r,"report_primary_injury","injury"),

@@ -179,7 +179,8 @@ jobs:
           AS_OF_UTC: ${{ steps.resolve.outputs.as_of_utc }}
           SIMULATION_COUNT: ${{ steps.resolve.outputs.simulation_count }}
         run: |
-          mkdir -p output/card
+          mkdir -p output
+          rm -rf output/card
           set +e
           python scripts/generate_card_force.py \
             --date "$CARD_DATE" \

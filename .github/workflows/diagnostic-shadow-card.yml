@@ -47,6 +47,7 @@ on:
 
 permissions:
   contents: read
+  actions: read
 
 env:
   PYTHONUNBUFFERED: "1"
@@ -146,7 +147,7 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
-          pip install pandas pyarrow scikit-learn
+          pip install pandas pyarrow scikit-learn nflreadpy
 
       - name: Validate inputs
         shell: bash
@@ -170,6 +171,24 @@ jobs:
               raise SystemExit("unsupported mode")
           PY
 
+      - name: Build fresh NFL event package
+        if: ${{ steps.resolve.outputs.league == 'nfl' }}
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          CARD_DATE: ${{ steps.resolve.outputs.card_date }}
+          AS_OF_UTC: ${{ steps.resolve.outputs.as_of_utc }}
+        run: |
+          rm -rf /tmp/week2-proof
+          mkdir -p /tmp/week2-proof
+          gh run download 35030382886 -n week2-reconciliation -D /tmp/week2-proof
+          PACKAGE_PATH="data/nfl/contextual_v1/fresh_${CARD_DATE}_${GITHUB_RUN_ID}.json"
+          python scripts/build_fresh_nfl_event_package.py \
+            --date "$CARD_DATE" \
+            --as-of-utc "$AS_OF_UTC" \
+            --state-proof /tmp/week2-proof \
+            --output "$PACKAGE_PATH"
+          echo "NFL_CONTEXT_PACKAGE=$PACKAGE_PATH" >> "$GITHUB_ENV"
       - name: Generate diagnostic card
         id: forecast
         continue-on-error: true

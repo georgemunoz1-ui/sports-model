@@ -42,8 +42,6 @@ on:
   repository_dispatch:
     types: [shadow-card-request]
   push:
-    branches:
-      - codex/nfl-wnba-nba-models-v1
     paths:
       - "card_requests/*.json"
 

@@ -6,12 +6,13 @@ registered Week-1 state proof is consumed as immutable prior-state evidence;
 historical event packages are never modified or reused as current facts.
 """
 from __future__ import annotations
-import argparse, datetime as dt, hashlib, json, os
+import argparse, datetime as dt, hashlib, json, os, sys
 from pathlib import Path
 import pandas as pd
 import nflreadpy as nfl
 
 ROOT=Path(__file__).resolve().parents[1]
+sys.path.insert(0,str(ROOT))
 DATA=ROOT/"data/nfl/contextual_v1"
 
 def digest(v):

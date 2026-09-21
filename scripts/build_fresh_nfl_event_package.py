@@ -89,6 +89,7 @@ def main():
             "location":event["location"],"roof":val(g,"roof"),"temp":None,"wind":None,
             "home_rest":val(g,"home_rest"),"away_rest":val(g,"away_rest")})
         base=bf._feature_row(row,states[home],states[away])
+        base={k:(None if pd.isna(v) else v) for k,v in base.items()}
         base["state_lineage"]={"state_policy":"AFTER_COMPLETE_WEEK1_REGISTERED_PROOF",
             "state_after_sha256":model_digest(after),"audit_sha256":model_digest(audit)}
 

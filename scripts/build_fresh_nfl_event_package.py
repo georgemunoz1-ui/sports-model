@@ -63,7 +63,10 @@ def main():
     pbp=pdframe(nfl.load_pbp(seasons=[season]))
     week1=sched[(sched["season"]==season)&(sched["week"]==1)&(sched["game_type"]=="REG")].copy()
     if len(week1)!=16:raise ValueError("QB_WEEK1_COMPLETE_SCHEDULE_REQUIRED")
-    qb_update=build_qb(artifact,pbp,week1,frame_digest(pbp))
+    proof_pbp_path=proof/"snapshots"/audit["snapshot"]["sha256"]/"raw.csv"
+    if not proof_pbp_path.exists(): raise ValueError("QB_REGISTERED_PROOF_SOURCE_MISSING")
+    proof_pbp=pd.read_csv(proof_pbp_path,low_memory=False)
+    qb_update=build_qb(artifact,proof_pbp,week1,audit["snapshot"]["sha256"])
 
     injuries=pdframe(nfl.load_injuries(seasons=[season]))
     depth=pdframe(nfl.load_depth_charts(seasons=[season]))

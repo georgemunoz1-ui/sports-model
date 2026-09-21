@@ -48,7 +48,7 @@ def main():
     source_schedule_hash=frame_digest(sched)
     proof=Path(a.state_proof)
     audit=json.loads((proof/"current_week/audit.json").read_text())
-    before=json.loads((proof/"historical_state.json").read_text())
+    before_doc=json.loads((proof/"historical_state.json").read_text())\n    before=before_doc["states"]
     after=json.loads((proof/"current_week/team_state.json").read_text())
     if audit.get("status")!="reconciled" or not audit.get("state_update_applied"):
         raise ValueError("LATEST_VALID_WEEK1_STATE_PROOF_INVALID")

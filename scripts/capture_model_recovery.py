@@ -32,13 +32,6 @@ def main():
     p=argparse.ArgumentParser();p.add_argument('--output',type=Path,required=True);a=p.parse_args()
     a.output.mkdir(parents=True,exist_ok=False);today=dt.datetime.now(dt.timezone.utc).date()
     specs=[]
-    for league in ('nba','nhl','mls'):
-        for year in range(2021,today.year+1):
-            for month in range(1,13):
-                start=dt.date(year,month,1)
-                if start>today:continue
-                end=min(dt.date(year,month,calendar.monthrange(year,month)[1]),today)
-                specs.append((league,'historical_schedule',f'https://site.api.espn.com/apis/site/v2/sports/{ROUTES[league]}/scoreboard?dates={start:%Y%m%d}-{end:%Y%m%d}&limit=1000',2))
     for offset in range(-22,8):
         day=today+dt.timedelta(days=offset)
         specs.append(('mlb','official_schedule',f'https://statsapi.mlb.com/api/v1/schedule?sportId=1&date={day}&hydrate=probablePitcher,linescore,venue',1))
@@ -46,7 +39,16 @@ def main():
     with ThreadPoolExecutor(max_workers=6) as pool: results=list(pool.map(lambda s:capture(a.output,s),specs))
     details={}
     for r,j in results:
-        if not j or r['kind']!='official_schedule' or r['league']!='mlb':continue
+        if not j or r['kind']!='official_schedule':continue
+        if r['league']=='wnba':
+            for day in j['leagueSchedule']['gameDates']:
+                for game in day['games']:
+                    gid=str(game['gameId'])
+                    if gid.startswith('102') and game['gameStatus']==3 and game['gameDateTimeUTC'][:10]>'2026-08-30':
+                        u=f'https://cdn.wnba.com/static/json/liveData/boxscore/boxscore_{gid}.json'
+                        details[u]=('wnba','official_boxscore',u,1)
+            continue
+        if r['league']!='mlb':continue
         for day in j.get('dates',[]):
             if day['date']!=str(today):continue
             for game in day['games']:
@@ -60,7 +62,11 @@ def main():
     c=manifest['source']['commit'];binaries=[]
     for f in manifest['files']:
         binaries.append((f['path'],f'https://raw.githubusercontent.com/sportsdataverse/cfbfastR-data/{c}/'+f['path'],f['sha256']))
-    binaries.append(('cfb_current.parquet',f'https://github.com/sportsdataverse/cfbfastR-data/releases/download/schedules/cfb_schedules_{today.year}.parquet',None))
+    binaries.append(('cfb_current.parquet',f'https://raw.githubusercontent.com/sportsdataverse/cfbfastR-data/main/schedules/parquet/cfb_schedules_{today.year}.parquet',None))
+    binaries.extend([
+        ('nba_schedule_master.parquet','https://raw.githubusercontent.com/sportsdataverse/hoopR-data/main/nba_schedule_master.parquet',None),
+        ('nhl_schedule_master.parquet','https://raw.githubusercontent.com/sportsdataverse/fastRhockey-data/main/nhl_schedule_master.parquet',None),
+        ('mls_scores.csv','https://www.football-data.co.uk/new/USA.csv',None)])
     wm=json.loads((ROOT/'data/wnba/source/STAGING_MANIFEST_2026-08-11.json').read_text())
     for family,meta in wm['families'].items():
         for f in meta['files']:

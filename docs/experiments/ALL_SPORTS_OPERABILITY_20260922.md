@@ -37,3 +37,12 @@ finite bound outputs, genuine retained simulation draws, deterministic replay,
 cutoff/duplicate/final-only guards, and actual adapter consumption. A model that
 fails a predictive screen may remain an explicit research candidate; it cannot
 silently become the accuracy-preferred default.
+
+
+Acquisition amendment before any score/model inspection: ESPN historical date-range
+requests returned HTTP 400 for all 207 requested league-months. Use retained
+SportsDataverse schedule mirrors for NBA/NHL and football-data.co.uk USA results
+for MLS, with current ESPN event identity reconciliation. Raw MLS source may carry
+market columns: the parser admits only date, teams, final goals and result; no
+market field may enter features, training or model selection. Keep the same fixed
+split, parameters, evaluation and no-promotion rules.

@@ -7,7 +7,9 @@ from pipelines.cards.adapters import nfl
 from models.nfl.contextual.runtime import run,persist_run
 
 def main():
-    p=argparse.ArgumentParser();p.add_argument('--date',required=True);p.add_argument('--output',type=Path,required=True);p.add_argument('--simulations',type=int,default=100000);p.add_argument('--model-id');p.add_argument('--mode',default='research_pregame');p.add_argument('--market-packet',type=Path);p.add_argument('--live-packet',type=Path);p.add_argument('--event-id');p.add_argument('--home-spread',type=float,action='append',help='Optional downstream full-game spread calibration, HOME handicap orientation');p.add_argument('--halftime-artifact',type=Path,help='Explicit fitted halftime/joint research artifact; emits a separate model output');a=p.parse_args()
+    p=argparse.ArgumentParser();p.add_argument('--date',required=True);p.add_argument('--output',type=Path,required=True);p.add_argument('--simulations',type=int,default=100000);p.add_argument('--model-id');p.add_argument('--mode',default='research_pregame');p.add_argument('--market-packet',type=Path);p.add_argument('--live-packet',type=Path);p.add_argument('--event-id');p.add_argument('--home-spread',type=float,action='append',help='Optional downstream full-game spread calibration, HOME handicap orientation');p.add_argument('--halftime-artifact',type=Path,help='Explicit fitted halftime/joint research artifact; emits a separate model output');p.add_argument('--weekly-state-store',type=Path);p.add_argument('--weekly-state-id');a=p.parse_args()
+    if bool(a.weekly_state_store)!=bool(a.weekly_state_id):p.error('Both weekly-state store and ID are required')
+    if a.weekly_state_store and a.mode=='live':p.error('Weekly state is a pregame input')
     if a.halftime_artifact and (a.mode!='research_pregame' or (a.model_id is not None and a.model_id!='nfl.integrated_context.combined.v1.research')):raise ValueError('HALFTIME_REQUIRES_COMBINED_FOOTBALL_FEATURE_SOURCE')
     if a.home_spread and (a.mode!='research_pregame' or (a.model_id is not None and a.model_id!='nfl.integrated_context.combined.v1.research')):raise ValueError('SPREAD_CALIBRATION_REQUIRES_COMBINED_FOOTBALL_ARM')
     fitted=nfl.mode_artifact(a.mode) if a.mode!='research_pregame' else None
@@ -22,6 +24,9 @@ def main():
     context=nfl.build_context(events,cutoff,mode=a.mode)
     for e in events:
         packet={'base':None,'context':None} if a.mode=='live' else context['package']['event_inputs'][e['event_id']]
+        if a.weekly_state_store:
+            from models.nfl.contextual.weekly_state import bind_packet
+            packet=bind_packet(packet,context['model'],e,cutoff,a.weekly_state_store,a.weekly_state_id)
         market_for_event=market.get('event_packets',{}).get(e['event_id']) if market and 'event_packets' in market else market
         live_for_event=live.get('event_packets',{}).get(e['event_id']) if live and 'event_packets' in live else live
         from models.nfl.contextual.week2 import applies,policy

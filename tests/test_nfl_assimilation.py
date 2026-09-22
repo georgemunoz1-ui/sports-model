@@ -66,7 +66,7 @@ class Assimilation(unittest.TestCase):
         trace=trace_feature_effects_into_forecasts(prior,updated,{**self.game,'game_id':'future','week':18,'home_score':None,'away_score':None},params)
         self.assertIn('epa_matchup_edge',trace['changed_features']);self.assertNotIn('temperature_f',trace['changed_features'])
         self.assertNotEqual(trace['state_before_sha256'],trace['state_after_sha256']);self.assertNotEqual(trace['forecast_delta']['home_margin'],0)
-    def test_end_to_end_orchestrator_and_same_week_refusal(self):
+    def test_legacy_orchestrator_cannot_publish_untracked_state(self):
         with tempfile.TemporaryDirectory() as td:
             td=Path(td);p=td/'raw.csv';self.pbp.to_csv(p,index=False)
             receipt={**self.receipt,'sha256':hashlib.sha256(p.read_bytes()).hexdigest()}
@@ -74,8 +74,10 @@ class Assimilation(unittest.TestCase):
             r=run_nfl_assimilation_check(path=p,receipt=receipt,schedule=self.schedule,cutoff=self.cutoff,archive=td/'archive',output=td/'run',
               prior_states={t:bf.TeamState() for t in ['KC','DEN']},params=params,
               forecast_requests=[self.game,{**self.game,'game_id':'future','week':18,'home_score':None,'away_score':None}])
-            self.assertTrue(r['state_update_applied']);self.assertEqual(r['forecast_traces'][0]['status'],'not_updated')
-            self.assertNotEqual(r['forecast_traces'][1]['forecast_delta']['home_margin'],0)
+            self.assertFalse(r['state_update_applied'])
+            self.assertFalse((td/'run/team_state.json').exists())
+            self.assertIn('LEGACY_STATE_WRITER_DISABLED_USE_WEEKLY_STATE',r['reason'])
+            self.assertEqual(r['forecast_traces'],[])
 
 class CapabilityValidation(unittest.TestCase):
     def setUp(self):

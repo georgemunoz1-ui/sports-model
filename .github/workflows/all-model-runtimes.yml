@@ -20,3 +20,18 @@ jobs:
           name: model-recovery-sources-${{ github.run_id }}
           path: model-recovery-sources
           retention-days: 90
+  histories:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python scripts/capture_team_histories.py --output team-histories
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: team-histories-${{ github.run_id }}
+          path: team-histories
+          retention-days: 90

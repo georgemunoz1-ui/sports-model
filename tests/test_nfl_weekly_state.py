@@ -149,7 +149,10 @@ class Weekly(unittest.TestCase):
         path=Path(self.temp.name)/'event.json';path.write_text(json.dumps(package,allow_nan=False))
         output=Path(self.temp.name)/'forecast'
         env={**os.environ,'NFL_CONTEXT_PACKAGE':str(path)}
-        r=subprocess.run([sys.executable,str(ROOT/'scripts/run_nfl_integrated.py'),'--date',e['gameday'],
+        # Freeze only the subprocess clock: fixed historical fixtures must not
+        # expire when CI runs after their synthetic kickoff. No model is mocked.
+        runner="import datetime,runpy; from unittest.mock import patch\nclass Clock(datetime.datetime):\n @classmethod\n def now(cls,tz=None):\n  value=cls(2026,9,22,tzinfo=datetime.timezone.utc)\n  return value.astimezone(tz) if tz else value.replace(tzinfo=None)\nwith patch('datetime.datetime',Clock):\n runpy.run_path("+repr(str(ROOT/'scripts/run_nfl_integrated.py'))+",run_name='__main__')"
+        r=subprocess.run([sys.executable,'-c',runner,'--date',e['gameday'],
                           '--output',str(output),'--simulations','1000','--weekly-state-store',str(self.store),
                           '--weekly-state-id',b],env=env,text=True,capture_output=True)
         self.assertEqual(r.returncode,0,r.stderr)

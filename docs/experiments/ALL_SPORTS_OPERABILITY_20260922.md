@@ -1,0 +1,39 @@
+# All-sports operational research recovery
+
+Registered before acquisition or fitting of new NBA/NHL/MLS baselines. The owner
+explicitly requests all models operational with full autonomy. This is research
+engineering, not wagering authority or a change to historical verdicts.
+
+Existing selected MLB, WNBA and CFB algorithms remain frozen. Recover their data,
+fit/runtime artifacts and adapters; retain source grades and chronological cutoffs.
+No failed NFL ensemble is selected. New NBA/NHL/MLS baselines get distinct research
+identities, not a false recovered-model label.
+
+Population: ESPN completed regular-season games, 2021 onward. NBA/NHL winner
+includes overtime; MLS is regulation 1X2. Exclude canceled/nonfinal/preseason and
+postseason games. Preserve raw responses, actual retrieval times and complete
+provider IDs. Retrospective source revisions do not prove historical availability.
+
+Fixed split: train 2021–2024, validation 2025, untouched 2026 later-period audit.
+No hyperparameter search or holdout-selected architecture. Binary models use
+regularized logistic regression C=1 on causal team scoring/form/rest features;
+margin/total Ridge alpha=1 are independent diagnostics, not a joint score model.
+MLS uses two regularized Poisson score heads alpha=1 and an independent count
+joint distribution with explicit limitations. Baseline is training-only empirical
+home-win rate (NBA/NHL) or training-only home/draw/away rates (MLS).
+
+State updates occur after a conservative one-day embargo, with same-day games
+sharing the same pre-day state. Exponentially weighted scoring form alpha=0.1,
+shrinkage 10 observed games toward training league scoring, rest capped at 14 days;
+new teams use the declared training prior and explicit cold-start indicators.
+Scalers/imputers fit on training only. Report scalar binary Brier or category-sum
+1X2 Brier, log loss, reliability counts, season coverage and paired UTC-week block
+bootstrap intervals (1000 draws, seed 7). Record margin/total MAE separately.
+
+No claim of superiority unless the paired later-period interval excludes zero
+and reliability/coverage checks pass. Prospective validation remains a separate
+requirement for promotion. Engineering operation requires source completeness,
+finite bound outputs, genuine retained simulation draws, deterministic replay,
+cutoff/duplicate/final-only guards, and actual adapter consumption. A model that
+fails a predictive screen may remain an explicit research candidate; it cannot
+silently become the accuracy-preferred default.

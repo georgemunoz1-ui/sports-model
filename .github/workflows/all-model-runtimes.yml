@@ -1,0 +1,22 @@
+name: All model runtime recovery
+on:
+  push:
+    branches: [codex/all-model-runtimes-20260922]
+permissions:
+  contents: read
+jobs:
+  acquire:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python scripts/capture_model_recovery.py --output model-recovery-sources
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: model-recovery-sources-${{ github.run_id }}
+          path: model-recovery-sources
+          retention-days: 90

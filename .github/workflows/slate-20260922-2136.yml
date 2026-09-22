@@ -1,0 +1,29 @@
+name: September 22 fresh model inputs
+on:
+  push:
+    branches: [codex/slate-20260922-2136]
+permissions:
+  contents: read
+jobs:
+  capture:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    strategy:
+      matrix:
+        include:
+          - script: capture_operational_inputs.py
+            label: current
+          - script: capture_model_recovery.py
+            label: recovery
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python scripts/${{ matrix.script }} --output ${{ matrix.label }}
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: slate-20260922-${{ matrix.label }}-${{ github.run_id }}
+          path: ${{ matrix.label }}
+          retention-days: 90

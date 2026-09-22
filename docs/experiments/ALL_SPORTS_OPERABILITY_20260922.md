@@ -46,3 +46,19 @@ for MLS, with current ESPN event identity reconciliation. Raw MLS source may car
 market columns: the parser admits only date, teams, final goals and result; no
 market field may enter features, training or model selection. Keep the same fixed
 split, parameters, evaluation and no-promotion rules.
+
+Acquisition resolution before fitting: ESPN team-season endpoints successfully
+returned all 555 directory/schedule requests for NBA/NHL/MLS, 2021–2026. Use that
+original ESPN population with exact provider-ID overlap reconciliation. Discard
+the stale NBA/NHL master mirrors and the alternate MLS CSV from this experiment.
+The parameters and split above remain fixed. Current research availability is an
+explicit opt-in; it does not change the accuracy-preferred default registry.
+
+Population correction after the first audit: ESPN labels three NBA Cup championship
+games regular season but separately tags competition type 39. Exclude that type
+consistently in training, validation, later audit and current schedules to honor
+the preregistered regular-season population. This removes one game in each of
+2024–2026; it is a source-classification correction, not a tuned exclusion. Keep
+the first NBA evaluation in the release evidence under preliminary/. No parameter,
+feature, split or promotion rule changes; the corrected audit is a restatement,
+not a newly untouched holdout.

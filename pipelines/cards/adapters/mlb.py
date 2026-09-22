@@ -23,6 +23,9 @@ def _load():
     return p
 
 def load_schedule(card_date,as_of):
+    if os.environ.get('SPORTS_RESEARCH_PACKAGE_DIR'):
+        from models.current import common
+        return common.schedule('mlb',card_date,as_of)
     p=_load()
     if card_date!=p['slate_date']:raise ValueError('SLATE_NOT_ACQUIRED')
     if instant(p['captured_at'])>instant(as_of):raise ValueError('PACKAGE_AFTER_CUTOFF')
@@ -31,6 +34,9 @@ def load_schedule(card_date,as_of):
 
 def build_context(events,as_of,*args):
     if args and len(args)>1 and args[1]:raise ValueError('MANUAL_OVERRIDES_UNSUPPORTED')
+    if os.environ.get('SPORTS_RESEARCH_PACKAGE_DIR'):
+        from models.current import common
+        return common.context('mlb',events,as_of)
     p=_load()
     if events!=p['events']:raise ValueError('EVENT_PACKAGE_MISMATCH')
     form=json.loads((ROOT/p['form_path']).read_text())
@@ -51,6 +57,9 @@ def capture_sim(engine,*args):
     return result,captured
 
 def forecast_event(event,context,simulations=100000):
+    if context['package'].get('schema')=='sports.current_research_package.v1':
+        from models.current.mlb import forecast
+        return forecast(event,context,simulations)
     if simulations<1:raise ValueError('INVALID_SIMULATION_COUNT')
     p=context['package'];form=context['form'];cutoff=context['cutoff']
     if instant(event['start_time_utc'])<=instant(cutoff):raise ValueError('POST_START')

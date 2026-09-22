@@ -1,9 +1,15 @@
 """Shared card selection, preserving frozen engine code and challenger identities."""
-import copy,hashlib,json
+import copy,hashlib,json,os
 from .selection import select,require_default
 
 def apply_default(league,event,raw):
     league=league.lower();result=copy.deepcopy(raw)
+    if league in {'nba','nhl','mls'} and os.environ.get('SPORTS_INITIAL_BASELINES')=='1':
+        from models.current.baseline import IDS
+        if raw.get('model_id')!=IDS[league]:raise ValueError('INITIAL_RESEARCH_IDENTITY_MISMATCH')
+        result.setdefault('diagnostics',{})['research_selection']={'model_id':IDS[league],'role':'INITIAL_RESEARCH_ONLY','accuracy_default':False,'action_authority':False}
+        result['action_authority']=False;result['dose']=0.0
+        return result
     if league=='nfl':
         selection=require_default(league,raw['model_id'])
     elif league=='mlb':

@@ -951,6 +951,18 @@
       "r7_note": "ONE numeric parameter: hr_shrink (prior strength HR_K). The normalisation SCHEME is a MODEL-ARCHITECTURE FORK and a researcher degree of freedom -- NOT a second numeric free parameter; A and B are different models, not two settings of one knob. Choosing between them after seeing which calibrates better is exactly the degree of freedom pre-registration removes. Pre-committing to A (ANCHOR_HR) and assigning B (multinomial softmax) to a separate experiment with its own pre-registration remains the correct control.",
       "why": "The reviewed construction's algebra is correct but two analytical claims about it were wrong, and the proposed hr_shrink is unidentified until the four prereqs are answered. Recording it as a pre-registered hypothesis keeps it out of the frozen formula path while preserving the idea.",
       "queue_hold_2026_07_28": "PARKED_BY_ML_PRIORITY: non-ML (HR event model; also DATA-BLOCKED). Pre-registration preserved; no work authorized."
+    },
+    {
+      "id": "ALL-SPORTS-OPERABILITY-20260922",
+      "status": "COMPLETED_RESEARCH_ENGINEERING",
+      "authorization": "User explicitly requests all models operational with full autonomy on 2026-09-22; existing no-real-money and frozen-verdict protections retained.",
+      "scope": "Recover selected MLB/WNBA/CFB paths and fit first research baselines for NBA/NHL/MLS. No failed NFL ensemble promotion.",
+      "registered_at_utc": "2026-09-22T07:54:08.745151+00:00",
+      "prereg_doc": "docs/experiments/ALL_SPORTS_OPERABILITY_20260922.md",
+      "production_model_change": false,
+      "action_authority": false,
+      "evidence": "docs/releases/2026-09-22-runtimes/combined-remote-ci.json",
+      "no_accuracy_default_promotion": true
     }
   ],
   "known_issues": [
@@ -1435,5 +1447,13 @@
     "report": "docs/NFL_ASSIMILATION_AUDIT.md",
     "action_authority": false,
     "production_promotion": false
+  },
+  "operational_runtime_recovery_20260922": {
+    "status": "ALL_SEVEN_RESEARCH_RUNTIMES_VALIDATED",
+    "evidence": "docs/releases/2026-09-22-runtimes/combined-remote-ci.json",
+    "documentation": "docs/ALL_MODELS_CURRENT_RUNTIME.md",
+    "scope": "Current supported populations; immutable source-bound snapshots, six-hour actual-source TTL",
+    "historical_verdicts_modified": false,
+    "action_authority": false
   }
 }

@@ -1,0 +1,84 @@
+name: All model runtime recovery
+on:
+  push:
+    branches: [codex/all-model-runtimes-20260922]
+permissions:
+  contents: read
+jobs:
+  acquire:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python scripts/capture_model_recovery.py --output model-recovery-sources
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: model-recovery-sources-${{ github.run_id }}
+          path: model-recovery-sources
+          retention-days: 90
+  histories:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python scripts/capture_team_histories.py --output team-histories
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: team-histories-${{ github.run_id }}
+          path: team-histories
+          retention-days: 90
+  validation:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    permissions:
+      contents: read
+      actions: read
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install -r requirements-consolidated.txt
+      - name: All unit and research contracts
+        run: python -m pytest tests research/tests -q > runtime-tests.txt 2>&1
+      - name: Download retained inputs with exact archive verification
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh api repos/georgemunoz1-ui/sports-model/actions/artifacts/10683213963/zip > recovery.zip
+          gh api repos/georgemunoz1-ui/sports-model/actions/artifacts/10682535981/zip > current.zip
+          gh api repos/georgemunoz1-ui/sports-model/actions/artifacts/10683171247/zip > history.zip
+          gh api repos/georgemunoz1-ui/sports-model/actions/artifacts/10525312986/zip > frozen.zip
+          echo 'fdd75d9bc6c3b23bd28608b9727c282ef5c817046e2b88b0070e99cd7a1aa02e  recovery.zip' | sha256sum -c -
+          echo '14e10b0d998c107d333aae3dd940569d9333d2e37a72061a3f283567c84f2776  current.zip' | sha256sum -c -
+          echo '256f81112fadf1a87533584512e2940863d10b6b5acc8a3bc5972fcc287426a6  history.zip' | sha256sum -c -
+          echo '12babe78049b69d07e41dfd4568b36c9f0fe41d511d73dd796364f7a19b52074  frozen.zip' | sha256sum -c -
+          unzip -q recovery.zip -d recovery
+          unzip -q current.zip -d current
+          unzip -q history.zip -d history
+          unzip -q frozen.zip -d frozen
+      - name: All six current packages, real CLI forecasts, retained draws and replay
+        run: python scripts/verify_all_current_runtimes.py --recovery recovery --current current --history history --output runtime-acceptance > runtime-acceptance.txt 2>&1
+      - name: NFL real Week 3 state and every current forecast
+        run: python scripts/verify_nfl_current_acceptance.py --frozen frozen --capture current --output nfl-acceptance > nfl-acceptance.txt 2>&1
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: all-seven-runtime-acceptance-${{ github.run_id }}
+          path: |
+            runtime-tests.txt
+            runtime-acceptance.txt
+            runtime-acceptance
+            nfl-acceptance.txt
+            nfl-acceptance
+          retention-days: 90

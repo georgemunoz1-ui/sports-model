@@ -25,3 +25,11 @@ sport. One schema (`schema.py::COLUMNS`), one registry (`registry.py::SPORTS`), 
 ## Adding a sport
 Add an entry to `registry.SPORTS` (endpoints, window, season, parks) + a one-line normalizer note.
 NFL/NBA/WNBA/CFB entries are already stubbed with verified ESPN endpoints — populate when in season.
+
+## Current runtime contracts (2026-09-22)
+
+All seven leagues have executable research paths. See
+[ALL_MODELS_CURRENT_RUNTIME](../docs/ALL_MODELS_CURRENT_RUNTIME.md) and
+`registry.CURRENT_RUNTIME_PROFILES` for fitted features, product scope, explicit
+research opt-ins and retained-draw acceptance. Registry ingestion plans are not
+claims that every planned feature participates in the fitted model.

@@ -1,0 +1,255 @@
+{
+  "action_authority": false,
+  "baseline_probabilities": [
+    0.466278101582015,
+    0.533721898417985
+  ],
+  "evaluation_fit_sha256": "00bee02210d810bfb2f71af76c2e6d714a3424bc5c4f649e27d7347a6be92370",
+  "historical_availability_proven": false,
+  "later_audit_2026": {
+    "baseline_brier": 0.2496464117772398,
+    "baseline_log_loss": 0.6924406594360324,
+    "brier": 0.24894963772387033,
+    "log_loss": 0.691012929944899,
+    "margin_mae": 2.1506845800955743,
+    "n": 1312,
+    "paired_week_bootstrap_95ci_brier_delta": [
+      -0.004521620405513274,
+      0.003113141783512388
+    ],
+    "paired_week_bootstrap_95ci_log_loss_delta": [
+      -0.00948669144053496,
+      0.006421275626201579
+    ],
+    "prediction_sha256": "f4f2f398109ebd1fc22f2483c790c67ccbbc633b930e4918a97c9c254e0503c2",
+    "reliability": [
+      {
+        "category": 0,
+        "frequency": 0.2857142857142857,
+        "lower": 0.2,
+        "mean_p": 0.27555572334494244,
+        "n": 35
+      },
+      {
+        "category": 0,
+        "frequency": 0.43410852713178294,
+        "lower": 0.3,
+        "mean_p": 0.3622227188441961,
+        "n": 258
+      },
+      {
+        "category": 0,
+        "frequency": 0.47048300536672627,
+        "lower": 0.4,
+        "mean_p": 0.4516249635189678,
+        "n": 559
+      },
+      {
+        "category": 0,
+        "frequency": 0.5095890410958904,
+        "lower": 0.5,
+        "mean_p": 0.5420989523178604,
+        "n": 365
+      },
+      {
+        "category": 0,
+        "frequency": 0.5714285714285714,
+        "lower": 0.6,
+        "mean_p": 0.6334523139804906,
+        "n": 91
+      },
+      {
+        "category": 0,
+        "frequency": 1.0,
+        "lower": 0.7,
+        "mean_p": 0.7231233694670742,
+        "n": 4
+      },
+      {
+        "category": 1,
+        "frequency": 0.0,
+        "lower": 0.2,
+        "mean_p": 0.27687663053292577,
+        "n": 4
+      },
+      {
+        "category": 1,
+        "frequency": 0.42857142857142855,
+        "lower": 0.3,
+        "mean_p": 0.3665476860195093,
+        "n": 91
+      },
+      {
+        "category": 1,
+        "frequency": 0.4904109589041096,
+        "lower": 0.4,
+        "mean_p": 0.4579010476821396,
+        "n": 365
+      },
+      {
+        "category": 1,
+        "frequency": 0.5295169946332737,
+        "lower": 0.5,
+        "mean_p": 0.5483750364810323,
+        "n": 559
+      },
+      {
+        "category": 1,
+        "frequency": 0.5658914728682171,
+        "lower": 0.6,
+        "mean_p": 0.6377772811558039,
+        "n": 258
+      },
+      {
+        "category": 1,
+        "frequency": 0.7142857142857143,
+        "lower": 0.7,
+        "mean_p": 0.7244442766550576,
+        "n": 35
+      }
+    ],
+    "total_mae": 1.8491124962796566
+  },
+  "league": "nhl",
+  "model_id": "nhl.initial_causal_score.research.v1",
+  "promotion_status": "INITIAL_RESEARCH_ONLY_NO_DEFAULT_PROMOTION",
+  "provider_copy_counts": {
+    "1": 302,
+    "2": 7126
+  },
+  "schema": "initial_baseline_temporal_audit.v1",
+  "season_counts": {
+    "2021": 868,
+    "2022": 1312,
+    "2023": 1312,
+    "2024": 1312,
+    "2025": 1312,
+    "2026": 1312
+  },
+  "training_n": 4804,
+  "training_prior": 3.1077227310574522,
+  "training_seasons": [
+    2021,
+    2022,
+    2023,
+    2024
+  ],
+  "validation_2025": {
+    "baseline_brier": 0.2469219291306648,
+    "baseline_log_loss": 0.686983409680584,
+    "brier": 0.24351873647093994,
+    "log_loss": 0.6799526152907759,
+    "margin_mae": 2.1845919105703273,
+    "n": 1312,
+    "paired_week_bootstrap_95ci_brier_delta": [
+      -0.008796139012050761,
+      0.001206580303211938
+    ],
+    "paired_week_bootstrap_95ci_log_loss_delta": [
+      -0.01833652695908076,
+      0.002657408978913073
+    ],
+    "prediction_sha256": "141408656ea7c4044748bfc7ffdd2c9d500d519d2db77ad0b59671ccbdb3e8ad",
+    "reliability": [
+      {
+        "category": 0,
+        "frequency": 0.0,
+        "lower": 0.1,
+        "mean_p": 0.188893650055497,
+        "n": 3
+      },
+      {
+        "category": 0,
+        "frequency": 0.2647058823529412,
+        "lower": 0.2,
+        "mean_p": 0.27405977986769664,
+        "n": 34
+      },
+      {
+        "category": 0,
+        "frequency": 0.337037037037037,
+        "lower": 0.3,
+        "mean_p": 0.35701307531037496,
+        "n": 270
+      },
+      {
+        "category": 0,
+        "frequency": 0.43953934740882916,
+        "lower": 0.4,
+        "mean_p": 0.45174523083957246,
+        "n": 521
+      },
+      {
+        "category": 0,
+        "frequency": 0.5104712041884817,
+        "lower": 0.5,
+        "mean_p": 0.5448376953221161,
+        "n": 382
+      },
+      {
+        "category": 0,
+        "frequency": 0.49,
+        "lower": 0.6,
+        "mean_p": 0.6318488750302267,
+        "n": 100
+      },
+      {
+        "category": 0,
+        "frequency": 0.5,
+        "lower": 0.7,
+        "mean_p": 0.7131000205207836,
+        "n": 2
+      },
+      {
+        "category": 1,
+        "frequency": 0.5,
+        "lower": 0.2,
+        "mean_p": 0.2868999794792165,
+        "n": 2
+      },
+      {
+        "category": 1,
+        "frequency": 0.51,
+        "lower": 0.3,
+        "mean_p": 0.36815112496977326,
+        "n": 100
+      },
+      {
+        "category": 1,
+        "frequency": 0.4895287958115183,
+        "lower": 0.4,
+        "mean_p": 0.4551623046778838,
+        "n": 382
+      },
+      {
+        "category": 1,
+        "frequency": 0.5604606525911708,
+        "lower": 0.5,
+        "mean_p": 0.5482547691604276,
+        "n": 521
+      },
+      {
+        "category": 1,
+        "frequency": 0.662962962962963,
+        "lower": 0.6,
+        "mean_p": 0.6429869246896249,
+        "n": 270
+      },
+      {
+        "category": 1,
+        "frequency": 0.7352941176470589,
+        "lower": 0.7,
+        "mean_p": 0.7259402201323033,
+        "n": 34
+      },
+      {
+        "category": 1,
+        "frequency": 1.0,
+        "lower": 0.8,
+        "mean_p": 0.8111063499445029,
+        "n": 3
+      }
+    ],
+    "total_mae": 1.8801498584781409
+  }
+}

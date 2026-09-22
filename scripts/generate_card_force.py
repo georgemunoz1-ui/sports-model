@@ -7,6 +7,7 @@ import csv
 import importlib
 import json
 import math
+import os
 import sys
 from datetime import datetime, timezone
 from pathlib import Path
@@ -43,7 +44,7 @@ def now_utc():
 
 def load_adapter(league):
     from pipelines.cards.selection import select,SelectionError
-    if league.lower() in {'nba','nhl','mls'}:select(league)
+    if league.lower() in {'nba','nhl','mls'} and os.environ.get('SPORTS_INITIAL_BASELINES')!='1':select(league)
     try:return importlib.import_module(f"pipelines.cards.adapters.{league.lower()}")
     except ModuleNotFoundError as exc:
         if exc.name==f"pipelines.cards.adapters.{league.lower()}":raise SelectionError('SELECTED_MODEL_CURRENT_CARD_ADAPTER_UNAVAILABLE:'+league) from exc
@@ -433,16 +434,18 @@ def main():
     parser.add_argument("--date", required=True)
     parser.add_argument("--league", required=True, choices=["mlb", "cfb", "nfl", "wnba", "nba", "nhl", "mls"])
     parser.add_argument("--as-of-utc")
+    parser.add_argument("--initial-research-baselines",action="store_true",help="Explicit NBA/NHL/MLS research models; does not change tested defaults")
     parser.add_argument("--simulations", type=int, default=100000)
     parser.add_argument("--manual-overrides")
     parser.add_argument("--output-dir", default="output")
     args = parser.parse_args()
+    if args.initial_research_baselines:os.environ['SPORTS_INITIAL_BASELINES']='1'
     as_of = args.as_of_utc or now_utc().isoformat().replace("+00:00", "Z")
 
     output = Path(args.output_dir)
     output.mkdir(parents=True, exist_ok=False)
+    os.environ['SPORTS_RESEARCH_DRAW_OUTPUT']=str((output/'draws').resolve())
     if args.league == "mlb":
-        import os
         os.environ["MLB_DRAW_OUTPUT"] = str((output / "draws").resolve())
     card = generate(args.date, args.league, as_of, args.simulations, args.manual_overrides)
     (output / "diagnostic_card.json").write_text(json.dumps(card, indent=2, sort_keys=True) + "\n")

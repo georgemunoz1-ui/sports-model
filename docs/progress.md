@@ -4531,3 +4531,15 @@ Evidence: docs/releases/2026-09-22-weekly-state/. Commands: docs/NFL_WEEKLY_STAT
 - All-seven operational acceptance remains incomplete: NBA/NHL/MLS have no tested
   default; MLB/WNBA/CFB current integration and four historical health failures
   remain real work. See docs/NFL_REAL_WEEK3_ACCEPTANCE.md for exact scope.
+
+### 2026-09-22 — Current runtime recovery across seven leagues
+
+Owner reiterated full autonomy and requested all models operational. Added current
+source-bound MLB, WNBA and CFB packages while preserving frozen engines; introduced
+separately preregistered NBA/NHL/MLS initial research models with chronological
+validation and a later-period audit. Shared card interfaces retain genuine draws,
+reject stale/tampered inputs and preserve zero authority. Current acceptance covers
+all supported games and verified empty NBA dates; deterministic replay compares
+retained draw bytes. NFL's selected QB Week 3 path remains independent of PR38 and
+the rejected combined ensemble. See docs/ALL_MODELS_CURRENT_RUNTIME.md for scope,
+source acquisition, exact commands, remaining model limitations and evidence.

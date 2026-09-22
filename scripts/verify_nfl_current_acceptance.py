@@ -57,7 +57,7 @@ def main():
         'starter_adjudication_count': 1, 'unmodified_source_refusal_verified': True,
         'identical_retry_verified': True, 'completed_games': 32, 'draws_per_event': 100000,
         'limitations': package['limitations'], 'action_authority': False, 'ensemble_promoted': False,
-        'official_gamebook_clearance': False, 'all_seven_models_operational': False}
+        'official_gamebook_clearance': False, 'validation_scope': 'NFL_ONLY'}
     (a.output/'acceptance.json').write_text(json.dumps(summary, indent=2)+'\n')
     print(json.dumps(summary, indent=2))
 

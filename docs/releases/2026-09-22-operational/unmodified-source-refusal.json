@@ -1,0 +1,48 @@
+{
+  "schema": "nfl.current_weekly_acceptance.v1",
+  "target_completed_week": 2,
+  "forecast_consumption_verified": false,
+  "action_authority": false,
+  "production_promotion": false,
+  "code": {
+    "weekly_state.py": "912b4e3b803be48c13851ab7633413c1cc750159964db4752206663838b44b80",
+    "assimilation.py": "9cfe2af178382326741be0197e2f19f84e32c132014a4677b55506919c052898",
+    "base_features.py": "f017a95578e056c1da799aaf29d218bf46bd480fbb4d214ecaad120f7f88cf68",
+    "qb_assimilation.py": "33667fa0375a1d151ec2a450c497e219cc0d099472e603f1ad6d4814abfef51c"
+  },
+  "frozen_manifest_entries": 51,
+  "capture_manifest_entries": 295,
+  "source_sha256": {
+    "schedule": "f388217fa08cbe1a10931f02b1ef5e1bcecc21fe436cf7d5ae1d88b11f929967",
+    "pbp": "48d4916ffd93700ae8ebec3bd0f17b54c6d3b7d61b25c84a1d059eed890a18c0"
+  },
+  "cutoff_utc": "2026-09-22T07:35:41.458387+00:00",
+  "seed_id": "9d206de471ae60f24883ee7eb945dff682b655dc58178fc4dea0da65e5e2edb1",
+  "transitions": [
+    {
+      "completed_week": 1,
+      "state_id": "549f83c09eb1b231efb329665ed37ef71fb0797a0cb427770379de780be8db6d",
+      "consumed_game_count": 16,
+      "replay_verified": true,
+      "identical_retry_verified": true
+    }
+  ],
+  "status": "REFUSED",
+  "failed_week": 2,
+  "refusal": "STARTER_DROPBACK_BINDING",
+  "head_preserved": true,
+  "objects_preserved": true,
+  "starter_conflicts": [
+    {
+      "game_id": "2026_02_CAR_ATL",
+      "team": "ATL",
+      "schedule_qb_id": "00-0036212",
+      "qualifying_pbp_passer_ids": [
+        "00-0033662",
+        "00-0041194"
+      ],
+      "disposition": "RECONCILE_SOURCE_CONFLICT; NO_AUTOMATIC_SUBSTITUTION"
+    }
+  ],
+  "published_state_id": "549f83c09eb1b231efb329665ed37ef71fb0797a0cb427770379de780be8db6d"
+}

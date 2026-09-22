@@ -4515,3 +4515,19 @@ and a fresh future-event package remain required. No current/live state pointer 
 Full repository health remains RED; local base health had checkout/history/environment
 failures plus pre-existing operational blockers. No ensemble promotion or action authority.
 Evidence: docs/releases/2026-09-22-weekly-state/. Commands: docs/NFL_WEEKLY_STATE_REPAIR.md.
+
+
+## 2026-09-22 — Real Week 3 operational follow-up
+
+- Acquired fresh evidence for all seven leagues in run 35700164324: 387 requests,
+  zero JSON source failures; exact archives and hashes retained.
+- Unmodified complete NFL Week 2 inputs correctly refuse CAR–ATL starter conflict.
+  The rejected transition preserves HEAD and existing immutable objects.
+- Reviewed retained AP/ESPN report against first QB play; seed-pinned research
+  adjudication corrects Atlanta starter to Rush without changing raw schedule bytes.
+- Real Week 1 and Week 2 replay and identical retries pass; next-week event package
+  consumes the resulting 32-game state with current context limitations explicit.
+- 397 unit/research tests pass. No failed ensemble or new model is promoted.
+- All-seven operational acceptance remains incomplete: NBA/NHL/MLS have no tested
+  default; MLB/WNBA/CFB current integration and four historical health failures
+  remain real work. See docs/NFL_REAL_WEEK3_ACCEPTANCE.md for exact scope.

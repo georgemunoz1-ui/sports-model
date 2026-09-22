@@ -26,7 +26,7 @@ SCHEDULE_URL = 'https://raw.githubusercontent.com/nflverse/nfldata/master/data/g
 
 def code_identity():
     return {p: hashlib.sha256(Path(__file__).with_name(p).read_bytes()).hexdigest()
-            for p in ('weekly_state.py', 'assimilation.py', 'base_features.py', 'qb_assimilation.py')}
+            for p in ('weekly_state.py', 'assimilation.py', 'base_features.py', 'qb_assimilation.py', 'starter_adjudication.py')}
 
 
 def _put(store, value):
@@ -109,7 +109,7 @@ def _schedule(source, season, cutoff):
     return d
 
 
-def initialize(store, historical_seed, schedule_source, artifact, cutoff):
+def initialize(store, historical_seed, schedule_source, artifact, cutoff, *, starter_adjudications=None):
     """Retain reconstructed Week1 seed and independent full-season schedule anchor.
 
     Caller must review/pin the returned seed ID before using it at inference.
@@ -133,6 +133,7 @@ def initialize(store, historical_seed, schedule_source, artifact, cutoff):
     node = {'schema': SCHEMA, 'kind': 'seed', 'season': season, 'completed_week': 0,
             'model_sha256': digest(artifact), 'code': code_identity(), 'cutoff_utc': cutoff,
             'historical_seed': historical_seed, 'schedule_source': schedule_source,
+            'starter_adjudications': copy.deepcopy(starter_adjudications or []),
             'team_state': states, 'qb_state': prior(artifact, season), 'consumed_game_ids': [],
             'research_only': True, 'action_authority': False}
     Path(store).mkdir(parents=True, exist_ok=True)
@@ -192,7 +193,9 @@ def _reduce(parent, seed, schedule_source, pbp_source, week, cutoff):
     for row in aggregates.to_dict('records'):
         value = qb['qb_ratings'].setdefault(row['passer_player_id'], {'sum': 0., 'n': 0.})
         value['sum'] += row['epa_sum']; value['n'] += row['dropbacks']
-    for row in games.to_dict('records'):
+    from .starter_adjudication import apply as adjudicate_starters
+    resolved_games = adjudicate_starters(games, p, seed.get('starter_adjudications', []), cutoff)
+    for row in resolved_games.to_dict('records'):
         for side in ('home', 'away'):
             q = row.get(side + '_qb_id')
             if not isinstance(q, str) or not q: raise ValueError('COMPLETED_STARTER_ID_REQUIRED')
@@ -203,6 +206,10 @@ def _reduce(parent, seed, schedule_source, pbp_source, week, cutoff):
     after, qa = advance_states(states, games, p)
     return {'team_state': serialize_states(after), 'qb_state': qb,
             'consumed_game_ids': sorted(parent['consumed_game_ids'] + ids),
+            'starter_adjudications_applied': [{'game_id': r['game_id'], 'team': r['team'],
+                'original_qb_id': r['expected_schedule_qb_id'], 'resolved_qb_id': r['qb_id'],
+                'resolution_sha256': digest(r), 'source_sha256': r['evidence']['receipt']['sha256']}
+                for r in seed.get('starter_adjudications', []) if r['game_id'] in ids],
             'coverage': cov, 'qualifying_play_audit': qa}
 
 
@@ -292,6 +299,7 @@ def require_features(base, state, event):
             'team_state_sha256': digest(state['team_state']), 'qb_state_sha256': digest(state['qb_state']),
             'consumed_game_ids': state['consumed_game_ids'], 'state_feature_values': {k: float(expected[k]) for k in STATE_FEATURES},
             'source_pbp_sha256': state['pbp_source']['receipt']['sha256'],
+            'starter_adjudications_applied': state.get('starter_adjudications_applied', []),
             'schedule_sha256': state['schedule_source']['receipt']['sha256'], 'official_gamebook_clearance': False}
 
 

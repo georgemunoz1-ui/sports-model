@@ -106,3 +106,10 @@ release, prospective eligibility, or ensemble promotion is claimed.
 The CI workflow repeats the same synthetic and pinned real-source checks. It
 fails on test errors and uploads logs even on failure. Source artifacts expire
 in December 2026; preserve the downloaded original archives for long-term replay.
+
+## Subsequent real-source acceptance
+
+The source-acquisition limitation above records the original PR42 acceptance.
+The September 22 operational follow-up acquired complete Week 2 PBP, isolated a
+starter conflict, and rebuilt a separately pinned chain with source-bound
+adjudication. See `docs/NFL_REAL_WEEK3_ACCEPTANCE.md` and its retained evidence.

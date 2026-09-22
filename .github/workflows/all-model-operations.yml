@@ -1,0 +1,87 @@
+name: All model operational recovery
+on:
+  push:
+    branches: [codex/all-model-operations-20260922]
+permissions:
+  contents: read
+  actions: read
+jobs:
+  capture:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Fresh current sources for every league
+        run: python scripts/capture_operational_inputs.py --output operational-sources
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: operational-sources-${{ github.run_id }}
+          path: operational-sources
+          retention-days: 90
+  validation:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install -r requirements-consolidated.txt
+      - name: All unit and research contracts
+        run: python -m pytest tests research/tests -q > operational-tests.txt 2>&1
+      - name: Record repository health separately
+        if: always()
+        run: |
+          set +e
+          python harness/healthcheck.py > operational-health.txt 2>&1
+          echo "$?" > operational-health-exit.txt
+          exit 0
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: operational-validation-${{ github.run_id }}
+          path: |
+            operational-tests.txt
+            operational-health.txt
+            operational-health-exit.txt
+          retention-days: 90
+
+  real-week3-state:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install -r requirements-consolidated.txt
+      - name: Download hash-pinned historical seed and current captured sources
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh api repos/georgemunoz1-ui/sports-model/actions/artifacts/10525312986/zip > frozen.zip
+          gh api repos/georgemunoz1-ui/sports-model/actions/artifacts/10682535981/zip > sources.zip
+          echo '12babe78049b69d07e41dfd4568b36c9f0fe41d511d73dd796364f7a19b52074  frozen.zip' | sha256sum -c -
+          echo '14e10b0d998c107d333aae3dd940569d9333d2e37a72061a3f283567c84f2776  sources.zip' | sha256sum -c -
+          unzip -q frozen.zip -d frozen
+          unzip -q sources.zip -d sources
+      - name: Real state replay, conflict refusal, explicit correction, and all Week 3 CLI forecasts
+        run: python scripts/verify_nfl_current_acceptance.py --frozen frozen --capture sources --output current-acceptance > current-acceptance.txt 2>&1
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: real-week3-state-${{ github.run_id }}
+          path: |
+            current-acceptance
+            current-acceptance.txt
+          retention-days: 90

@@ -17,6 +17,7 @@ def main():
     p.add_argument('--schedule', type=Path, required=True)
     p.add_argument('--schedule-receipt', type=Path, required=True)
     p.add_argument('--seed', type=Path, help='Historical Week1 reconstructed state; initialization only')
+    p.add_argument('--starter-adjudications', type=Path, help='Explicit reviewed source-bound corrections; new seed only')
     p.add_argument('--parent-id')
     p.add_argument('--seed-id', help='Independently retained seed ID, not a packet-provided assertion')
     p.add_argument('--pbp', type=Path)
@@ -28,8 +29,10 @@ def main():
     cutoff = dt.datetime.now(dt.timezone.utc).isoformat()
     if a.seed:
         if any((a.parent_id, a.seed_id, a.pbp, a.pbp_receipt, a.week)): p.error('Seed initialization cannot include update arguments')
-        key = initialize(a.store, json.loads(a.seed.read_text()), schedule, model, cutoff)
+        key = initialize(a.store, json.loads(a.seed.read_text()), schedule, model, cutoff,
+                         starter_adjudications=json.loads(a.starter_adjudications.read_text()) if a.starter_adjudications else None)
     else:
+        if a.starter_adjudications: p.error('Starter adjudications require a new reviewed seed')
         if not all((a.parent_id, a.seed_id, a.pbp, a.pbp_receipt, a.week)): p.error('Update requires parent ID, seed ID, PBP, receipt and week')
         key = advance(a.store, a.parent_id, a.seed_id, model, schedule,
                       capture(a.pbp, json.loads(a.pbp_receipt.read_text())), a.week, cutoff)

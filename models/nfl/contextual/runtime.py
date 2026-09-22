@@ -10,13 +10,18 @@ from .recovered_inference import bind_context,predict,digest,bernoulli_simulatio
 def live_features(artifact,recovered,base,context,event,cutoff):
     if base['game_id']!=event['event_id']:raise ValueError('BASE_EVENT_ID')
     if (base['home_team'],base['away_team'])!=(event['home_team'],event['away_team']):raise ValueError('HOME_AWAY_BINDING')
-    bound=bind_context(recovered,base,context,cutoff,event['start_time_utc'])
+    bound=bind_context(recovered,base,{k:v for k,v in context.items() if k not in {'assimilation','weekly_state'}},cutoff,event['start_time_utc'])
     ratings=copy.deepcopy(artifact['state']['qb_ratings'])
     years=int(base['season'])-int(artifact['state'].get('season',max(artifact['arms']['combined']['training_seasons'])))
     if years<0:raise ValueError('FUTURE_FEATURE_STATE')
     for v in ratings.values():v['sum']*=.55**years;v['n']*=.55**years
     last_qb=artifact['state']['last_qb']
-    if (int(base['season']),int(base['week']))>=(2026,2):
+    if int(base['week'])>=3 or context.get('weekly_state'):
+        from .weekly_state import for_event, require_features
+        weekly=for_event(context,artifact,event,cutoff)
+        require_features(base,weekly,event)
+        ratings=weekly['qb_state']['qb_ratings'];last_qb=weekly['qb_state']['last_qb']
+    elif (int(base['season']),int(base['week']))>=(2026,2):
         from .qb_assimilation import verified
         qb_state=verified(artifact,context.get('assimilation',{}))
         ratings=qb_state['qb_ratings'];last_qb=qb_state['last_qb']
@@ -61,7 +66,13 @@ def run(artifact,recovered,base,context,event,cutoff,n=100000,*,model_id=None,mo
     from .week2 import applies,policy,selection,require_assimilation,coherence
     week2=applies(base,event)
     if model_id is None:model_id=policy()['default_reference_model'] if week2 else artifact['arms']['combined']['model_id']
-    state_flow=require_assimilation(base,context,event,cutoff) if week2 else None
+    if int(base['week'])>=3 or context.get('weekly_state'):
+        from .weekly_state import for_event, require_features
+        weekly=for_event(context,artifact,event,cutoff)
+        state_flow=require_features(base,weekly,event)
+        state_flow['state_id']=context['weekly_state']['state_id']
+    else:
+        state_flow=require_assimilation(base,context,event,cutoff) if week2 else None
     selected=select(artifact,model_id,mode)
     if utc(cutoff)>=utc(event['start_time_utc']):raise ValueError('NOT_PREGAME')
     x,audit=live_features(artifact,recovered,base,context,event,cutoff)
@@ -71,7 +82,7 @@ def run(artifact,recovered,base,context,event,cutoff,n=100000,*,model_id=None,mo
         arms[arm]=predict(params,feature)
     from .capabilities import describe_run_capabilities
     capability_report=describe_run_capabilities(artifact['arms'][selected],x,context,base,cutoff,event,digest(artifact),arms[selected]['contribution_trace'])
-    code_hashes={name:hashlib.sha256((Path(__file__).parent/name).read_bytes()).hexdigest() for name in ('runtime.py','personnel.py','model.py','features.py','recovered_inference.py','operating.py','capabilities.py','settlement.py','forecast_stream.py','week2.py','joint_distribution.py','qb_assimilation.py')}
+    code_hashes={name:hashlib.sha256((Path(__file__).parent/name).read_bytes()).hexdigest() for name in ('runtime.py','personnel.py','model.py','features.py','recovered_inference.py','operating.py','capabilities.py','settlement.py','forecast_stream.py','week2.py','joint_distribution.py','qb_assimilation.py','weekly_state.py','assimilation.py')}
     identity=digest({'event':event,'features':x,'artifact':artifact,'context':context,'runtime':'nfl.integrated_context.v1','model_id':model_id,'mode':mode,'code_hashes':code_hashes})
     p=arms[selected]['prediction'];winner,win_info=bernoulli_simulation(p['home_win'],identity,n)
     scores=None;score_info={'status':'UNAVAILABLE_FOR_SELECTED_ARM','reason':'FROZEN_JOINT_RESIDUAL_POOL_IS_COMBINED_SPECIFIC'}

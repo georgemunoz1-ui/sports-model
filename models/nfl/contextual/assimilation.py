@@ -124,8 +124,11 @@ def build_scoring_and_play_attribution(pbp, coverage):
     return {'phase_observations':out,'scoring_events':scoring,'attribution_scope':'scoreboard transitions; no invented EPA allocation to returns'}
 
 def advance_states(states, games, pbp):
-    """Reuse the frozen feature implementation, including its opportunity convention."""
-    plays,audit=bf._qualifying_plays(pbp)
+    """Pure transform, not a state writer. Weekly publication uses weekly_state.
+
+    Scope before league means, opponent adjustments, or any other aggregation.
+    """
+    plays,audit=bf._qualifying_plays(pbp[pbp.game_id.isin(games.game_id)].copy())
     next_states=copy.deepcopy(states)
     for team,(obs,n) in bf._weekly_observations(games,plays,states).items():
         next_states.setdefault(team,bf.TeamState()).update(obs,n)
@@ -168,16 +171,11 @@ def run_nfl_assimilation_check(*,path,receipt,schedule,cutoff,archive,output,pri
         if prior_hash and quarantine.exists():
             report['reason'].append('PRIOR_STATE_QUARANTINED_REBUILD_REQUIRED')
             cov['weekly_state_update_eligible']=False;report['status']='quarantined'
-        if cov['weekly_state_update_eligible'] and prior_states is not None:
-            updated,qa=advance_states(prior_states,schedule,pbp);report['qualifying_play_audit']=qa
-            report['state_before_sha256']=digest(serialize_states(prior_states));report['state_after_sha256']=digest(serialize_states(updated))
-            report['state_update_applied']=True
-            write_once(out/'team_state.json',serialize_states(updated))
-            for request in forecast_requests:
-                if (int(request['season']),int(request['week']))<=max(zip(schedule.season.astype(int),schedule.week.astype(int))):
-                    report['forecast_traces'].append({'event_id':request['game_id'],'status':'not_updated','reason':'SAME_WEEK_OR_EARLIER_FORECAST'})
-                else:report['forecast_traces'].append(trace_feature_effects_into_forecasts(prior_states,updated,request,params))
-        else:report['reason'].append('WEEK_NOT_COMPLETE_OR_PRIOR_STATE_NOT_SUPPLIED')
+        # Bare TeamState dictionaries have no ancestry or consumed-game ledger.
+        # Keep this legacy entry point as an audit; only weekly_state may publish.
+        if prior_states is not None:
+            report['reason'].append('LEGACY_STATE_WRITER_DISABLED_USE_WEEKLY_STATE')
+        cov['weekly_state_update_eligible']=False
     except Exception as exc:
         report['reason'].append(type(exc).__name__+':'+str(exc))
     write_once(out/'audit.json',report)

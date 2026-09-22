@@ -4499,3 +4499,19 @@ Patched card probability overrides and strict timestamp ordering. Diagnostic car
 ## 2026-09-15 — User-authorized all-PR consolidation (2026-09-16 UTC)
 
 Reconciled default main and operational history; PR1,9–16,26–30 changes retained. Preserved current selected defaults and archived forecast hashes. Older Gamma-Poisson adapter accessible under an explicit research name. Recovered strict PIT timestamp and no-self-registration checks; preserved newer parser assertions. Local combined suite passed 330 tests before the additional package-integrity regression. New access guide and consistent dependency file added. External health blockers are not cleared by merging. Action authority OFF.
+
+## 2026-09-22 — Independent NFL weekly-state safety repair (draft)
+
+Built from main 4b39c651c88eefc66dfa6f6aaac3183dc5b48839, not PR38 implementation.
+Added a full-season schedule anchor, filtered PBP aggregation, immutable parent-linked
+team/QB states, CAS publication, idempotent retry and replay-verified Week3+ consumption.
+Legacy bare-state writer now audits only. Existing QB default and fitted rules unchanged.
+115 NFL tests passed, including the canonical CLI, 100K binary replay, concurrent writers,
+crash recovery, bye weeks and adversarial refusals. Real pinned sources (51+10 manifest
+entries) reproduce frozen Week1 team and QB state exactly from 17 games of source PBP.
+The source vintage has one Week2 final; real Week3 state remains BLOCKED, not zero-effect.
+Fresh PBP request through the available connector failed; current full Week2 acquisition
+and a fresh future-event package remain required. No current/live state pointer changed.
+Full repository health remains RED; local base health had checkout/history/environment
+failures plus pre-existing operational blockers. No ensemble promotion or action authority.
+Evidence: docs/releases/2026-09-22-weekly-state/. Commands: docs/NFL_WEEKLY_STATE_REPAIR.md.

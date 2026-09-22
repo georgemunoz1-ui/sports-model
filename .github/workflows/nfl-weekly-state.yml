@@ -1,0 +1,43 @@
+name: NFL weekly state acceptance
+on:
+  pull_request:
+    paths:
+      - 'models/nfl/contextual/**'
+      - 'scripts/*nfl*'
+      - 'tests/test_nfl*'
+      - '.github/workflows/nfl-weekly-state.yml'
+permissions:
+  contents: read
+  actions: read
+jobs:
+  weekly-state:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install numpy==2.3.5 pandas==2.2.3 scipy==1.17.0 scikit-learn==1.8.0
+      - name: NFL regressions including canonical CLI and duplicate writers
+        run: python -m unittest discover -s tests -p 'test_nfl*.py' -v > nfl-tests.txt 2>&1
+      - name: Download pinned evidence only
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh api repos/georgemunoz1-ui/sports-model/actions/artifacts/10525312986/zip > frozen.zip
+          gh api repos/georgemunoz1-ui/sports-model/actions/artifacts/10536523716/zip > captured.zip
+          echo '12babe78049b69d07e41dfd4568b36c9f0fe41d511d73dd796364f7a19b52074  frozen.zip' | sha256sum -c -
+          echo 'e3bb75c06ec7851879b95d15d49e8d3d8d3f11e7980dd315534e398478f548a8  captured.zip' | sha256sum -c -
+          unzip -q frozen.zip -d frozen
+          unzip -q captured.zip -d captured
+      - name: Real source replay; do not install state
+        run: python scripts/verify_nfl_weekly_sources.py --frozen frozen --capture captured --output acceptance > real-source-tests.txt 2>&1
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: weekly-state-acceptance-${{ github.run_id }}
+          path: |
+            nfl-tests.txt
+            real-source-tests.txt
+            acceptance/acceptance.json
+          retention-days: 90

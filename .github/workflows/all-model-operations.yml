@@ -1,0 +1,55 @@
+name: All model operational recovery
+on:
+  push:
+    branches: [codex/all-model-operations-20260922]
+permissions:
+  contents: read
+  actions: read
+jobs:
+  capture:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Fresh current sources for every league
+        run: python scripts/capture_operational_inputs.py --output operational-sources
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: operational-sources-${{ github.run_id }}
+          path: operational-sources
+          retention-days: 90
+  validation:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install -r requirements-consolidated.txt
+      - name: All unit and research contracts
+        run: python -m pytest tests research/tests -q > operational-tests.txt 2>&1
+      - name: Record repository health separately
+        if: always()
+        run: |
+          set +e
+          python harness/healthcheck.py > operational-health.txt 2>&1
+          echo "$?" > operational-health-exit.txt
+          exit 0
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: operational-validation-${{ github.run_id }}
+          path: |
+            operational-tests.txt
+            operational-health.txt
+            operational-health-exit.txt
+          retention-days: 90

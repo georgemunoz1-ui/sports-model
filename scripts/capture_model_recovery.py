@@ -32,6 +32,7 @@ def main():
     p=argparse.ArgumentParser();p.add_argument('--output',type=Path,required=True);a=p.parse_args()
     a.output.mkdir(parents=True,exist_ok=False);today=dt.datetime.now(dt.timezone.utc).date()
     specs=[]
+    specs.append(('mlb','official_season',f'https://statsapi.mlb.com/api/v1/schedule?sportId=1&startDate={today.year}-03-01&endDate={today}&gameType=R',1))
     for offset in range(-22,8):
         day=today+dt.timedelta(days=offset)
         specs.append(('mlb','official_schedule',f'https://statsapi.mlb.com/api/v1/schedule?sportId=1&date={day}&hydrate=probablePitcher,linescore,venue',1))

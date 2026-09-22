@@ -23,13 +23,18 @@ def main():
         for league,route in ROUTES.items():
             specs.append((league,'schedule',f'https://site.api.espn.com/apis/site/v2/sports/{route}/scoreboard?dates={day:%Y%m%d}&limit=1000',2))
         specs.append(('mlb','official_schedule',f'https://statsapi.mlb.com/api/v1/schedule?sportId=1&date={day}&hydrate=probablePitcher,linescore,venue',1))
+    # Fill the numeric WNBA extension gap after the retained August 29 state.
+    day=dt.date(today.year,8,30)
+    while day < today-dt.timedelta(days=7):
+        specs.append(('wnba','schedule',f'https://site.api.espn.com/apis/site/v2/sports/{ROUTES["wnba"]}/scoreboard?dates={day:%Y%m%d}&limit=1000',2))
+        day+=dt.timedelta(days=1)
     with ThreadPoolExecutor(max_workers=6) as pool:results=list(pool.map(lambda s:capture(a.output,s),specs))
     events={k:{} for k in ROUTES};details={}
     for rec,payload in results:
         if not payload or rec['kind']!='schedule':continue
         for e in payload.get('events',[]):
             events[rec['league']][e['id']]={'event':e,'source_sha256':rec['raw_sha256'],'retrieved_at_utc':rec['retrieved_at_utc']}
-            if rec['league'] in {'wnba','mlb'}:
+            if rec['league'] in {'wnba','mlb','nfl'}:
                 u=f"https://site.api.espn.com/apis/site/v2/sports/{ROUTES[rec['league']]}/summary?event={e['id']}"
                 details[u]=(rec['league'],'event_summary',u,2)
     with ThreadPoolExecutor(max_workers=6) as pool:results.extend(pool.map(lambda s:capture(a.output,s),details.values()))

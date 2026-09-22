@@ -63,3 +63,14 @@ Repository health still has four historical failures: missing production archive
 overdue recovery jobs, immutable September 3 release rejection and overdue
 standing-health evidence. None is cleared by relabeling. No claim that every
 model is operational is justified by this repair.
+
+
+## Subsequent all-league completion
+
+The boundary table above records PR43's scope at publication. PR44 subsequently
+implements and validates the missing current MLB/WNBA/CFB runtimes and explicit
+initial NBA/NHL/MLS research models. See
+[ALL_MODELS_CURRENT_RUNTIME](ALL_MODELS_CURRENT_RUNTIME.md) and the all-seven
+acceptance artifact for current operational evidence. The NFL runtime config also
+now names the selected QB arm directly, removing the stale combined-arm fallback.
+Historical health incidents and model verdicts in the earlier section are preserved.

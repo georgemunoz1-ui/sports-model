@@ -73,7 +73,9 @@ class Integrity(unittest.TestCase):
         from scripts.generate_card_force import load_adapter,normalize
         self.assertEqual(load_adapter('nfl').__name__,nfl.__name__)
         e=nfl.load_schedule('2026-09-14',self.cutoff)[0];c=nfl.build_context([e],self.cutoff);raw=nfl.forecast_event(e,c,1000);row=normalize(e,raw)
-        self.assertEqual(row['dose'],0);self.assertEqual(row['model_id'],'nfl.integrated_context.combined.v1.research');self.assertIn('score_simulation',row['diagnostics'])
+        self.assertEqual(row['dose'],0);self.assertEqual(row['model_id'],'nfl.integrated_context.qb.v1.research')
+        self.assertEqual(row['diagnostics']['score_simulation']['status'],'UNAVAILABLE_FOR_SELECTED_ARM')
+        self.assertIsNone(row['projected_total']);self.assertIsNone(row['projected_margin'])
     def test_explicit_arm_no_fallback(self):
         args=(self.artifact,self.recovered,self.base,self.context,self.event,self.cutoff,1000)
         with self.assertRaisesRegex(ValueError,'EXACT_MODEL_ID_REQUIRED'):run(*args,model_id='missing')

@@ -101,3 +101,11 @@ def test_binary_draw_replay_and_immutable_output(tmp_path,monkeypatch):
     x=np.load(Path(a['simulation']['draw_directory'])/'winner_draws.npy');y=np.load(Path(b['simulation']['draw_directory'])/'winner_draws.npy')
     assert np.array_equal(x,y) and a['sim_p']==float(x.mean()) and a['model_p']==.6
     with pytest.raises(FileExistsError):common.emit(e,ctx,{},.6,2,200,10000)
+
+
+def test_nfl_runtime_default_cannot_point_to_failed_ensemble():
+    from pipelines.cards.selection import select
+    root=Path(__file__).resolve().parents[1]
+    config=json.loads((root/'data/nfl/contextual_v1/runtime.json').read_text())
+    assert config['default_research_model']==select('nfl')['default_model_id']
+    assert 'combined' not in config['default_research_model']

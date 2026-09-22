@@ -954,13 +954,15 @@
     },
     {
       "id": "ALL-SPORTS-OPERABILITY-20260922",
-      "status": "PREREGISTERED_SHADOW_ENGINEERING",
+      "status": "COMPLETED_RESEARCH_ENGINEERING",
       "authorization": "User explicitly requests all models operational with full autonomy on 2026-09-22; existing no-real-money and frozen-verdict protections retained.",
       "scope": "Recover selected MLB/WNBA/CFB paths and fit first research baselines for NBA/NHL/MLS. No failed NFL ensemble promotion.",
       "registered_at_utc": "2026-09-22T07:54:08.745151+00:00",
       "prereg_doc": "docs/experiments/ALL_SPORTS_OPERABILITY_20260922.md",
       "production_model_change": false,
-      "action_authority": false
+      "action_authority": false,
+      "evidence": "docs/releases/2026-09-22-runtimes/combined-remote-ci.json",
+      "no_accuracy_default_promotion": true
     }
   ],
   "known_issues": [
@@ -1445,5 +1447,13 @@
     "report": "docs/NFL_ASSIMILATION_AUDIT.md",
     "action_authority": false,
     "production_promotion": false
+  },
+  "operational_runtime_recovery_20260922": {
+    "status": "ALL_SEVEN_RESEARCH_RUNTIMES_VALIDATED",
+    "evidence": "docs/releases/2026-09-22-runtimes/combined-remote-ci.json",
+    "documentation": "docs/ALL_MODELS_CURRENT_RUNTIME.md",
+    "scope": "Current supported populations; immutable source-bound snapshots, six-hour actual-source TTL",
+    "historical_verdicts_modified": false,
+    "action_authority": false
   }
 }

@@ -1,0 +1,38 @@
+name: September 22 postgame capture
+on:
+  push:
+    branches: [codex/postgame-20260922-0828]
+    paths: ['.github/workflows/postgame-20260922-0828.yml']
+permissions:
+  contents: read
+jobs:
+  capture:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Capture official results and independent scoreboards
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          from concurrent.futures import ThreadPoolExecutor
+          import hashlib,json,datetime
+          from scripts.recovery_capture import capture,save_json,ROUTES
+          root=Path('postgame-sources');root.mkdir()
+          specs=[('mlb','official_schedule','https://statsapi.mlb.com/api/v1/schedule?sportId=1&date=2026-09-22&hydrate=probablePitcher,linescore,venue',1)]
+          for league,route in ROUTES.items():
+           for day in ['20260922','20260923']:
+            specs.append((league,'schedule',f'https://site.api.espn.com/apis/site/v2/sports/{route}/scoreboard?dates={day}&limit=1000',2))
+          for gid in range(1022600319,1022600324):
+           specs.append(('wnba','official_boxscore',f'https://cdn.wnba.com/static/json/liveData/boxscore/boxscore_{gid}.json',1))
+          with ThreadPoolExecutor(max_workers=6) as pool: results=list(pool.map(lambda s:capture(root,s),specs))
+          save_json(root/'report.json',{'created_at_utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'slate_date':'2026-09-22','sources':[r for r,j in results]})
+          save_json(root/'manifest.json',{str(p.relative_to(root)):hashlib.sha256(p.read_bytes()).hexdigest() for p in root.rglob('*') if p.is_file()})
+          assert all(r['status']=='CAPTURED' for r,j in results)
+          print('Captured',len(results),'verified HTTP responses')
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: postgame-20260922-${{ github.run_id }}
+          path: postgame-sources
+          retention-days: 90

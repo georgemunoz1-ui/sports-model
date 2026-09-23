@@ -25,7 +25,7 @@ jobs:
       - name: Test leaf counting and packet controls
         run: |
           set -o pipefail
-          python -m pytest tests/test_standing_health_triage.py tests/test_review_mlb_current_readiness.py tests/test_mlb_current_path.py tests/test_model_defaults.py tests/test_current_runtime_contracts.py -q | tee evidence/tests.txt
+          python -m pytest tests/test_mlb_research_review.py tests/test_standing_health_triage.py tests/test_review_mlb_current_readiness.py tests/test_mlb_current_path.py tests/test_model_defaults.py tests/test_current_runtime_contracts.py -q | tee evidence/tests.txt
       - name: Acquire fresh official inputs and execute package context
         id: packet
         continue-on-error: true

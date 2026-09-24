@@ -1,0 +1,53 @@
+name: September 23 postgame source capture
+on:
+  push:
+    branches: [codex/postgame-20260923-1251]
+    paths: ['.github/workflows/postgame-20260923.yml']
+permissions:
+  contents: write
+jobs:
+  capture:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Capture exact result sources
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          from concurrent.futures import ThreadPoolExecutor
+          import json,hashlib,zipfile,base64,subprocess,datetime
+          from scripts.recovery_capture import capture,save_json,ROUTES
+          p=Path('postgame-capture');p.mkdir()
+          specs=[('mlb','official_schedule','https://statsapi.mlb.com/api/v1/schedule?sportId=1&date=2026-09-23&hydrate=probablePitcher,linescore,venue',1)]
+          for day in ['20260923','20260924']:
+           for l,route in ROUTES.items():specs.append((l,'scoreboard',f'https://site.api.espn.com/apis/site/v2/sports/{route}/scoreboard?dates={day}&limit=1000',2))
+          for gid in ['1022600324','1022600325']:specs.append(('wnba','official_boxscore',f'https://cdn.wnba.com/static/json/liveData/boxscore/boxscore_{gid}.json',1))
+          specs.append(('mls','event_summary','https://site.api.espn.com/apis/site/v2/sports/soccer/usa.1/summary?event=761543',2))
+          with ThreadPoolExecutor(max_workers=6) as pool:res=list(pool.map(lambda s:capture(p,s),specs))
+          mlb=next(j for r,j in res if r['kind']=='official_schedule')
+          boxes=[('mlb','official_boxscore',f"https://statsapi.mlb.com/api/v1/game/{g['gamePk']}/boxscore",1) for d in mlb['dates'] for g in d['games']]
+          with ThreadPoolExecutor(max_workers=6) as pool:res+=list(pool.map(lambda s:capture(p,s),boxes))
+          save_json(p/'report.json',{'sources':[r for r,j in res],'date':'2026-09-23','created_at_utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'source_capture_only':True})
+          save_json(p/'manifest.json',{str(f.relative_to(p)):hashlib.sha256(f.read_bytes()).hexdigest() for f in p.rglob('*') if f.is_file()})
+          assert all(r['status']=='CAPTURED' for r,j in res)
+          dest=Path('docs/runs/2026-09-23-postgame');dest.mkdir(parents=True,exist_ok=True)
+          zpath=Path('postgame-source.zip')
+          with zipfile.ZipFile(zpath,'w',zipfile.ZIP_DEFLATED) as z:
+           for f in p.rglob('*'):
+            if f.is_file():z.write(f,str(f.relative_to(p)))
+          (dest/'sources.zip.b64').write_text(base64.b64encode(zpath.read_bytes()).decode()+'\n')
+          (dest/'receipt.json').write_text(json.dumps({'zip_sha256':hashlib.sha256(zpath.read_bytes()).hexdigest(),'capture_count':len(res),'captured_at':datetime.datetime.now(datetime.timezone.utc).isoformat()},indent=2))
+          print('Captured',len(res),'sources; archive bytes',zpath.stat().st_size)
+          
+          PY
+      - name: Preserve small result archive on task branch
+        run: |
+          git config user.name "sports-model-evidence"
+          git config user.email "actions@users.noreply.github.com"
+          git add docs/runs/2026-09-23-postgame
+          git commit -m "Retain September 23 postgame source bytes and receipt"
+          git push origin HEAD:codex/postgame-20260923-1251

@@ -187,6 +187,19 @@ def grade_identity(output_hash, result_source_id):
     return hashlib.sha256(raw.encode()).hexdigest()
 
 
+def bound_grade_identity(card, forecast, result_source_id, card_sha256):
+    provenance = forecast.get("provenance") or {}
+    identity = {
+        "identity_version": 3, "event_id": str(forecast["event_id"]),
+        "model_id": provenance.get("model_id"), "model_version": provenance.get("model_version"),
+        "pregame_cutoff": card.get("requested_as_of_utc", card.get("as_of_utc")),
+        "forecast_generated_at": card["generated_at_utc"],
+        "forecast_output_hash": forecast_output_hash(forecast), "forecast_card_sha256": card_sha256,
+        "result_source_id": result_source_id, "grader_version": GRADER_VERSION,
+    }
+    return hashlib.sha256(json.dumps(identity, sort_keys=True, separators=(",", ":")).encode()).hexdigest()
+
+
 def _paired_summary(rows):
     if not rows:
         return {
@@ -316,7 +329,9 @@ def aggregate(rows):
     }
 
 
-def grade(card, ledger_rows, results, registered_event_ids=()):
+def grade(card, ledger_rows, results, registered_event_ids=(), card_sha256=None):
+    if not card_sha256:
+        raise ValueError("FROZEN_CARD_BINDING_REQUIRED")
     existing = {row["grade_id"]: row for row in ledger_rows}
     added, pending, skipped, duplicates = [], [], [], []
 
@@ -340,7 +355,18 @@ def grade(card, ledger_rows, results, registered_event_ids=()):
             if outcome.get(side + "_team") != forecast.get(side + "_team"):
                 raise ValueError(f"RESULT_TEAM_MISMATCH:{event_id}:{side}")
         output_hash = forecast_output_hash(forecast)
-        identity = grade_identity(output_hash, outcome["result_source_id"])
+        identity = bound_grade_identity(card, forecast, outcome["result_source_id"], card_sha256)
+        legacy_id = grade_identity(output_hash, outcome["result_source_id"])
+        if legacy_id in existing:
+            legacy = existing[legacy_id]
+            if not legacy.get("forecast_card_sha256"):
+                raise ValueError(f"LEGACY_GRADE_BINDING_REQUIRED:{event_id}")
+            if legacy["forecast_card_sha256"] == card_sha256:
+                if (legacy.get("event_id") != event_id
+                        or legacy.get("requested_as_of_utc") != card.get("requested_as_of_utc", card.get("as_of_utc"))):
+                    raise ValueError(f"LEGACY_GRADE_IDENTITY_CONFLICT:{event_id}")
+                # Read-only compatibility: never rewrite already appended v2 grade IDs.
+                identity = legacy_id
         if identity in existing:
             previous = existing[identity]
             actual = previous["actual_result"]
@@ -361,6 +387,7 @@ def grade(card, ledger_rows, results, registered_event_ids=()):
         graded_at = utcnow()
         row = {
             "grade_id": identity,
+            "grade_identity_version": 3,
             "grader_version": GRADER_VERSION,
             "event_id": event_id,
             "card_date": card.get("card_date"),

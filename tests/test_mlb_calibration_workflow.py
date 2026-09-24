@@ -27,7 +27,7 @@ class CalibrationWorkflowTests(unittest.TestCase):
         self.card_path = self.root / "diagnostic_card.json"
         self.results_path = self.root / "results.json"
         self.card = {
-            "league": "MLB", "card_date": "2026-09-04",
+            "league": "MLB", "card_date": "2026-09-04", "requested_as_of_utc": "2026-09-04T09:59:00Z",
             "generated_at_utc": "2026-09-04T10:00:00Z",
             "pit_provenance": {"pit_status": "PIT_ALIGNED", "max_source_timestamp_utc": "2026-09-04T09:59:00Z"},
             "action_authority": False, "market_overlay_enabled": False,
@@ -45,7 +45,8 @@ class CalibrationWorkflowTests(unittest.TestCase):
                 "away_team": "Away " + event, "start_time_utc": "2026-09-04T18:00:00Z",
                 "grading": {"eligible_for_prospective_grading": False, "eligibility_reason": "REGISTRATION_ATTESTATION_REQUIRED",
                             "analytic_p_home": analytic, "stochastic_sim_p_home": sim},
-                "provenance": {"output_hash": "test-only:" + event}, "action_authority": False}
+                "provenance": {"output_hash": "test-only:" + event, "model_id": "test-model", "model_version": "1"},
+                "input_snapshot_hash": "test-input", "model_state_config_hash": "test-state", "action_authority": False}
 
     def game(self, event, home, away, final=True):
         return {"gamePk": event, "status": {"abstractGameState": "Final" if final else "Live",
@@ -104,6 +105,11 @@ class CalibrationWorkflowTests(unittest.TestCase):
         before = self.durable()
         self.assertEqual(self.run_grade("2026-09-22"), 2)
         self.assertEqual(self.durable(), before)
+        no_selection = json.loads((self.root / "output/registry_grade_run.json").read_text())
+        self.assertEqual(no_selection["status"], "NO_ELIGIBLE_FORECASTS")
+        self.assertFalse(no_selection["success"])
+        self.assertEqual(no_selection["grade_count"], 0)
+        self.assertEqual(no_selection["grading_state"], "NO_PREGAME_REGISTRATION")
         self.assertIn("UNREGISTERED_CARD_DATE", (self.root / "output/registry_grade_run.json").read_text())
 
     def test_all_pending_selection_revisits_old_date(self):
@@ -114,7 +120,7 @@ class CalibrationWorkflowTests(unittest.TestCase):
         before = self.durable()
         self.assertEqual(self.run_grade(date=None, output="empty"), 0)
         self.assertEqual(self.durable(), before)
-        self.assertEqual(json.loads((self.root / "empty/registry_grade_run.json").read_text())["status"], "NO_PENDING_CARDS")
+        self.assertEqual(json.loads((self.root / "empty/registry_grade_run.json").read_text())["status"], "NO_ELIGIBLE_FORECASTS")
 
     def test_result_conflict_rejects_entire_batch_without_mutation(self):
         self.assertEqual(self.run_grade(), 0)
@@ -231,6 +237,19 @@ class CalibrationWorkflowTests(unittest.TestCase):
                 writer.validate_registration(self.card_path, broken, "2026-09-04")
         with self.assertRaisesRegex(ValueError, "IDENTITY"):
             writer.validate_registration(self.card_path, entry, "2026-09-22")
+
+    def test_full_identity_changes_key_and_generated_at_start_rejects(self):
+        f = self.card["forecasts"][0]
+        initial = acc.bound_grade_identity(self.card, f, "1", "frozen")
+        for field, value in (("event_id", "other"), ("provenance", {**f["provenance"], "model_version": "2"}),
+                             ("provenance", {**f["provenance"], "output_hash": "other"})):
+            changed = {**f, field: value}
+            self.assertNotEqual(initial, acc.bound_grade_identity(self.card, changed, "1", "frozen"))
+        self.assertNotEqual(initial, acc.bound_grade_identity({**self.card, "requested_as_of_utc": "2026-09-04T09:58:00Z"}, f, "1", "frozen"))
+        late = copy.deepcopy(self.card)
+        late["generated_at_utc"] = "2026-09-04T18:00:00Z"
+        with self.assertRaises(ValueError):
+            writer.validate_card(late, "2026-09-04", "2026-09-04T18:00:00Z")
 
     def test_download_failure_is_not_green(self):
         # Pinned local cards remove runtime download dependence; an unavailable pinned card fails.

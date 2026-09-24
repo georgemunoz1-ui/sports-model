@@ -13,8 +13,10 @@ not repair the missing evidence.
 
 - Scheduled grading selects every pending registered card, so older partial cards
   remain eligible for subsequent result checks. An explicitly requested unregistered
-  date fails with `UNREGISTERED_CARD_DATE` and does not change durable state. An
-  exhausted pending queue reports `NO_PENDING_CARDS` without a timestamp commit.
+  date fails with `UNREGISTERED_CARD_DATE` and does not change durable state. A
+  zero-selection query reports `NO_ELIGIBLE_FORECASTS`, `grade_count=0`, and
+  `success=false` without a timestamp commit. An exhausted queue is a process
+  no-op; an explicitly unregistered date exits nonzero.
 - The default-branch Diagnostic Shadow Card workflow uploads its immutable artifact,
   then invokes a writer that downloads that exact artifact, checks its card hash,
   validates pregame/PIT/probability restrictions and stamps the actual writer clock.
@@ -105,3 +107,36 @@ Locally generated or branch-only diagnostic cards do not silently join this regi
 Model defaults, forecast computations, market overlay, action authority and release
 policy files are unchanged. The change is reviewable as a PR; it is not active on
 main until merged.
+
+## Final review acceptance addendum
+
+The original remote consolidation run passed **393 tests** and all validation
+steps, then failed artifact archival because GitHub's artifact storage quota was
+exhausted. No artifacts were deleted and no storage/billing limit was changed.
+The final workflow additionally emits the complete deterministic acceptance JSON
+in the job log and compares it with the committed local report. Artifact upload
+remains an independently visible final step; a quota failure is not relabeled PASS.
+
+`acceptance.json` binds all 16 event IDs to model/version, generation/start times,
+probability orientation, output hash and input/state snapshots. All 16 scheduled
+September 4 events in the retained daily snapshot appear in the frozen registered
+card and recovered ledger; excluded September 4 count is zero for this registry.
+It also verifies first ingestion in an isolated test store, two fresh-process
+replays against copies of committed registry state, and independent Brier arithmetic.
+The first published PR commit `e4ad413145a49a418eb99e055f148ff24effbbb3`
+remains an immutable backup. Real forecast and grade bytes are never rewritten.
+
+New grade uniqueness keys explicitly bind event, model/version, cutoff,
+creation time, card hash and output hash. Existing recovered v2 IDs are recognized
+only through matching card/event/cutoff bindings; their original bytes stay intact.
+Additional admission checks require model/version and input/state snapshot identity.
+The generator itself still cannot self-certify grading eligibility.
+
+Reports expose `NO_PREGAME_REGISTRATION` for September 21–22 and
+`REPLAY_IDEMPOTENT` for duplicate-free retries. Existing durable legacy statuses
+remain backward compatible. The acceptance gate does not count missing registration
+as a loss, a 0–0 record, or a no-game day.
+
+Merge scope remains registry/governance repair. The standalone model/release health
+issues are not resolved by merging this PR. No protected default or authority file
+is changed relative to the PR base.

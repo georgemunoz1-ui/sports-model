@@ -17,12 +17,28 @@ jobs:
         with:
           python-version: '3.12'
       - run: pip install -r requirements-consolidated.txt
-      - run: python -m pytest tests -q | tee /tmp/unit-tests.txt
+      - shell: bash
+        run: python -m pytest tests -q | tee /tmp/unit-tests.txt
       - run: python scripts/model_defaults.py > /tmp/selected-models.json
       - run: |
           python -m sportsim --help > /tmp/sportsim-help.txt
           python scripts/run_nfl_integrated.py --help > /tmp/nfl-help.txt
           python scripts/prepare_mlb_current.py --help > /tmp/mlb-help.txt
+      - name: Verify MLB calibration acceptance against committed registry
+        # This acceptance fixture pins PR46's recovered n=16 state, not future daily grades.
+        if: ${{ github.event_name == 'pull_request' && github.event.pull_request.number == 46 }}
+        shell: bash
+        run: |
+          python scripts/verify_mlb_calibration_acceptance.py --output /tmp/mlb-calibration-acceptance.json
+          python - <<'PYCODE'
+          import json
+          from pathlib import Path
+          expected = json.loads(Path('docs/releases/2026-09-24-mlb-grading/acceptance.json').read_text())
+          actual = json.loads(Path('/tmp/mlb-calibration-acceptance.json').read_text())
+          if actual != expected:
+              raise SystemExit('LOCAL_REMOTE_CALIBRATION_ACCEPTANCE_MISMATCH')
+          print('LOCAL_REMOTE_CALIBRATION_ACCEPTANCE_MATCH')
+          PYCODE
       - name: Record health independently from software acceptance
         run: |
           set +e
@@ -42,6 +58,7 @@ jobs:
         with:
           name: consolidation-verification
           path: |
+            /tmp/mlb-calibration-acceptance.json
             /tmp/unit-tests.txt
             /tmp/selected-models.json
             /tmp/*-help.txt

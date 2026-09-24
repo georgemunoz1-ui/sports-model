@@ -73,7 +73,8 @@ def verify_invariants(card_path, pre_digest, ledger_path):
     by_hash = {forecast_output_hash(row): row for row in forecasts}
     hashes = [forecast_output_hash(row) for row in forecasts]
     ledger = load_ledger(ledger_path)
-    relevant = [row for row in ledger if row.get("forecast_output_hash") in by_hash and row.get("grader_version") == GRADER_VERSION]
+    relevant = [row for row in ledger if row.get("forecast_output_hash") in by_hash and row.get("grader_version") == GRADER_VERSION
+                and row.get("forecast_card_sha256") == pre_digest]
     grade_ids = [row.get("grade_id") for row in ledger]
     failures = []
 
@@ -164,7 +165,7 @@ def main(argv=None):
                     card, eligible_ids = validate_registration(card_path, entry, card_date)
                     pre_digest = sha256_file(card_path)
                     outcomes = accumulator.outcome_map(card_date, args.results_json, snapshots)
-                    added, pending, skipped, duplicates = accumulator.grade(card, ledger, outcomes, eligible_ids)
+                    added, pending, skipped, duplicates = accumulator.grade(card, ledger, outcomes, eligible_ids, pre_digest)
                     for row in added:
                         row["forecast_card_sha256"] = pre_digest
                         row["forecast_run_id"] = entry["run_id"]
@@ -189,6 +190,7 @@ def main(argv=None):
                         if status == "GRADED":
                             entry["graded_at_utc"] = utcnow()
                     report = {"card_date": card_date, "run_id": entry["run_id"], "status": status,
+                              "grading_state": "MISSING_RESULT" if pending else "REPLAY_IDEMPOTENT" if duplicates and not added else "GRADED",
                               "added_count": len(added), "duplicate_grades": duplicates,
                               "pending_event_ids": pending, "skipped": skipped, "invariants": invariants}
                     results.append(report)
@@ -222,9 +224,13 @@ def main(argv=None):
             atomic_json(output / ("grade_report_" + report["card_date"] + ".json"), report)
             if args.report_out:
                 atomic_json(Path(args.report_out), report)
-        status = "FAILED" if errors else "COMPLETED" if selected else "ALREADY_GRADED" if args.grade_date else "NO_PENDING_CARDS"
+        status = "NO_ELIGIBLE_FORECASTS" if not selected else "FAILED" if errors else "COMPLETED"
         combined = {"artifact_type": "mlb_calibration_registry_grade_run_v2", "grader_version": GRADER_VERSION,
                     "generated_at_utc": utcnow(), "status": status, "selected_count": len(selected),
+                    "success": bool(selected) and not errors,
+                    "grade_count": sum(r.get("added_count", 0) for r in results) if not errors else 0,
+                    "grading_state": "NO_PREGAME_REGISTRATION" if args.grade_date and args.grade_date not in cards
+                        else "REPLAY_IDEMPOTENT" if not selected and args.grade_date else None,
                     "added_count": sum(r.get("added_count", 0) for r in results) if not errors else 0,
                     "durable_ledger_count": len(load_ledger(ledger_path)), "errors": errors, "results": results,
                     "market_overlay_enabled": False, "action_authority": False}

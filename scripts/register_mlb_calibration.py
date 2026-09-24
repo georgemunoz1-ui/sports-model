@@ -68,13 +68,19 @@ def validate_card(card, card_date, registered_at):
     source = dt(pit["max_source_timestamp_utc"])
     registered = dt(registered_at)
     # Retain the card's declared PIT policy; registration never repairs its input vintage.
-    if source > created or created > registered:
+    cutoff = dt(card.get("requested_as_of_utc", card.get("as_of_utc")))
+    if cutoff > created or source > created or created > registered:
         raise ValueError("REGISTRATION_CHRONOLOGY_INVALID")
     rows = [r for r in card.get("forecasts", []) if r.get("forecast_status") == "FORECAST_GENERATED"]
     if not rows:
         raise ValueError("NO_GENERATED_FORECASTS")
     ids, hashes = set(), set()
     for row in rows:
+        provenance = row.get("provenance") or {}
+        if not provenance.get("model_id") or not provenance.get("model_version") or not provenance.get("output_hash"):
+            raise ValueError("MODEL_OR_FROZEN_OUTPUT_IDENTITY_REQUIRED")
+        if not row.get("input_snapshot_hash") or not row.get("model_state_config_hash"):
+            raise ValueError("INPUT_SNAPSHOT_BINDING_REQUIRED")
         event_id = str(row["event_id"])
         output_hash = forecast_output_hash(row)
         if event_id in ids or output_hash in hashes:

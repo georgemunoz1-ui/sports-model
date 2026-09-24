@@ -62,7 +62,7 @@ jobs:
           pip freeze --all > "$RUNNER_TEMP/health-triage/pip-freeze.txt"
           python -VV > "$RUNNER_TEMP/health-triage/python.txt"
       - name: Recover explicitly named candidate snapshot
-        id: archive
+        id: archive_checkout
         if: always() && steps.identity.outcome == 'success'
         uses: actions/checkout@v4
         with:
@@ -71,11 +71,15 @@ jobs:
           path: recovered-pitch-archive
           sparse-checkout: data/raw/2026/daily
           persist-credentials: false
+      - name: Stage recovered dependency outside source checkout
+        id: archive
+        if: always() && steps.archive_checkout.outcome == 'success'
+        run: mv "$GITHUB_WORKSPACE/recovered-pitch-archive" "$RUNNER_TEMP/recovered-pitch-archive"
       - name: Verify restored bytes and parser schema
         id: archive_verification
         if: always() && steps.archive.outcome == 'success' && steps.dependencies.outcome == 'success'
         env:
-          SPORTSMODEL_LANCEBROZ_ROOT: ${{ github.workspace }}/recovered-pitch-archive
+          SPORTSMODEL_LANCEBROZ_ROOT: ${{ runner.temp }}/recovered-pitch-archive
           SPORTSMODEL_LANCEBROZ_COMMIT: d49271818de98ee3b582dce134bb724861dda859
         run: |
           python - <<'PY'
@@ -102,7 +106,7 @@ jobs:
         id: health
         if: always()
         env:
-          SPORTSMODEL_LANCEBROZ_ROOT: ${{ github.workspace }}/recovered-pitch-archive
+          SPORTSMODEL_LANCEBROZ_ROOT: ${{ runner.temp }}/recovered-pitch-archive
           SPORTSMODEL_LANCEBROZ_COMMIT: d49271818de98ee3b582dce134bb724861dda859
         run: |
           set +e
@@ -141,7 +145,7 @@ jobs:
         with:
           if-no-files-found: error
           name: pinned-pitch-recovery-candidate
-          path: recovered-pitch-archive/data/raw/2026/daily/
+          path: ${{ runner.temp }}/recovered-pitch-archive/data/raw/2026/daily/
           retention-days: 90
       - name: Enforce all results after evidence upload
         if: always()

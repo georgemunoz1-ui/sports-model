@@ -52,11 +52,20 @@ jobs:
         run: |
           git rev-parse HEAD > /tmp/commit.txt
           git status --porcelain > /tmp/worktree-status.txt
+          # Repack losslessly; retain every ref and its complete reachable history.
+          git for-each-ref --format='%(objectname) %(refname)' > /tmp/refs-before.txt
+          git -c pack.window=250 -c pack.depth=50 -c pack.compression=9 repack -a -d -f
+          git for-each-ref --format='%(objectname) %(refname)' > /tmp/refs-after.txt
+          cmp /tmp/refs-before.txt /tmp/refs-after.txt
           git bundle create /tmp/repository-all.bundle --all
+          git bundle verify /tmp/repository-all.bundle
+          sha256sum /tmp/repository-all.bundle > /tmp/repository-all.bundle.sha256
       - uses: actions/upload-artifact@v4
         if: always()
         with:
           name: consolidation-verification
+          compression-level: 9
+          if-no-files-found: error
           path: |
             /tmp/mlb-calibration-acceptance.json
             /tmp/unit-tests.txt
@@ -67,3 +76,6 @@ jobs:
             /tmp/commit.txt
             /tmp/worktree-status.txt
             /tmp/repository-all.bundle
+            /tmp/repository-all.bundle.sha256
+            /tmp/refs-before.txt
+            /tmp/refs-after.txt

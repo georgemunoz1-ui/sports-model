@@ -7,12 +7,16 @@ import hashlib
 import json
 import math
 import shutil
-import subprocess
 import sys
+import tempfile
 from datetime import datetime, timezone
 from pathlib import Path
 
-GRADER_VERSION = "mlb.calibration_grader.v2"
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+from scripts import accumulate_mlb_calibration as accumulator
+from scripts.register_mlb_calibration import atomic_json, registry_lock, validate_registration
+
+GRADER_VERSION = accumulator.GRADER_VERSION
 
 
 def utcnow():
@@ -33,39 +37,13 @@ def load_registry(path):
     return json.loads(path.read_text())
 
 
-def save_registry(path, registry):
-    path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(json.dumps(registry, indent=2, sort_keys=True) + "\n")
-
-
 def load_ledger(path):
     if not path.exists():
         return []
     return [json.loads(line) for line in path.read_text().splitlines() if line.strip()]
 
 
-def finite_prob(value):
-    try:
-        number = float(value)
-    except Exception:
-        return False
-    return math.isfinite(number) and 0.0 <= number <= 1.0
-
-
-def home_probability(row, explicit_key, legacy_key):
-    grading = row.get("grading") or {}
-    if finite_prob(grading.get(explicit_key)):
-        return float(grading[explicit_key])
-    value = row.get(legacy_key)
-    if not finite_prob(value):
-        return None
-    value = float(value)
-    if row.get("model_winner") == row.get("home_team"):
-        return value
-    if row.get("model_winner") == row.get("away_team"):
-        return 1.0 - value
-    return None
-
+home_probability = accumulator.home_probability
 
 def calibration_bin(probability):
     low = min(0.9, math.floor(float(probability) * 10.0) / 10.0)
@@ -144,121 +122,116 @@ def verify_invariants(card_path, pre_digest, ledger_path):
     }
 
 
-def main():
-    parser = argparse.ArgumentParser()
+def main(argv=None):
+    parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--registry", default="data/grading/mlb/registry.json")
     parser.add_argument("--ledger", default="data/grading/mlb/calibration_ledger.jsonl")
     parser.add_argument("--summary", default="data/grading/mlb/calibration_summary.json")
     parser.add_argument("--output-dir", default="output/mlb_grading")
     parser.add_argument("--grade-date")
     parser.add_argument("--include-graded", action="store_true")
-    args = parser.parse_args()
-
-    registry_path = Path(args.registry)
-    ledger_path = Path(args.ledger)
-    registry = load_registry(registry_path)
-    cards = registry.setdefault("cards", {})
+    parser.add_argument("--results-json", help="Retained official schedule bytes; requires --grade-date")
+    parser.add_argument("--card", help="Assert an exact match to the registered frozen card")
+    parser.add_argument("--report-out", help="Compatibility path for a single-card grading report")
+    args = parser.parse_args(argv)
+    if (args.results_json or args.card or args.report_out) and not args.grade_date:
+        parser.error("single-card arguments require --grade-date")
     output = Path(args.output_dir)
     output.mkdir(parents=True, exist_ok=True)
-    results = []
-
-    selected = []
-    for card_date, entry in sorted(cards.items()):
-        if args.grade_date and card_date != args.grade_date:
-            continue
-        if entry.get("status") == "GRADED" and not args.include_graded:
-            continue
-        selected.append((card_date, entry))
-
-    for card_date, entry in selected:
-        run_id = entry.get("run_id")
-        if not run_id:
-            results.append({"card_date": card_date, "status": "ERROR", "reason": "RUN_ID_MISSING"})
-            continue
-
-        work = output / f"run-{run_id}"
-        if work.exists():
-            shutil.rmtree(work)
-        work.mkdir(parents=True)
-        try:
-            subprocess.run(["gh", "run", "download", str(run_id), "--dir", str(work)], check=True)
-        except subprocess.CalledProcessError as exc:
-            results.append({"card_date": card_date, "run_id": run_id, "status": "ERROR", "reason": f"ARTIFACT_DOWNLOAD_FAILED:{exc.returncode}"})
-            continue
-
-        candidates = sorted(work.rglob("diagnostic_card.json"))
-        if not candidates:
-            results.append({"card_date": card_date, "run_id": run_id, "status": "ERROR", "reason": "DIAGNOSTIC_CARD_NOT_FOUND"})
-            continue
-        if len(candidates) > 1:
-            results.append({"card_date": card_date, "run_id": run_id, "status": "ERROR", "reason": "MULTIPLE_DIAGNOSTIC_CARDS_FOUND"})
-            continue
-
-        card_path = candidates[0]
-        pre_digest = sha256_file(card_path)
-        report_path = output / f"grade_report_{card_date}.json"
-        cmd = [
-            sys.executable,
-            "scripts/accumulate_mlb_calibration.py",
-            "--card", str(card_path),
-            "--ledger", args.ledger,
-            "--summary-out", args.summary,
-            "--report-out", str(report_path),
-        ]
-        subprocess.run(cmd, check=True)
-        report = json.loads(report_path.read_text())
-        invariant_report = verify_invariants(card_path, pre_digest, ledger_path)
-        if invariant_report["status"] != "PASS":
-            raise SystemExit("GRADE_INVARIANT_FAILURE:" + ",".join(invariant_report["failures"]))
-
-        pending = report.get("pending_event_ids", [])
-        skipped = report.get("skipped", [])
-        graded_count = invariant_report["graded_rows_for_card_current_version"]
-        entry["last_grade_attempt_utc"] = utcnow()
-        entry["last_report"] = {
-            "added_count": report.get("added_count"),
-            "existing_grade_count": len(report.get("duplicate_grades", [])),
-            "graded_count": graded_count,
-            "pending_count": len(pending),
-            "skipped_count": len(skipped),
-            "invariant_status": invariant_report["status"],
-        }
-
-        if skipped:
-            entry["status"] = "REVIEW_REQUIRED"
-        elif pending and graded_count > 0:
-            entry["status"] = "PARTIALLY_GRADED"
-        elif pending:
-            entry["status"] = "AWAITING_OUTCOMES"
-        else:
-            entry["status"] = "GRADED"
-            entry["graded_at_utc"] = utcnow()
-
-        results.append({
-            "card_date": card_date,
-            "run_id": run_id,
-            "status": entry["status"],
-            "added_count": report.get("added_count"),
-            "existing_grades": report.get("duplicate_grades", []),
-            "pending_event_ids": pending,
-            "skipped": skipped,
-            "invariants": invariant_report,
-        })
-
-    registry["updated_at_utc"] = utcnow()
-    save_registry(registry_path, registry)
-    combined = {
-        "artifact_type": "mlb_calibration_registry_grade_run_v2",
-        "grader_version": GRADER_VERSION,
-        "generated_at_utc": utcnow(),
-        "selected_count": len(selected),
-        "results": results,
-        "market_overlay_enabled": False,
-        "action_authority": False,
-    }
-    (output / "registry_grade_run.json").write_text(json.dumps(combined, indent=2, sort_keys=True) + "\n")
-    print(json.dumps(combined, indent=2, sort_keys=True))
+    registry_path, ledger_path = Path(args.registry), Path(args.ledger)
+    with registry_lock(registry_path):
+        registry = load_registry(registry_path)
+        original_registry = json.loads(json.dumps(registry))
+        cards = registry.get("cards", {})
+        selected = [(date, entry) for date, entry in sorted(cards.items())
+                    if (not args.grade_date or date == args.grade_date)
+                    and (args.include_graded or entry.get("status") != "GRADED")]
+        errors, results = [], []
+        if args.grade_date and args.grade_date not in cards:
+            errors.append("UNREGISTERED_CARD_DATE:" + args.grade_date)
+        ledger = load_ledger(ledger_path)
+        ids = [r["grade_id"] for r in ledger]
+        if len(ids) != len(set(ids)):
+            errors.append("DUPLICATE_GRADE_ID_IN_LEDGER")
+        snapshots = output / "result_snapshots"
+        with tempfile.TemporaryDirectory(dir=output) as staging:
+            staged_ledger = Path(staging) / "ledger.jsonl"
+            for card_date, entry in selected:
+                try:
+                    card_path = Path(entry["card_path"])
+                    if args.card and sha256_file(Path(args.card)) != entry.get("card_sha256"):
+                        raise ValueError("ASSERTED_CARD_HASH_MISMATCH")
+                    card, eligible_ids = validate_registration(card_path, entry, card_date)
+                    pre_digest = sha256_file(card_path)
+                    outcomes = accumulator.outcome_map(card_date, args.results_json, snapshots)
+                    added, pending, skipped, duplicates = accumulator.grade(card, ledger, outcomes, eligible_ids)
+                    for row in added:
+                        row["forecast_card_sha256"] = pre_digest
+                        row["forecast_run_id"] = entry["run_id"]
+                        row["registration_at_utc"] = entry["registered_at_utc"]
+                    # Verify candidates before changing the durable ledger or registry.
+                    staged_ledger.write_text("".join(json.dumps(r) + "\n" for r in ledger))
+                    invariants = verify_invariants(card_path, pre_digest, staged_ledger)
+                    if invariants["status"] != "PASS":
+                        raise ValueError("GRADE_INVARIANT_FAILURE:" + ",".join(invariants["failures"]))
+                    if skipped:
+                        raise ValueError("FORECASTS_SKIPPED:" + json.dumps(skipped, sort_keys=True))
+                    graded = invariants["graded_rows_for_card_current_version"]
+                    if graded + len(pending) != len(eligible_ids):
+                        raise ValueError("GRADE_COVERAGE_MISMATCH")
+                    status = "PARTIALLY_GRADED" if pending and graded else "AWAITING_OUTCOMES" if pending else "GRADED"
+                    last_report = {"graded_count": graded, "pending_count": len(pending), "skipped_count": 0,
+                                   "invariant_status": "PASS"}
+                    if entry.get("status") != status or any(entry.get("last_report", {}).get(k) != v for k, v in last_report.items()):
+                        entry["status"] = status
+                        entry["last_grade_attempt_utc"] = utcnow()
+                        entry["last_report"] = {**last_report, "added_count": len(added), "existing_grade_count": len(duplicates)}
+                        if status == "GRADED":
+                            entry["graded_at_utc"] = utcnow()
+                    report = {"card_date": card_date, "run_id": entry["run_id"], "status": status,
+                              "added_count": len(added), "duplicate_grades": duplicates,
+                              "pending_event_ids": pending, "skipped": skipped, "invariants": invariants}
+                    results.append(report)
+                except (ValueError, KeyError, OSError, TypeError) as exc:
+                    errors.append(f"{card_date}:{exc}")
+                    results.append({"card_date": card_date, "status": "ERROR", "reason": str(exc)})
+            metrics = accumulator.aggregate(ledger)
+            if not errors and selected:
+                # The append is the recovery point: a retry reconstructs derived state from it.
+                result_dir = registry_path.parent / "results"
+                if snapshots.exists():
+                    result_dir.mkdir(parents=True, exist_ok=True)
+                    for source in snapshots.iterdir():
+                        target = result_dir / source.name
+                        if target.exists() and not source.name.endswith(".receipt.json") and target.read_bytes() != source.read_bytes():
+                            raise ValueError("RESULT_SNAPSHOT_CONFLICT:" + source.name)
+                        if not target.exists():
+                            shutil.copyfile(source, target)
+                accumulator.save_ledger(ledger_path, ledger)
+                summary_path = Path(args.summary)
+                prior_summary = json.loads(summary_path.read_text()) if summary_path.exists() else {}
+                if prior_summary.get("metrics") != metrics:
+                    atomic_json(summary_path, {"artifact_type": "mlb_probability_calibration_summary_v2",
+                                "generated_at_utc": utcnow(), "grader_version": GRADER_VERSION,
+                                "market_overlay_enabled": False, "action_authority": False, "metrics": metrics})
+                if registry != original_registry:
+                    registry["updated_at_utc"] = utcnow()
+                    atomic_json(registry_path, registry)
+        for report in results:
+            report["persisted"] = not errors
+            atomic_json(output / ("grade_report_" + report["card_date"] + ".json"), report)
+            if args.report_out:
+                atomic_json(Path(args.report_out), report)
+        status = "FAILED" if errors else "COMPLETED" if selected else "ALREADY_GRADED" if args.grade_date else "NO_PENDING_CARDS"
+        combined = {"artifact_type": "mlb_calibration_registry_grade_run_v2", "grader_version": GRADER_VERSION,
+                    "generated_at_utc": utcnow(), "status": status, "selected_count": len(selected),
+                    "added_count": sum(r.get("added_count", 0) for r in results) if not errors else 0,
+                    "durable_ledger_count": len(load_ledger(ledger_path)), "errors": errors, "results": results,
+                    "market_overlay_enabled": False, "action_authority": False}
+        atomic_json(output / "registry_grade_run.json", combined)
+        print(json.dumps(combined, indent=2, sort_keys=True))
+        return 2 if errors else 0
 
 
 if __name__ == "__main__":
-    main()
+    raise SystemExit(main())

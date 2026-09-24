@@ -10,6 +10,7 @@ import argparse
 import hashlib
 import json
 import math
+import os
 import statistics
 import urllib.request
 from datetime import datetime, timezone
@@ -25,13 +26,9 @@ def utcnow():
     return datetime.now(timezone.utc).isoformat().replace("+00:00", "Z")
 
 
-def get_json(url):
-    req = urllib.request.Request(url, headers={"User-Agent": "sports-model-calibration/2.0"})
-    with urllib.request.urlopen(req, timeout=30) as response:
-        return json.load(response)
-
-
 def finite_prob(value):
+    if isinstance(value, bool):
+        return False
     try:
         number = float(value)
     except Exception:
@@ -93,41 +90,80 @@ def load_ledger(path):
 
 
 def save_ledger(path, rows):
+    """Append a validated suffix; never rewrite, reorder or truncate prior bytes."""
+    existing = load_ledger(path)
+    if rows[:len(existing)] != existing:
+        raise ValueError("LEDGER_PREFIX_MUTATED")
+    ids = [row["grade_id"] for row in rows]
+    if len(ids) != len(set(ids)):
+        raise ValueError("DUPLICATE_GRADE_ID_IN_LEDGER")
+    suffix = rows[len(existing):]
+    if not suffix:
+        return
+    if path.exists() and path.stat().st_size and not path.read_bytes().endswith(b"\n"):
+        raise ValueError("LEDGER_INCOMPLETE_LAST_LINE")
     path.parent.mkdir(parents=True, exist_ok=True)
-    ordered = sorted(rows, key=lambda row: (row.get("card_date", ""), row.get("event_id", ""), row.get("grade_id", "")))
-    path.write_text("".join(json.dumps(row, sort_keys=True, separators=(",", ":")) + "\n" for row in ordered))
+    with path.open("a") as handle:
+        handle.write("".join(json.dumps(row, sort_keys=True, separators=(",", ":")) + "\n" for row in suffix))
+        handle.flush()
+        os.fsync(handle.fileno())
 
 
-def outcome_map(card_date, results_json=None):
+def outcome_map(card_date, results_json=None, capture_path=None):
+    url = f"{BASE}/schedule?sportId=1&date={card_date}"
     if results_json:
-        data = json.loads(Path(results_json).read_text())
+        raw = Path(results_json).read_bytes()
         source = "RESULTS_JSON"
     else:
-        data = get_json(f"{BASE}/schedule?sportId=1&date={card_date}")
+        req = urllib.request.Request(url, headers={"User-Agent": "sports-model-calibration/2.0"})
+        with urllib.request.urlopen(req, timeout=30) as response:
+            raw = response.read()
         source = RESULT_SOURCE
     observed_at = utcnow()
+    digest = hashlib.sha256(raw).hexdigest()
+    data = json.loads(raw)
+    if not isinstance(data.get("dates"), list):
+        raise ValueError("RESULT_SCHEDULE_INVALID")
+    if capture_path:
+        capture_path = Path(capture_path)
+        capture_path.mkdir(parents=True, exist_ok=True)
+        target = capture_path / (digest + ".json")
+        if not target.exists():
+            target.write_bytes(raw)
+        elif target.read_bytes() != raw:
+            raise ValueError("RESULT_SNAPSHOT_CONFLICT")
+        receipt = {"sha256": digest, "source": source, "url": url if not results_json else None,
+                   "source_file": str(results_json) if results_json else None,
+                   "observed_at_utc": observed_at}
+        receipt_path = capture_path / (digest + ".receipt.json")
+        if not receipt_path.exists():
+            receipt_path.write_text(json.dumps(receipt, indent=2, sort_keys=True) + "\n")
     result = {}
-    for date_row in data.get("dates", []):
+    for date_row in data["dates"]:
+        if date_row.get("date") != card_date:
+            continue
         for game in date_row.get("games", []):
             event_id = str(game.get("gamePk"))
             status = game.get("status", {})
             abstract = status.get("abstractGameState")
             detailed = status.get("detailedState")
-            is_final = abstract == "Final" or str(detailed).startswith("Final") or detailed == "Game Over"
+            is_final = abstract == "Final" and detailed in {"Final", "Game Over", "Completed Early"}
             home = game.get("teams", {}).get("home", {})
             away = game.get("teams", {}).get("away", {})
-            home_score = home.get("score")
-            away_score = away.get("score")
-            if is_final and home_score is not None and away_score is not None and int(home_score) != int(away_score):
-                result[event_id] = {
-                    "status": detailed or abstract,
-                    "home_score": int(home_score),
-                    "away_score": int(away_score),
-                    "home_won": int(home_score) > int(away_score),
-                    "result_source": source,
-                    "result_source_id": event_id,
-                    "result_observed_at_utc": observed_at,
-                }
+            hs, aws = home.get("score"), away.get("score")
+            if not is_final:
+                continue
+            if any(type(score) is not int or score < 0 for score in (hs, aws)) or hs == aws:
+                raise ValueError(f"INVALID_FINAL_SCORE:{event_id}")
+            if event_id in result:
+                raise ValueError(f"DUPLICATE_RESULT_EVENT:{event_id}")
+            result[event_id] = {
+                "status": detailed, "home_score": hs, "away_score": aws, "home_won": hs > aws,
+                "home_team": home.get("team", {}).get("name"),
+                "away_team": away.get("team", {}).get("name"),
+                "result_source": source, "result_source_id": event_id,
+                "result_snapshot_sha256": digest, "result_observed_at_utc": observed_at,
+            }
     return result
 
 
@@ -280,15 +316,17 @@ def aggregate(rows):
     }
 
 
-def grade(card, ledger_rows, results):
-    existing = {row["grade_id"] for row in ledger_rows}
+def grade(card, ledger_rows, results, registered_event_ids=()):
+    existing = {row["grade_id"]: row for row in ledger_rows}
     added, pending, skipped, duplicates = [], [], [], []
 
     for forecast in card.get("forecasts", []):
         if forecast.get("forecast_status") != "FORECAST_GENERATED":
             continue
         grading = forecast.get("grading") or {}
-        if grading and grading.get("eligible_for_prospective_grading") is False:
+        attested = (str(forecast.get("event_id")) in registered_event_ids
+                    and grading.get("eligibility_reason") == "REGISTRATION_ATTESTATION_REQUIRED")
+        if grading and grading.get("eligible_for_prospective_grading") is False and not attested:
             skipped.append({"event_id": forecast.get("event_id"), "reason": grading.get("eligibility_reason")})
             continue
 
@@ -298,9 +336,17 @@ def grade(card, ledger_rows, results):
             pending.append(event_id)
             continue
 
+        for side in ("home", "away"):
+            if outcome.get(side + "_team") != forecast.get(side + "_team"):
+                raise ValueError(f"RESULT_TEAM_MISMATCH:{event_id}:{side}")
         output_hash = forecast_output_hash(forecast)
         identity = grade_identity(output_hash, outcome["result_source_id"])
         if identity in existing:
+            previous = existing[identity]
+            actual = previous["actual_result"]
+            if (actual["home_score"], actual["away_score"], previous["home_won"]) != (
+                    outcome["home_score"], outcome["away_score"], outcome["home_won"]):
+                raise ValueError(f"RESULT_CONFLICT:{event_id}")
             duplicates.append({"event_id": event_id, "grade_id": identity, "status": "GRADE_ALREADY_EXISTS"})
             continue
 
@@ -344,6 +390,7 @@ def grade(card, ledger_rows, results):
             "result_source": outcome["result_source"],
             "result_source_id": outcome["result_source_id"],
             "result_observed_at_utc": outcome["result_observed_at_utc"],
+            "result_snapshot_sha256": outcome.get("result_snapshot_sha256"),
             "brier_analytic": brier(analytic_home, y),
             "brier_sim": brier(sim_home, y),
             "brier_difference_analytic_minus_sim": brier(analytic_home, y) - brier(sim_home, y),
@@ -362,7 +409,7 @@ def grade(card, ledger_rows, results):
             row["log_loss_normal_margin_candidate"] = log_loss(candidate_home, y)
         ledger_rows.append(row)
         added.append(row)
-        existing.add(identity)
+        existing[identity] = row
 
     return added, pending, skipped, duplicates
 
@@ -376,47 +423,20 @@ def main():
     parser.add_argument("--results-json")
     args = parser.parse_args()
 
+    # Delegate to the registry transaction, preserving this CLI's output argument names.
+    import sys
+    sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+    from scripts.grade_mlb_registry import main as registry_main
     card = json.loads(Path(args.card).read_text())
-    if str(card.get("league")).upper() != "MLB":
-        raise SystemExit("CARD_LEAGUE_NOT_MLB")
-
-    ledger_path = Path(args.ledger)
-    ledger = load_ledger(ledger_path)
-    results = outcome_map(card["card_date"], args.results_json)
-    added, pending, skipped, duplicates = grade(card, ledger, results)
-    save_ledger(ledger_path, ledger)
-
-    summary = {
-        "artifact_type": "mlb_probability_calibration_summary_v2",
-        "generated_at_utc": utcnow(),
-        "grader_version": GRADER_VERSION,
-        "market_overlay_enabled": False,
-        "action_authority": False,
-        "metrics": aggregate(ledger),
-    }
-    summary_path = Path(args.summary_out)
-    summary_path.parent.mkdir(parents=True, exist_ok=True)
-    summary_path.write_text(json.dumps(summary, indent=2, sort_keys=True) + "\n")
-
-    report = {
-        "artifact_type": "mlb_forecast_grade_run_v2",
-        "grader_version": GRADER_VERSION,
-        "card_date": card.get("card_date"),
-        "added_count": len(added),
-        "added_grade_ids": [row["grade_id"] for row in added],
-        "pending_event_ids": pending,
-        "skipped": skipped,
-        "duplicate_grades": duplicates,
-        "ledger_count": len(ledger),
-        "summary": summary["metrics"],
-        "market_overlay_enabled": False,
-        "action_authority": False,
-    }
-    report_path = Path(args.report_out)
-    report_path.parent.mkdir(parents=True, exist_ok=True)
-    report_path.write_text(json.dumps(report, indent=2, sort_keys=True) + "\n")
-    print(json.dumps(report, indent=2, sort_keys=True))
+    cli = ["--grade-date", card["card_date"], "--ledger", args.ledger,
+           "--summary", args.summary_out, "--output-dir", str(Path(args.report_out).parent),
+           "--include-graded"]
+    if args.results_json:
+        cli.extend(["--results-json", args.results_json])
+    # --card is an assertion, not permission to grade an unregistered artifact.
+    cli.extend(["--card", args.card, "--report-out", args.report_out])
+    return registry_main(cli)
 
 
 if __name__ == "__main__":
-    main()
+    raise SystemExit(main())

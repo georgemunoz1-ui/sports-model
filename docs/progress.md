@@ -4543,3 +4543,19 @@ all supported games and verified empty NBA dates; deterministic replay compares
 retained draw bytes. NFL's selected QB Week 3 path remains independent of PR38 and
 the rejected combined ensemble. See docs/ALL_MODELS_CURRENT_RUNTIME.md for scope,
 source acquisition, exact commands, remaining model limitations and evidence.
+
+## 2026-09-24 — PR45 standing-health evidence ordering repair
+
+Inspected PR45 head 835003d and failed run 35916497206 (merge c92b5a0).
+The retained, hash-verified artifact has 390 passing tests, 4 health failures,
+7 warnings and 9 aged unresolved obligation leaves. Triage's ten errors caused
+an early shell exit that skipped pinned archive recovery and environment capture.
+Split independent evidence steps and added a final strict gate after uploads;
+nonzero/missing exit evidence and failed/skipped phases still reject the run.
+The existing archive pin, all issue cards, deadlines, material ages, session ledger,
+September 3 release, model defaults, parameters and forecasts remain unchanged.
+Workflow-shell regression tests cover failed triage, missing evidence, cancelled
+or skipped steps and the success path. See docs/PR45_HEALTH_READINESS.md for the
+source run, exact remaining closure evidence and reproduction commands.
+This fixes evidence collection, not unresolved historical recovery or predictive
+validity. PR stays draft; no release waiver, promotion or action authority change.

@@ -9,6 +9,7 @@ on:
       - 'harness/recovery_jobs.py'
       - 'harness/ingest_lancebroz.py'
       - 'tests/test_standing_health_triage.py'
+      - 'tests/test_standing_health_workflow.py'
       - '.github/workflows/standing-health-triage.yml'
   workflow_dispatch:
 permissions:
@@ -26,22 +27,43 @@ jobs:
         with:
           python-version: '3.12'
       - name: Preserve clean checkout identity
+        id: identity
         run: |
           mkdir -p "$RUNNER_TEMP/health-triage"
           git rev-parse HEAD > "$RUNNER_TEMP/health-triage/commit.txt"
           git status --porcelain > "$RUNNER_TEMP/health-triage/status-before.txt"
           test ! -s "$RUNNER_TEMP/health-triage/status-before.txt"
           sha256sum requirements-consolidated.txt requirements-nfl-context.txt > "$RUNNER_TEMP/health-triage/requirements.sha256"
-      - run: pip install -r requirements-consolidated.txt
-      - name: Regression checks and governance evidence
+      - name: Install dependencies
+        id: dependencies
+        run: pip install -r requirements-consolidated.txt
+      - name: Regression checks
+        id: regressions
         run: |
           set -o pipefail
           python -m pytest tests -q | tee "$RUNNER_TEMP/health-triage/tests.txt"
-          python harness/recovery_jobs.py --mutants > "$RUNNER_TEMP/health-triage/recovery-mutants.txt"
-          python scripts/standing_health_triage.py > "$RUNNER_TEMP/health-triage/triage.json"
+      - name: Recovery refusal checks
+        id: mutants
+        if: always() && steps.dependencies.outcome == 'success'
+        run: python harness/recovery_jobs.py --mutants > "$RUNNER_TEMP/health-triage/recovery-mutants.txt"
+      - name: Capture triage without skipping independent evidence
+        id: triage
+        if: always() && steps.dependencies.outcome == 'success'
+        run: |
+          set +e
+          python scripts/standing_health_triage.py > "$RUNNER_TEMP/health-triage/triage.json" 2> "$RUNNER_TEMP/health-triage/triage.stderr.txt"
+          result=$?
+          set -e
+          echo "$result" > "$RUNNER_TEMP/health-triage/triage-exit-code.txt"
+      - name: Capture execution environment
+        id: environment
+        if: always() && steps.dependencies.outcome == 'success'
+        run: |
           pip freeze --all > "$RUNNER_TEMP/health-triage/pip-freeze.txt"
           python -VV > "$RUNNER_TEMP/health-triage/python.txt"
       - name: Recover explicitly named candidate snapshot
+        id: archive
+        if: always() && steps.identity.outcome == 'success'
         uses: actions/checkout@v4
         with:
           repository: lancebroz/mlb-pitcher-data
@@ -50,6 +72,8 @@ jobs:
           sparse-checkout: data/raw/2026/daily
           persist-credentials: false
       - name: Verify restored bytes and parser schema
+        id: archive_verification
+        if: always() && steps.archive.outcome == 'success' && steps.dependencies.outcome == 'success'
         env:
           SPORTSMODEL_LANCEBROZ_ROOT: ${{ github.workspace }}/recovered-pitch-archive
           SPORTSMODEL_LANCEBROZ_COMMIT: d49271818de98ee3b582dce134bb724861dda859
@@ -74,7 +98,8 @@ jobs:
           print('ARCHIVE_VERIFICATION='+json.dumps({k:v for k,v in r.items() if k!='objects'}))
           assert r['ok'] and not r['parser_problems']
           PY
-      - name: Record unchanged mandatory health failures
+      - name: Record mandatory health result
+        id: health
         if: always()
         env:
           SPORTSMODEL_LANCEBROZ_ROOT: ${{ github.workspace }}/recovered-pitch-archive
@@ -83,10 +108,11 @@ jobs:
           set +e
           python harness/healthcheck.py > "$RUNNER_TEMP/health-triage/health.log" 2>&1
           result=$?
+          set -e
           echo "$result" > "$RUNNER_TEMP/health-triage/health-exit-code.txt"
           git status --porcelain > "$RUNNER_TEMP/health-triage/status-after.txt"
-          exit 0
       - name: Publish exact evidence manifest
+        id: manifest
         if: always()
         run: |
           python - <<'PY'
@@ -95,20 +121,56 @@ jobs:
           r={'created_at_utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'commit':os.environ['GITHUB_SHA'],'workflow_run_id':os.environ['GITHUB_RUN_ID'],'official_release_eligible':False,'action_authority':'OFF','files':{f.name:hashlib.sha256(f.read_bytes()).hexdigest() for f in p.iterdir() if f.is_file()}}
           (p/'manifest.json').write_text(json.dumps(r,indent=2))
           print('TRIAGE_MANIFEST='+json.dumps(r))
-          for name in ['tests.txt','health-exit-code.txt','archive-verification.json']:
+          for name in ['tests.txt','triage-exit-code.txt','triage.json','health-exit-code.txt','archive-verification.json']:
               f=p/name
               if f.exists(): print('TRIAGE_FILE='+json.dumps({'name':name,'content':f.read_text()}))
           h=p/'health.log'
-          if h.exists(): print('TRIAGE_HEALTH='+json.dumps([s for s in h.read_text().splitlines() if s.startswith('[FAIL]')]))
+          if h.exists(): print('TRIAGE_HEALTH='+json.dumps([s for s in h.read_text().splitlines() if s.startswith(('[FAIL]', '[WARN]', 'REPOSITORY_HEALTH_'))]))
           PY
       - uses: actions/upload-artifact@v4
+        id: evidence_upload
         if: always()
         with:
           name: standing-health-triage-evidence
+          if-no-files-found: error
           path: ${{ runner.temp }}/health-triage/
           retention-days: 90
       - uses: actions/upload-artifact@v4
+        id: archive_upload
+        if: always() && steps.archive_verification.outcome == 'success'
         with:
+          if-no-files-found: error
           name: pinned-pitch-recovery-candidate
           path: recovered-pitch-archive/data/raw/2026/daily/
           retention-days: 90
+      - name: Enforce all results after evidence upload
+        if: always()
+        env:
+          IDENTITY: ${{ steps.identity.outcome }}
+          DEPENDENCIES: ${{ steps.dependencies.outcome }}
+          REGRESSIONS: ${{ steps.regressions.outcome }}
+          MUTANTS: ${{ steps.mutants.outcome }}
+          TRIAGE: ${{ steps.triage.outcome }}
+          ENVIRONMENT: ${{ steps.environment.outcome }}
+          ARCHIVE: ${{ steps.archive.outcome }}
+          ARCHIVE_VERIFICATION: ${{ steps.archive_verification.outcome }}
+          HEALTH: ${{ steps.health.outcome }}
+          MANIFEST: ${{ steps.manifest.outcome }}
+          EVIDENCE_UPLOAD: ${{ steps.evidence_upload.outcome }}
+          ARCHIVE_UPLOAD: ${{ steps.archive_upload.outcome }}
+        run: |
+          result=0
+          for phase in IDENTITY DEPENDENCIES REGRESSIONS MUTANTS TRIAGE ENVIRONMENT ARCHIVE ARCHIVE_VERIFICATION HEALTH MANIFEST EVIDENCE_UPLOAD ARCHIVE_UPLOAD; do
+            if [ "${!phase}" != success ]; then
+              echo "::error::$phase did not succeed: ${!phase}"
+              result=1
+            fi
+          done
+          for check in triage health; do
+            path="$RUNNER_TEMP/health-triage/$check-exit-code.txt"
+            if [ ! -f "$path" ] || [ "$(cat "$path")" != 0 ]; then
+              echo "::error::$check failed or its exit-code evidence is missing"
+              result=1
+            fi
+          done
+          exit "$result"

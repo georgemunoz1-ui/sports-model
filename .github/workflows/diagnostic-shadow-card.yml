@@ -47,8 +47,13 @@ on:
     paths:
       - "card_requests/*.json"
 
+concurrency:
+  group: mlb-calibration-state-${{ github.ref }}
+  cancel-in-progress: false
+
 permissions:
-  contents: read
+  contents: write
+  actions: read
 
 env:
   PYTHONUNBUFFERED: "1"
@@ -341,6 +346,7 @@ jobs:
           fi
 
       - name: Upload diagnostic card artifact
+        id: card_artifact
         if: always()
         uses: actions/upload-artifact@v4
         with:
@@ -348,3 +354,23 @@ jobs:
           path: output/card/
           if-no-files-found: error
           retention-days: 30
+
+      - name: Register pregame MLB calibration card
+        if: ${{ success() && steps.resolve.outputs.league == 'mlb' && github.ref_name == github.event.repository.default_branch }}
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          ARTIFACT_ID: ${{ steps.card_artifact.outputs.artifact-id }}
+          CARD_DATE: ${{ steps.resolve.outputs.card_date }}
+        run: |
+          python scripts/register_mlb_calibration.py \
+            --card output/card/diagnostic_card.json \
+            --run-id "$GITHUB_RUN_ID" \
+            --artifact-id "$ARTIFACT_ID"
+          git config user.name "sports-model-calibration-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add data/grading/mlb/registry.json data/grading/mlb/cards/
+          if ! git diff --cached --quiet; then
+            git commit -m "Register pregame MLB calibration card $CARD_DATE"
+            git push origin "HEAD:${GITHUB_REF_NAME}"
+          fi

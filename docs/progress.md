@@ -4543,3 +4543,17 @@ all supported games and verified empty NBA dates; deterministic replay compares
 retained draw bytes. NFL's selected QB Week 3 path remains independent of PR38 and
 the rejected combined ensemble. See docs/ALL_MODELS_CURRENT_RUNTIME.md for scope,
 source acquisition, exact commands, remaining model limitations and evidence.
+
+
+## 2026-09-24 — MLB calibration grading persistence repair
+
+Scheduled date filtering selected no registered cards yet committed success timestamps.
+Repair retries the pending registry, fails explicit missing dates, and adds a pregame
+writer bound to uploaded card bytes. Grade candidates validate before append; retries
+leave existing bytes unchanged, including after interrupted derived-state publication.
+Recovered 16 September 4 grades using the original run/registration and retained
+official finals. Summary n=16; analytic Brier 0.218148, archived sim Brier 0.240606.
+Exact replay adds zero and preserves forecast/ledger/summary/registry hashes.
+53 focused tests pass; unrelated health/release obligations remain unresolved.
+No model/default, market, action or release-policy changes. No historical registration
+created for September 21/22. See docs/MLB_CALIBRATION_GRADING_REPAIR.md and retained evidence.

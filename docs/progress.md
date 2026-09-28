@@ -4573,3 +4573,26 @@ passed, with unchanged old forecasts and zero report-missingness effect in QB.
 Source-bound Week2 parent retained; no Week3 partial-state advance. Research
 publication remains ineligible; global health RED; market/action authority OFF.
 See docs/NFL_QB_MARGIN_PROCESS.md and docs/releases/2026-09-28-qb-margin/.
+
+## 2026-09-28 — QB integer-margin calibration screen, grading and market display
+
+User requested rerunning the failed improvement screen, optimized calibration,
+enabled grading and an always visible market overlay. Preregistered one bounded
+CRPS blend parameter in commit dbe169b45eb7a99583d66cc566c8f608a43a0f29 before fit.
+The successor nfl.qb_margin.integer_blend.v1.research passed all seven nested
+chronological checks on 1,087 games: CRPS 7.112266 vs 7.124773, paired season CI
+[-0.019593,-0.004182], Brier .433998 vs .435680. Alpha .528957 uses all 1,615
+calibration games; shape history uses all 1,871 QB OOF games. No 2026 outcomes,
+market features or default-model change. Key-number underprediction remains.
+
+Ran integrated 100,000-draw current forecasts for both unresolved Chicago QB
+conditions with the valid Week2 state. Independent verification replays every
+calibration objective and both frozen draw arrays. Separate immutable research
+registrations are enabled and pending; final grading needs agreeing source-bound
+nflverse and official ESPN finals, with actual-QB cohort matching. Canonical
+ledgers and weekly state unchanged. Every research board displays the market
+panel and separate model/simulation cover fields; unknown capture time remains
+explicit. Market predictive inputs and action authority remain OFF. Forecasts,
+original v1 law and prior screens remain frozen. Retrospective PASS does not
+clear prospective validation, market-superiority or global recovery health gates.
+See docs/NFL_QB_MARGIN_CALIBRATION.md and the versioned release verification.

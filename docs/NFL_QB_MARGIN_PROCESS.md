@@ -123,3 +123,13 @@ promotion requires a separately preregistered untouched cohort and the existing
 review gates; this task does not invent that approval or clear global health RED.
 Postgame comparisons must reference these immutable identities and preserve
 research-only grading status; they cannot enter the primary winner denominator.
+
+## September 28 calibration successor
+
+The original screen and forecasts above are preserved. The separately preregistered
+integer-margin calibration successor passed its nested chronological improvement
+screen. New research grading is enabled in a separate append-only ledger, and the
+market comparison panel is always displayed while predictive market inputs remain
+OFF. See [the calibration process](NFL_QB_MARGIN_CALIBRATION.md) for the new model,
+current results, command and final-only grading contract. This does not promote
+or revise the original model.

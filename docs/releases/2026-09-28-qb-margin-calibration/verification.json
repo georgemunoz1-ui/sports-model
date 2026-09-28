@@ -1,0 +1,216 @@
+{
+  "schema": "nfl.qb_margin_calibration_verification.v1",
+  "verified_at_utc": "2026-09-28T11:44:05.505095+00:00",
+  "preregistration_commit": "dbe169b45eb7a99583d66cc566c8f608a43a0f29",
+  "model_id": "nfl.qb_margin.integer_blend.v1.research",
+  "history_rows": 1871,
+  "independently_replayed_calibration_games": 1615,
+  "calibration_alpha": 0.5289571148723023,
+  "screen_passed": true,
+  "screen_metrics": {
+    "games": 1087,
+    "contracts": 7609,
+    "candidate_crps": 7.112266435446448,
+    "reference_crps": 7.124773292098866,
+    "margin_mean_mae": 9.84086804522147,
+    "margin_mean_rmse": 12.743788672947401,
+    "interval_90_coverage": 0.920883164673413,
+    "interval_90_width": 44.77184912603496,
+    "predicted_tie_rate": 0.004311364255326699,
+    "observed_tie_rate": 0.0027598896044158236,
+    "candidate_brier": 0.4339979172105154,
+    "reference_brier": 0.43568047669403964,
+    "candidate_log_loss_clipped": 0.6902469790216598,
+    "reference_log_loss_clipped": 0.6976992080200211,
+    "candidate_zero_mass_observations": 0,
+    "key_number_push": {
+      "3": {
+        "contracts": 2174,
+        "predicted": 0.04738333855235323,
+        "observed": 0.07405703771849126
+      },
+      "7": {
+        "contracts": 2174,
+        "predicted": 0.03324279054740709,
+        "observed": 0.04001839926402944
+      }
+    },
+    "normal_reference_crps": 7.125179034382085,
+    "reference_key_number_push": {
+      "3": {
+        "predicted": 0.029051859013499857,
+        "observed": 0.07405703771849126
+      },
+      "7": {
+        "predicted": 0.025459779367171472,
+        "observed": 0.04001839926402944
+      }
+    }
+  },
+  "paired_crps_95_ci": [
+    -0.01959337114843454,
+    -0.004181759326804621
+  ],
+  "current_runs": [
+    {
+      "scenario": "bagent",
+      "identity": "f697795acddadf0b0d016a0f709eeab7cce0d22c650770bda14451a17ee05749",
+      "seed": 1200568262039123957,
+      "simulations": 100000,
+      "parent_cutoff_utc": "2026-09-28T11:42:04.857378+00:00",
+      "margin_cutoff_utc": "2026-09-28T11:42:09.056141+00:00",
+      "registered_at_utc": "2026-09-28T11:42:09.512439+00:00",
+      "model_file_sha256": "3b4f5ffac298bd522aa74dc73be0626e67dffec43768b9ba35bdac4e014f5a86",
+      "forecast_sha256": "3e12ec534309e56899b12a1b8de2e058d25d6ed7587c473228d4171c23a19257",
+      "raw_draw_sha256": "27600d52ee61f31f5c14127b1dea74eb74aa36e5b193218499cbb8c4c5ac9e3b",
+      "state_id": "e962a66b806e2371f7890ec6bc91c57726282ea2b2467a05761c603f00d406cf",
+      "input_flags": [
+        "CHICAGO_STARTER_CONDITIONAL",
+        "FINAL_INACTIVES_PENDING",
+        "WEATHER_FITTED_IMPUTATION",
+        "NON_QB_AVAILABILITY_NOT_NUMERICALLY_CONSUMED",
+        "WEEK2_STATE_LATEST_VALID_FOR_WEEK3"
+      ],
+      "rows": [
+        {
+          "team": "CHI",
+          "side": "HOME",
+          "handicap": 3.5,
+          "model_cover_probability": 0.5421785849227682,
+          "sim_cover_probability": 0.5444500000000001,
+          "model_settlement": {
+            "cover": 0.5421785849227682,
+            "push": 0.0,
+            "loss": 0.45782141507723195
+          },
+          "sim_settlement": {
+            "cover": 0.5444500000000001,
+            "push": 0.0,
+            "loss": 0.45555
+          },
+          "cover_status": "AVAILABLE",
+          "american_odds": -108,
+          "break_even_probability": 0.5192307692307693,
+          "proportional_no_vig_probability": 0.4956702459300312,
+          "quote_source": "Supplied sportsbook screenshot (book not identified in image)",
+          "quote_status": "SNAPSHOT_TIME_UNKNOWN"
+        },
+        {
+          "team": "PHI",
+          "side": "AWAY",
+          "handicap": -3.5,
+          "model_cover_probability": 0.45782141507723195,
+          "sim_cover_probability": 0.45555,
+          "model_settlement": {
+            "cover": 0.45782141507723195,
+            "push": 0.0,
+            "loss": 0.5421785849227682
+          },
+          "sim_settlement": {
+            "cover": 0.45555,
+            "push": 0.0,
+            "loss": 0.5444500000000001
+          },
+          "cover_status": "AVAILABLE",
+          "american_odds": -112,
+          "break_even_probability": 0.5283018867924528,
+          "proportional_no_vig_probability": 0.5043297540699688,
+          "quote_source": "Supplied sportsbook screenshot (book not identified in image)",
+          "quote_status": "SNAPSHOT_TIME_UNKNOWN"
+        }
+      ],
+      "independent_distribution_and_inverse_cdf_replay": "PASS",
+      "market_comparison_display_enabled": true,
+      "market_input": false,
+      "action_authority": false
+    },
+    {
+      "scenario": "keenum",
+      "identity": "55f743f729ff6f522115fdf66f04fbcbcd0cdabe6f4039cd73df65db25365698",
+      "seed": 6305174261344698536,
+      "simulations": 100000,
+      "parent_cutoff_utc": "2026-09-28T11:41:59.069624+00:00",
+      "margin_cutoff_utc": "2026-09-28T11:42:03.150668+00:00",
+      "registered_at_utc": "2026-09-28T11:42:03.635924+00:00",
+      "model_file_sha256": "3b4f5ffac298bd522aa74dc73be0626e67dffec43768b9ba35bdac4e014f5a86",
+      "forecast_sha256": "5de12c2ae5d22da44476f7ece308d879ef2ade330f5d9556a6b14fd8dc8600c3",
+      "raw_draw_sha256": "b85ba07146a1465b105ac801555df50ee39625379a945d7b3d5b0d949766f9dd",
+      "state_id": "e962a66b806e2371f7890ec6bc91c57726282ea2b2467a05761c603f00d406cf",
+      "input_flags": [
+        "CHICAGO_STARTER_CONDITIONAL",
+        "FINAL_INACTIVES_PENDING",
+        "WEATHER_FITTED_IMPUTATION",
+        "NON_QB_AVAILABILITY_NOT_NUMERICALLY_CONSUMED",
+        "WEEK2_STATE_LATEST_VALID_FOR_WEEK3"
+      ],
+      "rows": [
+        {
+          "team": "CHI",
+          "side": "HOME",
+          "handicap": 3.5,
+          "model_cover_probability": 0.5375725527451721,
+          "sim_cover_probability": 0.53739,
+          "model_settlement": {
+            "cover": 0.5375725527451721,
+            "push": 0.0,
+            "loss": 0.4624274472548281
+          },
+          "sim_settlement": {
+            "cover": 0.53739,
+            "push": 0.0,
+            "loss": 0.46261
+          },
+          "cover_status": "AVAILABLE",
+          "american_odds": -108,
+          "break_even_probability": 0.5192307692307693,
+          "proportional_no_vig_probability": 0.4956702459300312,
+          "quote_source": "Supplied sportsbook screenshot (book not identified in image)",
+          "quote_status": "SNAPSHOT_TIME_UNKNOWN"
+        },
+        {
+          "team": "PHI",
+          "side": "AWAY",
+          "handicap": -3.5,
+          "model_cover_probability": 0.4624274472548281,
+          "sim_cover_probability": 0.46261,
+          "model_settlement": {
+            "cover": 0.4624274472548281,
+            "push": 0.0,
+            "loss": 0.5375725527451721
+          },
+          "sim_settlement": {
+            "cover": 0.46261,
+            "push": 0.0,
+            "loss": 0.53739
+          },
+          "cover_status": "AVAILABLE",
+          "american_odds": -112,
+          "break_even_probability": 0.5283018867924528,
+          "proportional_no_vig_probability": 0.5043297540699688,
+          "quote_source": "Supplied sportsbook screenshot (book not identified in image)",
+          "quote_status": "SNAPSHOT_TIME_UNKNOWN"
+        }
+      ],
+      "independent_distribution_and_inverse_cdf_replay": "PASS",
+      "market_comparison_display_enabled": true,
+      "market_input": false,
+      "action_authority": false
+    }
+  ],
+  "grading": {
+    "schema": "nfl.qb_margin_grading_state.v1",
+    "enabled": true,
+    "scope": "SEPARATE_APPEND_ONLY_RESEARCH",
+    "head": "58caf1064695d2f9f6b36aa60a389dd6b320f76b8390697905beec1864f0334d",
+    "registered_forecasts": 2,
+    "graded_forecasts": 0,
+    "pending_forecasts": 2,
+    "matched_qb_grades": 0,
+    "canonical_grading_changed": false,
+    "weekly_state_advanced": false,
+    "action_authority": false
+  },
+  "prospective_predictive_validation": "PENDING",
+  "canonical_promotion": false,
+  "action_authority": false
+}

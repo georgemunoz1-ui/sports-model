@@ -7,16 +7,20 @@ from pipelines.cards.adapters import nfl
 from models.nfl.contextual.runtime import run,persist_run
 
 def main():
-    p=argparse.ArgumentParser();p.add_argument('--date',required=True);p.add_argument('--output',type=Path,required=True);p.add_argument('--simulations',type=int,default=100000);p.add_argument('--model-id');p.add_argument('--mode',default='research_pregame');p.add_argument('--market-packet',type=Path);p.add_argument('--live-packet',type=Path);p.add_argument('--event-id');p.add_argument('--home-spread',type=float,action='append',help='Optional downstream full-game spread calibration, HOME handicap orientation');p.add_argument('--halftime-artifact',type=Path,help='Explicit fitted halftime/joint research artifact; emits a separate model output');p.add_argument('--weekly-state-store',type=Path);p.add_argument('--weekly-state-id');p.add_argument('--qb-margin',action='store_true',help='Emit the separately registered QB-only full-game margin research model');a=p.parse_args()
+    p=argparse.ArgumentParser();p.add_argument('--date',required=True);p.add_argument('--output',type=Path,required=True);p.add_argument('--simulations',type=int,default=100000);p.add_argument('--model-id');p.add_argument('--mode',default='research_pregame');p.add_argument('--market-packet',type=Path);p.add_argument('--live-packet',type=Path);p.add_argument('--event-id');p.add_argument('--home-spread',type=float,action='append',help='Optional downstream full-game spread calibration, HOME handicap orientation');p.add_argument('--halftime-artifact',type=Path,help='Explicit fitted halftime/joint research artifact; emits a separate model output');p.add_argument('--weekly-state-store',type=Path);p.add_argument('--weekly-state-id');p.add_argument('--qb-margin',action='store_true',help='Emit the separately registered QB-only full-game margin research model');p.add_argument('--qb-margin-calibrated',action='store_true',help='Emit the separately registered integer-margin calibration successor');p.add_argument('--comparison-market-packet',type=Path,help='Display-only source snapshot loaded after forecast freeze');p.add_argument('--research-grading-store',type=Path,default=ROOT/'data/grading/nfl_qb_margin');a=p.parse_args()
+    qb_margin_requested=a.qb_margin or a.qb_margin_calibrated
+    if a.qb_margin and a.qb_margin_calibrated:p.error('Choose one distinct QB margin model per command')
+    if a.comparison_market_packet and a.mode!='research_pregame':p.error('Display-only snapshot belongs to the market-blind research board')
     if bool(a.weekly_state_store)!=bool(a.weekly_state_id):p.error('Both weekly-state store and ID are required')
     if a.weekly_state_store and a.mode=='live':p.error('Weekly state is a pregame input')
-    if (a.home_spread or a.halftime_artifact) and a.model_id is None and not a.qb_margin:p.error('Spread/halftime diagnostics require an explicit --model-id; the selected QB winner model has no joint score simulator')
+    if (a.home_spread or a.halftime_artifact) and a.model_id is None and not qb_margin_requested:p.error('Spread/halftime diagnostics require an explicit --model-id; the selected QB winner model has no joint score simulator')
     if a.halftime_artifact and (a.mode!='research_pregame' or (a.model_id is not None and a.model_id!='nfl.integrated_context.combined.v1.research')):raise ValueError('HALFTIME_REQUIRES_COMBINED_FOOTBALL_FEATURE_SOURCE')
-    if a.home_spread and not a.qb_margin and (a.mode!='research_pregame' or (a.model_id is not None and a.model_id!='nfl.integrated_context.combined.v1.research')):raise ValueError('SPREAD_CALIBRATION_REQUIRES_COMBINED_FOOTBALL_ARM')
-    if a.qb_margin:
+    if a.home_spread and not qb_margin_requested and (a.mode!='research_pregame' or (a.model_id is not None and a.model_id!='nfl.integrated_context.combined.v1.research')):raise ValueError('SPREAD_CALIBRATION_REQUIRES_COMBINED_FOOTBALL_ARM')
+    if qb_margin_requested:
         if a.mode!='research_pregame' or a.model_id not in {None,'nfl.integrated_context.qb.v1.research'} or a.halftime_artifact:p.error('QB margin requires the selected QB research arm and full-game-only products')
-        from models.nfl.contextual.qb_margin import load_registered
-        load_registered()
+        from models.nfl.contextual import qb_margin, qb_margin_calibration
+        margin_module=qb_margin_calibration if a.qb_margin_calibrated else qb_margin
+        margin_module.load_registered()
     fitted=nfl.mode_artifact(a.mode) if a.mode!='research_pregame' else None
     market=json.loads(a.market_packet.read_text()) if a.market_packet else None
     live=json.loads(a.live_packet.read_text()) if a.live_packet else None
@@ -42,16 +46,26 @@ def main():
             from models.nfl.contextual.halftime import run_artifact
             half=run_artifact(a.halftime_artifact,result,a.output/e['event_id']/'halftime_joint',a.simulations)
             print(json.dumps({'halftime_joint':half['simulation_probabilities'],'model_id':half['model_id']},indent=2))
-        if a.qb_margin:
-            from models.nfl.contextual.qb_margin import build,persist,compare
-            margin,margins=build(result,n=a.simulations)
-            persist(a.output/e['event_id']/'qb_margin',margin,margins)
-            if a.home_spread:
-                comparison=compare(margin,margins,a.home_spread)
-                comparison_path=a.output/e['event_id']/'qb_margin_comparison.json'
-                with comparison_path.open('x') as f:json.dump(comparison,f,indent=2,allow_nan=False)
-                print(json.dumps({'qb_margin_cover':comparison['rows'],'model_id':margin['model_id']},indent=2))
-        if a.home_spread and not a.qb_margin:
+        margin=margins=None
+        if qb_margin_requested:
+            margin,margins=margin_module.build(result,n=a.simulations)
+            margin_folder=a.output/e['event_id']/('qb_margin_calibrated' if a.qb_margin_calibrated else 'qb_margin')
+            margin_module.persist(margin_folder,margin,margins)
+            if a.qb_margin and a.home_spread:
+                with (a.output/e['event_id']/'qb_margin_comparison.json').open('x') as f:json.dump(margin_module.compare(margin,margins,a.home_spread),f,indent=2)
+            from models.nfl.contextual.research_grading import register
+            quarterbacks=packet['context']['personnel']['state']['quarterbacks']
+            register(a.research_grading_store,margin_folder,result,
+                     quarterback_conditions={team:q['id'] for team,q in quarterbacks.items()},home_handicaps=a.home_spread or [])
+        if a.mode=='research_pregame':
+            from models.nfl.contextual.research_board import board,persist_board
+            # Prices enter only after model, draws, and registration are frozen.
+            display=json.loads(a.comparison_market_packet.read_text()) if a.comparison_market_packet else None
+            if display and 'event_packets' in display:display=display['event_packets'].get(e['event_id'])
+            comparison=board(result,margin,margins,market=display,home_handicaps=a.home_spread or [])
+            persist_board(a.output/e['event_id'],comparison)
+            print(json.dumps({'market_overlay':comparison['market_overlay'],'cover_probabilities':comparison['spread_rows']},indent=2))
+        if a.home_spread and not qb_margin_requested:
             from models.nfl.contextual.spread_runtime import persist_overlay
             overlay,calibrated_margins=nfl.calibrate_spreads(result,scores,a.home_spread,n=a.simulations)
             persist_overlay(a.output/e['event_id']/'spread_calibration',overlay,calibrated_margins)

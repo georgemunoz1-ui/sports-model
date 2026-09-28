@@ -141,6 +141,7 @@ jobs:
           echo '**Market overlay: OFF · Action authority: OFF**' >> "$GITHUB_STEP_SUMMARY"
 
       - name: Commit durable grading state
+        id: persist
         if: ${{ steps.grade.outcome == 'success' }}
         shell: bash
         env:
@@ -154,13 +155,30 @@ jobs:
           if [ -f data/grading/mlb/calibration_summary.json ]; then git add data/grading/mlb/calibration_summary.json; fi
           if git diff --cached --quiet; then
             echo "No durable grading changes"
+            # Suppress only a proven empty selection with unchanged durable state.
+            # Missing/malformed reports retain evidence through the default upload.
+            python - <<'PY'
+          import json, os
+          from pathlib import Path
+          try:
+              report = json.loads(Path("output/mlb_grading/registry_grade_run.json").read_text())
+          except (OSError, ValueError):
+              report = None
+          noop = (isinstance(report, dict)
+                  and report.get("status") == "NO_ELIGIBLE_FORECASTS"
+                  and all(type(report.get(k)) is int and report[k] == 0
+                          for k in ("selected_count", "grade_count", "added_count"))
+                  and report.get("errors") == [] and report.get("results") == [])
+          with open(os.environ["GITHUB_OUTPUT"], "a") as handle:
+              handle.write(f"noop={str(noop).lower()}\n")
+          PY
           else
             git commit -m "Grade MLB calibration forecasts ${GRADE_DATE:-pending cards}"
             git push origin "HEAD:${GITHUB_REF_NAME}"
           fi
 
       - name: Upload grading report
-        if: always()
+        if: ${{ always() && (github.event_name != 'schedule' || failure() || cancelled() || steps.grade.outcome != 'success' || steps.persist.outcome != 'success' || steps.persist.outputs.noop != 'true') }}
         uses: actions/upload-artifact@v4
         with:
           name: mlb-calibration-grading-${{ steps.resolve.outputs.grade_date }}-${{ github.run_id }}

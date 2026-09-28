@@ -4557,3 +4557,19 @@ Exact replay adds zero and preserves forecast/ledger/summary/registry hashes.
 53 focused tests pass; unrelated health/release obligations remain unresolved.
 No model/default, market, action or release-policy changes. No historical registration
 created for September 21/22. See docs/MLB_CALIBRATION_GRADING_REPAIR.md and retained evidence.
+
+
+## 2026-09-28 — QB-only margin distribution and cover output (draft)
+
+User authorized a replacement for the quarantined combined spread dependency.
+Preregistered a new QB-only margin law before fitting; recovered hash-matched
+features and 1,871 QB OOF predictions, replayed every chronological head, and
+evaluated 1,615 games with strictly prior-season residual pools. The improvement
+screen did not pass; integer push calibration remains limited. No promotion.
+Canonical NFL CLI now has an explicit --qb-margin route; both PHI–CHI QB
+conditions have 100K margin draws and separate exact/model and simulation cover
+probabilities. Independent inverse-CDF replay and all eight provenance bindings
+passed, with unchanged old forecasts and zero report-missingness effect in QB.
+Source-bound Week2 parent retained; no Week3 partial-state advance. Research
+publication remains ineligible; global health RED; market/action authority OFF.
+See docs/NFL_QB_MARGIN_PROCESS.md and docs/releases/2026-09-28-qb-margin/.

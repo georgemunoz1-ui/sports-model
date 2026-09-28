@@ -2,18 +2,34 @@
 import json
 import os
 from pathlib import Path
+import re
 import subprocess
 import tempfile
+import textwrap
 import unittest
-
-import yaml
 
 
 class GradingArtifactRetentionTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         workflow = Path(__file__).resolve().parents[1] / '.github/workflows/mlb-calibration-grading.yml'
-        cls.steps = yaml.safe_load(workflow.read_text())['jobs']['grade']['steps']
+        # Read the named scalar/block fields without adding a CI dependency.
+        cls.steps = []
+        for block in workflow.read_text().split('      - name: ')[1:]:
+            name, body = block.split('\n', 1)
+            step = {'name': name}
+            for key in ('id', 'if', 'run', 'continue-on-error'):
+                match = re.search(r'^        ' + key + r': (.+)$', body, re.M)
+                if match:
+                    step[key] = match[1]
+            if step.get('run') == '|':
+                step['run'] = textwrap.dedent(body.split('        run: |\n', 1)[1])
+            if name == 'Upload grading report':
+                step['with'] = {
+                    'retention-days': int(re.search(r'retention-days: (\d+)', body)[1]),
+                    'path': textwrap.dedent(body.split('          path: |\n', 1)[1].split('          if-no-files-found:', 1)[0]),
+                }
+            cls.steps.append(step)
         cls.persist = next(s for s in cls.steps if s.get('id') == 'persist')
         cls.upload = next(s for s in cls.steps if s.get('name') == 'Upload grading report')
 

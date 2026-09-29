@@ -1,0 +1,44 @@
+{
+  "home_minus1_5": {
+    "n": 1312,
+    "mean_p": 0.3271066370295583,
+    "observed": 0.3010670731707317,
+    "brier": 0.20947077030663408,
+    "baseline_brier": 0.2111100486441636,
+    "delta_brier": -0.0016392783375295489,
+    "log_loss": 0.6094994459608278,
+    "baseline_log_loss": 0.6133425931529999,
+    "delta_log_loss": -0.0038431471921719375
+  },
+  "home_minus1_5_brier_bootstrap": {
+    "delta_convention": "challenger minus unconditional baseline; negative is better",
+    "mean_delta": -0.0016392783375295489,
+    "ci95_percentile": [
+      -0.002720180866421118,
+      -0.00039231515903954576
+    ],
+    "blocks": 26,
+    "resamples": 10000,
+    "seed": 20260929,
+    "unit": "week"
+  },
+  "home_minus1_5_log_loss_bootstrap": {
+    "delta_convention": "challenger minus unconditional baseline; negative is better",
+    "mean_delta": -0.0038431471921719375,
+    "ci95_percentile": [
+      -0.006199452002434872,
+      -0.001122586900931952
+    ],
+    "blocks": 26,
+    "resamples": 10000,
+    "seed": 20260929,
+    "unit": "week"
+  },
+  "home_minus1_5_ece10": 0.026573244755771712,
+  "calibration_fit_diagnostic_only": {
+    "intercept": 0.4150335294671434,
+    "slope": 1.747495577084657,
+    "optimizer_success": true,
+    "used_in_model": false
+  }
+}

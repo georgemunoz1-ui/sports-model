@@ -1,0 +1,396 @@
+{
+  "action_authority": false,
+  "away_minus1_5": {
+    "baseline_brier": 0.1956431340065254,
+    "baseline_log_loss": 0.5801196028329199,
+    "brier": 0.19450160867077024,
+    "delta_brier": -0.0011415253357552287,
+    "delta_log_loss": -0.002329128630249958,
+    "log_loss": 0.5777904742026698,
+    "mean_p": 0.27481738849450515,
+    "n": 1312,
+    "observed": 0.26676829268292684
+  },
+  "away_minus1_5_reliability": [
+    {
+      "gap": -0.30125738025759996,
+      "high": 0.1,
+      "low": 0.0,
+      "mean_p": 0.032075953075733375,
+      "n": 3,
+      "observed": 0.3333333333333333,
+      "observed_wilson95_descriptive": [
+        0.0614903152761605,
+        0.7923450448735121
+      ]
+    },
+    {
+      "gap": -0.037761347539428225,
+      "high": 0.2,
+      "low": 0.1,
+      "mean_p": 0.17276496825004545,
+      "n": 19,
+      "observed": 0.21052631578947367,
+      "observed_wilson95_descriptive": [
+        0.08507538491591576,
+        0.43334714240266087
+      ]
+    },
+    {
+      "gap": 0.020231468930004715,
+      "high": 0.3,
+      "low": 0.2,
+      "mean_p": 0.27200451857539476,
+      "n": 1128,
+      "observed": 0.25177304964539005,
+      "observed_wilson95_descriptive": [
+        0.22731527196273832,
+        0.27791584871704583
+      ]
+    },
+    {
+      "gap": -0.06567558953229963,
+      "high": 0.4,
+      "low": 0.3,
+      "mean_p": 0.3108676203442436,
+      "n": 162,
+      "observed": 0.3765432098765432,
+      "observed_wilson95_descriptive": [
+        0.3056047148054393,
+        0.45320127838324203
+      ]
+    },
+    {
+      "high": 0.5,
+      "low": 0.4,
+      "n": 0
+    },
+    {
+      "high": 0.6,
+      "low": 0.5,
+      "n": 0
+    },
+    {
+      "high": 0.7,
+      "low": 0.6,
+      "n": 0
+    },
+    {
+      "high": 0.8,
+      "low": 0.7,
+      "n": 0
+    },
+    {
+      "high": 0.9,
+      "low": 0.8,
+      "n": 0
+    },
+    {
+      "high": 1.0,
+      "low": 0.9,
+      "n": 0
+    }
+  ],
+  "calibration_fit_diagnostic_only": {
+    "intercept": 0.4150335294671434,
+    "optimizer_success": true,
+    "slope": 1.747495577084657,
+    "used_in_model": false
+  },
+  "cohort": "2026 season, 1312 same-event games; original bandwidth selected on 2025; post-screen diagnostic extension; not untouched prospective evidence",
+  "created_at_utc": "2026-09-29T23:23:54.079611+00:00",
+  "error_slices_home_minus1_5": {
+    "OT": {
+      "baseline_brier": 0.10707771278583421,
+      "baseline_log_loss": 0.3963477635588881,
+      "brier": 0.1066507828983546,
+      "delta_brier": -0.00042692988747958124,
+      "delta_log_loss": -0.0015085246328013836,
+      "log_loss": 0.39483923892608674,
+      "mean_p": 0.32584844495264154,
+      "n": 207,
+      "observed": 0.0
+    },
+    "REG": {
+      "baseline_brier": 0.24550613534783033,
+      "baseline_log_loss": 0.6850873339721483,
+      "brier": 0.2432696754010373,
+      "delta_brier": -0.0022364599467930226,
+      "delta_log_loss": -0.0050046877601668625,
+      "log_loss": 0.6800826462119814,
+      "mean_p": 0.3273188437618121,
+      "n": 986,
+      "observed": 0.40060851926977686
+    },
+    "SO": {
+      "baseline_brier": 0.10707771278583421,
+      "baseline_log_loss": 0.3963477635588881,
+      "brier": 0.108277635604384,
+      "delta_brier": 0.0011999228185497939,
+      "delta_log_loss": 0.001719979952813705,
+      "log_loss": 0.3980677435117018,
+      "mean_p": 0.3275369725078738,
+      "n": 119,
+      "observed": 0.0
+    },
+    "empty_net_explicit": {
+      "baseline_brier": 0.27814820822682546,
+      "baseline_log_loss": 0.7531734822214957,
+      "brier": 0.27537657596141435,
+      "delta_brier": -0.0027716322654110954,
+      "delta_log_loss": -0.006004548729843942,
+      "log_loss": 0.7471689334916516,
+      "mean_p": 0.32778477197938527,
+      "n": 406,
+      "observed": 0.49507389162561577
+    },
+    "empty_net_no_explicit_marker": {
+      "baseline_brier": 0.17125042600101203,
+      "baseline_log_loss": 0.5302017893656574,
+      "brier": 0.17064562854379875,
+      "delta_brier": -0.0006047974572132878,
+      "delta_log_loss": -0.0017307674674910552,
+      "log_loss": 0.5284710218981663,
+      "mean_p": 0.3273884501689274,
+      "n": 770,
+      "observed": 0.18571428571428572
+    },
+    "empty_net_unknown": {
+      "baseline_brier": 0.23665722985494325,
+      "baseline_log_loss": 0.666629931053326,
+      "brier": 0.23254137370032826,
+      "delta_brier": -0.00411585615461494,
+      "delta_log_loss": -0.009350524866506097,
+      "log_loss": 0.6572794061868198,
+      "mean_p": 0.32348664506673525,
+      "n": 136,
+      "observed": 0.375
+    },
+    "model_favorite_50_60": {
+      "baseline_brier": 0.21084998850994247,
+      "baseline_log_loss": 0.612800149267222,
+      "brier": 0.2087600365355741,
+      "delta_brier": -0.0020899519743684124,
+      "delta_log_loss": -0.004795885070182389,
+      "log_loss": 0.6080042641970396,
+      "mean_p": 0.3242994336831017,
+      "n": 1272,
+      "observed": 0.300314465408805
+    },
+    "model_favorite_60_70": {
+      "baseline_brier": 0.21266102299029344,
+      "baseline_log_loss": 0.6165776778136154,
+      "brier": 0.22948590067548721,
+      "delta_brier": 0.016824877685193824,
+      "delta_log_loss": 0.03544751131239949,
+      "log_loss": 0.6520251891260147,
+      "mean_p": 0.4016931697885624,
+      "n": 36,
+      "observed": 0.3055555555555556
+    },
+    "model_favorite_70_plus": {
+      "baseline_brier": 0.2798504022113129,
+      "baseline_log_loss": 0.7567239868848051,
+      "brier": 0.25534793618403145,
+      "delta_brier": -0.024502466027281455,
+      "delta_log_loss": -0.05448842852599162,
+      "log_loss": 0.7022355583588136,
+      "mean_p": 0.5485185063717218,
+      "n": 4,
+      "observed": 0.5
+    },
+    "one_goal": {
+      "baseline_brier": 0.10707771278583422,
+      "baseline_log_loss": 0.39634776355888823,
+      "brier": 0.10729560465183047,
+      "delta_brier": 0.0002178918659962735,
+      "delta_log_loss": -0.00021007062335444448,
+      "log_loss": 0.39613769293553375,
+      "mean_p": 0.32657219170280116,
+      "n": 567,
+      "observed": 0.0
+    },
+    "predicted_total_6to7": {
+      "baseline_brier": 0.2111640119198382,
+      "baseline_log_loss": 0.6134551519234316,
+      "brier": 0.20948117796956112,
+      "delta_brier": -0.0016828339502771102,
+      "delta_log_loss": -0.003928652285235916,
+      "log_loss": 0.6095264996381956,
+      "mean_p": 0.32652754378126897,
+      "n": 1308,
+      "observed": 0.3012232415902141
+    },
+    "predicted_total_7plus": {
+      "baseline_brier": 0.19346405749857357,
+      "baseline_log_loss": 0.5765358752218467,
+      "brier": 0.20606746452949665,
+      "delta_brier": 0.012603407030923067,
+      "delta_log_loss": 0.024117018239748877,
+      "log_loss": 0.6006528934615956,
+      "mean_p": 0.5164701292201769,
+      "n": 4,
+      "observed": 0.25
+    },
+    "predicted_total_below6": {
+      "n": 0
+    },
+    "two_plus": {
+      "baseline_brier": 0.2902863364719123,
+      "baseline_log_loss": 0.7784916782266391,
+      "brier": 0.2872336145029745,
+      "delta_brier": -0.0030527219689377924,
+      "delta_log_loss": -0.0066081866747484735,
+      "log_loss": 0.7718834915518906,
+      "mean_p": 0.3275133893789157,
+      "n": 745,
+      "observed": 0.5302013422818792
+    }
+  },
+  "frozen_model_sha256": "8eaf2b9b90cbe02fb8edfaa54e518a9bf9066006a25804709e8fbe98d8db60be",
+  "home_minus1_5": {
+    "baseline_brier": 0.2111100486441636,
+    "baseline_log_loss": 0.6133425931529999,
+    "brier": 0.20947077030663408,
+    "delta_brier": -0.0016392783375295489,
+    "delta_log_loss": -0.0038431471921719375,
+    "log_loss": 0.6094994459608278,
+    "mean_p": 0.3271066370295583,
+    "n": 1312,
+    "observed": 0.3010670731707317
+  },
+  "home_minus1_5_brier_bootstrap": {
+    "blocks": 26,
+    "ci95_percentile": [
+      -0.002720180866421118,
+      -0.00039231515903954576
+    ],
+    "delta_convention": "challenger minus unconditional baseline; negative is better",
+    "mean_delta": -0.0016392783375295489,
+    "resamples": 10000,
+    "seed": 20260929,
+    "unit": "week"
+  },
+  "home_minus1_5_brier_month_sensitivity": {
+    "blocks": 7,
+    "ci95_percentile": [
+      -0.002813490639661486,
+      -0.0003046388849270401
+    ],
+    "delta_convention": "challenger minus unconditional baseline; negative is better",
+    "mean_delta": -0.0016392783375295489,
+    "resamples": 10000,
+    "seed": 20260929,
+    "unit": "month"
+  },
+  "home_minus1_5_ece10": 0.026573244755771712,
+  "home_minus1_5_log_loss_bootstrap": {
+    "blocks": 26,
+    "ci95_percentile": [
+      -0.006199452002434872,
+      -0.001122586900931952
+    ],
+    "delta_convention": "challenger minus unconditional baseline; negative is better",
+    "mean_delta": -0.0038431471921719375,
+    "resamples": 10000,
+    "seed": 20260929,
+    "unit": "week"
+  },
+  "home_minus1_5_reliability": [
+    {
+      "high": 0.1,
+      "low": 0.0,
+      "n": 0
+    },
+    {
+      "high": 0.2,
+      "low": 0.1,
+      "n": 0
+    },
+    {
+      "gap": 0.09866109080439964,
+      "high": 0.3,
+      "low": 0.2,
+      "mean_p": 0.2915182336615425,
+      "n": 140,
+      "observed": 0.19285714285714287,
+      "observed_wilson95_descriptive": [
+        0.13606304869402092,
+        0.26605706120464545
+      ]
+    },
+    {
+      "gap": 0.015181871603953345,
+      "high": 0.4,
+      "low": 0.3,
+      "mean_p": 0.3290949150822142,
+      "n": 1150,
+      "observed": 0.3139130434782609,
+      "observed_wilson95_descriptive": [
+        0.28774749049306453,
+        0.34131771221760215
+      ]
+    },
+    {
+      "gap": 0.11311430324089866,
+      "high": 0.5,
+      "low": 0.4,
+      "mean_p": 0.42890377692510917,
+      "n": 19,
+      "observed": 0.3157894736842105,
+      "observed_wilson95_descriptive": [
+        0.15364171004428598,
+        0.5398998982493537
+      ]
+    },
+    {
+      "gap": 0.5465628162185617,
+      "high": 0.6,
+      "low": 0.5,
+      "mean_p": 0.5465628162185617,
+      "n": 2,
+      "observed": 0.0,
+      "observed_wilson95_descriptive": [
+        0.0,
+        0.6576280471103807
+      ]
+    },
+    {
+      "gap": -0.3500946683959889,
+      "high": 0.7,
+      "low": 0.6,
+      "mean_p": 0.6499053316040111,
+      "n": 1,
+      "observed": 1.0,
+      "observed_wilson95_descriptive": [
+        0.20654329147389294,
+        1.0
+      ]
+    },
+    {
+      "high": 0.8,
+      "low": 0.7,
+      "n": 0
+    },
+    {
+      "high": 0.9,
+      "low": 0.8,
+      "n": 0
+    },
+    {
+      "high": 1.0,
+      "low": 0.9,
+      "n": 0
+    }
+  ],
+  "n": 1312,
+  "promotion": "HOLD",
+  "slice_cautions": [
+    "Outcome-conditioned one-goal, OT/SO and empty-net slices are descriptive, not unconditional calibration tests.",
+    "No-explicit-marker is not certified absence of an empty-net goal.",
+    "Favorite strength and total environment use frozen model probabilities/means, not sportsbook lines.",
+    "Wilson intervals are descriptive iid intervals; clustered uncertainty is supplied for aggregate paired deltas.",
+    "Multiple exploratory slices; no slice selected for model adjustment."
+  ],
+  "source_prediction_sha256": "185419e6384acc1bc9ef58f6e9c68c84ab696419a1659e02e834f0c01ae837c5"
+}

@@ -1,0 +1,21 @@
+{
+  "registered_at_utc": "2026-09-29T23:08:14.469062+00:00",
+  "scope": "Separate research-arm evaluation only; no automatic promotion/blend/action",
+  "primary": "Home -1.5 Brier versus training-only unconditional settled-margin baseline; same game IDs",
+  "secondary": [
+    "away -1.5 Brier/log loss",
+    "home -1.5 log loss",
+    "fixed-decile reliability",
+    "winner Brier/log loss versus original winner arm only where frozen paired versions exist",
+    "market delta only for exact source/time/settlement-bound pregame pairs"
+  ],
+  "freeze_policy": "Last supported pre-start registered version is primary; earlier versions consistency diagnostics only; current 15 frozen versions retained",
+  "late_registration": "Montreal-Toronto archived, excluded from strict prospective cohort",
+  "sample_gate": "No promotion conclusion before at least 500 timing-eligible graded games spanning 8 calendar weeks, then independent review; minimum sample is not a pass",
+  "uncertainty": "Paired ISO-week bootstrap 10000 resamples seed 20260929; monthly sensitivity; no optional stopping promotion",
+  "revisions": "Official final revisions append superseding grade with original retained; same source/forecast identity idempotent",
+  "market_absence": "Missing market remains null, never reconstructed from closing/postgame data",
+  "goalie_increment": "Separate acquisition-only registration; no effects fitted or blended",
+  "automatic_promotion": false,
+  "action_authority": false
+}

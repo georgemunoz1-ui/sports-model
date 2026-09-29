@@ -1,0 +1,30 @@
+{
+  "increment_id": "nhl.joint_score.personnel_acquisition.v1.research",
+  "status": "ACQUISITION_CONTRACT_ONLY_NO_FITTED_EFFECT",
+  "parent_arm": "nhl.conditional_empirical_joint_score.v1.research",
+  "separate_from": "nhl.initial_causal_score.research.v1",
+  "registered_sources": {
+    "official_roster": "https://api-web.nhle.com/v1/roster/{team_abbreviation}/{season}",
+    "official_gamecenter_boxscore": "https://api-web.nhle.com/v1/gamecenter/{official_game_id}/boxscore",
+    "official_team_report": "https://www.nhl.com/{team}/news/{source_bound_article}",
+    "secondary_event_context": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/summary?event={espn_event_id}",
+    "secondary_injuries": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/injuries"
+  },
+  "required_fields": ["event_id", "player_id", "team_id", "status", "effective_at_utc", "source_published_at_utc", "retrieved_at_utc", "source_url", "raw_sha256", "evidence_pointer", "reviewer", "reviewed_at_utc"],
+  "goalie_status_enum": ["CONFIRMED_STARTER", "PROJECTED", "UNKNOWN", "POST_START_ACTUAL"],
+  "availability_status_enum": ["ACTIVE_CONFIRMED", "OUT_CONFIRMED", "QUESTIONABLE", "UNKNOWN"],
+  "constraints": [
+    "Roster membership and listed first goalie never establish starting status.",
+    "Absent injury list is missingness, not healthy.",
+    "Published/effective/retrieved/reviewed timestamps must each precede forecast cutoff.",
+    "Post-start boxscores cannot reconstruct a pregame confirmation.",
+    "Official game ID must be source-bound; never equate ESPN and NHL IDs.",
+    "Changes create immutable successor snapshots and never rewrite frozen forecasts."
+  ],
+  "prospective_shadow_collection": true,
+  "used_as_model_input": false,
+  "numerical_effect": null,
+  "fit_and_promotion_dependency": "Historical PIT-aligned coverage, registered dev/calibration/holdout split, paired ablation, leakage tests and approved model identity required before fitting a numerical personnel increment.",
+  "automatic_promotion": false,
+  "action_authority": false
+}

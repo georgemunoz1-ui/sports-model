@@ -4557,3 +4557,14 @@ Exact replay adds zero and preserves forecast/ledger/summary/registry hashes.
 53 focused tests pass; unrelated health/release obligations remain unresolved.
 No model/default, market, action or release-policy changes. No historical registration
 created for September 21/22. See docs/MLB_CALIBRATION_GRADING_REPAIR.md and retained evidence.
+
+
+## 2026-09-30 — isolated MLB postseason research challenger
+
+Owner requested September 30 playoff model. Separate V13 empty-base extra-inning
+research identity added; unchanged nine-inning kernel and coefficients. Prior-date
+official inputs: 2,433 finals, eight starter profiles. Four 100K path diagnostics
+retained; two PRE_START and two POST_START, never retrospectively graded. Nine
+contract tests and four exact event replays passed. No postseason predictive
+validation, no canonical forecast registration, no promotion or action authority.
+Full report: docs/MLB_POSTSEASON_RESEARCH.md. Old defaults and packet pins unchanged.

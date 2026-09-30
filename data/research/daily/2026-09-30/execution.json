@@ -1,0 +1,1275 @@
+{
+  "action": "OFF",
+  "checks": [
+    {
+      "draw_count": 100000,
+      "draw_manifest_sha256": "3dd47c4b20bde5f37b483a3be0d4686567a7fb59cb1af8e2ae3d51695bfc3224",
+      "event_id": "NHL:401891780",
+      "input_state_hash_matches": true,
+      "pre_start": true,
+      "seed_replay": "EXACT"
+    },
+    {
+      "draw_count": 100000,
+      "draw_manifest_sha256": "66421403b7e0e6af5355b3a6d4155a96917c685656c1a4a93a506c73e1ad74ac",
+      "event_id": "NHL:401891821",
+      "input_state_hash_matches": true,
+      "pre_start": true,
+      "seed_replay": "EXACT"
+    },
+    {
+      "draw_count": 100000,
+      "draw_manifest_sha256": "bc32c0437eddde76b77aa7fcc278a22664c346a284b616bba7fce63f839e0329",
+      "event_id": "NHL:401892431",
+      "input_state_hash_matches": true,
+      "pre_start": true,
+      "seed_replay": "EXACT"
+    },
+    {
+      "draw_count": 100000,
+      "draw_manifest_sha256": "286f01f940eecff9399dc43285f56dd9771d3ea2754ed63343208131f87f5edf",
+      "event_id": "MLS:761833",
+      "input_state_hash_matches": true,
+      "pre_start": true,
+      "seed_replay": "EXACT"
+    }
+  ],
+  "dose": 0.0,
+  "forecasts": [
+    {
+      "away_team": "Los Angeles Kings",
+      "diagnostics": {
+        "home_margin": 0.8059047757507674,
+        "home_win": 0.6483709162579178,
+        "model_lineage": {
+          "deployment_training_rows": 7428,
+          "embargo": "PREVIOUS_UTC_DAY_EXCLUDED",
+          "evaluation": {
+            "action_authority": false,
+            "baseline_probabilities": [
+              0.466278101582015,
+              0.533721898417985
+            ],
+            "evaluation_fit_sha256": "00bee02210d810bfb2f71af76c2e6d714a3424bc5c4f649e27d7347a6be92370",
+            "historical_availability_proven": false,
+            "later_audit_2026": {
+              "baseline_brier": 0.2496464117772398,
+              "baseline_log_loss": 0.6924406594360324,
+              "brier": 0.24894963772387033,
+              "log_loss": 0.691012929944899,
+              "margin_mae": 2.1506845800955743,
+              "n": 1312,
+              "paired_week_bootstrap_95ci_brier_delta": [
+                -0.004521620405513274,
+                0.003113141783512388
+              ],
+              "paired_week_bootstrap_95ci_log_loss_delta": [
+                -0.00948669144053496,
+                0.006421275626201579
+              ],
+              "prediction_sha256": "f4f2f398109ebd1fc22f2483c790c67ccbbc633b930e4918a97c9c254e0503c2",
+              "reliability": [
+                {
+                  "category": 0,
+                  "frequency": 0.2857142857142857,
+                  "lower": 0.2,
+                  "mean_p": 0.27555572334494244,
+                  "n": 35
+                },
+                {
+                  "category": 0,
+                  "frequency": 0.43410852713178294,
+                  "lower": 0.3,
+                  "mean_p": 0.3622227188441961,
+                  "n": 258
+                },
+                {
+                  "category": 0,
+                  "frequency": 0.47048300536672627,
+                  "lower": 0.4,
+                  "mean_p": 0.4516249635189678,
+                  "n": 559
+                },
+                {
+                  "category": 0,
+                  "frequency": 0.5095890410958904,
+                  "lower": 0.5,
+                  "mean_p": 0.5420989523178604,
+                  "n": 365
+                },
+                {
+                  "category": 0,
+                  "frequency": 0.5714285714285714,
+                  "lower": 0.6,
+                  "mean_p": 0.6334523139804906,
+                  "n": 91
+                },
+                {
+                  "category": 0,
+                  "frequency": 1.0,
+                  "lower": 0.7,
+                  "mean_p": 0.7231233694670742,
+                  "n": 4
+                },
+                {
+                  "category": 1,
+                  "frequency": 0.0,
+                  "lower": 0.2,
+                  "mean_p": 0.27687663053292577,
+                  "n": 4
+                },
+                {
+                  "category": 1,
+                  "frequency": 0.42857142857142855,
+                  "lower": 0.3,
+                  "mean_p": 0.3665476860195093,
+                  "n": 91
+                },
+                {
+                  "category": 1,
+                  "frequency": 0.4904109589041096,
+                  "lower": 0.4,
+                  "mean_p": 0.4579010476821396,
+                  "n": 365
+                },
+                {
+                  "category": 1,
+                  "frequency": 0.5295169946332737,
+                  "lower": 0.5,
+                  "mean_p": 0.5483750364810323,
+                  "n": 559
+                },
+                {
+                  "category": 1,
+                  "frequency": 0.5658914728682171,
+                  "lower": 0.6,
+                  "mean_p": 0.6377772811558039,
+                  "n": 258
+                },
+                {
+                  "category": 1,
+                  "frequency": 0.7142857142857143,
+                  "lower": 0.7,
+                  "mean_p": 0.7244442766550576,
+                  "n": 35
+                }
+              ],
+              "total_mae": 1.8491124962796566
+            },
+            "league": "nhl",
+            "model_id": "nhl.initial_causal_score.research.v1",
+            "promotion_status": "INITIAL_RESEARCH_ONLY_NO_DEFAULT_PROMOTION",
+            "provider_copy_counts": {
+              "1": 302,
+              "2": 7126
+            },
+            "schema": "initial_baseline_temporal_audit.v1",
+            "season_counts": {
+              "2021": 868,
+              "2022": 1312,
+              "2023": 1312,
+              "2024": 1312,
+              "2025": 1312,
+              "2026": 1312
+            },
+            "training_n": 4804,
+            "training_prior": 3.1077227310574522,
+            "training_seasons": [
+              2021,
+              2022,
+              2023,
+              2024
+            ],
+            "validation_2025": {
+              "baseline_brier": 0.2469219291306648,
+              "baseline_log_loss": 0.686983409680584,
+              "brier": 0.24351873647093994,
+              "log_loss": 0.6799526152907759,
+              "margin_mae": 2.1845919105703273,
+              "n": 1312,
+              "paired_week_bootstrap_95ci_brier_delta": [
+                -0.008796139012050761,
+                0.001206580303211938
+              ],
+              "paired_week_bootstrap_95ci_log_loss_delta": [
+                -0.01833652695908076,
+                0.002657408978913073
+              ],
+              "prediction_sha256": "141408656ea7c4044748bfc7ffdd2c9d500d519d2db77ad0b59671ccbdb3e8ad",
+              "reliability": [
+                {
+                  "category": 0,
+                  "frequency": 0.0,
+                  "lower": 0.1,
+                  "mean_p": 0.188893650055497,
+                  "n": 3
+                },
+                {
+                  "category": 0,
+                  "frequency": 0.2647058823529412,
+                  "lower": 0.2,
+                  "mean_p": 0.27405977986769664,
+                  "n": 34
+                },
+                {
+                  "category": 0,
+                  "frequency": 0.337037037037037,
+                  "lower": 0.3,
+                  "mean_p": 0.35701307531037496,
+                  "n": 270
+                },
+                {
+                  "category": 0,
+                  "frequency": 0.43953934740882916,
+                  "lower": 0.4,
+                  "mean_p": 0.45174523083957246,
+                  "n": 521
+                },
+                {
+                  "category": 0,
+                  "frequency": 0.5104712041884817,
+                  "lower": 0.5,
+                  "mean_p": 0.5448376953221161,
+                  "n": 382
+                },
+                {
+                  "category": 0,
+                  "frequency": 0.49,
+                  "lower": 0.6,
+                  "mean_p": 0.6318488750302267,
+                  "n": 100
+                },
+                {
+                  "category": 0,
+                  "frequency": 0.5,
+                  "lower": 0.7,
+                  "mean_p": 0.7131000205207836,
+                  "n": 2
+                },
+                {
+                  "category": 1,
+                  "frequency": 0.5,
+                  "lower": 0.2,
+                  "mean_p": 0.2868999794792165,
+                  "n": 2
+                },
+                {
+                  "category": 1,
+                  "frequency": 0.51,
+                  "lower": 0.3,
+                  "mean_p": 0.36815112496977326,
+                  "n": 100
+                },
+                {
+                  "category": 1,
+                  "frequency": 0.4895287958115183,
+                  "lower": 0.4,
+                  "mean_p": 0.4551623046778838,
+                  "n": 382
+                },
+                {
+                  "category": 1,
+                  "frequency": 0.5604606525911708,
+                  "lower": 0.5,
+                  "mean_p": 0.5482547691604276,
+                  "n": 521
+                },
+                {
+                  "category": 1,
+                  "frequency": 0.662962962962963,
+                  "lower": 0.6,
+                  "mean_p": 0.6429869246896249,
+                  "n": 270
+                },
+                {
+                  "category": 1,
+                  "frequency": 0.7352941176470589,
+                  "lower": 0.7,
+                  "mean_p": 0.7259402201323033,
+                  "n": 34
+                },
+                {
+                  "category": 1,
+                  "frequency": 1.0,
+                  "lower": 0.8,
+                  "mean_p": 0.8111063499445029,
+                  "n": 3
+                }
+              ],
+              "total_mae": 1.8801498584781409
+            }
+          },
+          "evaluation_sha256": "5ecc7e474cf10f733d090d68cad53ff7b759e511379d612f7cc647ba896942c9",
+          "excluded_current_events": {}
+        },
+        "package_sha256": "ffa555cfbcfa3c335c8e5e0bfabc197233ed7c6f6c110eb20a68bd89aab5d7ff",
+        "research_selection": {
+          "accuracy_default": false,
+          "action_authority": false,
+          "model_id": "nhl.initial_causal_score.research.v1",
+          "role": "INITIAL_RESEARCH_ONLY"
+        },
+        "total": 6.008046066108107
+      },
+      "event_id": "NHL:401891780",
+      "home_team": "Colorado Avalanche",
+      "league": "nhl",
+      "model_id": "nhl.initial_causal_score.research.v1",
+      "model_input_snapshot": {
+        "away_against": 3.0011277350925223,
+        "away_cold": 0.0,
+        "away_for": 3.006392068524284,
+        "away_rest": 14,
+        "home_against": 2.0617909613904564,
+        "home_cold": 0.0,
+        "home_for": 3.0873350396809904,
+        "home_rest": 14,
+        "neutral": 0.0
+      },
+      "model_p": 0.6483709162579178,
+      "model_winner": "Colorado Avalanche",
+      "sim_p": 0.64931,
+      "simulation": {
+        "binary": {
+          "count": 100000,
+          "home_win_probability": 0.64931,
+          "mc_standard_error_pp": 0.1509920763513059,
+          "scope": "BINARY_NON_TIE_DIAGNOSTIC_NOT_INDEPENDENT_MODEL_VALIDATION",
+          "seed": 7798484689081618899,
+          "sha256": "b0ad4985f89baad0eda857bd007cbccaab9863830af9f135b044b1357113a009"
+        },
+        "draw_directory": "/workspace/scratch/bc8d16170201/daily-20260930/nhl-results/draws/NHL_401891780",
+        "joint_scores": null
+      },
+      "start_time_utc": "2026-10-01T02:00:00+00:00"
+    },
+    {
+      "away_team": "Pittsburgh Penguins",
+      "diagnostics": {
+        "home_margin": 0.7443670636473086,
+        "home_win": 0.6442760226424097,
+        "model_lineage": {
+          "deployment_training_rows": 7428,
+          "embargo": "PREVIOUS_UTC_DAY_EXCLUDED",
+          "evaluation": {
+            "action_authority": false,
+            "baseline_probabilities": [
+              0.466278101582015,
+              0.533721898417985
+            ],
+            "evaluation_fit_sha256": "00bee02210d810bfb2f71af76c2e6d714a3424bc5c4f649e27d7347a6be92370",
+            "historical_availability_proven": false,
+            "later_audit_2026": {
+              "baseline_brier": 0.2496464117772398,
+              "baseline_log_loss": 0.6924406594360324,
+              "brier": 0.24894963772387033,
+              "log_loss": 0.691012929944899,
+              "margin_mae": 2.1506845800955743,
+              "n": 1312,
+              "paired_week_bootstrap_95ci_brier_delta": [
+                -0.004521620405513274,
+                0.003113141783512388
+              ],
+              "paired_week_bootstrap_95ci_log_loss_delta": [
+                -0.00948669144053496,
+                0.006421275626201579
+              ],
+              "prediction_sha256": "f4f2f398109ebd1fc22f2483c790c67ccbbc633b930e4918a97c9c254e0503c2",
+              "reliability": [
+                {
+                  "category": 0,
+                  "frequency": 0.2857142857142857,
+                  "lower": 0.2,
+                  "mean_p": 0.27555572334494244,
+                  "n": 35
+                },
+                {
+                  "category": 0,
+                  "frequency": 0.43410852713178294,
+                  "lower": 0.3,
+                  "mean_p": 0.3622227188441961,
+                  "n": 258
+                },
+                {
+                  "category": 0,
+                  "frequency": 0.47048300536672627,
+                  "lower": 0.4,
+                  "mean_p": 0.4516249635189678,
+                  "n": 559
+                },
+                {
+                  "category": 0,
+                  "frequency": 0.5095890410958904,
+                  "lower": 0.5,
+                  "mean_p": 0.5420989523178604,
+                  "n": 365
+                },
+                {
+                  "category": 0,
+                  "frequency": 0.5714285714285714,
+                  "lower": 0.6,
+                  "mean_p": 0.6334523139804906,
+                  "n": 91
+                },
+                {
+                  "category": 0,
+                  "frequency": 1.0,
+                  "lower": 0.7,
+                  "mean_p": 0.7231233694670742,
+                  "n": 4
+                },
+                {
+                  "category": 1,
+                  "frequency": 0.0,
+                  "lower": 0.2,
+                  "mean_p": 0.27687663053292577,
+                  "n": 4
+                },
+                {
+                  "category": 1,
+                  "frequency": 0.42857142857142855,
+                  "lower": 0.3,
+                  "mean_p": 0.3665476860195093,
+                  "n": 91
+                },
+                {
+                  "category": 1,
+                  "frequency": 0.4904109589041096,
+                  "lower": 0.4,
+                  "mean_p": 0.4579010476821396,
+                  "n": 365
+                },
+                {
+                  "category": 1,
+                  "frequency": 0.5295169946332737,
+                  "lower": 0.5,
+                  "mean_p": 0.5483750364810323,
+                  "n": 559
+                },
+                {
+                  "category": 1,
+                  "frequency": 0.5658914728682171,
+                  "lower": 0.6,
+                  "mean_p": 0.6377772811558039,
+                  "n": 258
+                },
+                {
+                  "category": 1,
+                  "frequency": 0.7142857142857143,
+                  "lower": 0.7,
+                  "mean_p": 0.7244442766550576,
+                  "n": 35
+                }
+              ],
+              "total_mae": 1.8491124962796566
+            },
+            "league": "nhl",
+            "model_id": "nhl.initial_causal_score.research.v1",
+            "promotion_status": "INITIAL_RESEARCH_ONLY_NO_DEFAULT_PROMOTION",
+            "provider_copy_counts": {
+              "1": 302,
+              "2": 7126
+            },
+            "schema": "initial_baseline_temporal_audit.v1",
+            "season_counts": {
+              "2021": 868,
+              "2022": 1312,
+              "2023": 1312,
+              "2024": 1312,
+              "2025": 1312,
+              "2026": 1312
+            },
+            "training_n": 4804,
+            "training_prior": 3.1077227310574522,
+            "training_seasons": [
+              2021,
+              2022,
+              2023,
+              2024
+            ],
+            "validation_2025": {
+              "baseline_brier": 0.2469219291306648,
+              "baseline_log_loss": 0.686983409680584,
+              "brier": 0.24351873647093994,
+              "log_loss": 0.6799526152907759,
+              "margin_mae": 2.1845919105703273,
+              "n": 1312,
+              "paired_week_bootstrap_95ci_brier_delta": [
+                -0.008796139012050761,
+                0.001206580303211938
+              ],
+              "paired_week_bootstrap_95ci_log_loss_delta": [
+                -0.01833652695908076,
+                0.002657408978913073
+              ],
+              "prediction_sha256": "141408656ea7c4044748bfc7ffdd2c9d500d519d2db77ad0b59671ccbdb3e8ad",
+              "reliability": [
+                {
+                  "category": 0,
+                  "frequency": 0.0,
+                  "lower": 0.1,
+                  "mean_p": 0.188893650055497,
+                  "n": 3
+                },
+                {
+                  "category": 0,
+                  "frequency": 0.2647058823529412,
+                  "lower": 0.2,
+                  "mean_p": 0.27405977986769664,
+                  "n": 34
+                },
+                {
+                  "category": 0,
+                  "frequency": 0.337037037037037,
+                  "lower": 0.3,
+                  "mean_p": 0.35701307531037496,
+                  "n": 270
+                },
+                {
+                  "category": 0,
+                  "frequency": 0.43953934740882916,
+                  "lower": 0.4,
+                  "mean_p": 0.45174523083957246,
+                  "n": 521
+                },
+                {
+                  "category": 0,
+                  "frequency": 0.5104712041884817,
+                  "lower": 0.5,
+                  "mean_p": 0.5448376953221161,
+                  "n": 382
+                },
+                {
+                  "category": 0,
+                  "frequency": 0.49,
+                  "lower": 0.6,
+                  "mean_p": 0.6318488750302267,
+                  "n": 100
+                },
+                {
+                  "category": 0,
+                  "frequency": 0.5,
+                  "lower": 0.7,
+                  "mean_p": 0.7131000205207836,
+                  "n": 2
+                },
+                {
+                  "category": 1,
+                  "frequency": 0.5,
+                  "lower": 0.2,
+                  "mean_p": 0.2868999794792165,
+                  "n": 2
+                },
+                {
+                  "category": 1,
+                  "frequency": 0.51,
+                  "lower": 0.3,
+                  "mean_p": 0.36815112496977326,
+                  "n": 100
+                },
+                {
+                  "category": 1,
+                  "frequency": 0.4895287958115183,
+                  "lower": 0.4,
+                  "mean_p": 0.4551623046778838,
+                  "n": 382
+                },
+                {
+                  "category": 1,
+                  "frequency": 0.5604606525911708,
+                  "lower": 0.5,
+                  "mean_p": 0.5482547691604276,
+                  "n": 521
+                },
+                {
+                  "category": 1,
+                  "frequency": 0.662962962962963,
+                  "lower": 0.6,
+                  "mean_p": 0.6429869246896249,
+                  "n": 270
+                },
+                {
+                  "category": 1,
+                  "frequency": 0.7352941176470589,
+                  "lower": 0.7,
+                  "mean_p": 0.7259402201323033,
+                  "n": 34
+                },
+                {
+                  "category": 1,
+                  "frequency": 1.0,
+                  "lower": 0.8,
+                  "mean_p": 0.8111063499445029,
+                  "n": 3
+                }
+              ],
+              "total_mae": 1.8801498584781409
+            }
+          },
+          "evaluation_sha256": "5ecc7e474cf10f733d090d68cad53ff7b759e511379d612f7cc647ba896942c9",
+          "excluded_current_events": {}
+        },
+        "package_sha256": "ffa555cfbcfa3c335c8e5e0bfabc197233ed7c6f6c110eb20a68bd89aab5d7ff",
+        "research_selection": {
+          "accuracy_default": false,
+          "action_authority": false,
+          "model_id": "nhl.initial_causal_score.research.v1",
+          "role": "INITIAL_RESEARCH_ONLY"
+        },
+        "total": 6.702124889478623
+      },
+      "event_id": "NHL:401891821",
+      "home_team": "Philadelphia Flyers",
+      "league": "nhl",
+      "model_id": "nhl.initial_causal_score.research.v1",
+      "model_input_snapshot": {
+        "away_against": 4.018966473375447,
+        "away_cold": 0.0,
+        "away_for": 4.063395921178013,
+        "away_rest": 14,
+        "home_against": 2.4711028771751096,
+        "home_cold": 0.0,
+        "home_for": 3.5644137653528056,
+        "home_rest": 14,
+        "neutral": 0.0
+      },
+      "model_p": 0.6442760226424097,
+      "model_winner": "Philadelphia Flyers",
+      "sim_p": 0.64329,
+      "simulation": {
+        "binary": {
+          "count": 100000,
+          "home_win_probability": 0.64329,
+          "mc_standard_error_pp": 0.15138838439275548,
+          "scope": "BINARY_NON_TIE_DIAGNOSTIC_NOT_INDEPENDENT_MODEL_VALIDATION",
+          "seed": 2149680742783370629,
+          "sha256": "99307da07432d917979d2b70c34788e760d32e65ef5b42c48ac442b89be1e770"
+        },
+        "draw_directory": "/workspace/scratch/bc8d16170201/daily-20260930/nhl-results/draws/NHL_401891821",
+        "joint_scores": null
+      },
+      "start_time_utc": "2026-09-30T23:30:00+00:00"
+    },
+    {
+      "away_team": "New York Islanders",
+      "diagnostics": {
+        "home_margin": -0.1850604566906439,
+        "home_win": 0.5048848260514062,
+        "model_lineage": {
+          "deployment_training_rows": 7428,
+          "embargo": "PREVIOUS_UTC_DAY_EXCLUDED",
+          "evaluation": {
+            "action_authority": false,
+            "baseline_probabilities": [
+              0.466278101582015,
+              0.533721898417985
+            ],
+            "evaluation_fit_sha256": "00bee02210d810bfb2f71af76c2e6d714a3424bc5c4f649e27d7347a6be92370",
+            "historical_availability_proven": false,
+            "later_audit_2026": {
+              "baseline_brier": 0.2496464117772398,
+              "baseline_log_loss": 0.6924406594360324,
+              "brier": 0.24894963772387033,
+              "log_loss": 0.691012929944899,
+              "margin_mae": 2.1506845800955743,
+              "n": 1312,
+              "paired_week_bootstrap_95ci_brier_delta": [
+                -0.004521620405513274,
+                0.003113141783512388
+              ],
+              "paired_week_bootstrap_95ci_log_loss_delta": [
+                -0.00948669144053496,
+                0.006421275626201579
+              ],
+              "prediction_sha256": "f4f2f398109ebd1fc22f2483c790c67ccbbc633b930e4918a97c9c254e0503c2",
+              "reliability": [
+                {
+                  "category": 0,
+                  "frequency": 0.2857142857142857,
+                  "lower": 0.2,
+                  "mean_p": 0.27555572334494244,
+                  "n": 35
+                },
+                {
+                  "category": 0,
+                  "frequency": 0.43410852713178294,
+                  "lower": 0.3,
+                  "mean_p": 0.3622227188441961,
+                  "n": 258
+                },
+                {
+                  "category": 0,
+                  "frequency": 0.47048300536672627,
+                  "lower": 0.4,
+                  "mean_p": 0.4516249635189678,
+                  "n": 559
+                },
+                {
+                  "category": 0,
+                  "frequency": 0.5095890410958904,
+                  "lower": 0.5,
+                  "mean_p": 0.5420989523178604,
+                  "n": 365
+                },
+                {
+                  "category": 0,
+                  "frequency": 0.5714285714285714,
+                  "lower": 0.6,
+                  "mean_p": 0.6334523139804906,
+                  "n": 91
+                },
+                {
+                  "category": 0,
+                  "frequency": 1.0,
+                  "lower": 0.7,
+                  "mean_p": 0.7231233694670742,
+                  "n": 4
+                },
+                {
+                  "category": 1,
+                  "frequency": 0.0,
+                  "lower": 0.2,
+                  "mean_p": 0.27687663053292577,
+                  "n": 4
+                },
+                {
+                  "category": 1,
+                  "frequency": 0.42857142857142855,
+                  "lower": 0.3,
+                  "mean_p": 0.3665476860195093,
+                  "n": 91
+                },
+                {
+                  "category": 1,
+                  "frequency": 0.4904109589041096,
+                  "lower": 0.4,
+                  "mean_p": 0.4579010476821396,
+                  "n": 365
+                },
+                {
+                  "category": 1,
+                  "frequency": 0.5295169946332737,
+                  "lower": 0.5,
+                  "mean_p": 0.5483750364810323,
+                  "n": 559
+                },
+                {
+                  "category": 1,
+                  "frequency": 0.5658914728682171,
+                  "lower": 0.6,
+                  "mean_p": 0.6377772811558039,
+                  "n": 258
+                },
+                {
+                  "category": 1,
+                  "frequency": 0.7142857142857143,
+                  "lower": 0.7,
+                  "mean_p": 0.7244442766550576,
+                  "n": 35
+                }
+              ],
+              "total_mae": 1.8491124962796566
+            },
+            "league": "nhl",
+            "model_id": "nhl.initial_causal_score.research.v1",
+            "promotion_status": "INITIAL_RESEARCH_ONLY_NO_DEFAULT_PROMOTION",
+            "provider_copy_counts": {
+              "1": 302,
+              "2": 7126
+            },
+            "schema": "initial_baseline_temporal_audit.v1",
+            "season_counts": {
+              "2021": 868,
+              "2022": 1312,
+              "2023": 1312,
+              "2024": 1312,
+              "2025": 1312,
+              "2026": 1312
+            },
+            "training_n": 4804,
+            "training_prior": 3.1077227310574522,
+            "training_seasons": [
+              2021,
+              2022,
+              2023,
+              2024
+            ],
+            "validation_2025": {
+              "baseline_brier": 0.2469219291306648,
+              "baseline_log_loss": 0.686983409680584,
+              "brier": 0.24351873647093994,
+              "log_loss": 0.6799526152907759,
+              "margin_mae": 2.1845919105703273,
+              "n": 1312,
+              "paired_week_bootstrap_95ci_brier_delta": [
+                -0.008796139012050761,
+                0.001206580303211938
+              ],
+              "paired_week_bootstrap_95ci_log_loss_delta": [
+                -0.01833652695908076,
+                0.002657408978913073
+              ],
+              "prediction_sha256": "141408656ea7c4044748bfc7ffdd2c9d500d519d2db77ad0b59671ccbdb3e8ad",
+              "reliability": [
+                {
+                  "category": 0,
+                  "frequency": 0.0,
+                  "lower": 0.1,
+                  "mean_p": 0.188893650055497,
+                  "n": 3
+                },
+                {
+                  "category": 0,
+                  "frequency": 0.2647058823529412,
+                  "lower": 0.2,
+                  "mean_p": 0.27405977986769664,
+                  "n": 34
+                },
+                {
+                  "category": 0,
+                  "frequency": 0.337037037037037,
+                  "lower": 0.3,
+                  "mean_p": 0.35701307531037496,
+                  "n": 270
+                },
+                {
+                  "category": 0,
+                  "frequency": 0.43953934740882916,
+                  "lower": 0.4,
+                  "mean_p": 0.45174523083957246,
+                  "n": 521
+                },
+                {
+                  "category": 0,
+                  "frequency": 0.5104712041884817,
+                  "lower": 0.5,
+                  "mean_p": 0.5448376953221161,
+                  "n": 382
+                },
+                {
+                  "category": 0,
+                  "frequency": 0.49,
+                  "lower": 0.6,
+                  "mean_p": 0.6318488750302267,
+                  "n": 100
+                },
+                {
+                  "category": 0,
+                  "frequency": 0.5,
+                  "lower": 0.7,
+                  "mean_p": 0.7131000205207836,
+                  "n": 2
+                },
+                {
+                  "category": 1,
+                  "frequency": 0.5,
+                  "lower": 0.2,
+                  "mean_p": 0.2868999794792165,
+                  "n": 2
+                },
+                {
+                  "category": 1,
+                  "frequency": 0.51,
+                  "lower": 0.3,
+                  "mean_p": 0.36815112496977326,
+                  "n": 100
+                },
+                {
+                  "category": 1,
+                  "frequency": 0.4895287958115183,
+                  "lower": 0.4,
+                  "mean_p": 0.4551623046778838,
+                  "n": 382
+                },
+                {
+                  "category": 1,
+                  "frequency": 0.5604606525911708,
+                  "lower": 0.5,
+                  "mean_p": 0.5482547691604276,
+                  "n": 521
+                },
+                {
+                  "category": 1,
+                  "frequency": 0.662962962962963,
+                  "lower": 0.6,
+                  "mean_p": 0.6429869246896249,
+                  "n": 270
+                },
+                {
+                  "category": 1,
+                  "frequency": 0.7352941176470589,
+                  "lower": 0.7,
+                  "mean_p": 0.7259402201323033,
+                  "n": 34
+                },
+                {
+                  "category": 1,
+                  "frequency": 1.0,
+                  "lower": 0.8,
+                  "mean_p": 0.8111063499445029,
+                  "n": 3
+                }
+              ],
+              "total_mae": 1.8801498584781409
+            }
+          },
+          "evaluation_sha256": "5ecc7e474cf10f733d090d68cad53ff7b759e511379d612f7cc647ba896942c9",
+          "excluded_current_events": {}
+        },
+        "package_sha256": "ffa555cfbcfa3c335c8e5e0bfabc197233ed7c6f6c110eb20a68bd89aab5d7ff",
+        "research_selection": {
+          "accuracy_default": false,
+          "action_authority": false,
+          "model_id": "nhl.initial_causal_score.research.v1",
+          "role": "INITIAL_RESEARCH_ONLY"
+        },
+        "total": 6.476066319214576
+      },
+      "event_id": "NHL:401892431",
+      "home_team": "Toronto Maple Leafs",
+      "league": "nhl",
+      "model_id": "nhl.initial_causal_score.research.v1",
+      "model_input_snapshot": {
+        "away_against": 3.2806413423782654,
+        "away_cold": 0.0,
+        "away_for": 2.3708386683475426,
+        "away_rest": 14,
+        "home_against": 4.33945783271854,
+        "home_cold": 0.0,
+        "home_for": 2.7514888559412762,
+        "home_rest": 14,
+        "neutral": 0.0
+      },
+      "model_p": 0.5048848260514062,
+      "model_winner": "Toronto Maple Leafs",
+      "sim_p": 0.50739,
+      "simulation": {
+        "binary": {
+          "count": 100000,
+          "home_win_probability": 0.50739,
+          "mc_standard_error_pp": 0.1581063371514398,
+          "scope": "BINARY_NON_TIE_DIAGNOSTIC_NOT_INDEPENDENT_MODEL_VALIDATION",
+          "seed": 5737989010897857322,
+          "sha256": "bf49625c4ad7788808335df52caa9d5df7f018dbfccc5370fc3ef3797bf6c7d0"
+        },
+        "draw_directory": "/workspace/scratch/bc8d16170201/daily-20260930/nhl-results/draws/NHL_401892431",
+        "joint_scores": null
+      },
+      "start_time_utc": "2026-09-30T23:30:00+00:00"
+    },
+    {
+      "away_team": "St. Louis CITY SC",
+      "diagnostics": {
+        "analytic_probabilities": [
+          0.3654286615721148,
+          0.24831884437891555,
+          0.38625249404896955
+        ],
+        "model_lineage": {
+          "deployment_training_rows": 2833,
+          "embargo": "PREVIOUS_UTC_DAY_EXCLUDED",
+          "evaluation": {
+            "action_authority": false,
+            "baseline_probabilities": [
+              0.2634044768349818,
+              0.2644456012493493,
+              0.4721499219156689
+            ],
+            "evaluation_fit_sha256": "a57208dd4bde474684a22b68dbca3eb601080d175cc8ee55aba3f774800f3883",
+            "historical_availability_proven": false,
+            "later_audit_2026": {
+              "baseline_brier": 0.6427675857775854,
+              "baseline_log_loss": 1.0644789670704098,
+              "brier": 0.6322321892141718,
+              "log_loss": 1.050766267951248,
+              "n": 402,
+              "paired_week_bootstrap_95ci_brier_delta": [
+                -0.021333591645213642,
+                -0.0001875192144828862
+              ],
+              "paired_week_bootstrap_95ci_log_loss_delta": [
+                -0.029817318713215895,
+                0.0009819569636679906
+              ],
+              "prediction_sha256": "4866f6d780d2ae5c2dd3d720767f684fe8496136d3be0eca0eee59dbf84ce1ca",
+              "reliability": [
+                {
+                  "category": 0,
+                  "frequency": 0.30434782608695654,
+                  "lower": 0.1,
+                  "mean_p": 0.18563862234190864,
+                  "n": 23
+                },
+                {
+                  "category": 0,
+                  "frequency": 0.23622047244094488,
+                  "lower": 0.2,
+                  "mean_p": 0.25294962226274287,
+                  "n": 254
+                },
+                {
+                  "category": 0,
+                  "frequency": 0.3697478991596639,
+                  "lower": 0.3,
+                  "mean_p": 0.33171630156624454,
+                  "n": 119
+                },
+                {
+                  "category": 0,
+                  "frequency": 0.5,
+                  "lower": 0.4,
+                  "mean_p": 0.4295492975989663,
+                  "n": 6
+                },
+                {
+                  "category": 1,
+                  "frequency": 0.2,
+                  "lower": 0.1,
+                  "mean_p": 0.19207088694902535,
+                  "n": 5
+                },
+                {
+                  "category": 1,
+                  "frequency": 0.25692695214105793,
+                  "lower": 0.2,
+                  "mean_p": 0.23280664770497883,
+                  "n": 397
+                },
+                {
+                  "category": 2,
+                  "frequency": 0.3225806451612903,
+                  "lower": 0.3,
+                  "mean_p": 0.37056062521869954,
+                  "n": 31
+                },
+                {
+                  "category": 2,
+                  "frequency": 0.3867403314917127,
+                  "lower": 0.4,
+                  "mean_p": 0.4576950302509846,
+                  "n": 181
+                },
+                {
+                  "category": 2,
+                  "frequency": 0.5568181818181818,
+                  "lower": 0.5,
+                  "mean_p": 0.5399013736405999,
+                  "n": 176
+                },
+                {
+                  "category": 2,
+                  "frequency": 0.5,
+                  "lower": 0.6,
+                  "mean_p": 0.6208683405605219,
+                  "n": 14
+                }
+              ]
+            },
+            "league": "mls",
+            "model_id": "mls.initial_causal_score.research.v1",
+            "promotion_status": "INITIAL_RESEARCH_ONLY_NO_DEFAULT_PROMOTION",
+            "provider_copy_counts": {
+              "2": 2833
+            },
+            "schema": "initial_baseline_temporal_audit.v1",
+            "season_counts": {
+              "2021": 459,
+              "2022": 476,
+              "2023": 493,
+              "2024": 493,
+              "2025": 510,
+              "2026": 402
+            },
+            "training_n": 1921,
+            "training_prior": 1.4578344612181156,
+            "training_seasons": [
+              2021,
+              2022,
+              2023,
+              2024
+            ],
+            "validation_2025": {
+              "baseline_brier": 0.6523574476572127,
+              "baseline_log_loss": 1.0778899429990896,
+              "brier": 0.6393544981656978,
+              "log_loss": 1.0595857056928235,
+              "n": 510,
+              "paired_week_bootstrap_95ci_brier_delta": [
+                -0.020213103153038797,
+                -0.0056863518003145
+              ],
+              "paired_week_bootstrap_95ci_log_loss_delta": [
+                -0.028751054088033225,
+                -0.007728286990509031
+              ],
+              "prediction_sha256": "1d230df17ca3f9c6b98e0b0fa0029fda7a7c1d88d4d7992a7d29b1beeced0bc7",
+              "reliability": [
+                {
+                  "category": 0,
+                  "frequency": 0.09090909090909091,
+                  "lower": 0.1,
+                  "mean_p": 0.19116444271966612,
+                  "n": 22
+                },
+                {
+                  "category": 0,
+                  "frequency": 0.27245508982035926,
+                  "lower": 0.2,
+                  "mean_p": 0.2572560904577919,
+                  "n": 334
+                },
+                {
+                  "category": 0,
+                  "frequency": 0.42483660130718953,
+                  "lower": 0.3,
+                  "mean_p": 0.3296500508873534,
+                  "n": 153
+                },
+                {
+                  "category": 0,
+                  "frequency": 1.0,
+                  "lower": 0.4,
+                  "mean_p": 0.43208905421556204,
+                  "n": 1
+                },
+                {
+                  "category": 1,
+                  "frequency": 0.3333333333333333,
+                  "lower": 0.1,
+                  "mean_p": 0.19631119809457817,
+                  "n": 3
+                },
+                {
+                  "category": 1,
+                  "frequency": 0.2504930966469428,
+                  "lower": 0.2,
+                  "mean_p": 0.23602364590239297,
+                  "n": 507
+                },
+                {
+                  "category": 2,
+                  "frequency": 0.2,
+                  "lower": 0.3,
+                  "mean_p": 0.380846208903979,
+                  "n": 25
+                },
+                {
+                  "category": 2,
+                  "frequency": 0.3669064748201439,
+                  "lower": 0.4,
+                  "mean_p": 0.45788894881378783,
+                  "n": 278
+                },
+                {
+                  "category": 2,
+                  "frequency": 0.5544554455445545,
+                  "lower": 0.5,
+                  "mean_p": 0.538669625089186,
+                  "n": 202
+                },
+                {
+                  "category": 2,
+                  "frequency": 0.8,
+                  "lower": 0.6,
+                  "mean_p": 0.6247663759278299,
+                  "n": 5
+                }
+              ]
+            }
+          },
+          "evaluation_sha256": "032d58d97c4b1c39643e7cc46781ecd780b5d33484fa06da84d7c6e8987c893a",
+          "excluded_current_events": {}
+        },
+        "outcome_order": [
+          "away",
+          "draw",
+          "home"
+        ],
+        "research_selection": {
+          "accuracy_default": false,
+          "action_authority": false,
+          "model_id": "mls.initial_causal_score.research.v1",
+          "role": "INITIAL_RESEARCH_ONLY"
+        },
+        "simulation_probabilities": [
+          0.36453,
+          0.24956,
+          0.38591
+        ]
+      },
+      "event_id": "MLS:761833",
+      "home_team": "Red Bull New York",
+      "league": "mls",
+      "model_id": "mls.initial_causal_score.research.v1",
+      "model_input_snapshot": {
+        "away_against": 1.418370980334205,
+        "away_cold": 0.0,
+        "away_for": 2.176500047330397,
+        "away_rest": 10.958333333333334,
+        "home_against": 1.4358441248842737,
+        "home_cold": 0.0,
+        "home_for": 1.0619462270191615,
+        "home_rest": 12.0,
+        "neutral": 0.0
+      },
+      "model_p": 0.38625249404896955,
+      "model_winner": "Red Bull New York",
+      "sim_p": 0.38591,
+      "simulation": {
+        "count": 100000,
+        "draw_directory": "/workspace/scratch/bc8d16170201/daily-20260930/mls-results/draws/MLS_761833",
+        "joint_scores": "INDEPENDENT_POISSON_REGULATION",
+        "seed": 15149120668020833795
+      },
+      "start_time_utc": "2026-09-30T23:30:00+00:00"
+    }
+  ],
+  "predictive_validation": "UNVALIDATED_CURRENT_PROSPECTIVE_COHORT",
+  "protected_artifacts_unchanged": true,
+  "publication_eligibility": "INELIGIBLE_OFFICIAL",
+  "receipts": [
+    {
+      "command": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+        "/workspace/scratch/bc8d16170201/sports-model/scripts/generate_card_force.py",
+        "--date",
+        "2026-09-30",
+        "--league",
+        "nhl",
+        "--as-of-utc",
+        "2026-09-30T15:23:12.561005+00:00",
+        "--initial-research-baselines",
+        "--simulations",
+        "100000",
+        "--output-dir",
+        "/workspace/scratch/bc8d16170201/daily-20260930/nhl-results"
+      ],
+      "cutoff": "2026-09-30T15:23:12.561005+00:00",
+      "exit": 0,
+      "league": "nhl",
+      "package_sha256": "ffa555cfbcfa3c335c8e5e0bfabc197233ed7c6f6c110eb20a68bd89aab5d7ff"
+    },
+    {
+      "command": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+        "/workspace/scratch/bc8d16170201/sports-model/scripts/generate_card_force.py",
+        "--date",
+        "2026-09-30",
+        "--league",
+        "mls",
+        "--as-of-utc",
+        "2026-09-30T15:23:13.304388+00:00",
+        "--initial-research-baselines",
+        "--simulations",
+        "100000",
+        "--output-dir",
+        "/workspace/scratch/bc8d16170201/daily-20260930/mls-results"
+      ],
+      "cutoff": "2026-09-30T15:23:13.304388+00:00",
+      "exit": 0,
+      "league": "mls",
+      "package_sha256": "1cfad9681978b3e4ac19933485b3f5da9f8fe1660ffcf7ef2081387c2269c258"
+    }
+  ],
+  "writer_clock": "2026-09-30T15:23:13.968173+00:00"
+}

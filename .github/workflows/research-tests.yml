@@ -22,8 +22,8 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.11'
+          python-version: '3.12'
       - name: Install numerical research dependencies
-        run: python3 -m pip install numpy==2.2.6 pandas==2.2.3
+        run: python3 -m pip install -r requirements-nfl-context.txt
       - name: Run research unit and integration suite
         run: python3 -m unittest discover -s research -p 'test_*.py' -v

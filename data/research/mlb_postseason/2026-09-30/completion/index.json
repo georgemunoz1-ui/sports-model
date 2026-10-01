@@ -1,0 +1,27 @@
+{
+  "archive_name": "MLB-Playoff-Completion-Evidence-2026-09-30.zip",
+  "archive_bytes": 831016,
+  "archive_sha256": "43b6e3b18831dcb921fafd84121647c868276111beca55624b0a9b545b2df620",
+  "parts": [
+    {
+      "path": "evidence.zip.part001",
+      "bytes": 300000,
+      "sha256": "200fff6b7fc21f0beacf3d1073a9806c97ac5c5e569cce435586a936efca2582",
+      "git_blob_sha": "7ab982d72a7b21be63bfdabc3640476e78fef6fa"
+    },
+    {
+      "path": "evidence.zip.part002",
+      "bytes": 300000,
+      "sha256": "61352f7b0f3b13adce9023a4ed4a6bdebe4acabd2473e2e8e428579faf25e529",
+      "git_blob_sha": "1e22defa828c60699ea5f71cc2371bb095773fae"
+    },
+    {
+      "path": "evidence.zip.part003",
+      "bytes": 231016,
+      "sha256": "2bfed1dc249c610a6c40f767ead84021a7395896538e4f8bc54d2110fcadf55d",
+      "git_blob_sha": "e80c74453b25eee0d7bd4d524591978e04cec641"
+    }
+  ],
+  "reassemble": "Concatenate parts in listed order; verify archive SHA256, then unzip.",
+  "prior_archive_sha256": "acb419a6db6bae81f195f28752a0a2c4b90a672e555149959035afb500f49e04"
+}

@@ -4568,3 +4568,17 @@ retained; two PRE_START and two POST_START, never retrospectively graded. Nine
 contract tests and four exact event replays passed. No postseason predictive
 validation, no canonical forecast registration, no promotion or action authority.
 Full report: docs/MLB_POSTSEASON_RESEARCH.md. Old defaults and packet pins unchanged.
+
+
+## 2026-09-30 — postseason process completion (17:45 PT research freeze)
+
+Added reusable collect/inspect/run/verify/result-reconciliation workflow. Raw-source
+feature reconstruction, review/code/input binding, chronology and writer locking
+are executable; duplicate requests return the same immutable run. Refreshed all
+four official event contexts, skipped three started games, froze CHC at SD 100K
+research paths (CHC 50.926%, SD 49.074%). Both batting orders available but not
+consumed. All five retained runs replay exactly; 106 local research tests pass.
+CI dependency import chain uses existing pinned contextual requirements. Prior
+forecasts, model kernel, parameters and official authority unchanged. Canonical
+registration and predictive validation remain unestablished. See
+docs/MLB_POSTSEASON_PROCESS_COMPLETION.md and immutable completion evidence index.

@@ -1,0 +1,32 @@
+name: All-model latest capability audit
+on:
+  push:
+    branches: [codex/all-model-capability-20261002]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Generate audit without hiding incomplete capabilities
+        run: |
+          set +e
+          python scripts/audit_latest_model_capabilities.py | tee latest-capability-audit.txt
+          code=${PIPESTATUS[0]}
+          echo "audit_exit=$code" >> "$GITHUB_OUTPUT"
+          exit 0
+        id: audit
+      - uses: actions/upload-artifact@v4
+        with:
+          name: latest-capability-audit-${{ github.run_id }}
+          path: |
+            latest-capability-audit.txt
+            evidence/latest_capability_audit.json
+          retention-days: 90
+      - name: Enforce no false latest-and-greatest claim
+        run: test "${{ steps.audit.outputs.audit_exit }}" = "0"

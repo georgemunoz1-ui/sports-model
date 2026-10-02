@@ -1,0 +1,73 @@
+name: October 2 limited-feature research
+on:
+  push:
+    branches: [codex/daily-research-20261002]
+    paths:
+      - scripts/daily_research_20261002.py
+      - .github/workflows/daily-research-20261002.yml
+permissions:
+  contents: read
+jobs:
+  research:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        league: [cfb, nhl]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install unchanged repository requirements
+        run: pip install -r requirements-consolidated.txt
+      - name: Fresh inputs, research forecasts, retained simulation and replay
+        run: python -u scripts/daily_research_20261002.py ${{ matrix.league }}
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: daily-research-20261002-${{ matrix.league }}-${{ github.run_id }}
+          path: daily-research-20261002-${{ matrix.league }}
+          retention-days: 90
+  census:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Independent all-seven-league dated provider census
+        run: |
+          python -u - <<'PY'
+          import datetime as dt, hashlib, json, urllib.request
+          from pathlib import Path
+          root = Path('daily-research-20261002-census')
+          root.mkdir()
+          routes = {'nfl':'football/nfl','cfb':'football/college-football','mlb':'baseball/mlb','nba':'basketball/nba','wnba':'basketball/wnba','mls':'soccer/usa.1','nhl':'hockey/nhl'}
+          report = {}
+          for league, route in routes.items():
+              url = f'https://site.api.espn.com/apis/site/v2/sports/{route}/scoreboard?dates=20261002&limit=1000'
+              if league == 'cfb': url += '&groups=80'
+              stamp = dt.datetime.now(dt.timezone.utc).isoformat()
+              try:
+                  req = urllib.request.Request(url, headers={'User-Agent':'sports-model/1.0 research'})
+                  with urllib.request.urlopen(req, timeout=45) as response: raw = response.read()
+                  (root / (league+'.json')).write_bytes(raw)
+                  j=json.loads(raw)
+                  events=[{'id':e['id'],'name':e.get('name'),'date':e.get('date'),'season':e.get('season'),'status':e.get('status'),'competitions':e.get('competitions')} for e in j.get('events',[])]
+                  report[league]={'status':'CAPTURED','url':url,'retrieved_at_utc':stamp,'raw_sha256':hashlib.sha256(raw).hexdigest(),'event_count':len(events),'events':events,'leagues':j.get('leagues')}
+              except Exception as exc:
+                  report[league]={'status':'FAILED','url':url,'retrieved_at_utc':stamp,'error':repr(exc)}
+          (root/'summary.json').write_text(json.dumps(report,indent=2))
+          print('CENSUS_SUMMARY_BEGIN')
+          print(json.dumps(report,separators=(',',':')))
+          print('CENSUS_SUMMARY_END')
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: daily-research-20261002-census-${{ github.run_id }}
+          path: daily-research-20261002-census
+          retention-days: 90

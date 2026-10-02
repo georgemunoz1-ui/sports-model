@@ -1,0 +1,59 @@
+{
+  "schema": "sports.capability_standard.v1",
+  "effective_date": "2026-10-02",
+  "principle": "Governance protects chronology and evidence; missing capabilities create development obligations rather than permanent scope excuses.",
+  "sports": ["nfl","cfb","mlb","nba","wnba","nhl","mls"],
+  "required_products": {
+    "winner": ["analytic_probability","calibrated_probability","simulation_probability"],
+    "margin": ["point_estimate","predictive_distribution","cover_probability","push_probability"],
+    "total": ["point_estimate","predictive_distribution","over_probability","under_probability","push_probability"]
+  },
+  "required_context": [
+    "current_roster_and_availability",
+    "starter_or_qb_or_goalie_identity",
+    "workload_and_role_changes",
+    "recent_team_state",
+    "rest_and_travel",
+    "venue_and_weather_when_relevant"
+  ],
+  "feature_policy": {
+    "incumbent_is_control_not_ceiling": true,
+    "new_feature_families_may_be_tested": true,
+    "market_features_in_independent_model": false,
+    "market_overlay_after_forecast_freeze": true,
+    "historical_point_in_time_binding_required_for_fitted_context": true,
+    "missing_context_creates_development_obligation": true
+  },
+  "candidate_methods": [
+    "regularized_linear_or_logistic",
+    "gradient_boosting",
+    "calibrated_nonlinear",
+    "distributional_or_count_model",
+    "ensemble_only_after_component_oof_predictions_exist"
+  ],
+  "validation": {
+    "outer_split": "chronological",
+    "winner_metrics": ["brier","log_loss","calibration_intercept","calibration_slope","ece"],
+    "margin_metrics": ["mae","rmse","crps","coverage_calibration"],
+    "total_metrics": ["mae","rmse","crps","coverage_calibration"],
+    "promotion_requires_same_population_comparison": true,
+    "prospective_shadow_after_historical_pass": true
+  },
+  "daily_output": [
+    "model_version",
+    "feature_version",
+    "input_cutoff",
+    "winner_model_probability",
+    "winner_simulation_probability",
+    "projected_margin",
+    "model_cover_probability",
+    "simulation_cover_probability",
+    "projected_total",
+    "over_under_probability",
+    "market_snapshot",
+    "no_vig_market_probability",
+    "model_market_delta",
+    "missing_or_stale_context"
+  ],
+  "action_authority": false
+}

@@ -1,0 +1,25 @@
+name: October 6 card source recovery
+on:
+  push:
+    branches: [codex/oct6-card-source-recovery]
+    paths: [.github/workflows/oct6-card-source-recovery.yml]
+permissions:
+  contents: read
+jobs:
+  recover:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: 43ad83382af067b019a086d45d23569497ca6e08
+      - name: Verify immutable source identity
+        run: |
+          test "$(git hash-object data/cfb/model/cfb_v1_features.parquet)" = a87a511937d852cc739f1d2cec2edd52cd7b9c64
+          sha256sum data/cfb/model/cfb_v1_features.parquet
+      - uses: actions/upload-artifact@v4
+        with:
+          name: oct6-card-cfb-frozen-source
+          path: data/cfb/model/cfb_v1_features.parquet
+          if-no-files-found: error
+          retention-days: 90

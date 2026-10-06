@@ -163,6 +163,10 @@ def run(root, context, contract, review, output):
         eid = e['event_id']
         try:
             if eid not in r['reviewed_event_ids']: raise ValueError('AGENT_REVIEW_MISSING')
+            for side in ('away', 'home'):
+                pid=e[side+'_pitcher_id']
+                if any(f'postseason_{pid}_{phase}' not in extra for phase in ('F','D','L','W')):
+                    raise ValueError('POSTSEASON_CONTEXT_CENSUS_MISSING')
             manual = r.get('event_context', {}).get(eid, {})
             if not all(isinstance(manual.get(k), str) and manual[k].strip() for k in ('pitching_plan', 'availability_review')):
                 raise ValueError('EVENT_CONTEXT_REVIEW_MISSING')

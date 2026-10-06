@@ -4559,26 +4559,6 @@ No model/default, market, action or release-policy changes. No historical regist
 created for September 21/22. See docs/MLB_CALIBRATION_GRADING_REPAIR.md and retained evidence.
 
 
-## 2026-09-30 — isolated MLB postseason research challenger
+## 2026-10-06T21:55:00.515532+00:00 — MLB remaining-issue repair / postseason context screen
 
-Owner requested September 30 playoff model. Separate V13 empty-base extra-inning
-research identity added; unchanged nine-inning kernel and coefficients. Prior-date
-official inputs: 2,433 finals, eight starter profiles. Four 100K path diagnostics
-retained; two PRE_START and two POST_START, never retrospectively graded. Nine
-contract tests and four exact event replays passed. No postseason predictive
-validation, no canonical forecast registration, no promotion or action authority.
-Full report: docs/MLB_POSTSEASON_RESEARCH.md. Old defaults and packet pins unchanged.
-
-
-## 2026-09-30 — postseason process completion (17:45 PT research freeze)
-
-Added reusable collect/inspect/run/verify/result-reconciliation workflow. Raw-source
-feature reconstruction, review/code/input binding, chronology and writer locking
-are executable; duplicate requests return the same immutable run. Refreshed all
-four official event contexts, skipped three started games, froze CHC at SD 100K
-research paths (CHC 50.926%, SD 49.074%). Both batting orders available but not
-consumed. All five retained runs replay exactly; 106 local research tests pass.
-CI dependency import chain uses existing pinned contextual requirements. Prior
-forecasts, model kernel, parameters and official authority unchanged. Canonical
-registration and predictive validation remain unestablished. See
-docs/MLB_POSTSEASON_PROCESS_COMPLETION.md and immutable completion evidence index.
+User authorized workload/personnel/calibration repairs. Separate workload, lineup, bullpen and temperature shadow arms; defaults and frozen kernels unchanged. 40 targeted tests, four current-source negative checks, four latest pre-start 100K diagnostic runs and exact replay/idempotency passed. Official current acquisition: 53 context responses, 104 players, 7958 log rows. Historical 2023/2024/2025 census 131 games; 122 eligible (37/41/44), nine exclusions. Calibration fit only 2024 (n=41); held-out 2025 (n=44): baseline Brier .25004, workload .25151, lineup .25416, full context .25589, calibrated .26430. NO ADOPTION; failed calibration not applied. Atomic capture, postponed-as-Final filtering and optimizer scalar bugs repaired. Full canonical health/registration/deployment and series-roster/injury completeness remain unestablished; no old flags upgraded. See docs/MLB_POSTSEASON_CONTEXT_REPAIR.md. PR58 draft atop PR51; action OFF, dose0.

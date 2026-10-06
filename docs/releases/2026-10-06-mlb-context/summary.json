@@ -1,0 +1,2595 @@
+{
+  "action_authority": false,
+  "created_at_utc": "2026-10-06T21:47:19.917148+00:00",
+  "design_sha256": "248b101302c8be5645542f2cc4ca28c264f377720587fb986bc532c8de16b14a",
+  "dose": 0.0,
+  "excluded": [
+    {
+      "event_id": "MLB:748573",
+      "reason": "STARTER_ROSTER_CONFLICT",
+      "season": 2023
+    },
+    {
+      "event_id": "MLB:748565",
+      "reason": "STARTER_ROSTER_CONFLICT",
+      "season": 2023
+    },
+    {
+      "event_id": "MLB:748548",
+      "reason": "STARTER_ROSTER_CONFLICT",
+      "season": 2023
+    },
+    {
+      "event_id": "MLB:748549",
+      "reason": "STARTER_ROSTER_CONFLICT",
+      "season": 2023
+    },
+    {
+      "event_id": "MLB:775302",
+      "reason": "STARTER_HISTORY_MISSING",
+      "season": 2024
+    },
+    {
+      "event_id": "MLB:775297",
+      "reason": "STARTER_HISTORY_MISSING",
+      "season": 2024
+    },
+    {
+      "event_id": "MLB:813066",
+      "reason": "STARTER_ROSTER_CONFLICT",
+      "season": 2025
+    },
+    {
+      "event_id": "MLB:813064",
+      "reason": "STARTER_HISTORY_MISSING",
+      "season": 2025
+    },
+    {
+      "event_id": "MLB:813046",
+      "reason": "STARTER_HISTORY_MISSING",
+      "season": 2025
+    }
+  ],
+  "historical_tier": "RETROSPECTIVE_RECONSTRUCTION: actual starter/initial lineup and dated roster recovered now, not pregame archive certification",
+  "holdout_comparisons": {
+    "arm1": {
+      "blocks": 11,
+      "ci95": [
+        -0.0013556890525977935,
+        0.0045094245145915245
+      ],
+      "delta": 0.001465723490909089,
+      "delta_direction": "arm1 minus baseline",
+      "limitation": "Few series; no pregame input timestamp proof; not promotion evidence",
+      "method": "PAIRED_SERIES_CLUSTER_PERCENTILE",
+      "resamples": 2000,
+      "seed": 61006
+    },
+    "arm2": {
+      "blocks": 11,
+      "ci95": [
+        -0.0005846822501355188,
+        0.009362798300587895
+      ],
+      "delta": 0.004113549650000007,
+      "delta_direction": "arm2 minus baseline",
+      "limitation": "Few series; no pregame input timestamp proof; not promotion evidence",
+      "method": "PAIRED_SERIES_CLUSTER_PERCENTILE",
+      "resamples": 2000,
+      "seed": 61006
+    },
+    "arm2_vs_arm1": {
+      "blocks": 11,
+      "ci95": [
+        -0.00019426226431061238,
+        0.005717318855056808
+      ],
+      "delta": 0.0026478261590909186,
+      "delta_direction": "arm2 minus arm1",
+      "limitation": "Few series; no pregame input timestamp proof; not promotion evidence",
+      "method": "PAIRED_SERIES_CLUSTER_PERCENTILE",
+      "resamples": 2000,
+      "seed": 61006
+    },
+    "arm3": {
+      "blocks": 11,
+      "ci95": [
+        0.0001409684711111015,
+        0.012285881173870765
+      ],
+      "delta": 0.005850766679545442,
+      "delta_direction": "arm3 minus baseline",
+      "limitation": "Few series; no pregame input timestamp proof; not promotion evidence",
+      "method": "PAIRED_SERIES_CLUSTER_PERCENTILE",
+      "resamples": 2000,
+      "seed": 61006
+    },
+    "arm3_vs_arm2": {
+      "blocks": 11,
+      "ci95": [
+        -0.004196672056648965,
+        0.009120669186501918
+      ],
+      "delta": 0.0017372170295454354,
+      "delta_direction": "arm3 minus arm2",
+      "limitation": "Few series; no pregame input timestamp proof; not promotion evidence",
+      "method": "PAIRED_SERIES_CLUSTER_PERCENTILE",
+      "resamples": 2000,
+      "seed": 61006
+    },
+    "calibrated": {
+      "blocks": 11,
+      "ci95": [
+        0.0013311638411215969,
+        0.029613231164380516
+      ],
+      "delta": 0.014255584777291152,
+      "delta_direction": "calibrated minus baseline",
+      "limitation": "Few series; no pregame input timestamp proof; not promotion evidence",
+      "method": "PAIRED_SERIES_CLUSTER_PERCENTILE",
+      "resamples": 2000,
+      "seed": 61006
+    },
+    "calibrated_vs_arm3": {
+      "blocks": 11,
+      "ci95": [
+        -0.003404144752462707,
+        0.019177256327165514
+      ],
+      "delta": 0.00840481809774571,
+      "delta_direction": "calibrated minus arm3",
+      "limitation": "Few series; no pregame input timestamp proof; not promotion evidence",
+      "method": "PAIRED_SERIES_CLUSTER_PERCENTILE",
+      "resamples": 2000,
+      "seed": 61006
+    }
+  },
+  "holdout_slices": {
+    "competitive": {
+      "arm1": {
+        "accuracy": 0.5813953488372093,
+        "binary_brier": 0.2473166111372093,
+        "log_loss": 0.6877547882467714,
+        "mean_abs_distance_from_half": 0.0439406976744186,
+        "mean_probability": 0.49288116279069766,
+        "n": 43,
+        "reliability": [
+          {
+            "mean_probability": 0.39928,
+            "n": 1,
+            "observed_rate": 0.0,
+            "outcome_rate_wilson95": [
+              0.0,
+              0.7934567085261071
+            ],
+            "range": [
+              0.3,
+              0.4
+            ]
+          },
+          {
+            "mean_probability": 0.4546790909090909,
+            "n": 22,
+            "observed_rate": 0.5,
+            "outcome_rate_wilson95": [
+              0.3072180469247956,
+              0.6927819530752044
+            ],
+            "range": [
+              0.4,
+              0.5
+            ]
+          },
+          {
+            "mean_probability": 0.5395835,
+            "n": 20,
+            "observed_rate": 0.65,
+            "outcome_rate_wilson95": [
+              0.43285051021946463,
+              0.8188104521320554
+            ],
+            "range": [
+              0.5,
+              0.6
+            ]
+          }
+        ]
+      },
+      "arm2": {
+        "accuracy": 0.5348837209302325,
+        "binary_brier": 0.2500269315116279,
+        "log_loss": 0.6932194152324354,
+        "mean_abs_distance_from_half": 0.04321441860465117,
+        "mean_probability": 0.49400093023255814,
+        "n": 43,
+        "reliability": [
+          {
+            "mean_probability": 0.39258,
+            "n": 2,
+            "observed_rate": 0.5,
+            "outcome_rate_wilson95": [
+              0.09452865480086614,
+              0.9054713451991339
+            ],
+            "range": [
+              0.3,
+              0.4
+            ]
+          },
+          {
+            "mean_probability": 0.45984523809523803,
+            "n": 21,
+            "observed_rate": 0.5238095238095238,
+            "outcome_rate_wilson95": [
+              0.32369217900266756,
+              0.7165628770323705
+            ],
+            "range": [
+              0.4,
+              0.5
+            ]
+          },
+          {
+            "mean_probability": 0.5368336842105264,
+            "n": 19,
+            "observed_rate": 0.5789473684210527,
+            "outcome_rate_wilson95": [
+              0.36275551465160105,
+              0.7685837960796962
+            ],
+            "range": [
+              0.5,
+              0.6
+            ]
+          },
+          {
+            "mean_probability": 0.60029,
+            "n": 1,
+            "observed_rate": 1.0,
+            "outcome_rate_wilson95": [
+              0.20654329147389294,
+              1.0
+            ],
+            "range": [
+              0.6,
+              0.7
+            ]
+          }
+        ]
+      },
+      "arm3": {
+        "accuracy": 0.4418604651162791,
+        "binary_brier": 0.2518597888744186,
+        "log_loss": 0.6968015848180621,
+        "mean_abs_distance_from_half": 0.03753720930232558,
+        "mean_probability": 0.4935906976744186,
+        "n": 43,
+        "reliability": [
+          {
+            "mean_probability": 0.38802,
+            "n": 1,
+            "observed_rate": 0.0,
+            "outcome_rate_wilson95": [
+              0.0,
+              0.7934567085261071
+            ],
+            "range": [
+              0.3,
+              0.4
+            ]
+          },
+          {
+            "mean_probability": 0.46529708333333336,
+            "n": 24,
+            "observed_rate": 0.625,
+            "outcome_rate_wilson95": [
+              0.42709619037907065,
+              0.7884086656636855
+            ],
+            "range": [
+              0.4,
+              0.5
+            ]
+          },
+          {
+            "mean_probability": 0.5330176470588235,
+            "n": 17,
+            "observed_rate": 0.47058823529411764,
+            "outcome_rate_wilson95": [
+              0.26164801196088106,
+              0.6903710268845051
+            ],
+            "range": [
+              0.5,
+              0.6
+            ]
+          },
+          {
+            "mean_probability": 0.60795,
+            "n": 1,
+            "observed_rate": 1.0,
+            "outcome_rate_wilson95": [
+              0.20654329147389294,
+              1.0
+            ],
+            "range": [
+              0.6,
+              0.7
+            ]
+          }
+        ]
+      },
+      "baseline": {
+        "accuracy": 0.5813953488372093,
+        "binary_brier": 0.2463153516023256,
+        "log_loss": 0.6857145451352405,
+        "mean_abs_distance_from_half": 0.040563488372093025,
+        "mean_probability": 0.4943462790697674,
+        "n": 43,
+        "reliability": [
+          {
+            "mean_probability": 0.4567969565217393,
+            "n": 23,
+            "observed_rate": 0.4782608695652174,
+            "outcome_rate_wilson95": [
+              0.2923686953994572,
+              0.6703757013578151
+            ],
+            "range": [
+              0.4,
+              0.5
+            ]
+          },
+          {
+            "mean_probability": 0.537528,
+            "n": 20,
+            "observed_rate": 0.65,
+            "outcome_rate_wilson95": [
+              0.43285051021946463,
+              0.8188104521320554
+            ],
+            "range": [
+              0.5,
+              0.6
+            ]
+          }
+        ]
+      },
+      "calibrated": {
+        "accuracy": 0.4418604651162791,
+        "binary_brier": 0.2567698011261211,
+        "log_loss": 0.7065495212518,
+        "mean_abs_distance_from_half": 0.06871679935356888,
+        "mean_probability": 0.4882928728161874,
+        "n": 43,
+        "reliability": [
+          {
+            "mean_probability": 0.3578117585271077,
+            "n": 5,
+            "observed_rate": 0.4,
+            "outcome_rate_wilson95": [
+              0.1176182311592533,
+              0.769280067791163
+            ],
+            "range": [
+              0.3,
+              0.4
+            ]
+          },
+          {
+            "mean_probability": 0.4490913393405379,
+            "n": 20,
+            "observed_rate": 0.65,
+            "outcome_rate_wilson95": [
+              0.43285051021946463,
+              0.8188104521320554
+            ],
+            "range": [
+              0.4,
+              0.5
+            ]
+          },
+          {
+            "mean_probability": 0.5498697721362903,
+            "n": 14,
+            "observed_rate": 0.5714285714285714,
+            "outcome_rate_wilson95": [
+              0.3259026690286936,
+              0.7861949006959948
+            ],
+            "range": [
+              0.5,
+              0.6
+            ]
+          },
+          {
+            "mean_probability": 0.6318827854354234,
+            "n": 4,
+            "observed_rate": 0.25,
+            "outcome_rate_wilson95": [
+              0.045586062644636216,
+              0.6993639475573634
+            ],
+            "range": [
+              0.6,
+              0.7
+            ]
+          }
+        ]
+      }
+    },
+    "extra_innings": {
+      "arm1": {
+        "accuracy": 0.6,
+        "binary_brier": 0.24873568076,
+        "log_loss": 0.6909094587488825,
+        "mean_abs_distance_from_half": 0.05876,
+        "mean_probability": 0.46344799999999997,
+        "n": 5,
+        "reliability": [
+          {
+            "mean_probability": 0.44043,
+            "n": 4,
+            "observed_rate": 0.5,
+            "outcome_rate_wilson95": [
+              0.15003570882017148,
+              0.8499642911798285
+            ],
+            "range": [
+              0.4,
+              0.5
+            ]
+          },
+          {
+            "mean_probability": 0.55552,
+            "n": 1,
+            "observed_rate": 1.0,
+            "outcome_rate_wilson95": [
+              0.20654329147389294,
+              1.0
+            ],
+            "range": [
+              0.5,
+              0.6
+            ]
+          }
+        ]
+      },
+      "arm2": {
+        "accuracy": 0.6,
+        "binary_brier": 0.2542678514,
+        "log_loss": 0.7021501115616353,
+        "mean_abs_distance_from_half": 0.05677199999999999,
+        "mean_probability": 0.4627,
+        "n": 5,
+        "reliability": [
+          {
+            "mean_probability": 0.39991,
+            "n": 1,
+            "observed_rate": 1.0,
+            "outcome_rate_wilson95": [
+              0.20654329147389294,
+              1.0
+            ],
+            "range": [
+              0.3,
+              0.4
+            ]
+          },
+          {
+            "mean_probability": 0.45497000000000004,
+            "n": 3,
+            "observed_rate": 0.3333333333333333,
+            "outcome_rate_wilson95": [
+              0.0614903152761605,
+              0.7923450448735121
+            ],
+            "range": [
+              0.4,
+              0.5
+            ]
+          },
+          {
+            "mean_probability": 0.54868,
+            "n": 1,
+            "observed_rate": 1.0,
+            "outcome_rate_wilson95": [
+              0.20654329147389294,
+              1.0
+            ],
+            "range": [
+              0.5,
+              0.6
+            ]
+          }
+        ]
+      },
+      "arm3": {
+        "accuracy": 0.6,
+        "binary_brier": 0.25619797892000007,
+        "log_loss": 0.7058198170469078,
+        "mean_abs_distance_from_half": 0.04753999999999999,
+        "mean_probability": 0.470992,
+        "n": 5,
+        "reliability": [
+          {
+            "mean_probability": 0.4521575,
+            "n": 4,
+            "observed_rate": 0.5,
+            "outcome_rate_wilson95": [
+              0.15003570882017148,
+              0.8499642911798285
+            ],
+            "range": [
+              0.4,
+              0.5
+            ]
+          },
+          {
+            "mean_probability": 0.54633,
+            "n": 1,
+            "observed_rate": 1.0,
+            "outcome_rate_wilson95": [
+              0.20654329147389294,
+              1.0
+            ],
+            "range": [
+              0.5,
+              0.6
+            ]
+          }
+        ]
+      },
+      "baseline": {
+        "accuracy": 0.6,
+        "binary_brier": 0.24436017478,
+        "log_loss": 0.6819666761035339,
+        "mean_abs_distance_from_half": 0.055838,
+        "mean_probability": 0.46845,
+        "n": 5,
+        "reliability": [
+          {
+            "mean_probability": 0.4453825,
+            "n": 4,
+            "observed_rate": 0.5,
+            "outcome_rate_wilson95": [
+              0.15003570882017148,
+              0.8499642911798285
+            ],
+            "range": [
+              0.4,
+              0.5
+            ]
+          },
+          {
+            "mean_probability": 0.56072,
+            "n": 1,
+            "observed_rate": 1.0,
+            "outcome_rate_wilson95": [
+              0.20654329147389294,
+              1.0
+            ],
+            "range": [
+              0.5,
+              0.6
+            ]
+          }
+        ]
+      },
+      "calibrated": {
+        "accuracy": 0.6,
+        "binary_brier": 0.2654079012311895,
+        "log_loss": 0.7259807129325165,
+        "mean_abs_distance_from_half": 0.08691400939256724,
+        "mean_probability": 0.4472020301076416,
+        "n": 5,
+        "reliability": [
+          {
+            "mean_probability": 0.3668781583766081,
+            "n": 2,
+            "observed_rate": 0.5,
+            "outcome_rate_wilson95": [
+              0.09452865480086614,
+              0.9054713451991339
+            ],
+            "range": [
+              0.3,
+              0.4
+            ]
+          },
+          {
+            "mean_probability": 0.4584818675172349,
+            "n": 2,
+            "observed_rate": 0.5,
+            "outcome_rate_wilson95": [
+              0.09452865480086614,
+              0.9054713451991339
+            ],
+            "range": [
+              0.4,
+              0.5
+            ]
+          },
+          {
+            "mean_probability": 0.5852900987505222,
+            "n": 1,
+            "observed_rate": 1.0,
+            "outcome_rate_wilson95": [
+              0.20654329147389294,
+              1.0
+            ],
+            "range": [
+              0.5,
+              0.6
+            ]
+          }
+        ]
+      }
+    },
+    "favorite_60plus": {
+      "arm1": {
+        "accuracy": 0.0,
+        "binary_brier": 0.43178041,
+        "log_loss": 1.0703164195132624,
+        "mean_abs_distance_from_half": 0.15710000000000002,
+        "mean_probability": 0.6571,
+        "n": 1,
+        "reliability": [
+          {
+            "mean_probability": 0.6571,
+            "n": 1,
+            "observed_rate": 0.0,
+            "outcome_rate_wilson95": [
+              0.0,
+              0.7934567085261071
+            ],
+            "range": [
+              0.6,
+              0.7
+            ]
+          }
+        ]
+      },
+      "arm2": {
+        "accuracy": 0.0,
+        "binary_brier": 0.43174098490000007,
+        "log_loss": 1.0702289342763405,
+        "mean_abs_distance_from_half": 0.15707000000000004,
+        "mean_probability": 0.65707,
+        "n": 1,
+        "reliability": [
+          {
+            "mean_probability": 0.65707,
+            "n": 1,
+            "observed_rate": 0.0,
+            "outcome_rate_wilson95": [
+              0.0,
+              0.7934567085261071
+            ],
+            "range": [
+              0.6,
+              0.7
+            ]
+          }
+        ]
+      },
+      "arm3": {
+        "accuracy": 0.0,
+        "binary_brier": 0.42936566759999995,
+        "log_loss": 1.0649647692558917,
+        "mean_abs_distance_from_half": 0.15525999999999995,
+        "mean_probability": 0.65526,
+        "n": 1,
+        "reliability": [
+          {
+            "mean_probability": 0.65526,
+            "n": 1,
+            "observed_rate": 0.0,
+            "outcome_rate_wilson95": [
+              0.0,
+              0.7934567085261071
+            ],
+            "range": [
+              0.6,
+              0.7
+            ]
+          }
+        ]
+      },
+      "baseline": {
+        "accuracy": 0.0,
+        "binary_brier": 0.4103427364000001,
+        "log_loss": 1.023263657878261,
+        "mean_abs_distance_from_half": 0.14058000000000004,
+        "mean_probability": 0.64058,
+        "n": 1,
+        "reliability": [
+          {
+            "mean_probability": 0.64058,
+            "n": 1,
+            "observed_rate": 0.0,
+            "outcome_rate_wilson95": [
+              0.0,
+              0.7934567085261071
+            ],
+            "range": [
+              0.6,
+              0.7
+            ]
+          }
+        ]
+      },
+      "calibrated": {
+        "accuracy": 0.0,
+        "binary_brier": 0.5880471370776055,
+        "log_loss": 1.4560402974633482,
+        "mean_abs_distance_from_half": 0.26684231565401073,
+        "mean_probability": 0.7668423156540107,
+        "n": 1,
+        "reliability": [
+          {
+            "mean_probability": 0.7668423156540107,
+            "n": 1,
+            "observed_rate": 0.0,
+            "outcome_rate_wilson95": [
+              0.0,
+              0.7934567085261071
+            ],
+            "range": [
+              0.7,
+              0.8
+            ]
+          }
+        ]
+      }
+    },
+    "high_realized_total_9plus": {
+      "arm1": {
+        "accuracy": 0.6470588235294118,
+        "binary_brier": 0.2506291811235294,
+        "log_loss": 0.6951668830683687,
+        "mean_abs_distance_from_half": 0.04911117647058823,
+        "mean_probability": 0.5041229411764706,
+        "n": 17,
+        "reliability": [
+          {
+            "mean_probability": 0.45751111111111104,
+            "n": 9,
+            "observed_rate": 0.4444444444444444,
+            "outcome_rate_wilson95": [
+              0.188775429471914,
+              0.7333526542559703
+            ],
+            "range": [
+              0.4,
+              0.5
+            ]
+          },
+          {
+            "mean_probability": 0.5421985714285714,
+            "n": 7,
+            "observed_rate": 0.8571428571428571,
+            "outcome_rate_wilson95": [
+              0.48686549668097007,
+              0.9743210440510253
+            ],
+            "range": [
+              0.5,
+              0.6
+            ]
+          },
+          {
+            "mean_probability": 0.6571,
+            "n": 1,
+            "observed_rate": 0.0,
+            "outcome_rate_wilson95": [
+              0.0,
+              0.7934567085261071
+            ],
+            "range": [
+              0.6,
+              0.7
+            ]
+          }
+        ]
+      },
+      "arm2": {
+        "accuracy": 0.5882352941176471,
+        "binary_brier": 0.2555912460941177,
+        "log_loss": 0.7051864921841079,
+        "mean_abs_distance_from_half": 0.046449411764705885,
+        "mean_probability": 0.5026917647058823,
+        "n": 17,
+        "reliability": [
+          {
+            "mean_probability": 0.4535075,
+            "n": 8,
+            "observed_rate": 0.5,
+            "outcome_rate_wilson95": [
+              0.21521252682444186,
+              0.7847874731755582
+            ],
+            "range": [
+              0.4,
+              0.5
+            ]
+          },
+          {
+            "mean_probability": 0.5325787500000001,
+            "n": 8,
+            "observed_rate": 0.75,
+            "outcome_rate_wilson95": [
+              0.40926987910258916,
+              0.9285223111419724
+            ],
+            "range": [
+              0.5,
+              0.6
+            ]
+          },
+          {
+            "mean_probability": 0.65707,
+            "n": 1,
+            "observed_rate": 0.0,
+            "outcome_rate_wilson95": [
+              0.0,
+              0.7934567085261071
+            ],
+            "range": [
+              0.6,
+              0.7
+            ]
+          }
+        ]
+      },
+      "arm3": {
+        "accuracy": 0.5294117647058824,
+        "binary_brier": 0.2531185926823529,
+        "log_loss": 0.7000853665523428,
+        "mean_abs_distance_from_half": 0.04212941176470589,
+        "mean_probability": 0.5048717647058824,
+        "n": 17,
+        "reliability": [
+          {
+            "mean_probability": 0.45475857142857146,
+            "n": 7,
+            "observed_rate": 0.5714285714285714,
+            "outcome_rate_wilson95": [
+              0.2504542304090258,
+              0.8417830777373732
+            ],
+            "range": [
+              0.4,
+              0.5
+            ]
+          },
+          {
+            "mean_probability": 0.5271388888888889,
+            "n": 9,
+            "observed_rate": 0.6666666666666666,
+            "outcome_rate_wilson95": [
+              0.35419734749908977,
+              0.879418401317257
+            ],
+            "range": [
+              0.5,
+              0.6
+            ]
+          },
+          {
+            "mean_probability": 0.65526,
+            "n": 1,
+            "observed_rate": 0.0,
+            "outcome_rate_wilson95": [
+              0.0,
+              0.7934567085261071
+            ],
+            "range": [
+              0.6,
+              0.7
+            ]
+          }
+        ]
+      },
+      "baseline": {
+        "accuracy": 0.6470588235294118,
+        "binary_brier": 0.24802577045294114,
+        "log_loss": 0.6896700032672912,
+        "mean_abs_distance_from_half": 0.04668882352941177,
+        "mean_probability": 0.5046758823529411,
+        "n": 17,
+        "reliability": [
+          {
+            "mean_probability": 0.46032111111111107,
+            "n": 9,
+            "observed_rate": 0.4444444444444444,
+            "outcome_rate_wilson95": [
+              0.188775429471914,
+              0.7333526542559703
+            ],
+            "range": [
+              0.4,
+              0.5
+            ]
+          },
+          {
+            "mean_probability": 0.5422885714285715,
+            "n": 7,
+            "observed_rate": 0.8571428571428571,
+            "outcome_rate_wilson95": [
+              0.48686549668097007,
+              0.9743210440510253
+            ],
+            "range": [
+              0.5,
+              0.6
+            ]
+          },
+          {
+            "mean_probability": 0.64058,
+            "n": 1,
+            "observed_rate": 0.0,
+            "outcome_rate_wilson95": [
+              0.0,
+              0.7934567085261071
+            ],
+            "range": [
+              0.6,
+              0.7
+            ]
+          }
+        ]
+      },
+      "calibrated": {
+        "accuracy": 0.5294117647058824,
+        "binary_brier": 0.25868198630365585,
+        "log_loss": 0.7152965315210744,
+        "mean_abs_distance_from_half": 0.07635228774305364,
+        "mean_probability": 0.5080260879754388,
+        "n": 17,
+        "reliability": [
+          {
+            "mean_probability": 0.381566765325066,
+            "n": 3,
+            "observed_rate": 0.3333333333333333,
+            "outcome_rate_wilson95": [
+              0.0614903152761605,
+              0.7923450448735121
+            ],
+            "range": [
+              0.3,
+              0.4
+            ]
+          },
+          {
+            "mean_probability": 0.4436317515000191,
+            "n": 4,
+            "observed_rate": 0.75,
+            "outcome_rate_wilson95": [
+              0.3006360524426366,
+              0.9544139373553637
+            ],
+            "range": [
+              0.4,
+              0.5
+            ]
+          },
+          {
+            "mean_probability": 0.5500415419947973,
+            "n": 9,
+            "observed_rate": 0.6666666666666666,
+            "outcome_rate_wilson95": [
+              0.35419734749908977,
+              0.879418401317257
+            ],
+            "range": [
+              0.5,
+              0.6
+            ]
+          },
+          {
+            "mean_probability": 0.7668423156540107,
+            "n": 1,
+            "observed_rate": 0.0,
+            "outcome_rate_wilson95": [
+              0.0,
+              0.7934567085261071
+            ],
+            "range": [
+              0.7,
+              0.8
+            ]
+          }
+        ]
+      }
+    },
+    "lower_realized_total": {
+      "arm1": {
+        "accuracy": 0.5185185185185185,
+        "binary_brier": 0.25206291147407406,
+        "log_loss": 0.6972568630356356,
+        "mean_abs_distance_from_half": 0.04487629629629631,
+        "mean_probability": 0.4918851851851852,
+        "n": 27,
+        "reliability": [
+          {
+            "mean_probability": 0.39928,
+            "n": 1,
+            "observed_rate": 0.0,
+            "outcome_rate_wilson95": [
+              0.0,
+              0.7934567085261071
+            ],
+            "range": [
+              0.3,
+              0.4
+            ]
+          },
+          {
+            "mean_probability": 0.4527184615384615,
+            "n": 13,
+            "observed_rate": 0.5384615384615384,
+            "outcome_rate_wilson95": [
+              0.2914343243183205,
+              0.7679424569851186
+            ],
+            "range": [
+              0.4,
+              0.5
+            ]
+          },
+          {
+            "mean_probability": 0.5381753846153846,
+            "n": 13,
+            "observed_rate": 0.5384615384615384,
+            "outcome_rate_wilson95": [
+              0.2914343243183205,
+              0.7679424569851186
+            ],
+            "range": [
+              0.5,
+              0.6
+            ]
+          }
+        ]
+      },
+      "arm2": {
+        "accuracy": 0.48148148148148145,
+        "binary_brier": 0.2532536243074074,
+        "log_loss": 0.699647904523749,
+        "mean_abs_distance_from_half": 0.04539444444444446,
+        "mean_probability": 0.4945685185185185,
+        "n": 27,
+        "reliability": [
+          {
+            "mean_probability": 0.39258,
+            "n": 2,
+            "observed_rate": 0.5,
+            "outcome_rate_wilson95": [
+              0.09452865480086614,
+              0.9054713451991339
+            ],
+            "range": [
+              0.3,
+              0.4
+            ]
+          },
+          {
+            "mean_probability": 0.46374538461538456,
+            "n": 13,
+            "observed_rate": 0.5384615384615384,
+            "outcome_rate_wilson95": [
+              0.2914343243183205,
+              0.7679424569851186
+            ],
+            "range": [
+              0.4,
+              0.5
+            ]
+          },
+          {
+            "mean_probability": 0.5399281818181818,
+            "n": 11,
+            "observed_rate": 0.45454545454545453,
+            "outcome_rate_wilson95": [
+              0.21270957543988045,
+              0.7199122443100118
+            ],
+            "range": [
+              0.5,
+              0.6
+            ]
+          },
+          {
+            "mean_probability": 0.60029,
+            "n": 1,
+            "observed_rate": 1.0,
+            "outcome_rate_wilson95": [
+              0.20654329147389294,
+              1.0
+            ],
+            "range": [
+              0.6,
+              0.7
+            ]
+          }
+        ]
+      },
+      "arm3": {
+        "accuracy": 0.37037037037037035,
+        "binary_brier": 0.25764150050370366,
+        "log_loss": 0.7083696920386198,
+        "mean_abs_distance_from_half": 0.039005925925925916,
+        "mean_probability": 0.49247555555555556,
+        "n": 27,
+        "reliability": [
+          {
+            "mean_probability": 0.38802,
+            "n": 1,
+            "observed_rate": 0.0,
+            "outcome_rate_wilson95": [
+              0.0,
+              0.7934567085261071
+            ],
+            "range": [
+              0.3,
+              0.4
+            ]
+          },
+          {
+            "mean_probability": 0.4696364705882353,
+            "n": 17,
+            "observed_rate": 0.6470588235294118,
+            "outcome_rate_wilson95": [
+              0.4129996672121182,
+              0.826905138560951
+            ],
+            "range": [
+              0.4,
+              0.5
+            ]
+          },
+          {
+            "mean_probability": 0.53963125,
+            "n": 8,
+            "observed_rate": 0.25,
+            "outcome_rate_wilson95": [
+              0.07147768885802763,
+              0.5907301208974108
+            ],
+            "range": [
+              0.5,
+              0.6
+            ]
+          },
+          {
+            "mean_probability": 0.60795,
+            "n": 1,
+            "observed_rate": 1.0,
+            "outcome_rate_wilson95": [
+              0.20654329147389294,
+              1.0
+            ],
+            "range": [
+              0.6,
+              0.7
+            ]
+          }
+        ]
+      },
+      "baseline": {
+        "accuracy": 0.5185185185185185,
+        "binary_brier": 0.2513135095407407,
+        "log_loss": 0.6957258904870239,
+        "mean_abs_distance_from_half": 0.04041111111111112,
+        "mean_probability": 0.49325851851851854,
+        "n": 27,
+        "reliability": [
+          {
+            "mean_probability": 0.45453142857142864,
+            "n": 14,
+            "observed_rate": 0.5,
+            "outcome_rate_wilson95": [
+              0.2679886791947528,
+              0.7320113208052472
+            ],
+            "range": [
+              0.4,
+              0.5
+            ]
+          },
+          {
+            "mean_probability": 0.5349646153846155,
+            "n": 13,
+            "observed_rate": 0.5384615384615384,
+            "outcome_rate_wilson95": [
+              0.2914343243183205,
+              0.7679424569851186
+            ],
+            "range": [
+              0.5,
+              0.6
+            ]
+          }
+        ]
+      },
+      "calibrated": {
+        "accuracy": 0.37037037037037035,
+        "binary_brier": 0.26783536364217264,
+        "log_loss": 0.728801062053055,
+        "mean_abs_distance_from_half": 0.07124725171205783,
+        "mean_probability": 0.4861849018950965,
+        "n": 27,
+        "reliability": [
+          {
+            "mean_probability": 0.3221792483301703,
+            "n": 2,
+            "observed_rate": 0.5,
+            "outcome_rate_wilson95": [
+              0.09452865480086614,
+              0.9054713451991339
+            ],
+            "range": [
+              0.3,
+              0.4
+            ]
+          },
+          {
+            "mean_probability": 0.4504562363006676,
+            "n": 16,
+            "observed_rate": 0.625,
+            "outcome_rate_wilson95": [
+              0.3864064709793481,
+              0.815190174452472
+            ],
+            "range": [
+              0.4,
+              0.5
+            ]
+          },
+          {
+            "mean_probability": 0.5495605863909779,
+            "n": 5,
+            "observed_rate": 0.4,
+            "outcome_rate_wilson95": [
+              0.1176182311592533,
+              0.769280067791163
+            ],
+            "range": [
+              0.5,
+              0.6
+            ]
+          },
+          {
+            "mean_probability": 0.6318827854354234,
+            "n": 4,
+            "observed_rate": 0.25,
+            "outcome_rate_wilson95": [
+              0.045586062644636216,
+              0.6993639475573634
+            ],
+            "range": [
+              0.6,
+              0.7
+            ]
+          }
+        ]
+      }
+    },
+    "regulation": {
+      "arm1": {
+        "accuracy": 0.5641025641025641,
+        "binary_brier": 0.2518645201307692,
+        "log_loss": 0.6971596159071799,
+        "mean_abs_distance_from_half": 0.04494230769230769,
+        "mean_probability": 0.5008653846153847,
+        "n": 39,
+        "reliability": [
+          {
+            "mean_probability": 0.39928,
+            "n": 1,
+            "observed_rate": 0.0,
+            "outcome_rate_wilson95": [
+              0.0,
+              0.7934567085261071
+            ],
+            "range": [
+              0.3,
+              0.4
+            ]
+          },
+          {
+            "mean_probability": 0.45784555555555556,
+            "n": 18,
+            "observed_rate": 0.5,
+            "outcome_rate_wilson95": [
+              0.2903070395897999,
+              0.7096929604102
+            ],
+            "range": [
+              0.4,
+              0.5
+            ]
+          },
+          {
+            "mean_probability": 0.5387447368421053,
+            "n": 19,
+            "observed_rate": 0.631578947368421,
+            "outcome_rate_wilson95": [
+              0.4103915749815672,
+              0.8085072762372616
+            ],
+            "range": [
+              0.5,
+              0.6
+            ]
+          },
+          {
+            "mean_probability": 0.6571,
+            "n": 1,
+            "observed_rate": 0.0,
+            "outcome_rate_wilson95": [
+              0.0,
+              0.7934567085261071
+            ],
+            "range": [
+              0.6,
+              0.7
+            ]
+          }
+        ]
+      },
+      "arm2": {
+        "accuracy": 0.5128205128205128,
+        "binary_brier": 0.25414255853589746,
+        "log_loss": 0.7017413649093047,
+        "mean_abs_distance_from_half": 0.044395641025641024,
+        "mean_probability": 0.5021951282051281,
+        "n": 39,
+        "reliability": [
+          {
+            "mean_probability": 0.38525,
+            "n": 1,
+            "observed_rate": 0.0,
+            "outcome_rate_wilson95": [
+              0.0,
+              0.7934567085261071
+            ],
+            "range": [
+              0.3,
+              0.4
+            ]
+          },
+          {
+            "mean_probability": 0.4606577777777777,
+            "n": 18,
+            "observed_rate": 0.5555555555555556,
+            "outcome_rate_wilson95": [
+              0.3371606942825164,
+              0.7544076889861088
+            ],
+            "range": [
+              0.4,
+              0.5
+            ]
+          },
+          {
+            "mean_probability": 0.5361755555555556,
+            "n": 18,
+            "observed_rate": 0.5555555555555556,
+            "outcome_rate_wilson95": [
+              0.3371606942825164,
+              0.7544076889861088
+            ],
+            "range": [
+              0.5,
+              0.6
+            ]
+          },
+          {
+            "mean_probability": 0.62868,
+            "n": 2,
+            "observed_rate": 0.5,
+            "outcome_rate_wilson95": [
+              0.09452865480086614,
+              0.9054713451991339
+            ],
+            "range": [
+              0.6,
+              0.7
+            ]
+          }
+        ]
+      },
+      "arm3": {
+        "accuracy": 0.41025641025641024,
+        "binary_brier": 0.25585504345128207,
+        "log_loss": 0.7050854828512313,
+        "mean_abs_distance_from_half": 0.039273333333333334,
+        "mean_probability": 0.5006333333333334,
+        "n": 39,
+        "reliability": [
+          {
+            "mean_probability": 0.38802,
+            "n": 1,
+            "observed_rate": 0.0,
+            "outcome_rate_wilson95": [
+              0.0,
+              0.7934567085261071
+            ],
+            "range": [
+              0.3,
+              0.4
+            ]
+          },
+          {
+            "mean_probability": 0.467925,
+            "n": 20,
+            "observed_rate": 0.65,
+            "outcome_rate_wilson95": [
+              0.43285051021946463,
+              0.8188104521320554
+            ],
+            "range": [
+              0.4,
+              0.5
+            ]
+          },
+          {
+            "mean_probability": 0.532185625,
+            "n": 16,
+            "observed_rate": 0.4375,
+            "outcome_rate_wilson95": [
+              0.2309836333518552,
+              0.6682180439322347
+            ],
+            "range": [
+              0.5,
+              0.6
+            ]
+          },
+          {
+            "mean_probability": 0.631605,
+            "n": 2,
+            "observed_rate": 0.5,
+            "outcome_rate_wilson95": [
+              0.09452865480086614,
+              0.9054713451991339
+            ],
+            "range": [
+              0.6,
+              0.7
+            ]
+          }
+        ]
+      },
+      "baseline": {
+        "accuracy": 0.5641025641025641,
+        "binary_brier": 0.25077184567692307,
+        "log_loss": 0.6948501466198956,
+        "mean_abs_distance_from_half": 0.0411697435897436,
+        "mean_probability": 0.5014158974358974,
+        "n": 39,
+        "reliability": [
+          {
+            "mean_probability": 0.4592,
+            "n": 19,
+            "observed_rate": 0.47368421052631576,
+            "outcome_rate_wilson95": [
+              0.27329505487448547,
+              0.6829251748817489
+            ],
+            "range": [
+              0.4,
+              0.5
+            ]
+          },
+          {
+            "mean_probability": 0.5363073684210526,
+            "n": 19,
+            "observed_rate": 0.631578947368421,
+            "outcome_rate_wilson95": [
+              0.4103915749815672,
+              0.8085072762372616
+            ],
+            "range": [
+              0.5,
+              0.6
+            ]
+          },
+          {
+            "mean_probability": 0.64058,
+            "n": 1,
+            "observed_rate": 0.0,
+            "outcome_rate_wilson95": [
+              0.0,
+              0.7934567085261071
+            ],
+            "range": [
+              0.6,
+              0.7
+            ]
+          }
+        ]
+      },
+      "calibrated": {
+        "accuracy": 0.41025641025641024,
+        "binary_brier": 0.2641566430601247,
+        "log_loss": 0.7232760550417479,
+        "mean_abs_distance_from_half": 0.07146396515114453,
+        "mean_probability": 0.5007032229797913,
+        "n": 39,
+        "reliability": [
+          {
+            "mean_probability": 0.3517674919607741,
+            "n": 3,
+            "observed_rate": 0.3333333333333333,
+            "outcome_rate_wilson95": [
+              0.0614903152761605,
+              0.7923450448735121
+            ],
+            "range": [
+              0.3,
+              0.4
+            ]
+          },
+          {
+            "mean_probability": 0.4480479473209049,
+            "n": 18,
+            "observed_rate": 0.6666666666666666,
+            "outcome_rate_wilson95": [
+              0.4374906934425036,
+              0.8372144563633714
+            ],
+            "range": [
+              0.4,
+              0.5
+            ]
+          },
+          {
+            "mean_probability": 0.5471451316275032,
+            "n": 13,
+            "observed_rate": 0.5384615384615384,
+            "outcome_rate_wilson95": [
+              0.2914343243183205,
+              0.7679424569851186
+            ],
+            "range": [
+              0.5,
+              0.6
+            ]
+          },
+          {
+            "mean_probability": 0.6318827854354234,
+            "n": 4,
+            "observed_rate": 0.25,
+            "outcome_rate_wilson95": [
+              0.045586062644636216,
+              0.6993639475573634
+            ],
+            "range": [
+              0.6,
+              0.7
+            ]
+          },
+          {
+            "mean_probability": 0.7668423156540107,
+            "n": 1,
+            "observed_rate": 0.0,
+            "outcome_rate_wilson95": [
+              0.0,
+              0.7934567085261071
+            ],
+            "range": [
+              0.7,
+              0.8
+            ]
+          }
+        ]
+      }
+    },
+    "short_workload": {
+      "arm1": {
+        "accuracy": 0.5,
+        "binary_brier": 0.24405878912499995,
+        "log_loss": 0.6811743075983865,
+        "mean_abs_distance_from_half": 0.03868249999999998,
+        "mean_probability": 0.4985275,
+        "n": 4,
+        "reliability": [
+          {
+            "mean_probability": 0.459845,
+            "n": 2,
+            "observed_rate": 0.5,
+            "outcome_rate_wilson95": [
+              0.09452865480086614,
+              0.9054713451991339
+            ],
+            "range": [
+              0.4,
+              0.5
+            ]
+          },
+          {
+            "mean_probability": 0.53721,
+            "n": 2,
+            "observed_rate": 0.5,
+            "outcome_rate_wilson95": [
+              0.09452865480086614,
+              0.9054713451991339
+            ],
+            "range": [
+              0.5,
+              0.6
+            ]
+          }
+        ]
+      },
+      "arm2": {
+        "accuracy": 0.5,
+        "binary_brier": 0.24395581875,
+        "log_loss": 0.6809865489493845,
+        "mean_abs_distance_from_half": 0.03835000000000001,
+        "mean_probability": 0.501875,
+        "n": 4,
+        "reliability": [
+          {
+            "mean_probability": 0.46352499999999996,
+            "n": 2,
+            "observed_rate": 0.5,
+            "outcome_rate_wilson95": [
+              0.09452865480086614,
+              0.9054713451991339
+            ],
+            "range": [
+              0.4,
+              0.5
+            ]
+          },
+          {
+            "mean_probability": 0.540225,
+            "n": 2,
+            "observed_rate": 0.5,
+            "outcome_rate_wilson95": [
+              0.09452865480086614,
+              0.9054713451991339
+            ],
+            "range": [
+              0.5,
+              0.6
+            ]
+          }
+        ]
+      },
+      "arm3": {
+        "accuracy": 0.25,
+        "binary_brier": 0.26075803349999993,
+        "log_loss": 0.7147332218671238,
+        "mean_abs_distance_from_half": 0.021864999999999996,
+        "mean_probability": 0.501865,
+        "n": 4,
+        "reliability": [
+          {
+            "mean_probability": 0.48666666666666664,
+            "n": 3,
+            "observed_rate": 0.6666666666666666,
+            "outcome_rate_wilson95": [
+              0.2076549551264879,
+              0.9385096847238394
+            ],
+            "range": [
+              0.4,
+              0.5
+            ]
+          },
+          {
+            "mean_probability": 0.54746,
+            "n": 1,
+            "observed_rate": 0.0,
+            "outcome_rate_wilson95": [
+              0.0,
+              0.7934567085261071
+            ],
+            "range": [
+              0.5,
+              0.6
+            ]
+          }
+        ]
+      },
+      "baseline": {
+        "accuracy": 0.5,
+        "binary_brier": 0.24768297557499996,
+        "log_loss": 0.6884894242061372,
+        "mean_abs_distance_from_half": 0.0332325,
+        "mean_probability": 0.5005325,
+        "n": 4,
+        "reliability": [
+          {
+            "mean_probability": 0.4673,
+            "n": 2,
+            "observed_rate": 0.5,
+            "outcome_rate_wilson95": [
+              0.09452865480086614,
+              0.9054713451991339
+            ],
+            "range": [
+              0.4,
+              0.5
+            ]
+          },
+          {
+            "mean_probability": 0.533765,
+            "n": 2,
+            "observed_rate": 0.5,
+            "outcome_rate_wilson95": [
+              0.09452865480086614,
+              0.9054713451991339
+            ],
+            "range": [
+              0.5,
+              0.6
+            ]
+          }
+        ]
+      },
+      "calibrated": {
+        "accuracy": 0.25,
+        "binary_brier": 0.270960949007769,
+        "log_loss": 0.7355397717720173,
+        "mean_abs_distance_from_half": 0.04034873316024919,
+        "mean_probability": 0.5033214981537736,
+        "n": 4,
+        "reliability": [
+          {
+            "mean_probability": 0.47531517666234957,
+            "n": 3,
+            "observed_rate": 0.6666666666666666,
+            "outcome_rate_wilson95": [
+              0.2076549551264879,
+              0.9385096847238394
+            ],
+            "range": [
+              0.4,
+              0.5
+            ]
+          },
+          {
+            "mean_probability": 0.5873404626280455,
+            "n": 1,
+            "observed_rate": 0.0,
+            "outcome_rate_wilson95": [
+              0.0,
+              0.7934567085261071
+            ],
+            "range": [
+              0.5,
+              0.6
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "official_release_eligible": false,
+  "park_policy": "ALL_HISTORICAL_ARMS_NEUTRAL_PARK",
+  "periods": {
+    "calibration_fit": {
+      "arm1": {
+        "accuracy": 0.5853658536585366,
+        "binary_brier": 0.24685466992195126,
+        "log_loss": 0.6868723740071746,
+        "mean_abs_distance_from_half": 0.027007804878048783,
+        "mean_probability": 0.5052117073170732,
+        "n": 41,
+        "reliability": [
+          {
+            "mean_probability": 0.47517666666666664,
+            "n": 18,
+            "observed_rate": 0.3888888888888889,
+            "outcome_rate_wilson95": [
+              0.20304991926931162,
+              0.6138133141934384
+            ],
+            "range": [
+              0.4,
+              0.5
+            ]
+          },
+          {
+            "mean_probability": 0.5287173913043478,
+            "n": 23,
+            "observed_rate": 0.5652173913043478,
+            "outcome_rate_wilson95": [
+              0.3681104930501695,
+              0.7436563166780135
+            ],
+            "range": [
+              0.5,
+              0.6
+            ]
+          }
+        ]
+      },
+      "arm2": {
+        "accuracy": 0.5609756097560976,
+        "binary_brier": 0.24730091334634152,
+        "log_loss": 0.6877526070177626,
+        "mean_abs_distance_from_half": 0.027258536585365856,
+        "mean_probability": 0.5063380487804878,
+        "n": 41,
+        "reliability": [
+          {
+            "mean_probability": 0.47140866666666664,
+            "n": 15,
+            "observed_rate": 0.4,
+            "outcome_rate_wilson95": [
+              0.19824228082594664,
+              0.642535572434923
+            ],
+            "range": [
+              0.4,
+              0.5
+            ]
+          },
+          {
+            "mean_probability": 0.5264896153846155,
+            "n": 26,
+            "observed_rate": 0.5384615384615384,
+            "outcome_rate_wilson95": [
+              0.3545763620443012,
+              0.712444173047651
+            ],
+            "range": [
+              0.5,
+              0.6
+            ]
+          }
+        ]
+      },
+      "arm3": {
+        "accuracy": 0.5853658536585366,
+        "binary_brier": 0.24434468068536583,
+        "log_loss": 0.6818455757156945,
+        "mean_abs_distance_from_half": 0.03809048780487804,
+        "mean_probability": 0.5111143902439025,
+        "n": 41,
+        "reliability": [
+          {
+            "mean_probability": 0.46543687499999997,
+            "n": 16,
+            "observed_rate": 0.375,
+            "outcome_rate_wilson95": [
+              0.18480982554752806,
+              0.613593529020652
+            ],
+            "range": [
+              0.4,
+              0.5
+            ]
+          },
+          {
+            "mean_probability": 0.5341930434782608,
+            "n": 23,
+            "observed_rate": 0.5652173913043478,
+            "outcome_rate_wilson95": [
+              0.3681104930501695,
+              0.7436563166780135
+            ],
+            "range": [
+              0.5,
+              0.6
+            ]
+          },
+          {
+            "mean_probability": 0.61113,
+            "n": 2,
+            "observed_rate": 0.5,
+            "outcome_rate_wilson95": [
+              0.09452865480086614,
+              0.9054713451991339
+            ],
+            "range": [
+              0.6,
+              0.7
+            ]
+          }
+        ]
+      },
+      "baseline": {
+        "accuracy": 0.5609756097560976,
+        "binary_brier": 0.24590427052682928,
+        "log_loss": 0.684930590955377,
+        "mean_abs_distance_from_half": 0.027424878048780483,
+        "mean_probability": 0.5053819512195121,
+        "n": 41,
+        "reliability": [
+          {
+            "mean_probability": 0.4762168421052631,
+            "n": 19,
+            "observed_rate": 0.42105263157894735,
+            "outcome_rate_wilson95": [
+              0.2314162039203038,
+              0.6372444853483988
+            ],
+            "range": [
+              0.4,
+              0.5
+            ]
+          },
+          {
+            "mean_probability": 0.5305699999999999,
+            "n": 22,
+            "observed_rate": 0.5454545454545454,
+            "outcome_rate_wilson95": [
+              0.34659473289041554,
+              0.7307998556799515
+            ],
+            "range": [
+              0.5,
+              0.6
+            ]
+          }
+        ]
+      },
+      "calibrated": {
+        "accuracy": 0.5853658536585366,
+        "binary_brier": 0.24271397334773745,
+        "log_loss": 0.67887459509377,
+        "mean_abs_distance_from_half": 0.06971957814662595,
+        "mean_probability": 0.5200372968131369,
+        "n": 41,
+        "reliability": [
+          {
+            "mean_probability": 0.3676486992830682,
+            "n": 1,
+            "observed_rate": 1.0,
+            "outcome_rate_wilson95": [
+              0.20654329147389294,
+              1.0
+            ],
+            "range": [
+              0.3,
+              0.4
+            ]
+          },
+          {
+            "mean_probability": 0.44092430222536044,
+            "n": 15,
+            "observed_rate": 0.3333333333333333,
+            "outcome_rate_wilson95": [
+              0.15176100694691236,
+              0.5828687484878701
+            ],
+            "range": [
+              0.4,
+              0.5
+            ]
+          },
+          {
+            "mean_probability": 0.5451557882261724,
+            "n": 18,
+            "observed_rate": 0.5,
+            "outcome_rate_wilson95": [
+              0.2903070395897999,
+              0.7096929604102
+            ],
+            "range": [
+              0.5,
+              0.6
+            ]
+          },
+          {
+            "mean_probability": 0.6364631839223256,
+            "n": 6,
+            "observed_rate": 0.8333333333333334,
+            "outcome_rate_wilson95": [
+              0.43649056343635395,
+              0.9699474141282697
+            ],
+            "range": [
+              0.6,
+              0.7
+            ]
+          },
+          {
+            "mean_probability": 0.7084326450700811,
+            "n": 1,
+            "observed_rate": 0.0,
+            "outcome_rate_wilson95": [
+              0.0,
+              0.7934567085261071
+            ],
+            "range": [
+              0.7,
+              0.8
+            ]
+          }
+        ]
+      },
+      "years": [
+        2024
+      ]
+    },
+    "development": {
+      "arm1": {
+        "accuracy": 0.5135135135135135,
+        "binary_brier": 0.2543996518486486,
+        "log_loss": 0.7020693461597014,
+        "mean_abs_distance_from_half": 0.048659999999999995,
+        "mean_probability": 0.5066670270270269,
+        "n": 37,
+        "reliability": [
+          {
+            "mean_probability": 0.39799,
+            "n": 1,
+            "observed_rate": 0.0,
+            "outcome_rate_wilson95": [
+              0.0,
+              0.7934567085261071
+            ],
+            "range": [
+              0.3,
+              0.4
+            ]
+          },
+          {
+            "mean_probability": 0.4603023529411765,
+            "n": 17,
+            "observed_rate": 0.4117647058823529,
+            "outcome_rate_wilson95": [
+              0.21610786039131383,
+              0.6399492561448447
+            ],
+            "range": [
+              0.4,
+              0.5
+            ]
+          },
+          {
+            "mean_probability": 0.5512272222222223,
+            "n": 18,
+            "observed_rate": 0.4444444444444444,
+            "outcome_rate_wilson95": [
+              0.24559231101389126,
+              0.6628393057174837
+            ],
+            "range": [
+              0.5,
+              0.6
+            ]
+          },
+          {
+            "mean_probability": 0.60146,
+            "n": 1,
+            "observed_rate": 0.0,
+            "outcome_rate_wilson95": [
+              0.0,
+              0.7934567085261071
+            ],
+            "range": [
+              0.6,
+              0.7
+            ]
+          }
+        ]
+      },
+      "arm2": {
+        "accuracy": 0.5675675675675675,
+        "binary_brier": 0.2530140946351352,
+        "log_loss": 0.6992711357246157,
+        "mean_abs_distance_from_half": 0.05336081081081081,
+        "mean_probability": 0.5063348648648649,
+        "n": 37,
+        "reliability": [
+          {
+            "mean_probability": 0.391135,
+            "n": 2,
+            "observed_rate": 0.0,
+            "outcome_rate_wilson95": [
+              0.0,
+              0.6576280471103807
+            ],
+            "range": [
+              0.3,
+              0.4
+            ]
+          },
+          {
+            "mean_probability": 0.459234375,
+            "n": 16,
+            "observed_rate": 0.375,
+            "outcome_rate_wilson95": [
+              0.18480982554752806,
+              0.613593529020652
+            ],
+            "range": [
+              0.4,
+              0.5
+            ]
+          },
+          {
+            "mean_probability": 0.5555044444444444,
+            "n": 18,
+            "observed_rate": 0.5,
+            "outcome_rate_wilson95": [
+              0.2903070395897999,
+              0.7096929604102
+            ],
+            "range": [
+              0.5,
+              0.6
+            ]
+          },
+          {
+            "mean_probability": 0.60529,
+            "n": 1,
+            "observed_rate": 0.0,
+            "outcome_rate_wilson95": [
+              0.0,
+              0.7934567085261071
+            ],
+            "range": [
+              0.6,
+              0.7
+            ]
+          }
+        ]
+      },
+      "arm3": {
+        "accuracy": 0.5135135135135135,
+        "binary_brier": 0.25845492625675676,
+        "log_loss": 0.7103800283772813,
+        "mean_abs_distance_from_half": 0.048787297297297305,
+        "mean_probability": 0.5131986486486486,
+        "n": 37,
+        "reliability": [
+          {
+            "mean_probability": 0.39698,
+            "n": 1,
+            "observed_rate": 0.0,
+            "outcome_rate_wilson95": [
+              0.0,
+              0.7934567085261071
+            ],
+            "range": [
+              0.3,
+              0.4
+            ]
+          },
+          {
+            "mean_probability": 0.4629753333333333,
+            "n": 15,
+            "observed_rate": 0.4,
+            "outcome_rate_wilson95": [
+              0.19824228082594664,
+              0.642535572434923
+            ],
+            "range": [
+              0.4,
+              0.5
+            ]
+          },
+          {
+            "mean_probability": 0.5504744999999999,
+            "n": 20,
+            "observed_rate": 0.45,
+            "outcome_rate_wilson95": [
+              0.25819502085709295,
+              0.6579179916924003
+            ],
+            "range": [
+              0.5,
+              0.6
+            ]
+          },
+          {
+            "mean_probability": 0.63725,
+            "n": 1,
+            "observed_rate": 0.0,
+            "outcome_rate_wilson95": [
+              0.0,
+              0.7934567085261071
+            ],
+            "range": [
+              0.6,
+              0.7
+            ]
+          }
+        ]
+      },
+      "baseline": {
+        "accuracy": 0.5135135135135135,
+        "binary_brier": 0.2551785997513513,
+        "log_loss": 0.7036669228595774,
+        "mean_abs_distance_from_half": 0.04791891891891891,
+        "mean_probability": 0.5074291891891892,
+        "n": 37,
+        "reliability": [
+          {
+            "mean_probability": 0.39239,
+            "n": 1,
+            "observed_rate": 0.0,
+            "outcome_rate_wilson95": [
+              0.0,
+              0.7934567085261071
+            ],
+            "range": [
+              0.3,
+              0.4
+            ]
+          },
+          {
+            "mean_probability": 0.46226764705882356,
+            "n": 17,
+            "observed_rate": 0.4117647058823529,
+            "outcome_rate_wilson95": [
+              0.21610786039131383,
+              0.6399492561448447
+            ],
+            "range": [
+              0.4,
+              0.5
+            ]
+          },
+          {
+            "mean_probability": 0.5506866666666665,
+            "n": 18,
+            "observed_rate": 0.4444444444444444,
+            "outcome_rate_wilson95": [
+              0.24559231101389126,
+              0.6628393057174837
+            ],
+            "range": [
+              0.5,
+              0.6
+            ]
+          },
+          {
+            "mean_probability": 0.61158,
+            "n": 1,
+            "observed_rate": 0.0,
+            "outcome_rate_wilson95": [
+              0.0,
+              0.7934567085261071
+            ],
+            "range": [
+              0.6,
+              0.7
+            ]
+          }
+        ]
+      },
+      "years": [
+        2023
+      ]
+    },
+    "held_out": {
+      "arm1": {
+        "accuracy": 0.5681818181818182,
+        "binary_brier": 0.25150897020227275,
+        "log_loss": 0.6964493707755551,
+        "mean_abs_distance_from_half": 0.0465125,
+        "mean_probability": 0.49661340909090906,
+        "n": 44,
+        "reliability": [
+          {
+            "mean_probability": 0.39928,
+            "n": 1,
+            "observed_rate": 0.0,
+            "outcome_rate_wilson95": [
+              0.0,
+              0.7934567085261071
+            ],
+            "range": [
+              0.3,
+              0.4
+            ]
+          },
+          {
+            "mean_probability": 0.4546790909090909,
+            "n": 22,
+            "observed_rate": 0.5,
+            "outcome_rate_wilson95": [
+              0.3072180469247956,
+              0.6927819530752044
+            ],
+            "range": [
+              0.4,
+              0.5
+            ]
+          },
+          {
+            "mean_probability": 0.5395835,
+            "n": 20,
+            "observed_rate": 0.65,
+            "outcome_rate_wilson95": [
+              0.43285051021946463,
+              0.8188104521320554
+            ],
+            "range": [
+              0.5,
+              0.6
+            ]
+          },
+          {
+            "mean_probability": 0.6571,
+            "n": 1,
+            "observed_rate": 0.0,
+            "outcome_rate_wilson95": [
+              0.0,
+              0.7934567085261071
+            ],
+            "range": [
+              0.6,
+              0.7
+            ]
+          }
+        ]
+      },
+      "arm2": {
+        "accuracy": 0.5227272727272727,
+        "binary_brier": 0.2541567963613636,
+        "log_loss": 0.7017878133925242,
+        "mean_abs_distance_from_half": 0.04580204545454546,
+        "mean_probability": 0.49770704545454547,
+        "n": 44,
+        "reliability": [
+          {
+            "mean_probability": 0.39258,
+            "n": 2,
+            "observed_rate": 0.5,
+            "outcome_rate_wilson95": [
+              0.09452865480086614,
+              0.9054713451991339
+            ],
+            "range": [
+              0.3,
+              0.4
+            ]
+          },
+          {
+            "mean_probability": 0.45984523809523803,
+            "n": 21,
+            "observed_rate": 0.5238095238095238,
+            "outcome_rate_wilson95": [
+              0.32369217900266756,
+              0.7165628770323705
+            ],
+            "range": [
+              0.4,
+              0.5
+            ]
+          },
+          {
+            "mean_probability": 0.5368336842105264,
+            "n": 19,
+            "observed_rate": 0.5789473684210527,
+            "outcome_rate_wilson95": [
+              0.36275551465160105,
+              0.7685837960796962
+            ],
+            "range": [
+              0.5,
+              0.6
+            ]
+          },
+          {
+            "mean_probability": 0.62868,
+            "n": 2,
+            "observed_rate": 0.5,
+            "outcome_rate_wilson95": [
+              0.09452865480086614,
+              0.9054713451991339
+            ],
+            "range": [
+              0.6,
+              0.7
+            ]
+          }
+        ]
+      },
+      "arm3": {
+        "accuracy": 0.4318181818181818,
+        "binary_brier": 0.2558940133909091,
+        "log_loss": 0.7051689299189219,
+        "mean_abs_distance_from_half": 0.04021272727272727,
+        "mean_probability": 0.497265,
+        "n": 44,
+        "reliability": [
+          {
+            "mean_probability": 0.38802,
+            "n": 1,
+            "observed_rate": 0.0,
+            "outcome_rate_wilson95": [
+              0.0,
+              0.7934567085261071
+            ],
+            "range": [
+              0.3,
+              0.4
+            ]
+          },
+          {
+            "mean_probability": 0.46529708333333336,
+            "n": 24,
+            "observed_rate": 0.625,
+            "outcome_rate_wilson95": [
+              0.42709619037907065,
+              0.7884086656636855
+            ],
+            "range": [
+              0.4,
+              0.5
+            ]
+          },
+          {
+            "mean_probability": 0.5330176470588235,
+            "n": 17,
+            "observed_rate": 0.47058823529411764,
+            "outcome_rate_wilson95": [
+              0.26164801196088106,
+              0.6903710268845051
+            ],
+            "range": [
+              0.5,
+              0.6
+            ]
+          },
+          {
+            "mean_probability": 0.631605,
+            "n": 2,
+            "observed_rate": 0.5,
+            "outcome_rate_wilson95": [
+              0.09452865480086614,
+              0.9054713451991339
+            ],
+            "range": [
+              0.6,
+              0.7
+            ]
+          }
+        ]
+      },
+      "baseline": {
+        "accuracy": 0.5681818181818182,
+        "binary_brier": 0.25004324671136363,
+        "log_loss": 0.6933861158794,
+        "mean_abs_distance_from_half": 0.04283659090909091,
+        "mean_probability": 0.4976697727272727,
+        "n": 44,
+        "reliability": [
+          {
+            "mean_probability": 0.4567969565217393,
+            "n": 23,
+            "observed_rate": 0.4782608695652174,
+            "outcome_rate_wilson95": [
+              0.2923686953994572,
+              0.6703757013578151
+            ],
+            "range": [
+              0.4,
+              0.5
+            ]
+          },
+          {
+            "mean_probability": 0.537528,
+            "n": 20,
+            "observed_rate": 0.65,
+            "outcome_rate_wilson95": [
+              0.43285051021946463,
+              0.8188104521320554
+            ],
+            "range": [
+              0.5,
+              0.6
+            ]
+          },
+          {
+            "mean_probability": 0.64058,
+            "n": 1,
+            "observed_rate": 0.0,
+            "outcome_rate_wilson95": [
+              0.0,
+              0.7934567085261071
+            ],
+            "range": [
+              0.6,
+              0.7
+            ]
+          }
+        ]
+      },
+      "calibrated": {
+        "accuracy": 0.4318181818181818,
+        "binary_brier": 0.2642988314886548,
+        "log_loss": 0.7235834025293353,
+        "mean_abs_distance_from_half": 0.07321965199676074,
+        "mean_probability": 0.4946235419715924,
+        "n": 44,
+        "reliability": [
+          {
+            "mean_probability": 0.3578117585271077,
+            "n": 5,
+            "observed_rate": 0.4,
+            "outcome_rate_wilson95": [
+              0.1176182311592533,
+              0.769280067791163
+            ],
+            "range": [
+              0.3,
+              0.4
+            ]
+          },
+          {
+            "mean_probability": 0.4490913393405379,
+            "n": 20,
+            "observed_rate": 0.65,
+            "outcome_rate_wilson95": [
+              0.43285051021946463,
+              0.8188104521320554
+            ],
+            "range": [
+              0.4,
+              0.5
+            ]
+          },
+          {
+            "mean_probability": 0.5498697721362903,
+            "n": 14,
+            "observed_rate": 0.5714285714285714,
+            "outcome_rate_wilson95": [
+              0.3259026690286936,
+              0.7861949006959948
+            ],
+            "range": [
+              0.5,
+              0.6
+            ]
+          },
+          {
+            "mean_probability": 0.6318827854354234,
+            "n": 4,
+            "observed_rate": 0.25,
+            "outcome_rate_wilson95": [
+              0.045586062644636216,
+              0.6993639475573634
+            ],
+            "range": [
+              0.6,
+              0.7
+            ]
+          },
+          {
+            "mean_probability": 0.7668423156540107,
+            "n": 1,
+            "observed_rate": 0.0,
+            "outcome_rate_wilson95": [
+              0.0,
+              0.7934567085261071
+            ],
+            "range": [
+              0.7,
+              0.8
+            ]
+          }
+        ]
+      },
+      "years": [
+        2025
+      ]
+    }
+  },
+  "predictive_validation": "HOLD",
+  "promotion": false,
+  "rows": 122,
+  "source_manifest_sha256": "d10bb8eeddc2dfadfa9df779603b37fcf14068f97e94ca1d8333e20d1acf7683",
+  "unresolved": [
+    "No historical pregame timestamps or announced opener/bulk/injury severity archive",
+    "No authentic same-event market benchmark",
+    "Below existing 500-game holdout gate",
+    "No prospective challenger cohort",
+    "No model promotion; operator merge/integration pending",
+    "No weather/platoon/defense transform or score-settlement support"
+  ]
+}

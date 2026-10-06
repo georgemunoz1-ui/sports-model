@@ -75,6 +75,20 @@ class ContextTests(unittest.TestCase):
             self.assertEqual(path.read_bytes(),body)
             with self.assertRaises(RuntimeError):write_once(path,b'changed')
             self.assertEqual(path.read_bytes(),body)
+    def test_optimizer_scalar_conversion(self):
+        from scipy.optimize import minimize_scalar
+        result=minimize_scalar(lambda slope:(C.calibrate(.6,float(slope))-.7)**2,bounds=(.25,2),method='bounded')
+        self.assertTrue(result.success)
+    def test_postponed_final_status_not_a_scored_game(self):
+        from scripts.evaluate_mlb_postseason_context import historical_features
+        prior=[{'gamePk':i,'officialDate':'2025-09-28','gameType':'R','status':{'abstractGameState':'Final','detailedState':'Final'},'teams':{'home':{'team':{'id':1},'score':4},'away':{'team':{'id':2},'score':3}}} for i in range(100)]
+        prior.insert(0,{'gamePk':1001,'officialDate':'2025-09-28','gameType':'R','status':{'abstractGameState':'Final','detailedState':'Postponed'},'teams':{'home':{'team':{'id':1}},'away':{'team':{'id':2}}}})
+        schedule={'dates':[{'date':'2025-09-28','games':prior}]};g={'gamePk':2000,'officialDate':'2025-10-06','gameType':'D','teams':{'home':{'team':{'id':1}},'away':{'team':{'id':2}}}}
+        box={'teams':{side:{'players':{str(pid):{'person':{'id':pid},'stats':{'pitching':{'gamesStarted':1}}}}} for side,pid in [('home',1),('away',2)]}}
+        source={'roster_2025_1_2025-10-06':{},'roster_2025_2_2025-10-06':{}}
+        e,_,_=historical_features(g,schedule,box,{1:player(1),2:player(2)},source)
+        self.assertEqual(e['home_form']['games'],100)
+        self.assertEqual(e['home_form']['rf'],4)
     def test_scoring_and_paired_identity(self):
         rows=[{'a':.8,'b':.8,'home_win':1,'series_id':'s1'},{'a':.2,'b':.2,'home_win':0,'series_id':'s2'}]
         self.assertAlmostEqual(metric(rows,'a')['binary_brier'],.04)

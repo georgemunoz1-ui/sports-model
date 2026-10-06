@@ -47,6 +47,7 @@ def historical_features(g,schedule,box,players,source):
         for prior in d['games']:
             key=str(prior['gamePk'])
             if key in seen or prior['officialDate']>=day or prior['gameType'] not in ('R','F','D','L','W') or prior['status']['abstractGameState']!='Final': continue
+            if prior['status'].get('detailedState') in ('Postponed','Cancelled','Suspended'): continue
             if prior.get('resumeDate','')[:10]>=day: continue
             seen.add(key)
             for side,other in [('away','home'),('home','away')]:
@@ -100,9 +101,12 @@ def evaluate(root,design_path,output):
                 save_once(output/'inputs'/f'{gid}.json',{'event':e,'context':ctx});rows.append(row)
             except (ValueError,KeyError,ZeroDivisionError) as exc: excluded.append({'event_id':'MLB:'+gid,'season':year,'reason':str(exc)})
         print(year,'eligible',sum(r['season']==year for r in rows),'excluded',sum(r['season']==year for r in excluded),flush=True)
+    save_once(output/'uncalibrated_rows.json',rows)
     fit=[r for r in rows if r['season'] in design['calibration_seasons']]
+    save_once(output/'coverage.json',{'eligible':len(rows),'excluded':excluded,'created_at_utc':stamp()})
     if len(fit)<20: raise ValueError('CALIBRATION_INSUFFICIENT_MIN20_COMPUTATIONAL_GATE_NOT_VALIDATION')
     def obj(slope):
+        slope=float(slope)
         p=np.array([C.calibrate(r['arm3'],slope) for r in fit]);y=np.array([r['home_win'] for r in fit]);return float(np.mean(-y*np.log(p)-(1-y)*np.log1p(-p)))
     opt=minimize_scalar(obj,bounds=(.25,2),method='bounded');slope=float(opt.x)
     state={'model_id':C.ARMS[4],'parent_model_id':C.ARMS[3],'slope':slope,'fit_seasons':design['calibration_seasons'],'fit_event_ids':[r['event_id'] for r in fit],'fit_rows_sha256':digest(fit),'fit_n':len(fit),'training_cutoff':max(r['date'] for r in fit),'objective':'binary log loss','optimizer':'scipy bounded [.25,2]','at_boundary':min(abs(slope-.25),abs(slope-2))<.001,'design_sha256':sha(design_path),'created_at_utc':stamp(),'predictive_validation':'HOLD'}

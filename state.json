@@ -966,7 +966,7 @@
     },
     {
       "id": "MLB-POSTSEASON-CONTEXT-20261006",
-      "status": "SHADOW_DESIGN_ONLY_NOT_ACTIVE_OR_PROMOTED",
+      "status": "SHADOW_SCREEN_COMPLETE_NO_ADOPTION",
       "created_at_utc": "2026-10-06T21:32:46.620319+00:00",
       "design": "research/registrations/mlb_postseason_context_design.json",
       "design_sha256": "248b101302c8be5645542f2cc4ca28c264f377720587fb986bc532c8de16b14a",
@@ -974,7 +974,17 @@
       "prior_state_sha256": "d2c2e9204d419f728a975475eabf0917ba3a9b7b406446d3f354191de3398edd",
       "prior_state_archive": "docs/releases/2026-10-06-mlb-context/state.before.d2c2e9204d419f728a975475eabf0917ba3a9b7b406446d3f354191de3398edd.json",
       "authority": "User October 6 explicit MLB repair and postseason challenger request",
-      "existing_selected_model_and_active_experiment_unchanged": true
+      "existing_selected_model_and_active_experiment_unchanged": true,
+      "last_completed_action_at_utc": "2026-10-06T21:53:49.760786+00:00",
+      "evaluation": "docs/releases/2026-10-06-mlb-context/summary.json",
+      "decision": "Context and calibration fail held-out baseline screen; workload/lineup no improvement established. All remain experimental. No default change.",
+      "history": [
+        {
+          "state_sha256": "d61cca1a682cb16f117bfb5037254c08c15df414c6fc53db0bc328b2196e72a4",
+          "path": "docs/releases/2026-10-06-mlb-context/state.before.d61cca1a682cb16f117bfb5037254c08c15df414c6fc53db0bc328b2196e72a4.json",
+          "transition_at_utc": "2026-10-06T21:53:49.760786+00:00"
+        }
+      ]
     }
   ],
   "known_issues": [

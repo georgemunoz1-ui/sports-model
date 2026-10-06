@@ -111,6 +111,11 @@ def run(artifact,recovered,base,context,event,cutoff,n=100000,*,model_id=None,mo
     result['feature_coverage']=coverage(artifact['arms'][selected],x,audit)
     result['current_context_numerically_applied']={'base':['WEATHER','REST'], 'qb':['WEATHER','REST','QB_PRIOR_AND_CHANGE'], 'availability':['WEATHER','REST','INJURY_POSITION_GROUPS','PRACTICE','PRIOR_SNAP_WORKLOAD'], 'travel':['WEATHER','REST','AIRPORT_TRAVEL_PROXY'], 'combined':result['current_context_numerically_applied']}[selected]
     from .flip_diagnostics import build_flip_diagnostics
+    result['arm_feature_references']={'model_artifact_sha256':digest(artifact),'arms':{
+        name:{'model_id':artifact['arms'][name]['model_id'],
+              'feature_names':copy.deepcopy(artifact['arms'][name]['feature_names']),
+              'home_win_head':copy.deepcopy(artifact['arms'][name]['heads']['home_win'])}
+        for name in ('base','qb')}}
     result['flip_diagnostics']=build_flip_diagnostics(result,arm_model_ids={name:params['model_id'] for name,params in artifact['arms'].items()})
     return result,winner,scores
 

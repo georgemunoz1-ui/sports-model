@@ -53,6 +53,40 @@ class FlipIntegrationTests(unittest.TestCase):
         return cards.normalize(self.event, {'model_p': p, 'sim_p': p, 'dose': 0,
             'model_winner': self.event['home_team'], 'diagnostics': copy.deepcopy(self.bundle)})
 
+    def test_fitted_reference_values_replay_and_do_not_alias_artifact(self):
+        bundle = copy.deepcopy(self.bundle)
+        refs = bundle['flip_diagnostics']['feature_references']
+        self.assertEqual(refs['status'], 'TRACE_VERIFIED')
+        for name in ('base', 'qb'):
+            params = self.artifact['arms'][name]
+            for i, feature in enumerate(params['feature_names']):
+                term = refs['arms'][name]['features'][feature]
+                self.assertEqual(term['center'], params['heads']['home_win']['center'][i])
+                self.assertEqual(term['scale'], params['heads']['home_win']['scale'][i])
+                self.assertEqual(term['raw_value'], bundle['features'][feature])
+                self.assertAlmostEqual(term['contribution'], bundle['arms'][name]['contribution_trace']['home_win']['features'][feature])
+        prior = copy.deepcopy(self.artifact)
+        bundle['arm_feature_references']['arms']['qb']['home_win_head']['center'][0] += 999
+        self.assertEqual(self.artifact, prior)
+        self.assertEqual(build_flip_diagnostics(bundle, {n: p['model_id'] for n, p in self.artifact['arms'].items()})['feature_references']['status'], 'INVALID')
+
+    def test_missing_or_misbound_references_remain_visible(self):
+        models = {n: p['model_id'] for n, p in self.artifact['arms'].items()}
+        for change in ('missing', 'artifact', 'arm', 'scale'):
+            bundle = copy.deepcopy(self.bundle)
+            if change == 'missing':
+                del bundle['arm_feature_references']
+            elif change == 'artifact':
+                bundle['arm_feature_references']['model_artifact_sha256'] = 'wrong'
+            elif change == 'arm':
+                bundle['arm_feature_references']['arms']['qb']['model_id'] = 'wrong'
+            else:
+                bundle['arm_feature_references']['arms']['qb']['home_win_head']['scale'][0] = 0
+            report = build_flip_diagnostics(bundle, models)
+            self.assertEqual(report['status'], 'COMPARABLE')
+            self.assertEqual(report['feature_references']['status'], 'UNAVAILABLE' if change == 'missing' else 'INVALID')
+            self.assertTrue(any(flag.startswith('FEATURE_REFERENCES_') for flag in report['flags']))
+
     def card(self):
         return {'league': 'NFL', 'card_date': '2099-01-01', 'pregame_coverage': 1,
             'forecasts': [self.row()], 'incidents': [], 'coverage_breach_event_ids': []}

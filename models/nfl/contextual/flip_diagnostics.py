@@ -19,6 +19,18 @@ from pathlib import Path
 VERSION = 'nfl.base_qb_flip_diagnostics.v1'
 QB_FEATURES = frozenset({'qb_quality_diff', 'qb_quality_sum', 'qb_experience_diff',
                          'qb_change_diff', 'qb_unknown_count'})
+TARGET_CONTRACT = {'target': 'home_win', 'period': 'FULL_GAME',
+                   'probability_orientation': 'HOME', 'tie_policy': 'CONDITIONAL_ON_NON_TIE',
+                   'settlement_definition': 'FINAL_RESULT_INCLUDING_OVERTIME'}
+
+
+def _utc(value):
+    if not isinstance(value, str):
+        raise ValueError('TIME_REQUIRED')
+    stamp = dt.datetime.fromisoformat(value.replace('Z', '+00:00'))
+    if stamp.tzinfo is None:
+        raise ValueError('TIMEZONE_REQUIRED')
+    return stamp.astimezone(dt.timezone.utc)
 
 
 def _digest(value):
@@ -121,6 +133,59 @@ def _contributions(base, qb, base_p, qb_p):
     return result
 
 
+def _feature_references(bundle, models):
+    """Replay captured fitted transforms; unavailable references remain explicit.
+
+    This is a trace check against the bound forecast, not independent artifact
+    authentication or a causal feature-removal experiment.
+    """
+    captured = bundle.get('arm_feature_references')
+    if captured is None:
+        return {'status': 'UNAVAILABLE', 'reason': 'REFERENCE_VALUES_NOT_CAPTURED'}
+    try:
+        if captured['model_artifact_sha256'] != bundle['model_artifact_sha256']:
+            raise ValueError('ARTIFACT_BINDING')
+        arms = {}
+        for name in ('base', 'qb'):
+            ref = captured['arms'][name]
+            if ref['model_id'] != models[name]:
+                raise ValueError('ARM_BINDING')
+            names, head = ref['feature_names'], ref['home_win_head']
+            if not names or len(set(names)) != len(names):
+                raise ValueError('FEATURE_SCHEMA')
+            for key in ('impute', 'center', 'scale', 'coefficient'):
+                if len(head[key]) != len(names) or not all(_finite(v) for v in head[key]):
+                    raise ValueError('TRANSFORM_VALUES')
+            arm = bundle['arms'][name]
+            trace = _trace(arm, _probability(arm))
+            if trace is None or set(trace['features']) != set(names):
+                raise ValueError('TRACE_SCHEMA')
+            if not _finite(head['intercept']) or head['intercept'] != trace['intercept']:
+                raise ValueError('INTERCEPT_MISMATCH')
+            terms = {}
+            for i, feature in enumerate(names):
+                raw = bundle['features'][feature]
+                missing = raw is None or (isinstance(raw, numbers.Real) and math.isnan(raw))
+                if not missing and not _finite(raw):
+                    raise ValueError('RAW_FEATURE')
+                value = head['impute'][i] if missing else raw
+                center, scale, coefficient = (head[k][i] for k in ('center', 'scale', 'coefficient'))
+                if scale <= 0:
+                    raise ValueError('NONPOSITIVE_SCALE')
+                term = (value - center) / scale * coefficient
+                if not _finite(term) or not math.isclose(term, trace['features'][feature], rel_tol=1e-9, abs_tol=1e-9):
+                    raise ValueError('TERM_MISMATCH')
+                terms[feature] = {'raw_value': _safe(raw), 'imputed': missing, 'used_value': value,
+                                  'impute_value': head['impute'][i], 'center': center, 'scale': scale,
+                                  'coefficient': coefficient, 'contribution': term}
+            arms[name] = {'model_id': ref['model_id'], 'reference_sha256': _digest(ref),
+                          'intercept': head['intercept'], 'features': terms}
+        return {'status': 'TRACE_VERIFIED', 'model_artifact_sha256': captured['model_artifact_sha256'],
+                'arms': arms, 'interpretation': 'Zeroing a centered feature is within-model sensitivity, not recovered base probability or causal QB value.'}
+    except (KeyError, TypeError, ValueError, OverflowError, AttributeError) as exc:
+        return {'status': 'INVALID', 'reason': str(exc)}
+
+
 def build_flip_diagnostics(bundle, arm_model_ids=None, gap_threshold_pp=10.0):
     """Return a deterministic JSON-safe observation; never mutate ``bundle``.
 
@@ -148,8 +213,26 @@ def build_flip_diagnostics(bundle, arm_model_ids=None, gap_threshold_pp=10.0):
               'source_ids': _safe(bundle.get('source_ids')),
               'source_hashes': _safe(bundle.get('source_hashes')),
               'assimilation': _safe(bundle.get('assimilation')),
-              'forecast_code_hashes': _safe(bundle.get('code_hashes'))}
+              'forecast_code_hashes': _safe(bundle.get('code_hashes')),
+              'target_contract': copy.deepcopy(TARGET_CONTRACT)}
     errors = []
+    if bundle.get('schema') != 'nfl.integrated_context_forecast.v1':
+        errors.append('UNSUPPORTED_SOURCE_SCHEMA')
+    stamps = {}
+    for key in ('cutoff_utc', 'start_time_utc'):
+        try:
+            stamps[key] = _utc(source[key])
+        except (ValueError, TypeError, OverflowError):
+            errors.append('INVALID_SOURCE_TIME:' + key)
+    if len(stamps) == 2 and stamps['cutoff_utc'] >= stamps['start_time_utc']:
+        errors.append('SOURCE_CUTOFF_NOT_PREGAME')
+    for name, obj in [('bundle', bundle)] + [(name, arms.get(name)) for name in ('base', 'qb')]:
+        if isinstance(obj, dict):
+            for key, expected in TARGET_CONTRACT.items():
+                if key in obj and obj[key] != expected:
+                    errors.append('TARGET_CONTRACT_MISMATCH:' + name + ':' + key)
+            if 'target_contract' in obj and obj['target_contract'] != TARGET_CONTRACT:
+                errors.append('TARGET_CONTRACT_MISMATCH:' + name + ':target_contract')
     for key in ('event_id', 'home_team', 'away_team', 'forecast_identity', 'cutoff_utc', 'model_artifact_sha256', 'selected_model_id'):
         if not isinstance(source[key], str) or not source[key].strip():
             errors.append('MISSING_SOURCE_IDENTITY:' + key)
@@ -176,7 +259,13 @@ def build_flip_diagnostics(bundle, arm_model_ids=None, gap_threshold_pp=10.0):
                   'forecast_identity': source['forecast_identity'], 'cutoff_utc': source['cutoff_utc'],
                   'model_artifact_sha256': source['model_artifact_sha256']}
         for key, expected in checks.items():
-            if key in arm and arm[key] != expected:
+            equal = arm.get(key) == expected
+            if key == 'cutoff_utc' and key in arm:
+                try:
+                    equal = _utc(arm[key]) == _utc(expected)
+                except (ValueError, TypeError, OverflowError):
+                    equal = False
+            if key in arm and not equal:
                 errors.append('ARM_IDENTITY_MISMATCH:' + name + ':' + key)
         if 'event' in arm:
             if not isinstance(arm['event'], dict):
@@ -211,6 +300,9 @@ def build_flip_diagnostics(bundle, arm_model_ids=None, gap_threshold_pp=10.0):
     contributions = _contributions(arms.get('base', {}), arms.get('qb', {}), base_p, qb_p) if valid else {'status': 'UNAVAILABLE_NOT_COMPARABLE'}
     if contributions['status'] == 'INCOMPLETE':
         flags.append('INCOMPLETE_CONTRIBUTION_TRACE')
+    references = _feature_references(bundle, models)
+    if references['status'] != 'TRACE_VERIFIED':
+        flags.append('FEATURE_REFERENCES_' + references['status'])
     # Only inference/source fields are hashed: adding this report to a bundle
     # must not change its own identity on replay.
     source_projection = {k: v for k, v in bundle.items() if k != 'flip_diagnostics'}
@@ -219,10 +311,12 @@ def build_flip_diagnostics(bundle, arm_model_ids=None, gap_threshold_pp=10.0):
               'source_projection_sha256': _digest(_safe(source_projection)),
               'source_hash_scope': 'Canonical JSON of input bundle excluding flip_diagnostics; not a raw-file hash.',
               'gap_threshold_pp': float(gap_threshold_pp),
+              'numeric_policy': {'pick_tolerance': 0.0, 'exact_half': 'NEUTRAL_NO_PICK',
+                                 'gap_threshold_status': 'EXPLORATORY_NOT_VALIDATED'},
               'base': {'home_win_probability': base_p, 'pick': base_pick},
               'qb': {'home_win_probability': qb_p, 'pick': qb_pick},
               'pick_flip': flip, 'delta_pp': delta_pp, 'delta_logit': delta_logit,
-              'flags': flags, 'contributions': contributions,
+              'flags': flags, 'contributions': contributions, 'feature_references': references,
               'source_tags': _safe(bundle.get('tags', [])),
               'source_warnings': _safe(bundle.get('warnings', [])),
               'research_only': True, 'promotion_eligible': False, 'canonical_prospective_eligible': False,

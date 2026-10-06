@@ -26,3 +26,31 @@ Old forecast files are never migrated or rewritten. New code provenance legitima
 Full repository CI and standing health are separate gates. This change does not clear existing RED release conditions or modify model defaults, evaluation results, frozen bytes or canonical ledgers.
 
 **Research only; RELEASE RED; ACTION OFF; DOSE 0.0.**
+
+## October 6 implementation review
+
+PR #56 is the existing PR 1 for #55; do not duplicate it. The follow-up review
+adds timezone-aware cutoff/start validation, a strict pre-start ordering check,
+and a schema-bound target contract: home win, full game including overtime,
+conditional on a non-tied final. Contradictory target, period, orientation,
+tie-policy or settlement metadata on either arm fails visibly. Equivalent
+timezone representations denote the same cutoff. A later diagnostic observation
+can inspect a genuinely pregame frozen source; it never backdates registration.
+
+The exact-half pick tolerance is explicitly zero. The 10pp magnitude threshold
+is exploratory and unvalidated. Its purpose is independent monitoring only.
+
+New runtime bundles retain each base/QB logistic head's fitted imputation values,
+centers, scales, coefficients and intercept. Diagnostics expose raw and actually
+used feature values and replay each contribution against the saved trace.
+`TRACE_VERIFIED` establishes transform/trace agreement, not independent source
+authentication or predictive calibration. Old bundles without captured reference
+values remain visible as `FEATURE_REFERENCES_UNAVAILABLE`; invalid captures are
+flagged independently from the analytic probability comparison. Zeroing a
+centered feature remains within-model sensitivity, never a causal QB estimate.
+
+Review evidence: [October 6 regression and replay record](releases/2026-10-06-nfl-flip-review/review.md).
+Related closure program: [#59](https://github.com/georgemunoz1-ui/sports-model/issues/59).
+This PR supports diagnosis but closes none of #59's four sections: injury-source
+acquisition/consumption, canonical registration, scheduled deployment reliability,
+and prospective validation all retain their separate evidence requirements.

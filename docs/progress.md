@@ -4557,3 +4557,18 @@ Exact replay adds zero and preserves forecast/ledger/summary/registry hashes.
 53 focused tests pass; unrelated health/release obligations remain unresolved.
 No model/default, market, action or release-policy changes. No historical registration
 created for September 21/22. See docs/MLB_CALIBRATION_GRADING_REPAIR.md and retained evidence.
+
+
+## 2026-10-06 — NFL PR 1 review (2026-10-06T22:55:11.565239+00:00)
+
+Confirmed issue #55 PR 1 already exists as draft #56; no duplicate PR created.
+Reproduced 58 focused passes, then six new tests with 25 failing comparison
+contract subcases. Repaired timezone/order/schema/target checks and retained
+base/QB fitted reference values with trace replay. 66 focused tests now pass.
+100K historical-fixture draws replay exactly; all five analytic arms and
+features equal unmodified main. Model/default/policy/state/fixture hashes
+unchanged. Evidence: docs/releases/2026-10-06-nfl-flip-review/. Prior remote
+test steps passed but three artifact uploads failed; full health not cleared.
+#59 remains open: acquisition, canonical registration, deployment and
+prospective validation have separate evidence gates. No model promotion,
+calibration, outcome fitting or canonical-ledger changes. Action OFF, dose 0.0.

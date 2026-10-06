@@ -43,5 +43,5 @@ def main():
             overlay,calibrated_margins=nfl.calibrate_spreads(result,scores,a.home_spread,n=a.simulations)
             persist_overlay(a.output/e['event_id']/'spread_calibration',overlay,calibrated_margins)
             print(json.dumps({'spread_calibration':overlay['contracts']},indent=2))
-        print(json.dumps({'event':e['event_id'],'selection_policy':result.get('selection_policy'),'coherence':result.get('coherence'),'assimilation':result.get('assimilation'),'joint_distribution':result.get('joint_distribution'),'independent_head_predictions':result['prediction'],'binary':result['winner_simulation'],'scores':result['score_simulation']},indent=2))
+        print(json.dumps({'event':e['event_id'],'selection_policy':result.get('selection_policy'),'flip_diagnostics':result.get('flip_diagnostics'),'coherence':result.get('coherence'),'assimilation':result.get('assimilation'),'joint_distribution':result.get('joint_distribution'),'independent_head_predictions':result['prediction'],'binary':result['winner_simulation'],'scores':result['score_simulation']},indent=2))
 if __name__=='__main__':main()

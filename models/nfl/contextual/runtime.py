@@ -110,6 +110,8 @@ def run(artifact,recovered,base,context,event,cutoff,n=100000,*,model_id=None,mo
     result['selected_arm']=selected
     result['feature_coverage']=coverage(artifact['arms'][selected],x,audit)
     result['current_context_numerically_applied']={'base':['WEATHER','REST'], 'qb':['WEATHER','REST','QB_PRIOR_AND_CHANGE'], 'availability':['WEATHER','REST','INJURY_POSITION_GROUPS','PRACTICE','PRIOR_SNAP_WORKLOAD'], 'travel':['WEATHER','REST','AIRPORT_TRAVEL_PROXY'], 'combined':result['current_context_numerically_applied']}[selected]
+    from .flip_diagnostics import build_flip_diagnostics
+    result['flip_diagnostics']=build_flip_diagnostics(result,arm_model_ids={name:params['model_id'] for name,params in artifact['arms'].items()})
     return result,winner,scores
 
 def persist_run(folder,bundle,winner,scores,design):
@@ -130,8 +132,13 @@ def persist_run(folder,bundle,winner,scores,design):
     np.save(folder/'winner_draws.npy',winner,allow_pickle=False)
     if 'capability_report' in bundle:(folder/'capabilities.json').write_text(json.dumps(bundle['capability_report'],indent=2,allow_nan=False))
     if scores is not None:np.save(folder/'score_draws.npy',scores,allow_pickle=False)
+    if 'flip_diagnostics' in bundle:
+        (folder/'flip_diagnostics.json').write_text(json.dumps(bundle['flip_diagnostics'],indent=2,allow_nan=False)+'\n')
     (folder/'forecast.json').write_text(json.dumps(bundle,indent=2,allow_nan=False))
     manifest={p.name:hashlib.sha256(p.read_bytes()).hexdigest() for p in folder.iterdir() if p.is_file()}
     (folder/'manifest.json').write_text(json.dumps(manifest,indent=2))
     from .forecast_stream import append_forecast_record
     append_forecast_record(folder.parent/'forecast_stream.jsonl',bundle,digest(manifest))
+    if 'flip_diagnostics' in bundle:
+        from .flip_diagnostics import append_flip_diagnostic
+        append_flip_diagnostic(folder.parent/'flip_diagnostics.jsonl',bundle['flip_diagnostics'])

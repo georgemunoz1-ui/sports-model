@@ -42,6 +42,9 @@ def enhanced(football,model,market,event,cutoff,n):
     b['feature_coverage']['market_columns']=3;b['feature_coverage']['football_weights_by_target']=model['weights'];b['warnings']+=['MARKET_AWARE_MODEL_EXPLICIT','REUSED_RETROSPECTIVE_FIT_NOT_PROSPECTIVE_VALIDATION']
     from ..contextual.capabilities import describe_ensemble
     b['capability_report']=describe_ensemble(football['capability_report'],model,football['prediction'],mv,event,cutoff)
+    # This comparison belongs to the football-only parent, not the market blend.
+    if 'flip_diagnostics' in b:
+        b['football_reference']['flip_diagnostics']=b.pop('flip_diagnostics')
     return b,draws,scores
 
 def live(model,market,snapshot,event,cutoff,n):

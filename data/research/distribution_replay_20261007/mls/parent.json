@@ -1,0 +1,1013 @@
+{
+  "created_at_utc": "2026-10-07T23:51:10.202162+00:00",
+  "current_default": false,
+  "fitted": {
+    "away_goals": {
+      "coefficient": [
+        -0.017836442670002867,
+        0.04015013838635911,
+        0.028951125021704313,
+        -0.033560530876119765,
+        -0.01367518195770573,
+        -0.002437890209773803,
+        -0.018790995768369827,
+        -0.009561414686595694,
+        0.0
+      ],
+      "impute": [
+        1.3797428062133943,
+        1.4177340236286406,
+        1.4050822645762475,
+        1.403335220178527,
+        6.8125,
+        6.875,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "intercept": 0.13255071545031502,
+      "kind": "poisson",
+      "mean": [
+        1.4049819127464098,
+        1.4283611104801464,
+        1.425491709063085,
+        1.4072199608042182,
+        6.550163398692809,
+        6.575761554621838,
+        0.10084033613445378,
+        0.10224089635854341,
+        0.0
+      ],
+      "scale": [
+        0.2652537456064431,
+        0.26139810954242493,
+        0.267510518027745,
+        0.26240237093533686,
+        3.172883367112352,
+        3.1306324983805127,
+        0.3011171910448592,
+        0.3029648419707203,
+        1.0
+      ]
+    },
+    "home_goals": {
+      "coefficient": [
+        0.04143514107585572,
+        -0.015467311071025865,
+        -0.01886533667515995,
+        0.0340633002897765,
+        -0.012683581753788567,
+        -0.006807985637956847,
+        -0.009036613403796584,
+        -0.0160638500011907,
+        0.0
+      ],
+      "impute": [
+        1.3797428062133943,
+        1.4177340236286406,
+        1.4050822645762475,
+        1.403335220178527,
+        6.8125,
+        6.875,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "intercept": 0.5225999987800957,
+      "kind": "poisson",
+      "mean": [
+        1.4049819127464098,
+        1.4283611104801464,
+        1.425491709063085,
+        1.4072199608042182,
+        6.550163398692809,
+        6.575761554621838,
+        0.10084033613445378,
+        0.10224089635854341,
+        0.0
+      ],
+      "scale": [
+        0.2652537456064431,
+        0.26139810954242493,
+        0.267510518027745,
+        0.26240237093533686,
+        3.172883367112352,
+        3.1306324983805127,
+        0.3011171910448592,
+        0.3029648419707203,
+        1.0
+      ]
+    }
+  },
+  "model_id": "mls.fixed_parent.10fec600d69ebf4d.research",
+  "source": {
+    "history_manifest_sha256": "9ee6980abb9232961c974aa911a6746db2dd3747053279257104e8bc78d3390d",
+    "parent_train_n": 1428,
+    "prior": 1.417717086834734,
+    "provider_copy_counts": {
+      "2": 2836
+    },
+    "source_receipts": [
+      {
+        "raw_sha256": "9afafc9aa51d54bcbcbb7cf8013ef40d792fc53617a041fe1e5c7369b19b4a83",
+        "retrieved_at_utc": "2026-10-07T15:37:06.829601Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/usa.1/teams/18418/schedule?season=2021"
+      },
+      {
+        "raw_sha256": "cccb5d6703e2f3a5423ec6b35336b3c3e55a026778118995cbc2f8bf31f64367",
+        "retrieved_at_utc": "2026-10-07T15:37:06.840396Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/usa.1/teams/18418/schedule?season=2022"
+      },
+      {
+        "raw_sha256": "2fa45d5beca734df32d4bfe81f0f9e7f24c082a22cbae6d619cdf2aed644e434",
+        "retrieved_at_utc": "2026-10-07T15:37:06.641615Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/usa.1/teams/18418/schedule?season=2023"
+      },
+      {
+        "raw_sha256": "cec1abc58f657df55fd9625c2aa9b9d041d02767a1805ba7d4db40b4ef4e8f4a",
+        "retrieved_at_utc": "2026-10-07T15:37:06.840110Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/usa.1/teams/18418/schedule?season=2024"
+      },
+      {
+        "raw_sha256": "90cb291a924079ac6a49d1130289a1a088b25d8f1cfe1c530c407f50e611615d",
+        "retrieved_at_utc": "2026-10-07T15:37:06.840656Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/usa.1/teams/18418/schedule?season=2025"
+      },
+      {
+        "raw_sha256": "0afd79cb363a84da339d166fae029a93f95de9306e006d9c61cb9472f8bd9497",
+        "retrieved_at_utc": "2026-10-07T15:37:06.831013Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/usa.1/teams/18418/schedule?season=2026"
+      },
+      {
+        "raw_sha256": "9eec1fe91cac25ee102089a52f00f32494de9dcd89cabd6db40924409e9e5e63",
+        "retrieved_at_utc": "2026-10-07T15:37:14.192126Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/usa.1/teams/20906/schedule?season=2021"
+      },
+      {
+        "raw_sha256": "2056ed816a1a8800aba5e84d34af3e39aa9987138f3792b5be5c688b8b2a9246",
+        "retrieved_at_utc": "2026-10-07T15:37:14.262570Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/usa.1/teams/20906/schedule?season=2022"
+      },
+      {
+        "raw_sha256": "42016381979b52a259db480e9f56ca59d4cc20db0d2b30b2c1bc19f64174c127",
+        "retrieved_at_utc": "2026-10-07T15:37:14.262825Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/usa.1/teams/20906/schedule?season=2023"
+      },
+      {
+        "raw_sha256": "350bcbbde7644e435e627923f5020c9c998da9676a0f98a544e3c59b6da30351",
+        "retrieved_at_utc": "2026-10-07T15:37:14.214548Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/usa.1/teams/20906/schedule?season=2024"
+      },
+      {
+        "raw_sha256": "343c56329fab6b097e4576093282c2c94fa1811a8fc8ae4b5930bd0c94d785ce",
+        "retrieved_at_utc": "2026-10-07T15:37:14.301385Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/usa.1/teams/20906/schedule?season=2025"
+      },
+      {
+        "raw_sha256": "a7ff2b45bb9cd978833f01d2317ce4bf592580b147e1d71a6be4f3ec54313427",
+        "retrieved_at_utc": "2026-10-07T15:37:14.258487Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/usa.1/teams/20906/schedule?season=2026"
+      },
+      {
+        "raw_sha256": "3c8eba3d31b5104aa77c2294eb3fff176386070cfb323f54aa893c27bf28c254",
+        "retrieved_at_utc": "2026-10-07T15:37:31.864089Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/usa.1/teams/9720/schedule?season=2021"
+      },
+      {
+        "raw_sha256": "6fa7386adc8fbbf45038e70334211b2655899e23adaaeec4f53b19f12f7b6653",
+        "retrieved_at_utc": "2026-10-07T15:37:31.622939Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/usa.1/teams/9720/schedule?season=2022"
+      },
+      {
+        "raw_sha256": "e87013e451b890bf50f73a6f3f867dc7a8de87b92338d190dc28fee25015eda5",
+        "retrieved_at_utc": "2026-10-07T15:37:31.602612Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/usa.1/teams/9720/schedule?season=2023"
+      },
+      {
+        "raw_sha256": "98768d4e6aafd96e75412dd505a0a4c8cba609a9725db866549ce82cf3063393",
+        "retrieved_at_utc": "2026-10-07T15:37:31.657343Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/usa.1/teams/9720/schedule?season=2024"
+      },
+      {
+        "raw_sha256": "899eae44e6b90a5d6fa2b8b3e3cb56a25e78a92d57ced4badf3fb1a26e796839",
+        "retrieved_at_utc": "2026-10-07T15:37:31.583301Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/usa.1/teams/9720/schedule?season=2025"
+      },
+      {
+        "raw_sha256": "90cd98c66307eec3cdf302cc886e0874ef971ebf116ae080808bb2075745763d",
+        "retrieved_at_utc": "2026-10-07T15:37:31.565058Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/usa.1/teams/9720/schedule?season=2026"
+      },
+      {
+        "raw_sha256": "79aea23ab2f128ffefc81aaa954617b1b7319cfb65fd137158da603df027c318",
+        "retrieved_at_utc": "2026-10-07T15:37:39.176285Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/usa.1/teams/21300/schedule?season=2021"
+      },
+      {
+        "raw_sha256": "7ce5c7973ca187b88996ebf9b9cb44112d9a4b0c4bb0a4cd573e5b8112fe4eec",
+        "retrieved_at_utc": "2026-10-07T15:37:39.216093Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/usa.1/teams/21300/schedule?season=2022"
+      },
+      {
+        "raw_sha256": "c66128c87c3a7832a5fcaf1df70fa4fb27def1516f704daacedd5c616005204e",
+        "retrieved_at_utc": "2026-10-07T15:37:39.179270Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/usa.1/teams/21300/schedule?season=2023"
+      },
+      {
+        "raw_sha256": "dd1c5b1295496c153eb200aae36e0051dc170b2745ee2e8e0c1011e6d5983076",
+        "retrieved_at_utc": "2026-10-07T15:37:39.247605Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/usa.1/teams/21300/schedule?season=2024"
+      },
+      {
+        "raw_sha256": "ff01e19859285f1dbf5ddd1c74aec91611940093823d1a6e5c23e7d456b0ac04",
+        "retrieved_at_utc": "2026-10-07T15:37:40.611162Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/usa.1/teams/21300/schedule?season=2025"
+      },
+      {
+        "raw_sha256": "f7b9d8af2cd5b4b5c722fbceda14fba4d107bc2b1a817dd11029cb86678bf5cf",
+        "retrieved_at_utc": "2026-10-07T15:37:39.185515Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/usa.1/teams/21300/schedule?season=2026"
+      },
+      {
+        "raw_sha256": "7d12827e79f2446845f0648ce705b0f88e75bb6b422cacd2d628b6dac7f2cb17",
+        "retrieved_at_utc": "2026-10-07T15:37:45.781736Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/usa.1/teams/182/schedule?season=2021"
+      },
+      {
+        "raw_sha256": "27993868e70dcccf02eee746f7dd78921d127e49f3768a84a00214f670a3af41",
+        "retrieved_at_utc": "2026-10-07T15:37:45.782551Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/usa.1/teams/182/schedule?season=2022"
+      },
+      {
+        "raw_sha256": "6a28fa46cc247f3a76111a19ae58f74c632f9ef88599e33b35bb4ac30ceede47",
+        "retrieved_at_utc": "2026-10-07T15:37:45.786579Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/usa.1/teams/182/schedule?season=2023"
+      },
+      {
+        "raw_sha256": "4ef1bad9c03bbfdb465de0676fbdfda08fb07ab6a094d9687162cd418b56c9b5",
+        "retrieved_at_utc": "2026-10-07T15:37:45.753875Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/usa.1/teams/182/schedule?season=2024"
+      },
+      {
+        "raw_sha256": "b2bde0693e69c7018a8273d44db03c98dd94eaa9ced774e1f54b7bc5f5128578",
+        "retrieved_at_utc": "2026-10-07T15:37:45.741366Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/usa.1/teams/182/schedule?season=2025"
+      },
+      {
+        "raw_sha256": "35ae724d7d8bc4dfba10942659f30388e53b537e2cb4b3a5f79e324c4be9265d",
+        "retrieved_at_utc": "2026-10-07T15:37:45.775648Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/usa.1/teams/182/schedule?season=2026"
+      },
+      {
+        "raw_sha256": "6c6fbce4566d32f513aa65b12db3c2564bd763f121532f9941a486fc6ab8628d",
+        "retrieved_at_utc": "2026-10-07T15:37:52.476436Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/usa.1/teams/184/schedule?season=2021"
+      },
+      {
+        "raw_sha256": "24bd065219d64ee38d6db2d80e0741146d8e3047689a61a2e2fa9ac9af349f64",
+        "retrieved_at_utc": "2026-10-07T15:37:52.454898Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/usa.1/teams/184/schedule?season=2022"
+      },
+      {
+        "raw_sha256": "b4e661169e0dccad423ccd31815c4cd6d8ed9920b535619f38ff054b311ace70",
+        "retrieved_at_utc": "2026-10-07T15:37:52.503528Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/usa.1/teams/184/schedule?season=2023"
+      },
+      {
+        "raw_sha256": "55946d306b863a401813c04316ff4b0fe83e6898069b14645ac55aefbc333db7",
+        "retrieved_at_utc": "2026-10-07T15:37:52.465544Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/usa.1/teams/184/schedule?season=2024"
+      },
+      {
+        "raw_sha256": "b2dbe82677ed76bc99b8277b3326d66053ce70fdd829fa9e189b5a0556add1dd",
+        "retrieved_at_utc": "2026-10-07T15:37:52.525216Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/usa.1/teams/184/schedule?season=2025"
+      },
+      {
+        "raw_sha256": "0f3d1f25e2c326410a54fbe4521a28ac4b6e9b2040bba33e3cb6334b4914d1a3",
+        "retrieved_at_utc": "2026-10-07T15:37:52.481121Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/usa.1/teams/184/schedule?season=2026"
+      },
+      {
+        "raw_sha256": "d359f93cd134571667fb055e1bc5fc6109234247c962ee20b5bd17a44fdedddc",
+        "retrieved_at_utc": "2026-10-07T15:37:59.146596Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/usa.1/teams/183/schedule?season=2021"
+      },
+      {
+        "raw_sha256": "5a5de319bef90e189926dc114357d9111f03a565e93f6700cd3de984f9adc2af",
+        "retrieved_at_utc": "2026-10-07T15:37:59.137011Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/usa.1/teams/183/schedule?season=2022"
+      },
+      {
+        "raw_sha256": "ffe2b21b75ad7a49f0e2e6c0ded384053fb6172d2493f7a89b944614df8924b4",
+        "retrieved_at_utc": "2026-10-07T15:37:59.101659Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/usa.1/teams/183/schedule?season=2023"
+      },
+      {
+        "raw_sha256": "08849610d58516db95b3be0ae49f7e9c4113e8173ad36fcf73ea04a5c6f1045f",
+        "retrieved_at_utc": "2026-10-07T15:37:59.137182Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/usa.1/teams/183/schedule?season=2024"
+      },
+      {
+        "raw_sha256": "fa6b5873e05eee646ec0bdd7cc268bf4c1106d39f3f9f021207d1114669c0ce2",
+        "retrieved_at_utc": "2026-10-07T15:37:59.067554Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/usa.1/teams/183/schedule?season=2025"
+      },
+      {
+        "raw_sha256": "28da7ea8c8ad58ce9a7b99dc5e302a64de6f00424441a4967428df39f9475a1c",
+        "retrieved_at_utc": "2026-10-07T15:37:59.130685Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/usa.1/teams/183/schedule?season=2026"
+      },
+      {
+        "raw_sha256": "0cf31bf88a7d69c02445fec02074632543922d1bc32a6560bef6e3568f39c022",
+        "retrieved_at_utc": "2026-10-07T15:38:05.757129Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/usa.1/teams/193/schedule?season=2021"
+      },
+      {
+        "raw_sha256": "48c735c040b393f35b38ecdd74750973707ac3962a6a423085bb9439c095612d",
+        "retrieved_at_utc": "2026-10-07T15:38:05.743355Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/usa.1/teams/193/schedule?season=2022"
+      },
+      {
+        "raw_sha256": "db9ca24bb63ef67e3708192b037bb1ab398f923b2f67e9e2b916f8078a4c5438",
+        "retrieved_at_utc": "2026-10-07T15:38:05.828669Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/usa.1/teams/193/schedule?season=2023"
+      },
+      {
+        "raw_sha256": "d2bc20cb76a97e766278ddc2b8263ff894f8e39c1c6d5b81a029bac181c89b19",
+        "retrieved_at_utc": "2026-10-07T15:38:05.748577Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/usa.1/teams/193/schedule?season=2024"
+      },
+      {
+        "raw_sha256": "99edb5ffe172d557608984519cb7a64ed0159dbf615227ea9cea2da26853bf73",
+        "retrieved_at_utc": "2026-10-07T15:38:05.767484Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/usa.1/teams/193/schedule?season=2025"
+      },
+      {
+        "raw_sha256": "e7af29624767c9f06e35fef62a3ef7a910451ca2b885339ea8cd443b37f18435",
+        "retrieved_at_utc": "2026-10-07T15:38:05.799329Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/usa.1/teams/193/schedule?season=2026"
+      },
+      {
+        "raw_sha256": "8dc4f60c859fe064d236d5a16c2af77d4117c14b9767173784a5b20855430f55",
+        "retrieved_at_utc": "2026-10-07T15:38:16.009774Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/usa.1/teams/18267/schedule?season=2021"
+      },
+      {
+        "raw_sha256": "f9236b68e15f68142a6239be63d12f28f790f1ef064e2b2619e2392977284275",
+        "retrieved_at_utc": "2026-10-07T15:38:16.033626Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/usa.1/teams/18267/schedule?season=2022"
+      },
+      {
+        "raw_sha256": "1daec34744ea38bb6aabdff4c93437d4bad8caff0cbe516001ce951a69b4836a",
+        "retrieved_at_utc": "2026-10-07T15:38:16.129160Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/usa.1/teams/18267/schedule?season=2023"
+      },
+      {
+        "raw_sha256": "d4f12c1e02a28e8da23fae77524a55cd7e03b25381583fa1ac5caf3e7d1c7172",
+        "retrieved_at_utc": "2026-10-07T15:38:15.994897Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/usa.1/teams/18267/schedule?season=2024"
+      },
+      {
+        "raw_sha256": "9a693b3f04fe3e23bcfe2cf97a4c42e1444ab5848abb461719b1a8a03ed34752",
+        "retrieved_at_utc": "2026-10-07T15:38:16.094469Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/usa.1/teams/18267/schedule?season=2025"
+      },
+      {
+        "raw_sha256": "35377d54f78d44c8a303a193bdcf07cba3092835b3d952b612a44f919bd7d1fe",
+        "retrieved_at_utc": "2026-10-07T15:38:16.068703Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/usa.1/teams/18267/schedule?season=2026"
+      },
+      {
+        "raw_sha256": "a944b0a9a16dc594f9d288521096921471f19c0e23061a5ae7615fa969e56120",
+        "retrieved_at_utc": "2026-10-07T15:38:27.067528Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/usa.1/teams/185/schedule?season=2021"
+      },
+      {
+        "raw_sha256": "fe7e5f1530a8553422144f008f6113af77624273709c6664f54436553056ab67",
+        "retrieved_at_utc": "2026-10-07T15:38:27.142930Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/usa.1/teams/185/schedule?season=2022"
+      },
+      {
+        "raw_sha256": "f12507ce68cb74dc947f5fa83ad776982e4055f5cc159d1d0592ed1733ae720b",
+        "retrieved_at_utc": "2026-10-07T15:38:27.133240Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/usa.1/teams/185/schedule?season=2023"
+      },
+      {
+        "raw_sha256": "8f9c4d263c30546c18b8d4efb2321314350f4d3eff4f65753dbe3c2c63e4a6fb",
+        "retrieved_at_utc": "2026-10-07T15:38:27.118978Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/usa.1/teams/185/schedule?season=2024"
+      },
+      {
+        "raw_sha256": "3fa6889d2e5624addba7a05edfb0005d67b87c17ed033138e01c286f695718ae",
+        "retrieved_at_utc": "2026-10-07T15:38:27.114074Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/usa.1/teams/185/schedule?season=2025"
+      },
+      {
+        "raw_sha256": "1d5fc6091e6bf1c3736e1287749629ad5a8b802abbd7c91d980774f566e3b815",
+        "retrieved_at_utc": "2026-10-07T15:38:27.170641Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/usa.1/teams/185/schedule?season=2026"
+      },
+      {
+        "raw_sha256": "a107ecce053e1f77c703cb9bd06b846742aba30737078e9ab04ca7fcec27e993",
+        "retrieved_at_utc": "2026-10-07T15:38:35.659059Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/usa.1/teams/6077/schedule?season=2021"
+      },
+      {
+        "raw_sha256": "26bb7dfa9f9907d3572597cfabd5c6496569b54457d0d516db2a4ffa48540f62",
+        "retrieved_at_utc": "2026-10-07T15:38:35.676025Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/usa.1/teams/6077/schedule?season=2022"
+      },
+      {
+        "raw_sha256": "a576bfd9fad441026adbe8884dddff7d9d6062371612ad0eb85480f007926a82",
+        "retrieved_at_utc": "2026-10-07T15:38:35.708580Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/usa.1/teams/6077/schedule?season=2023"
+      },
+      {
+        "raw_sha256": "4e5a6eef001d801bbd6cce0eed1172f090790d8e24561c44db5c1566094a7f32",
+        "retrieved_at_utc": "2026-10-07T15:38:35.700657Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/usa.1/teams/6077/schedule?season=2024"
+      },
+      {
+        "raw_sha256": "f41ee11d65372709168b16e9ccce64c15d04fb2813a716bfa7c34c2b90b92154",
+        "retrieved_at_utc": "2026-10-07T15:38:35.713519Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/usa.1/teams/6077/schedule?season=2025"
+      },
+      {
+        "raw_sha256": "12be746c5708787b94b1c1846d540a0a174c899ea5475d91a660272367eb9d95",
+        "retrieved_at_utc": "2026-10-07T15:38:35.700193Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/usa.1/teams/6077/schedule?season=2026"
+      },
+      {
+        "raw_sha256": "1afa2448a8dce78b364d5dc78cdabec0e18dcd36a8b94d7e46f117099ce4aba7",
+        "retrieved_at_utc": "2026-10-07T15:38:48.460352Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/usa.1/teams/20232/schedule?season=2021"
+      },
+      {
+        "raw_sha256": "c29a1487c86034bd8797ca82d40a1fe1b9400c98c38042b89abda0ac05b6e885",
+        "retrieved_at_utc": "2026-10-07T15:38:48.399398Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/usa.1/teams/20232/schedule?season=2022"
+      },
+      {
+        "raw_sha256": "81740b0222731d724ca319308f13bab9456cec74d5cce3be553a6b750ef7a18e",
+        "retrieved_at_utc": "2026-10-07T15:38:48.409838Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/usa.1/teams/20232/schedule?season=2023"
+      },
+      {
+        "raw_sha256": "3ef7ab049ce4183b3b736879b0b65b76c4bc2ea23407b8c72e8b79f221a22ce1",
+        "retrieved_at_utc": "2026-10-07T15:38:48.474686Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/usa.1/teams/20232/schedule?season=2024"
+      },
+      {
+        "raw_sha256": "ebc72a229f25e9cb3ddff2677ac386ede3143921e6405390434ceeb7f0853909",
+        "retrieved_at_utc": "2026-10-07T15:38:48.469700Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/usa.1/teams/20232/schedule?season=2025"
+      },
+      {
+        "raw_sha256": "398409b12b6a697472086d801a85ccbba36300487aec1323f62d258940e3a237",
+        "retrieved_at_utc": "2026-10-07T15:38:48.450350Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/usa.1/teams/20232/schedule?season=2026"
+      },
+      {
+        "raw_sha256": "58a663e57038b3a1e7baf9eb5ac193a7f5eecd242769a0764fa66c1a6214f50c",
+        "retrieved_at_utc": "2026-10-07T15:38:55.832676Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/usa.1/teams/187/schedule?season=2021"
+      },
+      {
+        "raw_sha256": "f059e4f58c88d037661616389f7d3a86fce5fdfffa80574071d6a0855d73e77e",
+        "retrieved_at_utc": "2026-10-07T15:38:55.791239Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/usa.1/teams/187/schedule?season=2022"
+      },
+      {
+        "raw_sha256": "de6dbfe194ebbdfb5689170fdfef241a610c1852602943305937bb47d49d57f8",
+        "retrieved_at_utc": "2026-10-07T15:38:55.862532Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/usa.1/teams/187/schedule?season=2023"
+      },
+      {
+        "raw_sha256": "25989143f871290a61cd6d9650e1a817cb76804e9b803789b1298aa2e2bee803",
+        "retrieved_at_utc": "2026-10-07T15:38:55.868695Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/usa.1/teams/187/schedule?season=2024"
+      },
+      {
+        "raw_sha256": "878fb2ff481569c64ed551576caef44540b7406540781f5224e7abdcfb7a0bc3",
+        "retrieved_at_utc": "2026-10-07T15:38:55.873734Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/usa.1/teams/187/schedule?season=2025"
+      },
+      {
+        "raw_sha256": "4fe1ddcca4619dc1a620d89393d6b933ea631ce1fb2027292832aa46fec2f943",
+        "retrieved_at_utc": "2026-10-07T15:38:55.981022Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/usa.1/teams/187/schedule?season=2026"
+      },
+      {
+        "raw_sha256": "f313e64f3d654aede1d2bc9dc4f2e88041a5305baf7c338c76c38fbbfa4fa6e9",
+        "retrieved_at_utc": "2026-10-07T15:39:02.248890Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/usa.1/teams/18966/schedule?season=2021"
+      },
+      {
+        "raw_sha256": "8715a86500fd5ad13013df206d5cc6a36c791f6ad2ca431047c02cd37a504d12",
+        "retrieved_at_utc": "2026-10-07T15:39:02.309350Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/usa.1/teams/18966/schedule?season=2022"
+      },
+      {
+        "raw_sha256": "1d900b582f143a88f4a90fa88660d984c3d67ba737f0b75b290564a08ebc6737",
+        "retrieved_at_utc": "2026-10-07T15:39:02.309748Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/usa.1/teams/18966/schedule?season=2023"
+      },
+      {
+        "raw_sha256": "c0c2799a2304b9d3c1e5ff94d9de9b38de111407c2c79b64ef07ff240c22f9f7",
+        "retrieved_at_utc": "2026-10-07T15:39:02.350842Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/usa.1/teams/18966/schedule?season=2024"
+      },
+      {
+        "raw_sha256": "55e79fbe59ca5f495e8e4636e3828397afad1501f65b53e662cae8d7afe1141c",
+        "retrieved_at_utc": "2026-10-07T15:39:02.243168Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/usa.1/teams/18966/schedule?season=2025"
+      },
+      {
+        "raw_sha256": "ed5f73539eaa473242158007c41ddce34e65bddefb1b0faa0bd2c6b1f9ebff3a",
+        "retrieved_at_utc": "2026-10-07T15:39:02.293530Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/usa.1/teams/18966/schedule?season=2026"
+      },
+      {
+        "raw_sha256": "e30ac8cd96b922745f9d20a13796e2f934d06ff1e0d754bed12a0ba047bebebb",
+        "retrieved_at_utc": "2026-10-07T15:39:08.900153Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/usa.1/teams/17362/schedule?season=2021"
+      },
+      {
+        "raw_sha256": "c3d9ac1fb99759cf49227ed60ad930a8d9894caf02a77aeaaa206fe613f069d5",
+        "retrieved_at_utc": "2026-10-07T15:39:08.947781Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/usa.1/teams/17362/schedule?season=2022"
+      },
+      {
+        "raw_sha256": "054a1d34fb9f35abd2189d6f05b33dbee06f19cbfbdf5c99af7279ac174d4e69",
+        "retrieved_at_utc": "2026-10-07T15:39:08.958053Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/usa.1/teams/17362/schedule?season=2023"
+      },
+      {
+        "raw_sha256": "d8e3dec77ad8c89e3a63fb08819bf1a060887fa7e607f234f2229809b4b743d4",
+        "retrieved_at_utc": "2026-10-07T15:39:08.996440Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/usa.1/teams/17362/schedule?season=2024"
+      },
+      {
+        "raw_sha256": "163584bd34dc7992740ec6d5202b9ba5dc198a5992c3aa3abb0be0c660cfcd66",
+        "retrieved_at_utc": "2026-10-07T15:39:08.948037Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/usa.1/teams/17362/schedule?season=2025"
+      },
+      {
+        "raw_sha256": "286e15d609e99d2a709b34a131d989514bf0482753ab6ba5cd0d9881a531d971",
+        "retrieved_at_utc": "2026-10-07T15:39:08.917664Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/usa.1/teams/17362/schedule?season=2026"
+      },
+      {
+        "raw_sha256": "41df64b26d7b5de5baf020f79fd5940401d83a655612e4ff0fdfd25621077505",
+        "retrieved_at_utc": "2026-10-07T15:39:15.432842Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/usa.1/teams/18986/schedule?season=2021"
+      },
+      {
+        "raw_sha256": "8de4852d036f5758f1013588752d6db2aca5c22d8d52424da01c3bc718ddd458",
+        "retrieved_at_utc": "2026-10-07T15:39:15.431760Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/usa.1/teams/18986/schedule?season=2022"
+      },
+      {
+        "raw_sha256": "5d070b90aa79472c8e8e490fcb7812024f3c8aa36b82ae788cf8e57857ea4c1e",
+        "retrieved_at_utc": "2026-10-07T15:39:15.432600Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/usa.1/teams/18986/schedule?season=2023"
+      },
+      {
+        "raw_sha256": "7f5e8b18cab929193f0947a399845754d7d2f400f4762b686c90654905b5e9fd",
+        "retrieved_at_utc": "2026-10-07T15:39:15.472689Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/usa.1/teams/18986/schedule?season=2024"
+      },
+      {
+        "raw_sha256": "2ecbe4a7d16e8cdd5c674836129ea8642eb56da519adbd50f7d5dca9f53ef33e",
+        "retrieved_at_utc": "2026-10-07T15:39:15.485162Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/usa.1/teams/18986/schedule?season=2025"
+      },
+      {
+        "raw_sha256": "c139fa99c2328df28b7e278bd683e399affcacd985eb578dec43d5118d9e676d",
+        "retrieved_at_utc": "2026-10-07T15:39:15.423425Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/usa.1/teams/18986/schedule?season=2026"
+      },
+      {
+        "raw_sha256": "5077c99afd470cb03c6082166a6862754860fee8e8db7fa0bea53c58e31b0497",
+        "retrieved_at_utc": "2026-10-07T15:39:21.979624Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/usa.1/teams/189/schedule?season=2021"
+      },
+      {
+        "raw_sha256": "d2e454f4e6d82dddb910e80e8fb2c79e9e395f5cdb4f59c779080f747652ba27",
+        "retrieved_at_utc": "2026-10-07T15:39:22.013471Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/usa.1/teams/189/schedule?season=2022"
+      },
+      {
+        "raw_sha256": "e2c7136dc41267bb0aa6c51af3b1c1fcb5b4078b4bb5c8ed267587c23694d319",
+        "retrieved_at_utc": "2026-10-07T15:39:22.041041Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/usa.1/teams/189/schedule?season=2023"
+      },
+      {
+        "raw_sha256": "79437052f7bfbbe14153f15a7260717b21baf14358decb1e352a0ae46aac7e49",
+        "retrieved_at_utc": "2026-10-07T15:39:21.990570Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/usa.1/teams/189/schedule?season=2024"
+      },
+      {
+        "raw_sha256": "c744c29b1dfde9b5c264c83b05a0b5d34cf546c3edb3f553fa0cc375d9c580e0",
+        "retrieved_at_utc": "2026-10-07T15:39:22.065684Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/usa.1/teams/189/schedule?season=2025"
+      },
+      {
+        "raw_sha256": "028596a71070ef597da0a7c51892c6137ddfee5a9218b35777b8d55595619204",
+        "retrieved_at_utc": "2026-10-07T15:39:22.040661Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/usa.1/teams/189/schedule?season=2026"
+      },
+      {
+        "raw_sha256": "9329ddcceb4739ba836db92dd7dbdac11dc4e22e2bca5781865886d4ef65bc7f",
+        "retrieved_at_utc": "2026-10-07T15:39:27.094733Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/usa.1/teams/17606/schedule?season=2021"
+      },
+      {
+        "raw_sha256": "f3962e14b4194c17276925ab3074197e608b4340a5e77077b2090c3810305783",
+        "retrieved_at_utc": "2026-10-07T15:39:27.109622Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/usa.1/teams/17606/schedule?season=2022"
+      },
+      {
+        "raw_sha256": "42c2d11278d33a1de65b9369bf69146265fd588b3aef7fbf40f3df8fc421285f",
+        "retrieved_at_utc": "2026-10-07T15:39:27.221014Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/usa.1/teams/17606/schedule?season=2023"
+      },
+      {
+        "raw_sha256": "efcfeb2d736d8bd9dd7443cd2a66b12b641e33c528e3dbdb7af26cd08ed7d8e5",
+        "retrieved_at_utc": "2026-10-07T15:39:27.053593Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/usa.1/teams/17606/schedule?season=2024"
+      },
+      {
+        "raw_sha256": "9233fc84800d865b89a496f0e03cc35113d89d7ae9cc652d2342ad6948f77726",
+        "retrieved_at_utc": "2026-10-07T15:39:27.087175Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/usa.1/teams/17606/schedule?season=2025"
+      },
+      {
+        "raw_sha256": "f510c1c0765e3ae19952f9a589115a1e49c77f398deb775b4e91a3fe48bbf152",
+        "retrieved_at_utc": "2026-10-07T15:39:27.105489Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/usa.1/teams/17606/schedule?season=2026"
+      },
+      {
+        "raw_sha256": "0dced4e1304a5af02f3255525cad8951e9a1bd7f1b7e5ebc9f9d8e14f7a62502",
+        "retrieved_at_utc": "2026-10-07T15:39:34.003843Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/usa.1/teams/12011/schedule?season=2021"
+      },
+      {
+        "raw_sha256": "dafb8db79c9a5ff6821ac5486ff641526328c3de499c7ced5bf244940a677d7d",
+        "retrieved_at_utc": "2026-10-07T15:39:34.118515Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/usa.1/teams/12011/schedule?season=2022"
+      },
+      {
+        "raw_sha256": "35b8769bb49057dc864488c42c51327708e44f0730ccefa167ea594449e53eb2",
+        "retrieved_at_utc": "2026-10-07T15:39:34.123462Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/usa.1/teams/12011/schedule?season=2023"
+      },
+      {
+        "raw_sha256": "88a243bad6eb8f6565042be73dcbcc62b8065f500b6541b9a048521cd7a3fa76",
+        "retrieved_at_utc": "2026-10-07T15:39:34.013855Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/usa.1/teams/12011/schedule?season=2024"
+      },
+      {
+        "raw_sha256": "240385464117848162102c937303bca9d4844d7f334769154539432435560154",
+        "retrieved_at_utc": "2026-10-07T15:39:34.079754Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/usa.1/teams/12011/schedule?season=2025"
+      },
+      {
+        "raw_sha256": "4faef78e3d2ad59f82344425b1f6c249276576bbbe4a306bd25a5e209c9ab3bb",
+        "retrieved_at_utc": "2026-10-07T15:39:34.043900Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/usa.1/teams/12011/schedule?season=2026"
+      },
+      {
+        "raw_sha256": "85f556ed3fb6f383fbd1472252bcd9cac0f1db5598bbf735e4143439358dad06",
+        "retrieved_at_utc": "2026-10-07T15:39:41.288329Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/usa.1/teams/10739/schedule?season=2021"
+      },
+      {
+        "raw_sha256": "314fadd841ada6772e704d7aa6f602e013c96152d237c3d0bd597bbf299f0827",
+        "retrieved_at_utc": "2026-10-07T15:39:41.282397Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/usa.1/teams/10739/schedule?season=2022"
+      },
+      {
+        "raw_sha256": "5d7531db695f84050707df2cc124b84fb6b0f295a499e72872cdc50fad879d02",
+        "retrieved_at_utc": "2026-10-07T15:39:41.334308Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/usa.1/teams/10739/schedule?season=2023"
+      },
+      {
+        "raw_sha256": "1bf2011e3198064994205b47d459c800dcda65d29fe3a3e9f39cb62849f10b50",
+        "retrieved_at_utc": "2026-10-07T15:39:41.296243Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/usa.1/teams/10739/schedule?season=2024"
+      },
+      {
+        "raw_sha256": "7cd34ef20a99f323bc844aa9b626366508530b4d823254c0afa6b1eda0635a6d",
+        "retrieved_at_utc": "2026-10-07T15:39:41.401523Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/usa.1/teams/10739/schedule?season=2025"
+      },
+      {
+        "raw_sha256": "d625b0f71d3e35cae1f9782bd94f21959535df26da7dbe9b515ea5ee35bf71c8",
+        "retrieved_at_utc": "2026-10-07T15:39:41.311509Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/usa.1/teams/10739/schedule?season=2026"
+      },
+      {
+        "raw_sha256": "208655e5b50b080ce208a8dec880368e0a750469eb762089c9e191f805720682",
+        "retrieved_at_utc": "2026-10-07T15:39:49.752956Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/usa.1/teams/9723/schedule?season=2021"
+      },
+      {
+        "raw_sha256": "cacb443859ee2f3ff5a55c2be74757b96f294d3454276c9bbdb2769a463721bd",
+        "retrieved_at_utc": "2026-10-07T15:39:49.697242Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/usa.1/teams/9723/schedule?season=2022"
+      },
+      {
+        "raw_sha256": "4dae69c08de725d011a8334b262ab085cc958565c7375207b8cb5b36a0258d80",
+        "retrieved_at_utc": "2026-10-07T15:39:49.696937Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/usa.1/teams/9723/schedule?season=2023"
+      },
+      {
+        "raw_sha256": "0afdc80c1df6d78fda2d8f9e8e8e9dc2a8c2603b69a335a084bef4f637b30f1d",
+        "retrieved_at_utc": "2026-10-07T15:39:49.644678Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/usa.1/teams/9723/schedule?season=2024"
+      },
+      {
+        "raw_sha256": "bc542c522e8c2f05ec3ed76efce470a2f09c4fbd0fc670f0778626c5d1b728e2",
+        "retrieved_at_utc": "2026-10-07T15:39:49.639444Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/usa.1/teams/9723/schedule?season=2025"
+      },
+      {
+        "raw_sha256": "fda969d41a563172f4b13b4687cb3f35bad84471a1d3c58df9ea9a5acdbaf2b3",
+        "retrieved_at_utc": "2026-10-07T15:39:49.677046Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/usa.1/teams/9723/schedule?season=2026"
+      },
+      {
+        "raw_sha256": "dba5d12baf338ff1bd5ecb7e2b470ad02520567df9a2432f11ea294ee24dc73b",
+        "retrieved_at_utc": "2026-10-07T15:39:56.278489Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/usa.1/teams/4771/schedule?season=2021"
+      },
+      {
+        "raw_sha256": "c8d5b62612906366889eeebc1a22b24df751fffd72e999c92b93b852258f9972",
+        "retrieved_at_utc": "2026-10-07T15:39:56.381079Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/usa.1/teams/4771/schedule?season=2022"
+      },
+      {
+        "raw_sha256": "de48a317de3b470e84dd7eae0e5437c628daf0a4dab35d29f6af79ca86429438",
+        "retrieved_at_utc": "2026-10-07T15:39:56.278694Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/usa.1/teams/4771/schedule?season=2023"
+      },
+      {
+        "raw_sha256": "feb0df901bc54c34713d28cc57230040bf38fec91a92888df55bd08c3d425180",
+        "retrieved_at_utc": "2026-10-07T15:39:56.230275Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/usa.1/teams/4771/schedule?season=2024"
+      },
+      {
+        "raw_sha256": "c6d1259fb8c4e2af3456a61736108fa4f555dd1034ecf584fc1625af14c01840",
+        "retrieved_at_utc": "2026-10-07T15:39:56.242925Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/usa.1/teams/4771/schedule?season=2025"
+      },
+      {
+        "raw_sha256": "825c96b20cb14fae3cbad3d2da0b779890e4c51f8a2b2ab48016804d0ce215ff",
+        "retrieved_at_utc": "2026-10-07T15:39:56.249324Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/usa.1/teams/4771/schedule?season=2026"
+      },
+      {
+        "raw_sha256": "568cc475896a042e5a8bb7c9d6f70bbbe54cdba3657b18f0bf81166574686962",
+        "retrieved_at_utc": "2026-10-07T15:40:02.931817Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/usa.1/teams/190/schedule?season=2021"
+      },
+      {
+        "raw_sha256": "aa0d19fd467b836a23021b5e73c096e5f001965bee080156bd97c3e3f9557917",
+        "retrieved_at_utc": "2026-10-07T15:40:02.954163Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/usa.1/teams/190/schedule?season=2022"
+      },
+      {
+        "raw_sha256": "0955663bbd6a9e76b0922e5a5c2a80ce1c54853df932c5444985b13922555268",
+        "retrieved_at_utc": "2026-10-07T15:40:02.942648Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/usa.1/teams/190/schedule?season=2023"
+      },
+      {
+        "raw_sha256": "f7e33d2d9bd3275869970985e3e457fedb7779762cbffd2424dd07da834f44b3",
+        "retrieved_at_utc": "2026-10-07T15:40:02.937375Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/usa.1/teams/190/schedule?season=2024"
+      },
+      {
+        "raw_sha256": "07676bdc6cb0708765581940235cf844738f710d134c036edbfdda41b497848d",
+        "retrieved_at_utc": "2026-10-07T15:40:02.894570Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/usa.1/teams/190/schedule?season=2025"
+      },
+      {
+        "raw_sha256": "5993bcadcc593e427515748a93a8d93b9eaa0b58c70a98b254c20cdbe0e290c6",
+        "retrieved_at_utc": "2026-10-07T15:40:02.912822Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/usa.1/teams/190/schedule?season=2026"
+      },
+      {
+        "raw_sha256": "2882fa15c61ccbedb9fd567124d4a3fc1a87f2e05ec6fa776094e1c73d37b47d",
+        "retrieved_at_utc": "2026-10-07T15:40:09.400877Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/usa.1/teams/22529/schedule?season=2021"
+      },
+      {
+        "raw_sha256": "be0ae536966a7f7bb48a2b35807ed4a071a59d970726c93da1e514d61e47dd75",
+        "retrieved_at_utc": "2026-10-07T15:40:09.430518Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/usa.1/teams/22529/schedule?season=2022"
+      },
+      {
+        "raw_sha256": "f93d0602057fa9c13ea4503be131e5767f93a7e3f624ac6aa44d9823b27d4611",
+        "retrieved_at_utc": "2026-10-07T15:40:09.454439Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/usa.1/teams/22529/schedule?season=2023"
+      },
+      {
+        "raw_sha256": "a3ee9e8081b16d28ac126100f6f8ac9523681cc974eebbce92d0551833819d33",
+        "retrieved_at_utc": "2026-10-07T15:40:09.385179Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/usa.1/teams/22529/schedule?season=2024"
+      },
+      {
+        "raw_sha256": "52b45f68a85c7d48ba1bab614ab9afab44f821316c8e217bead3695d79faba4d",
+        "retrieved_at_utc": "2026-10-07T15:40:09.474583Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/usa.1/teams/22529/schedule?season=2025"
+      },
+      {
+        "raw_sha256": "eb968707871a5f6df21ee854c6b9165f69be4e48a5d31885a8645c9e2fe62efd",
+        "retrieved_at_utc": "2026-10-07T15:40:09.381418Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/usa.1/teams/22529/schedule?season=2026"
+      },
+      {
+        "raw_sha256": "4cf3b975edd410e3aeeb4e04ad95eb6d96264f9311e8bbe3729c29f79c4fdb56",
+        "retrieved_at_utc": "2026-10-07T15:40:16.054231Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/usa.1/teams/191/schedule?season=2021"
+      },
+      {
+        "raw_sha256": "c6d1cf8bd33b09b3284e7e3dd26fc77e2a5c0cec82c7c1ac2337b9937659ba6c",
+        "retrieved_at_utc": "2026-10-07T15:40:16.084729Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/usa.1/teams/191/schedule?season=2022"
+      },
+      {
+        "raw_sha256": "07f67d5de8697dbc9c6bece32d4efb9920da1a74a828e8cb339f136e97c1d5ca",
+        "retrieved_at_utc": "2026-10-07T15:40:16.045164Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/usa.1/teams/191/schedule?season=2023"
+      },
+      {
+        "raw_sha256": "cd204df2292a3869b0d8dad8c81749506552532a729db71c912d82a40ae8c0ca",
+        "retrieved_at_utc": "2026-10-07T15:40:16.055111Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/usa.1/teams/191/schedule?season=2024"
+      },
+      {
+        "raw_sha256": "d721a2ec72f2988bc0445baa06ecc4e7a715e96378acf990541d031ddf7efbd9",
+        "retrieved_at_utc": "2026-10-07T15:40:16.054303Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/usa.1/teams/191/schedule?season=2025"
+      },
+      {
+        "raw_sha256": "1aa2965808d79b02a57506e5e40e117ff161dd878649dca820c9cad711374677",
+        "retrieved_at_utc": "2026-10-07T15:40:16.045373Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/usa.1/teams/191/schedule?season=2026"
+      },
+      {
+        "raw_sha256": "abfee0bf63e47a0e84aac1b0d57e77712fcf9cedba49b80363bde22f4766f54e",
+        "retrieved_at_utc": "2026-10-07T15:40:22.505757Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/usa.1/teams/9726/schedule?season=2021"
+      },
+      {
+        "raw_sha256": "c9a0451c346ee6876891ec623135d3f48f8db513221b9c4845405e3599c4287c",
+        "retrieved_at_utc": "2026-10-07T15:40:22.566905Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/usa.1/teams/9726/schedule?season=2022"
+      },
+      {
+        "raw_sha256": "53eec037edf10775e1bdb5a3a9edc8dec53337b46e90d9a4bbee21e9688d0ab5",
+        "retrieved_at_utc": "2026-10-07T15:40:22.580928Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/usa.1/teams/9726/schedule?season=2023"
+      },
+      {
+        "raw_sha256": "59e3773fcf99a438a948a11eeb5f49bd5f2b8cdd63010444f3ee35a275779aef",
+        "retrieved_at_utc": "2026-10-07T15:40:22.580612Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/usa.1/teams/9726/schedule?season=2024"
+      },
+      {
+        "raw_sha256": "9bf1d79694bc6294f16cb00628e8f4be3b01fca067397dbff922caa6bef8b6a7",
+        "retrieved_at_utc": "2026-10-07T15:40:22.574610Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/usa.1/teams/9726/schedule?season=2025"
+      },
+      {
+        "raw_sha256": "0059a9ea52e93cca1fa3a4cd301497aaa4969cf4c5f9ae55b149eed1e28f8931",
+        "retrieved_at_utc": "2026-10-07T15:40:22.599794Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/usa.1/teams/9726/schedule?season=2026"
+      },
+      {
+        "raw_sha256": "5e83f9026701b1f437f5f6c22f885227e6a52c31d9cb863b84ae35362acb446d",
+        "retrieved_at_utc": "2026-10-07T15:40:28.995308Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/usa.1/teams/186/schedule?season=2021"
+      },
+      {
+        "raw_sha256": "24fe5990f15abe463bd9b6f9bd52e6389104fe338f50d21f07e8d3f778d70701",
+        "retrieved_at_utc": "2026-10-07T15:40:28.995841Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/usa.1/teams/186/schedule?season=2022"
+      },
+      {
+        "raw_sha256": "3cbcaa1739b7520e39817d97758e35554fc07f1291d64105044f89f6ac7a6cc6",
+        "retrieved_at_utc": "2026-10-07T15:40:29.009130Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/usa.1/teams/186/schedule?season=2023"
+      },
+      {
+        "raw_sha256": "d5ccf70a5d4791f53f3a1ac2d85676ed201797b98baac8314cf9b7d5d5039e6d",
+        "retrieved_at_utc": "2026-10-07T15:40:28.994317Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/usa.1/teams/186/schedule?season=2024"
+      },
+      {
+        "raw_sha256": "2f443f061be9361be7bb8f2a4ac224ca21841abdd9bf563394882d8df7ec56a9",
+        "retrieved_at_utc": "2026-10-07T15:40:29.027501Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/usa.1/teams/186/schedule?season=2025"
+      },
+      {
+        "raw_sha256": "f9b3c7b72c94fee74ed215c58f4353efd77a00797bd363470c6a9808122c048c",
+        "retrieved_at_utc": "2026-10-07T15:40:28.969308Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/usa.1/teams/186/schedule?season=2026"
+      },
+      {
+        "raw_sha256": "e82dc3d2b9a3d254ce419b5ebc9ee675352300133918e8862c8b78f2f2411dfa",
+        "retrieved_at_utc": "2026-10-07T15:40:35.834709Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/usa.1/teams/21812/schedule?season=2021"
+      },
+      {
+        "raw_sha256": "52014e866c90db1d4d2adc84fcb8d71c00354c65618459bb78726105b39d8191",
+        "retrieved_at_utc": "2026-10-07T15:40:35.829235Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/usa.1/teams/21812/schedule?season=2022"
+      },
+      {
+        "raw_sha256": "f935906f49f475f4d24f5b16c7009d29b61512a56b172080253ac5c7be86a595",
+        "retrieved_at_utc": "2026-10-07T15:40:35.872144Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/usa.1/teams/21812/schedule?season=2023"
+      },
+      {
+        "raw_sha256": "4f2cdd712c5811f8b05db1555bdf211b2888cee66d246d27514bca3d095767db",
+        "retrieved_at_utc": "2026-10-07T15:40:35.863303Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/usa.1/teams/21812/schedule?season=2024"
+      },
+      {
+        "raw_sha256": "e741b335f3184fbd6d186165393331fb3498abedc694fbeccc94337d73ce2744",
+        "retrieved_at_utc": "2026-10-07T15:40:35.881109Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/usa.1/teams/21812/schedule?season=2025"
+      },
+      {
+        "raw_sha256": "b89aa45f2657759219df628cecc3ed622a093c6a4940baf8174edfebd5db9945",
+        "retrieved_at_utc": "2026-10-07T15:40:36.098721Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/usa.1/teams/21812/schedule?season=2026"
+      },
+      {
+        "raw_sha256": "4dcaf9d32e7f14ce64e473e78878a6a868fb0e4136669a24b582bc09f1581504",
+        "retrieved_at_utc": "2026-10-07T15:40:42.406283Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/usa.1/teams/7318/schedule?season=2021"
+      },
+      {
+        "raw_sha256": "da5337177dfccc17435494414c68d94405d20324231688b25dd8e422010278f6",
+        "retrieved_at_utc": "2026-10-07T15:40:42.438946Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/usa.1/teams/7318/schedule?season=2022"
+      },
+      {
+        "raw_sha256": "d8d283c53f870ebbdd0f1510b3e8c105babe2a7dc8fa4d5b3e15a69815295ca2",
+        "retrieved_at_utc": "2026-10-07T15:40:42.517255Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/usa.1/teams/7318/schedule?season=2023"
+      },
+      {
+        "raw_sha256": "e12b29f9722c32777a36e7e0c0ab25cc99e4e38b132058b3700a7457e692b7f7",
+        "retrieved_at_utc": "2026-10-07T15:40:42.464332Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/usa.1/teams/7318/schedule?season=2024"
+      },
+      {
+        "raw_sha256": "7b40adbfd91e5a07590d57151a288efbc900f35fbdf39867d9c46ba76e1109c2",
+        "retrieved_at_utc": "2026-10-07T15:40:42.385407Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/usa.1/teams/7318/schedule?season=2025"
+      },
+      {
+        "raw_sha256": "ae406d154958a323d2504cdf2d70e41c283443cd84f92ab350bb8a0300e3be09",
+        "retrieved_at_utc": "2026-10-07T15:40:42.391081Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/usa.1/teams/7318/schedule?season=2026"
+      },
+      {
+        "raw_sha256": "06bbbd1beffa00ad324bc8f5cd879a71cea2336750e79f8793104f8b4968507b",
+        "retrieved_at_utc": "2026-10-07T15:40:51.046872Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/usa.1/teams/9727/schedule?season=2021"
+      },
+      {
+        "raw_sha256": "0747ebc3f53f5239a0ebaf893cd3a67a60f2e0534169d6795cd38e7bf5496bb1",
+        "retrieved_at_utc": "2026-10-07T15:40:51.019544Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/usa.1/teams/9727/schedule?season=2022"
+      },
+      {
+        "raw_sha256": "2647b0a25a11f5bd58662dbe990cade6e1dfb34569fc33023a5f460779b5b746",
+        "retrieved_at_utc": "2026-10-07T15:40:51.086376Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/usa.1/teams/9727/schedule?season=2023"
+      },
+      {
+        "raw_sha256": "807db4dfe25be2c05e5b07b501c9c86ddcb393356ed691cdfcccb9b2b274638a",
+        "retrieved_at_utc": "2026-10-07T15:40:51.046357Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/usa.1/teams/9727/schedule?season=2024"
+      },
+      {
+        "raw_sha256": "a10ca327f4f3e5956cfb0d5b828c23ffac2dc4f8df0e849b7b5f40c132df88ae",
+        "retrieved_at_utc": "2026-10-07T15:40:51.091454Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/usa.1/teams/9727/schedule?season=2025"
+      },
+      {
+        "raw_sha256": "38137e0530660d4f797c2730d60feef199d30db8949586b5e0635ec56ecf1e7d",
+        "retrieved_at_utc": "2026-10-07T15:40:51.029316Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/usa.1/teams/9727/schedule?season=2026"
+      }
+    ]
+  }
+}

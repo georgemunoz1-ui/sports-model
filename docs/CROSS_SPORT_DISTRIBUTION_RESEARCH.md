@@ -194,3 +194,12 @@ Current code status: implemented and exercised with synthetic fixtures for all
 seven leagues. Current fitted sports deployment and measured accuracy improvement:
 NOT ESTABLISHED. Existing NFL calibration, PR #50/#53/#58 and closure program #59
 are not replaced or declared complete. Main's standing health failures remain.
+
+## Executed historical follow-up
+
+The October 7 follow-up fits and evaluates seven products across four sports,
+with source-limited NFL/WNBA/MLB cases explicit. See
+[DISTRIBUTION_REPLAY_20261007.md](DISTRIBUTION_REPLAY_20261007.md).
+Conditional scaling showed no clear improvement; six CDF fits refused missing
+support. No accuracy default was activated. The original verification checkpoint
+remains unchanged as historical evidence.

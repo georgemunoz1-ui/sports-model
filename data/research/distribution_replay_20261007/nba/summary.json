@@ -1,0 +1,106 @@
+{
+  "margin": {
+    "baseline": {
+      "central_90_interval_coverage": 0.891869918699187,
+      "central_90_interval_mean_width": 47.28211382113821,
+      "crps": 8.259648357402762,
+      "games": 1230,
+      "zero_probability_outcomes": 4
+    },
+    "calibration_n": 1230,
+    "calibration_status": "CALIBRATION_CANNOT_REPAIR_MISSING_SUPPORT",
+    "conditional_scale": {
+      "central_90_interval_coverage": 0.8845528455284553,
+      "central_90_interval_mean_width": 46.53983739837398,
+      "crps": 8.26416034204369,
+      "games": 1230,
+      "zero_probability_outcomes": 6
+    },
+    "evaluation_n": 1230,
+    "residual_n": 1230,
+    "scale_paired": {
+      "brier_category_sum": {
+        "block_n": 26,
+        "ci95": [
+          -0.0009510478550716844,
+          0.0015116828995773255
+        ],
+        "delta": 0.0002705739919444605,
+        "game_n": 1230,
+        "reason": null
+      },
+      "distribution_crps": {
+        "block_n": 26,
+        "ci95": [
+          -0.010650978027437093,
+          0.018417289663903085
+        ],
+        "delta": 0.00451198464092834,
+        "game_n": 1230,
+        "reason": null
+      },
+      "log_loss": {
+        "block_n": 26,
+        "ci95": [
+          -0.0009175443876915531,
+          0.004382721000892906
+        ],
+        "delta": 0.0016865815762329174,
+        "game_n": 1230,
+        "reason": null
+      }
+    }
+  },
+  "total": {
+    "baseline": {
+      "central_90_interval_coverage": 0.8902439024390244,
+      "central_90_interval_mean_width": 60.09024390243903,
+      "crps": 10.778329459054627,
+      "games": 1230,
+      "zero_probability_outcomes": 6
+    },
+    "calibration_n": 1230,
+    "calibration_status": "CALIBRATION_CANNOT_REPAIR_MISSING_SUPPORT",
+    "conditional_scale": {
+      "central_90_interval_coverage": 0.891869918699187,
+      "central_90_interval_mean_width": 60.06829268292683,
+      "crps": 10.779315295443524,
+      "games": 1230,
+      "zero_probability_outcomes": 8
+    },
+    "evaluation_n": 1230,
+    "residual_n": 1230,
+    "scale_paired": {
+      "brier_category_sum": {
+        "block_n": 26,
+        "ci95": [
+          -1.345072309036354e-05,
+          1.166820455404502e-05
+        ],
+        "delta": -3.268274304838818e-07,
+        "game_n": 1230,
+        "reason": null
+      },
+      "distribution_crps": {
+        "block_n": 26,
+        "ci95": [
+          -0.0030871132011021565,
+          0.005080494893911102
+        ],
+        "delta": 0.000985836388897532,
+        "game_n": 1230,
+        "reason": null
+      },
+      "log_loss": {
+        "block_n": 26,
+        "ci95": [
+          -0.0002449181133998399,
+          1.9504417120670027e-05
+        ],
+        "delta": -0.00010376016039522103,
+        "game_n": 1230,
+        "reason": null
+      }
+    }
+  }
+}

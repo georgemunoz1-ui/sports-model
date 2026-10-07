@@ -1,0 +1,119 @@
+{
+  "action_authority": false,
+  "baseline_id": "nba.total.empirical.research.ec9c0599f7ae758b",
+  "bootstrap": {
+    "count": 2000,
+    "seed": 7,
+    "unit": "GAME_MEAN_WITHIN_DECLARED_TIME_BLOCK"
+  },
+  "challenger_id": "nba.total.conditional_scale.research.39664d10eb36f525",
+  "input_sha256": "647dc7823786883cb74a31d864a2e24e292579e849cfa573e4072d9deacd15b7",
+  "limitations": [
+    "CALLER_PROVENANCE_NOT_INDEPENDENTLY_ATTESTED",
+    "NOT_CANONICAL_GRADING",
+    "RELIABILITY_BINS_DESCRIPTIVE_NOT_PROMOTION",
+    "NO_MULTIPLE_TESTING_ADJUSTMENT",
+    "NO_AUTOMATIC_PROMOTION"
+  ],
+  "matched_contract_n": 1230,
+  "matched_game_n": 1230,
+  "paired_challenger_minus_baseline": {
+    "brier_category_sum": {
+      "block_n": 26,
+      "ci95": [
+        -1.345072309036354e-05,
+        1.166820455404502e-05
+      ],
+      "delta": -3.268274304838818e-07,
+      "game_n": 1230,
+      "reason": null
+    },
+    "distribution_crps": {
+      "block_n": 26,
+      "ci95": [
+        -0.0030871132011021565,
+        0.005080494893911102
+      ],
+      "delta": 0.000985836388897532,
+      "game_n": 1230,
+      "reason": null
+    },
+    "log_loss": {
+      "block_n": 26,
+      "ci95": [
+        -0.0002449181133998399,
+        1.9504417120670027e-05
+      ],
+      "delta": -0.00010376016039522103,
+      "game_n": 1230,
+      "reason": null
+    }
+  },
+  "predictive_validation": "NOT_ESTABLISHED_BY_THIS_REPORT",
+  "schema": "sports.paired_distribution_evaluation.research.v1",
+  "scope": [
+    "nba",
+    "total",
+    "FULL_GAME_OT"
+  ],
+  "summaries": {
+    "nba.total.conditional_scale.research.39664d10eb36f525": {
+      "brier_category_sum": 0.5122935832879787,
+      "contract_n": 1230,
+      "distribution_crps": 10.779315295443524,
+      "full_win_reliability_descriptive": [
+        {
+          "lower": 0.4,
+          "mean_probability": 0.44692416301139815,
+          "n": 1230,
+          "observed_full_win_rate": 0.4715447154471545
+        }
+      ],
+      "log_loss": 0.7432664473368947,
+      "market_conditional_brier": null,
+      "market_nonpush_n": 0,
+      "mean_flat_stake_return": null,
+      "model_conditional_brier": null,
+      "quoted_contract_n": 0,
+      "settlements": {
+        "half_loss": 0,
+        "half_win": 0,
+        "loss": 635,
+        "push": 15,
+        "win": 580
+      },
+      "zero_probability_outcomes": 0
+    },
+    "nba.total.empirical.research.ec9c0599f7ae758b": {
+      "brier_category_sum": 0.5122939101154093,
+      "contract_n": 1230,
+      "distribution_crps": 10.778329459054627,
+      "full_win_reliability_descriptive": [
+        {
+          "lower": 0.4,
+          "mean_probability": 0.44692811444315866,
+          "n": 1230,
+          "observed_full_win_rate": 0.4715447154471545
+        }
+      ],
+      "log_loss": 0.74337020749729,
+      "market_conditional_brier": null,
+      "market_nonpush_n": 0,
+      "mean_flat_stake_return": null,
+      "model_conditional_brier": null,
+      "quoted_contract_n": 0,
+      "settlements": {
+        "half_loss": 0,
+        "half_win": 0,
+        "loss": 635,
+        "push": 15,
+        "win": 580
+      },
+      "zero_probability_outcomes": 0
+    }
+  },
+  "unmatched_contract_n": {
+    "nba.total.conditional_scale.research.39664d10eb36f525": 0,
+    "nba.total.empirical.research.ec9c0599f7ae758b": 0
+  }
+}

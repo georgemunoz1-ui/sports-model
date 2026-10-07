@@ -6,6 +6,10 @@ on:
       - 'pipelines/cards/distribution_research.py'
       - 'research/evaluate_discrete_products.py'
       - 'scripts/cross_sport_distribution_research.py'
+      - 'scripts/run_distribution_history.py'
+      - 'scripts/verify_distribution_study.py'
+      - 'data/research/distribution_replay_20261007/**'
+      - 'tests/test_distribution_history.py'
       - 'scripts/generate_card_force.py'
       - 'scripts/run_nfl_integrated.py'
       - 'tests/test_cross_sport_distributions.py'
@@ -16,12 +20,16 @@ permissions:
 jobs:
   software-contracts:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - run: python -m pip install numpy==2.3.5 scipy==1.17.0
+      - run: python -m pip install -r requirements-consolidated.txt
       - name: Synthetic software checks, not predictive validation
         run: python -m unittest discover -s tests -p test_cross_sport_distributions.py -v
+      - name: Chronological replay boundaries
+        run: python -m unittest discover -s tests -p test_distribution_history.py -v
+      - name: Replay retained authentic cohorts and 700K saved draws
+        run: python scripts/verify_distribution_study.py data/research/distribution_replay_20261007

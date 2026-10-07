@@ -4575,3 +4575,21 @@ The partial checkout cannot establish full repository health; historical standin
 health and issue #59 remain open. See docs/CROSS_SPORT_DISTRIBUTION_RESEARCH.md
 and docs/releases/2026-10-07-cross-sport-distributions/ for executed scope and limits.
 Research only, no model promotion, canonical registration, or action authority.
+
+
+## 2026-10-07 — Distribution release follow-up and authentic historical replay
+
+Owner asked to finish PR61. Registered DISTRIBUTION-REPLAY-20261007 before
+execution; fixed parent, residual, calibration and later evaluation seasons.
+Executed CFB margin and NBA/NHL/MLS margin+total: 3,661 unique games, 6,608
+game-product evaluations. Retained identified cohorts, all fitted artifacts,
+paired results, prediction hashes and 700K real draws for exact replay.
+All seven conditional-scale CRPS intervals include zero. Six CDF fits refuse
+missing support; NHL margin CDF shows a small retrospective CRPS improvement,
+but one evaluated margin has zero exact-score support and no market comparison.
+NFL/WNBA/MLB historical input gaps remain explicit; no anonymous residuals or
+winner-only evaluations were substituted. Availability effects and prospective
+validation remain incomplete. No default or wagering authority changed.
+Initial PR head passed 420 full-suite tests; three jobs failed solely on artifact
+upload quota. Repository health remains RED with four existing failures.
+See docs/DISTRIBUTION_REPLAY_20261007.md and the retained study for exact scope.

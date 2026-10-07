@@ -1,0 +1,1061 @@
+{
+  "created_at_utc": "2026-10-07T23:49:25.545366+00:00",
+  "current_default": false,
+  "fitted": {
+    "margin": {
+      "coefficient": [
+        3.430968135543475,
+        -3.4991755611698,
+        -2.3514408051057147,
+        2.6646621630038667,
+        -0.4197634363173746,
+        0.31013499359565766,
+        -1.0827394323580843,
+        0.6531837740722217,
+        -0.23660261070812333
+      ],
+      "impute": [
+        112.4314012017697,
+        112.41895343842174,
+        112.6288939909304,
+        112.48008474576271,
+        2.0625,
+        2.0833333333333335,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "intercept": 1.7550847457627228,
+      "kind": "linear",
+      "mean": [
+        112.38369801304279,
+        112.38479292642242,
+        112.47115324419003,
+        112.45744745669593,
+        2.8257268126176966,
+        2.8268581293157564,
+        0.042655367231638416,
+        0.043785310734463276,
+        0.0002824858757062147
+      ],
+      "scale": [
+        4.169488302900324,
+        4.322408103484742,
+        4.20347636073573,
+        4.274640844841342,
+        1.7604246440774716,
+        1.7922942274083677,
+        0.202078912501974,
+        0.20461709923259258,
+        0.016804942053938895
+      ]
+    },
+    "total": {
+      "coefficient": [
+        2.2482635695484845,
+        2.806681005273837,
+        2.7602236108958644,
+        2.5524167042890604,
+        0.21052617760007833,
+        -0.2401564327578697,
+        0.01376803770781862,
+        -0.5165488164754424,
+        -0.04241797100214759
+      ],
+      "impute": [
+        112.4314012017697,
+        112.41895343842174,
+        112.6288939909304,
+        112.48008474576271,
+        2.0625,
+        2.0833333333333335,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "intercept": 224.96016949152582,
+      "kind": "linear",
+      "mean": [
+        112.38369801304279,
+        112.38479292642242,
+        112.47115324419003,
+        112.45744745669593,
+        2.8257268126176966,
+        2.8268581293157564,
+        0.042655367231638416,
+        0.043785310734463276,
+        0.0002824858757062147
+      ],
+      "scale": [
+        4.169488302900324,
+        4.322408103484742,
+        4.20347636073573,
+        4.274640844841342,
+        1.7604246440774716,
+        1.7922942274083677,
+        0.202078912501974,
+        0.20461709923259258,
+        0.016804942053938895
+      ]
+    },
+    "winner": {
+      "coefficient": [
+        0.434574947400918,
+        -0.4482803626053826,
+        -0.2949402363019803,
+        0.30655270619470654,
+        -0.040771721643782705,
+        0.03441171869213468,
+        -0.1505217815539325,
+        0.07729446361095019,
+        -0.08335470257111639
+      ],
+      "impute": [
+        112.4314012017697,
+        112.41895343842174,
+        112.6288939909304,
+        112.48008474576271,
+        2.0625,
+        2.0833333333333335,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "intercept": 0.24446189658833034,
+      "kind": "logistic",
+      "mean": [
+        112.38369801304279,
+        112.38479292642242,
+        112.47115324419003,
+        112.45744745669593,
+        2.8257268126176966,
+        2.8268581293157564,
+        0.042655367231638416,
+        0.043785310734463276,
+        0.0002824858757062147
+      ],
+      "scale": [
+        4.169488302900324,
+        4.322408103484742,
+        4.20347636073573,
+        4.274640844841342,
+        1.7604246440774716,
+        1.7922942274083677,
+        0.202078912501974,
+        0.20461709923259258,
+        0.016804942053938895
+      ]
+    }
+  },
+  "model_id": "nba.fixed_parent.8b20d506d255dd14.research",
+  "source": {
+    "history_manifest_sha256": "9ee6980abb9232961c974aa911a6746db2dd3747053279257104e8bc78d3390d",
+    "parent_train_n": 3540,
+    "prior": 112.48008474576271,
+    "provider_copy_counts": {
+      "2": 7230
+    },
+    "source_receipts": [
+      {
+        "raw_sha256": "78220fd7323746c165091e913f7acc92bc361ce75ed0fbc98f05e71ecacc67b9",
+        "retrieved_at_utc": "2026-10-07T15:29:09.363289Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/1/schedule?season=2021&seasontype=2"
+      },
+      {
+        "raw_sha256": "f3ebce7a62fd034a0322518913a81336ae202b28cfa0d34fd7c903c60c5ab903",
+        "retrieved_at_utc": "2026-10-07T15:29:09.350977Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/1/schedule?season=2022&seasontype=2"
+      },
+      {
+        "raw_sha256": "35f9f276e9abe50582881085f2413f0d3bece4877c39e7b13662eb88629986c5",
+        "retrieved_at_utc": "2026-10-07T15:29:09.363209Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/1/schedule?season=2023&seasontype=2"
+      },
+      {
+        "raw_sha256": "68ee263bd3bc2d72f5f278b1300595534af5c4370af14bc774460f51b688b281",
+        "retrieved_at_utc": "2026-10-07T15:29:09.308949Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/1/schedule?season=2024&seasontype=2"
+      },
+      {
+        "raw_sha256": "ea4d4eb23fafe43756365690a40098a38329d371e8e6551da30053338f4f1126",
+        "retrieved_at_utc": "2026-10-07T15:29:09.327902Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/1/schedule?season=2025&seasontype=2"
+      },
+      {
+        "raw_sha256": "63ea0915e1844b3519831330bf42d093b751e434820788ee8a95e718cb8b11ba",
+        "retrieved_at_utc": "2026-10-07T15:29:09.292657Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/1/schedule?season=2026&seasontype=2"
+      },
+      {
+        "raw_sha256": "cd723e61683efeb07c79c5778da3a6649018d0d2ec39dc5aa45bfd82cb9ff5a4",
+        "retrieved_at_utc": "2026-10-07T15:29:14.706100Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/2/schedule?season=2021&seasontype=2"
+      },
+      {
+        "raw_sha256": "775bbbecb12bd476f760bef81ddacf0f69ec002ed1e801af125889a673f34891",
+        "retrieved_at_utc": "2026-10-07T15:29:14.798210Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/2/schedule?season=2022&seasontype=2"
+      },
+      {
+        "raw_sha256": "0887df34d3473da8b47e56034228324564abf33a143b868ea580a455dc4f1099",
+        "retrieved_at_utc": "2026-10-07T15:29:14.652646Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/2/schedule?season=2023&seasontype=2"
+      },
+      {
+        "raw_sha256": "795f78d5e97516bd986fcb112a482c9aaa1560c43e762e8e397a4c6515ba2106",
+        "retrieved_at_utc": "2026-10-07T15:29:14.810893Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/2/schedule?season=2024&seasontype=2"
+      },
+      {
+        "raw_sha256": "cab24c9d1d417ea4c3327ca77d826ef9b2a78f6caadebd07d80ac1dd1230d20a",
+        "retrieved_at_utc": "2026-10-07T15:29:14.748341Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/2/schedule?season=2025&seasontype=2"
+      },
+      {
+        "raw_sha256": "1ebefb9fb95d4c1e39069e7d416b5e54df3829c725b3af806f96b8ea3ba5615a",
+        "retrieved_at_utc": "2026-10-07T15:29:14.759098Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/2/schedule?season=2026&seasontype=2"
+      },
+      {
+        "raw_sha256": "52cda0af3580f7c8bf0c80bfe9b1f086c9c617855acf7a4abd401a8fe2320166",
+        "retrieved_at_utc": "2026-10-07T15:29:22.231511Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/17/schedule?season=2021&seasontype=2"
+      },
+      {
+        "raw_sha256": "948b863d37bfea71067a40084e6632ed657e7f06202b03e1ff42fb94968bbf83",
+        "retrieved_at_utc": "2026-10-07T15:29:22.252228Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/17/schedule?season=2022&seasontype=2"
+      },
+      {
+        "raw_sha256": "79d425c19a66bd096eb130a195c0a779fcb53687f63b086b1d947dbe882e89c3",
+        "retrieved_at_utc": "2026-10-07T15:29:22.158412Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/17/schedule?season=2023&seasontype=2"
+      },
+      {
+        "raw_sha256": "a7e51900f026c2da78749960edd2f93c9e03eff600ef60a05b58584b83feae09",
+        "retrieved_at_utc": "2026-10-07T15:29:22.232060Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/17/schedule?season=2024&seasontype=2"
+      },
+      {
+        "raw_sha256": "337667f5b64b19617dba820caabc95de1c54bb613d4bcb8ab711efd73e2ee9c6",
+        "retrieved_at_utc": "2026-10-07T15:29:22.242714Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/17/schedule?season=2025&seasontype=2"
+      },
+      {
+        "raw_sha256": "531ba0f8617502ff52d890e767399cb34a1e909142557367842c345979683d4b",
+        "retrieved_at_utc": "2026-10-07T15:29:22.215736Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/17/schedule?season=2026&seasontype=2"
+      },
+      {
+        "raw_sha256": "ab9629bcc8a21334f1ebcbad751185d4ff4be3a6e5f8ae8e4b2c0c7d5e398668",
+        "retrieved_at_utc": "2026-10-07T15:29:28.880442Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/30/schedule?season=2021&seasontype=2"
+      },
+      {
+        "raw_sha256": "ef78ba4f32b7860028f3d77b5692ece7f9a059bd232aa22e1ccc17f97138ddc9",
+        "retrieved_at_utc": "2026-10-07T15:29:28.865573Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/30/schedule?season=2022&seasontype=2"
+      },
+      {
+        "raw_sha256": "188532730c345c9a5152d2c8a258d51dfe6f5be49a17de2dff840d93d3437378",
+        "retrieved_at_utc": "2026-10-07T15:29:28.820785Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/30/schedule?season=2023&seasontype=2"
+      },
+      {
+        "raw_sha256": "a68186544118ef960e5bc3cebde87a5e4d35da75fe3bf4328ae905a77bf018fd",
+        "retrieved_at_utc": "2026-10-07T15:29:28.807546Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/30/schedule?season=2024&seasontype=2"
+      },
+      {
+        "raw_sha256": "5d466a0b658a162c657ca7f480a8851f83c2fadac6c8c3226d3cd6d903144a4b",
+        "retrieved_at_utc": "2026-10-07T15:29:28.970263Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/30/schedule?season=2025&seasontype=2"
+      },
+      {
+        "raw_sha256": "6746303440e10bed572355222414b9eefe4c6293de7c349871fe0d1b4d300c90",
+        "retrieved_at_utc": "2026-10-07T15:29:28.879889Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/30/schedule?season=2026&seasontype=2"
+      },
+      {
+        "raw_sha256": "f21fb7b286eb2a4dc6a2f03b6a44a1a6209a5d399c56022737c2b4abfa52abfa",
+        "retrieved_at_utc": "2026-10-07T15:29:35.682269Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/4/schedule?season=2021&seasontype=2"
+      },
+      {
+        "raw_sha256": "7e3cbac7e71806141f509dc7542c04d54a7f2a90458c93fd7714a7241d3db86e",
+        "retrieved_at_utc": "2026-10-07T15:29:35.660193Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/4/schedule?season=2022&seasontype=2"
+      },
+      {
+        "raw_sha256": "44088fc5105d36bf62b44c45367c1bf142b7d0c188e0aa9a1a3377befa0eb983",
+        "retrieved_at_utc": "2026-10-07T15:29:35.682573Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/4/schedule?season=2023&seasontype=2"
+      },
+      {
+        "raw_sha256": "2e894ce2f6afcf778405bbb6822b018e551761471521e5f360d45a90c0709f12",
+        "retrieved_at_utc": "2026-10-07T15:29:35.744825Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/4/schedule?season=2024&seasontype=2"
+      },
+      {
+        "raw_sha256": "f7b706932ebe4f4c60804efe22928594717988fa00704d7fbec147d5f98139a7",
+        "retrieved_at_utc": "2026-10-07T15:29:35.832100Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/4/schedule?season=2025&seasontype=2"
+      },
+      {
+        "raw_sha256": "07dd68f9947d4103c2704be3c1b31d0352863eb74bf1c0714095dab50ab6021e",
+        "retrieved_at_utc": "2026-10-07T15:29:35.715821Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/4/schedule?season=2026&seasontype=2"
+      },
+      {
+        "raw_sha256": "6d128d8b75948450f854d1570c15742f269a39b99639ca2338b4aee03f9b2a47",
+        "retrieved_at_utc": "2026-10-07T15:29:48.401528Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/5/schedule?season=2021&seasontype=2"
+      },
+      {
+        "raw_sha256": "a775770dfef37eedb8c27b4c16d3d247f6b4e4a229703abfcfa7a415f88762a0",
+        "retrieved_at_utc": "2026-10-07T15:29:48.383533Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/5/schedule?season=2022&seasontype=2"
+      },
+      {
+        "raw_sha256": "866eccaf9f848c157f7416d2f0524a9224e57a7e224f189b630c0692c2e60f82",
+        "retrieved_at_utc": "2026-10-07T15:29:48.530892Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/5/schedule?season=2023&seasontype=2"
+      },
+      {
+        "raw_sha256": "40b806aa0e35dfb0834d89089aad9cca30f48c2d67ece4b707f4d7198c58f9f2",
+        "retrieved_at_utc": "2026-10-07T15:29:48.531817Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/5/schedule?season=2024&seasontype=2"
+      },
+      {
+        "raw_sha256": "3505650a5bcf527ba6d3ce8e957cde64abc70e38b05df849accebb6eb6af0bb5",
+        "retrieved_at_utc": "2026-10-07T15:29:48.419317Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/5/schedule?season=2025&seasontype=2"
+      },
+      {
+        "raw_sha256": "e2c46ffd432a8199cf519e873c35de67ccf97acde86f50c43f2716536527f209",
+        "retrieved_at_utc": "2026-10-07T15:29:48.455839Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/5/schedule?season=2026&seasontype=2"
+      },
+      {
+        "raw_sha256": "b2707b6de69a2be08f03b93bd9d046ee89d10922544f9c86fd05dbba08fcde5f",
+        "retrieved_at_utc": "2026-10-07T15:29:54.738151Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/6/schedule?season=2021&seasontype=2"
+      },
+      {
+        "raw_sha256": "81dbbc907c10f0134f211c7bde3c6638d64869794c0285a31b48dfcd570804d4",
+        "retrieved_at_utc": "2026-10-07T15:29:54.849917Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/6/schedule?season=2022&seasontype=2"
+      },
+      {
+        "raw_sha256": "d8640f8878e3ba380d6fa823606422dcea69d694be9bdbe73d8ec46170299592",
+        "retrieved_at_utc": "2026-10-07T15:29:54.850109Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/6/schedule?season=2023&seasontype=2"
+      },
+      {
+        "raw_sha256": "ec0236e1c6a7bac9f4dc9d2e026483636fc78c3f84829e1369c226bc9bf7dbc3",
+        "retrieved_at_utc": "2026-10-07T15:29:54.736522Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/6/schedule?season=2024&seasontype=2"
+      },
+      {
+        "raw_sha256": "46a9b390af2f1d2d39596ae056898b2856cc993ff818af1913f164be4a68037e",
+        "retrieved_at_utc": "2026-10-07T15:29:54.838017Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/6/schedule?season=2025&seasontype=2"
+      },
+      {
+        "raw_sha256": "82e17e8c58edfdb20b762ad34df0d99f9028029d1a98b442ff3acc87686b11aa",
+        "retrieved_at_utc": "2026-10-07T15:29:54.821919Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/6/schedule?season=2026&seasontype=2"
+      },
+      {
+        "raw_sha256": "6fa654b6af708d41533614c13ff7ab2925ffda001f4356120fe7175fa0edfef3",
+        "retrieved_at_utc": "2026-10-07T15:30:01.503340Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/7/schedule?season=2021&seasontype=2"
+      },
+      {
+        "raw_sha256": "a10da592cd3df2585ec3ae44450f384ea5fabe434ceeed775eaa908d4150001f",
+        "retrieved_at_utc": "2026-10-07T15:30:01.566929Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/7/schedule?season=2022&seasontype=2"
+      },
+      {
+        "raw_sha256": "213cc1303dd1073654b6b3bd4f69215f2c24a74f06e6b67dc91dc696cd8497d6",
+        "retrieved_at_utc": "2026-10-07T15:30:01.448135Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/7/schedule?season=2023&seasontype=2"
+      },
+      {
+        "raw_sha256": "a0082d342ee4cc679140c569146dd50e7d0c4f96ff833abbcc90962aba398a0b",
+        "retrieved_at_utc": "2026-10-07T15:30:01.555816Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/7/schedule?season=2024&seasontype=2"
+      },
+      {
+        "raw_sha256": "61be8a06ce5454eb821586e3ada283ae24395c31977131834e1a910be3899b63",
+        "retrieved_at_utc": "2026-10-07T15:30:01.541760Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/7/schedule?season=2025&seasontype=2"
+      },
+      {
+        "raw_sha256": "08ea5432964d963ebfe9289bc81af10e3d33ef405f15bdcab9f0eaf958e45bf3",
+        "retrieved_at_utc": "2026-10-07T15:30:01.526172Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/7/schedule?season=2026&seasontype=2"
+      },
+      {
+        "raw_sha256": "d3cca518732b53d1c3f05d780c9a25786c125f52815480d3f91808215f5970eb",
+        "retrieved_at_utc": "2026-10-07T15:30:08.308295Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/8/schedule?season=2021&seasontype=2"
+      },
+      {
+        "raw_sha256": "3cf03d868c05d50855beede3639c3049bc5a6d5b948e9659d7f9013a29d5d6d2",
+        "retrieved_at_utc": "2026-10-07T15:30:08.347337Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/8/schedule?season=2022&seasontype=2"
+      },
+      {
+        "raw_sha256": "ae6f6215719e8230b5bbf15acc12770ed33bf764d198b03d828237aa28ec8ffe",
+        "retrieved_at_utc": "2026-10-07T15:30:08.464286Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/8/schedule?season=2023&seasontype=2"
+      },
+      {
+        "raw_sha256": "4baa7d3b81d545ab0d9a59dd48ce4be0af524133c43a8bf1d673417f24a8c203",
+        "retrieved_at_utc": "2026-10-07T15:30:08.319724Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/8/schedule?season=2024&seasontype=2"
+      },
+      {
+        "raw_sha256": "d65231064de53a5b2de2b03e9d956ce98932ff363832fad515e5706c6bd73ecd",
+        "retrieved_at_utc": "2026-10-07T15:30:08.359517Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/8/schedule?season=2025&seasontype=2"
+      },
+      {
+        "raw_sha256": "dd4ab29b58b93163be68baeddd694e9b52aa2ec04cda6c086611d9ec4497a2df",
+        "retrieved_at_utc": "2026-10-07T15:30:08.294689Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/8/schedule?season=2026&seasontype=2"
+      },
+      {
+        "raw_sha256": "d88474769d67320ec2d14bd48c86225c7b2e2a2505fa1ff08107532e54ae0836",
+        "retrieved_at_utc": "2026-10-07T15:30:15.097838Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/9/schedule?season=2021&seasontype=2"
+      },
+      {
+        "raw_sha256": "3c49dbacf25dc96a8bb3c2d55cfff539b270ce63a70da5c356f12dd6687def48",
+        "retrieved_at_utc": "2026-10-07T15:30:15.120595Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/9/schedule?season=2022&seasontype=2"
+      },
+      {
+        "raw_sha256": "1582f33d476d26e7f89ceb7001fb2f1b51d307ed78504c1830b630591fc5c756",
+        "retrieved_at_utc": "2026-10-07T15:30:15.175337Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/9/schedule?season=2023&seasontype=2"
+      },
+      {
+        "raw_sha256": "4e7ebea55ad82fab6492e4f54e853e43ebcea0f475ebbd37cd225d7d95841e71",
+        "retrieved_at_utc": "2026-10-07T15:30:15.153369Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/9/schedule?season=2024&seasontype=2"
+      },
+      {
+        "raw_sha256": "a819188766c27ab935777bfbe0fa73a964e9ad2623152d097d6df6eff332f4d9",
+        "retrieved_at_utc": "2026-10-07T15:30:15.121598Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/9/schedule?season=2025&seasontype=2"
+      },
+      {
+        "raw_sha256": "a02acf48301bda108aa1219ce810047cbeeb4a2fa841b6e0f8f06d47f97f8ce4",
+        "retrieved_at_utc": "2026-10-07T15:30:15.186815Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/9/schedule?season=2026&seasontype=2"
+      },
+      {
+        "raw_sha256": "4b581cf245a425e1ab65fb04e7492c9332fac8ce970d98833f8a5470a02cefcc",
+        "retrieved_at_utc": "2026-10-07T15:30:21.913675Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/10/schedule?season=2021&seasontype=2"
+      },
+      {
+        "raw_sha256": "9d4dabec4bd1c4036afa724356fd3b193a9bacf0af169b613faafb75a506ce28",
+        "retrieved_at_utc": "2026-10-07T15:30:22.053178Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/10/schedule?season=2022&seasontype=2"
+      },
+      {
+        "raw_sha256": "bb9ece2483464405b55e5d2eb7dc0b5ffffe75bd13be5b4dbc7fe6b0f0dc0113",
+        "retrieved_at_utc": "2026-10-07T15:30:21.972383Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/10/schedule?season=2023&seasontype=2"
+      },
+      {
+        "raw_sha256": "fdc2f8960e9009c27ff9d9f96313a7c02699b25298aadc68bb012b5ff1573cf8",
+        "retrieved_at_utc": "2026-10-07T15:30:21.926266Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/10/schedule?season=2024&seasontype=2"
+      },
+      {
+        "raw_sha256": "3cc900dfeebad8ee73de92adfd869ed4e19bc74991135fd754fa948ad3c462a7",
+        "retrieved_at_utc": "2026-10-07T15:30:21.894859Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/10/schedule?season=2025&seasontype=2"
+      },
+      {
+        "raw_sha256": "a0c403c846a29f47f712c8993faf998da089147da8a5f6800cf52cfcc054d013",
+        "retrieved_at_utc": "2026-10-07T15:30:21.949712Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/10/schedule?season=2026&seasontype=2"
+      },
+      {
+        "raw_sha256": "ed4748a2585c0e5c697f09208a569a98377d25780131318b312a01706940d13c",
+        "retrieved_at_utc": "2026-10-07T15:30:28.550547Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/11/schedule?season=2021&seasontype=2"
+      },
+      {
+        "raw_sha256": "79c13532a908b43dd858093da66380bd7960de7c279aa4476db454b735053099",
+        "retrieved_at_utc": "2026-10-07T15:30:28.578042Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/11/schedule?season=2022&seasontype=2"
+      },
+      {
+        "raw_sha256": "cc7f17cbf74844f80525d28a104f40f305c4ae83a5dcc307adf1f046d41b507b",
+        "retrieved_at_utc": "2026-10-07T15:30:28.598307Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/11/schedule?season=2023&seasontype=2"
+      },
+      {
+        "raw_sha256": "b60d3796bdbf18a4b8d3c1183e95254eb43c3b94ec8ab98faaade08b7cfe4427",
+        "retrieved_at_utc": "2026-10-07T15:30:28.597243Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/11/schedule?season=2024&seasontype=2"
+      },
+      {
+        "raw_sha256": "141b79cdb2fac32c25e46dc0ac86ac8627f07277c40b8644256cd74eac5642ad",
+        "retrieved_at_utc": "2026-10-07T15:30:28.563571Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/11/schedule?season=2025&seasontype=2"
+      },
+      {
+        "raw_sha256": "774c0b22bf993bb4e879ecf06d6167ba8aa853e8c6404dbfe82bd794f8f5a620",
+        "retrieved_at_utc": "2026-10-07T15:30:28.607850Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/11/schedule?season=2026&seasontype=2"
+      },
+      {
+        "raw_sha256": "c32f086886829695479ee07971815ab4f8a28cae77e31526c05ad541b1f1456d",
+        "retrieved_at_utc": "2026-10-07T15:30:35.564179Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/12/schedule?season=2021&seasontype=2"
+      },
+      {
+        "raw_sha256": "b57fbb023152390b8f3e7f753dcefdbc0cb65de8b819b7fe9a1ec7448bb76a9f",
+        "retrieved_at_utc": "2026-10-07T15:30:35.537405Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/12/schedule?season=2022&seasontype=2"
+      },
+      {
+        "raw_sha256": "7dd2cefdaa7e90e7a864e38d7bc50789833955121d6b32aa9c80336750966e95",
+        "retrieved_at_utc": "2026-10-07T15:30:35.520457Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/12/schedule?season=2023&seasontype=2"
+      },
+      {
+        "raw_sha256": "e5b6929a196558eb96d308995d1575f589a048d787a6b144867ba3418094541f",
+        "retrieved_at_utc": "2026-10-07T15:30:35.457681Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/12/schedule?season=2024&seasontype=2"
+      },
+      {
+        "raw_sha256": "ae14430d3b53b72dd906326193fc83a0fe04ef06c9e8c0eb608185b89cfccc27",
+        "retrieved_at_utc": "2026-10-07T15:30:35.565222Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/12/schedule?season=2025&seasontype=2"
+      },
+      {
+        "raw_sha256": "c6a52997ad3442b5605aa5c83b72af75639d8af167d040c26ae5d426b595e3ea",
+        "retrieved_at_utc": "2026-10-07T15:30:35.537530Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/12/schedule?season=2026&seasontype=2"
+      },
+      {
+        "raw_sha256": "d763dfb1b234d37ebcdbf5644471844e17c5f78bceb5a13151cf9c8b1ebe5c5d",
+        "retrieved_at_utc": "2026-10-07T15:30:42.466975Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/13/schedule?season=2021&seasontype=2"
+      },
+      {
+        "raw_sha256": "7e0bf41741668b969ab37870265d53e452e3e7cbe0ff5768157728b638334a15",
+        "retrieved_at_utc": "2026-10-07T15:30:42.588073Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/13/schedule?season=2022&seasontype=2"
+      },
+      {
+        "raw_sha256": "b085a25233249a39bd913a9a4818c4c32bb35b51c60e81f59f21d3b09dcd70a8",
+        "retrieved_at_utc": "2026-10-07T15:30:42.587503Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/13/schedule?season=2023&seasontype=2"
+      },
+      {
+        "raw_sha256": "b15ce508ebbc3623415aecfd151025ebdcc2947a53713da0cfdc632589aa0bec",
+        "retrieved_at_utc": "2026-10-07T15:30:42.587407Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/13/schedule?season=2024&seasontype=2"
+      },
+      {
+        "raw_sha256": "b6f84949a4a55f550832bcbc616580d7343445c2b5cd07c9dc3f0d635b9052d0",
+        "retrieved_at_utc": "2026-10-07T15:30:42.544541Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/13/schedule?season=2025&seasontype=2"
+      },
+      {
+        "raw_sha256": "163a3c3c1de6fdad722e9ed1ac46c57f85637463d4cde80276e77dc931ad6c59",
+        "retrieved_at_utc": "2026-10-07T15:30:42.573270Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/13/schedule?season=2026&seasontype=2"
+      },
+      {
+        "raw_sha256": "a1afcdaf228300ca4d1df2a16d3045d07f9c22f417eca8c8e84227c482a6efe8",
+        "retrieved_at_utc": "2026-10-07T15:30:49.292901Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/29/schedule?season=2021&seasontype=2"
+      },
+      {
+        "raw_sha256": "8a227452a49f7f80c191090c362ee0eaf34692859e40ac1878f135502ed34cba",
+        "retrieved_at_utc": "2026-10-07T15:30:49.215775Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/29/schedule?season=2022&seasontype=2"
+      },
+      {
+        "raw_sha256": "900de23d2ec503f28eb87fe4ff411fb1e3706cc89ee1bdfc3da6fd2ff566a7c1",
+        "retrieved_at_utc": "2026-10-07T15:30:49.195491Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/29/schedule?season=2023&seasontype=2"
+      },
+      {
+        "raw_sha256": "bb7527f1ff4eee253cb2cbe5715337cec967ef5cbb4b7a12ba73e5e1e90856e1",
+        "retrieved_at_utc": "2026-10-07T15:30:49.292390Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/29/schedule?season=2024&seasontype=2"
+      },
+      {
+        "raw_sha256": "f01b7175e0b9ee3a53861ec6516dfae5b50205423d69ea77e3483979237b5054",
+        "retrieved_at_utc": "2026-10-07T15:30:49.267716Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/29/schedule?season=2025&seasontype=2"
+      },
+      {
+        "raw_sha256": "c59961480aaa3ed81bdb003a6e195c5f72a05dcbb6db06786a2a7dc51745232f",
+        "retrieved_at_utc": "2026-10-07T15:30:49.267848Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/29/schedule?season=2026&seasontype=2"
+      },
+      {
+        "raw_sha256": "b0679f1253166714f19e0d255655b7796348a343e7c5c34ad8ff320535184349",
+        "retrieved_at_utc": "2026-10-07T15:30:56.385308Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/14/schedule?season=2021&seasontype=2"
+      },
+      {
+        "raw_sha256": "0526157a084e32a6a55d5b9614ee7ecff7fbb6b1e4e2882d6e10801782471dff",
+        "retrieved_at_utc": "2026-10-07T15:30:56.386665Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/14/schedule?season=2022&seasontype=2"
+      },
+      {
+        "raw_sha256": "53bcdb407fd2e7e93fcdfb3b70e0eeb3347dcc7bb29ac395d6e260c4bb54cd28",
+        "retrieved_at_utc": "2026-10-07T15:30:56.358078Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/14/schedule?season=2023&seasontype=2"
+      },
+      {
+        "raw_sha256": "b9974436fc6224b2eeb6f24b1aead21d99188999c7f9f034afa596496a348aae",
+        "retrieved_at_utc": "2026-10-07T15:30:56.432935Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/14/schedule?season=2024&seasontype=2"
+      },
+      {
+        "raw_sha256": "f5fd4bcba38b8e990f3da4ada75b1776acc9cd148f80ea675b2b136b107b6e9b",
+        "retrieved_at_utc": "2026-10-07T15:30:56.398350Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/14/schedule?season=2025&seasontype=2"
+      },
+      {
+        "raw_sha256": "b312c9b34801457b6cfdc641ac41ce40f270c3bb4e5c3d224b5b677a68677e7f",
+        "retrieved_at_utc": "2026-10-07T15:30:56.398682Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/14/schedule?season=2026&seasontype=2"
+      },
+      {
+        "raw_sha256": "127c74611fda02d3d9245883f5b9f2d920b305c8074f8ea2dd0e96dc8ed4354e",
+        "retrieved_at_utc": "2026-10-07T15:31:04.761699Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/15/schedule?season=2021&seasontype=2"
+      },
+      {
+        "raw_sha256": "1ff709d0a5c8779e604eb824ebe65126b794097ad70635c01e1f987b57e103fb",
+        "retrieved_at_utc": "2026-10-07T15:31:04.697690Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/15/schedule?season=2022&seasontype=2"
+      },
+      {
+        "raw_sha256": "cc89808b15c04c3cac1fba45e8bc2f69522e9ab083f958fe6e1e1b92949f838f",
+        "retrieved_at_utc": "2026-10-07T15:31:04.716883Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/15/schedule?season=2023&seasontype=2"
+      },
+      {
+        "raw_sha256": "90fae6c43c8b3a51dc755daf154298d7a79b20abf9fdae25fffe15c6dd8dea87",
+        "retrieved_at_utc": "2026-10-07T15:31:04.717116Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/15/schedule?season=2024&seasontype=2"
+      },
+      {
+        "raw_sha256": "24f1627e18f2aa6efd1b62adb52bc2ae85adc56b86ca244244b92b71c4dd03fe",
+        "retrieved_at_utc": "2026-10-07T15:31:04.715301Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/15/schedule?season=2025&seasontype=2"
+      },
+      {
+        "raw_sha256": "27b52bca7baee320636ad1316cd614be596df34d1647070ccfadcce8a9c933cc",
+        "retrieved_at_utc": "2026-10-07T15:31:04.718015Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/15/schedule?season=2026&seasontype=2"
+      },
+      {
+        "raw_sha256": "a516a71f01e2f4bec61806240795fa2f5f4fab435cff2e20a2ce65701555526d",
+        "retrieved_at_utc": "2026-10-07T15:31:12.586219Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/16/schedule?season=2021&seasontype=2"
+      },
+      {
+        "raw_sha256": "e743396d45bfaf19627691dbc1f8743f521b10e37479061e7d8e680e4c0fe2b8",
+        "retrieved_at_utc": "2026-10-07T15:31:12.547508Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/16/schedule?season=2022&seasontype=2"
+      },
+      {
+        "raw_sha256": "38666f9367160f97a05dac2e634daca1594c2c4b62edbb4c8a81c47d052f180f",
+        "retrieved_at_utc": "2026-10-07T15:31:12.632835Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/16/schedule?season=2023&seasontype=2"
+      },
+      {
+        "raw_sha256": "fc4897d0a7fee60a101211fc83a0a7b1b4207d41159d392060c66996527a97e9",
+        "retrieved_at_utc": "2026-10-07T15:31:12.646823Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/16/schedule?season=2024&seasontype=2"
+      },
+      {
+        "raw_sha256": "fc85a222ac29df4387b07e3cf36b6665feccab75fd90c3a06dc0fcb8f1514708",
+        "retrieved_at_utc": "2026-10-07T15:31:12.570589Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/16/schedule?season=2025&seasontype=2"
+      },
+      {
+        "raw_sha256": "5ce6ca8cea71d77f92670bac62b09559a8f1521830c89f0bf7f9ed96bde9d315",
+        "retrieved_at_utc": "2026-10-07T15:31:12.606177Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/16/schedule?season=2026&seasontype=2"
+      },
+      {
+        "raw_sha256": "d081d573663c29ed7290d057b4c6ed716fbcedc49dc4d43dba502592d80e397b",
+        "retrieved_at_utc": "2026-10-07T15:31:19.757134Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/3/schedule?season=2021&seasontype=2"
+      },
+      {
+        "raw_sha256": "20c979f83be0fd56e5b39d2c68b8a2aac6197458e2173df7f59066a84436bcc5",
+        "retrieved_at_utc": "2026-10-07T15:31:19.866446Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/3/schedule?season=2022&seasontype=2"
+      },
+      {
+        "raw_sha256": "2ce5cbb49638d63ce5c9de7a9af1075e4e793722c2d957e01e8e684e66f186fc",
+        "retrieved_at_utc": "2026-10-07T15:31:19.801061Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/3/schedule?season=2023&seasontype=2"
+      },
+      {
+        "raw_sha256": "b1c32c34ed612d9d2220e366e24de1255dd672aa7cf68c83fb5bc60f4567c4cc",
+        "retrieved_at_utc": "2026-10-07T15:31:19.839660Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/3/schedule?season=2024&seasontype=2"
+      },
+      {
+        "raw_sha256": "c8d8e3791b375756c585b02132335e498446feeeebfba754d83dc71e6a7d0939",
+        "retrieved_at_utc": "2026-10-07T15:31:19.839845Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/3/schedule?season=2025&seasontype=2"
+      },
+      {
+        "raw_sha256": "2697184411f4e73e93fbc7500fdc1267ca82f00667c54041ab3e7487c091e379",
+        "retrieved_at_utc": "2026-10-07T15:31:19.769960Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/3/schedule?season=2026&seasontype=2"
+      },
+      {
+        "raw_sha256": "1e948638400fb9b2b967d39d849b7d88dbebd63eb3dca1c60430bdd8bf9787ca",
+        "retrieved_at_utc": "2026-10-07T15:31:27.300530Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/18/schedule?season=2021&seasontype=2"
+      },
+      {
+        "raw_sha256": "b34d55d6ef3c90da33e7015842201ba90af6d2c8e4d6095b2892a9cdf7aa7287",
+        "retrieved_at_utc": "2026-10-07T15:31:27.228458Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/18/schedule?season=2022&seasontype=2"
+      },
+      {
+        "raw_sha256": "83addf0869f4b65ca16b94f95b8566d725dee8a8a67b9ed84ca3643ba39d10e3",
+        "retrieved_at_utc": "2026-10-07T15:31:27.325442Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/18/schedule?season=2023&seasontype=2"
+      },
+      {
+        "raw_sha256": "e0bdaafee000b82bc091e598d39a491c86b6f6de97870e955bc133e603d085fd",
+        "retrieved_at_utc": "2026-10-07T15:31:27.325477Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/18/schedule?season=2024&seasontype=2"
+      },
+      {
+        "raw_sha256": "a44e8907e8c25dd835435a9eb15abefb006a26665b271ed4f64dc5416d64cb70",
+        "retrieved_at_utc": "2026-10-07T15:31:27.324557Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/18/schedule?season=2025&seasontype=2"
+      },
+      {
+        "raw_sha256": "9ffc49df274fe5d49a404b6493888c9c5daffbf18c2128a62f5505ecd372bef0",
+        "retrieved_at_utc": "2026-10-07T15:31:27.389594Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/18/schedule?season=2026&seasontype=2"
+      },
+      {
+        "raw_sha256": "74af559ff750dbfa731dcc015b550e5c274c4f11eecce655d6d3395ab18f2c4f",
+        "retrieved_at_utc": "2026-10-07T15:31:33.770906Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/25/schedule?season=2021&seasontype=2"
+      },
+      {
+        "raw_sha256": "e5188e8b0b1a8a0a954e92b7b555e381137c0190d34bb80faed508c25dddddd8",
+        "retrieved_at_utc": "2026-10-07T15:31:33.741665Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/25/schedule?season=2022&seasontype=2"
+      },
+      {
+        "raw_sha256": "70996c17c790ebc9a225966e2dd958198958e3c85874bec5a1001def99b52162",
+        "retrieved_at_utc": "2026-10-07T15:31:33.806242Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/25/schedule?season=2023&seasontype=2"
+      },
+      {
+        "raw_sha256": "d38e99e868d0785a00335a5183d79a6a005b830b56cde523243be60001bb3510",
+        "retrieved_at_utc": "2026-10-07T15:31:33.804892Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/25/schedule?season=2024&seasontype=2"
+      },
+      {
+        "raw_sha256": "d8fefddb52d7a810f02742a7820fc256f5e6078b8f9205f1bd714bef7fbe9ed7",
+        "retrieved_at_utc": "2026-10-07T15:31:33.756298Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/25/schedule?season=2025&seasontype=2"
+      },
+      {
+        "raw_sha256": "b46ad01465e8a48229c2ec0b2c72b73ace31d98328883eb82dc2ec843468ee8c",
+        "retrieved_at_utc": "2026-10-07T15:31:33.720319Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/25/schedule?season=2026&seasontype=2"
+      },
+      {
+        "raw_sha256": "98223e1832b314554edbcd78a902817af3567cc27def1775f0ff2a93ddcca9ac",
+        "retrieved_at_utc": "2026-10-07T15:31:40.256555Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/19/schedule?season=2021&seasontype=2"
+      },
+      {
+        "raw_sha256": "7e86d367c564b0cd10970ff4c22a59cddc3d7d0effade0d65177951e0c23b484",
+        "retrieved_at_utc": "2026-10-07T15:31:40.290705Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/19/schedule?season=2022&seasontype=2"
+      },
+      {
+        "raw_sha256": "406f3d4f66e97973f591147292ed8cc965053eedff8dbb63350fa43701af6525",
+        "retrieved_at_utc": "2026-10-07T15:31:40.336060Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/19/schedule?season=2023&seasontype=2"
+      },
+      {
+        "raw_sha256": "26dc02079e8b3a207bcd7f59ba70c5905e87257366f8d6db8054202f8cb18214",
+        "retrieved_at_utc": "2026-10-07T15:31:40.269260Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/19/schedule?season=2024&seasontype=2"
+      },
+      {
+        "raw_sha256": "58cb65187f0a837039ac014db958e8d91011ee2c9db86aeff1ce7f36c7bf4bb2",
+        "retrieved_at_utc": "2026-10-07T15:31:40.371810Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/19/schedule?season=2025&seasontype=2"
+      },
+      {
+        "raw_sha256": "571dc2aba5e6dcde035ec89fe960e66726c4261a8dc5cfd0692f5c78283de30d",
+        "retrieved_at_utc": "2026-10-07T15:31:40.270264Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/19/schedule?season=2026&seasontype=2"
+      },
+      {
+        "raw_sha256": "6fc966a2dab30d07140fb02c098a40691bac3fe3e2d585dd2449fde685255627",
+        "retrieved_at_utc": "2026-10-07T15:31:46.905774Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/20/schedule?season=2021&seasontype=2"
+      },
+      {
+        "raw_sha256": "7e73bb9b4c134e8ce5bf66b04991736d5733c976ae91dcdc5a516967a08363e9",
+        "retrieved_at_utc": "2026-10-07T15:31:46.959043Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/20/schedule?season=2022&seasontype=2"
+      },
+      {
+        "raw_sha256": "a180941e957960f000bede931d08caba9a1b570ac5617b2a36f653018482b1e4",
+        "retrieved_at_utc": "2026-10-07T15:31:46.959951Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/20/schedule?season=2023&seasontype=2"
+      },
+      {
+        "raw_sha256": "a3dfd3c3f0402efd76c8197d85c0c1614b733a3b412815958efabbb8af59c2a2",
+        "retrieved_at_utc": "2026-10-07T15:31:46.934572Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/20/schedule?season=2024&seasontype=2"
+      },
+      {
+        "raw_sha256": "2dd3de4783f0edfeef1d2366dd74080b6ec4b0547a0d9b9db8df5c45353d3f64",
+        "retrieved_at_utc": "2026-10-07T15:31:46.934677Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/20/schedule?season=2025&seasontype=2"
+      },
+      {
+        "raw_sha256": "8aeae0b5594df891603ba4c8ec3579b04055c665068344797cc559e551484f0f",
+        "retrieved_at_utc": "2026-10-07T15:31:46.958648Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/20/schedule?season=2026&seasontype=2"
+      },
+      {
+        "raw_sha256": "a36d844b6324228428970a8223393071504b1cd90c5f78dc8cb6159197e30164",
+        "retrieved_at_utc": "2026-10-07T15:31:54.928123Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/21/schedule?season=2021&seasontype=2"
+      },
+      {
+        "raw_sha256": "ed7113df41b886acef1fa7b19af6fe22475c81daa71312c7d3844cf8a5217231",
+        "retrieved_at_utc": "2026-10-07T15:31:54.885385Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/21/schedule?season=2022&seasontype=2"
+      },
+      {
+        "raw_sha256": "d17262435234ddb1f58c12c17365a3cf524a8e498761fdb561a44608380a2e09",
+        "retrieved_at_utc": "2026-10-07T15:31:54.927821Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/21/schedule?season=2023&seasontype=2"
+      },
+      {
+        "raw_sha256": "75f6bcf3a4c783e05d2e1e5505523b91e81d9565b40085e7057599cee5722288",
+        "retrieved_at_utc": "2026-10-07T15:31:54.970834Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/21/schedule?season=2024&seasontype=2"
+      },
+      {
+        "raw_sha256": "24433952f0a3095b9113c15de50d66dbe8d2eced35a514af3f72ae72dbf603d8",
+        "retrieved_at_utc": "2026-10-07T15:31:55.001474Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/21/schedule?season=2025&seasontype=2"
+      },
+      {
+        "raw_sha256": "af442b0e342aeb0b93b2312bb901f1deb38d8525acacd3400979fe729ce990b6",
+        "retrieved_at_utc": "2026-10-07T15:31:54.956426Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/21/schedule?season=2026&seasontype=2"
+      },
+      {
+        "raw_sha256": "14884c496eec45df2f96ffa71f943b8ca23c8d5a92ccedea6aefa65a7e92768c",
+        "retrieved_at_utc": "2026-10-07T15:32:02.012857Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/22/schedule?season=2021&seasontype=2"
+      },
+      {
+        "raw_sha256": "e5d122870c8a81c564815ad2ff3a4c4d99da32a51e7599ecddc363fa36c10487",
+        "retrieved_at_utc": "2026-10-07T15:32:01.895313Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/22/schedule?season=2022&seasontype=2"
+      },
+      {
+        "raw_sha256": "ccff717e6110ce3617a6b5cd847861e604f0cdd1ac155735bb7da5cddf33605a",
+        "retrieved_at_utc": "2026-10-07T15:32:01.796208Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/22/schedule?season=2023&seasontype=2"
+      },
+      {
+        "raw_sha256": "a7b0d4475e5a643192319a8e68f81072196e6de333472a758189955e696178ec",
+        "retrieved_at_utc": "2026-10-07T15:32:01.826882Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/22/schedule?season=2024&seasontype=2"
+      },
+      {
+        "raw_sha256": "c027a2337de40d5db281826dda658e6697aabcda53f22dd774ca9c061153b1b0",
+        "retrieved_at_utc": "2026-10-07T15:32:01.781942Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/22/schedule?season=2025&seasontype=2"
+      },
+      {
+        "raw_sha256": "3d6a4d8f4dcea648aa515b70154583ebf63d9c7737aa6b2b703f95b2ec5875af",
+        "retrieved_at_utc": "2026-10-07T15:32:01.731562Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/22/schedule?season=2026&seasontype=2"
+      },
+      {
+        "raw_sha256": "9d4f99fa966111865563946359cedc9c3e9c13891906e515ff30536220789474",
+        "retrieved_at_utc": "2026-10-07T15:32:08.319769Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/23/schedule?season=2021&seasontype=2"
+      },
+      {
+        "raw_sha256": "34e2ee401c50225a978d4a4fa89294f8a60c907346e0aa65f9a757b163d00d84",
+        "retrieved_at_utc": "2026-10-07T15:32:08.354287Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/23/schedule?season=2022&seasontype=2"
+      },
+      {
+        "raw_sha256": "248547b2e3c9ebec235e2f678734e101d1da323d2cf84ff2b3d1e0e63690cac8",
+        "retrieved_at_utc": "2026-10-07T15:32:08.451412Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/23/schedule?season=2023&seasontype=2"
+      },
+      {
+        "raw_sha256": "4db4eb01814a07ca78eccc8b5b5c371248370bcd3830ad7febce3516082f550a",
+        "retrieved_at_utc": "2026-10-07T15:32:08.334483Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/23/schedule?season=2024&seasontype=2"
+      },
+      {
+        "raw_sha256": "077b3b3de64863374b0febc2aa6ca4bb8557a1d6996ad8a11aba54f3d81f3a71",
+        "retrieved_at_utc": "2026-10-07T15:32:08.539110Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/23/schedule?season=2025&seasontype=2"
+      },
+      {
+        "raw_sha256": "cda67cdcec0cd483a7a80d61c8989b3a7e7c46811af8dfd6f36a3b342e5220e6",
+        "retrieved_at_utc": "2026-10-07T15:32:08.380831Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/23/schedule?season=2026&seasontype=2"
+      },
+      {
+        "raw_sha256": "4c23b7680649d18fe56d56ab2704174aaeb64a804bb26a92a424c5fcdfd3e962",
+        "retrieved_at_utc": "2026-10-07T15:32:14.923142Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/24/schedule?season=2021&seasontype=2"
+      },
+      {
+        "raw_sha256": "4e6162f3988838f8e5b9a3660f6a0cc5b86af6de5832a4027ecbb46acf488b67",
+        "retrieved_at_utc": "2026-10-07T15:32:14.997766Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/24/schedule?season=2022&seasontype=2"
+      },
+      {
+        "raw_sha256": "a82dc7bdfcc73f76b42ce5bf2c53fa83c9ba4300b9fb3bf4bc98fcd4725eb065",
+        "retrieved_at_utc": "2026-10-07T15:32:14.966595Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/24/schedule?season=2023&seasontype=2"
+      },
+      {
+        "raw_sha256": "d436b738874b03682b8eb756d23056a8cfe8e4a05de71e4bdc770857f0995744",
+        "retrieved_at_utc": "2026-10-07T15:32:15.012108Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/24/schedule?season=2024&seasontype=2"
+      },
+      {
+        "raw_sha256": "29451d3d0c1723f4a871fbd02b19bdb93a5351db4a924f5d81ed80f8d3aad846",
+        "retrieved_at_utc": "2026-10-07T15:32:15.032767Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/24/schedule?season=2025&seasontype=2"
+      },
+      {
+        "raw_sha256": "28a5effca4b9d402b2db2694b1281e3b60ba0ca61e65260c49f571b568400361",
+        "retrieved_at_utc": "2026-10-07T15:32:15.012024Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/24/schedule?season=2026&seasontype=2"
+      },
+      {
+        "raw_sha256": "52b23ec9acc3337cee86115984c116f0a8d6b3bc318a637e3f424b7dec6f69ab",
+        "retrieved_at_utc": "2026-10-07T15:32:21.865685Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/28/schedule?season=2021&seasontype=2"
+      },
+      {
+        "raw_sha256": "ca7208d37ae84977e906d524c46a8e64a3c2b059fbcc90ac154d8159140a6d56",
+        "retrieved_at_utc": "2026-10-07T15:32:21.840499Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/28/schedule?season=2022&seasontype=2"
+      },
+      {
+        "raw_sha256": "0e364aaa242bfa548183198ff87237ff7fe8388c3d03751745d9040f02079e83",
+        "retrieved_at_utc": "2026-10-07T15:32:21.918103Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/28/schedule?season=2023&seasontype=2"
+      },
+      {
+        "raw_sha256": "6d5ee7ada6ef603415fbb92237deb86125c403f1552e303ab341b39ab1cb148c",
+        "retrieved_at_utc": "2026-10-07T15:32:21.886574Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/28/schedule?season=2024&seasontype=2"
+      },
+      {
+        "raw_sha256": "8a539023586137c4c5fa24f1cba1560797dee05403b2d3066688a7735feb3f6b",
+        "retrieved_at_utc": "2026-10-07T15:32:21.787714Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/28/schedule?season=2025&seasontype=2"
+      },
+      {
+        "raw_sha256": "cde5c750b46bac9df5bdaa0dd89d4b4000d6635af879bc6f669183c95e86a72d",
+        "retrieved_at_utc": "2026-10-07T15:32:21.853331Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/28/schedule?season=2026&seasontype=2"
+      },
+      {
+        "raw_sha256": "82f72ee6d2f1b8dafdf0c209bf927793764c7518abceac6bd9390b7b35c41f8e",
+        "retrieved_at_utc": "2026-10-07T15:32:28.460970Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/26/schedule?season=2021&seasontype=2"
+      },
+      {
+        "raw_sha256": "77803df87ea81c936b1201e9d408c90fd9dc81aae49a61c01704ea0aeb67c689",
+        "retrieved_at_utc": "2026-10-07T15:32:28.442541Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/26/schedule?season=2022&seasontype=2"
+      },
+      {
+        "raw_sha256": "209f86ed98b3b13cd9cc1a62426dd445b7434fec8665ab5ae729275cd0d60987",
+        "retrieved_at_utc": "2026-10-07T15:32:28.506539Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/26/schedule?season=2023&seasontype=2"
+      },
+      {
+        "raw_sha256": "c6e36ae74a6595e1f0bdad77ebd3ecf214b90097680b9a62ea1d0b3f0eb33f24",
+        "retrieved_at_utc": "2026-10-07T15:32:28.531804Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/26/schedule?season=2024&seasontype=2"
+      },
+      {
+        "raw_sha256": "b1ce6f246efe42183b07e7d9ea392b06be6bc7800d8117fd46be05382dce26c8",
+        "retrieved_at_utc": "2026-10-07T15:32:28.519522Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/26/schedule?season=2025&seasontype=2"
+      },
+      {
+        "raw_sha256": "096452a1f64f64fa228360eb4966f07aad6f4b010582081b0c1841ff72cb407c",
+        "retrieved_at_utc": "2026-10-07T15:32:28.478609Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/26/schedule?season=2026&seasontype=2"
+      },
+      {
+        "raw_sha256": "026be2f226b3fd93cdc4d56e2f87bda61269d35a67b6f07e7cc04a4bfeaca058",
+        "retrieved_at_utc": "2026-10-07T15:32:35.210831Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/27/schedule?season=2021&seasontype=2"
+      },
+      {
+        "raw_sha256": "c5ad4fe272fcfefb9a33e56d8a174742897437ebb7eb5f446ba5ad3c2bbc12ad",
+        "retrieved_at_utc": "2026-10-07T15:32:35.177350Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/27/schedule?season=2022&seasontype=2"
+      },
+      {
+        "raw_sha256": "73e13982fcc4c624a01c4c3831ed5c63193d61e70de6ee283e573ad64e1890aa",
+        "retrieved_at_utc": "2026-10-07T15:32:35.275691Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/27/schedule?season=2023&seasontype=2"
+      },
+      {
+        "raw_sha256": "670d3747c99ef52b6b8b300ea0681dd7783beec770b8c5072eabe4f63e7be11e",
+        "retrieved_at_utc": "2026-10-07T15:32:35.210203Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/27/schedule?season=2024&seasontype=2"
+      },
+      {
+        "raw_sha256": "98ba5eb1cfce0ee04c20766ee7355e9575e8e9572c2e765e2b50472281836ecb",
+        "retrieved_at_utc": "2026-10-07T15:32:35.301088Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/27/schedule?season=2025&seasontype=2"
+      },
+      {
+        "raw_sha256": "4b56f0cfd001c6326877ec60f79aa0307637eca2770438e86c323a3e7bd4cb93",
+        "retrieved_at_utc": "2026-10-07T15:32:35.276041Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/27/schedule?season=2026&seasontype=2"
+      }
+    ]
+  }
+}

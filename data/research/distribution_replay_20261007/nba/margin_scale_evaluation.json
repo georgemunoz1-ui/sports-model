@@ -1,0 +1,227 @@
+{
+  "action_authority": false,
+  "baseline_id": "nba.margin.empirical.research.b8cc5fd2b7055661",
+  "bootstrap": {
+    "count": 2000,
+    "seed": 7,
+    "unit": "GAME_MEAN_WITHIN_DECLARED_TIME_BLOCK"
+  },
+  "challenger_id": "nba.margin.conditional_scale.research.c842ccc8f101a9bc",
+  "input_sha256": "c6789cc09bdc7f5dc756a3904375ceb15af6156da29734a7d73df021e15bbca2",
+  "limitations": [
+    "CALLER_PROVENANCE_NOT_INDEPENDENTLY_ATTESTED",
+    "NOT_CANONICAL_GRADING",
+    "RELIABILITY_BINS_DESCRIPTIVE_NOT_PROMOTION",
+    "NO_MULTIPLE_TESTING_ADJUSTMENT",
+    "NO_AUTOMATIC_PROMOTION"
+  ],
+  "matched_contract_n": 8610,
+  "matched_game_n": 1230,
+  "paired_challenger_minus_baseline": {
+    "brier_category_sum": {
+      "block_n": 26,
+      "ci95": [
+        -0.0009510478550716844,
+        0.0015116828995773255
+      ],
+      "delta": 0.0002705739919444605,
+      "game_n": 1230,
+      "reason": null
+    },
+    "distribution_crps": {
+      "block_n": 26,
+      "ci95": [
+        -0.010650978027437093,
+        0.018417289663903085
+      ],
+      "delta": 0.00451198464092834,
+      "game_n": 1230,
+      "reason": null
+    },
+    "log_loss": {
+      "block_n": 26,
+      "ci95": [
+        -0.0009175443876915531,
+        0.004382721000892906
+      ],
+      "delta": 0.0016865815762329174,
+      "game_n": 1230,
+      "reason": null
+    }
+  },
+  "predictive_validation": "NOT_ESTABLISHED_BY_THIS_REPORT",
+  "schema": "sports.paired_distribution_evaluation.research.v1",
+  "scope": [
+    "nba",
+    "margin",
+    "FULL_GAME_OT"
+  ],
+  "summaries": {
+    "nba.margin.conditional_scale.research.c842ccc8f101a9bc": {
+      "brier_category_sum": 0.4239079763551686,
+      "contract_n": 8610,
+      "distribution_crps": 8.264160342043688,
+      "full_win_reliability_descriptive": [
+        {
+          "lower": 0.0,
+          "mean_probability": 0.07476351079960626,
+          "n": 105,
+          "observed_full_win_rate": 0.1523809523809524
+        },
+        {
+          "lower": 0.1,
+          "mean_probability": 0.15588176269643872,
+          "n": 399,
+          "observed_full_win_rate": 0.14285714285714285
+        },
+        {
+          "lower": 0.2,
+          "mean_probability": 0.25344073150020674,
+          "n": 740,
+          "observed_full_win_rate": 0.23243243243243245
+        },
+        {
+          "lower": 0.3,
+          "mean_probability": 0.3551433113115449,
+          "n": 1063,
+          "observed_full_win_rate": 0.35559736594543745
+        },
+        {
+          "lower": 0.4,
+          "mean_probability": 0.4513571577819141,
+          "n": 1230,
+          "observed_full_win_rate": 0.45365853658536587
+        },
+        {
+          "lower": 0.5,
+          "mean_probability": 0.5504453886949203,
+          "n": 1431,
+          "observed_full_win_rate": 0.5366876310272537
+        },
+        {
+          "lower": 0.6,
+          "mean_probability": 0.6451452513907302,
+          "n": 1388,
+          "observed_full_win_rate": 0.6498559077809798
+        },
+        {
+          "lower": 0.7,
+          "mean_probability": 0.7496449543227223,
+          "n": 1004,
+          "observed_full_win_rate": 0.7430278884462151
+        },
+        {
+          "lower": 0.8,
+          "mean_probability": 0.8447259832430617,
+          "n": 830,
+          "observed_full_win_rate": 0.8216867469879519
+        },
+        {
+          "lower": 0.9,
+          "mean_probability": 0.9429797742264275,
+          "n": 420,
+          "observed_full_win_rate": 0.8809523809523809
+        }
+      ],
+      "log_loss": 0.6530682910289469,
+      "market_conditional_brier": null,
+      "market_nonpush_n": 0,
+      "mean_flat_stake_return": null,
+      "model_conditional_brier": null,
+      "quoted_contract_n": 0,
+      "settlements": {
+        "half_loss": 0,
+        "half_win": 0,
+        "loss": 3839,
+        "push": 122,
+        "win": 4649
+      },
+      "zero_probability_outcomes": 0
+    },
+    "nba.margin.empirical.research.b8cc5fd2b7055661": {
+      "brier_category_sum": 0.4236374023632241,
+      "contract_n": 8610,
+      "distribution_crps": 8.259648357402762,
+      "full_win_reliability_descriptive": [
+        {
+          "lower": 0.0,
+          "mean_probability": 0.08538878029725588,
+          "n": 58,
+          "observed_full_win_rate": 0.13793103448275862
+        },
+        {
+          "lower": 0.1,
+          "mean_probability": 0.15664334921944284,
+          "n": 345,
+          "observed_full_win_rate": 0.14782608695652175
+        },
+        {
+          "lower": 0.2,
+          "mean_probability": 0.252340698384643,
+          "n": 843,
+          "observed_full_win_rate": 0.232502965599051
+        },
+        {
+          "lower": 0.3,
+          "mean_probability": 0.3534033912367136,
+          "n": 1102,
+          "observed_full_win_rate": 0.34754990925589835
+        },
+        {
+          "lower": 0.4,
+          "mean_probability": 0.4506674608579321,
+          "n": 1194,
+          "observed_full_win_rate": 0.4581239530988275
+        },
+        {
+          "lower": 0.5,
+          "mean_probability": 0.5507663689865472,
+          "n": 1380,
+          "observed_full_win_rate": 0.5347826086956522
+        },
+        {
+          "lower": 0.6,
+          "mean_probability": 0.6485894489336494,
+          "n": 1487,
+          "observed_full_win_rate": 0.6496301277740417
+        },
+        {
+          "lower": 0.7,
+          "mean_probability": 0.7496030064285917,
+          "n": 1161,
+          "observed_full_win_rate": 0.7536606373815676
+        },
+        {
+          "lower": 0.8,
+          "mean_probability": 0.8473879823368585,
+          "n": 842,
+          "observed_full_win_rate": 0.838479809976247
+        },
+        {
+          "lower": 0.9,
+          "mean_probability": 0.9314947772708742,
+          "n": 198,
+          "observed_full_win_rate": 0.9040404040404041
+        }
+      ],
+      "log_loss": 0.6513817094527139,
+      "market_conditional_brier": null,
+      "market_nonpush_n": 0,
+      "mean_flat_stake_return": null,
+      "model_conditional_brier": null,
+      "quoted_contract_n": 0,
+      "settlements": {
+        "half_loss": 0,
+        "half_win": 0,
+        "loss": 3839,
+        "push": 122,
+        "win": 4649
+      },
+      "zero_probability_outcomes": 0
+    }
+  },
+  "unmatched_contract_n": {
+    "nba.margin.conditional_scale.research.c842ccc8f101a9bc": 0,
+    "nba.margin.empirical.research.b8cc5fd2b7055661": 0
+  }
+}

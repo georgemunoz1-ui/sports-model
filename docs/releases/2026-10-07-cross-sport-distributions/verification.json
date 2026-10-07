@@ -1,0 +1,93 @@
+{
+  "acceptance_scope": {
+    "all_league_simulation_cases": 14,
+    "data": "SYNTHETIC_SOFTWARE_FIXTURES",
+    "draws_per_case": 100000,
+    "empirical_and_conditional_scale_fits": 28,
+    "leagues": [
+      "nfl",
+      "cfb",
+      "nba",
+      "wnba",
+      "mlb",
+      "nhl",
+      "mls"
+    ],
+    "products": [
+      "margin",
+      "total"
+    ],
+    "same_saved_fit_replay": "EXACT_WITHIN_TEST"
+  },
+  "action_authority": false,
+  "authentic_sports_cohort_fit": "NOT_RUN",
+  "base_commit": "43ad83382af067b019a086d45d23569497ca6e08",
+  "canonical_registration": "NOT_RUN",
+  "code_sha256": {
+    "models/common/discrete_calibration.py": "637ecf78c1746667ca022849398fa2b270e0f144269a21ae8a32bb67f2a1eec7",
+    "models/common/discrete_research.py": "4a68440a8a7d8bcc9b7ed7b617f9f5ff778fe62d4274840e52a37e48ba8f08eb",
+    "pipelines/cards/distribution_research.py": "fd7c1d4a7ae330e3fce4a0cd155b861b6fb4e6b0fc3f5e24c1b5ee81a57aa296",
+    "research/evaluate_discrete_products.py": "eb13f7c1b6bd162d18e24b8e71bda55837b5d36e28d448725ba99bad3adf95c1",
+    "scripts/cross_sport_distribution_research.py": "f5abd0f1b13ec02587abc2d6ebfffb188064a663c383e20ccb19c1bb86609a03",
+    "scripts/generate_card_force.py": "94e8a6d65cf57ae1430efce7c8675cbb96f21260638c8dd1b698eaf039153733",
+    "scripts/run_nfl_integrated.py": "b66cf359d182c7275fe0b92f477e4b2e0efb686b34ecd760b5f066a918763686",
+    "tests/test_cross_sport_distributions.py": "7fa7abc0a34ed8e47304222d092267eb56076a1a879f60148c575ed92bf5354d"
+  },
+  "created_at_utc": "2026-10-07T23:36:43.292247+00:00",
+  "errors": 0,
+  "failures": 0,
+  "full_repository_health": "UNVERIFIED_PARTIAL_CHECKOUT_AND_EXISTING_STANDING_FAILURES",
+  "limitations": [
+    "No pytest runtime was present; existing unittest regressions were exercised.",
+    "Scoped initial test failures due to missing remote fixtures were resolved by retrieving unchanged pinned source files.",
+    "No historical outcome-based model selection or prospective performance claim."
+  ],
+  "numpy": "2.3.5",
+  "predictive_validation": "NOT_RUN",
+  "protected_files": {
+    "AGENTS.md": {
+      "matches_main_blob": true,
+      "sha256": "068e3e6ee2d74c528dcde6c37a3797e54eb9a8d1f39af50767557c33c454ec22"
+    },
+    "AUTHORIZATIONS.md": {
+      "matches_main_blob": true,
+      "sha256": "675cf53e582bd22074eef89f941c3d1aead7fc7f3556a544294116ba82a546cb"
+    },
+    "data/model_selection/defaults_v1.json": {
+      "matches_main_blob": true,
+      "sha256": "8bbfb63ee0f8eeb99fc728fb25db3f1d9959c863ccb4f517abde058e3424b3eb"
+    },
+    "models/current/baseline.py": {
+      "matches_main_blob": true,
+      "sha256": "cc338abccfcc4c107069cc5b64b0e6e6485d77ea3ba27dd703f7a1c4055fb875"
+    },
+    "models/current/cfb.py": {
+      "matches_main_blob": true,
+      "sha256": "20628f3463589cae551b325e68fa7125aef8f9cd075e7b19b0a1c76b9f411b5a"
+    },
+    "models/current/common.py": {
+      "matches_main_blob": true,
+      "sha256": "63c0da2a4c620fb086d08e22268fe3875515c1807aec128f5e092f73eeafd5ff"
+    },
+    "models/current/wnba.py": {
+      "matches_main_blob": true,
+      "sha256": "52a1b64d4644e18d8edbd3337f307a7dcd8e7b199e9ed9a4fbfb66722c55821a"
+    },
+    "models/nfl/contextual/model.py": {
+      "matches_main_blob": true,
+      "sha256": "ba00569e30cd56fa1d50570f828db02e56caf849ddbdf1d0d0fc11272e7a0fc3"
+    },
+    "pipelines/cards/selected.py": {
+      "matches_main_blob": true,
+      "sha256": "0b6b270ea04a5df266ba47b23813e2943d6952b06f064802ba68c74d161276b8"
+    },
+    "state.json": {
+      "matches_main_blob": true,
+      "sha256": "d2c2e9204d419f728a975475eabf0917ba3a9b7b406446d3f354191de3398edd"
+    }
+  },
+  "python": "3.12.14 (main, Aug 25 2026, 14:00:49) [Clang 22.1.3 ]",
+  "scipy": "1.17.0",
+  "successful": true,
+  "tests_run": 53
+}

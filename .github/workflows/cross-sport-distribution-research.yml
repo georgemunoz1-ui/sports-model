@@ -1,0 +1,27 @@
+name: Cross-sport distribution research
+on:
+  pull_request:
+    paths:
+      - 'models/common/discrete_*.py'
+      - 'pipelines/cards/distribution_research.py'
+      - 'research/evaluate_discrete_products.py'
+      - 'scripts/cross_sport_distribution_research.py'
+      - 'scripts/generate_card_force.py'
+      - 'scripts/run_nfl_integrated.py'
+      - 'tests/test_cross_sport_distributions.py'
+      - '.github/workflows/cross-sport-distribution-research.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  software-contracts:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install numpy==2.3.5 scipy==1.17.0
+      - name: Synthetic software checks, not predictive validation
+        run: python -m unittest discover -s tests -p test_cross_sport_distributions.py -v

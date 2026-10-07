@@ -4557,3 +4557,21 @@ Exact replay adds zero and preserves forecast/ledger/summary/registry hashes.
 53 focused tests pass; unrelated health/release obligations remain unresolved.
 No model/default, market, action or release-policy changes. No historical registration
 created for September 21/22. See docs/MLB_CALIBRATION_GRADING_REPAIR.md and retained evidence.
+
+
+## 2026-10-07 — Cross-sport distribution research implementation
+
+Owner requested the ATS research applied across all models/sports. Added opt-in
+discrete margin/total residual fitting, conditional scale, monotone CDF calibration,
+source-bound availability mixtures, exact integer/half/MLS-quarter settlement,
+100K retained simulations, and paired contract-matched evaluation for seven leagues.
+Shared-card and canonical NFL pregame commands emit isolated child reports; missing
+fits/heads remain explicit. Existing defaults, frozen forecasts and ledgers unchanged.
+
+Synthetic all-seven software acceptance plus existing default-selection and NFL
+spread-calibration regressions pass locally; this does not establish predictive
+accuracy. No authentic all-seven fitting/holdout/prospective cohort was executed.
+The partial checkout cannot establish full repository health; historical standing
+health and issue #59 remain open. See docs/CROSS_SPORT_DISTRIBUTION_RESEARCH.md
+and docs/releases/2026-10-07-cross-sport-distributions/ for executed scope and limits.
+Research only, no model promotion, canonical registration, or action authority.

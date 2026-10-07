@@ -1,0 +1,99 @@
+{
+  "schema": "sports.distribution_study.design.v1",
+  "experiment_id": "DISTRIBUTION-REPLAY-20261007",
+  "created_at_utc": "2026-10-07T23:46:08.603619+00:00",
+  "authorization": "Owner asked to finish PR61 and cross-sport implementation. Research execution only; no wagering or automatic default promotion.",
+  "status": "FROZEN_BEFORE_EXECUTION_REUSED_RETROSPECTIVE_HISTORY",
+  "league_scope": [
+    "nfl",
+    "cfb",
+    "nba",
+    "wnba",
+    "mlb",
+    "nhl",
+    "mls"
+  ],
+  "executed_source_adapters": [
+    "cfb",
+    "nba",
+    "nhl",
+    "mls"
+  ],
+  "unavailable_source_adapters": {
+    "nfl": "Original model-specific OOF input rows not retained in checkout; packed coefficients and prior evaluation summaries do not replace these. PR50 remains separate.",
+    "wnba": "Frozen fitter requires official-plus-ESPN historical box archives; anonymous residual arrays do not provide game identity or chronology.",
+    "mlb": "Need point-run forecasts with source-bound realized final run differences; winner-only evaluation does not validate completed-game extra-inning distribution."
+  },
+  "source_pins": {
+    "history_manifest_sha256": "9ee6980abb9232961c974aa911a6746db2dd3747053279257104e8bc78d3390d",
+    "cfb_features_sha256": "30dc3cc56cb959cd36c184877525a32ee5d75416dd11cab82d90f980c1a46b90"
+  },
+  "code_pins": {
+    "models/common/discrete_research.py": "4a68440a8a7d8bcc9b7ed7b617f9f5ff778fe62d4274840e52a37e48ba8f08eb",
+    "models/common/discrete_calibration.py": "637ecf78c1746667ca022849398fa2b270e0f144269a21ae8a32bb67f2a1eec7",
+    "research/evaluate_discrete_products.py": "eb13f7c1b6bd162d18e24b8e71bda55837b5d36e28d448725ba99bad3adf95c1",
+    "scripts/prepare_initial_baselines.py": "e32a007a89763088f7958a306360ae1137684426aa6caf0cfa7a1eb7e7dd1dc7",
+    "models/current/baseline.py": "cc338abccfcc4c107069cc5b64b0e6e6485d77ea3ba27dd703f7a1c4055fb875",
+    "models/current/linear.py": "e10b15e6ed20fd410f5d87afbf01eb191768a459ffcb106dd64cbacef797e4a2"
+  },
+  "splits": {
+    "cfb": {
+      "parent_train_max_season": 2022,
+      "residual_season": 2023,
+      "calibration_season": 2024,
+      "evaluation_season": 2025
+    },
+    "nba": {
+      "parent_train_max_season": 2023,
+      "residual_season": 2024,
+      "calibration_season": 2025,
+      "evaluation_season": 2026
+    },
+    "nhl": {
+      "parent_train_max_season": 2023,
+      "residual_season": 2024,
+      "calibration_season": 2025,
+      "evaluation_season": 2026
+    },
+    "mls": {
+      "parent_train_max_season": 2023,
+      "residual_season": 2024,
+      "calibration_season": 2025,
+      "evaluation_season": 2026
+    }
+  },
+  "experiments": [
+    {
+      "id": "CONDITIONAL-SCALE",
+      "reference": "empirical residual CDF",
+      "change": "Only scale residual distribution using absolute fixed-parent predicted margin; ridge=10. Parent heads unchanged.",
+      "primary": "paired per-game CRPS; week-block bootstrap 2000 seed7",
+      "secondary": "category Brier and logloss on declared hypothetical contracts, 90% interval coverage/width, zero-support outcomes"
+    },
+    {
+      "id": "CDF-CALIBRATION",
+      "reference": "empirical residual CDF",
+      "change": "Only monotone two-parameter CDF transform fit on separate calibration season; no support repair or sample dropping.",
+      "failure": "Report fit failure for any zero-supported calibration outcome. No retuning or dropping the outcome."
+    }
+  ],
+  "hypothetical_lines": {
+    "margin": [
+      -7,
+      -3.5,
+      -3,
+      0,
+      3,
+      3.5,
+      7
+    ],
+    "total": "nearest lower half-point to frozen parent point mean; same line across arms; no market quote claimed"
+  },
+  "model_fit_policy": "Fixed parent heads fitted on designated earlier seasons; residual and CDF artifacts frozen before later outcomes are evaluated. Each fitted parent receives its own identity, not a current production ID. No post-evaluation refitting.",
+  "chronology": "Provider finals reconstructed after the fact. Historical prediction cutoff=start minus one hour; conservative result eligibility=start plus 48 hours. These are simulation assumptions, not capture timestamps. Abort if an assumed result-availability boundary overlaps the next split. Actual writer creation time retained separately.",
+  "historical_availability_proven": false,
+  "market_evaluation": "NOT_RUN; no verified timestamped two-sided handicap quotes in these sources. No ATS hit-rate or profit claim.",
+  "availability": "NOT_FITTED; no invented player effects or scenario weights. Requires archived pregame statuses, participation and conditional performance in a separately registered study.",
+  "promotion_rule": "NONE. History is reused; diagnostic improvements do not promote. All seven prospective cohorts and canonical writer integration still required.",
+  "action_authority": false
+}

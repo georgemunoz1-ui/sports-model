@@ -4593,3 +4593,9 @@ validation remain incomplete. No default or wagering authority changed.
 Initial PR head passed 420 full-suite tests; three jobs failed solely on artifact
 upload quota. Repository health remains RED with four existing failures.
 See docs/DISTRIBUTION_REPLAY_20261007.md and the retained study for exact scope.
+
+Cross-platform CI subsequently caught last-bit regenerated probability differences.
+Reproduced them by changing NumPy/OpenBLAS CPU dispatch; retained original full
+distributions verified against saved forecast hashes. Portable verification uses
+1e-11 absolute numerical tolerance while artifact and draw bytes stay exact.
+Negative tests forbid material probability, integer-support or identity changes.

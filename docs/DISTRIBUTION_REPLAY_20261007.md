@@ -105,3 +105,20 @@ The earlier `docs/releases/2026-10-07-cross-sport-distributions/verification.jso
 remains the original software-only checkpoint. This document and the new study
 supersede its not-yet-run historical-fit status without rewriting that checkpoint.
 Software merge does not clear standing repository health or close issue #59.
+
+## Cross-platform replay correction
+
+The first final-head CI attempt rejected exact regenerated-distribution hashes.
+Changing the local NumPy/OpenBLAS CPU dispatch reproduced this failure: a maximum
+absolute mass difference of 9.020562075079397e-17 in CFB conditional scaling
+changed 23 serialized hashes without changing any integer support.
+The frozen fitted models, study results and forecast hashes were left unchanged.
+Full original probability distributions were recovered from the saved fits and
+verified against every original stored hash, then retained alongside the cohort.
+
+Portable verification now checks original artifact hashes and sampled draw arrays
+with exact equality, and compares regenerated probabilities and metrics with an
+absolute numerical tolerance of 1e-11. Integer support and model/event identities
+remain exact. Negative tests reject a probability change of 1e-8, changed support
+or a different model identity. This changes verification portability only; no
+model, fitted parameter, forecast, study design or outcome was changed.

@@ -1,6 +1,7 @@
 """Negative checks for the historical replay's temporal and data boundaries."""
 import unittest
 from scripts.run_distribution_history import ordered_splits, eligibility
+from scripts.verify_distribution_study import equivalent
 
 
 class HistoricalBoundaryTests(unittest.TestCase):
@@ -30,6 +31,17 @@ class HistoricalBoundaryTests(unittest.TestCase):
         cutoff, available = eligibility({'start_time_utc': '2024-12-31T23:00:00Z'})
         self.assertEqual(cutoff, '2024-12-31T22:00:00+00:00')
         self.assertEqual(available, '2025-01-02T23:00:00+00:00')
+
+    def test_platform_tolerance_cannot_mask_probability_change(self):
+        equivalent({'p': .5 + 1e-14}, {'p': .5})
+        with self.assertRaisesRegex(ValueError, 'REPLAY_NUMERIC'):
+            equivalent({'p': .5 + 1e-8}, {'p': .5})
+
+    def test_platform_tolerance_cannot_change_support_or_identity(self):
+        with self.assertRaisesRegex(ValueError, 'REPLAY_IDENTITY'):
+            equivalent({'support': [1, 2]}, {'support': [1, 3]})
+        with self.assertRaisesRegex(ValueError, 'REPLAY_IDENTITY'):
+            equivalent({'model': 'candidate'}, {'model': 'reference'})
 
 
 if __name__ == '__main__': unittest.main()

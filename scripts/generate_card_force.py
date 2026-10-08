@@ -437,6 +437,7 @@ def main():
     parser.add_argument("--initial-research-baselines",action="store_true",help="Explicit NBA/NHL/MLS research models; does not change tested defaults")
     parser.add_argument("--simulations", type=int, default=100000)
     parser.add_argument("--manual-overrides")
+    parser.add_argument("--distribution-research-config", help="Opt-in hash-bound cross-sport distribution challengers; emits a separate report")
     parser.add_argument("--output-dir", default="output")
     args = parser.parse_args()
     if args.initial_research_baselines:os.environ['SPORTS_INITIAL_BASELINES']='1'
@@ -450,7 +451,6 @@ def main():
     card = generate(args.date, args.league, as_of, args.simulations, args.manual_overrides)
     (output / "diagnostic_card.json").write_text(json.dumps(card, indent=2, sort_keys=True) + "\n")
     (output / "diagnostic_card.md").write_text(render_md(card))
-
     fields = [
         "event_id", "away_team", "home_team", "forecast_status", "forecast_tier", "data_quality",
         "dose", "model_winner", "analytic_p", "stochastic_sim_p", "analytic_sim_gap_pp",
@@ -472,7 +472,20 @@ def main():
             writer.writerow(csv_row)
 
     print(render_md(card))
-    raise SystemExit(2 if card["coverage_breach_event_ids"] else 0)
+    research_incomplete = False
+    if args.distribution_research_config:
+        from pipelines.cards.distribution_research import build, load_config
+        try:
+            research = build(card, load_config(args.distribution_research_config), output / "distribution_research", simulations=args.simulations)
+            research_incomplete = any(r["status"] != "COMPLETED" for r in research["coverage"])
+            print(json.dumps({"distribution_research": research["coverage"]}, indent=2))
+        except (ValueError, KeyError, TypeError, OSError) as exc:
+            research_incomplete = True
+            failure = {"status": "FAILED", "reason": str(exc), "action_authority": False}
+            with (output / "distribution_research_failure.json").open("x") as handle:
+                json.dump(failure, handle, indent=2)
+            print(json.dumps({"distribution_research": failure}))
+    raise SystemExit(2 if card["coverage_breach_event_ids"] or research_incomplete else 0)
 
 
 if __name__ == "__main__":

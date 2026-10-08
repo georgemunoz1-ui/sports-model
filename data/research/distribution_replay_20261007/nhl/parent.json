@@ -1,0 +1,1122 @@
+{
+  "created_at_utc": "2026-10-07T23:50:26.424709+00:00",
+  "current_default": false,
+  "fitted": {
+    "margin": {
+      "coefficient": [
+        0.23024381273628933,
+        -0.34322074772318395,
+        -0.2129563885343664,
+        0.25596347346295784,
+        0.0035706796256760507,
+        0.04619392967906027,
+        0.050692620564210186,
+        0.034164383932420134,
+        0.016827303293156022
+      ],
+      "impute": [
+        3.093821462246942,
+        3.081683477865706,
+        3.114261969495076,
+        3.089308908623585,
+        2.1666666666666665,
+        2.40625,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "intercept": 0.22537227949599706,
+      "kind": "linear",
+      "mean": [
+        3.1105471940246754,
+        3.1151586528622293,
+        3.126699914004861,
+        3.10759488775326,
+        3.070334971999487,
+        3.04125958540155,
+        0.045819014891179836,
+        0.04725085910652921,
+        0.002004581901489118
+      ],
+      "scale": [
+        0.46443192744955136,
+        0.4738641389114581,
+        0.46048437813615756,
+        0.4748953705259371,
+        2.171552912417671,
+        2.013359086113345,
+        0.209092402457837,
+        0.2121749641692705,
+        0.044727659819057006
+      ]
+    },
+    "total": {
+      "coefficient": [
+        0.06391160009006187,
+        0.16437759468073979,
+        0.1961881397381971,
+        0.1632955908183538,
+        0.13071472280013371,
+        -0.06371960034368691,
+        -0.14788215416190634,
+        0.1085799942111682,
+        0.027925066999265228
+      ],
+      "impute": [
+        3.093821462246942,
+        3.081683477865706,
+        3.114261969495076,
+        3.089308908623585,
+        2.1666666666666665,
+        2.40625,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "intercept": 6.211626575028642,
+      "kind": "linear",
+      "mean": [
+        3.1105471940246754,
+        3.1151586528622293,
+        3.126699914004861,
+        3.10759488775326,
+        3.070334971999487,
+        3.04125958540155,
+        0.045819014891179836,
+        0.04725085910652921,
+        0.002004581901489118
+      ],
+      "scale": [
+        0.46443192744955136,
+        0.4738641389114581,
+        0.46048437813615756,
+        0.4748953705259371,
+        2.171552912417671,
+        2.013359086113345,
+        0.209092402457837,
+        0.2121749641692705,
+        0.044727659819057006
+      ]
+    },
+    "winner": {
+      "coefficient": [
+        0.17596313045797382,
+        -0.21757474641790717,
+        -0.19526295546178507,
+        0.15142305669436013,
+        0.016063304837684436,
+        0.03443667273772688,
+        0.03641918312037464,
+        0.03129350986534149,
+        0.006981385929999833
+      ],
+      "impute": [
+        3.093821462246942,
+        3.081683477865706,
+        3.114261969495076,
+        3.089308908623585,
+        2.1666666666666665,
+        2.40625,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "intercept": 0.12932222799172963,
+      "kind": "logistic",
+      "mean": [
+        3.1105471940246754,
+        3.1151586528622293,
+        3.126699914004861,
+        3.10759488775326,
+        3.070334971999487,
+        3.04125958540155,
+        0.045819014891179836,
+        0.04725085910652921,
+        0.002004581901489118
+      ],
+      "scale": [
+        0.46443192744955136,
+        0.4738641389114581,
+        0.46048437813615756,
+        0.4748953705259371,
+        2.171552912417671,
+        2.013359086113345,
+        0.209092402457837,
+        0.2121749641692705,
+        0.044727659819057006
+      ]
+    }
+  },
+  "model_id": "nhl.fixed_parent.03ce6285cdbfaa24.research",
+  "source": {
+    "history_manifest_sha256": "9ee6980abb9232961c974aa911a6746db2dd3747053279257104e8bc78d3390d",
+    "parent_train_n": 3492,
+    "prior": 3.1058132875143185,
+    "provider_copy_counts": {
+      "1": 302,
+      "2": 7126
+    },
+    "source_receipts": [
+      {
+        "raw_sha256": "df8413beaa9161db8ec288eea6bfadb96639dba4872b98a0789832eb7f42fb7b",
+        "retrieved_at_utc": "2026-10-07T15:32:43.126195Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/25/schedule?season=2021&seasontype=2"
+      },
+      {
+        "raw_sha256": "103290461b2de1c7ed9bee751754a3bcb016d5217c79eff09ecf6cb70cea2ade",
+        "retrieved_at_utc": "2026-10-07T15:32:43.261649Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/25/schedule?season=2022&seasontype=2"
+      },
+      {
+        "raw_sha256": "2605845eec7c650de2bea08fdcaceec8f183c0d723dfd2deb1d96c6133c57c63",
+        "retrieved_at_utc": "2026-10-07T15:32:43.303942Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/25/schedule?season=2023&seasontype=2"
+      },
+      {
+        "raw_sha256": "0a03093e95552135d714c46821e4de02f777beb2aad56d696fc18e5cb1c30d6c",
+        "retrieved_at_utc": "2026-10-07T15:32:43.230793Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/25/schedule?season=2024&seasontype=2"
+      },
+      {
+        "raw_sha256": "4e9f9b7d59116e25e007d4ddc0c8e5edc9c851f72c4e91abba1860370632efb1",
+        "retrieved_at_utc": "2026-10-07T15:32:43.231287Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/25/schedule?season=2025&seasontype=2"
+      },
+      {
+        "raw_sha256": "5eb26bb0ca6f578051556b2d1dfc4809e112261f60e30f23b2187d678d47dae8",
+        "retrieved_at_utc": "2026-10-07T15:32:43.280012Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/25/schedule?season=2026&seasontype=2"
+      },
+      {
+        "raw_sha256": "098960348a545238993359409d835be984646282fe8e1221836e6a6030b99687",
+        "retrieved_at_utc": "2026-10-07T15:32:50.910064Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/1/schedule?season=2021&seasontype=2"
+      },
+      {
+        "raw_sha256": "ab93bfa353312f027edabb95a90a21840224f106310e356cd60b4c4e24b339a4",
+        "retrieved_at_utc": "2026-10-07T15:32:51.123598Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/1/schedule?season=2022&seasontype=2"
+      },
+      {
+        "raw_sha256": "7af3e2fea3088089f87ded6a9e6cf4ac0d74a45806b56dce2f8d47fd27be03e7",
+        "retrieved_at_utc": "2026-10-07T15:32:51.125238Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/1/schedule?season=2023&seasontype=2"
+      },
+      {
+        "raw_sha256": "2c5139ae81eb56c65662e1d1a56f6b973bfc6b850bbd994430de916a03111f84",
+        "retrieved_at_utc": "2026-10-07T15:32:50.826296Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/1/schedule?season=2024&seasontype=2"
+      },
+      {
+        "raw_sha256": "b548a6d98f97473ca34c144633f2a400c85f28f2ca310bb0f798860118e018ec",
+        "retrieved_at_utc": "2026-10-07T15:32:50.921776Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/1/schedule?season=2025&seasontype=2"
+      },
+      {
+        "raw_sha256": "0f090061013584031bd18c2820da067a3b047f8207cd96b7353ea97e9bc4e701",
+        "retrieved_at_utc": "2026-10-07T15:32:50.867490Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/1/schedule?season=2026&seasontype=2"
+      },
+      {
+        "raw_sha256": "e252357a927acc2bc12edeb45934acbadf574c638d327588331b75545c84161f",
+        "retrieved_at_utc": "2026-10-07T15:33:05.820741Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/2/schedule?season=2021&seasontype=2"
+      },
+      {
+        "raw_sha256": "a54a0e659d80352d3e2c7850ba55a1f562da2c50fc7fb2052a58e7808accad8a",
+        "retrieved_at_utc": "2026-10-07T15:33:05.821137Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/2/schedule?season=2022&seasontype=2"
+      },
+      {
+        "raw_sha256": "ebcf3017ee4a0e14db71aa572cfd22174397f25b5c698c5acaec026110e14468",
+        "retrieved_at_utc": "2026-10-07T15:33:05.916153Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/2/schedule?season=2023&seasontype=2"
+      },
+      {
+        "raw_sha256": "23314c3f4439e47e0777b4ebd79ed08a1b44cf97a5141e996477f927588e4157",
+        "retrieved_at_utc": "2026-10-07T15:33:05.665935Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/2/schedule?season=2024&seasontype=2"
+      },
+      {
+        "raw_sha256": "abbec923f350c9660f4c5782b41b23ca324bfce7b413594b626a9710aec95f70",
+        "retrieved_at_utc": "2026-10-07T15:33:05.863612Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/2/schedule?season=2025&seasontype=2"
+      },
+      {
+        "raw_sha256": "bf2238eef4aad27962f6ed12b4be1f6da0ce1f258b965f930a2cf8b899d2ffb2",
+        "retrieved_at_utc": "2026-10-07T15:33:05.863134Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/2/schedule?season=2026&seasontype=2"
+      },
+      {
+        "raw_sha256": "8d2eddff9caa05c771310397caa4e95e3061db43d398563a4fc65efe44c8ebb3",
+        "retrieved_at_utc": "2026-10-07T15:33:15.619687Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/3/schedule?season=2021&seasontype=2"
+      },
+      {
+        "raw_sha256": "d595088a99331c19722c9bda661528fa99d906eb146109620cbbce1acd64291b",
+        "retrieved_at_utc": "2026-10-07T15:33:15.780970Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/3/schedule?season=2022&seasontype=2"
+      },
+      {
+        "raw_sha256": "d2dd869edfa53167a44c1f1bc75b22aced75141086131607e1ad49d455d6db6c",
+        "retrieved_at_utc": "2026-10-07T15:33:16.080939Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/3/schedule?season=2023&seasontype=2"
+      },
+      {
+        "raw_sha256": "e1a62fcaec8d0391d779c71cb8ccaacb09def221b01e9017d5e9e15ffdb9de40",
+        "retrieved_at_utc": "2026-10-07T15:33:15.732926Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/3/schedule?season=2024&seasontype=2"
+      },
+      {
+        "raw_sha256": "677718a837d785c0d5351099879e4e0a9bd8bd01282667328887444c500b2959",
+        "retrieved_at_utc": "2026-10-07T15:33:15.732464Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/3/schedule?season=2025&seasontype=2"
+      },
+      {
+        "raw_sha256": "daf610e634b122c9ddcffa0fdf511d3fb848d6a549d45fd43b60858145901c77",
+        "retrieved_at_utc": "2026-10-07T15:33:15.803319Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/3/schedule?season=2026&seasontype=2"
+      },
+      {
+        "raw_sha256": "5c1f0261e4674555ce68816248f8bfc37eb79492d1af6d9623342c30be9cb1be",
+        "retrieved_at_utc": "2026-10-07T15:33:22.849763Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/7/schedule?season=2021&seasontype=2"
+      },
+      {
+        "raw_sha256": "635aa64d88214a3b6e5543946d19ea7b90e9a52d32ade33064bac60cc89e7ed9",
+        "retrieved_at_utc": "2026-10-07T15:33:22.806633Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/7/schedule?season=2022&seasontype=2"
+      },
+      {
+        "raw_sha256": "b5db853623e3055d65e00447fb07ea209ef388e442899589d42e984b9e1eb869",
+        "retrieved_at_utc": "2026-10-07T15:33:23.028849Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/7/schedule?season=2023&seasontype=2"
+      },
+      {
+        "raw_sha256": "612308e197f5b3574ae94708c8b33748cb168e7021fa794d663188d6e086ec40",
+        "retrieved_at_utc": "2026-10-07T15:33:22.883046Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/7/schedule?season=2024&seasontype=2"
+      },
+      {
+        "raw_sha256": "2b49f7e0f10689279026d792518220384f733f42d7e7ec1fae7c2c68d9a32d4d",
+        "retrieved_at_utc": "2026-10-07T15:33:22.834830Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/7/schedule?season=2025&seasontype=2"
+      },
+      {
+        "raw_sha256": "34205fbc70397626543e3c8bc73169573d3b113332324e6407a6c69392f989ff",
+        "retrieved_at_utc": "2026-10-07T15:33:22.947800Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/7/schedule?season=2026&seasontype=2"
+      },
+      {
+        "raw_sha256": "44bfb965f4e773a778f95996b4cc52703a265364188777c6ca4a7923a37644aa",
+        "retrieved_at_utc": "2026-10-07T15:33:30.140566Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/4/schedule?season=2021&seasontype=2"
+      },
+      {
+        "raw_sha256": "f7387d74afbaf1b259d94f26a73f47b7c3966ed08c1278855224e6009bbf9783",
+        "retrieved_at_utc": "2026-10-07T15:33:30.060726Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/4/schedule?season=2022&seasontype=2"
+      },
+      {
+        "raw_sha256": "7356389ce98ca349ea489e140b22f7fb3df5261f0e4b18cb8d931d4c4e24b0f0",
+        "retrieved_at_utc": "2026-10-07T15:33:30.223652Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/4/schedule?season=2023&seasontype=2"
+      },
+      {
+        "raw_sha256": "26c55e654100b38d22add9f57b7ee97fc3d2fdc4e3bb9f16b33b7d20ec700137",
+        "retrieved_at_utc": "2026-10-07T15:33:30.038213Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/4/schedule?season=2024&seasontype=2"
+      },
+      {
+        "raw_sha256": "3f4a8ebca490f0aebad1315a810096106da1056a4e8bcb022bc5b4d18ca2d4b5",
+        "retrieved_at_utc": "2026-10-07T15:33:30.081402Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/4/schedule?season=2025&seasontype=2"
+      },
+      {
+        "raw_sha256": "53ea52606908c90b61c08b8c8310deb7538e7fba4868931ac9d09a83ce9bb8fa",
+        "retrieved_at_utc": "2026-10-07T15:33:30.152399Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/4/schedule?season=2026&seasontype=2"
+      },
+      {
+        "raw_sha256": "d61e973f2f2cd79a7345b9dd421acf8c3d562366e6b48a81d90816f7f4099cd5",
+        "retrieved_at_utc": "2026-10-07T15:33:38.253662Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/17/schedule?season=2021&seasontype=2"
+      },
+      {
+        "raw_sha256": "6f505b73a3c6d88657ef15f85715f1b16946924e0b148fb8036f681435861c0f",
+        "retrieved_at_utc": "2026-10-07T15:33:38.398228Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/17/schedule?season=2022&seasontype=2"
+      },
+      {
+        "raw_sha256": "590db3e477faad8a28ad60741b0424a0e05e34317e0a4f2ce48c8b21de0d8433",
+        "retrieved_at_utc": "2026-10-07T15:33:38.498309Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/17/schedule?season=2023&seasontype=2"
+      },
+      {
+        "raw_sha256": "e9d47fea0878f8503170049e27cc17b50dad313721ca7e0a5e51966f57c08b36",
+        "retrieved_at_utc": "2026-10-07T15:33:38.416327Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/17/schedule?season=2024&seasontype=2"
+      },
+      {
+        "raw_sha256": "7394d2690ba16f5acda44a14c20334f3c52c578d9029cdc640824fb58e8cc8cc",
+        "retrieved_at_utc": "2026-10-07T15:33:38.334115Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/17/schedule?season=2025&seasontype=2"
+      },
+      {
+        "raw_sha256": "e52dd2921250ac278c9212edb76cd468aca5e1419867768bd9f13aff354f03c1",
+        "retrieved_at_utc": "2026-10-07T15:33:38.378359Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/17/schedule?season=2026&seasontype=2"
+      },
+      {
+        "raw_sha256": "16199de496baf0c45d330db90abf8c4b01b8875c4d122b404d7b4c71f70660af",
+        "retrieved_at_utc": "2026-10-07T15:33:50.164717Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/29/schedule?season=2021&seasontype=2"
+      },
+      {
+        "raw_sha256": "963420827683ddbb8ca34e66ca67695385a4da3b8ebc804ec13e134388cfe46c",
+        "retrieved_at_utc": "2026-10-07T15:33:50.178276Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/29/schedule?season=2022&seasontype=2"
+      },
+      {
+        "raw_sha256": "c278bd0c5b7d79cb51d48d423455fe27dfa19ac3d964d31d4193834398735281",
+        "retrieved_at_utc": "2026-10-07T15:33:50.231243Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/29/schedule?season=2023&seasontype=2"
+      },
+      {
+        "raw_sha256": "9b51c7e0da507b2f3a9e7d971f2324e83ef061dd2344d32d4cb93dbbaad88792",
+        "retrieved_at_utc": "2026-10-07T15:33:50.191365Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/29/schedule?season=2024&seasontype=2"
+      },
+      {
+        "raw_sha256": "1cb0610689be7ea7ea9443db89b37fb6706a7b0469b07be966cf9ae92537baad",
+        "retrieved_at_utc": "2026-10-07T15:33:50.192127Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/29/schedule?season=2025&seasontype=2"
+      },
+      {
+        "raw_sha256": "ff2513fdb132600f95f7aa5027b0f85a0e485d0b1fa9fd6ee813725f4ba1d807",
+        "retrieved_at_utc": "2026-10-07T15:33:48.141591Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/29/schedule?season=2026&seasontype=2"
+      },
+      {
+        "raw_sha256": "08199334e7beaf7aa9ec7c4a3f74ab0b93db107c3f60ac207e69c5ef3d73decf",
+        "retrieved_at_utc": "2026-10-07T15:33:58.080860Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/9/schedule?season=2021&seasontype=2"
+      },
+      {
+        "raw_sha256": "2ae4d551a8a996ac6cd76a457024e59d811da0947df1331dab52099d68972c26",
+        "retrieved_at_utc": "2026-10-07T15:33:57.972139Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/9/schedule?season=2022&seasontype=2"
+      },
+      {
+        "raw_sha256": "36e8ee287dc82679e09b714c936a3d6d8b03005817fa0aef5ff68a5dc3b15e0b",
+        "retrieved_at_utc": "2026-10-07T15:33:58.229932Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/9/schedule?season=2023&seasontype=2"
+      },
+      {
+        "raw_sha256": "d9cd7634cc16798e2356e2e82774a361f1460ad7fff10a1e0b20c2452fe08e3b",
+        "retrieved_at_utc": "2026-10-07T15:33:58.097684Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/9/schedule?season=2024&seasontype=2"
+      },
+      {
+        "raw_sha256": "6775bf8d4589f103e4b240b8f67d14ffccd19875c491aeaf834b4ca93ce99a84",
+        "retrieved_at_utc": "2026-10-07T15:33:58.065327Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/9/schedule?season=2025&seasontype=2"
+      },
+      {
+        "raw_sha256": "2ae22aa28851ea255f2a9787a0031839f685e012c24a24aa0161bdf707e27d6a",
+        "retrieved_at_utc": "2026-10-07T15:33:58.125708Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/9/schedule?season=2026&seasontype=2"
+      },
+      {
+        "raw_sha256": "57398197be05854e53d299fe686b8e952aa824c60b4f767aa06c6a840e969ebb",
+        "retrieved_at_utc": "2026-10-07T15:34:03.110942Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/5/schedule?season=2021&seasontype=2"
+      },
+      {
+        "raw_sha256": "3226f71bc547214c3bf8f1ddd5194e1cf1a7beae2ae72a871a57ff97d4105497",
+        "retrieved_at_utc": "2026-10-07T15:34:03.273919Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/5/schedule?season=2022&seasontype=2"
+      },
+      {
+        "raw_sha256": "2ffc92e519ed0924c235cc6ba0a083668afb80153b85cd6e1b2661be06b018f2",
+        "retrieved_at_utc": "2026-10-07T15:34:03.328952Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/5/schedule?season=2023&seasontype=2"
+      },
+      {
+        "raw_sha256": "377d526bef8a306bc6f285e59e269504995627b4a0a26bcc10498fb305919058",
+        "retrieved_at_utc": "2026-10-07T15:34:03.304014Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/5/schedule?season=2024&seasontype=2"
+      },
+      {
+        "raw_sha256": "f9eaa57d236a613c161ee0e3ae87eb32315fde331820a130c3852fce8d908691",
+        "retrieved_at_utc": "2026-10-07T15:34:03.275328Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/5/schedule?season=2025&seasontype=2"
+      },
+      {
+        "raw_sha256": "d11e09e75025063f3ea7e050f9b4734d4158f6d29d6a8f3d555bc618f8619412",
+        "retrieved_at_utc": "2026-10-07T15:34:03.505650Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/5/schedule?season=2026&seasontype=2"
+      },
+      {
+        "raw_sha256": "a8bd5a34a7a5dd34b54cc4538c4cada07c4369343f23123409ece463548422aa",
+        "retrieved_at_utc": "2026-10-07T15:34:07.682179Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/6/schedule?season=2021&seasontype=2"
+      },
+      {
+        "raw_sha256": "961122893b8bd1127ab6a2d4b7e13db25d21e9e2e12a4b8753f8c6705e2799a5",
+        "retrieved_at_utc": "2026-10-07T15:34:07.649948Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/6/schedule?season=2022&seasontype=2"
+      },
+      {
+        "raw_sha256": "1251a620907e497d1c8ca577d200366343427c5c183fb6950fddbc2d4f760894",
+        "retrieved_at_utc": "2026-10-07T15:34:07.801953Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/6/schedule?season=2023&seasontype=2"
+      },
+      {
+        "raw_sha256": "cbefffc025e26d587742cbe140a7a710de3a88333aeb5a4292b66e439cd586fb",
+        "retrieved_at_utc": "2026-10-07T15:34:07.628667Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/6/schedule?season=2024&seasontype=2"
+      },
+      {
+        "raw_sha256": "3c4d72634c212729a5fb6bfdffdc8e10a05cfe8e28342cc2c19304294e744454",
+        "retrieved_at_utc": "2026-10-07T15:34:07.771777Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/6/schedule?season=2025&seasontype=2"
+      },
+      {
+        "raw_sha256": "3a721d0b3d1025c1348d80c4026db980c3737dc446f82991440cf95afd5b105f",
+        "retrieved_at_utc": "2026-10-07T15:34:07.700463Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/6/schedule?season=2026&seasontype=2"
+      },
+      {
+        "raw_sha256": "15935b5d345791d1ca90323e44b582850a7c90a4335334b55fb51133161a265b",
+        "retrieved_at_utc": "2026-10-07T15:34:11.904842Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/26/schedule?season=2021&seasontype=2"
+      },
+      {
+        "raw_sha256": "bfbe020f49c8ec518119c6cb2b67c85a4bdab2ab7a1c64b1e5bdd5845cdad33a",
+        "retrieved_at_utc": "2026-10-07T15:34:12.175019Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/26/schedule?season=2022&seasontype=2"
+      },
+      {
+        "raw_sha256": "d330f2121d1665306fcb6582045661d9683b208858b255b61889ae03eeee58fe",
+        "retrieved_at_utc": "2026-10-07T15:34:12.263015Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/26/schedule?season=2023&seasontype=2"
+      },
+      {
+        "raw_sha256": "3e6f627495142cbfe7b2f549a17ffdfc85af7c5059e37c0b2defd2bc3b17b8d4",
+        "retrieved_at_utc": "2026-10-07T15:34:12.135188Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/26/schedule?season=2024&seasontype=2"
+      },
+      {
+        "raw_sha256": "bcd909ab9daf206c3f4ea3eefbad985d7b99412c7d7fc041c038f9f1374a23ec",
+        "retrieved_at_utc": "2026-10-07T15:34:12.134568Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/26/schedule?season=2025&seasontype=2"
+      },
+      {
+        "raw_sha256": "1533e846c2b0713fb5d5a9dd7bb86ee1ea32ea8bfb94daaa3afcf03e058d0725",
+        "retrieved_at_utc": "2026-10-07T15:34:12.136442Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/26/schedule?season=2026&seasontype=2"
+      },
+      {
+        "raw_sha256": "246158b380dd7a9e978e7d9d74ce2dc8813bad61ceca27f19a04827af275f84f",
+        "retrieved_at_utc": "2026-10-07T15:34:19.245423Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/8/schedule?season=2021&seasontype=2"
+      },
+      {
+        "raw_sha256": "50e137ac6666c1169c895a574581f48285a57c78722c26fcb7d0cdcf7fb45dbf",
+        "retrieved_at_utc": "2026-10-07T15:34:19.932143Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/8/schedule?season=2022&seasontype=2"
+      },
+      {
+        "raw_sha256": "259456f7b4f96194cd15a87bb3f7e819a204e496a8b27da1009023f0ac617df0",
+        "retrieved_at_utc": "2026-10-07T15:34:19.433747Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/8/schedule?season=2023&seasontype=2"
+      },
+      {
+        "raw_sha256": "0747b9b84a59890e7dee03c9ee1cb11ea8220a273b30cd6f24d672aff33ca242",
+        "retrieved_at_utc": "2026-10-07T15:34:19.258446Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/8/schedule?season=2024&seasontype=2"
+      },
+      {
+        "raw_sha256": "4353a624a417dd8138f5144f344b2f8539c349b0a70a4cc0030c9a65535085e8",
+        "retrieved_at_utc": "2026-10-07T15:34:19.337169Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/8/schedule?season=2025&seasontype=2"
+      },
+      {
+        "raw_sha256": "b3a86f6f6bc5816f0ac552bc2661be01160d36b9477ed575b6a8266f5c6f9811",
+        "retrieved_at_utc": "2026-10-07T15:34:19.223915Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/8/schedule?season=2026&seasontype=2"
+      },
+      {
+        "raw_sha256": "fb46a2b3ef7d2227af58862bf1997ebba4eb0efd249949ae6669b4e70f7ac43b",
+        "retrieved_at_utc": "2026-10-07T15:34:27.118549Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/30/schedule?season=2021&seasontype=2"
+      },
+      {
+        "raw_sha256": "0c7fc75dc22f8b0dabfe3dbc044554e1dd6d79f4f52c1a6b2b87d56b91410f6d",
+        "retrieved_at_utc": "2026-10-07T15:34:27.098659Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/30/schedule?season=2022&seasontype=2"
+      },
+      {
+        "raw_sha256": "75304514230b64e804aa12150f8c88a956da3f7e07f29e20057b12571e16312a",
+        "retrieved_at_utc": "2026-10-07T15:34:27.164118Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/30/schedule?season=2023&seasontype=2"
+      },
+      {
+        "raw_sha256": "309de4657a8ef6d86fd6eec6ca8fe5e6ee17c3a350c728a4d3b0800f54383b61",
+        "retrieved_at_utc": "2026-10-07T15:34:26.908788Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/30/schedule?season=2024&seasontype=2"
+      },
+      {
+        "raw_sha256": "70d496289a8132e48fc39cfa87e30ab4d44eef1f5d4d6f88865ac9ef65ba0ace",
+        "retrieved_at_utc": "2026-10-07T15:34:27.116977Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/30/schedule?season=2025&seasontype=2"
+      },
+      {
+        "raw_sha256": "df4b3d9f331219ae3545c7fca0165ea61c7be7923b09ea88f7ec829c3548b431",
+        "retrieved_at_utc": "2026-10-07T15:34:27.116650Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/30/schedule?season=2026&seasontype=2"
+      },
+      {
+        "raw_sha256": "89dda74e0a148a17c388484434e2399874afc3e846cc081a9e00f23ae0cd6f1a",
+        "retrieved_at_utc": "2026-10-07T15:34:33.944931Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/10/schedule?season=2021&seasontype=2"
+      },
+      {
+        "raw_sha256": "10c674da46df9669c18113222f89d6b542fcdc0d1898a0ee20d43e229e2654ea",
+        "retrieved_at_utc": "2026-10-07T15:34:33.922450Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/10/schedule?season=2022&seasontype=2"
+      },
+      {
+        "raw_sha256": "857f6861b4edaf551d560bcb056d4d6f45974ecb7bbc7ddf4b4db23abda15e89",
+        "retrieved_at_utc": "2026-10-07T15:34:34.064616Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/10/schedule?season=2023&seasontype=2"
+      },
+      {
+        "raw_sha256": "3e0395770fb81e03fe4890a38261c034ae64682b6caeef90d876d87c0208a762",
+        "retrieved_at_utc": "2026-10-07T15:34:33.990082Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/10/schedule?season=2024&seasontype=2"
+      },
+      {
+        "raw_sha256": "4d86958b83bb4bea9df7ba7b4e641d90aecbf613285887f5a9ac6de39037e19e",
+        "retrieved_at_utc": "2026-10-07T15:34:33.958107Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/10/schedule?season=2025&seasontype=2"
+      },
+      {
+        "raw_sha256": "24e9ba0d0f9eb27a633df607a16ed6d24d1c4192992acb21ca059d87c03db8f8",
+        "retrieved_at_utc": "2026-10-07T15:34:33.815510Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/10/schedule?season=2026&seasontype=2"
+      },
+      {
+        "raw_sha256": "2657bcccc5f0aa892d7b15b6bd054d1cf0c99b912cb9a414c955f7aa662a8c91",
+        "retrieved_at_utc": "2026-10-07T15:34:43.468227Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/27/schedule?season=2021&seasontype=2"
+      },
+      {
+        "raw_sha256": "eacf4c73878c76de537bd317c940bd9062498bfc78c14ffc1089f183ec30cb01",
+        "retrieved_at_utc": "2026-10-07T15:34:43.675851Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/27/schedule?season=2022&seasontype=2"
+      },
+      {
+        "raw_sha256": "604bae8bc052de5f27930f43ac4ac8e83eb9bfe40337372a6c4e9ff6f7432983",
+        "retrieved_at_utc": "2026-10-07T15:34:43.728905Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/27/schedule?season=2023&seasontype=2"
+      },
+      {
+        "raw_sha256": "cf868b484c7d980abc7b602933e03932e35fed9a132f8295660bdca92dc69062",
+        "retrieved_at_utc": "2026-10-07T15:34:43.706053Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/27/schedule?season=2024&seasontype=2"
+      },
+      {
+        "raw_sha256": "98745729c4440f7cc90aa27e7365a72bf2576616d82272cd02cbf099e4979515",
+        "retrieved_at_utc": "2026-10-07T15:34:43.674876Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/27/schedule?season=2025&seasontype=2"
+      },
+      {
+        "raw_sha256": "9c7e0ad6ca29acedeb1d1a704ebfab1f166e10cb837493580c4cb87aea9192f0",
+        "retrieved_at_utc": "2026-10-07T15:34:43.659138Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/27/schedule?season=2026&seasontype=2"
+      },
+      {
+        "raw_sha256": "cb2ddc900f965b1c5e921adb8950be08dfdfe32a91aeffaf04a88064394dc8d1",
+        "retrieved_at_utc": "2026-10-07T15:34:51.424500Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/11/schedule?season=2021&seasontype=2"
+      },
+      {
+        "raw_sha256": "1883776ee81ef31d479faea3347360cbca7ad2fb884c238af294e0fd898c1bf1",
+        "retrieved_at_utc": "2026-10-07T15:34:51.434020Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/11/schedule?season=2022&seasontype=2"
+      },
+      {
+        "raw_sha256": "9259679e21bcf4e42d75e7502761f63c3368850b9f9fed3425155e5d751fc91f",
+        "retrieved_at_utc": "2026-10-07T15:34:51.623890Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/11/schedule?season=2023&seasontype=2"
+      },
+      {
+        "raw_sha256": "c2349e229e37b46706fd1437e0428c48fedb21cbd8572bf08f6419daaa7cda15",
+        "retrieved_at_utc": "2026-10-07T15:34:51.409192Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/11/schedule?season=2024&seasontype=2"
+      },
+      {
+        "raw_sha256": "914375d6fa1b98dab802cee5638561d80aef455e543aa6aaefc99bbc05c088f3",
+        "retrieved_at_utc": "2026-10-07T15:34:51.472622Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/11/schedule?season=2025&seasontype=2"
+      },
+      {
+        "raw_sha256": "415aaffd31c747d8411994ad9b14e974face4b60bf01618d1b0328b10bbd3ca6",
+        "retrieved_at_utc": "2026-10-07T15:34:51.450526Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/11/schedule?season=2026&seasontype=2"
+      },
+      {
+        "raw_sha256": "7bb1e29a1b7a4358723a03d25ac816393b9f15dc0e29b3a5901f031d5dac3f25",
+        "retrieved_at_utc": "2026-10-07T15:34:59.108474Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/12/schedule?season=2021&seasontype=2"
+      },
+      {
+        "raw_sha256": "610a1725b47a62281a871517b404f24c0ac83ddc3f28bc56038ca39d98f964d6",
+        "retrieved_at_utc": "2026-10-07T15:34:59.342131Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/12/schedule?season=2022&seasontype=2"
+      },
+      {
+        "raw_sha256": "0b30521acfcebd8065b12af4fa57637ac4809b4b727d32adea39b1a5f2b61894",
+        "retrieved_at_utc": "2026-10-07T15:34:59.386812Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/12/schedule?season=2023&seasontype=2"
+      },
+      {
+        "raw_sha256": "2436d4989b10fb5290994d2a70b4386119a6e542d497ae3da0df5ca38a932ed7",
+        "retrieved_at_utc": "2026-10-07T15:34:59.326724Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/12/schedule?season=2024&seasontype=2"
+      },
+      {
+        "raw_sha256": "ff7019dca84e36bb319bf5ac0df6a067f4cf365536c41fd6a15b216a353287eb",
+        "retrieved_at_utc": "2026-10-07T15:34:59.328342Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/12/schedule?season=2025&seasontype=2"
+      },
+      {
+        "raw_sha256": "9e0e62badf9a1af3bf3ad31ee12e1f32d2ecf886909ee2357f6e09f291c31dff",
+        "retrieved_at_utc": "2026-10-07T15:34:59.310285Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/12/schedule?season=2026&seasontype=2"
+      },
+      {
+        "raw_sha256": "0c29d08765cb040f97b752f2c543c2ee34ab5a15bc3667d115f6652a980c157d",
+        "retrieved_at_utc": "2026-10-07T15:35:07.245325Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/13/schedule?season=2021&seasontype=2"
+      },
+      {
+        "raw_sha256": "5a5b106ef82b7b0cb3118902e9beca18666e5009a58ba722c2b11a3bd03cc47f",
+        "retrieved_at_utc": "2026-10-07T15:35:07.076690Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/13/schedule?season=2022&seasontype=2"
+      },
+      {
+        "raw_sha256": "b26f662d52cb9b5577e5d20eed356d2e2010988a39ace986d71303ffe854ea57",
+        "retrieved_at_utc": "2026-10-07T15:35:07.320761Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/13/schedule?season=2023&seasontype=2"
+      },
+      {
+        "raw_sha256": "b85846737ea4489f3de3cef4e8cc11529396149477a7c92b1a732cda3b56cc0a",
+        "retrieved_at_utc": "2026-10-07T15:35:07.210056Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/13/schedule?season=2024&seasontype=2"
+      },
+      {
+        "raw_sha256": "faaf6187cd39be27531c80e4387d37ab7b4fbd805ccdfa1752113080fbc3dfba",
+        "retrieved_at_utc": "2026-10-07T15:35:07.209287Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/13/schedule?season=2025&seasontype=2"
+      },
+      {
+        "raw_sha256": "a8f69af63810ece6c8ec0d9ebeb1bda317b78bd278d99ed2007cee7bd14abd35",
+        "retrieved_at_utc": "2026-10-07T15:35:07.159359Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/13/schedule?season=2026&seasontype=2"
+      },
+      {
+        "raw_sha256": "9dfd091aad047a0d82c3c04c7405388970bc982a1f34443b1ada6a5f32277fb6",
+        "retrieved_at_utc": "2026-10-07T15:35:14.954267Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/14/schedule?season=2021&seasontype=2"
+      },
+      {
+        "raw_sha256": "d6b4d99bdca5f6ec14a407b9aaa668fbdf4f42134fd762f40db1d4850947d646",
+        "retrieved_at_utc": "2026-10-07T15:35:14.988880Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/14/schedule?season=2022&seasontype=2"
+      },
+      {
+        "raw_sha256": "e7281d630b7a6dea9a0da2d91403adba23deef4718fd4b9464d1134dcb658a72",
+        "retrieved_at_utc": "2026-10-07T15:35:15.022351Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/14/schedule?season=2023&seasontype=2"
+      },
+      {
+        "raw_sha256": "ab49bab249d724dc662418a846c8a80c9798bed53d574538616b0e0d5994d2b7",
+        "retrieved_at_utc": "2026-10-07T15:35:14.767178Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/14/schedule?season=2024&seasontype=2"
+      },
+      {
+        "raw_sha256": "47080717aee14862106a5e89d14b0e827bfdbaa26c0aa5bbce7a09e663b54e81",
+        "retrieved_at_utc": "2026-10-07T15:35:14.987861Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/14/schedule?season=2025&seasontype=2"
+      },
+      {
+        "raw_sha256": "8e77ba07a506850ffefaed3004fb7ba9b7ed52d641d60d68f8e85b1d20d6b573",
+        "retrieved_at_utc": "2026-10-07T15:35:14.955568Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/14/schedule?season=2026&seasontype=2"
+      },
+      {
+        "raw_sha256": "5d4f0e491189838e9e22e0df9d5bba3f3770d4f23bf36aa77945bbbdc7d5ff16",
+        "retrieved_at_utc": "2026-10-07T15:35:21.927306Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/15/schedule?season=2021&seasontype=2"
+      },
+      {
+        "raw_sha256": "eb8d9bf3721627b64355051c1b1513e63d1b6ee7807b8ed9efe2b7d809e5ba65",
+        "retrieved_at_utc": "2026-10-07T15:35:21.960638Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/15/schedule?season=2022&seasontype=2"
+      },
+      {
+        "raw_sha256": "7c0739252ee9c8b42aa8815bd48fde49f1a1827e7fd447096312030b67bbfe52",
+        "retrieved_at_utc": "2026-10-07T15:35:22.092943Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/15/schedule?season=2023&seasontype=2"
+      },
+      {
+        "raw_sha256": "b3cba9c673bb21d7b5ebd61f26dfb9d951a5723600901eee9d4e8b6fbaee9882",
+        "retrieved_at_utc": "2026-10-07T15:35:21.944322Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/15/schedule?season=2024&seasontype=2"
+      },
+      {
+        "raw_sha256": "484f58a34a68f6fcf26eb718646374adf0168fb5c624ce343a2ef640b9a02082",
+        "retrieved_at_utc": "2026-10-07T15:35:21.961409Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/15/schedule?season=2025&seasontype=2"
+      },
+      {
+        "raw_sha256": "b22fe4a7db154aa2736b0c12bfd9a50390cd39f016111481bb9c552d0fb030f5",
+        "retrieved_at_utc": "2026-10-07T15:35:21.856880Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/15/schedule?season=2026&seasontype=2"
+      },
+      {
+        "raw_sha256": "121a8fbd255f11013319601126cca680055458ca57b1e3dab21e39645e47958f",
+        "retrieved_at_utc": "2026-10-07T15:35:28.411147Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/16/schedule?season=2021&seasontype=2"
+      },
+      {
+        "raw_sha256": "259798f385fe2c27077bf9573e0ab83798631b7fea3cab1ac42e68444bc599d9",
+        "retrieved_at_utc": "2026-10-07T15:35:28.629381Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/16/schedule?season=2022&seasontype=2"
+      },
+      {
+        "raw_sha256": "2a9ab7bce7aa1b9a8f1c20028c96ed74d6e12f3ab74f503276690ed24e39ae5a",
+        "retrieved_at_utc": "2026-10-07T15:35:28.657603Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/16/schedule?season=2023&seasontype=2"
+      },
+      {
+        "raw_sha256": "0c4022451cda5166dd6e75be79d86b626ed147b264f0e2ef82a1686104d2263b",
+        "retrieved_at_utc": "2026-10-07T15:35:28.603557Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/16/schedule?season=2024&seasontype=2"
+      },
+      {
+        "raw_sha256": "92b7cfb28dc575467772a98f2f7fe59f3010924de53aa80e0bd28b702d5aeb53",
+        "retrieved_at_utc": "2026-10-07T15:35:28.586074Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/16/schedule?season=2025&seasontype=2"
+      },
+      {
+        "raw_sha256": "2babe857e64d7a1459178526a3376564dbb9acdffb4a4d2cb83aa734f01c6818",
+        "retrieved_at_utc": "2026-10-07T15:35:28.601411Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/16/schedule?season=2026&seasontype=2"
+      },
+      {
+        "raw_sha256": "72d1ea8a066c91e28d6793fb03b6c1eff13c0721a5bd09aaf6950ad2a5581c8c",
+        "retrieved_at_utc": "2026-10-07T15:35:35.044908Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/18/schedule?season=2021&seasontype=2"
+      },
+      {
+        "raw_sha256": "dfaff22acfdba97537b522317aa53237451254deb3d20b9a47e5376846232cdd",
+        "retrieved_at_utc": "2026-10-07T15:35:35.101897Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/18/schedule?season=2022&seasontype=2"
+      },
+      {
+        "raw_sha256": "ed94e0537ca9e9b28e3392b710f24595171964daab91af4237f1e79241df5657",
+        "retrieved_at_utc": "2026-10-07T15:35:35.253402Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/18/schedule?season=2023&seasontype=2"
+      },
+      {
+        "raw_sha256": "f9e2d9c33f622ef79b41c531e7c094efaa64bb8bb2589876016fc5be977523fb",
+        "retrieved_at_utc": "2026-10-07T15:35:35.059646Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/18/schedule?season=2024&seasontype=2"
+      },
+      {
+        "raw_sha256": "016dec419c2777f8eee4ddc8f97c66e728ed3a14740c1315c49bce265c697a97",
+        "retrieved_at_utc": "2026-10-07T15:35:35.102666Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/18/schedule?season=2025&seasontype=2"
+      },
+      {
+        "raw_sha256": "bff32ede00c8034440bb3955b4c1bb76ef16f50648a1243f806df2b820d9fe10",
+        "retrieved_at_utc": "2026-10-07T15:35:35.078535Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/18/schedule?season=2026&seasontype=2"
+      },
+      {
+        "raw_sha256": "d6f5b9185b8f78f28011dc2b63921b2f55f3d8ba3a194a855ebc9853f00b445c",
+        "retrieved_at_utc": "2026-10-07T15:35:44.209968Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/124292/schedule?season=2021&seasontype=2"
+      },
+      {
+        "raw_sha256": "88d1ca9b229434aafe39e86aae76858dfb4ef2cf538551f50a5bf1303caf9f1f",
+        "retrieved_at_utc": "2026-10-07T15:35:44.571689Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/124292/schedule?season=2022&seasontype=2"
+      },
+      {
+        "raw_sha256": "1f248bd81bc0555893d593de54715cbead46f494ead39281dfe140fa040b8f1a",
+        "retrieved_at_utc": "2026-10-07T15:35:44.629672Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/124292/schedule?season=2023&seasontype=2"
+      },
+      {
+        "raw_sha256": "b7391e02d06def7375c7f9a1308c6b58b323baf224133b8a92d2fb468534c493",
+        "retrieved_at_utc": "2026-10-07T15:35:44.379034Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/124292/schedule?season=2024&seasontype=2"
+      },
+      {
+        "raw_sha256": "7e06213d1fb1e5f2510828efad5a1c7024a2d21e09688a27af1ebdd2e5d4d114",
+        "retrieved_at_utc": "2026-10-07T15:35:44.572187Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/124292/schedule?season=2025&seasontype=2"
+      },
+      {
+        "raw_sha256": "b08400a257c9d95ad2f8e078dc9c83c44690cbc337d7265461606592afd1394e",
+        "retrieved_at_utc": "2026-10-07T15:35:44.571803Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/124292/schedule?season=2026&seasontype=2"
+      },
+      {
+        "raw_sha256": "8b45be35487da6931e7cb399987eb83f2954401079ae12d4c0ad6d92a24267d6",
+        "retrieved_at_utc": "2026-10-07T15:35:51.182494Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/19/schedule?season=2021&seasontype=2"
+      },
+      {
+        "raw_sha256": "a17c22b0cc184dc374793df0a2ef4c755e54e48289dcc28d3014a04f78080d12",
+        "retrieved_at_utc": "2026-10-07T15:35:51.146205Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/19/schedule?season=2022&seasontype=2"
+      },
+      {
+        "raw_sha256": "887c76e379cdeefd497942eb26d2b316f5d9bdbaa2233a24d20a21ebffe6db91",
+        "retrieved_at_utc": "2026-10-07T15:35:51.332570Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/19/schedule?season=2023&seasontype=2"
+      },
+      {
+        "raw_sha256": "1e9453b8c9c35e47964e7ccbda71e908e20e2c83dde31beeddbf46eafab8c900",
+        "retrieved_at_utc": "2026-10-07T15:35:51.217078Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/19/schedule?season=2024&seasontype=2"
+      },
+      {
+        "raw_sha256": "1bce54feb4a7d3fe45d1d36dd66603d4ed6b3121d03aa50b4f7c74616967557f",
+        "retrieved_at_utc": "2026-10-07T15:35:51.104631Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/19/schedule?season=2025&seasontype=2"
+      },
+      {
+        "raw_sha256": "a1aa2875dd1352e5098a28f0fdcf05c4f597b1527fc8da972662ac9b95ed6922",
+        "retrieved_at_utc": "2026-10-07T15:35:51.196302Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/19/schedule?season=2026&seasontype=2"
+      },
+      {
+        "raw_sha256": "1de6b3fa99a7c26ecd9082761d8c923df4a264bffa18480121609a00666feb93",
+        "retrieved_at_utc": "2026-10-07T15:35:58.982908Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/20/schedule?season=2021&seasontype=2"
+      },
+      {
+        "raw_sha256": "ff7251d86b6d6bc1bc0db66f8ba23eceec2a3d50aaca4a3ca428b3d38e42035c",
+        "retrieved_at_utc": "2026-10-07T15:35:59.196958Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/20/schedule?season=2022&seasontype=2"
+      },
+      {
+        "raw_sha256": "8180f4312ae1cb1938f5cff15a1ae8b37123c36a9b863ed0bebec2d3f1e62d6f",
+        "retrieved_at_utc": "2026-10-07T15:35:59.240173Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/20/schedule?season=2023&seasontype=2"
+      },
+      {
+        "raw_sha256": "2012ccb7029c1133596224a8777d27d4be1c5b89ae0fda23e3ed4000efecc670",
+        "retrieved_at_utc": "2026-10-07T15:35:59.175928Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/20/schedule?season=2024&seasontype=2"
+      },
+      {
+        "raw_sha256": "e0d7465ec1f4946ecf92962357d8b6f3a9c2ff229a221b65f08aaead8fadb622",
+        "retrieved_at_utc": "2026-10-07T15:35:58.947728Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/20/schedule?season=2025&seasontype=2"
+      },
+      {
+        "raw_sha256": "f02d85009f653c21f6f9569961a6b406038d0fd77b754890501f5203e18721a2",
+        "retrieved_at_utc": "2026-10-07T15:35:59.198764Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/20/schedule?season=2026&seasontype=2"
+      },
+      {
+        "raw_sha256": "83046c35904f79170c5f7fc6abc4bbeaa056f2ab82baacdc5cfd513a2f5fd89c",
+        "retrieved_at_utc": "2026-10-07T15:36:09.449439Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/21/schedule?season=2021&seasontype=2"
+      },
+      {
+        "raw_sha256": "b01b9c758304a522335e86c083c5021e679a5ee33f22ff9649fdd372a1b286a4",
+        "retrieved_at_utc": "2026-10-07T15:36:08.081842Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/21/schedule?season=2022&seasontype=2"
+      },
+      {
+        "raw_sha256": "1f2bea2163c3312c85e6d1f0b296e649d1160a927d605fa0209ed3fe8941fbbe",
+        "retrieved_at_utc": "2026-10-07T15:36:08.140652Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/21/schedule?season=2023&seasontype=2"
+      },
+      {
+        "raw_sha256": "db9f2cfbf1fcd14cb18978e46d103feb68559cb122050ba995c96549584343f2",
+        "retrieved_at_utc": "2026-10-07T15:36:07.944576Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/21/schedule?season=2024&seasontype=2"
+      },
+      {
+        "raw_sha256": "d13d6360106d2a9c85f811847d34a36d533fb168eb49e8a53bb3f0350692376f",
+        "retrieved_at_utc": "2026-10-07T15:36:08.028762Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/21/schedule?season=2025&seasontype=2"
+      },
+      {
+        "raw_sha256": "6c0c34a6435e4041b09981b2b373a1bca0551491d2ed396c2d21d8a025dcb43b",
+        "retrieved_at_utc": "2026-10-07T15:36:08.101444Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/21/schedule?season=2026&seasontype=2"
+      },
+      {
+        "raw_sha256": "630fb11080db7bc5528b42a43c4759cbe64877cb249676ed999f695580365b20",
+        "retrieved_at_utc": "2026-10-07T15:36:15.571649Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/129764/schedule?season=2021&seasontype=2"
+      },
+      {
+        "raw_sha256": "630fb11080db7bc5528b42a43c4759cbe64877cb249676ed999f695580365b20",
+        "retrieved_at_utc": "2026-10-07T15:36:15.575200Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/129764/schedule?season=2022&seasontype=2"
+      },
+      {
+        "raw_sha256": "630fb11080db7bc5528b42a43c4759cbe64877cb249676ed999f695580365b20",
+        "retrieved_at_utc": "2026-10-07T15:36:15.589153Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/129764/schedule?season=2023&seasontype=2"
+      },
+      {
+        "raw_sha256": "630fb11080db7bc5528b42a43c4759cbe64877cb249676ed999f695580365b20",
+        "retrieved_at_utc": "2026-10-07T15:36:15.624437Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/129764/schedule?season=2024&seasontype=2"
+      },
+      {
+        "raw_sha256": "77fcae96f58d2a14de2358dd1a23dd59a54cc236a8c9f02d031e3b2c52c6e792",
+        "retrieved_at_utc": "2026-10-07T15:36:15.687068Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/129764/schedule?season=2025&seasontype=2"
+      },
+      {
+        "raw_sha256": "aa6bc040777462202340dac4b135a82688e68fd20115cc29d21f956500debbe1",
+        "retrieved_at_utc": "2026-10-07T15:36:15.604334Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/129764/schedule?season=2026&seasontype=2"
+      },
+      {
+        "raw_sha256": "85556df9b746b5f8fb6ad258f9c2b55fb6fd29f8aff57394423e7e1737f7f831",
+        "retrieved_at_utc": "2026-10-07T15:36:22.959088Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/22/schedule?season=2021&seasontype=2"
+      },
+      {
+        "raw_sha256": "cdb41c2abce778c3437e74efcc61757c687e611c8b4fa2a16ec0b64f8c1268a1",
+        "retrieved_at_utc": "2026-10-07T15:36:22.811043Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/22/schedule?season=2022&seasontype=2"
+      },
+      {
+        "raw_sha256": "47170d61f56dafee1c52375ac0d34aa6b4ac08cd973d94db4f51d8ef19e8f89f",
+        "retrieved_at_utc": "2026-10-07T15:36:23.018992Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/22/schedule?season=2023&seasontype=2"
+      },
+      {
+        "raw_sha256": "553147644446cd9ee1cb78d4afde1455042c5e8893147da7e64beeb731b7367e",
+        "retrieved_at_utc": "2026-10-07T15:36:22.918820Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/22/schedule?season=2024&seasontype=2"
+      },
+      {
+        "raw_sha256": "6e36d877cdb0a8e32013d29b6eaaff31f7580ca42876038ea00dcb571d3a0c9a",
+        "retrieved_at_utc": "2026-10-07T15:36:22.935925Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/22/schedule?season=2025&seasontype=2"
+      },
+      {
+        "raw_sha256": "9a890336f5093cca22e814c9d32b37521ede5d7d88349546ced6e863d1375dd4",
+        "retrieved_at_utc": "2026-10-07T15:36:22.958564Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/22/schedule?season=2026&seasontype=2"
+      },
+      {
+        "raw_sha256": "62a128e1a87b6ffe3057f9311f88cb39236d371c8dc6a175c6c6d77b6e05f7e9",
+        "retrieved_at_utc": "2026-10-07T15:36:38.416238Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/37/schedule?season=2021&seasontype=2"
+      },
+      {
+        "raw_sha256": "060476b51fb6e333287ca2294fab553b55bbd1a2f0089872ab5099aec8a4af36",
+        "retrieved_at_utc": "2026-10-07T15:36:38.542982Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/37/schedule?season=2022&seasontype=2"
+      },
+      {
+        "raw_sha256": "9dc79791593539b45305a0b4cb4fd4e40db1de7d4471b8907acb38e93513049d",
+        "retrieved_at_utc": "2026-10-07T15:36:38.661496Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/37/schedule?season=2023&seasontype=2"
+      },
+      {
+        "raw_sha256": "2642d7b23616f3195485b24c59b5ff3e65c4776b3304d5bed29da97502babc20",
+        "retrieved_at_utc": "2026-10-07T15:36:38.542547Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/37/schedule?season=2024&seasontype=2"
+      },
+      {
+        "raw_sha256": "f4aa228e2e2c7dc2a60a20deb494ef59ee81c9cde2b5f2e47df1bb4ff81991e4",
+        "retrieved_at_utc": "2026-10-07T15:36:38.542466Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/37/schedule?season=2025&seasontype=2"
+      },
+      {
+        "raw_sha256": "5f5277d24596b095d54f7fb9a371ad50893aaf3abdd01d06a2e8c20a9134af27",
+        "retrieved_at_utc": "2026-10-07T15:36:38.542369Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/37/schedule?season=2026&seasontype=2"
+      },
+      {
+        "raw_sha256": "56c4d0eb6f98a7a9bae2ebcd1c9e32d38664558ac736c2778dcf5464680ae18c",
+        "retrieved_at_utc": "2026-10-07T15:36:45.256096Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/23/schedule?season=2021&seasontype=2"
+      },
+      {
+        "raw_sha256": "4c5ef0a8c45c2adba25a8f51665b0a648cde2f85b8df296e98e7aba60a431f84",
+        "retrieved_at_utc": "2026-10-07T15:36:48.886281Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/23/schedule?season=2022&seasontype=2"
+      },
+      {
+        "raw_sha256": "054aeb806359dc70eb005467776475895a6cc3da67cdcc1677ae5f551f74b1d7",
+        "retrieved_at_utc": "2026-10-07T15:36:48.966995Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/23/schedule?season=2023&seasontype=2"
+      },
+      {
+        "raw_sha256": "832f1543305d0380214077ea99632e476c91198092c8274bf99fcb387774d387",
+        "retrieved_at_utc": "2026-10-07T15:36:48.913675Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/23/schedule?season=2024&seasontype=2"
+      },
+      {
+        "raw_sha256": "8d4bc8605c44083bee37a6cfaddcd5890e260f62bd71ba1838935fc12d1ab9e1",
+        "retrieved_at_utc": "2026-10-07T15:36:48.914116Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/23/schedule?season=2025&seasontype=2"
+      },
+      {
+        "raw_sha256": "8e9eda1f7b4ee28cf44a7da6ca4094fe9d1197b9b48a59e3d3eacf04689c390f",
+        "retrieved_at_utc": "2026-10-07T15:36:48.913286Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/23/schedule?season=2026&seasontype=2"
+      },
+      {
+        "raw_sha256": "a3a80884a4dfd69db1f10ee5761700753e363a9c67e2aeda429fcb25e45d0fb9",
+        "retrieved_at_utc": "2026-10-07T15:36:56.909394Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/28/schedule?season=2021&seasontype=2"
+      },
+      {
+        "raw_sha256": "84fc7feafeffb1aa916c5949621c54f5385000f7bf85bc452dfe2fe4fcca6be4",
+        "retrieved_at_utc": "2026-10-07T15:36:56.873999Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/28/schedule?season=2022&seasontype=2"
+      },
+      {
+        "raw_sha256": "facb0bf4e11096c24692474124e45827f6c565739ac16f0fe16fa019089dce5d",
+        "retrieved_at_utc": "2026-10-07T15:36:57.013372Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/28/schedule?season=2023&seasontype=2"
+      },
+      {
+        "raw_sha256": "c56d28c3f78a7f32e2bfea571c09825e6a56a28017fdde96dc5f243d529323ae",
+        "retrieved_at_utc": "2026-10-07T15:36:56.903134Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/28/schedule?season=2024&seasontype=2"
+      },
+      {
+        "raw_sha256": "c434cf5effe917e98276753a4ddffd3ab01ec5433f86244683f0609dc1d3e8f6",
+        "retrieved_at_utc": "2026-10-07T15:36:56.940346Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/28/schedule?season=2025&seasontype=2"
+      },
+      {
+        "raw_sha256": "7af2ecb7ab44ab9cf4a1a84724cd5120902a0b409634be741744843af668e11b",
+        "retrieved_at_utc": "2026-10-07T15:36:56.959968Z",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/28/schedule?season=2026&seasontype=2"
+      }
+    ]
+  }
+}

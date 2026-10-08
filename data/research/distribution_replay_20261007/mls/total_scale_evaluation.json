@@ -1,0 +1,143 @@
+{
+  "action_authority": false,
+  "baseline_id": "mls.total.empirical.research.d5eae8380759b623",
+  "bootstrap": {
+    "count": 2000,
+    "seed": 7,
+    "unit": "GAME_MEAN_WITHIN_DECLARED_TIME_BLOCK"
+  },
+  "challenger_id": "mls.total.conditional_scale.research.bd3e1664b6e7017d",
+  "input_sha256": "69d7b79a77d2ae82f30c207639e4f8068b71fab8315cbe44908143c1f3553f6f",
+  "limitations": [
+    "CALLER_PROVENANCE_NOT_INDEPENDENTLY_ATTESTED",
+    "NOT_CANONICAL_GRADING",
+    "RELIABILITY_BINS_DESCRIPTIVE_NOT_PROMOTION",
+    "NO_MULTIPLE_TESTING_ADJUSTMENT",
+    "NO_AUTOMATIC_PROMOTION"
+  ],
+  "matched_contract_n": 405,
+  "matched_game_n": 405,
+  "paired_challenger_minus_baseline": {
+    "brier_category_sum": {
+      "block_n": 27,
+      "ci95": [
+        1.7108126471259798e-05,
+        0.0007135726830545836
+      ],
+      "delta": 0.00038165374164707803,
+      "game_n": 405,
+      "reason": null
+    },
+    "distribution_crps": {
+      "block_n": 27,
+      "ci95": [
+        -0.001041076910901409,
+        0.0008230758908972447
+      ],
+      "delta": -7.564035370647878e-05,
+      "game_n": 405,
+      "reason": null
+    },
+    "log_loss": {
+      "block_n": 27,
+      "ci95": [
+        -0.00012001503786629544,
+        0.0011193290689924986
+      ],
+      "delta": 0.0004874980689652329,
+      "game_n": 405,
+      "reason": null
+    }
+  },
+  "predictive_validation": "NOT_ESTABLISHED_BY_THIS_REPORT",
+  "schema": "sports.paired_distribution_evaluation.research.v1",
+  "scope": [
+    "mls",
+    "total",
+    "REGULATION_90_STOPPAGE"
+  ],
+  "summaries": {
+    "mls.total.conditional_scale.research.bd3e1664b6e7017d": {
+      "brier_category_sum": 0.5066177246492739,
+      "contract_n": 405,
+      "distribution_crps": 1.0277532820273068,
+      "full_win_reliability_descriptive": [
+        {
+          "lower": 0.4,
+          "mean_probability": 0.431457457071009,
+          "n": 73,
+          "observed_full_win_rate": 0.4520547945205479
+        },
+        {
+          "lower": 0.5,
+          "mean_probability": 0.591097921543774,
+          "n": 25,
+          "observed_full_win_rate": 0.72
+        },
+        {
+          "lower": 0.6,
+          "mean_probability": 0.6248540662239115,
+          "n": 307,
+          "observed_full_win_rate": 0.6058631921824105
+        }
+      ],
+      "log_loss": 0.7410169554321946,
+      "market_conditional_brier": null,
+      "market_nonpush_n": 0,
+      "mean_flat_stake_return": null,
+      "model_conditional_brier": null,
+      "quoted_contract_n": 0,
+      "settlements": {
+        "half_loss": 0,
+        "half_win": 0,
+        "loss": 150,
+        "push": 18,
+        "win": 237
+      },
+      "zero_probability_outcomes": 0
+    },
+    "mls.total.empirical.research.d5eae8380759b623": {
+      "brier_category_sum": 0.5062360709076268,
+      "contract_n": 405,
+      "distribution_crps": 1.0278289223810133,
+      "full_win_reliability_descriptive": [
+        {
+          "lower": 0.4,
+          "mean_probability": 0.4307402078172834,
+          "n": 73,
+          "observed_full_win_rate": 0.4520547945205479
+        },
+        {
+          "lower": 0.5,
+          "mean_probability": 0.5925280720161922,
+          "n": 25,
+          "observed_full_win_rate": 0.76
+        },
+        {
+          "lower": 0.6,
+          "mean_probability": 0.6248680132828209,
+          "n": 307,
+          "observed_full_win_rate": 0.6026058631921825
+        }
+      ],
+      "log_loss": 0.7405294573632293,
+      "market_conditional_brier": null,
+      "market_nonpush_n": 0,
+      "mean_flat_stake_return": null,
+      "model_conditional_brier": null,
+      "quoted_contract_n": 0,
+      "settlements": {
+        "half_loss": 0,
+        "half_win": 0,
+        "loss": 150,
+        "push": 18,
+        "win": 237
+      },
+      "zero_probability_outcomes": 0
+    }
+  },
+  "unmatched_contract_n": {
+    "mls.total.conditional_scale.research.bd3e1664b6e7017d": 0,
+    "mls.total.empirical.research.d5eae8380759b623": 0
+  }
+}

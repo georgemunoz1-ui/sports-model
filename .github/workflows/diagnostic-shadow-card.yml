@@ -18,6 +18,7 @@ on:
           - nfl
           - wnba
           - nba
+          - nhl
       as_of_utc:
         description: "Requested point-in-time cutoff timestamp (ISO-8601 UTC)"
         required: true
@@ -125,7 +126,7 @@ jobs:
               mode = os.environ.get("INPUT_MODE") or "diagnostic_shadow"
               publish_summary = (os.environ.get("INPUT_PUBLISH_SUMMARY") or "true").lower()
 
-          if league not in {"mlb", "cfb", "nfl", "wnba", "nba"}:
+          if league not in {"mlb", "cfb", "nfl", "wnba", "nba", "nhl"}:
               raise SystemExit(f"unsupported league: {league}")
 
           outputs = {
@@ -374,3 +375,38 @@ jobs:
             git commit -m "Register pregame MLB calibration card $CARD_DATE"
             git push origin "HEAD:${GITHUB_REF_NAME}"
           fi
+
+
+      - name: Register priority-league prospective research card
+        id: research_registration
+        if: ${{ always() && contains(fromJSON('["nfl","cfb","wnba","nba","nhl"]'), steps.resolve.outputs.league) && github.ref_name == github.event.repository.default_branch }}
+        continue-on-error: true
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          ARTIFACT_ID: ${{ steps.card_artifact.outputs.artifact-id }}
+        run: |
+          git pull --ff-only origin "$GITHUB_REF_NAME"
+          python scripts/canonical_forecasts.py register \
+            --card output/card/diagnostic_card.json \
+            --run-id "$GITHUB_RUN_ID" --artifact-id "${ARTIFACT_ID:-0}" \
+            --report "data/grading/canonical/attempts/${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}.json"
+
+      - name: Persist priority-league receipts and registration failures
+        if: ${{ always() && steps.research_registration.outcome != 'skipped' && github.ref_name == github.event.repository.default_branch }}
+        shell: bash
+        run: |
+          git config user.name "sports-model-calibration-bot"
+          git config user.email "actions@users.noreply.github.com"
+          if [ -d data/grading/canonical ]; then
+            git add data/grading/canonical/
+            git reset -- 'data/grading/canonical/*.lock' || true
+            if ! git diff --cached --quiet; then
+              git commit -m "Persist prospective research registration $GITHUB_RUN_ID"
+              git push origin "HEAD:${GITHUB_REF_NAME}"
+            fi
+          fi
+
+      - name: Fail rejected priority-league registration
+        if: ${{ steps.research_registration.outcome == 'failure' }}
+        run: exit 1

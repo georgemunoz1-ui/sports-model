@@ -4599,3 +4599,24 @@ Reproduced them by changing NumPy/OpenBLAS CPU dispatch; retained original full
 distributions verified against saved forecast hashes. Portable verification uses
 1e-11 absolute numerical tolerance while artifact and draw bytes stay exact.
 Negative tests forbid material probability, integer-support or identity changes.
+
+
+
+## 2026-10-09 — CFB margin evaluation safety repair (local review)
+
+Corrected the fitter's probability evaluation design: its former validation rows
+fitted residual scales and supplied the reported Brier, so that Brier is not an
+untouched holdout result. Mean-head MAE/RMSE may remain holdout diagnostics subject
+to source chronology; do not blanket-invalidate them. Legacy table is kickoff-
+ordered with unique IDs but lacks original feature/label availability metadata.
+It has 36,901 rows and only 17,472 FBS-v-FBS; old fitter's population claim was
+unenforced. Existing artifacts and previously issued forecasts remain unchanged.
+
+Added explicit train/calibration/test windows, source receipt binding, original
+availability checks, season-week/event disjointness, actual FBS filtering, and
+runtime-consistent weekly-scale test Brier. Both fit workflows pass all windows.
+Legacy-input refusal is verified before fitting. Source-backed migration and a
+registered untouched design remain required; no authentic refit or improved-model
+claim. Focused regressions pass; partial checkout cannot certify full repo health.
+Local patch only, no remote publication or promotion. See
+docs/CFB_MARGIN_EVALUATION_REPAIR.md for correction and migration requirements.

@@ -10,6 +10,30 @@ on:
         description: Point-in-time cutoff UTC
         required: true
         default: '2026-09-03T23:31:00Z'
+      train_start:
+        description: Train start YYYY-MM-DD (UTC; disjoint ordered windows)
+        required: true
+        type: string
+      train_end:
+        description: Train end YYYY-MM-DD (UTC; disjoint ordered windows)
+        required: true
+        type: string
+      calibration_start:
+        description: Calibration start YYYY-MM-DD (UTC; disjoint ordered windows)
+        required: true
+        type: string
+      calibration_end:
+        description: Calibration end YYYY-MM-DD (UTC; disjoint ordered windows)
+        required: true
+        type: string
+      validation_start:
+        description: Validation start YYYY-MM-DD (UTC; disjoint ordered windows)
+        required: true
+        type: string
+      validation_end:
+        description: Validation end YYYY-MM-DD (UTC; disjoint ordered windows)
+        required: true
+        type: string
       simulations:
         description: Simulation count
         required: true
@@ -34,25 +58,46 @@ jobs:
           python-version: '3.11'
       - name: Install fit/runtime dependencies
         run: python -m pip install --disable-pip-version-check numpy pandas pyarrow
+      - name: Evaluation protocol regression tests
+        run: python -m unittest discover -s tests -p "test_cfb_margin_evaluation.py" -v
       - name: Execution readiness
+        if: github.event_name == 'workflow_dispatch'
         run: |
           python - <<'PY'
           import pathlib, numpy, pandas, pyarrow
-          required=['data/cfb/model/cfb_v1_features.parquet','data/cfb/source/2026-09-03_cfb_schedule.csv']
+          required=['data/cfb/model/cfb_margin_pit_features_v1.parquet','data/cfb/source/2026-09-03_cfb_schedule.csv']
           missing=[p for p in required if not pathlib.Path(p).exists()]
           if missing: raise SystemExit('EXECUTION_ENVIRONMENT_UNAVAILABLE missing='+','.join(missing))
           print('FORECAST_EXECUTION_READINESS_GATE: PASS')
           PY
       - name: Fit immutable candidate state
+        if: github.event_name == 'workflow_dispatch'
         run: |
           python models/cfb/fit_margin_distribution_v1.py \
-            --train-data data/cfb/model/cfb_v1_features.parquet \
+            --train-data data/cfb/model/cfb_margin_pit_features_v1.parquet \
+            --provenance data/cfb/model/cfb_margin_pit_features_v1.provenance.json \
             --output run_artifacts/cfb_margin_model_state_v1.json \
             --validation-output run_artifacts/cfb_margin_model_validation_v1.json \
-            --as-of '${{ inputs.as_of_utc || github.event.head_commit.timestamp }}'
+            --as-of "$AS_OF" \
+            --train-start "$TRAIN_START" \
+            --train-end "$TRAIN_END" \
+            --calibration-start "$CALIBRATION_START" \
+            --calibration-end "$CALIBRATION_END" \
+            --validation-start "$VALIDATION_START" \
+            --validation-end "$VALIDATION_END"
+        env:
+          AS_OF: ${{ inputs.as_of_utc }}
+          TRAIN_START: ${{ inputs.train_start }}
+          TRAIN_END: ${{ inputs.train_end }}
+          CALIBRATION_START: ${{ inputs.calibration_start }}
+          CALIBRATION_END: ${{ inputs.calibration_end }}
+          VALIDATION_START: ${{ inputs.validation_start }}
+          VALIDATION_END: ${{ inputs.validation_end }}
       - name: Validate fitted state
+        if: github.event_name == 'workflow_dispatch'
         run: python harness/validate_cfb_margin_model_state.py run_artifacts/cfb_margin_model_state_v1.json
       - name: Simulator integrity selftest
+        if: github.event_name == 'workflow_dispatch'
         run: python harness/cfb_spread_simulation_validator.py
       - name: Upload fitted state
         if: always()
@@ -61,3 +106,4 @@ jobs:
           name: cfb-margin-fit-${{ github.run_id }}
           path: run_artifacts/
           if-no-files-found: warn
+

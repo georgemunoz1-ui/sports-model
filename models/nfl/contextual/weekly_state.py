@@ -197,7 +197,7 @@ def _reduce(parent, seed, schedule_source, pbp_source, week, cutoff):
     resolved_games = adjudicate_starters(games, p, seed.get('starter_adjudications', []), cutoff)
     for row in resolved_games.to_dict('records'):
         for side in ('home', 'away'):
-            q = row.get(side + '_qb_id')
+            q = row.get(side + '_active_qb_id')
             if not isinstance(q, str) or not q: raise ValueError('COMPLETED_STARTER_ID_REQUIRED')
             if d[(d.game_id == row['game_id']) & (d.passer_player_id == q) & (d.posteam == row[side + '_team'])].empty:
                 raise ValueError('STARTER_DROPBACK_BINDING')
@@ -208,6 +208,8 @@ def _reduce(parent, seed, schedule_source, pbp_source, week, cutoff):
             'consumed_game_ids': sorted(parent['consumed_game_ids'] + ids),
             'starter_adjudications_applied': [{'game_id': r['game_id'], 'team': r['team'],
                 'original_qb_id': r['expected_schedule_qb_id'], 'resolved_qb_id': r['qb_id'],
+                'resolution_kind': r.get('resolution_kind', 'STALE_SCHEDULE_STARTER'),
+                'nominal_starter_preserved': r.get('resolution_kind') == 'NOMINAL_STARTER_NO_DROPBACKS',
                 'resolution_sha256': digest(r), 'source_sha256': r['evidence']['receipt']['sha256']}
                 for r in seed.get('starter_adjudications', []) if r['game_id'] in ids],
             'coverage': cov, 'qualifying_play_audit': qa}
@@ -318,3 +320,4 @@ def bind_packet(packet, artifact, event, cutoff, store, state_id):
                          bf.TeamState(**state['team_state'][event['away_team']]))
     for key in STATE_FEATURES: base[key] = float(row[key])
     return result
+

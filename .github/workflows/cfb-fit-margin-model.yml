@@ -5,22 +5,26 @@ on:
       train_start:
         description: Training start YYYY-MM-DD
         required: true
-        default: '2001-01-01'
         type: string
       train_end:
         description: Training end YYYY-MM-DD
         required: true
-        default: '2025-12-31'
+        type: string
+      calibration_start:
+        description: Calibration start YYYY-MM-DD (UTC; after training)
+        required: true
+        type: string
+      calibration_end:
+        description: Calibration end YYYY-MM-DD (UTC; before test)
+        required: true
         type: string
       validation_start:
-        description: Validation start YYYY-MM-DD
+        description: Untouched test start YYYY-MM-DD (UTC)
         required: true
-        default: '2011-01-01'
         type: string
       validation_end:
-        description: Validation end YYYY-MM-DD
+        description: Untouched test end YYYY-MM-DD (UTC)
         required: true
-        default: '2025-12-31'
         type: string
       population:
         description: Eligible population
@@ -59,32 +63,31 @@ jobs:
         run: |
           python harness/execution_readiness.py --league cfb \
             --require-package numpy --require-package pandas --require-package pyarrow --require-package scikit-learn \
-            --require-file data/cfb/model/cfb_v1_features.parquet \
+            --require-file data/cfb/model/cfb_margin_pit_features_v1.parquet \
             --require-module models.cfb.fit_margin_distribution_v1 \
             --output-dir run_artifacts --report run_artifacts/execution_readiness.json
-      - name: Validate declared window
-        run: |
-          python - <<'PY'
-          from datetime import date
-          import os
-          vals=[os.environ[x] for x in ('TRAIN_START','TRAIN_END','VALIDATION_START','VALIDATION_END')]
-          ds=list(map(date.fromisoformat,vals))
-          if ds[0]>ds[1] or ds[2]>ds[3]: raise SystemExit('INVALID_DATE_WINDOW')
-          if ds[3]>ds[1]: raise SystemExit('VALIDATION_AFTER_TRAIN_END')
-          print('DECLARED_WINDOW: PASS')
-          PY
-        env:
-          TRAIN_START: ${{ inputs.train_start }}
-          TRAIN_END: ${{ inputs.train_end }}
-          VALIDATION_START: ${{ inputs.validation_start }}
-          VALIDATION_END: ${{ inputs.validation_end }}
       - name: Fit immutable candidate state
         run: |
           python models/cfb/fit_margin_distribution_v1.py \
-            --train-data data/cfb/model/cfb_v1_features.parquet \
+            --train-data data/cfb/model/cfb_margin_pit_features_v1.parquet \
+            --provenance data/cfb/model/cfb_margin_pit_features_v1.provenance.json \
             --output run_artifacts/cfb_margin_model_state_v1.json \
             --validation-output run_artifacts/cfb_margin_model_validation_v1.json \
-            --as-of '${{ inputs.as_of_utc }}'
+            --as-of "$AS_OF" \
+            --train-start "$TRAIN_START" \
+            --train-end "$TRAIN_END" \
+            --calibration-start "$CALIBRATION_START" \
+            --calibration-end "$CALIBRATION_END" \
+            --validation-start "$VALIDATION_START" \
+            --validation-end "$VALIDATION_END"
+        env:
+          AS_OF: ${{ inputs.as_of_utc }}
+          TRAIN_START: ${{ inputs.train_start }}
+          TRAIN_END: ${{ inputs.train_end }}
+          CALIBRATION_START: ${{ inputs.calibration_start }}
+          CALIBRATION_END: ${{ inputs.calibration_end }}
+          VALIDATION_START: ${{ inputs.validation_start }}
+          VALIDATION_END: ${{ inputs.validation_end }}
       - name: Validate fitted state
         run: python harness/validate_cfb_margin_model_state.py run_artifacts/cfb_margin_model_state_v1.json
       - name: Simulator integrity selftest
@@ -99,3 +102,4 @@ jobs:
           path: run_artifacts/
           if-no-files-found: error
           retention-days: 90
+

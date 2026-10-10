@@ -4620,3 +4620,28 @@ registered untouched design remain required; no authentic refit or improved-mode
 claim. Focused regressions pass; partial checkout cannot certify full repo health.
 Local patch only, no remote publication or promotion. See
 docs/CFB_MARGIN_EVALUATION_REPAIR.md for correction and migration requirements.
+
+
+## 2026-10-10 — Explicit research Monte Carlo precision and NBA direction shadow
+
+Owner authorized implementation and merge after reviewing the isolated prototypes.
+Added an opt-in finite-law MC precision CLI with default fixed 100,000 draws,
+versioned semantic RNG streams, immutable finite-look IID stopping plans, and
+paired common-random-number comparisons with declared estimand bounds. Existing
+selected simulations, seeds, draw artifacts and registered model defaults remain
+unchanged. Seven league contracts and a retained actual CFB card distribution
+exercise compatibility. Bounds quantify numerical integration uncertainty only;
+they do not establish source freshness, predictive calibration or corrected tails.
+
+Added a separately identified NBA efficiency shadow and opt-in CLI correcting
+points-allowed defensive-rating direction. Explicit units and fitted state are
+required; no fitted parameters are supplied or inferred. The selected NBA adapter
+still uses the initial causal-score model. Inherited tie-breaking remains a
+shortcut, not a fitted overtime model. No action or promotion authority added.
+
+Fifty focused integration tests passed independently on the control interpreter.
+The local source-only restoration has missing historical data/fixtures; broad
+local failures and health results cannot certify repository health. Exact-head
+remote CI and full-tree checks are required and recorded on the release PR.
+Artifact-storage quota remains an independently tracked upload limitation.
+See docs/MC_PRECISION_RESEARCH.md and docs/NBA_EFFICIENCY_SHADOW.md.

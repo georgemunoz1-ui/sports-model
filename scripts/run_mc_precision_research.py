@@ -13,6 +13,7 @@ from research.mc_precision_v1 import PrecisionPlan
 
 def main(argv=None):
     ap=argparse.ArgumentParser(description=__doc__)
+    ap.add_argument('--allow-research', action='store_true', required=True, help='Explicit acknowledgement that outputs are research only')
     ap.add_argument('--distribution', required=True, help='Canonical discrete law or shared-card distribution_report.json')
     ap.add_argument('--comparison-distribution', help='Optional distinct same-event/cutoff/product/settlement law')
     ap.add_argument('--event-id');ap.add_argument('--model-id');ap.add_argument('--comparison-model-id')

@@ -6,7 +6,7 @@ This research runner consumes an existing `sports.discrete_distribution.research
 
 From the repository root:
 
-    python scripts/run_mc_precision_research.py \
+    python scripts/run_mc_precision_research.py --allow-research \
       --distribution path/to/distribution_report.json \
       --event-id 'CFB:401858254' \
       --model-id cfb.margin.empirical.research.2a9cf9fcd1774e8e \
@@ -15,6 +15,8 @@ From the repository root:
       --output path/to/new-research-directory
 
 The example identifiers are from the retained historical test fixture, not a current forecast. Use actual IDs in your source report. A standalone distribution does not require selectors unless you want an explicit identity check. A report with multiple matches refuses instead of guessing. The output directory must not already exist.
+
+The required `--allow-research` flag explicitly acknowledges research-only execution; omission refuses before reading inputs or creating output.
 
 Default: exactly 100,000 draws, alpha 0.05 and absolute numerical tolerance 0.005 (0.5 percentage points). The default does not promise this precision for every law. To allow additional draws, explicitly predeclare `--checkpoints 100000,200000,400000 --tolerance 0.003`. The final checkpoint may not exceed 1,000,000. The run stops only at a declared look when all declared category bounds meet tolerance, or at the cap with `BUDGET_EXHAUSTED_UNRESOLVED`.
 

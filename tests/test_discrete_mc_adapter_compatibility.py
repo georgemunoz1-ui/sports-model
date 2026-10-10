@@ -45,7 +45,7 @@ def test_actual_retained_card_report_selector_and_cli(tmp_path):
     selected=select_distribution(payload,event_id=d['provenance']['event_id'],model_id=d['model_id'],product=d['product'])
     assert selected==d
     out=tmp_path/'new-output'
-    command=[sys.executable,str(ROOT/'scripts/run_mc_precision_research.py'),'--distribution',str(FIXTURE),
+    command=[sys.executable,str(ROOT/'scripts/run_mc_precision_research.py'),'--allow-research','--distribution',str(FIXTURE),
        '--event-id',d['provenance']['event_id'],'--model-id',d['model_id'],'--line','-3',
        '--side','HOME','--experiment-id','retained-cfb-readonly','--seed','722','--output',str(out)]
     result=subprocess.run(command,text=True,capture_output=True)
@@ -93,8 +93,17 @@ def test_mls_quarter_line_and_total_contracts():
 
 def test_cli_default_and_below_minimum_refusal(tmp_path):
     p=tmp_path/'law.json';p.write_text(json.dumps(law()))
-    result=subprocess.run([sys.executable,str(ROOT/'scripts/run_mc_precision_research.py'),'--distribution',str(p),
+    result=subprocess.run([sys.executable,str(ROOT/'scripts/run_mc_precision_research.py'),'--allow-research','--distribution',str(p),
         '--line','0','--side','HOME','--experiment-id','x','--seed','1','--checkpoints','99999',
         '--output',str(tmp_path/'out')],text=True,capture_output=True)
     assert result.returncode==2 and 'MINIMUM_100K_REQUIRED' in result.stderr
+    assert not (tmp_path/'out').exists()
+
+
+def test_cli_requires_explicit_research_opt_in(tmp_path):
+    p=tmp_path/'law.json';p.write_text(json.dumps(law()))
+    result=subprocess.run([sys.executable,str(ROOT/'scripts/run_mc_precision_research.py'),
+        '--distribution',str(p),'--line','0','--side','HOME','--experiment-id','x','--seed','1',
+        '--output',str(tmp_path/'out')],text=True,capture_output=True)
+    assert result.returncode==2 and '--allow-research' in result.stderr
     assert not (tmp_path/'out').exists()

@@ -1,0 +1,73 @@
+{
+  "action_authority": false,
+  "config_id": "nhl.initial_causal_score.acquisition.2026-27.v2",
+  "evaluation_training_seasons": [
+    2021,
+    2022,
+    2023,
+    2024
+  ],
+  "first_provider_season": 2021,
+  "last_provider_season": 2027,
+  "later_audit_provider_season": 2026,
+  "league": "nhl",
+  "model_id": "nhl.initial_causal_score.research.v1",
+  "nonexistent_team_seasons": [
+    {
+      "first_provider_season": 2022,
+      "official_evidence_urls": [
+        "https://www.nhl.com/news/seattle-is-32nd-nhl-franchise-will-start-play-in-2021-22-302583844"
+      ],
+      "provider_season": 2021,
+      "reason": "NONEXISTENT_TEAM_SEASON",
+      "team_id": "124292"
+    },
+    {
+      "first_provider_season": 2025,
+      "official_evidence_urls": [
+        "https://records.nhl.com/uta/overview/history",
+        "https://www.nhl.com/news/board-approves-establishment-of-new-franchise-in-utah-2024"
+      ],
+      "provider_season": 2021,
+      "reason": "NONEXISTENT_TEAM_SEASON",
+      "team_id": "129764"
+    },
+    {
+      "first_provider_season": 2025,
+      "official_evidence_urls": [
+        "https://records.nhl.com/uta/overview/history",
+        "https://www.nhl.com/news/board-approves-establishment-of-new-franchise-in-utah-2024"
+      ],
+      "provider_season": 2022,
+      "reason": "NONEXISTENT_TEAM_SEASON",
+      "team_id": "129764"
+    },
+    {
+      "first_provider_season": 2025,
+      "official_evidence_urls": [
+        "https://records.nhl.com/uta/overview/history",
+        "https://www.nhl.com/news/board-approves-establishment-of-new-franchise-in-utah-2024"
+      ],
+      "provider_season": 2023,
+      "reason": "NONEXISTENT_TEAM_SEASON",
+      "team_id": "129764"
+    },
+    {
+      "first_provider_season": 2025,
+      "official_evidence_urls": [
+        "https://records.nhl.com/uta/overview/history",
+        "https://www.nhl.com/news/board-approves-establishment-of-new-franchise-in-utah-2024"
+      ],
+      "provider_season": 2024,
+      "reason": "NONEXISTENT_TEAM_SEASON",
+      "team_id": "129764"
+    }
+  ],
+  "population": "regular_season_final_winner",
+  "reason": "Acquisition calendar rollover only; frozen audit cohorts, statistical method, feature rules, embargo and defaults unchanged.",
+  "schema": "initial_baseline_season_scope.v1",
+  "season_label": "2026-27",
+  "season_year_convention": "provider_end_year",
+  "team_identity_policy": "KEEP_ESPN_TEAM_IDS_DISTINCT; ARIZONA24_IS_NOT_UTAH129764",
+  "validation_provider_season": 2025
+}

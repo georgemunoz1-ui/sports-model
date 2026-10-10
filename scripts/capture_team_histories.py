@@ -11,9 +11,17 @@ ROOT=Path(__file__).resolve().parents[1];sys.path.insert(0,str(ROOT))
 from scripts.recovery_capture import ROUTES,capture,save_json
 
 def main():
-    p=argparse.ArgumentParser();p.add_argument('--output',type=Path,required=True);a=p.parse_args()
+    p=argparse.ArgumentParser();p.add_argument('--output',type=Path,required=True);p.add_argument('--league',choices=('nba','nhl','mls'),action='append');p.add_argument('--season-scope',type=Path);p.add_argument('--resume',action='store_true');a=p.parse_args()
+    if a.season_scope is not None:
+        if a.league!=['nhl']:raise ValueError('SEASON_SCOPE_EXPLICIT_NHL_REQUIRED')
+        from scripts.nhl_atomic_capture import collect_history
+        report=collect_history(a.output,a.season_scope,resume=a.resume)
+        print(json.dumps({'sources':len(report['sources']),'status':report['status'],'pending_requests':report['pending_requests']}))
+        if report['pending_requests']:raise SystemExit(2)
+        return
+    if a.resume:raise ValueError('RESUME_REQUIRES_EXPLICIT_NHL_SCOPE')
     a.output.mkdir(parents=True,exist_ok=False);results=[];specs=[]
-    for league in ('nba','nhl','mls'):
+    for league in (a.league or ('nba','nhl','mls')):
         u=f'https://site.api.espn.com/apis/site/v2/sports/{ROUTES[league]}/teams?limit=1000'
         rec,j=capture(a.output,(league,'team_directory',u,2));results.append((rec,j))
         if not j:continue

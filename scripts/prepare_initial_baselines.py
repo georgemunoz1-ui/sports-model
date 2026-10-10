@@ -41,22 +41,43 @@ def parse(e,league,historical=False):
     return r
 
 
-def histories(root,league):
+def load_season_scope(path):
+    if path is None:return None
+    from scripts.nhl_history_applicability import load_scope
+    return load_scope(path)
+
+
+def histories(root,league,season_scope=None,cutoff=None):
     report=json.loads((root/'report.json').read_text());games={};copies=collections.Counter();receipts=[]
-    for rec in report['sources']:
+    seasons=range(2021,2027) if season_scope is None else range(season_scope['first_provider_season'],season_scope['last_provider_season']+1)
+    if season_scope is not None and season_scope['league']!=league:raise ValueError('SEASON_SCOPE_LEAGUE')
+    requested_seasons=collections.Counter()
+    sources=report['sources']
+    if season_scope is not None:
+        from scripts.nhl_history_applicability import history_sources
+        sources=history_sources(root,report,season_scope,cutoff)
+    for rec in sources:
         if rec['league']!=league or rec['kind']!='team_season_schedule':continue
         if rec['status']!='CAPTURED':raise ValueError('HISTORICAL_SOURCE_FAILURE')
         receipts.append(rec);j=json.loads((root/rec['raw_path']).read_text())
+        from urllib.parse import urlparse,parse_qs
+        requested=int(parse_qs(urlparse(rec['url']).query)['season'][0])
+        requested_seasons[requested]+=1
+        if requested not in seasons:raise ValueError('REQUESTED_SEASON_OUT_OF_SCOPE')
+        if season_scope is not None:
+            if hashlib.sha256((root/rec['raw_path']).read_bytes()).hexdigest()!=rec['raw_sha256']:raise ValueError('SOURCE_RAW_DIGEST_MISMATCH')
+            if str(parse_qs(urlparse(rec['url']).query).get('seasontype',[''])[0])!='2':raise ValueError('REGULAR_SEASON_SOURCE_REQUIRED')
         for e in j.get('events',[]):
             r=parse(e,league,True)
             if not r or not r['final']:continue
-            if r['season'] not in range(2021,2027):raise ValueError('SEASON_OUT_OF_SCOPE')
+            if r['season'] not in seasons:raise ValueError('SEASON_OUT_OF_SCOPE')
             from urllib.parse import urlparse,parse_qs
             if int(parse_qs(urlparse(rec['url']).query)['season'][0])!=r['season']:raise ValueError('REQUESTED_SEASON_MISMATCH')
             key=r['event_id'];copies[key]+=1
             if key in games and games[key]!=r:raise ValueError('PROVIDER_ID_REVISION:'+key)
             games[key]=r
     if len(receipts)<180:raise ValueError('TEAM_SEASON_SOURCE_COVERAGE')
+    if season_scope is not None and set(requested_seasons)!=set(seasons):raise ValueError('SEASON_SOURCE_COVERAGE')
     return sorted(games.values(),key=lambda r:(r['start_time_utc'],r['event_id'])),receipts,dict(collections.Counter(copies.values()))
 
 
@@ -104,11 +125,55 @@ def evaluate(rows,fitted,league,base):
     return result
 
 
-def prepare(history,current,output):
-    manifest(history,'manifest.json');manifest(current,'manifest.json');now=dt.datetime.now(dt.timezone.utc);stamp=now.isoformat();current_events=json.loads((current/'events.json').read_text());reports={}
+def verify_current_sources(root,league,report,events,cutoff=None):
+    """Bind current events, timestamps and date coverage to captured bytes."""
+    from scripts.nhl_history_applicability import receipt,SCOPE_SHA256,BASE
+    from urllib.parse import urlparse,parse_qs
+    if report.get('season_scope_sha256')!=SCOPE_SHA256 or report.get('action_authority') is not False:raise ValueError('CURRENT_SCOPE_BINDING')
+    if report.get('pending_requests',0)!=0:raise ValueError('CURRENT_SOURCE_PENDING')
+    captured={};receipts={};dates=set();urls=set()
+    for rec in report['sources']:
+        if rec.get('league')!=league or rec.get('kind')!='schedule':raise ValueError('CURRENT_SOURCE_KIND')
+        url=urlparse(rec['url']);query=parse_qs(url.query)
+        if url.scheme+'://'+url.netloc+url.path!=BASE+'/scoreboard' or rec['url'] in urls:raise ValueError('CURRENT_SOURCE_URL')
+        urls.add(rec['url']);dates.add(query.get('dates',[''])[0])
+        data=receipt(root,rec,cutoff);rows=data.get('events',[])
+        if len({str(e['id']) for e in rows})!=len(rows):raise ValueError('DUPLICATE_CURRENT_EVENT')
+        captured[rec['raw_sha256']]={str(e['id']):e for e in rows};receipts[rec['raw_sha256']]=rec
+    if not captured:raise ValueError('CURRENT_SCHEDULE_RECEIPT_REQUIRED')
+    for eid,rec in events.items():
+        original=captured.get(rec['source_sha256'],{}).get(str(eid))
+        if original is None or original!=rec['event']:raise ValueError('CURRENT_EVENT_SOURCE_BINDING:'+str(eid))
+        if rec.get('retrieved_at_utc')!=receipts[rec['source_sha256']]['retrieved_at_utc']:raise ValueError('CURRENT_EVENT_RECEIPT_BINDING')
+    expected=set().union(*(set(v) for v in captured.values()))
+    if set(map(str,events))!=expected:raise ValueError('CURRENT_SOURCE_EVENT_COVERAGE')
+    if not report.get('covered_dates') or report.get('timezone')!='America/Los_Angeles':raise ValueError('SOURCE_BOUND_COVERAGE_REQUIRED')
+    for day in report['covered_dates']:
+        date=dt.date.fromisoformat(day)
+        if any((date+dt.timedelta(days=offset)).strftime('%Y%m%d') not in dates for offset in (-1,0,1)):raise ValueError('CURRENT_SLATE_TIMEZONE_COVERAGE')
+
+
+def preparation_cutoff(as_of_utc=None):
+    wall=dt.datetime.now(dt.timezone.utc)
+    cutoff=utc(as_of_utc) if as_of_utc else wall
+    if cutoff>wall:raise ValueError('FUTURE_PACKAGE_CUTOFF')
+    return cutoff
+
+
+def prepare(history,current,output,*,leagues=None,season_scope_path=None,as_of_utc=None):
+    season_scope=load_season_scope(season_scope_path)
+    selected=list(IDS) if leagues is None else list(leagues)
+    if not selected or any(l not in IDS for l in selected):raise ValueError('INITIAL_BASELINE_LEAGUE')
+    if season_scope is not None and selected!=[season_scope['league']]:raise ValueError('SEASON_SCOPE_EXPLICIT_LEAGUE_REQUIRED')
+    manifest(history,'manifest.json');manifest(current,'manifest.json');now=preparation_cutoff(as_of_utc);stamp=now.isoformat();current_events=json.loads((current/'events.json').read_text());reports={}
     cr=json.loads((current/'report.json').read_text())
-    for league in IDS:
-        games,receipts,copies=histories(history,league)
+    for league in selected:
+        if season_scope is not None:verify_current_sources(current,league,cr,current_events[league],now)
+        games,receipts,copies=histories(history,league,season_scope,now)
+        if season_scope is not None:
+            for source in receipts+[r for r in cr['sources'] if r['league']==league and r['kind']=='schedule']:
+                age=(now-utc(source['retrieved_at_utc'])).total_seconds()
+                if not 0<=age<=6*3600:raise ValueError('SOURCE_NOT_AVAILABLE_AND_CURRENT_AT_CUTOFF')
         if any(utc(r['start_time_utc'])>=now for r in games):raise ValueError('FUTURE_HISTORICAL_FINAL')
         train=[r for r in games if r['season']<=2024];prior=float(np.mean([r[s+'_score'] for r in train for s in ('home','away')]))
         rows,state,used=causal_rows(games,prior,stamp);tr=[r for r in rows if r[0]['season']<=2024];fitted=fit(tr,league)
@@ -121,18 +186,32 @@ def prepare(history,current,output):
         for rec in current_events[league].values():
             e=rec['event'];r=parse(e,league)
             if not r:excluded['outside_regular_season']+=1;continue
+            if season_scope is not None and r['season']!=season_scope['last_provider_season']:raise ValueError('CURRENT_PROVIDER_SEASON_MISMATCH')
             if r['final']:
                 old=historic_by_id.get(r['event_id'])
                 if old!=r:raise ValueError('CURRENT_HISTORY_RECONCILIATION:'+r['event_id'])
                 continue
             if utc(r['start_time_utc'])<=now:continue
+            if season_scope is not None and r['slate_date'] not in cr.get('covered_dates',[]):excluded['outside_acquired_slate_dates']+=1;continue
             r.pop('final');events.append(r)
         fetches=[{'source':r['url'],'sha256':r['raw_sha256'],'fetched_at_utc':r['retrieved_at_utc']} for r in receipts]
         fetches += [{'source':r['url'],'sha256':r['raw_sha256'],'fetched_at_utc':r['retrieved_at_utc']} for r in cr['sources'] if r['league']==league and r['status']=='CAPTURED' and r['kind']=='schedule']
         if len(fetches)==len(receipts):raise ValueError('CURRENT_SCHEDULE_RECEIPT_REQUIRED')
         pkg={'schema':'sports.current_research_package.v1','league':league,'model_id':IDS[league],'captured_at_utc':stamp,'training_cutoff_utc':stamp,'ttl_hours':6,'covered_dates':sorted({(now.astimezone(ZoneInfo('America/Los_Angeles')).date()+dt.timedelta(days=i)).isoformat() for i in range(8)}),'events':events,'fitted_model':deployment,'team_state':state,'prior':prior,'feature_names':FEATURES,'consumed_game_ids':used,'model_sha256':digest({'model':deployment,'state':state,'prior':prior}),'data_grade':'RETAINED_PROVIDER_FINALS_CURRENT_RESEARCH','model_lineage':{'evaluation_sha256':digest(ev),'evaluation':ev,'deployment_training_rows':len(used),'embargo':'PREVIOUS_UTC_DAY_EXCLUDED','excluded_current_events':dict(excluded)},'source_fetches':fetches,'limitations':['INITIAL_RESEARCH_BASELINE_NOT_ACCURACY_DEFAULT','RETROSPECTIVE_PROVIDER_REVISIONS_NOT_HISTORICAL_PIT','NO_PLAYER_AVAILABILITY_FEATURES','NO_WAGERING_AUTHORITY']+(['INDEPENDENT_POISSON_NO_LOW_SCORE_DEPENDENCE'] if league=='mls' else ['INDEPENDENT_MARGIN_TOTAL_NOT_JOINT_SCORE_MODEL']),'action_authority':False,'code_pins':{p:hashlib.sha256((ROOT/p).read_bytes()).hexdigest() for p in ['models/current/common.py','models/current/linear.py','models/current/baseline.py',f'pipelines/cards/adapters/{league}.py']}}
+        if season_scope is not None:
+            covered=cr.get('covered_dates')
+            if not covered or any(e['slate_date'] not in covered for e in events):raise ValueError('SOURCE_BOUND_COVERAGE_REQUIRED')
+            pkg['covered_dates']=sorted(set(covered))
+            pkg['model_lineage']['season_scope']=season_scope
+            pkg['model_lineage']['season_scope_sha256']=hashlib.sha256(Path(season_scope_path).read_bytes()).hexdigest()
+            pkg['model_lineage']['preparation_code_sha256']=hashlib.sha256(Path(__file__).read_bytes()).hexdigest()
+            pkg['model_lineage']['acquisition_contract_code_sha256']=hashlib.sha256((ROOT/'scripts/nhl_history_applicability.py').read_bytes()).hexdigest()
+            pkg['model_lineage']['history_manifest_sha256']=hashlib.sha256((history/'manifest.json').read_bytes()).hexdigest()
+            pkg['model_lineage']['current_manifest_sha256']=hashlib.sha256((current/'manifest.json').read_bytes()).hexdigest()
+            from models.current.common import current as assert_current
+            assert_current(pkg,stamp)
         save(output/league/'package.json',pkg);reports[league]={'events':len(events),'seasons':ev['season_counts'],'validation':ev['validation_2025']['brier'],'audit':ev['later_audit_2026']['brier']};print(json.dumps({league:reports[league]}),flush=True)
     return reports
 
 if __name__=='__main__':
-    p=argparse.ArgumentParser();p.add_argument('--history',type=Path,required=True);p.add_argument('--current',type=Path,required=True);p.add_argument('--output',type=Path,required=True);a=p.parse_args();prepare(a.history,a.current,a.output)
+    p=argparse.ArgumentParser();p.add_argument('--history',type=Path,required=True);p.add_argument('--current',type=Path,required=True);p.add_argument('--output',type=Path,required=True);p.add_argument('--league',choices=tuple(IDS),action='append');p.add_argument('--season-scope',type=Path);p.add_argument('--as-of-utc');a=p.parse_args();prepare(a.history,a.current,a.output,leagues=a.league,season_scope_path=a.season_scope,as_of_utc=a.as_of_utc)

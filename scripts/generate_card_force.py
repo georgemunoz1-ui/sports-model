@@ -129,6 +129,21 @@ def normalize(event, raw):
 def summarize_pit(context, requested_as_of_utc, generated_at_utc):
     raw = dict(context.get("pit_provenance") or {})
     fetches = list(raw.get("source_fetches") or [])
+    # Byte retention is separate from PIT ordering, model usage and calibration.
+    attestation = {"status": "SOURCE_RETENTION_UNVERIFIED",
+                   "historical_pit_validity_proven": False,
+                   "provider_authenticity_proven": False,
+                   "model_input_usage_proven": False,
+                   "certified_calibration_eligible": False}
+    if os.environ.get("SPORTS_SOURCE_BUNDLES"):
+        from scripts.source_attestation import attest_sources
+        try:
+            roots = json.loads(os.environ["SPORTS_SOURCE_BUNDLES"])
+            if not isinstance(roots, list) or not roots or any(not isinstance(p, str) for p in roots):
+                raise ValueError("SOURCE_BUNDLES_MUST_BE_PATH_LIST")
+            attestation = attest_sources(fetches, roots, requested_as_of_utc)
+        except (ValueError, KeyError, OSError, TypeError) as exc:
+            attestation["reason"] = str(exc)
     timestamps = []
     invalid_timestamp = False
     for item in fetches:
@@ -149,6 +164,7 @@ def summarize_pit(context, requested_as_of_utc, generated_at_utc):
         "pit_alignment_threshold_seconds": 0,
         "pit_threshold_seconds": 3600,
         "source_fetches": fetches,
+        "source_attestation": attestation,
         "action_authority": False,
     }
 
@@ -281,6 +297,8 @@ def generate(card_date, league, as_of, simulations, overrides):
     adapter = load_adapter(league)
     schedule = adapter.load_schedule(card_date, as_of)
     context = adapter.build_context(schedule, as_of, True, overrides)
+    if league.lower() == "nfl":
+        context["retain_draws"] = True
     rows = []
     incidents = []
     requested_cutoff = dt(as_of)

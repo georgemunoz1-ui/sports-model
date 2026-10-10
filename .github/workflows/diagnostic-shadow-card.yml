@@ -35,6 +35,19 @@ on:
         type: choice
         options:
           - diagnostic_shadow
+      package_artifact_id:
+        description: "Existing same-repository source-bound package artifact ID (required except legacy MLB)"
+        required: false
+        type: string
+      package_archive_sha256:
+        description: "Exact archive SHA-256; archive must contain packages/LEAGUE/package.json and its dependencies"
+        required: false
+        type: string
+      initial_research_baselines:
+        description: "Explicitly run initial NBA/NHL research baseline; never promotes a default"
+        required: false
+        default: false
+        type: boolean
       publish_summary:
         description: "Render the full Markdown card in the run summary"
         required: true
@@ -78,6 +91,12 @@ jobs:
           INPUT_AS_OF_UTC: ${{ inputs.as_of_utc }}
           INPUT_SIMULATION_COUNT: ${{ inputs.simulation_count }}
           INPUT_MODE: ${{ inputs.mode }}
+          INPUT_PACKAGE_ARTIFACT_ID: ${{ inputs.package_artifact_id }}
+          INPUT_PACKAGE_ARCHIVE_SHA256: ${{ inputs.package_archive_sha256 }}
+          INPUT_INITIAL_RESEARCH_BASELINES: ${{ inputs.initial_research_baselines }}
+          DISPATCH_PACKAGE_ARTIFACT_ID: ${{ github.event.client_payload.package_artifact_id }}
+          DISPATCH_PACKAGE_ARCHIVE_SHA256: ${{ github.event.client_payload.package_archive_sha256 }}
+          DISPATCH_INITIAL_RESEARCH_BASELINES: ${{ github.event.client_payload.initial_research_baselines }}
           INPUT_PUBLISH_SUMMARY: ${{ inputs.publish_summary }}
           DISPATCH_REQUEST_ID: ${{ github.event.client_payload.request_id }}
           DISPATCH_CARD_DATE: ${{ github.event.client_payload.card_date }}
@@ -129,7 +148,24 @@ jobs:
           if league not in {"mlb", "cfb", "nfl", "wnba", "nba", "nhl"}:
               raise SystemExit(f"unsupported league: {league}")
 
+          if event == "push":
+              package_artifact_id = str(req.get("package_artifact_id") or "")
+              package_archive_sha256 = str(req.get("package_archive_sha256") or "")
+              initial = str(req.get("initial_research_baselines", False)).lower()
+          else:
+              prefix = "DISPATCH_" if event == "repository_dispatch" else "INPUT_"
+              package_artifact_id = os.environ.get(prefix + "PACKAGE_ARTIFACT_ID") or ""
+              package_archive_sha256 = os.environ.get(prefix + "PACKAGE_ARCHIVE_SHA256") or ""
+              initial = (os.environ.get(prefix + "INITIAL_RESEARCH_BASELINES") or "false").lower()
+          if initial not in {"true", "false"}:
+              raise SystemExit("INVALID_INITIAL_RESEARCH_OPT_IN")
+          from scripts.prepare_card_workflow_inputs import validate_request
+          validate_request(league, package_artifact_id, package_archive_sha256, initial == "true")
+
           outputs = {
+              "package_artifact_id": package_artifact_id,
+              "package_archive_sha256": package_archive_sha256,
+              "initial_research_baselines": initial,
               "request_id": request_id,
               "card_date": card_date,
               "league": league,
@@ -138,6 +174,8 @@ jobs:
               "mode": mode,
               "publish_summary": publish_summary,
           }
+          if any("\n" in str(value) or "\r" in str(value) for value in outputs.values()):
+              raise SystemExit("MULTILINE_WORKFLOW_OUTPUT_REFUSED")
           with open(os.environ["GITHUB_OUTPUT"], "a") as f:
               for k, v in outputs.items():
                   f.write(f"{k}={v}\n")
@@ -147,13 +185,32 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: "3.11"
+          python-version: "3.12"
 
       - name: Install dependencies
         shell: bash
         run: |
-          python -m pip install --upgrade pip
-          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+          python -m pip install -r requirements-consolidated.txt
+
+      - name: Restore explicitly supplied immutable research package
+        if: ${{ steps.resolve.outputs.package_artifact_id != '' }}
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PACKAGE_ARTIFACT_ID: ${{ steps.resolve.outputs.package_artifact_id }}
+          PACKAGE_ARCHIVE_SHA256: ${{ steps.resolve.outputs.package_archive_sha256 }}
+          INITIAL_RESEARCH: ${{ steps.resolve.outputs.initial_research_baselines }}
+          LEAGUE: ${{ steps.resolve.outputs.league }}
+        run: |
+          # This consumes an existing capture; it does not refresh, refit, or reset source TTL.
+          gh api "repos/$GITHUB_REPOSITORY/actions/artifacts/$PACKAGE_ARTIFACT_ID/zip" > "$RUNNER_TEMP/card-package.zip"
+          args=()
+          if [ "$INITIAL_RESEARCH" = true ]; then args+=(--initial-research); fi
+          python scripts/prepare_card_workflow_inputs.py \
+            --league "$LEAGUE" --artifact-id "$PACKAGE_ARTIFACT_ID" \
+            --sha256 "$PACKAGE_ARCHIVE_SHA256" --archive "$RUNNER_TEMP/card-package.zip" \
+            --destination "$RUNNER_TEMP/card-package-inputs" \
+            --receipt output/run-evidence/package-inputs.json "${args[@]}"
 
       - name: Validate inputs
         shell: bash
@@ -186,17 +243,26 @@ jobs:
           LEAGUE: ${{ steps.resolve.outputs.league }}
           AS_OF_UTC: ${{ steps.resolve.outputs.as_of_utc }}
           SIMULATION_COUNT: ${{ steps.resolve.outputs.simulation_count }}
+          INITIAL_RESEARCH: ${{ steps.resolve.outputs.initial_research_baselines }}
         run: |
-          mkdir -p output/card
+          mkdir -p output/run-evidence
+          args=()
+          if [ "$INITIAL_RESEARCH" = true ]; then args+=(--initial-research-baselines); fi
           set +e
           python scripts/generate_card_force.py \
             --date "$CARD_DATE" \
             --league "$LEAGUE" \
             --as-of-utc "$AS_OF_UTC" \
             --simulations "$SIMULATION_COUNT" \
-            --output-dir output/card \
-            2>&1 | tee output/card/run.log
+            --output-dir output/card "${args[@]}" \
+            2>&1 | tee output/run-evidence/run.log
           rc=${PIPESTATUS[0]}
+          # The runner exclusively creates its output directory. Collect evidence only afterward.
+          mkdir -p output/card
+          cp output/run-evidence/run.log output/card/run.log
+          if [ -f output/run-evidence/package-inputs.json ]; then
+            cp output/run-evidence/package-inputs.json output/card/package-inputs.json
+          fi
           echo "exit_code=$rc" >> "$GITHUB_OUTPUT"
           exit 0
 
@@ -410,3 +476,4 @@ jobs:
       - name: Fail rejected priority-league registration
         if: ${{ steps.research_registration.outcome == 'failure' }}
         run: exit 1
+

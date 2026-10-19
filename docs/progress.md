@@ -4601,6 +4601,52 @@ distributions verified against saved forecast hashes. Portable verification uses
 Negative tests forbid material probability, integer-support or identity changes.
 
 
+
+## 2026-10-09 — CFB margin evaluation safety repair (local review)
+
+Corrected the fitter's probability evaluation design: its former validation rows
+fitted residual scales and supplied the reported Brier, so that Brier is not an
+untouched holdout result. Mean-head MAE/RMSE may remain holdout diagnostics subject
+to source chronology; do not blanket-invalidate them. Legacy table is kickoff-
+ordered with unique IDs but lacks original feature/label availability metadata.
+It has 36,901 rows and only 17,472 FBS-v-FBS; old fitter's population claim was
+unenforced. Existing artifacts and previously issued forecasts remain unchanged.
+
+Added explicit train/calibration/test windows, source receipt binding, original
+availability checks, season-week/event disjointness, actual FBS filtering, and
+runtime-consistent weekly-scale test Brier. Both fit workflows pass all windows.
+Legacy-input refusal is verified before fitting. Source-backed migration and a
+registered untouched design remain required; no authentic refit or improved-model
+claim. Focused regressions pass; partial checkout cannot certify full repo health.
+Local patch only, no remote publication or promotion. See
+docs/CFB_MARGIN_EVALUATION_REPAIR.md for correction and migration requirements.
+
+
+## 2026-10-10 — Explicit research Monte Carlo precision and NBA direction shadow
+
+Owner authorized implementation and merge after reviewing the isolated prototypes.
+Added an opt-in finite-law MC precision CLI with default fixed 100,000 draws,
+versioned semantic RNG streams, immutable finite-look IID stopping plans, and
+paired common-random-number comparisons with declared estimand bounds. Existing
+selected simulations, seeds, draw artifacts and registered model defaults remain
+unchanged. Seven league contracts and a retained actual CFB card distribution
+exercise compatibility. Bounds quantify numerical integration uncertainty only;
+they do not establish source freshness, predictive calibration or corrected tails.
+
+Added a separately identified NBA efficiency shadow and opt-in CLI correcting
+points-allowed defensive-rating direction. Explicit units and fitted state are
+required; no fitted parameters are supplied or inferred. The selected NBA adapter
+still uses the initial causal-score model. Inherited tie-breaking remains a
+shortcut, not a fitted overtime model. No action or promotion authority added.
+
+Fifty focused integration tests passed independently on the control interpreter.
+The local source-only restoration has missing historical data/fixtures; broad
+local failures and health results cannot certify repository health. Exact-head
+remote CI and full-tree checks are required and recorded on the release PR.
+Artifact-storage quota remains an independently tracked upload limitation.
+See docs/MC_PRECISION_RESEARCH.md and docs/NBA_EFFICIENCY_SHADOW.md.
+
+
 ## 2026-10-19 — Shared margin and cover research system
 
 User authorized swarm development across all sports. Added explicit home-margin contracts, coherent PMF-based cover/push/quarter-handicap ladders, 50/80/95% intervals, reproducible MC, dense-integer fitted residual challenger, chronological evaluation and immutable card CLI. Current main core dependencies and retained source cohorts hash-match 7cf2aea. No selected defaults, old forecasts or authority changed.

@@ -62,6 +62,8 @@ def _metadata(path):
         raise ValueError("EVENT_METADATA_LIST_REQUIRED")
     result = {}
     for row in rows:
+        if not isinstance(row, dict):
+            raise ValueError("EVENT_METADATA_OBJECT_REQUIRED")
         eid = D.identity(row.get("event_id"), "EVENT_ID")
         if eid in result:
             raise ValueError("DUPLICATE_METADATA_EVENT")
@@ -109,7 +111,10 @@ def _load_inputs(paths):
             rows.append({**copy.deepcopy(entry), "input_file_sha256": receipt["file_sha256"],
                          "input_path": receipt["path"],
                          "parent_report_sha256": receipt.get("artifact_sha256")})
-        for item in value.get("coverage", []):
+        coverage = value.get("coverage", [])
+        if not isinstance(coverage, list) or any(not isinstance(item, dict) for item in coverage):
+            raise ValueError("SOURCE_COVERAGE_OBJECT_LIST_REQUIRED")
+        for item in coverage:
             source_coverage.append({"league": value.get("league"), **copy.deepcopy(item),
                                     "source_file_sha256": receipt["file_sha256"]})
     return inputs, rows, source_coverage
@@ -126,15 +131,26 @@ def _point_inputs(parent_card_paths, config_path):
     information_set = D.identity(config.get("information_set"), "INFORMATION_SET")
     receipt["role"] = "CHALLENGER_CONFIG"
     sources, entries, coverage, models = [receipt], [], [], []
-    for entry in config.get("models", []):
+    model_entries = config.get("models")
+    if not isinstance(model_entries, list) or not model_entries:
+        raise ValueError("CHALLENGER_MODEL_LIST_REQUIRED")
+    derived_features = config.get("derived_scale_features", [])
+    if not isinstance(derived_features, list) or any(not isinstance(name, str) or not name.strip() for name in derived_features):
+        raise ValueError("DERIVED_SCALE_FEATURE_LIST_REQUIRED")
+    for entry in model_entries:
+        if not isinstance(entry, dict):
+            raise ValueError("CHALLENGER_MODEL_ENTRY_OBJECT_REQUIRED")
+        D.identity(entry.get("path"), "CHALLENGER_MODEL_PATH")
+        D.source_hash(entry.get("sha256"))
         path = (Path(config_path).resolve().parent / entry["path"]).resolve()
         model, model_receipt = _read(path)
-        D.source_hash(entry.get("sha256"))
         if model_receipt["file_sha256"] != entry["sha256"]:
             raise ValueError("CHALLENGER_MODEL_FILE_HASH_MISMATCH")
         F.validate_model(model)
         if model["information_set"] != information_set:
             raise ValueError("CHALLENGER_INFORMATION_SET_MISMATCH")
+        if any(existing["model_id"] == model["model_id"] for existing in models):
+            raise ValueError("CHALLENGER_MODEL_ID_DUPLICATE")
         models.append(model)
         sources.append({**model_receipt, "role": "FITTED_CHALLENGER", "model_id": model["model_id"],
                         "artifact_sha256": model["artifact_sha256"]})
@@ -152,9 +168,20 @@ def _point_inputs(parent_card_paths, config_path):
         card_receipt.update({"role": "POINT_HEAD_PARENT_CARD", "parent_card_sha256": D.digest(card),
                              "as_of_utc": cutoff, "generated_at_utc": generated})
         sources.append(card_receipt)
-        for row in card["forecasts"]:
-            eid = D.identity(row.get("event_id"), "EVENT_ID")
-            matched = [m for m in models if m["league"] == league and m["parent_model_id"] == row.get("model_id")]
+        for row_index, row in enumerate(card["forecasts"]):
+            try:
+                if not isinstance(row, dict):
+                    raise ValueError("PARENT_FORECAST_OBJECT_REQUIRED")
+                eid = D.identity(row.get("event_id"), "EVENT_ID")
+                parent_id = D.identity(row.get("model_id"), "PARENT_MODEL_ID")
+            except ValueError as exc:
+                coverage.append({"league": league, "row_index": row_index,
+                                 "event_id": row.get("event_id") if isinstance(row, dict) and isinstance(row.get("event_id"), str) else None,
+                                 "status": "UNAVAILABLE", "reason": str(exc)})
+                continue
+            # Model identity is an exact structured key. Free-text provenance,
+            # arm-like substrings and a scalar sigma cannot select a fitted pool.
+            matched = [m for m in models if m["league"] == league and m["parent_model_id"] == parent_id]
             if not matched:
                 coverage.append({"league": league, "event_id": eid, "parent_model_id": row.get("model_id"),
                                  "status": "MATCHING_CHALLENGER_FIT_REQUIRED"})
@@ -163,7 +190,7 @@ def _point_inputs(parent_card_paths, config_path):
                 try:
                     if row.get("forecast_status") != "FORECAST_GENERATED":
                         raise ValueError("PARENT_NOT_FORECAST")
-                    start = row["start_time_utc"]
+                    start = row.get("start_time_utc")
                     if not D.stamp(cutoff) <= D.stamp(generated) < D.stamp(start):
                         raise ValueError("PARENT_NOT_CREATED_PREGAME")
                     if row.get("information_set", card.get("information_set")) != information_set:
@@ -172,17 +199,28 @@ def _point_inputs(parent_card_paths, config_path):
                         raise ValueError("PARENT_SETTLEMENT_MISMATCH")
                     D.source_hash(row.get("input_snapshot_hash"))
                     D.source_hash(row.get("model_state_config_hash"))
-                    diagnostics = row.get("diagnostics") or {}
+                    diagnostics = row.get("diagnostics", {})
+                    if not isinstance(diagnostics, dict):
+                        raise ValueError("PARENT_DIAGNOSTICS_OBJECT_REQUIRED")
+                    if not isinstance(diagnostics.get("prediction", {}), dict):
+                        raise ValueError("PARENT_PREDICTION_OBJECT_REQUIRED")
+                    snapshot = row.get("model_input_snapshot", {})
+                    if not isinstance(snapshot, dict):
+                        raise ValueError("PARENT_INPUT_SNAPSHOT_OBJECT_REQUIRED")
+                    warnings = row.get("warnings", [])
+                    if not isinstance(warnings, list) or any(not isinstance(item, str) for item in warnings):
+                        raise ValueError("PARENT_WARNINGS_STRING_LIST_REQUIRED")
+                    for label in ("home_team", "away_team"):
+                        D.identity(row.get(label), "PARENT_" + label.upper())
                     if diagnostics.get("market_input", False) is not False or row.get("market_input", False) is not False:
                         raise ValueError("MARKET_INFORMED_PARENT_REFUSED")
                     mean = point(row, "margin")
                     required_features = (model["state"].get("scaling") or {}).get("features", [])
-                    snapshot = row.get("model_input_snapshot") or {}
                     scale_features = {}
                     for name in required_features:
                         if name in snapshot:
                             scale_features[name] = snapshot[name]
-                        elif name == "absolute_parent_margin" and name in config.get("derived_scale_features", []):
+                        elif name == "absolute_parent_margin" and name in derived_features:
                             scale_features[name] = abs(mean)
                         else:
                             raise ValueError("SCALE_FEATURE_UNAVAILABLE:" + name)
@@ -190,7 +228,7 @@ def _point_inputs(parent_card_paths, config_path):
                                   parent_model_id=row["model_id"], information_set=information_set,
                                   parent_forecast_sha256=D.digest(row),
                                   scale_features=scale_features)
-                    warnings = list(row.get("warnings", []))
+                    warnings = list(warnings)
                     if not d["provenance"].get("artifact_existed_at_forecast_cutoff"):
                         warnings.append("NEW_FIT_CREATED_AFTER_PARENT_CUTOFF_RECONSTRUCTION_ONLY")
                     entries.append({"event_id": eid, "distribution": d,
@@ -202,8 +240,14 @@ def _point_inputs(parent_card_paths, config_path):
                     coverage.append({"league": league, "event_id": eid, "model_id": model["model_id"],
                                      "product": "margin", "status": "CHALLENGER_GENERATED"})
                 except (ValueError, KeyError, TypeError) as exc:
+                    # Unexpected Python parser/type messages are not part of
+                    # the public failure-code contract.
+                    reason = str(exc)
+                    code = reason.partition(":")[0]
+                    if not code or any(ch not in "ABCDEFGHIJKLMNOPQRSTUVWXYZ_0123456789" for ch in code):
+                        reason = "PARENT_INPUT_INVALID"
                     coverage.append({"league": league, "event_id": eid, "model_id": model["model_id"],
-                                     "product": "margin", "status": "UNAVAILABLE", "reason": str(exc)})
+                                     "product": "margin", "status": "UNAVAILABLE", "reason": reason})
     return sources, entries, coverage
 
 
@@ -222,6 +266,134 @@ def _time_status(start_time, cutoff, created):
 
 def _percent(value):
     return "—" if value is None else f"{100 * value:.2f}%"
+
+
+def _report_digest(value):
+    try:
+        return D.digest(value)
+    except (ValueError, TypeError, OverflowError) as exc:
+        raise ValueError("MARGIN_CARD_SERIALIZATION_INVALID") from exc
+
+
+def _report_stamp(value):
+    try:
+        return D.stamp(value)
+    except (ValueError, TypeError, OverflowError) as exc:
+        raise ValueError("MARGIN_CARD_TIMESTAMP_INVALID") from exc
+
+
+def _coverage_summary(results, source_coverage):
+    if not isinstance(source_coverage, list) or any(not isinstance(item, dict) for item in source_coverage):
+        raise ValueError("MARGIN_CARD_COVERAGE_OBJECT_LIST_REQUIRED")
+    coverage = []
+    for league in LEAGUES:
+        selected = [row for row in results if row["league"] == league]
+        coverage.append({"league": league, "margin_rows": len(selected),
+                         "event_count": len({row["event_id"] for row in selected}),
+                         "status": "RESEARCH_OUTPUT_AVAILABLE" if selected else "NO_MARGIN_INPUT",
+                         "schedule_status": "NOT_VERIFIED_BY_THIS_RUN",
+                         "total_status": "NOT_GENERATED_BY_MARGIN_RUN",
+                         "joint_score_status": "SOURCE_DECLARED" if any(row["distribution"]["provenance"].get("joint_score_distribution") for row in selected) else "UNAVAILABLE",
+                         "source_coverage": [item for item in source_coverage if item.get("league") == league]})
+    return coverage
+
+
+def _execution_status(source_coverage):
+    if not isinstance(source_coverage, list) or any(not isinstance(item, dict) for item in source_coverage):
+        raise ValueError("MARGIN_CARD_COVERAGE_OBJECT_LIST_REQUIRED")
+    return "PARTIAL" if any(item.get("status") not in ("COMPLETED", "CHALLENGER_GENERATED") for item in source_coverage) else "COMPLETED"
+
+
+def validate_report(report):
+    """Recheck derived values and replay using the current implementation.
+
+    Re-sealing a hash cannot bless inconsistent numbers or authority labels.
+    The retained file name and hash format are checked; this in-memory function
+    does not read or authenticate the separately retained NPY file bytes.
+    """
+    if not isinstance(report, dict) or report.get("schema") != REPORT_SCHEMA:
+        raise ValueError("MARGIN_CARD_SCHEMA_REQUIRED")
+    if report.get("action_authority") is not False or report.get("market_quotes_used") is not False or report.get("prospective_grade_eligible") is not False or report.get("wagering_authority") != "OFF" or report.get("publication_eligibility") != "INELIGIBLE":
+        raise ValueError("MARGIN_CARD_RESEARCH_AUTHORITY_REQUIRED")
+    if report.get("orientation") != M.ORIENTATION:
+        raise ValueError("MARGIN_CARD_ORIENTATION_REQUIRED")
+    labels = {"predictive_validation": "UNVALIDATED",
+              "predictive_validation_reason": "NOT_ESTABLISHED_BY_SOFTWARE_EXECUTION",
+              "global_health": "INCOMPLETE_PARTIAL_SNAPSHOT",
+              "contract_kind": "HYPOTHETICAL", "incumbent_models_changed": False}
+    if _report_digest({key: report.get(key) for key in labels}) != _report_digest(labels):
+        raise ValueError("MARGIN_CARD_INFERENCE_LABEL_MISMATCH")
+    material = dict(report)
+    expected_hash = material.pop("artifact_sha256", None)
+    D.source_hash(expected_hash)
+    if _report_digest(material) != expected_hash:
+        raise ValueError("MARGIN_CARD_HASH_MISMATCH")
+    started = _report_stamp(report.get("execution_started_at_utc"))
+    created = _report_stamp(report.get("created_at_utc"))
+    if created < started:
+        raise ValueError("MARGIN_CARD_COMPLETION_PRECEDES_EXECUTION")
+    coverage = report.get("source_coverage")
+    if report.get("execution_status") != _execution_status(coverage):
+        raise ValueError("MARGIN_CARD_EXECUTION_STATUS_MISMATCH")
+    rows = report.get("results")
+    if not isinstance(rows, list):
+        raise ValueError("MARGIN_CARD_RESULTS_LIST_REQUIRED")
+    seen = set()
+    for row in rows:
+        if not isinstance(row, dict):
+            raise ValueError("MARGIN_CARD_RESULT_OBJECT_REQUIRED")
+        if row.get("action_authority") is not False or row.get("prospective_grade_eligible") is not False:
+            raise ValueError("MARGIN_CARD_RESEARCH_AUTHORITY_REQUIRED")
+        if not isinstance(row.get("distribution"), dict):
+            raise ValueError("MARGIN_CARD_DISTRIBUTION_OBJECT_REQUIRED")
+        d = M.from_discrete(row.get("distribution"))
+        if any(row.get(key) != d[key] for key in ("league", "model_id", "settlement")) or row.get("event_id") != d["provenance"].get("event_id") or row.get("parent_distribution_sha256") != d["distribution_sha256"]:
+            raise ValueError("MARGIN_CARD_DISTRIBUTION_BINDING_MISMATCH")
+        identity = tuple(D.identity(row.get(key), key.upper()) for key in ("event_id", "model_id", "settlement"))
+        if identity in seen:
+            raise ValueError("MARGIN_CARD_DUPLICATE_EVENT_MODEL_SETTLEMENT")
+        seen.add(identity)
+        if row.get("as_of_utc") != d["provenance"].get("cutoff"):
+            raise ValueError("MARGIN_CARD_CUTOFF_BINDING_MISMATCH")
+        if _report_stamp(row.get("as_of_utc")) > started:
+            raise ValueError("MARGIN_CARD_CUTOFF_AFTER_EXECUTION")
+        if row.get("start_time_utc") is not None:
+            _report_stamp(row["start_time_utc"])
+        if d["provenance"].get("start_time_utc") is not None and _report_stamp(row.get("start_time_utc")) != _report_stamp(d["provenance"]["start_time_utc"]):
+            raise ValueError("MARGIN_CARD_START_TIME_BINDING_MISMATCH")
+        if row.get("time_status") != _time_status(row.get("start_time_utc"), row["as_of_utc"], report["created_at_utc"]):
+            raise ValueError("MARGIN_CARD_TIME_STATUS_MISMATCH")
+        status = {"software": "EXECUTED", "input": "RETAINED_HASH_VERIFIED",
+                  "fit_validation": "NOT_ESTABLISHED_BY_THIS_REPORT",
+                  "prospective_validation": "PENDING_TEST",
+                  "global_health": "INCOMPLETE_PARTIAL_SNAPSHOT"}
+        if _report_digest(row.get("status")) != _report_digest(status):
+            raise ValueError("MARGIN_CARD_INFERENCE_LABEL_MISMATCH")
+        if _report_digest(row.get("summary")) != _report_digest(M.summarize(d)):
+            raise ValueError("MARGIN_CARD_SUMMARY_MISMATCH")
+        ladder = row.get("cover_ladder")
+        if not isinstance(ladder, list) or any(not isinstance(item, dict) for item in ladder):
+            raise ValueError("MARGIN_CARD_COVER_LADDER_REQUIRED")
+        lines = [item.get("home_spread") for item in ladder]
+        expected = [{"kind": "HYPOTHETICAL", "home_handicap": p["home_spread"],
+                     "away_handicap": p["away_spread"], **p} for p in M.cover_ladder(d, lines)]
+        if _report_digest(ladder) != _report_digest(expected):
+            raise ValueError("MARGIN_CARD_COVER_LADDER_MISMATCH")
+        simulation = row.get("simulation")
+        if not isinstance(simulation, dict):
+            raise ValueError("MARGIN_CARD_SIMULATION_OBJECT_REQUIRED")
+        D.source_hash(simulation.get("file_sha256"))
+        D.source_hash(simulation.get("draw_sha256"))
+        _, replay = M.simulate_margin(d, draws=simulation.get("count"), home_spreads=lines)
+        receipt = replay.pop("receipt")
+        expected_simulation = {**receipt, "diagnostics": replay,
+                               "file": "draws/" + d["distribution_sha256"] + ".npy",
+                               "file_sha256": simulation["file_sha256"]}
+        if _report_digest(simulation) != _report_digest(expected_simulation):
+            raise ValueError("MARGIN_CARD_SIMULATION_MISMATCH")
+    if _report_digest(report.get("coverage")) != _report_digest(_coverage_summary(rows, coverage)):
+        raise ValueError("MARGIN_CARD_COVERAGE_MISMATCH")
+    return report
 
 
 def build(input_paths, output, *, events_path=None, draws=100000, home_spreads=None,
@@ -319,22 +491,13 @@ def build(input_paths, output, *, events_path=None, draws=100000, home_spreads=N
                                    "prospective_validation": "PENDING_TEST",
                                    "global_health": "INCOMPLETE_PARTIAL_SNAPSHOT"},
                         "prospective_grade_eligible": False, "action_authority": False})
-    coverage = []
-    for league in LEAGUES:
-        selected = [row for row in results if row["league"] == league]
-        coverage.append({"league": league, "margin_rows": len(selected),
-                         "event_count": len({row["event_id"] for row in selected}),
-                         "status": "RESEARCH_OUTPUT_AVAILABLE" if selected else "NO_MARGIN_INPUT",
-                         "schedule_status": "NOT_VERIFIED_BY_THIS_RUN",
-                         "total_status": "NOT_GENERATED_BY_MARGIN_RUN",
-                         "joint_score_status": "SOURCE_DECLARED" if any(row["distribution"]["provenance"].get("joint_score_distribution") for row in selected) else "UNAVAILABLE",
-                         "source_coverage": [item for item in source_coverage if item.get("league") == league]})
+    coverage = _coverage_summary(results, source_coverage)
     report = {"schema": REPORT_SCHEMA, "execution_started_at_utc": created, "orientation": M.ORIENTATION,
               "results": results, "coverage": coverage, "source_coverage": source_coverage,
               "sources": sources, "event_metadata_source": metadata_receipt,
               "contract_kind": "HYPOTHETICAL", "market_quotes_used": False,
               "global_health": "INCOMPLETE_PARTIAL_SNAPSHOT",
-              "execution_status": "PARTIAL" if any(item.get("status") not in {"COMPLETED", "CHALLENGER_GENERATED"} for item in source_coverage) else "COMPLETED",
+              "execution_status": _execution_status(source_coverage),
               "predictive_validation": "UNVALIDATED",
               "predictive_validation_reason": "NOT_ESTABLISHED_BY_SOFTWARE_EXECUTION",
               "publication_eligibility": "INELIGIBLE", "wagering_authority": "OFF",
@@ -356,6 +519,7 @@ def build(input_paths, output, *, events_path=None, draws=100000, home_spreads=N
     for row in results:
         row["time_status"] = _time_status(row.get("start_time_utc"), row["as_of_utc"], report["created_at_utc"])
     report["artifact_sha256"] = D.digest(report)
+    validate_report(report)
     with (output / "margin_report.json").open("x") as stream:
         stream.write(json.dumps(report, indent=2, sort_keys=True, allow_nan=False) + "\n")
     with (output / "margin_card.html").open("x") as stream:

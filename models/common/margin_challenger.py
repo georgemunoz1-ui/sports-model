@@ -38,6 +38,10 @@ SCALE_MULTIPLIER_GRID = (.75, 1., 1.25)
 LATTICE_STRENGTH_GRID = (0., .5, 1.)
 LATTICE_PSEUDOCOUNT = 5.
 MAX_LATTICE_FACTOR = 4.
+EVIDENCE_FIELDS = ("event_id", "league", "product", "settlement", "parent_model_id",
+                   "information_set", "market_input", "prediction_kind",
+                   "parent_fit_cutoff", "forecast_cutoff", "start_time_utc",
+                   "result_available_at", "forecast_sha256", "result_source_sha256")
 
 
 def code_hash():
@@ -184,13 +188,24 @@ def fit(rows, *, league, settlement, parent_model_id, information_set, fitted_at
         raise ValueError("AT_LEAST_60_TRAINING_ROWS_REQUIRED_NOT_VALIDATION")
     if market_input is not False:
         raise ValueError("MARKET_BLIND_MARGIN_CHALLENGER_ONLY")
+    for row in rows:
+        if not isinstance(row, dict):
+            raise ValueError("TRAINING_ROW_OBJECT_REQUIRED")
+        # Optional aliases must agree with the mandatory positive OOT claim.
+        # Their absence is not a substitute for prediction_kind + chronology.
+        if (("label_in_sample" in row and row["label_in_sample"] is not False) or
+                ("oof" in row and row["oof"] is not True)):
+            raise ValueError("CONTRADICTORY_OUT_OF_TIME_PROVENANCE")
     # Preserve the established chronology, settlement, source-hash and parent
     # checks. The returned artifact is not used or substituted for this model.
-    checked = fit_residuals(rows, league=league, product="margin", settlement=settlement,
-                            parent_model_id=parent_model_id, fitted_at=fitted_at,
-                            information_set=information_set, market_input=False,
-                            method="conditional_scale" if scale_features else "empirical",
-                            scale_features=scale_features, ridge=ridge)
+    try:
+        checked = fit_residuals(rows, league=league, product="margin", settlement=settlement,
+                                parent_model_id=parent_model_id, fitted_at=fitted_at,
+                                information_set=information_set, market_input=False,
+                                method="conditional_scale" if scale_features else "empirical",
+                                scale_features=scale_features, ridge=ridge)
+    except (KeyError, TypeError, AttributeError, IndexError, OverflowError) as exc:
+        raise ValueError("TRAINING_ROW_STRUCTURE_INVALID") from exc
     for row in rows:
         # Provenance fields are retained below; missing attestation never becomes
         # historical availability merely because chronology is consistent.
@@ -238,6 +253,7 @@ def fit(rows, *, league, settlement, parent_model_id, information_set, fitted_at
              "numpy_version": np.__version__, "scipy_version": scipy.__version__,
              "market_input": False, "training_n": len(rows), "training_sha256": digest(ordered),
              "training_event_ids": sorted(checked["training_event_ids"]),
+             "training_evidence": [{k: r[k] for k in EVIDENCE_FIELDS} for r in ordered],
              "last_result_available_at": checked["last_result_available_at"],
              "source_provenance": provenance,
              "historical_availability_proven": all(r.get("historical_availability_proven") is True for r in rows),
@@ -259,18 +275,171 @@ def fit(rows, *, league, settlement, parent_model_id, information_set, fitted_at
              "prospective_grade_eligible": False, "selected_default": False}
     model["model_id"] = f"{league}.margin.full_support.research." + digest(model)[:16]
     model["artifact_sha256"] = digest(model)
+    validate_model(model)
     return model
 
 
+def _require(condition, code):
+    if not condition:
+        raise ValueError(code)
+
+
+def _positive_count(value, minimum=0):
+    return isinstance(value, int) and not isinstance(value, bool) and value >= minimum
+
+
+def _numbers(values, length):
+    _require(isinstance(values, list) and len(values) == length, "FITTED_VECTOR_LENGTH_INVALID")
+    return np.asarray([finite(v) for v in values], dtype=float)
+
+
+def _validate_fitted_fields(model):
+    """Verify retained fitting evidence, not independent historical authenticity."""
+    league, settlement = model["league"], model["settlement"]
+    _require(league in SETTLEMENTS and settlement in SETTLEMENTS[league], "UNSUPPORTED_SETTLEMENT")
+    _require(model["product"] == "margin" and model["orientation"] == "HOME_MINUS_AWAY",
+             "MARGIN_CHALLENGER_SCOPE_INVALID")
+    _require(model["status"] == "FITTED_RESEARCH_NOT_VALIDATED", "RESEARCH_ONLY")
+    for field in ("parent_model_id", "information_set", "numpy_version", "scipy_version"):
+        identity(model[field], field.upper())
+    source_hash(model["training_sha256"])
+    fitted_at = stamp(model["fit_as_of_utc"])
+    stamp(model["created_at_utc"])
+    last_result = stamp(model["last_result_available_at"])
+    _require(last_result < fitted_at, "TRAINING_CHRONOLOGY_INVALID")
+    n, ids, evidence = model["training_n"], model["training_event_ids"], model["training_evidence"]
+    _require(_positive_count(n, MIN_TRAINING), "FITTED_TRAINING_COUNT_INVALID")
+    _require(isinstance(ids, list) and len(ids) == n and
+             all(isinstance(e, str) and e.strip() for e in ids) and ids == sorted(set(ids)),
+             "FITTED_TRAINING_IDS_INVALID")
+    _require(isinstance(evidence, list) and len(evidence) == n, "OUT_OF_TIME_EVIDENCE_REQUIRED")
+    expected_scope = {k: model[k] for k in
+                      ("league", "product", "settlement", "parent_model_id", "information_set")}
+    rows = {}
+    for row in evidence:
+        _require(isinstance(row, dict), "TRAINING_ROW_OBJECT_REQUIRED")
+        event = identity(row["event_id"], "EVENT_ID")
+        _require(event not in rows, "DUPLICATE_TRAINING_EVENT")
+        _require(all(row[k] == value for k, value in expected_scope.items()), "TRAINING_SCOPE_MISMATCH")
+        _require(row["market_input"] is False, "TRAINING_MARKET_ROLE_MISMATCH")
+        _require(row["prediction_kind"] == "CHRONOLOGICAL_OUT_OF_TIME", "OUT_OF_TIME_FORECASTS_REQUIRED")
+        _require(("label_in_sample" not in row or row["label_in_sample"] is False) and
+                 ("oof" not in row or row["oof"] is True), "CONTRADICTORY_OUT_OF_TIME_PROVENANCE")
+        for field in ("forecast_sha256", "result_source_sha256"):
+            source_hash(row[field])
+        _require(stamp(row["parent_fit_cutoff"]) <= stamp(row["forecast_cutoff"]) <
+                 stamp(row["start_time_utc"]) <= stamp(row["result_available_at"]) < fitted_at,
+                 "TRAINING_CHRONOLOGY_INVALID")
+        rows[event] = row
+    _require(sorted(rows) == ids, "FITTED_TRAINING_IDS_INVALID")
+    _require(max(stamp(row["result_available_at"]) for row in evidence) == last_result,
+             "FITTED_RESULT_WINDOW_MISMATCH")
+    selection = model["selection"]
+    _require(selection["external_performance_evidence"] is False and
+             selection["objective"] == "LATER_INTERNAL_BLOCK_DISCRETE_LOG_LOSS", "RESEARCH_ONLY")
+    partitions = []
+    for field, minimum in (("inner_training", MIN_INNER_FIT), ("tuning", MIN_INNER_TUNE)):
+        count, events = selection[field + "_n"], selection[field + "_event_ids"]
+        _require(_positive_count(count, minimum) and isinstance(events, list) and
+                 len(events) == count and len(set(events)) == count and set(events) <= set(ids),
+                 "FITTED_TUNING_PARTITION_INVALID")
+        partitions.append(set(events))
+    _require(not partitions[0] & partitions[1] and _positive_count(selection["purged_n"]) and
+             sum(len(p) for p in partitions) + selection["purged_n"] == n,
+             "FITTED_TUNING_PARTITION_INVALID")
+    first_tune = stamp(selection["first_tuning_forecast_cutoff"])
+    _require(first_tune == min(stamp(rows[e]["forecast_cutoff"]) for e in partitions[1]) and
+             all(stamp(rows[e]["result_available_at"]) < first_tune for e in partitions[0]),
+             "FITTED_TUNING_CHRONOLOGY_INVALID")
+
+    state, parameters, lattice = model["state"], model["parameters"], model["lattice"]
+    residuals = _numbers(state["residuals"], n)
+    _require(finite(state["minimum_standard_deviation"]) == .25 and
+             math.isclose(finite(state["student_location"]), float(residuals.mean()), rel_tol=1e-10, abs_tol=1e-12) and
+             math.isclose(finite(state["student_standard_deviation"]), max(float(residuals.std()), .25), rel_tol=1e-10, abs_tol=1e-12),
+             "FITTED_RESIDUAL_STATE_INVALID")
+    scaling = state["scaling"]
+    if scaling is not None:
+        features = scaling["features"]
+        _require(isinstance(features, list) and features and all(isinstance(k, str) and k for k in features) and
+                 len(set(features)) == len(features), "SCALE_FEATURE_NAMES_INVALID")
+        _require(not any(re.search(r"(^|_)(odds|spread|price|market|closing|moneyline|line|observed|result|final|outcome)($|_)",
+                                   k, re.I) for k in features), "FORBIDDEN_SCALE_FEATURE")
+        _numbers(scaling["mean"], len(features))
+        _require(np.all(_numbers(scaling["sd"], len(features)) > 0), "FITTED_SCALE_INVALID")
+        _numbers(scaling["beta"], len(features) + 1)
+        _require(finite(scaling["ridge"]) > 0 and scaling["log_squared_error_link"] == "log1p" and
+                 scaling["log_scale_clip"] == [-4., 8.], "FITTED_SCALE_INVALID")
+    grids = {"degrees_of_freedom": DF_GRID, "student_weight": TAIL_WEIGHT_GRID,
+             "scale_multiplier": SCALE_MULTIPLIER_GRID}
+    _require(all(finite(parameters[k]) in values for k, values in grids.items()), "FITTED_TAIL_PARAMETERS_INVALID")
+    trials = selection["tail_trials"]
+    _require(isinstance(trials, list) and len(trials) == len(DF_GRID) * len(TAIL_WEIGHT_GRID) * len(SCALE_MULTIPLIER_GRID),
+             "FITTED_TAIL_TRIALS_INVALID")
+    combinations = []
+    for trial in trials:
+        _require(all(finite(trial[k]) in values for k, values in grids.items()), "FITTED_TAIL_TRIALS_INVALID")
+        finite(trial["tuning_log_loss"])
+        combinations.append(tuple(trial[k] for k in grids))
+    _require(len(set(combinations)) == len(trials), "FITTED_TAIL_TRIALS_INVALID")
+    selected = min(trials, key=lambda trial: trial["tuning_log_loss"])
+    _require(all(parameters[k] == selected[k] for k in grids), "FITTED_SELECTION_MISMATCH")
+    _require(isinstance(lattice["minimum_margin"], int) and not isinstance(lattice["minimum_margin"], bool) and
+             -MAX_ABSOLUTE_SUPPORT <= lattice["minimum_margin"] <= MAX_ABSOLUTE_SUPPORT,
+             "FITTED_LATTICE_INVALID")
+    factors = _numbers(lattice["factors"], len(lattice["factors"]))
+    _require(len(factors) > 0 and lattice["minimum_margin"] + len(factors) - 1 <= MAX_ABSOLUTE_SUPPORT and
+             np.all((factors >= 1. / MAX_LATTICE_FACTOR) & (factors <= MAX_LATTICE_FACTOR)) and
+             finite(lattice["strength"]) in LATTICE_STRENGTH_GRID and
+             lattice["pseudocount"] == LATTICE_PSEUDOCOUNT and
+             lattice["factor_bounds"] == [1. / MAX_LATTICE_FACTOR, MAX_LATTICE_FACTOR] and
+             lattice["outside_training_range_factor"] == 1. and
+             lattice["basis"] == "OBSERVED_TO_EXPECTED_INTEGER_FREQUENCY", "FITTED_LATTICE_INVALID")
+    lattice_trials = selection["lattice_trials"]
+    _require(isinstance(lattice_trials, list) and len(lattice_trials) == len(LATTICE_STRENGTH_GRID) and
+             {finite(trial["strength"]) for trial in lattice_trials} == set(LATTICE_STRENGTH_GRID),
+             "FITTED_LATTICE_TRIALS_INVALID")
+    for trial in lattice_trials:
+        finite(trial["tuning_log_loss"])
+    _require(lattice["strength"] == min(lattice_trials, key=lambda trial: trial["tuning_log_loss"])["strength"],
+             "FITTED_SELECTION_MISMATCH")
+    _require(model["support_policy"] == {"tail_tolerance": TAIL_TOLERANCE,
+             "minimum_absolute_support": MINIMUM_ABSOLUTE_SUPPORT, "max_absolute_support": MAX_ABSOLUTE_SUPPORT,
+             "zero_margin": "RETAIN" if SETTLEMENTS[league][settlement] else "CONDITION_OUT_EXPLICITLY",
+             "outside_represented_support": "OMITTED_TAIL_NOT_IMPOSSIBLE"}, "FITTED_SUPPORT_POLICY_INVALID")
+    _require(isinstance(model["historical_availability_proven"], bool) and isinstance(model["source_provenance"], dict),
+             "SOURCE_PROVENANCE_REQUIRED")
+    for key in ("source_capture_kind", "timestamp_basis", "historical_availability_proven"):
+        values = model["source_provenance"][key]
+        _require(isinstance(values, list) and values and all(isinstance(v, str) and v for v in values),
+                 "SOURCE_PROVENANCE_REQUIRED")
+    _require(model["historical_availability_proven"] ==
+             (model["source_provenance"]["historical_availability_proven"] == ["True"]),
+             "SOURCE_ATTESTATION_CONTRADICTION")
+
+
 def validate_model(model):
+    if not isinstance(model, dict):
+        raise ValueError("MARGIN_CHALLENGER_OBJECT_REQUIRED")
     material = dict(model)
     checksum = material.pop("artifact_sha256", None)
-    if material.get("schema") != SCHEMA or digest(material) != checksum:
+    try:
+        matches = material.get("schema") == SCHEMA and digest(material) == checksum
+    except (TypeError, ValueError, OverflowError) as exc:
+        raise ValueError("MARGIN_CHALLENGER_SERIALIZATION_INVALID") from exc
+    if not matches:
         raise ValueError("MARGIN_CHALLENGER_HASH_MISMATCH")
     if model.get("code_sha256") != code_hash():
         raise ValueError("MARGIN_CHALLENGER_CODE_DRIFT")
     if any(model.get(k) is not False for k in ("action_authority", "prospective_grade_eligible", "selected_default", "market_input")):
         raise ValueError("RESEARCH_ONLY")
+    try:
+        _validate_fitted_fields(model)
+        model_id = material.pop("model_id")
+        _require(model_id == f"{model['league']}.margin.full_support.research." + digest(material)[:16],
+                 "MARGIN_CHALLENGER_ID_MISMATCH")
+    except (KeyError, TypeError, AttributeError, IndexError, OverflowError) as exc:
+        raise ValueError("MARGIN_CHALLENGER_STRUCTURE_INVALID") from exc
     return checksum
 
 

@@ -154,6 +154,77 @@ class CardTests(unittest.TestCase):
         self.assertEqual(again.returncode, 2)
         self.assertIn("OUTPUT_EXISTS", again.stderr)
 
+    def test_resealed_report_semantic_tampering_rejected(self):
+        report = self.run_card()
+        self.assertIs(C.validate_report(report), report)
+        cases = [
+            (lambda r: r["results"][0]["summary"].update(mean_margin=99.), "SUMMARY_MISMATCH"),
+            (lambda r: r["results"][0]["cover_ladder"][0]["home"].update(win=.99), "COVER_LADDER_MISMATCH"),
+            (lambda r: r["results"][0]["cover_ladder"][0].pop("probability_basis", None), "COVER_LADDER_MISMATCH"),
+            (lambda r: r["results"][0].update(model_id="another.parent"), "DISTRIBUTION_BINDING_MISMATCH"),
+            (lambda r: r["results"][0].update(action_authority=True), "RESEARCH_AUTHORITY_REQUIRED"),
+            (lambda r: r["results"][0].update(distribution=None), "DISTRIBUTION_OBJECT_REQUIRED"),
+        ]
+        for mutate, code in cases:
+            with self.subTest(code=code):
+                bad = copy.deepcopy(report); mutate(bad)
+                bad.pop("artifact_sha256"); bad["artifact_sha256"] = D.digest(bad)
+                with self.assertRaisesRegex(ValueError, code):
+                    C.validate_report(bad)
+
+    def test_card_writer_validates_sealed_report_before_json(self):
+        with patch.object(C, "validate_report", side_effect=ValueError("FINAL_REPORT_REJECTED")) as check:
+            with self.assertRaisesRegex(ValueError, "FINAL_REPORT_REJECTED"):
+                self.run_card()
+        self.assertEqual(check.call_count, 1)
+        self.assertFalse((self.base / "out" / "margin_report.json").exists())
+
+    def test_resealed_simulation_timing_and_labels_rejected(self):
+        report = self.run_card()
+        cases = [
+            (lambda r: r["results"][0]["simulation"].update(seed=1), "SIMULATION_MISMATCH"),
+            (lambda r: r["results"][0]["simulation"]["diagnostics"].update(mean_margin=99.), "SIMULATION_MISMATCH"),
+            (lambda r: r["results"][0]["simulation"]["diagnostics"].update(uncertainty_kind="PREDICTIVE"), "SIMULATION_MISMATCH"),
+            (lambda r: r["results"][0]["simulation"].update(file_sha256="bad"), "SHA256_REQUIRED"),
+            (lambda r: r["results"][0].update(as_of_utc="2026-10-19T09:00:00Z"), "CUTOFF_BINDING_MISMATCH"),
+            (lambda r: r["results"][0].update(time_status="CREATED_POST_START_RESEARCH_ONLY"), "TIME_STATUS_MISMATCH"),
+            (lambda r: r.update(created_at_utc=CUTOFF), "COMPLETION_PRECEDES_EXECUTION"),
+            (lambda r: r.update(execution_started_at_utc="bad"), "TIMESTAMP_INVALID"),
+            (lambda r: r.update(predictive_validation="VALIDATED"), "INFERENCE_LABEL_MISMATCH"),
+            (lambda r: r["results"][0]["status"].update(prospective_validation="VALIDATED"), "INFERENCE_LABEL_MISMATCH"),
+            (lambda r: r["results"][0]["cover_ladder"][0]["home"].update(half_win=False), "COVER_LADDER_MISMATCH"),
+        ]
+        for mutate, code in cases:
+            with self.subTest(code=code):
+                bad = copy.deepcopy(report); mutate(bad)
+                bad.pop("artifact_sha256"); bad["artifact_sha256"] = D.digest(bad)
+                with self.assertRaisesRegex(ValueError, code):
+                    C.validate_report(bad)
+
+    def test_malformed_serialization_has_stable_error(self):
+        report = self.run_card()
+        for value in (float("nan"), {1, 2}):
+            with self.subTest(value=value):
+                bad = copy.deepcopy(report); bad["results"][0]["summary"]["mean_margin"] = value
+                with self.assertRaisesRegex(ValueError, "MARGIN_CARD_SERIALIZATION_INVALID"):
+                    C.validate_report(bad)
+
+    def test_resealed_deleted_duplicate_or_inflated_coverage_rejected(self):
+        report = self.run_card()
+        cases = [
+            (lambda r: r.update(results=[]), "MARGIN_CARD_COVERAGE_MISMATCH"),
+            (lambda r: r["results"].append(copy.deepcopy(r["results"][0])), "MARGIN_CARD_DUPLICATE_EVENT_MODEL_SETTLEMENT"),
+            (lambda r: r["coverage"][0].update(margin_rows=999), "MARGIN_CARD_COVERAGE_MISMATCH"),
+            (lambda r: r.update(source_coverage=["invalid"]), "MARGIN_CARD_COVERAGE_OBJECT_LIST_REQUIRED"),
+            (lambda r: r.update(execution_status="PARTIAL"), "MARGIN_CARD_EXECUTION_STATUS_MISMATCH"),
+        ]
+        for mutate, code in cases:
+            with self.subTest(code=code):
+                bad = copy.deepcopy(report); mutate(bad)
+                bad.pop("artifact_sha256"); bad["artifact_sha256"] = D.digest(bad)
+                with self.assertRaisesRegex(ValueError, code):
+                    C.validate_report(bad)
+
 
 class PointCardTests(unittest.TestCase):
     @classmethod
@@ -222,6 +293,62 @@ class PointCardTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, "MODEL_FILE_HASH"):
                 C.build([], base / "out", parent_card_paths=[parent], challenger_config_path=config)
             self.assertFalse((base / "out").exists())
+
+    def test_malformed_parent_rows_leave_independent_good_row(self):
+        cases = [
+            (lambda r: None, "PARENT_FORECAST_OBJECT_REQUIRED"),
+            (lambda r: {**r, "diagnostics": 1}, "PARENT_DIAGNOSTICS_OBJECT_REQUIRED"),
+            (lambda r: {**r, "diagnostics": []}, "PARENT_DIAGNOSTICS_OBJECT_REQUIRED"),
+            (lambda r: {**r, "diagnostics": {"prediction": "bad"}}, "PARENT_PREDICTION_OBJECT_REQUIRED"),
+            (lambda r: {**r, "model_input_snapshot": []}, "PARENT_INPUT_SNAPSHOT_OBJECT_REQUIRED"),
+            (lambda r: {**r, "warnings": "text"}, "PARENT_WARNINGS_STRING_LIST_REQUIRED"),
+            (lambda r: {**r, "model_id": None}, "PARENT_MODEL_ID_REQUIRED"),
+            (lambda r: {**r, "model_id": ["parent.fixture", "another.parent"]}, "PARENT_MODEL_ID_REQUIRED"),
+            (lambda r: {**r, "diagnostics": {"sigma": 12., "sport": "nfl"}}, "POINT_HEAD_UNAVAILABLE"),
+            (lambda r: {**r, "start_time_utc": "nonsense"}, "PARENT_INPUT_INVALID"),
+        ]
+        for mutate, expected in cases:
+            with self.subTest(expected=expected), tempfile.TemporaryDirectory() as tmp, patch.object(D, "writer_clock", return_value=NOW):
+                base = Path(tmp); parent, config = self.setup_files(base)
+                card = json.loads(parent.read_text())
+                bad = copy.deepcopy(card["forecasts"][0]); bad["event_id"] = "bad"
+                card["forecasts"].insert(0, mutate(bad)); parent.write_text(json.dumps(card))
+                report = C.build([], base / "out", parent_card_paths=[parent], challenger_config_path=config, draws=20)
+                self.assertEqual([row["event_id"] for row in report["results"]], ["future"])
+                self.assertEqual(report["source_coverage"][0]["status"], "UNAVAILABLE")
+                self.assertIn(expected, report["source_coverage"][0]["reason"])
+
+    def test_free_text_provenance_never_changes_exact_parent_binding(self):
+        with tempfile.TemporaryDirectory() as tmp, patch.object(D, "writer_clock", return_value=NOW):
+            base = Path(tmp)
+            parent, config = self.setup_files(base, lambda r: r["diagnostics"].update(source="database_residuals", arm="base", sigma=12.))
+            report = C.build([], base / "out", parent_card_paths=[parent], challenger_config_path=config, draws=20)
+            self.assertEqual(len(report["results"]), 1)
+            self.assertEqual(report["results"][0]["distribution"]["provenance"]["parent_model_id"], "parent.fixture")
+
+    def test_malformed_configs_and_sigma_only_fit_rejected_before_output(self):
+        cases = [
+            ({"models": None}, "CHALLENGER_MODEL_LIST_REQUIRED"),
+            ({"models": []}, "CHALLENGER_MODEL_LIST_REQUIRED"),
+            ({"models": [12.]}, "CHALLENGER_MODEL_ENTRY_OBJECT_REQUIRED"),
+            ({"models": [{"sigma": 12., "sport": "nfl"}]}, "CHALLENGER_MODEL_PATH_REQUIRED"),
+            ({"models": [{"path": ["fit.json"]}]}, "CHALLENGER_MODEL_PATH_REQUIRED"),
+            ({"derived_scale_features": "absolute_parent_margin"}, "DERIVED_SCALE_FEATURE_LIST_REQUIRED"),
+        ]
+        for changes, expected in cases:
+            with self.subTest(expected=expected), tempfile.TemporaryDirectory() as tmp:
+                base = Path(tmp); parent, config = self.setup_files(base)
+                value = json.loads(config.read_text()); value.update(changes); config.write_text(json.dumps(value))
+                with self.assertRaisesRegex(ValueError, expected):
+                    C.build([], base / "out", parent_card_paths=[parent], challenger_config_path=config)
+                self.assertFalse((base / "out").exists())
+
+    def test_duplicate_fitted_model_identity_rejected(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            base = Path(tmp); parent, config = self.setup_files(base)
+            value = json.loads(config.read_text()); value["models"] *= 2; config.write_text(json.dumps(value))
+            with self.assertRaisesRegex(ValueError, "CHALLENGER_MODEL_ID_DUPLICATE"):
+                C.build([], base / "out", parent_card_paths=[parent], challenger_config_path=config)
 
 
 if __name__ == "__main__":

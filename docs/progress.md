@@ -4652,3 +4652,10 @@ See docs/MC_PRECISION_RESEARCH.md and docs/NBA_EFFICIENCY_SHADOW.md.
 User authorized swarm development across all sports. Added explicit home-margin contracts, coherent PMF-based cover/push/quarter-handicap ladders, 50/80/95% intervals, reproducible MC, dense-integer fitted residual challenger, chronological evaluation and immutable card CLI. Current main core dependencies and retained source cohorts hash-match 7cf2aea. No selected defaults, old forecasts or authority changed.
 
 129 focused tests passed; eight NHL distributions produced 800,000 exactly replayed draws from retained morning inputs. Four-cohort historical screen contains 3,661 games: observed zero-support outcomes 15 to 0, NHL CRPS improved, CFB/NBA intervals include zero, MLS CRPS worsened. Reused historical cohorts and reconstructed availability prohibit prospective-validation claims. NFL/WNBA/MLB lack qualifying parent-specific cohorts. Global health remains incomplete in this partial recovered source snapshot. See docs/MARGIN_SYSTEM_SCREEN_20261019.md and docs/MARGIN_SYSTEM.md; all candidate promotion remains HOLD/OFF.
+
+
+## 2026-10-19 — External margin review hardening
+
+Mapped all supplied review findings to PR #69 source. Added retained OOT training-evidence validation, re-sealed fitted-state checks, safe malformed-row handling, explicit unconditional cover labels and pre-publication semantic validation of summaries, settlement, simulations, timing and coverage. Independent review reproduced and closed stale-coverage acceptance. Numerical fitting helpers and prediction law are unchanged; frozen fits remain tied to original code.
+
+158 focused tests passed. Eight retained NHL PMFs replayed 800,000 saved draws exactly; a 1,312-row NHL refit matched prior state, tail parameters, lattice and tuning selection exactly. New artifact/code identity is separate. Full health/CI remains unresolved; defaults, historical forecasts and action authority unchanged. See docs/MARGIN_SYSTEM_REVIEW_20261019.md and data/research/margin_review_20261019/verification.json.

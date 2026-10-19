@@ -26,10 +26,15 @@ ORIENTATION = "HOME_MINUS_AWAY"
 QUANTILES = (0.025, 0.1, 0.25, 0.5, 0.75, 0.9, 0.975)
 MC_CONFIDENCE = 0.95
 MC_Z = 1.959963984540054
+PROBABILITY_BASIS = "UNCONDITIONAL_FULL_WIN_WITH_SEPARATE_SETTLEMENT_STATES"
 
 
 def _margin(distribution):
     """Validate, without normalizing or repairing the supplied frozen PMF."""
+    if not isinstance(distribution, dict):
+        raise ValueError("MARGIN_DISTRIBUTION_OBJECT_REQUIRED")
+    if not isinstance(distribution.get("provenance"), dict):
+        raise ValueError("PROVENANCE_OBJECT_REQUIRED")
     x, p = discrete.validate(distribution)
     if distribution["product"] != "margin":
         raise ValueError("MARGIN_DISTRIBUTION_REQUIRED")
@@ -232,6 +237,7 @@ def cover_ladder(distribution, home_spreads):
         away = discrete.price(distribution, line, "AWAY")
         rows.append({"home_spread": line, "away_spread": -line,
                      "line_basis": "HOME_HANDICAP",
+                     "probability_basis": PROBABILITY_BASIS,
                      "side_handicaps": {"HOME": line, "AWAY": -line},
                      "home": home, "away": away,
                      "home_fair_odds": _fair_odds(home),
@@ -310,4 +316,45 @@ def build_margin_report(distribution, *, home_spreads=(), draws=100000):
               "status": "DIAGNOSTIC", "prospective_grade_eligible": False,
               "action_authority": False}
     report["report_sha256"] = discrete.digest(report)
+    validate_report(report, distribution)
     return report
+
+
+def validate_report(report, distribution):
+    """Check a sealed report against its PMF and replayable simulation.
+
+    A valid hash is necessary but cannot make inconsistent derived fields valid.
+    Cover is unconditional full-win probability; pushes and half outcomes remain
+    separate. No undefined all-push conditional probability is emitted.
+    """
+    _margin(distribution)
+    if not isinstance(report, dict):
+        raise ValueError("MARGIN_REPORT_OBJECT_REQUIRED")
+    material = dict(report)
+    checksum = material.pop("report_sha256", None)
+    try:
+        matches = report.get("schema") == SCHEMA and discrete.digest(material) == checksum
+    except (TypeError, ValueError, OverflowError) as exc:
+        raise ValueError("MARGIN_REPORT_SERIALIZATION_INVALID") from exc
+    if not matches:
+        raise ValueError("MARGIN_REPORT_HASH_MISMATCH")
+    if (report.get("action_authority") is not False or
+            report.get("prospective_grade_eligible") is not False or
+            report.get("status") != "DIAGNOSTIC"):
+        raise ValueError("RESEARCH_ONLY")
+    for key in ("league", "model_id", "settlement", "distribution_sha256", "provenance"):
+        if report.get(key) != distribution[key]:
+            raise ValueError("MARGIN_REPORT_DISTRIBUTION_MISMATCH")
+    if discrete.digest(report.get("analytics")) != discrete.digest(summarize(distribution)):
+        raise ValueError("MARGIN_REPORT_ANALYTICS_MISMATCH")
+    try:
+        lines = [row["home_spread"] for row in report["cover_ladder"]]
+        if discrete.digest(report["cover_ladder"]) != discrete.digest(cover_ladder(distribution, lines)):
+            raise ValueError("MARGIN_REPORT_COVER_MISMATCH")
+        count = report["simulation"]["receipt"]["count"]
+        _, expected = simulate_margin(distribution, draws=count, home_spreads=lines)
+        if discrete.digest(report["simulation"]) != discrete.digest(expected):
+            raise ValueError("MARGIN_REPORT_SIMULATION_MISMATCH")
+    except (KeyError, TypeError) as exc:
+        raise ValueError("MARGIN_REPORT_STRUCTURE_INVALID") from exc
+    return checksum

@@ -2,6 +2,7 @@
 import copy
 import datetime as dt
 import unittest
+from unittest import mock
 
 import numpy as np
 
@@ -51,6 +52,15 @@ def prediction(model, **overrides):
             "scale_features": {"dispersion_driver": 0.}}
     args.update(overrides)
     return challenger.predict(model, **args)
+
+
+def reseal(model):
+    """Recompute both hashes so structural tests cannot pass on hash failure."""
+    model.pop("artifact_sha256", None)
+    model.pop("model_id", None)
+    model["model_id"] = f"{model['league']}.margin.full_support.research." + digest(model)[:16]
+    model["artifact_sha256"] = digest(model)
+    return model
 
 
 class MarginChallengerTests(unittest.TestCase):
@@ -122,6 +132,118 @@ class MarginChallengerTests(unittest.TestCase):
         model["parameters"]["student_weight"] = .99
         with self.assertRaisesRegex(ValueError, "HASH_MISMATCH"):
             prediction(model)
+
+    def test_training_oof_evidence_is_retained_and_revalidated(self):
+        self.assertEqual(len(self.model["training_evidence"]), len(self.rows))
+        self.assertEqual(challenger.validate_model(self.model), self.model["artifact_sha256"])
+        for row in self.model["training_evidence"]:
+            self.assertEqual(row["prediction_kind"], "CHRONOLOGICAL_OUT_OF_TIME")
+            self.assertEqual(row["parent_model_id"], self.model["parent_model_id"])
+
+    def test_resealed_zero_or_missing_oof_evidence_is_rejected(self):
+        for mutation in (
+                lambda m: m.update(training_n=0),
+                lambda m: m.pop("training_evidence"),
+                lambda m: m.update(training_evidence=[]),
+                lambda m: m.update(training_event_ids=[]),
+                lambda m: m["training_evidence"][0].pop("prediction_kind"),
+                lambda m: m["training_evidence"][0].update(prediction_kind="IN_SAMPLE"),
+                lambda m: m["training_evidence"][0].update(label_in_sample=True),
+                lambda m: m["training_evidence"][0].update(oof=False)):
+            with self.subTest(mutation=mutation):
+                model = copy.deepcopy(self.model)
+                mutation(model)
+                with self.assertRaises(ValueError):
+                    challenger.validate_model(reseal(model))
+
+    def test_resealed_parent_chronology_state_and_selection_are_rejected(self):
+        cases = (
+            lambda m: m.update(parent_model_id=""),
+            lambda m: m.update(parent_model_id="other-parent"),
+            lambda m: m.update(last_result_available_at="2024-01-01T00:00:00Z"),
+            lambda m: m["training_evidence"][0].update(parent_fit_cutoff="2024-01-01T00:00:00Z"),
+            lambda m: m["training_evidence"][0].update(forecast_sha256="unhashed"),
+            lambda m: m["state"].update(residuals=[]),
+            lambda m: m["state"].update(student_standard_deviation=0.),
+            lambda m: m["state"]["scaling"].update(sd=[0.]),
+            lambda m: m["parameters"].update(degrees_of_freedom=1.),
+            lambda m: m["lattice"].update(factors=[0.]),
+            lambda m: m["selection"].update(tuning_event_ids=m["selection"]["inner_training_event_ids"]),
+            lambda m: m["selection"].update(first_tuning_forecast_cutoff="2021-01-01T00:00:00Z"),
+            lambda m: m.update(historical_availability_proven=True),
+            lambda m: m["support_policy"].update(tail_tolerance=1.),
+        )
+        for mutation in cases:
+            with self.subTest(mutation=mutation):
+                model = copy.deepcopy(self.model)
+                mutation(model)
+                with self.assertRaises(ValueError):
+                    challenger.validate_model(reseal(model))
+
+    def test_hash_valid_but_wrong_model_identity_is_rejected(self):
+        model = copy.deepcopy(self.model)
+        model["model_id"] = "invented"
+        model.pop("artifact_sha256")
+        model["artifact_sha256"] = digest(model)
+        with self.assertRaisesRegex(ValueError, "ID_MISMATCH"):
+            challenger.validate_model(model)
+
+    def test_old_artifact_is_rejected_explicitly_before_new_evidence_requirement(self):
+        model = copy.deepcopy(self.model)
+        model.pop("training_evidence")
+        model["code_sha256"] = "0" * 64
+        with self.assertRaisesRegex(ValueError, "CODE_DRIFT"):
+            challenger.validate_model(reseal(model))
+
+    def test_fit_checks_own_artifact_before_returning(self):
+        with mock.patch.object(challenger, "validate_model", side_effect=ValueError("SELF_VALIDATION_SENTINEL")) as check:
+            with self.assertRaisesRegex(ValueError, "SELF_VALIDATION_SENTINEL"):
+                fit(self.rows)
+            check.assert_called_once()
+
+    def test_missing_or_contradictory_oof_claim_cannot_fit(self):
+        for change in ({"prediction_kind": None}, {"label_in_sample": True}, {"oof": False},
+                       {"label_in_sample": 0}, {"oof": 1}):
+            with self.subTest(change=change):
+                rows = copy.deepcopy(self.rows)
+                rows[0].update(change)
+                with self.assertRaisesRegex(ValueError, "OUT_OF_TIME"):
+                    fit(rows)
+        rows = copy.deepcopy(self.rows)
+        rows[0].pop("prediction_kind")
+        with self.assertRaisesRegex(ValueError, "OUT_OF_TIME"):
+            fit(rows)
+
+    def test_missing_required_row_field_has_coded_failure(self):
+        for key in ("parent_fit_cutoff", "forecast_sha256", "observed", "parent_model_id"):
+            rows = copy.deepcopy(self.rows)
+            rows[-1].pop(key)
+            with self.subTest(key=key), self.assertRaisesRegex(ValueError, "TRAINING_ROW_STRUCTURE_INVALID"):
+                fit(rows)
+
+    def test_reversed_training_window_and_single_row_are_rejected(self):
+        rows = copy.deepcopy(self.rows)
+        rows[-1]["parent_fit_cutoff"] = "2024-01-01T00:00:00Z"
+        with self.assertRaisesRegex(ValueError, "TRAINING_CHRONOLOGY_INVALID"):
+            fit(rows)
+        with self.assertRaisesRegex(ValueError, "AT_LEAST_60"):
+            fit(self.rows[:1])
+
+    def test_zero_variance_retains_declared_positive_floor_and_replays(self):
+        rows = cohort(count=60)
+        for row in rows:
+            row["observed"] = row["predicted_mean"] = 7.
+        model = fit(rows, scale_features=())
+        self.assertEqual(model["state"]["student_standard_deviation"], .25)
+        self.assertEqual(model["state"]["minimum_standard_deviation"], .25)
+        distribution = prediction(model, scale_features=None)
+        x, p = validate(distribution)
+        self.assertTrue(np.all(np.isfinite(p)))
+        self.assertTrue(np.all(p > 0))
+        first, receipt = simulate(distribution, draws=10000)
+        second, replay = simulate(distribution, draws=10000)
+        self.assertTrue(np.array_equal(first, second))
+        self.assertEqual(receipt, replay)
 
     def test_future_fit_late_forecast_and_reused_event_refused(self):
         cases = [{"cutoff": "2022-12-31T00:00:00Z"},

@@ -181,6 +181,35 @@ price. The analytic cover output keeps win, half-win, push, half-loss and loss.
 Model fair decimal prices use winning and losing stake probabilities, including
 half outcomes; they exclude vig and costs.
 
+Every new ladder row declares `probability_basis:
+UNCONDITIONAL_FULL_WIN_WITH_SEPARATE_SETTLEMENT_STATES`. No ex-push conditional
+probability is emitted. If all mass pushes, both full-win probabilities are zero,
+push probability is one, and fair decimal odds are null. Removing or changing the
+basis label from a rehashed report fails semantic validation.
+
+`margin_system.validate_report(report, distribution)` checks a lightweight report
+against its PMF, analytic summaries, settlement ladder and deterministic simulation.
+`pipelines.cards.margin_system.validate_report(report)` performs the corresponding
+card checks, including identity, timing, coverage and research labels. Both builders
+validate before returning/publishing their JSON. Card validation checks simulation
+receipts and replayed values; separately stored NPY bytes must also be checked
+against the recorded file hash when reading files.
+
+New fitted challengers retain `training_evidence` for every training event: exact
+parent/information/settlement scope, chronological out-of-time declaration,
+forecast/result source hashes and fit/forecast/start/result timestamps. These are
+rechecked alongside counts, IDs, purged tuning partitions and fitted numerical
+state whenever the model is consumed. A scalar sigma or a sport/sigma dictionary
+cannot substitute for a fitted artifact. Optional `label_in_sample`/`oof` declarations
+must be exactly false/true if present and never replace the mandatory OOT record.
+This validates consistency; it does not authenticate a caller's source evidence.
+
+The hardening changes fitted code pins and artifact identities. Old fitted artifacts
+remain immutable and require their original pinned code for regeneration; do not
+re-seal them under the new code. Fit a new artifact from the qualifying original
+cohort. Already emitted frozen PMFs and saved draws remain readable and replayable.
+See `MARGIN_SYSTEM_REVIEW_20261019.md` for the external finding disposition.
+
 The 50%, 80% and 95% intervals describe predictive game-margin variability.
 Integer endpoints can cause the attained probability to exceed the nominal
 level. Wilson intervals in simulation diagnostics describe **Monte Carlo error
@@ -204,6 +233,7 @@ reports, not eligible production forecast publications or prospective registrati
 
 ```bash
 python -m unittest discover -s tests -p 'test_margin_system*.py' -v
+python -m unittest tests.test_margin_challenger tests.test_margin_review_regressions -v
 ```
 
 Card checks cover exact source hashes, source immutability, no overwrite,

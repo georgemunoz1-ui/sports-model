@@ -1465,5 +1465,44 @@
     "scope": "Current supported populations; immutable source-bound snapshots, six-hour actual-source TTL",
     "historical_verdicts_modified": false,
     "action_authority": false
+  },
+  "margin_system_research_20261019": {
+    "experiment_id": "MARGIN-SYSTEM-20261019-V1",
+    "registered_at_utc": "2026-10-19T17:52:13.897735+00:00",
+    "status": "REGISTERED_RESEARCH_ONLY",
+    "authorization": "2026-10-19 user: use swarm to build spread/cover projection and margins; high level margin distribution system for all models and sports",
+    "scope": [
+      "nfl",
+      "cfb",
+      "nba",
+      "wnba",
+      "mlb",
+      "nhl",
+      "mls"
+    ],
+    "baseline": "Unchanged parent-specific empirical residual distributions",
+    "challenger": "One composite structural margin challenger, version-bound code and design hash; no component-level causal attribution",
+    "training": "Existing residual split only; chronological inner tuning; do not tune to external evaluation",
+    "evaluation": "Reused later historical cohorts CFB/NBA/NHL/MLS; all events, same parent/cutoff; unavailable cohorts remain unavailable",
+    "primary_metric": "paired CRPS, challenger minus baseline",
+    "secondary_guardrails": [
+      "zero-support outcomes",
+      "log score",
+      "margin MAE/RMSE",
+      "50/80/95 percent interval coverage and width",
+      "cover and push calibration"
+    ],
+    "design_entrypoint": "scripts/run_margin_system_study.py",
+    "promotion": "HOLD; no automatic defaults or policy changes; untouched prospective evidence required",
+    "historical_availability_proven": false,
+    "action_authority": false,
+    "canonical_prospective_registration": false,
+    "execution_status": "COMPLETED",
+    "predictive_validation": "UNVALIDATED",
+    "publication_eligibility": "INELIGIBLE",
+    "wagering_authority": "OFF",
+    "evidence_report": "docs/MARGIN_SYSTEM_SCREEN_20261019.md",
+    "historical_evaluation_games": 3661,
+    "software_tests_passed": 129
   }
 }

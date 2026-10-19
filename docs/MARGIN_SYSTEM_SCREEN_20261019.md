@@ -28,3 +28,16 @@ The selected NFL QB row retains its SF +11.014 point margin, but a same-parent f
 129 focused software and regression tests passed. Independent output checks verified all eight PMFs, handicap complements, draw files, exact 800,000-draw replay and study code pins. Global repository health remains unresolved: this is a partial recovered checkout with missing unrelated modules and datasets. Focused tests do not certify whole-repository CI. No production deployment, model promotion, canonical prospective registration, sportsbook quote validation or wagering authority was enabled.
 
 Reproduce using the commands in `docs/MARGIN_SYSTEM.md`; `scripts/run_margin_system_study.py` runs the four-cohort study and `scripts/evaluate_margin_ladders.py` evaluates fixed hypothetical lines without refitting. `scripts/fit_margin_challenger.py` accepts qualifying earlier OOF forecasts for any supported sport.
+
+## Fixed handicap evaluation
+
+A separate descriptive check applied prespecified fixed hypothetical handicap ladders to the frozen distributions, without refitting. There are **31,135 matched event/threshold pairs across the same 3,661 games**. Lines remain grouped within each event during bootstrap. They are not historical sportsbook quotes and do not establish ATS profitability.
+
+| League | Matched event/threshold pairs | Full-win Brier delta [95% interval] | Push Brier delta |
+|---|---:|---|---:|
+| CFB | 6,426 | -0.000271 [-0.000847, +0.000244] | -0.000483 |
+| NBA | 11,070 | +0.000285 [-0.000565, +0.001061] | -0.000000 |
+| NHL | 9,184 | -0.001868 [-0.002379, -0.001278] | -0.000966 |
+| MLS | 4,455 | +0.000900 [+0.000152, +0.001607] | +0.000114 |
+
+NHL has favorable CRPS and fixed-line full-win/push scores in this reused historical cohort; a prospective test remains required. MLS worsens on CRPS and full-win Brier and should retain its existing model. CFB full-win results remain inconclusive despite an improvement in push scoring.

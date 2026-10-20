@@ -4670,3 +4670,8 @@ Fitted 1,055 earlier games and evaluated 816 later games with the existing fixed
 Wired a hash-bound margin child into the selected-QB research runner with pregame config/fit/evaluation timing, actual completion-before-kickoff, immutable outputs, push labeling, parent coefficient replay, and failed/incomplete evaluation refusal. Preserved the original parent forecast. WAS–SF reconstruction after kickoff: SF −7.5 cover 55.1492%, 100K-draw simulation 55.291%; push zero. This is retrospective from morning inputs, not the original pregame card or a live update.
 
 187 unique current focused tests pass. Independent source, 816-game metric/bootstrap, and 100K raw-draw replay checks retained. Source-only checkout still cannot certify full repository health. Implementation is on draft PR #69; no merge, production promotion, canonical grading, total distribution, or wager authorization. See docs/NFL_QB_MARGIN_PROCESS_20261019.md and data/research/nfl_qb_margin_20261019/.
+
+
+## 2026-10-19 — NFL historical CLI fixture isolation after CI
+
+Remote CI at 2628a499 found one historical weekly-state CLI fixture failure: its September clock inherited the later October margin registration and correctly failed the new timing guard. Isolated only that synthetic fixture's runtime selection JSON to its pre-margin configuration; the real parent model, state transitions and package remain in use. Product code and fitted artifacts are unchanged. The corrected historical test plus all 15 selected-QB margin tests pass (16 targeted tests). New automatic margin-routing and timing-refusal tests remain active. Follow-up exact-head CI is required; prior artifact upload quota remains a separate infrastructure limitation.

@@ -976,13 +976,19 @@
     },
     {
       "id": "NFL-QB-MARGIN-FULLSUPPORT-20261019",
-      "status": "REGISTERED_RETROSPECTIVE_RESEARCH",
+      "status": "COMPLETED_RESEARCH_HOLD",
       "registered_at_utc": "2026-10-20T01:23:07.052949+00:00",
       "prereg_doc": "data/nfl/qb_margin_full_support_v1/design.json",
       "passes": false,
       "production_model_change": false,
       "action_authority": false,
-      "scope": "Selected-QB same-parent full-game margin/cover; historical fit/evaluation and future diagnostic runner integration; preserve main winner and prior artifacts."
+      "scope": "Selected-QB same-parent full-game margin/cover; historical fit/evaluation and future diagnostic runner integration; preserve main winner and prior artifacts.",
+      "execution_status": "COMPLETED",
+      "numerical_validity": "PASS",
+      "historical_screen": "NOT_PASSED",
+      "predictive_validation": "HOLD",
+      "software_tests_passed": 187,
+      "report": "docs/NFL_QB_MARGIN_PROCESS_20261019.md"
     }
   ],
   "known_issues": [
@@ -1514,5 +1520,39 @@
     "evidence_report": "docs/MARGIN_SYSTEM_SCREEN_20261019.md",
     "historical_evaluation_games": 3661,
     "software_tests_passed": 129
+  },
+  "nfl_qb_margin_full_support_20261019": {
+    "experiment_id": "NFL-QB-MARGIN-FULLSUPPORT-20261019",
+    "preregistration_commit": "42cf2712507a29e8a67cfa4b1fc9f70e0be85a28",
+    "execution_status": "COMPLETED",
+    "numerical_validity": "PASS",
+    "predictive_validation": "HOLD",
+    "historical_screen": "NOT_PASSED",
+    "historical_training_games": 1055,
+    "historical_evaluation_games": 816,
+    "deployment_fit_games": 1871,
+    "model_id": "nfl.margin.full_support.research.ad4017ccf0663e24",
+    "config": "data/nfl/qb_margin_full_support_v1/runtime.json",
+    "runtime_scope": "Selected-QB research-pregame child; existing winner default preserved",
+    "current_event_mode": "RETROSPECTIVE_RECONSTRUCTION",
+    "current_event": "2026_06_WAS_SF",
+    "original_forecast_mutated": false,
+    "source_availability_proven": false,
+    "prospective_grade_eligible": false,
+    "production_promotion": false,
+    "action_authority": false,
+    "wagering_authority": "OFF",
+    "report": "docs/NFL_QB_MARGIN_PROCESS_20261019.md",
+    "software_tests_passed": 187,
+    "primary_crps": {
+      "ci95": [
+        -0.022664331118040674,
+        0.011301938965057986
+      ],
+      "delta": -0.007908090618756757,
+      "event_n": 816,
+      "status": "AVAILABLE",
+      "time_block_n": 57
+    }
   }
 }

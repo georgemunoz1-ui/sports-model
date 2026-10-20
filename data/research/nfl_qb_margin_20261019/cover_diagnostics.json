@@ -1,0 +1,1108 @@
+{
+  "cover_ladder_monotonicity": {
+    "all_pass": true,
+    "checks": 1632
+  },
+  "independent_sample_unit": "EVENT",
+  "line_role": "FIXED_DIAGNOSTIC_GRID_NOT_OBSERVED_MARKET",
+  "paired_deltas_challenger_minus_baseline": {
+    "conditional_nonpush_brier": {
+      "ci95": [
+        -0.0011312890574673798,
+        9.141242959672062e-05
+      ],
+      "delta": -0.0006022935968422082,
+      "event_n": 816,
+      "status": "AVAILABLE",
+      "time_block_n": 57
+    },
+    "conditional_nonpush_log_loss": {
+      "ci95": [
+        -0.00348196437202872,
+        0.00047705991773605414
+      ],
+      "delta": -0.0017457804272562442,
+      "event_n": 816,
+      "status": "AVAILABLE",
+      "time_block_n": 57
+    }
+  },
+  "summaries": {
+    "nfl.margin.empirical.research.a1dc272255961bd9": {
+      "by_home_handicap": [
+        {
+          "conditional_nonpush": {
+            "brier": 0.1443444928997171,
+            "events": 803,
+            "excluded_pushes": 13,
+            "log_loss": {
+              "mean": 0.4539513291374748,
+              "n": 803,
+              "status": "AVAILABLE",
+              "zero_probability_outcomes": 0
+            },
+            "probability_basis": "EXCLUDING_PUSHES",
+            "undefined_nonpush_mass": 0
+          },
+          "events": 816,
+          "home_handicap": -14.0,
+          "observed_cover_rate": 0.1948529411764706,
+          "observed_push_rate": 0.015931372549019607,
+          "predicted_cover_rate": 0.16650195469493276,
+          "predicted_push_rate": 0.01723358627020792,
+          "three_way_brier_category_sum": 0.3099604103820896,
+          "three_way_log_loss": {
+            "mean": 0.528674540379499,
+            "n": 816,
+            "status": "AVAILABLE",
+            "zero_probability_outcomes": 0
+          }
+        },
+        {
+          "conditional_nonpush": {
+            "brier": 0.1670678139208648,
+            "events": 804,
+            "excluded_pushes": 12,
+            "log_loss": {
+              "mean": 0.510471756326738,
+              "n": 804,
+              "status": "AVAILABLE",
+              "zero_probability_outcomes": 0
+            },
+            "probability_basis": "EXCLUDING_PUSHES",
+            "undefined_nonpush_mass": 0
+          },
+          "events": 816,
+          "home_handicap": -10.0,
+          "observed_cover_rate": 0.24877450980392157,
+          "observed_push_rate": 0.014705882352941176,
+          "predicted_cover_rate": 0.2434603001015703,
+          "predicted_push_rate": 0.022406057510966998,
+          "three_way_brier_category_sum": 0.35285137382987397,
+          "three_way_log_loss": {
+            "mean": 0.5801825089178304,
+            "n": 816,
+            "status": "AVAILABLE",
+            "zero_probability_outcomes": 0
+          }
+        },
+        {
+          "conditional_nonpush": {
+            "brier": 0.1813634154730094,
+            "events": 816,
+            "excluded_pushes": 0,
+            "log_loss": {
+              "mean": 0.5440947500955611,
+              "n": 816,
+              "status": "AVAILABLE",
+              "zero_probability_outcomes": 0
+            },
+            "probability_basis": "EXCLUDING_PUSHES",
+            "undefined_nonpush_mass": 0
+          },
+          "events": 816,
+          "home_handicap": -7.5,
+          "observed_cover_rate": 0.29411764705882354,
+          "observed_push_rate": 0.0,
+          "predicted_cover_rate": 0.31456957783339573,
+          "predicted_push_rate": 0.0,
+          "three_way_brier_category_sum": 0.3627268309460188,
+          "three_way_log_loss": {
+            "mean": 0.5440947500955611,
+            "n": 816,
+            "status": "AVAILABLE",
+            "zero_probability_outcomes": 0
+          }
+        },
+        {
+          "conditional_nonpush": {
+            "brier": 0.18446217450353894,
+            "events": 783,
+            "excluded_pushes": 33,
+            "log_loss": {
+              "mean": 0.5510714760214992,
+              "n": 783,
+              "status": "AVAILABLE",
+              "zero_probability_outcomes": 0
+            },
+            "probability_basis": "EXCLUDING_PUSHES",
+            "undefined_nonpush_mass": 0
+          },
+          "events": 816,
+          "home_handicap": -7.0,
+          "observed_cover_rate": 0.29411764705882354,
+          "observed_push_rate": 0.04044117647058824,
+          "predicted_cover_rate": 0.31456957783339573,
+          "predicted_push_rate": 0.026152420320893457,
+          "three_way_brier_category_sum": 0.4170161916634924,
+          "three_way_log_loss": {
+            "mean": 0.702898659128443,
+            "n": 816,
+            "status": "AVAILABLE",
+            "zero_probability_outcomes": 0
+          }
+        },
+        {
+          "conditional_nonpush": {
+            "brier": 0.19658420091713022,
+            "events": 816,
+            "excluded_pushes": 0,
+            "log_loss": {
+              "mean": 0.5788136644877833,
+              "n": 816,
+              "status": "AVAILABLE",
+              "zero_probability_outcomes": 0
+            },
+            "probability_basis": "EXCLUDING_PUSHES",
+            "undefined_nonpush_mass": 0
+          },
+          "events": 816,
+          "home_handicap": -6.5,
+          "observed_cover_rate": 0.33455882352941174,
+          "observed_push_rate": 0.0,
+          "predicted_cover_rate": 0.3407219981542893,
+          "predicted_push_rate": 0.0,
+          "three_way_brier_category_sum": 0.39316840183426044,
+          "three_way_log_loss": {
+            "mean": 0.5788136644877833,
+            "n": 816,
+            "status": "AVAILABLE",
+            "zero_probability_outcomes": 0
+          }
+        },
+        {
+          "conditional_nonpush": {
+            "brier": 0.21013549954756874,
+            "events": 816,
+            "excluded_pushes": 0,
+            "log_loss": {
+              "mean": 0.6094071968145027,
+              "n": 816,
+              "status": "AVAILABLE",
+              "zero_probability_outcomes": 0
+            },
+            "probability_basis": "EXCLUDING_PUSHES",
+            "undefined_nonpush_mass": 0
+          },
+          "events": 816,
+          "home_handicap": -3.5,
+          "observed_cover_rate": 0.41911764705882354,
+          "observed_push_rate": 0.0,
+          "predicted_cover_rate": 0.4243313268100733,
+          "predicted_push_rate": 0.0,
+          "three_way_brier_category_sum": 0.4202709990951375,
+          "three_way_log_loss": {
+            "mean": 0.6094071968145028,
+            "n": 816,
+            "status": "AVAILABLE",
+            "zero_probability_outcomes": 0
+          }
+        },
+        {
+          "conditional_nonpush": {
+            "brier": 0.2115741772604733,
+            "events": 761,
+            "excluded_pushes": 55,
+            "log_loss": {
+              "mean": 0.6123804682840948,
+              "n": 761,
+              "status": "AVAILABLE",
+              "zero_probability_outcomes": 0
+            },
+            "probability_basis": "EXCLUDING_PUSHES",
+            "undefined_nonpush_mass": 0
+          },
+          "events": 816,
+          "home_handicap": -3.0,
+          "observed_cover_rate": 0.41911764705882354,
+          "observed_push_rate": 0.06740196078431372,
+          "predicted_cover_rate": 0.4243313268100733,
+          "predicted_push_rate": 0.029211532501938437,
+          "three_way_brier_category_sum": 0.4951843239466127,
+          "three_way_log_loss": {
+            "mean": 0.8343683645354809,
+            "n": 816,
+            "status": "AVAILABLE",
+            "zero_probability_outcomes": 0
+          }
+        },
+        {
+          "conditional_nonpush": {
+            "brier": 0.22153101560847469,
+            "events": 815,
+            "excluded_pushes": 1,
+            "log_loss": {
+              "mean": 0.6326558346732986,
+              "n": 815,
+              "status": "AVAILABLE",
+              "zero_probability_outcomes": 0
+            },
+            "probability_basis": "EXCLUDING_PUSHES",
+            "undefined_nonpush_mass": 0
+          },
+          "events": 816,
+          "home_handicap": 0.0,
+          "observed_cover_rate": 0.5416666666666666,
+          "observed_push_rate": 0.0012254901960784314,
+          "predicted_cover_rate": 0.5130252955068596,
+          "predicted_push_rate": 0.029108376924089883,
+          "three_way_brier_category_sum": 0.44544636010182836,
+          "three_way_log_loss": {
+            "mean": 0.6654727406150317,
+            "n": 816,
+            "status": "AVAILABLE",
+            "zero_probability_outcomes": 0
+          }
+        },
+        {
+          "conditional_nonpush": {
+            "brier": 0.20220328138304697,
+            "events": 755,
+            "excluded_pushes": 61,
+            "log_loss": {
+              "mean": 0.5865524654597162,
+              "n": 755,
+              "status": "AVAILABLE",
+              "zero_probability_outcomes": 0
+            },
+            "probability_basis": "EXCLUDING_PUSHES",
+            "undefined_nonpush_mass": 0
+          },
+          "events": 816,
+          "home_handicap": 3.0,
+          "observed_cover_rate": 0.5968137254901961,
+          "observed_push_rate": 0.07475490196078431,
+          "predicted_cover_rate": 0.6005326148275293,
+          "predicted_push_rate": 0.028017211572714095,
+          "three_way_brier_category_sum": 0.48565912873008715,
+          "three_way_log_loss": {
+            "mean": 0.8361199139639589,
+            "n": 816,
+            "status": "AVAILABLE",
+            "zero_probability_outcomes": 0
+          }
+        },
+        {
+          "conditional_nonpush": {
+            "brier": 0.19966277615712724,
+            "events": 816,
+            "excluded_pushes": 0,
+            "log_loss": {
+              "mean": 0.5812820992158422,
+              "n": 816,
+              "status": "AVAILABLE",
+              "zero_probability_outcomes": 0
+            },
+            "probability_basis": "EXCLUDING_PUSHES",
+            "undefined_nonpush_mass": 0
+          },
+          "events": 816,
+          "home_handicap": 3.5,
+          "observed_cover_rate": 0.6715686274509803,
+          "observed_push_rate": 0.0,
+          "predicted_cover_rate": 0.6285498264002433,
+          "predicted_push_rate": 0.0,
+          "three_way_brier_category_sum": 0.3993255523142545,
+          "three_way_log_loss": {
+            "mean": 0.5812820992158423,
+            "n": 816,
+            "status": "AVAILABLE",
+            "zero_probability_outcomes": 0
+          }
+        },
+        {
+          "conditional_nonpush": {
+            "brier": 0.16738180213255802,
+            "events": 816,
+            "excluded_pushes": 0,
+            "log_loss": {
+              "mean": 0.5070159068561406,
+              "n": 816,
+              "status": "AVAILABLE",
+              "zero_probability_outcomes": 0
+            },
+            "probability_basis": "EXCLUDING_PUSHES",
+            "undefined_nonpush_mass": 0
+          },
+          "events": 816,
+          "home_handicap": 6.5,
+          "observed_cover_rate": 0.7549019607843137,
+          "observed_push_rate": 0.0,
+          "predicted_cover_rate": 0.7075461152777485,
+          "predicted_push_rate": 0.0,
+          "three_way_brier_category_sum": 0.33476360426511614,
+          "three_way_log_loss": {
+            "mean": 0.5070159068561406,
+            "n": 816,
+            "status": "AVAILABLE",
+            "zero_probability_outcomes": 0
+          }
+        },
+        {
+          "conditional_nonpush": {
+            "brier": 0.1545915761506877,
+            "events": 781,
+            "excluded_pushes": 35,
+            "log_loss": {
+              "mean": 0.4768837358467846,
+              "n": 781,
+              "status": "AVAILABLE",
+              "zero_probability_outcomes": 0
+            },
+            "probability_basis": "EXCLUDING_PUSHES",
+            "undefined_nonpush_mass": 0
+          },
+          "events": 816,
+          "home_handicap": 7.0,
+          "observed_cover_rate": 0.7549019607843137,
+          "observed_push_rate": 0.0428921568627451,
+          "predicted_cover_rate": 0.7075461152777485,
+          "predicted_push_rate": 0.024206139837488524,
+          "three_way_brier_category_sum": 0.36152374731558784,
+          "three_way_log_loss": {
+            "mean": 0.6328157735829139,
+            "n": 816,
+            "status": "AVAILABLE",
+            "zero_probability_outcomes": 0
+          }
+        },
+        {
+          "conditional_nonpush": {
+            "brier": 0.15308674792209018,
+            "events": 816,
+            "excluded_pushes": 0,
+            "log_loss": {
+              "mean": 0.47378722803626616,
+              "n": 816,
+              "status": "AVAILABLE",
+              "zero_probability_outcomes": 0
+            },
+            "probability_basis": "EXCLUDING_PUSHES",
+            "undefined_nonpush_mass": 0
+          },
+          "events": 816,
+          "home_handicap": 7.5,
+          "observed_cover_rate": 0.7977941176470589,
+          "observed_push_rate": 0.0,
+          "predicted_cover_rate": 0.7317522551152371,
+          "predicted_push_rate": 0.0,
+          "three_way_brier_category_sum": 0.30617349584418035,
+          "three_way_log_loss": {
+            "mean": 0.473787228036266,
+            "n": 816,
+            "status": "AVAILABLE",
+            "zero_probability_outcomes": 0
+          }
+        },
+        {
+          "conditional_nonpush": {
+            "brier": 0.12416945402753196,
+            "events": 794,
+            "excluded_pushes": 22,
+            "log_loss": {
+              "mean": 0.4014096752447514,
+              "n": 794,
+              "status": "AVAILABLE",
+              "zero_probability_outcomes": 0
+            },
+            "probability_basis": "EXCLUDING_PUSHES",
+            "undefined_nonpush_mass": 0
+          },
+          "events": 816,
+          "home_handicap": 10.0,
+          "observed_cover_rate": 0.8198529411764706,
+          "observed_push_rate": 0.02696078431372549,
+          "predicted_cover_rate": 0.7762660601829359,
+          "predicted_push_rate": 0.020571277638558323,
+          "three_way_brier_category_sum": 0.2854637507440031,
+          "three_way_log_loss": {
+            "mean": 0.5133403899822829,
+            "n": 816,
+            "status": "AVAILABLE",
+            "zero_probability_outcomes": 0
+          }
+        },
+        {
+          "conditional_nonpush": {
+            "brier": 0.0955149706011932,
+            "events": 793,
+            "excluded_pushes": 23,
+            "log_loss": {
+              "mean": 0.3236194952376738,
+              "n": 793,
+              "status": "AVAILABLE",
+              "zero_probability_outcomes": 0
+            },
+            "probability_basis": "EXCLUDING_PUSHES",
+            "undefined_nonpush_mass": 0
+          },
+          "events": 816,
+          "home_handicap": 14.0,
+          "observed_cover_rate": 0.8578431372549019,
+          "observed_push_rate": 0.028186274509803922,
+          "predicted_cover_rate": 0.8505043503493901,
+          "predicted_push_rate": 0.01535277118412963,
+          "three_way_brier_category_sum": 0.23426090880326958,
+          "three_way_log_loss": {
+            "mean": 0.4454808501073356,
+            "n": 816,
+            "status": "AVAILABLE",
+            "zero_probability_outcomes": 0
+          }
+        }
+      ],
+      "key_number_push_reliability": [
+        {
+          "conditional_nonpush": {
+            "brier": 0.18446217450353894,
+            "events": 783,
+            "excluded_pushes": 33,
+            "log_loss": {
+              "mean": 0.5510714760214992,
+              "n": 783,
+              "status": "AVAILABLE",
+              "zero_probability_outcomes": 0
+            },
+            "probability_basis": "EXCLUDING_PUSHES",
+            "undefined_nonpush_mass": 0
+          },
+          "events": 816,
+          "home_handicap": -7.0,
+          "observed_cover_rate": 0.29411764705882354,
+          "observed_push_rate": 0.04044117647058824,
+          "predicted_cover_rate": 0.31456957783339573,
+          "predicted_push_rate": 0.026152420320893457,
+          "three_way_brier_category_sum": 0.4170161916634924,
+          "three_way_log_loss": {
+            "mean": 0.702898659128443,
+            "n": 816,
+            "status": "AVAILABLE",
+            "zero_probability_outcomes": 0
+          }
+        },
+        {
+          "conditional_nonpush": {
+            "brier": 0.2115741772604733,
+            "events": 761,
+            "excluded_pushes": 55,
+            "log_loss": {
+              "mean": 0.6123804682840948,
+              "n": 761,
+              "status": "AVAILABLE",
+              "zero_probability_outcomes": 0
+            },
+            "probability_basis": "EXCLUDING_PUSHES",
+            "undefined_nonpush_mass": 0
+          },
+          "events": 816,
+          "home_handicap": -3.0,
+          "observed_cover_rate": 0.41911764705882354,
+          "observed_push_rate": 0.06740196078431372,
+          "predicted_cover_rate": 0.4243313268100733,
+          "predicted_push_rate": 0.029211532501938437,
+          "three_way_brier_category_sum": 0.4951843239466127,
+          "three_way_log_loss": {
+            "mean": 0.8343683645354809,
+            "n": 816,
+            "status": "AVAILABLE",
+            "zero_probability_outcomes": 0
+          }
+        },
+        {
+          "conditional_nonpush": {
+            "brier": 0.20220328138304697,
+            "events": 755,
+            "excluded_pushes": 61,
+            "log_loss": {
+              "mean": 0.5865524654597162,
+              "n": 755,
+              "status": "AVAILABLE",
+              "zero_probability_outcomes": 0
+            },
+            "probability_basis": "EXCLUDING_PUSHES",
+            "undefined_nonpush_mass": 0
+          },
+          "events": 816,
+          "home_handicap": 3.0,
+          "observed_cover_rate": 0.5968137254901961,
+          "observed_push_rate": 0.07475490196078431,
+          "predicted_cover_rate": 0.6005326148275293,
+          "predicted_push_rate": 0.028017211572714095,
+          "three_way_brier_category_sum": 0.48565912873008715,
+          "three_way_log_loss": {
+            "mean": 0.8361199139639589,
+            "n": 816,
+            "status": "AVAILABLE",
+            "zero_probability_outcomes": 0
+          }
+        },
+        {
+          "conditional_nonpush": {
+            "brier": 0.1545915761506877,
+            "events": 781,
+            "excluded_pushes": 35,
+            "log_loss": {
+              "mean": 0.4768837358467846,
+              "n": 781,
+              "status": "AVAILABLE",
+              "zero_probability_outcomes": 0
+            },
+            "probability_basis": "EXCLUDING_PUSHES",
+            "undefined_nonpush_mass": 0
+          },
+          "events": 816,
+          "home_handicap": 7.0,
+          "observed_cover_rate": 0.7549019607843137,
+          "observed_push_rate": 0.0428921568627451,
+          "predicted_cover_rate": 0.7075461152777485,
+          "predicted_push_rate": 0.024206139837488524,
+          "three_way_brier_category_sum": 0.36152374731558784,
+          "three_way_log_loss": {
+            "mean": 0.6328157735829139,
+            "n": 816,
+            "status": "AVAILABLE",
+            "zero_probability_outcomes": 0
+          }
+        }
+      ]
+    },
+    "nfl.margin.full_support.research.96c5a8cb7e9970e7": {
+      "by_home_handicap": [
+        {
+          "conditional_nonpush": {
+            "brier": 0.14467501002396232,
+            "events": 803,
+            "excluded_pushes": 13,
+            "log_loss": {
+              "mean": 0.45643030387229444,
+              "n": 803,
+              "status": "AVAILABLE",
+              "zero_probability_outcomes": 0
+            },
+            "probability_basis": "EXCLUDING_PUSHES",
+            "undefined_nonpush_mass": 0
+          },
+          "events": 816,
+          "home_handicap": -14.0,
+          "observed_cover_rate": 0.1948529411764706,
+          "observed_push_rate": 0.015931372549019607,
+          "predicted_cover_rate": 0.1566536151527666,
+          "predicted_push_rate": 0.024080578546976195,
+          "three_way_brier_category_sum": 0.3103235591655227,
+          "three_way_log_loss": {
+            "mean": 0.5307015876740975,
+            "n": 816,
+            "status": "AVAILABLE",
+            "zero_probability_outcomes": 0
+          }
+        },
+        {
+          "conditional_nonpush": {
+            "brier": 0.16745713712679486,
+            "events": 804,
+            "excluded_pushes": 12,
+            "log_loss": {
+              "mean": 0.5124131193302605,
+              "n": 804,
+              "status": "AVAILABLE",
+              "zero_probability_outcomes": 0
+            },
+            "probability_basis": "EXCLUDING_PUSHES",
+            "undefined_nonpush_mass": 0
+          },
+          "events": 816,
+          "home_handicap": -10.0,
+          "observed_cover_rate": 0.24877450980392157,
+          "observed_push_rate": 0.014705882352941176,
+          "predicted_cover_rate": 0.21795148230819428,
+          "predicted_push_rate": 0.03329250624356152,
+          "three_way_brier_category_sum": 0.35375784505145985,
+          "three_way_log_loss": {
+            "mean": 0.5874019232474793,
+            "n": 816,
+            "status": "AVAILABLE",
+            "zero_probability_outcomes": 0
+          }
+        },
+        {
+          "conditional_nonpush": {
+            "brier": 0.18080787643211138,
+            "events": 816,
+            "excluded_pushes": 0,
+            "log_loss": {
+              "mean": 0.542926773560503,
+              "n": 816,
+              "status": "AVAILABLE",
+              "zero_probability_outcomes": 0
+            },
+            "probability_basis": "EXCLUDING_PUSHES",
+            "undefined_nonpush_mass": 0
+          },
+          "events": 816,
+          "home_handicap": -7.5,
+          "observed_cover_rate": 0.29411764705882354,
+          "observed_push_rate": 0.0,
+          "predicted_cover_rate": 0.2930510168119666,
+          "predicted_push_rate": 0.0,
+          "three_way_brier_category_sum": 0.36161575286422276,
+          "three_way_log_loss": {
+            "mean": 0.542926773560503,
+            "n": 816,
+            "status": "AVAILABLE",
+            "zero_probability_outcomes": 0
+          }
+        },
+        {
+          "conditional_nonpush": {
+            "brier": 0.18400296428059934,
+            "events": 783,
+            "excluded_pushes": 33,
+            "log_loss": {
+              "mean": 0.5502621369229261,
+              "n": 783,
+              "status": "AVAILABLE",
+              "zero_probability_outcomes": 0
+            },
+            "probability_basis": "EXCLUDING_PUSHES",
+            "undefined_nonpush_mass": 0
+          },
+          "events": 816,
+          "home_handicap": -7.0,
+          "observed_cover_rate": 0.29411764705882354,
+          "observed_push_rate": 0.04044117647058824,
+          "predicted_cover_rate": 0.2930510168119666,
+          "predicted_push_rate": 0.03894564936374163,
+          "three_way_brier_category_sum": 0.4160676000960151,
+          "three_way_log_loss": {
+            "mean": 0.69734560564745,
+            "n": 816,
+            "status": "AVAILABLE",
+            "zero_probability_outcomes": 0
+          }
+        },
+        {
+          "conditional_nonpush": {
+            "brier": 0.19646074416603884,
+            "events": 816,
+            "excluded_pushes": 0,
+            "log_loss": {
+              "mean": 0.5789184221013662,
+              "n": 816,
+              "status": "AVAILABLE",
+              "zero_probability_outcomes": 0
+            },
+            "probability_basis": "EXCLUDING_PUSHES",
+            "undefined_nonpush_mass": 0
+          },
+          "events": 816,
+          "home_handicap": -6.5,
+          "observed_cover_rate": 0.33455882352941174,
+          "observed_push_rate": 0.0,
+          "predicted_cover_rate": 0.3319966661757082,
+          "predicted_push_rate": 0.0,
+          "three_way_brier_category_sum": 0.3929214883320777,
+          "three_way_log_loss": {
+            "mean": 0.5789184221013661,
+            "n": 816,
+            "status": "AVAILABLE",
+            "zero_probability_outcomes": 0
+          }
+        },
+        {
+          "conditional_nonpush": {
+            "brier": 0.20998022871147926,
+            "events": 816,
+            "excluded_pushes": 0,
+            "log_loss": {
+              "mean": 0.6094648891025312,
+              "n": 816,
+              "status": "AVAILABLE",
+              "zero_probability_outcomes": 0
+            },
+            "probability_basis": "EXCLUDING_PUSHES",
+            "undefined_nonpush_mass": 0
+          },
+          "events": 816,
+          "home_handicap": -3.5,
+          "observed_cover_rate": 0.41911764705882354,
+          "observed_push_rate": 0.0,
+          "predicted_cover_rate": 0.4048946002652021,
+          "predicted_push_rate": 0.0,
+          "three_way_brier_category_sum": 0.4199604574229585,
+          "three_way_log_loss": {
+            "mean": 0.6094648891025312,
+            "n": 816,
+            "status": "AVAILABLE",
+            "zero_probability_outcomes": 0
+          }
+        },
+        {
+          "conditional_nonpush": {
+            "brier": 0.21125716731885344,
+            "events": 761,
+            "excluded_pushes": 55,
+            "log_loss": {
+              "mean": 0.6120431846579292,
+              "n": 761,
+              "status": "AVAILABLE",
+              "zero_probability_outcomes": 0
+            },
+            "probability_basis": "EXCLUDING_PUSHES",
+            "undefined_nonpush_mass": 0
+          },
+          "events": 816,
+          "home_handicap": -3.0,
+          "observed_cover_rate": 0.41911764705882354,
+          "observed_push_rate": 0.06740196078431372,
+          "predicted_cover_rate": 0.4048946002652021,
+          "predicted_push_rate": 0.0676948680256569,
+          "three_way_brier_category_sum": 0.49308307596559486,
+          "three_way_log_loss": {
+            "mean": 0.8180811663733228,
+            "n": 816,
+            "status": "AVAILABLE",
+            "zero_probability_outcomes": 0
+          }
+        },
+        {
+          "conditional_nonpush": {
+            "brier": 0.22198802374633575,
+            "events": 815,
+            "excluded_pushes": 1,
+            "log_loss": {
+              "mean": 0.6337455963911706,
+              "n": 815,
+              "status": "AVAILABLE",
+              "zero_probability_outcomes": 0
+            },
+            "probability_basis": "EXCLUDING_PUSHES",
+            "undefined_nonpush_mass": 0
+          },
+          "events": 816,
+          "home_handicap": 0.0,
+          "observed_cover_rate": 0.5416666666666666,
+          "observed_push_rate": 0.0012254901960784314,
+          "predicted_cover_rate": 0.52144039346648,
+          "predicted_push_rate": 0.00828912286142496,
+          "three_way_brier_category_sum": 0.4452903701706593,
+          "three_way_log_loss": {
+            "mean": 0.6470852001880474,
+            "n": 816,
+            "status": "AVAILABLE",
+            "zero_probability_outcomes": 0
+          }
+        },
+        {
+          "conditional_nonpush": {
+            "brier": 0.20300485277947503,
+            "events": 755,
+            "excluded_pushes": 61,
+            "log_loss": {
+              "mean": 0.5877275226867861,
+              "n": 755,
+              "status": "AVAILABLE",
+              "zero_probability_outcomes": 0
+            },
+            "probability_basis": "EXCLUDING_PUSHES",
+            "undefined_nonpush_mass": 0
+          },
+          "events": 816,
+          "home_handicap": 3.0,
+          "observed_cover_rate": 0.5968137254901961,
+          "observed_push_rate": 0.07475490196078431,
+          "predicted_cover_rate": 0.5752600174580232,
+          "predicted_push_rate": 0.061881089127735586,
+          "three_way_brier_category_sum": 0.4836762211886141,
+          "three_way_log_loss": {
+            "mean": 0.8087146631456986,
+            "n": 816,
+            "status": "AVAILABLE",
+            "zero_probability_outcomes": 0
+          }
+        },
+        {
+          "conditional_nonpush": {
+            "brier": 0.19943799351104174,
+            "events": 816,
+            "excluded_pushes": 0,
+            "log_loss": {
+              "mean": 0.5800103091722328,
+              "n": 816,
+              "status": "AVAILABLE",
+              "zero_probability_outcomes": 0
+            },
+            "probability_basis": "EXCLUDING_PUSHES",
+            "undefined_nonpush_mass": 0
+          },
+          "events": 816,
+          "home_handicap": 3.5,
+          "observed_cover_rate": 0.6715686274509803,
+          "observed_push_rate": 0.0,
+          "predicted_cover_rate": 0.6371411065857587,
+          "predicted_push_rate": 0.0,
+          "three_way_brier_category_sum": 0.3988759870220835,
+          "three_way_log_loss": {
+            "mean": 0.5800103091722328,
+            "n": 816,
+            "status": "AVAILABLE",
+            "zero_probability_outcomes": 0
+          }
+        },
+        {
+          "conditional_nonpush": {
+            "brier": 0.16612266123353145,
+            "events": 816,
+            "excluded_pushes": 0,
+            "log_loss": {
+              "mean": 0.5029199653470163,
+              "n": 816,
+              "status": "AVAILABLE",
+              "zero_probability_outcomes": 0
+            },
+            "probability_basis": "EXCLUDING_PUSHES",
+            "undefined_nonpush_mass": 0
+          },
+          "events": 816,
+          "home_handicap": 6.5,
+          "observed_cover_rate": 0.7549019607843137,
+          "observed_push_rate": 0.0,
+          "predicted_cover_rate": 0.7261740865888594,
+          "predicted_push_rate": 0.0,
+          "three_way_brier_category_sum": 0.3322453224670629,
+          "three_way_log_loss": {
+            "mean": 0.5029199653470163,
+            "n": 816,
+            "status": "AVAILABLE",
+            "zero_probability_outcomes": 0
+          }
+        },
+        {
+          "conditional_nonpush": {
+            "brier": 0.1521073091043673,
+            "events": 781,
+            "excluded_pushes": 35,
+            "log_loss": {
+              "mean": 0.4691716557809222,
+              "n": 781,
+              "status": "AVAILABLE",
+              "zero_probability_outcomes": 0
+            },
+            "probability_basis": "EXCLUDING_PUSHES",
+            "undefined_nonpush_mass": 0
+          },
+          "events": 816,
+          "home_handicap": 7.0,
+          "observed_cover_rate": 0.7549019607843137,
+          "observed_push_rate": 0.0428921568627451,
+          "predicted_cover_rate": 0.7261740865888594,
+          "predicted_push_rate": 0.04028155069512102,
+          "three_way_brier_category_sum": 0.3566457881735197,
+          "three_way_log_loss": {
+            "mean": 0.6190397321781704,
+            "n": 816,
+            "status": "AVAILABLE",
+            "zero_probability_outcomes": 0
+          }
+        },
+        {
+          "conditional_nonpush": {
+            "brier": 0.14997158337967087,
+            "events": 816,
+            "excluded_pushes": 0,
+            "log_loss": {
+              "mean": 0.4646502489658546,
+              "n": 816,
+              "status": "AVAILABLE",
+              "zero_probability_outcomes": 0
+            },
+            "probability_basis": "EXCLUDING_PUSHES",
+            "undefined_nonpush_mass": 0
+          },
+          "events": 816,
+          "home_handicap": 7.5,
+          "observed_cover_rate": 0.7977941176470589,
+          "observed_push_rate": 0.0,
+          "predicted_cover_rate": 0.7664556372839805,
+          "predicted_push_rate": 0.0,
+          "three_way_brier_category_sum": 0.29994316675934174,
+          "three_way_log_loss": {
+            "mean": 0.4646502489658545,
+            "n": 816,
+            "status": "AVAILABLE",
+            "zero_probability_outcomes": 0
+          }
+        },
+        {
+          "conditional_nonpush": {
+            "brier": 0.12261831036876014,
+            "events": 794,
+            "excluded_pushes": 22,
+            "log_loss": {
+              "mean": 0.39557898734963276,
+              "n": 794,
+              "status": "AVAILABLE",
+              "zero_probability_outcomes": 0
+            },
+            "probability_basis": "EXCLUDING_PUSHES",
+            "undefined_nonpush_mass": 0
+          },
+          "events": 816,
+          "home_handicap": 10.0,
+          "observed_cover_rate": 0.8198529411764706,
+          "observed_push_rate": 0.02696078431372549,
+          "predicted_cover_rate": 0.7982319879116602,
+          "predicted_push_rate": 0.02254789261775534,
+          "three_way_brier_category_sum": 0.2825974382068611,
+          "three_way_log_loss": {
+            "mean": 0.5054091416203171,
+            "n": 816,
+            "status": "AVAILABLE",
+            "zero_probability_outcomes": 0
+          }
+        },
+        {
+          "conditional_nonpush": {
+            "brier": 0.09551926160912216,
+            "events": 793,
+            "excluded_pushes": 23,
+            "log_loss": {
+              "mean": 0.32318953417185853,
+              "n": 793,
+              "status": "AVAILABLE",
+              "zero_probability_outcomes": 0
+            },
+            "probability_basis": "EXCLUDING_PUSHES",
+            "undefined_nonpush_mass": 0
+          },
+          "events": 816,
+          "home_handicap": 14.0,
+          "observed_cover_rate": 0.8578431372549019,
+          "observed_push_rate": 0.028186274509803922,
+          "predicted_cover_rate": 0.8531008634593551,
+          "predicted_push_rate": 0.020828257539412733,
+          "three_way_brier_category_sum": 0.23443900770500617,
+          "three_way_log_loss": {
+            "mean": 0.4435798629305858,
+            "n": 816,
+            "status": "AVAILABLE",
+            "zero_probability_outcomes": 0
+          }
+        }
+      ],
+      "key_number_push_reliability": [
+        {
+          "conditional_nonpush": {
+            "brier": 0.18400296428059934,
+            "events": 783,
+            "excluded_pushes": 33,
+            "log_loss": {
+              "mean": 0.5502621369229261,
+              "n": 783,
+              "status": "AVAILABLE",
+              "zero_probability_outcomes": 0
+            },
+            "probability_basis": "EXCLUDING_PUSHES",
+            "undefined_nonpush_mass": 0
+          },
+          "events": 816,
+          "home_handicap": -7.0,
+          "observed_cover_rate": 0.29411764705882354,
+          "observed_push_rate": 0.04044117647058824,
+          "predicted_cover_rate": 0.2930510168119666,
+          "predicted_push_rate": 0.03894564936374163,
+          "three_way_brier_category_sum": 0.4160676000960151,
+          "three_way_log_loss": {
+            "mean": 0.69734560564745,
+            "n": 816,
+            "status": "AVAILABLE",
+            "zero_probability_outcomes": 0
+          }
+        },
+        {
+          "conditional_nonpush": {
+            "brier": 0.21125716731885344,
+            "events": 761,
+            "excluded_pushes": 55,
+            "log_loss": {
+              "mean": 0.6120431846579292,
+              "n": 761,
+              "status": "AVAILABLE",
+              "zero_probability_outcomes": 0
+            },
+            "probability_basis": "EXCLUDING_PUSHES",
+            "undefined_nonpush_mass": 0
+          },
+          "events": 816,
+          "home_handicap": -3.0,
+          "observed_cover_rate": 0.41911764705882354,
+          "observed_push_rate": 0.06740196078431372,
+          "predicted_cover_rate": 0.4048946002652021,
+          "predicted_push_rate": 0.0676948680256569,
+          "three_way_brier_category_sum": 0.49308307596559486,
+          "three_way_log_loss": {
+            "mean": 0.8180811663733228,
+            "n": 816,
+            "status": "AVAILABLE",
+            "zero_probability_outcomes": 0
+          }
+        },
+        {
+          "conditional_nonpush": {
+            "brier": 0.20300485277947503,
+            "events": 755,
+            "excluded_pushes": 61,
+            "log_loss": {
+              "mean": 0.5877275226867861,
+              "n": 755,
+              "status": "AVAILABLE",
+              "zero_probability_outcomes": 0
+            },
+            "probability_basis": "EXCLUDING_PUSHES",
+            "undefined_nonpush_mass": 0
+          },
+          "events": 816,
+          "home_handicap": 3.0,
+          "observed_cover_rate": 0.5968137254901961,
+          "observed_push_rate": 0.07475490196078431,
+          "predicted_cover_rate": 0.5752600174580232,
+          "predicted_push_rate": 0.061881089127735586,
+          "three_way_brier_category_sum": 0.4836762211886141,
+          "three_way_log_loss": {
+            "mean": 0.8087146631456986,
+            "n": 816,
+            "status": "AVAILABLE",
+            "zero_probability_outcomes": 0
+          }
+        },
+        {
+          "conditional_nonpush": {
+            "brier": 0.1521073091043673,
+            "events": 781,
+            "excluded_pushes": 35,
+            "log_loss": {
+              "mean": 0.4691716557809222,
+              "n": 781,
+              "status": "AVAILABLE",
+              "zero_probability_outcomes": 0
+            },
+            "probability_basis": "EXCLUDING_PUSHES",
+            "undefined_nonpush_mass": 0
+          },
+          "events": 816,
+          "home_handicap": 7.0,
+          "observed_cover_rate": 0.7549019607843137,
+          "observed_push_rate": 0.0428921568627451,
+          "predicted_cover_rate": 0.7261740865888594,
+          "predicted_push_rate": 0.04028155069512102,
+          "three_way_brier_category_sum": 0.3566457881735197,
+          "three_way_log_loss": {
+            "mean": 0.6190397321781704,
+            "n": 816,
+            "status": "AVAILABLE",
+            "zero_probability_outcomes": 0
+          }
+        }
+      ]
+    }
+  }
+}

@@ -83,3 +83,15 @@ Read `docs/NFL_SPREAD_CALIBRATION.md`. It emits both raw and calibrated research
 probabilities. The historical scoring screen passed, but integer push reliability
 worsened and market superiority is unestablished. Do not call it validated
 spread pricing or apply it to totals, first halves, or other model IDs.
+
+For the selected QB parent, the separate margin distribution is configured by
+`data/nfl/qb_margin_full_support_v1/runtime.json` through the optional
+`margin_distribution_config` entry in the contextual runtime. The integrated
+research runner saves a separate margin child automatically, including a
+hypothetical spread ladder when no observed line is supplied. Read
+`docs/NFL_QB_MARGIN_PROCESS_20261019.md`. Its historical primary comparison is
+inconclusive, predictive status remains HOLD, and wagering is OFF. This child
+does not provide totals or replace the independent winner head. Historical
+saved forecasts require explicit retrospective mode; future pregame outputs
+must be frozen before kickoff with previously created, verified fit/config/
+evaluation artifacts. Existing combined-arm calibration remains a distinct path.

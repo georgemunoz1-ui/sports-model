@@ -1,0 +1,32 @@
+{
+  "schema": "nfl.qb_margin_release_verification.v1",
+  "created_at_utc": "2026-10-20T01:38:27.974291+00:00",
+  "execution_status": "COMPLETED",
+  "numerical_validity": "PASS",
+  "predictive_validation": "HOLD",
+  "historical_screen": "NOT_PASSED",
+  "unique_focused_tests": 187,
+  "test_count_explanation": "172 unchanged common/cohort/study tests from initial185 aggregate plus current15adaptertests; duplicate reruns excluded",
+  "independent_source_validation": true,
+  "independent_historical_scores_and_2000_bootstrap_replays": true,
+  "independent_current_draw_replay": 100000,
+  "independent_current_negative_probes": 17,
+  "original_forecast_unchanged": true,
+  "current_mode": "RETROSPECTIVE_RECONSTRUCTION",
+  "current_report_file_sha256": "b38d569b86c2cfd16dc5f334b91b0b3b7e34a18b07df08f9bde106bff0da08be",
+  "deployment_refit_directly_evaluated": false,
+  "wagering_authority": "OFF",
+  "production_promotion": false,
+  "main_merged": false,
+  "health_scope": "Partial source snapshot; full health unresolved; see retained log",
+  "evidence": {
+    "cohort/source-validation.json": "2951f7f5f7db8cb6674a06010069aad2b7dd4a8721ce72cbd0143cff714105f7",
+    "study-v1-source-validation.json": "4c2f603a3a869439adbf0389f1971613d303fbf77af5667e6381fa6d9a24d57b",
+    "evaluation-verification.json": "0bcca23d76300f6c7a9c1a7ac3a64ea1810ccdcb2be338f78b1c61db6037bdf9",
+    "reviewer-evaluation.json": "1cb96a708a8864d6dc2e536746fe3278ca537878eea357c48724cecf2e746626",
+    "reviewer-cohort-probes.json": "10adeeed34ec25a278f231a0be2541775c63f5dec7c4f264c5c53de69d74b55e",
+    "reviewer-current-output-v2.json": "9cb4fa1aa8a644ee4827bd4719dc30254b6b0c6b7a1f8051d43e5661d7eb840b",
+    "focused-tests-aggregate.json": "ad97c08e4b6906adf004806e3c4252e66000e5a97e78c0cd00ac4e80ad6ec981",
+    "focused-tests-final-adapter-v2.json": "d20c176f4e36b92b8b9d7a7c8ff6d788c9ecd7fcb00257dedef3046354e9e89a"
+  }
+}

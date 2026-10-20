@@ -4659,3 +4659,14 @@ User authorized swarm development across all sports. Added explicit home-margin 
 Mapped all supplied review findings to PR #69 source. Added retained OOT training-evidence validation, re-sealed fitted-state checks, safe malformed-row handling, explicit unconditional cover labels and pre-publication semantic validation of summaries, settlement, simulations, timing and coverage. Independent review reproduced and closed stale-coverage acceptance. Numerical fitting helpers and prediction law are unchanged; frozen fits remain tied to original code.
 
 158 focused tests passed. Eight retained NHL PMFs replayed 800,000 saved draws exactly; a 1,312-row NHL refit matched prior state, tail parameters, lattice and tuning selection exactly. New artifact/code identity is separate. Full health/CI remains unresolved; defaults, historical forecasts and action authority unchanged. See docs/MARGIN_SYSTEM_REVIEW_20261019.md and data/research/margin_review_20261019/verification.json.
+
+
+## 2026-10-19 — Selected-QB NFL margin fitting and guarded runner completion
+
+User authorized completing the selected-QB spread process for current and future research use. Registered NFL-QB-MARGIN-FULLSUPPORT-20261019 at 42cf271 before fitting. Recovered and qualified 1,871 exact-parent OOF games from 2019–2025, including six ties; seven annual parent folds and source/schedule values replay. Historical availability remains reconstructed.
+
+Fitted 1,055 earlier games and evaluated 816 later games with the existing fixed shared challenger. Primary paired CRPS delta −0.007908, 95% block-bootstrap interval [−0.022664, +0.011302]: inconclusive; aggregate historical screen NOT_PASSED. Zero-support outcomes fell 1 to 0. Predeclared refit on all 1,871 rows is separately identified and not directly held-out evaluated. Numerical PASS, predictive HOLD, wagering OFF.
+
+Wired a hash-bound margin child into the selected-QB research runner with pregame config/fit/evaluation timing, actual completion-before-kickoff, immutable outputs, push labeling, parent coefficient replay, and failed/incomplete evaluation refusal. Preserved the original parent forecast. WAS–SF reconstruction after kickoff: SF −7.5 cover 55.1492%, 100K-draw simulation 55.291%; push zero. This is retrospective from morning inputs, not the original pregame card or a live update.
+
+187 unique current focused tests pass. Independent source, 816-game metric/bootstrap, and 100K raw-draw replay checks retained. Source-only checkout still cannot certify full repository health. Implementation is on draft PR #69; no merge, production promotion, canonical grading, total distribution, or wager authorization. See docs/NFL_QB_MARGIN_PROCESS_20261019.md and data/research/nfl_qb_margin_20261019/.

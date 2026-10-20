@@ -1,0 +1,27 @@
+{
+  "base": {
+    "status": "PASS",
+    "rows": 1871,
+    "raw_source_binding": true,
+    "fold_binding": true,
+    "historical_availability_proven": false
+  },
+  "probes": [
+    {
+      "name": "rehashed_changed_margin",
+      "rejected": true,
+      "code": "QB_COHORT_SOURCE_VALUE_MISMATCH"
+    },
+    {
+      "name": "changed_start",
+      "rejected": true,
+      "code": "QB_COHORT_TIMESTAMP_BASIS"
+    },
+    {
+      "name": "fabricated_oof",
+      "rejected": true,
+      "code": "QB_COHORT_ROW_PROVENANCE"
+    }
+  ],
+  "elapsed_seconds": 2.3770120259941905
+}

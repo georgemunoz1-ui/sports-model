@@ -7,13 +7,22 @@ from pipelines.cards.adapters import nfl
 from models.nfl.contextual.runtime import run,persist_run
 
 def main():
-    p=argparse.ArgumentParser();p.add_argument('--date',required=True);p.add_argument('--output',type=Path,required=True);p.add_argument('--simulations',type=int,default=100000);p.add_argument('--model-id');p.add_argument('--mode',default='research_pregame');p.add_argument('--market-packet',type=Path);p.add_argument('--live-packet',type=Path);p.add_argument('--event-id');p.add_argument('--home-spread',type=float,action='append',help='Optional downstream full-game spread calibration, HOME handicap orientation');p.add_argument('--halftime-artifact',type=Path,help='Explicit fitted halftime/joint research artifact; emits a separate model output');p.add_argument('--weekly-state-store',type=Path);p.add_argument('--weekly-state-id');p.add_argument('--distribution-research-config',type=Path,help='Separate hash-bound margin/total research child; does not require or replace combined-arm calibration');a=p.parse_args()
+    p=argparse.ArgumentParser();p.add_argument('--date',required=True);p.add_argument('--output',type=Path,required=True);p.add_argument('--simulations',type=int,default=100000);p.add_argument('--model-id');p.add_argument('--mode',default='research_pregame');p.add_argument('--market-packet',type=Path);p.add_argument('--live-packet',type=Path);p.add_argument('--event-id');p.add_argument('--home-spread',type=float,action='append',help='Full-game HOME handicap; selected-QB margin product when configured, otherwise explicit combined-arm calibration');p.add_argument('--halftime-artifact',type=Path,help='Explicit fitted halftime/joint research artifact; emits a separate model output');p.add_argument('--weekly-state-store',type=Path);p.add_argument('--weekly-state-id');p.add_argument('--distribution-research-config',type=Path,help='Separate hash-bound margin/total research child; does not require or replace combined-arm calibration');p.add_argument('--margin-model',type=Path,help='Pinned selected-QB full-game margin configuration; separate research product');a=p.parse_args()
+    runtime_config=json.loads((nfl.DATA/'runtime.json').read_text())
+    margin_path=a.margin_model
+    if margin_path is None and runtime_config.get('margin_distribution_config') and a.mode=='research_pregame' and (a.model_id or runtime_config['default_research_model'])=='nfl.integrated_context.qb.v1.research':
+        margin_path=(nfl.DATA/runtime_config['margin_distribution_config']).resolve()
+    margin_loaded=None
+    if margin_path is not None:
+        if a.mode!='research_pregame':p.error('Selected-QB margin distribution supports research_pregame only')
+        from models.nfl.contextual.margin_distribution import load_config
+        margin_loaded=load_config(margin_path)
     if a.distribution_research_config and a.mode=='live':p.error('Distribution research supports pregame only')
     if bool(a.weekly_state_store)!=bool(a.weekly_state_id):p.error('Both weekly-state store and ID are required')
     if a.weekly_state_store and a.mode=='live':p.error('Weekly state is a pregame input')
-    if (a.home_spread or a.halftime_artifact) and a.model_id is None:p.error('Spread/halftime diagnostics require an explicit --model-id; the selected QB winner model has no joint score simulator')
+    if ((a.home_spread and margin_loaded is None) or a.halftime_artifact) and a.model_id is None:p.error('Spread/halftime diagnostics require an explicit --model-id; the selected QB winner model has no joint score simulator')
     if a.halftime_artifact and (a.mode!='research_pregame' or (a.model_id is not None and a.model_id!='nfl.integrated_context.combined.v1.research')):raise ValueError('HALFTIME_REQUIRES_COMBINED_FOOTBALL_FEATURE_SOURCE')
-    if a.home_spread and (a.mode!='research_pregame' or (a.model_id is not None and a.model_id!='nfl.integrated_context.combined.v1.research')):raise ValueError('SPREAD_CALIBRATION_REQUIRES_COMBINED_FOOTBALL_ARM')
+    if a.home_spread and margin_loaded is None and (a.mode!='research_pregame' or (a.model_id is not None and a.model_id!='nfl.integrated_context.combined.v1.research')):raise ValueError('SPREAD_CALIBRATION_REQUIRES_COMBINED_FOOTBALL_ARM')
     fitted=nfl.mode_artifact(a.mode) if a.mode!='research_pregame' else None
     market=json.loads(a.market_packet.read_text()) if a.market_packet else None
     live=json.loads(a.live_packet.read_text()) if a.live_packet else None
@@ -52,7 +61,18 @@ def main():
             from models.nfl.contextual.halftime import run_artifact
             half=run_artifact(a.halftime_artifact,result,a.output/e['event_id']/'halftime_joint',a.simulations)
             print(json.dumps({'halftime_joint':half['simulation_probabilities'],'model_id':half['model_id']},indent=2))
-        if a.home_spread:
+        if margin_loaded is not None:
+            from models.nfl.contextual.margin_distribution import build as build_margin, persist as persist_margin
+            try:
+                margin,margin_draws=build_margin(result,margin_loaded,a.home_spread,n=a.simulations)
+                persist_margin(a.output/e['event_id']/'margin_distribution',margin,margin_draws)
+                print(json.dumps({'margin_distribution':margin['contracts'],'model_id':margin['model_id'],'mode':margin['mode']},indent=2))
+            except (ValueError,KeyError,TypeError,OSError) as exc:
+                distribution_incomplete=True
+                failure={'status':'FAILED','reason':str(exc),'action_authority':False}
+                with (a.output/e['event_id']/'margin_distribution_failure.json').open('x') as handle:json.dump(failure,handle,indent=2)
+                print(json.dumps({'margin_distribution':failure}))
+        elif a.home_spread:
             from models.nfl.contextual.spread_runtime import persist_overlay
             overlay,calibrated_margins=nfl.calibrate_spreads(result,scores,a.home_spread,n=a.simulations)
             persist_overlay(a.output/e['event_id']/'spread_calibration',overlay,calibrated_margins)

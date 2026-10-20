@@ -1,0 +1,1385 @@
+{
+  "base_commit": "7cf2aea0581b4048802c920c9670823fab21679e",
+  "capture": {
+    "bundle_sha256": "4b140e98aa7116ea078973d3f72f8c5a90adc4b20f81427f5f81b86820570c58",
+    "cfb_default_endpoint_omitted_players_recovered": 2004,
+    "completed_at_utc": "2026-10-20T22:19:15.822822+00:00",
+    "created_at_utc": "2026-10-20T22:17:40.200619+00:00",
+    "distinct_sport_scoped_players": 22034,
+    "parsed_teams": 307,
+    "raw_source_count": 314,
+    "requested_teams": 307,
+    "sports": {
+      "cfb": {
+        "counts": {
+          "conflicting_players": 0,
+          "distinct_players": 15804,
+          "failed": 0,
+          "parsed": 138,
+          "requested": 138
+        },
+        "scope": "FBS_SCHEDULE_ID_AND_NAME_MATCH"
+      },
+      "mlb": {
+        "counts": {
+          "conflicting_players": 0,
+          "distinct_players": 1122,
+          "failed": 0,
+          "parsed": 30,
+          "requested": 30
+        },
+        "scope": "ALL_PROVIDER_TEAMS"
+      },
+      "mls": {
+        "counts": {
+          "conflicting_players": 0,
+          "distinct_players": 963,
+          "failed": 0,
+          "parsed": 30,
+          "requested": 30
+        },
+        "scope": "ALL_PROVIDER_TEAMS"
+      },
+      "nba": {
+        "counts": {
+          "conflicting_players": 0,
+          "distinct_players": 517,
+          "failed": 0,
+          "parsed": 30,
+          "requested": 30
+        },
+        "scope": "ALL_PROVIDER_TEAMS"
+      },
+      "nfl": {
+        "counts": {
+          "conflicting_players": 1,
+          "distinct_players": 2559,
+          "failed": 0,
+          "parsed": 32,
+          "requested": 32
+        },
+        "scope": "ALL_PROVIDER_TEAMS"
+      },
+      "nhl": {
+        "counts": {
+          "conflicting_players": 0,
+          "distinct_players": 848,
+          "failed": 0,
+          "parsed": 32,
+          "requested": 32
+        },
+        "scope": "ALL_PROVIDER_TEAMS"
+      },
+      "wnba": {
+        "counts": {
+          "conflicting_players": 0,
+          "distinct_players": 221,
+          "failed": 0,
+          "parsed": 15,
+          "requested": 15
+        },
+        "scope": "ALL_PROVIDER_TEAMS"
+      }
+    },
+    "unresolved_membership_conflicts": {
+      "espn:nfl:4361437": [
+        "espn:nfl:24",
+        "espn:nfl:4"
+      ]
+    }
+  },
+  "created_at_utc": "2026-10-20T22:25:12.773612+00:00",
+  "evidence_archive": {
+    "filename": "All-Sports-Roster-Evidence-2026-10-20.tar.xz",
+    "library_file_id": "libfile_7eb1c14033ec81918ef66cfda4e82a77",
+    "sha256": "7c53c458fcc841576cb5400deb0bdf0f7e19e3311fc7e4112726959f770d4d2b"
+  },
+  "full_repository_health": "NOT_CERTIFIED: partial restored checkout healthcheck reported 252 missing/historical failures and 3 warnings; focused tests are separately scoped",
+  "remaining": [
+    "One conflicting NFL membership remains blocked in the source-bound bundle; primary Bengals transaction record supports Cincinnati on October 20.",
+    "Game-confirmed availability, lineups, roles and workloads are not inferred from membership.",
+    "Full roster effect transforms are not fitted or promoted for any parent.",
+    "Clean-checkout CI pending branch publication; main unchanged."
+  ],
+  "remote_ci": "PENDING",
+  "saved_card_review": {
+    "current_status_counts": {
+      "AVAILABLE_NOT_USED": 16,
+      "BLOCKED": 1
+    },
+    "event_ledger": [
+      {
+        "away_team": "Boston Celtics",
+        "current_assessment": {
+          "action_authority": false,
+          "bundle_sha256": "4b140e98aa7116ea078973d3f72f8c5a90adc4b20f81427f5f81b86820570c58",
+          "cutoff_utc": "2026-10-20T22:21:22.273876+00:00",
+          "event_id": "NBA:401909088",
+          "reasons": [
+            "ROSTER_POST_START",
+            "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+          ],
+          "roster_aware_forecast_eligible": false,
+          "roster_inputs_numerically_used": false,
+          "schema": "sports.roster_coverage.v1",
+          "sport": "nba",
+          "status": "BLOCKED",
+          "teams": {},
+          "unmet_model_requirements": [
+            "rotation_minutes",
+            "usage_sharing",
+            "offense_defense_impact"
+          ]
+        },
+        "event_id": "NBA:401909088",
+        "forecast_changed": false,
+        "home_team": "Detroit Pistons",
+        "model_id": "nba.initial_causal_score.research.v1",
+        "original_card_sha256": "ea42b95b7522b946503a85742447cb6ace52ea3aeffa2e0bc9a5f0ee327c07a9",
+        "original_cutoff_assessment": {
+          "action_authority": false,
+          "bundle_sha256": "4b140e98aa7116ea078973d3f72f8c5a90adc4b20f81427f5f81b86820570c58",
+          "cutoff_utc": "2026-10-20T16:14:46.987606Z",
+          "event_id": "NBA:401909088",
+          "reasons": [
+            "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+            "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+            "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+          ],
+          "roster_aware_forecast_eligible": false,
+          "roster_inputs_numerically_used": false,
+          "schema": "sports.roster_coverage.v1",
+          "sport": "nba",
+          "status": "BLOCKED",
+          "teams": {},
+          "unmet_model_requirements": [
+            "rotation_minutes",
+            "usage_sharing",
+            "offense_defense_impact"
+          ]
+        },
+        "original_forecast_cutoff_utc": "2026-10-20T16:14:46.987606Z",
+        "retrospective_roster_use_allowed": false,
+        "sport": "nba"
+      },
+      {
+        "away_team": "Philadelphia 76ers",
+        "current_assessment": {
+          "action_authority": false,
+          "bundle_sha256": "4b140e98aa7116ea078973d3f72f8c5a90adc4b20f81427f5f81b86820570c58",
+          "cutoff_utc": "2026-10-20T22:21:22.273876+00:00",
+          "event_id": "NBA:401909089",
+          "reasons": [
+            "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+          ],
+          "roster_aware_forecast_eligible": false,
+          "roster_inputs_numerically_used": false,
+          "schema": "sports.roster_coverage.v1",
+          "sport": "nba",
+          "status": "AVAILABLE_NOT_USED",
+          "teams": {
+            "away": {
+              "availability": "UNCONFIRMED",
+              "lifecycle": "AVAILABLE",
+              "player_count": 17,
+              "reported_injury_count": 6,
+              "snapshot_sha256": "9071df4c0052ef6db838634e697d4fee8b0bfad6924849e4acf5656b2e5fcacb",
+              "source_sha256": "86de1c00a784da711a35482e9bb68c3216ec04729bb7c5dfd1cf591bfc48f2c5",
+              "team_id": "espn:nba:20"
+            },
+            "home": {
+              "availability": "UNCONFIRMED",
+              "lifecycle": "AVAILABLE",
+              "player_count": 17,
+              "reported_injury_count": 0,
+              "snapshot_sha256": "b1401a6fd19fdec7a1ff24f47412ddf3c53256337de5e6666a1a7975bedf5301",
+              "source_sha256": "2893c3fabc30c01e52ff740e17abab0446281b38119a72887c3a2a7e61fd1832",
+              "team_id": "espn:nba:18"
+            }
+          },
+          "unmet_model_requirements": [
+            "rotation_minutes",
+            "usage_sharing",
+            "offense_defense_impact"
+          ]
+        },
+        "event_id": "NBA:401909089",
+        "forecast_changed": false,
+        "home_team": "New York Knicks",
+        "model_id": "nba.initial_causal_score.research.v1",
+        "original_card_sha256": "ea42b95b7522b946503a85742447cb6ace52ea3aeffa2e0bc9a5f0ee327c07a9",
+        "original_cutoff_assessment": {
+          "action_authority": false,
+          "bundle_sha256": "4b140e98aa7116ea078973d3f72f8c5a90adc4b20f81427f5f81b86820570c58",
+          "cutoff_utc": "2026-10-20T16:14:46.987606Z",
+          "event_id": "NBA:401909089",
+          "reasons": [
+            "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+            "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+            "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+          ],
+          "roster_aware_forecast_eligible": false,
+          "roster_inputs_numerically_used": false,
+          "schema": "sports.roster_coverage.v1",
+          "sport": "nba",
+          "status": "BLOCKED",
+          "teams": {},
+          "unmet_model_requirements": [
+            "rotation_minutes",
+            "usage_sharing",
+            "offense_defense_impact"
+          ]
+        },
+        "original_forecast_cutoff_utc": "2026-10-20T16:14:46.987606Z",
+        "retrospective_roster_use_allowed": false,
+        "sport": "nba"
+      },
+      {
+        "away_team": "Oklahoma City Thunder",
+        "current_assessment": {
+          "action_authority": false,
+          "bundle_sha256": "4b140e98aa7116ea078973d3f72f8c5a90adc4b20f81427f5f81b86820570c58",
+          "cutoff_utc": "2026-10-20T22:21:22.273876+00:00",
+          "event_id": "NBA:401909090",
+          "reasons": [
+            "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+          ],
+          "roster_aware_forecast_eligible": false,
+          "roster_inputs_numerically_used": false,
+          "schema": "sports.roster_coverage.v1",
+          "sport": "nba",
+          "status": "AVAILABLE_NOT_USED",
+          "teams": {
+            "away": {
+              "availability": "UNCONFIRMED",
+              "lifecycle": "AVAILABLE",
+              "player_count": 17,
+              "reported_injury_count": 3,
+              "snapshot_sha256": "b2f4e1fd90a998c437216ed84f33833ce84163a05b93ae32a8f52f244dd36d0f",
+              "source_sha256": "57494b719fdfcd1b0e924821e4df8304d911af44366a50a8324ffe21c27a3a8f",
+              "team_id": "espn:nba:25"
+            },
+            "home": {
+              "availability": "UNCONFIRMED",
+              "lifecycle": "AVAILABLE",
+              "player_count": 17,
+              "reported_injury_count": 2,
+              "snapshot_sha256": "bdba8e72cb3b1de162d0dd6600c32893d38010a631b5143340093ce251ffe60d",
+              "source_sha256": "221a95e5c902814b7e015eff10ba333a763ae018af2da163df454e520553e50c",
+              "team_id": "espn:nba:24"
+            }
+          },
+          "unmet_model_requirements": [
+            "rotation_minutes",
+            "usage_sharing",
+            "offense_defense_impact"
+          ]
+        },
+        "event_id": "NBA:401909090",
+        "forecast_changed": false,
+        "home_team": "San Antonio Spurs",
+        "model_id": "nba.initial_causal_score.research.v1",
+        "original_card_sha256": "ea42b95b7522b946503a85742447cb6ace52ea3aeffa2e0bc9a5f0ee327c07a9",
+        "original_cutoff_assessment": {
+          "action_authority": false,
+          "bundle_sha256": "4b140e98aa7116ea078973d3f72f8c5a90adc4b20f81427f5f81b86820570c58",
+          "cutoff_utc": "2026-10-20T16:14:46.987606Z",
+          "event_id": "NBA:401909090",
+          "reasons": [
+            "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+            "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+            "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+          ],
+          "roster_aware_forecast_eligible": false,
+          "roster_inputs_numerically_used": false,
+          "schema": "sports.roster_coverage.v1",
+          "sport": "nba",
+          "status": "BLOCKED",
+          "teams": {},
+          "unmet_model_requirements": [
+            "rotation_minutes",
+            "usage_sharing",
+            "offense_defense_impact"
+          ]
+        },
+        "original_forecast_cutoff_utc": "2026-10-20T16:14:46.987606Z",
+        "retrospective_roster_use_allowed": false,
+        "sport": "nba"
+      },
+      {
+        "away_team": "San Jose Sharks",
+        "current_assessment": {
+          "action_authority": false,
+          "bundle_sha256": "4b140e98aa7116ea078973d3f72f8c5a90adc4b20f81427f5f81b86820570c58",
+          "cutoff_utc": "2026-10-20T22:21:22.273876+00:00",
+          "event_id": "NHL:401892539",
+          "reasons": [
+            "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+          ],
+          "roster_aware_forecast_eligible": false,
+          "roster_inputs_numerically_used": false,
+          "schema": "sports.roster_coverage.v1",
+          "sport": "nhl",
+          "status": "AVAILABLE_NOT_USED",
+          "teams": {
+            "away": {
+              "availability": "UNCONFIRMED",
+              "lifecycle": "AVAILABLE",
+              "player_count": 29,
+              "reported_injury_count": 4,
+              "snapshot_sha256": "947c774f8264e03886f086fddb6c422f0e4d3dc8371c7196d7bd2db56a9a6ea6",
+              "source_sha256": "de28b24b5f59d21d6aa462cfa499b1a8d482e1295258d2a5534005eadd4b0433",
+              "team_id": "espn:nhl:18"
+            },
+            "home": {
+              "availability": "UNCONFIRMED",
+              "lifecycle": "AVAILABLE",
+              "player_count": 26,
+              "reported_injury_count": 4,
+              "snapshot_sha256": "904ee107b6b8dfcaf88c0e6d22497af4a29fa5304e001314b479918816a8fb99",
+              "source_sha256": "fa84463856022fdeca94f5801ad16829b7a0de5eaa3cefa34b1acfcbe85ab124",
+              "team_id": "espn:nhl:10"
+            }
+          },
+          "unmet_model_requirements": [
+            "starting_goalie",
+            "skater_time_on_ice",
+            "special_teams",
+            "replacement_impact"
+          ]
+        },
+        "event_id": "NHL:401892539",
+        "forecast_changed": false,
+        "home_team": "Montreal Canadiens",
+        "model_id": "nhl.initial_causal_score.research.v1",
+        "original_card_sha256": "bb9dc2a7a16eb5452761814ac6e2322a2a821bcbc0a82289c259a09f058d8c61",
+        "original_cutoff_assessment": {
+          "action_authority": false,
+          "bundle_sha256": "4b140e98aa7116ea078973d3f72f8c5a90adc4b20f81427f5f81b86820570c58",
+          "cutoff_utc": "2026-10-20T16:23:58.187602Z",
+          "event_id": "NHL:401892539",
+          "reasons": [
+            "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+            "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+            "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+          ],
+          "roster_aware_forecast_eligible": false,
+          "roster_inputs_numerically_used": false,
+          "schema": "sports.roster_coverage.v1",
+          "sport": "nhl",
+          "status": "BLOCKED",
+          "teams": {},
+          "unmet_model_requirements": [
+            "starting_goalie",
+            "skater_time_on_ice",
+            "special_teams",
+            "replacement_impact"
+          ]
+        },
+        "original_forecast_cutoff_utc": "2026-10-20T16:23:58.187602Z",
+        "retrospective_roster_use_allowed": false,
+        "sport": "nhl"
+      },
+      {
+        "away_team": "Colorado Avalanche",
+        "current_assessment": {
+          "action_authority": false,
+          "bundle_sha256": "4b140e98aa7116ea078973d3f72f8c5a90adc4b20f81427f5f81b86820570c58",
+          "cutoff_utc": "2026-10-20T22:21:22.273876+00:00",
+          "event_id": "NHL:401892540",
+          "reasons": [
+            "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+          ],
+          "roster_aware_forecast_eligible": false,
+          "roster_inputs_numerically_used": false,
+          "schema": "sports.roster_coverage.v1",
+          "sport": "nhl",
+          "status": "AVAILABLE_NOT_USED",
+          "teams": {
+            "away": {
+              "availability": "UNCONFIRMED",
+              "lifecycle": "AVAILABLE",
+              "player_count": 25,
+              "reported_injury_count": 4,
+              "snapshot_sha256": "3479793fec8b76b7aa734196af1a3054ff0391ac04d65dcc694b3c13cd2f0d29",
+              "source_sha256": "6de76300c384368406451d74f2a7bc7c03ed7c4feceed5473e0fa1eeda260024",
+              "team_id": "espn:nhl:17"
+            },
+            "home": {
+              "availability": "UNCONFIRMED",
+              "lifecycle": "AVAILABLE",
+              "player_count": 25,
+              "reported_injury_count": 4,
+              "snapshot_sha256": "2ec774d32fcece8131a821739cd9735d25af6f72355184df76c0e6052ef0d98e",
+              "source_sha256": "eb7ab5ca11a909a37110c2fe3062701b05f7218a19abcf908139c8db12c3d321",
+              "team_id": "espn:nhl:11"
+            }
+          },
+          "unmet_model_requirements": [
+            "starting_goalie",
+            "skater_time_on_ice",
+            "special_teams",
+            "replacement_impact"
+          ]
+        },
+        "event_id": "NHL:401892540",
+        "forecast_changed": false,
+        "home_team": "New Jersey Devils",
+        "model_id": "nhl.initial_causal_score.research.v1",
+        "original_card_sha256": "bb9dc2a7a16eb5452761814ac6e2322a2a821bcbc0a82289c259a09f058d8c61",
+        "original_cutoff_assessment": {
+          "action_authority": false,
+          "bundle_sha256": "4b140e98aa7116ea078973d3f72f8c5a90adc4b20f81427f5f81b86820570c58",
+          "cutoff_utc": "2026-10-20T16:23:58.187602Z",
+          "event_id": "NHL:401892540",
+          "reasons": [
+            "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+            "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+            "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+          ],
+          "roster_aware_forecast_eligible": false,
+          "roster_inputs_numerically_used": false,
+          "schema": "sports.roster_coverage.v1",
+          "sport": "nhl",
+          "status": "BLOCKED",
+          "teams": {},
+          "unmet_model_requirements": [
+            "starting_goalie",
+            "skater_time_on_ice",
+            "special_teams",
+            "replacement_impact"
+          ]
+        },
+        "original_forecast_cutoff_utc": "2026-10-20T16:23:58.187602Z",
+        "retrospective_roster_use_allowed": false,
+        "sport": "nhl"
+      },
+      {
+        "away_team": "Anaheim Ducks",
+        "current_assessment": {
+          "action_authority": false,
+          "bundle_sha256": "4b140e98aa7116ea078973d3f72f8c5a90adc4b20f81427f5f81b86820570c58",
+          "cutoff_utc": "2026-10-20T22:21:22.273876+00:00",
+          "event_id": "NHL:401892541",
+          "reasons": [
+            "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+          ],
+          "roster_aware_forecast_eligible": false,
+          "roster_inputs_numerically_used": false,
+          "schema": "sports.roster_coverage.v1",
+          "sport": "nhl",
+          "status": "AVAILABLE_NOT_USED",
+          "teams": {
+            "away": {
+              "availability": "UNCONFIRMED",
+              "lifecycle": "AVAILABLE",
+              "player_count": 29,
+              "reported_injury_count": 3,
+              "snapshot_sha256": "b8c8fc599a3f0a53aebc580cd2da2dfb1eac5b92fdaf2c756d24fbb7592d2453",
+              "source_sha256": "856cc6af73aa59daaa79807ccc46c9d94f236eab2535cb12cd6188a8430cdf7c",
+              "team_id": "espn:nhl:25"
+            },
+            "home": {
+              "availability": "UNCONFIRMED",
+              "lifecycle": "AVAILABLE",
+              "player_count": 26,
+              "reported_injury_count": 4,
+              "snapshot_sha256": "ffc41ca81711fb62370632781cd12e943dcd6d3347707939b7bd4022ebfd5a28",
+              "source_sha256": "659a1a0669172795e84d2863ac7018597b661cbf2f73ac0264e69f1fe84ed737",
+              "team_id": "espn:nhl:12"
+            }
+          },
+          "unmet_model_requirements": [
+            "starting_goalie",
+            "skater_time_on_ice",
+            "special_teams",
+            "replacement_impact"
+          ]
+        },
+        "event_id": "NHL:401892541",
+        "forecast_changed": false,
+        "home_team": "New York Islanders",
+        "model_id": "nhl.initial_causal_score.research.v1",
+        "original_card_sha256": "bb9dc2a7a16eb5452761814ac6e2322a2a821bcbc0a82289c259a09f058d8c61",
+        "original_cutoff_assessment": {
+          "action_authority": false,
+          "bundle_sha256": "4b140e98aa7116ea078973d3f72f8c5a90adc4b20f81427f5f81b86820570c58",
+          "cutoff_utc": "2026-10-20T16:23:58.187602Z",
+          "event_id": "NHL:401892541",
+          "reasons": [
+            "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+            "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+            "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+          ],
+          "roster_aware_forecast_eligible": false,
+          "roster_inputs_numerically_used": false,
+          "schema": "sports.roster_coverage.v1",
+          "sport": "nhl",
+          "status": "BLOCKED",
+          "teams": {},
+          "unmet_model_requirements": [
+            "starting_goalie",
+            "skater_time_on_ice",
+            "special_teams",
+            "replacement_impact"
+          ]
+        },
+        "original_forecast_cutoff_utc": "2026-10-20T16:23:58.187602Z",
+        "retrospective_roster_use_allowed": false,
+        "sport": "nhl"
+      },
+      {
+        "away_team": "Los Angeles Kings",
+        "current_assessment": {
+          "action_authority": false,
+          "bundle_sha256": "4b140e98aa7116ea078973d3f72f8c5a90adc4b20f81427f5f81b86820570c58",
+          "cutoff_utc": "2026-10-20T22:21:22.273876+00:00",
+          "event_id": "NHL:401892542",
+          "reasons": [
+            "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+          ],
+          "roster_aware_forecast_eligible": false,
+          "roster_inputs_numerically_used": false,
+          "schema": "sports.roster_coverage.v1",
+          "sport": "nhl",
+          "status": "AVAILABLE_NOT_USED",
+          "teams": {
+            "away": {
+              "availability": "UNCONFIRMED",
+              "lifecycle": "AVAILABLE",
+              "player_count": 25,
+              "reported_injury_count": 2,
+              "snapshot_sha256": "cb6afd1a80c34ce589b559b7057c5c0289ed3621c5b798676cb7fcedc7c396c2",
+              "source_sha256": "3fd52f6e09e4bbb981964c4c0725bb1a4587004079fab918d110de71dc5c0442",
+              "team_id": "espn:nhl:8"
+            },
+            "home": {
+              "availability": "UNCONFIRMED",
+              "lifecycle": "AVAILABLE",
+              "player_count": 25,
+              "reported_injury_count": 3,
+              "snapshot_sha256": "9905578775914762e18592c4f3bc9dd53b65120e57bf497f1983560636b9ec5f",
+              "source_sha256": "b0e5dd56ff50deed2b6911e7d4829590fa5463290695bca6b569b9ba782c1c94",
+              "team_id": "espn:nhl:23"
+            }
+          },
+          "unmet_model_requirements": [
+            "starting_goalie",
+            "skater_time_on_ice",
+            "special_teams",
+            "replacement_impact"
+          ]
+        },
+        "event_id": "NHL:401892542",
+        "forecast_changed": false,
+        "home_team": "Washington Capitals",
+        "model_id": "nhl.initial_causal_score.research.v1",
+        "original_card_sha256": "bb9dc2a7a16eb5452761814ac6e2322a2a821bcbc0a82289c259a09f058d8c61",
+        "original_cutoff_assessment": {
+          "action_authority": false,
+          "bundle_sha256": "4b140e98aa7116ea078973d3f72f8c5a90adc4b20f81427f5f81b86820570c58",
+          "cutoff_utc": "2026-10-20T16:23:58.187602Z",
+          "event_id": "NHL:401892542",
+          "reasons": [
+            "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+            "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+            "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+          ],
+          "roster_aware_forecast_eligible": false,
+          "roster_inputs_numerically_used": false,
+          "schema": "sports.roster_coverage.v1",
+          "sport": "nhl",
+          "status": "BLOCKED",
+          "teams": {},
+          "unmet_model_requirements": [
+            "starting_goalie",
+            "skater_time_on_ice",
+            "special_teams",
+            "replacement_impact"
+          ]
+        },
+        "original_forecast_cutoff_utc": "2026-10-20T16:23:58.187602Z",
+        "retrospective_roster_use_allowed": false,
+        "sport": "nhl"
+      },
+      {
+        "away_team": "Toronto Maple Leafs",
+        "current_assessment": {
+          "action_authority": false,
+          "bundle_sha256": "4b140e98aa7116ea078973d3f72f8c5a90adc4b20f81427f5f81b86820570c58",
+          "cutoff_utc": "2026-10-20T22:21:22.273876+00:00",
+          "event_id": "NHL:401892543",
+          "reasons": [
+            "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+          ],
+          "roster_aware_forecast_eligible": false,
+          "roster_inputs_numerically_used": false,
+          "schema": "sports.roster_coverage.v1",
+          "sport": "nhl",
+          "status": "AVAILABLE_NOT_USED",
+          "teams": {
+            "away": {
+              "availability": "UNCONFIRMED",
+              "lifecycle": "AVAILABLE",
+              "player_count": 29,
+              "reported_injury_count": 4,
+              "snapshot_sha256": "fbda21d9412114cb201b74df93203278c40137feb35e90b85d2797642db3b789",
+              "source_sha256": "a23b41c768d7de15a45178e2908edd0995a1720b9bbc3d4e295d7938799a8813",
+              "team_id": "espn:nhl:21"
+            },
+            "home": {
+              "availability": "UNCONFIRMED",
+              "lifecycle": "AVAILABLE",
+              "player_count": 25,
+              "reported_injury_count": 2,
+              "snapshot_sha256": "f8a54b0c5b2829c498e67979d93b3a538710b095779ee221fadc6bc5f27a5f63",
+              "source_sha256": "db3ca74005fb99dbb20c00065928dcb8412e30390c9249cd115078f95228d2cb",
+              "team_id": "espn:nhl:29"
+            }
+          },
+          "unmet_model_requirements": [
+            "starting_goalie",
+            "skater_time_on_ice",
+            "special_teams",
+            "replacement_impact"
+          ]
+        },
+        "event_id": "NHL:401892543",
+        "forecast_changed": false,
+        "home_team": "Columbus Blue Jackets",
+        "model_id": "nhl.initial_causal_score.research.v1",
+        "original_card_sha256": "bb9dc2a7a16eb5452761814ac6e2322a2a821bcbc0a82289c259a09f058d8c61",
+        "original_cutoff_assessment": {
+          "action_authority": false,
+          "bundle_sha256": "4b140e98aa7116ea078973d3f72f8c5a90adc4b20f81427f5f81b86820570c58",
+          "cutoff_utc": "2026-10-20T16:23:58.187602Z",
+          "event_id": "NHL:401892543",
+          "reasons": [
+            "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+            "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+            "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+          ],
+          "roster_aware_forecast_eligible": false,
+          "roster_inputs_numerically_used": false,
+          "schema": "sports.roster_coverage.v1",
+          "sport": "nhl",
+          "status": "BLOCKED",
+          "teams": {},
+          "unmet_model_requirements": [
+            "starting_goalie",
+            "skater_time_on_ice",
+            "special_teams",
+            "replacement_impact"
+          ]
+        },
+        "original_forecast_cutoff_utc": "2026-10-20T16:23:58.187602Z",
+        "retrospective_roster_use_allowed": false,
+        "sport": "nhl"
+      },
+      {
+        "away_team": "Winnipeg Jets",
+        "current_assessment": {
+          "action_authority": false,
+          "bundle_sha256": "4b140e98aa7116ea078973d3f72f8c5a90adc4b20f81427f5f81b86820570c58",
+          "cutoff_utc": "2026-10-20T22:21:22.273876+00:00",
+          "event_id": "NHL:401892544",
+          "reasons": [
+            "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+          ],
+          "roster_aware_forecast_eligible": false,
+          "roster_inputs_numerically_used": false,
+          "schema": "sports.roster_coverage.v1",
+          "sport": "nhl",
+          "status": "AVAILABLE_NOT_USED",
+          "teams": {
+            "away": {
+              "availability": "UNCONFIRMED",
+              "lifecycle": "AVAILABLE",
+              "player_count": 27,
+              "reported_injury_count": 4,
+              "snapshot_sha256": "3f35367edcdd9d8b8323157a1dcd2ee38129da5e100cc3b37869ebe2f7926a19",
+              "source_sha256": "db77ec1e4503dbd095c23bf2b9ea68e4ba92655f9d67651ec6e80002feabbc78",
+              "team_id": "espn:nhl:28"
+            },
+            "home": {
+              "availability": "UNCONFIRMED",
+              "lifecycle": "AVAILABLE",
+              "player_count": 26,
+              "reported_injury_count": 5,
+              "snapshot_sha256": "d11524dca16e2dca8c38120334fd88bd4f21c4959cfa7d70a0f5585aed8bbbdd",
+              "source_sha256": "6e089481f270b32d02f7aae3ddd2cb39d2f0c9fda9f4a520f29e75d1cbdf226b",
+              "team_id": "espn:nhl:19"
+            }
+          },
+          "unmet_model_requirements": [
+            "starting_goalie",
+            "skater_time_on_ice",
+            "special_teams",
+            "replacement_impact"
+          ]
+        },
+        "event_id": "NHL:401892544",
+        "forecast_changed": false,
+        "home_team": "St. Louis Blues",
+        "model_id": "nhl.initial_causal_score.research.v1",
+        "original_card_sha256": "bb9dc2a7a16eb5452761814ac6e2322a2a821bcbc0a82289c259a09f058d8c61",
+        "original_cutoff_assessment": {
+          "action_authority": false,
+          "bundle_sha256": "4b140e98aa7116ea078973d3f72f8c5a90adc4b20f81427f5f81b86820570c58",
+          "cutoff_utc": "2026-10-20T16:23:58.187602Z",
+          "event_id": "NHL:401892544",
+          "reasons": [
+            "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+            "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+            "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+          ],
+          "roster_aware_forecast_eligible": false,
+          "roster_inputs_numerically_used": false,
+          "schema": "sports.roster_coverage.v1",
+          "sport": "nhl",
+          "status": "BLOCKED",
+          "teams": {},
+          "unmet_model_requirements": [
+            "starting_goalie",
+            "skater_time_on_ice",
+            "special_teams",
+            "replacement_impact"
+          ]
+        },
+        "original_forecast_cutoff_utc": "2026-10-20T16:23:58.187602Z",
+        "retrospective_roster_use_allowed": false,
+        "sport": "nhl"
+      },
+      {
+        "away_team": "Boston Bruins",
+        "current_assessment": {
+          "action_authority": false,
+          "bundle_sha256": "4b140e98aa7116ea078973d3f72f8c5a90adc4b20f81427f5f81b86820570c58",
+          "cutoff_utc": "2026-10-20T22:21:22.273876+00:00",
+          "event_id": "NHL:401892545",
+          "reasons": [
+            "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+          ],
+          "roster_aware_forecast_eligible": false,
+          "roster_inputs_numerically_used": false,
+          "schema": "sports.roster_coverage.v1",
+          "sport": "nhl",
+          "status": "AVAILABLE_NOT_USED",
+          "teams": {
+            "away": {
+              "availability": "UNCONFIRMED",
+              "lifecycle": "AVAILABLE",
+              "player_count": 23,
+              "reported_injury_count": 0,
+              "snapshot_sha256": "9106117432559eba330751dbfe59f5d189fae6c7357495bdf0a7872bbd761c52",
+              "source_sha256": "85839d20692bd9619a7f91de69ee4484c851517e0f644e303e2d38c538a25bf4",
+              "team_id": "espn:nhl:1"
+            },
+            "home": {
+              "availability": "UNCONFIRMED",
+              "lifecycle": "AVAILABLE",
+              "player_count": 28,
+              "reported_injury_count": 5,
+              "snapshot_sha256": "b7c062b6f52fd3b99bc71cb8778dd519d7ff7fc045759a1124b7a1b537109062",
+              "source_sha256": "5a86a5eafdd6e6ddb65851b7da2155e59b0690a99b1ffa4ced5b5c24a7b6ee89",
+              "team_id": "espn:nhl:9"
+            }
+          },
+          "unmet_model_requirements": [
+            "starting_goalie",
+            "skater_time_on_ice",
+            "special_teams",
+            "replacement_impact"
+          ]
+        },
+        "event_id": "NHL:401892545",
+        "forecast_changed": false,
+        "home_team": "Dallas Stars",
+        "model_id": "nhl.initial_causal_score.research.v1",
+        "original_card_sha256": "bb9dc2a7a16eb5452761814ac6e2322a2a821bcbc0a82289c259a09f058d8c61",
+        "original_cutoff_assessment": {
+          "action_authority": false,
+          "bundle_sha256": "4b140e98aa7116ea078973d3f72f8c5a90adc4b20f81427f5f81b86820570c58",
+          "cutoff_utc": "2026-10-20T16:23:58.187602Z",
+          "event_id": "NHL:401892545",
+          "reasons": [
+            "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+            "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+            "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+          ],
+          "roster_aware_forecast_eligible": false,
+          "roster_inputs_numerically_used": false,
+          "schema": "sports.roster_coverage.v1",
+          "sport": "nhl",
+          "status": "BLOCKED",
+          "teams": {},
+          "unmet_model_requirements": [
+            "starting_goalie",
+            "skater_time_on_ice",
+            "special_teams",
+            "replacement_impact"
+          ]
+        },
+        "original_forecast_cutoff_utc": "2026-10-20T16:23:58.187602Z",
+        "retrospective_roster_use_allowed": false,
+        "sport": "nhl"
+      },
+      {
+        "away_team": "Minnesota Wild",
+        "current_assessment": {
+          "action_authority": false,
+          "bundle_sha256": "4b140e98aa7116ea078973d3f72f8c5a90adc4b20f81427f5f81b86820570c58",
+          "cutoff_utc": "2026-10-20T22:21:22.273876+00:00",
+          "event_id": "NHL:401892546",
+          "reasons": [
+            "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+          ],
+          "roster_aware_forecast_eligible": false,
+          "roster_inputs_numerically_used": false,
+          "schema": "sports.roster_coverage.v1",
+          "sport": "nhl",
+          "status": "AVAILABLE_NOT_USED",
+          "teams": {
+            "away": {
+              "availability": "UNCONFIRMED",
+              "lifecycle": "AVAILABLE",
+              "player_count": 30,
+              "reported_injury_count": 5,
+              "snapshot_sha256": "3f49c7f80e7795880ba936c96cda551e644e56e30ff8339b919211c7bee0537b",
+              "source_sha256": "1a301b4968b90e913b7927c1269112e09f3579c189f7cd93a0d5062b8faaa840",
+              "team_id": "espn:nhl:30"
+            },
+            "home": {
+              "availability": "UNCONFIRMED",
+              "lifecycle": "AVAILABLE",
+              "player_count": 28,
+              "reported_injury_count": 7,
+              "snapshot_sha256": "180b9a753d9663fe2bc491a68d75f79fb34ee7e32839777cfaaec9af8f249cbe",
+              "source_sha256": "a95e8ddf3731123e2da74fb21c364d7ae5d312cf5ecfbe33b9ea713577774882",
+              "team_id": "espn:nhl:6"
+            }
+          },
+          "unmet_model_requirements": [
+            "starting_goalie",
+            "skater_time_on_ice",
+            "special_teams",
+            "replacement_impact"
+          ]
+        },
+        "event_id": "NHL:401892546",
+        "forecast_changed": false,
+        "home_team": "Edmonton Oilers",
+        "model_id": "nhl.initial_causal_score.research.v1",
+        "original_card_sha256": "bb9dc2a7a16eb5452761814ac6e2322a2a821bcbc0a82289c259a09f058d8c61",
+        "original_cutoff_assessment": {
+          "action_authority": false,
+          "bundle_sha256": "4b140e98aa7116ea078973d3f72f8c5a90adc4b20f81427f5f81b86820570c58",
+          "cutoff_utc": "2026-10-20T16:23:58.187602Z",
+          "event_id": "NHL:401892546",
+          "reasons": [
+            "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+            "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+            "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+          ],
+          "roster_aware_forecast_eligible": false,
+          "roster_inputs_numerically_used": false,
+          "schema": "sports.roster_coverage.v1",
+          "sport": "nhl",
+          "status": "BLOCKED",
+          "teams": {},
+          "unmet_model_requirements": [
+            "starting_goalie",
+            "skater_time_on_ice",
+            "special_teams",
+            "replacement_impact"
+          ]
+        },
+        "original_forecast_cutoff_utc": "2026-10-20T16:23:58.187602Z",
+        "retrospective_roster_use_allowed": false,
+        "sport": "nhl"
+      },
+      {
+        "away_team": "Detroit Red Wings",
+        "current_assessment": {
+          "action_authority": false,
+          "bundle_sha256": "4b140e98aa7116ea078973d3f72f8c5a90adc4b20f81427f5f81b86820570c58",
+          "cutoff_utc": "2026-10-20T22:21:22.273876+00:00",
+          "event_id": "NHL:401892547",
+          "reasons": [
+            "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+          ],
+          "roster_aware_forecast_eligible": false,
+          "roster_inputs_numerically_used": false,
+          "schema": "sports.roster_coverage.v1",
+          "sport": "nhl",
+          "status": "AVAILABLE_NOT_USED",
+          "teams": {
+            "away": {
+              "availability": "UNCONFIRMED",
+              "lifecycle": "AVAILABLE",
+              "player_count": 26,
+              "reported_injury_count": 4,
+              "snapshot_sha256": "8ca56cd474db06513791d3f1cca480e2e4803c4381ece2e933c1df20d6040ab4",
+              "source_sha256": "baf01689e689a615c7bba676be317e3365f99d8dd95d0ebcf8ccfca8960e9057",
+              "team_id": "espn:nhl:5"
+            },
+            "home": {
+              "availability": "UNCONFIRMED",
+              "lifecycle": "AVAILABLE",
+              "player_count": 26,
+              "reported_injury_count": 3,
+              "snapshot_sha256": "93919fb3228aa04929a963936d0653b3cb6f949c8f872d1b86d129686a80db6c",
+              "source_sha256": "5e64c6b3c89254df0e5cea91573e9c2e6dbab78406fe2215a405ec9ef9d66f18",
+              "team_id": "espn:nhl:124292"
+            }
+          },
+          "unmet_model_requirements": [
+            "starting_goalie",
+            "skater_time_on_ice",
+            "special_teams",
+            "replacement_impact"
+          ]
+        },
+        "event_id": "NHL:401892547",
+        "forecast_changed": false,
+        "home_team": "Seattle Kraken",
+        "model_id": "nhl.initial_causal_score.research.v1",
+        "original_card_sha256": "bb9dc2a7a16eb5452761814ac6e2322a2a821bcbc0a82289c259a09f058d8c61",
+        "original_cutoff_assessment": {
+          "action_authority": false,
+          "bundle_sha256": "4b140e98aa7116ea078973d3f72f8c5a90adc4b20f81427f5f81b86820570c58",
+          "cutoff_utc": "2026-10-20T16:23:58.187602Z",
+          "event_id": "NHL:401892547",
+          "reasons": [
+            "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+            "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+            "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+          ],
+          "roster_aware_forecast_eligible": false,
+          "roster_inputs_numerically_used": false,
+          "schema": "sports.roster_coverage.v1",
+          "sport": "nhl",
+          "status": "BLOCKED",
+          "teams": {},
+          "unmet_model_requirements": [
+            "starting_goalie",
+            "skater_time_on_ice",
+            "special_teams",
+            "replacement_impact"
+          ]
+        },
+        "original_forecast_cutoff_utc": "2026-10-20T16:23:58.187602Z",
+        "retrospective_roster_use_allowed": false,
+        "sport": "nhl"
+      },
+      {
+        "away_team": "Carolina Hurricanes",
+        "current_assessment": {
+          "action_authority": false,
+          "bundle_sha256": "4b140e98aa7116ea078973d3f72f8c5a90adc4b20f81427f5f81b86820570c58",
+          "cutoff_utc": "2026-10-20T22:21:22.273876+00:00",
+          "event_id": "NHL:401892548",
+          "reasons": [
+            "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+          ],
+          "roster_aware_forecast_eligible": false,
+          "roster_inputs_numerically_used": false,
+          "schema": "sports.roster_coverage.v1",
+          "sport": "nhl",
+          "status": "AVAILABLE_NOT_USED",
+          "teams": {
+            "away": {
+              "availability": "UNCONFIRMED",
+              "lifecycle": "AVAILABLE",
+              "player_count": 25,
+              "reported_injury_count": 4,
+              "snapshot_sha256": "34f13c07024483c84a655dc80e871243e2f429083d607a7a9dcc5554bcf827f3",
+              "source_sha256": "569ba3634a5060934319a92145f80fb0180ae29247d2cef96ac066a7dcf137f2",
+              "team_id": "espn:nhl:7"
+            },
+            "home": {
+              "availability": "UNCONFIRMED",
+              "lifecycle": "AVAILABLE",
+              "player_count": 29,
+              "reported_injury_count": 5,
+              "snapshot_sha256": "562784715feeaa9bab82fee4d5e1a1f49b071dfa1b863e5dffb050f16f4330ba",
+              "source_sha256": "2e19e60e5483fc3e9828f5823156414c6a1d089b36d55ce1bd2e7b863f75215c",
+              "team_id": "espn:nhl:22"
+            }
+          },
+          "unmet_model_requirements": [
+            "starting_goalie",
+            "skater_time_on_ice",
+            "special_teams",
+            "replacement_impact"
+          ]
+        },
+        "event_id": "NHL:401892548",
+        "forecast_changed": false,
+        "home_team": "Vancouver Canucks",
+        "model_id": "nhl.initial_causal_score.research.v1",
+        "original_card_sha256": "bb9dc2a7a16eb5452761814ac6e2322a2a821bcbc0a82289c259a09f058d8c61",
+        "original_cutoff_assessment": {
+          "action_authority": false,
+          "bundle_sha256": "4b140e98aa7116ea078973d3f72f8c5a90adc4b20f81427f5f81b86820570c58",
+          "cutoff_utc": "2026-10-20T16:23:58.187602Z",
+          "event_id": "NHL:401892548",
+          "reasons": [
+            "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+            "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+            "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+          ],
+          "roster_aware_forecast_eligible": false,
+          "roster_inputs_numerically_used": false,
+          "schema": "sports.roster_coverage.v1",
+          "sport": "nhl",
+          "status": "BLOCKED",
+          "teams": {},
+          "unmet_model_requirements": [
+            "starting_goalie",
+            "skater_time_on_ice",
+            "special_teams",
+            "replacement_impact"
+          ]
+        },
+        "original_forecast_cutoff_utc": "2026-10-20T16:23:58.187602Z",
+        "retrospective_roster_use_allowed": false,
+        "sport": "nhl"
+      },
+      {
+        "away_team": "Tampa Bay Lightning",
+        "current_assessment": {
+          "action_authority": false,
+          "bundle_sha256": "4b140e98aa7116ea078973d3f72f8c5a90adc4b20f81427f5f81b86820570c58",
+          "cutoff_utc": "2026-10-20T22:21:22.273876+00:00",
+          "event_id": "NHL:401892549",
+          "reasons": [
+            "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+          ],
+          "roster_aware_forecast_eligible": false,
+          "roster_inputs_numerically_used": false,
+          "schema": "sports.roster_coverage.v1",
+          "sport": "nhl",
+          "status": "AVAILABLE_NOT_USED",
+          "teams": {
+            "away": {
+              "availability": "UNCONFIRMED",
+              "lifecycle": "AVAILABLE",
+              "player_count": 25,
+              "reported_injury_count": 1,
+              "snapshot_sha256": "71f5166b57e91809e3b59c4a36b75c3a462ebe3286688a2d4f65de3ef40a33b5",
+              "source_sha256": "21c204073d6cbc6c2a6905df4f4daa3154437316e28e646c81459357dccc49e2",
+              "team_id": "espn:nhl:20"
+            },
+            "home": {
+              "availability": "UNCONFIRMED",
+              "lifecycle": "AVAILABLE",
+              "player_count": 31,
+              "reported_injury_count": 5,
+              "snapshot_sha256": "ee28a27a55d94649fab858ab5fa6357946add9f24ed22d94ff77abbba4ebcbce",
+              "source_sha256": "06926d9b477364d5c96e9a6f3c5f1a1e9e9ce1f8c339b494120fc2b7f65a0797",
+              "team_id": "espn:nhl:37"
+            }
+          },
+          "unmet_model_requirements": [
+            "starting_goalie",
+            "skater_time_on_ice",
+            "special_teams",
+            "replacement_impact"
+          ]
+        },
+        "event_id": "NHL:401892549",
+        "forecast_changed": false,
+        "home_team": "Vegas Golden Knights",
+        "model_id": "nhl.initial_causal_score.research.v1",
+        "original_card_sha256": "bb9dc2a7a16eb5452761814ac6e2322a2a821bcbc0a82289c259a09f058d8c61",
+        "original_cutoff_assessment": {
+          "action_authority": false,
+          "bundle_sha256": "4b140e98aa7116ea078973d3f72f8c5a90adc4b20f81427f5f81b86820570c58",
+          "cutoff_utc": "2026-10-20T16:23:58.187602Z",
+          "event_id": "NHL:401892549",
+          "reasons": [
+            "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+            "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+            "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+          ],
+          "roster_aware_forecast_eligible": false,
+          "roster_inputs_numerically_used": false,
+          "schema": "sports.roster_coverage.v1",
+          "sport": "nhl",
+          "status": "BLOCKED",
+          "teams": {},
+          "unmet_model_requirements": [
+            "starting_goalie",
+            "skater_time_on_ice",
+            "special_teams",
+            "replacement_impact"
+          ]
+        },
+        "original_forecast_cutoff_utc": "2026-10-20T16:23:58.187602Z",
+        "retrospective_roster_use_allowed": false,
+        "sport": "nhl"
+      },
+      {
+        "away_team": "Missouri State",
+        "current_assessment": {
+          "action_authority": false,
+          "bundle_sha256": "4b140e98aa7116ea078973d3f72f8c5a90adc4b20f81427f5f81b86820570c58",
+          "cutoff_utc": "2026-10-20T22:21:22.273876+00:00",
+          "event_id": "CFB:401871069",
+          "reasons": [
+            "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+          ],
+          "roster_aware_forecast_eligible": false,
+          "roster_inputs_numerically_used": false,
+          "schema": "sports.roster_coverage.v1",
+          "sport": "cfb",
+          "status": "AVAILABLE_NOT_USED",
+          "teams": {
+            "away": {
+              "availability": "UNCONFIRMED",
+              "lifecycle": "AVAILABLE",
+              "player_count": 103,
+              "reported_injury_count": 0,
+              "snapshot_sha256": "08f9018a5128e3a1444b4b15157b4fc1c4108a3158176666f81d4b37acca2b1a",
+              "source_sha256": "d6cc4fedc78d7acb9cff8039815f05f76e8effe67b72d8e1867e283454234ff2",
+              "team_id": "espn:cfb:2623"
+            },
+            "home": {
+              "availability": "UNCONFIRMED",
+              "lifecycle": "AVAILABLE",
+              "player_count": 106,
+              "reported_injury_count": 0,
+              "snapshot_sha256": "2a08b428506f7f843ffe766eba670793e8b83858821ee87748cc7e673be37776",
+              "source_sha256": "f1e0f2defb11f5f7739a16c5333968b0a7bee7f43d00b0841422638e36e1ac1f",
+              "team_id": "espn:cfb:48"
+            }
+          },
+          "unmet_model_requirements": [
+            "starting_qb",
+            "depth_chart",
+            "transfer_identity",
+            "position_group_snaps",
+            "replacement_impact"
+          ]
+        },
+        "event_id": "CFB:401871069",
+        "forecast_changed": false,
+        "home_team": "Delaware",
+        "model_id": "cfb.fbs.elo_form_logit_ridge.v1_0.shadow",
+        "original_card_sha256": "1fa57c20d582500f5e709075cce2e7d9d06f451aa46892b22156ecf7670a2b7c",
+        "original_cutoff_assessment": {
+          "action_authority": false,
+          "bundle_sha256": "4b140e98aa7116ea078973d3f72f8c5a90adc4b20f81427f5f81b86820570c58",
+          "cutoff_utc": "2026-10-20T16:20:26.325923Z",
+          "event_id": "CFB:401871069",
+          "reasons": [
+            "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+            "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+            "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+          ],
+          "roster_aware_forecast_eligible": false,
+          "roster_inputs_numerically_used": false,
+          "schema": "sports.roster_coverage.v1",
+          "sport": "cfb",
+          "status": "BLOCKED",
+          "teams": {},
+          "unmet_model_requirements": [
+            "starting_qb",
+            "depth_chart",
+            "transfer_identity",
+            "position_group_snaps",
+            "replacement_impact"
+          ]
+        },
+        "original_forecast_cutoff_utc": "2026-10-20T16:20:26.325923Z",
+        "retrospective_roster_use_allowed": false,
+        "sport": "cfb"
+      },
+      {
+        "away_team": "Middle Tennessee",
+        "current_assessment": {
+          "action_authority": false,
+          "bundle_sha256": "4b140e98aa7116ea078973d3f72f8c5a90adc4b20f81427f5f81b86820570c58",
+          "cutoff_utc": "2026-10-20T22:21:22.273876+00:00",
+          "event_id": "CFB:401871055",
+          "reasons": [
+            "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+          ],
+          "roster_aware_forecast_eligible": false,
+          "roster_inputs_numerically_used": false,
+          "schema": "sports.roster_coverage.v1",
+          "sport": "cfb",
+          "status": "AVAILABLE_NOT_USED",
+          "teams": {
+            "away": {
+              "availability": "UNCONFIRMED",
+              "lifecycle": "AVAILABLE",
+              "player_count": 111,
+              "reported_injury_count": 0,
+              "snapshot_sha256": "35c0aee79afe008692d2ff63ba4f811ff360de26ffbafea1b4f42401408756c6",
+              "source_sha256": "44795ec607f947a6a6fa56374420caf85ebb7488531d188bd3d963a924ff8665",
+              "team_id": "espn:cfb:2393"
+            },
+            "home": {
+              "availability": "UNCONFIRMED",
+              "lifecycle": "AVAILABLE",
+              "player_count": 106,
+              "reported_injury_count": 0,
+              "snapshot_sha256": "1b1b4907fc24afcfb4d05cce4445e7e2f98a7d13b48332269c1305e1ee2f22e8",
+              "source_sha256": "432fdfdb4c1be522d259d63b888f91e1331aa61daecd241aeb4af4794ef0e2dd",
+              "team_id": "espn:cfb:2229"
+            }
+          },
+          "unmet_model_requirements": [
+            "starting_qb",
+            "depth_chart",
+            "transfer_identity",
+            "position_group_snaps",
+            "replacement_impact"
+          ]
+        },
+        "event_id": "CFB:401871055",
+        "forecast_changed": false,
+        "home_team": "Florida International",
+        "model_id": "cfb.fbs.elo_form_logit_ridge.v1_0.shadow",
+        "original_card_sha256": "1fa57c20d582500f5e709075cce2e7d9d06f451aa46892b22156ecf7670a2b7c",
+        "original_cutoff_assessment": {
+          "action_authority": false,
+          "bundle_sha256": "4b140e98aa7116ea078973d3f72f8c5a90adc4b20f81427f5f81b86820570c58",
+          "cutoff_utc": "2026-10-20T16:20:26.325923Z",
+          "event_id": "CFB:401871055",
+          "reasons": [
+            "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+            "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+            "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+          ],
+          "roster_aware_forecast_eligible": false,
+          "roster_inputs_numerically_used": false,
+          "schema": "sports.roster_coverage.v1",
+          "sport": "cfb",
+          "status": "BLOCKED",
+          "teams": {},
+          "unmet_model_requirements": [
+            "starting_qb",
+            "depth_chart",
+            "transfer_identity",
+            "position_group_snaps",
+            "replacement_impact"
+          ]
+        },
+        "original_forecast_cutoff_utc": "2026-10-20T16:20:26.325923Z",
+        "retrospective_roster_use_allowed": false,
+        "sport": "cfb"
+      },
+      {
+        "away_team": "South Alabama",
+        "current_assessment": {
+          "action_authority": false,
+          "bundle_sha256": "4b140e98aa7116ea078973d3f72f8c5a90adc4b20f81427f5f81b86820570c58",
+          "cutoff_utc": "2026-10-20T22:21:22.273876+00:00",
+          "event_id": "CFB:401871092",
+          "reasons": [
+            "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+          ],
+          "roster_aware_forecast_eligible": false,
+          "roster_inputs_numerically_used": false,
+          "schema": "sports.roster_coverage.v1",
+          "sport": "cfb",
+          "status": "AVAILABLE_NOT_USED",
+          "teams": {
+            "away": {
+              "availability": "UNCONFIRMED",
+              "lifecycle": "AVAILABLE",
+              "player_count": 118,
+              "reported_injury_count": 0,
+              "snapshot_sha256": "68ac097b05edbebbdec8f511a6c4a02630751b33e5c5f5111e4c2678e96bc935",
+              "source_sha256": "b95d68a1c5b193a7be817f304e1424b2915cdd4e8ce35171b213233927cf0a29",
+              "team_id": "espn:cfb:6"
+            },
+            "home": {
+              "availability": "UNCONFIRMED",
+              "lifecycle": "AVAILABLE",
+              "player_count": 106,
+              "reported_injury_count": 0,
+              "snapshot_sha256": "c0e8e53d031c4c38c90bd0f267308243d6258a8b06831b97a9599b9275322a84",
+              "source_sha256": "9087f50524b0bbf3b56378c325f945e5f4d95c139d4aa7c2265705a3c37ef1f4",
+              "team_id": "espn:cfb:276"
+            }
+          },
+          "unmet_model_requirements": [
+            "starting_qb",
+            "depth_chart",
+            "transfer_identity",
+            "position_group_snaps",
+            "replacement_impact"
+          ]
+        },
+        "event_id": "CFB:401871092",
+        "forecast_changed": false,
+        "home_team": "Marshall",
+        "model_id": "cfb.fbs.elo_form_logit_ridge.v1_0.shadow",
+        "original_card_sha256": "1fa57c20d582500f5e709075cce2e7d9d06f451aa46892b22156ecf7670a2b7c",
+        "original_cutoff_assessment": {
+          "action_authority": false,
+          "bundle_sha256": "4b140e98aa7116ea078973d3f72f8c5a90adc4b20f81427f5f81b86820570c58",
+          "cutoff_utc": "2026-10-20T16:20:26.325923Z",
+          "event_id": "CFB:401871092",
+          "reasons": [
+            "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+            "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+            "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+          ],
+          "roster_aware_forecast_eligible": false,
+          "roster_inputs_numerically_used": false,
+          "schema": "sports.roster_coverage.v1",
+          "sport": "cfb",
+          "status": "BLOCKED",
+          "teams": {},
+          "unmet_model_requirements": [
+            "starting_qb",
+            "depth_chart",
+            "transfer_identity",
+            "position_group_snaps",
+            "replacement_impact"
+          ]
+        },
+        "original_forecast_cutoff_utc": "2026-10-20T16:20:26.325923Z",
+        "retrospective_roster_use_allowed": false,
+        "sport": "cfb"
+      }
+    ],
+    "events": 17,
+    "new_model_forecasts": 0,
+    "no_forecasts_changed": true,
+    "original_cutoff_status_counts": {
+      "BLOCKED": 17
+    },
+    "reviewed_at_utc": "2026-10-20T22:21:22.273876+00:00"
+  },
+  "schema": "sports.roster_release.v1",
+  "scope": "SOURCE_CAPTURE_CONTRACT_AND_RUNNER_COVERAGE; NOT_PLAYER_IMPACT_FITTING",
+  "status_axes": {
+    "EXECUTION_STATUS": "PARTIAL",
+    "PREDICTIVE_VALIDATION": "NOT_ASSESSED",
+    "PUBLICATION_ELIGIBILITY": "INELIGIBLE",
+    "WAGERING_AUTHORITY": "OFF"
+  },
+  "tests": {
+    "command": "python3 -m pytest -q tests/test_rosters.py tests/test_current_runtime_contracts.py tests/test_nfl_personnel_resolution.py tests/test_current_sports_data.py",
+    "errors": 0,
+    "failures": 0,
+    "junit_sha256": "01f7614682cf9e5b348c18402e669d85141a12786930cebf2fc1a7b28369fa0c",
+    "skipped": 0,
+    "source_files": {
+      "scripts/audit_roster_cards.py": "890b8a6a6fc65cc53bef3c918ddb6b52390f30c9832aaab19687884557782606",
+      "scripts/generate_card_force.py": "7feba86b2bc2216524742089fc6f9088e350a0c4e76e0b0aaa88fc864604afbc",
+      "scripts/prepare_rosters.py": "7e736eeca52017634d8d4a2d7ae108e4023d7334af8750d821d709cf5517c6df",
+      "scripts/run_nfl_integrated.py": "eca319301678946587504c796ca87edf408940747059165d9e908de3cf23a060",
+      "sports/registry.py": "27d64aeee18fc19d7a867eb2e27a513d2ff7a10b59a278e6aa6ff50d38aa11f6",
+      "sports/rosters.py": "b13b2454adecc35193a5d3549c26cc5387cc4a573587fd2378ff599582204112",
+      "tests/test_rosters.py": "cb84c6c525438f3632164f2b907f4857d7b8552cc6ed68c4dc0b25136a411ba8"
+    },
+    "tests": 81
+  }
+}

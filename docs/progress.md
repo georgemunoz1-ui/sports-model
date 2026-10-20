@@ -4645,3 +4645,12 @@ local failures and health results cannot certify repository health. Exact-head
 remote CI and full-tree checks are required and recorded on the release PR.
 Artifact-storage quota remains an independently tracked upload limitation.
 See docs/MC_PRECISION_RESEARCH.md and docs/NBA_EFFICIENCY_SHADOW.md.
+
+
+## 2026-10-20 — all-sports roster acquisition and honest consumption boundaries
+
+User requested roster-gap repair across all sports. Added immutable roster capture and raw-byte normalization for NFL, CFB, NBA, WNBA, MLB, NHL and MLS, exact team/player identities, six-hour cutoff checks, duplicate membership guards, conditional workload conservation, and coverage attachments in the shared card and canonical NFL runner. Full-roster-required mode refuses before simulation; attaching a roster never changes parent probabilities or asserts numerical use. Current NFL selected-arm capability evidence and MLB starting-pitcher scope stay distinct.
+
+Captured 307/307 requested teams, seven directory receipts and 22,034 distinct sport-scoped player IDs. Discovered the default CFB endpoint silently capped every team at 100; explicit limit=1000 recovered 2,004 omitted players across the 138 FBS teams. The capped discovery is not acceptance evidence. One NFL practice-squad membership conflict (Emany Johnson, CIN/LAC) remains visible and blocks the affected roster checks; the Bengals official October 20 transaction record supports Cincinnati, but raw data is not silently overwritten.
+
+81 focused tests passed, including all-sport source rebuild, tampering/re-sealing, response limits, stale/future/PIT/season/identity failures, workload scenarios, immutable resume, original-card preservation, and both shared/NFL runner gates. The real-source audit covered all 17 saved October 20 events: current review 16 AVAILABLE_NOT_USED and one POST_START block; all 17 refuse the newly captured data at their original cutoffs. No new predictions were generated, no frozen card changed, and no full-roster impact transform was fitted. Full repository health remains unestablished in this partial restored checkout. Remote CI pending branch publication. See docs/ROSTER_SYSTEM.md and docs/releases/2026-10-20-rosters/report.json; retained source archive is hash-bound there. No defaults promoted, main not changed, wagering OFF.

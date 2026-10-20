@@ -121,6 +121,7 @@ def normalize(event, raw):
         "diagnostics": raw.get("diagnostics", {}),
         "simulation": raw.get("simulation", {}),
         "provenance": raw.get("provenance", {}),
+        "roster_coverage": raw.get("roster_coverage"),
         "action_authority": False,
         "action_status": "SHADOW_ONLY",
     }
@@ -293,7 +294,9 @@ def attach_grading(card):
     return card
 
 
-def generate(card_date, league, as_of, simulations, overrides):
+def generate(card_date, league, as_of, simulations, overrides, roster_bundle=None, require_roster_aware=False):
+    from sports.rosters import attach, assess, load_bundle
+    roster = load_bundle(roster_bundle) if roster_bundle else None
     adapter = load_adapter(league)
     schedule = adapter.load_schedule(card_date, as_of)
     context = adapter.build_context(schedule, as_of, True, overrides)
@@ -322,9 +325,14 @@ def generate(card_date, league, as_of, simulations, overrides):
             })
             continue
         try:
+            if require_roster_aware:
+                coverage = assess(league.lower(), event, as_of, roster)
+                if not coverage['roster_aware_forecast_eligible']:
+                    raise ValueError('ROSTER_AWARE_FORECAST_UNAVAILABLE:' + ';'.join(coverage['reasons']))
             raw = adapter.forecast_event(event, context, simulations)
             from pipelines.cards.selected import apply_default
             raw = apply_default(league,event,raw)
+            raw = attach(raw, league.lower(), event, as_of, roster)
             # Guard the rare case where network/simulation time crosses first pitch.
             if now_utc() >= event_start:
                 rows.append({
@@ -369,6 +377,10 @@ def generate(card_date, league, as_of, simulations, overrides):
         "pregame_coverage": 1.0 if not pregame else len(generated) / len(pregame),
         "coverage_breach_event_ids": missing,
         "incidents": incidents,
+        "roster_policy": {"bundle_sha256": roster.get('bundle_sha256') if roster else None,
+                          "require_roster_aware": require_roster_aware,
+                          "membership_is_not_availability": True,
+                          "current_roster_is_not_numerical_consumption": True},
         "forecasts": rows,
     }
     return attach_grading(card)
@@ -455,6 +467,8 @@ def main():
     parser.add_argument("--initial-research-baselines",action="store_true",help="Explicit NBA/NHL/MLS research models; does not change tested defaults")
     parser.add_argument("--simulations", type=int, default=100000)
     parser.add_argument("--manual-overrides")
+    parser.add_argument("--roster-bundle", type=Path, help="Retained all-sports roster bundle.json; adds validated personnel coverage")
+    parser.add_argument("--require-roster-aware", action="store_true", help="Fail closed unless full roster impacts are fitted and consumed; current parents do not meet this gate")
     parser.add_argument("--distribution-research-config", help="Opt-in hash-bound cross-sport distribution challengers; emits a separate report")
     parser.add_argument("--output-dir", default="output")
     args = parser.parse_args()
@@ -466,7 +480,8 @@ def main():
     os.environ['SPORTS_RESEARCH_DRAW_OUTPUT']=str((output/'draws').resolve())
     if args.league == "mlb":
         os.environ["MLB_DRAW_OUTPUT"] = str((output / "draws").resolve())
-    card = generate(args.date, args.league, as_of, args.simulations, args.manual_overrides)
+    card = generate(args.date, args.league, as_of, args.simulations, args.manual_overrides,
+                    args.roster_bundle, args.require_roster_aware)
     (output / "diagnostic_card.json").write_text(json.dumps(card, indent=2, sort_keys=True) + "\n")
     (output / "diagnostic_card.md").write_text(render_md(card))
     fields = [

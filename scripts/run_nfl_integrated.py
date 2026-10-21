@@ -7,9 +7,10 @@ from pipelines.cards.adapters import nfl
 from models.nfl.contextual.runtime import run,persist_run
 
 def main():
-    p=argparse.ArgumentParser();p.add_argument('--date',required=True);p.add_argument('--output',type=Path,required=True);p.add_argument('--simulations',type=int,default=100000);p.add_argument('--model-id');p.add_argument('--mode',default='research_pregame');p.add_argument('--market-packet',type=Path);p.add_argument('--live-packet',type=Path);p.add_argument('--event-id');p.add_argument('--home-spread',type=float,action='append',help='Optional downstream full-game spread calibration, HOME handicap orientation');p.add_argument('--halftime-artifact',type=Path,help='Explicit fitted halftime/joint research artifact; emits a separate model output');p.add_argument('--weekly-state-store',type=Path);p.add_argument('--weekly-state-id');p.add_argument('--distribution-research-config',type=Path,help='Separate hash-bound margin/total research child; does not require or replace combined-arm calibration');p.add_argument('--roster-bundle',type=Path);p.add_argument('--require-roster-aware',action='store_true');a=p.parse_args()
+    p=argparse.ArgumentParser();p.add_argument('--date',required=True);p.add_argument('--output',type=Path,required=True);p.add_argument('--simulations',type=int,default=100000);p.add_argument('--model-id');p.add_argument('--mode',default='research_pregame');p.add_argument('--market-packet',type=Path);p.add_argument('--live-packet',type=Path);p.add_argument('--event-id');p.add_argument('--home-spread',type=float,action='append',help='Optional downstream full-game spread calibration, HOME handicap orientation');p.add_argument('--halftime-artifact',type=Path,help='Explicit fitted halftime/joint research artifact; emits a separate model output');p.add_argument('--weekly-state-store',type=Path);p.add_argument('--weekly-state-id');p.add_argument('--distribution-research-config',type=Path,help='Separate hash-bound margin/total research child; does not require or replace combined-arm calibration');p.add_argument('--roster-bundle',type=Path);p.add_argument('--require-roster-aware',action='store_true');p.add_argument('--disclosures',type=Path,help='Presentation-only event scenarios and dependence evidence; requires --event-id');a=p.parse_args()
     from sports.rosters import attach, assess, load_bundle
     roster=load_bundle(a.roster_bundle) if a.roster_bundle else None
+    if a.disclosures and (not a.event_id or a.mode=='live'):p.error('Disclosure packets require a single pregame --event-id')
     if a.distribution_research_config and a.mode=='live':p.error('Distribution research supports pregame only')
     if bool(a.weekly_state_store)!=bool(a.weekly_state_id):p.error('Both weekly-state store and ID are required')
     if a.weekly_state_store and a.mode=='live':p.error('Weekly state is a pregame input')
@@ -42,6 +43,13 @@ def main():
         result,win,scores=run(context['model'],context['recovered'],packet['base'],packet['context'],e,cutoff,a.simulations,model_id=default_id if a.model_id is None else a.model_id,mode=a.mode,mode_artifact=fitted,market=market_for_event,live_state=live_for_event)
         result=attach(result,'nfl',e,cutoff,roster)
         persist_run(a.output/e['event_id'],result,win,scores,json.loads((nfl.ROOT/'data/nfl/modes_v1/design.json').read_text()) if fitted is not None else context['model']['design'])
+        if a.mode!='live':
+            from pipelines.cards.distribution_research import nfl_card
+            from pipelines.cards.disclosures import write_report,render_md
+            registration=json.loads((a.output/e['event_id']/'registration.jsonl').read_text())
+            disclosures=write_report(nfl_card(result,registration['created_at_utc']),a.output/e['event_id']/'disclosures',a.disclosures)
+            distribution_incomplete |= bool(disclosures['errors'])
+            print(render_md(disclosures))
         if a.distribution_research_config:
             from pipelines.cards.distribution_research import build,load_config,nfl_card
             try:

@@ -275,18 +275,29 @@ def test_nfl_cli_preserves_selected_arm_and_adds_roster_report(tmp_path):
               'model_artifact_sha256':'frozen','identity':'original','selected_arm':'qb',
               'capability_report':{'rows':[{'feature':'qb_difference','active_in_run':True}]},
               'prediction':{'home_win':.6},'winner_simulation':{},'score_simulation':{}}
+    result.update(schema='nfl.integrated_context_forecast.v1', mode='research_pregame',
+                  event=EVENT, cutoff_utc=CUTOFF)
+    def persist_fixture(folder, saved, *args):
+        folder.mkdir(parents=True)
+        (folder/'registration.jsonl').write_text(json.dumps({'created_at_utc': CUTOFF}))
+        (folder/'forecast.json').write_text(json.dumps(saved))
     args = ['run_nfl_integrated.py','--date','2026-10-20','--model-id',result['model_id'],
             '--output',str(tmp_path/'out'),'--roster-bundle',str(tmp_path/'bundle.json')]
     with patch.object(cli, 'dt', SimpleNamespace(datetime=Clock,timezone=timezone)), \
          patch.object(cli.nfl,'load_schedule',return_value=[EVENT]), \
          patch.object(cli.nfl,'build_context',return_value=context), \
          patch.object(cli,'run',return_value=(result,None,None)) as runner, \
-         patch.object(cli,'persist_run') as persist, patch('sys.argv',args):
+         patch.object(cli,'persist_run',side_effect=persist_fixture) as persist, patch('sys.argv',args):
         cli.main()
         saved = persist.call_args.args[1]
         assert saved['selected_arm'] == 'qb' and saved['identity'] == 'original'
         assert saved['roster_coverage']['existing_parent_personnel_evidence'] == result['capability_report']
         assert saved['roster_coverage']['forecast_binding']['input_snapshot_hash'] == digest(result['features'])
+        from pipelines.cards.distribution_research import nfl_card
+        report = json.loads((tmp_path/'out'/EVENT['event_id']/'disclosures/disclosures.json').read_text())
+        assert report['parent_card_sha256'] == digest(nfl_card(saved, CUTOFF))
+        assert report['events'][0]['decision'] == 'PASS'
+        assert not report['events'][0]['action_authority']
         runner.reset_mock()
         with patch('sys.argv',args+['--require-roster-aware']):
             with pytest.raises(ValueError,match='ROSTER_AWARE_FORECAST_UNAVAILABLE'):cli.main()

@@ -1,9 +1,9 @@
 name: All-sports roster contracts
 on:
   push:
-    paths: ['sports/rosters.py', 'scripts/prepare_rosters.py', 'scripts/audit_roster_cards.py', 'scripts/generate_card_force.py', 'scripts/run_nfl_integrated.py', 'tests/test_rosters.py', '.github/workflows/roster-contracts.yml']
+    paths: ['sports/rosters.py', 'scripts/prepare_rosters.py', 'scripts/audit_roster_cards.py', 'scripts/generate_card_force.py', 'scripts/run_nfl_integrated.py', 'tests/test_rosters.py', 'tests/test_roster_disclosure_integration.py', 'tests/test_card_disclosures.py', 'pipelines/cards/disclosures.py', '.github/workflows/roster-contracts.yml']
   pull_request:
-    paths: ['sports/rosters.py', 'scripts/prepare_rosters.py', 'scripts/audit_roster_cards.py', 'scripts/generate_card_force.py', 'scripts/run_nfl_integrated.py', 'tests/test_rosters.py', '.github/workflows/roster-contracts.yml']
+    paths: ['sports/rosters.py', 'scripts/prepare_rosters.py', 'scripts/audit_roster_cards.py', 'scripts/generate_card_force.py', 'scripts/run_nfl_integrated.py', 'tests/test_rosters.py', 'tests/test_roster_disclosure_integration.py', 'tests/test_card_disclosures.py', 'pipelines/cards/disclosures.py', '.github/workflows/roster-contracts.yml']
 permissions:
   contents: read
 jobs:
@@ -17,7 +17,7 @@ jobs:
           python-version: '3.12'
       - run: pip install pytest numpy pandas pyarrow scikit-learn
       - name: Source, identity, chronology, scenarios and card integration
-        run: python -m pytest -q tests/test_rosters.py tests/test_current_runtime_contracts.py tests/test_nfl_personnel_resolution.py tests/test_current_sports_data.py
+        run: python -m pytest -q tests/test_rosters.py tests/test_roster_disclosure_integration.py tests/test_card_disclosures.py tests/test_model_defaults.py tests/test_cross_sport_distributions.py tests/test_current_runtime_contracts.py tests/test_nfl_personnel_resolution.py tests/test_current_sports_data.py
       - name: CLI entry points
         run: |
           python scripts/prepare_rosters.py --help

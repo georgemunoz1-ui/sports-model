@@ -396,7 +396,7 @@ def _delta_text(seconds):
     return f"{sign}{hours}h {minutes:02d}m {secs:02d}s"
 
 
-def render_md(card):
+def render_md(card, disclosures=None):
     pit = card.get("pit_provenance") or {}
     grading = card.get("grading_policy") or {}
     lines = [
@@ -455,6 +455,15 @@ def render_md(card):
         )
     if card["incidents"]:
         lines += ["", "## Coverage incidents", "", "```json", json.dumps(card["incidents"], indent=2), "```"]
+    from pipelines.cards.disclosures import build_report, render_md as render_disclosures
+    if disclosures is not None:
+        lines += ["", render_disclosures(disclosures)]
+    elif card.get("as_of_utc"):
+        lines += ["", render_disclosures(build_report(card))]
+    else:
+        # Legacy display-only fragments are not evidence-bearing full cards.
+        # Preserve their renderer without inventing a missing cutoff.
+        lines += ["", "**Disclosures unavailable: parent cutoff missing. Wagering remains OFF.**"]
     lines += ["", "**Diagnostic only. Action authority is OFF. No market/EV layer is attached.**"]
     return "\n".join(lines) + "\n"
 
@@ -470,6 +479,7 @@ def main():
     parser.add_argument("--roster-bundle", type=Path, help="Retained all-sports roster bundle.json; adds validated personnel coverage")
     parser.add_argument("--require-roster-aware", action="store_true", help="Fail closed unless full roster impacts are fitted and consumed; current parents do not meet this gate")
     parser.add_argument("--distribution-research-config", help="Opt-in hash-bound cross-sport distribution challengers; emits a separate report")
+    parser.add_argument("--disclosures", type=Path, help="Source-bound availability scenarios, assumptions and dependence disclosures; presentation only")
     parser.add_argument("--output-dir", default="output")
     args = parser.parse_args()
     if args.initial_research_baselines:os.environ['SPORTS_INITIAL_BASELINES']='1'
@@ -483,7 +493,9 @@ def main():
     card = generate(args.date, args.league, as_of, args.simulations, args.manual_overrides,
                     args.roster_bundle, args.require_roster_aware)
     (output / "diagnostic_card.json").write_text(json.dumps(card, indent=2, sort_keys=True) + "\n")
-    (output / "diagnostic_card.md").write_text(render_md(card))
+    from pipelines.cards.disclosures import write_report
+    disclosures = write_report(card, output / "disclosures", args.disclosures)
+    (output / "diagnostic_card.md").write_text(render_md(card, disclosures))
     fields = [
         "event_id", "away_team", "home_team", "forecast_status", "forecast_tier", "data_quality",
         "dose", "model_winner", "analytic_p", "stochastic_sim_p", "analytic_sim_gap_pp",
@@ -504,13 +516,13 @@ def main():
             csv_row["grading_eligible"] = grading.get("eligible_for_prospective_grading")
             writer.writerow(csv_row)
 
-    print(render_md(card))
-    research_incomplete = False
+    print(render_md(card, disclosures))
+    research_incomplete = bool(disclosures["errors"])
     if args.distribution_research_config:
         from pipelines.cards.distribution_research import build, load_config
         try:
             research = build(card, load_config(args.distribution_research_config), output / "distribution_research", simulations=args.simulations)
-            research_incomplete = any(r["status"] != "COMPLETED" for r in research["coverage"])
+            research_incomplete |= any(r["status"] != "COMPLETED" for r in research["coverage"])
             print(json.dumps({"distribution_research": research["coverage"]}, indent=2))
         except (ValueError, KeyError, TypeError, OSError) as exc:
             research_incomplete = True

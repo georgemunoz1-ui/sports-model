@@ -4676,3 +4676,22 @@ full disclosure reports still require a valid cutoff. No cutoff is invented and
 no evidence guard is weakened. The expanded local suite passes 116 tests plus
 56 subtests, including the existing model-default renderer regression. Integration
 tests now restore their process-wide output environment after each case.
+
+
+## 2026-10-21 — Isolated margin contract integration review
+
+Compared current main after disclosure PR72 with pinned margin PR69/PR70.
+Added an opt-in source-bound PMF/CDF bridge delegating settlement to the existing
+five-state engine. Explicit side, source, cutoff and settlement identities prevent
+ambiguous three-state/MLS quarter-line interoperability. Fitted challengers and
+PR70's unfitted mean-shifting football boosts remain separate; no runtime or
+default activation. Reproduced the NFL runner merge conflict, omitted side in
+PR70 quote records, and raw-probability scoring on push-excluded samples.
+
+Local checks: 215 tests plus 56 subtests; 162 synthetic and 26 retained NFL
+identical-input contract comparisons pass. Preserved NFL predictive HOLD; the
+816-game result is not reevaluated or promoted. No frozen forecasts, model
+coefficients, defaults, runner disclosures, ledgers or authority changed.
+Partial local health cannot certify full repository health. See
+docs/MARGIN_INTEGRATION_20261021.md and docs/releases/2026-10-21-margin-integration/.
+Clean-checkout CI and draft publication outcome are recorded on the review PR.

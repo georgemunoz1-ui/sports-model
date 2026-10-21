@@ -384,7 +384,7 @@ def _delta_text(seconds):
     return f"{sign}{hours}h {minutes:02d}m {secs:02d}s"
 
 
-def render_md(card):
+def render_md(card, disclosures=None):
     pit = card.get("pit_provenance") or {}
     grading = card.get("grading_policy") or {}
     lines = [
@@ -443,6 +443,8 @@ def render_md(card):
         )
     if card["incidents"]:
         lines += ["", "## Coverage incidents", "", "```json", json.dumps(card["incidents"], indent=2), "```"]
+    from pipelines.cards.disclosures import build_report, render_md as render_disclosures
+    lines += ["", render_disclosures(disclosures if disclosures is not None else build_report(card))]
     lines += ["", "**Diagnostic only. Action authority is OFF. No market/EV layer is attached.**"]
     return "\n".join(lines) + "\n"
 
@@ -456,6 +458,7 @@ def main():
     parser.add_argument("--simulations", type=int, default=100000)
     parser.add_argument("--manual-overrides")
     parser.add_argument("--distribution-research-config", help="Opt-in hash-bound cross-sport distribution challengers; emits a separate report")
+    parser.add_argument("--disclosures", type=Path, help="Source-bound availability scenarios, assumptions and dependence disclosures; presentation only")
     parser.add_argument("--output-dir", default="output")
     args = parser.parse_args()
     if args.initial_research_baselines:os.environ['SPORTS_INITIAL_BASELINES']='1'
@@ -468,7 +471,9 @@ def main():
         os.environ["MLB_DRAW_OUTPUT"] = str((output / "draws").resolve())
     card = generate(args.date, args.league, as_of, args.simulations, args.manual_overrides)
     (output / "diagnostic_card.json").write_text(json.dumps(card, indent=2, sort_keys=True) + "\n")
-    (output / "diagnostic_card.md").write_text(render_md(card))
+    from pipelines.cards.disclosures import write_report
+    disclosures = write_report(card, output / "disclosures", args.disclosures)
+    (output / "diagnostic_card.md").write_text(render_md(card, disclosures))
     fields = [
         "event_id", "away_team", "home_team", "forecast_status", "forecast_tier", "data_quality",
         "dose", "model_winner", "analytic_p", "stochastic_sim_p", "analytic_sim_gap_pp",
@@ -489,13 +494,13 @@ def main():
             csv_row["grading_eligible"] = grading.get("eligible_for_prospective_grading")
             writer.writerow(csv_row)
 
-    print(render_md(card))
-    research_incomplete = False
+    print(render_md(card, disclosures))
+    research_incomplete = bool(disclosures["errors"])
     if args.distribution_research_config:
         from pipelines.cards.distribution_research import build, load_config
         try:
             research = build(card, load_config(args.distribution_research_config), output / "distribution_research", simulations=args.simulations)
-            research_incomplete = any(r["status"] != "COMPLETED" for r in research["coverage"])
+            research_incomplete |= any(r["status"] != "COMPLETED" for r in research["coverage"])
             print(json.dumps({"distribution_research": research["coverage"]}, indent=2))
         except (ValueError, KeyError, TypeError, OSError) as exc:
             research_incomplete = True

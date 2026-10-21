@@ -4645,3 +4645,34 @@ local failures and health results cannot certify repository health. Exact-head
 remote CI and full-tree checks are required and recorded on the release PR.
 Artifact-storage quota remains an independently tracked upload limitation.
 See docs/MC_PRECISION_RESEARCH.md and docs/NBA_EFFICIENCY_SHADOW.md.
+
+
+## 2026-10-20 — Card scenario, PASS and dependence disclosures
+
+Owner authorized implementation and merge of the reporting patterns reviewed in
+external cards. Added source-bound known/unknown/assumed input states, conditional
+availability scenarios with no invented weights, explicit PASS reasons, and
+parlay constraint/dependence evidence. Five nested example legs reduce to three
+constraints. Supplied joint draws permit intersection recomputation; sampler
+replay and predictive validation remain separately unestablished.
+
+Both shared all-seven and separate NFL pregame runners emit immutable disclosure
+sidecars; a standalone command can annotate a frozen card without rewriting it.
+Identity, cutoff, content-hash, count, score-support and contradiction failures
+are explicit and cannot grant action authority. Existing models, defaults,
+probabilities, fitting choices and wager policy are unchanged.
+
+Local acceptance: 100 tests plus 56 subtests passed, including all-seven shared
+runner and separate NFL integration. Seventeen saved October 20 forecasts
+(3 CFB, 3 NBA, 11 NHL) produced disclosure reports without changing parent bytes.
+Partial local checkout health cannot establish repository health. Exact-head CI
+and merge outcome are recorded on the pull request; full release health remains
+a separate gate. See docs/CARD_DISCLOSURES.md for schema, commands and limits.
+
+
+Follow-up: full-suite CI exposed a legacy display-only card fragment without an
+as-of cutoff. The renderer now displays disclosures unavailable for that fragment;
+full disclosure reports still require a valid cutoff. No cutoff is invented and
+no evidence guard is weakened. The expanded local suite passes 116 tests plus
+56 subtests, including the existing model-default renderer regression. Integration
+tests now restore their process-wide output environment after each case.

@@ -138,6 +138,7 @@ def event_disclosure(row, cutoff, supplied=None, root=Path("."), *, league):
                 if "value" not in item or item["value"] is None:
                     raise ValueError("KNOWN_INPUT_VALUE_REQUIRED")
                 _source(item, cutoff)
+                item["source_verification"] = "REFERENCE_SUPPLIED_NOT_INDEPENDENTLY_VERIFIED"
                 item["numerical_use"] = "NOT_ESTABLISHED"
                 if item.get("input_path"):
                     value = row.get("model_input_snapshot")
@@ -369,13 +370,13 @@ def render_md(report):
     for event in report["events"]:
         lines += ["### " + _cell(event["event_id"]), "", "**PASS:** " + "; ".join(
             _cell(r["code"] + ": " + r["detail"]) for r in event["pass_reasons"]), ""]
-        for group, title in (("known_inputs", "Source-documented inputs"), ("unknown_inputs", "Unknown inputs"),
+        for group, title in (("known_inputs", "Reported known inputs"), ("unknown_inputs", "Unknown inputs"),
                              ("assumptions", "Assumptions")):
             lines.append("**" + title + ":**")
             lines.append("")
             for item in event[group]:
                 if group == "known_inputs":
-                    detail = f"{item['value']} (source observed {item['observed_at_utc']}; numerical consumption not proven by this disclosure)"
+                    detail = f"{item['value']} (reported source time {item['observed_at_utc']}; source reference and numerical consumption not independently verified)"
                 elif group == "unknown_inputs":
                     detail = item["reason"]
                 else:

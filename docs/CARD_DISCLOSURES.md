@@ -56,8 +56,9 @@ Minimal packet (replace illustrative identities and hashes with actual evidence)
 Known inputs require `name`, non-null `value`, source SHA-256, `observed_at_utc`
 and `retrieved_at_utc`, ordered before the parent cutoff. Optional `input_path`
 is a list of mapping keys into `model_input_snapshot`; an exact value match proves
-input binding, not numerical consumption. Hash and timestamp checks are not
-provider authentication. Assumptions require a value and rationale; unknowns
+input binding, not numerical consumption. Source-reference hashes here are
+declarations, not independently fetched source bytes or provider authentication;
+both JSON and rendered text label that limitation. Assumptions require a value and rationale; unknowns
 require a reason. One name cannot occupy conflicting knowledge states.
 
 Scenarios have unique IDs and unique entity conditions (`IN` or `OUT`). Missing

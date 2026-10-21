@@ -90,6 +90,7 @@ def test_knowledge_states_conditional_scenarios_and_pass_reasons():
     row = report["events"][0]
     assert not report["errors"] and before == D.digest(p)
     assert row["known_inputs"][0]["numerical_use"] == "BOUND_TO_PARENT_INPUT_NOT_CONSUMPTION_PROOF"
+    assert row["known_inputs"][0]["source_verification"] == "REFERENCE_SUPPLIED_NOT_INDEPENDENTLY_VERIFIED"
     assert row["assumptions"][0]["numerical_use"] == "NOT_ESTABLISHED"
     assert all(s["weight"] is None and s["probability_of_playing"] is None and s["execution_status"] == "NOT_RUN"
                for s in row["availability_scenarios"])

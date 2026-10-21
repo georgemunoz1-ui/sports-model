@@ -4668,3 +4668,11 @@ runner and separate NFL integration. Seventeen saved October 20 forecasts
 Partial local checkout health cannot establish repository health. Exact-head CI
 and merge outcome are recorded on the pull request; full release health remains
 a separate gate. See docs/CARD_DISCLOSURES.md for schema, commands and limits.
+
+
+Follow-up: full-suite CI exposed a legacy display-only card fragment without an
+as-of cutoff. The renderer now displays disclosures unavailable for that fragment;
+full disclosure reports still require a valid cutoff. No cutoff is invented and
+no evidence guard is weakened. The expanded local suite passes 116 tests plus
+56 subtests, including the existing model-default renderer regression. Integration
+tests now restore their process-wide output environment after each case.

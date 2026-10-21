@@ -444,7 +444,14 @@ def render_md(card, disclosures=None):
     if card["incidents"]:
         lines += ["", "## Coverage incidents", "", "```json", json.dumps(card["incidents"], indent=2), "```"]
     from pipelines.cards.disclosures import build_report, render_md as render_disclosures
-    lines += ["", render_disclosures(disclosures if disclosures is not None else build_report(card))]
+    if disclosures is not None:
+        lines += ["", render_disclosures(disclosures)]
+    elif card.get("as_of_utc"):
+        lines += ["", render_disclosures(build_report(card))]
+    else:
+        # Legacy display-only fragments are not evidence-bearing full cards.
+        # Preserve their renderer without inventing a missing cutoff.
+        lines += ["", "**Disclosures unavailable: parent cutoff missing. Wagering remains OFF.**"]
     lines += ["", "**Diagnostic only. Action authority is OFF. No market/EV layer is attached.**"]
     return "\n".join(lines) + "\n"
 

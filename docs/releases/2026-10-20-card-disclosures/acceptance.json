@@ -3,12 +3,12 @@
   "base_commit": "7cf2aea0581b4048802c920c9670823fab21679e",
   "file_sha256": {
     "docs/CARD_DISCLOSURES.md": "28d4f3947d067ead99e6ce09a3f01d83eb4dc7fb15c9936d201ea58bb5de8696",
-    "docs/progress.md": "c33efb0d676ae76989331e5a7966540eaeae8b0222716569c440a37cb4342f23",
-    "pipelines/cards/disclosures.py": "683ce8490644830d659ce2b1f2f2d397e948812b4074e8fa9f912af95fe827f8",
-    "scripts/generate_card_force.py": "b0db1637318c1f7ef95ac5feaf72f5ef518f910fff824eee6e2ea4f639fde4cb",
+    "docs/progress.md": "712fff584a605536006e074b1ef1a7792eebdc802b47db1a5d23ebc3e77c9d6e",
+    "pipelines/cards/disclosures.py": "e4ac51ebe9defd89e5806ee9160ff1fba079852070e3d44bd25b8c97776e52c6",
+    "scripts/generate_card_force.py": "b280f86ee99b1ed7f40a1767ca0aec9f660ca20cb76bad7618315875b8af1560",
     "scripts/render_card_disclosures.py": "978270d347a73992aec84fc65251939260477db905270ee1ce7e7a7001602cd0",
     "scripts/run_nfl_integrated.py": "b248702e3d85bfec1e58e98b9584ad5219e94072d6a362bd9298576d2287ea0f",
-    "tests/test_card_disclosures.py": "0cc51944d0172c223ba98a4a9a5d26498956cc0ee47222e021f1506349528385"
+    "tests/test_card_disclosures.py": "96a7342df6ec8761867dbbfddf5151afbdbece92810d595b64dc93d6031203eb"
   },
   "frozen_card_compatibility": {
     "CFB": 3,
@@ -18,8 +18,8 @@
   },
   "full_repository_health": "NOT_ESTABLISHED_BY_PARTIAL_CHECKOUT",
   "local_tests": {
-    "command": "python -m pytest tests/test_card_disclosures.py tests/test_cross_sport_distributions.py tests/test_current_runtime_contracts.py -q",
-    "passed": 100,
+    "command": "python -m pytest tests/test_card_disclosures.py tests/test_cross_sport_distributions.py tests/test_current_runtime_contracts.py tests/test_model_defaults.py -q",
+    "passed": 116,
     "subtests_passed": 56
   },
   "predictive_validation": "NOT_ASSESSED",

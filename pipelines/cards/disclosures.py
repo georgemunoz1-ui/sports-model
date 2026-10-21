@@ -322,6 +322,9 @@ def parlay_disclosure(spec, rows, root=Path("."), *, cutoff, league):
 
 
 def build_report(card, packet=None, *, root=Path(".")):
+    if not card.get("as_of_utc"):
+        raise ValueError("DISCLOSURE_PARENT_CUTOFF_REQUIRED")
+    D.stamp(card["as_of_utc"])
     rows = card["forecasts"]
     _unique(rows, "event_id")
     by_id = {row["event_id"]: row for row in rows}

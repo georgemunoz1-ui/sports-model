@@ -281,6 +281,9 @@ def test_shared_runner_emits_disclosures_without_changing_probabilities(tmp_path
     from types import SimpleNamespace
     from scripts import generate_card_force as runner
     from pipelines.cards import selected
+    # main() sets process-wide output paths. Restore them between integration tests.
+    monkeypatch.setenv("SPORTS_RESEARCH_DRAW_OUTPUT", str(tmp_path / "prior-draws"))
+    monkeypatch.setenv("MLB_DRAW_OUTPUT", str(tmp_path / "prior-mlb-draws"))
     game = {"event_id": "event-1", "home_team": "Home", "away_team": "Away", "start_time_utc": "2099-10-20T23:00:00Z"}
     raw = {"model_p": .6, "sim_p": .601, "model_winner": "Home", "model_id": "parent.v1", "dose": 0,
            "input_snapshot_hash": HASH, "model_state_config_hash": HASH, "model_input_snapshot": {"qb": "player-1"}}
@@ -325,3 +328,9 @@ def test_nfl_separate_runner_emits_bound_disclosure_sidecar(tmp_path, monkeypatc
     report = json.loads((out / "event-1/disclosures/disclosures.json").read_text())
     assert report["events"][0]["parent_model_id"] == "parent.v1"
     assert json.loads((out / "event-1/forecast.json").read_text()) == bundle
+
+
+def test_full_disclosure_report_never_invents_a_missing_cutoff():
+    parent = card(); del parent["as_of_utc"]
+    with pytest.raises(ValueError, match="PARENT_CUTOFF_REQUIRED"):
+        C.build_report(parent)

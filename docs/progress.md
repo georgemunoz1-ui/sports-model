@@ -4676,3 +4676,31 @@ full disclosure reports still require a valid cutoff. No cutoff is invented and
 no evidence guard is weakened. The expanded local suite passes 116 tests plus
 56 subtests, including the existing model-default renderer regression. Integration
 tests now restore their process-wide output environment after each case.
+
+
+## 2026-10-21 — Qualified GameChamp report adaptations
+
+Owner supplied original CFB NMSU–SHSU and NBA MIN–MIA reports and requested
+qualified adaptations. Reused merged PR72's known/unknown/scenario/PASS/dependence
+layer. Added optional hash-bound projection audits: NBA/WNBA regulation minutes,
+nonnegative allocation reconciliation with rounding/component identity, and
+unweighted same-contract named-method sensitivity. Shared and NFL disclosure
+paths consume the optional field; frozen predictions and numerical models do not.
+
+On supplied reports both NBA rotations total 240; displayed player sums reconcile
+within rounding, but the source's team-component sum 248.32 differs from its
+reported 248.43. Named controls show 6.70 pp winner and 32.20 pp Under ranges;
+the claimed wider 44-row grid is not available and was not fabricated. CFB
+budgets reconcile only as bookkeeping; market-anchored forecasts are not imported.
+Original user-supplied reports and append-only archive receipt are retained with
+the adaptation evidence. No original sampler, roster truth or PIT validity is
+claimed from those text reports. See docs/GAMECHAMP_ADAPTATION.md.
+
+Focused local tests cover malformed/duplicate/nonfinite inputs, source/path/hash
+and contract failures, distinct component totals, immutable writes, all-seven
+parent preservation and the existing shared/NFL integration. This environment's
+source-only restoration lacks historical files and cannot establish full harness
+health. Exact local results are retained in the release acceptance record; full
+repository CI remains separate. No model default, forecast, active experiment,
+certified ledger or action authority changed. Player-led numerical construction
+remains a candidate requiring a fitted, source-bound chronological evaluation.

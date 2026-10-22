@@ -1,0 +1,428 @@
+{
+  "audit_id": "gamechamp-nba-20261021",
+  "source_artifact": {
+    "path": "GameChampAI-MIN-MIA-2026-10-21.md",
+    "sha256": "acadec64b6b2baac3b40182304cb4bb4c9aa33e27c00d57b7688e25042f27231",
+    "size_bytes": 28740,
+    "verification": "BYTES_MATCH; CONTENT_CLAIMS_NOT_AUTHENTICATED"
+  },
+  "minutes_budgets": [
+    {
+      "team_id": "MIN",
+      "component_id": "reported_rotation",
+      "basis": "REGULATION",
+      "players": [
+        {
+          "entity_id": "reported_name:LaMelo Ball",
+          "minutes": 32,
+          "reported_availability": "UNKNOWN"
+        },
+        {
+          "entity_id": "reported_name:Anthony Edwards",
+          "minutes": 36,
+          "reported_availability": "UNKNOWN"
+        },
+        {
+          "entity_id": "reported_name:Jonathan Kuminga",
+          "minutes": 28,
+          "reported_availability": "UNKNOWN"
+        },
+        {
+          "entity_id": "reported_name:Jaden McDaniels",
+          "minutes": 34,
+          "reported_availability": "UNKNOWN"
+        },
+        {
+          "entity_id": "reported_name:Rudy Gobert",
+          "minutes": 32,
+          "reported_availability": "UNKNOWN"
+        },
+        {
+          "entity_id": "reported_name:Ayo Dosunmu",
+          "minutes": 26,
+          "reported_availability": "UNKNOWN"
+        },
+        {
+          "entity_id": "reported_name:Bones Hyland",
+          "minutes": 16,
+          "reported_availability": "UNKNOWN"
+        },
+        {
+          "entity_id": "reported_name:Joan Beringer",
+          "minutes": 12,
+          "reported_availability": "UNKNOWN"
+        },
+        {
+          "entity_id": "reported_name:Terrence Shannon Jr.",
+          "minutes": 12,
+          "reported_availability": "UNKNOWN"
+        },
+        {
+          "entity_id": "reported_name:Trey Lyles",
+          "minutes": 12,
+          "reported_availability": "UNKNOWN"
+        },
+        {
+          "entity_id": "reported_name:Jaylen Clark",
+          "minutes": 0,
+          "reported_availability": "UNKNOWN"
+        }
+      ],
+      "sum_minutes": 240.0,
+      "required_minutes": 240,
+      "arithmetic_status": "PASS",
+      "findings": [],
+      "roster_and_minutes_validity": "NOT_ESTABLISHED",
+      "numerical_use": "NOT_ESTABLISHED"
+    },
+    {
+      "team_id": "MIA",
+      "component_id": "reported_rotation",
+      "basis": "REGULATION",
+      "players": [
+        {
+          "entity_id": "reported_name:Davion Mitchell",
+          "minutes": 29,
+          "reported_availability": "UNKNOWN"
+        },
+        {
+          "entity_id": "reported_name:Klay Thompson",
+          "minutes": 27,
+          "reported_availability": "UNKNOWN"
+        },
+        {
+          "entity_id": "reported_name:Andrew Wiggins",
+          "minutes": 31,
+          "reported_availability": "UNKNOWN"
+        },
+        {
+          "entity_id": "reported_name:Giannis Antetokounmpo",
+          "minutes": 34,
+          "reported_availability": "UNKNOWN"
+        },
+        {
+          "entity_id": "reported_name:Bam Adebayo",
+          "minutes": 33,
+          "reported_availability": "UNKNOWN"
+        },
+        {
+          "entity_id": "reported_name:Bobby Portis",
+          "minutes": 24,
+          "reported_availability": "UNKNOWN"
+        },
+        {
+          "entity_id": "reported_name:Tim Hardaway Jr.",
+          "minutes": 22,
+          "reported_availability": "UNKNOWN"
+        },
+        {
+          "entity_id": "reported_name:Pelle Larsson",
+          "minutes": 16,
+          "reported_availability": "UNKNOWN"
+        },
+        {
+          "entity_id": "reported_name:Dru Smith",
+          "minutes": 10,
+          "reported_availability": "UNKNOWN"
+        },
+        {
+          "entity_id": "reported_name:Nikola Jovic",
+          "minutes": 8,
+          "reported_availability": "UNKNOWN"
+        },
+        {
+          "entity_id": "reported_name:Nick Richards",
+          "minutes": 6,
+          "reported_availability": "UNKNOWN"
+        }
+      ],
+      "sum_minutes": 240.0,
+      "required_minutes": 240,
+      "arithmetic_status": "PASS",
+      "findings": [],
+      "roster_and_minutes_validity": "NOT_ESTABLISHED",
+      "numerical_use": "NOT_ESTABLISHED"
+    }
+  ],
+  "allocation_checks": [
+    {
+      "check_id": "MIN_player_points",
+      "unit": "points",
+      "source_component_id": "bottom_up_players",
+      "target_component_id": "bottom_up_players",
+      "terms": [
+        {
+          "entity_id": "LaMelo Ball",
+          "value": 15.2
+        },
+        {
+          "entity_id": "Anthony Edwards",
+          "value": 28.6
+        },
+        {
+          "entity_id": "Jonathan Kuminga",
+          "value": 9.3
+        },
+        {
+          "entity_id": "Jaden McDaniels",
+          "value": 20.7
+        },
+        {
+          "entity_id": "Rudy Gobert",
+          "value": 8.6
+        },
+        {
+          "entity_id": "Ayo Dosunmu",
+          "value": 14.8
+        },
+        {
+          "entity_id": "Bones Hyland",
+          "value": 10
+        },
+        {
+          "entity_id": "Joan Beringer",
+          "value": 5.2
+        },
+        {
+          "entity_id": "Terrence Shannon Jr.",
+          "value": 6.1
+        },
+        {
+          "entity_id": "Trey Lyles",
+          "value": 4
+        },
+        {
+          "entity_id": "Jaylen Clark",
+          "value": 0
+        }
+      ],
+      "target": 122.38,
+      "rounding_step": 0.1,
+      "sum_terms": 122.5,
+      "sum_minus_target": 0.12000000000000455,
+      "rounding_tolerance": 0.6000000000000001,
+      "arithmetic_status": "PASS",
+      "note": "Arithmetic reconciliation only; the input values and their predictive validity are unverified."
+    },
+    {
+      "check_id": "MIA_player_points",
+      "unit": "points",
+      "source_component_id": "bottom_up_players",
+      "target_component_id": "bottom_up_players",
+      "terms": [
+        {
+          "entity_id": "Davion Mitchell",
+          "value": 10
+        },
+        {
+          "entity_id": "Klay Thompson",
+          "value": 7
+        },
+        {
+          "entity_id": "Andrew Wiggins",
+          "value": 20.2
+        },
+        {
+          "entity_id": "Giannis Antetokounmpo",
+          "value": 26.7
+        },
+        {
+          "entity_id": "Bam Adebayo",
+          "value": 17.2
+        },
+        {
+          "entity_id": "Bobby Portis",
+          "value": 13.2
+        },
+        {
+          "entity_id": "Tim Hardaway Jr.",
+          "value": 15.4
+        },
+        {
+          "entity_id": "Pelle Larsson",
+          "value": 6.9
+        },
+        {
+          "entity_id": "Dru Smith",
+          "value": 3.4
+        },
+        {
+          "entity_id": "Nikola Jovic",
+          "value": 3.8
+        },
+        {
+          "entity_id": "Nick Richards",
+          "value": 2.1
+        }
+      ],
+      "target": 125.94,
+      "rounding_step": 0.1,
+      "sum_terms": 125.89999999999999,
+      "sum_minus_target": -0.04000000000000625,
+      "rounding_tolerance": 0.6000000000000001,
+      "arithmetic_status": "PASS",
+      "note": "Arithmetic reconciliation only; the input values and their predictive validity are unverified."
+    },
+    {
+      "check_id": "bottom_up_team_total",
+      "unit": "points",
+      "source_component_id": "bottom_up_players",
+      "target_component_id": "bottom_up_players",
+      "terms": [
+        {
+          "entity_id": "MIN",
+          "value": 122.38
+        },
+        {
+          "entity_id": "MIA",
+          "value": 125.94
+        }
+      ],
+      "target": 248.43,
+      "rounding_step": 0.01,
+      "sum_terms": 248.32,
+      "sum_minus_target": -0.11000000000001364,
+      "rounding_tolerance": 0.015,
+      "arithmetic_status": "FAIL",
+      "note": "Arithmetic reconciliation only; the input values and their predictive validity are unverified."
+    },
+    {
+      "check_id": "player_total_vs_blended_total",
+      "unit": "points",
+      "source_component_id": "bottom_up_players",
+      "target_component_id": "blended_game",
+      "terms": [
+        {
+          "entity_id": "MIN",
+          "value": 122.38
+        },
+        {
+          "entity_id": "MIA",
+          "value": 125.94
+        }
+      ],
+      "target": 240.33,
+      "rounding_step": 0.01,
+      "sum_terms": 248.32,
+      "sum_minus_target": 7.989999999999981,
+      "rounding_tolerance": 0.015,
+      "arithmetic_status": "NOT_COMPARABLE_COMPONENTS",
+      "note": "Different component totals must not be represented as one coherent player/game projection."
+    }
+  ],
+  "method_sensitivities": [
+    {
+      "sensitivity_id": "MIA_winner_prior_season_control",
+      "contract": {
+        "event_id": "NBA:401909091",
+        "league": "nba",
+        "product": "winner",
+        "side": "HOME",
+        "line": null,
+        "settlement": "FULL_GAME_OT"
+      },
+      "variants": [
+        {
+          "method_id": "primary",
+          "probability": 0.617,
+          "contract": {
+            "event_id": "NBA:401909091",
+            "league": "nba",
+            "product": "winner",
+            "side": "HOME",
+            "line": null,
+            "settlement": "FULL_GAME_OT"
+          }
+        },
+        {
+          "method_id": "prior_season_only",
+          "probability": 0.55,
+          "contract": {
+            "event_id": "NBA:401909091",
+            "league": "nba",
+            "product": "winner",
+            "side": "HOME",
+            "line": null,
+            "settlement": "FULL_GAME_OT"
+          }
+        }
+      ],
+      "method_count_supplied": 2,
+      "minimum_probability": 0.55,
+      "maximum_probability": 0.617,
+      "range_percentage_points": 6.699999999999995,
+      "probability_of_failure": null,
+      "predictive_confidence_interval": null,
+      "interpretation": "UNWEIGHTED_NAMED_METHOD_SENSITIVITY; NOT A RANDOM_SAMPLE_OR_CALIBRATED_INTERVAL",
+      "sampler_replay": "NOT_PERFORMED",
+      "predictive_validation": "NOT_ESTABLISHED"
+    },
+    {
+      "sensitivity_id": "Under242.5_component_controls",
+      "contract": {
+        "event_id": "NBA:401909091",
+        "league": "nba",
+        "product": "total",
+        "side": "UNDER",
+        "line": 242.5,
+        "settlement": "FULL_GAME_OT"
+      },
+      "variants": [
+        {
+          "method_id": "primary",
+          "probability": 0.545,
+          "contract": {
+            "event_id": "NBA:401909091",
+            "league": "nba",
+            "product": "total",
+            "side": "UNDER",
+            "line": 242.5,
+            "settlement": "FULL_GAME_OT"
+          }
+        },
+        {
+          "method_id": "player_only",
+          "probability": 0.379,
+          "contract": {
+            "event_id": "NBA:401909091",
+            "league": "nba",
+            "product": "total",
+            "side": "UNDER",
+            "line": 242.5,
+            "settlement": "FULL_GAME_OT"
+          }
+        },
+        {
+          "method_id": "ratings_only",
+          "probability": 0.701,
+          "contract": {
+            "event_id": "NBA:401909091",
+            "league": "nba",
+            "product": "total",
+            "side": "UNDER",
+            "line": 242.5,
+            "settlement": "FULL_GAME_OT"
+          }
+        }
+      ],
+      "method_count_supplied": 3,
+      "minimum_probability": 0.379,
+      "maximum_probability": 0.701,
+      "range_percentage_points": 32.199999999999996,
+      "probability_of_failure": null,
+      "predictive_confidence_interval": null,
+      "interpretation": "UNWEIGHTED_NAMED_METHOD_SENSITIVITY; NOT A RANDOM_SAMPLE_OR_CALIBRATED_INTERVAL",
+      "sampler_replay": "NOT_PERFORMED",
+      "predictive_validation": "NOT_ESTABLISHED"
+    }
+  ],
+  "scope": "SUPPLIED_CLAIM_ARITHMETIC_ONLY",
+  "numerical_forecast_modified": false,
+  "source_facts_verified": false,
+  "point_in_time_verified": false,
+  "action_authority": false,
+  "predictive_validation": "NOT_ASSESSED",
+  "arithmetic_failures": 1,
+  "audited_at_utc": "2026-10-22T04:27:06.844036+00:00",
+  "event_id": "NBA:401909091"
+}

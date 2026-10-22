@@ -1,6 +1,8 @@
 """Explicit, seed-pinned research corrections; raw schedules remain immutable."""
 import hashlib
 import json
+import datetime as dt
+from zoneinfo import ZoneInfo
 from .recovered_inference import utc
 
 
@@ -67,8 +69,17 @@ def apply(games, pbp, resolutions, cutoff):
             raise ValueError('ADJUDICATION_EVENT_NOT_FINAL')
         if int(header['season']['year']) != int(g.season) or int(header['season']['type']) != 2:
             raise ValueError('ADJUDICATION_SEASON_BINDING')
-        if utc(c['date']).date().isoformat() != str(g.gameday):
+        # nflverse gameday/gametime are America/New_York, while ESPN dates
+        # are UTC. Evening games cross the UTC date boundary legitimately.
+        kickoff = utc(c['date'])
+        eastern = kickoff.astimezone(ZoneInfo('America/New_York'))
+        if eastern.date().isoformat() != str(g.gameday):
             raise ValueError('ADJUDICATION_DATE_BINDING')
+        gametime = g.get('gametime')
+        if isinstance(gametime, str) and gametime.strip():
+            expected_kickoff = dt.datetime.fromisoformat(str(g.gameday)+'T'+gametime).replace(tzinfo=ZoneInfo('America/New_York'))
+            if kickoff != expected_kickoff:
+                raise ValueError('ADJUDICATION_KICKOFF_BINDING')
         # Exact codes unless the separately reviewed provider ID/name binding passes.
         teams = {x['homeAway']: x for x in c['competitors']}
         for s in ('home', 'away'):

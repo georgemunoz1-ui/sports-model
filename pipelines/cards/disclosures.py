@@ -104,6 +104,7 @@ def _scenario(scenario, row, cutoff, root, league):
 
 
 def event_disclosure(row, cutoff, supplied=None, root=Path("."), *, league):
+    from .market_provenance import describe as describe_market_path
     supplied = copy.deepcopy(supplied or {})
     reasons = [{"code": "WAGERING_AUTHORITY_OFF", "detail": "Research output; no wager is authorized."},
                {"code": "MARKET_VALUE_NOT_EVALUATED", "detail": "This disclosure layer does not qualify a price or betting edge."},
@@ -113,7 +114,8 @@ def event_disclosure(row, cutoff, supplied=None, root=Path("."), *, league):
     result = {"event_id": row["event_id"], "parent_model_id": row.get("model_id"),
               "known_inputs": [], "unknown_inputs": [], "assumptions": [],
               "availability_scenarios": [], "projection_audits": [], "decision": "PASS", "pass_reasons": reasons,
-              "action_authority": False, "numerical_forecast_modified": False}
+              "action_authority": False, "numerical_forecast_modified": False,
+              "market_provenance": describe_market_path(row, league)}
     if row.get("forecast_status") != "FORECAST_GENERATED":
         reasons.append({"code": "PARENT_NOT_FORECAST", "detail": row.get("forecast_status", "UNKNOWN")})
     if not supplied:
@@ -379,6 +381,17 @@ def render_md(report):
     for event in report["events"]:
         lines += ["### " + _cell(event["event_id"]), "", "**PASS:** " + "; ".join(
             _cell(r["code"] + ": " + r["detail"]) for r in event["pass_reasons"]), ""]
+        market = event.get("market_provenance")
+        if market:
+            lines += ["**Model versus market:** " + _cell(market["path_class"]) + ". " +
+                      _cell(market["numerical_source"]), "",
+                      "- Simulation independence: " + _cell(market["simulation_independence"]),
+                      "- " + _cell(market["market_comparison_role"]),
+                      "- Source-path attribution only; artifact lineage and predictive validation are not certified.", ""]
+            if market.get("product_scope"):
+                lines += [_cell(market["product_scope"]), ""]
+            if market.get("limitation"):
+                lines += [_cell(market["limitation"]), ""]
         for group, title in (("known_inputs", "Reported known inputs"), ("unknown_inputs", "Unknown inputs"),
                              ("assumptions", "Assumptions")):
             lines.append("**" + title + ":**")

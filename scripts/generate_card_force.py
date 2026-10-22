@@ -279,7 +279,9 @@ def attach_grading(card):
             "calibration_bin_analytic": _calibration_bin(analytic_home),
             "calibration_bin_sim": _calibration_bin(sim_home),
             "graded_at_utc": None,
-            "market_features_used": False,
+            # An absent producer declaration is unknown, not evidence of no use.
+            "market_features_used": row.get("diagnostics", {}).get("market_input"),
+            "market_independence_status": "NOT_CERTIFIED_BY_REPORTING_FLAGS",
             "action_authority": False,
         }
 
@@ -288,6 +290,8 @@ def attach_grading(card):
         "eligible_forecast_count": eligible_count,
         "registration_rule": "DIAGNOSTIC_ONLY; separate verified writer registration required",
         "market_overlay_enabled": False,
+        "market_overlay_scope": "NO_COMPARISON_LAYER_ATTACHED_BY_SHARED_RUNNER",
+        "market_independence_status": "SEE_DISCLOSURE_AND_RUNTIME_PERTURBATION_AUDIT",
         "action_authority": False,
     }
     return card

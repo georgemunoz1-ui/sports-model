@@ -4704,3 +4704,26 @@ health. Exact local results are retained in the release acceptance record; full
 repository CI remains separate. No model default, forecast, active experiment,
 certified ledger or action authority changed. Player-led numerical construction
 remains a candidate requiring a fitted, source-bound chronological evaluation.
+
+
+## 2026-10-22 — Selected-path market-independence audit
+
+Traced the seven league adapters, selection registry, fitted feature paths and
+retained simulations at main 90daf8e / PR74 bd6205e. The selected feature paths
+use historical/contextual data; NBA/NHL/MLS remain opt-in initial research with
+no verified default. NFL enhanced mode is explicitly market-informed (saved
+football weights 0 winner, 0 margin, 0.1 total); live uses a market prior.
+
+Added 100,000-draw metamorphic regressions and presentation-only provenance
+disclosures. Separate market payload changes preserve predictions and draw bytes.
+Accepted market metadata embedded in event/package identity changes RNG draws,
+and can change MLB's MC-only selected probability: MI-002 remains OPEN. Tests
+assert this counterexample, not universal independence. No seed or model code
+was changed. Current-package MLB is tested; the legacy Sep14 route has stale
+code pins and was not bypassed. Missing declarations now remain unknown in
+grading rather than being manufactured as market_features_used=false.
+
+See docs/SELECTED_MARKET_INDEPENDENCE.md and the retained acceptance record.
+A focused CI job requires no artifact upload; full-tree health and predictive
+validation remain separate. Defaults, frozen forecasts, experiment/ledger state
+and action authority are unchanged. No live slate or model promotion performed.

@@ -2,8 +2,8 @@
 """Retain and normalize provider finals for immutable research forecasts.
 
 No estimated results, fuzzy team matching, inferred finals, or market inputs.
-Provider final scores include overtime and NHL shootout scoring; they cannot
-settle regulation, period, spread, or total contracts through this interface.
+Provider full-game scores include overtime and NHL shootout scoring. MLS
+regulation scores are admitted only on an explicit completed FULL_TIME status.
 """
 from __future__ import annotations
 import argparse
@@ -16,7 +16,7 @@ import re
 import urllib.request
 
 ROUTES = {'NFL': 'football/nfl', 'CFB': 'football/college-football',
-          'NBA': 'basketball/nba', 'NHL': 'hockey/nhl'}
+          'NBA': 'basketball/nba', 'NHL': 'hockey/nhl', 'MLS': 'soccer/usa.1'}
 WNBA_ALIASES = {'LA': 'LAS', 'LV': 'LVA', 'NY': 'NYL', 'WSH': 'WAS',
                 'CONN': 'CON', 'SA': 'SAN', 'GS': 'GSV', 'POR': 'PDX', 'PHO': 'PHX'}
 NFL_ALIASES = {'LAR': 'LA', 'WSH': 'WAS', 'JAC': 'JAX'}
@@ -120,11 +120,20 @@ def parse_espn(payload, forecast, receipt):
     if not kind.get('completed') or kind.get('state') != 'post':
         return {**out, 'reason': 'PROVIDER_NOT_FINAL'}
     # Completed cancellations/forfeits are not played final score observations.
-    if kind.get('name') not in {'STATUS_FINAL', 'STATUS_FINAL_OT', 'STATUS_FINAL_SO'}:
+    accepted_statuses = {'STATUS_FULL_TIME'} if league == 'MLS' else {'STATUS_FINAL', 'STATUS_FINAL_OT', 'STATUS_FINAL_SO'}
+    if kind.get('name') not in accepted_statuses:
         return {**out, 'reason': 'UNSUPPORTED_TERMINAL_STATUS'}
     if stamp(receipt['fetched_at_utc']) <= stamp(out['start_time_utc']):
         raise ValueError('FINAL_CAPTURE_NOT_AFTER_START')
     h, a = score(sides['home'].get('score')), score(sides['away'].get('score'))
+    if league == 'MLS':
+        if status.get('period') != 2:
+            return {**out, 'reason': 'REGULATION_PERIOD_NOT_VERIFIED'}
+        return {**out, 'status': 'FINAL', 'home_score': h, 'away_score': a,
+                'score_period': 'REGULATION_90', 'supported_product': 'regulation_90_1x2',
+                'tie_policy': 'DRAW_IS_SEPARATE_OUTCOME', 'overtime': False, 'shootout': False,
+                'settlement': 'REGULATION_90_INCLUDING_STOPPAGE_TIME',
+                'binary_grade_eligible': False, 'reason': 'VERIFIED_PROVIDER_REGULATION_FINAL'}
     if h == a and league != 'NFL':
         raise ValueError('BINARY_LEAGUE_TIED_FINAL')
     detail = ' '.join(str(kind.get(k, '')) for k in ('description', 'detail', 'shortDetail'))

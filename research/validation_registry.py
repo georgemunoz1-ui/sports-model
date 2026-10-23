@@ -11,7 +11,7 @@ import hashlib
 import json
 import math
 import os
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any, Mapping
@@ -152,6 +152,11 @@ class Eligibility:
     evidence_id: str | None = None
     reviewer_id: str | None = None
     publication_allowed: bool = False
+    registry_schema: str = "validation-registry-v2"
+    lineage_id: str | None = None
+    inspected_configurations: int | None = None
+    lifecycle_event_id: str | None = None
+    retained_defect_ids: tuple[str, ...] = ()
 
 
 class ValidationRegistry:
@@ -164,13 +169,16 @@ class ValidationRegistry:
 
     TARGET_KEYS = frozenset({"league", "product", "period", "settlement_rules_id"})
 
-    def __init__(self, store: ArtifactStore, record_ids=(), verifier: Ed25519Verifier | None = None, *, revocation_ids=()):
+    def __init__(self, store: ArtifactStore, record_ids=(), verifier: Ed25519Verifier | None = None, *, revocation_ids=(),
+                 trial_log=None, trial_tip=None, lifecycle_log=None, lifecycle_tip=None):
         if not isinstance(store, ArtifactStore) or (verifier is not None and not isinstance(verifier, Ed25519Verifier)):
             raise TypeError("registry requires an artifact store and supported verifier")
         self.store = store
         self.record_ids = tuple(record_ids)
         self.revocation_ids = tuple(revocation_ids)
         self.verifier = verifier or Ed25519Verifier()
+        self.trial_log, self.trial_tip = trial_log, trial_tip
+        self.lifecycle_log, self.lifecycle_tip = lifecycle_log, lifecycle_tip
 
     def assess(self, procedure_id: str, target: Mapping[str, Any], at_utc: str,
                selector_config_id: str | None = None) -> Eligibility:
@@ -209,7 +217,26 @@ class ValidationRegistry:
                 revoked.add(record_id)
         return revoked
 
-    def _assess_record(self, record_id, procedure_id, target, when, config_id):
+    def replay_legacy_record(self, record_id, procedure_id, target, at_utc, *, selector_config_id):
+        """Reproduce v1 research admission without authorizing a new selection.
+
+        This deliberately separate return type cannot be consumed as Eligibility.
+        No old record is rewritten or silently treated as a v2 protocol.
+        """
+        try:
+            when = _time(at_utc)
+            if record_id in self._revoked(when):
+                raise RegistryError("VALIDATION_REVOKED")
+            result = self._assess_record(record_id, procedure_id, dict(target), when,
+                                         selector_config_id, require_v2=False)
+            reasons, legacy = (), result.eligible
+        except (RegistryError, KeyError, TypeError, ValueError, OverflowError) as exc:
+            reasons, legacy = (str(exc),), False
+        return {"schema": "validation-registry-v1-replay", "legacy_eligible": legacy,
+                "selection_eligible": False, "publication_allowed": False, "reasons": reasons,
+                "record_id": record_id}
+
+    def _assess_record(self, record_id, procedure_id, target, when, config_id, *, require_v2=True):
         record = self.store.read(record_id)
         review_id = record["review_payload_id"]
         review = self.store.read(review_id)
@@ -219,6 +246,10 @@ class ValidationRegistry:
             raise RegistryError("REVIEW_NOT_AVAILABLE_AT_CUTOFF")
         protocol_id, evidence_id = review["protocol_id"], review["evidence_id"]
         protocol, evidence = self.store.read(protocol_id), self.store.read(evidence_id)
+        if require_v2 and protocol.get("schema") != "validation-protocol-v2":
+            raise RegistryError("LEGACY_VALIDATION_REQUIRES_V2_ADMISSION")
+        if not require_v2 and protocol.get("schema") not in (None, "validation-protocol-v1"):
+            raise RegistryError("NOT_A_LEGACY_VALIDATION_PROTOCOL")
         self.store.read(procedure_id)
         self.store.read(protocol["control_id"])
         self.store.read(protocol["population_id"])
@@ -279,7 +310,71 @@ class ValidationRegistry:
         dataset = self.store.read(_digest(evidence["paired_dataset_id"]))
         if dataset.get("evidence_scope") != "CONFIRMATION":
             raise RegistryError("DISCOVERY_OR_SHADOW_CANNOT_QUALIFY")
-        return Eligibility(True, (), record_id, protocol_id, evidence_id, signed["signer_id"])
+        result = Eligibility(True, (), record_id, protocol_id, evidence_id, signed["signer_id"])
+        if require_v2:
+            result = self._check_v2(result, protocol, evidence, registration, when, target, config_id)
+        return result
+
+    def _check_v2(self, result, protocol, evidence, registration, when, target, config_id):
+        from research.procedure_lineage import ProcedureLineage, predictive_identity
+        lineage = ProcedureLineage(self.store).resolve(protocol["candidate_id"])
+        ProcedureLineage(self.store).resolve(protocol["control_id"])
+        node = self.store.read(protocol["candidate_id"])
+        identity = predictive_identity(node["definition"])
+        for artifact in (protocol, evidence):
+            if "predictive_identity" in artifact and artifact["predictive_identity"] != identity:
+                raise RegistryError("PREDICTIVE_IDENTITY_BINDING_MISMATCH")
+        if node["owner"] != protocol["author_id"] or _time(node["created_utc"]) > _time(registration["witnessed_at_utc"]):
+            raise RegistryError("PROCEDURE_OWNER_OR_CHRONOLOGY_MISMATCH")
+        justifications = protocol.get("criteria_justification")
+        if not isinstance(justifications, dict):
+            raise RegistryError("PROTOCOL_MINIMA_JUSTIFICATION_REQUIRED")
+        for key in ("minimum_events", "minimum_slates", "minimum_selected", "minimum_total_coverage", "minimum_power"):
+            rationale = justifications.get(key)
+            if not isinstance(rationale, dict) or not isinstance(rationale.get("rationale"), str) or not rationale["rationale"].strip():
+                raise RegistryError("PROTOCOL_MINIMUM_UNJUSTIFIED:" + key)
+            basis = self.store.read(_digest(rationale.get("basis_artifact_id")))
+            if basis.get("schema") != "validation-design-basis-v1":
+                raise RegistryError("DESIGN_BASIS_SCHEMA_REQUIRED")
+        budget = _integer(protocol.get("inspection_budget"), 1)
+        assumptions = protocol.get("power_assumptions")
+        required_power = {"minimum_useful_improvement", "paired_loss_sd", "design_effect", "alpha",
+                          "total_trials", "target_power", "dependence"}
+        if not isinstance(assumptions, dict) or not required_power <= set(assumptions):
+            raise RegistryError("DECLARED_POWER_ASSUMPTIONS_REQUIRED")
+        if not isinstance(assumptions["dependence"], str) or not assumptions["dependence"].strip():
+            raise RegistryError("DECLARED_DEPENDENCE_ASSUMPTION_REQUIRED")
+        if (_integer(assumptions["total_trials"], 1) < budget or
+                _number(assumptions["target_power"]) != _number(protocol["criteria"]["minimum_power"])):
+            raise RegistryError("POWER_PLAN_PROTOCOL_MISMATCH")
+        # Validate the declared numeric domain with the same planning method.
+        # This is not observed power and does not certify the empirical SD or
+        # dependence claim; those remain bound to the independent review.
+        from research.selection_evaluation import power_curve
+        power_curve([1], **{key: assumptions[key] for key in required_power - {"dependence"}})
+        if type(self.trial_log) is not TrialLog or self.trial_tip is None:
+            raise RegistryError("ANCHORED_TRIAL_LOG_REQUIRED")
+        exposure = self.trial_log.lineage_exposure(self.store, protocol["candidate_id"],
+                                                 expected_tip=_digest(self.trial_tip), as_of_utc=when.isoformat())
+        evidence_exposure = self.trial_log.lineage_exposure(self.store, protocol["candidate_id"],
+                       expected_tip=self.trial_tip, as_of_utc=evidence["computed_at_utc"])
+        if evidence_exposure["inspected_configurations"] != _integer(evidence.get("inspected_configurations"), 1):
+            raise RegistryError("ANCESTRY_INSPECTION_COUNT_MISMATCH")
+        if exposure["inspected_configurations"] > budget:
+            raise RegistryError("ANCESTRY_INSPECTION_BUDGET_EXCEEDED")
+        if type(self.lifecycle_log) is not LifecycleLog or self.lifecycle_tip is None:
+            raise RegistryError("ANCHORED_LIFECYCLE_LOG_REQUIRED")
+        if self.lifecycle_log.store.root != self.store.root or self.lifecycle_log.verifier._keys != self.verifier._keys:
+            raise RegistryError("LIFECYCLE_TRUST_CONTEXT_MISMATCH")
+        lifecycle = self.lifecycle_log.state(protocol["candidate_id"], target, config_id,
+                           when.isoformat(), expected_tip=_digest(self.lifecycle_tip))
+        if lifecycle["status"] != "QUALIFY" or lifecycle["record_id"] != result.record_id:
+            raise RegistryError("LIFECYCLE_NOT_QUALIFIED:" + lifecycle["status"])
+        inherited_defects = self.lifecycle_log.defect_history(protocol["candidate_id"], when.isoformat(), expected_tip=self.lifecycle_tip)
+        return replace(result, lineage_id=lineage.lineage_id,
+                       inspected_configurations=exposure["inspected_configurations"],
+                       lifecycle_event_id=lifecycle["event_id"],
+                       retained_defect_ids=tuple(sorted(set(lineage.defect_ids) | set(inherited_defects))))
 
 
 class TrialLog:
@@ -326,7 +421,7 @@ class TrialLog:
         raw = self.path.read_text() if self.path.exists() else ""
         return self._verify(raw, expected_tip)
 
-    def append(self, payload: Mapping[str, Any], *, expected_tip: str | None = None) -> dict:
+    def append(self, payload: Mapping[str, Any], *, expected_tip: str | None = None, _validator=None) -> dict:
         import fcntl
         payload = dict(payload)
         for key in ("kind", "trial_id", "family_id"):
@@ -347,7 +442,9 @@ class TrialLog:
                       "recorded_at_utc": stamp.astimezone(timezone.utc).isoformat(), "payload": payload}
             record["record_id"] = content_id(record)
             line = canonical_bytes(record).decode("utf-8") + "\n"
-            self._verify(raw + line)
+            complete = self._verify(raw + line)
+            if _validator is not None:
+                _validator(complete)
             stream.seek(0, os.SEEK_END)
             stream.write(line)
             stream.flush()
@@ -358,3 +455,140 @@ class TrialLog:
         return sum(r["payload"].get("kind") == "INSPECTED" and
                    (family_id is None or r["payload"].get("family_id") == family_id)
                    for r in self.read(expected_tip))
+
+    def lineage_exposure(self, store, procedure_id, *, expected_tip, as_of_utc=None):
+        """Count inspections across common ancestry, ignoring renameable family labels.
+
+        Siblings sharing any declared root count toward the same exposure. Legacy
+        unbound inspections are conservatively included for every lineage. No
+        forecast performance or qualification is pooled across these ancestors.
+        """
+        from research.procedure_lineage import ProcedureLineage
+        resolver = ProcedureLineage(store)
+        lineage = resolver.resolve(procedure_id)
+        roots, included, unbound = set(lineage.root_ids), [], []
+        cutoff = _time(as_of_utc) if as_of_utc is not None else None
+        for record in self.read(_digest(expected_tip)):
+            if cutoff is not None and _time(record["recorded_at_utc"]) > cutoff:
+                continue
+            payload = record["payload"]
+            if payload.get("kind") != "INSPECTED":
+                continue
+            candidate = payload.get("procedure_id")
+            if candidate is None:
+                included.append(record["record_id"])
+                unbound.append(record["record_id"])
+            elif roots.intersection(resolver.resolve(_digest(candidate)).root_ids):
+                included.append(record["record_id"])
+        return {"lineage_id": lineage.lineage_id, "root_ids": list(lineage.root_ids),
+                "inspected_configurations": len(included), "inspection_record_ids": included,
+                "legacy_unbound_inspections": unbound, "trial_log_tip": expected_tip,
+                "performance_inherited": False}
+
+
+class LifecycleLog:
+    """Signed append-only qualification transitions, resolved at an explicit cutoff.
+
+    An externally retained tip is mandatory for admission. QUALIFY/REVOKE/EXPIRE
+    refer to exact procedure, selector, target and review record. DEFECT_RECORDED
+    is retained across ancestry without transferring a parent's approval.
+    """
+    ACTIONS = frozenset({"QUALIFY", "REVOKE", "EXPIRE", "DEFECT_RECORDED"})
+
+    def __init__(self, store: ArtifactStore, path, verifier: Ed25519Verifier, clock=None):
+        if not isinstance(store, ArtifactStore) or not isinstance(verifier, Ed25519Verifier):
+            raise TypeError("store and external verifier required")
+        self.store, self.verifier = store, verifier
+        self.journal = TrialLog(path, clock=clock)
+
+    def _validate_records(self, records):
+        from research.procedure_lineage import ProcedureLineage
+        events, seen, last_time, active = [], set(), {}, {}
+        for record in records:
+            wrapper = record["payload"]
+            if wrapper.get("kind") != "LIFECYCLE":
+                raise RegistryError("NON_LIFECYCLE_RECORD")
+            event_id = _digest(wrapper.get("event_id"))
+            if event_id in seen:
+                raise RegistryError("DUPLICATE_LIFECYCLE_EVENT")
+            seen.add(event_id)
+            event = self.store.read(event_id)
+            if event.get("schema") != "procedure-lifecycle-event-v1" or event.get("action") not in self.ACTIONS:
+                raise RegistryError("LIFECYCLE_EVENT_SCHEMA_REQUIRED")
+            signed = self.verifier.verify(self.store.read(_digest(wrapper.get("receipt_id"))),
+                                          artifact_id=event_id, purpose="procedure_lifecycle")
+            witnessed, observed = _time(signed["witnessed_at_utc"]), _time(record["recorded_at_utc"])
+            if not _time(event.get("created_utc")) <= witnessed <= observed:
+                raise RegistryError("LIFECYCLE_EVENT_CHRONOLOGY")
+            procedure = _digest(event.get("procedure_id"))
+            ProcedureLineage(self.store).resolve(procedure)
+            if _time(self.store.read(procedure)["created_utc"]) > _time(event["created_utc"]):
+                raise RegistryError("LIFECYCLE_EVENT_PRECEDES_PROCEDURE")
+            config = _digest(event.get("selector_config_id"))
+            target = event.get("target")
+            if not isinstance(target, dict) or set(target) != ValidationRegistry.TARGET_KEYS:
+                raise RegistryError("LIFECYCLE_TARGET_REQUIRED")
+            scope = (procedure, config, content_id(target))
+            if scope in last_time and witnessed < last_time[scope]:
+                raise RegistryError("LIFECYCLE_WITNESS_TIME_REVERSED")
+            last_time[scope] = witnessed
+            if not isinstance(event.get("reason"), str) or not event["reason"].strip():
+                raise RegistryError("LIFECYCLE_REASON_REQUIRED")
+            if event["action"] == "DEFECT_RECORDED":
+                defect = self.store.read(_digest(event.get("defect_id")))
+                if defect.get("schema") != "procedure-defect-v1":
+                    raise RegistryError("DEFECT_SCHEMA_REQUIRED")
+            else:
+                review_record = _digest(event.get("record_id"))
+                record_body = self.store.read(review_record)
+                review = self.store.read(record_body["review_payload_id"])
+                protocol = self.store.read(review["protocol_id"])
+                if (protocol["candidate_id"], protocol["selector_config_id"], protocol["target"]) != (procedure, config, target):
+                    raise RegistryError("LIFECYCLE_REVIEW_BINDING_MISMATCH")
+                if event["action"] == "QUALIFY":
+                    if signed["signer_id"] == protocol["author_id"] or self.verifier.same_credential(signed["signer_id"], protocol["author_id"]):
+                        raise RegistryError("LIFECYCLE_SELF_QUALIFICATION")
+                    reviewed = self.verifier.verify(self.store.read(record_body["review_receipt_id"]),
+                                                    artifact_id=record_body["review_payload_id"], purpose="validation_review")
+                    if _time(reviewed["witnessed_at_utc"]) > witnessed:
+                        raise RegistryError("LIFECYCLE_QUALIFIED_BEFORE_REVIEW")
+                    active[scope] = review_record
+                elif active.get(scope) != review_record:
+                    raise RegistryError("LIFECYCLE_DEMOTION_RECORD_MISMATCH")
+                else:
+                    active.pop(scope)
+            events.append({"event_id": event_id, "event": event, "witnessed_at_utc": witnessed,
+                           "recorded_at_utc": observed, "signer_id": signed["signer_id"]})
+        return events
+
+    def append(self, event_id, receipt_id, *, expected_tip=None):
+        payload = {"kind": "LIFECYCLE", "trial_id": _digest(event_id), "family_id": "signed-lifecycle",
+                   "event_id": event_id, "receipt_id": _digest(receipt_id)}
+        return self.journal.append(payload, expected_tip=expected_tip, _validator=self._validate_records)
+
+    def read(self, *, expected_tip):
+        return self._validate_records(self.journal.read(_digest(expected_tip)))
+
+    def state(self, procedure_id, target, selector_config_id, at_utc, *, expected_tip):
+        when = _time(at_utc)
+        state = {"status": "UNQUALIFIED", "record_id": None, "event_id": None}
+        for item in self.read(expected_tip=expected_tip):
+            event = item["event"]
+            if item["witnessed_at_utc"] > when or item["recorded_at_utc"] > when:
+                continue
+            if (event["procedure_id"], event["target"], event["selector_config_id"]) != (procedure_id, target, selector_config_id):
+                continue
+            if event["action"] != "DEFECT_RECORDED":
+                state = {"status": event["action"], "record_id": event["record_id"], "event_id": item["event_id"]}
+        return state
+
+    def defect_history(self, procedure_id, at_utc, *, expected_tip):
+        from research.procedure_lineage import ProcedureLineage
+        ancestors = set(ProcedureLineage(self.store).resolve(procedure_id).ancestor_ids)
+        when, retained = _time(at_utc), set()
+        for item in self.read(expected_tip=expected_tip):
+            event = item["event"]
+            if (event["action"] == "DEFECT_RECORDED" and event["procedure_id"] in ancestors
+                    and item["witnessed_at_utc"] <= when and item["recorded_at_utc"] <= when):
+                retained.add(event["defect_id"])
+        return tuple(sorted(retained))

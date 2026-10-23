@@ -13,7 +13,8 @@ import statistics
 from collections import Counter, defaultdict
 from typing import Mapping, Sequence
 
-from research.validation_registry import content_id
+from research.validation_registry import RegistryError, content_id
+from research.procedure_lineage import FrozenWalkForwardPlan
 
 
 class EvaluationError(ValueError):
@@ -111,29 +112,40 @@ def _settlement(rows):
     decisive = counts["WIN"] + counts["LOSS"]
     return {"wins": counts["WIN"], "losses": counts["LOSS"], "pushes": counts["PUSH"], "voids": counts["VOID"],
             "n_settled": n, "unconditional_win_accuracy": counts["WIN"]/n if n else None,
+            "accuracy_denominator": "WIN+LOSS+PUSH+VOID (declared unconditional-win objective)",
             "non_win_risk": 1-counts["WIN"]/n if n else None,
+            "decisive_diagnostic_denominator": "WIN+LOSS",
             "decisive_only_accuracy_diagnostic": counts["WIN"]/decisive if decisive else None}
 
 
 def evaluate_decisions(rows: Sequence[Mapping], *, population: Sequence[Mapping], evidence_scope: str,
-                       bootstrap_samples=2000, seed=0):
+                       bootstrap_samples=2000, seed=0, walk_forward_plan=None):
     """Evaluate one frozen procedure/configuration and target family.
 
     population externally declares every opportunity, including blocked rows.
     Each population row has event_id, target_id and slate_id; a corresponding
-    decision row must exist. Different targets/procedures require separate calls.
+    decision row must exist. Different procedures require separate calls unless
+    an externally witnessed exact FrozenWalkForwardPlan admits their assignments.
     The upstream caller must bind these rows to immutable pre-event receipts;
     this function cannot authenticate a caller-supplied outcome or timestamp.
     """
     if evidence_scope not in {"DISCOVERY", "SHADOW", "CONFIRMATION"}:
         raise EvaluationError("explicit evidence_scope required")
+    plan_receipt = None
+    if walk_forward_plan is not None:
+        if type(walk_forward_plan) is not FrozenWalkForwardPlan:
+            raise EvaluationError("verified FrozenWalkForwardPlan object required")
+        try:
+            plan_receipt = walk_forward_plan.validate(rows, population)
+        except (RegistryError, KeyError, TypeError, ValueError) as exc:
+            raise EvaluationError("invalid walk-forward plan: " + str(exc)) from exc
     universe = {}
     for item in population:
         event = _id(item, "event_id")
         if event in universe:
             raise EvaluationError("duplicate population event")
         universe[event] = (_id(item, "target_id"), _id(item, "slate_id"))
-    decisions, seen, identity = [], set(), None
+    decisions, seen, identity, identities = [], set(), None, set()
     for item in rows:
         row = dict(item)
         event = _id(row, "event_id")
@@ -143,9 +155,10 @@ def evaluate_decisions(rows: Sequence[Mapping], *, population: Sequence[Mapping]
         if any(not isinstance(value, str) or len(value) != 64 or any(c not in "0123456789abcdef" for c in value)
                for value in binding if value is not None):
             raise EvaluationError("procedure/config/control/family identity must be SHA256")
-        if identity is not None and identity != binding:
+        if identity is not None and identity != binding and plan_receipt is None:
             raise EvaluationError("mixed procedure/config/control/target-family identities")
         identity = binding
+        identities.add(binding)
         if event in seen:
             raise EvaluationError("duplicate decision event")
         seen.add(event)
@@ -176,12 +189,16 @@ def evaluate_decisions(rows: Sequence[Mapping], *, population: Sequence[Mapping]
     settled = [r for r in decisions if r["outcome"] in {"WIN", "LOSS", "PUSH", "VOID"}]
     selected_settled = [r for r in selected if r["outcome"] in {"WIN", "LOSS", "PUSH", "VOID"}]
     n, eligible = len(decisions), sum(r["decision_class"] != "BLOCKED" for r in decisions)
+    # Do not mislabel a planned multi-state evaluation with the final row's identity.
+    identity = next(iter(identities)) if len(identities) == 1 else None
     report = {"schema_version": "research_selection_evaluation.v1", "evidence_scope": evidence_scope,
               "qualification_granted": False, "publication_allowed": False,
               "objective": "unconditional_win", "push_convention": "push_is_non_win; decisive_only_diagnostic_separate",
               "void_convention": "void_is_resolved_non_win; refunds_are_not_accuracy_wins",
               "procedure_id": identity[0] if identity else None, "selector_config_id": identity[1] if identity else None,
               "control_procedure_id": identity[2] if identity else None, "target_family_id": identity[3] if identity else None,
+              "walk_forward_plan": plan_receipt,
+              "identity_bindings": [list(x) for x in sorted(identities, key=lambda x: tuple(v or "" for v in x))],
               "population_id": content_id(sorted([dict(r) for r in population], key=lambda r: r["event_id"])),
               "decision_dataset_id": content_id(decisions),
               "n_events": n, "n_slates": len({r["slate_id"] for r in decisions}), "n_eligible": eligible,

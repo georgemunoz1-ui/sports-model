@@ -103,6 +103,30 @@ def causal_rows(games,prior,cutoff):
     return rows,state,used
 
 
+def operational_rest_training_example(state,event,prior,records,*,cutoff_utc,coverage=(),max_capture_age_hours=6):
+    """Build one separately identified training vector from a pre-event snapshot.
+
+    This candidate adapter is not selected by causal_rows/prepare's legacy path.
+    It consumes no current-event target and reads no state.last/rest proxy. Each
+    training example needs its own historically available all-game capture; a
+    present-day final snapshot is not silently reused at an earlier cutoff.
+    A5 hand-computed vectors test this adapter independently of serving parity.
+    """
+    from models.current.freshness import candidate_form_features, operational_rest, REST_SEMANTICS
+    form=candidate_form_features(state,event,prior)
+    receipt=operational_rest(event,records,cutoff_utc=cutoff_utc,coverage=coverage,max_capture_age_hours=max_capture_age_hours)
+    ready=all(row['status']=='KNOWN' for row in receipt['per_side'].values())
+    if ready:
+        values=dict(form)
+        values['home_rest']=receipt['per_side']['home']['candidate_feature_value']
+        values['away_rest']=receipt['per_side']['away']['candidate_feature_value']
+        features={name:values[name] for name in FEATURES}
+    else:features=None
+    return {'adapter_id':'initial_causal_score.operational_rest.training.v1',
+            'feature_semantics_id':REST_SEMANTICS,'candidate_ready':ready,'features':features,
+            'rest_receipt':receipt,'proxy_columns_used':[],'action_authority':False}
+
+
 def fit(rows,league):
     X=np.array([x for _,x in rows]);hg=np.array([r['home_score'] for r,_ in rows]);ag=np.array([r['away_score'] for r,_ in rows]);heads={}
     specs= [('home_goals',hg,PoissonRegressor(alpha=1,max_iter=1000),'poisson'),('away_goals',ag,PoissonRegressor(alpha=1,max_iter=1000),'poisson')] if league=='mls' else [('winner',(hg>ag).astype(int),LogisticRegression(C=1,max_iter=2000),'logistic'),('margin',hg-ag,Ridge(alpha=1),'linear'),('total',hg+ag,Ridge(alpha=1),'linear')]

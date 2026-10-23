@@ -4,6 +4,8 @@ This audit finds a usable research platform with substantial unfinished model an
 
 **Scope:** pinned main `90daf8e0036c67a5304aa0747bf50b2266e0b364` in `georgemunoz1-ui/sports-model`, plus read-only inspection of open PRs 52, 53, 68–71 and 73–75. PRs are not merged main; their test/evaluation counts below are reported in pinned PR bodies, not newly rerun by this audit. The local repository was restored through the connector during this task. Missing local data archives do not establish that the canonical repository is broken. This document neither certifies production nor changes weights, defaults, historical forecasts, ledgers or wagering authority.
 
+**Implementation addendum:** the table remains the original pinned-main gap inventory. CAP-02 now has a separately versioned fixed-state inference repair and 83 focused passing checks; see `MI002_REPAIR.md` and `MI002_REPRODUCTION_r5.json` for exact supported paths, legacy limitations and receipts. This does not close the broader player-model, training-provenance or predictive-validation program.
+
 The October 21–22 anecdotes are discovery exhibits. The causal explanations, roster/player effect sizes, and calibration conclusions in the conversation are not established by those games. Reported results also require exact-version, final-result identity reconciliation before evaluation.
 
 ## Stage vocabulary

@@ -1,5 +1,12 @@
 name: Prospective Research Grading
 on:
+  push:
+    branches: [main]
+    paths:
+      - 'scripts/canonical_forecasts.py'
+      - 'scripts/canonical_results.py'
+      - 'pipelines/cards/selection_integration.py'
+      - '.github/workflows/canonical-research-grading.yml'
   workflow_dispatch:
   schedule:
     - cron: "45 13 * * *"
@@ -25,7 +32,7 @@ jobs:
           python scripts/canonical_results.py \
             --registry data/grading/canonical/registry.json \
             --output "data/grading/canonical/results/$GITHUB_RUN_ID-$GITHUB_RUN_ATTEMPT"
-      - name: Grade immutable prospective research receipts
+      - name: Grade immutable prospective forecasts and registered selection sidecars
         id: grade
         continue-on-error: true
         if: ${{ always() && hashFiles('data/grading/canonical/results/**/results.json') != '' }}
@@ -51,6 +58,7 @@ jobs:
         run: |
           echo '## Prospective research grading' >> "$GITHUB_STEP_SUMMARY"
           echo 'Source-unverified research cohort; certified calibration and wagering remain OFF.' >> "$GITHUB_STEP_SUMMARY"
+          echo 'Registered selection sidecars are settled separately; NO_PICK never earns an abstention win. Historical cards are not retro-registered.' >> "$GITHUB_STEP_SUMMARY"
           if [ -f data/grading/canonical/summary.json ]; then cat data/grading/canonical/summary.json >> "$GITHUB_STEP_SUMMARY"; fi
           for report in "data/grading/canonical/attempts/grade-$GITHUB_RUN_ID-$GITHUB_RUN_ATTEMPT.json" "data/grading/canonical/results/$GITHUB_RUN_ID-$GITHUB_RUN_ATTEMPT/report.json"; do
             if [ -f "$report" ]; then cat "$report" >> "$GITHUB_STEP_SUMMARY"; fi

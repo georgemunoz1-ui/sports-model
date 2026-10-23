@@ -4707,3 +4707,23 @@ and CAPABILITY_GAPS.md/JSON for code usage, evidence and 20 prioritized gaps.
 Player-model refits, trust deployment, ancestry-based trial exposure, live drift
 monitoring and overlapping PR integration remain explicit work. No frozen card,
 weight, canonical ledger, authorization history or wagering status was changed.
+
+## 2026-10-23 — Integration continuation and blinded freeze
+
+The next implementation snapshot passes 1,101 full-suite tests and 61 independent
+blinded tests. Actual default and fitted-spread NFL retained-input replays each
+ran 100,000 draws under numeric-v2, emitted automatic NO_PICK sidecars, and wrote
+no prospective registration. The Oct22 discovery replay preserves 18 events and
+80 exact opportunities. Content-addressed ancestry, signed lifecycle, declared
+power, frozen-policy later refits, exact MLS settlement and population retention
+are now executable; earlier pending claims above describe the initial snapshot.
+
+The A5 rest candidate has independent hand oracles and five source-backed rebuilds
+(four complete, one ambiguous); none is a fitted or active shadow model. Archive
+and monitor workflows are implemented, but destination/auth/threshold/schedule
+remain configuration dependencies. No archive upload, notification or deletion
+is claimed. PR75 was separately merged at b1714692c21a0283653c3f71b4a678a4c625b6d0.
+PR76 remote publication/exercise is pending at this pre-publication checkpoint.
+
+See docs/research/overhaul_2026_10_23/DELIVERY_RECONCILIATION.md,
+CAPABILITY_RECONCILIATION_v2.md, BLIND_VERIFICATION.md and FINDING_EVIDENCE.json.

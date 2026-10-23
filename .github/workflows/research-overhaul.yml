@@ -3,7 +3,8 @@ on:
   pull_request:
     branches: [main]
   push:
-    branches: [codex/research-overhaul-20261023]
+    branches: [codex/research-overhaul-20261023, main]
+  workflow_dispatch:
 permissions:
   contents: read
 jobs:
@@ -32,6 +33,36 @@ jobs:
           tests/test_card_disclosures.py
           tests/test_nhl_season_rollover_unittest.py
           tests/test_nhl_atomic_capture.py
+          tests/test_finding_evidence.py
+          tests/test_semantic_identity.py
+          tests/test_semantic_distribution_identity.py
+          tests/test_semantic_spread_identity.py
+          tests/test_selection_integration.py
+          tests/test_canonical_forecasts.py
+          tests/test_canonical_results.py
+          tests/test_evaluation_walk_forward_cli.py
+          tests/test_operational_rest_golden_vectors.py
+          tests/test_procedure_lineage.py
+          tests/test_blind_conformance.py
+          tests/test_ci_storage_archive.py
+          tests/test_ci_storage_monitor.py
+      - name: Exercise actual NFL entrypoint on retained inputs
+        run: |
+          python scripts/run_nfl_integrated.py \
+            --date 2026-09-14 \
+            --replay-cutoff-utc 2026-09-15T00:12:00Z \
+            --identity-semantics market_blind_numeric.v2 \
+            --simulations 100000 \
+            --output "$RUNNER_TEMP/nfl-entrypoint-replay"
+          python - <<'PY'
+          import hashlib, json, os
+          from pathlib import Path
+          root = Path(os.environ['RUNNER_TEMP']) / 'nfl-entrypoint-replay'
+          rows = [{'path': str(p.relative_to(root)), 'sha256': hashlib.sha256(p.read_bytes()).hexdigest(), 'bytes': p.stat().st_size}
+                  for p in sorted(root.rglob('*')) if p.is_file()]
+          assert rows and not list(root.rglob('registration.jsonl')), 'Replay must not register prospectively'
+          print(json.dumps({'scope': 'ACTUAL_ENTRYPOINT_RETAINED_INPUT_REPLAY_NOT_PREDICTIVE_VALIDATION', 'files': rows}, sort_keys=True))
+          PY
       - name: Public research entrypoints
         run: |
           python scripts/run_research_selection.py --help
@@ -39,6 +70,8 @@ jobs:
           python scripts/build_operational_rest_candidate.py --help
           python scripts/capture_team_histories.py --help
           python scripts/prepare_initial_baselines.py --help
+      - name: Verify finding closure evidence
+        run: python -m research.finding_evidence docs/research/overhaul_2026_10_23/FINDING_EVIDENCE.json
       - name: Explain verification scope
         if: always()
         run: |

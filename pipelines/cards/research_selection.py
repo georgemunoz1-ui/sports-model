@@ -22,7 +22,7 @@ class ResearchSelectionError(ValueError):
 
 
 SPEC = {
-    "schema": "research-selection-spec-v1",
+    "schema": "research-selection-spec-v2",
     "objective": "unconditional_win",
     "selection_rule": "win_probability >= frozen_threshold",
     "decision_classes": ["BLOCKED", "ELIGIBLE_NOT_SELECTED", "SHADOW_SELECTED"],
@@ -31,6 +31,8 @@ SPEC = {
     "confidence_bands": "unimplemented_null",
     "publication_allowed": False,
     "wagering_status": "OFF",
+    "raw_probability_basis": "explicit; conditional or unresolved cannot select",
+    "registry_admission": "validation-registry-v2 lineage and lifecycle receipts",
 }
 _HASH = re.compile(r"[0-9a-f]{64}\Z")
 _TARGET_KEYS = {
@@ -41,6 +43,7 @@ _FORECAST_KEYS = {
     "schema", "procedure_id", "input_snapshot_sha256", "target", "probabilities",
     "forecast_cutoff_utc", "forecast_created_at_utc",
 }
+_FORECAST_OPTIONAL_KEYS = {"probability_basis"}
 _CONFIG_KEYS = {"schema", "objective", "threshold", "require_quality_receipt"}
 _QUALITY_KEYS = {
     "forecast_id", "input_snapshot_sha256", "created_at_utc",
@@ -114,7 +117,10 @@ def _target(value: Any) -> dict:
     product, side = result["product"], result["side"]
     if product not in {"winner", "spread", "total"}:
         raise ResearchSelectionError("UNSUPPORTED_PRODUCT")
-    if side not in ({"over", "under"} if product == "total" else {"home", "away"}):
+    allowed_sides = {"over", "under"} if product == "total" else {"home", "away"}
+    if product == "winner" and result["league"] == "mls":
+        allowed_sides.add("draw")
+    if side not in allowed_sides:
         raise ResearchSelectionError("INVALID_TARGET_SIDE")
     if product == "winner":
         if result["line"] is not None:
@@ -150,13 +156,17 @@ def _probabilities(value: Any) -> tuple[dict, bool]:
 
 
 def _forecast_payload(payload: Any) -> dict:
-    result = _mapping(payload, "FORECAST", _FORECAST_KEYS)
+    if not isinstance(payload, Mapping) or not _FORECAST_KEYS <= set(payload) or set(payload) - _FORECAST_KEYS - _FORECAST_OPTIONAL_KEYS:
+        raise ResearchSelectionError("INVALID_FORECAST_FIELDS")
+    result = copy.deepcopy(dict(payload))
     if result["schema"] != "research-forecast-v1":
         raise ResearchSelectionError("UNSUPPORTED_FORECAST_SCHEMA")
     _hash(result["procedure_id"], "PROCEDURE_ID")
     _hash(result["input_snapshot_sha256"], "INPUT_SNAPSHOT_SHA256")
     _target(result["target"])
     _probabilities(result["probabilities"])
+    if result.get("probability_basis", "unconditional_win") not in {"unconditional_win", "conditional_decisive", "unresolved"}:
+        raise ResearchSelectionError("INVALID_RAW_PROBABILITY_BASIS")
     cutoff = _time(result["forecast_cutoff_utc"], "FORECAST_CUTOFF")
     created = _time(result["forecast_created_at_utc"], "FORECAST_CREATED")
     if cutoff > created:
@@ -171,7 +181,9 @@ def seal_forecast(payload: Mapping[str, Any]) -> dict:
 
 
 def _forecast(value: Any) -> dict:
-    result = _mapping(value, "SEALED_FORECAST", _FORECAST_KEYS | {"forecast_id"})
+    if not isinstance(value, Mapping) or "forecast_id" not in value:
+        raise ResearchSelectionError("INVALID_SEALED_FORECAST_FIELDS")
+    result = copy.deepcopy(dict(value))
     claimed = _hash(result.pop("forecast_id"), "FORECAST_ID")
     payload = _forecast_payload(result)
     if content_hash(payload) != claimed:
@@ -244,6 +256,9 @@ def _qualification(registry: Any, forecast: dict, config_id: str, at_utc: str) -
     receipt = {key: getattr(result, key) for key in
                ("eligible", "record_id", "protocol_id", "evidence_id", "reviewer_id")}
     receipt["reasons"] = list(result.reasons)
+    for key in ("registry_schema", "lineage_id", "inspected_configurations", "lifecycle_event_id"):
+        receipt[key] = getattr(result, key, None)
+    receipt["retained_defect_ids"] = list(getattr(result, "retained_defect_ids", ()))
     for reason in receipt["reasons"]:
         _text(reason, "REGISTRY_REASON")
     if receipt["eligible"]:
@@ -276,10 +291,10 @@ def _price_diagnostics(price: Any, forecast: dict, at: datetime, decision_id: st
                                                  "probability_basis": "conditional_decisive",
                                                  "push_and_void": "stake_refunded"})
             probabilities, complete = _probabilities(forecast["probabilities"])
-            if complete:
+            if complete and forecast.get("probability_basis", "unconditional_win") == "unconditional_win":
                 diagnostics["estimated_value"] = probabilities["win"] * (decimal - 1) - probabilities["loss"]
             else:
-                diagnostics["price_reasons"] = ["EXPECTED_VALUE_REQUIRES_COMPLETE_MASS"]
+                diagnostics["price_reasons"] = ["EXPECTED_VALUE_REQUIRES_COMPLETE_UNCONDITIONAL_MASS"]
         except ResearchSelectionError as exc:
             diagnostics.update(price_status="INVALID_PRICE", price_reasons=[str(exc)])
     diagnostics["price_diagnostics_id"] = content_hash({"decision_id": decision_id, **diagnostics})
@@ -329,6 +344,9 @@ def select_research(
     blocks: list[str] = []
     if not complete:
         blocks.append("PROBABILITY_MASS_INCOMPLETE")
+    basis = original.get("probability_basis", "unconditional_win")
+    if basis != "unconditional_win":
+        blocks.append("RAW_PROBABILITY_BASIS_NOT_UNCONDITIONAL")
     if _time(original["forecast_created_at_utc"], "FORECAST_CREATED") > at:
         blocks.append("FORECAST_FROM_FUTURE")
     if at >= _time(original["target"]["starts_at_utc"], "EVENT_START"):
@@ -361,7 +379,7 @@ def select_research(
     selected = eligible and raw_win >= policy["threshold"]
     decisive_mass = (probabilities["win"] + probabilities["loss"]) if complete else None
     core = {
-        "schema": "research-selection-v1", "selector_spec_id": SELECTOR_SPEC_ID,
+        "schema": "research-selection-v2", "selector_spec_id": SELECTOR_SPEC_ID,
         "selector_config_id": config_id, "forecast_id": original["forecast_id"],
         "procedure_id": original["procedure_id"], "target_id": concrete_target_id,
         "target": copy.deepcopy(original["target"]), "decision_at_utc": decision_at_utc,
@@ -370,6 +388,7 @@ def select_research(
         "prospective_registration_verified": False,
         "objective": "unconditional_win", "threshold": policy["threshold"],
         "raw_probability": raw_win, "raw_probabilities": probabilities,
+        "raw_probability_basis": basis,
         "selection_probability": raw_win if eligible else None,
         "confidence_band": None,
         "confidence_band_status": "NO_QUALIFIED_BAND_DEFINITION",

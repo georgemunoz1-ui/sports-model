@@ -1,0 +1,230 @@
+{
+  "EXECUTION_STATUS": "COMPLETED",
+  "PREDICTIVE_VALIDATION": "UNVALIDATED",
+  "PUBLICATION_ELIGIBILITY": "INELIGIBLE",
+  "WAGERING_AUTHORITY": "OFF",
+  "action_authority": false,
+  "adoption_status": "REFIT_AND_CHRONOLOGICAL_EVALUATION_REQUIRED",
+  "candidate_artifact_id": "3e06e99e853738cd32de325d21029e0360eb75a9281c874e33e8a69c49f838e1",
+  "candidate_features": {
+    "away_against": 4.206271321906358,
+    "away_cold": 0.0,
+    "away_for": 2.7430253506057976,
+    "away_rest": 10.041666666666666,
+    "home_against": 2.7066666317974626,
+    "home_cold": 0.0,
+    "home_for": 3.2561872988920584,
+    "home_rest": 10.083333333333334,
+    "neutral": 0.0
+  },
+  "candidate_input_snapshot_hash": "615bd8a51cafb4378417001814a2cdd45c0bd184583cd667c1966284e69bef45",
+  "candidate_procedure_id": "nhl.initial_causal_score.operational_rest_candidate.v1",
+  "candidate_ready": true,
+  "coverage_assertion_basis": "UPSTREAM_SOURCE_CENSUS_REQUIRED_NOT_INFERRED_FROM_NONEMPTY_RECORDS",
+  "created_at_utc": "2026-10-23T06:05:40.208016+00:00",
+  "event_id": "NHL:401891804",
+  "execution_kind": "RETROSPECTIVE_FEATURE_REBUILD",
+  "feature_semantics_id": "initial_causal_score.operational_rest.start_to_start.v1",
+  "forecast_generated": false,
+  "forecast_horizon_hours_at_original_cutoff": 185.12628091055558,
+  "history_packet_sha256": "a51c460c3f55b77d48ad08632fbbbb12c6dbd2565fea57613fc799ee047e5b39",
+  "legacy_features": {
+    "away_against": 4.206271321906358,
+    "away_cold": 0.0,
+    "away_for": 2.7430253506057976,
+    "away_rest": 14,
+    "home_against": 2.7066666317974626,
+    "home_cold": 0.0,
+    "home_for": 3.2561872988920584,
+    "home_rest": 14,
+    "neutral": 0.0
+  },
+  "legacy_state_receipt": {
+    "action_authority": false,
+    "blocking_reasons": [],
+    "cutoff_utc": "2026-09-22T08:52:25.388722+00:00",
+    "event_id": "NHL:401891804",
+    "input_snapshot_hash": "9581e5f34a39056562b208c756dea2b5dd4f68d2ca8fb4d6117e68e91c333cab",
+    "max_state_age_hours_policy": null,
+    "model_id": "nhl.initial_causal_score.research.v1",
+    "model_state_config_hash": "9a72ab6f78c268defabfdb32661dabef52c523ed1ca92d7fe7436bc0a269268b",
+    "per_side": {
+      "away": {
+        "blocking_reasons": [],
+        "consumed_state_last_start_utc": "2026-04-17T01:00:00+00:00",
+        "feature_matches_consumed_state": true,
+        "imputed": false,
+        "rest_basis": "EMBARGOED_FORM_STATE_START_TO_START_CAPPED_14_DAYS",
+        "rest_feature_value": 14.0,
+        "rest_reconstructed_value": 14.0,
+        "state_age_at_cutoff_hours": 3799.8737190894444,
+        "team_id": "22"
+      },
+      "home": {
+        "blocking_reasons": [],
+        "consumed_state_last_start_utc": "2026-04-17T01:00:00+00:00",
+        "feature_matches_consumed_state": true,
+        "imputed": false,
+        "rest_basis": "EMBARGOED_FORM_STATE_START_TO_START_CAPPED_14_DAYS",
+        "rest_feature_value": 14.0,
+        "rest_reconstructed_value": 14.0,
+        "state_age_at_cutoff_hours": 3799.8737190894444,
+        "team_id": "6"
+      }
+    },
+    "receipt_sha256": "1457f7db9a66397ab032d841f13591c753c305b34708d5a395bd5e18345f5f62",
+    "review_notes": [
+      "CAPTURE_FRESHNESS_DOES_NOT_ESTABLISH_CONSUMED_STATE_FRESHNESS",
+      "NUMERICAL_USE_IS_FEATURE_TRACE_NOT_COUNTERFACTUAL_EFFECT_SIZE"
+    ],
+    "schema": "sports.state_freshness_receipt.v1",
+    "state_sha256": "e4399ae8feb9b37fdb4b651c3a846a6f0d9f2d05231b8c1971863d7540702091",
+    "training_cutoff_utc": "2026-09-22T08:52:25.388722+00:00"
+  },
+  "package_sha256": "ecf657dc8770b57a2f36e5c162d213765604b8cc14d6bb1a6364ab78bd063682",
+  "parent_model_id": "nhl.initial_causal_score.research.v1",
+  "procedure_code_sha256": {
+    "models/current/freshness.py": "ebadba51fa545a351d37980bab3bb78d5fe603265b758114b59f0f01191e027a",
+    "scripts/build_operational_rest_candidate.py": "0bd5b4bfc8d90d1300b0948a15af0984f5f218865afa4005f8736265d7ca897c"
+  },
+  "rest_receipt": {
+    "action_authority": false,
+    "coverage_basis": "OBSERVED_FINALS_AT_RETAINED_CAPTURE_NOT_CONTINUOUS_LIVE_TRUTH",
+    "cutoff_utc": "2026-09-22T08:52:25.388722+00:00",
+    "event_id": "NHL:401891804",
+    "exclusions": {
+      "CURRENT_EVENT_EXCLUDED": 1,
+      "NONFINAL_EXCLUDED": 47
+    },
+    "feature_semantics_id": "initial_causal_score.operational_rest.start_to_start.v1",
+    "max_capture_age_hours_policy": 6,
+    "per_side": {
+      "away": {
+        "blocking_reasons": [],
+        "candidate_feature_value": 10.041666666666666,
+        "completion_time_basis": "observed_final_at_capture",
+        "coverage_receipts": [
+          {
+            "complete": true,
+            "from_utc": "2026-09-16T00:00:00Z",
+            "observed_at_utc": "2026-09-22T07:33:13.443472Z",
+            "population": "ALL_PLAYED_GAMES",
+            "request_census_sha256": "05113e967e404cce422ec29fef6cd4e252c270ca8c88f1cfd161f990b508de8b",
+            "source_population_definition": "ALL_NHL_SCOREBOARD_GAME_TYPES_WITHIN_INTERIOR_CAPTURE_WINDOW",
+            "source_sha256": "ae86f02e936f2c9e9f12a9dd9301a567e734bda8495bb2d68957e72b37b98772",
+            "team_id": "22",
+            "through_utc": "2026-09-22T07:33:12.810732+00:00"
+          }
+        ],
+        "observed_at_utc": "2026-09-22T07:33:13.443472Z",
+        "previous_event_id": "NHL:401879652",
+        "previous_start_time_utc": "2026-09-20T01:00:00+00:00",
+        "rest_start_to_start_days": 10.041666666666666,
+        "source_sha256": "ae86f02e936f2c9e9f12a9dd9301a567e734bda8495bb2d68957e72b37b98772",
+        "status": "KNOWN",
+        "team_id": "22"
+      },
+      "home": {
+        "blocking_reasons": [],
+        "candidate_feature_value": 10.083333333333334,
+        "completion_time_basis": "observed_final_at_capture",
+        "coverage_receipts": [
+          {
+            "complete": true,
+            "from_utc": "2026-09-16T00:00:00Z",
+            "observed_at_utc": "2026-09-22T07:33:13.443472Z",
+            "population": "ALL_PLAYED_GAMES",
+            "request_census_sha256": "05113e967e404cce422ec29fef6cd4e252c270ca8c88f1cfd161f990b508de8b",
+            "source_population_definition": "ALL_NHL_SCOREBOARD_GAME_TYPES_WITHIN_INTERIOR_CAPTURE_WINDOW",
+            "source_sha256": "ae86f02e936f2c9e9f12a9dd9301a567e734bda8495bb2d68957e72b37b98772",
+            "team_id": "6",
+            "through_utc": "2026-09-22T07:33:12.810732+00:00"
+          }
+        ],
+        "observed_at_utc": "2026-09-22T07:33:13.443472Z",
+        "previous_event_id": "NHL:401878099",
+        "previous_start_time_utc": "2026-09-20T00:00:00+00:00",
+        "rest_start_to_start_days": 10.083333333333334,
+        "source_sha256": "ae86f02e936f2c9e9f12a9dd9301a567e734bda8495bb2d68957e72b37b98772",
+        "status": "KNOWN",
+        "team_id": "6"
+      }
+    },
+    "schema": "sports.operational_rest_candidate.v1",
+    "units": "start_to_start_days_24h"
+  },
+  "schema": "sports.operational_rest_feature_rebuild.v1",
+  "source_receipts": [
+    {
+      "captured_at_utc": "2026-09-22T07:33:12.810732Z",
+      "observation_basis": "RETRIEVAL_BOUND_FINAL_STATUS_NOT_PROVIDER_OBSERVED_TIMESTAMP",
+      "raw_path": "raw/3d8e3f8a51b9ee65afba7f9070631d1eeb41aeed7c50767e47a6815f28181ed4.json",
+      "source_sha256": "3d8e3f8a51b9ee65afba7f9070631d1eeb41aeed7c50767e47a6815f28181ed4",
+      "source_url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/scoreboard?dates=20260915&limit=1000"
+    },
+    {
+      "captured_at_utc": "2026-09-22T07:33:13.443472Z",
+      "observation_basis": "RETRIEVAL_BOUND_FINAL_STATUS_NOT_PROVIDER_OBSERVED_TIMESTAMP",
+      "raw_path": "raw/ae86f02e936f2c9e9f12a9dd9301a567e734bda8495bb2d68957e72b37b98772.json",
+      "source_sha256": "ae86f02e936f2c9e9f12a9dd9301a567e734bda8495bb2d68957e72b37b98772",
+      "source_url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/scoreboard?dates=20260919&limit=1000"
+    },
+    {
+      "captured_at_utc": "2026-09-22T07:33:13.537962Z",
+      "observation_basis": "RETRIEVAL_BOUND_FINAL_STATUS_NOT_PROVIDER_OBSERVED_TIMESTAMP",
+      "raw_path": "raw/b14fed529732973c3baa636f307063be5d45fb11158a0a1c04983e9d27afc4fc.json",
+      "source_sha256": "b14fed529732973c3baa636f307063be5d45fb11158a0a1c04983e9d27afc4fc",
+      "source_url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/scoreboard?dates=20260920&limit=1000"
+    },
+    {
+      "captured_at_utc": "2026-09-22T07:33:13.638873Z",
+      "observation_basis": "RETRIEVAL_BOUND_FINAL_STATUS_NOT_PROVIDER_OBSERVED_TIMESTAMP",
+      "raw_path": "raw/1f7aa90cb669cc0d21b7594b2d4419cd3df20e4de38cc82c584c9a064a4e969b.json",
+      "source_sha256": "1f7aa90cb669cc0d21b7594b2d4419cd3df20e4de38cc82c584c9a064a4e969b",
+      "source_url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/scoreboard?dates=20260921&limit=1000"
+    },
+    {
+      "captured_at_utc": "2026-09-22T07:33:13.708407Z",
+      "observation_basis": "RETRIEVAL_BOUND_FINAL_STATUS_NOT_PROVIDER_OBSERVED_TIMESTAMP",
+      "raw_path": "raw/53218a8b40041485fe878e8c3cf52c1517d346a9a8932e35a8c5ed825bbc44ab.json",
+      "source_sha256": "53218a8b40041485fe878e8c3cf52c1517d346a9a8932e35a8c5ed825bbc44ab",
+      "source_url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/scoreboard?dates=20260922&limit=1000"
+    },
+    {
+      "captured_at_utc": "2026-09-22T07:33:13.819108Z",
+      "observation_basis": "RETRIEVAL_BOUND_FINAL_STATUS_NOT_PROVIDER_OBSERVED_TIMESTAMP",
+      "raw_path": "raw/1d1e55e32fdc1efd26c553546fc07e4d14bf8e93ce3adbe9d51770d6dab6bfbc.json",
+      "source_sha256": "1d1e55e32fdc1efd26c553546fc07e4d14bf8e93ce3adbe9d51770d6dab6bfbc",
+      "source_url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/scoreboard?dates=20260923&limit=1000"
+    },
+    {
+      "captured_at_utc": "2026-09-22T07:33:13.928922Z",
+      "observation_basis": "RETRIEVAL_BOUND_FINAL_STATUS_NOT_PROVIDER_OBSERVED_TIMESTAMP",
+      "raw_path": "raw/34e55bd2dc51b9dad33b66fabadccb7ea8850ef7328da51096d1cc408e16b3d2.json",
+      "source_sha256": "34e55bd2dc51b9dad33b66fabadccb7ea8850ef7328da51096d1cc408e16b3d2",
+      "source_url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/scoreboard?dates=20260924&limit=1000"
+    },
+    {
+      "captured_at_utc": "2026-09-22T07:33:14.073885Z",
+      "observation_basis": "RETRIEVAL_BOUND_FINAL_STATUS_NOT_PROVIDER_OBSERVED_TIMESTAMP",
+      "raw_path": "raw/74628766284a45415a817f6d56ecaafdde702e1af938aa5a9f3bacca0ffde016.json",
+      "source_sha256": "74628766284a45415a817f6d56ecaafdde702e1af938aa5a9f3bacca0ffde016",
+      "source_url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/scoreboard?dates=20260925&limit=1000"
+    },
+    {
+      "captured_at_utc": "2026-09-22T07:33:14.119441Z",
+      "observation_basis": "RETRIEVAL_BOUND_FINAL_STATUS_NOT_PROVIDER_OBSERVED_TIMESTAMP",
+      "raw_path": "raw/cdadd84754198050ccb88d3e1a20ad39bc16163095d0e3ac3ccb1388b910d02f.json",
+      "source_sha256": "cdadd84754198050ccb88d3e1a20ad39bc16163095d0e3ac3ccb1388b910d02f",
+      "source_url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/scoreboard?dates=20260926&limit=1000"
+    },
+    {
+      "captured_at_utc": "2026-09-22T07:33:14.436149Z",
+      "observation_basis": "RETRIEVAL_BOUND_FINAL_STATUS_NOT_PROVIDER_OBSERVED_TIMESTAMP",
+      "raw_path": "raw/e20284790f724e8be2a73b0ee9e5e63841761f5bc5b09f52cfb857ccbabcaef4.json",
+      "source_sha256": "e20284790f724e8be2a73b0ee9e5e63841761f5bc5b09f52cfb857ccbabcaef4",
+      "source_url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/scoreboard?dates=20260929&limit=1000"
+    }
+  ],
+  "state_sha256": "e4399ae8feb9b37fdb4b651c3a846a6f0d9f2d05231b8c1971863d7540702091"
+}

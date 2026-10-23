@@ -23,7 +23,7 @@ from pipelines.cards.research_selection import (
     select_research, selector_config_id, target_id,
 )
 from research.validation_registry import (
-    ArtifactStore, Ed25519Verifier, RegistryError, TrialLog, ValidationRegistry,
+    ArtifactStore, Ed25519Verifier, LifecycleLog, RegistryError, TrialLog, ValidationRegistry,
     canonical_bytes,
 )
 from models.current.freshness import (
@@ -66,12 +66,18 @@ def signed_fixture(root, *, protocol_changes=None, evidence_changes=None,
         return store.put({"payload": payload,
                           "signature_b64": base64.b64encode(signing_key.sign(canonical_bytes(payload))).decode()})
 
-    procedure_id = store.put({"schema": "synthetic-procedure", "version": 1})
-    control_id = store.put({"schema": "synthetic-control", "version": 1})
+    procedure_common = {"schema": "research-procedure-v1", "parent_ids": [], "owner": "synthetic-author",
+                        "created_utc": "2026-08-29T00:00:00Z", "change_hypothesis": "Synthetic hostile-input test only",
+                        "defect_ids": []}
+    procedure_id = store.put({**procedure_common, "definition": {"role": "candidate", "version": 1,
+        "model_id": "independent-synthetic.v1", "model_state_id": "1"*64,
+        "feature_semantics_id": "2"*64, "calibration_id": "3"*64}})
+    control_id = store.put({**procedure_common, "definition": {"role": "control", "version": 1}})
     population_id = store.put({"schema": "synthetic-population", "league": "nfl"})
     config_id = store.put({"selector_spec_id": SELECTOR_SPEC_ID, "config": CONFIG})
     assert config_id == selector_config_id(CONFIG)
-    protocol = {"candidate_id": procedure_id, "control_id": control_id,
+    basis_id = store.put({"schema": "validation-design-basis-v1", "purpose": "Synthetic conformance fixture only"})
+    protocol = {"schema": "validation-protocol-v2", "candidate_id": procedure_id, "control_id": control_id,
                 "population_id": population_id, "target": FAMILY,
                 "selector_config_id": config_id, "objective": "unconditional_win",
                 "primary_metric": "brier", "author_id": "synthetic-author",
@@ -82,14 +88,22 @@ def signed_fixture(root, *, protocol_changes=None, evidence_changes=None,
                              "minimum_selected": 1, "minimum_total_coverage": .4,
                              "maximum_total_coverage": .6,
                              "maximum_primary_delta_ci_upper": 0,
-                             "minimum_power": .8}}
+                             "minimum_power": .8},
+                "inspection_budget": 1,
+                "power_assumptions": {"minimum_useful_improvement": .04, "paired_loss_sd": .03,
+                                      "design_effect": 1.2, "alpha": .05, "total_trials": 1,
+                                      "target_power": .8, "dependence": "Independent synthetic blocks"},
+                "criteria_justification": {k: {"rationale": "Synthetic fixture mechanics; not empirical validation",
+                                               "basis_artifact_id": basis_id}
+                                           for k in ("minimum_events", "minimum_slates", "minimum_selected",
+                                                     "minimum_total_coverage", "minimum_power")}}
     protocol.update(protocol_changes or {})
     protocol_id = store.put(protocol)
     evidence = {k: protocol[k] for k in ("candidate_id", "control_id", "population_id", "target",
                 "selector_config_id", "objective", "primary_metric", "evaluation_start_utc", "evaluation_end_utc")}
     evidence.update({"protocol_id": protocol_id, "computed_at_utc": "2026-10-20T00:00:00Z",
                      "n_events": 2, "n_slates": 2, "n_selected": 1, "total_coverage": .5,
-                     "primary_delta_ci_upper": -.01, "power_at_declared_effect": .85,
+                     "primary_delta_ci_upper": -.01, "power_at_declared_effect": .85, "inspected_configurations": 1,
                      "paired_dataset_id": store.put({"schema": "synthetic-paired-reference", "fixture_only": True,
                                                        "evidence_scope": dataset_scope})})
     evidence.update(evidence_changes or {})
@@ -100,7 +114,20 @@ def signed_fixture(root, *, protocol_changes=None, evidence_changes=None,
                            "registration_receipt_id": registration_id, "authorship_receipt_id": authorship_id})
     review_receipt_id = receipt(review_id, "validation_review", review_time)
     record_id = store.put({"review_payload_id": review_id, "review_receipt_id": review_receipt_id})
-    registry = ValidationRegistry(store, [record_id], verifier)
+    trials = TrialLog(Path(root) / (record_id + "-trials.jsonl"),
+                      clock=lambda: datetime(2026, 8, 31, 10, tzinfo=timezone.utc))
+    trial_tip = trials.append({"kind": "INSPECTED", "trial_id": "independent synthetic inspection", "family_id": "synthetic family",
+                               "configuration_id": config_id, "procedure_id": procedure_id})["record_id"]
+    lifecycle_time = datetime.fromisoformat(review_time.replace("Z", "+00:00"))
+    lifecycle = LifecycleLog(store, Path(root) / (record_id + "-lifecycle.jsonl"), verifier, clock=lambda: lifecycle_time)
+    life_tip = "0" * 64
+    if reviewer != "synthetic-author" and not same_signing_credential:
+        event_id = store.put({"schema": "procedure-lifecycle-event-v1", "action": "QUALIFY", "record_id": record_id,
+                              "procedure_id": procedure_id, "selector_config_id": config_id, "target": FAMILY,
+                              "created_utc": review_time, "reason": "Independent synthetic test qualification"})
+        life_tip = lifecycle.append(event_id, receipt(event_id, "procedure_lifecycle", review_time))["record_id"]
+    registry = ValidationRegistry(store, [record_id], verifier, trial_log=trials, trial_tip=trial_tip,
+                                   lifecycle_log=lifecycle, lifecycle_tip=life_tip)
     payload = {"schema": "research-forecast-v1", "procedure_id": procedure_id,
                "input_snapshot_sha256": "b" * 64,
                "target": {**FAMILY, "event_id": "test-event-1", "side": "away", "line": 3.0,

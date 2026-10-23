@@ -1,0 +1,2195 @@
+{
+  "action_authority": false,
+  "created_at_utc": "2026-10-23T06:11:57.103964+00:00",
+  "downstream_results": [
+    {
+      "league": "cfb",
+      "legacy_pmf_provenance_seed_leak_reproduced": true,
+      "product": "margin",
+      "residual_fixture_scope": "SYNTHETIC_FIT_NOT_VALIDATION",
+      "v2_parent_to_pmf_to_draw_invariant": true,
+      "variants": [
+        {
+          "canonical_pmf_sha256": "3cd833affad483627ccc76c0a01e5baea35e8281bad910477752926065ae325c",
+          "contract_probabilities": [
+            {
+              "event_id": "SYNTHETIC:cfb",
+              "kind": "HYPOTHETICAL",
+              "line": -1.5,
+              "model_probabilities": {
+                "half_loss": 0.0,
+                "half_win": 0.0,
+                "loss": 0.29259999999999997,
+                "push": 0.0,
+                "win": 0.7073999999999998
+              },
+              "product": "margin",
+              "settlement": "FULL_GAME_OT",
+              "side": "HOME",
+              "simulation_probabilities": {
+                "half_loss": 0.0,
+                "half_win": 0.0,
+                "loss": 0.29169,
+                "push": 0.0,
+                "win": 0.70831
+              }
+            }
+          ],
+          "distribution_sha256": "855e3d1ca78d81b8d1a20b19ede7ea239957d4f170d8ca8a506a383f6a864dc9",
+          "legacy_sampler": {
+            "count": 100000,
+            "draw_sha256": "66c66749ffb35a013fc7f8540cf75ca6e5ccf60d7f1845fcc2e88a00cc6c0af5",
+            "encoding": "little_endian_int64",
+            "numpy_version": "2.3.5",
+            "rng": "numpy.PCG64",
+            "seed": 8773116318388807494,
+            "simulation_code_sha256": "4a68440a8a7d8bcc9b7ed7b617f9f5ff778fe62d4274840e52a37e48ba8f08eb",
+            "worst_case_mc_se_pp": 0.15811388300841897
+          },
+          "parent_card_sha256": "40d4ea9c4482c3a710e068bbf42c98efe0845b7abcc5aed33f8701f07ee234c3",
+          "v2_sampler": {
+            "action_authority": false,
+            "archive_distribution_sha256": "855e3d1ca78d81b8d1a20b19ede7ea239957d4f170d8ca8a506a383f6a864dc9",
+            "archive_parent_forecast_sha256": "c101424afd19be61a451277516caf90859bf6f1c2c8ceff8c38d462a36c416a6",
+            "count": 100000,
+            "draw_sha256": "f339d47fd8604c197e11fd2f920efa974a82e1c553fcc5f3cde834cc661c0baf",
+            "encoding": "little_endian_int64",
+            "file": "855e3d1ca78d81b8d1a20b19ede7ea239957d4f170d8ca8a506a383f6a864dc9.npy",
+            "file_sha256": "9d5c181ab27f2be71548b2e24b784395aa43068b1cd1c812ddb20f0283e54c3a",
+            "identity_semantics": "market_blind_numeric.v2",
+            "numerical_identity": {
+              "distribution_core_sha256": "4a68440a8a7d8bcc9b7ed7b617f9f5ff778fe62d4274840e52a37e48ba8f08eb",
+              "draw_count": 100000,
+              "identity_sha256": "f24fdb7192e20f4b1c4ac54983e5ce53013033457d701de91dff57a2ee4b4db9",
+              "league": "cfb",
+              "masses": [
+                0.09260000000000003,
+                0.19999999999999996,
+                0.1074,
+                0.09260000000000003,
+                0.19999999999999996,
+                0.19999999999999996,
+                0.1074
+              ],
+              "numpy_version": "2.3.5",
+              "parent_numeric_identity_sha256": "9f1c3bc8ebeeefbe467927d89d64717d41edd486ddc5bd6a94c8a98027d8b6a6",
+              "product": "margin",
+              "rng": "numpy.PCG64",
+              "sampler_code_sha256": "6667d7b1bc4eb1245dd59fcaf5a9362c836cb56ab075fc1973f9498be21596ea",
+              "schema": "sports.numeric_pmf_identity.v2",
+              "semantics": "market_blind_numeric.v2",
+              "settlement": "FULL_GAME_OT",
+              "support": [
+                -1,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6
+              ]
+            },
+            "numpy_version": "2.3.5",
+            "predictive_validation": "NOT_ASSESSED",
+            "rng": "numpy.PCG64",
+            "seed": 17460415561180778315,
+            "simulation_code_sha256": "6667d7b1bc4eb1245dd59fcaf5a9362c836cb56ab075fc1973f9498be21596ea",
+            "worst_case_mc_se_pp": 0.15811388300841897
+          }
+        },
+        {
+          "canonical_pmf_sha256": "3cd833affad483627ccc76c0a01e5baea35e8281bad910477752926065ae325c",
+          "contract_probabilities": [
+            {
+              "event_id": "SYNTHETIC:cfb",
+              "kind": "HYPOTHETICAL",
+              "line": -1.5,
+              "model_probabilities": {
+                "half_loss": 0.0,
+                "half_win": 0.0,
+                "loss": 0.29259999999999997,
+                "push": 0.0,
+                "win": 0.7073999999999998
+              },
+              "product": "margin",
+              "settlement": "FULL_GAME_OT",
+              "side": "HOME",
+              "simulation_probabilities": {
+                "half_loss": 0.0,
+                "half_win": 0.0,
+                "loss": 0.29169,
+                "push": 0.0,
+                "win": 0.70831
+              }
+            }
+          ],
+          "distribution_sha256": "ccef4e66dc0ad0409e5d698dbca6e338e7e7d10be5dbd9a201231ee229b65c06",
+          "legacy_sampler": {
+            "count": 100000,
+            "draw_sha256": "047652a717970324bd56ce34675afb0ba4075ac0d90dedfa203f65944c0ad69c",
+            "encoding": "little_endian_int64",
+            "numpy_version": "2.3.5",
+            "rng": "numpy.PCG64",
+            "seed": 8832824313800775434,
+            "simulation_code_sha256": "4a68440a8a7d8bcc9b7ed7b617f9f5ff778fe62d4274840e52a37e48ba8f08eb",
+            "worst_case_mc_se_pp": 0.15811388300841897
+          },
+          "parent_card_sha256": "fad642d23b45cb207123887aca897e92386a2380fee1a5f0e92d5b305f8ae43c",
+          "v2_sampler": {
+            "action_authority": false,
+            "archive_distribution_sha256": "ccef4e66dc0ad0409e5d698dbca6e338e7e7d10be5dbd9a201231ee229b65c06",
+            "archive_parent_forecast_sha256": "3f59691008be31e23bd268e0b602dc914d35ec86d8ef33a06b856b188a0a7498",
+            "count": 100000,
+            "draw_sha256": "f339d47fd8604c197e11fd2f920efa974a82e1c553fcc5f3cde834cc661c0baf",
+            "encoding": "little_endian_int64",
+            "file": "ccef4e66dc0ad0409e5d698dbca6e338e7e7d10be5dbd9a201231ee229b65c06.npy",
+            "file_sha256": "9d5c181ab27f2be71548b2e24b784395aa43068b1cd1c812ddb20f0283e54c3a",
+            "identity_semantics": "market_blind_numeric.v2",
+            "numerical_identity": {
+              "distribution_core_sha256": "4a68440a8a7d8bcc9b7ed7b617f9f5ff778fe62d4274840e52a37e48ba8f08eb",
+              "draw_count": 100000,
+              "identity_sha256": "f24fdb7192e20f4b1c4ac54983e5ce53013033457d701de91dff57a2ee4b4db9",
+              "league": "cfb",
+              "masses": [
+                0.09260000000000003,
+                0.19999999999999996,
+                0.1074,
+                0.09260000000000003,
+                0.19999999999999996,
+                0.19999999999999996,
+                0.1074
+              ],
+              "numpy_version": "2.3.5",
+              "parent_numeric_identity_sha256": "9f1c3bc8ebeeefbe467927d89d64717d41edd486ddc5bd6a94c8a98027d8b6a6",
+              "product": "margin",
+              "rng": "numpy.PCG64",
+              "sampler_code_sha256": "6667d7b1bc4eb1245dd59fcaf5a9362c836cb56ab075fc1973f9498be21596ea",
+              "schema": "sports.numeric_pmf_identity.v2",
+              "semantics": "market_blind_numeric.v2",
+              "settlement": "FULL_GAME_OT",
+              "support": [
+                -1,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6
+              ]
+            },
+            "numpy_version": "2.3.5",
+            "predictive_validation": "NOT_ASSESSED",
+            "rng": "numpy.PCG64",
+            "seed": 17460415561180778315,
+            "simulation_code_sha256": "6667d7b1bc4eb1245dd59fcaf5a9362c836cb56ab075fc1973f9498be21596ea",
+            "worst_case_mc_se_pp": 0.15811388300841897
+          }
+        }
+      ]
+    },
+    {
+      "league": "wnba",
+      "legacy_pmf_provenance_seed_leak_reproduced": true,
+      "product": "margin",
+      "residual_fixture_scope": "SYNTHETIC_FIT_NOT_VALIDATION",
+      "v2_parent_to_pmf_to_draw_invariant": true,
+      "variants": [
+        {
+          "canonical_pmf_sha256": "2de7ea0c0cf09b6438dcbaa25685a075ea68ea525a3161c51db4701fbe06c61a",
+          "contract_probabilities": [
+            {
+              "event_id": "SYNTHETIC:wnba",
+              "kind": "HYPOTHETICAL",
+              "line": -1.5,
+              "model_probabilities": {
+                "half_loss": 0.0,
+                "half_win": 0.0,
+                "loss": 0.39200000000000007,
+                "push": 0.0,
+                "win": 0.6080000000000001
+              },
+              "product": "margin",
+              "settlement": "FULL_GAME_OT",
+              "side": "HOME",
+              "simulation_probabilities": {
+                "half_loss": 0.0,
+                "half_win": 0.0,
+                "loss": 0.39235,
+                "push": 0.0,
+                "win": 0.60765
+              }
+            }
+          ],
+          "distribution_sha256": "15d19147feac78dea66f10e8eb91a3411a175c6602b9787662b79b7db50bcda7",
+          "legacy_sampler": {
+            "count": 100000,
+            "draw_sha256": "8974721157feb12dd6b488088c25af15591acf0c10d23946920ad2d9dcf97e3e",
+            "encoding": "little_endian_int64",
+            "numpy_version": "2.3.5",
+            "rng": "numpy.PCG64",
+            "seed": 18287306197156368833,
+            "simulation_code_sha256": "4a68440a8a7d8bcc9b7ed7b617f9f5ff778fe62d4274840e52a37e48ba8f08eb",
+            "worst_case_mc_se_pp": 0.15811388300841897
+          },
+          "parent_card_sha256": "02b6972b3a7b8bb09d56861e9618a6fbc8ef887a8537a9b0c81435574566aa30",
+          "v2_sampler": {
+            "action_authority": false,
+            "archive_distribution_sha256": "15d19147feac78dea66f10e8eb91a3411a175c6602b9787662b79b7db50bcda7",
+            "archive_parent_forecast_sha256": "4bcfef53da83c35930460109080a1c117827f329e0c906c46640c46a4e45637b",
+            "count": 100000,
+            "draw_sha256": "d6a268ce15b3332aeaa32b6bccce3741d0f4be609a2afe2dc3f668f88d28106e",
+            "encoding": "little_endian_int64",
+            "file": "15d19147feac78dea66f10e8eb91a3411a175c6602b9787662b79b7db50bcda7.npy",
+            "file_sha256": "5cbd949ad0a8026d950f919642c9624c94a05b38a05475dda048ba064b7286c8",
+            "identity_semantics": "market_blind_numeric.v2",
+            "numerical_identity": {
+              "distribution_core_sha256": "4a68440a8a7d8bcc9b7ed7b617f9f5ff778fe62d4274840e52a37e48ba8f08eb",
+              "draw_count": 100000,
+              "identity_sha256": "1abcad6b37339bf7d4957674bfe6cd58fa007d3e36273f6d24c2f1de9aa3d74d",
+              "league": "wnba",
+              "masses": [
+                0.19200000000000012,
+                0.19999999999999996,
+                0.00800000000000001,
+                0.19200000000000012,
+                0.19999999999999996,
+                0.19999999999999996,
+                0.00800000000000001
+              ],
+              "numpy_version": "2.3.5",
+              "parent_numeric_identity_sha256": "5fab02600e356a5abfe5712e6a956e835ddabe0872a6b9a1060992a92e19c20e",
+              "product": "margin",
+              "rng": "numpy.PCG64",
+              "sampler_code_sha256": "6667d7b1bc4eb1245dd59fcaf5a9362c836cb56ab075fc1973f9498be21596ea",
+              "schema": "sports.numeric_pmf_identity.v2",
+              "semantics": "market_blind_numeric.v2",
+              "settlement": "FULL_GAME_OT",
+              "support": [
+                -1,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6
+              ]
+            },
+            "numpy_version": "2.3.5",
+            "predictive_validation": "NOT_ASSESSED",
+            "rng": "numpy.PCG64",
+            "seed": 1926605416606964727,
+            "simulation_code_sha256": "6667d7b1bc4eb1245dd59fcaf5a9362c836cb56ab075fc1973f9498be21596ea",
+            "worst_case_mc_se_pp": 0.15811388300841897
+          }
+        },
+        {
+          "canonical_pmf_sha256": "2de7ea0c0cf09b6438dcbaa25685a075ea68ea525a3161c51db4701fbe06c61a",
+          "contract_probabilities": [
+            {
+              "event_id": "SYNTHETIC:wnba",
+              "kind": "HYPOTHETICAL",
+              "line": -1.5,
+              "model_probabilities": {
+                "half_loss": 0.0,
+                "half_win": 0.0,
+                "loss": 0.39200000000000007,
+                "push": 0.0,
+                "win": 0.6080000000000001
+              },
+              "product": "margin",
+              "settlement": "FULL_GAME_OT",
+              "side": "HOME",
+              "simulation_probabilities": {
+                "half_loss": 0.0,
+                "half_win": 0.0,
+                "loss": 0.39235,
+                "push": 0.0,
+                "win": 0.60765
+              }
+            }
+          ],
+          "distribution_sha256": "965187ff730b171f1e718b79d7704a34d8d17332ba779976bbadfa661538de38",
+          "legacy_sampler": {
+            "count": 100000,
+            "draw_sha256": "8e99c750a18745b7d58b943d89c961c8b792794b5b14b2823364cbe9f8683311",
+            "encoding": "little_endian_int64",
+            "numpy_version": "2.3.5",
+            "rng": "numpy.PCG64",
+            "seed": 14616345108500329359,
+            "simulation_code_sha256": "4a68440a8a7d8bcc9b7ed7b617f9f5ff778fe62d4274840e52a37e48ba8f08eb",
+            "worst_case_mc_se_pp": 0.15811388300841897
+          },
+          "parent_card_sha256": "d32896787577fc3737913adf7f1cb6315b1da574a37f49fdb606c1fd36f55bec",
+          "v2_sampler": {
+            "action_authority": false,
+            "archive_distribution_sha256": "965187ff730b171f1e718b79d7704a34d8d17332ba779976bbadfa661538de38",
+            "archive_parent_forecast_sha256": "a3f1172725315e9cfe06b90b13d0dbaff020d39b4fb8335ca4993891b0d736ab",
+            "count": 100000,
+            "draw_sha256": "d6a268ce15b3332aeaa32b6bccce3741d0f4be609a2afe2dc3f668f88d28106e",
+            "encoding": "little_endian_int64",
+            "file": "965187ff730b171f1e718b79d7704a34d8d17332ba779976bbadfa661538de38.npy",
+            "file_sha256": "5cbd949ad0a8026d950f919642c9624c94a05b38a05475dda048ba064b7286c8",
+            "identity_semantics": "market_blind_numeric.v2",
+            "numerical_identity": {
+              "distribution_core_sha256": "4a68440a8a7d8bcc9b7ed7b617f9f5ff778fe62d4274840e52a37e48ba8f08eb",
+              "draw_count": 100000,
+              "identity_sha256": "1abcad6b37339bf7d4957674bfe6cd58fa007d3e36273f6d24c2f1de9aa3d74d",
+              "league": "wnba",
+              "masses": [
+                0.19200000000000012,
+                0.19999999999999996,
+                0.00800000000000001,
+                0.19200000000000012,
+                0.19999999999999996,
+                0.19999999999999996,
+                0.00800000000000001
+              ],
+              "numpy_version": "2.3.5",
+              "parent_numeric_identity_sha256": "5fab02600e356a5abfe5712e6a956e835ddabe0872a6b9a1060992a92e19c20e",
+              "product": "margin",
+              "rng": "numpy.PCG64",
+              "sampler_code_sha256": "6667d7b1bc4eb1245dd59fcaf5a9362c836cb56ab075fc1973f9498be21596ea",
+              "schema": "sports.numeric_pmf_identity.v2",
+              "semantics": "market_blind_numeric.v2",
+              "settlement": "FULL_GAME_OT",
+              "support": [
+                -1,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6
+              ]
+            },
+            "numpy_version": "2.3.5",
+            "predictive_validation": "NOT_ASSESSED",
+            "rng": "numpy.PCG64",
+            "seed": 1926605416606964727,
+            "simulation_code_sha256": "6667d7b1bc4eb1245dd59fcaf5a9362c836cb56ab075fc1973f9498be21596ea",
+            "worst_case_mc_se_pp": 0.15811388300841897
+          }
+        }
+      ]
+    },
+    {
+      "league": "mlb",
+      "legacy_pmf_provenance_seed_leak_reproduced": true,
+      "product": "margin",
+      "residual_fixture_scope": "SYNTHETIC_FIT_NOT_VALIDATION",
+      "v2_parent_to_pmf_to_draw_invariant": true,
+      "variants": [
+        {
+          "canonical_pmf_sha256": "1ae3e7a2bc9107243b2361ab40100fc03411d28e16dcc6e7a0734194df112d95",
+          "contract_probabilities": [
+            {
+              "event_id": "SYNTHETIC:mlb",
+              "kind": "HYPOTHETICAL",
+              "line": -1.5,
+              "model_probabilities": {
+                "half_loss": 0.0,
+                "half_win": 0.0,
+                "loss": 0.4000000000000001,
+                "push": 0.0,
+                "win": 0.6
+              },
+              "product": "margin",
+              "settlement": "COMPLETED_GAME_EXTRA_INNINGS",
+              "side": "HOME",
+              "simulation_probabilities": {
+                "half_loss": 0.0,
+                "half_win": 0.0,
+                "loss": 0.40012,
+                "push": 0.0,
+                "win": 0.59988
+              }
+            }
+          ],
+          "distribution_sha256": "8bf81f6f2e767425445079afc41d4abf3738bd2280399d684a5904f84ded27d5",
+          "legacy_sampler": {
+            "count": 100000,
+            "draw_sha256": "ba6f83c97d342630ddca2e72737f566ebc2e875052183d098effe8d605033026",
+            "encoding": "little_endian_int64",
+            "numpy_version": "2.3.5",
+            "rng": "numpy.PCG64",
+            "seed": 13266492963861966305,
+            "simulation_code_sha256": "4a68440a8a7d8bcc9b7ed7b617f9f5ff778fe62d4274840e52a37e48ba8f08eb",
+            "worst_case_mc_se_pp": 0.15811388300841897
+          },
+          "parent_card_sha256": "dedb4342cf24fa10ab2af357db36f157cd716641c4b646b00688394ad4808a45",
+          "v2_sampler": {
+            "action_authority": false,
+            "archive_distribution_sha256": "8bf81f6f2e767425445079afc41d4abf3738bd2280399d684a5904f84ded27d5",
+            "archive_parent_forecast_sha256": "16df2990e985f1f862c54981e05066c03d33b46c2621359740f2f311f83b2b65",
+            "count": 100000,
+            "draw_sha256": "18cdf9e6f93d3530dbee2b8042e846b6b690bed1fd653c33b27cd4b2a14de2e6",
+            "encoding": "little_endian_int64",
+            "file": "8bf81f6f2e767425445079afc41d4abf3738bd2280399d684a5904f84ded27d5.npy",
+            "file_sha256": "9c4f0d94f07aedcca31c346992845887e2e7b8977bf091d8cfada661e7055f8a",
+            "identity_semantics": "market_blind_numeric.v2",
+            "numerical_identity": {
+              "distribution_core_sha256": "4a68440a8a7d8bcc9b7ed7b617f9f5ff778fe62d4274840e52a37e48ba8f08eb",
+              "draw_count": 100000,
+              "identity_sha256": "b71171edfb595b0404f263ea3b8086a74e1b4c05ea919b4ca95467145ba79083",
+              "league": "mlb",
+              "masses": [
+                0.13620000000000004,
+                0.19999999999999998,
+                0.06380000000000001,
+                0.13620000000000004,
+                0.19999999999999998,
+                0.19999999999999998,
+                0.06380000000000001
+              ],
+              "numpy_version": "2.3.5",
+              "parent_numeric_identity_sha256": "471156855f2704eecba75576e59944360ccb4f552eb873e7a2155709a427d84a",
+              "product": "margin",
+              "rng": "numpy.PCG64",
+              "sampler_code_sha256": "6667d7b1bc4eb1245dd59fcaf5a9362c836cb56ab075fc1973f9498be21596ea",
+              "schema": "sports.numeric_pmf_identity.v2",
+              "semantics": "market_blind_numeric.v2",
+              "settlement": "COMPLETED_GAME_EXTRA_INNINGS",
+              "support": [
+                -2,
+                -1,
+                1,
+                2,
+                3,
+                4,
+                5
+              ]
+            },
+            "numpy_version": "2.3.5",
+            "predictive_validation": "NOT_ASSESSED",
+            "rng": "numpy.PCG64",
+            "seed": 13191450050483018500,
+            "simulation_code_sha256": "6667d7b1bc4eb1245dd59fcaf5a9362c836cb56ab075fc1973f9498be21596ea",
+            "worst_case_mc_se_pp": 0.15811388300841897
+          }
+        },
+        {
+          "canonical_pmf_sha256": "1ae3e7a2bc9107243b2361ab40100fc03411d28e16dcc6e7a0734194df112d95",
+          "contract_probabilities": [
+            {
+              "event_id": "SYNTHETIC:mlb",
+              "kind": "HYPOTHETICAL",
+              "line": -1.5,
+              "model_probabilities": {
+                "half_loss": 0.0,
+                "half_win": 0.0,
+                "loss": 0.4000000000000001,
+                "push": 0.0,
+                "win": 0.6
+              },
+              "product": "margin",
+              "settlement": "COMPLETED_GAME_EXTRA_INNINGS",
+              "side": "HOME",
+              "simulation_probabilities": {
+                "half_loss": 0.0,
+                "half_win": 0.0,
+                "loss": 0.40012,
+                "push": 0.0,
+                "win": 0.59988
+              }
+            }
+          ],
+          "distribution_sha256": "8a90dfc0d16f1b1e35aff98222084c77d2713e801c091ebd571cd48ead5b6943",
+          "legacy_sampler": {
+            "count": 100000,
+            "draw_sha256": "f8b34ca8c47bd269fa80fd1763064e87e51c9edaf91c21ad0d2aa94c46152e8e",
+            "encoding": "little_endian_int64",
+            "numpy_version": "2.3.5",
+            "rng": "numpy.PCG64",
+            "seed": 11489514254586714075,
+            "simulation_code_sha256": "4a68440a8a7d8bcc9b7ed7b617f9f5ff778fe62d4274840e52a37e48ba8f08eb",
+            "worst_case_mc_se_pp": 0.15811388300841897
+          },
+          "parent_card_sha256": "de2cdc6b2eb37330151e44c28d692238f6ccee3017de44d1322b89312e6fcf11",
+          "v2_sampler": {
+            "action_authority": false,
+            "archive_distribution_sha256": "8a90dfc0d16f1b1e35aff98222084c77d2713e801c091ebd571cd48ead5b6943",
+            "archive_parent_forecast_sha256": "c3abde483097bf4beaba7f40385be84c299c942507d62c5328b50fc9e3069ebd",
+            "count": 100000,
+            "draw_sha256": "18cdf9e6f93d3530dbee2b8042e846b6b690bed1fd653c33b27cd4b2a14de2e6",
+            "encoding": "little_endian_int64",
+            "file": "8a90dfc0d16f1b1e35aff98222084c77d2713e801c091ebd571cd48ead5b6943.npy",
+            "file_sha256": "9c4f0d94f07aedcca31c346992845887e2e7b8977bf091d8cfada661e7055f8a",
+            "identity_semantics": "market_blind_numeric.v2",
+            "numerical_identity": {
+              "distribution_core_sha256": "4a68440a8a7d8bcc9b7ed7b617f9f5ff778fe62d4274840e52a37e48ba8f08eb",
+              "draw_count": 100000,
+              "identity_sha256": "b71171edfb595b0404f263ea3b8086a74e1b4c05ea919b4ca95467145ba79083",
+              "league": "mlb",
+              "masses": [
+                0.13620000000000004,
+                0.19999999999999998,
+                0.06380000000000001,
+                0.13620000000000004,
+                0.19999999999999998,
+                0.19999999999999998,
+                0.06380000000000001
+              ],
+              "numpy_version": "2.3.5",
+              "parent_numeric_identity_sha256": "471156855f2704eecba75576e59944360ccb4f552eb873e7a2155709a427d84a",
+              "product": "margin",
+              "rng": "numpy.PCG64",
+              "sampler_code_sha256": "6667d7b1bc4eb1245dd59fcaf5a9362c836cb56ab075fc1973f9498be21596ea",
+              "schema": "sports.numeric_pmf_identity.v2",
+              "semantics": "market_blind_numeric.v2",
+              "settlement": "COMPLETED_GAME_EXTRA_INNINGS",
+              "support": [
+                -2,
+                -1,
+                1,
+                2,
+                3,
+                4,
+                5
+              ]
+            },
+            "numpy_version": "2.3.5",
+            "predictive_validation": "NOT_ASSESSED",
+            "rng": "numpy.PCG64",
+            "seed": 13191450050483018500,
+            "simulation_code_sha256": "6667d7b1bc4eb1245dd59fcaf5a9362c836cb56ab075fc1973f9498be21596ea",
+            "worst_case_mc_se_pp": 0.15811388300841897
+          }
+        }
+      ]
+    },
+    {
+      "league": "nba",
+      "legacy_pmf_provenance_seed_leak_reproduced": true,
+      "product": "margin",
+      "residual_fixture_scope": "SYNTHETIC_FIT_NOT_VALIDATION",
+      "v2_parent_to_pmf_to_draw_invariant": true,
+      "variants": [
+        {
+          "canonical_pmf_sha256": "7e4a52e1e5032f00e143d14e4e5e4ae3f5a0776499408478f3f1bc9fe37dea5d",
+          "contract_probabilities": [
+            {
+              "event_id": "SYNTHETIC:nba",
+              "kind": "HYPOTHETICAL",
+              "line": -1.5,
+              "model_probabilities": {
+                "half_loss": 0.0,
+                "half_win": 0.0,
+                "loss": 0.3734133333333333,
+                "push": 0.0,
+                "win": 0.6265866666666667
+              },
+              "product": "margin",
+              "settlement": "FULL_GAME_OT",
+              "side": "HOME",
+              "simulation_probabilities": {
+                "half_loss": 0.0,
+                "half_win": 0.0,
+                "loss": 0.37,
+                "push": 0.0,
+                "win": 0.63
+              }
+            }
+          ],
+          "distribution_sha256": "e4efed299ec1951edfe42d014ae8b794aa28e10b37eee3e8fb0a2f44bb57f8bc",
+          "legacy_sampler": {
+            "count": 100000,
+            "draw_sha256": "12bfac3d24e7d9775b88150db903a6daf576213bbea141ffc59da1a94e8fcbd5",
+            "encoding": "little_endian_int64",
+            "numpy_version": "2.3.5",
+            "rng": "numpy.PCG64",
+            "seed": 13628032516595406349,
+            "simulation_code_sha256": "4a68440a8a7d8bcc9b7ed7b617f9f5ff778fe62d4274840e52a37e48ba8f08eb",
+            "worst_case_mc_se_pp": 0.15811388300841897
+          },
+          "parent_card_sha256": "f7c3321ebb475efc3066e44720b5e7b44b523b46177dd54ff80c25707f13f624",
+          "v2_sampler": {
+            "action_authority": false,
+            "archive_distribution_sha256": "e4efed299ec1951edfe42d014ae8b794aa28e10b37eee3e8fb0a2f44bb57f8bc",
+            "archive_parent_forecast_sha256": "ccc9c92488f2677b93a736e27133e0eaefcd66163bd18a13569cc1dac10e98bc",
+            "count": 100000,
+            "draw_sha256": "4b00f010ebfc4519087dcdf8cc0c77477a4bf2a9bdaac2a34b083a4460b09417",
+            "encoding": "little_endian_int64",
+            "file": "e4efed299ec1951edfe42d014ae8b794aa28e10b37eee3e8fb0a2f44bb57f8bc.npy",
+            "file_sha256": "026d257ef3fd4f12bcf897e1f6301f1564e2e50c177767bc68cc7b0b802a5df4",
+            "identity_semantics": "market_blind_numeric.v2",
+            "numerical_identity": {
+              "distribution_core_sha256": "4a68440a8a7d8bcc9b7ed7b617f9f5ff778fe62d4274840e52a37e48ba8f08eb",
+              "draw_count": 100000,
+              "identity_sha256": "0bfacf78b23a310dd3a844b57192278800c442415b9631cab80c3d70359efa8c",
+              "league": "nba",
+              "masses": [
+                0.17341333333333328,
+                0.20000000000000004,
+                0.026586666666666668,
+                0.17341333333333328,
+                0.2,
+                0.2,
+                0.02658666666666676
+              ],
+              "numpy_version": "2.3.5",
+              "parent_numeric_identity_sha256": "e62b3cf466bef52c28a04d4aa6da8f38f745bd2e50b998c6309c77fecb8b89ce",
+              "product": "margin",
+              "rng": "numpy.PCG64",
+              "sampler_code_sha256": "6667d7b1bc4eb1245dd59fcaf5a9362c836cb56ab075fc1973f9498be21596ea",
+              "schema": "sports.numeric_pmf_identity.v2",
+              "semantics": "market_blind_numeric.v2",
+              "settlement": "FULL_GAME_OT",
+              "support": [
+                -1,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6
+              ]
+            },
+            "numpy_version": "2.3.5",
+            "predictive_validation": "NOT_ASSESSED",
+            "rng": "numpy.PCG64",
+            "seed": 863230395888054541,
+            "simulation_code_sha256": "6667d7b1bc4eb1245dd59fcaf5a9362c836cb56ab075fc1973f9498be21596ea",
+            "worst_case_mc_se_pp": 0.15811388300841897
+          }
+        },
+        {
+          "canonical_pmf_sha256": "7e4a52e1e5032f00e143d14e4e5e4ae3f5a0776499408478f3f1bc9fe37dea5d",
+          "contract_probabilities": [
+            {
+              "event_id": "SYNTHETIC:nba",
+              "kind": "HYPOTHETICAL",
+              "line": -1.5,
+              "model_probabilities": {
+                "half_loss": 0.0,
+                "half_win": 0.0,
+                "loss": 0.3734133333333333,
+                "push": 0.0,
+                "win": 0.6265866666666667
+              },
+              "product": "margin",
+              "settlement": "FULL_GAME_OT",
+              "side": "HOME",
+              "simulation_probabilities": {
+                "half_loss": 0.0,
+                "half_win": 0.0,
+                "loss": 0.37,
+                "push": 0.0,
+                "win": 0.63
+              }
+            }
+          ],
+          "distribution_sha256": "b7cc0fdc92cbea7313710fa544ac0d483a3fbc9862678b7e7b6b0c6a8c3779a9",
+          "legacy_sampler": {
+            "count": 100000,
+            "draw_sha256": "23964f3cb0e03347e73237883a3a39e8f9e35725b227b89901dbb880ba1ec7e0",
+            "encoding": "little_endian_int64",
+            "numpy_version": "2.3.5",
+            "rng": "numpy.PCG64",
+            "seed": 18091226136192502669,
+            "simulation_code_sha256": "4a68440a8a7d8bcc9b7ed7b617f9f5ff778fe62d4274840e52a37e48ba8f08eb",
+            "worst_case_mc_se_pp": 0.15811388300841897
+          },
+          "parent_card_sha256": "acb80df66256186cb9fd96be1fd4248586849d7eff2bb0b9c1776d4e4e354e38",
+          "v2_sampler": {
+            "action_authority": false,
+            "archive_distribution_sha256": "b7cc0fdc92cbea7313710fa544ac0d483a3fbc9862678b7e7b6b0c6a8c3779a9",
+            "archive_parent_forecast_sha256": "4ff62380e8082e5fab2de2cae795ebf15dc34dac0dd1a041590c8da7875f76cf",
+            "count": 100000,
+            "draw_sha256": "4b00f010ebfc4519087dcdf8cc0c77477a4bf2a9bdaac2a34b083a4460b09417",
+            "encoding": "little_endian_int64",
+            "file": "b7cc0fdc92cbea7313710fa544ac0d483a3fbc9862678b7e7b6b0c6a8c3779a9.npy",
+            "file_sha256": "026d257ef3fd4f12bcf897e1f6301f1564e2e50c177767bc68cc7b0b802a5df4",
+            "identity_semantics": "market_blind_numeric.v2",
+            "numerical_identity": {
+              "distribution_core_sha256": "4a68440a8a7d8bcc9b7ed7b617f9f5ff778fe62d4274840e52a37e48ba8f08eb",
+              "draw_count": 100000,
+              "identity_sha256": "0bfacf78b23a310dd3a844b57192278800c442415b9631cab80c3d70359efa8c",
+              "league": "nba",
+              "masses": [
+                0.17341333333333328,
+                0.20000000000000004,
+                0.026586666666666668,
+                0.17341333333333328,
+                0.2,
+                0.2,
+                0.02658666666666676
+              ],
+              "numpy_version": "2.3.5",
+              "parent_numeric_identity_sha256": "e62b3cf466bef52c28a04d4aa6da8f38f745bd2e50b998c6309c77fecb8b89ce",
+              "product": "margin",
+              "rng": "numpy.PCG64",
+              "sampler_code_sha256": "6667d7b1bc4eb1245dd59fcaf5a9362c836cb56ab075fc1973f9498be21596ea",
+              "schema": "sports.numeric_pmf_identity.v2",
+              "semantics": "market_blind_numeric.v2",
+              "settlement": "FULL_GAME_OT",
+              "support": [
+                -1,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6
+              ]
+            },
+            "numpy_version": "2.3.5",
+            "predictive_validation": "NOT_ASSESSED",
+            "rng": "numpy.PCG64",
+            "seed": 863230395888054541,
+            "simulation_code_sha256": "6667d7b1bc4eb1245dd59fcaf5a9362c836cb56ab075fc1973f9498be21596ea",
+            "worst_case_mc_se_pp": 0.15811388300841897
+          }
+        }
+      ]
+    },
+    {
+      "league": "nhl",
+      "legacy_pmf_provenance_seed_leak_reproduced": true,
+      "product": "margin",
+      "residual_fixture_scope": "SYNTHETIC_FIT_NOT_VALIDATION",
+      "v2_parent_to_pmf_to_draw_invariant": true,
+      "variants": [
+        {
+          "canonical_pmf_sha256": "c2c043ab5ca0584736c0c77c466d6d0f5bb05e66ba51ee45a3cfcc715e6b480d",
+          "contract_probabilities": [
+            {
+              "event_id": "SYNTHETIC:nhl",
+              "kind": "HYPOTHETICAL",
+              "line": -1.5,
+              "model_probabilities": {
+                "half_loss": 0.0,
+                "half_win": 0.0,
+                "loss": 0.4,
+                "push": 0.0,
+                "win": 0.6000000000000001
+              },
+              "product": "margin",
+              "settlement": "FULL_GAME_OT_SO_PLUS_ONE",
+              "side": "HOME",
+              "simulation_probabilities": {
+                "half_loss": 0.0,
+                "half_win": 0.0,
+                "loss": 0.40046000000000004,
+                "push": 0.0,
+                "win": 0.59954
+              }
+            }
+          ],
+          "distribution_sha256": "55c5da183c30322c2e8295738ebdc04b9a19a53d8dead572e06416760ae35b2a",
+          "legacy_sampler": {
+            "count": 100000,
+            "draw_sha256": "20582c7c557b4fc80e7e59851a9602746a9cfb0222ec4faefe43fd41ca1e2cfe",
+            "encoding": "little_endian_int64",
+            "numpy_version": "2.3.5",
+            "rng": "numpy.PCG64",
+            "seed": 277061155399678715,
+            "simulation_code_sha256": "4a68440a8a7d8bcc9b7ed7b617f9f5ff778fe62d4274840e52a37e48ba8f08eb",
+            "worst_case_mc_se_pp": 0.15811388300841897
+          },
+          "parent_card_sha256": "4182a10aa1362bf457c405035028f41ccca8523af67894c4b8da519a0d75c0b0",
+          "v2_sampler": {
+            "action_authority": false,
+            "archive_distribution_sha256": "55c5da183c30322c2e8295738ebdc04b9a19a53d8dead572e06416760ae35b2a",
+            "archive_parent_forecast_sha256": "eab93a8e9f2750a3bf41ad9805d148c50ad123301ff548cc4cf027ee2e4d2e95",
+            "count": 100000,
+            "draw_sha256": "4b511f28d31e74c6b0c9e8be1b78ecb9689f9a097e1935fa4f23f20c5be42833",
+            "encoding": "little_endian_int64",
+            "file": "55c5da183c30322c2e8295738ebdc04b9a19a53d8dead572e06416760ae35b2a.npy",
+            "file_sha256": "843a2e43b3012558f5e1914f091af66d0bb83e5e1cef03d2c5e383aa5be85bf2",
+            "identity_semantics": "market_blind_numeric.v2",
+            "numerical_identity": {
+              "distribution_core_sha256": "4a68440a8a7d8bcc9b7ed7b617f9f5ff778fe62d4274840e52a37e48ba8f08eb",
+              "draw_count": 100000,
+              "identity_sha256": "3d39209f0928eb9d4ef9c19f12af95de73a681a0e9a621a4fc2a69a1551966bd",
+              "league": "nhl",
+              "masses": [
+                0.18741333333333332,
+                0.20000000000000004,
+                0.012586666666666657,
+                0.1874133333333333,
+                0.2,
+                0.2,
+                0.0125866666666667
+              ],
+              "numpy_version": "2.3.5",
+              "parent_numeric_identity_sha256": "1bbbdddf84efff57246c68db4736f11c41564f0c305fa26acfc01682057d7e1a",
+              "product": "margin",
+              "rng": "numpy.PCG64",
+              "sampler_code_sha256": "6667d7b1bc4eb1245dd59fcaf5a9362c836cb56ab075fc1973f9498be21596ea",
+              "schema": "sports.numeric_pmf_identity.v2",
+              "semantics": "market_blind_numeric.v2",
+              "settlement": "FULL_GAME_OT_SO_PLUS_ONE",
+              "support": [
+                -2,
+                -1,
+                1,
+                2,
+                3,
+                4,
+                5
+              ]
+            },
+            "numpy_version": "2.3.5",
+            "predictive_validation": "NOT_ASSESSED",
+            "rng": "numpy.PCG64",
+            "seed": 4411593177411677085,
+            "simulation_code_sha256": "6667d7b1bc4eb1245dd59fcaf5a9362c836cb56ab075fc1973f9498be21596ea",
+            "worst_case_mc_se_pp": 0.15811388300841897
+          }
+        },
+        {
+          "canonical_pmf_sha256": "c2c043ab5ca0584736c0c77c466d6d0f5bb05e66ba51ee45a3cfcc715e6b480d",
+          "contract_probabilities": [
+            {
+              "event_id": "SYNTHETIC:nhl",
+              "kind": "HYPOTHETICAL",
+              "line": -1.5,
+              "model_probabilities": {
+                "half_loss": 0.0,
+                "half_win": 0.0,
+                "loss": 0.4,
+                "push": 0.0,
+                "win": 0.6000000000000001
+              },
+              "product": "margin",
+              "settlement": "FULL_GAME_OT_SO_PLUS_ONE",
+              "side": "HOME",
+              "simulation_probabilities": {
+                "half_loss": 0.0,
+                "half_win": 0.0,
+                "loss": 0.40046000000000004,
+                "push": 0.0,
+                "win": 0.59954
+              }
+            }
+          ],
+          "distribution_sha256": "3b58b9747956f1b1c300e0b5d04afc94aca35d847648b1066d29ecffd23eec73",
+          "legacy_sampler": {
+            "count": 100000,
+            "draw_sha256": "e0e00a1db703a25008b68c7bba7242b25222678a228b8a3857c6babbb86eb972",
+            "encoding": "little_endian_int64",
+            "numpy_version": "2.3.5",
+            "rng": "numpy.PCG64",
+            "seed": 17646083879376275183,
+            "simulation_code_sha256": "4a68440a8a7d8bcc9b7ed7b617f9f5ff778fe62d4274840e52a37e48ba8f08eb",
+            "worst_case_mc_se_pp": 0.15811388300841897
+          },
+          "parent_card_sha256": "d5556af5d29f125e2ad57c0ae9e186cd403af35f66cf79d61bf2cb05dfb0a2d8",
+          "v2_sampler": {
+            "action_authority": false,
+            "archive_distribution_sha256": "3b58b9747956f1b1c300e0b5d04afc94aca35d847648b1066d29ecffd23eec73",
+            "archive_parent_forecast_sha256": "5774052a9cad24b5459651e2a70906390affd4e40bbb51e87d07b9220855d5b0",
+            "count": 100000,
+            "draw_sha256": "4b511f28d31e74c6b0c9e8be1b78ecb9689f9a097e1935fa4f23f20c5be42833",
+            "encoding": "little_endian_int64",
+            "file": "3b58b9747956f1b1c300e0b5d04afc94aca35d847648b1066d29ecffd23eec73.npy",
+            "file_sha256": "843a2e43b3012558f5e1914f091af66d0bb83e5e1cef03d2c5e383aa5be85bf2",
+            "identity_semantics": "market_blind_numeric.v2",
+            "numerical_identity": {
+              "distribution_core_sha256": "4a68440a8a7d8bcc9b7ed7b617f9f5ff778fe62d4274840e52a37e48ba8f08eb",
+              "draw_count": 100000,
+              "identity_sha256": "3d39209f0928eb9d4ef9c19f12af95de73a681a0e9a621a4fc2a69a1551966bd",
+              "league": "nhl",
+              "masses": [
+                0.18741333333333332,
+                0.20000000000000004,
+                0.012586666666666657,
+                0.1874133333333333,
+                0.2,
+                0.2,
+                0.0125866666666667
+              ],
+              "numpy_version": "2.3.5",
+              "parent_numeric_identity_sha256": "1bbbdddf84efff57246c68db4736f11c41564f0c305fa26acfc01682057d7e1a",
+              "product": "margin",
+              "rng": "numpy.PCG64",
+              "sampler_code_sha256": "6667d7b1bc4eb1245dd59fcaf5a9362c836cb56ab075fc1973f9498be21596ea",
+              "schema": "sports.numeric_pmf_identity.v2",
+              "semantics": "market_blind_numeric.v2",
+              "settlement": "FULL_GAME_OT_SO_PLUS_ONE",
+              "support": [
+                -2,
+                -1,
+                1,
+                2,
+                3,
+                4,
+                5
+              ]
+            },
+            "numpy_version": "2.3.5",
+            "predictive_validation": "NOT_ASSESSED",
+            "rng": "numpy.PCG64",
+            "seed": 4411593177411677085,
+            "simulation_code_sha256": "6667d7b1bc4eb1245dd59fcaf5a9362c836cb56ab075fc1973f9498be21596ea",
+            "worst_case_mc_se_pp": 0.15811388300841897
+          }
+        }
+      ]
+    },
+    {
+      "league": "mls",
+      "legacy_pmf_provenance_seed_leak_reproduced": true,
+      "product": "margin",
+      "residual_fixture_scope": "SYNTHETIC_FIT_NOT_VALIDATION",
+      "v2_parent_to_pmf_to_draw_invariant": true,
+      "variants": [
+        {
+          "canonical_pmf_sha256": "8367b744658b11c65bc3f278870ff81b60218fd1b6dce235d781bf4f568807b7",
+          "contract_probabilities": [
+            {
+              "event_id": "SYNTHETIC:mls",
+              "kind": "HYPOTHETICAL",
+              "line": -1.5,
+              "model_probabilities": {
+                "half_loss": 0.0,
+                "half_win": 0.0,
+                "loss": 0.619430618090185,
+                "push": 0.0,
+                "win": 0.38056938190981493
+              },
+              "product": "margin",
+              "settlement": "REGULATION_90_STOPPAGE",
+              "side": "HOME",
+              "simulation_probabilities": {
+                "half_loss": 0.0,
+                "half_win": 0.0,
+                "loss": 0.61956,
+                "push": 0.0,
+                "win": 0.38044
+              }
+            }
+          ],
+          "distribution_sha256": "cb18197824cafa4b6c69405bf73c9a62bc2e9a93ab0a94c84860e86fbd1c25cf",
+          "legacy_sampler": {
+            "count": 100000,
+            "draw_sha256": "46f695aaf0ba466e9f42be0027ae0e7f6be8bf3dbee9661975a18e4d4645fc5e",
+            "encoding": "little_endian_int64",
+            "numpy_version": "2.3.5",
+            "rng": "numpy.PCG64",
+            "seed": 14554147290665144342,
+            "simulation_code_sha256": "4a68440a8a7d8bcc9b7ed7b617f9f5ff778fe62d4274840e52a37e48ba8f08eb",
+            "worst_case_mc_se_pp": 0.15811388300841897
+          },
+          "parent_card_sha256": "24e2c053b48af1a437e269b36e781edd9bb2508ff70d2cca81f6a55bad84fa00",
+          "v2_sampler": {
+            "action_authority": false,
+            "archive_distribution_sha256": "cb18197824cafa4b6c69405bf73c9a62bc2e9a93ab0a94c84860e86fbd1c25cf",
+            "archive_parent_forecast_sha256": "bdccd3096a401fa2fb432e4c46ffd791f922efdaf7686424481b5e5f73a6ff2a",
+            "count": 100000,
+            "draw_sha256": "54dc49900dfe0ab7649899ab1dba6acacef159df34fda64bdfafc9a91de41268",
+            "encoding": "little_endian_int64",
+            "file": "cb18197824cafa4b6c69405bf73c9a62bc2e9a93ab0a94c84860e86fbd1c25cf.npy",
+            "file_sha256": "296c8474a80866fdc86dfe96de16947d46d19457dd72386fac0a59ade4fc6619",
+            "identity_semantics": "market_blind_numeric.v2",
+            "numerical_identity": {
+              "distribution_core_sha256": "4a68440a8a7d8bcc9b7ed7b617f9f5ff778fe62d4274840e52a37e48ba8f08eb",
+              "draw_count": 100000,
+              "identity_sha256": "5996656d51e3951a9623194be8cee783d9ec37ae742606f87f0cb024e2488a6e",
+              "league": "mls",
+              "masses": [
+                0.11943061809018503,
+                0.16666666666666669,
+                0.16666666666666666,
+                0.0472360485764816,
+                0.11943061809018504,
+                0.16666666666666666,
+                0.16666666666666666,
+                0.047236048576481636
+              ],
+              "numpy_version": "2.3.5",
+              "parent_numeric_identity_sha256": "07dda4df5c4afd4301c3395a22f10c27ca5aca196a73a8cf5cfda33b25a38d63",
+              "product": "margin",
+              "rng": "numpy.PCG64",
+              "sampler_code_sha256": "6667d7b1bc4eb1245dd59fcaf5a9362c836cb56ab075fc1973f9498be21596ea",
+              "schema": "sports.numeric_pmf_identity.v2",
+              "semantics": "market_blind_numeric.v2",
+              "settlement": "REGULATION_90_STOPPAGE",
+              "support": [
+                -3,
+                -2,
+                -1,
+                0,
+                1,
+                2,
+                3,
+                4
+              ]
+            },
+            "numpy_version": "2.3.5",
+            "predictive_validation": "NOT_ASSESSED",
+            "rng": "numpy.PCG64",
+            "seed": 6455458636081894682,
+            "simulation_code_sha256": "6667d7b1bc4eb1245dd59fcaf5a9362c836cb56ab075fc1973f9498be21596ea",
+            "worst_case_mc_se_pp": 0.15811388300841897
+          }
+        },
+        {
+          "canonical_pmf_sha256": "8367b744658b11c65bc3f278870ff81b60218fd1b6dce235d781bf4f568807b7",
+          "contract_probabilities": [
+            {
+              "event_id": "SYNTHETIC:mls",
+              "kind": "HYPOTHETICAL",
+              "line": -1.5,
+              "model_probabilities": {
+                "half_loss": 0.0,
+                "half_win": 0.0,
+                "loss": 0.619430618090185,
+                "push": 0.0,
+                "win": 0.38056938190981493
+              },
+              "product": "margin",
+              "settlement": "REGULATION_90_STOPPAGE",
+              "side": "HOME",
+              "simulation_probabilities": {
+                "half_loss": 0.0,
+                "half_win": 0.0,
+                "loss": 0.61956,
+                "push": 0.0,
+                "win": 0.38044
+              }
+            }
+          ],
+          "distribution_sha256": "e4c83716efa8e5ab4603834c8e333d9aebb264a653a5cbbc45ea86ca3a11c1b8",
+          "legacy_sampler": {
+            "count": 100000,
+            "draw_sha256": "bfaa00649799aa2044a07f9679244da229f0b894c2c3851214fa60a819fe42c7",
+            "encoding": "little_endian_int64",
+            "numpy_version": "2.3.5",
+            "rng": "numpy.PCG64",
+            "seed": 1377875860235841673,
+            "simulation_code_sha256": "4a68440a8a7d8bcc9b7ed7b617f9f5ff778fe62d4274840e52a37e48ba8f08eb",
+            "worst_case_mc_se_pp": 0.15811388300841897
+          },
+          "parent_card_sha256": "54aaf77280a56b80b4c6cf9e2053102370673716ac3c67b9f6faeeffeae8e343",
+          "v2_sampler": {
+            "action_authority": false,
+            "archive_distribution_sha256": "e4c83716efa8e5ab4603834c8e333d9aebb264a653a5cbbc45ea86ca3a11c1b8",
+            "archive_parent_forecast_sha256": "517e90749a73967ff3745681f0c53ea73f7a9f66e2196dcd0340bdb78898a779",
+            "count": 100000,
+            "draw_sha256": "54dc49900dfe0ab7649899ab1dba6acacef159df34fda64bdfafc9a91de41268",
+            "encoding": "little_endian_int64",
+            "file": "e4c83716efa8e5ab4603834c8e333d9aebb264a653a5cbbc45ea86ca3a11c1b8.npy",
+            "file_sha256": "296c8474a80866fdc86dfe96de16947d46d19457dd72386fac0a59ade4fc6619",
+            "identity_semantics": "market_blind_numeric.v2",
+            "numerical_identity": {
+              "distribution_core_sha256": "4a68440a8a7d8bcc9b7ed7b617f9f5ff778fe62d4274840e52a37e48ba8f08eb",
+              "draw_count": 100000,
+              "identity_sha256": "5996656d51e3951a9623194be8cee783d9ec37ae742606f87f0cb024e2488a6e",
+              "league": "mls",
+              "masses": [
+                0.11943061809018503,
+                0.16666666666666669,
+                0.16666666666666666,
+                0.0472360485764816,
+                0.11943061809018504,
+                0.16666666666666666,
+                0.16666666666666666,
+                0.047236048576481636
+              ],
+              "numpy_version": "2.3.5",
+              "parent_numeric_identity_sha256": "07dda4df5c4afd4301c3395a22f10c27ca5aca196a73a8cf5cfda33b25a38d63",
+              "product": "margin",
+              "rng": "numpy.PCG64",
+              "sampler_code_sha256": "6667d7b1bc4eb1245dd59fcaf5a9362c836cb56ab075fc1973f9498be21596ea",
+              "schema": "sports.numeric_pmf_identity.v2",
+              "semantics": "market_blind_numeric.v2",
+              "settlement": "REGULATION_90_STOPPAGE",
+              "support": [
+                -3,
+                -2,
+                -1,
+                0,
+                1,
+                2,
+                3,
+                4
+              ]
+            },
+            "numpy_version": "2.3.5",
+            "predictive_validation": "NOT_ASSESSED",
+            "rng": "numpy.PCG64",
+            "seed": 6455458636081894682,
+            "simulation_code_sha256": "6667d7b1bc4eb1245dd59fcaf5a9362c836cb56ab075fc1973f9498be21596ea",
+            "worst_case_mc_se_pp": 0.15811388300841897
+          }
+        }
+      ]
+    },
+    {
+      "league": "nfl",
+      "legacy_pmf_provenance_seed_leak_reproduced": true,
+      "product": "margin",
+      "residual_fixture_scope": "SYNTHETIC_FIT_NOT_VALIDATION",
+      "v2_parent_to_pmf_to_draw_invariant": true,
+      "variants": [
+        {
+          "canonical_pmf_sha256": "f9afdd70465f9d6e3982eff9fa0d9b89fa1f9e77116121e9f045f29093a146d2",
+          "contract_probabilities": [
+            {
+              "event_id": "2026_01_DEN_KC",
+              "kind": "HYPOTHETICAL",
+              "line": -1.5,
+              "model_probabilities": {
+                "half_loss": 0.0,
+                "half_win": 0.0,
+                "loss": 0.771847962965911,
+                "push": 0.0,
+                "win": 0.22815203703408915
+              },
+              "product": "margin",
+              "settlement": "FULL_GAME_OT_REGULAR",
+              "side": "HOME",
+              "simulation_probabilities": {
+                "half_loss": 0.0,
+                "half_win": 0.0,
+                "loss": 0.7712300000000001,
+                "push": 0.0,
+                "win": 0.22876999999999997
+              }
+            }
+          ],
+          "distribution_sha256": "cb320f1b8bab73d9079b666abef2a85e1615abc552426ca8f56b885c435cc2c5",
+          "legacy_sampler": {
+            "count": 100000,
+            "draw_sha256": "61666dc91eeee9c15f1d5af578c609890f2186b8a5012a1b5c8b9ebe4e8a91a5",
+            "encoding": "little_endian_int64",
+            "numpy_version": "2.3.5",
+            "rng": "numpy.PCG64",
+            "seed": 6287430971155387276,
+            "simulation_code_sha256": "4a68440a8a7d8bcc9b7ed7b617f9f5ff778fe62d4274840e52a37e48ba8f08eb",
+            "worst_case_mc_se_pp": 0.15811388300841897
+          },
+          "parent_card_sha256": "f691d9d5efec528ff7c5c191e43014c5949ed23957b315bd1d1f5c15759db930",
+          "v2_sampler": {
+            "action_authority": false,
+            "archive_distribution_sha256": "cb320f1b8bab73d9079b666abef2a85e1615abc552426ca8f56b885c435cc2c5",
+            "archive_parent_forecast_sha256": "88d413b3f1dcf3897d7bcaae60cf96bcb3802ec927a9b7fdbdb260a8db9f7ca8",
+            "count": 100000,
+            "draw_sha256": "db306216916db2113857cb8c2619248e3610ff2e87fc8842ab42e774169b2288",
+            "encoding": "little_endian_int64",
+            "file": "cb320f1b8bab73d9079b666abef2a85e1615abc552426ca8f56b885c435cc2c5.npy",
+            "file_sha256": "441d2b12278b1e59d633044c92e8d2b702e85d438e10523546837c6c8e54ed48",
+            "identity_semantics": "market_blind_numeric.v2",
+            "numerical_identity": {
+              "distribution_core_sha256": "4a68440a8a7d8bcc9b7ed7b617f9f5ff778fe62d4274840e52a37e48ba8f08eb",
+              "draw_count": 100000,
+              "identity_sha256": "c4e559173a50c694f69ef7719596a154ea70e2ef399ed9210e5c4c58c4cebc7d",
+              "league": "nfl",
+              "masses": [
+                0.10518129629924419,
+                0.16666666666666669,
+                0.16666666666666669,
+                0.061485370367422465,
+                0.10518129629924418,
+                0.16666666666666669,
+                0.1666666666666667,
+                0.06148537036742243
+              ],
+              "numpy_version": "2.3.5",
+              "parent_numeric_identity_sha256": "facca5e20c599ac800ba963afab18b3fd83ceec70f20e4e1dc13207378f64c8a",
+              "product": "margin",
+              "rng": "numpy.PCG64",
+              "sampler_code_sha256": "6667d7b1bc4eb1245dd59fcaf5a9362c836cb56ab075fc1973f9498be21596ea",
+              "schema": "sports.numeric_pmf_identity.v2",
+              "semantics": "market_blind_numeric.v2",
+              "settlement": "FULL_GAME_OT_REGULAR",
+              "support": [
+                -4,
+                -3,
+                -2,
+                -1,
+                0,
+                1,
+                2,
+                3
+              ]
+            },
+            "numpy_version": "2.3.5",
+            "predictive_validation": "NOT_ASSESSED",
+            "rng": "numpy.PCG64",
+            "seed": 14187844157398107796,
+            "simulation_code_sha256": "6667d7b1bc4eb1245dd59fcaf5a9362c836cb56ab075fc1973f9498be21596ea",
+            "worst_case_mc_se_pp": 0.15811388300841897
+          }
+        },
+        {
+          "canonical_pmf_sha256": "f9afdd70465f9d6e3982eff9fa0d9b89fa1f9e77116121e9f045f29093a146d2",
+          "contract_probabilities": [
+            {
+              "event_id": "2026_01_DEN_KC",
+              "kind": "HYPOTHETICAL",
+              "line": -1.5,
+              "model_probabilities": {
+                "half_loss": 0.0,
+                "half_win": 0.0,
+                "loss": 0.771847962965911,
+                "push": 0.0,
+                "win": 0.22815203703408915
+              },
+              "product": "margin",
+              "settlement": "FULL_GAME_OT_REGULAR",
+              "side": "HOME",
+              "simulation_probabilities": {
+                "half_loss": 0.0,
+                "half_win": 0.0,
+                "loss": 0.7712300000000001,
+                "push": 0.0,
+                "win": 0.22876999999999997
+              }
+            }
+          ],
+          "distribution_sha256": "bb87d4fe0c6e41172526e25f4686439840d07eb827e6bfcbb98994fc35471eca",
+          "legacy_sampler": {
+            "count": 100000,
+            "draw_sha256": "2a6f5f944aae7308f225fcdc964038e2d26cd6394f8614966d35c23c4d5e3962",
+            "encoding": "little_endian_int64",
+            "numpy_version": "2.3.5",
+            "rng": "numpy.PCG64",
+            "seed": 7380369105665921801,
+            "simulation_code_sha256": "4a68440a8a7d8bcc9b7ed7b617f9f5ff778fe62d4274840e52a37e48ba8f08eb",
+            "worst_case_mc_se_pp": 0.15811388300841897
+          },
+          "parent_card_sha256": "7e44ad36b898d4018c7614e7a735c13e80819b64346c993c7bb9e9e56431d00d",
+          "v2_sampler": {
+            "action_authority": false,
+            "archive_distribution_sha256": "bb87d4fe0c6e41172526e25f4686439840d07eb827e6bfcbb98994fc35471eca",
+            "archive_parent_forecast_sha256": "aa9394073a7ef338da0a18b2d25736ffd6e2d7dbbbd03e9c14031a68f15eed91",
+            "count": 100000,
+            "draw_sha256": "db306216916db2113857cb8c2619248e3610ff2e87fc8842ab42e774169b2288",
+            "encoding": "little_endian_int64",
+            "file": "bb87d4fe0c6e41172526e25f4686439840d07eb827e6bfcbb98994fc35471eca.npy",
+            "file_sha256": "441d2b12278b1e59d633044c92e8d2b702e85d438e10523546837c6c8e54ed48",
+            "identity_semantics": "market_blind_numeric.v2",
+            "numerical_identity": {
+              "distribution_core_sha256": "4a68440a8a7d8bcc9b7ed7b617f9f5ff778fe62d4274840e52a37e48ba8f08eb",
+              "draw_count": 100000,
+              "identity_sha256": "c4e559173a50c694f69ef7719596a154ea70e2ef399ed9210e5c4c58c4cebc7d",
+              "league": "nfl",
+              "masses": [
+                0.10518129629924419,
+                0.16666666666666669,
+                0.16666666666666669,
+                0.061485370367422465,
+                0.10518129629924418,
+                0.16666666666666669,
+                0.1666666666666667,
+                0.06148537036742243
+              ],
+              "numpy_version": "2.3.5",
+              "parent_numeric_identity_sha256": "facca5e20c599ac800ba963afab18b3fd83ceec70f20e4e1dc13207378f64c8a",
+              "product": "margin",
+              "rng": "numpy.PCG64",
+              "sampler_code_sha256": "6667d7b1bc4eb1245dd59fcaf5a9362c836cb56ab075fc1973f9498be21596ea",
+              "schema": "sports.numeric_pmf_identity.v2",
+              "semantics": "market_blind_numeric.v2",
+              "settlement": "FULL_GAME_OT_REGULAR",
+              "support": [
+                -4,
+                -3,
+                -2,
+                -1,
+                0,
+                1,
+                2,
+                3
+              ]
+            },
+            "numpy_version": "2.3.5",
+            "predictive_validation": "NOT_ASSESSED",
+            "rng": "numpy.PCG64",
+            "seed": 14187844157398107796,
+            "simulation_code_sha256": "6667d7b1bc4eb1245dd59fcaf5a9362c836cb56ab075fc1973f9498be21596ea",
+            "worst_case_mc_se_pp": 0.15811388300841897
+          }
+        }
+      ]
+    }
+  ],
+  "fixture_origin": {
+    "adaptation": "Existing synthetic fixtures plus actual current-code pins",
+    "commit": "d5ab18213253fb2c903a943f06d499fe547afc7d",
+    "git_blob": "7accd370573e441d60685ea55fb5da5d60209715",
+    "path": "tests/test_selected_market_independence.py",
+    "pr": 74,
+    "repository": "georgemunoz1-ui/sports-model"
+  },
+  "legacy_path_status": "MI002_REMAINS_OPEN_EXPLICIT_REPLAY_ONLY",
+  "predictive_validation": "NOT_ASSESSED",
+  "report_sha256": "dff18515c764315d9c83327fc01e7e185efe188fbc340f0cad618a141ac29db9",
+  "results": [
+    {
+      "draws_per_execution": 100000,
+      "fixture_scope": "SYNTHETIC_SOURCE_BOUND_CURRENT_PACKAGE_REAL_CODE_PINS_AND_ADAPTER",
+      "league": "cfb",
+      "legacy_metadata_leak_reproduced": true,
+      "v2_numeric_identity_draws_probabilities_invariant": true,
+      "variants": {
+        "legacy.v1": [
+          {
+            "archival_parent_sha256": null,
+            "model_state_config_hash": "d6fc3915ffd18261d81da285161ba0e4c0ec7611105865d889532f55bde260bb",
+            "numeric": {
+              "analytic_p": 0.6652992298681197,
+              "model_p": 0.6652992298681197,
+              "numerical_identity": null,
+              "projected_away_points": null,
+              "projected_away_runs": null,
+              "projected_home_points": null,
+              "projected_home_runs": null,
+              "projected_margin": 2.537,
+              "projected_total": null,
+              "sim_p": 0.66461,
+              "stochastic_sim_p": 0.66461
+            },
+            "retained_array_file_sha256": {
+              "winner_draws.npy": "366a11c6db60b84481f2d6a38776e0c5da1eab2abcb1d634ab662d01074f1b08"
+            },
+            "source_package_sha256": "edcc653cd0ab2ba88df7e3dff6cdab07b3e5024bdf8d4ef3d3815aa1f9c4e62e"
+          },
+          {
+            "archival_parent_sha256": null,
+            "model_state_config_hash": "d6fc3915ffd18261d81da285161ba0e4c0ec7611105865d889532f55bde260bb",
+            "numeric": {
+              "analytic_p": 0.6652992298681197,
+              "model_p": 0.6652992298681197,
+              "numerical_identity": null,
+              "projected_away_points": null,
+              "projected_away_runs": null,
+              "projected_home_points": null,
+              "projected_home_runs": null,
+              "projected_margin": 2.537,
+              "projected_total": null,
+              "sim_p": 0.66243,
+              "stochastic_sim_p": 0.66243
+            },
+            "retained_array_file_sha256": {
+              "winner_draws.npy": "0747a7baacaa51f7b3ec0fec24fc79363df042abf9876a29f2d3210851ab9134"
+            },
+            "source_package_sha256": "c1b68aba81fd206246d8cc7bd8dc4fd7fa93ec471a0b5ae5eae74cff16e7ee13"
+          }
+        ],
+        "market_blind_numeric.v2": [
+          {
+            "archival_parent_sha256": "0f605fbc2ad139af87ef8d8da41c4e0335a46d406ec7a0557c19b8fb5eccc5af",
+            "model_state_config_hash": "d6fc3915ffd18261d81da285161ba0e4c0ec7611105865d889532f55bde260bb",
+            "numeric": {
+              "analytic_p": 0.6652992298681197,
+              "model_p": 0.6652992298681197,
+              "numerical_identity": {
+                "cutoff_utc": "2026-09-22T08:01:00+00:00",
+                "draw_count": 100000,
+                "engine": "BERNOULLI_WINNER_DIAGNOSTIC",
+                "event_id": "SYNTHETIC:cfb",
+                "feature_sha256": "5f282a65222b7e0d319c24752374679fc557ec115df5e55685028d6fd0bd3463",
+                "fitted_state_sha256": "c4fa5c0ede193402328090339ede328769c2b59d618421e28a7aa9e4914b2f23",
+                "identity_sha256": "9f1c3bc8ebeeefbe467927d89d64717d41edd486ddc5bd6a94c8a98027d8b6a6",
+                "league": "cfb",
+                "model_id": "cfb.fbs.elo_form_logit_ridge.v1_0.shadow",
+                "numpy_version": "2.3.5",
+                "schema": "sports.numeric_stochastic_identity.v2",
+                "semantic_runtime_sha256": "6667d7b1bc4eb1245dd59fcaf5a9362c836cb56ab075fc1973f9498be21596ea",
+                "semantics": "market_blind_numeric.v2",
+                "start_time_utc": "2026-09-23T20:00:00+00:00"
+              },
+              "projected_away_points": null,
+              "projected_away_runs": null,
+              "projected_home_points": null,
+              "projected_home_runs": null,
+              "projected_margin": 2.537,
+              "projected_total": null,
+              "sim_p": 0.66795,
+              "stochastic_sim_p": 0.66795
+            },
+            "retained_array_file_sha256": {
+              "winner_draws.npy": "5c281550d6b887b358ac0fa4544a98334a8f4148cfc1dc798d0ccc3304740756"
+            },
+            "source_package_sha256": "edcc653cd0ab2ba88df7e3dff6cdab07b3e5024bdf8d4ef3d3815aa1f9c4e62e"
+          },
+          {
+            "archival_parent_sha256": "e3bb383db932bfedada7370d6d0dd5e1601c526cf6098635f77bb72b3a73ca36",
+            "model_state_config_hash": "d6fc3915ffd18261d81da285161ba0e4c0ec7611105865d889532f55bde260bb",
+            "numeric": {
+              "analytic_p": 0.6652992298681197,
+              "model_p": 0.6652992298681197,
+              "numerical_identity": {
+                "cutoff_utc": "2026-09-22T08:01:00+00:00",
+                "draw_count": 100000,
+                "engine": "BERNOULLI_WINNER_DIAGNOSTIC",
+                "event_id": "SYNTHETIC:cfb",
+                "feature_sha256": "5f282a65222b7e0d319c24752374679fc557ec115df5e55685028d6fd0bd3463",
+                "fitted_state_sha256": "c4fa5c0ede193402328090339ede328769c2b59d618421e28a7aa9e4914b2f23",
+                "identity_sha256": "9f1c3bc8ebeeefbe467927d89d64717d41edd486ddc5bd6a94c8a98027d8b6a6",
+                "league": "cfb",
+                "model_id": "cfb.fbs.elo_form_logit_ridge.v1_0.shadow",
+                "numpy_version": "2.3.5",
+                "schema": "sports.numeric_stochastic_identity.v2",
+                "semantic_runtime_sha256": "6667d7b1bc4eb1245dd59fcaf5a9362c836cb56ab075fc1973f9498be21596ea",
+                "semantics": "market_blind_numeric.v2",
+                "start_time_utc": "2026-09-23T20:00:00+00:00"
+              },
+              "projected_away_points": null,
+              "projected_away_runs": null,
+              "projected_home_points": null,
+              "projected_home_runs": null,
+              "projected_margin": 2.537,
+              "projected_total": null,
+              "sim_p": 0.66795,
+              "stochastic_sim_p": 0.66795
+            },
+            "retained_array_file_sha256": {
+              "winner_draws.npy": "5c281550d6b887b358ac0fa4544a98334a8f4148cfc1dc798d0ccc3304740756"
+            },
+            "source_package_sha256": "c1b68aba81fd206246d8cc7bd8dc4fd7fa93ec471a0b5ae5eae74cff16e7ee13"
+          }
+        ]
+      }
+    },
+    {
+      "draws_per_execution": 100000,
+      "fixture_scope": "SYNTHETIC_SOURCE_BOUND_CURRENT_PACKAGE_REAL_CODE_PINS_AND_ADAPTER",
+      "league": "wnba",
+      "legacy_metadata_leak_reproduced": true,
+      "v2_numeric_identity_draws_probabilities_invariant": true,
+      "variants": {
+        "legacy.v1": [
+          {
+            "archival_parent_sha256": null,
+            "model_state_config_hash": "f40c08a2ad56908e013cfb05df4b0904318ee8df86f528bd1899ea226969527c",
+            "numeric": {
+              "analytic_p": 0.5267,
+              "model_p": 0.5267,
+              "numerical_identity": null,
+              "projected_away_points": null,
+              "projected_away_runs": null,
+              "projected_home_points": null,
+              "projected_home_runs": null,
+              "projected_margin": 2.04,
+              "projected_total": 158.9,
+              "sim_p": 0.52582,
+              "stochastic_sim_p": 0.52582
+            },
+            "retained_array_file_sha256": {
+              "winner_draws.npy": "a10c8f5af3c919f40bf3a5b0b008b89b03877a3346d7ef7c49f161edeccb2050"
+            },
+            "source_package_sha256": "1cbb2b5ca1eac40ff3c90f91345af137d377faa3cfa2d4b85974452f5fa6f064"
+          },
+          {
+            "archival_parent_sha256": null,
+            "model_state_config_hash": "f40c08a2ad56908e013cfb05df4b0904318ee8df86f528bd1899ea226969527c",
+            "numeric": {
+              "analytic_p": 0.5267,
+              "model_p": 0.5267,
+              "numerical_identity": null,
+              "projected_away_points": null,
+              "projected_away_runs": null,
+              "projected_home_points": null,
+              "projected_home_runs": null,
+              "projected_margin": 2.04,
+              "projected_total": 158.9,
+              "sim_p": 0.52477,
+              "stochastic_sim_p": 0.52477
+            },
+            "retained_array_file_sha256": {
+              "winner_draws.npy": "e6b3595307d8fe66231ea98d77d8080a0e605e86699c761d6ea1044a075ce8aa"
+            },
+            "source_package_sha256": "9c7bd835b41b1e0e19c321b5f49a4bfc1d5086813529f8fe9925b0c496dba39f"
+          }
+        ],
+        "market_blind_numeric.v2": [
+          {
+            "archival_parent_sha256": "b1c6aa9d8ee51f72dbc9f9d9a049ea6013df179cc5a1d74697326723a90f638a",
+            "model_state_config_hash": "f40c08a2ad56908e013cfb05df4b0904318ee8df86f528bd1899ea226969527c",
+            "numeric": {
+              "analytic_p": 0.5267,
+              "model_p": 0.5267,
+              "numerical_identity": {
+                "cutoff_utc": "2026-09-22T08:01:00+00:00",
+                "draw_count": 100000,
+                "engine": "BERNOULLI_WINNER_DIAGNOSTIC",
+                "event_id": "SYNTHETIC:wnba",
+                "feature_sha256": "9f12f1bf6f3f4c34900b575adef562ffa89cd3665898be0c8f3b902de659e459",
+                "fitted_state_sha256": "c3711e5936068d2b4da0d2f039f52277b40fd61003093dd4251983bb4eb6dad1",
+                "identity_sha256": "5fab02600e356a5abfe5712e6a956e835ddabe0872a6b9a1060992a92e19c20e",
+                "league": "wnba",
+                "model_id": "wnba.rs.ff7_logit_ridge.v1_0.shadow",
+                "numpy_version": "2.3.5",
+                "schema": "sports.numeric_stochastic_identity.v2",
+                "semantic_runtime_sha256": "6667d7b1bc4eb1245dd59fcaf5a9362c836cb56ab075fc1973f9498be21596ea",
+                "semantics": "market_blind_numeric.v2",
+                "start_time_utc": "2026-09-23T20:00:00+00:00"
+              },
+              "projected_away_points": null,
+              "projected_away_runs": null,
+              "projected_home_points": null,
+              "projected_home_runs": null,
+              "projected_margin": 2.04,
+              "projected_total": 158.9,
+              "sim_p": 0.52736,
+              "stochastic_sim_p": 0.52736
+            },
+            "retained_array_file_sha256": {
+              "winner_draws.npy": "2e1093e0997382b37ccbec8d04d1c2aafe27fb3f7239bac99e9bb3618d79a93d"
+            },
+            "source_package_sha256": "1cbb2b5ca1eac40ff3c90f91345af137d377faa3cfa2d4b85974452f5fa6f064"
+          },
+          {
+            "archival_parent_sha256": "f23a1edbda46eb16d47902d8cc0e09877f524152f1ca684f43f13d943cd2839b",
+            "model_state_config_hash": "f40c08a2ad56908e013cfb05df4b0904318ee8df86f528bd1899ea226969527c",
+            "numeric": {
+              "analytic_p": 0.5267,
+              "model_p": 0.5267,
+              "numerical_identity": {
+                "cutoff_utc": "2026-09-22T08:01:00+00:00",
+                "draw_count": 100000,
+                "engine": "BERNOULLI_WINNER_DIAGNOSTIC",
+                "event_id": "SYNTHETIC:wnba",
+                "feature_sha256": "9f12f1bf6f3f4c34900b575adef562ffa89cd3665898be0c8f3b902de659e459",
+                "fitted_state_sha256": "c3711e5936068d2b4da0d2f039f52277b40fd61003093dd4251983bb4eb6dad1",
+                "identity_sha256": "5fab02600e356a5abfe5712e6a956e835ddabe0872a6b9a1060992a92e19c20e",
+                "league": "wnba",
+                "model_id": "wnba.rs.ff7_logit_ridge.v1_0.shadow",
+                "numpy_version": "2.3.5",
+                "schema": "sports.numeric_stochastic_identity.v2",
+                "semantic_runtime_sha256": "6667d7b1bc4eb1245dd59fcaf5a9362c836cb56ab075fc1973f9498be21596ea",
+                "semantics": "market_blind_numeric.v2",
+                "start_time_utc": "2026-09-23T20:00:00+00:00"
+              },
+              "projected_away_points": null,
+              "projected_away_runs": null,
+              "projected_home_points": null,
+              "projected_home_runs": null,
+              "projected_margin": 2.04,
+              "projected_total": 158.9,
+              "sim_p": 0.52736,
+              "stochastic_sim_p": 0.52736
+            },
+            "retained_array_file_sha256": {
+              "winner_draws.npy": "2e1093e0997382b37ccbec8d04d1c2aafe27fb3f7239bac99e9bb3618d79a93d"
+            },
+            "source_package_sha256": "9c7bd835b41b1e0e19c321b5f49a4bfc1d5086813529f8fe9925b0c496dba39f"
+          }
+        ]
+      }
+    },
+    {
+      "draws_per_execution": 100000,
+      "fixture_scope": "SYNTHETIC_SOURCE_BOUND_CURRENT_PACKAGE_REAL_CODE_PINS_AND_ADAPTER",
+      "league": "mlb",
+      "legacy_metadata_leak_reproduced": true,
+      "v2_numeric_identity_draws_probabilities_invariant": true,
+      "variants": {
+        "legacy.v1": [
+          {
+            "archival_parent_sha256": null,
+            "model_state_config_hash": "400b2128dffc762f4e667369763fc366b63687156d1d7eac59c11e2a9664cd5d",
+            "numeric": {
+              "analytic_p": null,
+              "model_p": 0.57832,
+              "numerical_identity": null,
+              "projected_away_points": null,
+              "projected_away_runs": 3.664,
+              "projected_home_points": null,
+              "projected_home_runs": 4.973,
+              "projected_margin": null,
+              "projected_total": null,
+              "sim_p": 0.57832,
+              "stochastic_sim_p": 0.57832
+            },
+            "retained_array_file_sha256": {
+              "hw.npy": "2407085ee1ae0d0c76f063039c46e08793a3336d8ef5808982f8f1e7bddb9493",
+              "ra.npy": "6b50d8fedb4d3130cf304cea3cfaf0390529a83e8cf6d296c1f8ce099d5dccce",
+              "rh.npy": "8c089411a8397850600672e4ea2429ab130f03921fac20d94b9d55263c73341d"
+            },
+            "source_package_sha256": "2a97587a15a3b0e7d8d8b686315b97ea4231dde758a9c888210d6b25142f24c8"
+          },
+          {
+            "archival_parent_sha256": null,
+            "model_state_config_hash": "400b2128dffc762f4e667369763fc366b63687156d1d7eac59c11e2a9664cd5d",
+            "numeric": {
+              "analytic_p": null,
+              "model_p": 0.57888,
+              "numerical_identity": null,
+              "projected_away_points": null,
+              "projected_away_runs": 3.656,
+              "projected_home_points": null,
+              "projected_home_runs": 4.957,
+              "projected_margin": null,
+              "projected_total": null,
+              "sim_p": 0.57888,
+              "stochastic_sim_p": 0.57888
+            },
+            "retained_array_file_sha256": {
+              "hw.npy": "abfe5916f730850acd1c3d3db92c71a6788f5a0cdfc32c2375ac139594a4f692",
+              "ra.npy": "853075d15170fde84ccb56f5bc9f8e61a85e385cef7f79e9e785202ab4d312b1",
+              "rh.npy": "f441baa449fd55ef41e6a4666f3f3a3da17951208985e161c952df44d28a6a15"
+            },
+            "source_package_sha256": "37337d0ad30bee4cf98d5248c9a310878e89b56948630fcf193407c95208d815"
+          }
+        ],
+        "market_blind_numeric.v2": [
+          {
+            "archival_parent_sha256": "ff6e601783cca16620f8b57bac9355c90431edd01b0fa494e3c23565fbf31a3a",
+            "model_state_config_hash": "400b2128dffc762f4e667369763fc366b63687156d1d7eac59c11e2a9664cd5d",
+            "numeric": {
+              "analytic_p": null,
+              "model_p": 0.58126,
+              "numerical_identity": {
+                "cutoff_utc": "2026-09-22T08:01:00+00:00",
+                "draw_count": 100000,
+                "engine": "FROZEN_V13_GAMMA_POISSON_AND_TIE_PROXY",
+                "event_id": "SYNTHETIC:mlb",
+                "feature_sha256": "da2c8e779abd9935328868132fa3e7c2c1b2721b9bbc941dff43f7048f681e53",
+                "fitted_state_sha256": "9b92a74fcd72b0598baa38261c662aea5150423e7a5668a1f954d20d41638512",
+                "identity_sha256": "471156855f2704eecba75576e59944360ccb4f552eb873e7a2155709a427d84a",
+                "league": "mlb",
+                "model_id": "mlb.v13.current_input.research.v1",
+                "numpy_version": "2.3.5",
+                "schema": "sports.numeric_stochastic_identity.v2",
+                "semantic_runtime_sha256": "6667d7b1bc4eb1245dd59fcaf5a9362c836cb56ab075fc1973f9498be21596ea",
+                "semantics": "market_blind_numeric.v2",
+                "start_time_utc": "2026-09-23T20:00:00+00:00"
+              },
+              "projected_away_points": null,
+              "projected_away_runs": 3.643,
+              "projected_home_points": null,
+              "projected_home_runs": 4.962,
+              "projected_margin": null,
+              "projected_total": null,
+              "sim_p": 0.58126,
+              "stochastic_sim_p": 0.58126
+            },
+            "retained_array_file_sha256": {
+              "hw.npy": "af2c65a8080b16a67060d274ed309d6a3dc760355d3e0034be5ac0ac7d200d0b",
+              "ra.npy": "5bb9da679b13f9ec415babb90d86e5d1a011a074cabc5b7f09033a0429fb4e74",
+              "rh.npy": "7c4f534c006d5119635b9763c2a0cf62fe325c01e696fabfb9ef5a6d68c8f20a"
+            },
+            "source_package_sha256": "2a97587a15a3b0e7d8d8b686315b97ea4231dde758a9c888210d6b25142f24c8"
+          },
+          {
+            "archival_parent_sha256": "9e6b4d3951f8ac8d51b4af404030ad5f306d1e36a8d5861628f20e47fb98809d",
+            "model_state_config_hash": "400b2128dffc762f4e667369763fc366b63687156d1d7eac59c11e2a9664cd5d",
+            "numeric": {
+              "analytic_p": null,
+              "model_p": 0.58126,
+              "numerical_identity": {
+                "cutoff_utc": "2026-09-22T08:01:00+00:00",
+                "draw_count": 100000,
+                "engine": "FROZEN_V13_GAMMA_POISSON_AND_TIE_PROXY",
+                "event_id": "SYNTHETIC:mlb",
+                "feature_sha256": "da2c8e779abd9935328868132fa3e7c2c1b2721b9bbc941dff43f7048f681e53",
+                "fitted_state_sha256": "9b92a74fcd72b0598baa38261c662aea5150423e7a5668a1f954d20d41638512",
+                "identity_sha256": "471156855f2704eecba75576e59944360ccb4f552eb873e7a2155709a427d84a",
+                "league": "mlb",
+                "model_id": "mlb.v13.current_input.research.v1",
+                "numpy_version": "2.3.5",
+                "schema": "sports.numeric_stochastic_identity.v2",
+                "semantic_runtime_sha256": "6667d7b1bc4eb1245dd59fcaf5a9362c836cb56ab075fc1973f9498be21596ea",
+                "semantics": "market_blind_numeric.v2",
+                "start_time_utc": "2026-09-23T20:00:00+00:00"
+              },
+              "projected_away_points": null,
+              "projected_away_runs": 3.643,
+              "projected_home_points": null,
+              "projected_home_runs": 4.962,
+              "projected_margin": null,
+              "projected_total": null,
+              "sim_p": 0.58126,
+              "stochastic_sim_p": 0.58126
+            },
+            "retained_array_file_sha256": {
+              "hw.npy": "af2c65a8080b16a67060d274ed309d6a3dc760355d3e0034be5ac0ac7d200d0b",
+              "ra.npy": "5bb9da679b13f9ec415babb90d86e5d1a011a074cabc5b7f09033a0429fb4e74",
+              "rh.npy": "7c4f534c006d5119635b9763c2a0cf62fe325c01e696fabfb9ef5a6d68c8f20a"
+            },
+            "source_package_sha256": "37337d0ad30bee4cf98d5248c9a310878e89b56948630fcf193407c95208d815"
+          }
+        ]
+      }
+    },
+    {
+      "draws_per_execution": 100000,
+      "fixture_scope": "SYNTHETIC_SOURCE_BOUND_CURRENT_PACKAGE_REAL_CODE_PINS_AND_ADAPTER",
+      "league": "nba",
+      "legacy_metadata_leak_reproduced": true,
+      "v2_numeric_identity_draws_probabilities_invariant": true,
+      "variants": {
+        "legacy.v1": [
+          {
+            "archival_parent_sha256": null,
+            "model_state_config_hash": "a38a0bfeab7e67c4d54db38f46b8beb730e5e4a7768f6085862022b56deb866a",
+            "numeric": {
+              "analytic_p": 0.7743315638070969,
+              "model_p": 0.7743315638070969,
+              "numerical_identity": null,
+              "projected_away_points": null,
+              "projected_away_runs": null,
+              "projected_home_points": null,
+              "projected_home_runs": null,
+              "projected_margin": 2.1329333333333333,
+              "projected_total": 221.13293333333334,
+              "sim_p": 0.77238,
+              "stochastic_sim_p": 0.77238
+            },
+            "retained_array_file_sha256": {
+              "winner_draws.npy": "cebb23cb95cb687243bbdec6619342ae02f7040f757826aee5a7fecf7e59d79a"
+            },
+            "source_package_sha256": "c0128447aa231907af3e1cee8386710a1df11582b58caa28d8d3cd78f7a9aed7"
+          },
+          {
+            "archival_parent_sha256": null,
+            "model_state_config_hash": "a38a0bfeab7e67c4d54db38f46b8beb730e5e4a7768f6085862022b56deb866a",
+            "numeric": {
+              "analytic_p": 0.7743315638070969,
+              "model_p": 0.7743315638070969,
+              "numerical_identity": null,
+              "projected_away_points": null,
+              "projected_away_runs": null,
+              "projected_home_points": null,
+              "projected_home_runs": null,
+              "projected_margin": 2.1329333333333333,
+              "projected_total": 221.13293333333334,
+              "sim_p": 0.77432,
+              "stochastic_sim_p": 0.77432
+            },
+            "retained_array_file_sha256": {
+              "winner_draws.npy": "5593c87ded5ad3ee69e12fc7e5d3678b1b822fe0f327b8dea6c0b75f9c8f27a3"
+            },
+            "source_package_sha256": "972e3cbc500632ea937835f5425faf45a6b1ebfa8aafe1bb813a7c53b63b28fd"
+          }
+        ],
+        "market_blind_numeric.v2": [
+          {
+            "archival_parent_sha256": "48130397a990bfd50e8924c0e278ca55646626382a6553869b4e5f1b89b3afc0",
+            "model_state_config_hash": "a38a0bfeab7e67c4d54db38f46b8beb730e5e4a7768f6085862022b56deb866a",
+            "numeric": {
+              "analytic_p": 0.7743315638070969,
+              "model_p": 0.7743315638070969,
+              "numerical_identity": {
+                "cutoff_utc": "2026-09-22T08:01:00+00:00",
+                "draw_count": 100000,
+                "engine": "BERNOULLI_WINNER_DIAGNOSTIC",
+                "event_id": "SYNTHETIC:nba",
+                "feature_sha256": "123e0f0455499c0b485a11d78569d51e2ec489b7b3292c93953ccc89b6a9f116",
+                "fitted_state_sha256": "c95319deb4c73bc3e9c50f3e1b5cd2493daefad67a87413b608fb4305d2f4d00",
+                "identity_sha256": "e62b3cf466bef52c28a04d4aa6da8f38f745bd2e50b998c6309c77fecb8b89ce",
+                "league": "nba",
+                "model_id": "nba.initial_causal_score.research.v1",
+                "numpy_version": "2.3.5",
+                "schema": "sports.numeric_stochastic_identity.v2",
+                "semantic_runtime_sha256": "6667d7b1bc4eb1245dd59fcaf5a9362c836cb56ab075fc1973f9498be21596ea",
+                "semantics": "market_blind_numeric.v2",
+                "start_time_utc": "2026-09-23T20:00:00+00:00"
+              },
+              "projected_away_points": null,
+              "projected_away_runs": null,
+              "projected_home_points": null,
+              "projected_home_runs": null,
+              "projected_margin": 2.1329333333333333,
+              "projected_total": 221.13293333333334,
+              "sim_p": 0.77577,
+              "stochastic_sim_p": 0.77577
+            },
+            "retained_array_file_sha256": {
+              "winner_draws.npy": "e677a96cb716f5c8dba990403ea4b60f5cef032337d9fef1afb526d3fa04106a"
+            },
+            "source_package_sha256": "c0128447aa231907af3e1cee8386710a1df11582b58caa28d8d3cd78f7a9aed7"
+          },
+          {
+            "archival_parent_sha256": "73f66526b2b40d816175157a95d7f1a2dd202c4e86b00648a1047064be5edd79",
+            "model_state_config_hash": "a38a0bfeab7e67c4d54db38f46b8beb730e5e4a7768f6085862022b56deb866a",
+            "numeric": {
+              "analytic_p": 0.7743315638070969,
+              "model_p": 0.7743315638070969,
+              "numerical_identity": {
+                "cutoff_utc": "2026-09-22T08:01:00+00:00",
+                "draw_count": 100000,
+                "engine": "BERNOULLI_WINNER_DIAGNOSTIC",
+                "event_id": "SYNTHETIC:nba",
+                "feature_sha256": "123e0f0455499c0b485a11d78569d51e2ec489b7b3292c93953ccc89b6a9f116",
+                "fitted_state_sha256": "c95319deb4c73bc3e9c50f3e1b5cd2493daefad67a87413b608fb4305d2f4d00",
+                "identity_sha256": "e62b3cf466bef52c28a04d4aa6da8f38f745bd2e50b998c6309c77fecb8b89ce",
+                "league": "nba",
+                "model_id": "nba.initial_causal_score.research.v1",
+                "numpy_version": "2.3.5",
+                "schema": "sports.numeric_stochastic_identity.v2",
+                "semantic_runtime_sha256": "6667d7b1bc4eb1245dd59fcaf5a9362c836cb56ab075fc1973f9498be21596ea",
+                "semantics": "market_blind_numeric.v2",
+                "start_time_utc": "2026-09-23T20:00:00+00:00"
+              },
+              "projected_away_points": null,
+              "projected_away_runs": null,
+              "projected_home_points": null,
+              "projected_home_runs": null,
+              "projected_margin": 2.1329333333333333,
+              "projected_total": 221.13293333333334,
+              "sim_p": 0.77577,
+              "stochastic_sim_p": 0.77577
+            },
+            "retained_array_file_sha256": {
+              "winner_draws.npy": "e677a96cb716f5c8dba990403ea4b60f5cef032337d9fef1afb526d3fa04106a"
+            },
+            "source_package_sha256": "972e3cbc500632ea937835f5425faf45a6b1ebfa8aafe1bb813a7c53b63b28fd"
+          }
+        ]
+      }
+    },
+    {
+      "draws_per_execution": 100000,
+      "fixture_scope": "SYNTHETIC_SOURCE_BOUND_CURRENT_PACKAGE_REAL_CODE_PINS_AND_ADAPTER",
+      "league": "nhl",
+      "legacy_metadata_leak_reproduced": true,
+      "v2_numeric_identity_draws_probabilities_invariant": true,
+      "variants": {
+        "legacy.v1": [
+          {
+            "archival_parent_sha256": null,
+            "model_state_config_hash": "384d0c29d4c337451b8b374a6862db3f07837e77b293f42c705d351f19100638",
+            "numeric": {
+              "analytic_p": 0.5406434586815316,
+              "model_p": 0.5406434586815316,
+              "numerical_identity": null,
+              "projected_away_points": null,
+              "projected_away_runs": null,
+              "projected_home_points": null,
+              "projected_home_runs": null,
+              "projected_margin": 1.0629333333333333,
+              "projected_total": 6.0629333333333335,
+              "sim_p": 0.54221,
+              "stochastic_sim_p": 0.54221
+            },
+            "retained_array_file_sha256": {
+              "winner_draws.npy": "f8f9a27c7cc0a7a9b0034428108a6f0a4ff0c6d421557e598a4ea1fee47e86ed"
+            },
+            "source_package_sha256": "bb7fb3726d43d99aee38d20a3572f9dcb42b149f312e9dcf75452632e343b8bf"
+          },
+          {
+            "archival_parent_sha256": null,
+            "model_state_config_hash": "384d0c29d4c337451b8b374a6862db3f07837e77b293f42c705d351f19100638",
+            "numeric": {
+              "analytic_p": 0.5406434586815316,
+              "model_p": 0.5406434586815316,
+              "numerical_identity": null,
+              "projected_away_points": null,
+              "projected_away_runs": null,
+              "projected_home_points": null,
+              "projected_home_runs": null,
+              "projected_margin": 1.0629333333333333,
+              "projected_total": 6.0629333333333335,
+              "sim_p": 0.53689,
+              "stochastic_sim_p": 0.53689
+            },
+            "retained_array_file_sha256": {
+              "winner_draws.npy": "d443075bad16d58e05d7e8abc79e9393a5f4564dd558e8cb3e3ead8941250a19"
+            },
+            "source_package_sha256": "22353db5ad4df6ad90a5ae297f602f2eac7ca2876d6568b0c917e79c125e9c29"
+          }
+        ],
+        "market_blind_numeric.v2": [
+          {
+            "archival_parent_sha256": "09a8bb1f34992b0f8810fb39b779920337f56f1a4142e183d039f635ca177a3f",
+            "model_state_config_hash": "384d0c29d4c337451b8b374a6862db3f07837e77b293f42c705d351f19100638",
+            "numeric": {
+              "analytic_p": 0.5406434586815316,
+              "model_p": 0.5406434586815316,
+              "numerical_identity": {
+                "cutoff_utc": "2026-09-22T08:01:00+00:00",
+                "draw_count": 100000,
+                "engine": "BERNOULLI_WINNER_DIAGNOSTIC",
+                "event_id": "SYNTHETIC:nhl",
+                "feature_sha256": "48812867332de7615a324b46b2cd727e64951db4a40122e3015679f11b722842",
+                "fitted_state_sha256": "3203ea0ea1b3bbe5c354c891c8de6ea427c7648a4d074ce94696a2c6077a3bad",
+                "identity_sha256": "1bbbdddf84efff57246c68db4736f11c41564f0c305fa26acfc01682057d7e1a",
+                "league": "nhl",
+                "model_id": "nhl.initial_causal_score.research.v1",
+                "numpy_version": "2.3.5",
+                "schema": "sports.numeric_stochastic_identity.v2",
+                "semantic_runtime_sha256": "6667d7b1bc4eb1245dd59fcaf5a9362c836cb56ab075fc1973f9498be21596ea",
+                "semantics": "market_blind_numeric.v2",
+                "start_time_utc": "2026-09-23T20:00:00+00:00"
+              },
+              "projected_away_points": null,
+              "projected_away_runs": null,
+              "projected_home_points": null,
+              "projected_home_runs": null,
+              "projected_margin": 1.0629333333333333,
+              "projected_total": 6.0629333333333335,
+              "sim_p": 0.5401,
+              "stochastic_sim_p": 0.5401
+            },
+            "retained_array_file_sha256": {
+              "winner_draws.npy": "4b0b236534e8b6c6ea4f23d5ca4ea8e18dbee41a3af0f09bd5960ee7cbe0e14a"
+            },
+            "source_package_sha256": "bb7fb3726d43d99aee38d20a3572f9dcb42b149f312e9dcf75452632e343b8bf"
+          },
+          {
+            "archival_parent_sha256": "4b9b96b550626eb7960fdf97668b484470ce66d6b34ae93b6f4720a30f03ec0c",
+            "model_state_config_hash": "384d0c29d4c337451b8b374a6862db3f07837e77b293f42c705d351f19100638",
+            "numeric": {
+              "analytic_p": 0.5406434586815316,
+              "model_p": 0.5406434586815316,
+              "numerical_identity": {
+                "cutoff_utc": "2026-09-22T08:01:00+00:00",
+                "draw_count": 100000,
+                "engine": "BERNOULLI_WINNER_DIAGNOSTIC",
+                "event_id": "SYNTHETIC:nhl",
+                "feature_sha256": "48812867332de7615a324b46b2cd727e64951db4a40122e3015679f11b722842",
+                "fitted_state_sha256": "3203ea0ea1b3bbe5c354c891c8de6ea427c7648a4d074ce94696a2c6077a3bad",
+                "identity_sha256": "1bbbdddf84efff57246c68db4736f11c41564f0c305fa26acfc01682057d7e1a",
+                "league": "nhl",
+                "model_id": "nhl.initial_causal_score.research.v1",
+                "numpy_version": "2.3.5",
+                "schema": "sports.numeric_stochastic_identity.v2",
+                "semantic_runtime_sha256": "6667d7b1bc4eb1245dd59fcaf5a9362c836cb56ab075fc1973f9498be21596ea",
+                "semantics": "market_blind_numeric.v2",
+                "start_time_utc": "2026-09-23T20:00:00+00:00"
+              },
+              "projected_away_points": null,
+              "projected_away_runs": null,
+              "projected_home_points": null,
+              "projected_home_runs": null,
+              "projected_margin": 1.0629333333333333,
+              "projected_total": 6.0629333333333335,
+              "sim_p": 0.5401,
+              "stochastic_sim_p": 0.5401
+            },
+            "retained_array_file_sha256": {
+              "winner_draws.npy": "4b0b236534e8b6c6ea4f23d5ca4ea8e18dbee41a3af0f09bd5960ee7cbe0e14a"
+            },
+            "source_package_sha256": "22353db5ad4df6ad90a5ae297f602f2eac7ca2876d6568b0c917e79c125e9c29"
+          }
+        ]
+      }
+    },
+    {
+      "draws_per_execution": 100000,
+      "fixture_scope": "SYNTHETIC_SOURCE_BOUND_CURRENT_PACKAGE_REAL_CODE_PINS_AND_ADAPTER",
+      "league": "mls",
+      "legacy_metadata_leak_reproduced": true,
+      "v2_numeric_identity_draws_probabilities_invariant": true,
+      "variants": {
+        "legacy.v1": [
+          {
+            "archival_parent_sha256": null,
+            "model_state_config_hash": "d2c4c5ffefdf6b7b7d9267e350df563657be0d71f1dedd6f09617b910664b20a",
+            "numeric": {
+              "analytic_p": 0.43974908973455384,
+              "model_p": 0.43974908973455384,
+              "numerical_identity": null,
+              "projected_away_points": 1.280093770348864,
+              "projected_away_runs": null,
+              "projected_home_points": 1.5635100618077535,
+              "projected_home_runs": null,
+              "projected_margin": null,
+              "projected_total": 2.8436038321566173,
+              "sim_p": 0.43887,
+              "stochastic_sim_p": 0.43887
+            },
+            "retained_array_file_sha256": {
+              "away_goals.npy": "490e14f39ff3e0646577214955192ef7e74cb513e7f6b71056b9e2758fd29534",
+              "home_goals.npy": "42285cf701c8fa0252f03e6366eb896f78ca717d19d14fee346e212bee979aaf"
+            },
+            "source_package_sha256": "2663cfc9c02ff797592c36fc8b5edfab9f4853def1a27be73d5c1701099f4d62"
+          },
+          {
+            "archival_parent_sha256": null,
+            "model_state_config_hash": "d2c4c5ffefdf6b7b7d9267e350df563657be0d71f1dedd6f09617b910664b20a",
+            "numeric": {
+              "analytic_p": 0.43974908973455384,
+              "model_p": 0.43974908973455384,
+              "numerical_identity": null,
+              "projected_away_points": 1.280093770348864,
+              "projected_away_runs": null,
+              "projected_home_points": 1.5635100618077535,
+              "projected_home_runs": null,
+              "projected_margin": null,
+              "projected_total": 2.8436038321566173,
+              "sim_p": 0.44148,
+              "stochastic_sim_p": 0.44148
+            },
+            "retained_array_file_sha256": {
+              "away_goals.npy": "798b369337686163facdb2eb6a6f9f307e5cee073cf6fe13057900782e5fd0d6",
+              "home_goals.npy": "0d5852de65817a138ffa79f41122f9cf9dd50c44400fb7ea7bc861f957eb7a04"
+            },
+            "source_package_sha256": "70259dcf0a2355c53a8d8f4efeb176dbae092acd1697e97a0fe41a8eca418c62"
+          }
+        ],
+        "market_blind_numeric.v2": [
+          {
+            "archival_parent_sha256": "d049b9a481222af50ad8c5aa21cf2e7ad092e06d59732a52dead1d717010a278",
+            "model_state_config_hash": "d2c4c5ffefdf6b7b7d9267e350df563657be0d71f1dedd6f09617b910664b20a",
+            "numeric": {
+              "analytic_p": 0.43974908973455384,
+              "model_p": 0.43974908973455384,
+              "numerical_identity": {
+                "cutoff_utc": "2026-09-22T08:01:00+00:00",
+                "draw_count": 100000,
+                "engine": "INDEPENDENT_POISSON_REGULATION",
+                "event_id": "SYNTHETIC:mls",
+                "feature_sha256": "19993a8520b13f670b1ecf3484fc484265230ede10a780b69f922f1278b8d201",
+                "fitted_state_sha256": "10b8c3b4ea79393914acbc0f2237c7817146068e101c7d4d8dbfd471ab2dbe72",
+                "identity_sha256": "07dda4df5c4afd4301c3395a22f10c27ca5aca196a73a8cf5cfda33b25a38d63",
+                "league": "mls",
+                "model_id": "mls.initial_causal_score.research.v1",
+                "numpy_version": "2.3.5",
+                "schema": "sports.numeric_stochastic_identity.v2",
+                "semantic_runtime_sha256": "6667d7b1bc4eb1245dd59fcaf5a9362c836cb56ab075fc1973f9498be21596ea",
+                "semantics": "market_blind_numeric.v2",
+                "start_time_utc": "2026-09-23T20:00:00+00:00"
+              },
+              "projected_away_points": 1.280093770348864,
+              "projected_away_runs": null,
+              "projected_home_points": 1.5635100618077535,
+              "projected_home_runs": null,
+              "projected_margin": null,
+              "projected_total": 2.8436038321566173,
+              "sim_p": 0.43869,
+              "stochastic_sim_p": 0.43869
+            },
+            "retained_array_file_sha256": {
+              "away_goals.npy": "caa09d3be70b687dc1c3f706fa291fd7d1ead17ee73d2575fa6a644dbbde7bbd",
+              "home_goals.npy": "d28d301bd415db5a6429f148290357b90f3371f21971040198ff3e7356c6be15"
+            },
+            "source_package_sha256": "2663cfc9c02ff797592c36fc8b5edfab9f4853def1a27be73d5c1701099f4d62"
+          },
+          {
+            "archival_parent_sha256": "706a31a377be38e19ebfee72f2e68e1dea42f89dcdd78957fb12b3e491a0782d",
+            "model_state_config_hash": "d2c4c5ffefdf6b7b7d9267e350df563657be0d71f1dedd6f09617b910664b20a",
+            "numeric": {
+              "analytic_p": 0.43974908973455384,
+              "model_p": 0.43974908973455384,
+              "numerical_identity": {
+                "cutoff_utc": "2026-09-22T08:01:00+00:00",
+                "draw_count": 100000,
+                "engine": "INDEPENDENT_POISSON_REGULATION",
+                "event_id": "SYNTHETIC:mls",
+                "feature_sha256": "19993a8520b13f670b1ecf3484fc484265230ede10a780b69f922f1278b8d201",
+                "fitted_state_sha256": "10b8c3b4ea79393914acbc0f2237c7817146068e101c7d4d8dbfd471ab2dbe72",
+                "identity_sha256": "07dda4df5c4afd4301c3395a22f10c27ca5aca196a73a8cf5cfda33b25a38d63",
+                "league": "mls",
+                "model_id": "mls.initial_causal_score.research.v1",
+                "numpy_version": "2.3.5",
+                "schema": "sports.numeric_stochastic_identity.v2",
+                "semantic_runtime_sha256": "6667d7b1bc4eb1245dd59fcaf5a9362c836cb56ab075fc1973f9498be21596ea",
+                "semantics": "market_blind_numeric.v2",
+                "start_time_utc": "2026-09-23T20:00:00+00:00"
+              },
+              "projected_away_points": 1.280093770348864,
+              "projected_away_runs": null,
+              "projected_home_points": 1.5635100618077535,
+              "projected_home_runs": null,
+              "projected_margin": null,
+              "projected_total": 2.8436038321566173,
+              "sim_p": 0.43869,
+              "stochastic_sim_p": 0.43869
+            },
+            "retained_array_file_sha256": {
+              "away_goals.npy": "caa09d3be70b687dc1c3f706fa291fd7d1ead17ee73d2575fa6a644dbbde7bbd",
+              "home_goals.npy": "d28d301bd415db5a6429f148290357b90f3371f21971040198ff3e7356c6be15"
+            },
+            "source_package_sha256": "70259dcf0a2355c53a8d8f4efeb176dbae092acd1697e97a0fe41a8eca418c62"
+          }
+        ]
+      }
+    },
+    {
+      "draws_per_execution": 100000,
+      "fixture_scope": "RETAINED_HISTORICAL_FITTED_QB_ARTIFACT_SYNTHETIC_METADATA_PERTURBATION",
+      "league": "nfl",
+      "legacy_metadata_leak_reproduced": true,
+      "v2_numeric_identity_draws_probabilities_invariant": true,
+      "variants": [
+        {
+          "legacy_draw_sha256": "f162a0c20b850300323a20ea0d4fcc666b1605c1b5593925dd3130506c0f838f",
+          "legacy_identity": "994a8511d6107df0ff1b34f361e6c4d56ffa56b9b07cc13a00d60002d5fcf736",
+          "legacy_prediction": {
+            "home_margin": -0.6310877777954651,
+            "home_win": 0.4929274484932703,
+            "total_points": 45.604588048318554
+          },
+          "model_artifact_sha256": "c1cdf49dbb1a98bbf2b3d4286042a316c132dc7d472f3138c3bbbb1e0cb1c3cd",
+          "source_input_sha256": "183d56f4b234f5be3b09c37965b65902b5908053cc63bc887a176a9c3760c9ce",
+          "v2_draw_sha256": "ac74c3534cb0e85bf0c26ccfd312110bc2882cfdb106fb19ae79ee8cbbea2ada",
+          "v2_numerical_identity": {
+            "cutoff_utc": "2026-09-14T12:00:00+00:00",
+            "draw_count": 100000,
+            "engine": "BERNOULLI_WINNER_DIAGNOSTIC",
+            "event_id": "2026_01_DEN_KC",
+            "feature_sha256": "3a7bf604c347eedc9cc75bf66762e0af9aca424a792616983e5e7baa923abcad",
+            "fitted_state_sha256": "7ce942e0ee480ae3e09ed111d46b01f35095ef57f718402043510ed7cfa40496",
+            "identity_sha256": "facca5e20c599ac800ba963afab18b3fd83ceec70f20e4e1dc13207378f64c8a",
+            "league": "nfl",
+            "model_id": "nfl.integrated_context.qb.v1.research",
+            "numpy_version": "2.3.5",
+            "schema": "sports.numeric_stochastic_identity.v2",
+            "semantic_runtime_sha256": "6667d7b1bc4eb1245dd59fcaf5a9362c836cb56ab075fc1973f9498be21596ea",
+            "semantics": "market_blind_numeric.v2",
+            "start_time_utc": "2026-09-15T00:15:00+00:00"
+          },
+          "v2_prediction": {
+            "home_margin": -0.6310877777954651,
+            "home_win": 0.4929274484932703,
+            "total_points": 45.604588048318554
+          },
+          "v2_probability": 0.49254
+        },
+        {
+          "legacy_draw_sha256": "5279f64307f0deb38b8d5de6b3771780780089945a366473b484d30498d786de",
+          "legacy_identity": "b0ef73a753d68063ef0fb1d35223a61d12cccd8e727f9e3706dacac0421fb856",
+          "legacy_prediction": {
+            "home_margin": -0.6310877777954651,
+            "home_win": 0.4929274484932703,
+            "total_points": 45.604588048318554
+          },
+          "model_artifact_sha256": "c1cdf49dbb1a98bbf2b3d4286042a316c132dc7d472f3138c3bbbb1e0cb1c3cd",
+          "source_input_sha256": "ba9f115756eea025e92a06b40197488465a7e4bc32051294b50dedc56ebfcf03",
+          "v2_draw_sha256": "ac74c3534cb0e85bf0c26ccfd312110bc2882cfdb106fb19ae79ee8cbbea2ada",
+          "v2_numerical_identity": {
+            "cutoff_utc": "2026-09-14T12:00:00+00:00",
+            "draw_count": 100000,
+            "engine": "BERNOULLI_WINNER_DIAGNOSTIC",
+            "event_id": "2026_01_DEN_KC",
+            "feature_sha256": "3a7bf604c347eedc9cc75bf66762e0af9aca424a792616983e5e7baa923abcad",
+            "fitted_state_sha256": "7ce942e0ee480ae3e09ed111d46b01f35095ef57f718402043510ed7cfa40496",
+            "identity_sha256": "facca5e20c599ac800ba963afab18b3fd83ceec70f20e4e1dc13207378f64c8a",
+            "league": "nfl",
+            "model_id": "nfl.integrated_context.qb.v1.research",
+            "numpy_version": "2.3.5",
+            "schema": "sports.numeric_stochastic_identity.v2",
+            "semantic_runtime_sha256": "6667d7b1bc4eb1245dd59fcaf5a9362c836cb56ab075fc1973f9498be21596ea",
+            "semantics": "market_blind_numeric.v2",
+            "start_time_utc": "2026-09-15T00:15:00+00:00"
+          },
+          "v2_prediction": {
+            "home_margin": -0.6310877777954651,
+            "home_win": 0.4929274484932703,
+            "total_points": 45.604588048318554
+          },
+          "v2_probability": 0.49254
+        }
+      ]
+    }
+  ],
+  "schema": "sports.mi002_reproduction.v1",
+  "scope": "FIXED_FITTED_STATE_INPUT_PERTURBATION_NOT_FULL_REACQUISITION_REFIT_OR_PREDICTIVE_VALIDATION",
+  "source_receipts": {
+    "data/model_selection/defaults_v1.json": "8bbfb63ee0f8eeb99fc728fb25db3f1d9959c863ccb4f517abde058e3424b3eb",
+    "data/nfl/contextual_v1/mnf_base_row.json": "9cc2725381e449421ca7b791bdf3be815973df06aeeda0d3b77a4db6811243c3",
+    "data/nfl/contextual_v1/mnf_context_integrated.json": "5a854bdc1bd9b36a1fe070e1a8f2599c0fb34097a43f789e4a244d31f40e3c30",
+    "data/nfl/contextual_v1/mnf_event.json": "4460aaff5a2c43a80436a0ba2b08059f48cf8175dfe57650c2fd8ca7c4ab01c0",
+    "data/nfl/contextual_v1/model_packed.json": "a1fc0436a3e3d4f76d7b7fe9b480314fbb20804e3b9d29288f64913935a80322",
+    "data/nfl/contextual_v1/recovered_parameters.json": "131cb804353530ab1e764b32abb0a88f44f09e10713bece30e0c76f296e8aeca",
+    "models/common/discrete_research.py": "4a68440a8a7d8bcc9b7ed7b617f9f5ff778fe62d4274840e52a37e48ba8f08eb",
+    "pipelines/cards/distribution_research.py": "6c149980a3a4092d7fab6944682690baca47cbb5f78ad4ec5035117c658b9ad5",
+    "pipelines/cards/semantic_identity.py": "6667d7b1bc4eb1245dd59fcaf5a9362c836cb56ab075fc1973f9498be21596ea",
+    "scripts/verify_semantic_identity.py": "5c91c82b1b66bd56d972dbe50d1bde2e10a5853dfa26b5af65d18f0e131f88a2",
+    "tests/semantic_identity_fixtures.py": "35ee5205cfcc313865cde4e0163920f99c5cb8cd6b43e74f7926b5f1c30b4083",
+    "tests/test_semantic_distribution_identity.py": "24fdad1b49b1df3bdb4b5397ed5b3f7d04cf5a294c024e2b8a44bbcef228ff25",
+    "tests/test_semantic_identity.py": "a1d0fdc0b8ca5ab9783285a089c81b0a8d08184f3d1c612653aa95bf7a053167"
+  },
+  "unsupported_paths": [
+    "NFL_MARKET_INFORMED_ENHANCED_LIVE",
+    "MLB_LEGACY_STALE_PINNED_PACKAGE"
+  ],
+  "v2_path_status": "FIXED_STATE_METAMORPHIC_CHECKS_PASS"
+}

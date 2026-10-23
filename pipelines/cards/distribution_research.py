@@ -108,7 +108,10 @@ def nfl_card(bundle, created_at_utc):
                 "input_snapshot_hash": D.digest(bundle["features"]),
                 "model_state_config_hash": bundle["model_artifact_sha256"],
                 "model_input_snapshot": bundle["features"], "diagnostics": bundle,
-                "warnings": bundle.get("warnings", [])}]}
+                "warnings": bundle.get("warnings", []),
+                **{key: copy.deepcopy(bundle[key]) for key in
+                   ("identity_semantics", "numerical_identity", "forecast_procedure_id",
+                    "feature_procedure_id", "calibration_procedure_id") if key in bundle}}]}
 
 
 def build(card, config, output, *, simulations=100000):
@@ -161,7 +164,16 @@ def build(card, config, output, *, simulations=100000):
                 if entry["calibrator"]:
                     d = C.apply(d, entry["calibrator"])
                 contracts = _contracts(config, row, d, cutoff)
-                draws, metadata = D.simulate(d, draws=simulations)
+                # Only an explicitly versioned, bound numeric parent can enter
+                # v2. Unlabelled historical rows retain exact legacy sampling.
+                from pipelines.cards.semantic_identity import LEGACY, SEMANTIC, simulate_distribution
+                semantics = row.get("identity_semantics", LEGACY)
+                if semantics == SEMANTIC:
+                    draws, metadata = simulate_distribution(d, row, cutoff, draws=simulations)
+                elif semantics == LEGACY:
+                    draws, metadata = D.simulate(d, draws=simulations)
+                else:
+                    raise ValueError("UNKNOWN_STOCHASTIC_IDENTITY_SEMANTICS")
                 name = d["distribution_sha256"] + ".npy"
                 path = output / name
                 if path.exists():

@@ -6,6 +6,7 @@ receipts and upstream source-bound coverage assertions. All-played-game coverage
 must be explicit; regular-season-only acquisition does not certify physical rest.
 """
 import argparse
+import datetime as dt
 import hashlib
 import json
 from pathlib import Path
@@ -17,7 +18,7 @@ from models.current.baseline import IDS, FEATURES
 from models.current.common import current, save
 from models.current.freshness import (normalize_captured_schedule, rebuild_candidate_features,
                                      state_freshness_receipt)
-from models.nfl.contextual.recovered_inference import digest
+from models.nfl.contextual.recovered_inference import digest, utc
 
 
 def build(package_path, history_packet_path, event_id, cutoff_utc, output):
@@ -72,6 +73,16 @@ def build(package_path, history_packet_path, event_id, cutoff_utc, output):
     result['legacy_state_receipt'] = state_freshness_receipt(package, event, result['legacy_features'], cutoff_utc=cutoff_utc)
     result['coverage_assertion_basis'] = 'UPSTREAM_SOURCE_CENSUS_REQUIRED_NOT_INFERRED_FROM_NONEMPTY_RECORDS'
     result['forecast_generated'] = False
+    created = dt.datetime.now(dt.timezone.utc)
+    result['created_at_utc'] = created.isoformat()
+    result['candidate_procedure_id'] = f'{league}.initial_causal_score.operational_rest_candidate.v1'
+    result['parent_model_id'] = package['model_id']
+    result['execution_kind'] = 'RETROSPECTIVE_FEATURE_REBUILD' if utc(event['start_time_utc']) <= created else 'PREGAME_FEATURE_REBUILD'
+    result['forecast_horizon_hours_at_original_cutoff'] = (utc(event['start_time_utc']) - utc(cutoff_utc)).total_seconds()/3600
+    result['EXECUTION_STATUS'] = 'COMPLETED' if result['candidate_ready'] else 'BLOCKED'
+    result['PREDICTIVE_VALIDATION'] = 'UNVALIDATED'
+    result['PUBLICATION_ELIGIBILITY'] = 'INELIGIBLE'
+    result['WAGERING_AUTHORITY'] = 'OFF'
     result['procedure_code_sha256'] = {str(p.relative_to(ROOT)): hashlib.sha256(p.read_bytes()).hexdigest()
                                      for p in [Path(__file__).resolve(), ROOT/'models/current/freshness.py']}
     result['candidate_artifact_id'] = digest(result)

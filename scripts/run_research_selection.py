@@ -20,7 +20,7 @@ from pipelines.cards.research_selection import (  # noqa: E402
     ResearchSelectionError, content_hash, select_research, verify_selection_record,
 )
 from research.validation_registry import (  # noqa: E402
-    ArtifactStore, Ed25519Verifier, RegistryError, ValidationRegistry,
+    ArtifactStore, Ed25519Verifier, RegistryError, ValidationRegistry, TrialLog, LifecycleLog,
 )
 
 
@@ -125,7 +125,7 @@ def make_registry(args, manifest, sources):
     if not all(specified):
         raise InputError("REGISTRY_REQUIRES_STORE_TRUST_FILE_AND_MANIFEST_IDS")
     registry_spec = manifest["registry"]
-    exact_keys(registry_spec, {"record_ids", "revocation_ids"})
+    exact_keys(registry_spec, {"record_ids", "revocation_ids"}, {"trial_log", "trial_tip", "lifecycle_log", "lifecycle_tip"})
     records = identifiers(registry_spec["record_ids"])
     revocations = identifiers(registry_spec["revocation_ids"])
     store_path = Path(args.registry_store).resolve(strict=True)
@@ -146,8 +146,22 @@ def make_registry(args, manifest, sources):
         if len(key) != 32:
             raise InputError("INVALID_TRUSTED_PUBLIC_KEY_LENGTH")
         keys[signer] = key
-    return ValidationRegistry(ReadOnlyReceiptStore(store_path, sources), records,
-                              Ed25519Verifier(keys), revocation_ids=revocations)
+    store = ReadOnlyReceiptStore(store_path, sources)
+    verifier = Ed25519Verifier(keys)
+    anchors = {"trial_log", "trial_tip", "lifecycle_log", "lifecycle_tip"}
+    extra = {}
+    if anchors & set(registry_spec):
+        if not anchors <= set(registry_spec):
+            raise InputError("BOTH_RETAINED_LOGS_AND_ANCHORED_TIPS_REQUIRED")
+        base = Path(args.manifest).resolve().parent
+        trial_path = reference(base, registry_spec["trial_log"]).resolve(strict=True)
+        lifecycle_path = reference(base, registry_spec["lifecycle_log"]).resolve(strict=True)
+        sources.read(trial_path, "anchored_trial_log")
+        sources.read(lifecycle_path, "anchored_lifecycle_log")
+        identifiers([registry_spec["trial_tip"], registry_spec["lifecycle_tip"]])
+        extra = {"trial_log": TrialLog(trial_path), "trial_tip": registry_spec["trial_tip"],
+                 "lifecycle_log": LifecycleLog(store, lifecycle_path, verifier), "lifecycle_tip": registry_spec["lifecycle_tip"]}
+    return ValidationRegistry(store, records, verifier, revocation_ids=revocations, **extra)
 
 
 def parser():
@@ -176,7 +190,10 @@ produce exit 2. Inputs and registry are read-only. Every output remains SHADOW,
 publication/action authority false and wagering OFF. A historical decision
 timestamp is explicitly a retrospective diagnostic, never backdated execution.
 """)
-    result.add_argument("--manifest", required=True, help="Strict JSON manifest path.")
+    source = result.add_mutually_exclusive_group(required=True)
+    source.add_argument("--manifest", help="Strict JSON manifest path.")
+    source.add_argument("--source-card", help="Retained actual card JSON; generates an explicitly retrospective diagnostic sidecar.")
+    result.add_argument("--selection-config", help="Optional explicit selector config for --source-card; absent means unqualified diagnostic policy.")
     result.add_argument("--output-dir", required=True, help="New output directory; its parent must exist.")
     result.add_argument("--decision-at-utc", help="Optional historical UTC reference cutoff; marks replay, actual execution time is retained.")
     result.add_argument("--registry-store", help="Existing local content-addressed registry directory (read-only).")
@@ -187,6 +204,18 @@ timestamp is explicitly a retrospective diagnostic, never backdated execution.
 def execute(args):
     executed = datetime.now(timezone.utc)
     created = executed.isoformat(timespec="microseconds").replace("+00:00", "Z")
+    if args.source_card:
+        if args.decision_at_utc or args.registry_store or args.trust_file:
+            raise InputError("SOURCE_CARD_REPLAY_USES_RETAINED_CUTOFF_AND_NO_ASSUMED_REGISTRY")
+        from pipelines.cards.selection_integration import write_card_selection, _decode
+        config = _decode(Path(args.selection_config).read_bytes()) if args.selection_config else None
+        report = write_card_selection(args.source_card, args.output_dir, config=config,
+                                      retrospective=True, evaluated_at_utc=created)
+        return {"output_dir": str(args.output_dir), "decision_count": len(report["decisions"]),
+                "decision_classes": report["decision_counts"], "source_card_sha256": report["source_card"]["sha256"],
+                "execution_mode": report["execution_mode"], "wagering_status": "OFF"}
+    if args.selection_config:
+        raise InputError("SELECTION_CONFIG_FLAG_REQUIRES_SOURCE_CARD")
     decision_at = args.decision_at_utc or created
     if timestamp(decision_at) > executed:
         raise InputError("FUTURE_DECISION_TIMESTAMP")

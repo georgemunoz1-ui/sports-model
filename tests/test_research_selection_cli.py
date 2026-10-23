@@ -102,13 +102,15 @@ def test_signed_registry_round_trip_and_price_independence(tmp_path):
                                    "decimal_odds": decimal, "quoted_at_utc": AT})
     manifest["entries"][0].update(quality_receipt="quality.json", price="price.json", components=["sibling.json"])
     manifest["entries"].append(dict(manifest["entries"][0], entry_id="TEST_ONLY-poor-price", price="poor-price.json"))
-    manifest["registry"] = {"record_ids": [fixture["record_id"]], "revocation_ids": []}
+    manifest["registry"] = {"record_ids": [fixture["record_id"]], "revocation_ids": [],
+        "trial_log": str(fixture["trial_log"].path), "trial_tip": fixture["trial_tip"],
+        "lifecycle_log": str(fixture["lifecycle_log"].journal.path), "lifecycle_tip": fixture["lifecycle_tip"]}
     write(tmp_path / "manifest.json", manifest)
     write(tmp_path / "trust.json", {"schema": "research-validation-trust-v1", "public_keys_b64": {
         name: base64.b64encode(key.public_key().public_bytes(serialization.Encoding.Raw,
                                 serialization.PublicFormat.Raw)).decode()
         for name, key in fixture["keys"].items()}})
-    originals = {p: p.read_bytes() for p in tmp_path.rglob("*.json")}
+    originals = {p: p.read_bytes() for p in tmp_path.rglob("*") if p.is_file()}
     result = run(tmp_path, extra=("--registry-store", str(tmp_path / "registry"),
                                  "--trust-file", str(tmp_path / "trust.json")))
     assert result.returncode == 0, result.stderr

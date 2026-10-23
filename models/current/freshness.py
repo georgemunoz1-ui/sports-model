@@ -218,17 +218,59 @@ def rebuild_candidate_features(state, event, prior, records, *, cutoff_utc, cove
     """Executable candidate build; no inference with legacy fitted coefficients."""
     from models.current.baseline import feature
     legacy = feature(state, event, prior)
-    rest = operational_rest(event, records, cutoff_utc=cutoff_utc, coverage=coverage, max_capture_age_hours=max_capture_age_hours)
-    ready = all(r["status"] == "KNOWN" for r in rest["per_side"].values())
-    candidate = dict(legacy) if ready else None
-    if ready:
-        for side in ("home", "away"):
-            candidate[side + "_rest"] = rest["per_side"][side]["candidate_feature_value"]
+    serving = serving_candidate_features(state, event, prior, records, cutoff_utc=cutoff_utc,
+                                         coverage=coverage, max_capture_age_hours=max_capture_age_hours)
+    rest, ready, candidate = serving['rest_receipt'], serving['candidate_ready'], serving['features']
     return {"schema": "sports.operational_rest_feature_rebuild.v1", "event_id": event["event_id"],
             "feature_semantics_id": REST_SEMANTICS, "legacy_features": legacy,
             "candidate_features": candidate, "candidate_ready": ready, "rest_receipt": rest,
             "state_sha256": _digest(state), "candidate_input_snapshot_hash": _digest(candidate) if ready else None,
             "adoption_status": "REFIT_AND_CHRONOLOGICAL_EVALUATION_REQUIRED", "action_authority": False}
+
+
+def candidate_form_features(state, event, prior):
+    """Existing form definition, with no read of a rest/proxy/last-game column.
+
+    Kept separate from baseline.feature: constructing then overwriting a legacy
+    rest proxy can conceal an accidental dependency. Candidate predictive inputs
+    are built from n/for/against plus the independently observed schedule only.
+    """
+    prior = _number(prior)
+    result = {}
+    counts = {}
+    for side in ('home', 'away'):
+        team = state.get(event[side + '_id'], {'n': 0, 'for': prior, 'against': prior})
+        count = _number(team['n'])
+        if count < 0:
+            raise ValueError('NONNEGATIVE_FORM_COUNT_REQUIRED')
+        counts[side] = count
+        weight = count / (count + 10)
+        for field in ('for', 'against'):
+            result[side + '_' + field] = weight * _number(team[field]) + (1-weight) * prior
+    result['home_cold'] = float(counts['home'] < 10)
+    result['away_cold'] = float(counts['away'] < 10)
+    result['neutral'] = float(event['neutral_site'])
+    return result
+
+
+def serving_candidate_features(state, event, prior, records, *, cutoff_utc, coverage=(), max_capture_age_hours=6):
+    """Serving adapter for the unpromoted operational-rest feature contract.
+
+    The corresponding training adapter is operational_rest_training_example in
+    prepare_initial_baselines. Both are tested separately against a hand-written
+    oracle; agreement between them is not accepted as semantic validation.
+    """
+    from models.current.baseline import FEATURES
+    form = candidate_form_features(state, event, prior)
+    receipt = operational_rest(event, records, cutoff_utc=cutoff_utc, coverage=coverage,
+                               max_capture_age_hours=max_capture_age_hours)
+    ready = all(row['status'] == 'KNOWN' for row in receipt['per_side'].values())
+    values = {**form, **{side + '_rest': receipt['per_side'][side]['candidate_feature_value']
+                       for side in ('home', 'away')}}
+    return {'adapter_id': 'initial_causal_score.operational_rest.serving.v1',
+            'feature_semantics_id': REST_SEMANTICS, 'candidate_ready': ready,
+            'features': {name: values[name] for name in FEATURES} if ready else None,
+            'rest_receipt': receipt, 'proxy_columns_used': [], 'action_authority': False}
 
 
 def state_freshness_receipt(package, event, features, *, cutoff_utc, max_state_age_hours=None):

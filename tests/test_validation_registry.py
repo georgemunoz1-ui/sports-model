@@ -4,6 +4,7 @@ import copy
 import json
 import tempfile
 import unittest
+import uuid
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -11,12 +12,13 @@ from cryptography.hazmat.primitives import serialization
 from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PrivateKey
 
 from research.validation_registry import (ArtifactStore, Ed25519Verifier, RegistryError,
-                                          TrialLog, ValidationRegistry, canonical_bytes, content_id)
+                                          LifecycleLog, TrialLog, ValidationRegistry, canonical_bytes, content_id)
+from research.procedure_lineage import create_procedure
 
 
 def make_registry_fixture(root, *, protocol_overrides=None, evidence_overrides=None,
                           config_artifact=None, target=None, registration_at=None,
-                          reviewer="TEST_ONLY_reviewer", dataset_scope="CONFIRMATION"):
+                          reviewer="TEST_ONLY_reviewer", dataset_scope="CONFIRMATION", legacy=False):
     """Entirely fabricated TEST_ONLY evidence; not production trust or results.
 
     Returns registry, procedure_id, config_id, target, at_utc, store, keys, sign,
@@ -33,8 +35,13 @@ def make_registry_fixture(root, *, protocol_overrides=None, evidence_overrides=N
                    "signer_id": signer, "witnessed_at_utc": timestamp}
         return store.put({"payload": payload, "signature_b64": base64.b64encode(
             keys[signer].sign(canonical_bytes(payload))).decode()})
-    procedure_id = store.put({"kind": "procedure", "name": "TEST_ONLY candidate", "parent_ids": []})
-    control_id = store.put({"kind": "procedure", "name": "TEST_ONLY control", "parent_ids": []})
+    def procedure(name):
+        return create_procedure(store, parent_ids=[], owner="TEST_ONLY_author", created_utc="2025-12-31T00:00:00Z",
+                                change_hypothesis="TEST_ONLY mechanics fixture", definition={"name": name,
+                                 "model_id": name, "model_state_id": content_id({"synthetic_state": name}),
+                                 "feature_semantics_id": content_id({"synthetic_features": name}),
+                                 "calibration_id": content_id({"synthetic_calibration": name})})
+    procedure_id, control_id = procedure("TEST_ONLY candidate"), procedure("TEST_ONLY control")
     config_id = store.put(config_artifact or {"objective": "unconditional_win", "threshold": .6})
     population_id = store.put({"kind": "TEST_ONLY external population", "event_ids": ["a", "b", "c", "d"]})
     target = target or {"league": "nfl", "product": "spread", "period": "full_game",
@@ -47,6 +54,19 @@ def make_registry_fixture(root, *, protocol_overrides=None, evidence_overrides=N
                 "criteria": {"minimum_events": 4, "minimum_slates": 2, "minimum_selected": 2,
                              "minimum_total_coverage": .4, "maximum_total_coverage": .6,
                              "maximum_primary_delta_ci_upper": -.001, "minimum_power": .8}}
+    if not legacy:
+        basis_id = store.put({"schema": "validation-design-basis-v1", "kind": "TEST_ONLY synthetic mechanics",
+                              "minimum_useful_improvement": .5, "paired_loss_sd": .1,
+                              "dependence_assumption": "TEST_ONLY independent synthetic blocks", "power_target": .8})
+        protocol.update(schema="validation-protocol-v2", inspection_budget=4,
+                        power_assumptions={"minimum_useful_improvement": .5, "paired_loss_sd": .1,
+                                           "design_effect": 1., "alpha": .05,
+                                           "total_trials": (protocol_overrides or {}).get("inspection_budget", 4),
+                                           "target_power": .8, "dependence": "TEST_ONLY independent synthetic blocks"},
+                        criteria_justification={key: {"rationale": "TEST_ONLY fixture; no empirical scientific claim",
+                                                      "basis_artifact_id": basis_id}
+                                                for key in ("minimum_events", "minimum_slates", "minimum_selected",
+                                                            "minimum_total_coverage", "minimum_power")})
     protocol.update(protocol_overrides or {})
     protocol_id = store.put(protocol)
     registration_id = sign(protocol_id, "preregistration", "TEST_ONLY_witness",
@@ -58,16 +78,33 @@ def make_registry_fixture(root, *, protocol_overrides=None, evidence_overrides=N
     evidence.update(protocol_id=protocol_id, computed_at_utc="2026-01-11T00:00:00Z", n_events=4,
                     n_slates=2, n_selected=2, total_coverage=.5, primary_delta_ci_upper=-.01,
                     power_at_declared_effect=.85, paired_dataset_id=dataset_id)
+    if not legacy:
+        evidence["inspected_configurations"] = 1
     evidence.update(evidence_overrides or {})
     evidence_id = store.put(evidence)
     review_id = store.put({"protocol_id": protocol_id, "evidence_id": evidence_id,
                            "registration_receipt_id": registration_id, "authorship_receipt_id": authorship_id})
     review_receipt_id = sign(review_id, "validation_review", reviewer, "2026-01-12T00:00:00Z")
     record_id = store.put({"review_payload_id": review_id, "review_receipt_id": review_receipt_id})
-    return {"registry": ValidationRegistry(store, [record_id], verifier), "procedure_id": procedure_id,
+    extra = {}
+    if not legacy:
+        unique = uuid.uuid4().hex
+        trial_log = TrialLog(Path(root) / ("trials-" + unique + ".jsonl"),
+                             clock=lambda: datetime(2026, 1, 1, 9, tzinfo=timezone.utc))
+        tip = trial_log.append({"kind": "INSPECTED", "trial_id": "TEST_ONLY trial", "family_id": "TEST_ONLY family",
+                                "configuration_id": config_id, "procedure_id": procedure_id})["record_id"]
+        lifecycle = LifecycleLog(store, Path(root) / ("lifecycle-" + unique + ".jsonl"), verifier,
+                                 clock=lambda: datetime(2026, 1, 12, 1, tzinfo=timezone.utc))
+        event_id = store.put({"schema": "procedure-lifecycle-event-v1", "action": "QUALIFY", "record_id": record_id,
+                              "procedure_id": procedure_id, "selector_config_id": config_id, "target": target,
+                              "created_utc": "2026-01-12T01:00:00Z", "reason": "TEST_ONLY synthetic test qualification"})
+        event_receipt = sign(event_id, "procedure_lifecycle", "TEST_ONLY_reviewer", "2026-01-12T01:00:00Z")
+        life_tip = lifecycle.append(event_id, event_receipt)["record_id"]
+        extra = {"trial_log": trial_log, "trial_tip": tip, "lifecycle_log": lifecycle, "lifecycle_tip": life_tip}
+    return {"registry": ValidationRegistry(store, [record_id], verifier, **extra), "procedure_id": procedure_id,
             "config_id": config_id, "target": target, "at_utc": "2026-10-22T21:00:00Z", "store": store,
             "keys": keys, "sign": sign, "record_id": record_id, "protocol": protocol, "evidence": evidence,
-            "protocol_id": protocol_id, "evidence_id": evidence_id, "verifier": verifier}
+            "protocol_id": protocol_id, "evidence_id": evidence_id, "verifier": verifier, **extra}
 
 
 class RegistryTests(unittest.TestCase):
@@ -148,7 +185,8 @@ class RegistryTests(unittest.TestCase):
         payload_id = f["store"].put({"record_id": f["record_id"], "reason": "TEST_ONLY drift"})
         receipt_id = f["sign"](payload_id, "validation_revocation", "TEST_ONLY_reviewer", "2026-10-22T22:00:00Z")
         revoke_id = f["store"].put({"revocation_payload_id": payload_id, "revocation_receipt_id": receipt_id})
-        f["registry"] = ValidationRegistry(f["store"], [f["record_id"]], f["verifier"], revocation_ids=[revoke_id])
+        f["registry"] = ValidationRegistry(f["store"], [f["record_id"]], f["verifier"], revocation_ids=[revoke_id],
+                                           **{k: f[k] for k in ("trial_log", "trial_tip", "lifecycle_log", "lifecycle_tip")})
         self.assertTrue(self.assess(f).eligible)
         self.assertIn("VALIDATION_REVOKED", self.assess(f, at_utc="2026-10-23T00:00:00Z").reasons)
 

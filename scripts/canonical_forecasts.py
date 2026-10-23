@@ -24,6 +24,31 @@ LEAGUES = {'NFL', 'CFB', 'WNBA', 'NBA', 'NHL'}
 SCHEMA = 'canonical.prospective_research.v1'
 
 
+def draw_relative(row):
+    """Known child semantics choose a fixed path; never follow arbitrary metadata."""
+    suffix = '.semantic-v2' if row.get('identity_semantics') == 'market_blind_numeric.v2' else ''
+    return Path('draws') / (str(row['event_id']).replace(':', '_') + suffix) / 'winner_draws.npy'
+
+
+def selection_attachment(path, card_sha, registered_at):
+    from pipelines.cards.selection_integration import verify_sidecar
+    if not path.is_file():
+        return None
+    raw = path.read_bytes()
+    document = json.loads(raw)
+    verify_sidecar(document, source_card_sha256=card_sha)
+    if document['execution_mode'] != 'UNREGISTERED_RESEARCH':
+        raise ValueError('RETROSPECTIVE_SELECTION_CANNOT_REGISTER')
+    if dt(document['created_at_utc']) > dt(registered_at):
+        raise ValueError('SELECTION_SIDECAR_AFTER_REGISTRATION')
+    for decision in document['decisions']:
+        if dt(decision['decision_at_utc']) > dt(document['created_at_utc']):
+            raise ValueError('SELECTION_DECISION_AFTER_SIDECAR_CREATION')
+        if dt(document['created_at_utc']) >= dt(decision['target']['starts_at_utc']) and decision['decision_class'] != 'BLOCKED':
+            raise ValueError('POST_START_SELECTION_NOT_BLOCKED')
+    return {'sha256': hashlib.sha256(raw).hexdigest(), 'raw': raw, 'document': document}
+
+
 def identity(value):
     return hashlib.sha256(json.dumps(value, sort_keys=True, separators=(',', ':'), allow_nan=False).encode()).hexdigest()
 
@@ -107,6 +132,8 @@ def card_rows(card, registered_at):
             'source_provenance': 'NOT_INDEPENDENTLY_VERIFIED', 'certified_calibration_eligible': False,
             'evaluation_cohort': 'PROSPECTIVE_RESEARCH_SOURCE_UNVERIFIED', 'predictive_validation': 'NOT_ASSESSED',
             'publication_eligibility': 'NOT_EVALUATED', 'action_authority': False}))
+        if row.get('identity_semantics'):
+            rows[-1][1]['identity_semantics'] = row['identity_semantics']
     if not rows:
         raise ValueError('NO_GENERATED_FORECASTS')
     return rows
@@ -135,6 +162,7 @@ def register(card_path, root, run_id, artifact):
         entries = [r for r in registry['forecasts'].values() if r['card_sha256'] == sha and r['run_id'] == run_id]
         now = entries[0]['registered_at_utc'] if entries else utcnow()
         rows = card_rows(card, now)
+        attachment = selection_attachment(card_path.parent / 'research_selection/decisions.json', sha, now)
         if not artifact.get('id') or not artifact.get('digest') or artifact.get('run_id') != run_id:
             raise ValueError('ARTIFACT_BINDING_REQUIRED')
         observed = dt(artifact['created_at'])
@@ -142,7 +170,7 @@ def register(card_path, root, run_id, artifact):
             raise ValueError('ARTIFACT_CHRONOLOGY_INVALID')
         draw_paths = {}
         for key, row in rows:
-            source = card_path.parent / 'draws' / row['event_id'].replace(':', '_') / 'winner_draws.npy'
+            source = card_path.parent / draw_relative(row)
             row['draw_file_sha256'] = validate_draws(source, row['simulation_identity'])
             if abs(row['probabilities']['simulation'] - row['simulation_identity']['home_win_probability']) > 1e-12:
                 raise ValueError('CARD_DRAW_PROBABILITY_MISMATCH')
@@ -158,6 +186,14 @@ def register(card_path, root, run_id, artifact):
                 continue
             row.update(receipt_id=key, card_sha256=sha, card_date=card['card_date'], run_id=run_id,
                        artifact=artifact, registered_at_utc=now)
+            if attachment:
+                matches = [d for d in attachment['document']['decisions'] if d['target']['event_id'] == row['event_id'] and d['target']['product'] == 'winner']
+                if len(matches) != 1:
+                    raise ValueError('EXACT_WINNER_SELECTION_SIDECAR_REQUIRED')
+                if dt(attachment['document']['created_at_utc']) >= dt(matches[0]['target']['starts_at_utc']):
+                    raise ValueError('SELECTION_REGISTRATION_NOT_PREGAME')
+                row['selection_sidecar_sha256'] = attachment['sha256']
+                row['selection_decision_id'] = matches[0]['decision_id']
             registry['forecasts'][key] = row
             added.append(key)
         frozen = root / 'cards' / (sha + '.json')
@@ -178,6 +214,15 @@ def register(card_path, root, run_id, artifact):
                 if not target.exists():
                     with target.open('xb') as output:
                         output.write(draw_paths[key].read_bytes()); output.flush(); os.fsync(output.fileno())
+            if attachment:
+                selections = root / 'selections'
+                selections.mkdir(parents=True, exist_ok=True)
+                target = selections / (attachment['sha256'] + '.json')
+                if target.exists() and digest(target) != attachment['sha256']:
+                    raise ValueError('FROZEN_SELECTION_CONFLICT')
+                if not target.exists():
+                    with target.open('xb') as output:
+                        output.write(attachment['raw']); output.flush(); os.fsync(output.fileno())
             atomic_json(path, registry)
         return {'status': 'REGISTERED' if added else 'ALREADY_REGISTERED', 'added': added, 'existing': skipped,
                 'action_authority': False}
@@ -200,6 +245,58 @@ def verify_receipt(root, receipt):
         raise ValueError('ARTIFACT_BINDING_REQUIRED')
     if not dt(card['generated_at_utc']) <= dt(artifact['created_at']) <= dt(receipt['registered_at_utc']):
         raise ValueError('ARTIFACT_CHRONOLOGY_INVALID')
+    if receipt.get('selection_sidecar_sha256'):
+        attachment = selection_attachment(Path(root) / 'selections' / (receipt['selection_sidecar_sha256'] + '.json'), receipt['card_sha256'], receipt['registered_at_utc'])
+        if not attachment or attachment['sha256'] != receipt['selection_sidecar_sha256']:
+            raise ValueError('REGISTERED_SELECTION_HASH_MISMATCH')
+        matches = [d for d in attachment['document']['decisions'] if d['decision_id'] == receipt.get('selection_decision_id')]
+        if len(matches) != 1 or matches[0]['target']['event_id'] != receipt['event_id'] or matches[0]['target']['product'] != 'winner':
+            raise ValueError('REGISTERED_SELECTION_TARGET_MISMATCH')
+
+
+def selection_grades(root, registry, result_map):
+    """Compute actual registered sidecar settlements, independently of winner grades.
+
+    NO_PICK is retained in the population and never credited as a correct pick.
+    Unsupported/absent sidecars receive no invented or retrospective selection.
+    """
+    from pipelines.cards.selection_integration import settle_target
+    ledger = load_ledger(root / 'selection_ledger.jsonl')
+    existing = {x['grade_id']: x for x in ledger}
+    additions = []
+    for receipt in registry['forecasts'].values():
+        if not receipt.get('selection_sidecar_sha256'):
+            continue
+        result = result_map.get((receipt['league'], receipt['event_id']))
+        if not result or result.get('status') != 'FINAL':
+            continue
+        verify_result_source(result)
+        if (result['home_team'], result['away_team']) != (receipt['home_team'], receipt['away_team']) or dt(result['start_time_utc']) != dt(receipt['start_time_utc']):
+            raise ValueError('SELECTION_RESULT_IDENTITY_MISMATCH')
+        if dt(result['fetched_at_utc']) < dt(receipt['start_time_utc']):
+            raise ValueError('SELECTION_RESULT_CAPTURE_NOT_POST_START')
+        attachment = selection_attachment(root / 'selections' / (receipt['selection_sidecar_sha256'] + '.json'), receipt['card_sha256'], receipt['registered_at_utc'])
+        decision = next(d for d in attachment['document']['decisions'] if d['decision_id'] == receipt['selection_decision_id'])
+        outcome = settle_target(decision['target'], result['home_score'], result['away_score'],
+                                score_period=result.get('score_period'))
+        gid = identity({'receipt_id': receipt['receipt_id'], 'decision_id': decision['decision_id']})
+        immutable = {'grade_id': gid, 'forecast_receipt_id': receipt['receipt_id'], 'event_id': receipt['event_id'],
+            'decision_id': decision['decision_id'], 'target_id': decision['target_id'], 'target': decision['target'],
+            'procedure_id': decision['procedure_id'], 'selector_config_id': decision['selector_config_id'],
+            'selection_sidecar_sha256': receipt['selection_sidecar_sha256'],
+            'decision_class': decision['decision_class'], 'selection_decision': decision['selection_decision'],
+            'outcome': outcome, 'raw_probability': decision['raw_probability'],
+            'raw_probability_basis': decision.get('raw_probability_basis', 'unconditional_win'),
+            'selection_probability': decision['selection_probability'],
+            'selected_outcome': outcome if decision['decision_class'] == 'SHADOW_SELECTED' else None,
+            'blocking_reasons': decision['blocking_reasons'], 'home_score': result['home_score'],
+            'away_score': result['away_score'], 'publication_allowed': False, 'action_authority': False}
+        if gid in existing:
+            if any(existing[gid].get(k) != v for k, v in immutable.items()):
+                raise ValueError('IMMUTABLE_SELECTION_GRADE_CONFLICT')
+        else:
+            additions.append({**immutable, 'result_source': result, 'graded_at_utc': utcnow()})
+    return ledger, additions
 
 
 def grade(root, results):
@@ -258,8 +355,11 @@ def grade(root, results):
                 continue
             additions.append({**immutable, 'result_source': result, 'graded_at_utc': utcnow(), 'action_authority': False})
         # Validate entire batch before append. save_ledger enforces immutable prefix.
+        selection_ledger, selection_additions = selection_grades(root, registry, result_map)
         if additions:
             save_ledger(ledger_path, ledger + additions)
+        if selection_additions:
+            save_ledger(root / 'selection_ledger.jsonl', selection_ledger + selection_additions)
         all_rows = ledger + additions
         groups = {}
         for row in all_rows:
@@ -275,7 +375,9 @@ def grade(root, results):
         if registry_path.exists():
             atomic_json(root / 'summary.json', summary)
         return {'status': 'GRADED' if additions else ('PENDING_RESULTS' if pending else 'NO_NEW_GRADES'),
-                'registered_count': len(registry['forecasts']), 'added_count': len(additions), 'pending': pending, 'excluded': excluded, 'action_authority': False}
+                'registered_count': len(registry['forecasts']), 'added_count': len(additions),
+                'selection_added_count': len(selection_additions), 'selection_graded_count': len(selection_ledger) + len(selection_additions),
+                'pending': pending, 'excluded': excluded, 'action_authority': False}
 
 
 def verified_artifact(card, run_id, artifact_id):
@@ -290,9 +392,12 @@ def verified_artifact(card, run_id, artifact_id):
             raise ValueError('UPLOADED_CARD_MISMATCH')
         for row in json.loads(Path(card).read_text()).get('forecasts', []):
             if row.get('forecast_status') == 'FORECAST_GENERATED':
-                relative = Path('draws') / str(row['event_id']).replace(':', '_') / 'winner_draws.npy'
+                relative = draw_relative(row)
                 if digest(matches[0].parent / relative) != digest(Path(card).parent / relative):
                     raise ValueError('UPLOADED_DRAW_MISMATCH')
+        relative = Path('research_selection/decisions.json')
+        if (Path(card).parent / relative).exists() and digest(matches[0].parent / relative) != digest(Path(card).parent / relative):
+            raise ValueError('UPLOADED_SELECTION_SIDECAR_MISMATCH')
     return {**{k: meta[k] for k in ('id', 'name', 'digest', 'created_at')}, 'run_id': run_id,
             'code_commit': meta['workflow_run']['head_sha'], 'repository': repo}
 

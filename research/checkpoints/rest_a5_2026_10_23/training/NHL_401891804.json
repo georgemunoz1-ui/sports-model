@@ -1,0 +1,88 @@
+{
+  "action_authority": false,
+  "adapter_id": "initial_causal_score.operational_rest.training.v1",
+  "candidate_ready": true,
+  "evidence_class": "ACTUAL_RETAINED_SOURCE_FEATURE_REBUILD_NOT_MODEL_FIT",
+  "feature_semantics_id": "initial_causal_score.operational_rest.start_to_start.v1",
+  "features": {
+    "away_against": 4.206271321906358,
+    "away_cold": 0.0,
+    "away_for": 2.7430253506057976,
+    "away_rest": 10.041666666666666,
+    "home_against": 2.7066666317974626,
+    "home_cold": 0.0,
+    "home_for": 3.2561872988920584,
+    "home_rest": 10.083333333333334,
+    "neutral": 0.0
+  },
+  "forecast_generated": false,
+  "history_packet_sha256": "a51c460c3f55b77d48ad08632fbbbb12c6dbd2565fea57613fc799ee047e5b39",
+  "parent_package_sha256": "ecf657dc8770b57a2f36e5c162d213765604b8cc14d6bb1a6364ab78bd063682",
+  "proxy_columns_used": [],
+  "rest_receipt": {
+    "action_authority": false,
+    "coverage_basis": "OBSERVED_FINALS_AT_RETAINED_CAPTURE_NOT_CONTINUOUS_LIVE_TRUTH",
+    "cutoff_utc": "2026-09-22T08:52:25.388722+00:00",
+    "event_id": "NHL:401891804",
+    "exclusions": {
+      "CURRENT_EVENT_EXCLUDED": 1,
+      "NONFINAL_EXCLUDED": 47
+    },
+    "feature_semantics_id": "initial_causal_score.operational_rest.start_to_start.v1",
+    "max_capture_age_hours_policy": 6,
+    "per_side": {
+      "away": {
+        "blocking_reasons": [],
+        "candidate_feature_value": 10.041666666666666,
+        "completion_time_basis": "observed_final_at_capture",
+        "coverage_receipts": [
+          {
+            "complete": true,
+            "from_utc": "2026-09-16T00:00:00Z",
+            "observed_at_utc": "2026-09-22T07:33:13.443472Z",
+            "population": "ALL_PLAYED_GAMES",
+            "request_census_sha256": "05113e967e404cce422ec29fef6cd4e252c270ca8c88f1cfd161f990b508de8b",
+            "source_population_definition": "ALL_NHL_SCOREBOARD_GAME_TYPES_WITHIN_INTERIOR_CAPTURE_WINDOW",
+            "source_sha256": "ae86f02e936f2c9e9f12a9dd9301a567e734bda8495bb2d68957e72b37b98772",
+            "team_id": "22",
+            "through_utc": "2026-09-22T07:33:12.810732+00:00"
+          }
+        ],
+        "observed_at_utc": "2026-09-22T07:33:13.443472Z",
+        "previous_event_id": "NHL:401879652",
+        "previous_start_time_utc": "2026-09-20T01:00:00+00:00",
+        "rest_start_to_start_days": 10.041666666666666,
+        "source_sha256": "ae86f02e936f2c9e9f12a9dd9301a567e734bda8495bb2d68957e72b37b98772",
+        "status": "KNOWN",
+        "team_id": "22"
+      },
+      "home": {
+        "blocking_reasons": [],
+        "candidate_feature_value": 10.083333333333334,
+        "completion_time_basis": "observed_final_at_capture",
+        "coverage_receipts": [
+          {
+            "complete": true,
+            "from_utc": "2026-09-16T00:00:00Z",
+            "observed_at_utc": "2026-09-22T07:33:13.443472Z",
+            "population": "ALL_PLAYED_GAMES",
+            "request_census_sha256": "05113e967e404cce422ec29fef6cd4e252c270ca8c88f1cfd161f990b508de8b",
+            "source_population_definition": "ALL_NHL_SCOREBOARD_GAME_TYPES_WITHIN_INTERIOR_CAPTURE_WINDOW",
+            "source_sha256": "ae86f02e936f2c9e9f12a9dd9301a567e734bda8495bb2d68957e72b37b98772",
+            "team_id": "6",
+            "through_utc": "2026-09-22T07:33:12.810732+00:00"
+          }
+        ],
+        "observed_at_utc": "2026-09-22T07:33:13.443472Z",
+        "previous_event_id": "NHL:401878099",
+        "previous_start_time_utc": "2026-09-20T00:00:00+00:00",
+        "rest_start_to_start_days": 10.083333333333334,
+        "source_sha256": "ae86f02e936f2c9e9f12a9dd9301a567e734bda8495bb2d68957e72b37b98772",
+        "status": "KNOWN",
+        "team_id": "6"
+      }
+    },
+    "schema": "sports.operational_rest_candidate.v1",
+    "units": "start_to_start_days_24h"
+  }
+}

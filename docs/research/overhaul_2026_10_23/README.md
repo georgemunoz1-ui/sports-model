@@ -1,5 +1,23 @@
 # Research overhaul: implementation and remaining work
 
+## Current continuation — integrated build v2
+
+The continuation is governed by [INTEGRATION_CONTRACT.md](INTEGRATION_CONTRACT.md).
+Read [DELIVERY_RECONCILIATION.md](DELIVERY_RECONCILIATION.md) for the delivery state,
+[CAPABILITY_RECONCILIATION_v2.md](CAPABILITY_RECONCILIATION_v2.md) for remaining work,
+and [BLIND_VERIFICATION.md](BLIND_VERIFICATION.md) for independent verification.
+The final local suite passed **1,101 tests**. The actual NFL CLI ran both retained
+100,000-draw paths; the October 22 replay retained 80 exact opportunities and emitted
+NO_PICK for all of them. No predictive validation or wagering approval was created.
+
+New command-line forecasts use `market_blind_numeric.v2`; explicit legacy replay
+retains old identities. Selection sidecars are attached at the real entry points,
+with signed lineage/lifecycle and frozen-policy walk-forward evaluation available.
+The new numerical identity, automatic sidecars and ancestry logic supersede the
+corresponding unchanged/pending statements in the initial-build record below.
+
+## Initial-build record — retained historical scope
+
 Based on main `90daf8e0036c67a5304aa0747bf50b2266e0b364`. The user authorized
 parallel validation and building across sports on 2026-10-23 UTC. This change adds
 executable research infrastructure and repairs; it is not a new fitted probability

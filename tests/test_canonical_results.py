@@ -126,6 +126,26 @@ def test_cfb_requires_id_and_names():
     assert R.parse_espn(p, f, receipt(f))['status'] == 'PENDING'
 
 
+def test_mls_full_time_tie_is_verified_regulation_not_binary():
+    f = forecast('MLS'); p = espn(f)
+    competition = p['events'][0]['competitions'][0]
+    competition['status']['period'] = 2
+    competition['status']['type']['name'] = 'STATUS_FULL_TIME'
+    for side in competition['competitors']:
+        side['score'] = '1'
+    result = R.parse_espn(p, f, receipt(f))
+    assert result['status'] == 'FINAL' and result['score_period'] == 'REGULATION_90'
+    assert result['supported_product'] == 'regulation_90_1x2'
+    assert result['tie_policy'] == 'DRAW_IS_SEPARATE_OUTCOME'
+    assert not result['binary_grade_eligible']
+    for name in ('STATUS_FINAL', 'STATUS_FINAL_ET', 'STATUS_FINAL_PENALTIES'):
+        competition['status']['type']['name'] = name
+        assert R.parse_espn(p, f, receipt(f))['status'] == 'PENDING'
+    competition['status']['type']['name'] = 'STATUS_FULL_TIME'
+    competition['status']['period'] = 4
+    assert R.parse_espn(p, f, receipt(f))['reason'] == 'REGULATION_PERIOD_NOT_VERIFIED'
+
+
 def test_future_capture_rejected():
     f = forecast(); r = receipt(f); r['fetched_at_utc'] = '2099-01-01T00:00:00Z'
     with pytest.raises(ValueError, match='FUTURE_RESULT_CAPTURE'): R.parse_espn(espn(f), f, r)

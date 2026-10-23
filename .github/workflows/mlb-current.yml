@@ -1,7 +1,7 @@
 name: MLB current path
 on:
   push:
-    branches: [codex/mlb-current-20260914]
+    branches: [codex/mlb-current-20260914, main]
   pull_request:
     paths:
       - 'pipelines/mlb/**'
@@ -10,6 +10,9 @@ on:
       - 'scripts/generate_card_force.py'
       - 'tests/test_mlb_current_path.py'
       - 'data/mlb/current_v1/**'
+      - 'scripts/ci_evidence_archive.py'
+      - 'tests/test_ci_storage_archive.py'
+      - '.github/workflows/mlb-current.yml'
 permissions:
   contents: read
 jobs:
@@ -28,16 +31,50 @@ jobs:
           git rev-parse HEAD
           test -z "$(git status --porcelain)"
       - name: Regression and immutable forecast tests
-        run: python -m pytest tests/test_mlb_current_path.py tests/test_release_health_repairs.py tests/test_current_sports_data.py -q
+        shell: bash
+        run: |
+          set -o pipefail
+          python -m pytest tests/test_mlb_current_path.py tests/test_release_health_repairs.py tests/test_current_sports_data.py -q 2>&1 | tee "$RUNNER_TEMP/mlb-tests.log"
       - name: Full health evidence
         run: |
           set +e
           python harness/healthcheck.py > "$RUNNER_TEMP/mlb-health.log" 2>&1
           result=$?
           printf 'HEALTH_EXIT=%s\n' "$result"
+          printf '%s\n' "$result" > "$RUNNER_TEMP/mlb-health-exit.txt"
           cat "$RUNNER_TEMP/mlb-health.log"
           exit 0
-      - uses: actions/upload-artifact@v4
+      - name: Record archive run identity
+        if: always()
+        run: git rev-parse HEAD > "$RUNNER_TEMP/mlb-commit.txt"
+      - name: Archive evidence to Drive and verify downloaded bytes
+        id: drive_archive
+        if: always()
+        env:
+          CI_STORAGE_CONFIG_JSON: ${{ vars.CI_STORAGE_CONFIG_JSON }}
+          CI_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+          CI_BASE_SHA: ${{ github.event.pull_request.base.sha }}
+        run: |
+          python scripts/ci_evidence_archive.py \
+            --output-dir "$RUNNER_TEMP/mlb-archive" \
+            --source "commit.txt=$RUNNER_TEMP/mlb-commit.txt" \
+            --optional-source "tests.log=$RUNNER_TEMP/mlb-tests.log" \
+            --optional-source "health.log=$RUNNER_TEMP/mlb-health.log" \
+            --optional-source "health-exit.txt=$RUNNER_TEMP/mlb-health-exit.txt"
+      - name: Optional short-retention GitHub copy after verified Drive archive
+        id: github_copy
+        if: ${{ always() && steps.drive_archive.outputs.archive_status == 'VERIFIED' && vars.CI_OPTIONAL_GITHUB_ARTIFACTS == 'true' }}
+        continue-on-error: true
+        uses: actions/upload-artifact@v4
         with:
-          name: mlb-current-health
-          path: ${{ runner.temp }}/mlb-health.log
+          name: mlb-current-health-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/mlb-archive/
+          retention-days: 7
+          if-no-files-found: error
+      - name: Report archive and optional-copy outcomes separately
+        if: always()
+        env:
+          DRIVE_STATUS: ${{ steps.drive_archive.outputs.archive_status }}
+          GITHUB_COPY_OUTCOME: ${{ steps.github_copy.outcome }}
+        run: |
+          printf '\nDrive archive: %s. Optional GitHub copy: %s.\n' "${DRIVE_STATUS:-NOT_EXECUTED}" "$GITHUB_COPY_OUTCOME" >> "$GITHUB_STEP_SUMMARY"

@@ -1,0 +1,36 @@
+{
+  "cfb": {
+    "alpha": 0.4,
+    "cutoff": "earliest_season_week_kickoff",
+    "exclude": [
+      "no-play penalties",
+      "kneels",
+      "spikes"
+    ],
+    "hfa": 55,
+    "history_seasons": 3,
+    "k": 28,
+    "margin_alpha": 1,
+    "min_pass_plays": 20,
+    "min_rush_plays": 20,
+    "min_team_games": 2,
+    "opponent_ridge_alpha": 20,
+    "regress": 0.75,
+    "result_lag_hours": 24,
+    "sacks": "pass",
+    "sample_weight": "plays/50",
+    "success": "EPA>0",
+    "winner_C": 1
+  },
+  "nba": {
+    "embargo": "previous_UTC_day",
+    "ewma_old_weight": 0.9,
+    "joint_calibration_season": 2024,
+    "joint_mean_fit_through": 2023,
+    "min_team_games": 5,
+    "personnel": "requires actual PIT impacts; never zero imputed",
+    "possession_estimator": "mean(FGA-ORB+TOV+0.44*FTA) across both teams",
+    "ridge_alpha": 1,
+    "winner_C": 1
+  }
+}

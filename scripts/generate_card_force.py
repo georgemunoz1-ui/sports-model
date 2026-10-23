@@ -504,6 +504,7 @@ def main():
     parser.add_argument("--simulations", type=int, default=100000)
     parser.add_argument("--manual-overrides")
     parser.add_argument("--distribution-research-config", help="Opt-in hash-bound cross-sport distribution challengers; emits a separate report")
+    parser.add_argument("--efficiency-research-config", type=Path, help="Opt-in fitted CFB/NBA efficiency experiments; separate source-bound local SHADOW receipts, no default change")
     parser.add_argument("--disclosures", type=Path, help="Source-bound availability scenarios, assumptions and dependence disclosures; presentation only")
     parser.add_argument("--identity-semantics", choices=["legacy.v1", "market_blind_numeric.v2"], default="market_blind_numeric.v2", help="Explicit independently identified execution child; legacy behavior remains available")
     parser.add_argument("--selection-config", type=Path, help="Frozen research selector configuration; absent config emits unqualified diagnostic NO_PICK")
@@ -548,6 +549,19 @@ def main():
     print(render_md(card, disclosures))
     print(json.dumps({"research_selection": selection["decision_counts"], "wagering_status": "OFF"}))
     research_incomplete = bool(disclosures["errors"])
+    if args.efficiency_research_config:
+        from research.efficiency.runner import shadow_from_card
+        try:
+            efficiency = shadow_from_card(output / "diagnostic_card.json", args.efficiency_research_config,
+                                          output / "efficiency_research", simulations=args.simulations)
+            research_incomplete |= any(row["status"] != "SHADOW_LOGGED" for row in efficiency["coverage"])
+            print(json.dumps({"efficiency_research_run_id": efficiency["run_id"], "logged_count": efficiency["logged_count"], "canonical_prospective_eligible": False}))
+        except (ValueError, KeyError, TypeError, OSError) as exc:
+            research_incomplete = True
+            failure = {"status": "FAILED", "reason": str(exc), "action_authority": False}
+            with (output / "efficiency_research_failure.json").open("x") as handle:
+                json.dump(failure, handle, indent=2)
+            print(json.dumps({"efficiency_research": failure}))
     if args.distribution_research_config:
         from pipelines.cards.distribution_research import build, load_config
         try:

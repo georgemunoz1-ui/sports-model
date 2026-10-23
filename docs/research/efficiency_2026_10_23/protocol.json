@@ -1,0 +1,93 @@
+{
+  "authorization": "User explicitly authorized independent CFB and NBA experiments, runner integration, component receipts/source reconciliation, chronological same-event comparisons and prospective SHADOW logging.",
+  "base_commit": "278b9a2e655b72b720fefc215a5129a8e6cd2c93",
+  "created_at_utc": "2026-10-23T09:02:51.166911+00:00",
+  "discovery_events": "2026-10-21 through 2026-10-22; never confirmation evidence",
+  "evaluation": {
+    "hyperparameters": "Freeze model module default config before inspecting heldout metrics; no search on heldout outcomes",
+    "missingness": "Report full population and matched/excluded counts with reasons; no dropping failed events without census",
+    "primary": "winner Brier score paired on same events",
+    "promotion": "NONE; diagnostic hold unless separate preregistered untouched evidence and governance approval",
+    "secondary": [
+      "winner log loss",
+      "margin MAE/RMSE",
+      "total MAE/RMSE where supported",
+      "interval coverage and width where supported"
+    ],
+    "uncertainty": "paired chronological blocks or season-week clusters; bootstrap seed2302026, draws2000"
+  },
+  "experiments": {
+    "cfb": {
+      "baseline": "cfb.fbs.elo_form_logit_ridge.v1_0.shadow",
+      "comparison_products": [
+        "winner",
+        "home_margin"
+      ],
+      "control_fit": "Exact existing procedure, full available historical score population; refit control distinct from original fitted state",
+      "evaluation_seasons": [
+        2025,
+        2026
+      ],
+      "feature_groups": [
+        "opponent-adjusted pass/rush EPA",
+        "opponent-adjusted pass/rush success"
+      ],
+      "population": "Completed FBS-v-FBS, week>1; retain all exclusions, no total control fabricated",
+      "primary_id": "cfb.matchup_efficiency.research.v1",
+      "train_through_season": 2024
+    },
+    "nba": {
+      "baseline": "nba.initial_causal_score.research.v1",
+      "comparison_products": [
+        "winner",
+        "home_margin",
+        "total"
+      ],
+      "control_fit": "Original prior, causal_rows, feature, fit semantics; reconstructed refit ID separate from frozen state",
+      "evaluation_seasons": [
+        2025,
+        2026
+      ],
+      "feature_groups": [
+        "full-game possessions",
+        "offense vs opponent efficiency",
+        "four-factor matchup components"
+      ],
+      "population": "Regular-season exact events with reconciled boxscores; all score-baseline events retained in coverage census",
+      "primary_id": "nba.possession_efficiency.research.v1",
+      "prospective_provider_season": 2027,
+      "train_seasons": [
+        2021,
+        2022,
+        2023,
+        2024
+      ]
+    }
+  },
+  "historical_evidence_scope": "RETROSPECTIVE_RECONSTRUCTED_EXPLORATORY",
+  "objective": "Evaluate independent incremental efficiency features against actual incumbent procedures without changing defaults or original forecasts.",
+  "preservation": {
+    "action_authority": false,
+    "canonical_grading": "Unchanged",
+    "market_inputs": false,
+    "original_forecasts": "Read-only",
+    "registered_defaults": "Unchanged"
+  },
+  "schema": "efficiency-experiment-protocol.v1",
+  "shadow": {
+    "actual_writer_clock": true,
+    "before_event_start": true,
+    "canonical_grading_eligibility": false,
+    "external_timestamp_anchor": "Git commit/server timestamp if published before event start; otherwise explicitly unavailable",
+    "source_retrieval_before_cutoff": true
+  },
+  "stage_rules": {
+    "joint": "Separate ID; uncertainty fitted only on chronological pre-test residuals, never heldout outcomes; winner/margin/total from same score samples only in this stage.",
+    "personnel": "Separate ID; require real pre-cutoff personnel/minutes inputs, no assumed zeros. Missing data produces explicit stage blocker."
+  },
+  "stages": [
+    "efficiency",
+    "personnel",
+    "joint"
+  ]
+}

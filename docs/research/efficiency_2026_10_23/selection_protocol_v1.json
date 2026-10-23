@@ -1,0 +1,79 @@
+{
+  "schema": "efficiency-evaluation-selection-supplement.v1",
+  "created_at_utc": "2026-10-23T09:55:16.673850+00:00",
+  "stage": "FROZEN_BEFORE_RESULT_MAGNITUDES_INSPECTION",
+  "parent_protocol_sha256": "06420a002cd53830de6d45c32c8c1ccc51d7fbfd9fa5dda2e4724581eba53b02",
+  "data_scope": "retrospective reconstructed diagnostic; no pristine confirmation",
+  "candidate_parameters_changed": false,
+  "discovery_events_excluded": [
+    "CFB:401869845",
+    "2026_07_NE_CHI",
+    "NBA:401909094",
+    "NBA:401909093"
+  ],
+  "forecaster_metrics": "reuse research.efficiency.evaluation.evaluate, 2000 block bootstrap draws, seed2302026, binary home winner Brier/log loss, margin/total MAE RMSE",
+  "probability_diagnostics": {
+    "reliability": "ten fixed equal-width probability bins, last includes p=1; report counts/mean p/outcome frequency",
+    "sharpness": [
+      "mean confidence",
+      "mean absolute distance from 0.5",
+      "standard deviation p"
+    ],
+    "high_confidence_threshold": 0.8,
+    "learned_diagnostic_calibrator": "none"
+  },
+  "selection": {
+    "context": "HYPOTHETICAL_HISTORICAL_CONFIDENCE_POLICY; separate from operational qualification",
+    "thresholds": [
+      0.5,
+      0.55,
+      0.6,
+      0.65,
+      0.7,
+      0.75,
+      0.8,
+      0.85,
+      0.9,
+      0.95
+    ],
+    "confidence": "max(p_home,1-p_home)",
+    "side": "home if p_home>=0.5 else away",
+    "ties": "no partial probability tie selection",
+    "risk": "LOSS/(WIN+LOSS) on this full-game non-tie dataset",
+    "denominators": [
+      "entire declared evaluation opportunity population",
+      "common-event raw forecasts"
+    ],
+    "bootstrap": "2000 resamples of full-population chronological blocks; include zero-selection blocks; percentile 95%; fixed seed2302026",
+    "comparison": "select-all versus each frozen threshold on each unchanged forecaster; no optimum selected",
+    "operational": "all forecasts lack promotion/qualification and remain BLOCKED; raw predictions retained"
+  },
+  "joint_diagnostics": {
+    "scope": "candidate continuous distribution only, not exact integer ATS settlement",
+    "levels": [
+      0.5,
+      0.8,
+      0.9,
+      0.95
+    ],
+    "metrics": [
+      "normal margin CRPS",
+      "normal total CRPS",
+      "central interval coverage",
+      "interval width",
+      "standardized residual moments"
+    ],
+    "source": "frozen pre-2025 residual covariance already in separate joint state; no refit",
+    "baseline": "no distribution comparison if original control lacks joint distribution"
+  },
+  "integrity": [
+    "all rows unique exact events in declared population",
+    "rows plus stage exclusions reconcile full population",
+    "training event IDs disjoint from scored event IDs",
+    "retained forecast component receipts internally hash and chronology verified",
+    "raw input bytes unchanged before/after"
+  ],
+  "spread_selector": "BLOCKED_AUTHENTIC_HISTORICAL_MARKET_TARGETS_AND_EXACT_DISCRETE_DISTRIBUTIONS_ABSENT; does not block winner selector",
+  "no_promotion": true,
+  "wagering_authority": "OFF"
+}

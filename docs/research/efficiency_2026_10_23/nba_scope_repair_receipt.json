@@ -1,0 +1,213 @@
+{
+  "action_authority": false,
+  "code_sha256": "05836a6d29a6b899b43ba4b22c85c9f936677677eb8faf469f6e985de9669678",
+  "corrected_counts": {
+    "future_events": 20,
+    "history": 7222,
+    "score_history": 7246
+  },
+  "created_at_utc": "2026-10-23T09:56:50.369562+00:00",
+  "discovery_status": "POST_RESULT_DATA_CONTRACT_REPAIR; corrected rerun is not new unseen confirmation",
+  "effects": {
+    "efficiency": {
+      "state_path": "/workspace/scratch/101f83f5c588/runs/nba-efficiency-v1/efficiency/state.json",
+      "state_sha256": "91efc15052f9e6b409e5a203e2ac6f86b40e263b59af0e31ad81c5bba4ac4741",
+      "training_ids_removed": []
+    },
+    "joint": {
+      "state_path": "/workspace/scratch/101f83f5c588/runs/nba-efficiency-v1/joint/state.json",
+      "state_sha256": "327cb213b18c8db9a30a15f528ad5634df76e05c4bb6125bb35b916778a1daa5",
+      "training_ids_removed": []
+    },
+    "score_control": {
+      "training_ids_removed": [
+        "NBA:401306581",
+        "NBA:401410564",
+        "NBA:401524696",
+        "NBA:401623259"
+      ]
+    }
+  },
+  "excluded_source_rows": [
+    {
+      "away_id": "111353",
+      "away_team": "Team LeBron",
+      "event_id": "NBA:401306581",
+      "home_id": "123554",
+      "home_team": "Team Durant",
+      "reason": "OUTSIDE_REGULAR_SEASON_ALLSTAR_EVENT",
+      "season": 2021,
+      "source_path": "/workspace/scratch/6fb38bce3e7e/efficiency-experiments/acquisition/source-v1/nba/nba_schedule_2021.parquet",
+      "source_sha256": "0c2eab5b22cc956646ac0351ddf6110d9527e46f4ee4d9200bf2945051688392",
+      "type_abbreviation": "ALLSTAR",
+      "type_id": 4
+    },
+    {
+      "away_id": "123554",
+      "away_team": "Team Durant",
+      "event_id": "NBA:401410564",
+      "home_id": "111353",
+      "home_team": "Team LeBron",
+      "reason": "OUTSIDE_REGULAR_SEASON_ALLSTAR_EVENT",
+      "season": 2022,
+      "source_path": "/workspace/scratch/6fb38bce3e7e/efficiency-experiments/acquisition/source-v1/nba/nba_schedule_2022.parquet",
+      "source_sha256": "e3a764147f108c6fb3883eaa5617234ab41aa95e668dd7eb9506616c8a953d2f",
+      "type_abbreviation": "ALLSTAR",
+      "type_id": 4
+    },
+    {
+      "away_id": "112151",
+      "away_team": "Team Giannis",
+      "event_id": "NBA:401524696",
+      "home_id": "111353",
+      "home_team": "Team LeBron",
+      "reason": "OUTSIDE_REGULAR_SEASON_ALLSTAR_EVENT",
+      "season": 2023,
+      "source_path": "/workspace/scratch/6fb38bce3e7e/efficiency-experiments/acquisition/source-v1/nba/nba_schedule_2023.parquet",
+      "source_sha256": "9532db81a254b2ea9982111fbea970bb61ea34b6aa3fc4607b2cad17ba55c60b",
+      "type_abbreviation": "ALLSTAR",
+      "type_id": 4
+    },
+    {
+      "away_id": "32",
+      "away_team": "Western Conf All-Stars",
+      "event_id": "NBA:401623259",
+      "home_id": "31",
+      "home_team": "Eastern Conf All-Stars",
+      "reason": "OUTSIDE_REGULAR_SEASON_ALLSTAR_EVENT",
+      "season": 2024,
+      "source_path": "/workspace/scratch/6fb38bce3e7e/efficiency-experiments/acquisition/source-v1/nba/nba_schedule_2024.parquet",
+      "source_sha256": "2069783562b531b91ee9ad6a85358761ad6a611ce3291a60ed124bb978969b63",
+      "type_abbreviation": "ALLSTAR",
+      "type_id": 4
+    },
+    {
+      "away_id": "130580",
+      "away_team": "Team Shaq",
+      "event_id": "NBA:401752957",
+      "home_id": "130579",
+      "home_team": "Team Chuck",
+      "reason": "OUTSIDE_REGULAR_SEASON_ALLSTAR_EVENT",
+      "season": 2025,
+      "source_path": "/workspace/scratch/6fb38bce3e7e/efficiency-experiments/acquisition/source-v1/nba/nba_schedule_2025.parquet",
+      "source_sha256": "239829fdcf99629ee682bca4d6d0a6709b3c095be39c39f425664754ae1a979e",
+      "type_abbreviation": "ALLSTAR",
+      "type_id": 4
+    },
+    {
+      "away_id": "130754",
+      "away_team": "Team Candace",
+      "event_id": "NBA:401752956",
+      "home_id": "130580",
+      "home_team": "Team Shaq",
+      "reason": "OUTSIDE_REGULAR_SEASON_ALLSTAR_EVENT",
+      "season": 2025,
+      "source_path": "/workspace/scratch/6fb38bce3e7e/efficiency-experiments/acquisition/source-v1/nba/nba_schedule_2025.parquet",
+      "source_sha256": "239829fdcf99629ee682bca4d6d0a6709b3c095be39c39f425664754ae1a979e",
+      "type_abbreviation": "ALLSTAR",
+      "type_id": 4
+    },
+    {
+      "away_id": "130581",
+      "away_team": "Team Kenny",
+      "event_id": "NBA:401752955",
+      "home_id": "130579",
+      "home_team": "Team Chuck",
+      "reason": "OUTSIDE_REGULAR_SEASON_ALLSTAR_EVENT",
+      "season": 2025,
+      "source_path": "/workspace/scratch/6fb38bce3e7e/efficiency-experiments/acquisition/source-v1/nba/nba_schedule_2025.parquet",
+      "source_sha256": "239829fdcf99629ee682bca4d6d0a6709b3c095be39c39f425664754ae1a979e",
+      "type_abbreviation": "ALLSTAR",
+      "type_id": 4
+    },
+    {
+      "away_id": "132374",
+      "away_team": "Team Stars",
+      "event_id": "NBA:401838143",
+      "home_id": "132375",
+      "home_team": "Team Stripes",
+      "reason": "OUTSIDE_REGULAR_SEASON_ALLSTAR_EVENT",
+      "season": 2026,
+      "source_path": "/workspace/scratch/6fb38bce3e7e/efficiency-experiments/acquisition/source-v1/nba/nba_schedule_2026.parquet",
+      "source_sha256": "b3884aa4aa276d1fcafc71b69394675904a968902068bff634932e5d7afacae4",
+      "type_abbreviation": "ALLSTAR",
+      "type_id": 4
+    },
+    {
+      "away_id": "111386",
+      "away_team": "World",
+      "event_id": "NBA:401838142",
+      "home_id": "132375",
+      "home_team": "Team Stripes",
+      "reason": "OUTSIDE_REGULAR_SEASON_ALLSTAR_EVENT",
+      "season": 2026,
+      "source_path": "/workspace/scratch/6fb38bce3e7e/efficiency-experiments/acquisition/source-v1/nba/nba_schedule_2026.parquet",
+      "source_sha256": "b3884aa4aa276d1fcafc71b69394675904a968902068bff634932e5d7afacae4",
+      "type_abbreviation": "ALLSTAR",
+      "type_id": 4
+    },
+    {
+      "away_id": "132374",
+      "away_team": "Team Stars",
+      "event_id": "NBA:401838141",
+      "home_id": "132375",
+      "home_team": "Team Stripes",
+      "reason": "OUTSIDE_REGULAR_SEASON_ALLSTAR_EVENT",
+      "season": 2026,
+      "source_path": "/workspace/scratch/6fb38bce3e7e/efficiency-experiments/acquisition/source-v1/nba/nba_schedule_2026.parquet",
+      "source_sha256": "b3884aa4aa276d1fcafc71b69394675904a968902068bff634932e5d7afacae4",
+      "type_abbreviation": "ALLSTAR",
+      "type_id": 4
+    },
+    {
+      "away_id": "111386",
+      "away_team": "World",
+      "event_id": "NBA:401838140",
+      "home_id": "132374",
+      "home_team": "Team Stars",
+      "reason": "OUTSIDE_REGULAR_SEASON_ALLSTAR_EVENT",
+      "season": 2026,
+      "source_path": "/workspace/scratch/6fb38bce3e7e/efficiency-experiments/acquisition/source-v1/nba/nba_schedule_2026.parquet",
+      "source_sha256": "b3884aa4aa276d1fcafc71b69394675904a968902068bff634932e5d7afacae4",
+      "type_abbreviation": "ALLSTAR",
+      "type_id": 4
+    }
+  ],
+  "external_writes": false,
+  "original_packet_unchanged": true,
+  "output_path": "/workspace/scratch/101f83f5c588/workers/nba/inputs/nba-bound-regular-season-v2.json",
+  "output_sha256": "03cc0ad82c649c9852414854989a00bf5f323d7b161de280d7feb08434b2d3de",
+  "parent_path": "/workspace/scratch/6fb38bce3e7e/efficiency-experiments/acquisition/nba-bound-v1.json",
+  "parent_sha256": "aaf8331bd050aacdab857356bae95a7fa36785352df6fc52093c5006c6ca531d",
+  "reason": "Explicit provider type_id4 / ALLSTAR markers are outside preregistered regular-season scope",
+  "removed_ids": {
+    "future_events": [],
+    "history": [
+      "NBA:401306581",
+      "NBA:401410564",
+      "NBA:401524696",
+      "NBA:401623259",
+      "NBA:401752955",
+      "NBA:401752956",
+      "NBA:401752957",
+      "NBA:401838140",
+      "NBA:401838141",
+      "NBA:401838142",
+      "NBA:401838143"
+    ],
+    "score_history": [
+      "NBA:401306581",
+      "NBA:401410564",
+      "NBA:401524696",
+      "NBA:401623259",
+      "NBA:401752955",
+      "NBA:401752956",
+      "NBA:401752957",
+      "NBA:401838140",
+      "NBA:401838141",
+      "NBA:401838142",
+      "NBA:401838143"
+    ]
+  },
+  "schema": "nba-source-scope-correction.v1"
+}

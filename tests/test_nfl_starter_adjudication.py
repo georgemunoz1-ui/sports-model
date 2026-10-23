@@ -31,6 +31,39 @@ def fixture():
 
 
 class Adjudication(unittest.TestCase):
+    def night_fixture(self, gameday, source_start):
+        games, pbp, r = fixture()
+        games['gameday'] = gameday
+        games['gametime'] = '20:15'
+        j = json.loads(r['evidence']['text'])
+        j['header']['competitions'][0]['date'] = source_start
+        r['evidence']['text'] = json.dumps(j)
+        r['evidence']['receipt']['sha256'] = hashlib.sha256(r['evidence']['text'].encode()).hexdigest()
+        r['evidence']['receipt']['retrieved_at_utc'] = '2027-02-01T00:00:00Z'
+        r['reviewed_at_utc'] = '2027-02-01T01:00:00Z'
+        return games, pbp, r
+
+    def test_eastern_night_start_is_not_wrong_utc_date(self):
+        # Both daylight and standard time; the prior UTC-date test rejected each.
+        for gameday, start in [('2026-10-15', '2026-10-16T00:15:00Z'),
+                               ('2027-01-07', '2027-01-08T01:15:00Z')]:
+            games, pbp, r = self.night_fixture(gameday, start)
+            with self.subTest(gameday=gameday):
+                self.assertEqual(apply(games, pbp, [r], r['reviewed_at_utc']).iloc[0].home_qb_id, 'new')
+
+    def test_same_eastern_date_wrong_start_time_still_rejected(self):
+        games, pbp, r = self.night_fixture('2026-10-15', '2026-10-16T01:15:00Z')
+        with self.assertRaisesRegex(ValueError, 'ADJUDICATION_START_TIME_BINDING'):
+            apply(games, pbp, [r], r['reviewed_at_utc'])
+
+    def test_missing_time_uses_eastern_calendar_date(self):
+        games, pbp, r = self.night_fixture('2026-10-15', '2026-10-16T00:15:00Z')
+        games = games.drop(columns='gametime')
+        self.assertEqual(apply(games, pbp, [r], r['reviewed_at_utc']).iloc[0].home_qb_id, 'new')
+        games['gameday'] = '2026-10-16'
+        with self.assertRaisesRegex(ValueError, 'ADJUDICATION_DATE_BINDING'):
+            apply(games, pbp, [r], r['reviewed_at_utc'])
+
     def test_explicit_correction_preserves_input(self):
         games, pbp, r = fixture()
         self.assertEqual(apply(games, pbp, [], r['reviewed_at_utc']).iloc[0].home_qb_id, 'old')

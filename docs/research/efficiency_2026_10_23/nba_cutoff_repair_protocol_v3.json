@@ -1,0 +1,101 @@
+{
+  "baseline_contract": "Reuse existing models.current.baseline.feature/update and scripts.prepare_initial_baselines.fit unchanged; add separate cutoff-aligned admission wrapper. Preserve exact legacy causal_rows callable and control as original-procedure diagnostic, not same-cutoff primary comparator.",
+  "created_at_utc": "2026-10-23T10:02:23.778226+00:00",
+  "cutoff_policy": {
+    "admission": "history start < UTC midnight(cutoff) minus one day; authentic result_available_at_utc <= cutoff when supplied",
+    "default_historical": "event authoritative start minus exactly one microsecond, chosen before any training/evaluation/control feature generation",
+    "embargo": "PREVIOUS_UTC_DAY_EXCLUDED",
+    "explicit_current": "retain supplied timezone-aware prestart cutoff exactly",
+    "monotonicity": "equal cutoffs allowed for simultaneous starts; decreasing cutoffs rejected",
+    "receipt": "same pre-feature cutoff, no post-feature clipping or backdating"
+  },
+  "defect": "Historical features defaulted to event start; receipt rewrote start to start minus one microsecond. UTC-midnight events therefore recorded a prior-day cutoff incompatible with admitted feature history.",
+  "evidence_scope": "POST_RESULT_TEMPORAL_CONTRACT_REPAIR_OF_REUSED_RETROSPECTIVE_DIAGNOSTIC; NOT_NEW_UNSEEN_CONFIRMATION",
+  "fixed_parameters": {
+    "blocks": "ISO-week",
+    "bootstrap_count": 2000,
+    "bootstrap_seed": 2302026,
+    "evaluation_seasons": [
+      2025,
+      2026
+    ],
+    "ewma_old_weight": 0.9,
+    "fta_possession_weight": 0.44,
+    "joint_calibration_season": 2024,
+    "logistic_c": 1.0,
+    "min_team_games": 5,
+    "ridge_alpha": 1.0,
+    "training_seasons": [
+      2021,
+      2022,
+      2023,
+      2024
+    ]
+  },
+  "identity_lineage": {
+    "control": "nba.initial_causal_score.cutoff_aligned_refit.control.v1",
+    "efficiency": {
+      "parent": "nba.possession_efficiency.research.v1",
+      "repaired": "nba.possession_efficiency.research.v2"
+    },
+    "joint": {
+      "parent": "nba.possession_efficiency.joint.research.v1",
+      "repaired": "nba.possession_efficiency.joint.research.v2"
+    },
+    "legacy_control_retained": "nba.initial_causal_score.exact_procedure_refit.control.v1",
+    "matched_control": "nba.initial_causal_score.cutoff_aligned_matched_training_population.control.v1",
+    "personnel": {
+      "parent": "nba.possession_efficiency.personnel.research.v1",
+      "repaired": "nba.possession_efficiency.personnel.research.v2"
+    }
+  },
+  "independent_finding": {
+    "affected_v2_evaluation_receipts_per_stage": 352,
+    "path": "/workspace/scratch/101f83f5c588/workers/verifier/nba-receipt-cutoff-findings.json",
+    "sha256": "fc93fac2867a491d5ff88024a69a684e5ff7eaa5346f1b46d763252b271d7b6f",
+    "stage_population": 2458
+  },
+  "matched_control": "Same repaired efficiency training IDs and exact repaired efficiency prediction events; reuse candidate predictions; no additional refit or selection of challenger.",
+  "parent_protocol": {
+    "path": "/workspace/scratch/101f83f5c588/sports-model/docs/research/efficiency_2026_10_23/swarm_protocol_v1.json",
+    "sha256": "06420a002cd53830de6d45c32c8c1ccc51d7fbfd9fa5dda2e4724581eba53b02"
+  },
+  "planned_outputs": {
+    "matched": "/workspace/scratch/101f83f5c588/runs/nba-matched-control-cutoff-v3",
+    "primary": "/workspace/scratch/101f83f5c588/runs/nba-efficiency-cutoff-v3"
+  },
+  "preservation": {
+    "earlier_outputs_immutable": true,
+    "existing_shadow_records_immutable": true,
+    "hyperparameters_unchanged": true,
+    "no_automatic_promotion": true,
+    "no_tuning_to_discovery_losses": true,
+    "original_forecasts_immutable": true,
+    "selector_thresholds_unchanged": true
+  },
+  "required_checks": [
+    "UTC-midnight cutoff/boundary and exact one-microsecond non-midnight behavior",
+    "simultaneous starts have same cutoff and never consume each other",
+    "explicit current cutoff unchanged",
+    "candidate/control identical history admission boundaries",
+    "training, OOF residual and evaluation cutoff consistency",
+    "no provider timestamps invented or altered",
+    "receipt cutoff equals feature cutoff and all admitted history satisfies embargo",
+    "legacy vs aligned controls same-event admission differences labeled",
+    "preserve v1/v2 files and existing prospective first-write entries; compare state hashes and numerical parameters"
+  ],
+  "retained_input": {
+    "path": "/workspace/scratch/101f83f5c588/workers/nba/inputs/nba-bound-regular-season-v2.json",
+    "sha256": "03cc0ad82c649c9852414854989a00bf5f323d7b161de280d7feb08434b2d3de",
+    "source_effective_observed_retrieval_times_changed": false,
+    "source_metadata_changed": false
+  },
+  "schema": "nba-historical-cutoff-contract-repair.v1",
+  "source_before": {
+    "/workspace/scratch/101f83f5c588/sports-model/models/current/baseline.py": "cc338abccfcc4c107069cc5b64b0e6e6485d77ea3ba27dd703f7a1c4055fb875",
+    "/workspace/scratch/101f83f5c588/sports-model/models/experiments/nba_efficiency.py": "335561acea4adb17c513534965dc79e99b3dd4dbadac8bbaee7f0d3c59af745e",
+    "/workspace/scratch/101f83f5c588/sports-model/research/efficiency/runner.py": "232f084fdbb22ac843a89f8685f992e500325d9096bc2ee0e49d82a1abb6ef1f",
+    "/workspace/scratch/101f83f5c588/sports-model/scripts/prepare_initial_baselines.py": "03e01f10178a812ec2c0454279c0ee05223532fd7d622a780176995bfb55903a"
+  },
+  "status": "FROZEN_BEFORE_V3_FIT_OR_NUMERICAL_INSPECTION"
+}

@@ -4727,3 +4727,14 @@ PR76 remote publication/exercise is pending at this pre-publication checkpoint.
 
 See docs/research/overhaul_2026_10_23/DELIVERY_RECONCILIATION.md,
 CAPABILITY_RECONCILIATION_v2.md, BLIND_VERIFICATION.md and FINDING_EVIDENCE.json.
+
+
+## 2026-10-23 — Diagnostic swarm executed; no promotion
+
+Coordinator plus six workers and independent verifier inspected remote pin `278b9a2e655b72b720fefc215a5129a8e6cd2c93`, preserved original forecasts and evaluated CFB/NBA challengers through the real research runners. Final results and run IDs: `docs/research/efficiency_2026_10_23/SWARM_RESULTS_2026_10_23.md`.
+
+CFB: 1,045 common events; efficiency Brier delta +0.000453 with interval crossing zero. NBA repaired cutoff model v2: 2,458 common events; Brier delta +0.001298 with interval crossing zero; margin MAE worse; joint Brier worse. Post-result All-Star and midnight-cutoff repairs are disclosed; earlier outputs retained. Matched-training controls do not establish superiority. JMU/NE/Denver are partial discovery reconstructions, never preventable-loss confirmation.
+
+Integrated/exercised CFB joint dispatch, NBA scope/cutoff contracts, receipt identity binding, and NFL UTC/Eastern starter reconciliation. NFL six-week/93-game replay matches original states and selected QB NE forecast. Actual shared-card paths wrote 58 first-write local pregame SHADOW entries (10 CFB, 24 original NBA preserved, 24 new NBA v2); canonical eligibility and publication/action authority remain false.
+
+Final full test suite: 1,402 passed with JUnit evidence. Global legacy health remains RED (55 failures/4 warnings); scoped dependency disclosures retained. All 7,006 primary stage receipts/raw predictions survive selector BLOCKED status. Exact market/discrete settlement validation, authenticated personnel inputs, original historical availability evidence and NFL per-event OOF remain named blockers. No remote write/merge, default change or promotion. User approval is required before the prepared external research branch/draft PR.

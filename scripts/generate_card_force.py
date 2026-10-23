@@ -81,7 +81,7 @@ def normalize(event, raw):
     signed_gap_pp = None if mc_only else 100.0 * (analytic_p - stochastic_sim_p)
     abs_gap_pp = None if mc_only else abs(signed_gap_pp)
 
-    return {
+    result = {
         "event_id": str(event["event_id"]),
         "model_id": raw.get("model_id"),
         "coverage_label": raw.get("coverage_label"),
@@ -124,6 +124,11 @@ def normalize(event, raw):
         "action_authority": False,
         "action_status": "SHADOW_ONLY",
     }
+    for key in ("identity_semantics", "numerical_identity", "forecast_procedure_id",
+                "feature_procedure_id", "calibration_procedure_id"):
+        if key in raw:
+            result[key] = raw[key]
+    return result
 
 
 def summarize_pit(context, requested_as_of_utc, generated_at_utc):
@@ -293,7 +298,34 @@ def attach_grading(card):
     return card
 
 
-def generate(card_date, league, as_of, simulations, overrides):
+def attach_state_receipt(raw, event, context, league):
+    """Add an input trace after forecasting without editing pinned model code."""
+    import copy
+    result = copy.deepcopy(raw)
+    package = context.get("package")
+    if league.lower() not in {"nba", "nhl", "mls"} or not isinstance(package, dict):
+        return result
+    from models.current.baseline import IDS
+    if result.get("model_id") != IDS.get(league.lower()):
+        return result
+    from models.current.freshness import state_freshness_receipt
+    diagnostic = result.setdefault("diagnostics", {})
+    try:
+        if package.get("model_id") != result["model_id"]:
+            raise ValueError("RECEIPT_MODEL_IDENTITY_MISMATCH")
+        receipt = state_freshness_receipt(package, event, result["model_input_snapshot"],
+                                          cutoff_utc=context["cutoff"])
+        if (receipt["input_snapshot_hash"] != result.get("input_snapshot_hash") or
+                receipt["model_state_config_hash"] != result.get("model_state_config_hash")):
+            raise ValueError("RECEIPT_PARENT_HASH_MISMATCH")
+        diagnostic["state_freshness_receipt"] = receipt
+    except (ValueError, KeyError, TypeError) as exc:
+        # Retain raw evidence. A failed diagnostic is visible, never silently fresh.
+        diagnostic["state_freshness_receipt_error"] = str(exc)
+    return result
+
+
+def generate(card_date, league, as_of, simulations, overrides, *, identity_semantics="legacy.v1"):
     adapter = load_adapter(league)
     schedule = adapter.load_schedule(card_date, as_of)
     context = adapter.build_context(schedule, as_of, True, overrides)
@@ -322,9 +354,14 @@ def generate(card_date, league, as_of, simulations, overrides):
             })
             continue
         try:
-            raw = adapter.forecast_event(event, context, simulations)
+            if identity_semantics == "legacy.v1":
+                raw = adapter.forecast_event(event, context, simulations)
+            else:
+                from pipelines.cards.semantic_identity import forecast_with_identity
+                raw = forecast_with_identity(adapter, event, context, simulations, semantics=identity_semantics)
             from pipelines.cards.selected import apply_default
             raw = apply_default(league,event,raw)
+            raw = attach_state_receipt(raw, event, context, league)
             # Guard the rare case where network/simulation time crosses first pitch.
             if now_utc() >= event_start:
                 rows.append({
@@ -406,6 +443,8 @@ def render_md(card, disclosures=None):
     if pit.get("pit_status") not in (None, "PIT_ALIGNED"):
         lines.extend(["> **PIT WARNING:** this diagnostic card must not be represented as an exact requested-cutoff replay.", ""])
 
+    from pipelines.cards.integrity_reporting import render_integrity_md
+    lines.extend([render_integrity_md(card), ""])
     seen_defaults=set()
     for row in card["forecasts"]:
         default=(row.get("diagnostics") or {}).get("default_selection")
@@ -466,6 +505,8 @@ def main():
     parser.add_argument("--manual-overrides")
     parser.add_argument("--distribution-research-config", help="Opt-in hash-bound cross-sport distribution challengers; emits a separate report")
     parser.add_argument("--disclosures", type=Path, help="Source-bound availability scenarios, assumptions and dependence disclosures; presentation only")
+    parser.add_argument("--identity-semantics", choices=["legacy.v1", "market_blind_numeric.v2"], default="market_blind_numeric.v2", help="Explicit independently identified execution child; legacy behavior remains available")
+    parser.add_argument("--selection-config", type=Path, help="Frozen research selector configuration; absent config emits unqualified diagnostic NO_PICK")
     parser.add_argument("--output-dir", default="output")
     args = parser.parse_args()
     if args.initial_research_baselines:os.environ['SPORTS_INITIAL_BASELINES']='1'
@@ -476,8 +517,11 @@ def main():
     os.environ['SPORTS_RESEARCH_DRAW_OUTPUT']=str((output/'draws').resolve())
     if args.league == "mlb":
         os.environ["MLB_DRAW_OUTPUT"] = str((output / "draws").resolve())
-    card = generate(args.date, args.league, as_of, args.simulations, args.manual_overrides)
+    card = generate(args.date, args.league, as_of, args.simulations, args.manual_overrides, identity_semantics=args.identity_semantics)
     (output / "diagnostic_card.json").write_text(json.dumps(card, indent=2, sort_keys=True) + "\n")
+    from pipelines.cards.selection_integration import write_card_selection
+    selection_config = json.loads(args.selection_config.read_text()) if args.selection_config else None
+    selection = write_card_selection(output / "diagnostic_card.json", output / "research_selection", config=selection_config)
     from pipelines.cards.disclosures import write_report
     disclosures = write_report(card, output / "disclosures", args.disclosures)
     (output / "diagnostic_card.md").write_text(render_md(card, disclosures))
@@ -502,6 +546,7 @@ def main():
             writer.writerow(csv_row)
 
     print(render_md(card, disclosures))
+    print(json.dumps({"research_selection": selection["decision_counts"], "wagering_status": "OFF"}))
     research_incomplete = bool(disclosures["errors"])
     if args.distribution_research_config:
         from pipelines.cards.distribution_research import build, load_config

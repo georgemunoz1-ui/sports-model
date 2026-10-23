@@ -1,0 +1,19 @@
+{
+  "command": [
+    "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+    "/workspace/scratch/c2f9a66ae580/sports-model-overhaul/scripts/build_operational_rest_candidate.py",
+    "--package",
+    "research/checkpoints/rest_a5_2026_10_23/inputs/package.json",
+    "--history-packet",
+    "research/checkpoints/rest_a5_2026_10_23/inputs/history_packet.json",
+    "--event-id",
+    "NHL:401891827",
+    "--as-of-utc",
+    "2026-09-22T08:52:25.388722+00:00",
+    "--output",
+    "research/checkpoints/rest_a5_2026_10_23/serving/NHL_401891827"
+  ],
+  "returncode": 0,
+  "stderr": "",
+  "stdout": "{\"candidate_artifact_id\": \"f2e13c62214897d04dd729b8bdd9e5181c692856fd0ee463a71211c41c4a2d71\", \"candidate_ready\": false, \"adoption_status\": \"REFIT_AND_CHRONOLOGICAL_EVALUATION_REQUIRED\", \"forecast_generated\": false}\n"
+}

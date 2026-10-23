@@ -60,22 +60,45 @@ jobs:
           git bundle create /tmp/repository-all.bundle --all
           git bundle verify /tmp/repository-all.bundle
           sha256sum /tmp/repository-all.bundle > /tmp/repository-all.bundle.sha256
-      - uses: actions/upload-artifact@v4
+      - name: Archive complete available evidence to Drive and verify downloaded bytes
+        id: drive_archive
         if: always()
+        env:
+          CI_STORAGE_CONFIG_JSON: ${{ vars.CI_STORAGE_CONFIG_JSON }}
+          CI_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+          CI_BASE_SHA: ${{ github.event.pull_request.base.sha }}
+        run: |
+          python scripts/ci_evidence_archive.py \
+            --output-dir "$RUNNER_TEMP/consolidation-archive" \
+            --source "commit.txt=/tmp/commit.txt" \
+            --optional-source "mlb-calibration-acceptance.json=/tmp/mlb-calibration-acceptance.json" \
+            --optional-source "unit-tests.txt=/tmp/unit-tests.txt" \
+            --optional-source "selected-models.json=/tmp/selected-models.json" \
+            --optional-source "sportsim-help.txt=/tmp/sportsim-help.txt" \
+            --optional-source "nfl-help.txt=/tmp/nfl-help.txt" \
+            --optional-source "mlb-help.txt=/tmp/mlb-help.txt" \
+            --optional-source "healthcheck.txt=/tmp/healthcheck.txt" \
+            --optional-source "health-exit-code.txt=/tmp/health-exit-code.txt" \
+            --optional-source "worktree-status.txt=/tmp/worktree-status.txt" \
+            --optional-source "repository-all.bundle=/tmp/repository-all.bundle" \
+            --optional-source "repository-all.bundle.sha256=/tmp/repository-all.bundle.sha256" \
+            --optional-source "refs-before.txt=/tmp/refs-before.txt" \
+            --optional-source "refs-after.txt=/tmp/refs-after.txt"
+      - name: Optional short-retention GitHub copy after verified Drive archive
+        id: github_copy
+        if: ${{ always() && steps.drive_archive.outputs.archive_status == 'VERIFIED' && vars.CI_OPTIONAL_GITHUB_ARTIFACTS == 'true' }}
+        continue-on-error: true
+        uses: actions/upload-artifact@v4
         with:
-          name: consolidation-verification
+          name: consolidation-verification-${{ github.run_id }}-${{ github.run_attempt }}
           compression-level: 9
           if-no-files-found: error
-          path: |
-            /tmp/mlb-calibration-acceptance.json
-            /tmp/unit-tests.txt
-            /tmp/selected-models.json
-            /tmp/*-help.txt
-            /tmp/healthcheck.txt
-            /tmp/health-exit-code.txt
-            /tmp/commit.txt
-            /tmp/worktree-status.txt
-            /tmp/repository-all.bundle
-            /tmp/repository-all.bundle.sha256
-            /tmp/refs-before.txt
-            /tmp/refs-after.txt
+          retention-days: 7
+          path: ${{ runner.temp }}/consolidation-archive/
+      - name: Report archive and optional-copy outcomes separately
+        if: always()
+        env:
+          DRIVE_STATUS: ${{ steps.drive_archive.outputs.archive_status }}
+          GITHUB_COPY_OUTCOME: ${{ steps.github_copy.outcome }}
+        run: |
+          printf '\nDrive archive: %s. Optional GitHub copy: %s.\n' "${DRIVE_STATUS:-NOT_EXECUTED}" "$GITHUB_COPY_OUTCOME" >> "$GITHUB_STEP_SUMMARY"

@@ -295,7 +295,7 @@ def test_shared_runner_emits_disclosures_without_changing_probabilities(tmp_path
     out = tmp_path / league
     p = tmp_path / "packet.json"; p.write_text(json.dumps(packet()))
     monkeypatch.setattr(sys, "argv", ["generate", "--league", league, "--date", "2026-10-20", "--as-of-utc", CUTOFF,
-                                      "--output-dir", str(out), "--disclosures", str(p)])
+                                      "--output-dir", str(out), "--disclosures", str(p), "--identity-semantics", "legacy.v1"])
     with pytest.raises(SystemExit) as exc: runner.main()
     assert exc.value.code == 0
     parent = json.loads((out / "diagnostic_card.json").read_text())
@@ -323,7 +323,7 @@ def test_nfl_separate_runner_emits_bound_disclosure_sidecar(tmp_path, monkeypatc
         (folder / "registration.jsonl").write_text(json.dumps({"created_at_utc": CUTOFF}))
     monkeypatch.setattr(runner, "persist_run", persist)
     out = tmp_path / "nfl"
-    monkeypatch.setattr(sys, "argv", ["run", "--date", "2026-10-20", "--output", str(out)])
+    monkeypatch.setattr(sys, "argv", ["run", "--date", "2026-10-20", "--output", str(out), "--identity-semantics", "legacy.v1"])
     runner.main()
     report = json.loads((out / "event-1/disclosures/disclosures.json").read_text())
     assert report["events"][0]["parent_model_id"] == "parent.v1"

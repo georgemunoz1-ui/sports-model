@@ -250,6 +250,7 @@ jobs:
           if [ "$INITIAL_RESEARCH" = true ]; then args+=(--initial-research-baselines); fi
           set +e
           python scripts/generate_card_force.py \
+            --identity-semantics market_blind_numeric.v2 \
             --date "$CARD_DATE" \
             --league "$LEAGUE" \
             --as-of-utc "$AS_OF_UTC" \

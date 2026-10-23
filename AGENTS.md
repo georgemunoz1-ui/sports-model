@@ -83,3 +83,14 @@ Read `docs/NFL_SPREAD_CALIBRATION.md`. It emits both raw and calibrated research
 probabilities. The historical scoring screen passed, but integer push reliability
 worsened and market superiority is unestablished. Do not call it validated
 spread pricing or apply it to totals, first halves, or other model IDs.
+
+## Parallel research overhaul (user-authorized 2026-10-23 UTC)
+
+For accuracy-first research selection, read
+`docs/research/overhaul_2026_10_23/README.md`. The user authorized parallel agent
+validation and building across sports; historical one-unit/single-sport queue
+rules do not prohibit this research. New selection, registry and evaluation
+entrypoints preserve raw forecasts and remain SHADOW. Price diagnostics follow
+selection. This changes no legacy wagering objective, default, ledger or go-live
+authority. Publication blocks must not suppress independent research whose own
+data contract is satisfied.

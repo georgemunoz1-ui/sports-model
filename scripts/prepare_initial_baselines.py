@@ -47,12 +47,18 @@ def load_season_scope(path):
     return load_scope(path)
 
 
-def histories(root,league,season_scope=None,cutoff=None):
+def histories(root,league,season_scope=None,cutoff=None,nba_acquisition_scope=None):
     report=json.loads((root/'report.json').read_text());games={};copies=collections.Counter();receipts=[]
-    seasons=range(2021,2027) if season_scope is None else range(season_scope['first_provider_season'],season_scope['last_provider_season']+1)
+    if season_scope is not None and nba_acquisition_scope is not None:raise ValueError('ONE_ACQUISITION_SCOPE_REQUIRED')
+    active_scope=season_scope or nba_acquisition_scope
+    seasons=range(2021,2027) if active_scope is None else range(active_scope['first_provider_season'],active_scope['last_provider_season']+1)
     if season_scope is not None and season_scope['league']!=league:raise ValueError('SEASON_SCOPE_LEAGUE')
     requested_seasons=collections.Counter()
     sources=report['sources']
+    if nba_acquisition_scope is not None:
+        if league!='nba' or cutoff is None:raise ValueError('NBA_SCOPE_AND_CUTOFF_REQUIRED')
+        from scripts.nba_history_scope import history_sources
+        sources=history_sources(root,report,nba_acquisition_scope,cutoff)
     if season_scope is not None:
         from scripts.nhl_history_applicability import history_sources
         sources=history_sources(root,report,season_scope,cutoff)
@@ -64,7 +70,7 @@ def histories(root,league,season_scope=None,cutoff=None):
         requested=int(parse_qs(urlparse(rec['url']).query)['season'][0])
         requested_seasons[requested]+=1
         if requested not in seasons:raise ValueError('REQUESTED_SEASON_OUT_OF_SCOPE')
-        if season_scope is not None:
+        if active_scope is not None:
             if hashlib.sha256((root/rec['raw_path']).read_bytes()).hexdigest()!=rec['raw_sha256']:raise ValueError('SOURCE_RAW_DIGEST_MISMATCH')
             if str(parse_qs(urlparse(rec['url']).query).get('seasontype',[''])[0])!='2':raise ValueError('REGULAR_SEASON_SOURCE_REQUIRED')
         for e in j.get('events',[]):
@@ -77,7 +83,7 @@ def histories(root,league,season_scope=None,cutoff=None):
             if key in games and games[key]!=r:raise ValueError('PROVIDER_ID_REVISION:'+key)
             games[key]=r
     if len(receipts)<180:raise ValueError('TEAM_SEASON_SOURCE_COVERAGE')
-    if season_scope is not None and set(requested_seasons)!=set(seasons):raise ValueError('SEASON_SOURCE_COVERAGE')
+    if active_scope is not None and set(requested_seasons)!=set(seasons):raise ValueError('SEASON_SOURCE_COVERAGE')
     return sorted(games.values(),key=lambda r:(r['start_time_utc'],r['event_id'])),receipts,dict(collections.Counter(copies.values()))
 
 
@@ -95,6 +101,30 @@ def causal_rows(games,prior,cutoff):
     for r in pending:
         if utc(r['start_time_utc'])<boundary:update(state,r);used.append(r['event_id'])
     return rows,state,used
+
+
+def operational_rest_training_example(state,event,prior,records,*,cutoff_utc,coverage=(),max_capture_age_hours=6):
+    """Build one separately identified training vector from a pre-event snapshot.
+
+    This candidate adapter is not selected by causal_rows/prepare's legacy path.
+    It consumes no current-event target and reads no state.last/rest proxy. Each
+    training example needs its own historically available all-game capture; a
+    present-day final snapshot is not silently reused at an earlier cutoff.
+    A5 hand-computed vectors test this adapter independently of serving parity.
+    """
+    from models.current.freshness import candidate_form_features, operational_rest, REST_SEMANTICS
+    form=candidate_form_features(state,event,prior)
+    receipt=operational_rest(event,records,cutoff_utc=cutoff_utc,coverage=coverage,max_capture_age_hours=max_capture_age_hours)
+    ready=all(row['status']=='KNOWN' for row in receipt['per_side'].values())
+    if ready:
+        values=dict(form)
+        values['home_rest']=receipt['per_side']['home']['candidate_feature_value']
+        values['away_rest']=receipt['per_side']['away']['candidate_feature_value']
+        features={name:values[name] for name in FEATURES}
+    else:features=None
+    return {'adapter_id':'initial_causal_score.operational_rest.training.v1',
+            'feature_semantics_id':REST_SEMANTICS,'candidate_ready':ready,'features':features,
+            'rest_receipt':receipt,'proxy_columns_used':[],'action_authority':False}
 
 
 def fit(rows,league):
@@ -160,17 +190,27 @@ def preparation_cutoff(as_of_utc=None):
     return cutoff
 
 
-def prepare(history,current,output,*,leagues=None,season_scope_path=None,as_of_utc=None):
+def prepare(history,current,output,*,leagues=None,season_scope_path=None,as_of_utc=None,nba_acquisition_scope_path=None):
     season_scope=load_season_scope(season_scope_path)
     selected=list(IDS) if leagues is None else list(leagues)
     if not selected or any(l not in IDS for l in selected):raise ValueError('INITIAL_BASELINE_LEAGUE')
     if season_scope is not None and selected!=[season_scope['league']]:raise ValueError('SEASON_SCOPE_EXPLICIT_LEAGUE_REQUIRED')
+    nba_scope=None
+    if nba_acquisition_scope_path is not None:
+        if season_scope is not None or selected!=['nba']:raise ValueError('NBA_ACQUISITION_EXPLICIT_LEAGUE_REQUIRED')
+        from scripts.nba_history_scope import load_scope as load_nba_scope
+        nba_scope=load_nba_scope(nba_acquisition_scope_path)
     manifest(history,'manifest.json');manifest(current,'manifest.json');now=preparation_cutoff(as_of_utc);stamp=now.isoformat();current_events=json.loads((current/'events.json').read_text());reports={}
     cr=json.loads((current/'report.json').read_text())
     for league in selected:
         if season_scope is not None:verify_current_sources(current,league,cr,current_events[league],now)
-        games,receipts,copies=histories(history,league,season_scope,now)
-        if season_scope is not None:
+        if nba_scope is not None:
+            from scripts.nba_history_scope import current_season,verify_current_events
+            observed_season,_=current_season(current,now)
+            if observed_season!=nba_scope['last_provider_season']:raise ValueError('NBA_CURRENT_HISTORY_SEASON_GAP')
+            verify_current_events(current,current_events[league],now)
+        games,receipts,copies=histories(history,league,season_scope,now,nba_scope)
+        if season_scope is not None or nba_scope is not None:
             for source in receipts+[r for r in cr['sources'] if r['league']==league and r['kind']=='schedule']:
                 age=(now-utc(source['retrieved_at_utc'])).total_seconds()
                 if not 0<=age<=6*3600:raise ValueError('SOURCE_NOT_AVAILABLE_AND_CURRENT_AT_CUTOFF')
@@ -187,6 +227,7 @@ def prepare(history,current,output,*,leagues=None,season_scope_path=None,as_of_u
             e=rec['event'];r=parse(e,league)
             if not r:excluded['outside_regular_season']+=1;continue
             if season_scope is not None and r['season']!=season_scope['last_provider_season']:raise ValueError('CURRENT_PROVIDER_SEASON_MISMATCH')
+            if nba_scope is not None and r['season']!=nba_scope['last_provider_season']:raise ValueError('NBA_CURRENT_PROVIDER_SEASON_MISMATCH')
             if r['final']:
                 old=historic_by_id.get(r['event_id'])
                 if old!=r:raise ValueError('CURRENT_HISTORY_RECONCILIATION:'+r['event_id'])
@@ -210,8 +251,14 @@ def prepare(history,current,output,*,leagues=None,season_scope_path=None,as_of_u
             pkg['model_lineage']['current_manifest_sha256']=hashlib.sha256((current/'manifest.json').read_bytes()).hexdigest()
             from models.current.common import current as assert_current
             assert_current(pkg,stamp)
+        if nba_scope is not None:
+            pkg['model_lineage']['nba_acquisition_scope']=nba_scope
+            pkg['model_lineage']['preparation_code_sha256']=hashlib.sha256(Path(__file__).read_bytes()).hexdigest()
+            pkg['model_lineage']['history_manifest_sha256']=hashlib.sha256((history/'manifest.json').read_bytes()).hexdigest()
+            pkg['model_lineage']['current_manifest_sha256']=hashlib.sha256((current/'manifest.json').read_bytes()).hexdigest()
+            pkg['limitations'].append('NBA_ACQUISITION_REPAIRED_EXPLICIT_RESEARCH_REFIT_NOT_PROMOTED')
         save(output/league/'package.json',pkg);reports[league]={'events':len(events),'seasons':ev['season_counts'],'validation':ev['validation_2025']['brier'],'audit':ev['later_audit_2026']['brier']};print(json.dumps({league:reports[league]}),flush=True)
     return reports
 
 if __name__=='__main__':
-    p=argparse.ArgumentParser();p.add_argument('--history',type=Path,required=True);p.add_argument('--current',type=Path,required=True);p.add_argument('--output',type=Path,required=True);p.add_argument('--league',choices=tuple(IDS),action='append');p.add_argument('--season-scope',type=Path);p.add_argument('--as-of-utc');a=p.parse_args();prepare(a.history,a.current,a.output,leagues=a.league,season_scope_path=a.season_scope,as_of_utc=a.as_of_utc)
+    p=argparse.ArgumentParser();p.add_argument('--history',type=Path,required=True);p.add_argument('--current',type=Path,required=True);p.add_argument('--output',type=Path,required=True);p.add_argument('--league',choices=tuple(IDS),action='append');p.add_argument('--season-scope',type=Path);p.add_argument('--as-of-utc');p.add_argument('--nba-acquisition-scope',type=Path);a=p.parse_args();prepare(a.history,a.current,a.output,leagues=a.league,season_scope_path=a.season_scope,as_of_utc=a.as_of_utc,nba_acquisition_scope_path=a.nba_acquisition_scope)

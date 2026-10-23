@@ -1,0 +1,43 @@
+name: Visible repository artifact storage monitor
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'scripts/ci_storage_monitor.py'
+      - 'scripts/ci_evidence_archive.py'
+      - 'tests/test_ci_storage_monitor.py'
+      - 'tests/test_ci_storage_archive.py'
+      - '.github/workflows/storage-monitor.yml'
+# No schedule or notification action is enabled without operator configuration.
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: repository-visible-artifact-storage-state
+  cancel-in-progress: false
+jobs:
+  observe:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Inventory every visible repository artifact page
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh api --paginate --slurp "repos/$GITHUB_REPOSITORY/actions/artifacts?per_page=100" > "$RUNNER_TEMP/storage-inventory.json"
+      - name: Persist explicit threshold transition if configured
+        env:
+          CI_STORAGE_CONFIG_JSON: ${{ vars.CI_STORAGE_CONFIG_JSON }}
+          CI_STORAGE_MONITOR_CONFIG_JSON: ${{ vars.CI_STORAGE_MONITOR_CONFIG_JSON }}
+        run: |
+          python scripts/ci_storage_monitor.py \
+            --inventory "$RUNNER_TEMP/storage-inventory.json" \
+            --repository "$GITHUB_REPOSITORY" \
+            --output "$RUNNER_TEMP/storage-monitor-report.json"
+      - name: Scope and notification disclosure
+        if: always()
+        run: |
+          echo 'This measures visible live artifacts in this repository, not account billing or available quota. No threshold is assumed. Notifications are disabled and no artifacts are deleted.' >> "$GITHUB_STEP_SUMMARY"

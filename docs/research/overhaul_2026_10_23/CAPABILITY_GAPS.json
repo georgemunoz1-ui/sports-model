@@ -1,0 +1,336 @@
+{
+  "action_authority": false,
+  "all_gaps_closed": false,
+  "audit_date": "2026-10-23",
+  "evidence_scope": "SOURCE_AND_OPEN_PR_REVIEW_NO_NEW_MODEL_FITS",
+  "gaps": [
+    {
+      "action_authority": false,
+      "automatic_promotion": false,
+      "closure_criteria": "Separate source retrieval, fitted-through, team-state-through and latest eligible completed schedule event. Historical B2B fixture repairs affected rest only; old outcomes stay embargoed; stale state still disclosed.",
+      "dependencies": [],
+      "gap_and_paths": "State and rest clocks conflated: `scripts/prepare_initial_baselines.py`, `models/current/baseline.py`, `models/current/common.py`.",
+      "gap_id": "CAP-01",
+      "owner_suggestion": "data integrity",
+      "priority": "P0",
+      "research_may_continue": true,
+      "status": "OPEN_AT_PINNED_MAIN_AUDIT"
+    },
+    {
+      "action_authority": false,
+      "automatic_promotion": false,
+      "closure_criteria": "Numeric feature/model seed identity excludes market and display metadata; full provenance still retained. Perturb prices/metadata across all selected paths; draw bytes and forecasts unchanged. Genuine consumed feature changes get new identity.",
+      "dependencies": [],
+      "gap_and_paths": "Market metadata affects stochastic identity: `models/current/common.py:emit`, `models/current/baseline.py:forecast`, `models/current/mlb.py:forecast`; PR74.",
+      "gap_id": "CAP-02",
+      "implementation_addendum": {
+        "focused_tests_passed": 83,
+        "predictive_validation": "NOT_ASSESSED",
+        "receipt": "MI002_REPRODUCTION_r5.json",
+        "receipt_sha256": "43d8839c813a613947c67ab2111b246eca164bb9aec0b9b5341086c12f00c7ee",
+        "report": "MI002_REPAIR.md",
+        "status": "VERSIONED_V2_FIXED_STATE_PATHS_REPAIRED_LEGACY_REPLAY_UNCHANGED"
+      },
+      "owner_suggestion": "inference provenance",
+      "priority": "P0",
+      "research_may_continue": true,
+      "status": "OPEN_AT_PINNED_MAIN_AUDIT"
+    },
+    {
+      "action_authority": false,
+      "automatic_promotion": false,
+      "closure_criteria": "Frozen exact-target protocols, signer separation, lineage/trial exposure retention, disjoint chronology, dependable uncertainty and no automatic ACTIVE. Point/interval evidence cannot certify a cover/winner event.",
+      "dependencies": [],
+      "gap_and_paths": "No single enforced target/population validation registry tied to selector; PR52 overclaims from existence.",
+      "gap_id": "CAP-03",
+      "owner_suggestion": "evaluation",
+      "priority": "P0",
+      "research_may_continue": true,
+      "status": "OPEN_AT_PINNED_MAIN_AUDIT"
+    },
+    {
+      "action_authority": false,
+      "automatic_promotion": false,
+      "closure_criteria": "Immutable original receipts, exact provider ID/side/settlement, final-only, duplicate/version tests, append-only corrections, no rejected-pick wins.",
+      "dependencies": [],
+      "gap_and_paths": "Label alias/side mismatch and card-version aggregation: `scripts/grade_research_board.py`; PR75.",
+      "gap_id": "CAP-04",
+      "owner_suggestion": "grading",
+      "priority": "P0",
+      "research_may_continue": true,
+      "status": "OPEN_AT_PINNED_MAIN_AUDIT"
+    },
+    {
+      "action_authority": false,
+      "automatic_promotion": false,
+      "closure_criteria": "Shadow selector separate from model default registry. Raw values retained; unsupported validation gives null selection probability/NO_PICK. Prices cannot enter selection; population denominator, blocked rate and same-selected controls reported.",
+      "dependencies": [
+        "CAP-03"
+      ],
+      "gap_and_paths": "Raw, selectable, price and display confidence conflated; `pipelines/cards/disclosures.py`, `selected.py`, `selection.py`.",
+      "gap_id": "CAP-05",
+      "owner_suggestion": "card integration",
+      "priority": "P0",
+      "research_may_continue": true,
+      "status": "OPEN_AT_PINNED_MAIN_AUDIT"
+    },
+    {
+      "action_authority": false,
+      "automatic_promotion": false,
+      "closure_criteria": "Extend existing NFL approach per target; fitted transform/state and actual contribution or explicit zero/exclusion; captured status cannot imply use. Parent refresh creates a new forecast ID.",
+      "dependencies": [
+        "CAP-01",
+        "CAP-02"
+      ],
+      "gap_and_paths": "All-sport numerical-use proof absent; `models/nfl/contextual/capabilities.py`, `pipelines/cards/disclosures.py`; PR71/74.",
+      "gap_id": "CAP-06",
+      "owner_suggestion": "execution receipts",
+      "priority": "P0",
+      "research_may_continue": true,
+      "status": "OPEN_AT_PINNED_MAIN_AUDIT"
+    },
+    {
+      "action_authority": false,
+      "automatic_promotion": false,
+      "closure_criteria": "Historical player IDs, minutes sums, point-in-time availability and possession data; fit regularized player model and minutes challenger; chronological same-event paired loss, conditional opening-week calibration/coverage; freeze control.",
+      "dependencies": [
+        "CAP-01",
+        "CAP-03",
+        "CAP-06"
+      ],
+      "gap_and_paths": "Player/minutes/churn and early-season state: `models/current/baseline.py`, `models/nba/efficiency_monte_carlo_shadow_v1_1.py`.",
+      "gap_id": "CAP-07",
+      "owner_suggestion": "NBA modeling",
+      "priority": "P1",
+      "research_may_continue": true,
+      "status": "OPEN_AT_PINNED_MAIN_AUDIT"
+    },
+    {
+      "action_authority": false,
+      "automatic_promotion": false,
+      "closure_criteria": "Repair rest first; source starter identity/uncertainty; fit EB goalie and workload model; common-random-number contribution tests, time-clean heldout winner/margin/total endpoints. Named road-favorite review flag never auto-fades.",
+      "dependencies": [
+        "CAP-01",
+        "CAP-03",
+        "CAP-06"
+      ],
+      "gap_and_paths": "Goalies/rest and missing goalie state: `models/current/baseline.py`, `research/news_information/league_transforms.py`.",
+      "gap_id": "CAP-08",
+      "owner_suggestion": "NHL modeling",
+      "priority": "P1",
+      "research_may_continue": true,
+      "status": "OPEN_AT_PINNED_MAIN_AUDIT"
+    },
+    {
+      "action_authority": false,
+      "automatic_promotion": false,
+      "closure_criteria": "Deduplicate player changes, distinguish replacement/workload from prior-snap proxy; compare base/QB/availability/combined on same events with timestamp qualification. Failed availability arm remains evidence, not permanent ban.",
+      "dependencies": [
+        "CAP-03",
+        "CAP-06"
+      ],
+      "gap_and_paths": "Selected QB excludes non-QB availability; `models/nfl/contextual/features.py`, `model.py`, `personnel.py`.",
+      "gap_id": "CAP-09",
+      "owner_suggestion": "NFL modeling",
+      "priority": "P1",
+      "research_may_continue": true,
+      "status": "OPEN_AT_PINNED_MAIN_AUDIT"
+    },
+    {
+      "action_authority": false,
+      "automatic_promotion": false,
+      "closure_criteria": "Fit causal strength adjustment and shrinkage challenger, subdivision universe fixed; model total explicitly; recover label-availability chronology. Current GoP comparison is external benchmark, not predictive feature import.",
+      "dependencies": [
+        "CAP-03",
+        "CAP-06"
+      ],
+      "gap_and_paths": "Opponent-adjusted efficiency/churn and selected total gap: `models/current/cfb.py`, `harness/cfb_v1_port.py`; PR53.",
+      "gap_id": "CAP-10",
+      "owner_suggestion": "CFB modeling",
+      "priority": "P1",
+      "research_may_continue": true,
+      "status": "OPEN_AT_PINNED_MAIN_AUDIT"
+    },
+    {
+      "action_authority": false,
+      "automatic_promotion": false,
+      "closure_criteria": "One distribution ID per procedure; selected-side sign, mean/push/tail conservation, exact key-mass constraints, integer/half/quarter settlement tests. Fit exact-parent pools; heldout exact-line scoring with push basis declared.",
+      "dependencies": [
+        "CAP-02",
+        "CAP-03",
+        "CAP-04"
+      ],
+      "gap_and_paths": "Competing margin APIs and push calibration: `models/common/discrete_research.py`, `models/nfl/contextual/spread_calibration.py`; PR69/70/73.",
+      "gap_id": "CAP-11",
+      "owner_suggestion": "distribution integration",
+      "priority": "P1",
+      "research_may_continue": true,
+      "status": "OPEN_AT_PINNED_MAIN_AUDIT"
+    },
+    {
+      "action_authority": false,
+      "automatic_promotion": false,
+      "closure_criteria": "Preserve regulation/final scopes; explicit dependent final-score paths, scoring rules and goalie-pull effects; calibrate frequency and tails without adding OT twice. Test winner/margin/total coherence.",
+      "dependencies": [
+        "CAP-08",
+        "CAP-11"
+      ],
+      "gap_and_paths": "Mechanistic OT/SO/empty-net absent; NBA shadow tie repair is coin plus one point.",
+      "gap_id": "CAP-12",
+      "owner_suggestion": "hockey/basketball distribution",
+      "priority": "P1",
+      "research_may_continue": true,
+      "status": "OPEN_AT_PINNED_MAIN_AUDIT"
+    },
+    {
+      "action_authority": false,
+      "automatic_promotion": false,
+      "closure_criteria": "Separate predictive residual, parameter, missing-context and MC error. Fit/test context-conditional widths and conformal challenger; report interval and event calibration separately. No universal manual widening rule or forecast-dispersion-as-SE.",
+      "dependencies": [
+        "CAP-01",
+        "CAP-03",
+        "CAP-07",
+        "CAP-08"
+      ],
+      "gap_and_paths": "Parameter/state uncertainty missing; `models/current/baseline.py`, `models/common/discrete_research.py`, `harness/empirical_uncertainty.py`.",
+      "gap_id": "CAP-13",
+      "owner_suggestion": "uncertainty",
+      "priority": "P1",
+      "research_may_continue": true,
+      "status": "OPEN_AT_PINNED_MAIN_AUDIT"
+    },
+    {
+      "action_authority": false,
+      "automatic_promotion": false,
+      "closure_criteria": "Reuse paired/block bootstrap and Holm components; count inspected variants, minimum useful effect, paired variance and dependence; exact prospective protocol and non-leaking rollback policy. No sample-size floor masquerades as power.",
+      "dependencies": [
+        "CAP-03",
+        "CAP-04",
+        "CAP-05"
+      ],
+      "gap_and_paths": "Trial accounting, power, selection coverage and drift integration incomplete; `research/evaluate_discrete_products.py`, `evaluate_frozen_forecasts.py`, `harness/wnba_model_v1.py`.",
+      "gap_id": "CAP-14",
+      "owner_suggestion": "evaluation science",
+      "priority": "P1",
+      "research_may_continue": true,
+      "status": "OPEN_AT_PINNED_MAIN_AUDIT"
+    },
+    {
+      "action_authority": false,
+      "automatic_promotion": false,
+      "closure_criteria": "Distinct postseason scope, source player roles; challenger fit and population-specific validation. Preserve existing regular-season winner and point-target evidence.",
+      "dependencies": [
+        "CAP-03",
+        "CAP-06"
+      ],
+      "gap_and_paths": "Availability/minutes/postseason scope; `models/current/wnba.py`, `harness/wnba_model_v1.py`.",
+      "gap_id": "CAP-15",
+      "owner_suggestion": "WNBA modeling",
+      "priority": "P2",
+      "research_may_continue": true,
+      "status": "OPEN_AT_PINNED_MAIN_AUDIT"
+    },
+    {
+      "action_authority": false,
+      "automatic_promotion": false,
+      "closure_criteria": "PIT roles/workload with explicit opener/bulk treatment; actual relief availability; coherent final runs and joint settlement; compare frozen V13 per target on heldout chronology. Never call a tie proxy certified final run-line law.",
+      "dependencies": [
+        "CAP-03",
+        "CAP-06",
+        "CAP-11"
+      ],
+      "gap_and_paths": "Starter/opener workload, bullpen/TTO/lineup and extras coherence; `harness/run_v13_historical.py`, `models/mlb/monte_carlo_v1.py`.",
+      "gap_id": "CAP-16",
+      "owner_suggestion": "MLB modeling",
+      "priority": "P2",
+      "research_may_continue": true,
+      "status": "OPEN_AT_PINNED_MAIN_AUDIT"
+    },
+    {
+      "action_authority": false,
+      "automatic_promotion": false,
+      "closure_criteria": "Fit correlated/Dixon-Coles challenger with parameter uncertainty and full 1X2/simplex/quarter-settlement checks; heldout proper scores and draw calibration.",
+      "dependencies": [
+        "CAP-03",
+        "CAP-06",
+        "CAP-11"
+      ],
+      "gap_and_paths": "Low-score dependence and XI/GK/congestion; `models/current/baseline.py`, `research/adapters/mls.py`.",
+      "gap_id": "CAP-17",
+      "owner_suggestion": "MLS modeling",
+      "priority": "P2",
+      "research_may_continue": true,
+      "status": "OPEN_AT_PINNED_MAIN_AUDIT"
+    },
+    {
+      "action_authority": false,
+      "automatic_promotion": false,
+      "closure_criteria": "Capture bytes/version/time/target/venue/license; separate benchmark and model fields; certify market-information policy. A single simulated score or in-game displayed probability is not a pregame ensemble forecast.",
+      "dependencies": [
+        "CAP-02",
+        "CAP-06"
+      ],
+      "gap_and_paths": "External benchmark ownership/provenance incomplete; news archive and adapters, PR74.",
+      "gap_id": "CAP-18",
+      "owner_suggestion": "benchmark governance",
+      "priority": "P1",
+      "research_may_continue": true,
+      "status": "OPEN_AT_PINNED_MAIN_AUDIT"
+    },
+    {
+      "action_authority": false,
+      "automatic_promotion": false,
+      "closure_criteria": "Reproduce exact code/data manifest, archive outputs before deletion, resolve source obligations, distinguish unit CI from artifact acceptance; review/merge compatible PRs in dependency order without fabricating green health.",
+      "dependencies": [],
+      "gap_and_paths": "Durable artifact/health/source recovery and PR overlap; `.github/workflows/*`, `docs/progress.md`, `state.json`.",
+      "gap_id": "CAP-19",
+      "owner_suggestion": "release engineering",
+      "priority": "P0",
+      "research_may_continue": true,
+      "status": "OPEN_AT_PINNED_MAIN_AUDIT"
+    },
+    {
+      "action_authority": false,
+      "automatic_promotion": false,
+      "closure_criteria": "Apply current user authorization/later all-sports research authority; add explicit per-rule purpose, evidence, cost and removal test. Keep publication/wagering blocks scoped; parallel preregistered research continues.",
+      "dependencies": [
+        "CAP-03"
+      ],
+      "gap_and_paths": "Stale global research queue restrictions and hard-coded caps can suppress development.",
+      "gap_id": "CAP-20",
+      "owner_suggestion": "governance",
+      "priority": "P1",
+      "research_may_continue": true,
+      "status": "OPEN_AT_PINNED_MAIN_AUDIT"
+    }
+  ],
+  "models_retrained_this_audit": 0,
+  "open_pr_heads": {
+    "52": "a4cf09eefb41278ff800ee4e5bbb540554a17994",
+    "53": "982c5f10981962c5fb56bbc1f7dfef5687c50e64",
+    "68": "b812e5701767daefc2f0367ee5926b1c66bb546e",
+    "69": "79b92e2fd7e0e16ca2bcb2ee8c6c137f20a0fb27",
+    "70": "37cfcf048a8f1ff6860ad49b8098160b07646364",
+    "71": "8ad6d19d871e9e25397ac6db8b7d4e1e455c4f19",
+    "73": "d64924730197c693d511c5227d80bad33921dd47",
+    "74": "d5ab18213253fb2c903a943f06d499fe547afc7d",
+    "75": "43a331e15ddb46cb4cdbae27866f85f21c315ba6"
+  },
+  "report_path": "docs/research/overhaul_2026_10_23/CAPABILITY_GAPS.md",
+  "report_sha256": "b66239c2d219575b19ea5a292dd3fa82e4b06ce766cee0b103a3e2e449c19d65",
+  "schema": "sports.capability_gap_audit.v1",
+  "source_commit": "90daf8e0036c67a5304aa0747bf50b2266e0b364",
+  "source_repo": "georgemunoz1-ui/sports-model",
+  "stage_axes": [
+    "implemented",
+    "fitted",
+    "evaluated",
+    "registered",
+    "active_in_event"
+  ],
+  "warnings": [
+    "Source stage and selection status are distinct from predictive qualification.",
+    "Open PR bodies report test and evaluation outcomes; this audit did not rerun those branch-specific checks.",
+    "A newly written repair in this overhaul does not change this pinned-main audit status; closure requires its own receipt."
+  ]
+}

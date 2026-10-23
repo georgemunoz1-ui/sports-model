@@ -19,7 +19,10 @@ jobs:
           python-version: '3.12'
       - run: pip install numpy==2.3.5 pandas==2.2.3 scipy==1.17.0 scikit-learn==1.8.0
       - name: NFL regressions including canonical CLI and duplicate writers
-        run: python -m unittest discover -s tests -p 'test_nfl*.py' -v > nfl-tests.txt 2>&1
+        shell: bash
+        run: |
+          set -o pipefail
+          python -m unittest discover -s tests -p 'test_nfl*.py' -v 2>&1 | tee nfl-tests.txt
       - name: Download pinned evidence only
         env:
           GH_TOKEN: ${{ github.token }}
@@ -31,13 +34,42 @@ jobs:
           unzip -q frozen.zip -d frozen
           unzip -q captured.zip -d captured
       - name: Real source replay; do not install state
-        run: python scripts/verify_nfl_weekly_sources.py --frozen frozen --capture captured --output acceptance > real-source-tests.txt 2>&1
-      - uses: actions/upload-artifact@v4
+        shell: bash
+        run: |
+          set -o pipefail
+          python scripts/verify_nfl_weekly_sources.py --frozen frozen --capture captured --output acceptance 2>&1 | tee real-source-tests.txt
+          cat acceptance/acceptance.json
+      - name: Record archive run identity
         if: always()
+        run: git rev-parse HEAD > "$RUNNER_TEMP/weekly-commit.txt"
+      - name: Archive evidence to Drive and verify downloaded bytes
+        id: drive_archive
+        if: always()
+        env:
+          CI_STORAGE_CONFIG_JSON: ${{ vars.CI_STORAGE_CONFIG_JSON }}
+          CI_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+          CI_BASE_SHA: ${{ github.event.pull_request.base.sha }}
+        run: |
+          python scripts/ci_evidence_archive.py \
+            --output-dir "$RUNNER_TEMP/weekly-state-archive" \
+            --source "commit.txt=$RUNNER_TEMP/weekly-commit.txt" \
+            --optional-source "nfl-tests.txt=nfl-tests.txt" \
+            --optional-source "real-source-tests.txt=real-source-tests.txt" \
+            --optional-source "acceptance.json=acceptance/acceptance.json"
+      - name: Optional short-retention GitHub copy after verified Drive archive
+        id: github_copy
+        if: ${{ always() && steps.drive_archive.outputs.archive_status == 'VERIFIED' && vars.CI_OPTIONAL_GITHUB_ARTIFACTS == 'true' }}
+        continue-on-error: true
+        uses: actions/upload-artifact@v4
         with:
-          name: weekly-state-acceptance-${{ github.run_id }}
-          path: |
-            nfl-tests.txt
-            real-source-tests.txt
-            acceptance/acceptance.json
-          retention-days: 90
+          name: weekly-state-acceptance-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/weekly-state-archive/
+          retention-days: 7
+          if-no-files-found: error
+      - name: Report archive and optional-copy outcomes separately
+        if: always()
+        env:
+          DRIVE_STATUS: ${{ steps.drive_archive.outputs.archive_status }}
+          GITHUB_COPY_OUTCOME: ${{ steps.github_copy.outcome }}
+        run: |
+          printf '\nDrive archive: %s. Optional GitHub copy: %s.\n' "${DRIVE_STATUS:-NOT_EXECUTED}" "$GITHUB_COPY_OUTCOME" >> "$GITHUB_STEP_SUMMARY"

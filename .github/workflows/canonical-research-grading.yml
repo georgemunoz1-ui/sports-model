@@ -5,6 +5,8 @@ on:
     paths:
       - 'scripts/canonical_forecasts.py'
       - 'scripts/canonical_results.py'
+      - 'scripts/canonical_grading_preflight.py'
+      - 'tests/test_canonical_grading_preflight.py'
       - 'pipelines/cards/selection_integration.py'
       - '.github/workflows/canonical-research-grading.yml'
   workflow_dispatch:
@@ -25,17 +27,34 @@ jobs:
         with:
           python-version: "3.11"
       - run: pip install -r requirements.txt
+      - name: Check prospective registration readiness
+        id: preflight
+        continue-on-error: true
+        run: |
+          python scripts/canonical_grading_preflight.py \
+            --report "data/grading/canonical/operations/preflight-$GITHUB_RUN_ID-$GITHUB_RUN_ATTEMPT.json" \
+            --github-output "$GITHUB_OUTPUT"
       - name: Acquire explicit final evidence for registered forecasts
         id: acquire
         continue-on-error: true
+        if: ${{ steps.preflight.outputs.state == 'READY_TO_ACQUIRE' }}
         run: |
           python scripts/canonical_results.py \
             --registry data/grading/canonical/registry.json \
             --output "data/grading/canonical/results/$GITHUB_RUN_ID-$GITHUB_RUN_ATTEMPT"
+      - name: Check only this attempt's acquired results
+        id: current_results
+        continue-on-error: true
+        if: ${{ always() && steps.preflight.outputs.state == 'READY_TO_ACQUIRE' }}
+        run: |
+          python scripts/canonical_grading_preflight.py \
+            --check-current-results "$GITHUB_RUN_ID" "$GITHUB_RUN_ATTEMPT" \
+            --report "data/grading/canonical/operations/results-$GITHUB_RUN_ID-$GITHUB_RUN_ATTEMPT.json" \
+            --github-output "$GITHUB_OUTPUT"
       - name: Grade immutable prospective forecasts and registered selection sidecars
         id: grade
         continue-on-error: true
-        if: ${{ always() && hashFiles('data/grading/canonical/results/**/results.json') != '' }}
+        if: ${{ always() && steps.current_results.outputs.state == 'CURRENT_ATTEMPT_RESULTS_READY' }}
         run: |
           python scripts/canonical_forecasts.py grade \
             --results "data/grading/canonical/results/$GITHUB_RUN_ID-$GITHUB_RUN_ATTEMPT/results.json" \
@@ -60,9 +79,9 @@ jobs:
           echo 'Source-unverified research cohort; certified calibration and wagering remain OFF.' >> "$GITHUB_STEP_SUMMARY"
           echo 'Registered selection sidecars are settled separately; NO_PICK never earns an abstention win. Historical cards are not retro-registered.' >> "$GITHUB_STEP_SUMMARY"
           if [ -f data/grading/canonical/summary.json ]; then cat data/grading/canonical/summary.json >> "$GITHUB_STEP_SUMMARY"; fi
-          for report in "data/grading/canonical/attempts/grade-$GITHUB_RUN_ID-$GITHUB_RUN_ATTEMPT.json" "data/grading/canonical/results/$GITHUB_RUN_ID-$GITHUB_RUN_ATTEMPT/report.json"; do
+          for report in "data/grading/canonical/operations/preflight-$GITHUB_RUN_ID-$GITHUB_RUN_ATTEMPT.json" "data/grading/canonical/operations/results-$GITHUB_RUN_ID-$GITHUB_RUN_ATTEMPT.json" "data/grading/canonical/attempts/grade-$GITHUB_RUN_ID-$GITHUB_RUN_ATTEMPT.json" "data/grading/canonical/results/$GITHUB_RUN_ID-$GITHUB_RUN_ATTEMPT/report.json"; do
             if [ -f "$report" ]; then cat "$report" >> "$GITHUB_STEP_SUMMARY"; fi
           done
       - name: Fail incomplete acquisition or rejected grades
-        if: ${{ steps.acquire.outcome == 'failure' || steps.grade.outcome == 'failure' || steps.grade.outcome == 'skipped' }}
+        if: ${{ steps.preflight.outcome == 'failure' || steps.acquire.outcome == 'failure' || steps.current_results.outcome == 'failure' || steps.grade.outcome == 'failure' || (steps.preflight.outputs.state == 'READY_TO_ACQUIRE' && steps.grade.outcome == 'skipped') }}
         run: exit 1

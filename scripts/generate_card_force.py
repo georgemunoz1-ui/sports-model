@@ -293,6 +293,33 @@ def attach_grading(card):
     return card
 
 
+def attach_state_receipt(raw, event, context, league):
+    """Add an input trace after forecasting without editing pinned model code."""
+    import copy
+    result = copy.deepcopy(raw)
+    package = context.get("package")
+    if league.lower() not in {"nba", "nhl", "mls"} or not isinstance(package, dict):
+        return result
+    from models.current.baseline import IDS
+    if result.get("model_id") != IDS.get(league.lower()):
+        return result
+    from models.current.freshness import state_freshness_receipt
+    diagnostic = result.setdefault("diagnostics", {})
+    try:
+        if package.get("model_id") != result["model_id"]:
+            raise ValueError("RECEIPT_MODEL_IDENTITY_MISMATCH")
+        receipt = state_freshness_receipt(package, event, result["model_input_snapshot"],
+                                          cutoff_utc=context["cutoff"])
+        if (receipt["input_snapshot_hash"] != result.get("input_snapshot_hash") or
+                receipt["model_state_config_hash"] != result.get("model_state_config_hash")):
+            raise ValueError("RECEIPT_PARENT_HASH_MISMATCH")
+        diagnostic["state_freshness_receipt"] = receipt
+    except (ValueError, KeyError, TypeError) as exc:
+        # Retain raw evidence. A failed diagnostic is visible, never silently fresh.
+        diagnostic["state_freshness_receipt_error"] = str(exc)
+    return result
+
+
 def generate(card_date, league, as_of, simulations, overrides):
     adapter = load_adapter(league)
     schedule = adapter.load_schedule(card_date, as_of)
@@ -325,6 +352,7 @@ def generate(card_date, league, as_of, simulations, overrides):
             raw = adapter.forecast_event(event, context, simulations)
             from pipelines.cards.selected import apply_default
             raw = apply_default(league,event,raw)
+            raw = attach_state_receipt(raw, event, context, league)
             # Guard the rare case where network/simulation time crosses first pitch.
             if now_utc() >= event_start:
                 rows.append({
@@ -406,6 +434,8 @@ def render_md(card, disclosures=None):
     if pit.get("pit_status") not in (None, "PIT_ALIGNED"):
         lines.extend(["> **PIT WARNING:** this diagnostic card must not be represented as an exact requested-cutoff replay.", ""])
 
+    from pipelines.cards.integrity_reporting import render_integrity_md
+    lines.extend([render_integrity_md(card), ""])
     seen_defaults=set()
     for row in card["forecasts"]:
         default=(row.get("diagnostics") or {}).get("default_selection")

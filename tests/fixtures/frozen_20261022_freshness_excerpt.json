@@ -1,0 +1,802 @@
+{
+  "events": [
+    {
+      "away_team": "Cleveland Cavaliers",
+      "event_id": "NBA:401909093",
+      "home_team": "Philadelphia 76ers",
+      "league": "nba",
+      "model_input_snapshot": {
+        "away_against": 117.02773131438147,
+        "away_cold": 0.0,
+        "away_for": 120.795970465723,
+        "away_rest": 14,
+        "home_against": 114.0541899432444,
+        "home_cold": 0.0,
+        "home_for": 114.7552025898529,
+        "home_rest": 14,
+        "neutral": 0.0
+      },
+      "start_time_utc": "2026-10-22T23:00:00+00:00"
+    },
+    {
+      "away_team": "Denver Nuggets",
+      "event_id": "NBA:401909094",
+      "home_team": "Oklahoma City Thunder",
+      "league": "nba",
+      "model_input_snapshot": {
+        "away_against": 118.63242188164767,
+        "away_cold": 0.0,
+        "away_for": 127.62148084952284,
+        "away_rest": 14,
+        "home_against": 110.18385842329347,
+        "home_cold": 0.0,
+        "home_for": 118.86579505063047,
+        "home_rest": 14,
+        "neutral": 0.0
+      },
+      "start_time_utc": "2026-10-23T01:30:00+00:00"
+    },
+    {
+      "away_team": "Florida Panthers",
+      "event_id": "NHL:401892556",
+      "home_team": "Pittsburgh Penguins",
+      "league": "nhl",
+      "model_input_snapshot": {
+        "away_against": 3.06438137023586,
+        "away_cold": 0.0,
+        "away_for": 3.6736697983645197,
+        "away_rest": 5.041666666666667,
+        "home_against": 4.06473999387281,
+        "home_cold": 0.0,
+        "home_for": 3.412157903082371,
+        "home_rest": 2.9166666666666665,
+        "neutral": 0.0
+      },
+      "start_time_utc": "2026-10-22T23:00:00+00:00"
+    }
+  ],
+  "parent_created_at_utc": "2026-10-22T06:31:02.839044+00:00",
+  "parent_file": "October-22-2026-Pregame-Card.json",
+  "parent_is_unmodified": true,
+  "parent_sha256": "06af78e016a4eb152d259a53efbcf9192ca1d5bf60c8eac15fa0f912e0d4754e",
+  "schema": "overhaul.frozen_freshness_excerpt.v1",
+  "scope": "Frozen field excerpt only; no raw previous-game schedule captures are present.",
+  "sources": [
+    {
+      "consumed_games": 7230,
+      "earliest_capture": "2026-10-22T06:15:12.523552+00:00",
+      "latest_capture": "2026-10-22T06:18:01.235255+00:00",
+      "latest_consumed_game_start_utc": "2026-04-13T00:30:00+00:00",
+      "league": "nba",
+      "limitations": [
+        "INITIAL_RESEARCH_BASELINE_NOT_ACCURACY_DEFAULT",
+        "RETROSPECTIVE_PROVIDER_REVISIONS_NOT_HISTORICAL_PIT",
+        "NO_PLAYER_AVAILABILITY_FEATURES",
+        "NO_WAGERING_AUTHORITY",
+        "INDEPENDENT_MARGIN_TOTAL_NOT_JOINT_SCORE_MODEL"
+      ],
+      "model_lineage": {
+        "deployment_training_rows": 7230,
+        "embargo": "PREVIOUS_UTC_DAY_EXCLUDED",
+        "evaluation": {
+          "action_authority": false,
+          "baseline_probabilities": [
+            0.44696016771488467,
+            0.5530398322851153
+          ],
+          "evaluation_fit_sha256": "a1efcfeb0a261e4a00e8cbe34e862193177f54e8f19b473f456db5269cbeb83a",
+          "historical_availability_proven": false,
+          "later_audit_2026": {
+            "baseline_brier": 0.24703490061679623,
+            "baseline_log_loss": 0.6872052345883427,
+            "brier": 0.20919952551852322,
+            "log_loss": 0.6063039157473986,
+            "margin_mae": 11.540218709513526,
+            "n": 1230,
+            "paired_week_bootstrap_95ci_brier_delta": [
+              -0.051708336626225385,
+              -0.02503623199268638
+            ],
+            "paired_week_bootstrap_95ci_log_loss_delta": [
+              -0.11225587382143425,
+              -0.052166754185449485
+            ],
+            "prediction_sha256": "47d514dc5920e0f00688df0b0de4e3ded592f2a35c68df42cf944aa05bc14d47",
+            "reliability": [
+              {
+                "category": 0,
+                "frequency": 0.0,
+                "lower": 0.0,
+                "mean_p": 0.08387816176107492,
+                "n": 12
+              },
+              {
+                "category": 0,
+                "frequency": 0.2066115702479339,
+                "lower": 0.1,
+                "mean_p": 0.15660416780184006,
+                "n": 121
+              },
+              {
+                "category": 0,
+                "frequency": 0.21390374331550802,
+                "lower": 0.2,
+                "mean_p": 0.2523812024348107,
+                "n": 187
+              },
+              {
+                "category": 0,
+                "frequency": 0.35377358490566035,
+                "lower": 0.3,
+                "mean_p": 0.35279710647747986,
+                "n": 212
+              },
+              {
+                "category": 0,
+                "frequency": 0.4497816593886463,
+                "lower": 0.4,
+                "mean_p": 0.451085282150799,
+                "n": 229
+              },
+              {
+                "category": 0,
+                "frequency": 0.5693069306930693,
+                "lower": 0.5,
+                "mean_p": 0.5505280876963317,
+                "n": 202
+              },
+              {
+                "category": 0,
+                "frequency": 0.5615384615384615,
+                "lower": 0.6,
+                "mean_p": 0.6465734384528046,
+                "n": 130
+              },
+              {
+                "category": 0,
+                "frequency": 0.8387096774193549,
+                "lower": 0.7,
+                "mean_p": 0.7417049102784147,
+                "n": 93
+              },
+              {
+                "category": 0,
+                "frequency": 0.9047619047619048,
+                "lower": 0.8,
+                "mean_p": 0.8290514656619746,
+                "n": 42
+              },
+              {
+                "category": 0,
+                "frequency": 0.5,
+                "lower": 0.9,
+                "mean_p": 0.9072791485598386,
+                "n": 2
+              },
+              {
+                "category": 1,
+                "frequency": 0.5,
+                "lower": 0.0,
+                "mean_p": 0.09272085144016134,
+                "n": 2
+              },
+              {
+                "category": 1,
+                "frequency": 0.09523809523809523,
+                "lower": 0.1,
+                "mean_p": 0.17094853433802543,
+                "n": 42
+              },
+              {
+                "category": 1,
+                "frequency": 0.16129032258064516,
+                "lower": 0.2,
+                "mean_p": 0.2582950897215854,
+                "n": 93
+              },
+              {
+                "category": 1,
+                "frequency": 0.43846153846153846,
+                "lower": 0.3,
+                "mean_p": 0.3534265615471953,
+                "n": 130
+              },
+              {
+                "category": 1,
+                "frequency": 0.4306930693069307,
+                "lower": 0.4,
+                "mean_p": 0.44947191230366834,
+                "n": 202
+              },
+              {
+                "category": 1,
+                "frequency": 0.5502183406113537,
+                "lower": 0.5,
+                "mean_p": 0.548914717849201,
+                "n": 229
+              },
+              {
+                "category": 1,
+                "frequency": 0.6462264150943396,
+                "lower": 0.6,
+                "mean_p": 0.6472028935225201,
+                "n": 212
+              },
+              {
+                "category": 1,
+                "frequency": 0.786096256684492,
+                "lower": 0.7,
+                "mean_p": 0.7476187975651892,
+                "n": 187
+              },
+              {
+                "category": 1,
+                "frequency": 0.7933884297520661,
+                "lower": 0.8,
+                "mean_p": 0.8433958321981598,
+                "n": 121
+              },
+              {
+                "category": 1,
+                "frequency": 1.0,
+                "lower": 0.9,
+                "mean_p": 0.9161218382389252,
+                "n": 12
+              }
+            ],
+            "total_mae": 15.199258563331686
+          },
+          "league": "nba",
+          "model_id": "nba.initial_causal_score.research.v1",
+          "promotion_status": "INITIAL_RESEARCH_ONLY_NO_DEFAULT_PROMOTION",
+          "provider_copy_counts": {
+            "2": 7230
+          },
+          "schema": "initial_baseline_temporal_audit.v1",
+          "season_counts": {
+            "2021": 1080,
+            "2022": 1230,
+            "2023": 1230,
+            "2024": 1230,
+            "2025": 1230,
+            "2026": 1230
+          },
+          "training_n": 4770,
+          "training_prior": 112.92651991614255,
+          "training_seasons": [
+            2021,
+            2022,
+            2023,
+            2024
+          ],
+          "validation_2025": {
+            "baseline_brier": 0.24815606780331087,
+            "baseline_log_loss": 0.6894560371280906,
+            "brier": 0.2109861011825392,
+            "log_loss": 0.6100591638670871,
+            "margin_mae": 11.100980730440117,
+            "n": 1230,
+            "paired_week_bootstrap_95ci_brier_delta": [
+              -0.04513451189152435,
+              -0.030285221024914898
+            ],
+            "paired_week_bootstrap_95ci_log_loss_delta": [
+              -0.0971422808477786,
+              -0.06394225013889865
+            ],
+            "prediction_sha256": "a318037253315a566c2ce851b9dcb2a42a17ed07e85cebd48f676b967e753e2e",
+            "reliability": [
+              {
+                "category": 0,
+                "frequency": 0.1,
+                "lower": 0.0,
+                "mean_p": 0.0859935431171686,
+                "n": 10
+              },
+              {
+                "category": 0,
+                "frequency": 0.1485148514851485,
+                "lower": 0.1,
+                "mean_p": 0.16109376710876627,
+                "n": 101
+              },
+              {
+                "category": 0,
+                "frequency": 0.25888324873096447,
+                "lower": 0.2,
+                "mean_p": 0.25299373501777794,
+                "n": 197
+              },
+              {
+                "category": 0,
+                "frequency": 0.34615384615384615,
+                "lower": 0.3,
+                "mean_p": 0.3505663226697455,
+                "n": 234
+              },
+              {
+                "category": 0,
+                "frequency": 0.4811320754716981,
+                "lower": 0.4,
+                "mean_p": 0.45123960011741665,
+                "n": 212
+              },
+              {
+                "category": 0,
+                "frequency": 0.5025906735751295,
+                "lower": 0.5,
+                "mean_p": 0.5479943536537345,
+                "n": 193
+              },
+              {
+                "category": 0,
+                "frequency": 0.7181208053691275,
+                "lower": 0.6,
+                "mean_p": 0.6484788049944072,
+                "n": 149
+              },
+              {
+                "category": 0,
+                "frequency": 0.7878787878787878,
+                "lower": 0.7,
+                "mean_p": 0.7423279865245827,
+                "n": 99
+              },
+              {
+                "category": 0,
+                "frequency": 0.8181818181818182,
+                "lower": 0.8,
+                "mean_p": 0.8376775605682375,
+                "n": 33
+              },
+              {
+                "category": 0,
+                "frequency": 1.0,
+                "lower": 0.9,
+                "mean_p": 0.9120084072631887,
+                "n": 2
+              },
+              {
+                "category": 1,
+                "frequency": 0.0,
+                "lower": 0.0,
+                "mean_p": 0.08799159273681142,
+                "n": 2
+              },
+              {
+                "category": 1,
+                "frequency": 0.18181818181818182,
+                "lower": 0.1,
+                "mean_p": 0.1623224394317625,
+                "n": 33
+              },
+              {
+                "category": 1,
+                "frequency": 0.21212121212121213,
+                "lower": 0.2,
+                "mean_p": 0.25767201347541746,
+                "n": 99
+              },
+              {
+                "category": 1,
+                "frequency": 0.28187919463087246,
+                "lower": 0.3,
+                "mean_p": 0.35152119500559276,
+                "n": 149
+              },
+              {
+                "category": 1,
+                "frequency": 0.49740932642487046,
+                "lower": 0.4,
+                "mean_p": 0.45200564634626544,
+                "n": 193
+              },
+              {
+                "category": 1,
+                "frequency": 0.5188679245283019,
+                "lower": 0.5,
+                "mean_p": 0.5487603998825833,
+                "n": 212
+              },
+              {
+                "category": 1,
+                "frequency": 0.6538461538461539,
+                "lower": 0.6,
+                "mean_p": 0.6494336773302546,
+                "n": 234
+              },
+              {
+                "category": 1,
+                "frequency": 0.7411167512690355,
+                "lower": 0.7,
+                "mean_p": 0.747006264982222,
+                "n": 197
+              },
+              {
+                "category": 1,
+                "frequency": 0.8514851485148515,
+                "lower": 0.8,
+                "mean_p": 0.8389062328912337,
+                "n": 101
+              },
+              {
+                "category": 1,
+                "frequency": 0.9,
+                "lower": 0.9,
+                "mean_p": 0.9140064568828314,
+                "n": 10
+              }
+            ],
+            "total_mae": 14.758675038304217
+          }
+        },
+        "evaluation_sha256": "5d92e24981979e84ac0a8243670060e5a9aa109279fa0935a28cec5d160fd434",
+        "excluded_current_events": {}
+      },
+      "package_sha256": "bf651ebf2c08fb78e5728ce3aa0f3f7047697a825f1a707a05c7d2572e0e3dc6",
+      "refresh_required_after": "2026-10-22T12:15:12.523552+00:00",
+      "source_count": 181,
+      "state_model_sha256": "c4e3b3bda548154a5c3340ecc1fa021455e619dd35a5c197ef33001eb3776d4f"
+    },
+    {
+      "consumed_games": 7573,
+      "earliest_capture": "2026-10-22T06:16:19.959205+00:00",
+      "latest_capture": "2026-10-22T06:18:18.809292+00:00",
+      "latest_consumed_game_start_utc": "2026-10-20T23:00:00+00:00",
+      "league": "nhl",
+      "limitations": [
+        "INITIAL_RESEARCH_BASELINE_NOT_ACCURACY_DEFAULT",
+        "RETROSPECTIVE_PROVIDER_REVISIONS_NOT_HISTORICAL_PIT",
+        "NO_PLAYER_AVAILABILITY_FEATURES",
+        "NO_WAGERING_AUTHORITY",
+        "INDEPENDENT_MARGIN_TOTAL_NOT_JOINT_SCORE_MODEL"
+      ],
+      "model_lineage": {
+        "acquisition_contract_code_sha256": "2fb01458b5ab3e2f12d87b1e5e88195bbfa05486fe0d84476546f6ceea0162c1",
+        "current_manifest_sha256": "f4da65256bfbd017db905f18a27138800e6aded4b0dba7c3ac4728f7207e22e0",
+        "deployment_training_rows": 7573,
+        "embargo": "PREVIOUS_UTC_DAY_EXCLUDED",
+        "evaluation": {
+          "action_authority": false,
+          "baseline_probabilities": [
+            0.466278101582015,
+            0.533721898417985
+          ],
+          "evaluation_fit_sha256": "00bee02210d810bfb2f71af76c2e6d714a3424bc5c4f649e27d7347a6be92370",
+          "historical_availability_proven": false,
+          "later_audit_2026": {
+            "baseline_brier": 0.2496464117772398,
+            "baseline_log_loss": 0.6924406594360324,
+            "brier": 0.24894963772387033,
+            "log_loss": 0.691012929944899,
+            "margin_mae": 2.1506845800955743,
+            "n": 1312,
+            "paired_week_bootstrap_95ci_brier_delta": [
+              -0.004521620405513274,
+              0.003113141783512388
+            ],
+            "paired_week_bootstrap_95ci_log_loss_delta": [
+              -0.00948669144053496,
+              0.006421275626201579
+            ],
+            "prediction_sha256": "f4f2f398109ebd1fc22f2483c790c67ccbbc633b930e4918a97c9c254e0503c2",
+            "reliability": [
+              {
+                "category": 0,
+                "frequency": 0.2857142857142857,
+                "lower": 0.2,
+                "mean_p": 0.27555572334494244,
+                "n": 35
+              },
+              {
+                "category": 0,
+                "frequency": 0.43410852713178294,
+                "lower": 0.3,
+                "mean_p": 0.3622227188441961,
+                "n": 258
+              },
+              {
+                "category": 0,
+                "frequency": 0.47048300536672627,
+                "lower": 0.4,
+                "mean_p": 0.4516249635189678,
+                "n": 559
+              },
+              {
+                "category": 0,
+                "frequency": 0.5095890410958904,
+                "lower": 0.5,
+                "mean_p": 0.5420989523178604,
+                "n": 365
+              },
+              {
+                "category": 0,
+                "frequency": 0.5714285714285714,
+                "lower": 0.6,
+                "mean_p": 0.6334523139804906,
+                "n": 91
+              },
+              {
+                "category": 0,
+                "frequency": 1.0,
+                "lower": 0.7,
+                "mean_p": 0.7231233694670742,
+                "n": 4
+              },
+              {
+                "category": 1,
+                "frequency": 0.0,
+                "lower": 0.2,
+                "mean_p": 0.27687663053292577,
+                "n": 4
+              },
+              {
+                "category": 1,
+                "frequency": 0.42857142857142855,
+                "lower": 0.3,
+                "mean_p": 0.3665476860195093,
+                "n": 91
+              },
+              {
+                "category": 1,
+                "frequency": 0.4904109589041096,
+                "lower": 0.4,
+                "mean_p": 0.4579010476821396,
+                "n": 365
+              },
+              {
+                "category": 1,
+                "frequency": 0.5295169946332737,
+                "lower": 0.5,
+                "mean_p": 0.5483750364810323,
+                "n": 559
+              },
+              {
+                "category": 1,
+                "frequency": 0.5658914728682171,
+                "lower": 0.6,
+                "mean_p": 0.6377772811558039,
+                "n": 258
+              },
+              {
+                "category": 1,
+                "frequency": 0.7142857142857143,
+                "lower": 0.7,
+                "mean_p": 0.7244442766550576,
+                "n": 35
+              }
+            ],
+            "total_mae": 1.8491124962796566
+          },
+          "league": "nhl",
+          "model_id": "nhl.initial_causal_score.research.v1",
+          "promotion_status": "INITIAL_RESEARCH_ONLY_NO_DEFAULT_PROMOTION",
+          "provider_copy_counts": {
+            "1": 302,
+            "2": 7279
+          },
+          "schema": "initial_baseline_temporal_audit.v1",
+          "season_counts": {
+            "2021": 868,
+            "2022": 1312,
+            "2023": 1312,
+            "2024": 1312,
+            "2025": 1312,
+            "2026": 1312,
+            "2027": 153
+          },
+          "training_n": 4804,
+          "training_prior": 3.1077227310574522,
+          "training_seasons": [
+            2021,
+            2022,
+            2023,
+            2024
+          ],
+          "validation_2025": {
+            "baseline_brier": 0.2469219291306648,
+            "baseline_log_loss": 0.686983409680584,
+            "brier": 0.24351873647093994,
+            "log_loss": 0.6799526152907759,
+            "margin_mae": 2.1845919105703273,
+            "n": 1312,
+            "paired_week_bootstrap_95ci_brier_delta": [
+              -0.008796139012050761,
+              0.001206580303211938
+            ],
+            "paired_week_bootstrap_95ci_log_loss_delta": [
+              -0.01833652695908076,
+              0.002657408978913073
+            ],
+            "prediction_sha256": "141408656ea7c4044748bfc7ffdd2c9d500d519d2db77ad0b59671ccbdb3e8ad",
+            "reliability": [
+              {
+                "category": 0,
+                "frequency": 0.0,
+                "lower": 0.1,
+                "mean_p": 0.188893650055497,
+                "n": 3
+              },
+              {
+                "category": 0,
+                "frequency": 0.2647058823529412,
+                "lower": 0.2,
+                "mean_p": 0.27405977986769664,
+                "n": 34
+              },
+              {
+                "category": 0,
+                "frequency": 0.337037037037037,
+                "lower": 0.3,
+                "mean_p": 0.35701307531037496,
+                "n": 270
+              },
+              {
+                "category": 0,
+                "frequency": 0.43953934740882916,
+                "lower": 0.4,
+                "mean_p": 0.45174523083957246,
+                "n": 521
+              },
+              {
+                "category": 0,
+                "frequency": 0.5104712041884817,
+                "lower": 0.5,
+                "mean_p": 0.5448376953221161,
+                "n": 382
+              },
+              {
+                "category": 0,
+                "frequency": 0.49,
+                "lower": 0.6,
+                "mean_p": 0.6318488750302267,
+                "n": 100
+              },
+              {
+                "category": 0,
+                "frequency": 0.5,
+                "lower": 0.7,
+                "mean_p": 0.7131000205207836,
+                "n": 2
+              },
+              {
+                "category": 1,
+                "frequency": 0.5,
+                "lower": 0.2,
+                "mean_p": 0.2868999794792165,
+                "n": 2
+              },
+              {
+                "category": 1,
+                "frequency": 0.51,
+                "lower": 0.3,
+                "mean_p": 0.36815112496977326,
+                "n": 100
+              },
+              {
+                "category": 1,
+                "frequency": 0.4895287958115183,
+                "lower": 0.4,
+                "mean_p": 0.4551623046778838,
+                "n": 382
+              },
+              {
+                "category": 1,
+                "frequency": 0.5604606525911708,
+                "lower": 0.5,
+                "mean_p": 0.5482547691604276,
+                "n": 521
+              },
+              {
+                "category": 1,
+                "frequency": 0.662962962962963,
+                "lower": 0.6,
+                "mean_p": 0.6429869246896249,
+                "n": 270
+              },
+              {
+                "category": 1,
+                "frequency": 0.7352941176470589,
+                "lower": 0.7,
+                "mean_p": 0.7259402201323033,
+                "n": 34
+              },
+              {
+                "category": 1,
+                "frequency": 1.0,
+                "lower": 0.8,
+                "mean_p": 0.8111063499445029,
+                "n": 3
+              }
+            ],
+            "total_mae": 1.8801498584781409
+          }
+        },
+        "evaluation_sha256": "1fde47e90d7286c324f5eb81e1c71949b917b94a855cc542dbc75b7d3844bdfc",
+        "excluded_current_events": {
+          "outside_acquired_slate_dates": 2
+        },
+        "history_manifest_sha256": "ab6d090f51149bb0a75972a71f093a98733b498c5b8d1761c4cac9115915b960",
+        "preparation_code_sha256": "3e395368e1aed825e26dd7b153889ea84148182ea863d5e2c1da98dd489641c6",
+        "season_scope": {
+          "action_authority": false,
+          "config_id": "nhl.initial_causal_score.acquisition.2026-27.v2",
+          "evaluation_training_seasons": [
+            2021,
+            2022,
+            2023,
+            2024
+          ],
+          "first_provider_season": 2021,
+          "last_provider_season": 2027,
+          "later_audit_provider_season": 2026,
+          "league": "nhl",
+          "model_id": "nhl.initial_causal_score.research.v1",
+          "nonexistent_team_seasons": [
+            {
+              "first_provider_season": 2022,
+              "official_evidence_urls": [
+                "https://www.nhl.com/news/seattle-is-32nd-nhl-franchise-will-start-play-in-2021-22-302583844"
+              ],
+              "provider_season": 2021,
+              "reason": "NONEXISTENT_TEAM_SEASON",
+              "team_id": "124292"
+            },
+            {
+              "first_provider_season": 2025,
+              "official_evidence_urls": [
+                "https://records.nhl.com/uta/overview/history",
+                "https://www.nhl.com/news/board-approves-establishment-of-new-franchise-in-utah-2024"
+              ],
+              "provider_season": 2021,
+              "reason": "NONEXISTENT_TEAM_SEASON",
+              "team_id": "129764"
+            },
+            {
+              "first_provider_season": 2025,
+              "official_evidence_urls": [
+                "https://records.nhl.com/uta/overview/history",
+                "https://www.nhl.com/news/board-approves-establishment-of-new-franchise-in-utah-2024"
+              ],
+              "provider_season": 2022,
+              "reason": "NONEXISTENT_TEAM_SEASON",
+              "team_id": "129764"
+            },
+            {
+              "first_provider_season": 2025,
+              "official_evidence_urls": [
+                "https://records.nhl.com/uta/overview/history",
+                "https://www.nhl.com/news/board-approves-establishment-of-new-franchise-in-utah-2024"
+              ],
+              "provider_season": 2023,
+              "reason": "NONEXISTENT_TEAM_SEASON",
+              "team_id": "129764"
+            },
+            {
+              "first_provider_season": 2025,
+              "official_evidence_urls": [
+                "https://records.nhl.com/uta/overview/history",
+                "https://www.nhl.com/news/board-approves-establishment-of-new-franchise-in-utah-2024"
+              ],
+              "provider_season": 2024,
+              "reason": "NONEXISTENT_TEAM_SEASON",
+              "team_id": "129764"
+            }
+          ],
+          "population": "regular_season_final_winner",
+          "reason": "Acquisition calendar rollover only; frozen audit cohorts, statistical method, feature rules, embargo and defaults unchanged.",
+          "schema": "initial_baseline_season_scope.v1",
+          "season_label": "2026-27",
+          "season_year_convention": "provider_end_year",
+          "team_identity_policy": "KEEP_ESPN_TEAM_IDS_DISTINCT; ARIZONA24_IS_NOT_UTAH129764",
+          "validation_provider_season": 2025
+        },
+        "season_scope_sha256": "12410ec50d94654cdbda6207f5a638968ae065156774445176ecf5574e65e45f"
+      },
+      "package_sha256": "eb49c5f8e690915d105e76911ef7346328f59e30784010c22a643126a5d7cad6",
+      "refresh_required_after": "2026-10-22T12:16:19.959205+00:00",
+      "source_count": 222,
+      "state_model_sha256": "4f4850ded457e41ece67c01e268378ecd99a4f7f998643d031136874cbd3788b"
+    }
+  ]
+}

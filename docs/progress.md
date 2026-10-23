@@ -4676,3 +4676,34 @@ full disclosure reports still require a valid cutoff. No cutoff is invented and
 no evidence guard is weakened. The expanded local suite passes 116 tests plus
 56 subtests, including the existing model-default renderer regression. Integration
 tests now restore their process-wide output environment after each case.
+
+## 2026-10-23 — Parallel research integrity, selection and evaluation overhaul
+
+User authorized an agent swarm to validate and build across sports. Six specialist
+agents audited theory/capabilities, implemented selection/evaluation/freshness and
+performed independently authored adversarial checks; root integrated runners and
+card disclosures. Base commit: 90daf8e0036c67a5304aa0747bf50b2266e0b364.
+
+New executable paths preserve raw forecasts, verify external validation trust,
+emit deterministic price-independent SHADOW selection, count inspected trials,
+evaluate exact-target same-event controls and expose full-population coverage.
+WIN/LOSS/PUSH/VOID semantics and prospective-vs-replay boundaries are explicit.
+No abstention wins, mixed versions or post-start probability scoring are admitted.
+
+Card faces now expose consumed state dates and numerical traces. NBA acquisition
+has an explicit provider-season scope; corrected operational rest is an immutable
+candidate requiring new fitting/evaluation because the embargo proxy was used in
+training too. Existing model/core-adapter code pins and defaults are preserved.
+
+Final local full suite: 886 passed in 58.78s. Independent adversary: 49 tests,
+included in that total, with nine repaired findings. Earlier broad-run errors
+were missing committed fixtures in the partial source restoration, subsequently
+recovered unchanged. Five new/modified CLI help checks exit 0. Operational health
+and predictive validation remain separate; no go-live or selection certification
+is inferred from software tests.
+
+See docs/research/overhaul_2026_10_23/README.md, VALIDATION.md, ADVERSARIAL_REVIEW.md
+and CAPABILITY_GAPS.md/JSON for code usage, evidence and 20 prioritized gaps.
+Player-model refits, trust deployment, ancestry-based trial exposure, live drift
+monitoring and overlapping PR integration remain explicit work. No frozen card,
+weight, canonical ledger, authorization history or wagering status was changed.

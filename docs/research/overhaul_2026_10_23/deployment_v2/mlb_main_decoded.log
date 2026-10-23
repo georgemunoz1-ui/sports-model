@@ -1,0 +1,758 @@
+﻿2026-10-23T06:43:37.1640242Z Current runner version: '2.338.0'
+2026-10-23T06:43:37.1677724Z ##[group]Runner Image Provisioner
+2026-10-23T06:43:37.1679732Z Hosted Compute Agent
+2026-10-23T06:43:37.1680720Z Version: 20261012.601
+2026-10-23T06:43:37.1681991Z Commit: f3dc54e1fb89da6852db922499a0233137369e1d
+2026-10-23T06:43:37.1683421Z Build Date: 2026-10-12T17:48:21Z
+2026-10-23T06:43:37.1684717Z Worker ID: {78ade836-9c1e-4e3b-bad2-c2947671b9f4}
+2026-10-23T06:43:37.1685998Z Region: westus2
+2026-10-23T06:43:37.1686938Z Cloud: Azure
+2026-10-23T06:43:37.1687996Z ##[endgroup]
+2026-10-23T06:43:37.1690819Z ##[group]Operating System
+2026-10-23T06:43:37.1691823Z Ubuntu
+2026-10-23T06:43:37.1692857Z 24.04.5
+2026-10-23T06:43:37.1693682Z LTS
+2026-10-23T06:43:37.1694560Z ##[endgroup]
+2026-10-23T06:43:37.1695538Z ##[group]Runner Image
+2026-10-23T06:43:37.1696504Z Image: ubuntu-24.04
+2026-10-23T06:43:37.1697615Z Version: 20261012.334.1
+2026-10-23T06:43:37.1700097Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20261012.334/images/ubuntu/Ubuntu2404-Readme.md
+2026-10-23T06:43:37.1703083Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20261012.334
+2026-10-23T06:43:37.1704778Z ##[endgroup]
+2026-10-23T06:43:37.1706799Z ##[group]GITHUB_TOKEN Permissions
+2026-10-23T06:43:37.1710090Z Contents: read
+2026-10-23T06:43:37.1711143Z Metadata: read
+2026-10-23T06:43:37.1712036Z ##[endgroup]
+2026-10-23T06:43:37.1715136Z Secret source: Actions
+2026-10-23T06:43:37.1716686Z Cache mode: write
+2026-10-23T06:43:37.1718446Z Prepare workflow directory
+2026-10-23T06:43:37.2297225Z Prepare all required actions
+2026-10-23T06:43:37.2372876Z Getting action download info
+2026-10-23T06:43:37.6376412Z Download action repository 'actions/checkout@v4' (SHA:11d5960a326750d5838078e36cf38b85af677262)
+2026-10-23T06:43:37.7491553Z Download action repository 'actions/setup-python@v5' (SHA:a26af69be951a213d495a4c3e4e4022e16d87065)
+2026-10-23T06:43:37.8361318Z Download action repository 'actions/upload-artifact@v4' (SHA:ea165f8d65b6e75b540449e92b4886f43607fa02)
+2026-10-23T06:43:38.3901211Z Complete job name: verify
+2026-10-23T06:43:38.4901797Z ##[group]Run actions/checkout@v4
+2026-10-23T06:43:38.4903161Z with:
+2026-10-23T06:43:38.4903905Z   fetch-depth: 0
+2026-10-23T06:43:38.4904796Z   repository: georgemunoz1-ui/sports-model
+2026-10-23T06:43:38.4914962Z   token: ***
+2026-10-23T06:43:38.4915746Z   ssh-strict: true
+2026-10-23T06:43:38.4916554Z   ssh-user: git
+2026-10-23T06:43:38.4917378Z   persist-credentials: true
+2026-10-23T06:43:38.4918718Z   clean: true
+2026-10-23T06:43:38.4919653Z   sparse-checkout-cone-mode: true
+2026-10-23T06:43:38.4920661Z   fetch-tags: false
+2026-10-23T06:43:38.4921474Z   show-progress: true
+2026-10-23T06:43:38.4922299Z   lfs: false
+2026-10-23T06:43:38.4923078Z   submodules: false
+2026-10-23T06:43:38.4923906Z   set-safe-directory: true
+2026-10-23T06:43:38.4924844Z   allow-unsafe-pr-checkout: false
+2026-10-23T06:43:38.4926190Z ##[endgroup]
+2026-10-23T06:43:38.6181964Z Syncing repository: georgemunoz1-ui/sports-model
+2026-10-23T06:43:38.6186478Z ##[group]Getting Git version info
+2026-10-23T06:43:38.6199308Z Working directory is '/home/runner/work/sports-model/sports-model'
+2026-10-23T06:43:38.6203360Z [command]/usr/bin/git version
+2026-10-23T06:43:38.6263993Z git version 2.55.0
+2026-10-23T06:43:38.6317736Z ##[endgroup]
+2026-10-23T06:43:38.6350803Z Temporarily overriding HOME='/home/runner/work/_temp/d4a910a5-4907-4e4c-b1d8-81257670be70' before making global git config changes
+2026-10-23T06:43:38.6370640Z Adding repository directory to the temporary git global config as a safe directory
+2026-10-23T06:43:38.6374874Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/sports-model/sports-model
+2026-10-23T06:43:38.6479971Z Deleting the contents of '/home/runner/work/sports-model/sports-model'
+2026-10-23T06:43:38.6510785Z ##[group]Initializing the repository
+2026-10-23T06:43:38.6513561Z [command]/usr/bin/git init /home/runner/work/sports-model/sports-model
+2026-10-23T06:43:38.6585801Z hint: Using 'master' as the name for the initial branch. This default branch name
+2026-10-23T06:43:38.6612037Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+2026-10-23T06:43:38.6629449Z hint: to use in all of your new repositories, which will suppress this warning,
+2026-10-23T06:43:38.6632212Z hint: call:
+2026-10-23T06:43:38.6633600Z hint:
+2026-10-23T06:43:38.6635226Z hint: 	git config --global init.defaultBranch <name>
+2026-10-23T06:43:38.6637265Z hint:
+2026-10-23T06:43:38.6639721Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2026-10-23T06:43:38.6642839Z hint: 'development'. The just-created branch can be renamed via this command:
+2026-10-23T06:43:38.6645415Z hint:
+2026-10-23T06:43:38.6646960Z hint: 	git branch -m <name>
+2026-10-23T06:43:38.6649236Z hint:
+2026-10-23T06:43:38.6651507Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2026-10-23T06:43:38.6655284Z Initialized empty Git repository in /home/runner/work/sports-model/sports-model/.git/
+2026-10-23T06:43:38.6662043Z [command]/usr/bin/git remote add origin https://github.com/georgemunoz1-ui/sports-model
+2026-10-23T06:43:38.6699608Z ##[endgroup]
+2026-10-23T06:43:38.6702296Z ##[group]Disabling automatic garbage collection
+2026-10-23T06:43:38.6727896Z [command]/usr/bin/git config --local gc.auto 0
+2026-10-23T06:43:38.6820333Z ##[endgroup]
+2026-10-23T06:43:38.6840170Z ##[group]Setting up auth
+2026-10-23T06:43:38.6854759Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-10-23T06:43:38.6895714Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-10-23T06:43:38.7360151Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-10-23T06:43:38.7433970Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-10-23T06:43:38.7699863Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-10-23T06:43:38.7740298Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-10-23T06:43:38.7986972Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2026-10-23T06:43:38.8033745Z ##[endgroup]
+2026-10-23T06:43:38.8036865Z ##[group]Fetching the repository
+2026-10-23T06:43:38.8047573Z [command]/usr/bin/git -c protocol.version=2 fetch --prune --no-recurse-submodules origin +refs/heads/*:refs/remotes/origin/* +refs/tags/*:refs/tags/*
+2026-10-23T06:43:42.8290010Z From https://github.com/georgemunoz1-ui/sports-model
+2026-10-23T06:43:42.8291884Z  * [new branch]      audit/consolidated-release-20260916 -> origin/audit/consolidated-release-20260916
+2026-10-23T06:43:42.8294022Z  * [new branch]      audit/week2-selection-20260916 -> origin/audit/week2-selection-20260916
+2026-10-23T06:43:42.8296021Z  * [new branch]      backfill-2026-08-24-through-2026-09-02 -> origin/backfill-2026-08-24-through-2026-09-02
+2026-10-23T06:43:42.8297668Z  * [new branch]      backfill-2026-09-02     -> origin/backfill-2026-09-02
+2026-10-23T06:43:42.8299624Z  * [new branch]      claude/sports-simulator-model-a06072 -> origin/claude/sports-simulator-model-a06072
+2026-10-23T06:43:42.8301413Z  * [new branch]      claude/valorant-lut-raw-accel-h0e04m -> origin/claude/valorant-lut-raw-accel-h0e04m
+2026-10-23T06:43:42.8303280Z  * [new branch]      codex/actions-artifact-storage-20260924 -> origin/codex/actions-artifact-storage-20260924
+2026-10-23T06:43:42.8305528Z  * [new branch]      codex/all-model-capability-20261002 -> origin/codex/all-model-capability-20261002
+2026-10-23T06:43:42.8307521Z  * [new branch]      codex/all-model-operations-20260922 -> origin/codex/all-model-operations-20260922
+2026-10-23T06:43:42.8310105Z  * [new branch]      codex/all-model-runtimes-20260922 -> origin/codex/all-model-runtimes-20260922
+2026-10-23T06:43:42.8311660Z  * [new branch]      codex/all-sports-date-refresh-20260914 -> origin/codex/all-sports-date-refresh-20260914
+2026-10-23T06:43:42.8313269Z  * [new branch]      codex/all-sports-margin-system-20261019 -> origin/codex/all-sports-margin-system-20261019
+2026-10-23T06:43:42.8314805Z  * [new branch]      codex/all-sports-recovery-20260905 -> origin/codex/all-sports-recovery-20260905
+2026-10-23T06:43:42.8316458Z  * [new branch]      codex/all-sports-roster-contracts-20261020 -> origin/codex/all-sports-roster-contracts-20261020
+2026-10-23T06:43:42.8320975Z  * [new branch]      codex/canonical-release-preflight-20260914 -> origin/codex/canonical-release-preflight-20260914
+2026-10-23T06:43:42.8322611Z  * [new branch]      codex/card-disclosures-20261020 -> origin/codex/card-disclosures-20261020
+2026-10-23T06:43:42.8324047Z  * [new branch]      codex/cfb-capability-repair-20261003 -> origin/codex/cfb-capability-repair-20261003
+2026-10-23T06:43:42.8325543Z  * [new branch]      codex/cfb-contextual-fit-20261002 -> origin/codex/cfb-contextual-fit-20261002
+2026-10-23T06:43:42.8327101Z  * [new branch]      codex/cfb-margin-evaluation-repair-20261010 -> origin/codex/cfb-margin-evaluation-repair-20261010
+2026-10-23T06:43:42.8329167Z  * [new branch]      codex/cfb-pit-lineage-20260918 -> origin/codex/cfb-pit-lineage-20260918
+2026-10-23T06:43:42.8330904Z  * [new branch]      codex/cfb-support-safe-margin-v2-20261011 -> origin/codex/cfb-support-safe-margin-v2-20261011
+2026-10-23T06:43:42.8332520Z  * [new branch]      codex/cfb-v1-materializer -> origin/codex/cfb-v1-materializer
+2026-10-23T06:43:42.8333930Z  * [new branch]      codex/cfb-v1-materializer-20260903 -> origin/codex/cfb-v1-materializer-20260903
+2026-10-23T06:43:42.8335324Z  * [new branch]      codex/cfb-v1-materializer-atomic -> origin/codex/cfb-v1-materializer-atomic
+2026-10-23T06:43:42.8336822Z  * [new branch]      codex/cfb-v1-materializer-clean -> origin/codex/cfb-v1-materializer-clean
+2026-10-23T06:43:42.8338964Z  * [new branch]      codex/cfb-v1-materializer-core -> origin/codex/cfb-v1-materializer-core
+2026-10-23T06:43:42.8340706Z  * [new branch]      codex/cfb-v1-materializer-dev -> origin/codex/cfb-v1-materializer-dev
+2026-10-23T06:43:42.8342275Z  * [new branch]      codex/cfb-v1-materializer-final -> origin/codex/cfb-v1-materializer-final
+2026-10-23T06:43:42.8344020Z  * [new branch]      codex/cfb-v1-materializer-impl -> origin/codex/cfb-v1-materializer-impl
+2026-10-23T06:43:42.8345587Z  * [new branch]      codex/cfb-v1-materializer-next -> origin/codex/cfb-v1-materializer-next
+2026-10-23T06:43:42.8347050Z  * [new branch]      codex/cfb-v1-materializer-safe -> origin/codex/cfb-v1-materializer-safe
+2026-10-23T06:43:42.8348761Z  * [new branch]      codex/cfb-v1-materializer-stage -> origin/codex/cfb-v1-materializer-stage
+2026-10-23T06:43:42.8350245Z  * [new branch]      codex/cfb-v1-materializer-v1 -> origin/codex/cfb-v1-materializer-v1
+2026-10-23T06:43:42.8351693Z  * [new branch]      codex/cfb-v1-materializer-work -> origin/codex/cfb-v1-materializer-work
+2026-10-23T06:43:42.8353002Z  * [new branch]      codex/cfb-v2-preregister -> origin/codex/cfb-v2-preregister
+2026-10-23T06:43:42.8354262Z  * [new branch]      codex/consolidate-all-prs -> origin/codex/consolidate-all-prs
+2026-10-23T06:43:42.8355739Z  * [new branch]      codex/cross-sport-distributions-20261007 -> origin/codex/cross-sport-distributions-20261007
+2026-10-23T06:43:42.8357264Z  * [new branch]      codex/daily-research-20261002 -> origin/codex/daily-research-20261002
+2026-10-23T06:43:42.8359029Z  * [new branch]      codex/diagnostic-shadow-card-v1 -> origin/codex/diagnostic-shadow-card-v1
+2026-10-23T06:43:42.8360649Z  * [new branch]      codex/gamechamp-qualified-audits-20261021 -> origin/codex/gamechamp-qualified-audits-20261021
+2026-10-23T06:43:42.8362370Z  * [new branch]      codex/health-escalation-20260916 -> origin/codex/health-escalation-20260916
+2026-10-23T06:43:42.8364378Z  * [new branch]      codex/independent-candidates-20260916 -> origin/codex/independent-candidates-20260916
+2026-10-23T06:43:42.8366255Z  * [new branch]      codex/isotonic-pooling-eligibility-20261011 -> origin/codex/isotonic-pooling-eligibility-20261011
+2026-10-23T06:43:42.8368518Z  * [new branch]      codex/margin-contract-integration-20261021 -> origin/codex/margin-contract-integration-20261021
+2026-10-23T06:43:42.8370649Z  * [new branch]      codex/mc-precision-nba-shadow-20261010 -> origin/codex/mc-precision-nba-shadow-20261010
+2026-10-23T06:43:42.8372487Z  * [new branch]      codex/mlb-calibration-persistence -> origin/codex/mlb-calibration-persistence
+2026-10-23T06:43:42.8374114Z  * [new branch]      codex/mlb-current-20260914 -> origin/codex/mlb-current-20260914
+2026-10-23T06:43:42.8375899Z  * [new branch]      codex/mlb-firewall-full-coverage-20260908 -> origin/codex/mlb-firewall-full-coverage-20260908
+2026-10-23T06:43:42.8377889Z  * [new branch]      codex/mlb-noop-artifact-retention-20260928 -> origin/codex/mlb-noop-artifact-retention-20260928
+2026-10-23T06:43:42.8379999Z  * [new branch]      codex/model-output-first-v1 -> origin/codex/model-output-first-v1
+2026-10-23T06:43:42.8381864Z  * [new branch]      codex/nfl-active-passer-binding-20261009 -> origin/codex/nfl-active-passer-binding-20261009
+2026-10-23T06:43:42.8384041Z  * [new branch]      codex/nfl-adjudication-timezone-20261022 -> origin/codex/nfl-adjudication-timezone-20261022
+2026-10-23T06:43:42.8385794Z  * [new branch]      codex/nfl-assimilation-20260914 -> origin/codex/nfl-assimilation-20260914
+2026-10-23T06:43:42.8387284Z  * [new branch]      codex/nfl-context-recovery-20260914 -> origin/codex/nfl-context-recovery-20260914
+2026-10-23T06:43:42.8389173Z  * [new branch]      codex/nfl-det-buf-20260917-sealed-run -> origin/codex/nfl-det-buf-20260917-sealed-run
+2026-10-23T06:43:42.8390885Z  * [new branch]      codex/nfl-det-buf-learning-audit-20260918 -> origin/codex/nfl-det-buf-learning-audit-20260918
+2026-10-23T06:43:42.8392856Z  * [new branch]      codex/nfl-explicit-modes-20260914 -> origin/codex/nfl-explicit-modes-20260914
+2026-10-23T06:43:42.8394391Z  * [new branch]      codex/nfl-final-personnel-20260914 -> origin/codex/nfl-final-personnel-20260914
+2026-10-23T06:43:42.8395876Z  * [new branch]      codex/nfl-flag-all-flips-20261006 -> origin/codex/nfl-flag-all-flips-20261006
+2026-10-23T06:43:42.8397412Z  * [new branch]      codex/nfl-future-event-scope-20261010 -> origin/codex/nfl-future-event-scope-20261010
+2026-10-23T06:43:42.8399351Z  * [new branch]      codex/nfl-halftime-joint-research-20260914 -> origin/codex/nfl-halftime-joint-research-20260914
+2026-10-23T06:43:42.8401008Z  * [new branch]      codex/nfl-integrated-context-20260914 -> origin/codex/nfl-integrated-context-20260914
+2026-10-23T06:43:42.8402502Z  * [new branch]      codex/nfl-market-live-20260914 -> origin/codex/nfl-market-live-20260914
+2026-10-23T06:43:42.8404170Z  * [new branch]      codex/nfl-pregame-20260928-package -> origin/codex/nfl-pregame-20260928-package
+2026-10-23T06:43:42.8405811Z  * [new branch]      codex/nfl-qb-margin-20260928 -> origin/codex/nfl-qb-margin-20260928
+2026-10-23T06:43:42.8407462Z  * [new branch]      codex/nfl-qb-offset-prereg-20261006 -> origin/codex/nfl-qb-offset-prereg-20261006
+2026-10-23T06:43:42.8409492Z  * [new branch]      codex/nfl-spread-calibration-20260914 -> origin/codex/nfl-spread-calibration-20260914
+2026-10-23T06:43:42.8411504Z  * [new branch]      codex/nfl-week1-owner-data-20260916 -> origin/codex/nfl-week1-owner-data-20260916
+2026-10-23T06:43:42.8413039Z  * [new branch]      codex/nfl-week2-repair  -> origin/codex/nfl-week2-repair
+2026-10-23T06:43:42.8414557Z  * [new branch]      codex/nfl-weekly-state-safe-20260922 -> origin/codex/nfl-weekly-state-safe-20260922
+2026-10-23T06:43:42.8416099Z  * [new branch]      codex/nfl-wnba-nba-models-v1 -> origin/codex/nfl-wnba-nba-models-v1
+2026-10-23T06:43:42.8417705Z  * [new branch]      codex/nflverse-metric-ensemble-20260918 -> origin/codex/nflverse-metric-ensemble-20260918
+2026-10-23T06:43:42.8545623Z  * [new branch]      codex/nhl-season-rollover-atomic-20261010 -> origin/codex/nhl-season-rollover-atomic-20261010
+2026-10-23T06:43:42.8547355Z  * [new branch]      codex/oct6-card-source-recovery -> origin/codex/oct6-card-source-recovery
+2026-10-23T06:43:42.8552142Z  * [new branch]      codex/offline-benchmark-primitives-20260908 -> origin/codex/offline-benchmark-primitives-20260908
+2026-10-23T06:43:42.8554341Z  * [new branch]      codex/offline-benchmark-primitives-20260908-golden-smu-fsu -> origin/codex/offline-benchmark-primitives-20260908-golden-smu-fsu
+2026-10-23T06:43:42.8556324Z  * [new branch]      codex/p0-absent-acquisition-20260830 -> origin/codex/p0-absent-acquisition-20260830
+2026-10-23T06:43:42.8557930Z  * [new branch]      codex/p0-freshness-health-20260830 -> origin/codex/p0-freshness-health-20260830
+2026-10-23T06:43:42.8559782Z  * [new branch]      codex/postgame-20260922-0828 -> origin/codex/postgame-20260922-0828
+2026-10-23T06:43:42.8561333Z  * [new branch]      codex/postgame-20260923-1251 -> origin/codex/postgame-20260923-1251
+2026-10-23T06:43:42.8563109Z  * [new branch]      codex/priority-prospective-registration-20261009 -> origin/codex/priority-prospective-registration-20261009
+2026-10-23T06:43:42.8565004Z  * [new branch]      codex/readiness-repair-20260923 -> origin/codex/readiness-repair-20260923
+2026-10-23T06:43:42.8566974Z  * [new branch]      codex/release-gates-backfill-20260903 -> origin/codex/release-gates-backfill-20260903
+2026-10-23T06:43:42.8568862Z  * [new branch]      codex/research-overhaul-20261023 -> origin/codex/research-overhaul-20261023
+2026-10-23T06:43:42.8570784Z  * [new branch]      codex/slate-20260922-2136 -> origin/codex/slate-20260922-2136
+2026-10-23T06:43:42.8572182Z  * [new branch]      codex/slate-20260923-2125 -> origin/codex/slate-20260923-2125
+2026-10-23T06:43:42.8573757Z  * [new branch]      codex/standing-health-triage-20260916 -> origin/codex/standing-health-triage-20260916
+2026-10-23T06:43:42.8575394Z  * [new branch]      codex/tested-defaults-all-sports -> origin/codex/tested-defaults-all-sports
+2026-10-23T06:43:42.8577151Z  * [new branch]      decision-authority-contract-v1 -> origin/decision-authority-contract-v1
+2026-10-23T06:43:42.8579123Z  * [new branch]      evidence/import-2026-09-05-phase1-1 -> origin/evidence/import-2026-09-05-phase1-1
+2026-10-23T06:43:42.8580853Z  * [new branch]      feature/margin-distribution-system -> origin/feature/margin-distribution-system
+2026-10-23T06:43:42.8582347Z  * [new branch]      feature/margin-fitting-data -> origin/feature/margin-fitting-data
+2026-10-23T06:43:42.8583839Z  * [new branch]      feature/sports-news-information-state -> origin/feature/sports-news-information-state
+2026-10-23T06:43:42.8585407Z  * [new branch]      fix/card-adapters-all-models-20260921 -> origin/fix/card-adapters-all-models-20260921
+2026-10-23T06:43:42.8586911Z  * [new branch]      fix/diagnostic-winner-team-identity -> origin/fix/diagnostic-winner-team-identity
+2026-10-23T06:43:42.8588989Z  * [new branch]      forecast/2026-09-06-cfb-score-v0-1 -> origin/forecast/2026-09-06-cfb-score-v0-1
+2026-10-23T06:43:42.8590675Z  * [new branch]      forecast/2026-09-06-phase1-1-shadow -> origin/forecast/2026-09-06-phase1-1-shadow
+2026-10-23T06:43:42.8592084Z  * [new branch]      kimi/fu1-feed-adapter   -> origin/kimi/fu1-feed-adapter
+2026-10-23T06:43:42.8593246Z  * [new branch]      kimi/mc-engine-lineage  -> origin/kimi/mc-engine-lineage
+2026-10-23T06:43:42.8594511Z  * [new branch]      kimi/port-card-update-protocol -> origin/kimi/port-card-update-protocol
+2026-10-23T06:43:42.8595836Z  * [new branch]      kimi/port-mc-convergence-gate -> origin/kimi/port-mc-convergence-gate
+2026-10-23T06:43:42.8596978Z  * [new branch]      kimi/sim1-spec          -> origin/kimi/sim1-spec
+2026-10-23T06:43:42.8597948Z  * [new branch]      main                    -> origin/main
+2026-10-23T06:43:42.8599375Z  * [new branch]      reconcile/phase1-1-code -> origin/reconcile/phase1-1-code
+2026-10-23T06:43:42.8601162Z  * [new branch]      repair/mlb-postseason-production-audit-20261006 -> origin/repair/mlb-postseason-production-audit-20261006
+2026-10-23T06:43:42.8603245Z  * [new branch]      research/mlb-postseason-20260930 -> origin/research/mlb-postseason-20260930
+2026-10-23T06:43:42.8604845Z  * [new branch]      research/nhl-joint-evidence-20260929 -> origin/research/nhl-joint-evidence-20260929
+2026-10-23T06:43:42.8606200Z  * [new branch]      sportsmodel/main        -> origin/sportsmodel/main
+2026-10-23T06:43:42.8609469Z [command]/usr/bin/git branch --list --remote origin/main
+2026-10-23T06:43:42.8610402Z   origin/main
+2026-10-23T06:43:42.8612370Z [command]/usr/bin/git rev-parse refs/remotes/origin/main
+2026-10-23T06:43:42.8613307Z 74c22df865706ba8ec17442c95c7c521ca34f915
+2026-10-23T06:43:42.8615649Z ##[endgroup]
+2026-10-23T06:43:42.8616727Z ##[group]Determining the checkout info
+2026-10-23T06:43:42.8618482Z ##[endgroup]
+2026-10-23T06:43:42.8619352Z [command]/usr/bin/git sparse-checkout disable
+2026-10-23T06:43:42.8621656Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+2026-10-23T06:43:42.8624097Z ##[group]Checking out the ref
+2026-10-23T06:43:42.8624913Z [command]/usr/bin/git checkout --progress --force -B main refs/remotes/origin/main
+2026-10-23T06:43:43.1905910Z Switched to a new branch 'main'
+2026-10-23T06:43:43.1912866Z branch 'main' set up to track 'origin/main'.
+2026-10-23T06:43:43.1938701Z ##[endgroup]
+2026-10-23T06:43:43.1992645Z [command]/usr/bin/git log -1 --format=%H
+2026-10-23T06:43:43.2024188Z 74c22df865706ba8ec17442c95c7c521ca34f915
+2026-10-23T06:43:43.2289720Z ##[group]Run actions/setup-python@v5
+2026-10-23T06:43:43.2290024Z with:
+2026-10-23T06:43:43.2290229Z   python-version: 3.12
+2026-10-23T06:43:43.2290453Z   check-latest: false
+2026-10-23T06:43:43.2293163Z   token: ***
+2026-10-23T06:43:43.2293373Z   update-environment: true
+2026-10-23T06:43:43.2293615Z   allow-prereleases: false
+2026-10-23T06:43:43.2293839Z   freethreaded: false
+2026-10-23T06:43:43.2294048Z ##[endgroup]
+2026-10-23T06:43:43.3708651Z ##[group]Installed versions
+2026-10-23T06:43:43.3804593Z (node:2293) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-10-23T06:43:43.3806123Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-10-23T06:43:43.3807209Z Successfully set up CPython (3.12.15)
+2026-10-23T06:43:43.3808366Z ##[endgroup]
+2026-10-23T06:43:43.4053599Z ##[group]Run pip install -r requirements-nfl-context.txt pytest==8.4.2 PyYAML==6.0.2
+2026-10-23T06:43:43.4054684Z [36;1mpip install -r requirements-nfl-context.txt pytest==8.4.2 PyYAML==6.0.2[0m
+2026-10-23T06:43:43.4449533Z shell: /usr/bin/bash -e {0}
+2026-10-23T06:43:43.4449825Z env:
+2026-10-23T06:43:43.4450099Z   pythonLocation: /opt/hostedtoolcache/Python/3.12.15/x64
+2026-10-23T06:43:43.4450561Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.12.15/x64/lib/pkgconfig
+2026-10-23T06:43:43.4451005Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+2026-10-23T06:43:43.4451390Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+2026-10-23T06:43:43.4451793Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+2026-10-23T06:43:43.4452170Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.12.15/x64/lib
+2026-10-23T06:43:43.4452489Z ##[endgroup]
+2026-10-23T06:43:45.6755799Z Collecting pytest==8.4.2
+2026-10-23T06:43:45.7679533Z   Downloading pytest-8.4.2-py3-none-any.whl.metadata (7.7 kB)
+2026-10-23T06:43:45.8429253Z Collecting PyYAML==6.0.2
+2026-10-23T06:43:45.8506021Z   Downloading PyYAML-6.0.2-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (2.1 kB)
+2026-10-23T06:43:46.2052108Z Collecting numpy==2.3.5 (from -r requirements-nfl-context.txt (line 1))
+2026-10-23T06:43:46.2384504Z   Downloading numpy-2.3.5-cp312-cp312-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl.metadata (62 kB)
+2026-10-23T06:43:46.3979859Z Collecting pandas==2.2.3 (from -r requirements-nfl-context.txt (line 2))
+2026-10-23T06:43:46.4073564Z   Downloading pandas-2.2.3-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (89 kB)
+2026-10-23T06:43:46.5363171Z Collecting scikit-learn==1.8.0 (from -r requirements-nfl-context.txt (line 3))
+2026-10-23T06:43:46.5441552Z   Downloading scikit_learn-1.8.0-cp312-cp312-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl.metadata (11 kB)
+2026-10-23T06:43:46.6901609Z Collecting scipy==1.17.0 (from -r requirements-nfl-context.txt (line 4))
+2026-10-23T06:43:46.6977686Z   Downloading scipy-1.17.0-cp312-cp312-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl.metadata (62 kB)
+2026-10-23T06:43:46.7369365Z Collecting iniconfig>=1 (from pytest==8.4.2)
+2026-10-23T06:43:46.7444803Z   Downloading iniconfig-2.3.1-py3-none-any.whl.metadata (2.8 kB)
+2026-10-23T06:43:46.7639649Z Collecting packaging>=20 (from pytest==8.4.2)
+2026-10-23T06:43:46.7715885Z   Downloading packaging-26.3-py3-none-any.whl.metadata (3.5 kB)
+2026-10-23T06:43:46.7893337Z Collecting pluggy<2,>=1.5 (from pytest==8.4.2)
+2026-10-23T06:43:46.7972673Z   Downloading pluggy-1.7.0-py3-none-any.whl.metadata (5.0 kB)
+2026-10-23T06:43:46.8197609Z Collecting pygments>=2.7.2 (from pytest==8.4.2)
+2026-10-23T06:43:46.8271570Z   Downloading pygments-2.21.0-py3-none-any.whl.metadata (2.5 kB)
+2026-10-23T06:43:46.8460051Z Collecting python-dateutil>=2.8.2 (from pandas==2.2.3->-r requirements-nfl-context.txt (line 2))
+2026-10-23T06:43:46.8542099Z   Downloading python_dateutil-3.0.0-py2.py3-none-any.whl.metadata (8.2 kB)
+2026-10-23T06:43:46.8944978Z Collecting pytz>=2020.1 (from pandas==2.2.3->-r requirements-nfl-context.txt (line 2))
+2026-10-23T06:43:46.9025193Z   Downloading pytz-2026.5-py2.py3-none-any.whl.metadata (22 kB)
+2026-10-23T06:43:46.9241063Z Collecting tzdata>=2022.7 (from pandas==2.2.3->-r requirements-nfl-context.txt (line 2))
+2026-10-23T06:43:46.9316835Z   Downloading tzdata-2026.5-py2.py3-none-any.whl.metadata (1.4 kB)
+2026-10-23T06:43:46.9562670Z Collecting joblib>=1.3.0 (from scikit-learn==1.8.0->-r requirements-nfl-context.txt (line 3))
+2026-10-23T06:43:46.9638817Z   Downloading joblib-1.6.0-py3-none-any.whl.metadata (6.5 kB)
+2026-10-23T06:43:46.9810510Z Collecting threadpoolctl>=3.2.0 (from scikit-learn==1.8.0->-r requirements-nfl-context.txt (line 3))
+2026-10-23T06:43:46.9885315Z   Downloading threadpoolctl-3.7.0-py3-none-any.whl.metadata (24 kB)
+2026-10-23T06:43:47.0137866Z Collecting cloudpickle>=3.0 (from joblib>=1.3.0->scikit-learn==1.8.0->-r requirements-nfl-context.txt (line 3))
+2026-10-23T06:43:47.0222955Z   Downloading cloudpickle-3.1.2-py3-none-any.whl.metadata (7.1 kB)
+2026-10-23T06:43:47.0410588Z Collecting six>=1.6 (from python-dateutil>=2.8.2->pandas==2.2.3->-r requirements-nfl-context.txt (line 2))
+2026-10-23T06:43:47.0503607Z   Downloading six-1.17.0-py2.py3-none-any.whl.metadata (1.7 kB)
+2026-10-23T06:43:47.0646764Z Downloading pytest-8.4.2-py3-none-any.whl (365 kB)
+2026-10-23T06:43:47.1298938Z Downloading PyYAML-6.0.2-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (767 kB)
+2026-10-23T06:43:47.2262096Z    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 767.5/767.5 kB 8.6 MB/s  0:00:00
+2026-10-23T06:43:47.2338991Z Downloading numpy-2.3.5-cp312-cp312-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl (16.6 MB)
+2026-10-23T06:43:48.0852535Z    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 16.6/16.6 MB 19.9 MB/s  0:00:00
+2026-10-23T06:43:48.0945464Z Downloading pandas-2.2.3-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (12.7 MB)
+2026-10-23T06:43:48.1674322Z    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 12.7/12.7 MB 193.8 MB/s  0:00:00
+2026-10-23T06:43:48.1755188Z Downloading scikit_learn-1.8.0-cp312-cp312-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl (8.9 MB)
+2026-10-23T06:43:48.2079033Z    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 8.9/8.9 MB 301.0 MB/s  0:00:00
+2026-10-23T06:43:48.2160004Z Downloading scipy-1.17.0-cp312-cp312-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl (35.0 MB)
+2026-10-23T06:43:48.3309694Z    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 35.0/35.0 MB 309.7 MB/s  0:00:00
+2026-10-23T06:43:48.3387097Z Downloading pluggy-1.7.0-py3-none-any.whl (27 kB)
+2026-10-23T06:43:48.3489433Z Downloading iniconfig-2.3.1-py3-none-any.whl (7.6 kB)
+2026-10-23T06:43:48.3596160Z Downloading joblib-1.6.0-py3-none-any.whl (306 kB)
+2026-10-23T06:43:48.3702504Z Downloading cloudpickle-3.1.2-py3-none-any.whl (22 kB)
+2026-10-23T06:43:48.3799427Z Downloading packaging-26.3-py3-none-any.whl (129 kB)
+2026-10-23T06:43:48.3912728Z Downloading pygments-2.21.0-py3-none-any.whl (1.3 MB)
+2026-10-23T06:43:48.3985245Z    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 1.3/1.3 MB 232.3 MB/s  0:00:00
+2026-10-23T06:43:48.4064253Z Downloading python_dateutil-3.0.0-py2.py3-none-any.whl (94 kB)
+2026-10-23T06:43:48.4162444Z Downloading pytz-2026.5-py2.py3-none-any.whl (506 kB)
+2026-10-23T06:43:48.4272359Z Downloading six-1.17.0-py2.py3-none-any.whl (11 kB)
+2026-10-23T06:43:48.4368452Z Downloading threadpoolctl-3.7.0-py3-none-any.whl (26 kB)
+2026-10-23T06:43:48.4463411Z Downloading tzdata-2026.5-py2.py3-none-any.whl (347 kB)
+2026-10-23T06:43:48.7287712Z Installing collected packages: pytz, tzdata, threadpoolctl, six, PyYAML, pygments, pluggy, packaging, numpy, iniconfig, cloudpickle, scipy, python-dateutil, pytest, joblib, scikit-learn, pandas
+2026-10-23T06:44:04.3748978Z 
+2026-10-23T06:44:04.3772104Z Successfully installed PyYAML-6.0.2 cloudpickle-3.1.2 iniconfig-2.3.1 joblib-1.6.0 numpy-2.3.5 packaging-26.3 pandas-2.2.3 pluggy-1.7.0 pygments-2.21.0 pytest-8.4.2 python-dateutil-3.0.0 pytz-2026.5 scikit-learn-1.8.0 scipy-1.17.0 six-1.17.0 threadpoolctl-3.7.0 tzdata-2026.5
+2026-10-23T06:44:04.3785785Z 
+2026-10-23T06:44:04.3793416Z [notice] A new release of pip is available: 26.2.1 -> 26.2.2
+2026-10-23T06:44:04.3794476Z [notice] To update, run: pip install --upgrade pip
+2026-10-23T06:44:04.4730662Z ##[group]Run git rev-parse HEAD
+2026-10-23T06:44:04.4731011Z [36;1mgit rev-parse HEAD[0m
+2026-10-23T06:44:04.4731292Z [36;1mtest -z "$(git status --porcelain)"[0m
+2026-10-23T06:44:04.4794495Z shell: /usr/bin/bash -e {0}
+2026-10-23T06:44:04.4794741Z env:
+2026-10-23T06:44:04.4795006Z   pythonLocation: /opt/hostedtoolcache/Python/3.12.15/x64
+2026-10-23T06:44:04.4795454Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.12.15/x64/lib/pkgconfig
+2026-10-23T06:44:04.4795889Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+2026-10-23T06:44:04.4796268Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+2026-10-23T06:44:04.4796643Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+2026-10-23T06:44:04.4797027Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.12.15/x64/lib
+2026-10-23T06:44:04.4797347Z ##[endgroup]
+2026-10-23T06:44:04.4896212Z 74c22df865706ba8ec17442c95c7c521ca34f915
+2026-10-23T06:44:04.6118889Z ##[group]Run set -o pipefail
+2026-10-23T06:44:04.6119248Z [36;1mset -o pipefail[0m
+2026-10-23T06:44:04.6119915Z [36;1mpython -m pytest tests/test_mlb_current_path.py tests/test_release_health_repairs.py tests/test_current_sports_data.py -q 2>&1 | tee "$RUNNER_TEMP/mlb-tests.log"[0m
+2026-10-23T06:44:04.6188769Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-10-23T06:44:04.6189111Z env:
+2026-10-23T06:44:04.6189390Z   pythonLocation: /opt/hostedtoolcache/Python/3.12.15/x64
+2026-10-23T06:44:04.6189823Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.12.15/x64/lib/pkgconfig
+2026-10-23T06:44:04.6190247Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+2026-10-23T06:44:04.6190623Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+2026-10-23T06:44:04.6190996Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+2026-10-23T06:44:04.6191390Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.12.15/x64/lib
+2026-10-23T06:44:04.6191749Z ##[endgroup]
+2026-10-23T06:44:06.0385551Z ................................                                         [100%]
+2026-10-23T06:44:06.0386987Z 32 passed in 1.01s
+2026-10-23T06:44:06.1419142Z ##[group]Run set +e
+2026-10-23T06:44:06.1419450Z [36;1mset +e[0m
+2026-10-23T06:44:06.1419799Z [36;1mpython harness/healthcheck.py > "$RUNNER_TEMP/mlb-health.log" 2>&1[0m
+2026-10-23T06:44:06.1420190Z [36;1mresult=$?[0m
+2026-10-23T06:44:06.1420423Z [36;1mprintf 'HEALTH_EXIT=%s\n' "$result"[0m
+2026-10-23T06:44:06.1421017Z [36;1mprintf '%s\n' "$result" > "$RUNNER_TEMP/mlb-health-exit.txt"[0m
+2026-10-23T06:44:06.1421397Z [36;1mcat "$RUNNER_TEMP/mlb-health.log"[0m
+2026-10-23T06:44:06.1421668Z [36;1mexit 0[0m
+2026-10-23T06:44:06.1484929Z shell: /usr/bin/bash -e {0}
+2026-10-23T06:44:06.1485180Z env:
+2026-10-23T06:44:06.1485442Z   pythonLocation: /opt/hostedtoolcache/Python/3.12.15/x64
+2026-10-23T06:44:06.1485877Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.12.15/x64/lib/pkgconfig
+2026-10-23T06:44:06.1486301Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+2026-10-23T06:44:06.1486695Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+2026-10-23T06:44:06.1487128Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+2026-10-23T06:44:06.1487519Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.12.15/x64/lib
+2026-10-23T06:44:06.1487838Z ##[endgroup]
+2026-10-23T06:44:43.9517412Z HEALTH_EXIT=1
+2026-10-23T06:44:43.9532387Z [OK ] exists: state.json
+2026-10-23T06:44:43.9537443Z [OK ] exists: AGENTS.md
+2026-10-23T06:44:43.9537984Z [OK ] exists: AUTHORIZATIONS.md
+2026-10-23T06:44:43.9538898Z [OK ] exists: harness/runbook.md
+2026-10-23T06:44:43.9539515Z [OK ] exists: data/backfill/mlb/2026/results.csv
+2026-10-23T06:44:43.9540368Z [OK ] exists: data/backfill/mlb/2026/park_factors.json
+2026-10-23T06:44:43.9540926Z [OK ] state.json parses
+2026-10-23T06:44:43.9541346Z [OK ] real money still 0 / unauthorized
+2026-10-23T06:44:43.9541893Z [OK ] sides verdict still NO_PROMOTE (R3)
+2026-10-23T06:44:43.9542395Z [OK ] results.csv rows=2090 finals=2084 (>=1505)
+2026-10-23T06:44:43.9542900Z [OK ] no duplicate game_ids
+2026-10-23T06:44:43.9543522Z [OK ] all finals have home_win+total (or explicit winner-only PROVISIONAL)
+2026-10-23T06:44:43.9544276Z [WARN] dataset freshness: last final 2026-09-02 (51d old)
+2026-10-23T06:44:43.9545033Z [OK ] result provenance (1819 FINAL/tier-1, 265 PROVISIONAL, 2079 evidence-bound)
+2026-10-23T06:44:43.9545836Z [OK ] winner-name reconciliation (39 rows checkable, 0 mismatch)
+2026-10-23T06:44:43.9546650Z [WARN] adjacent-day duplicate scores on non-tier-1 sources: 1 (PIT@MIL 2026-08-05)
+2026-10-23T06:44:43.9547370Z [OK ] frozen-slate games missing a result: 0
+2026-10-23T06:44:43.9548027Z [OK ] graded slates registered in the forecast registry (unregistered: none)
+2026-10-23T06:44:43.9549155Z [OK ] pitcher_logs cached: 337 (>=310)
+2026-10-23T06:44:43.9549848Z [OK ] close_* contamination declared and not growing (2 dates populated, 0 undeclared)
+2026-10-23T06:44:43.9550694Z [OK ] ER/BB placeholder manifest matches logs (1684 rows, 0 drift)
+2026-10-23T06:44:43.9551383Z [OK ] HFA read from engine/hfa.py in live paths (0 stray literals)
+2026-10-23T06:44:43.9552068Z [OK ] kprop pending plays from past dates: 0 (grade them!)
+2026-10-23T06:44:43.9552832Z [OK ] pitcher-log integrity (0 flagged -> reconcile per runbook, do NOT delete)
+2026-10-23T06:44:43.9553315Z [OK ] kprops self-test (kprops self-test: PASS)
+2026-10-23T06:44:43.9553726Z [OK ] FROZEN_LINEAGE (verifier A: published hashes describe commit 6d4a7c0)
+2026-10-23T06:44:43.9554302Z [OK ] SUCCESSOR_EQUIVALENCE (verifier B: SCOPE: current code reproduces the frozen engine on the exac)
+2026-10-23T06:44:43.9554947Z [OK ] forecast registry (forecast_registry verify: PASS (345 forecasts, 359 grades, chain intac)
+2026-10-23T06:44:43.9555593Z [OK ] forecast-registry falsifications (forecast_registry tests: PASS (12 checks: 10 falsifications )
+2026-10-23T06:44:43.9556186Z [OK ] ml_asof rebuild rebuild check: IDENTICAL (manifest 9cfc539d54dc, rebuilt 9cf
+2026-10-23T06:44:43.9556618Z [OK ] ml_asof manifest complete (0 problems)
+2026-10-23T06:44:43.9557197Z [OK ] ml_asof row count matches manifest (2078 vs 2078)
+2026-10-23T06:44:43.9557716Z [OK ] ml firewall fixtures (ml_firewall tests: PASS (18 checks: 13 negative fixtures fired, 5 posi)
+2026-10-23T06:44:43.9558921Z [OK ] ml p4 forward (ml_p4_forward selftest: PASS (24 fixtures: hash-freeze refusal, quaran)
+2026-10-23T06:44:43.9559572Z [OK ] player evolution shadow (player_evolution selftest: PASS (25 fixtures, synthetic only; evidence)
+2026-10-23T06:44:43.9560394Z [OK ] model registry (model_registry self-test: PASS (20 identities, 18 pinned sources))
+2026-10-23T06:44:43.9560849Z [OK ] market_priority frozen [ML,K,RL,TOTAL]
+2026-10-23T06:44:43.9561355Z [OK ] market statuses (ML FORWARD_VALIDATION_ACTIVE, K MAINTENANCE_ONLY_ACTIVE, RL/TOTAL DATA_CAPTURE_ACTIVE)
+2026-10-23T06:44:43.9562256Z [OK ] queue policy: no non-ML model-changing experiment active (active=ML-P4-FORWARD (d_logistic_2f cfg 132523ac vs V13 vs market; first eligible slate 2026-07-29))
+2026-10-23T06:44:43.9563138Z [OK ] result_provenance selftest (result_provenance selftest: PASS (tier mapping incl. conservative defaul)
+2026-10-23T06:44:43.9563673Z [OK ] result_provenance selftest names its own module
+2026-10-23T06:44:43.9564213Z [OK ] result_content_checks selftest (result_content_checks selftest: PASS (echo detector fires on the real 8/)
+2026-10-23T06:44:43.9564774Z [OK ] result_content_checks selftest names its own module
+2026-10-23T06:44:43.9565303Z [OK ] parse_box_dump selftest (parse_box_dump selftest: PASS (team normalisation, away@home orientation)
+2026-10-23T06:44:43.9565809Z [OK ] parse_box_dump selftest names its own module
+2026-10-23T06:44:43.9566341Z [OK ] acquisition_ledger selftest (acquisition_ledger selftest: PASS (append-only enforced, duplicate revis)
+2026-10-23T06:44:43.9566883Z [OK ] acquisition_ledger selftest names its own module
+2026-10-23T06:44:43.9567397Z [OK ] missing_data_audit selftest (missing_data_audit selftest: PASS (34-game inventory, no structural viol)
+2026-10-23T06:44:43.9567909Z [OK ] missing_data_audit selftest names its own module
+2026-10-23T06:44:43.9569185Z [OK ] tier_discipline selftest (tier_discipline selftest: PASS (canonical predicate rejects tier-3 and t)
+2026-10-23T06:44:43.9569878Z [OK ] tier_discipline selftest names its own module
+2026-10-23T06:44:43.9570428Z [OK ] artifact_immutability selftest (artifact_immutability selftest: PASS (rewritten and deleted artifacts bo)
+2026-10-23T06:44:43.9570989Z [OK ] artifact_immutability selftest names its own module
+2026-10-23T06:44:43.9571511Z [OK ] tier1_board_gate selftest (tier1_board_gate selftest: PASS (unknown/typo'd team name, short slate, )
+2026-10-23T06:44:43.9572016Z [OK ] tier1_board_gate selftest names its own module
+2026-10-23T06:44:43.9572533Z [OK ] form_refresh_diff selftest (form_refresh_diff selftest: PASS (canonical file untouched; date filters)
+2026-10-23T06:44:43.9573044Z [OK ] form_refresh_diff selftest names its own module
+2026-10-23T06:44:43.9573538Z [OK ] tier1_lineage selftest (tier1_lineage selftest: PASS (canonical source untouched and byte-verifi)
+2026-10-23T06:44:43.9574039Z [OK ] tier1_lineage selftest names its own module
+2026-10-23T06:44:43.9574549Z [OK ] pregame_preflight selftest (pregame_preflight selftest: PASS (day-rollover fixed so a 00:05Z game no)
+2026-10-23T06:44:43.9575076Z [OK ] pregame_preflight selftest names its own module
+2026-10-23T06:44:43.9575566Z [OK ] card_render selftest (card_render selftest: PASS (replay reproduces all 6 stored fields on 11/)
+2026-10-23T06:44:43.9576060Z [OK ] card_render selftest names its own module
+2026-10-23T06:44:43.9576582Z [OK ] settlement_contract selftest (settlement_contract selftest: PASS (generic 'side', ghost ATS, post-tip )
+2026-10-23T06:44:43.9577127Z [OK ] settlement_contract selftest names its own module
+2026-10-23T06:44:43.9577626Z [OK ] unified_card selftest (unified_card selftest: PASS (all three owner compression fixtures flag; )
+2026-10-23T06:44:43.9578407Z [OK ] unified_card selftest names its own module
+2026-10-23T06:44:43.9578772Z [OK ] decision_card selftest (decision_card selftest: PASS)
+2026-10-23T06:44:43.9579280Z [OK ] decision_card selftest names its own module
+2026-10-23T06:44:43.9579621Z [OK ] ats_ledgers selftest (ats_ledgers selftest: PASS)
+2026-10-23T06:44:43.9579962Z [OK ] ats_ledgers selftest names its own module
+2026-10-23T06:44:43.9580349Z [OK ] journal_continuity selftest (journal_continuity selftest: PASS)
+2026-10-23T06:44:43.9580863Z [OK ] journal_continuity selftest names its own module
+2026-10-23T06:44:43.9581253Z [OK ] acquisition_ladder selftest (acquisition_ladder selftest: PASS)
+2026-10-23T06:44:43.9581677Z [OK ] acquisition_ladder selftest names its own module
+2026-10-23T06:44:43.9582008Z [OK ] echo_gate selftest (echo_gate selftest: PASS)
+2026-10-23T06:44:43.9582326Z [OK ] echo_gate selftest names its own module
+2026-10-23T06:44:43.9582825Z [OK ] sports_acquisition selftest (  "generated_utc": datetime.datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%)
+2026-10-23T06:44:43.9583342Z [OK ] sports_acquisition selftest names its own module
+2026-10-23T06:44:43.9583692Z [OK ] retry_ladder selftest (retry_ladder selftest: PASS)
+2026-10-23T06:44:43.9584030Z [OK ] retry_ladder selftest names its own module
+2026-10-23T06:44:43.9584401Z [OK ] information_class selftest (information_class selftest: PASS)
+2026-10-23T06:44:43.9584794Z [OK ] information_class selftest names its own module
+2026-10-23T06:44:43.9585141Z [OK ] grade_ledger selftest (grade_ledger selftest: PASS)
+2026-10-23T06:44:43.9585473Z [OK ] grade_ledger selftest names its own module
+2026-10-23T06:44:43.9585828Z [OK ] baseline_offset selftest (baseline_offset selftest: PASS)
+2026-10-23T06:44:43.9586193Z [OK ] baseline_offset selftest names its own module
+2026-10-23T06:44:43.9586537Z [OK ] paired_eval selftest (paired_eval selftest: PASS)
+2026-10-23T06:44:43.9586871Z [OK ] paired_eval selftest names its own module
+2026-10-23T06:44:43.9587224Z [OK ] adaptive_layers selftest (adaptive_layers selftest: PASS)
+2026-10-23T06:44:43.9587585Z [OK ] adaptive_layers selftest names its own module
+2026-10-23T06:44:43.9587942Z [OK ] adaptive_state selftest (adaptive_state selftest: PASS)
+2026-10-23T06:44:43.9588628Z [OK ] adaptive_state selftest names its own module
+2026-10-23T06:44:43.9589068Z [OK ] empirical_uncertainty selftest (empirical_uncertainty selftest: PASS)
+2026-10-23T06:44:43.9589506Z [OK ] empirical_uncertainty selftest names its own module
+2026-10-23T06:44:43.9589883Z [OK ] drift_monitor selftest (drift_monitor selftest: PASS)
+2026-10-23T06:44:43.9590234Z [OK ] drift_monitor selftest names its own module
+2026-10-23T06:44:43.9590625Z [OK ] champion_challenger selftest (champion_challenger selftest: PASS)
+2026-10-23T06:44:43.9591040Z [OK ] champion_challenger selftest names its own module
+2026-10-23T06:44:43.9591434Z [OK ] freshness_contract selftest (freshness_contract selftest: OK)
+2026-10-23T06:44:43.9591825Z [OK ] freshness_contract selftest names its own module
+2026-10-23T06:44:43.9592295Z [OK ] test_starter_freshness_regression selftest (    Christian Scott 43d -> DEGRADED dose 0.5)
+2026-10-23T06:44:43.9592841Z [OK ] test_starter_freshness_regression selftest names its own module
+2026-10-23T06:44:43.9593269Z [OK ] wnba_refresh_espn selftest (wnba_refresh_espn selftest: OK)
+2026-10-23T06:44:43.9593644Z [OK ] wnba_refresh_espn selftest names its own module
+2026-10-23T06:44:43.9594044Z [OK ] acquisition_adapters selftest (acquisition_adapters selftest: OK)
+2026-10-23T06:44:43.9594457Z [OK ] acquisition_adapters selftest names its own module
+2026-10-23T06:44:43.9594800Z [OK ] board_shape selftest (board_shape selftest: OK)
+2026-10-23T06:44:43.9595135Z [OK ] board_shape selftest names its own module
+2026-10-23T06:44:43.9595512Z [OK ] market_independence selftest (market_independence selftest: OK)
+2026-10-23T06:44:43.9595909Z [OK ] market_independence selftest names its own module
+2026-10-23T06:44:43.9596279Z [OK ] claim_discipline selftest (claim_discipline selftest: OK)
+2026-10-23T06:44:43.9596645Z [OK ] claim_discipline selftest names its own module
+2026-10-23T06:44:43.9597282Z [OK ] freshness_gates selftest (freshness_gates selftest: PASS (all six gates fire on their own fixtures)
+2026-10-23T06:44:43.9597802Z [OK ] freshness_gates selftest names its own module
+2026-10-23T06:44:43.9598419Z [OK ] never_adapt_audit selftest (never_adapt_audit selftest: PASS)
+2026-10-23T06:44:43.9598807Z [OK ] never_adapt_audit selftest names its own module
+2026-10-23T06:44:43.9599193Z [OK ] forecast_contract selftest (forecast_contract selftest: PASS)
+2026-10-23T06:44:43.9599695Z [OK ] forecast_contract selftest names its own module
+2026-10-23T06:44:43.9600085Z [OK ] evaluation_standard selftest (evaluation_standard selftest: PASS)
+2026-10-23T06:44:43.9600491Z [OK ] evaluation_standard selftest names its own module
+2026-10-23T06:44:43.9600837Z [OK ] prequential selftest (prequential selftest: PASS)
+2026-10-23T06:44:43.9601164Z [OK ] prequential selftest names its own module
+2026-10-23T06:44:43.9601510Z [OK ] promotion_gate selftest (promotion_gate selftest: PASS)
+2026-10-23T06:44:43.9601872Z [OK ] promotion_gate selftest names its own module
+2026-10-23T06:44:43.9602237Z [OK ] evaluation_arm selftest (evaluation_arm selftest: PASS)
+2026-10-23T06:44:43.9602592Z [OK ] evaluation_arm selftest names its own module
+2026-10-23T06:44:43.9602914Z [OK ] keyed_seed selftest (keyed_seed selftest: PASS)
+2026-10-23T06:44:43.9603315Z [OK ] keyed_seed selftest names its own module
+2026-10-23T06:44:43.9603652Z [OK ] cohort_fork selftest (cohort_fork selftest: PASS)
+2026-10-23T06:44:43.9603973Z [OK ] cohort_fork selftest names its own module
+2026-10-23T06:44:43.9604307Z [OK ] three_arm_card selftest (three_arm_card selftest: PASS)
+2026-10-23T06:44:43.9604652Z [OK ] three_arm_card selftest names its own module
+2026-10-23T06:44:43.9604978Z [OK ] arm_coverage selftest (arm_coverage selftest: OK)
+2026-10-23T06:44:43.9605303Z [OK ] arm_coverage selftest names its own module
+2026-10-23T06:44:43.9605706Z [OK ] totals_estimand selftest (totals_estimand selftest: OK)
+2026-10-23T06:44:43.9606071Z [OK ] totals_estimand selftest names its own module
+2026-10-23T06:44:43.9606456Z [OK ] simulation_standard selftest (simulation_standard selftest: OK)
+2026-10-23T06:44:43.9606853Z [OK ] simulation_standard selftest names its own module
+2026-10-23T06:44:43.9607212Z [OK ] render_contract selftest (render_contract selftest: OK)
+2026-10-23T06:44:43.9607564Z [OK ] render_contract selftest names its own module
+2026-10-23T06:44:43.9607940Z [OK ] franchise_identity selftest (franchise_identity selftest: OK)
+2026-10-23T06:44:43.9608662Z [OK ] franchise_identity selftest names its own module
+2026-10-23T06:44:43.9609065Z [OK ] finalization_evidence selftest (finalization_evidence selftest: OK)
+2026-10-23T06:44:43.9609492Z [OK ] finalization_evidence selftest names its own module
+2026-10-23T06:44:43.9609893Z [OK ] source_artifact_gate selftest (source_artifact_gate selftest: OK)
+2026-10-23T06:44:43.9610296Z [OK ] source_artifact_gate selftest names its own module
+2026-10-23T06:44:43.9610719Z [OK ] prospectivity_evidence selftest (prospectivity_evidence selftest: OK)
+2026-10-23T06:44:43.9611161Z [OK ] prospectivity_evidence selftest names its own module
+2026-10-23T06:44:43.9611528Z [OK ] widening_rule selftest (widening_rule selftest: OK)
+2026-10-23T06:44:43.9611875Z [OK ] widening_rule selftest names its own module
+2026-10-23T06:44:43.9612210Z [OK ] anchor_verify selftest (anchor_verify selftest: OK)
+2026-10-23T06:44:43.9612538Z [OK ] anchor_verify selftest names its own module
+2026-10-23T06:44:43.9612915Z [OK ] price_acquisition selftest (price_acquisition selftest: OK)
+2026-10-23T06:44:43.9613292Z [OK ] price_acquisition selftest names its own module
+2026-10-23T06:44:43.9613628Z [OK ] price_overlay selftest (price_overlay selftest: OK)
+2026-10-23T06:44:43.9613956Z [OK ] price_overlay selftest names its own module
+2026-10-23T06:44:43.9614263Z [OK ] ev_screen selftest (ev_screen selftest: OK)
+2026-10-23T06:44:43.9614563Z [OK ] ev_screen selftest names its own module
+2026-10-23T06:44:43.9614940Z [OK ] distribution_identity selftest (distribution_identity selftest: OK)
+2026-10-23T06:44:43.9615493Z [OK ] distribution_identity selftest names its own module
+2026-10-23T06:44:43.9615911Z [OK ] uncertainty_estimand selftest (uncertainty_estimand selftest: OK)
+2026-10-23T06:44:43.9616316Z [OK ] uncertainty_estimand selftest names its own module
+2026-10-23T06:44:43.9616669Z [OK ] decision_view selftest (decision_view selftest: OK)
+2026-10-23T06:44:43.9617101Z [OK ] decision_view selftest names its own module
+2026-10-23T06:44:43.9617440Z [OK ] route_ladder_v1 selftest (route_ladder_v1 selftest: OK)
+2026-10-23T06:44:43.9617786Z [OK ] route_ladder_v1 selftest names its own module
+2026-10-23T06:44:43.9618404Z [OK ] checkpoint_schedule selftest (checkpoint_schedule selftest: OK)
+2026-10-23T06:44:43.9618808Z [OK ] checkpoint_schedule selftest names its own module
+2026-10-23T06:44:43.9619166Z [OK ] readiness_gate selftest (readiness_gate selftest: OK)
+2026-10-23T06:44:43.9619517Z [OK ] readiness_gate selftest names its own module
+2026-10-23T06:44:43.9619904Z [OK ] replacement_workflow selftest (replacement_workflow selftest: OK)
+2026-10-23T06:44:43.9620322Z [OK ] replacement_workflow selftest names its own module
+2026-10-23T06:44:43.9620684Z [OK ] module_manifest selftest (module_manifest selftest: OK)
+2026-10-23T06:44:43.9621039Z [OK ] module_manifest selftest names its own module
+2026-10-23T06:44:43.9621380Z [OK ] pipeline_e2e selftest (pipeline_e2e selftest: OK)
+2026-10-23T06:44:43.9621720Z [OK ] pipeline_e2e selftest names its own module
+2026-10-23T06:44:43.9622055Z [OK ] recovery_jobs selftest (recovery_jobs selftest: OK)
+2026-10-23T06:44:43.9622385Z [OK ] recovery_jobs selftest names its own module
+2026-10-23T06:44:43.9622715Z [OK ] release_gate selftest (release_gate selftest: OK)
+2026-10-23T06:44:43.9623033Z [OK ] release_gate selftest names its own module
+2026-10-23T06:44:43.9623366Z [OK ] result_display selftest (result_display selftest: OK)
+2026-10-23T06:44:43.9623710Z [OK ] result_display selftest names its own module
+2026-10-23T06:44:43.9624090Z [OK ] adaptive_challenger selftest (adaptive_challenger selftest: OK)
+2026-10-23T06:44:43.9624487Z [OK ] adaptive_challenger selftest names its own module
+2026-10-23T06:44:43.9624843Z [OK ] state_coherence selftest (state_coherence selftest: OK)
+2026-10-23T06:44:43.9625194Z [OK ] state_coherence selftest names its own module
+2026-10-23T06:44:43.9625596Z [OK ] wnba_feature_pipeline selftest (wnba_feature_pipeline selftest: OK)
+2026-10-23T06:44:43.9626021Z [OK ] wnba_feature_pipeline selftest names its own module
+2026-10-23T06:44:43.9626375Z [OK ] mc_convergence selftest (mc_convergence selftest: OK)
+2026-10-23T06:44:43.9626711Z [OK ] mc_convergence selftest names its own module
+2026-10-23T06:44:43.9627160Z [OK ] test_mc_convergence_gate selftest (test_mc_convergence_gate selftest: OK (7/7 passed))
+2026-10-23T06:44:43.9627652Z [OK ] test_mc_convergence_gate selftest names its own module
+2026-10-23T06:44:43.9627995Z [OK ] feed_espn selftest (feed_espn selftest: OK)
+2026-10-23T06:44:43.9628621Z [OK ] feed_espn selftest names its own module
+2026-10-23T06:44:43.9628978Z [OK ] feed_mlb_statsapi selftest (feed_mlb_statsapi selftest: OK)
+2026-10-23T06:44:43.9629356Z [OK ] feed_mlb_statsapi selftest names its own module
+2026-10-23T06:44:43.9629689Z [OK ] feed_sweep selftest (feed_sweep selftest: OK)
+2026-10-23T06:44:43.9630004Z [OK ] feed_sweep selftest names its own module
+2026-10-23T06:44:43.9630374Z [OK ] test_feed_adapter selftest (test_feed_adapter selftest: OK (7/7))
+2026-10-23T06:44:43.9630770Z [OK ] test_feed_adapter selftest names its own module
+2026-10-23T06:44:43.9631117Z [OK ] market_capture selftest (market_capture selftest: OK)
+2026-10-23T06:44:43.9631472Z [OK ] market_capture selftest names its own module
+2026-10-23T06:44:43.9631867Z [OK ] market_sportsgameodds selftest (market_sportsgameodds selftest: OK)
+2026-10-23T06:44:43.9632286Z [OK ] market_sportsgameodds selftest names its own module
+2026-10-23T06:44:43.9632669Z [OK ] market_theoddsapi selftest (market_theoddsapi selftest: OK)
+2026-10-23T06:44:43.9633040Z [OK ] market_theoddsapi selftest names its own module
+2026-10-23T06:44:43.9633522Z [OK ] market_history selftest (market_history selftest: OK)
+2026-10-23T06:44:43.9633875Z [OK ] market_history selftest names its own module
+2026-10-23T06:44:43.9634237Z [OK ] market_moneyline selftest (market_moneyline selftest: OK)
+2026-10-23T06:44:43.9634603Z [OK ] market_moneyline selftest names its own module
+2026-10-23T06:44:43.9635061Z [OK ] backtest_causal selftest (backtest_causal selftest: OK)
+2026-10-23T06:44:43.9635413Z [OK ] backtest_causal selftest names its own module
+2026-10-23T06:44:43.9635753Z [OK ] calibration selftest (calibration selftest: OK)
+2026-10-23T06:44:43.9636085Z [OK ] calibration selftest names its own module
+2026-10-23T06:44:43.9636465Z [OK ] test_market_layer selftest (test_market_layer selftest: OK (21/21))
+2026-10-23T06:44:43.9636863Z [OK ] test_market_layer selftest names its own module
+2026-10-23T06:44:43.9637208Z [OK ] market_quality selftest (market_quality selftest: OK)
+2026-10-23T06:44:43.9637551Z [OK ] market_quality selftest names its own module
+2026-10-23T06:44:43.9637905Z [OK ] score_admission selftest (score_admission selftest: OK)
+2026-10-23T06:44:43.9638522Z [OK ] score_admission selftest names its own module
+2026-10-23T06:44:43.9638897Z [OK ] verified_snapshot selftest (verified_snapshot selftest: OK)
+2026-10-23T06:44:43.9639278Z [OK ] verified_snapshot selftest names its own module
+2026-10-23T06:44:43.9639636Z [OK ] score_collector selftest (score_collector selftest: OK)
+2026-10-23T06:44:43.9639982Z [OK ] score_collector selftest names its own module
+2026-10-23T06:44:43.9640338Z [OK ] board_invariants selftest (board_invariants selftest: OK)
+2026-10-23T06:44:43.9640707Z [OK ] board_invariants selftest names its own module
+2026-10-23T06:44:43.9641101Z [OK ] test_score_admission selftest (test_score_admission selftest: OK)
+2026-10-23T06:44:43.9641507Z [OK ] test_score_admission selftest names its own module
+2026-10-23T06:44:43.9641940Z [OK ] acquisition_orchestrator selftest (acquisition_orchestrator selftest: OK)
+2026-10-23T06:44:43.9642399Z [OK ] acquisition_orchestrator selftest names its own module
+2026-10-23T06:44:43.9642817Z [OK ] export_agent_context selftest (export_agent_context selftest: OK)
+2026-10-23T06:44:43.9643224Z [OK ] export_agent_context selftest names its own module
+2026-10-23T06:44:43.9643570Z [OK ] relay_parser selftest (relay_parser selftest: OK)
+2026-10-23T06:44:43.9643903Z [OK ] relay_parser selftest names its own module
+2026-10-23T06:44:43.9644288Z [OK ] mlb_daily_coordinator selftest (mlb_daily_coordinator selftest: OK)
+2026-10-23T06:44:43.9644702Z [OK ] mlb_daily_coordinator selftest names its own module
+2026-10-23T06:44:43.9645100Z [OK ] grade_owner_v5_board selftest (grade_owner_v5_board selftest: PASS)
+2026-10-23T06:44:43.9645500Z [OK ] grade_owner_v5_board selftest names its own module
+2026-10-23T06:44:43.9645868Z [OK ] build_board_0901 selftest (build_board_0901 selftest: PASS)
+2026-10-23T06:44:43.9646231Z [OK ] build_board_0901 selftest names its own module
+2026-10-23T06:44:43.9646580Z [OK ] grade_wnba_0830 selftest (grade_wnba_0830 selftest: PASS)
+2026-10-23T06:44:43.9646936Z [OK ] grade_wnba_0830 selftest names its own module
+2026-10-23T06:44:43.9647331Z [OK ] register_owner_0901_v1 selftest (register_owner_0901_v1 selftest: PASS)
+2026-10-23T06:44:43.9647749Z [OK ] register_owner_0901_v1 selftest names its own module
+2026-10-23T06:44:43.9648529Z [OK ] register_owner_0901_v2 selftest (register_owner_0901_v2 selftest: PASS)
+2026-10-23T06:44:43.9648994Z [OK ] register_owner_0901_v2 selftest names its own module
+2026-10-23T06:44:43.9649399Z [OK ] market_overlay_0901 selftest (market_overlay_0901 selftest: PASS)
+2026-10-23T06:44:43.9649805Z [OK ] market_overlay_0901 selftest names its own module
+2026-10-23T06:44:43.9650177Z [OK ] ingest_lancebroz selftest (ingest_lancebroz selftest: PASS)
+2026-10-23T06:44:43.9650547Z [OK ] ingest_lancebroz selftest names its own module
+2026-10-23T06:44:43.9650962Z [OK ] refresh_experiment_0901 selftest (refresh_experiment_0901 selftest: PASS)
+2026-10-23T06:44:43.9651401Z [OK ] refresh_experiment_0901 selftest names its own module
+2026-10-23T06:44:43.9652041Z [OK ] score_admission mutation suite (score_admission mutation suite: 24 killed, 0 errored, 0 survived)
+2026-10-23T06:44:43.9652719Z [OK ] verified_snapshot mutation suite (verified_snapshot mutation suite: 36 killed, 0 errored, 0 surviv)
+2026-10-23T06:44:43.9653375Z [OK ] score_collector mutation suite (score_collector mutation suite: 23 killed, 0 errored, 0 survived)
+2026-10-23T06:44:43.9654150Z [OK ] board_invariants mutation suite (board_invariants mutation suite: 31 killed, 0 errored, 0 survive)
+2026-10-23T06:44:43.9654841Z [OK ] acquisition_orchestrator mutation suite (acquisition_orchestrator mutation suite: 4 killed, 0 errored, 0 )
+2026-10-23T06:44:43.9655367Z [OK ] workflow shell syntax (33 workflow file(s))
+2026-10-23T06:44:43.9655847Z [OK ] acquisition ledgers valid (ledgers: 9 files, 186 rows, 83 current game states {'mlb': 57, 'wnba': 1)
+2026-10-23T06:44:43.9656508Z [OK ] missing-data audit (inventory: 34 game rows; structural violations: 0; legacy tier-2/3 canonical: 12)
+2026-10-23T06:44:43.9657204Z [OK ] canonical-tier exposure (tier exposure: 259 rows admitted by the tier-blind predicate but not canonical ()
+2026-10-23T06:44:43.9657965Z [OK ] registered-artifact immutability (registered artifacts: 330/330 records match their registered hash (30 distinct)
+2026-10-23T06:44:43.9658726Z [OK ] information-class ledger (information-class gate: PASS)
+2026-10-23T06:44:43.9659293Z [OK ] grade-summary reproducibility (grade-summary gate: PASS; 0 pre-contract cohort summary/ies not yet bound)
+2026-10-23T06:44:43.9659842Z [OK ] never-adapt enforcement (never-adapt audit: PASS)
+2026-10-23T06:44:43.9660398Z [OK ] tier-1 board completeness (LATEST_TIER1_FORM_DATE          = 2026-09-02   (>= 2026-08-16: True); missing_tier1_games_8_15  )
+2026-10-23T06:44:43.9661050Z [WARN] pregame inputs for 2026-10-23 (PREGAME PREFLIGHT 2026-10-23  ->  INPUTS_MISSING)
+2026-10-23T06:44:43.9661601Z [WARN] pregame inputs for 2026-10-24 (PREGAME PREFLIGHT 2026-10-24  ->  INPUTS_MISSING)
+2026-10-23T06:44:43.9662213Z [OK ] settlement contract (settlement contract: PASS (cutoff 2026-08-19T05:00:00Z; pre-cutoff records gra)
+2026-10-23T06:44:43.9662953Z [WARN] tier-1 successor lineage (SUCCESSOR READINESS: DEGRADED_INTERIOR_GAPS 18 whole days lost: 2026-07-29, 2026-07-31, )
+2026-10-23T06:44:43.9663535Z [OK ] policy gate self-test (policy_gate self-test: PASS)
+2026-10-23T06:44:43.9663874Z [OK ] gate string matches recomputed value
+2026-10-23T06:44:43.9664279Z [OK ] prospective gate counts only current-policy rows (0/100 under dp-2026-07-27)
+2026-10-23T06:44:43.9664744Z [OK ] historical audit preserved (10 settled, 5-5, -1.01u)
+2026-10-23T06:44:43.9665086Z [OK ] no invented policy tag on historical rows
+2026-10-23T06:44:43.9665410Z [OK ] git tree: 3 uncommitted path(s) (<=3 tolerated)
+2026-10-23T06:44:43.9665720Z [OK ] progress.md last touched 2026-10-23
+2026-10-23T06:44:43.9666134Z [OK ] model patch-note registry (10 entries, newest MULTISPORT-RELEASE-GATE-2026-09-03)
+2026-10-23T06:44:43.9666647Z [OK ] latest patch note carries status, scope, changes, and verification
+2026-10-23T06:44:43.9667143Z [OK ] health dashboard publishes latest patch MULTISPORT-RELEASE-GATE-2026-09-03
+2026-10-23T06:44:43.9667624Z [OK ] health dashboard discloses action block and open-source status
+2026-10-23T06:44:43.9668255Z [OK ] journal continuity (latest committed entry 2026-10-23, cold-bootstrap window 120 lines)
+2026-10-23T06:44:43.9668832Z [WARN] journal split: root progress.md is not newer than canonical docs/progress.md
+2026-10-23T06:44:43.9669310Z [OK ] module manifest (MANIFEST_OK; 194 registered, 0 problems)
+2026-10-23T06:44:43.9669741Z [OK ] pipeline end-to-end (PIPELINE_E2E_OK; 9/9 registered gates invoked)
+2026-10-23T06:44:43.9671782Z [FAIL] lancebroz production source ({'ok': False, 'source_directory': '/home/user/lancebroz/mlb-pitcher-data/data/raw/2026/daily', 'source_commit': None, 'n_files': 0, 'expected_files': 0, 'window': {'from_inclusive': '2026-07-01', 'to_exclusive': '2026-09-01'}, 'verification_scope': 'PUBLISHED_GIT_OBJECT_WINDOW_ONLY', 'schedule_completeness_verified': False, 'historical_retrieval_proven': False, 'failure': 'PRODUCTION_ARCHIVE_UNAVAILABLE_OR_UNVERSIONED', 'problems': ['PRODUCTION_ARCHIVE_UNAVAILABLE_OR_UNVERSIONED']})
+2026-10-23T06:44:43.9673767Z [FAIL] recovery jobs (9 registered, 4 overdue, 7 defect(s) still owned)
+2026-10-23T06:44:43.9674307Z        ! OVERDUE RJ-001-PROVENANCE 123/123 due 2026-09-01T00:00:00Z
+2026-10-23T06:44:43.9676058Z          PHASE RJ-001A_PROVENANCE_ACQUISITION: {'note': 'all provisional-set units bound; whole-file 1,948/1,957 after the OAK/ARI variant fold; 9 refusals in two named categories, reconciliation gate sums (88570751 superseded by the regenerated accounting)', 'progress': '123/123', 'status': 'COMPLETE'}
+2026-10-23T06:44:43.9677801Z          PHASE RJ-001B_SCORE_VERIFICATION: {'note': 'tier upgrades for the 126 provisional rows need a score-bearing artifact; pitch events carry no runs column (derivation judged infeasible)', 'progress': '0/126', 'status': 'RUNNING'}
+2026-10-23T06:44:43.9678835Z          PHASE RJ-001_INCIDENT: OPEN
+2026-10-23T06:44:43.9679193Z        ! OVERDUE RJ-005-WNBA-FEATURE-PIPELINE 11/17 due 2026-09-16T17:00:00Z
+2026-10-23T06:44:43.9679650Z        ! OVERDUE RJ-006-NFL-MODEL-RESTORATION 1/6 due 2026-09-09T00:00:00Z
+2026-10-23T06:44:43.9680135Z        ! OVERDUE RJ-007-DATELESS-JOIN-REMEDIATION 0/6 due 2026-09-03T00:00:00Z
+2026-10-23T06:44:43.9680718Z [FAIL] historical 2026-09-03 release eligibility (BLOCKED; 0 artifact problem(s), 0 contract problem(s))
+2026-10-23T06:44:43.9681292Z        Historical decision is immutable; this is not a fresh release check.
+2026-10-23T06:44:43.9681781Z [OK ] wnba feature staleness (age 93d) is held by an active five-component job
+2026-10-23T06:44:43.9682297Z [OK ] board arm completeness (cards/2026-08-28_mlb_board.json: 15 games x 6 arms)
+2026-10-23T06:44:43.9682883Z [OK ] result binding (result-binding gate: PASS (consecutive-series 5/5 refused; clean cohort 7/7 bo)
+2026-10-23T06:44:43.9683463Z [OK ] result-binding mutants (result_binding_gate mutation suite: 8/8 caught)
+2026-10-23T06:44:43.9683996Z [OK ] PregameDecisionReadiness v1.0 acceptance (standard acceptance: 16/16 passed)
+2026-10-23T06:44:43.9684469Z [FAIL] standing-health issue evidence and hash chain
+2026-10-23T06:44:43.9685627Z        REL-ARCHIVE-001: OVERDUE-ESCALATED; owner=data-platform maintainer (Codex); due=2026-09-17T04:26:41.997358+00:00; next=Reconcile the 58-file candidate against authoritative required-game coverage, inventory August 31 gap, and bind a separately versioned prospective archive profile.
+2026-10-23T06:44:43.9687233Z        REL-RECOVERY-001: OVERDUE-ESCALATED; owner=repository maintainer (Codex); due=2026-09-17T04:26:41.997358+00:00; next=Run negative regressions and remote health; retain child blockers and phase counts.
+2026-10-23T06:44:43.9688929Z        REL-HISTORICAL-001: OVERDUE-ESCALATED; owner=release maintainer (Codex); due=2026-09-17T04:26:41.997358+00:00; next=Keep September 3 evidence immutable; define a separate current-profile check and prove dependencies before replacing any current-health coupling.
+2026-10-23T06:44:43.9690614Z        RJ-001-PROVENANCE: OVERDUE-ESCALATED; owner=acquisition maintainer (Codex); due=2026-09-17T04:26:41.997358+00:00; next=Inventory the 126 score-verification IDs against current Tier-1 bindings and retain a missing-ID manifest before acquiring finals.
+2026-10-23T06:44:43.9692452Z        RJ-005-WNBA-FEATURE-PIPELINE: OVERDUE-ESCALATED; owner=wnba_features maintainer (Codex); due=2026-09-17T04:26:41.997358+00:00; next=Resolve the six-slot historical team/date obligation mapping from source-bound incident/slate records; only then credit independently retained official availability sections.
+2026-10-23T06:44:43.9694593Z        RJ-006-NFL-MODEL-RESTORATION: OVERDUE-ESCALATED; owner=model_registry maintainer (Codex); due=2026-09-17T04:26:41.997358+00:00; next=Locate original data/nfl/model/runs/2026-08-10_nflverse_2015_2025_oof_v2 and invalidation record in owner backup; verify exact source pins before assigning units.
+2026-10-23T06:44:43.9696422Z        RJ-007-DATELESS-JOIN-REMEDIATION: OVERDUE-ESCALATED; owner=harness maintainer (Codex); due=2026-09-17T04:26:41.997358+00:00; next=Test duplicate/date/outcome refusal; enumerate canonical IDs for historical migration sidecars without changing frozen boards.
+2026-10-23T06:44:43.9698457Z        RJ-005-AVAILABILITY-01: OVERDUE-ESCALATED; owner=wnba_features maintainer (Codex); due=2026-09-17T04:26:41.997358+00:00; next=Recover the historical mapping for slot 1; bind its team, date and event, then hash the matching official report or document a justified reclassification.
+2026-10-23T06:44:43.9700294Z        RJ-005-AVAILABILITY-02: OVERDUE-ESCALATED; owner=wnba_features maintainer (Codex); due=2026-09-17T04:26:41.997358+00:00; next=Recover the historical mapping for slot 2; bind its team, date and event, then hash the matching official report or document a justified reclassification.
+2026-10-23T06:44:43.9702097Z        RJ-005-AVAILABILITY-03: OVERDUE-ESCALATED; owner=wnba_features maintainer (Codex); due=2026-09-17T04:26:41.997358+00:00; next=Recover the historical mapping for slot 3; bind its team, date and event, then hash the matching official report or document a justified reclassification.
+2026-10-23T06:44:43.9703882Z        RJ-005-AVAILABILITY-04: OVERDUE-ESCALATED; owner=wnba_features maintainer (Codex); due=2026-09-17T04:26:41.997358+00:00; next=Recover the historical mapping for slot 4; bind its team, date and event, then hash the matching official report or document a justified reclassification.
+2026-10-23T06:44:43.9705708Z        RJ-005-AVAILABILITY-05: OVERDUE-ESCALATED; owner=wnba_features maintainer (Codex); due=2026-09-17T04:26:41.997358+00:00; next=Recover the historical mapping for slot 5; bind its team, date and event, then hash the matching official report or document a justified reclassification.
+2026-10-23T06:44:43.9707503Z        RJ-005-AVAILABILITY-06: OVERDUE-ESCALATED; owner=wnba_features maintainer (Codex); due=2026-09-17T04:26:41.997358+00:00; next=Recover the historical mapping for slot 6; bind its team, date and event, then hash the matching official report or document a justified reclassification.
+2026-10-23T06:44:43.9709231Z        TRIAGE_TREND: {'aged_over_14_days': 6, 'unknown_age': 0, 'previous_session_count': 2, 'direction': 'INCREASED_REQUIRES_EXPLANATION', 'clock_policy': 'material evidence change; a review or status rename does not reset age'}
+2026-10-23T06:44:43.9710082Z accepted_risks_present: true
+2026-10-23T06:44:43.9710342Z accepted_risk_release_override: false
+2026-10-23T06:44:43.9710619Z official_release_eligible: false
+2026-10-23T06:44:43.9710939Z        TRIAGE_ERROR: REL-ARCHIVE-001:AGED_ESCALATION_INCOMPLETE
+2026-10-23T06:44:43.9711348Z        TRIAGE_ERROR: REL-RECOVERY-001:AGED_ESCALATION_INCOMPLETE
+2026-10-23T06:44:43.9711758Z        TRIAGE_ERROR: REL-HISTORICAL-001:AGED_ESCALATION_INCOMPLETE
+2026-10-23T06:44:43.9712159Z        TRIAGE_ERROR: RJ-001-PROVENANCE:ESCALATION_REVIEW_OVERDUE
+2026-10-23T06:44:43.9712596Z        TRIAGE_ERROR: RJ-005-WNBA-FEATURE-PIPELINE:AGED_ESCALATION_INCOMPLETE
+2026-10-23T06:44:43.9713072Z        TRIAGE_ERROR: RJ-006-NFL-MODEL-RESTORATION:ESCALATION_REVIEW_OVERDUE
+2026-10-23T06:44:43.9713561Z        TRIAGE_ERROR: RJ-007-DATELESS-JOIN-REMEDIATION:AGED_ESCALATION_INCOMPLETE
+2026-10-23T06:44:43.9714029Z        TRIAGE_ERROR: RJ-005-AVAILABILITY-01:AGED_ESCALATION_INCOMPLETE
+2026-10-23T06:44:43.9714458Z        TRIAGE_ERROR: RJ-005-AVAILABILITY-02:AGED_ESCALATION_INCOMPLETE
+2026-10-23T06:44:43.9714879Z        TRIAGE_ERROR: RJ-005-AVAILABILITY-03:AGED_ESCALATION_INCOMPLETE
+2026-10-23T06:44:43.9715293Z        TRIAGE_ERROR: RJ-005-AVAILABILITY-04:AGED_ESCALATION_INCOMPLETE
+2026-10-23T06:44:43.9715717Z        TRIAGE_ERROR: RJ-005-AVAILABILITY-05:AGED_ESCALATION_INCOMPLETE
+2026-10-23T06:44:43.9716136Z        TRIAGE_ERROR: RJ-005-AVAILABILITY-06:AGED_ESCALATION_INCOMPLETE
+2026-10-23T06:44:43.9716398Z 
+2026-10-23T06:44:43.9716754Z REPOSITORY_HEALTH_RED — 4 fail, 6 warn
+2026-10-23T06:44:43.9717163Z CURRENT_DATA_READINESS: STALE_SNAPSHOT
+2026-10-23T06:44:43.9717429Z   mlb: STALE_SNAPSHOT
+2026-10-23T06:44:43.9717642Z   wnba: STALE_SNAPSHOT
+2026-10-23T06:44:43.9717859Z   nfl: STALE_SNAPSHOT
+2026-10-23T06:44:43.9718187Z   cfb: STALE_SNAPSHOT
+2026-10-23T06:44:43.9718391Z   mls: STALE_SNAPSHOT
+2026-10-23T06:44:43.9718590Z   nba: STALE_SNAPSHOT
+2026-10-23T06:44:43.9718923Z   nhl: STALE_SNAPSHOT
+2026-10-23T06:44:43.9721468Z Fix FAILs before new work: ["lancebroz production source ({'ok': False, 'source_directory': '/home/user/lancebroz/mlb-pitcher-data/data/raw/2026/daily', 'source_commit': None, 'n_files': 0, 'expected_files': 0, 'window': {'from_inclusive': '2026-07-01', 'to_exclusive': '2026-09-01'}, 'verification_scope': 'PUBLISHED_GIT_OBJECT_WINDOW_ONLY', 'schedule_completeness_verified': False, 'historical_retrieval_proven': False, 'failure': 'PRODUCTION_ARCHIVE_UNAVAILABLE_OR_UNVERSIONED', 'problems': ['PRODUCTION_ARCHIVE_UNAVAILABLE_OR_UNVERSIONED']})", 'recovery jobs (9 registered, 4 overdue, 7 defect(s) still owned)', 'historical 2026-09-03 release eligibility (BLOCKED; 0 artifact problem(s), 0 contract problem(s))', 'standing-health issue evidence and hash chain']
+2026-10-23T06:44:43.9755682Z ##[group]Run git rev-parse HEAD > "$RUNNER_TEMP/mlb-commit.txt"
+2026-10-23T06:44:43.9756141Z [36;1mgit rev-parse HEAD > "$RUNNER_TEMP/mlb-commit.txt"[0m
+2026-10-23T06:44:43.9817966Z shell: /usr/bin/bash -e {0}
+2026-10-23T06:44:43.9818352Z env:
+2026-10-23T06:44:43.9818620Z   pythonLocation: /opt/hostedtoolcache/Python/3.12.15/x64
+2026-10-23T06:44:43.9819042Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.12.15/x64/lib/pkgconfig
+2026-10-23T06:44:43.9819458Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+2026-10-23T06:44:43.9819836Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+2026-10-23T06:44:43.9820211Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+2026-10-23T06:44:43.9820583Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.12.15/x64/lib
+2026-10-23T06:44:43.9820900Z ##[endgroup]
+2026-10-23T06:44:43.9962785Z ##[group]Run python scripts/ci_evidence_archive.py \
+2026-10-23T06:44:43.9963200Z [36;1mpython scripts/ci_evidence_archive.py \[0m
+2026-10-23T06:44:43.9963554Z [36;1m  --output-dir "$RUNNER_TEMP/mlb-archive" \[0m
+2026-10-23T06:44:43.9963924Z [36;1m  --source "commit.txt=$RUNNER_TEMP/mlb-commit.txt" \[0m
+2026-10-23T06:44:43.9964355Z [36;1m  --optional-source "tests.log=$RUNNER_TEMP/mlb-tests.log" \[0m
+2026-10-23T06:44:43.9964809Z [36;1m  --optional-source "health.log=$RUNNER_TEMP/mlb-health.log" \[0m
+2026-10-23T06:44:43.9965290Z [36;1m  --optional-source "health-exit.txt=$RUNNER_TEMP/mlb-health-exit.txt"[0m
+2026-10-23T06:44:44.0027066Z shell: /usr/bin/bash -e {0}
+2026-10-23T06:44:44.0027311Z env:
+2026-10-23T06:44:44.0027570Z   pythonLocation: /opt/hostedtoolcache/Python/3.12.15/x64
+2026-10-23T06:44:44.0028003Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.12.15/x64/lib/pkgconfig
+2026-10-23T06:44:44.0028569Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+2026-10-23T06:44:44.0028997Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+2026-10-23T06:44:44.0029380Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+2026-10-23T06:44:44.0029760Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.12.15/x64/lib
+2026-10-23T06:44:44.0030088Z   CI_STORAGE_CONFIG_JSON: 
+2026-10-23T06:44:44.0030314Z   CI_HEAD_SHA: 
+2026-10-23T06:44:44.0030506Z   CI_BASE_SHA: 
+2026-10-23T06:44:44.0030695Z ##[endgroup]
+2026-10-23T06:44:44.0599946Z {"created_at_utc": "2026-10-23T06:44:44.055163Z", "durable_archive_verified": false, "optional_github_upload_allowed": false, "reason": "AUTHORIZED_UPLOADER_AND_DRIVE_DESTINATION_NOT_CONFIGURED", "status": "BLOCKED_UNCONFIGURED"}
+2026-10-23T06:44:44.0744251Z ##[group]Run printf '\nDrive archive: %s. Optional GitHub copy: %s.\n' "${DRIVE_STATUS:-NOT_EXECUTED}" "$GITHUB_COPY_OUTCOME" >> "$GITHUB_STEP_SUMMARY"
+2026-10-23T06:44:44.0745206Z [36;1mprintf '\nDrive archive: %s. Optional GitHub copy: %s.\n' "${DRIVE_STATUS:-NOT_EXECUTED}" "$GITHUB_COPY_OUTCOME" >> "$GITHUB_STEP_SUMMARY"[0m
+2026-10-23T06:44:44.0807657Z shell: /usr/bin/bash -e {0}
+2026-10-23T06:44:44.0807902Z env:
+2026-10-23T06:44:44.0808498Z   pythonLocation: /opt/hostedtoolcache/Python/3.12.15/x64
+2026-10-23T06:44:44.0808953Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.12.15/x64/lib/pkgconfig
+2026-10-23T06:44:44.0809575Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+2026-10-23T06:44:44.0809954Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+2026-10-23T06:44:44.0810338Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+2026-10-23T06:44:44.0810715Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.12.15/x64/lib
+2026-10-23T06:44:44.0811137Z   DRIVE_STATUS: BLOCKED_UNCONFIGURED
+2026-10-23T06:44:44.0811402Z   GITHUB_COPY_OUTCOME: skipped
+2026-10-23T06:44:44.0811633Z ##[endgroup]
+2026-10-23T06:44:44.1057176Z Post job cleanup.
+2026-10-23T06:44:44.2351200Z (node:3247) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-10-23T06:44:44.2352779Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-10-23T06:44:44.2707519Z Post job cleanup.
+2026-10-23T06:44:44.4589273Z [command]/usr/bin/git version
+2026-10-23T06:44:44.4749080Z git version 2.55.0
+2026-10-23T06:44:44.4851404Z Temporarily overriding HOME='/home/runner/work/_temp/3c110345-3cd3-4820-a126-aebc04b8de17' before making global git config changes
+2026-10-23T06:44:44.4869052Z Adding repository directory to the temporary git global config as a safe directory
+2026-10-23T06:44:44.4889068Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/sports-model/sports-model
+2026-10-23T06:44:44.5049066Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-10-23T06:44:44.5156554Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-10-23T06:44:44.5546463Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-10-23T06:44:44.5576576Z http.https://github.com/.extraheader
+2026-10-23T06:44:44.5615018Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+2026-10-23T06:44:44.5681891Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-10-23T06:44:44.6027855Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-10-23T06:44:44.6109670Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-10-23T06:44:44.6643110Z Cleaning up orphan processes
+2026-10-23T06:44:44.7038822Z ##[warning]Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4, actions/setup-python@v5. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/

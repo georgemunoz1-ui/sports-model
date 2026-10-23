@@ -3,6 +3,9 @@
 ## Current continuation — integrated build v2
 
 The continuation is governed by [INTEGRATION_CONTRACT.md](INTEGRATION_CONTRACT.md).
+PR76 is merged; [POSTMERGE_DELIVERY.md](POSTMERGE_DELIVERY.md) and
+[POSTMERGE_RECEIPTS.json](POSTMERGE_RECEIPTS.json) record actual main-branch
+execution, the storage inventory and the separate first-registration blocker.
 Read [DELIVERY_RECONCILIATION.md](DELIVERY_RECONCILIATION.md) for the delivery state,
 [CAPABILITY_RECONCILIATION_v2.md](CAPABILITY_RECONCILIATION_v2.md) for remaining work,
 and [BLIND_VERIFICATION.md](BLIND_VERIFICATION.md) for independent verification.

@@ -1,0 +1,45 @@
+{
+  "command": "python -m pytest tests/test_blind_canonical_grading_preflight.py -q",
+  "completed_at_utc": "2026-10-23T06:53:35.626366+00:00",
+  "executed_argv": [
+    "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+    "-m",
+    "pytest",
+    "tests/test_blind_canonical_grading_preflight.py",
+    "-q"
+  ],
+  "executed_at_utc": "2026-10-23T06:53:35.280991+00:00",
+  "exit_code": 0,
+  "hosted_workflow_execution_verified": false,
+  "log_ref": "docs/research/overhaul_2026_10_23/BLIND_CANONICAL_PREFLIGHT_TEST.log",
+  "log_sha256": "0920fa3e8fffd6a917aee56d29e9da73a41a9ba71faa6b5a6de7fe26f4f6cea2",
+  "original_pinned_file_count": 69,
+  "original_snapshot_sha256": "4b51c925202b1b3b8963d1af9b230d928c8453e2442fc1e862f152cde14a9943",
+  "original_source_snapshot_unchanged": true,
+  "original_verification_receipt": "docs/research/overhaul_2026_10_23/BLIND_VERIFICATION_FINAL_EXECUTION.json",
+  "publication_allowed": false,
+  "schema": "acceptance-execution-v1",
+  "scope": "independent operational first-registration and current-attempt preflight review after source freeze",
+  "settlement_performed": false,
+  "snapshot_sha256": "b13b3a78bdc5ea12204796982618b2f9c6ffc0cacb27021f1d53058c62665eab",
+  "source_hashes_unchanged": true,
+  "sources": [
+    {
+      "path": ".github/workflows/canonical-research-grading.yml",
+      "sha256": "23711a3af849f09fc27a86e25cef6165a3cc1fca0a7449815194dde5de848208"
+    },
+    {
+      "path": "scripts/canonical_grading_preflight.py",
+      "sha256": "6ccf9e3d772259bd24e4df916280b9a829066d72e844797903cc68aff185bad7"
+    },
+    {
+      "path": "tests/test_blind_canonical_grading_preflight.py",
+      "sha256": "2b8be8641108a0abc5459e40dabbeb76c333813fd24b9623678e9fd7ea9a6eda"
+    },
+    {
+      "path": "tests/test_canonical_grading_preflight.py",
+      "sha256": "83c9784f1b13f3e90287e21c3bc6b9a702b62c59c24a08733afd9cecc7e8ad30"
+    }
+  ],
+  "wagering_status": "OFF"
+}

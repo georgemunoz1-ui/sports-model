@@ -1,0 +1,96 @@
+{
+  "schema": "overhaul-postmerge-evidence-v1",
+  "recorded_at_utc": "2026-10-23T06:52:42.297528+00:00",
+  "merge_commit": "74c22df865706ba8ec17442c95c7c521ca34f915",
+  "merged_tree": "f2452a8687cdf5f449eb6250fb05ec8221351c35",
+  "pull_requests": [
+    75,
+    76
+  ],
+  "receipts": [
+    {
+      "path": "docs/research/overhaul_2026_10_23/deployment_v2/canonical_first_attempt_decoded.log",
+      "sha256": "4d882df9b328a13af3f8eb4d18b69e0b3b89f455e6df454a9a43533482c4e91a"
+    },
+    {
+      "path": "docs/research/overhaul_2026_10_23/deployment_v2/consolidation_main_decoded.log",
+      "sha256": "a77ec20b70620107e39b9ce504187f12d88d7bb6f6008251cfecb397d435666c"
+    },
+    {
+      "path": "docs/research/overhaul_2026_10_23/deployment_v2/integrity_main_decoded.log",
+      "sha256": "ff8cb0e55eefe52dbba34c4c1ece5a0b71bac4e6fb43e0a9a3c33eae55517fb7"
+    },
+    {
+      "path": "docs/research/overhaul_2026_10_23/deployment_v2/merge_pr76.json",
+      "sha256": "8864f2ce115e74279de0d326774af05ba813563eac8138a7954fdec3c883b084"
+    },
+    {
+      "path": "docs/research/overhaul_2026_10_23/deployment_v2/mlb_main_decoded.log",
+      "sha256": "10218b109dbda01ce79f30d6df6f5639b799e9d8b83c4bd79c2311eb7be03e4a"
+    },
+    {
+      "path": "docs/research/overhaul_2026_10_23/deployment_v2/run_39913254135.json",
+      "sha256": "e9ee707bde9b633c97feca567d8483619d9ff86ded5ac6048877e32d997e2027"
+    },
+    {
+      "path": "docs/research/overhaul_2026_10_23/deployment_v2/run_39913254193.json",
+      "sha256": "6e69bfe9e88c3c12e0ae6043838306a28a6ae3fdbb5dacd2d94f438160c755cd"
+    },
+    {
+      "path": "docs/research/overhaul_2026_10_23/deployment_v2/run_39913254198.json",
+      "sha256": "0b80641e4f16ed2a7745949310a44c6a5f700193eeded62b4905f8e8bda483cf"
+    },
+    {
+      "path": "docs/research/overhaul_2026_10_23/deployment_v2/run_39913254203.json",
+      "sha256": "5bd1b316d9ff171529855b2d0cb100f17a0c08e313d1fb85eb4a91e5bc5aa648"
+    },
+    {
+      "path": "docs/research/overhaul_2026_10_23/deployment_v2/run_39913254248.json",
+      "sha256": "6c976b3edf32ae4f3ef4b9207064ebcce94de17c4cd5cba1f7b7b22fb1ea709d"
+    },
+    {
+      "path": "docs/research/overhaul_2026_10_23/deployment_v2/storage_main_decoded.log",
+      "sha256": "764c766135e6ca7b132e56a9d4efc519d11b73ae5f8cafe3811fdba98cb8cb39"
+    }
+  ],
+  "software_acceptance": {
+    "local_full_suite": 1101,
+    "hosted_main_full_suite": 1101,
+    "blinded_independent_cases": 61,
+    "actual_main_nfl_draws": 100000,
+    "selected_predictions": 0,
+    "wagering_status": "OFF"
+  },
+  "storage_measurement": {
+    "visible_artifacts": 232,
+    "visible_live_bytes": 4843415167,
+    "pagination_pages": 3,
+    "inventory_sha256": "a8df58ff16bd45f6e310c21f4353fb3a57415a3db51fc0c58c8bc4f1fd8a56d2",
+    "account_quota": "UNKNOWN_NOT_MEASURED",
+    "durable_archive_verified": false,
+    "notifications_sent": false,
+    "artifacts_deleted": 0
+  },
+  "operational_health": {
+    "status": "RED",
+    "failures": 4,
+    "warnings": 6
+  },
+  "canonical_grading": {
+    "first_run": 39913254135,
+    "settlement_performed": false,
+    "failure": "REGISTRY_ABSENT_BEFORE_FIRST_PROSPECTIVE_REGISTRATION",
+    "followup": "Separate operational preflight repair; no dummy registry or historical registration."
+  },
+  "historical_local_execution_context": {
+    "manifest": "execution_v2/execution_manifest.json",
+    "changed_context_file": ".github/workflows/canonical-research-grading.yml",
+    "original_context_snapshot": {
+      "path": "docs/research/overhaul_2026_10_23/execution_v2/context_only_canonical_workflow_at_execution.yml",
+      "sha256": "a0d70ad97e9c204cdfeec5746ec171bb30c8788c603903083d99668c26f2d4eb"
+    },
+    "note": "Original manifest preserved. Its context-only workflow bytes predate the merge-trigger addition and are retained by matching SHA256. Forecast/selector Python bytes used by those local replays remain unchanged."
+  },
+  "predictive_promotion": false,
+  "publication_authority": false
+}

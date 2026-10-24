@@ -1,0 +1,66 @@
+{
+  "review_status": "PASS_SCOPED_ISOLATED_RESEARCH_REVIEW",
+  "production_approval": false,
+  "predictive_validation": "UNVALIDATED",
+  "source_and_artifact_sha256": {
+    "v2/margin_support_v2.py": "3c0a04ac379dff17b257d6c488c0add80d3677165798e6158998d14d003ef76f",
+    "v2/prior_support.py": "5deaf0e7a4f4fa7671046d5482c55bad4f8f79914adfbddb39c4fda8936f03b9",
+    "v2/evaluate_extension.py": "708e539eb708f3f4705af96fe7dba30e187255406dcdaba30b9e4da3caee3792",
+    "v2/simulate_diagnostic.py": "846f22a5856a0a71cf42df497a28b3d32becda624d4d26f2088fef114d37c508",
+    "v2/verify_calibrated_overlay.py": "ca16863f75f88d3efd2252eb206300161b70858c6a717edb2dde019be271cede",
+    "v2/reproduce_cover_incident.py": "03bf52d5a8f46d74e297256be1b45d59abe2d55d72c1c5ea51f6633c3f0c0338",
+    "v2/historical-results.json": "00b6743787d2f4011e2a4400ea06fce3f68422656bda3bbe9255ab2395711d70",
+    "v2/oct10-diagnostic.json": "3054e44becff85b1d266372f93746296588ce9ac8e0c99086edd79797ac6322a",
+    "v2/simulation-receipts.json": "3d3d386466be36399ead0e33ea83bf2f6ea80555aab58c2db170c0670a9dc559",
+    "v2/calibrated-overlay-verification.json": "860444a1ba312c47b89f748405f27454ab17da632694e8d9f86ec7b693edf861",
+    "v2/six-cover-incident.json": "3e0f9a87da3492b6ab77879fde658b22961593ab15ffbaed62e36c56e150a6f5",
+    "isotonic-audit/coherent_isotonic.py": "154561af407e85be5967f1be0b25c478aa49b9db964e0d8c1eec2f31bf251eb5",
+    "isotonic-audit/binary_isotonic_repair.py": "83b86bfbb5bdcd57123629e83bf5b45d492e144a7a9bfe3290ff8b8725167d37",
+    "isotonic-audit/fit_historical_calibration.py": "a658fa272ec74887967bae60f68cc5b73fed4fa79080d69bf7d4382609096dce",
+    "isotonic-audit/smooth-cdf-map.json": "ca4ca32c0ab876172d2c0d509a9eaef032eb226c6e73fd2e91992f152d47741e",
+    "isotonic-audit/mixture-cdf-map.json": "c363209bb59dbb14ab002a13ce71d27b3afe1ce1ad48017bf9d819e810e53efe",
+    "v2/fit_sequential_support.py": "95f0f316a04a8e41ada44a9e1e45cb4af5be2da5d5e4188a8061722da025223c"
+  },
+  "independent_checks": [
+    "18 margin tests passed",
+    "12 calibration/binary tests passed",
+    "All 92 stored simulation arrays reproduced exactly: 9,200,000 draws; file SHA256, payload SHA256 and law signatures matched",
+    "Historical calibration replay in separate temporary copy: protocol, fit-results and both map files byte-identical (4/4)",
+    "Nonidentity lambda0.25 both fitted families: mass plus analytic tails conserved within2.3e-16;1000 seeded inverse-CDF draws passed six-SE settlement checks at handicaps -7,-3.5,0,+7; no zero margins",
+    "Wrong Gaussian base rejected by smooth-map artifact",
+    "257/210/238 chronological groups pairwise event-disjoint; boundary label times strictly precede next forecasts;8 purges recorded",
+    "All5 frozen-before tracked original files hash-match",
+    "Final evaluator portability-only change reviewed: absent original absolute paths reported unavailable; existing changed frozen files still fail. Final hash708e539eb708f3f4705af96fe7dba30e187255406dcdaba30b9e4da3caee3792."
+  ],
+  "review_findings_resolved": [
+    "Accepted weight1 mixture logpmf crash fixed",
+    "Empirical atoms outside integration grid no longer omitted from mean; omitted-tail bound corrected",
+    "FrozenLaw negative,unnormalized,duplicate or illegal support rejected",
+    "Caller historical-availability booleans separated from UNVERIFIED source proof",
+    "Calibration base-family/config mismatch now rejected",
+    "Binary helper remains replacement API proposal, not incompatible drop-in claim"
+  ],
+  "limits": [
+    "Focused tests and read-only review are not a whole repository integration test",
+    "No clean untouched holdout:2025 andOct10 alreadyseen diagnostic only",
+    "Historical timestamps reconstructed, not original source availability proof",
+    "Both isotonic selection weights equal1, so no independent calibration improvement evidence",
+    "Support positivity fixes zero-mass impossibility but does not establish plausible tails or predictive superiority; Gaussian reference has better historical exact NLL",
+    "Future chronological locked test and confirmed source-to-feature-to-output bindings remain required before promotion",
+    "No publishing,merge,registration,default change or wagering authorized"
+  ],
+  "final_patch_verification": {
+    "tree": "/tmp/independent-patch-apply-dpguhtg3",
+    "scope": "Clean minimal exact new-file target paths, not full verified-base checkout",
+    "applied_files": 33,
+    "byte_mismatches": [],
+    "patch_sha256": {
+      "cfb-support-research-v2.patch": "4bb4802e0ff3fe1d81fe02be6b15b1a00f7ded553ef140d4c86eb215280dd5fc",
+      "binary-isotonic-proposal.patch": "faa18f6725639d5189822e89f4b114b638e1a518bb980b0164bfcdb6c53406b0"
+    },
+    "applied_tree_tests": "18 margin +12 CDF/binary tests independently passed",
+    "compatibility": "Binary helper is a replacement API proposal, not a drop-in: original fit(method,scores,labels,fold_role,...) and callable return differs from new fit(scores,labels,*,calibration_rows,fitted_at,base_training_event_ids,sample_weight) with serialized artifact plus separate predict.",
+    "eligibility": "New proposal rejects <=10000 distinct events; requires all10 probability buckets >=500 and both labels, positive finite weights, disjoint base-training IDs and chronological row metadata. No original helper or active caller is modified.",
+    "warning": "git apply emitted a harmless final blank-line whitespace warning for preserved original helper file; both check and actual application succeeded."
+  }
+}

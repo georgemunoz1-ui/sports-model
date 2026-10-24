@@ -1,0 +1,125 @@
+{
+  "action_authority": false,
+  "authorization": "User requests complete and validate selected NFL QB margin/cover process for current and future research use; 2026-10-19 18:18 Pacific.",
+  "baseline": "Same-parent empirical margin residual distribution; identical training and evaluation events.",
+  "bootstrap": {
+    "block_length": 4,
+    "line_aggregation": "Aggregate within game before block resampling; unique games are sample size.",
+    "replicates": 2000,
+    "seed": 7192026,
+    "unit": "week"
+  },
+  "canonical_prospective_eligible": false,
+  "challenger": "Existing models.common.margin_challenger, fixed code-pinned purged chronological 70/30 training-only parameter-selection policy.",
+  "code_sha256": {
+    "models/common/discrete_research.py": "4a68440a8a7d8bcc9b7ed7b617f9f5ff778fe62d4274840e52a37e48ba8f08eb",
+    "models/common/margin_challenger.py": "3ca0c2d748c3aff6373cecaf95661489a3573e2d4ca231fcbe3842668c60d5bd",
+    "models/common/margin_system.py": "6b5bc2ccc85b69daaa7afef4336249b0c5c01396666c6cea8531583a80ade37a",
+    "models/nfl/contextual/model.py": "ba00569e30cd56fa1d50570f828db02e56caf849ddbdf1d0d0fc11272e7a0fc3",
+    "research/evaluate_margin_system.py": "8453216bf113b550cd0e8029bcdfbc0366cf4532a28473e9ea32631f8cba354b",
+    "scripts/build_nfl_context.py": "484691390fa7ce412f1a9851fded078d92021b7409fb8c295874dc516a1a9014"
+  },
+  "created_at_utc": "2026-10-20T01:23:07.052949+00:00",
+  "current_event": "WAS\u2013SF was already started at authorization; evaluate frozen morning parent retrospectively only, no live/current-score features or backdated registration.",
+  "deployment_fit_as_of_utc": "2026-07-01T00:00:00Z",
+  "deployment_refit": "After fixed evaluation, refit same algorithm and selection policy on all1871 qualifying2019\u20132025 OOF rows. Preserve distinct evaluated and deployment identities and binding. No outcome-driven tuning or changing rule.",
+  "deployment_seasons": [
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024,
+    2025
+  ],
+  "evaluation_fit_as_of_utc": "2023-07-01T00:00:00Z",
+  "evaluation_seasons": [
+    2023,
+    2024,
+    2025
+  ],
+  "expected_counts": {
+    "deployment": 1871,
+    "evaluation": 816,
+    "training": 1055
+  },
+  "experiment_id": "NFL-QB-MARGIN-FULLSUPPORT-20261019",
+  "fixed_probe_role": "Hypothetical lines chosen before evaluation; no historical quote or profitability claim.",
+  "future_operation": "Separate research margin child: exact parent/state/source/code binding; valid fitted/evaluation artifacts before cutoff; actual write before start; fresh event package and unchanged default QB model.",
+  "historical_data_reused": true,
+  "historical_screen": {
+    "coverage_95_max": 0.99,
+    "coverage_95_min": 0.9,
+    "crps_ci_upper_max": 0.0,
+    "crps_delta_max": 0.0,
+    "three_way_brier_delta_max": 0.002,
+    "zero_supported_outcomes": 0
+  },
+  "home_handicaps": [
+    -14,
+    -10,
+    -7.5,
+    -7,
+    -6.5,
+    -3.5,
+    -3,
+    0,
+    3,
+    3.5,
+    6.5,
+    7,
+    7.5,
+    10,
+    14
+  ],
+  "information_set": "RECONSTRUCTED_QB_OOF_PRIOR_SEASON_FITS",
+  "information_timing": {
+    "artifact_created_at": "Actual execution clock, never logical historical cutoff",
+    "forecast_cutoff": "Reconstructed kickoff minus1hour",
+    "historical_pit_verified": false,
+    "parent_fit_cutoff": "July1of forecastseason; fit uses strictly earlierseasons",
+    "result_available_at": "Conservative reconstructed kickoff plus24hours",
+    "start": "Retained source-bound schedule kickoff"
+  },
+  "input_sha256": {
+    "evaluation/data_audit.json": "30f6f2c0283fc60292cd140a43f24cbc2dea4017711f84982383b18d841298f2",
+    "evaluation/features.csv": "4e85683269768322d50d00966d432c37d4179d95bac76cd41fa5933d94ff4e5b",
+    "evaluation/oof_predictions.csv": "cb11bb530bb7d8149e0fbae8f6d6cc1775f6879ab157051e3c86dff525092510"
+  },
+  "league": "nfl",
+  "market_input": false,
+  "one_structural_change": "Attach existing shared full-support integer-margin fitter to exact selected QB parent, preserving winner and point-head parameters.",
+  "original_source_availability_proven": false,
+  "parent_limitation": "Original parent training excludes ties through complete-target filtering; OOF test rows retain ties. Preserve and disclose this rule.",
+  "parent_model_id": "nfl.integrated_context.qb.v1.research",
+  "parent_packed_file_sha256": "a1fc0436a3e3d4f76d7b7fe9b480314fbb20804e3b9d29288f64913935a80322",
+  "predictive_validation": "HOLD pending separate prospective evidence; historical screen never automatic promotion.",
+  "primary_metric": "Paired game-level CRPS; challenger minus empirical baseline.",
+  "prior_branch_role": "Recovered QB OOF evidence and prior research only; older calibrated law not substituted for this preregistered challenger.",
+  "prior_recovered_branch": "c13adcc92acc26a995df267c8720a56f3ca0abab",
+  "product": "margin",
+  "publication_eligibility": "INELIGIBLE",
+  "scale_features": [
+    "absolute_parent_margin"
+  ],
+  "schema": "nfl.qb_margin_full_support_design.v1",
+  "secondary_metrics": [
+    "Exact integer-margin log score with explicit zero counts; never silently clip",
+    "Mean absolute error",
+    "50/80/95 percent predictive interval coverage and width",
+    "Three-way cover/push/loss Brier and log loss",
+    "Conditional nonpush cover scoring",
+    "Tie and +/-3,+/-7 push reliability",
+    "CDF monotonicity and two-sided settlement symmetry"
+  ],
+  "settlement": "FULL_GAME_OT_REGULAR",
+  "source_archive_sha256": "e55d1f2bee4620c816e3ac28e96dedaa0ecb0568b1d59db3e42a069e83cb76f3",
+  "status": "REGISTERED_BEFORE_NEW_FIT_AND_EVALUATION",
+  "training_seasons": [
+    2019,
+    2020,
+    2021,
+    2022
+  ],
+  "untouched_holdout": false
+}

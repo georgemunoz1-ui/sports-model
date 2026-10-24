@@ -52,3 +52,10 @@ Repository writes, merges and publication changes require the applicable owner a
 ## Handoff
 
 Report actual commands, test scope, run IDs, event populations, hashes, results, exclusions and integration status. End every task as completed and exercised; implemented but not exercised; blocked with a named dependency; or rejected/deferred with a reason. Do not substitute documentation or unexecuted scripts for completed work. The [research overhaul contract](docs/research/overhaul_2026_10_23/README.md) and original progress/evidence records remain available.
+
+Selected-QB full-game margin distributions remain a separate opt-in research product.
+Use `--margin-model data/nfl/qb_margin_full_support_v1/runtime.json`; no automatic
+child activation or default change. Read `docs/NFL_QB_MARGIN_PROCESS_20261019.md`.
+The historical primary comparison is inconclusive (HOLD), wagering is OFF, and
+totals, combined-arm calibration and winner heads remain separate. Historical
+replays cannot create prospective grading registrations.

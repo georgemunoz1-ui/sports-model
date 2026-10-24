@@ -1,0 +1,53 @@
+{
+  "command": [
+    "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+    "-m",
+    "unittest",
+    "tests.test_nfl_margin_distribution",
+    "-q"
+  ],
+  "working_directory": "/workspace/scratch/c2f9a66ae580/sports-20261019/repo",
+  "started_at_utc": "2026-10-20T01:36:10.815008+00:00",
+  "completed_at_utc": "2026-10-20T01:36:16.040598+00:00",
+  "exit_code": 0,
+  "tests": 15,
+  "seconds": 3.227,
+  "code_sha256_before": {
+    "models/nfl/contextual/margin_distribution.py": "0ccb631ade722af8b69053c969e7684281b2554eb268adddd5fa1222b61d84a2",
+    "scripts/run_nfl_integrated.py": "cc6ae2a063e6a6228730ff6828b7d4713ea352dfe2622fa44b647cccd2bc746f",
+    "tests/test_nfl_margin_distribution.py": "6d494c2a1afcdea797127688d9bb3201bdebf628514f7d2f266ebcce87c56cc6",
+    "data/nfl/contextual_v1/runtime.json": "bd1b8014abbb3eb58bbb04ea31b9d03ece5827f85eebb8e72beb140b342a487c",
+    "data/nfl/qb_margin_full_support_v1/runtime.json": "6395cefb2202cb691f930195e146d8c804f60c7e814b6572d8f8b554cd044296",
+    "data/nfl/qb_margin_full_support_v1/fit_01/model.json": "fb715ddf7abb86c3d725a9f3e1fbe510c4852881e8e3dd83342f6ddc744691cb",
+    "data/nfl/qb_margin_full_support_v1/fit_01/evaluation.json": "ca44c9eeefa4352ebf2c71831e1b0c596a18fd33d06d680a597a6abed31cf694"
+  },
+  "code_sha256_after": {
+    "models/nfl/contextual/margin_distribution.py": "0ccb631ade722af8b69053c969e7684281b2554eb268adddd5fa1222b61d84a2",
+    "scripts/run_nfl_integrated.py": "cc6ae2a063e6a6228730ff6828b7d4713ea352dfe2622fa44b647cccd2bc746f",
+    "tests/test_nfl_margin_distribution.py": "6d494c2a1afcdea797127688d9bb3201bdebf628514f7d2f266ebcce87c56cc6",
+    "data/nfl/contextual_v1/runtime.json": "bd1b8014abbb3eb58bbb04ea31b9d03ece5827f85eebb8e72beb140b342a487c",
+    "data/nfl/qb_margin_full_support_v1/runtime.json": "6395cefb2202cb691f930195e146d8c804f60c7e814b6572d8f8b554cd044296",
+    "data/nfl/qb_margin_full_support_v1/fit_01/model.json": "fb715ddf7abb86c3d725a9f3e1fbe510c4852881e8e3dd83342f6ddc744691cb",
+    "data/nfl/qb_margin_full_support_v1/fit_01/evaluation.json": "ca44c9eeefa4352ebf2c71831e1b0c596a18fd33d06d680a597a6abed31cf694"
+  },
+  "code_changed_during_run": [],
+  "log_sha256": "af831e9f55791f559939418f1a0758b002ec827f86031a69808abc511e1d0926",
+  "current_test_module_counts": {
+    "tests.test_margin_system": 31,
+    "tests.test_margin_challenger": 28,
+    "tests.test_margin_system_evaluation": 22,
+    "tests.test_margin_system_card": 23,
+    "tests.test_margin_review_regressions": 10,
+    "tests.test_cross_sport_distributions": 26,
+    "tests.test_distribution_history": 6,
+    "tests.test_nfl_spread_calibration": 12,
+    "tests.test_nfl_qb_margin_cohort": 7,
+    "tests.test_nfl_qb_margin_study": 7,
+    "tests.test_nfl_margin_distribution": 15
+  },
+  "current_unique_focused_tests": 187,
+  "prior_aggregate_log": "focused-tests-aggregate.log",
+  "prior_aggregate_count": 185,
+  "supersedes_adapter_receipt": "focused-tests-final-adapter.json",
+  "coverage_explanation": "Current untouched common/cohort/study coverage is172tests from the earlier aggregate. This15testadapterrun replaces its original13adaptertests and the intermediate14testrun; duplicate runs are not summed."
+}

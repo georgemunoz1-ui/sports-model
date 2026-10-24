@@ -1,0 +1,491 @@
+{
+  "code_sha256": {
+    "models/nfl/contextual/features.py": "3a064779ce6a1a53b4fda66eed9f86a4365208a849b357dcd1cb5719b3e0a115",
+    "models/nfl/contextual/model.py": "ba00569e30cd56fa1d50570f828db02e56caf849ddbdf1d0d0fc11272e7a0fc3",
+    "models/nfl/contextual/recovered_inference.py": "ac70b26355c8a9fe0850caf6e69ec268f363363dffb3b1289cbee13d4d729abd",
+    "scripts/build_nfl_context.py": "484691390fa7ce412f1a9851fded078d92021b7409fb8c295874dc516a1a9014",
+    "scripts/build_nfl_qb_margin_cohort.py": "094a0dcd2e7c30cb49830a5b761ca8c5d5200f2825b3a4671a877dc4554c9869"
+  },
+  "created_at_utc": "2026-10-20T01:25:03.877477+00:00",
+  "final_coefficient_max_abs_errors": {
+    "home_margin": {
+      "center": 2.7755575615628914e-17,
+      "coefficient": 8.881784197001252e-16,
+      "impute": 6.245004513516506e-17,
+      "intercept": 0.0,
+      "scale": 2.7755575615628914e-17
+    },
+    "home_win": {
+      "center": 2.7755575615628914e-17,
+      "coefficient": 8.326672684688674e-17,
+      "impute": 6.245004513516506e-17,
+      "intercept": 0.0,
+      "scale": 2.7755575615628914e-17
+    },
+    "total_points": {
+      "center": 2.7755575615628914e-17,
+      "coefficient": 4.440892098500626e-16,
+      "impute": 6.245004513516506e-17,
+      "intercept": 0.0,
+      "scale": 2.7755575615628914e-17
+    }
+  },
+  "folds": [
+    {
+      "fitted_parent_sha256": "0c38110ac33d3b5b9c6e0c7ecd8a78cbac64a35f0294c9f838d9a6c55b449449",
+      "held_out_season": 2019,
+      "max_abs_prediction_error": {
+        "home_margin": 7.993605777301127e-15,
+        "home_win": 3.3306690738754696e-16,
+        "total_points": 1.4210854715202004e-14
+      },
+      "prediction_rows": 256,
+      "replay_passed": true,
+      "test_gameday_max": "2019-12-29",
+      "test_gameday_min": "2019-09-05",
+      "train_gameday_max": "2018-12-30",
+      "training_rows": 1020,
+      "training_seasons": [
+        2015,
+        2016,
+        2017,
+        2018
+      ]
+    },
+    {
+      "fitted_parent_sha256": "e508c3b1efb6f82650cbe0a24af0595608891092e7b7078c346547938241825c",
+      "held_out_season": 2020,
+      "max_abs_prediction_error": {
+        "home_margin": 5.329070518200751e-15,
+        "home_win": 4.996003610813204e-16,
+        "total_points": 1.4210854715202004e-14
+      },
+      "prediction_rows": 256,
+      "replay_passed": true,
+      "test_gameday_max": "2021-01-03",
+      "test_gameday_min": "2020-09-10",
+      "train_gameday_max": "2019-12-29",
+      "training_rows": 1275,
+      "training_seasons": [
+        2015,
+        2016,
+        2017,
+        2018,
+        2019
+      ]
+    },
+    {
+      "fitted_parent_sha256": "3230e264b798834733389bcbb0ad83709696a33349b97a5dd53c03c272003066",
+      "held_out_season": 2021,
+      "max_abs_prediction_error": {
+        "home_margin": 1.1546319456101628e-14,
+        "home_win": 2.3314683517128287e-15,
+        "total_points": 1.4210854715202004e-14
+      },
+      "prediction_rows": 272,
+      "replay_passed": true,
+      "test_gameday_max": "2022-01-09",
+      "test_gameday_min": "2021-09-09",
+      "train_gameday_max": "2021-01-03",
+      "training_rows": 1530,
+      "training_seasons": [
+        2015,
+        2016,
+        2017,
+        2018,
+        2019,
+        2020
+      ]
+    },
+    {
+      "fitted_parent_sha256": "6e4e70ea527689c381efd0195cb0d2629b872ad3f6d93c455ad6fe40f5fba0f5",
+      "held_out_season": 2022,
+      "max_abs_prediction_error": {
+        "home_margin": 5.329070518200751e-15,
+        "home_win": 7.771561172376096e-16,
+        "total_points": 1.4210854715202004e-14
+      },
+      "prediction_rows": 271,
+      "replay_passed": true,
+      "test_gameday_max": "2023-01-08",
+      "test_gameday_min": "2022-09-08",
+      "train_gameday_max": "2022-01-09",
+      "training_rows": 1801,
+      "training_seasons": [
+        2015,
+        2016,
+        2017,
+        2018,
+        2019,
+        2020,
+        2021
+      ]
+    },
+    {
+      "fitted_parent_sha256": "ff48e165fe46b4e15a45f687c846eb8a8dda8938a1fee310b01dcb77db7ce45e",
+      "held_out_season": 2023,
+      "max_abs_prediction_error": {
+        "home_margin": 5.329070518200751e-15,
+        "home_win": 2.7755575615628914e-16,
+        "total_points": 1.4210854715202004e-14
+      },
+      "prediction_rows": 272,
+      "replay_passed": true,
+      "test_gameday_max": "2024-01-07",
+      "test_gameday_min": "2023-09-07",
+      "train_gameday_max": "2023-01-08",
+      "training_rows": 2070,
+      "training_seasons": [
+        2015,
+        2016,
+        2017,
+        2018,
+        2019,
+        2020,
+        2021,
+        2022
+      ]
+    },
+    {
+      "fitted_parent_sha256": "b7e1aa706210d82d5a8ab0ea338bb633600cc65a92775b79c23e618994d6d148",
+      "held_out_season": 2024,
+      "max_abs_prediction_error": {
+        "home_margin": 3.552713678800501e-15,
+        "home_win": 3.3306690738754696e-16,
+        "total_points": 1.4210854715202004e-14
+      },
+      "prediction_rows": 272,
+      "replay_passed": true,
+      "test_gameday_max": "2025-01-05",
+      "test_gameday_min": "2024-09-05",
+      "train_gameday_max": "2024-01-07",
+      "training_rows": 2342,
+      "training_seasons": [
+        2015,
+        2016,
+        2017,
+        2018,
+        2019,
+        2020,
+        2021,
+        2022,
+        2023
+      ]
+    },
+    {
+      "fitted_parent_sha256": "0d22f0995ce82ac61d6061d2de519b68c1645eccbca5c1d637f0d70b1749deea",
+      "held_out_season": 2025,
+      "max_abs_prediction_error": {
+        "home_margin": 1.0658141036401503e-14,
+        "home_win": 2.220446049250313e-16,
+        "total_points": 1.4210854715202004e-14
+      },
+      "prediction_rows": 272,
+      "replay_passed": true,
+      "test_gameday_max": "2026-01-04",
+      "test_gameday_min": "2025-09-04",
+      "train_gameday_max": "2025-01-05",
+      "training_rows": 2614,
+      "training_seasons": [
+        2015,
+        2016,
+        2017,
+        2018,
+        2019,
+        2020,
+        2021,
+        2022,
+        2023,
+        2024
+      ]
+    }
+  ],
+  "qualification_limitations": [
+    "Historical source publication and starter identities were not archived as of each kickoff.",
+    "Fit, forecast and result-availability timestamps are explicit reconstructed study bounds; they are not observed publication times.",
+    "Same model family is established by exact annual fitting rules and coefficient replay; each historical fold uses prior seasons only.",
+    "Final frozen QB heads exclude ties from fitting under the original parent contract; all six held-out final ties remain in this margin cohort.",
+    "This study reuses historical research rows and is not an untouched or prospective validation cohort."
+  ],
+  "schema": "nfl.qb_margin_qualified_cohort.v1",
+  "source_files": {
+    "archive_manifest": {
+      "path": "/workspace/scratch/c2f9a66ae580/nfl-margin-20261019/cohort/recovered/integrated_context_report/manifest.json",
+      "sha256": "4cb1f5bcf0de21ad00ec79f481a136e6d340227f519d9a515c00ac1ab7b71212"
+    },
+    "features": {
+      "path": "/workspace/scratch/c2f9a66ae580/nfl-margin-20261019/cohort/recovered/integrated_context_report/evaluation/features.csv",
+      "sha256": "4e85683269768322d50d00966d432c37d4179d95bac76cd41fa5933d94ff4e5b"
+    },
+    "oof": {
+      "path": "/workspace/scratch/c2f9a66ae580/nfl-margin-20261019/cohort/recovered/integrated_context_report/evaluation/oof_predictions.csv",
+      "sha256": "cb11bb530bb7d8149e0fbae8f6d6cc1775f6879ab157051e3c86dff525092510"
+    },
+    "schedule": {
+      "path": "/workspace/scratch/c2f9a66ae580/sports-20261019/recovered/evidence/run-2026-10-19/nfl/schedule-fd25cbcd392602a1c0636b0bfd3273e1fece4fca414ea4dc6ceef500b9f1819e.csv",
+      "receipt": {
+        "kind": "schedule",
+        "path": "run-2026-10-19/nfl/schedule-fd25cbcd392602a1c0636b0bfd3273e1fece4fca414ea4dc6ceef500b9f1819e.csv",
+        "requested_at_utc": "2026-10-19T15:24:20.442139+00:00",
+        "retrieved_at_utc": "2026-10-19T15:24:25.443101+00:00",
+        "sha256": "fd25cbcd392602a1c0636b0bfd3273e1fece4fca414ea4dc6ceef500b9f1819e",
+        "status": "CAPTURED",
+        "url": "https://raw.githubusercontent.com/nflverse/nfldata/master/data/games.csv"
+      },
+      "sha256": "fd25cbcd392602a1c0636b0bfd3273e1fece4fca414ea4dc6ceef500b9f1819e"
+    }
+  },
+  "source_manifest_checks": [
+    {
+      "bytes": 2401193,
+      "path": "sources/snap_counts_2025.csv",
+      "sha256": "80b02a6e511aa20283551cae622b29ba4d0a6f006c489a2d91591fcad33792e7"
+    },
+    {
+      "bytes": 2155797,
+      "path": "sources/snap_counts_2015.csv",
+      "sha256": "841496252ada825c3c50d3ba9b4b26d3f4fabd0fedc5fb44f286ddaaa5bdb7e0"
+    },
+    {
+      "bytes": 674980,
+      "path": "sources/injuries_2016.csv",
+      "sha256": "504e05968cb9c54ddc730fd9b6e7d1dd16a62db8029cc784d3d7bafcea7ff7cb"
+    },
+    {
+      "bytes": 2157110,
+      "path": "sources/snap_counts_2016.csv",
+      "sha256": "a778e24e9eb665ffe8f16093b03c5a263dca0250b3aa92bd6002f61f534bea59"
+    },
+    {
+      "bytes": 3919,
+      "path": "sources/nws_e435d8b62432.json",
+      "sha256": "e435d8b62432d73b467c756a7259a3dc540469aebb2e5ae0541b8c60e3b14d84"
+    },
+    {
+      "bytes": 2379719,
+      "path": "sources/snap_counts_2022.csv",
+      "sha256": "0018a4833fbf0f825286c1c27450c6254391b548d6c55bcde728e93e4816815a"
+    },
+    {
+      "bytes": 2402841,
+      "path": "sources/snap_counts_2024.csv",
+      "sha256": "a2aa58efe093f8aa0ad5aadf09f81d8ec690a1183bd2dde68d20e7f109a9c335"
+    },
+    {
+      "bytes": 2394875,
+      "path": "sources/snap_counts_2023.csv",
+      "sha256": "303b61aa5c33ffda863f93a750fc14483f397f9187ad502b1ce71e9b516a64c0"
+    },
+    {
+      "bytes": 2156311,
+      "path": "sources/snap_counts_2019.csv",
+      "sha256": "0cd52be8fa57f18503b670cb8263246c4f548375b768cbcad1c7a7462c98970d"
+    },
+    {
+      "bytes": 164563,
+      "path": "sources/nws_48696c013cd7.json",
+      "sha256": "48696c013cd743192b6a7fa591288302e57e538d4a4fbf270c7eac9384ff1c0b"
+    },
+    {
+      "bytes": 6822,
+      "path": "sources/manifest.json",
+      "sha256": "50006ae39d9decbc34b7afdae2f5c70fb022d1f6d00808855adb701404906906"
+    },
+    {
+      "bytes": 700757,
+      "path": "sources/injuries_2019.csv",
+      "sha256": "daddfe8e04ddc3a29bce14f362e774fbadfb274c807f1f0fde7b5bf32aaf6cdf"
+    },
+    {
+      "bytes": 2157555,
+      "path": "sources/snap_counts_2018.csv",
+      "sha256": "9a408b78a55f799110aed70de3564e157faf089ce9bed780d0368bf49ae13e0b"
+    },
+    {
+      "bytes": 752433,
+      "path": "sources/injuries_2022.csv",
+      "sha256": "5f0d60324e597edd1a2ced8540b04e40b51dd440591dd1df11b8d96343387c9e"
+    },
+    {
+      "bytes": 665119,
+      "path": "sources/injuries_2018.csv",
+      "sha256": "4724e1f37cc3076f564e997fbf269190e7dbe795a39315b903788e0a9c40065e"
+    },
+    {
+      "bytes": 816989,
+      "path": "sources/injuries_2024.csv",
+      "sha256": "498bce8e13cb64b2ab9bb0ad6cb81d0a63c2ddb24016c9fc90c2de2126fae449"
+    },
+    {
+      "bytes": 738501,
+      "path": "sources/injuries_2023.csv",
+      "sha256": "16b04e21da5aa3944cfa9c22cafcc84ed7e6d9866eaddf0344e9b8cbf2f63afe"
+    },
+    {
+      "bytes": 696006,
+      "path": "sources/injuries_2025.csv",
+      "sha256": "873ca1606dd575bd01152508a243ef6b3a0f8f97b90b707217e62ee8c7ceb735"
+    },
+    {
+      "bytes": 849,
+      "path": "sources/airports.csv",
+      "sha256": "c12105094b040c7b1223a33f79bbe7a15947282da50e6d773a0733a56227c30e"
+    },
+    {
+      "bytes": 737083,
+      "path": "sources/injuries_2021.csv",
+      "sha256": "1049fb9ff0fe7cfcf3ba8bfe1f5a35d3aba985c461c8fb7bf5201735b6d34254"
+    },
+    {
+      "bytes": 2388493,
+      "path": "sources/snap_counts_2021.csv",
+      "sha256": "8e4dae054a4749cf2d4919508d9161a6068fd67509979aefa385bfb3803d0ee5"
+    },
+    {
+      "bytes": 737474,
+      "path": "sources/injuries_2020.csv",
+      "sha256": "706cca82824214f6b73ba0c6e537d3ee39766a50c644b8974b9fc28d7518de90"
+    },
+    {
+      "bytes": 665280,
+      "path": "sources/injuries_2017.csv",
+      "sha256": "0d5139fbf41b0866517bd2bd5fd85bb20dbd4dd9bc36a706fed030a88731de6f"
+    },
+    {
+      "bytes": 2257664,
+      "path": "sources/snap_counts_2020.csv",
+      "sha256": "c3b2a9aa472aca23332c030e574cfb134f885608ddf74fe0a659c38584d14358"
+    },
+    {
+      "bytes": 715948,
+      "path": "sources/injuries_2015.csv",
+      "sha256": "fbca54ef42594cc52facc0d8c8dd74802b812771b9e33032e44ae8c7e21b0360"
+    },
+    {
+      "bytes": 2157818,
+      "path": "sources/snap_counts_2017.csv",
+      "sha256": "eab2fad2df99249d4061ed9c5c34d312cdba07cf3159d027d255bdc9b6526917"
+    },
+    {
+      "bytes": 1997189,
+      "path": "evaluation/features.csv",
+      "sha256": "4e85683269768322d50d00966d432c37d4179d95bac76cd41fa5933d94ff4e5b"
+    },
+    {
+      "bytes": 394103,
+      "path": "evaluation/qb_game_aggregates.csv",
+      "sha256": "626f672c1149ce70afa5b2ec54d293f758ec68946ea6adee3c291adc044ba65d"
+    },
+    {
+      "bytes": 939730,
+      "path": "evaluation/oof_predictions.csv",
+      "sha256": "cb11bb530bb7d8149e0fbae8f6d6cc1775f6879ab157051e3c86dff525092510"
+    },
+    {
+      "bytes": 6094,
+      "path": "evaluation/evaluation.json",
+      "sha256": "fcbbcae07a132314dc817ecdbca30442db1232a2276769e661080e1fc2afc84a"
+    },
+    {
+      "bytes": 105316,
+      "path": "evaluation/score_kernel_chronological_checks.csv",
+      "sha256": "0c964e2e42067ecadefeecbf86c7475b16fe8aa645de31c16a47b883e59364c8"
+    },
+    {
+      "bytes": 629,
+      "path": "evaluation/score_kernel_evaluation.json",
+      "sha256": "e18081083cc28bf21793b2985719aeeed098b4350a63eb13e7e6ee00e033695f"
+    },
+    {
+      "bytes": 9447,
+      "path": "evaluation/data_audit.json",
+      "sha256": "30f6f2c0283fc60292cd140a43f24cbc2dea4017711f84982383b18d841298f2"
+    },
+    {
+      "bytes": 400128,
+      "path": "final_forecast/score_draws.npy",
+      "sha256": "0cbf521622fc05ca4dd18d3ec447366f1a1b5ff580eddb9aa98f4693c328ec0d"
+    },
+    {
+      "bytes": 360,
+      "path": "final_forecast/manifest.json",
+      "sha256": "cfcd8b6c212bfcfab1f88fe55fae7fac803104d887ba64d4317b82b5f91f2bca"
+    },
+    {
+      "bytes": 411,
+      "path": "final_forecast/registration.jsonl",
+      "sha256": "66422a50668f7a33e954e3df64ba01c40503a31828db470bde633fbe68d81075"
+    },
+    {
+      "bytes": 100128,
+      "path": "final_forecast/winner_draws.npy",
+      "sha256": "67b6096c156c1ac3f95a24adaecbb1ae9c3cb7605bda78f3a346f2bf56a5b579"
+    },
+    {
+      "bytes": 83204,
+      "path": "final_forecast/forecast.json",
+      "sha256": "5817a0bdceb0446b8a93f184097bc65957aa2d6c132f2559105b4a371caa24fa"
+    },
+    {
+      "bytes": 180,
+      "path": "verification.json",
+      "sha256": "598254d18fdf6f6f54a39d04c3877684eacab623f12cb368f0297b394971b772"
+    },
+    {
+      "bytes": 1583,
+      "path": "integration_tests.log",
+      "sha256": "002aecb348b7ae63e5b7f39ee9ec337e96c806fd86b0fa3dfd57a6994b854383"
+    },
+    {
+      "bytes": 316,
+      "path": "superseded_first_simulation.json",
+      "sha256": "1d878e1d7d6df1234b88a32d659e27a27a9b449dfc4bb58b6105bb615b1be84f"
+    },
+    {
+      "bytes": 4739,
+      "path": "report.md",
+      "sha256": "53fc4b05c2b011ca6f8aeeef2199bac184ff3156bc5304d7592002f4b71b13f2"
+    }
+  ],
+  "source_sha256": {
+    "/workspace/scratch/c2f9a66ae580/nfl-margin-20261019/cohort/recovered/integrated_context_report/evaluation/data_audit.json": "30f6f2c0283fc60292cd140a43f24cbc2dea4017711f84982383b18d841298f2",
+    "/workspace/scratch/c2f9a66ae580/nfl-margin-20261019/cohort/recovered/integrated_context_report/evaluation/features.csv": "4e85683269768322d50d00966d432c37d4179d95bac76cd41fa5933d94ff4e5b",
+    "/workspace/scratch/c2f9a66ae580/nfl-margin-20261019/cohort/recovered/integrated_context_report/evaluation/oof_predictions.csv": "cb11bb530bb7d8149e0fbae8f6d6cc1775f6879ab157051e3c86dff525092510",
+    "/workspace/scratch/c2f9a66ae580/sports-20261019/recovered/evidence/run-2026-10-19/nfl/schedule-fd25cbcd392602a1c0636b0bfd3273e1fece4fca414ea4dc6ceef500b9f1819e.csv": "fd25cbcd392602a1c0636b0bfd3273e1fece4fca414ea4dc6ceef500b9f1819e",
+    "/workspace/scratch/c2f9a66ae580/sports-20261019/recovered/evidence/run-2026-10-19/nfl/source-refresh.json": "e18de2e8c9b55b76c0509ffede30eaf929a8cc35e446ebcf2669c9d016cfce3d",
+    "/workspace/scratch/c2f9a66ae580/sports-20261019/repo/data/nfl/contextual_v1/model_packed.json": "a1fc0436a3e3d4f76d7b7fe9b480314fbb20804e3b9d29288f64913935a80322"
+  },
+  "summary": {
+    "action_authority": false,
+    "counts_by_season": {
+      "2019": 256,
+      "2020": 256,
+      "2021": 272,
+      "2022": 271,
+      "2023": 272,
+      "2024": 272,
+      "2025": 272
+    },
+    "deployment_rows_2019_2025": 1871,
+    "evaluation_rows_2023_2025": 816,
+    "feature_rows": 2895,
+    "fit_rows_2019_2022": 1055,
+    "historical_availability_proven": false,
+    "information_set": "RECONSTRUCTED_QB_OOF_PRIOR_SEASON_FITS",
+    "market_input": false,
+    "new_2026_outcomes_used": false,
+    "oof_rows": 1871,
+    "original_historical_forecasts_registered": false,
+    "outcome_metrics_computed": false,
+    "parent_decoded_sha256": "c1cdf49dbb1a98bbf2b3d4286042a316c132dc7d472f3138c3bbbb1e0cb1c3cd",
+    "parent_model_id": "nfl.integrated_context.qb.v1.research",
+    "parent_packed_sha256": "a1fc0436a3e3d4f76d7b7fe9b480314fbb20804e3b9d29288f64913935a80322",
+    "parent_qb_head_sha256": "c5da832aa3d78bdfad4f679c6dd3eae157f9a1f1d92956d5cbd261b523e7332e",
+    "parent_source_audit_sha256": "3aff4e205adea7cb1ea070225b2d2b5b4aff910236bc50d4d76011225a6e2860",
+    "same_parent_verified": true,
+    "settlement": "FULL_GAME_OT_REGULAR",
+    "source_manifest_verified_files": 42,
+    "ties_retained": 6
+  },
+  "team_alias_policy": "Existing NFL contextual canonical() mapping; source team labels and game IDs retained."
+}

@@ -1,0 +1,128 @@
+{
+  "base_commit": "1a3bb94ee37e74ad428b2d516ec2d6a39a701067",
+  "created_at_utc": "2026-10-19T18:28:32.560129+00:00",
+  "draws_replayed": 800000,
+  "final_code_sha256": {
+    "models/common/margin_challenger.py": "3ca0c2d748c3aff6373cecaf95661489a3573e2d4ca231fcbe3842668c60d5bd",
+    "models/common/margin_system.py": "6b5bc2ccc85b69daaa7afef4336249b0c5c01396666c6cea8531583a80ade37a",
+    "pipelines/cards/margin_system.py": "43a8dac347d62b63854c12910bb651fa6098b0e33d538b10d42f4708d7787820",
+    "tests/test_margin_challenger.py": "e249035e097b612aaa221629bb432fce636415a47d2470258ae904f2bcd28e05",
+    "tests/test_margin_review_regressions.py": "b23a2a17e9ba1b8055d25660e80c0fc5c9593b1082f6ff87e9ee1abc9b3505f3",
+    "tests/test_margin_system_card.py": "dc339943eadb2d7e4824d83911ae0cfe7ef41c81c74969dbcb33e28b773ecd22"
+  },
+  "final_verified_at_utc": "2026-10-19T18:31:19.836882+00:00",
+  "independent_review": {
+    "coverage_reseal_probe": "REJECTED_MARGIN_CARD_COVERAGE_MISMATCH",
+    "fit_math_ast": "Only fit evidence checks and validate_model changed; numerical helpers and predict unchanged",
+    "later_change": "Card coverage validation strengthened after retained replay; fitting and distribution code pins unchanged."
+  },
+  "limits": [
+    "Source declarations validated for consistency, not independently authenticated.",
+    "Historical predictive conclusions remain tied to original frozen code/model IDs.",
+    "Full repository health and exact-head CI not cleared.",
+    "Unavailable externally referenced files were mapped to equivalent actual contracts."
+  ],
+  "nhl_numerical_refit": {
+    "cohort_sha256": "22bea70e63b67fbed25ab0fad590419119ba1d93bd52f21caa354d0c9b114cf9",
+    "new_evidence_rows": 1312,
+    "new_fit_file_sha256": "5b8630cef5b419459dd3247f13aefdbb3ccc87c0a23057610e778c1ffb3d6abd",
+    "old_fit_file_sha256": "87057046044f7a0ce47e1fca49d403573ab5b1bdd27b6e83f7f98b62af6db29f",
+    "prediction_checks": [
+      {
+        "event_id": "NHL:401801798",
+        "mass_sum": 1.0,
+        "support_n": 512
+      },
+      {
+        "event_id": "NHL:401803663",
+        "mass_sum": 1.0,
+        "support_n": 512
+      }
+    ],
+    "training_n": 1312,
+    "unchanged_fitted_state": true,
+    "unchanged_parameters_lattice_selection": true
+  },
+  "predictive_validation": "UNVALIDATED",
+  "retained_package": "All-Sports-Margin-Evidence-2026-10-19.zip",
+  "retained_replay": [
+    {
+      "draw_sha256": "9b01b6a835513e4b624fc55298a5aa13411cb41b3d16086d108ba2e87d85eb56",
+      "draws": 100000,
+      "event_id": "NHL:401892535",
+      "exact_replay": true,
+      "model_id": "nhl.margin.empirical.research.ce191ef893a5dd16",
+      "same_summary_and_settlement": true
+    },
+    {
+      "draw_sha256": "02efe3fb2f411f28db128ebf58056ac30ff97fa92a16d2452f62c2edc310dbca",
+      "draws": 100000,
+      "event_id": "NHL:401892536",
+      "exact_replay": true,
+      "model_id": "nhl.margin.empirical.research.ce191ef893a5dd16",
+      "same_summary_and_settlement": true
+    },
+    {
+      "draw_sha256": "be4cba4d17f88bba1abafbc5ce0620b54a49097e50fa7b9c795b2a66aa93ca2d",
+      "draws": 100000,
+      "event_id": "NHL:401892537",
+      "exact_replay": true,
+      "model_id": "nhl.margin.empirical.research.ce191ef893a5dd16",
+      "same_summary_and_settlement": true
+    },
+    {
+      "draw_sha256": "615a188fe156764b22b07959a3b6c841cc940eba5675ca2736d7ad8b5e5151e7",
+      "draws": 100000,
+      "event_id": "NHL:401892538",
+      "exact_replay": true,
+      "model_id": "nhl.margin.empirical.research.ce191ef893a5dd16",
+      "same_summary_and_settlement": true
+    },
+    {
+      "draw_sha256": "0e8e4f925733310f3ef2ae72dddabe00974089c318be171d49c220d64b7866c3",
+      "draws": 100000,
+      "event_id": "NHL:401892535",
+      "exact_replay": true,
+      "model_id": "nhl.margin.full_support.research.a0805eadf30974dc",
+      "same_summary_and_settlement": true
+    },
+    {
+      "draw_sha256": "fc54943952cca1be6b90ef829fc546c3617d387c5b47ca9b5a25be3804c950cf",
+      "draws": 100000,
+      "event_id": "NHL:401892536",
+      "exact_replay": true,
+      "model_id": "nhl.margin.full_support.research.a0805eadf30974dc",
+      "same_summary_and_settlement": true
+    },
+    {
+      "draw_sha256": "8db537a8908bf893ba5d87d8cea9cd5350f2c412d3c22aa85f639a09eac5c2c3",
+      "draws": 100000,
+      "event_id": "NHL:401892537",
+      "exact_replay": true,
+      "model_id": "nhl.margin.full_support.research.a0805eadf30974dc",
+      "same_summary_and_settlement": true
+    },
+    {
+      "draw_sha256": "e5cc1fc2093f55e6b637c88c16094fc4d346d952656a9093cb05c5712dcf1a3b",
+      "draws": 100000,
+      "event_id": "NHL:401892538",
+      "exact_replay": true,
+      "model_id": "nhl.margin.full_support.research.a0805eadf30974dc",
+      "same_summary_and_settlement": true
+    }
+  ],
+  "retained_report_sha256": "6a0f2245ee0e9eac58eb4ca989d337a684e5a376437d584d3d8f58e2dc06f18e",
+  "schema": "sports.margin_review.verification.v1",
+  "tests": {
+    "command": "python3 -m unittest tests.test_margin_system tests.test_margin_challenger tests.test_margin_system_evaluation tests.test_margin_system_card tests.test_margin_review_regressions tests.test_cross_sport_distributions tests.test_distribution_history tests.test_nfl_spread_calibration -q",
+    "count": 158,
+    "log_sha256": "d60d6d03e12b22785b4a6a300b68207985f07ed53c22dc934cf2d5eb15c29598",
+    "status": "PASS"
+  },
+  "verification_stage_code_sha256": {
+    "models/common/margin_challenger.py": "3ca0c2d748c3aff6373cecaf95661489a3573e2d4ca231fcbe3842668c60d5bd",
+    "models/common/margin_system.py": "6b5bc2ccc85b69daaa7afef4336249b0c5c01396666c6cea8531583a80ade37a",
+    "pipelines/cards/margin_system.py": "7ef30b519d2b6f6d85e70c95cd4d9285c3b43fb90bae1c4f9e2099483a51ad02"
+  },
+  "wagering_authority": "OFF"
+}

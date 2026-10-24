@@ -1,0 +1,435 @@
+{
+  "model_id": "nfl.qb_margin.residual_alignment.v1.research",
+  "design_sha256": "43d1ecd0f77c0c4e2c324ebd9749faeca2cff63771cfc5fb9308e0519d0aedd5",
+  "preregistration_commit": "954bc0e26be86b04206b9f82cedc857426891bad",
+  "retrospective_screen_passed": false,
+  "criteria": {
+    "crps_mean": false,
+    "crps_season_ci": false,
+    "cover_brier": true,
+    "interval_90": true
+  },
+  "metrics": {
+    "games": 1615,
+    "contracts": 11305,
+    "candidate_crps": 7.291716485760403,
+    "reference_crps": 7.291450170195367,
+    "margin_mean_mae": 10.124662903882529,
+    "margin_mean_rmse": 13.03337601966488,
+    "interval_90_coverage": 0.913312693498452,
+    "interval_90_width": 44.48482972136223,
+    "predicted_tie_rate": 0.004647772403741674,
+    "observed_tie_rate": 0.0030959752321981426,
+    "candidate_brier": 0.4403289038673641,
+    "reference_brier": 0.43989383592618103,
+    "candidate_log_loss_clipped": 0.7046213181737417,
+    "reference_log_loss_clipped": 0.7046927950348326,
+    "candidate_zero_mass_observations": 1,
+    "key_number_push": {
+      "3": {
+        "contracts": 3230,
+        "predicted": 0.02873247309817095,
+        "observed": 0.07306501547987616
+      },
+      "7": {
+        "contracts": 3230,
+        "predicted": 0.02533169008529741,
+        "observed": 0.038390092879256967
+      }
+    }
+  },
+  "paired_crps_season_bootstrap_95_ci": [
+    -0.012152497215723899,
+    0.012457283043347816
+  ],
+  "by_season": {
+    "2020": {
+      "games": 256,
+      "contracts": 1792,
+      "candidate_crps": 7.294567491889994,
+      "reference_crps": 7.3166162507394965,
+      "margin_mean_mae": 10.196195162679965,
+      "margin_mean_rmse": 13.048903075532596,
+      "interval_90_coverage": 0.9140625,
+      "interval_90_width": 44.125,
+      "predicted_tie_rate": 0.005836575875486383,
+      "observed_tie_rate": 0.00390625,
+      "candidate_brier": 0.44623860657509595,
+      "reference_brier": 0.4476767034297549,
+      "candidate_log_loss_clipped": 0.7232154774440386,
+      "reference_log_loss_clipped": 0.7123715899247988,
+      "candidate_zero_mass_observations": 1,
+      "key_number_push": {
+        "3": {
+          "contracts": 512,
+          "predicted": 0.028319656054954415,
+          "observed": 0.072265625
+        },
+        "7": {
+          "contracts": 512,
+          "predicted": 0.024503949381415098,
+          "observed": 0.037109375
+        }
+      }
+    },
+    "2021": {
+      "games": 272,
+      "contracts": 1904,
+      "candidate_crps": 7.956192198778474,
+      "reference_crps": 7.932237699642947,
+      "margin_mean_mae": 11.119385943162706,
+      "margin_mean_rmse": 14.134854498655304,
+      "interval_90_coverage": 0.8897058823529411,
+      "interval_90_width": 43.7389705882353,
+      "predicted_tie_rate": 0.004873294346978557,
+      "observed_tie_rate": 0.003676470588235294,
+      "candidate_brier": 0.45334344961818873,
+      "reference_brier": 0.4496968587009755,
+      "candidate_log_loss_clipped": 0.7147839246586624,
+      "reference_log_loss_clipped": 0.7129433474754271,
+      "candidate_zero_mass_observations": 0,
+      "key_number_push": {
+        "3": {
+          "contracts": 544,
+          "predicted": 0.02784463733751255,
+          "observed": 0.06985294117647059
+        },
+        "7": {
+          "contracts": 544,
+          "predicted": 0.02559885394852084,
+          "observed": 0.03308823529411765
+        }
+      }
+    },
+    "2022": {
+      "games": 271,
+      "contracts": 1897,
+      "candidate_crps": 6.604783234519508,
+      "reference_crps": 6.5958041356714725,
+      "margin_mean_mae": 8.968076037781987,
+      "margin_mean_rmse": 11.813353084441363,
+      "interval_90_coverage": 0.9372693726937269,
+      "interval_90_width": 45.140221402214024,
+      "predicted_tie_rate": 0.004458598726114649,
+      "observed_tie_rate": 0.007380073800738007,
+      "candidate_brier": 0.44568154361004697,
+      "reference_brier": 0.44465769347432066,
+      "candidate_log_loss_clipped": 0.7157187001631954,
+      "reference_log_loss_clipped": 0.7159272148735568,
+      "candidate_zero_mass_observations": 0,
+      "key_number_push": {
+        "3": {
+          "contracts": 542,
+          "predicted": 0.028201879490270827,
+          "observed": 0.08302583025830258
+        },
+        "7": {
+          "contracts": 542,
+          "predicted": 0.024772765961273223,
+          "observed": 0.03505535055350553
+        }
+      }
+    },
+    "2023": {
+      "games": 272,
+      "contracts": 1904,
+      "candidate_crps": 7.482376446600817,
+      "reference_crps": 7.498990539914436,
+      "margin_mean_mae": 10.357422815739358,
+      "margin_mean_rmse": 13.432096794440985,
+      "interval_90_coverage": 0.8970588235294118,
+      "interval_90_width": 44.3125,
+      "predicted_tie_rate": 0.005208333333333333,
+      "observed_tie_rate": 0.0,
+      "candidate_brier": 0.43879556767177696,
+      "reference_brier": 0.43995983408785844,
+      "candidate_log_loss_clipped": 0.6971427575599332,
+      "reference_log_loss_clipped": 0.7028935205023016,
+      "candidate_zero_mass_observations": 0,
+      "key_number_push": {
+        "3": {
+          "contracts": 544,
+          "predicted": 0.029462464808425487,
+          "observed": 0.06985294117647059
+        },
+        "7": {
+          "contracts": 544,
+          "predicted": 0.02600463510192351,
+          "observed": 0.04044117647058824
+        }
+      }
+    },
+    "2024": {
+      "games": 272,
+      "contracts": 1904,
+      "candidate_crps": 7.173542897633509,
+      "reference_crps": 7.1779987770856035,
+      "margin_mean_mae": 9.957803965874954,
+      "margin_mean_rmse": 12.794616774742963,
+      "interval_90_coverage": 0.9154411764705882,
+      "interval_90_width": 44.779411764705884,
+      "predicted_tie_rate": 0.004141566265060242,
+      "observed_tie_rate": 0.0,
+      "candidate_brier": 0.42270125121047886,
+      "reference_brier": 0.4234474613360345,
+      "candidate_log_loss_clipped": 0.6761182583912798,
+      "reference_log_loss_clipped": 0.68146672975505,
+      "candidate_zero_mass_observations": 0,
+      "key_number_push": {
+        "3": {
+          "contracts": 544,
+          "predicted": 0.029600659560129722,
+          "observed": 0.06801470588235294
+        },
+        "7": {
+          "contracts": 544,
+          "predicted": 0.025660951803063815,
+          "observed": 0.03676470588235294
+        }
+      }
+    },
+    "2025": {
+      "games": 272,
+      "contracts": 1904,
+      "candidate_crps": 7.236478861488763,
+      "reference_crps": 7.225976453611568,
+      "margin_mean_mae": 10.149049120389508,
+      "margin_mean_rmse": 12.859975943626802,
+      "interval_90_coverage": 0.9264705882352942,
+      "interval_90_width": 44.794117647058826,
+      "predicted_tie_rate": 0.0034375,
+      "observed_tie_rate": 0.003676470588235294,
+      "candidate_brier": 0.4355803129122236,
+      "reference_brier": 0.4343997944458087,
+      "candidate_log_loss_clipped": 0.701883364098555,
+      "reference_log_loss_clipped": 0.7030473645090309,
+      "candidate_zero_mass_observations": 0,
+      "key_number_push": {
+        "3": {
+          "contracts": 544,
+          "predicted": 0.028939307270455614,
+          "observed": 0.07536764705882353
+        },
+        "7": {
+          "contracts": 544,
+          "predicted": 0.025398238817844827,
+          "observed": 0.04779411764705882
+        }
+      }
+    }
+  },
+  "weeks_1_to_4": {
+    "games": 383,
+    "contracts": 2681,
+    "candidate_crps": 7.174723695998371,
+    "reference_crps": 7.184606241244609,
+    "margin_mean_mae": 9.934506346838374,
+    "margin_mean_rmse": 12.905751577926408,
+    "interval_90_coverage": 0.9112271540469974,
+    "interval_90_width": 44.4934725848564,
+    "predicted_tie_rate": 0.0046562376269733575,
+    "observed_tie_rate": 0.007832898172323759,
+    "candidate_brier": 0.4534520287500354,
+    "reference_brier": 0.453282410505127,
+    "candidate_log_loss_clipped": 0.7206744727846575,
+    "reference_log_loss_clipped": 0.7204017853376689,
+    "candidate_zero_mass_observations": 0,
+    "key_number_push": {
+      "3": {
+        "contracts": 766,
+        "predicted": 0.02941261686241772,
+        "observed": 0.0731070496083551
+      },
+      "7": {
+        "contracts": 766,
+        "predicted": 0.025871674003320883,
+        "observed": 0.03655352480417755
+      }
+    }
+  },
+  "neutral_venue": {
+    "games": 29,
+    "contracts": 203,
+    "candidate_crps": 6.480049166836486,
+    "reference_crps": 6.4053733338738414,
+    "margin_mean_mae": 8.407557721121936,
+    "margin_mean_rmse": 11.997375398380642,
+    "interval_90_coverage": 0.9310344827586207,
+    "interval_90_width": 44.51724137931034,
+    "predicted_tie_rate": 0.004472179345381053,
+    "observed_tie_rate": 0.0,
+    "candidate_brier": 0.45103363165050653,
+    "reference_brier": 0.44110290940748165,
+    "candidate_log_loss_clipped": 0.7249852090083843,
+    "reference_log_loss_clipped": 0.7195460899586326,
+    "candidate_zero_mass_observations": 0,
+    "key_number_push": {
+      "3": {
+        "contracts": 58,
+        "predicted": 0.029027888862547934,
+        "observed": 0.10344827586206896
+      },
+      "7": {
+        "contracts": 58,
+        "predicted": 0.027222994281032784,
+        "observed": 0.034482758620689655
+      }
+    }
+  },
+  "missingness_cohorts": {
+    "0": {
+      "games": 1608,
+      "contracts": 11256,
+      "candidate_crps": 7.283403757578091,
+      "reference_crps": 7.2841112433980095,
+      "margin_mean_mae": 10.11591334516053,
+      "margin_mean_rmse": 13.01702144868941,
+      "interval_90_coverage": 0.914179104477612,
+      "interval_90_width": 44.483830845771145,
+      "predicted_tie_rate": 0.004646612925693466,
+      "observed_tie_rate": 0.003109452736318408,
+      "candidate_brier": 0.4397879703916886,
+      "reference_brier": 0.43944959570990993,
+      "candidate_log_loss_clipped": 0.7042046716084543,
+      "reference_log_loss_clipped": 0.7044014952038659,
+      "candidate_zero_mass_observations": 1,
+      "key_number_push": {
+        "3": {
+          "contracts": 3216,
+          "predicted": 0.028715721514286138,
+          "observed": 0.07338308457711443
+        },
+        "7": {
+          "contracts": 3216,
+          "predicted": 0.025336857022036658,
+          "observed": 0.03855721393034826
+        }
+      }
+    },
+    "1": {
+      "games": 7,
+      "contracts": 49,
+      "candidate_crps": 9.201268902497274,
+      "reference_crps": 8.977306497359963,
+      "margin_mean_mae": 12.134561536021666,
+      "margin_mean_rmse": 16.36267309990795,
+      "interval_90_coverage": 0.7142857142857143,
+      "interval_90_width": 44.714285714285715,
+      "predicted_tie_rate": 0.004914121075387183,
+      "observed_tie_rate": 0.0,
+      "candidate_brier": 0.5645890508511259,
+      "reference_brier": 0.5419421598924654,
+      "candidate_log_loss_clipped": 0.8003309863140448,
+      "reference_log_loss_clipped": 0.7716085276340416,
+      "candidate_zero_mass_observations": 0,
+      "key_number_push": {
+        "3": {
+          "contracts": 14,
+          "predicted": 0.0325805512248528,
+          "observed": 0.0
+        },
+        "7": {
+          "contracts": 14,
+          "predicted": 0.02414477090291205,
+          "observed": 0.0
+        }
+      }
+    },
+    "2": {
+      "games": 0
+    }
+  },
+  "head_replay": [
+    {
+      "season": 2019,
+      "training_max_season": 2018,
+      "training_rows": 1020,
+      "oof_games": 256,
+      "max_absolute_replay_difference": {
+        "home_win": 3.3306690738754696e-16,
+        "home_margin": 7.993605777301127e-15,
+        "total_points": 1.4210854715202004e-14
+      },
+      "parameter_sha256": "0c38110ac33d3b5b9c6e0c7ecd8a78cbac64a35f0294c9f838d9a6c55b449449"
+    },
+    {
+      "season": 2020,
+      "training_max_season": 2019,
+      "training_rows": 1275,
+      "oof_games": 256,
+      "max_absolute_replay_difference": {
+        "home_win": 4.996003610813204e-16,
+        "home_margin": 5.329070518200751e-15,
+        "total_points": 1.4210854715202004e-14
+      },
+      "parameter_sha256": "e508c3b1efb6f82650cbe0a24af0595608891092e7b7078c346547938241825c"
+    },
+    {
+      "season": 2021,
+      "training_max_season": 2020,
+      "training_rows": 1530,
+      "oof_games": 272,
+      "max_absolute_replay_difference": {
+        "home_win": 2.3314683517128287e-15,
+        "home_margin": 1.1546319456101628e-14,
+        "total_points": 1.4210854715202004e-14
+      },
+      "parameter_sha256": "3230e264b798834733389bcbb0ad83709696a33349b97a5dd53c03c272003066"
+    },
+    {
+      "season": 2022,
+      "training_max_season": 2021,
+      "training_rows": 1801,
+      "oof_games": 271,
+      "max_absolute_replay_difference": {
+        "home_win": 7.771561172376096e-16,
+        "home_margin": 5.329070518200751e-15,
+        "total_points": 1.4210854715202004e-14
+      },
+      "parameter_sha256": "6e4e70ea527689c381efd0195cb0d2629b872ad3f6d93c455ad6fe40f5fba0f5"
+    },
+    {
+      "season": 2023,
+      "training_max_season": 2022,
+      "training_rows": 2070,
+      "oof_games": 272,
+      "max_absolute_replay_difference": {
+        "home_win": 2.7755575615628914e-16,
+        "home_margin": 5.329070518200751e-15,
+        "total_points": 1.4210854715202004e-14
+      },
+      "parameter_sha256": "ff48e165fe46b4e15a45f687c846eb8a8dda8938a1fee310b01dcb77db7ce45e"
+    },
+    {
+      "season": 2024,
+      "training_max_season": 2023,
+      "training_rows": 2342,
+      "oof_games": 272,
+      "max_absolute_replay_difference": {
+        "home_win": 3.3306690738754696e-16,
+        "home_margin": 3.552713678800501e-15,
+        "total_points": 1.4210854715202004e-14
+      },
+      "parameter_sha256": "b7e1aa706210d82d5a8ab0ea338bb633600cc65a92775b79c23e618994d6d148"
+    },
+    {
+      "season": 2025,
+      "training_max_season": 2024,
+      "training_rows": 2614,
+      "oof_games": 272,
+      "max_absolute_replay_difference": {
+        "home_win": 2.220446049250313e-16,
+        "home_margin": 1.0658141036401503e-14,
+        "total_points": 1.4210854715202004e-14
+      },
+      "parameter_sha256": "0d22f0995ce82ac61d6061d2de519b68c1645eccbca5c1d637f0d70b1749deea"
+    }
+  ],
+  "population": "All 2020-2025 saved QB REG OOF games including ties; no outcome-based exclusions",
+  "evidence": "REUSED_RETROSPECTIVE_HISTORY_NOT_ORIGINAL_PIT_OR_UNTOUCHED_HOLDOUT",
+  "market_line_evaluation": false,
+  "predictive_validation": "HOLD",
+  "promotion": false,
+  "publication_eligibility": "INELIGIBLE",
+  "action_authority": false
+}

@@ -1,0 +1,46 @@
+{
+  "by_season": {
+    "2024": {
+      "control_brier": 0.19487196578128893,
+      "control_log_loss": 0.5691125165397465,
+      "joint_brier": 0.1957244017013828,
+      "joint_log_loss": 0.572379100812694,
+      "margin_central80_coverage": 0.820476858345021,
+      "margin_mae": 13.255785413744741,
+      "n": 713,
+      "total_central80_coverage": 0.8373071528751753,
+      "total_mae": 12.890252454417952
+    },
+    "2025": {
+      "control_brier": 0.1807844065921378,
+      "control_log_loss": 0.5345124624483641,
+      "joint_brier": 0.18989411255224747,
+      "joint_log_loss": 0.5593393873651064,
+      "margin_central80_coverage": 0.8417366946778712,
+      "margin_mae": 13.119326636904763,
+      "n": 714,
+      "total_central80_coverage": 0.8389355742296919,
+      "total_mae": 12.693151479341736
+    }
+  },
+  "cover_total_probability_calibration": "NOT_ESTABLISHED_NO_MATCHED_HISTORICAL_QUOTES",
+  "design": "FIXED_TRAIN_THROUGH_2023_EVALUATE_2024_2025",
+  "overall": {
+    "control_brier": 0.1878232501113142,
+    "control_log_loss": 0.5518003661394333,
+    "joint_brier": 0.19280721427847977,
+    "joint_log_loss": 0.5658546751633754,
+    "margin_central80_coverage": 0.831114225648213,
+    "margin_mae": 13.187508212158374,
+    "n": 1427,
+    "total_central80_coverage": 0.8381219341275403,
+    "total_mae": 12.791632905571129
+  },
+  "paired_week_cluster_delta_brier_ci95": [
+    0.0016434004527149026,
+    0.008517325339122798
+  ],
+  "promotion": "NOT_PROMOTED",
+  "source_pit": "HISTORICAL_RECONSTRUCTION_NOT_UNTOUCHED_HOLDOUT",
+  "training_rows": 11835
+}

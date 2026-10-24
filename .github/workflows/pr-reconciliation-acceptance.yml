@@ -10,6 +10,13 @@ on:
       - 'tests/test_margin_quote_integrity_v2.py'
       - 'tests/test_roster_disclosure_integration.py'
       - 'docs/PR_RECONCILIATION_20261024.md'
+      - 'docs/REMAINING_PR_REPAIR_20261024.md'
+      - 'scripts/**'
+      - 'research/**'
+      - 'models/**'
+      - 'pipelines/**'
+      - 'tests/**'
+      - 'requirements-consolidated.txt'
 permissions:
   contents: read
 jobs:
@@ -31,8 +38,8 @@ jobs:
           git rev-parse HEAD > "$RUNNER_TEMP/pr-evidence/checkout.txt"
           python - <<'PY'
           import json, subprocess
-          base = 'c2a00e25282794e52981126217cb115be70398d5'
-          protected = ['models/current', 'models/nfl/contextual', 'pipelines/cards/adapters', 'data', 'AUTHORIZATIONS.md']
+          base = '4cb28e9912614a4d2f7a9f277be7680b431b8bae'
+          protected = ['models/current', 'models/nfl/contextual', 'models/nfl/modes', 'pipelines/cards/adapters', 'data', 'AUTHORIZATIONS.md']
           changed = subprocess.check_output(['git', 'diff', '--name-status', '--diff-filter=MDR', base, 'HEAD', '--', *protected], text=True)
           assert not changed, 'Protected original files changed: ' + changed
           before = json.loads(subprocess.check_output(['git', 'show', base + ':state.json']))
@@ -48,6 +55,7 @@ jobs:
           set -o pipefail
           python -m pytest tests research/tests research/cfb_binary_isotonic_proposal/test_binary_isotonic_repair.py -q \
             --junitxml="$RUNNER_TEMP/pr-evidence/tests.xml" 2>&1 | tee "$RUNNER_TEMP/pr-evidence/tests.log"
+          python -m unittest discover -s research -p 'test_*.py' -v 2>&1 | tee "$RUNNER_TEMP/pr-evidence/research-tests.log"
       - name: Preserve source history and original current-run reports
         if: always()
         env:

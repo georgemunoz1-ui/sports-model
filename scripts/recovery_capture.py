@@ -6,6 +6,7 @@ from datetime import datetime, timedelta, timezone
 import hashlib
 import json
 import os
+import tempfile
 from pathlib import Path
 import urllib.request
 
@@ -22,11 +23,18 @@ REQUIRED = {
 def utc(): return datetime.now(timezone.utc).isoformat().replace('+00:00','Z')
 def digest(data): return hashlib.sha256(data).hexdigest()
 def write_once(path, data):
+    """Atomically publish complete content; never read another writer's partial file."""
     path.parent.mkdir(parents=True, exist_ok=True)
+    fd, temp = tempfile.mkstemp(prefix='.capture-', dir=path.parent)
     try:
-        with path.open('xb') as f: f.write(data)
-    except FileExistsError:
-        if path.read_bytes() != data: raise RuntimeError('IMMUTABLE_CONTENT_CONFLICT')
+        with os.fdopen(fd, 'wb') as f:
+            f.write(data); f.flush(); os.fsync(f.fileno())
+        try:
+            os.link(temp, path)  # atomic no-clobber publication on the same filesystem
+        except FileExistsError:
+            if path.read_bytes() != data: raise RuntimeError('IMMUTABLE_CONTENT_CONFLICT')
+    finally:
+        os.unlink(temp)
 def save_json(path, data): write_once(path, (json.dumps(data,sort_keys=True,indent=2)+'\n').encode())
 def capture(root, spec):
     league, kind, url, tier = spec

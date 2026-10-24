@@ -149,9 +149,18 @@ class Weekly(unittest.TestCase):
         path=Path(self.temp.name)/'event.json';path.write_text(json.dumps(package,allow_nan=False))
         output=Path(self.temp.name)/'forecast'
         env={**os.environ,'NFL_CONTEXT_PACKAGE':str(path)}
-        # Freeze only the subprocess clock: fixed historical fixtures must not
-        # expire when CI runs after their synthetic kickoff. No model is mocked.
-        runner="import datetime,runpy; from unittest.mock import patch\nclass Clock(datetime.datetime):\n @classmethod\n def now(cls,tz=None):\n  value=cls(2026,9,22,tzinfo=datetime.timezone.utc)\n  return value.astimezone(tz) if tz else value.replace(tzinfo=None)\nwith patch('datetime.datetime',Clock):\n runpy.run_path("+repr(str(ROOT/'scripts/run_nfl_integrated.py'))+",run_name='__main__')"
+        # This September fixture predates the separately registered margin fit.
+        # Isolate its runtime selection snapshot; do not backdate a future fit or
+        # weaken the product's artifact/cutoff checks. The package still points
+        # to the actual fitted parent and recovered parameters above.
+        runtime_dir=Path(self.temp.name)/'historical_runtime';runtime_dir.mkdir()
+        production_runtime=(DATA/'runtime.json').read_bytes()
+        historical_runtime=json.loads(production_runtime)
+        historical_runtime.pop('margin_distribution_config',None)
+        (runtime_dir/'runtime.json').write_text(json.dumps(historical_runtime))
+        # Fixed historical clocks must not expire when CI runs after kickoff.
+        # No forecasting model, state transition, or source package is mocked.
+        runner="import datetime,runpy; from pathlib import Path; from unittest.mock import patch\nclass Clock(datetime.datetime):\n @classmethod\n def now(cls,tz=None):\n  value=cls(2026,9,22,tzinfo=datetime.timezone.utc)\n  return value.astimezone(tz) if tz else value.replace(tzinfo=None)\nwith patch('datetime.datetime',Clock), patch('pipelines.cards.adapters.nfl.DATA',Path("+repr(str(runtime_dir))+")):\n runpy.run_path("+repr(str(ROOT/'scripts/run_nfl_integrated.py'))+",run_name='__main__')"
         r=subprocess.run([sys.executable,'-c',runner,'--date',e['gameday'],
                           '--output',str(output),'--simulations','1000','--weekly-state-store',str(self.store),
                           '--weekly-state-id',b],env=env,text=True,capture_output=True)
@@ -159,6 +168,8 @@ class Weekly(unittest.TestCase):
         result=json.loads((output/e['event_id']/'forecast.json').read_text())
         self.assertEqual(result['selected_arm'],'qb');self.assertEqual(result['assimilation']['state_id'],b)
         self.assertFalse(result['action_authority'])
+        self.assertFalse((output/e['event_id']/'margin_distribution').exists())
+        self.assertEqual((DATA/'runtime.json').read_bytes(),production_runtime)
     def test_bye_teams_unchanged(self):
         # A supported bye week has no hardcoded 16-game requirement.
         seed=ws._get(self.store,self.seed);parent=copy.deepcopy(seed);parent['completed_week']=16

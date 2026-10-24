@@ -1,0 +1,33 @@
+{
+  "status": "PASS",
+  "scope": "INDEPENDENT_PRIMARY_SCORE_AND_INTERVAL_RECOMPUTATION",
+  "summary": {
+    "nfl.margin.empirical.research.a1dc272255961bd9": {
+      "n": 816,
+      "crps": 7.312196512225854,
+      "coverage95": 0.9558823529411765,
+      "width95": 53.69975490196079,
+      "zero_support": 1
+    },
+    "nfl.margin.full_support.research.96c5a8cb7e9970e7": {
+      "n": 816,
+      "crps": 7.304288421607096,
+      "coverage95": 0.9583333333333334,
+      "width95": 53.895833333333336,
+      "zero_support": 0
+    }
+  },
+  "paired_crps_delta": -0.00790809061875684,
+  "week_blocks": 57,
+  "bootstrap_replicates": 2000,
+  "seed": 7192026,
+  "ci95": [
+    -0.02266433111804082,
+    0.011301938965057674
+  ],
+  "refit_identity_mapping": "PASS",
+  "heldout_event_disjointness": "PASS",
+  "historical_screen": "NOT_PASSED",
+  "predictive_validation": "HOLD",
+  "evaluation_rows_sha256": "8aaf5a9215d8fa0373e1c1c78bd60c491f7a01cc49c119751c808b3ec14a5b5a"
+}

@@ -1,0 +1,58 @@
+{
+  "schema": "nfl.margin_distribution_config.research.v1",
+  "created_at_utc": "2026-10-20T01:33:31.412773+00:00",
+  "parent_model_id": "nfl.integrated_context.qb.v1.research",
+  "parent_model_file": {
+    "path": "../contextual_v1/model_packed.json",
+    "sha256": "a1fc0436a3e3d4f76d7b7fe9b480314fbb20804e3b9d29288f64913935a80322"
+  },
+  "parent_model_artifact_sha256": "c1cdf49dbb1a98bbf2b3d4286042a316c132dc7d472f3138c3bbbb1e0cb1c3cd",
+  "parent_runtime_code_sha256": {
+    "runtime.py": "8951577d6edd2e2e37b370cafe9f90c205b9de8b6b59d9c1aba961f15760c15d",
+    "personnel.py": "4b6863746783775bf61970363f1df2aa33b2919ae69c709de2ff404b4a369055",
+    "model.py": "ba00569e30cd56fa1d50570f828db02e56caf849ddbdf1d0d0fc11272e7a0fc3",
+    "features.py": "3a064779ce6a1a53b4fda66eed9f86a4365208a849b357dcd1cb5719b3e0a115",
+    "recovered_inference.py": "ac70b26355c8a9fe0850caf6e69ec268f363363dffb3b1289cbee13d4d729abd",
+    "operating.py": "e51b7845e3aa785bb2fb1f31615aee0f5b37529b8349d734a946aab3bb0abf3b",
+    "capabilities.py": "525c36a06438af62151ea24c42792a806d668c3a61ae700674767fb7b5892f17",
+    "settlement.py": "a710bebd0dc0ce068e0b190f02ab1245389535f332b419c46eb2ebc67a60eecf",
+    "forecast_stream.py": "05a27454fd000b5ca9ac1137dfa7a68cf22e46137ed2fa1a088e721608e1c2ee",
+    "week2.py": "03a35ca6994a8a154dd1b4b9ba3f44c15bc359b088e2ff4f2d37f4a7f3270d68",
+    "joint_distribution.py": "0d7192a794b4e9946febc0b25db6bd306dfb11723d404f8f3ccc55d2e677f5fb",
+    "qb_assimilation.py": "33667fa0375a1d151ec2a450c497e219cc0d099472e603f1ad6d4814abfef51c",
+    "weekly_state.py": "41e87fa081cbc2fe7625571f3a46f797bdaecc0dad9329676fea805059c6f71f",
+    "assimilation.py": "9cfe2af178382326741be0197e2f19f84e32c132014a4677b55506919c052898"
+  },
+  "information_set": "RECONSTRUCTED_QB_OOF_PRIOR_SEASON_FITS",
+  "settlement": "FULL_GAME_OT_REGULAR",
+  "model": {
+    "path": "fit_01/model.json",
+    "sha256": "fb715ddf7abb86c3d725a9f3e1fbe510c4852881e8e3dd83342f6ddc744691cb"
+  },
+  "evaluation": {
+    "path": "fit_01/evaluation.json",
+    "sha256": "ca44c9eeefa4352ebf2c71831e1b0c596a18fd33d06d680a597a6abed31cf694"
+  },
+  "home_spreads": [
+    -14.0,
+    -10.0,
+    -7.5,
+    -7.0,
+    -6.5,
+    -3.5,
+    -3.0,
+    0.0,
+    3.0,
+    3.5,
+    6.5,
+    7.0,
+    7.5,
+    10.0,
+    14.0
+  ],
+  "action_authority": false,
+  "prospective_grade_eligible": false,
+  "use": "OPT_IN_RESEARCH_CHILD_OF_SELECTED_QB_PARENT",
+  "predictive_validation": "HOLD",
+  "selected_winner_default_unchanged": true
+}

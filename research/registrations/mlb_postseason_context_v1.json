@@ -1,0 +1,41 @@
+{
+  "action_authority": false,
+  "arms": {
+    "1": "mlb.postseason.context.workload.v2",
+    "2": "mlb.postseason.context.lineup.v3",
+    "3": "mlb.postseason.context.bullpen.v4",
+    "4": "mlb.postseason.context.temperature.v5"
+  },
+  "canonical_registration": false,
+  "code_pins": {
+    "data/backfill/mlb/2026/park_factors.json": "f99f38b1042b0771ae850dc9aa506498c14e963064b72e110371ea9b48420793",
+    "engine/hfa.py": "029c5f6d7bf71d6ea05c0d2bb8775f65b6c30576ab1ccc9289d434edb5a35382",
+    "harness/mlb_daily_coordinator.py": "57cb75658db52daae530753e2185930ba252654c7a86c9b2ae3f8e46e5605c38",
+    "harness/mlb_form_state.py": "b8fd6e461d7023b48d7d23ef157e1a1159749c9aa3398ffdd19d6f87edf42814",
+    "harness/run_v13_historical.py": "d2fdf977cbd8eb34759af3bf23b19112ad02af99968973c1f0bc721a88470cba",
+    "pipelines/cards/adapters/mlb.py": "95cdbf3e028012a865e14d1ddbba2a3954c48488abe394f76044ec49063d05d5",
+    "research/mlb_postseason_context.py": "a5aa9b59c7ff5816cc6643d4ae8d9d8cb0b24c9fbfd2c844d71c417ef9a97efb",
+    "research/mlb_postseason_v1.py": "1672162d95a360f8a45ccaecd81b69508f0c74ddf66dd13c6c16f85acfccfbcb",
+    "scripts/evaluate_mlb_postseason_context.py": "bcac1965c65f67cd536a20467d2d47ab91dfa6dad4b6394afc87ed8bfb62b6ca",
+    "scripts/mlb_context_current.py": "edda9ad2939db964e1db0fe31435f8da163df3d881770ac720d3b6ad1d8c47ce",
+    "scripts/mlb_context_history.py": "67b7805a978c258135d7dfde46c0aa4a1d872a31cbec6daa49124b1650ec088e",
+    "scripts/mlb_postseason_audited.py": "04735c7e1771784292bed7e5ea4613255cc0f0b1c27f5d9ad650da0ba8341907",
+    "scripts/mlb_postseason_workflow.py": "5f8f6926d28bf2d5af07f1df39eb2e6b1e331f87d4e40197c4843ee941733ab7",
+    "scripts/prepare_mlb_official_current.py": "07e26052b47b9061c9615604648f073f09336e18c18f4678c6acc9b76eb0f69b",
+    "scripts/prepare_mlb_postseason.py": "dc1bd5f8b68303b86c099cc286f425497c7386311c9c0ae827c7599d0389e0b1",
+    "scripts/recovery_capture.py": "651f4784be4e86e4f84ff35369012f4c5bfc7a8c6f6dcdc4c296920170595615",
+    "scripts/run_mlb_postseason_context.py": "c8f70641507669e489d863aebabe18715825872b5083f8a9ba8de8bcd72d7792"
+  },
+  "count": 100000,
+  "created_at_utc": "2026-10-06T21:41:59.261623+00:00",
+  "default_selected": false,
+  "design_sha256": "248b101302c8be5645542f2cc4ca28c264f377720587fb986bc532c8de16b14a",
+  "dose": 0.0,
+  "official_release_eligible": false,
+  "predictive_validation": "UNVALIDATED",
+  "products": [
+    "winner diagnostic"
+  ],
+  "prospective_grade_eligible": false,
+  "schema": "mlb.postseason.context.contract.v1"
+}

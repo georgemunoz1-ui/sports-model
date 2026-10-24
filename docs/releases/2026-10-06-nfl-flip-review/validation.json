@@ -1,0 +1,37 @@
+{
+  "created_at_utc": "2026-10-06T22:54:13.322763+00:00",
+  "scope": "HISTORICAL_FIXTURE_REPLAY_SOFTWARE_VALIDATION_ONLY_NOT_NEW_PREGAME_FORECAST",
+  "base_commit": "43ad83382af067b019a086d45d23569497ca6e08",
+  "reviewed_pr_head": "4f2a605655df2fd7f9f90717eada23a1580ba243",
+  "fixture_event_id": "2026_01_DEN_KC",
+  "all_arm_probabilities_equal_main": true,
+  "feature_values_equal_main": true,
+  "fixture_input_objects_unchanged": true,
+  "protected_file_sha256": {
+    "state.json": "d2c2e9204d419f728a975475eabf0917ba3a9b7b406446d3f354191de3398edd",
+    "data/nfl/contextual_v1/model_packed.json": "a1fc0436a3e3d4f76d7b7fe9b480314fbb20804e3b9d29288f64913935a80322",
+    "data/nfl/contextual_v1/runtime.json": "cf2a0c2ef85073904b0bb61e06be9ec655ac2e728f59fdc38163889d607a8000",
+    "data/nfl/contextual_v1/week2_policy.json": "e00d1740f3a107c671da9059fccf6f3de1ef6424daec497ed38977fcaa87286e",
+    "data/nfl/contextual_v1/mnf_context_integrated.json": "5a854bdc1bd9b36a1fe070e1a8f2599c0fb34097a43f789e4a244d31f40e3c30",
+    "data/nfl/contextual_v1/mnf_base_row.json": "9cc2725381e449421ca7b791bdf3be815973df06aeeda0d3b77a4db6811243c3",
+    "data/nfl/contextual_v1/mnf_event.json": "4460aaff5a2c43a80436a0ba2b08059f48cf8175dfe57650c2fd8ca7c4ab01c0"
+  },
+  "draw_count": 100000,
+  "seed": 326958648638163134,
+  "draw_bytes_sha256": "ff3da2214352fabef53c647ddd6e94e5fd400a2c99199ea313e0a9ebf2c0fb14",
+  "simulation_exact_replay": true,
+  "diagnostic_exact_replay": true,
+  "diagnostic_stream_idempotent": true,
+  "feature_references_status": "TRACE_VERIFIED",
+  "forecast_identity": "f9f0e18114d9269e7d098742ebbac56735012d489f2a61e3bfdcb7db77ec0164",
+  "reporter_sha256": "d27715c786011a297d8b5ec0c87be4a7162e6b4307a370731c3a8f03ced3e0a0",
+  "modified_code_sha256": {
+    "models/nfl/contextual/flip_diagnostics.py": "d27715c786011a297d8b5ec0c87be4a7162e6b4307a370731c3a8f03ced3e0a0",
+    "models/nfl/contextual/runtime.py": "59e1d41555928d9b566281683f561f227453b6095061d76f52c83e7c55d59853"
+  },
+  "prospective_validation": false,
+  "canonical_registration": false,
+  "official_release_eligible": false,
+  "action_authority": false,
+  "dose": 0.0
+}

@@ -1,0 +1,17 @@
+{
+  "created_at_utc": "2026-10-06T21:50:58.660620+00:00",
+  "evaluation_sha256": "811b264c439fc46c3fd13a648ef95a8ef462ea17859baf4ff2ef743a5a310e4b",
+  "decision": "DO_NOT_ADOPT_CONTEXT_OR_CALIBRATION",
+  "calibration_applied_to_current_card": false,
+  "reason": "All held-out Brier point estimates worse than baseline. Full-context and calibrated intervals also above zero in a small 11-series cohort. No future tuning on this now-open holdout.",
+  "arms": {
+    "workload.v2": "HOLD_NO_IMPROVEMENT_ESTABLISHED",
+    "lineup.v3": "HOLD_NO_IMPROVEMENT_ESTABLISHED",
+    "bullpen.v4": "SCREEN_FAILED_VS_BASELINE",
+    "temperature.v5": "SCREEN_FAILED_VS_BASELINE"
+  },
+  "selected_default_changed": false,
+  "official_release_eligible": false,
+  "action_authority": false,
+  "dose": 0.0
+}

@@ -1,0 +1,152 @@
+{
+  "experiment_queue": [
+    {
+      "id": "E1",
+      "passes": false,
+      "status": "NO-PROMOTE / CONFIRMATORY INDETERMINATE (2026-07-24). Original n=1759 confirmatory CLOSED as UNRECOVERABLE (row IDs never stored: backtest kept anonymous arrays; data vintage mutated since; see docs/experiments/E1_confirmatory_closure.md). The n=1757 run is EXPLORATORY (reconstructed pop, 7/24 vintage, <=7/19 horizon), NOT confirmatory: overall \u0394MAE +0.011K (<0.03), interaction -0.037K, calib slope 1.009. Bounded conclusion: E1 as specified showed no material incremental value on the observed sample; does NOT explain the Cole/Sale misses (cause unexplained). The 1757 rows cannot be reused as confirmatory; a real E1-R needs a pre-registered FORWARD holdout. ENGINE UNCHANGED.",
+      "title": "Opponent-K% adjustment for K-props",
+      "prereg_doc": "docs/experiments/E1_opponent_k_prereg.md",
+      "method": "log5/odds-ratio combine of pitcher as-of shrunk K-rate p with as-of opponent team K-rate-taken o [o = (SigmaSO + L*N0)/(Sigma(AB+BB) + N0), N0=200, denominator AB+BB per principal 7/24] vs league L: adj=(p*o/L)/((p*o/L)+((1-p)(1-o)/(1-L))); E[TBF] unchanged; Poisson tails unchanged. Strict as-of (date<D), DH=start-of-day both games.",
+      "data_gate": "BLOCKING (harness/e1_data.py gate_ok): all 30 teams' terminal G(unique gamePk)/SO/AB/BB must reconcile to 7/23 snapshot before replay table is built/frozen. gamePk-keyed; explicit abbrev table; quarantine unmatched opponents (never sub league avg); parse raw locally, never trust model COUNT/SUM.",
+      "reporting": [
+        "overall MAE",
+        "Brier + calibration slope/intercept",
+        "displaced-line hit rate (lined subset)",
+        "premium-K arms K%>=27 slice",
+        "high-opp-K offenses oppK>=24 slice",
+        "interaction premium x high-K",
+        "count+direction of flipped decisions + their backtest ROI",
+        "COMPLEMENT slice (narrative-repair guard)"
+      ],
+      "adopt_rule": "GENERAL adopt requires ALL: overall MAE down >=0.03K; Brier not worse + calib slope [0.9,1.1]; displaced-hit >= baseline (or deferred if <150 lined starts); complement slice also improves (not interaction-only); flipped-decision set net non-negative ROI. Interaction-only gain (>=0.10K) with complement degradation -> GATE-TO-MATCHUP experimental only. Else REJECT (retain H0: short-run clustering).",
+      "data_prereq": "fetch 2026 team batting game logs (K,PA/game) from statsapi -> per-team as-of K-rate; opponent via pitcher_logs+results.csv join (no log-schema change).",
+      "why": "closes the 'book info we lack' gap IF it generalizes; pre-registration guards against post-hoc repair of the Cole/Sale anecdotes"
+    },
+    {
+      "id": "E2",
+      "passes": false,
+      "status": "queued (AFTER E3, per Taco 7/24 \u2014 tail quality is useful but does NOT address the book-info question)",
+      "title": "Negative-binomial K tails vs Poisson",
+      "method": "fit dispersion on backtest; must improve P(over) calibration buckets",
+      "queue_hold_2026_07_28": "PARKED_BY_ML_PRIORITY: non-ML (K tails). Pre-registration preserved; no work authorized."
+    },
+    {
+      "id": "E3",
+      "passes": false,
+      "status": "NEXT (E3 BEFORE E2, per Taco 7/24) \u2014 directly tests whether market movement carries information missing from the projection (the unresolved book-info question), with NO engine change. Pre-register before running.",
+      "title": "Line-move capture for props",
+      "method": "capture DK K-lines at 2 timestamps/day; measure if OUR flagged deviations get steamed toward projection (CLV-for-props = independent edge evidence)",
+      "queue_hold_2026_07_28": "CAPTURE-ONLY: passive line/odds capture allowed and encouraged; no model change."
+    },
+    {
+      "id": "E7",
+      "passes": false,
+      "status": "queued",
+      "title": "Lineup-aware offense for sides (reopen attempt)",
+      "method": "daily lineups + batter wOBA as-of; only worth building if E1-E3 show the pipeline sustains quality",
+      "id_history": "Was a SECOND E4 alongside the favorite-fade experiment. Renumbered to E7 on 2026-07-28. The favorite-fade experiment KEEPS E4 because it is the one with a pre-registration and with references throughout docs/progress.md; this entry was 'queued' with no doc and no references, so moving it breaks nothing.",
+      "queue_hold_2026_07_28": "PARKED_BY_ML_PRIORITY: ML-feature reopen attempt \u2014 held until Phase 3 ablations; single-active rule. Pre-registration preserved; no work authorized."
+    },
+    {
+      "id": "E5",
+      "passes": false,
+      "status": "queued",
+      "title": "WNBA port",
+      "method": "registry already stubbed; totals first",
+      "queue_hold_2026_07_28": "PARKED_BY_ML_PRIORITY: non-ML (WNBA). Pre-registration preserved; no work authorized."
+    },
+    {
+      "id": "E4",
+      "status": "PRE-REGISTERED, not yet run",
+      "registered_utc": "2026-07-25T22:30Z",
+      "title": "Is V13's disagreement with the moneyline market an edge or a favorite-fading bias?",
+      "motivation": "Across 50 priced+uncapped game-rows on 5 cards, mean(V13_home_wp - market_home_wp) is -0.086 where the home team is a big favorite (mkt>0.58, n=8), -0.019 in the middle (n=40), +0.005 where home is a big dog (n=2). V13 compresses toward 50/50 relative to the market. Every ml_ev_tracking pick so far (KC +154, COL +186, STL -116, COL +265, NYY +140) is consistent with that shape: 4 of 5 are underdogs. The ledger may be one systematic bet \u2014 'fade favorites' \u2014 wearing five different uniforms.",
+      "hypothesis": "H0: V13's favorite-fade is genuine edge -> ml_ev_tracking picks show positive CLV. H1: it is calibration bias -> CLV is <=0 and units bleed even when W-L looks respectable.",
+      "primary_readout": "Closing-line value in cents, NOT win-loss. Pre-specified because W-L is the wrong readout for a +EV objective function.",
+      "holdout": "Forward slates from 2026-07-27 onward. The 7/25 and 7/26 rows are EXPLORATORY \u2014 they generated this hypothesis, so they cannot confirm it.",
+      "blocking": "Requires a genuine closing snapshot at lock, which has never yet been captured. E4 cannot start until closing capture works. This is the same binding constraint (price access) already logged.",
+      "must_not_do": "This diagnostic MUST NOT be used to veto or trim picks on 7/26 or any registered slate. Rule 4 forbids discretion; the whole point of pre-registration is that a mid-flight hunch does not get to edit the pick list.",
+      "queue_hold_2026_07_28": "ML DIAGNOSTIC, retained; runs only as a Phase 3 pre-registered ablation under the single-active rule."
+    },
+    {
+      "id": "E6",
+      "passes": false,
+      "status": "PRE-REGISTERED (hypothesis only), NOT implemented, NOT run, DATA-BLOCKED 2026-07-27. Engine unchanged; hr_shrink appears in no source file in this repo. Recorded as a separate hypothesis because formula changes are frozen -- explicitly NOT a V11/v12 implementation.",
+      "title": "HR log-odds shrinkage in a log5 event model",
+      "prereg_doc": "docs/experiments/E6_hr_logodds_shrinkage_prereg.md",
+      "id_note": "Takes E6, not E5: 'E4' is already assigned twice in this queue (lineup-aware offense; V13-vs-moneyline). That pre-existing collision is NOT resolved here, only avoided.",
+      "method": "log5 in odds form odds(b)*odds(p)/odds(L) [exact identity, not an approximation], then HR shrunk toward league by weighted geometric interpolation in odds space: odds(h)=odds(q_HR)^(1-s)*odds(L_HR)^s, equivalently h=logistic((1-s)*logit(q_HR)+s*logit(L_HR)). Normalisation scheme PRE-COMMITTED to A (ANCHOR_HR): P(HR)=h; P(e)=(1-h)*raw[e]/sum_{j!=HR} raw[j].",
+      "corrections_superseding_prior_claims": [
+        "WITHDRAWN: 'log-odds interpolation is less violent at the extremes than probability interpolation.' NOT universal. True when both endpoints sit near the same boundary (0.001->0.030 at s=0.5 gives 0.00553 vs linear 0.01550); FALSE when endpoints are far apart in log-odds space (0.500->0.001 gives 0.03067 vs linear 0.25050, an 8x difference). REPLACED BY the three defensible properties: bounded, preserves endpoints, interpolates geometrically in odds space.",
+        "STRENGTHENED: independent binary log5 over mutually exclusive events generally does NOT sum to one (structural; holds even when b, p and L each sum to 1). Dividing every event by sum(raw) rescales HR too, so the delivered HR rate is NOT the value the shrinkage formula produced. The consequence is interpretive: the direct binary-logit interpretation of hr_shrink does not survive downstream normalisation. The parameter could still be estimated end-to-end against the final normalised distribution, but it would no longer mean the stated interpolation weight. Normalisation changes interpretation; it does not by itself demonstrate statistical non-identifiability. Illustrative synthetic case: sum(raw)=0.992512, h=0.036381, post-renormalisation 0.036655, drift +0.75% relative. Magnitude is data-dependent; the defect is not."
+      ],
+      "blocking_prereqs_before_hr_shrink_may_be_specified": [
+        "1. Are b and p already regressed? Double shrinkage gives total pull 1-(1-w1)(1-s), not s. Deliverable: the prior weight already embedded in each input.",
+        "2. Is HR modelled per PA or conditional on BBE? BBE is the sample size for HR|BBE; if HR is per PA the sample size is PA and BBE mixes units. If truly conditional, the distribution must be P(BBE)*P(HR|BBE), which the reviewed code does not do.",
+        "3. How are hitter and pitcher sample uncertainty combined? One scalar cannot represent two independent sample sizes. Either shrink b and p separately, or state and justify the combination rule.",
+        "4. Is the target sampling uncertainty or calibration correction? Sampling -> K/(n+K), decays with n, K from a variance decomposition. Calibration -> a fitted slope that does NOT decay with n and belongs in a calibration layer. One parameter fitted to outcomes absorbs both and will not generalise."
+      ],
+      "guards": [
+        "assert 0.0 <= hr_shrink <= 1.0 -- outside [0,1] the geometric interpolation EXTRAPOLATES (s>1 overshoots past L, s<0 pushes away); K/(n+K) is in range only if K>=0 and n>=0, and a NaN or missing n breaks it silently",
+        "clip b[e], p[e], L[e] to [1e-6, 1-1e-6] BEFORE _odds(): _odds(p)=p/(1-p) is undefined at p=1, and _odds(L[e]) sits in a DENOMINATOR so L[e]=0 (plausible for 3B early in a season) breaks. Exact boundary probabilities can produce division by zero, infinity or NaN depending on scalar versus array arithmetic and subsequent operations. The REQUIRED INVARIANT is finite output after clipping -- every intermediate and every output finite, with any non-finite value a hard failure -- not a specific predicted failure mode. A non-finite raw[e] also contaminates sum(raw), so the blast radius is not confined to the offending event."
+      ],
+      "data_gate": "BLOCKING -- THE DATA DOES NOT EXIST IN THIS REPO. Verified against the working tree: pitcher_logs are 7-field date|IP|H|SO|BB|TBF|GS (no HR, no batted-ball events); team_gamelogs are [gamePk,date,AB,BB,SO] (team-level only); team_batting_asof is team aggregate. No batter-level per-PA event data, no HR counts, no BBE anywhere. E6 needs a NEW acquisition of per-PA or per-batted-ball outcomes for BOTH batter and pitcher -- a larger prerequisite than E1's team K-rate aggregates.",
+      "test_set_requirement": "UNTOUCHED FORWARD HOLDOUT ONLY. Row IDs (batter_id|pitcher_id|gamePk|PA_index) plus data-vintage hash stored AT GENERATION TIME -- E1's confirmatory run was closed UNRECOVERABLE precisely because row IDs were never stored and the vintage mutated. Strict as-of. The window used to answer the four prereqs is BURNED and can never serve as the test.",
+      "adopt_rule": "Adopt only if ALL hold on the untouched forward holdout: HR calibration slope moves toward 1.0 and lands in [0.9,1.1]; HR Brier/log-loss not worse; every PA's distribution sums to 1.0 within 1e-9 AND P(HR) reproduces h exactly; non-HR calibration does not degrade (the anchored scheme pushes the normalisation residual onto them -- that cost is measured, not assumed); no guard ever fires on real data. Else retain H0.",
+      "r7_note": "ONE numeric parameter: hr_shrink (prior strength HR_K). The normalisation SCHEME is a MODEL-ARCHITECTURE FORK and a researcher degree of freedom -- NOT a second numeric free parameter; A and B are different models, not two settings of one knob. Choosing between them after seeing which calibrates better is exactly the degree of freedom pre-registration removes. Pre-committing to A (ANCHOR_HR) and assigning B (multinomial softmax) to a separate experiment with its own pre-registration remains the correct control.",
+      "why": "The reviewed construction's algebra is correct but two analytical claims about it were wrong, and the proposed hr_shrink is unidentified until the four prereqs are answered. Recording it as a pre-registered hypothesis keeps it out of the frozen formula path while preserving the idea.",
+      "queue_hold_2026_07_28": "PARKED_BY_ML_PRIORITY: non-ML (HR event model; also DATA-BLOCKED). Pre-registration preserved; no work authorized."
+    },
+    {
+      "id": "ALL-SPORTS-OPERABILITY-20260922",
+      "status": "COMPLETED_RESEARCH_ENGINEERING",
+      "authorization": "User explicitly requests all models operational with full autonomy on 2026-09-22; existing no-real-money and frozen-verdict protections retained.",
+      "scope": "Recover selected MLB/WNBA/CFB paths and fit first research baselines for NBA/NHL/MLS. No failed NFL ensemble promotion.",
+      "registered_at_utc": "2026-09-22T07:54:08.745151+00:00",
+      "prereg_doc": "docs/experiments/ALL_SPORTS_OPERABILITY_20260922.md",
+      "production_model_change": false,
+      "action_authority": false,
+      "evidence": "docs/releases/2026-09-22-runtimes/combined-remote-ci.json",
+      "no_accuracy_default_promotion": true
+    },
+    {
+      "id": "NFL-QB-MARGIN-20260928-01",
+      "title": "QB-specific full-game margin distribution and model/simulation cover output",
+      "prereg_doc": "data/nfl/qb_margin_v1/design.json",
+      "design_sha256": "43d1ecd0f77c0c4e2c324ebd9749faeca2cff63771cfc5fb9308e0519d0aedd5",
+      "status": "PREREGISTERED_RESEARCH_NOT_PROMOTED",
+      "passes": false,
+      "market_input": false,
+      "action_authority": false
+    },
+    {
+      "id": "NFL-QB-MARGIN-CAL-20260928-01",
+      "title": "Nested chronological QB integer-margin calibration with research grading and visible market comparison",
+      "prereg_doc": "data/nfl/qb_margin_calibration_v1/design.json",
+      "design_sha256": "799ee8b74bee22653540d8619c14f6dafea150d75a4da71b97473a64bf4ae021",
+      "status": "PREREGISTERED_RESEARCH_NOT_PROMOTED",
+      "passes": false,
+      "market_input": false,
+      "market_comparison_display_enabled": true,
+      "action_authority": false
+    }
+  ],
+  "nfl_qb_margin_calibration_20260928": {
+    "experiment_id": "NFL-QB-MARGIN-CAL-20260928-01",
+    "recorded_at_utc": "2026-09-28T11:47:23.329493+00:00",
+    "screen_status": "PASSED_RETROSPECTIVE_NESTED_CHRONOLOGICAL",
+    "model_id": "nfl.qb_margin.integer_blend.v1.research",
+    "evaluation_path": "data/nfl/qb_margin_calibration_v1/fit_01/evaluation.json",
+    "research_grading": {
+      "enabled": true,
+      "store": "data/grading/nfl_qb_margin",
+      "scope": "APPEND_ONLY_CONDITIONAL_RESEARCH",
+      "canonical_grading_changed": false
+    },
+    "market_comparison_display_enabled": true,
+    "predictive_market_overlay_enabled": false,
+    "action_authority": false,
+    "production_promotion": false,
+    "predictive_validation": "HOLD_FOR_PROSPECTIVE_COHORT"
+  }
+}

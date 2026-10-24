@@ -1,0 +1,366 @@
+{
+  "schema_version": 1,
+  "authority": "RESEARCH_ONLY",
+  "definitions": {
+    "OBSERVED": "parsed source evidence, not fitted effect",
+    "FITTED": "parameters learned for named experiment, not production available",
+    "USED": "actual feature contribution logged by named forecast; none enabled here"
+  },
+  "candidates": [
+    {
+      "id": "coaching",
+      "features": [
+        "head-coach tenure at team",
+        "head-coach change",
+        "offensive play-caller change",
+        "defensive play-caller change"
+      ],
+      "source": "https://github.com/samhoppen/NFL_public/tree/d659f80a8c657e1920030aaa2aa3e796da52d4e3",
+      "stage": "FITTED_RETROSPECTIVE_NO_PROMOTION",
+      "forecast_used": false,
+      "production_enabled": false,
+      "priority": "screened",
+      "next_evidence": "Archived pregame caller publication/effective dates; stronger integrated-baseline comparison"
+    },
+    {
+      "id": "scoring_baseline",
+      "features": [
+        "last-eight points for",
+        "last-eight points allowed",
+        "prior sample size"
+      ],
+      "source": "source_manifest.json: games.csv",
+      "stage": "FITTED_REFERENCE",
+      "forecast_used": false,
+      "production_enabled": false,
+      "priority": "screened",
+      "next_evidence": "Simple research comparator; not a replacement for existing integrated NFL model"
+    },
+    {
+      "id": "efficiency",
+      "features": [
+        "EPA/play",
+        "success rate",
+        "pass/rush splits",
+        "early-down splits",
+        "third-down splits",
+        "red-zone splits"
+      ],
+      "source": "source_manifest.json: play_by_play_2026.csv",
+      "stage": "OBSERVED_WEEK1",
+      "forecast_used": false,
+      "production_enabled": false,
+      "priority": "next",
+      "next_evidence": "Historical coverage and as-of aggregation, opponent adjustment and shrinkage fitted in training"
+    },
+    {
+      "id": "neutral_tendency",
+      "features": [
+        "neutral pass rate",
+        "pass rate over expectation",
+        "early-down aggressiveness"
+      ],
+      "source": "source_manifest.json: play_by_play_2026.csv",
+      "stage": "PARTIAL_OBSERVED",
+      "forecast_used": false,
+      "production_enabled": false,
+      "priority": "next",
+      "next_evidence": "Neutral pass rate implemented; xpass/pass-OE upstream training vintage and consistent historical coverage unverified"
+    },
+    {
+      "id": "clock_pace",
+      "features": [
+        "conservative running-clock elapsed seconds",
+        "no-huddle share",
+        "pace-over-expectation"
+      ],
+      "source": "https://github.com/samhoppen/Fantasy-Evaluator/tree/a5eed5a55f1335a1aea0f21692664ad23836634f",
+      "stage": "PARTIAL_OBSERVED",
+      "forecast_used": false,
+      "production_enabled": false,
+      "priority": "next",
+      "next_evidence": "Clock proxy implemented; fit pace expectation with sorted same-game clock, down-distance, score and stoppage inputs; exclude terminal labels"
+    },
+    {
+      "id": "drive_model",
+      "features": [
+        "starting field position",
+        "drive count",
+        "drive scoring probabilities",
+        "turnover-on-drive probability",
+        "expected drive points"
+      ],
+      "source": "https://github.com/samhoppen/Fantasy-Evaluator/tree/a5eed5a55f1335a1aea0f21692664ad23836634f",
+      "stage": "REVIEWED_NOT_FITTED",
+      "forecast_used": false,
+      "production_enabled": false,
+      "priority": "next",
+      "next_evidence": "Reconcile drive endpoints and score transitions; pre-play features only; drive IDs grouped within game; historical multinomial calibration"
+    },
+    {
+      "id": "workload",
+      "features": [
+        "receptions plus inside-10 rushes",
+        "stable player IDs",
+        "touch counts",
+        "routes",
+        "snaps",
+        "carries",
+        "targets"
+      ],
+      "source": "https://github.com/samhoppen/Fantasy-Evaluator/tree/a5eed5a55f1335a1aea0f21692664ad23836634f",
+      "stage": "PARTIAL_OBSERVED",
+      "forecast_used": false,
+      "production_enabled": false,
+      "priority": "next",
+      "next_evidence": "HVT captured; routes/snaps require dated sources; role and injury changes must condition next-game exposure"
+    },
+    {
+      "id": "concentration",
+      "features": [
+        "target HHI",
+        "top-target share",
+        "target/route participation"
+      ],
+      "source": "https://github.com/samhoppen/NFL_public/tree/d659f80a8c657e1920030aaa2aa3e796da52d4e3",
+      "stage": "PARTIAL_OBSERVED",
+      "forecast_used": false,
+      "production_enabled": false,
+      "priority": "next",
+      "next_evidence": "Week1 identified-target concentration computed; 2024 YTD table retained only as historical source, no current team join"
+    },
+    {
+      "id": "qb_skill",
+      "features": [
+        "QB EPA",
+        "CPOE",
+        "scramble rate",
+        "sack rate",
+        "pressure response"
+      ],
+      "source": "source_manifest.json: play_by_play_2026.csv",
+      "stage": "PARTIAL_SOURCE_AVAILABLE",
+      "forecast_used": false,
+      "production_enabled": false,
+      "priority": "next",
+      "next_evidence": "Avoid double-counting existing QB model; fit source-vintage-compatible histories; pressure data not present as independently verified source"
+    },
+    {
+      "id": "xyac",
+      "features": [
+        "observed YAC minus expected YAC",
+        "air yards",
+        "completion probability",
+        "expected receiving fantasy points"
+      ],
+      "source": "https://github.com/samhoppen/Fantasy-Evaluator/tree/a5eed5a55f1335a1aea0f21692664ad23836634f",
+      "stage": "PARTIAL_OBSERVED",
+      "forecast_used": false,
+      "production_enabled": false,
+      "priority": "next",
+      "next_evidence": "Residual captured; upstream xYAC weights/training vintage unverified; independent historical distribution fit and calibration required"
+    },
+    {
+      "id": "ryoe",
+      "features": [
+        "rush yards over expectation",
+        "defenders in box",
+        "personnel",
+        "rush direction",
+        "rush-yard distribution"
+      ],
+      "source": "https://github.com/samhoppen/Fantasy-Evaluator/tree/a5eed5a55f1335a1aea0f21692664ad23836634f",
+      "stage": "BLOCKED_MISSING_INPUTS",
+      "forecast_used": false,
+      "production_enabled": false,
+      "priority": "next",
+      "next_evidence": "Authorized tracking/personnel histories; cannot replace absent features by zero or copy serialized models"
+    },
+    {
+      "id": "explosiveness",
+      "features": [
+        "explosive gain rates",
+        "air-yard distribution",
+        "deep-target share",
+        "big-play variance"
+      ],
+      "source": "source_manifest.json: play_by_play_2026.csv",
+      "stage": "REVIEWED_SOURCE_AVAILABLE",
+      "forecast_used": false,
+      "production_enabled": false,
+      "priority": "next",
+      "next_evidence": "Register thresholds before testing; consistent historical extraction and opportunity denominators"
+    },
+    {
+      "id": "turnover_luck",
+      "features": [
+        "interceptions",
+        "fumbles lost",
+        "fumble recovery fraction",
+        "turnover volatility"
+      ],
+      "source": "source_manifest.json: play_by_play_2026.csv",
+      "stage": "PARTIAL_OBSERVED",
+      "forecast_used": false,
+      "production_enabled": false,
+      "priority": "next",
+      "next_evidence": "Sack/turnover counts captured; estimate repeatable vs noisy components using independent historical seasons"
+    },
+    {
+      "id": "schedule_context",
+      "features": [
+        "rest",
+        "travel",
+        "time zones",
+        "surface",
+        "weather",
+        "home field"
+      ],
+      "source": "https://github.com/samhoppen/NFL_public/tree/d659f80a8c657e1920030aaa2aa3e796da52d4e3",
+      "stage": "EXISTING_PROJECT_OVERLAP_REVIEWED",
+      "forecast_used": false,
+      "production_enabled": false,
+      "priority": "next",
+      "next_evidence": "Use current source-bound project modules; audit freshness and prevent duplicate adjustments; no new coefficients here"
+    },
+    {
+      "id": "availability",
+      "features": [
+        "QB status",
+        "player availability",
+        "workload replacement",
+        "rotation minutes"
+      ],
+      "source": "https://github.com/samhoppen/Fantasy-Evaluator/tree/a5eed5a55f1335a1aea0f21692664ad23836634f",
+      "stage": "EXISTING_PROJECT_OVERLAP_REVIEWED",
+      "forecast_used": false,
+      "production_enabled": false,
+      "priority": "next",
+      "next_evidence": "Effective-time injury/roster snapshots and replacement-specific fit; absence is never a neutral zero"
+    },
+    {
+      "id": "replacement_war",
+      "features": [
+        "replacement level",
+        "position-specific player value",
+        "usage-weighted injury impact"
+      ],
+      "source": "https://github.com/samhoppen/nflWAR_public",
+      "stage": "CONCEPT_REVIEWED",
+      "forecast_used": false,
+      "production_enabled": false,
+      "priority": "later",
+      "next_evidence": "Independent modern fit; verified role/exposure, uncertainty, no direct WAR-to-spread conversion"
+    },
+    {
+      "id": "composite_benchmark",
+      "features": [
+        "FPI",
+        "nfelo",
+        "GPF",
+        "DVOA",
+        "PFF",
+        "composite rating",
+        "market spread"
+      ],
+      "source": "https://github.com/samhoppen/NFL_public/tree/d659f80a8c657e1920030aaa2aa3e796da52d4e3",
+      "stage": "QUARANTINED_MARKET_COMPARATOR",
+      "forecast_used": false,
+      "production_enabled": false,
+      "priority": "benchmark",
+      "next_evidence": "2025 Week2 only; dated source and definition audit; separate price-aware track, never feed football-only model or claim independent edge"
+    },
+    {
+      "id": "wnba_rapm",
+      "features": [
+        "offensive adjusted plus-minus",
+        "defensive adjusted plus-minus",
+        "net player impact"
+      ],
+      "source": "https://github.com/samhoppen/shank_wnba/tree/359e320d4f52c2c94a76220ef11a62a026eac1e2",
+      "stage": "IMPLEMENTED_FIT_BLOCKED",
+      "forecast_used": false,
+      "production_enabled": false,
+      "priority": "blocked",
+      "next_evidence": "Repair 39 invalid point rows and 405 scoring-identity mismatches; complete official possession reconciliation"
+    },
+    {
+      "id": "wnba_rotation",
+      "features": [
+        "projected minutes",
+        "five-player exposure",
+        "lineup composition",
+        "injury substitutions"
+      ],
+      "source": "https://github.com/samhoppen/shank_wnba/tree/359e320d4f52c2c94a76220ef11a62a026eac1e2",
+      "stage": "CONTRACT_IMPLEMENTED",
+      "forecast_used": false,
+      "production_enabled": false,
+      "priority": "blocked",
+      "next_evidence": "Dated current rotation/minutes and fitted player vocabulary; unseen players block instead of silently receiving zero"
+    },
+    {
+      "id": "wnba_pace",
+      "features": [
+        "possessions",
+        "pace per regulation time",
+        "overtime adjustment",
+        "team efficiency"
+      ],
+      "source": "https://github.com/samhoppen/shank_wnba/tree/359e320d4f52c2c94a76220ef11a62a026eac1e2",
+      "stage": "SOURCE_CAPTURED_NOT_FITTED",
+      "forecast_used": false,
+      "production_enabled": false,
+      "priority": "next",
+      "next_evidence": "Reconcile team box scores and game dates; distinguish actual possessions from box-score formula; temporal team state"
+    },
+    {
+      "id": "wnba_components",
+      "features": [
+        "turnover rate",
+        "offensive rebound rate",
+        "shooting efficiency",
+        "free-throw rate",
+        "transition share"
+      ],
+      "source": "https://github.com/samhoppen/shank_wnba/tree/359e320d4f52c2c94a76220ef11a62a026eac1e2",
+      "stage": "SOURCE_QUALITY_BLOCKED",
+      "forecast_used": false,
+      "production_enabled": false,
+      "priority": "blocked",
+      "next_evidence": "Validated event numerators/denominators and reconciled stints before any component fit"
+    },
+    {
+      "id": "probability_distribution",
+      "features": [
+        "score residuals",
+        "margin uncertainty",
+        "calibration",
+        "reliability bins",
+        "tail and tie probabilities"
+      ],
+      "source": "official method references in docs/INDEPENDENT_CANDIDATES.md",
+      "stage": "PARTIAL_FITTED_DIAGNOSTIC",
+      "forecast_used": false,
+      "production_enabled": false,
+      "priority": "next",
+      "next_evidence": "Binary calibration fitted; valid discrete tie/push/score distributions require separate registration and holdout"
+    },
+    {
+      "id": "evaluation",
+      "features": [
+        "walk-forward seasons",
+        "whole-game grouping",
+        "train-only preprocessing",
+        "source-time checks",
+        "paired date bootstrap"
+      ],
+      "source": "research/candidate_methods/methods.py",
+      "stage": "IMPLEMENTED_AND_TESTED",
+      "forecast_used": false,
+      "production_enabled": false,
+      "priority": "implemented",
+      "next_evidence": "New data/targets require their own preregistered folds and as-of availability; serial dependence and multiplicity remain caveats"
+    }
+  ]
+}

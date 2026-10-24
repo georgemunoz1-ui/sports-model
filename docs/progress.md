@@ -4872,3 +4872,152 @@ reproducing the old defects; v2 regressions separately verify their repairs.
 No old hash, acceptance claim, forecast or grade was rewritten. Final-head CI
 and artifact readback remain merge gates. Exact evidence is in the reconciliation
 report and its ci-repair release directory.
+
+
+## 2026-09-16 — Independent candidate assimilation (research only)
+
+Owner requested independently learned standard methods and review-candidate collection.
+Registered INDEPENDENT-CANDIDATES-20260916 before fitting. Added ridge/XGBoost,
+train-only preprocessing, chronological tuning/calibration/tests, strict source/PIT
+contracts and portable model replay. Six test seasons, 1,599 games: ridge MAE
+10.35055; plus coaching 10.35895; XGBoost 10.42637. No promotion. NFL 2025/2026
+excluded from this experiment. Historical publication timestamps remain unverified.
+Captured all 16 Week1 games as 32 team rows and 259 player/game/touch-type records.
+Independent WNBA lineup method implemented; actual fit blocked by 39 invalid-point
+rows and 405 scoring-identity mismatches in the external source. Registered 23
+feature/method families with distinct observed/fitted/used states. 19 targeted tests
+pass; retained fitted model predictions replay without retraining. See
+docs/INDEPENDENT_CANDIDATES.md and data/research/candidate_methods_v1.
+Existing local health remains red; no complete-checkout health certification.
+Forecast defaults, preserved forecasts and action authority unchanged; action OFF.
+
+
+## 2026-09-30 — isolated MLB postseason research challenger
+
+Owner requested September 30 playoff model. Separate V13 empty-base extra-inning
+research identity added; unchanged nine-inning kernel and coefficients. Prior-date
+official inputs: 2,433 finals, eight starter profiles. Four 100K path diagnostics
+retained; two PRE_START and two POST_START, never retrospectively graded. Nine
+contract tests and four exact event replays passed. No postseason predictive
+validation, no canonical forecast registration, no promotion or action authority.
+Full report: docs/MLB_POSTSEASON_RESEARCH.md. Old defaults and packet pins unchanged.
+
+
+## 2026-09-30 — postseason process completion (17:45 PT research freeze)
+
+Added reusable collect/inspect/run/verify/result-reconciliation workflow. Raw-source
+feature reconstruction, review/code/input binding, chronology and writer locking
+are executable; duplicate requests return the same immutable run. Refreshed all
+four official event contexts, skipped three started games, froze CHC at SD 100K
+research paths (CHC 50.926%, SD 49.074%). Both batting orders available but not
+consumed. All five retained runs replay exactly; 106 local research tests pass.
+CI dependency import chain uses existing pinned contextual requirements. Prior
+forecasts, model kernel, parameters and official authority unchanged. Canonical
+registration and predictive validation remain unestablished. See
+docs/MLB_POSTSEASON_PROCESS_COMPLETION.md and immutable completion evidence index.
+
+
+## 2026-10-06T21:55:00.515532+00:00 — MLB remaining-issue repair / postseason context screen
+
+User authorized workload/personnel/calibration repairs. Separate workload, lineup, bullpen and temperature shadow arms; defaults and frozen kernels unchanged. 40 targeted tests, four current-source negative checks, four latest pre-start 100K diagnostic runs and exact replay/idempotency passed. Official current acquisition: 53 context responses, 104 players, 7958 log rows. Historical 2023/2024/2025 census 131 games; 122 eligible (37/41/44), nine exclusions. Calibration fit only 2024 (n=41); held-out 2025 (n=44): baseline Brier .25004, workload .25151, lineup .25416, full context .25589, calibrated .26430. NO ADOPTION; failed calibration not applied. Atomic capture, postponed-as-Final filtering and optimizer scalar bugs repaired. Full canonical health/registration/deployment and series-roster/injury completeness remain unestablished; no old flags upgraded. See docs/MLB_POSTSEASON_CONTEXT_REPAIR.md. PR58 draft atop PR51; action OFF, dose0.
+
+
+## 2026-09-28 — QB-only margin distribution and cover output (draft)
+
+User authorized a replacement for the quarantined combined spread dependency.
+Preregistered a new QB-only margin law before fitting; recovered hash-matched
+features and 1,871 QB OOF predictions, replayed every chronological head, and
+evaluated 1,615 games with strictly prior-season residual pools. The improvement
+screen did not pass; integer push calibration remains limited. No promotion.
+Canonical NFL CLI now has an explicit --qb-margin route; both PHI–CHI QB
+conditions have 100K margin draws and separate exact/model and simulation cover
+probabilities. Independent inverse-CDF replay and all eight provenance bindings
+passed, with unchanged old forecasts and zero report-missingness effect in QB.
+Source-bound Week2 parent retained; no Week3 partial-state advance. Research
+publication remains ineligible; global health RED; market/action authority OFF.
+See docs/NFL_QB_MARGIN_PROCESS.md and docs/releases/2026-09-28-qb-margin/.
+
+## 2026-09-28 — QB integer-margin calibration screen, grading and market display
+
+User requested rerunning the failed improvement screen, optimized calibration,
+enabled grading and an always visible market overlay. Preregistered one bounded
+CRPS blend parameter in commit dbe169b45eb7a99583d66cc566c8f608a43a0f29 before fit.
+The successor nfl.qb_margin.integer_blend.v1.research passed all seven nested
+chronological checks on 1,087 games: CRPS 7.112266 vs 7.124773, paired season CI
+[-0.019593,-0.004182], Brier .433998 vs .435680. Alpha .528957 uses all 1,615
+calibration games; shape history uses all 1,871 QB OOF games. No 2026 outcomes,
+market features or default-model change. Key-number underprediction remains.
+
+Ran integrated 100,000-draw current forecasts for both unresolved Chicago QB
+conditions with the valid Week2 state. Independent verification replays every
+calibration objective and both frozen draw arrays. Separate immutable research
+registrations are enabled and pending; final grading needs agreeing source-bound
+nflverse and official ESPN finals, with actual-QB cohort matching. Canonical
+ledgers and weekly state unchanged. Every research board displays the market
+panel and separate model/simulation cover fields; unknown capture time remains
+explicit. Market predictive inputs and action authority remain OFF. Forecasts,
+original v1 law and prior screens remain frozen. Retrospective PASS does not
+clear prospective validation, market-superiority or global recovery health gates.
+See docs/NFL_QB_MARGIN_CALIBRATION.md and the versioned release verification.
+
+
+## 2026-10-06 — NFL PR 1 review (2026-10-06T22:55:11.565239+00:00)
+
+Confirmed issue #55 PR 1 already exists as draft #56; no duplicate PR created.
+Reproduced 58 focused passes, then six new tests with 25 failing comparison
+contract subcases. Repaired timezone/order/schema/target checks and retained
+base/QB fitted reference values with trace replay. 66 focused tests now pass.
+100K historical-fixture draws replay exactly; all five analytic arms and
+features equal unmodified main. Model/default/policy/state/fixture hashes
+unchanged. Evidence: docs/releases/2026-10-06-nfl-flip-review/. Prior remote
+test steps passed but three artifact uploads failed; full health not cleared.
+#59 remains open: acquisition, canonical registration, deployment and
+prospective validation have separate evidence gates. No model promotion,
+calibration, outcome fitting or canonical-ledger changes. Action OFF, dose 0.0.
+
+
+## 2026-10-19 — Shared margin and cover research system
+
+User authorized swarm development across all sports. Added explicit home-margin contracts, coherent PMF-based cover/push/quarter-handicap ladders, 50/80/95% intervals, reproducible MC, dense-integer fitted residual challenger, chronological evaluation and immutable card CLI. Current main core dependencies and retained source cohorts hash-match 7cf2aea. No selected defaults, old forecasts or authority changed.
+
+129 focused tests passed; eight NHL distributions produced 800,000 exactly replayed draws from retained morning inputs. Four-cohort historical screen contains 3,661 games: observed zero-support outcomes 15 to 0, NHL CRPS improved, CFB/NBA intervals include zero, MLS CRPS worsened. Reused historical cohorts and reconstructed availability prohibit prospective-validation claims. NFL/WNBA/MLB lack qualifying parent-specific cohorts. Global health remains incomplete in this partial recovered source snapshot. See docs/MARGIN_SYSTEM_SCREEN_20261019.md and docs/MARGIN_SYSTEM.md; all candidate promotion remains HOLD/OFF.
+
+
+## 2026-10-19 — External margin review hardening
+
+Mapped all supplied review findings to PR #69 source. Added retained OOT training-evidence validation, re-sealed fitted-state checks, safe malformed-row handling, explicit unconditional cover labels and pre-publication semantic validation of summaries, settlement, simulations, timing and coverage. Independent review reproduced and closed stale-coverage acceptance. Numerical fitting helpers and prediction law are unchanged; frozen fits remain tied to original code.
+
+158 focused tests passed. Eight retained NHL PMFs replayed 800,000 saved draws exactly; a 1,312-row NHL refit matched prior state, tail parameters, lattice and tuning selection exactly. New artifact/code identity is separate. Full health/CI remains unresolved; defaults, historical forecasts and action authority unchanged. See docs/MARGIN_SYSTEM_REVIEW_20261019.md and data/research/margin_review_20261019/verification.json.
+
+
+## 2026-10-19 — Selected-QB NFL margin fitting and guarded runner completion
+
+User authorized completing the selected-QB spread process for current and future research use. Registered NFL-QB-MARGIN-FULLSUPPORT-20261019 at 42cf271 before fitting. Recovered and qualified 1,871 exact-parent OOF games from 2019–2025, including six ties; seven annual parent folds and source/schedule values replay. Historical availability remains reconstructed.
+
+Fitted 1,055 earlier games and evaluated 816 later games with the existing fixed shared challenger. Primary paired CRPS delta −0.007908, 95% block-bootstrap interval [−0.022664, +0.011302]: inconclusive; aggregate historical screen NOT_PASSED. Zero-support outcomes fell 1 to 0. Predeclared refit on all 1,871 rows is separately identified and not directly held-out evaluated. Numerical PASS, predictive HOLD, wagering OFF.
+
+Wired a hash-bound margin child into the selected-QB research runner with pregame config/fit/evaluation timing, actual completion-before-kickoff, immutable outputs, push labeling, parent coefficient replay, and failed/incomplete evaluation refusal. Preserved the original parent forecast. WAS–SF reconstruction after kickoff: SF −7.5 cover 55.1492%, 100K-draw simulation 55.291%; push zero. This is retrospective from morning inputs, not the original pregame card or a live update.
+
+187 unique current focused tests pass. Independent source, 816-game metric/bootstrap, and 100K raw-draw replay checks retained. Source-only checkout still cannot certify full repository health. Implementation is on draft PR #69; no merge, production promotion, canonical grading, total distribution, or wager authorization. See docs/NFL_QB_MARGIN_PROCESS_20261019.md and data/research/nfl_qb_margin_20261019/.
+
+
+## 2026-10-19 — NFL historical CLI fixture isolation after CI
+
+Remote CI at 2628a499 found one historical weekly-state CLI fixture failure: its September clock inherited the later October margin registration and correctly failed the new timing guard. Isolated only that synthetic fixture's runtime selection JSON to its pre-margin configuration; the real parent model, state transitions and package remain in use. Product code and fitted artifacts are unchanged. The corrected historical test plus all 15 selected-QB margin tests pass (16 targeted tests). New automatic margin-routing and timing-refusal tests remain active. Follow-up exact-head CI is required; prior artifact upload quota remains a separate infrastructure limitation.
+
+
+## 2026-10-24T22:51:10.856976+00:00 — remaining PR integration and integrity repair
+
+Reconciled PR35/36/39/40/49/50/51/52/53/56/57/58/69 against main 4cb28e9.
+Preserved all existing data, selected numerical sources, defaults and state keys.
+Restored journal entries deleted on PR58; branch state changes retained as separate
+historical supplements. Flip reports run outside frozen numerical source/seed
+identity. QB research margin products are explicit and cannot register replayed
+games. Capability audit no longer mistakes declaration for validation.
+Full source-bound suite: 2,224 passed; separate research suite: 131 passed.
+Retained 4,797 candidate predictions replayed; both MLB archives hash-verified.
+Actual NFL numeric-v2 retained-input CLI replay emitted no registration files.
+PR38 closed as already incorporated via82. PR45 strict health/evidence blockers
+remain separate and unwaived. Hosted integration CI and artifact readback are
+required before merge. All predictive limitations remain; authority OFF.
+See docs/REMAINING_PR_REPAIR_20261024.md and current execution receipts.

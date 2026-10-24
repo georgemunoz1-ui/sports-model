@@ -80,6 +80,7 @@ def normalize(event, raw):
         raise RuntimeError("INVALID_ESTIMATOR_PROBABILITY")
     signed_gap_pp = None if mc_only else 100.0 * (analytic_p - stochastic_sim_p)
     abs_gap_pp = None if mc_only else abs(signed_gap_pp)
+    flip = (raw.get("diagnostics") or {}).get("flip_diagnostics") or {}
 
     result = {
         "event_id": str(event["event_id"]),
@@ -101,6 +102,11 @@ def normalize(event, raw):
         "stochastic_sim_p": stochastic_sim_p,
         "analytic_sim_gap_pp": signed_gap_pp,
         "analytic_sim_abs_gap_pp": abs_gap_pp,
+        "base_home_probability": (flip.get("base") or {}).get("home_win_probability"),
+        "qb_home_probability": (flip.get("qb") or {}).get("home_win_probability"),
+        "base_qb_gap_pp": flip.get("delta_pp"),
+        "base_qb_pick_flip": flip.get("pick_flip"),
+        "base_qb_comparison_status": flip.get("status"),
         "analytic_sim_divergence": "NOT_APPLICABLE_MC_ONLY" if mc_only else ("DIFFERENT_MODELS_NOT_CONVERGENCE" if raw.get("diagnostics", {}).get("comparison") == "DIFFERENT_MODELS_NOT_ANALYTIC_MC_CONVERGENCE" else divergence_category(abs_gap_pp)),
         "model_p_candidate_normal_margin": raw.get("model_p_candidate_normal_margin"),
         "model_p_candidate_status": raw.get("model_p_candidate_status"),
@@ -372,6 +378,9 @@ def generate(card_date, league, as_of, simulations, overrides, roster_bundle=Non
                 raw = forecast_with_identity(adapter, event, context, simulations, semantics=identity_semantics)
             from pipelines.cards.selected import apply_default
             raw = apply_default(league,event,raw)
+            if league.lower() == 'nfl':
+                from pipelines.cards.nfl_flip_integration import attach_diagnostic
+                raw['diagnostics'] = attach_diagnostic(raw.get('diagnostics', {}), context.get('model'))
             raw = attach_state_receipt(raw, event, context, league)
             raw = attach(raw, league.lower(), event, as_of, roster)
             # Guard the rare case where network/simulation time crosses first pitch.
@@ -477,6 +486,24 @@ def render_md(card, disclosures=None):
             flow=diagnostic.get("assimilation")
             lines.extend(["Week-state assimilation: **"+(flow.get("status","UNVERIFIED") if flow else "NOT_DEMONSTRATED_FOR_THIS_RUN")+"**", ""])
 
+    if card['league'].upper() == 'NFL':
+        lines.extend(["## Base versus QB diagnostics", "",
+            "Home-oriented probabilities; the flip flag uses unrounded values. Every strict winner flip is flagged independently of gap size. Missing comparisons stay visible.", "",
+            "| Game | Base home P | QB home P | Base pick | QB pick | QB − base | Flip | Comparison / flags |",
+            "|---|---:|---:|---|---|---:|---|---|"])
+        for row in card['forecasts']:
+            if row.get('forecast_status') != 'FORECAST_GENERATED':
+                continue
+            flip = (row.get('diagnostics') or {}).get('flip_diagnostics') or {}
+            pct = lambda value: '—' if value is None else f'{100 * value:.4f}%'
+            delta = flip.get('delta_pp')
+            gap = '—' if delta is None else f'{delta:+.4f} pp'
+            flag = 'UNKNOWN' if flip.get('pick_flip') is None else ('PICK_FLIP' if flip['pick_flip'] else 'NO_FLIP')
+            status = flip.get('status', 'DIAGNOSTIC_MISSING')
+            detail = ', '.join(flip.get('flags', []))
+            lines.append(f"| {row.get('away_team')} @ {row.get('home_team')} | {pct((flip.get('base') or {}).get('home_win_probability'))} | {pct((flip.get('qb') or {}).get('home_win_probability'))} | {((flip.get('base') or {}).get('pick') or '—')} | {((flip.get('qb') or {}).get('pick') or '—')} | {gap} | {flag} | {status}; {detail} |")
+        lines.append('')
+
     lines.extend([
         "| Game | Tier | Dose | Winner | Analytic P | Stochastic Sim P | Gap | Divergence | Margin | Total | Grade | Warnings |",
         "|---|---|---:|---|---:|---:|---:|---|---:|---:|---|---|",
@@ -544,6 +571,13 @@ def main():
     from pipelines.cards.disclosures import write_report
     disclosures = write_report(card, output / "disclosures", args.disclosures)
     (output / "diagnostic_card.md").write_text(render_md(card, disclosures))
+    if args.league == 'nfl':
+        from models.nfl.contextual.flip_diagnostics import append_flip_diagnostic
+        for row in card['forecasts']:
+            flip = (row.get('diagnostics') or {}).get('flip_diagnostics')
+            if flip is not None:
+                append_flip_diagnostic(output / 'flip_diagnostics.jsonl', flip)
+
     fields = [
         "event_id", "away_team", "home_team", "forecast_status", "forecast_tier", "data_quality",
         "dose", "model_winner", "analytic_p", "stochastic_sim_p", "analytic_sim_gap_pp",
@@ -551,6 +585,8 @@ def main():
         "projected_margin", "projected_total", "projected_home_runs", "projected_away_runs",
         "margin_std", "total_std", "spread_or_runline", "total_market", "warnings",
         "analytic_p_home", "stochastic_sim_p_home", "grading_eligible",
+        "base_home_probability", "qb_home_probability", "base_qb_gap_pp",
+        "base_qb_pick_flip", "base_qb_comparison_status",
     ]
     with (output / "diagnostic_card.csv").open("w", newline="") as handle:
         writer = csv.DictWriter(handle, fieldnames=fields, extrasaction="ignore")

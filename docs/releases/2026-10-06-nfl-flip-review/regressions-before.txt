@@ -1,0 +1,333 @@
+test_contradictory_target_scope_is_not_comparable (test_nfl_flip_contract.FlipContractTests.test_contradictory_target_scope_is_not_comparable) ... 
+  test_contradictory_target_scope_is_not_comparable (test_nfl_flip_contract.FlipContractTests.test_contradictory_target_scope_is_not_comparable) (where='bundle', field='target') ... FAIL
+  test_contradictory_target_scope_is_not_comparable (test_nfl_flip_contract.FlipContractTests.test_contradictory_target_scope_is_not_comparable) (where='bundle', field='period') ... FAIL
+  test_contradictory_target_scope_is_not_comparable (test_nfl_flip_contract.FlipContractTests.test_contradictory_target_scope_is_not_comparable) (where='bundle', field='probability_orientation') ... FAIL
+  test_contradictory_target_scope_is_not_comparable (test_nfl_flip_contract.FlipContractTests.test_contradictory_target_scope_is_not_comparable) (where='bundle', field='tie_policy') ... FAIL
+  test_contradictory_target_scope_is_not_comparable (test_nfl_flip_contract.FlipContractTests.test_contradictory_target_scope_is_not_comparable) (where='bundle', field='settlement_definition') ... FAIL
+  test_contradictory_target_scope_is_not_comparable (test_nfl_flip_contract.FlipContractTests.test_contradictory_target_scope_is_not_comparable) (where='base', field='target') ... FAIL
+  test_contradictory_target_scope_is_not_comparable (test_nfl_flip_contract.FlipContractTests.test_contradictory_target_scope_is_not_comparable) (where='base', field='period') ... FAIL
+  test_contradictory_target_scope_is_not_comparable (test_nfl_flip_contract.FlipContractTests.test_contradictory_target_scope_is_not_comparable) (where='base', field='probability_orientation') ... FAIL
+  test_contradictory_target_scope_is_not_comparable (test_nfl_flip_contract.FlipContractTests.test_contradictory_target_scope_is_not_comparable) (where='base', field='tie_policy') ... FAIL
+  test_contradictory_target_scope_is_not_comparable (test_nfl_flip_contract.FlipContractTests.test_contradictory_target_scope_is_not_comparable) (where='base', field='settlement_definition') ... FAIL
+  test_contradictory_target_scope_is_not_comparable (test_nfl_flip_contract.FlipContractTests.test_contradictory_target_scope_is_not_comparable) (where='qb', field='target') ... FAIL
+  test_contradictory_target_scope_is_not_comparable (test_nfl_flip_contract.FlipContractTests.test_contradictory_target_scope_is_not_comparable) (where='qb', field='period') ... FAIL
+  test_contradictory_target_scope_is_not_comparable (test_nfl_flip_contract.FlipContractTests.test_contradictory_target_scope_is_not_comparable) (where='qb', field='probability_orientation') ... FAIL
+  test_contradictory_target_scope_is_not_comparable (test_nfl_flip_contract.FlipContractTests.test_contradictory_target_scope_is_not_comparable) (where='qb', field='tie_policy') ... FAIL
+  test_contradictory_target_scope_is_not_comparable (test_nfl_flip_contract.FlipContractTests.test_contradictory_target_scope_is_not_comparable) (where='qb', field='settlement_definition') ... FAIL
+test_cutoff_at_or_after_start_is_not_pregame (test_nfl_flip_contract.FlipContractTests.test_cutoff_at_or_after_start_is_not_pregame) ... FAIL
+test_explicit_contract_and_timezone_equivalence (test_nfl_flip_contract.FlipContractTests.test_explicit_contract_and_timezone_equivalence) ... FAIL
+test_invalid_or_naive_cutoff_is_not_comparable (test_nfl_flip_contract.FlipContractTests.test_invalid_or_naive_cutoff_is_not_comparable) ... 
+  test_invalid_or_naive_cutoff_is_not_comparable (test_nfl_flip_contract.FlipContractTests.test_invalid_or_naive_cutoff_is_not_comparable) (cutoff='not-a-time') ... FAIL
+  test_invalid_or_naive_cutoff_is_not_comparable (test_nfl_flip_contract.FlipContractTests.test_invalid_or_naive_cutoff_is_not_comparable) (cutoff='2026-10-05T15:00:00') ... FAIL
+  test_invalid_or_naive_cutoff_is_not_comparable (test_nfl_flip_contract.FlipContractTests.test_invalid_or_naive_cutoff_is_not_comparable) (cutoff='2026-13-05T15:00:00Z') ... FAIL
+test_missing_or_invalid_start_is_not_comparable (test_nfl_flip_contract.FlipContractTests.test_missing_or_invalid_start_is_not_comparable) ... 
+  test_missing_or_invalid_start_is_not_comparable (test_nfl_flip_contract.FlipContractTests.test_missing_or_invalid_start_is_not_comparable) (start=None) ... FAIL
+  test_missing_or_invalid_start_is_not_comparable (test_nfl_flip_contract.FlipContractTests.test_missing_or_invalid_start_is_not_comparable) (start='') ... FAIL
+  test_missing_or_invalid_start_is_not_comparable (test_nfl_flip_contract.FlipContractTests.test_missing_or_invalid_start_is_not_comparable) (start='2026-10-06T00:15:00') ... FAIL
+  test_missing_or_invalid_start_is_not_comparable (test_nfl_flip_contract.FlipContractTests.test_missing_or_invalid_start_is_not_comparable) (start='invalid') ... FAIL
+test_unknown_forecast_schema_cannot_inherit_target (test_nfl_flip_contract.FlipContractTests.test_unknown_forecast_schema_cannot_inherit_target) ... FAIL
+
+======================================================================
+FAIL: test_contradictory_target_scope_is_not_comparable (test_nfl_flip_contract.FlipContractTests.test_contradictory_target_scope_is_not_comparable) (where='bundle', field='target')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/c4ece79f221e/nfl-flip-review/repo/tests/test_nfl_flip_contract.py", line 56, in test_contradictory_target_scope_is_not_comparable
+    self.assertEqual(report['status'], 'NOT_COMPARABLE')
+AssertionError: 'COMPARABLE' != 'NOT_COMPARABLE'
+- COMPARABLE
++ NOT_COMPARABLE
+? ++++
+
+
+======================================================================
+FAIL: test_contradictory_target_scope_is_not_comparable (test_nfl_flip_contract.FlipContractTests.test_contradictory_target_scope_is_not_comparable) (where='bundle', field='period')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/c4ece79f221e/nfl-flip-review/repo/tests/test_nfl_flip_contract.py", line 56, in test_contradictory_target_scope_is_not_comparable
+    self.assertEqual(report['status'], 'NOT_COMPARABLE')
+AssertionError: 'COMPARABLE' != 'NOT_COMPARABLE'
+- COMPARABLE
++ NOT_COMPARABLE
+? ++++
+
+
+======================================================================
+FAIL: test_contradictory_target_scope_is_not_comparable (test_nfl_flip_contract.FlipContractTests.test_contradictory_target_scope_is_not_comparable) (where='bundle', field='probability_orientation')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/c4ece79f221e/nfl-flip-review/repo/tests/test_nfl_flip_contract.py", line 56, in test_contradictory_target_scope_is_not_comparable
+    self.assertEqual(report['status'], 'NOT_COMPARABLE')
+AssertionError: 'COMPARABLE' != 'NOT_COMPARABLE'
+- COMPARABLE
++ NOT_COMPARABLE
+? ++++
+
+
+======================================================================
+FAIL: test_contradictory_target_scope_is_not_comparable (test_nfl_flip_contract.FlipContractTests.test_contradictory_target_scope_is_not_comparable) (where='bundle', field='tie_policy')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/c4ece79f221e/nfl-flip-review/repo/tests/test_nfl_flip_contract.py", line 56, in test_contradictory_target_scope_is_not_comparable
+    self.assertEqual(report['status'], 'NOT_COMPARABLE')
+AssertionError: 'COMPARABLE' != 'NOT_COMPARABLE'
+- COMPARABLE
++ NOT_COMPARABLE
+? ++++
+
+
+======================================================================
+FAIL: test_contradictory_target_scope_is_not_comparable (test_nfl_flip_contract.FlipContractTests.test_contradictory_target_scope_is_not_comparable) (where='bundle', field='settlement_definition')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/c4ece79f221e/nfl-flip-review/repo/tests/test_nfl_flip_contract.py", line 56, in test_contradictory_target_scope_is_not_comparable
+    self.assertEqual(report['status'], 'NOT_COMPARABLE')
+AssertionError: 'COMPARABLE' != 'NOT_COMPARABLE'
+- COMPARABLE
++ NOT_COMPARABLE
+? ++++
+
+
+======================================================================
+FAIL: test_contradictory_target_scope_is_not_comparable (test_nfl_flip_contract.FlipContractTests.test_contradictory_target_scope_is_not_comparable) (where='base', field='target')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/c4ece79f221e/nfl-flip-review/repo/tests/test_nfl_flip_contract.py", line 56, in test_contradictory_target_scope_is_not_comparable
+    self.assertEqual(report['status'], 'NOT_COMPARABLE')
+AssertionError: 'COMPARABLE' != 'NOT_COMPARABLE'
+- COMPARABLE
++ NOT_COMPARABLE
+? ++++
+
+
+======================================================================
+FAIL: test_contradictory_target_scope_is_not_comparable (test_nfl_flip_contract.FlipContractTests.test_contradictory_target_scope_is_not_comparable) (where='base', field='period')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/c4ece79f221e/nfl-flip-review/repo/tests/test_nfl_flip_contract.py", line 56, in test_contradictory_target_scope_is_not_comparable
+    self.assertEqual(report['status'], 'NOT_COMPARABLE')
+AssertionError: 'COMPARABLE' != 'NOT_COMPARABLE'
+- COMPARABLE
++ NOT_COMPARABLE
+? ++++
+
+
+======================================================================
+FAIL: test_contradictory_target_scope_is_not_comparable (test_nfl_flip_contract.FlipContractTests.test_contradictory_target_scope_is_not_comparable) (where='base', field='probability_orientation')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/c4ece79f221e/nfl-flip-review/repo/tests/test_nfl_flip_contract.py", line 56, in test_contradictory_target_scope_is_not_comparable
+    self.assertEqual(report['status'], 'NOT_COMPARABLE')
+AssertionError: 'COMPARABLE' != 'NOT_COMPARABLE'
+- COMPARABLE
++ NOT_COMPARABLE
+? ++++
+
+
+======================================================================
+FAIL: test_contradictory_target_scope_is_not_comparable (test_nfl_flip_contract.FlipContractTests.test_contradictory_target_scope_is_not_comparable) (where='base', field='tie_policy')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/c4ece79f221e/nfl-flip-review/repo/tests/test_nfl_flip_contract.py", line 56, in test_contradictory_target_scope_is_not_comparable
+    self.assertEqual(report['status'], 'NOT_COMPARABLE')
+AssertionError: 'COMPARABLE' != 'NOT_COMPARABLE'
+- COMPARABLE
++ NOT_COMPARABLE
+? ++++
+
+
+======================================================================
+FAIL: test_contradictory_target_scope_is_not_comparable (test_nfl_flip_contract.FlipContractTests.test_contradictory_target_scope_is_not_comparable) (where='base', field='settlement_definition')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/c4ece79f221e/nfl-flip-review/repo/tests/test_nfl_flip_contract.py", line 56, in test_contradictory_target_scope_is_not_comparable
+    self.assertEqual(report['status'], 'NOT_COMPARABLE')
+AssertionError: 'COMPARABLE' != 'NOT_COMPARABLE'
+- COMPARABLE
++ NOT_COMPARABLE
+? ++++
+
+
+======================================================================
+FAIL: test_contradictory_target_scope_is_not_comparable (test_nfl_flip_contract.FlipContractTests.test_contradictory_target_scope_is_not_comparable) (where='qb', field='target')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/c4ece79f221e/nfl-flip-review/repo/tests/test_nfl_flip_contract.py", line 56, in test_contradictory_target_scope_is_not_comparable
+    self.assertEqual(report['status'], 'NOT_COMPARABLE')
+AssertionError: 'COMPARABLE' != 'NOT_COMPARABLE'
+- COMPARABLE
++ NOT_COMPARABLE
+? ++++
+
+
+======================================================================
+FAIL: test_contradictory_target_scope_is_not_comparable (test_nfl_flip_contract.FlipContractTests.test_contradictory_target_scope_is_not_comparable) (where='qb', field='period')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/c4ece79f221e/nfl-flip-review/repo/tests/test_nfl_flip_contract.py", line 56, in test_contradictory_target_scope_is_not_comparable
+    self.assertEqual(report['status'], 'NOT_COMPARABLE')
+AssertionError: 'COMPARABLE' != 'NOT_COMPARABLE'
+- COMPARABLE
++ NOT_COMPARABLE
+? ++++
+
+
+======================================================================
+FAIL: test_contradictory_target_scope_is_not_comparable (test_nfl_flip_contract.FlipContractTests.test_contradictory_target_scope_is_not_comparable) (where='qb', field='probability_orientation')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/c4ece79f221e/nfl-flip-review/repo/tests/test_nfl_flip_contract.py", line 56, in test_contradictory_target_scope_is_not_comparable
+    self.assertEqual(report['status'], 'NOT_COMPARABLE')
+AssertionError: 'COMPARABLE' != 'NOT_COMPARABLE'
+- COMPARABLE
++ NOT_COMPARABLE
+? ++++
+
+
+======================================================================
+FAIL: test_contradictory_target_scope_is_not_comparable (test_nfl_flip_contract.FlipContractTests.test_contradictory_target_scope_is_not_comparable) (where='qb', field='tie_policy')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/c4ece79f221e/nfl-flip-review/repo/tests/test_nfl_flip_contract.py", line 56, in test_contradictory_target_scope_is_not_comparable
+    self.assertEqual(report['status'], 'NOT_COMPARABLE')
+AssertionError: 'COMPARABLE' != 'NOT_COMPARABLE'
+- COMPARABLE
++ NOT_COMPARABLE
+? ++++
+
+
+======================================================================
+FAIL: test_contradictory_target_scope_is_not_comparable (test_nfl_flip_contract.FlipContractTests.test_contradictory_target_scope_is_not_comparable) (where='qb', field='settlement_definition')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/c4ece79f221e/nfl-flip-review/repo/tests/test_nfl_flip_contract.py", line 56, in test_contradictory_target_scope_is_not_comparable
+    self.assertEqual(report['status'], 'NOT_COMPARABLE')
+AssertionError: 'COMPARABLE' != 'NOT_COMPARABLE'
+- COMPARABLE
++ NOT_COMPARABLE
+? ++++
+
+
+======================================================================
+FAIL: test_cutoff_at_or_after_start_is_not_pregame (test_nfl_flip_contract.FlipContractTests.test_cutoff_at_or_after_start_is_not_pregame)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/c4ece79f221e/nfl-flip-review/repo/tests/test_nfl_flip_contract.py", line 34, in test_cutoff_at_or_after_start_is_not_pregame
+    self.assertEqual(report['status'], 'NOT_COMPARABLE')
+AssertionError: 'COMPARABLE' != 'NOT_COMPARABLE'
+- COMPARABLE
++ NOT_COMPARABLE
+? ++++
+
+
+======================================================================
+FAIL: test_explicit_contract_and_timezone_equivalence (test_nfl_flip_contract.FlipContractTests.test_explicit_contract_and_timezone_equivalence)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/c4ece79f221e/nfl-flip-review/repo/tests/test_nfl_flip_contract.py", line 70, in test_explicit_contract_and_timezone_equivalence
+    self.assertEqual(report['status'], 'COMPARABLE')
+AssertionError: 'NOT_COMPARABLE' != 'COMPARABLE'
+- NOT_COMPARABLE
+? ----
++ COMPARABLE
+
+
+======================================================================
+FAIL: test_invalid_or_naive_cutoff_is_not_comparable (test_nfl_flip_contract.FlipContractTests.test_invalid_or_naive_cutoff_is_not_comparable) (cutoff='not-a-time')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/c4ece79f221e/nfl-flip-review/repo/tests/test_nfl_flip_contract.py", line 16, in test_invalid_or_naive_cutoff_is_not_comparable
+    self.assertEqual(report['status'], 'NOT_COMPARABLE')
+AssertionError: 'COMPARABLE' != 'NOT_COMPARABLE'
+- COMPARABLE
++ NOT_COMPARABLE
+? ++++
+
+
+======================================================================
+FAIL: test_invalid_or_naive_cutoff_is_not_comparable (test_nfl_flip_contract.FlipContractTests.test_invalid_or_naive_cutoff_is_not_comparable) (cutoff='2026-10-05T15:00:00')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/c4ece79f221e/nfl-flip-review/repo/tests/test_nfl_flip_contract.py", line 16, in test_invalid_or_naive_cutoff_is_not_comparable
+    self.assertEqual(report['status'], 'NOT_COMPARABLE')
+AssertionError: 'COMPARABLE' != 'NOT_COMPARABLE'
+- COMPARABLE
++ NOT_COMPARABLE
+? ++++
+
+
+======================================================================
+FAIL: test_invalid_or_naive_cutoff_is_not_comparable (test_nfl_flip_contract.FlipContractTests.test_invalid_or_naive_cutoff_is_not_comparable) (cutoff='2026-13-05T15:00:00Z')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/c4ece79f221e/nfl-flip-review/repo/tests/test_nfl_flip_contract.py", line 16, in test_invalid_or_naive_cutoff_is_not_comparable
+    self.assertEqual(report['status'], 'NOT_COMPARABLE')
+AssertionError: 'COMPARABLE' != 'NOT_COMPARABLE'
+- COMPARABLE
++ NOT_COMPARABLE
+? ++++
+
+
+======================================================================
+FAIL: test_missing_or_invalid_start_is_not_comparable (test_nfl_flip_contract.FlipContractTests.test_missing_or_invalid_start_is_not_comparable) (start=None)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/c4ece79f221e/nfl-flip-review/repo/tests/test_nfl_flip_contract.py", line 26, in test_missing_or_invalid_start_is_not_comparable
+    self.assertEqual(report['status'], 'NOT_COMPARABLE')
+AssertionError: 'COMPARABLE' != 'NOT_COMPARABLE'
+- COMPARABLE
++ NOT_COMPARABLE
+? ++++
+
+
+======================================================================
+FAIL: test_missing_or_invalid_start_is_not_comparable (test_nfl_flip_contract.FlipContractTests.test_missing_or_invalid_start_is_not_comparable) (start='')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/c4ece79f221e/nfl-flip-review/repo/tests/test_nfl_flip_contract.py", line 26, in test_missing_or_invalid_start_is_not_comparable
+    self.assertEqual(report['status'], 'NOT_COMPARABLE')
+AssertionError: 'COMPARABLE' != 'NOT_COMPARABLE'
+- COMPARABLE
++ NOT_COMPARABLE
+? ++++
+
+
+======================================================================
+FAIL: test_missing_or_invalid_start_is_not_comparable (test_nfl_flip_contract.FlipContractTests.test_missing_or_invalid_start_is_not_comparable) (start='2026-10-06T00:15:00')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/c4ece79f221e/nfl-flip-review/repo/tests/test_nfl_flip_contract.py", line 26, in test_missing_or_invalid_start_is_not_comparable
+    self.assertEqual(report['status'], 'NOT_COMPARABLE')
+AssertionError: 'COMPARABLE' != 'NOT_COMPARABLE'
+- COMPARABLE
++ NOT_COMPARABLE
+? ++++
+
+
+======================================================================
+FAIL: test_missing_or_invalid_start_is_not_comparable (test_nfl_flip_contract.FlipContractTests.test_missing_or_invalid_start_is_not_comparable) (start='invalid')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/c4ece79f221e/nfl-flip-review/repo/tests/test_nfl_flip_contract.py", line 26, in test_missing_or_invalid_start_is_not_comparable
+    self.assertEqual(report['status'], 'NOT_COMPARABLE')
+AssertionError: 'COMPARABLE' != 'NOT_COMPARABLE'
+- COMPARABLE
++ NOT_COMPARABLE
+? ++++
+
+
+======================================================================
+FAIL: test_unknown_forecast_schema_cannot_inherit_target (test_nfl_flip_contract.FlipContractTests.test_unknown_forecast_schema_cannot_inherit_target)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/c4ece79f221e/nfl-flip-review/repo/tests/test_nfl_flip_contract.py", line 42, in test_unknown_forecast_schema_cannot_inherit_target
+    self.assertEqual(report['status'], 'NOT_COMPARABLE')
+AssertionError: 'COMPARABLE' != 'NOT_COMPARABLE'
+- COMPARABLE
++ NOT_COMPARABLE
+? ++++
+
+
+----------------------------------------------------------------------
+Ran 6 tests in 0.007s
+
+FAILED (failures=25)

@@ -1,0 +1,30 @@
+{
+  "status": "RESEARCH_ONLY_NO_PROMOTION",
+  "target_base_commit": "1c54ab5254b57b2efeb0085c8af3f56bed3a6557",
+  "source_archive_sha256": "e65dd567fe7e6077306ae4e73a9d418cd3faaa8ec4950697e16ae6965e08bdc3",
+  "tests": {
+    "command": "python -m unittest discover -s tests -p test_candidate_methods.py -v",
+    "passed": 19
+  },
+  "replay": {
+    "status": "PASS",
+    "artifact_hashes_verified": 25,
+    "model_event_predictions": 4797,
+    "max_absolute_prediction_error": 3.552713678800501e-15,
+    "tolerance": 1e-10,
+    "retrained": false
+  },
+  "health": {
+    "status": "RED",
+    "local_checkout_head": "547053102f25952323d123b019df07aed9661fc9",
+    "dirty_checkout": true,
+    "same_as_target_main": false,
+    "exit_code": 1,
+    "failures": [
+      "recovery jobs",
+      "historical 2026-09-03 release eligibility"
+    ],
+    "full_repository_health_certified": false
+  },
+  "initial_vs_verified_predictions_byte_identical": true
+}

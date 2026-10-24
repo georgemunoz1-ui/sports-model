@@ -1,0 +1,724 @@
+[
+  {
+    "schema": "finding-evidence-v1",
+    "finding_id": "ADV-01",
+    "observed": "Evaluator accepted mixed procedure/configuration/control identities.",
+    "expected": "Reject unplanned mixtures; permit exact preregistered walk-forward plans.",
+    "evidence": [
+      {
+        "path": "research/selection_evaluation.py",
+        "sha256": "1c464260e25fe5b0ae7637943fb72647a22da5576a450f3a805d372afbfe302f"
+      },
+      {
+        "path": "tests/test_overhaul_adversarial.py",
+        "sha256": "721b8e10e1908676f49926de3eab7efdce06890a185881c282aa5d545e98ac24"
+      }
+    ],
+    "scope": "Version-bound implementation behavior; prior frozen artifacts retained. Reverified on the PR reconciliation source version; prior packet and receipt remain unchanged. Reverified after the remaining-PR integration; original source versions and verdicts preserved.",
+    "classification": "evaluation_bug",
+    "change": "Regression-covered correction in research/selection_evaluation.py",
+    "acceptance_test": {
+      "command": "python -m pytest tests research/tests research/cfb_binary_isotonic_proposal/test_binary_isotonic_repair.py -q --junitxml=docs/releases/2026-10-24-remaining-prs/acceptance/tests.xml",
+      "execution_receipt": {
+        "path": "docs/releases/2026-10-24-remaining-prs/acceptance/acceptance.json",
+        "sha256": "d40e3c2777c6420d66fc2e70a4329844261d799074819ea1e08a44b2ed782fb1"
+      }
+    },
+    "remaining_limitation": "No predictive effect or production trust claim. Delivery evidence tracked separately.",
+    "publication_impact": "No predictive qualification; publication and wagering remain OFF.",
+    "owner": "model-integrity",
+    "status": "verified_implementation",
+    "delivery": {
+      "stage": "Tested"
+    },
+    "supersedes": {
+      "path": "docs/research/overhaul_2026_10_23/FINDING_EVIDENCE_pr_reconciliation_v1.json",
+      "sha256": "07d3a4f77476b7847a8f6d52c20011928aee51e30824b1d5857575a3ca533b95",
+      "finding_id": "ADV-01"
+    }
+  },
+  {
+    "schema": "finding-evidence-v1",
+    "finding_id": "ADV-02",
+    "observed": "VOID was silently excluded from an unconditional-win denominator.",
+    "expected": "Follow frozen convention, disclose decisive-only denominator and reconcile categories.",
+    "evidence": [
+      {
+        "path": "research/selection_evaluation.py",
+        "sha256": "1c464260e25fe5b0ae7637943fb72647a22da5576a450f3a805d372afbfe302f"
+      },
+      {
+        "path": "tests/test_overhaul_adversarial.py",
+        "sha256": "721b8e10e1908676f49926de3eab7efdce06890a185881c282aa5d545e98ac24"
+      }
+    ],
+    "scope": "Version-bound implementation behavior; prior frozen artifacts retained. Reverified on the PR reconciliation source version; prior packet and receipt remain unchanged. Reverified after the remaining-PR integration; original source versions and verdicts preserved.",
+    "classification": "evaluation_bug",
+    "change": "Regression-covered correction in research/selection_evaluation.py",
+    "acceptance_test": {
+      "command": "python -m pytest tests research/tests research/cfb_binary_isotonic_proposal/test_binary_isotonic_repair.py -q --junitxml=docs/releases/2026-10-24-remaining-prs/acceptance/tests.xml",
+      "execution_receipt": {
+        "path": "docs/releases/2026-10-24-remaining-prs/acceptance/acceptance.json",
+        "sha256": "d40e3c2777c6420d66fc2e70a4329844261d799074819ea1e08a44b2ed782fb1"
+      }
+    },
+    "remaining_limitation": "No predictive effect or production trust claim. Delivery evidence tracked separately.",
+    "publication_impact": "No predictive qualification; publication and wagering remain OFF.",
+    "owner": "model-integrity",
+    "status": "verified_implementation",
+    "delivery": {
+      "stage": "Tested"
+    },
+    "supersedes": {
+      "path": "docs/research/overhaul_2026_10_23/FINDING_EVIDENCE_pr_reconciliation_v1.json",
+      "sha256": "07d3a4f77476b7847a8f6d52c20011928aee51e30824b1d5857575a3ca533b95",
+      "finding_id": "ADV-02"
+    }
+  },
+  {
+    "schema": "finding-evidence-v1",
+    "finding_id": "ADV-03",
+    "observed": "Malformed expiry or revocation could escape the ineligibility path.",
+    "expected": "Fail closed without discarding frozen controls.",
+    "evidence": [
+      {
+        "path": "research/validation_registry.py",
+        "sha256": "d339fd89fd957aac457236116f1f0cc05031cd71dd5e43ed223831daa1994f83"
+      },
+      {
+        "path": "tests/test_overhaul_adversarial.py",
+        "sha256": "721b8e10e1908676f49926de3eab7efdce06890a185881c282aa5d545e98ac24"
+      }
+    ],
+    "scope": "Version-bound implementation behavior; prior frozen artifacts retained. Reverified on the PR reconciliation source version; prior packet and receipt remain unchanged. Reverified after the remaining-PR integration; original source versions and verdicts preserved.",
+    "classification": "implementation_bug",
+    "change": "Regression-covered correction in research/validation_registry.py",
+    "acceptance_test": {
+      "command": "python -m pytest tests research/tests research/cfb_binary_isotonic_proposal/test_binary_isotonic_repair.py -q --junitxml=docs/releases/2026-10-24-remaining-prs/acceptance/tests.xml",
+      "execution_receipt": {
+        "path": "docs/releases/2026-10-24-remaining-prs/acceptance/acceptance.json",
+        "sha256": "d40e3c2777c6420d66fc2e70a4329844261d799074819ea1e08a44b2ed782fb1"
+      }
+    },
+    "remaining_limitation": "No predictive effect or production trust claim. Delivery evidence tracked separately.",
+    "publication_impact": "No predictive qualification; publication and wagering remain OFF.",
+    "owner": "model-integrity",
+    "status": "verified_implementation",
+    "delivery": {
+      "stage": "Tested"
+    },
+    "supersedes": {
+      "path": "docs/research/overhaul_2026_10_23/FINDING_EVIDENCE_pr_reconciliation_v1.json",
+      "sha256": "07d3a4f77476b7847a8f6d52c20011928aee51e30824b1d5857575a3ca533b95",
+      "finding_id": "ADV-03"
+    }
+  },
+  {
+    "schema": "finding-evidence-v1",
+    "finding_id": "ADV-04",
+    "observed": "Different signer names could refer to the same credential.",
+    "expected": "Require distinct author/reviewer credentials, while not claiming human independence.",
+    "evidence": [
+      {
+        "path": "research/validation_registry.py",
+        "sha256": "d339fd89fd957aac457236116f1f0cc05031cd71dd5e43ed223831daa1994f83"
+      },
+      {
+        "path": "tests/test_overhaul_adversarial.py",
+        "sha256": "721b8e10e1908676f49926de3eab7efdce06890a185881c282aa5d545e98ac24"
+      }
+    ],
+    "scope": "Version-bound implementation behavior; prior frozen artifacts retained. Reverified on the PR reconciliation source version; prior packet and receipt remain unchanged. Reverified after the remaining-PR integration; original source versions and verdicts preserved.",
+    "classification": "implementation_bug",
+    "change": "Regression-covered correction in research/validation_registry.py",
+    "acceptance_test": {
+      "command": "python -m pytest tests research/tests research/cfb_binary_isotonic_proposal/test_binary_isotonic_repair.py -q --junitxml=docs/releases/2026-10-24-remaining-prs/acceptance/tests.xml",
+      "execution_receipt": {
+        "path": "docs/releases/2026-10-24-remaining-prs/acceptance/acceptance.json",
+        "sha256": "d40e3c2777c6420d66fc2e70a4329844261d799074819ea1e08a44b2ed782fb1"
+      }
+    },
+    "remaining_limitation": "No predictive effect or production trust claim. Delivery evidence tracked separately.",
+    "publication_impact": "No predictive qualification; publication and wagering remain OFF.",
+    "owner": "model-integrity",
+    "status": "verified_implementation",
+    "delivery": {
+      "stage": "Tested"
+    },
+    "supersedes": {
+      "path": "docs/research/overhaul_2026_10_23/FINDING_EVIDENCE_pr_reconciliation_v1.json",
+      "sha256": "07d3a4f77476b7847a8f6d52c20011928aee51e30824b1d5857575a3ca533b95",
+      "finding_id": "ADV-04"
+    }
+  },
+  {
+    "schema": "finding-evidence-v1",
+    "finding_id": "ADV-05",
+    "observed": "Final-status prefix admitted forfeits as played history.",
+    "expected": "Only explicit played-final statuses contribute rest.",
+    "evidence": [
+      {
+        "path": "models/current/freshness.py",
+        "sha256": "ebadba51fa545a351d37980bab3bb78d5fe603265b758114b59f0f01191e027a"
+      },
+      {
+        "path": "tests/test_overhaul_adversarial.py",
+        "sha256": "721b8e10e1908676f49926de3eab7efdce06890a185881c282aa5d545e98ac24"
+      }
+    ],
+    "scope": "Version-bound implementation behavior; prior frozen artifacts retained. Reverified on the PR reconciliation source version; prior packet and receipt remain unchanged. Reverified after the remaining-PR integration; original source versions and verdicts preserved.",
+    "classification": "implementation_bug",
+    "change": "Regression-covered correction in models/current/freshness.py",
+    "acceptance_test": {
+      "command": "python -m pytest tests research/tests research/cfb_binary_isotonic_proposal/test_binary_isotonic_repair.py -q --junitxml=docs/releases/2026-10-24-remaining-prs/acceptance/tests.xml",
+      "execution_receipt": {
+        "path": "docs/releases/2026-10-24-remaining-prs/acceptance/acceptance.json",
+        "sha256": "d40e3c2777c6420d66fc2e70a4329844261d799074819ea1e08a44b2ed782fb1"
+      }
+    },
+    "remaining_limitation": "No predictive effect or production trust claim. Delivery evidence tracked separately.",
+    "publication_impact": "No predictive qualification; publication and wagering remain OFF.",
+    "owner": "model-integrity",
+    "status": "verified_implementation",
+    "delivery": {
+      "stage": "Tested"
+    },
+    "supersedes": {
+      "path": "docs/research/overhaul_2026_10_23/FINDING_EVIDENCE_pr_reconciliation_v1.json",
+      "sha256": "07d3a4f77476b7847a8f6d52c20011928aee51e30824b1d5857575a3ca533b95",
+      "finding_id": "ADV-05"
+    }
+  },
+  {
+    "schema": "finding-evidence-v1",
+    "finding_id": "ADV-06",
+    "observed": "Old consumed state could conceal future training cutoff.",
+    "expected": "Disclose and block a fit unavailable at cutoff.",
+    "evidence": [
+      {
+        "path": "models/current/freshness.py",
+        "sha256": "ebadba51fa545a351d37980bab3bb78d5fe603265b758114b59f0f01191e027a"
+      },
+      {
+        "path": "tests/test_overhaul_adversarial.py",
+        "sha256": "721b8e10e1908676f49926de3eab7efdce06890a185881c282aa5d545e98ac24"
+      }
+    ],
+    "scope": "Version-bound implementation behavior; prior frozen artifacts retained. Reverified on the PR reconciliation source version; prior packet and receipt remain unchanged. Reverified after the remaining-PR integration; original source versions and verdicts preserved.",
+    "classification": "implementation_bug",
+    "change": "Regression-covered correction in models/current/freshness.py",
+    "acceptance_test": {
+      "command": "python -m pytest tests research/tests research/cfb_binary_isotonic_proposal/test_binary_isotonic_repair.py -q --junitxml=docs/releases/2026-10-24-remaining-prs/acceptance/tests.xml",
+      "execution_receipt": {
+        "path": "docs/releases/2026-10-24-remaining-prs/acceptance/acceptance.json",
+        "sha256": "d40e3c2777c6420d66fc2e70a4329844261d799074819ea1e08a44b2ed782fb1"
+      }
+    },
+    "remaining_limitation": "No predictive effect or production trust claim. Delivery evidence tracked separately.",
+    "publication_impact": "No predictive qualification; publication and wagering remain OFF.",
+    "owner": "model-integrity",
+    "status": "verified_implementation",
+    "delivery": {
+      "stage": "Tested"
+    },
+    "supersedes": {
+      "path": "docs/research/overhaul_2026_10_23/FINDING_EVIDENCE_pr_reconciliation_v1.json",
+      "sha256": "07d3a4f77476b7847a8f6d52c20011928aee51e30824b1d5857575a3ca533b95",
+      "finding_id": "ADV-06"
+    }
+  },
+  {
+    "schema": "finding-evidence-v1",
+    "finding_id": "ADV-07",
+    "observed": "Upcoming games poisoned otherwise valid prior rest.",
+    "expected": "Exclude current/future/nonfinal rows before prior-completion checks.",
+    "evidence": [
+      {
+        "path": "models/current/freshness.py",
+        "sha256": "ebadba51fa545a351d37980bab3bb78d5fe603265b758114b59f0f01191e027a"
+      },
+      {
+        "path": "tests/test_overhaul_adversarial.py",
+        "sha256": "721b8e10e1908676f49926de3eab7efdce06890a185881c282aa5d545e98ac24"
+      }
+    ],
+    "scope": "Version-bound implementation behavior; prior frozen artifacts retained. Reverified on the PR reconciliation source version; prior packet and receipt remain unchanged. Reverified after the remaining-PR integration; original source versions and verdicts preserved.",
+    "classification": "implementation_bug",
+    "change": "Regression-covered correction in models/current/freshness.py",
+    "acceptance_test": {
+      "command": "python -m pytest tests research/tests research/cfb_binary_isotonic_proposal/test_binary_isotonic_repair.py -q --junitxml=docs/releases/2026-10-24-remaining-prs/acceptance/tests.xml",
+      "execution_receipt": {
+        "path": "docs/releases/2026-10-24-remaining-prs/acceptance/acceptance.json",
+        "sha256": "d40e3c2777c6420d66fc2e70a4329844261d799074819ea1e08a44b2ed782fb1"
+      }
+    },
+    "remaining_limitation": "No predictive effect or production trust claim. Delivery evidence tracked separately.",
+    "publication_impact": "No predictive qualification; publication and wagering remain OFF.",
+    "owner": "model-integrity",
+    "status": "verified_implementation",
+    "delivery": {
+      "stage": "Tested"
+    },
+    "supersedes": {
+      "path": "docs/research/overhaul_2026_10_23/FINDING_EVIDENCE_pr_reconciliation_v1.json",
+      "sha256": "07d3a4f77476b7847a8f6d52c20011928aee51e30824b1d5857575a3ca533b95",
+      "finding_id": "ADV-07"
+    }
+  },
+  {
+    "schema": "finding-evidence-v1",
+    "finding_id": "ADV-08",
+    "observed": "Control direction used a 50% threshold despite push mass.",
+    "expected": "Compare complete win/loss masses and retain declared tie convention.",
+    "evidence": [
+      {
+        "path": "scripts/evaluate_research_selections.py",
+        "sha256": "675db3d68a0e75d6b3901151903d046de6272e69d5a0faaf12257eb6fd76613e"
+      },
+      {
+        "path": "tests/test_overhaul_adversarial.py",
+        "sha256": "721b8e10e1908676f49926de3eab7efdce06890a185881c282aa5d545e98ac24"
+      }
+    ],
+    "scope": "Version-bound implementation behavior; prior frozen artifacts retained. Reverified on the PR reconciliation source version; prior packet and receipt remain unchanged. Reverified after the remaining-PR integration; original source versions and verdicts preserved.",
+    "classification": "evaluation_bug",
+    "change": "Regression-covered correction in scripts/evaluate_research_selections.py",
+    "acceptance_test": {
+      "command": "python -m pytest tests research/tests research/cfb_binary_isotonic_proposal/test_binary_isotonic_repair.py -q --junitxml=docs/releases/2026-10-24-remaining-prs/acceptance/tests.xml",
+      "execution_receipt": {
+        "path": "docs/releases/2026-10-24-remaining-prs/acceptance/acceptance.json",
+        "sha256": "d40e3c2777c6420d66fc2e70a4329844261d799074819ea1e08a44b2ed782fb1"
+      }
+    },
+    "remaining_limitation": "No predictive effect or production trust claim. Delivery evidence tracked separately.",
+    "publication_impact": "No predictive qualification; publication and wagering remain OFF.",
+    "owner": "model-integrity",
+    "status": "verified_implementation",
+    "delivery": {
+      "stage": "Tested"
+    },
+    "supersedes": {
+      "path": "docs/research/overhaul_2026_10_23/FINDING_EVIDENCE_pr_reconciliation_v1.json",
+      "sha256": "07d3a4f77476b7847a8f6d52c20011928aee51e30824b1d5857575a3ca533b95",
+      "finding_id": "ADV-08"
+    }
+  },
+  {
+    "schema": "finding-evidence-v1",
+    "finding_id": "ADV-09",
+    "observed": "Blocked post-start forecasts could enter full-slate probability scores.",
+    "expected": "Retain population opportunity, exclude unavailable pregame estimate.",
+    "evidence": [
+      {
+        "path": "scripts/evaluate_research_selections.py",
+        "sha256": "675db3d68a0e75d6b3901151903d046de6272e69d5a0faaf12257eb6fd76613e"
+      },
+      {
+        "path": "tests/test_overhaul_adversarial.py",
+        "sha256": "721b8e10e1908676f49926de3eab7efdce06890a185881c282aa5d545e98ac24"
+      }
+    ],
+    "scope": "Version-bound implementation behavior; prior frozen artifacts retained. Reverified on the PR reconciliation source version; prior packet and receipt remain unchanged. Reverified after the remaining-PR integration; original source versions and verdicts preserved.",
+    "classification": "evaluation_bug",
+    "change": "Regression-covered correction in scripts/evaluate_research_selections.py",
+    "acceptance_test": {
+      "command": "python -m pytest tests research/tests research/cfb_binary_isotonic_proposal/test_binary_isotonic_repair.py -q --junitxml=docs/releases/2026-10-24-remaining-prs/acceptance/tests.xml",
+      "execution_receipt": {
+        "path": "docs/releases/2026-10-24-remaining-prs/acceptance/acceptance.json",
+        "sha256": "d40e3c2777c6420d66fc2e70a4329844261d799074819ea1e08a44b2ed782fb1"
+      }
+    },
+    "remaining_limitation": "No predictive effect or production trust claim. Delivery evidence tracked separately.",
+    "publication_impact": "No predictive qualification; publication and wagering remain OFF.",
+    "owner": "model-integrity",
+    "status": "verified_implementation",
+    "delivery": {
+      "stage": "Tested"
+    },
+    "supersedes": {
+      "path": "docs/research/overhaul_2026_10_23/FINDING_EVIDENCE_pr_reconciliation_v1.json",
+      "sha256": "07d3a4f77476b7847a8f6d52c20011928aee51e30824b1d5857575a3ca533b95",
+      "finding_id": "ADV-09"
+    }
+  },
+  {
+    "schema": "finding-evidence-v1",
+    "finding_id": "MI-002",
+    "observed": "Market/display archival metadata changed stochastic seeds with fixed fitted inputs.",
+    "expected": "Numeric forecast and child-distribution identities exclude nonconsumed metadata; legacy replay remains explicit.",
+    "evidence": [
+      {
+        "path": "pipelines/cards/semantic_identity.py",
+        "sha256": "a7f6541d1415523092e9e6364407100ceb9165de1493e833c93d21f88e65f756"
+      },
+      {
+        "path": "tests/test_semantic_identity.py",
+        "sha256": "9415d30ac954ab8481eda32939124bc8ed9e59fe6ac0d8e53cffab97930a35b7"
+      }
+    ],
+    "scope": "Version-bound software implementation; operational deployment and predictive qualification are separate. Reverified on the PR reconciliation source version; prior packet and receipt remain unchanged. Reverified after the remaining-PR integration; original source versions and verdicts preserved.",
+    "classification": "implementation_bug",
+    "change": "Implemented in pipelines/cards/semantic_identity.py",
+    "acceptance_test": {
+      "command": "python -m pytest tests research/tests research/cfb_binary_isotonic_proposal/test_binary_isotonic_repair.py -q --junitxml=docs/releases/2026-10-24-remaining-prs/acceptance/tests.xml",
+      "execution_receipt": {
+        "path": "docs/releases/2026-10-24-remaining-prs/acceptance/acceptance.json",
+        "sha256": "d40e3c2777c6420d66fc2e70a4329844261d799074819ea1e08a44b2ed782fb1"
+      }
+    },
+    "remaining_limitation": "Metadata invariance tested across seven selected adapters, PMF children and fitted NFL spread path. Legacy paths retain historical behavior; upstream acquisition and fitting independence are separate audits.",
+    "publication_impact": "No predictive qualification or wagering authority; unsupported selection remains blocked.",
+    "owner": "model-integrity",
+    "status": "verified_implementation",
+    "delivery": {
+      "stage": "Tested"
+    },
+    "supersedes": {
+      "path": "docs/research/overhaul_2026_10_23/FINDING_EVIDENCE_pr_reconciliation_v1.json",
+      "sha256": "07d3a4f77476b7847a8f6d52c20011928aee51e30824b1d5857575a3ca533b95",
+      "finding_id": "MI-002"
+    }
+  },
+  {
+    "schema": "finding-evidence-v1",
+    "finding_id": "A1-A4-LINEAGE",
+    "observed": "Candidate ancestry and lifecycle enforcement were insufficient for exact procedure attribution and frozen walk-forward research.",
+    "expected": "Require attributed content-addressed ancestry, signed lifecycle, complete predictive IDs and explicit frozen refit policy.",
+    "evidence": [
+      {
+        "path": "research/procedure_lineage.py",
+        "sha256": "2a8409a636fadb9a5b1a9a3d034224784c1d4c437f977ea91cf9726d5e5257ed"
+      },
+      {
+        "path": "tests/test_procedure_lineage.py",
+        "sha256": "db8b89091241215d0555a904479c5902b8b2a7bebc54329bc93dbd3b61019231"
+      }
+    ],
+    "scope": "Version-bound software implementation; operational deployment and predictive qualification are separate. Reverified on the PR reconciliation source version; prior packet and receipt remain unchanged. Reverified after the remaining-PR integration; original source versions and verdicts preserved.",
+    "classification": "implementation_bug",
+    "change": "Implemented in research/procedure_lineage.py",
+    "acceptance_test": {
+      "command": "python -m pytest tests research/tests research/cfb_binary_isotonic_proposal/test_binary_isotonic_repair.py -q --junitxml=docs/releases/2026-10-24-remaining-prs/acceptance/tests.xml",
+      "execution_receipt": {
+        "path": "docs/releases/2026-10-24-remaining-prs/acceptance/acceptance.json",
+        "sha256": "d40e3c2777c6420d66fc2e70a4329844261d799074819ea1e08a44b2ed782fb1"
+      }
+    },
+    "remaining_limitation": "External signer/time/state authority and unlogged inspections are trust boundaries. No fitted sports challenger is scientifically qualified.",
+    "publication_impact": "No predictive qualification or wagering authority; unsupported selection remains blocked.",
+    "owner": "model-integrity",
+    "status": "verified_implementation",
+    "delivery": {
+      "stage": "Tested"
+    },
+    "supersedes": {
+      "path": "docs/research/overhaul_2026_10_23/FINDING_EVIDENCE_pr_reconciliation_v1.json",
+      "sha256": "07d3a4f77476b7847a8f6d52c20011928aee51e30824b1d5857575a3ca533b95",
+      "finding_id": "A1-A4-LINEAGE"
+    }
+  },
+  {
+    "schema": "finding-evidence-v1",
+    "finding_id": "A5-REST",
+    "observed": "Train/serve parity could pass through a shared erroneous rest helper.",
+    "expected": "Check each adapter independently against literal hand-computed vectors and perturbations, without proxy columns.",
+    "evidence": [
+      {
+        "path": "models/current/freshness.py",
+        "sha256": "ebadba51fa545a351d37980bab3bb78d5fe603265b758114b59f0f01191e027a"
+      },
+      {
+        "path": "tests/test_operational_rest_golden_vectors.py",
+        "sha256": "55a4210f600d8961d6b7cfb79cceec8ea06f54b1a44e08d21eee9417bc96412f"
+      }
+    ],
+    "scope": "Version-bound software implementation; operational deployment and predictive qualification are separate. Reverified on the PR reconciliation source version; prior packet and receipt remain unchanged. Reverified after the remaining-PR integration; original source versions and verdicts preserved.",
+    "classification": "implementation_bug",
+    "change": "Implemented in models/current/freshness.py",
+    "acceptance_test": {
+      "command": "python -m pytest tests research/tests research/cfb_binary_isotonic_proposal/test_binary_isotonic_repair.py -q --junitxml=docs/releases/2026-10-24-remaining-prs/acceptance/tests.xml",
+      "execution_receipt": {
+        "path": "docs/releases/2026-10-24-remaining-prs/acceptance/acceptance.json",
+        "sha256": "d40e3c2777c6420d66fc2e70a4329844261d799074819ea1e08a44b2ed782fb1"
+      }
+    },
+    "remaining_limitation": "Authentic recovered feature builds are research-only. Original Oct22 captures, chronological fitting census and future-horizon contract remain missing; no refit or active SHADOW claim.",
+    "publication_impact": "No predictive qualification or wagering authority; unsupported selection remains blocked.",
+    "owner": "model-integrity",
+    "status": "verified_implementation",
+    "delivery": {
+      "stage": "Tested"
+    },
+    "supersedes": {
+      "path": "docs/research/overhaul_2026_10_23/FINDING_EVIDENCE_pr_reconciliation_v1.json",
+      "sha256": "07d3a4f77476b7847a8f6d52c20011928aee51e30824b1d5857575a3ca533b95",
+      "finding_id": "A5-REST"
+    }
+  },
+  {
+    "schema": "finding-evidence-v1",
+    "finding_id": "B01",
+    "observed": "NFL numeric-v2 reidentifier referenced an undefined local.",
+    "expected": "Actual NFL entrypoint executes both default and fitted spread replay.",
+    "evidence": [
+      {
+        "path": "pipelines/cards/semantic_identity.py",
+        "sha256": "a7f6541d1415523092e9e6364407100ceb9165de1493e833c93d21f88e65f756"
+      },
+      {
+        "path": "tests/test_blind_conformance.py",
+        "sha256": "12c38aa71d09e116ff8d1c858263ad74aacb1bbf007e68c119d45995e22f1268"
+      }
+    ],
+    "scope": "Version-bound software implementation; operational deployment and predictive qualification are separate. Reverified on the PR reconciliation source version; prior packet and receipt remain unchanged. Reverified after the remaining-PR integration; original source versions and verdicts preserved.",
+    "classification": "implementation_bug",
+    "change": "Implemented in pipelines/cards/semantic_identity.py",
+    "acceptance_test": {
+      "command": "python -m pytest tests research/tests research/cfb_binary_isotonic_proposal/test_binary_isotonic_repair.py -q --junitxml=docs/releases/2026-10-24-remaining-prs/acceptance/tests.xml",
+      "execution_receipt": {
+        "path": "docs/releases/2026-10-24-remaining-prs/acceptance/acceptance.json",
+        "sha256": "d40e3c2777c6420d66fc2e70a4329844261d799074819ea1e08a44b2ed782fb1"
+      }
+    },
+    "remaining_limitation": "Retrospective executed inputs are not new prospective forecasts or predictive validation.",
+    "publication_impact": "No predictive qualification or wagering authority; unsupported selection remains blocked.",
+    "owner": "model-integrity",
+    "status": "verified_implementation",
+    "delivery": {
+      "stage": "Tested"
+    },
+    "supersedes": {
+      "path": "docs/research/overhaul_2026_10_23/FINDING_EVIDENCE_pr_reconciliation_v1.json",
+      "sha256": "07d3a4f77476b7847a8f6d52c20011928aee51e30824b1d5857575a3ca533b95",
+      "finding_id": "B01"
+    }
+  },
+  {
+    "schema": "finding-evidence-v1",
+    "finding_id": "B02",
+    "observed": "A signed v2 protocol could omit power assumptions.",
+    "expected": "Reject omitted or malformed power declaration; admit complete positive twin.",
+    "evidence": [
+      {
+        "path": "research/validation_registry.py",
+        "sha256": "d339fd89fd957aac457236116f1f0cc05031cd71dd5e43ed223831daa1994f83"
+      },
+      {
+        "path": "tests/test_blind_conformance.py",
+        "sha256": "12c38aa71d09e116ff8d1c858263ad74aacb1bbf007e68c119d45995e22f1268"
+      }
+    ],
+    "scope": "Version-bound software implementation; operational deployment and predictive qualification are separate. Reverified on the PR reconciliation source version; prior packet and receipt remain unchanged. Reverified after the remaining-PR integration; original source versions and verdicts preserved.",
+    "classification": "implementation_bug",
+    "change": "Implemented in research/validation_registry.py",
+    "acceptance_test": {
+      "command": "python -m pytest tests research/tests research/cfb_binary_isotonic_proposal/test_binary_isotonic_repair.py -q --junitxml=docs/releases/2026-10-24-remaining-prs/acceptance/tests.xml",
+      "execution_receipt": {
+        "path": "docs/releases/2026-10-24-remaining-prs/acceptance/acceptance.json",
+        "sha256": "d40e3c2777c6420d66fc2e70a4329844261d799074819ea1e08a44b2ed782fb1"
+      }
+    },
+    "remaining_limitation": "Declared statistical assumptions and evidence truth remain externally reviewed.",
+    "publication_impact": "No predictive qualification or wagering authority; unsupported selection remains blocked.",
+    "owner": "model-integrity",
+    "status": "verified_implementation",
+    "delivery": {
+      "stage": "Tested"
+    },
+    "supersedes": {
+      "path": "docs/research/overhaul_2026_10_23/FINDING_EVIDENCE_pr_reconciliation_v1.json",
+      "sha256": "07d3a4f77476b7847a8f6d52c20011928aee51e30824b1d5857575a3ca533b95",
+      "finding_id": "B02"
+    }
+  },
+  {
+    "schema": "finding-evidence-v1",
+    "finding_id": "B03",
+    "observed": "Arbitrary delivery strings could claim Verified without bound receipts.",
+    "expected": "Validate merge/configuration/run and successful verification receipts.",
+    "evidence": [
+      {
+        "path": "research/finding_evidence.py",
+        "sha256": "fa810b3629c02241ae5bf8716929a4cefd0684bb8e9214cf9e26da1dd0c80099"
+      },
+      {
+        "path": "tests/test_blind_conformance.py",
+        "sha256": "12c38aa71d09e116ff8d1c858263ad74aacb1bbf007e68c119d45995e22f1268"
+      }
+    ],
+    "scope": "Version-bound software implementation; operational deployment and predictive qualification are separate. Reverified on the PR reconciliation source version; prior packet and receipt remain unchanged. Reverified after the remaining-PR integration; original source versions and verdicts preserved.",
+    "classification": "implementation_bug",
+    "change": "Implemented in research/finding_evidence.py",
+    "acceptance_test": {
+      "command": "python -m pytest tests research/tests research/cfb_binary_isotonic_proposal/test_binary_isotonic_repair.py -q --junitxml=docs/releases/2026-10-24-remaining-prs/acceptance/tests.xml",
+      "execution_receipt": {
+        "path": "docs/releases/2026-10-24-remaining-prs/acceptance/acceptance.json",
+        "sha256": "d40e3c2777c6420d66fc2e70a4329844261d799074819ea1e08a44b2ed782fb1"
+      }
+    },
+    "remaining_limitation": "File hashes bind receipts but do not authenticate remote services or scientific evidence.",
+    "publication_impact": "No predictive qualification or wagering authority; unsupported selection remains blocked.",
+    "owner": "model-integrity",
+    "status": "verified_implementation",
+    "delivery": {
+      "stage": "Tested"
+    },
+    "supersedes": {
+      "path": "docs/research/overhaul_2026_10_23/FINDING_EVIDENCE_pr_reconciliation_v1.json",
+      "sha256": "07d3a4f77476b7847a8f6d52c20011928aee51e30824b1d5857575a3ca533b95",
+      "finding_id": "B03"
+    }
+  },
+  {
+    "schema": "finding-evidence-v1",
+    "finding_id": "B04-B07",
+    "observed": "MLS 1X2 masses were mislabeled as refund ties and regulation targets could not settle.",
+    "expected": "Preserve full regulation 1X2 probability and require explicit regulation score period.",
+    "evidence": [
+      {
+        "path": "pipelines/cards/selection_integration.py",
+        "sha256": "cf7fca465fd8fbf86427284a15be498719b95e624c38cf9a31ff3e9a2048dc98"
+      },
+      {
+        "path": "tests/test_blind_conformance.py",
+        "sha256": "12c38aa71d09e116ff8d1c858263ad74aacb1bbf007e68c119d45995e22f1268"
+      }
+    ],
+    "scope": "Version-bound software implementation; operational deployment and predictive qualification are separate. Reverified on the PR reconciliation source version; prior packet and receipt remain unchanged. Reverified after the remaining-PR integration; original source versions and verdicts preserved.",
+    "classification": "implementation_bug",
+    "change": "Implemented in pipelines/cards/selection_integration.py",
+    "acceptance_test": {
+      "command": "python -m pytest tests research/tests research/cfb_binary_isotonic_proposal/test_binary_isotonic_repair.py -q --junitxml=docs/releases/2026-10-24-remaining-prs/acceptance/tests.xml",
+      "execution_receipt": {
+        "path": "docs/releases/2026-10-24-remaining-prs/acceptance/acceptance.json",
+        "sha256": "d40e3c2777c6420d66fc2e70a4329844261d799074819ea1e08a44b2ed782fb1"
+      }
+    },
+    "remaining_limitation": "Existing binary canonical registry does not admit MLS categorical draw arrays. Standalone exact settlement is implemented; no prospective MLS admission claimed.",
+    "publication_impact": "No predictive qualification or wagering authority; unsupported selection remains blocked.",
+    "owner": "model-integrity",
+    "status": "verified_implementation",
+    "delivery": {
+      "stage": "Tested"
+    },
+    "supersedes": {
+      "path": "docs/research/overhaul_2026_10_23/FINDING_EVIDENCE_pr_reconciliation_v1.json",
+      "sha256": "07d3a4f77476b7847a8f6d52c20011928aee51e30824b1d5857575a3ca533b95",
+      "finding_id": "B04-B07"
+    }
+  },
+  {
+    "schema": "finding-evidence-v1",
+    "finding_id": "B05",
+    "observed": "Failed source-card events disappeared from the evaluated population.",
+    "expected": "Retain failed opportunities as blocked with unknown raw mass.",
+    "evidence": [
+      {
+        "path": "pipelines/cards/selection_integration.py",
+        "sha256": "cf7fca465fd8fbf86427284a15be498719b95e624c38cf9a31ff3e9a2048dc98"
+      },
+      {
+        "path": "tests/test_blind_conformance.py",
+        "sha256": "12c38aa71d09e116ff8d1c858263ad74aacb1bbf007e68c119d45995e22f1268"
+      }
+    ],
+    "scope": "Version-bound software implementation; operational deployment and predictive qualification are separate. Reverified on the PR reconciliation source version; prior packet and receipt remain unchanged. Reverified after the remaining-PR integration; original source versions and verdicts preserved.",
+    "classification": "evaluation_bug",
+    "change": "Implemented in pipelines/cards/selection_integration.py",
+    "acceptance_test": {
+      "command": "python -m pytest tests research/tests research/cfb_binary_isotonic_proposal/test_binary_isotonic_repair.py -q --junitxml=docs/releases/2026-10-24-remaining-prs/acceptance/tests.xml",
+      "execution_receipt": {
+        "path": "docs/releases/2026-10-24-remaining-prs/acceptance/acceptance.json",
+        "sha256": "d40e3c2777c6420d66fc2e70a4329844261d799074819ea1e08a44b2ed782fb1"
+      }
+    },
+    "remaining_limitation": "Cannot discover events omitted from the upstream schedule; source completeness remains a dependency.",
+    "publication_impact": "No predictive qualification or wagering authority; unsupported selection remains blocked.",
+    "owner": "model-integrity",
+    "status": "verified_implementation",
+    "delivery": {
+      "stage": "Tested"
+    },
+    "supersedes": {
+      "path": "docs/research/overhaul_2026_10_23/FINDING_EVIDENCE_pr_reconciliation_v1.json",
+      "sha256": "07d3a4f77476b7847a8f6d52c20011928aee51e30824b1d5857575a3ca533b95",
+      "finding_id": "B05"
+    }
+  },
+  {
+    "schema": "finding-evidence-v1",
+    "finding_id": "B06",
+    "observed": "Incomplete candidate predictive identities could qualify.",
+    "expected": "Require exact model, fitted-state, feature and calibration identities.",
+    "evidence": [
+      {
+        "path": "research/validation_registry.py",
+        "sha256": "d339fd89fd957aac457236116f1f0cc05031cd71dd5e43ed223831daa1994f83"
+      },
+      {
+        "path": "tests/test_blind_conformance.py",
+        "sha256": "12c38aa71d09e116ff8d1c858263ad74aacb1bbf007e68c119d45995e22f1268"
+      }
+    ],
+    "scope": "Version-bound software implementation; operational deployment and predictive qualification are separate. Reverified on the PR reconciliation source version; prior packet and receipt remain unchanged. Reverified after the remaining-PR integration; original source versions and verdicts preserved.",
+    "classification": "implementation_bug",
+    "change": "Implemented in research/validation_registry.py",
+    "acceptance_test": {
+      "command": "python -m pytest tests research/tests research/cfb_binary_isotonic_proposal/test_binary_isotonic_repair.py -q --junitxml=docs/releases/2026-10-24-remaining-prs/acceptance/tests.xml",
+      "execution_receipt": {
+        "path": "docs/releases/2026-10-24-remaining-prs/acceptance/acceptance.json",
+        "sha256": "d40e3c2777c6420d66fc2e70a4329844261d799074819ea1e08a44b2ed782fb1"
+      }
+    },
+    "remaining_limitation": "Observed execution identities do not create registered lineage or independent qualification.",
+    "publication_impact": "No predictive qualification or wagering authority; unsupported selection remains blocked.",
+    "owner": "model-integrity",
+    "status": "verified_implementation",
+    "delivery": {
+      "stage": "Tested"
+    },
+    "supersedes": {
+      "path": "docs/research/overhaul_2026_10_23/FINDING_EVIDENCE_pr_reconciliation_v1.json",
+      "sha256": "07d3a4f77476b7847a8f6d52c20011928aee51e30824b1d5857575a3ca533b95",
+      "finding_id": "B06"
+    }
+  },
+  {
+    "schema": "finding-evidence-v1",
+    "finding_id": "CAP-19-IMPLEMENTATION",
+    "observed": "Quota failures lost optional CI artifact delivery; crossing state lacked implemented persistence.",
+    "expected": "Drive-first verified-byte archive, optional seven-day GitHub copy and persistent crossing monitor.",
+    "evidence": [
+      {
+        "path": "scripts/ci_evidence_archive.py",
+        "sha256": "547408043284a1a82f7475ea7aaad457bdc63f4da24874a48d23416b617e9c96"
+      },
+      {
+        "path": "tests/test_ci_storage_monitor.py",
+        "sha256": "449bb94d88f4cebb5a2f774a41188c6f7505038c3eb3f91cd657493bc3f88ca2"
+      }
+    ],
+    "scope": "Version-bound software implementation; operational deployment and predictive qualification are separate. Reverified on the PR reconciliation source version; prior packet and receipt remain unchanged. Reverified after the remaining-PR integration; original source versions and verdicts preserved.",
+    "classification": "deployment_failure",
+    "change": "Implemented in scripts/ci_evidence_archive.py",
+    "acceptance_test": {
+      "command": "python -m pytest tests research/tests research/cfb_binary_isotonic_proposal/test_binary_isotonic_repair.py -q --junitxml=docs/releases/2026-10-24-remaining-prs/acceptance/tests.xml",
+      "execution_receipt": {
+        "path": "docs/releases/2026-10-24-remaining-prs/acceptance/acceptance.json",
+        "sha256": "d40e3c2777c6420d66fc2e70a4329844261d799074819ea1e08a44b2ed782fb1"
+      }
+    },
+    "remaining_limitation": "Actual external archive, authenticated CI adapter, threshold/destination/schedule, notification delivery and new GitHub artifact expiry remain unverified/unconfigured. No deletion.",
+    "publication_impact": "No predictive qualification or wagering authority; unsupported selection remains blocked.",
+    "owner": "release-engineering",
+    "status": "verified_implementation",
+    "delivery": {
+      "stage": "Tested"
+    },
+    "supersedes": {
+      "path": "docs/research/overhaul_2026_10_23/FINDING_EVIDENCE_pr_reconciliation_v1.json",
+      "sha256": "07d3a4f77476b7847a8f6d52c20011928aee51e30824b1d5857575a3ca533b95",
+      "finding_id": "CAP-19-IMPLEMENTATION"
+    }
+  }
+]

@@ -1,0 +1,1101 @@
+{
+  "action_authority": false,
+  "bootstrap": {
+    "block_length": 4,
+    "count": 2000,
+    "method": "MOVING_CONTIGUOUS_OBSERVED_TIME_BLOCKS",
+    "seed": 7192026,
+    "time_unit": "week",
+    "weighting": "EQUAL_EVENT_MEANS"
+  },
+  "canonical_grading_write": false,
+  "input_rows": 1632,
+  "input_sha256": "efc5e267e80966432635f5739ae15d1b90b9adb25d24e97b40c2ed89c672e279",
+  "limitations": [
+    "STRUCTURAL_CHRONOLOGY_IS_NOT_POINT_IN_TIME_ATTESTATION",
+    "NO_AUTOMATIC_PROMOTION",
+    "NO_MULTIPLE_TESTING_ADJUSTMENT",
+    "COVER_IS_FULL_WIN_HALF_WINS_REMAIN_SEPARATE",
+    "NO_MARKET_SUPERIORITY_TEST"
+  ],
+  "paired": {
+    "baseline_id": "nfl.margin.empirical.research.a1dc272255961bd9",
+    "challenger_id": "nfl.margin.full_support.research.96c5a8cb7e9970e7",
+    "deltas_challenger_minus_baseline": {
+      "absolute_error": {
+        "ci95": [
+          -0.0034368697680401887,
+          0.018053157645268374
+        ],
+        "delta": 0.0059193803546955925,
+        "event_n": 816,
+        "status": "AVAILABLE",
+        "time_block_n": 57
+      },
+      "brier_category_sum": {
+        "ci95": [
+          -0.002554638675039095,
+          -0.0001319150357519731
+        ],
+        "delta": -0.0014901332816541638,
+        "event_n": 816,
+        "status": "AVAILABLE",
+        "time_block_n": 57
+      },
+      "category_log_loss": {
+        "ci95": [
+          -0.008937995982521858,
+          -0.003956983754281734
+        ],
+        "delta": -0.0065003396976132674,
+        "event_n": 816,
+        "status": "AVAILABLE",
+        "time_block_n": 57
+      },
+      "cover_brier": {
+        "ci95": [
+          -0.0009706851713760286,
+          0.0002906961731935113
+        ],
+        "delta": -0.00043431917710976166,
+        "event_n": 816,
+        "status": "AVAILABLE",
+        "time_block_n": 57
+      },
+      "cover_log_loss": {
+        "ci95": [
+          -0.0029271152179078004,
+          0.0010474726389568972
+        ],
+        "delta": -0.0011582621600785452,
+        "event_n": 816,
+        "status": "AVAILABLE",
+        "time_block_n": 57
+      },
+      "crps": {
+        "ci95": [
+          -0.022664331118040674,
+          0.011301938965057986
+        ],
+        "delta": -0.007908090618756757,
+        "event_n": 816,
+        "status": "AVAILABLE",
+        "time_block_n": 57
+      },
+      "distribution_log_loss": {
+        "ci95": null,
+        "delta": null,
+        "event_n": 816,
+        "status": "ZERO_SUPPORT_DELTA_UNDEFINED"
+      },
+      "push_brier": {
+        "ci95": [
+          -0.00044245540412274126,
+          -0.000216733460817929
+        ],
+        "delta": -0.0003150164499936444,
+        "event_n": 816,
+        "status": "AVAILABLE",
+        "time_block_n": 57
+      },
+      "push_log_loss": {
+        "ci95": [
+          -0.006286262368970409,
+          -0.003907651068215284
+        ],
+        "delta": -0.0049306009535746865,
+        "event_n": 816,
+        "status": "AVAILABLE",
+        "time_block_n": 57
+      },
+      "squared_error": {
+        "ci95": [
+          -0.36037102968087453,
+          0.3229798360928464
+        ],
+        "delta": -0.044497556523590734,
+        "event_n": 816,
+        "status": "AVAILABLE",
+        "time_block_n": 57
+      }
+    },
+    "matched_contract_n": 12240,
+    "matched_event_n": 816,
+    "matched_forecast_n": 816,
+    "paired_coverage": {
+      "nfl.margin.empirical.research.a1dc272255961bd9": 1.0,
+      "nfl.margin.full_support.research.96c5a8cb7e9970e7": 1.0
+    },
+    "status": "PAIRED_DIAGNOSTIC",
+    "summaries_matched": {
+      "nfl.margin.empirical.research.a1dc272255961bd9": {
+        "contracts": {
+          "category_brier_sum": 0.3735863386543875,
+          "category_log_loss": {
+            "mean": 0.6022503057812582,
+            "n": 12240,
+            "status": "AVAILABLE",
+            "zero_probability_outcomes": 0
+          },
+          "cover_full_win": {
+            "brier": 0.1775691797127909,
+            "log_loss": {
+              "mean": 0.5312553794306258,
+              "n": 12240,
+              "status": "AVAILABLE",
+              "zero_probability_outcomes": 0
+            },
+            "reliability": [
+              {
+                "lower": 0.0,
+                "mean_probability": 0.07525115745957357,
+                "n": 428,
+                "observed_rate": 0.08177570093457943,
+                "upper": 0.1,
+                "upper_inclusive": false
+              },
+              {
+                "lower": 0.1,
+                "mean_probability": 0.1560209056194003,
+                "n": 1289,
+                "observed_rate": 0.16602017067494182,
+                "upper": 0.2,
+                "upper_inclusive": false
+              },
+              {
+                "lower": 0.2,
+                "mean_probability": 0.24744695285846333,
+                "n": 1466,
+                "observed_rate": 0.24420190995907232,
+                "upper": 0.3,
+                "upper_inclusive": false
+              },
+              {
+                "lower": 0.3,
+                "mean_probability": 0.3477686498315273,
+                "n": 1269,
+                "observed_rate": 0.32939322301024426,
+                "upper": 0.4,
+                "upper_inclusive": false
+              },
+              {
+                "lower": 0.4,
+                "mean_probability": 0.444766134882208,
+                "n": 1265,
+                "observed_rate": 0.466403162055336,
+                "upper": 0.5,
+                "upper_inclusive": false
+              },
+              {
+                "lower": 0.5,
+                "mean_probability": 0.5500105438722441,
+                "n": 1412,
+                "observed_rate": 0.5750708215297451,
+                "upper": 0.6,
+                "upper_inclusive": false
+              },
+              {
+                "lower": 0.6,
+                "mean_probability": 0.6486954381543654,
+                "n": 1412,
+                "observed_rate": 0.6650141643059491,
+                "upper": 0.7,
+                "upper_inclusive": false
+              },
+              {
+                "lower": 0.7,
+                "mean_probability": 0.7482094217644156,
+                "n": 1610,
+                "observed_rate": 0.7832298136645963,
+                "upper": 0.8,
+                "upper_inclusive": false
+              },
+              {
+                "lower": 0.8,
+                "mean_probability": 0.8464729095787367,
+                "n": 1484,
+                "observed_rate": 0.887466307277628,
+                "upper": 0.9,
+                "upper_inclusive": false
+              },
+              {
+                "lower": 0.9,
+                "mean_probability": 0.9353640147061234,
+                "n": 605,
+                "observed_rate": 0.9652892561983472,
+                "upper": 1.0,
+                "upper_inclusive": true
+              }
+            ]
+          },
+          "diagnostic_threshold_n": 12240,
+          "n": 12240,
+          "observed_market_n": 0,
+          "outcome_counts": {
+            "half_loss": 0,
+            "half_win": 0,
+            "loss": 5457,
+            "push": 255,
+            "win": 6528
+          },
+          "push": {
+            "brier": 0.02009412278585571,
+            "log_loss": {
+              "mean": 0.09024530924113848,
+              "n": 12240,
+              "status": "AVAILABLE",
+              "zero_probability_outcomes": 0
+            },
+            "reliability": [
+              {
+                "lower": 0.0,
+                "mean_probability": 0.014150624917399152,
+                "n": 12240,
+                "observed_rate": 0.020833333333333332,
+                "upper": 0.1,
+                "upper_inclusive": false
+              },
+              {
+                "lower": 0.1,
+                "mean_probability": null,
+                "n": 0,
+                "observed_rate": null,
+                "upper": 0.2,
+                "upper_inclusive": false
+              },
+              {
+                "lower": 0.2,
+                "mean_probability": null,
+                "n": 0,
+                "observed_rate": null,
+                "upper": 0.3,
+                "upper_inclusive": false
+              },
+              {
+                "lower": 0.3,
+                "mean_probability": null,
+                "n": 0,
+                "observed_rate": null,
+                "upper": 0.4,
+                "upper_inclusive": false
+              },
+              {
+                "lower": 0.4,
+                "mean_probability": null,
+                "n": 0,
+                "observed_rate": null,
+                "upper": 0.5,
+                "upper_inclusive": false
+              },
+              {
+                "lower": 0.5,
+                "mean_probability": null,
+                "n": 0,
+                "observed_rate": null,
+                "upper": 0.6,
+                "upper_inclusive": false
+              },
+              {
+                "lower": 0.6,
+                "mean_probability": null,
+                "n": 0,
+                "observed_rate": null,
+                "upper": 0.7,
+                "upper_inclusive": false
+              },
+              {
+                "lower": 0.7,
+                "mean_probability": null,
+                "n": 0,
+                "observed_rate": null,
+                "upper": 0.8,
+                "upper_inclusive": false
+              },
+              {
+                "lower": 0.8,
+                "mean_probability": null,
+                "n": 0,
+                "observed_rate": null,
+                "upper": 0.9,
+                "upper_inclusive": false
+              },
+              {
+                "lower": 0.9,
+                "mean_probability": null,
+                "n": 0,
+                "observed_rate": null,
+                "upper": 1.0,
+                "upper_inclusive": true
+              }
+            ]
+          }
+        },
+        "crps": 7.312196512225854,
+        "distribution_log_score": {
+          "mean": null,
+          "n": 816,
+          "status": "INFINITE_ZERO_SUPPORT",
+          "zero_probability_outcomes": 1
+        },
+        "forecast_n": 816,
+        "historically_available_artifact_n": 0,
+        "mean_mae": 10.161392422154373,
+        "mean_rmse": 13.089952555413106,
+        "prediction_intervals": {
+          "0.5": {
+            "coverage": 0.5183823529411765,
+            "mean_width": 16.151960784313726,
+            "n": 816
+          },
+          "0.8": {
+            "coverage": 0.8063725490196079,
+            "mean_width": 33.25857843137255,
+            "n": 816
+          },
+          "0.9": {
+            "coverage": 0.9142156862745098,
+            "mean_width": 43.791666666666664,
+            "n": 816
+          },
+          "0.95": {
+            "coverage": 0.9558823529411765,
+            "mean_width": 53.69975490196079,
+            "n": 816
+          }
+        },
+        "unique_event_n": 816
+      },
+      "nfl.margin.full_support.research.96c5a8cb7e9970e7": {
+        "contracts": {
+          "category_brier_sum": 0.3720962053727334,
+          "category_log_loss": {
+            "mean": 0.5957499660836448,
+            "n": 12240,
+            "status": "AVAILABLE",
+            "zero_probability_outcomes": 0
+          },
+          "cover_full_win": {
+            "brier": 0.17713486053568114,
+            "log_loss": {
+              "mean": 0.5300971172705473,
+              "n": 12240,
+              "status": "AVAILABLE",
+              "zero_probability_outcomes": 0
+            },
+            "reliability": [
+              {
+                "lower": 0.0,
+                "mean_probability": 0.07062281661271422,
+                "n": 638,
+                "observed_rate": 0.09717868338557993,
+                "upper": 0.1,
+                "upper_inclusive": false
+              },
+              {
+                "lower": 0.1,
+                "mean_probability": 0.15117415165717843,
+                "n": 1485,
+                "observed_rate": 0.17777777777777778,
+                "upper": 0.2,
+                "upper_inclusive": false
+              },
+              {
+                "lower": 0.2,
+                "mean_probability": 0.25021032008506267,
+                "n": 1363,
+                "observed_rate": 0.26412325752017607,
+                "upper": 0.3,
+                "upper_inclusive": false
+              },
+              {
+                "lower": 0.3,
+                "mean_probability": 0.34985581187061465,
+                "n": 1239,
+                "observed_rate": 0.37368845843422116,
+                "upper": 0.4,
+                "upper_inclusive": false
+              },
+              {
+                "lower": 0.4,
+                "mean_probability": 0.4501478698599649,
+                "n": 1143,
+                "observed_rate": 0.4680664916885389,
+                "upper": 0.5,
+                "upper_inclusive": false
+              },
+              {
+                "lower": 0.5,
+                "mean_probability": 0.5501156053525746,
+                "n": 1177,
+                "observed_rate": 0.572642310960068,
+                "upper": 0.6,
+                "upper_inclusive": false
+              },
+              {
+                "lower": 0.6,
+                "mean_probability": 0.6508941091328132,
+                "n": 1295,
+                "observed_rate": 0.6656370656370656,
+                "upper": 0.7,
+                "upper_inclusive": false
+              },
+              {
+                "lower": 0.7,
+                "mean_probability": 0.7509438330393553,
+                "n": 1438,
+                "observed_rate": 0.7614742698191933,
+                "upper": 0.8,
+                "upper_inclusive": false
+              },
+              {
+                "lower": 0.8,
+                "mean_probability": 0.8492623271484714,
+                "n": 1622,
+                "observed_rate": 0.8711467324290999,
+                "upper": 0.9,
+                "upper_inclusive": false
+              },
+              {
+                "lower": 0.9,
+                "mean_probability": 0.9311283458637496,
+                "n": 840,
+                "observed_rate": 0.9523809523809523,
+                "upper": 1.0,
+                "upper_inclusive": true
+              }
+            ]
+          },
+          "diagnostic_threshold_n": 12240,
+          "n": 12240,
+          "observed_market_n": 0,
+          "outcome_counts": {
+            "half_loss": 0,
+            "half_win": 0,
+            "loss": 5457,
+            "push": 255,
+            "win": 6528
+          },
+          "push": {
+            "brier": 0.01977910633586206,
+            "log_loss": {
+              "mean": 0.0853147082875638,
+              "n": 12240,
+              "status": "AVAILABLE",
+              "zero_probability_outcomes": 0
+            },
+            "reliability": [
+              {
+                "lower": 0.0,
+                "mean_probability": 0.02118943433475906,
+                "n": 12240,
+                "observed_rate": 0.020833333333333332,
+                "upper": 0.1,
+                "upper_inclusive": false
+              },
+              {
+                "lower": 0.1,
+                "mean_probability": null,
+                "n": 0,
+                "observed_rate": null,
+                "upper": 0.2,
+                "upper_inclusive": false
+              },
+              {
+                "lower": 0.2,
+                "mean_probability": null,
+                "n": 0,
+                "observed_rate": null,
+                "upper": 0.3,
+                "upper_inclusive": false
+              },
+              {
+                "lower": 0.3,
+                "mean_probability": null,
+                "n": 0,
+                "observed_rate": null,
+                "upper": 0.4,
+                "upper_inclusive": false
+              },
+              {
+                "lower": 0.4,
+                "mean_probability": null,
+                "n": 0,
+                "observed_rate": null,
+                "upper": 0.5,
+                "upper_inclusive": false
+              },
+              {
+                "lower": 0.5,
+                "mean_probability": null,
+                "n": 0,
+                "observed_rate": null,
+                "upper": 0.6,
+                "upper_inclusive": false
+              },
+              {
+                "lower": 0.6,
+                "mean_probability": null,
+                "n": 0,
+                "observed_rate": null,
+                "upper": 0.7,
+                "upper_inclusive": false
+              },
+              {
+                "lower": 0.7,
+                "mean_probability": null,
+                "n": 0,
+                "observed_rate": null,
+                "upper": 0.8,
+                "upper_inclusive": false
+              },
+              {
+                "lower": 0.8,
+                "mean_probability": null,
+                "n": 0,
+                "observed_rate": null,
+                "upper": 0.9,
+                "upper_inclusive": false
+              },
+              {
+                "lower": 0.9,
+                "mean_probability": null,
+                "n": 0,
+                "observed_rate": null,
+                "upper": 1.0,
+                "upper_inclusive": true
+              }
+            ]
+          }
+        },
+        "crps": 7.304288421607098,
+        "distribution_log_score": {
+          "mean": 3.892296851502645,
+          "n": 816,
+          "status": "AVAILABLE",
+          "zero_probability_outcomes": 0
+        },
+        "forecast_n": 816,
+        "historically_available_artifact_n": 0,
+        "mean_mae": 10.167311802509067,
+        "mean_rmse": 13.088252761405645,
+        "prediction_intervals": {
+          "0.5": {
+            "coverage": 0.5036764705882353,
+            "mean_width": 15.031862745098039,
+            "n": 816
+          },
+          "0.8": {
+            "coverage": 0.7855392156862745,
+            "mean_width": 31.131127450980394,
+            "n": 816
+          },
+          "0.9": {
+            "coverage": 0.8958333333333334,
+            "mean_width": 42.6360294117647,
+            "n": 816
+          },
+          "0.95": {
+            "coverage": 0.9583333333333334,
+            "mean_width": 53.895833333333336,
+            "n": 816
+          }
+        },
+        "unique_event_n": 816
+      }
+    },
+    "unmatched_contract_n": {
+      "nfl.margin.empirical.research.a1dc272255961bd9": 0,
+      "nfl.margin.full_support.research.96c5a8cb7e9970e7": 0
+    },
+    "unmatched_forecasts": {
+      "nfl.margin.empirical.research.a1dc272255961bd9": [],
+      "nfl.margin.full_support.research.96c5a8cb7e9970e7": []
+    }
+  },
+  "promotion_authority": false,
+  "schema": "sports.margin_system_evaluation.research.v1",
+  "scope": [
+    "nfl",
+    "margin",
+    "FULL_GAME_OT_REGULAR",
+    "nfl.integrated_context.qb.v1.research",
+    "RECONSTRUCTED_QB_OOF_PRIOR_SEASON_FITS",
+    false
+  ],
+  "summaries_all_available": {
+    "nfl.margin.empirical.research.a1dc272255961bd9": {
+      "contracts": {
+        "category_brier_sum": 0.3735863386543875,
+        "category_log_loss": {
+          "mean": 0.6022503057812582,
+          "n": 12240,
+          "status": "AVAILABLE",
+          "zero_probability_outcomes": 0
+        },
+        "cover_full_win": {
+          "brier": 0.1775691797127909,
+          "log_loss": {
+            "mean": 0.5312553794306258,
+            "n": 12240,
+            "status": "AVAILABLE",
+            "zero_probability_outcomes": 0
+          },
+          "reliability": [
+            {
+              "lower": 0.0,
+              "mean_probability": 0.07525115745957357,
+              "n": 428,
+              "observed_rate": 0.08177570093457943,
+              "upper": 0.1,
+              "upper_inclusive": false
+            },
+            {
+              "lower": 0.1,
+              "mean_probability": 0.15602090561940027,
+              "n": 1289,
+              "observed_rate": 0.16602017067494182,
+              "upper": 0.2,
+              "upper_inclusive": false
+            },
+            {
+              "lower": 0.2,
+              "mean_probability": 0.24744695285846333,
+              "n": 1466,
+              "observed_rate": 0.24420190995907232,
+              "upper": 0.3,
+              "upper_inclusive": false
+            },
+            {
+              "lower": 0.3,
+              "mean_probability": 0.3477686498315273,
+              "n": 1269,
+              "observed_rate": 0.32939322301024426,
+              "upper": 0.4,
+              "upper_inclusive": false
+            },
+            {
+              "lower": 0.4,
+              "mean_probability": 0.444766134882208,
+              "n": 1265,
+              "observed_rate": 0.466403162055336,
+              "upper": 0.5,
+              "upper_inclusive": false
+            },
+            {
+              "lower": 0.5,
+              "mean_probability": 0.5500105438722441,
+              "n": 1412,
+              "observed_rate": 0.5750708215297451,
+              "upper": 0.6,
+              "upper_inclusive": false
+            },
+            {
+              "lower": 0.6,
+              "mean_probability": 0.6486954381543654,
+              "n": 1412,
+              "observed_rate": 0.6650141643059491,
+              "upper": 0.7,
+              "upper_inclusive": false
+            },
+            {
+              "lower": 0.7,
+              "mean_probability": 0.7482094217644156,
+              "n": 1610,
+              "observed_rate": 0.7832298136645963,
+              "upper": 0.8,
+              "upper_inclusive": false
+            },
+            {
+              "lower": 0.8,
+              "mean_probability": 0.8464729095787367,
+              "n": 1484,
+              "observed_rate": 0.887466307277628,
+              "upper": 0.9,
+              "upper_inclusive": false
+            },
+            {
+              "lower": 0.9,
+              "mean_probability": 0.9353640147061233,
+              "n": 605,
+              "observed_rate": 0.9652892561983472,
+              "upper": 1.0,
+              "upper_inclusive": true
+            }
+          ]
+        },
+        "diagnostic_threshold_n": 12240,
+        "n": 12240,
+        "observed_market_n": 0,
+        "outcome_counts": {
+          "half_loss": 0,
+          "half_win": 0,
+          "loss": 5457,
+          "push": 255,
+          "win": 6528
+        },
+        "push": {
+          "brier": 0.02009412278585571,
+          "log_loss": {
+            "mean": 0.09024530924113848,
+            "n": 12240,
+            "status": "AVAILABLE",
+            "zero_probability_outcomes": 0
+          },
+          "reliability": [
+            {
+              "lower": 0.0,
+              "mean_probability": 0.01415062491739915,
+              "n": 12240,
+              "observed_rate": 0.020833333333333332,
+              "upper": 0.1,
+              "upper_inclusive": false
+            },
+            {
+              "lower": 0.1,
+              "mean_probability": null,
+              "n": 0,
+              "observed_rate": null,
+              "upper": 0.2,
+              "upper_inclusive": false
+            },
+            {
+              "lower": 0.2,
+              "mean_probability": null,
+              "n": 0,
+              "observed_rate": null,
+              "upper": 0.3,
+              "upper_inclusive": false
+            },
+            {
+              "lower": 0.3,
+              "mean_probability": null,
+              "n": 0,
+              "observed_rate": null,
+              "upper": 0.4,
+              "upper_inclusive": false
+            },
+            {
+              "lower": 0.4,
+              "mean_probability": null,
+              "n": 0,
+              "observed_rate": null,
+              "upper": 0.5,
+              "upper_inclusive": false
+            },
+            {
+              "lower": 0.5,
+              "mean_probability": null,
+              "n": 0,
+              "observed_rate": null,
+              "upper": 0.6,
+              "upper_inclusive": false
+            },
+            {
+              "lower": 0.6,
+              "mean_probability": null,
+              "n": 0,
+              "observed_rate": null,
+              "upper": 0.7,
+              "upper_inclusive": false
+            },
+            {
+              "lower": 0.7,
+              "mean_probability": null,
+              "n": 0,
+              "observed_rate": null,
+              "upper": 0.8,
+              "upper_inclusive": false
+            },
+            {
+              "lower": 0.8,
+              "mean_probability": null,
+              "n": 0,
+              "observed_rate": null,
+              "upper": 0.9,
+              "upper_inclusive": false
+            },
+            {
+              "lower": 0.9,
+              "mean_probability": null,
+              "n": 0,
+              "observed_rate": null,
+              "upper": 1.0,
+              "upper_inclusive": true
+            }
+          ]
+        }
+      },
+      "crps": 7.312196512225854,
+      "distribution_log_score": {
+        "mean": null,
+        "n": 816,
+        "status": "INFINITE_ZERO_SUPPORT",
+        "zero_probability_outcomes": 1
+      },
+      "forecast_n": 816,
+      "historically_available_artifact_n": 0,
+      "mean_mae": 10.161392422154371,
+      "mean_rmse": 13.089952555413106,
+      "prediction_intervals": {
+        "0.5": {
+          "coverage": 0.5183823529411765,
+          "mean_width": 16.151960784313726,
+          "n": 816
+        },
+        "0.8": {
+          "coverage": 0.8063725490196079,
+          "mean_width": 33.25857843137255,
+          "n": 816
+        },
+        "0.9": {
+          "coverage": 0.9142156862745098,
+          "mean_width": 43.791666666666664,
+          "n": 816
+        },
+        "0.95": {
+          "coverage": 0.9558823529411765,
+          "mean_width": 53.69975490196079,
+          "n": 816
+        }
+      },
+      "unique_event_n": 816
+    },
+    "nfl.margin.full_support.research.96c5a8cb7e9970e7": {
+      "contracts": {
+        "category_brier_sum": 0.3720962053727333,
+        "category_log_loss": {
+          "mean": 0.5957499660836448,
+          "n": 12240,
+          "status": "AVAILABLE",
+          "zero_probability_outcomes": 0
+        },
+        "cover_full_win": {
+          "brier": 0.17713486053568112,
+          "log_loss": {
+            "mean": 0.5300971172705472,
+            "n": 12240,
+            "status": "AVAILABLE",
+            "zero_probability_outcomes": 0
+          },
+          "reliability": [
+            {
+              "lower": 0.0,
+              "mean_probability": 0.0706228166127142,
+              "n": 638,
+              "observed_rate": 0.09717868338557993,
+              "upper": 0.1,
+              "upper_inclusive": false
+            },
+            {
+              "lower": 0.1,
+              "mean_probability": 0.15117415165717843,
+              "n": 1485,
+              "observed_rate": 0.17777777777777778,
+              "upper": 0.2,
+              "upper_inclusive": false
+            },
+            {
+              "lower": 0.2,
+              "mean_probability": 0.25021032008506267,
+              "n": 1363,
+              "observed_rate": 0.26412325752017607,
+              "upper": 0.3,
+              "upper_inclusive": false
+            },
+            {
+              "lower": 0.3,
+              "mean_probability": 0.3498558118706146,
+              "n": 1239,
+              "observed_rate": 0.37368845843422116,
+              "upper": 0.4,
+              "upper_inclusive": false
+            },
+            {
+              "lower": 0.4,
+              "mean_probability": 0.4501478698599649,
+              "n": 1143,
+              "observed_rate": 0.4680664916885389,
+              "upper": 0.5,
+              "upper_inclusive": false
+            },
+            {
+              "lower": 0.5,
+              "mean_probability": 0.5501156053525746,
+              "n": 1177,
+              "observed_rate": 0.572642310960068,
+              "upper": 0.6,
+              "upper_inclusive": false
+            },
+            {
+              "lower": 0.6,
+              "mean_probability": 0.6508941091328132,
+              "n": 1295,
+              "observed_rate": 0.6656370656370656,
+              "upper": 0.7,
+              "upper_inclusive": false
+            },
+            {
+              "lower": 0.7,
+              "mean_probability": 0.7509438330393553,
+              "n": 1438,
+              "observed_rate": 0.7614742698191933,
+              "upper": 0.8,
+              "upper_inclusive": false
+            },
+            {
+              "lower": 0.8,
+              "mean_probability": 0.8492623271484714,
+              "n": 1622,
+              "observed_rate": 0.8711467324290999,
+              "upper": 0.9,
+              "upper_inclusive": false
+            },
+            {
+              "lower": 0.9,
+              "mean_probability": 0.9311283458637496,
+              "n": 840,
+              "observed_rate": 0.9523809523809523,
+              "upper": 1.0,
+              "upper_inclusive": true
+            }
+          ]
+        },
+        "diagnostic_threshold_n": 12240,
+        "n": 12240,
+        "observed_market_n": 0,
+        "outcome_counts": {
+          "half_loss": 0,
+          "half_win": 0,
+          "loss": 5457,
+          "push": 255,
+          "win": 6528
+        },
+        "push": {
+          "brier": 0.01977910633586206,
+          "log_loss": {
+            "mean": 0.0853147082875638,
+            "n": 12240,
+            "status": "AVAILABLE",
+            "zero_probability_outcomes": 0
+          },
+          "reliability": [
+            {
+              "lower": 0.0,
+              "mean_probability": 0.02118943433475906,
+              "n": 12240,
+              "observed_rate": 0.020833333333333332,
+              "upper": 0.1,
+              "upper_inclusive": false
+            },
+            {
+              "lower": 0.1,
+              "mean_probability": null,
+              "n": 0,
+              "observed_rate": null,
+              "upper": 0.2,
+              "upper_inclusive": false
+            },
+            {
+              "lower": 0.2,
+              "mean_probability": null,
+              "n": 0,
+              "observed_rate": null,
+              "upper": 0.3,
+              "upper_inclusive": false
+            },
+            {
+              "lower": 0.3,
+              "mean_probability": null,
+              "n": 0,
+              "observed_rate": null,
+              "upper": 0.4,
+              "upper_inclusive": false
+            },
+            {
+              "lower": 0.4,
+              "mean_probability": null,
+              "n": 0,
+              "observed_rate": null,
+              "upper": 0.5,
+              "upper_inclusive": false
+            },
+            {
+              "lower": 0.5,
+              "mean_probability": null,
+              "n": 0,
+              "observed_rate": null,
+              "upper": 0.6,
+              "upper_inclusive": false
+            },
+            {
+              "lower": 0.6,
+              "mean_probability": null,
+              "n": 0,
+              "observed_rate": null,
+              "upper": 0.7,
+              "upper_inclusive": false
+            },
+            {
+              "lower": 0.7,
+              "mean_probability": null,
+              "n": 0,
+              "observed_rate": null,
+              "upper": 0.8,
+              "upper_inclusive": false
+            },
+            {
+              "lower": 0.8,
+              "mean_probability": null,
+              "n": 0,
+              "observed_rate": null,
+              "upper": 0.9,
+              "upper_inclusive": false
+            },
+            {
+              "lower": 0.9,
+              "mean_probability": null,
+              "n": 0,
+              "observed_rate": null,
+              "upper": 1.0,
+              "upper_inclusive": true
+            }
+          ]
+        }
+      },
+      "crps": 7.304288421607097,
+      "distribution_log_score": {
+        "mean": 3.8922968515026444,
+        "n": 816,
+        "status": "AVAILABLE",
+        "zero_probability_outcomes": 0
+      },
+      "forecast_n": 816,
+      "historically_available_artifact_n": 0,
+      "mean_mae": 10.167311802509067,
+      "mean_rmse": 13.088252761405645,
+      "prediction_intervals": {
+        "0.5": {
+          "coverage": 0.5036764705882353,
+          "mean_width": 15.031862745098039,
+          "n": 816
+        },
+        "0.8": {
+          "coverage": 0.7855392156862745,
+          "mean_width": 31.131127450980394,
+          "n": 816
+        },
+        "0.9": {
+          "coverage": 0.8958333333333334,
+          "mean_width": 42.6360294117647,
+          "n": 816
+        },
+        "0.95": {
+          "coverage": 0.9583333333333334,
+          "mean_width": 53.895833333333336,
+          "n": 816
+        }
+      },
+      "unique_event_n": 816
+    }
+  }
+}

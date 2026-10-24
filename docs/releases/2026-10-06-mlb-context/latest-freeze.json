@@ -1,0 +1,242 @@
+{
+  "writer_clock_utc": "2026-10-06T21:51:00.015763+00:00",
+  "request": {
+    "package": "f61b0135cfcfefe0a872c921ee7c48a472ce3009a46c45202e89ba7b18623495",
+    "context": "965dd5cf399939f4a385d86f24aee3c9cf03a5deb6cbde5dcab487e9d42afbbf",
+    "review": "9b90a03cf71065d8936e065bd5bdf9e755a8a226fc85ccbaf72cd678f1ea6feb",
+    "contract": "60f3e15c29491ec279eae2ba25823d88a2b9d61a6d863b8d83f0b33ba54a20f8",
+    "calibration": null
+  },
+  "coverage": [
+    {
+      "event_id": "MLB:849819",
+      "stage": 1,
+      "status": "PRE_START_DIAGNOSTIC_FREEZE"
+    },
+    {
+      "event_id": "MLB:849819",
+      "stage": 2,
+      "status": "PRE_START_DIAGNOSTIC_FREEZE"
+    },
+    {
+      "event_id": "MLB:849819",
+      "stage": 3,
+      "status": "PRE_START_DIAGNOSTIC_FREEZE"
+    },
+    {
+      "event_id": "MLB:849819",
+      "stage": 4,
+      "status": "BLOCKED",
+      "reason": "FITTED_CALIBRATION_NOT_BOUND"
+    },
+    {
+      "event_id": "MLB:849826",
+      "stage": 1,
+      "status": "PRE_START_DIAGNOSTIC_FREEZE"
+    },
+    {
+      "event_id": "MLB:849826",
+      "stage": 2,
+      "status": "BLOCKED",
+      "reason": "NINE_CONFIRMED_BATTERS_REQUIRED"
+    },
+    {
+      "event_id": "MLB:849826",
+      "stage": 3,
+      "status": "BLOCKED",
+      "reason": "NINE_CONFIRMED_BATTERS_REQUIRED"
+    },
+    {
+      "event_id": "MLB:849826",
+      "stage": 4,
+      "status": "BLOCKED",
+      "reason": "FITTED_CALIBRATION_NOT_BOUND"
+    }
+  ],
+  "runs": [
+    {
+      "event_id": "MLB:849819",
+      "model_id": "mlb.postseason.context.workload.v2",
+      "result": {
+        "model_id": "mlb.postseason.context.workload.v2",
+        "home_win_probability": 0.49459,
+        "simulation_home_win_probability": 0.49459,
+        "raw_home_win_probability": 0.49459,
+        "n": 100000,
+        "seed": 5240954930507909195,
+        "rng": "NumPy PCG64",
+        "context_sha256": "3baf423a26345422c9e1b81a6f43ba4bb64aea426bfe73ce186916f0c39210e1",
+        "mc_se": 0.00158104627351637,
+        "predictive_validation": "UNVALIDATED",
+        "official_release_eligible": false,
+        "action_authority": false,
+        "dose": 0.0,
+        "supported_products": [
+          "winner diagnostic"
+        ],
+        "score_total_runline_outputs": null
+      },
+      "verification": {
+        "run_id": "48bb9cbdd4c1884bd103713b35826803297be3cd10d0a6c4d23fa158a1a0ba21",
+        "exact_replay": true,
+        "n": 100000,
+        "forecast_sha256": "448a26a1e2bf234d3c8a91cdfadfa803f9955f0786722c6ddfc672aeca28cf5f",
+        "canonical_registration": false,
+        "prospective_grade_eligible": false
+      },
+      "receipt": {
+        "action_authority": false,
+        "artifact_hashes": {
+          "away_starter_innings.npy": "f1bf2c588aa7358ea25e63d403a28ff48f722258e86034c19e0168f61f5d3584",
+          "forecast.json": "448a26a1e2bf234d3c8a91cdfadfa803f9955f0786722c6ddfc672aeca28cf5f",
+          "home_starter_innings.npy": "29d6bf49628ffb17099b64ad5cef06dfb797b4c5753a6a3408af08ce2221dd54",
+          "home_win_raw.npy": "21cceb6ddd05da1a086ef070e4e7e181502da7ebd942dd6300428c5ff8ff49b2"
+        },
+        "canonical_registration": false,
+        "official_release_eligible": false,
+        "pregame_research_capture": true,
+        "prospective_grade_eligible": false,
+        "run_id": "48bb9cbdd4c1884bd103713b35826803297be3cd10d0a6c4d23fa158a1a0ba21",
+        "writer_clock_utc": "2026-10-06T21:50:59.841824+00:00"
+      }
+    },
+    {
+      "event_id": "MLB:849819",
+      "model_id": "mlb.postseason.context.lineup.v3",
+      "result": {
+        "model_id": "mlb.postseason.context.lineup.v3",
+        "home_win_probability": 0.49114,
+        "simulation_home_win_probability": 0.49114,
+        "raw_home_win_probability": 0.49114,
+        "n": 100000,
+        "seed": 3760277617611615326,
+        "rng": "NumPy PCG64",
+        "context_sha256": "b32ef3cfdf2492d8b5ed5d6089fe4157be9ab5e1148977d029d3c098a3384ee4",
+        "mc_se": 0.0015808905730631706,
+        "predictive_validation": "UNVALIDATED",
+        "official_release_eligible": false,
+        "action_authority": false,
+        "dose": 0.0,
+        "supported_products": [
+          "winner diagnostic"
+        ],
+        "score_total_runline_outputs": null
+      },
+      "verification": {
+        "run_id": "342f30920697ac5e1bbcf695f13b5049429aa551ac874c969c2b663a469c7d64",
+        "exact_replay": true,
+        "n": 100000,
+        "forecast_sha256": "6354ed56ce611369744391b0a993abcae2962c629f6daebcccd113fa4ec84c5f",
+        "canonical_registration": false,
+        "prospective_grade_eligible": false
+      },
+      "receipt": {
+        "action_authority": false,
+        "artifact_hashes": {
+          "away_starter_innings.npy": "5f36f37257433cd2a46e9a93210eabcf0fc3939676515514f3db3ca64210c773",
+          "forecast.json": "6354ed56ce611369744391b0a993abcae2962c629f6daebcccd113fa4ec84c5f",
+          "home_starter_innings.npy": "3365e07d8e0e21387422fb1f03f87626f6c225b59c31c11ad2ebaae35c275f1f",
+          "home_win_raw.npy": "70aac3ec41a3a27e77e0e11f1de21b488d508bd8fb27c26ad01be9b4834c202d"
+        },
+        "canonical_registration": false,
+        "official_release_eligible": false,
+        "pregame_research_capture": true,
+        "prospective_grade_eligible": false,
+        "run_id": "342f30920697ac5e1bbcf695f13b5049429aa551ac874c969c2b663a469c7d64",
+        "writer_clock_utc": "2026-10-06T21:50:59.892482+00:00"
+      }
+    },
+    {
+      "event_id": "MLB:849819",
+      "model_id": "mlb.postseason.context.bullpen.v4",
+      "result": {
+        "model_id": "mlb.postseason.context.bullpen.v4",
+        "home_win_probability": 0.51497,
+        "simulation_home_win_probability": 0.51497,
+        "raw_home_win_probability": 0.51497,
+        "n": 100000,
+        "seed": 3585164644420902374,
+        "rng": "NumPy PCG64",
+        "context_sha256": "03b85ad1bce87825ec19225d3817a25610292ce96ce90239eab9e6443e59b8a7",
+        "mc_se": 0.0015804300019298546,
+        "predictive_validation": "UNVALIDATED",
+        "official_release_eligible": false,
+        "action_authority": false,
+        "dose": 0.0,
+        "supported_products": [
+          "winner diagnostic"
+        ],
+        "score_total_runline_outputs": null
+      },
+      "verification": {
+        "run_id": "31c1103fc3ff5de6dedbce952e47fd9ecfdf17849f35ac11e0ce0753326357fb",
+        "exact_replay": true,
+        "n": 100000,
+        "forecast_sha256": "6b057addb5b93d14691d974dff79ba8c38ceeb8b7301ee4d6caf35ca6206b544",
+        "canonical_registration": false,
+        "prospective_grade_eligible": false
+      },
+      "receipt": {
+        "action_authority": false,
+        "artifact_hashes": {
+          "away_starter_innings.npy": "dd3c9fc75713f7884c4aa7e1d83a8c20566d9ec55acf0fb42660b244c9d124f0",
+          "forecast.json": "6b057addb5b93d14691d974dff79ba8c38ceeb8b7301ee4d6caf35ca6206b544",
+          "home_starter_innings.npy": "8ee900e6ba6c10c8bf0a82b29494bd2a38c1fc89c4a075be020cdabaedf017ed",
+          "home_win_raw.npy": "4168c1c7963263b4f4f3abde66094c9e5cb34ab361e3a76d28c1cd03ee8c5b66"
+        },
+        "canonical_registration": false,
+        "official_release_eligible": false,
+        "pregame_research_capture": true,
+        "prospective_grade_eligible": false,
+        "run_id": "31c1103fc3ff5de6dedbce952e47fd9ecfdf17849f35ac11e0ce0753326357fb",
+        "writer_clock_utc": "2026-10-06T21:50:59.947400+00:00"
+      }
+    },
+    {
+      "event_id": "MLB:849826",
+      "model_id": "mlb.postseason.context.workload.v2",
+      "result": {
+        "model_id": "mlb.postseason.context.workload.v2",
+        "home_win_probability": 0.48052,
+        "simulation_home_win_probability": 0.48052,
+        "raw_home_win_probability": 0.48052,
+        "n": 100000,
+        "seed": 12781979113114064142,
+        "rng": "NumPy PCG64",
+        "context_sha256": "c866746310157a29dbaa389b0fd86e52505c6b23c2b3bebb656249abf43a0fca",
+        "mc_se": 0.0015799383836086773,
+        "predictive_validation": "UNVALIDATED",
+        "official_release_eligible": false,
+        "action_authority": false,
+        "dose": 0.0,
+        "supported_products": [
+          "winner diagnostic"
+        ],
+        "score_total_runline_outputs": null
+      },
+      "verification": {
+        "run_id": "b162b64813a0550ea0d75a2fbfcc23f8dd0d26b594e7405db8751345eb3ef3ce",
+        "exact_replay": true,
+        "n": 100000,
+        "forecast_sha256": "1b54b32664c705a69c07cefd2e8a89780b877cbc33c8870d2a12d032a5895c7d",
+        "canonical_registration": false,
+        "prospective_grade_eligible": false
+      },
+      "receipt": {
+        "action_authority": false,
+        "artifact_hashes": {
+          "away_starter_innings.npy": "b94eee87e75dd12968c00acbd55cfa5db9ef5dc07ba4ee66c247ea2185d03f53",
+          "forecast.json": "1b54b32664c705a69c07cefd2e8a89780b877cbc33c8870d2a12d032a5895c7d",
+          "home_starter_innings.npy": "acd70b972c415ced966b5dce9825052091e8629166865f88a8f2f1672015ae50",
+          "home_win_raw.npy": "d7da7d78cbf495ea0b07170704f994dd1ff96a979a59c4638ccb32e5b35c7c72"
+        },
+        "canonical_registration": false,
+        "official_release_eligible": false,
+        "pregame_research_capture": true,
+        "prospective_grade_eligible": false,
+        "run_id": "b162b64813a0550ea0d75a2fbfcc23f8dd0d26b594e7405db8751345eb3ef3ce",
+        "writer_clock_utc": "2026-10-06T21:50:59.989148+00:00"
+      }
+    }
+  ]
+}

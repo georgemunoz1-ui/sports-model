@@ -1,0 +1,345 @@
+[OK ] exists: state.json
+[OK ] exists: AGENTS.md
+[OK ] exists: AUTHORIZATIONS.md
+[OK ] exists: harness/runbook.md
+[OK ] exists: data/backfill/mlb/2026/results.csv
+[OK ] exists: data/backfill/mlb/2026/park_factors.json
+[OK ] state.json parses
+[OK ] real money still 0 / unauthorized
+[OK ] sides verdict still NO_PROMOTE (R3)
+[OK ] results.csv rows=2090 finals=2084 (>=1505)
+[OK ] no duplicate game_ids
+[OK ] all finals have home_win+total (or explicit winner-only PROVISIONAL)
+[WARN] dataset freshness: last final 2026-09-02 (52d old)
+[OK ] result provenance (1819 FINAL/tier-1, 265 PROVISIONAL, 2079 evidence-bound)
+[OK ] winner-name reconciliation (39 rows checkable, 0 mismatch)
+[WARN] adjacent-day duplicate scores on non-tier-1 sources: 1 (PIT@MIL 2026-08-05)
+[OK ] frozen-slate games missing a result: 0
+[OK ] graded slates registered in the forecast registry (unregistered: none)
+[OK ] pitcher_logs cached: 337 (>=310)
+[OK ] close_* contamination declared and not growing (2 dates populated, 0 undeclared)
+[OK ] ER/BB placeholder manifest matches logs (1684 rows, 0 drift)
+[OK ] HFA read from engine/hfa.py in live paths (0 stray literals)
+[OK ] kprop pending plays from past dates: 0 (grade them!)
+[OK ] pitcher-log integrity (0 flagged -> reconcile per runbook, do NOT delete)
+[OK ] kprops self-test (kprops self-test: PASS)
+[OK ] FROZEN_LINEAGE (verifier A: published hashes describe commit 6d4a7c0)
+[OK ] SUCCESSOR_EQUIVALENCE (verifier B: SCOPE: current code reproduces the frozen engine on the exac)
+[OK ] forecast registry (forecast_registry verify: PASS (345 forecasts, 359 grades, chain intac)
+[OK ] forecast-registry falsifications (forecast_registry tests: PASS (12 checks: 10 falsifications )
+[OK ] ml_asof rebuild rebuild check: IDENTICAL (manifest 9cfc539d54dc, rebuilt 9cf
+[OK ] ml_asof manifest complete (0 problems)
+[OK ] ml_asof row count matches manifest (2078 vs 2078)
+[OK ] ml firewall fixtures (ml_firewall tests: PASS (18 checks: 13 negative fixtures fired, 5 posi)
+[OK ] ml p4 forward (ml_p4_forward selftest: PASS (24 fixtures: hash-freeze refusal, quaran)
+[OK ] player evolution shadow (player_evolution selftest: PASS (25 fixtures, synthetic only; evidence)
+[OK ] model registry (model_registry self-test: PASS (20 identities, 18 pinned sources))
+[OK ] market_priority frozen [ML,K,RL,TOTAL]
+[OK ] market statuses (ML FORWARD_VALIDATION_ACTIVE, K MAINTENANCE_ONLY_ACTIVE, RL/TOTAL DATA_CAPTURE_ACTIVE)
+[OK ] queue policy: no non-ML model-changing experiment active (active=ML-P4-FORWARD (d_logistic_2f cfg 132523ac vs V13 vs market; first eligible slate 2026-07-29))
+[OK ] result_provenance selftest (result_provenance selftest: PASS (tier mapping incl. conservative defaul)
+[OK ] result_provenance selftest names its own module
+[OK ] result_content_checks selftest (result_content_checks selftest: PASS (echo detector fires on the real 8/)
+[OK ] result_content_checks selftest names its own module
+[OK ] parse_box_dump selftest (parse_box_dump selftest: PASS (team normalisation, away@home orientation)
+[OK ] parse_box_dump selftest names its own module
+[OK ] acquisition_ledger selftest (acquisition_ledger selftest: PASS (append-only enforced, duplicate revis)
+[OK ] acquisition_ledger selftest names its own module
+[OK ] missing_data_audit selftest (missing_data_audit selftest: PASS (34-game inventory, no structural viol)
+[OK ] missing_data_audit selftest names its own module
+[OK ] tier_discipline selftest (tier_discipline selftest: PASS (canonical predicate rejects tier-3 and t)
+[OK ] tier_discipline selftest names its own module
+[OK ] artifact_immutability selftest (artifact_immutability selftest: PASS (rewritten and deleted artifacts bo)
+[OK ] artifact_immutability selftest names its own module
+[OK ] tier1_board_gate selftest (tier1_board_gate selftest: PASS (unknown/typo'd team name, short slate, )
+[OK ] tier1_board_gate selftest names its own module
+[OK ] form_refresh_diff selftest (form_refresh_diff selftest: PASS (canonical file untouched; date filters)
+[OK ] form_refresh_diff selftest names its own module
+[OK ] tier1_lineage selftest (tier1_lineage selftest: PASS (canonical source untouched and byte-verifi)
+[OK ] tier1_lineage selftest names its own module
+[OK ] pregame_preflight selftest (pregame_preflight selftest: PASS (day-rollover fixed so a 00:05Z game no)
+[OK ] pregame_preflight selftest names its own module
+[OK ] card_render selftest (card_render selftest: PASS (replay reproduces all 6 stored fields on 11/)
+[OK ] card_render selftest names its own module
+[OK ] settlement_contract selftest (settlement_contract selftest: PASS (generic 'side', ghost ATS, post-tip )
+[OK ] settlement_contract selftest names its own module
+[OK ] unified_card selftest (unified_card selftest: PASS (all three owner compression fixtures flag; )
+[OK ] unified_card selftest names its own module
+[OK ] decision_card selftest (decision_card selftest: PASS)
+[OK ] decision_card selftest names its own module
+[OK ] ats_ledgers selftest (ats_ledgers selftest: PASS)
+[OK ] ats_ledgers selftest names its own module
+[OK ] journal_continuity selftest (journal_continuity selftest: PASS)
+[OK ] journal_continuity selftest names its own module
+[OK ] acquisition_ladder selftest (acquisition_ladder selftest: PASS)
+[OK ] acquisition_ladder selftest names its own module
+[OK ] echo_gate selftest (echo_gate selftest: PASS)
+[OK ] echo_gate selftest names its own module
+[OK ] sports_acquisition selftest (  "generated_utc": datetime.datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%)
+[OK ] sports_acquisition selftest names its own module
+[OK ] retry_ladder selftest (retry_ladder selftest: PASS)
+[OK ] retry_ladder selftest names its own module
+[OK ] information_class selftest (information_class selftest: PASS)
+[OK ] information_class selftest names its own module
+[OK ] grade_ledger selftest (grade_ledger selftest: PASS)
+[OK ] grade_ledger selftest names its own module
+[OK ] baseline_offset selftest (baseline_offset selftest: PASS)
+[OK ] baseline_offset selftest names its own module
+[OK ] paired_eval selftest (paired_eval selftest: PASS)
+[OK ] paired_eval selftest names its own module
+[OK ] adaptive_layers selftest (adaptive_layers selftest: PASS)
+[OK ] adaptive_layers selftest names its own module
+[OK ] adaptive_state selftest (adaptive_state selftest: PASS)
+[OK ] adaptive_state selftest names its own module
+[OK ] empirical_uncertainty selftest (empirical_uncertainty selftest: PASS)
+[OK ] empirical_uncertainty selftest names its own module
+[OK ] drift_monitor selftest (drift_monitor selftest: PASS)
+[OK ] drift_monitor selftest names its own module
+[OK ] champion_challenger selftest (champion_challenger selftest: PASS)
+[OK ] champion_challenger selftest names its own module
+[OK ] freshness_contract selftest (freshness_contract selftest: OK)
+[OK ] freshness_contract selftest names its own module
+[OK ] test_starter_freshness_regression selftest (    Christian Scott 43d -> DEGRADED dose 0.5)
+[OK ] test_starter_freshness_regression selftest names its own module
+[OK ] wnba_refresh_espn selftest (wnba_refresh_espn selftest: OK)
+[OK ] wnba_refresh_espn selftest names its own module
+[OK ] acquisition_adapters selftest (acquisition_adapters selftest: OK)
+[OK ] acquisition_adapters selftest names its own module
+[OK ] board_shape selftest (board_shape selftest: OK)
+[OK ] board_shape selftest names its own module
+[OK ] market_independence selftest (market_independence selftest: OK)
+[OK ] market_independence selftest names its own module
+[OK ] claim_discipline selftest (claim_discipline selftest: OK)
+[OK ] claim_discipline selftest names its own module
+[OK ] freshness_gates selftest (freshness_gates selftest: PASS (all six gates fire on their own fixtures)
+[OK ] freshness_gates selftest names its own module
+[OK ] never_adapt_audit selftest (never_adapt_audit selftest: PASS)
+[OK ] never_adapt_audit selftest names its own module
+[OK ] forecast_contract selftest (forecast_contract selftest: PASS)
+[OK ] forecast_contract selftest names its own module
+[OK ] evaluation_standard selftest (evaluation_standard selftest: PASS)
+[OK ] evaluation_standard selftest names its own module
+[OK ] prequential selftest (prequential selftest: PASS)
+[OK ] prequential selftest names its own module
+[OK ] promotion_gate selftest (promotion_gate selftest: PASS)
+[OK ] promotion_gate selftest names its own module
+[OK ] evaluation_arm selftest (evaluation_arm selftest: PASS)
+[OK ] evaluation_arm selftest names its own module
+[OK ] keyed_seed selftest (keyed_seed selftest: PASS)
+[OK ] keyed_seed selftest names its own module
+[OK ] cohort_fork selftest (cohort_fork selftest: PASS)
+[OK ] cohort_fork selftest names its own module
+[OK ] three_arm_card selftest (three_arm_card selftest: PASS)
+[OK ] three_arm_card selftest names its own module
+[OK ] arm_coverage selftest (arm_coverage selftest: OK)
+[OK ] arm_coverage selftest names its own module
+[OK ] totals_estimand selftest (totals_estimand selftest: OK)
+[OK ] totals_estimand selftest names its own module
+[OK ] simulation_standard selftest (simulation_standard selftest: OK)
+[OK ] simulation_standard selftest names its own module
+[OK ] render_contract selftest (render_contract selftest: OK)
+[OK ] render_contract selftest names its own module
+[OK ] franchise_identity selftest (franchise_identity selftest: OK)
+[OK ] franchise_identity selftest names its own module
+[OK ] finalization_evidence selftest (finalization_evidence selftest: OK)
+[OK ] finalization_evidence selftest names its own module
+[OK ] source_artifact_gate selftest (source_artifact_gate selftest: OK)
+[OK ] source_artifact_gate selftest names its own module
+[OK ] prospectivity_evidence selftest (prospectivity_evidence selftest: OK)
+[OK ] prospectivity_evidence selftest names its own module
+[OK ] widening_rule selftest (widening_rule selftest: OK)
+[OK ] widening_rule selftest names its own module
+[OK ] anchor_verify selftest (anchor_verify selftest: OK)
+[OK ] anchor_verify selftest names its own module
+[OK ] price_acquisition selftest (price_acquisition selftest: OK)
+[OK ] price_acquisition selftest names its own module
+[OK ] price_overlay selftest (price_overlay selftest: OK)
+[OK ] price_overlay selftest names its own module
+[OK ] ev_screen selftest (ev_screen selftest: OK)
+[OK ] ev_screen selftest names its own module
+[OK ] distribution_identity selftest (distribution_identity selftest: OK)
+[OK ] distribution_identity selftest names its own module
+[OK ] uncertainty_estimand selftest (uncertainty_estimand selftest: OK)
+[OK ] uncertainty_estimand selftest names its own module
+[OK ] decision_view selftest (decision_view selftest: OK)
+[OK ] decision_view selftest names its own module
+[OK ] route_ladder_v1 selftest (route_ladder_v1 selftest: OK)
+[OK ] route_ladder_v1 selftest names its own module
+[OK ] checkpoint_schedule selftest (checkpoint_schedule selftest: OK)
+[OK ] checkpoint_schedule selftest names its own module
+[OK ] readiness_gate selftest (readiness_gate selftest: OK)
+[OK ] readiness_gate selftest names its own module
+[OK ] replacement_workflow selftest (replacement_workflow selftest: OK)
+[OK ] replacement_workflow selftest names its own module
+[OK ] module_manifest selftest (module_manifest selftest: OK)
+[OK ] module_manifest selftest names its own module
+[OK ] pipeline_e2e selftest (pipeline_e2e selftest: OK)
+[OK ] pipeline_e2e selftest names its own module
+[OK ] recovery_jobs selftest (recovery_jobs selftest: OK)
+[OK ] recovery_jobs selftest names its own module
+[OK ] release_gate selftest (release_gate selftest: OK)
+[OK ] release_gate selftest names its own module
+[OK ] result_display selftest (result_display selftest: OK)
+[OK ] result_display selftest names its own module
+[OK ] adaptive_challenger selftest (adaptive_challenger selftest: OK)
+[OK ] adaptive_challenger selftest names its own module
+[OK ] state_coherence selftest (state_coherence selftest: OK)
+[OK ] state_coherence selftest names its own module
+[OK ] wnba_feature_pipeline selftest (wnba_feature_pipeline selftest: OK)
+[OK ] wnba_feature_pipeline selftest names its own module
+[OK ] mc_convergence selftest (mc_convergence selftest: OK)
+[OK ] mc_convergence selftest names its own module
+[OK ] test_mc_convergence_gate selftest (test_mc_convergence_gate selftest: OK (7/7 passed))
+[OK ] test_mc_convergence_gate selftest names its own module
+[OK ] feed_espn selftest (feed_espn selftest: OK)
+[OK ] feed_espn selftest names its own module
+[OK ] feed_mlb_statsapi selftest (feed_mlb_statsapi selftest: OK)
+[OK ] feed_mlb_statsapi selftest names its own module
+[OK ] feed_sweep selftest (feed_sweep selftest: OK)
+[OK ] feed_sweep selftest names its own module
+[OK ] test_feed_adapter selftest (test_feed_adapter selftest: OK (7/7))
+[OK ] test_feed_adapter selftest names its own module
+[OK ] market_capture selftest (market_capture selftest: OK)
+[OK ] market_capture selftest names its own module
+[OK ] market_sportsgameodds selftest (market_sportsgameodds selftest: OK)
+[OK ] market_sportsgameodds selftest names its own module
+[OK ] market_theoddsapi selftest (market_theoddsapi selftest: OK)
+[OK ] market_theoddsapi selftest names its own module
+[OK ] market_history selftest (market_history selftest: OK)
+[OK ] market_history selftest names its own module
+[OK ] market_moneyline selftest (market_moneyline selftest: OK)
+[OK ] market_moneyline selftest names its own module
+[OK ] backtest_causal selftest (backtest_causal selftest: OK)
+[OK ] backtest_causal selftest names its own module
+[OK ] calibration selftest (calibration selftest: OK)
+[OK ] calibration selftest names its own module
+[OK ] test_market_layer selftest (test_market_layer selftest: OK (21/21))
+[OK ] test_market_layer selftest names its own module
+[OK ] market_quality selftest (market_quality selftest: OK)
+[OK ] market_quality selftest names its own module
+[OK ] score_admission selftest (score_admission selftest: OK)
+[OK ] score_admission selftest names its own module
+[OK ] verified_snapshot selftest (verified_snapshot selftest: OK)
+[OK ] verified_snapshot selftest names its own module
+[OK ] score_collector selftest (score_collector selftest: OK)
+[OK ] score_collector selftest names its own module
+[OK ] board_invariants selftest (board_invariants selftest: OK)
+[OK ] board_invariants selftest names its own module
+[OK ] test_score_admission selftest (test_score_admission selftest: OK)
+[OK ] test_score_admission selftest names its own module
+[OK ] acquisition_orchestrator selftest (acquisition_orchestrator selftest: OK)
+[OK ] acquisition_orchestrator selftest names its own module
+[OK ] export_agent_context selftest (export_agent_context selftest: OK)
+[OK ] export_agent_context selftest names its own module
+[OK ] relay_parser selftest (relay_parser selftest: OK)
+[OK ] relay_parser selftest names its own module
+[OK ] mlb_daily_coordinator selftest (mlb_daily_coordinator selftest: OK)
+[OK ] mlb_daily_coordinator selftest names its own module
+[OK ] grade_owner_v5_board selftest (grade_owner_v5_board selftest: PASS)
+[OK ] grade_owner_v5_board selftest names its own module
+[OK ] build_board_0901 selftest (build_board_0901 selftest: PASS)
+[OK ] build_board_0901 selftest names its own module
+[OK ] grade_wnba_0830 selftest (grade_wnba_0830 selftest: PASS)
+[OK ] grade_wnba_0830 selftest names its own module
+[OK ] register_owner_0901_v1 selftest (register_owner_0901_v1 selftest: PASS)
+[OK ] register_owner_0901_v1 selftest names its own module
+[OK ] register_owner_0901_v2 selftest (register_owner_0901_v2 selftest: PASS)
+[OK ] register_owner_0901_v2 selftest names its own module
+[OK ] market_overlay_0901 selftest (market_overlay_0901 selftest: PASS)
+[OK ] market_overlay_0901 selftest names its own module
+[OK ] ingest_lancebroz selftest (ingest_lancebroz selftest: PASS)
+[OK ] ingest_lancebroz selftest names its own module
+[OK ] refresh_experiment_0901 selftest (refresh_experiment_0901 selftest: PASS)
+[OK ] refresh_experiment_0901 selftest names its own module
+[OK ] score_admission mutation suite (score_admission mutation suite: 24 killed, 0 errored, 0 survived)
+[OK ] verified_snapshot mutation suite (verified_snapshot mutation suite: 36 killed, 0 errored, 0 surviv)
+[OK ] score_collector mutation suite (score_collector mutation suite: 23 killed, 0 errored, 0 survived)
+[OK ] board_invariants mutation suite (board_invariants mutation suite: 31 killed, 0 errored, 0 survive)
+[OK ] acquisition_orchestrator mutation suite (acquisition_orchestrator mutation suite: 4 killed, 0 errored, 0 )
+[OK ] workflow shell syntax (43 workflow file(s))
+[OK ] acquisition ledgers valid (ledgers: 9 files, 186 rows, 83 current game states {'mlb': 57, 'wnba': 1)
+[OK ] missing-data audit (inventory: 34 game rows; structural violations: 0; legacy tier-2/3 canonical: 12)
+[OK ] canonical-tier exposure (tier exposure: 259 rows admitted by the tier-blind predicate but not canonical ()
+[OK ] registered-artifact immutability (registered artifacts: 330/330 records match their registered hash (30 distinct)
+[OK ] information-class ledger (information-class gate: PASS)
+[OK ] grade-summary reproducibility (grade-summary gate: PASS; 0 pre-contract cohort summary/ies not yet bound)
+[OK ] never-adapt enforcement (never-adapt audit: PASS)
+[OK ] tier-1 board completeness (LATEST_TIER1_FORM_DATE          = 2026-09-02   (>= 2026-08-16: True); missing_tier1_games_8_15  )
+[WARN] pregame inputs for 2026-10-24 (PREGAME PREFLIGHT 2026-10-24  ->  INPUTS_MISSING)
+[WARN] pregame inputs for 2026-10-25 (PREGAME PREFLIGHT 2026-10-25  ->  INPUTS_MISSING)
+[OK ] settlement contract (settlement contract: PASS (cutoff 2026-08-19T05:00:00Z; pre-cutoff records gra)
+[WARN] tier-1 successor lineage (SUCCESSOR READINESS: DEGRADED_INTERIOR_GAPS 18 whole days lost: 2026-07-29, 2026-07-31, )
+[OK ] policy gate self-test (policy_gate self-test: PASS)
+[OK ] gate string matches recomputed value
+[OK ] prospective gate counts only current-policy rows (0/100 under dp-2026-07-27)
+[OK ] historical audit preserved (10 settled, 5-5, -1.01u)
+[OK ] no invented policy tag on historical rows
+[WARN] git tree: 6 uncommitted path(s) (<=3 tolerated)
+[OK ] progress.md last touched 2026-10-24
+[OK ] model patch-note registry (10 entries, newest MULTISPORT-RELEASE-GATE-2026-09-03)
+[OK ] latest patch note carries status, scope, changes, and verification
+[OK ] health dashboard publishes latest patch MULTISPORT-RELEASE-GATE-2026-09-03
+[OK ] health dashboard discloses action block and open-source status
+[FAIL] journal continuity (latest committed entry 2026-10-24, cold-bootstrap window 120 lines)
+       ! COLD_BOOTSTRAP_MISSES_LATEST_ENTRY — a new session reads the last 120 lines of docs/progress.md and would see '2026-10-19', but the newest entry is '2026-10-24'. A journal whose newest entry falls outside the window the loader actually reads is not a handoff
+[OK ] journal split: root progress.md is not newer than canonical docs/progress.md
+[OK ] module manifest (MANIFEST_OK; 194 registered, 0 problems)
+[OK ] pipeline end-to-end (PIPELINE_E2E_OK; 9/9 registered gates invoked)
+[FAIL] lancebroz production source ({'ok': False, 'source_directory': '/home/user/lancebroz/mlb-pitcher-data/data/raw/2026/daily', 'source_commit': None, 'n_files': 0, 'expected_files': 0, 'window': {'from_inclusive': '2026-07-01', 'to_exclusive': '2026-09-01'}, 'verification_scope': 'PUBLISHED_GIT_OBJECT_WINDOW_ONLY', 'schedule_completeness_verified': False, 'historical_retrieval_proven': False, 'failure': 'PRODUCTION_ARCHIVE_UNAVAILABLE_OR_UNVERSIONED', 'problems': ['PRODUCTION_ARCHIVE_UNAVAILABLE_OR_UNVERSIONED']})
+[FAIL] recovery jobs (9 registered, 4 overdue, 7 defect(s) still owned)
+       ! OVERDUE RJ-001-PROVENANCE 123/123 due 2026-09-01T00:00:00Z
+         PHASE RJ-001A_PROVENANCE_ACQUISITION: {'note': 'all provisional-set units bound; whole-file 1,948/1,957 after the OAK/ARI variant fold; 9 refusals in two named categories, reconciliation gate sums (88570751 superseded by the regenerated accounting)', 'progress': '123/123', 'status': 'COMPLETE'}
+         PHASE RJ-001B_SCORE_VERIFICATION: {'note': 'tier upgrades for the 126 provisional rows need a score-bearing artifact; pitch events carry no runs column (derivation judged infeasible)', 'progress': '0/126', 'status': 'RUNNING'}
+         PHASE RJ-001_INCIDENT: OPEN
+       ! OVERDUE RJ-005-WNBA-FEATURE-PIPELINE 11/17 due 2026-09-16T17:00:00Z
+       ! OVERDUE RJ-006-NFL-MODEL-RESTORATION 1/6 due 2026-09-09T00:00:00Z
+       ! OVERDUE RJ-007-DATELESS-JOIN-REMEDIATION 0/6 due 2026-09-03T00:00:00Z
+[FAIL] historical 2026-09-03 release eligibility (BLOCKED; 0 artifact problem(s), 0 contract problem(s))
+       Historical decision is immutable; this is not a fresh release check.
+[OK ] wnba feature staleness (age 94d) is held by an active five-component job
+[OK ] board arm completeness (cards/2026-08-28_mlb_board.json: 15 games x 6 arms)
+[OK ] result binding (result-binding gate: PASS (consecutive-series 5/5 refused; clean cohort 7/7 bo)
+[OK ] result-binding mutants (result_binding_gate mutation suite: 8/8 caught)
+[OK ] PregameDecisionReadiness v1.0 acceptance (standard acceptance: 16/16 passed)
+[FAIL] standing-health issue evidence and hash chain
+       REL-ARCHIVE-001: OVERDUE-ESCALATED; owner=data-platform maintainer (Codex); due=2026-09-17T04:26:41.997358+00:00; next=Reconcile the 58-file candidate against authoritative required-game coverage, inventory August 31 gap, and bind a separately versioned prospective archive profile.
+       REL-RECOVERY-001: OVERDUE-ESCALATED; owner=repository maintainer (Codex); due=2026-09-17T04:26:41.997358+00:00; next=Run negative regressions and remote health; retain child blockers and phase counts.
+       REL-HISTORICAL-001: OVERDUE-ESCALATED; owner=release maintainer (Codex); due=2026-09-17T04:26:41.997358+00:00; next=Keep September 3 evidence immutable; define a separate current-profile check and prove dependencies before replacing any current-health coupling.
+       RJ-001-PROVENANCE: OVERDUE-ESCALATED; owner=acquisition maintainer (Codex); due=2026-09-17T04:26:41.997358+00:00; next=Inventory the 126 score-verification IDs against current Tier-1 bindings and retain a missing-ID manifest before acquiring finals.
+       RJ-005-WNBA-FEATURE-PIPELINE: OVERDUE-ESCALATED; owner=wnba_features maintainer (Codex); due=2026-09-17T04:26:41.997358+00:00; next=Resolve the six-slot historical team/date obligation mapping from source-bound incident/slate records; only then credit independently retained official availability sections.
+       RJ-006-NFL-MODEL-RESTORATION: OVERDUE-ESCALATED; owner=model_registry maintainer (Codex); due=2026-09-17T04:26:41.997358+00:00; next=Locate original data/nfl/model/runs/2026-08-10_nflverse_2015_2025_oof_v2 and invalidation record in owner backup; verify exact source pins before assigning units.
+       RJ-007-DATELESS-JOIN-REMEDIATION: OVERDUE-ESCALATED; owner=harness maintainer (Codex); due=2026-09-17T04:26:41.997358+00:00; next=Test duplicate/date/outcome refusal; enumerate canonical IDs for historical migration sidecars without changing frozen boards.
+       RJ-005-AVAILABILITY-01: OVERDUE-ESCALATED; owner=wnba_features maintainer (Codex); due=2026-09-17T04:26:41.997358+00:00; next=Recover the historical mapping for slot 1; bind its team, date and event, then hash the matching official report or document a justified reclassification.
+       RJ-005-AVAILABILITY-02: OVERDUE-ESCALATED; owner=wnba_features maintainer (Codex); due=2026-09-17T04:26:41.997358+00:00; next=Recover the historical mapping for slot 2; bind its team, date and event, then hash the matching official report or document a justified reclassification.
+       RJ-005-AVAILABILITY-03: OVERDUE-ESCALATED; owner=wnba_features maintainer (Codex); due=2026-09-17T04:26:41.997358+00:00; next=Recover the historical mapping for slot 3; bind its team, date and event, then hash the matching official report or document a justified reclassification.
+       RJ-005-AVAILABILITY-04: OVERDUE-ESCALATED; owner=wnba_features maintainer (Codex); due=2026-09-17T04:26:41.997358+00:00; next=Recover the historical mapping for slot 4; bind its team, date and event, then hash the matching official report or document a justified reclassification.
+       RJ-005-AVAILABILITY-05: OVERDUE-ESCALATED; owner=wnba_features maintainer (Codex); due=2026-09-17T04:26:41.997358+00:00; next=Recover the historical mapping for slot 5; bind its team, date and event, then hash the matching official report or document a justified reclassification.
+       RJ-005-AVAILABILITY-06: OVERDUE-ESCALATED; owner=wnba_features maintainer (Codex); due=2026-09-17T04:26:41.997358+00:00; next=Recover the historical mapping for slot 6; bind its team, date and event, then hash the matching official report or document a justified reclassification.
+       TRIAGE_TREND: {'aged_over_14_days': 6, 'unknown_age': 0, 'previous_session_count': 2, 'direction': 'INCREASED_REQUIRES_EXPLANATION', 'clock_policy': 'material evidence change; a review or status rename does not reset age'}
+accepted_risks_present: true
+accepted_risk_release_override: false
+official_release_eligible: false
+       TRIAGE_ERROR: REL-ARCHIVE-001:AGED_ESCALATION_INCOMPLETE
+       TRIAGE_ERROR: REL-RECOVERY-001:AGED_ESCALATION_INCOMPLETE
+       TRIAGE_ERROR: REL-HISTORICAL-001:AGED_ESCALATION_INCOMPLETE
+       TRIAGE_ERROR: RJ-001-PROVENANCE:ESCALATION_REVIEW_OVERDUE
+       TRIAGE_ERROR: RJ-005-WNBA-FEATURE-PIPELINE:AGED_ESCALATION_INCOMPLETE
+       TRIAGE_ERROR: RJ-006-NFL-MODEL-RESTORATION:ESCALATION_REVIEW_OVERDUE
+       TRIAGE_ERROR: RJ-007-DATELESS-JOIN-REMEDIATION:AGED_ESCALATION_INCOMPLETE
+       TRIAGE_ERROR: RJ-005-AVAILABILITY-01:AGED_ESCALATION_INCOMPLETE
+       TRIAGE_ERROR: RJ-005-AVAILABILITY-02:AGED_ESCALATION_INCOMPLETE
+       TRIAGE_ERROR: RJ-005-AVAILABILITY-03:AGED_ESCALATION_INCOMPLETE
+       TRIAGE_ERROR: RJ-005-AVAILABILITY-04:AGED_ESCALATION_INCOMPLETE
+       TRIAGE_ERROR: RJ-005-AVAILABILITY-05:AGED_ESCALATION_INCOMPLETE
+       TRIAGE_ERROR: RJ-005-AVAILABILITY-06:AGED_ESCALATION_INCOMPLETE
+
+REPOSITORY_HEALTH_RED — 5 fail, 6 warn
+CURRENT_DATA_READINESS: STALE_SNAPSHOT
+  mlb: STALE_SNAPSHOT
+  wnba: STALE_SNAPSHOT
+  nfl: STALE_SNAPSHOT
+  cfb: STALE_SNAPSHOT
+  mls: STALE_SNAPSHOT
+  nba: STALE_SNAPSHOT
+  nhl: STALE_SNAPSHOT
+Fix FAILs before new work: ['journal continuity (latest committed entry 2026-10-24, cold-bootstrap window 120 lines)', "lancebroz production source ({'ok': False, 'source_directory': '/home/user/lancebroz/mlb-pitcher-data/data/raw/2026/daily', 'source_commit': None, 'n_files': 0, 'expected_files': 0, 'window': {'from_inclusive': '2026-07-01', 'to_exclusive': '2026-09-01'}, 'verification_scope': 'PUBLISHED_GIT_OBJECT_WINDOW_ONLY', 'schedule_completeness_verified': False, 'historical_retrieval_proven': False, 'failure': 'PRODUCTION_ARCHIVE_UNAVAILABLE_OR_UNVERSIONED', 'problems': ['PRODUCTION_ARCHIVE_UNAVAILABLE_OR_UNVERSIONED']})", 'recovery jobs (9 registered, 4 overdue, 7 defect(s) still owned)', 'historical 2026-09-03 release eligibility (BLOCKED; 0 artifact problem(s), 0 contract problem(s))', 'standing-health issue evidence and hash chain']

@@ -1,0 +1,29 @@
+{
+  "id": "INDEPENDENT-CANDIDATES-20260916",
+  "status": "PREREGISTERED_BEFORE_FITTING",
+  "authority": "research_only_action_off",
+  "scope": "Independent standard-method implementation and source-quality assessment",
+  "seed": 20260916,
+  "nfl": {
+    "development_test_seasons": [2019,2020,2021,2022,2023,2024],
+    "sealed_seasons": [2025,2026],
+    "train": "2000 through test season minus 3; REG only",
+    "tune": "test season minus 2; no refit after selection",
+    "calibrate": "test season minus 1; binary non-ties only",
+    "test": "complete next regular season; models frozen for entire test season",
+    "baseline_features": ["home_prior_for","home_prior_against","away_prior_for","away_prior_against","home_prior_n","away_prior_n"],
+    "coaching_features": ["home_coach_prior_games","away_coach_prior_games","home_coach_changed","away_coach_changed","home_oc_changed","away_oc_changed","home_dc_changed","away_dc_changed"],
+    "ridge_alpha_grid": [1,10,100],
+    "xgb_grid": [{"max_depth":2,"n_estimators":100},{"max_depth":2,"n_estimators":250},{"max_depth":3,"n_estimators":100}],
+    "xgb_fixed": {"learning_rate":0.03,"subsample":1.0,"colsample_bytree":1.0,"reg_lambda":10,"n_jobs":1},
+    "selection_metric": "tuning-season margin MAE, first grid entry wins ties",
+    "calibration": "LogisticRegression C=1 on calibration-season predicted margin; sigmoid only",
+    "raw_probability": "Normal CDF using frozen training residual RMSE; diagnostic",
+    "comparisons": ["ridge_coaching versus ridge_base: coaching feature group only", "xgb_base versus ridge_base: estimator only", "sigmoid versus raw: probability map only"],
+    "scores": ["margin MAE","margin RMSE","home-only binary Brier excluding ties","binary log loss excluding ties","reliability bins","paired game-date bootstrap MAE delta"],
+    "pit_status": "RETROSPECTIVE_UNVERIFIED_PUBLICATION_TIMES; observation ordering is enforced but this is not certified historical PIT",
+    "promotion": "NONE; development screening only, holdout sealed"
+  },
+  "wnba": {"method":"independently authored offensive/defensive ridge RAPM", "target":"100 * points per possession", "lineup":"five unique offensive IDs and five unique defensive IDs; defense design entries -1", "data_gate":"nonnegative integer points <=5, scoring identity 2*fgm+fg3m+ftm and unique game/possession; anomalous source blocks entire fit, no silent trimming", "alpha":100,"promotion":"NONE"},
+  "nfl_pbp": {"use":"observed Week 1 feature capture only; no fitted coefficient or production injection", "order":"game_id,order_sequence; never lexicographic play_id", "pace":"same-game same-quarter same-drive consecutive offensive scrimmage snaps, no preceding timeout/out-of-bounds/incompletion/score/penalty; elapsed seconds in [0,40]", "hvt":"receptions plus rush attempts from opponent 10-yard line or closer; descriptive workload, not expected points"}
+}

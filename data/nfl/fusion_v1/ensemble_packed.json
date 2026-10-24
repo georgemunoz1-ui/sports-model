@@ -1,0 +1,42 @@
+{
+  "schema": "nfl.target_aligned_ensemble_packed.v1",
+  "protocol_sha256": "0e1208bd6b3994a38feaf0bb42aaa581cb1e542f824c9f3f37c4ea7ddacb41af",
+  "heads": {
+    "home_win": {
+      "target": "HOME_NON_TIE_PROBABILITY",
+      "arms": ["CONTEXT_BASE", "CONTEXT_QB", "CONTEXT_AVAILABILITY", "CONTEXT_TRAVEL", "CONTEXT_COMBINED", "PR36_SCORING_RIDGE", "PR36_COACHING_RIDGE", "PR36_SCORING_XGBOOST"],
+      "weights": [0.0, 0.4984232722048618, 7.564004218980902e-19, 8.639736061993863e-20, 0.12974339858558082, 0.03662405600720426, 0.29444417227319614, 0.04076510092915707],
+      "weight_sum": 1.0,
+      "fit_n": 781,
+      "calibration": {"slope": 1.1905897419670985, "intercept": 0.13966205391732925}
+    },
+    "home_margin": {
+      "target": "HOME_MINUS_AWAY_FINAL_POINTS",
+      "arms": ["CONTEXT_BASE", "CONTEXT_QB", "CONTEXT_AVAILABILITY", "CONTEXT_TRAVEL", "CONTEXT_COMBINED", "PR36_SCORING_RIDGE", "PR36_COACHING_RIDGE", "PR36_SCORING_XGBOOST"],
+      "weights": [2.4519503047174772e-15, 0.5479398829104108, 4.2750070772853144e-16, 8.66749196555913e-17, 0.01802030238407648, 0.0, 0.4340398147055098, 0.0],
+      "weight_sum": 1.0,
+      "fit_n": 784
+    },
+    "total_points": {
+      "target": "HOME_PLUS_AWAY_FINAL_POINTS",
+      "arms": ["CONTEXT_BASE", "CONTEXT_QB", "CONTEXT_AVAILABILITY", "CONTEXT_TRAVEL", "CONTEXT_COMBINED"],
+      "weights": [0.10414611512415077, 0.895853884875849, 0.0, 3.12250225675825e-16, 0.0],
+      "weight_sum": 1.0,
+      "fit_n": 784
+    }
+  },
+  "research_only": true,
+  "action_authority": false,
+  "market_input": false,
+  "official_release_eligible": false,
+  "trained_through_season": 2022,
+  "model_id": "nfl.target_aligned_ensemble.v1.research",
+  "parent_fitted_artifact_sha256": "895713bf221737fbb6ab87ce62289bad672b9e2773aecd634aacb423d75038af",
+  "fit_game_ids_sha256": "61b0e72f97808fb51782c1613e96d5b0450c3b5482e45124bc759618375d9a54",
+  "calibration_game_ids_sha256": "c48b94cfb341926ef85c927ad8e5c850f64fdf6ed912b47c4ef90f5ecc8c824d",
+  "fit_games": 784,
+  "calibration_games": 271,
+  "primary_improvement_screen_passed": false,
+  "promotion": false,
+  "packing_scope": "Identical learned weights and calibration; long cohort ID lists replaced by hashes/counts. Original cohort lists preserved in parent artifact."
+}

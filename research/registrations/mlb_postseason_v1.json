@@ -1,0 +1,65 @@
+{
+  "action_authority": false,
+  "authorization": "User: Create MLB playoff model for 9/30; 2026-09-30",
+  "baseline": "FROZEN_V13_SAME_NINE_INNING_DRAWS",
+  "chronology": "Team form includes R/F/D/L/W finals strictly before slate date; starter profiles use R games strictly before slate date. No current-day outcomes used.",
+  "code_pins": {
+    "data/backfill/mlb/2026/park_factors.json": "f99f38b1042b0771ae850dc9aa506498c14e963064b72e110371ea9b48420793",
+    "engine/hfa.py": "029c5f6d7bf71d6ea05c0d2bb8775f65b6c30576ab1ccc9289d434edb5a35382",
+    "harness/mlb_daily_coordinator.py": "57cb75658db52daae530753e2185930ba252654c7a86c9b2ae3f8e46e5605c38",
+    "harness/mlb_form_state.py": "b8fd6e461d7023b48d7d23ef157e1a1159749c9aa3398ffdd19d6f87edf42814",
+    "harness/run_v13_historical.py": "d2fdf977cbd8eb34759af3bf23b19112ad02af99968973c1f0bc721a88470cba",
+    "pipelines/cards/adapters/mlb.py": "95cdbf3e028012a865e14d1ddbba2a3954c48488abe394f76044ec49063d05d5",
+    "research/mlb_postseason_v1.py": "1672162d95a360f8a45ccaecd81b69508f0c74ddf66dd13c6c16f85acfccfbcb",
+    "scripts/prepare_mlb_official_current.py": "07e26052b47b9061c9615604648f073f09336e18c18f4678c6acc9b76eb0f69b",
+    "scripts/prepare_mlb_postseason.py": "dc1bd5f8b68303b86c099cc286f425497c7386311c9c0ae827c7599d0389e0b1"
+  },
+  "coefficient_changes": false,
+  "count": 100000,
+  "created_at_utc": "2026-09-30T21:53:17.774929+00:00",
+  "evaluation_plan": {
+    "primary": "paired binary Brier and log loss vs frozen V13 on identical prospective postseason events",
+    "promotion": "None authorized; no sample count alone confers validity",
+    "secondary": [
+      "reliability with bin counts",
+      "extra-inning and starter-workload slices",
+      "paired season/series block bootstrap"
+    ],
+    "tuning": "None on September30 outcomes; archive-first chronological postseason development required before calibration"
+  },
+  "fitted_postseason_coefficients": false,
+  "hfa": 1.005,
+  "model_id": "mlb.postseason.v13_empty_base_extras.research.v1",
+  "official_release_eligible": false,
+  "optional_unconsumed": [
+    "lineups",
+    "injuries",
+    "weather",
+    "bullpen availability",
+    "postseason manager starter-hook tactics"
+  ],
+  "post_start_policy": "Explicit diagnostic only; never retrospectively registered or graded as pregame",
+  "predictive_validation": "UNVALIDATED",
+  "products": [
+    "winner diagnostic"
+  ],
+  "required_inputs": [
+    "official postseason event identity/start",
+    "all 30 team prior-date result census",
+    "both observed starter profiles",
+    "current source hashes/receipts",
+    "hash-bound agent review",
+    "writer actual clock"
+  ],
+  "role": "SEPARATE_SHADOW_RESEARCH_CANDIDATE",
+  "rules_source": "https://www.mlb.com/news/mlb-playoff-format-faq",
+  "schema": "mlb.postseason.model_contract.v1",
+  "structural_change": "Replace tied-nine-inning winner proxy with independent Poisson empty-base extra innings, continuing until unequal. Rates inherit existing V13 relief strength, offense, park, HFA. No automatic runner.",
+  "supersedes_unexecuted_draft_sha256": "c63be6ee0b6d4ace257c970623a5d20393a7fe7f718d564e6d1359bd7229400b",
+  "unsupported_products": [
+    "score forecasts",
+    "run lines",
+    "totals",
+    "live win probability"
+  ]
+}

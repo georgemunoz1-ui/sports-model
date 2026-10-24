@@ -1,0 +1,114 @@
+{
+  "audit_id": "gamechamp-cfb-20261021",
+  "source_artifact": {
+    "path": "GameChampAI-NMSU-SHSU-2026-10-21.md",
+    "sha256": "895749478dc22fcd0df55d5e6775bdefc44266b93d55ba29b2d1828f7ba2f375",
+    "size_bytes": 26037,
+    "verification": "BYTES_MATCH; CONTENT_CLAIMS_NOT_AUTHENTICATED"
+  },
+  "minutes_budgets": [],
+  "allocation_checks": [
+    {
+      "check_id": "NMSU_play_budget",
+      "unit": "attempts",
+      "source_component_id": "conditional_bookkeeping",
+      "target_component_id": "conditional_bookkeeping",
+      "terms": [
+        {
+          "entity_id": "pass",
+          "value": 35.07
+        },
+        {
+          "entity_id": "rush",
+          "value": 29.52
+        }
+      ],
+      "target": 64.58,
+      "rounding_step": 0.01,
+      "sum_terms": 64.59,
+      "sum_minus_target": 0.010000000000005116,
+      "rounding_tolerance": 0.015,
+      "arithmetic_status": "PASS",
+      "note": "Arithmetic reconciliation only; the input values and their predictive validity are unverified."
+    },
+    {
+      "check_id": "SHSU_play_budget",
+      "unit": "attempts",
+      "source_component_id": "conditional_bookkeeping",
+      "target_component_id": "conditional_bookkeeping",
+      "terms": [
+        {
+          "entity_id": "pass",
+          "value": 34.57
+        },
+        {
+          "entity_id": "rush",
+          "value": 31.51
+        }
+      ],
+      "target": 66.08,
+      "rounding_step": 0.01,
+      "sum_terms": 66.08,
+      "sum_minus_target": 0.0,
+      "rounding_tolerance": 0.015,
+      "arithmetic_status": "PASS",
+      "note": "Arithmetic reconciliation only; the input values and their predictive validity are unverified."
+    },
+    {
+      "check_id": "NMSU_TD_budget",
+      "unit": "touchdown_lambda",
+      "source_component_id": "conditional_bookkeeping",
+      "target_component_id": "conditional_bookkeeping",
+      "terms": [
+        {
+          "entity_id": "named",
+          "value": 2.04
+        },
+        {
+          "entity_id": "field",
+          "value": 0.36
+        }
+      ],
+      "target": 2.4,
+      "rounding_step": 0,
+      "sum_terms": 2.4,
+      "sum_minus_target": 0.0,
+      "rounding_tolerance": 0.0,
+      "arithmetic_status": "PASS",
+      "note": "Arithmetic reconciliation only; the input values and their predictive validity are unverified."
+    },
+    {
+      "check_id": "SHSU_TD_budget",
+      "unit": "touchdown_lambda",
+      "source_component_id": "conditional_bookkeeping",
+      "target_component_id": "conditional_bookkeeping",
+      "terms": [
+        {
+          "entity_id": "named",
+          "value": 1.8275
+        },
+        {
+          "entity_id": "field",
+          "value": 0.3225
+        }
+      ],
+      "target": 2.15,
+      "rounding_step": 0,
+      "sum_terms": 2.15,
+      "sum_minus_target": 0.0,
+      "rounding_tolerance": 0.0,
+      "arithmetic_status": "PASS",
+      "note": "Arithmetic reconciliation only; the input values and their predictive validity are unverified."
+    }
+  ],
+  "method_sensitivities": [],
+  "scope": "SUPPLIED_CLAIM_ARITHMETIC_ONLY",
+  "numerical_forecast_modified": false,
+  "source_facts_verified": false,
+  "point_in_time_verified": false,
+  "action_authority": false,
+  "predictive_validation": "NOT_ASSESSED",
+  "arithmetic_failures": 0,
+  "audited_at_utc": "2026-10-22T04:27:06.844906+00:00",
+  "event_id": "CFB:401871070"
+}

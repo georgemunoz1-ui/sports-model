@@ -1,0 +1,298 @@
+{
+  "action_authority_changed": false,
+  "audit_date": "2026-10-22",
+  "end_to_end_independence": "HOLD_EMBEDDED_PAYLOAD_SEED_EXCEPTION",
+  "execution_status": "COMPLETED",
+  "frozen_forecasts_changed": false,
+  "implementation_sha256": {
+    ".github/workflows/market-independence-audit.yml": "42ee35dc2d6b5212a7db2f99439ddad9798c1bbfabe47a69e4b3900c73255675",
+    "docs/SELECTED_MARKET_INDEPENDENCE.md": "88519cd350cec7ba0edf9994928dc64141c94c82471e34141c548f38ce60397f",
+    "pipelines/cards/disclosures.py": "2cbaebf61e91e07ce6acf8a447df539051941ff99444865f7a5849e4d77002cd",
+    "pipelines/cards/market_provenance.py": "104defadba451c9a33769d59d0164c44b793e20db07f705668f346c317a8ed9e",
+    "scripts/generate_card_force.py": "7ed8dd0c2f9b8431530e42e2943c04a1f32c08b57e6bd83e4a5949f287f0bcd6",
+    "tests/test_selected_market_independence.py": "a7de4a76181d31fd97347547723baba028e612f0b73164b7c1c4878ead1db191"
+  },
+  "invariance": {
+    "embedded_event_package_market_metadata": "COUNTEREXAMPLE_REPRODUCED_7_LEAGUES",
+    "nfl_explicit_market_modes": "EXPECTED_DEPENDENCE_REPRODUCED",
+    "research_distribution_contracts": "PASS_7_LEAGUES_2_PRODUCTS",
+    "separate_market_payloads": "PASS"
+  },
+  "local_checkout": "SOURCE_ONLY_RESTORATION_NOT_FULL_HARNESS_HEALTH",
+  "main_revision": "90daf8e0036c67a5304aa0747bf50b2266e0b364",
+  "model_defaults_changed": false,
+  "numerical_model_code_changed": false,
+  "pr74_base_revision": "bd6205e0109190dec0fb47452d0f484dca203574",
+  "predictive_validation": "NOT_ASSESSED",
+  "prior_pr74_ci": {
+    "commit": "bd6205e0109190dec0fb47452d0f484dca203574",
+    "consolidation_run": 39722897660,
+    "durability": "success",
+    "durability_run": 39722897648,
+    "failure": "Artifact storage quota has been hit",
+    "job": 119640188785,
+    "pytest": "726 passed in 52.44s"
+  },
+  "publication_eligibility": "NOT_EVALUATED",
+  "python": "3.12.14",
+  "schema": "sports.selected_market_independence.audit.v1",
+  "simulation_count_per_case": 100000,
+  "source_scope": "Real adapters/loaders/selected numerical paths; synthetic six-league packages and retained historical NFL coefficients. Full historical refits not executed; legacy MLB pin mismatch not bypassed.",
+  "sources": [
+    {
+      "git_blob_sha": "6db980d312b3b8180ba5f891b8e8f6014f047e2a",
+      "matches_main_and_pr74": true,
+      "path": "pipelines/cards/selection.py",
+      "sha256": "2b7240a5c18ee74e260c5a769fe0e24d91633cd49d40bd7971c6d4ad91e291cd"
+    },
+    {
+      "git_blob_sha": "b555ece45ac37d16b28928777b2976492c479a9c",
+      "matches_main_and_pr74": true,
+      "path": "pipelines/cards/selected.py",
+      "sha256": "0b6b270ea04a5df266ba47b23813e2943d6952b06f064802ba68c74d161276b8"
+    },
+    {
+      "git_blob_sha": "4838f3daf447ada3525d41daae1375b769130296",
+      "matches_main_and_pr74": true,
+      "path": "data/model_selection/defaults_v1.json",
+      "sha256": "8bbfb63ee0f8eeb99fc728fb25db3f1d9959c863ccb4f517abde058e3424b3eb"
+    },
+    {
+      "git_blob_sha": "06aae65d54e9742517a5287d3cedf6789ec79155",
+      "matches_main_and_pr74": true,
+      "path": "models/current/common.py",
+      "sha256": "63c0da2a4c620fb086d08e22268fe3875515c1807aec128f5e092f73eeafd5ff"
+    },
+    {
+      "git_blob_sha": "494fcbb980b3fc630b9488b4af6cd7645c7f1cb8",
+      "matches_main_and_pr74": true,
+      "path": "models/current/cfb.py",
+      "sha256": "20628f3463589cae551b325e68fa7125aef8f9cd075e7b19b0a1c76b9f411b5a"
+    },
+    {
+      "git_blob_sha": "14f8bbdd427d7f7416c022e08c6337c6ead116d5",
+      "matches_main_and_pr74": true,
+      "path": "models/current/wnba.py",
+      "sha256": "52a1b64d4644e18d8edbd3337f307a7dcd8e7b199e9ed9a4fbfb66722c55821a"
+    },
+    {
+      "git_blob_sha": "0fd38c683198ae7e6b0cbe19d60c14872dc5feb0",
+      "matches_main_and_pr74": true,
+      "path": "models/current/mlb.py",
+      "sha256": "72c734fb0a36a15a013300773382089da325d162a558605020c7271efc48cf5f"
+    },
+    {
+      "git_blob_sha": "56405b95cfe0b0b6091acc67bcee0e15cf15e06b",
+      "matches_main_and_pr74": true,
+      "path": "models/current/baseline.py",
+      "sha256": "cc338abccfcc4c107069cc5b64b0e6e6485d77ea3ba27dd703f7a1c4055fb875"
+    },
+    {
+      "git_blob_sha": "d448d098a85c999e7da72054f907c38afa663a60",
+      "matches_main_and_pr74": true,
+      "path": "models/current/linear.py",
+      "sha256": "e10b15e6ed20fd410f5d87afbf01eb191768a459ffcb106dd64cbacef797e4a2"
+    },
+    {
+      "git_blob_sha": "b7fbcebebecb9ed9568ef5323ce03e916f71d788",
+      "matches_main_and_pr74": true,
+      "path": "scripts/prepare_cfb_current.py",
+      "sha256": "22ae3202b2f70efd05e3852c8e7162af7f79e3409f81276db4be4e14dfe71ab8"
+    },
+    {
+      "git_blob_sha": "316017cb1e024e07a1252d5f68c5ba021173a6b7",
+      "matches_main_and_pr74": true,
+      "path": "scripts/prepare_wnba_current.py",
+      "sha256": "233afaf1aece38b59e5788d0aa33597df4ed3c5d9243d1fe3b0f391f1c428cc1"
+    },
+    {
+      "git_blob_sha": "192a00a9bf8a5487771b43333a25bbfbf218406c",
+      "matches_main_and_pr74": true,
+      "path": "scripts/prepare_mlb_official_current.py",
+      "sha256": "07e26052b47b9061c9615604648f073f09336e18c18f4678c6acc9b76eb0f69b"
+    },
+    {
+      "git_blob_sha": "9ba2ec6912ad68a148e9bc6b118747fc2a433490",
+      "matches_main_and_pr74": true,
+      "path": "scripts/prepare_initial_baselines.py",
+      "sha256": "3e395368e1aed825e26dd7b153889ea84148182ea863d5e2c1da98dd489641c6"
+    },
+    {
+      "git_blob_sha": "7f5aec3f1a73eabc57e7d03b82be9a9715f31bc1",
+      "matches_main_and_pr74": true,
+      "path": "models/nfl/contextual/base_features.py",
+      "sha256": "f017a95578e056c1da799aaf29d218bf46bd480fbb4d214ecaad120f7f88cf68"
+    },
+    {
+      "git_blob_sha": "22ae216e19f2947ffb7e02e213d2a44c3a487bce",
+      "matches_main_and_pr74": true,
+      "path": "models/nfl/contextual/features.py",
+      "sha256": "3a064779ce6a1a53b4fda66eed9f86a4365208a849b357dcd1cb5719b3e0a115"
+    },
+    {
+      "git_blob_sha": "5ea2230841a9028d4d127aff337e84f065fc9dbc",
+      "matches_main_and_pr74": true,
+      "path": "models/nfl/contextual/runtime.py",
+      "sha256": "8951577d6edd2e2e37b370cafe9f90c205b9de8b6b59d9c1aba961f15760c15d"
+    },
+    {
+      "git_blob_sha": "081d8fe266abdd8ac49d74116989bcaad72ca198",
+      "matches_main_and_pr74": true,
+      "path": "models/nfl/contextual/model.py",
+      "sha256": "ba00569e30cd56fa1d50570f828db02e56caf849ddbdf1d0d0fc11272e7a0fc3"
+    },
+    {
+      "git_blob_sha": "055bc4665172209804201e2c4ad8677480fec615",
+      "matches_main_and_pr74": true,
+      "path": "models/nfl/contextual/recovered_inference.py",
+      "sha256": "ac70b26355c8a9fe0850caf6e69ec268f363363dffb3b1289cbee13d4d729abd"
+    },
+    {
+      "git_blob_sha": "9a49994ba1c7ef870349eb6b69334bb71ecd691f",
+      "matches_main_and_pr74": true,
+      "path": "models/nfl/contextual/weekly_state.py",
+      "sha256": "41e87fa081cbc2fe7625571f3a46f797bdaecc0dad9329676fea805059c6f71f"
+    },
+    {
+      "git_blob_sha": "37b6d6372c1d7fa65869d2bdfa4b51064fcefcf4",
+      "matches_main_and_pr74": true,
+      "path": "models/nfl/contextual/qb_assimilation.py",
+      "sha256": "33667fa0375a1d151ec2a450c497e219cc0d099472e603f1ad6d4814abfef51c"
+    },
+    {
+      "git_blob_sha": "e0f1ad7b58d0fede86f30b93ba6c55a8ae2c4d2a",
+      "matches_main_and_pr74": true,
+      "path": "models/nfl/modes/core.py",
+      "sha256": "0eb472f3c6842f20f723e7932743b242fa8056d6417ccbf75521c1b1de028476"
+    },
+    {
+      "git_blob_sha": "9f95c57cafe9ad7abc49a77959d46cdda209ed4c",
+      "matches_main_and_pr74": true,
+      "path": "models/nfl/modes/runtime.py",
+      "sha256": "ef04ff6455f56a4a191972f9beb9af175c8b1977d76cd30253271b366f3e93f3"
+    },
+    {
+      "git_blob_sha": "898c3232b57f88d50abad53bc4bb94fbebf89f1d",
+      "matches_main_and_pr74": true,
+      "path": "data/nfl/modes_v1/market_model.json",
+      "sha256": "bed86a87c9de511339bde3b1ed6e4e6ad11af2a59d6d4969c281ce6c9c5b9679"
+    },
+    {
+      "git_blob_sha": "ed1c6450566ebb63fddba8101f1849bfb4b78c7e",
+      "matches_main_and_pr74": true,
+      "path": "data/nfl/modes_v1/live_model.json",
+      "sha256": "fcc21af9e3c631ddb847b74a3e10b0fd244e892f9d909029b20d786eb384ea25"
+    },
+    {
+      "git_blob_sha": "fa5f22c65ad23c278841b6f1260c9ad16f4402dd",
+      "matches_main_and_pr74": true,
+      "path": "data/nfl/contextual_v1/model_packed.json",
+      "sha256": "a1fc0436a3e3d4f76d7b7fe9b480314fbb20804e3b9d29288f64913935a80322"
+    },
+    {
+      "git_blob_sha": "dc7d35907e57149b0e720b10a888469113c96e21",
+      "matches_main_and_pr74": true,
+      "path": "data/nfl/contextual_v1/runtime.json",
+      "sha256": "cf2a0c2ef85073904b0bb61e06be9ec655ac2e728f59fdc38163889d607a8000"
+    },
+    {
+      "git_blob_sha": "c7787c3d6dc0e559aa22187d8aadc27fe9cc812e",
+      "matches_main_and_pr74": true,
+      "path": "scripts/run_nfl_integrated.py",
+      "sha256": "b248702e3d85bfec1e58e98b9584ad5219e94072d6a362bd9298576d2287ea0f"
+    },
+    {
+      "git_blob_sha": "a844e3ca2a7e95ea5baa01acaafffeaab3068694",
+      "matches_main_and_pr74": true,
+      "path": "harness/cfb_v1_port.py",
+      "sha256": "5f3454c780cebf32a2ba193cf9537dc1fb1b5d5d405ad54482f7c7ce1488926a"
+    },
+    {
+      "git_blob_sha": "93834a298645e31926b2fa085ae69d9afc8f170c",
+      "matches_main_and_pr74": true,
+      "path": "harness/cfb_forecast_0829.py",
+      "sha256": "faead7713142ea813a00222f391f85f082d61d9bcb929c1feb6d5919b8001f8c"
+    },
+    {
+      "git_blob_sha": "223efd09bac9565d5fa86c9d0bec8a0768187a26",
+      "matches_main_and_pr74": true,
+      "path": "harness/wnba_model_v1.py",
+      "sha256": "7f128ba323ee939b8f40bf55eb2e1f6e9a24611e29ca4eb743962af2608af4e0"
+    },
+    {
+      "git_blob_sha": "6936480e8fa9d5c3d6e27243a173512e51b28c4b",
+      "matches_main_and_pr74": true,
+      "path": "harness/run_v13_historical.py",
+      "sha256": "d2fdf977cbd8eb34759af3bf23b19112ad02af99968973c1f0bc721a88470cba"
+    },
+    {
+      "git_blob_sha": "38331680512fa6d99ef751ff03cbd0527147cb28",
+      "matches_main_and_pr74": true,
+      "path": "engine/hfa.py",
+      "sha256": "029c5f6d7bf71d6ea05c0d2bb8775f65b6c30576ab1ccc9289d434edb5a35382"
+    },
+    {
+      "git_blob_sha": "e6e605249ae82fd55bca6a58c4e99b5a60a118dc",
+      "matches_main_and_pr74": true,
+      "path": "pipelines/cards/distribution_research.py",
+      "sha256": "fd7c1d4a7ae330e3fce4a0cd155b861b6fb4e6b0fc3f5e24c1b5ee81a57aa296"
+    },
+    {
+      "git_blob_sha": "4fafd460886050f128707ba9a75cd33e31b0b0d4",
+      "matches_main_and_pr74": true,
+      "path": "models/common/discrete_research.py",
+      "sha256": "4a68440a8a7d8bcc9b7ed7b617f9f5ff778fe62d4274840e52a37e48ba8f08eb"
+    },
+    {
+      "git_blob_sha": "bb8c2c256de84d95e3558dc787e18a7c2cdd8db9",
+      "matches_main_and_pr74": true,
+      "path": "pipelines/cards/adapters/nfl.py",
+      "sha256": "621ac88166b0516926c7f26ab2c8694cb2a8b74e7d210f811c3045bef555813e"
+    },
+    {
+      "git_blob_sha": "1e5e5cfaedf856a800afc33fe057745accad1641",
+      "matches_main_and_pr74": true,
+      "path": "pipelines/cards/adapters/cfb.py",
+      "sha256": "0497734c7ccd4ea8e2e9b678f21e0c067c5c193609f57d7f50c5a4d8452e49f7"
+    },
+    {
+      "git_blob_sha": "144eac7dcc7268e746be1d164212384345392b3d",
+      "matches_main_and_pr74": true,
+      "path": "pipelines/cards/adapters/wnba.py",
+      "sha256": "4778c51aa1de02edcb0a9814c4ce1e16196119ee435487e257e746b2b029cdc9"
+    },
+    {
+      "git_blob_sha": "df4af5b5e73af49e3601b734b4783d232cb40247",
+      "matches_main_and_pr74": true,
+      "path": "pipelines/cards/adapters/mlb.py",
+      "sha256": "95cdbf3e028012a865e14d1ddbba2a3954c48488abe394f76044ec49063d05d5"
+    },
+    {
+      "git_blob_sha": "d3638efcab917d28806cad665ab637994b7afce4",
+      "matches_main_and_pr74": true,
+      "path": "pipelines/cards/adapters/nba.py",
+      "sha256": "5c2251f1b088b8eab06d7a534df2f2360a96fb97f4905addc96ba1edae9c1450"
+    },
+    {
+      "git_blob_sha": "95344deba92a4498c786516f9016c474e335398f",
+      "matches_main_and_pr74": true,
+      "path": "pipelines/cards/adapters/nhl.py",
+      "sha256": "25758f1aa9f12332a1eb2c6733b17aba420f82c3ac43c38820f7c1557d652ff8"
+    },
+    {
+      "git_blob_sha": "66dca9608a12343b6d5a262f2798f8c926f55c24",
+      "matches_main_and_pr74": true,
+      "path": "pipelines/cards/adapters/mls.py",
+      "sha256": "c9b82582d331b4b903ba2a45b4e698ebb3d254efe5ec268fcc5b7eca6531eb89"
+    }
+  ],
+  "tests": {
+    "errors": 0,
+    "failures": 0,
+    "new_regression_cases": 47,
+    "skipped": 0,
+    "summary": "225 passed, 56 subtests passed in 11.90s",
+    "tests": 281
+  },
+  "wagering_authority": "OFF"
+}

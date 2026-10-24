@@ -4784,3 +4784,55 @@ records support Cincinnati but no source override or conflict clearance is made.
 All old inventories are stale/blocked at the current review cutoff. No forecasts,
 defaults, models, grades or wagering authority changed; PR 73 is excluded.
 See docs/ROSTER_DISCLOSURE_RECONCILIATION_20261021.md and its retained evidence.
+
+
+
+## 2026-10-21 — Qualified GameChamp report adaptations
+
+Owner supplied original CFB NMSU–SHSU and NBA MIN–MIA reports and requested
+qualified adaptations. Reused merged PR72's known/unknown/scenario/PASS/dependence
+layer. Added optional hash-bound projection audits: NBA/WNBA regulation minutes,
+nonnegative allocation reconciliation with rounding/component identity, and
+unweighted same-contract named-method sensitivity. Shared and NFL disclosure
+paths consume the optional field; frozen predictions and numerical models do not.
+
+On supplied reports both NBA rotations total 240; displayed player sums reconcile
+within rounding, but the source's team-component sum 248.32 differs from its
+reported 248.43. Named controls show 6.70 pp winner and 32.20 pp Under ranges;
+the claimed wider 44-row grid is not available and was not fabricated. CFB
+budgets reconcile only as bookkeeping; market-anchored forecasts are not imported.
+Original user-supplied reports and append-only archive receipt are retained with
+the adaptation evidence. No original sampler, roster truth or PIT validity is
+claimed from those text reports. See docs/GAMECHAMP_ADAPTATION.md.
+
+Focused local tests cover malformed/duplicate/nonfinite inputs, source/path/hash
+and contract failures, distinct component totals, immutable writes, all-seven
+parent preservation and the existing shared/NFL integration. This environment's
+source-only restoration lacks historical files and cannot establish full harness
+health. Exact local results are retained in the release acceptance record; full
+repository CI remains separate. No model default, forecast, active experiment,
+certified ledger or action authority changed. Player-led numerical construction
+remains a candidate requiring a fitted, source-bound chronological evaluation.
+
+
+## 2026-10-22 — Selected-path market-independence audit
+
+Traced the seven league adapters, selection registry, fitted feature paths and
+retained simulations at main 90daf8e / PR74 bd6205e. The selected feature paths
+use historical/contextual data; NBA/NHL/MLS remain opt-in initial research with
+no verified default. NFL enhanced mode is explicitly market-informed (saved
+football weights 0 winner, 0 margin, 0.1 total); live uses a market prior.
+
+Added 100,000-draw metamorphic regressions and presentation-only provenance
+disclosures. Separate market payload changes preserve predictions and draw bytes.
+Accepted market metadata embedded in event/package identity changes RNG draws,
+and can change MLB's MC-only selected probability: MI-002 remains OPEN. Tests
+assert this counterexample, not universal independence. No seed or model code
+was changed. Current-package MLB is tested; the legacy Sep14 route has stale
+code pins and was not bypassed. Missing declarations now remain unknown in
+grading rather than being manufactured as market_features_used=false.
+
+See docs/SELECTED_MARKET_INDEPENDENCE.md and the retained acceptance record.
+A focused CI job requires no artifact upload; full-tree health and predictive
+validation remain separate. Defaults, frozen forecasts, experiment/ledger state
+and action authority are unchanged. No live slate or model promotion performed.

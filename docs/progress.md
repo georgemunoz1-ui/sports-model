@@ -4544,6 +4544,484 @@ retained draw bytes. NFL's selected QB Week 3 path remains independent of PR38 a
 the rejected combined ensemble. See docs/ALL_MODELS_CURRENT_RUNTIME.md for scope,
 source acquisition, exact commands, remaining model limitations and evidence.
 
+
+## 2026-09-24 — MLB calibration grading persistence repair
+
+Scheduled date filtering selected no registered cards yet committed success timestamps.
+Repair retries the pending registry, fails explicit missing dates, and adds a pregame
+writer bound to uploaded card bytes. Grade candidates validate before append; retries
+leave existing bytes unchanged, including after interrupted derived-state publication.
+Recovered 16 September 4 grades using the original run/registration and retained
+official finals. Summary n=16; analytic Brier 0.218148, archived sim Brier 0.240606.
+Exact replay adds zero and preserves forecast/ledger/summary/registry hashes.
+53 focused tests pass; unrelated health/release obligations remain unresolved.
+No model/default, market, action or release-policy changes. No historical registration
+created for September 21/22. See docs/MLB_CALIBRATION_GRADING_REPAIR.md and retained evidence.
+
+
+## 2026-10-07 — Cross-sport distribution research implementation
+
+Owner requested the ATS research applied across all models/sports. Added opt-in
+discrete margin/total residual fitting, conditional scale, monotone CDF calibration,
+source-bound availability mixtures, exact integer/half/MLS-quarter settlement,
+100K retained simulations, and paired contract-matched evaluation for seven leagues.
+Shared-card and canonical NFL pregame commands emit isolated child reports; missing
+fits/heads remain explicit. Existing defaults, frozen forecasts and ledgers unchanged.
+
+Synthetic all-seven software acceptance plus existing default-selection and NFL
+spread-calibration regressions pass locally; this does not establish predictive
+accuracy. No authentic all-seven fitting/holdout/prospective cohort was executed.
+The partial checkout cannot establish full repository health; historical standing
+health and issue #59 remain open. See docs/CROSS_SPORT_DISTRIBUTION_RESEARCH.md
+and docs/releases/2026-10-07-cross-sport-distributions/ for executed scope and limits.
+Research only, no model promotion, canonical registration, or action authority.
+
+
+## 2026-10-07 — Distribution release follow-up and authentic historical replay
+
+Owner asked to finish PR61. Registered DISTRIBUTION-REPLAY-20261007 before
+execution; fixed parent, residual, calibration and later evaluation seasons.
+Executed CFB margin and NBA/NHL/MLS margin+total: 3,661 unique games, 6,608
+game-product evaluations. Retained identified cohorts, all fitted artifacts,
+paired results, prediction hashes and 700K real draws for exact replay.
+All seven conditional-scale CRPS intervals include zero. Six CDF fits refuse
+missing support; NHL margin CDF shows a small retrospective CRPS improvement,
+but one evaluated margin has zero exact-score support and no market comparison.
+NFL/WNBA/MLB historical input gaps remain explicit; no anonymous residuals or
+winner-only evaluations were substituted. Availability effects and prospective
+validation remain incomplete. No default or wagering authority changed.
+Initial PR head passed 420 full-suite tests; three jobs failed solely on artifact
+upload quota. Repository health remains RED with four existing failures.
+See docs/DISTRIBUTION_REPLAY_20261007.md and the retained study for exact scope.
+
+Cross-platform CI subsequently caught last-bit regenerated probability differences.
+Reproduced them by changing NumPy/OpenBLAS CPU dispatch; retained original full
+distributions verified against saved forecast hashes. Portable verification uses
+1e-11 absolute numerical tolerance while artifact and draw bytes stay exact.
+Negative tests forbid material probability, integer-support or identity changes.
+
+
+
+## 2026-10-09 — CFB margin evaluation safety repair (local review)
+
+Corrected the fitter's probability evaluation design: its former validation rows
+fitted residual scales and supplied the reported Brier, so that Brier is not an
+untouched holdout result. Mean-head MAE/RMSE may remain holdout diagnostics subject
+to source chronology; do not blanket-invalidate them. Legacy table is kickoff-
+ordered with unique IDs but lacks original feature/label availability metadata.
+It has 36,901 rows and only 17,472 FBS-v-FBS; old fitter's population claim was
+unenforced. Existing artifacts and previously issued forecasts remain unchanged.
+
+Added explicit train/calibration/test windows, source receipt binding, original
+availability checks, season-week/event disjointness, actual FBS filtering, and
+runtime-consistent weekly-scale test Brier. Both fit workflows pass all windows.
+Legacy-input refusal is verified before fitting. Source-backed migration and a
+registered untouched design remain required; no authentic refit or improved-model
+claim. Focused regressions pass; partial checkout cannot certify full repo health.
+Local patch only, no remote publication or promotion. See
+docs/CFB_MARGIN_EVALUATION_REPAIR.md for correction and migration requirements.
+
+
+## 2026-10-10 — Explicit research Monte Carlo precision and NBA direction shadow
+
+Owner authorized implementation and merge after reviewing the isolated prototypes.
+Added an opt-in finite-law MC precision CLI with default fixed 100,000 draws,
+versioned semantic RNG streams, immutable finite-look IID stopping plans, and
+paired common-random-number comparisons with declared estimand bounds. Existing
+selected simulations, seeds, draw artifacts and registered model defaults remain
+unchanged. Seven league contracts and a retained actual CFB card distribution
+exercise compatibility. Bounds quantify numerical integration uncertainty only;
+they do not establish source freshness, predictive calibration or corrected tails.
+
+Added a separately identified NBA efficiency shadow and opt-in CLI correcting
+points-allowed defensive-rating direction. Explicit units and fitted state are
+required; no fitted parameters are supplied or inferred. The selected NBA adapter
+still uses the initial causal-score model. Inherited tie-breaking remains a
+shortcut, not a fitted overtime model. No action or promotion authority added.
+
+Fifty focused integration tests passed independently on the control interpreter.
+The local source-only restoration has missing historical data/fixtures; broad
+local failures and health results cannot certify repository health. Exact-head
+remote CI and full-tree checks are required and recorded on the release PR.
+Artifact-storage quota remains an independently tracked upload limitation.
+See docs/MC_PRECISION_RESEARCH.md and docs/NBA_EFFICIENCY_SHADOW.md.
+
+
+## 2026-10-20 — Card scenario, PASS and dependence disclosures
+
+Owner authorized implementation and merge of the reporting patterns reviewed in
+external cards. Added source-bound known/unknown/assumed input states, conditional
+availability scenarios with no invented weights, explicit PASS reasons, and
+parlay constraint/dependence evidence. Five nested example legs reduce to three
+constraints. Supplied joint draws permit intersection recomputation; sampler
+replay and predictive validation remain separately unestablished.
+
+Both shared all-seven and separate NFL pregame runners emit immutable disclosure
+sidecars; a standalone command can annotate a frozen card without rewriting it.
+Identity, cutoff, content-hash, count, score-support and contradiction failures
+are explicit and cannot grant action authority. Existing models, defaults,
+probabilities, fitting choices and wager policy are unchanged.
+
+Local acceptance: 100 tests plus 56 subtests passed, including all-seven shared
+runner and separate NFL integration. Seventeen saved October 20 forecasts
+(3 CFB, 3 NBA, 11 NHL) produced disclosure reports without changing parent bytes.
+Partial local checkout health cannot establish repository health. Exact-head CI
+and merge outcome are recorded on the pull request; full release health remains
+a separate gate. See docs/CARD_DISCLOSURES.md for schema, commands and limits.
+
+
+Follow-up: full-suite CI exposed a legacy display-only card fragment without an
+as-of cutoff. The renderer now displays disclosures unavailable for that fragment;
+full disclosure reports still require a valid cutoff. No cutoff is invented and
+no evidence guard is weakened. The expanded local suite passes 116 tests plus
+56 subtests, including the existing model-default renderer regression. Integration
+tests now restore their process-wide output environment after each case.
+
+## 2026-10-23 — Parallel research integrity, selection and evaluation overhaul
+
+User authorized an agent swarm to validate and build across sports. Six specialist
+agents audited theory/capabilities, implemented selection/evaluation/freshness and
+performed independently authored adversarial checks; root integrated runners and
+card disclosures. Base commit: 90daf8e0036c67a5304aa0747bf50b2266e0b364.
+
+New executable paths preserve raw forecasts, verify external validation trust,
+emit deterministic price-independent SHADOW selection, count inspected trials,
+evaluate exact-target same-event controls and expose full-population coverage.
+WIN/LOSS/PUSH/VOID semantics and prospective-vs-replay boundaries are explicit.
+No abstention wins, mixed versions or post-start probability scoring are admitted.
+
+Card faces now expose consumed state dates and numerical traces. NBA acquisition
+has an explicit provider-season scope; corrected operational rest is an immutable
+candidate requiring new fitting/evaluation because the embargo proxy was used in
+training too. Existing model/core-adapter code pins and defaults are preserved.
+
+Final local full suite: 886 passed in 58.78s. Independent adversary: 49 tests,
+included in that total, with nine repaired findings. Earlier broad-run errors
+were missing committed fixtures in the partial source restoration, subsequently
+recovered unchanged. Five new/modified CLI help checks exit 0. Operational health
+and predictive validation remain separate; no go-live or selection certification
+is inferred from software tests.
+
+See docs/research/overhaul_2026_10_23/README.md, VALIDATION.md, ADVERSARIAL_REVIEW.md
+and CAPABILITY_GAPS.md/JSON for code usage, evidence and 20 prioritized gaps.
+Player-model refits, trust deployment, ancestry-based trial exposure, live drift
+monitoring and overlapping PR integration remain explicit work. No frozen card,
+weight, canonical ledger, authorization history or wagering status was changed.
+
+## 2026-10-23 — Integration continuation and blinded freeze
+
+The next implementation snapshot passes 1,101 full-suite tests and 61 independent
+blinded tests. Actual default and fitted-spread NFL retained-input replays each
+ran 100,000 draws under numeric-v2, emitted automatic NO_PICK sidecars, and wrote
+no prospective registration. The Oct22 discovery replay preserves 18 events and
+80 exact opportunities. Content-addressed ancestry, signed lifecycle, declared
+power, frozen-policy later refits, exact MLS settlement and population retention
+are now executable; earlier pending claims above describe the initial snapshot.
+
+The A5 rest candidate has independent hand oracles and five source-backed rebuilds
+(four complete, one ambiguous); none is a fitted or active shadow model. Archive
+and monitor workflows are implemented, but destination/auth/threshold/schedule
+remain configuration dependencies. No archive upload, notification or deletion
+is claimed. PR75 was separately merged at b1714692c21a0283653c3f71b4a678a4c625b6d0.
+PR76 remote publication/exercise is pending at this pre-publication checkpoint.
+
+See docs/research/overhaul_2026_10_23/DELIVERY_RECONCILIATION.md,
+CAPABILITY_RECONCILIATION_v2.md, BLIND_VERIFICATION.md and FINDING_EVIDENCE.json.
+
+
+## 2026-10-23 — Diagnostic swarm executed; no promotion
+
+Coordinator plus six workers and independent verifier inspected remote pin `278b9a2e655b72b720fefc215a5129a8e6cd2c93`, preserved original forecasts and evaluated CFB/NBA challengers through the real research runners. Final results and run IDs: `docs/research/efficiency_2026_10_23/SWARM_RESULTS_2026_10_23.md`.
+
+CFB: 1,045 common events; efficiency Brier delta +0.000453 with interval crossing zero. NBA repaired cutoff model v2: 2,458 common events; Brier delta +0.001298 with interval crossing zero; margin MAE worse; joint Brier worse. Post-result All-Star and midnight-cutoff repairs are disclosed; earlier outputs retained. Matched-training controls do not establish superiority. JMU/NE/Denver are partial discovery reconstructions, never preventable-loss confirmation.
+
+Integrated/exercised CFB joint dispatch, NBA scope/cutoff contracts, receipt identity binding, and NFL UTC/Eastern starter reconciliation. NFL six-week/93-game replay matches original states and selected QB NE forecast. Actual shared-card paths wrote 58 first-write local pregame SHADOW entries (10 CFB, 24 original NBA preserved, 24 new NBA v2); canonical eligibility and publication/action authority remain false.
+
+Final full test suite: 1,402 passed with JUnit evidence. Global legacy health remains RED (55 failures/4 warnings); scoped dependency disclosures retained. All 7,006 primary stage receipts/raw predictions survive selector BLOCKED status. Exact market/discrete settlement validation, authenticated personnel inputs, original historical availability evidence and NFL per-event OOF remain named blockers. No remote write/merge, default change or promotion. User approval is required before the prepared external research branch/draft PR.
+
+
+
+## 2026-10-21 — Isolated margin contract integration review
+
+Compared current main after disclosure PR72 with pinned margin PR69/PR70.
+Added an opt-in source-bound PMF/CDF bridge delegating settlement to the existing
+five-state engine. Explicit side, source, cutoff and settlement identities prevent
+ambiguous three-state/MLS quarter-line interoperability. Fitted challengers and
+PR70's unfitted mean-shifting football boosts remain separate; no runtime or
+default activation. Reproduced the NFL runner merge conflict, omitted side in
+PR70 quote records, and raw-probability scoring on push-excluded samples.
+
+Local checks: 215 tests plus 56 subtests; 162 synthetic and 26 retained NFL
+identical-input contract comparisons pass. Preserved NFL predictive HOLD; the
+816-game result is not reevaluated or promoted. No frozen forecasts, model
+coefficients, defaults, runner disclosures, ledgers or authority changed.
+Partial local health cannot certify full repository health. See
+docs/MARGIN_INTEGRATION_20261021.md and docs/releases/2026-10-21-margin-integration/.
+Clean-checkout CI and draft publication outcome are recorded on the review PR.
+
+
+
+## 2026-10-20 — all-sports roster acquisition and honest consumption boundaries
+
+User requested roster-gap repair across all sports. Added immutable roster capture and raw-byte normalization for NFL, CFB, NBA, WNBA, MLB, NHL and MLS, exact team/player identities, six-hour cutoff checks, duplicate membership guards, conditional workload conservation, and coverage attachments in the shared card and canonical NFL runner. Full-roster-required mode refuses before simulation; attaching a roster never changes parent probabilities or asserts numerical use. Current NFL selected-arm capability evidence and MLB starting-pitcher scope stay distinct.
+
+Captured 307/307 requested teams, seven directory receipts and 22,034 distinct sport-scoped player IDs. Discovered the default CFB endpoint silently capped every team at 100; explicit limit=1000 recovered 2,004 omitted players across the 138 FBS teams. The capped discovery is not acceptance evidence. One NFL practice-squad membership conflict (Emany Johnson, CIN/LAC) remains visible and blocks the affected roster checks; the Bengals official October 20 transaction record supports Cincinnati, but raw data is not silently overwritten.
+
+81 focused tests passed, including all-sport source rebuild, tampering/re-sealing, response limits, stale/future/PIT/season/identity failures, workload scenarios, immutable resume, original-card preservation, and both shared/NFL runner gates. The real-source audit covered all 17 saved October 20 events: current review 16 AVAILABLE_NOT_USED and one POST_START block; all 17 refuse the newly captured data at their original cutoffs. No new predictions were generated, no frozen card changed, and no full-roster impact transform was fitted. Full repository health remains unestablished in this partial restored checkout. Remote CI pending branch publication. See docs/ROSTER_SYSTEM.md and docs/releases/2026-10-20-rosters/report.json; retained source archive is hash-bound there. No defaults promoted, main not changed, wagering OFF.
+
+## 2026-10-21 — PR 71 roster/disclosure integration
+
+Reconciled roster head e145d0b7 with main 90daf8e (merged PR 72). Resolved the
+NFL argument conflict and preserved both appended journal entries. The shared
+runner merged textually; combined tests cover all seven shared leagues and NFL.
+224 tests plus 56 subtests and four CLI checks passed locally. Other local
+regressions exposed missing historical restoration files; remote clean-checkout
+checks remain separate and are recorded on PR 71. Full health is not certified.
+
+Verified the retained archive, 630 manifest files, 314 receipts, 307 parsed teams
+and 22,034 IDs. Same Emany Johnson ID remains on CIN/LAC; primary transaction
+records support Cincinnati but no source override or conflict clearance is made.
+All old inventories are stale/blocked at the current review cutoff. No forecasts,
+defaults, models, grades or wagering authority changed; PR 73 is excluded.
+See docs/ROSTER_DISCLOSURE_RECONCILIATION_20261021.md and its retained evidence.
+
+
+
+## 2026-10-21 — Qualified GameChamp report adaptations
+
+Owner supplied original CFB NMSU–SHSU and NBA MIN–MIA reports and requested
+qualified adaptations. Reused merged PR72's known/unknown/scenario/PASS/dependence
+layer. Added optional hash-bound projection audits: NBA/WNBA regulation minutes,
+nonnegative allocation reconciliation with rounding/component identity, and
+unweighted same-contract named-method sensitivity. Shared and NFL disclosure
+paths consume the optional field; frozen predictions and numerical models do not.
+
+On supplied reports both NBA rotations total 240; displayed player sums reconcile
+within rounding, but the source's team-component sum 248.32 differs from its
+reported 248.43. Named controls show 6.70 pp winner and 32.20 pp Under ranges;
+the claimed wider 44-row grid is not available and was not fabricated. CFB
+budgets reconcile only as bookkeeping; market-anchored forecasts are not imported.
+Original user-supplied reports and append-only archive receipt are retained with
+the adaptation evidence. No original sampler, roster truth or PIT validity is
+claimed from those text reports. See docs/GAMECHAMP_ADAPTATION.md.
+
+Focused local tests cover malformed/duplicate/nonfinite inputs, source/path/hash
+and contract failures, distinct component totals, immutable writes, all-seven
+parent preservation and the existing shared/NFL integration. This environment's
+source-only restoration lacks historical files and cannot establish full harness
+health. Exact local results are retained in the release acceptance record; full
+repository CI remains separate. No model default, forecast, active experiment,
+certified ledger or action authority changed. Player-led numerical construction
+remains a candidate requiring a fitted, source-bound chronological evaluation.
+
+
+## 2026-10-22 — Selected-path market-independence audit
+
+Traced the seven league adapters, selection registry, fitted feature paths and
+retained simulations at main 90daf8e / PR74 bd6205e. The selected feature paths
+use historical/contextual data; NBA/NHL/MLS remain opt-in initial research with
+no verified default. NFL enhanced mode is explicitly market-informed (saved
+football weights 0 winner, 0 margin, 0.1 total); live uses a market prior.
+
+Added 100,000-draw metamorphic regressions and presentation-only provenance
+disclosures. Separate market payload changes preserve predictions and draw bytes.
+Accepted market metadata embedded in event/package identity changes RNG draws,
+and can change MLB's MC-only selected probability: MI-002 remains OPEN. Tests
+assert this counterexample, not universal independence. No seed or model code
+was changed. Current-package MLB is tested; the legacy Sep14 route has stale
+code pins and was not bypassed. Missing declarations now remain unknown in
+grading rather than being manufactured as market_features_used=false.
+
+See docs/SELECTED_MARKET_INDEPENDENCE.md and the retained acceptance record.
+A focused CI job requires no artifact upload; full-tree health and predictive
+validation remain separate. Defaults, frozen forecasts, experiment/ledger state
+and action authority are unchanged. No live slate or model promotion performed.
+
+
+## 2026-10-24 — PR readiness reconciliation and immutable sidecars
+
+Reconciled PRs #68, #70, #73, #71, #74, #41 and #38 onto main c2a00e2 in
+reviewable merge commits. #38 also retains #37 ancestry. Current NFL weekly
+state, strict information-regime checks, WNBA adapter and numerical-v2
+identity remain intact. Superseded dated workflows/requests and incompatible
+legacy acceptance tests are preserved as explicitly archived evidence.
+
+Margin quote v2 binds the side and payoff basis; non-push calibration now
+conditions unconditional probabilities on non-push. Roster annotations preserve
+actual draw bytes and do not infer numerical personnel effects. Fixed an NFL
+selection-sidecar warning that could mutate its saved parent in memory.
+
+See PR_RECONCILIATION_20261024.md for exact heads, preserved-source scope,
+regressions and final execution status. Hosted acceptance requires current-run
+evidence upload and readback; Drive CI authentication is still unconfigured.
+Existing forecasts, fitted states, grading ledgers, defaults, prior state keys
+and authorization records remain unchanged. No promotion or wagering enabled.
+
+
+### 2026-10-24 — Hosted acceptance and version-bound evidence follow-up
+
+PR #82's first hosted acceptance run 40137946545 passed 1,863 tests and
+uploaded artifact 12577837691. Independent download verified its ZIP SHA-256,
+all five manifest members and Git bundle; it is seven-day GitHub retention,
+not configured Drive durability. Other checks exposed historical source pins
+being compared with newly integrated files. Preserve the old finding receipts
+and source manifest: isolate the historical PR70 imports and old-main checkout,
+then bind current finding closure to a separate complete-suite execution.
+The historical comparison passes 162 synthetic and 26 retained-law cases while
+reproducing the old defects; v2 regressions separately verify their repairs.
+No old hash, acceptance claim, forecast or grade was rewritten. Final-head CI
+and artifact readback remain merge gates. Exact evidence is in the reconciliation
+report and its ci-repair release directory.
+
+
+## 2026-09-16 — Independent candidate assimilation (research only)
+
+Owner requested independently learned standard methods and review-candidate collection.
+Registered INDEPENDENT-CANDIDATES-20260916 before fitting. Added ridge/XGBoost,
+train-only preprocessing, chronological tuning/calibration/tests, strict source/PIT
+contracts and portable model replay. Six test seasons, 1,599 games: ridge MAE
+10.35055; plus coaching 10.35895; XGBoost 10.42637. No promotion. NFL 2025/2026
+excluded from this experiment. Historical publication timestamps remain unverified.
+Captured all 16 Week1 games as 32 team rows and 259 player/game/touch-type records.
+Independent WNBA lineup method implemented; actual fit blocked by 39 invalid-point
+rows and 405 scoring-identity mismatches in the external source. Registered 23
+feature/method families with distinct observed/fitted/used states. 19 targeted tests
+pass; retained fitted model predictions replay without retraining. See
+docs/INDEPENDENT_CANDIDATES.md and data/research/candidate_methods_v1.
+Existing local health remains red; no complete-checkout health certification.
+Forecast defaults, preserved forecasts and action authority unchanged; action OFF.
+
+
+## 2026-09-30 — isolated MLB postseason research challenger
+
+Owner requested September 30 playoff model. Separate V13 empty-base extra-inning
+research identity added; unchanged nine-inning kernel and coefficients. Prior-date
+official inputs: 2,433 finals, eight starter profiles. Four 100K path diagnostics
+retained; two PRE_START and two POST_START, never retrospectively graded. Nine
+contract tests and four exact event replays passed. No postseason predictive
+validation, no canonical forecast registration, no promotion or action authority.
+Full report: docs/MLB_POSTSEASON_RESEARCH.md. Old defaults and packet pins unchanged.
+
+
+## 2026-09-30 — postseason process completion (17:45 PT research freeze)
+
+Added reusable collect/inspect/run/verify/result-reconciliation workflow. Raw-source
+feature reconstruction, review/code/input binding, chronology and writer locking
+are executable; duplicate requests return the same immutable run. Refreshed all
+four official event contexts, skipped three started games, froze CHC at SD 100K
+research paths (CHC 50.926%, SD 49.074%). Both batting orders available but not
+consumed. All five retained runs replay exactly; 106 local research tests pass.
+CI dependency import chain uses existing pinned contextual requirements. Prior
+forecasts, model kernel, parameters and official authority unchanged. Canonical
+registration and predictive validation remain unestablished. See
+docs/MLB_POSTSEASON_PROCESS_COMPLETION.md and immutable completion evidence index.
+
+
+## 2026-10-06T21:55:00.515532+00:00 — MLB remaining-issue repair / postseason context screen
+
+User authorized workload/personnel/calibration repairs. Separate workload, lineup, bullpen and temperature shadow arms; defaults and frozen kernels unchanged. 40 targeted tests, four current-source negative checks, four latest pre-start 100K diagnostic runs and exact replay/idempotency passed. Official current acquisition: 53 context responses, 104 players, 7958 log rows. Historical 2023/2024/2025 census 131 games; 122 eligible (37/41/44), nine exclusions. Calibration fit only 2024 (n=41); held-out 2025 (n=44): baseline Brier .25004, workload .25151, lineup .25416, full context .25589, calibrated .26430. NO ADOPTION; failed calibration not applied. Atomic capture, postponed-as-Final filtering and optimizer scalar bugs repaired. Full canonical health/registration/deployment and series-roster/injury completeness remain unestablished; no old flags upgraded. See docs/MLB_POSTSEASON_CONTEXT_REPAIR.md. PR58 draft atop PR51; action OFF, dose0.
+
+
+## 2026-09-28 — QB-only margin distribution and cover output (draft)
+
+User authorized a replacement for the quarantined combined spread dependency.
+Preregistered a new QB-only margin law before fitting; recovered hash-matched
+features and 1,871 QB OOF predictions, replayed every chronological head, and
+evaluated 1,615 games with strictly prior-season residual pools. The improvement
+screen did not pass; integer push calibration remains limited. No promotion.
+Canonical NFL CLI now has an explicit --qb-margin route; both PHI–CHI QB
+conditions have 100K margin draws and separate exact/model and simulation cover
+probabilities. Independent inverse-CDF replay and all eight provenance bindings
+passed, with unchanged old forecasts and zero report-missingness effect in QB.
+Source-bound Week2 parent retained; no Week3 partial-state advance. Research
+publication remains ineligible; global health RED; market/action authority OFF.
+See docs/NFL_QB_MARGIN_PROCESS.md and docs/releases/2026-09-28-qb-margin/.
+
+## 2026-09-28 — QB integer-margin calibration screen, grading and market display
+
+User requested rerunning the failed improvement screen, optimized calibration,
+enabled grading and an always visible market overlay. Preregistered one bounded
+CRPS blend parameter in commit dbe169b45eb7a99583d66cc566c8f608a43a0f29 before fit.
+The successor nfl.qb_margin.integer_blend.v1.research passed all seven nested
+chronological checks on 1,087 games: CRPS 7.112266 vs 7.124773, paired season CI
+[-0.019593,-0.004182], Brier .433998 vs .435680. Alpha .528957 uses all 1,615
+calibration games; shape history uses all 1,871 QB OOF games. No 2026 outcomes,
+market features or default-model change. Key-number underprediction remains.
+
+Ran integrated 100,000-draw current forecasts for both unresolved Chicago QB
+conditions with the valid Week2 state. Independent verification replays every
+calibration objective and both frozen draw arrays. Separate immutable research
+registrations are enabled and pending; final grading needs agreeing source-bound
+nflverse and official ESPN finals, with actual-QB cohort matching. Canonical
+ledgers and weekly state unchanged. Every research board displays the market
+panel and separate model/simulation cover fields; unknown capture time remains
+explicit. Market predictive inputs and action authority remain OFF. Forecasts,
+original v1 law and prior screens remain frozen. Retrospective PASS does not
+clear prospective validation, market-superiority or global recovery health gates.
+See docs/NFL_QB_MARGIN_CALIBRATION.md and the versioned release verification.
+
+
+## 2026-10-06 — NFL PR 1 review (2026-10-06T22:55:11.565239+00:00)
+
+Confirmed issue #55 PR 1 already exists as draft #56; no duplicate PR created.
+Reproduced 58 focused passes, then six new tests with 25 failing comparison
+contract subcases. Repaired timezone/order/schema/target checks and retained
+base/QB fitted reference values with trace replay. 66 focused tests now pass.
+100K historical-fixture draws replay exactly; all five analytic arms and
+features equal unmodified main. Model/default/policy/state/fixture hashes
+unchanged. Evidence: docs/releases/2026-10-06-nfl-flip-review/. Prior remote
+test steps passed but three artifact uploads failed; full health not cleared.
+#59 remains open: acquisition, canonical registration, deployment and
+prospective validation have separate evidence gates. No model promotion,
+calibration, outcome fitting or canonical-ledger changes. Action OFF, dose 0.0.
+
+
+## 2026-10-19 — Shared margin and cover research system
+
+User authorized swarm development across all sports. Added explicit home-margin contracts, coherent PMF-based cover/push/quarter-handicap ladders, 50/80/95% intervals, reproducible MC, dense-integer fitted residual challenger, chronological evaluation and immutable card CLI. Current main core dependencies and retained source cohorts hash-match 7cf2aea. No selected defaults, old forecasts or authority changed.
+
+129 focused tests passed; eight NHL distributions produced 800,000 exactly replayed draws from retained morning inputs. Four-cohort historical screen contains 3,661 games: observed zero-support outcomes 15 to 0, NHL CRPS improved, CFB/NBA intervals include zero, MLS CRPS worsened. Reused historical cohorts and reconstructed availability prohibit prospective-validation claims. NFL/WNBA/MLB lack qualifying parent-specific cohorts. Global health remains incomplete in this partial recovered source snapshot. See docs/MARGIN_SYSTEM_SCREEN_20261019.md and docs/MARGIN_SYSTEM.md; all candidate promotion remains HOLD/OFF.
+
+
+## 2026-10-19 — External margin review hardening
+
+Mapped all supplied review findings to PR #69 source. Added retained OOT training-evidence validation, re-sealed fitted-state checks, safe malformed-row handling, explicit unconditional cover labels and pre-publication semantic validation of summaries, settlement, simulations, timing and coverage. Independent review reproduced and closed stale-coverage acceptance. Numerical fitting helpers and prediction law are unchanged; frozen fits remain tied to original code.
+
+158 focused tests passed. Eight retained NHL PMFs replayed 800,000 saved draws exactly; a 1,312-row NHL refit matched prior state, tail parameters, lattice and tuning selection exactly. New artifact/code identity is separate. Full health/CI remains unresolved; defaults, historical forecasts and action authority unchanged. See docs/MARGIN_SYSTEM_REVIEW_20261019.md and data/research/margin_review_20261019/verification.json.
+
+
+## 2026-10-19 — Selected-QB NFL margin fitting and guarded runner completion
+
+User authorized completing the selected-QB spread process for current and future research use. Registered NFL-QB-MARGIN-FULLSUPPORT-20261019 at 42cf271 before fitting. Recovered and qualified 1,871 exact-parent OOF games from 2019–2025, including six ties; seven annual parent folds and source/schedule values replay. Historical availability remains reconstructed.
+
+Fitted 1,055 earlier games and evaluated 816 later games with the existing fixed shared challenger. Primary paired CRPS delta −0.007908, 95% block-bootstrap interval [−0.022664, +0.011302]: inconclusive; aggregate historical screen NOT_PASSED. Zero-support outcomes fell 1 to 0. Predeclared refit on all 1,871 rows is separately identified and not directly held-out evaluated. Numerical PASS, predictive HOLD, wagering OFF.
+
+Wired a hash-bound margin child into the selected-QB research runner with pregame config/fit/evaluation timing, actual completion-before-kickoff, immutable outputs, push labeling, parent coefficient replay, and failed/incomplete evaluation refusal. Preserved the original parent forecast. WAS–SF reconstruction after kickoff: SF −7.5 cover 55.1492%, 100K-draw simulation 55.291%; push zero. This is retrospective from morning inputs, not the original pregame card or a live update.
+
+187 unique current focused tests pass. Independent source, 816-game metric/bootstrap, and 100K raw-draw replay checks retained. Source-only checkout still cannot certify full repository health. Implementation is on draft PR #69; no merge, production promotion, canonical grading, total distribution, or wager authorization. See docs/NFL_QB_MARGIN_PROCESS_20261019.md and data/research/nfl_qb_margin_20261019/.
+
+
+## 2026-10-19 — NFL historical CLI fixture isolation after CI
+
+Remote CI at 2628a499 found one historical weekly-state CLI fixture failure: its September clock inherited the later October margin registration and correctly failed the new timing guard. Isolated only that synthetic fixture's runtime selection JSON to its pre-margin configuration; the real parent model, state transitions and package remain in use. Product code and fitted artifacts are unchanged. The corrected historical test plus all 15 selected-QB margin tests pass (16 targeted tests). New automatic margin-routing and timing-refusal tests remain active. Follow-up exact-head CI is required; prior artifact upload quota remains a separate infrastructure limitation.
+
+
+## 2026-10-24T22:51:10.856976+00:00 — remaining PR integration and integrity repair
+
+Reconciled PR35/36/39/40/49/50/51/52/53/56/57/58/69 against main 4cb28e9.
+Preserved all existing data, selected numerical sources, defaults and state keys.
+Restored journal entries deleted on PR58; branch state changes retained as separate
+historical supplements. Flip reports run outside frozen numerical source/seed
+identity. QB research margin products are explicit and cannot register replayed
+games. Capability audit no longer mistakes declaration for validation.
+Full source-bound suite: 2,224 passed; separate research suite: 131 passed.
+Retained 4,797 candidate predictions replayed; both MLB archives hash-verified.
+Actual NFL numeric-v2 retained-input CLI replay emitted no registration files.
+PR38 closed as already incorporated via82. PR45 strict health/evidence blockers
+remain separate and unwaived. Hosted integration CI and artifact readback are
+required before merge. All predictive limitations remain; authority OFF.
+See docs/REMAINING_PR_REPAIR_20261024.md and current execution receipts.
+
 ## 2026-09-24 — PR45 standing-health evidence ordering repair
 
 Inspected PR45 head 835003d and failed run 35916497206 (merge c92b5a0).
@@ -4559,3 +5037,14 @@ or skipped steps and the success path. See docs/PR45_HEALTH_READINESS.md for the
 source run, exact remaining closure evidence and reproduction commands.
 This fixes evidence collection, not unresolved historical recovery or predictive
 validity. PR stays draft; no release waiver, promotion or action authority change.
+
+
+## 2026-10-24T22:55:11.052433+00:00 — PR45 branch reconciliation, health still blocked
+
+Merged the current thirteen-PR integration into the existing readiness repair
+without dropping its strict health gate. Preserved authentic old records and
+retained evidence-before-enforcement workflow ordering. The old fixed September
+23 push acquisition is archived; requested-date acquisition is manual and never
+registers a forecast. Missing lineage, score/mapping and escalation evidence
+remain blockers; no dates, clocks, issue cards, defaults or verdicts were reset.
+Software verification is being re-executed on this source; release authority OFF.

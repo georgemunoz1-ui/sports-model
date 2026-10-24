@@ -1,0 +1,41 @@
+{
+  "created_at_utc": "2026-10-22T04:29:59.363499+00:00",
+  "base_commit": "90daf8e0036c67a5304aa0747bf50b2266e0b364",
+  "scope": "PROJECTION_AUDIT_REPORTING_ONLY",
+  "source_reports": [
+    {
+      "name": "GameChampAI-NMSU-SHSU-2026-10-21.md",
+      "sha256": "895749478dc22fcd0df55d5e6775bdefc44266b93d55ba29b2d1828f7ba2f375"
+    },
+    {
+      "name": "GameChampAI-MIN-MIA-2026-10-21.md",
+      "sha256": "acadec64b6b2baac3b40182304cb4bb4c9aa33e27c00d57b7688e25042f27231"
+    }
+  ],
+  "original_code_and_draws_supplied": false,
+  "original_sampler_replayed": false,
+  "numerical_forecast_modified": false,
+  "predictive_validation": "NOT_ASSESSED",
+  "wagering_authority": "OFF",
+  "full_repository_health": "NOT_ESTABLISHED_BY_PARTIAL_CHECKOUT",
+  "local_test_scope": "New projection audits plus existing disclosures, distributions, current runtime contracts and model defaults",
+  "first_local_test_run": {
+    "command": "python3 -m pytest tests/test_projection_audits.py tests/test_card_disclosures.py tests/test_model_defaults.py -q",
+    "passed": 108
+  },
+  "file_sha256": {
+    "pipelines/cards/projection_audits.py": "145f6372d3f945b3024ffa34562080e0adc5ca3782b9c0e9e6040b48159ae280",
+    "pipelines/cards/disclosures.py": "d06c7fcf104ec6d25ccb7004e7207378c81992d749e0403df9ae8dae9a2b12e4",
+    "tests/test_projection_audits.py": "e50d9b565cb3bfa952b8270893738fa5a0e6bef349107eba99dee313d16a4faf",
+    "docs/GAMECHAMP_ADAPTATION.md": "43e30583e9780a1aa846dbe1ff6ee3a41ed4fd6bae923a5506bcecf3aea75b91"
+  },
+  "final_local_test_run": {
+    "command": "python3 -m pytest tests/test_projection_audits.py tests/test_card_disclosures.py tests/test_cross_sport_distributions.py tests/test_current_runtime_contracts.py tests/test_model_defaults.py -q",
+    "passed": 149,
+    "subtests_passed": 56,
+    "duration_seconds": 4.4,
+    "python": "3.12.14",
+    "pytest": "9.1.1",
+    "note": "Repository CI uses pinned pytest 8.3.5; clean full-tree CI remains separate."
+  }
+}

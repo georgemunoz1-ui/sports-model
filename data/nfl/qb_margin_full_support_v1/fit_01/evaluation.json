@@ -1,0 +1,102 @@
+{
+  "action_authority": false,
+  "baseline_model_id": "nfl.margin.empirical.research.a1dc272255961bd9",
+  "cohort_sha256": "1f4cb50d7d464169c50ab3326ac5cf904c5242d0ce7509e2212f44f8fa8f1947",
+  "cover_diagnostics_sha256": "cd1810d05c60676f7f45ab67d8a650b9d86db83dc3ca529b3f20449001d7e8b6",
+  "created_at_utc": "2026-10-20T01:31:50.742456+00:00",
+  "deployment_model_id": "nfl.margin.full_support.research.ad4017ccf0663e24",
+  "deployment_refit": {
+    "deployment_artifact_directly_evaluated": false,
+    "evaluation_is_of_training_policy_and_prior_fitted_instance": true,
+    "policy": "SAME_PREREGISTERED_ALGORITHM_REFIT_ALL_QUALIFIED_HISTORY",
+    "same_algorithm_and_feature_policy": true,
+    "same_selected_numeric_parameters_required": false
+  },
+  "deployment_seasons": [
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024,
+    2025
+  ],
+  "deployment_training_n": 1871,
+  "design_sha256": "af2a6d8abf7db528671000fb952b6bff1a0c853f9b14940df6e6a578673499f2",
+  "evaluated_model_artifact_sha256": "a741d83543a7dd3c1af82d39006084d69c4732a3a8672ac912104d9045df1e19",
+  "evaluated_model_id": "nfl.margin.full_support.research.96c5a8cb7e9970e7",
+  "evaluated_training_n": 1055,
+  "evaluation_n": 816,
+  "evaluation_report_sha256": "006850f2e0e861959f133e4e6bb33915fb3ee2d77fd606e10889c502a8314d09",
+  "evaluation_seasons": [
+    2023,
+    2024,
+    2025
+  ],
+  "execution_status": "COMPLETED",
+  "historical_availability_proven": false,
+  "historical_screen": {
+    "checks": {
+      "coverage_95": true,
+      "crps_ci_upper": false,
+      "crps_delta": true,
+      "three_way_brier_delta": true,
+      "zero_support_outcomes": true
+    },
+    "criteria": {
+      "coverage_95_max": 0.99,
+      "coverage_95_min": 0.9,
+      "crps_ci_upper_max": 0.0,
+      "crps_delta_max": 0.0,
+      "three_way_brier_delta_max": 0.002,
+      "zero_supported_outcomes": 0
+    },
+    "grants_promotion": false,
+    "status": "NOT_PASSED"
+  },
+  "hold_reasons": [
+    "REUSED_HISTORICAL_COHORT",
+    "HISTORICAL_AVAILABILITY_RECONSTRUCTED",
+    "PROSPECTIVE_VALIDATION_REQUIRED",
+    "DEPLOYMENT_REFIT_IS_DISTINCT_ARTIFACT"
+  ],
+  "information_set": "RECONSTRUCTED_QB_OOF_PRIOR_SEASON_FITS",
+  "limitations": [
+    "Parent margin fitting inherited exclusion of tied games through complete-target fitting; held-out tied outcomes are retained.",
+    "No market prices or historical market superiority test; fixed handicap grid is diagnostic.",
+    "An exact numerical replay does not establish probability calibration."
+  ],
+  "market_input": false,
+  "model_artifact_sha256": "e50967eec466439749658881591442ade365af37d4e2371300b7686ab7469cd4",
+  "numerical_validity": "PASS",
+  "parent_model_id": "nfl.integrated_context.qb.v1.research",
+  "predictive_validation": "HOLD",
+  "prereg_commit": "42cf2712507a29e8a67cfa4b1fc9f70e0be85a28",
+  "primary_metric": {
+    "historical_diagnostic": "INCONCLUSIVE",
+    "name": "CRPS",
+    "paired_delta": {
+      "ci95": [
+        -0.022664331118040674,
+        0.011301938965057986
+      ],
+      "delta": -0.007908090618756757,
+      "event_n": 816,
+      "status": "AVAILABLE",
+      "time_block_n": 57
+    }
+  },
+  "prospective_grade_eligible": false,
+  "publication_eligibility": "INELIGIBLE",
+  "schema": "nfl.qb_margin_evaluation.v1",
+  "settlement": "FULL_GAME_OT_REGULAR",
+  "status": "HOLD",
+  "training_seasons": [
+    2019,
+    2020,
+    2021,
+    2022
+  ],
+  "untouched_holdout": false,
+  "wagering_authority": "OFF"
+}

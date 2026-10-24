@@ -1,0 +1,122 @@
+{
+  "base_commit": "90daf8e0036c67a5304aa0747bf50b2266e0b364",
+  "command": "python -m pytest tests -q",
+  "created_at_utc": "2026-10-23T05:29:00.392665+00:00",
+  "environment": {
+    "cryptography": "50.0.2",
+    "numpy": "2.3.5",
+    "pandas": "2.2.3",
+    "platform": "Linux-6.18.55-x86_64-with-glibc2.39",
+    "pytest": "8.3.5",
+    "python": "3.12.14 (main, Aug 25 2026, 14:00:49) [Clang 22.1.3 ]",
+    "scikit-learn": "1.8.0",
+    "scipy": "1.17.0"
+  },
+  "exit_code": 0,
+  "log_path": "pytest_full.txt",
+  "log_sha256": "367ad085700fc7d830905c4b4106b8906d7f586da48befde806306c8cc5d38f7",
+  "passed": 886,
+  "predictive_validation_granted": false,
+  "publication_allowed": false,
+  "runtime_seconds": 58.78,
+  "schema": "sports.research_overhaul.validation.v1",
+  "tested_changed_files": [
+    {
+      "path": ".github/workflows/research-overhaul.yml",
+      "sha256": "209a90e8f517cd26d6dc32f85c5050ee24814a5c1a53330aa54ba6ee35510200"
+    },
+    {
+      "path": "models/current/freshness.py",
+      "sha256": "50d59ef9775fa4a8ce7ed508c31233df8c36c86cfa2eaf0487ef32203c8a4a0e"
+    },
+    {
+      "path": "pipelines/cards/integrity_reporting.py",
+      "sha256": "760af206ff81c97c7085f09fdb22202773aee381d747610041d15ce882b85091"
+    },
+    {
+      "path": "pipelines/cards/research_selection.py",
+      "sha256": "d4264f48018eb8570c2048c08c64e498108324a9d73eaa0e6c203d10ddec254c"
+    },
+    {
+      "path": "pyproject.toml",
+      "sha256": "a35dcd961542e5aa039e3cf8ec584f11ee46c3d87df4103d91f06f2cb31a678b"
+    },
+    {
+      "path": "requirements-consolidated.txt",
+      "sha256": "cc830c294675515debab29e3dbe1279c408c520e8674e9a7ad91ced1329bed6c"
+    },
+    {
+      "path": "research/selection_evaluation.py",
+      "sha256": "d8ea22534d3cbd12a1c72fd4b4dffdf2a209f25c423376f6f4dccabe73c775ea"
+    },
+    {
+      "path": "research/validation_registry.py",
+      "sha256": "f119b81e8893f3a93acf48945b2e906659877373423afe8c86a0188d8672b5d8"
+    },
+    {
+      "path": "scripts/build_operational_rest_candidate.py",
+      "sha256": "43b27fe677181162543f681c84114b00d25f60bf19c45b001d77821d742bc7b0"
+    },
+    {
+      "path": "scripts/capture_team_histories.py",
+      "sha256": "88bce2b9584330bfad5ab6a1aec0ddccace73d813f58fe779240fd593c91d919"
+    },
+    {
+      "path": "scripts/evaluate_research_selections.py",
+      "sha256": "9d0bd86dd18ead037bda3681fa767aa3edb9de1e1f47eac6f855765c3a64534c"
+    },
+    {
+      "path": "scripts/generate_card_force.py",
+      "sha256": "5669097ee77d667e3f5b5bce97467c9f8e13586321ffe3ac4273facab4e2955c"
+    },
+    {
+      "path": "scripts/nba_history_scope.py",
+      "sha256": "fae23d76c774acdcd7b37a9876d9cf44e2d2c36b9c7dadb86d121fc5923bacc9"
+    },
+    {
+      "path": "scripts/prepare_initial_baselines.py",
+      "sha256": "f420c69f57a5733ac637a1e12f1952035adb649b98e46c29ea9a8584ecab1f6d"
+    },
+    {
+      "path": "scripts/run_research_selection.py",
+      "sha256": "289817aef18da74d32c9fcbb0b34b15a314608db7fe71bf4d6680e227af2d819"
+    },
+    {
+      "path": "tests/test_current_freshness.py",
+      "sha256": "074be315e63b12661fd63e7be9f6a323439385400021750d3975a57664539a2a"
+    },
+    {
+      "path": "tests/test_integrity_reporting.py",
+      "sha256": "c351e7b06aab80109806c8989e1e5f91c8a3f61e1f2718d06c92e84b0f0ee72d"
+    },
+    {
+      "path": "tests/test_nba_history_scope.py",
+      "sha256": "c3f8571766ef716e41f7d4cc8cb1e682ac8bd4040ec274c8f805b0d5e0ada8a4"
+    },
+    {
+      "path": "tests/test_overhaul_adversarial.py",
+      "sha256": "ef09fd0b8f83eeff2e46f3196a4d1dcb95f7244e46a45203d91e769fb94fecc2"
+    },
+    {
+      "path": "tests/test_overhaul_integration.py",
+      "sha256": "7848c1404ad4f8adcec155b5d4768bfacd49ff286ced0f3785bec052486314d0"
+    },
+    {
+      "path": "tests/test_research_selection.py",
+      "sha256": "b9c3009dd6d7546d30d0df5ef51ae79119a1eea0f6d55c6a66fe19818b589ee4"
+    },
+    {
+      "path": "tests/test_research_selection_cli.py",
+      "sha256": "cca638eb8eb825dd351d4326d52ffecc3933597ac26152e903015fbbd8343522"
+    },
+    {
+      "path": "tests/test_selection_evaluation.py",
+      "sha256": "5b508473561ad6ad97fe23480f7ed8b73fd06cc6f02a4522dc2afb3af5900728"
+    },
+    {
+      "path": "tests/test_validation_registry.py",
+      "sha256": "91cdd4951df7b92f6fab7db381b58e3929b045bb5bd876ecd7b3d6dd3a50a3c6"
+    }
+  ],
+  "wagering_status": "OFF"
+}

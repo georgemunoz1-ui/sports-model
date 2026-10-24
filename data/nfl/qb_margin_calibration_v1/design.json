@@ -1,0 +1,116 @@
+{
+  "schema": "nfl.qb_margin_calibration_design.v1",
+  "experiment_id": "NFL-QB-MARGIN-CAL-20260928-01",
+  "model_id": "nfl.qb_margin.integer_blend.v1.research",
+  "created_at_utc": "2026-09-28T11:24:15.793153+00:00",
+  "status": "PREREGISTERED_BEFORE_NEW_CALIBRATION_FIT_AND_SCREEN",
+  "authorization": "User requested optimized improvement screening, enabled grading state and always displayed market overlay on 2026-09-28",
+  "reference_model_id": "nfl.qb_margin.residual_alignment.v1.research",
+  "winner_reference_id": "nfl.integrated_context.qb.v1.research",
+  "reference_runtime_sha256": "f4ec4c325bbc45e8f7a57b95809062b83aed46eb1b71859fa1a2698cb4a388a8",
+  "weakness": "Location-translated residuals smear absolute football key-number masses. v1 did not establish CRPS improvement and understated integer pushes.",
+  "one_fitted_parameter": "alpha in [0,1]; convex blend weight between unchanged QB residual-margin law and fixed-rule QB-conditioned integer-margin law",
+  "integer_component": {
+    "training": "Only QB OOF final margins and QB OOF Ridge predictions from prior seasons; exclude ties only from conditional winning magnitude pool; retain tie mass separately",
+    "observations": "x=sign(actual_home_margin)*predicted_home_margin; y=abs(actual_home_margin)",
+    "home_shape": "For observed winning magnitudes, weight by exp(-0.5*((x-current_home_Ridge_margin)/4.0)^2), normalized",
+    "away_shape": "Same pooled winning magnitudes and rule, with query -current_home_Ridge_margin; negate support",
+    "bandwidth_points": 4.0,
+    "bandwidth_selection": "FIXED_BEFORE_NEW_EVALUATION; no bandwidth search",
+    "winner_and_tie_mass": "Same unchanged QB logistic and prior-year Jeffreys tie mass as v1",
+    "orientation": "One pooled winning-team-oriented training set; swapping sides mirrors support and preserves probabilities",
+    "low_effective_sample_size": "Report ESS; do not exclude evaluation games or silently substitute another model"
+  },
+  "calibration": {
+    "objective": "Mean discrete margin CRPS across prior walk-forward inner folds",
+    "method": "Global bounded quadratic minimizer: alpha=clip(-sum((F0-H)*(F1-F0))/sum((F1-F0)^2),0,1)",
+    "bounds": [
+      0,
+      1
+    ],
+    "zero_curvature": "alpha=0 with explicit unidentifiable flag",
+    "inner_predictions": "Each inner year uses only OOF rows from strictly earlier years for both distributions",
+    "calibration_first_year": 2020,
+    "outer_evaluation_years": [
+      2022,
+      2023,
+      2024,
+      2025
+    ],
+    "outer_alpha": "Fit only on inner prediction/outcome rows from years earlier than outer year",
+    "deployment_alpha": "Fit on inner walk-forward 2020-2025, then use distribution history 2019-2025 for 2026; no 2026 outcomes",
+    "retuning": "No changes to bounds, bandwidth, objective, thresholds or populations after seeing this screen"
+  },
+  "screen": {
+    "population": "Same QB REG games 2022-2025 including ties; no outcome-based exclusions",
+    "primary": "Paired CRPS against unchanged v1 on identical events",
+    "mean_crps_delta_max": 0.0,
+    "season_bootstrap_95_ci_upper_max": 0.0,
+    "normal_reference_crps_delta_max": 0.0,
+    "cover_three_way_brier_delta_max": 0.002,
+    "interval_90_coverage_bounds": [
+      0.85,
+      0.95
+    ],
+    "key_3_push_absolute_error_must_not_increase": true,
+    "key_7_push_absolute_error_must_not_increase": true,
+    "log_loss_epsilon": 1e-12,
+    "bootstrap_replicates": 10000,
+    "bootstrap_seed": 2026092802,
+    "fixed_home_handicaps": [
+      -7,
+      -3.5,
+      -3,
+      0,
+      3,
+      3.5,
+      7
+    ],
+    "secondary": [
+      "raw zero-mass counts",
+      "Weeks1-4",
+      "neutral venues",
+      "missingness cohorts",
+      "conditional ESS",
+      "alpha trajectory",
+      "90% interval width",
+      "reliability bins"
+    ],
+    "untouched_holdout": false,
+    "history_reused": true,
+    "promotion": "No production/winner-default promotion. Historical screen cannot establish prospective predictive validation."
+  },
+  "research_grading": {
+    "enabled": true,
+    "scope": "SEPARATE_APPEND_ONLY_RESEARCH_FORECAST_AND_GRADE_LEDGER",
+    "prospective_registration": "Actual current writer time before event start, preserving existing local registrations; no backdating or canonical reclassification",
+    "conditions": "Distinct QB scenarios and model versions; no double-counting in primary model grades",
+    "grading": "Verified source-bound final outcome only; exact retries idempotent; conflicts/tampering/future finals reject without mutation",
+    "canonical_prospective_eligible": false,
+    "assimilation": "Grading does not advance weekly state"
+  },
+  "market_display": {
+    "always_display": true,
+    "missing_quote": "Show UNAVAILABLE with reason; never fabricate prices",
+    "unknown_timestamp": "Show SNAPSHOT_TIME_UNKNOWN; do not call live",
+    "generation": "Market-blind; lines/prices loaded after freezing distribution and draws",
+    "fields": [
+      "model win",
+      "sim win",
+      "model cover",
+      "sim cover",
+      "market handicap",
+      "American odds",
+      "break-even",
+      "proportional no-vig benchmark",
+      "quote source",
+      "quote capture time/status"
+    ]
+  },
+  "market_input": false,
+  "predictive_market_overlay_enabled": false,
+  "market_comparison_display_enabled": true,
+  "action_authority": false,
+  "simulations": 100000,
+  "source_oof_sha256": "cb11bb530bb7d8149e0fbae8f6d6cc1775f6879ab157051e3c86dff525092510"
+}

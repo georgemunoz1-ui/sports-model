@@ -1,0 +1,26 @@
+{
+  "label": "integrated-tests-junit-final",
+  "command": [
+    "python",
+    "-m",
+    "pytest",
+    "tests",
+    "research/tests",
+    "-q",
+    "-p",
+    "no:cacheprovider",
+    "--junitxml=/workspace/scratch/101f83f5c588/evidence/commands/integrated-tests-final.junit.xml"
+  ],
+  "cwd": "/workspace/scratch/101f83f5c588/sports-model",
+  "environment_overrides": {
+    "PYTHONDONTWRITEBYTECODE": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "OMP_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1"
+  },
+  "started_at_utc": "2026-10-23T10:07:21.000469+00:00",
+  "finished_at_utc": "2026-10-23T10:08:49.492774+00:00",
+  "returncode": 0,
+  "log_path": "/workspace/scratch/101f83f5c588/evidence/commands/integrated-tests-junit-final.log",
+  "log_sha256": "1c5637c3a70e15b03b49705fe7b69e10f3953a84fd481170e305f7c93f6af761"
+}

@@ -1,0 +1,57 @@
+{
+  "margin": {
+    "baseline": {
+      "central_90_interval_coverage": 0.896358543417367,
+      "central_90_interval_mean_width": 52.04481792717087,
+      "crps": 9.105728474047869,
+      "games": 714,
+      "zero_probability_outcomes": 10
+    },
+    "calibration_n": 713,
+    "calibration_status": "CALIBRATION_CANNOT_REPAIR_MISSING_SUPPORT",
+    "conditional_scale": {
+      "central_90_interval_coverage": 0.896358543417367,
+      "central_90_interval_mean_width": 52.109243697478995,
+      "crps": 9.106209010596112,
+      "games": 714,
+      "zero_probability_outcomes": 11
+    },
+    "evaluation_n": 714,
+    "residual_n": 698,
+    "scale_paired": {
+      "brier_category_sum": {
+        "block_n": 15,
+        "ci95": [
+          -4.122419646274433e-05,
+          2.3496480999600095e-05
+        ],
+        "delta": -8.401157710635637e-06,
+        "game_n": 714,
+        "reason": null
+      },
+      "distribution_crps": {
+        "block_n": 15,
+        "ci95": [
+          -0.0001228434848786693,
+          0.00108967821413966
+        ],
+        "delta": 0.00048053654824397696,
+        "game_n": 714,
+        "reason": null
+      },
+      "log_loss": {
+        "block_n": 15,
+        "ci95": [
+          -0.00016065853294873996,
+          7.215932606548686e-05
+        ],
+        "delta": -4.2338788139594854e-05,
+        "game_n": 714,
+        "reason": null
+      }
+    }
+  },
+  "total": {
+    "status": "POINT_HEAD_UNAVAILABLE_IN_SELECTED_PARENT"
+  }
+}

@@ -80,8 +80,9 @@ def normalize(event, raw):
         raise RuntimeError("INVALID_ESTIMATOR_PROBABILITY")
     signed_gap_pp = None if mc_only else 100.0 * (analytic_p - stochastic_sim_p)
     abs_gap_pp = None if mc_only else abs(signed_gap_pp)
+    flip = (raw.get("diagnostics") or {}).get("flip_diagnostics") or {}
 
-    return {
+    result = {
         "event_id": str(event["event_id"]),
         "model_id": raw.get("model_id"),
         "coverage_label": raw.get("coverage_label"),
@@ -101,6 +102,11 @@ def normalize(event, raw):
         "stochastic_sim_p": stochastic_sim_p,
         "analytic_sim_gap_pp": signed_gap_pp,
         "analytic_sim_abs_gap_pp": abs_gap_pp,
+        "base_home_probability": (flip.get("base") or {}).get("home_win_probability"),
+        "qb_home_probability": (flip.get("qb") or {}).get("home_win_probability"),
+        "base_qb_gap_pp": flip.get("delta_pp"),
+        "base_qb_pick_flip": flip.get("pick_flip"),
+        "base_qb_comparison_status": flip.get("status"),
         "analytic_sim_divergence": "NOT_APPLICABLE_MC_ONLY" if mc_only else ("DIFFERENT_MODELS_NOT_CONVERGENCE" if raw.get("diagnostics", {}).get("comparison") == "DIFFERENT_MODELS_NOT_ANALYTIC_MC_CONVERGENCE" else divergence_category(abs_gap_pp)),
         "model_p_candidate_normal_margin": raw.get("model_p_candidate_normal_margin"),
         "model_p_candidate_status": raw.get("model_p_candidate_status"),
@@ -121,14 +127,35 @@ def normalize(event, raw):
         "diagnostics": raw.get("diagnostics", {}),
         "simulation": raw.get("simulation", {}),
         "provenance": raw.get("provenance", {}),
+        "roster_coverage": raw.get("roster_coverage"),
         "action_authority": False,
         "action_status": "SHADOW_ONLY",
     }
+    for key in ("identity_semantics", "numerical_identity", "forecast_procedure_id",
+                "feature_procedure_id", "calibration_procedure_id"):
+        if key in raw:
+            result[key] = raw[key]
+    return result
 
 
 def summarize_pit(context, requested_as_of_utc, generated_at_utc):
     raw = dict(context.get("pit_provenance") or {})
     fetches = list(raw.get("source_fetches") or [])
+    # Byte retention is separate from PIT ordering, model usage and calibration.
+    attestation = {"status": "SOURCE_RETENTION_UNVERIFIED",
+                   "historical_pit_validity_proven": False,
+                   "provider_authenticity_proven": False,
+                   "model_input_usage_proven": False,
+                   "certified_calibration_eligible": False}
+    if os.environ.get("SPORTS_SOURCE_BUNDLES"):
+        from scripts.source_attestation import attest_sources
+        try:
+            roots = json.loads(os.environ["SPORTS_SOURCE_BUNDLES"])
+            if not isinstance(roots, list) or not roots or any(not isinstance(p, str) for p in roots):
+                raise ValueError("SOURCE_BUNDLES_MUST_BE_PATH_LIST")
+            attestation = attest_sources(fetches, roots, requested_as_of_utc)
+        except (ValueError, KeyError, OSError, TypeError) as exc:
+            attestation["reason"] = str(exc)
     timestamps = []
     invalid_timestamp = False
     for item in fetches:
@@ -149,6 +176,7 @@ def summarize_pit(context, requested_as_of_utc, generated_at_utc):
         "pit_alignment_threshold_seconds": 0,
         "pit_threshold_seconds": 3600,
         "source_fetches": fetches,
+        "source_attestation": attestation,
         "action_authority": False,
     }
 
@@ -263,7 +291,9 @@ def attach_grading(card):
             "calibration_bin_analytic": _calibration_bin(analytic_home),
             "calibration_bin_sim": _calibration_bin(sim_home),
             "graded_at_utc": None,
-            "market_features_used": False,
+            # An absent producer declaration is unknown, not evidence of no use.
+            "market_features_used": row.get("diagnostics", {}).get("market_input"),
+            "market_independence_status": "NOT_CERTIFIED_BY_REPORTING_FLAGS",
             "action_authority": False,
         }
 
@@ -272,15 +302,48 @@ def attach_grading(card):
         "eligible_forecast_count": eligible_count,
         "registration_rule": "DIAGNOSTIC_ONLY; separate verified writer registration required",
         "market_overlay_enabled": False,
+        "market_overlay_scope": "NO_COMPARISON_LAYER_ATTACHED_BY_SHARED_RUNNER",
+        "market_independence_status": "SEE_DISCLOSURE_AND_RUNTIME_PERTURBATION_AUDIT",
         "action_authority": False,
     }
     return card
 
 
-def generate(card_date, league, as_of, simulations, overrides):
+def attach_state_receipt(raw, event, context, league):
+    """Add an input trace after forecasting without editing pinned model code."""
+    import copy
+    result = copy.deepcopy(raw)
+    package = context.get("package")
+    if league.lower() not in {"nba", "nhl", "mls"} or not isinstance(package, dict):
+        return result
+    from models.current.baseline import IDS
+    if result.get("model_id") != IDS.get(league.lower()):
+        return result
+    from models.current.freshness import state_freshness_receipt
+    diagnostic = result.setdefault("diagnostics", {})
+    try:
+        if package.get("model_id") != result["model_id"]:
+            raise ValueError("RECEIPT_MODEL_IDENTITY_MISMATCH")
+        receipt = state_freshness_receipt(package, event, result["model_input_snapshot"],
+                                          cutoff_utc=context["cutoff"])
+        if (receipt["input_snapshot_hash"] != result.get("input_snapshot_hash") or
+                receipt["model_state_config_hash"] != result.get("model_state_config_hash")):
+            raise ValueError("RECEIPT_PARENT_HASH_MISMATCH")
+        diagnostic["state_freshness_receipt"] = receipt
+    except (ValueError, KeyError, TypeError) as exc:
+        # Retain raw evidence. A failed diagnostic is visible, never silently fresh.
+        diagnostic["state_freshness_receipt_error"] = str(exc)
+    return result
+
+
+def generate(card_date, league, as_of, simulations, overrides, roster_bundle=None, require_roster_aware=False, *, identity_semantics="legacy.v1"):
+    from sports.rosters import attach, assess, load_bundle
+    roster = load_bundle(roster_bundle) if roster_bundle else None
     adapter = load_adapter(league)
     schedule = adapter.load_schedule(card_date, as_of)
     context = adapter.build_context(schedule, as_of, True, overrides)
+    if league.lower() == "nfl":
+        context["retain_draws"] = True
     rows = []
     incidents = []
     requested_cutoff = dt(as_of)
@@ -304,9 +367,22 @@ def generate(card_date, league, as_of, simulations, overrides):
             })
             continue
         try:
-            raw = adapter.forecast_event(event, context, simulations)
+            if require_roster_aware:
+                coverage = assess(league.lower(), event, as_of, roster)
+                if not coverage['roster_aware_forecast_eligible']:
+                    raise ValueError('ROSTER_AWARE_FORECAST_UNAVAILABLE:' + ';'.join(coverage['reasons']))
+            if identity_semantics == "legacy.v1":
+                raw = adapter.forecast_event(event, context, simulations)
+            else:
+                from pipelines.cards.semantic_identity import forecast_with_identity
+                raw = forecast_with_identity(adapter, event, context, simulations, semantics=identity_semantics)
             from pipelines.cards.selected import apply_default
             raw = apply_default(league,event,raw)
+            if league.lower() == 'nfl':
+                from pipelines.cards.nfl_flip_integration import attach_diagnostic
+                raw['diagnostics'] = attach_diagnostic(raw.get('diagnostics', {}), context.get('model'))
+            raw = attach_state_receipt(raw, event, context, league)
+            raw = attach(raw, league.lower(), event, as_of, roster)
             # Guard the rare case where network/simulation time crosses first pitch.
             if now_utc() >= event_start:
                 rows.append({
@@ -351,6 +427,10 @@ def generate(card_date, league, as_of, simulations, overrides):
         "pregame_coverage": 1.0 if not pregame else len(generated) / len(pregame),
         "coverage_breach_event_ids": missing,
         "incidents": incidents,
+        "roster_policy": {"bundle_sha256": roster.get('bundle_sha256') if roster else None,
+                          "require_roster_aware": require_roster_aware,
+                          "membership_is_not_availability": True,
+                          "current_roster_is_not_numerical_consumption": True},
         "forecasts": rows,
     }
     return attach_grading(card)
@@ -366,7 +446,7 @@ def _delta_text(seconds):
     return f"{sign}{hours}h {minutes:02d}m {secs:02d}s"
 
 
-def render_md(card):
+def render_md(card, disclosures=None):
     pit = card.get("pit_provenance") or {}
     grading = card.get("grading_policy") or {}
     lines = [
@@ -388,6 +468,8 @@ def render_md(card):
     if pit.get("pit_status") not in (None, "PIT_ALIGNED"):
         lines.extend(["> **PIT WARNING:** this diagnostic card must not be represented as an exact requested-cutoff replay.", ""])
 
+    from pipelines.cards.integrity_reporting import render_integrity_md
+    lines.extend([render_integrity_md(card), ""])
     seen_defaults=set()
     for row in card["forecasts"]:
         default=(row.get("diagnostics") or {}).get("default_selection")
@@ -403,6 +485,24 @@ def render_md(card):
             lines.extend(["Independent-head directions (home-oriented): `"+json.dumps(coherence.get("home_oriented_signs",{}))+"`. Joint score expectations appear only when available; Ridge centers are diagnostic.", ""])
             flow=diagnostic.get("assimilation")
             lines.extend(["Week-state assimilation: **"+(flow.get("status","UNVERIFIED") if flow else "NOT_DEMONSTRATED_FOR_THIS_RUN")+"**", ""])
+
+    if card['league'].upper() == 'NFL':
+        lines.extend(["## Base versus QB diagnostics", "",
+            "Home-oriented probabilities; the flip flag uses unrounded values. Every strict winner flip is flagged independently of gap size. Missing comparisons stay visible.", "",
+            "| Game | Base home P | QB home P | Base pick | QB pick | QB − base | Flip | Comparison / flags |",
+            "|---|---:|---:|---|---|---:|---|---|"])
+        for row in card['forecasts']:
+            if row.get('forecast_status') != 'FORECAST_GENERATED':
+                continue
+            flip = (row.get('diagnostics') or {}).get('flip_diagnostics') or {}
+            pct = lambda value: '—' if value is None else f'{100 * value:.4f}%'
+            delta = flip.get('delta_pp')
+            gap = '—' if delta is None else f'{delta:+.4f} pp'
+            flag = 'UNKNOWN' if flip.get('pick_flip') is None else ('PICK_FLIP' if flip['pick_flip'] else 'NO_FLIP')
+            status = flip.get('status', 'DIAGNOSTIC_MISSING')
+            detail = ', '.join(flip.get('flags', []))
+            lines.append(f"| {row.get('away_team')} @ {row.get('home_team')} | {pct((flip.get('base') or {}).get('home_win_probability'))} | {pct((flip.get('qb') or {}).get('home_win_probability'))} | {((flip.get('base') or {}).get('pick') or '—')} | {((flip.get('qb') or {}).get('pick') or '—')} | {gap} | {flag} | {status}; {detail} |")
+        lines.append('')
 
     lines.extend([
         "| Game | Tier | Dose | Winner | Analytic P | Stochastic Sim P | Gap | Divergence | Margin | Total | Grade | Warnings |",
@@ -425,6 +525,15 @@ def render_md(card):
         )
     if card["incidents"]:
         lines += ["", "## Coverage incidents", "", "```json", json.dumps(card["incidents"], indent=2), "```"]
+    from pipelines.cards.disclosures import build_report, render_md as render_disclosures
+    if disclosures is not None:
+        lines += ["", render_disclosures(disclosures)]
+    elif card.get("as_of_utc"):
+        lines += ["", render_disclosures(build_report(card))]
+    else:
+        # Legacy display-only fragments are not evidence-bearing full cards.
+        # Preserve their renderer without inventing a missing cutoff.
+        lines += ["", "**Disclosures unavailable: parent cutoff missing. Wagering remains OFF.**"]
     lines += ["", "**Diagnostic only. Action authority is OFF. No market/EV layer is attached.**"]
     return "\n".join(lines) + "\n"
 
@@ -437,6 +546,13 @@ def main():
     parser.add_argument("--initial-research-baselines",action="store_true",help="Explicit NBA/NHL/MLS research models; does not change tested defaults")
     parser.add_argument("--simulations", type=int, default=100000)
     parser.add_argument("--manual-overrides")
+    parser.add_argument("--roster-bundle", type=Path, help="Retained all-sports roster bundle.json; adds validated personnel coverage")
+    parser.add_argument("--require-roster-aware", action="store_true", help="Fail closed unless full roster impacts are fitted and consumed; current parents do not meet this gate")
+    parser.add_argument("--distribution-research-config", help="Opt-in hash-bound cross-sport distribution challengers; emits a separate report")
+    parser.add_argument("--efficiency-research-config", type=Path, help="Opt-in fitted CFB/NBA efficiency experiments; separate source-bound local SHADOW receipts, no default change")
+    parser.add_argument("--disclosures", type=Path, help="Source-bound availability scenarios, assumptions and dependence disclosures; presentation only")
+    parser.add_argument("--identity-semantics", choices=["legacy.v1", "market_blind_numeric.v2"], default="market_blind_numeric.v2", help="Explicit independently identified execution child; legacy behavior remains available")
+    parser.add_argument("--selection-config", type=Path, help="Frozen research selector configuration; absent config emits unqualified diagnostic NO_PICK")
     parser.add_argument("--output-dir", default="output")
     args = parser.parse_args()
     if args.initial_research_baselines:os.environ['SPORTS_INITIAL_BASELINES']='1'
@@ -447,9 +563,20 @@ def main():
     os.environ['SPORTS_RESEARCH_DRAW_OUTPUT']=str((output/'draws').resolve())
     if args.league == "mlb":
         os.environ["MLB_DRAW_OUTPUT"] = str((output / "draws").resolve())
-    card = generate(args.date, args.league, as_of, args.simulations, args.manual_overrides)
+    card = generate(args.date, args.league, as_of, args.simulations, args.manual_overrides, args.roster_bundle, args.require_roster_aware, identity_semantics=args.identity_semantics)
     (output / "diagnostic_card.json").write_text(json.dumps(card, indent=2, sort_keys=True) + "\n")
-    (output / "diagnostic_card.md").write_text(render_md(card))
+    from pipelines.cards.selection_integration import write_card_selection
+    selection_config = json.loads(args.selection_config.read_text()) if args.selection_config else None
+    selection = write_card_selection(output / "diagnostic_card.json", output / "research_selection", config=selection_config)
+    from pipelines.cards.disclosures import write_report
+    disclosures = write_report(card, output / "disclosures", args.disclosures)
+    (output / "diagnostic_card.md").write_text(render_md(card, disclosures))
+    if args.league == 'nfl':
+        from models.nfl.contextual.flip_diagnostics import append_flip_diagnostic
+        for row in card['forecasts']:
+            flip = (row.get('diagnostics') or {}).get('flip_diagnostics')
+            if flip is not None:
+                append_flip_diagnostic(output / 'flip_diagnostics.jsonl', flip)
 
     fields = [
         "event_id", "away_team", "home_team", "forecast_status", "forecast_tier", "data_quality",
@@ -458,6 +585,8 @@ def main():
         "projected_margin", "projected_total", "projected_home_runs", "projected_away_runs",
         "margin_std", "total_std", "spread_or_runline", "total_market", "warnings",
         "analytic_p_home", "stochastic_sim_p_home", "grading_eligible",
+        "base_home_probability", "qb_home_probability", "base_qb_gap_pp",
+        "base_qb_pick_flip", "base_qb_comparison_status",
     ]
     with (output / "diagnostic_card.csv").open("w", newline="") as handle:
         writer = csv.DictWriter(handle, fieldnames=fields, extrasaction="ignore")
@@ -471,8 +600,35 @@ def main():
             csv_row["grading_eligible"] = grading.get("eligible_for_prospective_grading")
             writer.writerow(csv_row)
 
-    print(render_md(card))
-    raise SystemExit(2 if card["coverage_breach_event_ids"] else 0)
+    print(render_md(card, disclosures))
+    print(json.dumps({"research_selection": selection["decision_counts"], "wagering_status": "OFF"}))
+    research_incomplete = bool(disclosures["errors"])
+    if args.efficiency_research_config:
+        from research.efficiency.runner import shadow_from_card
+        try:
+            efficiency = shadow_from_card(output / "diagnostic_card.json", args.efficiency_research_config,
+                                          output / "efficiency_research", simulations=args.simulations)
+            research_incomplete |= any(row["status"] != "SHADOW_LOGGED" for row in efficiency["coverage"])
+            print(json.dumps({"efficiency_research_run_id": efficiency["run_id"], "logged_count": efficiency["logged_count"], "canonical_prospective_eligible": False}))
+        except (ValueError, KeyError, TypeError, OSError) as exc:
+            research_incomplete = True
+            failure = {"status": "FAILED", "reason": str(exc), "action_authority": False}
+            with (output / "efficiency_research_failure.json").open("x") as handle:
+                json.dump(failure, handle, indent=2)
+            print(json.dumps({"efficiency_research": failure}))
+    if args.distribution_research_config:
+        from pipelines.cards.distribution_research import build, load_config
+        try:
+            research = build(card, load_config(args.distribution_research_config), output / "distribution_research", simulations=args.simulations)
+            research_incomplete |= any(r["status"] != "COMPLETED" for r in research["coverage"])
+            print(json.dumps({"distribution_research": research["coverage"]}, indent=2))
+        except (ValueError, KeyError, TypeError, OSError) as exc:
+            research_incomplete = True
+            failure = {"status": "FAILED", "reason": str(exc), "action_authority": False}
+            with (output / "distribution_research_failure.json").open("x") as handle:
+                json.dump(failure, handle, indent=2)
+            print(json.dumps({"distribution_research": failure}))
+    raise SystemExit(2 if card["coverage_breach_event_ids"] or research_incomplete else 0)
 
 
 if __name__ == "__main__":

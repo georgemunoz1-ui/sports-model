@@ -20,6 +20,20 @@ from models.nfl.contextual.runtime import live_features
 from pipelines.cards.selection import select
 
 
+def select_prestart_events(games, cutoff):
+    """Exclude started events independently; never advance partial-week state."""
+    future = []; excluded = []
+    for row in games.to_dict('records'):
+        start = dt.datetime.fromisoformat(row['gameday']+'T'+row['gametime']).replace(
+            tzinfo=ZoneInfo('America/New_York')).astimezone(dt.timezone.utc)
+        if utc(cutoff) >= start:
+            excluded.append({'event_id': row['game_id'], 'start_time_utc': start.isoformat(),
+                             'disposition': 'POST_START'})
+        else:
+            future.append((row, start))
+    return future, excluded
+
+
 def build(store, state_id, seed_id, output):
     model_path = ROOT/'data/nfl/contextual_v1/model_packed.json'
     recovered_path = ROOT/'data/nfl/contextual_v1/recovered_parameters.json'
@@ -35,10 +49,10 @@ def build(store, state_id, seed_id, output):
     schedule = ws._schedule(source, state['season'], cutoff)
     games = schedule[schedule.week == state['completed_week']+1]
     if games.empty: raise ValueError('NO_NEXT_WEEK_SCHEDULE')
+    future, excluded = select_prestart_events(games, cutoff)
+    if not future: raise ValueError('NO_PRESTART_EVENTS_IN_NEXT_WEEK')
     events = []; inputs = {}
-    for row in games.to_dict('records'):
-        start = dt.datetime.fromisoformat(row['gameday']+'T'+row['gametime']).replace(tzinfo=ZoneInfo('America/New_York')).astimezone(dt.timezone.utc)
-        if utc(cutoff) >= start: raise ValueError('NEXT_WEEK_ALREADY_STARTED')
+    for row, start in future:
         event = {'event_id': row['game_id'], 'home_team': row['home_team'], 'away_team': row['away_team'],
                  'gameday': row['gameday'], 'gametime': row['gametime'], 'location': row['location'],
                  'start_time_utc': start.isoformat()}
@@ -71,6 +85,9 @@ def build(store, state_id, seed_id, output):
         'recovered_parameters_path': os.path.relpath(recovered_path, output.parent),
         'selected_model_id': select('nfl')['default_model_id'], 'research_only': True,
         'action_authority': False, 'scope': 'NEXT_WEEK_SCHEDULE_WITH_VERIFIED_WEEKLY_STATE',
+        'event_scope': 'PRESTART_EVENTS_ONLY',
+        'coverage': {'scheduled_week_events': len(games), 'prestart_events': len(events),
+                     'excluded_events': excluded, 'completed_state_week': state['completed_week']},
         'limitations': ['SCHEDULE_QBS_UNCONFIRMED', 'INJURY_REPORTS_NOT_ACQUIRED', 'WEATHER_NOT_ACQUIRED', 'FINAL_INACTIVES_PENDING'],
         'source_fetches': [{'source': receipt['source_url'], 'sha256': receipt['sha256'], 'fetched_at_utc': receipt['retrieved_at_utc']}]}
     output.parent.mkdir(parents=True, exist_ok=True)

@@ -1,0 +1,97 @@
+{
+  "schema": "diagnostic-swarm-protocol.v1",
+  "created_at_utc": "2026-10-23T09:49:54.155478+00:00",
+  "main_commit": "278b9a2e655b72b720fefc215a5129a8e6cd2c93",
+  "stage": "FROZEN_BEFORE_NEW_EVALUATION_RESULT_INSPECTION",
+  "prior_protocol_sha256": "6215043608750fffc9bcce986cb2bb94701ed1dc6e5aa08f8cb0fc9fda3e0fe4",
+  "prior_config_sha256": "7fa9dfda8e2146eedcf4a17360f44a4a8aab53bc075f2da8b97d550edb082fa1",
+  "independent_worker_roles": [
+    "forecast reconstruction",
+    "point-in-time data",
+    "CFB matchup efficiency",
+    "NBA possession efficiency",
+    "NFL/NE investigation",
+    "evaluation/selection"
+  ],
+  "discovery_excluded": [
+    "CFB:401869845",
+    "2026_07_NE_CHI",
+    "NBA:401909094",
+    "NBA:401909093"
+  ],
+  "historical_evidence": "REUSED_RETROSPECTIVE_RECONSTRUCTED; no pristine confirmation claim",
+  "candidate_changes": "Reuse exactly frozen existing efficiency recipe; bug fixes require before/after records and separately identified changed procedure; no choices based on heldout results",
+  "split": {
+    "cfb_train_seasons": "<=2024",
+    "cfb_evaluation_seasons": [
+      2025,
+      2026
+    ],
+    "nba_train_seasons": [
+      2021,
+      2022,
+      2023,
+      2024
+    ],
+    "nba_evaluation_seasons": [
+      2025,
+      2026
+    ],
+    "prospective_start": "actual writer registration after protocol freeze and before authoritative event start"
+  },
+  "transforms": "All imputation, scaling, coefficients, opponent adjustment, residual scale, calibration fit permitted earlier data only; no outcome-aware trimming",
+  "comparators": [
+    "unchanged original forecaster procedure with independently labeled earlier-data refit",
+    "same training-population control if incremental feature attribution would otherwise be confounded"
+  ],
+  "primary": "paired binary winner Brier on chronological common events",
+  "secondary": [
+    "log loss",
+    "winner accuracy",
+    "margin MAE/RMSE",
+    "total MAE/RMSE where supported",
+    "fixed decile reliability counts",
+    "sharpness",
+    "high-confidence error >=0.8",
+    "margin/total interval coverage where supported"
+  ],
+  "bootstrap": {
+    "resamples": 2000,
+    "seed": 2302026,
+    "blocks": "CFB season-week; NBA chronological ISO-week; NFL frozen existing scheme reported separately",
+    "interpretation": "conditional on fixed forecasts and block dependence assumptions"
+  },
+  "selectors": {
+    "separate_from_forecaster": true,
+    "threshold_grid": [
+      0.5,
+      0.55,
+      0.6,
+      0.65,
+      0.7,
+      0.75,
+      0.8,
+      0.85,
+      0.9,
+      0.95
+    ],
+    "score": "max(p_home,1-p_home)",
+    "risk": "settled directional error rate",
+    "coverage_denominators": [
+      "all scheduled eligible product opportunities",
+      "all forecastable common events"
+    ],
+    "policy_fit": "none; full frozen grid, no chosen optimum",
+    "settlement": "WIN/LOSS/PUSH/VOID explicit; no win credit for abstention; unavailable authentic historical lines means spread selector evaluation blocked, winner selector unaffected"
+  },
+  "known_blockers": {
+    "historical_archive_asof": "original provider-observed snapshots absent; affects PIT confirmation claims",
+    "cfb_provider_epa": "upstream EPA training chronology unknown; affects PIT-trained feature qualification",
+    "personnel": "actual pre-cutoff inputs required; failures do not block team-efficiency arm",
+    "global_health": "legacy historical/MLB missing files and release failures do not stop independent data-contract-satisfied research"
+  },
+  "raw_outputs": "retain raw forecast and exclusions even when selector returns NO_PICK",
+  "promotion": "NONE; user approval and new prospective qualification required",
+  "external_writes": "approval after concrete reviewable artifact; no remote mutation in this execution",
+  "wagering_authority": "OFF"
+}

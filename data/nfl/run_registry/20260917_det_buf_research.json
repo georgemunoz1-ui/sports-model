@@ -1,0 +1,74 @@
+{
+  "schema": "nfl.research_run_registry_entry.v1",
+  "record_created_at_utc": "2026-09-18T00:00:40.280752+00:00",
+  "event_id": "2026_02_DET_BUF",
+  "slate_date": "2026-09-17",
+  "slate_timezone": "America/Los_Angeles",
+  "start_time_utc": "2026-09-18T00:15:00+00:00",
+  "status": "COMPLETED_RESEARCH_NOT_OFFICIAL",
+  "source_commit": "a5733ce8717afb922e666f537e1e54996f366c6d",
+  "workflow_run_id": 35289006699,
+  "input_artifact": {
+    "id": 10525098218,
+    "sha256": "5117e28c7026e4ce08b11cd51da5abff755d26d67b56b017066cd7b54d348366",
+    "created_at_utc": "2026-09-17T23:56:50Z"
+  },
+  "output_artifact": {
+    "id": 10525312986,
+    "sha256": "12babe78049b69d07e41dfd4568b36c9f0fe41d511d73dd796364f7a19b52074",
+    "created_at_utc": "2026-09-17T23:57:27Z",
+    "expires_at_utc": "2026-12-16T23:56:06Z"
+  },
+  "preexecution_writer_utc": "2026-09-17T23:56:48.841722+00:00",
+  "primary_cutoff_utc": "2026-09-17T23:57:23.168324+00:00",
+  "primary_registration_utc": "2026-09-17T23:57:23.546788+00:00",
+  "forecast_identity": "b1326932a2baf78bfea08c55309ebc8ea573dd12afce2d771096726cd39654df",
+  "forecast_file": "primary/2026_02_DET_BUF/forecast.json",
+  "forecast_file_sha256": "d9ae74cb122fb8d09fe5f05a6d856b01fbffd9813642066a8e47aeca0dac228e",
+  "event_package_file": "event_package.json",
+  "event_package_sha256": "f39e1fa968b7b1ea78b141d784c83726c7f7147635be08374ba9e1d942c1910d",
+  "completed_manifest_sha256": "c0b80459ea1b9e2c3f74996eb050f421f81e36052a2da66d4eaa1fb78ff46f64",
+  "model_id": "nfl.integrated_context.qb.v1.research",
+  "model_artifact_sha256": "c1cdf49dbb1a98bbf2b3d4286042a316c132dc7d472f3138c3bbbb1e0cb1c3cd",
+  "analytical_prediction": {
+    "home_win": 0.585779175173204,
+    "home_margin": 2.8039428305371503,
+    "total_points": 52.02793857905275
+  },
+  "simulation": {
+    "seed": 15515975723517109339,
+    "count": 100000,
+    "home_win_probability": 0.58763,
+    "mc_standard_error_pp": 0.15576968033176572,
+    "sha256": "77358489908c330874682e35cf5e622b07fea7d929b41bc2d77c9291dcfc4424",
+    "scope": "BINARY_NON_TIE_DIAGNOSTIC_NOT_INDEPENDENT_MODEL_VALIDATION"
+  },
+  "winner_draws_file_sha256": "a7b23ad17dc91ac0705ef581697a6e59525bc42e82f5d4dbefbeeadebf9abde4",
+  "exact_draw_replay": true,
+  "nfl_tests_passed": 108,
+  "week1_finals_reconciled": 16,
+  "qb_game_passer_aggregates": 37,
+  "evaluations_not_yet_graded": {
+    "analytic": {
+      "parent_forecast_sha256": "d9ae74cb122fb8d09fe5f05a6d856b01fbffd9813642066a8e47aeca0dac228e",
+      "json_pointer": "/prediction/home_win"
+    },
+    "monte_carlo": {
+      "parent_forecast_sha256": "d9ae74cb122fb8d09fe5f05a6d856b01fbffd9813642066a8e47aeca0dac228e",
+      "json_pointer": "/winner_simulation/home_win_probability"
+    }
+  },
+  "canonical_prospective_eligible": false,
+  "official_release_eligible": false,
+  "action_authority": false,
+  "dose": 0.0,
+  "main_branch_modified": false,
+  "registry_scope": "NEW_APPEND_ONLY_RESEARCH_RECORD; NOT_CANONICAL_REGISTRATION_OR_GRADE",
+  "limitations": [
+    "QB simulation is conditional non-tie binary winner only; no arm-specific joint score residuals",
+    "Selected QB arm does not apply injury/workload proxy features numerically",
+    "Gamebook clearance and retained global-health/recovery/canonical-release requirements not cleared",
+    "Preparer computes recovered-head validation diagnostics before sealing; external input receipt precedes the requested primary integrated CLI run",
+    "Frozen extraction label HUMAN_REVIEWED_FIELDS is imprecise: assistant-reviewed extraction, not independently documented human review; frozen bytes unchanged"
+  ]
+}

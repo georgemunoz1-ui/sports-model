@@ -31,6 +31,39 @@ def fixture():
 
 
 class Adjudication(unittest.TestCase):
+    def night_fixture(self, gameday, source_start):
+        games, pbp, r = fixture()
+        games['gameday'] = gameday
+        games['gametime'] = '20:15'
+        j = json.loads(r['evidence']['text'])
+        j['header']['competitions'][0]['date'] = source_start
+        r['evidence']['text'] = json.dumps(j)
+        r['evidence']['receipt']['sha256'] = hashlib.sha256(r['evidence']['text'].encode()).hexdigest()
+        r['evidence']['receipt']['retrieved_at_utc'] = '2027-02-01T00:00:00Z'
+        r['reviewed_at_utc'] = '2027-02-01T01:00:00Z'
+        return games, pbp, r
+
+    def test_eastern_night_start_is_not_wrong_utc_date(self):
+        # Both daylight and standard time; the prior UTC-date test rejected each.
+        for gameday, start in [('2026-10-15', '2026-10-16T00:15:00Z'),
+                               ('2027-01-07', '2027-01-08T01:15:00Z')]:
+            games, pbp, r = self.night_fixture(gameday, start)
+            with self.subTest(gameday=gameday):
+                self.assertEqual(apply(games, pbp, [r], r['reviewed_at_utc']).iloc[0].home_qb_id, 'new')
+
+    def test_same_eastern_date_wrong_start_time_still_rejected(self):
+        games, pbp, r = self.night_fixture('2026-10-15', '2026-10-16T01:15:00Z')
+        with self.assertRaisesRegex(ValueError, 'ADJUDICATION_START_TIME_BINDING'):
+            apply(games, pbp, [r], r['reviewed_at_utc'])
+
+    def test_missing_time_uses_eastern_calendar_date(self):
+        games, pbp, r = self.night_fixture('2026-10-15', '2026-10-16T00:15:00Z')
+        games = games.drop(columns='gametime')
+        self.assertEqual(apply(games, pbp, [r], r['reviewed_at_utc']).iloc[0].home_qb_id, 'new')
+        games['gameday'] = '2026-10-16'
+        with self.assertRaisesRegex(ValueError, 'ADJUDICATION_DATE_BINDING'):
+            apply(games, pbp, [r], r['reviewed_at_utc'])
+
     def test_explicit_correction_preserves_input(self):
         games, pbp, r = fixture()
         self.assertEqual(apply(games, pbp, [], r['reviewed_at_utc']).iloc[0].home_qb_id, 'old')
@@ -65,6 +98,77 @@ class Adjudication(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, 'PBP_IDENTITY_CONFLICT'):
             apply(games, pd.concat([pbp, extra]), [base], base['reviewed_at_utc'])
 
+
+
+
+class NominalStarter(unittest.TestCase):
+    def nominal(self):
+        games, pbp, r = fixture()
+        games['home_qb_name'] = 'Nominal Starter'
+        j = json.loads(r['evidence']['text'])
+        j['article'] = {'story': 'Nominal Starter took the opening handoff before Test Quarterback entered.'}
+        r['evidence']['text'] = json.dumps(j)
+        r['evidence']['receipt']['sha256'] = hashlib.sha256(r['evidence']['text'].encode()).hexdigest()
+        r.update(resolution_kind='NOMINAL_STARTER_NO_DROPBACKS',
+                 nominal_starter_player_name='Nominal Starter',
+                 nominal_starter_evidence_excerpt=j['article']['story'])
+        return games, pbp, r
+
+    def test_nominal_starter_preserved_active_passer_separate(self):
+        games, pbp, r = self.nominal()
+        actual = apply(games, pbp, [r], r['reviewed_at_utc'])
+        self.assertEqual(actual.iloc[0].home_qb_id, 'old')
+        self.assertEqual(actual.iloc[0].home_active_qb_id, 'new')
+        self.assertNotIn('home_active_qb_id', games)
+        r['resolution_kind'] = 'STALE_SCHEDULE_STARTER'
+        actual = apply(games, pbp, [r], r['reviewed_at_utc'])
+        self.assertEqual(actual.iloc[0].home_qb_id, 'new')
+        self.assertEqual(actual.iloc[0].home_active_qb_id, 'new')
+
+    def test_missing_semantic_evidence_and_wrong_kind_refused(self):
+        games, pbp, base = self.nominal()
+        for field, value in [('nominal_starter_evidence_excerpt','not in source'),
+                             ('nominal_starter_player_name','Other'),
+                             ('resolution_kind','AUTO_MAX_DROPBACKS')]:
+            r = copy.deepcopy(base); r[field] = value
+            with self.subTest(field=field), self.assertRaises(ValueError):
+                apply(games, pbp, [r], base['reviewed_at_utc'])
+
+    def test_nominal_starter_passing_conflict_still_refused(self):
+        games, pbp, r = self.nominal()
+        extra = pbp.copy(); extra['play_id'] = 2; extra['passer_player_id'] = 'old'
+        with self.assertRaisesRegex(ValueError, 'PBP_IDENTITY_CONFLICT'):
+            apply(games, pd.concat([pbp, extra]), [r], r['reviewed_at_utc'])
+        with self.assertRaisesRegex(ValueError, 'QB_PLAYS_REQUIRED'):
+            apply(games, pbp.iloc[:0], [r], r['reviewed_at_utc'])
+
+class ReviewedTeamAlias(unittest.TestCase):
+    def test_alias_requires_exact_review_and_identity(self):
+        from models.nfl.contextual.starter_adjudication import reviewed_team
+        team = {'abbreviation':'WSH','id':'28','displayName':'Washington Commanders'}
+        binding = {'provider_code':'WSH','canonical_code':'WAS','provider_team_id':'28',
+                   'provider_display_name':'Washington Commanders'}
+        self.assertEqual(reviewed_team(team, {'provider_team_binding_review':binding}), 'WAS')
+        with self.assertRaisesRegex(ValueError, 'EXPLICIT_TEAM_ALIAS'):
+            reviewed_team(team, {})
+        team['id'] = '29'
+        with self.assertRaisesRegex(ValueError, 'TEAM_ALIAS_IDENTITY'):
+            reviewed_team(team, {'provider_team_binding_review':binding})
+
+class NominalAdversarial(NominalStarter):
+    def test_unrelated_excerpt_and_scramble_refused(self):
+        games, pbp, base = self.nominal()
+        r=copy.deepcopy(base); r['nominal_starter_evidence_excerpt']='header'
+        with self.assertRaisesRegex(ValueError,'NOMINAL_STARTER_SOURCE_REVIEW_REQUIRED'):
+            apply(games,pbp,[r],r['reviewed_at_utc'])
+        extra=pbp.copy();extra['play_id']=2;extra['qb_scramble']=1
+        extra['passer_player_id']=None;extra['rusher_player_id']='old'
+        with self.assertRaisesRegex(ValueError,'PBP_IDENTITY_CONFLICT'):
+            apply(games,pd.concat([pbp,extra]),[base],base['reviewed_at_utc'])
+        for clock in ('available_at_utc','source_published_at_utc'):
+            r=copy.deepcopy(base);r['evidence']['receipt'][clock]='2026-09-23T00:00:00Z'
+            with self.assertRaisesRegex(ValueError,'AFTER_CUTOFF'):
+                apply(games,pbp,[r],base['reviewed_at_utc'])
 
 if __name__ == '__main__':
     unittest.main()

@@ -1,0 +1,305 @@
+{
+  "blinding": "No builder test suites or excluded review reports read; independently chosen fixtures and assertions",
+  "command": "python -m pytest tests/test_blind_conformance.py -q",
+  "completed_at_utc": "2026-10-23T06:26:47.004860+00:00",
+  "executed_argv": [
+    "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+    "-m",
+    "pytest",
+    "tests/test_blind_conformance.py",
+    "-q"
+  ],
+  "executed_at_utc": "2026-10-23T06:26:41.432192+00:00",
+  "exit_code": 0,
+  "log": {
+    "path": "docs/research/overhaul_2026_10_23/BLIND_VERIFICATION_FINAL_TEST.log",
+    "sha256": "1224f54d04e56bbcfc169abedd4f88970273c148f3f9304bde4c2d7356dc3fba"
+  },
+  "previous_checkpoint_receipt": "docs/research/overhaul_2026_10_23/BLIND_VERIFICATION_EXECUTION.json",
+  "publication_allowed": false,
+  "schema": "acceptance-execution-v1",
+  "scope": "Independent synthetic behavioral conformance after coordinator source-freeze signal; not predictive validation or deployment evidence",
+  "snapshot_sha256": "4b51c925202b1b3b8963d1af9b230d928c8453e2442fc1e862f152cde14a9943",
+  "source_changes_since_checkpoint": [],
+  "source_commit_verified": false,
+  "source_hashes_unchanged": true,
+  "sources": [
+    {
+      "path": "data/mlb/ml_asof/p3_candidate_config.json",
+      "sha256": "eede422d0659e485ecdfefb40938aaab5d705bd1aa873720460977cd7a573f47"
+    },
+    {
+      "path": "data/model_selection/defaults_v1.json",
+      "sha256": "8bbfb63ee0f8eeb99fc728fb25db3f1d9959c863ccb4f517abde058e3424b3eb"
+    },
+    {
+      "path": "data/nfl/contextual_v1/mnf_base_row.json",
+      "sha256": "9cc2725381e449421ca7b791bdf3be815973df06aeeda0d3b77a4db6811243c3"
+    },
+    {
+      "path": "data/nfl/contextual_v1/mnf_context_integrated.json",
+      "sha256": "5a854bdc1bd9b36a1fe070e1a8f2599c0fb34097a43f789e4a244d31f40e3c30"
+    },
+    {
+      "path": "data/nfl/contextual_v1/mnf_event.json",
+      "sha256": "4460aaff5a2c43a80436a0ba2b08059f48cf8175dfe57650c2fd8ca7c4ab01c0"
+    },
+    {
+      "path": "data/nfl/contextual_v1/model_packed.json",
+      "sha256": "a1fc0436a3e3d4f76d7b7fe9b480314fbb20804e3b9d29288f64913935a80322"
+    },
+    {
+      "path": "data/nfl/contextual_v1/recovered_parameters.json",
+      "sha256": "131cb804353530ab1e764b32abb0a88f44f09e10713bece30e0c76f296e8aeca"
+    },
+    {
+      "path": "data/nfl/contextual_v1/runtime.json",
+      "sha256": "cf2a0c2ef85073904b0bb61e06be9ec655ac2e728f59fdc38163889d607a8000"
+    },
+    {
+      "path": "data/nfl/contextual_v1/week2_policy.json",
+      "sha256": "e00d1740f3a107c671da9059fccf6f3de1ef6424daec497ed38977fcaa87286e"
+    },
+    {
+      "path": "engine/hfa.py",
+      "sha256": "029c5f6d7bf71d6ea05c0d2bb8775f65b6c30576ab1ccc9289d434edb5a35382"
+    },
+    {
+      "path": "harness/run_v13_historical.py",
+      "sha256": "d2fdf977cbd8eb34759af3bf23b19112ad02af99968973c1f0bc721a88470cba"
+    },
+    {
+      "path": "harness/wnba_model_v1.py",
+      "sha256": "7f128ba323ee939b8f40bf55eb2e1f6e9a24611e29ca4eb743962af2608af4e0"
+    },
+    {
+      "path": "models/current/__init__.py",
+      "sha256": "e698b545214ba4d820838f205014f6ea7c35d735f5c4415cd1e2599352263000"
+    },
+    {
+      "path": "models/current/baseline.py",
+      "sha256": "cc338abccfcc4c107069cc5b64b0e6e6485d77ea3ba27dd703f7a1c4055fb875"
+    },
+    {
+      "path": "models/current/cfb.py",
+      "sha256": "20628f3463589cae551b325e68fa7125aef8f9cd075e7b19b0a1c76b9f411b5a"
+    },
+    {
+      "path": "models/current/common.py",
+      "sha256": "63c0da2a4c620fb086d08e22268fe3875515c1807aec128f5e092f73eeafd5ff"
+    },
+    {
+      "path": "models/current/freshness.py",
+      "sha256": "ebadba51fa545a351d37980bab3bb78d5fe603265b758114b59f0f01191e027a"
+    },
+    {
+      "path": "models/current/linear.py",
+      "sha256": "e10b15e6ed20fd410f5d87afbf01eb191768a459ffcb106dd64cbacef797e4a2"
+    },
+    {
+      "path": "models/current/mlb.py",
+      "sha256": "72c734fb0a36a15a013300773382089da325d162a558605020c7271efc48cf5f"
+    },
+    {
+      "path": "models/current/wnba.py",
+      "sha256": "52a1b64d4644e18d8edbd3337f307a7dcd8e7b199e9ed9a4fbfb66722c55821a"
+    },
+    {
+      "path": "models/nfl/contextual/assimilation.py",
+      "sha256": "9cfe2af178382326741be0197e2f19f84e32c132014a4677b55506919c052898"
+    },
+    {
+      "path": "models/nfl/contextual/base_features.py",
+      "sha256": "f017a95578e056c1da799aaf29d218bf46bd480fbb4d214ecaad120f7f88cf68"
+    },
+    {
+      "path": "models/nfl/contextual/capabilities.py",
+      "sha256": "525c36a06438af62151ea24c42792a806d668c3a61ae700674767fb7b5892f17"
+    },
+    {
+      "path": "models/nfl/contextual/features.py",
+      "sha256": "3a064779ce6a1a53b4fda66eed9f86a4365208a849b357dcd1cb5719b3e0a115"
+    },
+    {
+      "path": "models/nfl/contextual/forecast_stream.py",
+      "sha256": "05a27454fd000b5ca9ac1137dfa7a68cf22e46137ed2fa1a088e721608e1c2ee"
+    },
+    {
+      "path": "models/nfl/contextual/halftime.py",
+      "sha256": "3204a172ed830e6975bf04958ca9877ea74abb3cb12d8c9c9d5011d40d4852be"
+    },
+    {
+      "path": "models/nfl/contextual/joint_distribution.py",
+      "sha256": "0d7192a794b4e9946febc0b25db6bd306dfb11723d404f8f3ccc55d2e677f5fb"
+    },
+    {
+      "path": "models/nfl/contextual/model.py",
+      "sha256": "ba00569e30cd56fa1d50570f828db02e56caf849ddbdf1d0d0fc11272e7a0fc3"
+    },
+    {
+      "path": "models/nfl/contextual/operating.py",
+      "sha256": "e51b7845e3aa785bb2fb1f31615aee0f5b37529b8349d734a946aab3bb0abf3b"
+    },
+    {
+      "path": "models/nfl/contextual/personnel.py",
+      "sha256": "4b6863746783775bf61970363f1df2aa33b2919ae69c709de2ff404b4a369055"
+    },
+    {
+      "path": "models/nfl/contextual/qb_assimilation.py",
+      "sha256": "33667fa0375a1d151ec2a450c497e219cc0d099472e603f1ad6d4814abfef51c"
+    },
+    {
+      "path": "models/nfl/contextual/reconstruction.py",
+      "sha256": "18bd1ee252b61c5e95f83865a60e7740aad83bcc96d0085294296f1df11418cc"
+    },
+    {
+      "path": "models/nfl/contextual/recovered_inference.py",
+      "sha256": "ac70b26355c8a9fe0850caf6e69ec268f363363dffb3b1289cbee13d4d729abd"
+    },
+    {
+      "path": "models/nfl/contextual/runtime.py",
+      "sha256": "8951577d6edd2e2e37b370cafe9f90c205b9de8b6b59d9c1aba961f15760c15d"
+    },
+    {
+      "path": "models/nfl/contextual/settlement.py",
+      "sha256": "a710bebd0dc0ce068e0b190f02ab1245389535f332b419c46eb2ebc67a60eecf"
+    },
+    {
+      "path": "models/nfl/contextual/spread_calibration.py",
+      "sha256": "4bea6490fd2a140fe13a0bba1969d94c4eda39da710732ac9d1f891e11c4acb2"
+    },
+    {
+      "path": "models/nfl/contextual/spread_runtime.py",
+      "sha256": "37b035c63bd31ca22024c2b1cb907c46cf5690da8ddd4b56bd4166f9240d56e8"
+    },
+    {
+      "path": "models/nfl/contextual/starter_adjudication.py",
+      "sha256": "b78a8d5a68692341bf2a685069e1e8ff6f8873f21d472722151959514c2a04fa"
+    },
+    {
+      "path": "models/nfl/contextual/week2.py",
+      "sha256": "03a35ca6994a8a154dd1b4b9ba3f44c15bc359b088e2ff4f2d37f4a7f3270d68"
+    },
+    {
+      "path": "models/nfl/contextual/weekly_state.py",
+      "sha256": "41e87fa081cbc2fe7625571f3a46f797bdaecc0dad9329676fea805059c6f71f"
+    },
+    {
+      "path": "pipelines/cards/adapters/__init__.py",
+      "sha256": "95a35a9259881d69f03cf0dee4da853ac6387f1f46b79f5a190d403f25afe68f"
+    },
+    {
+      "path": "pipelines/cards/adapters/cfb.py",
+      "sha256": "0497734c7ccd4ea8e2e9b678f21e0c067c5c193609f57d7f50c5a4d8452e49f7"
+    },
+    {
+      "path": "pipelines/cards/adapters/mlb.py",
+      "sha256": "95cdbf3e028012a865e14d1ddbba2a3954c48488abe394f76044ec49063d05d5"
+    },
+    {
+      "path": "pipelines/cards/adapters/mlb_gamma_poisson_research.py",
+      "sha256": "7cfcc0a536fb1a1bb71ca13c2fe79826902c5b51b81a0e14042f47a5348aea12"
+    },
+    {
+      "path": "pipelines/cards/adapters/mls.py",
+      "sha256": "c9b82582d331b4b903ba2a45b4e698ebb3d254efe5ec268fcc5b7eca6531eb89"
+    },
+    {
+      "path": "pipelines/cards/adapters/nba.py",
+      "sha256": "5c2251f1b088b8eab06d7a534df2f2360a96fb97f4905addc96ba1edae9c1450"
+    },
+    {
+      "path": "pipelines/cards/adapters/nfl.py",
+      "sha256": "621ac88166b0516926c7f26ab2c8694cb2a8b74e7d210f811c3045bef555813e"
+    },
+    {
+      "path": "pipelines/cards/adapters/nhl.py",
+      "sha256": "25758f1aa9f12332a1eb2c6733b17aba420f82c3ac43c38820f7c1557d652ff8"
+    },
+    {
+      "path": "pipelines/cards/adapters/wnba.py",
+      "sha256": "4778c51aa1de02edcb0a9814c4ce1e16196119ee435487e257e746b2b029cdc9"
+    },
+    {
+      "path": "pipelines/cards/disclosures.py",
+      "sha256": "e4ac51ebe9defd89e5806ee9160ff1fba079852070e3d44bd25b8c97776e52c6"
+    },
+    {
+      "path": "pipelines/cards/distribution_research.py",
+      "sha256": "691dd6357af2a7a9ef84336f54670db843c6d57aad79783d9f77b11d270c6554"
+    },
+    {
+      "path": "pipelines/cards/research_selection.py",
+      "sha256": "789eba02a4239348a2820c8b91fe2078562d3604f04626bf96806e44b98d4784"
+    },
+    {
+      "path": "pipelines/cards/selected.py",
+      "sha256": "0b6b270ea04a5df266ba47b23813e2943d6952b06f064802ba68c74d161276b8"
+    },
+    {
+      "path": "pipelines/cards/selection.py",
+      "sha256": "2b7240a5c18ee74e260c5a769fe0e24d91633cd49d40bd7971c6d4ad91e291cd"
+    },
+    {
+      "path": "pipelines/cards/selection_integration.py",
+      "sha256": "249762e96c206def9bb31d91d95048ab2e0e81a7d7d448ff5f870c6783fa712c"
+    },
+    {
+      "path": "pipelines/cards/semantic_identity.py",
+      "sha256": "a7f6541d1415523092e9e6364407100ceb9165de1493e833c93d21f88e65f756"
+    },
+    {
+      "path": "research/finding_evidence.py",
+      "sha256": "fa810b3629c02241ae5bf8716929a4cefd0684bb8e9214cf9e26da1dd0c80099"
+    },
+    {
+      "path": "research/procedure_lineage.py",
+      "sha256": "2a8409a636fadb9a5b1a9a3d034224784c1d4c437f977ea91cf9726d5e5257ed"
+    },
+    {
+      "path": "research/selection_evaluation.py",
+      "sha256": "1c464260e25fe5b0ae7637943fb72647a22da5576a450f3a805d372afbfe302f"
+    },
+    {
+      "path": "research/validation_registry.py",
+      "sha256": "d339fd89fd957aac457236116f1f0cc05031cd71dd5e43ed223831daa1994f83"
+    },
+    {
+      "path": "scripts/build_operational_rest_candidate.py",
+      "sha256": "0bd5b4bfc8d90d1300b0948a15af0984f5f218865afa4005f8736265d7ca897c"
+    },
+    {
+      "path": "scripts/ci_evidence_archive.py",
+      "sha256": "547408043284a1a82f7475ea7aaad457bdc63f4da24874a48d23416b617e9c96"
+    },
+    {
+      "path": "scripts/ci_storage_monitor.py",
+      "sha256": "600990b00159196401d99be26d993e4aeb5d5fba184c9b08d239ef4df8c99f11"
+    },
+    {
+      "path": "scripts/evaluate_research_selections.py",
+      "sha256": "675db3d68a0e75d6b3901151903d046de6272e69d5a0faaf12257eb6fd76613e"
+    },
+    {
+      "path": "scripts/generate_card_force.py",
+      "sha256": "a80fb79713258b990afae7d9253eb3fa9fd1f0d219354317a9b2d404b9f078c1"
+    },
+    {
+      "path": "scripts/prepare_initial_baselines.py",
+      "sha256": "03e01f10178a812ec2c0454279c0ee05223532fd7d622a780176995bfb55903a"
+    },
+    {
+      "path": "scripts/run_nfl_integrated.py",
+      "sha256": "b2f2e8150286d385a2c0ba82bc7197f7677f971eca0d196af498cfe3bb60e067"
+    },
+    {
+      "path": "scripts/run_research_selection.py",
+      "sha256": "7cd00312065a05e7aa3c67028a7549de5c0bf5968fa9c93442d68c8cc5589d7e"
+    },
+    {
+      "path": "tests/test_blind_conformance.py",
+      "sha256": "12c38aa71d09e116ff8d1c858263ad74aacb1bbf007e68c119d45995e22f1268"
+    }
+  ],
+  "wagering_status": "OFF"
+}

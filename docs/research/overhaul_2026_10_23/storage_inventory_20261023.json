@@ -1,0 +1,367 @@
+{
+  "created_at_utc": "2026-10-23T06:08:04.009246Z",
+  "deployment": {
+    "archive": "BLOCKED_UNCONFIGURED",
+    "artifacts_deleted": 0,
+    "monitor_threshold": "NOT_CONFIGURED",
+    "notification_status": "DISABLED_UNCONFIGURED",
+    "observed_account_storage_billing": false
+  },
+  "failed_run_recovery": {
+    "artifact_page": {
+      "artifacts": [],
+      "response_canonical_sha256": "0f35eb972ace40e4bbe366b75979113ffe59e9a09ef713d1756c9e3de7639d44",
+      "source_url": "https://api.github.com/repos/georgemunoz1-ui/sports-model/actions/runs/39906285378/artifacts?per_page=100&page=1",
+      "total_count": 0
+    },
+    "base_sha": "90daf8e0036c67a5304aa0747bf50b2266e0b364",
+    "created_at_utc": "2026-10-23T05:32:03Z",
+    "executed_merge_sha": "fe0d38fa4fc44093011e2cf156cd68358591fcca",
+    "head_sha": "f6cbfcda2528a76ca1bf4710ef3e05711a3d6c4a",
+    "health": {
+      "exit_code": 1,
+      "failures": 4,
+      "status": "RED",
+      "warnings": 6
+    },
+    "job_id": 120258891413,
+    "job_log_receipt": {
+      "full_original_artifact_recovered": false,
+      "original_job_log_service_text_retrieved": true,
+      "original_mlb_health_log_bytes_recovered": false,
+      "representation": "connector-decoded job log text encoded UTF-8; not original HTTP ZIP or artifact bytes",
+      "retrieval_method": "GitHub connector fetch_workflow_job_logs",
+      "sha256": "a0e08c65b0af12c882042ff5d3eac763a0690b139cb47f74a7cbd5bd2cb1f28d",
+      "size_bytes": 76568,
+      "source_url": "https://api.github.com/repos/georgemunoz1-ui/sports-model/actions/jobs/120258891413/logs"
+    },
+    "jobs_metadata_canonical_sha256": "0e5f597e0e229f8dcde17138e721479715796532d1be2cb9910c0fc5ea57b4fa",
+    "reconstruction_rule": "Any extracted health transcript is reconstructed from timestamped logs. Any rerun or regenerated Git bundle receives a new execution identity; neither is the original failed-upload artifact.",
+    "run_attempt": 1,
+    "run_conclusion": "failure",
+    "run_id": 39906285378,
+    "run_status": "completed",
+    "run_url": "https://github.com/georgemunoz1-ui/sports-model/actions/runs/39906285378",
+    "software_tests": {
+      "passed": 32,
+      "status": "PASSED"
+    },
+    "updated_at_utc": "2026-10-23T05:33:05Z",
+    "upload": {
+      "reason": "Artifact storage quota has been hit. Unable to upload any new artifacts.",
+      "status": "FAILED"
+    }
+  },
+  "pinned_main_sha": "90daf8e0036c67a5304aa0747bf50b2266e0b364",
+  "pinned_pr_76_head_sha": "f6cbfcda2528a76ca1bf4710ef3e05711a3d6c4a",
+  "receipt_id": "56f340f11b95b4bc0570ff3bb3462c046d683e9d664600b0632c794fae4a4d3b",
+  "repository": "georgemunoz1-ui/sports-model",
+  "repository_artifact_inventory": {
+    "account_quota_status": "UNKNOWN_NOT_MEASURED",
+    "error_response": {
+      "error": "HTTPError: 400: GitHub Fetch URL is not an allowed public GitHub repository or search endpoint. (Response: None)",
+      "error_code": "INVALID_ARGUMENT"
+    },
+    "error_response_canonical_sha256": "88192edc8ce3b84943535216f9687f6a11440ec491b0aa119a3ec0eed8a18ac7",
+    "next_execution": ".github/workflows/storage-monitor.yml runs gh api --paginate --slurp on main push; prints page count, total/live counts and bytes, inventory SHA256 even when threshold/archive config is absent",
+    "no_partial_or_run_count_substitution_for_artifact_total": true,
+    "requested_url": "https://api.github.com/repos/georgemunoz1-ui/sports-model/actions/artifacts?per_page=100&page=1",
+    "status": "BLOCKED_CONNECTOR_ENDPOINT_UNSUPPORTED",
+    "visible_active_artifact_bytes": null,
+    "visible_active_artifact_count": null,
+    "visible_artifact_bytes": null,
+    "visible_artifact_count": null
+  },
+  "schema": "storage-inventory-recovery-audit-v1",
+  "supported_workflow_run_inventory": {
+    "artifact_traversal_not_executed": true,
+    "enumerated_unique_run_count": 1667,
+    "page_count": 17,
+    "pages": [
+      {
+        "enumerated_run_count": 100,
+        "page": 1,
+        "reported_total_runs": 1667,
+        "run_id_list_canonical_sha256": "330d10f5d3c79272123b961726b78eada4c21cce09508a2a954be12f7ce10188",
+        "source_url": "https://api.github.com/repos/georgemunoz1-ui/sports-model/actions/runs?per_page=100&page=1"
+      },
+      {
+        "enumerated_run_count": 100,
+        "page": 2,
+        "reported_total_runs": 1667,
+        "run_id_list_canonical_sha256": "95abc7ad32e6f4157628db2cd3f9d3360d1fbec078e3829b3283ec41b629e0ac",
+        "source_url": "https://api.github.com/repos/georgemunoz1-ui/sports-model/actions/runs?per_page=100&page=2"
+      },
+      {
+        "enumerated_run_count": 100,
+        "page": 3,
+        "reported_total_runs": 1667,
+        "run_id_list_canonical_sha256": "fc05fc72f7eb7082813daba4a73aaff05ff1deb3a08a56312057ba435e6c5bb0",
+        "source_url": "https://api.github.com/repos/georgemunoz1-ui/sports-model/actions/runs?per_page=100&page=3"
+      },
+      {
+        "enumerated_run_count": 100,
+        "page": 4,
+        "reported_total_runs": 1667,
+        "run_id_list_canonical_sha256": "846a7176aa67878a912b495cd40ea34269891cd5d6598c9e95b1571aa76bb25e",
+        "source_url": "https://api.github.com/repos/georgemunoz1-ui/sports-model/actions/runs?per_page=100&page=4"
+      },
+      {
+        "enumerated_run_count": 100,
+        "page": 5,
+        "reported_total_runs": 1667,
+        "run_id_list_canonical_sha256": "82667f9eb765d807b649f2d427966d11bc944368381bcf719099860cbe53cc8c",
+        "source_url": "https://api.github.com/repos/georgemunoz1-ui/sports-model/actions/runs?per_page=100&page=5"
+      },
+      {
+        "enumerated_run_count": 100,
+        "page": 6,
+        "reported_total_runs": 1667,
+        "run_id_list_canonical_sha256": "b0a3fd2ee8390208d5d7c5f8f30fd44d6dbf23b15a2ffd2556605a3363c6fc24",
+        "source_url": "https://api.github.com/repos/georgemunoz1-ui/sports-model/actions/runs?per_page=100&page=6"
+      },
+      {
+        "enumerated_run_count": 100,
+        "page": 7,
+        "reported_total_runs": 1667,
+        "run_id_list_canonical_sha256": "63c5520e2de070aa26f0adf6e9739a9291dc14311da16e68f2152f3bd6de9e89",
+        "source_url": "https://api.github.com/repos/georgemunoz1-ui/sports-model/actions/runs?per_page=100&page=7"
+      },
+      {
+        "enumerated_run_count": 100,
+        "page": 8,
+        "reported_total_runs": 1667,
+        "run_id_list_canonical_sha256": "467fa68e3b7c9cf60b3ffb5ee853bcc19c7b426f730d6ff559898c33b784d1c0",
+        "source_url": "https://api.github.com/repos/georgemunoz1-ui/sports-model/actions/runs?per_page=100&page=8"
+      },
+      {
+        "enumerated_run_count": 100,
+        "page": 9,
+        "reported_total_runs": 1667,
+        "run_id_list_canonical_sha256": "d93a65f3948c697af8bd4b08b3304a04644664ef3c2251a71a6434bd9ffb88cf",
+        "source_url": "https://api.github.com/repos/georgemunoz1-ui/sports-model/actions/runs?per_page=100&page=9"
+      },
+      {
+        "enumerated_run_count": 100,
+        "page": 10,
+        "reported_total_runs": 1667,
+        "run_id_list_canonical_sha256": "3734f092951283953f5c6167f819ed95b0c46741c758b6e422fa7fd99643c2ea",
+        "source_url": "https://api.github.com/repos/georgemunoz1-ui/sports-model/actions/runs?per_page=100&page=10"
+      },
+      {
+        "enumerated_run_count": 100,
+        "page": 11,
+        "reported_total_runs": 1667,
+        "run_id_list_canonical_sha256": "c7d3bd140d5918f4c451202ebc174d890d032c2731329c64a5fb8e8561c82873",
+        "source_url": "https://api.github.com/repos/georgemunoz1-ui/sports-model/actions/runs?per_page=100&page=11"
+      },
+      {
+        "enumerated_run_count": 100,
+        "page": 12,
+        "reported_total_runs": 1667,
+        "run_id_list_canonical_sha256": "35b7b679803fdc649c2d12b477fd0e8db249acbdcc3c9ea09803fa28fb23d1e9",
+        "source_url": "https://api.github.com/repos/georgemunoz1-ui/sports-model/actions/runs?per_page=100&page=12"
+      },
+      {
+        "enumerated_run_count": 100,
+        "page": 13,
+        "reported_total_runs": 1667,
+        "run_id_list_canonical_sha256": "71823cf662add95dc7a71d341dc70650e675b0233580cddf604e631ef5080313",
+        "source_url": "https://api.github.com/repos/georgemunoz1-ui/sports-model/actions/runs?per_page=100&page=13"
+      },
+      {
+        "enumerated_run_count": 100,
+        "page": 14,
+        "reported_total_runs": 1667,
+        "run_id_list_canonical_sha256": "6d04297f401c9099c1ce622b2effb29d9e69a35b58379a471ac28aad644805f1",
+        "source_url": "https://api.github.com/repos/georgemunoz1-ui/sports-model/actions/runs?per_page=100&page=14"
+      },
+      {
+        "enumerated_run_count": 100,
+        "page": 15,
+        "reported_total_runs": 1667,
+        "run_id_list_canonical_sha256": "a9f939bc0500e482395017f09944bca31e0f5ab95a5f11e2ca454cbf48b69dbe",
+        "source_url": "https://api.github.com/repos/georgemunoz1-ui/sports-model/actions/runs?per_page=100&page=15"
+      },
+      {
+        "enumerated_run_count": 100,
+        "page": 16,
+        "reported_total_runs": 1667,
+        "run_id_list_canonical_sha256": "4554f47d3e4d0b7cdca4c14c1c198d8121c5f2f797d98f3c2a45809b2ad9c2bb",
+        "source_url": "https://api.github.com/repos/georgemunoz1-ui/sports-model/actions/runs?per_page=100&page=16"
+      },
+      {
+        "enumerated_run_count": 67,
+        "page": 17,
+        "reported_total_runs": 1667,
+        "run_id_list_canonical_sha256": "8c554ae332af4e2033362a31dd4a3e562f6b3c4dcf3a518461eb41eaa2f79948",
+        "source_url": "https://api.github.com/repos/georgemunoz1-ui/sports-model/actions/runs?per_page=100&page=17"
+      }
+    ],
+    "reported_total_runs": 1667,
+    "status": "COMPLETE_RUN_LIST_ONLY_NOT_ARTIFACT_INVENTORY"
+  },
+  "uploader_inventory": {
+    "authorized_ci_uploader_found": false,
+    "existing_storage_document": "docs/ARTIFACT_STORAGE_REPAIR.md",
+    "folder_is_not_evidence_of_ci_credentials": true,
+    "known_drive_folder_id": "1zQnJYCktPvBHOYL805ozk_yfUD17Lguj",
+    "main_tree": {
+      "entry_count": 2725,
+      "sha": "90daf8e0036c67a5304aa0747bf50b2266e0b364",
+      "truncated": false
+    },
+    "main_tree_url": "https://api.github.com/repos/georgemunoz1-ui/sports-model/git/trees/90daf8e0036c67a5304aa0747bf50b2266e0b364?recursive=1",
+    "open_pr_count": 24,
+    "open_prs": [
+      {
+        "changed_file_count": 36,
+        "changed_filenames_canonical_sha256": "71136286668ba2966c8f0ca7928e442f9c51b3c9ecd52f70411df96dacea2b51",
+        "head_sha": "f6cbfcda2528a76ca1bf4710ef3e05711a3d6c4a",
+        "number": 76
+      },
+      {
+        "changed_file_count": 4,
+        "changed_filenames_canonical_sha256": "1390dd90788235fe85ad53496cf7f52225634b156ab9cd7023af29bd484180d9",
+        "head_sha": "43a331e15ddb46cb4cdbae27866f85f21c315ba6",
+        "number": 75
+      },
+      {
+        "changed_file_count": 16,
+        "changed_filenames_canonical_sha256": "dfb1bd8ee35e7650f32f2f9186f88dab061bdf1c6730e8287be96dbda7e31373",
+        "head_sha": "d5ab18213253fb2c903a943f06d499fe547afc7d",
+        "number": 74
+      },
+      {
+        "changed_file_count": 11,
+        "changed_filenames_canonical_sha256": "fb9a98a9ecd10fc1da79f588935785fd788d10a68a9db527f7a61e075dfe9e5c",
+        "head_sha": "d64924730197c693d511c5227d80bad33921dd47",
+        "number": 73
+      },
+      {
+        "changed_file_count": 20,
+        "changed_filenames_canonical_sha256": "a1535627704c9a43fe36412b49732bea2c464a9f634198a0812886660956a587",
+        "head_sha": "8ad6d19d871e9e25397ac6db8b7d4e1e455c4f19",
+        "number": 71
+      },
+      {
+        "changed_file_count": 21,
+        "changed_filenames_canonical_sha256": "5052fda70accaeab9cf259308ea3f21e51c4035159ce3d9c29f74caa80d226e7",
+        "head_sha": "37cfcf048a8f1ff6860ad49b8098160b07646364",
+        "number": 70
+      },
+      {
+        "changed_file_count": 51,
+        "changed_filenames_canonical_sha256": "bb19c321b68c6216a22974fe5bada0c2daebd4f09931a9f722240ef1dc98c51a",
+        "head_sha": "79b92e2fd7e0e16ca2bcb2ee8c6c137f20a0fb27",
+        "number": 69
+      },
+      {
+        "changed_file_count": 8,
+        "changed_filenames_canonical_sha256": "d03b23e3ed424580c4c425a0dbd45c66b5f09fa88ec4db73feb472cb257beef1",
+        "head_sha": "b812e5701767daefc2f0367ee5926b1c66bb546e",
+        "number": 68
+      },
+      {
+        "changed_file_count": 28,
+        "changed_filenames_canonical_sha256": "9432e8ad71b6a1d0840c260f5bfe1ea045e9b9f09d15630cd0f300652961f9ca",
+        "head_sha": "f6c24d7aaceec378fc0c63bde8e012c9429ba34d",
+        "number": 58
+      },
+      {
+        "changed_file_count": 2,
+        "changed_filenames_canonical_sha256": "d7fd62a3140662ef5611e2b35d9485d025e4b39aa008767550251829cb44d9af",
+        "head_sha": "74fbca532c0c4d12a2f76ea14937767ccff0990c",
+        "number": 57
+      },
+      {
+        "changed_file_count": 14,
+        "changed_filenames_canonical_sha256": "045c2b43bf6ab96da211da50f9d2df4e5a4ef7011133b2e61c3b165436ea60c4",
+        "head_sha": "58e3a54119b47a1b2cbf2a6e1712ba7b5811be6d",
+        "number": 56
+      },
+      {
+        "changed_file_count": 8,
+        "changed_filenames_canonical_sha256": "b886c43700fc975393da253aa3cb481f00844c3226593053e2063c5a58f65bc2",
+        "head_sha": "982c5f10981962c5fb56bbc1f7dfef5687c50e64",
+        "number": 53
+      },
+      {
+        "changed_file_count": 3,
+        "changed_filenames_canonical_sha256": "7978c52f22b98fd56ee617518fba4edd5ac2bb204b89720c12a64135b1826e0d",
+        "head_sha": "a4cf09eefb41278ff800ee4e5bbb540554a17994",
+        "number": 52
+      },
+      {
+        "changed_file_count": 24,
+        "changed_filenames_canonical_sha256": "ffc3dfe13593876c0226750fc0ec2b5e88897e7185c2dc3d27e7b2017a99ba89",
+        "head_sha": "ff442c08baf92cee2ed7ff1811f923e13599ad13",
+        "number": 51
+      },
+      {
+        "changed_file_count": 39,
+        "changed_filenames_canonical_sha256": "101eea1768aa1e38e89e82181d70b2aea5d0554d93004f5ffa54b056836c1ff8",
+        "head_sha": "c13adcc92acc26a995df267c8720a56f3ca0abab",
+        "number": 50
+      },
+      {
+        "changed_file_count": 7,
+        "changed_filenames_canonical_sha256": "21d15fdce9a0d1322c38a8d5a86c78371f3a89c808259997774b6c5be09e80cb",
+        "head_sha": "5168a48041d25aa229fae81e55c8c271ccba085b",
+        "number": 49
+      },
+      {
+        "changed_file_count": 12,
+        "changed_filenames_canonical_sha256": "ea8b80e5c41fb9261d9997863756e499ad4d8dfb35922df566ae7d5712185f83",
+        "head_sha": "99091d40638daedf4c08e352130d6d163ddd0aad",
+        "number": 45
+      },
+      {
+        "changed_file_count": 25,
+        "changed_filenames_canonical_sha256": "ea6ed475bea77674c64e61b6b17fc44c243d102b3090afd402611400c428ad53",
+        "head_sha": "373b48be5d284515fbe39b6988e7eeac1111c680",
+        "number": 41
+      },
+      {
+        "changed_file_count": 16,
+        "changed_filenames_canonical_sha256": "e9efe8609b6de91f3336ecdc8df882c27a236c332d8f2b3505608ed2e6164c82",
+        "head_sha": "98debbf3b8038259400dd82784efd01545b5a8b7",
+        "number": 40
+      },
+      {
+        "changed_file_count": 13,
+        "changed_filenames_canonical_sha256": "b166a125357ed7bd709b4f96fb48a67eafb0a1732325e0287d0ea49d69d35f57",
+        "head_sha": "eaf7d93d697b8b2f6f65c326588b99e2c410b26e",
+        "number": 39
+      },
+      {
+        "changed_file_count": 11,
+        "changed_filenames_canonical_sha256": "94a38ea22873a69ee8f4127b920135aca350a32786cbfbe830cbff812248baf4",
+        "head_sha": "7f6c75736f9645e23de61cb3fae1352e1bfcf81d",
+        "number": 38
+      },
+      {
+        "changed_file_count": 8,
+        "changed_filenames_canonical_sha256": "609702860f49c011230b82c25617988b27ef344720dc21a3003086dc37110dd4",
+        "head_sha": "8963d5e2dc281edb35cd9de1266b2d7abe8af8a1",
+        "number": 37
+      },
+      {
+        "changed_file_count": 44,
+        "changed_filenames_canonical_sha256": "9f86c4bfe42be535f5ca81da79905638ec2a15df86f7b11509b8833c046f96e4",
+        "head_sha": "544584db9ac1e66606190b326e625ae7b7da2db4",
+        "number": 36
+      },
+      {
+        "changed_file_count": 8,
+        "changed_filenames_canonical_sha256": "62151b8145e1b4d23c568308dde1ad1fbcbd3e88b8b23be82a982bfcfd6c11f6",
+        "head_sha": "b748aab74436cca36e3cd2ba1a9f97c7665e8002",
+        "number": 35
+      }
+    ]
+  },
+  "validation": {
+    "command": "python -m pytest -q tests/test_ci_storage_archive.py tests/test_ci_storage_monitor.py tests/test_mlb_grading_artifact_retention.py",
+    "passed": 34
+  }
+}

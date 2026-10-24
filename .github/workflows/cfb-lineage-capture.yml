@@ -1,0 +1,76 @@
+name: CFB lineage source discovery
+on:
+  push:
+    branches: [codex/cfb-pit-lineage-20260918]
+    paths: ['.github/workflows/cfb-lineage-capture.yml']
+  workflow_dispatch:
+permissions: {contents: read, actions: read}
+jobs:
+  capture:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with: {fetch-depth: 0}
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - run: pip install -r requirements-consolidated.txt pyreadr cfbd==5.27.1
+      - name: Record health and source discovery with actual retrieval times
+        run: |
+          python - <<'PY'
+          import pathlib,subprocess,datetime,json,hashlib,urllib.request,urllib.error,concurrent.futures,importlib.metadata
+          root=pathlib.Path('cfb-source-capture');root.mkdir();raw=root/'raw';raw.mkdir()
+          with (root/'health.txt').open('w') as f:
+              try:code=subprocess.run(['python','-u','harness/healthcheck.py'],stdout=f,stderr=subprocess.STDOUT,timeout=180).returncode
+              except subprocess.TimeoutExpired:code=124
+          (root/'health.exit').write_text(str(code));(root/'state_at_start.json').write_bytes(pathlib.Path('state.json').read_bytes())
+          (root/'journal_tail.txt').write_text('\n'.join(pathlib.Path('docs/progress.md').read_text().splitlines()[-120:]))
+          receipts=[]
+          def fetch(name,url):
+              r={'name':name,'url':url,'request_started_at':datetime.datetime.now(datetime.timezone.utc).isoformat(),'publication_time_verified':False}
+              try:
+                  with urllib.request.urlopen(urllib.request.Request(url,headers={'User-Agent':'cfb-lineage-research/1.0'}),timeout=100) as q:b=q.read(160000001);r['http_status']=q.status
+                  if len(b)>160000000:raise ValueError('RESPONSE_SIZE_LIMIT')
+                  (raw/name).write_bytes(b);r.update(status='CAPTURED',sha256=hashlib.sha256(b).hexdigest(),bytes=len(b),retrieved_at=datetime.datetime.now(datetime.timezone.utc).isoformat())
+              except Exception as e:r.update(status='FAILED',error=repr(e),retrieved_at=datetime.datetime.now(datetime.timezone.utc).isoformat())
+              receipts.append(r);return r
+          fetch('cfbfastR-main.json','https://api.github.com/repos/sportsdataverse/cfbfastR/commits/main')
+          meta=json.loads((raw/'cfbfastR-main.json').read_text());commit=meta['sha']
+          for filename in ['load_cfb_pbp.R','load_cfb.R','load_espn_cfb.R','load_cfb_datasets.R']:
+              fetch(filename,'https://raw.githubusercontent.com/sportsdataverse/cfbfastR/'+commit+'/R/'+filename)
+          fetch('cfbd-client.json','https://api.github.com/repos/CFBD/cfbd-python/commits/main')
+          fetch('cfbd-ratings-doc.html','https://api.collegefootballdata.com/api/ratings')
+          fetch('cfbd-games-no-auth.json','https://api.collegefootballdata.com/games?year=2026&week=1&seasonType=regular')
+          captures=[]
+          for tag in ['cfbfastR_cfb_pbp','espn_cfb_pbp','cfb_schedules','cfb_ratings_weekly']:
+              r=fetch(tag+'-release.json','https://api.github.com/repos/sportsdataverse/sportsdataverse-data/releases/tags/'+tag)
+              if r['status']!='CAPTURED':continue
+              assets=json.loads((raw/(tag+'-release.json')).read_text())['assets']
+              choices=[x for x in assets if '2026' in x['name'] and x['name'].endswith(('.parquet','.rds'))]
+              choices.sort(key=lambda x:(not x['name'].endswith('.parquet'),x['size']))
+              if choices:
+                  item=choices[0];r=fetch(tag+'__'+item['name'],item['browser_download_url']);r['source_family']=tag;captures.append(r)
+          import pandas as pd,pyreadr
+          schemas=[]
+          for r in captures:
+              if r['status']!='CAPTURED':continue
+              p=raw/r['name']
+              try:
+                  d=pd.read_parquet(p) if p.suffix=='.parquet' else next(iter(pyreadr.read_r(str(p)).values()))
+                  info={'source_family':r['source_family'],'filename':r['name'],'sha256':r['sha256'],'rows':len(d),'columns':[str(c) for c in d.columns],'dtypes':{str(c):str(v) for c,v in d.dtypes.items()},'historical_pit_certified':False}
+                  if 'game_id' in d:info['unique_game_ids']=int(d.game_id.nunique())
+                  if 'EPA' in d:info['epa_observed_rows']=int(d.EPA.notna().sum())
+                  schemas.append(info)
+              except Exception as e:schemas.append({'source_family':r['source_family'],'parse_error':repr(e)})
+          (root/'schemas.json').write_text(json.dumps(schemas,indent=2));(root/'receipts.json').write_text(json.dumps(receipts,indent=2))
+          (root/'versions.json').write_text(json.dumps({k:importlib.metadata.version(k) for k in ['pandas','pyarrow','pyreadr','cfbd']},indent=2))
+          with (root/'code.tar.gz').open('xb') as f:subprocess.run(['git','archive','--format=tar.gz','HEAD'],stdout=f,check=True)
+          (root/'manifest.json').write_text(json.dumps({str(p.relative_to(root)):hashlib.sha256(p.read_bytes()).hexdigest() for p in root.rglob('*') if p.is_file()},indent=2))
+          print(json.dumps({'health_exit':code,'sources':[{k:r.get(k) for k in ['name','status','bytes','error']} for r in receipts],'schemas':schemas},indent=2))
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: cfb-lineage-source-${{ github.run_id }}
+          path: cfb-source-capture
+          retention-days: 90

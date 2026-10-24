@@ -1,7 +1,11 @@
-name: September 23 readiness repair
+name: Explicit-date readiness evidence
 on:
-  push:
-    branches: [codex/readiness-repair-20260923]
+  workflow_dispatch:
+    inputs:
+      date:
+        description: 'Date to audit; never a prospective forecast registration'
+        required: true
+        type: string
 permissions:
   contents: read
 jobs:
@@ -14,7 +18,7 @@ jobs:
           fetch-depth: 0
       - uses: actions/setup-python@v5
         with:
-          python-version: '3.11'
+          python-version: '3.12'
       - run: pip install -r requirements-consolidated.txt
       - name: Record binding repository health
         run: |
@@ -26,12 +30,14 @@ jobs:
         run: |
           set -o pipefail
           python -m pytest tests/test_mlb_research_review.py tests/test_standing_health_triage.py tests/test_review_mlb_current_readiness.py tests/test_mlb_current_path.py tests/test_model_defaults.py tests/test_current_runtime_contracts.py -q | tee evidence/tests.txt
-      - name: Acquire fresh official inputs and execute package context
+      - name: Acquire official inputs and execute requested-date package context
         id: packet
+        env:
+          READINESS_DATE: ${{ inputs.date }}
         continue-on-error: true
         run: |
           set -o pipefail
-          python scripts/review_mlb_current_readiness.py --date 2026-09-23 --output evidence/current | tee evidence/current.log
+          python scripts/review_mlb_current_readiness.py --date "$READINESS_DATE" --output evidence/current | tee evidence/current.log
       - name: Read-only triage with corrected leaf count
         if: always()
         run: |

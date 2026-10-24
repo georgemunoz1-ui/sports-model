@@ -1,0 +1,433 @@
+{
+  "action_authority": false,
+  "availability_effects": "NOT_FITTED_NO_HISTORICAL_STATUS_AND_PARTICIPATION_PANEL",
+  "created_at_utc": "2026-10-07T23:49:02.952960+00:00",
+  "default_promotion": false,
+  "design_sha256": "e9d1318fe5a4eb2a6e0355ba45aa2c0a2663f8015cf7054fc130f2df68bf4267",
+  "historical_availability_proven": false,
+  "market_evaluation": "NOT_RUN_NO_TIMESTAMPED_QUOTES",
+  "prospective_validation": "NOT_RUN_FUTURE_OUTCOMES_REQUIRED",
+  "results": {
+    "cfb": {
+      "margin": {
+        "baseline": {
+          "central_90_interval_coverage": 0.896358543417367,
+          "central_90_interval_mean_width": 52.04481792717087,
+          "crps": 9.105728474047869,
+          "games": 714,
+          "zero_probability_outcomes": 10
+        },
+        "calibration_n": 713,
+        "calibration_status": "CALIBRATION_CANNOT_REPAIR_MISSING_SUPPORT",
+        "conditional_scale": {
+          "central_90_interval_coverage": 0.896358543417367,
+          "central_90_interval_mean_width": 52.109243697478995,
+          "crps": 9.106209010596112,
+          "games": 714,
+          "zero_probability_outcomes": 11
+        },
+        "evaluation_n": 714,
+        "residual_n": 698,
+        "scale_paired": {
+          "brier_category_sum": {
+            "block_n": 15,
+            "ci95": [
+              -4.122419646274433e-05,
+              2.3496480999600095e-05
+            ],
+            "delta": -8.401157710635637e-06,
+            "game_n": 714,
+            "reason": null
+          },
+          "distribution_crps": {
+            "block_n": 15,
+            "ci95": [
+              -0.0001228434848786693,
+              0.00108967821413966
+            ],
+            "delta": 0.00048053654824397696,
+            "game_n": 714,
+            "reason": null
+          },
+          "log_loss": {
+            "block_n": 15,
+            "ci95": [
+              -0.00016065853294873996,
+              7.215932606548686e-05
+            ],
+            "delta": -4.2338788139594854e-05,
+            "game_n": 714,
+            "reason": null
+          }
+        }
+      },
+      "total": {
+        "status": "POINT_HEAD_UNAVAILABLE_IN_SELECTED_PARENT"
+      }
+    },
+    "mls": {
+      "margin": {
+        "baseline": {
+          "central_90_interval_coverage": 0.9407407407407408,
+          "central_90_interval_mean_width": 5.592592592592593,
+          "crps": 0.9408736326405014,
+          "games": 405,
+          "zero_probability_outcomes": 0
+        },
+        "calibration_n": 510,
+        "calibration_status": "CALIBRATION_CANNOT_REPAIR_MISSING_SUPPORT",
+        "conditional_scale": {
+          "central_90_interval_coverage": 0.9382716049382716,
+          "central_90_interval_mean_width": 5.6419753086419755,
+          "crps": 0.940612135912503,
+          "games": 405,
+          "zero_probability_outcomes": 0
+        },
+        "evaluation_n": 405,
+        "residual_n": 493,
+        "scale_paired": {
+          "brier_category_sum": {
+            "block_n": 27,
+            "ci95": [
+              -0.0003556405365073643,
+              0.00012244840031955497
+            ],
+            "delta": -0.00012165343272519018,
+            "game_n": 405,
+            "reason": null
+          },
+          "distribution_crps": {
+            "block_n": 27,
+            "ci95": [
+              -0.0016683699452593444,
+              0.001295819761719787
+            ],
+            "delta": -0.0002614967279986,
+            "game_n": 405,
+            "reason": null
+          },
+          "log_loss": {
+            "block_n": 27,
+            "ci95": [
+              -0.0021354925644533674,
+              0.000167525014261202
+            ],
+            "delta": -0.0009206267175700441,
+            "game_n": 405,
+            "reason": null
+          }
+        }
+      },
+      "total": {
+        "baseline": {
+          "central_90_interval_coverage": 0.9555555555555556,
+          "central_90_interval_mean_width": 5.995061728395061,
+          "crps": 1.0278289223810133,
+          "games": 405,
+          "zero_probability_outcomes": 1
+        },
+        "calibration_n": 510,
+        "calibration_status": "CALIBRATION_CANNOT_REPAIR_MISSING_SUPPORT",
+        "conditional_scale": {
+          "central_90_interval_coverage": 0.9555555555555556,
+          "central_90_interval_mean_width": 6.091358024691358,
+          "crps": 1.0277532820273068,
+          "games": 405,
+          "zero_probability_outcomes": 1
+        },
+        "evaluation_n": 405,
+        "residual_n": 493,
+        "scale_paired": {
+          "brier_category_sum": {
+            "block_n": 27,
+            "ci95": [
+              1.7108126471259798e-05,
+              0.0007135726830545836
+            ],
+            "delta": 0.00038165374164707803,
+            "game_n": 405,
+            "reason": null
+          },
+          "distribution_crps": {
+            "block_n": 27,
+            "ci95": [
+              -0.001041076910901409,
+              0.0008230758908972447
+            ],
+            "delta": -7.564035370647878e-05,
+            "game_n": 405,
+            "reason": null
+          },
+          "log_loss": {
+            "block_n": 27,
+            "ci95": [
+              -0.00012001503786629544,
+              0.0011193290689924986
+            ],
+            "delta": 0.0004874980689652329,
+            "game_n": 405,
+            "reason": null
+          }
+        }
+      }
+    },
+    "nba": {
+      "margin": {
+        "baseline": {
+          "central_90_interval_coverage": 0.891869918699187,
+          "central_90_interval_mean_width": 47.28211382113821,
+          "crps": 8.259648357402762,
+          "games": 1230,
+          "zero_probability_outcomes": 4
+        },
+        "calibration_n": 1230,
+        "calibration_status": "CALIBRATION_CANNOT_REPAIR_MISSING_SUPPORT",
+        "conditional_scale": {
+          "central_90_interval_coverage": 0.8845528455284553,
+          "central_90_interval_mean_width": 46.53983739837398,
+          "crps": 8.26416034204369,
+          "games": 1230,
+          "zero_probability_outcomes": 6
+        },
+        "evaluation_n": 1230,
+        "residual_n": 1230,
+        "scale_paired": {
+          "brier_category_sum": {
+            "block_n": 26,
+            "ci95": [
+              -0.0009510478550716844,
+              0.0015116828995773255
+            ],
+            "delta": 0.0002705739919444605,
+            "game_n": 1230,
+            "reason": null
+          },
+          "distribution_crps": {
+            "block_n": 26,
+            "ci95": [
+              -0.010650978027437093,
+              0.018417289663903085
+            ],
+            "delta": 0.00451198464092834,
+            "game_n": 1230,
+            "reason": null
+          },
+          "log_loss": {
+            "block_n": 26,
+            "ci95": [
+              -0.0009175443876915531,
+              0.004382721000892906
+            ],
+            "delta": 0.0016865815762329174,
+            "game_n": 1230,
+            "reason": null
+          }
+        }
+      },
+      "total": {
+        "baseline": {
+          "central_90_interval_coverage": 0.8902439024390244,
+          "central_90_interval_mean_width": 60.09024390243903,
+          "crps": 10.778329459054627,
+          "games": 1230,
+          "zero_probability_outcomes": 6
+        },
+        "calibration_n": 1230,
+        "calibration_status": "CALIBRATION_CANNOT_REPAIR_MISSING_SUPPORT",
+        "conditional_scale": {
+          "central_90_interval_coverage": 0.891869918699187,
+          "central_90_interval_mean_width": 60.06829268292683,
+          "crps": 10.779315295443524,
+          "games": 1230,
+          "zero_probability_outcomes": 8
+        },
+        "evaluation_n": 1230,
+        "residual_n": 1230,
+        "scale_paired": {
+          "brier_category_sum": {
+            "block_n": 26,
+            "ci95": [
+              -1.345072309036354e-05,
+              1.166820455404502e-05
+            ],
+            "delta": -3.268274304838818e-07,
+            "game_n": 1230,
+            "reason": null
+          },
+          "distribution_crps": {
+            "block_n": 26,
+            "ci95": [
+              -0.0030871132011021565,
+              0.005080494893911102
+            ],
+            "delta": 0.000985836388897532,
+            "game_n": 1230,
+            "reason": null
+          },
+          "log_loss": {
+            "block_n": 26,
+            "ci95": [
+              -0.0002449181133998399,
+              1.9504417120670027e-05
+            ],
+            "delta": -0.00010376016039522103,
+            "game_n": 1230,
+            "reason": null
+          }
+        }
+      }
+    },
+    "nhl": {
+      "margin": {
+        "baseline": {
+          "central_90_interval_coverage": 0.958079268292683,
+          "central_90_interval_mean_width": 8.479420731707316,
+          "crps": 1.4604358380331266,
+          "games": 1312,
+          "zero_probability_outcomes": 1
+        },
+        "calibrated": {
+          "central_90_interval_coverage": 0.9397865853658537,
+          "central_90_interval_mean_width": 7.8635670731707314,
+          "crps": 1.4563328455439204,
+          "games": 1312,
+          "zero_probability_outcomes": 1
+        },
+        "calibration_n": 1312,
+        "calibration_status": "FITTED",
+        "cdf_paired": {
+          "brier_category_sum": {
+            "block_n": 26,
+            "ci95": [
+              -0.0012789348240318278,
+              -0.00023219232581967098
+            ],
+            "delta": -0.0007423724962474338,
+            "game_n": 1312,
+            "reason": null
+          },
+          "distribution_crps": {
+            "block_n": 26,
+            "ci95": [
+              -0.007417006455091399,
+              -0.0009474863122210768
+            ],
+            "delta": -0.004102992489206177,
+            "game_n": 1312,
+            "reason": null
+          },
+          "log_loss": {
+            "block_n": 26,
+            "ci95": [
+              -0.0025954910375909877,
+              0.0005557559227868183
+            ],
+            "delta": -0.0009223957050311582,
+            "game_n": 1312,
+            "reason": null
+          }
+        },
+        "conditional_scale": {
+          "central_90_interval_coverage": 0.9626524390243902,
+          "central_90_interval_mean_width": 8.671493902439025,
+          "crps": 1.4609214261481662,
+          "games": 1312,
+          "zero_probability_outcomes": 1
+        },
+        "evaluation_n": 1312,
+        "residual_n": 1312,
+        "scale_paired": {
+          "brier_category_sum": {
+            "block_n": 26,
+            "ci95": [
+              -0.00030277202244734626,
+              0.00016359930229627672
+            ],
+            "delta": -7.143204776155434e-05,
+            "game_n": 1312,
+            "reason": null
+          },
+          "distribution_crps": {
+            "block_n": 26,
+            "ci95": [
+              -0.0008022808918726908,
+              0.0017994515321719114
+            ],
+            "delta": 0.00048558811503972917,
+            "game_n": 1312,
+            "reason": null
+          },
+          "log_loss": {
+            "block_n": 26,
+            "ci95": [
+              -0.0005582561325783102,
+              0.0006562787907094953
+            ],
+            "delta": 5.838546107737637e-05,
+            "game_n": 1312,
+            "reason": null
+          }
+        }
+      },
+      "total": {
+        "baseline": {
+          "central_90_interval_coverage": 0.9390243902439024,
+          "central_90_interval_mean_width": 7.604420731707317,
+          "crps": 1.2862485655638178,
+          "games": 1312,
+          "zero_probability_outcomes": 1
+        },
+        "calibration_n": 1312,
+        "calibration_status": "CALIBRATION_CANNOT_REPAIR_MISSING_SUPPORT",
+        "conditional_scale": {
+          "central_90_interval_coverage": 0.9390243902439024,
+          "central_90_interval_mean_width": 7.5998475609756095,
+          "crps": 1.2860738397758584,
+          "games": 1312,
+          "zero_probability_outcomes": 1
+        },
+        "evaluation_n": 1312,
+        "residual_n": 1312,
+        "scale_paired": {
+          "brier_category_sum": {
+            "block_n": 26,
+            "ci95": [
+              -7.58773789692688e-05,
+              0.00010096754012794375
+            ],
+            "delta": 1.510320116100034e-05,
+            "game_n": 1312,
+            "reason": null
+          },
+          "distribution_crps": {
+            "block_n": 26,
+            "ci95": [
+              -0.00040044632367856214,
+              4.168460633269549e-05
+            ],
+            "delta": -0.0001747257879597754,
+            "game_n": 1312,
+            "reason": null
+          },
+          "log_loss": {
+            "block_n": 26,
+            "ci95": [
+              -0.00018198257715667848,
+              0.000249219661146978
+            ],
+            "delta": 4.140179413858765e-05,
+            "game_n": 1312,
+            "reason": null
+          }
+        }
+      }
+    }
+  },
+  "runner_sha256": "aecbbd9b9e5a3c9d4e3472c984a21a5d56a081062569c219f80efa483a3da576",
+  "schema": "sports.distribution_study.results.v1",
+  "unavailable": {
+    "mlb": "Need point-run forecasts with source-bound realized final run differences; winner-only evaluation does not validate completed-game extra-inning distribution.",
+    "nfl": "Original model-specific OOF input rows not retained in checkout; packed coefficients and prior evaluation summaries do not replace these. PR50 remains separate.",
+    "wnba": "Frozen fitter requires official-plus-ESPN historical box archives; anonymous residual arrays do not provide game identity or chronology."
+  }
+}

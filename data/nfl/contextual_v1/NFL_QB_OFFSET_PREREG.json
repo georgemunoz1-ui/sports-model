@@ -1,0 +1,195 @@
+{
+  "schema_version": "nfl.qb_offset_prereg.proposal.v1",
+  "record_id": "NFL-QB-OFFSET-PREREG-PROPOSAL-2026-10-06",
+  "status": "DRAFT_PROPOSAL_NOT_REGISTERED",
+  "created_utc": "2026-10-06T00:53:09Z",
+  "registered_utc": null,
+  "registration_receipt": null,
+  "confirmatory_evaluation_authorized": false,
+  "forecast_generation_authorized": false,
+  "canonical_prospective_eligible": false,
+  "promotion_authorized": false,
+  "purpose": "Propose a separately identified fixed-base Bernoulli-logistic QB-offset challenger and its evaluation contract. This document does not implement, register, fit, evaluate, promote or activate a model.",
+  "tracking": {
+    "issue": "https://github.com/georgemunoz1-ui/sports-model/issues/55",
+    "parent_review": "https://github.com/georgemunoz1-ui/sports-model/issues/54",
+    "reference_commit": "43ad83382af067b019a086d45d23569497ca6e08",
+    "pattern": "data/cfb/model/CFB_V2_PREREG.json",
+    "pattern_blob_sha": "0989bf3dccc358de7441f641b8675731b61dae39",
+    "pattern_use": "Structural inspiration only; CFB thresholds, identities, permissions and registration status are not inherited."
+  },
+  "proposed_candidate": {
+    "model_id": "nfl.fixed_base_qb_offset.raw5.v1.challenger",
+    "product": "FULL_GAME_HOME_WIN_CONDITIONAL_NON_TIE",
+    "scope": "NFL regular season; official final score including overtime; ties retained in coverage and excluded from binary fitting/scoring with denominators",
+    "orientation": "home team",
+    "base_model_id": "nfl.integrated_context.base.v1.research",
+    "incumbent_model_id": "nfl.integrated_context.qb.v1.research",
+    "changed_factor": "Freeze the base fit and estimate only QB adjustment coefficients, instead of jointly refitting shared team coefficients and intercept.",
+    "unchanged_factor": "Use the same five existing as-of QB transforms initially, so the first comparison isolates estimator architecture rather than a new QB signal.",
+    "not_supported": ["margin", "spread_cover", "total", "first_half", "live", "wagering"]
+  },
+  "estimator_proposal": {
+    "family": "Bernoulli logistic regression with a fixed offset",
+    "formula": "eta_i = eta_base_raw_i + dot(gamma, z_QB_i); p_i = sigmoid(eta_i)",
+    "loss": "mean(logaddexp(0, eta_i) - y_i * eta_i) + (lambda / 2) * dot(gamma, gamma)",
+    "offset": "raw linear predictor from the separately frozen fold-local base home_win head",
+    "offset_coefficient": 1.0,
+    "offset_coefficient_fitted": false,
+    "additional_intercept": false,
+    "calibration": "NONE_FOR_INITIAL_CANDIDATE",
+    "lambda_proposal": 1.0,
+    "lambda_scale": "mean Bernoulli negative log-likelihood; not an undocumented mapping to a library C parameter",
+    "hyperparameter_search": "NONE_FOR_INITIAL_CANDIDATE; any alternative regularization, intercept or calibration is a separate tracked increment",
+    "optimizer": "PENDING_IMPLEMENTATION_REVIEW; deterministic float64 solver, stopping tolerance and dependency hashes must be pinned before registration",
+    "zero_adjustment_invariant": "When gamma is exactly zero, return the designated raw base probability; absolute difference <= 1e-12. No clipping or calibration may alter the base output.",
+    "numerical_failure_policy": "Fail visibly for nonfinite offsets/features/output, solver failure or missing bound base artifact. Do not silently clip, refit or substitute an arm.",
+    "causal_claim": false
+  },
+  "ordered_feature_blocks": {
+    "qb_existing_raw5": [
+      "qb_quality_diff",
+      "qb_quality_sum",
+      "qb_experience_diff",
+      "qb_change_diff",
+      "qb_unknown_count"
+    ]
+  },
+  "feature_contract": {
+    "source_transform": "models/nfl/contextual/features.py at reference_commit; content and dependency hashes required at registration",
+    "quality_transform": "Retain sum/(n+300), existing 0.55 offseason retention, and existing experience/change transforms for this architecture-only increment.",
+    "preprocessing": "Fit QB imputation and StandardScaler only on the adjustment-training rows admitted within the outer training window. Record all values/hashes. Outer-test rows never fit preprocessing.",
+    "unknown_qb_policy": "Known source identity is mandatory for a candidate forecast; an unknown, ambiguous or unresolved starter emits CANDIDATE_INPUT_UNRESOLVED. Keep the event in coverage reporting. Never silently activate a zero-quality QB or replacement forecast.",
+    "historical_identity_limit": "Retrospective starter identities are not archived pregame observations. Such rows may support explicitly retrospective exploration but cannot be recast as untouched prospective evidence.",
+    "minimum_qb_sample": "No minimum dropbacks exclusion beyond the existing shrinkage: known debutants may have n=0. Report low-sample slices. Unknown identity is different from a known player with little history.",
+    "double_counting_limit": "Raw QB quality can overlap the QB information already reflected in team strength. Fixed base coefficients make the increment inspectable, not automatically causal or free of double counting.",
+    "preferred_later_increment": "A starter-deviation-from-team-QB-context signal is a separate candidate. Define and source-bind the reference QB context and causal weighting rule first; do not assume the 18 base features encode a single known quarterback baseline."
+  },
+  "data_and_asof_contract": {
+    "inventory_status": "PENDING_VERIFICATION",
+    "no_new_data_claim": "The draft and architecture can be built from the existing interfaces; availability/completeness of the actual historical feature matrix and point-in-time QB state has not been established here.",
+    "training_manifest": null,
+    "training_manifest_sha256": null,
+    "feature_state_manifest": null,
+    "feature_state_manifest_sha256": null,
+    "base_design_manifest": null,
+    "source_rules": [
+      "Bind raw source bytes, ids, hashes, provider observation/effective time, actual retrieval, feature cutoff and official event start.",
+      "Permit only eligible finalized results available before each forecast cutoff to update state.",
+      "Use one predeclared cutoff per official season-week block, before its earliest kickoff; keep same cutoffs across arms.",
+      "Keep historical archive retrieval distinct from original pregame capture; require independent as-of evidence for confirmatory claims.",
+      "Exclude market data from features, priors, tuning, calibration, selection and promotion thresholds. A separate captured benchmark remains display/evaluation only."
+    ],
+    "market_input": false
+  },
+  "chronological_protocol_proposal": {
+    "outer_unit": "official NFL season-week, expanding window",
+    "base_training_rule": "Use the pinned existing base fit/design on all eligible training rows before each outer block; freeze its coefficients, intercept, transforms and hashes for that block.",
+    "inner_offset_rule": "Within each outer training population, traverse earlier official weeks in order. Fit a separate base on strictly earlier eligible rows and predict the next inner week. Retain only those chronological OOF raw offsets, with producer-fit and cutoff hashes, to train gamma.",
+    "forbidden_offset_sources": [
+      "full-dataset fitted predictions",
+      "in-sample predictions from the final outer base fit",
+      "offsets trained using the row's outcome or a later result",
+      "current refits relabeled as frozen historical forecasts"
+    ],
+    "warmup_and_minimum_fit_population": "PENDING_DATA_INVENTORY_AND_PRECISION_REVIEW; exact earliest training season, minimum base rows, minimum adjustment rows and class support must be frozen before any confirmatory evaluation",
+    "fitting_population": "Paired identifiable events with both outcome classes and eligible OOF offsets; unknown-input exclusions reported separately, never silently dropped from coverage.",
+    "outer_test_operation": "Fit gamma on prior inner-OOF offsets/features only. Apply gamma to current as-of QB features and the frozen outer base raw offset. No outer outcomes enter any fit, preprocessing or calibration.",
+    "final_refit_operation": "At each prospective scheduled origin, regenerate the same prior-only inner OOF offset population; fit gamma by the same procedure; refit the base on all eligible prior rows; bind and freeze the pair together before predicting the next block.",
+    "training_inference_alignment": "OOF offsets intentionally come from earlier, smaller training windows than the final inference base. Record training-span/offset-distribution differences; replicate this entire pairing in outer evaluation. Do not claim perfect distribution equality or refit gamma on in-sample final-base offsets.",
+    "update_policy": "One paired refit at each official weekly origin under the registered procedure; no intraweek structural change or result-driven parameter override.",
+    "candidate_variants": "Initial raw5 offset only. Alternative QB shrinkage, reference-context signal, blend/stack, intercept and calibrator each require a new identity and amended experiment inventory before evaluation."
+  },
+  "contamination_and_holdout": {
+    "known_reused_history": "Existing 2019-2025 arm-comparison history and all other previously inspected outcomes are exploratory. A chronological split alone does not make reused history untouched.",
+    "explicit_confirmatory_exclusions": [
+      {
+        "cohort": "2026-10-04 frozen Sunday NFL cohort",
+        "reason": "All 14 outcomes and arm comparisons were examined during proposal formation."
+      },
+      {
+        "cohort": "2026-10-05 ATL at NO",
+        "reason": "Forecast and flip were inspected before this proposal; proposal is post-start. Do not use the game's eventual result as an untouched confirmation event."
+      }
+    ],
+    "holdout_manifest": null,
+    "holdout_manifest_sha256": null,
+    "untouched_history_verified": false,
+    "prospective_start": null,
+    "prospective_end_or_fixed_horizon": null,
+    "decision_rule": "Only an independently verified untouched historical cohort plus genuinely future, registered prospective accumulation can supply the planned confirmatory evidence. If no untouched history exists, label all historical findings exploratory and use a preregistered prospective cohort; do not backdate registration.",
+    "peeking_policy": "Descriptive monitoring is permitted. A fixed primary decision horizon and minimum precision/block requirement must be locked before prospective collection; no repeated significance-driven stopping."
+  },
+  "evaluation_proposal": {
+    "arms": ["frozen_base_raw", "incumbent_qb_raw", "fixed_base_qb_offset_raw5"],
+    "matching": "Identical event ids, cutoff, input contract, home orientation and conditional-non-tie target. Report each arm's coverage and failures plus the common paired cohort.",
+    "primary_metric": "binary Brier = mean((p_home - y_home)^2)",
+    "secondary_metrics": ["binary log loss", "calibration intercept", "calibration slope", "fixed-bin reliability counts", "winner accuracy descriptive only"],
+    "score_endpoint_policy": "Retain exact probabilities for Brier; exact contradictory 0/1 predictions have infinite log loss. No silent probability clipping.",
+    "paired_contrasts": ["challenger minus base", "challenger minus incumbent"],
+    "uncertainty": {
+      "method_proposal": "paired season-week block bootstrap with season-stratified reporting",
+      "replicates_proposal": 20000,
+      "seed_proposal": 5501,
+      "confidence_level_proposal": 0.95,
+      "multiplicity_proposal": "Holm correction across the two primary Brier comparisons; all other comparisons/slices descriptive unless separately registered",
+      "minimum_blocks_and_precision": "PENDING_REVIEW_BEFORE_REGISTRATION; bootstrap replication count cannot compensate for too few independent blocks"
+    },
+    "fixed_probability_bins": [0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0],
+    "bin_boundary_rule": "left closed, right open; final bin includes 1",
+    "predeclared_descriptive_slices": [
+      "weeks 1-5 versus later regular-season weeks",
+      "minimum of home/away effective QB dropbacks: [0,50), [50,150), [150,300), [300,infinity)",
+      "strict base-incumbent flips versus non-flips; exact 0.5 reported separately",
+      "absolute base-incumbent probability gap in pp: [0,2.5), [2.5,5), [5,10), [10,infinity)",
+      "input defect and unresolved/stale starter tags, preserving every original tag"
+    ],
+    "simulation": "No simulation is executed or proposed as validation in this docs-only increment. Any later actual simulation requires separate sampler identity, n, seed, RNG, draw hash and replay proof; analytic probabilities are never relabeled as draws."
+  },
+  "decision_criteria_proposal": {
+    "status": "PROPOSED_FOR_REVIEW_NOT_APPROVED_OR_EMPIRICALLY_VALIDATED",
+    "review_entry": [
+      "All implementation, immutability, leakage, identity and replay gates pass.",
+      "Identical-cohort Brier improves against both base and incumbent; multiplicity-adjusted paired evidence supports the predeclared practical improvement.",
+      "Log loss, calibration, coverage and early-season/low-sample behavior satisfy separately frozen tolerances.",
+      "Prospective fixed-horizon evidence satisfies its frozen minimum block/sample and precision requirements."
+    ],
+    "practical_brier_improvement": null,
+    "log_loss_and_calibration_tolerances": null,
+    "coverage_noninferiority_tolerance": null,
+    "minimum_games_and_blocks": null,
+    "prospective_horizon": null,
+    "null_field_policy": "These are required design decisions, not zero thresholds or implicit passes. Any null keeps registration/confirmatory evaluation/promotion unauthorized.",
+    "failure_or_underpowered_disposition": "HOLD; report all results; no substitution of a favorable subgroup or extended horizon after seeing outcomes",
+    "promotion_effect": "Passing future research criteria permits a separate governance review only. It does not automatically change defaults, canonical eligibility or action authority."
+  },
+  "implementation_acceptance": [
+    "Zero gamma reproduces the raw base to absolute tolerance 1e-12.",
+    "Nonzero gamma cannot mutate base coefficients, intercept, transform values or original artifact bytes.",
+    "Every adjustment-training row binds a prior-only chronological OOF offset; later data cannot change a frozen historical feature or prediction.",
+    "Changing outer test outcomes cannot change fitted preprocessing, gamma or base parameters.",
+    "Unknown/ambiguous starters and missing bound data fail visibly without a silent candidate/base substitution.",
+    "Known n=0 quarterback is represented distinctly from unknown identity.",
+    "Replay produces the same candidate artifacts and diagnostics and does not append duplicate records.",
+    "Original analytic and actual frozen simulation outputs, input tags and canonical ledger remain unchanged."
+  ],
+  "required_before_registration": [
+    "Review candidate, offset/intercept/calibration, raw5 feature choice and proposed loss/regularization.",
+    "Verify historical data inventory and source-time/identity completeness; pin manifests and hashes.",
+    "Pin existing base design plus deterministic estimator/software/optimizer configuration.",
+    "Freeze exact warmup, minimum training population, eligible comparison population and event/holdout manifests.",
+    "Resolve practical metric tolerances, minimum sample/block/precision and fixed prospective decision horizon without using contaminated outcomes to tune them.",
+    "Complete implementation/regression evidence and obtain the actual registration receipt through the existing governance mechanism before confirmatory evaluation."
+  ],
+  "governance": {
+    "RELEASE": "RED",
+    "ACTION": "OFF",
+    "DOSE": 0.0,
+    "market_input": false,
+    "model_defaults_changed": false,
+    "frozen_forecasts_changed": false,
+    "canonical_ledger_changed": false,
+    "production_registration_changed": false,
+    "new_doctrine_authorized": false
+  }
+}

@@ -1,0 +1,114 @@
+{
+  "status": "PASS",
+  "scope": "FINAL_V2_NUMERICAL_EXECUTION_GATES_AND_ACTUAL_REPLAY",
+  "output_dir": "/workspace/scratch/c2f9a66ae580/nfl-margin-20261019/was-sf-retrospective-v2",
+  "adapter_sha256": "0ccb631ade722af8b69053c969e7684281b2554eb268adddd5fa1222b61d84a2",
+  "report_sha256": "63e5b08b53b2ee295bb89e0719a0653226029bec1e4ebc95a0bc1f8fc0a3ddbf",
+  "mode": "RETROSPECTIVE_RECONSTRUCTION",
+  "predictive_validation": "HOLD",
+  "numerical_validity": "PASS",
+  "execution_status": "COMPLETED",
+  "draw_count": 100000,
+  "exact_rebuild_and_raw_replay": true,
+  "all_manifest_files_verified": true,
+  "parent_files_unchanged": true,
+  "same_draw_file_as_v1": true,
+  "sf_minus7_5": {
+    "analytic": 0.5514918679064864,
+    "simulation": 0.55291,
+    "push": 0
+  },
+  "configuration_existed_at_parent_cutoff": false,
+  "fitted_artifact_existed_at_parent_cutoff": false,
+  "evaluation_existed_at_parent_cutoff": false,
+  "action_authority": false,
+  "probes": [
+    {
+      "name": "load_config_numerical_fail",
+      "rejected": true,
+      "code": "MARGIN_EVALUATION_EXECUTION_OR_NUMERICS_FAILED"
+    },
+    {
+      "name": "loaded_numerical_fail",
+      "rejected": true,
+      "code": "MARGIN_EVALUATION_EXECUTION_OR_NUMERICS_FAILED"
+    },
+    {
+      "name": "report_numerical_fail",
+      "rejected": true,
+      "code": "NFL_MARGIN_RESEARCH_ONLY"
+    },
+    {
+      "name": "load_config_numerical_missing",
+      "rejected": true,
+      "code": "MARGIN_CONFIG_STRUCTURE_INVALID"
+    },
+    {
+      "name": "loaded_numerical_missing",
+      "rejected": true,
+      "code": "MARGIN_EVALUATION_EXECUTION_OR_NUMERICS_FAILED"
+    },
+    {
+      "name": "report_numerical_missing",
+      "rejected": true,
+      "code": "NFL_MARGIN_REPORT_STRUCTURE_INVALID"
+    },
+    {
+      "name": "load_config_execution_incomplete",
+      "rejected": true,
+      "code": "MARGIN_EVALUATION_EXECUTION_OR_NUMERICS_FAILED"
+    },
+    {
+      "name": "loaded_execution_incomplete",
+      "rejected": true,
+      "code": "MARGIN_EVALUATION_EXECUTION_OR_NUMERICS_FAILED"
+    },
+    {
+      "name": "report_execution_incomplete",
+      "rejected": true,
+      "code": "NFL_MARGIN_RESEARCH_ONLY"
+    },
+    {
+      "name": "load_config_execution_missing",
+      "rejected": true,
+      "code": "MARGIN_CONFIG_STRUCTURE_INVALID"
+    },
+    {
+      "name": "loaded_execution_missing",
+      "rejected": true,
+      "code": "MARGIN_EVALUATION_EXECUTION_OR_NUMERICS_FAILED"
+    },
+    {
+      "name": "report_execution_missing",
+      "rejected": true,
+      "code": "NFL_MARGIN_REPORT_STRUCTURE_INVALID"
+    },
+    {
+      "name": "post_start_without_retrospective",
+      "rejected": true,
+      "code": "NFL_MARGIN_POST_START_REQUIRES_RETROSPECTIVE"
+    },
+    {
+      "name": "parent_prediction_tamper",
+      "rejected": true,
+      "code": "PARENT_PREDICTION_REPLAY_MISMATCH"
+    },
+    {
+      "name": "resealed_false_pregame",
+      "rejected": true,
+      "code": "NFL_MARGIN_FALSE_PREGAME_LABEL"
+    },
+    {
+      "name": "resealed_missing_conditional_label",
+      "rejected": true,
+      "code": "NFL_MARGIN_CONTRACT_MISMATCH"
+    },
+    {
+      "name": "draw_tamper",
+      "rejected": true,
+      "code": "NFL_MARGIN_DRAW_MISMATCH"
+    }
+  ],
+  "npy_file_sha256": "90cab21d819c84ee84d2606dde0c009325707da7bef922387309e60edd7bb4b3",
+  "raw_draw_sha256": "08878bc33012514c7fdfd4e083d59a3025d3034c3a94eff90fd8f33e06223059"
+}

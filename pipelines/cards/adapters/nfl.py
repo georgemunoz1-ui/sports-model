@@ -54,6 +54,11 @@ def forecast_event(event,context,simulations=100000,*,model_id=None,mode='resear
     default_id=fitted['model_id'] if fitted is not None else (policy()['default_reference_model'] if applies(packet['base'],event) else json.loads((DATA/'runtime.json').read_text())['default_research_model'])
     result,winner,scores=run(context['model'],context['recovered'],packet['base'],packet['context'],event,context['cutoff'],simulations,model_id=default_id if model_id is None else model_id,mode=mode,mode_artifact=fitted,market=market,live_state=live_state)
     if mode=='live':return result
+    draw_directory = None
+    if context.get('retain_draws') and os.environ.get('SPORTS_RESEARCH_DRAW_OUTPUT'):
+        from models.nfl.contextual.runtime import persist_run
+        draw_directory = Path(os.environ['SPORTS_RESEARCH_DRAW_OUTPUT']) / event['event_id'].replace(':', '_')
+        persist_run(draw_directory, result, winner, scores, context['model']['design'])
     p=result['prediction'];home=p['home_win']>=.5;winner_name=event['home_team'] if home else event['away_team']
     analytic=p['home_win'] if home else 1-p['home_win'];mc=result['winner_simulation']['home_win_probability'];mc=mc if home else 1-mc
     joint=result.get('joint_distribution')
@@ -61,10 +66,11 @@ def forecast_event(event,context,simulations=100000,*,model_id=None,mode='resear
     margin=joint['mean_margin'] if joint else None
     total=joint['mean_total'] if joint else None
     points={'home':joint['mean_home_score'],'away':joint['mean_away_score']} if joint else {'home':None,'away':None}
-    return {'model_id':result['model_id'],'model_winner':winner_name,'model_p':analytic,'sim_p':mc,'analytic_p':analytic,'stochastic_sim_p':mc,'projected_margin':(margin if home else -margin) if margin is not None else None,'projected_total':total,'projected_home_points':points['home'],'projected_away_points':points['away'],'forecast_tier':'REDUCED','data_quality':'PARTIAL_CURRENT_CONTEXT_APPLIED','dose':0.0,'coverage_label':result['coverage_label'],'model_state_config_hash':result['model_artifact_sha256'],'input_snapshot_hash':digest(result['features']),'model_input_snapshot':result['features'],'diagnostics':result,'simulation':{'binary':result['winner_simulation'],'joint_scores':result['score_simulation']},'warnings':result['warnings'],'provenance':{'source_fetches':context['package']['source_fetches'],'model_id':result['model_id']},'action_authority':False}
+    return {'model_id':result['model_id'],'model_winner':winner_name,'model_p':analytic,'sim_p':mc,'analytic_p':analytic,'stochastic_sim_p':mc,'projected_margin':(margin if home else -margin) if margin is not None else None,'projected_total':total,'projected_home_points':points['home'],'projected_away_points':points['away'],'forecast_tier':'REDUCED','data_quality':'PARTIAL_CURRENT_CONTEXT_APPLIED','dose':0.0,'coverage_label':result['coverage_label'],'model_state_config_hash':result['model_artifact_sha256'],'input_snapshot_hash':digest(result['features']),'model_input_snapshot':result['features'],'diagnostics':result,'simulation':{'binary':result['winner_simulation'],'joint_scores':result['score_simulation'],'draw_directory':str(draw_directory) if draw_directory else None},'warnings':result['warnings'],'provenance':{'source_fetches':context['package']['source_fetches'],'model_id':result['model_id']},'action_authority':False}
 
 
 def calibrate_spreads(frozen_forecast,score_draws,home_handicaps,*,n=100000):
     """Downstream calibrated spread output; never changes generation inputs."""
     from models.nfl.contextual.spread_runtime import build_overlay
     return build_overlay(frozen_forecast,score_draws,home_handicaps,n=n)
+

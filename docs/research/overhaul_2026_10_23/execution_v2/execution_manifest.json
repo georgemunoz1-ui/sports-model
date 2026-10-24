@@ -1,0 +1,789 @@
+{
+  "code_receipts": [
+    {
+      "bytes": 20063,
+      "path": "/workspace/scratch/c2f9a66ae580/sports-model-overhaul/pipelines/cards/research_selection.py",
+      "sha256": "789eba02a4239348a2820c8b91fe2078562d3604f04626bf96806e44b98d4784"
+    },
+    {
+      "bytes": 25535,
+      "path": "/workspace/scratch/c2f9a66ae580/sports-model-overhaul/pipelines/cards/selection_integration.py",
+      "sha256": "249762e96c206def9bb31d91d95048ab2e0e81a7d7d448ff5f870c6783fa712c"
+    },
+    {
+      "bytes": 27081,
+      "path": "/workspace/scratch/c2f9a66ae580/sports-model-overhaul/scripts/generate_card_force.py",
+      "sha256": "a80fb79713258b990afae7d9253eb3fa9fd1f0d219354317a9b2d404b9f078c1"
+    },
+    {
+      "bytes": 10761,
+      "path": "/workspace/scratch/c2f9a66ae580/sports-model-overhaul/scripts/run_nfl_integrated.py",
+      "sha256": "b2f2e8150286d385a2c0ba82bc7197f7677f971eca0d196af498cfe3bb60e067"
+    },
+    {
+      "bytes": 15189,
+      "path": "/workspace/scratch/c2f9a66ae580/sports-model-overhaul/scripts/run_research_selection.py",
+      "sha256": "7cd00312065a05e7aa3c67028a7549de5c0bf5968fa9c93442d68c8cc5589d7e"
+    },
+    {
+      "bytes": 23968,
+      "path": "/workspace/scratch/c2f9a66ae580/sports-model-overhaul/scripts/evaluate_research_selections.py",
+      "sha256": "675db3d68a0e75d6b3901151903d046de6272e69d5a0faaf12257eb6fd76613e"
+    },
+    {
+      "bytes": 25612,
+      "path": "/workspace/scratch/c2f9a66ae580/sports-model-overhaul/scripts/canonical_forecasts.py",
+      "sha256": "0c72ddb0d0a9bb7de40547c2b0181888e96220328f469d104f9c5e8c3fdaec9e"
+    },
+    {
+      "bytes": 13187,
+      "path": "/workspace/scratch/c2f9a66ae580/sports-model-overhaul/scripts/canonical_results.py",
+      "sha256": "f243a0d76238a2ae02059d0d1ef251ff7bffc88a2a894e4889090659cba14303"
+    },
+    {
+      "bytes": 3045,
+      "path": "/workspace/scratch/c2f9a66ae580/sports-model-overhaul/.github/workflows/canonical-research-grading.yml",
+      "sha256": "a0d70ad97e9c204cdfeec5746ec171bb30c8788c603903083d99668c26f2d4eb"
+    },
+    {
+      "bytes": 10752,
+      "path": "/workspace/scratch/c2f9a66ae580/sports-model-overhaul/tests/test_research_selection_cli.py",
+      "sha256": "85e576df7ea9e5544822f0efe479be2168860b053d053b5fe00d201b8a4affab"
+    },
+    {
+      "bytes": 19782,
+      "path": "/workspace/scratch/c2f9a66ae580/sports-model-overhaul/tests/test_card_disclosures.py",
+      "sha256": "1af01208cb8c86fe025d4430a3ea561ec2d5c017bfab44da1e39cca0ec10ebd2"
+    },
+    {
+      "bytes": 12386,
+      "path": "/workspace/scratch/c2f9a66ae580/sports-model-overhaul/tests/test_selection_integration.py",
+      "sha256": "4fd51904f55880bce9e7447ef6f73142773b77ed84c728c5bc59be6c077be8d6"
+    },
+    {
+      "bytes": 7323,
+      "path": "/workspace/scratch/c2f9a66ae580/sports-model-overhaul/tests/test_canonical_results.py",
+      "sha256": "31df6dec70802a1d10789279293503f9b58a1e2949057bdeefc27491178194b2"
+    },
+    {
+      "bytes": 5546,
+      "path": "/workspace/scratch/c2f9a66ae580/sports-model-overhaul/tests/test_evaluation_walk_forward_cli.py",
+      "sha256": "0ed98435bc8725396f9d7a8beb71744f378f955b010e973447beeb9a82431c38"
+    },
+    {
+      "bytes": 28058,
+      "path": "/workspace/scratch/c2f9a66ae580/sports-model-overhaul/pipelines/cards/semantic_identity.py",
+      "sha256": "a7f6541d1415523092e9e6364407100ceb9165de1493e833c93d21f88e65f756"
+    }
+  ],
+  "created_at_utc": "2026-10-23T06:26:22.565368+00:00",
+  "manifest_id": "738af96e860c49bbeb8564e70bd509c571d5589263197073313d402b6edb6605",
+  "oct22_settlement_evaluation": {
+    "artifact_receipt": {
+      "bytes": 199632,
+      "path": "/workspace/scratch/c2f9a66ae580/oct22-evaluation-final-v2/evaluation.json",
+      "sha256": "1139de932aa5cf1577557a72db683c427be34bcac619861e18ef40e98ce46e0f"
+    },
+    "decision_counts": {
+      "BLOCKED": 80
+    },
+    "event_count": 18,
+    "opportunity_count": 80,
+    "outcome_counts": {
+      "LIVE": 20,
+      "LOSS": 29,
+      "MISSING": 5,
+      "WIN": 26
+    },
+    "scope": "DISCOVERY"
+  },
+  "oct22_sidecar": {
+    "artifact_receipt": {
+      "bytes": 562252,
+      "path": "/workspace/scratch/c2f9a66ae580/oct22-selection-final-v2/decisions.json",
+      "sha256": "30cdf2c438446aedb72543592821b8b659c069d7d9b15a03a8887ed3d1c8a4cc"
+    },
+    "decision_counts": {
+      "BLOCKED": 80
+    },
+    "event_count": 18,
+    "opportunity_count": 80,
+    "outcome_counts": null,
+    "scope": "DISCOVERY"
+  },
+  "prospective_registration_verified": false,
+  "publication_allowed": false,
+  "runs": [
+    {
+      "argv": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+        "scripts/run_nfl_integrated.py",
+        "--date",
+        "2026-09-14",
+        "--replay-cutoff-utc",
+        "2026-09-15T00:12:00Z",
+        "--simulations",
+        "100000",
+        "--identity-semantics",
+        "market_blind_numeric.v2",
+        "--output",
+        "/workspace/scratch/c2f9a66ae580/nfl-default-replay-r5"
+      ],
+      "artifact_receipts": [
+        {
+          "bytes": 2510,
+          "path": "/workspace/scratch/c2f9a66ae580/nfl-default-replay-r5/2026_01_DEN_KC/disclosures/disclosures.json",
+          "sha256": "957323600dbe43dde8e8a79203c743474136f80b7e0447703ab36bae46c7a002"
+        },
+        {
+          "bytes": 1193,
+          "path": "/workspace/scratch/c2f9a66ae580/nfl-default-replay-r5/2026_01_DEN_KC/disclosures/disclosures.md",
+          "sha256": "e2c5721b3c035186a8f4e88628f83436fbaa31b949d3cbc954da4d2b1a4b2a8c"
+        },
+        {
+          "bytes": 479,
+          "path": "/workspace/scratch/c2f9a66ae580/nfl-default-replay-r5/2026_01_DEN_KC/execution_receipt.json",
+          "sha256": "5e7dc68d7bc3ce65bbbef7299002086474a9b415881d8d7ba5abe711996bf923"
+        },
+        {
+          "bytes": 144140,
+          "path": "/workspace/scratch/c2f9a66ae580/nfl-default-replay-r5/2026_01_DEN_KC/forecast.json",
+          "sha256": "66476cb98f76a39e98b1f8dbcef98b3b4f394e0b30170ec014b51c14ba859929"
+        },
+        {
+          "bytes": 275,
+          "path": "/workspace/scratch/c2f9a66ae580/nfl-default-replay-r5/2026_01_DEN_KC/manifest.json",
+          "sha256": "443e237eca5b977c20b6d852f6f8f7c4f91d630ca503735622a82943ac3eda00"
+        },
+        {
+          "bytes": 15502,
+          "path": "/workspace/scratch/c2f9a66ae580/nfl-default-replay-r5/2026_01_DEN_KC/research_selection/decisions.json",
+          "sha256": "ddb769a891427e8feff144b4d23aafb10b36fea57601e45f1947c7dac5295418"
+        },
+        {
+          "bytes": 556,
+          "path": "/workspace/scratch/c2f9a66ae580/nfl-default-replay-r5/2026_01_DEN_KC/research_selection/execution_receipt.json",
+          "sha256": "a81bf174255a84b18b7e650ccac4f877d6ef79d4bbf34cb7971fca43bbb60bc6"
+        },
+        {
+          "bytes": 170845,
+          "path": "/workspace/scratch/c2f9a66ae580/nfl-default-replay-r5/2026_01_DEN_KC/selection_source_card.json",
+          "sha256": "4a86e9e6f20294c9eaf2ba483f56e00f565a97309e150a09bf9412245f8e5fa7"
+        },
+        {
+          "bytes": 100128,
+          "path": "/workspace/scratch/c2f9a66ae580/nfl-default-replay-r5/2026_01_DEN_KC/winner_draws.npy",
+          "sha256": "c2e884ec5caf0c2703524e6230b7b65a354335cec088eec1218bfd26feef15af"
+        }
+      ],
+      "canonical_registration_files": 0,
+      "completed_at_utc": "2026-10-23T06:26:24.312239+00:00",
+      "cwd": "/workspace/scratch/c2f9a66ae580/sports-model-overhaul",
+      "executed_procedure_artifact": {
+        "definition": {
+          "calibration_id": "869ad260c12e7a1cced6ba1750b947efa1b5c589210a345e80361539117f45fb",
+          "feature_semantics_id": "786e5b429d6b8d39bb3a7941d8fdea3e90ff1224e5319597aa4b68124d4657eb",
+          "model_id": "nfl.integrated_context.qb.v1.research",
+          "model_state_id": "7ce942e0ee480ae3e09ed111d46b01f35095ef57f718402043510ed7cfa40496",
+          "stochastic_procedure": {
+            "draw_count": 100000,
+            "engine": "BERNOULLI_WINNER_DIAGNOSTIC",
+            "numpy_version": "2.3.5",
+            "semantic_runtime_sha256": "a7f6541d1415523092e9e6364407100ceb9165de1493e833c93d21f88e65f756",
+            "semantics": "market_blind_numeric.v2"
+          }
+        },
+        "lineage_status": "OBSERVED_EXECUTION_NOT_REGISTERED",
+        "schema": "executed-forecast-procedure-v1",
+        "validation_status": "NOT_ASSESSED"
+      },
+      "execution_receipt": {
+        "action_authority": false,
+        "canonical_prospective_eligible": false,
+        "captured_package_sha256": "cb0f85a81352045f96dc2bb6edc9497d12dcafd6f3a433e82206b9222ec4d385",
+        "created_at_utc": "2026-10-23T06:26:24.094314+00:00",
+        "execution_mode": "RETROSPECTIVE_DIAGNOSTIC",
+        "information_cutoff_utc": "2026-09-15T00:12:00Z",
+        "prospective_registration_verified": false,
+        "publication_allowed": false,
+        "schema": "nfl.retrospective_execution.v1",
+        "wagering_status": "OFF"
+      },
+      "exit_code": 0,
+      "identity_component_artifacts": {
+        "786e5b429d6b8d39bb3a7941d8fdea3e90ff1224e5319597aa4b68124d4657eb": {
+          "constructor_code_sha256": {
+            "models/nfl/contextual/features.py": "3a064779ce6a1a53b4fda66eed9f86a4365208a849b357dcd1cb5719b3e0a115",
+            "models/nfl/contextual/personnel.py": "4b6863746783775bf61970363f1df2aa33b2919ae69c709de2ff404b4a369055",
+            "models/nfl/contextual/qb_assimilation.py": "33667fa0375a1d151ec2a450c497e219cc0d099472e603f1ad6d4814abfef51c",
+            "models/nfl/contextual/recovered_inference.py": "ac70b26355c8a9fe0850caf6e69ec268f363363dffb3b1289cbee13d4d729abd",
+            "models/nfl/contextual/runtime.py": "8951577d6edd2e2e37b370cafe9f90c205b9de8b6b59d9c1aba961f15760c15d",
+            "models/nfl/contextual/weekly_state.py": "41e87fa081cbc2fe7625571f3a46f797bdaecc0dad9329676fea805059c6f71f"
+          },
+          "feature_configuration": {
+            "selected_arm": "qb"
+          },
+          "feature_contract": {
+            "epa_matchup_edge": "CONSUMED_SCALAR",
+            "explosive_matchup_edge": "CONSUMED_SCALAR",
+            "location_missing": "CONSUMED_SCALAR",
+            "neutral_pass_rate_diff": "CONSUMED_SCALAR",
+            "neutral_site": "CONSUMED_SCALAR",
+            "pace_seconds_sum": "CONSUMED_SCALAR",
+            "point_differential_diff": "CONSUMED_SCALAR",
+            "protection_matchup_edge": "CONSUMED_SCALAR",
+            "qb_change_diff": "CONSUMED_SCALAR",
+            "qb_experience_diff": "CONSUMED_SCALAR",
+            "qb_quality_diff": "CONSUMED_SCALAR",
+            "qb_quality_sum": "CONSUMED_SCALAR",
+            "qb_unknown_count": "CONSUMED_SCALAR",
+            "rest_days_diff": "CONSUMED_SCALAR",
+            "rest_missing": "CONSUMED_SCALAR",
+            "roof_indoor": "CONSUMED_SCALAR",
+            "roof_missing": "CONSUMED_SCALAR",
+            "state_experience_diff_log": "CONSUMED_SCALAR",
+            "state_experience_min_log": "CONSUMED_SCALAR",
+            "success_matchup_edge": "CONSUMED_SCALAR",
+            "temperature_f": "CONSUMED_SCALAR",
+            "weather_missing": "CONSUMED_SCALAR",
+            "wind_mph": "CONSUMED_SCALAR"
+          },
+          "league": "nfl",
+          "model_id": "nfl.integrated_context.qb.v1.research",
+          "ordered_feature_names": [
+            "epa_matchup_edge",
+            "success_matchup_edge",
+            "explosive_matchup_edge",
+            "protection_matchup_edge",
+            "neutral_pass_rate_diff",
+            "pace_seconds_sum",
+            "point_differential_diff",
+            "rest_days_diff",
+            "neutral_site",
+            "roof_indoor",
+            "temperature_f",
+            "wind_mph",
+            "state_experience_min_log",
+            "state_experience_diff_log",
+            "rest_missing",
+            "location_missing",
+            "roof_missing",
+            "weather_missing",
+            "qb_quality_diff",
+            "qb_quality_sum",
+            "qb_experience_diff",
+            "qb_change_diff",
+            "qb_unknown_count"
+          ],
+          "schema": "sports.observed_feature_procedure.v1",
+          "validation_status": "NOT_ASSESSED"
+        },
+        "869ad260c12e7a1cced6ba1750b947efa1b5c589210a345e80361539117f45fb": {
+          "league": "nfl",
+          "model_id": "nfl.integrated_context.qb.v1.research",
+          "observed_prediction_code_sha256": {
+            "models/nfl/contextual/recovered_inference.py": "ac70b26355c8a9fe0850caf6e69ec268f363363dffb3b1289cbee13d4d729abd",
+            "models/nfl/contextual/runtime.py": "8951577d6edd2e2e37b370cafe9f90c205b9de8b6b59d9c1aba961f15760c15d"
+          },
+          "retained_numeric_operations": "SELECTED_HEAD_OR_SIMULATION_TRANSFORM_UNCHANGED",
+          "schema": "sports.observed_calibration_procedure.v1",
+          "stage": "NONE_NO_SEPARATE_FITTED_POSTHOC_CALIBRATOR_IN_SELECTED_PATH",
+          "validation_status": "NOT_ASSESSED"
+        }
+      },
+      "name": "nfl-default",
+      "procedure_binding": {
+        "calibration_procedure_id": "869ad260c12e7a1cced6ba1750b947efa1b5c589210a345e80361539117f45fb",
+        "distribution_sha256": null,
+        "feature_procedure_id": "786e5b429d6b8d39bb3a7941d8fdea3e90ff1224e5319597aa4b68124d4657eb",
+        "fitted_state_id": "7ce942e0ee480ae3e09ed111d46b01f35095ef57f718402043510ed7cfa40496",
+        "forecast_id": "10eaaaa26be6c6c766f4f593de1b2a1ce46f8c70e7cd3b384f5f3af4b2a40589",
+        "forecast_procedure_id": "dfecb22e4edf92532c6fe37ec6ef2f918efc32184f5f0a82210c7367ab60f895",
+        "identity_registration_status": "OBSERVED_NOT_REGISTERED",
+        "procedure_binding_id": "aacb2b656416359db99b39958ea1cdfb68949c69b8c4e64defcf53e7ce5178c5",
+        "selector_config_id": "efd27259614e0ee2c6fc67316c56fde3ee024d497c2bbf9392e1754c2e21bf2d",
+        "source_row_sha256": "176c3b663adb81517b54c9883443b51b08b7b0123ecd5b190a60723951760250"
+      },
+      "selection_summary": {
+        "decision_counts": {
+          "BLOCKED": 1
+        },
+        "raw_probability": 0.5070725515067297,
+        "reasons": [
+          "AUTOMATIC_DIAGNOSTIC_POLICY_NOT_PREREGISTERED",
+          "MISSING_VALIDATION_REGISTRY",
+          "PREGAME_DECISION_WINDOW_CLOSED",
+          "RAW_PROBABILITY_BASIS_NOT_UNCONDITIONAL"
+        ],
+        "selection_probability": null
+      },
+      "started_at_utc": "2026-10-23T06:26:22.566637+00:00",
+      "stdout_stderr_receipt": {
+        "bytes": 2614,
+        "path": "/workspace/scratch/c2f9a66ae580/selection-integration-final-evidence/nfl-default.log",
+        "sha256": "2dea5543256868642d133bbb985eb71f04ef5d227483cc50daeb83a36e5ddaec"
+      }
+    },
+    {
+      "argv": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+        "scripts/run_nfl_integrated.py",
+        "--date",
+        "2026-09-14",
+        "--replay-cutoff-utc",
+        "2026-09-15T00:12:00Z",
+        "--simulations",
+        "100000",
+        "--identity-semantics",
+        "market_blind_numeric.v2",
+        "--output",
+        "/workspace/scratch/c2f9a66ae580/nfl-calibrated-spread-replay-r5",
+        "--model-id",
+        "nfl.integrated_context.combined.v1.research",
+        "--home-spread",
+        "-3"
+      ],
+      "artifact_receipts": [
+        {
+          "bytes": 2656,
+          "path": "/workspace/scratch/c2f9a66ae580/nfl-calibrated-spread-replay-r5/2026_01_DEN_KC/disclosures/disclosures.json",
+          "sha256": "ad9b09c761fc4507a439a2e8c34c8abf759ff048e6d971350db405da8141764f"
+        },
+        {
+          "bytes": 1271,
+          "path": "/workspace/scratch/c2f9a66ae580/nfl-calibrated-spread-replay-r5/2026_01_DEN_KC/disclosures/disclosures.md",
+          "sha256": "1346907a883f054c47a0afb1652b62d8c1503abb9ce2155770f69089c3031832"
+        },
+        {
+          "bytes": 479,
+          "path": "/workspace/scratch/c2f9a66ae580/nfl-calibrated-spread-replay-r5/2026_01_DEN_KC/execution_receipt.json",
+          "sha256": "e8e8402a5087f3b992194dd9c5466f2446e98da79063bcd27c1ca77f272f1883"
+        },
+        {
+          "bytes": 292934,
+          "path": "/workspace/scratch/c2f9a66ae580/nfl-calibrated-spread-replay-r5/2026_01_DEN_KC/forecast.json",
+          "sha256": "7b61f65a8fe2f821fc97bb2766f02f7f37d51796346316d43eff3f95a48b9947"
+        },
+        {
+          "bytes": 364,
+          "path": "/workspace/scratch/c2f9a66ae580/nfl-calibrated-spread-replay-r5/2026_01_DEN_KC/manifest.json",
+          "sha256": "69a74f17d42d8f081ec82d8e93e6212603359179f479f22dde9ca1b37d590952"
+        },
+        {
+          "bytes": 21332,
+          "path": "/workspace/scratch/c2f9a66ae580/nfl-calibrated-spread-replay-r5/2026_01_DEN_KC/research_selection/decisions.json",
+          "sha256": "a2242076f1080e5d26d12e96b1f97d223fe350080915cf5c1e8ec81fd055a4d0"
+        },
+        {
+          "bytes": 556,
+          "path": "/workspace/scratch/c2f9a66ae580/nfl-calibrated-spread-replay-r5/2026_01_DEN_KC/research_selection/execution_receipt.json",
+          "sha256": "8d3ed38770f62764f6c1276cdce660cfcfbc9e65fca679dd902d123e079a5180"
+        },
+        {
+          "bytes": 400128,
+          "path": "/workspace/scratch/c2f9a66ae580/nfl-calibrated-spread-replay-r5/2026_01_DEN_KC/score_draws.npy",
+          "sha256": "8578f247ee8f5cc6c67e0716dd17cf3b8685f41eb04e3eb90257622191734eec"
+        },
+        {
+          "bytes": 341367,
+          "path": "/workspace/scratch/c2f9a66ae580/nfl-calibrated-spread-replay-r5/2026_01_DEN_KC/selection_source_card.json",
+          "sha256": "65171698495914de26f5650e8c18430c2687c0e2fae978343ffad7e62cf8e1e6"
+        },
+        {
+          "bytes": 800128,
+          "path": "/workspace/scratch/c2f9a66ae580/nfl-calibrated-spread-replay-r5/2026_01_DEN_KC/spread_calibration/calibrated_margin_draws.npy",
+          "sha256": "e34ba75dc138b194cbf7f9096366e6f9daee929b22da45788a1dd6384de34f6c"
+        },
+        {
+          "bytes": 189,
+          "path": "/workspace/scratch/c2f9a66ae580/nfl-calibrated-spread-replay-r5/2026_01_DEN_KC/spread_calibration/manifest.json",
+          "sha256": "053ecf96d4503b1f3ac1ffba4f3030256e4a32afdcb6ad2ac863047723baa3fe"
+        },
+        {
+          "bytes": 12802,
+          "path": "/workspace/scratch/c2f9a66ae580/nfl-calibrated-spread-replay-r5/2026_01_DEN_KC/spread_calibration/overlay.json",
+          "sha256": "96d46722281a363a0a1041cf57a040d4721c7a400d5c233ed75dfbc90598499e"
+        },
+        {
+          "bytes": 100128,
+          "path": "/workspace/scratch/c2f9a66ae580/nfl-calibrated-spread-replay-r5/2026_01_DEN_KC/winner_draws.npy",
+          "sha256": "954170dbc63a74d60a1d971d3e75105ac5ab9fe8da99fdd16cd1cafbb5b78a52"
+        }
+      ],
+      "canonical_registration_files": 0,
+      "completed_at_utc": "2026-10-23T06:26:26.250476+00:00",
+      "cwd": "/workspace/scratch/c2f9a66ae580/sports-model-overhaul",
+      "executed_procedure_artifact": {
+        "definition": {
+          "calibration_id": "2dfc7d9a1f359aa437bc52e1001162a0dec0765db979907fb5e0f19127b0aa2a",
+          "feature_semantics_id": "4cb50de983ab219cc747a2e0f70e708df89b54f819a329ac2ef836760554f518",
+          "model_id": "nfl.integrated_context.combined.v1.research",
+          "model_state_id": "2dd9c42b7e8838fca2f35785659873bc58fc2e93fb6bce834be77cb5d45c62a4",
+          "stochastic_procedure": {
+            "draw_count": 100000,
+            "engine": "NFL_BINARY_AND_COMBINED_JOINT_KERNEL",
+            "numpy_version": "2.3.5",
+            "semantic_runtime_sha256": "a7f6541d1415523092e9e6364407100ceb9165de1493e833c93d21f88e65f756",
+            "semantics": "market_blind_numeric.v2"
+          }
+        },
+        "lineage_status": "OBSERVED_EXECUTION_NOT_REGISTERED",
+        "schema": "executed-forecast-procedure-v1",
+        "validation_status": "NOT_ASSESSED"
+      },
+      "execution_receipt": {
+        "action_authority": false,
+        "canonical_prospective_eligible": false,
+        "captured_package_sha256": "cb0f85a81352045f96dc2bb6edc9497d12dcafd6f3a433e82206b9222ec4d385",
+        "created_at_utc": "2026-10-23T06:26:25.855295+00:00",
+        "execution_mode": "RETROSPECTIVE_DIAGNOSTIC",
+        "information_cutoff_utc": "2026-09-15T00:12:00Z",
+        "prospective_registration_verified": false,
+        "publication_allowed": false,
+        "schema": "nfl.retrospective_execution.v1",
+        "wagering_status": "OFF"
+      },
+      "exit_code": 0,
+      "identity_component_artifacts": {
+        "2dfc7d9a1f359aa437bc52e1001162a0dec0765db979907fb5e0f19127b0aa2a": {
+          "league": "nfl",
+          "model_id": "nfl.integrated_context.combined.v1.research",
+          "observed_prediction_code_sha256": {
+            "models/nfl/contextual/recovered_inference.py": "ac70b26355c8a9fe0850caf6e69ec268f363363dffb3b1289cbee13d4d729abd",
+            "models/nfl/contextual/runtime.py": "8951577d6edd2e2e37b370cafe9f90c205b9de8b6b59d9c1aba961f15760c15d"
+          },
+          "retained_numeric_operations": "SELECTED_HEAD_OR_SIMULATION_TRANSFORM_UNCHANGED",
+          "schema": "sports.observed_calibration_procedure.v1",
+          "stage": "NONE_NO_SEPARATE_FITTED_POSTHOC_CALIBRATOR_IN_SELECTED_PATH",
+          "validation_status": "NOT_ASSESSED"
+        },
+        "4cb50de983ab219cc747a2e0f70e708df89b54f819a329ac2ef836760554f518": {
+          "constructor_code_sha256": {
+            "models/nfl/contextual/features.py": "3a064779ce6a1a53b4fda66eed9f86a4365208a849b357dcd1cb5719b3e0a115",
+            "models/nfl/contextual/personnel.py": "4b6863746783775bf61970363f1df2aa33b2919ae69c709de2ff404b4a369055",
+            "models/nfl/contextual/qb_assimilation.py": "33667fa0375a1d151ec2a450c497e219cc0d099472e603f1ad6d4814abfef51c",
+            "models/nfl/contextual/recovered_inference.py": "ac70b26355c8a9fe0850caf6e69ec268f363363dffb3b1289cbee13d4d729abd",
+            "models/nfl/contextual/runtime.py": "8951577d6edd2e2e37b370cafe9f90c205b9de8b6b59d9c1aba961f15760c15d",
+            "models/nfl/contextual/weekly_state.py": "41e87fa081cbc2fe7625571f3a46f797bdaecc0dad9329676fea805059c6f71f"
+          },
+          "feature_configuration": {
+            "selected_arm": "combined"
+          },
+          "feature_contract": {
+            "DB_dnp_diff": "CONSUMED_SCALAR",
+            "DB_dnp_sum": "CONSUMED_SCALAR",
+            "DB_doubtful_diff": "CONSUMED_SCALAR",
+            "DB_doubtful_sum": "CONSUMED_SCALAR",
+            "DB_out_diff": "CONSUMED_SCALAR",
+            "DB_out_snap_diff": "CONSUMED_SCALAR",
+            "DB_out_snap_sum": "CONSUMED_SCALAR",
+            "DB_out_sum": "CONSUMED_SCALAR",
+            "DB_questionable_diff": "CONSUMED_SCALAR",
+            "DB_questionable_sum": "CONSUMED_SCALAR",
+            "DL_dnp_diff": "CONSUMED_SCALAR",
+            "DL_dnp_sum": "CONSUMED_SCALAR",
+            "DL_doubtful_diff": "CONSUMED_SCALAR",
+            "DL_doubtful_sum": "CONSUMED_SCALAR",
+            "DL_out_diff": "CONSUMED_SCALAR",
+            "DL_out_snap_diff": "CONSUMED_SCALAR",
+            "DL_out_snap_sum": "CONSUMED_SCALAR",
+            "DL_out_sum": "CONSUMED_SCALAR",
+            "DL_questionable_diff": "CONSUMED_SCALAR",
+            "DL_questionable_sum": "CONSUMED_SCALAR",
+            "LB_dnp_diff": "CONSUMED_SCALAR",
+            "LB_dnp_sum": "CONSUMED_SCALAR",
+            "LB_doubtful_diff": "CONSUMED_SCALAR",
+            "LB_doubtful_sum": "CONSUMED_SCALAR",
+            "LB_out_diff": "CONSUMED_SCALAR",
+            "LB_out_snap_diff": "CONSUMED_SCALAR",
+            "LB_out_snap_sum": "CONSUMED_SCALAR",
+            "LB_out_sum": "CONSUMED_SCALAR",
+            "LB_questionable_diff": "CONSUMED_SCALAR",
+            "LB_questionable_sum": "CONSUMED_SCALAR",
+            "OL_dnp_diff": "CONSUMED_SCALAR",
+            "OL_dnp_sum": "CONSUMED_SCALAR",
+            "OL_doubtful_diff": "CONSUMED_SCALAR",
+            "OL_doubtful_sum": "CONSUMED_SCALAR",
+            "OL_out_diff": "CONSUMED_SCALAR",
+            "OL_out_snap_diff": "CONSUMED_SCALAR",
+            "OL_out_snap_sum": "CONSUMED_SCALAR",
+            "OL_out_sum": "CONSUMED_SCALAR",
+            "OL_questionable_diff": "CONSUMED_SCALAR",
+            "OL_questionable_sum": "CONSUMED_SCALAR",
+            "QB_dnp_diff": "CONSUMED_SCALAR",
+            "QB_dnp_sum": "CONSUMED_SCALAR",
+            "QB_doubtful_diff": "CONSUMED_SCALAR",
+            "QB_doubtful_sum": "CONSUMED_SCALAR",
+            "QB_out_diff": "CONSUMED_SCALAR",
+            "QB_out_snap_diff": "CONSUMED_SCALAR",
+            "QB_out_snap_sum": "CONSUMED_SCALAR",
+            "QB_out_sum": "CONSUMED_SCALAR",
+            "QB_questionable_diff": "CONSUMED_SCALAR",
+            "QB_questionable_sum": "CONSUMED_SCALAR",
+            "RB_dnp_diff": "CONSUMED_SCALAR",
+            "RB_dnp_sum": "CONSUMED_SCALAR",
+            "RB_doubtful_diff": "CONSUMED_SCALAR",
+            "RB_doubtful_sum": "CONSUMED_SCALAR",
+            "RB_out_diff": "CONSUMED_SCALAR",
+            "RB_out_snap_diff": "CONSUMED_SCALAR",
+            "RB_out_snap_sum": "CONSUMED_SCALAR",
+            "RB_out_sum": "CONSUMED_SCALAR",
+            "RB_questionable_diff": "CONSUMED_SCALAR",
+            "RB_questionable_sum": "CONSUMED_SCALAR",
+            "WRTE_dnp_diff": "CONSUMED_SCALAR",
+            "WRTE_dnp_sum": "CONSUMED_SCALAR",
+            "WRTE_doubtful_diff": "CONSUMED_SCALAR",
+            "WRTE_doubtful_sum": "CONSUMED_SCALAR",
+            "WRTE_out_diff": "CONSUMED_SCALAR",
+            "WRTE_out_snap_diff": "CONSUMED_SCALAR",
+            "WRTE_out_snap_sum": "CONSUMED_SCALAR",
+            "WRTE_out_sum": "CONSUMED_SCALAR",
+            "WRTE_questionable_diff": "CONSUMED_SCALAR",
+            "WRTE_questionable_sum": "CONSUMED_SCALAR",
+            "away_early_body_clock": "CONSUMED_SCALAR",
+            "away_east_hours": "CONSUMED_SCALAR",
+            "away_travel_1000km": "CONSUMED_SCALAR",
+            "away_west_hours": "CONSUMED_SCALAR",
+            "epa_matchup_edge": "CONSUMED_SCALAR",
+            "explosive_matchup_edge": "CONSUMED_SCALAR",
+            "location_missing": "CONSUMED_SCALAR",
+            "neutral_pass_rate_diff": "CONSUMED_SCALAR",
+            "neutral_site": "CONSUMED_SCALAR",
+            "out_role_unknown_count": "CONSUMED_SCALAR",
+            "pace_seconds_sum": "CONSUMED_SCALAR",
+            "point_differential_diff": "CONSUMED_SCALAR",
+            "protection_matchup_edge": "CONSUMED_SCALAR",
+            "qb_change_diff": "CONSUMED_SCALAR",
+            "qb_experience_diff": "CONSUMED_SCALAR",
+            "qb_quality_diff": "CONSUMED_SCALAR",
+            "qb_quality_sum": "CONSUMED_SCALAR",
+            "qb_unknown_count": "CONSUMED_SCALAR",
+            "report_missing_count": "CONSUMED_SCALAR",
+            "rest_days_diff": "CONSUMED_SCALAR",
+            "rest_missing": "CONSUMED_SCALAR",
+            "roof_indoor": "CONSUMED_SCALAR",
+            "roof_missing": "CONSUMED_SCALAR",
+            "state_experience_diff_log": "CONSUMED_SCALAR",
+            "state_experience_min_log": "CONSUMED_SCALAR",
+            "success_matchup_edge": "CONSUMED_SCALAR",
+            "temperature_f": "CONSUMED_SCALAR",
+            "travel_unknown": "CONSUMED_SCALAR",
+            "weather_missing": "CONSUMED_SCALAR",
+            "wind_mph": "CONSUMED_SCALAR"
+          },
+          "league": "nfl",
+          "model_id": "nfl.integrated_context.combined.v1.research",
+          "ordered_feature_names": [
+            "epa_matchup_edge",
+            "success_matchup_edge",
+            "explosive_matchup_edge",
+            "protection_matchup_edge",
+            "neutral_pass_rate_diff",
+            "pace_seconds_sum",
+            "point_differential_diff",
+            "rest_days_diff",
+            "neutral_site",
+            "roof_indoor",
+            "temperature_f",
+            "wind_mph",
+            "state_experience_min_log",
+            "state_experience_diff_log",
+            "rest_missing",
+            "location_missing",
+            "roof_missing",
+            "weather_missing",
+            "qb_quality_diff",
+            "qb_quality_sum",
+            "qb_experience_diff",
+            "qb_change_diff",
+            "qb_unknown_count",
+            "QB_out_diff",
+            "QB_out_sum",
+            "QB_questionable_diff",
+            "QB_questionable_sum",
+            "QB_doubtful_diff",
+            "QB_doubtful_sum",
+            "QB_dnp_diff",
+            "QB_dnp_sum",
+            "QB_out_snap_diff",
+            "QB_out_snap_sum",
+            "RB_out_diff",
+            "RB_out_sum",
+            "RB_questionable_diff",
+            "RB_questionable_sum",
+            "RB_doubtful_diff",
+            "RB_doubtful_sum",
+            "RB_dnp_diff",
+            "RB_dnp_sum",
+            "RB_out_snap_diff",
+            "RB_out_snap_sum",
+            "WRTE_out_diff",
+            "WRTE_out_sum",
+            "WRTE_questionable_diff",
+            "WRTE_questionable_sum",
+            "WRTE_doubtful_diff",
+            "WRTE_doubtful_sum",
+            "WRTE_dnp_diff",
+            "WRTE_dnp_sum",
+            "WRTE_out_snap_diff",
+            "WRTE_out_snap_sum",
+            "OL_out_diff",
+            "OL_out_sum",
+            "OL_questionable_diff",
+            "OL_questionable_sum",
+            "OL_doubtful_diff",
+            "OL_doubtful_sum",
+            "OL_dnp_diff",
+            "OL_dnp_sum",
+            "OL_out_snap_diff",
+            "OL_out_snap_sum",
+            "DL_out_diff",
+            "DL_out_sum",
+            "DL_questionable_diff",
+            "DL_questionable_sum",
+            "DL_doubtful_diff",
+            "DL_doubtful_sum",
+            "DL_dnp_diff",
+            "DL_dnp_sum",
+            "DL_out_snap_diff",
+            "DL_out_snap_sum",
+            "LB_out_diff",
+            "LB_out_sum",
+            "LB_questionable_diff",
+            "LB_questionable_sum",
+            "LB_doubtful_diff",
+            "LB_doubtful_sum",
+            "LB_dnp_diff",
+            "LB_dnp_sum",
+            "LB_out_snap_diff",
+            "LB_out_snap_sum",
+            "DB_out_diff",
+            "DB_out_sum",
+            "DB_questionable_diff",
+            "DB_questionable_sum",
+            "DB_doubtful_diff",
+            "DB_doubtful_sum",
+            "DB_dnp_diff",
+            "DB_dnp_sum",
+            "DB_out_snap_diff",
+            "DB_out_snap_sum",
+            "report_missing_count",
+            "out_role_unknown_count",
+            "away_travel_1000km",
+            "away_east_hours",
+            "away_west_hours",
+            "away_early_body_clock",
+            "travel_unknown"
+          ],
+          "schema": "sports.observed_feature_procedure.v1",
+          "validation_status": "NOT_ASSESSED"
+        }
+      },
+      "name": "nfl-calibrated-spread",
+      "procedure_binding": {
+        "calibration_procedure_id": "2dfc7d9a1f359aa437bc52e1001162a0dec0765db979907fb5e0f19127b0aa2a",
+        "distribution_sha256": null,
+        "feature_procedure_id": "4cb50de983ab219cc747a2e0f70e708df89b54f819a329ac2ef836760554f518",
+        "fitted_state_id": "2dd9c42b7e8838fca2f35785659873bc58fc2e93fb6bce834be77cb5d45c62a4",
+        "forecast_id": "0a107a57ebcc4d16f4134190d96c5927228b733b41a99341bea21172e5589b4c",
+        "forecast_procedure_id": "354c302761f1bd7ec5489b880fdf3c17751a4b28e57b8bd40921c7719f35b39a",
+        "identity_registration_status": "OBSERVED_NOT_REGISTERED",
+        "procedure_binding_id": "c3e95071c773245903dbd2fef10097d3fec3d78ede3add0feaaa4cbf30500b16",
+        "selector_config_id": "efd27259614e0ee2c6fc67316c56fde3ee024d497c2bbf9392e1754c2e21bf2d",
+        "source_row_sha256": "eb1fad65f4a6836fa41894418354276f1f7c80efb299f7a4363c5ed6481f878a"
+      },
+      "selection_summary": {
+        "decision_counts": {
+          "BLOCKED": 1
+        },
+        "raw_probability": 0.553553338828693,
+        "reasons": [
+          "AUTOMATIC_DIAGNOSTIC_POLICY_NOT_PREREGISTERED",
+          "MISSING_VALIDATION_REGISTRY",
+          "PREGAME_DECISION_WINDOW_CLOSED",
+          "RAW_PROBABILITY_BASIS_NOT_UNCONDITIONAL"
+        ],
+        "selection_probability": null
+      },
+      "spread_overlay_file_names": [
+        "overlay.json",
+        "manifest.json",
+        "calibrated_margin_draws.npy"
+      ],
+      "started_at_utc": "2026-10-23T06:26:24.312851+00:00",
+      "stdout_stderr_receipt": {
+        "bytes": 5655,
+        "path": "/workspace/scratch/c2f9a66ae580/selection-integration-final-evidence/nfl-calibrated-spread.log",
+        "sha256": "43c575e6cb5a7a41442ac15421052ad11925d7f545bbce49ea7906e952b1c94b"
+      }
+    }
+  ],
+  "schema": "selection-integration-source-execution-v2",
+  "scope_limits": [
+    "Actual runs reuse retained historical package; no fresh pregame source or prospective registration was claimed.",
+    "Complete execution identity is observed, not independently registered or qualified.",
+    "Canonical selection ledger is attached only to existing supported prospectively registered winner receipts; MLS categorical and MLB separate graders are not silently admitted.",
+    "Oct22 spread/total settlements are version-bound discovery evaluation; no retrospective canonical contract registration."
+  ],
+  "source_receipts": [
+    {
+      "bytes": 558,
+      "path": "/workspace/scratch/c2f9a66ae580/sports-model-overhaul/data/nfl/contextual_v1/runtime.json",
+      "sha256": "cf2a0c2ef85073904b0bb61e06be9ec655ac2e728f59fdc38163889d607a8000"
+    },
+    {
+      "bytes": 23391,
+      "path": "/workspace/scratch/c2f9a66ae580/sports-model-overhaul/data/nfl/personnel_resolution_20260914/event_package.json",
+      "sha256": "ee8a6b47eb03e9181080cddf01c1d154f4260a64779823b12930acfcaf471990"
+    },
+    {
+      "bytes": 586820,
+      "path": "/workspace/scratch/c2f9a66ae580/sports-model-overhaul/data/nfl/contextual_v1/model_packed.json",
+      "sha256": "a1fc0436a3e3d4f76d7b7fe9b480314fbb20804e3b9d29288f64913935a80322"
+    },
+    {
+      "bytes": 6840,
+      "path": "/workspace/scratch/c2f9a66ae580/sports-model-overhaul/data/nfl/contextual_v1/recovered_parameters.json",
+      "sha256": "131cb804353530ab1e764b32abb0a88f44f09e10713bece30e0c76f296e8aeca"
+    },
+    {
+      "bytes": 307,
+      "path": "/workspace/scratch/c2f9a66ae580/sports-model-overhaul/data/nfl/spread_calibration_v1/runtime.json",
+      "sha256": "6a4c499141cc15c0bf1497bb435b85ec5c94cef8b281be96fccb37d514d1e1f6"
+    },
+    {
+      "bytes": 1605,
+      "path": "/workspace/scratch/c2f9a66ae580/sports-model-overhaul/data/nfl/spread_calibration_v1/fit_01/model.json",
+      "sha256": "ce5aec85713abe3f44004d9e7c8b9be24390af7624908c5d35d8ff548d8ed7c2"
+    },
+    {
+      "bytes": 18457,
+      "path": "/workspace/scratch/c2f9a66ae580/sports-model-overhaul/data/nfl/spread_calibration_v1/fit_01/evaluation.json",
+      "sha256": "ceccc792bfec4cd50e1e93273940a6c4e27e9c5d7ddb10c4f7147f44cab2dfce"
+    }
+  ],
+  "test_run": {
+    "argv": [
+      "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+      "-m",
+      "pytest",
+      "tests/test_research_selection.py",
+      "tests/test_research_selection_cli.py",
+      "tests/test_selection_integration.py",
+      "tests/test_evaluation_walk_forward_cli.py",
+      "tests/test_overhaul_integration.py",
+      "tests/test_card_disclosures.py",
+      "tests/test_canonical_forecasts.py",
+      "tests/test_canonical_results.py",
+      "-q"
+    ],
+    "exit_code": 0,
+    "log_receipt": {
+      "bytes": 260,
+      "path": "/workspace/scratch/c2f9a66ae580/selection-integration-final-evidence/integration-tests.log",
+      "sha256": "3ac7363836e3dedbd2514d34e984d9add4c2d5be0ad64b238917210753227e54"
+    },
+    "summary": "192 passed in 2.98s"
+  },
+  "wagering_status": "OFF"
+}

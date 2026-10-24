@@ -17,12 +17,28 @@ jobs:
         with:
           python-version: '3.12'
       - run: pip install -r requirements-consolidated.txt
-      - run: python -m pytest tests -q | tee /tmp/unit-tests.txt
+      - shell: bash
+        run: python -m pytest tests -q | tee /tmp/unit-tests.txt
       - run: python scripts/model_defaults.py > /tmp/selected-models.json
       - run: |
           python -m sportsim --help > /tmp/sportsim-help.txt
           python scripts/run_nfl_integrated.py --help > /tmp/nfl-help.txt
           python scripts/prepare_mlb_current.py --help > /tmp/mlb-help.txt
+      - name: Verify MLB calibration acceptance against committed registry
+        # This acceptance fixture pins PR46's recovered n=16 state, not future daily grades.
+        if: ${{ github.event_name == 'pull_request' && github.event.pull_request.number == 46 }}
+        shell: bash
+        run: |
+          python scripts/verify_mlb_calibration_acceptance.py --output /tmp/mlb-calibration-acceptance.json
+          python - <<'PYCODE'
+          import json
+          from pathlib import Path
+          expected = json.loads(Path('docs/releases/2026-09-24-mlb-grading/acceptance.json').read_text())
+          actual = json.loads(Path('/tmp/mlb-calibration-acceptance.json').read_text())
+          if actual != expected:
+              raise SystemExit('LOCAL_REMOTE_CALIBRATION_ACCEPTANCE_MISMATCH')
+          print('LOCAL_REMOTE_CALIBRATION_ACCEPTANCE_MATCH')
+          PYCODE
       - name: Record health independently from software acceptance
         run: |
           set +e
@@ -36,17 +52,53 @@ jobs:
         run: |
           git rev-parse HEAD > /tmp/commit.txt
           git status --porcelain > /tmp/worktree-status.txt
+          # Repack losslessly; retain every ref and its complete reachable history.
+          git for-each-ref --format='%(objectname) %(refname)' > /tmp/refs-before.txt
+          git -c pack.window=250 -c pack.depth=50 -c pack.compression=9 repack -a -d -f
+          git for-each-ref --format='%(objectname) %(refname)' > /tmp/refs-after.txt
+          cmp /tmp/refs-before.txt /tmp/refs-after.txt
           git bundle create /tmp/repository-all.bundle --all
-      - uses: actions/upload-artifact@v4
+          git bundle verify /tmp/repository-all.bundle
+          sha256sum /tmp/repository-all.bundle > /tmp/repository-all.bundle.sha256
+      - name: Archive complete available evidence to Drive and verify downloaded bytes
+        id: drive_archive
         if: always()
+        env:
+          CI_STORAGE_CONFIG_JSON: ${{ vars.CI_STORAGE_CONFIG_JSON }}
+          CI_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+          CI_BASE_SHA: ${{ github.event.pull_request.base.sha }}
+        run: |
+          python scripts/ci_evidence_archive.py \
+            --output-dir "$RUNNER_TEMP/consolidation-archive" \
+            --source "commit.txt=/tmp/commit.txt" \
+            --optional-source "mlb-calibration-acceptance.json=/tmp/mlb-calibration-acceptance.json" \
+            --optional-source "unit-tests.txt=/tmp/unit-tests.txt" \
+            --optional-source "selected-models.json=/tmp/selected-models.json" \
+            --optional-source "sportsim-help.txt=/tmp/sportsim-help.txt" \
+            --optional-source "nfl-help.txt=/tmp/nfl-help.txt" \
+            --optional-source "mlb-help.txt=/tmp/mlb-help.txt" \
+            --optional-source "healthcheck.txt=/tmp/healthcheck.txt" \
+            --optional-source "health-exit-code.txt=/tmp/health-exit-code.txt" \
+            --optional-source "worktree-status.txt=/tmp/worktree-status.txt" \
+            --optional-source "repository-all.bundle=/tmp/repository-all.bundle" \
+            --optional-source "repository-all.bundle.sha256=/tmp/repository-all.bundle.sha256" \
+            --optional-source "refs-before.txt=/tmp/refs-before.txt" \
+            --optional-source "refs-after.txt=/tmp/refs-after.txt"
+      - name: Optional short-retention GitHub copy after verified Drive archive
+        id: github_copy
+        if: ${{ always() && steps.drive_archive.outputs.archive_status == 'VERIFIED' && vars.CI_OPTIONAL_GITHUB_ARTIFACTS == 'true' }}
+        continue-on-error: true
+        uses: actions/upload-artifact@v4
         with:
-          name: consolidation-verification
-          path: |
-            /tmp/unit-tests.txt
-            /tmp/selected-models.json
-            /tmp/*-help.txt
-            /tmp/healthcheck.txt
-            /tmp/health-exit-code.txt
-            /tmp/commit.txt
-            /tmp/worktree-status.txt
-            /tmp/repository-all.bundle
+          name: consolidation-verification-${{ github.run_id }}-${{ github.run_attempt }}
+          compression-level: 9
+          if-no-files-found: error
+          retention-days: 7
+          path: ${{ runner.temp }}/consolidation-archive/
+      - name: Report archive and optional-copy outcomes separately
+        if: always()
+        env:
+          DRIVE_STATUS: ${{ steps.drive_archive.outputs.archive_status }}
+          GITHUB_COPY_OUTCOME: ${{ steps.github_copy.outcome }}
+        run: |
+          printf '\nDrive archive: %s. Optional GitHub copy: %s.\n' "${DRIVE_STATUS:-NOT_EXECUTED}" "$GITHUB_COPY_OUTCOME" >> "$GITHUB_STEP_SUMMARY"

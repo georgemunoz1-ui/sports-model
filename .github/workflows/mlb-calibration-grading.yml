@@ -8,7 +8,7 @@ on:
         required: false
         type: string
       forecast_run_id:
-        description: "Optional Actions run ID to register for grade_date before grading"
+        description: "Optional assertion of an already registered forecast run ID"
         required: false
         type: string
   schedule:
@@ -20,6 +20,10 @@ on:
       - codex/nfl-wnba-nba-models-v1
     paths:
       - "grading_requests/*.json"
+
+concurrency:
+  group: mlb-calibration-state-${{ github.ref }}
+  cancel-in-progress: false
 
 permissions:
   actions: read
@@ -53,7 +57,7 @@ jobs:
         run: |
           python - <<'PY'
           import json, os, subprocess
-          from datetime import datetime, timedelta, timezone
+          from datetime import datetime
           from pathlib import Path
 
           event = os.environ["EVENT_NAME"]
@@ -71,8 +75,8 @@ jobs:
               grade_date = str(req.get("grade_date") or "").strip()
               run_id = str(req.get("forecast_run_id") or "").strip()
           elif event == "schedule":
-              # At 13:30Z, yesterday's UTC date corresponds to the completed MLB slate.
-              grade_date = (datetime.now(timezone.utc).date() - timedelta(days=1)).isoformat()
+              # Retry every registered pending card, including postponed/partial slates.
+              grade_date = ""
 
           if grade_date:
               datetime.fromisoformat(grade_date)
@@ -85,36 +89,25 @@ jobs:
           print(json.dumps({"grade_date": grade_date, "run_id": run_id}, indent=2))
           PY
 
-      - name: Register explicit forecast run
+      - name: Verify explicit forecast run assertion
         if: ${{ steps.resolve.outputs.run_id != '' }}
         shell: bash
         env:
           GRADE_DATE: ${{ steps.resolve.outputs.grade_date }}
           RUN_ID: ${{ steps.resolve.outputs.run_id }}
         run: |
-          python - <<'PY'
+          python - <<'PYCODE'
           import json, os
-          from datetime import datetime, timezone
           from pathlib import Path
-          path = Path("data/grading/mlb/registry.json")
-          registry = json.loads(path.read_text()) if path.exists() else {"schema_version":"mlb_calibration_registry_v1","cards":{}}
-          cards = registry.setdefault("cards", {})
-          date = os.environ["GRADE_DATE"]
-          run_id = int(os.environ["RUN_ID"])
-          existing = cards.get(date)
-          if existing and int(existing.get("run_id")) != run_id:
-              raise SystemExit(f"REGISTERED_CARD_IMMUTABLE:{date}:{existing.get('run_id')} != {run_id}")
-          cards[date] = existing or {
-              "run_id": run_id,
-              "registered_at_utc": datetime.now(timezone.utc).isoformat().replace("+00:00","Z"),
-              "registration_basis": "Explicit prospective registration before grading",
-              "status": "REGISTERED",
-          }
-          path.parent.mkdir(parents=True, exist_ok=True)
-          path.write_text(json.dumps(registry, indent=2, sort_keys=True) + "\n")
-          PY
+          registry = json.loads(Path("data/grading/mlb/registry.json").read_text())
+          entry = registry["cards"].get(os.environ["GRADE_DATE"])
+          if not entry or int(entry["run_id"]) != int(os.environ["RUN_ID"]):
+              raise SystemExit("PREGAME_REGISTRATION_REQUIRED: use the daily card writer before first pitch")
+          PYCODE
 
       - name: Grade registered forecast card(s)
+        id: grade
+        continue-on-error: true
         shell: bash
         env:
           GRADE_DATE: ${{ steps.resolve.outputs.grade_date }}
@@ -148,22 +141,44 @@ jobs:
           echo '**Market overlay: OFF · Action authority: OFF**' >> "$GITHUB_STEP_SUMMARY"
 
       - name: Commit durable grading state
+        id: persist
+        if: ${{ steps.grade.outcome == 'success' }}
         shell: bash
+        env:
+          GRADE_DATE: ${{ steps.resolve.outputs.grade_date }}
         run: |
           git config user.name "sports-model-calibration-bot"
           git config user.email "actions@users.noreply.github.com"
           git add data/grading/mlb/registry.json
+          if [ -d data/grading/mlb/results ]; then git add data/grading/mlb/results; fi
           if [ -f data/grading/mlb/calibration_ledger.jsonl ]; then git add data/grading/mlb/calibration_ledger.jsonl; fi
           if [ -f data/grading/mlb/calibration_summary.json ]; then git add data/grading/mlb/calibration_summary.json; fi
           if git diff --cached --quiet; then
             echo "No durable grading changes"
+            # Suppress only a proven empty selection with unchanged durable state.
+            # Missing/malformed reports retain evidence through the default upload.
+            python - <<'PY'
+          import json, os
+          from pathlib import Path
+          try:
+              report = json.loads(Path("output/mlb_grading/registry_grade_run.json").read_text())
+          except (OSError, ValueError):
+              report = None
+          noop = (isinstance(report, dict)
+                  and report.get("status") == "NO_ELIGIBLE_FORECASTS"
+                  and all(type(report.get(k)) is int and report[k] == 0
+                          for k in ("selected_count", "grade_count", "added_count"))
+                  and report.get("errors") == [] and report.get("results") == [])
+          with open(os.environ["GITHUB_OUTPUT"], "a") as handle:
+              handle.write(f"noop={str(noop).lower()}\n")
+          PY
           else
-            git commit -m "Grade MLB calibration forecasts ${{ steps.resolve.outputs.grade_date }}"
+            git commit -m "Grade MLB calibration forecasts ${GRADE_DATE:-pending cards}"
             git push origin "HEAD:${GITHUB_REF_NAME}"
           fi
 
       - name: Upload grading report
-        if: always()
+        if: ${{ always() && (github.event_name != 'schedule' || failure() || cancelled() || steps.grade.outcome != 'success' || steps.persist.outcome != 'success' || steps.persist.outputs.noop != 'true') }}
         uses: actions/upload-artifact@v4
         with:
           name: mlb-calibration-grading-${{ steps.resolve.outputs.grade_date }}-${{ github.run_id }}
@@ -174,3 +189,7 @@ jobs:
             data/grading/mlb/calibration_summary.json
           if-no-files-found: warn
           retention-days: 90
+
+      - name: Fail unsuccessful grading
+        if: ${{ steps.grade.outcome == 'failure' }}
+        run: exit 1

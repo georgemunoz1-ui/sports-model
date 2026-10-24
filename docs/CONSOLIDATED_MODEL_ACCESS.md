@@ -1,46 +1,81 @@
 # Consolidated model access
 
-The default `main` contains the operational models and the previously separate research engines. Select defaults by held-out evidence using `python scripts/model_defaults.py`; software test counts do not select a forecasting champion. Other models remain accessible as explicitly named research implementations.
+Updated October 23, 2026 Pacific / October 24 UTC. The consolidated source is `main`; see [current status](CURRENT_STATUS.md) for the inspected commit and evidence boundaries. The old guide is preserved in [history](history/2026-10-23-status-refresh/CONSOLIDATED_MODEL_ACCESS.md).
 
-## Setup
+## Setup and inspection
 
-Use Python 3.12 in a virtual environment, then:
+Use a complete checkout and Python 3.12:
 
 ```bash
 python -m pip install -r requirements-consolidated.txt
 python -m pip install --no-deps -e .
 python scripts/model_defaults.py
-python -m pytest tests -q
+python -m pytest tests research/tests -q
+python harness/healthcheck.py
 ```
 
-## Entry points
+Software tests and health are separate commands. Retain both outputs; a partial source restoration cannot certify full repository health. Commands below are usage examples, not executions performed by this documentation update.
 
-| Sport / capability | Tested default or research implementation | Access |
+## Real entry points
+
+| Capability | Entry point | Boundary |
 |---|---|---|
-| NFL | Selected QB winner arm; combined remains experimental | `python scripts/run_nfl_integrated.py --help`; [Week 2 assimilation](NFL_WEEK2_REPAIR.md) |
-| MLB | Selected V13 winner estimator with acquired current inputs | `python scripts/prepare_mlb_current.py --help`; `python scripts/generate_card_force.py --league mlb --help`; [current packet contract](MLB_CURRENT_PATH.md) |
-| WNBA | Selected FF7 ridge model | `pipelines.cards.selected.wnba_predict` delegates to `harness.wnba_model_v1.predict_slate`; requires its fitted state and feature frame |
-| CFB | Selected FBS form model; separate Week 1 context model | `harness/cfb_v1_port.py`; [selection scope](MODEL_DEFAULT_SELECTION.md). Restored margin adapter is a separate research model and is not silently substituted for the selected winner arm. |
-| NBA | Restored efficiency simulation / card adapter; no evidence-cleared default | `models.nba.efficiency_monte_carlo_v1`; `pipelines.cards.adapters.nba`; default selector explicitly blocks unvalidated automatic selection |
-| NFL/NBA/MLB/NHL standalone simulation | sportsim research engines, ratings, season and chronological backtests | `python -m sportsim --help`; [usage and input formats](SPORTSIM_RESEARCH.md). Synthetic demo is not a current forecast. |
-| Alternative MLB Gamma-Poisson | Preserved research adapter | `pipelines.cards.adapters.mlb_gamma_poisson_research`; original current-data and missing-starter guards retained |
-| WNBA efficiency simulation | Separate research engine | `models.wnba.efficiency_monte_carlo_v1_1` |
-| MLS | Recovery/source tooling; no verified default engine | `scripts/recovery_capture.py`; `scripts/recovery_features.py` |
+| Shared seven-league card | `scripts/generate_card_force.py` | Valid fresh source-bound package; post-start events cannot receive new pregame forecasts |
+| NFL selected QB and explicit research arms | `scripts/run_nfl_integrated.py` | Selected QB winner is distinct from combined, enhanced-pregame and live modes |
+| CFB/NBA experiments | `scripts/run_efficiency_experiments.py` | Separate efficiency/personnel/joint stages and real chronological controls |
+| CFB/NBA selector evaluation | `scripts/evaluate_efficiency_selection.py` | Frozen protocol, retained run, same-event population; no automatic threshold optimization |
+| Opt-in shared-card efficiency SHADOW | `--efficiency-research-config` on shared card | Fitted candidate states/history configuration; local receipts, not canonical registration |
+| Shared discrete-distribution research | `scripts/cross_sport_distribution_research.py` | Explicit compatible parent, product and settlement; does not infer a law from a win probability |
+| MC precision research | `scripts/run_mc_precision_research.py --allow-research` | Numerical simulation precision, not predictive accuracy |
+| Separate NBA direction-repair shadow | `scripts/run_nba_efficiency_shadow.py --allow-research` | Requires supplied fitted state; not the PR #78 possession-efficiency experiment |
+| Research selection/evaluation | `scripts/run_research_selection.py`, `scripts/evaluate_research_selections.py` | Raw evidence retained when selection fails; publication/wagering OFF |
+| Canonical registration/results/grading | `scripts/canonical_forecasts.py`, `scripts/canonical_results.py` | Genuine pre-start upload/receipt validation; no retrospective registration |
+| Standalone sportsim | `python -m sportsim --help` | Separate research/demo engine, not a selected operational default |
 
-## Current-input requirement
+CFB and WNBA **current shared-card adapters are present**. NBA/NHL/MLS have explicit initial research adapters; that is different from a verified automatic default. [Default boundaries](MODEL_DEFAULT_SELECTION.md).
 
-Merging code does not refresh schedules, starters, rosters, injuries or weather. The September 14 MLB package remains immutable. Its old code/input pins intentionally reject the consolidated tree; build a **new** package from freshly acquired evidence before a new board. Do not change old packet hashes to clear that gate. Week 2 NFL needs the documented Week 1 assimilation proof plus fresh event/personnel context.
+## Run the two independent historical experiments
 
-A selected default is distinct from official release eligibility and action permission. Research and diagnostic entry points are usable without claiming official clearance. Action authority remains OFF. Hardware/software tests do not establish predictive calibration, current input completeness or prospective registration.
+Supply actual normalized source-bound history files; the repository does not manufacture them from these example paths. Use fresh output directories.
 
-## Merge resolutions
+```bash
+python scripts/run_efficiency_experiments.py \
+  --league cfb --history /absolute/path/cfb-bound-history.json \
+  --stages efficiency personnel joint --bootstrap-count 2000 \
+  --output-dir output/cfb-efficiency-unique-run
 
-- PR9 freshness repair retained; later audit entries preserved.
-- PR10 simulation specification retained.
-- PR11 release/backfill work retained; PR26 provenance-marked parser fixture and stronger ingestion regression assertions take precedence over its older self-tests.
-- PR12 recovery and simulation tools retained; its Gamma-Poisson adapter has an explicit research name so it cannot replace the newer MLB default. Its strict timestamp and no-self-registration fixes are integrated into the shared card generator.
-- PR16 checks every MLB feature row, not only the first 50.
-- PR1 sportsim available independently; does not become an automatic official default.
-- PR13–15 historical evidence retains original eligibility labels; PR26–30 operational repairs and selected defaults retained.
+python scripts/run_efficiency_experiments.py \
+  --league nba --history /absolute/path/nba-bound-history.json \
+  --stages efficiency personnel joint --bootstrap-count 2000 \
+  --output-dir output/nba-efficiency-unique-run
 
-Tests cover repository unit/contract/simulation behavior. They do not validate external source availability, all live league adapters, betting profitability, or official release acceptance. The full health report lists remaining external evidence/recovery blockers separately.
+python scripts/evaluate_efficiency_selection.py \
+  --run output/nba-efficiency-unique-run \
+  --protocol docs/research/efficiency_2026_10_23/selection_protocol_v1.json \
+  --output output/nba-selection-unique-run
+```
+
+Read the protocol schema before reuse; an existing inspected protocol does not turn a new tuned analysis into confirmation. Missing authenticated personnel inputs produce an explicit blocked stage, not a fabricated zero effect. Earlier repaired runs remain diagnostic. Source preparation tools include `acquire_efficiency_history.py`, `capture_efficiency_current.py`, `prepare_cfb_efficiency_history.py` and `prepare_efficiency_current_nba.py` under `scripts/`.
+
+## Shared-card candidate integration
+
+After verifying the package and candidate configuration:
+
+```bash
+SPORTS_RESEARCH_PACKAGE_DIR=/absolute/path/packages \
+python scripts/generate_card_force.py \
+  --league nba --date YYYY-MM-DD --initial-research-baselines \
+  --simulations 100000 \
+  --efficiency-research-config /absolute/path/nba-shadow-config.json \
+  --output-dir output/nba-card-unique-run
+```
+
+The configuration binds fitted states and source history; it is not a switch that fits a model. The candidate outputs are separate from the original baseline card. Use `--help` for the exact current CLI contract. The current default numerical identity is `market_blind_numeric.v2`; explicit `legacy.v1` remains available for original replay. Never overwrite old forecasts or alter their code/input pins to make them run.
+
+For NFL, use a fresh package through `NFL_CONTEXT_PACKAGE`. Explicit combined-arm spread diagnostics require `--model-id nfl.integrated_context.combined.v1.research --home-spread HANDICAP`; this does not create a selected-QB spread product. Market-informed and live modes require their separate packets. [NFL guide](NFL_CONTEXT_INTEGRATION.md), [market/live guide](NFL_MARKET_LIVE_MODELS.md).
+
+## Evidence and output interpretation
+
+Shared output includes `diagnostic_card.json`, Markdown/CSV, retained draws, disclosures and research selection sidecars. Opt-in efficiency output adds its own run and component receipts. Keep model, simulation and market observations separate; a Bernoulli winner simulation is not a score simulation. Record unique events separately from multiple stages/versions.
+
+Current-data acquisition, scheduled execution, verified archive upload and canonical grading each require their own acceptance. See [runtime status](ALL_MODELS_CURRENT_RUNTIME.md), [archive contract](CI_STORAGE_ARCHIVE.md) and [executed run IDs](research/efficiency_2026_10_23/INTEGRATION_STATUS.md). None of these commands changes model promotion or wagering authority.

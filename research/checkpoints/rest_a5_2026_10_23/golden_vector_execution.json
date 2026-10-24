@@ -1,0 +1,15 @@
+{
+  "command": [
+    "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+    "-m",
+    "unittest",
+    "tests.test_operational_rest_golden_vectors",
+    "-v"
+  ],
+  "independent_expected_value_checks": 18,
+  "oracle_sha256": "4df66a8fc69764e36f69fe75ec82f7efe63a47ab440d00274f1a380d58b0e8af",
+  "oracle_source": "LITERAL_HAND_COMPUTED_VALUES_NOT_ADAPTER_PARITY",
+  "returncode": 0,
+  "stderr": "test_poisoned_embargo_proxy_cannot_change_either_candidate (tests.test_operational_rest_golden_vectors.GoldenVectors.test_poisoned_embargo_proxy_cannot_change_either_candidate) ... ok\ntest_schedule_perturbation_changes_each_adapter_by_hand_computed_quarter_day (tests.test_operational_rest_golden_vectors.GoldenVectors.test_schedule_perturbation_changes_each_adapter_by_hand_computed_quarter_day) ... ok\ntest_serving_adapter_against_hand_computed_oracle (tests.test_operational_rest_golden_vectors.GoldenVectors.test_serving_adapter_against_hand_computed_oracle) ... ok\ntest_serving_proxy_columns_absent_and_unread (tests.test_operational_rest_golden_vectors.GoldenVectors.test_serving_proxy_columns_absent_and_unread) ... ok\ntest_training_adapter_against_hand_computed_oracle (tests.test_operational_rest_golden_vectors.GoldenVectors.test_training_adapter_against_hand_computed_oracle) ... ok\ntest_training_proxy_columns_absent_and_unread (tests.test_operational_rest_golden_vectors.GoldenVectors.test_training_proxy_columns_absent_and_unread) ... ok\n\n----------------------------------------------------------------------\nRan 6 tests in 0.002s\n\nOK\n",
+  "stdout": ""
+}

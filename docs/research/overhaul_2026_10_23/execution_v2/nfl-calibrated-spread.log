@@ -1,0 +1,170 @@
+{"research_selection": {"BLOCKED": 1}, "wagering_status": "OFF"}
+## Input, scenario and decision disclosures
+
+Research only. PASS describes wagering disposition, not a failed prediction.
+
+### 2026_01_DEN_KC
+
+**PASS:** WAGERING_AUTHORITY_OFF: Research output; no wager is authorized.; MARKET_VALUE_NOT_EVALUATED: This disclosure layer does not qualify a price or betting edge.; PREDICTIVE_QUALIFICATION_NOT_ASSESSED: Disclosures do not establish predictive qualification.; PARENT_WARNING: NEW_FIT_NOT_PROSPECTIVELY_VALIDATED; PARENT_WARNING: HISTORICAL_REPORT_AND_STARTER_PIT_LIMITATIONS; PARENT_WARNING: PRIOR_SNAP_SHARE_IS_NOT_PROMISED_WORKLOAD; PARENT_WARNING: TRAVEL_IS_AIRPORT_PROXY; PARENT_WARNING: EMPIRICAL_SCORE_SETTLEMENT_UNVALIDATED; PARENT_WARNING: FINAL_INACTIVES_VERIFIED; NON_INJURY_SCRATCH_IMPACT_UNFITTED; PARENT_WARNING: EXPERIMENTAL_ONLY:FAILED; PARENT_WARNING: CROSS_HEAD_DIRECTION_DISAGREEMENT; RIDGE_CENTERS_ARE_NOT_JOINT_EXPECTATIONS; PARENT_WARNING: VERSIONED_RNG_IDENTITY_REPAIR_NOT_PREDICTIVE_PROMOTION
+
+**Reported known inputs:**
+
+- None supplied.
+
+**Unknown inputs:**
+
+- availability_evidence: No structured availability disclosure supplied; numerical use is not assessed here.
+
+**Assumptions:**
+
+- None supplied.
+
+**Availability scenarios:** conditional; no availability weights assigned.
+
+- None supplied.
+
+
+{
+  "spread_calibration": [
+    {
+      "team": "KC",
+      "side": "HOME",
+      "handicap": -3.0,
+      "raw": {
+        "win": 0.35697999999999985,
+        "push": 0.030449999999999977,
+        "loss": 0.6125700000000002
+      },
+      "calibrated": {
+        "win": 0.417915615136761,
+        "push": 0.016823640745195823,
+        "loss": 0.5652607441180432
+      },
+      "calibrated_simulation": {
+        "win": 0.4170400000000001,
+        "push": 0.016939999999999955,
+        "loss": 0.56602
+      },
+      "conditional_nonpush_probability": 0.4250667860377756,
+      "integer_line_warning": "PUSH_RELIABILITY_WORSENED_IN_HELDOUT_TEST"
+    },
+    {
+      "team": "DEN",
+      "side": "AWAY",
+      "handicap": 3.0,
+      "raw": {
+        "win": 0.6125700000000002,
+        "push": 0.030449999999999977,
+        "loss": 0.35697999999999985
+      },
+      "calibrated": {
+        "win": 0.5652607441180432,
+        "push": 0.016823640745195823,
+        "loss": 0.417915615136761
+      },
+      "calibrated_simulation": {
+        "win": 0.56602,
+        "push": 0.016939999999999955,
+        "loss": 0.4170400000000001
+      },
+      "conditional_nonpush_probability": 0.5749332139622244,
+      "integer_line_warning": "PUSH_RELIABILITY_WORSENED_IN_HELDOUT_TEST"
+    }
+  ]
+}
+{
+  "event": "2026_01_DEN_KC",
+  "selection_policy": {
+    "policy_id": "nfl.week2.selection.v2",
+    "policy_sha256": "8fdd029c47d30e97aea308622b83e7df0e8e30afb4c41277aef497ef5dd18d3d",
+    "screen_status": "FAILED",
+    "presentation_role": "EXPERIMENTAL_ONLY",
+    "headline_eligible": false,
+    "official_eligible": false,
+    "action_authority": false
+  },
+  "coherence": {
+    "home_oriented_signs": {
+      "binary_head": -1,
+      "ridge_margin_head": 1,
+      "joint_mean_margin": -1
+    },
+    "cross_head_direction_disagreement": true,
+    "separate_heads_are_not_joint_expectations": true,
+    "same_distribution_mean_and_majority_sign_need_not_match": true,
+    "calibration_established": false
+  },
+  "assimilation": null,
+  "joint_distribution": {
+    "distribution": "OUTCOME_ALIGNED_FINAL_SCORE_KERNEL_V2",
+    "measure_sha256": "4884ae7900b8e9152f9a884cdaf8b9014a968474a4e3673fafd36be7888779f1",
+    "p_home_win": 0.4448279837050435,
+    "p_away_win": 0.5515463256872216,
+    "p_tie": 0.0036256906077348056,
+    "p_home_win_conditional_non_tie": 0.44644666117130694,
+    "mean_home_score": 21.775678526784816,
+    "mean_away_score": 22.6840094308301,
+    "mean_margin": -0.9083309040452826,
+    "mean_total": 44.45968795761492,
+    "source": "EXACT_WEIGHTED_SUPPORT_NOT_MONTE_CARLO",
+    "calibration_established": false
+  },
+  "independent_head_predictions": {
+    "home_win": 0.44644666117130705,
+    "home_margin": 0.3986765215795396,
+    "total_points": 44.43207952090133
+  },
+  "binary": {
+    "seed": 89462134730947579,
+    "count": 100000,
+    "home_win_probability": 0.44478,
+    "mc_standard_error_pp": 0.15720433833081682,
+    "sha256": "d9819a4fbac7a77168984eab8bea63047f2d867fab166dd0040ef6835e61d1f9",
+    "scope": "BINARY_NON_TIE_DIAGNOSTIC_NOT_INDEPENDENT_MODEL_VALIDATION"
+  },
+  "scores": {
+    "seed": 1855832850456255886,
+    "n": 100000,
+    "distribution": "OUTCOME_ALIGNED_FINAL_SCORE_KERNEL_V2",
+    "target": "FINAL_SCORE_INCLUDING_OVERTIME",
+    "p_home_win": 0.44421,
+    "p_away_win": 0.55223,
+    "p_tie": 0.00356,
+    "p_home_win_conditional_non_tie": 0.4457970374533339,
+    "model_home_win_unconditional": 0.4448279837050437,
+    "model_away_win_unconditional": 0.5515463256872215,
+    "model_tie": 0.0036256906077348065,
+    "tie_model": "JEFFREYS_BETA_RATE_FROM_TRAINING_FINALS; UNCONDITIONAL",
+    "mean_home_score": 21.77286,
+    "mean_away_score": 22.69226,
+    "mean_margin": -0.9194,
+    "mean_total": 44.46512,
+    "margin_quantiles": [
+      -22.0,
+      -17.0,
+      -9.0,
+      -2.0,
+      8.0,
+      17.0,
+      22.0
+    ],
+    "total_quantiles": [
+      24.0,
+      28.0,
+      35.0,
+      43.0,
+      53.0,
+      62.0,
+      68.0
+    ],
+    "conditional_score_support_counts": [
+      917,
+      891,
+      63
+    ],
+    "sha256": "74615bae950fde98a0737b605a10528bcd5264f25f25e8e657eaf69d2628d6b4",
+    "settlement_validation": "NOT_ESTABLISHED",
+    "discrete_key_number_calibration": "NOT_ESTABLISHED",
+    "conditional_score_means_differ_from_ridge_centers": true
+  }
+}

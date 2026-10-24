@@ -99,3 +99,11 @@ CURRENT_RUNTIME_PROFILES = {
 }
 for _league, _route in [('nhl','hockey/nhl'),('mls','soccer/usa.1')]:
     SPORTS[_league] = {'espn_path':_route,'results_endpoint':ESPN_SCOREBOARD.format(path=_route,yyyymmdd='{yyyymmdd}'),'window_days':7,'exclude':'Nonregular, canceled and nonfinal outcomes','feature_plan':CURRENT_RUNTIME_PROFILES[_league]['current_features'],'parks':{},'note':'Operational explicit initial research; no accuracy-default promotion'}
+
+# Personnel capture does not upgrade the fitted feature scope above. Both shared
+# and NFL integrated runners expose --roster-bundle / --require-roster-aware.
+for _profile in CURRENT_RUNTIME_PROFILES.values():
+    _profile['roster_capture_runner'] = 'scripts/prepare_rosters.py'
+    _profile['roster_contract'] = 'sports.roster_bundle.v1'
+    _profile['full_roster_impact_status'] = 'NOT_FITTED'
+    _profile['roster_operating_guide'] = 'docs/ROSTER_SYSTEM.md'

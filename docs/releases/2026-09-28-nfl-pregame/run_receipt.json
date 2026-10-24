@@ -1,0 +1,110 @@
+{
+  "schema": "nfl.requested_run_verification.v1",
+  "verified_at_utc": "2026-09-28T10:32:28.531731+00:00",
+  "code_base_commit": "43ad83382af067b019a086d45d23569497ca6e08",
+  "patch_scope": "prepare_nfl_event.py source receipt serialization only; inference unchanged",
+  "python_version": "3.12.14",
+  "numpy_version": "2.3.5",
+  "preparation_sha256": "49d5da1c2df0e2d1e41dfe6776248ba74a8746f3e24a2ed24081b8ee71b33932",
+  "schedule_count": 1,
+  "execution_status": "COMPLETED",
+  "predictive_validation": "HOLD",
+  "publication_eligibility": "INELIGIBLE",
+  "wagering_authority": "OFF",
+  "canonical_registration": "NOT_ESTABLISHED_BY_EXISTING_RESEARCH_WRITER",
+  "source_policy": "REUSE_HASH_VERIFIED_CURRENT_CAPTURE_WITHIN_REGISTERED_SIX_HOUR_SCHEDULE_BUDGET; ORIGINAL_RETRIEVAL_TIMES_UNCHANGED",
+  "rows": [
+    {
+      "scenario": "keenum",
+      "event_id": "2026_03_PHI_CHI",
+      "model_id": "nfl.integrated_context.qb.v1.research",
+      "away_model_probability": 0.5918451620614629,
+      "home_model_probability": 0.4081548379385371,
+      "away_mc_probability": 0.5903,
+      "home_mc_probability": 0.4097,
+      "simulations": 100000,
+      "rng": "numpy.random.default_rng / PCG64",
+      "dtype": "|u1",
+      "order": "C",
+      "shape": [
+        100000
+      ],
+      "seed": 11660282267618056276,
+      "seed_derivation": "int(SHA256(canonical_json({id:forecast_identity,kind:BERNOULLI_WINNER_DIAGNOSTIC,n:100000}))[:16],16)",
+      "raw_draw_sha256": "f3af818ec6462bf9a57be1bb514c57254cca0de2f1eb8ad8a0de5a72ad740f13",
+      "npy_sha256": "0138e053aa4e183685b76c939fb02975c0460c4420c2b30b0bcb83528f9af880",
+      "forecast_sha256": "911b3cff8697bad36992146f84c58f18fdcc08d20ca255a2ac1f08767e761060",
+      "forecast_identity": "a8886ab5a2304e635eeaa83a95d79ab3e20afce809e0b5472060f572f23a18fa",
+      "model_artifact_sha256": "c1cdf49dbb1a98bbf2b3d4286042a316c132dc7d472f3138c3bbbb1e0cb1c3cd",
+      "feature_set_sha256": "5c36c47d7a01671510c11088dc1fbe4784425585b469ba2e7052e0746f7ae822",
+      "context_sha256": "caacf6f8e2d652031572a67ab3e4648324793b9f3400a85c7cab646be64bf4e3",
+      "package_sha256": "8250c9ed8a4e35b60527a41ac54f6a79c38a021aa3c17459874243c786d9ff30",
+      "source_cutoff_utc": "2026-09-28T10:29:17.551798+00:00",
+      "writer_at_utc": "2026-09-28T10:29:21.967311+00:00",
+      "writer_record_hash": "b23644d25f4fbd5d697daef0da72155c61938ad03cbfb32881f7a3873d720174",
+      "model_and_draw_replay": "EXACT",
+      "state_id": "e962a66b806e2371f7890ec6bc91c57726282ea2b2467a05761c603f00d406cf",
+      "imputed_features": [
+        "temperature_f",
+        "wind_mph"
+      ],
+      "input_flags": [
+        "CHICAGO_STARTER_UNRESOLVED",
+        "FINAL_INACTIVES_PENDING",
+        "WEATHER_FITTED_IMPUTATION",
+        "NON_QB_AVAILABILITY_NOT_NUMERICALLY_USED",
+        "OFFICIAL_GAMEBOOK_CLEARANCE_FALSE"
+      ],
+      "score_spread_total": "UNAVAILABLE_FOR_SELECTED_QB_ARM",
+      "market_overlay_enabled": false,
+      "action_authority": false,
+      "canonical_prospective_eligible": false
+    },
+    {
+      "scenario": "bagent",
+      "event_id": "2026_03_PHI_CHI",
+      "model_id": "nfl.integrated_context.qb.v1.research",
+      "away_model_probability": 0.5873376607613424,
+      "home_model_probability": 0.4126623392386576,
+      "away_mc_probability": 0.58752,
+      "home_mc_probability": 0.41248,
+      "simulations": 100000,
+      "rng": "numpy.random.default_rng / PCG64",
+      "dtype": "|u1",
+      "order": "C",
+      "shape": [
+        100000
+      ],
+      "seed": 11634513647396746906,
+      "seed_derivation": "int(SHA256(canonical_json({id:forecast_identity,kind:BERNOULLI_WINNER_DIAGNOSTIC,n:100000}))[:16],16)",
+      "raw_draw_sha256": "109fba3dc828477f1ce70d7fd9e6a7b36c259c2ee0214c9a969d854fb1100f19",
+      "npy_sha256": "06dfc4e408b803ece6e4a79dd411c585a33c23550d7c86d9d43a012f9aabafc6",
+      "forecast_sha256": "a54f46f6fd7dc6a77ca891ddc8dd64b684732df755ac4aeefae26066c10be1b8",
+      "forecast_identity": "3645c3be0ba7042969ccf7a6801cc3369f62f6aca3b431c5dac3263736e19412",
+      "model_artifact_sha256": "c1cdf49dbb1a98bbf2b3d4286042a316c132dc7d472f3138c3bbbb1e0cb1c3cd",
+      "feature_set_sha256": "8f4fd1ae09cee709913d4b060ab4bc5121056263e05ded7b2aa86bed4222b023",
+      "context_sha256": "95dbffe12378812956efb9d81ba8401f159ce15fb9700dd7e45e418ad705d2b3",
+      "package_sha256": "0d4f6b73fd688ff46c6cb7cacc8d0c1d47dc07e5e086820bf083add8e6745f61",
+      "source_cutoff_utc": "2026-09-28T10:29:50.574994+00:00",
+      "writer_at_utc": "2026-09-28T10:29:55.050311+00:00",
+      "writer_record_hash": "28d7af19a97b8cb6e7e33afa24c0f5ec86c6e0d1e577f9bc5bdea1a73a9504d0",
+      "model_and_draw_replay": "EXACT",
+      "state_id": "e962a66b806e2371f7890ec6bc91c57726282ea2b2467a05761c603f00d406cf",
+      "imputed_features": [
+        "temperature_f",
+        "wind_mph"
+      ],
+      "input_flags": [
+        "CHICAGO_STARTER_UNRESOLVED",
+        "FINAL_INACTIVES_PENDING",
+        "WEATHER_FITTED_IMPUTATION",
+        "NON_QB_AVAILABILITY_NOT_NUMERICALLY_USED",
+        "OFFICIAL_GAMEBOOK_CLEARANCE_FALSE"
+      ],
+      "score_spread_total": "UNAVAILABLE_FOR_SELECTED_QB_ARM",
+      "market_overlay_enabled": false,
+      "action_authority": false,
+      "canonical_prospective_eligible": false
+    }
+  ]
+}

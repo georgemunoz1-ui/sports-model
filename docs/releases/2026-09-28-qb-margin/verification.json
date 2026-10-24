@@ -1,0 +1,110 @@
+{
+  "schema": "nfl.qb_margin_verification.v1",
+  "verified_at_utc": "2026-09-28T11:07:54.944711+00:00",
+  "model_id": "nfl.qb_margin.residual_alignment.v1.research",
+  "model_file_sha256": "c2c6a9b5c79eb8562ebaf277850b972f03531745b230de20636ea39798da970b",
+  "rows": [
+    {
+      "scenario": "bagent",
+      "forecast_identity": "a5c31f45ffb7168953e155df631fc847cdc134071395070b9d23465d3daee800",
+      "forecast_sha256": "2d64c901d7184f1c0d11cd94b47ee6202c396073a5c32380b9b83c097cf0f7bb",
+      "parent_forecast_sha256": "6ce717a4b969d79fcc37c91e89f53489cd43f7ed06f412c5f2c082153ae5752c",
+      "margin_npy_sha256": "b00b5243277a14bc79d9557f72aa70c1d11481406e7e5cbf4305fa05315dcaae",
+      "raw_draw_sha256": "d8ac645b90b4ce2f15c4ef5046a549cdda4cf68b148baec0236d1010adee2851",
+      "seed": 14612832683840210239,
+      "draws": 100000,
+      "source_cutoff_utc": "2026-09-28T11:05:24.665471+00:00",
+      "distribution_cutoff_utc": "2026-09-28T11:05:28.584610+00:00",
+      "registered_at_utc": "2026-09-28T11:05:28.789607+00:00",
+      "state_id": "e962a66b806e2371f7890ec6bc91c57726282ea2b2467a05761c603f00d406cf",
+      "eight_bindings": {
+        "model_code_coefficients": "PASS",
+        "sources_parent_state": "PASS",
+        "consumed_features": "PASS",
+        "heads_orientation": "PASS",
+        "qb_noise_law_sigma": "PASS",
+        "sampler_seed_draw_hash": "EXACT_INVERSE_CDF_REPLAY",
+        "settlement_coherence": "PASS",
+        "independent_replay_effect": "PASS"
+      },
+      "sensitivity_probe": {
+        "synthetic_not_forecast": true,
+        "qb_quality_diff_delta": 0.01,
+        "home_cover_probability_delta": 0.007725363913695493,
+        "report_missing_count_effect": 0.0
+      },
+      "availability_missingness_orientation": {
+        "home_indicator": "CHI_DESIGNATED_HOME_NON_NEUTRAL",
+        "home_missing_report": true,
+        "away_missing_report": true,
+        "combined_report_missing_count": 2,
+        "qb_model_status": "NOT_USED",
+        "combined_model_status": "QUARANTINED_NOT_CONSUMED"
+      },
+      "input_flags": [
+        "CHICAGO_STARTER_UNRESOLVED",
+        "FINAL_INACTIVES_PENDING",
+        "WEATHER_FITTED_IMPUTATION",
+        "NON_QB_AVAILABILITY_NOT_NUMERICALLY_USED",
+        "OFFICIAL_GAMEBOOK_CLEARANCE_FALSE"
+      ],
+      "original_freeze_unchanged": true,
+      "market_overlay_enabled": false,
+      "action_authority": false
+    },
+    {
+      "scenario": "keenum",
+      "forecast_identity": "e499a4d90e73be0e1ad245a6095f470eb78ba1988f675c14c722d102fb35a880",
+      "forecast_sha256": "e371020a76d7bcefb10ed54c1c2c7880c250590d560d1f922bb80eda67420400",
+      "parent_forecast_sha256": "0d37f6f54eec542b84fd8392a7d4458c3ddf9bc27ddea587e929cfe47da52c06",
+      "margin_npy_sha256": "801daca51d0dfc784a5259f94e1a1726b904581baa5251ed394268938709df0b",
+      "raw_draw_sha256": "0f15999c2668c650db834cdf7467b91518048ef0f86b1326abd6bd395a199785",
+      "seed": 1780947969615946428,
+      "draws": 100000,
+      "source_cutoff_utc": "2026-09-28T11:05:19.173344+00:00",
+      "distribution_cutoff_utc": "2026-09-28T11:05:23.347153+00:00",
+      "registered_at_utc": "2026-09-28T11:05:23.495021+00:00",
+      "state_id": "e962a66b806e2371f7890ec6bc91c57726282ea2b2467a05761c603f00d406cf",
+      "eight_bindings": {
+        "model_code_coefficients": "PASS",
+        "sources_parent_state": "PASS",
+        "consumed_features": "PASS",
+        "heads_orientation": "PASS",
+        "qb_noise_law_sigma": "PASS",
+        "sampler_seed_draw_hash": "EXACT_INVERSE_CDF_REPLAY",
+        "settlement_coherence": "PASS",
+        "independent_replay_effect": "PASS"
+      },
+      "sensitivity_probe": {
+        "synthetic_not_forecast": true,
+        "qb_quality_diff_delta": 0.01,
+        "home_cover_probability_delta": 0.00962603498589254,
+        "report_missing_count_effect": 0.0
+      },
+      "availability_missingness_orientation": {
+        "home_indicator": "CHI_DESIGNATED_HOME_NON_NEUTRAL",
+        "home_missing_report": true,
+        "away_missing_report": true,
+        "combined_report_missing_count": 2,
+        "qb_model_status": "NOT_USED",
+        "combined_model_status": "QUARANTINED_NOT_CONSUMED"
+      },
+      "input_flags": [
+        "CHICAGO_STARTER_UNRESOLVED",
+        "FINAL_INACTIVES_PENDING",
+        "WEATHER_FITTED_IMPUTATION",
+        "NON_QB_AVAILABILITY_NOT_NUMERICALLY_USED",
+        "OFFICIAL_GAMEBOOK_CLEARANCE_FALSE"
+      ],
+      "original_freeze_unchanged": true,
+      "market_overlay_enabled": false,
+      "action_authority": false
+    }
+  ],
+  "historical_residual_rows_verified": 1871,
+  "old_protected_files_verified": 46,
+  "execution_status": "COMPLETED",
+  "predictive_validation": "HOLD",
+  "publication_eligibility": "INELIGIBLE",
+  "action_authority": false
+}

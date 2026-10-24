@@ -1,0 +1,77 @@
+name: NFLverse ensemble source and OOF build
+on:
+  push:
+    branches: [codex/nflverse-metric-ensemble-20260918]
+    paths: ['.github/workflows/nfl-fusion-build.yml', 'scripts/capture_nfl_fusion.py']
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    env:
+      OMP_NUM_THREADS: '1'
+      OPENBLAS_NUM_THREADS: '1'
+      MKL_NUM_THREADS: '1'
+    steps:
+      - uses: actions/checkout@v4
+        with: {fetch-depth: 0}
+      - uses: actions/checkout@v4
+        with:
+          ref: 544584db9ac1e66606190b326e625ae7b7da2db4
+          path: _candidate
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - run: pip install -r requirements-consolidated.txt -r _candidate/research/candidate_methods/requirements.txt nflreadpy
+      - name: Retain real health status without claiming global release clearance
+        run: |
+          mkdir fusion-checks
+          python - <<'PY'
+          import subprocess,pathlib,json
+          p=pathlib.Path('fusion-checks')
+          with (p/'health.txt').open('w') as f:
+              try:code=subprocess.run(['python','-u','harness/healthcheck.py'],stdout=f,stderr=subprocess.STDOUT,timeout=180).returncode
+              except subprocess.TimeoutExpired:code=124
+          (p/'health.exit').write_text(str(code))
+          (p/'state_at_start.json').write_bytes(pathlib.Path('state.json').read_bytes())
+          (p/'journal_tail.txt').write_text('\n'.join(pathlib.Path('docs/progress.md').read_text().splitlines()[-120:]))
+          print('GLOBAL_HEALTH_EXIT',code,'RESEARCH_ONLY_NO_OVERRIDE')
+          PY
+      - name: Compile and run intact NFL contracts; no tee status masking
+        run: |
+          python -m compileall -q models/nfl scripts/capture_nfl_fusion.py
+          python -m unittest discover -s tests -p 'test_nfl_*.py' -v > fusion-checks/existing_nfl_tests.txt 2>&1
+          tail -5 fusion-checks/existing_nfl_tests.txt
+      - name: Build input data and previously specified OOF arms
+        run: python -u scripts/capture_nfl_fusion.py --candidate-root _candidate --output fusion-inputs > fusion-checks/build.txt 2>&1
+      - name: Build portable nonraw distribution manifest
+        if: always()
+        run: |
+          python - <<'PY'
+          import pathlib,hashlib,json
+          p=pathlib.Path('fusion-inputs');p.mkdir(exist_ok=True)
+          files={str(f.relative_to(p)):hashlib.sha256(f.read_bytes()).hexdigest() for f in p.rglob('*') if f.is_file() and not str(f.relative_to(p)).startswith('raw/')}
+          (p/'distribution_manifest.json').write_text(json.dumps(files,indent=2))
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: nfl-fusion-inputs-${{ github.run_id }}
+          path: |
+            fusion-inputs
+            !fusion-inputs/raw
+          retention-days: 90
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: nfl-fusion-raw-${{ github.run_id }}
+          path: fusion-inputs/raw
+          retention-days: 90
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: nfl-fusion-build-checks-${{ github.run_id }}
+          path: fusion-checks
+          retention-days: 90

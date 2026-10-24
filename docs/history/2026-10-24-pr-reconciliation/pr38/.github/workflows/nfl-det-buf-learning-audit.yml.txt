@@ -1,0 +1,74 @@
+name: DET BUF learning audit source capture
+on:
+  push:
+    branches: [codex/nfl-det-buf-learning-audit-20260918]
+    paths: ['.github/workflows/nfl-det-buf-learning-audit.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  capture:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Capture current postgame bytes; no predictive updates
+        run: |
+          python - <<'PY'
+          import pathlib,urllib.request,datetime,json,hashlib,subprocess,concurrent.futures
+          root=pathlib.Path('learning-capture');root.mkdir();out=root/'sources';out.mkdir()
+          urls={
+          'games.csv':'https://raw.githubusercontent.com/nflverse/nfldata/master/data/games.csv',
+          'play_by_play_2026.csv':'https://github.com/nflverse/nflverse-data/releases/download/pbp/play_by_play_2026.csv',
+          'nfl_gamecenter.html':'https://www.nfl.com/games/lions-at-bills-2026-reg-2',
+          'buf_home.html':'https://www.buffalobills.com/',
+          'det_home.html':'https://www.detroitlions.com/',
+          'buf_schedule.html':'https://www.buffalobills.com/schedule/',
+          'det_schedule.html':'https://www.detroitlions.com/schedule/',
+          'espn_summary.json':'https://site.api.espn.com/apis/site/v2/sports/football/nfl/summary?event=401872932'}
+          def capture(item):
+              name,url=item;r={'filename':name,'source_url':url,'request_started_at_utc':datetime.datetime.now(datetime.timezone.utc).isoformat()}
+              try:
+                  req=urllib.request.Request(url,headers={'User-Agent':'sports-model research source archive'})
+                  with urllib.request.urlopen(req,timeout=90) as response:data=response.read();headers=dict(response.headers);resolved=response.url
+                  (out/name).write_bytes(data)
+                  r.update(status='captured',retrieved_at_utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),sha256=hashlib.sha256(data).hexdigest(),bytes=len(data),headers=headers,resolved_url=resolved)
+              except Exception as exc:r.update(status='failed',error=repr(exc),retrieved_at_utc=datetime.datetime.now(datetime.timezone.utc).isoformat())
+              return r
+          with concurrent.futures.ThreadPoolExecutor(max_workers=5) as pool:records=list(pool.map(capture,urls.items()))
+          (out/'receipt.json').write_text(json.dumps(records,indent=2))
+          with (root/'code.tar.gz').open('xb') as f:subprocess.run(['git','archive','--format=tar.gz','HEAD'],stdout=f,check=True)
+          (root/'source_commit.txt').write_text(subprocess.check_output(['git','rev-parse','HEAD'],text=True))
+          manifest={str(p.relative_to(root)):hashlib.sha256(p.read_bytes()).hexdigest() for p in root.rglob('*') if p.is_file()}
+          (root/'manifest.json').write_text(json.dumps(manifest,indent=2))
+          print(json.dumps(records,indent=2))
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: det-buf-learning-source-${{ github.run_id }}
+          path: learning-capture
+          retention-days: 90
+      - run: pip install -r requirements-nfl-context.txt
+      - name: Retain actual health and NFL regression outcomes
+        run: |
+          mkdir -p learning-checks
+          set +e
+          timeout 120 python -u harness/healthcheck.py > learning-checks/healthcheck.txt 2>&1
+          echo $? > learning-checks/healthcheck.exit
+          python -m unittest discover -s tests -p 'test_nfl_*.py' -v > learning-checks/nfl-tests.txt 2>&1
+          echo $? > learning-checks/nfl-tests.exit
+          tail -25 learning-checks/healthcheck.txt
+          tail -8 learning-checks/nfl-tests.txt
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: det-buf-learning-checks-${{ github.run_id }}
+          path: learning-checks
+          retention-days: 90

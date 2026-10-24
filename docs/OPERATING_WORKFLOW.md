@@ -1,95 +1,41 @@
-# SPORTSMODEL OPERATING WORKFLOW (authoritative)
+# Operating workflow — current research integration
 
-Owner-reconciled 2026-08-08. This is the single operating workflow all agents follow. It supersedes
-ad-hoc process notes. Governance rules R1 (never invent numbers), R3 (frozen stays frozen), R6
-(append-only) remain the substrate. Gate 0/100 NO_PROMOTE; model ledger $0; push only on explicit
-per-release authorization.
+Updated October 23, 2026 Pacific / October 24 UTC. This reconciles current research work with the preserved [August operating workflow](history/2026-10-23-status-refresh/OPERATING_WORKFLOW.md); it does not waive [AUTHORIZATIONS.md](../AUTHORIZATIONS.md), signed release requirements, protected-branch rules, frozen verdicts or real-money gates.
 
-## Agent responsibilities
+## Start from evidence
 
-| Role | Responsibility |
-|---|---|
-| Pregame agent | Schedule, starters, lineups, injuries, weather, odds and K props |
-| Validation agent | Forecast identity, simulations, grading, cohorts and promotion evidence |
-| Release agent | Signatures, frozen hashes, bundle backup and safe Git publication |
-| Root / orchestrator | Reconciles conflicts and authorizes the next state; **only writer during integration** |
+Read [AGENTS.md](../AGENTS.md), [current status](CURRENT_STATUS.md), [state.json](../state.json), the latest append-only [progress](progress.md) entries and the exact model/product policy. Pin the actual branch/commit; inspect merged implementation before declaring a capability absent. Record health and software test results separately. An affected claim may be blocked without stopping unrelated reconstruction or research whose own contracts are satisfied.
 
-Agents supplement one another but **never independently overwrite the same forecast or push
-concurrently.** During integration the orchestrator is the sole writer (release step 1: pause all
-agent writes).
+## Separate workstreams and one integration writer
 
-## Pregame workflow — PER GAME (not once per slate)
+Data/provenance owns as-of availability, identity and source reconciliation. Sport research owns explicitly named candidate formulas and distributions. Market research owns decision-time quotes, execution assumptions and independent price comparisons. Portfolio work owns consistent contract settlement and correlated scenarios. Evaluation owns common-event chronology and frozen selectors. Independent review challenges those claims. A coordinator is the sole integration writer; parallel workers do not overwrite the same forecast, ledger or ref. Report actual agent executions only when they occurred.
 
-1. **T−120 minutes** — re-pull gamePk, first pitch, starters, available lineup, roster/IL,
-   weather/roof, same-book odds and K props. Hash the raw evidence. Freeze `FORECAST_T120_v1`.
-2. **T−30 minutes** — re-pull everything, including fields already filled. Freeze a NEW version:
-   `FINAL_PREGAME` when model-required inputs are confirmed, else `DIAGNOSTIC` when unresolved.
-   **Never overwrite T−120.**
-3. **After forecast freeze** — join same-book two-sided quotes into a SEPARATE benchmark sidecar.
-   **Never use prices as prediction inputs.**
-4. **First pitch** — lock eligibility. Anything received afterward is `LATE_CAPTURE`.
-5. **Postgame** — ingest the official result. Grade EVERY frozen forecast version in its eligible
-   cohort.
+## Forecast → evaluate → register
 
-A screenshot documents what was shown; it does **not** automatically confer `HIGH_CONFIDENCE`.
+1. Acquire raw evidence with provider/event identities and actual retrieval times. Preserve original bytes; reconcile conflicting sources without silently choosing a convenient value.
+2. Fit transformations and parameters using permitted earlier data only. Freeze protocols, population, candidate identities, metrics and selector rules before confirmation results are inspected. Label repaired retrospective analyses diagnostic.
+3. Execute the actual selected runner and separately identified candidate stages. Preserve the incumbent, source snapshots, component receipts, cutoffs, RNG/seed, simulation count and output hashes. Missing inputs remain null/blocked.
+4. Join exact decision-time market contracts downstream of independent forecasts. Explicit market-relative models are separate, labeled procedures; closing prices belong only to post-decision evaluation. No market metadata may silently change independent numerical RNG identity.
+5. Keep raw research forecasts when selector eligibility fails. Record NO_PICK/abstention in the population; never count it as a win. Evaluate forecasters and selectors separately on matched events and contracts.
+6. For prospective admission, archive and independently read back exact bytes, then obtain the writer-owned pre-start registration. Local SHADOW logs and hashes alone are not canonical or external timestamp proof. Never register old forecasts retrospectively.
+7. Acquire verified finals and apply the exact declared settlement rules. Preserve pushes, voids and half outcomes; preregister denominators. Repeated versions/stages remain available, but do not increase the unique-event sample.
 
-## Three independent states (eliminates permanent-pending)
+## Core markets and allocation
 
-```json
-{
-  "forecast_status":  "FINAL_PREGAME",
-  "benchmark_status": "COMPLETE_QUOTE",
-  "execution_status": "UNAUTHORIZED",
-  "next_action":      "GRADE_AFTER_FINAL",
-  "owner":            "grading_agent",
-  "deadline_utc":     "..."
-}
-```
+The cross-sport research agenda prioritizes moneyline, spread/run line/puck line and totals; additional markets require their own data and settlement support. This is not an edit to legacy machine priority or verdict fields. Match the model product to the contract, including period, home/away orientation, overtime, tie/push and sportsbook rules.
 
-- Missing prices do **not** prevent outcome grading.
-- Missing lineups do **not** block a model that does not consume lineups.
-- Unattributed odds block market comparison, **not** model learning.
-- Execution can stay `UNAUTHORIZED` while forecasting and evaluation continue normally.
+For decimal odds d and unconditional settlement masses, ordinary full-win/full-loss expected return per unit is `p_win*(d-1) - p_loss`; pushes refund stake. Half-win/half-loss contracts require their explicit payouts. A probability gap versus a de-vigged benchmark is not executable expected return. Correlated same-game legs must settle from compatible joint scenarios, not assumed-independent marginals.
 
-Nothing sits in indefinite PENDING: each state advances or is explicitly blocked with an owner and
-a deadline.
+Unqualified challengers receive **zero live allocation**, not smaller supposedly safe stakes. Synthetic ROI, CLV alone, large disagreements or an arbitrary sample threshold do not establish profit. Owner permission and statistical qualification are separate decisions.
 
-## Model workflow
+## Integration and publication
 
-Priority (unchanged): **1. ML → 2. K → 3. RL → 4. Totals.**
+Prepare an exact patch and file-level summary; distinguish infrastructure repair, candidate implementation and promotion decisions. Use the owner's explicit repository-write authorization, a named branch, expected-head checks and reviewable PR. Preserve required CI and branch protection; do not force push, rewrite history or suppress an introduced failure. An unavailable optional archive must remain visibly blocked, not silently successful. Required registration artifacts cannot be bypassed.
 
-Historical V13 evaluation: strict as-of rows, the established **100,000 simulations per game**, with
-an **independent per-game seed derived from `model_id + gamePk + 722`** (distinct stream per model
-identity). **Never replay historical games through `harness/daily_card.py`** (look-ahead leakage) —
-use `harness/run_v13_historical.py`.
+Publish research summaries with their evidence limitations. Qualified operational forecast publication, model promotion and wagering remain separate gates even after an authorized code merge. Preserve original reports as historical checkpoints and add a dated integration addendum instead of rewriting their original approval state.
 
-Every experiment receives a **forced disposition** — `ADOPT` | `REJECT` | `INCONCLUSIVE` |
-`DATA_BLOCKED`. No indefinite PENDING.
+## Task dispositions
 
-The Phase-4 logistic candidate `d_logistic_2f` is an ACTIVE forward challenger. Its betting
-authorization may stay closed without preventing forecasts or learning.
+Finish each task as **completed and exercised**, **implemented but not exercised**, **blocked with a named dependency**, or **rejected/deferred with a reason**. Include actual commands, run IDs, event counts, hashes, results, exclusions and integration evidence. Documentation or an unexecuted script is not a completed experiment or scheduled service.
 
-## Release workflow (protected push)
-
-1. Pause all agent writes.
-2. Verify: clean tree, ancestry (remote is a direct ancestor), exactly the expected linear commit
-   count, all signatures Good against the pinned key, all suites/selftests pass, frozen hashes intact.
-3. Cut and round-trip a complete bundle (backup).
-4. Confirm the remote target has not changed since step 2.
-5. Dry-run one explicit refspec.
-6. Push only the explicit refspec, e.g. `95c9ac2:refs/heads/sportsmodel/main`.
-
-No force, tags, implicit push, rebase, amend, or unrelated PR branch. **Push requires explicit
-per-release authorization from the owner.**
-
-## Implementation status (orchestrator ledger)
-
-| Element | Status |
-|---|---|
-| Operating workflow doc (this file) | DONE (2026-08-08) |
-| Push of 95c9ac2 → origin/sportsmodel/main | DONE last turn under explicit owner auth; remote verified at 95c9ac2 (the release procedure above is adopted for FUTURE pushes) |
-| Three-state tracking schema | DEFINED here; applied to live forecasts in data/mlb/forecasts/forecast_states.json |
-| Per-game T−120 / T−30 versioned freezes in the re-pull Routine | PENDING — Routine is approval-gated; will carry this richer spec once approved |
-| run_v13_historical: seed = f(model_id,gamePk,722), 100k default | PENDING — deferred to reconcile with the running full-system-audit (orchestrator is sole writer during integration; will not edit audited engine files mid-audit) |
-| Forced experiment dispositions (ADOPT/REJECT/INCONCLUSIVE/DATA_BLOCKED) | DEFINED here; wired into the experiment queue during integration |
-| Full-system-audit findings | RUNNING (wf_7d2c1d88-8eb); orchestrator reconciles findings + this spec into one change set on completion |
+Current dependencies and recorded executions: [status](CURRENT_STATUS.md), [recent changes](RECENT_CHANGES.md), [health reconciliation](HEALTH_RECONCILIATION_2026_10_23.md), [archive contract](CI_STORAGE_ARCHIVE.md).

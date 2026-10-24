@@ -1,0 +1,39 @@
+name: Selected market independence audit
+on:
+  pull_request:
+    paths:
+      - 'models/**'
+      - 'pipelines/cards/**'
+      - 'harness/wnba_model_v1.py'
+      - 'harness/run_v13_historical.py'
+      - 'scripts/generate_card_force.py'
+      - 'tests/test_selected_market_independence.py'
+      - '.github/workflows/market-independence-audit.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  audit:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install -r requirements-consolidated.txt
+      - name: Verify invariance, disclosures and documented counterexamples
+        run: >-
+          python -m pytest -q
+          tests/test_selected_market_independence.py
+          tests/test_card_disclosures.py
+          tests/test_projection_audits.py
+          tests/test_model_defaults.py
+          tests/test_current_runtime_contracts.py
+          tests/test_nfl_context.py
+          tests/test_nfl_modes.py
+          tests/test_cross_sport_distributions.py
+      - name: State audit scope
+        if: always()
+        run: |
+          echo 'Software checks include explicit OPEN seed counterexamples; a passing job is not universal market independence or predictive validation.' >> "$GITHUB_STEP_SUMMARY"
+          echo 'Defaults and action authority unchanged. No artifact upload is required by this focused job.' >> "$GITHUB_STEP_SUMMARY"

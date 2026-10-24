@@ -1,0 +1,24 @@
+name: MLB postseason context research checks
+on:
+  pull_request:
+    paths:
+      - 'research/mlb_postseason*.py'
+      - 'research/test_mlb_postseason*.py'
+      - 'scripts/*mlb*context*.py'
+      - 'scripts/mlb_postseason*.py'
+      - 'scripts/recovery_capture.py'
+      - '.github/workflows/mlb-postseason-context.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  regression:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install numpy scipy pandas scikit-learn
+      - name: Targeted research regressions; not predictive validation
+        run: python -m unittest research.test_mlb_postseason_context research.test_mlb_postseason_audited research.test_mlb_postseason_v1 research.test_mlb_postseason_workflow -v

@@ -1,0 +1,60 @@
+{
+  "reviewed_head": "03cbda170de84252f8786d61aae089fd5546e507",
+  "pr": 61,
+  "software_tests": 420,
+  "workflow_runs": [
+    {
+      "run_id": 37703408446,
+      "name": "research-tests",
+      "conclusion": "success"
+    },
+    {
+      "run_id": 37703408467,
+      "name": "phase1-1-durability",
+      "conclusion": "success"
+    },
+    {
+      "run_id": 37703408594,
+      "name": "Cross-sport distribution research",
+      "conclusion": "success"
+    },
+    {
+      "run_id": 37703408427,
+      "name": "NFL context integration",
+      "conclusion": "success"
+    },
+    {
+      "run_id": 37703408554,
+      "name": "MLB current path",
+      "conclusion": "failure",
+      "software_steps": "passed",
+      "reason": "Artifact storage quota has been hit"
+    },
+    {
+      "run_id": 37703408465,
+      "name": "NFL weekly state acceptance",
+      "conclusion": "failure",
+      "software_and_real_source_replay_steps": "passed",
+      "reason": "Artifact storage quota has been hit"
+    },
+    {
+      "run_id": 37703408488,
+      "name": "Consolidation verification",
+      "conclusion": "failure",
+      "unit_tests_passed": 420,
+      "reason": "Artifact storage quota has been hit"
+    }
+  ],
+  "repository_health": {
+    "status": "RED",
+    "fail": 4,
+    "warn": 6,
+    "reasons": [
+      "Production historical MLB archive unavailable/unversioned",
+      "Recovery jobs: 9 registered, 4 overdue, 7 defects still owned",
+      "Historical 2026-09-03 release eligibility blocked",
+      "Standing-health issue evidence and hash chain"
+    ]
+  },
+  "authority": "Software merge and research evidence only; no operational clearance, changed default or wagering."
+}

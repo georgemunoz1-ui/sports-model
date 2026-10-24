@@ -1,0 +1,128 @@
+{
+  "schema": "nfl.qb_margin_design.v1",
+  "experiment_id": "NFL-QB-MARGIN-20260928-01",
+  "model_id": "nfl.qb_margin.residual_alignment.v1.research",
+  "created_at_utc": "2026-09-28T10:55:03.756376+00:00",
+  "status": "PREREGISTERED_BEFORE_NEW_DISTRIBUTION_FIT_AND_EVALUATION",
+  "authorization": "2026-09-28 user request to acquire/develop a proper QB margin distribution and supersede the quarantined spread process",
+  "reference_model_id": "nfl.integrated_context.qb.v1.research",
+  "reference_model_packed_sha256": "a1fc0436a3e3d4f76d7b7fe9b480314fbb20804e3b9d29288f64913935a80322",
+  "supersession_scope": "Separate QB full-game margin/cover research path replaces dependency on quarantined combined spread output; no unquarantine, default change or rewrite of old forecasts",
+  "target": "FINAL_HOME_MINUS_AWAY_INTEGER_MARGIN_INCLUDING_OVERTIME",
+  "supported_products": [
+    "FULL_GAME_SPREAD"
+  ],
+  "unsupported_products": [
+    "TOTAL",
+    "TEAM_TOTAL",
+    "FIRST_HALF",
+    "LIVE",
+    "QUARTER_POINT_HANDICAP"
+  ],
+  "one_structural_change": "Add a QB-specific discrete residual margin law to unchanged fitted QB logistic and Ridge margin heads",
+  "distribution": {
+    "residual": "QB OOF observed final home margin minus QB OOF predicted home margin",
+    "support": "numpy.rint(current QB Ridge home margin + residual - mean(training residual)); no clipping or truncation",
+    "weighting": "Uniform within positive, negative and zero margin strata; masses (1-t)*p_qb, (1-t)*(1-p_qb), t",
+    "tie_rate": "Jeffreys estimate (observed ties + 0.5)/(training residual games + 1)",
+    "sigma_definition": "Population SD of centered QB OOF residuals, reported in points; no assumed or backsolved sigma",
+    "candidate_mean": "Exact weighted mean after rounding/reweighting; may differ from independent Ridge center",
+    "minimum_residual_rows": 200,
+    "failure_policy": "Abort for absent outcome stratum with positive mass, missing/duplicate/nonfinite data, mismatched reference or future training rows; no combined pool fallback",
+    "tuning": "NONE; no market inputs, calibration slopes, line-dependent seeds or parameter search"
+  },
+  "history": {
+    "source": "Recovered original integrated-context archive; exact source hashes required",
+    "oof_seasons": [
+      2019,
+      2025
+    ],
+    "base_head_training": "2015 through year immediately preceding OOF season; original fit rule retained and QB OOF regenerated from saved features",
+    "distribution_evaluation_seasons": [
+      2020,
+      2021,
+      2022,
+      2023,
+      2024,
+      2025
+    ],
+    "each_evaluation_pool": "Only QB OOF residuals from strictly earlier seasons; minimum 200 rows",
+    "deployment_pool": "All QB OOF residuals 2019-2025, fixed once; no 2026 outcomes",
+    "untouched_holdout": false,
+    "limitation": "History was inspected in earlier research; new screen is reused retrospective development, not prospective/PIT validation"
+  },
+  "baseline": {
+    "id": "qb.margin.discretized_normal.reference.v1",
+    "mean": "Unchanged QB Ridge margin center",
+    "sigma": "Same prior-season QB residual population SD",
+    "distribution": "Rounded normal; full integer support via normal CDF; no market fit"
+  },
+  "evaluation": {
+    "primary": "Paired margin CRPS, candidate minus discretized-normal reference",
+    "screen": {
+      "mean_delta_max": 0,
+      "season_bootstrap_ci_upper_max": 0,
+      "cover_brier_delta_max": 0.002,
+      "interval_90_coverage_min": 0.85,
+      "interval_90_coverage_max": 0.95
+    },
+    "secondary": [
+      "Margin mean MAE/RMSE",
+      "90% interval width and coverage",
+      "fixed-line three-way Brier and clipped log loss with zero-mass counts",
+      "tie reliability",
+      "key-number push reliability at 3 and 7",
+      "Weeks 1-4",
+      "neutral venue",
+      "missingness cohorts",
+      "home/away orientation"
+    ],
+    "fixed_home_handicaps": [
+      -7,
+      -3.5,
+      -3,
+      0,
+      3,
+      3.5,
+      7
+    ],
+    "lines_role": "Outcome-independent fixed probes only; not historical betting-line profitability or market calibration",
+    "bootstrap": {
+      "unit": "season",
+      "replicates": 10000,
+      "seed": 2026092801
+    },
+    "log_loss_epsilon": 1e-12,
+    "promotion": "NONE from this retrospective screen; retain research HOLD until separately approved untouched prospective cohort"
+  },
+  "sampler": {
+    "rng": "NumPy default_rng PCG64",
+    "n": 100000,
+    "dtype": "<i2",
+    "shape": "(100000,)",
+    "seed": "first 16 hex of SHA256 canonical JSON of forecast identity, distribution identity and n; line and price absent"
+  },
+  "registration": {
+    "design": "Append experiment_queue in state.json and commit design before fitting",
+    "forecast": "New immutable margin writer record at actual current UTC, before start; original QB writer record remains unchanged",
+    "canonical_prospective_eligible": false
+  },
+  "required_bindings": [
+    "code/model/coefficient identities",
+    "source cutoff and latest valid parent state",
+    "consumed QB feature vector",
+    "head/link/home-away orientation",
+    "fitted QB residual law and sigma",
+    "sampler/seed/draw hash",
+    "settlement/push/tie/coherence",
+    "independent deterministic replay and forecast-effect proof"
+  ],
+  "input_sha256": {
+    "oof_predictions.csv": "cb11bb530bb7d8149e0fbae8f6d6cc1775f6879ab157051e3c86dff525092510",
+    "features.csv": "4e85683269768322d50d00966d432c37d4179d95bac76cd41fa5933d94ff4e5b"
+  },
+  "market_input": false,
+  "market_overlay_enabled": false,
+  "action_authority": false,
+  "production_promotion": false
+}

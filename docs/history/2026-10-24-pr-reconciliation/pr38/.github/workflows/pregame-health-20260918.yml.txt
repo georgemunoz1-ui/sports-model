@@ -1,0 +1,34 @@
+name: 2026-09-18 corrected pregame health
+on:
+  push:
+    branches: [codex/nfl-det-buf-learning-audit-20260918]
+    paths: ['.github/workflows/pregame-health-20260918.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  health:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - name: Install complete repository test/runtime dependencies
+        run: |
+          pip install -r requirements-nfl-context.txt pytest pyyaml
+      - name: Run health without masking result
+        run: |
+          mkdir -p corrected-health
+          set +e
+          python -u harness/healthcheck.py 2>&1 | tee corrected-health/health.txt
+          code=${PIPESTATUS[0]}
+          echo "$code" > corrected-health/health.exit
+          exit "$code"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: corrected-health-20260918-${{ github.run_id }}
+          path: corrected-health
+          retention-days: 90

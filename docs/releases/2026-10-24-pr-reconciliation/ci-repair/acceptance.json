@@ -1,0 +1,1387 @@
+{
+  "argv": [
+    "/workspace/scratch/5e04ca887693/test-env/bin/python",
+    "-m",
+    "pytest",
+    "tests",
+    "research/tests",
+    "research/cfb_binary_isotonic_proposal/test_binary_isotonic_repair.py",
+    "-q",
+    "--junitxml=docs/releases/2026-10-24-pr-reconciliation/ci-repair/tests.xml"
+  ],
+  "command": "python -m pytest tests research/tests research/cfb_binary_isotonic_proposal/test_binary_isotonic_repair.py -q --junitxml=docs/releases/2026-10-24-pr-reconciliation/ci-repair/tests.xml",
+  "completed_at_utc": "2026-10-24T22:23:23.993886+00:00",
+  "executed_at_utc": "2026-10-24T22:21:17.322428+00:00",
+  "exit_code": 0,
+  "junit": {
+    "path": "docs/releases/2026-10-24-pr-reconciliation/ci-repair/tests.xml",
+    "sha256": "236be39cbd9768f46662326cf953cb80342fc514556e34f22077d7d77f0c2fda"
+  },
+  "log": {
+    "path": "docs/releases/2026-10-24-pr-reconciliation/ci-repair/tests.log",
+    "sha256": "9324370f2da160bc10cc48f735dd2c375b2f187f7dc1a03c9b5e34658bd679fa"
+  },
+  "model_promotion_granted": false,
+  "predictive_validation_granted": false,
+  "prior_acceptance_receipt": {
+    "path": "docs/research/overhaul_2026_10_23/ACCEPTANCE_EXECUTION_swarm_v1.json",
+    "sha256": "10ce2a65aa3298aaf9349d762016c435ca9979bc176b8ceb45d9bc65a7564994"
+  },
+  "prior_finding_manifest": {
+    "path": "docs/research/overhaul_2026_10_23/FINDING_EVIDENCE.json",
+    "sha256": "64d21c45a535f455b14f26e4a232e8a9a4c0c378e5b0246f82290407dc5bb006"
+  },
+  "schema": "acceptance-execution-v1",
+  "source_scope": "Actual complete local repository execution after PR reconciliation and historical-source isolation; hosted final-head CI is separate.",
+  "sources": [
+    {
+      "path": "models/cfb/fit_margin_distribution_v1.py",
+      "sha256": "8bc6dfbdfc105d547a96325842cea22de42162c071a967c17d18a02ddbab2f26"
+    },
+    {
+      "path": "models/cfb/margin_distribution_v1.py",
+      "sha256": "3626742a42b072c60d29df1de9fe125c07448baffaa4d2bb860761e9e1b6c589"
+    },
+    {
+      "path": "models/cfb/monte_carlo_v1.py",
+      "sha256": "b3fe5c8646ef577fbf009afd9b397e6071f382afeee717201f8f3c5a6671cfe7"
+    },
+    {
+      "path": "models/cfb/spread_simulator_v1.py",
+      "sha256": "a527b60aacfe361e16f0230d971166a47ee616623e5b03f04ce8300def0b44ef"
+    },
+    {
+      "path": "models/common/discrete_calibration.py",
+      "sha256": "637ecf78c1746667ca022849398fa2b270e0f144269a21ae8a32bb67f2a1eec7"
+    },
+    {
+      "path": "models/common/discrete_research.py",
+      "sha256": "4a68440a8a7d8bcc9b7ed7b617f9f5ff778fe62d4274840e52a37e48ba8f08eb"
+    },
+    {
+      "path": "models/common/joint_margin_total_mc_v1.py",
+      "sha256": "bfe079e959b14b2d3fcbb835554c3e40503f8658093f98ceab42f2266dfee0fd"
+    },
+    {
+      "path": "models/common/margin_contract.py",
+      "sha256": "384ac27edc510f54322fcbf51a9f4256e636d45eab9c9486b2cce4af7e3382ca"
+    },
+    {
+      "path": "models/common/margins/__init__.py",
+      "sha256": "28817eca6fcac9f4b53fa290aa9c0cfd3fe84e94d892975094fceca8b3982d1e"
+    },
+    {
+      "path": "models/common/margins/cover.py",
+      "sha256": "4cdd9df50b414d6c3b4924409fda0a06f89a161e7f16b934a23c3e319764d7fb"
+    },
+    {
+      "path": "models/common/margins/distribution.py",
+      "sha256": "4d80e1663212d29934e674bcb53d10b4b2f5440c5e50a1722d65659a4d33f835"
+    },
+    {
+      "path": "models/common/margins/emit.py",
+      "sha256": "9eec6d58a628bad1c19587dd42fef4f154d251db61952c88d63d2658a53a345e"
+    },
+    {
+      "path": "models/common/margins/sigma.py",
+      "sha256": "638dc458dbff0fec5a412641159008d16ed4a98f7206133a845a0f6b2abea86f"
+    },
+    {
+      "path": "models/current/__init__.py",
+      "sha256": "e698b545214ba4d820838f205014f6ea7c35d735f5c4415cd1e2599352263000"
+    },
+    {
+      "path": "models/current/baseline.py",
+      "sha256": "cc338abccfcc4c107069cc5b64b0e6e6485d77ea3ba27dd703f7a1c4055fb875"
+    },
+    {
+      "path": "models/current/cfb.py",
+      "sha256": "20628f3463589cae551b325e68fa7125aef8f9cd075e7b19b0a1c76b9f411b5a"
+    },
+    {
+      "path": "models/current/common.py",
+      "sha256": "63c0da2a4c620fb086d08e22268fe3875515c1807aec128f5e092f73eeafd5ff"
+    },
+    {
+      "path": "models/current/freshness.py",
+      "sha256": "ebadba51fa545a351d37980bab3bb78d5fe603265b758114b59f0f01191e027a"
+    },
+    {
+      "path": "models/current/linear.py",
+      "sha256": "e10b15e6ed20fd410f5d87afbf01eb191768a459ffcb106dd64cbacef797e4a2"
+    },
+    {
+      "path": "models/current/mlb.py",
+      "sha256": "72c734fb0a36a15a013300773382089da325d162a558605020c7271efc48cf5f"
+    },
+    {
+      "path": "models/current/wnba.py",
+      "sha256": "52a1b64d4644e18d8edbd3337f307a7dcd8e7b199e9ed9a4fbfb66722c55821a"
+    },
+    {
+      "path": "models/experiments/cfb_efficiency.py",
+      "sha256": "aebb8357bf6e7a75da6a0543caaf18e36fa907b8e1606da730fafab1e8712b50"
+    },
+    {
+      "path": "models/experiments/nba_efficiency.py",
+      "sha256": "e1d55d59be7e8e4e364d9c4eff8a7b2f1abd172b530315ebf3441f42df54e770"
+    },
+    {
+      "path": "models/mlb/monte_carlo_v1.py",
+      "sha256": "4c30875077208b50a965b12d7a294856ba817b15241e40ae57a49bfc6b6ba34b"
+    },
+    {
+      "path": "models/nba/efficiency_monte_carlo_shadow_v1_1.py",
+      "sha256": "625ab654b835d38b1160fba7a4dea9ef330ce89f5e1d40ad0f79993a3c1cf959"
+    },
+    {
+      "path": "models/nba/efficiency_monte_carlo_v1.py",
+      "sha256": "522ecddbcbc4b560d1edba0587b42a61f3c9d58a52413ea92f54a0082f28be26"
+    },
+    {
+      "path": "models/nfl/contextual/assimilation.py",
+      "sha256": "9cfe2af178382326741be0197e2f19f84e32c132014a4677b55506919c052898"
+    },
+    {
+      "path": "models/nfl/contextual/base_features.py",
+      "sha256": "f017a95578e056c1da799aaf29d218bf46bd480fbb4d214ecaad120f7f88cf68"
+    },
+    {
+      "path": "models/nfl/contextual/capabilities.py",
+      "sha256": "525c36a06438af62151ea24c42792a806d668c3a61ae700674767fb7b5892f17"
+    },
+    {
+      "path": "models/nfl/contextual/features.py",
+      "sha256": "3a064779ce6a1a53b4fda66eed9f86a4365208a849b357dcd1cb5719b3e0a115"
+    },
+    {
+      "path": "models/nfl/contextual/forecast_stream.py",
+      "sha256": "05a27454fd000b5ca9ac1137dfa7a68cf22e46137ed2fa1a088e721608e1c2ee"
+    },
+    {
+      "path": "models/nfl/contextual/halftime.py",
+      "sha256": "3204a172ed830e6975bf04958ca9877ea74abb3cb12d8c9c9d5011d40d4852be"
+    },
+    {
+      "path": "models/nfl/contextual/joint_distribution.py",
+      "sha256": "0d7192a794b4e9946febc0b25db6bd306dfb11723d404f8f3ccc55d2e677f5fb"
+    },
+    {
+      "path": "models/nfl/contextual/model.py",
+      "sha256": "ba00569e30cd56fa1d50570f828db02e56caf849ddbdf1d0d0fc11272e7a0fc3"
+    },
+    {
+      "path": "models/nfl/contextual/operating.py",
+      "sha256": "e51b7845e3aa785bb2fb1f31615aee0f5b37529b8349d734a946aab3bb0abf3b"
+    },
+    {
+      "path": "models/nfl/contextual/personnel.py",
+      "sha256": "4b6863746783775bf61970363f1df2aa33b2919ae69c709de2ff404b4a369055"
+    },
+    {
+      "path": "models/nfl/contextual/qb_assimilation.py",
+      "sha256": "33667fa0375a1d151ec2a450c497e219cc0d099472e603f1ad6d4814abfef51c"
+    },
+    {
+      "path": "models/nfl/contextual/reconstruction.py",
+      "sha256": "18bd1ee252b61c5e95f83865a60e7740aad83bcc96d0085294296f1df11418cc"
+    },
+    {
+      "path": "models/nfl/contextual/recovered_inference.py",
+      "sha256": "ac70b26355c8a9fe0850caf6e69ec268f363363dffb3b1289cbee13d4d729abd"
+    },
+    {
+      "path": "models/nfl/contextual/runtime.py",
+      "sha256": "8951577d6edd2e2e37b370cafe9f90c205b9de8b6b59d9c1aba961f15760c15d"
+    },
+    {
+      "path": "models/nfl/contextual/settlement.py",
+      "sha256": "a710bebd0dc0ce068e0b190f02ab1245389535f332b419c46eb2ebc67a60eecf"
+    },
+    {
+      "path": "models/nfl/contextual/spread_calibration.py",
+      "sha256": "4bea6490fd2a140fe13a0bba1969d94c4eda39da710732ac9d1f891e11c4acb2"
+    },
+    {
+      "path": "models/nfl/contextual/spread_runtime.py",
+      "sha256": "37b035c63bd31ca22024c2b1cb907c46cf5690da8ddd4b56bd4166f9240d56e8"
+    },
+    {
+      "path": "models/nfl/contextual/starter_adjudication.py",
+      "sha256": "f1bec6fc4b15f458959a5cc32ab1390409479adf4a6ef0f947a007d1373f54e1"
+    },
+    {
+      "path": "models/nfl/contextual/week2.py",
+      "sha256": "03a35ca6994a8a154dd1b4b9ba3f44c15bc359b088e2ff4f2d37f4a7f3270d68"
+    },
+    {
+      "path": "models/nfl/contextual/weekly_state.py",
+      "sha256": "41e87fa081cbc2fe7625571f3a46f797bdaecc0dad9329676fea805059c6f71f"
+    },
+    {
+      "path": "models/nfl/elo_margin_monte_carlo_v1.py",
+      "sha256": "4b290a33b62d9d18d56cbeb1d5ffa5c19221f3d6d8dc9fc7135b829444dba689"
+    },
+    {
+      "path": "models/nfl/modes/__init__.py",
+      "sha256": "1e3e98f6e4bf60b4f7d512afdcb77dc4b9a201f2a311e9ba4ba2443aa32fc7a7"
+    },
+    {
+      "path": "models/nfl/modes/core.py",
+      "sha256": "0eb472f3c6842f20f723e7932743b242fa8056d6417ccbf75521c1b1de028476"
+    },
+    {
+      "path": "models/nfl/modes/runtime.py",
+      "sha256": "ef04ff6455f56a4a191972f9beb9af175c8b1977d76cd30253271b366f3e93f3"
+    },
+    {
+      "path": "models/wnba/efficiency_monte_carlo_v1.py",
+      "sha256": "e9c4e6d1c18ef28f4bb5d2e012b5fb00a96cc27367b9a88a42c3cbe141ecab78"
+    },
+    {
+      "path": "models/wnba/efficiency_monte_carlo_v1_1.py",
+      "sha256": "4d2f6378002ef87880a78754e10da421aae1ccb05d84a5d5811b6a11384ea05c"
+    },
+    {
+      "path": "pipelines/__init__.py",
+      "sha256": "458ecb6c176223b29989669314639ec060218954d6fc351b2247e044ec76a98d"
+    },
+    {
+      "path": "pipelines/cards/__init__.py",
+      "sha256": "40015836498094228c54c373478095d4c2110620f95450043ca32605775e25ce"
+    },
+    {
+      "path": "pipelines/cards/adapters/__init__.py",
+      "sha256": "95a35a9259881d69f03cf0dee4da853ac6387f1f46b79f5a190d403f25afe68f"
+    },
+    {
+      "path": "pipelines/cards/adapters/cfb.py",
+      "sha256": "0497734c7ccd4ea8e2e9b678f21e0c067c5c193609f57d7f50c5a4d8452e49f7"
+    },
+    {
+      "path": "pipelines/cards/adapters/mlb.py",
+      "sha256": "95cdbf3e028012a865e14d1ddbba2a3954c48488abe394f76044ec49063d05d5"
+    },
+    {
+      "path": "pipelines/cards/adapters/mlb_gamma_poisson_research.py",
+      "sha256": "7cfcc0a536fb1a1bb71ca13c2fe79826902c5b51b81a0e14042f47a5348aea12"
+    },
+    {
+      "path": "pipelines/cards/adapters/mls.py",
+      "sha256": "c9b82582d331b4b903ba2a45b4e698ebb3d254efe5ec268fcc5b7eca6531eb89"
+    },
+    {
+      "path": "pipelines/cards/adapters/nba.py",
+      "sha256": "5c2251f1b088b8eab06d7a534df2f2360a96fb97f4905addc96ba1edae9c1450"
+    },
+    {
+      "path": "pipelines/cards/adapters/nfl.py",
+      "sha256": "621ac88166b0516926c7f26ab2c8694cb2a8b74e7d210f811c3045bef555813e"
+    },
+    {
+      "path": "pipelines/cards/adapters/nhl.py",
+      "sha256": "25758f1aa9f12332a1eb2c6733b17aba420f82c3ac43c38820f7c1557d652ff8"
+    },
+    {
+      "path": "pipelines/cards/adapters/wnba.py",
+      "sha256": "4778c51aa1de02edcb0a9814c4ce1e16196119ee435487e257e746b2b029cdc9"
+    },
+    {
+      "path": "pipelines/cards/disclosures.py",
+      "sha256": "2cbaebf61e91e07ce6acf8a447df539051941ff99444865f7a5849e4d77002cd"
+    },
+    {
+      "path": "pipelines/cards/distribution_research.py",
+      "sha256": "691dd6357af2a7a9ef84336f54670db843c6d57aad79783d9f77b11d270c6554"
+    },
+    {
+      "path": "pipelines/cards/forecast_adapter.py",
+      "sha256": "8aa8a2256edbf9a01d0c7cea7aff0b6099ff77a905b6c636c52a0d61a5c26e71"
+    },
+    {
+      "path": "pipelines/cards/integrity_reporting.py",
+      "sha256": "760af206ff81c97c7085f09fdb22202773aee381d747610041d15ce882b85091"
+    },
+    {
+      "path": "pipelines/cards/market_provenance.py",
+      "sha256": "3b472355ce2456f4ae412acb0ceb1c22f969dcad6881e77dc68b0e95e6ce5546"
+    },
+    {
+      "path": "pipelines/cards/projection_audits.py",
+      "sha256": "145f6372d3f945b3024ffa34562080e0adc5ca3782b9c0e9e6040b48159ae280"
+    },
+    {
+      "path": "pipelines/cards/research_selection.py",
+      "sha256": "789eba02a4239348a2820c8b91fe2078562d3604f04626bf96806e44b98d4784"
+    },
+    {
+      "path": "pipelines/cards/selected.py",
+      "sha256": "0b6b270ea04a5df266ba47b23813e2943d6952b06f064802ba68c74d161276b8"
+    },
+    {
+      "path": "pipelines/cards/selection.py",
+      "sha256": "2b7240a5c18ee74e260c5a769fe0e24d91633cd49d40bd7971c6d4ad91e291cd"
+    },
+    {
+      "path": "pipelines/cards/selection_integration.py",
+      "sha256": "cf7fca465fd8fbf86427284a15be498719b95e624c38cf9a31ff3e9a2048dc98"
+    },
+    {
+      "path": "pipelines/cards/semantic_identity.py",
+      "sha256": "a7f6541d1415523092e9e6364407100ceb9165de1493e833c93d21f88e65f756"
+    },
+    {
+      "path": "pipelines/margins/__init__.py",
+      "sha256": "49b34386c7a621a5089df7d84038ce5881434022da158ca77486ea801005e73d"
+    },
+    {
+      "path": "pipelines/margins/_basketball.py",
+      "sha256": "d450e4ff09cdc7c9e40c37d58a6e19920f647307dd80c4396ce42ce31a087557"
+    },
+    {
+      "path": "pipelines/margins/_shared.py",
+      "sha256": "24a73dd8ef45c67f1f760b489a94f1e3cc10ffeff8668af17386b91d920d4993"
+    },
+    {
+      "path": "pipelines/margins/cfb.py",
+      "sha256": "dd27577dffa9cd7f15a80b618ea913a5b3e8355ea248e88eb7c42e51dad13ae2"
+    },
+    {
+      "path": "pipelines/margins/mlb.py",
+      "sha256": "3d30eb3605fcd31fa3add965ee22b904f32f59f315b2a7ccb2e0ee460da899fd"
+    },
+    {
+      "path": "pipelines/margins/mls.py",
+      "sha256": "3b2ec3f8922bc051f5bd409bed8cbf991fc8ef414f205b3174c4f7f04b1d9c3d"
+    },
+    {
+      "path": "pipelines/margins/nba.py",
+      "sha256": "94e246cf0b54f7c01e6e886b91d2cf03f7f3bbdc84730dc2bf90f70354a9d089"
+    },
+    {
+      "path": "pipelines/margins/nfl.py",
+      "sha256": "b43ba28d7c79db067adb55dc38d6bc2e04b9e663aa06acfd5d43ef516189ccc8"
+    },
+    {
+      "path": "pipelines/margins/nhl.py",
+      "sha256": "a1f75016c38e29a742e6b048e1197ffbd63c3dfccb36f16f03b6c71ee1d90d60"
+    },
+    {
+      "path": "pipelines/margins/validate.py",
+      "sha256": "3b023ed292ca41bab2c187ac6b2fc5497e72f02682d3b7695ab5da0baf2204c6"
+    },
+    {
+      "path": "pipelines/margins/wnba.py",
+      "sha256": "52a3f45b9d97d9247887fd17d668a47ae739b879743e9d3111ea3bd525a6ec32"
+    },
+    {
+      "path": "pipelines/mlb/current.py",
+      "sha256": "18d55e8db0a90d2c1499b06e4aa5cb967815f26bf13ebd3eab3f84fbecf0e6ca"
+    },
+    {
+      "path": "research/__init__.py",
+      "sha256": "612ab1971a5dc98f733182dbaefa47a796520467fc1bb54cac3ee9ec4b6b89b9"
+    },
+    {
+      "path": "research/adapters/__init__.py",
+      "sha256": "945eac7b24fbc5c87c53eebb247a349667f1913c37c2cc059a0fe346d31fe46c"
+    },
+    {
+      "path": "research/adapters/base.py",
+      "sha256": "8149b2043fcdd039a4ead51f7c75497d4f5fc7492c9c58a3e5bc6eb7912511f0"
+    },
+    {
+      "path": "research/adapters/cfb.py",
+      "sha256": "a173dd8794e7e991d2fb3447037103a44f996f8a4c40d5ad0426ac0ac9b7ce99"
+    },
+    {
+      "path": "research/adapters/mlb.py",
+      "sha256": "71a9f2309599ddbb08cfcdc1bdeadfae2d87d8a0b73001beddf6ddffbebb2425"
+    },
+    {
+      "path": "research/adapters/mls.py",
+      "sha256": "ad2bee4f00a51ed88f819f3a9151a8fc561a31e621420c01c4d6adb668fa614f"
+    },
+    {
+      "path": "research/audits/2026-09-10/audit.py",
+      "sha256": "e76be2a62c15c238c4747c2b19564beea78adc51af2a6eba7d77d27dfaef9b1b"
+    },
+    {
+      "path": "research/audits/2026-09-10/engine_snapshot.py",
+      "sha256": "4c30875077208b50a965b12d7a294856ba817b15241e40ae57a49bfc6b6ba34b"
+    },
+    {
+      "path": "research/audits/2026-09-10/nfl_baseline_run.py",
+      "sha256": "ad6eda81b92e18a34771c4dacdbfaf07873d3b1c35181858a1f6f452cc2e97d6"
+    },
+    {
+      "path": "research/audits/2026-09-10/nfl_engine.py",
+      "sha256": "4b290a33b62d9d18d56cbeb1d5ffa5c19221f3d6d8dc9fc7135b829444dba689"
+    },
+    {
+      "path": "research/audits/2026-09-10/residuals.py",
+      "sha256": "db3a4e1ddc58e7422ffd9971413f99c8c234297a428406074bfe980fb853967b"
+    },
+    {
+      "path": "research/cfb_binary_isotonic_proposal/binary_isotonic_repair.py",
+      "sha256": "43933c91ba7bd83bbb45dd6f0f9ce7816eb134f055bc08ca286a998d94679368"
+    },
+    {
+      "path": "research/cfb_binary_isotonic_proposal/original_calibration.py",
+      "sha256": "8d21e83d3d1d3d04af869ad679878cc005ff0fee8e23b34df054cd1783f8d8c9"
+    },
+    {
+      "path": "research/cfb_binary_isotonic_proposal/test_binary_isotonic_repair.py",
+      "sha256": "28c493580f84addc6fcf3df38229fed5eb7df5d5fd183d6aedfca180317a4460"
+    },
+    {
+      "path": "research/discrete_mc_v1.py",
+      "sha256": "864f3b69aeeafbb6e0e58c972cb079098ffc400bb4cb96e71bca553e5f2ef7aa"
+    },
+    {
+      "path": "research/efficiency/__init__.py",
+      "sha256": "c31828f58210fae1289d0b940515daa7dc17a7e0beacec4a805403ce7c078fca"
+    },
+    {
+      "path": "research/efficiency/evaluation.py",
+      "sha256": "99950da4987d42bbcfcd5cacb09ed392c0715800a78ab6e283f8a6861a531b9f"
+    },
+    {
+      "path": "research/efficiency/integrity.py",
+      "sha256": "5f7b2a910839f0525894edcf2f6e79d39a0a4b9b5af20f9e201d21bf92495285"
+    },
+    {
+      "path": "research/efficiency/runner.py",
+      "sha256": "5014bf91d7cfb63148c89b26a6f7a0f0f50d229d42c5a81ed53d915369782099"
+    },
+    {
+      "path": "research/efficiency/selection_diagnostics.py",
+      "sha256": "55feca7f57c0533b4304292564ee0a6e703b8d3174613f76324b828e3ea609af"
+    },
+    {
+      "path": "research/evaluate_discrete_products.py",
+      "sha256": "eb13f7c1b6bd162d18e24b8e71bda55837b5d36e28d448725ba99bad3adf95c1"
+    },
+    {
+      "path": "research/evaluate_frozen_forecasts.py",
+      "sha256": "454c0568b712835736e7c5efff0fa785b4aa19c6161034f974d14bd81ca5ad77"
+    },
+    {
+      "path": "research/finding_evidence.py",
+      "sha256": "fa810b3629c02241ae5bf8716929a4cefd0684bb8e9214cf9e26da1dd0c80099"
+    },
+    {
+      "path": "research/markets/capture_20260910.py",
+      "sha256": "16c9b86cbdc40b85efbef66741357734ed285f90fbbaeb70c40b4a4c4a71a473"
+    },
+    {
+      "path": "research/mc_precision_v1.py",
+      "sha256": "a1fcf1f99890fb8e4f50c795b4f12e9a9c3c4278bf83c2b60665da9a00602d54"
+    },
+    {
+      "path": "research/mlb_distribution_experiment.py",
+      "sha256": "4a16225e2c85bc9bed46639a4aaa527c74953a0e6829b6cb8de302c78c969ecc"
+    },
+    {
+      "path": "research/news_information/__init__.py",
+      "sha256": "9cbb912b40f8a0250231fb51785567cec5b6ea239549da4dc946d033ed0e4ad4"
+    },
+    {
+      "path": "research/news_information/archive.py",
+      "sha256": "9d28dba873f865744be73ac53d7164da0cfa1bf72021b6e9ee62e4caad8eb055"
+    },
+    {
+      "path": "research/news_information/benchmark.py",
+      "sha256": "a907f9fcbd7cd1be7bf3f0c0c1e120667bd04665878d8b9579c64e8a901bea49"
+    },
+    {
+      "path": "research/news_information/benchmark_cli.py",
+      "sha256": "3f720767561f1f293d00f7a36647fbf89df0ed61ca2d7eed4097b6566cfc2821"
+    },
+    {
+      "path": "research/news_information/capture_postgame_20260908.py",
+      "sha256": "d0cabc9be2cdb4a1a8b3b14f12c28ab97ca360310e3a01cdb4e9124650f1bf12"
+    },
+    {
+      "path": "research/news_information/capture_postgame_20260909.py",
+      "sha256": "cadafb8ae0770e8bcc835448b7ddb04c2d2a67f87672f12c297a51447f2e1a54"
+    },
+    {
+      "path": "research/news_information/contracts.py",
+      "sha256": "d304bbc6509c222d8250104f44b64b59900fc41ab21f9630d8e6624714d67511"
+    },
+    {
+      "path": "research/news_information/ensemble.py",
+      "sha256": "2bf5bbacb39979d5b84a626ebc72d683d10b2ff66fe20326f85dd04de7ea5b70"
+    },
+    {
+      "path": "research/news_information/entity_resolution.py",
+      "sha256": "7b3fbd5fb137a4e897e5dedd4fd8245042e1bf18ee36e772f6a9fce67ebd5be6"
+    },
+    {
+      "path": "research/news_information/feature_store.py",
+      "sha256": "bf4b0cb653495c6167abb0a3e8cc9d1e1e012d074dee0d352a4350806fc1a718"
+    },
+    {
+      "path": "research/news_information/full_slate.py",
+      "sha256": "1f334dff2e54b6d0813473c318fb5ac3f60ce07d0166438132b089e6e1c22ab0"
+    },
+    {
+      "path": "research/news_information/identity_registry.py",
+      "sha256": "aa5d540f3cbeda5e35237ffd404fdabbe0a6deb97abc6c0ea1f9a2ae2ad8804d"
+    },
+    {
+      "path": "research/news_information/league_transforms.py",
+      "sha256": "f21b933cd6ad6d8005570dbd49a02c2ebf6fb842efd4ac68a416a2bf61b464c8"
+    },
+    {
+      "path": "research/news_information/materialize_models.py",
+      "sha256": "d74d59a0d13334f784c7ae5fd2d662eb437075eabd75ac1c686316addda84a13"
+    },
+    {
+      "path": "research/news_information/model_adapters.py",
+      "sha256": "105159151fa077151627b39cb7b80664aea95bfaf106a46b4534af32c054a17b"
+    },
+    {
+      "path": "research/news_information/model_registry.py",
+      "sha256": "4a631e4fdfc8215a3e6dd1e39772cf15e9227fd98356e1e96ef6359d02c70bd5"
+    },
+    {
+      "path": "research/news_information/multisport_benchmark.py",
+      "sha256": "2213c148d815caa60293f897042123c3bbaaefcdaadf5b9a44e2a2152c27f615"
+    },
+    {
+      "path": "research/news_information/nfl_official_report.py",
+      "sha256": "0a9e3599a411229cf78958dc06f63c075811cc8d8f79c1b752187e01a1de420e"
+    },
+    {
+      "path": "research/news_information/official_pilot.py",
+      "sha256": "e08f1131664b3dc7f15354010a6c89a383ff150b8b1bacb90252cfa76a7d26d7"
+    },
+    {
+      "path": "research/news_information/pipeline.py",
+      "sha256": "30cd05fa495d8a4878289be87a54f5fc993cfd9731e71b7c4b6e033cb2c53a9e"
+    },
+    {
+      "path": "research/news_information/replay_official_pilot.py",
+      "sha256": "741d8374dad59e59795682463e8d3869de413c06a25080b3f4abe5ac53e339da"
+    },
+    {
+      "path": "research/news_information/rules.py",
+      "sha256": "188a240f57a2b20021f6500cf00fc773469e9d2dcb7371b784540e24d8b76517"
+    },
+    {
+      "path": "research/news_information/runtime_backends.py",
+      "sha256": "80d21abc11f2c2063a2e1339c4cc4492c9ebe6d9277c461d4d25532c360e232c"
+    },
+    {
+      "path": "research/news_information/shadow_features.py",
+      "sha256": "ee887fe352d9ec63153e14aebdccd8cce3d825b6b3ff56a60027f2179d3fcf66"
+    },
+    {
+      "path": "research/news_information/source_adapters.py",
+      "sha256": "5ec0173aed14ba536051c2a72c3d1ab4c8178beba0187f33b896eb3b823e8292"
+    },
+    {
+      "path": "research/news_information/source_policy.py",
+      "sha256": "b095e62022a8fec077830978a0a8170cb2caac3c3a1add8b2187c84255542aee"
+    },
+    {
+      "path": "research/news_information/state_reducer.py",
+      "sha256": "85130f94c526ed48690b701ed72d1d5c4953703e3879d9b01d80162d01fe8054"
+    },
+    {
+      "path": "research/news_information/taxonomies.py",
+      "sha256": "afc2db2104f5241e36275d380299bdbdf61a61a4219aa19b899c3098c0c19f9c"
+    },
+    {
+      "path": "research/news_information/tests/__init__.py",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "research/news_information/tests/test_contracts.py",
+      "sha256": "9e490b7aefb2505b217344e2c6df13a8cf919489cf33d61e046bcabcc4cff7b7"
+    },
+    {
+      "path": "research/news_information/tests/test_ensemble_benchmark.py",
+      "sha256": "8912eec5e94c2cb10b26d600234cb0f8743ebccf45a4cb1e5f71a70da5a9055c"
+    },
+    {
+      "path": "research/news_information/tests/test_materialization_shadow.py",
+      "sha256": "a5e831971312070ed753da03cc61b7c56b6177d8321fd209906fcbaed1bc3447"
+    },
+    {
+      "path": "research/news_information/tests/test_multisport_hardening.py",
+      "sha256": "971d031a44e6ac48b25d9c26c7a09962fdee545fc012159d90a15cd927c40bd6"
+    },
+    {
+      "path": "research/news_information/tests/test_multisport_platform.py",
+      "sha256": "eaa8e92fc218329d50a520b61c9669e9c1f488f9d6b966952890f5cee69a0db3"
+    },
+    {
+      "path": "research/news_information/tests/test_nfl_official_report.py",
+      "sha256": "e26b6a19437ad854e974cd23e7d0d4b5ec51c9f3b57c85b1b544dcb8809a55ee"
+    },
+    {
+      "path": "research/news_information/tests/test_official_pilot.py",
+      "sha256": "1ed8dfc80ccbe8dc17a54f1c3d273e5cad0f4fa72397d7678cf9eafd14801f9b"
+    },
+    {
+      "path": "research/news_information/tests/test_official_replay.py",
+      "sha256": "c2e88f2d83f11038de31bc65677e767b7f037d39a45ed3761b7bfd4e9b04f530"
+    },
+    {
+      "path": "research/offline_benchmark.py",
+      "sha256": "7658c3437144f5a4e66b01a0b723c5eb3070ab5ac7837e68ced4f4c6d0234e6a"
+    },
+    {
+      "path": "research/postgame/2026-09-08/run-34273154914/analyze.py",
+      "sha256": "e86e87d5c3e5fde8f7f65f69b24dd9da82eed105eb0c3f518318154d4b1c36a4"
+    },
+    {
+      "path": "research/postgame/2026-09-09/run-34330917567/analyze.py",
+      "sha256": "bb0ac513e277d49d0b49f7f06eeec85ccc8ab65cfa8341a47fbca5c85ece3b05"
+    },
+    {
+      "path": "research/postgame/2026-09-10/closeout/run.py",
+      "sha256": "6d40481f1a8b19ddcd30b2bfbf9fdaaf442d317a12d39201e5df7470dfe805ae"
+    },
+    {
+      "path": "research/procedure_lineage.py",
+      "sha256": "2a8409a636fadb9a5b1a9a3d034224784c1d4c437f977ea91cf9726d5e5257ed"
+    },
+    {
+      "path": "research/selection_evaluation.py",
+      "sha256": "1c464260e25fe5b0ae7637943fb72647a22da5576a450f3a805d372afbfe302f"
+    },
+    {
+      "path": "research/test_mlb_distribution_diagnostic_extension.py",
+      "sha256": "df1ee8c560b527a3b0a6952b46c113219120c3eff6b67677d384c246296d882c"
+    },
+    {
+      "path": "research/test_offline_benchmark.py",
+      "sha256": "5a986a8b0fc73d4cb1d0b86b2c0a532f346af32668f057c8249b2cee30a935d5"
+    },
+    {
+      "path": "research/tests/__init__.py",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "research/tests/common.py",
+      "sha256": "56497bf9f8aaa1fa43d2c86b2eaaf6cab938ccd27c4a53ef1135ca6d3114500f"
+    },
+    {
+      "path": "research/tests/test_cfb_adapter.py",
+      "sha256": "7d6551997abf8f8b18e717d72afa4b97be295d4dc6d2f1659779c59bcda67941"
+    },
+    {
+      "path": "research/tests/test_evaluate_frozen_forecasts.py",
+      "sha256": "b114dfffbd87e94be467fc0f3e06dc04cf3ade9583d8dbc66b5bbb8e0fed995f"
+    },
+    {
+      "path": "research/tests/test_mlb_adapter.py",
+      "sha256": "43656a30e841e3dcc6ce4b338a7d3579dc2562a5b2195d4d181129a66d590911"
+    },
+    {
+      "path": "research/tests/test_mlb_distribution_experiment.py",
+      "sha256": "2da14faa4460601d77f8f537dd8e7354bb0235ae39baa67cfbba0750a5e785ae"
+    },
+    {
+      "path": "research/tests/test_mlb_distribution_integration.py",
+      "sha256": "95e8f3a8179c6d319313607bd93be2491c5da22badbca66f7309d19506b32c71"
+    },
+    {
+      "path": "research/tests/test_mls_adapter.py",
+      "sha256": "74e19465905b03c1fcdd4c6413368c5a0a91d953197d52fcbdd78ea1c7ab4c66"
+    },
+    {
+      "path": "research/validation_registry.py",
+      "sha256": "d339fd89fd957aac457236116f1f0cc05031cd71dd5e43ed223831daa1994f83"
+    },
+    {
+      "path": "scripts/accumulate_mlb_calibration.py",
+      "sha256": "313dec2c737567fd8ffcb09cec265085b29f5466335c590db251965ba0875708"
+    },
+    {
+      "path": "scripts/acquire_efficiency_history.py",
+      "sha256": "93347689d5a3d5b3e17c52a6c2191f0a95c1dad8b6863d162cedaa0267be3414"
+    },
+    {
+      "path": "scripts/advance_nfl_weekly_state.py",
+      "sha256": "33aaa7b1155565391275b6fa0fda1589a5b2e89d9decb3a4f07a263a8cdaa7f1"
+    },
+    {
+      "path": "scripts/audit_margin_integration.py",
+      "sha256": "bf5ff3fd29de5b5bfe95140719df6d21af4445fbea8ce644a8319761888a8724"
+    },
+    {
+      "path": "scripts/audit_nfl_arm_deltas.py",
+      "sha256": "7d1ca2f4d07bafffe7da579f4c03912ca54fff75e1cc8e99eb0f8951f53eeded"
+    },
+    {
+      "path": "scripts/audit_nfl_frozen_distribution.py",
+      "sha256": "e15ccbd1769503434c347dcf0f5a877ba1674fa55f8183a390bd80a4ea2ab601"
+    },
+    {
+      "path": "scripts/audit_roster_cards.py",
+      "sha256": "890b8a6a6fc65cc53bef3c918ddb6b52390f30c9832aaab19687884557782606"
+    },
+    {
+      "path": "scripts/build_fresh_nfl_event_package.py",
+      "sha256": "b10a03173bf548a8f6efb7bc016c58db798f54bb4699949e4756fea32cc28069"
+    },
+    {
+      "path": "scripts/build_nfl_context.py",
+      "sha256": "484691390fa7ce412f1a9851fded078d92021b7409fb8c295874dc516a1a9014"
+    },
+    {
+      "path": "scripts/build_nfl_mode_data.py",
+      "sha256": "dda123a37ea2ed1182fe3eb186256ebbdebcf729b6b49420d63b057a2b572836"
+    },
+    {
+      "path": "scripts/build_operational_rest_candidate.py",
+      "sha256": "0bd5b4bfc8d90d1300b0948a15af0984f5f218865afa4005f8736265d7ca897c"
+    },
+    {
+      "path": "scripts/canonical_forecasts.py",
+      "sha256": "0c72ddb0d0a9bb7de40547c2b0181888e96220328f469d104f9c5e8c3fdaec9e"
+    },
+    {
+      "path": "scripts/canonical_grading_preflight.py",
+      "sha256": "6ccf9e3d772259bd24e4df916280b9a829066d72e844797903cc68aff185bad7"
+    },
+    {
+      "path": "scripts/canonical_results.py",
+      "sha256": "f243a0d76238a2ae02059d0d1ef251ff7bffc88a2a894e4889090659cba14303"
+    },
+    {
+      "path": "scripts/capture_efficiency_current.py",
+      "sha256": "ca3b387b3e376259a63ff87582a1dc697c2409864a75dd9e0fa6cfa7d6c1b038"
+    },
+    {
+      "path": "scripts/capture_model_recovery.py",
+      "sha256": "9d427ef154b40caace85ce54d22b8d524e25a738b049630b165551d63a8b1944"
+    },
+    {
+      "path": "scripts/capture_operational_inputs.py",
+      "sha256": "113ef1104f8bbddf81b8e80b7dc9068b4e9bdb87961c75d610d8885864abeb62"
+    },
+    {
+      "path": "scripts/capture_priority_schedules.py",
+      "sha256": "15781ca3b542a059ab31c6d10e2c18225caa6356616e12982ab550af4959451e"
+    },
+    {
+      "path": "scripts/capture_team_histories.py",
+      "sha256": "88bce2b9584330bfad5ab6a1aec0ddccace73d813f58fe779240fd593c91d919"
+    },
+    {
+      "path": "scripts/check_cutoff_integrity.py",
+      "sha256": "10114122a1d88c43b469d8cad955a580fb39150a5e08001b8d92fda9634aab17"
+    },
+    {
+      "path": "scripts/ci_evidence_archive.py",
+      "sha256": "547408043284a1a82f7475ea7aaad457bdc63f4da24874a48d23416b617e9c96"
+    },
+    {
+      "path": "scripts/ci_storage_monitor.py",
+      "sha256": "600990b00159196401d99be26d993e4aeb5d5fba184c9b08d239ef4df8c99f11"
+    },
+    {
+      "path": "scripts/cross_sport_distribution_research.py",
+      "sha256": "f5abd0f1b13ec02587abc2d6ebfffb188064a663c383e20ccb19c1bb86609a03"
+    },
+    {
+      "path": "scripts/diagnostic_winner_grading.py",
+      "sha256": "a24e3f5c4f8b633a4fda1a068561e3d5130eaae7d9cbedc0bd6187da0d3b4d21"
+    },
+    {
+      "path": "scripts/evaluate_efficiency_selection.py",
+      "sha256": "488d596ff23216baf47cff235f3d59a0a965094dcf97c9a7cad3dd2f1543b3ac"
+    },
+    {
+      "path": "scripts/evaluate_nfl_score_kernel.py",
+      "sha256": "4dab4b10d701a0341e44288030c701c734decb2c6748ea7bdddc0493c98875c4"
+    },
+    {
+      "path": "scripts/evaluate_research_selections.py",
+      "sha256": "675db3d68a0e75d6b3901151903d046de6272e69d5a0faaf12257eb6fd76613e"
+    },
+    {
+      "path": "scripts/fit_nfl_modes.py",
+      "sha256": "a8921e7a866e4be76f75ba5aa6174262b3249cdb114d3ab773a296929c970813"
+    },
+    {
+      "path": "scripts/fit_nfl_spread_calibration.py",
+      "sha256": "76c866b86d1b313a6d939611c833ad2c6854fca1494b881d164f46d52f8f2954"
+    },
+    {
+      "path": "scripts/generate_card_force.py",
+      "sha256": "b1a6a2d175d39f43f6fba86f720be49c3afe49b4cd324f5fc19d93e511983242"
+    },
+    {
+      "path": "scripts/grade_mlb_registry.py",
+      "sha256": "d463f8ddadc019ba8bd9eba2996f14877f5265c12856478b080c07e84c6ae902"
+    },
+    {
+      "path": "scripts/grade_research_board.py",
+      "sha256": "0b080a641d3be53619db6bff06385a39d81a8c5ed891fcbf1e49450490b9e478"
+    },
+    {
+      "path": "scripts/investigate_mlb_model_sim_divergence.py",
+      "sha256": "2f2133a1a0cfe43c5d1c458bba42936ede537dbc7974728df58304fa475807c4"
+    },
+    {
+      "path": "scripts/model_defaults.py",
+      "sha256": "055e5310fb9d38cfd4b5bf9193a1eaae5ccec0648edce381618b90510c6dfb9b"
+    },
+    {
+      "path": "scripts/nba_history_scope.py",
+      "sha256": "fae23d76c774acdcd7b37a9876d9cf44e2d2c36b9c7dadb86d121fc5923bacc9"
+    },
+    {
+      "path": "scripts/nhl_atomic_capture.py",
+      "sha256": "21de9510df15888c4d2f353ea2cfd67482a586ba646ae7c1769c372a6d184060"
+    },
+    {
+      "path": "scripts/nhl_history_applicability.py",
+      "sha256": "2fb01458b5ab3e2f12d87b1e5e88195bbfa05486fe0d84476546f6ceea0162c1"
+    },
+    {
+      "path": "scripts/pack_nfl_context_model.py",
+      "sha256": "4952401d4e1dbd0084cee5eff00d3c31aa1027210186a0a948124d50f01b914f"
+    },
+    {
+      "path": "scripts/package_nfl_modes.py",
+      "sha256": "b2f40ce290887c9de8eea454d53e654d2ec39cba17957dbaea40bd45b2081ada"
+    },
+    {
+      "path": "scripts/prepare_card_workflow_inputs.py",
+      "sha256": "7c240336d2a1dd063449b38aa8f6d313a2bf524e949a1b1c4cc3590cd0b61547"
+    },
+    {
+      "path": "scripts/prepare_cfb_current.py",
+      "sha256": "22ae3202b2f70efd05e3852c8e7162af7f79e3409f81276db4be4e14dfe71ab8"
+    },
+    {
+      "path": "scripts/prepare_cfb_efficiency_history.py",
+      "sha256": "e01f1a8478b88dd95d6de27a6a43632835189f562f679564408d71cb63dd2037"
+    },
+    {
+      "path": "scripts/prepare_det_buf_20260917.py",
+      "sha256": "c1d00401bd36c2c7d4139e4bb15bbe140847b75d94c993ac96004b7f315e4808"
+    },
+    {
+      "path": "scripts/prepare_efficiency_current_nba.py",
+      "sha256": "3517b2ea83a237538e7c9031fae88ce99dc815ad96dac6939b41d4c957b28116"
+    },
+    {
+      "path": "scripts/prepare_initial_baselines.py",
+      "sha256": "03e01f10178a812ec2c0454279c0ee05223532fd7d622a780176995bfb55903a"
+    },
+    {
+      "path": "scripts/prepare_mlb_current.py",
+      "sha256": "a027786d9d65f2667f67a2bdf1bff2c7217580750469bf1d0dfcc5fbdd152f28"
+    },
+    {
+      "path": "scripts/prepare_mlb_official_current.py",
+      "sha256": "07e26052b47b9061c9615604648f073f09336e18c18f4678c6acc9b76eb0f69b"
+    },
+    {
+      "path": "scripts/prepare_nfl_event.py",
+      "sha256": "f1cde0d801fa3ef84b202f54b61c5fb098ae4ac0ad86ec548c2659ad35da84f5"
+    },
+    {
+      "path": "scripts/prepare_nfl_mode_packet.py",
+      "sha256": "bcc9823d02ac87559826329f68a74496b92a55e5ae6bcbef4e32598fbaa4715a"
+    },
+    {
+      "path": "scripts/prepare_nfl_weekly_events.py",
+      "sha256": "37458cc87f54b757738750bc334561c1789d12860162f8cc64f812dc8876a945"
+    },
+    {
+      "path": "scripts/prepare_rosters.py",
+      "sha256": "7e736eeca52017634d8d4a2d7ae108e4023d7334af8750d821d709cf5517c6df"
+    },
+    {
+      "path": "scripts/prepare_wnba_current.py",
+      "sha256": "233afaf1aece38b59e5788d0aa33597df4ed3c5d9243d1fe3b0f391f1c428cc1"
+    },
+    {
+      "path": "scripts/recovery_capture.py",
+      "sha256": "1afcbe7d37fefdbd22ed0469faa75650d74e9b51f3c4d87e310bede832d33305"
+    },
+    {
+      "path": "scripts/recovery_features.py",
+      "sha256": "b17455cbf57bcabcc2e598f535a6015ac8d0fa904bce48ac8497d04f81668e6c"
+    },
+    {
+      "path": "scripts/refresh_all_sports.py",
+      "sha256": "c787ed96443048acfdfa7e077025aa29ee200d108e171d04abac10f092ccfb04"
+    },
+    {
+      "path": "scripts/register_mlb_calibration.py",
+      "sha256": "4673ab3a9c6e1e341771fb327f9822fcad2e7755fb07293133a8b1b6fd202fdb"
+    },
+    {
+      "path": "scripts/render_card_disclosures.py",
+      "sha256": "978270d347a73992aec84fc65251939260477db905270ee1ce7e7a7001602cd0"
+    },
+    {
+      "path": "scripts/run_distribution_history.py",
+      "sha256": "aecbbd9b9e5a3c9d4e3472c984a21a5d56a081062569c219f80efa483a3da576"
+    },
+    {
+      "path": "scripts/run_efficiency_experiments.py",
+      "sha256": "17f0559c6c22ba16582929834f76f96ca918fda35a5311dd3fd7b97efe433d71"
+    },
+    {
+      "path": "scripts/run_fresh_nfl_research.py",
+      "sha256": "cacd891fdf2ff7f7dcdb64b362ad5418556a8b4e1fd2391a2298a4bdb63965a6"
+    },
+    {
+      "path": "scripts/run_mc_precision_research.py",
+      "sha256": "f0ecaa5f828dc3847e699af86311fa80b7a082469811a4fb382561a2d508e0e3"
+    },
+    {
+      "path": "scripts/run_nba_efficiency_shadow.py",
+      "sha256": "84a314cf860b158accb55e5061e16b62e8d1673bc80c9b1bfa56f7670db454dc"
+    },
+    {
+      "path": "scripts/run_nfl_assimilation.py",
+      "sha256": "8305429251a3fbe62df1be63646710a056d8990d1ee334292083acdf111008dd"
+    },
+    {
+      "path": "scripts/run_nfl_halftime_research.py",
+      "sha256": "56a8a99531deb805da0f320efe8c1594a2f9beafdef687a00907451e56694625"
+    },
+    {
+      "path": "scripts/run_nfl_integrated.py",
+      "sha256": "9708b10a3af0f0896d4db90d893c649061d12b4d4c696b1f38f259974fd515ee"
+    },
+    {
+      "path": "scripts/run_nfl_spread_calibration.py",
+      "sha256": "3883b1ec6bcc86c3db3e25b3e214fa2c2ac3864e813b4962569d147a9367f910"
+    },
+    {
+      "path": "scripts/run_research_selection.py",
+      "sha256": "7cd00312065a05e7aa3c67028a7549de5c0bf5968fa9c93442d68c8cc5589d7e"
+    },
+    {
+      "path": "scripts/seal_det_buf_20260917.py",
+      "sha256": "a0b745d5e5a0d65534d1e33f77a47ba9154ab1d1e22d405681c06987f33e4be0"
+    },
+    {
+      "path": "scripts/source_attestation.py",
+      "sha256": "569ab05316a5997de996fd48f48b3ae8a88e7f0d87ad7f544121ebe0d0cde1df"
+    },
+    {
+      "path": "scripts/standing_health_triage.py",
+      "sha256": "03d88b468c4be0cb3f0f41ca0485e3a18f4fc0af212f969a488c08bcd423233c"
+    },
+    {
+      "path": "scripts/validate_current_nfl_weekly_state.py",
+      "sha256": "cdc672206decda46ffd5d4c478c7fadd256a26687e5c727e79813c77fbf422b9"
+    },
+    {
+      "path": "scripts/verify_all_current_runtimes.py",
+      "sha256": "0de5076bff4941d355c09a392c6485c300733c51f243d1090317a6a3ed464983"
+    },
+    {
+      "path": "scripts/verify_distribution_study.py",
+      "sha256": "134cab6ba0efbd4e86d1eb73a66a753a7e3df0db0fe93f5cbe7a978b60cd9f50"
+    },
+    {
+      "path": "scripts/verify_mlb_calibration_acceptance.py",
+      "sha256": "31ea9f2acb4584998aef1e5ab4c473977a9a2c30a48b5097f9f4e9773333a44e"
+    },
+    {
+      "path": "scripts/verify_nfl_current_acceptance.py",
+      "sha256": "c9fec14b5f929f92b70944f5d936d43d571e8f486c93f78b1e4bd0132bc9ff3b"
+    },
+    {
+      "path": "scripts/verify_nfl_modes.py",
+      "sha256": "b11d3aded3eabc9abf2fc66cdb03231b6e65fc61cbf397b705a9ef631a4c830c"
+    },
+    {
+      "path": "scripts/verify_nfl_weekly_sources.py",
+      "sha256": "db2b0a71515c54681eadc35f918656dbbb4c3ca2ab0fd967dfdb3b236af99cbe"
+    },
+    {
+      "path": "scripts/verify_semantic_identity.py",
+      "sha256": "215051d81d8d7b6ee24ceae4dd101edd1b8414dad7278bb90b723075e9950eff"
+    },
+    {
+      "path": "sports/enrich_mlb.py",
+      "sha256": "eaacd88ccfd21e19484979cc9dfb5933ed1427013b38c5e7ca6744199f64af78"
+    },
+    {
+      "path": "sports/ingest_mlb.py",
+      "sha256": "4d181ad9f71a9012696c6dd7adffb0af042ed2f7d28526068515b42adc184c23"
+    },
+    {
+      "path": "sports/phase1_1/durability.py",
+      "sha256": "20a445a38554c07c9e12db6dd700e6ece412ef60afa756b9664b0fd1370e2854"
+    },
+    {
+      "path": "sports/phase1_1/test_durability.py",
+      "sha256": "aff2be71f3c3494d8903ef469c1ae1106cf8ea827ed62be042ce814f8897e970"
+    },
+    {
+      "path": "sports/registry.py",
+      "sha256": "27d64aeee18fc19d7a867eb2e27a513d2ff7a10b59a278e6aa6ff50d38aa11f6"
+    },
+    {
+      "path": "sports/rosters.py",
+      "sha256": "b13b2454adecc35193a5d3549c26cc5387cc4a573587fd2378ff599582204112"
+    },
+    {
+      "path": "sports/schema.py",
+      "sha256": "d7e62e3e4cb70e6743660f2529d8c9a8403ead01290d0c666420c62aa079c51c"
+    },
+    {
+      "path": "tests/conftest.py",
+      "sha256": "c14e668d5405e68ee34b3572ef50e8f3733343c7d3c4f80ab3205bb851928afe"
+    },
+    {
+      "path": "tests/run_operational_rest_a5_checkpoint.py",
+      "sha256": "d0bca6e2b5012985aa8cb72dcd7be27554803468292f940faf32f92c604b8a3e"
+    },
+    {
+      "path": "tests/semantic_identity_fixtures.py",
+      "sha256": "35ee5205cfcc313865cde4e0163920f99c5cb8cd6b43e74f7926b5f1c30b4083"
+    },
+    {
+      "path": "tests/test_blind_canonical_grading_preflight.py",
+      "sha256": "2b8be8641108a0abc5459e40dabbeb76c333813fd24b9623678e9fd7ea9a6eda"
+    },
+    {
+      "path": "tests/test_blind_conformance.py",
+      "sha256": "12c38aa71d09e116ff8d1c858263ad74aacb1bbf007e68c119d45995e22f1268"
+    },
+    {
+      "path": "tests/test_canonical_forecasts.py",
+      "sha256": "cd22df723d97df4b0a2fe050f067d47e40bfb24d609c3eb0de7f1580a8848cbf"
+    },
+    {
+      "path": "tests/test_canonical_grading_preflight.py",
+      "sha256": "83c9784f1b13f3e90287e21c3bc6b9a702b62c59c24a08733afd9cecc7e8ad30"
+    },
+    {
+      "path": "tests/test_canonical_results.py",
+      "sha256": "31df6dec70802a1d10789279293503f9b58a1e2949057bdeefc27491178194b2"
+    },
+    {
+      "path": "tests/test_card_adapter_registry.py",
+      "sha256": "686755257dfb2f4b5fba716ff4041177fefc568cf801cdd6faa024502102240d"
+    },
+    {
+      "path": "tests/test_card_disclosures.py",
+      "sha256": "5d90d313267bbfbba0d2abf0a3b318930a08d87eb35868bb131e9ad8c85aa897"
+    },
+    {
+      "path": "tests/test_card_workflow_inputs.py",
+      "sha256": "70388471fba9634309eef0ea5588d74ab8e7585b646c07cea67781f2def1f6d6"
+    },
+    {
+      "path": "tests/test_cfb_efficiency_experiment.py",
+      "sha256": "c1073842b2193b9fd250d101a3feb48d136f2d718a1a1a954a9eb640df124e84"
+    },
+    {
+      "path": "tests/test_cfb_margin_evaluation.py",
+      "sha256": "5900bec17f6d657d577f0c4132cdf812684586bbdffc7c1ab486a4ce5d2482fe"
+    },
+    {
+      "path": "tests/test_ci_storage_archive.py",
+      "sha256": "c4f91e8e886120979a21d9622dd452c0bf2efadb6196ad9b3f3e77d09926bf54"
+    },
+    {
+      "path": "tests/test_ci_storage_monitor.py",
+      "sha256": "449bb94d88f4cebb5a2f774a41188c6f7505038c3eb3f91cd657493bc3f88ca2"
+    },
+    {
+      "path": "tests/test_cross_sport_distributions.py",
+      "sha256": "7fa7abc0a34ed8e47304222d092267eb56076a1a879f60148c575ed92bf5354d"
+    },
+    {
+      "path": "tests/test_current_freshness.py",
+      "sha256": "074be315e63b12661fd63e7be9f6a323439385400021750d3975a57664539a2a"
+    },
+    {
+      "path": "tests/test_current_runtime_contracts.py",
+      "sha256": "7b35b2cb8a1f1111d2a682aae0a50294b561e4be5da73ca6de6fc6cdb916b262"
+    },
+    {
+      "path": "tests/test_current_sports_data.py",
+      "sha256": "2034779166f1781536cf143872a5ad590b3052be9466067f9131bfcea5930ec7"
+    },
+    {
+      "path": "tests/test_diagnostic_winner_grading.py",
+      "sha256": "b50e5caa2958c2460fb07db7582e10802552cdb2214750893c9c454dd65a0b47"
+    },
+    {
+      "path": "tests/test_discrete_mc_adapter_compatibility.py",
+      "sha256": "29d92944af78796a07e1396cd1014dbcaec4870e6c8cb2760f3f15b94d0a39bb"
+    },
+    {
+      "path": "tests/test_distribution_history.py",
+      "sha256": "d47194b8b034e4084fab72b21e06f95ee23886668a76eefcc6d976fde00eefc3"
+    },
+    {
+      "path": "tests/test_efficiency_adversarial.py",
+      "sha256": "539cfb9235d042d66cd483f6c6c333e04e2bafecbe1c8af6c02dc917e9cd5a84"
+    },
+    {
+      "path": "tests/test_efficiency_evaluation.py",
+      "sha256": "17d9d928628e76141a738e76c24ddc4788e2223519079bf748fe23c648d7497e"
+    },
+    {
+      "path": "tests/test_efficiency_integrity.py",
+      "sha256": "aa92229269b8722bd8412b05cea4ced36b942d76dcab4685f4ca76bc3c40e48c"
+    },
+    {
+      "path": "tests/test_efficiency_runner_dispatch.py",
+      "sha256": "ad3d7f1593b527491cc9e8fe3f0b293c638cf510a95c66a9392118d8c867ee3b"
+    },
+    {
+      "path": "tests/test_efficiency_selection_diagnostics.py",
+      "sha256": "a27a5df42a1f542ce11ce4ec3f2378f3b7b5ff3ec532dbc3c53b0702ac182b01"
+    },
+    {
+      "path": "tests/test_evaluation_walk_forward_cli.py",
+      "sha256": "0ed98435bc8725396f9d7a8beb71744f378f955b010e973447beeb9a82431c38"
+    },
+    {
+      "path": "tests/test_finding_evidence.py",
+      "sha256": "f3cfa165412d7bdb10eec19ea7a24936c22fdb26b8b9aae46eb7860f997e210a"
+    },
+    {
+      "path": "tests/test_forecast_and_io.py",
+      "sha256": "3f3809658981d4ef4cd1481934fa97fc973f13841410dd35e220ae5905940220"
+    },
+    {
+      "path": "tests/test_fresh_nfl_research.py",
+      "sha256": "1f0075680685e0afe6f2f69f256c0561f85cf6d0b372b259731c295e011b5ffa"
+    },
+    {
+      "path": "tests/test_integrity_reporting.py",
+      "sha256": "c351e7b06aab80109806c8989e1e5f91c8a3f61e1f2718d06c92e84b0f0ee72d"
+    },
+    {
+      "path": "tests/test_margin_contract.py",
+      "sha256": "89f4b7f35407379600a8cdcf7451724a1f0fe67da6e4fdc7600620bdcb132441"
+    },
+    {
+      "path": "tests/test_margin_quote_integrity_v2.py",
+      "sha256": "598c515b45cc30bc6bbd3918111a59e4aa0bfa08ae194201b5bf1a84f491a366"
+    },
+    {
+      "path": "tests/test_margins_adapters.py",
+      "sha256": "733b4093d3de303c5aa9d6c543f5cf0afb15c976ab853753a7fbc21d295fd425"
+    },
+    {
+      "path": "tests/test_margins_core.py",
+      "sha256": "395e2dc25ecc195acb828e8126fb5a724cbdd173f4237e4f8dd46f541bbad71f"
+    },
+    {
+      "path": "tests/test_margins_validate.py",
+      "sha256": "13d45e1711aac99bd3c02bfd1882e3693fcbb62d87205f7c27961a265dfaced1"
+    },
+    {
+      "path": "tests/test_market.py",
+      "sha256": "9019b2b4728df2ec4d1e41421d20a77c9285ce6583570b2f352272571286335c"
+    },
+    {
+      "path": "tests/test_mc_precision_research.py",
+      "sha256": "6d276027f0b3e7f13424c7a6931ca5f754bc393887ceb30f6e93885267029ac9"
+    },
+    {
+      "path": "tests/test_metrics_and_backtest.py",
+      "sha256": "d456a8e0e614e988978d7c6d298f9073f1baef8a587fbea131e4c4305909b00f"
+    },
+    {
+      "path": "tests/test_ml_market_coverage.py",
+      "sha256": "5eb6f51b5c6424ffb07709408c7c31ac99f458525275a68b1b34740763d41f41"
+    },
+    {
+      "path": "tests/test_mlb_calibration_workflow.py",
+      "sha256": "7e0031b9ccf7902e4ef628845c13d18f4cc184dfd2b6034c285355cc6403fb15"
+    },
+    {
+      "path": "tests/test_mlb_current_path.py",
+      "sha256": "5278ba1f4b23a743edb12a46292690f70e8d5b8185e2ac6e3a0873a6a0ad0da6"
+    },
+    {
+      "path": "tests/test_mlb_grading_artifact_retention.py",
+      "sha256": "3be77e13e29c3739c00d70e097d98094b0d509e1c68f6d2a75fa6528966e6e95"
+    },
+    {
+      "path": "tests/test_model_defaults.py",
+      "sha256": "acd85ae0e09e86d045ad2d36bb776007a8febaba9edd51c59e6d9266d28c9fa2"
+    },
+    {
+      "path": "tests/test_monte_carlo_reproducibility_v1.py",
+      "sha256": "4cb36d090a8df898de5b8cebd2b25d5b184d32cf3de4e5bf8ce13791ce1e9578"
+    },
+    {
+      "path": "tests/test_nba_efficiency_shadow.py",
+      "sha256": "14c976941674eb258727b0306920c1f0d32b268a7397b52a53be7214fa43ca07"
+    },
+    {
+      "path": "tests/test_nba_history_scope.py",
+      "sha256": "c3f8571766ef716e41f7d4cc8cb1e682ac8bd4040ec274c8f805b0d5e0ada8a4"
+    },
+    {
+      "path": "tests/test_nba_possession_efficiency.py",
+      "sha256": "697686574116a45c22713afa24f9d4db1fbd9c6ca19a6ec49f1c07f3944a53e1"
+    },
+    {
+      "path": "tests/test_nfl_assimilation.py",
+      "sha256": "f5c27a434a2eca69fbe3ea0c9b3bfa1c2a735258e2e6805d720b097e61384936"
+    },
+    {
+      "path": "tests/test_nfl_context.py",
+      "sha256": "256169475d12310e9f81aada6dd950e66794b26b466bb8392ddb6466ad7eed99"
+    },
+    {
+      "path": "tests/test_nfl_halftime.py",
+      "sha256": "5aa8d02e3773878424ac3138dba6a0b644300b7573cee202489fad3450030a37"
+    },
+    {
+      "path": "tests/test_nfl_modes.py",
+      "sha256": "15b26fd2628110f0ef42b6829dffe68b48a340a91a9133b2c8f7dd75859b97cd"
+    },
+    {
+      "path": "tests/test_nfl_personnel_resolution.py",
+      "sha256": "9fd6b1549c9fefff7de018e13665966daab96f0c08a5630a5bbec89e21a33895"
+    },
+    {
+      "path": "tests/test_nfl_prestart_package.py",
+      "sha256": "b251702078c0304d2661f0aeca3e79340fece1bb3487370982f7ecd27939968c"
+    },
+    {
+      "path": "tests/test_nfl_reconstruction.py",
+      "sha256": "fac5ab56a337ed51d9fb9356e3db38108f52d97ee3dcf0c60b98e85af74de4b8"
+    },
+    {
+      "path": "tests/test_nfl_spread_calibration.py",
+      "sha256": "fb59748388ca2141685afeda7f1178fc3974ff6ed8e4fc575541974936ee1558"
+    },
+    {
+      "path": "tests/test_nfl_starter_adjudication.py",
+      "sha256": "a0d53d847a5e61e1544b0fee02237b5b1447b82de7061e298a3b58d163a76b4e"
+    },
+    {
+      "path": "tests/test_nfl_week2.py",
+      "sha256": "c771296bd4f6a45ba1150fb7a8f80412c6bc0434e45962e9885e75493176e874"
+    },
+    {
+      "path": "tests/test_nfl_weekly_state.py",
+      "sha256": "0cd29285e578e565d90bc6d9aa458df7c622a21e97028be91ac2bfd87a71af9d"
+    },
+    {
+      "path": "tests/test_nhl_atomic_capture.py",
+      "sha256": "df0b02ee214746fef60e14bb234f7a78f96d5f85650e056a583fdb776f6e4bd6"
+    },
+    {
+      "path": "tests/test_nhl_season_rollover_unittest.py",
+      "sha256": "0629c377169abd0f87639e3edc18d87c149c590261c4a74146f77ba7bc75d269"
+    },
+    {
+      "path": "tests/test_operational_rest_golden_vectors.py",
+      "sha256": "55a4210f600d8961d6b7cfb79cceec8ea06f54b1a44e08d21eee9417bc96412f"
+    },
+    {
+      "path": "tests/test_overhaul_adversarial.py",
+      "sha256": "721b8e10e1908676f49926de3eab7efdce06890a185881c282aa5d545e98ac24"
+    },
+    {
+      "path": "tests/test_overhaul_integration.py",
+      "sha256": "7848c1404ad4f8adcec155b5d4768bfacd49ff286ced0f3785bec052486314d0"
+    },
+    {
+      "path": "tests/test_procedure_lineage.py",
+      "sha256": "db8b89091241215d0555a904479c5902b8b2a7bebc54329bc93dbd3b61019231"
+    },
+    {
+      "path": "tests/test_projection_audits.py",
+      "sha256": "e50d9b565cb3bfa952b8270893738fa5a0e6bef349107eba99dee313d16a4faf"
+    },
+    {
+      "path": "tests/test_ratings.py",
+      "sha256": "057f9d508a56fbacacf5494715d07ce09a258da4a2dddce3aada08562d5bc21d"
+    },
+    {
+      "path": "tests/test_recovery_governance.py",
+      "sha256": "fe0d5959dbcbca2ae3befbd2003b31c63bf0dec25945807f14c95bed69f3eaff"
+    },
+    {
+      "path": "tests/test_recovery_models.py",
+      "sha256": "5e975106243698c764573f35d344501960ea3452d5d110d6a1f0c687f2b38f1a"
+    },
+    {
+      "path": "tests/test_release_health_repairs.py",
+      "sha256": "d4347a0b0e8ae1b3c805735fcd892e72e4064722bffd702d46c7fac8a04607df"
+    },
+    {
+      "path": "tests/test_research_selection.py",
+      "sha256": "b9c3009dd6d7546d30d0df5ef51ae79119a1eea0f6d55c6a66fe19818b589ee4"
+    },
+    {
+      "path": "tests/test_research_selection_cli.py",
+      "sha256": "85e576df7ea9e5544822f0efe479be2168860b053d053b5fe00d201b8a4affab"
+    },
+    {
+      "path": "tests/test_roster_disclosure_integration.py",
+      "sha256": "ebf174308cd9154784909211f394692043f13729b88d547de400827758d900d7"
+    },
+    {
+      "path": "tests/test_rosters.py",
+      "sha256": "807c3410e81496838561740cd56685ba9fdc2443792ba61cd7bced10faf4ab88"
+    },
+    {
+      "path": "tests/test_season.py",
+      "sha256": "9bfa68706e79a3d0f5c49296f94df1c5e47b3466dc12a0f09ba9054b5f3236e7"
+    },
+    {
+      "path": "tests/test_selected_market_independence.py",
+      "sha256": "a7de4a76181d31fd97347547723baba028e612f0b73164b7c1c4878ead1db191"
+    },
+    {
+      "path": "tests/test_selection_evaluation.py",
+      "sha256": "5b508473561ad6ad97fe23480f7ed8b73fd06cc6f02a4522dc2afb3af5900728"
+    },
+    {
+      "path": "tests/test_selection_integration.py",
+      "sha256": "4fd51904f55880bce9e7447ef6f73142773b77ed84c728c5bc59be6c077be8d6"
+    },
+    {
+      "path": "tests/test_semantic_distribution_identity.py",
+      "sha256": "3b28228e7913c29925b041a60497bf1c4766cee2aa717671a6b08ecce5f62b7e"
+    },
+    {
+      "path": "tests/test_semantic_identity.py",
+      "sha256": "9415d30ac954ab8481eda32939124bc8ed9e59fe6ac0d8e53cffab97930a35b7"
+    },
+    {
+      "path": "tests/test_semantic_spread_identity.py",
+      "sha256": "200a022bfebf175814319e42b170e2616054762b11f786f957410f9c34c4dfb8"
+    },
+    {
+      "path": "tests/test_simulators.py",
+      "sha256": "ec845ec472672b1e059718ec38dcd1a93620b0afb44f5daf364d6d69fd65c992"
+    },
+    {
+      "path": "tests/test_source_attestation.py",
+      "sha256": "41d44ba0b6ea5c44456567218962c3613b1cda6ab2ad115d3709132eeeb2bba4"
+    },
+    {
+      "path": "tests/test_standing_health_triage.py",
+      "sha256": "b991dcd7999b6b6140a7d874671d3965020fd48d7d7332998d7b984af03709ab"
+    },
+    {
+      "path": "tests/test_validation_registry.py",
+      "sha256": "d6105cba62f1e99e1a035bea905cddbf12f34260b5cabcad981ddd5fdadb4728"
+    }
+  ],
+  "wagering_authority": "OFF"
+}

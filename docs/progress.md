@@ -4738,3 +4738,137 @@ CFB: 1,045 common events; efficiency Brier delta +0.000453 with interval crossin
 Integrated/exercised CFB joint dispatch, NBA scope/cutoff contracts, receipt identity binding, and NFL UTC/Eastern starter reconciliation. NFL six-week/93-game replay matches original states and selected QB NE forecast. Actual shared-card paths wrote 58 first-write local pregame SHADOW entries (10 CFB, 24 original NBA preserved, 24 new NBA v2); canonical eligibility and publication/action authority remain false.
 
 Final full test suite: 1,402 passed with JUnit evidence. Global legacy health remains RED (55 failures/4 warnings); scoped dependency disclosures retained. All 7,006 primary stage receipts/raw predictions survive selector BLOCKED status. Exact market/discrete settlement validation, authenticated personnel inputs, original historical availability evidence and NFL per-event OOF remain named blockers. No remote write/merge, default change or promotion. User approval is required before the prepared external research branch/draft PR.
+
+
+
+## 2026-10-21 — Isolated margin contract integration review
+
+Compared current main after disclosure PR72 with pinned margin PR69/PR70.
+Added an opt-in source-bound PMF/CDF bridge delegating settlement to the existing
+five-state engine. Explicit side, source, cutoff and settlement identities prevent
+ambiguous three-state/MLS quarter-line interoperability. Fitted challengers and
+PR70's unfitted mean-shifting football boosts remain separate; no runtime or
+default activation. Reproduced the NFL runner merge conflict, omitted side in
+PR70 quote records, and raw-probability scoring on push-excluded samples.
+
+Local checks: 215 tests plus 56 subtests; 162 synthetic and 26 retained NFL
+identical-input contract comparisons pass. Preserved NFL predictive HOLD; the
+816-game result is not reevaluated or promoted. No frozen forecasts, model
+coefficients, defaults, runner disclosures, ledgers or authority changed.
+Partial local health cannot certify full repository health. See
+docs/MARGIN_INTEGRATION_20261021.md and docs/releases/2026-10-21-margin-integration/.
+Clean-checkout CI and draft publication outcome are recorded on the review PR.
+
+
+
+## 2026-10-20 — all-sports roster acquisition and honest consumption boundaries
+
+User requested roster-gap repair across all sports. Added immutable roster capture and raw-byte normalization for NFL, CFB, NBA, WNBA, MLB, NHL and MLS, exact team/player identities, six-hour cutoff checks, duplicate membership guards, conditional workload conservation, and coverage attachments in the shared card and canonical NFL runner. Full-roster-required mode refuses before simulation; attaching a roster never changes parent probabilities or asserts numerical use. Current NFL selected-arm capability evidence and MLB starting-pitcher scope stay distinct.
+
+Captured 307/307 requested teams, seven directory receipts and 22,034 distinct sport-scoped player IDs. Discovered the default CFB endpoint silently capped every team at 100; explicit limit=1000 recovered 2,004 omitted players across the 138 FBS teams. The capped discovery is not acceptance evidence. One NFL practice-squad membership conflict (Emany Johnson, CIN/LAC) remains visible and blocks the affected roster checks; the Bengals official October 20 transaction record supports Cincinnati, but raw data is not silently overwritten.
+
+81 focused tests passed, including all-sport source rebuild, tampering/re-sealing, response limits, stale/future/PIT/season/identity failures, workload scenarios, immutable resume, original-card preservation, and both shared/NFL runner gates. The real-source audit covered all 17 saved October 20 events: current review 16 AVAILABLE_NOT_USED and one POST_START block; all 17 refuse the newly captured data at their original cutoffs. No new predictions were generated, no frozen card changed, and no full-roster impact transform was fitted. Full repository health remains unestablished in this partial restored checkout. Remote CI pending branch publication. See docs/ROSTER_SYSTEM.md and docs/releases/2026-10-20-rosters/report.json; retained source archive is hash-bound there. No defaults promoted, main not changed, wagering OFF.
+
+## 2026-10-21 — PR 71 roster/disclosure integration
+
+Reconciled roster head e145d0b7 with main 90daf8e (merged PR 72). Resolved the
+NFL argument conflict and preserved both appended journal entries. The shared
+runner merged textually; combined tests cover all seven shared leagues and NFL.
+224 tests plus 56 subtests and four CLI checks passed locally. Other local
+regressions exposed missing historical restoration files; remote clean-checkout
+checks remain separate and are recorded on PR 71. Full health is not certified.
+
+Verified the retained archive, 630 manifest files, 314 receipts, 307 parsed teams
+and 22,034 IDs. Same Emany Johnson ID remains on CIN/LAC; primary transaction
+records support Cincinnati but no source override or conflict clearance is made.
+All old inventories are stale/blocked at the current review cutoff. No forecasts,
+defaults, models, grades or wagering authority changed; PR 73 is excluded.
+See docs/ROSTER_DISCLOSURE_RECONCILIATION_20261021.md and its retained evidence.
+
+
+
+## 2026-10-21 — Qualified GameChamp report adaptations
+
+Owner supplied original CFB NMSU–SHSU and NBA MIN–MIA reports and requested
+qualified adaptations. Reused merged PR72's known/unknown/scenario/PASS/dependence
+layer. Added optional hash-bound projection audits: NBA/WNBA regulation minutes,
+nonnegative allocation reconciliation with rounding/component identity, and
+unweighted same-contract named-method sensitivity. Shared and NFL disclosure
+paths consume the optional field; frozen predictions and numerical models do not.
+
+On supplied reports both NBA rotations total 240; displayed player sums reconcile
+within rounding, but the source's team-component sum 248.32 differs from its
+reported 248.43. Named controls show 6.70 pp winner and 32.20 pp Under ranges;
+the claimed wider 44-row grid is not available and was not fabricated. CFB
+budgets reconcile only as bookkeeping; market-anchored forecasts are not imported.
+Original user-supplied reports and append-only archive receipt are retained with
+the adaptation evidence. No original sampler, roster truth or PIT validity is
+claimed from those text reports. See docs/GAMECHAMP_ADAPTATION.md.
+
+Focused local tests cover malformed/duplicate/nonfinite inputs, source/path/hash
+and contract failures, distinct component totals, immutable writes, all-seven
+parent preservation and the existing shared/NFL integration. This environment's
+source-only restoration lacks historical files and cannot establish full harness
+health. Exact local results are retained in the release acceptance record; full
+repository CI remains separate. No model default, forecast, active experiment,
+certified ledger or action authority changed. Player-led numerical construction
+remains a candidate requiring a fitted, source-bound chronological evaluation.
+
+
+## 2026-10-22 — Selected-path market-independence audit
+
+Traced the seven league adapters, selection registry, fitted feature paths and
+retained simulations at main 90daf8e / PR74 bd6205e. The selected feature paths
+use historical/contextual data; NBA/NHL/MLS remain opt-in initial research with
+no verified default. NFL enhanced mode is explicitly market-informed (saved
+football weights 0 winner, 0 margin, 0.1 total); live uses a market prior.
+
+Added 100,000-draw metamorphic regressions and presentation-only provenance
+disclosures. Separate market payload changes preserve predictions and draw bytes.
+Accepted market metadata embedded in event/package identity changes RNG draws,
+and can change MLB's MC-only selected probability: MI-002 remains OPEN. Tests
+assert this counterexample, not universal independence. No seed or model code
+was changed. Current-package MLB is tested; the legacy Sep14 route has stale
+code pins and was not bypassed. Missing declarations now remain unknown in
+grading rather than being manufactured as market_features_used=false.
+
+See docs/SELECTED_MARKET_INDEPENDENCE.md and the retained acceptance record.
+A focused CI job requires no artifact upload; full-tree health and predictive
+validation remain separate. Defaults, frozen forecasts, experiment/ledger state
+and action authority are unchanged. No live slate or model promotion performed.
+
+
+## 2026-10-24 — PR readiness reconciliation and immutable sidecars
+
+Reconciled PRs #68, #70, #73, #71, #74, #41 and #38 onto main c2a00e2 in
+reviewable merge commits. #38 also retains #37 ancestry. Current NFL weekly
+state, strict information-regime checks, WNBA adapter and numerical-v2
+identity remain intact. Superseded dated workflows/requests and incompatible
+legacy acceptance tests are preserved as explicitly archived evidence.
+
+Margin quote v2 binds the side and payoff basis; non-push calibration now
+conditions unconditional probabilities on non-push. Roster annotations preserve
+actual draw bytes and do not infer numerical personnel effects. Fixed an NFL
+selection-sidecar warning that could mutate its saved parent in memory.
+
+See PR_RECONCILIATION_20261024.md for exact heads, preserved-source scope,
+regressions and final execution status. Hosted acceptance requires current-run
+evidence upload and readback; Drive CI authentication is still unconfigured.
+Existing forecasts, fitted states, grading ledgers, defaults, prior state keys
+and authorization records remain unchanged. No promotion or wagering enabled.
+
+
+### 2026-10-24 — Hosted acceptance and version-bound evidence follow-up
+
+PR #82's first hosted acceptance run 40137946545 passed 1,863 tests and
+uploaded artifact 12577837691. Independent download verified its ZIP SHA-256,
+all five manifest members and Git bundle; it is seven-day GitHub retention,
+not configured Drive durability. Other checks exposed historical source pins
+being compared with newly integrated files. Preserve the old finding receipts
+and source manifest: isolate the historical PR70 imports and old-main checkout,
+then bind current finding closure to a separate complete-suite execution.
+The historical comparison passes 162 synthetic and 26 retained-law cases while
+reproducing the old defects; v2 regressions separately verify their repairs.
+No old hash, acceptance claim, forecast or grade was rewritten. Final-head CI
+and artifact readback remain merge gates. Exact evidence is in the reconciliation
+report and its ci-repair release directory.

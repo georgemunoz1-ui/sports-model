@@ -15,6 +15,7 @@ from pathlib import Path
 import numpy as np
 
 from models.common import discrete_research as D
+from pipelines.cards.projection_audits import audit_projection
 
 INPUT_SCHEMA = "sports.card_disclosures.input.v1"
 REPORT_SCHEMA = "sports.card_disclosures.research.v1"
@@ -103,6 +104,7 @@ def _scenario(scenario, row, cutoff, root, league):
 
 
 def event_disclosure(row, cutoff, supplied=None, root=Path("."), *, league):
+    from .market_provenance import describe as describe_market_path
     supplied = copy.deepcopy(supplied or {})
     reasons = [{"code": "WAGERING_AUTHORITY_OFF", "detail": "Research output; no wager is authorized."},
                {"code": "MARKET_VALUE_NOT_EVALUATED", "detail": "This disclosure layer does not qualify a price or betting edge."},
@@ -111,8 +113,9 @@ def event_disclosure(row, cutoff, supplied=None, root=Path("."), *, league):
         reasons.append({"code": "PARENT_WARNING", "detail": str(warning)})
     result = {"event_id": row["event_id"], "parent_model_id": row.get("model_id"),
               "known_inputs": [], "unknown_inputs": [], "assumptions": [],
-              "availability_scenarios": [], "decision": "PASS", "pass_reasons": reasons,
-              "action_authority": False, "numerical_forecast_modified": False}
+              "availability_scenarios": [], "projection_audits": [], "decision": "PASS", "pass_reasons": reasons,
+              "action_authority": False, "numerical_forecast_modified": False,
+              "market_provenance": describe_market_path(row, league)}
     if row.get("forecast_status") != "FORECAST_GENERATED":
         reasons.append({"code": "PARENT_NOT_FORECAST", "detail": row.get("forecast_status", "UNKNOWN")})
     if not supplied:
@@ -120,11 +123,16 @@ def event_disclosure(row, cutoff, supplied=None, root=Path("."), *, league):
             "reason": "No structured availability disclosure supplied; numerical use is not assessed here."})
         return result
     _keys(supplied, {"event_id", "parent_model_id", "parent_input_sha256", "known_inputs",
-                     "unknown_inputs", "assumptions", "availability_scenarios", "pass_reasons"})
+                     "unknown_inputs", "assumptions", "availability_scenarios", "pass_reasons", "projection_audits"})
     if (supplied.get("event_id") != row["event_id"] or
             supplied.get("parent_model_id") != row.get("model_id") or
             D.source_hash(supplied.get("parent_input_sha256")) != row.get("input_snapshot_hash")):
         raise ValueError("DISCLOSURE_PARENT_MISMATCH")
+    audits = supplied.get("projection_audits", [])
+    _unique(audits, "audit_id")
+    result["projection_audits"] = [audit_projection(a, event_id=row["event_id"], league=league.lower(), root=root) for a in audits]
+    if any(a["arithmetic_failures"] for a in result["projection_audits"]):
+        reasons.append({"code": "PROJECTION_ARITHMETIC_FAILURE", "detail": "Supplied minutes/allocation claims do not reconcile; forecasts were not changed."})
     names = set()
     for group in ("known_inputs", "unknown_inputs", "assumptions"):
         records = supplied.get(group, [])
@@ -373,6 +381,17 @@ def render_md(report):
     for event in report["events"]:
         lines += ["### " + _cell(event["event_id"]), "", "**PASS:** " + "; ".join(
             _cell(r["code"] + ": " + r["detail"]) for r in event["pass_reasons"]), ""]
+        market = event.get("market_provenance")
+        if market:
+            lines += ["**Model versus market:** " + _cell(market["path_class"]) + ". " +
+                      _cell(market["numerical_source"]), "",
+                      "- Simulation independence: " + _cell(market["simulation_independence"]),
+                      "- " + _cell(market["market_comparison_role"]),
+                      "- Source-path attribution only; artifact lineage and predictive validation are not certified.", ""]
+            if market.get("product_scope"):
+                lines += [_cell(market["product_scope"]), ""]
+            if market.get("limitation"):
+                lines += [_cell(market["limitation"]), ""]
         for group, title in (("known_inputs", "Reported known inputs"), ("unknown_inputs", "Unknown inputs"),
                              ("assumptions", "Assumptions")):
             lines.append("**" + title + ":**")
@@ -398,6 +417,17 @@ def render_md(report):
         if not event["availability_scenarios"]:
             lines.append("- None supplied.")
         lines.append("")
+        for audit in event.get("projection_audits", []):
+            lines += ["**Projection audit: " + _cell(audit["audit_id"]) + "**", "",
+                      "Source bytes verified; extracted claims, roster, timing and predictive validity remain unverified. No numeric forecast was changed.", ""]
+            for budget in audit["minutes_budgets"]:
+                lines.append(f"- {_cell(budget['team_id'])} regulation minutes: {budget['sum_minutes']:g}/{budget['required_minutes']:g}; arithmetic {budget['arithmetic_status']}.")
+                lines.extend("  - " + _cell(f) for f in budget["findings"])
+            for allocation in audit["allocation_checks"]:
+                lines.append(f"- {_cell(allocation['check_id'])}: sum {allocation['sum_terms']:.3f}, target {allocation['target']:.3f} {_cell(allocation['unit'])}; {allocation['arithmetic_status']}; gap {allocation['sum_minus_target']:+.3f}.")
+            for sensitivity in audit["method_sensitivities"]:
+                lines.append(f"- {_cell(sensitivity['sensitivity_id'])}: {sensitivity['method_count_supplied']} supplied methods, {sensitivity['minimum_probability']:.2%}–{sensitivity['maximum_probability']:.2%}, range {sensitivity['range_percentage_points']:.2f} pp. Unweighted sensitivity, not a confidence interval or failure probability.")
+            lines.append("")
     for parlay in report["parlays"]:
         pct = lambda value: "unavailable" if value is None else f"{value:.3%}"
         lines += ["### Parlay " + _cell(parlay["parlay_id"]), "",

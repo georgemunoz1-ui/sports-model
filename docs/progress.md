@@ -4758,3 +4758,29 @@ coefficients, defaults, runner disclosures, ledgers or authority changed.
 Partial local health cannot certify full repository health. See
 docs/MARGIN_INTEGRATION_20261021.md and docs/releases/2026-10-21-margin-integration/.
 Clean-checkout CI and draft publication outcome are recorded on the review PR.
+
+
+
+## 2026-10-20 — all-sports roster acquisition and honest consumption boundaries
+
+User requested roster-gap repair across all sports. Added immutable roster capture and raw-byte normalization for NFL, CFB, NBA, WNBA, MLB, NHL and MLS, exact team/player identities, six-hour cutoff checks, duplicate membership guards, conditional workload conservation, and coverage attachments in the shared card and canonical NFL runner. Full-roster-required mode refuses before simulation; attaching a roster never changes parent probabilities or asserts numerical use. Current NFL selected-arm capability evidence and MLB starting-pitcher scope stay distinct.
+
+Captured 307/307 requested teams, seven directory receipts and 22,034 distinct sport-scoped player IDs. Discovered the default CFB endpoint silently capped every team at 100; explicit limit=1000 recovered 2,004 omitted players across the 138 FBS teams. The capped discovery is not acceptance evidence. One NFL practice-squad membership conflict (Emany Johnson, CIN/LAC) remains visible and blocks the affected roster checks; the Bengals official October 20 transaction record supports Cincinnati, but raw data is not silently overwritten.
+
+81 focused tests passed, including all-sport source rebuild, tampering/re-sealing, response limits, stale/future/PIT/season/identity failures, workload scenarios, immutable resume, original-card preservation, and both shared/NFL runner gates. The real-source audit covered all 17 saved October 20 events: current review 16 AVAILABLE_NOT_USED and one POST_START block; all 17 refuse the newly captured data at their original cutoffs. No new predictions were generated, no frozen card changed, and no full-roster impact transform was fitted. Full repository health remains unestablished in this partial restored checkout. Remote CI pending branch publication. See docs/ROSTER_SYSTEM.md and docs/releases/2026-10-20-rosters/report.json; retained source archive is hash-bound there. No defaults promoted, main not changed, wagering OFF.
+
+## 2026-10-21 — PR 71 roster/disclosure integration
+
+Reconciled roster head e145d0b7 with main 90daf8e (merged PR 72). Resolved the
+NFL argument conflict and preserved both appended journal entries. The shared
+runner merged textually; combined tests cover all seven shared leagues and NFL.
+224 tests plus 56 subtests and four CLI checks passed locally. Other local
+regressions exposed missing historical restoration files; remote clean-checkout
+checks remain separate and are recorded on PR 71. Full health is not certified.
+
+Verified the retained archive, 630 manifest files, 314 receipts, 307 parsed teams
+and 22,034 IDs. Same Emany Johnson ID remains on CIN/LAC; primary transaction
+records support Cincinnati but no source override or conflict clearance is made.
+All old inventories are stale/blocked at the current review cutoff. No forecasts,
+defaults, models, grades or wagering authority changed; PR 73 is excluded.
+See docs/ROSTER_DISCLOSURE_RECONCILIATION_20261021.md and its retained evidence.

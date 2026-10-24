@@ -1,0 +1,47 @@
+{
+  "additional_local_regression": {
+    "failed_missing_mlb_historical_package": 3,
+    "full_repository_health": "NOT_CERTIFIED_PARTIAL_RESTORATION",
+    "passed": 112,
+    "subtests_passed": 56
+  },
+  "conflicted_files": [
+    "scripts/run_nfl_integrated.py",
+    "docs/progress.md"
+  ],
+  "created_at_utc": "2026-10-21T20:37:54.160701+00:00",
+  "existing_defaults_changed": false,
+  "forecasts_created_or_modified": 0,
+  "main_commit": "90daf8e0036c67a5304aa0747bf50b2266e0b364",
+  "main_ref_changed": false,
+  "merge_base": "7cf2aea0581b4048802c920c9670823fab21679e",
+  "pr73_integrated": false,
+  "remote_ci": "PENDING_AT_COMMIT; consult PR71 for exact published-head results",
+  "resolution_applied": false,
+  "retained_source_review_sha256": "0ebc14448e3bf482e0dd38bba9145bd5425f5c2c99ab16484aaae238a3f785b4",
+  "roster_parent_commit": "e145d0b7cf90a3eb2553639a3d76bd49d13ab471",
+  "schema": "sports.roster_disclosure_integration.v1",
+  "source_sha256": {
+    ".github/workflows/roster-contracts.yml": "a75306450ef22502e27847d441dc6acbcdda86f94ff831b8735d9c432fb681de",
+    "pipelines/cards/disclosures.py": "e4ac51ebe9defd89e5806ee9160ff1fba079852070e3d44bd25b8c97776e52c6",
+    "scripts/generate_card_force.py": "3c880ba58b9487c24905705314e6b96924f8ddfa209298aef78317ce6acfff5c",
+    "scripts/run_nfl_integrated.py": "8c4323dedb669f90af054d8ccdb219a3c0f9e54ec05fb32351d3db6433f0e1c5",
+    "sports/rosters.py": "b13b2454adecc35193a5d3549c26cc5387cc4a573587fd2378ff599582204112",
+    "tests/test_card_disclosures.py": "1bda0ccd9eaf4c7ee5607ee802bcdb1de048c6e42e34c7c569abbae3b4d324c5",
+    "tests/test_roster_disclosure_integration.py": "05d4775133d17c80247f0ddd5a69513a045139b95910530d908ec0c939d237c4",
+    "tests/test_rosters.py": "3731f662ca05a9aaa685b0821f09a0edbf4e8899d26f290a5c9ed79a6afe8f7b"
+  },
+  "status_axes": {
+    "EXECUTION_STATUS": "COMPLETED",
+    "PREDICTIVE_VALIDATION": "NOT_ASSESSED",
+    "PUBLICATION_ELIGIBILITY": "INELIGIBLE",
+    "WAGERING_AUTHORITY": "OFF"
+  },
+  "tests": {
+    "failed": 0,
+    "junit_sha256": "888364a4066df5c1ef4bdb15800d07a449ec4ea8a344fe10e2a79fdd9dc26684",
+    "passed": 224,
+    "subtests_passed": 56
+  },
+  "textually_clean_overlapping_runner": "scripts/generate_card_force.py"
+}

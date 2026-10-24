@@ -121,6 +121,7 @@ def normalize(event, raw):
         "diagnostics": raw.get("diagnostics", {}),
         "simulation": raw.get("simulation", {}),
         "provenance": raw.get("provenance", {}),
+        "roster_coverage": raw.get("roster_coverage"),
         "action_authority": False,
         "action_status": "SHADOW_ONLY",
     }
@@ -325,7 +326,9 @@ def attach_state_receipt(raw, event, context, league):
     return result
 
 
-def generate(card_date, league, as_of, simulations, overrides, *, identity_semantics="legacy.v1"):
+def generate(card_date, league, as_of, simulations, overrides, roster_bundle=None, require_roster_aware=False, *, identity_semantics="legacy.v1"):
+    from sports.rosters import attach, assess, load_bundle
+    roster = load_bundle(roster_bundle) if roster_bundle else None
     adapter = load_adapter(league)
     schedule = adapter.load_schedule(card_date, as_of)
     context = adapter.build_context(schedule, as_of, True, overrides)
@@ -354,6 +357,10 @@ def generate(card_date, league, as_of, simulations, overrides, *, identity_seman
             })
             continue
         try:
+            if require_roster_aware:
+                coverage = assess(league.lower(), event, as_of, roster)
+                if not coverage['roster_aware_forecast_eligible']:
+                    raise ValueError('ROSTER_AWARE_FORECAST_UNAVAILABLE:' + ';'.join(coverage['reasons']))
             if identity_semantics == "legacy.v1":
                 raw = adapter.forecast_event(event, context, simulations)
             else:
@@ -362,6 +369,7 @@ def generate(card_date, league, as_of, simulations, overrides, *, identity_seman
             from pipelines.cards.selected import apply_default
             raw = apply_default(league,event,raw)
             raw = attach_state_receipt(raw, event, context, league)
+            raw = attach(raw, league.lower(), event, as_of, roster)
             # Guard the rare case where network/simulation time crosses first pitch.
             if now_utc() >= event_start:
                 rows.append({
@@ -406,6 +414,10 @@ def generate(card_date, league, as_of, simulations, overrides, *, identity_seman
         "pregame_coverage": 1.0 if not pregame else len(generated) / len(pregame),
         "coverage_breach_event_ids": missing,
         "incidents": incidents,
+        "roster_policy": {"bundle_sha256": roster.get('bundle_sha256') if roster else None,
+                          "require_roster_aware": require_roster_aware,
+                          "membership_is_not_availability": True,
+                          "current_roster_is_not_numerical_consumption": True},
         "forecasts": rows,
     }
     return attach_grading(card)
@@ -503,6 +515,8 @@ def main():
     parser.add_argument("--initial-research-baselines",action="store_true",help="Explicit NBA/NHL/MLS research models; does not change tested defaults")
     parser.add_argument("--simulations", type=int, default=100000)
     parser.add_argument("--manual-overrides")
+    parser.add_argument("--roster-bundle", type=Path, help="Retained all-sports roster bundle.json; adds validated personnel coverage")
+    parser.add_argument("--require-roster-aware", action="store_true", help="Fail closed unless full roster impacts are fitted and consumed; current parents do not meet this gate")
     parser.add_argument("--distribution-research-config", help="Opt-in hash-bound cross-sport distribution challengers; emits a separate report")
     parser.add_argument("--efficiency-research-config", type=Path, help="Opt-in fitted CFB/NBA efficiency experiments; separate source-bound local SHADOW receipts, no default change")
     parser.add_argument("--disclosures", type=Path, help="Source-bound availability scenarios, assumptions and dependence disclosures; presentation only")
@@ -518,7 +532,7 @@ def main():
     os.environ['SPORTS_RESEARCH_DRAW_OUTPUT']=str((output/'draws').resolve())
     if args.league == "mlb":
         os.environ["MLB_DRAW_OUTPUT"] = str((output / "draws").resolve())
-    card = generate(args.date, args.league, as_of, args.simulations, args.manual_overrides, identity_semantics=args.identity_semantics)
+    card = generate(args.date, args.league, as_of, args.simulations, args.manual_overrides, args.roster_bundle, args.require_roster_aware, identity_semantics=args.identity_semantics)
     (output / "diagnostic_card.json").write_text(json.dumps(card, indent=2, sort_keys=True) + "\n")
     from pipelines.cards.selection_integration import write_card_selection
     selection_config = json.loads(args.selection_config.read_text()) if args.selection_config else None

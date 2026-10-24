@@ -32,7 +32,9 @@ def persist_replay(folder, bundle, winner, scores, captured_package):
     return receipt
 
 def main():
-    p=argparse.ArgumentParser();p.add_argument('--date',required=True);p.add_argument('--output',type=Path,required=True);p.add_argument('--simulations',type=int,default=100000);p.add_argument('--model-id');p.add_argument('--mode',default='research_pregame');p.add_argument('--market-packet',type=Path);p.add_argument('--live-packet',type=Path);p.add_argument('--event-id');p.add_argument('--home-spread',type=float,action='append',help='Optional downstream full-game spread calibration, HOME handicap orientation');p.add_argument('--halftime-artifact',type=Path,help='Explicit fitted halftime/joint research artifact; emits a separate model output');p.add_argument('--weekly-state-store',type=Path);p.add_argument('--weekly-state-id');p.add_argument('--distribution-research-config',type=Path,help='Separate hash-bound margin/total research child; does not require or replace combined-arm calibration');p.add_argument('--disclosures',type=Path,help='Presentation-only event scenarios and dependence evidence; requires --event-id');p.add_argument('--identity-semantics',choices=['legacy.v1','market_blind_numeric.v2'],default='market_blind_numeric.v2');p.add_argument('--selection-config',type=Path,help='Frozen selector config; absent config produces diagnostic NO_PICK');p.add_argument('--replay-cutoff-utc',help='Explicit retained-package replay, never prospective registration');a=p.parse_args()
+    p=argparse.ArgumentParser();p.add_argument('--date',required=True);p.add_argument('--output',type=Path,required=True);p.add_argument('--simulations',type=int,default=100000);p.add_argument('--model-id');p.add_argument('--mode',default='research_pregame');p.add_argument('--market-packet',type=Path);p.add_argument('--live-packet',type=Path);p.add_argument('--event-id');p.add_argument('--home-spread',type=float,action='append',help='Optional downstream full-game spread calibration, HOME handicap orientation');p.add_argument('--halftime-artifact',type=Path,help='Explicit fitted halftime/joint research artifact; emits a separate model output');p.add_argument('--weekly-state-store',type=Path);p.add_argument('--weekly-state-id');p.add_argument('--distribution-research-config',type=Path,help='Separate hash-bound margin/total research child; does not require or replace combined-arm calibration');p.add_argument('--disclosures',type=Path,help='Presentation-only event scenarios and dependence evidence; requires --event-id');p.add_argument('--identity-semantics',choices=['legacy.v1','market_blind_numeric.v2'],default='market_blind_numeric.v2');p.add_argument('--selection-config',type=Path,help='Frozen selector config; absent config produces diagnostic NO_PICK');p.add_argument('--replay-cutoff-utc',help='Explicit retained-package replay, never prospective registration');p.add_argument('--roster-bundle',type=Path);p.add_argument('--require-roster-aware',action='store_true');a=p.parse_args()
+    from sports.rosters import attach, assess, load_bundle
+    roster=load_bundle(a.roster_bundle) if a.roster_bundle else None
     if a.disclosures and (not a.event_id or a.mode=='live'):p.error('Disclosure packets require a single pregame --event-id')
     if a.distribution_research_config and a.mode=='live':p.error('Distribution research supports pregame only')
     if bool(a.weekly_state_store)!=bool(a.weekly_state_id):p.error('Both weekly-state store and ID are required')
@@ -56,6 +58,9 @@ def main():
     context=nfl.build_context(events,cutoff,mode=a.mode)
     distribution_incomplete=False
     for e in events:
+        if a.require_roster_aware:
+            coverage=assess('nfl',e,cutoff,roster)
+            if not coverage['roster_aware_forecast_eligible']:raise ValueError('ROSTER_AWARE_FORECAST_UNAVAILABLE:'+';'.join(coverage['reasons']))
         packet={'base':None,'context':None} if a.mode=='live' else context['package']['event_inputs'][e['event_id']]
         if a.weekly_state_store:
             from models.nfl.contextual.weekly_state import bind_packet
@@ -68,6 +73,7 @@ def main():
         if a.identity_semantics != 'legacy.v1':
             from pipelines.cards.semantic_identity import reidentify_nfl_run
             result,win,scores=reidentify_nfl_run(context['model'],e,cutoff,result,win,scores,semantics=a.identity_semantics)
+        result=attach(result,'nfl',e,cutoff,roster)
         if a.replay_cutoff_utc:
             registration=persist_replay(a.output/e['event_id'],result,win,scores,context['package'])
         else:

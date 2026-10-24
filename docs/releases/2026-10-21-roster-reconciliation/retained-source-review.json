@@ -1,0 +1,4462 @@
+{
+  "action_authority": false,
+  "archive_sha256": "7c53c458fcc841576cb5400deb0bdf0f7e19e3311fc7e4112726959f770d4d2b",
+  "bundle_sha256": "4b140e98aa7116ea078973d3f72f8c5a90adc4b20f81427f5f81b86820570c58",
+  "emany_johnson_evidence": [
+    {
+      "player": {
+        "event_availability": "UNCONFIRMED",
+        "expected_exposure": null,
+        "name": "Emany Johnson",
+        "player_id": "espn:nfl:4361437",
+        "position": "LB",
+        "reported_injuries": [],
+        "roster_status": "Practice Squad"
+      },
+      "provider_timestamp_utc": "2026-10-20T21:31:04Z",
+      "receipt": {
+        "evidence_tier": 2,
+        "final_url": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/teams/24/roster?limit=1000",
+        "headers": {
+          "access-control-allow-methods": "GET,PUT,POST,DELETE,OPTIONS,HEAD",
+          "access-control-allow-origin": "*",
+          "access-control-expose-headers": "content-length,location",
+          "cache-control": "max-age=1",
+          "connection": "close",
+          "content-type": "application/json;charset=UTF-8",
+          "date": "Tue, 20 Oct 2026 22:18:04 GMT",
+          "link": "<roster.json#>; rel=\"describedby\"",
+          "server": "envoy",
+          "transfer-encoding": "chunked",
+          "vary": "Accept-Encoding",
+          "x-envoy-upstream-service-time": "47"
+        },
+        "historical_pregame_eligibility": false,
+        "http_status": 200,
+        "provider": "ESPN",
+        "raw_path": "raw/6f252579073593e0b7348bb13a854eeb88e82d9c5d730f2be831a992928f15cd.json",
+        "raw_sha256": "6f252579073593e0b7348bb13a854eeb88e82d9c5d730f2be831a992928f15cd",
+        "requested_at_utc": "2026-10-20T22:18:02.038256+00:00",
+        "retrieved_at_utc": "2026-10-20T22:18:04.483541+00:00",
+        "sport": "nfl",
+        "status": "CAPTURED",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/teams/24/roster?limit=1000"
+      },
+      "team_id": "espn:nfl:24",
+      "team_name": "Los Angeles Chargers"
+    },
+    {
+      "player": {
+        "event_availability": "UNCONFIRMED",
+        "expected_exposure": null,
+        "name": "Emany Johnson",
+        "player_id": "espn:nfl:4361437",
+        "position": "LB",
+        "reported_injuries": [],
+        "roster_status": "Practice Squad"
+      },
+      "provider_timestamp_utc": "2026-10-20T22:04:29Z",
+      "receipt": {
+        "evidence_tier": 2,
+        "final_url": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/teams/4/roster?limit=1000",
+        "headers": {
+          "access-control-allow-methods": "GET,PUT,POST,DELETE,OPTIONS,HEAD",
+          "access-control-allow-origin": "*",
+          "access-control-expose-headers": "content-length,location",
+          "cache-control": "max-age=1",
+          "connection": "close",
+          "content-type": "application/json;charset=UTF-8",
+          "date": "Tue, 20 Oct 2026 22:18:04 GMT",
+          "link": "<roster.json#>; rel=\"describedby\"",
+          "server": "envoy",
+          "transfer-encoding": "chunked",
+          "vary": "Accept-Encoding",
+          "x-envoy-upstream-service-time": "175"
+        },
+        "historical_pregame_eligibility": false,
+        "http_status": 200,
+        "provider": "ESPN",
+        "raw_path": "raw/26d88d5cbd816ae80a80ab749aa4050cbadbf670be418fb819489c902aea8c16.json",
+        "raw_sha256": "26d88d5cbd816ae80a80ab749aa4050cbadbf670be418fb819489c902aea8c16",
+        "requested_at_utc": "2026-10-20T22:18:02.129912+00:00",
+        "retrieved_at_utc": "2026-10-20T22:18:04.743438+00:00",
+        "sport": "nfl",
+        "status": "CAPTURED",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/teams/4/roster?limit=1000"
+      },
+      "team_id": "espn:nfl:4",
+      "team_name": "Cincinnati Bengals"
+    }
+  ],
+  "forecasts_created_or_modified": 0,
+  "fresh_source_capture_performed": false,
+  "league_counts": {
+    "cfb": {
+      "conflicting_players": 0,
+      "distinct_players": 15804,
+      "failed": 0,
+      "parsed": 138,
+      "requested": 138
+    },
+    "mlb": {
+      "conflicting_players": 0,
+      "distinct_players": 1122,
+      "failed": 0,
+      "parsed": 30,
+      "requested": 30
+    },
+    "mls": {
+      "conflicting_players": 0,
+      "distinct_players": 963,
+      "failed": 0,
+      "parsed": 30,
+      "requested": 30
+    },
+    "nba": {
+      "conflicting_players": 0,
+      "distinct_players": 517,
+      "failed": 0,
+      "parsed": 30,
+      "requested": 30
+    },
+    "nfl": {
+      "conflicting_players": 1,
+      "distinct_players": 2559,
+      "failed": 0,
+      "parsed": 32,
+      "requested": 32
+    },
+    "nhl": {
+      "conflicting_players": 0,
+      "distinct_players": 848,
+      "failed": 0,
+      "parsed": 32,
+      "requested": 32
+    },
+    "wnba": {
+      "conflicting_players": 0,
+      "distinct_players": 221,
+      "failed": 0,
+      "parsed": 15,
+      "requested": 15
+    }
+  },
+  "manifest_files_verified": 630,
+  "probe_scope": "TEST_ONLY event shells for per-team roster eligibility; NOT real-game forecasts or live roster acceptance",
+  "probes": [
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "cfb",
+      "team_id": "espn:cfb:103"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "cfb",
+      "team_id": "espn:cfb:113"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "cfb",
+      "team_id": "espn:cfb:12"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "cfb",
+      "team_id": "espn:cfb:120"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "cfb",
+      "team_id": "espn:cfb:127"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "cfb",
+      "team_id": "espn:cfb:130"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "cfb",
+      "team_id": "espn:cfb:135"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "cfb",
+      "team_id": "espn:cfb:142"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "cfb",
+      "team_id": "espn:cfb:145"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "cfb",
+      "team_id": "espn:cfb:150"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "cfb",
+      "team_id": "espn:cfb:151"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "cfb",
+      "team_id": "espn:cfb:152"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "cfb",
+      "team_id": "espn:cfb:153"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "cfb",
+      "team_id": "espn:cfb:154"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "cfb",
+      "team_id": "espn:cfb:158"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "cfb",
+      "team_id": "espn:cfb:16"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "cfb",
+      "team_id": "espn:cfb:164"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "cfb",
+      "team_id": "espn:cfb:166"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "cfb",
+      "team_id": "espn:cfb:167"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "cfb",
+      "team_id": "espn:cfb:183"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "cfb",
+      "team_id": "espn:cfb:189"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "cfb",
+      "team_id": "espn:cfb:193"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "cfb",
+      "team_id": "espn:cfb:194"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "cfb",
+      "team_id": "espn:cfb:195"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "cfb",
+      "team_id": "espn:cfb:197"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "cfb",
+      "team_id": "espn:cfb:2"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "cfb",
+      "team_id": "espn:cfb:2005"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "cfb",
+      "team_id": "espn:cfb:2006"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "cfb",
+      "team_id": "espn:cfb:201"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "cfb",
+      "team_id": "espn:cfb:202"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "cfb",
+      "team_id": "espn:cfb:2026"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "cfb",
+      "team_id": "espn:cfb:2032"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "cfb",
+      "team_id": "espn:cfb:204"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "cfb",
+      "team_id": "espn:cfb:2050"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "cfb",
+      "team_id": "espn:cfb:2084"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "cfb",
+      "team_id": "espn:cfb:21"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "cfb",
+      "team_id": "espn:cfb:2116"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "cfb",
+      "team_id": "espn:cfb:2117"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "cfb",
+      "team_id": "espn:cfb:213"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "cfb",
+      "team_id": "espn:cfb:2132"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "cfb",
+      "team_id": "espn:cfb:218"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "cfb",
+      "team_id": "espn:cfb:2199"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "cfb",
+      "team_id": "espn:cfb:221"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "cfb",
+      "team_id": "espn:cfb:2226"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "cfb",
+      "team_id": "espn:cfb:2229"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "cfb",
+      "team_id": "espn:cfb:2247"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "cfb",
+      "team_id": "espn:cfb:228"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "cfb",
+      "team_id": "espn:cfb:2294"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "cfb",
+      "team_id": "espn:cfb:23"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "cfb",
+      "team_id": "espn:cfb:2305"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "cfb",
+      "team_id": "espn:cfb:2306"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "cfb",
+      "team_id": "espn:cfb:2309"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "cfb",
+      "team_id": "espn:cfb:2335"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "cfb",
+      "team_id": "espn:cfb:2348"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "cfb",
+      "team_id": "espn:cfb:235"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "cfb",
+      "team_id": "espn:cfb:238"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "cfb",
+      "team_id": "espn:cfb:239"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "cfb",
+      "team_id": "espn:cfb:2390"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "cfb",
+      "team_id": "espn:cfb:2393"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "cfb",
+      "team_id": "espn:cfb:24"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "cfb",
+      "team_id": "espn:cfb:242"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "cfb",
+      "team_id": "espn:cfb:2426"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "cfb",
+      "team_id": "espn:cfb:2429"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "cfb",
+      "team_id": "espn:cfb:2433"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "cfb",
+      "team_id": "espn:cfb:2439"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "cfb",
+      "team_id": "espn:cfb:2440"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "cfb",
+      "team_id": "espn:cfb:2449"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "cfb",
+      "team_id": "espn:cfb:245"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "cfb",
+      "team_id": "espn:cfb:2459"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "cfb",
+      "team_id": "espn:cfb:248"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "cfb",
+      "team_id": "espn:cfb:2483"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "cfb",
+      "team_id": "espn:cfb:249"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "cfb",
+      "team_id": "espn:cfb:25"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "cfb",
+      "team_id": "espn:cfb:2509"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "cfb",
+      "team_id": "espn:cfb:251"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "cfb",
+      "team_id": "espn:cfb:252"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "cfb",
+      "team_id": "espn:cfb:2534"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "cfb",
+      "team_id": "espn:cfb:254"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "cfb",
+      "team_id": "espn:cfb:256"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "cfb",
+      "team_id": "espn:cfb:2567"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "cfb",
+      "team_id": "espn:cfb:2572"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "cfb",
+      "team_id": "espn:cfb:2579"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "cfb",
+      "team_id": "espn:cfb:258"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "cfb",
+      "team_id": "espn:cfb:259"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "cfb",
+      "team_id": "espn:cfb:26"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "cfb",
+      "team_id": "espn:cfb:2623"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "cfb",
+      "team_id": "espn:cfb:2628"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "cfb",
+      "team_id": "espn:cfb:2633"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "cfb",
+      "team_id": "espn:cfb:2636"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "cfb",
+      "team_id": "espn:cfb:2638"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "cfb",
+      "team_id": "espn:cfb:264"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "cfb",
+      "team_id": "espn:cfb:2641"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "cfb",
+      "team_id": "espn:cfb:2649"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "cfb",
+      "team_id": "espn:cfb:265"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "cfb",
+      "team_id": "espn:cfb:2653"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "cfb",
+      "team_id": "espn:cfb:2655"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "cfb",
+      "team_id": "espn:cfb:2711"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "cfb",
+      "team_id": "espn:cfb:275"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "cfb",
+      "team_id": "espn:cfb:2751"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "cfb",
+      "team_id": "espn:cfb:276"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "cfb",
+      "team_id": "espn:cfb:277"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "cfb",
+      "team_id": "espn:cfb:278"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "cfb",
+      "team_id": "espn:cfb:290"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "cfb",
+      "team_id": "espn:cfb:295"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "cfb",
+      "team_id": "espn:cfb:30"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "cfb",
+      "team_id": "espn:cfb:309"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "cfb",
+      "team_id": "espn:cfb:324"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "cfb",
+      "team_id": "espn:cfb:326"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "cfb",
+      "team_id": "espn:cfb:328"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "cfb",
+      "team_id": "espn:cfb:333"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "cfb",
+      "team_id": "espn:cfb:338"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "cfb",
+      "team_id": "espn:cfb:344"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "cfb",
+      "team_id": "espn:cfb:349"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "cfb",
+      "team_id": "espn:cfb:356"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "cfb",
+      "team_id": "espn:cfb:36"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "cfb",
+      "team_id": "espn:cfb:38"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "cfb",
+      "team_id": "espn:cfb:41"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "cfb",
+      "team_id": "espn:cfb:48"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "cfb",
+      "team_id": "espn:cfb:5"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "cfb",
+      "team_id": "espn:cfb:52"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "cfb",
+      "team_id": "espn:cfb:55"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "cfb",
+      "team_id": "espn:cfb:57"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "cfb",
+      "team_id": "espn:cfb:58"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "cfb",
+      "team_id": "espn:cfb:59"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "cfb",
+      "team_id": "espn:cfb:6"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "cfb",
+      "team_id": "espn:cfb:61"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "cfb",
+      "team_id": "espn:cfb:62"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "cfb",
+      "team_id": "espn:cfb:66"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "cfb",
+      "team_id": "espn:cfb:68"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "cfb",
+      "team_id": "espn:cfb:77"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "cfb",
+      "team_id": "espn:cfb:8"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "cfb",
+      "team_id": "espn:cfb:84"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "cfb",
+      "team_id": "espn:cfb:87"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "cfb",
+      "team_id": "espn:cfb:9"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "cfb",
+      "team_id": "espn:cfb:96"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "cfb",
+      "team_id": "espn:cfb:97"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "cfb",
+      "team_id": "espn:cfb:98"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "cfb",
+      "team_id": "espn:cfb:99"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "mlb",
+      "team_id": "espn:mlb:1"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "mlb",
+      "team_id": "espn:mlb:10"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "mlb",
+      "team_id": "espn:mlb:11"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "mlb",
+      "team_id": "espn:mlb:12"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "mlb",
+      "team_id": "espn:mlb:13"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "mlb",
+      "team_id": "espn:mlb:14"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "mlb",
+      "team_id": "espn:mlb:15"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "mlb",
+      "team_id": "espn:mlb:16"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "mlb",
+      "team_id": "espn:mlb:17"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "mlb",
+      "team_id": "espn:mlb:18"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "mlb",
+      "team_id": "espn:mlb:19"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "mlb",
+      "team_id": "espn:mlb:2"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "mlb",
+      "team_id": "espn:mlb:20"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "mlb",
+      "team_id": "espn:mlb:21"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "mlb",
+      "team_id": "espn:mlb:22"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "mlb",
+      "team_id": "espn:mlb:23"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "mlb",
+      "team_id": "espn:mlb:24"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "mlb",
+      "team_id": "espn:mlb:25"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "mlb",
+      "team_id": "espn:mlb:26"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "mlb",
+      "team_id": "espn:mlb:27"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "mlb",
+      "team_id": "espn:mlb:28"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "mlb",
+      "team_id": "espn:mlb:29"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "mlb",
+      "team_id": "espn:mlb:3"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "mlb",
+      "team_id": "espn:mlb:30"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "mlb",
+      "team_id": "espn:mlb:4"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "mlb",
+      "team_id": "espn:mlb:5"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "mlb",
+      "team_id": "espn:mlb:6"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "mlb",
+      "team_id": "espn:mlb:7"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "mlb",
+      "team_id": "espn:mlb:8"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "mlb",
+      "team_id": "espn:mlb:9"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "mls",
+      "team_id": "espn:mls:10739"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "mls",
+      "team_id": "espn:mls:12011"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "mls",
+      "team_id": "espn:mls:17362"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "mls",
+      "team_id": "espn:mls:17606"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "mls",
+      "team_id": "espn:mls:182"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "mls",
+      "team_id": "espn:mls:18267"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "mls",
+      "team_id": "espn:mls:183"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "mls",
+      "team_id": "espn:mls:184"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "mls",
+      "team_id": "espn:mls:18418"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "mls",
+      "team_id": "espn:mls:185"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "mls",
+      "team_id": "espn:mls:186"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "mls",
+      "team_id": "espn:mls:187"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "mls",
+      "team_id": "espn:mls:189"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "mls",
+      "team_id": "espn:mls:18966"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "mls",
+      "team_id": "espn:mls:18986"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "mls",
+      "team_id": "espn:mls:190"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "mls",
+      "team_id": "espn:mls:191"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "mls",
+      "team_id": "espn:mls:193"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "mls",
+      "team_id": "espn:mls:20232"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "mls",
+      "team_id": "espn:mls:20906"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "mls",
+      "team_id": "espn:mls:21300"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "mls",
+      "team_id": "espn:mls:21812"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "mls",
+      "team_id": "espn:mls:22529"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "mls",
+      "team_id": "espn:mls:4771"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "mls",
+      "team_id": "espn:mls:6077"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "mls",
+      "team_id": "espn:mls:7318"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "mls",
+      "team_id": "espn:mls:9720"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "mls",
+      "team_id": "espn:mls:9723"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "mls",
+      "team_id": "espn:mls:9726"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "mls",
+      "team_id": "espn:mls:9727"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "nba",
+      "team_id": "espn:nba:1"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "nba",
+      "team_id": "espn:nba:10"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "nba",
+      "team_id": "espn:nba:11"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "nba",
+      "team_id": "espn:nba:12"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "nba",
+      "team_id": "espn:nba:13"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "nba",
+      "team_id": "espn:nba:14"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "nba",
+      "team_id": "espn:nba:15"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "nba",
+      "team_id": "espn:nba:16"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "nba",
+      "team_id": "espn:nba:17"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "nba",
+      "team_id": "espn:nba:18"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "nba",
+      "team_id": "espn:nba:19"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "nba",
+      "team_id": "espn:nba:2"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "nba",
+      "team_id": "espn:nba:20"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "nba",
+      "team_id": "espn:nba:21"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "nba",
+      "team_id": "espn:nba:22"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "nba",
+      "team_id": "espn:nba:23"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "nba",
+      "team_id": "espn:nba:24"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "nba",
+      "team_id": "espn:nba:25"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "nba",
+      "team_id": "espn:nba:26"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "nba",
+      "team_id": "espn:nba:27"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "nba",
+      "team_id": "espn:nba:28"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "nba",
+      "team_id": "espn:nba:29"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "nba",
+      "team_id": "espn:nba:3"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "nba",
+      "team_id": "espn:nba:30"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "nba",
+      "team_id": "espn:nba:4"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "nba",
+      "team_id": "espn:nba:5"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "nba",
+      "team_id": "espn:nba:6"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "nba",
+      "team_id": "espn:nba:7"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "nba",
+      "team_id": "espn:nba:8"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "nba",
+      "team_id": "espn:nba:9"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "nfl",
+      "team_id": "espn:nfl:1"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "nfl",
+      "team_id": "espn:nfl:10"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "nfl",
+      "team_id": "espn:nfl:11"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "nfl",
+      "team_id": "espn:nfl:12"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "nfl",
+      "team_id": "espn:nfl:13"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "nfl",
+      "team_id": "espn:nfl:14"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "nfl",
+      "team_id": "espn:nfl:15"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "nfl",
+      "team_id": "espn:nfl:16"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "nfl",
+      "team_id": "espn:nfl:17"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "nfl",
+      "team_id": "espn:nfl:18"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "nfl",
+      "team_id": "espn:nfl:19"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "nfl",
+      "team_id": "espn:nfl:2"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "nfl",
+      "team_id": "espn:nfl:20"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "nfl",
+      "team_id": "espn:nfl:21"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "nfl",
+      "team_id": "espn:nfl:22"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "nfl",
+      "team_id": "espn:nfl:23"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_MULTIPLE_TEAM_MEMBERSHIP",
+        "away:ROSTER_MULTIPLE_TEAM_MEMBERSHIP",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "home:ROSTER_MULTIPLE_TEAM_MEMBERSHIP",
+        "away:ROSTER_MULTIPLE_TEAM_MEMBERSHIP",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "BLOCKED",
+      "sport": "nfl",
+      "team_id": "espn:nfl:24"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "nfl",
+      "team_id": "espn:nfl:25"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "nfl",
+      "team_id": "espn:nfl:26"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "nfl",
+      "team_id": "espn:nfl:27"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "nfl",
+      "team_id": "espn:nfl:28"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "nfl",
+      "team_id": "espn:nfl:29"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "nfl",
+      "team_id": "espn:nfl:3"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "nfl",
+      "team_id": "espn:nfl:30"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "nfl",
+      "team_id": "espn:nfl:33"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "nfl",
+      "team_id": "espn:nfl:34"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_MULTIPLE_TEAM_MEMBERSHIP",
+        "away:ROSTER_MULTIPLE_TEAM_MEMBERSHIP",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "home:ROSTER_MULTIPLE_TEAM_MEMBERSHIP",
+        "away:ROSTER_MULTIPLE_TEAM_MEMBERSHIP",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "BLOCKED",
+      "sport": "nfl",
+      "team_id": "espn:nfl:4"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "nfl",
+      "team_id": "espn:nfl:5"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "nfl",
+      "team_id": "espn:nfl:6"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "nfl",
+      "team_id": "espn:nfl:7"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "nfl",
+      "team_id": "espn:nfl:8"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "nfl",
+      "team_id": "espn:nfl:9"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "nhl",
+      "team_id": "espn:nhl:1"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "nhl",
+      "team_id": "espn:nhl:10"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "nhl",
+      "team_id": "espn:nhl:11"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "nhl",
+      "team_id": "espn:nhl:12"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "nhl",
+      "team_id": "espn:nhl:124292"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "nhl",
+      "team_id": "espn:nhl:129764"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "nhl",
+      "team_id": "espn:nhl:13"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "nhl",
+      "team_id": "espn:nhl:14"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "nhl",
+      "team_id": "espn:nhl:15"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "nhl",
+      "team_id": "espn:nhl:16"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "nhl",
+      "team_id": "espn:nhl:17"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "nhl",
+      "team_id": "espn:nhl:18"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "nhl",
+      "team_id": "espn:nhl:19"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "nhl",
+      "team_id": "espn:nhl:2"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "nhl",
+      "team_id": "espn:nhl:20"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "nhl",
+      "team_id": "espn:nhl:21"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "nhl",
+      "team_id": "espn:nhl:22"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "nhl",
+      "team_id": "espn:nhl:23"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "nhl",
+      "team_id": "espn:nhl:25"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "nhl",
+      "team_id": "espn:nhl:26"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "nhl",
+      "team_id": "espn:nhl:27"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "nhl",
+      "team_id": "espn:nhl:28"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "nhl",
+      "team_id": "espn:nhl:29"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "nhl",
+      "team_id": "espn:nhl:3"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "nhl",
+      "team_id": "espn:nhl:30"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "nhl",
+      "team_id": "espn:nhl:37"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "nhl",
+      "team_id": "espn:nhl:4"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "nhl",
+      "team_id": "espn:nhl:5"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "nhl",
+      "team_id": "espn:nhl:6"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "nhl",
+      "team_id": "espn:nhl:7"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "nhl",
+      "team_id": "espn:nhl:8"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "nhl",
+      "team_id": "espn:nhl:9"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "wnba",
+      "team_id": "espn:wnba:11"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "wnba",
+      "team_id": "espn:wnba:129689"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "wnba",
+      "team_id": "espn:wnba:131935"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "wnba",
+      "team_id": "espn:wnba:132052"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "wnba",
+      "team_id": "espn:wnba:14"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "wnba",
+      "team_id": "espn:wnba:16"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "wnba",
+      "team_id": "espn:wnba:17"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "wnba",
+      "team_id": "espn:wnba:18"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "wnba",
+      "team_id": "espn:wnba:19"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "wnba",
+      "team_id": "espn:wnba:20"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "wnba",
+      "team_id": "espn:wnba:3"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "wnba",
+      "team_id": "espn:wnba:5"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "wnba",
+      "team_id": "espn:wnba:6"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "wnba",
+      "team_id": "espn:wnba:8"
+    },
+    {
+      "current_cutoff_reasons": [
+        "home:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "away:ROSTER_STALE_OR_FUTURE_SOURCE",
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "current_cutoff_status": "BLOCKED",
+      "retained_cutoff_reasons": [
+        "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+      ],
+      "retained_cutoff_status": "AVAILABLE_NOT_USED",
+      "sport": "wnba",
+      "team_id": "espn:wnba:9"
+    }
+  ],
+  "provider_correctness_independently_certified": false,
+  "resolution_applied": false,
+  "retained_membership_conflicts": {
+    "espn:nfl:4361437": [
+      "espn:nfl:24",
+      "espn:nfl:4"
+    ]
+  },
+  "retained_source_fresh_for_current_forecast": false,
+  "reviewed_at_utc": "2026-10-21T20:35:36.695253+00:00",
+  "schema": "sports.roster_reconciliation_review.v1",
+  "source_receipts_rebuilt": 314
+}

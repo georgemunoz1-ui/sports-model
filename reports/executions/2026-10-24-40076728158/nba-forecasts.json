@@ -1,0 +1,1090 @@
+[
+  {
+    "action_authority": false,
+    "analytic_p": 0.778789890785726,
+    "away_team": "Miami Heat",
+    "cutoff_utc": "2026-10-24T08:07:06.158300Z",
+    "distributions": {
+      "margin": {
+        "analytic": {
+          "AWAY": {
+            "half_loss": 0.0,
+            "half_win": 0.0,
+            "loss": 0.8388746640289398,
+            "push": 0.0,
+            "win": 0.16112533597106043
+          },
+          "HOME": {
+            "half_loss": 0.0,
+            "half_win": 0.0,
+            "loss": 0.16112533597106043,
+            "push": 0.0,
+            "win": 0.8388746640289398
+          }
+        },
+        "distribution_sha256": "e3a151e708deaea538c2954d6ec4127474f75d7fdd11314086dfd3971f33c7b4",
+        "draw_count": 100000,
+        "draw_sha256": "cc68867617d937f3cd232f64e58a5d117d49aec9ff5fac90188a344edecfc892",
+        "exact_replay": true,
+        "line": 3.5,
+        "mean": 10.785688085616078,
+        "model_id": "nba.margin.empirical.research.b8cc5fd2b7055661",
+        "monte_carlo": {
+          "AWAY": {
+            "half_loss": 0.0,
+            "half_win": 0.0,
+            "loss": 0.83852,
+            "push": 0.0,
+            "win": 0.16148
+          },
+          "HOME": {
+            "half_loss": 0.0,
+            "half_win": 0.0,
+            "loss": 0.16148,
+            "push": 0.0,
+            "win": 0.83852
+          }
+        },
+        "odds": {
+          "AWAY": "-110",
+          "HOME": "-110"
+        },
+        "parent_model_id": "nba.fixed_parent.8b20d506d255dd14.research",
+        "settlement": "FULL_GAME_OT"
+      },
+      "total": {
+        "analytic": {
+          "OVER": {
+            "half_loss": 0.0,
+            "half_win": 0.0,
+            "loss": 0.4336494862370314,
+            "push": 0.0,
+            "win": 0.5663505137629686
+          },
+          "UNDER": {
+            "half_loss": 0.0,
+            "half_win": 0.0,
+            "loss": 0.5663505137629686,
+            "push": 0.0,
+            "win": 0.4336494862370314
+          }
+        },
+        "distribution_sha256": "e2dee3ce3253e71ab6504a5b3102acb1d046b5b075d3374e93e1d962b130e527",
+        "draw_count": 100000,
+        "draw_sha256": "303f51345f50ae5a4edc4165a93eda088d632d034d0e414faae13ba3c13912dd",
+        "exact_replay": true,
+        "line": 230.5,
+        "mean": 233.9573251424946,
+        "model_id": "nba.total.empirical.research.ec9c0599f7ae758b",
+        "monte_carlo": {
+          "OVER": {
+            "half_loss": 0.0,
+            "half_win": 0.0,
+            "loss": 0.4318800000000001,
+            "push": 0.0,
+            "win": 0.5681200000000003
+          },
+          "UNDER": {
+            "half_loss": 0.0,
+            "half_win": 0.0,
+            "loss": 0.5681200000000003,
+            "push": 0.0,
+            "win": 0.4318800000000001
+          }
+        },
+        "odds": {
+          "OVER": "-110",
+          "UNDER": "-110"
+        },
+        "parent_model_id": "nba.fixed_parent.8b20d506d255dd14.research",
+        "settlement": "FULL_GAME_OT"
+      }
+    },
+    "event_id": "NBA:401909853",
+    "forecast_row_sha256": "b7e175c0aef1c0e7f287f71d8f62f80698f2ac5901860ab598b1ff8138c9a7e6",
+    "home_margin": 10.272573698711986,
+    "home_team": "Charlotte Hornets",
+    "league": "NBA",
+    "model_id": "nba.initial_causal_score.research.v1",
+    "model_winner": "Charlotte Hornets",
+    "period": "FULL_GAME",
+    "projected_total": 234.46523616260393,
+    "quote": {
+      "book": "Draft Kings",
+      "moneyline": {
+        "away": "-155",
+        "home": "+130"
+      },
+      "provider_observed_at_utc": null,
+      "retrieved_at_utc": "2026-10-24T08:06:49.227874Z",
+      "source_kind": "ORIGINAL_SCOREBOARD",
+      "source_sha256": "0a815e677a991beae5014db3060bfabc3623b4a74f4d51f4bd5c426894186c2c"
+    },
+    "sim_p": 0.77937,
+    "start_time_utc": "2026-10-24T22:00:00+00:00",
+    "warnings": [
+      "INITIAL_RESEARCH_BASELINE_NOT_ACCURACY_DEFAULT",
+      "INITIAL_RESEARCH_BASELINE_NOT_ACCURACY_DEFAULT",
+      "RETROSPECTIVE_PROVIDER_REVISIONS_NOT_HISTORICAL_PIT",
+      "NO_PLAYER_AVAILABILITY_FEATURES",
+      "NO_WAGERING_AUTHORITY",
+      "INDEPENDENT_MARGIN_TOTAL_NOT_JOINT_SCORE_MODEL",
+      "NBA_ACQUISITION_REPAIRED_EXPLICIT_RESEARCH_REFIT_NOT_PROMOTED",
+      "VERSIONED_RNG_IDENTITY_REPAIR_NOT_PREDICTIVE_PROMOTION"
+    ],
+    "winner_draw_sha256": "1841914bd963cdf264f54c98e1a5504ac2475bd071fa20e9c1740e44d4c5f8f0",
+    "winner_draws_exact_replay": true
+  },
+  {
+    "action_authority": false,
+    "analytic_p": 0.8536480625096177,
+    "away_team": "Brooklyn Nets",
+    "cutoff_utc": "2026-10-24T08:07:06.158300Z",
+    "distributions": {
+      "margin": {
+        "analytic": {
+          "AWAY": {
+            "half_loss": 0.0,
+            "half_win": 0.0,
+            "loss": 0.5438132748497532,
+            "push": 0.0,
+            "win": 0.45618672515024705
+          },
+          "HOME": {
+            "half_loss": 0.0,
+            "half_win": 0.0,
+            "loss": 0.45618672515024705,
+            "push": 0.0,
+            "win": 0.5438132748497532
+          }
+        },
+        "distribution_sha256": "d147226aa48e83467e7fbe30c7016a57e2c86732791f72a4f15335a80215802a",
+        "draw_count": 100000,
+        "draw_sha256": "c46d1518ab33993769b49c6c76eb4a06e3032e29e11c0521870adc691057deff",
+        "exact_replay": true,
+        "line": -11.5,
+        "mean": 13.175935676308999,
+        "model_id": "nba.margin.empirical.research.b8cc5fd2b7055661",
+        "monte_carlo": {
+          "AWAY": {
+            "half_loss": 0.0,
+            "half_win": 0.0,
+            "loss": 0.5417300000000002,
+            "push": 0.0,
+            "win": 0.45827
+          },
+          "HOME": {
+            "half_loss": 0.0,
+            "half_win": 0.0,
+            "loss": 0.45827,
+            "push": 0.0,
+            "win": 0.5417300000000002
+          }
+        },
+        "odds": {
+          "AWAY": "-105",
+          "HOME": "-115"
+        },
+        "parent_model_id": "nba.fixed_parent.8b20d506d255dd14.research",
+        "settlement": "FULL_GAME_OT"
+      },
+      "total": {
+        "analytic": {
+          "OVER": {
+            "half_loss": 0.0,
+            "half_win": 0.0,
+            "loss": 0.6274327018061522,
+            "push": 0.0,
+            "win": 0.37256729819384765
+          },
+          "UNDER": {
+            "half_loss": 0.0,
+            "half_win": 0.0,
+            "loss": 0.37256729819384765,
+            "push": 0.0,
+            "win": 0.6274327018061522
+          }
+        },
+        "distribution_sha256": "06e2fbf354141a113526db5470702d8f08420737574244020adc6bc5087bd1ba",
+        "draw_count": 100000,
+        "draw_sha256": "ed79554e665d6de3bafa64cf0013ff613803b733bd226a1cc7cb6d747bb5513d",
+        "exact_replay": true,
+        "line": 232.5,
+        "mean": 226.6222371630862,
+        "model_id": "nba.total.empirical.research.ec9c0599f7ae758b",
+        "monte_carlo": {
+          "OVER": {
+            "half_loss": 0.0,
+            "half_win": 0.0,
+            "loss": 0.62284,
+            "push": 0.0,
+            "win": 0.37716
+          },
+          "UNDER": {
+            "half_loss": 0.0,
+            "half_win": 0.0,
+            "loss": 0.37716,
+            "push": 0.0,
+            "win": 0.62284
+          }
+        },
+        "odds": {
+          "OVER": "-105",
+          "UNDER": "-115"
+        },
+        "parent_model_id": "nba.fixed_parent.8b20d506d255dd14.research",
+        "settlement": "FULL_GAME_OT"
+      }
+    },
+    "event_id": "NBA:401909854",
+    "forecast_row_sha256": "40213c79ec5b4b1a35d520c7c3bdd891d572d5912d9587e7914d0f0a92de93f8",
+    "home_margin": 14.001921855580385,
+    "home_team": "Cleveland Cavaliers",
+    "league": "NBA",
+    "model_id": "nba.initial_causal_score.research.v1",
+    "model_winner": "Cleveland Cavaliers",
+    "period": "FULL_GAME",
+    "projected_total": 228.5124306665282,
+    "quote": {
+      "book": "Draft Kings",
+      "moneyline": {
+        "away": "+400",
+        "home": "-535"
+      },
+      "provider_observed_at_utc": null,
+      "retrieved_at_utc": "2026-10-24T08:06:49.227874Z",
+      "source_kind": "ORIGINAL_SCOREBOARD",
+      "source_sha256": "0a815e677a991beae5014db3060bfabc3623b4a74f4d51f4bd5c426894186c2c"
+    },
+    "sim_p": 0.8531,
+    "start_time_utc": "2026-10-24T23:30:00+00:00",
+    "warnings": [
+      "INITIAL_RESEARCH_BASELINE_NOT_ACCURACY_DEFAULT",
+      "INITIAL_RESEARCH_BASELINE_NOT_ACCURACY_DEFAULT",
+      "RETROSPECTIVE_PROVIDER_REVISIONS_NOT_HISTORICAL_PIT",
+      "NO_PLAYER_AVAILABILITY_FEATURES",
+      "NO_WAGERING_AUTHORITY",
+      "INDEPENDENT_MARGIN_TOTAL_NOT_JOINT_SCORE_MODEL",
+      "NBA_ACQUISITION_REPAIRED_EXPLICIT_RESEARCH_REFIT_NOT_PROMOTED",
+      "VERSIONED_RNG_IDENTITY_REPAIR_NOT_PREDICTIVE_PROMOTION"
+    ],
+    "winner_draw_sha256": "7eecd916dddbe169b8ab0aed7b475dc9234557bf68b258fd94f4128520ec00c0",
+    "winner_draws_exact_replay": true
+  },
+  {
+    "action_authority": false,
+    "analytic_p": 0.7915658409162969,
+    "away_team": "Milwaukee Bucks",
+    "cutoff_utc": "2026-10-24T08:07:06.158300Z",
+    "distributions": {
+      "margin": {
+        "analytic": {
+          "AWAY": {
+            "half_loss": 0.0,
+            "half_win": 0.0,
+            "loss": 0.41759993284655805,
+            "push": 0.0,
+            "win": 0.5824000671534421
+          },
+          "HOME": {
+            "half_loss": 0.0,
+            "half_win": 0.0,
+            "loss": 0.5824000671534421,
+            "push": 0.0,
+            "win": 0.41759993284655805
+          }
+        },
+        "distribution_sha256": "a36226247fbc12d94ba6074a8e9a12d40958ca2b930da7c106a2c7ee69bf8597",
+        "draw_count": 100000,
+        "draw_sha256": "0ae66579dfc9961336c5342a7bff05d2e9fdc134996e58b28c5b20abc6185613",
+        "exact_replay": true,
+        "line": -12.5,
+        "mean": 10.188489367779585,
+        "model_id": "nba.margin.empirical.research.b8cc5fd2b7055661",
+        "monte_carlo": {
+          "AWAY": {
+            "half_loss": 0.0,
+            "half_win": 0.0,
+            "loss": 0.41647,
+            "push": 0.0,
+            "win": 0.5835300000000001
+          },
+          "HOME": {
+            "half_loss": 0.0,
+            "half_win": 0.0,
+            "loss": 0.5835300000000001,
+            "push": 0.0,
+            "win": 0.41647
+          }
+        },
+        "odds": {
+          "AWAY": "-110",
+          "HOME": "-110"
+        },
+        "parent_model_id": "nba.fixed_parent.8b20d506d255dd14.research",
+        "settlement": "FULL_GAME_OT"
+      },
+      "total": {
+        "analytic": {
+          "OVER": {
+            "half_loss": 0.0,
+            "half_win": 0.0,
+            "loss": 0.6702359139681452,
+            "push": 0.0,
+            "win": 0.3297640860318546
+          },
+          "UNDER": {
+            "half_loss": 0.0,
+            "half_win": 0.0,
+            "loss": 0.3297640860318546,
+            "push": 0.0,
+            "win": 0.6702359139681452
+          }
+        },
+        "distribution_sha256": "f535eab36c2327735899483fa42bc1129b7ebce1553afc3ba31b92c2debadb76",
+        "draw_count": 100000,
+        "draw_sha256": "3892754a6f1a598013e957af980fdf1c6f8e15c7e5768301c00bed639a5f6e2b",
+        "exact_replay": true,
+        "line": 234.5,
+        "mean": 226.61383619196948,
+        "model_id": "nba.total.empirical.research.ec9c0599f7ae758b",
+        "monte_carlo": {
+          "OVER": {
+            "half_loss": 0.0,
+            "half_win": 0.0,
+            "loss": 0.6695299999999998,
+            "push": 0.0,
+            "win": 0.3304699999999998
+          },
+          "UNDER": {
+            "half_loss": 0.0,
+            "half_win": 0.0,
+            "loss": 0.3304699999999998,
+            "push": 0.0,
+            "win": 0.6695299999999998
+          }
+        },
+        "odds": {
+          "OVER": "-108",
+          "UNDER": "-112"
+        },
+        "parent_model_id": "nba.fixed_parent.8b20d506d255dd14.research",
+        "settlement": "FULL_GAME_OT"
+      }
+    },
+    "event_id": "NBA:401909855",
+    "forecast_row_sha256": "fe1865f48cda9ce1e901ae28f57ded2224c6eedd7f59a93bbd198f2480175301",
+    "home_margin": 10.743316611188561,
+    "home_team": "Philadelphia 76ers",
+    "league": "NBA",
+    "model_id": "nba.initial_causal_score.research.v1",
+    "model_winner": "Philadelphia 76ers",
+    "period": "FULL_GAME",
+    "projected_total": 227.8835848947725,
+    "quote": {
+      "book": "Draft Kings",
+      "moneyline": {
+        "away": "+500",
+        "home": "-700"
+      },
+      "provider_observed_at_utc": null,
+      "retrieved_at_utc": "2026-10-24T08:06:49.227874Z",
+      "source_kind": "ORIGINAL_SCOREBOARD",
+      "source_sha256": "0a815e677a991beae5014db3060bfabc3623b4a74f4d51f4bd5c426894186c2c"
+    },
+    "sim_p": 0.79115,
+    "start_time_utc": "2026-10-24T23:30:00+00:00",
+    "warnings": [
+      "INITIAL_RESEARCH_BASELINE_NOT_ACCURACY_DEFAULT",
+      "INITIAL_RESEARCH_BASELINE_NOT_ACCURACY_DEFAULT",
+      "RETROSPECTIVE_PROVIDER_REVISIONS_NOT_HISTORICAL_PIT",
+      "NO_PLAYER_AVAILABILITY_FEATURES",
+      "NO_WAGERING_AUTHORITY",
+      "INDEPENDENT_MARGIN_TOTAL_NOT_JOINT_SCORE_MODEL",
+      "NBA_ACQUISITION_REPAIRED_EXPLICIT_RESEARCH_REFIT_NOT_PROMOTED",
+      "VERSIONED_RNG_IDENTITY_REPAIR_NOT_PREDICTIVE_PROMOTION"
+    ],
+    "winner_draw_sha256": "1dc0f69d0d5f82d521dd2a4819f97e1109825f47ddec0a799bd4ef43761436dd",
+    "winner_draws_exact_replay": true
+  },
+  {
+    "action_authority": false,
+    "analytic_p": 0.5239596855761361,
+    "away_team": "Houston Rockets",
+    "cutoff_utc": "2026-10-24T08:07:06.158300Z",
+    "distributions": {
+      "margin": {
+        "analytic": {
+          "AWAY": {
+            "half_loss": 0.0,
+            "half_win": 0.0,
+            "loss": 0.5318427140263645,
+            "push": 0.0,
+            "win": 0.4681572859736357
+          },
+          "HOME": {
+            "half_loss": 0.0,
+            "half_win": 0.0,
+            "loss": 0.4681572859736357,
+            "push": 0.0,
+            "win": 0.5318427140263645
+          }
+        },
+        "distribution_sha256": "00c187a3d0ee3aed9e4376115754ab1a99d4cfaa72f62ee572ab6635a1570e32",
+        "draw_count": 100000,
+        "draw_sha256": "be9409cd75c36128830f56bb43a438c7b6ea583d7c19bb88eb46c79bd4e70433",
+        "exact_replay": true,
+        "line": -1.5,
+        "mean": 2.379562935249168,
+        "model_id": "nba.margin.empirical.research.b8cc5fd2b7055661",
+        "monte_carlo": {
+          "AWAY": {
+            "half_loss": 0.0,
+            "half_win": 0.0,
+            "loss": 0.5291499999999999,
+            "push": 0.0,
+            "win": 0.47085
+          },
+          "HOME": {
+            "half_loss": 0.0,
+            "half_win": 0.0,
+            "loss": 0.47085,
+            "push": 0.0,
+            "win": 0.5291499999999999
+          }
+        },
+        "odds": {
+          "AWAY": "-110",
+          "HOME": "-110"
+        },
+        "parent_model_id": "nba.fixed_parent.8b20d506d255dd14.research",
+        "settlement": "FULL_GAME_OT"
+      },
+      "total": {
+        "analytic": {
+          "OVER": {
+            "half_loss": 0.0,
+            "half_win": 0.0,
+            "loss": 0.43813122394830556,
+            "push": 0.0,
+            "win": 0.5618687760516947
+          },
+          "UNDER": {
+            "half_loss": 0.0,
+            "half_win": 0.0,
+            "loss": 0.5618687760516947,
+            "push": 0.0,
+            "win": 0.43813122394830556
+          }
+        },
+        "distribution_sha256": "81764f46384472cf33155a4cfd3b120c84fb3eb6e7e262168ab468c616102714",
+        "draw_count": 100000,
+        "draw_sha256": "8ed3172c5f790060977ba61edda4cd9880ef34dfa3cc3f3b666ccdde82ecc691",
+        "exact_replay": true,
+        "line": 230.5,
+        "mean": 233.71781331482995,
+        "model_id": "nba.total.empirical.research.ec9c0599f7ae758b",
+        "monte_carlo": {
+          "OVER": {
+            "half_loss": 0.0,
+            "half_win": 0.0,
+            "loss": 0.43833,
+            "push": 0.0,
+            "win": 0.5616699999999999
+          },
+          "UNDER": {
+            "half_loss": 0.0,
+            "half_win": 0.0,
+            "loss": 0.5616699999999999,
+            "push": 0.0,
+            "win": 0.43833
+          }
+        },
+        "odds": {
+          "OVER": "-105",
+          "UNDER": "-115"
+        },
+        "parent_model_id": "nba.fixed_parent.8b20d506d255dd14.research",
+        "settlement": "FULL_GAME_OT"
+      }
+    },
+    "event_id": "NBA:401909856",
+    "forecast_row_sha256": "474928cca77492f2ff47e8d3098f2f8d8cc6d393987e15a57b6a0e0892720f4a",
+    "home_margin": 0.3455424025005964,
+    "home_team": "Atlanta Hawks",
+    "league": "NBA",
+    "model_id": "nba.initial_causal_score.research.v1",
+    "model_winner": "Atlanta Hawks",
+    "period": "FULL_GAME",
+    "projected_total": 235.2343645689837,
+    "quote": {
+      "book": "Draft Kings",
+      "moneyline": {
+        "away": "+100",
+        "home": "-120"
+      },
+      "provider_observed_at_utc": null,
+      "retrieved_at_utc": "2026-10-24T08:06:49.227874Z",
+      "source_kind": "ORIGINAL_SCOREBOARD",
+      "source_sha256": "0a815e677a991beae5014db3060bfabc3623b4a74f4d51f4bd5c426894186c2c"
+    },
+    "sim_p": 0.52678,
+    "start_time_utc": "2026-10-25T00:30:00+00:00",
+    "warnings": [
+      "INITIAL_RESEARCH_BASELINE_NOT_ACCURACY_DEFAULT",
+      "INITIAL_RESEARCH_BASELINE_NOT_ACCURACY_DEFAULT",
+      "RETROSPECTIVE_PROVIDER_REVISIONS_NOT_HISTORICAL_PIT",
+      "NO_PLAYER_AVAILABILITY_FEATURES",
+      "NO_WAGERING_AUTHORITY",
+      "INDEPENDENT_MARGIN_TOTAL_NOT_JOINT_SCORE_MODEL",
+      "NBA_ACQUISITION_REPAIRED_EXPLICIT_RESEARCH_REFIT_NOT_PROMOTED",
+      "VERSIONED_RNG_IDENTITY_REPAIR_NOT_PREDICTIVE_PROMOTION"
+    ],
+    "winner_draw_sha256": "53b2374672f4bf1fef913492d1fc30e3b73e2549fb3fdd01b192e4653d83af38",
+    "winner_draws_exact_replay": true
+  },
+  {
+    "action_authority": false,
+    "analytic_p": 0.5401603866838987,
+    "away_team": "Washington Wizards",
+    "cutoff_utc": "2026-10-24T08:07:06.158300Z",
+    "distributions": {
+      "margin": {
+        "analytic": {
+          "AWAY": {
+            "half_loss": 0.0,
+            "half_win": 0.0,
+            "loss": 0.4749383779075765,
+            "push": 0.0,
+            "win": 0.5250616220924231
+          },
+          "HOME": {
+            "half_loss": 0.0,
+            "half_win": 0.0,
+            "loss": 0.5250616220924231,
+            "push": 0.0,
+            "win": 0.4749383779075765
+          }
+        },
+        "distribution_sha256": "8a17c321d8e8a96f83a9c3d199ddb9cbfd4a933b2f95d02eaf6aa4b66c9935f0",
+        "draw_count": 100000,
+        "draw_sha256": "73655f6fc403e6837522d180ac7e7904746b2e3288c4a011aa2997beae28e105",
+        "exact_replay": true,
+        "line": -1.5,
+        "mean": 0.6271616249755287,
+        "model_id": "nba.margin.empirical.research.b8cc5fd2b7055661",
+        "monte_carlo": {
+          "AWAY": {
+            "half_loss": 0.0,
+            "half_win": 0.0,
+            "loss": 0.4729199999999997,
+            "push": 0.0,
+            "win": 0.5270800000000001
+          },
+          "HOME": {
+            "half_loss": 0.0,
+            "half_win": 0.0,
+            "loss": 0.5270800000000001,
+            "push": 0.0,
+            "win": 0.4729199999999997
+          }
+        },
+        "odds": {
+          "AWAY": "-118",
+          "HOME": "-102"
+        },
+        "parent_model_id": "nba.fixed_parent.8b20d506d255dd14.research",
+        "settlement": "FULL_GAME_OT"
+      },
+      "total": {
+        "analytic": {
+          "OVER": {
+            "half_loss": 0.0,
+            "half_win": 0.0,
+            "loss": 0.4889923137257019,
+            "push": 0.0,
+            "win": 0.511007686274298
+          },
+          "UNDER": {
+            "half_loss": 0.0,
+            "half_win": 0.0,
+            "loss": 0.511007686274298,
+            "push": 0.0,
+            "win": 0.4889923137257019
+          }
+        },
+        "distribution_sha256": "cd3e6571b654b3a5c0403cf2cc8a953801196165f99dcd4ace5996c971152707",
+        "draw_count": 100000,
+        "draw_sha256": "0e1991907213f25e37edcaa085588f1962ee6d729a20f03a887856633a87d4ee",
+        "exact_replay": true,
+        "line": 243.5,
+        "mean": 244.78994205818483,
+        "model_id": "nba.total.empirical.research.ec9c0599f7ae758b",
+        "monte_carlo": {
+          "OVER": {
+            "half_loss": 0.0,
+            "half_win": 0.0,
+            "loss": 0.48934999999999995,
+            "push": 0.0,
+            "win": 0.51065
+          },
+          "UNDER": {
+            "half_loss": 0.0,
+            "half_win": 0.0,
+            "loss": 0.51065,
+            "push": 0.0,
+            "win": 0.48934999999999995
+          }
+        },
+        "odds": {
+          "OVER": "-112",
+          "UNDER": "-108"
+        },
+        "parent_model_id": "nba.fixed_parent.8b20d506d255dd14.research",
+        "settlement": "FULL_GAME_OT"
+      }
+    },
+    "event_id": "NBA:401909857",
+    "forecast_row_sha256": "e4e03017cb523a866f97292dc4806b26728601efdaa0626895b7cee12b2cdb4f",
+    "home_margin": 2.046699644143542,
+    "home_team": "Chicago Bulls",
+    "league": "NBA",
+    "model_id": "nba.initial_causal_score.research.v1",
+    "model_winner": "Chicago Bulls",
+    "period": "FULL_GAME",
+    "projected_total": 246.25487317707174,
+    "quote": {
+      "book": "Draft Kings",
+      "moneyline": {
+        "away": "-110",
+        "home": "-110"
+      },
+      "provider_observed_at_utc": null,
+      "retrieved_at_utc": "2026-10-24T08:06:49.227874Z",
+      "source_kind": "ORIGINAL_SCOREBOARD",
+      "source_sha256": "0a815e677a991beae5014db3060bfabc3623b4a74f4d51f4bd5c426894186c2c"
+    },
+    "sim_p": 0.53862,
+    "start_time_utc": "2026-10-25T00:00:00+00:00",
+    "warnings": [
+      "INITIAL_RESEARCH_BASELINE_NOT_ACCURACY_DEFAULT",
+      "INITIAL_RESEARCH_BASELINE_NOT_ACCURACY_DEFAULT",
+      "RETROSPECTIVE_PROVIDER_REVISIONS_NOT_HISTORICAL_PIT",
+      "NO_PLAYER_AVAILABILITY_FEATURES",
+      "NO_WAGERING_AUTHORITY",
+      "INDEPENDENT_MARGIN_TOTAL_NOT_JOINT_SCORE_MODEL",
+      "NBA_ACQUISITION_REPAIRED_EXPLICIT_RESEARCH_REFIT_NOT_PROMOTED",
+      "VERSIONED_RNG_IDENTITY_REPAIR_NOT_PREDICTIVE_PROMOTION"
+    ],
+    "winner_draw_sha256": "05452d4b89964ff77d2f8f5e68b0a489984151453f5225d6d8f3d695bbd16020",
+    "winner_draws_exact_replay": true
+  },
+  {
+    "action_authority": false,
+    "analytic_p": 0.7886186342594361,
+    "away_team": "San Antonio Spurs",
+    "cutoff_utc": "2026-10-24T08:07:06.158300Z",
+    "distributions": {
+      "margin": {
+        "analytic": {
+          "AWAY": {
+            "half_loss": 0.0,
+            "half_win": 0.0,
+            "loss": 0.5766397560258812,
+            "push": 0.0,
+            "win": 0.4233602439741187
+          },
+          "HOME": {
+            "half_loss": 0.0,
+            "half_win": 0.0,
+            "loss": 0.4233602439741187,
+            "push": 0.0,
+            "win": 0.5766397560258812
+          }
+        },
+        "distribution_sha256": "858d868300e5706e7592118151cb6a7bd066b4cf0b986bcbbd27d1590386ad2f",
+        "draw_count": 100000,
+        "draw_sha256": "7354fc8e61ce093787467d94f2542c89ee61facec1d04e9db4b9a5f4f9ea7331",
+        "exact_replay": true,
+        "line": 12.5,
+        "mean": -9.524650738888152,
+        "model_id": "nba.margin.empirical.research.b8cc5fd2b7055661",
+        "monte_carlo": {
+          "AWAY": {
+            "half_loss": 0.0,
+            "half_win": 0.0,
+            "loss": 0.5777500000000001,
+            "push": 0.0,
+            "win": 0.42225
+          },
+          "HOME": {
+            "half_loss": 0.0,
+            "half_win": 0.0,
+            "loss": 0.42225,
+            "push": 0.0,
+            "win": 0.5777500000000001
+          }
+        },
+        "odds": {
+          "AWAY": "-108",
+          "HOME": "-112"
+        },
+        "parent_model_id": "nba.fixed_parent.8b20d506d255dd14.research",
+        "settlement": "FULL_GAME_OT"
+      },
+      "total": {
+        "analytic": {
+          "OVER": {
+            "half_loss": 0.0,
+            "half_win": 0.0,
+            "loss": 0.3187380491987461,
+            "push": 0.0,
+            "win": 0.6812619508012542
+          },
+          "UNDER": {
+            "half_loss": 0.0,
+            "half_win": 0.0,
+            "loss": 0.6812619508012542,
+            "push": 0.0,
+            "win": 0.3187380491987461
+          }
+        },
+        "distribution_sha256": "20e35238682ed8f3a9d877bf8e254caac052b249c74f4a50f3d4f9d90fdbbfc8",
+        "draw_count": 100000,
+        "draw_sha256": "2903afa1223b6eeba6c064cbd011744c1e4e54f41119aeeff5dc822b075e0223",
+        "exact_replay": true,
+        "line": 230.5,
+        "mean": 239.75305455411043,
+        "model_id": "nba.total.empirical.research.ec9c0599f7ae758b",
+        "monte_carlo": {
+          "OVER": {
+            "half_loss": 0.0,
+            "half_win": 0.0,
+            "loss": 0.31832,
+            "push": 0.0,
+            "win": 0.6816799999999998
+          },
+          "UNDER": {
+            "half_loss": 0.0,
+            "half_win": 0.0,
+            "loss": 0.6816799999999998,
+            "push": 0.0,
+            "win": 0.31832
+          }
+        },
+        "odds": {
+          "OVER": "-112",
+          "UNDER": "-108"
+        },
+        "parent_model_id": "nba.fixed_parent.8b20d506d255dd14.research",
+        "settlement": "FULL_GAME_OT"
+      }
+    },
+    "event_id": "NBA:401909858",
+    "forecast_row_sha256": "7b0e1ba3db8000a02b699768311e9aa5a0bf8b38aa8177c461c8342fe4c66af2",
+    "home_margin": -10.591827488030866,
+    "home_team": "Dallas Mavericks",
+    "league": "NBA",
+    "model_id": "nba.initial_causal_score.research.v1",
+    "model_winner": "San Antonio Spurs",
+    "period": "FULL_GAME",
+    "projected_total": 241.57400700373293,
+    "quote": {
+      "book": "Draft Kings",
+      "moneyline": {
+        "away": "-535",
+        "home": "+400"
+      },
+      "provider_observed_at_utc": null,
+      "retrieved_at_utc": "2026-10-24T08:06:49.227874Z",
+      "source_kind": "ORIGINAL_SCOREBOARD",
+      "source_sha256": "0a815e677a991beae5014db3060bfabc3623b4a74f4d51f4bd5c426894186c2c"
+    },
+    "sim_p": 0.7875,
+    "start_time_utc": "2026-10-25T00:00:00+00:00",
+    "warnings": [
+      "INITIAL_RESEARCH_BASELINE_NOT_ACCURACY_DEFAULT",
+      "INITIAL_RESEARCH_BASELINE_NOT_ACCURACY_DEFAULT",
+      "RETROSPECTIVE_PROVIDER_REVISIONS_NOT_HISTORICAL_PIT",
+      "NO_PLAYER_AVAILABILITY_FEATURES",
+      "NO_WAGERING_AUTHORITY",
+      "INDEPENDENT_MARGIN_TOTAL_NOT_JOINT_SCORE_MODEL",
+      "NBA_ACQUISITION_REPAIRED_EXPLICIT_RESEARCH_REFIT_NOT_PROMOTED",
+      "VERSIONED_RNG_IDENTITY_REPAIR_NOT_PREDICTIVE_PROMOTION"
+    ],
+    "winner_draw_sha256": "dd5900d2c0cfec7ca092f0657741016fbccd3b15b498948fbccabb8970c94759",
+    "winner_draws_exact_replay": true
+  },
+  {
+    "action_authority": false,
+    "analytic_p": 0.7250296250492895,
+    "away_team": "New Orleans Pelicans",
+    "cutoff_utc": "2026-10-24T08:07:06.158300Z",
+    "distributions": {
+      "margin": {
+        "analytic": {
+          "AWAY": {
+            "half_loss": 0.0,
+            "half_win": 0.0,
+            "loss": 0.4577335873621134,
+            "push": 0.0,
+            "win": 0.542266412637887
+          },
+          "HOME": {
+            "half_loss": 0.0,
+            "half_win": 0.0,
+            "loss": 0.542266412637887,
+            "push": 0.0,
+            "win": 0.4577335873621134
+          }
+        },
+        "distribution_sha256": "ac73e718b5bf28d99c88114b3a388a0200fa555a6e21305dd9eb224f5cb1a014",
+        "draw_count": 100000,
+        "draw_sha256": "0256911f74fa1034e680f56a86383d1cf00dd55a883c812aad9e18332706f0ff",
+        "exact_replay": true,
+        "line": -11.5,
+        "mean": 10.451271449824253,
+        "model_id": "nba.margin.empirical.research.b8cc5fd2b7055661",
+        "monte_carlo": {
+          "AWAY": {
+            "half_loss": 0.0,
+            "half_win": 0.0,
+            "loss": 0.45802999999999994,
+            "push": 0.0,
+            "win": 0.5419700000000001
+          },
+          "HOME": {
+            "half_loss": 0.0,
+            "half_win": 0.0,
+            "loss": 0.5419700000000001,
+            "push": 0.0,
+            "win": 0.45802999999999994
+          }
+        },
+        "odds": {
+          "AWAY": "-115",
+          "HOME": "-105"
+        },
+        "parent_model_id": "nba.fixed_parent.8b20d506d255dd14.research",
+        "settlement": "FULL_GAME_OT"
+      },
+      "total": {
+        "analytic": {
+          "OVER": {
+            "half_loss": 0.0,
+            "half_win": 0.0,
+            "loss": 0.34695624758905935,
+            "push": 0.0,
+            "win": 0.653043752410941
+          },
+          "UNDER": {
+            "half_loss": 0.0,
+            "half_win": 0.0,
+            "loss": 0.653043752410941,
+            "push": 0.0,
+            "win": 0.34695624758905935
+          }
+        },
+        "distribution_sha256": "9eaa32c11f0e5c17803e7c184a8139d09d6fe7be3b1c165cc246c2c8f4c5aa7c",
+        "draw_count": 100000,
+        "draw_sha256": "5a11b468ee482429a86010cec0c4da5f9a17cc3312823680e1cf18d3d842058f",
+        "exact_replay": true,
+        "line": 238.5,
+        "mean": 246.2524101753126,
+        "model_id": "nba.total.empirical.research.ec9c0599f7ae758b",
+        "monte_carlo": {
+          "OVER": {
+            "half_loss": 0.0,
+            "half_win": 0.0,
+            "loss": 0.34701000000000004,
+            "push": 0.0,
+            "win": 0.65299
+          },
+          "UNDER": {
+            "half_loss": 0.0,
+            "half_win": 0.0,
+            "loss": 0.65299,
+            "push": 0.0,
+            "win": 0.34701000000000004
+          }
+        },
+        "odds": {
+          "OVER": "-108",
+          "UNDER": "-112"
+        },
+        "parent_model_id": "nba.fixed_parent.8b20d506d255dd14.research",
+        "settlement": "FULL_GAME_OT"
+      }
+    },
+    "event_id": "NBA:401909859",
+    "forecast_row_sha256": "8a811b78e1f3831cba30d8243f1e7b7cdb2e79cef73632fc0ad7515ae0668115",
+    "home_margin": 8.84731814641563,
+    "home_team": "Denver Nuggets",
+    "league": "NBA",
+    "model_id": "nba.initial_causal_score.research.v1",
+    "model_winner": "Denver Nuggets",
+    "period": "FULL_GAME",
+    "projected_total": 247.01262042266154,
+    "quote": {
+      "book": "Draft Kings",
+      "moneyline": {
+        "away": "+370",
+        "home": "-485"
+      },
+      "provider_observed_at_utc": null,
+      "retrieved_at_utc": "2026-10-24T08:06:49.227874Z",
+      "source_kind": "ORIGINAL_SCOREBOARD",
+      "source_sha256": "0a815e677a991beae5014db3060bfabc3623b4a74f4d51f4bd5c426894186c2c"
+    },
+    "sim_p": 0.72435,
+    "start_time_utc": "2026-10-25T01:00:00+00:00",
+    "warnings": [
+      "INITIAL_RESEARCH_BASELINE_NOT_ACCURACY_DEFAULT",
+      "INITIAL_RESEARCH_BASELINE_NOT_ACCURACY_DEFAULT",
+      "RETROSPECTIVE_PROVIDER_REVISIONS_NOT_HISTORICAL_PIT",
+      "NO_PLAYER_AVAILABILITY_FEATURES",
+      "NO_WAGERING_AUTHORITY",
+      "INDEPENDENT_MARGIN_TOTAL_NOT_JOINT_SCORE_MODEL",
+      "NBA_ACQUISITION_REPAIRED_EXPLICIT_RESEARCH_REFIT_NOT_PROMOTED",
+      "VERSIONED_RNG_IDENTITY_REPAIR_NOT_PREDICTIVE_PROMOTION"
+    ],
+    "winner_draw_sha256": "7ebb2e4e654b624245ea2a6c766d735cba4d23434ca173b43200ad4e15fbe58e",
+    "winner_draws_exact_replay": true
+  },
+  {
+    "action_authority": false,
+    "analytic_p": 0.6564279901908395,
+    "away_team": "Golden State Warriors",
+    "cutoff_utc": "2026-10-24T08:07:06.158300Z",
+    "distributions": {
+      "margin": {
+        "analytic": {
+          "AWAY": {
+            "half_loss": 0.0,
+            "half_win": 0.0,
+            "loss": 0.3602258812386165,
+            "push": 0.0,
+            "win": 0.6397741187613836
+          },
+          "HOME": {
+            "half_loss": 0.0,
+            "half_win": 0.0,
+            "loss": 0.6397741187613836,
+            "push": 0.0,
+            "win": 0.3602258812386165
+          }
+        },
+        "distribution_sha256": "e4f57caa5d9f8bcaf9316c2ab2d69f5f215f8f1821699c83f1310178662508d8",
+        "draw_count": 100000,
+        "draw_sha256": "725b794c1ececdeae34c17339c78466c486303109a4debbabb4bb815ce3c5355",
+        "exact_replay": true,
+        "line": -9.5,
+        "mean": 4.883628039931982,
+        "model_id": "nba.margin.empirical.research.b8cc5fd2b7055661",
+        "monte_carlo": {
+          "AWAY": {
+            "half_loss": 0.0,
+            "half_win": 0.0,
+            "loss": 0.36260999999999993,
+            "push": 0.0,
+            "win": 0.6373900000000001
+          },
+          "HOME": {
+            "half_loss": 0.0,
+            "half_win": 0.0,
+            "loss": 0.6373900000000001,
+            "push": 0.0,
+            "win": 0.36260999999999993
+          }
+        },
+        "odds": {
+          "AWAY": "-110",
+          "HOME": "-110"
+        },
+        "parent_model_id": "nba.fixed_parent.8b20d506d255dd14.research",
+        "settlement": "FULL_GAME_OT"
+      },
+      "total": {
+        "analytic": {
+          "OVER": {
+            "half_loss": 0.0,
+            "half_win": 0.0,
+            "loss": 0.40826896603098434,
+            "push": 0.0,
+            "win": 0.5917310339690159
+          },
+          "UNDER": {
+            "half_loss": 0.0,
+            "half_win": 0.0,
+            "loss": 0.5917310339690159,
+            "push": 0.0,
+            "win": 0.40826896603098434
+          }
+        },
+        "distribution_sha256": "d166a7cb7200e17e5898e72fd4d1f8be45c63bb4e10db6d772e123d871090cd3",
+        "draw_count": 100000,
+        "draw_sha256": "f99de58d80dc79c54ab9f505c9fc89b7c3e1f6152049324a718c7604b02c2db9",
+        "exact_replay": true,
+        "line": 219.5,
+        "mean": 224.04596298525982,
+        "model_id": "nba.total.empirical.research.ec9c0599f7ae758b",
+        "monte_carlo": {
+          "OVER": {
+            "half_loss": 0.0,
+            "half_win": 0.0,
+            "loss": 0.40895,
+            "push": 0.0,
+            "win": 0.59105
+          },
+          "UNDER": {
+            "half_loss": 0.0,
+            "half_win": 0.0,
+            "loss": 0.59105,
+            "push": 0.0,
+            "win": 0.40895
+          }
+        },
+        "odds": {
+          "OVER": "-110",
+          "UNDER": "-110"
+        },
+        "parent_model_id": "nba.fixed_parent.8b20d506d255dd14.research",
+        "settlement": "FULL_GAME_OT"
+      }
+    },
+    "event_id": "NBA:401909860",
+    "forecast_row_sha256": "b372786d0fbe52dbf8959bede97c79eb1eee3ce76373a57a5689a07641b9fa68",
+    "home_margin": 5.431474539117755,
+    "home_team": "Phoenix Suns",
+    "league": "NBA",
+    "model_id": "nba.initial_causal_score.research.v1",
+    "model_winner": "Phoenix Suns",
+    "period": "FULL_GAME",
+    "projected_total": 225.0681167900469,
+    "quote": {
+      "book": "Draft Kings",
+      "moneyline": {
+        "away": "+300",
+        "home": "-380"
+      },
+      "provider_observed_at_utc": null,
+      "retrieved_at_utc": "2026-10-24T08:06:49.227874Z",
+      "source_kind": "ORIGINAL_SCOREBOARD",
+      "source_sha256": "0a815e677a991beae5014db3060bfabc3623b4a74f4d51f4bd5c426894186c2c"
+    },
+    "sim_p": 0.65447,
+    "start_time_utc": "2026-10-25T02:00:00+00:00",
+    "warnings": [
+      "INITIAL_RESEARCH_BASELINE_NOT_ACCURACY_DEFAULT",
+      "INITIAL_RESEARCH_BASELINE_NOT_ACCURACY_DEFAULT",
+      "RETROSPECTIVE_PROVIDER_REVISIONS_NOT_HISTORICAL_PIT",
+      "NO_PLAYER_AVAILABILITY_FEATURES",
+      "NO_WAGERING_AUTHORITY",
+      "INDEPENDENT_MARGIN_TOTAL_NOT_JOINT_SCORE_MODEL",
+      "NBA_ACQUISITION_REPAIRED_EXPLICIT_RESEARCH_REFIT_NOT_PROMOTED",
+      "VERSIONED_RNG_IDENTITY_REPAIR_NOT_PREDICTIVE_PROMOTION"
+    ],
+    "winner_draw_sha256": "0fd447098e66860a651272eb06817aef52d103cf9e90f1b72bca42c01d5ec162",
+    "winner_draws_exact_replay": true
+  }
+]

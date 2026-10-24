@@ -1,0 +1,1622 @@
+[
+  {
+    "action_authority": false,
+    "analytic_p": 0.586212019137628,
+    "away_team": "Anaheim Ducks",
+    "cutoff_utc": "2026-10-24T08:07:36.439538Z",
+    "distributions": {
+      "margin": {
+        "analytic": {
+          "AWAY": {
+            "half_loss": 0.0,
+            "half_win": 0.0,
+            "loss": 0.446575810289053,
+            "push": 0.0,
+            "win": 0.5534241897109469
+          },
+          "HOME": {
+            "half_loss": 0.0,
+            "half_win": 0.0,
+            "loss": 0.5534241897109469,
+            "push": 0.0,
+            "win": 0.446575810289053
+          }
+        },
+        "distribution_sha256": "0816b8481333b5e8116acc6c8d20bd5d738f2a76d7e7c7af566f16c4319bb33a",
+        "draw_count": 100000,
+        "draw_sha256": "9d603815fdd1350b5a7d78a350aafa8ce29bef7bb5793c0c2db9cd5a83679109",
+        "exact_replay": true,
+        "line": -1.5,
+        "mean": 0.6527321157466841,
+        "model_id": "nhl.margin.empirical.research.ce191ef893a5dd16",
+        "monte_carlo": {
+          "AWAY": {
+            "half_loss": 0.0,
+            "half_win": 0.0,
+            "loss": 0.44737,
+            "push": 0.0,
+            "win": 0.55263
+          },
+          "HOME": {
+            "half_loss": 0.0,
+            "half_win": 0.0,
+            "loss": 0.55263,
+            "push": 0.0,
+            "win": 0.44737
+          }
+        },
+        "odds": {
+          "AWAY": "-245",
+          "HOME": "+200"
+        },
+        "parent_model_id": "nhl.fixed_parent.03ce6285cdbfaa24.research",
+        "settlement": "FULL_GAME_OT_SO_PLUS_ONE"
+      },
+      "total": {
+        "analytic": {
+          "OVER": {
+            "half_loss": 0.0,
+            "half_win": 0.0,
+            "loss": 0.45200751735765454,
+            "push": 0.0,
+            "win": 0.5479924826423455
+          },
+          "UNDER": {
+            "half_loss": 0.0,
+            "half_win": 0.0,
+            "loss": 0.5479924826423455,
+            "push": 0.0,
+            "win": 0.45200751735765454
+          }
+        },
+        "distribution_sha256": "42e3a72913c757cbc37252bae29dfefd7be48d5da40aa64e86142684fb03cea3",
+        "draw_count": 100000,
+        "draw_sha256": "5826506f8f0a29a5e32af0e25ee651d673a34623c0ffbd4fa221356af5ce8b98",
+        "exact_replay": true,
+        "line": 5.5,
+        "mean": 5.970392968295954,
+        "model_id": "nhl.total.empirical.research.b83ea2a994a5037c",
+        "monte_carlo": {
+          "OVER": {
+            "half_loss": 0.0,
+            "half_win": 0.0,
+            "loss": 0.44909999999999994,
+            "push": 0.0,
+            "win": 0.5508999999999998
+          },
+          "UNDER": {
+            "half_loss": 0.0,
+            "half_win": 0.0,
+            "loss": 0.5508999999999998,
+            "push": 0.0,
+            "win": 0.44909999999999994
+          }
+        },
+        "odds": {
+          "OVER": "-125",
+          "UNDER": "+105"
+        },
+        "parent_model_id": "nhl.fixed_parent.03ce6285cdbfaa24.research",
+        "settlement": "FULL_GAME_OT_SO_PLUS_ONE"
+      }
+    },
+    "event_id": "NHL:401892566",
+    "forecast_row_sha256": "3f8428154734ccca818534dc4715dd5ee2c42368a0f83519b0839a3d0368b854",
+    "home_margin": 0.5632168007665118,
+    "home_team": "Philadelphia Flyers",
+    "league": "NHL",
+    "model_id": "nhl.initial_causal_score.research.v1",
+    "model_winner": "Philadelphia Flyers",
+    "period": "FULL_GAME",
+    "projected_total": 6.029606467534295,
+    "quote": {
+      "book": "DraftKings",
+      "moneyline": {
+        "away": "+102",
+        "home": "-122"
+      },
+      "provider_observed_at_utc": null,
+      "retrieved_at_utc": "2026-10-24T08:06:53.942977Z",
+      "source_kind": "ORIGINAL_SCOREBOARD",
+      "source_sha256": "8ad59734263b954ce61098cdbd1f912706abbd4e819443a35c04889beb2a8e49"
+    },
+    "sim_p": 0.58598,
+    "start_time_utc": "2026-10-24T17:00:00+00:00",
+    "warnings": [
+      "INITIAL_RESEARCH_BASELINE_NOT_ACCURACY_DEFAULT",
+      "INITIAL_RESEARCH_BASELINE_NOT_ACCURACY_DEFAULT",
+      "RETROSPECTIVE_PROVIDER_REVISIONS_NOT_HISTORICAL_PIT",
+      "NO_PLAYER_AVAILABILITY_FEATURES",
+      "NO_WAGERING_AUTHORITY",
+      "INDEPENDENT_MARGIN_TOTAL_NOT_JOINT_SCORE_MODEL",
+      "VERSIONED_RNG_IDENTITY_REPAIR_NOT_PREDICTIVE_PROMOTION"
+    ],
+    "winner_draw_sha256": "0f59ed5049e4e9fdcc2e70b1d9be46c3f4c399aa77905446be0a5b9a7138bd37",
+    "winner_draws_exact_replay": true
+  },
+  {
+    "action_authority": false,
+    "analytic_p": 0.5936338442404134,
+    "away_team": "Los Angeles Kings",
+    "cutoff_utc": "2026-10-24T08:07:36.439538Z",
+    "distributions": {
+      "margin": {
+        "analytic": {
+          "AWAY": {
+            "half_loss": 0.0,
+            "half_win": 0.0,
+            "loss": 0.44347812584552626,
+            "push": 0.0,
+            "win": 0.5565218741544737
+          },
+          "HOME": {
+            "half_loss": 0.0,
+            "half_win": 0.0,
+            "loss": 0.5565218741544737,
+            "push": 0.0,
+            "win": 0.44347812584552626
+          }
+        },
+        "distribution_sha256": "fc8b885d0b7786f5146d830a10db3e1e8f26b3f05911bc76abca0f63f697e2d4",
+        "draw_count": 100000,
+        "draw_sha256": "d60d3a13e2d015f59ab2204f2adce451fad40bd02ae22b48e1a917b8f8bd92ab",
+        "exact_replay": true,
+        "line": -1.5,
+        "mean": 0.6342367016944145,
+        "model_id": "nhl.margin.empirical.research.ce191ef893a5dd16",
+        "monte_carlo": {
+          "AWAY": {
+            "half_loss": 0.0,
+            "half_win": 0.0,
+            "loss": 0.44442999999999994,
+            "push": 0.0,
+            "win": 0.55557
+          },
+          "HOME": {
+            "half_loss": 0.0,
+            "half_win": 0.0,
+            "loss": 0.55557,
+            "push": 0.0,
+            "win": 0.44442999999999994
+          }
+        },
+        "odds": {
+          "AWAY": "-185",
+          "HOME": "+154"
+        },
+        "parent_model_id": "nhl.fixed_parent.03ce6285cdbfaa24.research",
+        "settlement": "FULL_GAME_OT_SO_PLUS_ONE"
+      },
+      "total": {
+        "analytic": {
+          "OVER": {
+            "half_loss": 0.0,
+            "half_win": 0.0,
+            "loss": 0.4367674248495055,
+            "push": 0.0,
+            "win": 0.5632325751504946
+          },
+          "UNDER": {
+            "half_loss": 0.0,
+            "half_win": 0.0,
+            "loss": 0.5632325751504946,
+            "push": 0.0,
+            "win": 0.4367674248495055
+          }
+        },
+        "distribution_sha256": "b4e32b0e31156a002f5d1db9f8eee8eed9b7128faa35472610c0e8692f03990e",
+        "draw_count": 100000,
+        "draw_sha256": "256ab237e7aac4f637dd2832c97ebfde119347cd41dbbf04e2e3b8bf5cfb324e",
+        "exact_replay": true,
+        "line": 5.5,
+        "mean": 6.0778638232807705,
+        "model_id": "nhl.total.empirical.research.b83ea2a994a5037c",
+        "monte_carlo": {
+          "OVER": {
+            "half_loss": 0.0,
+            "half_win": 0.0,
+            "loss": 0.43577,
+            "push": 0.0,
+            "win": 0.5642299999999999
+          },
+          "UNDER": {
+            "half_loss": 0.0,
+            "half_win": 0.0,
+            "loss": 0.5642299999999999,
+            "push": 0.0,
+            "win": 0.43577
+          }
+        },
+        "odds": {
+          "OVER": "-130",
+          "UNDER": "+110"
+        },
+        "parent_model_id": "nhl.fixed_parent.03ce6285cdbfaa24.research",
+        "settlement": "FULL_GAME_OT_SO_PLUS_ONE"
+      }
+    },
+    "event_id": "NHL:401892567",
+    "forecast_row_sha256": "831129749aecbc0f80a2e720570b563f37196dc8ea779463cac56df44c7acd0b",
+    "home_margin": 0.5610587014733606,
+    "home_team": "New Jersey Devils",
+    "league": "NHL",
+    "model_id": "nhl.initial_causal_score.research.v1",
+    "model_winner": "New Jersey Devils",
+    "period": "FULL_GAME",
+    "projected_total": 6.144736353595858,
+    "quote": {
+      "book": "DraftKings",
+      "moneyline": {
+        "away": "+140",
+        "home": "-166"
+      },
+      "provider_observed_at_utc": null,
+      "retrieved_at_utc": "2026-10-24T08:06:53.942977Z",
+      "source_kind": "ORIGINAL_SCOREBOARD",
+      "source_sha256": "8ad59734263b954ce61098cdbd1f912706abbd4e819443a35c04889beb2a8e49"
+    },
+    "sim_p": 0.59493,
+    "start_time_utc": "2026-10-24T19:30:00+00:00",
+    "warnings": [
+      "INITIAL_RESEARCH_BASELINE_NOT_ACCURACY_DEFAULT",
+      "INITIAL_RESEARCH_BASELINE_NOT_ACCURACY_DEFAULT",
+      "RETROSPECTIVE_PROVIDER_REVISIONS_NOT_HISTORICAL_PIT",
+      "NO_PLAYER_AVAILABILITY_FEATURES",
+      "NO_WAGERING_AUTHORITY",
+      "INDEPENDENT_MARGIN_TOTAL_NOT_JOINT_SCORE_MODEL",
+      "VERSIONED_RNG_IDENTITY_REPAIR_NOT_PREDICTIVE_PROMOTION"
+    ],
+    "winner_draw_sha256": "be5bfe4d38cb43710522e8a5b7eeb8ca54069bcc11f704dc22cebc822e19a3af",
+    "winner_draws_exact_replay": true
+  },
+  {
+    "action_authority": false,
+    "analytic_p": 0.6774263775967821,
+    "away_team": "San Jose Sharks",
+    "cutoff_utc": "2026-10-24T08:07:36.439538Z",
+    "distributions": {
+      "margin": {
+        "analytic": {
+          "AWAY": {
+            "half_loss": 0.0,
+            "half_win": 0.0,
+            "loss": 0.5750249837166984,
+            "push": 0.0,
+            "win": 0.4249750162833017
+          },
+          "HOME": {
+            "half_loss": 0.0,
+            "half_win": 0.0,
+            "loss": 0.4249750162833017,
+            "push": 0.0,
+            "win": 0.5750249837166984
+          }
+        },
+        "distribution_sha256": "ab1b951a2cb8e9172124f110a32c3303e10cf5db7374f12681abffc7e93175bb",
+        "draw_count": 100000,
+        "draw_sha256": "18fddf6e9daa9feccbeb0d11decb7c994438bbac16eb57e513ea93d8492541fe",
+        "exact_replay": true,
+        "line": -1.5,
+        "mean": 1.5456196787632759,
+        "model_id": "nhl.margin.empirical.research.ce191ef893a5dd16",
+        "monte_carlo": {
+          "AWAY": {
+            "half_loss": 0.0,
+            "half_win": 0.0,
+            "loss": 0.57442,
+            "push": 0.0,
+            "win": 0.42557999999999996
+          },
+          "HOME": {
+            "half_loss": 0.0,
+            "half_win": 0.0,
+            "loss": 0.42557999999999996,
+            "push": 0.0,
+            "win": 0.57442
+          }
+        },
+        "odds": {
+          "AWAY": "-155",
+          "HOME": "+130"
+        },
+        "parent_model_id": "nhl.fixed_parent.03ce6285cdbfaa24.research",
+        "settlement": "FULL_GAME_OT_SO_PLUS_ONE"
+      },
+      "total": {
+        "analytic": {
+          "OVER": {
+            "half_loss": 0.0,
+            "half_win": 0.0,
+            "loss": 0.590856585712416,
+            "push": 0.0,
+            "win": 0.40914341428758416
+          },
+          "UNDER": {
+            "half_loss": 0.0,
+            "half_win": 0.0,
+            "loss": 0.40914341428758416,
+            "push": 0.0,
+            "win": 0.590856585712416
+          }
+        },
+        "distribution_sha256": "2a37e02e979607967c51e5b1d5c60a164b73ffe339fe3aff3b0cf20af5cdc07e",
+        "draw_count": 100000,
+        "draw_sha256": "87a4092c2b391e7226eba4e1e94a94f81048ecfe19acfbf126884251fd4bb61d",
+        "exact_replay": true,
+        "line": 6.5,
+        "mean": 6.026216518546566,
+        "model_id": "nhl.total.empirical.research.b83ea2a994a5037c",
+        "monte_carlo": {
+          "OVER": {
+            "half_loss": 0.0,
+            "half_win": 0.0,
+            "loss": 0.5923799999999999,
+            "push": 0.0,
+            "win": 0.40762
+          },
+          "UNDER": {
+            "half_loss": 0.0,
+            "half_win": 0.0,
+            "loss": 0.40762,
+            "push": 0.0,
+            "win": 0.5923799999999999
+          }
+        },
+        "odds": {
+          "OVER": "-112",
+          "UNDER": "-108"
+        },
+        "parent_model_id": "nhl.fixed_parent.03ce6285cdbfaa24.research",
+        "settlement": "FULL_GAME_OT_SO_PLUS_ONE"
+      }
+    },
+    "event_id": "NHL:401892568",
+    "forecast_row_sha256": "ac98ebe993dfcd00b310e529be32718001dc7fdf3ca3020c7f55e14c16c6efc0",
+    "home_margin": 1.1311916664874015,
+    "home_team": "Boston Bruins",
+    "league": "NHL",
+    "model_id": "nhl.initial_causal_score.research.v1",
+    "model_winner": "Boston Bruins",
+    "period": "FULL_GAME",
+    "projected_total": 6.1006734064888795,
+    "quote": {
+      "book": "DraftKings",
+      "moneyline": {
+        "away": "+160",
+        "home": "-192"
+      },
+      "provider_observed_at_utc": null,
+      "retrieved_at_utc": "2026-10-24T08:06:53.942977Z",
+      "source_kind": "ORIGINAL_SCOREBOARD",
+      "source_sha256": "8ad59734263b954ce61098cdbd1f912706abbd4e819443a35c04889beb2a8e49"
+    },
+    "sim_p": 0.67572,
+    "start_time_utc": "2026-10-24T23:00:00+00:00",
+    "warnings": [
+      "INITIAL_RESEARCH_BASELINE_NOT_ACCURACY_DEFAULT",
+      "INITIAL_RESEARCH_BASELINE_NOT_ACCURACY_DEFAULT",
+      "RETROSPECTIVE_PROVIDER_REVISIONS_NOT_HISTORICAL_PIT",
+      "NO_PLAYER_AVAILABILITY_FEATURES",
+      "NO_WAGERING_AUTHORITY",
+      "INDEPENDENT_MARGIN_TOTAL_NOT_JOINT_SCORE_MODEL",
+      "VERSIONED_RNG_IDENTITY_REPAIR_NOT_PREDICTIVE_PROMOTION"
+    ],
+    "winner_draw_sha256": "15433ba2671105378f22b0db32b398d0a705ef66a4e4caf2dbe5ce7b8bceb8a5",
+    "winner_draws_exact_replay": true
+  },
+  {
+    "action_authority": false,
+    "analytic_p": 0.5188959180775842,
+    "away_team": "New York Rangers",
+    "cutoff_utc": "2026-10-24T08:07:36.439538Z",
+    "distributions": {
+      "margin": {
+        "analytic": {
+          "AWAY": {
+            "half_loss": 0.0,
+            "half_win": 0.0,
+            "loss": 0.3715506185174856,
+            "push": 0.0,
+            "win": 0.6284493814825144
+          },
+          "HOME": {
+            "half_loss": 0.0,
+            "half_win": 0.0,
+            "loss": 0.6284493814825144,
+            "push": 0.0,
+            "win": 0.3715506185174856
+          }
+        },
+        "distribution_sha256": "e067490f87178f90d80163f11cc747084d8ffe2ac72f45f8b65ae44af12658e9",
+        "draw_count": 100000,
+        "draw_sha256": "ebe27c038c409e6d994d8e4de0394d839f97846d2a1e4b75dc7d73eb78da7571",
+        "exact_replay": true,
+        "line": -1.5,
+        "mean": 0.16258206011018317,
+        "model_id": "nhl.margin.empirical.research.ce191ef893a5dd16",
+        "monte_carlo": {
+          "AWAY": {
+            "half_loss": 0.0,
+            "half_win": 0.0,
+            "loss": 0.36982999999999994,
+            "push": 0.0,
+            "win": 0.63017
+          },
+          "HOME": {
+            "half_loss": 0.0,
+            "half_win": 0.0,
+            "loss": 0.63017,
+            "push": 0.0,
+            "win": 0.36982999999999994
+          }
+        },
+        "odds": {
+          "AWAY": "-245",
+          "HOME": "+200"
+        },
+        "parent_model_id": "nhl.fixed_parent.03ce6285cdbfaa24.research",
+        "settlement": "FULL_GAME_OT_SO_PLUS_ONE"
+      },
+      "total": {
+        "analytic": {
+          "OVER": {
+            "half_loss": 0.0,
+            "half_win": 0.0,
+            "loss": 0.4547538366156459,
+            "push": 0.0,
+            "win": 0.545246163384354
+          },
+          "UNDER": {
+            "half_loss": 0.0,
+            "half_win": 0.0,
+            "loss": 0.545246163384354,
+            "push": 0.0,
+            "win": 0.4547538366156459
+          }
+        },
+        "distribution_sha256": "9fd5ee97b164bfd3d6ece21c6c1ae73b7d11ea37f5e9289fde4a21376bda08fc",
+        "draw_count": 100000,
+        "draw_sha256": "e74019aa6a7a45c0f34a995a88cf0b287813a77d37bc40f106c206d740b30074",
+        "exact_replay": true,
+        "line": 5.5,
+        "mean": 5.950417916980882,
+        "model_id": "nhl.total.empirical.research.b83ea2a994a5037c",
+        "monte_carlo": {
+          "OVER": {
+            "half_loss": 0.0,
+            "half_win": 0.0,
+            "loss": 0.45567,
+            "push": 0.0,
+            "win": 0.5443299999999999
+          },
+          "UNDER": {
+            "half_loss": 0.0,
+            "half_win": 0.0,
+            "loss": 0.5443299999999999,
+            "push": 0.0,
+            "win": 0.45567
+          }
+        },
+        "odds": {
+          "OVER": "-135",
+          "UNDER": "+114"
+        },
+        "parent_model_id": "nhl.fixed_parent.03ce6285cdbfaa24.research",
+        "settlement": "FULL_GAME_OT_SO_PLUS_ONE"
+      }
+    },
+    "event_id": "NHL:401892569",
+    "forecast_row_sha256": "7c34c94c52595ddf41c541bb20a3f9ebc48f12c095efb406b459a756d04739f2",
+    "home_margin": 0.15091418958857217,
+    "home_team": "Ottawa Senators",
+    "league": "NHL",
+    "model_id": "nhl.initial_causal_score.research.v1",
+    "model_winner": "Ottawa Senators",
+    "period": "FULL_GAME",
+    "projected_total": 5.998158397992611,
+    "quote": {
+      "book": "DraftKings",
+      "moneyline": {
+        "away": "+105",
+        "home": "-125"
+      },
+      "provider_observed_at_utc": null,
+      "retrieved_at_utc": "2026-10-24T08:06:53.942977Z",
+      "source_kind": "ORIGINAL_SCOREBOARD",
+      "source_sha256": "8ad59734263b954ce61098cdbd1f912706abbd4e819443a35c04889beb2a8e49"
+    },
+    "sim_p": 0.52094,
+    "start_time_utc": "2026-10-24T23:00:00+00:00",
+    "warnings": [
+      "INITIAL_RESEARCH_BASELINE_NOT_ACCURACY_DEFAULT",
+      "INITIAL_RESEARCH_BASELINE_NOT_ACCURACY_DEFAULT",
+      "RETROSPECTIVE_PROVIDER_REVISIONS_NOT_HISTORICAL_PIT",
+      "NO_PLAYER_AVAILABILITY_FEATURES",
+      "NO_WAGERING_AUTHORITY",
+      "INDEPENDENT_MARGIN_TOTAL_NOT_JOINT_SCORE_MODEL",
+      "VERSIONED_RNG_IDENTITY_REPAIR_NOT_PREDICTIVE_PROMOTION"
+    ],
+    "winner_draw_sha256": "c141f2fba148fb914510d5316ee904f036c1abc57b170c2c4af6e7484bb063e9",
+    "winner_draws_exact_replay": true
+  },
+  {
+    "action_authority": false,
+    "analytic_p": 0.5592865934172847,
+    "away_team": "Nashville Predators",
+    "cutoff_utc": "2026-10-24T08:07:36.439538Z",
+    "distributions": {
+      "margin": {
+        "analytic": {
+          "AWAY": {
+            "half_loss": 0.0,
+            "half_win": 0.0,
+            "loss": 0.38846913245880926,
+            "push": 0.0,
+            "win": 0.6115308675411906
+          },
+          "HOME": {
+            "half_loss": 0.0,
+            "half_win": 0.0,
+            "loss": 0.6115308675411906,
+            "push": 0.0,
+            "win": 0.38846913245880926
+          }
+        },
+        "distribution_sha256": "be382c2c07d346aeadeac4fa564088182d3d8207f84f3a738e5fff886438cb20",
+        "draw_count": 100000,
+        "draw_sha256": "0c9e5563b8d91459982c3bd8c740a942a6f24e9bab27c0590fa323a3b1a182d0",
+        "exact_replay": true,
+        "line": -1.5,
+        "mean": 0.2806713268652633,
+        "model_id": "nhl.margin.empirical.research.ce191ef893a5dd16",
+        "monte_carlo": {
+          "AWAY": {
+            "half_loss": 0.0,
+            "half_win": 0.0,
+            "loss": 0.38682000000000005,
+            "push": 0.0,
+            "win": 0.6131800000000001
+          },
+          "HOME": {
+            "half_loss": 0.0,
+            "half_win": 0.0,
+            "loss": 0.6131800000000001,
+            "push": 0.0,
+            "win": 0.38682000000000005
+          }
+        },
+        "odds": {
+          "AWAY": "-218",
+          "HOME": "+180"
+        },
+        "parent_model_id": "nhl.fixed_parent.03ce6285cdbfaa24.research",
+        "settlement": "FULL_GAME_OT_SO_PLUS_ONE"
+      },
+      "total": {
+        "analytic": {
+          "OVER": {
+            "half_loss": 0.0,
+            "half_win": 0.0,
+            "loss": 0.5341645538460619,
+            "push": 0.0,
+            "win": 0.4658354461539382
+          },
+          "UNDER": {
+            "half_loss": 0.0,
+            "half_win": 0.0,
+            "loss": 0.4658354461539382,
+            "push": 0.0,
+            "win": 0.5341645538460619
+          }
+        },
+        "distribution_sha256": "8e88ae6a802426b589dafa1342cdadd52169f21d44f5f44dbbe49a9502a6fcce",
+        "draw_count": 100000,
+        "draw_sha256": "1a5ada9efab846c63678ea2440e7e4ad6eb5eaea8d2c3289eec50e1c09fe6b41",
+        "exact_replay": true,
+        "line": 6.5,
+        "mean": 6.337625740498132,
+        "model_id": "nhl.total.empirical.research.b83ea2a994a5037c",
+        "monte_carlo": {
+          "OVER": {
+            "half_loss": 0.0,
+            "half_win": 0.0,
+            "loss": 0.53819,
+            "push": 0.0,
+            "win": 0.46181
+          },
+          "UNDER": {
+            "half_loss": 0.0,
+            "half_win": 0.0,
+            "loss": 0.46181,
+            "push": 0.0,
+            "win": 0.53819
+          }
+        },
+        "odds": {
+          "OVER": "-108",
+          "UNDER": "-112"
+        },
+        "parent_model_id": "nhl.fixed_parent.03ce6285cdbfaa24.research",
+        "settlement": "FULL_GAME_OT_SO_PLUS_ONE"
+      }
+    },
+    "event_id": "NHL:401892570",
+    "forecast_row_sha256": "922d8df5cfa9ada97c9b3b4cb0fbeee22fd1e0bb6a48b7d556f184b3a11c9392",
+    "home_margin": 0.31658030166603923,
+    "home_team": "Pittsburgh Penguins",
+    "league": "NHL",
+    "model_id": "nhl.initial_causal_score.research.v1",
+    "model_winner": "Pittsburgh Penguins",
+    "period": "FULL_GAME",
+    "projected_total": 6.342784731570312,
+    "quote": {
+      "book": "DraftKings",
+      "moneyline": {
+        "away": "+120",
+        "home": "-142"
+      },
+      "provider_observed_at_utc": null,
+      "retrieved_at_utc": "2026-10-24T08:06:53.942977Z",
+      "source_kind": "ORIGINAL_SCOREBOARD",
+      "source_sha256": "8ad59734263b954ce61098cdbd1f912706abbd4e819443a35c04889beb2a8e49"
+    },
+    "sim_p": 0.55867,
+    "start_time_utc": "2026-10-24T23:00:00+00:00",
+    "warnings": [
+      "INITIAL_RESEARCH_BASELINE_NOT_ACCURACY_DEFAULT",
+      "INITIAL_RESEARCH_BASELINE_NOT_ACCURACY_DEFAULT",
+      "RETROSPECTIVE_PROVIDER_REVISIONS_NOT_HISTORICAL_PIT",
+      "NO_PLAYER_AVAILABILITY_FEATURES",
+      "NO_WAGERING_AUTHORITY",
+      "INDEPENDENT_MARGIN_TOTAL_NOT_JOINT_SCORE_MODEL",
+      "VERSIONED_RNG_IDENTITY_REPAIR_NOT_PREDICTIVE_PROMOTION"
+    ],
+    "winner_draw_sha256": "6ae7515a0845e63d2a922211d104a230168a3ef9b10a7265a8d8f15ecd5e481c",
+    "winner_draws_exact_replay": true
+  },
+  {
+    "action_authority": false,
+    "analytic_p": 0.5669018160667284,
+    "away_team": "Buffalo Sabres",
+    "cutoff_utc": "2026-10-24T08:07:36.439538Z",
+    "distributions": {
+      "margin": {
+        "analytic": {
+          "AWAY": {
+            "half_loss": 0.0,
+            "half_win": 0.0,
+            "loss": 0.41854761294379295,
+            "push": 0.0,
+            "win": 0.5814523870562072
+          },
+          "HOME": {
+            "half_loss": 0.0,
+            "half_win": 0.0,
+            "loss": 0.5814523870562072,
+            "push": 0.0,
+            "win": 0.41854761294379295
+          }
+        },
+        "distribution_sha256": "2a5f10c48b5241c9bb3ceaf5fc6432f10fa1ed24d8f0a65f8d52ae1ca519bdf4",
+        "draw_count": 100000,
+        "draw_sha256": "1e79b858dbee25f28e2dbfe684e42e45c3eeda9c7578bb80c9ae40bce3a699b1",
+        "exact_replay": true,
+        "line": -1.5,
+        "mean": 0.4828153315210543,
+        "model_id": "nhl.margin.empirical.research.ce191ef893a5dd16",
+        "monte_carlo": {
+          "AWAY": {
+            "half_loss": 0.0,
+            "half_win": 0.0,
+            "loss": 0.41838000000000003,
+            "push": 0.0,
+            "win": 0.58162
+          },
+          "HOME": {
+            "half_loss": 0.0,
+            "half_win": 0.0,
+            "loss": 0.58162,
+            "push": 0.0,
+            "win": 0.41838000000000003
+          }
+        },
+        "odds": {
+          "AWAY": "-238",
+          "HOME": "+195"
+        },
+        "parent_model_id": "nhl.fixed_parent.03ce6285cdbfaa24.research",
+        "settlement": "FULL_GAME_OT_SO_PLUS_ONE"
+      },
+      "total": {
+        "analytic": {
+          "OVER": {
+            "half_loss": 0.0,
+            "half_win": 0.0,
+            "loss": 0.5250397926653142,
+            "push": 0.0,
+            "win": 0.47496020733468564
+          },
+          "UNDER": {
+            "half_loss": 0.0,
+            "half_win": 0.0,
+            "loss": 0.47496020733468564,
+            "push": 0.0,
+            "win": 0.5250397926653142
+          }
+        },
+        "distribution_sha256": "808ef57de0196d8ca8ad53f256491afbdd3856563e34a4fa0dc499ce228394aa",
+        "draw_count": 100000,
+        "draw_sha256": "37217401a0287c2bcce4acefef60af2253ad973ba7e6cdf7c0a3fbbe00856b3b",
+        "exact_replay": true,
+        "line": 6.5,
+        "mean": 6.4005831985588895,
+        "model_id": "nhl.total.empirical.research.b83ea2a994a5037c",
+        "monte_carlo": {
+          "OVER": {
+            "half_loss": 0.0,
+            "half_win": 0.0,
+            "loss": 0.5271,
+            "push": 0.0,
+            "win": 0.4729
+          },
+          "UNDER": {
+            "half_loss": 0.0,
+            "half_win": 0.0,
+            "loss": 0.4729,
+            "push": 0.0,
+            "win": 0.5271
+          }
+        },
+        "odds": {
+          "OVER": "-112",
+          "UNDER": "-108"
+        },
+        "parent_model_id": "nhl.fixed_parent.03ce6285cdbfaa24.research",
+        "settlement": "FULL_GAME_OT_SO_PLUS_ONE"
+      }
+    },
+    "event_id": "NHL:401892571",
+    "forecast_row_sha256": "43e65aa2f64b80c667823e9b2047cd66f175fc8ca77ee16917961441075539db",
+    "home_margin": 0.3812326102465722,
+    "home_team": "Washington Capitals",
+    "league": "NHL",
+    "model_id": "nhl.initial_causal_score.research.v1",
+    "model_winner": "Washington Capitals",
+    "period": "FULL_GAME",
+    "projected_total": 6.348366851721079,
+    "quote": {
+      "book": "DraftKings",
+      "moneyline": {
+        "away": "+105",
+        "home": "-125"
+      },
+      "provider_observed_at_utc": null,
+      "retrieved_at_utc": "2026-10-24T08:06:53.942977Z",
+      "source_kind": "ORIGINAL_SCOREBOARD",
+      "source_sha256": "8ad59734263b954ce61098cdbd1f912706abbd4e819443a35c04889beb2a8e49"
+    },
+    "sim_p": 0.56618,
+    "start_time_utc": "2026-10-24T23:00:00+00:00",
+    "warnings": [
+      "INITIAL_RESEARCH_BASELINE_NOT_ACCURACY_DEFAULT",
+      "INITIAL_RESEARCH_BASELINE_NOT_ACCURACY_DEFAULT",
+      "RETROSPECTIVE_PROVIDER_REVISIONS_NOT_HISTORICAL_PIT",
+      "NO_PLAYER_AVAILABILITY_FEATURES",
+      "NO_WAGERING_AUTHORITY",
+      "INDEPENDENT_MARGIN_TOTAL_NOT_JOINT_SCORE_MODEL",
+      "VERSIONED_RNG_IDENTITY_REPAIR_NOT_PREDICTIVE_PROMOTION"
+    ],
+    "winner_draw_sha256": "c6ded2455f5d383d001d26e3043295515343111a82ff33f6ddeb99d8e6f6aacd",
+    "winner_draws_exact_replay": true
+  },
+  {
+    "action_authority": false,
+    "analytic_p": 0.6173970472154897,
+    "away_team": "Vegas Golden Knights",
+    "cutoff_utc": "2026-10-24T08:07:36.439538Z",
+    "distributions": {
+      "margin": {
+        "analytic": {
+          "AWAY": {
+            "half_loss": 0.0,
+            "half_win": 0.0,
+            "loss": 0.5156927590120592,
+            "push": 0.0,
+            "win": 0.4843072409879407
+          },
+          "HOME": {
+            "half_loss": 0.0,
+            "half_win": 0.0,
+            "loss": 0.4843072409879407,
+            "push": 0.0,
+            "win": 0.5156927590120592
+          }
+        },
+        "distribution_sha256": "8aa7bed06c75e148316bdde3fe131599bec0b11667610f7ba429952d5ccc4b43",
+        "draw_count": 100000,
+        "draw_sha256": "a8125842f6b7f313595765be637de628a93f98b0fafbadc1b11d3153dabecc5a",
+        "exact_replay": true,
+        "line": 1.5,
+        "mean": -0.9082088232387999,
+        "model_id": "nhl.margin.empirical.research.ce191ef893a5dd16",
+        "monte_carlo": {
+          "AWAY": {
+            "half_loss": 0.0,
+            "half_win": 0.0,
+            "loss": 0.51689,
+            "push": 0.0,
+            "win": 0.48311000000000004
+          },
+          "HOME": {
+            "half_loss": 0.0,
+            "half_win": 0.0,
+            "loss": 0.48311000000000004,
+            "push": 0.0,
+            "win": 0.51689
+          }
+        },
+        "odds": {
+          "AWAY": "+185",
+          "HOME": "-225"
+        },
+        "parent_model_id": "nhl.fixed_parent.03ce6285cdbfaa24.research",
+        "settlement": "FULL_GAME_OT_SO_PLUS_ONE"
+      },
+      "total": {
+        "analytic": {
+          "OVER": {
+            "half_loss": 0.0,
+            "half_win": 0.0,
+            "loss": 0.5224651595894081,
+            "push": 0.0,
+            "win": 0.4775348404105919
+          },
+          "UNDER": {
+            "half_loss": 0.0,
+            "half_win": 0.0,
+            "loss": 0.4775348404105919,
+            "push": 0.0,
+            "win": 0.5224651595894081
+          }
+        },
+        "distribution_sha256": "b603232a23c132dce2542482be1ae2b25c805980e23007ebe0a0b5ae751fbac4",
+        "draw_count": 100000,
+        "draw_sha256": "3e584fbdc9fd61647ee1f400fdd9bf00c735ce7abce73d03a22821f5487f2d25",
+        "exact_replay": true,
+        "line": 6.5,
+        "mean": 6.419411745938743,
+        "model_id": "nhl.total.empirical.research.b83ea2a994a5037c",
+        "monte_carlo": {
+          "OVER": {
+            "half_loss": 0.0,
+            "half_win": 0.0,
+            "loss": 0.5229900000000001,
+            "push": 0.0,
+            "win": 0.47701000000000005
+          },
+          "UNDER": {
+            "half_loss": 0.0,
+            "half_win": 0.0,
+            "loss": 0.47701000000000005,
+            "push": 0.0,
+            "win": 0.5229900000000001
+          }
+        },
+        "odds": {
+          "OVER": "+114",
+          "UNDER": "-135"
+        },
+        "parent_model_id": "nhl.fixed_parent.03ce6285cdbfaa24.research",
+        "settlement": "FULL_GAME_OT_SO_PLUS_ONE"
+      }
+    },
+    "event_id": "NHL:401892572",
+    "forecast_row_sha256": "1f8287861f1bd9169d1794d623bd4ee64f31771cea5d50545cf9bd210ae00d0c",
+    "home_margin": -0.6905889967019345,
+    "home_team": "Columbus Blue Jackets",
+    "league": "NHL",
+    "model_id": "nhl.initial_causal_score.research.v1",
+    "model_winner": "Vegas Golden Knights",
+    "period": "FULL_GAME",
+    "projected_total": 6.266546419766728,
+    "quote": {
+      "book": "DraftKings",
+      "moneyline": {
+        "away": "-135",
+        "home": "+114"
+      },
+      "provider_observed_at_utc": null,
+      "retrieved_at_utc": "2026-10-24T08:06:53.942977Z",
+      "source_kind": "ORIGINAL_SCOREBOARD",
+      "source_sha256": "8ad59734263b954ce61098cdbd1f912706abbd4e819443a35c04889beb2a8e49"
+    },
+    "sim_p": 0.6176699999999999,
+    "start_time_utc": "2026-10-24T23:00:00+00:00",
+    "warnings": [
+      "INITIAL_RESEARCH_BASELINE_NOT_ACCURACY_DEFAULT",
+      "INITIAL_RESEARCH_BASELINE_NOT_ACCURACY_DEFAULT",
+      "RETROSPECTIVE_PROVIDER_REVISIONS_NOT_HISTORICAL_PIT",
+      "NO_PLAYER_AVAILABILITY_FEATURES",
+      "NO_WAGERING_AUTHORITY",
+      "INDEPENDENT_MARGIN_TOTAL_NOT_JOINT_SCORE_MODEL",
+      "VERSIONED_RNG_IDENTITY_REPAIR_NOT_PREDICTIVE_PROMOTION"
+    ],
+    "winner_draw_sha256": "f0965894a31752c4ea9131ccfcdf924230ee23d7d3e6c65c04071ef348a7c955",
+    "winner_draws_exact_replay": true
+  },
+  {
+    "action_authority": false,
+    "analytic_p": 0.5404343503449982,
+    "away_team": "Carolina Hurricanes",
+    "cutoff_utc": "2026-10-24T08:07:36.439538Z",
+    "distributions": {
+      "margin": {
+        "analytic": {
+          "AWAY": {
+            "half_loss": 0.0,
+            "half_win": 0.0,
+            "loss": 0.6155897911529568,
+            "push": 0.0,
+            "win": 0.38441020884704324
+          },
+          "HOME": {
+            "half_loss": 0.0,
+            "half_win": 0.0,
+            "loss": 0.38441020884704324,
+            "push": 0.0,
+            "win": 0.6155897911529568
+          }
+        },
+        "distribution_sha256": "ac306fca49bbab4f37257efe73b4deb7193a39dcecc7ddfd2dd7957cd5f10bea",
+        "draw_count": 100000,
+        "draw_sha256": "bed1be31b7a9fe2d5bf6e99d6b5d2307b7968452511c195fe5dd2390be476416",
+        "exact_replay": true,
+        "line": 1.5,
+        "mean": -0.21652972218187427,
+        "model_id": "nhl.margin.empirical.research.ce191ef893a5dd16",
+        "monte_carlo": {
+          "AWAY": {
+            "half_loss": 0.0,
+            "half_win": 0.0,
+            "loss": 0.61489,
+            "push": 0.0,
+            "win": 0.38510999999999995
+          },
+          "HOME": {
+            "half_loss": 0.0,
+            "half_win": 0.0,
+            "loss": 0.38510999999999995,
+            "push": 0.0,
+            "win": 0.61489
+          }
+        },
+        "odds": {
+          "AWAY": "+164",
+          "HOME": "-198"
+        },
+        "parent_model_id": "nhl.fixed_parent.03ce6285cdbfaa24.research",
+        "settlement": "FULL_GAME_OT_SO_PLUS_ONE"
+      },
+      "total": {
+        "analytic": {
+          "OVER": {
+            "half_loss": 0.0,
+            "half_win": 0.0,
+            "loss": 0.5212956905257573,
+            "push": 0.0,
+            "win": 0.47870430947424275
+          },
+          "UNDER": {
+            "half_loss": 0.0,
+            "half_win": 0.0,
+            "loss": 0.47870430947424275,
+            "push": 0.0,
+            "win": 0.5212956905257573
+          }
+        },
+        "distribution_sha256": "48265b923d2557fd736756094b8ba4070b6a74b038d95f97a9e258f54930cb82",
+        "draw_count": 100000,
+        "draw_sha256": "e4e7b7ed42505144f8a6d9077501c94398916fe57fffabc02b4b7f0c58aacd27",
+        "exact_replay": true,
+        "line": 6.5,
+        "mean": 6.427870046835796,
+        "model_id": "nhl.total.empirical.research.b83ea2a994a5037c",
+        "monte_carlo": {
+          "OVER": {
+            "half_loss": 0.0,
+            "half_win": 0.0,
+            "loss": 0.52197,
+            "push": 0.0,
+            "win": 0.47803000000000007
+          },
+          "UNDER": {
+            "half_loss": 0.0,
+            "half_win": 0.0,
+            "loss": 0.47803000000000007,
+            "push": 0.0,
+            "win": 0.52197
+          }
+        },
+        "odds": {
+          "OVER": "+105",
+          "UNDER": "-125"
+        },
+        "parent_model_id": "nhl.fixed_parent.03ce6285cdbfaa24.research",
+        "settlement": "FULL_GAME_OT_SO_PLUS_ONE"
+      }
+    },
+    "event_id": "NHL:401892573",
+    "forecast_row_sha256": "b79340088e1c56564ef55c18fa906a73a05ec1c0e9e3c341fabb03d2701fc8b3",
+    "home_margin": -0.2400891728869232,
+    "home_team": "St. Louis Blues",
+    "league": "NHL",
+    "model_id": "nhl.initial_causal_score.research.v1",
+    "model_winner": "Carolina Hurricanes",
+    "period": "FULL_GAME",
+    "projected_total": 6.304440039754325,
+    "quote": {
+      "book": "DraftKings",
+      "moneyline": {
+        "away": "-155",
+        "home": "+130"
+      },
+      "provider_observed_at_utc": null,
+      "retrieved_at_utc": "2026-10-24T08:06:53.942977Z",
+      "source_kind": "ORIGINAL_SCOREBOARD",
+      "source_sha256": "8ad59734263b954ce61098cdbd1f912706abbd4e819443a35c04889beb2a8e49"
+    },
+    "sim_p": 0.54202,
+    "start_time_utc": "2026-10-24T23:00:00+00:00",
+    "warnings": [
+      "INITIAL_RESEARCH_BASELINE_NOT_ACCURACY_DEFAULT",
+      "INITIAL_RESEARCH_BASELINE_NOT_ACCURACY_DEFAULT",
+      "RETROSPECTIVE_PROVIDER_REVISIONS_NOT_HISTORICAL_PIT",
+      "NO_PLAYER_AVAILABILITY_FEATURES",
+      "NO_WAGERING_AUTHORITY",
+      "INDEPENDENT_MARGIN_TOTAL_NOT_JOINT_SCORE_MODEL",
+      "VERSIONED_RNG_IDENTITY_REPAIR_NOT_PREDICTIVE_PROMOTION"
+    ],
+    "winner_draw_sha256": "4c5ac3e61833b403540505ce1385ecad44abd1eeba67db847fa9d09eb7e654a6",
+    "winner_draws_exact_replay": true
+  },
+  {
+    "action_authority": false,
+    "analytic_p": 0.625678357134294,
+    "away_team": "Toronto Maple Leafs",
+    "cutoff_utc": "2026-10-24T08:07:36.439538Z",
+    "distributions": {
+      "margin": {
+        "analytic": {
+          "AWAY": {
+            "half_loss": 0.0,
+            "half_win": 0.0,
+            "loss": 0.514021000438537,
+            "push": 0.0,
+            "win": 0.48597899956146307
+          },
+          "HOME": {
+            "half_loss": 0.0,
+            "half_win": 0.0,
+            "loss": 0.48597899956146307,
+            "push": 0.0,
+            "win": 0.514021000438537
+          }
+        },
+        "distribution_sha256": "f1d2fa908f1d15ccca5056e6317dce6f983286ddf4d5d9e798b0a6a559ac454c",
+        "draw_count": 100000,
+        "draw_sha256": "08d7cae76c620a20a219dfcbce4f51b4b2bacfc86fede71146c4cc4036fa097c",
+        "exact_replay": true,
+        "line": -1.5,
+        "mean": 1.066317524176089,
+        "model_id": "nhl.margin.empirical.research.ce191ef893a5dd16",
+        "monte_carlo": {
+          "AWAY": {
+            "half_loss": 0.0,
+            "half_win": 0.0,
+            "loss": 0.51393,
+            "push": 0.0,
+            "win": 0.48607
+          },
+          "HOME": {
+            "half_loss": 0.0,
+            "half_win": 0.0,
+            "loss": 0.48607,
+            "push": 0.0,
+            "win": 0.51393
+          }
+        },
+        "odds": {
+          "AWAY": "-155",
+          "HOME": "+130"
+        },
+        "parent_model_id": "nhl.fixed_parent.03ce6285cdbfaa24.research",
+        "settlement": "FULL_GAME_OT_SO_PLUS_ONE"
+      },
+      "total": {
+        "analytic": {
+          "OVER": {
+            "half_loss": 0.0,
+            "half_win": 0.0,
+            "loss": 0.49592036006476914,
+            "push": 0.0,
+            "win": 0.5040796399352309
+          },
+          "UNDER": {
+            "half_loss": 0.0,
+            "half_win": 0.0,
+            "loss": 0.5040796399352309,
+            "push": 0.0,
+            "win": 0.49592036006476914
+          }
+        },
+        "distribution_sha256": "bc65391b93189965bac0343e22a188480e997ed5b8847d4aee92622fac7c488c",
+        "draw_count": 100000,
+        "draw_sha256": "017fc87f167026b0ad33c988c89c73c7422cb33c5d0483a37c8ae0eac7a3a8e4",
+        "exact_replay": true,
+        "line": 6.5,
+        "mean": 6.618882754659446,
+        "model_id": "nhl.total.empirical.research.b83ea2a994a5037c",
+        "monte_carlo": {
+          "OVER": {
+            "half_loss": 0.0,
+            "half_win": 0.0,
+            "loss": 0.49358,
+            "push": 0.0,
+            "win": 0.50642
+          },
+          "UNDER": {
+            "half_loss": 0.0,
+            "half_win": 0.0,
+            "loss": 0.50642,
+            "push": 0.0,
+            "win": 0.49358
+          }
+        },
+        "odds": {
+          "OVER": "-148",
+          "UNDER": "+124"
+        },
+        "parent_model_id": "nhl.fixed_parent.03ce6285cdbfaa24.research",
+        "settlement": "FULL_GAME_OT_SO_PLUS_ONE"
+      }
+    },
+    "event_id": "NHL:401892574",
+    "forecast_row_sha256": "5dbd1513d9dc274c82c75395eeab0af0f35aa23dd8fc1192f157e04c263485ac",
+    "home_margin": 0.753698483414358,
+    "home_team": "Edmonton Oilers",
+    "league": "NHL",
+    "model_id": "nhl.initial_causal_score.research.v1",
+    "model_winner": "Edmonton Oilers",
+    "period": "FULL_GAME",
+    "projected_total": 6.520204455080698,
+    "quote": {
+      "book": "DraftKings",
+      "moneyline": {
+        "away": "+150",
+        "home": "-180"
+      },
+      "provider_observed_at_utc": null,
+      "retrieved_at_utc": "2026-10-24T08:06:53.942977Z",
+      "source_kind": "ORIGINAL_SCOREBOARD",
+      "source_sha256": "8ad59734263b954ce61098cdbd1f912706abbd4e819443a35c04889beb2a8e49"
+    },
+    "sim_p": 0.62864,
+    "start_time_utc": "2026-10-24T23:00:00+00:00",
+    "warnings": [
+      "INITIAL_RESEARCH_BASELINE_NOT_ACCURACY_DEFAULT",
+      "INITIAL_RESEARCH_BASELINE_NOT_ACCURACY_DEFAULT",
+      "RETROSPECTIVE_PROVIDER_REVISIONS_NOT_HISTORICAL_PIT",
+      "NO_PLAYER_AVAILABILITY_FEATURES",
+      "NO_WAGERING_AUTHORITY",
+      "INDEPENDENT_MARGIN_TOTAL_NOT_JOINT_SCORE_MODEL",
+      "VERSIONED_RNG_IDENTITY_REPAIR_NOT_PREDICTIVE_PROMOTION"
+    ],
+    "winner_draw_sha256": "393c81018206fe74a24a42d1291ca94d598e7f1b292bc977ee57cd121e77ec1a",
+    "winner_draws_exact_replay": true
+  },
+  {
+    "action_authority": false,
+    "analytic_p": 0.5032209283199613,
+    "away_team": "Tampa Bay Lightning",
+    "cutoff_utc": "2026-10-24T08:07:36.439538Z",
+    "distributions": {
+      "margin": {
+        "analytic": {
+          "AWAY": {
+            "half_loss": 0.0,
+            "half_win": 0.0,
+            "loss": 0.3471466027393194,
+            "push": 0.0,
+            "win": 0.6528533972606806
+          },
+          "HOME": {
+            "half_loss": 0.0,
+            "half_win": 0.0,
+            "loss": 0.6528533972606806,
+            "push": 0.0,
+            "win": 0.3471466027393194
+          }
+        },
+        "distribution_sha256": "587bf131471380fdf1d00e56dbcb139a0b5c562e1b1c14bef39585338702cc61",
+        "draw_count": 100000,
+        "draw_sha256": "e744a5f36dc2e819686923526a3c04f6912554d7be0fa88011c3f07878a92b97",
+        "exact_replay": true,
+        "line": -1.5,
+        "mean": -0.02010936397334695,
+        "model_id": "nhl.margin.empirical.research.ce191ef893a5dd16",
+        "monte_carlo": {
+          "AWAY": {
+            "half_loss": 0.0,
+            "half_win": 0.0,
+            "loss": 0.34825,
+            "push": 0.0,
+            "win": 0.65175
+          },
+          "HOME": {
+            "half_loss": 0.0,
+            "half_win": 0.0,
+            "loss": 0.65175,
+            "push": 0.0,
+            "win": 0.34825
+          }
+        },
+        "odds": {
+          "AWAY": "-192",
+          "HOME": "+160"
+        },
+        "parent_model_id": "nhl.fixed_parent.03ce6285cdbfaa24.research",
+        "settlement": "FULL_GAME_OT_SO_PLUS_ONE"
+      },
+      "total": {
+        "analytic": {
+          "OVER": {
+            "half_loss": 0.0,
+            "half_win": 0.0,
+            "loss": 0.5111548498581582,
+            "push": 0.0,
+            "win": 0.48884515014184166
+          },
+          "UNDER": {
+            "half_loss": 0.0,
+            "half_win": 0.0,
+            "loss": 0.48884515014184166,
+            "push": 0.0,
+            "win": 0.5111548498581582
+          }
+        },
+        "distribution_sha256": "97347265b91293a8508bc9e49c46eed93bddf1c3bfb16df3776a220bf5c15dcf",
+        "draw_count": 100000,
+        "draw_sha256": "85355ee91501fa2b6318674b00cb8a2bd1da8b750f3015cfaa4ccf8a831bf6b0",
+        "exact_replay": true,
+        "line": 6.5,
+        "mean": 6.501728236271464,
+        "model_id": "nhl.total.empirical.research.b83ea2a994a5037c",
+        "monte_carlo": {
+          "OVER": {
+            "half_loss": 0.0,
+            "half_win": 0.0,
+            "loss": 0.5098,
+            "push": 0.0,
+            "win": 0.49019999999999997
+          },
+          "UNDER": {
+            "half_loss": 0.0,
+            "half_win": 0.0,
+            "loss": 0.49019999999999997,
+            "push": 0.0,
+            "win": 0.5098
+          }
+        },
+        "odds": {
+          "OVER": "-108",
+          "UNDER": "-112"
+        },
+        "parent_model_id": "nhl.fixed_parent.03ce6285cdbfaa24.research",
+        "settlement": "FULL_GAME_OT_SO_PLUS_ONE"
+      }
+    },
+    "event_id": "NHL:401892575",
+    "forecast_row_sha256": "d23113ed70467456f103798e5cc7bd0a805d0b46575a294731af36051ce73c20",
+    "home_margin": -0.05614079254817286,
+    "home_team": "Utah Mammoth",
+    "league": "NHL",
+    "model_id": "nhl.initial_causal_score.research.v1",
+    "model_winner": "Tampa Bay Lightning",
+    "period": "FULL_GAME",
+    "projected_total": 6.391497185284309,
+    "quote": {
+      "book": "DraftKings",
+      "moneyline": {
+        "away": "+120",
+        "home": "-142"
+      },
+      "provider_observed_at_utc": null,
+      "retrieved_at_utc": "2026-10-24T08:06:53.942977Z",
+      "source_kind": "ORIGINAL_SCOREBOARD",
+      "source_sha256": "8ad59734263b954ce61098cdbd1f912706abbd4e819443a35c04889beb2a8e49"
+    },
+    "sim_p": 0.5020800000000001,
+    "start_time_utc": "2026-10-25T01:00:00+00:00",
+    "warnings": [
+      "INITIAL_RESEARCH_BASELINE_NOT_ACCURACY_DEFAULT",
+      "INITIAL_RESEARCH_BASELINE_NOT_ACCURACY_DEFAULT",
+      "RETROSPECTIVE_PROVIDER_REVISIONS_NOT_HISTORICAL_PIT",
+      "NO_PLAYER_AVAILABILITY_FEATURES",
+      "NO_WAGERING_AUTHORITY",
+      "INDEPENDENT_MARGIN_TOTAL_NOT_JOINT_SCORE_MODEL",
+      "VERSIONED_RNG_IDENTITY_REPAIR_NOT_PREDICTIVE_PROMOTION"
+    ],
+    "winner_draw_sha256": "f7af4df1c5fc7ce0dceddddc76eff6d44745ac98e5bed26ade93ce0b6d83089a",
+    "winner_draws_exact_replay": true
+  },
+  {
+    "action_authority": false,
+    "analytic_p": 0.5194778516140068,
+    "away_team": "Detroit Red Wings",
+    "cutoff_utc": "2026-10-24T08:07:36.439538Z",
+    "distributions": {
+      "margin": {
+        "analytic": {
+          "AWAY": {
+            "half_loss": 0.0,
+            "half_win": 0.0,
+            "loss": 0.6052355652514944,
+            "push": 0.0,
+            "win": 0.39476443474850553
+          },
+          "HOME": {
+            "half_loss": 0.0,
+            "half_win": 0.0,
+            "loss": 0.39476443474850553,
+            "push": 0.0,
+            "win": 0.6052355652514944
+          }
+        },
+        "distribution_sha256": "18053b80e0ce994a87bbbaddc005cff8583ae854bcc0c28cb85950e5992513f5",
+        "draw_count": 100000,
+        "draw_sha256": "c07000a2d6d25e8827fa40d1317aeae8e36e053521552389385157f7b13b1c6b",
+        "exact_replay": true,
+        "line": 1.5,
+        "mean": -0.28024522968250287,
+        "model_id": "nhl.margin.empirical.research.ce191ef893a5dd16",
+        "monte_carlo": {
+          "AWAY": {
+            "half_loss": 0.0,
+            "half_win": 0.0,
+            "loss": 0.6024199999999998,
+            "push": 0.0,
+            "win": 0.39757999999999993
+          },
+          "HOME": {
+            "half_loss": 0.0,
+            "half_win": 0.0,
+            "loss": 0.39757999999999993,
+            "push": 0.0,
+            "win": 0.6024199999999998
+          }
+        },
+        "odds": {
+          "AWAY": "+170",
+          "HOME": "-205"
+        },
+        "parent_model_id": "nhl.fixed_parent.03ce6285cdbfaa24.research",
+        "settlement": "FULL_GAME_OT_SO_PLUS_ONE"
+      },
+      "total": {
+        "analytic": {
+          "OVER": {
+            "half_loss": 0.0,
+            "half_win": 0.0,
+            "loss": 0.35881525200029785,
+            "push": 0.0,
+            "win": 0.641184747999702
+          },
+          "UNDER": {
+            "half_loss": 0.0,
+            "half_win": 0.0,
+            "loss": 0.641184747999702,
+            "push": 0.0,
+            "win": 0.35881525200029785
+          }
+        },
+        "distribution_sha256": "5e4c1f6c34c3dcbfe6b09c8b36a59174c01b140a86fe75c8796f86992a6fad92",
+        "draw_count": 100000,
+        "draw_sha256": "c673084c8b4bda44b1a064f301c1bcc65bcfc7b25c7109d8a9c657b8b958c6e9",
+        "exact_replay": true,
+        "line": 5.5,
+        "mean": 6.5209735883494995,
+        "model_id": "nhl.total.empirical.research.b83ea2a994a5037c",
+        "monte_carlo": {
+          "OVER": {
+            "half_loss": 0.0,
+            "half_win": 0.0,
+            "loss": 0.36202999999999996,
+            "push": 0.0,
+            "win": 0.6379700000000001
+          },
+          "UNDER": {
+            "half_loss": 0.0,
+            "half_win": 0.0,
+            "loss": 0.6379700000000001,
+            "push": 0.0,
+            "win": 0.36202999999999996
+          }
+        },
+        "odds": {
+          "OVER": "-135",
+          "UNDER": "+114"
+        },
+        "parent_model_id": "nhl.fixed_parent.03ce6285cdbfaa24.research",
+        "settlement": "FULL_GAME_OT_SO_PLUS_ONE"
+      }
+    },
+    "event_id": "NHL:401892576",
+    "forecast_row_sha256": "d3f784798a18a5f62d13f86e4498e4dc519e22c95254fe630098ebd70f9335c7",
+    "home_margin": -0.15828902049064705,
+    "home_team": "Calgary Flames",
+    "league": "NHL",
+    "model_id": "nhl.initial_causal_score.research.v1",
+    "model_winner": "Detroit Red Wings",
+    "period": "FULL_GAME",
+    "projected_total": 6.405707619155579,
+    "quote": {
+      "book": "DraftKings",
+      "moneyline": {
+        "away": "-148",
+        "home": "+124"
+      },
+      "provider_observed_at_utc": null,
+      "retrieved_at_utc": "2026-10-24T08:06:53.942977Z",
+      "source_kind": "ORIGINAL_SCOREBOARD",
+      "source_sha256": "8ad59734263b954ce61098cdbd1f912706abbd4e819443a35c04889beb2a8e49"
+    },
+    "sim_p": 0.519,
+    "start_time_utc": "2026-10-25T02:00:00+00:00",
+    "warnings": [
+      "INITIAL_RESEARCH_BASELINE_NOT_ACCURACY_DEFAULT",
+      "INITIAL_RESEARCH_BASELINE_NOT_ACCURACY_DEFAULT",
+      "RETROSPECTIVE_PROVIDER_REVISIONS_NOT_HISTORICAL_PIT",
+      "NO_PLAYER_AVAILABILITY_FEATURES",
+      "NO_WAGERING_AUTHORITY",
+      "INDEPENDENT_MARGIN_TOTAL_NOT_JOINT_SCORE_MODEL",
+      "VERSIONED_RNG_IDENTITY_REPAIR_NOT_PREDICTIVE_PROMOTION"
+    ],
+    "winner_draw_sha256": "dc4f87702335bfe74806659d8f99564bcb8c798133e56bc4f9c4f80485fd0903",
+    "winner_draws_exact_replay": true
+  },
+  {
+    "action_authority": false,
+    "analytic_p": 0.5208508584958151,
+    "away_team": "Minnesota Wild",
+    "cutoff_utc": "2026-10-24T08:07:36.439538Z",
+    "distributions": {
+      "margin": {
+        "analytic": {
+          "AWAY": {
+            "half_loss": 0.0,
+            "half_win": 0.0,
+            "loss": 0.6114931762333697,
+            "push": 0.0,
+            "win": 0.38850682376663037
+          },
+          "HOME": {
+            "half_loss": 0.0,
+            "half_win": 0.0,
+            "loss": 0.38850682376663037,
+            "push": 0.0,
+            "win": 0.6114931762333697
+          }
+        },
+        "distribution_sha256": "96f4ebb2335391bfcc1562e84dae68e4b5f52eff25aef4bd54f53f21e2509f29",
+        "draw_count": 100000,
+        "draw_sha256": "3a3cfb0b3e27a677e0d187b08b66fbbffeacb3cd32834ba9f78fb773aae8ccbe",
+        "exact_replay": true,
+        "line": 1.5,
+        "mean": -0.24204076970828325,
+        "model_id": "nhl.margin.empirical.research.ce191ef893a5dd16",
+        "monte_carlo": {
+          "AWAY": {
+            "half_loss": 0.0,
+            "half_win": 0.0,
+            "loss": 0.61202,
+            "push": 0.0,
+            "win": 0.38798
+          },
+          "HOME": {
+            "half_loss": 0.0,
+            "half_win": 0.0,
+            "loss": 0.38798,
+            "push": 0.0,
+            "win": 0.61202
+          }
+        },
+        "odds": {
+          "AWAY": "+160",
+          "HOME": "-192"
+        },
+        "parent_model_id": "nhl.fixed_parent.03ce6285cdbfaa24.research",
+        "settlement": "FULL_GAME_OT_SO_PLUS_ONE"
+      },
+      "total": {
+        "analytic": {
+          "OVER": {
+            "half_loss": 0.0,
+            "half_win": 0.0,
+            "loss": 0.5247737733985942,
+            "push": 0.0,
+            "win": 0.4752262266014057
+          },
+          "UNDER": {
+            "half_loss": 0.0,
+            "half_win": 0.0,
+            "loss": 0.4752262266014057,
+            "push": 0.0,
+            "win": 0.5247737733985942
+          }
+        },
+        "distribution_sha256": "4f42a5ec2745276a162a57c693358e86f1ca9e937261ba804b9f6097ef79ca9c",
+        "draw_count": 100000,
+        "draw_sha256": "146f3b853ade95f88873a9a57e81760052fd4827401b9f7b8a4eec97cdff6d07",
+        "exact_replay": true,
+        "line": 6.5,
+        "mean": 6.402498326020762,
+        "model_id": "nhl.total.empirical.research.b83ea2a994a5037c",
+        "monte_carlo": {
+          "OVER": {
+            "half_loss": 0.0,
+            "half_win": 0.0,
+            "loss": 0.52757,
+            "push": 0.0,
+            "win": 0.4724299999999999
+          },
+          "UNDER": {
+            "half_loss": 0.0,
+            "half_win": 0.0,
+            "loss": 0.4724299999999999,
+            "push": 0.0,
+            "win": 0.52757
+          }
+        },
+        "odds": {
+          "OVER": "+110",
+          "UNDER": "-130"
+        },
+        "parent_model_id": "nhl.fixed_parent.03ce6285cdbfaa24.research",
+        "settlement": "FULL_GAME_OT_SO_PLUS_ONE"
+      }
+    },
+    "event_id": "NHL:401892577",
+    "forecast_row_sha256": "0c1cbdb5b81dc4f4d8f9df4066a8332d6a2f726b056c7d89d7aab6a2f02c7303",
+    "home_margin": -0.1640677368673962,
+    "home_team": "Seattle Kraken",
+    "league": "NHL",
+    "model_id": "nhl.initial_causal_score.research.v1",
+    "model_winner": "Minnesota Wild",
+    "period": "FULL_GAME",
+    "projected_total": 6.32488499327753,
+    "quote": {
+      "book": "DraftKings",
+      "moneyline": {
+        "away": "-155",
+        "home": "+130"
+      },
+      "provider_observed_at_utc": null,
+      "retrieved_at_utc": "2026-10-24T08:06:53.942977Z",
+      "source_kind": "ORIGINAL_SCOREBOARD",
+      "source_sha256": "8ad59734263b954ce61098cdbd1f912706abbd4e819443a35c04889beb2a8e49"
+    },
+    "sim_p": 0.51913,
+    "start_time_utc": "2026-10-25T02:00:00+00:00",
+    "warnings": [
+      "INITIAL_RESEARCH_BASELINE_NOT_ACCURACY_DEFAULT",
+      "INITIAL_RESEARCH_BASELINE_NOT_ACCURACY_DEFAULT",
+      "RETROSPECTIVE_PROVIDER_REVISIONS_NOT_HISTORICAL_PIT",
+      "NO_PLAYER_AVAILABILITY_FEATURES",
+      "NO_WAGERING_AUTHORITY",
+      "INDEPENDENT_MARGIN_TOTAL_NOT_JOINT_SCORE_MODEL",
+      "VERSIONED_RNG_IDENTITY_REPAIR_NOT_PREDICTIVE_PROMOTION"
+    ],
+    "winner_draw_sha256": "27a2e85ad501c783d266d339edaaad571efb2e0a56bc0e25db083b40eb4c8b9e",
+    "winner_draws_exact_replay": true
+  }
+]

@@ -102,5 +102,35 @@ not cleared by software tests. Health-generated reports were restored exactly
 and not substituted for original data. Protected source/state/journal and
 verbatim archived-file checks passed; workflow YAML parses.
 
-Hosted CI and artifact readback: pending branch publication. No merge is
-claimed in this document.
+At initial publication, hosted CI and artifact readback were pending. No merge
+is claimed in this document.
+
+### Hosted integration follow-up
+
+The first hosted run on `ee6b7d765d28e4efbb8373830ecda965269705da`
+passed the full acceptance suite and required GitHub artifact upload
+([run 40137946545](https://github.com/georgemunoz1-ui/sports-model/actions/runs/40137946545)).
+This establishes upload availability for that execution, not account-wide quota
+measurement or a verified Drive archive.
+
+Two separate checks correctly rejected old evidence bindings against current
+files. The historical margin comparison now checks out its original main pin
+and loads PR #70's original library/validator under isolated module names.
+The source manifest and old defect expectations are unchanged. Local execution
+passes 162 synthetic and 26 retained-law comparisons, including the original
+side collision, lost quarter-line settlement and `.26` Brier reproduction.
+Current repaired behavior is checked separately by the v2 regression suite.
+
+The old finding manifest and acceptance receipts remain unchanged. The new
+`FINDING_EVIDENCE_pr_reconciliation_v1.json` points to a separately executed
+complete-suite receipt and retains explicit links to each prior finding.
+Its source hashes bind the newly tested code; no old acceptance is rehashed to
+pretend it covered changed files. Original logs and the historical comparison
+are under `docs/releases/2026-10-24-pr-reconciliation/ci-repair/`.
+Final-head hosted checks and independent artifact readback remain required.
+
+Final local rerun after the CI-reader repairs: **1,863 passed in 125.61 seconds**.
+All 19 successor finding packets validate against the actual new execution.
+The initial artifact was independently downloaded: its published ZIP digest,
+all five manifest member hashes and Git bundle verification match. This receipt
+is limited to the initial head; the final head needs its own hosted evidence.

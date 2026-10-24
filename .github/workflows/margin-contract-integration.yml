@@ -32,6 +32,11 @@ jobs:
           ref: 37cfcf048a8f1ff6860ad49b8098160b07646364
           path: review-sources/pr70
           persist-credentials: false
+      - uses: actions/checkout@v4
+        with:
+          ref: 90daf8e0036c67a5304aa0747bf50b2266e0b364
+          path: review-sources/historical-main
+          persist-credentials: false
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
@@ -39,7 +44,7 @@ jobs:
       - name: Contract, disclosure and unchanged-default regressions
         run: python -m pytest tests/test_margin_contract.py tests/test_card_disclosures.py tests/test_cross_sport_distributions.py tests/test_model_defaults.py -q
       - name: Pinned-source identical-input comparison
-        run: python scripts/audit_margin_integration.py --pr69-source review-sources/pr69 --pr70-source review-sources/pr70 --output /tmp/margin-comparison.json
+        run: python scripts/audit_margin_integration.py --main-source review-sources/historical-main --pr69-source review-sources/pr69 --pr70-source review-sources/pr70 --output /tmp/margin-comparison.json
       - name: Record exact code and comparison digest
         run: |
           git rev-parse HEAD

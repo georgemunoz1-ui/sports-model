@@ -1,6 +1,6 @@
 """Compare pinned PR sources on identical inputs; software evidence only.
 
-python scripts/audit_margin_integration.py --pr69-source DIR --pr70-source DIR --output NEW.json
+python scripts/audit_margin_integration.py --main-source DIR --pr69-source DIR --pr70-source DIR --output NEW.json
 The source directories are read only. No source is fetched by this command.
 """
 import argparse
@@ -26,24 +26,26 @@ def load_module(name, path):
     return module
 
 
-def audit(pr69, pr70):
+def audit(pr69, pr70, main_source):
     manifest = json.loads((ROOT / "tests/fixtures/margin_integration/sources.json").read_text())
-    roots = {"main": ROOT, "69": pr69, "70": pr70}
+    roots = {"main": main_source, "69": pr69, "70": pr70}
     for entry in manifest["files"]:
         raw = (roots[entry["source"]] / entry["path"]).read_bytes()
         if hashlib.sha256(raw).hexdigest() != entry["sha256"]:
             raise ValueError("PINNED_SOURCE_BYTES_MISMATCH:" + entry["path"])
     old69 = load_module("review_margin_69", pr69 / "models/common/margin_system.py")
-    sys.path.insert(0, str(pr70))
-    # Main has a regular pipelines package; explicitly add the pinned review path.
-    import pipelines
-    pipelines.__path__.append(str(pr70 / "pipelines"))
-    from models.common.margins import simulated_margin, cover_quote as quote70
-    from models.common.margins import normal_margin, margin_quote_record
-    from pipelines.margins.nfl import NFL_KEY_NUMBER_MASS
-    from models.common.margins import discrete_football_margin
-    from pipelines.margins.mls import mls_cover
-    from pipelines.margins.validate import cover_calibration
+    # These are historical defect reproductions. Never let newly integrated
+    # packages shadow the explicitly pinned old core or validation module.
+    old70 = load_module("review_pr70_margins", pr70 / "models/common/margins/__init__.py")
+    load_module("review_pr70_adapters", pr70 / "pipelines/margins/__init__.py")
+    old_nfl = load_module("review_pr70_adapters.nfl", pr70 / "pipelines/margins/nfl.py")
+    old_mls = load_module("review_pr70_adapters.mls", pr70 / "pipelines/margins/mls.py")
+    old_validation = load_module("review_pr70_validation", pr70 / "pipelines/margins/validate.py")
+    simulated_margin, quote70 = old70.simulated_margin, old70.cover_quote
+    normal_margin, margin_quote_record = old70.normal_margin, old70.margin_quote_record
+    discrete_football_margin = old70.discrete_football_margin
+    NFL_KEY_NUMBER_MASS, mls_cover = old_nfl.NFL_KEY_NUMBER_MASS, old_mls.mls_cover
+    cover_calibration = old_validation.cover_calibration
 
     paired = []
     values = np.array([-7, -3, 3, 7], dtype=np.int64)
@@ -121,6 +123,8 @@ def audit(pr69, pr70):
         "week": 1, "date": "2025-09-01"} for m in [7, 0, 3]])
     assert abs(calibration["brier"] - .26) < 1e-12
     return {"schema": "sports.margin_integration_audit.v1", "sources": manifest,
+        "historical_defect_replay": True,
+        "current_bridge_sha256": hashlib.sha256((ROOT / "models/common/margin_contract.py").read_bytes()).hexdigest(),
         "execution_status": "COMPLETED", "predictive_validation": "NOT_ASSESSED",
         "preserved_nfl_predictive_decision": "HOLD", "publication_eligibility": "INELIGIBLE",
         "action_authority": False, "prospective_grade_eligible": False,
@@ -141,11 +145,13 @@ def audit(pr69, pr70):
 
 def main():
     p = argparse.ArgumentParser(description=__doc__)
+    p.add_argument("--main-source", required=True, type=Path,
+                   help="Historical main checkout pinned by sources.json; not the current working tree")
     p.add_argument("--pr69-source", required=True, type=Path)
     p.add_argument("--pr70-source", required=True, type=Path)
     p.add_argument("--output", required=True, type=Path)
     args = p.parse_args()
-    result = audit(args.pr69_source.resolve(), args.pr70_source.resolve())
+    result = audit(args.pr69_source.resolve(), args.pr70_source.resolve(), args.main_source.resolve())
     with args.output.open("x") as handle:
         json.dump(result, handle, indent=2, allow_nan=False); handle.write("\n")
     print(json.dumps({k: result[k] for k in ["execution_status", "synthetic_contract_comparisons",

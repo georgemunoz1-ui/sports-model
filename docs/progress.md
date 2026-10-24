@@ -4856,3 +4856,19 @@ regressions and final execution status. Hosted acceptance requires current-run
 evidence upload and readback; Drive CI authentication is still unconfigured.
 Existing forecasts, fitted states, grading ledgers, defaults, prior state keys
 and authorization records remain unchanged. No promotion or wagering enabled.
+
+
+### 2026-10-24 — Hosted acceptance and version-bound evidence follow-up
+
+PR #82's first hosted acceptance run 40137946545 passed 1,863 tests and
+uploaded artifact 12577837691. Independent download verified its ZIP SHA-256,
+all five manifest members and Git bundle; it is seven-day GitHub retention,
+not configured Drive durability. Other checks exposed historical source pins
+being compared with newly integrated files. Preserve the old finding receipts
+and source manifest: isolate the historical PR70 imports and old-main checkout,
+then bind current finding closure to a separate complete-suite execution.
+The historical comparison passes 162 synthetic and 26 retained-law cases while
+reproducing the old defects; v2 regressions separately verify their repairs.
+No old hash, acceptance claim, forecast or grade was rewritten. Final-head CI
+and artifact readback remain merge gates. Exact evidence is in the reconciliation
+report and its ci-repair release directory.

@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Sports Model Health & Patch Notes — August 30, 2026</title>
+  <style>
+    :root{--bg:#0b0f14;--panel:#121923;--line:#263242;--text:#e6edf3;--muted:#9ba7b4;--green:#4ac26b;--amber:#e3b341;--red:#ff6b6b;--blue:#66a3ff;--purple:#c099ff}
+    *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:14px/1.55 system-ui,-apple-system,Segoe UI,sans-serif}.wrap{max-width:1160px;margin:auto;padding:28px 20px 64px}
+    h1{font-size:26px;margin:0}h2{font-size:15px;margin:28px 0 10px;padding-bottom:7px;border-bottom:1px solid var(--line);text-transform:uppercase;letter-spacing:.05em;color:var(--muted)}h3{font-size:15px;margin:0 0 5px}.sub,.muted{color:var(--muted)}
+    .banner{margin:18px 0;padding:14px 16px;border:1px solid #6f2f34;background:#231317;border-radius:10px}.banner b{color:#ff8e8e}.tiles{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}@media(max-width:820px){.tiles{grid-template-columns:1fr 1fr}}@media(max-width:520px){.tiles{grid-template-columns:1fr}}
+    .tile,.card{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:13px 15px}.label{font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted)}.value{font-size:20px;font-weight:750;margin-top:2px}.ok{color:var(--green)}.warn{color:var(--amber)}.bad{color:var(--red)}.info{color:var(--blue)}
+    table{width:100%;border-collapse:collapse;background:var(--panel);border:1px solid var(--line);font-size:12.5px}th,td{padding:8px 10px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}th{font-size:10px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}code{color:#c9d9ff;background:#0a111b;padding:1px 4px;border-radius:4px}
+    .patches{display:grid;gap:10px}.patch{background:var(--panel);border:1px solid var(--line);border-left:4px solid var(--blue);border-radius:9px;padding:13px 15px}.patch.p0{border-left-color:var(--red)}.patch.p1{border-left-color:var(--amber)}.meta{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:7px}.tag{font-size:10px;font-weight:750;letter-spacing:.05em;padding:2px 8px;border-radius:99px;background:#1c2735;color:#cbd5e1}.tag.p0{background:#3a171b;color:#ff9999}.tag.pass{background:#12301c;color:#7ee29a}.tag.block{background:#3b2d12;color:#f0cb73}ul{margin:5px 0 0;padding-left:19px}li{margin:3px 0}.foot{margin-top:28px;padding-top:12px;border-top:1px solid var(--line);color:var(--muted);font-size:11px}
+  </style>
+</head>
+<body><main class="wrap">
+  <h1>Sports Model Health & Patch Notes</h1>
+  <div class="sub">Forward-looking system status · generated 2026-08-30 18:05Z · frozen historical cards remain immutable</div>
+
+  <div class="banner"><b>Action remains blocked.</b> The P0 freshness patch preserves labelled model output by using registered fallbacks, but stale, absent, post-hoc, or search-identified evidence is no longer action eligible. No current page state authorizes a wager.</div>
+
+  <section class="tiles">
+    <div class="tile"><div class="label">P0 freshness gate</div><div class="value ok">PASS</div><div class="muted">9/9 mutants caught</div></div>
+    <div class="tile"><div class="label">Full handoff suite</div><div class="value warn">171 / 174</div><div class="muted">3 WNBA dependency failures</div></div>
+    <div class="tile"><div class="label">Decision readiness</div><div class="value bad">ACTION_BLOCKED</div><div class="muted">freshness ≠ wager authority</div></div>
+    <div class="tile"><div class="label">Open source</div><div class="value info">PRIVATE</div><div class="muted">no license; not open source</div></div>
+  </section>
+
+  <h2>Model status</h2>
+  <table><thead><tr><th>Sport</th><th>Model output</th><th>Current health</th><th>Action status</th></tr></thead><tbody>
+    <tr><td><b>MLB</b></td><td>Champion V13 plus separately identified challengers and prior</td><td>P0 forward path now substitutes the registered CAP for stale starter values; exact starter confirmation still requires game-bound evidence. FU-1 adds a programmatic first-party feed (ESPN scoreboard + MLB StatsAPI) whose finals bind the 8/28 cohort 15/15 against the cached fixture</td><td class="bad">BLOCKED unless every decision gate passes</td></tr>
+    <tr><td><b>WNBA</b></td><td>Four-factors refresh arm, standings fallback, prior</td><td>89-game extension and ET-date guard are present; real <code>pyarrow</code> was unavailable in this clean review environment, so end-to-end reproduction is not yet green</td><td class="bad">BLOCKED</td></tr>
+    <tr><td><b>CFB</b></td><td>Registered historical/house arm and separately developed shadow margin distribution; never merge their probabilities</td><td>August 29 relay identities were structurally unbindable for canonical grading; future boards require canonical result-binding identities before publication</td><td class="bad">BLOCKED</td></tr>
+    <tr><td><b>NFL</b></td><td>Implementation exists, but no admitted current competition-eligible forecast path</td><td>Benchmark/data-preparation lane only until a current registered model binds</td><td class="bad">NO FORECAST AUTHORITY</td></tr>
+  </tbody></table>
+
+  <h2>Freshness state machine</h2>
+  <table><thead><tr><th>Input state</th><th>Forecast value policy</th><th>May publish research output?</th><th>May reach action layer?</th></tr></thead><tbody>
+    <tr><td><code>FRESH + CONFIRMED</code></td><td><code>CURRENT_OBSERVED_VALUE</code></td><td class="ok">Yes</td><td>Only if every other gate passes</td></tr>
+    <tr><td><code>ACQUIRING</code></td><td><code>REGISTERED_FALLBACK_ONLY</code> until the board refreezes</td><td class="ok">Yes, labelled</td><td class="bad">No</td></tr>
+    <tr><td><code>DEGRADED / ABSENT</code></td><td><code>REGISTERED_FALLBACK_ONLY</code>; stale raw value retained for audit only</td><td class="ok">Yes, labelled</td><td class="bad">No</td></tr>
+    <tr><td><code>IDENTIFIED_UNCONFIRMED</code> or <code>POST_HOC_NOT_PREGAME</code></td><td><code>REGISTERED_FALLBACK_ONLY</code></td><td class="ok">Yes, labelled</td><td class="bad">No</td></tr>
+    <tr><td><code>MC_CONVERGENCE_FAIL</code></td><td><code>REGISTERED_FALLBACK_ONLY</code>; simulated value retained for audit only</td><td class="ok">Yes, labelled</td><td class="bad">No</td></tr>
+  </tbody></table>
+
+  
+<section class="patch">
+  <h2>Latest patch — ACQUISITION-EXECUTION-2026-08-30 <span class="sev">P0</span></h2>
+  <p><strong>Status:</strong> FIXED_AND_ACCEPTANCE_TESTED</p>
+  <p><strong>The incident.</strong> On 2026-08-30 a search for Atlanta Dream availability returned
+  a report 32 days stale. <em>Rejecting it was correct.</em> Terminating on it was not: the run
+  reported <code>AVAILABILITY_UNKNOWN</code> when the correct classification was
+  <code>ACQUISITION_INCOMPLETE</code>. One more query on the same working rail returned the current
+  report immediately. The failure was premature termination and query specificity, not source
+  availability.</p>
+  <p><strong>Root cause.</strong> The repo had an acquisition control plane and no execution plane.
+  <code>route_ladder_v1</code> already stated that a blocked rail advances the ladder and that
+  acquisition cannot terminate while an authorized route remains untried — but its entry point
+  judges an already-collected set of attempts. It can say &ldquo;you stopped too soon&rdquo;; it
+  cannot make anything continue.</p>
+  <p><strong>Fix.</strong> <code>harness/acquisition_orchestrator.py</code> executes the ladder.
+  Every non-acquiring outcome advances — BLOCKED, NOT_FOUND, <strong>STALE_REJECTED</strong>,
+  CONTAMINATED, TITLES_ONLY, ERROR. <code>disposition()</code> refuses a terminal answer while any
+  authorized rung is untried. <code>assert_no_premature_termination()</code> fails CI when UNKNOWN,
+  BLOCKED or NO_FORECAST is claimed over an unfinished ladder.</p>
+  <p><strong>Acceptance, live and without an owner upload.</strong> Two games, primary rail
+  genuinely blocked. Seven BLOCKED, one NOT_FOUND and one STALE_REJECTED all advanced; current
+  availability, a 12-game MLB slate and a probable starter were acquired at rung 6; forecasts were
+  produced for <em>both</em> games; actionability was gated separately and PASSed for reasons
+  unrelated to forecast availability. ACTION_BLOCKED throughout — wager authority NO, exposure $0.</p>
+  <p><strong>Residual.</strong> MLB MIA@WSH carries no canonical id, because statsapi.mlb.com is
+  blocked on both egress paths and the pitch archive supplies real gamePks only after a game is
+  played. It is forecastable now and not bindable later. <em>No id was invented</em> — the 8/27
+  pseudo-pk defect is not repeated.</p>
+</section>
+<h2>Patch notes</h2>
+  <section class="patches">
+    <article class="patch p0"><div class="meta"><span class="tag p0">P0</span><span class="tag">MULTISPORT-RELEASE-GATE-2026-09-03</span><span class="tag block">release blocked</span></div><h3>September 3 evidence ingested; binary release gate installed</h3><ul><li>Classified all 20 discovered events: 9 MLB games with canonical gamePk values and 11 CFB games retained under provisional keys because canonical identities were unavailable. No event was silently dropped.</li><li>WNBA and NFL correctly record zero-game date dispositions, but neither inherits a healthy state: their since-8/24 backfill and current model-path blockers remain explicit.</li><li>The evidence-bound release artifact has zero contract or hash-binding problems. The global result is still <b>BLOCKED</b> because current forecasts, critical inputs, fresh exact prices, canonical CFB identities, and release-health prerequisites are incomplete.</li><li>No probability, edge, selection, price, or wager was manufactured. Action authority remains NO and exposure remains $0.</li></ul></article>
+<article class="patch p1"><div class="meta"><span class="tag block">P1</span><span class="tag">SIM1-SPEC-2026-08-30</span><span class="tag">spec only, no code</span></div><h3>Monte Carlo simulation corpus ingested; SIM-1 tiered spec</h3><ul><li>Five owner methodology docs ingested VERBATIM under <code>docs/specs/simulation/</code> (design principles, in-play real-time MC, QMC vs stratified, NFL/NBA stratification boundaries, all-sports state modules) as an append-only reference corpus.</li><li><code>SIM1_SPEC.md</code> distills them: <b>SIM-1a</b> (P1) scenario engine formalization — stratified availability/game-script scenarios wrapping the existing margin sim, E[EV] = Σ P(s)·EV<sub>s</sub> with worst-case and lower-percentile EV recorded, hybrid stratified-outer + scrambled-Sobol-inner sampling, Neyman allocation; <b>SIM-1b</b> (P1) decision-state record on every sim output (raw/calibrated/no-vig probabilities, EV, seed, count, scenario distribution, MC standard error); <b>SIM-1c</b> (P2) adaptive stopping as a config-gated candidate only; <b>SIM-1d</b> (P2) empirical residual / Student-t distribution upgrades with walk-forward-only pools; <b>SIM-1e</b> (P2/backlog) canonical live-state schema, sport adapters, OT ruleset branches, shared-latent-factor correlation generator.</li><li>Governance invariant recorded: nothing in SIM-1 changes <code>TRIALS</code>/<code>BLOCKS</code>/<code>CONVERGENCE_SIGMAS</code>/<code>MC_CONVERGENCE_TOL_PP</code> without an owner-gated candidate config. In-play failure controls cross-reference the PR #7 dq_gate and the PR #5 convergence gate rather than inventing parallel ones.</li></ul></article>
+<article class="patch p1"><div class="meta"><span class="tag block">P1</span><span class="tag">FU1-FEED-ADAPTER-2026-08-30</span><span class="tag pass">isolated verification passed</span></div><h3>Programmatic schedule/starter/results feed (FU-1)</h3><ul><li>ESPN scoreboard API client for MLB/WNBA/NFL/CFB plus an MLB StatsAPI client replace manual odds-page uploads; records normalize to one game shape with ET dates derived from UTC instants, never sliced.</li><li>A starter is <code>CONFIRMED</code> only from a boxscore <code>gamesStarted</code> line once a game is underway; probable listings stay <code>IDENTIFIED_UNCONFIRMED</code>.</li><li><code>feed_sweep</code> writes append-only content-hashed snapshots under <code>data/feeds/YYYY-MM-DD/</code> and surfaces cross-feed disagreements as <code>CONFLICT</code>, never silently resolved.</li><li>Market capture layer (owner Addenda 1&ndash;5): SportsGameOdds + The Odds API env-key clients (loud stub mode without a key), owner record schema, consensus as a set of book prices plus computed medians with Circa as its own labelled sharp book, 2+ point book disagreement surfaced as <code>CONFLICT</code>. VALUATION/AUDIT ONLY &mdash; a mechanical firewall keeps market modules out of every forecast path.</li><li>Historical/movement store with typed <code>line_kind</code> (OPENING/CONSENSUS/BEST_AVAILABLE/SHARP_BOOK/CLOSING) and a temporal firewall: a pregame path can never read a closing line or a post-cutoff snapshot. Causal backtest layer: PointInTime store, no entry-price backfill, 15-minute close window, walk-forward folds with purge/embargo, shift(1) lint, event-level splits. Calibration ships <b>DORMANT</b> &mdash; the gate refuses any fit under 500 events (current WNBA bound Tier-1 base is n=4).</li><li>Verified: the 8/28 MLB cohort binds <b>15/15</b> (10 ESPN_GAMEID + 5 MLB_GAMEPK) against the cached fixture; pytest 26/26; StatsAPI live fetch OK (all 5 captured gamePks live-verified), ESPN scoreboard returned 403 from the build egress.</li></ul></article>
+    <article class="patch p0"><div class="meta"><span class="tag p0">P0</span><span class="tag">P0-MC-CONVERGENCE-2026-08-30</span><span class="tag pass">isolated verification passed</span></div><h3>Monte-Carlo convergence gate bound into the actionable gate</h3><ul><li>Ported from the mc_engine lineage: 30,000 trials in 10 keyed-seed blocks; a game fails convergence when the max block-vs-pooled gap exceeds 3 pooled-Bernoulli block sigmas. Registered tolerance <code>MC_CONVERGENCE_TOL_PP = 2.7386pp</code> (worst case at p=0.5; derived from the source lineage, not tuned).</li><li>A <code>CONVERGENCE_FAIL</code> now demotes that game to forecast-only — <code>actionable=False</code>, <code>REGISTERED_FALLBACK_ONLY</code>, verdict and pre-demotion state recorded for audit — instead of crashing the slate builder with exit 1. The rest of the board still builds.</li><li>Convergence never promotes: a clean verdict leaves a degraded freshness disposition non-actionable.</li><li>Verified: mc_convergence selftest PASS, 4/4 mutants caught, regression tests 7/7 (synthetic gap above tolerance demotes with audit and the board builds around it; below tolerance keeps the actionable path), freshness gate PASS with 9/9 mutants.</li></ul></article>
+    <article class="patch p0"><div class="meta"><span class="tag p0">P0</span><span class="tag">P0-FRESHNESS-2026-08-30</span><span class="tag pass">isolated verification passed</span></div><h3>Stale values removed from the live feature path</h3><ul><li>Split <code>forecastable</code> from <code>actionable</code>; only <code>FRESH + CONFIRMED</code> can proceed toward action.</li><li>MLB people search now requires one exact normalized full-name match; <code>people[0]</code> is never trusted.</li><li>A historical MLB game log is <code>POST_HOC_NOT_PREGAME</code> for starter identity.</li><li>Stale starter rates no longer enter V13. The registered CAP runs; the old observation remains audit evidence.</li><li>The dual-clock age gate now also covers an <code>ABSENT</code> store filled by acquisition. Ancient returned content stays <code>DEGRADED</code>; a genuinely current observation may recover to <code>ACQUIRING</code>.</li><li><code>starter_slots_capped</code> now derives from current-value authority. An <code>ACQUIRING</code> row that uses fallback values can no longer be mislabeled uncapped.</li><li>Verified: freshness gate PASS, 9/9 mutants, paired absent-acquisition regression PASS, acquisition/cap coherence PASS, starter regression PASS, targeted multi-sport tests 23/23; full intake suite remains 171/174 only because real <code>pyarrow</code> is absent.</li></ul></article>
+    <article class="patch p0"><div class="meta"><span class="tag p0">P0</span><span class="tag">P0-CONTENT-AGE-2026-08-29</span><span class="tag pass">operational branch</span></div><h3>Fetching is no longer mistaken for learning</h3><p>A fresh <code>fetched_at</code> cannot launder an old observation. Both content age and derived age must pass, newly acquired content is re-gated, and identical stale bytes do not clear staleness.</p></article>
+    <article class="patch p0"><div class="meta"><span class="tag p0">P0</span><span class="tag">P0-RESULT-BINDING-2026-08-28</span><span class="tag pass">operational branch</span></div><h3>Prior-date series contamination refused</h3><p>Grades require sport, canonical game ID, scheduled date, away team, and home team. Any refused row refuses the aggregate; descriptive display never silently becomes promotion evidence.</p></article>
+    <article class="patch p1"><div class="meta"><span class="tag block">P1</span><span class="tag">DATA-WNBA-DATE-AND-EXTENSION-2026-08-29</span><span class="tag block">repro blocker open</span></div><h3>WNBA date and extension repair</h3><p>UTC instants now derive ET game dates, duplicate content across ID spaces is refused, and the extension is 89 games. The clean review still cannot run the real WNBA path without <code>pyarrow</code>; this is an explicit health failure, not a hidden skip.</p></article>
+    <article class="patch"><div class="meta"><span class="tag">POLICY</span><span class="tag">POLICY-MARKET-INDEPENDENCE-2026-08-29</span></div><h3>Market remains valuation-only</h3><p>Odds, betting splits, line movement, and implied probabilities are forbidden predictive features. Model outputs freeze first; prices attach afterward for EV screening.</p></article>
+  </section>
+
+  <h2>Open blockers</h2>
+  <table><thead><tr><th>Priority</th><th>Blocker</th><th>Closure proof</th></tr></thead><tbody>
+    <tr><td>P0 merge</td><td>Freshness patch must pass the operational branch healthcheck without changing frozen artifacts</td><td>clean branch run + hashes unchanged + review</td></tr>
+    <tr><td>P1</td><td>WNBA <code>pyarrow</code> dependency/reproducible bootstrap</td><td>174/174 in a clean documented environment; no stub-only pass</td></tr>
+    <tr><td>P1</td><td>Current roster, injury, probable-starter and lineup evidence must bind to canonical game identities</td><td>same-game/date evidence receipts before freeze</td></tr>
+    <tr><td>P1</td><td>CFB relay identities cannot settle canonical grades</td><td>canonical IDs and result-binding pass before board registration</td></tr>
+    <tr><td>Release</td><td>Repository is private and has no license</td><td>license, dependency lock, data-rights audit, anonymous clean-clone reproduction</td></tr>
+  </tbody></table>
+
+  <div class="foot">Machine-readable source: <code>data/audit/model_patch_notes.json</code> · operational code branch: <code>sportsmodel/main</code> · this page reports research-system health, not betting advice.</div>
+</main></body></html>

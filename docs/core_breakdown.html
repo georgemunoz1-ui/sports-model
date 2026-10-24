@@ -1,306 +1,39 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>sportsmodel — core breakdown: what was learned, and where it lives</title>
-<style>
-  :root{
-    --bg:#0e1116; --panel:#161b22; --line:#2a3240;
-    --tx:#d7dee8; --dim:#8b97a8; --dimmer:#6b7688;
-    --ok:#3fb950; --chg:#58a6ff; --fix:#d29922; --bad:#f85149; --vio:#a371f7;
-  }
-  *{box-sizing:border-box}
-  body{margin:0;background:var(--bg);color:var(--tx);
-       font:15px/1.65 -apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Roboto,sans-serif}
-  .wrap{max-width:940px;margin:0 auto;padding:34px 22px 90px}
-  code,.mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
-  code{background:#0b0e13;border:1px solid var(--line);border-radius:4px;padding:1px 5px;font-size:.87em}
-
-  header{border-bottom:1px solid var(--line);padding-bottom:22px;margin-bottom:8px}
-  h1{font-size:27px;margin:0 0 6px;letter-spacing:-.4px}
-  .sub{color:var(--dim);font-size:14px}
-  .stamp{color:var(--dimmer);font-size:12.5px;margin-top:10px}
-
-  h2{font-size:19px;margin:46px 0 12px;padding-bottom:8px;border-bottom:1px solid var(--line);letter-spacing:-.2px}
-  h3{font-size:15.5px;margin:28px 0 8px;color:#e6edf5}
-  p{margin:11px 0}
-
-  .lead{background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--vio);
-        border-radius:7px;padding:16px 18px;margin:22px 0}
-  .lead b{color:#fff}
-
-  .lesson{background:var(--panel);border:1px solid var(--line);border-radius:8px;
-          padding:15px 18px;margin:14px 0}
-  .lesson .n{font-family:ui-monospace,monospace;font-size:11px;color:var(--dimmer);
-             letter-spacing:.8px;text-transform:uppercase}
-  .lesson .claim{font-size:16px;color:#fff;margin:4px 0 9px;letter-spacing:-.15px}
-  .lesson .row{display:flex;gap:11px;padding:4px 0;align-items:flex-start;font-size:14px}
-  .lesson .row .t{flex:0 0 82px;font-family:ui-monospace,monospace;font-size:10.5px;
-                  letter-spacing:.6px;text-transform:uppercase;padding:4px 0 0;text-align:right;color:var(--dimmer)}
-  .t-inc{color:var(--ok)!important} .t-pend{color:var(--fix)!important} .t-none{color:var(--bad)!important}
-
-  table{width:100%;border-collapse:collapse;margin:14px 0;font-size:13.5px}
-  th,td{text-align:left;padding:8px 9px;border-bottom:1px solid var(--line);vertical-align:top}
-  th{color:var(--dimmer);font-size:11px;text-transform:uppercase;letter-spacing:.6px;font-weight:600}
-  td.num{font-family:ui-monospace,monospace;text-align:right;white-space:nowrap}
-  tr:last-child td{border-bottom:none}
-  .pill{display:inline-block;font-family:ui-monospace,monospace;font-size:10.5px;
-        padding:1px 7px;border-radius:20px;border:1px solid;white-space:nowrap}
-  .p-live{color:var(--ok);border-color:#25502f;background:#0f2015}
-  .p-dead{color:var(--bad);border-color:#5c2626;background:#22110f}
-  .p-hold{color:var(--fix);border-color:#5a4415;background:#20180a}
-  .p-unk{color:var(--dim);border-color:var(--line);background:#141922}
-
-  pre{background:#0b0e13;border:1px solid var(--line);border-radius:7px;padding:13px 15px;
-      overflow-x:auto;font-size:12.5px;line-height:1.6;margin:13px 0;color:#c9d3e0}
-  ul{margin:10px 0;padding-left:22px} li{margin:6px 0}
-  footer{margin-top:56px;padding-top:18px;border-top:1px solid var(--line);
-         color:var(--dimmer);font-size:12.5px}
-</style>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>System workflow and evidence boundaries | Sports Model Research</title>
+<link rel="stylesheet" href="status-ui.css">
 </head>
-<body>
-<div class="wrap">
-
-<header>
-  <h1>core breakdown</h1>
-  <div class="sub">Everything learned since the project started, the incident that taught it, and the mechanism that now enforces it — or the admission that nothing does.</div>
-  <div class="stamp mono">2026-07-27 · HEAD 91d2d9c · 54 commits (generated at b9257bb/52; re-stamped 2026-07-27) · companion to model_breakdown.html (patch notes)</div>
-</header>
-
-<div class="lead">
-  <b>The one-line version of everything below:</b> this project's actual output has been falsification,
-  not prediction. The pitcher index died. Sides died. The GBM did worse than the thing it replaced.
-  E1 — the "biggest known gap" — came back NO-PROMOTE. The clock finding was withdrawn. The shrinkage
-  convergence turned out to be two different estimators wearing the same number. Each of those is a
-  thing the system now will not do, and the list of things it will not do is the only asset that has
-  compounded. Nine paper plays is not.
-</div>
-
-<h2>1 · The objective, which was wrong at the start</h2>
-<p>
-The first and largest correction was not a modeling error. It was that I described the goal as beating
-the house at a high clip, winning more often than not — and that is not the goal. A bet is judged by
-<b>expected value against the price's break-even</b>. A 45% dog at +150 is a good bet. A 60% favorite
-at −200 is a bad one. Getting this wrong doesn't produce a slightly worse model; it produces a model
-optimized for the wrong thing, which will happily trade away EV to protect a win rate.
-</p>
-<p>
-This is now AUTH-7, and it is the only place in the project with a <b>retired-language list</b> —
-phrases I am not permitted to use because using them re-imports the error. It is enforced in code: the
-selector requires <code>EV &gt; 0</code>, never <code>p &gt; 0.5</code>, and the ledger convention line
-says so in <code>state.json</code> so a future session reads it before it reads any record.
-</p>
-<pre>RETIRED: "beat the house at a high clip" · "win more often than not"
-REQUIRED: "positive EV vs the price's break-even"</pre>
-
-<h2>2 · The failure class that produced five separate errors</h2>
-<div class="lead">
-  <b>Summaries are not sources.</b> Every data error this project has found — every single one — came
-  from trusting something's <em>description</em> of the data instead of the data. Five incidents, one
-  root cause, and it keeps recurring because the summary is always the convenient artifact.
-</div>
-<table>
-  <tr><th>Incident</th><th>What the summary said</th><th>What was true</th></tr>
-  <tr><td>WSH extraction</td><td>model-reported COUNT/SUM: 813</td><td>raw local parse: 858</td></tr>
-  <tr><td>statsapi linescore</td><td>a clean current box score</td><td>stale <em>and</em> home/away swapped</td></tr>
-  <tr><td>7/25 box paste (LAD@NYM)</td><td>team pitching SO row: 8</td><td>9, resolved 2-of-3 across sources</td></tr>
-  <tr><td>"container clock ~3.8h fast"</td><td>a measured clock offset</td><td>a stale-cache artifact — finding WITHDRAWN</td></tr>
-  <tr><td>fantasy roster call (7/27)</td><td>truncated display showed no appearances</td><td>pitched 7/24, 7/22, 7/20 — my recommendation was wrong</td></tr>
-</table>
-<p>
-The last one is the most instructive because it happened <em>this week</em>, in this project, by me,
-after the doctrine forbidding it was already written down. I inferred a count from a truncated display.
-That is precisely the WSH error in a different costume. You corrected it with the source, which is the
-only thing that ever corrects it.
-</p>
-<p>
-Two doctrines came out of this class and both are load-bearing: <b>"Parse raw locally, never trust the
-model-reported COUNT/SUM"</b> and <b>"Never grade from a single endpoint."</b> Graded inputs now
-resolve 2-of-3 across sources.
-</p>
-<p>
-And the honest gap: <b>WebFetch structurally violates the first doctrine.</b> It pipes content through
-a summarizing model and hands back prose. Every web-sourced number in this project has passed through
-exactly the mechanism the doctrine forbids. I have flagged this and I have not solved it, because the
-environment permits no other fetch path. I will not claim a clean data pipeline until bytes reach disk
-unaltered.
-</p>
-
-<h2>3 · The lessons, and where each one lives</h2>
-
-<div class="lesson">
-  <div class="n">L1 · from n=1,461 games</div>
-  <div class="claim">The market is the referee, and on public data it wins.</div>
-  <div class="row"><span class="t">Incident</span><span>V13's Monte Carlo simulator, built carefully over weeks, scored a held-out Brier of 0.2500 — exactly a coin flip — against a market at 0.238. Directional 53.0% vs a 52.0% home base rate; the market runs ~57%. A gradient-boosted model on the same features did <em>worse</em>: 0.2563 and 49.7%.</span></div>
-  <div class="row"><span class="t">Lesson</span><span>The GBM result is the important half. Two very different algorithms hitting the same ceiling means the ceiling is the <b>inputs</b>. Season-level rates and team form do not carry what the market prices — lineups, platoons, bullpen state, injuries, order flow.</span></div>
-  <div class="row"><span class="t t-inc">Incorporated</span><span>R3 freezes the verdict. Sides are DEAD; no ML, RL or sides plays. Reopening requires a new feature class beating market Brier on a ≥500-game holdout, not a better algorithm on the same features.</span></div>
-</div>
-
-<div class="lesson">
-  <div class="n">L2 · from the 7/26 board</div>
-  <div class="claim">A price is a structure, not a number.</div>
-  <div class="row"><span class="t">Incident</span><span>An aggregator board showed best-price-across-books, which silently mixes one book's main line with another's alt rung. It contaminated 10 of 30 arms. Naive ingestion would have produced <b>11 fake R5-level UNDER edges</b> and a shrinkage fit 65% too aggressive. Per-book diagnostics showed only BetRivers behaving like a main line: mean signed dispersion −0.11 and MAE 0.49, against DK at −1.44 / 1.44.</span></div>
-  <div class="row"><span class="t">Lesson</span><span>Rung coherence (T2) passed every contaminated row — an internally consistent alt ladder looks fine from inside. Only cross-book dispersion (T3) could see it. A test that cannot fail on the error you have is not protecting you.</span></div>
-  <div class="row"><span class="t t-inc">Incorporated</span><span>Four-test suite with T2 demoted to necessary-but-not-sufficient and T3 load-bearing at ≤1.0 K. Drops declare <code>source_type</code>; on a single-book capture T3 is <em>inapplicable</em> rather than skipped, because one book's page has no alt ladder to confuse.</span></div>
-</div>
-
-<div class="lesson">
-  <div class="n">L3 · from Fedde, Freeland, Avila, Baz</div>
-  <div class="claim">A short posted line is information, not an opportunity.</div>
-  <div class="row"><span class="t">Incident</span><span>Fedde came back at EV +0.469 — over the R5 audit threshold, which fired correctly. The audit found the cause: the book posted 2.5 K because it expected an opener or a bulk arm. The engine's E[TBF] prior cannot read a posted line, so it projected a normal start and manufactured a 47% edge out of a workload disagreement.</span></div>
-  <div class="row"><span class="t">Lesson</span><span>When the market encodes something the model structurally cannot see, the gap is not edge. It is the model being uninformed, expressed in EV units.</span></div>
-  <div class="row"><span class="t t-inc">Incorporated</span><span>Hard hold on any arm posted ≤3.5 K, overridable only with an explicit flag. This is a blunt instrument standing in for an opener detector that does not exist yet.</span></div>
-</div>
-
-<div class="lesson">
-  <div class="n">L4 · from a 0.001 EV discrepancy</div>
-  <div class="claim">Look-ahead reintroduces itself through convenience.</div>
-  <div class="row"><span class="t">Incident</span><span>A replay produced EV +0.073 against the ledger's +0.074. Chasing it: the frozen card stores <code>ek: 5.68</code> while <code>proj()</code> returns 5.680745 — a 2dp rounding difference. But the reason <code>proj()</code> could be called at all is that it reads the pitcher log <em>as it stands now</em>, which on a replay includes the very start being priced.</span></div>
-  <div class="row"><span class="t">Lesson</span><span>R2 is not a thing you satisfy once. Any function that reads live state is a leak waiting for a replay. And the discrepancy that looks like harmless rounding is worth chasing — this one was rounding sitting on top of a look-ahead path.</span></div>
-  <div class="row"><span class="t t-inc">Incorporated</span><span><code>resolve_ek()</code> takes full precision from the live projector <em>only while it still agrees with the frozen card</em> to within 0.005 with matching GS; otherwise it falls back to the card and says out loud that the log has moved.</span></div>
-</div>
-
-<div class="lesson">
-  <div class="n">L5 · from a 7–3 record that was thrown away</div>
-  <div class="claim">A rule you cannot write down in advance is not a rule.</div>
-  <div class="row"><span class="t">Incident</span><span><code>ml_tracking</code> was 7–3 and got frozen anyway. The stated reason: <em>"Selection rule was 'V13 directional lean + my discretion', which is not an EV rule and was never written down in advance."</em></span></div>
-  <div class="row"><span class="t">Lesson</span><span>A winning record produced by an unwritten rule is unfalsifiable and therefore worthless — there is no way to know what would have been excluded. Discarding a 7–3 is cheap; discarding a 70–30 later would not be.</span></div>
-  <div class="row"><span class="t t-inc">Incorporated</span><span>R7. <code>ml_ev_tracking</code> replaced it, pre-registered 2026-07-25T06:20Z with a timestamp before first pitch and mechanical exclusions. When the written rule and the code disagreed (text said "TBD or &lt;5 GS", code said <code>gs&lt;2 or TBD</code>), the resolution was to grade consistently with the code and amend the text <em>forward only</em> — never to re-grade history into agreement.</span></div>
-</div>
-
-<div class="lesson">
-  <div class="n">L6 · from every sample under 30</div>
-  <div class="claim">Small samples get recorded, not obeyed.</div>
-  <div class="row"><span class="t">Incident</span><span>Three live temptations. A raw-vs-shrunk A/B where raw won on both Brier (0.2435 vs 0.2584) and log-loss (0.6806 vs 0.7102) — at n=4. An ML ROI of 46.7% — at n=3. A calibration temperature that said 0.55 at n=26 and 1.50 at n=1,461, both pinned at a boundary.</span></div>
-  <div class="row"><span class="t">Lesson</span><span>All three point somewhere. None of them can carry a verdict. The n=3 ROI is annotated in the ledger itself as <em>"a number, not evidence."</em></span></div>
-  <div class="row"><span class="t t-inc">Incorporated</span><span>R4, plus the habit of leaving a verdict explicitly UNRESOLVED rather than picking the reading that flatters. <code>calibration_T</code> is still UNRESOLVED for exactly this reason.</span></div>
-</div>
-
-<div class="lesson">
-  <div class="n">L7 · from the 7/25–7/26 shrinkage work · NEW 7/27</div>
-  <div class="claim">Name the estimator and the convention, not just the number.</div>
-  <div class="row"><span class="t">Incident</span><span>I reported two "convergent" measurements that the engine is over-shrunk: 1.35 from outcomes, 1.42 from the market. They are different estimands. The outcome figure is a calibration slope — actual regressed on projected. The market figure is <code>1/slope</code> of E[K] regressed on line. Since <code>slope(y~x)·slope(x~y) = corr²</code>, inverting one does not produce the other.</span></div>
-  <div class="row"><span class="t">Proof</span><span>Apply the market estimator to the outcome data: <code>1/slope(proj~actual) = 1/0.1760 = 5.68</code>. Not 1.35. The convergence was an artifact of using a different estimator on each side.</span></div>
-  <div class="row"><span class="t">Lesson</span><span>Beyond the arithmetic: the two conventions optimize different things. Restoring dispersion amplifies my own noise along with any signal, and noise in excess of the market's is precisely what manufactures edges. So the logged KPROP-EDGE-ARTIFACT (residual vs posted line at −0.87) <b>cannot be the readout</b> for this experiment — a 1.42 stretch zeroes that correlation whether or not the extra spread is real.</span></div>
-  <div class="row"><span class="t t-pend">Pending</span><span>Next-action #2 is wrong as written. The pre-registration must name estimator, convention and readout metric, and the readout must be held-out MAE and log-loss on plays the selector would actually make.</span></div>
-</div>
-
-<table>
-  <tr><th>Shrinkage scalar, computed consistently</th><th class="num">from outcomes</th><th class="num">from market</th></tr>
-  <tr><td>calibration slope, E[y|x]</td><td class="num">1.35</td><td class="num">1.08</td></tr>
-  <tr><td>dispersion matching; <i>outcome estimate Poisson-stripped</i></td><td class="num">1.31</td><td class="num">1.24</td></tr>
-  <tr><td>noiseless inversion, 1/slope</td><td class="num">5.68</td><td class="num">1.42</td></tr>
-  <tr><td colspan="3">The document's quoted pair took 1.35 from row 1 and 1.42 from row 3. Direction is consistent across every cut; magnitude is not identified: <b>the four comparable point estimates span 1.08–1.35; this is not a confidence interval or an identified parameter range, and no-stretch remains plausible.</b> "Comparable" is the 2×2 of calibration slope and dispersion matching — the inversion row is excluded because 5.68 against 1.42 is not comparable across sources, which is the arithmetic that made the original convergence claim possible. <b>Corrected 2026-07-27:</b> the outcome-side sd-matching cell first read 1.56, computed from an <i>assumed</i> mean of 4.9. The 24 stored rows give mean(actual) 5.750 and sd(actual) 2.723, so the Poisson-stripped talent sd is √(7.413−5.750)=1.290 and the ratio to sd(proj) 0.983 is <b>1.31</b>. An assumed input inside a correction is the same R1 error the correction was fixing. <b>Also corrected:</b> that row was labelled "sd-matching, Poisson noise stripped", which was true of only half of it — the outcome cell strips Poisson sampling variance from actual K counts; the market cell is sd(line)/sd(E[K]) with no Poisson correction at all, because posted lines are not Poisson draws. Labelling both the same way implied a symmetry that does not exist. At n=24 with corr 0.487 the slope SE is 0.516, the 95% CI is [0.28, 2.42], and t against no-stretch is 0.68 — that evidence alone does not establish a stretch is needed.</td></tr>
-</table>
-
-<div class="lesson">
-  <div class="n">L8 · found 7/27</div>
-  <div class="claim">A changing selector silently changes what the counter counts.</div>
-  <div class="row"><span class="t">Incident</span><span>The 7/27 short-line guard blocks any arm posted ≤3.5 K. Buehler (O 3.5) is one of the nine graded plays. Eight of nine would register under today's selector; the ninth would not. Nothing in any ledger row records which selector version produced it.</span></div>
-  <div class="row"><span class="t">Lesson</span><span>The gate is "n ≥ 100 graded plays," which quietly assumes the hundred plays came from one strategy. This is the third selector change. Without a version tag the sample is a blend, and R6 correctly forbids the tempting fix of retro-dropping the row.</span></div>
-  <div class="row"><span class="t t-pend">Pending</span><span>Proposal: tag every row with <code>selector_version</code>, keep the historical counter at 9 as the audit trail, and define the gate on the current version <i>prospectively</i> — which starts at <b>0</b>, not 8 and not 9. Eight of the nine survive today's guard, but a filter applied after the fact, with the results already known, is not a selection rule.</span></div>
-</div>
-
-<div class="lesson">
-  <div class="n">L9 · found 7/27</div>
-  <div class="claim">A push is not a win.</div>
-  <div class="row"><span class="t">Incident</span><span><code>p_over</code> computes <code>P(X ≥ ⌈line⌉)</code>. Correct on a half-point line. On an integer line, <code>⌈5⌉ = 5</code> yields P(X≥5), which scores X=5 as a win when it is a push — 17.6% of outcomes at E[K]=5, 15.9% at E[K]=5.68 on a 6. <code>ev()</code> has the matching gap: a push returns stake and needs a three-outcome form.</span></div>
-  <div class="row"><span class="t">Lesson</span><span>Rare on main lines, not rare on alt lines — and the ingester now accepts alt captures, so the exposure grew at the moment intake got lenient.</span></div>
-  <div class="row"><span class="t t-inc">Incorporated</span><span>Fixed in commit <code>91d2d9c</code>. <code>probs(ek,line)</code> is now the single source of truth and <code>ev(p,ml,p_push)</code> settles three outcomes; the default <code>p_push=0.0</code> reproduces every half-point call bit-for-bit. Self-test 4 → 8 checks. Independently re-verified 2026-07-27.</span></div>
-</div>
-
-<div class="lesson">
-  <div class="n">L10 · from AUTH-6</div>
-  <div class="claim">Not all losses are the same loss.</div>
-  <div class="row"><span class="t">Incident</span><span>A LIVE loss inside a 2-run margin is variance. A blowout loss — ≥5 runs and never competitive — is the model having been wrong about the game, not unlucky in it.</span></div>
-  <div class="row"><span class="t t-inc">Incorporated</span><span>Blowout-loss rate is a primary KPI, baseline 2/13 = 15%, with an 18% guardrail on the card. This is <b>the one component of the sides work that survived validation</b>: picks flagged ≥18% got blown out 33% of the time versus 5% for the rest, a 6.6× separation. The simulator could not pick winners and could still tell you when it was likely to be badly wrong.</span></div>
-</div>
-
-<div class="lesson">
-  <div class="n">L11 · from V13's "80%+ locks"</div>
-  <div class="claim">Displayed confidence is a claim and must be calibrated like one.</div>
-  <div class="row"><span class="t">Incident</span><span>V13's high-confidence picks — the ones displayed as 80%+ — won 61%. Its honest operating range is roughly 40–65%.</span></div>
-  <div class="row"><span class="t t-inc">Incorporated</span><span>Calibration compresses displayed confidence toward the honest range. A number shown to you is a number that can be graded, so it gets graded.</span></div>
-</div>
-
-<div class="lesson">
-  <div class="n">L12 · standing</div>
-  <div class="claim">Price access is the binding constraint, not model quality.</div>
-  <div class="row"><span class="t">Evidence</span><span>Everything downstream of a price is in reasonable shape. What is not: getting a trustworthy price, before first pitch, consistently. No closing price has ever been captured; the <code>close_*</code> columns in results.csv contain <em>opening</em> prices, and the historical closes are gone. That single gap blocks E3 and the favorite-fade E4.</span></div>
-  <div class="row"><span class="t t-inc">Incorporated</span><span>The only structural response so far is to lower the capture bar rather than raise the capture effort — one arm, one book, both sides is a complete drop, and gate eligibility turns on the clock alone.</span></div>
-</div>
-
-<div class="lesson">
-  <div class="n">L13 · found 7/27</div>
-  <div class="claim">A logged risk with no mechanism is not a managed risk.</div>
-  <div class="row"><span class="t">Incident</span><span>"The container is ephemeral" has been in known-issues for days. Today: 52 commits, <b>no git remote</b>, and the only backups were bundles in <code>/tmp</code> dated 7/22 and 7/23 — in a directory that dies with the container. Four days of work existed in exactly one place.</span></div>
-  <div class="row"><span class="t">Lesson</span><span>I wrote the risk down and then worked past it for four days. Writing it down felt like handling it. It was not.</span></div>
-  <div class="row"><span class="t t-inc">Resolved 2026-07-27</span><span>All 54 commits are pushed to <code>github.com/georgemunoz1-ui/sports-model</code>, branch <code>sportsmodel/main</code>, tip <code>91d2d9c</code>. The history now exists in a second place that does not die with the container. The standing obligation is to push after every session.</span></div>
-</div>
-
-<h2>4 · What is doctrine but nothing enforces</h2>
-<p>
-The honest counterpart to the table above. Each of these is written down and believed, and none of it
-is mechanically checked.
-</p>
-<table>
-  <tr><th>Gap</th><th>Status</th></tr>
-  <tr><td><b>WebFetch summarization</b> — the only permitted fetch path pipes data through a model, which is the exact thing "parse raw locally" forbids</td><td><span class="pill p-dead">unsolved</span></td></tr>
-  <tr><td><b>selector_version</b> on ledger rows — the gate counter blends rulesets</td><td><span class="pill p-hold">proposed today</span></td></tr>
-  <tr><td><b>Push handling</b> in <code>p_over</code> and <code>ev</code></td><td><span class="pill p-hold">found today</span></td></tr>
-  <tr><td><b>HFA-SPLIT</b> — <code>v13_1.py</code> uses ×1.03, <code>daily_card.py</code> uses ×1.005; two paths, two models</td><td><span class="pill p-hold">logged, unpatched</span></td></tr>
-  <tr><td><b>8-field parser</b> crashes <code>sp_asof</code>, and healthcheck <em>skips</em> it silently instead of failing — a health check that passes by not looking</td><td><span class="pill p-dead">blocks forward writes</span></td></tr>
-  <tr><td><b>E4 ID collision</b> — two experiments numbered E4; under R7 identity is part of pre-registration</td><td><span class="pill p-hold">flagged</span></td></tr>
-  <tr><td><b>Opener detection</b> — the ≤3.5 K hold is a proxy, not a detector</td><td><span class="pill p-hold">proxy in place</span></td></tr>
-  <tr><td><b>Closing prices</b> — never once captured</td><td><span class="pill p-dead">blocks 2 experiments</span></td></tr>
-</table>
-
-<h2>5 · What the project has actually produced</h2>
-<table>
-  <tr><th>Track</th><th>Standing</th><th>Basis</th></tr>
-  <tr><td>MLB sides / RL</td><td><span class="pill p-dead">DEAD</span></td><td>n=1,461; Brier 0.2500 vs market 0.238; GBM worse</td></tr>
-  <tr><td>Totals</td><td><span class="pill p-dead">NOT_READY</span></td><td>44–48% pooled</td></tr>
-  <tr><td>K-props</td><td><span class="pill p-live">LIVE_PAPER</span></td><td>backtest n=1,759, MAE 1.92 vs naive 2.41; forward 4–5, −1.61u at 9/100</td></tr>
-  <tr><td>Blowout guardrail</td><td><span class="pill p-live">VALIDATED</span></td><td>33% vs 5% separation at the ≥18% flag</td></tr>
-  <tr><td>Calibration layer</td><td><span class="pill p-live">VALIDATED</span></td><td>compressed 80%-claims to a 61%-reality</td></tr>
-  <tr><td>Multi-sport</td><td><span class="pill p-unk">SCAFFOLD</span></td><td>5 registered (MLB populated, NFL/NBA/WNBA/CFB empty); NHL absent entirely</td></tr>
-  <tr><td>Real money</td><td><span class="pill p-dead">$0 · UNAUTHORIZED</span></td><td>gate: n≥100, ROI&gt;0 with CI excluding 0, forward calibration, your sign-off</td></tr>
-</table>
-
-<h2>6 · The through-line</h2>
-<p>
-Two things separate the parts of this project that held up from the parts that didn't, and neither is
-about modeling.
-</p>
-<p>
-The first is <b>who gets to be the referee</b>. Everything that survived was measured against something
-that could not be argued with — outcomes, the market's Brier, a second independent source, a frozen
-pre-registration. Everything that had to be discarded was validated against my own reasoning: the 7–3
-ML record, the shrinkage convergence, the clock finding, the fantasy call. In every one of those I was
-checking my work against my own description of the data rather than the data.
-</p>
-<p>
-The second is that <b>the useful moves have been subtractive</b>. The strongest thing built this week
-was not a feature; it was making the intake demand less and the clock demand more, because the old
-requirement was mine and not the market's, and it was costing every board its gate eligibility. The
-same shape shows up in the ≤3.5 hold, the T3 quarantine, the frozen sides verdict, and the retired
-language list. This system gets better mostly by refusing to do things.
-</p>
-<p>
-Which is why the record stands where it does and why I will keep stating it plainly: nine graded paper
-plays, 4–5, −1.61 units, against a gate of one hundred. That is not a track record. It is the first
-one percent of one, and the four defects found in the last day — three of them found by you reading the
-document rather than by me writing it — are a fair estimate of how much is still wrong that neither of
-us has looked at yet.
-</p>
-
-<footer>
-  Generated 2026-07-27 from state.json, AGENTS.md, AUTHORIZATIONS.md, the seven ledgers, engine source,
-  and the correction log. Every figure traces to one of those (R1). Companion document:
-  <code>docs/model_breakdown.html</code> — same system, organized as dated releases rather than lessons.
-</footer>
-
-</div>
-</body>
+<body><main>
+<nav aria-label="Project documentation"><a href="dashboard.html">Status</a><a href="model_breakdown.html">Models</a><a href="core_breakdown.html">Workflow</a><a href="README.md">Documentation index</a><a href="../README.md">Repository README</a></nav>
+<h1>System workflow and evidence boundaries</h1>
+<p class="meta">Documentation refresh: October 24, 2026 UTC. Implementation snapshot: <code>cb06cb561a37661b129f79c7d6c19f3a52055725</code>. Research figures retain their original October 23 evaluation scope.</p>
+<p class="notice"><strong>Research/paper only. ACTION_BLOCKED; wagering authority OFF.</strong> This static checkpoint is not live odds, a fresh forecast, a global health certificate or model promotion.</p>
+<h2>From observed data to an auditable result</h2>
+<ol>
+<li><strong>Capture and reconcile.</strong> Retain raw source bytes, event/team identities, retrieval and availability timestamps. Missing inputs stay explicit; acquisition of historical data today does not prove historical availability.</li>
+<li><strong>Fit chronologically.</strong> Transformations, coefficients, residual calibration and selector choices use earlier permitted data. Preserve original controls and freeze protocols before confirmation.</li>
+<li><strong>Execute the real runner.</strong> Shared cards use <code>scripts/generate_card_force.py</code>; NFL uses <code>scripts/run_nfl_integrated.py</code>; CFB/NBA challengers use <code>scripts/run_efficiency_experiments.py</code> and the explicit shared-card efficiency configuration.</li>
+<li><strong>Retain component receipts.</strong> Bind event, cutoff, model/stage, fitted state, source hashes and numerical identity. Winner Bernoulli trials are not score draws; 100,000 draws are not 100,000 games.</li>
+<li><strong>Price exact contracts and select separately.</strong> Independent models remain separate from decision-time prices. Explicit market-informed procedures have separate identities. Keep raw predictions when selection returns BLOCKED or NO_PICK.</li>
+<li><strong>Archive, register and grade.</strong> Verify returned archive bytes, register genuine pre-start forecasts, acquire final results and apply the exact payout rules. A local log or empty grading preflight does not complete this chain.</li>
+</ol>
+<h2>Core-market arithmetic</h2>
+<pre>M = home score - away score; T = home score + away score
+Home win      = P(M > 0), with separately declared tie/OT treatment
+Home cover    = P(M + home handicap > 0)
+Push          = P(M + home handicap = 0)
+Over line L   = P(T > L)
+Net EV/unit   = p_win * (decimal_odds - 1) - p_loss</pre>
+<p>The EV expression assumes ordinary full-win/full-loss contracts with pushes refunded. Half outcomes, voids, exchange fees and house rules require explicit payouts. A margin law alone cannot identify totals. Related same-game legs must settle from compatible joint scenarios, not assumed-independent marginal probabilities.</p>
+<h2>What is deployed versus pending</h2>
+<p>PR #78 exercised local efficiency SHADOW logging; it did not deploy a recurring efficiency service. Canonical grading has a declared daily schedule, but the latest retained preflight reports zero registrations. The diagnostic-card path is dispatch-driven. <a href="ALL_MODELS_CURRENT_RUNTIME.md">Exact workflow boundaries</a>.</p>
+<p>Archive hooks are merged but unconfigured. Configuring a service requires authorized transport, credentials, destination, verified byte readback and a genuine pre-start run. This documentation refresh changes no workflow schedule and makes no background-execution promise.</p>
+<h2>Review and promotion</h2>
+<p>Keep infrastructure repairs, predictive candidates and promotion decisions separate. Preserve superseded registrations without treating them as extra independent events. JMU–App State, NE–Chicago and Denver–OKC are discovery diagnostics, not proof that losses were preventable. An authorized merge does not supply missing predictive evidence.</p>
+<p><a href="OPERATING_WORKFLOW.md">Operating workflow</a> · <a href="../AGENTS.md">Agent instructions</a> · <a href="../AUTHORIZATIONS.md">Preserved authorizations</a> · <a href="progress.md">Append-only canonical journal</a>.</p>
+<footer>Original page preserved verbatim: <a href="history/2026-10-24-dashboard-refresh/core_breakdown.html">historical core_breakdown.html</a>. <a href="updates/2026-10-24-dashboard-refresh.md">Change scope and evidence</a>. No coefficient, forecast, ledger, authority or schedule changed.</footer>
+</main></body>
 </html>

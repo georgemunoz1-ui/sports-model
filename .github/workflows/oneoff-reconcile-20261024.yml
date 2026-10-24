@@ -1,0 +1,55 @@
+name: October 24 CFB source reconciliation
+on:
+  push:
+    branches: [runs/pregame-2026-10-24]
+    paths:
+      - '.github/workflows/oneoff-reconcile-20261024.yml'
+      - 'scripts/requests/reconcile_20261024.py'
+permissions:
+  contents: read
+  actions: read
+jobs:
+  reconcile:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Verify forecasters and frozen source remain unchanged
+        run: |
+          python - <<'PY'
+          import subprocess
+          allowed={'.github/workflows/oneoff-pregame-20261024.yml','scripts/requests/run_20261024.py','.github/workflows/oneoff-reconcile-20261024.yml','scripts/requests/reconcile_20261024.py'}
+          changed=set(subprocess.check_output(['git','diff','--name-only','2fbfaa687c03c8736fd14e329c9f16fa3d101386','HEAD'],text=True).splitlines())
+          assert changed <= allowed, changed
+          print('FORECASTERS_UNCHANGED')
+          PY
+      - name: Recover exact original archive and reconcile missing event sources
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PYTHONUNBUFFERED: '1'
+        run: |
+          set -o pipefail
+          python scripts/requests/reconcile_20261024.py | tee reconciliation.log
+      - name: Publish complete or partial reconciliation evidence
+        if: always()
+        run: |
+          echo '## CFB source reconciliation: no new model inference' >> "$GITHUB_STEP_SUMMARY"
+          if [ -f reconcile-output/supplement/report.json ]; then
+            cat reconcile-output/supplement/report.json >> "$GITHUB_STEP_SUMMARY"
+          fi
+      - name: Retain new source bytes and immutable readback receipt
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: october24-cfb-reconciliation-${{ github.run_id }}
+          path: |
+            reconcile-output/supplement
+            reconciliation.log
+          retention-days: 7
+          if-no-files-found: error

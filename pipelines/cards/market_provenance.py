@@ -73,4 +73,9 @@ def describe(row, league):
             numerical_source=profile[2], product_scope=profile[3],
             simulation_independence="SEPARATE_MARKET_SIDECAR_INVARIANT; EMBEDDED_PAYLOAD_SEED_EXCEPTION_OPEN",
             limitation="Event/package metadata participates in RNG identity. Embedded market fields can change retained draws without changing fitted heads; reporting flags do not certify independence.")
+        if row.get("identity_semantics") == "market_blind_numeric.v2":
+            result.update(
+                simulation_independence="MARKET_BLIND_NUMERIC_V2_DECLARED; RECEIPT_VERIFICATION_REQUIRED",
+                limitation="This row declares the separate numeric-v2 procedure introduced after the legacy seed audit. The embedded-payload counterexample remains a legacy.v1 finding; this display does not authenticate the numerical receipt or grant predictive qualification.",
+                identity_source_path="pipelines/cards/semantic_identity.py")
     return copy.deepcopy(result)

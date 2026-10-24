@@ -15,6 +15,22 @@ CUTOFF = "2026-10-20T16:00:00Z"
 HASH = "a" * 64
 
 
+@pytest.mark.parametrize("mode", ["research_pregame", "live"])
+def test_nfl_selection_warning_does_not_mutate_parent(mode):
+    from pipelines.cards.selection_integration import nfl_selection_card
+    parent = {"schema": "nfl.integrated_context_forecast.v1", "mode": mode,
+              "event": {"event_id": "event-1", "home_team": "Home", "away_team": "Away",
+                        "start_time_utc": "2099-10-20T23:00:00Z"},
+              "cutoff_utc": CUTOFF, "model_id": "parent.v1", "model_artifact_sha256": HASH,
+              "features": {}, "prediction": {}, "warnings": ["ORIGINAL_WARNING"]}
+    before = copy.deepcopy(parent)
+    selected = nfl_selection_card(parent, CUTOFF)
+    assert parent == before
+    assert "WINNER_HEAD_UNAVAILABLE" in selected["forecasts"][0]["warnings"]
+    selected["forecasts"][0]["diagnostics"]["features"]["new"] = True
+    assert parent == before
+
+
 def card(league="CFB"):
     return {"league": league, "as_of_utc": CUTOFF, "forecasts": [
         {"event_id": "event-1", "model_id": "parent.v1", "input_snapshot_hash": HASH,

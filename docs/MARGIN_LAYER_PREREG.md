@@ -203,3 +203,15 @@ intervals, consistent with existing repo practice.
    profitability metrics, consistent with existing repo governance.
 7. **No 1X2 sports.** MLS and other 1X2 markets are out of scope
    (`UNSUPPORTED_1X2_ONLY`).
+
+
+## 2026-10-24 integration addendum
+
+The original v1 proposal above is retained as historical text. New generic
+quote receipts use sports.margin_quote.v2 with explicit home/away orientation,
+unconditional probability basis and an integer/half-line payoff contract.
+Old records are not migrated in place. Validation inputs require explicit
+p_push and probability_basis; non-push scores condition unconditional cover
+probabilities by dividing by 1-p_push. See PR_RECONCILIATION_20261024.md for
+regressions and integration boundaries. No new predictive qualification or
+parameter fit is established by this software repair.

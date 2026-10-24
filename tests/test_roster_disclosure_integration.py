@@ -3,6 +3,7 @@ import copy
 import datetime as dt
 import json
 import sys
+from pathlib import Path
 from types import SimpleNamespace
 from unittest.mock import Mock
 
@@ -162,3 +163,20 @@ def test_nfl_disclosure_cli_restrictions_survive_merge(tmp_path, monkeypatch, ex
     with pytest.raises(SystemExit) as exc: runner.main()
     assert exc.value.code == 2
     load.assert_not_called()
+
+
+@pytest.mark.parametrize('sport', ['cfb', 'wnba', 'mlb', 'nba', 'nhl', 'mls'])
+def test_roster_annotation_preserves_real_numeric_v2_draws(sport, tmp_path, monkeypatch):
+    from tests.semantic_identity_fixtures import package
+    from tests.test_semantic_identity import execute, numeric, CUTOFF as identity_cutoff
+    from sports.rosters import attach
+    source = package(sport)
+    raw, hashes = execute(source, tmp_path, monkeypatch)
+    before = copy.deepcopy(raw)
+    annotated = attach(raw, sport, source['events'][0], identity_cutoff, None)
+    assert numeric(annotated) == numeric(before)
+    assert annotated['identity_semantics'] == 'market_blind_numeric.v2'
+    assert raw == before
+    import hashlib
+    folder = Path(annotated['simulation']['draw_directory'])
+    assert {f.name: hashlib.sha256(f.read_bytes()).hexdigest() for f in folder.glob('*.npy')} == hashes

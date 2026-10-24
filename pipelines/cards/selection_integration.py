@@ -7,6 +7,7 @@ This bridge never fetches outcomes and never enables publication or wagering.
 from __future__ import annotations
 
 from collections import Counter
+import copy
 from datetime import datetime, timezone
 import hashlib
 import json
@@ -388,6 +389,8 @@ def write_card_selection(source_path, output_dir, *, config=None, registry=None,
 
 def nfl_selection_card(bundle, created_at_utc):
     """Bridge the NFL runner's actual winner head, retaining conditional basis."""
+    # Sidecar warnings must never mutate the already persisted parent bundle.
+    bundle = copy.deepcopy(bundle)
     from pipelines.cards.distribution_research import nfl_card
     if bundle.get("mode") == "live":
         event = bundle["event"]

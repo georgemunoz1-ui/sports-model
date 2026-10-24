@@ -89,3 +89,15 @@ def test_generic_three_outcome_api_refuses_quarter_lines():
     dist = simulated_margin(np.zeros(10000), {"fixture": "synthetic"})
     with pytest.raises(ValueError, match="COVER_FRACTIONAL_SETTLEMENT_UNSUPPORTED"):
         cover_quote(dist, .25)
+
+
+def test_legacy_and_numeric_v2_disclosures_keep_different_scope():
+    from pipelines.cards.market_provenance import describe
+    row = {'model_id': 'nba.initial_causal_score.research.v1',
+           'forecast_status': 'FORECAST_GENERATED'}
+    assert 'EXCEPTION_OPEN' in describe(row, 'nba')['simulation_independence']
+    child = {**row, 'identity_semantics': 'market_blind_numeric.v2'}
+    assert 'RECEIPT_VERIFICATION_REQUIRED' in describe(child, 'nba')['simulation_independence']
+    assert describe(child, 'nba')['predictive_validation'] == 'NOT_ASSESSED'
+    child['diagnostics'] = {'market_input': True}
+    assert describe(child, 'nba')['path_class'] == 'MARKET_INFORMED'

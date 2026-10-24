@@ -13,6 +13,9 @@ Conventions (binding; mirrors repo governance style):
     audit trail.
   * Pushes are excluded from Brier / log loss / reliability scoring and are
     reported separately with explicit denominators (n_scored vs n_push).
+    Unconditional cover probabilities are divided by (1 - p_push) before
+    scoring this conditional, non-push population. Explicit conditional
+    probabilities are used as supplied; missing basis is rejected.
   * Block bootstrap by season-week (20,000 reps, pinned seed) mirrors the CFB
     prereg machinery (1000 games / 60 season-week blocks / Holm intervals).
   * Every flag emitted here is a *diagnostic heuristic*, not a promotion rule.
@@ -20,6 +23,8 @@ Conventions (binding; mirrors repo governance style):
 Record schema (list[dict]) consumed here:
     p_cover        float in [0, 1]  — predicted probability the *bet side*
                                        (see ``orientation``) covers the line.
+    p_push         float in [0, 1]  — unconditional predicted push probability.
+    probability_basis str          — UNCONDITIONAL or CONDITIONAL_ON_NO_PUSH.
     line           float            — home spread, signed convention
                                       (negative = home favored). Half-point
                                       lines cannot push; integer lines can.

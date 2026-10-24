@@ -4836,3 +4836,23 @@ See docs/SELECTED_MARKET_INDEPENDENCE.md and the retained acceptance record.
 A focused CI job requires no artifact upload; full-tree health and predictive
 validation remain separate. Defaults, frozen forecasts, experiment/ledger state
 and action authority are unchanged. No live slate or model promotion performed.
+
+
+## 2026-10-24 — PR readiness reconciliation and immutable sidecars
+
+Reconciled PRs #68, #70, #73, #71, #74, #41 and #38 onto main c2a00e2 in
+reviewable merge commits. #38 also retains #37 ancestry. Current NFL weekly
+state, strict information-regime checks, WNBA adapter and numerical-v2
+identity remain intact. Superseded dated workflows/requests and incompatible
+legacy acceptance tests are preserved as explicitly archived evidence.
+
+Margin quote v2 binds the side and payoff basis; non-push calibration now
+conditions unconditional probabilities on non-push. Roster annotations preserve
+actual draw bytes and do not infer numerical personnel effects. Fixed an NFL
+selection-sidecar warning that could mutate its saved parent in memory.
+
+See PR_RECONCILIATION_20261024.md for exact heads, preserved-source scope,
+regressions and final execution status. Hosted acceptance requires current-run
+evidence upload and readback; Drive CI authentication is still unconfigured.
+Existing forecasts, fitted states, grading ledgers, defaults, prior state keys
+and authorization records remain unchanged. No promotion or wagering enabled.

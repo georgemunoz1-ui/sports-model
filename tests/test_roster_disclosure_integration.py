@@ -71,7 +71,7 @@ def test_shared_cli_keeps_both_contracts(tmp_path, monkeypatch, sport, case, sta
     p = tmp_path/'packet.json'; p.write_text(json.dumps(packet(raw['model_id'], raw['input_snapshot_hash'], case)))
     out = tmp_path/'out'
     argv = ['card', '--date', '2026-10-20', '--league', sport, '--as-of-utc', cutoff,
-            '--roster-bundle', str(tmp_path/'rosters/bundle.json'), '--disclosures', str(p), '--output-dir', str(out)]
+            '--identity-semantics', 'legacy.v1', '--roster-bundle', str(tmp_path/'rosters/bundle.json'), '--disclosures', str(p), '--output-dir', str(out)]
     monkeypatch.setattr(sys, 'argv', argv)
     with pytest.raises(SystemExit) as exc:
         runner.main()
@@ -130,7 +130,7 @@ def test_nfl_cli_keeps_selected_arm_and_both_contracts(tmp_path, monkeypatch, ca
     p = tmp_path/'packet.json'; p.write_text(json.dumps(packet(selected_id, digest(bundle['features']), case)))
     out = tmp_path/'out'
     argv = ['nfl', '--date', '2026-10-20', '--event-id', EVENT['event_id'], '--output', str(out),
-            '--roster-bundle', str(tmp_path/'rosters/bundle.json'), '--disclosures', str(p)]
+            '--identity-semantics', 'legacy.v1', '--roster-bundle', str(tmp_path/'rosters/bundle.json'), '--disclosures', str(p)]
     monkeypatch.setattr(sys, 'argv', argv)
     if error:
         with pytest.raises(SystemExit) as exc: runner.main()

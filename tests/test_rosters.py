@@ -282,7 +282,7 @@ def test_nfl_cli_preserves_selected_arm_and_adds_roster_report(tmp_path):
         (folder/'registration.jsonl').write_text(json.dumps({'created_at_utc': CUTOFF}))
         (folder/'forecast.json').write_text(json.dumps(saved))
     args = ['run_nfl_integrated.py','--date','2026-10-20','--model-id',result['model_id'],
-            '--output',str(tmp_path/'out'),'--roster-bundle',str(tmp_path/'bundle.json')]
+            '--output',str(tmp_path/'out'),'--identity-semantics', 'legacy.v1', '--roster-bundle',str(tmp_path/'bundle.json')]
     with patch.object(cli, 'dt', SimpleNamespace(datetime=Clock,timezone=timezone)), \
          patch.object(cli.nfl,'load_schedule',return_value=[EVENT]), \
          patch.object(cli.nfl,'build_context',return_value=context), \

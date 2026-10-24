@@ -52,7 +52,7 @@ def test_legacy_probability_records_require_explicit_migration(key):
 
 
 def quote_record(side):
-    dist = simulated_margin(np.repeat([-1., 0., 1.], [4000, 2000, 4000]), {"fixture": "synthetic"})
+    dist = simulated_margin(np.repeat([-1., 0., 1.], [2500, 5000, 2500]), {"fixture": "synthetic"})
     return margin_quote_record(dist, cover_quote(dist, 0, orientation=side),
         event={"event_id": "SYNTHETIC_ONLY"},
         source_model={"model_id": "fixture", "artifact_sha256": "0" * 64},

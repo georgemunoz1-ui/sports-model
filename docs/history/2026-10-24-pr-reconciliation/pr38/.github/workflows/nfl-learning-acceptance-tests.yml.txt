@@ -1,0 +1,61 @@
+name: NFL learning acceptance regressions
+on:
+  push:
+    branches: [codex/nfl-det-buf-learning-audit-20260918]
+    paths: ['.github/workflows/nfl-learning-acceptance-tests.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  acceptance:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install -r requirements-nfl-context.txt
+      - uses: actions/download-artifact@v4
+        with:
+          name: det-buf-learning-source-35320323493
+          run-id: 35320323493
+          github-token: ${{ github.token }}
+          path: inputs/capture
+      - uses: actions/download-artifact@v4
+        with:
+          name: det-buf-completed-35289006699
+          run-id: 35289006699
+          github-token: ${{ github.token }}
+          path: inputs/frozen
+      - name: Execute acceptance tests without suppressing failure evidence
+        env:
+          NFL_LEARNING_CAPTURE: inputs/capture
+          NFL_LEARNING_FROZEN: inputs/frozen
+          NFL_LEARNING_OUTPUT: learning-acceptance/cases
+        run: |
+          mkdir -p learning-acceptance
+          set +e
+          python -m unittest discover -s tests -p test_learning_acceptance_det_buf.py -v > learning-acceptance/tests.txt 2>&1
+          echo $? > learning-acceptance/tests.exit
+          cat learning-acceptance/tests.txt
+      - name: Bind evidence to input artifacts and exact code
+        run: |
+          python - <<'PY'
+          import pathlib,subprocess,json,datetime,hashlib,os
+          root=pathlib.Path('learning-acceptance')
+          with (root/'code.tar.gz').open('xb') as f:subprocess.run(['git','archive','--format=tar.gz','HEAD'],stdout=f,check=True)
+          record={'created_at_utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'source_commit':subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),'workflow_run_id':os.environ['GITHUB_RUN_ID'],'input_artifacts':{'source':{'id':10536523716,'run_id':35320323493,'sha256':'e3bb75c06ec7851879b95d15d49e8d3d8d3f11e7980dd315534e398478f548a8'},'frozen':{'id':10525312986,'run_id':35289006699,'sha256':'12babe78049b69d07e41dfd4568b36c9f0fe41d511d73dd796364f7a19b52074'}},'scope':'ADVERSARIAL_TEST_OUTPUTS_ONLY; NOT_RELEASED_STATE','model_code_changed':False,'action_authority':False}
+          (root/'provenance.json').write_text(json.dumps(record,indent=2))
+          (root/'manifest.json').write_text(json.dumps({str(p.relative_to(root)):hashlib.sha256(p.read_bytes()).hexdigest() for p in root.rglob('*') if p.is_file()},indent=2))
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: nfl-learning-acceptance-${{ github.run_id }}
+          path: learning-acceptance
+          retention-days: 90
+      - name: Keep failed acceptance status visible
+        if: always()
+        run: test "$(cat learning-acceptance/tests.exit)" = 0

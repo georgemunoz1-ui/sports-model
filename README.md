@@ -1,57 +1,72 @@
 # Sports Model Research System
 
-Seven-league forecasting and simulation research: **NFL, CFB, NBA, WNBA, MLB, NHL and MLS**. Core research products are **moneyline, spread/run line/puck line, and totals**; support and qualification are specific to the model, league and settlement contract.
+Forecasting and simulation research across **NFL, CFB, NBA, WNBA, MLB, NHL and MLS**. The core market products are **moneyline, spread/run line/puck line, and totals**. Availability and qualification are specific to each model, population and settlement contract.
 
-**Documentation reconciled October 23, 2026 Pacific / October 24 UTC**, against `main` at [`15bc5b8`](https://github.com/georgemunoz1-ui/sports-model/commit/15bc5b87ee8e403589c0bf384aa4667039935db4). `main` is the consolidated code entry point, not a README-only landing branch. Dated reports retain their original checkpoint statements.
+**Navigation refresh: October 24, 2026 UTC.** Implementation reviewed at [`cb06cb5`](https://github.com/georgemunoz1-ui/sports-model/commit/cb06cb561a37661b129f79c7d6c19f3a52055725), the merged PR #79 documentation checkpoint. No newer model commit was present at inspection. The research results below remain the October 23 evaluations, not a new forecast or backtest.
 
-> **Research execution is not predictive qualification.** Wagering authority remains **OFF**. Selected research defaults, initial baselines, challenger results, software CI, repository health, source freshness and durable archiving are separate statuses. No validated profitability ranking or automatic model promotion is claimed.
+> **Research/paper only. Wagering authority OFF.** Merged code, executable research, predictive qualification, current data, repository health and verified archival are separate statuses. No automatic promotion or proven profitability ranking is claimed.
 
-## Start here
+## Current project views
 
-| Need | Current reference |
+| Start here | Contents |
 |---|---|
-| Status, evidence and blockers | [Current status](docs/CURRENT_STATUS.md) |
-| Recent merged and pending work | [Recent changes](docs/RECENT_CHANGES.md) |
-| Installation and real runner commands | [Model access](docs/CONSOLIDATED_MODEL_ACCESS.md) |
-| Selected model and product boundaries | [Default selection](docs/MODEL_DEFAULT_SELECTION.md) |
-| Input preparation, current inference and scheduling | [Research runtimes](docs/ALL_MODELS_CURRENT_RUNTIME.md) |
-| Agent/review/registration workflow | [Operating workflow](docs/OPERATING_WORKFLOW.md) and [AGENTS.md](AGENTS.md) |
-| Cross-sport formula work still to evaluate | [Research roadmap](docs/RESEARCH_ROADMAP.md) |
-| Local 55 failures / 4 warnings versus hosted health | [Scoped health reconciliation](docs/HEALTH_RECONCILIATION_2026_10_23.md) |
-| Most recently supplied card snapshot | [October 23, 3:31 p.m. Pacific repricing record](docs/cards/2026-10-23-1531-PT.md) — archived, not live |
-| All documentation | [Documentation index](docs/README.md) |
+| [Status dashboard](docs/dashboard.html) | Seven-league coverage, completed integrations, evidence counts and named blockers |
+| [Model breakdown](docs/model_breakdown.html) | Actual model families, core-product boundaries and NBA regression results |
+| [System workflow](docs/core_breakdown.html) | Source capture, inference, settlement, selection, registration and grading |
+| [Detailed current status](docs/CURRENT_STATUS.md) | Evidence-scoped implementation and operational status |
+| [Recent changes](docs/RECENT_CHANGES.md) | Merged milestones and separately identified open research PRs |
+| [Runner commands](docs/CONSOLIDATED_MODEL_ACCESS.md) | Setup, required packages and executable research entry points |
+| [Documentation index](docs/README.md) | Full navigation, governance, research designs and preserved history |
 
-## What is now integrated
+The HTML files are standalone reader views; linking them does not deploy a GitHub Pages site. Their July/August predecessors are preserved exactly in [dashboard history](docs/history/2026-10-24-dashboard-refresh/). Older dated reports are evidence snapshots, not live status pages.
 
-[PR #78](https://github.com/georgemunoz1-ui/sports-model/pull/78) merged the independent CFB matchup-efficiency and NBA possession-efficiency experiments, component receipts, source reconciliation, chronological common-event comparisons, separate selector diagnostics and opt-in local SHADOW logging. Personnel and joint stages have separate identities. The NFL kickoff-date binding repair preserves the selected QB forecast; it is not a new NE-specific predictor.
+## Model and core-market coverage
 
-[PR #75](https://github.com/georgemunoz1-ui/sports-model/pull/75) repaired event-scoped diagnostic winner identities. [PR #76](https://github.com/georgemunoz1-ui/sports-model/pull/76) integrated numerical identity, lineage, selection and evaluation controls with real runners and archive hooks. [PR #77](https://github.com/georgemunoz1-ui/sports-model/pull/77) added an explicit empty-registration preflight without fabricating forecasts or grades. [PR #72](https://github.com/georgemunoz1-ui/sports-model/pull/72) added availability and dependence disclosures.
+| League | Current research path | Important product boundary |
+|---|---|---|
+| NFL | Selected QB contextual winner; separately named combined, market-informed and live arms | Combined score/spread residuals cannot be borrowed for the selected QB; selected-QB margin completion remains on open PR #69 |
+| CFB | Selected Elo/form family plus evaluated matchup-efficiency challenger | FBS/week scope applies; the selected current parent has no total head; joint/personnel increments stay separate |
+| NBA | Explicit initial causal-score baseline plus evaluated possession-efficiency v2 | No qualified automatic default; efficiency winner Brier is inconclusive and joint winner Brier worsened |
+| WNBA | Selected FF7 research family and current shared-card adapter | Winner, margin and total evidence is target-specific; regular-season evidence does not automatically extend to postseason |
+| MLB | Frozen V13 current-input research profile | Winner probability is Monte Carlo-only; winner selection does not qualify full-game run-line/total or extra-innings settlement |
+| NHL | Explicit initial baseline and source-season repair | Affected recommendation eligibility remains suspended; fitted rest, goalie and overtime/shootout qualification remain unresolved |
+| MLS | Explicit initial Poisson regulation score path | Three-way home/draw/away; regulation and extra-time/quarter-handicap contracts must stay distinct |
 
-### Executed efficiency research — not promotion evidence
+The [default-selection registry](data/model_selection/defaults_v1.json) and existing model parameters are unchanged. See [selection scope](docs/MODEL_DEFAULT_SELECTION.md) and [runtime requirements](docs/ALL_MODELS_CURRENT_RUNTIME.md).
 
-Binary single-class Brier; lower is better. Delta is challenger minus control. Intervals are paired chronological-block bootstrap intervals from the retained diagnostic execution.
+## Recent integrated work
+
+[PR #78](https://github.com/georgemunoz1-ui/sports-model/pull/78) integrated independent CFB/NBA efficiency experiments, component-level forecast receipts, source reconciliation, chronological common-event comparisons, separate selector diagnostics, opt-in local SHADOW logging and the NFL kickoff-date repair. It did not promote the challengers.
+
+[PR #75](https://github.com/georgemunoz1-ui/sports-model/pull/75) repaired diagnostic winner identity matching. [PR #76](https://github.com/georgemunoz1-ui/sports-model/pull/76) connected numerical identity, lineage, selection and evaluation controls to real runners and archive hooks. [PR #77](https://github.com/georgemunoz1-ui/sports-model/pull/77) added first-registration preflight without fabricating forecasts or grades. [PR #72](https://github.com/georgemunoz1-ui/sports-model/pull/72) added availability and dependence disclosures.
+
+[PR #79](https://github.com/georgemunoz1-ui/sports-model/pull/79) refreshed the README and operator guides; its [consolidation run](https://github.com/georgemunoz1-ui/sports-model/actions/runs/40071113060) passed **1,367 tests**. This follow-up updates the remaining outdated HTML entry points. [File-level scope and verification](docs/updates/2026-10-24-dashboard-refresh.md).
+
+## Executed challenger results
+
+Binary single-class Brier; lower is better. Deltas are challenger minus control with retained paired chronological-block bootstrap intervals.
 
 | Candidate | Common events / opportunities | Brier delta | 95% interval | Disposition |
 |---|---:|---:|---|---|
-| CFB matchup efficiency | 1,045 / 1,196 | +0.000453 | [−0.001894, +0.002705] | HOLD; improvement unestablished |
-| NBA possession efficiency v2 | 2,458 / 2,460 | +0.001298 | [−0.000971, +0.003499] | HOLD; improvement unestablished |
+| CFB matchup efficiency | 1,045 / 1,196 | +0.000453 | [-0.001894, +0.002705] | HOLD; improvement unestablished |
+| NBA possession efficiency v2 | 2,458 / 2,460 | +0.001298 | [-0.000971, +0.003499] | HOLD; improvement unestablished |
 | NBA joint-score v2 | 2,458 / 2,460 | +0.003833 | [+0.001456, +0.006366] | HOLD; worse on this winner metric |
 
-The NBA efficiency margin MAE also worsened by **0.151969 points**. Do not repair that conclusion by selecting a favorable threshold or relabeling the same inspected sample as confirmation. Preserve these candidates; evaluate new increments under new identities and frozen protocols. Details: [original results](docs/research/efficiency_2026_10_23/SWARM_RESULTS_2026_10_23.md), [subsequent integration status](docs/research/efficiency_2026_10_23/INTEGRATION_STATUS.md).
+NBA efficiency margin MAE also worsened by **0.151969 points**. Preserve the control and these negative/inconclusive results; new formulas need separate identities and earlier-only fitting. Repaired retrospective analyses remain diagnostic, not untouched confirmation. [Original results](docs/research/efficiency_2026_10_23/SWARM_RESULTS_2026_10_23.md) and [integration addendum](docs/research/efficiency_2026_10_23/INTEGRATION_STATUS.md).
 
-The experiment has **3,503 unique common events** and **7,006 candidate-stage receipts**. Its **58 local SHADOW registrations concern 17 unique future games**, not 58 independent games. Superseded candidates and repeated forecasts must not inflate the event denominator.
+Evidence counts: **3,503 unique common events**, **7,006 candidate-stage receipts**, and **58 local SHADOW registrations across 17 unique games**. Multiple versions and simulation draws do not increase the independent-event denominator.
 
-## Current boundaries
+## What remains open
 
-- **Grading:** the latest retained [canonical preflight](data/grading/canonical/operations/preflight-39999394059-1.json) reports zero registrations and no settlement. Local SHADOW logging is not canonical registration.
-- **CI:** PR #78 records 9/9 final-head and 6/6 post-merge checks passing. Its [hosted consolidation run](https://github.com/georgemunoz1-ui/sports-model/actions/runs/39940720358) passed 1,367 tests; the separate local swarm suite passed 1,402. Different scopes are not interchangeable.
-- **Storage:** deployed archive hooks are not a verified durable upload. The retained status is `BLOCKED_UNCONFIGURED`; [CI storage requirements](docs/CI_STORAGE_ARCHIVE.md) remain necessary.
-- **Markets:** preserved independent models remain market-blind. Explicit market-informed NFL modes are separate research paths. A saved quote or positive arithmetic return is not proof of an executable edge.
-- **Open work:** PRs #68, #69, #70, #71, #73 and #74 remain open at this checkpoint. A capability in one of those branches is not automatically available on main.
+The latest retained [canonical preflight](data/grading/canonical/operations/preflight-39999394059-1.json) has zero registrations and no settlement. Local SHADOW logging is not canonical registration. Archive hooks remain `BLOCKED_UNCONFIGURED`; no verified remote upload is implied by passing CI. [Storage contract](docs/CI_STORAGE_ARCHIVE.md).
 
-## Quick start
+The [55-failure/four-warning inventory](docs/HEALTH_RECONCILIATION_2026_10_23.md) is from a partial local checkout; it is not directly comparable with the separately recorded hosted health report. No health issue is closed by a documentation change. Open PRs #68, #69, #70, #71, #73 and #74 remain separately identified in the inspected checkpoint.
 
-From a complete checkout, use Python 3.12 and the repository dependencies:
+The [saved October 23 card](docs/cards/2026-10-23-1531-PT.md) is a 19-row repricing-only snapshot, not live odds or fresh inference. The separately described external `joint.py` and synthetic agent-package claims are not certified integrated. [Cross-sport formula and market research agenda](docs/RESEARCH_ROADMAP.md).
+
+## Setup
+
+Use a complete checkout and Python 3.12:
 
 ```bash
 python -m pip install -r requirements-consolidated.txt
@@ -61,10 +76,4 @@ python -m pytest tests research/tests -q
 python harness/healthcheck.py
 ```
 
-Run health separately from software tests and retain its failures. Before generating a card, acquire source-bound current packages and follow the [runner guide](docs/CONSOLIDATED_MODEL_ACCESS.md). A missing package is not a verified empty slate. An already started event cannot become a new pregame forecast.
-
-## Preservation and scope of this update
-
-This documentation synchronization changes no model coefficients, defaults, forecast artifacts, canonical ledgers, release decisions or workflow schedules. It publishes no new predictive evaluation. Historical reports, [state.json](state.json), [AUTHORIZATIONS.md](AUTHORIZATIONS.md) and the append-only [progress journal](docs/progress.md) retain their original evidence.
-
-The superseded landing page and operating guides are preserved by original Git blob in [documentation history](docs/history/2026-10-23-status-refresh/). [File-level change summary](docs/CHANGE_SUMMARY_2026_10_23.md).
+These are usage commands, not executions performed by this page. Keep software tests and health results separate. Acquire fresh source-bound packages before inference; a missing package is not a verified empty slate. Read [AGENTS.md](AGENTS.md), [operating workflow](docs/OPERATING_WORKFLOW.md), [state.json](state.json) and the append-only [progress journal](docs/progress.md). Frozen forecasts, policies, authorizations, historical records and workflow schedules are not changed by this documentation refresh.

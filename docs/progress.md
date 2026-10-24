@@ -4738,3 +4738,23 @@ CFB: 1,045 common events; efficiency Brier delta +0.000453 with interval crossin
 Integrated/exercised CFB joint dispatch, NBA scope/cutoff contracts, receipt identity binding, and NFL UTC/Eastern starter reconciliation. NFL six-week/93-game replay matches original states and selected QB NE forecast. Actual shared-card paths wrote 58 first-write local pregame SHADOW entries (10 CFB, 24 original NBA preserved, 24 new NBA v2); canonical eligibility and publication/action authority remain false.
 
 Final full test suite: 1,402 passed with JUnit evidence. Global legacy health remains RED (55 failures/4 warnings); scoped dependency disclosures retained. All 7,006 primary stage receipts/raw predictions survive selector BLOCKED status. Exact market/discrete settlement validation, authenticated personnel inputs, original historical availability evidence and NFL per-event OOF remain named blockers. No remote write/merge, default change or promotion. User approval is required before the prepared external research branch/draft PR.
+
+
+
+## 2026-10-21 — Isolated margin contract integration review
+
+Compared current main after disclosure PR72 with pinned margin PR69/PR70.
+Added an opt-in source-bound PMF/CDF bridge delegating settlement to the existing
+five-state engine. Explicit side, source, cutoff and settlement identities prevent
+ambiguous three-state/MLS quarter-line interoperability. Fitted challengers and
+PR70's unfitted mean-shifting football boosts remain separate; no runtime or
+default activation. Reproduced the NFL runner merge conflict, omitted side in
+PR70 quote records, and raw-probability scoring on push-excluded samples.
+
+Local checks: 215 tests plus 56 subtests; 162 synthetic and 26 retained NFL
+identical-input contract comparisons pass. Preserved NFL predictive HOLD; the
+816-game result is not reevaluated or promoted. No frozen forecasts, model
+coefficients, defaults, runner disclosures, ledgers or authority changed.
+Partial local health cannot certify full repository health. See
+docs/MARGIN_INTEGRATION_20261021.md and docs/releases/2026-10-21-margin-integration/.
+Clean-checkout CI and draft publication outcome are recorded on the review PR.

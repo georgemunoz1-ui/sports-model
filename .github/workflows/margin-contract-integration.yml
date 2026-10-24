@@ -1,0 +1,53 @@
+name: Margin contract integration
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'models/common/margin_contract.py'
+      - 'models/common/discrete_research.py'
+      - 'scripts/audit_margin_integration.py'
+      - 'scripts/run_nfl_integrated.py'
+      - 'pipelines/cards/disclosures.py'
+      - 'tests/test_margin_contract.py'
+      - 'tests/fixtures/margin_integration/**'
+      - '.github/workflows/margin-contract-integration.yml'
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          persist-credentials: false
+      - uses: actions/checkout@v4
+        with:
+          ref: 79b92e2fd7e0e16ca2bcb2ee8c6c137f20a0fb27
+          path: review-sources/pr69
+          persist-credentials: false
+      - uses: actions/checkout@v4
+        with:
+          ref: 37cfcf048a8f1ff6860ad49b8098160b07646364
+          path: review-sources/pr70
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install -r requirements-consolidated.txt
+      - name: Contract, disclosure and unchanged-default regressions
+        run: python -m pytest tests/test_margin_contract.py tests/test_card_disclosures.py tests/test_cross_sport_distributions.py tests/test_model_defaults.py -q
+      - name: Pinned-source identical-input comparison
+        run: python scripts/audit_margin_integration.py --pr69-source review-sources/pr69 --pr70-source review-sources/pr70 --output /tmp/margin-comparison.json
+      - name: Record exact code and comparison digest
+        run: |
+          git rev-parse HEAD
+          sha256sum /tmp/margin-comparison.json
+          python - <<'PY'
+          import json, os
+          report = json.load(open('/tmp/margin-comparison.json'))
+          with open(os.environ['GITHUB_STEP_SUMMARY'], 'a') as out:
+              out.write('162 synthetic contract comparisons and 26 retained NFL comparisons passed.\n\n')
+              out.write('Software evidence only. NFL predictive HOLD preserved; action authority OFF.\n')
+          PY

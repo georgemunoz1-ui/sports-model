@@ -1,0 +1,65 @@
+name: October 24 retained card reconciliation
+on:
+  push:
+    branches: [runs/pregame-2026-10-24]
+    paths:
+      - '.github/workflows/oneoff-card-recovery-20261024.yml'
+      - 'scripts/requests/recover_card_20261024.py'
+permissions:
+  contents: write
+  actions: read
+concurrency:
+  group: october24-card-reconciliation
+  cancel-in-progress: false
+jobs:
+  reconcile:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      PYTHONUNBUFFERED: '1'
+      OPENBLAS_NUM_THREADS: '1'
+      OMP_NUM_THREADS: '1'
+      MKL_NUM_THREADS: '1'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install -r requirements-consolidated.txt
+      - name: Confirm model and original run inputs unchanged
+        run: |
+          python - <<'PY'
+          import subprocess
+          paths=set(subprocess.check_output(['git','diff','--name-only','2fbfaa687c03c8736fd14e329c9f16fa3d101386','HEAD'],text=True).splitlines())
+          assert paths <= {'scripts/requests/run_20261024.py','.github/workflows/oneoff-pregame-20261024.yml','scripts/requests/recover_card_20261024.py','.github/workflows/oneoff-card-recovery-20261024.yml'}, paths
+          PY
+          python -m py_compile scripts/requests/recover_card_20261024.py
+      - name: Download and verify exact artifacts, replay retained draws, reconcile markets
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -o pipefail
+          mkdir -p run-output
+          python scripts/requests/recover_card_20261024.py | tee run-output/reconciliation-console.log
+      - name: Persist exact research summaries to the isolated run branch only
+        run: |
+          test "$GITHUB_REF_NAME" = 'runs/pregame-2026-10-24'
+          git config user.name 'sports-model-research-runner'
+          git config user.email 'actions@users.noreply.github.com'
+          git add reports/executions/2026-10-24-40076728158/
+          git diff --cached --check
+          git commit -m 'evidence: retain October 24 card reconciliation; original forecasts unchanged'
+          git push origin HEAD:refs/heads/runs/pregame-2026-10-24
+      - name: Retain recovery and source readback evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: october24-reconciliation-${{ github.run_id }}-${{ github.run_attempt }}
+          path: |
+            run-output/recovery
+            run-output/reconciliation-console.log
+            reports/executions/2026-10-24-40076728158
+          retention-days: 7
+          if-no-files-found: error

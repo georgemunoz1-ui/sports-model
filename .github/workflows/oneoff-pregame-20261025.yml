@@ -1,0 +1,79 @@
+name: October 25 fresh pregame research card
+on:
+  push:
+    branches: [runs/pregame-2026-10-25]
+    paths:
+      - '.github/workflows/oneoff-pregame-20261025.yml'
+      - 'scripts/requests/card_20261025.py'
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: oneoff-pregame-20261025
+  cancel-in-progress: false
+jobs:
+  run-card:
+    strategy:
+      fail-fast: false
+      max-parallel: 4
+      matrix:
+        league: [nfl, nba, nhl, scope]
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    env:
+      PYTHONUNBUFFERED: '1'
+      OPENBLAS_NUM_THREADS: '1'
+      OMP_NUM_THREADS: '1'
+      MKL_NUM_THREADS: '1'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Verify unchanged model and forecast sources
+        run: |
+          python - <<'PY'
+          import subprocess
+          base='527409a9aa48b554a03aecd01b5b87ac66bc9baa'
+          paths=set(subprocess.check_output(['git','diff','--name-only',base,'HEAD'],text=True).splitlines())
+          assert paths <= {'scripts/requests/card_20261025.py','.github/workflows/oneoff-pregame-20261025.yml'}, paths
+          print('Preserved source pin',base,'one-off only',sorted(paths))
+          PY
+          python -m py_compile scripts/requests/card_20261025.py
+          git cat-file -e 37f977bad0ae23d17af89a09a951e214a8136f14:scripts/requests/run_20261024.py
+      - run: python -m pip install -r requirements-consolidated.txt
+      - name: Regression contracts
+        run: |
+          mkdir -p run-output
+          set -o pipefail
+          python -m pytest tests/test_current_runtime_contracts.py tests/test_nba_history_scope.py tests/test_nhl_atomic_capture.py tests/test_semantic_identity.py -q | tee run-output/${{ matrix.league }}-tests.txt
+      - name: Execute fresh-source existing model paths
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -o pipefail
+          python scripts/requests/card_20261025.py ${{ matrix.league }} | tee run-output/${{ matrix.league }}-console.log
+      - name: Retain complete source, forecast and draw evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: october25-${{ matrix.league }}-${{ github.run_id }}-${{ github.run_attempt }}
+          path: |
+            run-output/${{ matrix.league }}-evidence.zip
+            run-output/${{ matrix.league }}-console.log
+            run-output/${{ matrix.league }}-tests.txt
+          retention-days: 7
+          if-no-files-found: error
+      - name: Report exact execution or blocker
+        if: always()
+        run: |
+          echo '## October 25 fresh-input research, action OFF' >> "$GITHUB_STEP_SUMMARY"
+          echo 'No default change, main write, scheduled service, canonical registration, or promotion.' >> "$GITHUB_STEP_SUMMARY"
+          if [ -f run-output/${{ matrix.league }}/summary.json ]; then
+            echo '```json' >> "$GITHUB_STEP_SUMMARY"
+            cat run-output/${{ matrix.league }}/summary.json >> "$GITHUB_STEP_SUMMARY"
+            echo '```' >> "$GITHUB_STEP_SUMMARY"
+          fi

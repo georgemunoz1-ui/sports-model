@@ -1,0 +1,55 @@
+name: October 25 MLS source-scope execution
+on:
+  push:
+    branches: [runs/pregame-2026-10-25]
+    paths:
+      - '.github/workflows/oneoff-mls-scope-20261025.yml'
+      - 'scripts/requests/mls_scope_20261025.py'
+permissions:
+  contents: read
+  actions: read
+jobs:
+  source-scoped-mls:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      OPENBLAS_NUM_THREADS: '1'
+      OMP_NUM_THREADS: '1'
+      MKL_NUM_THREADS: '1'
+      PYTHONUNBUFFERED: '1'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Assert no existing source changed
+        run: |
+          python - <<'PY'
+          import subprocess
+          changed=subprocess.check_output(['git','diff','--name-status','527409a9aa48b554a03aecd01b5b87ac66bc9baa','HEAD'],text=True).splitlines()
+          for row in changed:
+            status,path=row.split('\t')
+            assert status=='A' and (path.startswith('scripts/requests/') or path.startswith('.github/workflows/oneoff-')), row
+          PY
+          python -m py_compile scripts/requests/mls_scope_20261025.py
+      - run: python -m pip install -r requirements-consolidated.txt
+      - name: Execute MLS existing preparation and model path
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          mkdir -p run-output
+          set -o pipefail
+          python scripts/requests/mls_scope_20261025.py | tee run-output/mls-reviewed-console.log
+      - name: Retain complete research evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: october25-mls-reviewed-${{ github.run_id }}-${{ github.run_attempt }}
+          path: |
+            run-output/mls-reviewed-evidence.zip
+            run-output/mls-reviewed-console.log
+          retention-days: 7
+          if-no-files-found: error

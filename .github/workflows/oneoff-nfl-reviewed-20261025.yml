@@ -1,0 +1,63 @@
+name: October 25 source-reviewed NFL execution
+on:
+  push:
+    branches: [runs/pregame-2026-10-25]
+    paths:
+      - '.github/workflows/oneoff-nfl-reviewed-20261025.yml'
+      - 'scripts/requests/reviewed_nfl_20261025.py'
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: oneoff-nfl-reviewed-20261025
+  cancel-in-progress: false
+jobs:
+  reviewed-nfl:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    env:
+      PYTHONUNBUFFERED: '1'
+      OPENBLAS_NUM_THREADS: '1'
+      OMP_NUM_THREADS: '1'
+      MKL_NUM_THREADS: '1'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Assert core model and existing evidence untouched
+        run: |
+          python - <<'PY'
+          import subprocess
+          allowed={'scripts/requests/card_20261025.py','.github/workflows/oneoff-pregame-20261025.yml','scripts/requests/reviewed_nfl_20261025.py','.github/workflows/oneoff-nfl-reviewed-20261025.yml'}
+          paths=set(subprocess.check_output(['git','diff','--name-only','527409a9aa48b554a03aecd01b5b87ac66bc9baa','HEAD'],text=True).splitlines())
+          assert paths <= allowed, paths
+          print('UNCHANGED_MODELS_DEFAULTS_PRIOR_FORECASTS',sorted(paths))
+          PY
+          python -m py_compile scripts/requests/reviewed_nfl_20261025.py
+      - run: python -m pip install -r requirements-consolidated.txt
+      - name: Actual starter, weekly-state, and margin contract regressions
+        run: |
+          mkdir -p run-output
+          set -o pipefail
+          python -m pytest tests/test_nfl_starter_adjudication.py tests/test_nfl_weekly_state.py -q | tee run-output/nfl-reviewed-tests.txt
+      - name: Source-bound reconciliation and actual pregame runners
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -o pipefail
+          python scripts/requests/reviewed_nfl_20261025.py | tee run-output/nfl-reviewed-console.log
+      - name: Preserve success and failure evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: october25-reviewed-nfl-${{ github.run_id }}-${{ github.run_attempt }}
+          path: |
+            run-output/nfl-reviewed-evidence.zip
+            run-output/nfl-reviewed-console.log
+            run-output/nfl-reviewed-tests.txt
+          retention-days: 7
+          if-no-files-found: error

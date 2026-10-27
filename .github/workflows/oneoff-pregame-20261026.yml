@@ -17,7 +17,7 @@ jobs:
       fail-fast: false
       max-parallel: 4
       matrix:
-        league: [nba, nhl, scope]
+        league: [nba, nhl, nfl, scope]
     runs-on: ubuntu-latest
     timeout-minutes: 25
     env:

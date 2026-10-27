@@ -1,4 +1,4 @@
-"""One-off 2026-10-24 research execution; existing forecasters are unchanged.
+"""One-off 2026-10-27 research execution; existing forecasters are unchanged.
 No canonical registration, promotion, wager, schedule deployment or main write.
 Current inputs must pass existing source, six-hour freshness and model gates.
 """
@@ -172,11 +172,26 @@ def distributions(league, package_dir, events):
         row['replay'] = {'exact': True, 'count': len(a), 'seed': meta['seed'],
                          'draw_sha256': meta['draw_sha256'],
                          'simulation_code_sha256': meta['simulation_code_sha256']}
+    fit_artifacts = {}
+    for product in ('margin', 'total'):
+        fit_path = fitroot / league / (product + '_empirical.json')
+        if fit_path.exists():
+            fit_json = json.loads(fit_path.read_text())
+            fit_artifacts[product] = {'sha256':sha(fit_path), 'model_id':fit_json.get('model_id'),
+                                      'code_sha256':fit_json.get('code_sha256'),
+                                      'parent_model_id':fit_json.get('parent_model_id'),
+                                      'settlement':fit_json.get('settlement'),
+                                      'fit_as_of_utc':fit_json.get('fit_as_of_utc'),
+                                      'training_n':fit_json.get('training_n')}
     result['research_evidence'] = {
         'fit_root_manifest_sha256': sha(fitroot / 'manifest.json'),
         'parent_artifact_sha256': sha(parent_path),
+        'parent_model_id': parent['model_id'],
         'fixed_parent_card_sha256': sha(out / 'fixed-parent-card.json'),
+        'parent_card_sha256': result.get('parent_card_sha256'),
         'distribution_config_sha256': sha(config_path),
+        'distribution_code_sha256': D.code_hash(),
+        'fit_artifacts': fit_artifacts,
         'current_package_sha256': ctx['package_sha256'],
         'input_information_set': 'RECONSTRUCTED_PROVIDER_FINALS_FIXED_PARENT',
         'action_authority': False,
@@ -295,8 +310,11 @@ try:
                     'under_odds': total.get('under',{}).get('close',{}).get('odds')
                 })
             row['distributions'] = {}
-            row['cover'] = {'status':'UNAVAILABLE', 'gate':'MARGIN_DISTRIBUTION_NOT_FOUND',
+            row['cover'] = {'status':'UNAVAILABLE', 'disposition':row['disposition'],
+                            'gate':'MARGIN_DISTRIBUTION_NOT_FOUND',
                             'next_evidence':'Compatible fitted margin arm, current event feature frame and exact replay evidence.'}
+            parent_card = json.loads((OUT/'distributions'/'fixed-parent-card.json').read_text()) if ds else None
+            parent_row = next((pr for pr in (parent_card or {}).get('forecasts',[]) if pr.get('event_id') == f['event_id']), None)
             if ds:
                 for dr in ds['results']:
                     if dr['event_id'] != f['event_id']: continue
@@ -321,8 +339,14 @@ try:
                         'fit_artifact_sha256':d['provenance'].get('fitted_artifact_sha256'),
                         'parent_forecast_sha256':d['provenance'].get('parent_forecast_sha256'),
                         'distribution_sha256':d['distribution_sha256'],
-                        'input_snapshot_hash':D.digest(d['provenance']),
-                        'model_state_config_hash':row.get('model_state_config_hash'),
+                        'parent_input_snapshot_hash':(parent_row or {}).get('input_snapshot_hash'),
+                        'parent_model_state_config_hash':(parent_row or {}).get('model_state_config_hash'),
+                        'parent_card_sha256':ds.get('parent_card_sha256'),
+                        'distribution_config_sha256':(ds.get('research_evidence') or {}).get('distribution_config_sha256'),
+                        'distribution_code_sha256':(ds.get('research_evidence') or {}).get('distribution_code_sha256'),
+                        'fit_code_sha256':((ds.get('research_evidence') or {}).get('fit_artifacts') or {}).get(product,{}).get('code_sha256'),
+                        'input_snapshot_hash':(parent_row or {}).get('input_snapshot_hash'),
+                        'model_state_config_hash':(parent_row or {}).get('model_state_config_hash'),
                         'settlement':d['settlement'], 'settlement_horizon':d['settlement'],
                         'mean':float(support@mass), 'line':line, 'quoted_lines':quoted_lines,
                         'analytic_states':{}, 'simulation_states':{},
@@ -359,7 +383,14 @@ try:
                             out['accounting'] = {'model_cover_plus_push_sum_pct':model_sum,
                                                  'simulation_cover_plus_push_sum_pct':sim_sum, 'passed':passed}
                             if not passed: raise ValueError('COVER_PUSH_ACCOUNTING_FAILED')
-                        if product == 'margin':
+                        if product == 'margin' and row['disposition'] == 'POST_START':
+                            row['cover'] = {'status':'POST_START', 'disposition':'POST_START',
+                                            'gate':'START_TIME_PASSED_BEFORE_CUTOFF',
+                                            'distribution_arm':out['distribution_arm'],
+                                            'parent_model_id':out['parent_model_id'],
+                                            'settlement_horizon':out['settlement_horizon'],
+                                            'action_authority':False}
+                        elif product == 'margin':
                             quote_side_odds = {'HOME':ps.get('home',{}).get('close',{}).get('odds'),
                                                'AWAY':ps.get('away',{}).get('close',{}).get('odds')}
                             row['cover'] = {
@@ -376,7 +407,7 @@ try:
                                 'model_push_pct':out['model_push_pct'],
                                 'actual_simulation_push_pct':out['simulation_push_pct'],
                                 'simulation_count':out['simulation_count'],
-                                'seed':out['simulation'].get('seed'),
+                                'seed':(out.get('replay') or {}).get('seed', out['simulation'].get('seed')),
                                 'draw_sha256':out['simulation'].get('draw_sha256'),
                                 'replay_exact':bool((out.get('replay') or {}).get('exact')),
                                 'distribution_sha256':out['distribution_sha256'],
@@ -397,7 +428,7 @@ try:
                                             'parent_model_id':out['parent_model_id'],
                                             'settlement_horizon':out['settlement_horizon'],
                                             'simulation_count':out['simulation_count'],
-                                            'seed':out['simulation'].get('seed'),
+                                            'seed':(out.get('replay') or {}).get('seed', out['simulation'].get('seed')),
                                             'draw_sha256':out['simulation'].get('draw_sha256'),
                                             'predictive_validation':'NOT_ESTABLISHED'}
                     row['distributions'][product] = out
@@ -408,8 +439,28 @@ try:
             result['forecasts'].append(row)
         if len(result['forecasts']) != len(events): raise ValueError('FORECAST_POPULATION_MISMATCH')
         result['package_event_count']=len(events)
+        # Preserve every provider-scheduled event even when it cannot be joined to a model package.
+        package_provider_ids = {str(e['event_id'].split(':')[-1]) for e in events}
+        for scheduled in report['schedule']['events']:
+            se = scheduled['event']; provider_id = str(se.get('provider_event_id'))
+            if provider_id in package_provider_ids:
+                continue
+            start = D.stamp(se['start_time_utc'])
+            disposition = 'PRE_START' if start > D.stamp(card['as_of_utc']) else 'POST_START'
+            result['forecasts'].append({
+                'event_id':se.get('event_id'), 'away_team':se.get('away_team'),
+                'home_team':se.get('home_team'), 'start_time_utc':se.get('start_time_utc'),
+                'disposition':disposition,
+                'cover':{'status':'POST_START' if disposition == 'POST_START' else 'UNAVAILABLE',
+                         'gate':'SCHEDULE_EVENT_NOT_IN_MODEL_PACKAGE' if disposition == 'PRE_START' else 'START_TIME_PASSED_BEFORE_CUTOFF',
+                         'provider_event_id':provider_id,
+                         'source_sha256':scheduled.get('source_sha256'),
+                         'next_evidence':'Source-bound model event/team join and compatible current fitted state.'},
+                'action_authority':False, 'dose':0.0
+            })
+        result['expected_scheduled_events'] = len(report['schedule']['events'])
         result['cover_coverage'] = {
-            'expected_events':len(events),
+            'expected_events':len(report['schedule']['events']),
             'completed':sum(1 for r in result['forecasts'] if (r.get('cover') or {}).get('status') == 'COMPLETED'),
             'blocked':sum(1 for r in result['forecasts'] if (r.get('cover') or {}).get('status') == 'UNAVAILABLE'),
             'post_start':sum(1 for r in result['forecasts'] if (r.get('cover') or {}).get('status') == 'POST_START'),

@@ -247,7 +247,11 @@ try:
         result['input_cutoff_utc'] = card['as_of_utc']
         result['card_sha256'] = sha(OUT/'card/diagnostic_card.json')
         result['package_sha256'] = sha(packages/LEAGUE/'package.json')
+        result['model_id'] = pkg.get('model_id')
         result['model_lineage'] = {k:v for k,v in pkg['model_lineage'].items() if k != 'evaluation'}
+        result['model_evaluation'] = pkg['model_lineage'].get('evaluation')
+        result['package_limitations'] = pkg.get('limitations', [])
+        result['package_data_grade'] = pkg.get('data_grade')
         ds = None
         try: ds = distributions(LEAGUE,packages,events)
         except Exception as e:
@@ -330,6 +334,11 @@ try:
                     'over_odds': total.get('over',{}).get('close',{}).get('odds'),
                     'under_odds': total.get('under',{}).get('close',{}).get('odds')
                 })
+            row['quote']['book_status'] = 'CAPTURED' if row['quote']['book'] else 'MISSING'
+            row['quote']['spread_line_status'] = 'CAPTURED' if row['quote']['spread']['home_line'] is not None and row['quote']['spread']['away_line'] is not None else 'MISSING'
+            row['quote']['spread_odds_status'] = 'CAPTURED' if row['quote']['spread']['home_odds'] is not None and row['quote']['spread']['away_odds'] is not None else 'MISSING'
+            row['quote']['total_line_status'] = 'CAPTURED' if row['quote']['total']['over_line'] is not None and row['quote']['total']['under_line'] is not None else 'MISSING'
+            row['quote']['total_odds_status'] = 'CAPTURED' if row['quote']['total']['over_odds'] is not None and row['quote']['total']['under_odds'] is not None else 'MISSING'
             row['distributions'] = {}
             row['cover'] = {'status':'UNAVAILABLE', 'disposition':row['disposition'],
                             'gate':'MARGIN_DISTRIBUTION_NOT_FOUND',
@@ -431,6 +440,9 @@ try:
                                 'status':'COMPLETED', 'disposition':row['disposition'],
                                 'line':line, 'opposing_line':quoted_lines.get('AWAY'),
                                 'odds':quote_side_odds, 'book':row['quote'].get('book'),
+                                'quote_status':{'book':row['quote'].get('book_status'),
+                                                'line':row['quote'].get('spread_line_status'),
+                                                'odds':row['quote'].get('spread_odds_status')},
                                 'quote_timestamp_utc':row['quote'].get('quote_timestamp_utc'),
                                 'provider_observed_at_utc':row['quote'].get('provider_observed_at_utc'),
                                 'parent_model_id':out['parent_model_id'],
@@ -458,6 +470,8 @@ try:
                                 'model_state_config_hash':out['model_state_config_hash'],
                                 'quote_source_sha256':row['quote'].get('source_sha256'),
                                 'simulation_code_sha256':(out.get('replay') or {}).get('simulation_code_sha256'),
+                                'fit_root_manifest_sha256':(ds.get('research_evidence') or {}).get('fit_root_manifest_sha256'),
+                                'current_package_sha256':(ds.get('research_evidence') or {}).get('current_package_sha256'),
                                 'current_package_sha256':(ds.get('research_evidence') or {}).get('current_package_sha256'),
                                 'accounting':out.get('accounting'),
                                 'predictive_validation':'NOT_ESTABLISHED',

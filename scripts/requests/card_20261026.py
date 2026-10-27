@@ -74,14 +74,15 @@ def annotate_poststart_card(card_path):
         grading['log_loss_sim']=None
     card['post_start_audit']['events_started_by_generation']=post_count
     card['post_start_audit']['event_count']=len(card.get('forecasts',[]))
-    card_path.write_text(json.dumps(card,sort_keys=True,indent=2)+'\\n')
+    card_path.write_text(json.dumps(card,sort_keys=True,indent=2)+'\n')
     md=card_path.with_name('diagnostic_card.md')
     if md.exists():
         with md.open('a') as h:
-            h.write('\\n\\n## RETROSPECTIVE BACKFILL — NOT A PREGAME RELEASE\\n')
+            h.write('\n\n## RETROSPECTIVE BACKFILL — NOT A PREGAME RELEASE\n')
             h.write(f'Generated at {card["generated_at_utc"]}; target date {DAY}. This card was generated after games had started. ')
             h.write('Current provider snapshots were used for event identity only; live target-game score/stat fields were excluded from forecast inputs. ')
-            h.write('Historical point-in-time availability is not established. All rows are ineligible for prospective grading and action authority is OFF.\\n')
+            h.write('Historical point-in-time availability is not established. All rows are ineligible for prospective grading and action authority is OFF.\n')
+            h.write('Margin reporting caveat: projected_margin is winner-oriented; diagnostics.home_margin is home-minus-away and is the margin field to use for grading.\n')
     csv_path=card_path.with_name('diagnostic_card.csv')
     if csv_path.exists():
         with csv_path.open(newline='') as h: rows=list(csv.DictReader(h))

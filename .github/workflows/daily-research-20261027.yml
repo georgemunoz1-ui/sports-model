@@ -1,0 +1,449 @@
+name: Daily sports research 2026-10-27 (research only)
+
+on:
+  push:
+    branches:
+      - research/daily-2026-10-27
+
+permissions:
+  contents: read
+  actions: read
+
+concurrency:
+  group: sports-research-2026-10-27
+  cancel-in-progress: false
+
+jobs:
+  research:
+    if: contains(github.event.head_commit.message, '[run-research]')
+    runs-on: ubuntu-24.04
+    timeout-minutes: 50
+    strategy:
+      fail-fast: false
+      matrix:
+        league: [cfb, nba, nhl]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install research dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements-consolidated.txt
+          pip install pyarrow
+      - name: Compile runner and execute current source-bound research
+        env:
+          PYTHONUNBUFFERED: '1'
+        run: |
+          python -m py_compile scripts/requests/run_20261027.py
+          python scripts/requests/run_20261027.py ${{ matrix.league }}
+      - name: Summarize card and cover coverage
+        if: always()
+        run: |
+          python - <<'PY'
+          import json, pathlib, os
+          p=pathlib.Path('run-output')/'${{ matrix.league }}'/'summary.json'
+          lines=['# ${{ matrix.league }} — 2026-10-27 research run','']
+          if p.exists():
+              r=json.loads(p.read_text())
+              lines += [f"- Status: **{r.get('status')}**",
+                        f"- Main source pin: `{r.get('requested_base_sha')}`",
+                        f"- Execution commit: `{r.get('execution_commit')}`",
+                        f"- Scheduled/provider events: {r.get('expected_scheduled_events',r.get('schedule_count'))}",
+                        f"- Package events: {r.get('package_event_count')}",
+                        f"- Cover coverage: {json.dumps(r.get('cover_coverage',{}),sort_keys=True)}",
+                        f"- Model: `{r.get('model_id')}`",
+                        f"- Input cutoff UTC: {r.get('input_cutoff_utc')}",
+                        f"- Package SHA256: `{r.get('package_sha256')}`",
+                        f"- Card SHA256: `{r.get('card_sha256')}`",
+                        f"- Blockers: `{json.dumps(r.get('blockers',[]),sort_keys=True)}`",
+                        f"- Action authority: OFF; dose 0.0; official release eligible: false"]
+              for f in r.get('forecasts',[]):
+                  c=f.get('cover') or {}
+                  lines += ['',f"## {f.get('away_team')} @ {f.get('home_team')}",
+                            f"- Start UTC: {f.get('start_time_utc')}; disposition: {f.get('disposition')}",
+                            f"- Winner model: {f.get('model_id')}; winner: {f.get('model_winner')}; model p: {f.get('analytic_p')}; sim p: {f.get('sim_p')}",
+                            f"- Cover: {c.get('status')} / {c.get('gate')}",
+                            f"- Cover detail: `{json.dumps(c,sort_keys=True)}`"]
+          else:
+              lines += ['- Summary artifact not produced; inspect the run log and evidence ZIP.']
+          with open(os.environ['GITHUB_STEP_SUMMARY'],'a') as f: f.write('\n'.join(lines)+'\n')
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: research-${{ matrix.league }}-2026-10-27
+          path: run-output/${{ matrix.league }}-evidence.zip
+          if-no-files-found: warn
+          retention-days: 90
+
+  scope:
+    if: contains(github.event.head_commit.message, '[run-research]')
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements-consolidated.txt
+      - name: Capture NFL, MLB, WNBA and MLS provider schedules only
+        run: |
+          python -m py_compile scripts/requests/run_20261027.py
+          python scripts/requests/run_20261027.py scope
+      - name: Summarize scope evidence
+        if: always()
+        run: |
+          python - <<'PY'
+          import json, pathlib, os
+          p=pathlib.Path('run-output/scope/summary.json')
+          lines=['# Non-forecast league schedule scope — 2026-10-27','']
+          if p.exists():
+              r=json.loads(p.read_text())
+              lines += [f"- Status: **{r.get('status')}**",f"- Main source pin: `{r.get('requested_base_sha')}`",
+                        f"- Source retrieval/capture evidence: `{r.get('manifest_sha256')}`",
+                        f"- Blockers: `{json.dumps(r.get('blockers',[]),sort_keys=True)}`"]
+              for league,v in r.get('schedule',{}).items():
+                  lines += ['',f"## {league.upper()}",f"- Provider status: {v.get('status')}",
+                            f"- Provider no-games flag: {v.get('provider_no_games')}",
+                            f"- Events: `{json.dumps(v.get('events',[]),sort_keys=True)}`",
+                            f"- Source hash: `{v.get('source_sha256')}`"]
+          else: lines += ['- Scope summary not produced; inspect the evidence ZIP and log.']
+          with open(os.environ['GITHUB_STEP_SUMMARY'],'a') as f: f.write('\n'.join(lines)+'\n')
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: research-scope-2026-10-27
+          path: run-output/scope-evidence.zip
+          if-no-files-found: warn
+          retention-days: 90
+
+  mlb-collect:
+    if: contains(github.event.head_commit.message, '[run-research]')
+    runs-on: ubuntu-24.04
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install MLB research dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements-consolidated.txt
+          pip install pyarrow
+      - name: Collect fresh MLB packet and readiness evidence (no forecast)
+        run: |
+          mkdir -p run-output
+          set +e
+          python scripts/review_mlb_current_readiness.py --date 2026-10-27 --output run-output/mlb-readiness > run-output/mlb-readiness-command.log 2>&1
+          readiness_rc=$?
+          if [ -d run-output/mlb-readiness ]; then
+            python scripts/mlb_research_review.py collect --readiness run-output/mlb-readiness --output run-output/mlb-review > run-output/mlb-collect-command.log 2>&1
+            collect_rc=$?
+          else
+            collect_rc=99
+            echo "NOT-RUN: readiness output directory absent after collection attempt" > run-output/mlb-collect-command.log
+          fi
+          printf '{"readiness_exit":%s,"collect_exit":%s,"writer_clock_utc":"%s"}\n' "$readiness_rc" "$collect_rc" "$(date -u +%Y-%m-%dT%H:%M:%SZ)" > run-output/mlb-collect-exit-codes.json
+          cat run-output/mlb-readiness-command.log
+          cat run-output/mlb-collect-command.log
+          exit 0
+      - name: Stage source-bound MLB review evidence
+        if: always()
+        run: |
+          mkdir -p mlb-source-review
+          [ ! -d run-output/mlb-readiness ] || cp -a run-output/mlb-readiness mlb-source-review/
+          [ ! -d run-output/mlb-review ] || cp -a run-output/mlb-review mlb-source-review/
+          [ ! -f run-output/mlb-readiness-command.log ] || cp run-output/mlb-readiness-command.log mlb-source-review/
+          [ ! -f run-output/mlb-collect-command.log ] || cp run-output/mlb-collect-command.log mlb-source-review/
+          [ ! -f run-output/mlb-collect-exit-codes.json ] || cp run-output/mlb-collect-exit-codes.json mlb-source-review/
+      - name: Summarize MLB packet and input review
+        if: always()
+        run: |
+          python - <<'PY'
+          import json, pathlib, os
+          lines=['# MLB packet/input review — 2026-10-27','']
+          for name in ['run-output/mlb-readiness/readiness.json','run-output/mlb-review/review.json']:
+              p=pathlib.Path(name)
+              if p.exists():
+                  try:
+                      r=json.loads(p.read_text())
+                      lines += [f"## {p.name}",f"- Status: {r.get('status')}",
+                                f"- Writer clock: {r.get('writer_clock_utc',r.get('created_at_utc'))}",
+                                f"- Source manifest/hash: {r.get('manifest_sha256',r.get('source_manifest_sha256'))}",
+                                f"- Scheduled events/dispositions: `{json.dumps(r.get('event_dispositions',r.get('events',[])),sort_keys=True)}`",
+                                f"- Errors/blockers: `{json.dumps(r.get('errors',r.get('mandatory_research_blockers',[])),sort_keys=True)}`"]
+                  except Exception as e: lines += [f"- Could not parse {name}: {e}"]
+          ec=pathlib.Path('run-output/mlb-collect-exit-codes.json')
+          if ec.exists(): lines += ['',f"- Command exit codes: `{ec.read_text().strip()}`"]
+          with open(os.environ['GITHUB_STEP_SUMMARY'],'a') as f: f.write('\n'.join(lines)+'\n')
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: mlb-source-review
+          path: mlb-source-review/
+          if-no-files-found: warn
+          retention-days: 90
+      - name: Mark collection failure if any phase failed
+        if: always()
+        run: |
+          python - <<'PY'
+          import json, pathlib, sys
+          p=pathlib.Path('run-output/mlb-collect-exit-codes.json')
+          if not p.exists(): sys.exit(1)
+          r=json.loads(p.read_text())
+          if r.get('readiness_exit') != 0 or r.get('collect_exit') != 0:
+              print('MLB collection remains incomplete; artifact retained:',r)
+              sys.exit(1)
+          PY
+
+  health-triage:
+    if: contains(github.event.head_commit.message, '[run-research]')
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install test and triage dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements-consolidated.txt
+      - name: Preserve canonical health evidence before checks
+        run: |
+          mkdir -p "$RUNNER_TEMP/health-triage"
+          git rev-parse HEAD > "$RUNNER_TEMP/health-triage/commit.txt"
+          git status --porcelain > "$RUNNER_TEMP/health-triage/status-before.txt"
+          sha256sum docs/releases/official_release_blocker_register.json data/governance/health_triage_sessions.jsonl harness/recovery_jobs.py scripts/standing_health_triage.py > "$RUNNER_TEMP/health-triage/source-hashes-before.txt"
+          cp docs/releases/official_release_blocker_register.json "$RUNNER_TEMP/health-triage/register.before.json"
+          cp data/governance/health_triage_sessions.jsonl "$RUNNER_TEMP/health-triage/health_triage_sessions.before.jsonl"
+          python - <<'PY'
+          import json,pathlib
+          p=pathlib.Path('data/governance/health_triage_sessions.jsonl')
+          rows=[json.loads(s) for s in p.read_text().splitlines() if s.strip()]
+          out={'prior_session_record_count':len(rows),'prior_session_ids':[r.get('session_id') for r in rows],
+               'prior_last_record_sha256':rows[-1].get('record_sha256') if rows else None}
+          pathlib.Path('$RUNNER_TEMP/health-triage/prior-sessions.json').write_text(json.dumps(out,indent=2))
+          print(json.dumps(out))
+          PY
+      - name: Run full regression tests and recovery-job accounting
+        run: |
+          set +e
+          python -m pytest tests -q > "$RUNNER_TEMP/health-triage/tests.txt" 2>&1
+          echo "$?" > "$RUNNER_TEMP/health-triage/tests-exit-code.txt"
+          python harness/recovery_jobs.py --mutants > "$RUNNER_TEMP/health-triage/recovery-mutants.txt" 2>&1
+          echo "$?" > "$RUNNER_TEMP/health-triage/recovery-mutants-exit-code.txt"
+          NOW="$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+          python harness/recovery_jobs.py --report "$NOW" > "$RUNNER_TEMP/health-triage/recovery-jobs-report.json" 2> "$RUNNER_TEMP/health-triage/recovery-jobs-report.stderr"
+          echo "$?" > "$RUNNER_TEMP/health-triage/recovery-jobs-report-exit-code.txt"
+          pip freeze --all > "$RUNNER_TEMP/health-triage/pip-freeze.txt"
+          python -VV > "$RUNNER_TEMP/health-triage/python.txt"
+          exit 0
+      - name: Recover explicitly named candidate snapshot
+        uses: actions/checkout@v4
+        continue-on-error: true
+        with:
+          repository: lancebroz/mlb-pitcher-data
+          ref: d49271818de98ee3b582dce134bb724861dda859
+          path: recovered-pitch-archive
+          sparse-checkout: data/raw/2026/daily
+          sparse-checkout-cone-mode: false
+          persist-credentials: false
+      - name: Verify restored bytes and parser schema
+        if: always()
+        env:
+          SPORTSMODEL_LANCEBROZ_ROOT: ${{ github.workspace }}/recovered-pitch-archive
+          SPORTSMODEL_LANCEBROZ_COMMIT: d49271818de98ee3b582dce134bb724861dda859
+        run: |
+          set +e
+          python - <<'PY'
+          import os,json,pathlib,datetime,sys
+          try:
+              import pandas as pd
+              from harness import ingest_lancebroz as m
+              r=m.source_health()
+              r['retrieved_at_utc']=datetime.datetime.now(datetime.timezone.utc).isoformat()
+              r['source_kind']='EXPLICIT_RECOVERY_CANDIDATE_NOT_ORIGINAL_HISTORICAL_RECEIPT'
+              r['required_columns']=['game_pk','game_date','top_bottom','pitcher_id','at_bat_number','events']
+              r['parser_problems']=[]
+              for obj in r['objects']:
+                  try:
+                      frame=pd.read_parquet(pathlib.Path(m.SRC)/obj['path'],columns=r['required_columns'])
+                      _, rejects=m.derive_day(frame)
+                      obj['rows']=len(frame); obj['parser_rejects']=dict(rejects)
+                  except Exception as e: r['parser_problems'].append({'path':obj['path'],'error':str(e)})
+          except Exception as e:
+              r={'ok':False,'error':type(e).__name__+':'+str(e),'parser_problems':[],'objects':[]}
+          p=pathlib.Path(os.environ['RUNNER_TEMP'])/'health-triage/archive-verification.json'
+          p.write_text(json.dumps(r,indent=2))
+          print('ARCHIVE_VERIFICATION='+json.dumps({k:v for k,v in r.items() if k!='objects'}))
+          PY
+          echo "$?" > "$RUNNER_TEMP/health-triage/archive-verification-exit-code.txt"
+          exit 0
+      - name: Run healthcheck without waiving existing failures
+        if: always()
+        env:
+          SPORTSMODEL_LANCEBROZ_ROOT: ${{ github.workspace }}/recovered-pitch-archive
+          SPORTSMODEL_LANCEBROZ_COMMIT: d49271818de98ee3b582dce134bb724861dda859
+        run: |
+          set +e
+          python harness/healthcheck.py > "$RUNNER_TEMP/health-triage/health.log" 2>&1
+          echo "$?" > "$RUNNER_TEMP/health-triage/health-exit-code.txt"
+          git status --porcelain > "$RUNNER_TEMP/health-triage/status-before-session.txt"
+          exit 0
+      - name: Tuesday standing-health triage (append only if current validation passes)
+        if: always()
+        run: |
+          set +e
+          python scripts/standing_health_triage.py > "$RUNNER_TEMP/health-triage/triage-readonly.json" 2> "$RUNNER_TEMP/health-triage/triage-readonly.stderr"
+          echo "$?" > "$RUNNER_TEMP/health-triage/triage-readonly-exit-code.txt"
+          python - <<'PY'
+          import json,pathlib,subprocess,sys,datetime,hashlib,os
+          root=pathlib.Path(os.environ['RUNNER_TEMP'])/'health-triage'
+          rp=root/'triage-readonly.json'
+          outcome={'triage_session_id':'HEALTH-TRIAGE-2026-10-27',
+                   'writer_clock_utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),
+                   'canonical_main_modified':False,'append_attempted':False}
+          if not rp.exists():
+              outcome.update(status='NOT-APPENDED',reason='TRIAGE_REPORT_NOT_CREATED')
+          else:
+              report=json.loads(rp.read_text())
+              outcome['validation_errors']=report.get('validation_errors',[])
+              outcome['accepted_risks_present']=report.get('accepted_risks_present')
+              outcome['accepted_risk_release_override']=report.get('accepted_risk_release_override',False)
+              outcome['official_release_eligible']=report.get('official_release_eligible',False)
+              outcome['trend']=report.get('trend')
+              if outcome['validation_errors']:
+                  outcome.update(status='NOT-APPENDED',reason='VALIDATION_ERRORS_REMAIN; no issue decision invented')
+              else:
+                  outcome['append_attempted']=True
+                  cp=subprocess.run([sys.executable,'scripts/standing_health_triage.py','--append-session','HEALTH-TRIAGE-2026-10-27'],capture_output=True,text=True)
+                  (root/'triage-append.stdout.txt').write_text(cp.stdout)
+                  (root/'triage-append.stderr.txt').write_text(cp.stderr)
+                  outcome.update(status='APPENDED_TO_RUNNER_COPY' if cp.returncode==0 else 'APPEND_FAILED',
+                                 append_exit_code=cp.returncode)
+          ledger=pathlib.Path('data/governance/health_triage_sessions.jsonl')
+          outcome['ledger_before_sha256']=hashlib.sha256((root/'health_triage_sessions.before.jsonl').read_bytes()).hexdigest()
+          outcome['ledger_after_sha256']=hashlib.sha256(ledger.read_bytes()).hexdigest()
+          outcome['ledger_changed_in_runner']=outcome['ledger_before_sha256']!=outcome['ledger_after_sha256']
+          (root/'triage-session-result.json').write_text(json.dumps(outcome,indent=2))
+          print('TRIAGE_SESSION_RESULT='+json.dumps(outcome,sort_keys=True))
+          PY
+      - name: Preserve final evidence manifest
+        if: always()
+        run: |
+          python - <<'PY'
+          import os,pathlib,hashlib,json,datetime
+          p=pathlib.Path(os.environ['RUNNER_TEMP'])/'health-triage'
+          files={f.name:hashlib.sha256(f.read_bytes()).hexdigest() for f in p.iterdir() if f.is_file()}
+          r={'created_at_utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),
+             'execution_commit':os.environ['GITHUB_SHA'],'main_source_pin':'1715cfc0821185ce8b0413fb96d2ec1ea3c54aeb',
+             'workflow_run_id':os.environ['GITHUB_RUN_ID'],'accepted_risks_present':True,
+             'accepted_risk_release_override':False,'official_release_eligible':False,
+             'action_authority':'OFF','dose':0.0,'files':files}
+          (p/'manifest.json').write_text(json.dumps(r,indent=2))
+          print('TRIAGE_MANIFEST='+json.dumps(r))
+          for name in ['tests-exit-code.txt','recovery-mutants-exit-code.txt','recovery-jobs-report-exit-code.txt','archive-verification-exit-code.txt','health-exit-code.txt','triage-readonly-exit-code.txt','triage-session-result.json']:
+              f=p/name
+              if f.exists(): print('TRIAGE_RESULT='+json.dumps({'name':name,'content':f.read_text()}))
+          h=p/'health.log'
+          if h.exists(): print('TRIAGE_HEALTH_FAILURES='+json.dumps([s for s in h.read_text().splitlines() if '[FAIL]' in s or 'BLOCKED' in s]))
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: standing-health-triage-2026-10-27
+          path: ${{ runner.temp }}/health-triage/
+          retention-days: 90
+      - name: Preserve current RED gates as failed job status
+        if: always()
+        run: |
+          python - <<'PY'
+          import json,pathlib,os,sys
+          root=pathlib.Path(os.environ['RUNNER_TEMP'])/'health-triage'
+          failed=[]
+          for name in ['tests-exit-code.txt','recovery-mutants-exit-code.txt','recovery-jobs-report-exit-code.txt','archive-verification-exit-code.txt','health-exit-code.txt']:
+              p=root/name
+              if p.exists() and p.read_text().strip()!='0': failed.append(name+':'+p.read_text().strip())
+          triage=root/'triage-session-result.json'
+          if triage.exists():
+              t=json.loads(triage.read_text())
+              if t.get('validation_errors'): failed.append('triage-validation-errors:'+str(len(t['validation_errors'])))
+              if t.get('status') in ('APPEND_FAILED','NOT-APPENDED'): failed.append('triage-session:'+t.get('status'))
+          print('HEALTH_GATE_FAILURES='+json.dumps(failed))
+          if failed: sys.exit(1)
+          PY
+
+  mlb-run:
+    if: contains(github.event.head_commit.message, '[mlb-approval]')
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install MLB research dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements-consolidated.txt
+          pip install pyarrow
+      - name: Download the exact reviewed source packet
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          SOURCE_RUN_ID="$(python -c "import json; print(json.load(open('run-evidence/mlb-approval.json'))['source_run_id'])")"
+          mkdir -p run-input
+          gh run download "$SOURCE_RUN_ID" --repo "$GITHUB_REPOSITORY" --name mlb-source-review --dir run-input
+          test -f run-input/mlb-readiness/readiness.json
+          test -f run-input/mlb-review/review.json
+      - name: Execute reviewed limited-feature MLB research only
+        run: |
+          REVIEW_SHA="$(python -c "import json; print(json.load(open('run-evidence/mlb-approval.json'))['review_sha256'])")"
+          python scripts/mlb_research_review.py run --readiness run-input/mlb-readiness --review run-input/mlb-review --review-sha256 "$REVIEW_SHA" --approval run-evidence/mlb-approval.json --output run-output/mlb-results
+      - name: Summarize MLB winner and run-line disposition
+        if: always()
+        run: |
+          python - <<'PY'
+          import json,pathlib,os
+          p=pathlib.Path('run-output/mlb-results/summary.json')
+          lines=['# MLB reviewed research — 2026-10-27','']
+          if p.exists():
+              r=json.loads(p.read_text())
+              lines += [f"- Status: **{r.get('status')}**",
+                        f"- Event coverage: `{json.dumps(r.get('event_dispositions',[]),sort_keys=True)}`",
+                        f"- Forecast rows: `{json.dumps(r.get('forecasts',[]),sort_keys=True)}`",
+                        f"- Run-line cover: **UNAVAILABLE** — selected MLB adapter declares `UNSUPPORTED_SETTLEMENT` and `V13_TIE_PROXY_NOT_FULL_EXTRA_INNINGS`.",
+                        f"- Action authority: OFF; dose 0.0; official release eligible: false"]
+          else: lines += ['- No summary.json; inspect run log and output artifact.']
+          with open(os.environ['GITHUB_STEP_SUMMARY'],'a') as f: f.write('\n'.join(lines)+'\n')
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: mlb-reviewed-research-2026-10-27
+          path: run-output/mlb-results/
+          if-no-files-found: warn
+          retention-days: 90

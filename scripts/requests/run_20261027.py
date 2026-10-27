@@ -81,7 +81,7 @@ def cfb_source():
                   url=f'https://raw.githubusercontent.com/sportsdataverse/cfbfastR-data/{old}/schedules/parquet/cfb_schedules_{y}.parquet',
                   path=f'binary/schedules/parquet/cfb_schedules_{y}.parquet')
              for y in range(2001, 2026)]
-    specs.append(dict(name='cfb_schedule_2026',
+    specs.append(dict(name='cfb_current_schedule_2026',
                       url='https://raw.githubusercontent.com/sportsdataverse/cfbfastR-data/main/schedules/parquet/cfb_schedules_2026.parquet',
                       path='binary/cfb_current.parquet'))
     def fetch(s):

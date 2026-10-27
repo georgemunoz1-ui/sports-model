@@ -212,13 +212,20 @@ try:
             for e in (r['event'] for r in raw.values()):
                 if dt.datetime.fromisoformat(e['date'].replace('Z','+00:00')).astimezone(TZ).date().isoformat() != DAY: continue
                 display.append(dict(event_id=l.upper()+':'+str(e['id']), name=e.get('name'), start_time_utc=e['date'], season=e.get('season')))
-            result.setdefault('schedule', {})[l] = dict(status=report['schedule']['schedule_status'], reason=report['schedule'].get('reason'), events=display)
-        result['status'] = 'SCHEDULE_SCOPE_ONLY_NO_FORECASTS'
+            result.setdefault('schedule', {})[l] = dict(status=report['schedule']['schedule_status'],
+                reason=report['schedule'].get('reason'), events=display,
+                provider_no_games=(report['schedule']['schedule_status']=='PROVIDER_SCHEDULE_CAPTURED' and len(display)==0),
+                source_sha256=sha(OUT / ('current-' + l) / 'report.json'))
+            if report['schedule']['schedule_status'] != 'PROVIDER_SCHEDULE_CAPTURED':
+                result['blockers'].append({'league':l,'gate':'SCHEDULE_UNKNOWN',
+                                           'reason':report['schedule'].get('reason')})
+        result['status'] = 'SCHEDULE_SCOPE_ONLY_NO_FORECASTS' if not result['blockers'] else 'PARTIAL_SCHEDULE_SCOPE'
     else:
         current_dir, report, sources = current(LEAGUE)
         if report['schedule']['schedule_status'] != 'PROVIDER_SCHEDULE_CAPTURED':
             raise RuntimeError('SCHEDULE_UNKNOWN:' + str(report['schedule'].get('reason')))
         result['schedule_count'] = len(report['schedule']['events'])
+        result['schedule_capture_sha256'] = sha(current_dir / 'report.json')
         packages = OUT / 'packages'
         if LEAGUE == 'cfb':
             source = cfb_source()
@@ -284,8 +291,22 @@ try:
             assert np.array_equal(ad,replay)
             row['winner_draws_exact_replay'] = True
             raw = sources.get(f['event_id'].split(':')[-1])
-            if raw is None: raise ValueError('CURRENT_SCHEDULE_MODEL_EVENT_JOIN:' + f['event_id'])
-            e = raw['event']; assert D.stamp(e['date']) == D.stamp(f['start_time_utc'])
+            if raw is None:
+                result['blockers'].append({'event_id':f['event_id'],'gate':'CURRENT_SCHEDULE_MODEL_EVENT_JOIN'})
+                row['cover'] = {'status':'UNAVAILABLE','disposition':row['disposition'],
+                                'gate':'CURRENT_SCHEDULE_MODEL_EVENT_JOIN',
+                                'next_evidence':'Source-bound current provider event/team join.'}
+                result['forecasts'].append(row)
+                continue
+            e = raw['event']
+            if D.stamp(e['date']) != D.stamp(f['start_time_utc']):
+                result['blockers'].append({'event_id':f['event_id'],'gate':'CURRENT_SCHEDULE_START_TIME_MISMATCH',
+                                           'provider_start':e.get('date'),'model_start':f.get('start_time_utc')})
+                row['cover'] = {'status':'UNAVAILABLE','disposition':row['disposition'],
+                                'gate':'CURRENT_SCHEDULE_START_TIME_MISMATCH',
+                                'next_evidence':'Reconcile official and provider start-time evidence.'}
+                result['forecasts'].append(row)
+                continue
             comp = e['competitions'][0]; o = (comp.get('odds') or [{}])[0]
             ps = o.get('pointSpread', {})
             total = o.get('total', {})
@@ -374,15 +395,28 @@ try:
                             out['simulation_states'][side] = {state: counts[state]/len(draws) for state in D.STATES}
                             out['simulation_cover_pct'][side] = 100.0*(counts['win']+counts['half_win'])/len(draws)
                             out['simulation_push_pct'][side] = 100.0*counts['push']/len(draws)
-                        if line*2 == round(line*2):
-                            first = 'HOME' if product == 'margin' else 'OVER'
-                            second = 'AWAY' if product == 'margin' else 'UNDER'
-                            model_sum = out['model_cover_pct'][first] + out['model_cover_pct'][second] + out['model_push_pct'][first]
-                            sim_sum = out['simulation_cover_pct'][first] + out['simulation_cover_pct'][second] + out['simulation_push_pct'][first]
-                            passed = abs(model_sum-100.0) <= 1e-6 and abs(sim_sum-100.0) <= 1e-6
-                            out['accounting'] = {'model_cover_plus_push_sum_pct':model_sum,
-                                                 'simulation_cover_plus_push_sum_pct':sim_sum, 'passed':passed}
-                            if not passed: raise ValueError('COVER_PUSH_ACCOUNTING_FAILED')
+                        first = 'HOME' if product == 'margin' else 'OVER'
+                        second = 'AWAY' if product == 'margin' else 'UNDER'
+                        opposite = {'win':'loss','half_win':'half_loss','push':'push','half_loss':'half_win','loss':'win'}
+                        model_symmetry = all(abs(out['analytic_states'][first][state] -
+                                                 out['analytic_states'][second][opposite[state]]) <= 1e-6
+                                             for state in D.STATES)
+                        simulation_symmetry = all(abs(out['simulation_states'][first][state] -
+                                                      out['simulation_states'][second][opposite[state]]) <= 1e-6
+                                                  for state in D.STATES)
+                        model_sum = out['model_cover_pct'][first] + out['model_cover_pct'][second] + out['model_push_pct'][first]
+                        sim_sum = out['simulation_cover_pct'][first] + out['simulation_cover_pct'][second] + out['simulation_push_pct'][first]
+                        ordinary_line = abs(line*2 - round(line*2)) <= 1e-9
+                        passed = model_symmetry and simulation_symmetry
+                        if ordinary_line:
+                            passed = passed and abs(model_sum-100.0) <= 1e-6 and abs(sim_sum-100.0) <= 1e-6
+                        out['accounting'] = {'ordinary_two_sided_line':ordinary_line,
+                                             'model_cover_plus_push_sum_pct':model_sum if ordinary_line else None,
+                                             'simulation_cover_plus_push_sum_pct':sim_sum if ordinary_line else None,
+                                             'model_opposing_state_symmetry':model_symmetry,
+                                             'simulation_opposing_state_symmetry':simulation_symmetry,
+                                             'passed':passed}
+                        if not passed: raise ValueError('COVER_PUSH_ACCOUNTING_FAILED')
                         if product == 'margin' and row['disposition'] == 'POST_START':
                             row['cover'] = {'status':'POST_START', 'disposition':'POST_START',
                                             'gate':'START_TIME_PASSED_BEFORE_CUTOFF',
@@ -412,9 +446,20 @@ try:
                                 'replay_exact':bool((out.get('replay') or {}).get('exact')),
                                 'distribution_sha256':out['distribution_sha256'],
                                 'fit_artifact_sha256':out['fit_artifact_sha256'],
+                                'fit_file_sha256':((ds.get('research_evidence') or {}).get('fit_artifacts') or {}).get('margin',{}).get('sha256'),
+                                'fit_code_sha256':out['fit_code_sha256'],
+                                'distribution_code_sha256':out['distribution_code_sha256'],
+                                'distribution_config_sha256':out['distribution_config_sha256'],
+                                'fit_root_manifest_sha256':(ds.get('research_evidence') or {}).get('fit_root_manifest_sha256'),
+                                'fixed_parent_card_sha256':(ds.get('research_evidence') or {}).get('fixed_parent_card_sha256'),
+                                'parent_card_sha256':out['parent_card_sha256'],
                                 'parent_artifact_sha256':out['parent_artifact_sha256'],
                                 'input_snapshot_hash':out['input_snapshot_hash'],
                                 'model_state_config_hash':out['model_state_config_hash'],
+                                'quote_source_sha256':row['quote'].get('source_sha256'),
+                                'simulation_code_sha256':(out.get('replay') or {}).get('simulation_code_sha256'),
+                                'current_package_sha256':(ds.get('research_evidence') or {}).get('current_package_sha256'),
+                                'accounting':out.get('accounting'),
                                 'predictive_validation':'NOT_ESTABLISHED',
                                 'status_label':'DIAGNOSTIC',
                                 'action_authority':False
@@ -432,6 +477,13 @@ try:
                                             'draw_sha256':out['simulation'].get('draw_sha256'),
                                             'predictive_validation':'NOT_ESTABLISHED'}
                     row['distributions'][product] = out
+            if row['cover'].get('status') == 'UNAVAILABLE' and ds:
+                coverage_row = next((c for c in ds.get('coverage',[]) if c.get('event_id') == f['event_id'] and c.get('product') == 'margin'), None)
+                if coverage_row:
+                    row['cover']['gate'] = 'DISTRIBUTION_' + str(coverage_row.get('status'))
+                    row['cover']['reason'] = coverage_row.get('reason') or coverage_row.get('detail')
+                    row['cover']['distribution_arm'] = coverage_row.get('model_id')
+                    row['cover']['parent_model_id'] = coverage_row.get('parent_model_id')
             if row['cover'].get('status') == 'UNAVAILABLE' and not ds:
                 row['cover']['gate'] = 'DISTRIBUTION_RESEARCH_FAILED'
                 row['cover']['blockers'] = result.get('blockers', [])

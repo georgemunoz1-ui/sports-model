@@ -21,7 +21,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        league: [cfb, nba, nhl]
+        league: [nba, nhl]
     steps:
       - uses: actions/checkout@v4
         with:
@@ -81,6 +81,63 @@ jobs:
           if-no-files-found: warn
           retention-days: 90
 
+  cfb-research:
+    if: contains(github.event.head_commit.message, '[run-research]') || contains(github.event.head_commit.message, '[cfb-research]')
+    runs-on: ubuntu-24.04
+    timeout-minutes: 50
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install CFB research dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements-consolidated.txt
+          pip install pyarrow
+      - name: Execute current CFB model, assimilation verification, and 100k-draw cover research
+        env:
+          PYTHONUNBUFFERED: '1'
+        run: |
+          python -m py_compile scripts/requests/run_20261027.py
+          python scripts/requests/run_20261027.py cfb
+      - name: Summarize CFB selected-state and cover evidence
+        if: always()
+        run: |
+          python - <<'PY'
+          import json,pathlib,os
+          p=pathlib.Path('run-output/cfb/summary.json')
+          lines=['# CFB Tuesday research rollup — 2026-10-27','']
+          if p.exists():
+              r=json.loads(p.read_text())
+              lines += [f"- Status: **{r.get('status')}**",
+                        f"- Selected model: `{r.get('model_id')}`",
+                        f"- Current package SHA256: `{r.get('package_sha256')}`",
+                        f"- Current-season selected-state consumption: `{json.dumps(r.get('cfb_selected_state_consumption',{}),sort_keys=True)}`",
+                        f"- Model evaluation cohort: `{json.dumps(r.get('model_evaluation'),sort_keys=True)}`",
+                        f"- Cover coverage: `{json.dumps(r.get('cover_coverage',{}),sort_keys=True)}`",
+                        f"- Blockers: `{json.dumps(r.get('blockers',[]),sort_keys=True)}`",
+                        "- Cover status is DIAGNOSTIC only; predictive validation NOT ESTABLISHED; Action OFF; dose 0.0."]
+              for row in r.get('forecasts',[]):
+                  lines += ['',f"## {row.get('away_team')} @ {row.get('home_team')}",
+                            f"- Start: {row.get('start_time_utc')}; disposition: {row.get('disposition')}",
+                            f"- Winner: {row.get('model_winner')}; model p: {row.get('analytic_p')}; simulation p: {row.get('sim_p')}",
+                            f"- Cover entry: `{json.dumps(row.get('cover',{}),sort_keys=True)}`",
+                            f"- Quote: `{json.dumps(row.get('quote',{}),sort_keys=True)}`"]
+          else: lines += ['- No summary.json; inspect the evidence ZIP and execution log.']
+          with open(os.environ['GITHUB_STEP_SUMMARY'],'a') as f: f.write('\n'.join(lines)+'\n')
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: research-cfb-2026-10-27
+          path: run-output/cfb-evidence.zip
+          if-no-files-found: warn
+          retention-days: 90
+
   scope:
     if: contains(github.event.head_commit.message, '[run-research]')
     runs-on: ubuntu-24.04
@@ -129,7 +186,7 @@ jobs:
           retention-days: 90
 
   mlb-collect:
-    if: contains(github.event.head_commit.message, '[run-research]')
+    if: contains(github.event.head_commit.message, '[run-research]') || contains(github.event.head_commit.message, '[mlb-collect]')
     runs-on: ubuntu-24.04
     timeout-minutes: 35
     steps:
@@ -434,8 +491,8 @@ jobs:
           if p.exists():
               r=json.loads(p.read_text())
               lines += [f"- Status: **{r.get('status')}**",
-                        f"- Event coverage: `{json.dumps(r.get('event_dispositions',[]),sort_keys=True)}`",
-                        f"- Forecast rows: `{json.dumps(r.get('forecasts',[]),sort_keys=True)}`",
+                        f"- Cover coverage: `{json.dumps(r.get('cover_coverage',{}),sort_keys=True)}`",
+                        f"- Event rows: `{json.dumps(r.get('events',[]),sort_keys=True)}`",
                         f"- Run-line cover: **UNAVAILABLE** — selected MLB adapter declares `UNSUPPORTED_SETTLEMENT` and `V13_TIE_PROXY_NOT_FULL_EXTRA_INNINGS`.",
                         f"- Action authority: OFF; dose 0.0; official release eligible: false"]
           else: lines += ['- No summary.json; inspect run log and output artifact.']

@@ -3,7 +3,7 @@ Reuse existing model/preparation/settlement runners. Actual acquisition and exec
 receipts are retained. Expiring Actions delivery is not permanent archival.
 """
 from __future__ import annotations
-import ast, concurrent.futures as cf, datetime as dt, hashlib, json, os
+import ast, concurrent.futures as cf, datetime as dt, hashlib, json, os, csv
 from pathlib import Path
 import subprocess, sys, traceback, urllib.request, zipfile
 from zoneinfo import ZoneInfo
@@ -38,22 +38,88 @@ def safe_extract(archive,where):
 def scoped_events(sources):
     return [r['event'] for r in sources.values() if dt.datetime.fromisoformat(r['event']['date'].replace('Z','+00:00')).astimezone(TZ).date().isoformat()==DAY]
 
+
+def annotate_poststart_card(card_path):
+    card=json.loads(card_path.read_text())
+    generated=dt.datetime.fromisoformat(card['generated_at_utc'].replace('Z','+00:00'))
+    card['generation_mode']='POST_START_RETROSPECTIVE_AUDIT'
+    card['prospective_grading_eligible']=False
+    card['actionable']=False
+    card['authority']='SHADOW_ONLY'
+    card['post_start_audit']={
+        'label':'CREATED_AFTER_TARGET_DATE_GAMES_STARTED',
+        'target_date':DAY,
+        'generated_at_utc':card['generated_at_utc'],
+        'prospective_grading_eligible':False,
+        'canonical_registration_permitted':False,
+        'score_and_live_stat_inputs_used_for_target_event_forecasts':False,
+        'current_source_snapshots_are_not_historical_point_in_time_evidence':True
+    }
+    post_count=0
+    for row in card.get('forecasts',[]):
+        row['action_authority']=False
+        row['action_status']='SHADOW_ONLY'
+        row['warnings']=list(dict.fromkeys(list(row.get('warnings',[]))+['POST_START_RETROSPECTIVE_AUDIT_ONLY','NOT_ELIGIBLE_FOR_PROSPECTIVE_GRADING']))
+        start=dt.datetime.fromisoformat(row['start_time_utc'].replace('Z','+00:00'))
+        if start<=generated: post_count+=1
+        grading=row.setdefault('grading',{})
+        grading['awaiting_outcome']=False
+        grading['eligible_for_prospective_grading']=False
+        grading['eligibility_reason']='POST_START_RETROSPECTIVE_AUDIT_ONLY'
+        grading['actual_result']=None
+        grading['home_won']=None
+        grading['brier_analytic']=None
+        grading['brier_sim']=None
+        grading['log_loss_analytic']=None
+        grading['log_loss_sim']=None
+    card['post_start_audit']['events_started_by_generation']=post_count
+    card['post_start_audit']['event_count']=len(card.get('forecasts',[]))
+    card_path.write_text(json.dumps(card,sort_keys=True,indent=2)+'\\n')
+    md=card_path.with_name('diagnostic_card.md')
+    if md.exists():
+        with md.open('a') as h:
+            h.write('\\n\\n## RETROSPECTIVE BACKFILL — NOT A PREGAME RELEASE\\n')
+            h.write(f'Generated at {card["generated_at_utc"]}; target date {DAY}. This card was generated after games had started. ')
+            h.write('Current provider snapshots were used for event identity only; live target-game score/stat fields were excluded from forecast inputs. ')
+            h.write('Historical point-in-time availability is not established. All rows are ineligible for prospective grading and action authority is OFF.\\n')
+    csv_path=card_path.with_name('diagnostic_card.csv')
+    if csv_path.exists():
+        with csv_path.open(newline='') as h: rows=list(csv.DictReader(h))
+        fields=list(rows[0].keys()) if rows else []
+        if 'post_start_audit' not in fields: fields.append('post_start_audit')
+        with csv_path.open('w',newline='') as h:
+            w=csv.DictWriter(h,fieldnames=fields,extrasaction='ignore');w.writeheader()
+            for r in rows:
+                r['post_start_audit']='true'
+                r['grading_eligible']='False'
+                r['warnings']=';'.join(dict.fromkeys([x for x in r.get('warnings','').split(';') if x]+['POST_START_RETROSPECTIVE_AUDIT_ONLY','NOT_ELIGIBLE_FOR_PROSPECTIVE_GRADING']))
+                w.writerow(r)
+    return card
+
 def nba_nhl():
     current_dir,report,sources=current(LEAGUE)
     result['schedule']=report['schedule'];result['current_source_count']=len(report['sources'])
-    if report['schedule']['schedule_status']!='PROVIDER_SCHEDULE_CAPTURED':raise ValueError('SCHEDULE_CAPTURE_FAILED')
+    if report['schedule']['schedule_status']!='PROVIDER_SCHEDULE_CAPTURED':
+        reason=str(report['schedule'].get('reason',''))
+        if os.environ.get('SPORTS_POSTSTART_AUDIT')!='1' or report['schedule'].get('schedule_status')!='SCHEDULE_UNKNOWN' or not reason.startswith('PROVIDER_EVENT_REVISION:'):
+            raise ValueError('SCHEDULE_CAPTURE_FAILED:'+reason)
+        # Audit-only reconciliation: use retained raw provider event identities (ID, teams, start),
+        # never live score/stat fields as forecast inputs. Keep the original source report unchanged.
+        result['schedule_reconciliation']={'status':'POST_START_IDENTITY_ONLY','reason':reason,'source_event_count':len(scoped_events(sources)),'score_fields_used_for_forecast':False}
     if not scoped_events(sources):result['status']='NO_EVENTS_IN_CAPTURED_PROVIDER_SCOPE';return
     packages=OUT/'packages'
     if LEAGUE=='nba':
         history=OUT/'history'
         cmd(['scripts/capture_team_histories.py','--league','nba','--nba-current-bundle',str(current_dir),'--output',str(history)],'history')
-        cmd(['scripts/prepare_initial_baselines.py','--league','nba','--history',str(history),'--current',str(current_dir),'--nba-acquisition-scope',str(history/'nba_acquisition_scope.json'),'--output',str(packages)],'prepare')
+        cmd(['scripts/requests/prepare_initial_baselines_audit.py','--league','nba','--history',str(history),'--current',str(current_dir),'--nba-acquisition-scope',str(history/'nba_acquisition_scope.json'),'--output',str(packages)],'prepare')
     else:
         history,scope=ns['nhl_history']()
         cmd(['scripts/prepare_initial_baselines.py','--league','nhl','--history',str(history),'--current',str(current_dir),'--season-scope',str(scope),'--output',str(packages)],'prepare')
     env={**os.environ,'SPORTS_RESEARCH_PACKAGE_DIR':str(packages)}
-    run_cmd(['scripts/generate_card_force.py','--league',LEAGUE,'--date',DAY,'--simulations','100000','--initial-research-baselines','--output-dir',str(OUT/'card')],'inference',env)
-    card=json.loads((OUT/'card/diagnostic_card.json').read_text());pkg=json.loads((packages/LEAGUE/'package.json').read_text())
+    run_cmd(['scripts/requests/generate_card_force_audit.py','--league',LEAGUE,'--date',DAY,'--simulations','100000','--initial-research-baselines','--output-dir',str(OUT/'card')],'inference',env)
+    card_path=OUT/'card/diagnostic_card.json'
+    card=annotate_poststart_card(card_path)
+    pkg=json.loads((packages/LEAGUE/'package.json').read_text())
     events=[e for e in pkg['events'] if e['slate_date']==DAY and any(f.get('event_id')==e['event_id'] and f.get('forecast_status')=='FORECAST_GENERATED' for f in card['forecasts'])]
     result.update(input_cutoff_utc=card['as_of_utc'],card_sha256=sha(OUT/'card/diagnostic_card.json'),package_sha256=sha(packages/LEAGUE/'package.json'),model_lineage=pkg['model_lineage'])
     ds=None
@@ -69,14 +135,16 @@ def nba_nhl():
         r.update(home_margin=f['diagnostics']['home_margin'],home_win=f['diagnostics']['home_win'],warnings=f.get('warnings',[]),period='FULL_GAME',input_cutoff_utc=card['as_of_utc'],distributions={})
         ad=np.load(Path(f['simulation']['draw_directory'])/'winner_draws.npy');re,_=bernoulli_simulation(f['diagnostics']['home_win'],f['numerical_identity']['identity_sha256'],100000)
         assert np.array_equal(ad,re);r['winner_draws_exact_replay']=True
-        raw=sources.get(f['event_id'].split(':')[-1]);r['market_source_status']='MISSING' if raw is None else 'CAPTURED'
+        raw=sources.get(f['event_id'].split(':')[-1])
+        r['market_source_status']='MISSING' if raw is None else 'POST_START_SOURCE_FOR_IDENTITY_ONLY'
         if raw:
             assert D.stamp(raw['event']['date'])==D.stamp(f['start_time_utc'])
-            r['market_raw']=raw
+            r['market_source_receipt']={'source_sha256':raw.get('source_sha256'),'retrieved_at_utc':raw.get('retrieved_at_utc'),'payload_outcome_fields_excluded':True}
         if ds:
             r['distributions']={d['product']:d for x in ds['results'] if x['event_id']==f['event_id'] for d in [x['distribution']]}
         result['forecasts'].append(r)
-    result['status']='EXECUTED_RESEARCH_ONLY' if not result['blockers'] else 'PARTIAL_RESEARCH_WITH_SCOPED_BLOCKERS'
+    result['generation_mode']='POST_START_RETROSPECTIVE_AUDIT';result['prospective_grading_eligible']=False;result['action_authority']=False;result['canonical_registrations']=0;result['live_allocation_units']=0
+    result['status']='POST_START_RETROSPECTIVE_AUDIT_ONLY' if not result['blockers'] else 'PARTIAL_RETROSPECTIVE_AUDIT_WITH_SCOPED_BLOCKERS'
 
 def scope_only():
     result['schedule']={}

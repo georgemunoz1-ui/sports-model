@@ -111,6 +111,9 @@ def collect(readiness, output):
         row['full_validation_remaining']=['CONFIRMED_STARTER_TIMESTAMPS','COMPLETE_INJURY_EFFECTIVE_TIMES','FULL_BULLPEN_AVAILABILITY','FINAL_EVENT_CUTOFF_RECHECK']
         if any(t['lineup_status']!='POSTED_IN_OFFICIAL_FEED' for t in row['teams'].values()):row['full_validation_remaining'].append('BOTH_POSTED_LINEUPS')
         if not row['weather_available_not_consumed']:row['full_validation_remaining'].append('VENUE_WEATHER')
+        for side in ('away','home'):
+            if row['teams'][side].get('starter') is None and side.upper()+'_STARTER_UNKNOWN' not in row['mandatory_research_blockers']:
+                row['mandatory_research_blockers'].append(side.upper()+'_STARTER_UNKNOWN')
         rows.append(row)
     # Attach only provider quotes that exactly match official home/away identities and start time.
     def quote_line(value):

@@ -114,7 +114,7 @@ def nba_nhl():
         cmd(['scripts/requests/prepare_initial_baselines_audit.py','--league','nba','--history',str(history),'--current',str(current_dir),'--nba-acquisition-scope',str(history/'nba_acquisition_scope.json'),'--output',str(packages)],'prepare')
     else:
         history,scope=ns['nhl_history']()
-        cmd(['scripts/prepare_initial_baselines.py','--league','nhl','--history',str(history),'--current',str(current_dir),'--season-scope',str(scope),'--output',str(packages)],'prepare')
+        cmd(['scripts/requests/prepare_initial_baselines_audit.py','--league','nhl','--history',str(history),'--current',str(current_dir),'--season-scope',str(scope),'--output',str(packages)],'prepare')
     env={**os.environ,'SPORTS_RESEARCH_PACKAGE_DIR':str(packages)}
     run_cmd(['scripts/requests/generate_card_force_audit.py','--league',LEAGUE,'--date',DAY,'--simulations','100000','--initial-research-baselines','--output-dir',str(OUT/'card')],'inference',env)
     card_path=OUT/'card/diagnostic_card.json'

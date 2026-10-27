@@ -428,7 +428,7 @@ def generate(card_date, league, as_of, simulations, overrides, roster_bundle=Non
             raw = attach_state_receipt(raw, event, context, league)
             raw = attach(raw, league.lower(), event, as_of, roster)
             # Guard the rare case where network/simulation time crosses first pitch.
-            if now_utc() >= event_start:
+            if now_utc() >= event_start and os.environ.get("SPORTS_POSTSTART_AUDIT") != "1":
                 rows.append({
                     "event_id": str(event["event_id"]),
                     "away_team": event["away_team"],

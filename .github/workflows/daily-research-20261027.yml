@@ -213,7 +213,7 @@ jobs:
           PY
 
   health-triage:
-    if: contains(github.event.head_commit.message, '[run-research]')
+    if: contains(github.event.head_commit.message, '[run-research]') || contains(github.event.head_commit.message, '[health-triage]')
     runs-on: ubuntu-24.04
     timeout-minutes: 45
     steps:
@@ -242,7 +242,7 @@ jobs:
           rows=[json.loads(s) for s in p.read_text().splitlines() if s.strip()]
           out={'prior_session_record_count':len(rows),'prior_session_ids':[r.get('session_id') for r in rows],
                'prior_last_record_sha256':rows[-1].get('record_sha256') if rows else None}
-          pathlib.Path('$RUNNER_TEMP/health-triage/prior-sessions.json').write_text(json.dumps(out,indent=2))
+          pathlib.Path(__import__('os').environ['RUNNER_TEMP']).joinpath('health-triage','prior-sessions.json').write_text(json.dumps(out,indent=2))
           print(json.dumps(out))
           PY
       - name: Run full regression tests and recovery-job accounting
@@ -296,6 +296,7 @@ jobs:
           p=pathlib.Path(os.environ['RUNNER_TEMP'])/'health-triage/archive-verification.json'
           p.write_text(json.dumps(r,indent=2))
           print('ARCHIVE_VERIFICATION='+json.dumps({k:v for k,v in r.items() if k!='objects'}))
+          if not r.get('ok') or r.get('parser_problems'): sys.exit(1)
           PY
           echo "$?" > "$RUNNER_TEMP/health-triage/archive-verification-exit-code.txt"
           exit 0

@@ -164,14 +164,20 @@ def distributions(league, package_dir, events):
     config_path = out / 'config.json'
     result = build(card, load_config(config_path), out / 'draws', simulations=100000)
     for row in result['results']:
-        d = row['distribution']; support, mass = D.validate(d)
-        a = np.load(out / 'draws' / row['simulation']['file'])
-        b, meta = D.simulate(d, draws=100000)
-        if len(a) != 100000 or not np.array_equal(a,b) or meta['draw_sha256'] != row['simulation']['draw_sha256']:
-            raise ValueError('DISTRIBUTION_DRAW_REPLAY_MISMATCH')
-        row['replay'] = {'exact': True, 'count': len(a), 'seed': meta['seed'],
-                         'draw_sha256': meta['draw_sha256'],
-                         'simulation_code_sha256': meta['simulation_code_sha256']}
+        d = row['distribution']
+        try:
+            support, mass = D.validate(d)
+            a = np.load(out / 'draws' / row['simulation']['file'])
+            b, meta = D.simulate(d, draws=100000)
+            if len(a) != 100000 or not np.array_equal(a,b) or meta['draw_sha256'] != row['simulation']['draw_sha256']:
+                raise ValueError('DISTRIBUTION_DRAW_REPLAY_MISMATCH')
+            row['replay'] = {'exact': True, 'count': len(a), 'seed': meta['seed'],
+                             'draw_sha256': meta['draw_sha256'],
+                             'simulation_code_sha256': meta['simulation_code_sha256']}
+        except Exception as exc:
+            row['replay'] = {'exact':False,'count':row.get('simulation',{}).get('count'),
+                             'error':type(exc).__name__+':'+str(exc)}
+            row['research_gate'] = 'DISTRIBUTION_DRAW_REPLAY_MISMATCH'
     fit_artifacts = {}
     for product in ('margin', 'total'):
         fit_path = fitroot / league / (product + '_empirical.json')
@@ -300,18 +306,22 @@ try:
         for f in card['forecasts']:
             if f.get('forecast_status') != 'FORECAST_GENERATED':
                 result['blockers'].append(dict(event_id=f.get('event_id'), forecast=f))
-                disposition = 'POST_START' if f.get('forecast_status') == 'POST_START' else 'UNAVAILABLE'
+                post_start = f.get('forecast_status') == 'POST_START' or (f.get('start_time_utc') and D.stamp(f['start_time_utc']) <= D.stamp(card['as_of_utc']))
+                disposition = 'POST_START' if post_start else 'PRE_START'
+                cover_status = 'POST_START' if post_start else 'UNAVAILABLE'
                 result['forecasts'].append({
                     'event_id': f.get('event_id'), 'away_team': f.get('away_team'),
                     'home_team': f.get('home_team'), 'start_time_utc': f.get('start_time_utc'),
                     'disposition': disposition,
-                    'cover': {'status': disposition, 'gate': f.get('forecast_status'),
+                    'cover': {'status': cover_status, 'disposition':disposition,
+                              'gate': f.get('forecast_status') if not post_start else 'START_TIME_PASSED_BEFORE_CUTOFF',
                               'next_evidence': 'New event-specific pre-cutoff forecast execution if still prestart.'},
                     'action_authority': False, 'dose': 0.0
                 })
                 continue
             row = {k:f.get(k) for k in ['event_id','away_team','home_team','start_time_utc','model_id','model_winner','analytic_p','sim_p','projected_total']}
             row['home_margin'] = f['diagnostics']['home_margin']
+            row['home_win_probability'] = f['diagnostics']['home_win']
             row['period'] = 'FULL_GAME'; row['action_authority'] = False; row['dose'] = 0.0
             row['disposition'] = 'PRE_START' if D.stamp(f['start_time_utc']) > D.stamp(card['as_of_utc']) else 'POST_START'
             row['warnings'] = f.get('warnings',[])
@@ -320,9 +330,17 @@ try:
             row['model_state_config_hash'] = f.get('model_state_config_hash')
             row['simulation'] = f['simulation']['binary']
             ad = np.load(Path(f['simulation']['draw_directory'])/'winner_draws.npy')
-            replay,_ = bernoulli_simulation(f['diagnostics']['home_win'], f['numerical_identity']['identity_sha256'],100000)
-            assert np.array_equal(ad,replay)
-            row['winner_draws_exact_replay'] = True
+            replay, replay_meta = bernoulli_simulation(f['diagnostics']['home_win'], f['numerical_identity']['identity_sha256'],100000)
+            row['winner_draws_exact_replay'] = bool(len(ad)==100000 and np.array_equal(ad,replay))
+            row['winner_draw_sha256'] = hashlib.sha256(ad.tobytes()).hexdigest()
+            row['winner_draw_seed'] = replay_meta.get('seed')
+            if not row['winner_draws_exact_replay']:
+                result['blockers'].append({'event_id':f['event_id'],'gate':'WINNER_DRAW_REPLAY_MISMATCH'})
+                row['cover']={'status':'UNAVAILABLE','disposition':row['disposition'],
+                              'gate':'WINNER_DRAW_REPLAY_MISMATCH',
+                              'next_evidence':'Exact deterministic replay of the selected winner draw stream.'}
+                result['forecasts'].append(row)
+                continue
             raw = sources.get(f['event_id'].split(':')[-1])
             if raw is None:
                 result['blockers'].append({'event_id':f['event_id'],'gate':'CURRENT_SCHEDULE_MODEL_EVENT_JOIN'})
@@ -377,7 +395,18 @@ try:
             if ds:
                 for dr in ds['results']:
                     if dr['event_id'] != f['event_id']: continue
-                    d = dr['distribution']; product = d['product']; support, mass = D.validate(d)
+                    d = dr['distribution']; product = d['product']
+                    if not (dr.get('replay') or {}).get('exact'):
+                        result['blockers'].append({'event_id':f['event_id'],'product':product,
+                                                   'gate':'DISTRIBUTION_DRAW_REPLAY_MISMATCH',
+                                                   'detail':(dr.get('replay') or {}).get('error')})
+                        if product == 'margin':
+                            row['cover']={'status':'UNAVAILABLE','disposition':row['disposition'],
+                                          'gate':'DISTRIBUTION_DRAW_REPLAY_MISMATCH',
+                                          'distribution_arm':d.get('model_id'),
+                                          'parent_model_id':d.get('provenance',{}).get('parent_model_id')}
+                        continue
+                    support, mass = D.validate(d)
                     line = None; quoted_lines = {}
                     if product == 'margin':
                         line = line_num(ps.get('home',{}).get('close',{}).get('line'))

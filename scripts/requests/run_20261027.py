@@ -230,6 +230,9 @@ try:
         if LEAGUE == 'cfb':
             source = cfb_source()
             cmd(['scripts/prepare_cfb_current.py','--source',str(source),'--output',str(packages)], 'prepare')
+            cmd(['scripts/verify_cfb_consumption.py','--source',str(source),
+                 '--package',str(packages/'cfb'/'package.json'),
+                 '--output',str(OUT/'cfb-consumption-verification.json')], 'cfb-consumption-verification')
         elif LEAGUE == 'nba':
             history = OUT / 'history'
             cmd(['scripts/capture_team_histories.py','--league','nba','--nba-current-bundle',str(current_dir),'--output',str(history)], 'history')
@@ -247,6 +250,32 @@ try:
         result['input_cutoff_utc'] = card['as_of_utc']
         result['card_sha256'] = sha(OUT/'card/diagnostic_card.json')
         result['package_sha256'] = sha(packages/LEAGUE/'package.json')
+        if LEAGUE == 'cfb':
+            verify = json.loads((OUT/'cfb-consumption-verification.json').read_text())
+            traces = {t['event_id']:t for t in verify.get('event_traces',[])}
+            effect_rows = []
+            for forecast in card['forecasts']:
+                if forecast.get('forecast_status') != 'FORECAST_GENERATED':
+                    continue
+                trace = traces.get(forecast['event_id'])
+                if trace is None:
+                    raise ValueError('CFB_RUNNER_FEATURE_TRACE_MISSING:' + forecast['event_id'])
+                observed = float(forecast['diagnostics']['home_win'])
+                expected = float(trace['current_state_p_home'])
+                if not math.isclose(observed, expected, rel_tol=0.0, abs_tol=1e-12):
+                    raise ValueError('CFB_RUNNER_FEATURE_EFFECT_MISMATCH:' + forecast['event_id'])
+                effect_rows.append({'event_id':forecast['event_id'],'runner_home_win_p':observed,
+                                    'replayed_home_win_p':expected,'p_delta_vs_historical_only':trace['p_delta'],
+                                    'feature_sha256':trace['feature_sha256'],'consumed_state_sha256':trace['consumed_state_sha256']})
+            result['cfb_selected_state_consumption'] = {
+                'status':'VERIFIED_FOR_THIS_RUN',
+                'verification_sha256':sha(OUT/'cfb-consumption-verification.json'),
+                'eligible_current_finals':verify.get('eligible_current_finals'),
+                'excluded_current_week':verify.get('excluded_current_week'),
+                'runner_feature_effect_proof':effect_rows,
+                'broader_assimilation_acceptance':verify.get('broader_assimilation_acceptance'),
+                'official_release_eligible':False
+            }
         result['model_id'] = pkg.get('model_id')
         result['model_lineage'] = {k:v for k,v in pkg['model_lineage'].items() if k != 'evaluation'}
         result['model_evaluation'] = pkg['model_lineage'].get('evaluation')
@@ -538,6 +567,35 @@ try:
 except Exception as e:
     result['status']='BLOCKED';result['blockers'].append(type(e).__name__+':'+str(e))
     (OUT/'error.txt').write_text(traceback.format_exc())
+    # On an execution-level blocker, preserve a cover disposition for every captured scheduled event.
+    try:
+        known = {str(r.get('event_id')) for r in result.get('forecasts',[])}
+        rep = globals().get('report', {})
+        schedule_rows = (rep.get('schedule') or {}).get('events',[])
+        now_clock = dt.datetime.now(dt.timezone.utc)
+        for scheduled in schedule_rows:
+            se = scheduled.get('event',{})
+            eid = str(se.get('event_id') or (LEAGUE.upper()+':'+str(se.get('provider_event_id'))))
+            if eid in known:
+                continue
+            start = dt.datetime.fromisoformat(str(se.get('start_time_utc')).replace('Z','+00:00')) if se.get('start_time_utc') else None
+            disposition = 'PRE_START' if start is not None and start > now_clock else 'POST_START'
+            result['forecasts'].append({'event_id':eid,'away_team':se.get('away_team'),'home_team':se.get('home_team'),
+                'start_time_utc':se.get('start_time_utc'),'disposition':disposition,
+                'cover':{'status':'UNAVAILABLE' if disposition=='PRE_START' else 'POST_START',
+                         'gate':'EXECUTION_BLOCKED:'+type(e).__name__+':'+str(e),
+                         'next_evidence':'Repair the exact command/input/hash/selection gate and rerun if still prestart.'},
+                'action_authority':False,'dose':0.0})
+        if schedule_rows:
+            result['cover_coverage']={'expected_events':len(schedule_rows),
+                'completed':sum(1 for r in result['forecasts'] if (r.get('cover') or {}).get('status')=='COMPLETED'),
+                'blocked':sum(1 for r in result['forecasts'] if (r.get('cover') or {}).get('status')=='UNAVAILABLE'),
+                'post_start':sum(1 for r in result['forecasts'] if (r.get('cover') or {}).get('status')=='POST_START'),
+                'entries':[{'event_id':r.get('event_id'),'disposition':r.get('disposition'),
+                            'cover_status':(r.get('cover') or {}).get('status'),
+                            'cover_gate':(r.get('cover') or {}).get('gate')} for r in result['forecasts']]}
+    except Exception as coverage_exc:
+        result['blockers'].append('COVER_ENTRY_INVENTORY_FAILED:'+type(coverage_exc).__name__+':'+str(coverage_exc))
     print('ERROR',traceback.format_exc(),flush=True)
 finally:
     result['completed_at_utc']=utc()

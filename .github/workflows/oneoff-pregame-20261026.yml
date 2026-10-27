@@ -25,6 +25,8 @@ jobs:
       OPENBLAS_NUM_THREADS: '1'
       OMP_NUM_THREADS: '1'
       MKL_NUM_THREADS: '1'
+      SPORTS_POSTSTART_AUDIT: '1'
+      SPORTS_POSTSTART_AUDIT_DAY: '2026-10-26'
     steps:
       - uses: actions/checkout@v4
         with:
@@ -39,7 +41,7 @@ jobs:
           import subprocess
           base='dba08eb8682e0e875fc44054c842ca66c5ca78f6'
           paths=set(subprocess.check_output(['git','diff','--name-only',base,'HEAD'],text=True).splitlines())
-          assert paths <= {'scripts/requests/card_20261026.py','.github/workflows/oneoff-pregame-20261026.yml'}, paths
+          assert paths <= {'scripts/requests/card_20261026.py','.github/workflows/oneoff-pregame-20261026.yml','scripts/requests/prepare_initial_baselines_audit.py','scripts/requests/generate_card_force_audit.py'}, paths
           print('Preserved source pin',base,'one-off only',sorted(paths))
           PY
           python -m py_compile scripts/requests/card_20261026.py

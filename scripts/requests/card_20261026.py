@@ -229,13 +229,20 @@ def nfl():
             pe=source['event'];comp=pe['competitions'][0];teams={c['homeAway']:c['team']['abbreviation'] for c in comp['competitors']}
             aliases={'WSH':'WAS'};teams={s:aliases.get(t,t) for s,t in teams.items()}
             if teams.get('home')==e['home_team'] and teams.get('away')==e['away_team'] and dt.datetime.fromisoformat(pe['date'].replace('Z','+00:00'))==dt.datetime.fromisoformat(e['start_time_utc'].replace('Z','+00:00')):
-                r['market_raw']=source;r['market_source_status']='CAPTURED_EXACT_TEAMS_START';break
+                r['market_source_receipt']={'source_sha256':source.get('source_sha256'),'retrieved_at_utc':source.get('retrieved_at_utc'),'payload_outcome_fields_excluded':True};r['market_source_status']='POST_START_SOURCE_FOR_IDENTITY_ONLY';break
         margin_dir=OUT/'selected'/eid/'margin_distribution'
         r['margin_files']=[str(p.relative_to(OUT)) for p in margin_dir.glob('*.json')]
         f2=OUT/'combined'/eid/'forecast.json'
         if f2.exists():r['combined_forecast']=json.loads(f2.read_text());r['combined_forecast_sha256']=sha(f2)
         result['forecasts'].append(r)
-    result['status']='EXECUTED_RESEARCH_ONLY' if len(result['forecasts'])==len(events) else 'PARTIAL_RESEARCH_WITH_SCOPED_BLOCKERS'
+    result['generation_mode']='POST_START_RETROSPECTIVE_AUDIT';result['prospective_grading_eligible']=False;result['action_authority']=False;result['canonical_registrations']=0;result['live_allocation_units']=0
+    for item in result['forecasts']:
+        for key in ('forecast','combined_forecast'):
+            f=item.get(key)
+            if not isinstance(f,dict): continue
+            f['action_authority']=False;f['canonical_prospective_eligible']=False
+            f['warnings']=list(dict.fromkeys(list(f.get('warnings',[]))+['POST_START_RETROSPECTIVE_AUDIT_ONLY','NOT_ELIGIBLE_FOR_PROSPECTIVE_GRADING']))
+    result['status']='POST_START_RETROSPECTIVE_AUDIT_ONLY' if len(result['forecasts'])==len(events) else 'PARTIAL_RETROSPECTIVE_AUDIT_WITH_SCOPED_BLOCKERS'
 
 try:
     if LEAGUE in ('nba','nhl'):nba_nhl()

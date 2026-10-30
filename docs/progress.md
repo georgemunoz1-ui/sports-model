@@ -5021,3 +5021,21 @@ PR38 closed as already incorporated via82. PR45 strict health/evidence blockers
 remain separate and unwaived. Hosted integration CI and artifact readback are
 required before merge. All predictive limitations remain; authority OFF.
 See docs/REMAINING_PR_REPAIR_20261024.md and current execution receipts.
+
+
+## 2026-10-30T11:27:34.695643+00:00 — NBA source-versioned combination challenger
+
+User requested the first comparison dataset and small frozen NBA challenger.
+Implemented opt-in mean-only B0/B1/C1/C2 source contracts, bounded residual
+blend, train-only factor scaling and explicit B0 fallback. Frozen pilot protocol
+and candidate-catalog entry are local research bookkeeping, not canonical
+registration. 30 synthetic tests pass. Three October 29 NBA events are matched;
+zero qualify for fitting because external captures are postgame and original
+availability is unproven. Both real C1/C2 fit attempts correctly block.
+Earlier screenshot values and later source vintages remain distinct.
+Baseline point parent is distinct from the winner head. State/defaults, original
+forecasts, circadian experiments and production runners are unchanged.
+Session-start full-checkout health RED (9 fail, 7 warn), including environment
+dependencies and existing lineage/archive/recovery/release obligations.
+No real-data coefficients, uncertainty model, predictive improvement, deployment
+or wagering authorization. See docs/research/NBA_FORECAST_COMBINATION_20261030.md.

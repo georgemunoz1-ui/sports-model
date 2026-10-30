@@ -5021,3 +5021,30 @@ PR38 closed as already incorporated via82. PR45 strict health/evidence blockers
 remain separate and unwaived. Hosted integration CI and artifact readback are
 required before merge. All predictive limitations remain; authority OFF.
 See docs/REMAINING_PR_REPAIR_20261024.md and current execution receipts.
+
+## 2026-09-24 — PR45 standing-health evidence ordering repair
+
+Inspected PR45 head 835003d and failed run 35916497206 (merge c92b5a0).
+The retained, hash-verified artifact has 390 passing tests, 4 health failures,
+7 warnings and 9 aged unresolved obligation leaves. Triage's ten errors caused
+an early shell exit that skipped pinned archive recovery and environment capture.
+Split independent evidence steps and added a final strict gate after uploads;
+nonzero/missing exit evidence and failed/skipped phases still reject the run.
+The existing archive pin, all issue cards, deadlines, material ages, session ledger,
+September 3 release, model defaults, parameters and forecasts remain unchanged.
+Workflow-shell regression tests cover failed triage, missing evidence, cancelled
+or skipped steps and the success path. See docs/PR45_HEALTH_READINESS.md for the
+source run, exact remaining closure evidence and reproduction commands.
+This fixes evidence collection, not unresolved historical recovery or predictive
+validity. PR stays draft; no release waiver, promotion or action authority change.
+
+
+## 2026-10-24T22:55:11.052433+00:00 — PR45 branch reconciliation, health still blocked
+
+Merged the current thirteen-PR integration into the existing readiness repair
+without dropping its strict health gate. Preserved authentic old records and
+retained evidence-before-enforcement workflow ordering. The old fixed September
+23 push acquisition is archived; requested-date acquisition is manual and never
+registers a forecast. Missing lineage, score/mapping and escalation evidence
+remain blockers; no dates, clocks, issue cards, defaults or verdicts were reset.
+Software verification is being re-executed on this source; release authority OFF.

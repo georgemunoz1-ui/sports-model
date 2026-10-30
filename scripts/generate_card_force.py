@@ -550,6 +550,8 @@ def main():
     parser.add_argument("--require-roster-aware", action="store_true", help="Fail closed unless full roster impacts are fitted and consumed; current parents do not meet this gate")
     parser.add_argument("--distribution-research-config", help="Opt-in hash-bound cross-sport distribution challengers; emits a separate report")
     parser.add_argument("--efficiency-research-config", type=Path, help="Opt-in fitted CFB/NBA efficiency experiments; separate source-bound local SHADOW receipts, no default change")
+    parser.add_argument("--personnel-research-config", type=Path, help="Opt-in NBA fitted minutes residual margin challenger; separate research output, no default change")
+    parser.add_argument("--nhl-context-config", type=Path, help="Opt-in source-bound NHL rest/goalie context checks; capture is not a fitted forecast adjustment")
     parser.add_argument("--disclosures", type=Path, help="Source-bound availability scenarios, assumptions and dependence disclosures; presentation only")
     parser.add_argument("--identity-semantics", choices=["legacy.v1", "market_blind_numeric.v2"], default="market_blind_numeric.v2", help="Explicit independently identified execution child; legacy behavior remains available")
     parser.add_argument("--selection-config", type=Path, help="Frozen research selector configuration; absent config emits unqualified diagnostic NO_PICK")
@@ -603,6 +605,14 @@ def main():
     print(render_md(card, disclosures))
     print(json.dumps({"research_selection": selection["decision_counts"], "wagering_status": "OFF"}))
     research_incomplete = bool(disclosures["errors"])
+    from pipelines.cards.model_controls import run_extension
+    for extension, config_path in (("nba_personnel", args.personnel_research_config),
+                                   ("nhl_context", args.nhl_context_config)):
+        if config_path:
+            extension_result = run_extension(extension, output / "diagnostic_card.json",
+                                             config_path, output / extension)
+            research_incomplete |= extension_result["incomplete"]
+            print(json.dumps(extension_result, allow_nan=False))
     if args.efficiency_research_config:
         from research.efficiency.runner import shadow_from_card
         try:

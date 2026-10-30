@@ -1,0 +1,373 @@
+{
+  "allocation": 0,
+  "base_commit": "6789e7d090b77c55287f4fe68426f790b0fe0950",
+  "code_files": {
+    "models/common/settlement_risk.py": "d9427997e6d433564264e04af0dcea940d19cd8553d26a25a663ee9021e62c31",
+    "pipelines/cards/candidate_board.py": "3be6b2d167d8ab2e0f629b51ed5a2691ec0136a543e9173d3abc7e54e0af88b8",
+    "scripts/build_research_candidate_board.py": "214ebb12795d716f200fbd63dde924ddd5b4e752b63e8363b76521e3b0379b50",
+    "tests/test_research_candidate_board.py": "5c8e922b5c24a05a927d1b77a9cdb4f1e9600aa22a9cd9dcd0f1a52c2dfe3ad9",
+    "tests/test_settlement_risk.py": "54420b915d42b2df38466ae9618da5ec6134d07d65bd831ad6e6b8c4cb76bd3f"
+  },
+  "comparisons": [
+    {
+      "ev_per_100": 30.88441355501232,
+      "event_id": "CFB:401862813",
+      "league": "cfb",
+      "max_abs_error": 7.105427357601002e-15,
+      "odds": -110.0,
+      "probabilities": {
+        "half_loss": 0.0,
+        "half_win": 0.0,
+        "loss": 0.31441497661660217,
+        "push": 0.0,
+        "void": 0.0,
+        "win": 0.6855850233833979
+      },
+      "rank": 1,
+      "return_sd_per_100": 88.63574163009754
+    },
+    {
+      "ev_per_100": -2.1471284604884735,
+      "event_id": "CFB:401856844",
+      "league": "cfb",
+      "max_abs_error": 2.220446049250313e-14,
+      "odds": -112.0,
+      "probabilities": {
+        "half_loss": 0.0,
+        "half_win": 0.0,
+        "loss": 0.48304143337616545,
+        "push": 0.0,
+        "void": 0.0,
+        "win": 0.5169585666238344
+      },
+      "rank": 2,
+      "return_sd_per_100": 94.5884042350675
+    },
+    {
+      "ev_per_100": -1.150588116497303,
+      "event_id": "CFB:401866451",
+      "league": "cfb",
+      "max_abs_error": 1.4210854715202004e-14,
+      "odds": -105.0,
+      "probabilities": {
+        "half_loss": 0.0,
+        "half_win": 0.0,
+        "loss": 0.4809032934126594,
+        "push": 0.02622942372726988,
+        "void": 0.0,
+        "win": 0.49286728286007075
+      },
+      "rank": 3,
+      "return_sd_per_100": 96.32320917789664
+    },
+    {
+      "ev_per_100": 40.9085152771671,
+      "event_id": "NBA:401909277",
+      "league": "nba",
+      "max_abs_error": 2.842170943040401e-14,
+      "odds": -115,
+      "probabilities": {
+        "half_loss": 0.0,
+        "half_win": 0.0,
+        "loss": 0.24630329037794346,
+        "push": 0.0,
+        "void": 0.0,
+        "win": 0.7536967096220567
+      },
+      "rank": 1,
+      "return_sd_per_100": 80.55157491960445
+    },
+    {
+      "ev_per_100": 30.950862132868263,
+      "event_id": "NBA:401909281",
+      "league": "nba",
+      "max_abs_error": 1.4210854715202004e-14,
+      "odds": -115,
+      "probabilities": {
+        "half_loss": 0.0,
+        "half_win": 0.0,
+        "loss": 0.29956515603349543,
+        "push": 0.0,
+        "void": 0.0,
+        "win": 0.7004348439665049
+      },
+      "rank": 2,
+      "return_sd_per_100": 85.63871443313467
+    },
+    {
+      "ev_per_100": 32.47379939797418,
+      "event_id": "NBA:401909279",
+      "league": "nba",
+      "max_abs_error": 2.1316282072803006e-14,
+      "odds": -105,
+      "probabilities": {
+        "half_loss": 0.0,
+        "half_win": 0.0,
+        "loss": 0.32147566162013225,
+        "push": 0.0,
+        "void": 0.0,
+        "win": 0.6785243383798678
+      },
+      "rank": 3,
+      "return_sd_per_100": 91.18456413494174
+    },
+    {
+      "ev_per_100": 28.430746610040238,
+      "event_id": "NBA:401909282",
+      "league": "nba",
+      "max_abs_error": 2.1316282072803006e-14,
+      "odds": -105,
+      "probabilities": {
+        "half_loss": 0.0,
+        "half_win": 0.0,
+        "loss": 0.34218398077784273,
+        "push": 0.0,
+        "void": 0.0,
+        "win": 0.6578160192221574
+      },
+      "rank": 4,
+      "return_sd_per_100": 92.62892455026319
+    },
+    {
+      "ev_per_100": 10.156660958980329,
+      "event_id": "NBA:401909285",
+      "league": "nba",
+      "max_abs_error": 2.842170943040401e-14,
+      "odds": -115,
+      "probabilities": {
+        "half_loss": 0.0,
+        "half_win": 0.0,
+        "loss": 0.4107899530101053,
+        "push": 0.0,
+        "void": 0.0,
+        "win": 0.589210046989895
+      },
+      "rank": 5,
+      "return_sd_per_100": 91.97834650425006
+    },
+    {
+      "ev_per_100": 9.297867907792778,
+      "event_id": "NBA:401909280",
+      "league": "nba",
+      "max_abs_error": 2.3092638912203256e-14,
+      "odds": -115,
+      "probabilities": {
+        "half_loss": 0.0,
+        "half_win": 0.0,
+        "loss": 0.41538349723738743,
+        "push": 0.0,
+        "void": 0.0,
+        "win": 0.5846165027626126
+      },
+      "rank": 6,
+      "return_sd_per_100": 92.12993698225647
+    },
+    {
+      "ev_per_100": 6.126930410090242,
+      "event_id": "NBA:401909286",
+      "league": "nba",
+      "max_abs_error": 2.7533531010703882e-14,
+      "odds": -115,
+      "probabilities": {
+        "half_loss": 0.0,
+        "half_win": 0.0,
+        "loss": 0.4323443257134707,
+        "push": 0.0,
+        "void": 0.0,
+        "win": 0.5676556742865292
+      },
+      "rank": 7,
+      "return_sd_per_100": 92.61855329280996
+    },
+    {
+      "ev_per_100": 9.74450063568063,
+      "event_id": "NBA:401909283",
+      "league": "nba",
+      "max_abs_error": 1.4210854715202004e-14,
+      "odds": -105,
+      "probabilities": {
+        "half_loss": 0.0,
+        "half_win": 0.0,
+        "loss": 0.43789402113431863,
+        "push": 0.0,
+        "void": 0.0,
+        "win": 0.5621059788656813
+      },
+      "rank": 8,
+      "return_sd_per_100": 96.86305718482826
+    },
+    {
+      "ev_per_100": 8.942383686849148,
+      "event_id": "NBA:401909278",
+      "league": "nba",
+      "max_abs_error": 1.4210854715202004e-14,
+      "odds": -105,
+      "probabilities": {
+        "half_loss": 0.0,
+        "half_win": 0.0,
+        "loss": 0.4420024250185775,
+        "push": 0.0,
+        "void": 0.0,
+        "win": 0.5579975749814224
+      },
+      "rank": 9,
+      "return_sd_per_100": 96.9600975574257
+    },
+    {
+      "ev_per_100": 0.460213653017183,
+      "event_id": "NBA:401909284",
+      "league": "nba",
+      "max_abs_error": 1.6653345369377348e-14,
+      "odds": -118,
+      "probabilities": {
+        "half_loss": 0.0,
+        "half_win": 0.0,
+        "loss": 0.45622453160293447,
+        "push": 0.0,
+        "void": 0.0,
+        "win": 0.5437754683970655
+      },
+      "rank": 10,
+      "return_sd_per_100": 92.01817356540856
+    },
+    {
+      "ev_per_100": -2.227924820340715,
+      "event_id": "NHL:401892613",
+      "league": "nhl",
+      "max_abs_error": 0.0,
+      "odds": -258.0,
+      "probabilities": {
+        "half_loss": 0.0,
+        "half_win": 0.0,
+        "loss": 0.29538560345385206,
+        "push": 0.0,
+        "void": 0.0,
+        "win": 0.7046143965461479
+      },
+      "rank": 1,
+      "return_sd_per_100": 63.30437702141961
+    },
+    {
+      "ev_per_100": -15.12928211462993,
+      "event_id": "NHL:401892611",
+      "league": "nhl",
+      "max_abs_error": 1.4210854715202004e-14,
+      "odds": -265.0,
+      "probabilities": {
+        "half_loss": 0.0,
+        "half_win": 0.0,
+        "loss": 0.38381533590073785,
+        "push": 0.0,
+        "void": 0.0,
+        "win": 0.6161846640992623
+      },
+      "rank": 2,
+      "return_sd_per_100": 66.98284581597633
+    },
+    {
+      "ev_per_100": 8.253432886107765,
+      "event_id": "NHL:401892612",
+      "league": "nhl",
+      "max_abs_error": 4.263256414560601e-14,
+      "odds": 114.0,
+      "probabilities": {
+        "half_loss": 0.0,
+        "half_win": 0.0,
+        "loss": 0.4941428369808047,
+        "push": 0.0,
+        "void": 0.0,
+        "win": 0.5058571630191951
+      },
+      "rank": 3,
+      "return_sd_per_100": 106.99265818737291
+    }
+  ],
+  "created_at_utc": "2026-10-30T18:35:11.392417+00:00",
+  "execution_command": "python3 scripts/build_research_candidate_board.py --input retained_input.json --output exact-lines-reviewed-run",
+  "independent_review": {
+    "findings_fixed": [
+      "Implicit highest-confidence model selection across same-event/same-product distributions",
+      "Full quote metadata incorrectly hid raw-term and house-rule verification gaps"
+    ],
+    "reviewer": "capture agent"
+  },
+  "input_file_sha256": "0aa678b6043b8b9a4208622f608a0eda0b5cc1c35d952cdcc240294b05e03061",
+  "limits": [
+    "Only 10 candidate NBA sides supplied; no counterpart prices fabricated.",
+    "Source authenticity and quote freshness not established by hashes.",
+    "Legacy orientation bound to existing source semantics in a separate record; original PMFs unchanged.",
+    "Input and output files retained in implementation-evidence; source paths describe this local execution.",
+    "No fitting, new draw simulation, personnel adjustment, provider authentication, or production-runner replay."
+  ],
+  "max_abs_error": 4.263256414560601e-14,
+  "new_tests": 56,
+  "output_artifact_sha256": "27c6875a4d9bc47fff361cf162ee96f18cf2c8f5acccd442aec1cf0e804b487b",
+  "output_file_sha256": "4d7903d2bb879fa003abc262fbb7d71b6211f4330eb59d57776eed22a5d5eaab",
+  "quote_vintages": "NBA user-reported terms; CFB 11:58Z frozen terms; NHL 15:32Z retained refresh terms.",
+  "regression_command": "python3 -m pytest -q tests/test_settlement_risk.py tests/test_research_candidate_board.py tests/test_margin_contract.py tests/test_cross_sport_distributions.py tests/test_research_selection.py",
+  "regression_tests": 240,
+  "retained_population": {
+    "events": 17,
+    "original_margin_distributions": 16,
+    "selected_research_candidates": 16,
+    "supplied_contracts": 22,
+    "unsupported_events": 1
+  },
+  "schema": "sports.model_control_execution.settlement.v1",
+  "scope": "Downstream exact-line pricing and candidate ranking only; not a production runner replay or new forecast.",
+  "source_files": [
+    {
+      "path": "/workspace/scratch/8c429768f845/early/October-30-2026-Updated-Card/nba-fixed-products/distributions/distribution_report.json",
+      "role": "FROZEN_DISTRIBUTION_REPORT",
+      "sha256": "2643ed4bc52f96026b5a7cee105e6e435ea08989a4c692bb6040d31c45bee9ca"
+    },
+    {
+      "path": "/workspace/scratch/8c429768f845/early/October-30-2026-Updated-Card/nhl-fixed-products/distributions/distribution_report.json",
+      "role": "FROZEN_DISTRIBUTION_REPORT",
+      "sha256": "2a9f31aefbbc373e0f20bfb9cad2ea8aeb5a3099de764383f4ea7ceb0e351388"
+    },
+    {
+      "path": "/workspace/scratch/8c429768f845/early/October-30-2026-Updated-Card/cfb-fixed-products/distributions/distribution_report.json",
+      "role": "FROZEN_DISTRIBUTION_REPORT",
+      "sha256": "be62c53d872c333b01d50c395e414e24d5bf9e8a971409b9028c4877511015d6"
+    },
+    {
+      "path": "/workspace/scratch/8c429768f845/early/October-30-2026-Updated-Card/October-30-2026-Updated-Card.json",
+      "role": "EARLY_CFB_EXACT_QUOTES",
+      "sha256": "e22e158dfd42f6c867b793f1c683653d9f1cb745940eaba7d13f2a6ee35e1641"
+    },
+    {
+      "path": "/workspace/scratch/721be813e757/slate_review/Sports-Model-Refresh-2026-10-30.json",
+      "role": "RETAINED_COMPARISON_INPUT",
+      "sha256": "d2f4c3e4b051a2d6b2fa6a97cfe1471453f7ee0be9c53f436fb449060ac12bc7"
+    },
+    {
+      "path": "/workspace/scratch/721be813e757/slate_review/external_comparison_extraction.json",
+      "role": "RETAINED_COMPARISON_INPUT",
+      "sha256": "792acfb2418a1aea2c7cea840e03f895254503fae15bd9073a4703d4fa623008"
+    },
+    {
+      "path": "/workspace/scratch/721be813e757/slate_review/candidate_calculation_intermediate.json",
+      "role": "RETAINED_COMPARISON_INPUT",
+      "sha256": "e23d43291ccc69d6ec13daa80708fd45575882a415b5bd25aed3ca7e654cce4b"
+    },
+    {
+      "path": "/workspace/scratch/721be813e757/agent-settlement/pipelines/cards/distribution_research.py",
+      "role": "ORIENTATION_IMPLEMENTATION_SOURCE",
+      "scope": "Existing point(row, margin) function declares and extracts home-minus-away point head; binding remains research, not provider authentication.",
+      "sha256": "691dd6357af2a7a9ef84336f54670db843c6d57aad79783d9f77b11d270c6554"
+    }
+  ],
+  "test_command": "python3 -m pytest -q tests/test_settlement_risk.py tests/test_research_candidate_board.py",
+  "verdicts": {
+    "frozen_source_preservation": "PASS",
+    "independent_fixture_tests": "PASS",
+    "pit_eligibility": "NOT_ASSESSED",
+    "predictive_validation": "NOT_ASSESSED",
+    "provider_authenticity": "NOT_ASSESSED",
+    "publication_eligibility": "INELIGIBLE",
+    "runner_replay": "NOT_RUN",
+    "settlement_recomputation": "PASS",
+    "wagering_authority": "OFF"
+  }
+}

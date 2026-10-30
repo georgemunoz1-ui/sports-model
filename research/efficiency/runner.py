@@ -88,10 +88,29 @@ def prepare(league, history, *, future_events=None, cutoff=None):
     if future_events is not None:
         ids = {e["event_id"] for e in future_events}
         packet["games"] = [e for e in packet["games"] if e.get("completed") or e.get("event_id", "CFB:" + str(e.get("game_id"))) in ids]
+        overlays = {e["event_id"]: e for e in future_events if "personnel_evidence" in e}
+        if len(overlays) != sum("personnel_evidence" in e for e in future_events):
+            raise ValueError("CFB_PERSONNEL_DUPLICATE_FUTURE_EVENT")
+        known_ids = {e.get("event_id", "CFB:" + str(e.get("game_id"))) for e in packet["games"]}
+        if set(overlays) - known_ids:
+            raise ValueError("CFB_PERSONNEL_FUTURE_EVENT_NOT_IN_HISTORY")
+        for event in packet["games"]:
+            event_id = event.get("event_id", "CFB:" + str(event.get("game_id")))
+            if event_id not in overlays:
+                continue
+            current, incoming = module.canonical_game(event), module.canonical_game(overlays[event_id])
+            keys = ("event_id", "home_id", "away_id", "home_team", "away_team", "start_time_utc", "season", "week")
+            if any(current[key] != incoming[key] for key in keys):
+                raise ValueError("CFB_PERSONNEL_FUTURE_EVENT_IDENTITY_CONFLICT")
+            if "personnel_evidence" in event and event["personnel_evidence"] != incoming["personnel_evidence"]:
+                raise ValueError("CFB_PERSONNEL_FUTURE_EVIDENCE_CONFLICT")
+            event["personnel_evidence"] = copy.deepcopy(incoming["personnel_evidence"])
     return module.prepare_examples(packet)
 
 
 def fit_stage(module, league, training, stage):
+    if stage == "personnel_v2" and league != "cfb":
+        raise ValueError("PERSONNEL_V2_STAGE_CFB_ONLY")
     if league == "nba":
         return module.fit(training, {"stage": stage})
     if stage == "efficiency":
@@ -139,6 +158,9 @@ def sanitize_forecast(value):
 
 def sources_for(example, history, fitted):
     rows = list(example.get("sources", example.get("source_bindings", [])))
+    if fitted.get("stage_id") == "personnel_v2":
+        from models.experiments.cfb_personnel import sources
+        rows += sources(example)
     rows += list(fitted.get("source_bindings", []))
     rows += list(history.get("schedule_sources", []))
     if not rows:
@@ -150,7 +172,8 @@ def sources_for(example, history, fitted):
         r["retrieved_at_utc"] = r.get("retrieved_at_utc", r.get("fetched_at_utc"))
         # Raw bytes are verified once by verify_sources before a run. Per-event
         # receipts reference that run evidence, avoiding repeated archive reads.
-        r.pop("path", None)
+        if fitted.get("stage_id") != "personnel_v2":
+            r.pop("path", None)
         unique[r["sha256"]] = r
     return list(unique.values())
 
@@ -183,7 +206,7 @@ def verify_sources(history):
 def code_snapshot(league):
     names = ["research/efficiency/runner.py", "research/efficiency/integrity.py", "research/efficiency/evaluation.py",
              "models/experiments/" + league + "_efficiency.py", "models/current/linear.py"]
-    names += ["harness/cfb_v1_port.py", "models/current/cfb.py"] if league == "cfb" else ["models/current/baseline.py", "scripts/prepare_initial_baselines.py"]
+    names += ["harness/cfb_v1_port.py", "models/current/cfb.py", "models/experiments/cfb_personnel.py"] if league == "cfb" else ["models/current/baseline.py", "scripts/prepare_initial_baselines.py"]
     return {name: file_hash(ROOT / name) for name in names}
 
 
@@ -210,6 +233,10 @@ def component_receipt(league, stage, example, fitted, forecast, history, *, mode
     inputs = {"event": pure_event, "features": example["features"],
               "history_event_ids": example.get("history_event_ids", []),
               "component_state_sha256": example.get("component_state_sha256")}
+    if league == "cfb" and fitted.get("stage_id") == "personnel_v2":
+        inputs.update(personnel_evidence=example["personnel_evidence"],
+                      personnel_schedule_coverage=example["personnel_schedule_coverage"],
+                      consumed_personnel_features=forecast["personnel_consumption"]["feature_values"])
     components = forecast.get("components", {})
     if not components:
         components = {k: v for k, v in example["features"].items() if isinstance(v, (int, float)) and not isinstance(v, bool)}
@@ -218,6 +245,8 @@ def component_receipt(league, stage, example, fitted, forecast, history, *, mode
     numeric_forecast = {k: v for k, v in sanitize_forecast(forecast).items() if v is not None}
     files = [ROOT / "models/experiments" / (league + "_efficiency.py"), Path(__file__), ROOT / "research/efficiency/integrity.py"]
     files += [ROOT / p for p in (["harness/cfb_v1_port.py", "models/current/cfb.py", "models/current/linear.py"] if league == "cfb" else ["models/current/baseline.py", "scripts/prepare_initial_baselines.py", "models/current/linear.py"])]
+    if league == "cfb" and fitted.get("stage_id") == "personnel_v2":
+        files.append(ROOT / "models/experiments/cfb_personnel.py")
     return build_component_receipt(model_id=forecast["model_id"], stage_id=stage,
         event_id=example["event_id"], cutoff_utc=cutoff, start_utc=start,
         inputs=inputs, state=fitted, config=fitted.get("config", {}), code_files=files,

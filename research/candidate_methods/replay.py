@@ -6,6 +6,7 @@ import numpy as np
 import pandas as pd
 from scipy.special import expit, ndtr
 from .methods import verify_source
+from research.replay_controls import equivalent
 
 
 def replay(directory):
@@ -32,6 +33,7 @@ def replay(directory):
             raw=ndtr(mu/spec['train_residual_sigma'])
             calibrated=expit(mu.astype(float)*spec['calibration_coefficient']+spec['calibration_intercept'])
             for actual, column in [(mu,'predicted_margin'),(raw,'p_home_raw'),(calibrated,'p_home_calibrated')]:
+                equivalent(actual.tolist(), expected[column].to_numpy().tolist(), abs_tol=1e-10)
                 delta=float(np.max(np.abs(actual-expected[column].to_numpy())))
                 if delta>1e-10:raise ValueError(f'prediction replay mismatch: {arm} {column} {delta}')
                 max_error=max(max_error,delta)

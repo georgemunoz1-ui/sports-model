@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import copy
 from pathlib import Path
 from typing import Any
 
@@ -25,7 +26,9 @@ MODEL_ID = "cfb.fbs.matchup_efficiency.v1.research"
 CONTROL_ID = "cfb.fbs.elo_form_logit_ridge.v1_0.shadow.reconstructed_2024fit"
 MATCHED_CONTROL_ID = "cfb.fbs.elo_form.matched_population.control.v1"
 BASELINE_PARENT_ID = "cfb.fbs.elo_form_logit_ridge.v1_0.shadow"
-PERSONNEL_ID = "cfb.fbs.matchup_efficiency.personnel.v1.research"
+LEGACY_PERSONNEL_ID = "cfb.fbs.matchup_efficiency.personnel.v1.research"
+PERSONNEL_ID = LEGACY_PERSONNEL_ID
+PERSONNEL_V2_ID = "cfb.fbs.matchup_efficiency.personnel.v2.research"
 JOINT_ID = "cfb.fbs.matchup_efficiency.joint.v1.research"
 STAGE_ID = "matchup_efficiency"
 DEFAULT_CONFIG = {
@@ -396,14 +399,27 @@ def prepare_examples(history, config=None):
                        "history_max_available_at_utc": state.get("max_history_available_at_utc"),
                        "history_event_ids": state["used_event_ids"], "component_state_sha256": state.get("state_sha256"),
                        "evidence_scope": "RETROSPECTIVE_ARCHIVE_RECONSTRUCTION"})
+        # Optional evidence is transported, never imputed or added to the v1
+        # efficiency/control features. Only the explicit personnel v2 arm uses
+        # the stricter all-team schedule census and source-bound transform.
+        if "personnel_evidence" in g:
+            from models.experiments.cfb_personnel import schedule_coverage
+            result[-1]["personnel_evidence"] = copy.deepcopy(g["personnel_evidence"])
+            result[-1]["personnel_schedule_coverage"] = schedule_coverage(
+                games, records, g, cutoffs[key], history_seasons=cfg["history_seasons"],
+                label_lag_hours=cfg["label_lag_hours"])
     return result
 
 
-def fit(train_examples, config=None, *, control=False, matched_control=False, personnel=False):
+def fit(train_examples, config=None, *, control=False, matched_control=False, personnel=False, personnel_v2=False):
+    if personnel_v2 and (control or matched_control or personnel):
+        raise ValueError("CFB_PERSONNEL_V2_INCOMPATIBLE_FIT_FLAGS")
     cfg = config_with(config)
+    personnel = personnel or personnel_v2
+    personnel_transform = personnel_v2_values if personnel_v2 else personnel_values
     rows = [r for r in train_examples if r.get("target") is not None and ((control and not matched_control) or r.get("eligible"))]
     if personnel:
-        rows = [{**r, "features": {**r["features"], **personnel_values(r)}} for r in rows]
+        rows = [{**r, "features": {**r["features"], **personnel_transform(r)}} for r in rows]
     if len({r["event_id"] for r in rows}) != len(rows):
         raise ValueError("DUPLICATE_CFB_FIT_EVENT")
     if any(r["season"] > cfg["fit_through_season"] for r in rows):
@@ -426,8 +442,8 @@ def fit(train_examples, config=None, *, control=False, matched_control=False, pe
     margin = make_pipeline(SimpleImputer(strategy="median"), StandardScaler(), Ridge(alpha=cfg["margin_ridge_alpha"]))
     clf.fit(x, y)
     margin.fit(x, [r["target"]["home_margin"] for r in rows])
-    identity = MATCHED_CONTROL_ID if matched_control else CONTROL_ID if control else PERSONNEL_ID if personnel else MODEL_ID
-    result = {"model_id": identity, "parent_model_id": BASELINE_PARENT_ID, "stage_id": "matched_population_control" if matched_control else "incumbent_reconstruction" if control else "personnel" if personnel else STAGE_ID,
+    identity = MATCHED_CONTROL_ID if matched_control else CONTROL_ID if control else PERSONNEL_V2_ID if personnel_v2 else PERSONNEL_ID if personnel else MODEL_ID
+    result = {"model_id": identity, "parent_model_id": BASELINE_PARENT_ID, "stage_id": "matched_population_control" if matched_control else "incumbent_reconstruction" if control else "personnel_v2" if personnel_v2 else "personnel" if personnel else STAGE_ID,
               "feature_names": features, "fitted_model": {"winner": pack(clf, "logistic"), "margin": pack(margin, "linear")},
               "config": cfg, "feature_config_sha256": feature_config_hash(cfg), "training_rows": len(rows), "training_event_ids": [r["event_id"] for r in rows],
               "training_population_sha256": digest([{k: r[k] for k in ("event_id", "features", "target")} for r in rows]),
@@ -435,6 +451,13 @@ def fit(train_examples, config=None, *, control=False, matched_control=False, pe
               "training_max_label_available_at_utc": max(r["label_available_at_utc"] for r in rows),
               "source_bindings": list({s["sha256"]: s for r in rows for s in r["source_bindings"]}.values()),
               "action_authority": False, "predictive_validation": "UNVALIDATED"}
+    if personnel_v2:
+        from models.experiments.cfb_personnel import TRANSFORM_ID, sources
+        result.update(parent_personnel_model_id=LEGACY_PERSONNEL_ID, personnel_transform_id=TRANSFORM_ID,
+                      personnel_evidence_sha256=digest([r["personnel_evidence"] for r in rows]),
+                      personnel_schedule_coverage_sha256=digest([r["personnel_schedule_coverage"] for r in rows]),
+                      personnel_source_authenticity="NOT_ESTABLISHED")
+        result["source_bindings"] += [source for row in rows for source in sources(row)]
     result["state_sha256"] = digest(result)
     return result
 
@@ -448,6 +471,7 @@ def fit_matched_control(train_examples, config=None):
 
 
 def personnel_values(example):
+    """Original v1 contract retained for explicitly identified frozen replay."""
     supplied = example.get("personnel_features")
     sources = example.get("personnel_sources", [])
     if not isinstance(supplied, dict) or set(supplied) != set(PERSONNEL_FEATURES) or not sources:
@@ -463,8 +487,17 @@ def personnel_values(example):
     return supplied
 
 
+def personnel_v2_values(example):
+    from models.experiments.cfb_personnel import values
+    return values(example)
+
+
 def fit_personnel(train_examples, config=None):
     return fit(train_examples, config, personnel=True)
+
+
+def fit_personnel_v2(train_examples, config=None):
+    return fit(train_examples, config, personnel_v2=True)
 
 
 def predict(state, example, stage=None):
@@ -476,37 +509,50 @@ def predict(state, example, stage=None):
         return predict_joint(state, example)
     if stage is not None and stage not in (state["stage_id"], "efficiency" if state["model_id"] == MODEL_ID else state["stage_id"]):
         raise ValueError("CFB_STAGE_ID_MISMATCH")
-    if state["model_id"] not in (MODEL_ID, CONTROL_ID, MATCHED_CONTROL_ID, PERSONNEL_ID):
+    if state["model_id"] not in (MODEL_ID, CONTROL_ID, MATCHED_CONTROL_ID, PERSONNEL_ID, PERSONNEL_V2_ID):
         raise ValueError("CFB_UNKNOWN_MODEL_ID")
     if utc(state["training_max_label_available_at_utc"]) >= utc(example["cutoff_utc"]):
         raise ValueError("CFB_TRAINING_LABEL_AFTER_FORECAST_CUTOFF")
     if example["event_id"] in state["training_event_ids"]:
         raise ValueError("CFB_TARGET_EVENT_IN_FIT")
-    if state["model_id"] in (MODEL_ID, PERSONNEL_ID, MATCHED_CONTROL_ID) and not example.get("eligible"):
+    if state["model_id"] in (MODEL_ID, PERSONNEL_ID, PERSONNEL_V2_ID, MATCHED_CONTROL_ID) and not example.get("eligible"):
         raise ValueError("CFB_MATCHUP_INPUT_BLOCKED:" + ",".join(example["reasons"]))
     if example["week"] <= 1:
         raise ValueError("WEEK1_REQUIRES_SEPARATE_SELECTED_CONTROL")
     if "LEGACY_BASELINE_FEATURES_AFTER_WEEK_CUTOFF" in example.get("reasons", []):
         raise ValueError("LEGACY_BASELINE_FEATURES_AFTER_WEEK_CUTOFF")
     feature_values = example["baseline_features" if state["model_id"] in (CONTROL_ID, MATCHED_CONTROL_ID) else "features"]
-    if state["model_id"] == PERSONNEL_ID:
+    if state["model_id"] == PERSONNEL_V2_ID:
+        feature_values = {**feature_values, **personnel_v2_values(example)}
+    elif state["model_id"] == LEGACY_PERSONNEL_ID:
         feature_values = {**feature_values, **personnel_values(example)}
     x = [feature_values[k] for k in state["feature_names"]]
     p = linear_predict(state["fitted_model"]["winner"], x)
     margin = linear_predict(state["fitted_model"]["margin"], x)
-    components = dict(example["components"]) if state["model_id"] in (MODEL_ID, PERSONNEL_ID) else {}
+    components = dict(example["components"]) if state["model_id"] in (MODEL_ID, PERSONNEL_ID, PERSONNEL_V2_ID) else {}
     for name, head in state["fitted_model"].items():
         values = np.array([np.nan if v is None else v for v in x], float)
         values = np.where(np.isnan(values), head["impute"], values)
         contributions = (values - head["mean"]) / head["scale"] * head["coefficient"]
         components[name + "_intercept"] = head["intercept"]
         components.update({name + "_contribution_" + k: float(v) for k, v in zip(state["feature_names"], contributions)})
-    return {"model_id": state["model_id"], "stage_id": state["stage_id"], "event_id": example["event_id"],
+    result = {"model_id": state["model_id"], "stage_id": state["stage_id"], "event_id": example["event_id"],
             "p_home": p, "home_margin": margin, "total": None,
             "components": components, "input_snapshot": dict(zip(state["feature_names"], x)),
             "model_state_sha256": state["state_sha256"], "action_authority": False,
             "limitations": ["TOTAL_HEAD_NOT_FITTED", "NO_PERSONNEL_FEATURES", "NO_JOINT_SCORE_DISTRIBUTION",
                             "ORIGINAL_HISTORICAL_PIT_UNVERIFIED", "PROVIDER_EPA_MODEL_TRAINING_CHRONOLOGY_UNKNOWN"]}
+    if state["model_id"] == PERSONNEL_V2_ID:
+        from models.experiments.cfb_personnel import TRANSFORM_ID
+        result["personnel_consumption"] = {
+            "transform_id": TRANSFORM_ID, "evidence_sha256": digest(example["personnel_evidence"]),
+            "schedule_coverage_sha256": example["personnel_schedule_coverage"]["receipt_sha256"],
+            "feature_values": {k: feature_values[k] for k in PERSONNEL_FEATURES},
+            "source_authenticity": "NOT_ESTABLISHED", "predictive_validation": "UNVALIDATED"}
+        result["limitations"] = [x for x in result["limitations"] if x != "NO_PERSONNEL_FEATURES"] + [
+            "SUPPLIED_QB_PARTICIPATION_ASSUMPTIONS_NOT_INFERRED", "PERSONNEL_INCREMENT_NOT_PREDICTIVELY_VALIDATED",
+            "SOURCE_FIELD_EXTRACTION_NOT_INDEPENDENTLY_VERIFIED"]
+    return result
 
 
 def predict_control(state, example):

@@ -143,3 +143,11 @@ Sources: [Dunks & Threes methodology](https://dunksandthrees.com/about/epm),
 [Databallr NBA team factors](https://databallr.com/teams), retrieved October 30,
 2026. Dunks & Threes distinguishes the current 2026–27 generation, earlier live
 models and reconstructed backtests; these are not interchangeable live records.
+
+## Subsequent pregame-capture increment
+
+The first implementation record above is preserved. The later October 30
+[pregame source-capture report](NBA_PREGAME_CAPTURE_20261030.md) documents the
+opt-in collector, raw-extraction replay gates, two genuine captures of the same
+10 upcoming events, 71 focused tests and remaining source-access/timestamp
+limitations. It does not revise the original zero-eligible October 29 finding.

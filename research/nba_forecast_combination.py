@@ -70,6 +70,14 @@ proof that the parsed semantics or provider's model are correct.
             errors.append("RAW_HASH_MISMATCH")
         if receipt.get("extraction_review") != "REVIEWED":
             errors.append("EXTRACTION_NOT_REVIEWED")
+        if row.get("capture_schema") or payload.get("acquisition"):
+            try:
+                from research.nba_pregame_capture import SCHEMA as CAPTURE_SCHEMA, verify_capture_source
+                if row.get("capture_schema") != CAPTURE_SCHEMA:
+                    raise ValueError("CAPTURE_SCHEMA_MISMATCH")
+                verify_capture_source(payload, row, base)
+            except (KeyError, ValueError, TypeError, OSError, StopIteration) as exc:
+                errors.append("CAPTURE_PROVENANCE:" + str(exc))
         for key in ("event_id", "league", "home", "away", "target"):
             if payload.get(key) != row.get(key):
                 errors.append("IDENTITY_MISMATCH:" + key)

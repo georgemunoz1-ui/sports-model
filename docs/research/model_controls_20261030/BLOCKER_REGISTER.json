@@ -1,0 +1,232 @@
+{
+  "schema": "sports.model_controls_blocker_register.v1",
+  "base_commit": "6789e7d090b77c55287f4fe68426f790b0fe0950",
+  "date": "2026-10-30",
+  "rows": [
+    {
+      "id": "CAPTURE-PRICE",
+      "league": "all",
+      "product": "exact quoted contracts",
+      "issue_class": "source capture",
+      "owner": "capture",
+      "status": "IMPLEMENTED_INPUT_DEPENDENCY_OPEN",
+      "code": [
+        "harness/market_capture.py",
+        "research/source_capture_contracts.py",
+        "scripts/bind_source_observations.py"
+      ],
+      "acceptance_tests": [
+        "tests/test_source_capture_contracts.py"
+      ],
+      "executed_evidence": "Eight malformed cases now refuse; raw-field JSON pointers and timestamp ordering tested.",
+      "remaining_dependency": "Source-native period and house-rule bindings, fresh source quotes and provider verification; retained exact quote bindings=0."
+    },
+    {
+      "id": "NBA-PERSONNEL",
+      "league": "nba",
+      "product": "home margin only",
+      "issue_class": "new unvalidated method",
+      "owner": "nba_personnel",
+      "status": "IMPLEMENTED_SYNTHETIC_EXERCISED",
+      "code": [
+        "models/experiments/nba_personnel.py",
+        "research/efficiency/nba_personnel_runner.py",
+        "scripts/run_nba_personnel_experiment.py"
+      ],
+      "acceptance_tests": [
+        "tests/test_nba_personnel_minutes.py"
+      ],
+      "executed_evidence": "Strict normalized source/minute/rotation/parent/result binding; train-only ridge and sidecar tested.",
+      "remaining_dependency": "Eligible projected/reference rotation panel and real OOS parents/results; matched historical, prospective and untouched evaluation. No winner/total probability head created."
+    },
+    {
+      "id": "CFB-PERSONNEL",
+      "league": "cfb",
+      "product": "FBS/FBS personnel_v2 winner and margin research",
+      "issue_class": "input transport and unvalidated method",
+      "owner": "requirements",
+      "status": "IMPLEMENTED_SYNTHETIC_EXERCISED",
+      "code": [
+        "models/experiments/cfb_personnel.py",
+        "models/experiments/cfb_efficiency.py",
+        "research/efficiency/runner.py"
+      ],
+      "acceptance_tests": [
+        "tests/test_cfb_personnel_v2.py"
+      ],
+      "executed_evidence": "Separate v2; exact source values/scenario assumptions; real runner transport; chronology and control-label refusals.",
+      "remaining_dependency": "Authentic historical/current QB and returning-snap evidence; independent extraction and predictive evaluation. Existing weekly cutoff excludes later-week personnel; event-specific refresh requires a separately declared timing policy."
+    },
+    {
+      "id": "CFB-COVERAGE",
+      "league": "cfb",
+      "product": "FBS/FCS populations",
+      "issue_class": "missing coverage/evaluation evidence",
+      "owner": "requirements",
+      "status": "CENSUS_IMPLEMENTED_EXTERNAL_COMPLETENESS_OPEN",
+      "code": [
+        "models/experiments/cfb_personnel.py"
+      ],
+      "acceptance_tests": [
+        "tests/test_cfb_personnel_v2.py"
+      ],
+      "executed_evidence": "Both team rows, nonlatest omissions, season/week mismatch, scope and fresh-overlay tests.",
+      "remaining_dependency": "Provider-complete census and separately evaluated FBS/FCS matchup population; Harvard-Dartmouth remains unsupported."
+    },
+    {
+      "id": "NHL-CONTEXT",
+      "league": "nhl",
+      "product": "rest, goalie inputs and final score semantics",
+      "issue_class": "input and settlement controls",
+      "owner": "nhl",
+      "status": "IMPLEMENTED_PARTIALLY_REAL_EXERCISED",
+      "code": [
+        "models/nhl/context_controls.py",
+        "research/nhl_context.py",
+        "scripts/run_nhl_context.py"
+      ],
+      "acceptance_tests": [
+        "tests/test_nhl_context_controls.py"
+      ],
+      "executed_evidence": "3 retained events processed; existing rest builder reexecuted on 5 archived events (4 complete/1 unknown); OT/SO fixtures.",
+      "remaining_dependency": "Source-confirmed or explicit projected goalies, evaluated effect transform, distinct rest refit and final-score intake integration. No mechanistic OT model claimed."
+    },
+    {
+      "id": "PMF-TAILS",
+      "league": "cfb,nba,nhl,mls",
+      "product": "margin and available total products",
+      "issue_class": "unvalidated distribution adequacy",
+      "owner": "coordinator",
+      "status": "DIAGNOSTICS_EXECUTED_REPAIR_OPEN",
+      "code": [
+        "research/distribution_diagnostics.py",
+        "scripts/audit_distribution_tails.py"
+      ],
+      "acceptance_tests": [
+        "tests/test_distribution_tail_diagnostics.py"
+      ],
+      "executed_evidence": "7 retained products audited; matched intervals/tail and key-margin mass; zero-support outcomes explicit.",
+      "remaining_dependency": "New separately registered distribution procedure and later-outcome evaluation. Empirical PMFs not silently replaced."
+    },
+    {
+      "id": "TOTAL-PRODUCTS",
+      "league": "nba,cfb",
+      "product": "full game totals",
+      "issue_class": "distribution limitation / absent model",
+      "owner": "coordinator",
+      "status": "OPEN_SEPARATE_DEVELOPMENT_REQUIRED",
+      "code": [
+        "models/common/discrete_research.py",
+        "data/research/distribution_replay_20261007/summary.json"
+      ],
+      "acceptance_tests": [
+        "tests/test_cross_sport_distributions.py"
+      ],
+      "executed_evidence": "NBA total support failure reproduced: 6 zero-support outcomes/1230 retained baseline events.",
+      "remaining_dependency": "NBA total successor distribution plus evaluation; CFB separate total model development and evaluation. Margin validation cannot transfer."
+    },
+    {
+      "id": "REPLAY-NUMERIC",
+      "league": "all",
+      "product": "retained numerical comparisons",
+      "issue_class": "implementation defect",
+      "owner": "replay",
+      "status": "IMPLEMENTED_REAL_REPLAY_PASSED",
+      "code": [
+        "research/replay_controls.py",
+        "scripts/verify_distribution_study.py",
+        "research/candidate_methods/replay.py"
+      ],
+      "acceptance_tests": [
+        "tests/test_replay_controls.py",
+        "tests/test_distribution_history.py"
+      ],
+      "executed_evidence": "Finite typed tolerances/operands; 7 products,6608 event-products,700000 saved draws reproduced.",
+      "remaining_dependency": "PIT/source authenticity/forecast qualification remain independent."
+    },
+    {
+      "id": "REPLAY-ISOLATION",
+      "league": "all",
+      "product": "adapter input independence",
+      "issue_class": "implementation control",
+      "owner": "replay",
+      "status": "DATA_FLOW_CLOSED_OS_ISOLATION_OPEN",
+      "code": [
+        "research/distribution_replay_adapter.py"
+      ],
+      "acceptance_tests": [
+        "tests/test_replay_controls.py"
+      ],
+      "executed_evidence": "14 fresh subprocess receipts; only model/inference inputs passed, expected checkpoints loaded separately.",
+      "remaining_dependency": "Adversarial OS/filesystem isolation remains open; trusted worker can still access host files. No sandbox claim."
+    },
+    {
+      "id": "PERSISTENCE",
+      "league": "all",
+      "product": "evidence snapshots",
+      "issue_class": "new integration infrastructure",
+      "owner": "replay",
+      "status": "LOCAL_IMPLEMENTED_REMOTE_OPEN",
+      "code": [
+        "research/replay_controls.py"
+      ],
+      "acceptance_tests": [
+        "tests/test_replay_controls.py"
+      ],
+      "executed_evidence": "Immutable local snapshot references hashed complete replay/PIT/semantic/source/predictive reports; tamper tests.",
+      "remaining_dependency": "Original separately supplied SnapshotStore source not recovered; remote retention, independent timestamp anchoring and production persistence integration unestablished."
+    },
+    {
+      "id": "CONTRACT-RISK",
+      "league": "all",
+      "product": "exact supplied margin/spread/puck-line contracts",
+      "issue_class": "implementation control",
+      "owner": "settlement",
+      "status": "IMPLEMENTED_REAL_REPRICING_PASSED",
+      "code": [
+        "models/common/settlement_risk.py",
+        "pipelines/cards/candidate_board.py",
+        "scripts/build_research_candidate_board.py"
+      ],
+      "acceptance_tests": [
+        "tests/test_settlement_risk.py",
+        "tests/test_research_candidate_board.py"
+      ],
+      "executed_evidence": "16 prior candidate outputs reproduced from16 PMFs/22 supplied quotes/17-event census; competing-model and nonfinite payoffs refuse.",
+      "remaining_dependency": "Raw quote authenticity/house rules and full opposing NBA price coverage remain unverified. Negative EV is retained as a price assessment."
+    },
+    {
+      "id": "PREDICTIVE-EVALUATION",
+      "league": "all",
+      "product": "new candidate-specific populations",
+      "issue_class": "missing evaluation evidence",
+      "owner": "coordinator",
+      "status": "OPEN_INPUT_SCOPED",
+      "code": [
+        "scripts/run_efficiency_experiments.py",
+        "scripts/run_nba_personnel_experiment.py",
+        "research/efficiency/evaluation.py"
+      ],
+      "acceptance_tests": [
+        "tests/test_efficiency_evaluation.py",
+        "tests/test_nba_personnel_minutes.py"
+      ],
+      "executed_evidence": "Historical diagnostics continue; independent test counts and MC draws are not independent event evidence.",
+      "remaining_dependency": "Eligible personnel corpus; frozen same-event/cutoff experiment; prospective shadow and untouched confirmation. No program-wide freeze or activation."
+    }
+  ],
+  "closure_rule": "Each issue closes only for its specified scope with code, executable tests and retained evidence; no narrative-only closure.",
+  "status_axes": [
+    "DATA_CAPTURE",
+    "INPUT_ELIGIBILITY",
+    "PERSONNEL_TRANSFORM",
+    "STRUCTURAL_CORRECTNESS",
+    "RUNNER_REPLAY",
+    "PREDICTIVE_EVIDENCE",
+    "PRICE_ASSESSMENT",
+    "SELECTION_ELIGIBILITY"
+  ],
+  "wagering_authority": "OFF",
+  "allocation": 0,
+  "automatic_promotion": false
+}

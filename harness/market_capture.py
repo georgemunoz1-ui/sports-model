@@ -21,6 +21,8 @@ MODULE_ID = "market_capture"
 
 import hashlib
 import json
+import datetime as dt
+import math
 import statistics
 import sys
 
@@ -45,6 +47,7 @@ VALID_MARKETS = ("moneyline", "spread", "total")
 MISSING_FIELD = "MISSING_IDENTITY_FIELD"
 BAD_MARKET = "UNKNOWN_MARKET"
 BAD_PRICE = "UNPARSEABLE_PRICE"
+BAD_TIMESTAMP = "INVALID_QUOTE_TIMESTAMP"
 CONFLICT = "CONFLICT"
 DISAGREEMENT_POINTS = 2.0   # two books this far apart on a line -> CONFLICT, never a silent pick
 
@@ -55,19 +58,54 @@ def validate_record(rec):
     for f in REQUIRED_FIELDS:
         if rec.get(f) in (None, "", "TBD"):
             problems.append({"code": MISSING_FIELD, "field": f})
+    for field in ("event_id", "sportsbook", "source_url"):
+        if not isinstance(rec.get(field), str) or not rec[field].strip() or rec[field] == "None":
+            problems.append({"code": MISSING_FIELD, "field": field})
     if problems:
         return problems
     if rec["market"] not in VALID_MARKETS:
         problems.append({"code": BAD_MARKET, "market": rec["market"]})
     try:
-        float(rec["price"])
-    except (TypeError, ValueError):
+        price = _finite_number(rec["price"])
+        if abs(price) < 100:
+            raise ValueError("American odds require magnitude >= 100")
+    except (TypeError, ValueError, OverflowError):
         problems.append({"code": BAD_PRICE, "price": rec["price"]})
     try:
-        float(rec["line"])
-    except (TypeError, ValueError):
+        _finite_number(rec["line"])
+    except (TypeError, ValueError, OverflowError):
         problems.append({"code": BAD_PRICE, "field": "line", "line": rec["line"]})
+    for field in ("timestamp_captured", "timestamp_source"):
+        if field == "timestamp_source" and rec.get(field) is None:
+            continue
+        try:
+            _instant(rec[field])
+        except (TypeError, ValueError, OverflowError):
+            problems.append({"code": BAD_TIMESTAMP, "field": field})
+    if not any(p["code"] == BAD_TIMESTAMP for p in problems) and rec.get("timestamp_source") is not None:
+        if _instant(rec["timestamp_source"]) > _instant(rec["timestamp_captured"]):
+            problems.append({"code": BAD_TIMESTAMP, "field": "timestamp_source", "reason": "SOURCE_AFTER_CAPTURE"})
+    if rec.get("information_class", INFORMATION_CLASS) != INFORMATION_CLASS:
+        problems.append({"code": "INVALID_INFORMATION_CLASS"})
     return problems
+
+
+def _finite_number(value):
+    if isinstance(value, bool):
+        raise ValueError("boolean is not a number")
+    value = float(value)
+    if not math.isfinite(value):
+        raise ValueError("nonfinite number")
+    return value
+
+
+def _instant(value):
+    if not isinstance(value, str):
+        raise ValueError("timestamp must be a string")
+    value = dt.datetime.fromisoformat(value.replace("Z", "+00:00"))
+    if value.tzinfo is None or value.utcoffset() is None:
+        raise ValueError("timezone required")
+    return value.astimezone(dt.timezone.utc)
 
 
 def validate_records(records):
@@ -78,7 +116,7 @@ def validate_records(records):
 def make_record(event_id, sportsbook, market, line, price, timestamp_captured,
                 source_url, timestamp_source=None, grade=GRADE_UNCONFIRMED,
                 grade_basis="", feed=None, **extra):
-    rec = {"event_id": str(event_id), "sportsbook": sportsbook, "market": market,
+    rec = {"event_id": str(event_id) if event_id is not None and not isinstance(event_id, bool) else None, "sportsbook": sportsbook, "market": market,
            "line": line, "price": price, "timestamp_captured": timestamp_captured,
            "source_url": source_url, "feed": feed or source_url,
            "grade": grade, "grade_basis": grade_basis,
@@ -104,6 +142,8 @@ def consensus(records, event_id, market, exclude_books=(SHARP_REFERENCE_BOOK,)):
     for r in records:
         if r["event_id"] != str(event_id) or r["market"] != market:
             continue
+        if validate_record(r):
+            raise ValueError("INVALID_CONSENSUS_RECORD")
         if r["sportsbook"] in exclude_books:
             sharp = {"sportsbook": r["sportsbook"], "line": r["line"], "price": r["price"],
                      "label": "SHARP_REFERENCE_not_in_consensus"}
@@ -123,6 +163,9 @@ def consensus(records, event_id, market, exclude_books=(SHARP_REFERENCE_BOOK,)):
 
 def disagreements(records, event_id, market, threshold=DISAGREEMENT_POINTS):
     """Two books >= threshold points apart on a line -> CONFLICT status. Surfaced, never picked."""
+    threshold = _finite_number(threshold)
+    if threshold < 0:
+        raise ValueError("INVALID_DISAGREEMENT_THRESHOLD")
     cons = consensus(records, event_id, market)
     lines = {b: l for b, (l, _) in cons["books"].items()}
     out = []

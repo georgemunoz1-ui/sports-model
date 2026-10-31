@@ -1,0 +1,113 @@
+name: Daily Sports Operations Preflight
+
+on:
+  workflow_dispatch:
+  schedule:
+    # Early Pacific morning: acquire a point-in-time schedule/source bundle and
+    # report readiness before any forecast/card workflow is authorized.
+    - cron: "30 13 * * *"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: daily-sports-operations-preflight
+  cancel-in-progress: false
+
+jobs:
+  preflight:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Capture current operational inputs
+        id: capture
+        continue-on-error: true
+        run: |
+          set -o pipefail
+          python scripts/capture_operational_inputs.py --output "$RUNNER_TEMP/sports-inputs" 2>&1 | tee "$RUNNER_TEMP/capture.log"
+
+      - name: Validate capture receipts and run repository health checks
+        id: checks
+        continue-on-error: true
+        run: |
+          set +e
+          python - <<'PY' > "$RUNNER_TEMP/capture-validation.json"
+          import json
+          from pathlib import Path
+          root = Path(__import__('os').environ['RUNNER_TEMP']) / 'sports-inputs'
+          report_path = root / 'report.json'
+          errors = []
+          report = {}
+          if not report_path.exists():
+              errors.append('CAPTURE_REPORT_MISSING')
+          else:
+              report = json.loads(report_path.read_text())
+              for row in report.get('sources', []):
+                  if row.get('status') != 'CAPTURED':
+                      errors.append('SOURCE_FAILED:' + str(row.get('league')) + ':' + str(row.get('kind')))
+              for row in report.get('nfl_sources', []):
+                  if row.get('status') != 'captured':
+                      errors.append('NFL_SOURCE_FAILED:' + str(row.get('filename')))
+              if not (root / 'events.json').exists() or not (root / 'manifest.json').exists():
+                  errors.append('CAPTURE_ARTIFACT_MISSING')
+          print(json.dumps({'ok': not errors, 'errors': errors, 'date': report.get('date'),
+                            'event_counts': report.get('event_counts', {}),
+                            'source_capture_only': True, 'action_authority': False}, indent=2))
+          if errors:
+              raise SystemExit(1)
+          PY
+          CAPTURE_RC=$?
+          python harness/healthcheck.py > "$RUNNER_TEMP/healthcheck.log" 2>&1
+          HEALTH_RC=$?
+          printf '{"capture_validation_exit":%s,"healthcheck_exit":%s}\n' "$CAPTURE_RC" "$HEALTH_RC" > "$RUNNER_TEMP/exit-status.json"
+          if [ "$CAPTURE_RC" -ne 0 ] || [ "$HEALTH_RC" -ne 0 ]; then exit 1; fi
+
+      - name: Publish operational report
+        if: always()
+        run: |
+          {
+            echo "## Daily sports operations preflight"
+            echo
+            echo "- Commit: `$GITHUB_SHA`"
+            echo "- Run: $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"
+            echo "- This workflow captures and checks evidence only. It does not generate forecasts, register selections, or authorize wagering."
+            echo
+            echo "### Capture validation"
+            if [ -f "$RUNNER_TEMP/capture-validation.json" ]; then cat "$RUNNER_TEMP/capture-validation.json"; else echo "Capture validation did not complete."; fi
+            echo
+            echo "### Health check summary"
+            if [ -f "$RUNNER_TEMP/healthcheck.log" ]; then tail -n 100 "$RUNNER_TEMP/healthcheck.log"; else echo "Health check did not complete."; fi
+            echo
+            echo "### Exit status"
+            if [ -f "$RUNNER_TEMP/exit-status.json" ]; then cat "$RUNNER_TEMP/exit-status.json"; else echo "No combined exit status available."; fi
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Preserve source and failure evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: daily-operations-preflight-${{ github.run_id }}-${{ github.run_attempt }}
+          path: |
+            ${{ runner.temp }}/sports-inputs/
+            ${{ runner.temp }}/capture.log
+            ${{ runner.temp }}/capture-validation.json
+            ${{ runner.temp }}/healthcheck.log
+            ${{ runner.temp }}/exit-status.json
+          if-no-files-found: warn
+          retention-days: 30
+
+      - name: Fail closed on incomplete acquisition or unhealthy repository
+        if: always()
+        run: |
+          if [ "${{ steps.capture.outcome }}" != "success" ] || [ "${{ steps.checks.outcome }}" != "success" ]; then
+            echo "PREFLIGHT_FAILED: forecast publication remains blocked."
+            exit 1
+          fi

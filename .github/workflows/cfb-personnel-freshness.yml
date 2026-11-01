@@ -1,0 +1,38 @@
+name: CFB personnel event freshness
+on:
+  pull_request:
+    paths:
+      - 'models/experiments/cfb_*.py'
+      - 'research/efficiency/**'
+      - 'scripts/*cfb_personnel*'
+      - 'scripts/run_efficiency_experiments.py'
+      - 'tests/test_cfb_personnel*'
+      - 'docs/research/cfb_personnel_freshness_20261031/**'
+      - '.github/workflows/cfb-personnel-freshness.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install -r requirements-consolidated.txt
+      - name: Timing, immutable refresh and weekly-control regressions
+        run: >-
+          python -m pytest -q
+          tests/test_cfb_personnel_freshness.py
+          tests/test_cfb_personnel_v2.py
+          tests/test_cfb_efficiency_experiment.py
+          tests/test_efficiency_runner_dispatch.py
+          tests/test_efficiency_integrity.py
+          tests/test_efficiency_adversarial.py
+          tests/test_model_control_dispatch.py
+      - name: Verify version-bound acceptance evidence
+        run: python -m research.finding_evidence docs/research/cfb_personnel_freshness_20261031/FINDING_EVIDENCE.json
+      - name: Scope
+        if: always()
+        run: echo 'Synthetic software acceptance only. Source qualification and chronological predictive evaluation remain open. Wagering OFF.' >> "$GITHUB_STEP_SUMMARY"

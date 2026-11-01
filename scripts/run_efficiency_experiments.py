@@ -7,7 +7,7 @@ import sys
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
-from research.efficiency.runner import experiment, shadow_from_card
+from research.efficiency.runner import experiment, shadow_from_card, personnel_refresh_from_card
 
 
 def main():
@@ -19,9 +19,17 @@ def main():
     p.add_argument("--bootstrap-count", type=int, default=2000)
     p.add_argument("--source-card", type=Path)
     p.add_argument("--shadow-config", type=Path)
+    p.add_argument("--personnel-refresh-config", type=Path,
+                   help="Opt-in CFB personnel-v2 event freshness child; frozen parent fit, separate refresh receipts.")
     p.add_argument("--simulations", type=int, default=100000)
     a = p.parse_args()
-    if a.source_card or a.shadow_config:
+    if a.personnel_refresh_config:
+        if a.league != "cfb" or not a.source_card or a.history or a.shadow_config:
+            p.error("personnel refresh requires CFB and source-card, without history or shadow-config")
+        report = personnel_refresh_from_card(a.source_card, a.personnel_refresh_config, a.output_dir)
+        print(json.dumps({"run_id": report["run_id"], "retained_count": report["retained_count"],
+                          "coverage": report["coverage"], "action_authority": False}))
+    elif a.source_card or a.shadow_config:
         if not (a.source_card and a.shadow_config) or a.history:
             p.error("SHADOW requires source-card and shadow-config, without history")
         report = shadow_from_card(a.source_card, a.shadow_config, a.output_dir, simulations=a.simulations)

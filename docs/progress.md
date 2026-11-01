@@ -5044,3 +5044,21 @@ No activation, forecast overwrite, provider authentication or promotion.
 Wagering OFF, dose 0, allocation zero. See
 docs/research/model_controls_20261030/README.md, BLOCKER_REGISTER.json and
 EXECUTION.json for commands, source hashes, separate verdicts and dependencies.
+
+
+## 2026-10-31 — Opt-in CFB personnel-v2 event freshness
+
+Implemented a separately identified event-refresh inference child on PR99 head
+eb70c0c. The frozen weekly personnel-v2 fit, weekly state/coverage/label gates,
+selected CFB defaults and original forecasts remain unchanged. Explicit per-event
+cutoffs, source-bound versions, signed historical snapshot requirements and
+locked append-only refresh receipts are exercised. No trust authority enabled.
+
+1,034 scoped software tests passed after installing missing pinned pyarrow;
+1,565 protected files match the parent. Two retained synthetic refresh receipts
+cover one fixture event and reverify from archived personnel bytes. Forty-seven
+retained CFB context captures hash-match but zero supply admissible personnel-v2
+inputs; authentic predictive evaluation remains unavailable. Repository health
+still has four failures/seven warnings. No source qualification, promotion,
+canonical registration, market use or wagering authority. See
+docs/research/cfb_personnel_freshness_20261031/README.md and EXECUTION.json.

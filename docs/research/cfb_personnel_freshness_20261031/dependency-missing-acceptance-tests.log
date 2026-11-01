@@ -1,0 +1,360 @@
+........................................................................ [  6%]
+........................................................................ [ 13%]
+........................................................................ [ 20%]
+........................................................................ [ 27%]
+.........................................F.....F.....F.............F.... [ 34%]
+F....................................................................... [ 41%]
+........................................................................ [ 48%]
+...............................................................F........ [ 55%]
+........................................................................ [ 62%]
+........................................................................ [ 69%]
+........................................................................ [ 76%]
+........................................................................ [ 83%]
+........................................................................ [ 90%]
+........................................................................ [ 97%]
+..........................                                               [100%]
+=================================== FAILURES ===================================
+___ test_metadata_changes_archive_not_numeric_identity_or_draws[event-wnba] ____
+
+league = 'wnba', location = 'event'
+tmp_path = PosixPath('/tmp/pytest-of-root/pytest-3/test_metadata_changes_archive_1')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7f046cd0b2f0>
+
+    @pytest.mark.parametrize("league", LEAGUES)
+    @pytest.mark.parametrize("location", ["event", "package"])
+    def test_metadata_changes_archive_not_numeric_identity_or_draws(league, location, tmp_path, monkeypatch):
+        results = []
+        for i, quote in enumerate(QUOTES):
+            p = package(league); target = p["events"][0] if location == "event" else p
+            target.update(market_quotes=quote, display_metadata={"label": str(i), "color": str(i)}, scrape_receipt="capture-" + str(i))
+            before = copy.deepcopy(p)
+>           results.append(execute(p, tmp_path / str(i), monkeypatch))
+
+tests/test_semantic_identity.py:55: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_semantic_identity.py:35: in execute
+    row = forecast_with_identity(adapter, events[0], ctx, 100000, semantics=semantics)
+pipelines/cards/semantic_identity.py:375: in forecast_with_identity
+    raw = adapter.forecast_event(event, context, simulations, **forecast_kwargs)
+pipelines/cards/adapters/wnba.py:11: in forecast_event
+    def forecast_event(event,context,simulations=100000):return forecast(event,context,simulations)
+models/current/wnba.py:9: in forecast
+    from harness import wnba_model_v1 as W
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    #!/usr/bin/env python3
+    """wnba.rs.ff7_logit_ridge.v1_0.shadow — preregistered in docs/experiments/2026-08-12_WNBA_V1_PREREG.json.
+    
+    Builds the official-plus-one dataset from the staged bytes, walks forward, applies the frozen
+    gates, and (only if the win-target gates pass) emits a coherence-gated card for a given slate.
+    Reuses the tested fitting/diagnostic primitives from the MLB harness. SHADOW DIAGNOSTIC ONLY.
+    """
+    from __future__ import annotations
+    
+    import datetime as dt
+    import json
+    import math
+    import os
+    import sys
+    from zoneinfo import ZoneInfo
+    
+    import numpy as np
+>   import pyarrow.parquet as pq
+E   ModuleNotFoundError: No module named 'pyarrow'
+
+harness/wnba_model_v1.py:18: ModuleNotFoundError
+__ test_metadata_changes_archive_not_numeric_identity_or_draws[package-wnba] ___
+
+league = 'wnba', location = 'package'
+tmp_path = PosixPath('/tmp/pytest-of-root/pytest-3/test_metadata_changes_archive_7')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7f046c95c620>
+
+    @pytest.mark.parametrize("league", LEAGUES)
+    @pytest.mark.parametrize("location", ["event", "package"])
+    def test_metadata_changes_archive_not_numeric_identity_or_draws(league, location, tmp_path, monkeypatch):
+        results = []
+        for i, quote in enumerate(QUOTES):
+            p = package(league); target = p["events"][0] if location == "event" else p
+            target.update(market_quotes=quote, display_metadata={"label": str(i), "color": str(i)}, scrape_receipt="capture-" + str(i))
+            before = copy.deepcopy(p)
+>           results.append(execute(p, tmp_path / str(i), monkeypatch))
+
+tests/test_semantic_identity.py:55: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_semantic_identity.py:35: in execute
+    row = forecast_with_identity(adapter, events[0], ctx, 100000, semantics=semantics)
+pipelines/cards/semantic_identity.py:375: in forecast_with_identity
+    raw = adapter.forecast_event(event, context, simulations, **forecast_kwargs)
+pipelines/cards/adapters/wnba.py:11: in forecast_event
+    def forecast_event(event,context,simulations=100000):return forecast(event,context,simulations)
+models/current/wnba.py:9: in forecast
+    from harness import wnba_model_v1 as W
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    #!/usr/bin/env python3
+    """wnba.rs.ff7_logit_ridge.v1_0.shadow — preregistered in docs/experiments/2026-08-12_WNBA_V1_PREREG.json.
+    
+    Builds the official-plus-one dataset from the staged bytes, walks forward, applies the frozen
+    gates, and (only if the win-target gates pass) emits a coherence-gated card for a given slate.
+    Reuses the tested fitting/diagnostic primitives from the MLB harness. SHADOW DIAGNOSTIC ONLY.
+    """
+    from __future__ import annotations
+    
+    import datetime as dt
+    import json
+    import math
+    import os
+    import sys
+    from zoneinfo import ZoneInfo
+    
+    import numpy as np
+>   import pyarrow.parquet as pq
+E   ModuleNotFoundError: No module named 'pyarrow'
+
+harness/wnba_model_v1.py:18: ModuleNotFoundError
+_________ test_consumed_feature_change_changes_semantic_identity[wnba] _________
+
+league = 'wnba'
+tmp_path = PosixPath('/tmp/pytest-of-root/pytest-3/test_consumed_feature_change_c1')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7f046ca10c80>
+
+    @pytest.mark.parametrize("league", LEAGUES)
+    def test_consumed_feature_change_changes_semantic_identity(league, tmp_path, monkeypatch):
+        p = package(league); q = copy.deepcopy(p)
+        if league == "mlb":
+            q["team_state"]["HOME"]["rf"] += .5
+            material = dict(pins=q["code_pins"], teams=q["team_state"], starters=q["starter_state"])
+        elif league == "wnba":
+            q["team_state"][0]["values"]["pts"] += 100
+            material = dict(model=q["fitted_model"], state=q["team_state"], league=q["league_state"])
+        elif league == "cfb":
+            q["team_state"]["elo"]["HOME"] += 30
+            material = dict(model=q["fitted_model"], state=q["team_state"], parameters=q["parameters"])
+        else:
+            q["team_state"]["H"]["for"] += .5
+            material = dict(model=q["fitted_model"], state=q["team_state"], prior=q["prior"])
+        q["model_sha256"] = digest(material)
+>       a, ad = execute(p, tmp_path / "a", monkeypatch); b, bd = execute(q, tmp_path / "b", monkeypatch)
+
+tests/test_semantic_identity.py:87: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_semantic_identity.py:35: in execute
+    row = forecast_with_identity(adapter, events[0], ctx, 100000, semantics=semantics)
+pipelines/cards/semantic_identity.py:375: in forecast_with_identity
+    raw = adapter.forecast_event(event, context, simulations, **forecast_kwargs)
+pipelines/cards/adapters/wnba.py:11: in forecast_event
+    def forecast_event(event,context,simulations=100000):return forecast(event,context,simulations)
+models/current/wnba.py:9: in forecast
+    from harness import wnba_model_v1 as W
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    #!/usr/bin/env python3
+    """wnba.rs.ff7_logit_ridge.v1_0.shadow — preregistered in docs/experiments/2026-08-12_WNBA_V1_PREREG.json.
+    
+    Builds the official-plus-one dataset from the staged bytes, walks forward, applies the frozen
+    gates, and (only if the win-target gates pass) emits a coherence-gated card for a given slate.
+    Reuses the tested fitting/diagnostic primitives from the MLB harness. SHADOW DIAGNOSTIC ONLY.
+    """
+    from __future__ import annotations
+    
+    import datetime as dt
+    import json
+    import math
+    import os
+    import sys
+    from zoneinfo import ZoneInfo
+    
+    import numpy as np
+>   import pyarrow.parquet as pq
+E   ModuleNotFoundError: No module named 'pyarrow'
+
+harness/wnba_model_v1.py:18: ModuleNotFoundError
+_______________ test_wnba_nested_state_display_metadata_excluded _______________
+
+tmp_path = PosixPath('/tmp/pytest-of-root/pytest-3/test_wnba_nested_state_display0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7f046ca132f0>
+
+    def test_wnba_nested_state_display_metadata_excluded(tmp_path, monkeypatch):
+        outputs = []
+        for i, quote in enumerate(QUOTES):
+            p = package("wnba")
+            p["team_state"][0]["values"]["market_quotes"] = quote
+            p["team_state"][1]["values"]["display_metadata"] = str(i)
+            p["model_sha256"] = digest(dict(model=p["fitted_model"], state=p["team_state"], league=p["league_state"]))
+>           outputs.append(execute(p, tmp_path / str(i), monkeypatch))
+
+tests/test_semantic_identity.py:201: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_semantic_identity.py:35: in execute
+    row = forecast_with_identity(adapter, events[0], ctx, 100000, semantics=semantics)
+pipelines/cards/semantic_identity.py:375: in forecast_with_identity
+    raw = adapter.forecast_event(event, context, simulations, **forecast_kwargs)
+pipelines/cards/adapters/wnba.py:11: in forecast_event
+    def forecast_event(event,context,simulations=100000):return forecast(event,context,simulations)
+models/current/wnba.py:9: in forecast
+    from harness import wnba_model_v1 as W
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    #!/usr/bin/env python3
+    """wnba.rs.ff7_logit_ridge.v1_0.shadow — preregistered in docs/experiments/2026-08-12_WNBA_V1_PREREG.json.
+    
+    Builds the official-plus-one dataset from the staged bytes, walks forward, applies the frozen
+    gates, and (only if the win-target gates pass) emits a coherence-gated card for a given slate.
+    Reuses the tested fitting/diagnostic primitives from the MLB harness. SHADOW DIAGNOSTIC ONLY.
+    """
+    from __future__ import annotations
+    
+    import datetime as dt
+    import json
+    import math
+    import os
+    import sys
+    from zoneinfo import ZoneInfo
+    
+    import numpy as np
+>   import pyarrow.parquet as pq
+E   ModuleNotFoundError: No module named 'pyarrow'
+
+harness/wnba_model_v1.py:18: ModuleNotFoundError
+___ test_full_selected_parent_to_pmf_draw_chain_is_metadata_invariant[wnba] ____
+
+league = 'wnba'
+tmp_path = PosixPath('/tmp/pytest-of-root/pytest-3/test_full_selected_parent_to_p1')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7f04a5bcc620>
+
+    @pytest.mark.parametrize("league", LEAGUES + ("nfl",))
+    def test_full_selected_parent_to_pmf_draw_chain_is_metadata_invariant(league, tmp_path, monkeypatch):
+>       cards, reports = full_chain(league, tmp_path, monkeypatch)
+
+tests/test_semantic_distribution_identity.py:60: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_semantic_distribution_identity.py:50: in full_chain
+    cards = [parent_card(league, i, directory / ("parent-" + str(i)), monkeypatch, semantics) for i in range(2)]
+tests/test_semantic_distribution_identity.py:30: in parent_card
+    raw, _ = execute(p, directory, monkeypatch, semantics=semantics)
+tests/test_semantic_identity.py:35: in execute
+    row = forecast_with_identity(adapter, events[0], ctx, 100000, semantics=semantics)
+pipelines/cards/semantic_identity.py:375: in forecast_with_identity
+    raw = adapter.forecast_event(event, context, simulations, **forecast_kwargs)
+pipelines/cards/adapters/wnba.py:11: in forecast_event
+    def forecast_event(event,context,simulations=100000):return forecast(event,context,simulations)
+models/current/wnba.py:9: in forecast
+    from harness import wnba_model_v1 as W
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    #!/usr/bin/env python3
+    """wnba.rs.ff7_logit_ridge.v1_0.shadow — preregistered in docs/experiments/2026-08-12_WNBA_V1_PREREG.json.
+    
+    Builds the official-plus-one dataset from the staged bytes, walks forward, applies the frozen
+    gates, and (only if the win-target gates pass) emits a coherence-gated card for a given slate.
+    Reuses the tested fitting/diagnostic primitives from the MLB harness. SHADOW DIAGNOSTIC ONLY.
+    """
+    from __future__ import annotations
+    
+    import datetime as dt
+    import json
+    import math
+    import os
+    import sys
+    from zoneinfo import ZoneInfo
+    
+    import numpy as np
+>   import pyarrow.parquet as pq
+E   ModuleNotFoundError: No module named 'pyarrow'
+
+harness/wnba_model_v1.py:18: ModuleNotFoundError
+_________ test_remaining_current_adapters_numeric_price_firewall[wnba] _________
+
+tmp_path = PosixPath('/tmp/pytest-of-root/pytest-3/test_remaining_current_adapter1')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7f046c9ba8d0>
+league = 'wnba'
+
+    @pytest.mark.parametrize("league", ["cfb", "wnba", "mlb"])
+    def test_remaining_current_adapters_numeric_price_firewall(tmp_path, monkeypatch, league):
+        import importlib
+        from pipelines.cards.semantic_identity import forecast_with_identity, SEMANTIC
+        event, package = synthetic_nba_package()
+        event["event_id"] = league.upper()+":independent-numeric-oracle"
+        package["league"] = league
+        if league == "cfb":
+            from models.current.cfb import feature_row
+            event.update(season=2026, week=8, division_scope="FBS_VS_FBS", conference_game=True)
+            state = {"elo": {"Home": 1560, "Away": 1490}, "last_season": {"Home": 2026, "Away": 2026},
+                     "last": {"Home": "2026-10-17T01:00:00Z", "Away": "2026-10-16T01:00:00Z"},
+                     "ewpf": {"Home": 29, "Away": 24}, "ewpa": {"Home": 22, "Away": 28}, "ewm": {"Home": 7, "Away": -4}}
+            parameters = {"regress": .75, "hfa": 55}
+            names = list(feature_row(state, event, parameters))
+            fitted = {kind: {"kind": "logistic" if kind == "winner" else "linear", "impute": [0]*len(names),
+                "mean": [0]*len(names), "scale": [1]*len(names), "coefficient": [.001]*len(names), "intercept": .2}
+                for kind in ("winner", "margin")}
+            package.update(model_id="cfb.fbs.elo_form_logit_ridge.v1_0.shadow", team_state=state,
+                           feature_names=names, parameters=parameters, fitted_model=fitted)
+            package["model_sha256"] = content_id({"model": fitted, "state": state, "parameters": parameters})
+        elif league == "wnba":
+            event.update(season=2026, season_type=2)
+            values = {"g": 20, "pts": 1600, "opts": 1500, "fgm": 600, "fga": 1400, "fg3m": 200,
+                      "fta": 250, "oreb": 180, "tov": 240, "ofga": 1400, "ooreb": 180, "otov": 240,
+                      "ofta": 250, "last": "2026-10-20"}
+            state = [{"season": 2026, "team": name, "values": copy.deepcopy(values)} for name in ("Home", "Away")]
+            fitted = {"mu": [0]*6, "sd": [1]*6, "blog": [.2]+[.01]*7, "bmar": [3]+[.1]*7,
+                      "tmu": [0]*3, "tsd": [1]*3, "btot": [145]+[.1]*3}
+            package.update(model_id="wnba.rs.ff7_logit_ridge.v1_0.shadow", team_state=state,
+                           fitted_model=fitted, league_state=[16000, 100, 8000], consumed_game_ids=[])
+            package["model_sha256"] = content_id({"model": fitted, "state": state, "league": package["league_state"]})
+        else:
+            event.update(home_pitcher_id="10", away_pitcher_id="11", park_factor=1.05)
+            state = {"Home": {"rf": 4.6, "ra": 4.1}, "Away": {"rf": 4.1, "ra": 4.5}}
+            starters = {"10": {"era": 3.6, "gs": 25, "k": 24, "bb": 8}, "11": {"era": 4.2, "gs": 23, "k": 20, "bb": 9}}
+            package.update(model_id="mlb.v13.current_input.research.v1", team_state=state, starter_state=starters)
+            package["model_sha256"] = content_id({"teams": state, "starters": starters})
+        adapter = importlib.import_module("pipelines.cards.adapters."+league)
+        children = []
+        for i, price in enumerate((1.1, 10.0)):
+            p = copy.deepcopy(package)
+            e = p["events"][0]
+            e["decimal_odds"] = price
+            p["market_metadata"] = {"price": price, "book": "synthetic-market"}
+            context = {"package": p, "package_sha256": content_id(p), "cutoff": "2026-10-23T23:00:00Z"}
+            monkeypatch.setenv("SPORTS_RESEARCH_DRAW_OUTPUT", str(tmp_path/f"{league}-{i}"))
+>           children.append(forecast_with_identity(adapter, e, context, 257, semantics=SEMANTIC))
+
+tests/test_blind_conformance.py:605: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+pipelines/cards/semantic_identity.py:375: in forecast_with_identity
+    raw = adapter.forecast_event(event, context, simulations, **forecast_kwargs)
+pipelines/cards/adapters/wnba.py:11: in forecast_event
+    def forecast_event(event,context,simulations=100000):return forecast(event,context,simulations)
+models/current/wnba.py:9: in forecast
+    from harness import wnba_model_v1 as W
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    #!/usr/bin/env python3
+    """wnba.rs.ff7_logit_ridge.v1_0.shadow — preregistered in docs/experiments/2026-08-12_WNBA_V1_PREREG.json.
+    
+    Builds the official-plus-one dataset from the staged bytes, walks forward, applies the frozen
+    gates, and (only if the win-target gates pass) emits a coherence-gated card for a given slate.
+    Reuses the tested fitting/diagnostic primitives from the MLB harness. SHADOW DIAGNOSTIC ONLY.
+    """
+    from __future__ import annotations
+    
+    import datetime as dt
+    import json
+    import math
+    import os
+    import sys
+    from zoneinfo import ZoneInfo
+    
+    import numpy as np
+>   import pyarrow.parquet as pq
+E   ModuleNotFoundError: No module named 'pyarrow'
+
+harness/wnba_model_v1.py:18: ModuleNotFoundError
+- generated xml file: /workspace/scratch/47ef32e7f379/sports-model/docs/research/cfb_personnel_freshness_20261031/acceptance-tests.xml -
+=========================== short test summary info ============================
+FAILED tests/test_semantic_identity.py::test_metadata_changes_archive_not_numeric_identity_or_draws[event-wnba]
+FAILED tests/test_semantic_identity.py::test_metadata_changes_archive_not_numeric_identity_or_draws[package-wnba]
+FAILED tests/test_semantic_identity.py::test_consumed_feature_change_changes_semantic_identity[wnba]
+FAILED tests/test_semantic_identity.py::test_wnba_nested_state_display_metadata_excluded
+FAILED tests/test_semantic_distribution_identity.py::test_full_selected_parent_to_pmf_draw_chain_is_metadata_invariant[wnba]
+FAILED tests/test_blind_conformance.py::test_remaining_current_adapters_numeric_price_firewall[wnba]
+6 failed, 1028 passed in 94.51s (0:01:34)

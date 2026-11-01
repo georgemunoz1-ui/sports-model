@@ -1,0 +1,32 @@
+{
+ "ok": true,
+ "failures": [],
+ "detail": {
+  "journals": {
+   "AUTHORIZATIONS.md": "DECLARED_NOT_A_JOURNAL",
+   "docs/progress.md": "LIVE",
+   "progress.md": "REDIRECT"
+  },
+  "latest_committed_entry": "2026-10-30",
+  "latest_entry_body_lines": 28,
+  "latest_entry_age_days": 1,
+  "head_commit": "e16a2c3b835354a4994d681c6d550b8a5d4e11b1",
+  "journal_commit": "e16a2c3b835354a4994d681c6d550b8a5d4e11b1",
+  "journal_commit_time": "2026-10-30T12:04:58-07:00",
+  "commits_since_journal": 0,
+  "loader": {
+   "spec_file": "AGENTS.md",
+   "path": "docs/progress.md",
+   "lines": 120,
+   "instruction": "3. Read `docs/progress.md` (last ~120 lines) and the current documentation checkpoint. The journal is append-only; retain dated headers and original statements. `harness/journal_continuity.py` checks that the newest dated entry is visible in this window.",
+   "parse_note": null
+  },
+  "cold_bootstrap": {
+   "window_lines": 120,
+   "latest_entry_in_window": "2026-10-30"
+  },
+  "redirects_newer_than_canonical": {},
+  "redirect_state_leaks": {},
+  "warnings": []
+ }
+}

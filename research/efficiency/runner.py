@@ -457,3 +457,94 @@ def shadow_from_card(card_path, config_path, output, *, simulations=100000):
               "predictive_validation": "UNVALIDATED", "publication_allowed": False, "action_authority": False}
     write(output / "report.json", report)
     return report
+
+
+def personnel_refresh_from_card(card_path, config_path, output):
+    """Explicit CFB-only child of a frozen personnel-v2 fit and source card.
+
+    It retains all versions in a separate refresh store. Existing weekly SHADOW
+    registration and FIRST_PRESTART_EVENT_MODEL_STAGE behavior are untouched.
+    """
+    from research.efficiency import cfb_personnel_freshness as freshness
+    from research.efficiency.integrity import build_component_receipt
+    from research.validation_registry import _decode
+    card_path, config_path = Path(card_path).resolve(strict=True), Path(config_path).resolve(strict=True)
+    card_raw, config_raw = card_path.read_bytes(), config_path.read_bytes()
+    card, config = _decode(card_raw), _decode(config_raw)
+    if config.get("schema") != "cfb.personnel-refresh-run.v1" or card.get("league", "").lower() != "cfb":
+        raise ValueError("CFB_REFRESH_CONFIG_OR_LEAGUE")
+    freshness.validate_policy(config["policy"])
+    mode = config["mode"]
+    if mode not in {"SHADOW", "HISTORICAL_REPLAY"}:
+        raise ValueError("CFB_REFRESH_MODE_REQUIRED")
+    history, history_path = read_bound(config["history"], config_path.parent)
+    fitted, state_path = read_bound(config["parent_state"], config_path.parent)
+    module = backend("cfb")
+    if fitted.get("model_id") != module.PERSONNEL_V2_ID:
+        raise ValueError("CFB_REFRESH_REQUIRES_PERSONNEL_V2_PARENT")
+    freshness.index_events(history["games"])
+    request_ids = [freshness.identity(r["event"])["event_id"] for r in config["requests"]]
+    parent_ids = [r["event_id"] for r in card["forecasts"]]
+    if len(set(request_ids)) != len(request_ids) or len(set(parent_ids)) != len(parent_ids):
+        raise ValueError("CFB_REFRESH_DUPLICATE_EVENT_IDENTITY")
+    if set(request_ids) - set(parent_ids):
+        raise ValueError("CFB_REFRESH_EVENT_ABSENT_FROM_PARENT_CARD")
+    source_checks = verify_sources(history)
+    # Prepare the entire supplied schedule so earlier games in the same week
+    # continue to set the original weekly cutoff. Do not filter to refresh IDs.
+    examples = {e["event_id"]: e for e in prepare("cfb", history)}
+    parents = {r["event_id"]: r for r in card["forecasts"]}
+    code = code_snapshot("cfb")
+    code.update({"research/efficiency/" + name: file_hash(ROOT / "research/efficiency" / name)
+                 for name in ("cfb_personnel_freshness.py", "cfb_personnel_clock_authorities.json")})
+    output = Path(output)
+    output.mkdir(parents=True, exist_ok=False)
+    run_id = "cfb-personnel-refresh-" + datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ") + "-" + uuid.uuid4().hex[:8]
+    invocation = {"run_id": run_id, "mode": mode, "created_at_utc": stamp(),
+        "parent_card_sha256": hashlib.sha256(card_raw).hexdigest(), "config_sha256": hashlib.sha256(config_raw).hexdigest(),
+        "history_sha256": file_hash(history_path), "parent_state_file_sha256": file_hash(state_path),
+        "code_sha256": code, "policy": config["policy"], "model_id": freshness.MODEL_ID}
+    write(output / "invocation.json", invocation)
+    write(output / "source_verification.json", source_checks)
+    coverage = []
+    for request in config["requests"]:
+        eid = freshness.identity(request["event"])["event_id"]
+        try:
+            example = examples[eid]
+            parent = parents[eid]
+            if (utc(parent["start_time_utc"]) != utc(example["start_time_utc"])
+                    or any(parent[s + "_team"] != example["event"][s + "_team"] for s in ("home", "away"))):
+                raise ValueError("CFB_REFRESH_PARENT_EVENT_CONFLICT")
+            candidate, snapshot = freshness.prepare_snapshot(example, request, config["policy"], mode, history)
+            forecast = module.predict(fitted, candidate, personnel_refresh=snapshot)
+            state = freshness.procedure_state(fitted, config["policy"])
+            checked = forecast["personnel_freshness"]
+            receipt = build_component_receipt(model_id=freshness.MODEL_ID, stage_id=forecast["stage_id"],
+                event_id=eid, cutoff_utc=checked["personnel_cutoff_utc"], start_utc=example["start_time_utc"],
+                inputs={"event": freshness.identity(example["event"]), "weekly_features": example["features"],
+                        "weekly_cutoff_utc": example["cutoff_utc"], "snapshot": snapshot,
+                        "personnel_schedule_coverage": candidate["personnel_schedule_coverage"],
+                        "consumed_personnel_features": checked["feature_values"],
+                        "parent_card_forecast": parent, "component_state_sha256": example["component_state_sha256"]},
+                state=state, config=config["policy"], code_files={name: ROOT / name for name in code},
+                sources=sources_for(candidate, history, fitted), components=forecast["components"],
+                forecast=forecast, mode=mode, parent_model_id=module.PERSONNEL_V2_ID,
+                input_max_available_at_utc=example.get("history_max_available_at_utc"))
+            if (card_path.read_bytes() != card_raw or config_path.read_bytes() != config_raw
+                    or file_hash(history_path) != invocation["history_sha256"]
+                    or file_hash(state_path) != invocation["parent_state_file_sha256"]
+                    or any(file_hash(ROOT / name) != sha for name, sha in code.items())):
+                raise ValueError("CFB_REFRESH_INPUT_OR_CODE_MUTATED")
+            saved = freshness.write_refresh(config_path.parent / config["refresh_store"], candidate, snapshot,
+                forecast, parent_state=fitted, parent_card_sha256=invocation["parent_card_sha256"], component_receipt=receipt)
+            coverage.append({"event_id": eid, "status": "REFRESH_RETAINED", "forecast": forecast,
+                             "receipt_sha256": saved["receipt_sha256"], "sequence": saved["sequence"]})
+        except (ValueError, KeyError, TypeError, OSError) as exc:
+            coverage.append({"event_id": eid, "status": "BLOCKED", "reason": str(exc)})
+    report = {**invocation, "completed_at_utc": stamp(), "coverage": coverage,
+        "retained_count": sum(r["status"] == "REFRESH_RETAINED" for r in coverage),
+        "predictive_validation": "UNVALIDATED", "current_source_qualification": "NOT_ESTABLISHED",
+        "canonical_prospective_eligible": False, "publication_allowed": False, "action_authority": False,
+        "original_baselines_and_forecasts_modified": False}
+    write(output / "report.json", report)
+    return report

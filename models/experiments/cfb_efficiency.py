@@ -500,7 +500,13 @@ def fit_personnel_v2(train_examples, config=None):
     return fit(train_examples, config, personnel_v2=True)
 
 
-def predict(state, example, stage=None):
+def predict(state, example, stage=None, *, personnel_refresh=None):
+    refresh = None
+    if personnel_refresh is not None:
+        if state.get("model_id") != PERSONNEL_V2_ID:
+            raise ValueError("CFB_REFRESH_REQUIRES_PERSONNEL_V2_PARENT")
+        from research.efficiency.cfb_personnel_freshness import validate_snapshot
+        refresh = validate_snapshot(example, personnel_refresh)
     if digest({k: v for k, v in state.items() if k != "state_sha256"}) != state.get("state_sha256"):
         raise ValueError("CFB_FITTED_STATE_DIGEST_MISMATCH")
     if state.get("feature_config_sha256") != example.get("feature_config_sha256"):
@@ -523,7 +529,10 @@ def predict(state, example, stage=None):
         raise ValueError("LEGACY_BASELINE_FEATURES_AFTER_WEEK_CUTOFF")
     feature_values = example["baseline_features" if state["model_id"] in (CONTROL_ID, MATCHED_CONTROL_ID) else "features"]
     if state["model_id"] == PERSONNEL_V2_ID:
-        feature_values = {**feature_values, **personnel_v2_values(example)}
+        if refresh is None:
+            feature_values = {**feature_values, **personnel_v2_values(example)}
+        else:
+            feature_values = {**feature_values, **refresh["feature_values"]}
     elif state["model_id"] == LEGACY_PERSONNEL_ID:
         feature_values = {**feature_values, **personnel_values(example)}
     x = [feature_values[k] for k in state["feature_names"]]
@@ -552,6 +561,13 @@ def predict(state, example, stage=None):
         result["limitations"] = [x for x in result["limitations"] if x != "NO_PERSONNEL_FEATURES"] + [
             "SUPPLIED_QB_PARTICIPATION_ASSUMPTIONS_NOT_INFERRED", "PERSONNEL_INCREMENT_NOT_PREDICTIVELY_VALIDATED",
             "SOURCE_FIELD_EXTRACTION_NOT_INDEPENDENTLY_VERIFIED"]
+    if refresh is not None:
+        from research.efficiency.cfb_personnel_freshness import MODEL_ID as REFRESH_ID, procedure_state
+        result.update(model_id=REFRESH_ID, stage_id="personnel_v2_event_refresh",
+                      parent_personnel_model_id=state["model_id"],
+                      parent_model_state_sha256=state["state_sha256"],
+                      model_state_sha256=procedure_state(state, personnel_refresh["policy"])["state_sha256"],
+                      personnel_freshness=refresh)
     return result
 
 

@@ -144,7 +144,7 @@ def schedule_coverage(games, records, event, cutoff, *, history_seasons=3, label
     return report
 
 
-def values(example):
+def values(example, *, personnel_cutoff_utc=None):
     """Validate explicit QB/participation evidence and return the six v2 values."""
     from models.experiments.cfb_efficiency import utc
 
@@ -153,13 +153,18 @@ def values(example):
         raise ValueError("CFB_PERSONNEL_SOURCE_BOUND_INPUTS_REQUIRED")
     if evidence.get("event_id") != example["event_id"]:
         raise ValueError("CFB_PERSONNEL_EVENT_MISMATCH")
-    event, cutoff = example["event"], utc(example["cutoff_utc"])
+    event, weekly_cutoff = example["event"], utc(example["cutoff_utc"])
+    # A separate research procedure may supply its validated personnel cutoff.
+    # Coverage and all non-personnel features remain bound to the weekly cutoff.
+    cutoff = weekly_cutoff if personnel_cutoff_utc is None else utc(personnel_cutoff_utc)
+    if not weekly_cutoff <= cutoff < utc(event["start_time_utc"]):
+        raise ValueError("CFB_PERSONNEL_INVALID_EVENT_CUTOFF")
     coverage = example.get("personnel_schedule_coverage")
     if not isinstance(coverage, dict):
         raise ValueError("CFB_PERSONNEL_SCHEDULE_COVERAGE_REQUIRED")
     if coverage.get("receipt_sha256") != _digest({k: v for k, v in coverage.items() if k != "receipt_sha256"}):
         raise ValueError("CFB_PERSONNEL_COVERAGE_HASH_MISMATCH")
-    if coverage.get("event_id") != example["event_id"] or utc(coverage["cutoff_utc"]) != cutoff:
+    if coverage.get("event_id") != example["event_id"] or utc(coverage["cutoff_utc"]) != weekly_cutoff:
         raise ValueError("CFB_PERSONNEL_COVERAGE_IDENTITY_MISMATCH")
     if not coverage.get("matchup_supported"):
         raise ValueError("CFB_PERSONNEL_FBS_VS_FBS_REQUIRED")

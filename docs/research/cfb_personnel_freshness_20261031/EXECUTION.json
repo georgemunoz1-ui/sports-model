@@ -1,0 +1,72 @@
+{
+  "schema": "cfb.personnel-freshness-execution.v1",
+  "completed_at_utc": "2026-11-01T02:50:28.154705+00:00",
+  "base_pr": 99,
+  "base_sha": "eb70c0cfd5e671a07262e42e5a9d3a2d47b4be0f",
+  "execution_status": "COMPLETED",
+  "software_tests": {
+    "passed": 1034,
+    "failed": 0,
+    "new_freshness_tests": 32,
+    "acceptance": {
+      "path": "docs/research/cfb_personnel_freshness_20261031/acceptance.json",
+      "sha256": "f4cfbc46f7b340f8b72b67ad2757b5c98d533a0611e8539666e4abf255f00a57"
+    },
+    "initial_environment_failure": "6 WNBA tests could not import pyarrow; installed repository-pinned 19.0.1 and reran identical command."
+  },
+  "protected_files": {
+    "count": 1565,
+    "changed": 0,
+    "manifest": {
+      "path": "docs/research/cfb_personnel_freshness_20261031/protected-files.json",
+      "sha256": "bc459f3f8631fd69b0c75a3a43f532809e76070884ca310803660341a2538af3"
+    }
+  },
+  "retained_evidence": {
+    "captures": 47,
+    "unique_events": 47,
+    "raw_hashes_verified": 47,
+    "personnel_admitted": 0,
+    "new_predictive_events": 0,
+    "audit": {
+      "path": "docs/research/cfb_personnel_freshness_20261031/retained-source-audit.json",
+      "sha256": "480f15afff866d3ce0e3f72115d6ad7b429466b91c76aaf1acccf1e14fe3fd3b"
+    }
+  },
+  "synthetic_execution": {
+    "unique_events": 1,
+    "refresh_versions": 2,
+    "run_ids": [
+      "cfb-personnel-refresh-20261101T024625Z-5750be2f",
+      "cfb-personnel-refresh-20261101T024625Z-da29f1ca"
+    ],
+    "receipt_sha256": [
+      "06c4fdb628aea5c36b4952699491e0945e11e31c1cd9e3ee4cdfae6bb944f128",
+      "3101f897ed9c966fe02322f8897a0178630208a41bfaeef52f735cb8b0326d82"
+    ],
+    "verification": {
+      "path": "docs/research/cfb_personnel_freshness_20261031/synthetic/verification.json",
+      "sha256": "9c23c517d7a4d4c145939f3a7dd1860ef9c04227d56fd17861269bbdcf7a4f72"
+    }
+  },
+  "repository_health": {
+    "status": "RED",
+    "failures": 4,
+    "warnings": 7,
+    "log": {
+      "path": "docs/research/cfb_personnel_freshness_20261031/health.log",
+      "sha256": "5e26e3707b8be41287434498ef6733fd9e22aaca695cb1a4b284c4699c7cc688"
+    },
+    "scope": "Existing archive, recovery, historical-release and standing-health failures; no waiver."
+  },
+  "predictive_validation": "NOT_ASSESSED",
+  "current_source_qualification": "NOT_ESTABLISHED",
+  "publication_eligibility": "INELIGIBLE",
+  "wagering_authority": "OFF",
+  "promotion": false,
+  "market_features_used": false,
+  "selected_cfb_model_changed": false,
+  "weekly_control_changed": false,
+  "training_coefficients_changed": false,
+  "original_forecasts_changed": false
+}

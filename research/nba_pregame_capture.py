@@ -83,6 +83,8 @@ class NoRedirect(urllib.request.HTTPRedirectHandler):
 def http_transport(url, credential=None):
     approved_url(url)
     headers = {"User-Agent": "sports-model-pregame-research/1.0", "Accept": "application/json,text/html"}
+    if urllib.parse.urlsplit(url).path == "/api/v2/game-predictions":
+        headers["Accept"] = "application/json"
     if credential:
         if urllib.parse.urlsplit(url).path != "/api/v2/game-predictions":
             raise ValueError("CREDENTIAL_ENDPOINT_MISMATCH")
@@ -126,7 +128,7 @@ def capture_http(root, kind, url, *, credential=None, transport=http_transport, 
             raise ValueError("RESPONSE_SIZE_LIMIT")
         # Never save request headers, cookies, tokens, or response auth material.
         headers = {k.lower(): v for k, v in r.headers.items() if k.lower() in
-                   {"date", "last-modified", "content-type", "etag", "cache-control", "age"}}
+                   {"date", "last-modified", "content-type", "etag", "cache-control", "age", "retry-after"}}
         state = "CAPTURED" if r.status == 200 else (
             "ACCESS_DENIED" if r.status in (401, 403) else "RATE_LIMITED" if r.status == 429 else "HTTP_ERROR")
         return retain(root, kind, r.body, started, finished, url=url, final_url=r.final_url,
@@ -479,13 +481,21 @@ def normalize(root, captures, date, *, clock=utc):
                      exclusions=["PROVIDER_AS_OF_UNKNOWN", "BROWSER_IMPORT_ORIGIN_NOT_INDEPENDENTLY_ATTESTED"])
             row["sources"]["databallr"] = bind_source(root, event, "databallr", v, captures["db_dom"], cutoff, reasons)
             row["source_states"]["databallr"] = "PARSED_PROVIDER_AS_OF_UNKNOWN"
-        else: row["source_states"]["databallr"] = parser_errors.get("db_dom", "HTML_SHELL_ONLY_RENDERED_CAPTURE_REQUIRED")
+        else: row["source_states"]["databallr"] = parser_errors.get("db_dom",
+            "HTML_SHELL_ONLY_RENDERED_CAPTURE_REQUIRED" if "db_http" in captures else "NOT_REQUESTED")
         rows.append(row)
     return rows, parser_errors
 
 
 def run_capture(output, date, *, baseline=None, databallr_dom=None, use_dt_api=False,
-                transport=http_transport, clock=utc):
+                acquisition_profile="legacy", transport=http_transport, clock=utc):
+    # The API profile changes acquisition scope only, never source eligibility.
+    # Keep the original collector available for explicit, separately permitted use.
+    if acquisition_profile not in ("legacy", "dunks-api"):
+        raise ValueError("UNKNOWN_ACQUISITION_PROFILE")
+    if acquisition_profile == "dunks-api" and databallr_dom is not None:
+        raise ValueError("DUNKS_API_PROFILE_EXCLUDES_DATABALLR")
+    use_dt_api = use_dt_api or acquisition_profile == "dunks-api"
     root = Path(output)
     root.mkdir(parents=True, exist_ok=False)
     run_id = "nba-pregame-" + uuid.uuid4().hex
@@ -498,6 +508,8 @@ def run_capture(output, date, *, baseline=None, databallr_dom=None, use_dt_api=F
     specs = [("schedule", ESPN + f"?dates={day:%Y%m%d}&limit=1000"),
              ("dt_public", DT + f"/games?date={date}&days=1"),
              ("dt_method", DT + "/about/epm"), ("db_http", DB)]
+    if acquisition_profile == "dunks-api":
+        specs = [(kind, url) for kind, url in specs if kind in ("schedule", "dt_method")]
     for key, url in specs:
         captures[key] = capture_http(root, key, url, transport=transport, clock=clock)
     api_status = "NOT_REQUESTED"
@@ -522,6 +534,10 @@ def run_capture(output, date, *, baseline=None, databallr_dom=None, use_dt_api=F
                   "data/research/nba_forecast_combination_v1/protocol.json")
     report = dict(schema=SCHEMA, run_id=run_id, started_at=started, completed_at=clock(),
                   date=date, timezone="America/Los_Angeles", captures=captures, parser_errors=errors,
+                  acquisition_profile=acquisition_profile,
+                  source_eligibility_scope="TECHNICAL_RECEIPT_AND_CHRONOLOGY_ONLY",
+                  source_qualification="NOT_ASSESSED",
+                  source_qualification_note="Technical audit counts do not certify subscription entitlement, permitted use, provider target semantics, or independent archival timestamp attestation.",
                   api_status=api_status, schedule_status="UNAVAILABLE_OR_INVALID" if "normalization" in errors else "CAPTURED",
                   events=len(rows), pregame_opportunities=sum(not r["opportunity_exclusions"] for r in rows),
                   baseline_preserved=sum("B0" in r["sources"] for r in rows),

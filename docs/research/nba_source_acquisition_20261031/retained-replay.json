@@ -1,0 +1,73 @@
+{
+  "archive_manifest_sha256": "6a46c95528c0d2b1d099b321663553b3b0861cf501c5a2022029eb733c3b42dc",
+  "authenticated_acquisition_exercised": false,
+  "distinct_events": 10,
+  "files_verified": 98,
+  "predictive_validation": "NOT_ASSESSED",
+  "runs": [
+    {
+      "baseline_originals_verified": 10,
+      "databallr_event_pairs": 10,
+      "dataset_sha256": "1062b21a9efc2de11ef09fbcd80ed9925c85a8bec81cdd47ba07ce13b826b987",
+      "events": 10,
+      "exclusions": {
+        "C1": {
+          "B1:CAPTURE_PROVENANCE:CAPTURE_SOURCE_EXCLUDED:SUBSCRIPTION_REQUIRED;PROJECTION_UNAVAILABLE;PROVIDER_TIMEZONE_UNKNOWN": 10,
+          "B1:POINT_IN_TIME_UNPROVEN": 10,
+          "B1:TIMESTAMP_UNKNOWN_OR_INVALID:source_as_of": 10,
+          "B1:VALUES_INVALID": 10
+        },
+        "C2": {
+          "B1:CAPTURE_PROVENANCE:CAPTURE_SOURCE_EXCLUDED:SUBSCRIPTION_REQUIRED;PROJECTION_UNAVAILABLE;PROVIDER_TIMEZONE_UNKNOWN": 10,
+          "B1:POINT_IN_TIME_UNPROVEN": 10,
+          "B1:TIMESTAMP_UNKNOWN_OR_INVALID:source_as_of": 10,
+          "B1:VALUES_INVALID": 10,
+          "databallr:CAPTURE_PROVENANCE:CAPTURE_SOURCE_EXCLUDED:PROVIDER_AS_OF_UNKNOWN;BROWSER_IMPORT_ORIGIN_NOT_INDEPENDENTLY_ATTESTED": 10,
+          "databallr:POINT_IN_TIME_UNPROVEN": 10,
+          "databallr:TIMESTAMP_UNKNOWN_OR_INVALID:source_as_of": 10
+        }
+      },
+      "external_margin_values": 0,
+      "raw_receipts_verified": 6,
+      "run_id": "nba-pregame-daf6184a9ce34df1951231fd61ab8401",
+      "source_eligible": {
+        "C1": 0,
+        "C2": 0
+      }
+    },
+    {
+      "baseline_originals_verified": 10,
+      "databallr_event_pairs": 10,
+      "dataset_sha256": "5f57caa95e3a90bd5ea404c51e7c73e7335b8328af476520b6cec69411fcab97",
+      "events": 10,
+      "exclusions": {
+        "C1": {
+          "B1:CAPTURE_PROVENANCE:CAPTURE_SOURCE_EXCLUDED:SUBSCRIPTION_REQUIRED;PROJECTION_UNAVAILABLE;PROVIDER_TIMEZONE_UNKNOWN": 10,
+          "B1:POINT_IN_TIME_UNPROVEN": 10,
+          "B1:TIMESTAMP_UNKNOWN_OR_INVALID:source_as_of": 10,
+          "B1:VALUES_INVALID": 10
+        },
+        "C2": {
+          "B1:CAPTURE_PROVENANCE:CAPTURE_SOURCE_EXCLUDED:SUBSCRIPTION_REQUIRED;PROJECTION_UNAVAILABLE;PROVIDER_TIMEZONE_UNKNOWN": 10,
+          "B1:POINT_IN_TIME_UNPROVEN": 10,
+          "B1:TIMESTAMP_UNKNOWN_OR_INVALID:source_as_of": 10,
+          "B1:VALUES_INVALID": 10,
+          "databallr:CAPTURE_PROVENANCE:CAPTURE_SOURCE_EXCLUDED:PROVIDER_AS_OF_UNKNOWN;BROWSER_IMPORT_ORIGIN_NOT_INDEPENDENTLY_ATTESTED": 10,
+          "databallr:POINT_IN_TIME_UNPROVEN": 10,
+          "databallr:TIMESTAMP_UNKNOWN_OR_INVALID:source_as_of": 10
+        }
+      },
+      "external_margin_values": 0,
+      "raw_receipts_verified": 6,
+      "run_id": "nba-pregame-8c057dfba8d749e2b1c59a74fac856a5",
+      "source_eligible": {
+        "C1": 0,
+        "C2": 0
+      }
+    }
+  ],
+  "schema": "nba.acquisition_review_replay.v1",
+  "source_files_changed": 0,
+  "source_qualification": "BLOCKED",
+  "wagering_authority": "OFF"
+}

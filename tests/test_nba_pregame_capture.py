@@ -1,5 +1,6 @@
 """Synthetic contract tests, not provider captures or predictive evidence."""
 from copy import deepcopy
+import io
 import json
 from pathlib import Path
 import tempfile
@@ -61,8 +62,10 @@ class CaptureTests(unittest.TestCase):
         self.b0 = self.parent / "original.json"; self.b0.write_bytes(c.encoded(baseline()))
         self.db = self.parent / "dom.json"; self.db.write_bytes(c.encoded(dom()))
         self.schedule = schedule(); self.rec = projection(); self.status = 200
+        self.requests = []
 
     def transport(self, url, credential=None):
+        self.requests.append((url, bool(credential)))
         if url.startswith(c.ESPN): raw = c.encoded(self.schedule)
         elif "/game-predictions?" in url: raw = c.encoded([self.rec])
         elif "/games?" in url: raw = public()
@@ -71,10 +74,11 @@ class CaptureTests(unittest.TestCase):
         else: raise AssertionError(url)
         return c.Response(raw, self.status, {"Date": NOW, "Set-Cookie": "never retain", "Authorization": "never retain"}, url)
 
-    def capture(self, *, api=False, clock=lambda: NOW, name="capture", db=True):
+    def capture(self, *, api=False, clock=lambda: NOW, name="capture", db=True, profile="legacy"):
         with patch.dict("os.environ", {"DUNKS_AND_THREES_API_KEY": "SYNTHETIC_TOKEN"} if api else {}, clear=True):
             report = c.run_capture(self.parent/name, "2026-10-30", baseline=self.b0,
-                        databallr_dom=self.db if db else None, use_dt_api=api, transport=self.transport, clock=clock)
+                        databallr_dom=self.db if db else None, use_dt_api=api,
+                        acquisition_profile=profile, transport=self.transport, clock=clock)
         root = self.parent/name
         return root, report, json.loads((root/"dataset.json").read_text())["rows"]
 
@@ -267,6 +271,95 @@ class CaptureTests(unittest.TestCase):
         self.assertFalse(report["coefficients_fitted"])
         self.assertFalse(report["canonical_registration"])
         self.assertEqual(report["wagering_authority"], "OFF")
+
+    def test_api_profile_requests_only_required_sources_and_preserves_b0(self):
+        before = self.b0.read_bytes()
+        root, report, rows = self.capture(api=True, db=False, profile="dunks-api")
+        self.assertEqual(set(report["captures"]), {"B0", "schedule", "dt_method", "dt_api"})
+        self.assertEqual(self.requests, [(c.ESPN+"?dates=20261030&limit=1000", False),
+            (c.DT+"/about/epm", False), (c.DT+"/api/v2/game-predictions?date=2026-10-30&days=1", True)])
+        self.assertEqual(before, self.b0.read_bytes())
+        self.assertEqual(rows[0]["sources"]["B0"]["payload"]["original_forecast"], baseline()["forecasts"][0])
+        self.assertEqual(report["source_eligible"], {"C1": 1, "C2": 0})
+        self.assertEqual(rows[0]["source_states"]["databallr"], "NOT_REQUESTED")
+        self.assertEqual(report["acquisition_profile"], "dunks-api")
+        self.assertEqual(report["source_qualification"], "NOT_ASSESSED")
+        self.assertEqual(report["source_eligibility_scope"], "TECHNICAL_RECEIPT_AND_CHRONOLOGY_ONLY")
+        self.assertFalse(report["coefficients_fitted"])
+        self.assertEqual(report["wagering_authority"], "OFF")
+
+    def test_api_profile_missing_credential_never_requests_public_fallback(self):
+        root, report, rows = self.capture(db=False, profile="dunks-api")
+        self.assertEqual(report["api_status"], "CREDENTIAL_NOT_CONFIGURED")
+        self.assertEqual(set(report["captures"]), {"B0", "schedule", "dt_method"})
+        self.assertEqual(len(self.requests), 2)
+        self.assertEqual(report["source_eligible"], {"C1": 0, "C2": 0})
+
+    def test_api_profile_validation_precedes_any_write_or_request(self):
+        for kw, error in ((dict(acquisition_profile="other"), "UNKNOWN_ACQUISITION_PROFILE"),
+                          (dict(acquisition_profile="dunks-api", databallr_dom=self.db), "EXCLUDES_DATABALLR")):
+            with self.assertRaisesRegex(ValueError, error):
+                c.run_capture(self.parent/"invalid", "2026-10-30", transport=self.transport, **kw)
+            self.assertFalse((self.parent/"invalid").exists())
+            self.assertEqual(self.requests, [])
+
+    def test_api_profile_denials_and_rate_limits_have_one_attempt_no_fallback(self):
+        original = self.transport
+        for status, label in ((401, "ACCESS_DENIED"), (403, "ACCESS_DENIED"), (429, "RATE_LIMITED")):
+            def transport(url, credential=None):
+                r = original(url, credential)
+                return c.Response(r.body, status, {"Retry-After": "90", "Set-Cookie": "SECRET"}, url) if credential else r
+            self.requests = []
+            with patch.object(self, "transport", transport):
+                root, report, rows = self.capture(api=True, db=False, profile="dunks-api", name=str(status))
+            self.assertEqual(len(self.requests), 3)
+            receipt = report["captures"]["dt_api"]["receipt"]
+            self.assertEqual(receipt["status"], label)
+            self.assertEqual(receipt["headers"], {"retry-after": "90"})
+            self.assertEqual(report["source_eligible"]["C1"], 0)
+            self.assertNotIn("dt_public", report["captures"])
+
+    def test_api_profile_keeps_provider_clock_requirement(self):
+        for index, value in enumerate((None, "2026-10-30 17:00:00", "2026-10-30T20:00:00Z")):
+            self.rec["update_dt"] = value
+            root, report, rows = self.capture(api=True, db=False, profile="dunks-api", name=str(index))
+            self.assertEqual(report["source_eligible"]["C1"], 0)
+
+    def test_api_profile_keeps_cutoff_and_started_status_gates(self):
+        for index, (clock, status) in enumerate((("2026-10-30T22:56:00Z", 1),
+                                                ("2026-10-30T23:01:00Z", 1), (NOW, 3))):
+            self.rec["status_id"] = status
+            root, report, rows = self.capture(api=True, db=False, profile="dunks-api", name=str(index), clock=lambda: clock)
+            self.assertEqual(report["source_eligible"]["C1"], 0)
+
+    def test_api_profile_does_not_change_b0_b1_values_or_eligibility(self):
+        _, old, old_rows = self.capture(api=True, db=False, name="legacy")
+        _, new, new_rows = self.capture(api=True, db=False, name="api", profile="dunks-api")
+        self.assertEqual(old["source_eligible"], new["source_eligible"])
+        for key in ("B0", "B1"):
+            a, b = (r[0]["sources"][key]["payload"] for r in (old_rows, new_rows))
+            for field in ("values", "source_model_version", "source_as_of", "target", "historical_record_type"):
+                self.assertEqual(a[field], b[field])
+
+    def test_documented_api_transport_asks_for_json_without_retaining_key(self):
+        url = c.DT+"/api/v2/game-predictions?date=2026-10-30&days=1"
+        response = io.BytesIO(b"[]")
+        response.status, response.url, response.headers = 200, url, {"Content-Type": "application/json"}
+        with patch("urllib.request.build_opener") as opener:
+            opener.return_value.open.return_value = response
+            value = c.http_transport(url, credential="SYNTHETIC_TOKEN")
+            request = opener.return_value.open.call_args.args[0]
+            self.assertEqual(request.get_header("Accept"), "application/json")
+            self.assertEqual(request.get_header("Authorization"), "SYNTHETIC_TOKEN")
+            self.assertIsInstance(opener.call_args.args[0], c.NoRedirect)
+            self.assertNotIn("SYNTHETIC_TOKEN", str(value))
+
+    def test_credential_never_sent_to_other_approved_endpoints(self):
+        with patch("urllib.request.build_opener") as opener:
+            for url in (c.DB, c.DT+"/about/epm", c.ESPN):
+                with self.assertRaisesRegex(ValueError, "CREDENTIAL_ENDPOINT_MISMATCH"):
+                    c.http_transport(url, credential="SYNTHETIC_TOKEN")
+            opener.assert_not_called()
 
 
 if __name__ == "__main__": unittest.main()

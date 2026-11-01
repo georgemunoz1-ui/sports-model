@@ -5056,3 +5056,18 @@ Collector exercised locally; no collection cron, independent timestamp archive,
 canonical registration, predictive improvement or wagering authority claimed.
 See docs/research/NBA_PREGAME_CAPTURE_20261030.md and run
 nba-pregame-8c057dfba8d749e2b1c59a74fac856a5.
+
+## 2026-10-31 — NBA external-source acquisition review
+
+Reviewed D&T subscription/API terms and legitimate alternatives against PR #98.
+Added opt-in API acquisition scope, explicit JSON errors, retained Retry-After,
+and separate technical-eligibility/source-qualification reporting. Legacy mode,
+frozen combination protocol and source/timestamp gates remain unchanged.
+80 focused tests passed (nine new). Read-only replay verified 98 retained files;
+two captures cover the same 10 distinct events, zero accessible D&T margins and
+zero eligible C1/C2 observations. All 1,704 protected files unchanged. No genuine
+authenticated acquisition, fit, prediction, scheduler or promotion. Provider
+rights, exact target/time/version semantics and Databallr provenance remain
+unresolved; owner subscription/credential decisions are separate. Global health
+RED (four failures/six warnings); wagering OFF. See
+`docs/research/NBA_SOURCE_ACQUISITION_20261031.md`.

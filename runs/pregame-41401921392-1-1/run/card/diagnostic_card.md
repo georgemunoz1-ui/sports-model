@@ -1,0 +1,101 @@
+# CFB Diagnostic Card — 2026-11-03
+
+Pregame coverage: **100.0%** · Action authority: **OFF**
+Prospective grading eligible: **0**
+
+## Point-in-time provenance
+
+- PIT status: **PIT_ORDERED**
+- Requested cutoff: `2026-11-02T06:46:35.381443+00:00`
+- Actual live-fetch vintage proxy: `2026-11-02T06:45:58.821408Z`
+- Fetch-to-request delta: **-0h 00m 37s**
+- Replay supported: **false**
+- Vintage basis: `RETAINED_SOURCES_AND_FROZEN_TRANSFORM`
+
+> **PIT WARNING:** this diagnostic card must not be represented as an exact requested-cutoff replay.
+
+**Consumed-state and model integrity — diagnostic, not certification.**
+State age uses consumed results; a recent fetch is not a state refresh. Margins below are home minus away.
+
+| Game | Consumed state / age at cutoff | Numerical use | Margin head / sibling distribution | Review |
+|---|---|---|---|---|
+| Ohio @ Akron | away: UNKNOWN; home: UNKNOWN; CONSUMED_STATE_RECEIPT_ABSENT | INPUT_PRESENT_USE_UNPROVEN; player/goalie effect not demonstrated | -20.95 / UNKNOWN | No named flag established |
+| Buffalo @ Miami (OH) | away: UNKNOWN; home: UNKNOWN; CONSUMED_STATE_RECEIPT_ABSENT | INPUT_PRESENT_USE_UNPROVEN; player/goalie effect not demonstrated | +4.18 / UNKNOWN | No named flag established |
+
+Input binding alone does not prove numerical use. Review flags do not change forecasts, select a side, or establish calibration.
+
+**Selected default:** cfb.fbs.elo_form_logit_ridge.v1_0.shadow · BASELINE_VALIDATED_DEFAULT
+Pooled chronological evaluation passes; season openers have a separate selected profile. V2 remains a challenger.
+
+| Game | Tier | Dose | Winner | Analytic P | Stochastic Sim P | Gap | Divergence | Margin | Total | Grade | Warnings |
+|---|---|---:|---|---:|---:|---:|---|---:|---:|---|---|
+| Ohio @ Akron | REDUCED | 0.00 | Ohio | 89.9% | 89.8% | +0.07 pp | NONE | 20.950308524812215 | None | INELIGIBLE | TOTAL_HEAD_NOT_FITTED_FOR_SELECTED_CFB_ARM, CURRENT_FCS_INTERNAL_SCHEDULE_COVERAGE_UNVERIFIED, FBS_VS_FBS_ONLY, NO_CURRENT_QB_OR_PERSONNEL_TRANSFORM_IN_SELECTED_ARM, NO_WAGERING_AUTHORITY, VERSIONED_RNG_IDENTITY_REPAIR_NOT_PREDICTIVE_PROMOTION, ROSTER:ACQUIRE_REQUIRED, FULL_ROSTER_IMPACTS_NOT_APPLIED |
+| Buffalo @ Miami (OH) | REDUCED | 0.00 | Miami (OH) | 61.5% | 61.6% | -0.05 pp | NONE | 4.183250924924633 | None | INELIGIBLE | TOTAL_HEAD_NOT_FITTED_FOR_SELECTED_CFB_ARM, CURRENT_FCS_INTERNAL_SCHEDULE_COVERAGE_UNVERIFIED, FBS_VS_FBS_ONLY, NO_CURRENT_QB_OR_PERSONNEL_TRANSFORM_IN_SELECTED_ARM, NO_WAGERING_AUTHORITY, VERSIONED_RNG_IDENTITY_REPAIR_NOT_PREDICTIVE_PROMOTION, ROSTER:ACQUIRE_REQUIRED, FULL_ROSTER_IMPACTS_NOT_APPLIED |
+
+## Input, scenario and decision disclosures
+
+Research only. PASS describes wagering disposition, not a failed prediction.
+
+### CFB:401866453
+
+**PASS:** WAGERING_AUTHORITY_OFF: Research output; no wager is authorized.; MARKET_VALUE_NOT_EVALUATED: This disclosure layer does not qualify a price or betting edge.; PREDICTIVE_QUALIFICATION_NOT_ASSESSED: Disclosures do not establish predictive qualification.; PARENT_WARNING: TOTAL_HEAD_NOT_FITTED_FOR_SELECTED_CFB_ARM; PARENT_WARNING: CURRENT_FCS_INTERNAL_SCHEDULE_COVERAGE_UNVERIFIED; PARENT_WARNING: FBS_VS_FBS_ONLY; PARENT_WARNING: NO_CURRENT_QB_OR_PERSONNEL_TRANSFORM_IN_SELECTED_ARM; PARENT_WARNING: NO_WAGERING_AUTHORITY; PARENT_WARNING: VERSIONED_RNG_IDENTITY_REPAIR_NOT_PREDICTIVE_PROMOTION; PARENT_WARNING: ROSTER:ACQUIRE_REQUIRED; PARENT_WARNING: FULL_ROSTER_IMPACTS_NOT_APPLIED
+
+**Model versus market:** REVIEWED_NONMARKET_FEATURE_PATH. Historical Elo, scoring EWMAs, rest, neutral-site/home advantage and conference features.
+
+- Simulation independence: MARKET_BLIND_NUMERIC_V2_DECLARED; RECEIPT_VERIFICATION_REQUIRED
+- Downstream quotes are benchmarks or contract thresholds; changing a line changes the event being priced.
+- Source-path attribution only; artifact lineage and predictive validation are not certified.
+
+Winner and separate margin point estimate; selected total head unavailable.
+
+This row declares the separate numeric-v2 procedure introduced after the legacy seed audit. The embedded-payload counterexample remains a legacy.v1 finding; this display does not authenticate the numerical receipt or grant predictive qualification.
+
+**Reported known inputs:**
+
+- None supplied.
+
+**Unknown inputs:**
+
+- availability_evidence: No structured availability disclosure supplied; numerical use is not assessed here.
+
+**Assumptions:**
+
+- None supplied.
+
+**Availability scenarios:** conditional; no availability weights assigned.
+
+- None supplied.
+
+### CFB:401866454
+
+**PASS:** WAGERING_AUTHORITY_OFF: Research output; no wager is authorized.; MARKET_VALUE_NOT_EVALUATED: This disclosure layer does not qualify a price or betting edge.; PREDICTIVE_QUALIFICATION_NOT_ASSESSED: Disclosures do not establish predictive qualification.; PARENT_WARNING: TOTAL_HEAD_NOT_FITTED_FOR_SELECTED_CFB_ARM; PARENT_WARNING: CURRENT_FCS_INTERNAL_SCHEDULE_COVERAGE_UNVERIFIED; PARENT_WARNING: FBS_VS_FBS_ONLY; PARENT_WARNING: NO_CURRENT_QB_OR_PERSONNEL_TRANSFORM_IN_SELECTED_ARM; PARENT_WARNING: NO_WAGERING_AUTHORITY; PARENT_WARNING: VERSIONED_RNG_IDENTITY_REPAIR_NOT_PREDICTIVE_PROMOTION; PARENT_WARNING: ROSTER:ACQUIRE_REQUIRED; PARENT_WARNING: FULL_ROSTER_IMPACTS_NOT_APPLIED
+
+**Model versus market:** REVIEWED_NONMARKET_FEATURE_PATH. Historical Elo, scoring EWMAs, rest, neutral-site/home advantage and conference features.
+
+- Simulation independence: MARKET_BLIND_NUMERIC_V2_DECLARED; RECEIPT_VERIFICATION_REQUIRED
+- Downstream quotes are benchmarks or contract thresholds; changing a line changes the event being priced.
+- Source-path attribution only; artifact lineage and predictive validation are not certified.
+
+Winner and separate margin point estimate; selected total head unavailable.
+
+This row declares the separate numeric-v2 procedure introduced after the legacy seed audit. The embedded-payload counterexample remains a legacy.v1 finding; this display does not authenticate the numerical receipt or grant predictive qualification.
+
+**Reported known inputs:**
+
+- None supplied.
+
+**Unknown inputs:**
+
+- availability_evidence: No structured availability disclosure supplied; numerical use is not assessed here.
+
+**Assumptions:**
+
+- None supplied.
+
+**Availability scenarios:** conditional; no availability weights assigned.
+
+- None supplied.
+
+
+
+**Diagnostic only. Action authority is OFF. No market/EV layer is attached.**

@@ -5062,3 +5062,24 @@ inputs; authentic predictive evaluation remains unavailable. Repository health
 still has four failures/seven warnings. No source qualification, promotion,
 canonical registration, market use or wagering authority. See
 docs/research/cfb_personnel_freshness_20261031/README.md and EXECUTION.json.
+
+
+## 2026-11-01 — Authentic CFB personnel source inspection
+
+Inspected official conference-linked SEC/ACC/Big 12 reports on PR100's exact
+parent. Twenty current reports supply 213 literal quarterback status rows; all
+are October 30–31 reports, with zero future reports or admissible personnel-v2
+observations. SEC archive contains 644 historical player rows without original
+report timestamps. Import times remain distinct from missing original retrieval
+receipts and provider observation times; no retrospective admission or model run.
+
+Added a permission-gated capture boundary and conservative retained-byte parser.
+No source-use grants ship enabled; actual live command refuses before network
+access. Public access does not prove model-use or redistribution permission.
+Raw provider payloads remain outside public git; code, hashes and audit metadata
+are reviewable. 92 focused tests pass, including 29 new source tests and all 32
+freshness/31 personnel-v2 tests. 1,565 protected files hash-match; existing model
+code, trust roots, defaults, forecasts and refresh chains remain unchanged.
+Historical parent provenance, authentic snap/attempt/QB inputs, source rights
+and independent chronology are separate unresolved dependencies. Wagering OFF,
+official release OFF. See docs/research/cfb_personnel_sources_20261101/.

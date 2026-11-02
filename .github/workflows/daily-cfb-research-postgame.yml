@@ -1,0 +1,114 @@
+name: Daily CFB Research Postgame
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '45 14 * * *'
+  push:
+    branches: [codex/daily-pipeline-integration-20261101]
+    paths: ['daily_research_requests/postgame/*.json']
+concurrency:
+  group: daily-cfb-research-archive-v1
+  cancel-in-progress: false
+permissions:
+  contents: write
+  actions: read
+  issues: write
+env:
+  PYTHONDONTWRITEBYTECODE: '1'
+  PYTHONUNBUFFERED: '1'
+jobs:
+  postgame:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: '3.12.14'
+      - run: python -m pip install -r requirements-daily-research.lock
+      - run: python -m pytest tests/test_daily_research_postgame.py tests/test_canonical_forecasts.py tests/test_canonical_results.py -q
+      - name: Restore only the authenticated repository archive
+        id: restore
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          mkdir -p output/postgame/operations output/registry output/delivery
+          python scripts/daily_research_store.py restore --checkout "$RUNNER_TEMP/daily-archive" --report output/postgame/operations/restore.json
+          if [ -d "$RUNNER_TEMP/daily-archive/registry" ]; then cp -a "$RUNNER_TEMP/daily-archive/registry/." output/registry/; fi
+      - name: Acquire verified finals and grade the original registered probabilities
+        id: grade
+        if: ${{ steps.restore.outcome == 'success' }}
+        continue-on-error: true
+        run: python scripts/daily_research_postgame.py --root output/registry --output output/postgame/run
+      - name: Seal the postgame attempt
+        id: seal
+        if: ${{ always() && steps.restore.outcome == 'success' }}
+        continue-on-error: true
+        run: python scripts/daily_research_archive.py seal --root output/postgame --report output/delivery/local-integrity.json
+      - name: Upload complete grading evidence
+        id: upload
+        if: ${{ always() && steps.seal.outcome == 'success' }}
+        continue-on-error: true
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: daily-cfb-postgame-${{ github.run_id }}-${{ github.run_attempt }}
+          path: output/postgame/
+          if-no-files-found: error
+          retention-days: 90
+      - name: Download this postgame artifact
+        id: download
+        if: ${{ always() && steps.upload.outcome == 'success' }}
+        continue-on-error: true
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
+        with:
+          artifact-ids: ${{ steps.upload.outputs.artifact-id }}
+          path: ${{ runner.temp }}/postgame-readback
+          merge-multiple: true
+      - name: Verify the complete grading evidence readback
+        id: readback
+        if: ${{ always() && steps.download.outcome == 'success' }}
+        continue-on-error: true
+        run: python scripts/daily_research_archive.py verify --root "$RUNNER_TEMP/postgame-readback" --manifest output/postgame/manifest.json --report output/delivery/actions-readback.json
+      - name: Persist append-only grades and verify remote bytes
+        id: durable
+        if: ${{ always() && steps.seal.outcome == 'success' }}
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          python scripts/daily_research_store.py publish --checkout "$RUNNER_TEMP/daily-archive" \
+            --source output/postgame --registry output/registry \
+            --run-key "postgame-$GITHUB_RUN_ID-$GITHUB_RUN_ATTEMPT" --report output/delivery/durable-readback.json
+      - name: Publish actual settlement status
+        if: always()
+        run: |
+          echo '## CFB prospective research grading' >> "$GITHUB_STEP_SUMMARY"
+          echo 'Only registered original probabilities are eligible. Waiting for events is not completed settlement. Official release and wagering OFF.' >> "$GITHUB_STEP_SUMMARY"
+          for report in output/postgame/run/report.json output/postgame/run/grade.json output/delivery/durable-readback.json; do
+            if [ -f "$report" ]; then cat "$report" >> "$GITHUB_STEP_SUMMARY"; fi
+          done
+      - name: Deliver and verify an explicit failure notification
+        id: notify
+        if: ${{ always() && (failure() || steps.grade.outcome != 'success' || steps.readback.outcome != 'success' || steps.durable.outcome != 'success') }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python scripts/daily_research_notify.py --phase postgame --report output/delivery/failure-notification.json
+      - name: Retain delivery receipts
+        id: delivery
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: daily-cfb-postgame-delivery-${{ github.run_id }}-${{ github.run_attempt }}
+          path: output/delivery/
+          if-no-files-found: error
+          retention-days: 90
+      - name: Notify failure of the final delivery-receipt upload
+        if: ${{ always() && steps.delivery.outcome == 'failure' && steps.notify.outcome != 'success' }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python scripts/daily_research_notify.py --phase postgame --report output/delivery/receipt-upload-failure.json
+      - name: Reject incomplete grading or retention
+        if: ${{ always() && (failure() || steps.grade.outcome != 'success' || steps.readback.outcome != 'success' || steps.durable.outcome != 'success') }}
+        run: exit 1

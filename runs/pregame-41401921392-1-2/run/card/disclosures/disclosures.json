@@ -1,0 +1,175 @@
+{
+  "action_authority": false,
+  "artifact_sha256": "b2ccea6c0c3e8c6a89645eabc9d04c72ece58038d82d82660900adeedf96da9f",
+  "as_of_utc": "2026-11-02T06:48:37.325835+00:00",
+  "errors": [],
+  "events": [
+    {
+      "action_authority": false,
+      "assumptions": [],
+      "availability_scenarios": [],
+      "decision": "PASS",
+      "event_id": "CFB:401866453",
+      "known_inputs": [],
+      "market_provenance": {
+        "action_authority": false,
+        "audit_reference": "docs/SELECTED_MARKET_INDEPENDENCE.md",
+        "identity_source_path": "pipelines/cards/semantic_identity.py",
+        "limitation": "This row declares the separate numeric-v2 procedure introduced after the legacy seed audit. The embedded-payload counterexample remains a legacy.v1 finding; this display does not authenticate the numerical receipt or grant predictive qualification.",
+        "market_comparison_role": "Downstream quotes are benchmarks or contract thresholds; changing a line changes the event being priced.",
+        "model_id": "cfb.fbs.elo_form_logit_ridge.v1_0.shadow",
+        "numerical_source": "Historical Elo, scoring EWMAs, rest, neutral-site/home advantage and conference features.",
+        "path_class": "REVIEWED_NONMARKET_FEATURE_PATH",
+        "predictive_validation": "NOT_ASSESSED",
+        "product_scope": "Winner and separate margin point estimate; selected total head unavailable.",
+        "reported_market_input": null,
+        "review_scope": "SOURCE_PATH_ATTRIBUTION_NOT_ARTIFACT_OR_TRAINING_LINEAGE_CERTIFICATION",
+        "schema": "sports.market_path_disclosure.v1",
+        "simulation_independence": "MARKET_BLIND_NUMERIC_V2_DECLARED; RECEIPT_VERIFICATION_REQUIRED",
+        "source_path": "models/current/cfb.py:forecast"
+      },
+      "numerical_forecast_modified": false,
+      "parent_model_id": "cfb.fbs.elo_form_logit_ridge.v1_0.shadow",
+      "pass_reasons": [
+        {
+          "code": "WAGERING_AUTHORITY_OFF",
+          "detail": "Research output; no wager is authorized."
+        },
+        {
+          "code": "MARKET_VALUE_NOT_EVALUATED",
+          "detail": "This disclosure layer does not qualify a price or betting edge."
+        },
+        {
+          "code": "PREDICTIVE_QUALIFICATION_NOT_ASSESSED",
+          "detail": "Disclosures do not establish predictive qualification."
+        },
+        {
+          "code": "PARENT_WARNING",
+          "detail": "TOTAL_HEAD_NOT_FITTED_FOR_SELECTED_CFB_ARM"
+        },
+        {
+          "code": "PARENT_WARNING",
+          "detail": "CURRENT_FCS_INTERNAL_SCHEDULE_COVERAGE_UNVERIFIED"
+        },
+        {
+          "code": "PARENT_WARNING",
+          "detail": "FBS_VS_FBS_ONLY"
+        },
+        {
+          "code": "PARENT_WARNING",
+          "detail": "NO_CURRENT_QB_OR_PERSONNEL_TRANSFORM_IN_SELECTED_ARM"
+        },
+        {
+          "code": "PARENT_WARNING",
+          "detail": "NO_WAGERING_AUTHORITY"
+        },
+        {
+          "code": "PARENT_WARNING",
+          "detail": "VERSIONED_RNG_IDENTITY_REPAIR_NOT_PREDICTIVE_PROMOTION"
+        },
+        {
+          "code": "PARENT_WARNING",
+          "detail": "ROSTER:ACQUIRE_REQUIRED"
+        },
+        {
+          "code": "PARENT_WARNING",
+          "detail": "FULL_ROSTER_IMPACTS_NOT_APPLIED"
+        }
+      ],
+      "projection_audits": [],
+      "unknown_inputs": [
+        {
+          "name": "availability_evidence",
+          "reason": "No structured availability disclosure supplied; numerical use is not assessed here."
+        }
+      ]
+    },
+    {
+      "action_authority": false,
+      "assumptions": [],
+      "availability_scenarios": [],
+      "decision": "PASS",
+      "event_id": "CFB:401866454",
+      "known_inputs": [],
+      "market_provenance": {
+        "action_authority": false,
+        "audit_reference": "docs/SELECTED_MARKET_INDEPENDENCE.md",
+        "identity_source_path": "pipelines/cards/semantic_identity.py",
+        "limitation": "This row declares the separate numeric-v2 procedure introduced after the legacy seed audit. The embedded-payload counterexample remains a legacy.v1 finding; this display does not authenticate the numerical receipt or grant predictive qualification.",
+        "market_comparison_role": "Downstream quotes are benchmarks or contract thresholds; changing a line changes the event being priced.",
+        "model_id": "cfb.fbs.elo_form_logit_ridge.v1_0.shadow",
+        "numerical_source": "Historical Elo, scoring EWMAs, rest, neutral-site/home advantage and conference features.",
+        "path_class": "REVIEWED_NONMARKET_FEATURE_PATH",
+        "predictive_validation": "NOT_ASSESSED",
+        "product_scope": "Winner and separate margin point estimate; selected total head unavailable.",
+        "reported_market_input": null,
+        "review_scope": "SOURCE_PATH_ATTRIBUTION_NOT_ARTIFACT_OR_TRAINING_LINEAGE_CERTIFICATION",
+        "schema": "sports.market_path_disclosure.v1",
+        "simulation_independence": "MARKET_BLIND_NUMERIC_V2_DECLARED; RECEIPT_VERIFICATION_REQUIRED",
+        "source_path": "models/current/cfb.py:forecast"
+      },
+      "numerical_forecast_modified": false,
+      "parent_model_id": "cfb.fbs.elo_form_logit_ridge.v1_0.shadow",
+      "pass_reasons": [
+        {
+          "code": "WAGERING_AUTHORITY_OFF",
+          "detail": "Research output; no wager is authorized."
+        },
+        {
+          "code": "MARKET_VALUE_NOT_EVALUATED",
+          "detail": "This disclosure layer does not qualify a price or betting edge."
+        },
+        {
+          "code": "PREDICTIVE_QUALIFICATION_NOT_ASSESSED",
+          "detail": "Disclosures do not establish predictive qualification."
+        },
+        {
+          "code": "PARENT_WARNING",
+          "detail": "TOTAL_HEAD_NOT_FITTED_FOR_SELECTED_CFB_ARM"
+        },
+        {
+          "code": "PARENT_WARNING",
+          "detail": "CURRENT_FCS_INTERNAL_SCHEDULE_COVERAGE_UNVERIFIED"
+        },
+        {
+          "code": "PARENT_WARNING",
+          "detail": "FBS_VS_FBS_ONLY"
+        },
+        {
+          "code": "PARENT_WARNING",
+          "detail": "NO_CURRENT_QB_OR_PERSONNEL_TRANSFORM_IN_SELECTED_ARM"
+        },
+        {
+          "code": "PARENT_WARNING",
+          "detail": "NO_WAGERING_AUTHORITY"
+        },
+        {
+          "code": "PARENT_WARNING",
+          "detail": "VERSIONED_RNG_IDENTITY_REPAIR_NOT_PREDICTIVE_PROMOTION"
+        },
+        {
+          "code": "PARENT_WARNING",
+          "detail": "ROSTER:ACQUIRE_REQUIRED"
+        },
+        {
+          "code": "PARENT_WARNING",
+          "detail": "FULL_ROSTER_IMPACTS_NOT_APPLIED"
+        }
+      ],
+      "projection_audits": [],
+      "unknown_inputs": [
+        {
+          "name": "availability_evidence",
+          "reason": "No structured availability disclosure supplied; numerical use is not assessed here."
+        }
+      ]
+    }
+  ],
+  "execution_status": "COMPLETED",
+  "input_packet_sha256": "06d26701cd36fc5749a263ea4c4c1099175aa7688d576a69c990491cab79e62f",
+  "parent_card_sha256": "ce9f71a54a17823c177c0e96a11049bce8b1b6c2076f7d1f0108303912204313",
+  "parlays": [],
+  "predictive_validation": "NOT_ASSESSED",
+  "schema": "sports.card_disclosures.research.v1",
+  "scope": "DISCLOSURE_ONLY"
+}

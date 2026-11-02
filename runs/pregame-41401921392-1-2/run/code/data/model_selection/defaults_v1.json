@@ -1,0 +1,241 @@
+{
+  "schema": "sports.default_selection.v1",
+  "effective_at_utc": "2026-09-16T02:03:49.651716+00:00",
+  "policy": "Evidence quality, scope, comparable evaluation, calibration and stability before nominal score or model complexity. Unit-test counts and Monte Carlo draws do not rank models. Retain a tested incumbent when superiority is unestablished.",
+  "profiles": {
+    "nfl:winner": {
+      "default_model_id": "nfl.integrated_context.qb.v1.research",
+      "selection_status": "PROVISIONAL_TESTED_DEFAULT",
+      "evidence": [
+        {
+          "path": "data/nfl/contextual_v1/evaluation.json",
+          "sha256": "fcbbcae07a132314dc817ecdbca30442db1232a2276769e661080e1fc2afc84a"
+        },
+        {
+          "path": "data/nfl/contextual_v1/week2_policy.json",
+          "sha256": "e00d1740f3a107c671da9059fccf6f3de1ef6424daec497ed38977fcaa87286e"
+        }
+      ],
+      "metrics": {
+        "games": 1871,
+        "binary_games": 1865,
+        "ties_excluded_from_binary": 6,
+        "brier": 0.22291192059317314,
+        "log_loss": 0.635398958424852,
+        "winner_accuracy": 0.6343163538873995,
+        "margin_mae": 10.212441464614667,
+        "margin_rmse": 13.13526331176027,
+        "total_mae": 10.72022987413277
+      },
+      "reason": "Best saved same-population Brier, log loss and overall hit rate; user-authorized research selection, not a new prospective screen pass.",
+      "scope": "REGULAR_SEASON_NON_TIE_WINNER",
+      "runner": "scripts/run_nfl_integrated.py",
+      "official_release": false,
+      "action_authority": false
+    },
+    "wnba:winner": {
+      "default_model_id": "wnba.rs.ff7_logit_ridge.v1_0.shadow",
+      "selection_status": "BASELINE_VALIDATED_DEFAULT",
+      "evidence": [
+        {
+          "path": "data/wnba/model/2026-08-12_v1_walkforward.json",
+          "sha256": "d80b94d28ef9978c6ee30e0784e5667997e9d6ea8e57d329f726508b9de920a2"
+        },
+        {
+          "path": "harness/wnba_model_v1.py",
+          "sha256": "7f128ba323ee939b8f40bf55eb2e1f6e9a24611e29ca4eb743962af2608af4e0"
+        }
+      ],
+      "metrics": {
+        "n": 1633,
+        "brier": 0.2112318736147291,
+        "base_brier": 0.2471628938348657,
+        "auc": 0.7222466960352423,
+        "calibration": {
+          "intercept": -0.04515628030269122,
+          "slope": 1.0546488072300644
+        },
+        "accuracy": 0.6668707899571341
+      },
+      "reason": "Passed registered win-target gates, date-block comparison and multiplicity adjustment. No standings fallback replaces this model.",
+      "scope": "REGULAR_SEASON",
+      "runner": "harness/wnba_model_v1.py:predict_slate",
+      "official_release": false,
+      "action_authority": false
+    },
+    "cfb:winner": {
+      "default_model_id": "cfb.fbs.elo_form_logit_ridge.v1_0.shadow",
+      "selection_status": "BASELINE_VALIDATED_DEFAULT",
+      "evidence": [
+        {
+          "path": "data/cfb/model/CFB_V1_OOF_EVALUATION.json",
+          "sha256": "1102479918c41f8c408e8b6106812e67840f3a71f3953a72ad4061f9889df5aa"
+        },
+        {
+          "path": "data/cfb/model/CFB_V2_LIFECYCLE_2026-08-28.json",
+          "sha256": "f02b92c219d21995dfc5fca7ffcaca1b83475a64988390cf0b896f859cfced9f"
+        },
+        {
+          "path": "harness/cfb_v1_port.py",
+          "sha256": "5f3454c780cebf32a2ba193cf9537dc1fb1b5d5d405ad54482f7c7ce1488926a"
+        }
+      ],
+      "metrics": {
+        "n": 10818,
+        "auc": 0.792199,
+        "brier": 0.182233,
+        "calibration_intercept": -0.0335,
+        "calibration_slope": 0.9559,
+        "ece": 0.014195,
+        "logloss": 0.539141
+      },
+      "reason": "Pooled chronological evaluation passes; season openers have a separate selected profile. V2 remains a challenger.",
+      "scope": "FBS_VS_FBS_WEEK2_PLUS",
+      "runner": "harness/cfb_v1_port.py",
+      "official_release": false,
+      "action_authority": false
+    },
+    "cfb:winner:week1": {
+      "default_model_id": "cfb.fbs.elo_context_logit.v1_0.week1_shadow",
+      "selection_status": "TESTED_SUBGROUP_DEFAULT",
+      "evidence": [
+        {
+          "path": "data/cfb/model/CFB_V2_LIFECYCLE_2026-08-28.json",
+          "sha256": "f02b92c219d21995dfc5fca7ffcaca1b83475a64988390cf0b896f859cfced9f"
+        }
+      ],
+      "metrics": {
+        "n": 758,
+        "brier": 0.18327,
+        "calibration_slope": 0.932,
+        "calibration_intercept": 0.089
+      },
+      "reason": "Existing opener-specific arm passes its recorded calibration gates; full-form arm fails this subgroup.",
+      "scope": "FBS_VS_FBS_WEEK1",
+      "runner": "harness/cfb_forecast_0829.py",
+      "official_release": false,
+      "action_authority": false
+    },
+    "mlb:winner": {
+      "default_model_id": "mlb.v13.current_input.research.v1",
+      "selection_status": "TESTED_INCUMBENT_RETAINED",
+      "evidence": [
+        {
+          "path": "data/mlb/ml_asof/V13_FREEZE.json",
+          "sha256": "ca7bfe738ccc49ebf464f450c6c3140fab656628dd4aaf1c094095942b104755"
+        },
+        {
+          "path": "data/mlb/ml_asof/2026-08-11_mlv2_experiment.json",
+          "sha256": "b95db6853f39cfe62854bae171be592268734b9b43df363c30e94fddf41e4feb"
+        },
+        {
+          "path": "data/mlb/ml_asof/p3_holdout_final.json",
+          "sha256": "09af0050b57f543631504d882e49faa807a28f243f13aa92c7b72f51fbcf0fc3"
+        },
+        {
+          "path": "harness/run_v13_historical.py",
+          "sha256": "d2fdf977cbd8eb34759af3bf23b19112ad02af99968973c1f0bc721a88470cba"
+        }
+      ],
+      "metrics": {
+        "broader_oof_n": 1054,
+        "broader_oof_brier": 0.24707133238562087,
+        "paired_holdout_n": 234,
+        "paired_holdout_brier": 0.2447,
+        "paired_holdout_hit_rate": 0.6453,
+        "challenger_holdout_brier": 0.2438,
+        "challenger_holdout_hit_rate": 0.5897
+      },
+      "reason": "Retain broader-tested frozen V13 probability estimator as research default. Candidate nominal Brier improvement on 234 games does not establish superiority; V13 has higher paired hit rate. This does not overturn NO_PROMOTE or establish a betting edge.",
+      "scope": "FULL_GAME_WINNER_WITH_DECLARED_TIE_PROXY",
+      "runner": "pipelines/cards/selected.py",
+      "official_release": false,
+      "action_authority": false
+    },
+    "wnba:margin": {
+      "default_model_id": "wnba.rs.ff7_logit_ridge.v1_0.shadow",
+      "selection_status": "BASELINE_VALIDATED_DEFAULT",
+      "evidence": [
+        {
+          "path": "data/wnba/model/2026-08-12_v1_walkforward.json",
+          "sha256": "d80b94d28ef9978c6ee30e0784e5667997e9d6ea8e57d329f726508b9de920a2"
+        },
+        {
+          "path": "harness/wnba_model_v1.py",
+          "sha256": "7f128ba323ee939b8f40bf55eb2e1f6e9a24611e29ca4eb743962af2608af4e0"
+        }
+      ],
+      "metrics": {
+        "n": 1633,
+        "mae": 9.994992200020839,
+        "base_mae": 11.407124019958832
+      },
+      "reason": "Target-specific registered evaluation passes versus baseline. Not a winner-calibration transfer.",
+      "scope": "REGULAR_SEASON",
+      "runner": "harness/wnba_model_v1.py:predict_slate",
+      "official_release": false,
+      "action_authority": false
+    },
+    "wnba:total": {
+      "default_model_id": "wnba.rs.ff7_logit_ridge.v1_0.shadow",
+      "selection_status": "BASELINE_VALIDATED_DEFAULT",
+      "evidence": [
+        {
+          "path": "data/wnba/model/2026-08-12_v1_walkforward.json",
+          "sha256": "d80b94d28ef9978c6ee30e0784e5667997e9d6ea8e57d329f726508b9de920a2"
+        },
+        {
+          "path": "harness/wnba_model_v1.py",
+          "sha256": "7f128ba323ee939b8f40bf55eb2e1f6e9a24611e29ca4eb743962af2608af4e0"
+        }
+      ],
+      "metrics": {
+        "n": 1633,
+        "mae": 14.16358826210898,
+        "base_mae": 14.471270555550193
+      },
+      "reason": "Target-specific registered evaluation passes versus baseline. Not a winner-calibration transfer.",
+      "scope": "REGULAR_SEASON",
+      "runner": "harness/wnba_model_v1.py:predict_slate",
+      "official_release": false,
+      "action_authority": false
+    },
+    "nba:winner": {
+      "default_model_id": null,
+      "selection_status": "NO_VERIFIED_TESTED_DEFAULT",
+      "evidence": [],
+      "metrics": {},
+      "reason": "No recoverable fitted forecasting arm plus comparable evaluation in this checkout. Historical claims and evaluation adapters are insufficient.",
+      "scope": "UNVERIFIED",
+      "runner": null,
+      "official_release": false,
+      "action_authority": false
+    },
+    "nhl:winner": {
+      "default_model_id": null,
+      "selection_status": "NO_VERIFIED_TESTED_DEFAULT",
+      "evidence": [],
+      "metrics": {},
+      "reason": "No recoverable fitted forecasting arm plus comparable evaluation in this checkout. Historical claims and evaluation adapters are insufficient.",
+      "scope": "UNVERIFIED",
+      "runner": null,
+      "official_release": false,
+      "action_authority": false
+    },
+    "mls:winner": {
+      "default_model_id": null,
+      "selection_status": "NO_VERIFIED_TESTED_DEFAULT",
+      "evidence": [],
+      "metrics": {},
+      "reason": "No recoverable fitted forecasting arm plus comparable evaluation in this checkout. Historical claims and evaluation adapters are insufficient.",
+      "scope": "UNVERIFIED",
+      "runner": null,
+      "official_release": false,
+      "action_authority": false
+    }
+  },
+  "failed_screen_default_allowed": false,
+  "implicit_target_transfer": false,
+  "automatic_promotion": false,
+  "action_authority": false
+}

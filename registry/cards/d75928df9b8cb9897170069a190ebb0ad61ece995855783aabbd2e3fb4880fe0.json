@@ -1,0 +1,1190 @@
+{
+  "actionable": false,
+  "artifact_type": "diagnostic_force_card_v1",
+  "as_of_utc": "2026-11-02T06:40:24.833157+00:00",
+  "authority": "SHADOW_ONLY",
+  "card_date": "2026-11-03",
+  "coverage_breach_event_ids": [],
+  "forecast_count": 2,
+  "forecasts": [
+    {
+      "action_authority": false,
+      "action_status": "SHADOW_ONLY",
+      "analytic_p": 0.8986147327626355,
+      "analytic_sim_abs_gap_pp": 0.11052672373644823,
+      "analytic_sim_divergence": "NONE",
+      "analytic_sim_gap_pp": -0.11052672373644823,
+      "away_team": "Ohio",
+      "base_home_probability": null,
+      "base_qb_comparison_status": null,
+      "base_qb_gap_pp": null,
+      "base_qb_pick_flip": null,
+      "calibration_procedure_id": "51f8c0272e73a6b07139fdd2f358ee98da47f5075eea79eec34c1961f65c1319",
+      "coverage_label": "CURRENT_RESEARCH; INDEPENDENT_MARGIN_TOTAL_HEADS_NOT_JOINT_SCORE_EXPECTATIONS",
+      "data_quality": "PINNED_HISTORY_PLUS_CURRENT_FBS_SCHEDULE_FINALS",
+      "diagnostics": {
+        "default_selection": {
+          "action_authority": false,
+          "default_model_id": "cfb.fbs.elo_form_logit_ridge.v1_0.shadow",
+          "evidence": [
+            {
+              "path": "data/cfb/model/CFB_V1_OOF_EVALUATION.json",
+              "sha256": "1102479918c41f8c408e8b6106812e67840f3a71f3953a72ad4061f9889df5aa"
+            },
+            {
+              "path": "data/cfb/model/CFB_V2_LIFECYCLE_2026-08-28.json",
+              "sha256": "f02b92c219d21995dfc5fca7ffcaca1b83475a64988390cf0b896f859cfced9f"
+            },
+            {
+              "path": "harness/cfb_v1_port.py",
+              "sha256": "5f3454c780cebf32a2ba193cf9537dc1fb1b5d5d405ad54482f7c7ce1488926a"
+            }
+          ],
+          "league": "cfb",
+          "metrics": {
+            "auc": 0.792199,
+            "brier": 0.182233,
+            "calibration_intercept": -0.0335,
+            "calibration_slope": 0.9559,
+            "ece": 0.014195,
+            "logloss": 0.539141,
+            "n": 10818
+          },
+          "official_release": false,
+          "policy_sha256": "dfef8b94709ad5a1d47d4f652c67ab18813f51c232fc6ea50f2e864dd139b8e9",
+          "profile": "cfb:winner",
+          "reason": "Pooled chronological evaluation passes; season openers have a separate selected profile. V2 remains a challenger.",
+          "runner": "harness/cfb_v1_port.py",
+          "scope": "FBS_VS_FBS_WEEK2_PLUS",
+          "selection_status": "BASELINE_VALIDATED_DEFAULT",
+          "target": "winner"
+        },
+        "home_margin": -20.950308524812215,
+        "home_win": 0.10138526723736455,
+        "identity_provenance": {
+          "action_authority": false,
+          "identity_components": {
+            "calibration": {
+              "league": "cfb",
+              "model_id": "cfb.fbs.elo_form_logit_ridge.v1_0.shadow",
+              "observed_prediction_code_sha256": {
+                "models/current/cfb.py": "20628f3463589cae551b325e68fa7125aef8f9cd075e7b19b0a1c76b9f411b5a",
+                "models/current/common.py": "63c0da2a4c620fb086d08e22268fe3875515c1807aec128f5e092f73eeafd5ff",
+                "models/current/linear.py": "e10b15e6ed20fd410f5d87afbf01eb191768a459ffcb106dd64cbacef797e4a2"
+              },
+              "procedure_id": "51f8c0272e73a6b07139fdd2f358ee98da47f5075eea79eec34c1961f65c1319",
+              "retained_numeric_operations": "SELECTED_HEAD_OR_SIMULATION_TRANSFORM_UNCHANGED",
+              "schema": "sports.observed_calibration_procedure.v1",
+              "stage": "NONE_NO_SEPARATE_FITTED_POSTHOC_CALIBRATOR_IN_SELECTED_PATH",
+              "validation_status": "NOT_ASSESSED"
+            },
+            "feature": {
+              "constructor_code_sha256": {
+                "models/current/cfb.py": "20628f3463589cae551b325e68fa7125aef8f9cd075e7b19b0a1c76b9f411b5a"
+              },
+              "feature_configuration": {
+                "hfa": 55.0,
+                "regress": 0.75
+              },
+              "feature_contract": {
+                "away_ewma_margin": "CONSUMED_SCALAR",
+                "away_ewma_points_against": "CONSUMED_SCALAR",
+                "away_ewma_points_for": "CONSUMED_SCALAR",
+                "conference_game": "CONSUMED_SCALAR",
+                "elo_diff_with_home_advantage": "CONSUMED_SCALAR",
+                "home_ewma_margin": "CONSUMED_SCALAR",
+                "home_ewma_points_against": "CONSUMED_SCALAR",
+                "home_ewma_points_for": "CONSUMED_SCALAR",
+                "neutral_site": "CONSUMED_SCALAR",
+                "rest_days_diff": "CONSUMED_SCALAR"
+              },
+              "league": "cfb",
+              "model_id": "cfb.fbs.elo_form_logit_ridge.v1_0.shadow",
+              "ordered_feature_names": [
+                "elo_diff_with_home_advantage",
+                "home_ewma_points_for",
+                "home_ewma_points_against",
+                "away_ewma_points_for",
+                "away_ewma_points_against",
+                "home_ewma_margin",
+                "away_ewma_margin",
+                "rest_days_diff",
+                "neutral_site",
+                "conference_game"
+              ],
+              "procedure_id": "daf51daa2f3f655c20748e92cf739e1d3ee8accbf1e4b2126d2707666ed9ec02",
+              "schema": "sports.observed_feature_procedure.v1",
+              "validation_status": "NOT_ASSESSED"
+            }
+          },
+          "interpretation": "Full provenance retained separately; none of these archive hashes seeds v2.",
+          "legacy_draw_directory": "/home/runner/work/sports-model/sports-model/output/pregame/run/card/draws/CFB_401866453",
+          "legacy_input_snapshot_hash": "8a94f9688eb5388b2128c545d02b437f6d1523e5e0fea982eaf2706c33f5723d",
+          "legacy_model_state_config_hash": "e8a26331f5b748bee66132bb47b0c12a59943d746f02d3a91ab99813a7e7aab6",
+          "legacy_package_sha256": "1f2e4aed2680cabcc08ad51a9c32b4e846a12a9c5ebcd015ac9d884502e1eb8d",
+          "legacy_parent_forecast_sha256": "cf0e32c978dfe9af44db42f496997f79e84151c097064b5e1f974283ca355ab7",
+          "legacy_parent_identity": null,
+          "predictive_validation": "NOT_ASSESSED"
+        },
+        "model_lineage": {
+          "current_feature_replay_events": 62,
+          "current_finals_assimilated": 622,
+          "exact_historical_replay": true,
+          "historical_feature_rows_replayed": 36901,
+          "training_rows": 17972
+        },
+        "package_sha256": "2dbde2bedd145ce46f1ee2ee99786e38d9ab1372a5a447eeea4c6d1e2df84b11",
+        "total": null
+      },
+      "dose": 0.0,
+      "event_id": "CFB:401866453",
+      "feature_procedure_id": "daf51daa2f3f655c20748e92cf739e1d3ee8accbf1e4b2126d2707666ed9ec02",
+      "forecast_procedure_id": "cfb.fbs.elo_form_logit_ridge.v1_0.shadow:market_blind_numeric.v2",
+      "forecast_status": "FORECAST_GENERATED",
+      "forecast_tier": "REDUCED",
+      "grading": {
+        "action_authority": false,
+        "actual_result": null,
+        "analytic_p_home": 0.10138526723736452,
+        "awaiting_outcome": false,
+        "brier_analytic": null,
+        "brier_normal_margin_candidate": null,
+        "brier_sim": null,
+        "calibration_bin_analytic": "0.1-0.2",
+        "calibration_bin_sim": "0.1-0.2",
+        "eligibility_reason": "PIT_STATUS_PIT_ORDERED",
+        "eligible_for_prospective_grading": false,
+        "graded_at_utc": null,
+        "home_won": null,
+        "log_loss_analytic": null,
+        "log_loss_sim": null,
+        "market_features_used": null,
+        "market_independence_status": "NOT_CERTIFIED_BY_REPORTING_FLAGS",
+        "normal_margin_candidate_p_home": null,
+        "schema_version": "forecast_grading_v1",
+        "stochastic_sim_p_home": 0.10028000000000004
+      },
+      "home_team": "Akron",
+      "identity_semantics": "market_blind_numeric.v2",
+      "input_snapshot_hash": "8a94f9688eb5388b2128c545d02b437f6d1523e5e0fea982eaf2706c33f5723d",
+      "margin_std": null,
+      "model_id": "cfb.fbs.elo_form_logit_ridge.v1_0.shadow",
+      "model_input_snapshot": {
+        "away_ewma_margin": 15.312782825693546,
+        "away_ewma_points_against": 15.527192975607925,
+        "away_ewma_points_for": 30.83997580130147,
+        "conference_game": 1.0,
+        "elo_diff_with_home_advantage": -320.2091805092725,
+        "home_ewma_margin": -15.201126698268228,
+        "home_ewma_points_against": 33.55295950613595,
+        "home_ewma_points_for": 18.351832807867723,
+        "neutral_site": 0.0,
+        "rest_days_diff": 0
+      },
+      "model_p": 0.8986147327626355,
+      "model_p_candidate_normal_margin": null,
+      "model_p_candidate_status": null,
+      "model_state_config_hash": "e8a26331f5b748bee66132bb47b0c12a59943d746f02d3a91ab99813a7e7aab6",
+      "model_winner": "Ohio",
+      "numerical_identity": {
+        "calibration_procedure_id": "51f8c0272e73a6b07139fdd2f358ee98da47f5075eea79eec34c1961f65c1319",
+        "cutoff_utc": "2026-11-02T06:40:24.833157+00:00",
+        "draw_count": 100000,
+        "engine": "BERNOULLI_WINNER_DIAGNOSTIC",
+        "event_id": "CFB:401866453",
+        "feature_procedure_id": "daf51daa2f3f655c20748e92cf739e1d3ee8accbf1e4b2126d2707666ed9ec02",
+        "feature_sha256": "8a94f9688eb5388b2128c545d02b437f6d1523e5e0fea982eaf2706c33f5723d",
+        "fitted_state_sha256": "de58a83f0344f0d711c35fa567997c9fbb566ad11dba420e1afbd948e9d57604",
+        "identity_sha256": "936d9f82223d86b693a5441759e47ab035740acab265c52fdc0b5e4169b107b7",
+        "league": "cfb",
+        "model_id": "cfb.fbs.elo_form_logit_ridge.v1_0.shadow",
+        "numpy_version": "2.3.5",
+        "schema": "sports.numeric_stochastic_identity.v2",
+        "semantic_runtime_sha256": "a7f6541d1415523092e9e6364407100ceb9165de1493e833c93d21f88e65f756",
+        "semantics": "market_blind_numeric.v2",
+        "start_time_utc": "2026-11-04T00:00:00+00:00"
+      },
+      "probability_estimator": "ANALYTIC_AND_SIMULATION",
+      "projected_away_points": null,
+      "projected_away_runs": null,
+      "projected_home_points": null,
+      "projected_home_runs": null,
+      "projected_margin": 20.950308524812215,
+      "projected_total": null,
+      "provenance": {
+        "source_fetches": [
+          {
+            "fetched_at_utc": "2026-11-02T06:39:20.556269+00:00",
+            "sha256": "8724a79408ed01cb9467194d657033d927dc73d1c9938259f75254ddb7e8fe14",
+            "source": "https://raw.githubusercontent.com/sportsdataverse/cfbfastR-data/c1af1a0ab26d63dea1be4d3ea730ea48a16d8b43/schedules/parquet/cfb_schedules_2001.parquet"
+          },
+          {
+            "fetched_at_utc": "2026-11-02T06:39:20.554886+00:00",
+            "sha256": "c8a1b97ca677f6369cf2128c16bea5a1cec329f4af420fea669d692e7ca116b4",
+            "source": "https://raw.githubusercontent.com/sportsdataverse/cfbfastR-data/c1af1a0ab26d63dea1be4d3ea730ea48a16d8b43/schedules/parquet/cfb_schedules_2002.parquet"
+          },
+          {
+            "fetched_at_utc": "2026-11-02T06:39:20.632557+00:00",
+            "sha256": "50d62aceea41999412bf7ba139f2579559330586a9e19ae9a1e4f9adda1141a3",
+            "source": "https://raw.githubusercontent.com/sportsdataverse/cfbfastR-data/c1af1a0ab26d63dea1be4d3ea730ea48a16d8b43/schedules/parquet/cfb_schedules_2003.parquet"
+          },
+          {
+            "fetched_at_utc": "2026-11-02T06:39:20.555448+00:00",
+            "sha256": "db119a13a2b372085a2a1e6271ead324477c63d707e143d5a4b6256961f4c13b",
+            "source": "https://raw.githubusercontent.com/sportsdataverse/cfbfastR-data/c1af1a0ab26d63dea1be4d3ea730ea48a16d8b43/schedules/parquet/cfb_schedules_2004.parquet"
+          },
+          {
+            "fetched_at_utc": "2026-11-02T06:39:20.652300+00:00",
+            "sha256": "0343de3e75b5b04c0efe4c0b86d061e5497b0536b38dd96d459949f25ee8c26b",
+            "source": "https://raw.githubusercontent.com/sportsdataverse/cfbfastR-data/c1af1a0ab26d63dea1be4d3ea730ea48a16d8b43/schedules/parquet/cfb_schedules_2005.parquet"
+          },
+          {
+            "fetched_at_utc": "2026-11-02T06:39:20.645763+00:00",
+            "sha256": "a0d1604278fd5667c1dab35653d1c36dc316a3f3799573100206d94df8ee6e2b",
+            "source": "https://raw.githubusercontent.com/sportsdataverse/cfbfastR-data/c1af1a0ab26d63dea1be4d3ea730ea48a16d8b43/schedules/parquet/cfb_schedules_2006.parquet"
+          },
+          {
+            "fetched_at_utc": "2026-11-02T06:39:20.687298+00:00",
+            "sha256": "40ab95f62372b37bed8bf79b128a4dfe535dd9da82a90b52296ecd4dd2ac3461",
+            "source": "https://raw.githubusercontent.com/sportsdataverse/cfbfastR-data/c1af1a0ab26d63dea1be4d3ea730ea48a16d8b43/schedules/parquet/cfb_schedules_2007.parquet"
+          },
+          {
+            "fetched_at_utc": "2026-11-02T06:39:20.713789+00:00",
+            "sha256": "dee6c6d2e6fb49ca06b9e9dadaec66b1bd1098e19824b135439d6834463cc8a6",
+            "source": "https://raw.githubusercontent.com/sportsdataverse/cfbfastR-data/c1af1a0ab26d63dea1be4d3ea730ea48a16d8b43/schedules/parquet/cfb_schedules_2008.parquet"
+          },
+          {
+            "fetched_at_utc": "2026-11-02T06:39:20.741260+00:00",
+            "sha256": "9656bfc975cef85e04155eff543bda66b3038b6988333af7bd71388edb9382d0",
+            "source": "https://raw.githubusercontent.com/sportsdataverse/cfbfastR-data/c1af1a0ab26d63dea1be4d3ea730ea48a16d8b43/schedules/parquet/cfb_schedules_2009.parquet"
+          },
+          {
+            "fetched_at_utc": "2026-11-02T06:39:20.741859+00:00",
+            "sha256": "393e46e2431ba97fc3c27ad8d48625f38ce882f986c7894f02c2fb65472dd6f2",
+            "source": "https://raw.githubusercontent.com/sportsdataverse/cfbfastR-data/c1af1a0ab26d63dea1be4d3ea730ea48a16d8b43/schedules/parquet/cfb_schedules_2010.parquet"
+          },
+          {
+            "fetched_at_utc": "2026-11-02T06:39:20.775902+00:00",
+            "sha256": "ce67fd75eb1467f0ec4919127a2846f4a21cc94ace987f8c72e3bf84079d6411",
+            "source": "https://raw.githubusercontent.com/sportsdataverse/cfbfastR-data/c1af1a0ab26d63dea1be4d3ea730ea48a16d8b43/schedules/parquet/cfb_schedules_2011.parquet"
+          },
+          {
+            "fetched_at_utc": "2026-11-02T06:39:20.803058+00:00",
+            "sha256": "556c54131da097e6395956e08462194871109999c3a989f4575a763639543a76",
+            "source": "https://raw.githubusercontent.com/sportsdataverse/cfbfastR-data/c1af1a0ab26d63dea1be4d3ea730ea48a16d8b43/schedules/parquet/cfb_schedules_2012.parquet"
+          },
+          {
+            "fetched_at_utc": "2026-11-02T06:39:20.844250+00:00",
+            "sha256": "b02281dd35040a5b57af4af24466e95c78219c9f38ba23cdd3d5093d0ca9b73d",
+            "source": "https://raw.githubusercontent.com/sportsdataverse/cfbfastR-data/c1af1a0ab26d63dea1be4d3ea730ea48a16d8b43/schedules/parquet/cfb_schedules_2013.parquet"
+          },
+          {
+            "fetched_at_utc": "2026-11-02T06:39:20.840255+00:00",
+            "sha256": "375fd3add14e66bdb7e83bb158fc6637c1f90c8938cac477f65a8b7348018aba",
+            "source": "https://raw.githubusercontent.com/sportsdataverse/cfbfastR-data/c1af1a0ab26d63dea1be4d3ea730ea48a16d8b43/schedules/parquet/cfb_schedules_2014.parquet"
+          },
+          {
+            "fetched_at_utc": "2026-11-02T06:39:20.855435+00:00",
+            "sha256": "b2d7f8295ad2683107d3ff8d5756cf37a8d7b5b67ab7b5083c5cd440eed98019",
+            "source": "https://raw.githubusercontent.com/sportsdataverse/cfbfastR-data/c1af1a0ab26d63dea1be4d3ea730ea48a16d8b43/schedules/parquet/cfb_schedules_2015.parquet"
+          },
+          {
+            "fetched_at_utc": "2026-11-02T06:39:20.892747+00:00",
+            "sha256": "77c1e6f0f19164644cfacea6aa32b866e11bc8b72aae8259e14692ce369547d3",
+            "source": "https://raw.githubusercontent.com/sportsdataverse/cfbfastR-data/c1af1a0ab26d63dea1be4d3ea730ea48a16d8b43/schedules/parquet/cfb_schedules_2016.parquet"
+          },
+          {
+            "fetched_at_utc": "2026-11-02T06:39:20.978535+00:00",
+            "sha256": "6662313b163fbe2bfe4187422051c415934ebddddffd2c24d5b4301d3eafe621",
+            "source": "https://raw.githubusercontent.com/sportsdataverse/cfbfastR-data/c1af1a0ab26d63dea1be4d3ea730ea48a16d8b43/schedules/parquet/cfb_schedules_2017.parquet"
+          },
+          {
+            "fetched_at_utc": "2026-11-02T06:39:20.918882+00:00",
+            "sha256": "384c53865c1e12cab7115e1ea9646f622bd07182668d0815d4763bb15bb5242a",
+            "source": "https://raw.githubusercontent.com/sportsdataverse/cfbfastR-data/c1af1a0ab26d63dea1be4d3ea730ea48a16d8b43/schedules/parquet/cfb_schedules_2018.parquet"
+          },
+          {
+            "fetched_at_utc": "2026-11-02T06:39:20.958752+00:00",
+            "sha256": "7ab3e13313ad8c6d37b8f6f64859107eded64992c281e934b463bacd1076ff7f",
+            "source": "https://raw.githubusercontent.com/sportsdataverse/cfbfastR-data/c1af1a0ab26d63dea1be4d3ea730ea48a16d8b43/schedules/parquet/cfb_schedules_2019.parquet"
+          },
+          {
+            "fetched_at_utc": "2026-11-02T06:39:20.987252+00:00",
+            "sha256": "b5f1f74681f0eb275d3b3a4335a1ed21b35edf548713aee5721cebb53c369c11",
+            "source": "https://raw.githubusercontent.com/sportsdataverse/cfbfastR-data/c1af1a0ab26d63dea1be4d3ea730ea48a16d8b43/schedules/parquet/cfb_schedules_2020.parquet"
+          },
+          {
+            "fetched_at_utc": "2026-11-02T06:39:21.003176+00:00",
+            "sha256": "8b2d1306c92de0c12930e30156af35c3ae4441e97a4ac5226eac60765fb97585",
+            "source": "https://raw.githubusercontent.com/sportsdataverse/cfbfastR-data/c1af1a0ab26d63dea1be4d3ea730ea48a16d8b43/schedules/parquet/cfb_schedules_2021.parquet"
+          },
+          {
+            "fetched_at_utc": "2026-11-02T06:39:21.052692+00:00",
+            "sha256": "b9dcbee1e823edf54c811941190e4b678e6774d86156396888c3ee38e0dc9034",
+            "source": "https://raw.githubusercontent.com/sportsdataverse/cfbfastR-data/c1af1a0ab26d63dea1be4d3ea730ea48a16d8b43/schedules/parquet/cfb_schedules_2022.parquet"
+          },
+          {
+            "fetched_at_utc": "2026-11-02T06:39:21.069315+00:00",
+            "sha256": "6bf45f7ade2353fc6f511162eb9fe67f999d2fc7eb0bfaca660554a9c84c5246",
+            "source": "https://raw.githubusercontent.com/sportsdataverse/cfbfastR-data/c1af1a0ab26d63dea1be4d3ea730ea48a16d8b43/schedules/parquet/cfb_schedules_2023.parquet"
+          },
+          {
+            "fetched_at_utc": "2026-11-02T06:39:21.092641+00:00",
+            "sha256": "c6b9b210c0771155c5805657747814a0d9197a4f236c286c4cc56964bbf86bbf",
+            "source": "https://raw.githubusercontent.com/sportsdataverse/cfbfastR-data/c1af1a0ab26d63dea1be4d3ea730ea48a16d8b43/schedules/parquet/cfb_schedules_2024.parquet"
+          },
+          {
+            "fetched_at_utc": "2026-11-02T06:39:21.090963+00:00",
+            "sha256": "7c172a3bdc48dc1965606ba594ea856c70193d5f84ef58138f0b774f878eba29",
+            "source": "https://raw.githubusercontent.com/sportsdataverse/cfbfastR-data/c1af1a0ab26d63dea1be4d3ea730ea48a16d8b43/schedules/parquet/cfb_schedules_2025.parquet"
+          },
+          {
+            "fetched_at_utc": "2026-11-02T06:39:21.112970+00:00",
+            "sha256": "4ac83709d96e70ebb3276426f216c0833b75f724eb6816d22cc62c85abac3974",
+            "source": "https://raw.githubusercontent.com/sportsdataverse/cfbfastR-data/main/schedules/parquet/cfb_schedules_2026.parquet"
+          }
+        ]
+      },
+      "qb_home_probability": null,
+      "roster_coverage": {
+        "action_authority": false,
+        "bundle_sha256": null,
+        "coverage_sha256": "54d0aca4c6e96b8d705b3ba4debea28c9639bf3da6d9e6de739fc0d6f9d0fa34",
+        "cutoff_utc": "2026-11-02T06:40:24.833157+00:00",
+        "event_id": "CFB:401866453",
+        "existing_parent_personnel_evidence": null,
+        "existing_parent_scope": "TEAM_HISTORY_ONLY",
+        "forecast_binding": {
+          "forecast_identity": null,
+          "input_snapshot_hash": "8a94f9688eb5388b2128c545d02b437f6d1523e5e0fea982eaf2706c33f5723d",
+          "model_id": "cfb.fbs.elo_form_logit_ridge.v1_0.shadow",
+          "model_state_config_hash": "e8a26331f5b748bee66132bb47b0c12a59943d746f02d3a91ab99813a7e7aab6"
+        },
+        "reasons": [
+          "ROSTER_BUNDLE_NOT_SUPPLIED",
+          "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+        ],
+        "roster_aware_forecast_eligible": false,
+        "roster_inputs_numerically_used": false,
+        "schema": "sports.roster_coverage.v1",
+        "sport": "cfb",
+        "status": "ACQUIRE_REQUIRED",
+        "teams": {},
+        "unmet_model_requirements": [
+          "starting_qb",
+          "depth_chart",
+          "transfer_identity",
+          "position_group_snaps",
+          "replacement_impact"
+        ]
+      },
+      "selection_hash": "dfef8b94709ad5a1d47d4f652c67ab18813f51c232fc6ea50f2e864dd139b8e9",
+      "sim_p": 0.89972,
+      "simulation": {
+        "binary": {
+          "count": 100000,
+          "home_win_probability": 0.10028,
+          "mc_standard_error_pp": 0.0954496175081769,
+          "scope": "BINARY_NON_TIE_DIAGNOSTIC_NOT_INDEPENDENT_MODEL_VALIDATION",
+          "seed": 14939797808040842805,
+          "sha256": "1ce88685fc7c8f7c47bac5dd9a7c68e2fcb99372c833dde708343fc9ee88685e"
+        },
+        "draw_directory": "/home/runner/work/sports-model/sports-model/output/pregame/run/card/draws/CFB_401866453.semantic-v2",
+        "draw_sha256": {
+          "winner_draws": "1ce88685fc7c8f7c47bac5dd9a7c68e2fcb99372c833dde708343fc9ee88685e"
+        },
+        "joint_scores": null
+      },
+      "spread_or_runline": "UNSUPPORTED_BY_TIER",
+      "start_time_utc": "2026-11-04T00:00:00+00:00",
+      "stochastic_sim_p": 0.89972,
+      "total_market": "UNSUPPORTED_BY_TIER",
+      "total_std": null,
+      "warnings": [
+        "TOTAL_HEAD_NOT_FITTED_FOR_SELECTED_CFB_ARM",
+        "CURRENT_FCS_INTERNAL_SCHEDULE_COVERAGE_UNVERIFIED",
+        "FBS_VS_FBS_ONLY",
+        "NO_CURRENT_QB_OR_PERSONNEL_TRANSFORM_IN_SELECTED_ARM",
+        "NO_WAGERING_AUTHORITY",
+        "VERSIONED_RNG_IDENTITY_REPAIR_NOT_PREDICTIVE_PROMOTION",
+        "ROSTER:ACQUIRE_REQUIRED",
+        "FULL_ROSTER_IMPACTS_NOT_APPLIED"
+      ]
+    },
+    {
+      "action_authority": false,
+      "action_status": "SHADOW_ONLY",
+      "analytic_p": 0.6151883196973272,
+      "analytic_sim_abs_gap_pp": 0.08383196973272833,
+      "analytic_sim_divergence": "NONE",
+      "analytic_sim_gap_pp": 0.08383196973272833,
+      "away_team": "Buffalo",
+      "base_home_probability": null,
+      "base_qb_comparison_status": null,
+      "base_qb_gap_pp": null,
+      "base_qb_pick_flip": null,
+      "calibration_procedure_id": "51f8c0272e73a6b07139fdd2f358ee98da47f5075eea79eec34c1961f65c1319",
+      "coverage_label": "CURRENT_RESEARCH; INDEPENDENT_MARGIN_TOTAL_HEADS_NOT_JOINT_SCORE_EXPECTATIONS",
+      "data_quality": "PINNED_HISTORY_PLUS_CURRENT_FBS_SCHEDULE_FINALS",
+      "diagnostics": {
+        "default_selection": {
+          "action_authority": false,
+          "default_model_id": "cfb.fbs.elo_form_logit_ridge.v1_0.shadow",
+          "evidence": [
+            {
+              "path": "data/cfb/model/CFB_V1_OOF_EVALUATION.json",
+              "sha256": "1102479918c41f8c408e8b6106812e67840f3a71f3953a72ad4061f9889df5aa"
+            },
+            {
+              "path": "data/cfb/model/CFB_V2_LIFECYCLE_2026-08-28.json",
+              "sha256": "f02b92c219d21995dfc5fca7ffcaca1b83475a64988390cf0b896f859cfced9f"
+            },
+            {
+              "path": "harness/cfb_v1_port.py",
+              "sha256": "5f3454c780cebf32a2ba193cf9537dc1fb1b5d5d405ad54482f7c7ce1488926a"
+            }
+          ],
+          "league": "cfb",
+          "metrics": {
+            "auc": 0.792199,
+            "brier": 0.182233,
+            "calibration_intercept": -0.0335,
+            "calibration_slope": 0.9559,
+            "ece": 0.014195,
+            "logloss": 0.539141,
+            "n": 10818
+          },
+          "official_release": false,
+          "policy_sha256": "dfef8b94709ad5a1d47d4f652c67ab18813f51c232fc6ea50f2e864dd139b8e9",
+          "profile": "cfb:winner",
+          "reason": "Pooled chronological evaluation passes; season openers have a separate selected profile. V2 remains a challenger.",
+          "runner": "harness/cfb_v1_port.py",
+          "scope": "FBS_VS_FBS_WEEK2_PLUS",
+          "selection_status": "BASELINE_VALIDATED_DEFAULT",
+          "target": "winner"
+        },
+        "home_margin": 4.183250924924632,
+        "home_win": 0.6151883196973272,
+        "identity_provenance": {
+          "action_authority": false,
+          "identity_components": {
+            "calibration": {
+              "league": "cfb",
+              "model_id": "cfb.fbs.elo_form_logit_ridge.v1_0.shadow",
+              "observed_prediction_code_sha256": {
+                "models/current/cfb.py": "20628f3463589cae551b325e68fa7125aef8f9cd075e7b19b0a1c76b9f411b5a",
+                "models/current/common.py": "63c0da2a4c620fb086d08e22268fe3875515c1807aec128f5e092f73eeafd5ff",
+                "models/current/linear.py": "e10b15e6ed20fd410f5d87afbf01eb191768a459ffcb106dd64cbacef797e4a2"
+              },
+              "procedure_id": "51f8c0272e73a6b07139fdd2f358ee98da47f5075eea79eec34c1961f65c1319",
+              "retained_numeric_operations": "SELECTED_HEAD_OR_SIMULATION_TRANSFORM_UNCHANGED",
+              "schema": "sports.observed_calibration_procedure.v1",
+              "stage": "NONE_NO_SEPARATE_FITTED_POSTHOC_CALIBRATOR_IN_SELECTED_PATH",
+              "validation_status": "NOT_ASSESSED"
+            },
+            "feature": {
+              "constructor_code_sha256": {
+                "models/current/cfb.py": "20628f3463589cae551b325e68fa7125aef8f9cd075e7b19b0a1c76b9f411b5a"
+              },
+              "feature_configuration": {
+                "hfa": 55.0,
+                "regress": 0.75
+              },
+              "feature_contract": {
+                "away_ewma_margin": "CONSUMED_SCALAR",
+                "away_ewma_points_against": "CONSUMED_SCALAR",
+                "away_ewma_points_for": "CONSUMED_SCALAR",
+                "conference_game": "CONSUMED_SCALAR",
+                "elo_diff_with_home_advantage": "CONSUMED_SCALAR",
+                "home_ewma_margin": "CONSUMED_SCALAR",
+                "home_ewma_points_against": "CONSUMED_SCALAR",
+                "home_ewma_points_for": "CONSUMED_SCALAR",
+                "neutral_site": "CONSUMED_SCALAR",
+                "rest_days_diff": "CONSUMED_SCALAR"
+              },
+              "league": "cfb",
+              "model_id": "cfb.fbs.elo_form_logit_ridge.v1_0.shadow",
+              "ordered_feature_names": [
+                "elo_diff_with_home_advantage",
+                "home_ewma_points_for",
+                "home_ewma_points_against",
+                "away_ewma_points_for",
+                "away_ewma_points_against",
+                "home_ewma_margin",
+                "away_ewma_margin",
+                "rest_days_diff",
+                "neutral_site",
+                "conference_game"
+              ],
+              "procedure_id": "daf51daa2f3f655c20748e92cf739e1d3ee8accbf1e4b2126d2707666ed9ec02",
+              "schema": "sports.observed_feature_procedure.v1",
+              "validation_status": "NOT_ASSESSED"
+            }
+          },
+          "interpretation": "Full provenance retained separately; none of these archive hashes seeds v2.",
+          "legacy_draw_directory": "/home/runner/work/sports-model/sports-model/output/pregame/run/card/draws/CFB_401866454",
+          "legacy_input_snapshot_hash": "7af0c6f3c3290e7303de537006b7c59b85fa693cb47b4e3aa861da77c5c014e9",
+          "legacy_model_state_config_hash": "e8a26331f5b748bee66132bb47b0c12a59943d746f02d3a91ab99813a7e7aab6",
+          "legacy_package_sha256": "1f2e4aed2680cabcc08ad51a9c32b4e846a12a9c5ebcd015ac9d884502e1eb8d",
+          "legacy_parent_forecast_sha256": "ccd77062c0bdcab5dc26ee66aa1d0732d18cb5eea11e7eb94cc0dde877c2cc67",
+          "legacy_parent_identity": null,
+          "predictive_validation": "NOT_ASSESSED"
+        },
+        "model_lineage": {
+          "current_feature_replay_events": 62,
+          "current_finals_assimilated": 622,
+          "exact_historical_replay": true,
+          "historical_feature_rows_replayed": 36901,
+          "training_rows": 17972
+        },
+        "package_sha256": "2dbde2bedd145ce46f1ee2ee99786e38d9ab1372a5a447eeea4c6d1e2df84b11",
+        "total": null
+      },
+      "dose": 0.0,
+      "event_id": "CFB:401866454",
+      "feature_procedure_id": "daf51daa2f3f655c20748e92cf739e1d3ee8accbf1e4b2126d2707666ed9ec02",
+      "forecast_procedure_id": "cfb.fbs.elo_form_logit_ridge.v1_0.shadow:market_blind_numeric.v2",
+      "forecast_status": "FORECAST_GENERATED",
+      "forecast_tier": "REDUCED",
+      "grading": {
+        "action_authority": false,
+        "actual_result": null,
+        "analytic_p_home": 0.6151883196973272,
+        "awaiting_outcome": false,
+        "brier_analytic": null,
+        "brier_normal_margin_candidate": null,
+        "brier_sim": null,
+        "calibration_bin_analytic": "0.6-0.7",
+        "calibration_bin_sim": "0.6-0.7",
+        "eligibility_reason": "PIT_STATUS_PIT_ORDERED",
+        "eligible_for_prospective_grading": false,
+        "graded_at_utc": null,
+        "home_won": null,
+        "log_loss_analytic": null,
+        "log_loss_sim": null,
+        "market_features_used": null,
+        "market_independence_status": "NOT_CERTIFIED_BY_REPORTING_FLAGS",
+        "normal_margin_candidate_p_home": null,
+        "schema_version": "forecast_grading_v1",
+        "stochastic_sim_p_home": 0.61435
+      },
+      "home_team": "Miami (OH)",
+      "identity_semantics": "market_blind_numeric.v2",
+      "input_snapshot_hash": "7af0c6f3c3290e7303de537006b7c59b85fa693cb47b4e3aa861da77c5c014e9",
+      "margin_std": null,
+      "model_id": "cfb.fbs.elo_form_logit_ridge.v1_0.shadow",
+      "model_input_snapshot": {
+        "away_ewma_margin": 4.918465158025379,
+        "away_ewma_points_against": 21.27283146450605,
+        "away_ewma_points_for": 26.19129662253143,
+        "conference_game": 1.0,
+        "elo_diff_with_home_advantage": 80.15738183514395,
+        "home_ewma_margin": 5.157469751361814,
+        "home_ewma_points_against": 22.287100096141494,
+        "home_ewma_points_for": 27.444569847503303,
+        "neutral_site": 0.0,
+        "rest_days_diff": 0
+      },
+      "model_p": 0.6151883196973272,
+      "model_p_candidate_normal_margin": null,
+      "model_p_candidate_status": null,
+      "model_state_config_hash": "e8a26331f5b748bee66132bb47b0c12a59943d746f02d3a91ab99813a7e7aab6",
+      "model_winner": "Miami (OH)",
+      "numerical_identity": {
+        "calibration_procedure_id": "51f8c0272e73a6b07139fdd2f358ee98da47f5075eea79eec34c1961f65c1319",
+        "cutoff_utc": "2026-11-02T06:40:24.833157+00:00",
+        "draw_count": 100000,
+        "engine": "BERNOULLI_WINNER_DIAGNOSTIC",
+        "event_id": "CFB:401866454",
+        "feature_procedure_id": "daf51daa2f3f655c20748e92cf739e1d3ee8accbf1e4b2126d2707666ed9ec02",
+        "feature_sha256": "7af0c6f3c3290e7303de537006b7c59b85fa693cb47b4e3aa861da77c5c014e9",
+        "fitted_state_sha256": "de58a83f0344f0d711c35fa567997c9fbb566ad11dba420e1afbd948e9d57604",
+        "identity_sha256": "ef20df0202698fa3570b1907ec9bd5b8f2420a14a9e8bb26aafc054a83622e81",
+        "league": "cfb",
+        "model_id": "cfb.fbs.elo_form_logit_ridge.v1_0.shadow",
+        "numpy_version": "2.3.5",
+        "schema": "sports.numeric_stochastic_identity.v2",
+        "semantic_runtime_sha256": "a7f6541d1415523092e9e6364407100ceb9165de1493e833c93d21f88e65f756",
+        "semantics": "market_blind_numeric.v2",
+        "start_time_utc": "2026-11-04T01:00:00+00:00"
+      },
+      "probability_estimator": "ANALYTIC_AND_SIMULATION",
+      "projected_away_points": null,
+      "projected_away_runs": null,
+      "projected_home_points": null,
+      "projected_home_runs": null,
+      "projected_margin": 4.183250924924632,
+      "projected_total": null,
+      "provenance": {
+        "source_fetches": [
+          {
+            "fetched_at_utc": "2026-11-02T06:39:20.556269+00:00",
+            "sha256": "8724a79408ed01cb9467194d657033d927dc73d1c9938259f75254ddb7e8fe14",
+            "source": "https://raw.githubusercontent.com/sportsdataverse/cfbfastR-data/c1af1a0ab26d63dea1be4d3ea730ea48a16d8b43/schedules/parquet/cfb_schedules_2001.parquet"
+          },
+          {
+            "fetched_at_utc": "2026-11-02T06:39:20.554886+00:00",
+            "sha256": "c8a1b97ca677f6369cf2128c16bea5a1cec329f4af420fea669d692e7ca116b4",
+            "source": "https://raw.githubusercontent.com/sportsdataverse/cfbfastR-data/c1af1a0ab26d63dea1be4d3ea730ea48a16d8b43/schedules/parquet/cfb_schedules_2002.parquet"
+          },
+          {
+            "fetched_at_utc": "2026-11-02T06:39:20.632557+00:00",
+            "sha256": "50d62aceea41999412bf7ba139f2579559330586a9e19ae9a1e4f9adda1141a3",
+            "source": "https://raw.githubusercontent.com/sportsdataverse/cfbfastR-data/c1af1a0ab26d63dea1be4d3ea730ea48a16d8b43/schedules/parquet/cfb_schedules_2003.parquet"
+          },
+          {
+            "fetched_at_utc": "2026-11-02T06:39:20.555448+00:00",
+            "sha256": "db119a13a2b372085a2a1e6271ead324477c63d707e143d5a4b6256961f4c13b",
+            "source": "https://raw.githubusercontent.com/sportsdataverse/cfbfastR-data/c1af1a0ab26d63dea1be4d3ea730ea48a16d8b43/schedules/parquet/cfb_schedules_2004.parquet"
+          },
+          {
+            "fetched_at_utc": "2026-11-02T06:39:20.652300+00:00",
+            "sha256": "0343de3e75b5b04c0efe4c0b86d061e5497b0536b38dd96d459949f25ee8c26b",
+            "source": "https://raw.githubusercontent.com/sportsdataverse/cfbfastR-data/c1af1a0ab26d63dea1be4d3ea730ea48a16d8b43/schedules/parquet/cfb_schedules_2005.parquet"
+          },
+          {
+            "fetched_at_utc": "2026-11-02T06:39:20.645763+00:00",
+            "sha256": "a0d1604278fd5667c1dab35653d1c36dc316a3f3799573100206d94df8ee6e2b",
+            "source": "https://raw.githubusercontent.com/sportsdataverse/cfbfastR-data/c1af1a0ab26d63dea1be4d3ea730ea48a16d8b43/schedules/parquet/cfb_schedules_2006.parquet"
+          },
+          {
+            "fetched_at_utc": "2026-11-02T06:39:20.687298+00:00",
+            "sha256": "40ab95f62372b37bed8bf79b128a4dfe535dd9da82a90b52296ecd4dd2ac3461",
+            "source": "https://raw.githubusercontent.com/sportsdataverse/cfbfastR-data/c1af1a0ab26d63dea1be4d3ea730ea48a16d8b43/schedules/parquet/cfb_schedules_2007.parquet"
+          },
+          {
+            "fetched_at_utc": "2026-11-02T06:39:20.713789+00:00",
+            "sha256": "dee6c6d2e6fb49ca06b9e9dadaec66b1bd1098e19824b135439d6834463cc8a6",
+            "source": "https://raw.githubusercontent.com/sportsdataverse/cfbfastR-data/c1af1a0ab26d63dea1be4d3ea730ea48a16d8b43/schedules/parquet/cfb_schedules_2008.parquet"
+          },
+          {
+            "fetched_at_utc": "2026-11-02T06:39:20.741260+00:00",
+            "sha256": "9656bfc975cef85e04155eff543bda66b3038b6988333af7bd71388edb9382d0",
+            "source": "https://raw.githubusercontent.com/sportsdataverse/cfbfastR-data/c1af1a0ab26d63dea1be4d3ea730ea48a16d8b43/schedules/parquet/cfb_schedules_2009.parquet"
+          },
+          {
+            "fetched_at_utc": "2026-11-02T06:39:20.741859+00:00",
+            "sha256": "393e46e2431ba97fc3c27ad8d48625f38ce882f986c7894f02c2fb65472dd6f2",
+            "source": "https://raw.githubusercontent.com/sportsdataverse/cfbfastR-data/c1af1a0ab26d63dea1be4d3ea730ea48a16d8b43/schedules/parquet/cfb_schedules_2010.parquet"
+          },
+          {
+            "fetched_at_utc": "2026-11-02T06:39:20.775902+00:00",
+            "sha256": "ce67fd75eb1467f0ec4919127a2846f4a21cc94ace987f8c72e3bf84079d6411",
+            "source": "https://raw.githubusercontent.com/sportsdataverse/cfbfastR-data/c1af1a0ab26d63dea1be4d3ea730ea48a16d8b43/schedules/parquet/cfb_schedules_2011.parquet"
+          },
+          {
+            "fetched_at_utc": "2026-11-02T06:39:20.803058+00:00",
+            "sha256": "556c54131da097e6395956e08462194871109999c3a989f4575a763639543a76",
+            "source": "https://raw.githubusercontent.com/sportsdataverse/cfbfastR-data/c1af1a0ab26d63dea1be4d3ea730ea48a16d8b43/schedules/parquet/cfb_schedules_2012.parquet"
+          },
+          {
+            "fetched_at_utc": "2026-11-02T06:39:20.844250+00:00",
+            "sha256": "b02281dd35040a5b57af4af24466e95c78219c9f38ba23cdd3d5093d0ca9b73d",
+            "source": "https://raw.githubusercontent.com/sportsdataverse/cfbfastR-data/c1af1a0ab26d63dea1be4d3ea730ea48a16d8b43/schedules/parquet/cfb_schedules_2013.parquet"
+          },
+          {
+            "fetched_at_utc": "2026-11-02T06:39:20.840255+00:00",
+            "sha256": "375fd3add14e66bdb7e83bb158fc6637c1f90c8938cac477f65a8b7348018aba",
+            "source": "https://raw.githubusercontent.com/sportsdataverse/cfbfastR-data/c1af1a0ab26d63dea1be4d3ea730ea48a16d8b43/schedules/parquet/cfb_schedules_2014.parquet"
+          },
+          {
+            "fetched_at_utc": "2026-11-02T06:39:20.855435+00:00",
+            "sha256": "b2d7f8295ad2683107d3ff8d5756cf37a8d7b5b67ab7b5083c5cd440eed98019",
+            "source": "https://raw.githubusercontent.com/sportsdataverse/cfbfastR-data/c1af1a0ab26d63dea1be4d3ea730ea48a16d8b43/schedules/parquet/cfb_schedules_2015.parquet"
+          },
+          {
+            "fetched_at_utc": "2026-11-02T06:39:20.892747+00:00",
+            "sha256": "77c1e6f0f19164644cfacea6aa32b866e11bc8b72aae8259e14692ce369547d3",
+            "source": "https://raw.githubusercontent.com/sportsdataverse/cfbfastR-data/c1af1a0ab26d63dea1be4d3ea730ea48a16d8b43/schedules/parquet/cfb_schedules_2016.parquet"
+          },
+          {
+            "fetched_at_utc": "2026-11-02T06:39:20.978535+00:00",
+            "sha256": "6662313b163fbe2bfe4187422051c415934ebddddffd2c24d5b4301d3eafe621",
+            "source": "https://raw.githubusercontent.com/sportsdataverse/cfbfastR-data/c1af1a0ab26d63dea1be4d3ea730ea48a16d8b43/schedules/parquet/cfb_schedules_2017.parquet"
+          },
+          {
+            "fetched_at_utc": "2026-11-02T06:39:20.918882+00:00",
+            "sha256": "384c53865c1e12cab7115e1ea9646f622bd07182668d0815d4763bb15bb5242a",
+            "source": "https://raw.githubusercontent.com/sportsdataverse/cfbfastR-data/c1af1a0ab26d63dea1be4d3ea730ea48a16d8b43/schedules/parquet/cfb_schedules_2018.parquet"
+          },
+          {
+            "fetched_at_utc": "2026-11-02T06:39:20.958752+00:00",
+            "sha256": "7ab3e13313ad8c6d37b8f6f64859107eded64992c281e934b463bacd1076ff7f",
+            "source": "https://raw.githubusercontent.com/sportsdataverse/cfbfastR-data/c1af1a0ab26d63dea1be4d3ea730ea48a16d8b43/schedules/parquet/cfb_schedules_2019.parquet"
+          },
+          {
+            "fetched_at_utc": "2026-11-02T06:39:20.987252+00:00",
+            "sha256": "b5f1f74681f0eb275d3b3a4335a1ed21b35edf548713aee5721cebb53c369c11",
+            "source": "https://raw.githubusercontent.com/sportsdataverse/cfbfastR-data/c1af1a0ab26d63dea1be4d3ea730ea48a16d8b43/schedules/parquet/cfb_schedules_2020.parquet"
+          },
+          {
+            "fetched_at_utc": "2026-11-02T06:39:21.003176+00:00",
+            "sha256": "8b2d1306c92de0c12930e30156af35c3ae4441e97a4ac5226eac60765fb97585",
+            "source": "https://raw.githubusercontent.com/sportsdataverse/cfbfastR-data/c1af1a0ab26d63dea1be4d3ea730ea48a16d8b43/schedules/parquet/cfb_schedules_2021.parquet"
+          },
+          {
+            "fetched_at_utc": "2026-11-02T06:39:21.052692+00:00",
+            "sha256": "b9dcbee1e823edf54c811941190e4b678e6774d86156396888c3ee38e0dc9034",
+            "source": "https://raw.githubusercontent.com/sportsdataverse/cfbfastR-data/c1af1a0ab26d63dea1be4d3ea730ea48a16d8b43/schedules/parquet/cfb_schedules_2022.parquet"
+          },
+          {
+            "fetched_at_utc": "2026-11-02T06:39:21.069315+00:00",
+            "sha256": "6bf45f7ade2353fc6f511162eb9fe67f999d2fc7eb0bfaca660554a9c84c5246",
+            "source": "https://raw.githubusercontent.com/sportsdataverse/cfbfastR-data/c1af1a0ab26d63dea1be4d3ea730ea48a16d8b43/schedules/parquet/cfb_schedules_2023.parquet"
+          },
+          {
+            "fetched_at_utc": "2026-11-02T06:39:21.092641+00:00",
+            "sha256": "c6b9b210c0771155c5805657747814a0d9197a4f236c286c4cc56964bbf86bbf",
+            "source": "https://raw.githubusercontent.com/sportsdataverse/cfbfastR-data/c1af1a0ab26d63dea1be4d3ea730ea48a16d8b43/schedules/parquet/cfb_schedules_2024.parquet"
+          },
+          {
+            "fetched_at_utc": "2026-11-02T06:39:21.090963+00:00",
+            "sha256": "7c172a3bdc48dc1965606ba594ea856c70193d5f84ef58138f0b774f878eba29",
+            "source": "https://raw.githubusercontent.com/sportsdataverse/cfbfastR-data/c1af1a0ab26d63dea1be4d3ea730ea48a16d8b43/schedules/parquet/cfb_schedules_2025.parquet"
+          },
+          {
+            "fetched_at_utc": "2026-11-02T06:39:21.112970+00:00",
+            "sha256": "4ac83709d96e70ebb3276426f216c0833b75f724eb6816d22cc62c85abac3974",
+            "source": "https://raw.githubusercontent.com/sportsdataverse/cfbfastR-data/main/schedules/parquet/cfb_schedules_2026.parquet"
+          }
+        ]
+      },
+      "qb_home_probability": null,
+      "roster_coverage": {
+        "action_authority": false,
+        "bundle_sha256": null,
+        "coverage_sha256": "dc239be0c2ca2974a941e86b9f7c437e114d1af37e94b024c03016d241b75489",
+        "cutoff_utc": "2026-11-02T06:40:24.833157+00:00",
+        "event_id": "CFB:401866454",
+        "existing_parent_personnel_evidence": null,
+        "existing_parent_scope": "TEAM_HISTORY_ONLY",
+        "forecast_binding": {
+          "forecast_identity": null,
+          "input_snapshot_hash": "7af0c6f3c3290e7303de537006b7c59b85fa693cb47b4e3aa861da77c5c014e9",
+          "model_id": "cfb.fbs.elo_form_logit_ridge.v1_0.shadow",
+          "model_state_config_hash": "e8a26331f5b748bee66132bb47b0c12a59943d746f02d3a91ab99813a7e7aab6"
+        },
+        "reasons": [
+          "ROSTER_BUNDLE_NOT_SUPPLIED",
+          "FULL_ROSTER_IMPACT_TRANSFORM_NOT_FITTED"
+        ],
+        "roster_aware_forecast_eligible": false,
+        "roster_inputs_numerically_used": false,
+        "schema": "sports.roster_coverage.v1",
+        "sport": "cfb",
+        "status": "ACQUIRE_REQUIRED",
+        "teams": {},
+        "unmet_model_requirements": [
+          "starting_qb",
+          "depth_chart",
+          "transfer_identity",
+          "position_group_snaps",
+          "replacement_impact"
+        ]
+      },
+      "selection_hash": "dfef8b94709ad5a1d47d4f652c67ab18813f51c232fc6ea50f2e864dd139b8e9",
+      "sim_p": 0.61435,
+      "simulation": {
+        "binary": {
+          "count": 100000,
+          "home_win_probability": 0.61435,
+          "mc_standard_error_pp": 0.1538608627966535,
+          "scope": "BINARY_NON_TIE_DIAGNOSTIC_NOT_INDEPENDENT_MODEL_VALIDATION",
+          "seed": 10884854777888671091,
+          "sha256": "6fd6674a72cb6867ce349afd8294e46c80adc90adb65c26071769c6ba649bab9"
+        },
+        "draw_directory": "/home/runner/work/sports-model/sports-model/output/pregame/run/card/draws/CFB_401866454.semantic-v2",
+        "draw_sha256": {
+          "winner_draws": "6fd6674a72cb6867ce349afd8294e46c80adc90adb65c26071769c6ba649bab9"
+        },
+        "joint_scores": null
+      },
+      "spread_or_runline": "UNSUPPORTED_BY_TIER",
+      "start_time_utc": "2026-11-04T01:00:00+00:00",
+      "stochastic_sim_p": 0.61435,
+      "total_market": "UNSUPPORTED_BY_TIER",
+      "total_std": null,
+      "warnings": [
+        "TOTAL_HEAD_NOT_FITTED_FOR_SELECTED_CFB_ARM",
+        "CURRENT_FCS_INTERNAL_SCHEDULE_COVERAGE_UNVERIFIED",
+        "FBS_VS_FBS_ONLY",
+        "NO_CURRENT_QB_OR_PERSONNEL_TRANSFORM_IN_SELECTED_ARM",
+        "NO_WAGERING_AUTHORITY",
+        "VERSIONED_RNG_IDENTITY_REPAIR_NOT_PREDICTIVE_PROMOTION",
+        "ROSTER:ACQUIRE_REQUIRED",
+        "FULL_ROSTER_IMPACTS_NOT_APPLIED"
+      ]
+    }
+  ],
+  "generated_at_utc": "2026-11-02T06:40:26.163938Z",
+  "grading_policy": {
+    "action_authority": false,
+    "eligible_forecast_count": 0,
+    "market_independence_status": "SEE_DISCLOSURE_AND_RUNTIME_PERTURBATION_AUDIT",
+    "market_overlay_enabled": false,
+    "market_overlay_scope": "NO_COMPARISON_LAYER_ATTACHED_BY_SHARED_RUNNER",
+    "registration_rule": "DIAGNOSTIC_ONLY; separate verified writer registration required",
+    "schema_version": "mlb_probability_calibration_v1"
+  },
+  "incidents": [],
+  "league": "CFB",
+  "pit_provenance": {
+    "action_authority": false,
+    "actual_data_vintage_utc": "2026-11-02T06:39:21.112970Z",
+    "adapter_source": null,
+    "data_vintage_basis": "RETAINED_SOURCES_AND_FROZEN_TRANSFORM",
+    "generated_at_utc": "2026-11-02T06:40:26.163938Z",
+    "max_source_timestamp_utc": "2026-11-02T06:39:21.112970Z",
+    "min_source_timestamp_utc": "2026-11-02T06:39:20.554886Z",
+    "pit_alignment_threshold_seconds": 0,
+    "pit_delta_seconds": -64,
+    "pit_gate": "WARN",
+    "pit_mode": "CURRENT_SOURCE_BOUND_RESEARCH",
+    "pit_reason": "FETCH_ORDER_ONLY_SOURCE_PROVENANCE_UNVERIFIED",
+    "pit_reconstruction_supported": false,
+    "pit_status": "PIT_ORDERED",
+    "pit_threshold_seconds": 3600,
+    "requested_as_of_utc": "2026-11-02T06:40:24.833157+00:00",
+    "source_attestation": {
+      "action_authority": false,
+      "certified_calibration_eligible": false,
+      "historical_pit_validity_proven": false,
+      "market_overlay_enabled": false,
+      "model_input_usage_proven": false,
+      "provider_authenticity_proven": false,
+      "reports": [
+        {
+          "report_sha256": "5fcc5cdf341d0d78596bf31a8f97e9b5404e9b4ae71e563c65606928bed75209"
+        }
+      ],
+      "schema": "sports.source_retention_attestation.v1",
+      "sources": [
+        {
+          "byte_count": 45220,
+          "fetched_at_utc": "2026-11-02T06:39:20.556269+00:00",
+          "report_sha256": "5fcc5cdf341d0d78596bf31a8f97e9b5404e9b4ae71e563c65606928bed75209",
+          "sha256": "8724a79408ed01cb9467194d657033d927dc73d1c9938259f75254ddb7e8fe14",
+          "source": "https://raw.githubusercontent.com/sportsdataverse/cfbfastR-data/c1af1a0ab26d63dea1be4d3ea730ea48a16d8b43/schedules/parquet/cfb_schedules_2001.parquet"
+        },
+        {
+          "byte_count": 47803,
+          "fetched_at_utc": "2026-11-02T06:39:20.554886+00:00",
+          "report_sha256": "5fcc5cdf341d0d78596bf31a8f97e9b5404e9b4ae71e563c65606928bed75209",
+          "sha256": "c8a1b97ca677f6369cf2128c16bea5a1cec329f4af420fea669d692e7ca116b4",
+          "source": "https://raw.githubusercontent.com/sportsdataverse/cfbfastR-data/c1af1a0ab26d63dea1be4d3ea730ea48a16d8b43/schedules/parquet/cfb_schedules_2002.parquet"
+        },
+        {
+          "byte_count": 48549,
+          "fetched_at_utc": "2026-11-02T06:39:20.632557+00:00",
+          "report_sha256": "5fcc5cdf341d0d78596bf31a8f97e9b5404e9b4ae71e563c65606928bed75209",
+          "sha256": "50d62aceea41999412bf7ba139f2579559330586a9e19ae9a1e4f9adda1141a3",
+          "source": "https://raw.githubusercontent.com/sportsdataverse/cfbfastR-data/c1af1a0ab26d63dea1be4d3ea730ea48a16d8b43/schedules/parquet/cfb_schedules_2003.parquet"
+        },
+        {
+          "byte_count": 43886,
+          "fetched_at_utc": "2026-11-02T06:39:20.555448+00:00",
+          "report_sha256": "5fcc5cdf341d0d78596bf31a8f97e9b5404e9b4ae71e563c65606928bed75209",
+          "sha256": "db119a13a2b372085a2a1e6271ead324477c63d707e143d5a4b6256961f4c13b",
+          "source": "https://raw.githubusercontent.com/sportsdataverse/cfbfastR-data/c1af1a0ab26d63dea1be4d3ea730ea48a16d8b43/schedules/parquet/cfb_schedules_2004.parquet"
+        },
+        {
+          "byte_count": 43744,
+          "fetched_at_utc": "2026-11-02T06:39:20.652300+00:00",
+          "report_sha256": "5fcc5cdf341d0d78596bf31a8f97e9b5404e9b4ae71e563c65606928bed75209",
+          "sha256": "0343de3e75b5b04c0efe4c0b86d061e5497b0536b38dd96d459949f25ee8c26b",
+          "source": "https://raw.githubusercontent.com/sportsdataverse/cfbfastR-data/c1af1a0ab26d63dea1be4d3ea730ea48a16d8b43/schedules/parquet/cfb_schedules_2005.parquet"
+        },
+        {
+          "byte_count": 48400,
+          "fetched_at_utc": "2026-11-02T06:39:20.645763+00:00",
+          "report_sha256": "5fcc5cdf341d0d78596bf31a8f97e9b5404e9b4ae71e563c65606928bed75209",
+          "sha256": "a0d1604278fd5667c1dab35653d1c36dc316a3f3799573100206d94df8ee6e2b",
+          "source": "https://raw.githubusercontent.com/sportsdataverse/cfbfastR-data/c1af1a0ab26d63dea1be4d3ea730ea48a16d8b43/schedules/parquet/cfb_schedules_2006.parquet"
+        },
+        {
+          "byte_count": 49820,
+          "fetched_at_utc": "2026-11-02T06:39:20.687298+00:00",
+          "report_sha256": "5fcc5cdf341d0d78596bf31a8f97e9b5404e9b4ae71e563c65606928bed75209",
+          "sha256": "40ab95f62372b37bed8bf79b128a4dfe535dd9da82a90b52296ecd4dd2ac3461",
+          "source": "https://raw.githubusercontent.com/sportsdataverse/cfbfastR-data/c1af1a0ab26d63dea1be4d3ea730ea48a16d8b43/schedules/parquet/cfb_schedules_2007.parquet"
+        },
+        {
+          "byte_count": 49440,
+          "fetched_at_utc": "2026-11-02T06:39:20.713789+00:00",
+          "report_sha256": "5fcc5cdf341d0d78596bf31a8f97e9b5404e9b4ae71e563c65606928bed75209",
+          "sha256": "dee6c6d2e6fb49ca06b9e9dadaec66b1bd1098e19824b135439d6834463cc8a6",
+          "source": "https://raw.githubusercontent.com/sportsdataverse/cfbfastR-data/c1af1a0ab26d63dea1be4d3ea730ea48a16d8b43/schedules/parquet/cfb_schedules_2008.parquet"
+        },
+        {
+          "byte_count": 45303,
+          "fetched_at_utc": "2026-11-02T06:39:20.741260+00:00",
+          "report_sha256": "5fcc5cdf341d0d78596bf31a8f97e9b5404e9b4ae71e563c65606928bed75209",
+          "sha256": "9656bfc975cef85e04155eff543bda66b3038b6988333af7bd71388edb9382d0",
+          "source": "https://raw.githubusercontent.com/sportsdataverse/cfbfastR-data/c1af1a0ab26d63dea1be4d3ea730ea48a16d8b43/schedules/parquet/cfb_schedules_2009.parquet"
+        },
+        {
+          "byte_count": 72424,
+          "fetched_at_utc": "2026-11-02T06:39:20.741859+00:00",
+          "report_sha256": "5fcc5cdf341d0d78596bf31a8f97e9b5404e9b4ae71e563c65606928bed75209",
+          "sha256": "393e46e2431ba97fc3c27ad8d48625f38ce882f986c7894f02c2fb65472dd6f2",
+          "source": "https://raw.githubusercontent.com/sportsdataverse/cfbfastR-data/c1af1a0ab26d63dea1be4d3ea730ea48a16d8b43/schedules/parquet/cfb_schedules_2010.parquet"
+        },
+        {
+          "byte_count": 73290,
+          "fetched_at_utc": "2026-11-02T06:39:20.775902+00:00",
+          "report_sha256": "5fcc5cdf341d0d78596bf31a8f97e9b5404e9b4ae71e563c65606928bed75209",
+          "sha256": "ce67fd75eb1467f0ec4919127a2846f4a21cc94ace987f8c72e3bf84079d6411",
+          "source": "https://raw.githubusercontent.com/sportsdataverse/cfbfastR-data/c1af1a0ab26d63dea1be4d3ea730ea48a16d8b43/schedules/parquet/cfb_schedules_2011.parquet"
+        },
+        {
+          "byte_count": 78404,
+          "fetched_at_utc": "2026-11-02T06:39:20.803058+00:00",
+          "report_sha256": "5fcc5cdf341d0d78596bf31a8f97e9b5404e9b4ae71e563c65606928bed75209",
+          "sha256": "556c54131da097e6395956e08462194871109999c3a989f4575a763639543a76",
+          "source": "https://raw.githubusercontent.com/sportsdataverse/cfbfastR-data/c1af1a0ab26d63dea1be4d3ea730ea48a16d8b43/schedules/parquet/cfb_schedules_2012.parquet"
+        },
+        {
+          "byte_count": 80072,
+          "fetched_at_utc": "2026-11-02T06:39:20.844250+00:00",
+          "report_sha256": "5fcc5cdf341d0d78596bf31a8f97e9b5404e9b4ae71e563c65606928bed75209",
+          "sha256": "b02281dd35040a5b57af4af24466e95c78219c9f38ba23cdd3d5093d0ca9b73d",
+          "source": "https://raw.githubusercontent.com/sportsdataverse/cfbfastR-data/c1af1a0ab26d63dea1be4d3ea730ea48a16d8b43/schedules/parquet/cfb_schedules_2013.parquet"
+        },
+        {
+          "byte_count": 94966,
+          "fetched_at_utc": "2026-11-02T06:39:20.840255+00:00",
+          "report_sha256": "5fcc5cdf341d0d78596bf31a8f97e9b5404e9b4ae71e563c65606928bed75209",
+          "sha256": "375fd3add14e66bdb7e83bb158fc6637c1f90c8938cac477f65a8b7348018aba",
+          "source": "https://raw.githubusercontent.com/sportsdataverse/cfbfastR-data/c1af1a0ab26d63dea1be4d3ea730ea48a16d8b43/schedules/parquet/cfb_schedules_2014.parquet"
+        },
+        {
+          "byte_count": 93922,
+          "fetched_at_utc": "2026-11-02T06:39:20.855435+00:00",
+          "report_sha256": "5fcc5cdf341d0d78596bf31a8f97e9b5404e9b4ae71e563c65606928bed75209",
+          "sha256": "b2d7f8295ad2683107d3ff8d5756cf37a8d7b5b67ab7b5083c5cd440eed98019",
+          "source": "https://raw.githubusercontent.com/sportsdataverse/cfbfastR-data/c1af1a0ab26d63dea1be4d3ea730ea48a16d8b43/schedules/parquet/cfb_schedules_2015.parquet"
+        },
+        {
+          "byte_count": 103432,
+          "fetched_at_utc": "2026-11-02T06:39:20.892747+00:00",
+          "report_sha256": "5fcc5cdf341d0d78596bf31a8f97e9b5404e9b4ae71e563c65606928bed75209",
+          "sha256": "77c1e6f0f19164644cfacea6aa32b866e11bc8b72aae8259e14692ce369547d3",
+          "source": "https://raw.githubusercontent.com/sportsdataverse/cfbfastR-data/c1af1a0ab26d63dea1be4d3ea730ea48a16d8b43/schedules/parquet/cfb_schedules_2016.parquet"
+        },
+        {
+          "byte_count": 105727,
+          "fetched_at_utc": "2026-11-02T06:39:20.978535+00:00",
+          "report_sha256": "5fcc5cdf341d0d78596bf31a8f97e9b5404e9b4ae71e563c65606928bed75209",
+          "sha256": "6662313b163fbe2bfe4187422051c415934ebddddffd2c24d5b4301d3eafe621",
+          "source": "https://raw.githubusercontent.com/sportsdataverse/cfbfastR-data/c1af1a0ab26d63dea1be4d3ea730ea48a16d8b43/schedules/parquet/cfb_schedules_2017.parquet"
+        },
+        {
+          "byte_count": 107218,
+          "fetched_at_utc": "2026-11-02T06:39:20.918882+00:00",
+          "report_sha256": "5fcc5cdf341d0d78596bf31a8f97e9b5404e9b4ae71e563c65606928bed75209",
+          "sha256": "384c53865c1e12cab7115e1ea9646f622bd07182668d0815d4763bb15bb5242a",
+          "source": "https://raw.githubusercontent.com/sportsdataverse/cfbfastR-data/c1af1a0ab26d63dea1be4d3ea730ea48a16d8b43/schedules/parquet/cfb_schedules_2018.parquet"
+        },
+        {
+          "byte_count": 108775,
+          "fetched_at_utc": "2026-11-02T06:39:20.958752+00:00",
+          "report_sha256": "5fcc5cdf341d0d78596bf31a8f97e9b5404e9b4ae71e563c65606928bed75209",
+          "sha256": "7ab3e13313ad8c6d37b8f6f64859107eded64992c281e934b463bacd1076ff7f",
+          "source": "https://raw.githubusercontent.com/sportsdataverse/cfbfastR-data/c1af1a0ab26d63dea1be4d3ea730ea48a16d8b43/schedules/parquet/cfb_schedules_2019.parquet"
+        },
+        {
+          "byte_count": 63376,
+          "fetched_at_utc": "2026-11-02T06:39:20.987252+00:00",
+          "report_sha256": "5fcc5cdf341d0d78596bf31a8f97e9b5404e9b4ae71e563c65606928bed75209",
+          "sha256": "b5f1f74681f0eb275d3b3a4335a1ed21b35edf548713aee5721cebb53c369c11",
+          "source": "https://raw.githubusercontent.com/sportsdataverse/cfbfastR-data/c1af1a0ab26d63dea1be4d3ea730ea48a16d8b43/schedules/parquet/cfb_schedules_2020.parquet"
+        },
+        {
+          "byte_count": 119714,
+          "fetched_at_utc": "2026-11-02T06:39:21.003176+00:00",
+          "report_sha256": "5fcc5cdf341d0d78596bf31a8f97e9b5404e9b4ae71e563c65606928bed75209",
+          "sha256": "8b2d1306c92de0c12930e30156af35c3ae4441e97a4ac5226eac60765fb97585",
+          "source": "https://raw.githubusercontent.com/sportsdataverse/cfbfastR-data/c1af1a0ab26d63dea1be4d3ea730ea48a16d8b43/schedules/parquet/cfb_schedules_2021.parquet"
+        },
+        {
+          "byte_count": 175367,
+          "fetched_at_utc": "2026-11-02T06:39:21.052692+00:00",
+          "report_sha256": "5fcc5cdf341d0d78596bf31a8f97e9b5404e9b4ae71e563c65606928bed75209",
+          "sha256": "b9dcbee1e823edf54c811941190e4b678e6774d86156396888c3ee38e0dc9034",
+          "source": "https://raw.githubusercontent.com/sportsdataverse/cfbfastR-data/c1af1a0ab26d63dea1be4d3ea730ea48a16d8b43/schedules/parquet/cfb_schedules_2022.parquet"
+        },
+        {
+          "byte_count": 181534,
+          "fetched_at_utc": "2026-11-02T06:39:21.069315+00:00",
+          "report_sha256": "5fcc5cdf341d0d78596bf31a8f97e9b5404e9b4ae71e563c65606928bed75209",
+          "sha256": "6bf45f7ade2353fc6f511162eb9fe67f999d2fc7eb0bfaca660554a9c84c5246",
+          "source": "https://raw.githubusercontent.com/sportsdataverse/cfbfastR-data/c1af1a0ab26d63dea1be4d3ea730ea48a16d8b43/schedules/parquet/cfb_schedules_2023.parquet"
+        },
+        {
+          "byte_count": 191897,
+          "fetched_at_utc": "2026-11-02T06:39:21.092641+00:00",
+          "report_sha256": "5fcc5cdf341d0d78596bf31a8f97e9b5404e9b4ae71e563c65606928bed75209",
+          "sha256": "c6b9b210c0771155c5805657747814a0d9197a4f236c286c4cc56964bbf86bbf",
+          "source": "https://raw.githubusercontent.com/sportsdataverse/cfbfastR-data/c1af1a0ab26d63dea1be4d3ea730ea48a16d8b43/schedules/parquet/cfb_schedules_2024.parquet"
+        },
+        {
+          "byte_count": 174631,
+          "fetched_at_utc": "2026-11-02T06:39:21.090963+00:00",
+          "report_sha256": "5fcc5cdf341d0d78596bf31a8f97e9b5404e9b4ae71e563c65606928bed75209",
+          "sha256": "7c172a3bdc48dc1965606ba594ea856c70193d5f84ef58138f0b774f878eba29",
+          "source": "https://raw.githubusercontent.com/sportsdataverse/cfbfastR-data/c1af1a0ab26d63dea1be4d3ea730ea48a16d8b43/schedules/parquet/cfb_schedules_2025.parquet"
+        },
+        {
+          "byte_count": 61292,
+          "fetched_at_utc": "2026-11-02T06:39:21.112970+00:00",
+          "report_sha256": "5fcc5cdf341d0d78596bf31a8f97e9b5404e9b4ae71e563c65606928bed75209",
+          "sha256": "4ac83709d96e70ebb3276426f216c0833b75f724eb6816d22cc62c85abac3974",
+          "source": "https://raw.githubusercontent.com/sportsdataverse/cfbfastR-data/main/schedules/parquet/cfb_schedules_2026.parquet"
+        }
+      ],
+      "status": "RAW_BYTES_AND_RECEIPTS_VERIFIED"
+    },
+    "source_fetches": [
+      {
+        "fetched_at_utc": "2026-11-02T06:39:20.556269+00:00",
+        "sha256": "8724a79408ed01cb9467194d657033d927dc73d1c9938259f75254ddb7e8fe14",
+        "source": "https://raw.githubusercontent.com/sportsdataverse/cfbfastR-data/c1af1a0ab26d63dea1be4d3ea730ea48a16d8b43/schedules/parquet/cfb_schedules_2001.parquet"
+      },
+      {
+        "fetched_at_utc": "2026-11-02T06:39:20.554886+00:00",
+        "sha256": "c8a1b97ca677f6369cf2128c16bea5a1cec329f4af420fea669d692e7ca116b4",
+        "source": "https://raw.githubusercontent.com/sportsdataverse/cfbfastR-data/c1af1a0ab26d63dea1be4d3ea730ea48a16d8b43/schedules/parquet/cfb_schedules_2002.parquet"
+      },
+      {
+        "fetched_at_utc": "2026-11-02T06:39:20.632557+00:00",
+        "sha256": "50d62aceea41999412bf7ba139f2579559330586a9e19ae9a1e4f9adda1141a3",
+        "source": "https://raw.githubusercontent.com/sportsdataverse/cfbfastR-data/c1af1a0ab26d63dea1be4d3ea730ea48a16d8b43/schedules/parquet/cfb_schedules_2003.parquet"
+      },
+      {
+        "fetched_at_utc": "2026-11-02T06:39:20.555448+00:00",
+        "sha256": "db119a13a2b372085a2a1e6271ead324477c63d707e143d5a4b6256961f4c13b",
+        "source": "https://raw.githubusercontent.com/sportsdataverse/cfbfastR-data/c1af1a0ab26d63dea1be4d3ea730ea48a16d8b43/schedules/parquet/cfb_schedules_2004.parquet"
+      },
+      {
+        "fetched_at_utc": "2026-11-02T06:39:20.652300+00:00",
+        "sha256": "0343de3e75b5b04c0efe4c0b86d061e5497b0536b38dd96d459949f25ee8c26b",
+        "source": "https://raw.githubusercontent.com/sportsdataverse/cfbfastR-data/c1af1a0ab26d63dea1be4d3ea730ea48a16d8b43/schedules/parquet/cfb_schedules_2005.parquet"
+      },
+      {
+        "fetched_at_utc": "2026-11-02T06:39:20.645763+00:00",
+        "sha256": "a0d1604278fd5667c1dab35653d1c36dc316a3f3799573100206d94df8ee6e2b",
+        "source": "https://raw.githubusercontent.com/sportsdataverse/cfbfastR-data/c1af1a0ab26d63dea1be4d3ea730ea48a16d8b43/schedules/parquet/cfb_schedules_2006.parquet"
+      },
+      {
+        "fetched_at_utc": "2026-11-02T06:39:20.687298+00:00",
+        "sha256": "40ab95f62372b37bed8bf79b128a4dfe535dd9da82a90b52296ecd4dd2ac3461",
+        "source": "https://raw.githubusercontent.com/sportsdataverse/cfbfastR-data/c1af1a0ab26d63dea1be4d3ea730ea48a16d8b43/schedules/parquet/cfb_schedules_2007.parquet"
+      },
+      {
+        "fetched_at_utc": "2026-11-02T06:39:20.713789+00:00",
+        "sha256": "dee6c6d2e6fb49ca06b9e9dadaec66b1bd1098e19824b135439d6834463cc8a6",
+        "source": "https://raw.githubusercontent.com/sportsdataverse/cfbfastR-data/c1af1a0ab26d63dea1be4d3ea730ea48a16d8b43/schedules/parquet/cfb_schedules_2008.parquet"
+      },
+      {
+        "fetched_at_utc": "2026-11-02T06:39:20.741260+00:00",
+        "sha256": "9656bfc975cef85e04155eff543bda66b3038b6988333af7bd71388edb9382d0",
+        "source": "https://raw.githubusercontent.com/sportsdataverse/cfbfastR-data/c1af1a0ab26d63dea1be4d3ea730ea48a16d8b43/schedules/parquet/cfb_schedules_2009.parquet"
+      },
+      {
+        "fetched_at_utc": "2026-11-02T06:39:20.741859+00:00",
+        "sha256": "393e46e2431ba97fc3c27ad8d48625f38ce882f986c7894f02c2fb65472dd6f2",
+        "source": "https://raw.githubusercontent.com/sportsdataverse/cfbfastR-data/c1af1a0ab26d63dea1be4d3ea730ea48a16d8b43/schedules/parquet/cfb_schedules_2010.parquet"
+      },
+      {
+        "fetched_at_utc": "2026-11-02T06:39:20.775902+00:00",
+        "sha256": "ce67fd75eb1467f0ec4919127a2846f4a21cc94ace987f8c72e3bf84079d6411",
+        "source": "https://raw.githubusercontent.com/sportsdataverse/cfbfastR-data/c1af1a0ab26d63dea1be4d3ea730ea48a16d8b43/schedules/parquet/cfb_schedules_2011.parquet"
+      },
+      {
+        "fetched_at_utc": "2026-11-02T06:39:20.803058+00:00",
+        "sha256": "556c54131da097e6395956e08462194871109999c3a989f4575a763639543a76",
+        "source": "https://raw.githubusercontent.com/sportsdataverse/cfbfastR-data/c1af1a0ab26d63dea1be4d3ea730ea48a16d8b43/schedules/parquet/cfb_schedules_2012.parquet"
+      },
+      {
+        "fetched_at_utc": "2026-11-02T06:39:20.844250+00:00",
+        "sha256": "b02281dd35040a5b57af4af24466e95c78219c9f38ba23cdd3d5093d0ca9b73d",
+        "source": "https://raw.githubusercontent.com/sportsdataverse/cfbfastR-data/c1af1a0ab26d63dea1be4d3ea730ea48a16d8b43/schedules/parquet/cfb_schedules_2013.parquet"
+      },
+      {
+        "fetched_at_utc": "2026-11-02T06:39:20.840255+00:00",
+        "sha256": "375fd3add14e66bdb7e83bb158fc6637c1f90c8938cac477f65a8b7348018aba",
+        "source": "https://raw.githubusercontent.com/sportsdataverse/cfbfastR-data/c1af1a0ab26d63dea1be4d3ea730ea48a16d8b43/schedules/parquet/cfb_schedules_2014.parquet"
+      },
+      {
+        "fetched_at_utc": "2026-11-02T06:39:20.855435+00:00",
+        "sha256": "b2d7f8295ad2683107d3ff8d5756cf37a8d7b5b67ab7b5083c5cd440eed98019",
+        "source": "https://raw.githubusercontent.com/sportsdataverse/cfbfastR-data/c1af1a0ab26d63dea1be4d3ea730ea48a16d8b43/schedules/parquet/cfb_schedules_2015.parquet"
+      },
+      {
+        "fetched_at_utc": "2026-11-02T06:39:20.892747+00:00",
+        "sha256": "77c1e6f0f19164644cfacea6aa32b866e11bc8b72aae8259e14692ce369547d3",
+        "source": "https://raw.githubusercontent.com/sportsdataverse/cfbfastR-data/c1af1a0ab26d63dea1be4d3ea730ea48a16d8b43/schedules/parquet/cfb_schedules_2016.parquet"
+      },
+      {
+        "fetched_at_utc": "2026-11-02T06:39:20.978535+00:00",
+        "sha256": "6662313b163fbe2bfe4187422051c415934ebddddffd2c24d5b4301d3eafe621",
+        "source": "https://raw.githubusercontent.com/sportsdataverse/cfbfastR-data/c1af1a0ab26d63dea1be4d3ea730ea48a16d8b43/schedules/parquet/cfb_schedules_2017.parquet"
+      },
+      {
+        "fetched_at_utc": "2026-11-02T06:39:20.918882+00:00",
+        "sha256": "384c53865c1e12cab7115e1ea9646f622bd07182668d0815d4763bb15bb5242a",
+        "source": "https://raw.githubusercontent.com/sportsdataverse/cfbfastR-data/c1af1a0ab26d63dea1be4d3ea730ea48a16d8b43/schedules/parquet/cfb_schedules_2018.parquet"
+      },
+      {
+        "fetched_at_utc": "2026-11-02T06:39:20.958752+00:00",
+        "sha256": "7ab3e13313ad8c6d37b8f6f64859107eded64992c281e934b463bacd1076ff7f",
+        "source": "https://raw.githubusercontent.com/sportsdataverse/cfbfastR-data/c1af1a0ab26d63dea1be4d3ea730ea48a16d8b43/schedules/parquet/cfb_schedules_2019.parquet"
+      },
+      {
+        "fetched_at_utc": "2026-11-02T06:39:20.987252+00:00",
+        "sha256": "b5f1f74681f0eb275d3b3a4335a1ed21b35edf548713aee5721cebb53c369c11",
+        "source": "https://raw.githubusercontent.com/sportsdataverse/cfbfastR-data/c1af1a0ab26d63dea1be4d3ea730ea48a16d8b43/schedules/parquet/cfb_schedules_2020.parquet"
+      },
+      {
+        "fetched_at_utc": "2026-11-02T06:39:21.003176+00:00",
+        "sha256": "8b2d1306c92de0c12930e30156af35c3ae4441e97a4ac5226eac60765fb97585",
+        "source": "https://raw.githubusercontent.com/sportsdataverse/cfbfastR-data/c1af1a0ab26d63dea1be4d3ea730ea48a16d8b43/schedules/parquet/cfb_schedules_2021.parquet"
+      },
+      {
+        "fetched_at_utc": "2026-11-02T06:39:21.052692+00:00",
+        "sha256": "b9dcbee1e823edf54c811941190e4b678e6774d86156396888c3ee38e0dc9034",
+        "source": "https://raw.githubusercontent.com/sportsdataverse/cfbfastR-data/c1af1a0ab26d63dea1be4d3ea730ea48a16d8b43/schedules/parquet/cfb_schedules_2022.parquet"
+      },
+      {
+        "fetched_at_utc": "2026-11-02T06:39:21.069315+00:00",
+        "sha256": "6bf45f7ade2353fc6f511162eb9fe67f999d2fc7eb0bfaca660554a9c84c5246",
+        "source": "https://raw.githubusercontent.com/sportsdataverse/cfbfastR-data/c1af1a0ab26d63dea1be4d3ea730ea48a16d8b43/schedules/parquet/cfb_schedules_2023.parquet"
+      },
+      {
+        "fetched_at_utc": "2026-11-02T06:39:21.092641+00:00",
+        "sha256": "c6b9b210c0771155c5805657747814a0d9197a4f236c286c4cc56964bbf86bbf",
+        "source": "https://raw.githubusercontent.com/sportsdataverse/cfbfastR-data/c1af1a0ab26d63dea1be4d3ea730ea48a16d8b43/schedules/parquet/cfb_schedules_2024.parquet"
+      },
+      {
+        "fetched_at_utc": "2026-11-02T06:39:21.090963+00:00",
+        "sha256": "7c172a3bdc48dc1965606ba594ea856c70193d5f84ef58138f0b774f878eba29",
+        "source": "https://raw.githubusercontent.com/sportsdataverse/cfbfastR-data/c1af1a0ab26d63dea1be4d3ea730ea48a16d8b43/schedules/parquet/cfb_schedules_2025.parquet"
+      },
+      {
+        "fetched_at_utc": "2026-11-02T06:39:21.112970+00:00",
+        "sha256": "4ac83709d96e70ebb3276426f216c0833b75f724eb6816d22cc62c85abac3974",
+        "source": "https://raw.githubusercontent.com/sportsdataverse/cfbfastR-data/main/schedules/parquet/cfb_schedules_2026.parquet"
+      }
+    ]
+  },
+  "pregame_coverage": 1.0,
+  "requested_as_of_utc": "2026-11-02T06:40:24.833157+00:00",
+  "roster_policy": {
+    "bundle_sha256": null,
+    "current_roster_is_not_numerical_consumption": true,
+    "membership_is_not_availability": true,
+    "require_roster_aware": false
+  },
+  "scheduled_game_count": 2,
+  "simulation_count": 100000
+}

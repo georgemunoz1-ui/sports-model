@@ -5021,3 +5021,12 @@ PR38 closed as already incorporated via82. PR45 strict health/evidence blockers
 remain separate and unwaived. Hosted integration CI and artifact readback are
 required before merge. All predictive limitations remain; authority OFF.
 See docs/REMAINING_PR_REPAIR_20261024.md and current execution receipts.
+
+
+## 2026-11-01 — Selected CFB operating pilot and first prospective research receipts
+
+Owner requested actual acquisition-to-registration execution, separate postgame grading and authentic personnel-source investigation. Draft PR #102 preserves the selected CFB parent and connects 29 genuine source captures per run to exact event reconciliation, current packages, full winner cards, 100,000 draws per event, real Actions artifact verification, canonical-writer registration and append-only remote retention. Hosted runs 41401199915 and 41401921392 each completed two fresh executions. Only the first registered the two November 3 events; every retry preserved their original probabilities and registry SHA 12f0a6bb1e50d059e8864e3ecb2957a7d90cc62ff720e4bcefe75799b3fb3230.
+
+Each hosted pregame job passed 245 tests. Separate authenticated postgame run 41402593838 passed 59 focused tests, restored both receipts, correctly reported no events through October 31, and retained zero grades. Independent downloads and fresh Git fetches verified artifacts and archive commit 61251edf2ac6ac088be90e26042dddfb67386710. Injected failure run 41401921500 delivered and read back labeled issue #104. The current-source 617-test integrity step and retained NFL replay passed; a new source-bound finding packet preserves the old packet after a legitimate grading-source hash change. No historical evidence was rewritten.
+
+Two unique events remain PROSPECTIVE_RESEARCH_SOURCE_UNVERIFIED, not certified calibration. Actual final settlement is pending; the November 4 execution follow-up does not establish it in advance. Cron declarations are not deployed on main. Pilot archive state and the empty legacy main registry remain distinct. Main health retains four existing failures. The separate PR #103 personnel-source audit found real status rows but zero admissible v2 observations; rights, original chronology, actual snap evidence and authentic historical parent provenance remain missing. All defaults, frozen outputs, qualification gates and market independence are preserved. Official release and wagering remain OFF. See docs/research/daily_pipeline_20261101/EXECUTION.json and README.md.

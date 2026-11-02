@@ -1,0 +1,439 @@
+{
+  "action_authority": false,
+  "adapter_exclusions": [],
+  "config": {
+    "objective": "unconditional_win",
+    "require_quality_receipt": true,
+    "schema": "research-selector-config-v1",
+    "threshold": 0.5
+  },
+  "created_at_utc": "2026-11-02T06:41:41.953551Z",
+  "decision_counts": {
+    "BLOCKED": 2
+  },
+  "decisions": [
+    {
+      "action_authority": false,
+      "blocking_reasons": [
+        "AUTOMATIC_DIAGNOSTIC_POLICY_NOT_PREREGISTERED",
+        "MISSING_VALIDATION_REGISTRY"
+      ],
+      "confidence_band": null,
+      "confidence_band_status": "NO_QUALIFIED_BAND_DEFINITION",
+      "decision_at_utc": "2026-11-02T06:41:41.953551Z",
+      "decision_class": "BLOCKED",
+      "decision_id": "146d04318919c146937e3f2fcf7938756c115e9cf2499d072a4880ae742d1709",
+      "decisive_probability": 0.8986147327626354,
+      "estimated_value": null,
+      "estimated_value_basis": "net_units_per_unit_staked",
+      "execution_mode": "UNREGISTERED_RESEARCH",
+      "forecast_id": "0e4eb93eb0143d9440d524e86dd80d6e2096bcc4e7a463d6d2e718847906ac1f",
+      "noncomparable_component_ids": [],
+      "objective": "unconditional_win",
+      "official_release": false,
+      "price_break_even": null,
+      "price_diagnostics_id": "72adbd34a08ccff6f3d236088592bd2559af5264276c83c7059d2a2e7d672eaa",
+      "price_quote": null,
+      "price_reasons": [],
+      "price_status": "MISSING_PRICE",
+      "procedure_id": "0feee79c22aca9505b3d2a8ee4d963d61e73de925536906fc9143c5410aafd2f",
+      "prospective_registration_verified": false,
+      "publication_allowed": false,
+      "quality_receipt_id": "a332cc22bf397fd8c4a0fb99e5301de03f01a94f9ba4c489a5ddf1b5e87c1b22",
+      "raw_probabilities": {
+        "loss": 0.10138526723736463,
+        "push": 0.0,
+        "void": 0.0,
+        "win": 0.8986147327626354
+      },
+      "raw_probability": 0.8986147327626354,
+      "raw_probability_basis": "unconditional_win",
+      "replay_at_utc": null,
+      "research_mode": "SHADOW",
+      "review_notes": [
+        "COMPLETE_EXECUTION_IDENTITY_OBSERVED; REGISTRY_QUALIFICATION_STILL_REQUIRED",
+        "PARENT_WARNING:CURRENT_FCS_INTERNAL_SCHEDULE_COVERAGE_UNVERIFIED",
+        "PARENT_WARNING:FBS_VS_FBS_ONLY",
+        "PARENT_WARNING:FULL_ROSTER_IMPACTS_NOT_APPLIED",
+        "PARENT_WARNING:NO_CURRENT_QB_OR_PERSONNEL_TRANSFORM_IN_SELECTED_ARM",
+        "PARENT_WARNING:NO_WAGERING_AUTHORITY",
+        "PARENT_WARNING:ROSTER:ACQUIRE_REQUIRED",
+        "PARENT_WARNING:TOTAL_HEAD_NOT_FITTED_FOR_SELECTED_CFB_ARM",
+        "PARENT_WARNING:VERSIONED_RNG_IDENTITY_REPAIR_NOT_PREDICTIVE_PROMOTION",
+        "STATE_FRESHNESS_RECEIPT_NOT_PRESENT_IN_PARENT"
+      ],
+      "same_target_components": [],
+      "schema": "research-selection-v2",
+      "selection_decision": "NO_PICK",
+      "selection_probability": null,
+      "selector_config_id": "efd27259614e0ee2c6fc67316c56fde3ee024d497c2bbf9392e1754c2e21bf2d",
+      "selector_spec_id": "26ed7372c5b8ada01d5b4e482a758d5389b20ec19c3c1edde61344fca6c8878f",
+      "target": {
+        "event_id": "CFB:401866453",
+        "league": "cfb",
+        "line": null,
+        "period": "full_game",
+        "product": "winner",
+        "settlement_rules_id": "full_game_winner_tie_push_v1",
+        "side": "away",
+        "starts_at_utc": "2026-11-04T00:00:00+00:00"
+      },
+      "target_id": "66c358830cffe5be70ec0a2c0e4ea45bf434d7660e86eeadf1a11fb749021906",
+      "threshold": 0.5,
+      "validation": {
+        "eligible": false,
+        "evidence_id": null,
+        "protocol_id": null,
+        "reasons": [
+          "MISSING_VALIDATION_REGISTRY"
+        ],
+        "record_id": null,
+        "reviewer_id": null
+      },
+      "wagering_status": "OFF"
+    },
+    {
+      "action_authority": false,
+      "blocking_reasons": [
+        "AUTOMATIC_DIAGNOSTIC_POLICY_NOT_PREREGISTERED",
+        "MISSING_VALIDATION_REGISTRY"
+      ],
+      "confidence_band": null,
+      "confidence_band_status": "NO_QUALIFIED_BAND_DEFINITION",
+      "decision_at_utc": "2026-11-02T06:41:41.953551Z",
+      "decision_class": "BLOCKED",
+      "decision_id": "c3b743ff3b08abe0351b786495751d7856840bbb11e2cb0da0e4d091515dc486",
+      "decisive_probability": 0.6151883196973272,
+      "estimated_value": null,
+      "estimated_value_basis": "net_units_per_unit_staked",
+      "execution_mode": "UNREGISTERED_RESEARCH",
+      "forecast_id": "08a661e98fe0ceb7e53bb539511f79ae5064042f0836fb1984c4351ba2359ff2",
+      "noncomparable_component_ids": [],
+      "objective": "unconditional_win",
+      "official_release": false,
+      "price_break_even": null,
+      "price_diagnostics_id": "21275aa3cc5400a5c8a9d01b9b3ea3bef8ff6514dc26bc71f3819938445fe246",
+      "price_quote": null,
+      "price_reasons": [],
+      "price_status": "MISSING_PRICE",
+      "procedure_id": "0feee79c22aca9505b3d2a8ee4d963d61e73de925536906fc9143c5410aafd2f",
+      "prospective_registration_verified": false,
+      "publication_allowed": false,
+      "quality_receipt_id": "72ff2a46369d3659bb4c6b4da80ea40bd1bb8260eb5c3f47129de615936a0bb1",
+      "raw_probabilities": {
+        "loss": 0.38481168030267277,
+        "push": 0.0,
+        "void": 0.0,
+        "win": 0.6151883196973272
+      },
+      "raw_probability": 0.6151883196973272,
+      "raw_probability_basis": "unconditional_win",
+      "replay_at_utc": null,
+      "research_mode": "SHADOW",
+      "review_notes": [
+        "COMPLETE_EXECUTION_IDENTITY_OBSERVED; REGISTRY_QUALIFICATION_STILL_REQUIRED",
+        "PARENT_WARNING:CURRENT_FCS_INTERNAL_SCHEDULE_COVERAGE_UNVERIFIED",
+        "PARENT_WARNING:FBS_VS_FBS_ONLY",
+        "PARENT_WARNING:FULL_ROSTER_IMPACTS_NOT_APPLIED",
+        "PARENT_WARNING:NO_CURRENT_QB_OR_PERSONNEL_TRANSFORM_IN_SELECTED_ARM",
+        "PARENT_WARNING:NO_WAGERING_AUTHORITY",
+        "PARENT_WARNING:ROSTER:ACQUIRE_REQUIRED",
+        "PARENT_WARNING:TOTAL_HEAD_NOT_FITTED_FOR_SELECTED_CFB_ARM",
+        "PARENT_WARNING:VERSIONED_RNG_IDENTITY_REPAIR_NOT_PREDICTIVE_PROMOTION",
+        "STATE_FRESHNESS_RECEIPT_NOT_PRESENT_IN_PARENT"
+      ],
+      "same_target_components": [],
+      "schema": "research-selection-v2",
+      "selection_decision": "NO_PICK",
+      "selection_probability": null,
+      "selector_config_id": "efd27259614e0ee2c6fc67316c56fde3ee024d497c2bbf9392e1754c2e21bf2d",
+      "selector_spec_id": "26ed7372c5b8ada01d5b4e482a758d5389b20ec19c3c1edde61344fca6c8878f",
+      "target": {
+        "event_id": "CFB:401866454",
+        "league": "cfb",
+        "line": null,
+        "period": "full_game",
+        "product": "winner",
+        "settlement_rules_id": "full_game_winner_tie_push_v1",
+        "side": "home",
+        "starts_at_utc": "2026-11-04T01:00:00+00:00"
+      },
+      "target_id": "305c088d7d3b1ced259a3d14516587c990f112d8f8c570da33ea75dfee30378e",
+      "threshold": 0.5,
+      "validation": {
+        "eligible": false,
+        "evidence_id": null,
+        "protocol_id": null,
+        "reasons": [
+          "MISSING_VALIDATION_REGISTRY"
+        ],
+        "record_id": null,
+        "reviewer_id": null
+      },
+      "wagering_status": "OFF"
+    }
+  ],
+  "event_count": 2,
+  "evidence_scope": "SHADOW",
+  "execution_mode": "UNREGISTERED_RESEARCH",
+  "forecasts": [
+    {
+      "forecast_created_at_utc": "2026-11-02T06:41:41.941115Z",
+      "forecast_cutoff_utc": "2026-11-02T06:41:41.188655+00:00",
+      "forecast_id": "0e4eb93eb0143d9440d524e86dd80d6e2096bcc4e7a463d6d2e718847906ac1f",
+      "input_snapshot_sha256": "8a94f9688eb5388b2128c545d02b437f6d1523e5e0fea982eaf2706c33f5723d",
+      "probabilities": {
+        "loss": 0.10138526723736463,
+        "push": 0.0,
+        "void": 0.0,
+        "win": 0.8986147327626354
+      },
+      "probability_basis": "unconditional_win",
+      "procedure_id": "0feee79c22aca9505b3d2a8ee4d963d61e73de925536906fc9143c5410aafd2f",
+      "schema": "research-forecast-v1",
+      "target": {
+        "event_id": "CFB:401866453",
+        "league": "cfb",
+        "line": null,
+        "period": "full_game",
+        "product": "winner",
+        "settlement_rules_id": "full_game_winner_tie_push_v1",
+        "side": "away",
+        "starts_at_utc": "2026-11-04T00:00:00+00:00"
+      }
+    },
+    {
+      "forecast_created_at_utc": "2026-11-02T06:41:41.941115Z",
+      "forecast_cutoff_utc": "2026-11-02T06:41:41.188655+00:00",
+      "forecast_id": "08a661e98fe0ceb7e53bb539511f79ae5064042f0836fb1984c4351ba2359ff2",
+      "input_snapshot_sha256": "7af0c6f3c3290e7303de537006b7c59b85fa693cb47b4e3aa861da77c5c014e9",
+      "probabilities": {
+        "loss": 0.38481168030267277,
+        "push": 0.0,
+        "void": 0.0,
+        "win": 0.6151883196973272
+      },
+      "probability_basis": "unconditional_win",
+      "procedure_id": "0feee79c22aca9505b3d2a8ee4d963d61e73de925536906fc9143c5410aafd2f",
+      "schema": "research-forecast-v1",
+      "target": {
+        "event_id": "CFB:401866454",
+        "league": "cfb",
+        "line": null,
+        "period": "full_game",
+        "product": "winner",
+        "settlement_rules_id": "full_game_winner_tie_push_v1",
+        "side": "home",
+        "starts_at_utc": "2026-11-04T01:00:00+00:00"
+      }
+    }
+  ],
+  "objects": {
+    "0feee79c22aca9505b3d2a8ee4d963d61e73de925536906fc9143c5410aafd2f": {
+      "definition": {
+        "calibration_id": "51f8c0272e73a6b07139fdd2f358ee98da47f5075eea79eec34c1961f65c1319",
+        "feature_semantics_id": "daf51daa2f3f655c20748e92cf739e1d3ee8accbf1e4b2126d2707666ed9ec02",
+        "model_id": "cfb.fbs.elo_form_logit_ridge.v1_0.shadow",
+        "model_state_id": "828ef9cf90f7e801da793fb404b558eba19614386d016059bd346bddb76e702d",
+        "stochastic_procedure": {
+          "draw_count": 100000,
+          "engine": "BERNOULLI_WINNER_DIAGNOSTIC",
+          "numpy_version": "2.3.5",
+          "semantic_runtime_sha256": "a7f6541d1415523092e9e6364407100ceb9165de1493e833c93d21f88e65f756",
+          "semantics": "market_blind_numeric.v2"
+        }
+      },
+      "lineage_status": "OBSERVED_EXECUTION_NOT_REGISTERED",
+      "schema": "executed-forecast-procedure-v1",
+      "validation_status": "NOT_ASSESSED"
+    },
+    "51f8c0272e73a6b07139fdd2f358ee98da47f5075eea79eec34c1961f65c1319": {
+      "league": "cfb",
+      "model_id": "cfb.fbs.elo_form_logit_ridge.v1_0.shadow",
+      "observed_prediction_code_sha256": {
+        "models/current/cfb.py": "20628f3463589cae551b325e68fa7125aef8f9cd075e7b19b0a1c76b9f411b5a",
+        "models/current/common.py": "63c0da2a4c620fb086d08e22268fe3875515c1807aec128f5e092f73eeafd5ff",
+        "models/current/linear.py": "e10b15e6ed20fd410f5d87afbf01eb191768a459ffcb106dd64cbacef797e4a2"
+      },
+      "retained_numeric_operations": "SELECTED_HEAD_OR_SIMULATION_TRANSFORM_UNCHANGED",
+      "schema": "sports.observed_calibration_procedure.v1",
+      "stage": "NONE_NO_SEPARATE_FITTED_POSTHOC_CALIBRATOR_IN_SELECTED_PATH",
+      "validation_status": "NOT_ASSESSED"
+    },
+    "d736a2a53dc689eea45df1dab86b2a60f9237bed67ee107f97f0cfcdfaaacfc4": {
+      "archival_model_state_config_hash": "18389569ad9f87172226367c48882b596d2db364a69056bcc41c805fa6782955",
+      "calibration_procedure_id": "51f8c0272e73a6b07139fdd2f358ee98da47f5075eea79eec34c1961f65c1319",
+      "code_hashes": null,
+      "declared_forecast_procedure_identity": "cfb.fbs.elo_form_logit_ridge.v1_0.shadow:market_blind_numeric.v2",
+      "distribution_model_id": null,
+      "explicit_forecast_procedure_id": null,
+      "feature_procedure_id": "daf51daa2f3f655c20748e92cf739e1d3ee8accbf1e4b2126d2707666ed9ec02",
+      "identity_semantics": "market_blind_numeric.v2",
+      "lineage_status": "OBSERVATION_ONLY_NOT_REGISTERED_OR_QUALIFIED",
+      "model_artifact_sha256": "828ef9cf90f7e801da793fb404b558eba19614386d016059bd346bddb76e702d",
+      "model_id": "cfb.fbs.elo_form_logit_ridge.v1_0.shadow",
+      "numeric_feature_snapshot_sha256": "8a94f9688eb5388b2128c545d02b437f6d1523e5e0fea982eaf2706c33f5723d",
+      "observed_execution_procedure_id": "0feee79c22aca9505b3d2a8ee4d963d61e73de925536906fc9143c5410aafd2f",
+      "schema": "observed-forecast-procedure-binding-v1"
+    },
+    "daf51daa2f3f655c20748e92cf739e1d3ee8accbf1e4b2126d2707666ed9ec02": {
+      "constructor_code_sha256": {
+        "models/current/cfb.py": "20628f3463589cae551b325e68fa7125aef8f9cd075e7b19b0a1c76b9f411b5a"
+      },
+      "feature_configuration": {
+        "hfa": 55.0,
+        "regress": 0.75
+      },
+      "feature_contract": {
+        "away_ewma_margin": "CONSUMED_SCALAR",
+        "away_ewma_points_against": "CONSUMED_SCALAR",
+        "away_ewma_points_for": "CONSUMED_SCALAR",
+        "conference_game": "CONSUMED_SCALAR",
+        "elo_diff_with_home_advantage": "CONSUMED_SCALAR",
+        "home_ewma_margin": "CONSUMED_SCALAR",
+        "home_ewma_points_against": "CONSUMED_SCALAR",
+        "home_ewma_points_for": "CONSUMED_SCALAR",
+        "neutral_site": "CONSUMED_SCALAR",
+        "rest_days_diff": "CONSUMED_SCALAR"
+      },
+      "league": "cfb",
+      "model_id": "cfb.fbs.elo_form_logit_ridge.v1_0.shadow",
+      "ordered_feature_names": [
+        "elo_diff_with_home_advantage",
+        "home_ewma_points_for",
+        "home_ewma_points_against",
+        "away_ewma_points_for",
+        "away_ewma_points_against",
+        "home_ewma_margin",
+        "away_ewma_margin",
+        "rest_days_diff",
+        "neutral_site",
+        "conference_game"
+      ],
+      "schema": "sports.observed_feature_procedure.v1",
+      "validation_status": "NOT_ASSESSED"
+    },
+    "efd27259614e0ee2c6fc67316c56fde3ee024d497c2bbf9392e1754c2e21bf2d": {
+      "config": {
+        "objective": "unconditional_win",
+        "require_quality_receipt": true,
+        "schema": "research-selector-config-v1",
+        "threshold": 0.5
+      },
+      "selector_spec_id": "26ed7372c5b8ada01d5b4e482a758d5389b20ec19c3c1edde61344fca6c8878f"
+    },
+    "fbe64823432368d648ded44b22f87b7ef398526fac6fc2b1f43dbe22537e7065": {
+      "archival_model_state_config_hash": "18389569ad9f87172226367c48882b596d2db364a69056bcc41c805fa6782955",
+      "calibration_procedure_id": "51f8c0272e73a6b07139fdd2f358ee98da47f5075eea79eec34c1961f65c1319",
+      "code_hashes": null,
+      "declared_forecast_procedure_identity": "cfb.fbs.elo_form_logit_ridge.v1_0.shadow:market_blind_numeric.v2",
+      "distribution_model_id": null,
+      "explicit_forecast_procedure_id": null,
+      "feature_procedure_id": "daf51daa2f3f655c20748e92cf739e1d3ee8accbf1e4b2126d2707666ed9ec02",
+      "identity_semantics": "market_blind_numeric.v2",
+      "lineage_status": "OBSERVATION_ONLY_NOT_REGISTERED_OR_QUALIFIED",
+      "model_artifact_sha256": "828ef9cf90f7e801da793fb404b558eba19614386d016059bd346bddb76e702d",
+      "model_id": "cfb.fbs.elo_form_logit_ridge.v1_0.shadow",
+      "numeric_feature_snapshot_sha256": "7af0c6f3c3290e7303de537006b7c59b85fa693cb47b4e3aa861da77c5c014e9",
+      "observed_execution_procedure_id": "0feee79c22aca9505b3d2a8ee4d963d61e73de925536906fc9143c5410aafd2f",
+      "schema": "observed-forecast-procedure-binding-v1"
+    }
+  },
+  "opportunity_count": 2,
+  "population": [
+    {
+      "decision_id": "146d04318919c146937e3f2fcf7938756c115e9cf2499d072a4880ae742d1709",
+      "event_id": "CFB:401866453",
+      "slate_id": "2026-11-03",
+      "target_id": "66c358830cffe5be70ec0a2c0e4ea45bf434d7660e86eeadf1a11fb749021906"
+    },
+    {
+      "decision_id": "c3b743ff3b08abe0351b786495751d7856840bbb11e2cb0da0e4d091515dc486",
+      "event_id": "CFB:401866454",
+      "slate_id": "2026-11-03",
+      "target_id": "305c088d7d3b1ced259a3d14516587c990f112d8f8c570da33ea75dfee30378e"
+    }
+  ],
+  "procedure_bindings": [
+    {
+      "calibration_procedure_id": "51f8c0272e73a6b07139fdd2f358ee98da47f5075eea79eec34c1961f65c1319",
+      "distribution_sha256": null,
+      "feature_procedure_id": "daf51daa2f3f655c20748e92cf739e1d3ee8accbf1e4b2126d2707666ed9ec02",
+      "fitted_state_id": "828ef9cf90f7e801da793fb404b558eba19614386d016059bd346bddb76e702d",
+      "forecast_id": "0e4eb93eb0143d9440d524e86dd80d6e2096bcc4e7a463d6d2e718847906ac1f",
+      "forecast_procedure_id": "0feee79c22aca9505b3d2a8ee4d963d61e73de925536906fc9143c5410aafd2f",
+      "identity_registration_status": "OBSERVED_NOT_REGISTERED",
+      "procedure_binding_id": "d736a2a53dc689eea45df1dab86b2a60f9237bed67ee107f97f0cfcdfaaacfc4",
+      "selector_config_id": "efd27259614e0ee2c6fc67316c56fde3ee024d497c2bbf9392e1754c2e21bf2d",
+      "source_row_sha256": "32ca8ce3b31abe4471f67e55896dca6cec10575e7a4865cfc14e0c0c36c40160"
+    },
+    {
+      "calibration_procedure_id": "51f8c0272e73a6b07139fdd2f358ee98da47f5075eea79eec34c1961f65c1319",
+      "distribution_sha256": null,
+      "feature_procedure_id": "daf51daa2f3f655c20748e92cf739e1d3ee8accbf1e4b2126d2707666ed9ec02",
+      "fitted_state_id": "828ef9cf90f7e801da793fb404b558eba19614386d016059bd346bddb76e702d",
+      "forecast_id": "08a661e98fe0ceb7e53bb539511f79ae5064042f0836fb1984c4351ba2359ff2",
+      "forecast_procedure_id": "0feee79c22aca9505b3d2a8ee4d963d61e73de925536906fc9143c5410aafd2f",
+      "identity_registration_status": "OBSERVED_NOT_REGISTERED",
+      "procedure_binding_id": "fbe64823432368d648ded44b22f87b7ef398526fac6fc2b1f43dbe22537e7065",
+      "selector_config_id": "efd27259614e0ee2c6fc67316c56fde3ee024d497c2bbf9392e1754c2e21bf2d",
+      "source_row_sha256": "7fc9ed5337bfa0c043ec2a245ac552e7fc4467121ebd0503c312eaf46fc16447"
+    }
+  ],
+  "prospective_registration_verified": false,
+  "publication_allowed": false,
+  "quality_receipts": [
+    {
+      "blocking_reasons": [
+        "AUTOMATIC_DIAGNOSTIC_POLICY_NOT_PREREGISTERED"
+      ],
+      "created_at_utc": "2026-11-02T06:41:41.953551Z",
+      "forecast_id": "0e4eb93eb0143d9440d524e86dd80d6e2096bcc4e7a463d6d2e718847906ac1f",
+      "input_snapshot_sha256": "8a94f9688eb5388b2128c545d02b437f6d1523e5e0fea982eaf2706c33f5723d",
+      "receipt_id": "a332cc22bf397fd8c4a0fb99e5301de03f01a94f9ba4c489a5ddf1b5e87c1b22",
+      "review_notes": [
+        "COMPLETE_EXECUTION_IDENTITY_OBSERVED; REGISTRY_QUALIFICATION_STILL_REQUIRED",
+        "PARENT_WARNING:CURRENT_FCS_INTERNAL_SCHEDULE_COVERAGE_UNVERIFIED",
+        "PARENT_WARNING:FBS_VS_FBS_ONLY",
+        "PARENT_WARNING:FULL_ROSTER_IMPACTS_NOT_APPLIED",
+        "PARENT_WARNING:NO_CURRENT_QB_OR_PERSONNEL_TRANSFORM_IN_SELECTED_ARM",
+        "PARENT_WARNING:NO_WAGERING_AUTHORITY",
+        "PARENT_WARNING:ROSTER:ACQUIRE_REQUIRED",
+        "PARENT_WARNING:TOTAL_HEAD_NOT_FITTED_FOR_SELECTED_CFB_ARM",
+        "PARENT_WARNING:VERSIONED_RNG_IDENTITY_REPAIR_NOT_PREDICTIVE_PROMOTION",
+        "STATE_FRESHNESS_RECEIPT_NOT_PRESENT_IN_PARENT"
+      ]
+    },
+    {
+      "blocking_reasons": [
+        "AUTOMATIC_DIAGNOSTIC_POLICY_NOT_PREREGISTERED"
+      ],
+      "created_at_utc": "2026-11-02T06:41:41.953551Z",
+      "forecast_id": "08a661e98fe0ceb7e53bb539511f79ae5064042f0836fb1984c4351ba2359ff2",
+      "input_snapshot_sha256": "7af0c6f3c3290e7303de537006b7c59b85fa693cb47b4e3aa861da77c5c014e9",
+      "receipt_id": "72ff2a46369d3659bb4c6b4da80ea40bd1bb8260eb5c3f47129de615936a0bb1",
+      "review_notes": [
+        "COMPLETE_EXECUTION_IDENTITY_OBSERVED; REGISTRY_QUALIFICATION_STILL_REQUIRED",
+        "PARENT_WARNING:CURRENT_FCS_INTERNAL_SCHEDULE_COVERAGE_UNVERIFIED",
+        "PARENT_WARNING:FBS_VS_FBS_ONLY",
+        "PARENT_WARNING:FULL_ROSTER_IMPACTS_NOT_APPLIED",
+        "PARENT_WARNING:NO_CURRENT_QB_OR_PERSONNEL_TRANSFORM_IN_SELECTED_ARM",
+        "PARENT_WARNING:NO_WAGERING_AUTHORITY",
+        "PARENT_WARNING:ROSTER:ACQUIRE_REQUIRED",
+        "PARENT_WARNING:TOTAL_HEAD_NOT_FITTED_FOR_SELECTED_CFB_ARM",
+        "PARENT_WARNING:VERSIONED_RNG_IDENTITY_REPAIR_NOT_PREDICTIVE_PROMOTION",
+        "STATE_FRESHNESS_RECEIPT_NOT_PRESENT_IN_PARENT"
+      ]
+    }
+  ],
+  "schema": "automatic-research-selection-sidecar-v1",
+  "selector_config_id": "efd27259614e0ee2c6fc67316c56fde3ee024d497c2bbf9392e1754c2e21bf2d",
+  "sidecar_id": "d711ddca943290fb94eef5736f5b4c106ee8ece8ffeec58cf33728dab45a00f7",
+  "source_card": {
+    "created_at_utc": "2026-11-02T06:41:41.941115Z",
+    "path": "/home/runner/work/sports-model/sports-model/output/pregame/run/card/diagnostic_card.json",
+    "sha256": "77f7ee2dfe88df26839964812ed5814d887141df8b885d9f467da4b78ad575de"
+  },
+  "unsupported_products": "Products without exact source contract probabilities are not invented.",
+  "wagering_status": "OFF"
+}

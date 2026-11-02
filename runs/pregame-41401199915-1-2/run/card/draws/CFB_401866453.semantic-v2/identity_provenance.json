@@ -1,0 +1,65 @@
+{
+  "action_authority": false,
+  "identity_components": {
+    "calibration": {
+      "league": "cfb",
+      "model_id": "cfb.fbs.elo_form_logit_ridge.v1_0.shadow",
+      "observed_prediction_code_sha256": {
+        "models/current/cfb.py": "20628f3463589cae551b325e68fa7125aef8f9cd075e7b19b0a1c76b9f411b5a",
+        "models/current/common.py": "63c0da2a4c620fb086d08e22268fe3875515c1807aec128f5e092f73eeafd5ff",
+        "models/current/linear.py": "e10b15e6ed20fd410f5d87afbf01eb191768a459ffcb106dd64cbacef797e4a2"
+      },
+      "procedure_id": "51f8c0272e73a6b07139fdd2f358ee98da47f5075eea79eec34c1961f65c1319",
+      "retained_numeric_operations": "SELECTED_HEAD_OR_SIMULATION_TRANSFORM_UNCHANGED",
+      "schema": "sports.observed_calibration_procedure.v1",
+      "stage": "NONE_NO_SEPARATE_FITTED_POSTHOC_CALIBRATOR_IN_SELECTED_PATH",
+      "validation_status": "NOT_ASSESSED"
+    },
+    "feature": {
+      "constructor_code_sha256": {
+        "models/current/cfb.py": "20628f3463589cae551b325e68fa7125aef8f9cd075e7b19b0a1c76b9f411b5a"
+      },
+      "feature_configuration": {
+        "hfa": 55.0,
+        "regress": 0.75
+      },
+      "feature_contract": {
+        "away_ewma_margin": "CONSUMED_SCALAR",
+        "away_ewma_points_against": "CONSUMED_SCALAR",
+        "away_ewma_points_for": "CONSUMED_SCALAR",
+        "conference_game": "CONSUMED_SCALAR",
+        "elo_diff_with_home_advantage": "CONSUMED_SCALAR",
+        "home_ewma_margin": "CONSUMED_SCALAR",
+        "home_ewma_points_against": "CONSUMED_SCALAR",
+        "home_ewma_points_for": "CONSUMED_SCALAR",
+        "neutral_site": "CONSUMED_SCALAR",
+        "rest_days_diff": "CONSUMED_SCALAR"
+      },
+      "league": "cfb",
+      "model_id": "cfb.fbs.elo_form_logit_ridge.v1_0.shadow",
+      "ordered_feature_names": [
+        "elo_diff_with_home_advantage",
+        "home_ewma_points_for",
+        "home_ewma_points_against",
+        "away_ewma_points_for",
+        "away_ewma_points_against",
+        "home_ewma_margin",
+        "away_ewma_margin",
+        "rest_days_diff",
+        "neutral_site",
+        "conference_game"
+      ],
+      "procedure_id": "daf51daa2f3f655c20748e92cf739e1d3ee8accbf1e4b2126d2707666ed9ec02",
+      "schema": "sports.observed_feature_procedure.v1",
+      "validation_status": "NOT_ASSESSED"
+    }
+  },
+  "interpretation": "Full provenance retained separately; none of these archive hashes seeds v2.",
+  "legacy_draw_directory": "/home/runner/work/sports-model/sports-model/output/pregame/run/card/draws/CFB_401866453",
+  "legacy_input_snapshot_hash": "8a94f9688eb5388b2128c545d02b437f6d1523e5e0fea982eaf2706c33f5723d",
+  "legacy_model_state_config_hash": "18389569ad9f87172226367c48882b596d2db364a69056bcc41c805fa6782955",
+  "legacy_package_sha256": "e786181c4098c6410298b4e7be936ae1e5dde78dd02ede008ee814ad27df906f",
+  "legacy_parent_forecast_sha256": "489f91560c3d2cadd663941c5a521d7a2f8aadd8788cc759d4ce16a02b530e49",
+  "legacy_parent_identity": null,
+  "predictive_validation": "NOT_ASSESSED"
+}

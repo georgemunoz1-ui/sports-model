@@ -342,6 +342,14 @@ def run(date, output, simulations=100000, next_slate=False):
                              "declared_lock_versions": declared, "matches_dependency_lock": actual == declared,
                              "runner_image": os.environ.get("ImageVersion"),
                              "github_run_id": os.environ.get("GITHUB_RUN_ID"), "github_run_attempt": os.environ.get("GITHUB_RUN_ATTEMPT")}
+        # Keep only package names and versions: pip-freeze URLs can contain
+        # credentials or private repository locations and are not an audit need.
+        installed = sorted({(str(d.metadata.get("Name", "")), d.version)
+                            for d in importlib.metadata.distributions()})
+        write(output / "runtime/installed-distributions.json",
+              {"schema": "sports.runtime_distributions.v1",
+               "packages": [{"name": name, "version": version} for name, version in installed]})
+        record["runtime"]["installed_distributions_sha256"] = digest(output / "runtime/installed-distributions.json")
         capture_report = capture_cfb(output / "source", date, next_slate=next_slate)
         date = capture_report["slate_date"]
         record["slate_date"] = date

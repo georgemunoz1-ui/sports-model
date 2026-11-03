@@ -1,0 +1,47 @@
+{
+  "action_authority": false,
+  "artifact_sha256": "571517d96bd97b1c4b4a037d404c05adabe9aa5ca0c330e029818ab0cf289c0f",
+  "baseline_commit": "946ee80b7b57a414f58db06c141e589c82dd7745",
+  "checks": [
+    {
+      "command": "PYTHONPATH=/tmp/sports-test-runtime python3 -m pytest -q tests/test_volatility_matrix_v1.py tests/test_volatility_replay_inputs.py",
+      "exit_code": 0,
+      "result": "36 passed"
+    },
+    {
+      "command": "PYTHONPATH=/tmp/sports-test-runtime python3 -m pytest -q",
+      "exit_code": 0,
+      "result": "2220 passed in 185.72s"
+    },
+    {
+      "command": "PYTHONPATH=/tmp/sports-test-runtime python3 harness/healthcheck.py",
+      "exit_code": 1,
+      "failures": [
+        "FROZEN_LINEAGE",
+        "SUCCESSOR_EQUIVALENCE",
+        "JOURNAL_CONTINUITY_NO_GIT_METADATA_IN_SOURCE_SNAPSHOT",
+        "LANCEBROZ_PRODUCTION_ARCHIVE_UNAVAILABLE",
+        "RECOVERY_JOBS_OVERDUE",
+        "HISTORICAL_RELEASE_ELIGIBILITY_BLOCKED",
+        "STANDING_HEALTH_HASH_CHAIN"
+      ],
+      "result": "GLOBAL_HEALTH_NOT_CLEARED"
+    }
+  ],
+  "created_at_utc": "2026-11-03T18:02:42Z",
+  "environment": {
+    "numpy": "2.2.5",
+    "pyarrow": "19.0.1",
+    "pytest": "8.3.5",
+    "python": "3.12.12",
+    "xgboost": "3.4.1"
+  },
+  "predictive_validation": "NOT_ESTABLISHED",
+  "prospective_grade_eligible": false,
+  "reference_checks": {
+    "ledoit_wolf": "Matched sklearn.covariance.ledoit_wolf on synthetic matrices to floating-point tolerance; fixed reference retained in tests.",
+    "review": "Independent statistical/code review completed; findings addressed with regression tests."
+  },
+  "schema": "sports.volatility_matrix_verification.research.v1",
+  "software_status": "IMPLEMENTED_AND_EXERCISED"
+}

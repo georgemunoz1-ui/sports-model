@@ -1,0 +1,148 @@
+{
+  "schema": "independent-helper-review-v1",
+  "scope": "SYNTHETIC_TARGETED_SOFTWARE_TESTS_ONLY",
+  "helper_sha256": "9371f44cad79444c899496ec308d79ac09153bc14aa507ccb6f36105c54e88e4",
+  "helper_tests_sha256": "6feb847407b75e7450d9482b72a0a979b70e97d9b16890b9aa03fb4ca79b881c",
+  "passed_cases": 16,
+  "cases": [
+    {
+      "case": "normal",
+      "passed": true,
+      "root": "/workspace/scratch/4d9e36f4eb71/finding-successor-independent/verified-normal-pv8tp9qc",
+      "error": null,
+      "packet_created": true,
+      "receipt_exit_code": 0,
+      "receipt_failure": null
+    },
+    {
+      "case": "unit-skip",
+      "passed": true,
+      "root": "/workspace/scratch/4d9e36f4eb71/finding-successor-independent/verified-unit-skip-ffkmvouv",
+      "error": "ValueError:ACCEPTANCE_TEST_FAILED",
+      "packet_created": false,
+      "receipt_exit_code": 1,
+      "receipt_failure": "ACCEPTANCE_TEST_FAILED"
+    },
+    {
+      "case": "unit-expected-failure",
+      "passed": true,
+      "root": "/workspace/scratch/4d9e36f4eb71/finding-successor-independent/verified-unit-expected-failure-j5l3yhbb",
+      "error": "ValueError:ACCEPTANCE_TEST_FAILED",
+      "packet_created": false,
+      "receipt_exit_code": 1,
+      "receipt_failure": "ACCEPTANCE_TEST_FAILED"
+    },
+    {
+      "case": "unit-zero",
+      "passed": true,
+      "root": "/workspace/scratch/4d9e36f4eb71/finding-successor-independent/verified-unit-zero-tvqszv_z",
+      "error": "ValueError:ACCEPTANCE_TEST_FAILED",
+      "packet_created": false,
+      "receipt_exit_code": 1,
+      "receipt_failure": "ACCEPTANCE_TEST_FAILED"
+    },
+    {
+      "case": "pytest-skip",
+      "passed": true,
+      "root": "/workspace/scratch/4d9e36f4eb71/finding-successor-independent/verified-pytest-skip-i_adrad1",
+      "error": "ValueError:JUNIT_NOT_COMPLETE_PASS",
+      "packet_created": false,
+      "receipt_exit_code": 1,
+      "receipt_failure": "JUNIT_NOT_COMPLETE_PASS"
+    },
+    {
+      "case": "actual-failure",
+      "passed": true,
+      "root": "/workspace/scratch/4d9e36f4eb71/finding-successor-independent/verified-actual-failure-illm9dig",
+      "error": "ValueError:ACCEPTANCE_TEST_FAILED",
+      "packet_created": false,
+      "receipt_exit_code": 1,
+      "receipt_failure": "ACCEPTANCE_TEST_FAILED"
+    },
+    {
+      "case": "env-deselect",
+      "passed": true,
+      "root": "/workspace/scratch/4d9e36f4eb71/finding-successor-independent/verified-env-deselect-eqqgv54t",
+      "error": "ValueError:PYTEST_ADDOPTS_MUST_BE_EMPTY",
+      "packet_created": false,
+      "receipt_exit_code": null,
+      "receipt_failure": null
+    },
+    {
+      "case": "config-deselect-overridden",
+      "passed": true,
+      "root": "/workspace/scratch/4d9e36f4eb71/finding-successor-independent/verified-config-deselect-overridden-j7goe8e0",
+      "error": "ValueError:ACCEPTANCE_TEST_FAILED",
+      "packet_created": false,
+      "receipt_exit_code": 1,
+      "receipt_failure": "ACCEPTANCE_TEST_FAILED"
+    },
+    {
+      "case": "plugin-deselect",
+      "passed": true,
+      "root": "/workspace/scratch/4d9e36f4eb71/finding-successor-independent/verified-plugin-deselect-_pqbjl22",
+      "error": "ValueError:ACCEPTANCE_TEST_FAILED",
+      "packet_created": false,
+      "receipt_exit_code": 1,
+      "receipt_failure": "ACCEPTANCE_TEST_FAILED"
+    },
+    {
+      "case": "ignored-source-drift",
+      "passed": true,
+      "root": "/workspace/scratch/4d9e36f4eb71/finding-successor-independent/verified-ignored-source-drift-v_00by9e",
+      "error": "ValueError:SOURCE_CHANGED_DURING_ACCEPTANCE",
+      "packet_created": false,
+      "receipt_exit_code": 1,
+      "receipt_failure": "SOURCE_CHANGED_DURING_ACCEPTANCE"
+    },
+    {
+      "case": "historical-log-drift",
+      "passed": true,
+      "root": "/workspace/scratch/4d9e36f4eb71/finding-successor-independent/verified-historical-log-drift-ppu5qe6f",
+      "error": "ValueError:HISTORICAL_EVIDENCE_HASH_MISMATCH:old.log",
+      "packet_created": false,
+      "receipt_exit_code": 1,
+      "receipt_failure": "HISTORICAL_EVIDENCE_HASH_MISMATCH:old.log"
+    },
+    {
+      "case": "ancestor-tamper",
+      "passed": true,
+      "root": "/workspace/scratch/4d9e36f4eb71/finding-successor-independent/verified-ancestor-tamper-r39iiph4",
+      "error": "ValueError:HISTORICAL_EVIDENCE_HASH_MISMATCH:older.json",
+      "packet_created": false,
+      "receipt_exit_code": null,
+      "receipt_failure": null
+    },
+    {
+      "case": "ancestor-missing-id",
+      "passed": true,
+      "root": "/workspace/scratch/4d9e36f4eb71/finding-successor-independent/verified-ancestor-missing-id-2ax1alb9",
+      "error": "ValueError:HISTORICAL_FINDING_IDENTITY_MISMATCH",
+      "packet_created": false,
+      "receipt_exit_code": null,
+      "receipt_failure": null
+    },
+    {
+      "case": "inherited-authority-sanitized",
+      "passed": true,
+      "root": "/workspace/scratch/4d9e36f4eb71/finding-successor-independent/verified-inherited-authority-sanitized-0ozd4s1t",
+      "error": null,
+      "packet_created": true,
+      "receipt_exit_code": 0,
+      "receipt_failure": null
+    },
+    {
+      "case": "junit-suite-error",
+      "passed": true,
+      "error": "JUNIT_NOT_COMPLETE_PASS"
+    },
+    {
+      "case": "junit-failure-counter",
+      "passed": true,
+      "error": "JUNIT_COUNTER_MISMATCH:failures"
+    }
+  ],
+  "full_acceptance_run": false,
+  "remote_writes": false,
+  "predictive_validation_granted": false
+}

@@ -84,6 +84,10 @@ def test_successor_reexecutes_current_source_and_preserves_exact_historical_byte
     assert receipt["environment"]["python_version"]
     assert receipt["environment"]["platform"]
     assert receipt["environment"]["pin_conformance"] == "NOT_ASSESSED"
+    assert receipt["successor_delivery_status"] == "PENDING"
+    delivery = json.loads((tmp_path / result["delivery"]["path"]).read_text())
+    assert delivery["status"] == "LOCAL_COMPLETE" and delivery["evidence_delivery_complete"]
+    assert delivery["packet"] == result["packet"]
     assert any(d["name"].lower() == "pytest" for d in receipt["environment"]["installed_distributions"])
     (tmp_path / "old.log").write_text("changed after successor\n")
     with pytest.raises(ValueError, match="EVIDENCE_HASH_MISMATCH"):
@@ -308,4 +312,33 @@ def test_deselection_count_cannot_close_even_with_zero_exit(tmp_path):
         return result
     with pytest.raises(ValueError, match="PYTEST_COLLECTION_NOT_COMPLETE_PASS"):
         record(tmp_path, sha, deselect)
+    assert not (tmp_path / "successor/finding-evidence.json").exists()
+
+
+def test_completed_subprocess_log_retains_large_output_and_final_suffix(tmp_path):
+    import shlex
+    log = tmp_path / "acceptance.log"
+    log.touch()
+    # Exceed normal pipe/buffer sizes and keep an exact final stderr suffix.
+    program = "import sys; sys.stdout.buffer.write(b'A'*131072); sys.stdout.flush(); sys.stderr.buffer.write(b'B'*131072+b'FINAL-STDERR-SUFFIX\\n'); sys.stderr.flush()"
+    args = [successor.sys.executable, "-c", program]
+    assert successor.run_command(args, tmp_path, log) == 0
+    expected = ("\n$ " + shlex.join(args) + "\n").encode() + b"A" * 131072 + b"B" * 131072 + b"FINAL-STDERR-SUFFIX\n"
+    assert log.read_bytes() == expected
+    assert file_ref(tmp_path, log)["sha256"] == hashlib.sha256(expected).hexdigest()
+
+
+def test_packet_validation_failure_has_separate_delivery_failure_receipt(tmp_path, monkeypatch):
+    sha = fixture(tmp_path)
+    def reject(packet, *, root):
+        raise ValueError("EVIDENCE_HASH_MISMATCH:synthetic-finalization")
+    monkeypatch.setattr(successor, "validate_packet", reject)
+    with pytest.raises(ValueError, match="EVIDENCE_HASH_MISMATCH:synthetic-finalization"):
+        record(tmp_path, sha)
+    receipt = json.loads((tmp_path / "successor/acceptance.json").read_text())
+    assert receipt["exit_code"] == 0 and receipt["successor_delivery_status"] == "PENDING"
+    delivery = json.loads((tmp_path / "successor/delivery.json").read_text())
+    assert delivery["status"] == "FAILED" and not delivery["evidence_delivery_complete"]
+    assert delivery["failure"] == "ValueError:EVIDENCE_HASH_MISMATCH:synthetic-finalization"
+    assert not delivery["packet_created"]
     assert not (tmp_path / "successor/finding-evidence.json").exists()

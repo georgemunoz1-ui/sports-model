@@ -91,11 +91,16 @@ def write_json(path, value):
 
 
 def run_command(args, root, log):
+    # Children never hold the final evidence-log descriptor. Retain their
+    # complete combined output only after the pipe reaches EOF and they exit.
+    completed = subprocess.run(args, cwd=root, stdout=subprocess.PIPE,
+                               stderr=subprocess.STDOUT, check=False)
     with log.open("ab") as stream:
         stream.write(("\n$ " + shlex.join(args) + "\n").encode())
+        stream.write(completed.stdout)
         stream.flush()
-        return subprocess.run(args, cwd=root, stdout=stream,
-                              stderr=subprocess.STDOUT, check=False).returncode
+        os.fsync(stream.fileno())
+    return completed.returncode
 
 
 def run_unittest_receipt(path):
@@ -303,6 +308,7 @@ def record_successor(root, parent, expected_parent_sha256, output, *,
                "historical_evidence": list(historical.values()),
                "log": file_ref(root, log), "exit_code": 1 if failure else 0,
                "failure": failure, "scope": "LOCAL_SOFTWARE_ACCEPTANCE_ONLY",
+               "successor_delivery_status": "PENDING",
                "hosted_verification": "PENDING", "durable_archive_verified": False,
                "predictive_validation_granted": False, "model_promotion_granted": False,
                "publication_allowed": False, "action_authority": False,
@@ -319,26 +325,45 @@ def record_successor(root, parent, expected_parent_sha256, output, *,
     receipt_ref = file_ref(root, output / "acceptance.json")
     # Historical extra fields remain preserved in the parent; they cannot grant
     # authority to the new software-only successor.
-    successors = [{k: deepcopy(row[k]) for k in FIELDS | {"schema", "owner", "status"}}
-                  for row in rows]
-    for row in successors:
-        row["evidence"] = [file_ref(root, root / ref["path"]) for ref in row["evidence"]]
-        if parent_ref not in row["evidence"]:
-            row["evidence"].append(parent_ref)
-        row["evidence"].extend(list(historical.values()))
-        row["evidence"].extend([receipt["junit"], receipt["research_unittest_receipt"],
-                                receipt["pytest_execution_receipt"]])
-        row["supersedes"] = dict(parent_ref, finding_id=row["finding_id"])
-        row["acceptance_test"] = {"command": receipt["command"],
-                                  "execution_receipt": receipt_ref}
-        row["delivery"] = {"stage": "Tested"}
-        row.update(predictive_validation_granted=False, model_promotion_granted=False,
-                   publication_allowed=False, action_authority=False, wagering_authority="OFF")
-        row["scope"] += " Re-exercised against the retained current source manifest; local software acceptance only, hosted delivery pending."
-        validate_packet(row, root=root)
     packet_path = output / "finding-evidence.json"
-    write_json(packet_path, successors)
+    delivery_path = output / "delivery.json"
+    try:
+        successors = [{k: deepcopy(row[k]) for k in FIELDS | {"schema", "owner", "status"}}
+                      for row in rows]
+        for row in successors:
+            row["evidence"] = [file_ref(root, root / ref["path"]) for ref in row["evidence"]]
+            if parent_ref not in row["evidence"]:
+                row["evidence"].append(parent_ref)
+            row["evidence"].extend(list(historical.values()))
+            row["evidence"].extend([receipt["junit"], receipt["research_unittest_receipt"],
+                                    receipt["pytest_execution_receipt"]])
+            row["supersedes"] = dict(parent_ref, finding_id=row["finding_id"])
+            row["acceptance_test"] = {"command": receipt["command"],
+                                      "execution_receipt": receipt_ref}
+            row["delivery"] = {"stage": "Tested"}
+            row.update(predictive_validation_granted=False, model_promotion_granted=False,
+                       publication_allowed=False, action_authority=False, wagering_authority="OFF")
+            row["scope"] += " Re-exercised against the retained current source manifest; local software acceptance only, hosted delivery pending."
+            validate_packet(row, root=root)
+        write_json(packet_path, successors)
+    except Exception as exc:
+        write_json(delivery_path, {
+            "schema": "finding-successor-delivery-v1", "status": "FAILED",
+            "failure": type(exc).__name__ + ":" + str(exc),
+            "recorded_at_utc": now(), "acceptance_receipt": receipt_ref,
+            "packet_created": packet_path.exists(), "evidence_delivery_complete": False,
+            "predictive_validation_granted": False, "publication_allowed": False,
+            "action_authority": False, "wagering_authority": "OFF"})
+        raise
+    write_json(delivery_path, {
+        "schema": "finding-successor-delivery-v1", "status": "LOCAL_COMPLETE",
+        "recorded_at_utc": now(), "acceptance_receipt": receipt_ref,
+        "packet": file_ref(root, packet_path), "evidence_delivery_complete": True,
+        "hosted_verification": "PENDING", "durable_archive_verified": False,
+        "predictive_validation_granted": False, "publication_allowed": False,
+        "action_authority": False, "wagering_authority": "OFF"})
     return {"packet": file_ref(root, packet_path), "receipt": receipt_ref,
+            "delivery": file_ref(root, delivery_path),
             "findings": len(successors), "hosted_verification": "PENDING",
             "predictive_validation_granted": False, "publication_allowed": False,
             "wagering_authority": "OFF"}

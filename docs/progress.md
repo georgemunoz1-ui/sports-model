@@ -5029,3 +5029,5 @@ Added a separate men's Division I schedule, research forecast, market attachment
 ### 2026-11-04 Pacific | Men's college basketball result reconciliation
 
 The original draft grader could mark an ESPN final complete after the collector flagged an NCAA score disagreement. A controlled replay reproduced the discrepancy. Postgame grading now pins the manifest and per-event evidence and compares both scoreboards with the ESPN event summary. Unresolved games do not contribute to accuracy or settlement. A correction links to the prior grade in a new output. The original November 4 forecasts and market attachment retain their identities. See `docs/CBB_DAILY_CARD.md` for the postgame commands.
+
+The concurrent coverage-status change was reconciled with the pinned-evidence grader. The grade reports the collector's date, status and coverage digest. A valid globally blocked capture yields an incomplete record. A modified coverage file fails the retained manifest pin.

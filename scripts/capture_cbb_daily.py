@@ -268,6 +268,96 @@ def american(value):
     return int(value)
 
 
+def quoted_american(value):
+    """Only explicit OFF/null means unavailable; malformed prices refuse the event."""
+    if value is None or value == "OFF":
+        return None
+    if type(value) not in (int, str):
+        raise ValueError("INVALID_QUOTE_PRICE")
+    price = american(value)
+    if price is None:
+        raise ValueError("INVALID_QUOTE_PRICE")
+    return price
+
+
+def paired_market_quotes(data):
+    """Return only unambiguous, same-book, two-sided full-game quotes.
+
+    Duplicate book entries are rejected even when their bytes agree. Missing
+    products and explicitly unavailable prices are unquoted; an offered product
+    with incomplete scope rejects the whole event, never a partial attachment.
+    """
+    offers = data.get("pickcenter", [])
+    if not isinstance(offers, list):
+        raise ValueError("QUOTE_SCOPE_MISSING:pickcenter")
+    books = []
+    for offer in offers:
+        provider = offer.get("provider") if isinstance(offer, dict) else None
+        name = provider.get("name") if isinstance(provider, dict) else None
+        if not isinstance(name, str) or not name.strip():
+            raise ValueError("QUOTE_SCOPE_MISSING:provider.name")
+        if name == "DraftKings":
+            books.append(offer)
+    if len(books) > 1:
+        raise ValueError("AMBIGUOUS_BOOK")
+    if not books:
+        return None, []
+    book = books[0]
+    rows = []
+    for product, key, pair in (
+        ("winner", "moneyline", ("home", "away")),
+        ("margin", "pointSpread", ("home", "away")),
+        ("total", "total", ("over", "under")),
+    ):
+        if key not in book:
+            continue
+        market = book[key]
+        if not isinstance(market, dict):
+            raise ValueError("QUOTE_SCOPE_MISSING:" + key)
+        ticks = []
+        for side in pair:
+            leg = market.get(side)
+            tick = leg.get("close") if isinstance(leg, dict) else None
+            if not isinstance(tick, dict) or "odds" not in tick:
+                raise ValueError("QUOTE_SCOPE_MISSING:" + key + "." + side)
+            ticks.append(tick)
+        prices = [quoted_american(t["odds"]) for t in ticks]
+        if None in prices:
+            continue
+        lines = [None, None]
+        if product != "winner":
+            if any("line" not in t or t["line"] is None for t in ticks):
+                raise ValueError("QUOTE_SCOPE_MISSING:" + key + ".line")
+            values = [str(t["line"]) for t in ticks]
+            if product == "total":
+                if not all(
+                    v.lower().startswith(prefix)
+                    for v, prefix in zip(values, ("o", "u"))
+                ):
+                    raise ValueError("TOTAL_SIDE")
+                values = [v[1:] for v in values]
+            try:
+                lines = [float(value) for value in values]
+            except ValueError as exc:
+                raise ValueError("INVALID_MARKET_LINE") from exc
+            if not all(math.isfinite(value) for value in lines):
+                raise ValueError("INVALID_MARKET_LINE")
+            if product == "margin" and lines[0] != -lines[1]:
+                raise ValueError("SPREAD_COMPLEMENTS")
+            if product == "total" and (lines[0] <= 0 or lines[0] != lines[1]):
+                raise ValueError("TOTAL_MISMATCH")
+        rows.extend(
+            {
+                "product": product,
+                "side": side,
+                "line": line,
+                "american_price": price,
+            }
+            for side, line, price in zip(pair, lines, prices)
+        )
+    return "DraftKings", rows
+
+
 def empty_quote(row, receipt, source_state, quote_status):
     keys = (
         "event_id",
@@ -318,64 +408,28 @@ def quote(row, data, receipt):
         comp["date"]
     ) != dt.datetime.fromisoformat(row["start_time_utc"]):
         raise ValueError("QUOTE_EVENT_SCOPE_MISMATCH")
-    books = [
-        b
-        for b in data.get("pickcenter", [])
-        if b.get("provider", {}).get("name") == "DraftKings"
-    ]
-    if len(books) > 1:
-        raise ValueError("AMBIGUOUS_BOOK")
-    book = books[0] if books else {}
+    book, contracts = paired_market_quotes(data)
     st = comp["status"]["type"]
     pre = st["state"] == "pre" and dt.datetime.fromisoformat(
         receipt["retrieved_at_utc"]
     ) < dt.datetime.fromisoformat(row["start_time_utc"])
     r = empty_quote(row, receipt, st["name"], "UNQUOTED")
-    if book:
-        r["book"] = "DraftKings"
+    r["book"] = book
     if not pre and not (st["completed"] and st["name"] == "STATUS_FINAL"):
         r["quote_status"] = "NO_PREGAME_OR_FINAL_QUOTE"
         return r
 
-    def legs(product, a, b):
-        m = book.get(product, {})
-        return m.get(a, {}).get("close", {}), m.get(b, {}).get("close", {})
-
-    a, b = legs("pointSpread", "home", "away")
-    if (
-        american(a.get("odds"))
-        and american(b.get("odds"))
-        and all(x.get("line") is not None for x in (a, b))
-    ):
-        ah, bh = float(a["line"]), float(b["line"])
-        if not math.isfinite(ah) or ah + bh != 0:
-            raise ValueError("SPREAD_COMPLEMENTS")
-        r.update(
-            home_spread=ah,
-            away_spread=bh,
-            home_spread_price=american(a["odds"]),
-            away_spread_price=american(b["odds"]),
-        )
-    a, b = legs("total", "over", "under")
-    if (
-        american(a.get("odds"))
-        and american(b.get("odds"))
-        and a.get("line")
-        and b.get("line")
-    ):
-        if not a["line"].lower().startswith("o") or not b["line"].lower().startswith(
-            "u"
-        ):
-            raise ValueError("TOTAL_SIDE")
-        line = float(a["line"][1:])
-        if not math.isfinite(line) or line <= 0 or line != float(b["line"][1:]):
-            raise ValueError("TOTAL_MISMATCH")
-        r.update(
-            total=line, over_price=american(a["odds"]), under_price=american(b["odds"])
-        )
-    a, b = legs("moneyline", "home", "away")
-    if american(a.get("odds")) and american(b.get("odds")):
-        r.update(home_ml_price=american(a["odds"]), away_ml_price=american(b["odds"]))
+    for contract in contracts:
+        side = contract["side"]
+        product = contract["product"]
+        if product == "winner":
+            r[side + "_ml_price"] = contract["american_price"]
+        elif product == "margin":
+            r[side + "_spread"] = contract["line"]
+            r[side + "_spread_price"] = contract["american_price"]
+        else:
+            r["total"] = contract["line"]
+            r[side + "_price"] = contract["american_price"]
     if any(r[k] is not None for k in ("home_spread", "total", "home_ml_price")):
         r["quote_status"] = "REPORTED_CLOSE" if st["completed"] else "CAPTURED_PRETIP"
     return r

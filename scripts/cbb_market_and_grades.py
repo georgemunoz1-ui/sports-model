@@ -17,6 +17,7 @@ from scripts.capture_cbb_daily import (
     PACIFIC,
     ncaa_events,
     ncaa_url,
+    paired_market_quotes,
     reconcile_event,
 )
 from scripts.capture_cbb_daily import (
@@ -69,62 +70,25 @@ def parse_price(value):
 
 
 def market_rows(raw, forecast):
-    """Read same-provider pairs directly from source. Require matching handicap on both sides."""
-    offer = next(
-        (o for o in raw.get("pickcenter", []) if o["provider"]["name"] == "DraftKings"),
-        {},
-    )
+    """Use the collector's exact book-ambiguity and paired-contract policy."""
+    _, quotes = paired_market_quotes(raw)
     result = []
-    for product, key, sides in [
-        ("winner", "moneyline", ("home", "away")),
-        ("margin", "pointSpread", ("home", "away")),
-        ("total", "total", ("over", "under")),
-    ]:
-        ticks = [offer.get(key, {}).get(s, {}).get("close", {}) for s in sides]
-        prices = [parse_price(t.get("odds")) for t in ticks]
-        if None in prices:
-            continue
+    for quote in quotes:
+        product, side, line = quote["product"], quote["side"], quote["line"]
         if product == "winner":
-            lines = [0.0, 0.0]
+            win = forecast["p_home_win"]
+            if side == "away":
+                win = 1 - win
+            probs = {"win": win, "push": 0.0, "loss": 1 - win}
         else:
-            values = [str(t.get("line", "")) for t in ticks]
-            if product == "total":
-                if not all(
-                    v.lower().startswith(prefix)
-                    for v, prefix in zip(values, ("o", "u"))
-                ):
-                    continue
-                values = [v[1:] for v in values]
-            try:
-                lines = [float(v) for v in values]
-            except ValueError:
-                continue
-            if not all(math.isfinite(v) for v in lines) or (
-                lines[0] != (-lines[1] if product == "margin" else lines[1])
-            ):
-                raise ValueError("Opposing lines differ")
-        for i, s in enumerate(sides):
-            if product == "winner":
-                win = forecast["p_home_win"] if i == 0 else 1 - forecast["p_home_win"]
-                probs = {"win": win, "push": 0.0, "loss": 1 - win}
-            else:
-                handicap = (
-                    lines[i]
-                    if product == "margin"
-                    else (-lines[i] if i == 0 else lines[i])
-                )
-                probs = probability(
-                    forecast["distributions"][product], 1 if i == 0 else -1, handicap
-                )
-            result.append(
-                {
-                    "product": product,
-                    "side": s,
-                    "line": None if product == "winner" else lines[i],
-                    "american_price": prices[i],
-                    **probs,
-                }
+            positive = side in ("home", "over")
+            handicap = line if product == "margin" or not positive else -line
+            probs = probability(
+                forecast["distributions"][product],
+                1 if positive else -1,
+                handicap,
             )
+        result.append({**quote, **probs})
     return result
 
 

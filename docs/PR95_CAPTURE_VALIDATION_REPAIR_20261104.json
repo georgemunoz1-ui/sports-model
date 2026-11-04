@@ -1,0 +1,154 @@
+{
+  "affected_commit": "5acf5972bc448b4e5c03b65ee69ecd38033765c0",
+  "author_validation": {
+    "command": "/tmp/nhl-shadow-root/venv/bin/python -m pytest -q tests/test_operational_capture_validation.py --junitxml=docs/reviews/pr95_capture_20261104/author-tests.xml",
+    "evidence": {
+      "docs/reviews/pr95_capture_20261104/author-tests.log": "76864e090f7ad639a5e91abed24215659c1c712d00093a21e58c582606181583",
+      "docs/reviews/pr95_capture_20261104/author-tests.xml": "3f180874fbe6c3f699c3854db21dec2bc2dc5b97f3bdaf296e1afbf83b4dc7d8"
+    },
+    "fixtures": "Synthetic minimum provider shapes through the actual collector; all network acquisition mocked; actual workflow shell steps exercised.",
+    "git_diff_check": "PASS",
+    "result": "91 passed in 7.11s"
+  },
+  "base_head": "5acf5972bc448b4e5c03b65ee69ecd38033765c0",
+  "contract_scope": {
+    "action_authority": false,
+    "derived_sources": "WNBA, MLB and NFL summaries for event IDs reconstructed from verified schedule bytes.",
+    "fixed_sources": "Existing seven-league ESPN daily schedules for the inclusive plus/minus seven-day window; existing WNBA August 30 extension; official MLB schedule for every window date; two existing NFL sources.",
+    "historical_pregame_eligibility": false,
+    "positive_meaning": "Capture contract and retained-byte consistency only.",
+    "preserved_policy": "The existing source URLs, schedule window and WNBA extension boundary are unchanged.",
+    "provider_authenticity_verified": false,
+    "version": "sports.operational_capture.v1"
+  },
+  "defects_closed": [
+    "The prior inline validator accepted empty report/events/manifest objects and trusted receipt declarations without validating retained bytes.",
+    "Mandatory source scope now comes from a versioned collector contract, with raw-byte SHA256, exact inventory, capture/date/clock bindings and reconstructed event coverage.",
+    "Schedule and summary event IDs, start times, and oriented team IDs must agree; complete zero-event schedules remain valid source capture evidence.",
+    "The commit summary now uses printf instead of executing the SHA through shell backticks.",
+    "The final workflow gate independently requires acquisition, validation/health, and evidence upload success."
+  ],
+  "files": {
+    ".github/workflows/daily-operations-preflight.yml": "5228e6694b748f2fe7892d8506ebfca06b8d708562461b9d436b2856f9f6e912",
+    "scripts/capture_operational_inputs.py": "74620011ad24911a7970541e9d722bd36282e747605209aa98b4c088b57b6bfc",
+    "scripts/operational_capture_contract.py": "00b23308066a89d01a1b103f8637338ba1bb909ba56b3d6761e68e7b30514043",
+    "scripts/validate_operational_capture.py": "e79f698465b6662ae43c66ba5c2c350a032338bbdd972d03c2452b1a9e254fba",
+    "tests/test_operational_capture_validation.py": "c664345354abcbf26c770fd37b56138eaa609e86c9108b4bd89d64201f998b67"
+  },
+  "hosted_premerge_route": {
+    "concurrency": "PR number is isolated from the scheduled-manual group.",
+    "paths": [
+      ".github/workflows/daily-operations-preflight.yml",
+      "scripts/capture_operational_inputs.py",
+      "scripts/validate_operational_capture.py",
+      "scripts/operational_capture_contract.py",
+      "scripts/recovery_capture.py",
+      "tests/test_operational_capture_validation.py",
+      "tests/test_recovery_governance.py"
+    ],
+    "permissions": {
+      "contents": "read"
+    },
+    "reason": "The workflow is absent from main; a narrow PR trigger permits actual hosted evidence before a merge.",
+    "status": "LOCAL_PROPOSAL_NOT_PUBLISHED",
+    "trigger": "pull_request"
+  },
+  "incident_id": "PR95_CAPTURE_RECEIPTS_DECLARATION_ONLY",
+  "independent_evidence": [
+    {
+      "original_path": "/workspace/scratch/4d9e36f4eb71/independent-repair-verifier/pr95-before.xml",
+      "path": "docs/reviews/pr95_capture_20261104/independent/pr95-before.xml",
+      "sha256": "805c744ef2eb553a4b871b997a68dc41202b1cecc3b791bac5b8842608b97867"
+    },
+    {
+      "original_path": "/workspace/scratch/4d9e36f4eb71/independent-repair-verifier/pr95-independent-report-v2.json",
+      "path": "docs/reviews/pr95_capture_20261104/independent/pr95-independent-report-v2.json",
+      "sha256": "3e84fbe1432c5a51d54d4c7eeb0c4308f78eb16bff77ed20d3d17561aaf39405"
+    },
+    {
+      "original_path": "/workspace/scratch/4d9e36f4eb71/independent-repair-verifier/pr95-workflow-independent.xml",
+      "path": "docs/reviews/pr95_capture_20261104/independent/pr95-workflow-independent.xml",
+      "sha256": "4abc1bb6ceb9c3938b63554f4776b7d859edb6df5417140db6a61ffc2b8becd5"
+    },
+    {
+      "original_path": "/workspace/scratch/4d9e36f4eb71/independent-repair-verifier/pr95-independent-report.json",
+      "path": "docs/reviews/pr95_capture_20261104/independent/pr95-independent-report.json",
+      "sha256": "00667f836e1ea01ea4586455a4cc796612f5ee128a51b2e9bdc2bc65c627cfad"
+    },
+    {
+      "original_path": "/workspace/scratch/4d9e36f4eb71/independent-repair-verifier/pr95-preservation.json",
+      "path": "docs/reviews/pr95_capture_20261104/independent/pr95-preservation.json",
+      "sha256": "e20cbfdc54bef40ebbaea02958fe3c388c307a02c85043d3a932c06025d551e7"
+    },
+    {
+      "original_path": "/workspace/scratch/4d9e36f4eb71/independent-repair-verifier/preservation.py",
+      "path": "docs/reviews/pr95_capture_20261104/independent/preservation.py",
+      "sha256": "b51123409c6eee7fbaa06b059d221b86158a7ff5e6ccfa30a6798107f65ee2f7"
+    },
+    {
+      "original_path": "/workspace/scratch/4d9e36f4eb71/independent-repair-verifier/pr95-independent.log",
+      "path": "docs/reviews/pr95_capture_20261104/independent/pr95-independent.log",
+      "sha256": "3f6ac4659c9526a7aaff91a7961308ebd4bfb62d48759b8a52c44146cebb48ce"
+    },
+    {
+      "original_path": "/workspace/scratch/4d9e36f4eb71/independent-repair-verifier/test_capture_independent.py",
+      "path": "docs/reviews/pr95_capture_20261104/independent/test_capture_independent.py",
+      "sha256": "81a5943fc689944e1db820227e461e37d26b8e5120f515f8c988af083ee6fe7d"
+    },
+    {
+      "original_path": "/workspace/scratch/4d9e36f4eb71/independent-repair-verifier/pr95-independent.xml",
+      "path": "docs/reviews/pr95_capture_20261104/independent/pr95-independent.xml",
+      "sha256": "1675f5584378767d1f73977c839e192d223f006828b98774698c597c78b86760"
+    }
+  ],
+  "independent_validation": {
+    "predecessor_report_sha256": "00667f836e1ea01ea4586455a4cc796612f5ee128a51b2e9bdc2bc65c627cfad",
+    "report_basename": "pr95-independent-report-v2.json",
+    "report_sha256": "3e84fbe1432c5a51d54d4c7eeb0c4308f78eb16bff77ed20d3d17561aaf39405",
+    "result": "25 capture/preservation tests plus 4 workflow tests passed; all 125 shell outcome combinations checked; 1624 protected original blobs and journal prefix unchanged",
+    "scope": "Independent route/date inventory oracle, mutually rehashed omissions and identity conflicts, malformed CSV, cross-capture/date/clock violations, byte tamper and workflow gate probes.",
+    "workflow_binding": "PASS: refreshed report binds the current workflow hash, narrow PR trigger, read-only permissions, isolated concurrency and mandatory upload gate."
+  },
+  "local_environment_limitation": "Local NumPy 2.3.5 differs from repository pin 2.4.6. This is not hosted pinned-environment verification.",
+  "minimal_reproduction": {
+    "after": {
+      "command": "python scripts/validate_operational_capture.py --root \"$RUNNER_TEMP/sports-inputs\" --expected-date 2026-11-04",
+      "expected": "Nonzero exit, ok=false; empty report/events/manifest and fabricated/missing bytes are rejected.",
+      "test_references": [
+        "test_empty_objects_are_rejected",
+        "test_actual_bytes_are_required",
+        "test_mutually_rehashed_bad_receipts_fail",
+        "test_complete_zero_event_schedules_are_valid_capture_evidence"
+      ]
+    },
+    "before": {
+      "fixture": {
+        "events.json": {},
+        "manifest.json": {},
+        "report.json": {}
+      },
+      "impact": "An empty source capture could pass; declared CAPTURED receipts with nonexistent raw bytes could also pass because the old block did not read or hash them.",
+      "observed": {
+        "date": null,
+        "exit_code": 0,
+        "ok": true
+      },
+      "steps": [
+        "Place the three JSON objects in RUNNER_TEMP/sports-inputs.",
+        "Execute the inline capture-validation Python block from daily-operations-preflight.yml at the affected commit."
+      ]
+    }
+  },
+  "pending": [
+    "Actual hosted preflight execution and its retained downloadable artifacts have not been produced or verified by this local repair.",
+    "Existing repository health failures remain independent blockers; this patch does not resolve them.",
+    "Merge readiness requires current hosted evidence and review; no forecast qualification or predictive promotion is implied."
+  ],
+  "pr": "https://github.com/georgemunoz1-ui/sports-model/pull/95",
+  "protected_boundaries": "No model/default, original forecast/source, grade, settlement, journal-prefix or wagering changes.",
+  "remote_actions_performed": [],
+  "repair_commit": "e255ecb4e84d3d828ae2596faae93eab146e1740",
+  "required_check_configuration": "UNVERIFIED_HTTP_403",
+  "schema": "sports.pr_repair_local_closure.v1",
+  "status": "LOCAL_SOFTWARE_VERIFIED_HOSTED_PREFLIGHT_PENDING"
+}

@@ -5021,3 +5021,7 @@ PR38 closed as already incorporated via82. PR45 strict health/evidence blockers
 remain separate and unwaived. Hosted integration CI and artifact readback are
 required before merge. All predictive limitations remain; authority OFF.
 See docs/REMAINING_PR_REPAIR_20261024.md and current execution receipts.
+
+### 2026-11-03 Pacific | Men's college basketball coverage
+
+Added a separate men's Division I schedule, research forecast, market attachment and grading path. The November 3 card omitted CBB. The source audit found 29 games involving a Division I team; 19 Division I pairings had FanMatch benchmarks, and none had an original in-house forecast. The first in-house pre-tip integration run covered November 4, with ten paired score distributions and sixteen cross-division exclusions. The chronological held-out check used 5,747 games from the season ending 2026 and a no-team-rating benchmark. Research only. See `docs/CBB_DAILY_CARD.md` and `docs/CBB_MENS_SHADOW.md`.

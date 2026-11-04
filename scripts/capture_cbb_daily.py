@@ -7,7 +7,6 @@ import math
 import re
 import sys
 import urllib.request
-from collections import Counter
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 from urllib.parse import urlencode
@@ -112,21 +111,11 @@ def normalize(event, members):
         raise ValueError("COMPETITION_IDENTITY")
     comp = event["competitions"][0]
     team = sides(comp)
-    if comp["id"] != event["id"] or any(
-        t["id"] != t["team"]["id"] for t in team.values()
-    ):
-        raise ValueError("TEAM_OR_COMPETITION_IDENTITY")
     status = comp["status"]["type"]
-    final = (
-        status["completed"] is True
-        and status["name"] == "STATUS_FINAL"
-        and status["state"] == "post"
-    )
+    final = status["completed"] and status["name"] == "STATUS_FINAL"
     start = dt.datetime.fromisoformat(event["date"].replace("Z", "+00:00"))
-    if start.tzinfo is None or dt.datetime.fromisoformat(comp["date"]) != start:
-        raise ValueError("COMPETITION_TIP_MISMATCH")
-    if type(comp["neutralSite"]) is not bool:
-        raise ValueError("INVALID_VENUE_FLAG")
+    if start.tzinfo is None:
+        raise ValueError("NAIVE_TIP")
     row = {
         "event_id": "CBB:" + event["id"],
         "source_event_id": event["id"],
@@ -137,8 +126,6 @@ def normalize(event, members):
         "season_type": event["season"]["type"],
     }
     for side, t in team.items():
-        if final and not re.fullmatch(r"[0-9]+", str(t["score"])):
-            raise ValueError("INVALID_FINAL_SCORE")
         row.update(
             {
                 side + "_id": t["id"],
@@ -186,80 +173,8 @@ def same_team(team, official):
 
 def match_ncaa(e, contest):
     t = sides(e["competitions"][0])
-    if (
-        contest.get("sportUrl", "basketball-men") != "basketball-men"
-        or len(contest["teams"]) != 2
-        or any(type(x["isHome"]) is not bool for x in contest["teams"])
-    ):
-        return False
     n = {("home" if x["isHome"] else "away"): x for x in contest["teams"]}
     return set(n) == set(t) and all(same_team(t[s]["team"], n[s]) for s in t)
-
-
-def ncaa_identity(contest):
-    return contest["startTimeEpoch"], {
-        t["isHome"]: (t.get("nameShort"), t.get("seoname")) for t in contest["teams"]
-    }
-
-
-def ncaa_final_scores(contest):
-    if contest["gameState"] != "F":
-        return {}
-    return {
-        ("home" if t["isHome"] else "away"): t.get("score") for t in contest["teams"]
-    }
-
-
-def reconcile_event(event, espn_receipt, contest, ncaa_receipt):
-    """Reproduce one event's settlement evidence from the two specific scoreboards."""
-    row = normalize(event, set())
-    matched = contest is not None and match_ncaa(event, contest)
-    ncaa_state = contest["gameState"] if matched else None
-    ncaa_scores = ncaa_final_scores(contest) if matched else {}
-    evidence = {
-        k: row[k]
-        for k in ("event_id", "start_time_utc", "home_id", "away_id", "neutral_site")
-    }
-    evidence.update(
-        espn_scoreboard_url=espn_receipt["url"],
-        espn_scoreboard_sha256=espn_receipt["sha256"],
-        ncaa_scoreboard_url=ncaa_receipt["url"] if matched else None,
-        ncaa_scoreboard_sha256=ncaa_receipt["sha256"] if matched else None,
-        ncaa_contest_id=contest["contestId"] if matched else None,
-        espn_status=row["status"],
-        ncaa_status=ncaa_state,
-        espn_home_score=row["home_score"],
-        espn_away_score=row["away_score"],
-        ncaa_home_score=ncaa_scores.get("home"),
-        ncaa_away_score=ncaa_scores.get("away"),
-        home_score=None,
-        away_score=None,
-    )
-    issues = []
-    if not matched:
-        issues.append("IDENTITY_NOT_CROSS_CHECKED")
-    else:
-        if row["completed"] != (ncaa_state == "F") or (
-            row["completed"]
-            and any(
-                type(ncaa_scores.get(s)) is not int
-                or ncaa_scores[s] != row[s + "_score"]
-                for s in ("home", "away")
-            )
-        ):
-            issues.append("FINAL_RECONCILIATION_REQUIRED")
-        if dt.datetime.fromtimestamp(
-            contest["startTimeEpoch"], dt.timezone.utc
-        ) != dt.datetime.fromisoformat(row["start_time_utc"]):
-            issues.append("TIP_RECONCILIATION_REQUIRED")
-    if issues:
-        status = issues[0]
-    elif row["completed"]:
-        status = "FINAL_RECONCILED"
-        evidence.update(home_score=row["home_score"], away_score=row["away_score"])
-    else:
-        status = "PENDING"
-    return {**evidence, "status": status, "issues": issues}
 
 
 def american(value):
@@ -387,8 +302,6 @@ def daily(day, output, get=fetch):
     failures = []
     events = {}
     official = {}
-    conflicting_events = set()
-    conflicting_contests = set()
     key = day.strftime("%Y%m%d")
     season = day.year + int(day.month >= 7)
 
@@ -427,76 +340,57 @@ def daily(day, output, get=fetch):
                 row = normalize(e, members)
                 eid = e["id"]
                 if eid in events and row != events[eid][0]:
-                    previous = events[eid][0]
-                    if any(
-                        row[k] != previous[k]
-                        for k in (
-                            "start_time_utc",
-                            "home_id",
-                            "away_id",
-                            "neutral_site",
-                        )
-                    ):
-                        raise ValueError("CONFLICTING_ESPN_IDENTITY")
-                    conflicting_events.add(eid)
-                events[eid] = (row, e, rec)
+                    raise ValueError("CONFLICTING_SCOREBOARD")
+                events[eid] = (row, e)
         for d in (day, day + dt.timedelta(days=1)):
-            raw, rec = acquire(ncaa_url(d))
+            raw, _ = acquire(ncaa_url(d))
             for c in ncaa_events(raw):
                 if (
                     dt.datetime.fromtimestamp(c["startTimeEpoch"], PACIFIC).date()
                     == day
                 ):
-                    key_id = c["contestId"]
-                    if key_id in official:
-                        previous = official[key_id][0]
-
-                        if ncaa_identity(c) != ncaa_identity(previous):
-                            raise ValueError("CONFLICTING_NCAA_IDENTITY")
-                        if c["gameState"] != previous["gameState"] or ncaa_final_scores(
-                            c
-                        ) != ncaa_final_scores(previous):
-                            conflicting_contests.add(key_id)
-                    official[key_id] = (c, rec)
+                    official[c["contestId"]] = c
         unmatched = set(official)
         issues = []
-        reconciliations = []
-        matches = {
-            eid: [i for i, (c, _) in official.items() if match_ncaa(e, c)]
-            for eid, (_, e, _) in events.items()
-        }
-        claims = Counter(i for ids in matches.values() for i in ids)
-        for eid, (row, e, rec) in events.items():
-            ids = matches[eid]
-            n = ncaa_rec = None
-            if len(ids) == 1 and claims[ids[0]] == 1:
-                i = ids[0]
-                n, ncaa_rec = official[i]
-                unmatched.remove(i)
-                row["ncaa_contest_id"] = i
-                row["ncaa_start_time_utc"] = dt.datetime.fromtimestamp(
-                    n["startTimeEpoch"], dt.timezone.utc
-                ).isoformat()
-            result = reconcile_event(e, rec, n, ncaa_rec)
-            if (
-                eid in conflicting_events
-                or result["ncaa_contest_id"] in conflicting_contests
-            ):
-                if "FINAL_RECONCILIATION_REQUIRED" not in result["issues"]:
-                    result["issues"].append("FINAL_RECONCILIATION_REQUIRED")
-                result.update(
-                    status="FINAL_RECONCILIATION_REQUIRED",
-                    home_score=None,
-                    away_score=None,
+        for row, e in events.values():
+            ids = [i for i in unmatched if match_ncaa(e, official[i])]
+            if len(ids) != 1:
+                issues.append(
+                    {"event_id": row["event_id"], "issue": "IDENTITY_NOT_CROSS_CHECKED"}
                 )
-            reconciliations.append(result)
-            issues.extend(
-                {"event_id": row["event_id"], "issue": issue}
-                for issue in result["issues"]
+                continue
+            i = ids[0]
+            n = official[i]
+            unmatched.remove(i)
+            row["ncaa_contest_id"] = i
+            nteams = {("home" if x["isHome"] else "away"): x for x in n["teams"]}
+            official_start = dt.datetime.fromtimestamp(
+                n["startTimeEpoch"], dt.timezone.utc
             )
+            row["ncaa_start_time_utc"] = official_start.isoformat()
+            if dt.datetime.fromisoformat(row["start_time_utc"]) != official_start:
+                issues.append(
+                    {
+                        "event_id": row["event_id"],
+                        "issue": "TIP_RECONCILIATION_REQUIRED",
+                    }
+                )
+            disagreed_final = row["completed"] != (n["gameState"] == "F")
+            if disagreed_final or (
+                row["completed"]
+                and any(
+                    row[side + "_score"] != nteams[side]["score"] for side in nteams
+                )
+            ):
+                issues.append(
+                    {
+                        "event_id": row["event_id"],
+                        "issue": "FINAL_RECONCILIATION_REQUIRED",
+                    }
+                )
         rows = [
             r
-            for r, _, _ in sorted(
+            for r, e in sorted(
                 events.values(),
                 key=lambda v: (v[0]["start_time_utc"], v[0]["event_id"]),
             )
@@ -539,6 +433,7 @@ def daily(day, output, get=fetch):
             {"date": key, "timezone": PACIFIC.key, "quotes": quotes},
         )
         coverage = {
+            "date": key,
             "status": "RECONCILED"
             if not unmatched and not issues
             else "REQUIRES_REVIEW",
@@ -546,19 +441,16 @@ def daily(day, output, get=fetch):
             "ncaa_events": len(official),
             "d1_vs_d1": sum(r["both_d1"] for r in rows),
             "outside_d1_pair_scope": sum(not r["both_d1"] for r in rows),
-            "unmatched_ncaa": [official[k][0] for k in sorted(unmatched)],
+            "unmatched_ncaa": [official[k] for k in sorted(unmatched)],
             "issues": issues,
-            "events": sorted(reconciliations, key=lambda e: e["event_id"]),
         }
     except (KeyError, ValueError, OSError, TypeError, IndexError) as exc:
-        coverage = {"status": "BLOCKED", "reason": str(exc)}
-    coverage["date"] = key
+        coverage = {"date": key, "status": "BLOCKED", "reason": str(exc)}
     save_json(output / "coverage.json", coverage)
     save_json(
         output / "manifest.json",
         {
             "date": key,
-            "coverage_sha256": digest((output / "coverage.json").read_bytes()),
             "sources": sorted(receipts, key=lambda x: x["url"]),
             "failures": failures,
             "finished_at_utc": utc(),

@@ -1,18 +1,24 @@
 # Men's college basketball card and postgame workflow
 
-Only full Division I vs Division I games with verified identity from two sources. Pacific slate date governs the board. A pregame card is immutable once generated; diagnostics attach by hash and never change the card bytes. These are diagnostic shadows only: no market input, no action authority.
+CBB is a distinct diagnostic population. Show every scheduled game involving a men's Division I team on its America/Los_Angeles slate date. Independently reconcile the full Division I schedule, including games against non-Division I opponents. The internal model currently supports Division I vs. Division I only. Keep explicit uncovered rows and source failures. A zero count requires a verified empty schedule. A date mismatch or unverified division must be reported.
 
 ## Pregame
 
+Use a new directory for each command and write the raw parent hash to a separate receipt before attaching prices. For example, set DAY to the Pacific slate date, RUN to an unused directory, and run from the repository root:
+
 ```bash
-python scripts/capture_cbb_daily.py --date "$DAY" --output "$RUN/pregame-sources"
-python scripts/cbb_shadow_card.py --date "$DAY" --inputs "$RUN/pregame-sources" --output "$RUN/parent/card.json"
+set -e
+mkdir -p "$RUN"
+python scripts/capture_cbb_daily.py --date "$DAY" --output "$RUN/market-sources"
+python scripts/cbb_shadow.py capture --date "$DAY" --inputs "$RUN/model-inputs"
+python scripts/cbb_shadow.py card --date "$DAY" --inputs "$RUN/model-inputs" --output "$RUN/parent"
 sha256sum "$RUN/parent/card.json" > "$RUN/frozen-parent.sha256"
-python scripts/cbb_market_and_grades.py attach --card "$RUN/parent/card.json" --card-sha "$PARENT_SHA" --inputs "$RUN/pregame-sources" --output "$RUN/market.json"
+PARENT_SHA=$(cut -d' ' -f1 "$RUN/frozen-parent.sha256")
+python scripts/cbb_market_and_grades.py attach --card "$RUN/parent/card.json" --card-sha "$PARENT_SHA" --inputs "$RUN/market-sources" --output "$RUN/market.json"
 sha256sum "$RUN/market.json" > "$RUN/frozen-market.sha256"
 ```
 
-The card records `as_of_utc`, `generated_at_utc`, per-event start, original margin/total projections, home win probability, and the full support/mass distributions used. Quotes require DraftKings paired prices with matching handicaps, captured strictly before tip. Moneyline "OFF" entries are not prices.
+Before publishing a research supplement, compare the complete schedule event-ID set, starts, teams and eligible statuses with the parent card. Surface scope discrepancies. Preserve coverage for ineligible and unavailable games, and continue independently verified rows and other sports when a source is missing. The price capture is separate from inference. ESPN's `side.close` field in a pre-tip capture is the quote actually displayed at retrieval, rather than a final close. The diagnostic attachment checks parent hash, pre-tip capture and attachment times, exact event/side/line/settlement, raw source bytes and retrieval receipt. The current source has no independent provider-observed tick. Official recommendations, staking and EV-based promotion are disabled.
 
 ## Postgame
 

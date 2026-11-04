@@ -1,20 +1,5 @@
-import hashlib
-import json
-import subprocess
-import sys
-from datetime import date, datetime
-from pathlib import Path
-
+from scripts.cbb_market_and_grades import market_rows, probability, parse_price
 import pytest
-
-from scripts.capture_cbb_daily import ESPN, STANDINGS, daily, ncaa_url
-from scripts.cbb_market_and_grades import (
-    digest,
-    grade,
-    market_rows,
-    parse_price,
-    probability,
-)
 
 
 def test_handicaps_are_in_selected_side_orientation():
@@ -49,336 +34,206 @@ def test_quote_types_and_two_sided_price_requirement():
     ]
 
 
-PARENT_PIN = "d" * 64
-MARKET_PIN = "e" * 64
-DAY = date(2020, 1, 1)
-START = "2020-01-02T00:00Z"
+def grade_fixture(tmp_path, coverage):
+    import hashlib
+    import json
 
-
-def setup_assessment(
-    path,
-    *,
-    ncaa_score=80,
-    espn_final=True,
-    ncaa_final=True,
-    summary_score=80,
-    summary_final=True,
-    ncaa_sides_swapped=False,
-):
-    # Two events on the same provider pages. Only the first is varied.
-    pairs = [("1", "2"), ("3", "4")]
-
-    def event(i, score=80, final=True):
-        home, away = pairs[i]
-        eid = str(7 + i)
-        teams = [
-            {
-                "homeAway": side,
-                "id": tid,
-                "team": {"id": tid, "displayName": "Team " + tid},
-                "score": str(val),
-            }
-            for side, tid, val in [("home", home, score), ("away", away, 76)]
-        ]
-        st = (
-            {"completed": True, "state": "post", "name": "STATUS_FINAL"}
-            if final
-            else {"completed": False, "state": "in", "name": "STATUS_IN_PROGRESS"}
-        )
-        return {
-            "id": eid,
-            "date": START,
-            "season": {"type": 2},
-            "competitions": [
-                {
-                    "id": eid,
-                    "date": START,
-                    "neutralSite": False,
-                    "competitors": teams,
-                    "status": {"type": st},
-                }
-            ],
-        }
-
-    def contest(i):
-        home, away = pairs[i]
-        return {
-            "contestId": 17 + i,
-            "startTimeEpoch": int(datetime.fromisoformat(START).timestamp()),
-            "gameState": "F" if i or ncaa_final else "L",
-            "teams": [
-                {
-                    "isHome": bool(i or not ncaa_sides_swapped),
-                    "nameShort": "Team " + home,
-                    "score": 80 if i else ncaa_score,
-                },
-                {
-                    "isHome": not (i or not ncaa_sides_swapped),
-                    "nameShort": "Team " + away,
-                    "score": 76,
-                },
-            ],
-        }
-
-    def get(out, url):
-        if url.startswith(STANDINGS):
-            obj = {
-                "season": {"year": 2020},
-                "children": [
-                    {
-                        "standings": {
-                            "entries": [{"team": {"id": str(i)}} for i in range(301)]
-                        }
-                    }
-                ],
-            }
-        elif url.startswith(ESPN + "scoreboard"):
-            obj = {
-                "events": [event(0, final=espn_final), event(1)]
-                if "dates=20200101" in url
-                else []
-            }
-        elif url.startswith(ESPN + "summary"):
-            obj = {
-                "header": event(0, summary_score, summary_final)
-                if url.endswith("=7")
-                else event(1)
-            }
-        else:
-            obj = {
-                "data": {
-                    "contests": [contest(0), contest(1)] if url == ncaa_url(DAY) else []
-                }
-            }
-        body = json.dumps(obj).encode()
-        sha = hashlib.sha256(body).hexdigest()
-        dest = out / "raw" / (sha + ".json")
-        dest.parent.mkdir(exist_ok=True)
-        dest.write_bytes(body)
-        return body, {
-            "url": url,
-            "file": str(dest.relative_to(out)),
-            "sha256": sha,
-            "retrieved_at_utc": "2020-01-02T03:00Z",
-        }
-
-    daily(DAY, path, get)
-    predictions = [
-        {
-            "event_id": "CBB:" + str(7 + i),
-            "forecast_status": "FORECAST_GENERATED",
-            "start_time_utc": START,
-            "home_margin": 6,
-            "total": 140,
-            "p_home_win": 0.7,
-            "model_input_snapshot": {"h": h, "a": a, "neutral": False},
-        }
-        for i, (h, a) in enumerate(pairs)
-    ]
-    card = {
-        "schema": "sports.cbb.shadow_card.v1",
-        "league": "CBB",
-        "market_input": False,
-        "action_authority": False,
-        "scheduled": 2,
-        "date": DAY.isoformat(),
-        "forecasts": predictions,
-        "forecast_count": 2,
+    stem = "https://site.api.espn.com/apis/site/v2/sports/basketball/mens-college-basketball/summary?event=7"
+    row = {
+        "event_id": "CBB:7",
+        "forecast_status": "FORECAST_GENERATED",
+        "start_time_utc": "2020-01-02T00:00Z",
+        "home_margin": 6.0,
+        "total": 140.0,
+        "p_home_win": 0.7,
+        "model_input_snapshot": {"h": "1", "a": "2"},
+    }
+    parent = {
+        "date": "2020-01-01",
         "as_of_utc": "2020-01-01T18:00Z",
         "generated_at_utc": "2020-01-01T18:01Z",
+        "forecasts": [row],
+        "forecast_count": 1,
     }
     market = {
         "schema": "sports.cbb.market.shadow.v1",
-        "date": card["date"],
-        "frozen_parent_sha256": PARENT_PIN,
+        "date": parent["date"],
+        "frozen_parent_sha256": "pin",
         "action_authority": False,
         "created_at_utc": "2020-01-01T18:02Z",
         "rows": [
             {
-                "event_id": r["event_id"],
+                "event_id": "CBB:7",
                 "quote_retrieved_at_utc": "2020-01-01T17:59Z",
                 "contracts": [
                     {
                         "product": "margin",
                         "side": "away",
-                        "line": 4,
+                        "line": 4.0,
                         "win": 0.60,
                         "push": 0.02,
                     },
                     {
                         "product": "margin",
                         "side": "home",
-                        "line": -4,
+                        "line": -4.0,
                         "win": 0.38,
                         "push": 0.02,
                     },
                 ],
             }
-            for r in predictions
         ],
     }
-    return card, market
+    final = {
+        "header": {
+            "id": "7",
+            "competitions": [
+                {
+                    "id": "7",
+                    "date": row["start_time_utc"],
+                    "status": {"type": {"completed": True, "name": "STATUS_FINAL"}},
+                    "competitors": [
+                        {"homeAway": "home", "id": "1", "score": "80"},
+                        {"homeAway": "away", "id": "2", "score": "76"},
+                    ],
+                }
+            ],
+        }
+    }
+    raw = json.dumps(final).encode()
+    (tmp_path / "raw").mkdir()
+    (tmp_path / "raw/7.json").write_bytes(raw)
+    (tmp_path / "manifest.json").write_text(
+        json.dumps(
+            {
+                "sources": [
+                    {
+                        "url": stem,
+                        "sha256": hashlib.sha256(raw).hexdigest(),
+                        "file": "raw/7.json",
+                        "retrieved_at_utc": "2020-01-02T03:00Z",
+                    }
+                ]
+            }
+        )
+    )
+    coverage_bytes = None
+    if coverage is not None:
+        coverage_bytes = json.dumps(coverage).encode()
+        (tmp_path / "coverage.json").write_bytes(coverage_bytes)
+    return parent, market, coverage_bytes
 
 
-def run(path, card, market):
-    return grade(
-        card,
-        market,
-        path,
-        PARENT_PIN,
-        digest(path / "manifest.json"),
-        market_sha=MARKET_PIN,
+CLEAN_COVERAGE = {"date": "20200101", "status": "RECONCILED", "issues": []}
+
+
+def test_grade_uses_original_side_and_keeps_pushes(tmp_path):
+    import hashlib
+    from scripts.cbb_market_and_grades import grade
+
+    parent, market, coverage_bytes = grade_fixture(tmp_path, dict(CLEAN_COVERAGE))
+    r = grade(parent, market, tmp_path, "pin")
+    assert (
+        r["complete"]
+        and r["graded_margin_mae"] == 2
+        and r["rows"][0]["products"][0]["result"] == "push"
+    )
+    assert r["rows"][0]["products"][0]["conditional_brier"] is None
+    assert r["reconciliation"]["sha256"] == hashlib.sha256(coverage_bytes).hexdigest()
+    assert r["reconciliation"]["status"] == "RECONCILED"
+    parent["forecasts"][0]["model_input_snapshot"]["h"] = "3"
+    assert grade(parent, market, tmp_path, "pin")["finals"] == 0
+
+
+def test_grade_blocks_conflicting_final_scores(tmp_path):
+    from scripts.cbb_market_and_grades import grade
+
+    parent, market, _ = grade_fixture(
+        tmp_path,
+        {
+            "date": "20200101",
+            "status": "REQUIRES_REVIEW",
+            "issues": [{"event_id": "CBB:7", "issue": "FINAL_RECONCILIATION_REQUIRED"}],
+        },
+    )
+    r = grade(parent, market, tmp_path, "pin")
+    assert r["rows"][0]["status"] == "RECONCILIATION_REQUIRED"
+    assert r["rows"][0]["reason"] == "FINAL_RECONCILIATION_REQUIRED"
+    assert r["finals"] == 0 and not r["complete"]
+    assert (
+        r["graded_margin_mae"] is None
+        and r["graded_total_mae"] is None
+        and r["graded_winner_brier"] is None
     )
 
 
 @pytest.mark.parametrize(
-    "options",
-    [
-        {"ncaa_score": 81},
-        {"espn_final": False},
-        {"ncaa_final": False},
-        {"ncaa_sides_swapped": True},
-        {"summary_score": 81},
-        {"summary_final": False},
-        {"ncaa_final": False, "espn_final": False},
-    ],
+    "issue", ["TIP_RECONCILIATION_REQUIRED", "IDENTITY_NOT_CROSS_CHECKED"]
 )
-def test_disputed_event_excluded_without_suppressing_clean_event(tmp_path, options):
-    path = tmp_path / "capture"
-    card, market = setup_assessment(path, **options)
-    result = run(path, card, market)
-    disputed, clean = result["rows"]
-    assert result["finals"] == 1 and not result["complete"]
-    assert (
-        disputed["status"] == "FINAL_RECONCILIATION_REQUIRED"
-        and disputed["products"] == []
+def test_grade_blocks_tip_and_identity_disagreement(tmp_path, issue):
+    from scripts.cbb_market_and_grades import grade
+
+    parent, market, _ = grade_fixture(
+        tmp_path,
+        {
+            "date": "20200101",
+            "status": "REQUIRES_REVIEW",
+            "issues": [{"event_id": "CBB:7", "issue": issue}],
+        },
     )
-    assert not set(disputed) & {
-        "margin_error",
-        "total_error",
-        "home_win_brier",
-        "home_score",
-        "away_score",
-    }
-    assert clean["status"] == "FINAL" and clean["products"][0]["result"] == "push"
-    assert clean["products"][0]["conditional_brier"] is None
-    assert result["graded_margin_mae"] == 2 and result["graded_total_mae"] == 16
-    assert result["graded_winner_brier"] == pytest.approx(0.09)
-    assert (
-        result["coverage_sha256"] == digest(path / "coverage.json")
-        and result["frozen_market_sha256"] == MARKET_PIN
+    r = grade(parent, market, tmp_path, "pin")
+    assert r["rows"][0]["status"] == "RECONCILIATION_REQUIRED"
+    assert r["rows"][0]["reason"] == issue
+    assert r["finals"] == 0 and not r["complete"]
+
+
+def test_grade_blocked_coverage_blocks_all(tmp_path):
+    from scripts.cbb_market_and_grades import grade
+
+    parent, market, _ = grade_fixture(
+        tmp_path,
+        {"date": "20200101", "status": "BLOCKED", "reason": "source unavailable"},
     )
-    assert clean["reconciliation"]["ncaa_contest_id"] == 18
+    r = grade(parent, market, tmp_path, "pin")
+    assert r["rows"][0]["status"] == "RECONCILIATION_REQUIRED"
+    assert r["rows"][0]["reason"] == "COVERAGE_BLOCKED:source unavailable"
+    assert r["finals"] == 0 and not r["complete"]
 
 
-def test_matching_pending_sources_are_ungraded(tmp_path):
-    path = tmp_path / "capture"
-    card, market = setup_assessment(
-        path, espn_final=False, ncaa_final=False, summary_final=False
+def test_grade_coverage_date_mismatch_blocks_all(tmp_path):
+    from scripts.cbb_market_and_grades import grade
+
+    parent, market, _ = grade_fixture(
+        tmp_path, {"date": "20200102", "status": "RECONCILED", "issues": []}
     )
-    assert run(path, card, market)["rows"][0]["status"] == "PENDING"
+    r = grade(parent, market, tmp_path, "pin")
+    assert r["rows"][0]["status"] == "RECONCILIATION_REQUIRED"
+    assert r["rows"][0]["reason"] == "COVERAGE_DATE_MISMATCH"
+    assert r["finals"] == 0 and not r["complete"]
 
 
-def test_coverage_and_source_tampering(tmp_path):
-    path = tmp_path / "capture"
-    card, market = setup_assessment(path)
-    assert run(path, card, market)["complete"]
-    manpath = path / "manifest.json"
-    covpath = path / "coverage.json"
-    manifest = json.loads(manpath.read_bytes())
-    coverage = json.loads(covpath.read_bytes())
-    with pytest.raises(ValueError, match="SHA-256"):
-        grade(card, market, path, PARENT_PIN, "0" * 64, market_sha=MARKET_PIN)
-    coverage["events"][0]["home_score"] = 81
-    covpath.write_text(json.dumps(coverage))
-    with pytest.raises(ValueError, match="SHA-256"):
-        run(path, card, market)
-    # A rehashed summary assertion still must replay from its named scoreboards.
-    manifest["coverage_sha256"] = digest(covpath)
-    manpath.write_text(json.dumps(manifest))
-    assert run(path, card, market)["finals"] == 1
-    manifest.pop("coverage_sha256")
-    manpath.write_text(json.dumps(manifest))
-    with pytest.raises(ValueError, match="SHA-256"):
-        run(path, card, market)
+def test_grade_missing_coverage_blocks_all(tmp_path):
+    from scripts.cbb_market_and_grades import grade
+
+    parent, market, _ = grade_fixture(tmp_path, None)
+    r = grade(parent, market, tmp_path, "pin")
+    assert r["rows"][0]["status"] == "RECONCILIATION_REQUIRED"
+    assert r["rows"][0]["reason"] == "COVERAGE_MISSING"
+    assert r["reconciliation"]["sha256"] is None
+    assert r["finals"] == 0 and not r["complete"]
 
 
-def test_bound_source_and_forecast_identity(tmp_path):
-    path = tmp_path / "capture"
-    card, market = setup_assessment(path)
-    card["forecasts"][0]["model_input_snapshot"]["neutral"] = True
-    assert run(path, card, market)["finals"] == 1
-    card["forecast_count"] = 1
-    with pytest.raises(ValueError, match="forecast count"):
-        run(path, card, market)
-    card["forecast_count"] = 2
-    official = next(
-        r
-        for r in json.loads((path / "manifest.json").read_bytes())["sources"]
-        if r["url"] == ncaa_url(DAY)
+def test_grade_nonblocking_issue_still_final(tmp_path):
+    from scripts.cbb_market_and_grades import grade
+
+    parent, market, _ = grade_fixture(
+        tmp_path,
+        {
+            "date": "20200101",
+            "status": "REQUIRES_REVIEW",
+            "issues": [{"event_id": "CBB:7", "issue": "QUOTE_SOURCE_UNAVAILABLE"}],
+        },
     )
-    (path / official["file"]).write_text("{}")
-    assert run(path, card, market)["finals"] == 0
-
-
-def test_correction_appends_and_links_frozen_inputs(tmp_path):
-    first = tmp_path / "first"
-    later = tmp_path / "later"
-    card, market = setup_assessment(first, ncaa_score=81)
-    setup_assessment(later)
-    parent_path = tmp_path / "parent.json"
-    market_path = tmp_path / "market.json"
-    parent_path.write_text(json.dumps(card))
-    market["frozen_parent_sha256"] = digest(parent_path)
-    market_path.write_text(json.dumps(market))
-    cmd = [
-        sys.executable,
-        str(Path(__file__).resolve().parents[1] / "scripts/cbb_market_and_grades.py"),
-        "grade",
-        "--card",
-        str(parent_path),
-        "--card-sha",
-        digest(parent_path),
-        "--market",
-        str(market_path),
-        "--market-sha",
-        digest(market_path),
-    ]
-
-    def issue(capture, output, *args):
-        return subprocess.run(
-            cmd
-            + [
-                "--inputs",
-                str(capture),
-                "--manifest-sha",
-                digest(capture / "manifest.json"),
-                "--output",
-                str(output),
-                *args,
-            ],
-            check=False,
-            capture_output=True,
-            text=True,
-        )
-
-    orig = tmp_path / "grade-01.json"
-    fixed = tmp_path / "grade-02.json"
-    assert issue(first, orig).returncode == 2
-    orig_sha = digest(orig)
-    prev = ["--previous-grade", str(orig), "--previous-grade-sha", orig_sha]
-    assert issue(later, orig, *prev).returncode != 0
-    assert issue(later, fixed, *prev).returncode == 0
-    rec = json.loads(fixed.read_bytes())
-    assert rec["previous_grade_sha256"] == orig_sha == digest(orig)
-    assert rec["previous_market_binding"] == "VERIFIED"
-    assert (
-        rec["complete"]
-        and rec["finals"] == 2
-        and rec["frozen_market_sha256"] == digest(market_path)
-    )
-    assert (
-        issue(later, tmp_path / "should-not-exist", *prev[:-1], "0" * 64).returncode
-        != 0
-    )
-    assert not (tmp_path / "should-not-exist").exists()
+    r = grade(parent, market, tmp_path, "pin")
+    assert r["rows"][0]["status"] == "FINAL"
+    assert r["finals"] == 1 and r["complete"]

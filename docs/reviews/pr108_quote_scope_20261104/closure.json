@@ -1,0 +1,137 @@
+{
+  "finding": "Collector refused duplicate DraftKings offers while standalone attachment selected the first, permitting ambiguous frozen contract selection.",
+  "followup_repair": "Only explicit OFF/null prices mean unavailable. Structured, Boolean, empty, fractional and arbitrary-text prices refuse the entire event before any contracts are returned.",
+  "hosted_verification": {
+    "artifact_download_verified": false,
+    "artifact_id": null,
+    "run_id": null,
+    "status": "PENDING"
+  },
+  "incident_id": "PR108_CBB_QUOTE_AMBIGUITY_20261104",
+  "independent_verification": {
+    "evidence": [
+      {
+        "original_path": "/workspace/scratch/4d9e36f4eb71/independent-repair-verifier/pr108-independent-report.json",
+        "path": "docs/reviews/pr108_quote_scope_20261104/independent/pr108-independent-report.json",
+        "sha256": "c525406754619cbaf49dd0a93991b90572cd41f41300f2c3a82fb09bcc1011ca"
+      },
+      {
+        "original_path": "/workspace/scratch/4d9e36f4eb71/independent-repair-verifier/test_cbb_independent.py",
+        "path": "docs/reviews/pr108_quote_scope_20261104/independent/test_cbb_independent.py",
+        "sha256": "9a93c994cbb441e4d959422936d3c5a033f8ea2722d7de0ba27177481b9cefb9"
+      },
+      {
+        "original_path": "/workspace/scratch/4d9e36f4eb71/independent-repair-verifier/preservation.py",
+        "path": "docs/reviews/pr108_quote_scope_20261104/independent/preservation.py",
+        "sha256": "b51123409c6eee7fbaa06b059d221b86158a7ff5e6ccfa30a6798107f65ee2f7"
+      },
+      {
+        "original_path": "/workspace/scratch/4d9e36f4eb71/independent-repair-verifier/pr108-independent.xml",
+        "path": "docs/reviews/pr108_quote_scope_20261104/independent/pr108-independent.xml",
+        "sha256": "b30ffc645d13dadd7cc086ea866b516cbc22f2c0a5a8028afa864fbf5222d97b"
+      },
+      {
+        "original_path": "/workspace/scratch/4d9e36f4eb71/independent-repair-verifier/pr108-independent.log",
+        "path": "docs/reviews/pr108_quote_scope_20261104/independent/pr108-independent.log",
+        "sha256": "4f06d4d7e91675e254642c370ee29cf296412e006895a908637937b4234ad44c"
+      },
+      {
+        "original_path": "/workspace/scratch/4d9e36f4eb71/independent-repair-verifier/pr108-preservation.json",
+        "path": "docs/reviews/pr108_quote_scope_20261104/independent/pr108-preservation.json",
+        "sha256": "021e0e03fb9913a017e09a7cfec983d1184f93193875c8ff6f0a60707aca4b78"
+      },
+      {
+        "original_path": "/workspace/scratch/4d9e36f4eb71/independent-repair-verifier/pr108-before.xml",
+        "path": "docs/reviews/pr108_quote_scope_20261104/independent/pr108-before.xml",
+        "sha256": "898fc16e5538405bee06652b4ff544aa665541820987b5d0e7d9a54f3943b6b9"
+      }
+    ],
+    "protected_original_files_checked": 1632,
+    "status": "PASS",
+    "tests_passed": 22
+  },
+  "initial_local_verification": {
+    "closure_path": "docs/reviews/pr108_quote_scope_20261104/closure-initial.json",
+    "closure_sha256": "08bc45219cbea7f09e91e74d228d8fd5716777bbdbccf0ed3e5dc1e9c9b5f357",
+    "log_path": "docs/reviews/pr108_quote_scope_20261104/local-tests-initial.txt",
+    "log_sha256": "cad7e5d22e6ce7a8ddfe3949104b3320ada63fc48e5b2522f228ec49cc5d0810",
+    "original_log_location": "docs/reviews/pr108_quote_scope_20261104/local-tests.txt",
+    "scope_note": "Initial 50 passing author tests did not cover malformed-price partial attachment; independent review found seven failing malformed-price cases. The final local suite adds those cases and explicit-null unavailability. Archived initial receipt/log bytes are retained without editing."
+  },
+  "limitations": [
+    "No hosted workflow has executed this locally committed repair.",
+    "Local tests do not establish predictive qualification, production readiness, durable archival or wagering authority.",
+    "Original forecasts, market attachments and grades are not changed; prior historical findings and evidence remain preserved."
+  ],
+  "local_environment_limitation": "Local NumPy2.3.5 differs from repositorypin2.4.6; hosted pinned-environment verification remains required.",
+  "local_validation": {
+    "command": [
+      "/tmp/nhl-shadow-root/venv/bin/python",
+      "-m",
+      "pytest",
+      "tests/test_cbb_daily_capture.py",
+      "tests/test_cbb_market_and_grades.py",
+      "tests/test_cbb_shadow.py",
+      "tests/test_cbb_quote_scope.py",
+      "-q"
+    ],
+    "exit_code": 0,
+    "log": "docs/reviews/pr108_quote_scope_20261104/local-tests.txt",
+    "log_sha256": "44b2a2990833d1f56688ef7deb952a779378ab7f09c805f29a62e25956a850aa",
+    "new_regression_cases": 22,
+    "test_scope": "Synthetic CBB collector, attachment, result reconciliation, append-only corrections and forecast law regression tests; no live source acquisition or original-card execution.",
+    "tests_passed": 58
+  },
+  "model_default_promotion": false,
+  "policy": {
+    "absent_product": "UNQUOTED",
+    "duplicate_book_offers": "REFUSE_ALL_INCLUDING_IDENTICAL",
+    "explicit_unavailable_price": "OFF_OR_JSON_NULL_ONLY_UNQUOTED_PRODUCT",
+    "independent_clean_events": "CONTINUE",
+    "malformed_price": "REFUSE_ENTIRE_EVENT",
+    "missing_offered_paired_scope": "REFUSE_EVENT",
+    "missing_provider_identity": "REFUSE_EVENT"
+  },
+  "pr_number": 108,
+  "predictive_qualification": "NOT_ASSESSED",
+  "protected_tracked_files_changed": [],
+  "protected_tracked_paths_checked": [
+    "state.json",
+    "AUTHORIZATIONS.md",
+    "data",
+    "models",
+    "cards",
+    "evidence",
+    "governance",
+    "grading_requests"
+  ],
+  "recorded_at_utc": "2026-11-04T17:36:02.567192+00:00",
+  "remaining_blockers": [
+    "Owner confirmation before remote publication and hosted exercise",
+    "Exact candidate-head hosted checks and independently retrieved artifact evidence",
+    "Required-check enforcement remains unverifiedHTTP403",
+    "Predictive qualification and durable archival are not granted by this repair"
+  ],
+  "remote_update_performed": false,
+  "repair": "One shared paired-quote parser rejects all duplicate DraftKings offers, including identical entries, and missing offered contract scope; no partial event contracts escape refusal.",
+  "repair_commit": "14a79dde53378368892b055b8d9d170170319d00",
+  "repository": "georgemunoz1-ui/sports-model",
+  "required_check_configuration": "UNVERIFIED_HTTP_403",
+  "retained_original_identities": {
+    "AUTHORIZATIONS.md": "675cf53e582bd22074eef89f941c3d1aead7fc7f3556a544294116ba82a546cb",
+    "data/model_selection/defaults_v1.json": "8bbfb63ee0f8eeb99fc728fb25db3f1d9959c863ccb4f517abde058e3424b3eb",
+    "state.json": "b11eaae146d0ad6f01cbcf8cd2be8b6164074a013e03d1cd5977c664a728cd19"
+  },
+  "reviewed_parent_sha": "655bf57df4f230938374617a5d83161d739c4401",
+  "schema": "sports.local_repair_closure.v1",
+  "status": "LOCAL_VERIFIED_HOSTED_PENDING",
+  "subject_files_sha256": {
+    "scripts/capture_cbb_daily.py": "f9aa620709e3f958e537ff5a3c833b3373252fa19e7f731794476e5aef821901",
+    "scripts/cbb_market_and_grades.py": "03a8de14b2667792a5de557b450a2bfba5314414ffd6c1a3dc805e7e9c11c861",
+    "tests/test_cbb_daily_capture.py": "c4ecb3678fd54848e7c32336e6dd3cd0e1186d6ce6aabfddc06265665aea50b1",
+    "tests/test_cbb_market_and_grades.py": "0f7c4a216eff4b50e4fbb7588a5ebfbfd1f11bbc8147978cc0b7699ccd879c08",
+    "tests/test_cbb_quote_scope.py": "53dee13be912bafa4b96a53b2c5dd0319064a9ea14e642f48ebac540f0596242",
+    "tests/test_cbb_shadow.py": "67da7c6b2b93bd47eb3eb2a3f4f29c98db2ccaafef0126d4d082dcff42f5668c"
+  },
+  "wagering_authority": "OFF"
+}

@@ -1,0 +1,76 @@
+{
+  "finding": "Collector refused duplicate DraftKings offers while standalone attachment selected the first, permitting ambiguous frozen contract selection.",
+  "hosted_verification": {
+    "artifact_download_verified": false,
+    "artifact_id": null,
+    "run_id": null,
+    "status": "PENDING"
+  },
+  "incident_id": "PR108_CBB_QUOTE_AMBIGUITY_20261104",
+  "limitations": [
+    "No hosted workflow has executed this uncommitted repair.",
+    "Local tests do not establish predictive qualification, production readiness, durable archival or wagering authority.",
+    "Original forecasts, market attachments and grades are not changed; prior historical findings and evidence remain preserved."
+  ],
+  "local_validation": {
+    "command": [
+      "/tmp/nhl-shadow-root/venv/bin/python",
+      "-m",
+      "pytest",
+      "tests/test_cbb_daily_capture.py",
+      "tests/test_cbb_market_and_grades.py",
+      "tests/test_cbb_shadow.py",
+      "tests/test_cbb_quote_scope.py",
+      "-q"
+    ],
+    "exit_code": 0,
+    "log": "docs/reviews/pr108_quote_scope_20261104/local-tests.txt",
+    "log_sha256": "cad7e5d22e6ce7a8ddfe3949104b3320ada63fc48e5b2522f228ec49cc5d0810",
+    "new_regression_cases": 14,
+    "test_scope": "Synthetic CBB collector, attachment, result reconciliation, append-only corrections and forecast law regression tests; no live source acquisition or original-card execution.",
+    "tests_passed": 50
+  },
+  "model_default_promotion": false,
+  "policy": {
+    "absent_product": "UNQUOTED",
+    "duplicate_book_offers": "REFUSE_ALL_INCLUDING_IDENTICAL",
+    "explicit_unavailable_price": "UNQUOTED_PRODUCT",
+    "independent_clean_events": "CONTINUE",
+    "missing_offered_paired_scope": "REFUSE_EVENT",
+    "missing_provider_identity": "REFUSE_EVENT"
+  },
+  "pr_number": 108,
+  "predictive_qualification": "NOT_ASSESSED",
+  "protected_tracked_files_changed": [],
+  "protected_tracked_paths_checked": [
+    "state.json",
+    "AUTHORIZATIONS.md",
+    "data",
+    "models",
+    "cards",
+    "evidence",
+    "governance",
+    "grading_requests"
+  ],
+  "recorded_at_utc": "2026-11-04T17:30:15.929933+00:00",
+  "remote_update_performed": false,
+  "repair": "One shared paired-quote parser rejects all duplicate DraftKings offers, including identical entries, and missing offered contract scope; no partial event contracts escape refusal.",
+  "repository": "georgemunoz1-ui/sports-model",
+  "retained_original_identities": {
+    "AUTHORIZATIONS.md": "675cf53e582bd22074eef89f941c3d1aead7fc7f3556a544294116ba82a546cb",
+    "data/model_selection/defaults_v1.json": "8bbfb63ee0f8eeb99fc728fb25db3f1d9959c863ccb4f517abde058e3424b3eb",
+    "state.json": "b11eaae146d0ad6f01cbcf8cd2be8b6164074a013e03d1cd5977c664a728cd19"
+  },
+  "reviewed_parent_sha": "655bf57df4f230938374617a5d83161d739c4401",
+  "schema": "sports.local_repair_closure.v1",
+  "status": "LOCAL_VERIFIED_HOSTED_PENDING",
+  "subject_files_sha256": {
+    "scripts/capture_cbb_daily.py": "e1cab57456c21ea51aec5e993349ea6e43cdef3d34bb12fd7ffbcd708de2d002",
+    "scripts/cbb_market_and_grades.py": "03a8de14b2667792a5de557b450a2bfba5314414ffd6c1a3dc805e7e9c11c861",
+    "tests/test_cbb_daily_capture.py": "c4ecb3678fd54848e7c32336e6dd3cd0e1186d6ce6aabfddc06265665aea50b1",
+    "tests/test_cbb_market_and_grades.py": "0f7c4a216eff4b50e4fbb7588a5ebfbfd1f11bbc8147978cc0b7699ccd879c08",
+    "tests/test_cbb_quote_scope.py": "f4718f1e87bc39f8b2a31c322d127b818643819383615eb2540015c7ec814ca9",
+    "tests/test_cbb_shadow.py": "67da7c6b2b93bd47eb3eb2a3f4f29c98db2ccaafef0126d4d082dcff42f5668c"
+  },
+  "wagering_authority": "OFF"
+}

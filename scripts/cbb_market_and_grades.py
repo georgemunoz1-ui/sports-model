@@ -1,12 +1,27 @@
 """Attach diagnostic quotes to a frozen men's CBB shadow card, or grade that exact card."""
 
 import argparse
-from datetime import datetime, timezone
 import hashlib
 import json
 import math
+import re
+import sys
+from datetime import date, datetime, timedelta, timezone
+from functools import cache, partial
 from pathlib import Path
 from statistics import mean
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+from scripts.capture_cbb_daily import (
+    ESPN,
+    PACIFIC,
+    ncaa_events,
+    ncaa_url,
+    reconcile_event,
+)
+from scripts.capture_cbb_daily import (
+    sides as competition_sides,
+)
 
 
 def digest(path):
@@ -113,10 +128,15 @@ def market_rows(raw, forecast):
     return result
 
 
+def pinned_json(path, expected, decode=json.loads):
+    raw = path.read_bytes()
+    if hashlib.sha256(raw).hexdigest() != expected:
+        raise ValueError(f"SHA-256 mismatch: {path.name}")
+    return decode(raw)
+
+
 def verified_card(path, expected):
-    if digest(path) != expected:
-        raise ValueError("Frozen parent SHA-256 mismatch")
-    d = json.loads(path.read_bytes())
+    d = pinned_json(path, expected)
     if (d["schema"], d["league"], d["market_input"], d["action_authority"]) != (
         "sports.cbb.shadow_card.v1",
         "CBB",
@@ -134,8 +154,10 @@ def verified_card(path, expected):
 
 def identity(raw, fc):
     event_id = fc["event_id"].split(":")[1]
+    if len(raw["header"]["competitions"]) != 1:
+        raise ValueError("Ambiguous ESPN summary competition")
     c = raw["header"]["competitions"][0]
-    teams = {t["homeAway"]: t for t in c["competitors"]}
+    teams = competition_sides(c)
     snapshot = fc["model_input_snapshot"]
     if (
         str(raw["header"]["id"]) != event_id
@@ -148,26 +170,27 @@ def identity(raw, fc):
     return c, teams
 
 
-def capture(inputs, fc):
-    eid = fc["event_id"].split(":")[1]
-    source_url = (
-        "https://site.api.espn.com/apis/site/v2/sports/basketball/mens-college-basketball/summary?event="
-        + eid
-    )
-    manifest = json.loads((inputs / "manifest.json").read_bytes())
+def source_json(inputs, manifest, source_url, decode=json.loads):
     receipts = [item for item in manifest["sources"] if item["url"] == source_url]
     if len(receipts) != 1:
-        raise ValueError("Missing or ambiguous ESPN event receipt")
+        raise ValueError("Missing or ambiguous source receipt")
     receipt = receipts[0]
     path = (inputs / receipt["file"]).resolve()
     if (
         path.parent != (inputs / "raw").resolve()
-        or receipt["sha256"] != digest(path)
         or receipt.get("status", 200) != 200
         or stamp(receipt["retrieved_at_utc"]) > datetime.now(timezone.utc)
     ):
-        raise ValueError("Unverified ESPN event input")
-    raw = json.loads(path.read_bytes())
+        raise ValueError("Unverified capture receipt")
+    return pinned_json(path, receipt["sha256"], decode), receipt
+
+
+def capture(inputs, fc, manifest=None):
+    eid = fc["event_id"].split(":")[1]
+    source_url = ESPN + "summary?event=" + eid
+    if manifest is None:
+        manifest = json.loads((inputs / "manifest.json").read_bytes())
+    raw, receipt = source_json(inputs, manifest, source_url)
     c, teams = identity(raw, fc)
     return raw, c, teams, receipt
 
@@ -221,7 +244,73 @@ def attach(card, inputs, parent_sha):
     }
 
 
-def grade(card, market, inputs, parent_sha):
+def reconciled_result(inputs, fc, manifest, coverage, day, load_board):
+    eid = fc["event_id"]
+    records = [r for r in coverage["events"] if r["event_id"] == eid]
+    if len(records) != 1:
+        raise ValueError("Missing or ambiguous event reconciliation")
+    rec = records[0]
+    issues = [
+        i["issue"]
+        for i in coverage["issues"]
+        if i["event_id"] == eid and i["issue"] != "QUOTE_SOURCE_UNAVAILABLE"
+    ]
+    if issues or rec["status"] not in ("FINAL_RECONCILED", "PENDING"):
+        raise ValueError(", ".join(issues) if issues else rec["status"])
+
+    espn = rec["espn_scoreboard_url"]
+    ncaa = rec["ncaa_scoreboard_url"]
+    if espn not in {
+        f"{ESPN}scoreboard?dates={day + timedelta(days=n):%Y%m%d}&limit=1000&groups=50"
+        for n in (-1, 0, 1)
+    } or ncaa not in {ncaa_url(day), ncaa_url(day + timedelta(days=1))}:
+        raise ValueError("Unexpected scoreboard URL or slate date")
+    board, espn_receipt = load_board(espn)
+    official, ncaa_receipt = load_board(ncaa, ncaa_events)
+    es = [event for event in board["events"] if "CBB:" + event["id"] == eid]
+    ns = [c for c in official if c["contestId"] == rec["ncaa_contest_id"]]
+    if len(es) != 1 or len(ns) != 1:
+        raise ValueError("Event not unique in source scoreboard")
+    if reconcile_event(es[0], espn_receipt, ns[0], ncaa_receipt) != rec:
+        raise ValueError("Reconciliation differs from raw provider evidence")
+    _, comp, teams, receipt = capture(inputs, fc, manifest)
+    start = stamp(fc["start_time_utc"])
+    snap = fc["model_input_snapshot"]
+    if (
+        start.astimezone(PACIFIC).date() != day
+        or stamp(rec["start_time_utc"]) != start
+        or (rec["home_id"], rec["away_id"]) != (snap["h"], snap["a"])
+        or rec["neutral_site"] is not snap["neutral"]
+        or comp["neutralSite"] is not snap["neutral"]
+    ):
+        raise ValueError("Reconciled event identity differs from frozen card")
+    st = comp["status"]["type"]
+    final = (
+        st["completed"] is True
+        and st["name"] == "STATUS_FINAL"
+        and st["state"] == "post"
+    )
+    if final != (rec["status"] == "FINAL_RECONCILED"):
+        raise ValueError("Summary and scoreboards disagree on final status")
+    if final:
+        if any(
+            stamp(r["retrieved_at_utc"]) <= start
+            for r in (espn_receipt, ncaa_receipt, receipt)
+        ):
+            raise ValueError("Final receipt precedes start")
+        for side in ("home", "away"):
+            if str(teams[side]["score"]) != str(rec[side + "_score"]):
+                raise ValueError("Summary and scoreboards disagree on final score")
+    return rec, receipt
+
+
+def grade(card, market, inputs, parent_sha, manifest_sha, *, market_sha):
+    """Grade pre-verified card and market objects with the exact pinned postgame bundle."""
+    if not all(
+        isinstance(pin, str) and re.fullmatch(r"[a-f0-9]{64}", pin)
+        for pin in (parent_sha, market_sha)
+    ):
+        raise ValueError("Invalid parent or market SHA-256")
     if (
         market["schema"] != "sports.cbb.market.shadow.v1"
         or market["frozen_parent_sha256"] != parent_sha
@@ -236,6 +325,21 @@ def grade(card, market, inputs, parent_sha):
         if r["forecast_status"] == "FORECAST_GENERATED"
     }:
         raise ValueError("Market comparison coverage mismatch")
+    if card["forecast_count"] != len(q):
+        raise ValueError("Incorrect frozen forecast count")
+    manifest = pinned_json(inputs / "manifest.json", manifest_sha)
+    coverage_sha = manifest.get("coverage_sha256")
+    coverage = pinned_json(inputs / "coverage.json", coverage_sha)
+    day = date.fromisoformat(card["date"])
+    if (
+        manifest["date"] != day.strftime("%Y%m%d")
+        or coverage.get("date") != manifest["date"]
+        or coverage["status"] not in ("RECONCILED", "REQUIRES_REVIEW")
+        or not isinstance(coverage.get("events"), list)
+        or not isinstance(coverage.get("issues"), list)
+    ):
+        raise ValueError("Missing or invalid postgame reconciliation coverage")
+    load_board = cache(partial(source_json, inputs, manifest))
     rows = []
     for fc in card["forecasts"]:
         row = {
@@ -248,18 +352,17 @@ def grade(card, market, inputs, parent_sha):
         if fc["forecast_status"] != "FORECAST_GENERATED":
             continue
         try:
-            _, c, t, receipt = capture(inputs, fc)
-            if (
-                not c["status"]["type"]["completed"]
-                or c["status"]["type"]["name"] != "STATUS_FINAL"
-            ):
-                row.update(status="PENDING", reason=c["status"]["type"]["name"])
-                continue
-            if stamp(receipt["retrieved_at_utc"]) <= stamp(fc["start_time_utc"]):
-                raise ValueError("Final captured before start")
-            home, away = [int(t[s]["score"]) for s in ("home", "away")]
-            if min(home, away) < 0 or home == away:
-                raise ValueError("Invalid full-game result")
+            rec, receipt = reconciled_result(
+                inputs, fc, manifest, coverage, day, load_board
+            )
+        except (OSError, IndexError, KeyError, ValueError, TypeError) as exc:
+            row.update(status="FINAL_RECONCILIATION_REQUIRED", reason=str(exc))
+            continue
+        if rec["status"] == "PENDING":
+            row.update(status="PENDING", reason=rec["espn_status"])
+            continue
+        try:
+            home, away = rec["home_score"], rec["away_score"]
             m, total = home - away, home + away
             row.update(
                 status="FINAL",
@@ -267,6 +370,7 @@ def grade(card, market, inputs, parent_sha):
                 home_score=home,
                 away_score=away,
                 result_sha256=receipt["sha256"],
+                reconciliation=rec,
                 source=receipt["url"],
                 result_retrieved_at_utc=receipt["retrieved_at_utc"],
                 margin_error=m - fc["home_margin"],
@@ -310,11 +414,20 @@ def grade(card, market, inputs, parent_sha):
                         else (best["win"] / (1 - best["push"]) - (value > 0)) ** 2,
                     }
                 )
-        except (OSError, KeyError, ValueError) as e:
-            row.update(status="RESULT_UNAVAILABLE", reason=str(e))
+        except (OSError, KeyError, ValueError, TypeError) as e:
+            row.clear()
+            row.update(
+                event_id=fc["event_id"],
+                status="RESULT_UNAVAILABLE",
+                reason=str(e),
+                products=[],
+            )
     done = [r for r in rows if r["status"] == "FINAL"]
     return {
-        "schema": "sports.cbb.grades.shadow.v1",
+        "schema": "sports.cbb.grades.shadow.v2",
+        "postgame_manifest_sha256": manifest_sha,
+        "coverage_sha256": coverage_sha,
+        "frozen_market_sha256": market_sha,
         "date": card["date"],
         "frozen_parent_sha256": parent_sha,
         "created_at_utc": datetime.now(timezone.utc).isoformat(),
@@ -341,21 +454,54 @@ if __name__ == "__main__":
     ap.add_argument("--card-sha", required=True)
     ap.add_argument("--market", type=Path)
     ap.add_argument("--market-sha")
+    ap.add_argument("--manifest-sha")
+    ap.add_argument("--previous-grade", type=Path)
+    ap.add_argument("--previous-grade-sha")
     args = ap.parse_args()
     card = verified_card(args.card, args.card_sha)
     if args.command == "attach":
+        if args.previous_grade or args.previous_grade_sha or args.manifest_sha:
+            ap.error("Postgame evidence arguments apply only to grade")
         output = attach(card, args.inputs, args.card_sha)
     else:
-        if (
-            not args.market
-            or not args.market_sha
-            or digest(args.market) != args.market_sha
-        ):
-            ap.error("Frozen --market and --market-sha required")
+        if not args.market or not args.market_sha or not args.manifest_sha:
+            ap.error(
+                "Frozen --market, --market-sha, and postgame --manifest-sha required"
+            )
+        if bool(args.previous_grade) != bool(args.previous_grade_sha):
+            ap.error("Provide both --previous-grade and --previous-grade-sha")
+        market = pinned_json(args.market, args.market_sha)
         output = grade(
-            card, json.loads(args.market.read_bytes()), args.inputs, args.card_sha
+            card,
+            market,
+            args.inputs,
+            args.card_sha,
+            args.manifest_sha,
+            market_sha=args.market_sha,
         )
+        if args.previous_grade:
+            previous = pinned_json(args.previous_grade, args.previous_grade_sha)
+            if (
+                previous.get("schema")
+                not in ("sports.cbb.grades.shadow.v1", "sports.cbb.grades.shadow.v2")
+                or previous.get("date") != card["date"]
+                or previous.get("frozen_parent_sha256") != args.card_sha
+                or previous.get("action_authority") is not False
+                or (
+                    previous["schema"].endswith(".v2")
+                    and previous.get("frozen_market_sha256") != args.market_sha
+                )
+            ):
+                ap.error("Previous grade does not belong to this frozen assessment")
+            output["previous_grade_sha256"] = args.previous_grade_sha
+            output["previous_market_binding"] = (
+                "VERIFIED"
+                if previous["schema"].endswith(".v2")
+                else "UNVERIFIABLE_LEGACY_GRADE"
+            )
+    encoded = json.dumps(output, indent=2, allow_nan=False) + "\n"
     with args.output.open("x") as file:
-        json.dump(output, file, indent=2, allow_nan=False)
-        file.write("\n")
+        file.write(encoded)
     print(digest(args.output))
+    if args.command == "grade" and not output["complete"]:
+        raise SystemExit(2)

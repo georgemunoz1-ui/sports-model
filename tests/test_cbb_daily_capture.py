@@ -1,9 +1,17 @@
 import datetime as dt
+import hashlib
 import json
 
 import pytest
 
-from scripts.capture_cbb_daily import daily, ncaa_events, normalize, quote
+from scripts.capture_cbb_daily import (
+    daily,
+    ncaa_events,
+    ncaa_url,
+    normalize,
+    quote,
+    reconcile_event,
+)
 
 
 def event(status="STATUS_SCHEDULED"):
@@ -17,6 +25,7 @@ def event(status="STATUS_SCHEDULED"):
         for i, s, n in (("2511", "away", "Queens"), ("2351", "home", "LMU"))
     ]
     comp = {
+        "id": "12345",
         "date": "2026-11-05T03:00Z",
         "competitors": pair,
         "neutralSite": False,
@@ -90,7 +99,8 @@ def test_failed_source_is_not_an_empty_slate(tmp_path):
         ncaa_events(json.dumps({"errors": ["query failed"]}).encode())
 
 
-def test_pacific_date_overlapping_boards_and_failed_price(tmp_path):
+@pytest.mark.parametrize("conflicting_ncaa", [False, True])
+def test_pacific_date_overlapping_boards_and_failed_price(tmp_path, conflicting_ncaa):
     from scripts.capture_cbb_daily import ESPN, STANDINGS
 
     day = dt.date(2026, 11, 4)
@@ -127,7 +137,10 @@ def test_pacific_date_overlapping_boards_and_failed_price(tmp_path):
         elif url.startswith(ESPN + "summary"):
             raise OSError("offline")
         else:
-            data = {"data": {"contests": [official]}}
+            contest = dict(official)
+            if conflicting_ncaa and url == ncaa_url(day + dt.timedelta(days=1)):
+                contest["gameState"] = "F"
+            data = {"data": {"contests": [contest]}}
         return json.dumps(data).encode(), {
             "url": url,
             "file": "fixture",
@@ -137,6 +150,10 @@ def test_pacific_date_overlapping_boards_and_failed_price(tmp_path):
 
     path = tmp_path / "new"
     result = daily(day, path, fixture)
+    assert (
+        json.loads((path / "manifest.json").read_bytes())["coverage_sha256"]
+        == hashlib.sha256((path / "coverage.json").read_bytes()).hexdigest()
+    )
     assert result["status"] == "REQUIRES_REVIEW"
     assert (result["espn_events"], result["ncaa_events"], result["d1_vs_d1"]) == (
         1,
@@ -147,4 +164,49 @@ def test_pacific_date_overlapping_boards_and_failed_price(tmp_path):
     assert (
         quotes[0]["quote_status"] == "QUOTE_SOURCE_UNAVAILABLE"
         and quotes[0]["home_spread"] is None
+    )
+    assert result["events"][0]["status"] == (
+        "FINAL_RECONCILIATION_REQUIRED" if conflicting_ncaa else "PENDING"
+    )
+    assert result["events"][0]["ncaa_contest_id"] == 55
+
+
+@pytest.mark.parametrize(
+    "espn_status,ncaa_state,home_points,offset,expected",
+    [
+        ("STATUS_FINAL", "F", 80, 0, "FINAL_RECONCILED"),
+        ("STATUS_FINAL", "F", 79, 0, "FINAL_RECONCILIATION_REQUIRED"),
+        ("STATUS_FINAL", "P", 80, 0, "FINAL_RECONCILIATION_REQUIRED"),
+        ("STATUS_SCHEDULED", "F", 80, 0, "FINAL_RECONCILIATION_REQUIRED"),
+        ("STATUS_SCHEDULED", "P", 80, 0, "PENDING"),
+        ("STATUS_FINAL", "F", 80, 300, "TIP_RECONCILIATION_REQUIRED"),
+        ("STATUS_FINAL", "F", 79, 300, "FINAL_RECONCILIATION_REQUIRED"),
+    ],
+)
+def test_reconciled_evidence(espn_status, ncaa_state, home_points, offset, expected):
+    e = event(espn_status)
+    espn = {"url": "espn-board", "sha256": "a" * 64}
+    ncaa = {"url": "ncaa-board", "sha256": "c" * 64}
+    c = {
+        "contestId": 55,
+        "gameState": ncaa_state,
+        "startTimeEpoch": int(dt.datetime.fromisoformat(e["date"]).timestamp())
+        + offset,
+        "teams": [
+            {"isHome": True, "nameShort": "LMU (CA)", "score": home_points},
+            {"isHome": False, "nameShort": "Queens (NC)", "score": 65},
+        ],
+    }
+    record = reconcile_event(e, espn, c, ncaa)
+    assert record["event_id"] == "CBB:12345"
+    assert record["espn_scoreboard_sha256"] == espn["sha256"]
+    assert record["ncaa_scoreboard_sha256"] == ncaa["sha256"]
+    assert record["status"] == expected
+    if offset and home_points != 80:
+        assert set(record["issues"]) == {
+            "FINAL_RECONCILIATION_REQUIRED",
+            "TIP_RECONCILIATION_REQUIRED",
+        }
+    assert (record["home_score"], record["away_score"]) == (
+        (80, 65) if expected == "FINAL_RECONCILED" else (None, None)
     )

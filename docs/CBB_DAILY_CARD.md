@@ -22,14 +22,29 @@ Before publishing a research supplement, compare the complete schedule event-ID 
 
 ## Postgame
 
-Fetch a fresh schedule and final-game summaries for the same Pacific slate date. Use the original immutable card and market hashes. A rerun must use a new grade file; preserve previous grades and original forecast bytes.
+Use a new postgame capture directory and grade filename for each attempt. Pin the collector manifest immediately after capture and retain the pin separately with the run receipts. The manifest binds the exact coverage report and source bytes. This also permits grading agreed events on a slate with individual results still under review.
 
 ```bash
-python scripts/capture_cbb_daily.py --date "$DAY" --output "$RUN/postgame-sources"
+CAPTURE="$RUN/postgame-sources-001"
+rc=0
+python scripts/capture_cbb_daily.py --date "$DAY" --output "$CAPTURE" || rc=$?
+if [ "$rc" -ne 0 ] && [ "$rc" -ne 2 ]; then exit "$rc"; fi
+sha256sum "$CAPTURE/manifest.json" > "$RUN/postgame-001.sha256"
+MANIFEST_SHA=$(cut -d' ' -f1 "$RUN/postgame-001.sha256")
 MARKET_SHA=$(cut -d' ' -f1 "$RUN/frozen-market.sha256")
-python scripts/cbb_market_and_grades.py grade --card "$RUN/parent/card.json" --card-sha "$PARENT_SHA" --market "$RUN/market.json" --market-sha "$MARKET_SHA" --inputs "$RUN/postgame-sources" --output "$RUN/grades.json"
+GRADE="$RUN/grades-001.json"
+test ! -e "$GRADE"
+rc=0
+python scripts/cbb_market_and_grades.py grade --card "$RUN/parent/card.json" --card-sha "$PARENT_SHA" --market "$RUN/market.json" --market-sha "$MARKET_SHA" --inputs "$CAPTURE" --manifest-sha "$MANIFEST_SHA" --output "$GRADE" || rc=$?
+if [ "$rc" -ne 0 ] && [ "$rc" -ne 2 ]; then exit "$rc"; fi
+test -s "$GRADE"
+sha256sum "$GRADE" > "$RUN/grades-001.sha256"
 ```
 
-Grading requires verified event/team/start identity, a completed final and the full-game score including overtime. Prior score projections and the original lines determine winner, margin and total errors, and win/loss/push for the higher-probability side. Report priced and unpriced counts, unresolved finals, and paired model/market cohorts separately. Use provider-labeled postgame closing prices as a separate retrospective benchmark. Show sample sizes and compare uncertainty across dates once enough independent dates are available.
+Each final requires the same event, teams, start, final status and home/away scores in the captured ESPN scoreboard, NCAA contest and ESPN event summary. Disputed or missing results stay outside the accuracy and settlement totals. A valid incomplete grade writes its event statuses and exits 2. An invalid bundle cannot produce a grade. Older capture formats without a bound event reconciliation require a new capture.
+
+If a source corrects a result, retain the original grade. Repeat the capture and pin steps using the next sequence number. Write a new grade with the original card and market hashes, the new manifest pin, and both `--previous-grade "$RUN/grades-001.json"` and `--previous-grade-sha` with the digest from the retained grade receipt. Version 1 grades lack a market hash and receive the explicit historical label `UNVERIFIABLE_LEGACY_GRADE`. Store the successor beside the original and use one version per event when reporting.
+
+Prior score projections and the original lines determine winner, margin and total errors, and win/loss/push for the higher-probability side. Report priced and unpriced counts, unresolved finals, and paired model/market cohorts separately. Use provider-labeled closing prices for the retrospective benchmark.
 
 The November 3, 2026 FanMatch rows are an external benchmark. The first dated in-house shadow parent in this integration is November 4. Preserve these distinct identities. The in-house methodology and scope restrictions are in CBB_MENS_SHADOW.md.

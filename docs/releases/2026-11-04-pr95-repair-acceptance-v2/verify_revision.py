@@ -46,6 +46,9 @@ def check_ref(ref, seen, problems):
         problems.append("MISSING:" + ref["path"])
     elif sha(path) != ref["sha256"]:
         problems.append("HASH_MISMATCH:" + ref["path"])
+    elif ref["path"] not in TRACKED:
+        # Hosted verification checks out the commit, not this working tree.
+        problems.append("REFERENCED_BUT_UNTRACKED:" + ref["path"])
 
 
 def walk_refs(value, seen, problems):
@@ -70,6 +73,9 @@ def junit(path: Path):
 
 def git(*args):
     return subprocess.check_output(["git", *args], cwd=ROOT, text=True)
+
+
+TRACKED = set(git("ls-files", "--cached").split("\n"))
 
 
 def main() -> int:
@@ -159,6 +165,7 @@ def main() -> int:
         "failures": counts["failures"], "errors": counts["errors"], "skips": counts["skipped"],
         "deselected": pytest_exec["deselected"],
         "all_reference_paths_verified": len(seen),
+        "all_reference_paths_tracked_in_index": all(p in TRACKED for p, _ in seen),
         "source_files_in_manifest": len(receipt["sources"]),
         "retained_history_files_verified": len(receipt["historical_evidence"]),
         "finding_successors": len(packet),

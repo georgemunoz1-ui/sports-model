@@ -35,6 +35,16 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
+          cache: pip
+          cache-dependency-path: |
+            requirements-consolidated.txt
+            requirements-nfl-context.txt
+
+      - name: Install pinned dependencies
+        # Same pinned set the research-overhaul verify job installs. Without it
+        # harness/healthcheck.py reports import failures (numpy, pandas, pytest)
+        # that mask the repository's actual health status.
+        run: python -m pip install -r requirements-consolidated.txt
 
       - name: Capture current operational inputs
         id: capture

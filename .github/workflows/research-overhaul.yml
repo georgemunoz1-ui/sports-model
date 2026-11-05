@@ -73,7 +73,7 @@ jobs:
           python scripts/capture_team_histories.py --help
           python scripts/prepare_initial_baselines.py --help
       - name: Verify finding closure evidence
-        run: python -m research.finding_evidence docs/releases/2026-11-04-pr95-repair-acceptance-v2/finding-evidence.json
+        run: python -m research.finding_evidence docs/releases/2026-11-05-pr95-repair-acceptance-v3/finding-evidence.json
       - name: Explain verification scope
         if: always()
         run: |

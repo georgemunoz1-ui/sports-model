@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites><testsuite name="pytest" errors="0" failures="11" skipped="0" tests="12" time="0.830" timestamp="2026-11-04T12:32:46.267046-05:00" hostname="35e412643710"><testcase classname="independent-repair-verifier.test_route_independent" name="test_displayed_scope_mismatch_refuses_before_adapter[projected_margin_orientation-AWAY_MINUS_HOME]" time="0.025"><failure message="AssertionError: displayed projected_margin_orientation='AWAY_MINUS_HOME' reached adapter&#10;assert not [True]">independent-repair-verifier/test_route_independent.py:24: in test_displayed_scope_mismatch_refuses_before_adapter
+    assert not calls, f'displayed {field}={value!r} reached adapter'
+E   AssertionError: displayed projected_margin_orientation='AWAY_MINUS_HOME' reached adapter
+E   assert not [True]</failure></testcase><testcase classname="independent-repair-verifier.test_route_independent" name="test_displayed_scope_mismatch_refuses_before_adapter[target-WINNER_PROBABILITY]" time="0.020"><failure message="AssertionError: displayed target='WINNER_PROBABILITY' reached adapter&#10;assert not [True]">independent-repair-verifier/test_route_independent.py:24: in test_displayed_scope_mismatch_refuses_before_adapter
+    assert not calls, f'displayed {field}={value!r} reached adapter'
+E   AssertionError: displayed target='WINNER_PROBABILITY' reached adapter
+E   assert not [True]</failure></testcase><testcase classname="independent-repair-verifier.test_route_independent" name="test_displayed_scope_mismatch_refuses_before_adapter[information_set-INPLAY_TEST]" time="0.021"><failure message="AssertionError: displayed information_set='INPLAY_TEST' reached adapter&#10;assert not [True]">independent-repair-verifier/test_route_independent.py:24: in test_displayed_scope_mismatch_refuses_before_adapter
+    assert not calls, f'displayed {field}={value!r} reached adapter'
+E   AssertionError: displayed information_set='INPLAY_TEST' reached adapter
+E   assert not [True]</failure></testcase><testcase classname="independent-repair-verifier.test_route_independent" name="test_displayed_scope_mismatch_refuses_before_adapter[projected_margin_orientation-None]" time="0.023"><failure message="AssertionError: displayed projected_margin_orientation=None reached adapter&#10;assert not [True]">independent-repair-verifier/test_route_independent.py:24: in test_displayed_scope_mismatch_refuses_before_adapter
+    assert not calls, f'displayed {field}={value!r} reached adapter'
+E   AssertionError: displayed projected_margin_orientation=None reached adapter
+E   assert not [True]</failure></testcase><testcase classname="independent-repair-verifier.test_route_independent" name="test_displayed_scope_mismatch_refuses_before_adapter[target-None]" time="0.021"><failure message="AssertionError: displayed target=None reached adapter&#10;assert not [True]">independent-repair-verifier/test_route_independent.py:24: in test_displayed_scope_mismatch_refuses_before_adapter
+    assert not calls, f'displayed {field}={value!r} reached adapter'
+E   AssertionError: displayed target=None reached adapter
+E   assert not [True]</failure></testcase><testcase classname="independent-repair-verifier.test_route_independent" name="test_displayed_scope_mismatch_refuses_before_adapter[information_set-None]" time="0.019"><failure message="AssertionError: displayed information_set=None reached adapter&#10;assert not [True]">independent-repair-verifier/test_route_independent.py:24: in test_displayed_scope_mismatch_refuses_before_adapter
+    assert not calls, f'displayed {field}={value!r} reached adapter'
+E   AssertionError: displayed information_set=None reached adapter
+E   assert not [True]</failure></testcase><testcase classname="independent-repair-verifier.test_route_independent" name="test_malformed_card_always_retains_refusal_receipt[payload0]" time="0.019"><failure message="AttributeError: 'NoneType' object has no attribute 'get'">repair-106/pipelines/cards/volatility_routing.py:186: in run_joint_route
+    displayed_bindings = _event_bindings(card)
+repair-106/pipelines/cards/volatility_routing.py:86: in _event_bindings
+    ids = [r["event_id"] for r in rows]
+E   TypeError: 'NoneType' object is not subscriptable
+
+During handling of the above exception, another exception occurred:
+independent-repair-verifier/test_route_independent.py:34: in test_malformed_card_always_retains_refusal_receipt
+    receipt=R.run_joint_route(card,config,tmp_path/'out',simulations=100)
+repair-106/pipelines/cards/volatility_routing.py:261: in run_joint_route
+    receipt["coverage"] = [{"event_id": r.get("event_id"), "status": "UNAVAILABLE",
+E   AttributeError: 'NoneType' object has no attribute 'get'</failure></testcase><testcase classname="independent-repair-verifier.test_route_independent" name="test_malformed_card_always_retains_refusal_receipt[payload1]" time="0.025"><failure message="AttributeError: 'str' object has no attribute 'get'">repair-106/pipelines/cards/volatility_routing.py:186: in run_joint_route
+    displayed_bindings = _event_bindings(card)
+repair-106/pipelines/cards/volatility_routing.py:86: in _event_bindings
+    ids = [r["event_id"] for r in rows]
+E   TypeError: string indices must be integers, not 'str'
+
+During handling of the above exception, another exception occurred:
+independent-repair-verifier/test_route_independent.py:34: in test_malformed_card_always_retains_refusal_receipt
+    receipt=R.run_joint_route(card,config,tmp_path/'out',simulations=100)
+repair-106/pipelines/cards/volatility_routing.py:261: in run_joint_route
+    receipt["coverage"] = [{"event_id": r.get("event_id"), "status": "UNAVAILABLE",
+E   AttributeError: 'str' object has no attribute 'get'</failure></testcase><testcase classname="independent-repair-verifier.test_route_independent" name="test_malformed_card_always_retains_refusal_receipt[payload2]" time="0.018"><failure message="AttributeError: 'int' object has no attribute 'get'">repair-106/pipelines/cards/volatility_routing.py:186: in run_joint_route
+    displayed_bindings = _event_bindings(card)
+repair-106/pipelines/cards/volatility_routing.py:86: in _event_bindings
+    ids = [r["event_id"] for r in rows]
+E   TypeError: 'int' object is not subscriptable
+
+During handling of the above exception, another exception occurred:
+independent-repair-verifier/test_route_independent.py:34: in test_malformed_card_always_retains_refusal_receipt
+    receipt=R.run_joint_route(card,config,tmp_path/'out',simulations=100)
+repair-106/pipelines/cards/volatility_routing.py:261: in run_joint_route
+    receipt["coverage"] = [{"event_id": r.get("event_id"), "status": "UNAVAILABLE",
+E   AttributeError: 'int' object has no attribute 'get'</failure></testcase><testcase classname="independent-repair-verifier.test_route_independent" name="test_malformed_card_always_retains_refusal_receipt[payload3]" time="0.017"><failure message="AttributeError: 'list' object has no attribute 'get'">repair-106/pipelines/cards/volatility_routing.py:186: in run_joint_route
+    displayed_bindings = _event_bindings(card)
+repair-106/pipelines/cards/volatility_routing.py:83: in _event_bindings
+    rows = card["forecasts"]
+E   TypeError: list indices must be integers or slices, not str
+
+During handling of the above exception, another exception occurred:
+independent-repair-verifier/test_route_independent.py:34: in test_malformed_card_always_retains_refusal_receipt
+    receipt=R.run_joint_route(card,config,tmp_path/'out',simulations=100)
+repair-106/pipelines/cards/volatility_routing.py:262: in run_joint_route
+    "reason": str(exc)} for r in card.get("forecasts", [])]
+E   AttributeError: 'list' object has no attribute 'get'</failure></testcase><testcase classname="independent-repair-verifier.test_route_independent" name="test_malformed_card_always_retains_refusal_receipt[payload4]" time="0.019"><failure message="AttributeError: 'str' object has no attribute 'get'">repair-106/pipelines/cards/volatility_routing.py:186: in run_joint_route
+    displayed_bindings = _event_bindings(card)
+repair-106/pipelines/cards/volatility_routing.py:85: in _event_bindings
+    raise ValueError("NONEMPTY_PARENT_EVENT_SET_REQUIRED")
+E   ValueError: NONEMPTY_PARENT_EVENT_SET_REQUIRED
+
+During handling of the above exception, another exception occurred:
+independent-repair-verifier/test_route_independent.py:34: in test_malformed_card_always_retains_refusal_receipt
+    receipt=R.run_joint_route(card,config,tmp_path/'out',simulations=100)
+repair-106/pipelines/cards/volatility_routing.py:261: in run_joint_route
+    receipt["coverage"] = [{"event_id": r.get("event_id"), "status": "UNAVAILABLE",
+E   AttributeError: 'str' object has no attribute 'get'</failure></testcase><testcase classname="independent-repair-verifier.test_route_independent" name="test_malformed_card_always_retains_refusal_receipt[payload5]" time="0.018" /></testsuite></testsuites>

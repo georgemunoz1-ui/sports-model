@@ -5021,3 +5021,38 @@ PR38 closed as already incorporated via82. PR45 strict health/evidence blockers
 remain separate and unwaived. Hosted integration CI and artifact readback are
 required before merge. All predictive limitations remain; authority OFF.
 See docs/REMAINING_PR_REPAIR_20261024.md and current execution receipts.
+
+
+## 2026-10-30T11:27:34.695643+00:00 — NBA source-versioned combination challenger
+
+User requested the first comparison dataset and small frozen NBA challenger.
+Implemented opt-in mean-only B0/B1/C1/C2 source contracts, bounded residual
+blend, train-only factor scaling and explicit B0 fallback. Frozen pilot protocol
+and candidate-catalog entry are local research bookkeeping, not canonical
+registration. 30 synthetic tests pass. Three October 29 NBA events are matched;
+zero qualify for fitting because external captures are postgame and original
+availability is unproven. Both real C1/C2 fit attempts correctly block.
+Earlier screenshot values and later source vintages remain distinct.
+Baseline point parent is distinct from the winner head. State/defaults, original
+forecasts, circadian experiments and production runners are unchanged.
+Session-start full-checkout health RED (9 fail, 7 warn), including environment
+dependencies and existing lineage/archive/recovery/release obligations.
+No real-data coefficients, uncertainty model, predictive improvement, deployment
+or wagering authorization. See docs/research/NBA_FORECAST_COMBINATION_20261030.md.
+
+## 2026-10-30T19:00:42Z — NBA pregame source capture for PR98
+
+User authorized provenance-verified acquisition for the NBA combination pilot.
+Added bounded public HTTP and documented D&T v2 API adapters, strict rendered
+Databallr normalization, source receipt/extraction replay in the actual audit/fit
+path, individual schedule cutoffs and append-only capture outputs. Preserved B0,
+the frozen fitting protocol, defaults, original forecasts and production runners.
+Two current captures cover the same 10 future events. All 10 B0 records and 10
+Databallr event pairs retained; public D&T projections are access-gated/null,
+API credential unconfigured, provider as-of/naive-clock semantics unresolved.
+Zero eligible C1/C2 observations and zero real coefficients fitted. 71 focused
+synthetic tests pass. Local session health remains RED (6 fail, 6 warn).
+Collector exercised locally; no collection cron, independent timestamp archive,
+canonical registration, predictive improvement or wagering authority claimed.
+See docs/research/NBA_PREGAME_CAPTURE_20261030.md and run
+nba-pregame-8c057dfba8d749e2b1c59a74fac856a5.

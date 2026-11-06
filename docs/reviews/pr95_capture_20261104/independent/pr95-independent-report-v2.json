@@ -1,0 +1,30 @@
+{
+  "pr": 95,
+  "result": "PASS",
+  "scope": "Narrow workflow addition: local PR-trigger and shell-gate verification only; no hosted run, dispatch, provider authentication, forecast generation or wagering authority.",
+  "predecessor_report": {
+    "path": "/workspace/scratch/4d9e36f4eb71/independent-repair-verifier/pr95-independent-report.json",
+    "sha256": "00667f836e1ea01ea4586455a4cc796612f5ee128a51b2e9bdc2bc65c627cfad",
+    "independent_tests": 25,
+    "core_runtime_sources_unchanged": true
+  },
+  "new_workflow_tests": 4,
+  "actual_shell_outcome_combinations_checked": 125,
+  "checks": [
+    "Exactly seven capture-related pull_request paths; schedule/manual unchanged",
+    "Explicit contents:read permission, no environment or secret elevation",
+    "PR-number concurrency separate from scheduled-manual, cancel-in-progress false",
+    "All 125 capture/checks/evidence outcome combinations: only all-success succeeds",
+    "Mandatory always-upload if-no-files-found:error remains enforced"
+  ],
+  "current_source_hashes": {
+    "scripts/capture_operational_inputs.py": "74620011ad24911a7970541e9d722bd36282e747605209aa98b4c088b57b6bfc",
+    "scripts/validate_operational_capture.py": "e79f698465b6662ae43c66ba5c2c350a032338bbdd972d03c2452b1a9e254fba",
+    "scripts/operational_capture_contract.py": "00b23308066a89d01a1b103f8637338ba1bb909ba56b3d6761e68e7b30514043",
+    ".github/workflows/daily-operations-preflight.yml": "5228e6694b748f2fe7892d8506ebfca06b8d708562461b9d436b2856f9f6e912"
+  },
+  "evidence": {
+    "/workspace/scratch/4d9e36f4eb71/independent-repair-verifier/test_capture_workflow_independent.py": "ebbf92d44753359dc1312dc23b68a6edab2b2b026d02a164527a630875a7208f",
+    "/workspace/scratch/4d9e36f4eb71/independent-repair-verifier/pr95-workflow-independent.xml": "4abc1bb6ceb9c3938b63554f4776b7d859edb6df5417140db6a61ffc2b8becd5"
+  }
+}

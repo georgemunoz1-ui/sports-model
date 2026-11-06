@@ -56,6 +56,26 @@ jobs:
           python -m pytest tests research/tests research/cfb_binary_isotonic_proposal/test_binary_isotonic_repair.py -q \
             --junitxml="$RUNNER_TEMP/pr-evidence/tests.xml" 2>&1 | tee "$RUNNER_TEMP/pr-evidence/tests.log"
           python -m unittest discover -s research -p 'test_*.py' -v 2>&1 | tee "$RUNNER_TEMP/pr-evidence/research-tests.log"
+      - name: Verify CBB incident changes on the exact PR head
+        shell: bash
+        env:
+          CI_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+          CI_BASE_SHA: ${{ github.event.pull_request.base.sha }}
+        run: |
+          set -euo pipefail
+          changed=$(git diff --name-only "$CI_BASE_SHA...$CI_HEAD_SHA" -- \
+            'pipelines/cards/cbb_incident*.py' 'pipelines/cards/cbb_quote*.py' \
+            'tests/test_cbb*incident*.py' 'tests/test_cbb_quote*.py')
+          if [[ -z "$changed" ]]; then exit 0; fi
+          evidence="$RUNNER_TEMP/pr-evidence"
+          git worktree add --detach "$RUNNER_TEMP/cbb-head" "$CI_HEAD_SHA"
+          cd "$RUNNER_TEMP/cbb-head"
+          git rev-parse HEAD > "$evidence/cbb-head-checkout.txt"
+          test "$(cat "$evidence/cbb-head-checkout.txt")" = "$CI_HEAD_SHA"
+          python -m pip install -r requirements-consolidated.txt
+          python -m pytest tests research/tests research/cfb_binary_isotonic_proposal/test_binary_isotonic_repair.py -q \
+            --junitxml="$evidence/cbb-head-tests.xml" 2>&1 | tee "$evidence/cbb-head-tests.log"
+          python -m unittest discover -s research -p 'test_*.py' -v 2>&1 | tee "$evidence/cbb-head-research-tests.log"
       - name: Preserve source history and original current-run reports
         if: always()
         env:

@@ -14,11 +14,13 @@ import re
 import stat
 import zipfile
 
-INITIAL = {'nba', 'nhl'}
-LEAGUES = {'mlb', 'nfl', 'cfb', 'wnba', 'nba', 'nhl'}
+INITIAL = {'nba', 'nhl', 'mls'}
+LEAGUES = {'mlb', 'nfl', 'cfb', 'wnba', 'nba', 'nhl', 'mls', 'cbb'}
 
 
 def validate_request(league, artifact_id='', archive_sha256='', initial_research=False):
+    if league == 'cbb':
+        raise ValueError('CBB_RUNNER_UNAVAILABLE_ON_THIS_REVISION')
     if league not in LEAGUES:
         raise ValueError('UNSUPPORTED_WORKFLOW_LEAGUE')
     if league in INITIAL and not initial_research:
@@ -108,6 +110,8 @@ def main():
         parser.error('archive, destination and receipt required for restore')
     environment, receipt = restore(args.archive, args.sha256, args.destination, args.league)
     receipt['artifact_id'] = args.artifact_id
+    environment.update(CARD_EVENT_PACKAGE=receipt['package_path'],
+                       CARD_EVENT_PACKAGE_SHA256=receipt['package_sha256'])
     args.receipt.parent.mkdir(parents=True, exist_ok=True)
     with args.receipt.open('x') as stream:
         json.dump(receipt, stream, indent=2, sort_keys=True)

@@ -52,6 +52,7 @@ jobs:
       - name: All unit and research contracts
         run: python -m pytest tests research/tests -q > runtime-tests.txt 2>&1
       - name: Download retained inputs with exact archive verification
+        id: inputs
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
@@ -68,8 +69,9 @@ jobs:
           unzip -q history.zip -d history
           unzip -q frozen.zip -d frozen
       - name: All six current packages, real CLI forecasts, retained draws and replay
-        run: python scripts/verify_all_current_runtimes.py --recovery recovery --current current --history history --output runtime-acceptance > runtime-acceptance.txt 2>&1
+        run: python scripts/verify_all_current_runtimes.py --recovery recovery --current current --history history --output runtime-acceptance --required-leagues mlb wnba cfb nba nhl mls > runtime-acceptance.txt 2>&1
       - name: NFL real Week 3 state and every current forecast
+        if: ${{ !cancelled() && steps.inputs.outcome == 'success' }}
         run: python scripts/verify_nfl_current_acceptance.py --frozen frozen --capture current --output nfl-acceptance > nfl-acceptance.txt 2>&1
       - uses: actions/upload-artifact@v4
         if: always()

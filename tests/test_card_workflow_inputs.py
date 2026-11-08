@@ -29,7 +29,7 @@ class PackageTests(unittest.TestCase):
         M.validate_request('mlb')
         for league in ['cfb','nfl','wnba','nba','nhl']:
             with self.subTest(league=league), self.assertRaises(ValueError): M.validate_request(league)
-        for league in ['nba','nhl']:
+        for league in ['nba','nhl','mls']:
             with self.subTest(league=league):
                 with self.assertRaisesRegex(ValueError,'OPT_IN'): M.validate_request(league,'12','a'*64)
                 M.validate_request(league,'12','a'*64,True)
@@ -161,7 +161,8 @@ class RealRunnerOutputIntegration(unittest.TestCase):
         self.assertIn('FileExistsError',files['output/card/run.log'])
     def test_runner_failure_preserves_log_and_receipt(self):
         files,outputs=self.run_workflow(fail_adapter=True)
-        self.assertIn('exit_code=1',outputs)
+        self.assertIn('exit_code=2',outputs)
+        self.assertEqual(json.loads(files['output/card/runner_failure.json'])['status'], 'BLOCKED')
         self.assertIn('SYNTHETIC_ADAPTER_FAILURE',files['output/card/run.log'])
         self.assertIn('output/card/package-inputs.json',files)
         self.assertNotIn('output/card/diagnostic_card.json',files)

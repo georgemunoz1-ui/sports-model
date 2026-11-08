@@ -30,7 +30,10 @@ def load_schedule(card_date,as_of_utc):
 
 def build_context(schedule,as_of_utc,allow_stale=True,overrides_path=None,*,mode='research_pregame'):
     if overrides_path:raise ValueError('USE_VERSIONED_EVENT_PACKAGE_NOT_UNTYPED_OVERRIDES')
-    package=_package();base=_path().parent
+    return build_package_context(_package(),_path().parent,as_of_utc,mode=mode)
+
+def build_package_context(package,base,as_of_utc,*,mode):
+    """Consume an already-loaded package; paths remain relative to its captured location."""
     if mode=='live':return {'model':None,'recovered':None,'package':package,'cutoff':as_of_utc}
     model_path=base/package['model_path'];model=load_artifact(model_path)
     if digest(model)!=package['model_digest']:raise ValueError('MODEL_PACKAGE_HASH_MISMATCH')

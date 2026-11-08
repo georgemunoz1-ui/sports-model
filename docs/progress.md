@@ -5021,3 +5021,7 @@ PR38 closed as already incorporated via82. PR45 strict health/evidence blockers
 remain separate and unwaived. Hosted integration CI and artifact readback are
 required before merge. All predictive limitations remain; authority OFF.
 See docs/REMAINING_PR_REPAIR_20261024.md and current execution receipts.
+
+## 2026-11-08 — Dated research runner handoffs
+
+Added explicit package and date binding, per-event refusal rows, native NFL forecast and draw readback, and a static recipient card. The workflow checks the process result, evidence receipt and artifact readback before registration. Six shared adapters passed synthetic CLI replay controls. The eight-league acceptance matrix exposes men's CBB as unavailable on this revision. See [runner contracts and verification scope](ISSUE_96_RUNNER_CONTRACTS.md).

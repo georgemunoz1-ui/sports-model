@@ -349,14 +349,16 @@ class CardTests(unittest.TestCase):
     def test_optional_failure_preserves_all_parent_card_files(self):
         from scripts import generate_card_force as G
         with tempfile.TemporaryDirectory() as tmp:
-            p = Path(tmp); card = self.card("nfl"); card["coverage_breach_event_ids"] = []
+            p = Path(tmp); card = self.card("nfl")
+            card.update(card_date="2026-10-01", coverage_breach_event_ids=[], incidents=[])
+            card["forecasts"][0].update(model_p=0.6, sim_p=0.602)
             for name, config in [("base", []), ("bad", ["--distribution-research-config", str(p/"missing.json")])]:
                 args = ["generate_card_force", "--date", "2026-10-01", "--league", "nfl", "--output-dir", str(p/name)] + config
                 with patch.object(sys, "argv", args), patch.object(G, "generate", return_value=card), patch.object(G, "render_md", return_value="fixture"), patch("builtins.print"):
                     with self.assertRaises(SystemExit) as exc:
                         G.main()
                     self.assertEqual(exc.exception.code, 2 if config else 0)
-            for name in ["diagnostic_card.json", "diagnostic_card.md", "diagnostic_card.csv"]:
+            for name in ["diagnostic_card.json", "diagnostic_card.md", "diagnostic_card.csv", "diagnostic_card.html"]:
                 self.assertEqual((p/"base"/name).read_bytes(), (p/"bad"/name).read_bytes())
             self.assertTrue((p/"bad/distribution_research_failure.json").exists())
 

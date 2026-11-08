@@ -19,6 +19,8 @@ on:
           - wnba
           - nba
           - nhl
+          - mls
+          - cbb
       as_of_utc:
         description: "Requested point-in-time cutoff timestamp (ISO-8601 UTC)"
         required: true
@@ -44,7 +46,7 @@ on:
         required: false
         type: string
       initial_research_baselines:
-        description: "Explicitly run initial NBA/NHL research baseline; never promotes a default"
+        description: "Explicitly run initial NBA/NHL/MLS research baseline; never promotes a default"
         required: false
         default: false
         type: boolean
@@ -145,7 +147,8 @@ jobs:
               mode = os.environ.get("INPUT_MODE") or "diagnostic_shadow"
               publish_summary = (os.environ.get("INPUT_PUBLISH_SUMMARY") or "true").lower()
 
-          if league not in {"mlb", "cfb", "nfl", "wnba", "nba", "nhl"}:
+          from scripts.prepare_card_workflow_inputs import LEAGUES, validate_request
+          if league not in LEAGUES:
               raise SystemExit(f"unsupported league: {league}")
 
           if event == "push":
@@ -159,10 +162,14 @@ jobs:
               initial = (os.environ.get(prefix + "INITIAL_RESEARCH_BASELINES") or "false").lower()
           if initial not in {"true", "false"}:
               raise SystemExit("INVALID_INITIAL_RESEARCH_OPT_IN")
-          from scripts.prepare_card_workflow_inputs import validate_request
-          validate_request(league, package_artifact_id, package_archive_sha256, initial == "true")
+          request_error = ""
+          try:
+              validate_request(league, package_artifact_id, package_archive_sha256, initial == "true")
+          except ValueError as exc:
+              request_error = str(exc)
 
           outputs = {
+              "request_error": request_error,
               "package_artifact_id": package_artifact_id,
               "package_archive_sha256": package_archive_sha256,
               "initial_research_baselines": initial,
@@ -181,6 +188,14 @@ jobs:
                   f.write(f"{k}={v}\n")
           print(json.dumps(outputs, indent=2, sort_keys=True))
           PY
+
+      - name: Enforce request prerequisites
+        if: ${{ steps.resolve.outputs.request_error != '' }}
+        env:
+          REQUEST_ERROR: ${{ steps.resolve.outputs.request_error }}
+        run: |
+          echo "$REQUEST_ERROR" >&2
+          exit 2
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -236,9 +251,9 @@ jobs:
 
       - name: Generate diagnostic card
         id: forecast
-        continue-on-error: true
         shell: bash
         env:
+          NFL_WEEKLY_STATE_SEED_SHA256: ${{ vars.NFL_WEEKLY_STATE_SEED_SHA256 }}
           CARD_DATE: ${{ steps.resolve.outputs.card_date }}
           LEAGUE: ${{ steps.resolve.outputs.league }}
           AS_OF_UTC: ${{ steps.resolve.outputs.as_of_utc }}
@@ -248,16 +263,30 @@ jobs:
           mkdir -p output/run-evidence
           args=()
           if [ "$INITIAL_RESEARCH" = true ]; then args+=(--initial-research-baselines); fi
+          if [ -n "${CARD_EVENT_PACKAGE:-}" ]; then
+            args+=(--event-package "$CARD_EVENT_PACKAGE" --event-package-sha256 "$CARD_EVENT_PACKAGE_SHA256")
+          fi
+          run_generator() {
+            if [ "$LEAGUE" = nfl ]; then
+              if [ -z "${CARD_EVENT_PACKAGE:-}" ]; then echo NFL_EXPLICIT_EVENT_PACKAGE_REQUIRED >&2; return 2; fi
+              store="$(dirname "$CARD_EVENT_PACKAGE")/state"
+              if [ -f "$store/HEAD" ]; then
+                args+=(--weekly-state-store "$store" --weekly-state-id "$(cat "$store/HEAD")")
+              fi
+              python scripts/run_nfl_integrated.py --date "$CARD_DATE" --as-of-utc "$AS_OF_UTC" \
+                --simulations "$SIMULATION_COUNT" --output output/card "${args[@]}"
+            else
+              python scripts/generate_card_force.py --identity-semantics market_blind_numeric.v2 \
+                --date "$CARD_DATE" --league "$LEAGUE" --as-of-utc "$AS_OF_UTC" \
+                --simulations "$SIMULATION_COUNT" --output-dir output/card "${args[@]}"
+            fi
+          }
           set +e
-          python scripts/generate_card_force.py \
-            --identity-semantics market_blind_numeric.v2 \
-            --date "$CARD_DATE" \
-            --league "$LEAGUE" \
-            --as-of-utc "$AS_OF_UTC" \
-            --simulations "$SIMULATION_COUNT" \
-            --output-dir output/card "${args[@]}" \
-            2>&1 | tee output/run-evidence/run.log
-          rc=${PIPESTATUS[0]}
+          run_generator 2>&1 | tee output/run-evidence/run.log
+          statuses=("${PIPESTATUS[@]}")
+          set -e
+          rc=${statuses[0]}
+          if [ "${statuses[1]}" != 0 ]; then rc=2; fi
           # The runner exclusively creates its output directory. Collect evidence only afterward.
           mkdir -p output/card
           cp output/run-evidence/run.log output/card/run.log
@@ -285,6 +314,7 @@ jobs:
 
       - name: Validate card and write manifest
         id: validate
+        if: ${{ always() && !cancelled() }}
         shell: bash
         env:
           REQUEST_ID: ${{ steps.resolve.outputs.request_id }}
@@ -293,107 +323,10 @@ jobs:
           AS_OF_UTC: ${{ steps.resolve.outputs.as_of_utc }}
           SIMULATION_COUNT: ${{ steps.resolve.outputs.simulation_count }}
           FORECAST_EXIT_CODE: ${{ steps.forecast.outputs.exit_code }}
-        run: |
-          python - <<'PY'
-          import json, os
-          from pathlib import Path
-
-          out = Path("output/card")
-          league = os.environ["LEAGUE"].lower()
-          required = [
-              out / "diagnostic_card.json",
-              out / "diagnostic_card.csv",
-              out / "diagnostic_card.md",
-              out / "pit_integrity.json",
-          ]
-          if league == "mlb":
-              required.extend(
-                  [
-                      out / "divergence/divergence_report.json",
-                      out / "divergence/divergence_report.csv",
-                      out / "divergence/divergence_report.md",
-                  ]
-              )
-          missing = [str(p) for p in required if not p.exists()]
-          if missing:
-              raise SystemExit(f"missing card artifacts: {missing}")
-
-          card = json.loads((out / "diagnostic_card.json").read_text())
-          scheduled = int(card.get("scheduled_game_count", 0))
-          forecasted = int(card.get("forecast_count", 0))
-          post_start = sum(1 for row in card.get("forecasts", []) if row.get("forecast_status") == "POST_START")
-          pregame = max(0, scheduled - post_start)
-          coverage = float(card.get("pregame_coverage", 0.0))
-          incidents = card.get("incidents", [])
-          exit_code = int(os.environ.get("FORECAST_EXIT_CODE") or 0)
-          pit = card.get("pit_provenance") or {}
-
-          overall_status = "PASS"
-          if pregame > 0 and forecasted == 0:
-              overall_status = "FAIL"
-          if card.get("coverage_breach_event_ids"):
-              overall_status = "FAIL"
-          if exit_code != 0:
-              overall_status = "FAIL"
-
-          if pit.get("pit_gate") == "WARN":
-              print(
-                  f"::warning title=PIT provenance::{pit.get('pit_status')} "
-                  f"requested={pit.get('requested_as_of_utc')} "
-                  f"actual={pit.get('actual_data_vintage_utc')} "
-                  f"delta_seconds={pit.get('pit_delta_seconds')}"
-              )
-
-          artifacts = {
-              "json": "output/card/diagnostic_card.json",
-              "csv": "output/card/diagnostic_card.csv",
-              "markdown": "output/card/diagnostic_card.md",
-              "pit_integrity": "output/card/pit_integrity.json",
-              "log": "output/card/run.log",
-          }
-          if league == "mlb":
-              artifacts["divergence_json"] = "output/card/divergence/divergence_report.json"
-              artifacts["divergence_csv"] = "output/card/divergence/divergence_report.csv"
-              artifacts["divergence_markdown"] = "output/card/divergence/divergence_report.md"
-
-          manifest = {
-              "request_id": os.environ["REQUEST_ID"],
-              "github_run_id": os.environ.get("GITHUB_RUN_ID"),
-              "github_run_attempt": os.environ.get("GITHUB_RUN_ATTEMPT"),
-              "git_sha": os.environ.get("GITHUB_SHA"),
-              "card_date": os.environ["CARD_DATE"],
-              "as_of_utc": os.environ["AS_OF_UTC"],
-              "requested_as_of_utc": card.get("requested_as_of_utc", os.environ["AS_OF_UTC"]),
-              "actual_data_vintage_utc": pit.get("actual_data_vintage_utc"),
-              "generated_at_utc": card.get("generated_at_utc"),
-              "max_source_timestamp_utc": pit.get("max_source_timestamp_utc"),
-              "min_source_timestamp_utc": pit.get("min_source_timestamp_utc"),
-              "pit_mode": pit.get("pit_mode"),
-              "pit_reconstruction_supported": pit.get("pit_reconstruction_supported"),
-              "pit_delta_seconds": pit.get("pit_delta_seconds"),
-              "pit_status": pit.get("pit_status"),
-              "pit_reason": pit.get("pit_reason"),
-              "pit_threshold_seconds": pit.get("pit_threshold_seconds"),
-              "data_vintage_basis": pit.get("data_vintage_basis"),
-              "mode": "DIAGNOSTIC_SHADOW",
-              "league": league.upper(),
-              "simulation_count": int(os.environ["SIMULATION_COUNT"]),
-              "scheduled_events": scheduled,
-              "pregame_events": pregame,
-              "forecasted_events": forecasted,
-              "forecast_coverage_pct": coverage,
-              "incident_count": len(incidents),
-              "generator_exit_code": exit_code,
-              "card_artifacts": artifacts,
-              "action_authority": False,
-              "market_overlay_enabled": False,
-              "overall_status": overall_status,
-          }
-          (out / "manifest.json").write_text(json.dumps(manifest, indent=2, sort_keys=True) + "\n")
-          print(json.dumps(manifest, indent=2, sort_keys=True))
-          if overall_status != "PASS":
-              raise SystemExit("diagnostic card validation failed")
-          PY
+          REQUEST_ERROR: ${{ steps.resolve.outputs.request_error }}
+          PACKAGE_ARTIFACT_ID: ${{ steps.resolve.outputs.package_artifact_id }}
+          PACKAGE_ARCHIVE_SHA256: ${{ steps.resolve.outputs.package_archive_sha256 }}
+        run: python -m pipelines.cards.runner_contract
 
       - name: Publish card summary
         if: ${{ always() && steps.resolve.outputs.publish_summary == 'true' }}
@@ -423,6 +356,19 @@ jobs:
           if-no-files-found: error
           retention-days: 30
 
+      - name: Download the checked diagnostic artifact
+        if: ${{ success() && steps.validate.outcome == 'success' }}
+        uses: actions/download-artifact@v4
+        with:
+          artifact-ids: ${{ steps.card_artifact.outputs.artifact-id }}
+          merge-multiple: true
+          path: ${{ runner.temp }}/diagnostic-card-readback
+
+      - name: Verify published card readback
+        if: ${{ success() && steps.validate.outcome == 'success' }}
+        shell: bash
+        run: python -m pipelines.cards.runner_contract --readback-dir "$RUNNER_TEMP/diagnostic-card-readback"
+
       - name: Register pregame MLB calibration card
         if: ${{ success() && steps.resolve.outputs.league == 'mlb' && github.ref_name == github.event.repository.default_branch }}
         shell: bash
@@ -446,7 +392,7 @@ jobs:
 
       - name: Register priority-league prospective research card
         id: research_registration
-        if: ${{ always() && contains(fromJSON('["nfl","cfb","wnba","nba","nhl"]'), steps.resolve.outputs.league) && github.ref_name == github.event.repository.default_branch }}
+        if: ${{ success() && steps.validate.outputs.registration_policy == 'EXISTING_REGISTRATION_RULES' && contains(fromJSON('["nfl","cfb","wnba","nba","nhl"]'), steps.resolve.outputs.league) && github.ref_name == github.event.repository.default_branch }}
         continue-on-error: true
         shell: bash
         env:

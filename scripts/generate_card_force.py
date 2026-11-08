@@ -4,6 +4,8 @@ from __future__ import annotations
 
 import argparse
 import csv
+from collections import Counter
+import hashlib
 import importlib
 import json
 import math
@@ -11,6 +13,7 @@ import os
 import sys
 from datetime import datetime, timezone
 from pathlib import Path
+from zoneinfo import ZoneInfo
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 if str(REPO_ROOT) not in sys.path:
@@ -336,35 +339,92 @@ def attach_state_receipt(raw, event, context, league):
     return result
 
 
-def generate(card_date, league, as_of, simulations, overrides, roster_bundle=None, require_roster_aware=False, *, identity_semantics="legacy.v1"):
+def bind_shared_package(path, expected_sha256, league, day):
+    """Select exactly the supplied current-package file; keep existing adapter checks active."""
+    path = Path(path).resolve()
+    if league == "nfl" or path.name != "package.json" or path.parent.name != league:
+        raise ValueError("SHARED_PACKAGE_PATH_OR_ROUTE_MISMATCH")
+    raw = path.read_bytes()
+    if hashlib.sha256(raw).hexdigest() != expected_sha256:
+        raise ValueError("SHARED_PACKAGE_HASH_MISMATCH")
+    package = json.loads(raw)
+    if (package.get("schema") != "sports.current_research_package.v1" or
+            package.get("league") != league or package.get("action_authority") is not False):
+        raise ValueError("SHARED_PACKAGE_IDENTITY_MISMATCH")
+    if day not in package["covered_dates"]:
+        raise ValueError("DATE_NOT_ACQUIRED:" + day)
+    dated = []
+    for event in package["events"]:
+        actual_day = dt(event["start_time_utc"]).astimezone(ZoneInfo("America/Los_Angeles")).date().isoformat()
+        if actual_day != event["slate_date"]:
+            raise ValueError("PACKAGE_EVENT_SLATE_DATE_MISMATCH")
+        if actual_day == day:
+            dated.append(event)
+    os.environ["SPORTS_RESEARCH_PACKAGE_DIR"] = str(path.parent.parent)
+    return dated
+
+
+def refused_event(event, reason, status="BLOCKED"):
+    return {"event_id": str(event["event_id"]), "away_team": event.get("away_team"),
+            "home_team": event.get("home_team"), "start_time_utc": event.get("start_time_utc"),
+            "forecast_status": status, "refusal_reason": reason,
+            "action_authority": False, "action_status": "SHADOW_ONLY"}
+
+
+def generate(card_date, league, as_of, simulations, overrides, roster_bundle=None, require_roster_aware=False, *,
+             identity_semantics="legacy.v1", package_sha256=None, expected_schedule=None):
     from sports.rosters import attach, assess, load_bundle
-    roster = load_bundle(roster_bundle) if roster_bundle else None
     adapter = load_adapter(league)
     schedule = adapter.load_schedule(card_date, as_of)
-    context = adapter.build_context(schedule, as_of, True, overrides)
+    if expected_schedule is not None and schedule != expected_schedule:
+        raise ValueError("BOUND_PACKAGE_SCHEDULE_MISMATCH")
+    context_error = None
+    try:
+        roster = load_bundle(roster_bundle) if roster_bundle else None
+        context = adapter.build_context(schedule, as_of, True, overrides)
+        if package_sha256 is not None and context.get("package_sha256") != package_sha256:
+            raise ValueError("LOADED_PACKAGE_HASH_MISMATCH")
+    except Exception as exc:
+        context_error = f"{type(exc).__name__}:{exc}"
+        context, roster = {}, None
     if league.lower() == "nfl":
         context["retain_draws"] = True
     rows = []
     incidents = []
+    if context_error:
+        incidents.append({"incident": "CONTEXT_UNAVAILABLE", "detail": context_error})
     requested_cutoff = dt(as_of)
-
+    ids = Counter(str(event["event_id"]) for event in schedule if event.get("event_id"))
+    seen = set()
     for event in schedule:
-        if not event.get("event_id") or not event.get("home_team") or not event.get("away_team"):
+        if not event.get("event_id"):
             incidents.append({"event": event, "incident": "CANONICAL_IDENTITY_UNRESOLVED"})
             continue
-        event_start = dt(event["start_time_utc"])
+        eid = str(event["event_id"])
+        if eid in seen:
+            continue
+        seen.add(eid)
+        problem = None
+        if ids[eid] != 1:
+            problem = "DUPLICATE_SCHEDULE_EVENT_ID"
+        elif not event.get("home_team") or not event.get("away_team"):
+            problem = "CANONICAL_IDENTITY_UNRESOLVED"
+        else:
+            try:
+                event_start = dt(event["start_time_utc"])
+            except (KeyError, TypeError, ValueError):
+                problem = "INVALID_EVENT_START"
+        if problem:
+            rows.append(refused_event(event, problem))
+            incidents.append({"event_id": eid, "incident": problem})
+            continue
         # A requested cutoff alone is insufficient for prospectivity. Do not fetch
         # event-level inputs if the game has already started in wall-clock time.
         if event_start <= requested_cutoff or event_start <= now_utc():
-            rows.append({
-                "event_id": str(event["event_id"]),
-                "away_team": event["away_team"],
-                "home_team": event["home_team"],
-                "start_time_utc": event["start_time_utc"],
-                "forecast_status": "POST_START",
-                "action_authority": False,
-                "action_status": "SHADOW_ONLY",
-            })
+            rows.append(refused_event(event, "AT_OR_AFTER_START", "POST_START"))
+            continue
+        if context_error:
+            rows.append(refused_event(event, context_error))
             continue
         try:
             if require_roster_aware:
@@ -385,19 +445,11 @@ def generate(card_date, league, as_of, simulations, overrides, roster_bundle=Non
             raw = attach(raw, league.lower(), event, as_of, roster)
             # Guard the rare case where network/simulation time crosses first pitch.
             if now_utc() >= event_start:
-                rows.append({
-                    "event_id": str(event["event_id"]),
-                    "away_team": event["away_team"],
-                    "home_team": event["home_team"],
-                    "start_time_utc": event["start_time_utc"],
-                    "forecast_status": "POST_START",
-                    "action_authority": False,
-                    "action_status": "SHADOW_ONLY",
-                    "warnings": ["START_CROSSED_DURING_FORECAST_GENERATION"],
-                })
+                rows.append(refused_event(event, "START_CROSSED_DURING_FORECAST_GENERATION", "POST_START"))
             else:
                 rows.append(normalize(event, raw))
         except Exception as exc:
+            rows.append(refused_event(event, f"{type(exc).__name__}:{exc}"))
             incidents.append({
                 "event_id": str(event["event_id"]),
                 "incident": "FORECAST_COVERAGE_BREACH",
@@ -406,10 +458,9 @@ def generate(card_date, league, as_of, simulations, overrides, roster_bundle=Non
 
     generated_at = now_utc().isoformat().replace("+00:00", "Z")
     pit = summarize_pit(context, as_of, generated_at)
-    actual_cutoff = max(requested_cutoff, dt(generated_at))
-    pregame = [event for event in schedule if dt(event["start_time_utc"]) > actual_cutoff]
-    generated = {row["event_id"] for row in rows if row.get("forecast_status") == "FORECAST_GENERATED"}
-    missing = [str(event["event_id"]) for event in pregame if str(event["event_id"]) not in generated]
+    generated = {row["event_id"] for row in rows if row["forecast_status"] == "FORECAST_GENERATED"}
+    missing = [row["event_id"] for row in rows if row["forecast_status"] == "BLOCKED"]
+    pregame_count = len(schedule) - sum(r["forecast_status"] == "POST_START" for r in rows)
 
     card = {
         "artifact_type": "diagnostic_force_card_v1",
@@ -424,7 +475,7 @@ def generate(card_date, league, as_of, simulations, overrides, roster_bundle=Non
         "actionable": False,
         "scheduled_game_count": len(schedule),
         "forecast_count": len(generated),
-        "pregame_coverage": 1.0 if not pregame else len(generated) / len(pregame),
+        "pregame_coverage": len(generated) / pregame_count if pregame_count else 1.0,
         "coverage_breach_event_ids": missing,
         "incidents": incidents,
         "roster_policy": {"bundle_sha256": roster.get('bundle_sha256') if roster else None,
@@ -433,6 +484,8 @@ def generate(card_date, league, as_of, simulations, overrides, roster_bundle=Non
                           "current_roster_is_not_numerical_consumption": True},
         "forecasts": rows,
     }
+    if package_sha256 is not None:
+        card["package_binding"] = {"sha256": package_sha256, "date": card_date, "league": league}
     return attach_grading(card)
 
 
@@ -511,7 +564,9 @@ def render_md(card, disclosures=None):
     for row in card["forecasts"]:
         game = f"{row.get('away_team')} @ {row.get('home_team')}"
         if row.get("forecast_status") != "FORECAST_GENERATED":
-            lines.append(f"| {game} | POST_START | — | — | — | — | — | — | — | — | INELIGIBLE | post-start; no new pregame forecast |")
+            status = row["forecast_status"]
+            reason = row.get("refusal_reason", status).replace("|", "\\|").replace("\n", " ")
+            lines.append(f"| {game} | {status} | — | — | — | — | — | — | — | — | INELIGIBLE | {reason} |")
             continue
         pct = lambda x: "—" if x is None else f"{100 * x:.1f}%"
         gap = "—" if row["analytic_sim_gap_pp"] is None else f"{row['analytic_sim_gap_pp']:+.2f} pp"
@@ -553,6 +608,8 @@ def main():
     parser.add_argument("--disclosures", type=Path, help="Source-bound availability scenarios, assumptions and dependence disclosures; presentation only")
     parser.add_argument("--identity-semantics", choices=["legacy.v1", "market_blind_numeric.v2"], default="market_blind_numeric.v2", help="Explicit independently identified execution child; legacy behavior remains available")
     parser.add_argument("--selection-config", type=Path, help="Frozen research selector configuration; absent config emits unqualified diagnostic NO_PICK")
+    parser.add_argument("--event-package", type=Path, help="Explicit dated current-package file")
+    parser.add_argument("--event-package-sha256", help="Expected SHA-256 of the selected package bytes")
     parser.add_argument("--output-dir", default="output")
     args = parser.parse_args()
     if args.initial_research_baselines:os.environ['SPORTS_INITIAL_BASELINES']='1'
@@ -563,8 +620,28 @@ def main():
     os.environ['SPORTS_RESEARCH_DRAW_OUTPUT']=str((output/'draws').resolve())
     if args.league == "mlb":
         os.environ["MLB_DRAW_OUTPUT"] = str((output / "draws").resolve())
-    card = generate(args.date, args.league, as_of, args.simulations, args.manual_overrides, args.roster_bundle, args.require_roster_aware, identity_semantics=args.identity_semantics)
+    try:
+        schedule = None
+        if args.event_package is not None or args.event_package_sha256 is not None:
+            if not args.event_package or not args.event_package_sha256:
+                raise ValueError("PACKAGE_AND_SHA256_REQUIRED_TOGETHER")
+            schedule = bind_shared_package(args.event_package, args.event_package_sha256, args.league, args.date)
+        card = generate(args.date, args.league, as_of, args.simulations, args.manual_overrides,
+                        args.roster_bundle, args.require_roster_aware, identity_semantics=args.identity_semantics,
+                        package_sha256=args.event_package_sha256, expected_schedule=schedule)
+    except Exception as exc:
+        failure = {"status": "BLOCKED", "league": args.league, "date": args.date, "as_of_utc": as_of,
+                   "package_path": str(args.event_package) if args.event_package else None,
+                   "expected_package_sha256": args.event_package_sha256, "action_authority": False,
+                   "reason": f"{type(exc).__name__}:{exc}"}
+        (output / "runner_failure.json").write_text(json.dumps(failure, indent=2) + "\n")
+        print(failure["reason"], file=sys.stderr)
+        raise SystemExit(2) from exc
     (output / "diagnostic_card.json").write_text(json.dumps(card, indent=2, sort_keys=True) + "\n")
+    from pipelines.cards.recipient_card import write_recipient_card, verify_recipient_card
+    html = output / "diagnostic_card.html"
+    write_recipient_card(card, html)
+    verify_recipient_card(json.loads((output / "diagnostic_card.json").read_text()), html)
     from pipelines.cards.selection_integration import write_card_selection
     selection_config = json.loads(args.selection_config.read_text()) if args.selection_config else None
     selection = write_card_selection(output / "diagnostic_card.json", output / "research_selection", config=selection_config)
@@ -579,7 +656,7 @@ def main():
                 append_flip_diagnostic(output / 'flip_diagnostics.jsonl', flip)
 
     fields = [
-        "event_id", "away_team", "home_team", "forecast_status", "forecast_tier", "data_quality",
+        "event_id", "away_team", "home_team", "forecast_status", "refusal_reason", "forecast_tier", "data_quality",
         "dose", "model_winner", "analytic_p", "stochastic_sim_p", "analytic_sim_gap_pp",
         "analytic_sim_abs_gap_pp", "analytic_sim_divergence", "model_p_candidate_normal_margin",
         "projected_margin", "projected_total", "projected_home_runs", "projected_away_runs",
@@ -628,7 +705,7 @@ def main():
             with (output / "distribution_research_failure.json").open("x") as handle:
                 json.dump(failure, handle, indent=2)
             print(json.dumps({"distribution_research": failure}))
-    raise SystemExit(2 if card["coverage_breach_event_ids"] or research_incomplete else 0)
+    raise SystemExit(2 if card["incidents"] or card["coverage_breach_event_ids"] or research_incomplete else 0)
 
 
 if __name__ == "__main__":

@@ -33,7 +33,22 @@ def persist_replay(folder, bundle, winner, scores, captured_package):
     return receipt
 
 def main():
-    p=argparse.ArgumentParser();p.add_argument('--date',required=True);p.add_argument('--output',type=Path,required=True);p.add_argument('--simulations',type=int,default=100000);p.add_argument('--model-id');p.add_argument('--mode',default='research_pregame');p.add_argument('--market-packet',type=Path);p.add_argument('--live-packet',type=Path);p.add_argument('--event-id');p.add_argument('--home-spread',type=float,action='append',help='Optional downstream full-game spread calibration, HOME handicap orientation');p.add_argument('--halftime-artifact',type=Path,help='Explicit fitted halftime/joint research artifact; emits a separate model output');p.add_argument('--weekly-state-store',type=Path);p.add_argument('--weekly-state-id');p.add_argument('--distribution-research-config',type=Path,help='Separate hash-bound margin/total research child; does not require or replace combined-arm calibration');p.add_argument('--disclosures',type=Path,help='Presentation-only event scenarios and dependence evidence; requires --event-id');p.add_argument('--identity-semantics',choices=['legacy.v1','market_blind_numeric.v2'],default='market_blind_numeric.v2');p.add_argument('--selection-config',type=Path,help='Frozen selector config; absent config produces diagnostic NO_PICK');p.add_argument('--replay-cutoff-utc',help='Explicit retained-package replay, never prospective registration');p.add_argument('--roster-bundle',type=Path);p.add_argument('--require-roster-aware',action='store_true');p.add_argument('--qb-margin',action='store_true',help='Emit the separately registered QB-only full-game margin research model');p.add_argument('--qb-margin-calibrated',action='store_true',help='Emit the separately registered integer-margin calibration successor');p.add_argument('--comparison-market-packet',type=Path,help='Display-only source snapshot loaded after forecast freeze');p.add_argument('--research-grading-store',type=Path,default=ROOT/'data/grading/nfl_qb_margin');p.add_argument('--margin-model',type=Path,help='Explicit separate selected-QB full-game margin research config');a=p.parse_args()
+    p=argparse.ArgumentParser()
+    p.add_argument('--event-package',type=Path,help='Explicit dated NFL research package. Requires a trusted file SHA-256 and a new output directory.')
+    p.add_argument('--event-package-sha256',help='Approved SHA-256 of the exact event package bytes')
+    p.add_argument('--as-of-utc',help='Information cutoff for the bound pregame run; the writer still uses the actual clock')
+    p.add_argument('--date',required=True);p.add_argument('--output',type=Path,required=True);p.add_argument('--simulations',type=int,default=100000);p.add_argument('--model-id');p.add_argument('--mode',default='research_pregame');p.add_argument('--market-packet',type=Path);p.add_argument('--live-packet',type=Path);p.add_argument('--event-id');p.add_argument('--home-spread',type=float,action='append',help='Optional downstream full-game spread calibration, HOME handicap orientation');p.add_argument('--halftime-artifact',type=Path,help='Explicit fitted halftime/joint research artifact; emits a separate model output');p.add_argument('--weekly-state-store',type=Path);p.add_argument('--weekly-state-id');p.add_argument('--distribution-research-config',type=Path,help='Separate hash-bound margin/total research child; does not require or replace combined-arm calibration');p.add_argument('--disclosures',type=Path,help='Presentation-only event scenarios and dependence evidence; requires --event-id');p.add_argument('--identity-semantics',choices=['legacy.v1','market_blind_numeric.v2'],default='market_blind_numeric.v2');p.add_argument('--selection-config',type=Path,help='Frozen selector config; absent config produces diagnostic NO_PICK');p.add_argument('--replay-cutoff-utc',help='Explicit retained-package replay, never prospective registration');p.add_argument('--roster-bundle',type=Path);p.add_argument('--require-roster-aware',action='store_true');p.add_argument('--qb-margin',action='store_true',help='Emit the separately registered QB-only full-game margin research model');p.add_argument('--qb-margin-calibrated',action='store_true',help='Emit the separately registered integer-margin calibration successor');p.add_argument('--comparison-market-packet',type=Path,help='Display-only source snapshot loaded after forecast freeze');p.add_argument('--research-grading-store',type=Path,default=ROOT/'data/grading/nfl_qb_margin');p.add_argument('--margin-model',type=Path,help='Explicit separate selected-QB full-game margin research config');a=p.parse_args()
+    if a.event_package is not None or a.event_package_sha256 is not None:
+        from pipelines.cards.nfl_runner_contract import run_bound
+        if run_bound(a, lambda args, package: _execute(args,p,package)):
+            raise SystemExit(2)
+        return
+    if a.as_of_utc is not None:
+        p.error('--as-of-utc requires an explicit hash-bound package')
+    _execute(a,p)
+
+
+def _execute(a,p,expected_package=None):
     from sports.rosters import attach, assess, load_bundle
     roster=load_bundle(a.roster_bundle) if a.roster_bundle else None
     if a.disclosures and (not a.event_id or a.mode=='live'):p.error('Disclosure packets require a single pregame --event-id')
@@ -64,16 +79,20 @@ def main():
     market=json.loads(a.market_packet.read_text()) if a.market_packet else None
     live=json.loads(a.live_packet.read_text()) if a.live_packet else None
     default_id=fitted['model_id'] if fitted is not None else json.loads((nfl.DATA/'runtime.json').read_text())['default_research_model']
-    cutoff=a.replay_cutoff_utc or dt.datetime.now(dt.timezone.utc).isoformat()
+    cutoff=a.replay_cutoff_utc or a.as_of_utc or dt.datetime.now(dt.timezone.utc).isoformat()
     if a.replay_cutoff_utc:
         from models.nfl.contextual.recovered_inference import utc
         if a.mode != 'research_pregame' or utc(cutoff) > dt.datetime.now(dt.timezone.utc):p.error('Replay requires past cutoff and independent research_pregame mode')
-    events=nfl.load_schedule(a.date,cutoff)
+    events=(nfl.load_schedule(a.date,cutoff) if expected_package is None else
+            [e for e in expected_package['events'] if e['gameday'] == a.date])
     if a.event_id:
         events=[e for e in events if e['event_id']==a.event_id]
         if not events:raise ValueError('EVENT_NOT_IN_CAPTURED_SCHEDULE')
+    if not events:
+        raise ValueError('NFL_EMPTY_DATED_PACKAGE')
     if a.home_spread and len(events)!=1:raise ValueError('SPREAD_OVERLAY_REQUIRES_SINGLE_EVENT_SELECTION')
-    context=nfl.build_context(events,cutoff,mode=a.mode)
+    context=(nfl.build_context(events,cutoff,mode=a.mode) if expected_package is None else
+             nfl.build_package_context(expected_package,a.event_package.resolve().parent,cutoff,mode=a.mode))
     distribution_incomplete=False
     for e in events:
         if a.require_roster_aware:

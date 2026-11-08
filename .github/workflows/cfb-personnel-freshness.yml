@@ -1,14 +1,6 @@
 name: CFB personnel event freshness
 on:
-  pull_request:
-    paths:
-      - 'models/experiments/cfb_*.py'
-      - 'research/efficiency/**'
-      - 'scripts/*cfb_personnel*'
-      - 'scripts/run_efficiency_experiments.py'
-      - 'tests/test_cfb_personnel*'
-      - 'docs/research/cfb_personnel_freshness_20261031/**'
-      - '.github/workflows/cfb-personnel-freshness.yml'
+  pull_request: {}
   workflow_dispatch:
 permissions:
   contents: read
@@ -32,7 +24,7 @@ jobs:
           tests/test_efficiency_adversarial.py
           tests/test_model_control_dispatch.py
       - name: Verify version-bound acceptance evidence
-        run: python -m research.finding_evidence docs/research/cfb_personnel_freshness_20261031/FINDING_EVIDENCE.json
+        run: python -m research.finding_evidence docs/research/cfb_missingness_evidence_20261108/FINDING_EVIDENCE.json
       - name: Scope
         if: always()
         run: echo 'Synthetic software acceptance only. Source qualification and chronological predictive evaluation remain open. Wagering OFF.' >> "$GITHUB_STEP_SUMMARY"

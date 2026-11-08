@@ -227,6 +227,14 @@ def test_real_runner_retains_refreshes_and_never_rewrites_first(fixture):
     second = run(fixture, request, suffix="2")
     assert second["retained_count"] == 1, second["coverage"]
     assert second["coverage"][0]["sequence"] == 1
+    first_audit=first["coverage"][0]["native_missingness_audit"]
+    assert first_audit["details"]["comparison_status"]=="FIRST_REFRESH_NO_PAIRED_PREDECESSOR"
+    audit=second["coverage"][0]["native_missingness_audit"]
+    assert audit["release_status"]=="HOLD_PENDING_SCOPE_REVIEW"
+    assert audit["details"]["comparison_status"]=="SAME_FIT_SOURCE_BOUND_REFRESH"
+    assert all(v["imputation_transition"]==0. for v in audit["details"]["heads"].values())
+    assert audit["details"]["heads"]["home_margin"]["after"]==second["coverage"][0]["forecast"]["home_margin"]
+    assert audit["details"]["features"]["home_qb_availability"]["fallback"]=="REFUSE_MISSING_PERSONNEL_EVIDENCE"
     assert all(p.read_bytes() == raw for p, raw in files.items())
     assert len(list((fixture["root"] / "refresh-store" / "blobs").iterdir())) == 8
     duplicate = run(fixture, request, suffix="3")
@@ -361,3 +369,25 @@ def test_real_cli_blocks_unanchored_history_and_retains_disposition(fixture):
     report = json.loads((root / "cli-run" / "report.json").read_bytes())
     assert report["retained_count"] == 0
     assert "HISTORICAL_INDEPENDENT_AVAILABILITY_REQUIRED" in report["coverage"][0]["reason"]
+
+
+def test_removed_refresh_source_yields_audited_refusal_and_no_forecast(fixture):
+    request=copy.deepcopy(fixture['request'])
+    request['personnel_evidence'].pop('away')
+    report=run(fixture,request)
+    row,=report['coverage']
+    assert row['status']=='BLOCKED' and 'forecast' not in row
+    assert row['missingness_audit']['details']['unresolved_inputs']==[row['reason']]
+    assert not any((fixture['root']/'refresh-store').rglob('*.json'))
+
+
+def test_missingness_receipt_rejects_relabelled_native_refresh(fixture):
+    from research.efficiency.freshness_missingness import check
+    report=run(fixture)
+    assert report["retained_count"]==1
+    path=next((fixture["root"]/"refresh-store").rglob("*.json"))
+    receipt=json.loads(path.read_bytes())
+    check(receipt)
+    receipt["component_receipt"]["forecast"]["p_home"]=0.91
+    with pytest.raises(ValueError,match="MISSINGNESS_READBACK_FAILED"):
+        check(receipt)

@@ -4,6 +4,7 @@ from __future__ import annotations
 from datetime import datetime, timezone
 import hashlib
 import json
+from collections import Counter
 from pathlib import Path
 import uuid
 
@@ -36,6 +37,42 @@ def common_report(mode):
                             for p in (Path(model.__file__).resolve(), Path(__file__).resolve())}}
 
 
+def _audited_prediction(state,row,base):
+    from pipelines.cards.missingness import seal_audit
+    forecast=model.predict(state,row,base=base)
+    packet=row["personnel"]
+    f=model.features(row,base)
+    players=packet["players"]
+    probes={}
+    for label, changed in (("missing_rotation_member",players[:-1]),("duplicate_rotation_member",players+[players[0]])):
+        try:
+            model.features({**row,"personnel":{**packet,"players":changed}},base)
+        except ValueError as exc:
+            probes[label]=str(exc)
+        else:
+            raise ValueError("NBA_MISSINGNESS_PROBE_ACCEPTED:"+label)
+    reordered=model.predict(state,{**row,"personnel":{**packet,"players":list(reversed(players))}},base=base)
+    if abs(reordered["home_margin"]-forecast["home_margin"])>1e-10:
+        raise ValueError("NBA_PERSONNEL_ORDER_CHANGES_MARGIN")
+    details={"status":"ROTATION_COVERAGE_PROBED","probes":probes,
+             "counts_by_status":{k:sum(p["status"]==k for p in players) for k in sorted({p["status"] for p in players})},
+             "player_feature_values":f["features"],
+             "unseen_with_zero_minute_delta":sorted(set(f["features"])-set(state["players"])),
+             "absent_fit_columns_zero_filled":sorted(set(state["players"])-set(f["features"])),
+             "withheld_source_status":"Missing or conflicting role/rotation evidence refuses; unseen nonzero effects cannot be imputed.",
+             "historical_support":"UNMEASURED","limits":"UNREVIEWED","refresh":{"status":"NO_PAIRED_PARENT"}}
+    # The fitted source hash covers only native forecast bytes. Seal the outer pair separately.
+    return forecast, seal_audit(league="nba",model_id=forecast["model_id"],event_id=forecast["event_id"],
+                                products=["home_margin_points"],forecast=forecast,details=details)
+
+
+def _audit_check(forecast,receipt):
+    from pipelines.cards.missingness import verify_audit
+    if not verify_audit(receipt,league="nba",model_id=forecast["model_id"],event_id=forecast["event_id"],
+                        products=["home_margin_points"],forecast=forecast):
+        raise ValueError("NBA_PERSONNEL_MISSINGNESS_READBACK_FAILED")
+
+
 def experiment(input_path, output):
     """Fit an explicit earlier split, then score the exact later paired events.
 
@@ -60,13 +97,15 @@ def experiment(input_path, output):
         return report
     write(out / "state.json", state)
     ids, forecasts, paired, excluded = set(), [], [], []
+    audit_by_event={}
     for row in packet["evaluation"]:
         eid = row.get("event", {}).get("event_id")
         try:
             if eid in ids:
                 raise ValueError("NBA_PERSONNEL_DUPLICATE_EVALUATION_EVENT")
             ids.add(eid)
-            forecast = model.predict(state, row, base=p.parent)
+            forecast,receipt = _audited_prediction(state,row,p.parent)
+            audit_by_event[eid]=receipt
             forecasts.append(forecast)
             if forecast["conditional_scenarios"]:
                 raise ValueError("NBA_PERSONNEL_CONDITIONAL_OUTCOME_MATCH_NOT_ESTABLISHED")
@@ -93,6 +132,10 @@ def experiment(input_path, output):
     if p.read_bytes() != raw:
         raise ValueError("NBA_PERSONNEL_INPUT_CHANGED_DURING_RUN")
     write(out / "forecasts.json", forecasts)
+    write(out / "missingness.json", audit_by_event)
+    stored=json.loads((out/"missingness.json").read_bytes())
+    for f in json.loads((out/"forecasts.json").read_bytes()):
+        _audit_check(f,stored[f["event_id"]])
     write(out / "paired.json", paired)
     write(out / "report.json", report)
     return report
@@ -115,8 +158,8 @@ def shadow_from_card(card_path, config_path, output):
         raise ValueError("NBA_PERSONNEL_INPUT_SCHEMA")
     rows = inputs["rows"]
     lookup = {r["event"]["event_id"]: r for r in rows}
-    if len(lookup) != len(rows):
-        raise ValueError("NBA_PERSONNEL_DUPLICATE_EVENT")
+    counts=Counter(r["event"]["event_id"] for r in rows)
+    parent_counts=Counter(parent["event_id"] for parent in card["forecasts"])
     cutoff = card.get("as_of_utc", card.get("requested_as_of_utc")) or card.get("pit", {}).get("requested_as_of_utc")
     model.utc(cutoff)
     out.mkdir(parents=True, exist_ok=False)
@@ -124,6 +167,8 @@ def shadow_from_card(card_path, config_path, output):
     for parent in card["forecasts"]:
         eid = parent["event_id"]
         try:
+            if counts[eid]>1 or parent_counts[eid]>1:
+                raise ValueError("NBA_PERSONNEL_DUPLICATE_EVENT")
             if eid not in lookup:
                 raise ValueError("NBA_PERSONNEL_EVENT_INPUT_MISSING")
             row = lookup[eid]
@@ -141,10 +186,15 @@ def shadow_from_card(card_path, config_path, output):
             margin = diagnostics.get("home_margin", diagnostics.get("prediction", {}).get("home_margin"))
             if model.number(margin, "parent_margin") != model.number(baseline["home_margin"], "supplied_parent_margin"):
                 raise ValueError("NBA_PERSONNEL_PARENT_MARGIN_MISMATCH")
-            forecast = model.predict(state, row, base=inputs_path.parent)
-            coverage.append({"event_id": eid, "status": "DIAGNOSTIC", "forecast": forecast})
+            forecast,receipt = _audited_prediction(state,row,inputs_path.parent)
+            coverage.append({"event_id": eid, "status": "DIAGNOSTIC", "forecast": forecast, "missingness_audit":receipt})
         except (ValueError, KeyError, TypeError, OSError) as exc:
-            coverage.append({"event_id": eid, "status": "BLOCKED", "reason": str(exc)})
+            from pipelines.cards.missingness import seal_audit
+            blocked={"event_id":eid,"status":"BLOCKED","reason":str(exc),"cutoff_utc":cutoff}
+            blocked["missingness_audit"]=seal_audit(league="nba",event_id=eid,model_id=model.MODEL_ID,
+                products=["coverage"],forecast=dict(blocked),details={"status":"UNRESOLVED_IDENTITY_OR_COVERAGE",
+                "reason":str(exc),"source_review":"REQUIRED"})
+            coverage.append(blocked)
     if card_path.read_bytes() != card_raw or config_path.read_bytes() != config_raw:
         raise ValueError("NBA_PERSONNEL_PARENT_OR_CONFIG_CHANGED")
     report = {**common_report("CARD_DIAGNOSTIC"), "parent_card_sha256": hashlib.sha256(card_raw).hexdigest(),
@@ -153,4 +203,16 @@ def shadow_from_card(card_path, config_path, output):
               "blocked_count": sum(r["status"] == "BLOCKED" for r in coverage),
               "state_sha256": state["state_sha256"], "inputs_sha256": config["inputs"]["sha256"]}
     write(out / "report.json", report)
+    stored=json.loads((out/"report.json").read_bytes())
+    if stored!=report:
+        raise ValueError("NBA_PERSONNEL_REPORT_READBACK_MISMATCH")
+    for c in stored["coverage"]:
+        if c["status"]=="DIAGNOSTIC":
+            _audit_check(c["forecast"],c["missingness_audit"])
+        else:
+            from pipelines.cards.missingness import verify_audit
+            if not verify_audit(c.get("missingness_audit"),league="nba",event_id=c["event_id"],
+                                model_id=model.MODEL_ID,products=["coverage"],
+                                forecast={k:v for k,v in c.items() if k!="missingness_audit"}):
+                raise ValueError("NBA_PERSONNEL_REFUSAL_READBACK")
     return report

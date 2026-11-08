@@ -371,6 +371,16 @@ class ValidationRegistry:
         if lifecycle["status"] != "QUALIFY" or lifecycle["record_id"] != result.record_id:
             raise RegistryError("LIFECYCLE_NOT_QUALIFIED:" + lifecycle["status"])
         inherited_defects = self.lifecycle_log.defect_history(protocol["candidate_id"], when.isoformat(), expected_tip=self.lifecycle_tip)
+        from research.missingness_review import validate_study
+        if not protocol.get("missingness_policy_id") or not evidence.get("missingness_evaluation_id"):
+            raise RegistryError("MISSINGNESS_REVIEW_REQUIRED")
+        policy = validate_study(self.store, protocol["missingness_policy_id"], evidence["missingness_evaluation_id"],
+                                protocol["candidate_id"], target, _time(protocol["evaluation_start_utc"]),
+                                _time(protocol["evaluation_end_utc"]), verifier=self.verifier)
+        if policy["model_id"] != node["definition"]["model_id"] or policy["incumbent_id"] != protocol["control_id"]:
+            raise RegistryError("MISSINGNESS_FITTED_MODEL_OR_CONTROL_MISMATCH")
+        if _time(policy["calibration_end_utc"]) > _time(registration["witnessed_at_utc"]):
+            raise RegistryError("MISSINGNESS_POLICY_AFTER_PREREGISTRATION")
         return replace(result, lineage_id=lineage.lineage_id,
                        inspected_configurations=exposure["inspected_configurations"],
                        lifecycle_event_id=lifecycle["event_id"],

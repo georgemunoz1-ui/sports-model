@@ -81,3 +81,33 @@ def test_context_wrong_event_and_late_capture():
     receipt={'status':'CAPTURED','retrieved_at_utc':'2026-10-03T23:45:00Z','raw_sha256':'example','url':'https://example.org'}
     with pytest.raises(ValueError,match='EVENT_MISMATCH'):extract(event,receipt,{'header':{'id':'2'}})
     assert extract(event,receipt,{'header':{'id':'1'}})['pre_start_capture'] is False
+
+
+def test_current_joint_operator_preserves_sibling_and_reads_bound_imputation(tmp_path):
+    import json
+    from datetime import datetime, timedelta, timezone
+    from scripts.run_cfb_joint_empirical import run
+    from models.cfb.joint_empirical_v1 import digest
+    now = datetime.now(timezone.utc)
+    future = now+timedelta(days=1)
+    date = future.date().isoformat()
+    train = frame().rename(columns={'strength':'home_ewma_margin'})
+    state = fit(train, ['home_ewma_margin'], '2021-01-01T00:00:00Z', 2)
+    e = dict(event_id='fixture-1',start_time_utc=future.isoformat(),slate_date=date,division_scope='FBS_VS_FBS',
+             week=2,neutral_site=True,conference_game=False,season=2026,home_team='a',away_team='b')
+    material={'model':{},'state':{k:{} for k in ('elo','last','last_season','ewpf','ewpa','ewm')},
+              'parameters':{'hfa':30,'regress':.5}}
+    pkg = dict(captured_at_utc=now.isoformat(),source_fetches=[dict(fetched_at_utc=now.isoformat(),status='CAPTURED')],
+               covered_dates=[date],training_cutoff_utc=state['training_cutoff'],model_sha256=digest(material),
+               events=[e,dict(e,event_id='fixture-2',neutral_site=None)],code_pins={},feature_names=state['features'],
+               fitted_model=material['model'],team_state=material['state'],parameters=material['parameters'])
+    source=tmp_path/'package.json'; source.write_text(json.dumps(pkg))
+    board=run(source,state,date,tmp_path/'out')
+    assert len(board['forecasts'])==len(board['blocked_events'])==1
+    row=board['forecasts'][0]
+    assert row['missingness_audit']['details']['input_observations']['imputed_features']==['home_ewma_margin']
+    assert row['analytic']==summarize(distribution(state,[None])[0])
+    assert board['blocked_events'][0]['disposition']=='NEUTRAL_SITE_UNRESOLVED'
+    pkg['source_fetches'][0]['status']='TIMEOUT'; source.write_text(json.dumps(pkg))
+    with pytest.raises(ValueError,match='SOURCE_ACQUISITION_FAILED'):
+        run(source,state,date,tmp_path/'out2')

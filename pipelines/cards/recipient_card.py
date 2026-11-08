@@ -6,11 +6,26 @@ from xml.etree import ElementTree as ET
 
 
 _COLUMNS = ("Event ID", "Start (UTC)", "Away", "Home", "Status", "Model winner",
-            "Model P", "Simulation P", "Projected margin¹", "Projected total", "Refusal reason")
+            "Model P", "Simulation P", "Projected margin¹", "Projected total", "Missingness review", "Refusal reason")
 
 
 def _percent(value):
     return "—" if value is None else f"{value:.2%}"
+
+
+def _audit_summary(row):
+    receipt = row.get("missingness_audit") or {}
+    if not receipt:
+        return "MISSING RECEIPT"
+    details = receipt["details"]
+    parts = [receipt["release_status"], details.get("status", "See native diagnostics")]
+    refresh = details.get("refresh") or {}
+    if refresh:
+        parts.append(refresh.get("status", "UNRESOLVED"))
+    for name, head in refresh.get("heads", {}).items():
+        parts.append(f"{name} ({head['scale']}): sporting {head['substantive']:+.3g}, "
+                     f"indicator {head['missingness_indicator']:+.3g}, mixed {head['mixed_imputation_or_unknown']:+.3g}")
+    return " · ".join(parts)
 
 
 def _cells(row):
@@ -26,7 +41,7 @@ def _cells(row):
     fields = (row.get("event_id"), row.get("start_time_utc"), row.get("away_team"),
               row.get("home_team"), status, row.get("model_winner"),
               _percent(row.get("model_p")), _percent(row.get("sim_p")),
-              row.get("projected_margin"), row.get("projected_total"), reason)
+              row.get("projected_margin"), row.get("projected_total"), _audit_summary(row), reason)
     return tuple("—" if v is None else str(v) for v in fields)
 
 

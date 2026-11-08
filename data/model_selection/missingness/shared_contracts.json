@@ -1,0 +1,64 @@
+{
+  "schema": "sports.shared_model_missingness_contracts.v1",
+  "review_status": "ENGINEERING_INVENTORY_PENDING_INDEPENDENT_MODEL_REVIEW",
+  "scope_limits": "Current-package forecast routes. The fitted model SHA and actual per-head columns are recorded on each receipt. Declared policies describe the incumbent, without approving statistical thresholds.",
+  "historical_support": "NBA, NHL, MLS and CFB preparation emits per-season pre-imputation counts for the deployment cohort. Normalized fields cannot establish provider publication or original-time coverage. Other cohorts and incomplete older packages have unknown support.",
+  "freshness": "Current packages use the existing package and source TTL, as-of date and no-future-fit checks. Each row binds its cutoff, state, source references and semantic identity. Eligible-history recency may differ from source retrieval recency.",
+  "league": {
+    "nba": {
+      "arms": ["nba.initial_causal_score.research.v1"],
+      "products": ["binary_winner", "full_game_margin_points", "full_game_total_points"],
+      "groups": ["team_form", "eligible_rest", "early_history", "neutral", "packed_imputer"],
+      "source": "Provider final histories; regular-season scope and eligible prior-day embargo"
+    },
+    "nhl": {
+      "arms": ["nhl.initial_causal_score.research.v1"],
+      "products": ["binary_winner", "scored_margin_goals", "total_goals"],
+      "groups": ["team_form", "eligible_rest", "early_history", "neutral", "packed_imputer"],
+      "source": "Provider final histories; fitted NHL season scope and eligible prior-day embargo. Contract settlement remains separately scoped."
+    },
+    "mls": {
+      "arms": ["mls.initial_causal_score.research.v1"],
+      "products": ["home_goals", "away_goals", "derived_regulation_1x2", "derived_total_goals"],
+      "groups": ["team_form", "eligible_rest", "early_history", "neutral", "packed_imputer"],
+      "source": "Provider final histories under regulation game scope; independent Poisson goal heads"
+    },
+    "cfb": {
+      "arms": ["cfb.fbs.elo_form_logit_ridge.v1_0.shadow"],
+      "products": ["binary_winner", "home_margin_points"],
+      "groups": ["elo_prior", "ewma", "cfb_rest", "schedule_flags", "packed_imputer"],
+      "source": "Pinned FBS/FBS schedule and historical scores; week 1 has a separately registered model and is refused by the current packager. No fitted total."
+    },
+    "wnba": {
+      "arms": ["wnba.rs.ff7_logit_ridge.v1_0.shadow"],
+      "products": ["regular_season_winner", "home_margin_points", "total_points"],
+      "groups": ["wnba_team_eligibility", "wnba_shrinkage", "wnba_rest", "wnba_rate_floor", "wnba_league_state"],
+      "source": "Earlier season box scores and league aggregates, official-plus-one reconciliation and canonical team mapping"
+    },
+    "mlb": {
+      "arms": ["mlb.v13.current_input.research.v1", "d_logistic_2f"],
+      "products": ["v13_mc_winner", "v13_simulated_runs", "d_logistic_2f_winner"],
+      "groups": ["starter_profile", "form_default", "park_factor"],
+      "source": "Official regular-season D-1 form, probable pitchers and earlier pitcher logs, or explicitly pinned legacy form and dated starter dispositions"
+    }
+  },
+  "groups": {
+    "team_form": "Home/away scoring for and against use fitted league prior when team absent; observed team state is blended by n/(n+10). All fitted heads.",
+    "eligible_rest": "Each side without last eligible start receives 14 days. Elapsed days are bounded to 0–14. Does not resolve real travel/last game. All fitted heads.",
+    "early_history": "Home and away cold flags indicate fewer than ten eligible games. All initial heads.",
+    "neutral": "Normalized neutral flag enters all initial heads; legacy parser substitutes false when provider field absent. Raw omission unresolved on older packages.",
+    "packed_imputer": "Each fitted column in each packed logistic/linear/Poisson head is ordered by the feature schema, replaces unavailable values with its own fit-time median, and applies own center, scale and coefficients.",
+    "elo_prior": "Previously unseen team rating defaults to 1500; existing rating regresses on season transitions. Both heads.",
+    "ewma": "Absent home or away points-for, points-against and margin state yield None; head-specific median replaces it. Both heads.",
+    "cfb_rest": "Difference is None if either last game is absent; both fitted heads impute.",
+    "schedule_flags": "Neutral site and conference-game booleans enter both heads. Provenance of a normalized false requires source readback.",
+    "wnba_team_eligibility": "Missing team season, fewer than the native minimum games or nonpositive possessions blocks all heads.",
+    "wnba_shrinkage": "Net rating shrinks by games/(games+SHRINK_G); enters winner, margin and total.",
+    "wnba_rest": "ET-date rest is capped at five; a one-day interval fires back-to-back. Winner and margin.",
+    "wnba_rate_floor": "Offensive rebound denominator floors available misses at one in four-factor features; winner and margin.",
+    "wnba_league_state": "League total and pace aggregates require nonzero eligible game count. Total head only.",
+    "starter_profile": "V13 substitutes 4.20 ERA, 22 K%, 8.5 BB% and zero starts; shrinks ERA by starts/(starts+8). A prior may reflect unknown identity, thin history or legacy staleness. Separate d_logistic_2f consumes shrunk ERA and team form only.",
+    "form_default": "V13 falsey team runs for/against fall back to 4.45; audit cannot distinguish every upstream substitution in legacy form.",
+    "park_factor": "Missing/falsey park values use neutral 1.0 on V13; no park field in d_logistic_2f."
+  }
+}

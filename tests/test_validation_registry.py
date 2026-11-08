@@ -58,6 +58,8 @@ def make_registry_fixture(root, *, protocol_overrides=None, evidence_overrides=N
         basis_id = store.put({"schema": "validation-design-basis-v1", "kind": "TEST_ONLY synthetic mechanics",
                               "minimum_useful_improvement": .5, "paired_loss_sd": .1,
                               "dependence_assumption": "TEST_ONLY independent synthetic blocks", "power_target": .8})
+        from missingness_review_fixture import make_study
+        protocol["missingness_policy_id"], study_id = make_study(store, protocol, lambda art, purpose, stamp: sign(art,purpose,"TEST_ONLY_witness",stamp), "TEST_ONLY_witness")
         protocol.update(schema="validation-protocol-v2", inspection_budget=4,
                         power_assumptions={"minimum_useful_improvement": .5, "paired_loss_sd": .1,
                                            "design_effect": 1., "alpha": .05,
@@ -80,6 +82,8 @@ def make_registry_fixture(root, *, protocol_overrides=None, evidence_overrides=N
                     power_at_declared_effect=.85, paired_dataset_id=dataset_id)
     if not legacy:
         evidence["inspected_configurations"] = 1
+    if not legacy:
+        evidence["missingness_evaluation_id"] = study_id
     evidence.update(evidence_overrides or {})
     evidence_id = store.put(evidence)
     review_id = store.put({"protocol_id": protocol_id, "evidence_id": evidence_id,

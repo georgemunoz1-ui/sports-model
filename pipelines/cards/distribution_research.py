@@ -11,6 +11,7 @@ from pathlib import Path
 import numpy as np
 from models.common import discrete_research as D
 from models.common import discrete_calibration as C
+from . import derived_missingness as audit
 
 
 def load_config(path):
@@ -187,6 +188,13 @@ def build(card, config, output, *, simulations=100000):
                     "contracts": [{**c, "model_probabilities": D.price(d, c["line"], c["side"]),
                                    "simulation_probabilities": D.price(empirical, c["line"], c["side"])} for c in contracts],
                     "parent_warnings": list(row.get("warnings", [])), "status": "DIAGNOSTIC"})
+                child = report["results"][-1]
+                audit.attach(child, league, eid, d["model_id"], [d["product"]], inputs={
+                    "parent_forecast_sha256": D.digest(row), "settlement": d["settlement"],
+                    "parent_model": row["model_id"], "scale_features": row.get("model_input_snapshot"),
+                    "calibrator_applied": entry["calibrator"] is not None,
+                }, method="FROZEN_PARENT_CONDITIONAL_RESIDUAL_LAW",
+                    missing=["Historical and current source-state coverage must be assessed on the parent."])
                 report["coverage"].append({"event_id": eid, "model_id": model["model_id"], "product": model["product"], "status": "COMPLETED"})
             except (ValueError, KeyError, TypeError) as exc:
                 report["coverage"].append({"event_id": eid, "model_id": model.get("model_id"),
@@ -196,4 +204,8 @@ def build(card, config, output, *, simulations=100000):
                                       if D.stamp(r["start_time_utc"]) <= D.stamp(report["created_at_utc"])]
     report["artifact_sha256"] = D.digest(report)
     (output / "distribution_report.json").write_text(json.dumps(report, indent=2, sort_keys=True, allow_nan=False) + "\n")
+    saved = json.loads((output / "distribution_report.json").read_bytes())
+    for child in saved["results"]:
+        law = child["distribution"]
+        audit.check(child, league, child["event_id"], law["model_id"], [law["product"]])
     return report

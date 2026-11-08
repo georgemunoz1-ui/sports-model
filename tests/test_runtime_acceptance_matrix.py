@@ -86,6 +86,9 @@ def test_nfl_binds_dedicated_process_and_its_receipt(tmp_path, monkeypatch, defe
                     'winner_simulation': {'count': matrix.N, 'home_win_probability': 1.0,
                                           'sha256': hashlib.sha256(draws.tobytes()).hexdigest()},
                     'prediction': {'home_win': 0.7, 'home_margin': 4.3, 'total_points': 42.1}}
+        from pipelines.cards.nfl_missingness import audit, seal_native_card_row
+        forecast['identity'] = 'a' * 64
+        forecast['missingness_audit'] = audit(forecast, None)
         f.write_text(json.dumps(forecast))
         manifest = {p.name: matrix.sha(p) for p in (f, draw_path)}
         (f.parent/'manifest.json').write_text(json.dumps(manifest))
@@ -93,6 +96,8 @@ def test_nfl_binds_dedicated_process_and_its_receipt(tmp_path, monkeypatch, defe
                                matrix.utc(cutoff), package['model_digest'])
         card = {'league': 'nfl', 'card_date': inputs['date'], 'as_of_utc': cutoff,
                 'action_authority': False, 'forecasts': [{**fixture, **native, 'action_authority': False}]}
+        row = card['forecasts'][0]
+        row['missingness_audit'] = seal_native_card_row(row, cutoff, {'status':'NATIVE_FIXTURE'})
         if defect == 'wrong_display':
             card['forecasts'][0]['sim_p'] = 0.3
         cp, hp = dest/'diagnostic_card.json', dest/'diagnostic_card.html'

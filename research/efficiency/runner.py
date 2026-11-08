@@ -218,7 +218,7 @@ def component_receipt(league, stage, example, fitted, forecast, history, *, mode
     numeric_forecast = {k: v for k, v in sanitize_forecast(forecast).items() if v is not None}
     files = [ROOT / "models/experiments" / (league + "_efficiency.py"), Path(__file__), ROOT / "research/efficiency/integrity.py"]
     files += [ROOT / p for p in (["harness/cfb_v1_port.py", "models/current/cfb.py", "models/current/linear.py"] if league == "cfb" else ["models/current/baseline.py", "scripts/prepare_initial_baselines.py", "models/current/linear.py"])]
-    return build_component_receipt(model_id=forecast["model_id"], stage_id=stage,
+    return build_component_receipt(league=league,model_id=forecast["model_id"], stage_id=stage,
         event_id=example["event_id"], cutoff_utc=cutoff, start_utc=start,
         inputs=inputs, state=fitted, config=fitted.get("config", {}), code_files=files,
         sources=sources_for(example, history, fitted), components=components,

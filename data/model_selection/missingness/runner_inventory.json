@@ -1,0 +1,73 @@
+{
+  "schema": "sports.missingness_runner_inventory.v1",
+  "active_research": {
+    "scripts/generate_card_force.py": [
+      "mlb",
+      "wnba",
+      "cfb",
+      "nba",
+      "nhl",
+      "mls",
+      "nfl"
+    ],
+    "scripts/run_nfl_integrated.py": [
+      "nfl"
+    ],
+    "scripts/run_fresh_nfl_research.py": [
+      "nfl"
+    ],
+    "scripts/run_nfl_halftime_research.py": [
+      "nfl"
+    ],
+    "scripts/run_nfl_spread_calibration.py": [
+      "nfl"
+    ],
+    "scripts/run_cfb_joint_empirical.py": [
+      "cfb"
+    ],
+    "scripts/run_margin_system.py": [
+      "all supported integer margin distributions"
+    ],
+    "scripts/cross_sport_distribution_research.py": [
+      "all supported marginal residual distributions"
+    ],
+    "scripts/run_efficiency_experiments.py": [
+      "nba",
+      "cfb"
+    ],
+    "scripts/run_nba_efficiency_shadow.py": [
+      "nba"
+    ],
+    "scripts/mlb_postseason_audited.py": [
+      "mlb"
+    ],
+    "scripts/mlb_postseason_workflow.py": [
+      "mlb"
+    ],
+    "scripts/run_mlb_postseason_context.py": [
+      "mlb"
+    ],
+    "sportsim/cli.py": [
+      "unregistered scenario game and season simulations"
+    ],
+    "scripts/run_mlb_legacy_tracking.py": [
+      "mlb legacy tracking successor"
+    ]
+  },
+  "other_run_commands": {
+    "scripts/run_distribution_history.py": "historical distribution evaluation",
+    "scripts/run_margin_system_study.py": "historical margin evaluation",
+    "scripts/run_mc_precision_research.py": "Monte Carlo precision of an already issued distribution",
+    "scripts/run_nfl_assimilation.py": "weekly state update",
+    "scripts/run_nfl_qb_margin_study.py": "historical selected-QB margin study",
+    "scripts/run_research_selection.py": "downstream research decisions, separately reviewed through signed validation registry"
+  },
+  "separate_revisions": {
+    "98": "standalone NBA combination predict command",
+    "99": "NBA projected minutes card and CFB personnel-v2",
+    "100": "CFB event freshness and personnel refresh",
+    "105": "joint-volatility child with league-specific settlement",
+    "106": "operator-level joint-volatility route",
+    "108": "standalone men's CBB capture, issue, verification and grade attachment"
+  }
+}

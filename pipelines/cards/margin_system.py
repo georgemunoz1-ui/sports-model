@@ -5,6 +5,8 @@ winner probability and never treats a hypothetical handicap as a market quote.
 """
 from __future__ import annotations
 
+from . import derived_missingness as audit
+
 import copy
 import datetime as dt
 import hashlib
@@ -393,6 +395,8 @@ def validate_report(report):
             raise ValueError("MARGIN_CARD_SIMULATION_MISMATCH")
     if _report_digest(report.get("coverage")) != _report_digest(_coverage_summary(rows, coverage)):
         raise ValueError("MARGIN_CARD_COVERAGE_MISMATCH")
+    for row in rows:
+        audit.check(row, row.get("league"), row.get("event_id"), row.get("model_id"), ["margin", "cover"])
     return report
 
 
@@ -518,6 +522,12 @@ def build(input_paths, output, *, events_path=None, draws=100000, home_spreads=N
     report["created_at_utc"] = D.writer_clock()
     for row in results:
         row["time_status"] = _time_status(row.get("start_time_utc"), row["as_of_utc"], report["created_at_utc"])
+        audit.attach(row, row["league"], row["event_id"], row["model_id"], ["margin", "cover"],
+                     method="RETAINED_INTEGER_MARGIN_LAW",
+                     inputs={"law_sha256": row["parent_distribution_sha256"],
+                             "parent_report_sha256": row["parent_report_sha256"],
+                             "settlement": row["settlement"], "warnings": row["warnings"]},
+                     missing=["Parent source missingness transitions and confirmation evidence."])
     report["artifact_sha256"] = D.digest(report)
     validate_report(report)
     with (output / "margin_report.json").open("x") as stream:
@@ -549,6 +559,7 @@ def _render(report):
         parts.append("</table></div>")
     for row in report["results"]:
         summary = row["summary"]
+        parts.append("<p>Missingness review on hold. Parent source changes require a paired replay.</p>")
         label = f"{row.get('away_team', 'Away')} @ {row.get('home_team', 'Home')}"
         parts.extend([f"<h2>{esc(label)} <span class='tag'>{esc(row['league'].upper())}</span></h2>",
                       f"<p><code>{esc(row['model_id'])}</code><br><small>{esc(row['event_id'])} · {esc(row['time_status'])} · Input cutoff {esc(row.get('as_of_utc'))}</small></p>",

@@ -69,6 +69,15 @@ def verify_shared_card(card, expected_events, *, league, card_date, as_of, simul
                 raise ValueError(f"MISSING_REFUSAL_REASON:{eid}")
         else:
             raise ValueError(f"UNKNOWN_FORECAST_STATUS:{eid}")
+        if league.lower() == "nfl" and "execution_mode" in card:
+            from .nfl_missingness import verify_native_card_row
+            valid_audit = verify_native_card_row(row, cutoff=as_of)
+        else:
+            from .shared_missingness import binding
+            from .missingness import verify_audit
+            valid_audit = verify_audit(row.get("missingness_audit"), **binding(row, league.lower(), as_of))
+        if not valid_audit:
+            raise ValueError(f"MISSINGNESS_RECEIPT_MISSING_OR_INVALID:{eid}")
         counts[status] += 1
     if card.get("scheduled_game_count") != len(scheduled) or card.get("forecast_count") != counts["FORECAST_GENERATED"]:
         raise ValueError("CARD_COUNTER_MISMATCH")

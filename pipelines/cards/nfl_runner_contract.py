@@ -107,6 +107,8 @@ def read_forecast(root, event, count, model_id, state_id, cutoff, model_digest):
     require(sim['count'] == count and draws.shape == (count,) and draws.dtype == np.uint8 and
             (draws <= 1).all() and sha(draws.tobytes()) == sim['sha256'] and
             float(draws.mean()) == sim['home_win_probability'], 'NFL_DRAW_READBACK_MISMATCH')
+    from .nfl_missingness import verify
+    require(verify(f), 'NFL_MISSINGNESS_AUDIT_READBACK_FAILED')
     pred = f['prediction']
     for key in ('home_win','home_margin','total_points'):
         require(type(pred[key]) in (float,int) and math.isfinite(pred[key]), 'NFL_INVALID_POINT_HEAD')
@@ -117,6 +119,7 @@ def read_forecast(root, event, count, model_id, state_id, cutoff, model_digest):
             'model_p':p if home else 1-p, 'sim_p':sim['home_win_probability'] if home else 1-sim['home_win_probability'],
             'projected_margin':pred['home_margin'] if home else -pred['home_margin'], 'projected_total':pred['total_points'],
             'point_head_basis':'INDEPENDENT_MARGIN_AND_TOTAL_HEADS', 'probability_scope':'BINARY_CONDITIONAL_ON_NON_TIE',
+            'native_missingness_audit_sha256':sha(json.dumps(f['missingness_audit'], sort_keys=True).encode()),
             'forecast_sha256':manifest['forecast.json'], 'draw_file_sha256':manifest['winner_draws.npy'],
             'n_simulations':count, 'weekly_state_id':state_id}
 
@@ -167,6 +170,26 @@ def run_bound(args, execute):
                 print(f"{e['event_id']}: {type(exc).__name__}: {exc}", file=sys.stderr)
                 row.update(forecast_status='POST_START' if evidence['reason']=='POST_START' else 'BLOCKED',
                            refusal_reason=evidence['reason'])
+            from .nfl_missingness import seal_native_card_row, verify_native_card_row
+            if evidence['status'] == 'COMPLETED':
+                f = json.loads((args.output/e['event_id']/'forecast.json').read_bytes())
+                native = f['missingness_audit']['details']
+                terms = {name: a['changes'] for name, a in native['arms'].items() if 'changes' in a}
+                dominated = any(h['reporting_state_dominated'] for heads in terms.values() for h in heads.values())
+                presentation = {f'{arm}.{head}': {
+                    'scale': v['units'], 'substantive': v['observed_feature_change'],
+                    'missingness_indicator': v['missingness_imputation'],
+                    'mixed_imputation_or_unknown': v['observation_or_reporting_interaction']}
+                    for arm, heads in terms.items() for head, v in heads.items() if v['changed_features']}
+                details = {'status': 'REPORTING_STATE_DOMINATED' if dominated else native['comparison_status'],
+                           'refresh': {'status': native['comparison_status'], 'heads':presentation},
+                           'comparison_status': native['comparison_status'],
+                           'native_receipt_sha256': row['native_missingness_audit_sha256'],
+                           'arm_changes': terms, 'reporting_state_dominated': dominated}
+            else:
+                details = {'comparison_status':'UNEVALUABLE', 'reason':row['refusal_reason']}
+            row['missingness_audit'] = seal_native_card_row(row, cutoff.isoformat(), details)
+            require(verify_native_card_row(row, cutoff=cutoff.isoformat()), 'NFL_CARD_MISSINGNESS_AUDIT')
             card['forecasts'].append(row)
             receipt['events'].append(evidence)
         from pipelines.cards.recipient_card import write_recipient_card, verify_recipient_card

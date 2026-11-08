@@ -109,6 +109,8 @@ def main():
        'market_capture':{'source':'USER_SCREENSHOTS_IMG7885_7886_7887; CAPTURE_DATE_TIMEZONE_NOT_VERIFIED','combo_price':.391,'h1_under_price':.50,'h1_over_price':.51,'fees_and_execution_verified':False},
        'limitations':['NEW_RESEARCH_ARM_NOT_PROMOTED','FULL_GAME_MARGINAL_DIFFERS_FROM_PRIOR_CALIBRATED_ARM','HALFTIME_AND_JOINT_CALIBRATION_NOT_ESTABLISHED','NO_HISTORICAL_1H_ODDS_ARCHIVE','EMPIRICAL_INTEGER_ROUNDING_NOT_NFL_KEY_NUMBER_MODEL','CORRECTED_HISTORICAL_SOURCE_PIT_LIMITATIONS','FINAL_TIE_AND_OT_SETTLEMENT_UNVALIDATED'],'action_authority':False}
     save(a.output/'forecast.json',result)
+    from pipelines.cards.nfl_missingness import persist_child_review
+    persist_child_review(a.output, forecast, result, ['half_score_distribution'])
     save(a.output/'manifest.json',{str(p.relative_to(a.output)):sha(p) for p in a.output.rglob('*') if p.is_file()})
     print(json.dumps({'probabilities':sim,'exact':exact,'means':result['simulation_means'],'evaluation':{k:v for k,v in summary.items() if k not in ['per_season','reliability_fixed_line_probes']}},indent=2))
 

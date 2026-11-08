@@ -56,6 +56,13 @@ def prepare(tmp, league="nhl", *, n=1):
 
 
 def write_card(card, out):
+    from pipelines.cards.shared_missingness import attach_shared_audit
+    from pipelines.cards.nfl_missingness import seal_native_card_row
+    for row in card["forecasts"]:
+        if card["league"]=="NFL" and "execution_mode" in card:
+            row["missingness_audit"]=seal_native_card_row(row,card["as_of_utc"],{"status":"TEST_FIXTURE"})
+        else:
+            attach_shared_audit(card["league"],row,row,{},card["as_of_utc"])
     (out/"diagnostic_card.json").write_text(json.dumps(card))
     write_recipient_card(card, out/"diagnostic_card.html")
 

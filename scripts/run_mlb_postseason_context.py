@@ -9,6 +9,7 @@ from pathlib import Path
 ROOT=Path(__file__).resolve().parents[1];sys.path.insert(0,str(ROOT))
 import numpy as np
 from research import mlb_postseason_context as C
+from pipelines.cards.postseason_missingness import check_sidecar, write_sidecar
 from research.mlb_postseason_v1 import sha,digest,stamp,instant,save_once
 from scripts import mlb_postseason_workflow as W
 from scripts.mlb_postseason_audited import source_map
@@ -28,7 +29,8 @@ def verify_run(path):
     for k,v in draws.items():
         if not np.array_equal(v,np.load(path/(k+'.npy'),allow_pickle=False)):raise ValueError('DRAW_REPLAY_MISMATCH')
     if receipt['pregame_research_capture'] and not instant(f['cutoff_utc'])<=instant(f['created_at_utc'])<=instant(receipt['writer_clock_utc'])<instant(f['inputs']['start_time_utc']):raise ValueError('WRITER_CHRONOLOGY')
-    return {'run_id':receipt['run_id'],'exact_replay':True,'n':f['n'],'forecast_sha256':sha(path/'forecast.json'),'canonical_registration':False,'prospective_grade_eligible':False}
+    missingness=check_sidecar(path,f)
+    return {'run_id':receipt['run_id'],'missingness_audit_sha256':missingness,'exact_replay':True,'n':f['n'],'forecast_sha256':sha(path/'forecast.json'),'canonical_registration':False,'prospective_grade_eligible':False}
 
 
 def verify_context(root,review):
@@ -63,6 +65,7 @@ def run(root,review_path,contract_path,output,calibration_path=None):
         if review.get('decision')!='ALLOW_LIMITED_FEATURE_RESEARCH_ONLY' or review.get('action_authority')is not False:raise ValueError('REVIEW_AUTHORITY')
         if review.get('challenger_contract_sha256')!=sha(contract_path) or contract['arms']!={str(k):v for k,v in C.ARMS.items()}:raise ValueError('CHALLENGER_IDENTITY')
         required={'research/mlb_postseason_context.py','scripts/run_mlb_postseason_context.py','scripts/evaluate_mlb_postseason_context.py','scripts/mlb_postseason_audited.py','scripts/mlb_postseason_workflow.py'}
+        required.update({'pipelines/cards/postseason_missingness.py','pipelines/cards/missingness.py'})
         required.update(W.load(ROOT/'research/registrations/mlb_postseason_v1.json')['code_pins'])
         if not required.issubset(contract['code_pins']) or contract.get('count')!=100000 or contract.get('action_authority')is not False:raise ValueError('REQUIRED_CODE_OR_AUTHORITY_CONTRACT')
         for name,h in contract['code_pins'].items():
@@ -77,9 +80,10 @@ def run(root,review_path,contract_path,output,calibration_path=None):
             if cal['training_cutoff']>=package['slate_date']:raise ValueError('CALIBRATION_LEAKAGE')
         runs=[];coverage=[]
         for e in package['events']:
-            eid=e['event_id'];feed=source['gamefeed_'+eid.split(':')[1]][1]
+            eid=e['event_id']
             for stage in (1,2,3,4):
                 try:
+                    feed=source['gamefeed_'+eid.split(':')[1]][1]
                     if instant(stamp())>=instant(e['start_time_utc']) or feed['gameData']['status']['abstractGameState']!='Preview':raise ValueError('POST_START')
                     if stage==4 and cal is None:raise ValueError('FITTED_CALIBRATION_NOT_BOUND')
                     if eid not in review['reviewed_event_ids']:raise ValueError('EVENT_REVIEW_MISSING')
@@ -102,7 +106,7 @@ def run(root,review_path,contract_path,output,calibration_path=None):
                     path=output/'runs'/identity;path.mkdir(parents=True,exist_ok=False)
                     for name,array in draws.items():np.save(path/(name+'.npy'),array,allow_pickle=False)
                     forecast={'model_id':C.ARMS[stage],'stage':stage,'inputs':e,'context':ctx,'calibration_slope':slope,'n':100000,'seed':seed,'cutoff_utc':cutoff,'created_at_utc':stamp(),'result':result,'code_pins':contract['code_pins'],'request':request,'runtime':{'python':platform.python_version(),'numpy':np.__version__},'used':['starter_workload']+(['lineup_identity_and_shrunk_OPS'] if stage>=2 else [])+(['roster_relief_strength_and_3day_pitch_load'] if stage>=3 else []),'not_used':['weather','platoon','defense','active_player_injury_severity','manager_choice_certainty'],'manual_review':manual,'official_release_eligible':False,'action_authority':False,'dose':0.}
-                    save_once(path/'forecast.json',forecast);writer=stamp();pregame=instant(writer)<instant(e['start_time_utc'])
+                    save_once(path/'forecast.json',forecast);write_sidecar(path,forecast);writer=stamp();pregame=instant(writer)<instant(e['start_time_utc'])
                     save_once(path/'receipt.json',{'run_id':identity,'writer_clock_utc':writer,'pregame_research_capture':pregame,'canonical_registration':False,'prospective_grade_eligible':False,'official_release_eligible':False,'action_authority':False,'artifact_hashes':{p.name:sha(p) for p in path.iterdir() if p.is_file()}})
                     v=verify_run(path);runs.append({'event_id':eid,'model_id':C.ARMS[stage],'path':str(path),'result':result,'verification':v});coverage.append({'event_id':eid,'stage':stage,'status':'PRE_START_DIAGNOSTIC_FREEZE' if pregame else 'POST_START'})
                 except (ValueError,KeyError) as exc:coverage.append({'event_id':eid,'stage':stage,'status':'BLOCKED','reason':str(exc)})

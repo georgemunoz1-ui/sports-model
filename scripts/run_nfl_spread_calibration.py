@@ -14,6 +14,8 @@ def main():
     forecast=json.loads((a.forecast_directory/'forecast.json').read_text());scores=np.load(a.forecast_directory/'score_draws.npy',allow_pickle=False)
     out,draws=build_overlay(forecast,scores,a.home_spread,n=a.simulations)
     persist_overlay(a.output,out,draws)
+    from pipelines.cards.nfl_missingness import persist_child_review
+    persist_child_review(a.output, forecast, out, ['full_game_spread'])
     for name,h in manifest.items():assert hashlib.sha256((a.forecast_directory/name).read_bytes()).hexdigest()==h
     print(json.dumps({'contracts':out['contracts'],'simulation':out['simulation'],'warnings':out['warnings']},indent=2))
 if __name__=='__main__':main()

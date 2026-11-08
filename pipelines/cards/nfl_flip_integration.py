@@ -9,8 +9,11 @@ from models.nfl.contextual.flip_diagnostics import build_flip_diagnostics, appen
 from models.nfl.contextual.recovered_inference import digest
 
 
-def attach_diagnostic(bundle, artifact):
+def attach_diagnostic(bundle, artifact, *, previous=None, prior_file_sha256=None):
     result = copy.deepcopy(bundle)
+    if result.get('model_id') and result.get('event', {}).get('event_id') and 'prediction' in result:
+        from .nfl_missingness import audit
+        result['missingness_audit'] = audit(result, artifact, previous, prior_file_sha256=prior_file_sha256)
     if result.get('mode') != 'research_pregame':
         return result
     valid_artifact = (isinstance(artifact, dict)

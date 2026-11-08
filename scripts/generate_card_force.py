@@ -597,6 +597,8 @@ def render_md(card, disclosures=None):
             f"{row.get('projected_margin', '—')} | {row.get('projected_total', '—')} | {grade} | "
             f"{', '.join(row.get('warnings', [])) or 'None'} |"
         )
+    from pipelines.cards.missingness_presentation import render_md as render_missingness
+    lines += ["", render_missingness(card)]
     if card["incidents"]:
         lines += ["", "## Coverage incidents", "", "```json", json.dumps(card["incidents"], indent=2), "```"]
     from pipelines.cards.disclosures import build_report, render_md as render_disclosures

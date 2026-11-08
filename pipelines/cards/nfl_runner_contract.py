@@ -182,6 +182,7 @@ def run_bound(args, execute):
                     'mixed_imputation_or_unknown': v['observation_or_reporting_interaction']}
                     for arm, heads in terms.items() for head, v in heads.items() if v['changed_features']}
                 details = {'status': 'REPORTING_STATE_DOMINATED' if dominated else native['comparison_status'],
+                           'native': f['missingness_audit'],
                            'refresh': {'status': native['comparison_status'], 'heads':presentation},
                            'comparison_status': native['comparison_status'],
                            'native_receipt_sha256': row['native_missingness_audit_sha256'],

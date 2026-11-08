@@ -14,18 +14,8 @@ def _percent(value):
 
 
 def _audit_summary(row):
-    receipt = row.get("missingness_audit") or {}
-    if not receipt:
-        return "MISSING RECEIPT"
-    details = receipt["details"]
-    parts = [receipt["release_status"], details.get("status", "See native diagnostics")]
-    refresh = details.get("refresh") or {}
-    if refresh:
-        parts.append(refresh.get("status", "UNRESOLVED"))
-    for name, head in refresh.get("heads", {}).items():
-        parts.append(f"{name} ({head['scale']}): sporting {head['substantive']:+.3g}, "
-                     f"indicator {head['missingness_indicator']:+.3g}, mixed {head['mixed_imputation_or_unknown']:+.3g}")
-    return " · ".join(parts)
+    from pipelines.cards.missingness_presentation import audit_view
+    return audit_view(row)["summary"]
 
 
 def _cells(row):
@@ -46,6 +36,7 @@ def _cells(row):
 
 
 def _html(card):
+    from pipelines.cards.missingness_presentation import render_html
     title = f'{card["league"]} diagnostic card — {card["card_date"]}'
     rows = ["<tr>" + "".join(f"<td>{escape(v)}</td>" for v in _cells(r)) + "</tr>"
             for r in card["forecasts"]]
@@ -67,7 +58,8 @@ def _html(card):
             '</tr></thead><tbody>' + "\n".join(rows) + '</tbody></table>'
             '<p>¹ Margin and total retain the values and units of the league adapter. '
             'Model and simulation probabilities refer to the named outcome. '
-            'Consult the source card for the estimator and settlement scope.</p></body></html>\n')
+            'Consult the source card for the estimator and settlement scope.</p>' +
+            render_html(card) + '</body></html>\n')
 
 
 def write_recipient_card(card, destination):

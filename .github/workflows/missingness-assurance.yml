@@ -10,6 +10,8 @@ on:
       - 'scripts/**'
       - 'data/model_selection/**'
       - 'tests/**'
+      - 'requirements*.txt'
+      - 'pyproject.toml'
       - '.github/workflows/missingness-assurance.yml'
   workflow_dispatch:
 permissions:
@@ -25,7 +27,7 @@ jobs:
       - run: python -m pip install -r requirements-consolidated.txt
       - name: Check runner invocation, readback and release refusal cases
         run: |
-          python -m pytest -q tests/test_*missingness*.py tests/test_runtime_acceptance_matrix.py tests/test_validation_registry.py tests/test_research_selection_cli.py
+          python -m pytest -q tests/test_*missingness*.py tests/test_nfl_runner_contract.py tests/test_runtime_acceptance_matrix.py tests/test_validation_registry.py tests/test_research_selection_cli.py
           python harness/release_gate.py --selftest
           python harness/promotion_gate.py --selftest
           python harness/readiness_gate.py --selftest

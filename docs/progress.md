@@ -5062,3 +5062,12 @@ inputs; authentic predictive evaluation remains unavailable. Repository health
 still has four failures/seven warnings. No source qualification, promotion,
 canonical registration, market use or wagering authority. See
 docs/research/cfb_personnel_freshness_20261031/README.md and EXECUTION.json.
+
+### 2026-11-08 — CFB missingness source-bound evidence and CI repair
+
+Re-executed the prior acceptance population plus workflow dispatch checks on the
+missingness successor: 1,042 passed; 20 source-bound findings verify. Preserved
+all October 31 evidence and added a linked November 8 successor. The freshness
+workflow now checks every PR regardless of base or changed path and verifies
+the new packet. Software acceptance only; predictive limits and wagering OFF
+remain unchanged. See docs/research/cfb_missingness_evidence_20261108/.

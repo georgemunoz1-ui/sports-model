@@ -237,6 +237,15 @@ def verify_retained_receipt(receipt_path, store):
     This function cannot upgrade either or create a prospective registration.
     """
     receipt = _load_receipt(Path(receipt_path))
+    # Older frozen receipts remain identifiable by their pre-audit schema.
+    if receipt["schema"] == "cfb.personnel-refresh-receipt.v2":
+        from research.efficiency.freshness_missingness import check
+        check(receipt)
+        missingness = "RETAINED_HOLD_PENDING_SCOPE_REVIEW"
+    elif receipt["schema"] == "cfb.personnel-refresh-receipt.v1" and "missingness_audit" not in receipt:
+        missingness = "LEGACY_RECEIPT_NO_MISSINGNESS_EVIDENCE"
+    else:
+        raise ValueError("CFB_REFRESH_MISSINGNESS_SCHEMA")
     blobs = Path(store) / "blobs"
     for sha in receipt["retained_blob_sha256"]:
         if not isinstance(sha, str) or len(sha) != 64 or any(c not in "0123456789abcdef" for c in sha):
@@ -270,7 +279,7 @@ def verify_retained_receipt(receipt_path, store):
         raise ValueError("CFB_REFRESH_RETAINED_CONSUMPTION_MISMATCH")
     clock = chronology(request, cutoff, snapshot["mode"], retained_blobs=blobs)
     return {"receipt_sha256": receipt["receipt_sha256"], "personnel_bytes_and_values": "PASS",
-            "chronology": clock, "provider_authenticity": "NOT_ESTABLISHED",
+            "chronology": clock, "missingness_status":missingness, "provider_authenticity": "NOT_ESTABLISHED",
             "parent_model_historical_pit": "NOT_ESTABLISHED", "action_authority": False}
 
 
@@ -362,7 +371,7 @@ def write_refresh(store, example, snapshot, forecast, *, parent_state, parent_ca
         if (registered < time(verified_component["created_at_utc"])
                 or (snapshot["mode"] == "SHADOW" and registered >= time(example["start_time_utc"]))):
             raise ValueError("CFB_REFRESH_WRITER_COMPLETION_CHRONOLOGY")
-        receipt = {"schema": "cfb.personnel-refresh-receipt.v1", "sequence": len(receipts),
+        receipt = {"schema": "cfb.personnel-refresh-receipt.v2", "sequence": len(receipts),
             "previous_receipt_sha256": predecessor, "event": identity(example["event"]),
             "registered_at_utc": registered.isoformat(), "snapshot": snapshot,
             "freshness": checked, "parent_card_sha256": parent_card_sha256,
@@ -373,6 +382,9 @@ def write_refresh(store, example, snapshot, forecast, *, parent_state, parent_ca
             "status": "LOCAL_RESEARCH_REFRESH" if snapshot["mode"] == "SHADOW" else "HISTORICAL_REPLAY",
             "external_registration_timestamp_verified": False,
             "canonical_prospective_eligible": False, "action_authority": False}
+        from research.efficiency.freshness_missingness import review, check
+        receipt["missingness_audit"] = review(receipt, parent_state, previous if receipts else None)
         receipt["receipt_sha256"] = digest(receipt)
         _exclusive(directory / (receipt["receipt_sha256"] + ".json"), canonical_bytes(receipt))
+        check(_load_receipt(directory / (receipt["receipt_sha256"] + ".json")))
         return receipt

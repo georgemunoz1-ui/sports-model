@@ -496,7 +496,7 @@ def personnel_refresh_from_card(card_path, config_path, output):
     parents = {r["event_id"]: r for r in card["forecasts"]}
     code = code_snapshot("cfb")
     code.update({"research/efficiency/" + name: file_hash(ROOT / "research/efficiency" / name)
-                 for name in ("cfb_personnel_freshness.py", "cfb_personnel_clock_authorities.json")})
+                 for name in ("cfb_personnel_freshness.py", "cfb_personnel_clock_authorities.json", "freshness_missingness.py")})
     output = Path(output)
     output.mkdir(parents=True, exist_ok=False)
     run_id = "cfb-personnel-refresh-" + datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ") + "-" + uuid.uuid4().hex[:8]
@@ -538,13 +538,22 @@ def personnel_refresh_from_card(card_path, config_path, output):
             saved = freshness.write_refresh(config_path.parent / config["refresh_store"], candidate, snapshot,
                 forecast, parent_state=fitted, parent_card_sha256=invocation["parent_card_sha256"], component_receipt=receipt)
             coverage.append({"event_id": eid, "status": "REFRESH_RETAINED", "forecast": forecast,
-                             "receipt_sha256": saved["receipt_sha256"], "sequence": saved["sequence"]})
+                             "receipt_sha256": saved["receipt_sha256"], "sequence": saved["sequence"],
+                             "native_missingness_audit":saved["missingness_audit"]})
         except (ValueError, KeyError, TypeError, OSError) as exc:
             coverage.append({"event_id": eid, "status": "BLOCKED", "reason": str(exc)})
+    from pipelines.cards import derived_missingness as M
+    for row in coverage:
+        M.attach(row, "cfb", row["event_id"], freshness.MODEL_ID, ["p_home","home_margin"],
+                 inputs={"status":row["status"], "policy":config["policy"]},
+                 method="CFB personnel-v2 event refresh with changed source evidence and a fixed weekly parent",
+                 missing=[row["reason"]] if row["status"]=="BLOCKED" else [])
     report = {**invocation, "completed_at_utc": stamp(), "coverage": coverage,
         "retained_count": sum(r["status"] == "REFRESH_RETAINED" for r in coverage),
         "predictive_validation": "UNVALIDATED", "current_source_qualification": "NOT_ESTABLISHED",
         "canonical_prospective_eligible": False, "publication_allowed": False, "action_authority": False,
         "original_baselines_and_forecasts_modified": False}
     write(output / "report.json", report)
+    for row in json.loads((output/"report.json").read_bytes())["coverage"]:
+        M.check(row, "cfb", row["event_id"], freshness.MODEL_ID, ["p_home","home_margin"])
     return report

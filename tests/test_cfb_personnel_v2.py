@@ -149,6 +149,12 @@ def test_personnel_v2_fit_predict_and_real_runner_receipt(tmp_path):
     assert receipt["forecast"]["personnel_consumption"] == prediction["personnel_consumption"]
     assert all(s["bytes_verified"] for s in receipt["sources"] if s["source"] == "synthetic://personnel")
     assert prediction["action_authority"] is False
+    details=receipt["missingness_audit"]["details"]
+    assert set(details["heads"])=={"winner","margin"}
+    assert set(details["inputs_withheld"])=={"personnel_evidence","personnel_schedule_coverage"}
+    for head in details["heads"].values():
+        assert set(head["isolated_fitted_median_deltas"])==set(p.values(rows[-1]))
+
 
 
 def test_v1_personnel_replay_retains_original_identity(tmp_path):

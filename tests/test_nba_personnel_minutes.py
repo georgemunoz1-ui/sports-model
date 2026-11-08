@@ -201,6 +201,26 @@ def test_shadow_binds_actual_parent_card_and_keeps_missing_events(tmp_path):
     config_path = tmp_path / "config.json"; config_path.write_text(json.dumps({"schema": "nba-personnel-shadow.v1", "state": refs(state_path), "inputs": refs(inputs_path)}))
     report = shadow_from_card(card_path, config_path, tmp_path / "shadow")
     assert report["completed_count"] == report["blocked_count"] == 1
+    cli_output=tmp_path/"shadow_cli"
+    cmd=[sys.executable,"scripts/run_nba_personnel_experiment.py","--card",str(card_path),
+         "--input",str(config_path),"--output",str(cli_output)]
+    process=subprocess.run(cmd,capture_output=True,text=True)
+    assert process.returncode==2, process.stderr
+    readback=json.loads((cli_output/"report.json").read_bytes())
+    assert readback["completed_count"]==readback["blocked_count"]==1
+    from pipelines.cards.missingness import verify_audit
+    for entry in report["coverage"]:
+        audit=entry["missingness_audit"]
+        if entry["status"]=="DIAGNOSTIC":
+            actual=entry["forecast"]
+            assert set(audit["details"]["probes"])=={"missing_rotation_member","duplicate_rotation_member"}
+            assert verify_audit(audit,league="nba",model_id=actual["model_id"],event_id=entry["event_id"],
+                                products=["home_margin_points"],forecast=actual)
+            changed={**actual,"home_margin":1234}
+            assert not verify_audit(audit,league="nba",model_id=actual["model_id"],event_id=entry["event_id"],
+                                    products=["home_margin_points"],forecast=changed)
+        else:
+            assert audit["products"]==["coverage"] and audit["action_authority"] is False
     assert card_path.read_bytes() == original
     altered = copy.deepcopy(card)
     altered["forecasts"][0]["numerical_identity"]["fitted_state_sha256"] = "f" * 64

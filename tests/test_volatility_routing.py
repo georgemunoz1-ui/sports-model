@@ -363,3 +363,17 @@ def test_nonfinite_and_ambiguous_json_retains_refusal_before_adapter(
     assert not list((tmp_path / "out").rglob("*.npz"))
     assert (tmp_path / "out/route_receipt.json").is_file()
     assert {str(p): R.file_hash(p) for p in tmp_path.glob("*.json")} == before
+
+
+def test_receipted_route_enforces_missingness_before_fit_and_after_simulation(tmp_path):
+    card,config=inputs(tmp_path,separate=True)
+    first=R.run_joint_route(card,config,tmp_path/'ok',simulations=100)
+    assert first['status']=='COMPLETED'
+    assert {'pipelines/cards/missingness.py','pipelines/cards/derived_missingness.py'} <= set(first['code_file_sha256'])
+    config.unlink()
+    bad=R.run_joint_route(card,config,tmp_path/'blocked',simulations=100)
+    assert bad['status']=='BLOCKED' and not bad['adapter_invoked']
+    for receipt in (first,bad):
+        for row in receipt['per_market_availability']:
+            assert row['missingness_audit']['release_status']=='HOLD_PENDING_SCOPE_REVIEW'
+            assert row['missingness_audit']['products']==[row['product']]

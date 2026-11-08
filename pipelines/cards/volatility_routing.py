@@ -19,6 +19,7 @@ import numpy as np
 from models.common import discrete_research as D
 from models.common import volatility_matrix_v1 as M
 from pipelines.cards import volatility_research as V
+from pipelines.cards import derived_missingness as A
 
 ROUTE = "JOINT_VOLATILITY_RESEARCH_BOUND_V2"
 CONFIG_SCHEMA = "sports.volatility_route_config.research.v2"
@@ -28,6 +29,7 @@ CODE_FILES = (
     "scripts/generate_card_force.py", "scripts/cross_sport_volatility_research.py",
     "scripts/run_volatility_card_receipted.py",
     "pipelines/cards/volatility_routing.py", "pipelines/cards/volatility_research.py",
+    "pipelines/cards/missingness.py", "pipelines/cards/derived_missingness.py",
     "pipelines/cards/distribution_research.py", "models/common/volatility_matrix_v1.py",
     "models/common/volatility_scoring_v2.py",
     "models/common/discrete_research.py",
@@ -308,6 +310,20 @@ def run_joint_route(card_path, config_path, output, *, simulations=100000, repo_
                 {"event_id": r.get("event_id"), "product": product, "status": "UNAVAILABLE",
                  "reason": str(exc)} for r in _diagnostic_rows(card)
                 for product in ("winner", "margin", "total")]
+    for product_row in receipt["per_market_availability"]:
+        event_id = product_row.get("event_id")
+        if not isinstance(event_id, str) or not event_id.strip():
+            receipt.update(status="BLOCKED", reason="JOINT_ROUTE_MISSING_EVENT_IDENTITY")
+            continue
+        # The requested route may fail before a model is admitted. Label the
+        # route identity in this case; a rejected request has no fitted state.
+        model_id = product_row.get("model_id") or ROUTE
+        A.attach(product_row, (card or {}).get("league","unknown").lower(), event_id,
+                 model_id, [product_row["product"]],
+                 inputs={"route":ROUTE, "adapter_invoked":receipt["adapter_invoked"],
+                         "status":product_row["status"], "parent_card_sha256":receipt.get("parent_card_file_sha256")},
+                 method="Route availability, independently scoped to each derived product",
+                 missing=[product_row["reason"]] if product_row.get("reason") else [])
     receipt["input_files"] = tracked
     receipt["input_files_unchanged"] = all(Path(p).is_file() and file_hash(p) == h
                                            for p, h in tracked.items())
@@ -353,6 +369,11 @@ def run_joint_route(card_path, config_path, output, *, simulations=100000, repo_
                                 for p in sorted(output.rglob("*")) if p.is_file()}
     receipt["receipt_sha256"] = D.digest(receipt)
     _write(output / "route_receipt.json", receipt)
+    saved = _load_json((output / "route_receipt.json").read_bytes())
+    for item in saved["per_market_availability"]:
+        if isinstance(item.get("event_id"), str) and item["event_id"].strip():
+            A.check(item, (card or {}).get("league","unknown").lower(), item["event_id"],
+                    item.get("model_id") or ROUTE, [item["product"]])
     return receipt
 
 

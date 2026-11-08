@@ -7,6 +7,7 @@ CONTRACT_PRODUCTS separately gates every configured contract in this pipeline.
 """
 from __future__ import annotations
 
+from collections import Counter
 import copy
 import hashlib
 import json
@@ -17,6 +18,7 @@ import numpy as np
 from models.common import discrete_research as D
 from models.common import volatility_matrix_v1 as V
 from pipelines.cards.distribution_research import _contracts, point
+from pipelines.cards import derived_missingness as M
 
 CONTRACT_PRODUCTS = {
     "nfl": {"margin", "total"}, "cfb": {"margin", "total"},
@@ -74,6 +76,62 @@ def _empirical(draws, template):
                                provenance=template["provenance"])
 
 
+PRODUCTS = ["joint_score", "margin", "total"]
+
+
+def _scale_inputs(model, distribution, point_source):
+    provenance = distribution["provenance"]
+    scaling = model["scaling"]
+    names = scaling["features"] if scaling is not None else []
+    used = provenance["scale_features_used"]
+    if set(used) != set(names):
+        raise ValueError("JOINT_MISSINGNESS_SCALE_SCOPE")
+    return {
+        "score_head_source": point_source,
+        "parent_home_mean": provenance["parent_home_mean"],
+        "parent_away_mean": provenance["parent_away_mean"],
+        "parent_forecast_sha256": provenance["parent_forecast_sha256"],
+        "parent_model_id": model["parent_model_id"],
+        "information_set": model["information_set"],
+        "fitted_state_sha256": provenance["fitted_artifact_sha256"],
+        "settlement": model["settlement"],
+        "missing_scale_policy": "REFUSE_MISSING_REQUIRED_SCALE_INPUT",
+        "scale_mode": "FITTED_CONDITIONAL" if names else "FITTED_UNCONDITIONAL",
+        "conditional_scale": provenance["conditional_scale"],
+        "features": {name: {"used":used[name], "training_mean":scaling["mean"][i],
+                            "training_scaler_sd":scaling["sd"][i],
+                            "fitted_log_mse_coefficient":scaling["beta"][i+1],
+                            "imputation":None} for i,name in enumerate(names)},
+        "numeric_law_sha256": D.digest({k: distribution[k] for k in ("home_scores", "away_scores", "masses")}),
+        "training_and_current_use_same_declared_scale_features": True,
+        "historical_missingness_by_season": None,
+        "scope_limits_reviewed": False,
+    }
+
+
+def verify_readback(report, output):
+    expected = {k:v for k,v in report.items() if k != "artifact_sha256"}
+    if D.digest(expected) != report["artifact_sha256"]:
+        raise ValueError("JOINT_MISSINGNESS_ARTIFACT_HASH")
+    covered = Counter()
+    for row in report["coverage"]:
+        model_id = row.get("model_id") or row.get("parent_model_id") or "joint_fit_unavailable"
+        M.check(row, report["league"], row["event_id"], model_id, PRODUCTS)
+        if row["status"] == "COMPLETED":
+            covered[row["event_id"], model_id] += 1
+    forecasts = Counter()
+    for row in report["results"]:
+        model_id = row["distribution"]["model_id"]
+        M.check(row, report["league"], row["event_id"], model_id, PRODUCTS)
+        forecasts[row["event_id"], model_id] += 1
+        filename = row["distribution"]["distribution_sha256"] + ".npz"
+        if (row["simulation"]["file"] != filename or
+                hashlib.sha256((output / filename).read_bytes()).hexdigest() != row["simulation"]["file_sha256"]):
+            raise ValueError("JOINT_MISSINGNESS_DRAWS_READBACK")
+    if forecasts != covered or any(count != 1 for count in covered.values()):
+        raise ValueError("JOINT_MISSINGNESS_COVERAGE")
+
+
 def build(card, config, output, *, simulations=100000):
     """Create a new immutable joint-score child report, never revise the card."""
     output = Path(output)
@@ -91,8 +149,13 @@ def build(card, config, output, *, simulations=100000):
               "derived_marginals_are_diagnostic_not_product_activation": True,
               "prospective_grade_eligible": False,
               "predictive_validation": "NOT_ESTABLISHED", "action_authority": False}
+    counts = Counter(row["event_id"] for row in card["forecasts"])
     for row in card["forecasts"]:
         event_id = row["event_id"]
+        if counts[event_id] > 1:
+            report["coverage"].append({"event_id": event_id, "status": "UNAVAILABLE",
+                                       "reason": "DUPLICATE_PARENT_EVENT", "parent_model_id": row.get("model_id")})
+            continue
         entries = [e for e in config["loaded_models"] if e["model"]["league"] == league
                    and e["model"]["parent_model_id"] == row.get("model_id")]
         if row.get("forecast_status") != "FORECAST_GENERATED":
@@ -102,9 +165,12 @@ def build(card, config, output, *, simulations=100000):
         if not entries:
             report["coverage"].append({"event_id": event_id, "status": "FIT_REQUIRED",
                                        "parent_model_id": row.get("model_id")})
+        seen_models = Counter(e["model"]["model_id"] for e in entries)
         for entry in entries:
             model = entry["model"]
             try:
+                if seen_models[model["model_id"]] != 1:
+                    raise ValueError("DUPLICATE_CHILD_MODEL")
                 if not D.stamp(cutoff) < D.stamp(row["start_time_utc"]):
                     raise ValueError("PARENT_CUTOFF_NOT_PREGAME")
                 if D.stamp(card["generated_at_utc"]) >= D.stamp(row["start_time_utc"]):
@@ -144,7 +210,7 @@ def build(card, config, output, *, simulations=100000):
                                    "model_probabilities": D.price(exact_distribution, contract["line"], contract["side"]),
                                    "simulation_probabilities": D.price(empirical[contract["product"]],
                                                                         contract["line"], contract["side"])})
-                report["results"].append({
+                result = {
                     "event_id": event_id, "distribution": distribution,
                     "predictive_moments": V.moments(distribution),
                     "margin_distribution": margin, "total_distribution": total,
@@ -153,17 +219,29 @@ def build(card, config, output, *, simulations=100000):
                     "simulation": {**metadata, "file": name,
                                    "file_sha256": hashlib.sha256(path.read_bytes()).hexdigest()},
                     "contracts": priced, "parent_warnings": list(row.get("warnings", [])),
-                    "limitations": list(model["limitations"]), "status": "DIAGNOSTIC"})
+                    "limitations": list(model["limitations"]), "status": "DIAGNOSTIC"}
+                M.attach(result, league, event_id, model["model_id"], PRODUCTS,
+                         inputs=_scale_inputs(model, distribution, point_source),
+                         method="Bound parent heads and fitted joint residual law; no missing-feature imputation",
+                         missing=["SOURCE_SEASON_SUPPORT_AND_PAIRED_REFRESH_UNREVIEWED"])
+                report["results"].append(result)
                 report["coverage"].append({"event_id": event_id, "model_id": model["model_id"],
                                            "product": "joint_score", "status": "COMPLETED"})
             except (ValueError, KeyError, TypeError) as exc:
                 report["coverage"].append({"event_id": event_id, "model_id": model.get("model_id"),
                                            "product": "joint_score", "status": "UNAVAILABLE",
                                            "reason": str(exc)})
+    for record in report["coverage"]:
+        model_id = record.get("model_id") or record.get("parent_model_id") or "joint_fit_unavailable"
+        M.attach(record, league, record["event_id"], model_id, PRODUCTS,
+                 inputs={"status":record["status"], "parent_card_sha256":report["parent_card_sha256"]},
+                 method="Joint child event coverage", missing=[] if record["status"] == "COMPLETED"
+                 else [record.get("reason") or record.get("detail") or record["status"]])
     report["created_at_utc"] = D.writer_clock()
     report["post_start_event_ids"] = [r["event_id"] for r in card["forecasts"]
                                       if D.stamp(r["start_time_utc"]) <= D.stamp(report["created_at_utc"])]
     report["artifact_sha256"] = D.digest(report)
     (output / "volatility_report.json").write_text(json.dumps(report, indent=2, sort_keys=True,
                                                               allow_nan=False) + "\n")
+    verify_readback(json.loads((output / "volatility_report.json").read_bytes()), output)
     return report

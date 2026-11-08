@@ -365,3 +365,77 @@ def test_margin_without_total_is_visible_gap_not_invented_score(tmp_path):
     assert report["results"] == []
     assert report["coverage"][0]["status"] == "UNAVAILABLE"
     assert "POINT_HEAD_UNAVAILABLE:total" in report["coverage"][0]["reason"]
+
+
+def _missingness_config(league='nhl', scaled=False):
+    card,settlement=_card(league)
+    model=fit(league=league,settlement=settlement,scale_features=('pace','rest_days') if scaled else ())
+    return card,{'loaded_models':[{'model':model}],'contracts':[], 'config_file_sha256':'a'*64,
+                 'information_set':'PREGAME_TEST'}
+
+
+def test_joint_missingness_metadata_and_record_order_preserve_law(tmp_path):
+    card,config=_missingness_config(scaled=True)
+    row=card['forecasts'][0]
+    row['model_input_snapshot']={'pace':61.,'rest_days':3.}
+    first=R.build(card,config,tmp_path/'first',simulations=200)
+    revised=copy.deepcopy(card)
+    revised['forecasts'][0].update(source_url='https://example.org/renamed',
+        model_input_snapshot={'unused':None,'rest_days':3.,'pace':61.})
+    second=R.build(revised,config,tmp_path/'second',simulations=200)
+    for r in (first,second):
+        result=r['results'][0]
+        info=result['missingness_audit']
+        assert info['release_status']=='HOLD_PENDING_SCOPE_REVIEW' and info['action_authority'] is False
+        inputs=info['details']['input_observations']
+        assert set(inputs['features'])=={'pace','rest_days'}
+        assert inputs['features']['pace']['imputation'] is None
+        assert inputs['settlement']=='FULL_GAME_OT_SO_PLUS_ONE'
+    left,right=[r['results'][0]['distribution'] for r in (first,second)]
+    for key in ('home_scores','away_scores','masses'):
+        assert left[key]==right[key]
+    revised['forecasts'][0]['model_input_snapshot']['pace']=85.
+    third=R.build(revised,config,tmp_path/'third',simulations=200)
+    after=third['results'][0]['missingness_audit']['details']['input_observations']
+    assert after['conditional_scale']!=left['provenance']['conditional_scale']
+    assert after['parent_home_mean']==left['provenance']['parent_home_mean']
+
+
+@pytest.mark.parametrize('defect', ['absent','null','nan','duplicate_event','missing_score_head'])
+def test_joint_missingness_refusals_keep_sibling_and_parent(tmp_path,defect):
+    card,config=_missingness_config(scaled=True)
+    good=card['forecasts'][0]
+    good['model_input_snapshot']={'pace':61.,'rest_days':4.}
+    bad=copy.deepcopy(good)
+    bad['event_id']='bad'
+    card['forecasts'].append(bad)
+    if defect=='absent':del bad['model_input_snapshot']['pace']
+    if defect=='null':bad['model_input_snapshot']['pace']=None
+    if defect=='nan':bad['model_input_snapshot']['pace']='NaN'
+    if defect=='duplicate_event':card['forecasts'].append(copy.deepcopy(bad))
+    if defect=='missing_score_head':bad.pop('projected_away_points')
+    before=copy.deepcopy(card)
+    report=R.build(card,config,tmp_path/'out',simulations=200)
+    assert card==before
+    assert [r['event_id'] for r in report['results']]==[good['event_id']]
+    refused=[r for r in report['coverage'] if r['event_id']=='bad']
+    assert refused and all(r['status']=='UNAVAILABLE' and r['reason'] and
+        r['missingness_audit']['release_status']=='HOLD_PENDING_SCOPE_REVIEW' for r in refused)
+    if defect=='absent':
+        with pytest.raises(ValueError,match='MISSING_SCALE_FEATURE'):
+            V.predict(config['loaded_models'][0]['model'],home_mean=30,away_mean=24,
+                parent_model_id=bad['model_id'],event_id=bad['event_id'],cutoff=card['as_of_utc'],
+                information_set='PREGAME_TEST',parent_forecast_sha256='b'*64,scale_features=bad['model_input_snapshot'])
+
+
+def test_joint_missingness_distribution_and_array_tampering_block_readback(tmp_path):
+    card,config=_missingness_config()
+    report=R.build(card,config,tmp_path/'out',simulations=200)
+    changed=copy.deepcopy(report)
+    changed['results'][0]['predictive_moments']['total_mean']=999.
+    changed['artifact_sha256']=D.digest({k:v for k,v in changed.items() if k!='artifact_sha256'})
+    with pytest.raises(ValueError,match='MISSINGNESS_CHILD_READBACK_FAILED'):
+        R.verify_readback(changed,tmp_path/'out')
+    (tmp_path/'out'/report['results'][0]['simulation']['file']).write_bytes(b'altered')
+    with pytest.raises(ValueError,match='DRAWS_READBACK'):
+        R.verify_readback(report,tmp_path/'out')

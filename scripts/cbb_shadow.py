@@ -7,6 +7,7 @@ import io
 import itertools
 import json
 import sys
+import re
 import urllib.request
 from collections import Counter, defaultdict
 from datetime import date, datetime, timedelta, timezone
@@ -19,6 +20,7 @@ import pandas as pd
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 from models.common.discrete_research import digest
+from scripts import cbb_missingness as missingness
 
 PACIFIC = ZoneInfo("America/Los_Angeles")
 HISTORY_REPO = "sportsdataverse/hoopR-mbb-data"
@@ -122,13 +124,33 @@ def capture(day, path):
 
 
 def conference(v):
-    return pd.notna(v) and int(v) in D1
+    return str(v).isdigit() and int(v) in D1
+
+
+def venue(value):
+    # Strict and common to historical parquet values and live JSON.
+    return bool(value) if isinstance(value, (bool, np.bool_)) else None
+
+
+def team_id(value):
+    return value is not None and re.fullmatch(r"[1-9][0-9]*", str(value)) is not None
 
 
 def normalized(r):
-    sides = {v["homeAway"]: v for v in r["competitions"][0]["competitors"]}
-    h, a = sides["home"], sides["away"]
     c = r["competitions"][0]
+    players = c["competitors"]
+    sides = {v.get("homeAway"): v for v in players}
+    h, a = sides.get("home", {}), sides.get("away", {})
+    ht, at = h.get("team", {}), a.get("team", {})
+    issues = []
+    if (len(r["competitions"]) != 1 or str(c.get("id")) != str(r["id"])
+        or len(players) != 2 or set(sides) != {"home","away"}
+        or not all(team_id(v.get("id")) and str(v["id"]) == str(v.get("team", {}).get("id")) for v in (h,a))
+        or h.get("id") == a.get("id")):
+        issues.append("TEAM_IDENTITY")
+    site = venue(c.get("neutralSite"))
+    if site is None:
+        issues.append("VENUE_UNRESOLVED")
     start = ts(c["date"])
     # Copy a fixed allowlist; no odds, ranks, favorites or prices enter the numeric inputs.
     return {
@@ -137,17 +159,19 @@ def normalized(r):
         "day": start.astimezone(PACIFIC).date().isoformat(),
         "season": int(r["season"]["year"]),
         "type": int(r["season"]["type"]),
-        "h": str(h["id"]),
-        "a": str(a["id"]),
-        "hn": h["team"]["displayName"],
-        "an": a["team"]["displayName"],
-        "neutral": c["neutralSite"],
+        "h": str(h.get("id", "")),
+        "a": str(a.get("id", "")),
+        "hn": ht.get("displayName", "Unresolved home team"),
+        "an": at.get("displayName", "Unresolved away team"),
+        "neutral": site,
+        "issues": issues,
+        "affiliation_resolution": "OBSERVED_BOTH" if all(t.get("conferenceId") is not None for t in (ht,at)) else "UNRESOLVED",
         "final": c["status"]["type"]["name"] == "STATUS_FINAL"
         and c["status"]["type"]["completed"],
         "status": c["status"]["type"]["name"],
         "hs": h.get("score"),
         "as": a.get("score"),
-        "d1": all(conference(v["team"].get("conferenceId")) for v in (h, a)),
+        "d1": all(conference(t.get("conferenceId")) for t in (ht,at)),
     }
 
 
@@ -185,6 +209,9 @@ def load(path, day, cutoff):
         "status_type_name",
         "status_type_completed",
     ]
+    files = [row["file"] for row in m["entries"]]
+    if len(set(files)) != len(files) or any(row["kind"] not in {"history","scoreboard"} for row in m["entries"]):
+        raise ValueError("DUPLICATE_OR_UNEXPECTED_SOURCE")
     for source in m["entries"]:
         f = source["file"]
         b = (path / f).read_bytes()
@@ -216,6 +243,8 @@ def load(path, day, cutoff):
                 key = str(g.game_id)
                 if key in history:
                     raise ValueError("DUPLICATE_HISTORY_GAME")
+                if venue(g.neutral_site) is None or not all(team_id(v) for v in (g.home_id,g.away_id)):
+                    raise ValueError("HISTORICAL_VENUE_OR_ID_UNRESOLVED:" + key)
                 history[key] = {
                     "id": key,
                     "day": pastday.isoformat(),
@@ -225,7 +254,7 @@ def load(path, day, cutoff):
                     "a": str(g.away_id),
                     "hs": int(g.home_score),
                     "as": int(g.away_score),
-                    "neutral": bool(g.neutral_site),
+                    "neutral": venue(g.neutral_site),
                 }
         else:
             expected = f"https://site.api.espn.com/apis/site/v2/sports/basketball/mens-college-basketball/scoreboard?dates={f[:8]}&limit=1000&groups=50"
@@ -237,7 +266,13 @@ def load(path, day, cutoff):
             for raw in json.loads(b)["events"]:
                 g = normalized(raw)
                 if g["id"] in recent and recent[g["id"]] != g:
-                    raise ValueError("CONFLICTING_SCHEDULE")
+                    if recent[g["id"]]["day"] == g["day"] == day.isoformat():
+                        # Deterministic refusal for this event. A clean peer remains gradeable.
+                        old = recent[g["id"]]
+                        g = min((g,old), key=lambda item:(item["utc"],item["h"],item["a"],item["hn"],item["an"]))
+                        g = dict(g, issues=sorted(set(g["issues"]) | {"CONFLICTING_SCHEDULE"}))
+                    else:
+                        raise ValueError("CONFLICTING_SCHEDULE")
                 recent[g["id"]] = g
     for key, g in recent.items():
         if (
@@ -247,6 +282,8 @@ def load(path, day, cutoff):
             and g["day"] < day.isoformat()
             and ts(g["utc"]) < cutoff
         ):
+            if g["issues"]:
+                raise ValueError("HISTORICAL_SOURCE_UNRESOLVED:" + key)
             g = {
                 k: g[k]
                 for k in ["id", "day", "utc", "season", "h", "a", "hs", "as", "neutral"]
@@ -285,6 +322,8 @@ def load(path, day, cutoff):
 
 
 def project(state, g, prior):
+    if venue(g["neutral"]) is None:
+        raise ValueError("VENUE_UNRESOLVED")
     h, a = state[g["h"]], state[g["a"]]
     margin = h[0] - a[0] + prior[0] * (not g["neutral"])
     total = prior[1] + h[1] + a[1]
@@ -325,6 +364,8 @@ def fit(games):
     # Seasons are named by ending year. Warm the ratings on 2022-24, learn empirical residuals on 2025, test on 2026.
     warm = [g for g in games if g["season"] <= 2024]
     nonneutral = [g for g in warm if not g["neutral"]]
+    if not nonneutral or not any(g["neutral"] for g in warm):
+        raise ValueError("INSUFFICIENT_VENUE_TRAINING_SUPPORT")
     prior = (
         float(np.mean([g["hs"] - g["as"] for g in nonneutral])),
         float(np.mean([g["hs"] + g["as"] for g in warm])),
@@ -391,14 +432,67 @@ def pmf(vals):
     return {"support": s.tolist(), "masses": (n / n.sum()).tolist()}
 
 
-def issue(path, day, dest):
+def admission(g, state, at):
+    if g["issues"]:
+        return g["issues"][0]
+    if g["status"] != "STATUS_SCHEDULED" or ts(g["utc"]) <= at:
+        return "NOT_SCHEDULED_PRE_START"
+    if not g["d1"] or g["type"] not in (2, 3):
+        return "OUTSIDE_VERIFIED_D1_PAIR"
+    if min((int(state[k][2]) if k in state else 0) for k in (g["h"],g["a"])) < PARAMS["min_prior_games"]:
+        return "INSUFFICIENT_TEAM_HISTORY"
+    return None
+
+
+def run_contract_checks(targets, state, prior, cutoff):
+    """Exercise the actual model's input gates and point transform on a current eligible row."""
+    game = next((g for g in targets if admission(g,state,cutoff) is None), None)
+    if game is None:
+        return {"status":"UNEVALUABLE_NO_ADMITTED_EVENT", "event_id":None}
+    h, a = project(state,game,prior)
+    if project(state,dict(game,hn="audit alias",an="audit alias",audit_url="annotation"),prior) != (h,a):
+        raise ValueError("METADATA_CHANGED_POINT_LAW")
+    swap = dict(game,h=game["a"],a=game["h"],neutral=True)
+    nh,na = project(state,dict(game,neutral=True),prior)
+    if project(state,swap,prior) != (na,nh):
+        raise ValueError("TEAM_ORIENTATION_INVARIANCE")
+    if admission(dict(game,h="missing"),state,cutoff) != "INSUFFICIENT_TEAM_HISTORY":
+        raise ValueError("MISSING_HISTORY_BYPASS")
+    try:
+        project(state,dict(game,neutral=None),prior)
+    except ValueError as exc:
+        if str(exc) != "VENUE_UNRESOLVED":
+            raise
+    else:
+        raise ValueError("UNKNOWN_VENUE_BYPASS")
+    return {"status":"PASS","event_id":"CBB:"+game["id"],"probes":["metadata","orientation","unknown_venue","missing_history"]}
+
+
+def issue(path, day, dest, previous_card=None, previous_sha=None):
     cutoff = now()
-    games, targets, manifest, hfiles = load(path, day, cutoff)
-    state, prior, errors, test, last_season = fit(games)
+    dest.mkdir(parents=True, exist_ok=False)
+    try:
+        games, targets, manifest, hfiles = load(path, day, cutoff)
+        state, prior, errors, test, last_season = fit(games)
+        if errors is None or not test:
+            raise ValueError("INSUFFICIENT_CALIBRATION_OR_EVALUATION")
+        parent = None
+        if previous_card is not None or previous_sha is not None:
+            if previous_card is None or sha(previous_card.read_bytes()) != previous_sha:
+                raise ValueError("PREVIOUS_CARD_HASH_REQUIRED")
+            parent = json.loads(previous_card.read_bytes())
+            missingness.verify(parent)
+            if parent["date"] != day.isoformat() or ts(parent["generated_at_utc"]) > cutoff:
+                raise ValueError("PREVIOUS_CARD_SCOPE")
+    except (KeyError, ValueError, OSError, TypeError) as exc:
+        write(dest / "missingness_failure.json", {"status":"BLOCKED", "reason":str(exc),
+              "date":day.isoformat(), "scheduled":None, "generated_at_utc":now().isoformat(),
+              "observation_state":"ACQUISITION_FAILURE" if isinstance(exc,OSError) else "UNRESOLVED_IDENTITY_OR_COVERAGE",
+              "action_authority":False})
+        raise
     if manifest["season"] != last_season:
         for team in state.values():
             team[:2] *= PARAMS["offseason_retention"]
-    dest.mkdir(parents=True, exist_ok=False)
     state_sha = digest({k: v.tolist() for k, v in sorted(state.items())})
     training_sha = digest([g for g in games if g["season"] <= 2025])
     cfg = {
@@ -425,14 +519,9 @@ def issue(path, day, dest):
             "qualification": "NO_PICK",
         }
         rows.append(row)
-        if g["status"] != "STATUS_SCHEDULED" or ts(g["utc"]) <= now():
-            row["reason"] = "NOT_SCHEDULED_PRE_START"
-            continue
-        if not g["d1"] or g["type"] not in (2, 3):
-            row["reason"] = "OUTSIDE_VERIFIED_D1_PAIR"
-            continue
-        if min(state[g["h"]][2], state[g["a"]][2]) < PARAMS["min_prior_games"]:
-            row["reason"] = "INSUFFICIENT_TEAM_HISTORY"
+        reason = admission(g,state,now())
+        if reason is not None:
+            row["reason"] = reason
             continue
         base.update(
             home_state=state[g["h"]].tolist(),
@@ -440,7 +529,13 @@ def issue(path, day, dest):
             state_sha256=state_sha,
         )
         h, a = project(state, g, prior)
-        s = legal_scores(h, a, errors)
+        try:
+            s = legal_scores(h, a, errors)
+        except ValueError as exc:
+            if str(exc) != "EMPTY_LEGAL_SUPPORT":
+                raise
+            row["reason"] = str(exc)
+            continue
         seed = int(digest([MODEL, proc, g["id"], digest(base), N])[:16], 16)
         draws = np.random.Generator(np.random.PCG64(seed)).choice(len(s), N)
         pairs = s[draws].astype("<i4")
@@ -495,13 +590,19 @@ def issue(path, day, dest):
         w.writeheader()
         w.writerows(test)
     generated = now()
-    assert all(
-        ts(r["start_time_utc"]) > generated
-        for r in rows
-        if r["forecast_status"] == "FORECAST_GENERATED"
-    )
+    for i,row in enumerate(rows):
+        if row["forecast_status"] == "FORECAST_GENERATED" and ts(row["start_time_utc"]) <= generated:
+            # Draws are local scratch until this new edition is sealed.
+            (dest / row["simulation"]["file"]).unlink()
+            rows[i] = {key:row[key] for key in ("event_id","home_team","away_team","start_time_utc",
+                                                 "source_status","action_authority","qualification")}
+            rows[i].update(forecast_status="UNAVAILABLE",reason="NOT_SCHEDULED_PRE_START")
     result = {
-        "schema": "sports.cbb.shadow_card.v1",
+        "schema": "sports.cbb.shadow_card.v2",
+        "previous_card_sha256": previous_sha,
+        "missingness_runtime_checks": run_contract_checks(targets,state,prior,cutoff),
+        "missingness_historical_support": missingness.historical_support(games, PARAMS["min_prior_games"]),
+        "schedule_scope": "CAPTURED_ESPN_SLATE" if rows else "EMPTY_ESPN_WINDOW_REQUIRES_INDEPENDENT_SCOPE_VERIFICATION",
         "date": day.isoformat(),
         "as_of_utc": cutoff.isoformat(),
         "generated_at_utc": generated.isoformat(),
@@ -541,7 +642,10 @@ def issue(path, day, dest):
         ),
         "forecasts": rows,
     }
+    missingness.attach(result,targets,state,PARAMS["min_prior_games"],parent)
+    missingness.verify(result)
     write(dest / "card.json", result)
+    missingness.verify(json.loads((dest / "card.json").read_bytes()))
     print(
         json.dumps(
             {
@@ -561,10 +665,19 @@ if __name__ == "__main__":
     ap.add_argument("--date", type=date.fromisoformat, required=True)
     ap.add_argument("--inputs", type=Path, required=True)
     ap.add_argument("--output", type=Path)
+    ap.add_argument("--previous-card", type=Path, help="Earlier v2 edition of this same slate")
+    ap.add_argument("--previous-sha256", help="Independently recorded predecessor card digest")
     args = ap.parse_args()
     if args.command == "capture":
-        capture(args.date, args.inputs)
+        try:
+            capture(args.date, args.inputs)
+        except (OSError, KeyError, ValueError) as exc:
+            if args.inputs.is_dir() and not isinstance(exc, FileExistsError):
+                write(args.inputs / "capture_failure.json", {"status":"BLOCKED", "date":args.date.isoformat(),
+                      "scheduled":None, "action_authority":False, "observation_state":"ACQUISITION_FAILURE",
+                      "failed_at_utc":now().isoformat(), "reason":str(exc)})
+            raise
     elif args.output:
-        issue(args.inputs, args.date, args.output)
+        issue(args.inputs, args.date, args.output,args.previous_card,args.previous_sha256)
     else:
         ap.error("--output required for card")

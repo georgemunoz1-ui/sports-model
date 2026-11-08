@@ -116,6 +116,18 @@ def verified_card(path, expected):
     return d
 
 
+def load_audited_card(path, expected):
+    """Preserve the frozen v1 grader; only the v2 issuer supplies auditable new rows."""
+    card = pinned_json(path, expected)
+    if card["schema"] == "sports.cbb.shadow_card.v1":
+        if "missingness_registry_sha256" in card or any("missingness_audit" in r for r in card["forecasts"]):
+            raise ValueError("CBB_MISSINGNESS_SCHEMA_DOWNGRADE")
+        return verified_card(path, expected)
+    from scripts.cbb_missingness import verify
+    verify(card)
+    return card
+
+
 def identity(raw, fc):
     event_id = fc["event_id"].split(":")[1]
     if len(raw["header"]["competitions"]) != 1:
@@ -439,7 +451,7 @@ if __name__ == "__main__":
     ap.add_argument("--previous-grade", type=Path)
     ap.add_argument("--previous-grade-sha")
     args = ap.parse_args()
-    card = verified_card(args.card, args.card_sha)
+    card = load_audited_card(args.card, args.card_sha)
     if args.command == "attach":
         if args.previous_grade or args.previous_grade_sha or args.manifest_sha:
             ap.error("Postgame evidence arguments apply only to grade")
@@ -480,6 +492,8 @@ if __name__ == "__main__":
                 if previous["schema"].endswith(".v2")
                 else "UNVERIFIABLE_LEGACY_GRADE"
             )
+    output["missingness_review"] = ("LEGACY_NO_AUDIT_INELIGIBLE" if card["schema"].endswith(".v1") else
+                                   "RECEIPTS_BOUND_HOLD_PENDING_REVIEW")
     encoded = json.dumps(output, indent=2, allow_nan=False) + "\n"
     with args.output.open("x") as file:
         file.write(encoded)

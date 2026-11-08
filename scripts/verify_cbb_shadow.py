@@ -12,6 +12,7 @@ import numpy as np
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from scripts import cbb_shadow as model
 from models.common.discrete_research import digest
+from scripts import cbb_missingness as missingness
 
 
 def require(test, description):
@@ -19,10 +20,19 @@ def require(test, description):
         raise ValueError(description)
 
 
-def verify(inputs, run, expected_card_sha):
+def verify(inputs, run, expected_card_sha, previous_card=None):
     data = (run / "card.json").read_bytes()
     require(model.sha(data) == expected_card_sha, "PARENT_BYTES_CHANGED")
     card = json.loads(data)
+    missingness.verify(card)
+    parent = None
+    if card["previous_card_sha256"] is not None:
+        require(previous_card is not None and model.sha(previous_card.read_bytes()) == card["previous_card_sha256"],
+                "PREVIOUS_CARD_INPUT_REQUIRED")
+        parent = json.loads(previous_card.read_bytes())
+        missingness.verify(parent)
+        require(parent["date"] == card["date"] and model.ts(parent["generated_at_utc"]) <= model.ts(card["as_of_utc"]),
+                "PREVIOUS_CARD_SCOPE")
     require(
         model.sha((inputs / "manifest.json").read_bytes())
         == card["input_manifest_sha256"],
@@ -59,6 +69,13 @@ def verify(inputs, run, expected_card_sha):
         is False,
         "AUTHORITY",
     )
+    require(card["missingness_historical_support"] == missingness.historical_support(history,model.PARAMS["min_prior_games"]),
+            "HISTORICAL_MISSINGNESS_SUPPORT_CHANGED")
+    require(card["missingness_runtime_checks"] == model.run_contract_checks(targets,state,prior,cutoff),
+            "MISSINGNESS_RUNTIME_PROBES_CHANGED")
+    receipts = [r["missingness_audit"] for r in card["forecasts"]]
+    missingness.attach(card, targets, state, model.PARAMS["min_prior_games"], parent)
+    require(receipts == [r["missingness_audit"] for r in card["forecasts"]], "MISSINGNESS_DETAILS_DO_NOT_REPLAY")
     ids = {g["id"]: g for g in targets}
     observed = {r["event_id"].split(":")[1]: r for r in card["forecasts"]}
     require(
@@ -117,15 +134,20 @@ def verify(inputs, run, expected_card_sha):
                 )
                 or (
                     reason == "INSUFFICIENT_TEAM_HISTORY"
-                    and min(state[g["h"]][2], state[g["a"]][2])
-                    < model.PARAMS["min_prior_games"]
+                    and model.admission(g,state,cutoff) == reason
                 )
             )
-            require(supported, "UNSUPPORTED_EXCLUSION")
+            if reason == "EMPTY_LEGAL_SUPPORT":
+                h, a = model.project(state,g,prior)
+                scores = np.floor(np.array([h,a])+bank+0.5)
+                supported = not ((scores >= 0).all(axis=1) & (scores[:,0] != scores[:,1])).any()
+            require(supported or reason in g["issues"], "UNSUPPORTED_EXCLUSION")
             continue
         require(
             g["status"] == "STATUS_SCHEDULED"
-            and g["d1"]
+            and g["d1"] and not g["issues"]
+            and min(state[g["h"]][2],state[g["a"]][2]) >= model.PARAMS["min_prior_games"]
+            and g["type"] in (2,3)
             and passed < model.ts(g["utc"]),
             "LATE_OR_WRONG_SCOPE",
         )
@@ -225,6 +247,11 @@ def verify(inputs, run, expected_card_sha):
         "frozen_rows": len(ids),
         "forecasts_replayed": counted,
         "paired_draws_replayed": counted * model.N,
+        "missingness_receipts_replayed": len(observed),
+        "model_release_review": {"status":"HOLD", "action_authority":False, "blockers":[
+            "INDEPENDENT_FEATURE_CONTRACT_REVIEW_REQUIRED", "PRODUCT_LIMITS_AND_FORWARD_MONITORING_REQUIRED",
+            "NO_PRODUCT_SPECIFIC_VALIDATED_MISSINGNESS_POLICY"]},
+        "missingness_registry_sha256": card["missingness_registry_sha256"],
         "max_absolute_margin_or_total_cdf_error": max_dev,
         "simultaneous_dkw_99pct_tolerance": bound,
         "qualification": "DIAGNOSTIC_ONLY",
@@ -237,7 +264,11 @@ if __name__ == "__main__":
     for f in ("inputs", "run", "out"):
         p.add_argument("--" + f, type=Path, required=True)
     p.add_argument("--card-sha256", required=True)
+    p.add_argument("--previous-card",type=Path)
+    p.add_argument("--release-review",action="store_true",help="Require missingness release eligibility as well as numerical replay")
     a = p.parse_args()
-    receipt = verify(a.inputs, a.run, a.card_sha256)
+    receipt = verify(a.inputs, a.run, a.card_sha256, a.previous_card)
     model.write(a.out, receipt)
     print(json.dumps(receipt))
+    if a.release_review and receipt["model_release_review"]["status"] != "PASS":
+        raise SystemExit(2)

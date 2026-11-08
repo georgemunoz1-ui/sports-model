@@ -1,0 +1,18 @@
+{
+  "schema": "sports.cbb.missingness_contract.v1",
+  "model_id": "cbb.men.d1.opponent_adjusted_score_residual.v1.research",
+  "settlement": "FULL_GAME_INCLUDING_OVERTIME",
+  "review_status": "ENGINEERING_CANDIDATE_AWAITING_INDEPENDENT_REVIEW",
+  "limits_by_product": null,
+  "historical_pattern": "Captured prior-history support by season is computed before same-day updates. Excludes noneligible historical pairs. Historical provider publication times are unverified.",
+  "current_pattern": "Per-event audit plus source manifest and explicit refusals.",
+  "contracts": [
+    {"input":"source slate and historical finals", "heads":"all", "source":"ESPN groups=50 six-date window within six hours and pinned hoopR season files", "missing":"incomplete manifest, timeout or date/hash mismatch", "transform":"no imputation", "indicator":"admission only", "fallback":"block run, never infer an empty schedule"},
+    {"input":"event identity, home/away team IDs, Pacific time and D-I membership", "heads":"all", "source":"dated ESPN schedule, verified prior season archive", "missing":"unresolved, invalid or conflicting identity or unrecognized affiliation", "transform":"no alias guessing or positional default", "indicator":"admission only", "fallback":"refuse affected fixture; quarantine unreconciled historical inputs"},
+    {"input":"neutral-site flag", "heads":"home_score, away_score, home_margin, all joint-derived products", "source":"retained competition and earlier eligible finals", "missing":"absent, null or non-boolean", "transform":"true neutral; false verified nonneutral; never coerce null to home or neutral", "indicator":"venue coefficient on margin only", "fallback":"refuse target; block ambiguous historical fit"},
+    {"input":"team strength, scoring environment and number of eligible earlier games", "heads":"all", "source":"earlier Pacific-date verified finals", "missing":"unseen team or short history", "transform":"zero-initialized strength/environment for rating assimilation only; retain 50% across seasons", "indicator":"5 prior games each before issuing", "fallback":"refuse insufficient or unresolved team history"},
+    {"input":"mean venue margin and scoring total", "heads":"all", "source":"training seasons ending 2022 through 2024, official earlier positive decisive final scores", "missing":"empty warm or venue population; invalid/absent score", "transform":"training-period mean; no per-event replacement", "indicator":"fit support only", "fallback":"no forecast using unsupported fit"},
+    {"input":"paired score residual law", "heads":"home_win, margin_pmf, total_pmf", "source":"earlier season ending 2025, verified minimum history", "missing":"insufficient residuals or empty legal support", "transform":"center pairs; round and condition on legal nonnegative unequal scores", "indicator":"no inference fill", "fallback":"block fit when residual bank absent, refuse individual event when out of joint support"},
+    {"input":"injuries, lineup, minutes, weather, sportsbook prices", "heads":"none", "source":"outside this model", "missing":"not modeled", "transform":"no numerical use", "indicator":"none", "fallback":"no proxy"}
+  ]
+}

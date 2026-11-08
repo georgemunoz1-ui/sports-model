@@ -50,3 +50,10 @@ If a source corrects a result, retain the original grade. Repeat the capture and
 Prior score projections and the original lines determine winner, margin and total errors, and win/loss/push for the higher-probability side. Report priced and unpriced counts, unresolved finals, and paired model/market cohorts separately. Use provider-labeled closing prices for the retrospective benchmark.
 
 The November 3, 2026 FanMatch rows are an external benchmark. The first dated in-house shadow parent in this integration is November 4. Preserve these distinct identities. The in-house methodology and scope restrictions are in CBB_MENS_SHADOW.md.
+
+## Missingness audit for the standalone runner
+
+V2 cards bind a receipt to every forecast and refused event. The CBB registry in
+`data/model_selection/cbb_missingness_v1.json` specifies the score model's input families, admission rules, missing-value handling, heads and units. The issuer reports eligible history by season and team, checks equivalent venue/team/metadata treatments, and retains the current residual law and seed. Missing acquisition writes a failure receipt with an unknown slate count. The verified ESPN inventory still requires separate schedule reconciliation. When refreshing, pass `--previous-card` and its pinned `--previous-sha256` to the issuer and the same `--previous-card` to the verifier. Without the earlier edition, attribution is unresolved.
+
+Verify the new card using the usual `verify_cbb_shadow.py` command. Add `--release-review` to require predictive release clearance. Verification still saves its receipt, but release review returns exit 2 while independent registry review, product-specific limits or forward evidence are outstanding. The seven test classes run in `tests/test_cbb_missingness.py` with the existing capture, shadow and reconciliation suites. Offline replay recomputes the receipts from the captured inputs. The native release gate remains on hold. The market and grading readers retain v1 historical rows as legacy, ineligible for the new audit.

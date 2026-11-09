@@ -105,7 +105,7 @@ def checkout_evidence(repo):
                                  if (Path(repo)/p).is_file()}}
 
 
-def _event_bindings(card):
+def _event_rows(card):
     if not isinstance(card, dict):
         raise ValueError("CARD_OBJECT_REQUIRED")
     rows = card["forecasts"]
@@ -116,30 +116,30 @@ def _event_bindings(card):
     ids = [D.identity(r.get("event_id"), "EVENT_ID") for r in rows]
     if len(ids) != len(set(ids)):
         raise ValueError("DUPLICATE_PARENT_EVENT")
-    bindings = {}
-    for row in rows:
-        event_id = D.identity(row["event_id"], "EVENT_ID")
-        # Labels cannot substitute for canonical, ordered team identities. Old
-        # cards without these fields need a separately issued bound successor;
-        # this adapter never guesses identifiers or rewrites a frozen card.
-        home = D.identity(row.get("home_id"), "CANONICAL_HOME_ID")
-        away = D.identity(row.get("away_id"), "CANONICAL_AWAY_ID")
-        if home == away:
-            raise ValueError("PARENT_DISTINCT_CANONICAL_TEAMS_REQUIRED")
-        if row.get("projected_margin_orientation") != PARENT_ORIENTATION:
-            raise ValueError("PARENT_MARGIN_ORIENTATION_REQUIRED_HOME_MINUS_AWAY")
-        if row.get("target") != PARENT_TARGET:
-            raise ValueError("PARENT_TARGET_SCOPE_MISMATCH")
-        bindings[event_id] = {
-            "event_id_namespace": D.identity(row.get("event_id_namespace"), "EVENT_ID_NAMESPACE"),
-            "start_time_utc": D.stamp(row["start_time_utc"]).isoformat(),
-            "home_id": home, "away_id": away,
-            "team_id_namespace": D.identity(row.get("team_id_namespace"), "TEAM_ID_NAMESPACE"),
-            "settlement": D.identity(row.get("settlement"), "PARENT_SETTLEMENT"),
-            "orientation": PARENT_ORIENTATION, "target": PARENT_TARGET,
-            "information_set": D.identity(row.get("information_set"), "PARENT_INFORMATION_SET"),
-        }
-    return bindings
+    return dict(zip(ids, rows))
+
+
+def _event_binding(row):
+    # Labels cannot substitute for canonical, ordered team identities. Old
+    # cards without these fields need a separately issued bound successor;
+    # this adapter never guesses identifiers or rewrites a frozen card.
+    home = D.identity(row.get("home_id"), "CANONICAL_HOME_ID")
+    away = D.identity(row.get("away_id"), "CANONICAL_AWAY_ID")
+    if home == away:
+        raise ValueError("PARENT_DISTINCT_CANONICAL_TEAMS_REQUIRED")
+    if row.get("projected_margin_orientation") != PARENT_ORIENTATION:
+        raise ValueError("PARENT_MARGIN_ORIENTATION_REQUIRED_HOME_MINUS_AWAY")
+    if row.get("target") != PARENT_TARGET:
+        raise ValueError("PARENT_TARGET_SCOPE_MISMATCH")
+    return {
+        "event_id_namespace": D.identity(row.get("event_id_namespace"), "EVENT_ID_NAMESPACE"),
+        "start_time_utc": D.stamp(row["start_time_utc"]).isoformat(),
+        "home_id": home, "away_id": away,
+        "team_id_namespace": D.identity(row.get("team_id_namespace"), "TEAM_ID_NAMESPACE"),
+        "settlement": D.identity(row.get("settlement"), "PARENT_SETTLEMENT"),
+        "orientation": PARENT_ORIENTATION, "target": PARENT_TARGET,
+        "information_set": D.identity(row.get("information_set"), "PARENT_INFORMATION_SET"),
+    }
 
 
 def _diagnostic_rows(card):
@@ -152,7 +152,7 @@ def _diagnostic_rows(card):
     return [row if isinstance(row, dict) else {} for row in rows]
 
 
-def _validate_parent_scope(parent, config):
+def _validate_parent_row(row, league, config, binding):
     """Check the original row's declared scope before any adapter/draw call.
 
     A matching config string or a retained file hash does not supply missing
@@ -160,43 +160,35 @@ def _validate_parent_scope(parent, config):
     no winner-only, regulation/full-game or away-oriented reinterpretation is
     permitted here. This verifies consistency, not provider authentication.
     """
-    league = parent["league"].lower()
-    bindings = {}
-    for row in parent["forecasts"]:
-        model_id = D.identity(row.get("model_id"), "PARENT_MODEL_ID")
-        D.source_hash(row.get("input_snapshot_hash"))
-        D.source_hash(row.get("model_state_config_hash"))
-        if row.get("projected_margin_orientation") != PARENT_ORIENTATION:
-            raise ValueError("PARENT_MARGIN_ORIENTATION_REQUIRED_HOME_MINUS_AWAY")
-        if row.get("target") != PARENT_TARGET:
-            raise ValueError("PARENT_TARGET_SCOPE_MISMATCH")
-        settlement = D.identity(row.get("settlement"), "PARENT_SETTLEMENT")
-        information_set = D.identity(row.get("information_set"), "PARENT_INFORMATION_SET")
-        if information_set != config["information_set"]:
-            raise ValueError("PARENT_INFORMATION_SET_MISMATCH")
-        matches = [entry["model"] for entry in config["loaded_models"]
-                   if entry["model"]["league"] == league
-                   and entry["model"]["parent_model_id"] == model_id]
-        # Preserve the existing FIT_REQUIRED disposition when no fit is supplied.
-        # An explicitly supplied incompatible fit must never masquerade as one.
-        if config["loaded_models"] and not matches:
-            raise ValueError("PARENT_MODEL_OR_LEAGUE_SCOPE_MISMATCH")
-        if settlement not in M.SETTLEMENTS.get(league, {}):
+    model_id = D.identity(row.get("model_id"), "PARENT_MODEL_ID")
+    D.source_hash(row.get("input_snapshot_hash"))
+    D.source_hash(row.get("model_state_config_hash"))
+    settlement = binding["settlement"]
+    information_set = binding["information_set"]
+    if information_set != config["information_set"]:
+        raise ValueError("PARENT_INFORMATION_SET_MISMATCH")
+    matches = [entry["model"] for entry in config["loaded_models"]
+               if entry["model"]["league"] == league
+               and entry["model"]["parent_model_id"] == model_id]
+    # Preserve the existing FIT_REQUIRED disposition when no fit is supplied.
+    # An explicitly supplied incompatible fit must never masquerade as one.
+    if config["loaded_models"] and not matches:
+        raise ValueError("PARENT_MODEL_OR_LEAGUE_SCOPE_MISMATCH")
+    if settlement not in M.SETTLEMENTS.get(league, {}):
+        raise ValueError("PARENT_SETTLEMENT_SCOPE_MISMATCH")
+    for model in matches:
+        if settlement != model["settlement"]:
             raise ValueError("PARENT_SETTLEMENT_SCOPE_MISMATCH")
-        for model in matches:
-            if settlement != model["settlement"]:
-                raise ValueError("PARENT_SETTLEMENT_SCOPE_MISMATCH")
-            if information_set != model["information_set"]:
-                raise ValueError("PARENT_FIT_INFORMATION_SET_MISMATCH")
-        bindings[row["event_id"]] = {
-            **_event_bindings({"forecasts": [row]})[row["event_id"]],
-            "parent_forecast_sha256": D.digest(row),
-            "parent_model_id": model_id, "target": PARENT_TARGET,
-            "orientation": PARENT_ORIENTATION, "information_set": information_set,
-            "input_snapshot_hash": row["input_snapshot_hash"],
-            "model_state_config_hash": row["model_state_config_hash"],
-        }
-    return bindings
+        if information_set != model["information_set"]:
+            raise ValueError("PARENT_FIT_INFORMATION_SET_MISMATCH")
+    return {
+        **binding,
+        "parent_forecast_sha256": D.digest(row),
+        "parent_model_id": model_id, "target": PARENT_TARGET,
+        "orientation": PARENT_ORIENTATION, "information_set": information_set,
+        "input_snapshot_hash": row["input_snapshot_hash"],
+        "model_state_config_hash": row["model_state_config_hash"],
+    }
 
 
 def run_joint_route(card_path, config_path, output, *, simulations=100000, repo_root=None):
@@ -229,7 +221,7 @@ def run_joint_route(card_path, config_path, output, *, simulations=100000, repo_
     try:
         tracked[str(card_path)] = file_hash(card_path)
         card = _load_json(card_path.read_bytes())
-        displayed_bindings = _event_bindings(card)
+        displayed_rows = _event_rows(card)
         tracked[str(config_path)] = file_hash(config_path)
         receipt["input_files"] = dict(tracked)
         config = load_route_config(config_path)
@@ -237,6 +229,7 @@ def run_joint_route(card_path, config_path, output, *, simulations=100000, repo_
         if len(set(model_ids)) != len(model_ids):
             raise ValueError("DUPLICATE_CONFIG_MODEL")
         parent = card
+        parent_rows = displayed_rows
         parent_path = card_path
         entry = config.get("parent_card")
         if entry is not None:
@@ -248,16 +241,27 @@ def run_joint_route(card_path, config_path, output, *, simulations=100000, repo_
             parent = _load_json(parent_path.read_bytes())
             if parent["league"].lower() != card["league"].lower():
                 raise ValueError("EXPLICIT_PARENT_LEAGUE_MISMATCH")
-            parent_bindings = _event_bindings(parent)
-            if parent_bindings.keys() != displayed_bindings.keys() or any(
-                    parent_bindings[eid]["start_time_utc"] != displayed_bindings[eid]["start_time_utc"]
-                    for eid in displayed_bindings):
+            parent_rows = _event_rows(parent)
+            if parent_rows.keys() != displayed_rows.keys():
                 raise ValueError("EXPLICIT_PARENT_EVENT_SET_OR_START_MISMATCH")
-            if parent_bindings != displayed_bindings:
-                raise ValueError("EXPLICIT_PARENT_IDENTITY_OR_SCOPE_MISMATCH")
             if parent.get("card_date") != card.get("card_date"):
                 raise ValueError("EXPLICIT_PARENT_DATE_MISMATCH")
-        receipt["parent_identity_bindings"] = _validate_parent_scope(parent, config)
+        # Resolve every event against the original displayed and parent rows before any draw.
+        # Only the independently admitted subset may enter the numerical adapter.
+        bindings, refused = {}, {}
+        for event_id, row in parent_rows.items():
+            try:
+                binding = _event_binding(row)
+                if entry is not None:
+                    displayed = _event_binding(displayed_rows[event_id])
+                    if binding["start_time_utc"] != displayed["start_time_utc"]:
+                        raise ValueError("EXPLICIT_PARENT_EVENT_SET_OR_START_MISMATCH")
+                    if binding != displayed:
+                        raise ValueError("EXPLICIT_PARENT_IDENTITY_OR_SCOPE_MISMATCH")
+                bindings[event_id] = _validate_parent_row(row, parent["league"].lower(), config, binding)
+            except (KeyError, TypeError, ValueError) as exc:
+                refused[event_id] = {"event_id": event_id, "status": "UNAVAILABLE", "reason": str(exc)}
+        receipt["parent_identity_bindings"] = bindings
         receipt["displayed_card_file_sha256"] = tracked[str(card_path)]
         receipt["displayed_as_of_utc"] = card["as_of_utc"]
         receipt["displayed_generated_at_utc"] = card["generated_at_utc"]
@@ -265,8 +269,9 @@ def run_joint_route(card_path, config_path, output, *, simulations=100000, repo_
         receipt["parent_generated_at_utc"] = parent["generated_at_utc"]
         receipt["parent_card_file_sha256"] = file_hash(parent_path)
         receipt["explicit_separate_parent"] = entry is not None
-        receipt["parent_model_ids"] = sorted({r.get("model_id", "UNKNOWN")
-                                               for r in parent["forecasts"]})
+        receipt["parent_model_ids"] = sorted({
+            row["model_id"] for row in parent_rows.values()
+            if isinstance(row.get("model_id"), str) and row["model_id"].strip()})
         receipt["parent_forecast_sha256"] = {r["event_id"]: D.digest(r)
                                                 for r in parent["forecasts"]}
         for spec, loaded in zip(config["models"], config["loaded_models"]):
@@ -277,18 +282,26 @@ def run_joint_route(card_path, config_path, output, *, simulations=100000, repo_
                 "artifact_sha256": model["artifact_sha256"], "model_id": model["model_id"],
                 "parent_model_id": model["parent_model_id"], "settlement": model["settlement"],
                 "fit_as_of_utc": model["fit_as_of_utc"], "created_at_utc": model["created_at_utc"]})
-        receipt["adapter_invoked"] = True
-        report = V.build(parent, config, output / "joint", simulations=simulations)
-        receipt["coverage"] = report["coverage"]
-        receipt["actual_joint_draws"] = sum(r["simulation"]["count"] for r in report["results"])
-        if report["results"]:
+        results, coverage, post_start = [], [], set()
+        if bindings:
+            admitted = dict(parent, forecasts=[parent_rows[eid] for eid in bindings])
+            receipt["admitted_parent_sha256"] = D.digest(admitted)
+            receipt["adapter_invoked"] = True
+            report = V.build(admitted, config, output / "joint", simulations=simulations)
+            receipt["joint_report_sha256"] = report["artifact_sha256"]
+            results, coverage = report["results"], report["coverage"]
+            post_start = set(report["post_start_event_ids"])
+        receipt["coverage"] = coverage + list(refused.values())
+        receipt["actual_joint_draws"] = sum(r["simulation"]["count"] for r in results)
+        if results:
             receipt["executed_route"] = ROUTE
-        receipt["status"] = ("COMPLETED" if report["coverage"] and all(
-            r["status"] == "COMPLETED" for r in report["coverage"])
-            else "PARTIAL" if report["results"] else "BLOCKED")
-        result_map = {(r["event_id"], r["distribution"]["model_id"]): r
-                      for r in report["results"]}
-        for item in report["coverage"]:
+        receipt["status"] = ("COMPLETED" if all(r["status"] == "COMPLETED" for r in receipt["coverage"])
+                             else "PARTIAL" if results else "BLOCKED")
+        if not bindings:
+            reasons = {r["reason"] for r in refused.values()}
+            receipt["reason"] = reasons.pop() if len(reasons) == 1 else "NO_ADMISSIBLE_PARENTS"
+        result_map = {(r["event_id"], r["distribution"]["model_id"]): r for r in results}
+        for item in receipt["coverage"]:
             result = result_map.get((item["event_id"], item.get("model_id")))
             for product in ("winner", "margin", "total"):
                 supported = product == "winner" or product in V.CONTRACT_PRODUCTS[parent["league"].lower()]
@@ -300,7 +313,8 @@ def run_joint_route(card_path, config_path, output, *, simulations=100000, repo_
                               "COMPLETED" if available else "UNAVAILABLE",
                     "reason": None if available else item.get("reason", item["status"]) if supported else "UNSUPPORTED_PRODUCT",
                     "quoted_contract_count": len(contracts),
-                    "timing": "POST_START" if item["event_id"] in report["post_start_event_ids"] else "PRE_START"})
+                    "timing": "UNASSESSED" if item["event_id"] in refused else
+                              "POST_START" if item["event_id"] in post_start else "PRE_START"})
     except Exception as exc:
         receipt["status"], receipt["reason"] = "BLOCKED", str(exc)
         if card is not None:
@@ -370,6 +384,8 @@ def run_joint_route(card_path, config_path, output, *, simulations=100000, repo_
     receipt["receipt_sha256"] = D.digest(receipt)
     _write(output / "route_receipt.json", receipt)
     saved = _load_json((output / "route_receipt.json").read_bytes())
+    if saved != receipt:
+        raise ValueError("JOINT_ROUTE_RECEIPT_READBACK")
     for item in saved["per_market_availability"]:
         if isinstance(item.get("event_id"), str) and item["event_id"].strip():
             A.check(item, (card or {}).get("league","unknown").lower(), item["event_id"],

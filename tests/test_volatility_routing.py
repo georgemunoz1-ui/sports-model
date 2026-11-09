@@ -280,21 +280,54 @@ def test_missing_displayed_event_id_retains_refusal_receipt(tmp_path):
     assert (tmp_path / "out/route_receipt.json").is_file()
 
 
-def test_all_parent_rows_validated_before_any_draw(tmp_path, monkeypatch):
-    card, config = inputs(tmp_path)
-    displayed = json.loads(card.read_text())
-    second = copy.deepcopy(displayed["forecasts"][0])
-    second["event_id"] = "card-nhl-second"
-    second["projected_margin_orientation"] = "AWAY_MINUS_HOME"
-    displayed["forecasts"].append(second)
-    write(card, displayed)
-    calls = []
-    monkeypatch.setattr(R.V, "build", lambda *a, **k: calls.append("adapter"))
+@pytest.mark.parametrize("defect", ["orientation", "fit", "null_model", "list_model", "settlement", "explicit_team", "explicit_start"])
+def test_event_refusals_preserve_verified_siblings(tmp_path, defect):
+    separate = defect.startswith("explicit")
+    card, config = inputs(tmp_path, separate=separate)
+    control = R.run_joint_route(card, config, tmp_path / "control", simulations=100)
+    assert control["status"] == "COMPLETED"
+    reference = json.loads((tmp_path / "control/joint/volatility_report.json").read_text())["results"][0]
+    sources = [card, tmp_path / "parent.json"] if separate else [card]
+    for path in sources:
+        data = json.loads(path.read_text())
+        second = dict(data["forecasts"][0], event_id="refused-event")
+        if defect == "orientation":
+            second["projected_margin_orientation"] = "AWAY_MINUS_HOME"
+        elif defect == "fit":
+            second["model_id"] = "nhl.unrelated.parent"
+        elif defect in ("null_model", "list_model"):
+            second["model_id"] = None if defect == "null_model" else []
+        elif defect == "settlement":
+            second["settlement"] = "REGULATION"
+        elif path != card and defect == "explicit_team":
+            second["home_id"] = "wrong-team"
+        elif path != card and defect == "explicit_start":
+            second["start_time_utc"] = "2026-02-02T18:00:00Z"
+        data["forecasts"].append(second)
+        write(path, data)
+    if separate:
+        settings = json.loads(config.read_text())
+        settings["parent_card"]["sha256"] = R.file_hash(sources[-1])
+        write(config, settings)
+    original = {p: R.file_hash(p) for p in sources}
     receipt = R.run_joint_route(card, config, tmp_path / "out", simulations=100)
-    assert calls == []
-    assert receipt["status"] == "BLOCKED" and receipt["actual_joint_draws"] == 0
-    assert len(receipt["coverage"]) == 2
-    assert not (tmp_path / "out/joint").exists()
+    assert receipt["status"] == "PARTIAL" and receipt["actual_joint_draws"] == 100
+    assert not receipt["fallback_executed"] and not receipt["action_authority"]
+    assert {r["event_id"]:r["status"] for r in receipt["coverage"]} == {
+        "card-nhl":"COMPLETED", "refused-event":"UNAVAILABLE"}
+    assert len(list((tmp_path / "out").rglob("*.npz"))) == 1
+    refused = [r for r in receipt["per_market_availability"] if r["event_id"] == "refused-event"]
+    assert len(refused) == 3 and all(r["status"] == "UNAVAILABLE" and r["reason"] and
+        r["missingness_audit"]["release_status"] == "HOLD_PENDING_SCOPE_REVIEW" for r in refused)
+    parent = json.loads(sources[-1].read_text())
+    admitted = dict(parent, forecasts=parent["forecasts"][:1])
+    report = json.loads((tmp_path / "out/joint/volatility_report.json").read_text())
+    assert report["artifact_sha256"] == receipt["joint_report_sha256"]
+    assert report["parent_card_sha256"] == receipt["admitted_parent_sha256"] == D.digest(admitted)
+    assert report["results"][0]["distribution"] == reference["distribution"]
+    assert report["results"][0]["simulation"]["draw_sha256"] == reference["simulation"]["draw_sha256"]
+    assert report["results"][0]["distribution"]["provenance"]["parent_forecast_sha256"] == D.digest(admitted["forecasts"][0])
+    assert {p: R.file_hash(p) for p in sources} == original
 
 
 @pytest.mark.parametrize("field,value", [

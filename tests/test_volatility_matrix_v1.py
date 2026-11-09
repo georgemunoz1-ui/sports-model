@@ -435,7 +435,60 @@ def test_joint_missingness_distribution_and_array_tampering_block_readback(tmp_p
     changed['results'][0]['predictive_moments']['total_mean']=999.
     changed['artifact_sha256']=D.digest({k:v for k,v in changed.items() if k!='artifact_sha256'})
     with pytest.raises(ValueError,match='MISSINGNESS_CHILD_READBACK_FAILED'):
-        R.verify_readback(changed,tmp_path/'out')
+        R.verify_readback(changed,tmp_path/'out',card,config, expected_report_sha256=report["artifact_sha256"])
     (tmp_path/'out'/report['results'][0]['simulation']['file']).write_bytes(b'altered')
     with pytest.raises(ValueError,match='DRAWS_READBACK'):
-        R.verify_readback(report,tmp_path/'out')
+        R.verify_readback(report,tmp_path/'out',card,config, expected_report_sha256=report["artifact_sha256"])
+
+@pytest.mark.parametrize("omitted", ["fitted", "refused", "substituted", "source", "config"])
+def test_readback_reconciles_every_event_against_parent_and_fitted_configuration(tmp_path, omitted):
+    card, config = _missingness_config()
+    good = card["forecasts"][0]
+    card["forecasts"].append(dict(good, event_id="unfitted", model_id="other.parent"))
+    report = R.build(card, config, tmp_path / "out", simulations=100)
+    published = report["artifact_sha256"]
+    if omitted == "fitted":
+        report["coverage"] = [r for r in report["coverage"] if r["event_id"] != good["event_id"]]
+        report["results"] = []
+    elif omitted == "refused":
+        report["coverage"] = [r for r in report["coverage"] if r["event_id"] != "unfitted"]
+    elif omitted == "substituted":
+        report["coverage"][0] = copy.deepcopy(report["coverage"][1])
+    elif omitted == "source":
+        card["forecasts"][0]["source_url"] = "changed"
+    else:
+        config["config_file_sha256"] = "f" * 64
+    report["artifact_sha256"] = D.digest({k:v for k,v in report.items() if k != "artifact_sha256"})
+    with pytest.raises(ValueError, match="JOINT_MISSINGNESS_PARENT"):
+        R.verify_readback(report, tmp_path / "out", card, config, expected_report_sha256=published)
+
+def test_resealed_fabricated_refusal_cannot_replace_executed_run(tmp_path):
+    card, config = _missingness_config()
+    report = R.build(card, config, tmp_path / "out", simulations=100)
+    published = report["artifact_sha256"]
+    row = report["coverage"][0]
+    prior = row.pop("missingness_audit")
+    row.update(status="UNAVAILABLE", reason="fabricated")
+    inputs = dict(prior["details"]["input_observations"], status="UNAVAILABLE")
+    R.M.attach(row, report["league"], row["event_id"], row["model_id"], R.PRODUCTS,
+               inputs=inputs, method="Joint child event coverage", missing=[row["reason"]])
+    report["results"] = []
+    report["artifact_sha256"] = D.digest({k:v for k,v in report.items() if k != "artifact_sha256"})
+    with pytest.raises(ValueError, match="EXPECTED_REPORT_HASH"):
+        R.verify_readback(report, tmp_path / "out", card, config, expected_report_sha256=published)
+
+
+@pytest.mark.parametrize(("field", "value"), [
+    ("start_time_utc", None), ("start_time_utc", "bad-time"),
+    ("model_id", None), ("model_id", ["unresolved"]),
+])
+def test_invalid_parent_metadata_preserves_sibling(tmp_path, field, value):
+    card, config = _missingness_config()
+    card["forecasts"].append(dict(card["forecasts"][0], event_id="invalid", **{field:value}))
+    report = R.build(card, config, tmp_path / "out", simulations=100)
+    assert [row["event_id"] for row in report["results"]] == [card["forecasts"][0]["event_id"]]
+    assert report["coverage"][1]["status"] == "UNAVAILABLE"
+    assert report["coverage"][1]["reason"]
+    if field == "start_time_utc":
+        assert report["timing_unassessed_event_ids"] == ["invalid"]
+        assert "invalid" not in report["post_start_event_ids"]

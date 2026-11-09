@@ -109,20 +109,77 @@ def _scale_inputs(model, distribution, point_source):
     }
 
 
-def verify_readback(report, output):
+def _parent_model_id(row):
+    value = row.get("model_id")
+    return value if isinstance(value, str) and value.strip() else None
+
+
+def _matching_fits(row, league, config):
+    return [e for e in config["loaded_models"] if e["model"]["league"] == league
+            and e["model"]["parent_model_id"] == row.get("model_id")]
+
+
+def verify_readback(report, output, card, config, *, expected_report_sha256):
+    """Use the issuer's pre-write digest or an independently pinned copy for offline review."""
     expected = {k:v for k,v in report.items() if k != "artifact_sha256"}
     if D.digest(expected) != report["artifact_sha256"]:
         raise ValueError("JOINT_MISSINGNESS_ARTIFACT_HASH")
+    league = card["league"].lower()
+    parent_hash = D.digest(card)
+    if (report["league"] != league or report["as_of_utc"] != card["as_of_utc"]
+            or report["parent_card_sha256"] != parent_hash
+            or report["config_sha256"] != config["config_file_sha256"]):
+        raise ValueError("JOINT_MISSINGNESS_PARENT_OR_CONFIG")
+
+    # Derive every expected attempt and refusal from the supplied parents and fits.
+    # Matching the two output lists alone would accept deletion of an entire event.
+    expected_slots = Counter()
+    fitted_states = {e["model"]["model_id"]: e["model"]["artifact_sha256"] for e in config["loaded_models"]}
+    parent_counts = Counter(row["event_id"] for row in card["forecasts"])
+    parent_rows = {row["event_id"]: row for row in card["forecasts"]}
+    for row in card["forecasts"]:
+        event = row["event_id"]
+        parent_model = _parent_model_id(row)
+        fits = _matching_fits(row, league, config)
+        if parent_counts[event] > 1:
+            expected_slots[event, None, parent_model, "UNAVAILABLE"] += 1
+        elif row.get("forecast_status") != "FORECAST_GENERATED":
+            expected_slots[event, None, None, "PARENT_NOT_FORECAST"] += 1
+        elif parent_model is None:
+            expected_slots[event, None, None, "UNAVAILABLE"] += 1
+        elif not fits:
+            expected_slots[event, None, parent_model, "FIT_REQUIRED"] += 1
+        else:
+            for entry in fits:
+                expected_slots[event, entry["model"]["model_id"], None, "FITTED"] += 1
+    observed_slots = Counter()
     covered = Counter()
     for row in report["coverage"]:
         model_id = row.get("model_id") or row.get("parent_model_id") or "joint_fit_unavailable"
         M.check(row, report["league"], row["event_id"], model_id, PRODUCTS)
-        if row["status"] == "COMPLETED":
+        status = row["status"]
+        inputs = row["missingness_audit"]["details"]["input_observations"]
+        if inputs["parent_card_sha256"] != parent_hash or inputs["config_sha256"] != config["config_file_sha256"]:
+            raise ValueError("JOINT_MISSINGNESS_PARENT_OR_CONFIG")
+        slot = "FITTED" if row.get("model_id") and status in ("COMPLETED", "UNAVAILABLE") else status
+        observed_slots[row["event_id"], row.get("model_id"), row.get("parent_model_id"), slot] += 1
+        if status == "COMPLETED":
             covered[row["event_id"], model_id] += 1
+    if observed_slots != expected_slots:
+        raise ValueError("JOINT_MISSINGNESS_PARENT_COVERAGE")
     forecasts = Counter()
     for row in report["results"]:
         model_id = row["distribution"]["model_id"]
         M.check(row, report["league"], row["event_id"], model_id, PRODUCTS)
+        inputs = row["missingness_audit"]["details"]["input_observations"]
+        provenance = row["distribution"]["provenance"]
+        if (inputs["config_sha256"] != config["config_file_sha256"]
+                or inputs["fitted_state_sha256"] != fitted_states.get(model_id)
+                or provenance["fitted_artifact_sha256"] != fitted_states.get(model_id)):
+            raise ValueError("JOINT_MISSINGNESS_FITTED_CONFIG")
+        parent = parent_rows.get(row["event_id"])
+        if parent is None or row["distribution"]["provenance"]["parent_forecast_sha256"] != D.digest(parent):
+            raise ValueError("JOINT_MISSINGNESS_RESULT_PARENT")
         forecasts[row["event_id"], model_id] += 1
         filename = row["distribution"]["distribution_sha256"] + ".npz"
         if (row["simulation"]["file"] != filename or
@@ -130,6 +187,8 @@ def verify_readback(report, output):
             raise ValueError("JOINT_MISSINGNESS_DRAWS_READBACK")
     if forecasts != covered or any(count != 1 for count in covered.values()):
         raise ValueError("JOINT_MISSINGNESS_COVERAGE")
+    if report["artifact_sha256"] != D.source_hash(expected_report_sha256):
+        raise ValueError("JOINT_MISSINGNESS_EXPECTED_REPORT_HASH")
 
 
 def build(card, config, output, *, simulations=100000):
@@ -154,13 +213,16 @@ def build(card, config, output, *, simulations=100000):
         event_id = row["event_id"]
         if counts[event_id] > 1:
             report["coverage"].append({"event_id": event_id, "status": "UNAVAILABLE",
-                                       "reason": "DUPLICATE_PARENT_EVENT", "parent_model_id": row.get("model_id")})
+                                       "reason": "DUPLICATE_PARENT_EVENT", "parent_model_id": _parent_model_id(row)})
             continue
-        entries = [e for e in config["loaded_models"] if e["model"]["league"] == league
-                   and e["model"]["parent_model_id"] == row.get("model_id")]
+        entries = _matching_fits(row, league, config)
         if row.get("forecast_status") != "FORECAST_GENERATED":
             report["coverage"].append({"event_id": event_id, "status": "PARENT_NOT_FORECAST",
                                        "detail": row.get("forecast_status")})
+            continue
+        if _parent_model_id(row) is None:
+            report["coverage"].append({"event_id": event_id, "status": "UNAVAILABLE",
+                                       "reason": "PARENT_MODEL_ID_REQUIRED"})
             continue
         if not entries:
             report["coverage"].append({"event_id": event_id, "status": "FIT_REQUIRED",
@@ -221,7 +283,8 @@ def build(card, config, output, *, simulations=100000):
                     "contracts": priced, "parent_warnings": list(row.get("warnings", [])),
                     "limitations": list(model["limitations"]), "status": "DIAGNOSTIC"}
                 M.attach(result, league, event_id, model["model_id"], PRODUCTS,
-                         inputs=_scale_inputs(model, distribution, point_source),
+                         inputs={**_scale_inputs(model, distribution, point_source),
+                                 "config_sha256": config["config_file_sha256"]},
                          method="Bound parent heads and fitted joint residual law; no missing-feature imputation",
                          missing=["SOURCE_SEASON_SUPPORT_AND_PAIRED_REFRESH_UNREVIEWED"])
                 report["results"].append(result)
@@ -234,14 +297,24 @@ def build(card, config, output, *, simulations=100000):
     for record in report["coverage"]:
         model_id = record.get("model_id") or record.get("parent_model_id") or "joint_fit_unavailable"
         M.attach(record, league, record["event_id"], model_id, PRODUCTS,
-                 inputs={"status":record["status"], "parent_card_sha256":report["parent_card_sha256"]},
+                 inputs={"status":record["status"], "parent_card_sha256":report["parent_card_sha256"],
+                         "config_sha256": config["config_file_sha256"]},
                  method="Joint child event coverage", missing=[] if record["status"] == "COMPLETED"
                  else [record.get("reason") or record.get("detail") or record["status"]])
     report["created_at_utc"] = D.writer_clock()
-    report["post_start_event_ids"] = [r["event_id"] for r in card["forecasts"]
-                                      if D.stamp(r["start_time_utc"]) <= D.stamp(report["created_at_utc"])]
+    issued = D.stamp(report["created_at_utc"])
+    report["post_start_event_ids"], report["timing_unassessed_event_ids"] = [], []
+    for row in card["forecasts"]:
+        try:
+            start = D.stamp(row.get("start_time_utc"))
+        except (TypeError, ValueError):
+            report["timing_unassessed_event_ids"].append(row["event_id"])
+        else:
+            if start <= issued:
+                report["post_start_event_ids"].append(row["event_id"])
     report["artifact_sha256"] = D.digest(report)
     (output / "volatility_report.json").write_text(json.dumps(report, indent=2, sort_keys=True,
                                                               allow_nan=False) + "\n")
-    verify_readback(json.loads((output / "volatility_report.json").read_bytes()), output)
+    verify_readback(json.loads((output / "volatility_report.json").read_bytes()), output, card, config,
+                    expected_report_sha256=report["artifact_sha256"])
     return report

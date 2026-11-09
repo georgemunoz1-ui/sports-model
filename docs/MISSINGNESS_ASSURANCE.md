@@ -29,6 +29,10 @@ The signed validation registry reads the missingness policy and evaluation by co
 
 The current release manifest, promotion check and board-readiness check also require a protected, independently reviewed scope. Each complete event must match the witnessed release inventory and the current source measurements. A missing approval, unsigned empty schedule, changed product/settlement, missing receipt or unsupported observation blocks the affected claim. Historical v1 release artifacts have a read-only verification path.
 
+For a shared-cutoff study, the pregame witness signs the candidate forecast, its audit receipt, and the content IDs of both comparator forecasts. Each comparator must have been frozen by the witnessed registration time. Direct release review references the original v2 validation protocol and its preregistration receipt. The witness must appear in the protected `protocol_witnesses` list. Its signature binds the candidate, policy and confirmation window before observation begins.
+
+A `sports.missingness_release_inventory.v2` entry records each event's disposition, reason codes and expected model outputs. A refusal needs at least one witnessed reason and zero outputs. A completed event requires the full set of witnessed outputs. Reclassifying it as cancelled or removing one output invalidates that league's delivery.
+
 The approval index starts empty. The presence of a receipt, a numerical perturbation, a passing software test, a draft PR or a correct game call does not fill it. Production branch protection, independent review signers, their authorized observations, sustained forward monitoring and product-specific statistical approval are separate operational requirements.
 
 ## Cincinnati at Atlanta regression
@@ -37,4 +41,4 @@ The combined model's original two-missing-team state falls outside its observed 
 
 The isolated NFL candidate limits the reporting count used by each fitted arm to that arm's earlier training support. It keeps the true observed count in the audit. Seven expanding-year fits for each arm produced 1,871 same-game historical comparisons per arm, including 1,865 decisive winners. Zero held-out games activated the intervention. The development example does not qualify the candidate. See the pinned study design and executable replay under research/missingness.
 
-Run the missingness checks with the repository's consolidated dependencies. CI also runs release and promotion selftests. Preserve originals, receipts and draw files when replaying an archived parent.
+The shared missingness workflow runs the full `tests` and `research/tests` suites and the release, promotion and readiness selftests on every pull request. Its log identifies the tested Git commit and tree. Preserve originals, receipts and draw files when replaying an archived parent.

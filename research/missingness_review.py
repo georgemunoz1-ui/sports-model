@@ -127,7 +127,9 @@ def validate_study(store, policy_id, results_id, procedure_id, target, start, en
                     settlement["status"] == "RECONCILED" and settlement["start_utc"] == row["start_utc"] and
                     settlement["available_utc"] == row["result_available_utc"], "SETTLEMENT_BINDING")
             record = {"event_id": eid, "procedure_id": procedure_id, "target": target, "forecast_id": row["forecast_id"],
-                      "receipt_id": row["receipt_id"], "start_utc": row["start_utc"]}
+                      "receipt_id": row["receipt_id"], "start_utc": row["start_utc"],
+                      "incumbent_forecast_id": row["incumbent_forecast_id"],
+                      "independent_forecast_id": row["independent_forecast_id"]}
             require(store.read(row["registration_id"]) == record, "REGISTRATION_BINDING")
             for subject, purpose, stamp, ref in (
                 (row["registration_id"], "missingness_pregame_registration", row["registered_at_utc"], row["registration_witness_id"]),
@@ -143,7 +145,7 @@ def validate_study(store, policy_id, results_id, procedure_id, target, start, en
                 comparator_key = "incumbent_id" if name == "incumbent" else "independent_comparator_id"
                 require(ref["procedure_id"] == policy[comparator_key]
                         and ref["event_id"] == eid and ref["target"] == target
-                        and _time(ref["frozen_utc"]) < _time(row["start_utc"]), "COMPARATOR_BINDING")
+                        and _time(ref["frozen_utc"]) <= _time(row["registered_at_utc"]), "COMPARATOR_BINDING")
                 forecasts[name] = ref["point"]
             for name, estimate in forecasts.items():
                 score = number(row[name + "_loss"])
@@ -193,11 +195,25 @@ def reviewed_policy(scope, at_utc, *, league=None):
     require(_time(r["policy_frozen_utc"]) < _time(r["confirmation_start_utc"]) <
             _time(r["confirmation_end_utc"]) <= _time(r["reviewed_utc"]) <= _time(at_utc) <
             _time(r["expires_utc"]), "RELEASE_CHRONOLOGY")
+    verifier = Ed25519Verifier({k: base64.b64decode(v, validate=True)
+                                for k, v in anchors["witness_keys"].items()})
+    protocol = store.read(r["protocol_id"])
+    witness = verifier.verify(store.read(r["registration_receipt_id"]),
+                              artifact_id=r["protocol_id"], purpose="preregistration")
+    require(witness["signer_id"] in anchors["protocol_witnesses"] and
+            witness["signer_id"] != r["author"] and not verifier.same_credential(witness["signer_id"], r["author"])
+            and _time(witness["witnessed_at_utc"]) == _time(r["policy_frozen_utc"]), "POLICY_WITNESS_BINDING")
+    require(protocol["schema"] == "validation-protocol-v2" and protocol["candidate_id"] == scope["procedure_id"]
+            and protocol["target"] == target and protocol["author_id"] == r["author"]
+            and protocol["missingness_policy_id"] == r["policy_id"]
+            and _time(protocol["development_end_utc"]) <= _time(r["policy_frozen_utc"])
+            and _time(protocol["evaluation_start_utc"]) == _time(r["confirmation_start_utc"])
+            and _time(protocol["evaluation_end_utc"]) == _time(r["confirmation_end_utc"]), "PROTOCOL_SCOPE")
     p = validate_study(store, r["policy_id"], r["results_id"], scope["procedure_id"], target,
                        _time(r["confirmation_start_utc"]), _time(r["confirmation_end_utc"]),
-                       verifier=Ed25519Verifier({k: base64.b64decode(v, validate=True)
-                                                for k,v in anchors["witness_keys"].items()}))
-    require(p["model_id"] == scope["model_id"] and _time(p["calibration_end_utc"]) <= _time(r["policy_frozen_utc"]),
+                       verifier=verifier)
+    require(p["model_id"] == scope["model_id"] and p["incumbent_id"] == protocol["control_id"]
+            and _time(p["calibration_end_utc"]) <= _time(protocol["development_end_utc"]),
             "RELEASE_MODEL_OR_CUTOFF_MISMATCH")
     return p
 
@@ -235,6 +251,7 @@ def release_inventory(block, league, decision_utc):
         verifier = Ed25519Verifier({k: base64.b64decode(v, validate=True) for k,v in anchors["witness_keys"].items()})
         claim = verifier.verify(data.read(witness), artifact_id=record_id, purpose="missingness_release_inventory")
         require(claim["signer_id"] in anchors["inventory_witnesses"], "INVENTORY_ISSUER")
+        require(inventory.get("schema") == "sports.missingness_release_inventory.v2", "INVENTORY_SCHEMA")
         require(inventory["league"] == league and inventory["state"] in ("VERIFIED_ABSENCE", "VERIFIED_OBSERVATION")
                 and _time(inventory["cutoff_utc"]) <= _time(claim["witnessed_at_utc"]) <= _time(decision_utc)
                 < _time(inventory["expires_utc"]), "INVENTORY_SCOPE_OR_CHRONOLOGY")
@@ -244,10 +261,17 @@ def release_inventory(block, league, decision_utc):
                 set(expected) == {e["event_key"] for e in actual} and len(expected) == len(actual) and
                 (inventory["state"] == "VERIFIED_ABSENCE") == (not expected), "INVENTORY_EVENTS")
         for e in actual:
-            if e["disposition"] == "COMPLETE":
-                rows = e.get("model_outputs", [])
-                wanted = expected[e["event_key"]]
-                require(isinstance(wanted, list) and wanted and len(wanted) == len(rows) and
+            entry = expected[e["event_key"]]
+            disposition = e["disposition"]
+            require(isinstance(entry, dict) and entry.get("disposition") == disposition, "INVENTORY_DISPOSITION")
+            reasons = e.get("reason_codes", [])
+            require(isinstance(reasons, list) and all(isinstance(r, str) and r.strip() for r in reasons)
+                    and len(set(reasons)) == len(reasons) and isinstance(entry.get("reason_codes"), list)
+                    and sorted(reasons) == sorted(entry["reason_codes"]), "INVENTORY_REASON_CODES")
+            rows, wanted = e.get("model_outputs", []), entry["model_outputs"]
+            require(isinstance(rows, list) and isinstance(wanted, list), "INVENTORY_OUTPUTS")
+            if disposition == "COMPLETE":
+                require(wanted and len(wanted) == len(rows) and
                         sorted(json.dumps(r, sort_keys=True) for r in wanted) ==
                         sorted(json.dumps({**{k: r[k] for k in ("model_id", "procedure_id", "target", "start_utc")},
                                            "forecast_sha256": content_digest(r["forecast"]),
@@ -257,7 +281,7 @@ def release_inventory(block, league, decision_utc):
                         and all(_time(decision_utc) < _time(r["start_utc"]) for r in wanted),
                         "DUPLICATE_OR_POST_START_RELEASE")
             else:
-                require(not e.get("model_outputs") and e.get("disposition") in
+                require(not rows and not wanted and reasons and disposition in
                         ("EXPLICITLY_BLOCKED","NOT_APPLICABLE","CANCELLED","POSTPONED","SOURCE_CONFLICT"),
                         "UNVERIFIED_EVENT_OUTPUT")
         return None

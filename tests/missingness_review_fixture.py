@@ -49,7 +49,9 @@ def make_study(store, protocol, sign, witness):
                             (("incumbent", protocol["control_id"]),("independent",policy["independent_comparator_id"]))}})
     for row in rows:
         record = {"event_id": row["event_id"], "procedure_id": pid, "target": target,
-                  "forecast_id":row["forecast_id"], "receipt_id":row["receipt_id"], "start_utc":row["start_utc"]}
+                  "forecast_id":row["forecast_id"], "receipt_id":row["receipt_id"], "start_utc":row["start_utc"],
+                  "incumbent_forecast_id":row["incumbent_forecast_id"],
+                  "independent_forecast_id":row["independent_forecast_id"]}
         row["registration_id"] = store.put(record)
         row["registration_witness_id"] = sign(row["registration_id"], "missingness_pregame_registration", row["registered_at_utc"])
         row["result_witness_id"] = sign(row["result_id"], "missingness_result_reconciliation", row["result_available_utc"])

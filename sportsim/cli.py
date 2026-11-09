@@ -17,6 +17,8 @@ from pathlib import Path
 import numpy as np
 
 from .backtest import compare_models, walk_forward
+from .scenario_audit import finish, rating_details, array_sha
+from pipelines.cards.missingness import content_digest
 from .core.market import scan_edges
 from .core.ratings import EloModel, fit_for_sport, fit_ridge_margin
 from .core.types import Game, TeamRating
@@ -32,7 +34,11 @@ SPORTS = ("nfl", "nba", "mlb", "nhl")
 def _load_ratings(args, games: list[Game] | None):
     """Ratings come from a file if given, otherwise they are fit from games."""
     if args.ratings:
-        return read_ratings_csv(args.ratings)
+        evidence=getattr(args,"source_evidence",{}).get("ratings")
+        ratings=read_ratings_csv(args.ratings,evidence=evidence)
+        if evidence is not None and not ratings:
+            raise ValueError("SUPPLIED_RATINGS_EMPTY")
+        return ratings
     if games:
         fit = fit_for_sport(games, args.sport)
         elo = EloModel(args.sport).fit(games)
@@ -45,24 +51,48 @@ def _load_ratings(args, games: list[Game] | None):
 
 def _games_for(args) -> list[Game]:
     if args.games:
-        return read_games_csv(args.games)
+        evidence=getattr(args,"source_evidence",{}).get("games")
+        games=read_games_csv(args.games,evidence=evidence)
+        if evidence is not None and not games:
+            raise ValueError("SUPPLIED_GAME_TABLE_EMPTY")
+        return games
     return []
 
 
 # --------------------------------------------------------------------------
 def cmd_game(args) -> int:
+    if args.home==args.away:
+        raise ValueError("SELF_MATCH")
     games = _games_for(args)
-    ratings = _load_ratings(args, games)
+    ratings = _load_ratings(args, [g for g in games if g.played])
     sim = get_simulator(args.sport, playoff=args.playoff)
     home = ratings.get(args.home, TeamRating(args.home))
     away = ratings.get(args.away, TeamRating(args.away))
     home.team, away.team = args.home, args.away
 
     forecast = sim.forecast(home, away, n=args.sims, rng=args.seed, neutral=args.neutral)
+    output=forecast.to_dict()
+    if args.spread is not None: output["home_cover_p"]=forecast.cover_prob(args.spread)
+    if args.total is not None: output["over_p"]=forecast.over_prob(args.total)
+    details=rating_details(ratings,[args.home,args.away])
+    count=min(args.sims,256)
+    def probe(h,a):
+        f=sim.forecast(h,a,n=count,rng=args.seed,neutral=args.neutral)
+        return {"home_win_p":f.home_win_prob,"home_margin":f.mean_home_score-f.mean_away_score,"total":f.mean_total}
+    anchor=probe(home,away)
+    details["paired_sampling_sensitivity"]={"count":count,"seed":args.seed,"current":anchor,
+        "with_home_rating_omitted":probe(TeamRating(args.home),away),
+        "with_away_rating_omitted":probe(home,TeamRating(args.away)),
+        "interpretation":"Per-scenario finite draw diagnostics; the same seed can still produce different sampling paths"}
+    details["frozen_score_arrays"]={s:array_sha(getattr(forecast.samples,s)) for s in ("home","away")}
+    packet=finish(args,output,details)
     if args.json:
-        print(json.dumps(forecast.to_dict(), indent=2))
+        print(json.dumps({**output,"missingness":packet}, indent=2))
         return 0
 
+    print("Research scenario · wagering authority OFF")
+    print("Teams using default ratings:", ", ".join(details["teams_using_average_rating"]) or "none")
+    print("Missingness audit:",json.dumps(packet,sort_keys=True),file=sys.stderr)
     print(forecast.report())
     if args.spread is not None:
         print(f"  P({args.home} {args.spread:+g}) = {forecast.cover_prob(args.spread):.1%}")
@@ -110,24 +140,32 @@ def cmd_season(args) -> int:
     league = get_league(args.sport)
     ratings = _load_ratings(args, [g for g in games if g.played])
     if not ratings:
-        print("no ratings and no games to fit them from", file=sys.stderr)
-        return 2
+        raise ValueError("RATINGS_OR_PLAYED_GAMES_REQUIRED")
 
     schedule = [g for g in games if not g.played]
+    synthetic_schedule=not schedule
     if not schedule:
         # Nothing left to play: project a fresh season instead.
         schedule = build_schedule(league, SEASON_LENGTH[args.sport], sport=args.sport, rng=args.seed)
 
     if games:
         played = [g for g in games if g.played]
-        if played and args.standings:
+        if played and args.standings and not args.json:
             print(standings_table(compute_standings(played, league.teams, args.sport == "nhl"), league, args.sport == "nhl"))
 
     sim = SeasonSimulator(args.sport, ratings, league=league)
     result = sim.run(schedule, n_sims=args.sims, rng=args.seed, include_playoffs=not args.no_playoffs)
+    output=result.summary()
+    details=rating_details(ratings,league.teams)
+    details.update(postseason_simulated=not args.no_playoffs,schedule_basis="GENERATED_SCENARIO" if synthetic_schedule else "SUPPLIED_UNPLAYED_ROWS",
+                   schedule_sha256=content_digest([vars(g) for g in schedule]),
+                   fixture_count=len(schedule),sensitivity="SEASON_AGGREGATE_PERTURBATIONS_UNMEASURED")
+    packet=finish(args,{"teams":output},details)
     if args.json:
-        print(json.dumps(result.summary(), indent=2))
+        print(json.dumps({"teams":output,"missingness":packet},indent=2))
     else:
+        print("Research season scenario · wagering authority OFF · "+details["schedule_basis"])
+        print("Missingness audit:",json.dumps(packet,sort_keys=True),file=sys.stderr)
         print(result.report(top=args.top))
     return 0
 
@@ -153,6 +191,7 @@ def cmd_backtest(args) -> int:
 
 
 def cmd_demo(args) -> int:
+    print("SYNTHETIC DEMONSTRATION · GENERATED TEAMS AND RESULTS · WAGERING AUTHORITY OFF")
     """Fit ratings on a simulated season and project the next one."""
     sport = args.sport
     print(f"generating a synthetic {sport.upper()} season...")
@@ -209,6 +248,7 @@ def build_parser() -> argparse.ArgumentParser:
     g.add_argument("--odds", help='market prices as JSON, e.g. \'{"moneyline":{"home":-140,"away":120}}\'')
     g.add_argument("--kelly", type=float, default=0.25, help="Kelly fraction for staking")
     g.add_argument("--json", action="store_true")
+    g.add_argument("--audit-output", type=Path, help="Save the verified scenario receipt to a new file")
     g.set_defaults(func=cmd_game)
 
     r = sub.add_parser("rate", help="fit team ratings from results")
@@ -223,6 +263,7 @@ def build_parser() -> argparse.ArgumentParser:
     s.add_argument("--standings", action="store_true", help="print current standings first")
     s.add_argument("--no-playoffs", action="store_true")
     s.add_argument("--json", action="store_true")
+    s.add_argument("--audit-output", type=Path, help="Save the verified scenario receipt to a new file")
     s.set_defaults(func=cmd_season)
 
     b = sub.add_parser("backtest", help="walk-forward evaluation")
@@ -247,7 +288,23 @@ def build_parser() -> argparse.ArgumentParser:
 
 def main(argv: list[str] | None = None) -> int:
     args = build_parser().parse_args(argv)
-    return int(args.func(args) or 0)
+    if args.command not in ("game","season"):
+        return int(args.func(args) or 0)
+    if args.audit_output and args.audit_output.exists():
+        print("New audit output path required",file=sys.stderr)
+        return 2
+    args.source_evidence={k:{"state":"SOURCE_REQUESTED" if getattr(args,k) else "NOT_SUPPLIED"} for k in ("games","ratings")}
+    try:
+        return int(args.func(args) or 0)
+    except FileExistsError as exc:
+        print("New audit output path required:",exc,file=sys.stderr)
+        return 2
+    except (OSError,ValueError,KeyError) as exc:
+        output={"status":"BLOCKED","reason":str(exc)}
+        packet=finish(args,output,{"reason":str(exc),"source_state":"ACQUISITION_FAILURE" if isinstance(exc,OSError)
+                                   else "UNRESOLVED_IDENTITY_OR_COVERAGE"},blocked=True)
+        print(json.dumps({**output,"missingness":packet},indent=2),file=sys.stdout if args.json else sys.stderr)
+        return 2
 
 
 if __name__ == "__main__":  # pragma: no cover

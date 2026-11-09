@@ -18,6 +18,9 @@ validation = ["cryptography==50.0.2"]
 [project.scripts]
 sportsim = "sportsim.cli:main"
 
+[tool.setuptools]
+py-modules = ["pipelines.cards.missingness"]
+
 [tool.setuptools.packages.find]
 include = ["sportsim*"]
 

@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 """Fit/evaluate or explicitly run the isolated empirical joint-score challenger."""
+from collections import Counter
 import argparse
+import math
 import datetime as dt
 import hashlib
 import json
@@ -17,6 +19,8 @@ from sklearn.linear_model import LogisticRegression
 from models.cfb.joint_empirical_v1 import fit, distribution, summarize, simulate, digest, MODEL_ID
 from models.current.cfb import feature_row
 from models.current.common import save, current
+from pipelines.cards import derived_missingness as audit
+from pipelines.cards.shared_missingness import check_source_inputs
 
 
 def sha(p):return hashlib.sha256(Path(p).read_bytes()).hexdigest()
@@ -59,16 +63,23 @@ def evaluate(frame,names):
 
 def run(package,state,date,output,quote_path=None):
     p=json.loads(package.read_text());cutoff=dt.datetime.now(dt.timezone.utc).isoformat();current(p,cutoff)
+    check_source_inputs(p)
+    if date not in p['covered_dates']:
+        raise ValueError('DATE_NOT_ACQUIRED')
     if pd.Timestamp(state['training_cutoff'])>pd.Timestamp(cutoff):raise ValueError('FUTURE_JOINT_STATE')
     if state['features']!=p['feature_names']:raise ValueError('FEATURE_ORDER_MISMATCH')
     for name,h in p['code_pins'].items():
         if sha(ROOT/name)!=h:raise ValueError('RUNTIME_CODE_DRIFT:'+name)
     if digest({'model':p['fitted_model'],'state':p['team_state'],'parameters':p['parameters']})!=p['model_sha256']:raise ValueError('PACKAGE_STATE_HASH')
     quotes=json.loads(quote_path.read_text())if quote_path else {};rows=[];blocked=[]
-    for e in p['events']:
-        if e['slate_date']!=date:continue
-        if dt.datetime.fromisoformat(e['start_time_utc'].replace('Z','+00:00'))<=dt.datetime.now(dt.timezone.utc):blocked.append({'event_id':e['event_id'],'disposition':'POST_START'});continue
-        if e['division_scope']!='FBS_VS_FBS' or e['week']<2:raise ValueError('UNSUPPORTED_POPULATION')
+    products = ['winner', 'home_margin', 'total', 'home_cover', 'over']
+    def project(e):
+        if dt.datetime.fromisoformat(e['start_time_utc'].replace('Z','+00:00')) <= dt.datetime.now(dt.timezone.utc):
+            raise ValueError("POST_START")
+        if e['division_scope']!='FBS_VS_FBS' or e['week']<2:
+            raise ValueError("UNSUPPORTED_POPULATION")
+        if type(e.get("neutral_site")) is not bool:
+            raise ValueError("NEUTRAL_SITE_UNRESOLVED")
         x=feature_row(p['team_state'],e,p['parameters']);scores,trace=distribution(state,[x[k]for k in state['features']]);q=quotes.get(e['event_id'],{})
         if q:raise ValueError('QUOTE_SOURCE_AND_SETTLEMENT_ADAPTER_NOT_IMPLEMENTED')
         identity=digest({'event':e,'package':sha(package),'state':state['state_sha256'],'features':x,'cutoff':cutoff,'model_id':MODEL_ID});draws,meta=simulate(scores,identity)
@@ -77,9 +88,49 @@ def run(package,state,date,output,quote_path=None):
         line_grid={str(h):{'analytic':summarize(scores,h)['home_cover'],'simulation':summarize(draws,h)['home_cover']}for h in np.arange(-35,35.5,.5)}
         total_grid={str(t):{'analytic':summarize(scores,total_line=t)['over'],'simulation':summarize(draws,total_line=t)['over']}for t in np.arange(20,90.5,.5)}
         row={'event':e,'model_id':MODEL_ID,'analytic':summarize(scores),'simulation':summarize(draws),'simulation_metadata':meta,'feature_values':x,'consumed_state_sha256':p['model_sha256'],'package_sha256':sha(package),'joint_state_sha256':state['state_sha256'],'trace':trace,'hypothetical_home_handicap_curve':line_grid,'hypothetical_total_curve':total_grid,'market_comparison':None,'official_release_eligible':False,'action_authority':False,'disposition':'PRE_START_DIAGNOSTIC'}
-        save(folder/'forecast.json',row);save(folder/'manifest.json',{f.name:sha(f)for f in folder.iterdir()if f.is_file()});rows.append(row)
+        used = {k: float(v) if v is not None and math.isfinite(v) else None for k, v in x.items()}
+        perturbations = {}
+        for k in state['features']:
+            if used[k] is None:
+                perturbations[k] = None
+            else:
+                omitted = [None if name==k else used[name] for name in state['features']]
+                alt = summarize(distribution(state, omitted)[0])
+                perturbations[k] = {h: alt[h]-row['analytic'][h] for h in ('home_win','home_margin','total')}
+        row['feature_values'] = used
+        audit.attach(row, 'cfb', e['event_id'], MODEL_ID, products, method='FITTED_MEDIANS_AND_EMPIRICAL_NEIGHBOURS',
+                     inputs={ 'training_medians': dict(zip(state['features'], state['impute'])), 'input': used,
+                             'unseen_elo_prior_teams': [t for t in (e['home_team'],e['away_team']) if t not in p['team_state']['elo']],
+                             'imputed_features': [k for k in state['features'] if used[k] is None],
+                             'fixed_fit_one_missing_minus_observed': perturbations},
+                     missing=['Missing upstream state may already have been replaced in feature_row.'])
+        save(folder/'forecast.json',row)
+        audit.check(json.loads((folder/'forecast.json').read_bytes()), 'cfb', e['event_id'], MODEL_ID, products)
+        save(folder/'manifest.json',{f.name:sha(f)for f in folder.iterdir()if f.is_file()})
+        return row
+    eligible = [e for e in p['events'] if e['slate_date'] == date]
+    counts = Counter(e['event_id'] for e in eligible)
+    for eid, n in counts.items():
+        if n>1:
+            blocked.append({'event_id':eid,'disposition':'DUPLICATE_EVENT_ID'})
+    for e in eligible:
+        if counts[e['event_id']] > 1:
+            continue
+        try:
+            rows.append(project(e))
+        except (KeyError, ValueError, TypeError) as exc:
+            blocked.append({'event_id':e['event_id'],'disposition':str(exc)})
+    for row in blocked:
+        audit.attach(row, 'cfb', row['event_id'], MODEL_ID, ['coverage'], method='REFUSAL',
+                     inputs={'refusal': row['disposition']}, missing=[row['disposition']])
     board={'model_id':MODEL_ID,'date':date,'cutoff':cutoff,'forecasts':rows,'blocked_events':blocked,'restrictions':state['limitations'],'context_used':{'weather':False,'player_availability':False},'prospective_registration':False,'official_release_eligible':False,'action_authority':False}
-    save(output/'board.json',board);return board
+    save(output/'board.json',board)
+    saved = json.loads((output/'board.json').read_bytes())
+    for row in saved['forecasts']:
+        audit.check(row, 'cfb', row['event']['event_id'], MODEL_ID, products)
+    for row in saved['blocked_events']:
+        audit.check(row, 'cfb', row['event_id'], MODEL_ID, ['coverage'])
+    return board
 
 
 def main():

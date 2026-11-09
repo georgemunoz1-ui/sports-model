@@ -5025,3 +5025,18 @@ See docs/REMAINING_PR_REPAIR_20261024.md and current execution receipts.
 ## 2026-11-08 — Dated research runner handoffs
 
 Added explicit package and date binding, per-event refusal rows, native NFL forecast and draw readback, and a static recipient card. The workflow checks the process result, evidence receipt and artifact readback before registration. Six shared adapters passed synthetic CLI replay controls. The eight-league acceptance matrix exposes men's CBB as unavailable on this revision. See [runner contracts and verification scope](ISSUE_96_RUNNER_CONTRACTS.md).
+
+### 2026-11-08 — Cross-model missingness assurance (draft research integration)
+
+Added event- and model-bound audits and mandatory release review on the runner-hardening successor. Standalone draft routes have separate companion branches. The CIN–ATL report-count indicator was outside the NFL fit's observed support. A separately registered reporting-count sensitivity had zero out-of-support observations in seven earlier-season held-out folds. The full qualification matrix, acceptance limits and operator boundaries are documented in [Missingness assurance](MISSINGNESS_ASSURANCE.md). Official selections and allocation remain off.
+
+### 2026-11-08 — Missingness CI and recipient attribution recheck
+
+Resolved conflicting pytest pins that prevented hosted missingness tests from running.
+Published-card rendering now retains native per-arm reporting-state attribution,
+model/version and simulation evidence, including the actual dated NFL wrapper.
+Full suite 2,356 passed; final dated-runner/presentation checks 15 passed, independently
+reproduced. CIN–ATL retained-input retrospective replay preserved five arms and
+100,000 winner draws byte-for-byte; reporting-dominated attribution is visible.
+Reviewed product limits and forward monitoring remain pending; approvals empty.
+See docs/research/missingness_20261108/ACCEPTANCE_RECHECK.md. Wagering OFF.

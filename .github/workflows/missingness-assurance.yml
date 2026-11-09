@@ -1,0 +1,26 @@
+name: Missingness assurance
+on:
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install -r requirements-consolidated.txt
+      - name: Run the full repository and research test suites
+        run: |
+          git show -s --format='Tested commit %H tree %T'
+          python -m pytest -q tests research/tests --junitxml="$RUNNER_TEMP/missingness.xml"
+      - name: Verify release, promotion and readiness gates
+        run: |
+          python harness/release_gate.py --selftest
+          python harness/promotion_gate.py --selftest
+          python harness/readiness_gate.py --selftest

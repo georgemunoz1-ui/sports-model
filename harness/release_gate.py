@@ -11,8 +11,14 @@ import datetime as dt
 import hashlib
 import json
 import sys
+from pathlib import Path
 
-SPORTS = ("mlb", "wnba", "nfl", "cfb")
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+from research.missingness_review import release_reason, release_inventory
+from pipelines.cards.missingness import verify_audit
+
+LEGACY_SPORTS = ("mlb", "wnba", "nfl", "cfb")
+SPORTS = (*LEGACY_SPORTS, "nba", "nhl", "mls", "cbb")
 REQUIRED_GATES = (
     "backfill", "event_coverage", "data_contract", "freshness", "point_in_time",
     "forecast_contract", "calibration", "market_mapping", "execution", "evaluation",
@@ -31,10 +37,10 @@ def _utc(value):
     return dt.datetime.fromisoformat(value[:-1] + "+00:00")
 
 
-def _problems(evidence):
+def _problems(evidence, leagues):
     problems = []
     enabled = evidence.get("enabled_sports")
-    if enabled != list(SPORTS):
+    if enabled != list(leagues):
         problems.append("ENABLED_SPORT_SET_MISMATCH")
     decision_time = evidence.get("decision_time_utc")
     try:
@@ -43,7 +49,7 @@ def _problems(evidence):
         cutoff = None
         problems.append("DECISION_TIME_INVALID")
     sports = evidence.get("sports") or {}
-    for sport in SPORTS:
+    for sport in leagues:
         block = sports.get(sport)
         if not isinstance(block, dict):
             problems.append(f"{sport}:SPORT_EVIDENCE_MISSING")
@@ -79,10 +85,10 @@ def _problems(evidence):
     return problems
 
 
-def evaluate(evidence):
-    problems = _problems(evidence)
+def _evaluate(evidence, leagues):
+    problems = _problems(evidence, leagues)
     sports_out = {}
-    for sport in SPORTS:
+    for sport in leagues:
         block = (evidence.get("sports") or {}).get(sport) or {}
         gates = block.get("gates") or {}
         states = [(gates.get(g) or {}).get("status") for g in REQUIRED_GATES]
@@ -97,6 +103,55 @@ def evaluate(evidence):
             row = gates.get(gate) or {}
             if row.get("status") in {"BLOCKED", "SHADOW_ONLY"}:
                 reasons.extend(row.get("reason_codes") or [f"{gate.upper()}_{row.get('status')}"])
+        if leagues == SPORTS:
+            inventory_problem = release_inventory(block, sport, evidence.get("decision_time_utc"))
+            if inventory_problem:
+                reasons.append(inventory_problem)
+                status = "BLOCKED"
+            checks = block.get("missingness_reviews")
+            coverage = block.get("events") or []
+            if not coverage and inventory_problem is None:
+                checks = []
+            elif not isinstance(checks, list) or not checks:
+                reasons.append("MISSINGNESS_REVIEW_REQUIRED")
+                status = "BLOCKED"
+            else:
+                scope_keys = {}
+                for review in checks:
+                    reason = release_reason(review, evidence.get("decision_time_utc"), league=sport)
+                    if reason:
+                        reasons.append(reason)
+                        status = "BLOCKED"
+                    elif (key := (review["model_id"], json.dumps(review["target"], sort_keys=True))) in scope_keys:
+                        reasons.append("MISSINGNESS_DUPLICATE_PRODUCT_REVIEW")
+                        status = "BLOCKED"
+                    else:
+                        scope_keys[key] = review
+                for event in coverage:
+                    if event.get("disposition") != "COMPLETE":
+                        continue
+                    outputs = event.get("model_outputs")
+                    if not isinstance(outputs, list) or not outputs:
+                        reasons.append("MISSINGNESS_EVENT_RECEIPT_REQUIRED")
+                        status = "BLOCKED"
+                        continue
+                    for out in outputs:
+                        if not isinstance(out, dict):
+                            reasons.append("MISSINGNESS_EVENT_RECEIPT_INVALID")
+                            status = "BLOCKED"
+                            continue
+                        model = out.get("model_id")
+                        products = out.get("products")
+                        target = out.get("target")
+                        review = scope_keys.get((model, json.dumps(target, sort_keys=True))) if isinstance(model, str) else None
+                        if (review is None or out.get("procedure_id") != review.get("procedure_id")
+                                or not verify_audit(out.get("missingness_audit"), league=sport, event_id=event.get("event_key"),
+                                model_id=model, products=products, forecast=out.get("forecast"))
+                                or target["product"] not in products
+                                or release_reason(review, evidence.get("decision_time_utc"), league=sport,
+                                                  receipt=out["missingness_audit"], forecast=out["forecast"])):
+                            reasons.append("MISSINGNESS_EVENT_RECEIPT_OR_SCOPE_INVALID")
+                            status = "BLOCKED"
         sports_out[sport] = {
             "status": status,
             "expected_event_count": block.get("expected_event_count"),
@@ -112,12 +167,12 @@ def evaluate(evidence):
     else:
         global_status = "HEALTHY"
     return {
-        "schema": "ops.release_manifest.v1",
+        "schema": "ops.release_manifest.v2" if leagues == SPORTS else "ops.release_manifest.v1",
         "release_id": evidence.get("release_id"),
         "as_of_date": evidence.get("as_of_date"),
         "decision_time_utc": evidence.get("decision_time_utc"),
         "coverage_start": evidence.get("coverage_start"),
-        "enabled_sports": list(SPORTS),
+        "enabled_sports": list(leagues),
         "enabled_markets": evidence.get("enabled_markets"),
         "global_status": global_status,
         "action_authority": "NO",
@@ -127,13 +182,18 @@ def evaluate(evidence):
     }
 
 
+def evaluate(evidence):
+    return _evaluate(evidence, SPORTS)
+
+
 def verify_artifact(evidence_path, artifact_path):
     with open(evidence_path, "rb") as handle:
         raw = handle.read()
     evidence = json.loads(raw)
     with open(artifact_path, encoding="utf-8") as handle:
         artifact = json.load(handle)
-    expected = evaluate(evidence)
+    leagues = LEGACY_SPORTS if artifact.get("schema") in {"ops.release_manifest.v1","ops.release_artifact.v1"} else SPORTS
+    expected = _evaluate(evidence, leagues)
     problems = []
     if artifact.get("evidence_sha256") != hashlib.sha256(raw).hexdigest():
         problems.append("EVIDENCE_HASH_MISMATCH")
@@ -143,7 +203,7 @@ def verify_artifact(evidence_path, artifact_path):
         problems.append("GLOBAL_STATUS_MISMATCH")
     if artifact.get("contract_problems") != expected["contract_problems"]:
         problems.append("CONTRACT_PROBLEMS_MISMATCH")
-    for sport in SPORTS:
+    for sport in leagues:
         if (artifact.get("sports") or {}).get(sport) != expected["sports"][sport]:
             problems.append(f"{sport}:SPORT_RESULT_MISMATCH")
     return expected, problems
@@ -158,10 +218,11 @@ def selftest():
         "sports": {s: {"expected_event_count": 0, "events": [],
                         "gates": {g: gate("PASS") for g in REQUIRED_GATES}} for s in SPORTS},
     }
-    assert evaluate(base)["global_status"] == "HEALTHY"
+    assert evaluate(base)["global_status"] == "BLOCKED"
+    assert "MISSINGNESS_REVIEW_REQUIRED" in evaluate(base)["sports"]["nfl"]["reason_codes"]
     shadow = json.loads(json.dumps(base))
     shadow["sports"]["mlb"]["gates"]["calibration"] = gate("SHADOW_ONLY")
-    assert evaluate(shadow)["global_status"] == "SHADOW_ONLY"
+    assert evaluate(shadow)["global_status"] == "BLOCKED"
     blocked = json.loads(json.dumps(base))
     blocked["sports"]["cfb"]["gates"]["event_coverage"] = {
         "status": "BLOCKED", "reason_codes": ["EVENT_ID_UNRESOLVED"]}
@@ -198,7 +259,7 @@ def main():
             report = evaluate(json.load(handle))
     print(json.dumps(report, indent=2, sort_keys=True))
     if args.gate:
-        return 0 if (report["global_status"] == "HEALTHY"
+        return 0 if (report["schema"] == "ops.release_manifest.v2" and report["global_status"] == "HEALTHY"
                      and not report["contract_problems"]
                      and not report.get("artifact_problems")) else 1
     return 0

@@ -36,8 +36,12 @@ def main():
     p=argparse.ArgumentParser()
     p.add_argument('--event-package',type=Path,help='Explicit dated NFL research package. Requires a trusted file SHA-256 and a new output directory.')
     p.add_argument('--event-package-sha256',help='Approved SHA-256 of the exact event package bytes')
+    p.add_argument('--previous-forecast', type=Path, help='Retained same-event prior forecast for exact missingness attribution')
+    p.add_argument('--previous-forecast-sha256', help='Approved hash of the exact previous forecast bytes')
     p.add_argument('--as-of-utc',help='Information cutoff for the bound pregame run; the writer still uses the actual clock')
     p.add_argument('--date',required=True);p.add_argument('--output',type=Path,required=True);p.add_argument('--simulations',type=int,default=100000);p.add_argument('--model-id');p.add_argument('--mode',default='research_pregame');p.add_argument('--market-packet',type=Path);p.add_argument('--live-packet',type=Path);p.add_argument('--event-id');p.add_argument('--home-spread',type=float,action='append',help='Optional downstream full-game spread calibration, HOME handicap orientation');p.add_argument('--halftime-artifact',type=Path,help='Explicit fitted halftime/joint research artifact; emits a separate model output');p.add_argument('--weekly-state-store',type=Path);p.add_argument('--weekly-state-id');p.add_argument('--distribution-research-config',type=Path,help='Separate hash-bound margin/total research child; does not require or replace combined-arm calibration');p.add_argument('--disclosures',type=Path,help='Presentation-only event scenarios and dependence evidence; requires --event-id');p.add_argument('--identity-semantics',choices=['legacy.v1','market_blind_numeric.v2'],default='market_blind_numeric.v2');p.add_argument('--selection-config',type=Path,help='Frozen selector config; absent config produces diagnostic NO_PICK');p.add_argument('--replay-cutoff-utc',help='Explicit retained-package replay, never prospective registration');p.add_argument('--roster-bundle',type=Path);p.add_argument('--require-roster-aware',action='store_true');p.add_argument('--qb-margin',action='store_true',help='Emit the separately registered QB-only full-game margin research model');p.add_argument('--qb-margin-calibrated',action='store_true',help='Emit the separately registered integer-margin calibration successor');p.add_argument('--comparison-market-packet',type=Path,help='Display-only source snapshot loaded after forecast freeze');p.add_argument('--research-grading-store',type=Path,default=ROOT/'data/grading/nfl_qb_margin');p.add_argument('--margin-model',type=Path,help='Explicit separate selected-QB full-game margin research config');a=p.parse_args()
+    if (a.previous_forecast or a.previous_forecast_sha256) and not a.event_id:
+        p.error('NFL_MISSINGNESS_PRIOR_REQUIRES_SINGLE_EVENT')
     if a.event_package is not None or a.event_package_sha256 is not None:
         from pipelines.cards.nfl_runner_contract import run_bound
         if run_bound(a, lambda args, package: _execute(args,p,package)):
@@ -110,7 +114,9 @@ def _execute(a,p,expected_package=None):
         if a.identity_semantics != 'legacy.v1':
             from pipelines.cards.semantic_identity import reidentify_nfl_run
             result,win,scores=reidentify_nfl_run(context['model'],e,cutoff,result,win,scores,semantics=a.identity_semantics)
-        result=attach_diagnostic(result,context['model'])
+        from pipelines.cards.nfl_missingness import persist_child_review, read_prior
+        prior = read_prior(a.previous_forecast, a.previous_forecast_sha256)
+        result=attach_diagnostic(result,context['model'],previous=prior,prior_file_sha256=a.previous_forecast_sha256)
         result=attach(result,'nfl',e,cutoff,roster)
         if a.replay_cutoff_utc:
             registration=persist_replay(a.output/e['event_id'],result,win,scores,context['package'])
@@ -134,6 +140,10 @@ def _execute(a,p,expected_package=None):
             from pipelines.cards.distribution_research import build,load_config,nfl_card
             try:
                 child=build(nfl_card(result,registration['created_at_utc']),load_config(a.distribution_research_config),a.output/e['event_id']/'distribution_research',simulations=a.simulations)
+                for row in child['results']:
+                    distribution = row['distribution']
+                    persist_child_review(a.output/e['event_id']/'distribution_research', result, distribution,
+                        [distribution['product']], name=distribution['distribution_sha256']+'.missingness.json')
                 distribution_incomplete |= any(r['status']!='COMPLETED' for r in child['coverage'])
                 print(json.dumps({'distribution_research':child['coverage']},indent=2))
             except (ValueError,KeyError,TypeError,OSError) as exc:
@@ -144,12 +154,14 @@ def _execute(a,p,expected_package=None):
         if a.halftime_artifact:
             from models.nfl.contextual.halftime import run_artifact
             half=run_artifact(a.halftime_artifact,result,a.output/e['event_id']/'halftime_joint',a.simulations)
+            persist_child_review(a.output/e['event_id']/'halftime_joint', result, half, ['half_score_distribution'])
             print(json.dumps({'halftime_joint':half['simulation_probabilities'],'model_id':half['model_id']},indent=2))
         margin=margins=None
         if qb_margin_requested:
             margin,margins=margin_module.build(result,n=a.simulations)
             margin_folder=a.output/e['event_id']/('qb_margin_calibrated' if a.qb_margin_calibrated else 'qb_margin')
             margin_module.persist(margin_folder,margin,margins)
+            persist_child_review(margin_folder, result, margin, ['full_game_margin_distribution'])
             if a.qb_margin and a.home_spread:
                 with (a.output/e['event_id']/'qb_margin_comparison.json').open('x') as f:json.dump(margin_module.compare(margin,margins,a.home_spread),f,indent=2)
             from models.nfl.contextual.research_grading import register
@@ -169,6 +181,7 @@ def _execute(a,p,expected_package=None):
             try:
                 margin,margin_draws=build_margin(result,margin_loaded,a.home_spread,n=a.simulations)
                 persist_margin(a.output/e['event_id']/'margin_distribution',margin,margin_draws)
+                persist_child_review(a.output/e['event_id']/'margin_distribution', result, margin, ['full_game_margin_distribution'])
                 print(json.dumps({'margin_distribution':margin['contracts'],'model_id':margin['model_id'],'mode':margin['mode']},indent=2))
             except (ValueError,KeyError,TypeError,OSError) as exc:
                 distribution_incomplete=True
@@ -183,6 +196,7 @@ def _execute(a,p,expected_package=None):
                 from pipelines.cards.semantic_identity import build_spread_overlay
                 overlay,calibrated_margins=build_spread_overlay(result,scores,a.home_spread,n=a.simulations,semantics=a.identity_semantics)
             persist_overlay(a.output/e['event_id']/'spread_calibration',overlay,calibrated_margins)
+            persist_child_review(a.output/e['event_id']/'spread_calibration', result, overlay, ['full_game_spread'])
             print(json.dumps({'spread_calibration':overlay['contracts']},indent=2))
         print(json.dumps({'event':e['event_id'],'selection_policy':result.get('selection_policy'),'flip_diagnostics':result.get('flip_diagnostics'),'coherence':result.get('coherence'),'assimilation':result.get('assimilation'),'joint_distribution':result.get('joint_distribution'),'independent_head_predictions':result['prediction'],'binary':result['winner_simulation'],'scores':result['score_simulation']},indent=2))
     if distribution_incomplete:raise SystemExit(2)

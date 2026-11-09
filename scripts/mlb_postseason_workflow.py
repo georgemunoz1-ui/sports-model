@@ -21,7 +21,7 @@ from zoneinfo import ZoneInfo
 ROOT=Path(__file__).resolve().parents[1]
 sys.path.insert(0,str(ROOT))
 import numpy as np
-from research.mlb_postseason_v1 import MODEL_ID,sha,digest,stamp,instant,save_once,run_event,simulate
+from research.mlb_postseason_v1 import MODEL_ID,sha,digest,stamp,instant,save_once,run_event as _frozen_run_event,simulate
 from scripts.prepare_mlb_postseason import prepare
 from scripts.recovery_capture import capture
 
@@ -91,6 +91,14 @@ def verify_package(root,contract_path,review_path):
     return p,r
 
 
+def run_event(*args,**kwargs):
+    """Wrap the immutable simulation and seal the operator evidence before accepting it."""
+    from pipelines.cards.postseason_missingness import write_sidecar
+    row=_frozen_run_event(*args,**kwargs)
+    write_sidecar(row["path"],row["result"])
+    return row
+
+
 def verify_run(path):
     path=Path(path);r=load(path/'forecast.json');receipt=load(path/'receipt.json')
     for name,h in receipt['artifact_hashes'].items():
@@ -103,7 +111,9 @@ def verify_run(path):
     if receipt['pregame_research_capture']:
         if not instant(r['cutoff_utc'])<=instant(r['created_at_utc'])<=instant(receipt['writer_clock_utc'])<instant(r['start_time_utc']):
             raise ValueError('PREGAME_WRITER_CHRONOLOGY')
-    return {'run_id':receipt['run_id'],'forecast_sha256':sha(path/'forecast.json'),'exact_replay':True,'n':r['n'],'canonical_registration':False,'prospective_grade_eligible':False}
+    from pipelines.cards.postseason_missingness import check_sidecar
+    missingness=check_sidecar(path,r)
+    return {'run_id':receipt['run_id'],'missingness_audit_sha256':missingness,'forecast_sha256':sha(path/'forecast.json'),'exact_replay':True,'n':r['n'],'canonical_registration':False,'prospective_grade_eligible':False}
 
 
 def run(root,contract,review,output):
@@ -122,8 +132,14 @@ def run(root,contract,review,output):
                 coverage.append({'event_id':x['event_id'],'status':'BLOCKED_AGENT_REVIEW_MISSING'});continue
             if instant(x['start_time_utc'])<=instant(stamp()) or x['captured_status']!='Preview':
                 coverage.append({'event_id':x['event_id'],'status':'POST_START_NOT_RERUN'});continue
-            row=run_event(x,output/'runs',root/'package.json',contract,review)
-            verify_run(row['path']);rows.append(row);coverage.append({'event_id':x['event_id'],'status':row['receipt']['status']})
+            try:
+                row=run_event(x,output/'runs',root/'package.json',contract,review)
+                verified=verify_run(row['path'])
+            except (ValueError,KeyError,OSError) as exc:
+                coverage.append({'event_id':x['event_id'],'status':'BLOCKED','reason':str(exc)})
+                continue
+            rows.append(row);coverage.append({'event_id':x['event_id'],'status':row['receipt']['status'],
+                                              'missingness_audit_sha256':verified['missingness_audit_sha256']})
         result={'request_id':rid,'request':request,'writer_clock_utc':stamp(),'runs':rows,'coverage':coverage,'action_authority':False,'official_release_eligible':False,'runtime':{'python':sys.version,'numpy':np.__version__}}
         save_once(index,result)
         return result

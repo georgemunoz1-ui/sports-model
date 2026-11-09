@@ -389,7 +389,7 @@ def build_component_receipt(*, model_id: str, stage_id: str, event_id: str,
                             state: Mapping, config: Mapping, code_files: Sequence[str | Path] | Mapping,
                             sources: Sequence[Mapping], components: Mapping, forecast: Mapping,
                             mode="HISTORICAL_REPLAY", simulation=None, parent_model_id=None,
-                            history_max_event_time_utc=None, input_max_available_at_utc=None) -> dict:
+                            history_max_event_time_utc=None, input_max_available_at_utc=None, league=None) -> dict:
     """Seal actual inference components, preserving inputs/state for verification.
 
     Components may be plain numeric values or {value, unit, input_paths,
@@ -472,8 +472,28 @@ def build_component_receipt(*, model_id: str, stage_id: str, event_id: str,
     receipt["inference_trace_sha256"] = content_id({"inputs": hashes["inputs_sha256"],
         "state": hashes["state_sha256"], "config": hashes["config_sha256"], "code": code,
         "components": component_rows, "forecast": hashes["forecast_sha256"]})
+    from pipelines.cards.missingness import seal_audit
+    league=league or model_id.split(".")[0]
+    feature_map=inputs.get("features") or {}
+    receipt["missingness_league"]=league
+    receipt["missingness_audit"]=seal_audit(**component_missingness_binding(receipt,league),details={
+        "status":"COMPONENT_TRACE_ONLY", "stage":stage_id, "feature_names":sorted(feature_map),
+        "null_features":sorted(k for k,v in feature_map.items() if v is None),
+        "unsupported_heads":unsupported_heads, "historical_support":"UNMEASURED",
+        "thresholds":"UNREVIEWED", "sensitivity":"NUMERICAL_STAGE_PROBES_UNAVAILABLE",
+        "refresh":{"status":"NO_PAIRED_PARENT"}})
     receipt["receipt_sha256"] = content_id(receipt)
     return receipt
+
+
+def component_missingness_binding(receipt, league):
+    forecasts=receipt["forecast"]
+    products=[k for k in ("p_home","home_margin","total","home_score","away_score")
+              if type(forecasts.get(k)) in (float,int)]
+    return {"league":league, "model_id":receipt["model_id"], "event_id":receipt["event_id"],
+            "products":products or ["components"], "forecast":{"forecast":receipt["forecast_sha256"],
+                        "state":receipt["state_sha256"],"inputs":receipt["inputs_sha256"],
+                        "cutoff":receipt["cutoff_utc"],"stage":receipt["stage_id"]}}
 
 
 def verify_component_receipt(receipt: Mapping) -> dict:
@@ -540,6 +560,10 @@ def verify_component_receipt(receipt: Mapping) -> dict:
         raise IntegrityError("SIMULATION_VERIFICATION_DISCLOSURE_MISMATCH")
     if _validate_forecast(value["forecast"]) != value.get("unsupported_forecast_fields"):
         raise IntegrityError("UNSUPPORTED_FORECAST_FIELD_DISCLOSURE_MISMATCH")
+    from pipelines.cards.missingness import verify_audit
+    if not verify_audit(value.get("missingness_audit"),
+                        **component_missingness_binding(value,value.get("missingness_league"))):
+        raise IntegrityError("EFFICIENCY_MISSINGNESS_AUDIT_INVALID")
     return dict(receipt)
 
 

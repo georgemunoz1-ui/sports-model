@@ -1,0 +1,73 @@
+name: Bounded validation prospective receipt
+on:
+  push:
+    branches: [codex/validation-prospective-20261110]
+    paths:
+      - research/validation_20261110/**
+      - .github/workflows/validation-prospective-20261110.yml
+  workflow_dispatch:
+permissions:
+  contents: write
+  actions: read
+concurrency:
+  group: validation-prospective-20261110
+  cancel-in-progress: false
+jobs:
+  register:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: pip install -r requirements.txt
+      - name: Verify and extract the sealed research bundle
+        run: |
+          cd research/validation_20261110
+          sha256sum --check forward-bundle.sha256
+          python -m zipfile --extract forward-bundle.zip ../../output/validation
+      - name: Verify cohort and supported native forecast bindings
+        run: |
+          python research/validation_20261110/forward_registry.py \
+            --bundle output/validation --receipt output/local-check.json --verify-only
+      - uses: actions/upload-artifact@v4
+        id: bundle
+        with:
+          name: validation-pregame-20261110-${{ github.run_id }}
+          path: output/validation/
+          retention-days: 90
+          if-no-files-found: error
+      - name: Register new research cohort after remote artifact readback
+        run: |
+          python research/validation_20261110/forward_registry.py \
+            --bundle output/validation \
+            --run-id "$GITHUB_RUN_ID" --artifact-id '${{ steps.bundle.outputs.artifact-id }}' \
+            --receipt data/grading/validation-20261110/cohort-receipt.json
+          python scripts/canonical_forecasts.py register \
+            --card output/validation/cfb/diagnostic_card.json \
+            --root data/grading/validation-20261110/native \
+            --run-id "$GITHUB_RUN_ID" --artifact-id '${{ steps.bundle.outputs.artifact-id }}' \
+            --report data/grading/validation-20261110/native-registration.json
+      - name: Persist research registration receipts
+        if: always()
+        run: |
+          git config user.name sports-model-research-bot
+          git config user.email actions@users.noreply.github.com
+          if [ -d data/grading/validation-20261110 ]; then
+            git add data/grading/validation-20261110
+            git reset -- 'data/grading/validation-20261110/**/*.lock' || true
+            if ! git diff --cached --quiet; then
+              git commit -m 'Retain bounded prospective research registration'
+              git push origin "HEAD:$GITHUB_REF_NAME"
+            fi
+          fi
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: validation-registration-receipts-${{ github.run_id }}
+          path: data/grading/validation-20261110/
+          retention-days: 90
+          if-no-files-found: warn

@@ -24,8 +24,8 @@ jobs:
         with:
           python-version: '3.11'
       - run: pip install -r requirements.txt
-      - name: Exercise CFB source and corruption controls
-        run: python -m unittest research.validation_20261110.test_cfb_source_check -v
+      - name: Exercise source and derived-claim corruption controls
+        run: python -m unittest research.validation_20261110.test_cfb_source_check research.validation_20261110.test_forward_derived_claims -v
       - name: Verify and extract the sealed research bundle
         run: |
           cd research/validation_20261110

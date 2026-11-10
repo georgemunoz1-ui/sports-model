@@ -38,7 +38,10 @@ def load(path):
 
 
 def same(actual, expected, name):
-    if isinstance(actual, (int, float)) and isinstance(expected, (int, float)):
+    if type(actual) is bool or type(expected) is bool:
+        if type(actual) is type(expected) and actual == expected:
+            return
+    elif isinstance(actual, (int, float)) and isinstance(expected, (int, float)):
         if math.isfinite(actual) and math.isfinite(expected) and math.isclose(actual, expected, rel_tol=1e-11, abs_tol=1e-11):
             return
     elif actual == expected:
@@ -92,6 +95,18 @@ def verify_cbb_law(row, name, arm, parameters, bank):
     support, counts = np.unique(scores[:, 0] - scores[:, 1], return_counts=True)
     expected = {"support": support.tolist(), "counts": counts.tolist(), "denominator": int(counts.sum())}
     same(arm["margin_pmf"], expected, "CBB_reconstructed_law")
+    encoded = json.dumps(expected, sort_keys=True, separators=(",", ":"), allow_nan=False).encode()
+    same(arm["margin_pmf_sha256"], hashlib.sha256(encoded).hexdigest(), "CBB_law_digest")
+    same(arm["retained_residual_pairs"], len(scores), "CBB_retained_residual_pairs")
+    cumulative = np.cumsum(counts / counts.sum())
+    same(arm["law_median_home_margin"], int(support[np.searchsorted(cumulative, 0.5)]), "CBB_median")
+    intervals = {}
+    for level in (80, 90, 95):
+        alpha = 1 - level / 100
+        lower = int(support[np.searchsorted(cumulative, alpha / 2)])
+        upper = int(support[np.searchsorted(cumulative, 1 - alpha / 2)])
+        intervals[str(level)] = {"lower": lower, "upper": upper, "width": upper - lower}
+    same(arm["intervals"], intervals, "CBB_intervals")
     same(arm["point_home_margin"], float(centers[0] - centers[1]), "CBB_reconstructed_point")
     same(arm["point_total"], row["point_total"], "CBB_total_head")
     same(arm["location_adjustment"], shift, "CBB_location_transform")
@@ -132,11 +147,16 @@ def verify_quotes(root, events, trusted):
     observed, quote_ids = set(), set()
     for label in ("cfb-cbb", "nba-nhl"):
         ledger = load(root / f"quotes/{label}.json")
+        same(ledger["action_authority"], False, "quote_ledger_authority")
+        same(ledger["schema"], "validation.post_seal_quotes.v1", "quote_schema")
         bindings = {item["league"]: item for item in ledger["forecast_bindings"]}
         for league, binding in bindings.items():
             same(binding["sha256"], sha(root / paths[league]), "quote_forecast_version")
+            parent = load(root / paths[league])
+            same(dt(binding["sealed_at_utc"]), dt(parent["generated_at_utc" if league == "CFB" else "created_at_utc"]), "quote_forecast_seal")
         for event in ledger["events"]:
             event_id = event["event_id"]
+            same(event["league"], event_id.split(":")[0], "quote_event_league")
             if event_id in observed:
                 raise ValueError("DUPLICATE_QUOTE_EVENT")
             observed.add(event_id)
@@ -147,6 +167,7 @@ def verify_quotes(root, events, trusted):
             source = load(path)
             same(str(source["header"]["id"]), event_id.split(":")[-1], "quote_event")
             competition = source["header"]["competitions"][0]
+            same(event["source_event_status"], competition["status"], "quote_source_event_status")
             same(dt(competition["date"]), dt(events[event_id]), "quote_start")
             same(dt(event["authoritative_start_utc"]), dt(competition["date"]), "quote_declared_start")
             binding = bindings[event["league"]]
@@ -156,6 +177,7 @@ def verify_quotes(root, events, trusted):
             for team in competition["competitors"]:
                 same(str(team["team"]["id"]), event["team_ids"][team["homeAway"]], "quote_team")
             expected = {(q["market"], q["side"]): q for q in source_contracts(source)}
+            same(event["status"], "CAPTURED_PAIRED_QUOTES" if expected else "NO_COMPLETE_PAIR_DISPLAYED", "quote_availability")
             actual = [q for q in ledger["quotes"] if q["event_id"] == event_id]
             same(len(actual), len(expected), "quote_complete_population")
             same(set(event["quote_ids"]), {q["quote_id"] for q in actual}, "quote_references")
@@ -166,7 +188,22 @@ def verify_quotes(root, events, trusted):
                 source_quote = expected[(quote["market"], quote["side"])]
                 for key, value in source_quote.items():
                     same(quote[key], value, "quote_" + key)
-                for key, value in {"forecast_sha256": binding["sha256"], "provider_asof_utc": None, "captured_at_utc": receipt["source_receipt"]["retrieved_at_utc"], "source_response_sha256": receipt["source_receipt"]["raw_sha256"], "executable_verified": False, "sportsbook_rules_verified": False, "official_selection": False, "stake_units": 0}.items():
+                descriptors = {
+                    "event_id": event_id,
+                    "league": event["league"],
+                    "provider": "ESPN",
+                    "settlement_evidence": "DISPLAYED_FULL_GAME_REFERENCE",
+                    "forecast_sha256": binding["sha256"],
+                    "provider_asof_utc": None,
+                    "captured_at_utc": receipt["source_receipt"]["retrieved_at_utc"],
+                    "source_response_sha256": receipt["source_receipt"]["raw_sha256"],
+                    "executable_verified": False,
+                    "sportsbook_rules_verified": False,
+                    "official_selection": False,
+                    "stake_units": 0,
+                }
+                same(set(quote), set(source_quote) | set(descriptors) | {"quote_id"}, "quote_field_contract")
+                for key, value in descriptors.items():
                     same(quote[key], value, "quote_evidence_" + key)
                 body = {k: v for k, v in quote.items() if k != "quote_id"}
                 same(quote["quote_id"], "quote-" + hashlib.sha256(json.dumps(body, sort_keys=True, separators=(",", ":"), allow_nan=False).encode()).hexdigest(), "quote_identity")
@@ -208,6 +245,19 @@ def verify_bundle(root, registered_at):
     same(cbb["parameter_sha256"], sha(root / "cbb/parameters.json"), "CBB_parameters")
     same(cbb["protocol_sha256"], BASE_HASH, "CBB_protocol")
     same(cbb["protocol_addendum_sha256"], ADDENDUM_HASH, "CBB_addendum")
+    for key, value in {
+        "schema": "cbb_location_scale_forward.v1",
+        "date": source["date"],
+        "input_cutoff_utc": source["as_of_utc"],
+        "forecast_count": source["forecast_count"],
+        "refusal_count": source["scheduled"] - source["forecast_count"],
+        "qualification": "HOLD",
+        "wagering_authority": "OFF",
+        "official_selections": 0,
+        "units": 0,
+        "canonical_registration": "PENDING_COORDINATOR_NEW_RUN",
+    }.items():
+        same(cbb[key], value, "CBB_" + key)
     if not dt(cbb["input_cutoff_utc"]) <= dt(cbb["created_at_utc"]) <= dt(registered_at):
         raise ValueError("CBB_CHRONOLOGY")
     freezes.append(dt(cbb["created_at_utc"]))
@@ -216,6 +266,11 @@ def verify_bundle(root, registered_at):
         parent = source_rows[row["event_id"]]
         for key in ("event_id", "home_team", "away_team", "start_time_utc"):
             same(row[key], parent[key], "CBB_" + key)
+        same(row["day"], cbb["date"], "CBB_slate_date")
+        same(dt(row["start_time_utc"]).astimezone(ZoneInfo("America/Los_Angeles")).date().isoformat(), row["day"], "CBB_event_day")
+        same(row["source_forecast_status"], parent["forecast_status"], "CBB_source_forecast_status")
+        same(row["returning_roster_information"], None, "CBB_returning_roster_information")
+        same(row["settlement_scope"], "FULL_GAME_INCLUDING_OVERTIME", "CBB_declared_settlement")
         if row["actual_home_margin"] is not None:
             raise ValueError("PREGAME_OUTCOME_PRESENT")
         events[row["event_id"]] = row["start_time_utc"]
@@ -234,6 +289,13 @@ def verify_bundle(root, registered_at):
         same(row["point_home_margin"], parent["home_margin"], "CBB_baseline_point")
         same(row["point_total"], parent["total"], "CBB_baseline_total")
         same(row["settlement_scope"], parent["settlement"], "CBB_settlement")
+        days = row["days_since_season_origin"]
+        phase = "0_TO_6" if days < 7 else "7_TO_13" if days < 14 else "14_PLUS"
+        same(row["season_phase"], phase, "CBB_season_phase_group")
+        size = abs(parent["home_margin"])
+        group = "UNDER_10" if size < 10 else "10_TO_UNDER_20" if size < 20 else "20_TO_UNDER_30" if size < 30 else "30_PLUS"
+        same(row["fitted_baseline_margin_group"], group, "CBB_fitted_margin_group")
+        same(row["market_handicap_group"], None, "CBB_market_group")
         for name, arm in row["arms"].items():
             verify_cbb_law(row, name, arm, parameters, bank)
             pmf = arm["margin_pmf"]
@@ -259,6 +321,8 @@ def verify_bundle(root, registered_at):
     history = load(root / "history/forward-candidate-predictions.json")
     for row in history["rows"]:
         league, event = row["league"], row["event"]
+        for key, value in {"official_selection": False, "registered": False, "units": 0}.items():
+            same(row[key], value, "history_" + key)
         candidate = load(root / f"history/{league}-forward-candidate.json")
         package = load(root / f"history/{league}-incumbent-package.json")
         same(row["candidate_artifact_sha256"], sha(root / f"history/{league}-forward-candidate.json"), "history_candidate")

@@ -24,23 +24,38 @@ jobs:
         with:
           python-version: '3.11'
       - run: pip install -r requirements.txt
+      - name: Exercise CFB source and corruption controls
+        run: python -m unittest research.validation_20261110.test_cfb_source_check -v
       - name: Verify and extract the sealed research bundle
         run: |
           cd research/validation_20261110
           sha256sum --check forward-bundle.sha256
           python -m zipfile --extract forward-bundle.zip ../../output/validation
-      - name: Verify cohort and supported native forecast bindings
+      - name: Verify source bindings and existing registration witness
+        id: verify
         run: |
-          python research/validation_20261110/forward_registry.py \
-            --bundle output/validation --receipt output/local-check.json --verify-only
+          receipt=data/grading/validation-20261110/cohort-receipt.json
+          if [ -f "$receipt" ]; then
+            python research/validation_20261110/forward_registry.py \
+              --bundle output/validation --receipt "$receipt" \
+              --archived-readback --receipt-artifact-id 13769648664 > output/local-check.json
+            echo 'registered=true' >> "$GITHUB_OUTPUT"
+          else
+            python research/validation_20261110/forward_registry.py \
+              --bundle output/validation --receipt output/local-check.json --verify-only > output/local-check.json
+            echo 'registered=false' >> "$GITHUB_OUTPUT"
+          fi
+          cat output/local-check.json
       - uses: actions/upload-artifact@v4
         id: bundle
+        if: steps.verify.outputs.registered == 'false'
         with:
           name: validation-pregame-20261110-${{ github.run_id }}
           path: output/validation/
           retention-days: 90
           if-no-files-found: error
       - name: Register new research cohort after remote artifact readback
+        if: steps.verify.outputs.registered == 'false'
         run: |
           python research/validation_20261110/forward_registry.py \
             --bundle output/validation \
@@ -52,7 +67,7 @@ jobs:
             --run-id "$GITHUB_RUN_ID" --artifact-id '${{ steps.bundle.outputs.artifact-id }}' \
             --report data/grading/validation-20261110/native-registration.json
       - name: Persist research registration receipts
-        if: always()
+        if: steps.verify.outputs.registered == 'false'
         run: |
           git config user.name sports-model-research-bot
           git config user.email actions@users.noreply.github.com
@@ -69,5 +84,12 @@ jobs:
         with:
           name: validation-registration-receipts-${{ github.run_id }}
           path: data/grading/validation-20261110/
+          retention-days: 90
+          if-no-files-found: warn
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: validation-semantic-readback-${{ github.run_id }}
+          path: output/local-check.json
           retention-days: 90
           if-no-files-found: warn

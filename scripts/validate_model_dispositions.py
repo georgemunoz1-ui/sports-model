@@ -6,7 +6,7 @@ import json
 from pathlib import Path
 import sys
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]))
-from harness.model_disposition_review import read_manifest
+from research.nov11_cross_model.model_disposition_review import read_manifest
 
 
 def main(argv=None):

@@ -8,7 +8,7 @@ import unittest
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
-from harness.cross_model_learning_review import (
+from research.nov11_cross_model.cross_model_learning_review import (
     LEAGUES, ReviewError, audit_observation, cohort_summary, expected_return,
     paired_novig, personnel_asof, preferred_side, purchase_probability,
 )

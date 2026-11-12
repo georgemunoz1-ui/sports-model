@@ -11,7 +11,7 @@ from pathlib import Path
 import sys
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
-from harness.cross_model_learning_review import cohort_summary, ReviewError
+from research.nov11_cross_model.cross_model_learning_review import cohort_summary, ReviewError
 
 
 def main(argv=None):

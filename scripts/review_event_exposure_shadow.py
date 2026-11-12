@@ -6,7 +6,7 @@ import json
 from pathlib import Path
 import sys
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
-from harness.event_exposure_shadow import review_exposure_book
+from research.nov11_cross_model.event_exposure_shadow import review_exposure_book
 
 
 def main(argv=None):

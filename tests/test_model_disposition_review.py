@@ -2,7 +2,7 @@ import copy
 import json
 from pathlib import Path
 import unittest
-from harness.model_disposition_review import (validate_dispositions,read_manifest,DispositionError)
+from research.nov11_cross_model.model_disposition_review import (validate_dispositions,read_manifest,DispositionError)
 
 MANIFEST=Path(__file__).resolve().parents[1]/"data/research/nov11_cross_model_dispositions_v1.json"
 

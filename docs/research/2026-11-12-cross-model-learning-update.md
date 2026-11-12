@@ -27,7 +27,7 @@ The software cannot decide an arm supports a product merely because a league tra
 
 ## Implemented in the opt-in auditor
 
-- `harness/cross_model_learning_review.py`: validated odds and outcome masses; group-separated Brier scores; signed Sim–Model replication gap and optional Monte Carlo SE; two-sided same-event/period/provider/line matching for no-vig comparisons; push-aware three-class scoring and decisive conditional comparisons; MLA binary and MLS regulation 1X2 properly separated; no-action output; prospective source timestamps left **unverified** unless a separate trusted attestor exists; source-state monitoring without fabricated fitted effects.
+- `research/nov11_cross_model/cross_model_learning_review.py`: validated odds and outcome masses; group-separated Brier scores; signed Sim–Model replication gap and optional Monte Carlo SE; two-sided same-event/period/provider/line matching for no-vig comparisons; push-aware three-class scoring and decisive conditional comparisons; MLA binary and MLS regulation 1X2 properly separated; no-action output; prospective source timestamps left **unverified** unless a separate trusted attestor exists; source-state monitoring without fabricated fitted effects.
 - `scripts/review_cross_model_findings.py`: explicit input JSON to read-only research JSON. Does not import or mutate league model weights, write the canonical registry, create forecasts or authorize stakes. It may write to an explicitly requested **research** file only.
 - `tests/test_cross_model_learning_review.py`: standard-library tests spanning eight-league review contracts, source clocks, exact quote joins, integer pushes, MLS draws, refusal of an incomplete two-price MLS 1X2 market, CBB tails, missing personnel, side preference and zero authorization.
 
@@ -58,10 +58,10 @@ league models. The machine-readable file
 baseline and one blocked/proposed shadow workstream per league. Each entry has a
 pinned source-branch code commit, missing fitted-state/input identities recorded
 as null, unverified eligible training data, unresolved release dependencies and a
-separate product-specific action queue. `harness/model_disposition_review.py`
+separate product-specific action queue. `research/nov11_cross_model/model_disposition_review.py`
 refuses a false training, registration, release or authority claim.
 
-`harness/event_exposure_shadow.py` implements source-law-gated, **same-event**
+`research/nov11_cross_model/event_exposure_shadow.py` implements source-law-gated, **same-event**
 reference exposure. Its classification distinguishes nested moneyline/spread
 stacks from opposing middle-window contracts by common winning settlement
 scenarios. It refuses incomplete/unsupported settlement tables, contradictory
@@ -84,3 +84,14 @@ sports prediction. These modules are **not** wired to the old or new daily
 card generators. Each prospective numerical challenger still needs its exact
 fitted parent and input hash, chronology-consistent labels and independent
 forward evaluation. Existing draft PRs and protected integrations remain separate.
+
+## Protected module manifest reconciliation
+
+The initial draft added a module under `harness/`, which failed its module
+registry health test. A subsequent attempt to register it changed
+`data/registry/module_manifest.json`, a protected file that cannot be modified
+by this research PR. The resolved approach is an **isolated**
+`research/nov11_cross_model/` package. It is not imported by any production
+runner or protected harness module. The old module manifest is preserved
+**byte-for-byte**, so neither module registration rules nor protected-file
+checks are weakened.

@@ -1,7 +1,7 @@
 """Research-only correlated exposure tests; no synthetic portfolio superiority claims."""
 import math
 import unittest
-from harness.event_exposure_shadow import (
+from research.nov11_cross_model.event_exposure_shadow import (
     ExposureError, review_event_exposure, review_exposure_book,
 )
 

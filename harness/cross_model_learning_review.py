@@ -7,6 +7,8 @@ and settlement rules remain authoritative and must be supplied as inputs.
 """
 from __future__ import annotations
 
+MODULE_ID = "cross_model_learning_review_v1"
+
 from collections import defaultdict
 from datetime import datetime, timezone
 import math

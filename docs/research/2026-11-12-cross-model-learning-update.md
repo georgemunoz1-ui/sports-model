@@ -49,3 +49,38 @@ The model-optimal side, EV-optimal side, price-qualified abstention and 60/40 bl
 ## Integration dependencies
 
 `main` remains older than research draft PRs #95, #98, #102, #105, #108 and #111–#118. In particular, #117 (cross-model missingness), #118 (registered research) and #102 (daily pipeline) are not equivalent to a production release. This additive research adapter should be reviewed for integration with their *actual* APIs only after the branches converge, with a verified complete checkout and CI. Avoid claiming a locally isolated test run is the repository-wide healthcheck. All original model defaults and wagering authority remain unchanged.
+
+## Coordinated eight-league disposition and exposure follow-up
+
+The follow-up deliberately does **not** claim fitted or deployed changes in all
+league models. The machine-readable file
+`data/research/nov11_cross_model_dispositions_v1.json` names one unchanged
+baseline and one blocked/proposed shadow workstream per league. Each entry has a
+pinned source-branch code commit, missing fitted-state/input identities recorded
+as null, unverified eligible training data, unresolved release dependencies and a
+separate product-specific action queue. `harness/model_disposition_review.py`
+refuses a false training, registration, release or authority claim.
+
+`harness/event_exposure_shadow.py` implements source-law-gated, **same-event**
+reference exposure. Its classification distinguishes nested moneyline/spread
+stacks from opposing middle-window contracts by common winning settlement
+scenarios. It refuses incomplete/unsupported settlement tables, contradictory
+event identities, invalid probability masses and live authority. If a coherent
+joint score/scenario law is absent, event EV, volatility and pair structure are
+**NULL/UNASSESSED** rather than manufactured from independent marginal legs.
+The multi-event book does not compute an SD or optimize an allocation unless
+an independently supported *cross-event* joint law exists (not provided here).
+
+New read-only commands:
+
+```bash
+python scripts/validate_model_dispositions.py
+python scripts/review_event_exposure_shadow.py --input examples/event_exposure_shadow_synthetic.json
+python -m unittest discover -s tests -p 'test_*.py' -q
+```
+
+Synthetic scenario probabilities are for verifying correlation accounting, not
+sports prediction. These modules are **not** wired to the old or new daily
+card generators. Each prospective numerical challenger still needs its exact
+fitted parent and input hash, chronology-consistent labels and independent
+forward evaluation. Existing draft PRs and protected integrations remain separate.

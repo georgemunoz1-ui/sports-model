@@ -1,0 +1,303 @@
+{
+  "date_utc": "2026-11-12",
+  "decision_facing_products": [
+    "MONEYLINE",
+    "SPREAD",
+    "PUCK_LINE",
+    "RUN_LINE"
+  ],
+  "independent_policy_registration": "NOT_PROVEN",
+  "integration_branch": "research/nov11-cross-model-learning-20261112",
+  "integration_dependencies": {
+    "issue_96": "RUNNER_REPRODUCIBILITY_AND_DURABLE_OUTPUT_NOT_CLOSED",
+    "pr_102": "DAILY_CANONICAL_RESEARCH_PIPELINE_DRAFT",
+    "pr_117": "MISSINGNESS_RELEASE_GATES_DRAFT",
+    "pr_118": "NOV10_RESEARCH_NOT_MAIN_CANONICAL_REGISTRY",
+    "pr_119": "THIS_EVALUATION_ADAPTER_DRAFT"
+  },
+  "leagues": {
+    "CBB": {
+      "baseline_branch": "research/cbb-men-shadow-20261104",
+      "baseline_state": "UNCHANGED",
+      "blockers": [
+        "baseline and challenger exact frozen fit manifests",
+        "later untouched 2026 D1 slate",
+        "authenticated same-time opponent spread quotes"
+      ],
+      "candidate_arm": "CBB_CENTER_TAIL_FOUR_ARMS_FROZEN_NO_NEW_FIT",
+      "evaluation_adapter_status": "LOCALLY_EXERCISED_RESEARCH_ONLY",
+      "model_disposition": "BLOCKED_PENDING_SOURCE_AND_MODEL_STATE_RECONCILIATION",
+      "numerical_update_executed": false,
+      "parent_code_commit": "aa9edae9c27d5309cc659b66513764fb01dd766b",
+      "parent_dependency_prs": [
+        108,
+        111,
+        117
+      ],
+      "parent_fitted_state_sha256": null,
+      "parent_input_manifest_sha256": null,
+      "parent_model_id": null,
+      "registration_receipt_verified": false,
+      "review_focus": [
+        "extreme-underdog >90% cover tail without automatic cap",
+        "center versus dispersion and conditional interval coverage",
+        "as-of roster continuity and match identity",
+        "all refusal grades retained"
+      ],
+      "scope": [
+        "verified D1 pair winner",
+        "opponent-adjusted margin",
+        "four frozen center/scale arms"
+      ],
+      "training_labels_verified": false
+    },
+    "CFB": {
+      "baseline_branch": "main",
+      "baseline_state": "UNCHANGED",
+      "blockers": [
+        "fresh source-acquired inputs",
+        "source/revision lineage of player availability",
+        "chronological training/serving baseline manifest"
+      ],
+      "candidate_arm": "CFB_CHRONOLOGY_AND_MARGIN_CALIBRATION_SHADOW_NOT_FITTED",
+      "evaluation_adapter_status": "LOCALLY_EXERCISED_RESEARCH_ONLY",
+      "model_disposition": "BLOCKED_PENDING_SOURCE_AND_MODEL_STATE_RECONCILIATION",
+      "numerical_update_executed": false,
+      "parent_code_commit": "8d2e20f1d0e2ce5c7818de47ed86dcf17d7c9722",
+      "parent_dependency_prs": [
+        100,
+        115,
+        117
+      ],
+      "parent_fitted_state_sha256": null,
+      "parent_input_manifest_sha256": null,
+      "parent_model_id": null,
+      "registration_receipt_verified": false,
+      "review_focus": [
+        "eligible FBS history by event date",
+        "integer spread push/settlement",
+        "winner-vs-PMF proper scores",
+        "selected parent has no total head"
+      ],
+      "scope": [
+        "FBS winner",
+        "empirical or conditional spread margin"
+      ],
+      "training_labels_verified": false
+    },
+    "MLB": {
+      "baseline_branch": "main",
+      "baseline_state": "UNCHANGED",
+      "blockers": [
+        "fresh authenticated starters and current injuries",
+        "supported extra-inning run distribution for betting products",
+        "eligible prospective calibration holdout"
+      ],
+      "candidate_arm": "MLB_STARTER_BULLPEN_FEATURE_SHADOW_NOT_FITTED",
+      "evaluation_adapter_status": "LOCALLY_EXERCISED_RESEARCH_ONLY",
+      "model_disposition": "BLOCKED_PENDING_SOURCE_AND_MODEL_STATE_RECONCILIATION",
+      "numerical_update_executed": false,
+      "parent_code_commit": "8d2e20f1d0e2ce5c7818de47ed86dcf17d7c9722",
+      "parent_dependency_prs": [
+        117
+      ],
+      "parent_fitted_state_sha256": null,
+      "parent_input_manifest_sha256": null,
+      "parent_model_id": null,
+      "registration_receipt_verified": false,
+      "review_focus": [
+        "probable starter and bullpen as-of capture",
+        "lineup status missingness",
+        "extra innings and game-ending tie handling",
+        "preserve historical NO_PROMOTE verdict"
+      ],
+      "scope": [
+        "V13 winner research",
+        "unsupported run line/totals until full settlement"
+      ],
+      "training_labels_verified": false
+    },
+    "MLS": {
+      "baseline_branch": "main",
+      "baseline_state": "UNCHANGED",
+      "blockers": [
+        "same-vintage 1X2 prices for all outcomes",
+        "later untouched event season blocks",
+        "regulation and extra-time capability declaration"
+      ],
+      "candidate_arm": "MLS_DRAW_HOME_ADVANTAGE_SHADOW_NOT_FITTED",
+      "evaluation_adapter_status": "LOCALLY_EXERCISED_RESEARCH_ONLY",
+      "model_disposition": "BLOCKED_PENDING_SOURCE_AND_MODEL_STATE_RECONCILIATION",
+      "numerical_update_executed": false,
+      "parent_code_commit": "8d2e20f1d0e2ce5c7818de47ed86dcf17d7c9722",
+      "parent_dependency_prs": [
+        117
+      ],
+      "parent_fitted_state_sha256": null,
+      "parent_input_manifest_sha256": null,
+      "parent_model_id": null,
+      "registration_receipt_verified": false,
+      "review_focus": [
+        "HOME/DRAW/AWAY three-outcome Brier",
+        "regulation vs overtime settlement",
+        "lineup and home-advantage missingness",
+        "complete three-way market quote"
+      ],
+      "scope": [
+        "regulation 1X2 score law",
+        "extra-time/Asian lines separately unsupported"
+      ],
+      "training_labels_verified": false
+    },
+    "NBA": {
+      "baseline_branch": "main",
+      "baseline_state": "UNCHANGED",
+      "blockers": [
+        "source-published vs captured vs cutoff status transition",
+        "numerically supported roster transform",
+        "prospective baseline/candidate common event receipts"
+      ],
+      "candidate_arm": "NBA_ASOF_AVAILABILITY_AND_CENTER_SHADOW_NOT_FITTED",
+      "evaluation_adapter_status": "LOCALLY_EXERCISED_RESEARCH_ONLY",
+      "model_disposition": "BLOCKED_PENDING_SOURCE_AND_MODEL_STATE_RECONCILIATION",
+      "numerical_update_executed": false,
+      "parent_code_commit": "8d2e20f1d0e2ce5c7818de47ed86dcf17d7c9722",
+      "parent_dependency_prs": [
+        98,
+        101,
+        113,
+        114,
+        117
+      ],
+      "parent_fitted_state_sha256": null,
+      "parent_input_manifest_sha256": null,
+      "parent_model_id": null,
+      "registration_receipt_verified": false,
+      "review_focus": [
+        "Murphy probable at freeze, later out and no status consumption",
+        "timestamped player/status transitions",
+        "historical history policy vs point-head corrections",
+        "independent exact-product Brier"
+      ],
+      "scope": [
+        "initial causal-score winner",
+        "separate margin candidate"
+      ],
+      "training_labels_verified": false
+    },
+    "NFL": {
+      "baseline_branch": "main",
+      "baseline_state": "UNCHANGED",
+      "blockers": [
+        "source-bound per-event QB and roster state at each cutoff",
+        "candidate and baseline model-state digests",
+        "untouched prospective registration and grading"
+      ],
+      "candidate_arm": "NFL_QB_PERSONNEL_MISSINGNESS_SHADOW_NOT_FITTED",
+      "evaluation_adapter_status": "LOCALLY_EXERCISED_RESEARCH_ONLY",
+      "model_disposition": "BLOCKED_PENDING_SOURCE_AND_MODEL_STATE_RECONCILIATION",
+      "numerical_update_executed": false,
+      "parent_code_commit": "8d2e20f1d0e2ce5c7818de47ed86dcf17d7c9722",
+      "parent_dependency_prs": [
+        117
+      ],
+      "parent_fitted_state_sha256": null,
+      "parent_input_manifest_sha256": null,
+      "parent_model_id": null,
+      "registration_receipt_verified": false,
+      "review_focus": [
+        "QB identity at cutoff",
+        "verified inactives vs reporting state",
+        "missingness feature support",
+        "winner/margin separate law and push"
+      ],
+      "scope": [
+        "selected QB winner",
+        "parent-specific joint/conditional margin"
+      ],
+      "training_labels_verified": false
+    },
+    "NHL": {
+      "baseline_branch": "main",
+      "baseline_state": "UNCHANGED",
+      "blockers": [
+        "eligible point-in-time goalie/rest inputs",
+        "lineage and source-season support for puck-line law",
+        "out-of-sample independent puck-line market comparison"
+      ],
+      "candidate_arm": "NHL_GOALIE_CONDITIONED_MARGIN_SHADOW_NOT_FITTED",
+      "evaluation_adapter_status": "LOCALLY_EXERCISED_RESEARCH_ONLY",
+      "model_disposition": "BLOCKED_PENDING_SOURCE_AND_MODEL_STATE_RECONCILIATION",
+      "numerical_update_executed": false,
+      "parent_code_commit": "8d2e20f1d0e2ce5c7818de47ed86dcf17d7c9722",
+      "parent_dependency_prs": [
+        105,
+        112,
+        117
+      ],
+      "parent_fitted_state_sha256": null,
+      "parent_input_manifest_sha256": null,
+      "parent_model_id": null,
+      "registration_receipt_verified": false,
+      "review_focus": [
+        "goalie confirmation timing",
+        "five-on-five form, rest and back-to-back",
+        "OT/shootout plus-one settlement",
+        "joint volatility challenger kept shadow"
+      ],
+      "scope": [
+        "baseline winner",
+        "separate puck-line and total laws"
+      ],
+      "training_labels_verified": false
+    },
+    "WNBA": {
+      "baseline_branch": "main",
+      "baseline_state": "UNCHANGED",
+      "blockers": [
+        "eligible current-season outcome/forecast pairs",
+        "source-bound feature-state trace for target arm",
+        "pre-registered independent reference market"
+      ],
+      "candidate_arm": "WNBA_ROSTER_SCOPE_SHADOW_NOT_FITTED",
+      "evaluation_adapter_status": "LOCALLY_EXERCISED_RESEARCH_ONLY",
+      "model_disposition": "BLOCKED_PENDING_SOURCE_AND_MODEL_STATE_RECONCILIATION",
+      "numerical_update_executed": false,
+      "parent_code_commit": "8d2e20f1d0e2ce5c7818de47ed86dcf17d7c9722",
+      "parent_dependency_prs": [
+        117
+      ],
+      "parent_fitted_state_sha256": null,
+      "parent_input_manifest_sha256": null,
+      "parent_model_id": null,
+      "registration_receipt_verified": false,
+      "review_focus": [
+        "season/postseason eligibility",
+        "roster/rotation availability chronology",
+        "paired winner/cover scoring without cross-league pooling"
+      ],
+      "scope": [
+        "FF7 winner",
+        "separate margin/total targets"
+      ],
+      "training_labels_verified": false
+    }
+  },
+  "main_baseline_commit": "8d2e20f1d0e2ce5c7818de47ed86dcf17d7c9722",
+  "research_only_product_groups": [
+    "TOTAL",
+    "MLS_THREE_WAY_REGULATION"
+  ],
+  "schema": "sports.cross_model_research_dispositions.v1",
+  "shared_evaluator": {
+    "canonical_forecasts_rewritten": false,
+    "model_defaults_changed": false,
+    "models_retrained": 0,
+    "official_units": 0,
+    "production_runner_enabled": false,
+    "status": "LOCALLY_TESTED_IN_PR",
+    "wagering_authorized": false
+  },
+  "source_research_date_pt": "2026-11-11",
+  "underlying_results": "BOUNDED_POSTGAME_NOT_CANONICAL_REPLAY"
+}

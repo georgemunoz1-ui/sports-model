@@ -29,7 +29,7 @@ The software cannot decide an arm supports a product merely because a league tra
 
 - `harness/cross_model_learning_review.py`: validated odds and outcome masses; group-separated Brier scores; signed Sim–Model replication gap and optional Monte Carlo SE; two-sided same-event/period/provider/line matching for no-vig comparisons; push-aware three-class scoring and decisive conditional comparisons; MLA binary and MLS regulation 1X2 properly separated; no-action output; prospective source timestamps left **unverified** unless a separate trusted attestor exists; source-state monitoring without fabricated fitted effects.
 - `scripts/review_cross_model_findings.py`: explicit input JSON to read-only research JSON. Does not import or mutate league model weights, write the canonical registry, create forecasts or authorize stakes. It may write to an explicitly requested **research** file only.
-- `tests/test_cross_model_learning_review.py`: standard-library tests spanning eight-league review contracts, source clocks, exact quote joins, integer pushes, MLS draws, CBB tails, missing personnel, side preference and zero authorization.
+- `tests/test_cross_model_learning_review.py`: standard-library tests spanning eight-league review contracts, source clocks, exact quote joins, integer pushes, MLS draws, refusal of an incomplete two-price MLS 1X2 market, CBB tails, missing personnel, side preference and zero authorization.
 
 **Interface:**
 

@@ -130,6 +130,15 @@ class CrossModelReviewTests(unittest.TestCase):
         with self.assertRaisesRegex(ReviewError,"complementary"):
             audit_observation(row(product="SPREAD",quote={**q,"matching_opposite":{**other,"line":13.5}}))
 
+    def test_mls_pair_is_not_a_threeway_market(self):
+        r=row(league="MLS",product="THREE_WAY",model_p_win=None,
+              three_way_probabilities={"HOME":.5,"DRAW":.3,"AWAY":.2},
+              selected_outcome="DRAW",observed_result="DRAW")
+        q={**r["quote"],"event_id":r["event_id"],"side":"DRAW"}
+        other={**q,"american":150,"side":"HOME"}
+        with self.assertRaisesRegex(ReviewError,"all three market prices"):
+            audit_observation({**r,"quote":{**q,"matching_opposite":other}})
+
     def test_mls_vector_sum_is_enforced(self):
         with self.assertRaisesRegex(ReviewError,"sum to one"):
             audit_observation(row(league="MLS",product="THREE_WAY",selected_outcome="HOME",

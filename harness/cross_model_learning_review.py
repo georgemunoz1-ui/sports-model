@@ -228,6 +228,8 @@ def audit_observation(row):
                         "POST_SEAL_COMPARISON_ONLY" if retrieved > cutoff else
                         "PROVIDER_ASOF_NOT_ESTABLISHED")
         pair = quote.get("matching_opposite")
+        if product == "THREE_WAY" and pair is not None:
+            raise ReviewError("MLS regulation 1X2 needs all three market prices; a two-side no-vig pair is invalid")
         if pair is not None:
             if (not isinstance(pair, dict) or not quote.get("book") or
                 not quote.get("event_id") or quote.get("event_id") != row["event_id"] or

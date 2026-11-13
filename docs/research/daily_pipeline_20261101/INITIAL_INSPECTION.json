@@ -1,0 +1,52 @@
+{
+  "schema": "sports.pipeline.current_inspection.v1",
+  "recorded_at_utc": "2026-11-02 05:16:10 UTC",
+  "repository": "georgemunoz1-ui/sports-model",
+  "main_at_clone": "f3c9cb9a13ac253d970719b40cbc4d99a9c9c50c",
+  "authority": {
+    "official_release": false,
+    "wagering": "OFF"
+  },
+  "references": {
+    "pr95": {
+      "url": "https://github.com/georgemunoz1-ui/sports-model/pull/95",
+      "title": "Add fail-closed daily sports operations preflight",
+      "state": "open",
+      "draft": false,
+      "head": "5acf5972bc448b4e5c03b65ee69ecd38033765c0",
+      "branch": "codex/daily-ops-preflight-20261026",
+      "base": "main",
+      "mergeable": true,
+      "merged": false,
+      "body": "## Summary\n- Adds a scheduled/manual daily source-capture and repository-health preflight.\n- Preserves capture and healthcheck evidence as a run artifact even when a check fails.\n- Fails closed when acquisition receipts are incomplete or repository health checks fail.\n- Documents the end-to-end acceptance requirements for pregame cards, end-of-day reviews, provenance, qualification, and delivery.\n\n## Important scope boundary\nThis is an operations guardrail, **not** the completed autonomous card pipeline. It does not yet invoke all model-specific forecast builders, register pregame forecasts, generate all league cards, or confirm external notification/delivery. The repository currently lacks verified evidence that those steps are wired end-to-end. The workflow explicitly does not authorize wagering or label source capture as a forecast.\n\n## Validation status\n- Source files read back from the feature branch after commit.\n- Hosted workflow execution and Python tests have not yet been run from this session.\n- Do not merge or treat as production-ready until the workflow run is inspected and its capture/healthcheck behavior is verified."
+    },
+    "pr100": {
+      "url": "https://github.com/georgemunoz1-ui/sports-model/pull/100",
+      "title": "Add opt-in event freshness for CFB personnel-v2 research",
+      "state": "open",
+      "draft": true,
+      "head": "86f30e08fcdedeea022c28a621d3dea48fd7a6c1",
+      "branch": "codex/cfb-personnel-event-freshness-20261031",
+      "base": "codex/model-input-controls-20261030",
+      "mergeable": true,
+      "merged": false,
+      "body": "CFB personnel-v2 currently excludes later-week pre-kickoff updates at its weekly cutoff. This adds an explicit event-refresh inference child of the frozen weekly personnel-v2 fit, using min(requested as-of, kickoff minus the declared buffer) for personnel only. Existing weekly features, training-label checks, selected defaults and original forecasts stay unchanged.\n\nThe new CLI route reuses existing source/value/cutoff validation, checks exact event identity and linked source revisions, requires independently signed pre-cutoff snapshots for historical admission, and retains append-only refresh receipts with raw personnel bytes. No clock authority is enabled. Live unanchored captures remain diagnostic; source authenticity, parent PIT and predictive qualification are separate requirements. No automatic promotion, canonical registration or wagering authority.\n\nValidation:\n- 1,034 scoped tests passed, including 32 new freshness tests. Six initial WNBA dependency failures disappeared after installing the repository-pinned pyarrow and rerunning the identical suite.\n- Tests exercise late quarterback updates, missing timestamps, cutoff equality, conflicting revisions, untrusted/modified signatures, post-start requests and writer completion, duplicate identities, immutable receipts, retained-byte verification after original paths disappear, baseline preservation and market independence.\n- Two synthetic refresh versions retained for one fixture event; these are engineering evidence only.\n- 1,565 protected files hash-match PR #99.\n- 47 retained October 31 CFB captures hash-match; zero supply admissible personnel-v2 inputs. Authentic qualifying predictive events: zero.\n- Repository health remains RED: four existing failures and seven warnings.\n\n[Policy and integration points](https://github.com/georgemunoz1-ui/sports-model/blob/codex/cfb-personnel-event-freshness-20261031/docs/research/cfb_personnel_freshness_20261031/README.md)\n[Execution evidence](https://github.com/georgemunoz1-ui/sports-model/blob/codex/cfb-personnel-event-freshness-20261031/docs/research/cfb_personnel_freshness_20261031/EXECUTION.json)\n\nStacked on draft PR #99 at eb70c0c. Historical acceptance packets remain unchanged; the CI finding check uses a version-bound successor after re-executing their scope. A dedicated workflow tests this stacked PR. Draft only; not merged or activated."
+    },
+    "issue96": {
+      "url": "https://github.com/georgemunoz1-ui/sports-model/issues/96",
+      "title": "Unblock end-to-end daily card generation, registration, review, and delivery",
+      "state": "open",
+      "body": "## Incident\nOctober 25 end-of-day review and October 26 pregame card delivery were not proven end-to-end. The repository has a scheduled canonical grading workflow, but its latest inspected run (39999394059) reports successful workflow execution while the canonical registry has zero prospective registrations. The diagnostic shadow-card workflow is manual/repository-dispatch/legacy-branch driven and requires an existing source-bound package artifact for most leagues. Current runtime documentation explicitly says an autonomous daily seven-league card pipeline and verified durable archive/notification are not established.\n\n## Required acceptance criteria\n- [ ] Restore a reproducible, pinned execution environment for every model-specific current runner.\n- [ ] Reconcile operational capture outputs (events.json, report.json, manifest.json) with the acquisition.json bundle contract without weakening source hashes, timestamps, or coverage gates.\n- [ ] Fix qualification evidence value/type validation and rerun clean-interpreter regression tests; resolve any stale-bytecode discrepancy.\n- [ ] Implement a single scheduled orchestration path that runs acquisition, per-league forecast builders, pre-start cutoff checks, full-slate receipts, selector registration, immutable card publication, and durable artifact readback.\n- [ ] Implement a separate end-of-day path that grades only registered immutable forecasts against authenticated settlement sources and produces a review with exclusions/missingness.\n- [ ] Add explicit failure notifications and delivery receipts; a missing card/review or failed upload must alert rather than silently pass.\n- [ ] Recover October 25 only from authentic saved pregame forecasts and verified results; do not retro-register or relabel reconstructions as pregame.\n- [ ] Generate October 26 only as research-only reconstruction unless an authentic pre-start forecast receipt is found.\n- [ ] Demonstrate two successful forward runs, one injected-failure alert, artifact readback, and independent audit before marking operational.\n- [ ] Keep official release and wagering authority OFF until existing qualification gates independently pass.\n\n## Evidence references\n- [Daily operations acceptance standard PR #95](https://github.com/georgemunoz1-ui/sports-model/pull/95)\n- [Current runtime boundaries](https://github.com/georgemunoz1-ui/sports-model/blob/main/docs/ALL_MODELS_CURRENT_RUNTIME.md)\n- [Current refresh contract](https://github.com/georgemunoz1-ui/sports-model/blob/main/docs/CURRENT_SPORTS_DATA.md)\n- [Canonical grading workflow](https://github.com/georgemunoz1-ui/sports-model/blob/main/.github/workflows/canonical-research-grading.yml)\n- [Diagnostic shadow-card workflow](https://github.com/georgemunoz1-ui/sports-model/blob/main/.github/workflows/diagnostic-shadow-card.yml)\n\n## Safety\nDo not merge a workflow change without running and reviewing it. Do not change selected models, original forecasts, selector rules, or action authority as a workaround for missing evidence. A green software check is not forecast qualification."
+    }
+  },
+  "latest_canonical_grading": [
+    {
+      "id": 41337274742,
+      "url": "https://github.com/georgemunoz1-ui/sports-model/actions/runs/41337274742",
+      "created_at": "2026-11-01T18:33:57Z",
+      "status": "completed",
+      "conclusion": "success",
+      "head_sha": "2998e5182bbff5c678101ba8f3e50277e292eac8"
+    }
+  ]
+}

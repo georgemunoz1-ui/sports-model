@@ -1,0 +1,1131 @@
+﻿2026-11-02T06:45:30.0276761Z Current runner version: '2.338.2'
+2026-11-02T06:45:30.0298988Z ##[group]Runner Image Provisioner
+2026-11-02T06:45:30.0299919Z Hosted Compute Agent
+2026-11-02T06:45:30.0300478Z Version: 20261021.618
+2026-11-02T06:45:30.0301043Z Commit: 21505ad2541d5be6135ed84fc33697146cf75b8e
+2026-11-02T06:45:30.0301661Z Build Date: 2026-10-21T00:45:21Z
+2026-11-02T06:45:30.0302306Z Worker ID: {3d5c2c6d-2cf5-48f7-b1bc-924984d27211}
+2026-11-02T06:45:30.0302901Z Region: westus3
+2026-11-02T06:45:30.0303413Z Cloud: Azure
+2026-11-02T06:45:30.0303928Z ##[endgroup]
+2026-11-02T06:45:30.0305293Z ##[group]Operating System
+2026-11-02T06:45:30.0305868Z Ubuntu
+2026-11-02T06:45:30.0306409Z 24.04.5
+2026-11-02T06:45:30.0306834Z LTS
+2026-11-02T06:45:30.0307340Z ##[endgroup]
+2026-11-02T06:45:30.0307820Z ##[group]Runner Image
+2026-11-02T06:45:30.0308379Z Image: ubuntu-24.04
+2026-11-02T06:45:30.0308883Z Version: 20261025.353.1
+2026-11-02T06:45:30.0310205Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20261025.353/images/ubuntu/Ubuntu2404-Readme.md
+2026-11-02T06:45:30.0311485Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20261025.353
+2026-11-02T06:45:30.0312334Z ##[endgroup]
+2026-11-02T06:45:30.0313281Z ##[group]GITHUB_TOKEN Permissions
+2026-11-02T06:45:30.0314834Z Contents: read
+2026-11-02T06:45:30.0315393Z Metadata: read
+2026-11-02T06:45:30.0315873Z ##[endgroup]
+2026-11-02T06:45:30.0317681Z Secret source: Actions
+2026-11-02T06:45:30.0318490Z Cache mode: write
+2026-11-02T06:45:30.0319137Z Prepare workflow directory
+2026-11-02T06:45:30.0585627Z Prepare all required actions
+2026-11-02T06:45:30.0639626Z Getting action download info
+2026-11-02T06:45:30.3686349Z Download action repository 'actions/checkout@v4' (SHA:11d5960a326750d5838078e36cf38b85af677262)
+2026-11-02T06:45:30.4843585Z Download action repository 'actions/setup-python@v5' (SHA:a26af69be951a213d495a4c3e4e4022e16d87065)
+2026-11-02T06:45:30.7923786Z Complete job name: verify
+2026-11-02T06:45:30.8620404Z ##[group]Run actions/checkout@v4
+2026-11-02T06:45:30.8621145Z with:
+2026-11-02T06:45:30.8621536Z   repository: georgemunoz1-ui/sports-model
+2026-11-02T06:45:30.8624734Z   token: ***
+2026-11-02T06:45:30.8625094Z   ssh-strict: true
+2026-11-02T06:45:30.8625454Z   ssh-user: git
+2026-11-02T06:45:30.8625829Z   persist-credentials: true
+2026-11-02T06:45:30.8626235Z   clean: true
+2026-11-02T06:45:30.8626600Z   sparse-checkout-cone-mode: true
+2026-11-02T06:45:30.8627020Z   fetch-depth: 1
+2026-11-02T06:45:30.8627370Z   fetch-tags: false
+2026-11-02T06:45:30.8627733Z   show-progress: true
+2026-11-02T06:45:30.8628100Z   lfs: false
+2026-11-02T06:45:30.8628439Z   submodules: false
+2026-11-02T06:45:30.8628802Z   set-safe-directory: true
+2026-11-02T06:45:30.8629215Z   allow-unsafe-pr-checkout: false
+2026-11-02T06:45:30.8629877Z ##[endgroup]
+2026-11-02T06:45:31.0677932Z Syncing repository: georgemunoz1-ui/sports-model
+2026-11-02T06:45:31.0680139Z ##[group]Getting Git version info
+2026-11-02T06:45:31.0681172Z Working directory is '/home/runner/work/sports-model/sports-model'
+2026-11-02T06:45:31.0682450Z [command]/usr/bin/git version
+2026-11-02T06:45:31.0752847Z git version 2.56.0
+2026-11-02T06:45:31.0772674Z ##[endgroup]
+2026-11-02T06:45:31.0795110Z Temporarily overriding HOME='/home/runner/work/_temp/7786af53-9b2b-4a74-a648-3bfc3919294d' before making global git config changes
+2026-11-02T06:45:31.0797777Z Adding repository directory to the temporary git global config as a safe directory
+2026-11-02T06:45:31.0805868Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/sports-model/sports-model
+2026-11-02T06:45:31.0857534Z Deleting the contents of '/home/runner/work/sports-model/sports-model'
+2026-11-02T06:45:31.0864452Z ##[group]Initializing the repository
+2026-11-02T06:45:31.0868983Z [command]/usr/bin/git init /home/runner/work/sports-model/sports-model
+2026-11-02T06:45:31.0951425Z hint: Using 'master' as the name for the initial branch. This default branch name
+2026-11-02T06:45:31.0952667Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+2026-11-02T06:45:31.0954782Z hint: to use in all of your new repositories, which will suppress this warning,
+2026-11-02T06:45:31.0955535Z hint: call:
+2026-11-02T06:45:31.0956166Z hint:
+2026-11-02T06:45:31.0956858Z hint: 	git config --global init.defaultBranch <name>
+2026-11-02T06:45:31.0957696Z hint:
+2026-11-02T06:45:31.0958439Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2026-11-02T06:45:31.0959658Z hint: 'development'. The just-created branch can be renamed via this command:
+2026-11-02T06:45:31.0961185Z hint:
+2026-11-02T06:45:31.0962008Z hint: 	git branch -m <name>
+2026-11-02T06:45:31.0963007Z hint:
+2026-11-02T06:45:31.0964178Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2026-11-02T06:45:31.0966306Z Initialized empty Git repository in /home/runner/work/sports-model/sports-model/.git/
+2026-11-02T06:45:31.0977930Z [command]/usr/bin/git remote add origin https://github.com/georgemunoz1-ui/sports-model
+2026-11-02T06:45:31.1023811Z ##[endgroup]
+2026-11-02T06:45:31.1024889Z ##[group]Disabling automatic garbage collection
+2026-11-02T06:45:31.1027900Z [command]/usr/bin/git config --local gc.auto 0
+2026-11-02T06:45:31.1061589Z ##[endgroup]
+2026-11-02T06:45:31.1062667Z ##[group]Setting up auth
+2026-11-02T06:45:31.1067529Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-11-02T06:45:31.1103130Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-11-02T06:45:31.1640564Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-11-02T06:45:31.1678388Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-11-02T06:45:31.1883785Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-11-02T06:45:31.1922083Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-11-02T06:45:31.2129935Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2026-11-02T06:45:31.2174944Z ##[endgroup]
+2026-11-02T06:45:31.2175914Z ##[group]Fetching the repository
+2026-11-02T06:45:31.2185737Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +f51692faca0422791fa85886a1f2622fe0b26d4c:refs/remotes/pull/102/merge
+2026-11-02T06:45:33.2097607Z From https://github.com/georgemunoz1-ui/sports-model
+2026-11-02T06:45:33.2098864Z  * [new ref]         f51692faca0422791fa85886a1f2622fe0b26d4c -> pull/102/merge
+2026-11-02T06:45:33.2101839Z ##[endgroup]
+2026-11-02T06:45:33.2103000Z ##[group]Determining the checkout info
+2026-11-02T06:45:33.2104259Z ##[endgroup]
+2026-11-02T06:45:33.2109488Z [command]/usr/bin/git sparse-checkout disable
+2026-11-02T06:45:33.2170397Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+2026-11-02T06:45:33.2205898Z ##[group]Checking out the ref
+2026-11-02T06:45:33.2209098Z [command]/usr/bin/git checkout --progress --force refs/remotes/pull/102/merge
+2026-11-02T06:45:33.4981816Z Note: switching to 'refs/remotes/pull/102/merge'.
+2026-11-02T06:45:33.4982442Z 
+2026-11-02T06:45:33.4982868Z You are in 'detached HEAD' state. You can look around, make experimental
+2026-11-02T06:45:33.4983792Z changes and commit them, and you can discard any commits you make in this
+2026-11-02T06:45:33.4984751Z state without impacting any branches by switching back to a branch.
+2026-11-02T06:45:33.4985308Z 
+2026-11-02T06:45:33.4985730Z If you want to create a new branch to retain commits you create, you may
+2026-11-02T06:45:33.4986780Z do so (now or later) by using -c with the switch command. Example:
+2026-11-02T06:45:33.4987350Z 
+2026-11-02T06:45:33.4987928Z   git switch -c <new-branch-name>
+2026-11-02T06:45:33.4988361Z 
+2026-11-02T06:45:33.4988650Z Or undo this operation with:
+2026-11-02T06:45:33.4989030Z 
+2026-11-02T06:45:33.4989286Z   git switch -
+2026-11-02T06:45:33.4989624Z 
+2026-11-02T06:45:33.4990334Z Turn off this advice by setting config variable advice.detachedHead to false
+2026-11-02T06:45:33.4991119Z 
+2026-11-02T06:45:33.4991936Z HEAD is now at f51692f Merge 7fcf51389fc6cca0f16f32c9ac399c6f5969ce77 into f3c9cb9a13ac253d970719b40cbc4d99a9c9c50c
+2026-11-02T06:45:33.5000845Z ##[endgroup]
+2026-11-02T06:45:33.5047503Z [command]/usr/bin/git log -1 --format=%H
+2026-11-02T06:45:33.5077172Z f51692faca0422791fa85886a1f2622fe0b26d4c
+2026-11-02T06:45:33.5461488Z ##[group]Run actions/setup-python@v5
+2026-11-02T06:45:33.5462469Z with:
+2026-11-02T06:45:33.5463200Z   python-version: 3.12
+2026-11-02T06:45:33.5464027Z   check-latest: false
+2026-11-02T06:45:33.5471140Z   token: ***
+2026-11-02T06:45:33.5471919Z   update-environment: true
+2026-11-02T06:45:33.5472797Z   allow-prereleases: false
+2026-11-02T06:45:33.5473663Z   freethreaded: false
+2026-11-02T06:45:33.5474434Z ##[endgroup]
+2026-11-02T06:45:33.6564012Z ##[group]Installed versions
+2026-11-02T06:45:33.6630602Z (node:2098) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-11-02T06:45:33.6633497Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-11-02T06:45:33.6635338Z Successfully set up CPython (3.12.15)
+2026-11-02T06:45:33.6637419Z ##[endgroup]
+2026-11-02T06:45:33.6907697Z ##[group]Run python -m pip install -r requirements-consolidated.txt
+2026-11-02T06:45:33.6910409Z [36;1mpython -m pip install -r requirements-consolidated.txt[0m
+2026-11-02T06:45:33.6943356Z shell: /usr/bin/bash -e {0}
+2026-11-02T06:45:33.6944223Z env:
+2026-11-02T06:45:33.6945092Z   pythonLocation: /opt/hostedtoolcache/Python/3.12.15/x64
+2026-11-02T06:45:33.6946733Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.12.15/x64/lib/pkgconfig
+2026-11-02T06:45:33.6948198Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+2026-11-02T06:45:33.6949429Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+2026-11-02T06:45:33.6950907Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+2026-11-02T06:45:33.6952164Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.12.15/x64/lib
+2026-11-02T06:45:33.6953482Z ##[endgroup]
+2026-11-02T06:45:34.6023989Z Collecting numpy==2.3.5 (from -r /home/runner/work/sports-model/sports-model/requirements-nfl-context.txt (line 1))
+2026-11-02T06:45:34.6432305Z   Downloading numpy-2.3.5-cp312-cp312-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl.metadata (62 kB)
+2026-11-02T06:45:34.7801046Z Collecting pandas==2.2.3 (from -r /home/runner/work/sports-model/sports-model/requirements-nfl-context.txt (line 2))
+2026-11-02T06:45:34.7834549Z   Downloading pandas-2.2.3-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (89 kB)
+2026-11-02T06:45:34.8803006Z Collecting scikit-learn==1.8.0 (from -r /home/runner/work/sports-model/sports-model/requirements-nfl-context.txt (line 3))
+2026-11-02T06:45:34.8848189Z   Downloading scikit_learn-1.8.0-cp312-cp312-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl.metadata (11 kB)
+2026-11-02T06:45:35.0101355Z Collecting scipy==1.17.0 (from -r /home/runner/work/sports-model/sports-model/requirements-nfl-context.txt (line 4))
+2026-11-02T06:45:35.0142621Z   Downloading scipy-1.17.0-cp312-cp312-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl.metadata (62 kB)
+2026-11-02T06:45:35.0977174Z Collecting pyarrow==19.0.1 (from -r requirements-consolidated.txt (line 3))
+2026-11-02T06:45:35.1008723Z   Downloading pyarrow-19.0.1-cp312-cp312-manylinux_2_28_x86_64.whl.metadata (3.3 kB)
+2026-11-02T06:45:35.1275456Z Collecting pytest==8.3.5 (from -r requirements-consolidated.txt (line 4))
+2026-11-02T06:45:35.1305781Z   Downloading pytest-8.3.5-py3-none-any.whl.metadata (7.6 kB)
+2026-11-02T06:45:35.3093314Z Collecting cryptography==50.0.2 (from -r requirements-consolidated.txt (line 5))
+2026-11-02T06:45:35.3125909Z   Downloading cryptography-50.0.2-cp311-abi3-manylinux_2_34_x86_64.whl.metadata (4.4 kB)
+2026-11-02T06:45:35.3459504Z Collecting PyYAML==6.0.2 (from -r requirements-consolidated.txt (line 6))
+2026-11-02T06:45:35.3489517Z   Downloading PyYAML-6.0.2-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (2.1 kB)
+2026-11-02T06:45:35.3760897Z Collecting xgboost==3.4.1 (from -r requirements-consolidated.txt (line 7))
+2026-11-02T06:45:35.3790199Z   Downloading xgboost-3.4.1-py3-none-manylinux_2_28_x86_64.whl.metadata (2.0 kB)
+2026-11-02T06:45:35.4009934Z Collecting jsonschema==4.23.0 (from -r requirements-consolidated.txt (line 8))
+2026-11-02T06:45:35.4039189Z   Downloading jsonschema-4.23.0-py3-none-any.whl.metadata (7.9 kB)
+2026-11-02T06:45:35.4339281Z Collecting python-dateutil>=2.8.2 (from pandas==2.2.3->-r /home/runner/work/sports-model/sports-model/requirements-nfl-context.txt (line 2))
+2026-11-02T06:45:35.4370861Z   Downloading python_dateutil-4.0.0-py3-none-any.whl.metadata (7.3 kB)
+2026-11-02T06:45:35.4728831Z Collecting pytz>=2020.1 (from pandas==2.2.3->-r /home/runner/work/sports-model/sports-model/requirements-nfl-context.txt (line 2))
+2026-11-02T06:45:35.4757075Z   Downloading pytz-2026.6-py2.py3-none-any.whl.metadata (22 kB)
+2026-11-02T06:45:35.4940292Z Collecting tzdata>=2022.7 (from pandas==2.2.3->-r /home/runner/work/sports-model/sports-model/requirements-nfl-context.txt (line 2))
+2026-11-02T06:45:35.4970252Z   Downloading tzdata-2026.6-py2.py3-none-any.whl.metadata (1.4 kB)
+2026-11-02T06:45:35.5192369Z Collecting joblib>=1.3.0 (from scikit-learn==1.8.0->-r /home/runner/work/sports-model/sports-model/requirements-nfl-context.txt (line 3))
+2026-11-02T06:45:35.5219633Z   Downloading joblib-1.6.0-py3-none-any.whl.metadata (6.5 kB)
+2026-11-02T06:45:35.5384069Z Collecting threadpoolctl>=3.2.0 (from scikit-learn==1.8.0->-r /home/runner/work/sports-model/sports-model/requirements-nfl-context.txt (line 3))
+2026-11-02T06:45:35.5413116Z   Downloading threadpoolctl-3.7.0-py3-none-any.whl.metadata (24 kB)
+2026-11-02T06:45:35.5589239Z Collecting iniconfig (from pytest==8.3.5->-r requirements-consolidated.txt (line 4))
+2026-11-02T06:45:35.5617704Z   Downloading iniconfig-2.3.1-py3-none-any.whl.metadata (2.8 kB)
+2026-11-02T06:45:35.5808717Z Collecting packaging (from pytest==8.3.5->-r requirements-consolidated.txt (line 4))
+2026-11-02T06:45:35.5836460Z   Downloading packaging-26.3-py3-none-any.whl.metadata (3.5 kB)
+2026-11-02T06:45:35.6000712Z Collecting pluggy<2,>=1.5 (from pytest==8.3.5->-r requirements-consolidated.txt (line 4))
+2026-11-02T06:45:35.6028472Z   Downloading pluggy-1.7.0-py3-none-any.whl.metadata (5.0 kB)
+2026-11-02T06:45:35.6889643Z Collecting cffi>=2.0.0 (from cryptography==50.0.2->-r requirements-consolidated.txt (line 5))
+2026-11-02T06:45:35.6919057Z   Downloading cffi-2.1.1-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.whl.metadata (2.5 kB)
+2026-11-02T06:45:36.0664291Z Collecting nvidia-nccl-cu13 (from xgboost==3.4.1->-r requirements-consolidated.txt (line 7))
+2026-11-02T06:45:36.0695308Z   Downloading nvidia_nccl_cu13-2.32.3-py3-none-manylinux_2_27_x86_64.whl.metadata (2.1 kB)
+2026-11-02T06:45:36.4988314Z Collecting attrs>=22.2.0 (from jsonschema==4.23.0->-r requirements-consolidated.txt (line 8))
+2026-11-02T06:45:36.5021672Z   Downloading attrs-26.1.0-py3-none-any.whl.metadata (8.8 kB)
+2026-11-02T06:45:36.5189337Z Collecting jsonschema-specifications>=2023.03.6 (from jsonschema==4.23.0->-r requirements-consolidated.txt (line 8))
+2026-11-02T06:45:36.5219553Z   Downloading jsonschema_specifications-2025.9.1-py3-none-any.whl.metadata (2.9 kB)
+2026-11-02T06:45:36.5428306Z Collecting referencing>=0.28.4 (from jsonschema==4.23.0->-r requirements-consolidated.txt (line 8))
+2026-11-02T06:45:36.5456446Z   Downloading referencing-0.37.0-py3-none-any.whl.metadata (2.8 kB)
+2026-11-02T06:45:36.7536757Z Collecting rpds-py>=0.7.1 (from jsonschema==4.23.0->-r requirements-consolidated.txt (line 8))
+2026-11-02T06:45:36.7567717Z   Downloading rpds_py-2026.9.1-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (4.1 kB)
+2026-11-02T06:45:36.7754727Z Collecting pycparser (from cffi>=2.0.0->cryptography==50.0.2->-r requirements-consolidated.txt (line 5))
+2026-11-02T06:45:36.7783449Z   Downloading pycparser-3.12-py3-none-any.whl.metadata (9.7 kB)
+2026-11-02T06:45:36.7957723Z Collecting cloudpickle>=3.0 (from joblib>=1.3.0->scikit-learn==1.8.0->-r /home/runner/work/sports-model/sports-model/requirements-nfl-context.txt (line 3))
+2026-11-02T06:45:36.7985949Z   Downloading cloudpickle-3.1.2-py3-none-any.whl.metadata (7.1 kB)
+2026-11-02T06:45:36.8222412Z Collecting typing-extensions>=4.4.0 (from referencing>=0.28.4->jsonschema==4.23.0->-r requirements-consolidated.txt (line 8))
+2026-11-02T06:45:36.8253147Z   Downloading typing_extensions-4.16.0-py3-none-any.whl.metadata (3.3 kB)
+2026-11-02T06:45:36.8348926Z Downloading numpy-2.3.5-cp312-cp312-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl (16.6 MB)
+2026-11-02T06:45:36.9956037Z    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 16.6/16.6 MB 104.3 MB/s  0:00:00
+2026-11-02T06:45:36.9988330Z Downloading pandas-2.2.3-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (12.7 MB)
+2026-11-02T06:45:37.1167657Z    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 12.7/12.7 MB 109.9 MB/s  0:00:00
+2026-11-02T06:45:37.1199886Z Downloading scikit_learn-1.8.0-cp312-cp312-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl (8.9 MB)
+2026-11-02T06:45:37.2010091Z    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 8.9/8.9 MB 110.2 MB/s  0:00:00
+2026-11-02T06:45:37.2044237Z Downloading scipy-1.17.0-cp312-cp312-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl (35.0 MB)
+2026-11-02T06:45:37.5401321Z    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 35.0/35.0 MB 104.8 MB/s  0:00:00
+2026-11-02T06:45:37.5455038Z Downloading pyarrow-19.0.1-cp312-cp312-manylinux_2_28_x86_64.whl (42.1 MB)
+2026-11-02T06:45:37.9147578Z    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 42.1/42.1 MB 113.9 MB/s  0:00:00
+2026-11-02T06:45:37.9182183Z Downloading pytest-8.3.5-py3-none-any.whl (343 kB)
+2026-11-02T06:45:37.9241517Z Downloading cryptography-50.0.2-cp311-abi3-manylinux_2_34_x86_64.whl (4.8 MB)
+2026-11-02T06:45:37.9567680Z    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 4.8/4.8 MB 148.1 MB/s  0:00:00
+2026-11-02T06:45:37.9603777Z Downloading PyYAML-6.0.2-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (767 kB)
+2026-11-02T06:45:38.0205379Z    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 767.5/767.5 kB 8.7 MB/s  0:00:00
+2026-11-02T06:45:38.0253210Z Downloading xgboost-3.4.1-py3-none-manylinux_2_28_x86_64.whl (57.6 MB)
+2026-11-02T06:45:38.4928686Z    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 57.6/57.6 MB 123.2 MB/s  0:00:00
+2026-11-02T06:45:38.4958994Z Downloading jsonschema-4.23.0-py3-none-any.whl (88 kB)
+2026-11-02T06:45:38.5004938Z Downloading pluggy-1.7.0-py3-none-any.whl (27 kB)
+2026-11-02T06:45:38.5049513Z Downloading attrs-26.1.0-py3-none-any.whl (67 kB)
+2026-11-02T06:45:38.5093053Z Downloading cffi-2.1.1-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.whl (221 kB)
+2026-11-02T06:45:38.5142607Z Downloading joblib-1.6.0-py3-none-any.whl (306 kB)
+2026-11-02T06:45:38.5199113Z Downloading cloudpickle-3.1.2-py3-none-any.whl (22 kB)
+2026-11-02T06:45:38.5240479Z Downloading jsonschema_specifications-2025.9.1-py3-none-any.whl (18 kB)
+2026-11-02T06:45:38.5284839Z Downloading python_dateutil-4.0.0-py3-none-any.whl (92 kB)
+2026-11-02T06:45:38.5330651Z Downloading pytz-2026.6-py2.py3-none-any.whl (506 kB)
+2026-11-02T06:45:38.5404167Z Downloading referencing-0.37.0-py3-none-any.whl (26 kB)
+2026-11-02T06:45:38.5448322Z Downloading rpds_py-2026.9.1-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (371 kB)
+2026-11-02T06:45:38.5518678Z Downloading threadpoolctl-3.7.0-py3-none-any.whl (26 kB)
+2026-11-02T06:45:38.5565554Z Downloading typing_extensions-4.16.0-py3-none-any.whl (45 kB)
+2026-11-02T06:45:38.5609059Z Downloading tzdata-2026.6-py2.py3-none-any.whl (348 kB)
+2026-11-02T06:45:38.5658975Z Downloading iniconfig-2.3.1-py3-none-any.whl (7.6 kB)
+2026-11-02T06:45:38.5710001Z Downloading nvidia_nccl_cu13-2.32.3-py3-none-manylinux_2_27_x86_64.whl (305.1 MB)
+2026-11-02T06:45:41.2229330Z    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 305.1/305.1 MB 106.1 MB/s  0:00:02
+2026-11-02T06:45:41.2261892Z Downloading packaging-26.3-py3-none-any.whl (129 kB)
+2026-11-02T06:45:41.2307280Z Downloading pycparser-3.12-py3-none-any.whl (62 kB)
+2026-11-02T06:45:41.7508993Z Installing collected packages: pytz, tzdata, typing-extensions, threadpoolctl, rpds-py, PyYAML, pycparser, pyarrow, pluggy, packaging, nvidia-nccl-cu13, numpy, iniconfig, cloudpickle, attrs, scipy, referencing, python-dateutil, pytest, joblib, cffi, xgboost, scikit-learn, pandas, jsonschema-specifications, cryptography, jsonschema
+2026-11-02T06:45:55.1199983Z 
+2026-11-02T06:45:55.1222078Z Successfully installed PyYAML-6.0.2 attrs-26.1.0 cffi-2.1.1 cloudpickle-3.1.2 cryptography-50.0.2 iniconfig-2.3.1 joblib-1.6.0 jsonschema-4.23.0 jsonschema-specifications-2025.9.1 numpy-2.3.5 nvidia-nccl-cu13-2.32.3 packaging-26.3 pandas-2.2.3 pluggy-1.7.0 pyarrow-19.0.1 pycparser-3.12 pytest-8.3.5 python-dateutil-4.0.0 pytz-2026.6 referencing-0.37.0 rpds-py-2026.9.1 scikit-learn-1.8.0 scipy-1.17.0 threadpoolctl-3.7.0 typing-extensions-4.16.0 tzdata-2026.6 xgboost-3.4.1
+2026-11-02T06:45:55.2533479Z ##[group]Run python -m pytest -q tests/test_research_selection.py tests/test_research_selection_cli.py tests/test_validation_registry.py tests/test_selection_evaluation.py tests/test_overhaul_adversarial.py tests/test_overhaul_integration.py tests/test_integrity_reporting.py tests/test_current_freshness.py tests/test_nba_history_scope.py tests/test_model_defaults.py tests/test_current_runtime_contracts.py tests/test_card_disclosures.py tests/test_nhl_season_rollover_unittest.py tests/test_nhl_atomic_capture.py tests/test_finding_evidence.py tests/test_semantic_identity.py tests/test_semantic_distribution_identity.py tests/test_semantic_spread_identity.py tests/test_selection_integration.py tests/test_canonical_forecasts.py tests/test_canonical_results.py tests/test_evaluation_walk_forward_cli.py tests/test_canonical_grading_preflight.py tests/test_blind_canonical_grading_preflight.py tests/test_operational_rest_golden_vectors.py tests/test_procedure_lineage.py tests/test_blind_conformance.py tests/test_ci_storage_archive.py tests/test_ci_storage_monitor.py
+2026-11-02T06:45:55.2539009Z [36;1mpython -m pytest -q tests/test_research_selection.py tests/test_research_selection_cli.py tests/test_validation_registry.py tests/test_selection_evaluation.py tests/test_overhaul_adversarial.py tests/test_overhaul_integration.py tests/test_integrity_reporting.py tests/test_current_freshness.py tests/test_nba_history_scope.py tests/test_model_defaults.py tests/test_current_runtime_contracts.py tests/test_card_disclosures.py tests/test_nhl_season_rollover_unittest.py tests/test_nhl_atomic_capture.py tests/test_finding_evidence.py tests/test_semantic_identity.py tests/test_semantic_distribution_identity.py tests/test_semantic_spread_identity.py tests/test_selection_integration.py tests/test_canonical_forecasts.py tests/test_canonical_results.py tests/test_evaluation_walk_forward_cli.py tests/test_canonical_grading_preflight.py tests/test_blind_canonical_grading_preflight.py tests/test_operational_rest_golden_vectors.py tests/test_procedure_lineage.py tests/test_blind_conformance.py tests/test_ci_storage_archive.py tests/test_ci_storage_monitor.py[0m
+2026-11-02T06:45:55.2561151Z shell: /usr/bin/bash -e {0}
+2026-11-02T06:45:55.2561358Z env:
+2026-11-02T06:45:55.2561583Z   pythonLocation: /opt/hostedtoolcache/Python/3.12.15/x64
+2026-11-02T06:45:55.2561930Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.12.15/x64/lib/pkgconfig
+2026-11-02T06:45:55.2562263Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+2026-11-02T06:45:55.2562569Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+2026-11-02T06:45:55.2562880Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+2026-11-02T06:45:55.2563179Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.12.15/x64/lib
+2026-11-02T06:45:55.2563437Z ##[endgroup]
+2026-11-02T06:46:02.0152668Z ........................................................................ [ 11%]
+2026-11-02T06:46:02.7916914Z ........................................................................ [ 23%]
+2026-11-02T06:46:02.9208182Z ........................................................................ [ 35%]
+2026-11-02T06:46:04.3712280Z ........................................................................ [ 46%]
+2026-11-02T06:46:09.4791623Z ........................................................................ [ 58%]
+2026-11-02T06:46:15.7118776Z ........................................................................ [ 70%]
+2026-11-02T06:46:16.5155600Z ........................................................................ [ 81%]
+2026-11-02T06:46:17.5658637Z ........................................................................ [ 93%]
+2026-11-02T06:46:21.8565245Z .........................................                                [100%]
+2026-11-02T06:46:21.8566095Z 617 passed in 26.25s
+2026-11-02T06:46:22.0887439Z ##[group]Run python scripts/run_nfl_integrated.py \
+2026-11-02T06:46:22.0887779Z [36;1mpython scripts/run_nfl_integrated.py \[0m
+2026-11-02T06:46:22.0888039Z [36;1m  --date 2026-09-14 \[0m
+2026-11-02T06:46:22.0888281Z [36;1m  --replay-cutoff-utc 2026-09-15T00:12:00Z \[0m
+2026-11-02T06:46:22.0888560Z [36;1m  --identity-semantics market_blind_numeric.v2 \[0m
+2026-11-02T06:46:22.0888868Z [36;1m  --simulations 100000 \[0m
+2026-11-02T06:46:22.0889113Z [36;1m  --output "$RUNNER_TEMP/nfl-entrypoint-replay"[0m
+2026-11-02T06:46:22.0889365Z [36;1mpython - <<'PY'[0m
+2026-11-02T06:46:22.0889557Z [36;1mimport hashlib, json, os[0m
+2026-11-02T06:46:22.0889951Z [36;1mfrom pathlib import Path[0m
+2026-11-02T06:46:22.0890389Z [36;1mroot = Path(os.environ['RUNNER_TEMP']) / 'nfl-entrypoint-replay'[0m
+2026-11-02T06:46:22.0891033Z [36;1mrows = [{'path': str(p.relative_to(root)), 'sha256': hashlib.sha256(p.read_bytes()).hexdigest(), 'bytes': p.stat().st_size}[0m
+2026-11-02T06:46:22.0891530Z [36;1m        for p in sorted(root.rglob('*')) if p.is_file()][0m
+2026-11-02T06:46:22.0891980Z [36;1massert rows and not list(root.rglob('registration.jsonl')), 'Replay must not register prospectively'[0m
+2026-11-02T06:46:22.0892591Z [36;1mprint(json.dumps({'scope': 'ACTUAL_ENTRYPOINT_RETAINED_INPUT_REPLAY_NOT_PREDICTIVE_VALIDATION', 'files': rows}, sort_keys=True))[0m
+2026-11-02T06:46:22.0893027Z [36;1mPY[0m
+2026-11-02T06:46:22.0911310Z shell: /usr/bin/bash -e {0}
+2026-11-02T06:46:22.0911515Z env:
+2026-11-02T06:46:22.0911734Z   pythonLocation: /opt/hostedtoolcache/Python/3.12.15/x64
+2026-11-02T06:46:22.0912081Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.12.15/x64/lib/pkgconfig
+2026-11-02T06:46:22.0912441Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+2026-11-02T06:46:22.0912738Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+2026-11-02T06:46:22.0913034Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+2026-11-02T06:46:22.0913346Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.12.15/x64/lib
+2026-11-02T06:46:22.0913616Z ##[endgroup]
+2026-11-02T06:46:23.6328146Z {"research_selection": {"BLOCKED": 1}, "wagering_status": "OFF"}
+2026-11-02T06:46:23.6328815Z ## Input, scenario and decision disclosures
+2026-11-02T06:46:23.6329059Z 
+2026-11-02T06:46:23.6329325Z Research only. PASS describes wagering disposition, not a failed prediction.
+2026-11-02T06:46:23.6329709Z 
+2026-11-02T06:46:23.6329963Z ### 2026_01_DEN_KC
+2026-11-02T06:46:23.6330113Z 
+2026-11-02T06:46:23.6333748Z **PASS:** WAGERING_AUTHORITY_OFF: Research output; no wager is authorized.; MARKET_VALUE_NOT_EVALUATED: This disclosure layer does not qualify a price or betting edge.; PREDICTIVE_QUALIFICATION_NOT_ASSESSED: Disclosures do not establish predictive qualification.; PARENT_WARNING: NEW_FIT_NOT_PROSPECTIVELY_VALIDATED; PARENT_WARNING: HISTORICAL_REPORT_AND_STARTER_PIT_LIMITATIONS; PARENT_WARNING: PRIOR_SNAP_SHARE_IS_NOT_PROMISED_WORKLOAD; PARENT_WARNING: TRAVEL_IS_AIRPORT_PROXY; PARENT_WARNING: EMPIRICAL_SCORE_SETTLEMENT_UNVALIDATED; PARENT_WARNING: FINAL_INACTIVES_VERIFIED; NON_INJURY_SCRATCH_IMPACT_UNFITTED; PARENT_WARNING: DEFAULT_RESEARCH_MODEL:SELECTED_DEFAULT; PARENT_WARNING: VERSIONED_RNG_IDENTITY_REPAIR_NOT_PREDICTIVE_PROMOTION; PARENT_WARNING: ROSTER:ACQUIRE_REQUIRED; PARENT_WARNING: FULL_ROSTER_IMPACTS_NOT_APPLIED
+2026-11-02T06:46:23.6337547Z 
+2026-11-02T06:46:23.6338157Z **Model versus market:** REVIEWED_NONMARKET_FEATURE_PATH. Historical EPA/team state, weather/rest and fitted QB features; independent logistic and Ridge heads.
+2026-11-02T06:46:23.6338909Z 
+2026-11-02T06:46:23.6339233Z - Simulation independence: MARKET_BLIND_NUMERIC_V2_DECLARED; RECEIPT_VERIFICATION_REQUIRED
+2026-11-02T06:46:23.6340202Z - Downstream quotes are benchmarks or contract thresholds; changing a line changes the event being priced.
+2026-11-02T06:46:23.6341024Z - Source-path attribution only; artifact lineage and predictive validation are not certified.
+2026-11-02T06:46:23.6341469Z 
+2026-11-02T06:46:23.6342032Z Winner selected; Ridge margin/total remain diagnostics, with no selected QB joint-score sampler.
+2026-11-02T06:46:23.6342478Z 
+2026-11-02T06:46:23.6343467Z This row declares the separate numeric-v2 procedure introduced after the legacy seed audit. The embedded-payload counterexample remains a legacy.v1 finding; this display does not authenticate the numerical receipt or grant predictive qualification.
+2026-11-02T06:46:23.6344645Z 
+2026-11-02T06:46:23.6344765Z **Reported known inputs:**
+2026-11-02T06:46:23.6344944Z 
+2026-11-02T06:46:23.6345045Z - None supplied.
+2026-11-02T06:46:23.6345182Z 
+2026-11-02T06:46:23.6345286Z **Unknown inputs:**
+2026-11-02T06:46:23.6345435Z 
+2026-11-02T06:46:23.6345824Z - availability_evidence: No structured availability disclosure supplied; numerical use is not assessed here.
+2026-11-02T06:46:23.6346330Z 
+2026-11-02T06:46:23.6346423Z **Assumptions:**
+2026-11-02T06:46:23.6346565Z 
+2026-11-02T06:46:23.6346659Z - None supplied.
+2026-11-02T06:46:23.6346798Z 
+2026-11-02T06:46:23.6347065Z **Availability scenarios:** conditional; no availability weights assigned.
+2026-11-02T06:46:23.6347436Z 
+2026-11-02T06:46:23.6347538Z - None supplied.
+2026-11-02T06:46:23.6347677Z 
+2026-11-02T06:46:23.6347681Z 
+2026-11-02T06:46:23.6347781Z {
+2026-11-02T06:46:23.6348003Z   "event": "2026_01_DEN_KC",
+2026-11-02T06:46:23.6348285Z   "selection_policy": {
+2026-11-02T06:46:23.6348576Z     "policy_id": "nfl.week2.selection.v2",
+2026-11-02T06:46:23.6349157Z     "policy_sha256": "8fdd029c47d30e97aea308622b83e7df0e8e30afb4c41277aef497ef5dd18d3d",
+2026-11-02T06:46:23.6349704Z     "screen_status": "SELECTED_DEFAULT",
+2026-11-02T06:46:23.6350190Z     "presentation_role": "DEFAULT_RESEARCH_MODEL",
+2026-11-02T06:46:23.6350536Z     "headline_eligible": true,
+2026-11-02T06:46:23.6350830Z     "official_eligible": false,
+2026-11-02T06:46:23.6351117Z     "action_authority": false
+2026-11-02T06:46:23.6351375Z   },
+2026-11-02T06:46:23.6351589Z   "flip_diagnostics": {
+2026-11-02T06:46:23.6351889Z     "schema": "nfl.base_qb_flip_diagnostics.v1",
+2026-11-02T06:46:23.6352421Z     "reporter_sha256": "d27715c786011a297d8b5ec0c87be4a7162e6b4307a370731c3a8f03ced3e0a0",
+2026-11-02T06:46:23.6352922Z     "status": "COMPARABLE",
+2026-11-02T06:46:23.6353186Z     "source": {
+2026-11-02T06:46:23.6353420Z       "event_id": "2026_01_DEN_KC",
+2026-11-02T06:46:23.6353711Z       "home_team": "KC",
+2026-11-02T06:46:23.6353970Z       "away_team": "DEN",
+2026-11-02T06:46:23.6354254Z       "start_time_utc": "2026-09-15T00:15:00Z",
+2026-11-02T06:46:23.6354856Z       "forecast_identity": "d20220f27ced842d066f4f7226ab337e18ccbeca9b60b27329ec48eaa9f2b054",
+2026-11-02T06:46:23.6355409Z       "cutoff_utc": "2026-09-15T00:12:00Z",
+2026-11-02T06:46:23.6355960Z       "model_artifact_sha256": "c1cdf49dbb1a98bbf2b3d4286042a316c132dc7d472f3138c3bbbb1e0cb1c3cd",
+2026-11-02T06:46:23.6356596Z       "selected_model_id": "nfl.integrated_context.qb.v1.research",
+2026-11-02T06:46:23.6356996Z       "arm_model_ids": {
+2026-11-02T06:46:23.6357332Z         "base": "nfl.integrated_context.base.v1.research",
+2026-11-02T06:46:23.6357894Z         "qb": "nfl.integrated_context.qb.v1.research",
+2026-11-02T06:46:23.6358370Z         "availability": "nfl.integrated_context.availability.v1.research",
+2026-11-02T06:46:23.6358883Z         "travel": "nfl.integrated_context.travel.v1.research",
+2026-11-02T06:46:23.6359348Z         "combined": "nfl.integrated_context.combined.v1.research"
+2026-11-02T06:46:23.6359846Z       },
+2026-11-02T06:46:23.6360104Z       "mode": "research_pregame",
+2026-11-02T06:46:23.6360424Z       "market_input": false,
+2026-11-02T06:46:23.6360706Z       "source_ids": null,
+2026-11-02T06:46:23.6360967Z       "source_hashes": null,
+2026-11-02T06:46:23.6361247Z       "assimilation": null,
+2026-11-02T06:46:23.6361512Z       "forecast_code_hashes": {
+2026-11-02T06:46:23.6361984Z         "runtime.py": "8951577d6edd2e2e37b370cafe9f90c205b9de8b6b59d9c1aba961f15760c15d",
+2026-11-02T06:46:23.6362838Z         "personnel.py": "4b6863746783775bf61970363f1df2aa33b2919ae69c709de2ff404b4a369055",
+2026-11-02T06:46:23.6363500Z         "model.py": "ba00569e30cd56fa1d50570f828db02e56caf849ddbdf1d0d0fc11272e7a0fc3",
+2026-11-02T06:46:23.6364150Z         "features.py": "3a064779ce6a1a53b4fda66eed9f86a4365208a849b357dcd1cb5719b3e0a115",
+2026-11-02T06:46:23.6364893Z         "recovered_inference.py": "ac70b26355c8a9fe0850caf6e69ec268f363363dffb3b1289cbee13d4d729abd",
+2026-11-02T06:46:23.6365648Z         "operating.py": "e51b7845e3aa785bb2fb1f31615aee0f5b37529b8349d734a946aab3bb0abf3b",
+2026-11-02T06:46:23.6366344Z         "capabilities.py": "525c36a06438af62151ea24c42792a806d668c3a61ae700674767fb7b5892f17",
+2026-11-02T06:46:23.6367034Z         "settlement.py": "a710bebd0dc0ce068e0b190f02ab1245389535f332b419c46eb2ebc67a60eecf",
+2026-11-02T06:46:23.6367742Z         "forecast_stream.py": "05a27454fd000b5ca9ac1137dfa7a68cf22e46137ed2fa1a088e721608e1c2ee",
+2026-11-02T06:46:23.6368453Z         "week2.py": "03a35ca6994a8a154dd1b4b9ba3f44c15bc359b088e2ff4f2d37f4a7f3270d68",
+2026-11-02T06:46:23.6369276Z         "joint_distribution.py": "0d7192a794b4e9946febc0b25db6bd306dfb11723d404f8f3ccc55d2e677f5fb",
+2026-11-02T06:46:23.6370213Z         "qb_assimilation.py": "33667fa0375a1d151ec2a450c497e219cc0d099472e603f1ad6d4814abfef51c",
+2026-11-02T06:46:23.6370955Z         "weekly_state.py": "41e87fa081cbc2fe7625571f3a46f797bdaecc0dad9329676fea805059c6f71f",
+2026-11-02T06:46:23.6371647Z         "assimilation.py": "9cfe2af178382326741be0197e2f19f84e32c132014a4677b55506919c052898"
+2026-11-02T06:46:23.6372127Z       },
+2026-11-02T06:46:23.6372349Z       "target_contract": {
+2026-11-02T06:46:23.6372623Z         "target": "home_win",
+2026-11-02T06:46:23.6372906Z         "period": "FULL_GAME",
+2026-11-02T06:46:23.6373206Z         "probability_orientation": "HOME",
+2026-11-02T06:46:23.6373544Z         "tie_policy": "CONDITIONAL_ON_NON_TIE",
+2026-11-02T06:46:23.6373983Z         "settlement_definition": "FINAL_RESULT_INCLUDING_OVERTIME"
+2026-11-02T06:46:23.6374403Z       }
+2026-11-02T06:46:23.6374628Z     },
+2026-11-02T06:46:23.6375110Z     "source_projection_sha256": "337d922f35c9c4c9ec40cc7d2ab3101fc4292c4ce080850c30c6e324ce7a816d",
+2026-11-02T06:46:23.6376006Z     "source_hash_scope": "Canonical JSON of input bundle excluding flip_diagnostics; not a raw-file hash.",
+2026-11-02T06:46:23.6376577Z     "gap_threshold_pp": 10.0,
+2026-11-02T06:46:23.6376858Z     "numeric_policy": {
+2026-11-02T06:46:23.6377127Z       "pick_tolerance": 0.0,
+2026-11-02T06:46:23.6377431Z       "exact_half": "NEUTRAL_NO_PICK",
+2026-11-02T06:46:23.6377809Z       "gap_threshold_status": "EXPLORATORY_NOT_VALIDATED"
+2026-11-02T06:46:23.6378161Z     },
+2026-11-02T06:46:23.6378364Z     "base": {
+2026-11-02T06:46:23.6378618Z       "home_win_probability": 0.40995274949208094,
+2026-11-02T06:46:23.6378945Z       "pick": "DEN"
+2026-11-02T06:46:23.6379173Z     },
+2026-11-02T06:46:23.6379376Z     "qb": {
+2026-11-02T06:46:23.6379619Z       "home_win_probability": 0.4929274484932703,
+2026-11-02T06:46:23.6380106Z       "pick": "DEN"
+2026-11-02T06:46:23.6380343Z     },
+2026-11-02T06:46:23.6380690Z     "pick_flip": false,
+2026-11-02T06:46:23.6380953Z     "delta_pp": 8.297469900118937,
+2026-11-02T06:46:23.6381253Z     "delta_logit": 0.3358686183251197,
+2026-11-02T06:46:23.6381546Z     "flags": [],
+2026-11-02T06:46:23.6381772Z     "contributions": {
+2026-11-02T06:46:23.6382027Z       "status": "COMPLETE",
+2026-11-02T06:46:23.6407234Z       "units": "LOG_ODDS",
+2026-11-02T06:46:23.6407592Z       "qb_group_signed": 0.17728254686496653,
+2026-11-02T06:46:23.6407958Z       "shared_feature_shift": 0.15238139453699914,
+2026-11-02T06:46:23.6408317Z       "intercept_shift": 0.00620467692315399,
+2026-11-02T06:46:23.6408692Z       "trace_logit_difference": 0.3358686183251196,
+2026-11-02T06:46:23.6409065Z       "qb_absolute_share": 0.2472648889327291,
+2026-11-02T06:46:23.6409401Z       "qb_absolute_sum": 0.23398196350306252,
+2026-11-02T06:46:23.6409920Z       "absolute_feature_sum": 0.9462805840044668,
+2026-11-02T06:46:23.6410314Z       "denominator_excludes_intercept": true,
+2026-11-02T06:46:23.6411136Z       "interpretation": "Fitted-term decomposition, not causal QB attribution or a recovered base.",
+2026-11-02T06:46:23.6411726Z       "shared_feature_differences": {
+2026-11-02T06:46:23.6412101Z         "epa_matchup_edge": 0.009467064171495232,
+2026-11-02T06:46:23.6412501Z         "explosive_matchup_edge": -0.00170165292735662,
+2026-11-02T06:46:23.6412881Z         "location_missing": 0.0,
+2026-11-02T06:46:23.6413284Z         "neutral_pass_rate_diff": -0.02607416522900395,
+2026-11-02T06:46:23.6413616Z         "neutral_site": 0.0004981404159394015,
+2026-11-02T06:46:23.6413945Z         "pace_seconds_sum": -0.0017200676431344591,
+2026-11-02T06:46:23.6414306Z         "point_differential_diff": 0.09626138866492706,
+2026-11-02T06:46:23.6414677Z         "protection_matchup_edge": 0.007303019995549057,
+2026-11-02T06:46:23.6415016Z         "rest_days_diff": 2.3936076056579013e-05,
+2026-11-02T06:46:23.6415332Z         "rest_missing": 0.0,
+2026-11-02T06:46:23.6415608Z         "roof_indoor": -1.7590898137753892e-05,
+2026-11-02T06:46:23.6415909Z         "roof_missing": 0.0,
+2026-11-02T06:46:23.6416252Z         "state_experience_diff_log": -0.0067479241066194014,
+2026-11-02T06:46:23.6416689Z         "state_experience_min_log": 8.624142383053103e-05,
+2026-11-02T06:46:23.6417061Z         "success_matchup_edge": 0.04773343547611869,
+2026-11-02T06:46:23.6417395Z         "temperature_f": 0.0002778805925098826,
+2026-11-02T06:46:23.6417732Z         "weather_missing": 0.015086183121838945,
+2026-11-02T06:46:23.6418036Z         "wind_mph": 0.011905505402985956
+2026-11-02T06:46:23.6418312Z       },
+2026-11-02T06:46:23.6418529Z       "qb_feature_contributions": {
+2026-11-02T06:46:23.6418827Z         "qb_change_diff": -0.01924223724175803,
+2026-11-02T06:46:23.6419152Z         "qb_experience_diff": 0.03901515832168394,
+2026-11-02T06:46:23.6419489Z         "qb_quality_diff": 0.1666170968623306,
+2026-11-02T06:46:23.6420094Z         "qb_quality_sum": -0.009107471077289958,
+2026-11-02T06:46:23.6420414Z         "qb_unknown_count": 0.0
+2026-11-02T06:46:23.6420676Z       },
+2026-11-02T06:46:23.6420883Z       "share_status": "DEFINED"
+2026-11-02T06:46:23.6421133Z     },
+2026-11-02T06:46:23.6421338Z     "feature_references": {
+2026-11-02T06:46:23.6421601Z       "status": "TRACE_VERIFIED",
+2026-11-02T06:46:23.6422146Z       "model_artifact_sha256": "c1cdf49dbb1a98bbf2b3d4286042a316c132dc7d472f3138c3bbbb1e0cb1c3cd",
+2026-11-02T06:46:23.6422659Z       "arms": {
+2026-11-02T06:46:23.6422863Z         "base": {
+2026-11-02T06:46:23.6423163Z           "model_id": "nfl.integrated_context.base.v1.research",
+2026-11-02T06:46:23.6423733Z           "reference_sha256": "49588358a68a0d86199648a76c9a00de2b967d3a1186069a72ca57912e13c967",
+2026-11-02T06:46:23.6424251Z           "intercept": 0.20319144789132995,
+2026-11-02T06:46:23.6424545Z           "features": {
+2026-11-02T06:46:23.6424786Z             "epa_matchup_edge": {
+2026-11-02T06:46:23.6425060Z               "raw_value": -0.1805891935,
+2026-11-02T06:46:23.6425357Z               "imputed": false,
+2026-11-02T06:46:23.6425802Z               "used_value": -0.1805891935,
+2026-11-02T06:46:23.6426103Z               "impute_value": 0.0,
+2026-11-02T06:46:23.6426380Z               "center": -0.0027280657118337118,
+2026-11-02T06:46:23.6426676Z               "scale": 0.2573366739045745,
+2026-11-02T06:46:23.6426988Z               "coefficient": -0.12315048999438476,
+2026-11-02T06:46:23.6427344Z               "contribution": 0.08511684209530461
+2026-11-02T06:46:23.6427636Z             },
+2026-11-02T06:46:23.6427863Z             "success_matchup_edge": {
+2026-11-02T06:46:23.6428163Z               "raw_value": -0.1286536627,
+2026-11-02T06:46:23.6428453Z               "imputed": false,
+2026-11-02T06:46:23.6428726Z               "used_value": -0.1286536627,
+2026-11-02T06:46:23.6429037Z               "impute_value": -0.0026476382330842,
+2026-11-02T06:46:23.6429350Z               "center": -0.001225186996095302,
+2026-11-02T06:46:23.6429650Z               "scale": 0.09783792430335612,
+2026-11-02T06:46:23.6430213Z               "coefficient": 0.18684444279120324,
+2026-11-02T06:46:23.6430559Z               "contribution": -0.24335453463633758
+2026-11-02T06:46:23.6430854Z             },
+2026-11-02T06:46:23.6431076Z             "explosive_matchup_edge": {
+2026-11-02T06:46:23.6431369Z               "raw_value": -0.0278972195,
+2026-11-02T06:46:23.6431650Z               "imputed": false,
+2026-11-02T06:46:23.6431906Z               "used_value": -0.0278972195,
+2026-11-02T06:46:23.6432203Z               "impute_value": -0.0004895649319411,
+2026-11-02T06:46:23.6432517Z               "center": -0.0017925031204035515,
+2026-11-02T06:46:23.6432880Z               "scale": 0.054594169440729666,
+2026-11-02T06:46:23.6433192Z               "coefficient": 0.02514676021844589,
+2026-11-02T06:46:23.6433514Z               "contribution": -0.012024160273761922
+2026-11-02T06:46:23.6433808Z             },
+2026-11-02T06:46:23.6434028Z             "protection_matchup_edge": {
+2026-11-02T06:46:23.6434326Z               "raw_value": -0.020154273,
+2026-11-02T06:46:23.6434626Z               "imputed": false,
+2026-11-02T06:46:23.6434895Z               "used_value": -0.020154273,
+2026-11-02T06:46:23.6435211Z               "impute_value": 0.0001604578955147,
+2026-11-02T06:46:23.6435541Z               "center": -0.0001707685828902097,
+2026-11-02T06:46:23.6435856Z               "scale": 0.03466253734612274,
+2026-11-02T06:46:23.6436162Z               "coefficient": 0.05916428815113684,
+2026-11-02T06:46:23.6436492Z               "contribution": -0.03410915368939803
+2026-11-02T06:46:23.6436784Z             },
+2026-11-02T06:46:23.6437002Z             "neutral_pass_rate_diff": {
+2026-11-02T06:46:23.6437291Z               "raw_value": 0.019423191,
+2026-11-02T06:46:23.6437573Z               "imputed": false,
+2026-11-02T06:46:23.6437833Z               "used_value": 0.019423191,
+2026-11-02T06:46:23.6438130Z               "impute_value": -0.0024537913487918,
+2026-11-02T06:46:23.6438449Z               "center": -0.0011902408647736673,
+2026-11-02T06:46:23.6438752Z               "scale": 0.07554712428187581,
+2026-11-02T06:46:23.6439067Z               "coefficient": 0.0663918138837348,
+2026-11-02T06:46:23.6439388Z               "contribution": 0.01811535706858703
+2026-11-02T06:46:23.6439674Z             },
+2026-11-02T06:46:23.6440047Z             "pace_seconds_sum": {
+2026-11-02T06:46:23.6440326Z               "raw_value": -0.102089052,
+2026-11-02T06:46:23.6440612Z               "imputed": false,
+2026-11-02T06:46:23.6440883Z               "used_value": -0.102089052,
+2026-11-02T06:46:23.6441179Z               "impute_value": 0.5083005704834089,
+2026-11-02T06:46:23.6441489Z               "center": 0.5163314374862923,
+2026-11-02T06:46:23.6441781Z               "scale": 2.1427579485871244,
+2026-11-02T06:46:23.6442085Z               "coefficient": -0.007296172533095324,
+2026-11-02T06:46:23.6442408Z               "contribution": 0.002105745351344237
+2026-11-02T06:46:23.6442694Z             },
+2026-11-02T06:46:23.6442919Z             "point_differential_diff": {
+2026-11-02T06:46:23.6443228Z               "raw_value": -5.6736636076,
+2026-11-02T06:46:23.6443727Z               "imputed": false,
+2026-11-02T06:46:23.6443989Z               "used_value": -5.6736636076,
+2026-11-02T06:46:23.6444285Z               "impute_value": -0.34413934446387,
+2026-11-02T06:46:23.6444585Z               "center": -0.3740918952344867,
+2026-11-02T06:46:23.6444874Z               "scale": 9.00449182605378,
+2026-11-02T06:46:23.6445173Z               "coefficient": 0.551081848639944,
+2026-11-02T06:46:23.6445484Z               "contribution": -0.3243378785463621
+2026-11-02T06:46:23.6445768Z             },
+2026-11-02T06:46:23.6445979Z             "rest_days_diff": {
+2026-11-02T06:46:23.6446245Z               "raw_value": 0,
+2026-11-02T06:46:23.6446497Z               "imputed": false,
+2026-11-02T06:46:23.6446754Z               "used_value": 0,
+2026-11-02T06:46:23.6447017Z               "impute_value": 0.0,
+2026-11-02T06:46:23.6447305Z               "center": -0.0682842287694974,
+2026-11-02T06:46:23.6447718Z               "scale": 2.4484669986852485,
+2026-11-02T06:46:23.6448022Z               "coefficient": 0.055515340341623164,
+2026-11-02T06:46:23.6448338Z               "contribution": 0.0015482431260619232
+2026-11-02T06:46:23.6448623Z             },
+2026-11-02T06:46:23.6448829Z             "neutral_site": {
+2026-11-02T06:46:23.6449074Z               "raw_value": 0.0,
+2026-11-02T06:46:23.6449323Z               "imputed": false,
+2026-11-02T06:46:23.6449606Z               "used_value": 0.0,
+2026-11-02T06:46:23.6450005Z               "impute_value": 0.0,
+2026-11-02T06:46:23.6450276Z               "center": 0.016637781629116118,
+2026-11-02T06:46:23.6450570Z               "scale": 0.12790999121092128,
+2026-11-02T06:46:23.6450867Z               "coefficient": -0.005597281070307039,
+2026-11-02T06:46:23.6451172Z               "contribution": 0.0007280615007704143
+2026-11-02T06:46:23.6451449Z             },
+2026-11-02T06:46:23.6451655Z             "roof_indoor": {
+2026-11-02T06:46:23.6451910Z               "raw_value": 0.0,
+2026-11-02T06:46:23.6452179Z               "imputed": false,
+2026-11-02T06:46:23.6452434Z               "used_value": 0.0,
+2026-11-02T06:46:23.6452702Z               "impute_value": 0.0,
+2026-11-02T06:46:23.6452977Z               "center": 0.28318890814558056,
+2026-11-02T06:46:23.6453266Z               "scale": 0.45054738979256614,
+2026-11-02T06:46:23.6453564Z               "coefficient": -0.002415123158998545,
+2026-11-02T06:46:23.6453877Z               "contribution": 0.0015180114365966925
+2026-11-02T06:46:23.6454164Z             },
+2026-11-02T06:46:23.6454374Z             "temperature_f": {
+2026-11-02T06:46:23.6454627Z               "raw_value": 88,
+2026-11-02T06:46:23.6454883Z               "imputed": false,
+2026-11-02T06:46:23.6455133Z               "used_value": 88,
+2026-11-02T06:46:23.6455385Z               "impute_value": 59.0,
+2026-11-02T06:46:23.6455665Z               "center": 58.75597920277296,
+2026-11-02T06:46:23.6455954Z               "scale": 13.892958072581227,
+2026-11-02T06:46:23.6456259Z               "coefficient": -0.03916952118165512,
+2026-11-02T06:46:23.6456574Z               "contribution": -0.08244999272792919
+2026-11-02T06:46:23.6456857Z             },
+2026-11-02T06:46:23.6457065Z             "wind_mph": {
+2026-11-02T06:46:23.6457302Z               "raw_value": 13.0,
+2026-11-02T06:46:23.6457571Z               "imputed": false,
+2026-11-02T06:46:23.6457833Z               "used_value": 13.0,
+2026-11-02T06:46:23.6458105Z               "impute_value": 7.0,
+2026-11-02T06:46:23.6458377Z               "center": 7.816291161178509,
+2026-11-02T06:46:23.6458664Z               "scale": 4.209777935391821,
+2026-11-02T06:46:23.6458953Z               "coefficient": -0.014088554720008221,
+2026-11-02T06:46:23.6459270Z               "contribution": -0.017347937765161376
+2026-11-02T06:46:23.6459551Z             },
+2026-11-02T06:46:23.6459895Z             "state_experience_min_log": {
+2026-11-02T06:46:23.6460200Z               "raw_value": 6.5850622614,
+2026-11-02T06:46:23.6460479Z               "imputed": false,
+2026-11-02T06:46:23.6460859Z               "used_value": 6.5850622614,
+2026-11-02T06:46:23.6461146Z               "impute_value": 6.679375542747677,
+2026-11-02T06:46:23.6461450Z               "center": 6.525892003070378,
+2026-11-02T06:46:23.6461728Z               "scale": 0.7180809991095924,
+2026-11-02T06:46:23.6462012Z               "coefficient": -0.011210030188818507,
+2026-11-02T06:46:23.6462344Z               "contribution": -0.0009237124822655507
+2026-11-02T06:46:23.6462636Z             },
+2026-11-02T06:46:23.6462853Z             "state_experience_diff_log": {
+2026-11-02T06:46:23.6463149Z               "raw_value": 0.0425264144,
+2026-11-02T06:46:23.6463419Z               "imputed": false,
+2026-11-02T06:46:23.6463672Z               "used_value": 0.0425264144,
+2026-11-02T06:46:23.6463964Z               "impute_value": -0.0004503594470754,
+2026-11-02T06:46:23.6464271Z               "center": 0.0002988136303716734,
+2026-11-02T06:46:23.6464568Z               "scale": 0.11639301154542775,
+2026-11-02T06:46:23.6464983Z               "coefficient": 0.010346118863462274,
+2026-11-02T06:46:23.6465302Z               "contribution": 0.003753591139884618
+2026-11-02T06:46:23.6465592Z             },
+2026-11-02T06:46:23.6465814Z             "rest_missing": {
+2026-11-02T06:46:23.6466066Z               "raw_value": 0.0,
+2026-11-02T06:46:23.6466322Z               "imputed": false,
+2026-11-02T06:46:23.6466580Z               "used_value": 0.0,
+2026-11-02T06:46:23.6466853Z               "impute_value": 0.0,
+2026-11-02T06:46:23.6467135Z               "center": 0.0,
+2026-11-02T06:46:23.6467383Z               "scale": 1.0,
+2026-11-02T06:46:23.6467627Z               "coefficient": 0.0,
+2026-11-02T06:46:23.6467900Z               "contribution": 0.0
+2026-11-02T06:46:23.6468156Z             },
+2026-11-02T06:46:23.6468372Z             "location_missing": {
+2026-11-02T06:46:23.6468638Z               "raw_value": 0.0,
+2026-11-02T06:46:23.6468881Z               "imputed": false,
+2026-11-02T06:46:23.6469126Z               "used_value": 0.0,
+2026-11-02T06:46:23.6469384Z               "impute_value": 0.0,
+2026-11-02T06:46:23.6469643Z               "center": 0.0,
+2026-11-02T06:46:23.6469994Z               "scale": 1.0,
+2026-11-02T06:46:23.6470234Z               "coefficient": 0.0,
+2026-11-02T06:46:23.6470500Z               "contribution": 0.0
+2026-11-02T06:46:23.6470748Z             },
+2026-11-02T06:46:23.6470957Z             "roof_missing": {
+2026-11-02T06:46:23.6471212Z               "raw_value": 0.0,
+2026-11-02T06:46:23.6471455Z               "imputed": false,
+2026-11-02T06:46:23.6471708Z               "used_value": 0.0,
+2026-11-02T06:46:23.6471968Z               "impute_value": 0.0,
+2026-11-02T06:46:23.6472234Z               "center": 0.0,
+2026-11-02T06:46:23.6472487Z               "scale": 1.0,
+2026-11-02T06:46:23.6472739Z               "coefficient": 0.0,
+2026-11-02T06:46:23.6473011Z               "contribution": 0.0
+2026-11-02T06:46:23.6473264Z             },
+2026-11-02T06:46:23.6473485Z             "weather_missing": {
+2026-11-02T06:46:23.6473754Z               "raw_value": 0.0,
+2026-11-02T06:46:23.6474024Z               "imputed": false,
+2026-11-02T06:46:23.6474278Z               "used_value": 0.0,
+2026-11-02T06:46:23.6474538Z               "impute_value": 0.0,
+2026-11-02T06:46:23.6474814Z               "center": 0.3435008665511265,
+2026-11-02T06:46:23.6475104Z               "scale": 0.47487684848784917,
+2026-11-02T06:46:23.6475406Z               "coefficient": -0.047431380594970526,
+2026-11-02T06:46:23.6475741Z               "contribution": 0.03430935912746555
+2026-11-02T06:46:23.6476049Z             }
+2026-11-02T06:46:23.6476246Z           }
+2026-11-02T06:46:23.6476435Z         },
+2026-11-02T06:46:23.6476643Z         "qb": {
+2026-11-02T06:46:23.6476918Z           "model_id": "nfl.integrated_context.qb.v1.research",
+2026-11-02T06:46:23.6477479Z           "reference_sha256": "30ff6dc2ad914b5a1f265e4716d7b47c4db335fd9637d80f4ac198856c6718f0",
+2026-11-02T06:46:23.6477977Z           "intercept": 0.20939612481448394,
+2026-11-02T06:46:23.6478256Z           "features": {
+2026-11-02T06:46:23.6478635Z             "epa_matchup_edge": {
+2026-11-02T06:46:23.6478908Z               "raw_value": -0.1805891935,
+2026-11-02T06:46:23.6479190Z               "imputed": false,
+2026-11-02T06:46:23.6479456Z               "used_value": -0.1805891935,
+2026-11-02T06:46:23.6479856Z               "impute_value": 0.0,
+2026-11-02T06:46:23.6480138Z               "center": -0.0027280657118337118,
+2026-11-02T06:46:23.6480445Z               "scale": 0.2573366739045745,
+2026-11-02T06:46:23.6480741Z               "coefficient": -0.1368478213665062,
+2026-11-02T06:46:23.6481061Z               "contribution": 0.09458390626679984
+2026-11-02T06:46:23.6481345Z             },
+2026-11-02T06:46:23.6481564Z             "success_matchup_edge": {
+2026-11-02T06:46:23.6481854Z               "raw_value": -0.1286536627,
+2026-11-02T06:46:23.6482140Z               "imputed": false,
+2026-11-02T06:46:23.6482406Z               "used_value": -0.1286536627,
+2026-11-02T06:46:23.6482833Z               "impute_value": -0.0026476382330842,
+2026-11-02T06:46:23.6483180Z               "center": -0.001225186996095302,
+2026-11-02T06:46:23.6483484Z               "scale": 0.09783792430335612,
+2026-11-02T06:46:23.6483781Z               "coefficient": 0.15019533260563322,
+2026-11-02T06:46:23.6484082Z               "contribution": -0.1956210991602189
+2026-11-02T06:46:23.6484367Z             },
+2026-11-02T06:46:23.6484581Z             "explosive_matchup_edge": {
+2026-11-02T06:46:23.6484868Z               "raw_value": -0.0278972195,
+2026-11-02T06:46:23.6485147Z               "imputed": false,
+2026-11-02T06:46:23.6485409Z               "used_value": -0.0278972195,
+2026-11-02T06:46:23.6485709Z               "impute_value": -0.0004895649319411,
+2026-11-02T06:46:23.6486028Z               "center": -0.0017925031204035515,
+2026-11-02T06:46:23.6486321Z               "scale": 0.054594169440729666,
+2026-11-02T06:46:23.6486623Z               "coefficient": 0.02870551668584165,
+2026-11-02T06:46:23.6486942Z               "contribution": -0.013725813201118542
+2026-11-02T06:46:23.6487248Z             },
+2026-11-02T06:46:23.6487477Z             "protection_matchup_edge": {
+2026-11-02T06:46:23.6487785Z               "raw_value": -0.020154273,
+2026-11-02T06:46:23.6488095Z               "imputed": false,
+2026-11-02T06:46:23.6488353Z               "used_value": -0.020154273,
+2026-11-02T06:46:23.6488661Z               "impute_value": 0.0001604578955147,
+2026-11-02T06:46:23.6488965Z               "center": -0.0001707685828902097,
+2026-11-02T06:46:23.6489257Z               "scale": 0.03466253734612274,
+2026-11-02T06:46:23.6489549Z               "coefficient": 0.04649678008791336,
+2026-11-02T06:46:23.6489969Z               "contribution": -0.02680613369384897
+2026-11-02T06:46:23.6490247Z             },
+2026-11-02T06:46:23.6490457Z             "neutral_pass_rate_diff": {
+2026-11-02T06:46:23.6490740Z               "raw_value": 0.019423191,
+2026-11-02T06:46:23.6491011Z               "imputed": false,
+2026-11-02T06:46:23.6491265Z               "used_value": 0.019423191,
+2026-11-02T06:46:23.6491576Z               "impute_value": -0.0024537913487918,
+2026-11-02T06:46:23.6491896Z               "center": -0.0011902408647736673,
+2026-11-02T06:46:23.6492174Z               "scale": 0.07554712428187581,
+2026-11-02T06:46:23.6492462Z               "coefficient": -0.02916860584763314,
+2026-11-02T06:46:23.6492783Z               "contribution": -0.00795880816041692
+2026-11-02T06:46:23.6493063Z             },
+2026-11-02T06:46:23.6493281Z             "pace_seconds_sum": {
+2026-11-02T06:46:23.6493555Z               "raw_value": -0.102089052,
+2026-11-02T06:46:23.6493840Z               "imputed": false,
+2026-11-02T06:46:23.6494103Z               "used_value": -0.102089052,
+2026-11-02T06:46:23.6494404Z               "impute_value": 0.5083005704834089,
+2026-11-02T06:46:23.6494696Z               "center": 0.5163314374862923,
+2026-11-02T06:46:23.6494983Z               "scale": 2.1427579485871244,
+2026-11-02T06:46:23.6495279Z               "coefficient": -0.00133633019750987,
+2026-11-02T06:46:23.6495741Z               "contribution": 0.00038567770820977795
+2026-11-02T06:46:23.6496025Z             },
+2026-11-02T06:46:23.6496241Z             "point_differential_diff": {
+2026-11-02T06:46:23.6496535Z               "raw_value": -5.6736636076,
+2026-11-02T06:46:23.6496803Z               "imputed": false,
+2026-11-02T06:46:23.6497070Z               "used_value": -5.6736636076,
+2026-11-02T06:46:23.6497374Z               "impute_value": -0.34413934446387,
+2026-11-02T06:46:23.6497679Z               "center": -0.3740918952344867,
+2026-11-02T06:46:23.6497963Z               "scale": 9.00449182605378,
+2026-11-02T06:46:23.6498251Z               "coefficient": 0.3875243133441297,
+2026-11-02T06:46:23.6498561Z               "contribution": -0.22807648988143503
+2026-11-02T06:46:23.6498837Z             },
+2026-11-02T06:46:23.6499046Z             "rest_days_diff": {
+2026-11-02T06:46:23.6499298Z               "raw_value": 0,
+2026-11-02T06:46:23.6499545Z               "imputed": false,
+2026-11-02T06:46:23.6500136Z               "used_value": 0,
+2026-11-02T06:46:23.6500421Z               "impute_value": 0.0,
+2026-11-02T06:46:23.6500704Z               "center": -0.0682842287694974,
+2026-11-02T06:46:23.6500995Z               "scale": 2.4484669986852485,
+2026-11-02T06:46:23.6501289Z               "coefficient": 0.05637361601316056,
+2026-11-02T06:46:23.6501617Z               "contribution": 0.0015721792021185022
+2026-11-02T06:46:23.6501905Z             },
+2026-11-02T06:46:23.6502119Z             "neutral_site": {
+2026-11-02T06:46:23.6502364Z               "raw_value": 0.0,
+2026-11-02T06:46:23.6502621Z               "imputed": false,
+2026-11-02T06:46:23.6502876Z               "used_value": 0.0,
+2026-11-02T06:46:23.6503141Z               "impute_value": 0.0,
+2026-11-02T06:46:23.6503430Z               "center": 0.016637781629116118,
+2026-11-02T06:46:23.6503710Z               "scale": 0.12790999121092128,
+2026-11-02T06:46:23.6504001Z               "coefficient": -0.009426946445473913,
+2026-11-02T06:46:23.6504320Z               "contribution": 0.0012262019167098158
+2026-11-02T06:46:23.6504602Z             },
+2026-11-02T06:46:23.6504813Z             "roof_indoor": {
+2026-11-02T06:46:23.6505079Z               "raw_value": 0.0,
+2026-11-02T06:46:23.6505353Z               "imputed": false,
+2026-11-02T06:46:23.6505609Z               "used_value": 0.0,
+2026-11-02T06:46:23.6505878Z               "impute_value": 0.0,
+2026-11-02T06:46:23.6506165Z               "center": 0.28318890814558056,
+2026-11-02T06:46:23.6506442Z               "scale": 0.45054738979256614,
+2026-11-02T06:46:23.6506742Z               "coefficient": -0.0023871364228937623,
+2026-11-02T06:46:23.6507057Z               "contribution": 0.0015004205384589386
+2026-11-02T06:46:23.6507346Z             },
+2026-11-02T06:46:23.6507561Z             "temperature_f": {
+2026-11-02T06:46:23.6507821Z               "raw_value": 88,
+2026-11-02T06:46:23.6508081Z               "imputed": false,
+2026-11-02T06:46:23.6508327Z               "used_value": 88,
+2026-11-02T06:46:23.6508589Z               "impute_value": 59.0,
+2026-11-02T06:46:23.6508875Z               "center": 58.75597920277296,
+2026-11-02T06:46:23.6509154Z               "scale": 13.892958072581227,
+2026-11-02T06:46:23.6509447Z               "coefficient": -0.03903750843800087,
+2026-11-02T06:46:23.6509946Z               "contribution": -0.0821721121354193
+2026-11-02T06:46:23.6510242Z             },
+2026-11-02T06:46:23.6510446Z             "wind_mph": {
+2026-11-02T06:46:23.6510690Z               "raw_value": 13.0,
+2026-11-02T06:46:23.6510946Z               "imputed": false,
+2026-11-02T06:46:23.6511225Z               "used_value": 13.0,
+2026-11-02T06:46:23.6511497Z               "impute_value": 7.0,
+2026-11-02T06:46:23.6511770Z               "center": 7.816291161178509,
+2026-11-02T06:46:23.6512053Z               "scale": 4.209777935391821,
+2026-11-02T06:46:23.6512350Z               "coefficient": -0.004419891700236264,
+2026-11-02T06:46:23.6512692Z               "contribution": -0.00544243236217542
+2026-11-02T06:46:23.6512980Z             },
+2026-11-02T06:46:23.6513984Z             "state_experience_min_log": {
+2026-11-02T06:46:23.6514269Z               "raw_value": 6.5850622614,
+2026-11-02T06:46:23.6514548Z               "imputed": false,
+2026-11-02T06:46:23.6514800Z               "used_value": 6.5850622614,
+2026-11-02T06:46:23.6515085Z               "impute_value": 6.679375542747677,
+2026-11-02T06:46:23.6515385Z               "center": 6.525892003070378,
+2026-11-02T06:46:23.6515670Z               "scale": 0.7180809991095924,
+2026-11-02T06:46:23.6515967Z               "coefficient": -0.010163417759920945,
+2026-11-02T06:46:23.6516280Z               "contribution": -0.0008374710584350196
+2026-11-02T06:46:23.6516574Z             },
+2026-11-02T06:46:23.6516797Z             "state_experience_diff_log": {
+2026-11-02T06:46:23.6517087Z               "raw_value": 0.0425264144,
+2026-11-02T06:46:23.6517369Z               "imputed": false,
+2026-11-02T06:46:23.6517628Z               "used_value": 0.0425264144,
+2026-11-02T06:46:23.6518092Z               "impute_value": -0.0004503594470754,
+2026-11-02T06:46:23.6518455Z               "center": 0.0002988136303716734,
+2026-11-02T06:46:23.6518751Z               "scale": 0.11639301154542775,
+2026-11-02T06:46:23.6519052Z               "coefficient": -0.008253356222375883,
+2026-11-02T06:46:23.6519373Z               "contribution": -0.0029943329667347835
+2026-11-02T06:46:23.6519658Z             },
+2026-11-02T06:46:23.6520007Z             "rest_missing": {
+2026-11-02T06:46:23.6520260Z               "raw_value": 0.0,
+2026-11-02T06:46:23.6520510Z               "imputed": false,
+2026-11-02T06:46:23.6520760Z               "used_value": 0.0,
+2026-11-02T06:46:23.6521024Z               "impute_value": 0.0,
+2026-11-02T06:46:23.6521300Z               "center": 0.0,
+2026-11-02T06:46:23.6521553Z               "scale": 1.0,
+2026-11-02T06:46:23.6521800Z               "coefficient": 0.0,
+2026-11-02T06:46:23.6522069Z               "contribution": 0.0
+2026-11-02T06:46:23.6522322Z             },
+2026-11-02T06:46:23.6522530Z             "location_missing": {
+2026-11-02T06:46:23.6522795Z               "raw_value": 0.0,
+2026-11-02T06:46:23.6523071Z               "imputed": false,
+2026-11-02T06:46:23.6523313Z               "used_value": 0.0,
+2026-11-02T06:46:23.6523570Z               "impute_value": 0.0,
+2026-11-02T06:46:23.6523839Z               "center": 0.0,
+2026-11-02T06:46:23.6524083Z               "scale": 1.0,
+2026-11-02T06:46:23.6524326Z               "coefficient": 0.0,
+2026-11-02T06:46:23.6524605Z               "contribution": 0.0
+2026-11-02T06:46:23.6524858Z             },
+2026-11-02T06:46:23.6525067Z             "roof_missing": {
+2026-11-02T06:46:23.6525317Z               "raw_value": 0.0,
+2026-11-02T06:46:23.6525557Z               "imputed": false,
+2026-11-02T06:46:23.6525798Z               "used_value": 0.0,
+2026-11-02T06:46:23.6526052Z               "impute_value": 0.0,
+2026-11-02T06:46:23.6526320Z               "center": 0.0,
+2026-11-02T06:46:23.6526552Z               "scale": 1.0,
+2026-11-02T06:46:23.6526789Z               "coefficient": 0.0,
+2026-11-02T06:46:23.6527056Z               "contribution": 0.0
+2026-11-02T06:46:23.6527301Z             },
+2026-11-02T06:46:23.6527509Z             "weather_missing": {
+2026-11-02T06:46:23.6527764Z               "raw_value": 0.0,
+2026-11-02T06:46:23.6528007Z               "imputed": false,
+2026-11-02T06:46:23.6528245Z               "used_value": 0.0,
+2026-11-02T06:46:23.6528499Z               "impute_value": 0.0,
+2026-11-02T06:46:23.6528772Z               "center": 0.3435008665511265,
+2026-11-02T06:46:23.6529063Z               "scale": 0.47487684848784917,
+2026-11-02T06:46:23.6529357Z               "coefficient": -0.06828745344433308,
+2026-11-02T06:46:23.6529671Z               "contribution": 0.049395542249304494
+2026-11-02T06:46:23.6530177Z             },
+2026-11-02T06:46:23.6530389Z             "qb_quality_diff": {
+2026-11-02T06:46:23.6530657Z               "raw_value": 0.04690554210771652,
+2026-11-02T06:46:23.6530939Z               "imputed": false,
+2026-11-02T06:46:23.6531209Z               "used_value": 0.04690554210771652,
+2026-11-02T06:46:23.6531645Z               "impute_value": 0.0,
+2026-11-02T06:46:23.6531920Z               "center": -0.0004473377909788304,
+2026-11-02T06:46:23.6532232Z               "scale": 0.09328579052066183,
+2026-11-02T06:46:23.6532515Z               "coefficient": 0.3282378522343776,
+2026-11-02T06:46:23.6532873Z               "contribution": 0.1666170968623306
+2026-11-02T06:46:23.6533152Z             },
+2026-11-02T06:46:23.6533354Z             "qb_quality_sum": {
+2026-11-02T06:46:23.6533609Z               "raw_value": 0.13655228326231514,
+2026-11-02T06:46:23.6533891Z               "imputed": false,
+2026-11-02T06:46:23.6534147Z               "used_value": 0.13655228326231514,
+2026-11-02T06:46:23.6534452Z               "impute_value": 0.05371054560716116,
+2026-11-02T06:46:23.6534751Z               "center": 0.05615066848173024,
+2026-11-02T06:46:23.6535049Z               "scale": 0.09585407322226495,
+2026-11-02T06:46:23.6535343Z               "coefficient": -0.010857844110402345,
+2026-11-02T06:46:23.6535794Z               "contribution": -0.009107471077289958
+2026-11-02T06:46:23.6536078Z             },
+2026-11-02T06:46:23.6536291Z             "qb_experience_diff": {
+2026-11-02T06:46:23.6536573Z               "raw_value": 0.29508983141639344,
+2026-11-02T06:46:23.6536847Z               "imputed": false,
+2026-11-02T06:46:23.6537103Z               "used_value": 0.29508983141639344,
+2026-11-02T06:46:23.6537398Z               "impute_value": 0.0,
+2026-11-02T06:46:23.6537681Z               "center": -0.012113266297142291,
+2026-11-02T06:46:23.6537973Z               "scale": 1.4367515273452087,
+2026-11-02T06:46:23.6538260Z               "coefficient": 0.18246915062219007,
+2026-11-02T06:46:23.6538562Z               "contribution": 0.03901515832168394
+2026-11-02T06:46:23.6538835Z             },
+2026-11-02T06:46:23.6539043Z             "qb_change_diff": {
+2026-11-02T06:46:23.6539287Z               "raw_value": 1.0,
+2026-11-02T06:46:23.6539535Z               "imputed": false,
+2026-11-02T06:46:23.6539945Z               "used_value": 1.0,
+2026-11-02T06:46:23.6540196Z               "impute_value": 0.0,
+2026-11-02T06:46:23.6540475Z               "center": 0.009705372616984401,
+2026-11-02T06:46:23.6540755Z               "scale": 0.43651695680235336,
+2026-11-02T06:46:23.6541045Z               "coefficient": -0.00848188267469256,
+2026-11-02T06:46:23.6541351Z               "contribution": -0.01924223724175803
+2026-11-02T06:46:23.6541621Z             },
+2026-11-02T06:46:23.6541830Z             "qb_unknown_count": {
+2026-11-02T06:46:23.6542094Z               "raw_value": 0.0,
+2026-11-02T06:46:23.6542346Z               "imputed": false,
+2026-11-02T06:46:23.6542588Z               "used_value": 0.0,
+2026-11-02T06:46:23.6542836Z               "impute_value": 0.0,
+2026-11-02T06:46:23.6543109Z               "center": 0.0,
+2026-11-02T06:46:23.6543352Z               "scale": 1.0,
+2026-11-02T06:46:23.6543605Z               "coefficient": 0.0,
+2026-11-02T06:46:23.6543874Z               "contribution": 0.0
+2026-11-02T06:46:23.6544133Z             }
+2026-11-02T06:46:23.6544335Z           }
+2026-11-02T06:46:23.6544527Z         }
+2026-11-02T06:46:23.6544716Z       },
+2026-11-02T06:46:23.6545255Z       "interpretation": "Zeroing a centered feature is within-model sensitivity, not recovered base probability or causal QB value."
+2026-11-02T06:46:23.6545858Z     },
+2026-11-02T06:46:23.6546064Z     "source_tags": [],
+2026-11-02T06:46:23.6546306Z     "source_warnings": [
+2026-11-02T06:46:23.6546590Z       "NEW_FIT_NOT_PROSPECTIVELY_VALIDATED",
+2026-11-02T06:46:23.6546936Z       "HISTORICAL_REPORT_AND_STARTER_PIT_LIMITATIONS",
+2026-11-02T06:46:23.6547300Z       "PRIOR_SNAP_SHARE_IS_NOT_PROMISED_WORKLOAD",
+2026-11-02T06:46:23.6547628Z       "TRAVEL_IS_AIRPORT_PROXY",
+2026-11-02T06:46:23.6547929Z       "EMPIRICAL_SCORE_SETTLEMENT_UNVALIDATED",
+2026-11-02T06:46:23.6548336Z       "FINAL_INACTIVES_VERIFIED; NON_INJURY_SCRATCH_IMPACT_UNFITTED",
+2026-11-02T06:46:23.6548756Z       "DEFAULT_RESEARCH_MODEL:SELECTED_DEFAULT",
+2026-11-02T06:46:23.6549296Z       "VERSIONED_RNG_IDENTITY_REPAIR_NOT_PREDICTIVE_PROMOTION"
+2026-11-02T06:46:23.6549656Z     ],
+2026-11-02T06:46:23.6550029Z     "research_only": true,
+2026-11-02T06:46:23.6550286Z     "promotion_eligible": false,
+2026-11-02T06:46:23.6550578Z     "canonical_prospective_eligible": false,
+2026-11-02T06:46:23.6550878Z     "market_input": false,
+2026-11-02T06:46:23.6551407Z     "market_input_scope": "Diagnostic performs no market calculations; original source scope is preserved under source.",
+2026-11-02T06:46:23.6551993Z     "action_authority": false,
+2026-11-02T06:46:23.6552508Z     "interpretation": "Diagnostics only; no probability, model selection, forecast or simulation changes.",
+2026-11-02T06:46:23.6553233Z     "diagnostic_identity": "46dbbdf2a30c3a194cf77dc8ca0b21788b9b962892ece3a1f21c4cd1efa5b040",
+2026-11-02T06:46:23.6553892Z     "content_sha256": "9627b21381e0b9e3feac304f4f2b505c06cbda36392f4b262d9edc7de7e4572d"
+2026-11-02T06:46:23.6554324Z   },
+2026-11-02T06:46:23.6554510Z   "coherence": {
+2026-11-02T06:46:23.6554864Z     "home_oriented_signs": {
+2026-11-02T06:46:23.6555121Z       "binary_head": -1,
+2026-11-02T06:46:23.6555373Z       "ridge_margin_head": -1
+2026-11-02T06:46:23.6555616Z     },
+2026-11-02T06:46:23.6555846Z     "cross_head_direction_disagreement": false,
+2026-11-02T06:46:23.6556203Z     "separate_heads_are_not_joint_expectations": true,
+2026-11-02T06:46:23.6556633Z     "same_distribution_mean_and_majority_sign_need_not_match": true,
+2026-11-02T06:46:23.6557033Z     "calibration_established": false
+2026-11-02T06:46:23.6557296Z   },
+2026-11-02T06:46:23.6557490Z   "assimilation": null,
+2026-11-02T06:46:23.6557745Z   "joint_distribution": null,
+2026-11-02T06:46:23.6558021Z   "independent_head_predictions": {
+2026-11-02T06:46:23.6558298Z     "home_win": 0.4929274484932703,
+2026-11-02T06:46:23.6558565Z     "home_margin": -0.6310877777954651,
+2026-11-02T06:46:23.6558858Z     "total_points": 45.604588048318554
+2026-11-02T06:46:23.6559128Z   },
+2026-11-02T06:46:23.6559326Z   "binary": {
+2026-11-02T06:46:23.6559550Z     "seed": 14101996097918657935,
+2026-11-02T06:46:23.6559931Z     "count": 100000,
+2026-11-02T06:46:23.6560173Z     "home_win_probability": 0.49321,
+2026-11-02T06:46:23.6560469Z     "mc_standard_error_pp": 0.15809806419282452,
+2026-11-02T06:46:23.6560915Z     "sha256": "5bde6a4c5a09cc52eea6c5b480359c3de89892b51856a5acaf709110266f6e7e",
+2026-11-02T06:46:23.6561441Z     "scope": "BINARY_NON_TIE_DIAGNOSTIC_NOT_INDEPENDENT_MODEL_VALIDATION"
+2026-11-02T06:46:23.6561818Z   },
+2026-11-02T06:46:23.6562009Z   "scores": {
+2026-11-02T06:46:23.6562247Z     "status": "UNAVAILABLE_FOR_SELECTED_ARM",
+2026-11-02T06:46:23.6562632Z     "reason": "FROZEN_JOINT_RESIDUAL_POOL_IS_COMBINED_SPECIFIC"
+2026-11-02T06:46:23.6562972Z   }
+2026-11-02T06:46:23.6563157Z }
+2026-11-02T06:46:23.7998874Z {"files": [{"bytes": 4164, "path": "2026_01_DEN_KC/disclosures/disclosures.json", "sha256": "1723c1f49943640dd2e7378759f464fb62d584d249db08fe1b06ea69d665723f"}, {"bytes": 2085, "path": "2026_01_DEN_KC/disclosures/disclosures.md", "sha256": "3250b68baafc932c1304c443be306aea22479f9ae8a09301f7ae98e2f6a57998"}, {"bytes": 479, "path": "2026_01_DEN_KC/execution_receipt.json", "sha256": "eeb1a19966602b734f070b4b5b3d472a0edc0e5cf6d9a0e2e0d67c5125e5cecf"}, {"bytes": 174897, "path": "2026_01_DEN_KC/forecast.json", "sha256": "4a4195f453780fdb0a43d0b0a03389091eab6edb53d101ce1b4a3c35672d7bca"}, {"bytes": 275, "path": "2026_01_DEN_KC/manifest.json", "sha256": "ff78c057f6b64a91a582c3767c61acb7a3cff2ce89b91f832fcded7e71b0205b"}, {"bytes": 15710, "path": "2026_01_DEN_KC/research_selection/decisions.json", "sha256": "6f011f026d6d458a5dc0dc88e3457d5672c62fbedad4ee5c41ae019abf3c80b7"}, {"bytes": 556, "path": "2026_01_DEN_KC/research_selection/execution_receipt.json", "sha256": "0321b7319441b853af0aa85c3169da1d75a731ddfcd6558becb235a5eb717a55"}, {"bytes": 206702, "path": "2026_01_DEN_KC/selection_source_card.json", "sha256": "76b09ff9cd8db2b7530598b3cea05b1a28ae941b5435c0cf50316b79366ff658"}, {"bytes": 100128, "path": "2026_01_DEN_KC/winner_draws.npy", "sha256": "c2e884ec5caf0c2703524e6230b7b65a354335cec088eec1218bfd26feef15af"}], "scope": "ACTUAL_ENTRYPOINT_RETAINED_INPUT_REPLAY_NOT_PREDICTIVE_VALIDATION"}
+2026-11-02T06:46:23.8060336Z ##[group]Run python scripts/run_research_selection.py --help
+2026-11-02T06:46:23.8060750Z [36;1mpython scripts/run_research_selection.py --help[0m
+2026-11-02T06:46:23.8061068Z [36;1mpython scripts/evaluate_research_selections.py --help[0m
+2026-11-02T06:46:23.8061415Z [36;1mpython scripts/build_operational_rest_candidate.py --help[0m
+2026-11-02T06:46:23.8061749Z [36;1mpython scripts/capture_team_histories.py --help[0m
+2026-11-02T06:46:23.8062046Z [36;1mpython scripts/prepare_initial_baselines.py --help[0m
+2026-11-02T06:46:23.8080149Z shell: /usr/bin/bash -e {0}
+2026-11-02T06:46:23.8080354Z env:
+2026-11-02T06:46:23.8080569Z   pythonLocation: /opt/hostedtoolcache/Python/3.12.15/x64
+2026-11-02T06:46:23.8080929Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.12.15/x64/lib/pkgconfig
+2026-11-02T06:46:23.8081283Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+2026-11-02T06:46:23.8081584Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+2026-11-02T06:46:23.8081909Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+2026-11-02T06:46:23.8082216Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.12.15/x64/lib
+2026-11-02T06:46:23.8082478Z ##[endgroup]
+2026-11-02T06:46:23.8568835Z usage: run_research_selection.py [-h]
+2026-11-02T06:46:23.8569275Z                                  (--manifest MANIFEST | --source-card SOURCE_CARD)
+2026-11-02T06:46:23.8569608Z                                  [--selection-config SELECTION_CONFIG]
+2026-11-02T06:46:23.8570120Z                                  --output-dir OUTPUT_DIR
+2026-11-02T06:46:23.8570394Z                                  [--decision-at-utc DECISION_AT_UTC]
+2026-11-02T06:46:23.8570674Z                                  [--registry-store REGISTRY_STORE]
+2026-11-02T06:46:23.8570935Z                                  [--trust-file TRUST_FILE]
+2026-11-02T06:46:23.8571140Z 
+2026-11-02T06:46:23.8571312Z Read sealed research inputs and emit immutable, non-authoritative decisions.
+2026-11-02T06:46:23.8571554Z 
+2026-11-02T06:46:23.8571640Z options:
+2026-11-02T06:46:23.8571850Z   -h, --help            show this help message and exit
+2026-11-02T06:46:23.8572126Z   --manifest MANIFEST   Strict JSON manifest path.
+2026-11-02T06:46:23.8572375Z   --source-card SOURCE_CARD
+2026-11-02T06:46:23.8572622Z                         Retained actual card JSON; generates an explicitly
+2026-11-02T06:46:23.8572917Z                         retrospective diagnostic sidecar.
+2026-11-02T06:46:23.8573163Z   --selection-config SELECTION_CONFIG
+2026-11-02T06:46:23.8573434Z                         Optional explicit selector config for --source-card;
+2026-11-02T06:46:23.8573746Z                         absent means unqualified diagnostic policy.
+2026-11-02T06:46:23.8574012Z   --output-dir OUTPUT_DIR
+2026-11-02T06:46:23.8574242Z                         New output directory; its parent must exist.
+2026-11-02T06:46:23.8574505Z   --decision-at-utc DECISION_AT_UTC
+2026-11-02T06:46:23.8574756Z                         Optional historical UTC reference cutoff; marks
+2026-11-02T06:46:23.8575062Z                         replay, actual execution time is retained.
+2026-11-02T06:46:23.8575315Z   --registry-store REGISTRY_STORE
+2026-11-02T06:46:23.8575575Z                         Existing local content-addressed registry directory
+2026-11-02T06:46:23.8575851Z                         (read-only).
+2026-11-02T06:46:23.8576068Z   --trust-file TRUST_FILE
+2026-11-02T06:46:23.8576322Z                         Explicit trusted public keys, separate from registry
+2026-11-02T06:46:23.8576684Z                         artifacts.
+2026-11-02T06:46:23.8576853Z 
+2026-11-02T06:46:23.8577068Z Manifest schema (all file references relative to the manifest):
+2026-11-02T06:46:23.8577589Z   {"schema":"research-selection-manifest-v1","entries":[
+2026-11-02T06:46:23.8578109Z     {"entry_id":"example","forecast":"sealed-forecast.json",
+2026-11-02T06:46:23.8578882Z      "config":"selector-config.json","quality_receipt":"quality.json",
+2026-11-02T06:46:23.8579605Z      "price":"price.json","components":["sealed-sibling.json"]}
+2026-11-02T06:46:23.8580073Z   ]}
+2026-11-02T06:46:23.8580460Z Only entry_id, forecast and config are mandatory within each entry. Optional
+2026-11-02T06:46:23.8581007Z quality_receipt/price may be null; components defaults to []. Forecasts and
+2026-11-02T06:46:23.8581510Z quality receipts must already be sealed by the research_selection API. Config
+2026-11-02T06:46:23.8582012Z is the explicit research-selector-config-v1 payload, not its artifact wrapper.
+2026-11-02T06:46:23.8582666Z No legacy probability orientation, line or settlement convention is inferred.
+2026-11-02T06:46:23.8582949Z 
+2026-11-02T06:46:23.8583201Z For registry verification also supply manifest registry:{"record_ids":[...],
+2026-11-02T06:46:23.8583735Z "revocation_ids":[...]} and both registry flags. The separate trust JSON is
+2026-11-02T06:46:23.8584223Z {"schema":"research-validation-trust-v1","public_keys_b64":{"signer":
+2026-11-02T06:46:23.8584682Z "base64 raw 32-byte Ed25519 public key"}}. No keys are trusted by default.
+2026-11-02T06:46:23.8585225Z User-supplied trust is not evidence of independent scientific certification.
+2026-11-02T06:46:23.8585546Z 
+2026-11-02T06:46:23.8597059Z Outputs: decisions.json and execution_receipt.json, in a NEW directory only.
+2026-11-02T06:46:23.8597542Z Missing qualification produces BLOCKED records and exit 0; malformed inputs
+2026-11-02T06:46:23.8597966Z produce exit 2. Inputs and registry are read-only. Every output remains SHADOW,
+2026-11-02T06:46:23.8598422Z publication/action authority false and wagering OFF. A historical decision
+2026-11-02T06:46:23.8598829Z timestamp is explicitly a retrospective diagnostic, never backdated execution.
+2026-11-02T06:46:23.9143279Z usage: evaluate_research_selections.py [-h]
+2026-11-02T06:46:23.9143702Z                                        (--manifest MANIFEST | --selection-sidecar SELECTION_SIDECAR)
+2026-11-02T06:46:23.9144099Z                                        [--settlement-update SETTLEMENT_UPDATE]
+2026-11-02T06:46:23.9144431Z                                        [--walk-forward-config WALK_FORWARD_CONFIG]
+2026-11-02T06:46:23.9144739Z                                        --output-dir OUTPUT_DIR
+2026-11-02T06:46:23.9145030Z                                        [--bootstrap-samples BOOTSTRAP_SAMPLES]
+2026-11-02T06:46:23.9145308Z                                        [--seed SEED]
+2026-11-02T06:46:23.9145466Z 
+2026-11-02T06:46:23.9145632Z Evaluate preserved selection receipts against an explicit, hash-pinned
+2026-11-02T06:46:23.9146020Z population. This offline reader does not fetch finals, edit forecasts or
+2026-11-02T06:46:23.9146407Z certify a procedure. Run --help for the manifest contract; outcomes remain
+2026-11-02T06:46:23.9146808Z source assertions until an independent reviewer authenticates their provenance
+2026-11-02T06:46:23.9147125Z and settlement mapping.
+2026-11-02T06:46:23.9147252Z 
+2026-11-02T06:46:23.9147318Z options:
+2026-11-02T06:46:23.9147506Z   -h, --help            show this help message and exit
+2026-11-02T06:46:23.9147760Z   --manifest MANIFEST
+2026-11-02T06:46:23.9147963Z   --selection-sidecar SELECTION_SIDECAR
+2026-11-02T06:46:23.9148227Z                         Actual automatic sidecar; paired with explicit
+2026-11-02T06:46:23.9148512Z                         retained --settlement-update
+2026-11-02T06:46:23.9148762Z   --settlement-update SETTLEMENT_UPDATE
+2026-11-02T06:46:23.9149034Z                         Version-bound retained Oct22 corrected interim update;
+2026-11-02T06:46:23.9149309Z                         discovery only
+2026-11-02T06:46:23.9149531Z   --walk-forward-config WALK_FORWARD_CONFIG
+2026-11-02T06:46:23.9150032Z                         External trust/store/plan/fit receipt configuration;
+2026-11-02T06:46:23.9150357Z                         manifest must bind exact forecast_states
+2026-11-02T06:46:23.9150628Z   --output-dir OUTPUT_DIR
+2026-11-02T06:46:23.9151083Z   --bootstrap-samples BOOTSTRAP_SAMPLES
+2026-11-02T06:46:23.9151295Z   --seed SEED
+2026-11-02T06:46:23.9151387Z 
+2026-11-02T06:46:23.9151679Z Manifest schema research-selection-evaluation-input-v1: evidence_scope
+2026-11-02T06:46:23.9152079Z DISCOVERY|SHADOW; population, decisions, outcomes and optional controls are
+2026-11-02T06:46:23.9152477Z {path,sha256} references beneath the manifest directory. Population declares
+2026-11-02T06:46:23.9152801Z event_id,target_id,slate_id. Outcomes declare
+2026-11-02T06:46:23.9153118Z event_id,target_id,outcome,status,observed_at_utc; resolved rows also declare
+2026-11-02T06:46:23.9153526Z settled_at_utc, source_sha256,source_ref. Controls are sealed forecasts on the
+2026-11-02T06:46:23.9153825Z exact same target.
+2026-11-02T06:46:24.5757891Z usage: build_operational_rest_candidate.py [-h] --package PACKAGE
+2026-11-02T06:46:24.5758316Z                                            --history-packet HISTORY_PACKET
+2026-11-02T06:46:24.5758666Z                                            --event-id EVENT_ID --as-of-utc
+2026-11-02T06:46:24.5758964Z                                            AS_OF_UTC --output OUTPUT
+2026-11-02T06:46:24.5759145Z 
+2026-11-02T06:46:24.5759330Z Build immutable operational-rest candidate inputs; never fit or infer a model.
+2026-11-02T06:46:24.5759929Z History packet schema sports.operational_rest_history.v1 supplies raw source
+2026-11-02T06:46:24.5760517Z receipts and upstream source-bound coverage assertions. All-played-game
+2026-11-02T06:46:24.5760916Z coverage must be explicit; regular-season-only acquisition does not certify
+2026-11-02T06:46:24.5761218Z physical rest.
+2026-11-02T06:46:24.5761319Z 
+2026-11-02T06:46:24.5761391Z options:
+2026-11-02T06:46:24.5761589Z   -h, --help            show this help message and exit
+2026-11-02T06:46:24.5761839Z   --package PACKAGE
+2026-11-02T06:46:24.5762034Z   --history-packet HISTORY_PACKET
+2026-11-02T06:46:24.5762246Z   --event-id EVENT_ID
+2026-11-02T06:46:24.5762431Z   --as-of-utc AS_OF_UTC
+2026-11-02T06:46:24.5762608Z   --output OUTPUT
+2026-11-02T06:46:24.6918943Z usage: capture_team_histories.py [-h] --output OUTPUT [--league {nba,nhl,mls}]
+2026-11-02T06:46:24.6919412Z                                  [--season-scope SEASON_SCOPE] [--resume]
+2026-11-02T06:46:24.6919925Z                                  [--nba-current-bundle NBA_CURRENT_BUNDLE]
+2026-11-02T06:46:24.6920346Z                                  [--as-of-utc AS_OF_UTC]
+2026-11-02T06:46:24.6920504Z 
+2026-11-02T06:46:24.6920582Z options:
+2026-11-02T06:46:24.6920794Z   -h, --help            show this help message and exit
+2026-11-02T06:46:24.6921043Z   --output OUTPUT
+2026-11-02T06:46:24.6921225Z   --league {nba,nhl,mls}
+2026-11-02T06:46:24.6921432Z   --season-scope SEASON_SCOPE
+2026-11-02T06:46:24.6921635Z   --resume
+2026-11-02T06:46:24.6921816Z   --nba-current-bundle NBA_CURRENT_BUNDLE
+2026-11-02T06:46:24.6922048Z   --as-of-utc AS_OF_UTC
+2026-11-02T06:46:25.6549363Z usage: prepare_initial_baselines.py [-h] --history HISTORY --current CURRENT
+2026-11-02T06:46:25.6550047Z                                     --output OUTPUT [--league {nba,nhl,mls}]
+2026-11-02T06:46:25.6550445Z                                     [--season-scope SEASON_SCOPE]
+2026-11-02T06:46:25.6550714Z                                     [--as-of-utc AS_OF_UTC]
+2026-11-02T06:46:25.6551001Z                                     [--nba-acquisition-scope NBA_ACQUISITION_SCOPE]
+2026-11-02T06:46:25.6551207Z 
+2026-11-02T06:46:25.6551277Z options:
+2026-11-02T06:46:25.6551476Z   -h, --help            show this help message and exit
+2026-11-02T06:46:25.6551724Z   --history HISTORY
+2026-11-02T06:46:25.6551907Z   --current CURRENT
+2026-11-02T06:46:25.6552079Z   --output OUTPUT
+2026-11-02T06:46:25.6552256Z   --league {nba,nhl,mls}
+2026-11-02T06:46:25.6552455Z   --season-scope SEASON_SCOPE
+2026-11-02T06:46:25.6552657Z   --as-of-utc AS_OF_UTC
+2026-11-02T06:46:25.6552871Z   --nba-acquisition-scope NBA_ACQUISITION_SCOPE
+2026-11-02T06:46:25.7942714Z ##[group]Run python -m research.finding_evidence docs/research/overhaul_2026_10_23/FINDING_EVIDENCE_remaining_prs_v1.json
+2026-11-02T06:46:25.7943507Z [36;1mpython -m research.finding_evidence docs/research/overhaul_2026_10_23/FINDING_EVIDENCE_remaining_prs_v1.json[0m
+2026-11-02T06:46:25.7961642Z shell: /usr/bin/bash -e {0}
+2026-11-02T06:46:25.7961843Z env:
+2026-11-02T06:46:25.7962060Z   pythonLocation: /opt/hostedtoolcache/Python/3.12.15/x64
+2026-11-02T06:46:25.7962407Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.12.15/x64/lib/pkgconfig
+2026-11-02T06:46:25.7962735Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+2026-11-02T06:46:25.7963031Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+2026-11-02T06:46:25.7963322Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+2026-11-02T06:46:25.7963608Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.12.15/x64/lib
+2026-11-02T06:46:25.7963864Z ##[endgroup]
+2026-11-02T06:46:25.8672128Z Traceback (most recent call last):
+2026-11-02T06:46:25.8678058Z   File "<frozen runpy>", line 198, in _run_module_as_main
+2026-11-02T06:46:25.8678448Z   File "<frozen runpy>", line 88, in _run_code
+2026-11-02T06:46:25.8678908Z   File "/home/runner/work/sports-model/sports-model/research/finding_evidence.py", line 148, in <module>
+2026-11-02T06:46:25.8679303Z     main()
+2026-11-02T06:46:25.8679646Z   File "/home/runner/work/sports-model/sports-model/research/finding_evidence.py", line 144, in main
+2026-11-02T06:46:25.8680691Z     print(json.dumps([validate_packet(row, root=args.root) for row in rows], indent=2))
+2026-11-02T06:46:25.8681060Z                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-11-02T06:46:25.8681505Z   File "/home/runner/work/sports-model/sports-model/research/finding_evidence.py", line 96, in validate_packet
+2026-11-02T06:46:25.8681901Z     _ref(root, source)
+2026-11-02T06:46:25.8682256Z   File "/home/runner/work/sports-model/sports-model/research/finding_evidence.py", line 40, in _ref
+2026-11-02T06:46:25.8682705Z     raise ValueError("EVIDENCE_HASH_MISMATCH:" + ref["path"])
+2026-11-02T06:46:25.8683044Z ValueError: EVIDENCE_HASH_MISMATCH:scripts/canonical_forecasts.py
+2026-11-02T06:46:25.8737808Z ##[error]Process completed with exit code 1.
+2026-11-02T06:46:25.8783444Z ##[group]Run echo 'These are software and immutable-artifact tests; they grant no predictive validation, default promotion, publication or wagering authority.' >> "$GITHUB_STEP_SUMMARY"
+2026-11-02T06:46:25.8784452Z [36;1mecho 'These are software and immutable-artifact tests; they grant no predictive validation, default promotion, publication or wagering authority.' >> "$GITHUB_STEP_SUMMARY"[0m
+2026-11-02T06:46:25.8802529Z shell: /usr/bin/bash -e {0}
+2026-11-02T06:46:25.8802741Z env:
+2026-11-02T06:46:25.8802970Z   pythonLocation: /opt/hostedtoolcache/Python/3.12.15/x64
+2026-11-02T06:46:25.8803314Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.12.15/x64/lib/pkgconfig
+2026-11-02T06:46:25.8803647Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+2026-11-02T06:46:25.8803968Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+2026-11-02T06:46:25.8804256Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+2026-11-02T06:46:25.8804573Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.12.15/x64/lib
+2026-11-02T06:46:25.8804831Z ##[endgroup]
+2026-11-02T06:46:25.8951861Z Post job cleanup.
+2026-11-02T06:46:25.9662024Z [command]/usr/bin/git version
+2026-11-02T06:46:25.9735604Z git version 2.56.0
+2026-11-02T06:46:25.9771554Z Temporarily overriding HOME='/home/runner/work/_temp/ce296fc5-c686-4cdf-b72d-6e22702af9f1' before making global git config changes
+2026-11-02T06:46:25.9772333Z Adding repository directory to the temporary git global config as a safe directory
+2026-11-02T06:46:25.9775188Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/sports-model/sports-model
+2026-11-02T06:46:25.9814318Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-11-02T06:46:25.9848468Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-11-02T06:46:26.0079017Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-11-02T06:46:26.0105291Z http.https://github.com/.extraheader
+2026-11-02T06:46:26.0114907Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+2026-11-02T06:46:26.0147482Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-11-02T06:46:26.0396361Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-11-02T06:46:26.0434708Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-11-02T06:46:26.0787550Z Cleaning up orphan processes
+2026-11-02T06:46:26.1081269Z ##[warning]Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4, actions/setup-python@v5. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+

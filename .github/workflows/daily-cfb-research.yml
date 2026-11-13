@@ -1,0 +1,184 @@
+name: Daily Selected CFB Research
+
+on:
+  workflow_dispatch:
+    inputs:
+      acceptance_pair:
+        description: Run two fresh forward captures to exercise the path (same events do not enlarge the sample)
+        type: boolean
+        default: false
+  schedule:
+    - cron: '15 16,22 * * *'
+  push:
+    branches: [codex/daily-pipeline-integration-20261101]
+    paths:
+      - '.github/workflows/daily-cfb-research.yml'
+      - 'pipelines/daily_research.py'
+      - 'scripts/daily_research_*.py'
+      - 'scripts/run_daily_research.py'
+      - 'scripts/canonical_forecasts.py'
+      - 'requirements-daily-research.lock'
+      - 'daily_research_requests/pregame/*.json'
+
+# This workflow is only scheduled after reviewed deployment to the default branch.
+# All branch execution is an explicit research acceptance exercise.
+concurrency:
+  group: daily-cfb-research-archive-v1
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+  actions: read
+  issues: write
+
+env:
+  PYTHONDONTWRITEBYTECODE: '1'
+  PYTHONUNBUFFERED: '1'
+
+jobs:
+  pregame:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 40
+    strategy:
+      max-parallel: 1
+      fail-fast: false
+      matrix:
+        repetition: ${{ fromJSON((github.event_name == 'push' || inputs.acceptance_pair) && '[1,2]' || '[1]') }}
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: '3.12.14'
+      - name: Install the pinned selected-model environment
+        run: python -m pip install -r requirements-daily-research.lock
+      - name: Exercise acquisition, completeness and retention gates
+        run: python -m pytest tests/test_daily_research.py tests/test_daily_research_archive.py tests/test_daily_research_store.py tests/test_daily_research_postgame.py tests/test_canonical_forecasts.py tests/test_canonical_results.py tests/test_canonical_grading_preflight.py tests/test_blind_canonical_grading_preflight.py tests/test_research_selection.py tests/test_selection_integration.py tests/test_validation_registry.py -q
+      - name: Restore append-only research state from its remote branch
+        id: restore
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          mkdir -p output/pregame/operations output/registry output/delivery
+          python scripts/daily_research_store.py restore --checkout "$RUNNER_TEMP/daily-archive" --report output/pregame/operations/restore.json
+          if [ -d "$RUNNER_TEMP/daily-archive/registry" ]; then cp -a "$RUNNER_TEMP/daily-archive/registry/." output/registry/; fi
+      - name: Acquire real sources, prepare the selected model, and publish the full research card
+        id: forecast
+        if: ${{ steps.restore.outcome == 'success' }}
+        continue-on-error: true
+        run: python scripts/run_daily_research.py --next-slate --simulations 100000 --output output/pregame/run
+      - name: Identify this attempt's genuine forecast population
+        id: population
+        if: ${{ always() && steps.restore.outcome == 'success' }}
+        run: |
+          python - <<'PY'
+          import json, os
+          from pathlib import Path
+          path = Path('output/pregame/run/run.json')
+          report = json.loads(path.read_text()) if path.exists() else {}
+          with open(os.environ['GITHUB_OUTPUT'], 'a') as f:
+              f.write('forecasts=' + str(report.get('forecast_count', 0)) + '\n')
+              f.write('status=' + str(report.get('status', 'MISSING_RUN_RECEIPT')) + '\n')
+          print(json.dumps(report, sort_keys=True))
+          PY
+      - name: Upload complete capture, package, card and draws
+        id: artifact
+        if: ${{ always() && steps.restore.outcome == 'success' }}
+        continue-on-error: true
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: daily-cfb-pregame-${{ github.run_id }}-${{ github.run_attempt }}-${{ matrix.repetition }}
+          path: output/pregame/run/
+          if-no-files-found: error
+          retention-days: 90
+      - name: Download the exact new artifact into a separate directory
+        id: download
+        if: ${{ always() && steps.artifact.outcome == 'success' }}
+        continue-on-error: true
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
+        with:
+          artifact-ids: ${{ steps.artifact.outputs.artifact-id }}
+          path: ${{ runner.temp }}/daily-artifact-readback
+          merge-multiple: true
+      - name: Verify every source, package, forecast and draw byte after download
+        id: readback
+        if: ${{ always() && steps.download.outcome == 'success' }}
+        continue-on-error: true
+        run: python scripts/daily_research_archive.py verify --root "$RUNNER_TEMP/daily-artifact-readback" --manifest output/pregame/run/manifest.json --report output/pregame/operations/actions-readback.json
+      - name: Register the immutable forecast using the real artifact and writer clock
+        id: register
+        if: ${{ always() && steps.forecast.outcome == 'success' && steps.readback.outcome == 'success' && steps.population.outputs.forecasts != '0' }}
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ github.token }}
+          ARTIFACT_ID: ${{ steps.artifact.outputs.artifact-id }}
+        run: |
+          python scripts/canonical_forecasts.py register --root output/registry \
+            --card output/pregame/run/card/diagnostic_card.json \
+            --run-id "$GITHUB_RUN_ID" --artifact-id "$ARTIFACT_ID" \
+            --report output/pregame/operations/registration.json
+      - name: Seal the execution envelope including rejected-stage evidence
+        id: seal
+        if: ${{ always() && steps.restore.outcome == 'success' }}
+        continue-on-error: true
+        env:
+          FORECAST_OUTCOME: ${{ steps.forecast.outcome }}
+          ARTIFACT_OUTCOME: ${{ steps.artifact.outcome }}
+          READBACK_OUTCOME: ${{ steps.readback.outcome }}
+          REGISTER_OUTCOME: ${{ steps.register.outcome }}
+          FORECAST_COUNT: ${{ steps.population.outputs.forecasts }}
+        run: |
+          python - <<'PY'
+          import json, os
+          from pathlib import Path
+          from scripts.daily_research_archive import seal_directory
+          report = {k: os.environ[k] for k in ('FORECAST_OUTCOME','ARTIFACT_OUTCOME','READBACK_OUTCOME','REGISTER_OUTCOME','FORECAST_COUNT')}
+          report.update(schema='daily.research.stage_outcomes.v1', official_release=False, action_authority=False, wagering_authority='OFF')
+          with Path('output/pregame/operations/stages.json').open('x') as f: json.dump(report, f, indent=2, sort_keys=True)
+          seal_directory('output/pregame')
+          PY
+      - name: Persist all bytes and registrations, then read them from a fresh remote clone
+        id: durable
+        if: ${{ always() && steps.seal.outcome == 'success' }}
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPETITION: ${{ matrix.repetition }}
+        run: |
+          python scripts/daily_research_store.py publish --checkout "$RUNNER_TEMP/daily-archive" \
+            --source output/pregame --registry output/registry \
+            --run-key "pregame-$GITHUB_RUN_ID-$GITHUB_RUN_ATTEMPT-$REPETITION" \
+            --report output/delivery/durable-readback.json
+      - name: Publish the card and distinct operational status
+        if: always()
+        run: |
+          echo '## Selected CFB research execution' >> "$GITHUB_STEP_SUMMARY"
+          echo 'Official release OFF; wagering OFF. Repeated captures of the same event do not increase the prospective sample.' >> "$GITHUB_STEP_SUMMARY"
+          if [ -f output/pregame/run/card/diagnostic_card.md ]; then cat output/pregame/run/card/diagnostic_card.md >> "$GITHUB_STEP_SUMMARY"; fi
+          for report in output/pregame/run/run.json output/pregame/operations/registration.json output/delivery/durable-readback.json; do
+            if [ -f "$report" ]; then cat "$report" >> "$GITHUB_STEP_SUMMARY"; fi
+          done
+      - name: Notify a failed acquisition, forecast, registration, upload, or durability stage
+        id: notify
+        if: ${{ always() && (failure() || steps.forecast.outcome == 'failure' || steps.artifact.outcome != 'success' || steps.readback.outcome != 'success' || steps.durable.outcome != 'success' || (steps.population.outputs.forecasts != '0' && steps.register.outcome != 'success')) }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python scripts/daily_research_notify.py --phase pregame --report output/delivery/failure-notification.json
+      - name: Retain delivery and notification receipts
+        id: delivery
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: daily-cfb-delivery-${{ github.run_id }}-${{ github.run_attempt }}-${{ matrix.repetition }}
+          path: output/delivery/
+          if-no-files-found: error
+          retention-days: 90
+      - name: Notify failure of the final delivery-receipt upload
+        if: ${{ always() && steps.delivery.outcome == 'failure' && steps.notify.outcome != 'success' }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python scripts/daily_research_notify.py --phase pregame --report output/delivery/receipt-upload-failure.json
+      - name: Fail the workflow when any required operational stage is missing
+        if: ${{ always() && (failure() || steps.forecast.outcome != 'success' || steps.artifact.outcome != 'success' || steps.readback.outcome != 'success' || steps.durable.outcome != 'success' || (steps.population.outputs.forecasts != '0' && steps.register.outcome != 'success')) }}
+        run: exit 1

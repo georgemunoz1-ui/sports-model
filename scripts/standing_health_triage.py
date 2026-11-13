@@ -140,7 +140,13 @@ def report(register, sessions, now, root=ROOT, for_new_session=False):
                      "due_at_utc": card["due_at_utc"], "card_sha256": card["record_sha256"]})
         if escalation:
             rows[-1]["escalation"] = escalation
-    active = [r for r in rows if r["trend_included"] and r["status"] not in ("RESOLVED", "DESCOPED")]
+    # Count obligation leaves. Legacy registers exclude ordinal children and count
+    # their parent; use the explicit relationships without rewriting old cards.
+    parents = {c["parent_issue_id"] for c in register["issues"] if c.get("parent_issue_id")}
+    children = {c["issue_id"] for c in register["issues"] if c.get("parent_issue_id")}
+    active = [r for r in rows if r["issue_id"] not in parents
+              and (r["trend_included"] or r["issue_id"] in children)
+              and r["status"] not in ("RESOLVED", "DESCOPED")]
     aged = sum(r["days_without_material_change"] is not None and r["days_without_material_change"] > 14 for r in active)
     unknown = sum(r["days_without_material_change"] is None for r in active)
     previous = sessions[-1]["trend"]["aged_over_14_days"] if sessions else None
@@ -155,6 +161,9 @@ def report(register, sessions, now, root=ROOT, for_new_session=False):
             "issues": rows, "validation_errors": errors,
             "trend": {"aged_over_14_days": aged, "unknown_age": unknown,
                       "previous_session_count": previous,
+                      "counting_basis": "UNRESOLVED_OBLIGATION_LEAVES",
+                      "previous_session_counting_basis": sessions[-1]["trend"].get("counting_basis", "LEGACY_GROUPED_OR_UNKNOWN") if sessions else None,
+                      "aged_issue_ids": [r["issue_id"] for r in active if r["days_without_material_change"] is not None and r["days_without_material_change"] > 14],
                       "direction": "BASELINE_NOT_AVAILABLE" if previous is None else
                       ("INCREASED_REQUIRES_EXPLANATION" if aged > previous else "NON_INCREASING"),
                       "clock_policy": "material evidence change; a review or status rename does not reset age"},

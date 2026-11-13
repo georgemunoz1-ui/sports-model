@@ -1,0 +1,174 @@
+{
+  "agent_workstreams": [
+    "requirements/cfb",
+    "capture",
+    "nba_personnel",
+    "nhl",
+    "settlement",
+    "replay"
+  ],
+  "base_commit": "6789e7d090b77c55287f4fe68426f790b0fe0950",
+  "code_sha256": {
+    "harness/market_capture.py": "186be5089e997c2b65ab1d3c8d674e20c39459e92ca974c4b0b8f35c5a879078",
+    "harness/market_sportsgameodds.py": "80d83f463dfae46c09d48b43f2fae82983313468042d93a073960d5ed54b85b6",
+    "harness/market_theoddsapi.py": "4456ee47e536fc5346b83b29a2904f37e840e9e8938bebb176304faf4ea85e5c",
+    "models/common/settlement_risk.py": "d9427997e6d433564264e04af0dcea940d19cd8553d26a25a663ee9021e62c31",
+    "models/experiments/cfb_efficiency.py": "2feb2967da72006e9276ee1dbfd648126232a7af2bddbc3411699c0421c7e6c1",
+    "models/experiments/cfb_personnel.py": "5ad2862fb1ab4c2e6a27dc51f55701270d8cdefc0e0672eed16fad09aed03979",
+    "models/experiments/nba_personnel.py": "780197a5959bc2b5c0a89abfc72e4e4b54430fb48d97b9a48a986b954393905d",
+    "models/nhl/__init__.py": "f40ff6689379f534a14059d2939841e0f9eb5adffda0ce31703fb64c83745a1c",
+    "models/nhl/context_controls.py": "1b4afbcc110511a75e9f2397d59950ba6c53f48d22b28ef5adfe705565f7a377",
+    "pipelines/cards/candidate_board.py": "3be6b2d167d8ab2e0f629b51ed5a2691ec0136a543e9173d3abc7e54e0af88b8",
+    "pipelines/cards/model_controls.py": "c67677da16910e1cee3ce55c7c1e61fc2076cdc311159ef5b2dc9fd26603fb52",
+    "research/candidate_methods/replay.py": "f9eb2f652f959fa6a204caba95bebb0b9db99346ac7e5d005ed835be36c43454",
+    "research/distribution_diagnostics.py": "7f4ce1d05336c40de6370b49b9fb87020b506b8f8a5369e4a13c369d417e1d6e",
+    "research/distribution_replay_adapter.py": "adfb20eab62a5cc08e11ac73ad1d85a996575c90556a03c33d5c5f823dca2500",
+    "research/efficiency/nba_personnel_runner.py": "6d4080fb3f9c4918ae146308d9192eadb7dadbe362c0d57e65cbb93a8786b030",
+    "research/efficiency/runner.py": "5cc410aee9bbabe5ac82acf5fc1ce2de5a2e9ce091982a2930614af102bc8d60",
+    "research/nhl_context.py": "f203785a8036c68b049455098cc051d8fe72c0a19d29b4b739a6a55a90c2f386",
+    "research/replay_controls.py": "fc8ad05b11aa8949a1be3247658fd66e7637a958f51d0d85d44923fcc4121459",
+    "research/source_capture_contracts.py": "e37404294dd09b81de8d15301c27b7f949aadd1fd558cd191d0d80bafcedcef7",
+    "scripts/audit_distribution_tails.py": "24dd0bba0a094a3a4bf6019ca228690efa07e1d9c80977597cf6fbc344ed20db",
+    "scripts/bind_source_observations.py": "9dbad5bb1a5b5ab98fcef3e6c724c43247fbf4ecbec15a696724e73106edc192",
+    "scripts/build_research_candidate_board.py": "214ebb12795d716f200fbd63dde924ddd5b4e752b63e8363b76521e3b0379b50",
+    "scripts/capture_operational_inputs.py": "d2c670cb0f8a4d388f87feb15c4d3724fd6935960c9d24630fe4ab559a55f732",
+    "scripts/generate_card_force.py": "8f5e50786066d81ad88c42402b5bad6ea24b9f7b95bf8bdecb0dc2b0699fadc9",
+    "scripts/run_efficiency_experiments.py": "773fe44c03996ccec189782cf0b5b098afbb798d1d2c79b3a5a178fd420fb520",
+    "scripts/run_nba_personnel_experiment.py": "23cd99367b650fd24f91b34ee45c34489a141410e90e7213221d37ecc84801cc",
+    "scripts/run_nhl_context.py": "26d7ec85d62df8303b3609c63564a3bd3ada92e7ac67667a0a70cdbe110eb784",
+    "scripts/verify_distribution_study.py": "bbac3d09df806019ec953ef88632a676fbab205528d74f380b0c02dec9d00b95",
+    "scripts/verify_model_control_card_replay.py": "78240cd955cfecd8aad58eb4a4c4fb0a2d1d16c8b99e94aa64113cba2fd4544e",
+    "tests/test_cfb_personnel_v2.py": "7ccc590a960ba467839142288e2b337503735386221c3ef2821106853fa5c8ed",
+    "tests/test_distribution_tail_diagnostics.py": "c0dd67617400cb15e3542b735d382541a858ad28b4208c63365b21b3950e478f",
+    "tests/test_model_control_dispatch.py": "d210b5a0cf0766ab802aac84e69819990faa0e9bcea3af2797727a83c7afae9d",
+    "tests/test_nba_personnel_minutes.py": "ef6e1accbd1a59d6fd0a4a28ec997df8ca4b3ce0caafc27c204427fbb419cfaa",
+    "tests/test_nhl_context_controls.py": "7c274710cb4ccb38d454baa7dfca6c6369ed39f95b4a64edb2faa3dbafefc43e",
+    "tests/test_replay_controls.py": "9017f3211dec83b6bdde4811d525d45d5cd87663c933b80de0bd99f32ebfb577",
+    "tests/test_research_candidate_board.py": "5c8e922b5c24a05a927d1b77a9cdb4f1e9600aa22a9cd9dcd0f1a52c2dfe3ad9",
+    "tests/test_settlement_risk.py": "54420b915d42b2df38466ae9618da5ec6134d07d65bd831ad6e6b8c4cb76bd3f",
+    "tests/test_source_capture_contracts.py": "5cac1ac20abf7a71b273dfb7bcdeb3dd0fdc5d054b79935616b5bd2e6b9fa971"
+  },
+  "commands": [
+    {
+      "command": "PYTHONPATH=<isolated-dependencies>:<repo> python3 -m pytest tests research/tests research/cfb_binary_isotonic_proposal/test_binary_isotonic_repair.py -q",
+      "exit_code": 0,
+      "log": "evidence/final-tests.log",
+      "passed": 2465
+    },
+    {
+      "command": "PYTHONPATH=<isolated-dependencies>:<repo> python3 -m unittest discover -s research -p 'test_*.py' -q",
+      "exit_code": 0,
+      "log": "evidence/research-unittest.log",
+      "passed": 131
+    },
+    {
+      "command": "python3 harness/healthcheck.py",
+      "exit_code": 1,
+      "failures": 4,
+      "log": "evidence/health-after.log",
+      "warnings": 9
+    }
+  ],
+  "created_at_utc": "2026-10-30T18:46:43.145510+00:00",
+  "evidence_sha256": {
+    "evidence/before-after.json": "70f6c53a50389513e625d6e114f8e8847d65a975d3516b1ce00511c62f5b3856",
+    "evidence/capture-scope.json": "8b0b9ae0819d7cceb010291b7e67958d8d1894287370b8eaaf4bc913a9c50d72",
+    "evidence/dependencies.log": "713c4bc3bdb888320a81e91fa6a45b673c436177feb6b2d30eeec58bb180458c",
+    "evidence/distribution-replay.log": "9b3fc5c585d87b6e638ed4a7583c01ab6607fa1b6bfeb57775bb0a2d653a7882",
+    "evidence/distribution-tail-audit.json": "c2dda33d665f8af1e8c96e94f85ddde07a6d43bb3549018accc0f073339a00e4",
+    "evidence/final-tests.log": "f00f9c7898a643e7ad0c7b61d3098dd21a3429e23e69687259fb05a0fcb1ce59",
+    "evidence/health-after.log": "86b0e019f88bb59dd470124698f9a6d8ebe8cc884efa75643e230e15038fdbad",
+    "evidence/health-before.log": "40a0e1da9f037847841de62260335cecc22d8f643aa91b13b1ceb8b73887e5c4",
+    "evidence/nba-missing-data-execution.json": "f28a694770b46257094265aba3966e5004ad49bc8e128af05150393637d36949",
+    "evidence/nba-synthetic-execution.json": "3e6b8119631a5872b1db6ea5395c3875f420f0063025d40a01b1f896b37b3be7",
+    "evidence/preservation.json": "9f11f357de1ec968dae63ddcb5c382f43febf70cab22642acc14347d301469a2",
+    "evidence/replay-reports/reports/1e338ab42bc8d8b979a342df9f5634c1f3c56901bb54892a045b2b2aed8d87b6.json": "1e338ab42bc8d8b979a342df9f5634c1f3c56901bb54892a045b2b2aed8d87b6",
+    "evidence/replay-reports/reports/20b50eb32769cb93372933a2de0654ed67aa7936e3f3d15228b6bbc7f359e301.json": "20b50eb32769cb93372933a2de0654ed67aa7936e3f3d15228b6bbc7f359e301",
+    "evidence/replay-reports/reports/4311565d5de43e335473a136881b73f3acbb9de48f4b2f87b7db1fbb79e1d181.json": "4311565d5de43e335473a136881b73f3acbb9de48f4b2f87b7db1fbb79e1d181",
+    "evidence/replay-reports/reports/4cbb0a6c4aa73c7d087d52998a2f52de2b399ea328cfa47fb211fe708799ef9c.json": "4cbb0a6c4aa73c7d087d52998a2f52de2b399ea328cfa47fb211fe708799ef9c",
+    "evidence/replay-reports/reports/9b28d072214c4ef302fbf8940bddc014405c90ec2ad2800126e0166a559c4316.json": "9b28d072214c4ef302fbf8940bddc014405c90ec2ad2800126e0166a559c4316",
+    "evidence/replay-reports/reports/fd93ca3e88e3ff92e524b85aa38575ebdbefe07a2bc6641fd946186c069097e2.json": "fd93ca3e88e3ff92e524b85aa38575ebdbefe07a2bc6641fd946186c069097e2",
+    "evidence/replay-reports/snapshots/45422980f9a0b76d7ed8ef62828ee50e8324442404f90732ca4b398bdaf7a19b.json": "45422980f9a0b76d7ed8ef62828ee50e8324442404f90732ca4b398bdaf7a19b",
+    "evidence/replay-reports/snapshots/7222b886aa701c4dd861a218ca4175783c9349cb68452c2bb0c4b27aea53e79f.json": "7222b886aa701c4dd861a218ca4175783c9349cb68452c2bb0c4b27aea53e79f",
+    "evidence/research-unittest.log": "522a43d0bc058e24820354c66396df2d251d68cbca6924054da45e252c1c015e",
+    "evidence/runtime.json": "671229ea6ec339d3c29acf324d68302656f47873616bf599614deb14fd13e08d",
+    "evidence/shared-card-replay.json": "f06f47d8537942d534566ebae116ebd46fc21ce5715350f35ba67f3422eb66bc"
+  },
+  "executed_populations": {
+    "candidate_contracts_supplied": 22,
+    "candidate_distributions": 16,
+    "candidate_inventory_events": 17,
+    "candidates_reproduced": 16,
+    "distribution_event_products": 6608,
+    "distribution_products": 7,
+    "distribution_saved_draws_equal": 700000,
+    "distribution_worker_receipts": 14,
+    "new_real_personnel_evaluation_events": 0,
+    "new_real_personnel_training_events": 0,
+    "shared_cli_retained_events": 16,
+    "shared_cli_saved_winner_draws_equal": 1600000,
+    "source_nba_rows": 67,
+    "source_nhl_rows": 19,
+    "source_personnel_rows": 86
+  },
+  "implemented_revision_before_evidence": "af80b0ac6bc7627669b2543c7af654934a199bf0",
+  "independent_reviews": [
+    {
+      "component": "NBA personnel",
+      "remaining": "provider authentication and upstream extraction/training evidence truth",
+      "reproduced_findings": [
+        "detached source values",
+        "unbound parent-state identity"
+      ],
+      "resolution": "repaired; 36 tests and original mutation cases independently rerun",
+      "reviewed_commit": "3b83ae51ae85b3d47eeffa97e54418f777852d43",
+      "reviewer": "replay"
+    },
+    {
+      "component": "CFB personnel",
+      "remaining": "authentic personnel data and inherited weekly cutoff",
+      "reproduced_findings": [
+        "discarded future evidence",
+        "season mismatch allowed in coverage",
+        "personnel features mislabeled as control"
+      ],
+      "resolution": "repaired; 31 tests and three repro cases independently rerun",
+      "reviewed_commit": "928db62f037956718be7c3656b385c89d96f660d",
+      "reviewer": "nhl"
+    },
+    {
+      "component": "candidate board",
+      "reproduced_findings": [
+        "implicit model selection",
+        "missing raw-quote/rules warnings"
+      ],
+      "resolution": "repaired; included in final combined test suite",
+      "reviewed_successor": "64455674490da8c9bffc9dc5134bc17dae9eb3ef",
+      "reviewer": "capture"
+    }
+  ],
+  "qualification_notes": [
+    "Software tests and simulation paths are not independent event evidence.",
+    "Original production-runner chronology/provider authentication not established by retained-input replay.",
+    "Adversarial OS sandboxing not implemented; worker input independence only.",
+    "Neither stale source captures nor positive EV enables allocation.",
+    "CFB totals and NBA total support repairs remain separate open research work."
+  ],
+  "run_ids": {
+    "distribution_replay": "distribution-replay-56e675030c117911756a7f20",
+    "nba_missing_inputs": "nba-personnel-46a510c26567456c9410ad52dacd344a",
+    "nba_synthetic": "nba-personnel-525fd6a7005a4308ad5f767f33f30cee"
+  },
+  "schema": "sports.model_controls_execution.v1",
+  "verdicts": {
+    "EXECUTION_STATUS": "COMPLETED_WITH_SCOPED_REFUSALS",
+    "NUMERICAL_REPLAY": "PASS_RETAINED_SHARED_CLI_AND_DISTRIBUTION_STUDY",
+    "PERSISTENCE": "LOCAL_HASH_BOUND_REPORTS_VERIFIED_REMOTE_ANCHOR_UNESTABLISHED",
+    "PIT_ELIGIBILITY": "UNRESOLVED",
+    "PREDICTIVE_VALIDATION": "NOT_ASSESSED_FOR_NEW_PERSONNEL_METHODS",
+    "PUBLICATION_ELIGIBILITY": "INELIGIBLE",
+    "SOURCE_AUTHENTICITY": "NOT_ESTABLISHED",
+    "WAGERING_AUTHORITY": "OFF",
+    "allocation": 0
+  }
+}

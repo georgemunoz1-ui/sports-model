@@ -1,0 +1,66 @@
+{
+  "schema": "finding-evidence-successor-reconciliation.v1",
+  "prior_manifest": {
+    "path": "docs/research/overhaul_2026_10_23/FINDING_EVIDENCE_remaining_prs_v1.json",
+    "sha256": "018cd78ddcaf7337b986ba91c5a2ecb00f208e1ad14b34cff6cb1fa5ddd2050b"
+  },
+  "prior_receipt": {
+    "path": "docs/releases/2026-10-24-remaining-prs/acceptance/acceptance.json",
+    "sha256": "d40e3c2777c6420d66fc2e70a4329844261d799074819ea1e08a44b2ed782fb1"
+  },
+  "prior_current_tree_verification_exit_code": 1,
+  "source_drift": [
+    {
+      "path": "harness/market_capture.py",
+      "previous_sha256": "f2c5e1bd2670abe749b7ec8a6236bb0f6829deddafe36ed82cd0097f150bf2b7",
+      "current_sha256": "186be5089e997c2b65ab1d3c8d674e20c39459e92ca974c4b0b8f35c5a879078"
+    },
+    {
+      "path": "harness/market_sportsgameodds.py",
+      "previous_sha256": "e63999bfd5075ce5c061d517025f69717ed9b7db1668f52077f96994d1cdd136",
+      "current_sha256": "80d83f463dfae46c09d48b43f2fae82983313468042d93a073960d5ed54b85b6"
+    },
+    {
+      "path": "harness/market_theoddsapi.py",
+      "previous_sha256": "a76692dc9b5fb85592ad9330b532584b4b62c81352e2ba0ab83951390de0bcf7",
+      "current_sha256": "4456ee47e536fc5346b83b29a2904f37e840e9e8938bebb176304faf4ea85e5c"
+    },
+    {
+      "path": "models/experiments/cfb_efficiency.py",
+      "previous_sha256": "aebb8357bf6e7a75da6a0543caaf18e36fa907b8e1606da730fafab1e8712b50",
+      "current_sha256": "2feb2967da72006e9276ee1dbfd648126232a7af2bddbc3411699c0421c7e6c1"
+    },
+    {
+      "path": "research/candidate_methods/replay.py",
+      "previous_sha256": "04a49b41d5c5813deb4778ed93d57574ac565248edd98d52d6aad30021bc4f58",
+      "current_sha256": "f9eb2f652f959fa6a204caba95bebb0b9db99346ac7e5d005ed835be36c43454"
+    },
+    {
+      "path": "research/efficiency/runner.py",
+      "previous_sha256": "5014bf91d7cfb63148c89b26a6f7a0f0f50d229d42c5a81ed53d915369782099",
+      "current_sha256": "5cc410aee9bbabe5ac82acf5fc1ce2de5a2e9ce091982a2930614af102bc8d60"
+    },
+    {
+      "path": "scripts/capture_operational_inputs.py",
+      "previous_sha256": "113ef1104f8bbddf81b8e80b7dc9068b4e9bdb87961c75d610d8885864abeb62",
+      "current_sha256": "d2c670cb0f8a4d388f87feb15c4d3724fd6935960c9d24630fe4ab559a55f732"
+    },
+    {
+      "path": "scripts/generate_card_force.py",
+      "previous_sha256": "bf4e6374a855b4bccbc4a36732f5703fb07d2108abf34408745af6ad56d14590",
+      "current_sha256": "8f5e50786066d81ad88c42402b5bad6ea24b9f7b95bf8bdecb0dc2b0699fadc9"
+    },
+    {
+      "path": "scripts/run_efficiency_experiments.py",
+      "previous_sha256": "17f0559c6c22ba16582929834f76f96ca918fda35a5311dd3fd7b97efe433d71",
+      "current_sha256": "773fe44c03996ccec189782cf0b5b098afbb798d1d2c79b3a5a178fd420fb520"
+    },
+    {
+      "path": "scripts/verify_distribution_study.py",
+      "previous_sha256": "134cab6ba0efbd4e86d1eb73a66a753a7e3df0db0fe93f5cbe7a978b60cd9f50",
+      "current_sha256": "bbac3d09df806019ec953ef88632a676fbab205528d74f380b0c02dec9d00b95"
+    }
+  ],
+  "original_artifacts_modified": false,
+  "interpretation": "Historical receipt remains valid only for its bound prior source bytes; this successor requires new execution and does not rewrite the original execution."
+}

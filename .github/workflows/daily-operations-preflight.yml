@@ -1,0 +1,109 @@
+name: Daily Sports Operations Preflight
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - '.github/workflows/daily-operations-preflight.yml'
+      - 'scripts/capture_operational_inputs.py'
+      - 'scripts/validate_operational_capture.py'
+      - 'scripts/operational_capture_contract.py'
+      - 'scripts/recovery_capture.py'
+      - 'tests/test_operational_capture_validation.py'
+      - 'tests/test_recovery_governance.py'
+  schedule:
+    # Early Pacific morning: acquire a point-in-time schedule/source bundle and
+    # report readiness before any forecast/card workflow is authorized.
+    - cron: "30 13 * * *"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: daily-sports-operations-preflight-${{ github.event.pull_request.number || 'scheduled-manual' }}
+  cancel-in-progress: false
+
+jobs:
+  preflight:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: |
+            requirements-consolidated.txt
+            requirements-nfl-context.txt
+
+      - name: Install pinned dependencies
+        # Same pinned set the research-overhaul verify job installs. Without it
+        # harness/healthcheck.py reports import failures (numpy, pandas, pytest)
+        # that mask the repository's actual health status.
+        run: python -m pip install -r requirements-consolidated.txt
+
+      - name: Capture current operational inputs
+        id: capture
+        continue-on-error: true
+        run: |
+          set -o pipefail
+          python scripts/capture_operational_inputs.py --output "$RUNNER_TEMP/sports-inputs" 2>&1 | tee "$RUNNER_TEMP/capture.log"
+
+      - name: Validate capture receipts and run repository health checks
+        id: checks
+        continue-on-error: true
+        run: |
+          set +e
+          python scripts/validate_operational_capture.py --root "$RUNNER_TEMP/sports-inputs" > "$RUNNER_TEMP/capture-validation.json"
+          CAPTURE_RC=$?
+          python harness/healthcheck.py > "$RUNNER_TEMP/healthcheck.log" 2>&1
+          HEALTH_RC=$?
+          printf '{"capture_validation_exit":%s,"healthcheck_exit":%s}\n' "$CAPTURE_RC" "$HEALTH_RC" > "$RUNNER_TEMP/exit-status.json"
+          if [ "$CAPTURE_RC" -ne 0 ] || [ "$HEALTH_RC" -ne 0 ]; then exit 1; fi
+
+      - name: Publish operational report
+        if: always()
+        run: |
+          {
+            echo "## Daily sports operations preflight"
+            echo
+            printf '%s\n' "- Commit: $GITHUB_SHA"
+            echo "- Run: $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"
+            echo "- This workflow captures and checks evidence only. It does not generate forecasts, register selections, or authorize wagering."
+            echo
+            echo "### Capture validation"
+            if [ -f "$RUNNER_TEMP/capture-validation.json" ]; then cat "$RUNNER_TEMP/capture-validation.json"; else echo "Capture validation did not complete."; fi
+            echo
+            echo "### Health check summary"
+            if [ -f "$RUNNER_TEMP/healthcheck.log" ]; then tail -n 100 "$RUNNER_TEMP/healthcheck.log"; else echo "Health check did not complete."; fi
+            echo
+            echo "### Exit status"
+            if [ -f "$RUNNER_TEMP/exit-status.json" ]; then cat "$RUNNER_TEMP/exit-status.json"; else echo "No combined exit status available."; fi
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Preserve source and failure evidence
+        id: evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: daily-operations-preflight-${{ github.run_id }}-${{ github.run_attempt }}
+          path: |
+            ${{ runner.temp }}/sports-inputs/
+            ${{ runner.temp }}/capture.log
+            ${{ runner.temp }}/capture-validation.json
+            ${{ runner.temp }}/healthcheck.log
+            ${{ runner.temp }}/exit-status.json
+          if-no-files-found: error
+          retention-days: 30
+
+      - name: Fail closed on incomplete acquisition or unhealthy repository
+        if: always()
+        run: |
+          if [ "${{ steps.capture.outcome }}" != "success" ] || [ "${{ steps.checks.outcome }}" != "success" ] || [ "${{ steps.evidence.outcome }}" != "success" ]; then
+            echo "PREFLIGHT_FAILED: forecast publication remains blocked."
+            exit 1
+          fi

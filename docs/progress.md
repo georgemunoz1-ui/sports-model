@@ -5021,3 +5021,19 @@ PR38 closed as already incorporated via82. PR45 strict health/evidence blockers
 remain separate and unwaived. Hosted integration CI and artifact readback are
 required before merge. All predictive limitations remain; authority OFF.
 See docs/REMAINING_PR_REPAIR_20261024.md and current execution receipts.
+
+### 2026-11-03 Pacific | Men's college basketball coverage
+
+Added a separate men's Division I schedule, research forecast, market attachment and grading path. The November 3 card omitted CBB. The source audit found 29 games involving a Division I team; 19 Division I pairings had FanMatch benchmarks, and none had an original in-house forecast. The first in-house pre-tip integration run covered November 4, with ten paired score distributions and sixteen cross-division exclusions. The chronological held-out check used 5,747 games from the season ending 2026 and a no-team-rating benchmark. Research only. See `docs/CBB_DAILY_CARD.md` and `docs/CBB_MENS_SHADOW.md`.
+
+### 2026-11-04 Pacific | Men's college basketball result reconciliation
+
+The original draft grader could mark an ESPN final complete after the collector flagged an NCAA score disagreement. A controlled replay reproduced the discrepancy. Postgame grading now pins the manifest and per-event evidence and compares both scoreboards with the ESPN event summary. Unresolved games do not contribute to accuracy or settlement. A correction links to the prior grade in a new output. The original November 4 forecasts and market attachment retain their identities. See `docs/CBB_DAILY_CARD.md` for the postgame commands.
+
+The concurrent coverage-status change was reconciled with the pinned-evidence grader. The grade reports the collector's date, status and coverage digest. A valid globally blocked capture yields an incomplete record. A modified coverage file fails the retained manifest pin.
+
+### 2026-11-04 Pacific | CBB quote ambiguity refusal — local repair
+
+The collector rejected duplicate DraftKings offers while the standalone attachment selected the first. Both now use the same paired-quote parser: duplicate offers, including identical entries, and incomplete offered contract scope reject the event's entire attachment. Clean independent events remain available. Synthetic regressions exercise conflicting lines in either order, price conflicts, identical duplicates, missing scope and immutable CLI output. The existing result-reconciliation and append-only correction tests remain unchanged. Status is `LOCAL_VERIFIED_HOSTED_PENDING`; see `docs/reviews/pr108_quote_scope_20261104/closure.json`. No remote update, forecast/grade rewrite, model/default promotion or wagering authority is included.
+
+Independent review of the local repair found that malformed odds could be treated as unavailable while other contracts survived. Only explicit `OFF`/JSON `null` now means unavailable; malformed typed values refuse the entire event. Seven added regressions preserve that distinction. Earlier local test results are retained with their narrower test scope.

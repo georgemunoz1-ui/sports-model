@@ -1,0 +1,75 @@
+{
+  "action_authority": false,
+  "artifact_sha256": "fc57f90c8e0004e0b176912fe2fd44a51e76bece8fa2bdec3c34c9455b51f7b9",
+  "baseline_commit": "946ee80b7b57a414f58db06c141e589c82dd7745",
+  "created_at_utc": "2026-11-03T18:02:42Z",
+  "predictive_validation": "NOT_ESTABLISHED",
+  "prospective_grade_eligible": false,
+  "rows": [
+    {
+      "artifacts": "data/research/volatility_matrix_replay_20261103/nba/",
+      "league": "nba",
+      "limitations": [
+        "COMPOSITE_FORECAST_HASH_DERIVED",
+        "SIMULATED_TIMESTAMPS",
+        "HISTORICAL_AVAILABILITY_NOT_PROVEN"
+      ],
+      "source": "data/research/distribution_replay_20261007/nba/{margin,total}_cohort.json.gz",
+      "status": "DIAGNOSTIC_FIT_CREATED",
+      "training_n": 1230
+    },
+    {
+      "artifacts": "data/research/volatility_matrix_replay_20261103/nhl/",
+      "league": "nhl",
+      "limitations": [
+        "COMPOSITE_FORECAST_HASH_DERIVED",
+        "SIMULATED_TIMESTAMPS",
+        "HISTORICAL_AVAILABILITY_NOT_PROVEN"
+      ],
+      "source": "data/research/distribution_replay_20261007/nhl/{margin,total}_cohort.json.gz",
+      "status": "DIAGNOSTIC_FIT_CREATED",
+      "training_n": 1312
+    },
+    {
+      "artifacts": "data/research/volatility_matrix_replay_20261103/mls/",
+      "league": "mls",
+      "limitations": [
+        "COMPOSITE_FORECAST_HASH_DERIVED",
+        "SIMULATED_TIMESTAMPS",
+        "HISTORICAL_AVAILABILITY_NOT_PROVEN"
+      ],
+      "source": "data/research/distribution_replay_20261007/mls/{margin,total}_cohort.json.gz",
+      "status": "DIAGNOSTIC_FIT_CREATED",
+      "training_n": 493
+    },
+    {
+      "blocker": "NO_PAIRED_SCORE_HEAD",
+      "league": "cfb",
+      "next_action": "Fit and retain a real earlier-only total head and paired out-of-time score forecasts; never synthesize totals from margins.",
+      "source": "data/cfb/model/cfb_v1_oof.parquet; data/research/distribution_replay_20261007/cfb/margin_cohort.json.gz",
+      "status": "BLOCKED"
+    },
+    {
+      "blocker": "NO_ROW_PROVENANCE",
+      "league": "nfl",
+      "next_action": "Re-run the exact parent walk-forward with per-event forecast/result hashes and real availability timestamps for the same arm.",
+      "source": "data/nfl/contextual_v1/model_packed.json; data/nfl/qb_margin_v1/fit_02/qb_oof_predictions.csv",
+      "status": "BLOCKED"
+    },
+    {
+      "blocker": "ANONYMOUS_RESIDUAL_ARRAYS",
+      "league": "wnba",
+      "next_action": "Persist per-game paired predictions from the WNBA walk-forward with official-plus-ESPN source identities and chronology.",
+      "source": "data/wnba/model/wnba_{margin,total}_residuals_2026-08-29.npy",
+      "status": "BLOCKED"
+    },
+    {
+      "blocker": "RETROSPECTIVE_BATCH_CHRONOLOGY",
+      "league": "mlb",
+      "next_action": "Run a new as-of paired-run forecast replay with pregame cutoffs and source-bound result receipts; keep winner-only evaluation separate.",
+      "source": "data/mlb/evaluations/v13_full_30k.jsonl",
+      "status": "BLOCKED"
+    }
+  ],
+  "schema": "sports.volatility_matrix_readiness.research.v1"
+}

@@ -1,0 +1,91 @@
+{
+  "schema": "sports.decision_research.independent_review.v1",
+  "reviewed_at_utc": "2026-11-04T03:23:27.923909+00:00",
+  "status": "PASS_SCOPED_ENGINEERING_REVIEW",
+  "observed_base_commit": "f421f3c2e68ad2ebaa136a42fd1cd1101f2f6725",
+  "code_scope": "New opt-in research package and immutable sidecar. No model inference, shared-card activation, wagering or production database.",
+  "test_execution": {
+    "command": "/tmp/nhl-shadow-root/venv/bin/python -m pytest -q tests/test_decision_research_*.py",
+    "passed": 297,
+    "failed": 0,
+    "elapsed_seconds": 1.15,
+    "independent_adversarial_cases": 55,
+    "real_sqlite_tests": 34,
+    "postgresql_static_checks": 4,
+    "postgresql_execution": "NOT_RUN",
+    "test_population": "Synthetic engineering fixtures, no predictive sports evaluation"
+  },
+  "closed_findings": [
+    {
+      "finding": "Engine dose float incompatible with strict persistence serializer",
+      "closure": "Integer zero output; actual decide_payload\u2192SQLite evaluation passes."
+    },
+    {
+      "finding": "SQLite authority constraint permitted NULL from absent field",
+      "closure": "IS false constraint; raw missing/null/string/true authority inputs rejected."
+    },
+    {
+      "finding": "Near-half-point Decimal rounded into supported half-point at ambient precision",
+      "closure": "Explicit precision256 exact boundary validation; positive and negative adversarial cases reject."
+    },
+    {
+      "finding": "Model-bound game-state timestamp could follow model cutoff",
+      "closure": "state_time<=cutoff required; retained adversarial fixture refuses."
+    },
+    {
+      "finding": "CLI did not enforce postwrite audit verification and malformed root could bypass receipt",
+      "closure": "Explicit audit/checkpoint checks and invalid-root wrapper; actual subprocess fixtures produce auditable BLOCKED."
+    }
+  ],
+  "reviewed_properties": [
+    "Signed favorites/underdogs use opponent-minus-selected margin; region dominance equals exhaustive integer test.",
+    "Quantity-level fees/minimum/upward rounding, tier crossing and strict total-EV buffer preserve decimal arithmetic.",
+    "Caller flags are engineering assertions only. Evidence bridge ignores authority assertions and has no provider/qualification authority.",
+    "Bound state, model, quote, rules, fee schedule and configuration hashes retained. Matching supplied bytes does not authenticate their contents.",
+    "Actual SQLite transactions/idempotency/rollback/concurrent writers exercised; rows append-only through ordinary SQL and replacement attempts.",
+    "External checkpoint required to detect deletion of complete audit history; administrator protection not claimed.",
+    "Joint-scenario parlay expectations use supplied correlated mass; no multiplication of marginal probabilities or automatic selection.",
+    "Contract sidecar copies exact bound sources, records writer time/observed checkout, refuses overwrite, never emits order authority."
+  ],
+  "protected_existing_files": {
+    "git_diff_exit_code": 0,
+    "paths": [
+      "state.json",
+      "AUTHORIZATIONS.md",
+      "data/model_selection/defaults_v1.json",
+      "scripts/generate_card_force.py",
+      "pipelines/cards"
+    ],
+    "unchanged": true
+  },
+  "reviewed_sha256": {
+    "models/common/decision_research/__init__.py": "5f7f5a3da8ee6a436e5c05255413912839efa47f2aecb79aae5023a2627d1284",
+    "models/common/decision_research/comparisons.py": "e0a5b378d1e7d9be65fc46e53ade3d4482f2a863e87cc4cf599ccdc5b457d4e3",
+    "models/common/decision_research/compatibility.py": "00241854860192aaa258bb89487a0f0345cec48e3cdb682b9286ab3e7d133585",
+    "models/common/decision_research/engine.py": "a039f9abdd3775c629ce8220819283090b5e493e56e927adb0e626bfb26082d6",
+    "models/common/decision_research/fees.py": "79d996e18b5c27aebc4675423d122cc53455773fb51edccb2526ae93849acb67",
+    "models/common/decision_research/numeric.py": "8ec238aa3f5d7779127b615ca68bbdd19711e21cb54c8df163a6974e18d5cc2e",
+    "models/common/decision_research/parlays.py": "b73786f557703cb122e0475b8e2464090dcf7096c529d5c82976eb075eb53a3e",
+    "models/common/decision_research/repository.py": "3ca1ece17e8428d9a52bcc832d024878aaa6396f23540851c379c34e9b9aad8a",
+    "models/common/decision_research/sql/001_postgresql_candidate.sql": "c09c567a440cf629f934c2dc31e92823d9e90537323f2393bf6909f1d6271537",
+    "scripts/run_contract_decision_research.py": "104179cac0ac9b4c7bb52983c8970d8a7a7e5a33c8391a28accfdd9594a5ea3f",
+    "tests/test_decision_research_adversarial.py": "85ad9468001b4b7a206032c52d63ce5f58a9f8dfca5797ee7d120a27f71e1cce",
+    "tests/test_decision_research_compatibility.py": "a1ec64a8c243b29c403f380c72722ed7638b075c709c5077d23cdb7ff60cc432",
+    "tests/test_decision_research_core.py": "ec8c507c1626d5d269922d2bfe34610d3041eda444f92ba4bc0e276bfd261a16",
+    "tests/test_decision_research_parlays.py": "6fc663780c3a97c4a938f23460c4ba26f8d0768994fc795c74a572d26890bac3",
+    "tests/test_decision_research_postgres.py": "aad4dedacbdc00fba2699f7146e18f847dcc666e56c9d4bf68c09772e7099a9f",
+    "tests/test_decision_research_repository.py": "f0044eb59982830b160da2b400519b16bab52f7337178bd25916a92d9c88c124"
+  },
+  "limitations": [
+    "Reported external 51-test and 28-test packages were not recovered; these results concern new repository implementation.",
+    "PostgreSQL migration is static candidate only; no PostgreSQL adapter, transaction/concurrency run or production schema mapping.",
+    "No verified venue fee/rule schedule, quote authentication or qualified valuation registry. Operational sidecar remains BLOCKED.",
+    "Pure core can label caller-asserted engineering fixture QUALIFIED_CANDIDATE but explicitly production_eligible=false and order_authorized=false.",
+    "Binary half-point $1 contracts only for comparator/decision path. Sportsbook pushes/quarter lines/live state are not enabled.",
+    "Parlay half wins/losses, cashout, correlated probability generation and automatic selection remain unsupported.",
+    "No accuracy-first ranker altered; fees/EV do not increase confidence. No deployment, model promotion or predictive validation."
+  ],
+  "order_authorized": false,
+  "action": "OFF",
+  "dose": 0
+}

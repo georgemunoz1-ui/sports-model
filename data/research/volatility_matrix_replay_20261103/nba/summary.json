@@ -1,0 +1,86 @@
+{
+  "action_authority": false,
+  "artifact_sha256": "cb73a0cb483cafd623aa2c65c77c5d16270cb5c1fffb1df0b03e5e8bb8d08975",
+  "artifacts": [
+    {
+      "artifact_sha256": "11ab6d0ba1ecb57a16109a119713697116a08461003f15b6a2553d215a78eafc",
+      "method": "empirical",
+      "model_id": "nba.joint_score.empirical.research.49ed61165f7b941e",
+      "path": "data/research/volatility_matrix_replay_20261103/nba/empirical.json",
+      "volatility": {
+        "away_score_sd": 11.608249490238348,
+        "away_score_variance": 134.75145622761886,
+        "bias_applied_to_point_forecast": false,
+        "conditional_scale": 1.0,
+        "covariance_estimator": "SAMPLE_COVARIANCE_DDOF_1",
+        "empirical_margin_variance_before_discretization": 205.06172373210666,
+        "empirical_residual_pool_population_scale": 0.9991869918699187,
+        "empirical_total_variance_before_discretization": 337.9914205781956,
+        "home_away_correlation": 0.2447904648730455,
+        "home_away_covariance": 33.25946442650313,
+        "home_score_sd": 11.704531125102644,
+        "home_score_variance": 136.99604885849658,
+        "margin_sd": 14.32580106776264,
+        "margin_variance": 205.22857623310918,
+        "mean_bias_actual_minus_predicted": [
+          -0.7513322322967859,
+          -1.1129481475367058
+        ],
+        "predictive_sd_not_monte_carlo_se": true,
+        "scale_features_used": {},
+        "total_sd": 18.392020931347425,
+        "total_variance": 338.2664339391217
+      }
+    },
+    {
+      "artifact_sha256": "5cf3fd8b637256ef7af3afbcc3493432edf40efe3c3a0e1f258586faa76ef9b1",
+      "method": "ledoit_wolf",
+      "model_id": "nba.joint_score.ledoit_wolf.research.e2384555d6656560",
+      "path": "data/research/volatility_matrix_replay_20261103/nba/ledoit_wolf.json",
+      "volatility": {
+        "away_score_sd": 11.605596023205042,
+        "away_score_variance": 134.68985905383266,
+        "bias_applied_to_point_forecast": false,
+        "conditional_scale": 1.0,
+        "covariance_estimator": "SAMPLE_COVARIANCE_DDOF_1",
+        "empirical_margin_variance_before_discretization": 207.73511702105037,
+        "empirical_residual_pool_population_scale": 0.9991869918699187,
+        "empirical_total_variance_before_discretization": 334.87652066786114,
+        "home_away_correlation": 0.23432114073650503,
+        "home_away_covariance": 31.811213687058036,
+        "home_score_sd": 11.697722560452457,
+        "home_score_variance": 136.83671310131837,
+        "margin_sd": 14.418881537103873,
+        "margin_variance": 207.90414478103497,
+        "mean_bias_actual_minus_predicted": [
+          -0.7513322322967859,
+          -1.1129481475367058
+        ],
+        "predictive_sd_not_monte_carlo_se": true,
+        "scale_features_used": {},
+        "total_sd": 18.30707512218342,
+        "total_variance": 335.1489995292671
+      }
+    }
+  ],
+  "fitted_at": "2026-11-03T18:02:42Z",
+  "joint_input_rows_sha256": "0571daf617a9c2fb64d1e315349d49110af530c8a6937dd4624c59fee427ad90",
+  "league": "nba",
+  "prospective_grade_eligible": false,
+  "schema": "sports.volatility_matrix_replay_fit.research.v1",
+  "source_provenance": {
+    "forecast_hash_derivation": "COMPOSITE_MARGIN_TOTAL_FORECAST_HASH_HOME_MINUS_AWAY_V1",
+    "historical_availability_proven": false,
+    "prospective_evidence": false,
+    "score_derivation": "HOME_EQUALS_TOTAL_PLUS_MARGIN_OVER_TWO_AWAY_EQUALS_TOTAL_MINUS_MARGIN_OVER_TWO",
+    "source_capture_kind": "RETROSPECTIVE_RECONSTRUCTION",
+    "source_files": {
+      "margin_cohort.json.gz": "62488c8c4f5dd575a080f63acff10ee1c839164cbe0a44bcfb5631e49c9ab15e",
+      "total_cohort.json.gz": "d355e3222c0628d37dc8d09dd5115865305a586e6e768626ab443d3cd7f96d67"
+    },
+    "source_row_count": 1230,
+    "timestamp_basis": "SIMULATED_START_MINUS_1H_AND_START_PLUS_48H_NOT_CAPTURE"
+  },
+  "status": "FITTED_RESEARCH_NOT_VALIDATED",
+  "training_n": 1230
+}

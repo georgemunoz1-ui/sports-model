@@ -5021,3 +5021,10 @@ PR38 closed as already incorporated via82. PR45 strict health/evidence blockers
 remain separate and unwaived. Hosted integration CI and artifact readback are
 required before merge. All predictive limitations remain; authority OFF.
 See docs/REMAINING_PR_REPAIR_20261024.md and current execution receipts.
+
+
+## 2026-11-04T02:06:21.804774+00:00 — explicit joint-volatility card route
+
+Integrated pinned PR105 research dependencies on an isolated review branch. Added opt-in shared --volatility-research-config and standalone receipted invocation, explicit hash-bound compatible point-parent cards, visible route summaries, actual checkout/source/fit/input/output identities, per-market refusals and no silent fallback. Original winner cards, numerical matrix/fit bytes, selected defaults and chronology gates remain unchanged.
+
+108 focused routing, matrix/replay and card-disclosure engineering tests passed, including a synthetic 100K paired-draw replay. Separate independent adversarial review verified interrupted paired-output accounting. Tests are not predictive validation; actual November 4 packet execution is a separate downstream receipt. Full health remains RED for production archive, recovery, historical release and standing-health dependencies. No automatic promotion, merge, deployment, registration or wagering activation. See docs/NOV4_JOINT_ROUTE_INTEGRATION.md.

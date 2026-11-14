@@ -149,6 +149,82 @@ def personnel_asof(observations, forecast_cutoff_utc, *, transform_fitted=False)
     }
 
 
+def _contract_side(row, side):
+    product = row["product"]
+    if product == "TOTAL":
+        valid = ("OVER", "UNDER")
+    elif product == "THREE_WAY":
+        valid = ("HOME", "DRAW", "AWAY")
+    else:
+        valid = ("HOME", "AWAY")
+    if isinstance(side, str) and side in valid:
+        return side
+    if product != "TOTAL" and isinstance(side, str) and side.strip():
+        teams = {role: row.get(role.lower() + "_team") for role in ("HOME", "AWAY")}
+        if all(teams.values()) and teams["HOME"] != teams["AWAY"]:
+            for role, team in teams.items():
+                if side == team:
+                    return role
+    raise ReviewError("quote selection must identify an exact forecast contract side")
+
+
+def _validate_quote(row, quote):
+    """Bind the quoted side to the forecast before computing any price statistic."""
+    product = row["product"]
+    if not isinstance(quote, dict):
+        raise ReviewError("quote must be an object")
+    if quote.get("event_id") != row["event_id"]:
+        raise ReviewError("quote event must match forecast event")
+    period = row.get("period")
+    if not isinstance(period, str) or not period.strip() or quote.get("period") != period:
+        raise ReviewError("quote period must match explicit forecast period")
+    book = quote.get("book")
+    key = quote.get("market_key")
+    if not isinstance(book, str) or not book.strip():
+        raise ReviewError("quote book required")
+    if not isinstance(key, str) or not key.strip():
+        raise ReviewError("quote market key required")
+    normalized_key = key.strip().upper()
+    key_product = "MONEYLINE" if normalized_key == "ML" else normalized_key
+    if key_product in PRODUCTS:
+        if key_product != product:
+            raise ReviewError("contradictory market key and product")
+    elif row.get("market_key") != key or quote.get("product") != product:
+        raise ReviewError("provider market key requires exact forecast key and typed quote product")
+    if row.get("market_key") is not None and row["market_key"] != key:
+        raise ReviewError("quote market key differs from forecast market key")
+    if quote.get("product", product) != product:
+        raise ReviewError("quote product differs from forecast product")
+    side = _contract_side(row, row.get("selected_outcome"))
+    if _contract_side(row, quote.get("side")) != side:
+        raise ReviewError("quote side must match selected outcome")
+    threshold = product in {"SPREAD", "RUN_LINE", "PUCK_LINE", "TOTAL"}
+    if threshold:
+        if _numeric(quote.get("line"), "quote.line") != _numeric(row.get("line"), "forecast.line"):
+            raise ReviewError("quote line must match exact forecast line")
+    elif row.get("line") is not None or quote.get("line") is not None:
+        raise ReviewError("winner market must not carry a handicap")
+    pair = quote.get("matching_opposite")
+    if pair is None:
+        return None
+    if product == "THREE_WAY":
+        raise ReviewError("MLS regulation 1X2 needs all three market prices; a two-side no-vig pair is invalid")
+    fields = ("event_id", "book", "market_key", "period", "retrieved_at_utc", "provider_asof_utc")
+    if not isinstance(pair, dict) or any(pair.get(k) != quote.get(k) for k in fields):
+        raise ReviewError("no-vig requires exactly paired same-event/line/provider market vintage")
+    if pair.get("product", product) != product or _contract_side(row, pair.get("side")) == side:
+        raise ReviewError("no-vig requires exactly paired opposite sides of the forecast market")
+    if product in {"SPREAD", "RUN_LINE", "PUCK_LINE"}:
+        if _numeric(pair.get("line"), "pair.line") != -quote["line"]:
+            raise ReviewError("no-vig requires complementary signed handicaps")
+    elif threshold:
+        if _numeric(pair.get("line"), "pair.line") != quote["line"]:
+            raise ReviewError("no-vig requires an identical total threshold")
+    elif pair.get("line") is not None:
+        raise ReviewError("no-vig requires an identical winner market")
+    return pair
+
+
 def audit_observation(row):
     """Evaluate one source-bound research contract; never authorize an action.
 
@@ -214,48 +290,36 @@ def audit_observation(row):
     quote = row.get("quote")
     quote_status = "NO_QUOTE"
     ev = hurdle = no_vig = value_gap_pp = None
+    priced = False
     if quote is not None:
-        if not isinstance(quote, dict):
-            raise ReviewError("quote must be an object")
+        pair = _validate_quote(row, quote)
         price = quote.get("american")
-        hurdle = purchase_probability(price)
-        ev = expected_return(p, push, price)
+        purchase_probability(price)
+        if pair is not None:
+            purchase_probability(pair.get("american"))
         retrieved = _utc(quote.get("retrieved_at_utc"), "quote.retrieved_at_utc")
         asof_text = quote.get("provider_asof_utc")
-        asof = _utc(asof_text, "quote.provider_asof_utc") if asof_text else None
-        # The observation can still be displayed after seal, but cannot be
-        # backdated to justify at-cutoff model/price comparison.
-        quote_status = ("AT_CUTOFF_SOURCE_DECLARED_UNVERIFIED" if asof is not None and asof <= cutoff
-                        and retrieved <= cutoff else
-                        "POST_SEAL_COMPARISON_ONLY" if retrieved > cutoff else
-                        "PROVIDER_ASOF_NOT_ESTABLISHED")
-        pair = quote.get("matching_opposite")
-        if product == "THREE_WAY" and pair is not None:
-            raise ReviewError("MLS regulation 1X2 needs all three market prices; a two-side no-vig pair is invalid")
-        if pair is not None:
-            if (not isinstance(pair, dict) or not quote.get("book") or
-                not quote.get("event_id") or quote.get("event_id") != row["event_id"] or
-                pair.get("event_id") != row["event_id"] or
-                pair.get("book") != quote.get("book") or
-                pair.get("market_key") != quote.get("market_key") or
-                pair.get("period") != quote.get("period") or
-                not quote.get("side") or not pair.get("side") or
-                pair.get("side") == quote.get("side") or
-                pair.get("retrieved_at_utc") != quote.get("retrieved_at_utc") or
-                pair.get("provider_asof_utc") != quote.get("provider_asof_utc")):
-                raise ReviewError("no-vig requires exactly paired same-event/line/provider market vintage")
-            line_a, line_b = quote.get("line"), pair.get("line")
-            if product in {"SPREAD", "PUCK_LINE", "RUN_LINE"}:
-                a = _numeric(line_a, "quote.line")
-                b = _numeric(line_b, "pair.line")
-                if abs(a + b) > 1e-9:
-                    raise ReviewError("no-vig requires complementary signed handicaps")
-            elif line_a != line_b:
-                raise ReviewError("no-vig requires an identical ML/total threshold")
-            no_vig = paired_novig(price, pair.get("american"))
-            # Two quoted decisive sides condition out a refund. A native three-
-            # outcome grade must keep the push mass separately.
-            value_gap_pp = (p / (1-push) - no_vig) * 100 if push < 1 else None
+        asof = _utc(asof_text, "quote.provider_asof_utc") if asof_text is not None else None
+        if asof is not None and asof > retrieved:
+            raise ReviewError("quote cannot be retrieved before provider as-of time")
+        if retrieved >= start:
+            quote_status = "AT_OR_AFTER_START_EXCLUDED"
+        elif retrieved <= cutoff:
+            quote_status = ("AT_CUTOFF_SOURCE_DECLARED_UNVERIFIED" if asof is not None
+                            else "PROVIDER_ASOF_NOT_ESTABLISHED")
+        elif issued_at is None:
+            quote_status = "POST_CUTOFF_PRESTART_ISSUANCE_UNKNOWN"
+        elif retrieved < issued:
+            quote_status = "POST_CUTOFF_PRE_ISSUANCE"
+        else:
+            quote_status = "POST_SEAL_COMPARISON_ONLY"
+        priced = retrieved < start
+        if priced:
+            hurdle = purchase_probability(price)
+            ev = expected_return(p, push, price)
+            if pair is not None:
+                no_vig = paired_novig(price, pair["american"])
+                value_gap_pp = (p / (1-push) - no_vig) * 100 if push < 1 else None
     if row.get("product_supported") is not True:
         product_state = "PRODUCT_SUPPORT_NOT_VERIFIED"
     else:
@@ -278,11 +342,11 @@ def audit_observation(row):
         threeway_brier = sum((prob - float(outcome == result)) ** 2
                              for outcome, prob in probs.items())
         won = result == row["selected_outcome"]
-        pnl = (payout_per_unit(quote["american"]) if won else -1.0) if quote else None
+        pnl = (payout_per_unit(quote["american"]) if won else -1.0) if priced else None
     elif result == "PUSH":
         brier = None
         settlement_brier = p*p + (push-1)**2 + (1-p-push)**2
-        pnl = 0.0
+        pnl = 0.0 if priced else None
     else:
         y = 1.0 if result == "WIN" else 0.0
         brier = (p-y)**2 if push == 0 else None
@@ -291,7 +355,7 @@ def audit_observation(row):
             settlement_brier = sum((a-b)**2 for a,b in zip((p,push,1-p-push),targets))
         decisive_brier = ((p/(1-push))-y)**2 if push < 1 else None
         market_brier = (no_vig-y)**2 if decisive_brier is not None and no_vig is not None else None
-        pnl = (payout_per_unit(quote["american"]) if result == "WIN" else -1.0) if quote else None
+        pnl = (payout_per_unit(quote["american"]) if result == "WIN" else -1.0) if priced else None
     grade_type = ("NOT_GRADED" if result is None else
                   "RESEARCH_ONLY_SOURCE_HASH_ABSENT" if not row.get("final_source_sha256") else
                   "RESEARCH_ONLY_HASH_DECLARED_NOT_INDEPENDENTLY_VERIFIED")
@@ -361,7 +425,22 @@ def cohort_summary(observations):
             raise ReviewError("duplicate event within league/model/arm/product cohort")
         settled = [r for r in rows if r["observed_result"] in {"WIN", "LOSS", "HOME", "DRAW", "AWAY"}]
         comparable = [r for r in settled if r["binary_brier"] is not None]
-        paired = [r for r in settled if r["paired_market_decisive_brier"] is not None]
+        by_vintage = defaultdict(list)
+        for r in rows:
+            if r["paired_market_no_vig_decisive"] is not None:
+                by_vintage[r["quote_status"]].append(r)
+        benchmarks = {}
+        for vintage, cohort in sorted(by_vintage.items()):
+            paired = [r for r in cohort if r["paired_market_decisive_brier"] is not None]
+            n = len(paired)
+            benchmarks[vintage] = {
+                "paired_count": len(cohort), "settled_count": n,
+                "model_decisive_brier": sum(r["conditional_decisive_brier"] for r in paired)/n if n else None,
+                "market_decisive_brier": sum(r["paired_market_decisive_brier"] for r in paired)/n if n else None,
+            }
+        # Existing single-vintage consumers retain their scores. Mixed vintages
+        # have no aggregate paired score; callers must select a dated cohort.
+        only = next(iter(benchmarks.values())) if len(benchmarks) == 1 else {}
         threeway = [r for r in settled if r["three_way_brier"] is not None]
         summaries.append({
             "league": key[0], "model_id": key[1], "arm_id": key[2], "product": key[3],
@@ -375,12 +454,11 @@ def cohort_summary(observations):
                                   if comparable else None),
             "mean_three_way_brier": (sum(r["three_way_brier"] for r in threeway) / len(threeway)
                                      if threeway else None),
-            "market_paired_count": sum(r["paired_market_no_vig_decisive"] is not None for r in rows),
-            "market_paired_settled_count": len(paired),
-            "model_decisive_brier_on_market_pairs": (
-                sum(r["conditional_decisive_brier"] for r in paired) / len(paired) if paired else None),
-            "market_decisive_brier_on_market_pairs": (
-                sum(r["paired_market_decisive_brier"] for r in paired) / len(paired) if paired else None),
+            "market_benchmarks_by_quote_status": benchmarks,
+            "market_paired_count": sum(b["paired_count"] for b in benchmarks.values()),
+            "market_paired_settled_count": sum(b["settled_count"] for b in benchmarks.values()),
+            "model_decisive_brier_on_market_pairs": only.get("model_decisive_brier"),
+            "market_decisive_brier_on_market_pairs": only.get("market_decisive_brier"),
             "official_units": 0.0, "predictive_qualification": "HOLD",
         })
     return {

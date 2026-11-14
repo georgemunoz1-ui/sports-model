@@ -45,10 +45,36 @@ class ModelDispositionTests(unittest.TestCase):
         with self.assertRaisesRegex(DispositionError,"do not invent"):
             validate_dispositions(self.data)
 
+    def test_parent_identifiers_do_not_authorize_a_new_disposition(self):
+        row = self.data["leagues"]["NBA"]
+        row.update(parent_model_id="research.parent",
+                   parent_fitted_state_sha256="a" * 64,
+                   parent_input_manifest_sha256="b" * 64)
+        result = validate_dispositions(self.data)
+        self.assertEqual(result["league_dispositions"]["NBA"], row["model_disposition"])
+        for disposition in ("PROMOTED_TO_PRODUCTION", "UNRECOGNIZED", None):
+            with self.subTest(disposition=disposition):
+                row["model_disposition"] = disposition
+                with self.assertRaisesRegex(DispositionError, "must name blocker"):
+                    validate_dispositions(self.data)
+
     def test_unpinned_model_state_must_be_explicit(self):
         self.data["leagues"]["MLS"]["blockers"]=[]
         with self.assertRaisesRegex(DispositionError,"blocker accounting"):
             validate_dispositions(self.data)
+
+    def test_top_level_claims_agree_with_dated_evidence(self):
+        for key, target, value, error in (
+            ("independent_policy_registration", self.data, "PROVEN", "independent policy registration"),
+            ("status", self.data["shared_evaluator"], "PROMOTED_TO_PRODUCTION", "shared evaluator status"),
+        ):
+            for supplied in (value, None):
+                with self.subTest(key=key, supplied=supplied):
+                    original = target[key]
+                    target[key] = supplied
+                    with self.assertRaisesRegex(DispositionError, error):
+                        validate_dispositions(self.data)
+                    target[key] = original
 
     def test_precise_sha256_checks(self):
         self.data["leagues"]["NFL"]["parent_input_manifest_sha256"]="not-a-sha"

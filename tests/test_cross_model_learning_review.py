@@ -21,11 +21,14 @@ def row(**overrides):
         "forecast_cutoff_utc": "2026-11-11T16:12:00Z",
         "start_time_utc": "2026-11-12T00:30:00Z",
         "protocol_registered_at_utc": None,
+        "period": "FULL_GAME_OT", "selected_outcome": "HOME",
+        "home_team": "BUF", "away_team": "BSU",
+        "forecast_issued_at_utc": "2026-11-11T16:13:00Z",
         "model_p_win": 0.673056, "model_p_push": 0.0,
         "sim_p_win": 0.6721, "simulation_draws": 100000,
         "quote": {"american": -122,"retrieved_at_utc":"2026-11-11T16:16:17Z",
                   "provider_asof_utc": None,"book":"DraftKings",
-                  "market_key":"ML","period":"FULL_GAME_OT"},
+                  "market_key":"ML","period":"FULL_GAME_OT","event_id":"CFB:20261111-BUF-BSU","side":"HOME"},
         "observed_result": "WIN", "final_source_sha256": "source_digest_placeholder",
         "product_supported": True,
         "action_authority": False, "stake_units": 0,
@@ -112,15 +115,15 @@ class CrossModelReviewTests(unittest.TestCase):
         self.assertAlmostEqual(summary["groups"][0]["mean_three_way_brier"],0.78)
 
     def test_novig_not_inferred_from_unpaired_nhl_quote(self):
-        x=audit_observation(row(league="NHL",product="PUCK_LINE",quote={**row()["quote"],"american":190}))
+        x=audit_observation(row(league="NHL",product="PUCK_LINE",line=-1.5,quote={**row()["quote"],"market_key":"PUCK_LINE","line":-1.5,"american":190}))
         self.assertIsNone(x["paired_market_no_vig_decisive"])
         self.assertIsNone(x["paired_market_decisive_brier"])
 
     def test_integer_spread_paired_decisive_vs_push_unconditional(self):
         q={**row()["quote"],"event_id":row()["event_id"],"market_key":"SPREAD",
-           "line":-14,"side":"Toledo","american":-112}
-        other={**q,"line":14,"side":"UMass","american":-108}
-        obs=audit_observation(row(product="SPREAD",model_p_win=.6345,model_p_push=.019,
+           "line":-14,"side":"HOME","american":-112}
+        other={**q,"line":14,"side":"AWAY","american":-108}
+        obs=audit_observation(row(product="SPREAD",line=-14,model_p_win=.6345,model_p_push=.019,
                                   quote={**q,"matching_opposite":other},observed_result="WIN"))
         self.assertAlmostEqual(obs["model_minus_market_decisive_pp"],
             100*((.6345/(1-.019))-paired_novig(-112,-108)))
@@ -128,13 +131,13 @@ class CrossModelReviewTests(unittest.TestCase):
         self.assertIsNotNone(obs["conditional_decisive_brier"])
         self.assertIsNotNone(obs["settlement_three_class_brier"])
         with self.assertRaisesRegex(ReviewError,"complementary"):
-            audit_observation(row(product="SPREAD",quote={**q,"matching_opposite":{**other,"line":13.5}}))
+            audit_observation(row(product="SPREAD",line=-14,quote={**q,"matching_opposite":{**other,"line":13.5}}))
 
     def test_mls_pair_is_not_a_threeway_market(self):
         r=row(league="MLS",product="THREE_WAY",model_p_win=None,
               three_way_probabilities={"HOME":.5,"DRAW":.3,"AWAY":.2},
               selected_outcome="DRAW",observed_result="DRAW")
-        q={**r["quote"],"event_id":r["event_id"],"side":"DRAW"}
+        q={**r["quote"],"event_id":r["event_id"],"side":"DRAW","market_key":"THREE_WAY"}
         other={**q,"american":150,"side":"HOME"}
         with self.assertRaisesRegex(ReviewError,"all three market prices"):
             audit_observation({**r,"quote":{**q,"matching_opposite":other}})
@@ -145,8 +148,8 @@ class CrossModelReviewTests(unittest.TestCase):
                                   three_way_probabilities={"HOME":0.6,"DRAW":0.3,"AWAY":0.2}))
 
     def test_integer_push_refund_is_not_a_win(self):
-        r=row(product="SPREAD",model_p_win=.6345,model_p_push=.019,
-              quote={**row()["quote"],"american":-112,"market_key":"SPREAD"},
+        r=row(product="SPREAD",line=-14,model_p_win=.6345,model_p_push=.019,
+              quote={**row()["quote"],"american":-112,"market_key":"SPREAD","line":-14},
               observed_result="PUSH")
         x=audit_observation(r)
         self.assertAlmostEqual(x["paper_ev_per_unit"],.6345*(100/112) - (1-.6345-.019))
@@ -171,6 +174,73 @@ class CrossModelReviewTests(unittest.TestCase):
         self.assertEqual(x["quote_status"],"AT_CUTOFF_SOURCE_DECLARED_UNVERIFIED")
         self.assertIn("QUOTE_NOT_INDEPENDENTLY_PROVEN_AT_CUTOFF",x["warnings"])
 
+    def test_single_quote_requires_matching_event_product_period_side_and_line(self):
+        base = row(product="SPREAD", line=-3.5)
+        q = {**base["quote"], "line": -3.5, "market_key": "SPREAD"}
+        for field, bad in (("event_id","OTHER"), ("period","REGULATION"), ("book",""),
+                           ("market_key","ML"), ("side","AWAY"), ("line",3.5)):
+            with self.subTest(field=field), self.assertRaises(ReviewError):
+                audit_observation({**base,"quote":{**q, field:bad}})
+        q_missing = {k:v for k,v in q.items() if k not in ("market_key","period")}
+        with self.assertRaises(ReviewError):
+            audit_observation({**base,"quote":{**q_missing,"matching_opposite":q_missing}})
+
+    def test_invalid_opponent_label_and_pair_product_rejected(self):
+        q = row()["quote"]
+        for fields in ({"side":"BANANA"}, {"side":"AWAY","product":"TOTAL"}):
+            with self.subTest(fields=fields), self.assertRaises(ReviewError):
+                audit_observation(row(quote={**q,"matching_opposite":{**q,**fields}}))
+        q = {**q,"product":"SPREAD"}
+        with self.assertRaises(ReviewError):
+            audit_observation(row(product="SPREAD",quote=q))
+
+    def test_provider_market_keys_require_explicit_forecast_binding(self):
+        q = row()["quote"]
+        for key in ("first-half-spread", "three_way", "spread", "total"):
+            with self.subTest(key=key), self.assertRaises(ReviewError):
+                audit_observation(row(quote={**q, "market_key":key, "product":"MONEYLINE"}))
+        with self.assertRaises(ReviewError):
+            audit_observation(row(market_key="three_way", quote={**q,"market_key":"three_way","product":"MONEYLINE"}))
+        q = {**q,"market_key":"provider:main:01"}
+        with self.assertRaises(ReviewError):
+            audit_observation(row(market_key=q["market_key"], quote=q))
+        with self.assertRaises(ReviewError):
+            audit_observation(row(market_key="provider:main:02", quote={**q,"product":"MONEYLINE"}))
+        obs = audit_observation(row(market_key=q["market_key"], quote={**q,"product":"MONEYLINE"}))
+        self.assertIsNotNone(obs["paper_ev_per_unit"])
+        self.assertIsNotNone(audit_observation(row(quote={**q,"market_key":"ml"}))["paper_ev_per_unit"])
+
+    def test_start_boundary_refuses_price_metrics_but_preserves_model_grade(self):
+        for when in ("2026-11-12T00:30:00Z", "2026-11-12T00:31:00Z"):
+            q = {**row()["quote"],"retrieved_at_utc":when}
+            obs = row(quote={**q,"matching_opposite":{**q,"side":"AWAY","american":115}})
+            out = cohort_summary([obs])
+            grade = out["rows"][0]
+            self.assertEqual(grade["quote_status"], "AT_OR_AFTER_START_EXCLUDED")
+            for field in ("paper_ev_per_unit","paper_realized_units","purchase_break_even",
+                          "paired_market_no_vig_decisive","paired_market_decisive_brier"):
+                self.assertIsNone(grade[field])
+            self.assertIsNotNone(grade["binary_brier"])
+            self.assertEqual(out["groups"][0]["market_paired_settled_count"],0)
+
+    def test_vintages_get_separate_matched_scores(self):
+        observations = []
+        for event, t in (("one","2026-11-11T16:10:00Z"), ("two","2026-11-11T16:15:00Z")):
+            q = {**row()["quote"],"event_id":event,"retrieved_at_utc":t,"provider_asof_utc":t}
+            observations.append(row(event_id=event,quote={**q,"matching_opposite":{**q,"side":"AWAY"}}))
+        g = cohort_summary(observations)["groups"][0]
+        self.assertIsNone(g["market_decisive_brier_on_market_pairs"])
+        self.assertEqual({k:v["settled_count"] for k,v in g["market_benchmarks_by_quote_status"].items()},
+                         {"AT_CUTOFF_SOURCE_DECLARED_UNVERIFIED":1,"POST_SEAL_COMPARISON_ONLY":1})
+
+    def test_post_cutoff_status_depends_on_actual_issuance(self):
+        self.assertEqual(audit_observation(row(forecast_issued_at_utc=None))["quote_status"],
+                         "POST_CUTOFF_PRESTART_ISSUANCE_UNKNOWN")
+        self.assertEqual(audit_observation(row(forecast_issued_at_utc="2026-11-11T16:17:00Z"))["quote_status"],
+                         "POST_CUTOFF_PRE_ISSUANCE")
+        with self.assertRaises(ReviewError):
+            audit_observation(row(quote={**row()["quote"],"provider_asof_utc":"2026-11-11T16:20:00Z"}))
+
     def test_naive_and_late_frozen_cutoffs_rejected(self):
         with self.assertRaisesRegex(ReviewError,"offset"):
             audit_observation(row(forecast_cutoff_utc="2026-11-11T16:12:00"))
@@ -192,7 +262,7 @@ class CrossModelReviewTests(unittest.TestCase):
             preferred_side({"BUF":.67})
 
     def test_no_opposing_ev_flip_and_totals_shadows(self):
-        x=audit_observation(row(product="TOTAL",product_supported=False,observed_result=None))
+        x=audit_observation(row(product="TOTAL",product_supported=False,observed_result=None, quote=None))
         self.assertIn("NON_DECISION_FACING_PRODUCT",x["warnings"])
         self.assertIn("PRODUCT_SUPPORT_NOT_VERIFIED",x["warnings"])
         self.assertIsNone(x["binary_brier"])
@@ -231,8 +301,8 @@ class CrossModelReviewTests(unittest.TestCase):
 
     def test_grouping_denominators_and_no_cross_league_average(self):
         first=row()
-        second=row(product="SPREAD",arm_id="margin.v1",model_p_win=.63,
-                   quote={**first["quote"],"market_key":"SPREAD"})
+        second=row(product="SPREAD",arm_id="margin.v1",model_p_win=.63,line=-3.5,
+                   quote={**first["quote"],"market_key":"SPREAD","line":-3.5})
         output=cohort_summary([first,second])
         self.assertEqual(output["unique_events"],1)
         self.assertEqual(output["contract_rows"],2)
@@ -250,7 +320,7 @@ class CrossModelReviewTests(unittest.TestCase):
 
     def test_unsupported_half_settlement_refused(self):
         with self.assertRaisesRegex(ReviewError,"halves"):
-            audit_observation(row(product="SPREAD",observed_result="HALF_WIN"))
+            audit_observation(row(product="SPREAD",observed_result="HALF_WIN",quote=None))
 
     def test_cli_stdin_not_needed_output_is_read_only(self):
         with tempfile.TemporaryDirectory() as tmp:

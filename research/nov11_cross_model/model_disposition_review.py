@@ -29,9 +29,13 @@ def validate_dispositions(payload):
         raise DispositionError("all and only eight league dispositions required")
     if not SHA40.fullmatch(str(payload.get("main_baseline_commit", ""))):
         raise DispositionError("pinned parent code commit required")
+    if payload.get("independent_policy_registration") != "NOT_PROVEN":
+        raise DispositionError("independent policy registration must be NOT_PROVEN in this packet")
     control=payload.get("shared_evaluator")
     if not isinstance(control,dict) or control.get("official_units")!=0:
         raise DispositionError("official exposure must be exactly zero")
+    if control.get("status") != "LOCALLY_TESTED_IN_PR":
+        raise DispositionError("shared evaluator status must be LOCALLY_TESTED_IN_PR in this packet")
     for name in ("model_defaults_changed","production_runner_enabled","canonical_forecasts_rewritten","wagering_authorized"):
         if control.get(name) is not False:
             raise DispositionError(f"{name} must stay false")
@@ -59,9 +63,10 @@ def validate_dispositions(payload):
                     raise DispositionError(f"{league}: malformed {key}")
                 if key=="parent_model_id" and (not isinstance(val,str) or not val.strip()):
                     raise DispositionError(f"{league}: malformed model identity")
-        missing=[k for k in ("parent_model_id","parent_fitted_state_sha256","parent_input_manifest_sha256") if row.get(k) is None]
-        if missing and row.get("model_disposition") != "BLOCKED_PENDING_SOURCE_AND_MODEL_STATE_RECONCILIATION":
-            raise DispositionError(f"{league}: must name blocker when model state/input not pinned")
+        # This dated packet has no verified training labels or registration.
+        # Supplying digest strings cannot advance its recorded disposition.
+        if row.get("model_disposition") != "BLOCKED_PENDING_SOURCE_AND_MODEL_STATE_RECONCILIATION":
+            raise DispositionError(f"{league}: must name blocker for this research-only manifest")
     return {
         "status":"VALID_RESEARCH_ONLY_WITH_NAMED_BLOCKERS",
         "model_families":8,

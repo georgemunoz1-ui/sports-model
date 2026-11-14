@@ -225,6 +225,13 @@ def _validate_quote(row, quote):
     return pair
 
 
+def _schedule_hold(row):
+    held = row.get("schedule_hold", False)
+    if not isinstance(held, bool):
+        raise ReviewError("schedule_hold must be boolean")
+    return held or row.get("status") == "SCHEDULE_HOLD"
+
+
 def audit_observation(row):
     """Evaluate one source-bound research contract; never authorize an action.
 
@@ -233,6 +240,8 @@ def audit_observation(row):
     """
     if not isinstance(row, dict):
         raise ReviewError("observation must be an object")
+    if _schedule_hold(row):
+        raise ReviewError("SCHEDULE_HOLD: fixture comparison withheld")
     league = row.get("league")
     product = row.get("product")
     if league not in LEAGUES:
@@ -411,7 +420,23 @@ def cohort_summary(observations):
     avoid counting both opposite sides or successive editions as new games.
     The number of distinct events across products is returned separately.
     """
-    graded = [audit_observation(r) for r in observations]
+    # Quarantine the entire fixture when any sibling contract reports a hold.
+    # Keep a minimal accounting record without attaching a probability to a team.
+    observations = list(observations)
+    held_events = set()
+    for row in observations:
+        if not isinstance(row, dict) or row.get("league") not in LEAGUES or not isinstance(row.get("event_id"), str) or not row["event_id"]:
+            raise ReviewError("valid league and event identity required")
+        if _schedule_hold(row):
+            held_events.add((row["league"], row["event_id"]))
+    graded = []
+    withheld = []
+    for row in observations:
+        if (row["league"], row["event_id"]) in held_events:
+            withheld.append({"league": row["league"], "event_id": row["event_id"],
+                             "product": row.get("product"), "status": "SCHEDULE_HOLD"})
+        else:
+            graded.append(audit_observation(row))
     group = defaultdict(list)
     event_ids = set()
     for r in graded:
@@ -463,7 +488,13 @@ def cohort_summary(observations):
         })
     return {
         "schema": SCHEMA, "population": "BOUNDED_RESEARCH_NOT_CANONICAL",
-        "unique_events": len(event_ids), "contract_rows": len(graded),
+        "unique_events": len(event_ids | held_events), "contract_rows": len(observations),
+        "withheld": withheld,
+        "league_coverage": {
+            league: {"reviewed_contracts": sum(r["league"] == league for r in graded),
+                     "held_contracts": sum(r["league"] == league for r in withheld)}
+            for league in sorted(LEAGUES)
+        },
         "groups": summaries, "rows": graded,
         "official_units": 0.0, "wagering_authority": False,
     }

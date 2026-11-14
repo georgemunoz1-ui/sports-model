@@ -1,0 +1,43 @@
+{
+  "action_authority": false,
+  "official_stake_units": 0.0,
+  "positions": [
+    {
+      "event_id": "CFB:SYNTHETIC-NOT-REAL",
+      "contract_id": "TEAM_HOME_ML",
+      "market": "MONEYLINE",
+      "orientation": "HOME",
+      "american": -122,
+      "reference_stake_units": 1,
+      "settlements": {
+        "HOME_BY_10": "WIN",
+        "HOME_BY_1": "WIN",
+        "AWAY_BY_7": "LOSS"
+      }
+    },
+    {
+      "event_id": "CFB:SYNTHETIC-NOT-REAL",
+      "contract_id": "TEAM_HOME_MINUS_1_5",
+      "market": "SPREAD",
+      "orientation": "HOME",
+      "american": -102,
+      "reference_stake_units": 1,
+      "settlements": {
+        "HOME_BY_10": "WIN",
+        "HOME_BY_1": "LOSS",
+        "AWAY_BY_7": "LOSS"
+      }
+    }
+  ],
+  "event_scenarios": {
+    "CFB:SYNTHETIC-NOT-REAL": {
+      "event_id": "CFB:SYNTHETIC-NOT-REAL",
+      "law_id": "ILLUSTRATIVE_UNFITTED_SCENARIOS_DO_NOT_USE_FOR_BETS",
+      "scenarios": [
+        {"id": "HOME_BY_10", "probability": 0.35},
+        {"id": "HOME_BY_1", "probability": 0.30},
+        {"id": "AWAY_BY_7", "probability": 0.35}
+      ]
+    }
+  }
+}

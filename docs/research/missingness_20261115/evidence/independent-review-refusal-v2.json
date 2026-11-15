@@ -1,0 +1,26 @@
+{
+  "scope": "INDEPENDENT_TEST_ONLY_SOFTWARE_REVIEW",
+  "reviewed_files_sha256": {
+    "research/missingness_review.py": "85c24c7c062e6d87dfbc7a73de02bffd81f7f7a1af0241eecf3e7f55165b801a",
+    "pipelines/cards/shared_missingness.py": "870dfcbfd4c6d0361f176badc29ef51ddb6ba989e3ec006223930f039ad1af6c",
+    "data/model_selection/missingness/shared_contracts.json": "e06812a2ace4a4168623bd1fc240d2c7bc91e1111a054286b6c3d2b93ee710a8",
+    "tests/test_missingness_refusal_policy.py": "50238be5fb40ddcab526c7021963373149efdc843452143a5fc8a42689eb8a5a",
+    "tests/test_missingness_feature_contracts.py": "d8eea5e3300e29ee918793ac7541715264004606318b934bcffb0181a60c1f1c"
+  },
+  "independent_test_file": "test_missingness_refusal_independent.py",
+  "independent_test_file_sha256": "e5523bad4c27a43dc0e3331219322007f278b744dfcdd791c22286b10498583c",
+  "test_log": "independent-refusal-v2-tests.log",
+  "test_summary": "88 passed in 1.31s",
+  "findings_closed": [
+    "Complete-only support and mandatory source refusals are representable by an explicit new v2 policy without rewriting v1 semantics.",
+    "A candidate refusal and a comparator refusal can coexist without invented numerical loss; scored candidate rows still require numeric paired comparisons.",
+    "Source-supported opportunities cannot be converted into unexplained refusals, even with fresh test signatures.",
+    "Version-2 source scope restricts the current full release path even when a test inventory signer authenticates the altered receipt.",
+    "NBA/NHL/MLS/CFB audit-contract attachment preserved all existing row fields and five retained draw-file byte hashes."
+  ],
+  "remaining_limits": [
+    "Current source-state and reporting-control measurement authenticity remains dependent on a yet-unverified producer and witness process.",
+    "Feature-contract registration and synthetic successful gate tests are not independent statistical approval.",
+    "No production v2 policy, model promotion, calibrated model/product threshold, forward predictive qualification, or wagering authority was installed."
+  ]
+}

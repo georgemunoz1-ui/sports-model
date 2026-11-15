@@ -178,6 +178,9 @@ def nfl_run(inputs, output):
         fixture, row = fixtures[eid], shown[eid]
         native = read_forecast(dest, fixture, N, select('nfl')['default_model_id'],
                                inputs['state_id'], utc(receipt['cutoff_utc']), package['model_digest'])
+        from pipelines.cards.nfl_missingness import verify_native_card_row
+        if not verify_native_card_row(row, cutoff=receipt['cutoff_utc']):
+            raise ValueError('NFL_MISSINGNESS_ROW_READBACK_FAILED')
         if (row.get('action_authority') is not False or row['home_team'] != fixture['home_team']
                 or row['away_team'] != fixture['away_team'] or row['start_time_utc'] != fixture['start_time_utc']
                 or any(row.get(k) != v for k, v in native.items())

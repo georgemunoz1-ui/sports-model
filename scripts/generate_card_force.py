@@ -372,8 +372,9 @@ def refused_event(event, reason, status="BLOCKED"):
 
 
 def generate(card_date, league, as_of, simulations, overrides, roster_bundle=None, require_roster_aware=False, *,
-             identity_semantics="legacy.v1", package_sha256=None, expected_schedule=None):
+             identity_semantics="legacy.v1", package_sha256=None, expected_schedule=None, previous_rows=None):
     from sports.rosters import attach, assess, load_bundle
+    from pipelines.cards.shared_missingness import attach_shared_audit, check_source_inputs
     adapter = load_adapter(league)
     schedule = adapter.load_schedule(card_date, as_of)
     if expected_schedule is not None and schedule != expected_schedule:
@@ -382,6 +383,7 @@ def generate(card_date, league, as_of, simulations, overrides, roster_bundle=Non
     try:
         roster = load_bundle(roster_bundle) if roster_bundle else None
         context = adapter.build_context(schedule, as_of, True, overrides)
+        check_source_inputs(context.get("package"))
         if package_sha256 is not None and context.get("package_sha256") != package_sha256:
             raise ValueError("LOADED_PACKAGE_HASH_MISMATCH")
     except Exception as exc:
@@ -456,6 +458,16 @@ def generate(card_date, league, as_of, simulations, overrides, roster_bundle=Non
                 "detail": f"{type(exc).__name__}:{exc}",
             })
 
+    event_by_id = {str(e["event_id"]): e for e in schedule if e.get("event_id")}
+    for index,row in enumerate(rows):
+        eid = row["event_id"]
+        try:
+            attach_shared_audit(league,row,event_by_id[eid],context,as_of,(previous_rows or {}).get(eid))
+        except (ValueError,TypeError,ArithmeticError,KeyError,AttributeError) as exc:
+            reason=f"MISSINGNESS_RECEIPT_UNAVAILABLE:{type(exc).__name__}:{exc}"
+            rows[index]=refused_event(event_by_id[eid],reason)
+            attach_shared_audit(league,rows[index],event_by_id[eid],{},as_of)
+            incidents.append({"event_id":eid,"incident":"MISSINGNESS_RECEIPT_UNAVAILABLE","detail":reason})
     generated_at = now_utc().isoformat().replace("+00:00", "Z")
     pit = summarize_pit(context, as_of, generated_at)
     generated = {row["event_id"] for row in rows if row["forecast_status"] == "FORECAST_GENERATED"}
@@ -486,7 +498,14 @@ def generate(card_date, league, as_of, simulations, overrides, roster_bundle=Non
     }
     if package_sha256 is not None:
         card["package_binding"] = {"sha256": package_sha256, "date": card_date, "league": league}
-    return attach_grading(card)
+    attach_grading(card)
+    # Bind the final delivered row, including the writer-owned grading fields.
+    from pipelines.cards.missingness import seal_audit
+    from pipelines.cards.shared_missingness import binding
+    for row in rows:
+        row["missingness_audit"]=seal_audit(**binding(row,league.lower(),as_of),
+                                            details=row["missingness_audit"]["details"])
+    return card
 
 
 def _delta_text(seconds):
@@ -578,6 +597,8 @@ def render_md(card, disclosures=None):
             f"{row.get('projected_margin', '—')} | {row.get('projected_total', '—')} | {grade} | "
             f"{', '.join(row.get('warnings', [])) or 'None'} |"
         )
+    from pipelines.cards.missingness_presentation import render_md as render_missingness
+    lines += ["", render_missingness(card)]
     if card["incidents"]:
         lines += ["", "## Coverage incidents", "", "```json", json.dumps(card["incidents"], indent=2), "```"]
     from pipelines.cards.disclosures import build_report, render_md as render_disclosures
@@ -610,6 +631,8 @@ def main():
     parser.add_argument("--selection-config", type=Path, help="Frozen research selector configuration; absent config emits unqualified diagnostic NO_PICK")
     parser.add_argument("--event-package", type=Path, help="Explicit dated current-package file")
     parser.add_argument("--event-package-sha256", help="Expected SHA-256 of the selected package bytes")
+    parser.add_argument("--previous-card", type=Path, help="Earlier frozen edition for the same event, with an audit receipt")
+    parser.add_argument("--previous-card-sha256", help="Expected hash of earlier edition")
     parser.add_argument("--output-dir", default="output")
     args = parser.parse_args()
     if args.initial_research_baselines:os.environ['SPORTS_INITIAL_BASELINES']='1'
@@ -621,6 +644,8 @@ def main():
     if args.league == "mlb":
         os.environ["MLB_DRAW_OUTPUT"] = str((output / "draws").resolve())
     try:
+        from pipelines.cards.shared_missingness import load_parent
+        previous_rows = load_parent(args.previous_card, args.previous_card_sha256, args.league, as_of)
         schedule = None
         if args.event_package is not None or args.event_package_sha256 is not None:
             if not args.event_package or not args.event_package_sha256:
@@ -628,7 +653,7 @@ def main():
             schedule = bind_shared_package(args.event_package, args.event_package_sha256, args.league, args.date)
         card = generate(args.date, args.league, as_of, args.simulations, args.manual_overrides,
                         args.roster_bundle, args.require_roster_aware, identity_semantics=args.identity_semantics,
-                        package_sha256=args.event_package_sha256, expected_schedule=schedule)
+                        package_sha256=args.event_package_sha256, expected_schedule=schedule, previous_rows=previous_rows)
     except Exception as exc:
         failure = {"status": "BLOCKED", "league": args.league, "date": args.date, "as_of_utc": as_of,
                    "package_path": str(args.event_package) if args.event_package else None,

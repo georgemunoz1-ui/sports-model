@@ -327,7 +327,9 @@ def test_nfl_separate_runner_emits_bound_disclosure_sidecar(tmp_path, monkeypatc
     game = {"event_id": "event-1", "home_team": "Home", "away_team": "Away", "start_time_utc": "2099-10-20T23:00:00Z"}
     bundle = {"schema": "nfl.integrated_context_forecast.v1", "mode": "research_pregame", "event": game,
               "cutoff_utc": CUTOFF, "model_id": "parent.v1", "model_artifact_sha256": HASH,
-              "features": {"qb": "player-1"}, "prediction": {}, "winner_simulation": {}, "score_simulation": {}}
+              "identity": HASH, "features": {"qb": "player-1"},
+              "prediction": {"home_win": 0.6, "home_margin": 2., "total_points": 41.},
+              "winner_simulation": {}, "score_simulation": {}}
     context = {"model": {"design": {}}, "recovered": {}, "package": {"event_inputs": {"event-1": {"base": {}, "context": {}}}}}
     monkeypatch.setattr(runner.nfl, "load_schedule", lambda *a: [game])
     monkeypatch.setattr(runner.nfl, "build_context", lambda *a, **kw: context)

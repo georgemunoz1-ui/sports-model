@@ -15,7 +15,10 @@
    gs gates + qualify-then-best baked in). NO ad-hoc pricing scripts — that's how the Sale flaw and
    the unwired-fix gap happened. START-ONLY accumulation from pitcher_logs
    (bug history: relief outings inflate TBF/start). <5 prior GS -> skip. |proj-line|>=1.5 -> R5 audit.
-5. Card = FULL-TRACKING (Taco standing order 7/22): run `python3 harness/daily_card.py DATE slate.psv`
+5. Card = FULL-TRACKING (Taco standing order 7/22): run `python3 scripts/run_mlb_legacy_tracking.py DATE slate.psv --output NEW_DIRECTORY`
+   For the keyed coordinator use the same command with a dated relay JSON and `--coordinator`.
+   Both emit a checked research-only `tracking_card.json`. Direct calls to `harness/daily_card.py` and
+   `harness/mlb_daily_coordinator.py` serve historical replay. Their registered source bytes stay pinned.
    -> ALL games x {lines, V13 H%/projT/RLcov/blow%, K projs, gap-vs-market} displayed as TRACKING.
    Plays remain kprop-only: EV>0 AND edge>=4pp AND |dev|>=0.8 -> paper play (weight 0.5 if GS<10). Write
    cards/YYYY-MM-DD_kprops.json + html; append plays to state.json ledgers.kprops_paper.plays_pending;

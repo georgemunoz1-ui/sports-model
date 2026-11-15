@@ -1,0 +1,56 @@
+{
+  "schema": "sports.independent_personnel_refusal_review.v1",
+  "scope": "TEST_ONLY_SOFTWARE_AND_ARTIFACT_INTEGRITY",
+  "base_commit": "3246bd3e6b356abe47ead1a298ce329d4622b57a",
+  "reviewed_commit": "d1dd65c03a288b59032076170080e3b2ded67fd3",
+  "reviewed_file_sha256": {
+    "research/efficiency/nba_personnel_runner.py": "5fefcb8d1d7d9bd555678f14f9db84372a1105b629e93b2a5668e676530aa08e",
+    "tests/test_nba_personnel_minutes.py": "2ecec222cd4e3a817b3be4e48aa0c533b041482915184e38b69906c0e180e015",
+    "docs/research/missingness_20261115/PERSONNEL_EXPERIMENT_REFUSALS.md": "d54010e13834175ec47c8c49185119da2ff0152e8f098489eca93ed8b4ec78d6"
+  },
+  "unchanged_native_files": {
+    "models/experiments/nba_personnel.py": {
+      "sha256": "780197a5959bc2b5c0a89abfc72e4e4b54430fb48d97b9a48a986b954393905d",
+      "byte_identical": true
+    },
+    "scripts/run_nba_personnel_experiment.py": {
+      "sha256": "c83946327d8bb5b518a4b6ed93b91abd44c6ffcfaccb7f28739a63d7e3c72d2a",
+      "byte_identical": true
+    },
+    "data/model_selection/defaults_v1.json": {
+      "sha256": "8bbfb63ee0f8eeb99fc728fb25db3f1d9959c863ccb4f517abde058e3424b3eb",
+      "byte_identical": true
+    },
+    "state.json": {
+      "sha256": "b11eaae146d0ad6f01cbcf8cd2be8b6164074a013e03d1cd5977c664a728cd19",
+      "byte_identical": true
+    }
+  },
+  "card_sidecar_function_unchanged": true,
+  "card_sidecar_function_sha256": "433bc886dff0300f711e03b7f8e34ecb15913e7acd7416d1d2664c945e05d674",
+  "before_independent_regressions": {
+    "failed": 4,
+    "passed": 0,
+    "log_sha256": "6a84f77d166884575f6b425c6b9acffa74f871ddbc95a9b44c913aa454408800"
+  },
+  "after": {
+    "passed": 145,
+    "failed": 0,
+    "scope": "141 exact workflow tests plus 4 independently authored regressions",
+    "log_sha256": "27425736eb1442405fc67e12535e7ae0f6a0bcabb3fae087ab840acd3364d3c3"
+  },
+  "closed_findings": [
+    "Whole-report and original-input row inventory reject suppressed exclusions and altered coverage counters.",
+    "Malformed event/row containers are isolated; successful sibling outputs are retained."
+  ],
+  "verified_behaviors": [
+    "Fit failure has source-bound coverage inventory without state or numeric forecasts.",
+    "Result reconciliation exclusion retains the original successful forecast and receipt.",
+    "Writer checks original source hash and reconstructs every input inventory row.",
+    "Generated reports and exclusions are separately hash-bound and checked after write."
+  ],
+  "limitations": [
+    "Checksums and original-file reconstruction establish retained-byte integrity, not provider authentication if all source/package/receipt bytes are fabricated.",
+    "No predictive qualification, model promotion, protected integration, or action authority established."
+  ]
+}

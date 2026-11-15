@@ -68,8 +68,10 @@ class SignedFixture:
             "power_assumptions": {"minimum_useful_improvement": .04, "paired_loss_sd": .03,
                 "design_effect": 1.2, "alpha": .05, "total_trials": 1, "target_power": .8,
                 "dependence": "Independent synthetic blocks"}}
+        from missingness_review_fixture import make_study
+        self.protocol["missingness_policy_id"], study_id = make_study(self.store, self.protocol, lambda art, purpose, stamp: self.receipt(art,purpose,stamp,"fixture-witness"), "fixture-witness")
         self.dataset = self.store.put({"schema": "synthetic-paired-dataset.v1", "evidence_scope": "CONFIRMATION"})
-        self.evidence = {"candidate_id": self.candidate, "control_id": self.control,
+        self.evidence = {"missingness_evaluation_id": study_id, "candidate_id": self.candidate, "control_id": self.control,
             "population_id": self.population, "selector_config_id": self.config_id,
             "target": FAMILY, "objective": "unconditional_win", "primary_metric": "brier",
             "evaluation_start_utc": self.protocol["evaluation_start_utc"],

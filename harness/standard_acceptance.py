@@ -148,7 +148,12 @@ def t9_missing_uncertainty_blocks_readiness():
     COMPLETE = {p: "specified" for p in RG.REQUIRED_ESTIMATOR_PARTS}
     COMPLETE["exact_estimand"] = "SD_OF_BLOCK_MEAN_SIGNED_CALIBRATION_RESIDUAL"
     COMPLETE["minimum_admissible_cluster_count"] = 6
-    ready = RG.readiness(COMPLETE, admissible_clusters=8, prior_pool_provisional=False)
+    from unittest.mock import patch
+    target = {"league":"mlb", "product":"winner", "period":"full_game", "settlement_rules_id":"extra_innings"}
+    COMPLETE.update(procedure_id="synthetic",target=target,missingness_review={
+        "model_id":COMPLETE["versioned_model_identity"], "procedure_id":"synthetic", "target":target})
+    with patch.object(RG, "release_reason", return_value=None):
+        ready = RG.readiness(COMPLETE, admissible_clusters=8, prior_pool_provisional=False)
     absent = RG.readiness({}, admissible_clusters=2, prior_pool_provisional=True)
     return _check("missing uncertainty prevents the board from claiming decision readiness",
                   ready["may_publish_decision_board"] and

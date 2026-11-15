@@ -6,11 +6,16 @@ from xml.etree import ElementTree as ET
 
 
 _COLUMNS = ("Event ID", "Start (UTC)", "Away", "Home", "Status", "Model winner",
-            "Model P", "Simulation P", "Projected margin¹", "Projected total", "Refusal reason")
+            "Model P", "Simulation P", "Projected margin¹", "Projected total", "Missingness review", "Refusal reason")
 
 
 def _percent(value):
     return "—" if value is None else f"{value:.2%}"
+
+
+def _audit_summary(row):
+    from pipelines.cards.missingness_presentation import audit_view
+    return audit_view(row)["summary"]
 
 
 def _cells(row):
@@ -26,11 +31,12 @@ def _cells(row):
     fields = (row.get("event_id"), row.get("start_time_utc"), row.get("away_team"),
               row.get("home_team"), status, row.get("model_winner"),
               _percent(row.get("model_p")), _percent(row.get("sim_p")),
-              row.get("projected_margin"), row.get("projected_total"), reason)
+              row.get("projected_margin"), row.get("projected_total"), _audit_summary(row), reason)
     return tuple("—" if v is None else str(v) for v in fields)
 
 
 def _html(card):
+    from pipelines.cards.missingness_presentation import render_html
     title = f'{card["league"]} diagnostic card — {card["card_date"]}'
     rows = ["<tr>" + "".join(f"<td>{escape(v)}</td>" for v in _cells(r)) + "</tr>"
             for r in card["forecasts"]]
@@ -52,7 +58,8 @@ def _html(card):
             '</tr></thead><tbody>' + "\n".join(rows) + '</tbody></table>'
             '<p>¹ Margin and total retain the values and units of the league adapter. '
             'Model and simulation probabilities refer to the named outcome. '
-            'Consult the source card for the estimator and settlement scope.</p></body></html>\n')
+            'Consult the source card for the estimator and settlement scope.</p>' +
+            render_html(card) + '</body></html>\n')
 
 
 def write_recipient_card(card, destination):

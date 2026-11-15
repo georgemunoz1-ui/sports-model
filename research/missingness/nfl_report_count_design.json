@@ -1,0 +1,21 @@
+{
+  "schema": "sports.nfl.report_count_support_challenger.v1",
+  "model_id": "nfl.report_count_training_support.v1.shadow",
+  "registered_at_utc": "2026-11-08T14:10:14.698590+00:00",
+  "parent_model_sha256": "c1cdf49dbb1a98bbf2b3d4286042a316c132dc7d472f3138c3bbbb1e0cb1c3cd",
+  "selected_arms": [
+    "availability",
+    "combined"
+  ],
+  "feature": "report_missing_count",
+  "rule": "Clamp only the integer count of missing team reports to [earlier training minimum,earlier training maximum]. Refuse if an interior integer is absent from observed fit support, if support is ambiguous, or if input is invalid. Hold all other feature values and fitted parameters fixed. A clamped count is an extrapolation sensitivity, never new source evidence.",
+  "source_precedence": "Accept exact training rows or uniquely identified support from the bound standardized feature moments. Historical out-of-fold fitting requires the exact feature-table digest in the archived fit audit. No substitute law or model.",
+  "development": [
+    "2026-11-08 CIN-ATL original and refreshed; supporting mechanism and illustration only",
+    "original 2015\u20132025 model-development dataset was previously used"
+  ],
+  "historical_design": "Descriptive expanding-season replay 2019\u20132025. Earlier seasons only, all three native heads, same event sets, signed margin error actual minus predicted, MAE/RMSE for margin/total and decisive win Brier/log loss. Separate all and adjusted rows. No newly fitted coefficients downstream of outcomes.",
+  "confirmation": "New untouched, source-bound pregame forecasts after this registration, paired official final, stratified by report-count support. No release or approval until separately reviewed criteria, sufficient OOD examples, calibration and independent market comparisons.",
+  "release": "HOLD",
+  "wagering_authority": false
+}

@@ -6,7 +6,8 @@ import json
 from pathlib import Path
 import sys
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
-from models.nba.efficiency_monte_carlo_shadow_v1_1 import run
+from models.nba.efficiency_monte_carlo_shadow_v1_1 import REQUIRED_SNAPSHOT, run
+from pipelines.cards.missingness import seal_audit, verify_audit
 
 
 def main(argv=None):
@@ -26,9 +27,32 @@ def main(argv=None):
                 'limitations': ['Synthetic direction/engineering repair; predictive validation unestablished.',
                                 'No fitted state supplied by repository; caller must supply explicit fitted parameters.',
                                 'Inherited one-point random tie-break is not a fitted overtime model.']}
+    refusals={}
+    for name in REQUIRED_SNAPSHOT:
+        probe=dict(snapshot)
+        probe.pop(name)
+        try:
+            run(probe,state,args.simulations)
+        except ValueError as exc:
+            reason=str(exc)
+            if reason!="INPUTS_INCOMPLETE:"+name:
+                raise
+            refusals[name]=reason
+        else:
+            raise ValueError("NBA_MISSING_INPUT_PROBE_ACCEPTED:"+name)
+    binding=dict(league="nba",event_id=snapshot["event_id"],model_id=result["model_id"],
+                 products=["winner","margin","total"],forecast=result)
+    envelope["missingness_audit"]=seal_audit(**binding,details={
+        "status":"REQUIRED_INPUTS_PROBED","missing_input_refusals":refusals,
+        "availability_rule":"Both EPM-per-100 inputs required; explicit numeric zero allowed",
+        "source_freshness":"Caller-supplied snapshot; independent source chronology unverified",
+        "historical_support":"UNMEASURED","limits":"UNREVIEWED","refresh":{"status":"NO_PAIRED_PARENT"}})
     # Exclusive creation preserves any prior artifact. Input/config hashes live in result.
     with args.output.open('x') as stream:
         stream.write(json.dumps(envelope, sort_keys=True, indent=2, allow_nan=False) + '\n')
+    stored=json.loads(args.output.read_bytes())
+    if not verify_audit(stored["missingness_audit"], **{**binding,"forecast":stored["result"]}):
+        raise ValueError("NBA_SHADOW_MISSINGNESS_READBACK")
     return 0
 
 

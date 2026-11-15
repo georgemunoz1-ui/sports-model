@@ -17,6 +17,9 @@ Ratings CSV -- ``team,attack,defense,pace,elo``; only ``team`` is required.
 from __future__ import annotations
 
 import csv
+import io
+import hashlib
+import math
 from pathlib import Path
 from typing import Iterable, Sequence
 
@@ -44,19 +47,50 @@ def _to_int(value: str | None) -> int | None:
     return int(float(value))
 
 
-def read_games_csv(path: str | Path) -> list[Game]:
+def _open_csv(path, evidence):
+    if evidence is None:
+        return open(path,newline="",encoding="utf-8")
+    try:
+        raw=Path(path).read_bytes()
+    except OSError:
+        evidence["state"]="ACQUISITION_FAILURE"
+        raise
+    evidence.update(state="LOCAL_CSV_READ",sha256=hashlib.sha256(raw).hexdigest(),rows=0)
+    return io.StringIO(raw.decode("utf-8-sig"),newline="")
+
+
+def read_games_csv(path: str | Path, *, evidence=None) -> list[Game]:
     """Load games; rows without both scores are returned as unplayed."""
     games: list[Game] = []
-    with open(path, newline="", encoding="utf-8") as fh:
+    with _open_csv(path,evidence) as fh:
         reader = csv.DictReader(fh)
         if reader.fieldnames is None:
             return games
+        keys=set()
         for raw in reader:
             row = {(k or "").strip().lower(): (v.strip() if isinstance(v, str) else v) for k, v in raw.items()}
             home, away = _pick(row, _HOME_KEYS), _pick(row, _AWAY_KEYS)
+            if evidence is not None:
+                evidence["rows"]+=1
+                if not home or not away or home==away:
+                    raise ValueError("UNRESOLVED_GAME_TEAMS")
+                eid=row.get("event_id") or row.get("game_id")
+                # With no provider ID, repeated team/date pairs need disambiguation (including doubleheaders).
+                identity=("event",eid) if eid else (row.get("date"),home,away)
+                if identity in keys:
+                    raise ValueError("DUPLICATE_OR_AMBIGUOUS_GAME_IDENTITY")
+                keys.add(identity)
+                for field in ("neutral","ot"):
+                    v=(row.get("overtime") if field=="ot" and "ot" not in row else row.get(field))
+                    if v in (None,""):
+                        evidence[field+"_default_count"]=evidence.get(field+"_default_count",0)+1
+                    elif str(v).lower() not in _TRUE|{"0","false","no","n","f"}:
+                        raise ValueError("INVALID_GAME_FLAG:"+field)
             if not home or not away:
                 continue
             hs, as_ = _to_int(_pick(row, _HS_KEYS)), _to_int(_pick(row, _AS_KEYS))
+            if evidence is not None and ((hs is None)!=(as_ is None)):
+                raise ValueError("PARTIAL_SCORE_CANNOT_BECOME_UNPLAYED")
             games.append(
                 Game(
                     home=home,
@@ -91,12 +125,21 @@ def write_games_csv(path: str | Path, games: Iterable[Game]) -> None:
             )
 
 
-def read_ratings_csv(path: str | Path) -> dict[str, TeamRating]:
+def read_ratings_csv(path: str | Path, *, evidence=None) -> dict[str, TeamRating]:
     ratings: dict[str, TeamRating] = {}
-    with open(path, newline="", encoding="utf-8") as fh:
+    with _open_csv(path,evidence) as fh:
         for raw in csv.DictReader(fh):
             row = {(k or "").strip().lower(): (v.strip() if isinstance(v, str) else v) for k, v in raw.items()}
             team = row.get("team") or row.get("name")
+            if evidence is not None:
+                evidence["rows"]+=1
+                if not team or team in ratings:
+                    raise ValueError("DUPLICATE_OR_UNRESOLVED_RATING_TEAM")
+                defaults=evidence.setdefault("default_fields_by_team",{})
+                defaults[team]=[k for k in ("elo","attack","defense","pace") if not row.get(k)]
+                for k in ("elo","attack","defense","pace"):
+                    if row.get(k) and not math.isfinite(float(row[k])):
+                        raise ValueError("NONFINITE_RATING")
             if not team:
                 continue
             ratings[team] = TeamRating(

@@ -22,6 +22,10 @@ number never reaches a decision; absent refusal behaviour -> extrapolation witho
 MODULE_ID = "readiness_gate"
 
 import sys
+from datetime import datetime, timezone
+from pathlib import Path
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+from research.missingness_review import release_reason
 
 REQUIRED_ESTIMATOR_PARTS = (
     "exact_estimand",
@@ -68,7 +72,34 @@ def estimator_complete(spec):
     return (not missing and not problems), missing, problems
 
 
-def readiness(estimator_spec, admissible_clusters=None, prior_pool_provisional=None):
+def scoped_review_failure(review, model_id, procedure_id, target, decision_at_utc,
+                          declared_time, verify, *, league=None):
+    """Match the reviewed scope to the consuming estimator/cohort, then evaluate at the decision time."""
+    from research.validation_registry import ValidationRegistry, _time
+    if not isinstance(review, dict):
+        return "MISSINGNESS_REVIEW_REQUIRED"
+    if (not isinstance(model_id, str) or not model_id.strip()
+            or not isinstance(procedure_id, str) or not procedure_id.strip()
+            or not isinstance(target, dict) or set(target) != ValidationRegistry.TARGET_KEYS
+            or not all(isinstance(v,str) and v.strip() for v in target.values())
+            or (league is not None and target["league"] != league)
+            or (review.get("model_id"), review.get("procedure_id"), review.get("target")) !=
+               (model_id, procedure_id, target)):
+        return "MISSINGNESS_CONSUMER_SCOPE_MISMATCH"
+    # The operating clock is authoritative for new decisions. An explicit historical
+    # decision cutoff belongs to the caller; the document cannot backdate itself.
+    actual = datetime.now(timezone.utc)
+    try:
+        when = _time(decision_at_utc) if decision_at_utc is not None else actual
+        if when > actual or (decision_at_utc is not None and declared_time is not None
+                             and _time(declared_time) != when):
+            return "MISSINGNESS_CONSUMER_DECISION_TIME_MISMATCH"
+    except ValueError:
+        return "MISSINGNESS_CONSUMER_DECISION_TIME_MISMATCH"
+    return verify(review, when.isoformat(), league=target["league"])
+
+
+def readiness(estimator_spec, admissible_clusters=None, prior_pool_provisional=None, *, decision_at_utc=None):
     """The product-level gate. Anything short of ready refuses to publish a decision board."""
     ok, missing, problems = estimator_complete(estimator_spec)
     reasons = []
@@ -83,6 +114,12 @@ def readiness(estimator_spec, admissible_clusters=None, prior_pool_provisional=N
         reasons.append({"code": "PRIOR_INPUT_POOL_PROVISIONAL",
                         "note": "training evidence that cannot be traced to a retained artifact "
                                 "cannot certify an estimator built on it"})
+    spec = estimator_spec or {}
+    failure = scoped_review_failure(spec.get("missingness_review"), spec.get("versioned_model_identity"),
+                                    spec.get("procedure_id"), spec.get("target"), decision_at_utc,
+                                    spec.get("decision_at_utc"), release_reason)
+    if failure:
+        reasons.append({"code": failure})
     ready = not reasons
     return {
         "status": READY if ready else NOT_READY,
@@ -111,7 +148,21 @@ def selftest():
     ok, missing, probs = estimator_complete(COMPLETE)
     if not ok:
         f.append(f"a complete spec must pass, missing={missing} problems={probs}")
-    r = readiness(COMPLETE, admissible_clusters=8, prior_pool_provisional=False)
+    if readiness(COMPLETE, admissible_clusters=8)["may_publish_decision_board"]:
+        f.append("missing model review must block the decision board")
+    from unittest.mock import patch
+    target = {"league":"nfl", "product":"winner", "period":"full_game", "settlement_rules_id":"two_way"}
+    COMPLETE.update(procedure_id="synthetic", target=target, missingness_review={
+        "model_id":COMPLETE["versioned_model_identity"], "procedure_id":"synthetic", "target":target})
+    with patch(__name__ + ".release_reason", return_value=None):
+        r = readiness(COMPLETE, admissible_clusters=8, prior_pool_provisional=False)
+        for mismatch in ({"versioned_model_identity":"other"}, {"procedure_id":"other"},
+                         {"target":dict(target, period="first_half")}):
+            if readiness(dict(COMPLETE, **mismatch), admissible_clusters=8)["may_publish_decision_board"]:
+                f.append("foreign missingness scope allowed decision readiness")
+        timed = dict(COMPLETE, decision_at_utc="2026-01-10T12:00:00Z")
+        if readiness(timed, 8, decision_at_utc="2026-01-11T12:00:00Z")["may_publish_decision_board"]:
+            f.append("mismatched decision clock allowed readiness")
     if r["status"] != READY or not r["may_publish_decision_board"]:
         f.append(f"a complete, well-supplied estimator is READY, got {r}")
 

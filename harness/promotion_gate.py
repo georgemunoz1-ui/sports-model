@@ -40,6 +40,10 @@ import sys
 BASE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
+sys.path.insert(0, BASE)
+from research.missingness_review import release_reason
+from harness.readiness_gate import scoped_review_failure
+
 import paired_eval as PE
 
 FORWARD_ONLY_PENDING = "FORWARD_ONLY_PENDING"
@@ -229,7 +233,7 @@ def compare_against_references(challenger, references, reps=4000, seed=20260823)
             "references": blocks}
 
 
-def evaluate(cohort, comparison, integrity, calibration, auc):
+def evaluate(cohort, comparison, integrity, calibration, auc, *, decision_at_utc=None):
     """The binding gate. Returns FORWARD_ONLY_PENDING unless EVERY condition is met.
 
     cohort: {"n_games":..., "n_slate_dates":...}
@@ -274,6 +278,10 @@ def evaluate(cohort, comparison, integrity, calibration, auc):
     c["zero_integrity_failures"] = {
         "ok": all(v == 0 for v in fails.values()), "detail": fails,
         "note": "a MISSING count is not zero; an unmeasured integrity check fails the gate"}
+    missingness_failure = scoped_review_failure(cohort.get("missingness_review"), cohort.get("model_id"),
+                                               cohort.get("procedure_id"), cohort.get("target"), decision_at_utc,
+                                               cohort.get("at_utc"), release_reason, league="mlb")
+    c["missingness_review"] = {"ok": missingness_failure is None, "reason": missingness_failure}
     all_ok = all(v["ok"] for v in c.values())
     return {
         "status": ELIGIBLE_FOR_PROMOTION_REVIEW if all_ok else FORWARD_ONLY_PENDING,
@@ -467,7 +475,20 @@ def selftest():
                                "B": {"beats_this_reference": True,
                                      "interval_entirely_below_zero": True,
                                      "date_block_interval": [-0.03, -0.005]}}}
+    # An otherwise fully qualifying cohort needs an independently reviewed model scope.
     g = evaluate(full, good_cmp, clean, cal_ok, auc_ok)
+    if g["blocking"] != ["missingness_review"] or g["status"] != FORWARD_ONLY_PENDING:
+        f.append("an unreviewed missingness scope was allowed past promotion")
+    from unittest.mock import patch
+    target = {"league":"mlb", "product":"winner", "period":"full_game", "settlement_rules_id":"extra_innings"}
+    full = {**full, "model_id":"synthetic", "procedure_id":"synthetic", "target":target,
+            "missingness_review":{"model_id":"synthetic","procedure_id":"synthetic","target":target}}
+    with patch(__name__ + ".release_reason", return_value=None):
+        g = evaluate(full, good_cmp, clean, cal_ok, auc_ok)
+        for mismatch in ({"model_id":"other"}, {"procedure_id":"other"},
+                         {"target":dict(target, period="first_half")}):
+            if evaluate(dict(full, **mismatch), good_cmp, clean, cal_ok, auc_ok)["conditions"]["missingness_review"]["ok"]:
+                f.append("foreign model/product review allowed MLB promotion")
     if g["status"] != ELIGIBLE_FOR_PROMOTION_REVIEW:
         f.append(f"a fully qualifying cohort was blocked on {g['blocking']}")
     if "does not promote it" not in g["note"]:

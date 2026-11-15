@@ -1,0 +1,34 @@
+{
+  "scope": "INDEPENDENT_SOFTWARE_REVIEW_ONLY",
+  "baseline_commit": "14ccf3edacd6a5ad1463b66bbdd08582aab589e7",
+  "reviewed_files_sha256": {
+    "harness/release_gate.py": "b15a7e8edea95bc18aec2827343eb9ea7687820c4cdf9db72bc0b70b5b324765",
+    "research/missingness_review.py": "84ae22122a9a1f9f18328ac233b6f97bc0dcd9070d1c1d377dd58bfe3a354aa2",
+    "tests/test_missingness_release_review_regressions.py": "da95d2a5d7af9c5c868ffb0d16e789934dd248c2d0d1fac698e50e2646d8a2f3"
+  },
+  "baseline_regressions": {
+    "passed": 1,
+    "failed": 13,
+    "log": "independent-regressions-before.log"
+  },
+  "repaired_release_tests": {
+    "passed": 46,
+    "failed": 0,
+    "log": "independent-regressions-after.log"
+  },
+  "additional_json_shape_probes": {
+    "cases": 225,
+    "crashes": 0,
+    "valid_siblings_lost": 0,
+    "active_output_bypasses": 0
+  },
+  "resolved_findings": [
+    "Current release manifest verification ignored changed or omitted authority, cutoff, league/market scope and provenance fields.",
+    "Malformed per-league events/gate rows/identifiers raised before returning valid siblings."
+  ],
+  "remaining_limitations": [
+    "Current monitoring source states and same-fit reporting control values lack an implemented source-bound measurement producer. Direct release_reason can accept self-asserted measurements under an otherwise valid scope; full retained signed inventory blocks receipt replacement.",
+    "validate_study unconditionally requires complete, partial and missing numerical forecast groups; policy-aware refusal cohorts remain unimplemented.",
+    "No production approval, statistical qualification, predictive promotion, threshold calibration or wagering authority established."
+  ]
+}

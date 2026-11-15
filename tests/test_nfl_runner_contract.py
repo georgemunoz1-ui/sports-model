@@ -60,6 +60,11 @@ def test_frozen_week_one_replay_and_distinct_partial_refusal(tmp_path):
     f=json.loads((folder/GOOD/'forecast.json').read_bytes())
     draws=np.load(folder/GOOD/'winner_draws.npy',allow_pickle=False)
     row=card['forecasts'][1]
+    # The dated card must retain all native attribution fields for presentation,
+    # including paired sampling/model evidence when a prior is supplied.
+    assert row['missingness_audit']['details']['native'] == f['missingness_audit']
+    from pipelines.cards.missingness_presentation import audit_view
+    assert audit_view(row)['summary'] == audit_view(f)['summary']
     home=row['model_winner']==f['event']['home_team']
     assert row['model_p']==(f['prediction']['home_win'] if home else 1-f['prediction']['home_win'])
     assert row['sim_p']==(draws.mean() if home else 1-draws.mean())

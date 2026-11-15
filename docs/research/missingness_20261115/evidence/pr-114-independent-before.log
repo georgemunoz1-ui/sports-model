@@ -1,0 +1,164 @@
+FFFF                                                                     [100%]
+=================================== FAILURES ===================================
+_____ test_exclusion_omission_cannot_evade_report_readback[drop_exclusion] _____
+
+tmp_path = PosixPath('/tmp/pytest-of-agent/pytest-82/test_exclusion_omission_cannot0')
+reshape = 'drop_exclusion'
+
+    @pytest.mark.parametrize('reshape',['drop_exclusion','rewrite_all_counters'])
+    def test_exclusion_omission_cannot_evade_report_readback(tmp_path,reshape):
+        report,_=execute(tmp_path)
+        assert report['status']=='PARTIAL' and report['n_paired']==report['n_excluded']==1
+        runner.verify_experiment_report(report)
+        changed=deepcopy(report)
+        changed['exclusions']=[];changed['n_excluded']=0
+        if reshape=='rewrite_all_counters':
+            changed['n_paired']=2;changed['status']='COMPLETED'
+>       with pytest.raises(ValueError):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE <class 'ValueError'>
+
+../verification/test_pr114_independent_refusals.py:37: Failed
+__ test_exclusion_omission_cannot_evade_report_readback[rewrite_all_counters] __
+
+tmp_path = PosixPath('/tmp/pytest-of-agent/pytest-82/test_exclusion_omission_cannot1')
+reshape = 'rewrite_all_counters'
+
+    @pytest.mark.parametrize('reshape',['drop_exclusion','rewrite_all_counters'])
+    def test_exclusion_omission_cannot_evade_report_readback(tmp_path,reshape):
+        report,_=execute(tmp_path)
+        assert report['status']=='PARTIAL' and report['n_paired']==report['n_excluded']==1
+        runner.verify_experiment_report(report)
+        changed=deepcopy(report)
+        changed['exclusions']=[];changed['n_excluded']=0
+        if reshape=='rewrite_all_counters':
+            changed['n_paired']=2;changed['status']='COMPLETED'
+>       with pytest.raises(ValueError):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE <class 'ValueError'>
+
+../verification/test_pr114_independent_refusals.py:37: Failed
+________ test_malformed_evaluation_container_retains_valid_sibling[row] ________
+
+tmp_path = PosixPath('/tmp/pytest-of-agent/pytest-82/test_malformed_evaluation_cont0')
+malformed = 'row'
+
+    @pytest.mark.parametrize('malformed',['row','event'])
+    def test_malformed_evaluation_container_retains_valid_sibling(tmp_path,malformed):
+>       report,output=execute(tmp_path,malformed=malformed)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../verification/test_pr114_independent_refusals.py:43: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../verification/test_pr114_independent_refusals.py:25: in execute
+    return runner.experiment(source,output),output
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+input_path = PosixPath('/tmp/pytest-of-agent/pytest-82/test_malformed_evaluation_cont0/input.json')
+output = PosixPath('/tmp/pytest-of-agent/pytest-82/test_malformed_evaluation_cont0/run')
+
+    def experiment(input_path, output):
+        """Fit an explicit earlier split, then score the exact later paired events.
+    
+        Input schema is nba-personnel-experiment.v1; training/evaluation are row
+        lists. Scope is TEST_ONLY or HISTORICAL_RECONSTRUCTED, never prospective.
+        A refused fit is retained as a named BLOCKED result, not a zero effect.
+        """
+        p, out = Path(input_path).resolve(strict=True), Path(output)
+        raw = p.read_bytes()
+        packet = json.loads(raw)
+        if packet.get("schema") != "nba-personnel-experiment.v1" or packet.get("evidence_scope") not in {"TEST_ONLY", "HISTORICAL_RECONSTRUCTED"}:
+            raise ValueError("NBA_PERSONNEL_EXPERIMENT_SCHEMA")
+        out.mkdir(parents=True, exist_ok=False)
+        report = {**common_report("HISTORICAL_DIAGNOSTIC"), "evidence_scope": packet["evidence_scope"],
+                  "input_sha256": hashlib.sha256(raw).hexdigest(), "fit_cutoff_utc": packet["fit_cutoff_utc"],
+                  "training_opportunities": len(packet["training"]), "evaluation_opportunities": len(packet["evaluation"])}
+        try:
+            state = model.fit(packet["training"], base=p.parent, fit_cutoff_utc=packet["fit_cutoff_utc"])
+        except (ValueError, KeyError, TypeError, OSError) as exc:
+            from pipelines.cards.missingness import seal_audit
+            report.update(status="BLOCKED", reason=str(exc), n_paired=0)
+            report["missingness_audit"] = seal_audit(league="nba", model_id=model.MODEL_ID,
+                event_id=report["run_id"], products=["coverage"], forecast=dict(report), details={
+                    "scope": "RUN_WITHOUT_FITTED_STATE", "failed_stage": "FIT", "reason": str(exc),
+                    "observation_state": "ACQUISITION_FAILURE" if isinstance(exc, OSError) else "UNRESOLVED_IDENTITY_OR_COVERAGE",
+                    "forecast_emitted": False, "feature_values": None, "historical_support": "NOT_ASSESSED",
+                    "evaluation_opportunities_unforecasted": report["evaluation_opportunities"]})
+            _write_experiment_report(out / "report.json", report)
+            return report
+        write(out / "state.json", state)
+        ids, forecasts, paired, excluded = set(), [], [], []
+        audit_by_event={}
+        exclusion_context = []
+        for index, row in enumerate(packet["evaluation"]):
+>           eid = row.get("event", {}).get("event_id")
+                  ^^^^^^^
+E           AttributeError: 'NoneType' object has no attribute 'get'
+
+research/efficiency/nba_personnel_runner.py:151: AttributeError
+_______ test_malformed_evaluation_container_retains_valid_sibling[event] _______
+
+tmp_path = PosixPath('/tmp/pytest-of-agent/pytest-82/test_malformed_evaluation_cont1')
+malformed = 'event'
+
+    @pytest.mark.parametrize('malformed',['row','event'])
+    def test_malformed_evaluation_container_retains_valid_sibling(tmp_path,malformed):
+>       report,output=execute(tmp_path,malformed=malformed)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../verification/test_pr114_independent_refusals.py:43: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../verification/test_pr114_independent_refusals.py:25: in execute
+    return runner.experiment(source,output),output
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+input_path = PosixPath('/tmp/pytest-of-agent/pytest-82/test_malformed_evaluation_cont1/input.json')
+output = PosixPath('/tmp/pytest-of-agent/pytest-82/test_malformed_evaluation_cont1/run')
+
+    def experiment(input_path, output):
+        """Fit an explicit earlier split, then score the exact later paired events.
+    
+        Input schema is nba-personnel-experiment.v1; training/evaluation are row
+        lists. Scope is TEST_ONLY or HISTORICAL_RECONSTRUCTED, never prospective.
+        A refused fit is retained as a named BLOCKED result, not a zero effect.
+        """
+        p, out = Path(input_path).resolve(strict=True), Path(output)
+        raw = p.read_bytes()
+        packet = json.loads(raw)
+        if packet.get("schema") != "nba-personnel-experiment.v1" or packet.get("evidence_scope") not in {"TEST_ONLY", "HISTORICAL_RECONSTRUCTED"}:
+            raise ValueError("NBA_PERSONNEL_EXPERIMENT_SCHEMA")
+        out.mkdir(parents=True, exist_ok=False)
+        report = {**common_report("HISTORICAL_DIAGNOSTIC"), "evidence_scope": packet["evidence_scope"],
+                  "input_sha256": hashlib.sha256(raw).hexdigest(), "fit_cutoff_utc": packet["fit_cutoff_utc"],
+                  "training_opportunities": len(packet["training"]), "evaluation_opportunities": len(packet["evaluation"])}
+        try:
+            state = model.fit(packet["training"], base=p.parent, fit_cutoff_utc=packet["fit_cutoff_utc"])
+        except (ValueError, KeyError, TypeError, OSError) as exc:
+            from pipelines.cards.missingness import seal_audit
+            report.update(status="BLOCKED", reason=str(exc), n_paired=0)
+            report["missingness_audit"] = seal_audit(league="nba", model_id=model.MODEL_ID,
+                event_id=report["run_id"], products=["coverage"], forecast=dict(report), details={
+                    "scope": "RUN_WITHOUT_FITTED_STATE", "failed_stage": "FIT", "reason": str(exc),
+                    "observation_state": "ACQUISITION_FAILURE" if isinstance(exc, OSError) else "UNRESOLVED_IDENTITY_OR_COVERAGE",
+                    "forecast_emitted": False, "feature_values": None, "historical_support": "NOT_ASSESSED",
+                    "evaluation_opportunities_unforecasted": report["evaluation_opportunities"]})
+            _write_experiment_report(out / "report.json", report)
+            return report
+        write(out / "state.json", state)
+        ids, forecasts, paired, excluded = set(), [], [], []
+        audit_by_event={}
+        exclusion_context = []
+        for index, row in enumerate(packet["evaluation"]):
+>           eid = row.get("event", {}).get("event_id")
+                  ^^^^^^^^^^^^^^^^^^^^^^^^
+E           AttributeError: 'NoneType' object has no attribute 'get'
+
+research/efficiency/nba_personnel_runner.py:151: AttributeError
+=========================== short test summary info ============================
+FAILED ../verification/test_pr114_independent_refusals.py::test_exclusion_omission_cannot_evade_report_readback[drop_exclusion]
+FAILED ../verification/test_pr114_independent_refusals.py::test_exclusion_omission_cannot_evade_report_readback[rewrite_all_counters]
+FAILED ../verification/test_pr114_independent_refusals.py::test_malformed_evaluation_container_retains_valid_sibling[row]
+FAILED ../verification/test_pr114_independent_refusals.py::test_malformed_evaluation_container_retains_valid_sibling[event]
+4 failed in 0.51s

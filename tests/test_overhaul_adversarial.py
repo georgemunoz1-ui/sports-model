@@ -97,6 +97,8 @@ def signed_fixture(root, *, protocol_changes=None, evidence_changes=None,
                                                "basis_artifact_id": basis_id}
                                            for k in ("minimum_events", "minimum_slates", "minimum_selected",
                                                      "minimum_total_coverage", "minimum_power")}}
+    from missingness_review_fixture import make_study
+    protocol["missingness_policy_id"], study_id = make_study(store, protocol, lambda art, purpose, stamp: receipt(art,purpose,stamp), reviewer)
     protocol.update(protocol_changes or {})
     protocol_id = store.put(protocol)
     evidence = {k: protocol[k] for k in ("candidate_id", "control_id", "population_id", "target",
@@ -106,6 +108,7 @@ def signed_fixture(root, *, protocol_changes=None, evidence_changes=None,
                      "primary_delta_ci_upper": -.01, "power_at_declared_effect": .85, "inspected_configurations": 1,
                      "paired_dataset_id": store.put({"schema": "synthetic-paired-reference", "fixture_only": True,
                                                        "evidence_scope": dataset_scope})})
+    evidence["missingness_evaluation_id"] = study_id
     evidence.update(evidence_changes or {})
     evidence_id = store.put(evidence)
     registration_id = receipt(protocol_id, "preregistration", registration_time)

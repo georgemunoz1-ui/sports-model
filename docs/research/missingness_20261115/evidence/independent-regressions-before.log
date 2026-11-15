@@ -1,0 +1,451 @@
+.FFFFFFFFFFFFF                                                           [100%]
+=================================== FAILURES ===================================
+_ test_release_readback_rejects_changed_published_contract[action_authority-YES] _
+
+release_case = ({'decision_time_utc': '2026-10-22T21:00:00Z', 'enabled_sports': ['mlb', 'wnba', 'nfl', 'cfb', 'nba', 'nhl', ...], 'sp... 'PASS'}, ...}, 'inventory_id': '964b9d23b27981ec40adf343417e8d658f3346f37d1bb6a41288ba302fde4f33', ...}, ...}}, 'nfl')
+tmp_path = PosixPath('/tmp/pytest-of-agent/pytest-51/test_release_readback_rejects_0')
+field = 'action_authority', value = 'YES'
+
+    @pytest.mark.parametrize("field,value", [
+        ("action_authority", "YES"),
+        ("decision_time_utc", "2099-01-01T00:00:00Z"),
+        ("enabled_sports", []),
+        ("enabled_markets", ["WAGER"]),
+        ("as_of_date", "2099-01-01"),
+        ("coverage_start", "2099-01-01"),
+        ("source_evidence", {"substituted": True}),
+    ])
+    def test_release_readback_rejects_changed_published_contract(release_case, tmp_path, field, value):
+        evidence, _ = release_case
+        evidence_path, report = _write_release(tmp_path, evidence)
+        report[field] = value
+        path = tmp_path / "altered-manifest.json"
+        path.write_text(json.dumps(report))
+        _, problems = release_gate.verify_artifact(evidence_path, path)
+>       assert problems, f"Published {field} change escaped readback"
+E       AssertionError: Published action_authority change escaped readback
+E       assert []
+
+tests/test_missingness_release_review_regressions.py:51: AssertionError
+_ test_release_readback_rejects_changed_published_contract[decision_time_utc-2099-01-01T00:00:00Z] _
+
+release_case = ({'decision_time_utc': '2026-10-22T21:00:00Z', 'enabled_sports': ['mlb', 'wnba', 'nfl', 'cfb', 'nba', 'nhl', ...], 'sp... 'PASS'}, ...}, 'inventory_id': '964b9d23b27981ec40adf343417e8d658f3346f37d1bb6a41288ba302fde4f33', ...}, ...}}, 'nfl')
+tmp_path = PosixPath('/tmp/pytest-of-agent/pytest-51/test_release_readback_rejects_1')
+field = 'decision_time_utc', value = '2099-01-01T00:00:00Z'
+
+    @pytest.mark.parametrize("field,value", [
+        ("action_authority", "YES"),
+        ("decision_time_utc", "2099-01-01T00:00:00Z"),
+        ("enabled_sports", []),
+        ("enabled_markets", ["WAGER"]),
+        ("as_of_date", "2099-01-01"),
+        ("coverage_start", "2099-01-01"),
+        ("source_evidence", {"substituted": True}),
+    ])
+    def test_release_readback_rejects_changed_published_contract(release_case, tmp_path, field, value):
+        evidence, _ = release_case
+        evidence_path, report = _write_release(tmp_path, evidence)
+        report[field] = value
+        path = tmp_path / "altered-manifest.json"
+        path.write_text(json.dumps(report))
+        _, problems = release_gate.verify_artifact(evidence_path, path)
+>       assert problems, f"Published {field} change escaped readback"
+E       AssertionError: Published decision_time_utc change escaped readback
+E       assert []
+
+tests/test_missingness_release_review_regressions.py:51: AssertionError
+_ test_release_readback_rejects_changed_published_contract[enabled_sports-value2] _
+
+release_case = ({'decision_time_utc': '2026-10-22T21:00:00Z', 'enabled_sports': ['mlb', 'wnba', 'nfl', 'cfb', 'nba', 'nhl', ...], 'sp... 'PASS'}, ...}, 'inventory_id': '964b9d23b27981ec40adf343417e8d658f3346f37d1bb6a41288ba302fde4f33', ...}, ...}}, 'nfl')
+tmp_path = PosixPath('/tmp/pytest-of-agent/pytest-51/test_release_readback_rejects_2')
+field = 'enabled_sports', value = []
+
+    @pytest.mark.parametrize("field,value", [
+        ("action_authority", "YES"),
+        ("decision_time_utc", "2099-01-01T00:00:00Z"),
+        ("enabled_sports", []),
+        ("enabled_markets", ["WAGER"]),
+        ("as_of_date", "2099-01-01"),
+        ("coverage_start", "2099-01-01"),
+        ("source_evidence", {"substituted": True}),
+    ])
+    def test_release_readback_rejects_changed_published_contract(release_case, tmp_path, field, value):
+        evidence, _ = release_case
+        evidence_path, report = _write_release(tmp_path, evidence)
+        report[field] = value
+        path = tmp_path / "altered-manifest.json"
+        path.write_text(json.dumps(report))
+        _, problems = release_gate.verify_artifact(evidence_path, path)
+>       assert problems, f"Published {field} change escaped readback"
+E       AssertionError: Published enabled_sports change escaped readback
+E       assert []
+
+tests/test_missingness_release_review_regressions.py:51: AssertionError
+_ test_release_readback_rejects_changed_published_contract[enabled_markets-value3] _
+
+release_case = ({'decision_time_utc': '2026-10-22T21:00:00Z', 'enabled_sports': ['mlb', 'wnba', 'nfl', 'cfb', 'nba', 'nhl', ...], 'sp... 'PASS'}, ...}, 'inventory_id': '964b9d23b27981ec40adf343417e8d658f3346f37d1bb6a41288ba302fde4f33', ...}, ...}}, 'nfl')
+tmp_path = PosixPath('/tmp/pytest-of-agent/pytest-51/test_release_readback_rejects_3')
+field = 'enabled_markets', value = ['WAGER']
+
+    @pytest.mark.parametrize("field,value", [
+        ("action_authority", "YES"),
+        ("decision_time_utc", "2099-01-01T00:00:00Z"),
+        ("enabled_sports", []),
+        ("enabled_markets", ["WAGER"]),
+        ("as_of_date", "2099-01-01"),
+        ("coverage_start", "2099-01-01"),
+        ("source_evidence", {"substituted": True}),
+    ])
+    def test_release_readback_rejects_changed_published_contract(release_case, tmp_path, field, value):
+        evidence, _ = release_case
+        evidence_path, report = _write_release(tmp_path, evidence)
+        report[field] = value
+        path = tmp_path / "altered-manifest.json"
+        path.write_text(json.dumps(report))
+        _, problems = release_gate.verify_artifact(evidence_path, path)
+>       assert problems, f"Published {field} change escaped readback"
+E       AssertionError: Published enabled_markets change escaped readback
+E       assert []
+
+tests/test_missingness_release_review_regressions.py:51: AssertionError
+_ test_release_readback_rejects_changed_published_contract[as_of_date-2099-01-01] _
+
+release_case = ({'decision_time_utc': '2026-10-22T21:00:00Z', 'enabled_sports': ['mlb', 'wnba', 'nfl', 'cfb', 'nba', 'nhl', ...], 'sp... 'PASS'}, ...}, 'inventory_id': '964b9d23b27981ec40adf343417e8d658f3346f37d1bb6a41288ba302fde4f33', ...}, ...}}, 'nfl')
+tmp_path = PosixPath('/tmp/pytest-of-agent/pytest-51/test_release_readback_rejects_4')
+field = 'as_of_date', value = '2099-01-01'
+
+    @pytest.mark.parametrize("field,value", [
+        ("action_authority", "YES"),
+        ("decision_time_utc", "2099-01-01T00:00:00Z"),
+        ("enabled_sports", []),
+        ("enabled_markets", ["WAGER"]),
+        ("as_of_date", "2099-01-01"),
+        ("coverage_start", "2099-01-01"),
+        ("source_evidence", {"substituted": True}),
+    ])
+    def test_release_readback_rejects_changed_published_contract(release_case, tmp_path, field, value):
+        evidence, _ = release_case
+        evidence_path, report = _write_release(tmp_path, evidence)
+        report[field] = value
+        path = tmp_path / "altered-manifest.json"
+        path.write_text(json.dumps(report))
+        _, problems = release_gate.verify_artifact(evidence_path, path)
+>       assert problems, f"Published {field} change escaped readback"
+E       AssertionError: Published as_of_date change escaped readback
+E       assert []
+
+tests/test_missingness_release_review_regressions.py:51: AssertionError
+_ test_release_readback_rejects_changed_published_contract[coverage_start-2099-01-01] _
+
+release_case = ({'decision_time_utc': '2026-10-22T21:00:00Z', 'enabled_sports': ['mlb', 'wnba', 'nfl', 'cfb', 'nba', 'nhl', ...], 'sp... 'PASS'}, ...}, 'inventory_id': '964b9d23b27981ec40adf343417e8d658f3346f37d1bb6a41288ba302fde4f33', ...}, ...}}, 'nfl')
+tmp_path = PosixPath('/tmp/pytest-of-agent/pytest-51/test_release_readback_rejects_5')
+field = 'coverage_start', value = '2099-01-01'
+
+    @pytest.mark.parametrize("field,value", [
+        ("action_authority", "YES"),
+        ("decision_time_utc", "2099-01-01T00:00:00Z"),
+        ("enabled_sports", []),
+        ("enabled_markets", ["WAGER"]),
+        ("as_of_date", "2099-01-01"),
+        ("coverage_start", "2099-01-01"),
+        ("source_evidence", {"substituted": True}),
+    ])
+    def test_release_readback_rejects_changed_published_contract(release_case, tmp_path, field, value):
+        evidence, _ = release_case
+        evidence_path, report = _write_release(tmp_path, evidence)
+        report[field] = value
+        path = tmp_path / "altered-manifest.json"
+        path.write_text(json.dumps(report))
+        _, problems = release_gate.verify_artifact(evidence_path, path)
+>       assert problems, f"Published {field} change escaped readback"
+E       AssertionError: Published coverage_start change escaped readback
+E       assert []
+
+tests/test_missingness_release_review_regressions.py:51: AssertionError
+_ test_release_readback_rejects_changed_published_contract[source_evidence-value6] _
+
+release_case = ({'decision_time_utc': '2026-10-22T21:00:00Z', 'enabled_sports': ['mlb', 'wnba', 'nfl', 'cfb', 'nba', 'nhl', ...], 'sp... 'PASS'}, ...}, 'inventory_id': '964b9d23b27981ec40adf343417e8d658f3346f37d1bb6a41288ba302fde4f33', ...}, ...}}, 'nfl')
+tmp_path = PosixPath('/tmp/pytest-of-agent/pytest-51/test_release_readback_rejects_6')
+field = 'source_evidence', value = {'substituted': True}
+
+    @pytest.mark.parametrize("field,value", [
+        ("action_authority", "YES"),
+        ("decision_time_utc", "2099-01-01T00:00:00Z"),
+        ("enabled_sports", []),
+        ("enabled_markets", ["WAGER"]),
+        ("as_of_date", "2099-01-01"),
+        ("coverage_start", "2099-01-01"),
+        ("source_evidence", {"substituted": True}),
+    ])
+    def test_release_readback_rejects_changed_published_contract(release_case, tmp_path, field, value):
+        evidence, _ = release_case
+        evidence_path, report = _write_release(tmp_path, evidence)
+        report[field] = value
+        path = tmp_path / "altered-manifest.json"
+        path.write_text(json.dumps(report))
+        _, problems = release_gate.verify_artifact(evidence_path, path)
+>       assert problems, f"Published {field} change escaped readback"
+E       AssertionError: Published source_evidence change escaped readback
+E       assert []
+
+tests/test_missingness_release_review_regressions.py:51: AssertionError
+__ test_release_readback_requires_published_contract_fields[action_authority] __
+
+release_case = ({'decision_time_utc': '2026-10-22T21:00:00Z', 'enabled_sports': ['mlb', 'wnba', 'nfl', 'cfb', 'nba', 'nhl', ...], 'sp... 'PASS'}, ...}, 'inventory_id': '964b9d23b27981ec40adf343417e8d658f3346f37d1bb6a41288ba302fde4f33', ...}, ...}}, 'nfl')
+tmp_path = PosixPath('/tmp/pytest-of-agent/pytest-51/test_release_readback_requires0')
+field = 'action_authority'
+
+    @pytest.mark.parametrize("field", ["action_authority", "decision_time_utc", "enabled_sports"])
+    def test_release_readback_requires_published_contract_fields(release_case, tmp_path, field):
+        evidence, _ = release_case
+        evidence_path, report = _write_release(tmp_path, evidence)
+        del report[field]
+        path = tmp_path / "incomplete-manifest.json"
+        path.write_text(json.dumps(report))
+        _, problems = release_gate.verify_artifact(evidence_path, path)
+>       assert problems, f"Missing published {field} escaped readback"
+E       AssertionError: Missing published action_authority escaped readback
+E       assert []
+
+tests/test_missingness_release_review_regressions.py:62: AssertionError
+_ test_release_readback_requires_published_contract_fields[decision_time_utc] __
+
+release_case = ({'decision_time_utc': '2026-10-22T21:00:00Z', 'enabled_sports': ['mlb', 'wnba', 'nfl', 'cfb', 'nba', 'nhl', ...], 'sp... 'PASS'}, ...}, 'inventory_id': '964b9d23b27981ec40adf343417e8d658f3346f37d1bb6a41288ba302fde4f33', ...}, ...}}, 'nfl')
+tmp_path = PosixPath('/tmp/pytest-of-agent/pytest-51/test_release_readback_requires1')
+field = 'decision_time_utc'
+
+    @pytest.mark.parametrize("field", ["action_authority", "decision_time_utc", "enabled_sports"])
+    def test_release_readback_requires_published_contract_fields(release_case, tmp_path, field):
+        evidence, _ = release_case
+        evidence_path, report = _write_release(tmp_path, evidence)
+        del report[field]
+        path = tmp_path / "incomplete-manifest.json"
+        path.write_text(json.dumps(report))
+        _, problems = release_gate.verify_artifact(evidence_path, path)
+>       assert problems, f"Missing published {field} escaped readback"
+E       AssertionError: Missing published decision_time_utc escaped readback
+E       assert []
+
+tests/test_missingness_release_review_regressions.py:62: AssertionError
+___ test_release_readback_requires_published_contract_fields[enabled_sports] ___
+
+release_case = ({'decision_time_utc': '2026-10-22T21:00:00Z', 'enabled_sports': ['mlb', 'wnba', 'nfl', 'cfb', 'nba', 'nhl', ...], 'sp... 'PASS'}, ...}, 'inventory_id': '964b9d23b27981ec40adf343417e8d658f3346f37d1bb6a41288ba302fde4f33', ...}, ...}}, 'nfl')
+tmp_path = PosixPath('/tmp/pytest-of-agent/pytest-51/test_release_readback_requires2')
+field = 'enabled_sports'
+
+    @pytest.mark.parametrize("field", ["action_authority", "decision_time_utc", "enabled_sports"])
+    def test_release_readback_requires_published_contract_fields(release_case, tmp_path, field):
+        evidence, _ = release_case
+        evidence_path, report = _write_release(tmp_path, evidence)
+        del report[field]
+        path = tmp_path / "incomplete-manifest.json"
+        path.write_text(json.dumps(report))
+        _, problems = release_gate.verify_artifact(evidence_path, path)
+>       assert problems, f"Missing published {field} escaped readback"
+E       AssertionError: Missing published enabled_sports escaped readback
+E       assert []
+
+tests/test_missingness_release_review_regressions.py:62: AssertionError
+_ test_malformed_other_league_is_blocked_without_losing_valid_sibling[events-value0] _
+
+release_case = ({'decision_time_utc': '2026-10-22T21:00:00Z', 'enabled_sports': ['mlb', 'wnba', 'nfl', 'cfb', 'nba', 'nhl', ...], 'sp... 'PASS'}, ...}, 'inventory_id': '964b9d23b27981ec40adf343417e8d658f3346f37d1bb6a41288ba302fde4f33', ...}, ...}}, 'nfl')
+field = 'events', value = [None]
+
+    @pytest.mark.parametrize("field,value", [
+        ("events", [None]),
+        ("events", [{"event_key": ["invalid"], "disposition": "EXPLICITLY_BLOCKED"}]),
+        ("gates", {"freshness": "PASS"}),
+    ])
+    def test_malformed_other_league_is_blocked_without_losing_valid_sibling(release_case, field, value):
+        evidence, healthy_sport = release_case
+        healthy_before = release_gate.evaluate(evidence)["sports"][healthy_sport]
+        assert healthy_before["status"] == "HEALTHY"
+        bad = deepcopy(evidence)
+        bad["sports"]["nba"][field] = value
+>       report = release_gate.evaluate(bad)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_missingness_release_review_regressions.py:76: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+harness/release_gate.py:186: in evaluate
+    return _evaluate(evidence, SPORTS)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+harness/release_gate.py:89: in _evaluate
+    problems = _problems(evidence, leagues)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+evidence = {'decision_time_utc': '2026-10-22T21:00:00Z', 'enabled_sports': ['mlb', 'wnba', 'nfl', 'cfb', 'nba', 'nhl', ...], 'spo...status': 'PASS'}, ...}, 'inventory_id': '964b9d23b27981ec40adf343417e8d658f3346f37d1bb6a41288ba302fde4f33', ...}, ...}}
+leagues = ('mlb', 'wnba', 'nfl', 'cfb', 'nba', 'nhl', ...)
+
+    def _problems(evidence, leagues):
+        problems = []
+        enabled = evidence.get("enabled_sports")
+        if enabled != list(leagues):
+            problems.append("ENABLED_SPORT_SET_MISMATCH")
+        decision_time = evidence.get("decision_time_utc")
+        try:
+            cutoff = _utc(decision_time)
+        except (TypeError, ValueError):
+            cutoff = None
+            problems.append("DECISION_TIME_INVALID")
+        sports = evidence.get("sports") or {}
+        for sport in leagues:
+            block = sports.get(sport)
+            if not isinstance(block, dict):
+                problems.append(f"{sport}:SPORT_EVIDENCE_MISSING")
+                continue
+            gates = block.get("gates") or {}
+            for gate in REQUIRED_GATES:
+                state = (gates.get(gate) or {}).get("status")
+                if state not in GATE_STATES:
+                    problems.append(f"{sport}:{gate}:GATE_UNCLASSIFIED")
+            events = block.get("events") or []
+            expected = block.get("expected_event_count")
+            if not isinstance(expected, int) or expected != len(events):
+                problems.append(f"{sport}:EVENT_COUNT_MISMATCH")
+            seen = set()
+            for event in events:
+>               key = event.get("event_key")
+                      ^^^^^^^^^
+E               AttributeError: 'NoneType' object has no attribute 'get'
+
+harness/release_gate.py:68: AttributeError
+_ test_malformed_other_league_is_blocked_without_losing_valid_sibling[events-value1] _
+
+release_case = ({'decision_time_utc': '2026-10-22T21:00:00Z', 'enabled_sports': ['mlb', 'wnba', 'nfl', 'cfb', 'nba', 'nhl', ...], 'sp... 'PASS'}, ...}, 'inventory_id': '964b9d23b27981ec40adf343417e8d658f3346f37d1bb6a41288ba302fde4f33', ...}, ...}}, 'nfl')
+field = 'events'
+value = [{'disposition': 'EXPLICITLY_BLOCKED', 'event_key': ['invalid']}]
+
+    @pytest.mark.parametrize("field,value", [
+        ("events", [None]),
+        ("events", [{"event_key": ["invalid"], "disposition": "EXPLICITLY_BLOCKED"}]),
+        ("gates", {"freshness": "PASS"}),
+    ])
+    def test_malformed_other_league_is_blocked_without_losing_valid_sibling(release_case, field, value):
+        evidence, healthy_sport = release_case
+        healthy_before = release_gate.evaluate(evidence)["sports"][healthy_sport]
+        assert healthy_before["status"] == "HEALTHY"
+        bad = deepcopy(evidence)
+        bad["sports"]["nba"][field] = value
+>       report = release_gate.evaluate(bad)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_missingness_release_review_regressions.py:76: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+harness/release_gate.py:186: in evaluate
+    return _evaluate(evidence, SPORTS)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+harness/release_gate.py:89: in _evaluate
+    problems = _problems(evidence, leagues)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+evidence = {'decision_time_utc': '2026-10-22T21:00:00Z', 'enabled_sports': ['mlb', 'wnba', 'nfl', 'cfb', 'nba', 'nhl', ...], 'spo...status': 'PASS'}, ...}, 'inventory_id': '964b9d23b27981ec40adf343417e8d658f3346f37d1bb6a41288ba302fde4f33', ...}, ...}}
+leagues = ('mlb', 'wnba', 'nfl', 'cfb', 'nba', 'nhl', ...)
+
+    def _problems(evidence, leagues):
+        problems = []
+        enabled = evidence.get("enabled_sports")
+        if enabled != list(leagues):
+            problems.append("ENABLED_SPORT_SET_MISMATCH")
+        decision_time = evidence.get("decision_time_utc")
+        try:
+            cutoff = _utc(decision_time)
+        except (TypeError, ValueError):
+            cutoff = None
+            problems.append("DECISION_TIME_INVALID")
+        sports = evidence.get("sports") or {}
+        for sport in leagues:
+            block = sports.get(sport)
+            if not isinstance(block, dict):
+                problems.append(f"{sport}:SPORT_EVIDENCE_MISSING")
+                continue
+            gates = block.get("gates") or {}
+            for gate in REQUIRED_GATES:
+                state = (gates.get(gate) or {}).get("status")
+                if state not in GATE_STATES:
+                    problems.append(f"{sport}:{gate}:GATE_UNCLASSIFIED")
+            events = block.get("events") or []
+            expected = block.get("expected_event_count")
+            if not isinstance(expected, int) or expected != len(events):
+                problems.append(f"{sport}:EVENT_COUNT_MISMATCH")
+            seen = set()
+            for event in events:
+                key = event.get("event_key")
+>               if not key or key in seen:
+                              ^^^^^^^^^^^
+E               TypeError: unhashable type: 'list'
+
+harness/release_gate.py:69: TypeError
+_ test_malformed_other_league_is_blocked_without_losing_valid_sibling[gates-value2] _
+
+release_case = ({'decision_time_utc': '2026-10-22T21:00:00Z', 'enabled_sports': ['mlb', 'wnba', 'nfl', 'cfb', 'nba', 'nhl', ...], 'sp... 'PASS'}, ...}, 'inventory_id': '964b9d23b27981ec40adf343417e8d658f3346f37d1bb6a41288ba302fde4f33', ...}, ...}}, 'nfl')
+field = 'gates', value = {'freshness': 'PASS'}
+
+    @pytest.mark.parametrize("field,value", [
+        ("events", [None]),
+        ("events", [{"event_key": ["invalid"], "disposition": "EXPLICITLY_BLOCKED"}]),
+        ("gates", {"freshness": "PASS"}),
+    ])
+    def test_malformed_other_league_is_blocked_without_losing_valid_sibling(release_case, field, value):
+        evidence, healthy_sport = release_case
+        healthy_before = release_gate.evaluate(evidence)["sports"][healthy_sport]
+        assert healthy_before["status"] == "HEALTHY"
+        bad = deepcopy(evidence)
+        bad["sports"]["nba"][field] = value
+>       report = release_gate.evaluate(bad)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_missingness_release_review_regressions.py:76: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+harness/release_gate.py:186: in evaluate
+    return _evaluate(evidence, SPORTS)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+harness/release_gate.py:89: in _evaluate
+    problems = _problems(evidence, leagues)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+evidence = {'decision_time_utc': '2026-10-22T21:00:00Z', 'enabled_sports': ['mlb', 'wnba', 'nfl', 'cfb', 'nba', 'nhl', ...], 'spo...status': 'PASS'}, ...}, 'inventory_id': '964b9d23b27981ec40adf343417e8d658f3346f37d1bb6a41288ba302fde4f33', ...}, ...}}
+leagues = ('mlb', 'wnba', 'nfl', 'cfb', 'nba', 'nhl', ...)
+
+    def _problems(evidence, leagues):
+        problems = []
+        enabled = evidence.get("enabled_sports")
+        if enabled != list(leagues):
+            problems.append("ENABLED_SPORT_SET_MISMATCH")
+        decision_time = evidence.get("decision_time_utc")
+        try:
+            cutoff = _utc(decision_time)
+        except (TypeError, ValueError):
+            cutoff = None
+            problems.append("DECISION_TIME_INVALID")
+        sports = evidence.get("sports") or {}
+        for sport in leagues:
+            block = sports.get(sport)
+            if not isinstance(block, dict):
+                problems.append(f"{sport}:SPORT_EVIDENCE_MISSING")
+                continue
+            gates = block.get("gates") or {}
+            for gate in REQUIRED_GATES:
+>               state = (gates.get(gate) or {}).get("status")
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E               AttributeError: 'str' object has no attribute 'get'
+
+harness/release_gate.py:59: AttributeError
+=========================== short test summary info ============================
+FAILED tests/test_missingness_release_review_regressions.py::test_release_readback_rejects_changed_published_contract[action_authority-YES]
+FAILED tests/test_missingness_release_review_regressions.py::test_release_readback_rejects_changed_published_contract[decision_time_utc-2099-01-01T00:00:00Z]
+FAILED tests/test_missingness_release_review_regressions.py::test_release_readback_rejects_changed_published_contract[enabled_sports-value2]
+FAILED tests/test_missingness_release_review_regressions.py::test_release_readback_rejects_changed_published_contract[enabled_markets-value3]
+FAILED tests/test_missingness_release_review_regressions.py::test_release_readback_rejects_changed_published_contract[as_of_date-2099-01-01]
+FAILED tests/test_missingness_release_review_regressions.py::test_release_readback_rejects_changed_published_contract[coverage_start-2099-01-01]
+FAILED tests/test_missingness_release_review_regressions.py::test_release_readback_rejects_changed_published_contract[source_evidence-value6]
+FAILED tests/test_missingness_release_review_regressions.py::test_release_readback_requires_published_contract_fields[action_authority]
+FAILED tests/test_missingness_release_review_regressions.py::test_release_readback_requires_published_contract_fields[decision_time_utc]
+FAILED tests/test_missingness_release_review_regressions.py::test_release_readback_requires_published_contract_fields[enabled_sports]
+FAILED tests/test_missingness_release_review_regressions.py::test_malformed_other_league_is_blocked_without_losing_valid_sibling[events-value0]
+FAILED tests/test_missingness_release_review_regressions.py::test_malformed_other_league_is_blocked_without_losing_valid_sibling[events-value1]
+FAILED tests/test_missingness_release_review_regressions.py::test_malformed_other_league_is_blocked_without_losing_valid_sibling[gates-value2]
+13 failed, 1 passed in 0.44s

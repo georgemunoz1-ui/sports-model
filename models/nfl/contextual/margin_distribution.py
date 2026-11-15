@@ -391,6 +391,8 @@ def main():
     report, draws = build(forecast, load_config(args.margin_model), args.home_spread,
                           n=args.simulations, retrospective=args.retrospective)
     persist(args.output, report, draws)
+    from pipelines.cards.nfl_missingness import persist_child_review
+    persist_child_review(args.output, forecast, report, ["full_game_spread"])
     print(json.dumps({"model_id": report["model_id"], "mode": report["mode"], "contracts": report["contracts"]}, indent=2))
 
 

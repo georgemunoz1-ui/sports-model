@@ -1,0 +1,52 @@
+FF                                                                       [100%]
+=================================== FAILURES ===================================
+____________ test_fit_failure_retains_verified_run_coverage_receipt ____________
+
+tmp_path = PosixPath('/tmp/pytest-of-agent/pytest-79/test_fit_failure_retains_verif0')
+
+    def test_fit_failure_retains_verified_run_coverage_receipt(tmp_path):
+        from pipelines.cards.missingness import verify_audit
+        rows = data(tmp_path)
+        manifest = {"schema": "nba-personnel-experiment.v1", "evidence_scope": "TEST_ONLY",
+                    "fit_cutoff_utc": "2020-01-25T12:00:00Z", "training": [], "evaluation": rows[24:]}
+        source = tmp_path / "input.json"
+        source.write_text(json.dumps(manifest))
+        report = experiment(source, tmp_path / "blocked")
+>       receipt = report["missingness_audit"]
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       KeyError: 'missingness_audit'
+
+tests/test_nba_personnel_minutes.py:199: KeyError
+_ test_experiment_exclusions_are_audited_without_replacing_valid_forecasts[personnel] _
+
+tmp_path = PosixPath('/tmp/pytest-of-agent/pytest-79/test_experiment_exclusions_are0')
+failure = 'personnel'
+
+    @pytest.mark.parametrize("failure", ["personnel", "result", "identity"])
+    def test_experiment_exclusions_are_audited_without_replacing_valid_forecasts(tmp_path, failure):
+        from research.efficiency import nba_personnel_runner as runner
+        rows = data(tmp_path)
+        bad = copy.deepcopy(rows[25])
+        if failure == "personnel":
+            bad["personnel"]["players"].pop()
+        elif failure == "result":
+            bad["result"]["home_margin"] += 10
+        else:
+            bad["event"]["event_id"] = None
+        manifest = {"schema": "nba-personnel-experiment.v1", "evidence_scope": "TEST_ONLY",
+                    "fit_cutoff_utc": "2020-01-25T12:00:00Z", "training": rows[:22],
+                    "evaluation": [rows[24], bad]}
+        source = tmp_path / "input.json"
+        source.write_text(json.dumps(manifest))
+        output = tmp_path / "run"
+        report = experiment(source, output)
+        exclusion, = report["exclusions"]
+>       receipt = exclusion["missingness_audit"]
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       KeyError: 'missingness_audit'
+
+tests/test_nba_personnel_minutes.py:231: KeyError
+=========================== short test summary info ============================
+FAILED tests/test_nba_personnel_minutes.py::test_fit_failure_retains_verified_run_coverage_receipt
+FAILED tests/test_nba_personnel_minutes.py::test_experiment_exclusions_are_audited_without_replacing_valid_forecasts[personnel]
+2 failed in 0.23s

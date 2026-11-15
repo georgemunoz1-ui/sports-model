@@ -1,0 +1,122 @@
+{
+  "schema": "sports.companion_invocation_review.v1",
+  "scope": "Read-only source inspection plus pinned workflow test replay; author-independent of those companion implementations; not authorized statistical signoff",
+  "reviews": [
+    {
+      "pr": 111,
+      "entrypoints": [
+        "scripts/cbb_shadow.py:issue",
+        "scripts/verify_cbb_shadow.py:verify",
+        "scripts/cbb_market_and_grades.py:load_audited_card"
+      ],
+      "evidence_tests": [
+        "test_source_failure_preserves_unknown_inventory",
+        "test_native_writer_reader_partial_scope_and_tampering",
+        "test_orientation_and_order_and_alias_invariance"
+      ],
+      "verified": "Writer generates event receipts for forecasts and refusals, readbacks card.json, runs real metadata/orientation/unknown-venue/missing-history probes; independent reader replays all receipts. Mixed control has one forecast and two refusals. Missing source emits separate missingness_failure.json with unknown scheduled count.",
+      "limits": "Synthetic operator controls, not a newly acquired slate or statistical review. Historical model validity, limits and forward monitoring remain HOLD.",
+      "inspected_source_hashes": {
+        "scripts/cbb_shadow.py": "57e0c6f261faafc8b35e53479466e6d03eefc22a86626169fc3df07cca3e1ffa",
+        "scripts/verify_cbb_shadow.py": "faef4be1a736fbef3477e4525a4eededab6e65d744c5ad12e0bb8d824ceaae0a",
+        "scripts/cbb_market_and_grades.py": "1393c441be2e75656f1988eccb8899b4ca9e1bea2675cc8690a93d9c37dd860c"
+      },
+      "all_inspected_sources_present": true
+    },
+    {
+      "pr": 112,
+      "entrypoints": [
+        "pipelines/cards/volatility_research.py:build",
+        "pipelines/cards/volatility_research.py:verify_readback"
+      ],
+      "evidence_tests": [
+        "test_joint_missingness_metadata_and_record_order_preserve_law",
+        "test_joint_missingness_refusals_keep_sibling_and_parent",
+        "test_readback_reconciles_every_event_against_parent_and_fitted_configuration",
+        "test_resealed_fabricated_refusal_cannot_replace_executed_run"
+      ],
+      "verified": "Native child binds fitted scale features, settlement and retained paired-score arrays. Refusal receipts retain affected events while good siblings survive. Parent/config/report/draw substitutions and dropped output/refusal rows are rejected.",
+      "limits": "Derived-product sensitivity qualification remains separate from successful readback.",
+      "inspected_source_hashes": {
+        "pipelines/cards/volatility_research.py": "55d258273d648be1a4c58d308d9dd718eec586c8f8b4d09a7a673d8e7f142651"
+      },
+      "all_inspected_sources_present": true
+    },
+    {
+      "pr": 113,
+      "entrypoints": [
+        "scripts/run_nba_forecast_combination.py:predictions",
+        "scripts/run_nba_forecast_combination.py:main"
+      ],
+      "evidence_tests": [
+        "test_withholding_each_source_isolation_fitted_parity_and_readback[C1]",
+        "test_withholding_each_source_isolation_fitted_parity_and_readback[C2]"
+      ],
+      "verified": "C1/C2 native prediction withholds every required source, preserves separately identified B0 fallback, emits receipts for every row, and reads all back. Subprocess mixed control exits 2 with PARTIAL and one admitted challenger.",
+      "limits": "Historical source support and thresholds remain unreviewed.",
+      "inspected_source_hashes": {
+        "scripts/run_nba_forecast_combination.py": "629371fd30e7026dbeaec65e6c40d4dae478f2794f930cbea723d4ae6025aba3"
+      },
+      "all_inspected_sources_present": true
+    },
+    {
+      "pr": 114,
+      "entrypoints": [
+        "research/efficiency/nba_personnel_runner.py:shadow_from_card",
+        "research/efficiency/nba_personnel_runner.py:experiment",
+        "research/efficiency/runner.py:component_receipt",
+        "research/efficiency/integrity.py:verify_component_receipt"
+      ],
+      "evidence_tests": [
+        "test_shadow_binds_actual_parent_card_and_keeps_missing_events",
+        "test_personnel_v2_fit_predict_and_real_runner_receipt"
+      ],
+      "verified": "NBA card sidecar emits and reads back both prediction and coverage/refusal receipts; mixed subprocess exits 2. CFB personnel-v2 component receipt records head-specific fitted-median deltas and withheld personnel/schedule evidence; integrity verification enforces receipt.",
+      "limits": "Historical NBA experiment fit failure returns only report.json without a missingness receipt; exclusions before an emitted prediction also lack individual missingness receipts. Confirmed by pr-114-fit-refusal-probe.json. No production/statistical qualification.",
+      "inspected_source_hashes": {
+        "research/efficiency/runner.py": "dbfacc764a2f2b5c48539bc5434ac23a8f8fae2c77307b6c62e30dc003278449",
+        "research/efficiency/integrity.py": "f335afb813415b2ecdb06718cf9e05bf93bd5d59806ec23a06f0012e6fa6f9c6",
+        "research/efficiency/nba_personnel_runner.py": "86f724d3aef3489943051064cf00b9502afc66f17ddf9cab3f5d04095003474b"
+      },
+      "all_inspected_sources_present": true
+    },
+    {
+      "pr": 115,
+      "entrypoints": [
+        "research/efficiency/cfb_personnel_freshness.py:write_refresh",
+        "research/efficiency/freshness_missingness.py:review",
+        "research/efficiency/freshness_missingness.py:check"
+      ],
+      "evidence_tests": [
+        "test_real_runner_retains_refreshes_and_never_rewrites_first",
+        "test_removed_refresh_source_yields_audited_refusal_and_no_forecast",
+        "test_missingness_receipt_rejects_relabelled_native_refresh"
+      ],
+      "verified": "Native v2 refresh receipt retains bound missingness attribution and checks persisted readback. Missing personnel source produces an audited refusal and no frozen forecast. Source-bound finding verifier returns 20 valid packets without granting publication.",
+      "limits": "Existing CLI refusal test explicitly accepts exit 0 with retained_count=0; therefore not every refusal is surfaced through nonzero process status. Authentic source/forward qualification is still absent.",
+      "inspected_source_hashes": {
+        "research/efficiency/cfb_personnel_freshness.py": "64cd07e2accdc58124219c784c256db2f9d302328ee3746b3c96fe3802691b29",
+        "research/efficiency/freshness_missingness.py": "7a2b203b47e6997aad74da83400b070340d0a79595890606a561e0bc502866e8"
+      },
+      "all_inspected_sources_present": true
+    },
+    {
+      "pr": 116,
+      "entrypoints": [
+        "pipelines/cards/volatility_routing.py:run_joint_route",
+        "pipelines/cards/volatility_research.py:verify_readback"
+      ],
+      "evidence_tests": [
+        "test_receipted_route_enforces_missingness_before_fit_and_after_simulation",
+        "test_event_refusals_preserve_verified_siblings"
+      ],
+      "verified": "Operator binds every event/product receipt, including route-level config refusal before adapter invocation, preserves valid siblings, and verifies native child report and retained paired draws after execution.",
+      "limits": "This verifies isolated pinned draft source. Cross-branch integration and actual deployment were not performed.",
+      "inspected_source_hashes": {
+        "pipelines/cards/volatility_routing.py": "84abcb1a6d746a4348d54228afa6aacb42014360480cc758ce30a269a8412429",
+        "pipelines/cards/volatility_research.py": "55d258273d648be1a4c58d308d9dd718eec586c8f8b4d09a7a673d8e7f142651"
+      },
+      "all_inspected_sources_present": true
+    }
+  ]
+}

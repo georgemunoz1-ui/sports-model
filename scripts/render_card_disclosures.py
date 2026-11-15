@@ -15,10 +15,11 @@ from pipelines.cards.disclosures import write_report
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--card", type=Path, required=True)
+    parser.add_argument("--personnel-events", type=Path, help="Hash-bound personnel evidence manifest for the disclosure sidecar")
     parser.add_argument("--disclosures", type=Path)
     parser.add_argument("--output", type=Path, required=True)
     args = parser.parse_args()
-    report = write_report(json.loads(args.card.read_text()), args.output, args.disclosures)
+    report = write_report(json.loads(args.card.read_text()), args.output, args.disclosures, personnel_events=args.personnel_events, parent_path=args.card)
     print(json.dumps({"execution_status": report["execution_status"],
                       "artifact_sha256": report["artifact_sha256"], "errors": report["errors"]}))
     if report["errors"]:

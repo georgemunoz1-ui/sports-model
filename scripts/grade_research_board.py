@@ -113,18 +113,36 @@ def main():
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument('--board', type=Path, required=True)
     p.add_argument('--raw-dir', type=Path, required=True)
+    p.add_argument('--pregame-personnel-review', type=Path, help='Carry a personnel review bound to this exact frozen board')
+    p.add_argument('--pregame-personnel-review-sha256', help='Previously retained hash of the personnel review file')
     p.add_argument('--output', type=Path, required=True)
     args = p.parse_args()
+    if args.pregame_personnel_review_sha256 and not args.pregame_personnel_review:
+        p.error('--pregame-personnel-review-sha256 requires --pregame-personnel-review')
     raw = args.board.read_bytes()
     sources = {league: (args.raw_dir/name).read_bytes() for league, name in LEAGUE_FILES.items()
                if (args.raw_dir/name).is_file()}
-    out = grade_board(json.loads(raw), sources)
+    board = json.loads(raw)
+    out = grade_board(board, sources)
     out['forecast_board_sha256'] = hashlib.sha256(raw).hexdigest()
+    if args.pregame_personnel_review:
+        from pipelines.cards.personnel_review import bind_grades, load_pregame_review
+        try:
+            review, sha = load_pregame_review(args.pregame_personnel_review, board,
+                out['forecast_board_sha256'], args.pregame_personnel_review_sha256)
+            out['personnel_review'] = bind_grades(review, out, out['forecast_board_sha256'])
+            out['personnel_review_file_sha256'] = sha
+            out['personnel_review_status'] = 'BOUND_TO_FROZEN_BOARD'
+        except (AttributeError, KeyError, OSError, TypeError, ValueError) as exc:
+            out['personnel_review_status'] = 'REJECTED_PERSONNEL_REVIEW'
+            out['personnel_review_reason'] = str(exc)
+    else:
+        out['personnel_review_status'] = 'NO_PRIOR_REVIEW_SUPPLIED'
     with args.output.open('x') as handle:
         json.dump(out, handle, indent=2, sort_keys=True, allow_nan=False)
         handle.write('\n')
     print(json.dumps(out['summary'], sort_keys=True))
-    return 2 if out['blocked_count'] else 0
+    return 2 if out['blocked_count'] or out['personnel_review_status'] == 'REJECTED_PERSONNEL_REVIEW' else 0
 
 
 if __name__ == '__main__':

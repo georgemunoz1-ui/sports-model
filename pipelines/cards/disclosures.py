@@ -329,7 +329,8 @@ def parlay_disclosure(spec, rows, root=Path("."), *, cutoff, league):
     return result
 
 
-def build_report(card, packet=None, *, root=Path(".")):
+def build_report(card, packet=None, *, root=Path("."), personnel_observations=()):
+    from pipelines.cards.personnel_review import build_review
     if not card.get("as_of_utc"):
         raise ValueError("DISCLOSURE_PARENT_CUTOFF_REQUIRED")
     D.stamp(card["as_of_utc"])
@@ -350,6 +351,7 @@ def build_report(card, packet=None, *, root=Path(".")):
               "input_packet_sha256": D.digest(packet), "as_of_utc": card["as_of_utc"],
               "scope": "DISCLOSURE_ONLY", "action_authority": False,
               "predictive_validation": "NOT_ASSESSED", "events": [], "parlays": [], "errors": []}
+    personnel = {r["event_id"]: r for r in build_review(card, personnel_observations)["events"]}
     for row in rows:
         try:
             item = event_disclosure(row, card["as_of_utc"], supplied.get(row["event_id"]), root, league=card["league"])
@@ -357,6 +359,7 @@ def build_report(card, packet=None, *, root=Path(".")):
             item = event_disclosure(row, card["as_of_utc"], league=card["league"])
             item["pass_reasons"].append({"code": "DISCLOSURE_REJECTED", "detail": str(exc)})
             result["errors"].append({"event_id": row["event_id"], "reason": str(exc)})
+        item["personnel_review"] = personnel[row["event_id"]]
         result["events"].append(item)
     parlays = packet.get("parlays", [])
     _unique(parlays, "parlay_id")
@@ -381,6 +384,15 @@ def render_md(report):
     for event in report["events"]:
         lines += ["### " + _cell(event["event_id"]), "", "**PASS:** " + "; ".join(
             _cell(r["code"] + ": " + r["detail"]) for r in event["pass_reasons"]), ""]
+        personnel = event.get("personnel_review")
+        if personnel:
+            lines += ["**Personnel review** " + _cell(personnel["personnel_disposition"] + " · " + personnel["status"]), ""]
+            for observation in personnel.get("observations", []):
+                lines.append("- " + _cell(f"{observation['player_name']} ({observation['role']}): "
+                    f"{observation['comparison']}, {observation['timing']}."))
+            for caveat in personnel.get("caveats", []):
+                lines.append("- " + _cell(caveat))
+            lines.append("")
         market = event.get("market_provenance")
         if market:
             lines += ["**Model versus market:** " + _cell(market["path_class"]) + ". " +
@@ -447,10 +459,37 @@ def render_md(report):
     return "\n".join(lines) + "\n"
 
 
-def write_report(card, output, packet_path=None):
+def write_report(card, output, packet_path=None, *, personnel_events=None, parent_path=None):
+    from research.personnel_events import load_observations
     packet_path = Path(packet_path) if packet_path else None
     packet = json.loads(packet_path.read_text()) if packet_path else None
-    report = build_report(card, packet, root=packet_path.parent if packet_path else Path("."))
+    observations = ()
+    evidence_error = None
+    if personnel_events:
+        try:
+            observations = load_observations(personnel_events)
+        except (AttributeError, KeyError, OSError, TypeError, ValueError) as exc:
+            evidence_error = str(exc)
+    report = build_report(card, packet, root=packet_path.parent if packet_path else Path("."),
+                          personnel_observations=observations)
+    if evidence_error is not None:
+        report["errors"].append({"source": "personnel_events", "reason": evidence_error})
+        report["execution_status"] = "PARTIAL"
+    if parent_path is not None:
+        raw = Path(parent_path).read_bytes()
+        source = json.loads(raw)
+        parent = D.digest(source)
+        if parent != report["parent_card_sha256"]:
+            # Only the normal NFL bridge can bind a display card to a different raw parent.
+            from pipelines.cards.distribution_research import nfl_card
+            if (parent != card.get("parent_bundle_sha256")
+                    or source.get("schema") not in {"nfl.integrated_context_forecast.v1", "nfl.enhanced_pregame_forecast.v1"}
+                    or nfl_card(source, card.get("generated_at_utc")) != card):
+                raise ValueError("DISCLOSURE_PARENT_FILE_MISMATCH")
+        report["parent_file_sha256"] = hashlib.sha256(raw).hexdigest()
+        report["source_parent_sha256"] = parent
+    report.pop("artifact_sha256")
+    report["artifact_sha256"] = D.digest(report)
     output = Path(output)
     output.mkdir(parents=True, exist_ok=False)
     (output / "disclosures.json").write_text(json.dumps(report, indent=2, sort_keys=True, allow_nan=False) + "\n")

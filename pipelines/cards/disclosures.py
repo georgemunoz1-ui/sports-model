@@ -454,6 +454,8 @@ def render_md(report):
                   "- Pushes and half wins are excluded from all-full-win probability; this is not payout pricing.",
                   "- Sampler replay: NOT_PERFORMED; predictive validation: NOT_ESTABLISHED.",
                   "- PASS: wagering OFF; actual payout, price, and sportsbook acceptance unverified.", ""]
+    if report.get("parent_file_status") == "MISSING_SERIALIZED_PARENT":
+        lines += ["The frozen parent file was unavailable. A postgame grade cannot be attached to this review.", ""]
     if report["errors"]:
         lines += ["**Rejected disclosure evidence:** " + _cell(json.dumps(report["errors"])), ""]
     return "\n".join(lines) + "\n"
@@ -475,8 +477,16 @@ def write_report(card, output, packet_path=None, *, personnel_events=None, paren
     if evidence_error is not None:
         report["errors"].append({"source": "personnel_events", "reason": evidence_error})
         report["execution_status"] = "PARTIAL"
+    raw = None
     if parent_path is not None:
-        raw = Path(parent_path).read_bytes()
+        try:
+            raw = Path(parent_path).read_bytes()
+        except FileNotFoundError:
+            report["parent_file_status"] = "MISSING_SERIALIZED_PARENT"
+            report["execution_status"] = "PARTIAL"
+            if personnel_events:
+                report["errors"].append({"source": "parent_file", "reason": "MISSING_SERIALIZED_PARENT"})
+    if raw is not None:
         source = json.loads(raw)
         parent = D.digest(source)
         if parent != report["parent_card_sha256"]:

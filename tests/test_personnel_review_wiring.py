@@ -145,6 +145,18 @@ def test_nfl_raw_bridge_requires_exact_view_and_role_matches_still_hold(tmp_path
         write_report(changed, tmp_path/'bad', parent_path=stored)
 
 
+def test_missing_serialized_parent_preserves_disclosure_and_prevents_grade_join(tmp_path):
+    from pipelines.cards.disclosures import write_report
+    parent = {"as_of_utc": CUTOFF, "league": "NFL", "forecasts": []}
+    output = tmp_path / "disclosures"
+    review = write_report(parent, output, parent_path=tmp_path / "unavailable.json")
+    assert review["execution_status"] == "PARTIAL"
+    assert review["parent_file_status"] == "MISSING_SERIALIZED_PARENT"
+    assert "parent_file_sha256" not in review and not review["errors"]
+    with pytest.raises(ValueError, match="DISCLOSURE_HASH_MISMATCH"):
+        R.load_pregame_review(output / "disclosures.json", parent, R.digest(parent))
+
+
 def test_native_mlb_reviewed_board_keeps_blocked_rows_and_resolves_sides():
     away = {'team':'New York Mets','starter':{'id':123,'fullName':'A B'}}
     home = {'team':'Washington Nationals','starter':{'id':456,'fullName':'C D'}}
